@@ -504,7 +504,7 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle chr7_phyloHMMcons_CFTR
 yLineOnOff Off
-pairwise CFTR
+pairwise CFTR 40
 autoScaleDefault Off
 speciesOrder chimp orangutan baboon macaque vervet lemur rabbit rat mouse cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fugu
 
@@ -897,7 +897,7 @@ maxHeightPixels 100:40:11
 wiggle multizMm3Rn3GalGal2_phyloHMM_wig
 yLineOnOff Off
 autoScaleDefault Off
-pairwise hmrg
+pairwise hmrg 
 speciesOrder mouse rat chicken
 
 track mzPt1Mm3Rn3Gg2_pHMM

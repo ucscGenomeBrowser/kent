@@ -1,6 +1,14 @@
+track ctgPos
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 9
+visibility hide
+color 150,0,0
+
 track gold
-shortLabel Assembly 
-longLabel Assembly from Fragments 
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
 group map
 priority 10
 visibility hide
@@ -91,3 +99,17 @@ searchMethod exact
 searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|PTB)[[:alnum:]]*)?(-[[:alnum:]_]+)+)
 searchPriority 8
+
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex (contig_)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchTable gold
+searchMethod exact
+shortCircuit 1
+termRegex (scaffold_)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where scaffold like '%s'
+searchPriority 5

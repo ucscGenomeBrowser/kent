@@ -1171,8 +1171,6 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 
-
-
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
