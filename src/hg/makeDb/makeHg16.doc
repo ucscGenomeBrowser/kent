@@ -1569,7 +1569,7 @@ XXXX
      hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
 
-# MAKING THE AXTTIGHT FROM AXTBEST (TBD)
+# MAKING THE AXTTIGHT FROM AXTBEST (DONE - 2003-08-25 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3/axtNet
@@ -1904,6 +1904,10 @@ SEQ2_LEN=$BASE/S2.len
 
 # MAKE BLASTZ BEST RAT RN3 (TBD)
 
+    # IMPORTANT NOTE - this axtBest process has been replaced by
+    #	the chain -> net -> netToAxt process.  So, after chains and
+    #	nets have been created, pick up this best process below.
+
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.rn3/axtChrom
@@ -1957,12 +1961,81 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
 # Longest job:                     6415s     106.92m     1.78h    0.07d
 # Submission to last job:          6417s     106.95m     1.78h    0.07d
 
+    #	Better yet, Jim says to be consistent, do all the chroms in
+    #	this manner:
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain
+    mkdir ratNet
+    netSplit rat.net ratNet
+
+    mkdir ../axtNet
+    foreach n (ratNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt -maxGap=25 ratNet/$c.net chain/$c.chain \
+		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+		/cluster/bluearc/rat/rn3/softNib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> $c.axt"
+    end
+XXXX
+
+    mkdir -p /cluster/data/hg16/bed/blastz.rn3/axtBest
+    cd /cluster/data/hg16/bed/blastz.rn3/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    #  Convert those axt files to psl
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
     # Load tables
      ssh hgwdev
      set base="/cluster/data/hg16/bed/blastz.rn3"
      set tbl="blastzBestRn3"
      cd $base/pslBest
      /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+
+     # check results
+     # the original axtBest stuff from the axtBest operation:
+#  featureBits hg16 blastzBestMm3
+#  1027438291 bases of 2865248791 (35.859%) in intersection
+     #  After going through the chain->net->axt operation:
+#  featureBits hg16 blastzBestMm3
+#   991468768 bases of 2865248791 (34.603%) in intersection
+
+
+#  featureBits hg15 blastzBestMm3
+#  1035090465 bases of 2866466359 (36.110%) in intersection
+
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg16/axtBestRn3
+     cd /gbdb/hg16/axtBestRn3
+     foreach f (/cluster/data/hg16/bed/blastz.rn3/axtNet/chr*.axt)
+       ln -s $f .
+     end
+     cd /cluster/data/hg16/bed/blastz.rn3/axtNet
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/hg16/axtBestRn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     #	Already done above.  This table needs definition only once
+     # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql hg16 < axtInfoInserts.sql
+
+    # Load tables
 
      # check results
      featureBits hg16 blastzBestRn3
