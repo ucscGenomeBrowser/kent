@@ -27,7 +27,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.97 2003/10/02 17:23:57 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.98 2003/10/03 03:34:46 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -154,8 +154,8 @@ char *outputTypeNonPosMenu[] =
 int outputTypeNonPosMenuSize = 3;
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
-#define pasteKeywordsPhase  "Paste in Keywords"
-#define uploadKeywordsPhase "Upload Keyword File"
+#define pasteNamesPhase     "Paste in Names/Accessions"
+#define uploadNamesPhase    "Upload Names/Accessions File"
 #define outputOptionsPhase  "Advanced query..."
 #define getOutputPhase      "Get results"
 #define getSomeFieldsPhase  "Get these fields"
@@ -315,7 +315,7 @@ return(sameWord(pos, "genome"));
 }
 
 boolean isBatch()
-/* Return TRUE if user has selected to filter by name/keyword, and table 
+/* Return TRUE if user has selected to filter by name/accession, and table 
  * is positional. */
 {
 char *posOrKeys = cartCgiUsualString(cart, "tbPosOrKeys", "undef");
@@ -334,7 +334,7 @@ cgiMakeButton("submit", "Look up");
 }
 
 char *getUserKeys()
-/* return a string with the user's keywords (item names) */
+/* return a string with the user's names/accessions */
 {
 //#*** instead of tbUserKeys, should read these in from a file!
 char *ret = cartCgiUsualString(cart, "tbUserKeys", "");
@@ -344,10 +344,10 @@ if (ret[0] == 0)
 else
     ret = cloneString(ret);
 if (isBatch() && (ret == NULL))
-    webAbort("Missing item names/keywords",
-	     "Item names/keywords must be given if \"Item name\" "
+    webAbort("Missing item names/accessions",
+	     "Item names/accessions must be given if \"Item name\" "
 	     "is chosen as the way to select table items.  Please go back "
-	     "and paste or upload item names/keywords.");
+	     "and paste or upload item names/accessions.");
 return(ret);
 }
 
@@ -381,9 +381,9 @@ if (tableIsPositional)
     {
     if (isBatch())
 	{
-	printf("position: previously uploaded set of accessions/names (");
+	printf("position: previously uploaded set of names/accessions (<TT>");
 	printFirstNWords(getUserKeys(), 3, " ");
-	puts(")<P>");
+	puts("</TT>)<P>");
 	}
     else
 	printf("position: %s<P>\n", position);
@@ -835,10 +835,10 @@ else
 void pasteForm()
 /* Put up form that lets them paste in keys. */
 {
-webStart(cart, "Table Browser: Paste in Keys for Batch Query");
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#PasteKeys\">"
+webStart(cart, "Table Browser: Paste in Names/Accessions for Batch Query");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#PasteNames\">"
      "<B>Help</B></A>");
-puts("Please paste in a list of keys to match.  These may include "
+puts("<P> Please paste in a list of names/accessions to match.  These may include "
        "* and ? wildcard characters.");
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\">", hgTextName(), httpFormMethod);
 cgiContinueHiddenVar("org");
@@ -863,8 +863,8 @@ webEnd();
 void uploadForm()
 /* Put up upload form. */
 {
-webStart(cart, "Table Browser: Upload File of Keys for Batch Query");
-puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#UploadKeys\">"
+webStart(cart, "Table Browser: Upload File of Names/Accessions for Batch Query");
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#UploadNames\">"
      "<B>Help</B></A>");
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n",
        hgTextName());
@@ -879,7 +879,7 @@ cgiContinueHiddenVar("tbCustomTrack");
 cgiContinueHiddenVar("table0");
 cgiContinueHiddenVar("table1");
 puts("Please enter the name of a file in your computer containing a space, tab, or ");
-puts("line separated list of the key names you want to look up in the database.");
+puts("line separated list of the accessions/names you want to look up in the database.");
 puts("Unlike in the paste option, wildcards don't work in this list.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"tbUserKeys\">");
 puts("<INPUT TYPE=SUBMIT Name=tbShowUploadResults VALUE=\"Submit File\"><P>\n");
@@ -1085,14 +1085,15 @@ puts("Position: ");
 positionLookup(chooseTablePhase);
 puts("<BR>");
 cgiMakeRadioButton("tbPosOrKeys", "keys", !sameString(posOrKeys, "pos"));
-puts("Item name: ");
-cgiMakeButton("phase", pasteKeywordsPhase);
+puts("Item name/accession: ");
+cgiMakeButton("phase", pasteNamesPhase);
 printf(" ");
-cgiMakeButton("phase", uploadKeywordsPhase);
+cgiMakeButton("phase", uploadNamesPhase);
 if (keyStr != NULL)
     {
-    puts("<BR> Previously loaded keywords: ");
+    puts("<BR> Previously loaded names/accessions: <TT>");
     printFirstNWords(keyStr, 3, " ");
+    puts("</TT>");
     }
 
 puts("<P> Choose an action: <BR>");
@@ -1101,6 +1102,7 @@ cgiMakeButton("phase", oldSeqOptionsPhase);
 cgiMakeButton("phase", outputOptionsPhase);
 
 puts("</FORM>");
+hgPositionsHelpHtml(organism, database);
 webEnd();
 }
 
@@ -3940,9 +3942,9 @@ if ((constraints2 != NULL) && (constraints2[0] == 0))
 
 if (isBatch())
     {
-    printf("Position range: previously uploaded set of accessions/names (");
+    printf("Position range: previously uploaded set of names/accessions (<TT>");
     printFirstNWords(getUserKeys(), 3, " ");
-    puts(")");
+    puts("</TT>)");
     }
 else
     printf("Position range: %s\n", position);
@@ -4536,9 +4538,9 @@ else
 		     "Error: unrecognized value of CGI var outputType: %s",
 		     cgiUsualString("outputType", "(Undefined)"));
 	}
-    else if (existsAndEqual("phase", pasteKeywordsPhase))
+    else if (existsAndEqual("phase", pasteNamesPhase))
 	pasteForm();
-    else if (existsAndEqual("phase", uploadKeywordsPhase))
+    else if (existsAndEqual("phase", uploadNamesPhase))
 	uploadForm();
     else if (existsAndEqual("phase", allFieldsPhase) ||
 	     existsAndEqual("phase", oldAllFieldsPhase))
