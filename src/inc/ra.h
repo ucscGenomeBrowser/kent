@@ -31,5 +31,8 @@ void raFoldIn(char *fileName, struct hash *hashOfHash);
  * exists in the hashOfHash,  overriding fields of the
  * same name if they exist already. */
 
+struct hash *raReadSingle(char *fileName);
+/* Read in first ra record in file and return as hash. */
+
 #endif /* RA_H */
 

@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.8 2003/10/11 09:26:38 kent Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.9 2005/03/06 03:07:51 kent Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -157,3 +157,11 @@ if (lf != NULL)
     }
 }
 
+struct hash *raReadSingle(char *fileName)
+/* Read in first ra record in file and return as hash. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = raNextRecord(lf);
+lineFileClose(&lf);
+return hash;
+}
