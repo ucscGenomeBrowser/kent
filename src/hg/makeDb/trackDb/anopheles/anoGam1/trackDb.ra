@@ -20,7 +20,15 @@ spectrum on
 type netAlign dm1 chainDm1
 otherDb dm1
 
-
+track netDm2
+shortLabel (dm2) D. mel. Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 134
+visibility dense
+spectrum on
+type netAlign dm2 chainDm2
+otherDb dm2
 
 searchTable ensGene
 searchType genePred
