@@ -7,12 +7,25 @@ DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 02/06/03)
     mkdir chrfasta contigfasta
     ftp ftp.ncbi.nih.gov
       # user hgpguest, password from /cse/guests/kent/buildHg6.doc
-      cd cd mouse_30
+      cd mouse_30
       prompt
       bin
       mget *
       quit
     gunzip *.agp.gz
+
+GET UPDATED MOUSE ASSEMBLY FILES FROM NCBI (DONE 02/19/03)
+    # Deanna regenerated allrefcontig.chr.agp for us with _random's.  
+    # While downloading that, I noticed some other new files.  I saved 
+    # the original copies of those to *.orig.  
+    cd /cluster/store2/mm.2003.02/ncbi
+    ftp ftp.ncbi.nih.gov
+      # user hgpguest, password from /cse/guests/kent/buildHg6.doc
+      cd mouse_30
+      prompt
+      bin
+      mget allrefcontig.chr.agp.gz contig.idmap ctg_coords seq_contig.md
+      quit    
 
 BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 02/06/03)
 
@@ -37,14 +50,63 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 02/06/03)
       perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
         ../ncbi/allrefcontig.chr.agp \
         > $c/chr$c.agp
-    end
-    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y Un )
       gunzip -c /cluster/store2/mm.2003.02/ncbi/chrfasta/chr$c.fa.gz \
         | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
         | splitFaIntoContigs $c/chr$c.agp \
           stdin /cluster/store2/mm.2003.02/mm3 -nSize=5000000
     end
 
+CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 02/20/03)
+    ssh kkstore
+    cd /cluster/store2/mm.2003.02/ncbi
+    ../mm3/jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.agp \
+      contig.idmap ../mm3
+    cd /cluster/store2/mm.2003.02/mm3
+    foreach c (?{,?})
+      if (-e $c/chr${c}_random.ctg.agp) then
+        echo building $c/chr${c}_random.fa
+        gunzip -c ../ncbi/contigfasta/chr$c.fa.gz \
+          | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
+          > ./tmp.fa
+        agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
+          $c/chr${c}_random.fa ./tmp.fa
+        rm tmp.fa
+      endif
+    end
+    # At 37402 sequences with 50000-long gaps in between, chrUn is just 
+    # too damn big to fit in memory on any of our machines!!  So use a 
+    # gap size of 1000 (OK with Jim and Terry) just for chrUn.  
+    cd /cluster/store2/mm.2003.02/ncbi
+    ../mm3/jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
+      seq_contig.md allrefcontig.chr.agp contig.idmap ../mm3
+    cd /cluster/store2/mm.2003.02/mm3
+    set c=Un
+    echo building $c/chr${c}_random.fa
+    gunzip -c ../ncbi/contigfasta/chr$c.fa.gz \
+      | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
+      > ./tmp.fa
+    agpToFa -simpleMulti $c/chr${c}_random.ctg.agp chr${c}_random \
+      $c/chr${c}_random.fa ./tmp.fa
+    rm tmp.fa
+    # Clean these up to avoid confusion later... they're easily rebuilt.
+    rm ?{,?}/*.ctg.agp
+
+BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 02/20/03)
+    ssh kkstore
+    cd /cluster/store2/mm.2003.02/mm3
+    foreach c (?{,?})
+      if (-e $c/chr${c}_random.agp) then
+        splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
+          -nSize=5000000
+        mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
+        mv ${c}_random/lift/ordered.lft $c/lift/random.lft
+        mv ${c}_random/lift/ordered.lst $c/lift/random.lst
+        rmdir ${c}_random/lift
+        rm ${c}_random/chr${c}_random.{agp,fa}
+        mv ${c}_random/* $c
+        rmdir ${c}_random
+      endif
+    end
 
 CREATING DATABASE (DONE 02/06/03)
 
@@ -66,16 +128,15 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE 02/11/03)
       | hgsql mm3
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 02/06/03)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 02/20/03)
 
     # Create (unmasked) nib files 
     ssh kkstore
     cd ~/mm
     mkdir -p nib
-    foreach c (?{,?}/chr*.fa)
-        echo $f:t:r
-        faToNib $f nib/$f:t:r.nib
-      end
+    foreach f (?{,?}/chr*.fa)
+      echo $f:t:r
+      faToNib $f nib/$f:t:r.nib
     end
     # Create symbolic links from /gbdb/mm3/nib to real nib files
     ssh hgwdev
@@ -205,7 +266,7 @@ VERIFY REPEATMASKER RESULTS (IN PROGRESS)
     # --> 1037964664 bases of 2726995854 (38.063%) in intersection
 
 
-MAKE LIFTALL.LFT (DONE 02/06/03)
+MAKE LIFTALL.LFT (DONE 02/20/03)
 
     cd ~/mm3
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
