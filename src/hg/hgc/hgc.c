@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.479 2003/09/23 20:28:06 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.480 2003/09/24 22:47:05 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5805,7 +5805,7 @@ printf("</UL>");
 printf("<B>UCSC Gene Family Browser:</B> ");
 printf("<A HREF=\"http:/cgi-bin/hgNear?near.search=%s\"", mrnaName);
 printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
-printf("<BR>");
+printf("<BR><BR>");
 
 // Show Pathway links if any exists
 hasPathway = FALSE;
@@ -5820,7 +5820,7 @@ if (sqlTableExists(conn, "keggPathway"))
 	{
 	if (!hasPathway)
 	    {
-	    printf("<BR><B>Pathways</B><UL>");
+	    printf("<B>Pathways</B><UL>");
 	    hasPathway = TRUE;
 	    }
         while (row != NULL)
