@@ -804,18 +804,18 @@ int j;
 int offset;
 double sum, slope;
 int bpr = _mgBpr(mg);
-double h = fabs(y2d-y1d);
+double h;
 double colRange = 9.0;
 
 
 //adjust y if x is cutoff 
 slope = (double)(y2d - y1d)/(double)(x2-x1);
-if (x1 < mg->clipMinX)
+if (x1 <= mg->clipMinX)
     {
     y1d += ((double)(mg->clipMinX - x1)) * slope;
     x1 = mg->clipMinX;
     }
-if (x2 > mg->clipMaxX)
+if (x2 >= mg->clipMaxX)
     {
     y2d += -((double)(x2 - mg->clipMaxX)) * slope;
     x2 = mg->clipMaxX;
@@ -823,7 +823,9 @@ if (x2 > mg->clipMaxX)
 
 if ((x2 - x1) <= 0)
     return;
+    //errAbort( "x1 = %d, x2 = %d\n (%d,%d)", x1, x2, mg->clipMaxX, mg->clipMinX);
 
+h = fabs(y2d-y1d);
 
 y1i = (int)y1d;
 y2i = (int)y2d;
@@ -837,7 +839,6 @@ offset = 0;
 slope = (double)(y2d - y1d)/(double)(x2-x1);
 mult = bpr * sign(slope);
 sum = 0.0;
-
 
 if (minY <= y1i && y1i < maxY
      && minY <= y2i && y2i < maxY)
