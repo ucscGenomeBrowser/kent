@@ -310,3 +310,23 @@ cvs commit etc/genbank.conf
   # ~/src/hg/makeDb/genbank/etc/align-genbank
   # CVS update and check in the file.
 
+# GC5BASE - (DONE 2004-10-27 - Hiram)
+    ssh kksilo
+    mkdir /cluster/data/xenTro1/bed/gc5Base
+    cd /cluster/data/xenTro1/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 xenTro1 \
+      /cluster/data/xenTro1 | wigBedToBinary stdin gc5Base.wig gc5Base.wib
+    #       Calculating gcPercent with window size 5
+    #       Using twoBit: /cluster/data/xenTro1/xenTro1.2bit
+    #       File stdout created
+    #	Converted stdin, upper limit 100.00, lower limit 0.00
+    #	real    332m59.680s
+    #	user    150m45.460s
+    #	sys     157m28.750s
+
+    #	Now load those results into the database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/gc5Base
+    mkdir /gbdb/xenTro1/wib
+    ln -s `pwd`/*.wib /gbdb/xenTro1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/xenTro1/wib xenTro1 gc5Base gc5Base.wig
