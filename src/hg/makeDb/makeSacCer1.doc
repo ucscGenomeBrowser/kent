@@ -779,9 +779,9 @@ end
     cd harbisonGordon
     # Get GFF files and motif file from downloads section of 
     # http://jura.wi.mit.edu/fraenkel/regulatory_map
-    # Also get v24_probes_040923.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
+    # Also get v24_probes_041004.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
 
-    sort v24_probes_040923.GFF | uniq > probes.GFF
+    sort v24_probes_041004.GFF | uniq > probes.GFF
     hgYeastRegCode motifGff Final_InTableS2_v24.motifs probes.GFF \
     	transRegCode.bed transRegCodeMotif.tab transRegCodeProbe.bed
     hgLoadBed sacCer1 transRegCode transRegCode.bed -sqlTable=$HOME/kent/src/hg/lib/transRegCode.sql
@@ -791,6 +791,8 @@ end
     # Get rid of some crufty motif placements Ben Gordon doesn't like anymore that aren't in the
     # transRegCodeMotif table.
     hgsql sacCer1 -e 'delete from transRegCode where name="CRZ1" or name="ECM22" or name="SFL1"'
+    # Trim some motif columns
+    fixHarbisonMotifs sacCer1
 
 #CREATING DOWNLOADS DIRECTORY
     ssh hgwdev
