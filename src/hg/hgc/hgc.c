@@ -123,7 +123,7 @@
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.547 2004/01/13 04:44:56 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.548 2004/01/15 16:33:59 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12801,7 +12801,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") )
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") )
     {
     doAffy(tdb, item, NULL);
     }
