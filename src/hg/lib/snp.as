@@ -10,8 +10,8 @@ table snp
     string  alleles;   	"the sequence of the observed alleles"
     string  source;	"BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K"
     string  class;      "SNP | INDEL | SEGMENTAL"
-    string  func; 	"the functional category of the SNP, if any"
     string  valid;   	"the validation status of the SNP"
     float   avHet;   	"the average heterozygosity from all observations"
     float   avHetSE; 	"the Standard Error for the average heterozygosity"
+    string  func; 	"the functional category of the SNP, if any"
     )

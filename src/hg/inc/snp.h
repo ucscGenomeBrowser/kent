@@ -24,10 +24,10 @@ struct snp
     char *alleles;	/* the sequence of the observed alleles */
     char *source;	/* BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K */
     char *class;	/* SNP | INDEL | SEGMENTAL */
-    char *func;	/* the functional category of the SNP, if any */
     char *valid;	/* the validation status of the SNP */
     float avHet;	/* the average heterozygosity from all observations */
     float avHetSE;	/* the Standard Error for the average heterozygosity */
+    char *func;	/* the functional category of the SNP, if any */
     };
 
 void snpStaticLoad(char **row, struct snp *ret);

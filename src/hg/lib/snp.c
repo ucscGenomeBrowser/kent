@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp.h"
 
-static char const rcsid[] = "$Id: snp.c,v 1.4 2004/04/02 07:17:18 daryl Exp $";
+static char const rcsid[] = "$Id: snp.c,v 1.6 2004/04/09 02:31:58 daryl Exp $";
 
 void snpStaticLoad(char **row, struct snp *ret)
 /* Load a row from snp table into ret.  The contents of ret will
@@ -26,10 +26,10 @@ strcpy(ret->strand, row[5]);
 ret->alleles = row[6];
 ret->source = row[7];
 ret->class = row[8];
-ret->func = row[9];
-ret->valid = row[10];
-ret->avHet = atof(row[11]);
-ret->avHetSE = atof(row[12]);
+ret->valid = row[9];
+ret->avHet = atof(row[10]);
+ret->avHetSE = atof(row[11]);
+ret->func = row[12];
 }
 
 struct snp *snpLoad(char **row)
@@ -50,10 +50,10 @@ strcpy(ret->strand, row[5]);
 ret->alleles = cloneString(row[6]);
 ret->source = cloneString(row[7]);
 ret->class = cloneString(row[8]);
-ret->func = cloneString(row[9]);
-ret->valid = cloneString(row[10]);
-ret->avHet = atof(row[11]);
-ret->avHetSE = atof(row[12]);
+ret->valid = cloneString(row[9]);
+ret->avHet = atof(row[10]);
+ret->avHetSE = atof(row[11]);
+ret->func = cloneString(row[12]);
 return ret;
 }
 
@@ -125,8 +125,8 @@ void snpSaveToDb(struct sqlConnection *conn, struct snp *el, char *tableName, in
  * If worried about this use snpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%f,'%s','%s','%s','%s','%s','%s',%f,%f)", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->alleles,  el->source,  el->class,  el->func,  el->valid,  el->avHet,  el->avHetSE);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%f,'%s','%s','%s','%s','%s',%f,%f,'%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->alleles,  el->source,  el->class,  el->valid,  el->avHet,  el->avHetSE,  el->func);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -141,18 +141,18 @@ void snpSaveToDbEscaped(struct sqlConnection *conn, struct snp *el, char *tableN
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *strand, *alleles, *source, *class, *func, *valid;
+char  *chrom, *name, *strand, *alleles, *source, *class, *valid, *func;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 strand = sqlEscapeString(el->strand);
 alleles = sqlEscapeString(el->alleles);
 source = sqlEscapeString(el->source);
 class = sqlEscapeString(el->class);
-func = sqlEscapeString(el->func);
 valid = sqlEscapeString(el->valid);
+func = sqlEscapeString(el->func);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%f,'%s','%s','%s','%s','%s','%s',%f,%f)", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  alleles,  source,  class,  func,  valid, el->avHet , el->avHetSE );
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%f,'%s','%s','%s','%s','%s',%f,%f,'%s')", 
+	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  strand,  alleles,  source,  class,  valid, el->avHet , el->avHetSE ,  func);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
@@ -161,8 +161,8 @@ freez(&strand);
 freez(&alleles);
 freez(&source);
 freez(&class);
-freez(&func);
 freez(&valid);
+freez(&func);
 }
 
 struct snp *snpCommaIn(char **pS, struct snp *ret)
@@ -184,10 +184,10 @@ sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->alleles = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
 ret->class = sqlStringComma(&s);
-ret->func = sqlStringComma(&s);
 ret->valid = sqlStringComma(&s);
 ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
+ret->func = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -204,8 +204,8 @@ freeMem(el->name);
 freeMem(el->alleles);
 freeMem(el->source);
 freeMem(el->class);
-freeMem(el->func);
 freeMem(el->valid);
+freeMem(el->func);
 freez(pEl);
 }
 
@@ -257,16 +257,16 @@ fprintf(f, "%s", el->class);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->func);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->valid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%f", el->avHet);
 fputc(sep,f);
 fprintf(f, "%f", el->avHetSE);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->func);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
