@@ -2339,9 +2339,24 @@ char *track = tg->mapName;
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
+char *optionChrStr;
 struct linkedFeatures *lfList = NULL, *lf;
+char optionChr[128]; /* Option -  chromosome filter */
+char extraWhere[128] ;
 
-sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+optionChrStr = cartUsualString(cart, optionChr, "All");
+if (startsWith("chr",optionChrStr)) 
+	{
+	snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+	sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
+	}
+else
+	{
+	snprintf(extraWhere, sizeof(extraWhere), " ");
+	sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+	}
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
@@ -2359,6 +2374,16 @@ tg->items = lfList;
 }
 
 void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
+	char *chromName, boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table. */
+{
+struct sqlConnection *conn = hAllocConn();
+connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
+	isXeno, nameGetsPos);
+hFreeConn(&conn);
+}
+
+void lfFromPslsInRangeAndFilter(struct trackGroup *tg, int start, int end, 
 	char *chromName, boolean isXeno, boolean nameGetsPos)
 /* Return linked features from range of table. */
 {
@@ -4729,15 +4754,17 @@ void longXenoPslMethods(struct trackGroup *tg)
 /* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
 {
 char option[128]; /* Option -  rainbow chromosome color */
-char *optionStr;
-tg->loadItems = loadXenoPslWithPos;
-tg->mapItemName = mapNameFromLfExtra;
+char optionChr[128]; /* Option -  chromosome filter */
+char *optionChrStr; 
+char *optionStr ;
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "off");
+tg->mapItemName = mapNameFromLfExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = pslItemColor;
 else
     tg->itemColor = NULL;
+tg->loadItems = loadXenoPslWithPos;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -9753,6 +9780,7 @@ registerTrackHandler("blastzHgTop", longXenoPslMethods);
 registerTrackHandler("blastzMmHg", longXenoPslMethods);
 registerTrackHandler("blastzMmHgRef", longXenoPslMethods);
 registerTrackHandler("blastzMmHg12", longXenoPslMethods);
+registerTrackHandler("blastzMmHg12Best", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman", longXenoPslMethods);
 registerTrackHandler("blastBestHuman_75", longXenoPslMethods);
 registerTrackHandler("blastBestHuman_08_30", longXenoPslMethods);
