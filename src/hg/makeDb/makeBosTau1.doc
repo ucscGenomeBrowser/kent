@@ -1053,3 +1053,34 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) 
     # values ("bosTau1", "hg17", "/gbdb/bosTau1/liftOver/bosTau1.hg17.over.chain", 0.95, 0, 0, "Y", 1, "N");
 
+
+# ACCESSIONS FOR CONTIGS (WORKING 2005-03-17 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/danRer2/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+    # NOTE: the the  scaffolds seem to be incompletely accessioned as
+    # CH* accedssions, but completely as NW_, so pull out the NW_ from
+    # the full list (ignoring the superscaffolds).
+    #  The cow WGS project accesion is: AAFC01000000
+    grep contig cow.NW.acc | grep -v super | wc -l
+    # 449560
+
+    # edit hg/encode/regionAgp/contigAccession.pl to recognize cow format
+    # and install in /cluster/bin/scripts
+    contigAccession cow.NW.acc > contigAcc.tab
+    wc -l contigAcc.tab
+    # 449560 
+    hgsql bosTau1 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql bosTau1
+    hgsql bosTau1 -e "SELECT COUNT(*) FROM contigAcc"
+        # 
