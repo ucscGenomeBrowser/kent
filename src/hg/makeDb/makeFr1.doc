@@ -1115,12 +1115,11 @@ SEQ2_LEN=$BASE/S2.len
       # 38510 gene predictions
 
     # download and load predicted peptides
-    # NOTE: can't use these till we have
-    # correspondence between Ensembl "transcript ID"
-    # and "protein ID" 
     #wget http://www.fugu-sg.org/~shawnh/fugu_download/Fugu_rubripes.FUGU2.pep.fa.gz
     #gunzip Fugu_rubripes.FUGU2.pep.fa.gz
-    hgPepPred hg15 generic ensPep *.fa
+
+    sed 's/Translation:SINFRUP/SINFRUT/g' < Fugu_rubripes.FUGU2.pep.fa > ensembl.pep
+    hgPepPred fr1 generic ensPep ensembl.pep
 #
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-08-29 kate)

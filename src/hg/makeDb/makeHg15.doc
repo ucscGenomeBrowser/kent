@@ -1939,7 +1939,7 @@ LOAD SNPS (Done.  Daryl Thomas; April 14, 2003)
 LOAD SNP DETAILS (TODO)
     Daryl will add this.
 
-LOAD ENSEMBL GENES (IN PROGRESS 2003-07-03 kate)
+LOAD ENSEMBL GENES (Finished 2003-09-26 braney)
      cd ~/hg15/bed
      mkdir ensembl
      cd ensembl
@@ -1965,6 +1965,11 @@ LOAD ENSEMBL GENES (IN PROGRESS 2003-07-03 kate)
      ../../jkStuff/ensemblAddChr.pl unrandom.gtf ensGene.gtf
      # Not necessary for this build
      #../../jkStuff/ensemblFixEns.pl ensGene.gtf ensFixed.gtf 
+
+     # get rid of the ".1" or ".2" after the name
+     sed "s/\..\"/\"/g" ensGene.gtf > ensFixed.gtf
+     mv ensFixed.gtf ensGene.gtf
+
      /cluster/bin/i386/ldHgGene hg15 ensGene ensGene.gtf
 
     # Load Ensembl peptides:
@@ -1979,9 +1984,9 @@ LOAD ENSEMBL GENES (IN PROGRESS 2003-07-03 kate)
      cp Homo_sapiens.NCBI33.pep.fa ensemblPep.fa
 
      # munge fasta header to be >ENST<number>
-     sed 's/Translation:ENSP/ENST/g' < ensemblPep.fa > ensemblPep.fixed.fa
+     sed 's/Translation:ENSP/ENST/g' < ensemblPep.fa > ensembl.pep
 
-     ../../jkStuff/ensemblFixPep.pl ensemblPep.fa ensembl.pep
+     # ../../jkStuff/ensemblFixPep.pl ensemblPep.fixed ensembl.pep
         # Processing ensemblPep.fa into ensembl.pep
         # 294245 total lines read
         # 32035 comment lines processed
