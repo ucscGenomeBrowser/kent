@@ -27,7 +27,6 @@ BAD_DIRS = \
 	hgBatch \
 	makePai \
 	makeSeqs \
-	mouseStuff \
 	ooCloneOverlaps \
 	oneShot \
 	orthoMap \
@@ -151,6 +150,7 @@ DIRS = \
 	maskOutFa \
 	mdToNcbiLift \
 	mendMap \
+	mouseStuff \
 	mrnaToGene \
 	nci60 \
 	ntGoldGl \

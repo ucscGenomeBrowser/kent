@@ -11,6 +11,9 @@ all:
 # List of directories to build
 USE_DIRS = $(DIRS)
 
+BADDIRS = \
+        correctEst
+
 DIRS = \
 	axtAndBed \
 	axtBest \
@@ -39,7 +42,6 @@ DIRS = \
 	chainSort \
 	chainSplit \
 	chainSwap \
-	correctEst \
 	gcForBed \
 	lavToAxt \
 	lavToPsl \
