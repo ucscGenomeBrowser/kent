@@ -1,17 +1,30 @@
 /* genoFind - Quickly find where DNA occurs in genome.. */
 #include "common.h"
+#include <signal.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
 #include "fa.h"
+#include "dystring.h"
+
+char signature[] = "0ddf270562684f29";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "genoFind - Quickly find where DNA occurs in genome.\n"
-  "usage:\n"
-  "   genoFind probe.fa file(s).nib\n");
+  "To execute a single query:\n"
+  "   genoFind direct probe.fa file(s).nib\n"
+  "To set up a server:\n"
+  "   genoFind start port file(s).nib\n"
+  "To remove a server:\n"
+  "   genoFind stop port\n"
+  "To query a server:\n"
+  "   genoFind query port probe.fa\n");
 }
 
 struct blockPos
@@ -322,6 +335,30 @@ struct gfClump
     struct gfHit *hitList;	/* List of hits. */
     };
 
+void gfClumpFree(struct gfClump **pClump)
+/* Free a single clump. */
+{
+struct gfClump *clump;
+if ((clump = *pClump) == NULL)
+    return;
+slFreeList(&clump->hitList);
+freez(pClump);
+}
+
+void gfClumpFreeList(struct gfClump **pList)
+/* Free a list of dynamically allocated gfClump's */
+{
+struct gfClump *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    gfClumpFree(&el);
+    }
+*pList = NULL;
+}
+
+
 void dumpClump(struct gfClump *clump, FILE *f)
 /* Print out info on clump */
 {
@@ -472,7 +509,7 @@ uglyf("Sorted\n");
 return clumpHits(ps, hitList);
 }
 
-void genoFind(char *probeName, int nibCount, char *nibFiles[])
+void genoFindDirect(char *probeName, int nibCount, char *nibFiles[])
 /* genoFind - Quickly find where DNA occurs in genome.. */
 {
 struct patSpace *ps = indexNibs(nibCount, nibFiles, 3, 2, 10, 4*1024);
@@ -484,11 +521,190 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
 uglyf("Done\n");
 }
 
+int getPortIx(char *portName)
+/* Convert from ascii to integer. */
+{
+if (!isdigit(portName[0]))
+    errAbort("Expecting a port number got %s", portName);
+return atoi(portName);
+}
+
+struct sockaddr_in sai;
+
+int setupSocket(char *portName, char *hostName)
+/* Set up our socket. */
+{
+int port = getPortIx(portName);
+struct hostent *hostent;
+hostent = gethostbyname(hostName);
+if (hostent == NULL)
+    {
+    herror("");
+    errAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
+    }
+sai.sin_family = AF_INET;
+sai.sin_port = htons(port);
+memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
+return socket(AF_INET, SOCK_STREAM, 0);
+}
+
+void startServer(char *portName, int nibCount, char *nibFiles[])
+/* Load up index and hang out in RAM. */
+{
+struct patSpace *ps = indexNibs(nibCount, nibFiles, 3, 2, 10, 4*1024);
+char buf[256];
+char *line, *command;
+int fromLen, readSize;
+int socketHandle = 0, connectionHandle = 0;
+int sigSize = strlen(signature);
+
+/* Set up socket.  Get ready to listen to it. */
+socketHandle = setupSocket(portName, "localhost");
+if (bind(socketHandle, &sai, sizeof(sai)) == -1)
+     errAbort("Couldn't bind to %s port %s", "localhost", portName);
+listen(socketHandle, 100);
+
+uglyf("Starting server proper\n");
+for (;;)
+    {
+    connectionHandle = accept(socketHandle, &sai, &fromLen);
+    readSize = read(connectionHandle, buf, sizeof(buf)-1);
+    buf[readSize] = 0;
+    if (!startsWith(signature, buf))
+        {
+	warn("Connection without signature\n%s", buf);
+	continue;
+	}
+    line = buf + sigSize;
+    command = nextWord(&line);
+    if (sameString("quit", command))
+        {
+	printf("Quitting genoFind server\n");
+	break;
+	}
+    else if (sameString("query", command))
+        {
+	int querySize;
+	char *s = nextWord(&line);
+	if (s == NULL || !isdigit(s[0]))
+	    {
+	    warn("Expecting query size after query command");
+	    }
+	else
+	    {
+	    struct dnaSeq seq;
+
+	    seq.size = atoi(s);
+	    seq.name = NULL;
+	    seq.dna = needLargeMem(seq.size);
+	    buf[0] = 'Y';
+	    write(connectionHandle, buf, 1);
+	    if (read(connectionHandle, seq.dna, seq.size) != seq.size)
+	        {
+		warn("Didn't recieve all %d bytes of query sequence", seq.size);
+		}
+	    else
+	        {
+		struct gfClump *clumpList = gfFindClumps(ps, &seq), *clump;
+
+		for (clump = clumpList; clump != NULL; clump = clump->next)
+		    dumpClump(clump, stdout);
+		uglyf("Done\n");
+		gfClumpFreeList(&clumpList);
+		}
+	    }
+	}
+    else
+        {
+	warn("Unknown command %s", command);
+	}
+    close(connectionHandle);
+    connectionHandle = 0;
+    }
+}
+
+void stopServer(char *portName)
+/* Load up index and hang out in RAM. */
+{
+char buf[256];
+int sd = 0;
+
+uglyf("stopServer\n");
+
+/* Set up socket.  Get ready to listen to it. */
+sd = setupSocket(portName, "localhost");
+uglyf("Socket %d\n", sd);
+if (connect(sd, &sai, sizeof(sai)) == -1)
+     errAbort("Couldn't connect to %s port %s", "localhost", portName);
+uglyf("Connected ok\n");
+
+/* Put together quit command. */
+sprintf(buf, "%squit", signature);
+write(sd, buf, strlen(buf));
+
+uglyf("%s sent\n", buf);
+close(sd);
+}
+
+void queryServer(char *portName, char *faName)
+/* Load up index and hang out in RAM. */
+{
+char buf[256];
+char *line, *command;
+int fromLen, readSize;
+int sd = 0;
+int sigSize = strlen(signature);
+struct dnaSeq *seq = faReadDna(faName);
+
+/* Set up socket.  Get ready to listen to it. */
+sd = setupSocket(portName, "localhost");
+if (connect(sd, &sai, sizeof(sai)) == -1)
+     errAbort("Couldn't connect to %s port %s", "localhost", portName);
+
+/* Put together query command. */
+sprintf(buf, "%squery %d", signature, seq->size);
+write(sd, buf, strlen(buf));
+
+read(sd, buf, 1);
+if (buf[0] != 'Y')
+    errAbort("Expecting 'Y' from server, got %c", buf[0]);
+write(sd, seq->dna, seq->size);
+
+close(sd);
+}
+
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc < 3)
+char *command;
+
+if (argc < 2)
     usage();
-genoFind(argv[1], argc-2, argv+2);
+command = argv[1];
+if (sameWord(command, "direct"))
+    {
+    if (argc < 4)
+        usage();
+    genoFindDirect(argv[2], argc-3, argv+3);
+    }
+else if (sameWord(command, "start"))
+    {
+    if (argc < 4)
+        usage();
+    startServer(argv[2], argc-3, argv+3);
+    }
+else if (sameWord(command, "stop"))
+    {
+    stopServer(argv[2]);
+    }
+else if (sameWord(command, "query"))
+    {
+    queryServer(argv[2], argv[3]);
+    }
+else
+    {
+    usage();
+    }
 return 0;
 }
