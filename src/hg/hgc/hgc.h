@@ -58,7 +58,8 @@ void printCappedSequence(int start, int end, int extra);
 /* Print DNA from start to end including extra at either end.
  * Capitalize bits from start to end. */
 
-void printPos(char *chrom, int start, int end, char *strand, boolean featDna);
+void printPos(char *chrom, int start, int end, char *strand, boolean featDna,
+	      char *item);
 /* Print position lines.  'strand' argument may be null. */
 
 void bedPrintPos(struct bed *bed, int bedSize);

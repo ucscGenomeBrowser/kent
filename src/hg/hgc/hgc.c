@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.541 2003/12/29 06:13:23 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.542 2004/01/06 22:58:59 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -393,7 +393,8 @@ printf("</TT></PRE>");
 }
 
 
-void printPosOnChrom(char *chrom, int start, int end, char *strand, boolean featDna)
+void printPosOnChrom(char *chrom, int start, int end, char *strand,
+		     boolean featDna, char *item)
 /* Print position lines referenced to chromosome. Strand argument may be NULL */
 {
 char band[64];
@@ -411,9 +412,10 @@ else
 if (featDna)
     {
     char *tbl = cgiUsualString("table", cgiString("g"));
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+    printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	   start, chrom, start, end, strand, tbl);
+	   start, (item != NULL ? cgiEncode(item) : ""),
+	   chrom, start, end, strand, tbl);
     }
 }
 
@@ -426,7 +428,7 @@ void printPosOnScaffold(char *chrom, int start, int end, char *strand)
 
     if (!hScaffoldPos(chrom, start, end, &scaffoldName, &scaffoldStart, &scaffoldEnd))
         {
-        printPosOnChrom(chrom, start,end,strand, FALSE);
+        printPosOnChrom(chrom, start,end,strand, FALSE, NULL);
         return;
         }
     printf("<B>Scaffold:</B> %s<BR>\n", scaffoldName);
@@ -439,14 +441,15 @@ void printPosOnScaffold(char *chrom, int start, int end, char *strand)
             strand = "?";
 }
 
-void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
+void printPos(char *chrom, int start, int end, char *strand, boolean featDna,
+	      char *item)
 /* Print position lines.  'strand' argument may be null. */
 {
     if (sameWord(organism, "Fugu"))
         /* use this for unmapped genomes */
         printPosOnScaffold(chrom, start, end, strand);
     else
-        printPosOnChrom(chrom, start, end, strand, featDna);
+        printPosOnChrom(chrom, start, end, strand, featDna, item);
 }
 
 void samplePrintPos(struct sample *smp, int smpSize)
@@ -459,7 +462,7 @@ if( smpSize != 9 )
 printf("<B>Item:</B> %s<BR>\n", smp->name);
 printf("<B>Score:</B> %d<BR>\n", smp->score);
 printf("<B>Strand:</B> %s<BR>\n", smp->strand);
-printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
+printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE, smp->name);
 }
 
 
@@ -473,7 +476,7 @@ if (bedSize > 4)
     printf("<B>Score:</B> %d<BR>\n", bed->score);
 if (bedSize > 5)
    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
+printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE, bed->name);
 }
 
 void genericHeader(struct trackDb *tdb, char *item)
@@ -1413,7 +1416,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("<BR>\n");
     ++posCount;
     gp = genePredLoad(row + hasBin);
-    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE);
+    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
@@ -1442,7 +1445,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("<BR>\n");
     ++posCount;
     gp = genePredLoad(row + hasBin);
-    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE);
+    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
@@ -1923,7 +1926,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Item:</B> %s<BR>\n", bed->name);
     printf("<B>Probability:</B> %g<BR>\n", bed->score / 1000.0);
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
+    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE, bed->name);
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -2046,6 +2049,7 @@ printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
+cgiContinueHiddenVar("i");
 cgiContinueHiddenVar("o");
 cgiContinueHiddenVar("t");
 cgiContinueHiddenVar("l");
@@ -2483,20 +2487,32 @@ if (tbl[0] == 0)
     }
 else
     {
+    struct hTableInfo *hti = NULL;
     char rootName[256];
     char parsedChrom[32];
     /* Table might be a custom track; if it's not in the database, 
      * just get DNA as if no table were given. */
     hParseTableName(tbl, rootName, parsedChrom);
-    if (hFindTableInfo(seqName, rootName) == NULL)
+    hti = hFindTableInfo(seqName, rootName);
+    if (hti == NULL)
 	{
 	itemCount = 1;
 	hgSeqRange(seqName, cartInt(cart, "o"), cartInt(cart, "t"),
 		   '?', tbl);
 	}
     else
+	{
+	char *where = NULL;
+	char *item = cgiUsualString("i", "");
+	char buf[256];
+	if ((hti->nameField[0] != 0) && (item[0] != 0))
+	    {
+	    safef(buf, sizeof(buf), "%s = '%s'", hti->nameField, item);
+	    where = buf;
+	    }
 	itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
-				      cartInt(cart, "t"), NULL);
+				      cartInt(cart, "t"), where);
+	}
     }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
@@ -3538,7 +3554,7 @@ agpFragStaticLoad(row+hasBin, &frag);
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
-printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE);
+printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE, NULL);
 
 if (hTableExists("certificate"))
     {
@@ -3654,7 +3670,7 @@ agpGapStaticLoad(row+hasBin, &gap);
 
 printf("<B>Gap Type:</B> %s<BR>\n", gap.type);
 printf("<B>Bridged:</B> %s<BR>\n", gap.bridge);
-printPos(gap.chrom, gap.chromStart, gap.chromEnd, NULL, FALSE);
+printPos(gap.chrom, gap.chromStart, gap.chromEnd, NULL, FALSE, NULL);
 printTrackHtml(tdb);
 
 sqlFreeResult(&sr);
@@ -3705,7 +3721,7 @@ if (hTableExists("clonePos"))
     cloneCount = sqlQuickNum(conn, query);
     printf("<B>Total Clones:</B> %d<BR>\n", cloneCount);
     }
-printPos(ctg->chrom, ctg->chromStart, ctg->chromEnd, NULL, TRUE);
+printPos(ctg->chrom, ctg->chromStart, ctg->chromEnd, NULL, TRUE, ctg->contig);
 printTrackHtml(tdb);
 
 hFreeConn(&conn);
@@ -3821,7 +3837,7 @@ if (hTableExists(goldTable))
     }
 printf("%s</A><BR>\n", bactig->endContig);
 
-printPos(bactig->chrom, bactig->chromStart, bactig->chromEnd, NULL, FALSE);
+printPos(bactig->chrom, bactig->chromStart, bactig->chromEnd, NULL, FALSE,NULL);
 printTrackHtml(tdb);
 
 hFreeConn(&conn);
@@ -4869,7 +4885,8 @@ if (offset >= 0)
 	printf("<B>Begin in repeat:</B> %d<BR>\n", ro->repStart);
 	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
 	printf("<B>Left in repeat:</B> %d<BR>\n", ro->repLeft);
-	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE);
+	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE,
+		 ro->repName);
 	}
     hFreeConn(&conn);
     }
@@ -4951,7 +4968,8 @@ if (cgiVarExists("o"))
 	printf("<B>Score:</B> %d<BR>\n", rep->score);
 	printf("<B>Entropy:</B> %4.3f<BR>\n", rep->entropy);
 	printf("<B>Sequence:</B> %s<BR>\n", rep->sequence);
-	printPos(seqName, rep->chromStart, rep->chromEnd, NULL, TRUE);
+	printPos(seqName, rep->chromStart, rep->chromEnd, NULL, TRUE,
+		 rep->name);
 	printf("<BR>\n");
 	simpleRepeatFree(&rep);
 	}
@@ -7251,9 +7269,10 @@ if (sqlTableExists(conn, tdb->tableName))
     }
 //showHomologies(geneName, "softberryHom");
 //geneShowCommon(geneName, tdb, NULL);
-printf("<p><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+printf("<p><A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	   bed->chromStart, bed->chrom, bed->chromStart, bed->chromEnd, "+", tbl);
+	   bed->chromStart, cgiEncode(bed->name), bed->chrom, bed->chromStart,
+           bed->chromEnd, "+", tbl);
 printTrackHtml(tdb);
 }
 void doSoftberryPred(struct trackDb *tdb, char *geneName)
@@ -9934,9 +9953,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	       xenoOrg, xenoChrom, el.xenoStart, el.xenoEnd);
 
 	}
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+    printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	   el.chromStart, el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
+	   el.chromStart, cgiEncode(el.name),
+	   el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
     freez(&elname);
     }
 printTrackHtml(tdb);
@@ -10498,7 +10518,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     htmlHorizontalLine();
     showSAM_T02(gbProtAnn->proteinId);
     
-    printPos(seqName, gbProtAnn->chromStart, gbProtAnn->chromEnd, "+", TRUE);
+    printPos(seqName, gbProtAnn->chromStart, gbProtAnn->chromEnd, "+", TRUE,
+	     gbProtAnn->name);
     }
 printTrackHtml(tdb);
 
@@ -10903,17 +10924,17 @@ if (cgiVarExists("o"))
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>Current Position:</B> %s:%d-%d\n &nbsp;&nbsp;&nbsp;",
 	       dup.chrom, dup.chromStart+1, dup.chromEnd);
-	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
+	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
 	       "View DNA for this feature</A><BR>\n",
-	       hgcPathAndSettings(), dup.chromStart, dup.chromEnd,
+	       hgcPathAndSettings(), dup.chromStart, dup.chromEnd, dup.name,
 	       dup.chrom, dup.chromStart, dup.chromEnd, database, tbl);
 
 
 	printf("<B>Other Position:</B> %s:%d-%d &nbsp;&nbsp;&nbsp;\n",
 	       dup.otherChrom, dup.otherStart+1, dup.otherEnd);
-	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
+	printf("<A HREF=\"%s&o=%d&t=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
 	       "View DNA for this feature</A><BR>\n",
-	       hgcPathAndSettings(), dup.otherStart, dup.otherEnd,
+	       hgcPathAndSettings(), dup.otherStart, dup.otherEnd, "",
 	       dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand,
 	       database, tbl);
 
@@ -11412,7 +11433,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gc = gcPercentLoad(row + hasBin);
-    printPos(gc->chrom, gc->chromStart, gc->chromEnd, NULL, FALSE);
+    printPos(gc->chrom, gc->chromStart, gc->chromEnd, NULL, FALSE, NULL);
     printf("<B>GC Percentage:</B> %3.1f%%<BR>\n", ((float)gc->gcPpt)/10);
     gcPercentFree(&gc);
     }
@@ -12109,7 +12130,7 @@ else
 if(ag == NULL) 
     errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
 genericHeader(tdb, ag->name);
-printPosOnChrom(ag->tName, ag->tStart, ag->tEnd, ag->strand, FALSE);
+printPosOnChrom(ag->tName, ag->tStart, ag->tEnd, ag->strand, FALSE, NULL);
 
 /* Print a display of the Graph. */
 printf("<b>Plots of Alt-Splicing:</b>");
