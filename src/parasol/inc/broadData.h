@@ -4,18 +4,24 @@
 #define BROADDATA_H
 
 /* Files are transmitted a block at a time.  This block and surrounding
- * data has to be less than 64k to fit in a datagram.
+ * data has to be less than 1444 bytes to fit in an ethernet datagram.
+ * A UDP datagram can hold more, but it gets broken up if bigger, and
+ * then thrown away if any part of it has a problem.
  *
- * Blocks are grouped together into sections of 8k blocks.  After a section
+ * Blocks are grouped together into sections of 360 blocks.  
+ * Within a section 8 blocks are transmitted in a row before looking
+ * for acknowledgement packets.   After an entire section
  * is transmitted then the round robin is polled to see what if any
  * blocks need to be retransmitted.  The system does not go on to the
  * next section until either each nodes on the round robin has
  * indicated full reciept of it, or the node has been marked as dead.
  */
 
-#define bdBlockSize (1444)	        /* The block size of file data to send. */
-#define bdSectionBlocks (bdBlockSize/4)	/* The number of blocks in a section. */
-#define bdSectionBytes (bdBlockSize * bdSectionSize) /* Number of bytes in a section */
+#define bdSubSectionSize 8	/* Send bursts of this size before checking for ack. */
+#define bdSubSectionCount 45    /* This many subsections in a section */
+#define bdSectionBlocks (bdSubSectionSize * bdSubSectionCount) 
+#define bdBlockSize (bdSectionBlocks*4)   /* This needs to total 1444 or less for ethernet */
+#define bdSectionBytes (bdBlockSize * bdSectionBlocks) /* Number of bytes in a section */
 
 enum bdMessageTypes 
 /* Defines various types of messages. */

@@ -15,7 +15,7 @@
 #include "broadData.h"
 
 char *broadIp = "10.1.255.255";
-int initTimeOut = 20000;
+int initTimeOut = 50000;
 bits32 broadAddr;
 
 void usage()
@@ -243,7 +243,7 @@ int firstCloseMessage;
 bits32 ip;
 char *fileDataArea = m->data + 3 * sizeof(bits32);
 int readSize;
-int sectionIx, subIx, blockIx, blockCount, lastBlockSize;
+int sectionIx, subIx, subBlockIx, blockIx, blockCount, subBlockCount = 0, lastBlockSize;
 int err;
 FILE *f;
 boolean allDone;
@@ -336,44 +336,49 @@ else
     sendAhead = 0;
     for (sectionIx = 0; !allDone;  ++sectionIx)
 	{
+	int subStart = 0;
 	/* Seek to section start (error recovery might have moved us) */
 	off_t offset = bdBlockOffset(sectionIx, 0);
+	blockCount = 0;
 	// if (lseek(fd, offset, SEEK_SET) == -1)
 	if (fseek(f, offset, SEEK_SET) == -1)
 	    errnoAbort("Couldn't seek in %s", fileName);
 
 	/* Do primary broadcast for section. */
 	uglyf("Section %d\n", sectionIx);
-	blockCount = bdSectionBlocks;
 	t2 = microTime();
-	for (blockIx = 0; blockIx < bdSectionBlocks; ++blockIx)
+	for (subIx=0,subStart=0; subIx < bdSubSectionCount && !allDone; ++subIx, subStart += bdSubSectionSize)
 	    {
-	    machine = nextLivingMachine(machineList, deadList);
-	    if (machine == NULL)
-	       errAbort("All machines seem to be dead now.");
-	    // readSize = netReadAll(fd, fileDataArea, bdBlockSize);
-	    readSize = fread(fileDataArea, 1, bdBlockSize, f);
-	    ++statBlocks;
-	    if (readSize < 0)
-		errAbort("Read error on %s", fileName);
-	    bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
-		blockIx, readSize, fileDataArea);
-	    broadcast(outSd, m);
-	    if (sendAhead < desiredSendAhead)
-	        ++sendAhead;
-	    else
+	    subBlockCount = 0;
+	    blockIx = subStart;
+	    for (subBlockIx = 0; subBlockIx < bdSubSectionSize; ++subBlockIx, ++blockIx)
+		{
+		machine = nextLivingMachine(machineList, deadList);
+		if (machine == NULL)
+		   errAbort("All machines seem to be dead now.");
+		// readSize = netReadAll(fd, fileDataArea, bdBlockSize);
+		readSize = fread(fileDataArea, 1, bdBlockSize, f);
+		++statBlocks;
+		if (readSize < 0)
+		    errAbort("Read error on %s", fileName, machine->name);
+		bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
+		    blockIx, readSize, fileDataArea);
+		broadcast(outSd, m);
+		++subBlockCount;
+		++blockCount;
+		if (readSize < bdBlockSize)
+		    {
+		    allDone = TRUE;
+		    uglyf("ALL DONE!\n");
+		    break;
+		    }
+		}
+	    blockIx = subStart;
+	    for (subBlockIx = 0; subBlockIx < subBlockCount; ++subBlockIx, ++blockIx)
 		{
 		err = bdReceive(inSd, m, &ip);	/* This recieve is just to control flow. */
 		if (err < 0)
-		   sendAhead = 0;
-		trackTimeOuts(err, machine, &totalTimeOuts);
-		}
-	    if (readSize < bdBlockSize)
-		{
-		blockCount = blockIx + 1;
-		allDone = TRUE;
-		uglyf("ALL DONE!\n");
-		break;
+		    break;
 		}
 	    }
 	primaryTime += microTime() - t2;
@@ -424,7 +429,7 @@ else
 			    char *dataArea2;
 			    AllocVar(m2);
 			    dataArea2 = m2->data + 3 * sizeof(bits32);
-			    uglyf("%d missing blocks\n", missingCount);
+			    uglyf("%d missing blocks from %s\n", missingCount, machine->name);
 			    for (i=0; i<missingCount; ++i)
 				{
 				bits32 blockIx = missingList[i];
