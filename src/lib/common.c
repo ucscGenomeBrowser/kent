@@ -1135,7 +1135,7 @@ void carefulClose(FILE **pFile)
 /* Close file if open and null out handle to it. */
 {
 FILE *f;
-if ((f = *pFile) != NULL)
+if ((pFile != NULL) && ((f = *pFile) != NULL))
     {
     if (f != stdin && f != stdout)
         {
