@@ -25,7 +25,7 @@ update:
 	hgTrackDb mouse mm4 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb -visibility=rat/rn3/visibility.ra rat rn3 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb rat rn3 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb -visibility=fugu/visibility.ra fugu fr1 trackDb_$(USER) ../../lib/trackDb.sql .
@@ -54,7 +54,6 @@ alpha:
 	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn3 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -visibility=rat/rn3/visibility.ra rat rn3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb fugu fr1 trackDb ../../lib/trackDb.sql .
@@ -78,7 +77,7 @@ beta:
 	hgTrackDb mouse mm4 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_beta ../../lib/trackDb.sql .
-	hgTrackDb -visibility=fugu/visibility.ra rat rn3 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb rat rn3 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb -visibility=fugu/visibility.ra fugu fr1 trackDb_beta ../../lib/trackDb.sql .
