@@ -12,3 +12,6 @@ joinableFields: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
+test:
+	joinableFields ../all.joiner go goaPart
