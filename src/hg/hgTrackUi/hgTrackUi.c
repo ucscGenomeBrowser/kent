@@ -18,7 +18,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.98 2004/04/19 18:02:06 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.99 2004/04/19 18:34:52 kate Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -559,8 +559,9 @@ for (i = 0; i < speciesCt; i++)
 puts("</TR></TABLE><P>");
 puts("<p><b>Base-level display:</b><br>" );
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
-cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
-puts ("Alternate colors every 4 bases");
+puts ("Alternate colors every");
+cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+puts ("bases");
 puts("<p><b>Multiple alignment:</b><br>" );
 wigUi(tdb);
 }
