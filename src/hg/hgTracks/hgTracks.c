@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.871 2005/01/28 23:02:14 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.872 2005/01/29 00:34:38 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8370,7 +8370,7 @@ struct sqlResult *sr;
 char **row = NULL;
 char query[256];
 boolean found = FALSE;
-char *colorString = NULL, *colorClone = NULL, *name = NULL;
+char *colorString = NULL, *colorClone = NULL;
 struct rgbColor gClassColor;
 int color = tg->ixColor; /* default color in trackDb */
 int size = 3;
