@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.8 2003/06/18 21:05:15 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.9 2003/06/18 21:38:03 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -238,17 +238,29 @@ struct sqlResult *sr;
 char **row;
 struct dyString *query = dyStringNew(1024);
 struct slName *list = NULL, *name;
+struct hash *dupeHash = newHash(0);
+int count = 0;
 
-dyStringPrintf(query, "select target from knownBlastTab where query = '%s'", 
+/* Look for matchers.  Look for a few more than they ask for to
+ * account for dupes. */
+dyStringPrintf(query, 
+	"select target from knownBlastTab where query='%s'", 
 	curGeneId);
-dyStringPrintf(query, " order by bitScore desc limit %d", displayCount);
+dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    name = slNameNew(row[0]);
-    slAddHead(&list, name);
+    if (!hashLookup(dupeHash, row[0]))
+	{
+	hashAdd(dupeHash, row[0], NULL);
+	name = slNameNew(row[0]);
+	slAddHead(&list, name);
+	if (++count >= displayCount)
+	    break;
+	}
     }
 dyStringFree(&query);
+freeHash(&dupeHash);
 slReverse(&list);
 return list;
 }

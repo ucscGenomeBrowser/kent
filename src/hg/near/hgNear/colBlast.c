@@ -9,7 +9,7 @@
 #include "cart.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colBlast.c,v 1.3 2003/06/18 16:22:57 kent Exp $";
+static char const rcsid[] = "$Id: colBlast.c,v 1.4 2003/06/18 21:38:03 kent Exp $";
 
 static char *blastVal(struct column *col, char *geneId, struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
@@ -19,7 +19,7 @@ struct sqlResult *sr;
 char **row;
 char *res = NULL;
 safef(query, sizeof(query), "select %s from %s where target = '%s' and query = '%s'",
-	col->valField, col->table, curGeneId, geneId);
+	col->valField, col->table, geneId, curGeneId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     res = cloneString(row[0]);
