@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.751 2004/06/03 21:07:07 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.752 2004/06/06 17:24:24 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2992,6 +2992,33 @@ if (vis != tvDense)
 vis = limitVisibility(tg);
 }
 
+
+Color blastColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw protein in. */
+{
+struct linkedFeatures *lf = item;
+int col = tg->ixColor;
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter, lightest;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+if (hTableExists("hg16KG"))
+    {
+    sprintf(query, "select tName from hg16KG where qName = '%s'",
+	    lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	col = getChromColor(&row[0][3], vg);
+    sqlFreeResult(&sr);
+    }
+    
+hFreeConn(&conn);
+tg->ixAltColor = col;
+return(col);
+}
 
 Color refGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw refseq gene in. */
@@ -7252,13 +7279,19 @@ if (vis != tvDense)
 vis = limitVisibility(tg);
 }
 
+Color blastNameColor(struct track *tg, void *item, struct vGfx *vg)
+{
+return 1;
+}
+
 void blastMethods(struct track *tg)
 /* blast protein track methods */
 {
 tg->loadItems = loadBlast;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
-tg->itemColor = refGeneColor;
+tg->itemColor = blastColor;
+tg->itemNameColor = blastNameColor;
 }
 
 
