@@ -50,6 +50,25 @@ if (host == NULL)
 return host;
 }
 
+boolean parseRunJobMessage(char *line, struct runJobMessage *rjm)
+/* Parse runJobMessage as paraNodes sees it. */
+{
+bool ret;
+rjm->managingHost = nextWord(&line);
+rjm->jobIdString = nextWord(&line);
+rjm->reserved = nextWord(&line);
+rjm->user = nextWord(&line);
+rjm->dir = nextWord(&line);
+rjm->in = nextWord(&line);
+rjm->out = nextWord(&line);
+rjm->err = nextWord(&line);
+rjm->command = line = skipLeadingSpaces(line);
+ret = (line != NULL && line[0] != 0);
+if (!ret)
+    warn("Badly formatted jobMessage");
+return ret;
+}
+
 static FILE *logFile = NULL;  /* Log file - if NULL no logging. */
 static boolean logFlush;
 
