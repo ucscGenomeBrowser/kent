@@ -1,5 +1,6 @@
 /* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
