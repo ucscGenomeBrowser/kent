@@ -10,7 +10,7 @@ libs:
 	cd hg/lib && ${MAKE}
 
 cgi: libs
-	cd hg && ${MAKE}
+	cd hg && ${MAKE} cgi
 
 cgi-alpha: libs
 	cd hg && ${MAKE} clean
