@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.14 2003/08/21 01:57:43 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.15 2003/08/26 18:49:42 kent Exp $";
 
 struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -82,10 +82,7 @@ char *advSearchVal(struct column *col, char *varName)
  * doesn't exist or if it is "" */
 {
 char *name = advSearchName(col, varName);
-char *val = trimSpaces(cartOptionalString(cart, name));
-if (val != NULL && val[0] == 0)
-    val = NULL;
-return val;
+return cartNonemptyString(cart, name);
 }
 
 char *advSearchNameI(struct column *col, char *varName)
