@@ -72,7 +72,7 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 4;
-int maxQueue = 200000;
+int maxQueue = 1000000;
 int minPush = 1;
 int maxPush = 100000;
 int warnTime = 3*24*60;
@@ -1142,11 +1142,11 @@ void paraStopAll(char *batch)
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
-int chillCount;
+int killCount = 0;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
-chillCount = cleanTrackingErrors(db);
+cleanTrackingErrors(db);
 deathRowStart();
 for (job = db->jobList; job != NULL; job = job->next)
     {
@@ -1158,10 +1158,12 @@ for (job = db->jobList; job != NULL; job = job->next)
 	    deathRowAdd(sub->id);
 	    job->submissionCount -= 1;
 	    job->submissionList = sub->next;
+	    killCount += 1;
 	    }
 	}
     }
 deathRowEnd();
+printf("%d running jobs stopped\n", killCount);
 atomicWriteBatch(db, batch);
 }
 

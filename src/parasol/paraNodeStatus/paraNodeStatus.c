@@ -24,6 +24,7 @@ char statCmd[256];
 char status[256];
 int size;
 char *row[1];
+int totalCpu = 0, totalBusy = 0;
 
 while (lineFileRow(lf, row))
     {
@@ -35,8 +36,14 @@ while (lineFileRow(lf, row))
 	size = read(sd, status, sizeof(status)-1);
 	if (size >= 0)
 	    {
+	    char *row[3];
 	    status[size] = 0;
 	    printf("%s %s\n", name, status);
+	    chopLine(status, row);
+	    totalBusy += atoi(row[0]);
+	    if (!sameString(row[1], "of"))
+	        errAbort("paraNode status message format changed");
+	    totalCpu += atoi(row[2]);
 	    }
 	else
 	    {
@@ -49,6 +56,7 @@ while (lineFileRow(lf, row))
 	printf("%s - no node server\n", name);
 	}
     }
+printf("%d of %d CPUs busy total\n", totalBusy, totalCpu);
 }
 
 
