@@ -10,7 +10,7 @@
 # The format of the summaries and the contig naming convention
 # differs for each project
 
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.3 2005/03/17 20:55:56 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.4 2005/03/18 00:34:45 kate Exp $
 
 sub usage() {
     print "usage: contigAccession <summaryfile>\n";
@@ -92,7 +92,19 @@ while (<SUMMARY>) {
             ($gi, $num, $gb, $acc) = split /\|/;
         }
         print "$contig\t$acc\n";
+    } elsif (/^Danio/) {
+        # contig name is Zv4_scaffold* or Zv4_NA*, in the 2nd line in the Genbank summary
+        # and the same in the AGP files from the assembly
+        # accession is on 4th line
+        ($contig) = /(Zv4_scaffold.*),/;
+        if (!defined($contig)) {
+            ($contig) = /(Zv4_NA.*),/;
+        }
+        $_ = <SUMMARY>;
+        $_ = <SUMMARY>;
+        ($gi, $num, $gb, $acc) = split /\|/;
+        print "$contig\t$acc\n";
     } else {
-        die "Unknown WGS project: only know rat, chicken, chimp, dog, opossum, tetra";
+        die "Unknown WGS project: only know rat, chicken, chimp, dog, opossum, tetra, zfish";
     }
 }
