@@ -473,7 +473,9 @@ customDefaultRows(row);
 if (isFile)
     {
     if (stringIn("://", text))
+	{
         lf = netLineFileOpen(text);
+	}
     else
 	lf = lineFileOpen(text, TRUE);
     }
