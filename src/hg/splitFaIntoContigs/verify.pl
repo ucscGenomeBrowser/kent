@@ -6,7 +6,7 @@ use strict;
 # to the liftHs.lft file as output
 
 my $infile = "/cluster/store2/mm.2001.11/mm1/assembly/mouse.oo.03.agp.fasta";
-my $outdir = "/cluster/store2/mm.2001.11/mm1/";
+my $outdir = "/cluster/store2/mm.2001.11/mm1";
 my $ext = ".fa";
 my $chromo;
 my $line;
@@ -16,7 +16,7 @@ open(INFILE, "<$infile");
 while ($line = <INFILE>) {
     chomp($line);
     $chromo = getChromoName($line);
-    processDir($outdir . $chromo);
+    processDir($outdir, $chromo);
 }
 
 close(INFILE);
@@ -28,22 +28,26 @@ sub getChromoName {
 }
 
 sub processDir {
-    my ($chromDir) = @_;
+    my ($chromDir, $chrom) = @_;
+    $chromDir = $chromDir . "/" . $chrom;
+    print("Processing chromosome " . $chrom . "\n");
     opendir(DIR, $chromDir);
-    my @dirList = grep(!/$ext$|^\./, readdir(DIR));
+
+    my @dirList = grep(/^chr$chrom\_[0-9]+$/, readdir(DIR));
     my $dirName;
     my @subFileList;
     my $subLine;
     my $filename;
     my @line;
-
     my @subLine;
     my $index;
+    my @mainChars;
+    my $charIndex = 0;
 
     for $dirName (@dirList) {
 	$filename = $chromDir . "/" . $dirName . "/" . $dirName . $ext;
-	open(SUBFILE, $filename);
 	print("OPENING SUBFILE: " . $filename . "\n");
+	open(SUBFILE, $filename);
 	$subLine = <SUBFILE>;
 	$index = index($subLine, " ");
 
@@ -53,25 +57,27 @@ sub processDir {
 	    die("Invalid directory" . $dirName . "\n");
 	}
 
-        chomp($line = <INFILE>);
-        print "LINE: \"" . $line . "\"\n";
-        
-        my @mainChars = split(//, $line);
         my @subChars;
         my $subChar;
         my $mainChar;
-        my $charIndex = 0;
+           
 
         # Read file and compare to main file in order 
         while ($subLine = <SUBFILE>) {
 	    chomp($subLine);
-            print "SUBLINE: \"" . $subLine . "\"\n";
-
+            #print "SUBLINE: \"" . $subLine . "\"\n";
             @subChars = split(//, $subLine);
-            
+
             foreach $subChar (@subChars) {
+                if (!(@mainChars) || $charIndex > $#mainChars) {
+                    chomp($line = <INFILE>);
+                    #print "LINE: \"" . $line . "\"\n";
+                    @mainChars = split(//, $line);
+                    $charIndex = 0;
+                }
+
                 $mainChar = $mainChars[$charIndex];
-                
+
                 if (uc($mainChar) ne uc($subChar)) {
                     print "LINE: \"" . $line . "\"\n";
                     print "SUBLINE: \"" . $subLine . "\"\n";
@@ -81,14 +87,6 @@ sub processDir {
                 }    
 
                 $charIndex++;
-                if($charIndex > $#mainChars) {
-                    chomp($line = <INFILE>);
-                    print "LINE: \"" . $line . "\"\n";
-                    @mainChars = split(//, $line);
-                    $charIndex = 0;
-                }
-
-TODO: Preserve array pos between calls to new dirs
             }   
 	}        
     }
