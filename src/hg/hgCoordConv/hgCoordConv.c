@@ -3,6 +3,8 @@
    genome to another. Cool place to test is: chr1:126168504-126599722
    from Dec to April, it was inverted. Looks to be inverted back in
    Aug.
+
+   Note: Troubleshooting features have not been fully implemented for Zoo conversions.
 */
 #include "common.h"
 #include "errabort.h"
@@ -62,6 +64,23 @@ errAbort("hgCoordConv - cgi program for converting coordinates from one draft\n"
 	 "usage:\n\thgCoordConv hgTest=on numTests=10 origGenome=hg10 newGenome=hg10\n");
 }
 
+
+/* Zoo count  is very similar to its human brethren below except it searchers for zoo*/
+int zooCount(struct dbDb *dbList)
+/* Count the number of human organism records. */
+{
+struct dbDb *db = NULL;
+int count = 0;
+for(db = dbList; db != NULL; db = db->next)
+    {
+    
+    /*  Make sure zoo Combo isn't included and that the species are zoo */
+    if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo"))
+	count++;
+    }
+return count;
+}
+
 int humanCount(struct dbDb *dbList)
 /* Count the number of human organism records. */
 {
@@ -73,6 +92,79 @@ for(db = dbList; db != NULL; db = db->next)
 	count++;
     }
 return count;
+}
+
+
+/* There are both from coordConv.c - simply copied over into here, slightly modified.  Should change include file after consultation...?*/
+
+struct dbDb *loadDbInformation_mod(char *database)
+/* load up the information for a particular draft */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = NULL;
+char **row;
+struct dbDb *dbList = NULL, *db = NULL;
+char query[256];
+snprintf(query, sizeof(query), "select * from dbDb where name='%s'", database);
+
+/* Scan through dbDb table, loading into list */
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = dbDbLoad(row);
+    slAddHead(&dbList, db);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+if(slCount(dbList) != 1)
+    errAbort("coordConv.c::loadDbInformation() - expecting 1 dbDb record for %s got %d", db, slCount(dbList));
+return dbList;
+}
+
+
+struct coordConvRep *createCoordConvRep_mod()
+/* create a coordinate conversion report, allocating
+   coordConv structures as well */
+{
+struct coordConvRep *ccr = NULL;
+AllocVar(ccr);
+AllocVar(ccr->from);
+//
+AllocVar(ccr->from->next);
+AllocVar(ccr->to);
+return ccr;
+}
+
+/* Very similar to the Non-Zoo except for Zoo "customizations" */
+
+void getIndexedGenomeDescriptionsZoo(char ***retArray, int *retCount, boolean blatOnly)
+/* Find out the list of genomes that have blat servers on them. */
+{
+struct dbDb *dbList = NULL, *db;
+int i, count = 0;
+char **array;
+if(blatOnly)
+    dbList = hGetBlatIndexedDatabases();
+else
+    dbList = hGetIndexedDatabases();
+
+/* Call zooCount instead of human count */
+count = zooCount(dbList);
+
+if (count == 0)
+    errAbort("No active %s servers in database", (blatOnly ? "blat" : "nib" ));
+AllocArray(array, count);
+i = 0;
+for (db=dbList; db != NULL; db=db->next)
+    {
+    /* Get the proper Zoo species omitting combo */
+     if(strstrNoCase(db->name, "zoo") && !strstrNoCase(db->name,"combo")){
+    array[i++] = cloneString(db->description);
+    }
+    }
+dbDbFreeList(&dbList);
+*retArray = array;
+*retCount = count;
 }
 
 void getIndexedGenomeDescriptions(char ***retArray, int *retCount, boolean blatOnly)
@@ -100,6 +192,7 @@ dbDbFreeList(&dbList);
 *retArray = array;
 *retCount = count;
 }
+
 
 
 void appendWarningMsg(char *warning)
@@ -231,6 +324,12 @@ outputBlatLink("Blat Sequence on new Draft", db, seq);
 printf("<br><br>");
 }
 
+
+void printSucessWarningZoo() {
+/** Make sure the user knows to take this with a grain of salt */
+printf("<p>Please be aware that this is merely our best guess of converting from one species to another. Make sure to check with local landmarks and use common sense.\n");
+}
+
 void printSucessWarning() {
 /** Make sure the user knows to take this with a grain of salt */
 printf("<p>Please be aware that this is merely our best guess of converting from one draft to another. Make sure to check with local landmarks and use common sense.\n");
@@ -246,6 +345,41 @@ webOutFasta(ccr->midSeq, ccr->to->version);
 webOutFasta(ccr->downSeq, ccr->to->version);
 printf("<br><br>");
 printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a></font></i>\n");
+}
+
+/* Mimic behaviour of doGoodReport do less stuff... */
+void doGoodReportZoo(FILE *dummy, struct coordConvRep *ccr) 
+/** output the result of a successful conversion */
+{
+cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
+	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+printWebWarnings();
+printf("<p><b>Success:</b> %s\n", ccr->msg);
+
+printSucessWarningZoo(); 
+
+printf("<ul><li><b>Original Coordinates:</b> %s %s:%d-%d  ", 
+       ccr->from->date ,ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+
+printf("<a href=\"%s\">[browser]</a></li>\n", 
+       makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd));
+
+printf("<li><b>Region of Original Coordinates Converted:</b> %s %s:%d-%d  ", 
+       ccr->from->date ,ccr->from->chrom, ccr->from->next->chromStart, ccr->from->next->chromEnd);
+
+printf("<a href=\"%s\">[browser]</a></li>\n", 
+       makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->next->chromStart, ccr->from->next->chromEnd));
+
+printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ", 
+       ccr->to->date ,ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd);
+
+printf("<a href=\"%s\">[browser]</a></li></ul>\n", 
+       makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd));
+
+/* Trouble shooting isn't applicable in this case yet... ccr doesn't contain proper info.. */
+/*  printTroubleShooting(ccr); */
+
+cartWebEnd();
 }
 
 void doGoodReport(FILE *dummy, struct coordConvRep *ccr) 
@@ -272,6 +406,23 @@ printTroubleShooting(ccr);
 cartWebEnd();
 }
 
+
+/* Same as below.. pretty much */
+void doBadReportZoo(FILE *dummy, struct coordConvRep *ccr) 
+/** output the result of a flawed conversion */{
+cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
+	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+printWebWarnings();
+printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
+printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n", 
+       makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
+       ccr->from->date);
+
+/* Don't need this - would need to fill in ccr manually */
+/* printTroubleShooting(ccr); */
+cartWebEnd();
+}
+
 void doBadReport(FILE *dummy, struct coordConvRep *ccr) 
 /** output the result of a flawed conversion */{
 cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d", 
@@ -283,6 +434,192 @@ printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n",
        ccr->from->date);
 printTroubleShooting(ccr);
 cartWebEnd();
+}
+
+
+/* Version for Zoo species */
+boolean convertCoordinatesZoo(FILE *goodOut, FILE *badOut, 
+			void (*goodResult)(FILE *out, struct coordConvRep *report),
+			void (*badResult)(FILE *out, struct coordConvRep *report)) 
+/* tries to convert coordinates and prints report 
+ depending on function pointers provided. In generial
+ goodResult and badResult either generate html or tesxt
+ if we are in cgi or testing mode respectively. */
+{
+struct blatServerTable *serve = NULL;
+struct coordConvRep *ccr = createCoordConvRep_mod();
+struct dbDb *newDbRec = NULL, *oldDbRec = NULL;
+struct sqlConnection *conn = sqlConnect(origGenome);
+struct linkedFeatures *lfList = NULL, *lf;
+struct sqlResult *sr = NULL;
+
+boolean success = FALSE;
+
+/* Keeps track if we're in an inverted match or not */
+boolean inversion = FALSE;
+
+/* Two possible reasons two fail */
+boolean incoherent = FALSE;
+boolean max_apart= FALSE;
+
+char track[256];
+char success_message[256];
+char **row;
+int rowOffset;
+int conv_total=0;
+int iteration = 0;
+
+/* These two distances check how different the distance is between the converted and unconverted coordinates.  
+   In this case if the distance between a converted versus unconverted block is more than 10 times
+   and greater than 10 000 bases, set up a warning... */
+
+int ref_end=0,ref_start,comp_end=0,comp_start=0;
+
+/* Load info from databases into ccr */
+oldDbRec = loadDbInformation_mod(origGenome);
+ccr->from->chrom = cloneString(chrom);
+ccr->from->chromStart = chromStart;
+ccr->from->chromEnd = chromEnd;
+ccr->from->version = cloneString(oldDbRec->name);
+ccr->from->date = cloneString(oldDbRec->description);
+ccr->from->nibDir = cloneString(oldDbRec->nibPath);
+ccr->seqSize=1000;
+newDbRec = loadDbInformation_mod(newGenome);
+ccr->to->version = cloneString(newDbRec->name);
+ccr->to->date = cloneString(newDbRec->description);
+ccr->to->nibDir = cloneString(newDbRec->nibPath);
+ccr->good=FALSE;
+
+/* Create the correct track name...  Will have to be changed when multiple versions? */
+
+sprintf(track,"%s_%s",origGenome,newGenome);
+
+/* Get the information from loading the track. */
+/* Double check we are not in the second release... */
+
+if(!strstr(track,"2"))
+    {
+    sr = hRangeQuery(conn, track, chrom, chromStart, chromEnd, NULL, &rowOffset);
+    }
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* Find the correponding track */
+    struct psl *psl = pslLoad(row+rowOffset);
+    
+    /* If first time through... */
+    if(iteration==0)
+	{
+	/* Fill in stuff if first time through... */
+	ccr->to->chrom=cloneString(psl->qName);
+	ccr->to->chromStart=psl->qStart;
+	
+	/* Actual point of conversion of coordinates */
+	ccr->from->next->chromStart=psl->tStart;      
+	ccr->good=TRUE;
+	
+	success=TRUE;
+	}
+    
+    /* check for erroneous conversion if not first time through */
+    /* Check for inversions, massive insertions... */
+    
+    /* Check for inversion (old start is "bigger" than new start)*/	
+    
+    if(iteration > 0)
+	{
+	if((comp_start> psl->qStart))
+	    {
+	    /* If not currently in an inversion state */
+	    if(!inversion )
+		/* If not the second time through (first time inversion could be detected) */
+		if(iteration > 2)
+		    incoherent=TRUE;
+	    
+	    /* Reset variables used for measuring distance... */
+	    
+	    /* Set inversion state variable to true */
+	    inversion = TRUE;
+	    
+	    
+	    /* Check to see if there are too great distances ... */
+	    
+	    if( ((comp_start - psl->qEnd)>(10 * (psl->tStart - ref_end))) && ((comp_start - psl->qEnd) > 10000))
+		max_apart=TRUE;
+	    }
+	else 
+	    /* No inversion */
+	    {
+	    /* Check if previous state was an inversion (then flip flop)...*/
+	    if(inversion)
+		incoherent = TRUE;
+	    else
+		{
+		/* Check to see if the mapping is too far apart */
+		if( ((psl->qStart - comp_end) > (10 * (psl->tStart - ref_end))) && ((psl->qStart - comp_end) > 10000))
+		    max_apart=TRUE;
+		}
+	    }
+	}
+    
+    if(inversion)
+	{
+	if(iteration == 1)
+	    ccr->to->chromEnd=comp_end;
+	
+	ccr->to->chromStart=psl->qStart;
+	}
+    else
+	ccr->to->chromEnd=psl->qEnd;
+    
+    ccr->from->next->chromEnd=psl->tEnd;
+    
+    if(max_apart || incoherent)
+	{
+	success=FALSE;
+	break;
+	}
+    
+    if(psl->tStart > ref_end)
+	conv_total+=(psl->tEnd - psl->tStart);
+    else
+	conv_total+=(psl->tEnd - ref_end);
+    
+    ref_end=psl->tEnd;
+    comp_end=psl->qEnd;
+    ref_start=psl->tStart;
+    comp_start=psl->qStart;
+        
+    iteration++;
+    pslFree(&psl);
+    }
+		    
+if(!success)
+    {
+    /* Check to see if using version two of zoo.  Not integrated into the database at this stage... */
+    if(strstr(origGenome,"2") || strstr(newGenome,"2"))
+	sprintf(success_message,"Couldn't convert between these two genomes since the second release of Zoo sequences hasn't been fully integrated into the database");
+    else if (max_apart)
+	sprintf(success_message, "Coordinates couldn't reliably be converted between the two species.  Try using a smaller window. ");
+    else if (incoherent)
+	sprintf(success_message, "Coordinates couldn't be converted due to inconsistent inversions.");
+    else
+	sprintf(success_message,"Couldn't find a corresponding region for the original genome to the new genome.");
+    
+    ccr->msg=cloneString(success_message);
+    badResult(badOut,ccr);
+    }
+else
+    {
+    sprintf(success_message,"Successfully converted (%3.1f%% of the original region was converted.)",((float)(conv_total * 100))/(float)(chromEnd-chromStart));
+    ccr->msg=cloneString(success_message);
+    goodResult(goodOut,ccr);
+    }
+
+dbDbFree(&oldDbRec);
+dbDbFree(&newDbRec);
+coordConvRepFreeList(&ccr); 
+return success;
 }
 
 
@@ -317,7 +654,13 @@ return success;
 void doConvertCoordinates()
 /* tries to convert the coordinates given */
 {
-convertCoordinates(stdout, stdout, doGoodReport, doBadReport);
+/* Seperate zoo conversions from non-zoo conversions... */
+
+if(strstr(origGenome, "zoo")){
+    convertCoordinatesZoo(stdout, stdout, doGoodReportZoo, doBadReportZoo);
+}
+else
+    convertCoordinates(stdout, stdout, doGoodReport, doBadReport);
 }
 
 
@@ -340,6 +683,62 @@ else
 	return db2;
     }
 return NULL;
+}
+
+/* This is very similar to doForm except it's for Zoo species */
+void doFormZoo(struct cart *lCart) 
+/** Print out the form for users */
+{
+char **genomeList = NULL;
+int genomeCount = 0;
+char *dbChoice = NULL;
+int i = 0;
+cart = lCart;
+cartWebStart(cart, "Converting Coordinates Between Drafts");
+puts( 
+     "<p>This page attempts to convert coordinates from one Zoo species' CFTR region\n"
+     "to another. The mechanism for doing this is to use the blastz alignments which have been\n"
+     "done between each Zoo species and use this to convert coordinates.  In general these should\n"
+     "be reasonable conversions however the user is advised to not take the conversions as absolute \n"
+     "standards.  Furthermore a given region from a given species is not necessarily alignable to any\n"
+     "region in a different species.\n"
+     );
+
+/* Get all Zoo species since we are using blastz static alignments */ 
+getIndexedGenomeDescriptionsZoo(&genomeList, &genomeCount,FALSE);
+
+/* choose whether to use the db supplied by cgi or our default */
+if(origDb != NULL && strstr(origDb, "zoo") == NULL)
+    errAbort("Sorry, this mode of the program only works between zoo species.");
+dbChoice = chooseDb(origDb, genomeList[0]); 
+
+printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
+printf("<br><br>\n");
+printf("<table><tr>\n");
+printf("<b><td><table><tr><td>Original Draft: </b>\n");
+cgiMakeDropList("origGenome", genomeList, genomeCount, dbChoice);
+printf("</td></tr></table></td>\n");
+printf("  <b><td><table><tr><td>Original Position:  </b>\n");
+
+/* if someone has passed in a position fill it in for them */
+if(position == NULL) 
+    cgiMakeTextVar("position",defaultPos, 30);
+else
+    cgiMakeTextVar("position",position, 30);
+printf("</td></tr></table></td>\n");
+printf("<b><td><table><tr><td>New Draft: </b>\n");
+
+freez(&genomeList);
+genomeCount =0;
+getIndexedGenomeDescriptionsZoo(&genomeList, &genomeCount, FALSE);
+cgiMakeDropList("newGenome", genomeList, genomeCount, genomeList[genomeCount -1]);
+printf("</td></tr></table></td></tr>\n");
+printf("<tr><td colspan=6 align=right><br>\n");
+cgiMakeButton("Submit","submit");
+printf("</center></td></tr></table>\n");
+cgiMakeHiddenVar("calledSelf", "on");
+printf("</form>\n");
+cartWebEnd();
 }
 
 
@@ -537,10 +936,15 @@ if(hgTest)
 else 
     {
 /* do our thing  */
-    if(calledSelf)
+    if(calledSelf)  
 	cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars, NULL);
-    else
+    else{
+    /* Check to see if in zoo browser... if so call doFormZoo */
+    if(strstr(origDb, "hg"))
 	cartEmptyShell(doForm, hUserCookie(), excludeVars, NULL);
+    else
+	cartEmptyShell(doFormZoo, hUserCookie(), excludeVars, NULL);
+    }    
     }
 return 0;
 }
