@@ -7,6 +7,7 @@
 #include "jksql.h"
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
+#include "dystring.h"
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -166,5 +167,30 @@ for (i=0; i<el->columnCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
+}
+
+struct dnaMotif *dnaMotifLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all dnaMotif from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with dnaMotifFreeList(). */
+{
+struct dnaMotif *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = dnaMotifLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+return list;
 }
 
