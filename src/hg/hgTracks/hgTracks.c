@@ -5265,7 +5265,7 @@ if (sameString(database, "hg7"))
     printEnsemblAnchor();
     printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
-printf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Help"));
+printf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
 fputs("</TR></TABLE>", stdout);
 fputs("</TD></TR></TABLE>\n", stdout);
 }
