@@ -7,4 +7,5 @@ getgene.exe: $(O)
 	gcc $O ../lib/$(MACHTYPE)/jkweb.a
 	mv a.out getgene.exe
 	chmod a+rx getgene.exe
-	mv getgene.exe ../cgi-bin
+	chmod g-w getgene.exe
+	mv getgene.exe $(HOME)/.html/cgi-bin
