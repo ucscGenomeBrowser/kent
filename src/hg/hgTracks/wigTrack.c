@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.23 2003/11/11 23:43:49 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.24 2003/11/13 00:21:15 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -174,7 +174,6 @@ struct wigItem *item;
 char *heightPer;
 int heightFromCart;
 struct wigCartOptions *wigCart;
-char o1[128];
 int itemCount = 1;
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
@@ -743,13 +742,13 @@ freeMem(preDraw);
 void wigMethods(struct track *track, struct trackDb *tdb, 
 	int wordCount, char *words[])
 {
-char o1[128];	/*	Option 1 - track pixel height:  .heightPer	*/
-char o2[128];	/*	Option 2 - interpolate or samples only	*/
-char o4[128];	/*	Option 4 - minimum Y axis value: .minY	*/
-char o5[128];	/*	Option 5 - maximum Y axis value: .minY	*/
-char o7[128];	/*	Option 7 - horizontal grid lines: horizGrid */
-char o8[128];	/*	Option 8 - type of graph, lineBar */
-char o9[128];	/*	Option 9 - type of graph, autoScale */
+char o1[MAX_OPT_STRLEN]; /* Option 1 - track pixel height:  .heightPer	*/
+char o2[MAX_OPT_STRLEN]; /* Option 2 - interpolate or samples only	*/
+char o4[MAX_OPT_STRLEN]; /* Option 4 - minimum Y axis value: .minY	*/
+char o5[MAX_OPT_STRLEN]; /* Option 5 - maximum Y axis value: .minY	*/
+char o7[MAX_OPT_STRLEN]; /* Option 7 - horizontal grid lines: horizGrid */
+char o8[MAX_OPT_STRLEN]; /* Option 8 - type of graph, lineBar */
+char o9[MAX_OPT_STRLEN]; /* Option 9 - type of graph, autoScale */
 char *interpolate = NULL;	/*	samples only, or interpolate */
 char *horizontalGrid = NULL;	/*	Grid lines, ON/OFF - off default */
 char *lineBar = NULL;	/*	Line or Bar chart - Bar by default */
@@ -768,6 +767,8 @@ double minY;	/*	from trackDb.ra words, the absolute minimum */
 double maxY;	/*	from trackDb.ra words, the absolute maximum */
 char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
+int maxHeightPixels = atoi(trackDbSettingOrDefault(track->tdb,
+				"maxHeightPixels", DEFAULT_HEIGHT_PER));
 
 AllocVar(wigCart);
 
@@ -786,12 +787,6 @@ if (maxY < minY)
     maxY = minY;
     minY = d;
     }
-/*	Allow DrawItems to see these from wigCart in addition
- *	to the track minRange,maxRange which is set below
- */
-
-wigCart->minY = minY;
-wigCart->maxY = maxY;
 
 /*	Possibly fetch values from the cart	*/
 snprintf( o1, sizeof(o1), "%s.heightPer", track->mapName);
@@ -815,14 +810,18 @@ else minYc = minY;
 if (maxY_str) maxYc = atof(maxY_str);
 else maxYc = maxY;
 
-/*	Clip the cart value to range [tl.fontHeight + 1:DEFAULT_HEIGHT_PER] */
-if (heightPer) heightFromCart = min( DEFAULT_HEIGHT_PER, atoi(heightPer));
-else heightFromCart = DEFAULT_HEIGHT_PER;
+/*	Clip the cart value to range [tl.fontHeight + 1:maxHeightPixels] */
+if (heightPer) heightFromCart = min( maxHeightPixels, atoi(heightPer));
+else heightFromCart = maxHeightPixels;
 heightFromCart = max(tl.fontHeight + 1, heightFromCart);
 
 wigCart->heightFromCart = heightFromCart;
 
-/*	The values from trackDb.ra are the clipping boundaries, do
+/*	Allow DrawItems to see these from wigCart in addition
+ *	to the track minRange,maxRange which is set below
+ */
+
+/*	The values from trackDb.ra are the absolute clipping boundaries, do
  *	not let cart settings go outside that range, and keep them
  *	in proper order.
  */
@@ -879,7 +878,8 @@ else
 wigCart->lineBar = wiggleLineBar;
 
 /*	If autoScale is a string, it came from the cart, otherwise set
- *	the default for this option and stuff it into the cart
+ *	the default for this option and stuff it into the cart.  The
+ *	default is "Auto-Scale to data view"
  */
 if (autoScale)
     wiggleAutoScale = wiggleScaleStringToEnum(autoScale);
