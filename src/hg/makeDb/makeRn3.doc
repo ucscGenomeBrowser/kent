@@ -1,7 +1,7 @@
 # This file describes how we made the browser database on the Rattus 
 # Norvegicus genome, January 2003 update.
 
-DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
+DOWNLOAD SEQUENCE (DONE Rnor3.1 - 2003-06-29 - Hiram)
 
     ssh kkstore
     mkdir /cluster/store3/rn3
@@ -10,24 +10,19 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/conditions_for_use
     #  Three extra files that were not in Rn2:
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bac.clones
+    wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bacfile.gz
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bactigs.bacs
     wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/bactigs.contigs
 
     # Get BCM's chrom assemblies -- we will assemble our own chr*.fa from 
     # contig fa + agp, and cross-check against this.  
-    #	The chrX is picked up as chr21.  We change the name here to
-    #	match our conventions.
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X Un)
       mkdir $c
       wget -O $c/chr$c.fa.bcm.gz \
        ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.fa.gz
       wget -O $c/chr${c}_random.fa.bcm.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.random.fa.gz
+ ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.random.fa.gz
     end
-    # rename the chr21 business to chrX
-    mkdir X
-    zcat 21/chr21.fa.bcm.gz | sed -e "s/chr21/chrX/g" | gzip > X/chrX.fa.bcm.gz
-    zcat 21/chr21_random.fa.bcm.gz | sed -e "s/chr21/chrX/g" | gzip > X/chrX_random.fa.bcm.gz
 
     # Get BCM's contig fa + agp.  We will split into our own conveniently-sized
     # pseudo-contigs, and assemble chrom fa.  
@@ -37,54 +32,49 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
     # wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/record.dat.gz
     #  Perhaps the extra three files bac.clones, bactigs.bacs and
     #  bactigs.contigs can be used ?
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
-      wget -O $c/chr$c.agp.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.agp.gz
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X Un)
+      wget -O $c/chr$c.agp \
+       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.agp
       wget -O $c/chr$c.contig.fa.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.contig.fa.gz
-      wget -O $c/chr${c}_random.agp.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.agp.gz
+   ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.contig.fa.gz
+      wget -O $c/chr${c}_random.agp \
+   ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.agp
       wget -O $c/chr${c}_random.contig.fa.gz \
-       ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.contig.fa.gz
-      gunzip $c/chr$c.agp.gz
-      gunzip $c/chr${c}_random.agp.gz
+   ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.random.contig.fa.gz
     end
-    # rename the chr21 business to chrX
-    sed -e "s/chr21/chrX/g" 21/chr21.agp > X/chrX.agp
-    mv 21/chr21.contig.fa.gz X/chrX.contig.fa.gz
-    sed -e "s/chr21/chrX/g"  21/chr21_random.agp > X/chrX_random.agp
-    mv 21/chr21_random.contig.fa.gz X/chrX_random.contig.fa.gz
-    # end of chr21 business
-    rm -fr 21
 
-BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-25 - Hiram)
+BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-29 - Hiram)
 
     # Make chrom fa:
     ssh kkstore
     # The contig sequences are delivered with various upper and lower
     # case.  We need them all in upper case to begin with.  The first
     # line of the file is not a problem, it is already all upper case.
+    # According to Kim Worley: <kworley@swan.hgsc.bcm.tmc.edu>
+    # "The lowercase letters are regions where Phrap assigns a quality score
+    #	of less than 20.  These can safely be ignored."
     foreach c (?{,?})
 	set f = $c/chr$c.contig.fa.gz
 	set g = $f:r
+	echo "${f}"
 	zcat ${f} | tr '[a-z]' '[A-Z]' > ${g}
-	ls -og ${g}
     end
     foreach c (?{,?})
 	set f = $c/chr${c}_random.contig.fa.gz
 	set g = $f:r
-	if (-e${f}) then
+	if (-e ${f}) then
+	    echo "${f}"
 	    zcat ${f} | tr '[a-z]' '[A-Z]' > ${g}
-	    ls -og ${g}
 	endif
     end
 
     foreach c (?{,?})
       echo "Processing ${c}"
-      $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.agp chr$c $c/chr$c.fa $c/chr$c.contig.fa
+      $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.agp chr$c \
+	$c/chr$c.fa $c/chr$c.contig.fa
       if (-e $c/chr${c}_random.agp) then
-        $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr${c}_random.agp chr${c}_random \
-          $c/chr${c}_random.fa $c/chr${c}_random.contig.fa
+        $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr${c}_random.agp \
+	chr${c}_random $c/chr${c}_random.fa $c/chr${c}_random.contig.fa
       endif
       echo "${c} - DONE"
     end
@@ -110,22 +100,27 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-25 - Hiram)
       if ($ucscLen == $bcmLen) then
         echo "   OK: chr$c.fa length = chr$c.fa.bcm length = $bcmLen"
       else
-        echo "ERROR:  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length = $bcmLen"
+        echo -n "ERROR:  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length"
+	echo " = $bcmLen"
+        echo -n "ERROR:  chr$c.fa length = $ucscLen, but chr$c.fa.bcm length"
+	echo " = $bcmLen"
       endif
       if (-e $c/chr${c}_random.fa) then
         set ucscLen = `faSize $c/chr${c}_random.fa | awk '{print $1;}'`
         set bcmLen  = `gunzip -c $c/chr${c}_random.fa.bcm.gz | faSize stdin \
                         | awk '{print $1;}'`
         if ($ucscLen == $bcmLen) then
-          echo "   OK: chr${c}_random.fa length = chr${c}_random.fa.bcm length = $bcmLen"
+          echo -n "   OK: chr${c}_random.fa length = chr${c}_random.fa.bcm"
+	  echo " length = $bcmLen"
         else
-          echo "ERROR:  chr${c}_random.fa length = $ucscLen, but chr${c}_random.fa.bcm length = $bcmLen"
+          echo -n "ERROR:  chr${c}_random.fa length = $ucscLen, but"
+	  echo " chr${c}_random.fa.bcm length = $bcmLen"
         endif
       endif
     end
 
 BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
-					(DONE - 2003-06-25 - Hiram)
+					(DONE - 2003-06-29 - Hiram)
 
     # This will split the rat sequence into approx. 5 Mbase
     # supercontigs between non-bridged clone contigs and drop the
@@ -162,14 +157,14 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
     #	able to catch all the output.  Look for non-zero numbers.  The
     #	wc -l should always output zero
     foreach f ( */*.fa.bak )
-      echo $f:r
+      echo -n $f:r " "
       diff $f $f:r | wc -l
     end
     # The .agp goes through a slight format change, but make sure it 
     # at least ends up with the same number of lines:
-    foreach f ( */*.agp.bak )
-      set l1 = `wc -l $f | awk '{print $1;}'`
-      set l2 = `wc -l $f:r | awk '{print $1;}'`
+    foreach f ( ?{,?}/*.agp.bak )
+      set l1 = `wc -l $f | awk '{print $1}'`
+      set l2 = `wc -l $f:r | awk '{print $1}'`
       if ($l1 == $l2) then
         echo "   OK: $f and $f:r have the same #lines"
       else
@@ -183,6 +178,9 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
 #	echo $c
 #	gzip $c/chr*.contig.fa
 #	end
+    # Do need to at least move these out of the way because later
+    # wild card expansions are looking for things like *.fa and we
+    # don't want these in those expansions.
 	foreach c (?{,?})
 	echo "$c/chr${c}.contig.fa -> $c/chr${c}.contig.fa.UC"
 	mv $c/chr${c}_random.contig.fa $c/chr${c}_random.contig.fa.UC
@@ -193,12 +191,15 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
     # with the *.bak originals.
 #	rm */*.bak
 
-COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE - 2003-06-23 - Hiram)
+COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE - 2003-06-29 - Hiram)
 	# Some of these scripts are being edited after they were
 	#	copied to here.  Some cases of binaries in
 	#	~kent/bin/i386 need to be changed either to
 	#	/cluster/bin/i386 or ~hiram/bin/i386 depending upon what
 	#	was being fixed as all this proceeded.
+	#	The "real" place should be /cluster/bin/i386 but before
+	#	we go that route, we need to have our build processes
+	#	working properly to keep that bin up to date.
 
     ssh kkstore
     ln -s /cluster/store3/rn3 ~/rn3
@@ -230,7 +231,7 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-23 - Hiram)
       | hgsql rn3
 
 
-REPEAT MASKING (DONE - 2003-06-26 - Hiram)
+REPEAT MASKING (RUNNING - 2003-06-30 - Hiram)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -329,8 +330,10 @@ if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
 
 MAKE LIFTALL.LFT (DONE - 2003-06-26 - Hiram)
 
+    ssh kkstore
     cd ~/rn3
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
+    cp -p jkStuff/liftAll.lft /cluster/bluearc/rat/rn3
 
 VERIFY REPEATMASKER RESULTS (DONE - 2003-06-24 - Hiram)
 
@@ -363,6 +366,9 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
     end
 
     # Make symbolic links from /gbdb/rn3/nib to the real nibs.
+    # It is unclear to me what kind of nibs these links are supposed to
+    # point to.  Below, after the soft masked nibs are created, I am
+    # going to reset these links to point to the soft masked nibs.
     ssh hgwdev
     mkdir -p /gbdb/rn3/nib
     foreach f (/cluster/store3/rn3/nib/chr*.nib)
@@ -552,6 +558,28 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
     cp -p ~/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
 	/cluster/bluearc/rat/rn3/trfFa
 
+RESET NIB POINTERS TO softNib (DONE - 2003-06-27 - Hiram)
+
+    # As mentioned above the first time this was done, I don't know if
+    # this needs to done to reset the links, but I'm going to do it.
+    ssh hgwdev
+    cd /gbdb/rn3/nib
+    rm -f *
+    foreach f (/cluster/store3/rn3/softNib/chr*.nib)
+      ln -s $f /gbdb/rn3/nib
+    end
+    #  I wonder if this needs to be run again ?  I'm going to do it
+    #	anyway.
+    # Load /gbdb/rn3/nib paths into database and save size info.
+     ssh hgwdev
+     cd ~/rn3
+     hgNibSeq -preMadeNib rn3 /gbdb/rn3/nib ?{,?}/chr?{,?}{,_random}.fa
+    #	2835152425 total bases
+     echo "select chrom,size from chromInfo" | hgsql -N rn3 > chrom.sizes
+    # take a look at chrom.sizes, should be 44 lines and reasonable
+    # numbers
+    wc chrom.sizes
+    #	44      88     778 chrom.sizes
 
 MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
     ssh kkstore
@@ -634,6 +662,15 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  STOP HERE 2003-06-27
 XXXXXXXXXXXXXXXXXX  The following needs to be done with Mark's new
 XXXXXXXXXXXXXXXXXX  system of auto-update genbank data.  Will start
 XXXXXXXXXXXXXXXXXX  on this later today.
+
+AUTO UPDATE GENBANK MRNA RUN
+
+    ssh eieio
+    set db = rn3
+    set nibGlob = '/cluster/bluearc/rat/rn3/softNib/chr*.nib'
+    set liftFile = /cluster/bluearc/rat/rn3/liftAll.lft
+    nice bin/gbAlignStep -verbose=1 -initial -srcDb=genbank -type=mrna \
+	$db "$nibGlob" $liftFile &
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (TO DO)
 
