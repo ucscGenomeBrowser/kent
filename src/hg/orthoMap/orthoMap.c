@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.14 2005/01/10 00:42:08 kent Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.15 2005/02/14 07:32:25 sugnet Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -985,7 +985,8 @@ int i;
 unsigned *blockSizes;
 struct chain *chain = NULL;
 int diff = 0;
-
+boolean goodCdsStart = FALSE;
+boolean goodCdsEnd = FALSE;
 AllocArray(blockSizes, gene->exonCount);
 for(i=0; i<gene->exonCount; i++)
     blockSizes[i] = gene->exonEnds[i] - gene->exonStarts[i];
@@ -1012,8 +1013,32 @@ else
 	addExonToGene(chain, gene, synGene, i);
 	}
     }
+
 if(synGene->exonCount > 0 && synGene->exonStarts[0] != 0)
     diff = synGene->exonStarts[0];
+
+/* Make sure the txStart/End and cdsStart/End are at reasonable places. */
+if(synGene->exonCount > 0) 
+    {
+    synGene->txStart = synGene->exonStarts[0];
+    synGene->txEnd = synGene->exonEnds[synGene->exonCount - 1];
+    }
+
+/* Are the cdsStart and cdsEnd within exons? */
+for(i = 0; i < synGene->exonCount; i++) 
+    {
+    if(synGene->cdsStart >= synGene->exonStarts[i] &&
+       synGene->cdsStart <= synGene->exonEnds[i])
+	goodCdsStart |= TRUE;
+    if(synGene->cdsEnd >= synGene->exonStarts[i] &&
+       synGene->cdsEnd <= synGene->exonEnds[i])
+	goodCdsEnd |= TRUE;
+    }
+
+/* If we don't have good cds's quit the program. */    
+if(!goodCdsEnd || !goodCdsStart)
+    genePredFree(&synGene);
+
 return synGene;
 }
 
