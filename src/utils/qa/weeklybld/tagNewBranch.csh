@@ -1,6 +1,6 @@
 #!/bin/tcsh
-if ( "$HOST" != "kkstore" ) then
- echo "Error: this script must be run from kkstore."
+if ( "$HOST" != "hgwdev" ) then
+ echo "Error: this script must be run from hgwdev."
  exit 1
 endif
 

@@ -56,7 +56,7 @@ echo
 
 echo
 #echo debug: disabled tagging
-ssh kkstore $WEEKLYBLD/tagNewBranch.csh real
+./tagNewBranch.csh real
 if ( $status ) then
  echo "tagNewBranch.csh failed on $HOST"
  exit 1
