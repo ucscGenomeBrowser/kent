@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.56 2004/10/29 21:40:10 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.57 2004/10/31 02:55:42 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -195,10 +195,18 @@ if (startsWith("chr", table))
     char *s = strchr(table, '_');
     if (s != NULL)
         {
+	char *hap;
 	if (startsWith("_random_", s))
 	    table = s+8;
 	else
 	    table = s+1;
+	hap = stringIn("_hap", table);
+	if (hap != NULL && hap - table <= 6)
+	    {
+	    s = strchr(hap+4, '_');
+	    if (s != NULL)
+	        table = s+1;
+	    }
 	}
     }
 return table;

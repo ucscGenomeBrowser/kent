@@ -22,8 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.83 2004/10/27 22:58:25 kent Exp $";
-
+static char const rcsid[] = "$Id: hgTables.c,v 1.84 2004/10/31 02:55:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1164,6 +1163,7 @@ void hgTables()
  * and put away the cart when it is done. */
 {
 struct sqlConnection *conn = NULL;
+
 oldVars = hashNew(10);
 
 /* Sometimes we output HTML and sometimes plain text; let each outputter 
