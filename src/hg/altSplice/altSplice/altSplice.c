@@ -70,7 +70,7 @@
 #include "cheapcgi.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.4 2003/05/20 23:36:07 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.5 2003/05/27 20:33:11 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -167,7 +167,7 @@ struct altGraphX *ag = NULL;
 struct ggMrnaCluster *mcList=NULL, *mc=NULL;
 struct ggMrnaInput *ci = NULL;
 struct geneGraph *gg = NULL;
-int count = 0;
+static int count = 0;
 ci = ggMrnaInputFromAlignments(maList, seq);
 mcList = ggClusterMrna(ci);
 if(mcList == NULL)
@@ -411,6 +411,8 @@ out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
     {
 //    count++;
+    warn("Starting loci %s:", gp->name);
+    fflush(stderr);
     ag = agFromGp(gp, conn, 5, out);
     altGraphXFree(&ag);
     if (memTest != TRUE) 
