@@ -3460,6 +3460,7 @@ printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
 	psl->tEnd - psl->tStart);
 printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
 printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
