@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "chromInfo.h"
@@ -13,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.1 2003/08/21 18:01:32 baertsch Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.2 2003/08/28 09:07:27 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,7 +38,8 @@ struct optionSpec options[] = {
 struct chromInfo *getAllChromInfo()
 /* Return list of info for all chromosomes. */
 {
-struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct sqlResult *sr;
 char **row;
 struct chromInfo *ci, *ciList = NULL;
@@ -49,7 +51,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&ciList, ci);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+sqlDisconnect(&conn);
+//hFreeConn(&conn);
 slReverse(&ciList);
 return ciList;
 }
@@ -75,8 +78,11 @@ struct chromSizes
    double unrestrictedSize;	/* Size unrestricted. */
    double totalDepth;  /* Sum of coverage of all bases. */
    double totalCov;    /* Sum of bases covered at least once. */
+   double totalAlign;    /* Sum of aligning bases covered at least once. */
+   double totalId;    /* Sum of aligning exact match bases covered at least once. */
 
    double histogram[maxCover+1]; /* Coverage histogram. */
+   double histogramAlign[maxCover+1]; /* Coverage histogram. */
    boolean completed;   /* True if completed. */
    struct range *restrictList;	/* List of ranges to restrict to. */
    };
@@ -107,14 +113,24 @@ void showStats(struct chromSizes *cs)
 /* Print out stats. */
 {
 int i, j;
-printf("%-6s %9.0f depth %10.0f %5.2f anyCov %10.0f %5.2f%%\n", 
-	cs->name, cs->unrestrictedSize, 
-	cs->totalDepth, 100.0 * cs->totalDepth/cs->unrestrictedSize,
-	cs->totalCov, 100.0 * cs->totalCov/cs->unrestrictedSize);
+printf("%-6s ", cs->name);
+printLongWithCommas(stdout,cs->unrestrictedSize);
+printf("    Depth ");
+printLongWithCommas(stdout,cs->totalDepth);
+printf(" %5.2f%%    Coverage ", 100.0 * cs->totalDepth/cs->unrestrictedSize);
+printLongWithCommas(stdout,cs->totalCov);
+printf(" %5.2f%%    Align ", 100.0 * cs->totalCov/cs->unrestrictedSize);
+printLongWithCommas(stdout,cs->totalAlign);
+printf(" %5.2f%%    Exact Match ", 100.0 * cs->totalAlign/cs->unrestrictedSize);
+printLongWithCommas(stdout,cs->totalId);
+printf(" %5.2f%%    MisMatch ", 100.0 * cs->totalId/cs->unrestrictedSize);
+printLongWithCommas(stdout,cs->totalAlign - cs->totalId);
+printf(" %5.2f%%    \n", 100.0 * (cs->totalAlign - cs->totalId)/cs->unrestrictedSize);
 for (i=1; i<10; ++i)
     {
     double sum = cs->histogram[i];
-    printf("%2d  %10.0f %5.3f%%\n", i, sum, 100.0 * sum/cs->unrestrictedSize);
+    if (sum > 0)
+        printf("%2d  %10.0f %5.3f%%\n", i, sum, 100.0 * sum/cs->unrestrictedSize);
     }
 for (i=0; i<100; i += 10)
     {
@@ -124,9 +140,11 @@ for (i=0; i<100; i += 10)
 	int ix = i+j;
 	sum += cs->histogram[ix];
 	}
-    printf("%2d to %2d:  %10f %5.3f%%\n", i, i+9, sum, 100.0 * sum/cs->unrestrictedSize);
+    if (sum > 0)
+        printf("%2d to %2d:  %10f %5.3f%%\n", i, i+9, sum, 100.0 * sum/cs->unrestrictedSize);
     }
-printf(">=100  %10f %5.3f%%\n", cs->histogram[100], 
+if (cs->histogram[100] > 0)
+    printf(">=100  %10f %5.3f%%\n", cs->histogram[100], 
 	100.0 * cs->histogram[100]/cs->unrestrictedSize);
 printf("\n");
 }
@@ -141,19 +159,26 @@ twoOrMore = totalCov - cs->histogram[1];
 for (i=10; i<=100; ++i)
     tenOrMore += cs->histogram[i];
 hundredOrMore = cs->histogram[100];
-printf("%s\t%1.2f\t%1.2f\t%1.2f\t%1.2f\n", 
-	cs->name, 
-	totalCov * 100.0 / cs->unrestrictedSize, 
-	twoOrMore * 100.0 / cs->unrestrictedSize, 
-	tenOrMore * 100.0 / cs->unrestrictedSize, 
-	hundredOrMore * 100.0 / cs->unrestrictedSize);
+if (totalCov > 0 || cs->totalAlign > 0 || tenOrMore > 0 || hundredOrMore > 0)
+    {
+    printf("%s\t", cs->name); 
+    printLongWithCommas(stdout,cs->totalCov);
+    printf("\t%1.2f\t",totalCov * 100.0 / cs->unrestrictedSize); 
+    printLongWithCommas(stdout,cs->totalAlign);
+    printf("\t%1.2f\t",cs->totalAlign * 100.0 / cs->unrestrictedSize);
+    printLongWithCommas(stdout,cs->totalId);
+    printf("\t%1.2f\t",cs->totalId * 100.0 / cs->unrestrictedSize);
+    printLongWithCommas(stdout,cs->totalAlign - cs->totalId);
+    printf("\t%1.2f\n",(cs->totalAlign - cs->totalId) * 100.0 / cs->unrestrictedSize);
+    }
 }
 
 void getChromSizes(struct hash **retHash, 
 	struct chromSizes **retList)
 /* Return hash of chromSizes. */
 {
-struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct chromInfo *ci, *ciList = getAllChromInfo();
 struct sqlResult *sr;
 char **row;
@@ -177,7 +202,8 @@ for (ci = ciList; ci != NULL; ci = ci->next)
 	}
     sqlFreeResult(&sr);
     }
-hFreeConn(&conn);
+sqlDisconnect(&conn);
+//hFreeConn(&conn);
 slReverse(&csList);
 *retHash = hash;
 *retList = csList;
@@ -188,7 +214,6 @@ void incNoOverflow(UBYTE *cov, int size)
  * not over maxCover. */
 {
 UBYTE c;
-//printf("cov %d size %d\n",(int)cov,size);
 while (--size >= 0)
    {
    c = *cov;
@@ -201,10 +226,10 @@ while (--size >= 0)
    }
 }
 
-void closeChromCov(char *fileName, struct chromSizes *cs, UBYTE **pCov)
+void closeChromCov(char *fileName, struct chromSizes *cs, UBYTE **pCov1, UBYTE **pCov2, UBYTE **pCov3)
 /* Fill in cs->histogram from cov, and free cov. */
 {
-UBYTE *cov = *pCov, c;
+UBYTE *cov = *pCov1, *align = *pCov2, *id = *pCov3,  c;
 int i, size = cs->totalSize;
 for (i=0; i<size; ++i)
    {
@@ -214,8 +239,21 @@ for (i=0; i<size; ++i)
        cs->histogram[c] += 1;
        cs->totalCov += 1;
        }
+   c = align[i];
+   if (c > 0 && c != restricted)
+       {
+       cs->histogramAlign[c] += 1;
+       cs->totalAlign += 1;
+       }
+   c = id[i];
+   if (c > 0 && c != restricted)
+       {
+       cs->totalId += 1;
+       }
    }
-freez(pCov);
+freez(pCov1);
+freez(pCov2);
+freez(pCov3);
 if (cs->completed)
      errAbort("maf file not sorted by chromosome in %s .", fileName);
 cs->completed = TRUE;
@@ -241,7 +279,8 @@ void restrictGaps(UBYTE *cov, int size, char *chrom)
 /* Mark gaps as off-limits. */
 {
 int rowOffset;
-struct sqlConnection *conn = hAllocConn();
+//struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
 char **row;
 int s,e;
@@ -255,7 +294,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     memset(cov + s, restricted, e - s);
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+sqlDisconnect(&conn);
+//hFreeConn(&conn);
 }
 
 int calcUnrestrictedSize(UBYTE *cov, int size)
@@ -280,9 +320,12 @@ struct mafAli *ali = NULL;
 struct mafComp *comp = NULL;
 struct chromSizes *lastCs = NULL, *cs = NULL;
 char *chrom = NULL;
-int start = 0, end = 0, size = 0, j;
+int start = 0, end = 0, size = 0, j, k;
+int idStart = 0, idEnd = 0, idSize = 0;
 char *row[3];
 UBYTE *cov = NULL;
+UBYTE *align = NULL;
+UBYTE *id = NULL;
 char *tPtr[MAXALIGN];
 bool hit = FALSE;
 
@@ -290,24 +333,33 @@ while (ali = mafNext(mf))
     {
     int cCount = slCount(ali->components);
     int i = 1;
-    int nextStart;
+    int nextStart, idNextStart;
     
     comp = ali->components; 
     tPtr[0] = comp->text;
     chrom = strstr(comp->src,".")+1;
     start = comp->start;
-    nextStart = start;
+    idStart = comp->start;
+    nextStart = idNextStart = start;
     cs = hashMustFindVal(chromHash, chrom);
     if (cs == NULL)
         errAbort("cannot find chrom %s\n",chrom);
     if (cs != lastCs)
         {
 	if (lastCs != NULL)
-	    closeChromCov(fileName, lastCs, &cov);
+	    closeChromCov(fileName, lastCs, &cov, &align, &id);
 	AllocArray(cov, cs->totalSize);
+	AllocArray(align, cs->totalSize);
+	AllocArray(id, cs->totalSize);
 	if (restrict)
+            {
 	    restrictCov(cov, cs->totalSize, cs->restrictList);
+	    restrictCov(align, cs->totalSize, cs->restrictList);
+	    restrictCov(id, cs->totalSize, cs->restrictList);
+            }
 	restrictGaps(cov, cs->totalSize, chrom);
+	restrictGaps(align, cs->totalSize, chrom);
+	restrictGaps(id, cs->totalSize, chrom);
 	cs->unrestrictedSize = calcUnrestrictedSize(cov, cs->totalSize);
 	lastCs = cs;
 	}
@@ -317,6 +369,8 @@ while (ali = mafNext(mf))
         mafAliFree(&ali);
         continue;
         }
+    //printf("coverage %d, size %d\n", start, comp->size);
+    incNoOverflow(cov+start, comp->size);
     for (comp = ali->components->next; comp != NULL; comp = comp->next)
         {
         tPtr[i] = comp->text;
@@ -329,9 +383,10 @@ while (ali = mafNext(mf))
         {
         for (i = 1 ; i < cCount ; i++)
             {
-            if (toupper(tPtr[i][j]) != toupper(tPtr[0][j]) || tPtr[0][j] == '-')
+            if (toupper(tPtr[i][j]) == '-' || tPtr[0][j] == '-')
                 {
-                incNoOverflow(cov+start, size);
+     //   printf("align %d, size %d\n", start, size);
+                incNoOverflow(align+start, size);
                 cs->totalDepth += size;
                 start = nextStart;
                 size = 0;
@@ -361,11 +416,52 @@ while (ali = mafNext(mf))
             else
                 errAbort("End %d past end %d \n", end, cs->totalSize);
             }
-    incNoOverflow(cov+start, size-1);
+    incNoOverflow(align+start, size-1);
     cs->totalDepth += size-1;
+
+    /* count percent id */
+    idSize = 0;
+    assert(cs != NULL);
+    for (k = 0 ; k<=ali->textSize ; k++)
+        {
+        for (i = 1 ; i < cCount ; i++)
+            {
+            if (toupper(tPtr[i][k]) != toupper(tPtr[0][k]) || 
+                    tPtr[0][k] == '-' || tPtr[0][k] == 'N')
+                {
+                incNoOverflow(id+idStart, idSize);
+                idStart = idNextStart;
+                idSize = 0;
+                hit = FALSE;
+                break;
+                }
+            else
+                {
+                hit = TRUE;
+                }
+            }
+        if (hit)
+            idSize++;
+        /* skip over gaps */
+        if (tPtr[0][k] != '-')
+            idNextStart++;
+        }
+    assert(cs!=NULL);
+    idEnd = idStart+idSize;
+    if (idEnd > cs->totalSize)
+        if (cs->name != NULL)
+            errAbort("End %d past end %d of %f\n", idEnd, cs->totalSize, ali->score);
+        else
+            {
+            if (ali!=NULL)
+                errAbort("End %d past end %d %f\n", idEnd, cs->totalSize, ali->score );
+            else
+                errAbort("End %d past end %d \n", idEnd, cs->totalSize);
+            }
+    incNoOverflow(id+idStart, idSize-1);
     mafAliFree(&ali);
     }
-closeChromCov(fileName, cs, &cov);
+closeChromCov(fileName, cs, &cov, &align, &id);
 }
 
 struct chromSizes *genoSize(struct chromSizes *chromSizes)
@@ -382,6 +478,8 @@ for (cs = chromSizes; cs != NULL; cs = cs->next)
     g->totalSize += cs->totalSize;
     g->totalDepth += cs->totalDepth;
     g->totalCov += cs->totalCov;
+    g->totalAlign += cs->totalAlign;
+    g->totalId += cs->totalId;
     for (i=0; i<=maxCover; ++i)
         g->histogram[i] += cs->histogram[i];
     }
