@@ -97,5 +97,8 @@ void trackDbPolish(struct trackDb *bt);
 char *trackDbSetting(struct trackDb *tdb, char *name);
 /* Return setting string or NULL if none exists. */
 
+char *trackDbSettingOrDefault(struct trackDb *tdb, char *name, char *defaultVal);
+/* Return setting string, or defaultVal if none exists */
+
 #endif /* TRACKDB_H */
 
