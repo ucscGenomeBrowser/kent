@@ -790,6 +790,8 @@ char      *outColor     = cartUsualString(cart, "ldOut",    "white");
 char      *valArray     = cartUsualString(cart, "ldValues", "dprime");
 Color      outlineColor = MG_BLUE;
 boolean    drawOutline  = differentString(outColor,"none");
+char      *commaSepList = NULL;
+boolean isLod = FALSE, isRsquared = FALSE, isDprime=FALSE;
 
 makeLdShades(vg);
 
@@ -826,66 +828,36 @@ if (drawOutline)
 	outlineColor = MG_BLUE;
     }
 
+
 /* choose values from different arrays based on cart settings */
 if (sameString(valArray,"rsquared"))
-    for (el=tg->items; el!=NULL; el=el->next)
-	{
-	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-	if(arraySize != el->ldCount) 
-	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
-		      "el->ldCount=%d<BR>el->ldStarts: %s",
-		      el->name,arraySize,el->ldCount,el->ldStarts);
-	if (chromStarts[0] < winStart) /* clip to triangle */
-	    continue;
-	sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
-	if(arraySize != el->ldCount) 
-	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
-		      "el->ldCount=%d<BR>el->rsquared: %s",
-		      el->name,arraySize,el->ldCount,el->rsquared);
-	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		     chromStarts, values, arraySize, drawOutline);
-	}
+    isRsquared = TRUE;
 else if (sameString(valArray, "dprime"))
-    for (el=tg->items; el!=NULL; el=el->next)
-	{
-	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-	if(arraySize != el->ldCount) 
-	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
-		      "el->ldCount=%d<BR>el->ldStarts: %s",
-		      el->name,arraySize,el->ldCount,el->ldStarts);
-	if (chromStarts[0] < winStart) /* clip to triangle */
-	    continue;
-	sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
-	if(arraySize != el->ldCount) 
-	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
-		      "el->ldCount=%d<BR>el->dprime: %s",
-		      el->name,arraySize,el->ldCount,el->dprime);
-	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		     chromStarts, values, arraySize, drawOutline);
-	}
+    isDprime = TRUE;
 else if (sameString(valArray, "lod"))
-    for (el=tg->items; el!=NULL; el=el->next)
-	{
-	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-	if(arraySize != el->ldCount) 
-	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
-		      "el->ldCount=%d<BR>el->ldStarts: %s",
-		      el->name,arraySize,el->ldCount,el->ldStarts);
-	if (chromStarts[0] < winStart) /* clip to triangle */
-	    continue;
-	sqlDoubleDynamicArray(el->lod, &values, &arraySize);
-	if(arraySize != el->ldCount) 
-	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
-		      "el->ldCount=%d<BR>el->lod: %s",
-		      el->name,arraySize,el->ldCount,el->lod);
-	/* transform lod values to [0,1] */
-	ldTransformLods(arraySize, values);
-	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		     chromStarts, values, arraySize, drawOutline);
-	}
+    isLod = TRUE;
 else
     errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'.  "
 	      "'%s' is not known", valArray);
+
+for (el=tg->items; el!=NULL; el=el->next)
+    {
+    sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
+    if (chromStarts[0] < winStart) /* clip to triangle */
+	continue;
+    if (isLod)
+	commaSepList = el->lod;
+    else if (isDprime)
+	commaSepList = el->dprime;
+    else if (isRsquared)
+	commaSepList = el->rsquared;
+    sqlDoubleDynamicArray(commaSepList, &values, &arraySize);
+
+	/* transform lod values to [0,1] */
+	ldTransformLods(arraySize, values);
+    drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
+		 chromStarts, values, arraySize, drawOutline);
+    }
 }
 
 void ldFreeItems(struct track *tg)
