@@ -149,8 +149,9 @@ struct region *getRegionsWithChromEnds();
 /* Get list of regions.  End field is set to chrom size rather
  * than zero for full chromosomes. */
 
-void regionFillInChromEnds(struct region *regionList);
-/* Fill in end fields if set to zero to be whole chrom. */
+void regionFillInChromEnds(struct region *regionList, int limit);
+/* Fill in end fields if set to zero to be whole chrom up
+	to limit number of regions, limit=0 == no limit, all chroms */
 
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */
@@ -448,11 +449,14 @@ char *getIdField(char *db, struct trackDb *track, char *table,
 /* Get ID field for table, or NULL if none.  FreeMem result when done */
 
 /* --------- Summary and stats stuff -------------- */
-long long basesInRegion(struct region *regionList);
-/* Count up all bases in regions. */
+long long basesInRegion(struct region *regionList, int limit);
+/* Count up all bases in regions to limit number of regions, 0 == no limit */
 
-long long gapsInRegion(struct sqlConnection *conn, struct region *regionList);
-/* Return count of gaps in all regions. */
+long long gapsInRegion(struct sqlConnection *conn, struct region *regionList,
+	int limit);
+/* Return count of gaps in all regions to limit number of regions,
+ *	limit=0 == no limit, do them all
+ */
 
 void percentStatRow(char *label, long long p, long long q);
 /* Print label, p, and p/q */

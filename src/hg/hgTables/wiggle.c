@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.31 2004/11/17 17:42:32 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.32 2004/11/17 23:27:56 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -500,7 +500,7 @@ struct region *region, *regionList = getRegions();
 char *regionName = getRegionName();
 long long regionSize = 0;
 long long gapTotal = 0;
-long startTime, wigFetchTime;
+long startTime = 0, wigFetchTime = 0, freeTime = 0;
 char splitTableOrFileName[256];
 struct customTrack *ct;
 boolean isCustom = FALSE;
@@ -668,6 +668,8 @@ if (1 == regionCount)
 
     if ( ! ((valuesMatched == 0) && table2) )
 	wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+    regionSize = basesInRegion(regionList,0);
+    gapTotal = gapsInRegion(conn, regionList,0);
     }
 else
     {	/* this is a bit of a kludge here since these printouts are done in the
@@ -683,25 +685,15 @@ else
     /*	Too expensive to lookup the numbers for thousands of regions */
     if (regionsDone >= MAX_REGION_DISPLAY)
 	{
-	int i;
-	long long total = 0;
-	struct region *region;
-	for ( i = 0, region = regionList;
-		i < MAX_REGION_DISPLAY && region != NULL;
-		++i, region = region->next)
-	    {
-	    if (region->end == 0)
-		total += hChromSize(region->chrom);
-	    else
-		total += region->end - region->start;
-	    }
-	regionSize = total;
-	gapTotal = 0;
+	regionSize = basesInRegion(regionList,MAX_REGION_DISPLAY);
+	regionFillInChromEnds(regionList, MAX_REGION_DISPLAY);
+	gapTotal = gapsInRegion(conn, regionList,MAX_REGION_DISPLAY);
 	}
     else
 	{
-	regionSize = basesInRegion(regionList);
-	gapTotal = gapsInRegion(conn, regionList);
+	regionSize = basesInRegion(regionList,0);
+	regionFillInChromEnds(regionList, 0);
+	gapTotal = gapsInRegion(conn, regionList,0);
 	}
     realSize = regionSize - gapTotal;
 
@@ -782,6 +774,8 @@ stringStatRow("region", regionName);
 numberStatRow("bases in region", regionSize);
 numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
+stringStatRow("filter", (anyFilter() ? "on" : "off"));
+stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
 htmlClose();
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
