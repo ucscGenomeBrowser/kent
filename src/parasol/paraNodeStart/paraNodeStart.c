@@ -19,6 +19,7 @@ errAbort(
  "options:\n"
  "    -exe=/path/to/paranode\n"
  "    -log=/path/to/log/file\n"
+ "    -umask=000 - set file creation mask, defaults to 002\n"
  "    -hub=machineHostingParaHub - nodes will ignore messages from elsewhere\n"
  "    -rsh=/path/to/rsh/like/command\n");
 }
@@ -31,6 +32,7 @@ char *exe = optionVal("exe", "paraNode");
 char *rsh = optionVal("rsh", "rsh");
 char *log = optionVal("log", NULL);
 char *hub = optionVal("hub", NULL);
+char *umask = optionVal("umask", NULL);
 struct lineFile *lf = lineFileOpen(machineList, TRUE);
 char *row[2];
 struct dyString *dy = newDyString(256);
@@ -48,6 +50,8 @@ while (lineFileRow(lf, row))
        dyStringPrintf(dy, " log=%s", log);
     if (hub != NULL)
        dyStringPrintf(dy, " hub=%s", hub);
+    if (umask != NULL)
+       dyStringPrintf(dy, " umask=%s", umask);
     printf("%s\n", dy->string);
     system(dy->string);
     }
