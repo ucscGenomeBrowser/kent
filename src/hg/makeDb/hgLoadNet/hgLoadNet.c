@@ -10,7 +10,7 @@
 #include "chainNet.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.12 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.13 2004/10/14 18:04:11 markd Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -201,7 +201,7 @@ for (i=0; i<netCount; ++i)
         cnWriteTables(net->name,net->fillList, alignFile, 1);
 	chainNetFree(&net);
         }
-
+    lineFileClose(&lf);
     }
 fclose(alignFile);
 if (!test)
