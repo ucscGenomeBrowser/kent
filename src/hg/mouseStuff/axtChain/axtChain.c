@@ -12,7 +12,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-int minScore = 2000;
+int minScore = 400;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ errAbort(
   "usage:\n"
   "   axtChain in.axt tNibDir qNibDir out.chain\n"
   "options:\n"
-  "   -minScore=N  Minimum score for chain, default 2000\n"
+  "   -minScore=N  Minimum score for chain, default 400\n"
   );
 }
 
