@@ -1,5 +1,5 @@
 .c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
+	gcc -ggdb -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
 
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)
@@ -26,6 +26,10 @@ compile: $O
 	mv a.out $A
 #	strip $A
 	chmod a+rx $A
+
+debug: $O
+	gcc $O $(MYLIBS) $(L) 
+	mv a.out $A
 
 lib:
 	cd ../../lib; make

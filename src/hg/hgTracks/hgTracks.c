@@ -63,7 +63,7 @@
 #define MAX_CONTROL_COLUMNS 5
 #define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
-boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
+boolean hgDebug = TRUE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
@@ -111,7 +111,7 @@ param comment _ The comment to be printed
 */
 {
 printf("\n<!-- DEBUG: %s -->\n", comment);
-//fflush(stdout); /* USED ONLY FOR DEBUGGING, IT"S SLOOOWWW - MATT */
+//fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 }
 
 void setPicWidth(char *s)
@@ -7907,12 +7907,14 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
     {
     char *words[96];
     int wordCount;
+
     wordCount = chopLine(bl->name, words);
     if (wordCount > 1)
         {
 	char *command = words[1];
-	if (sameString(command, "hide") || 
-		sameString(command, "dense") || sameString(command, "full"))
+	if (sameString(command, "hide") 
+            || sameString(command, "dense") 
+            || sameString(command, "full"))
 	    {
 	    if (wordCount > 2)
 	        {
@@ -7934,11 +7936,20 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    {
 	    char *chrom;
 	    int start, end;
+            
 	    if (wordCount < 3)
 	        errAbort("Expecting 3 words in browser position line");
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+
+            /*Fix a start window of -1 that is returned when a custom track position
+              begins at 0
+            */
+            if (winStart < 0) 
+                {
+                winStart = 0;
+                }
 	    }
 	else if (sameString(command, "pix"))
 	    {
@@ -7949,6 +7960,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	}
     }
+
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
