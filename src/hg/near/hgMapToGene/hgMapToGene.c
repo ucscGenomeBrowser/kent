@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.9 2004/04/16 07:04:33 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.10 2004/04/28 17:56:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ errAbort(
   "where:\n"
   "   database - is a browser database (ex. hg16)\n"
   "   track - the track to map to the genePred track\n"
-  "           This must be bed12 or genePred itself\n"
+  "           This must be bed12 psl or genePred itself\n"
   "   geneTrack - a genePred format track\n"
   "   newMapTable - a new table to create with two columns\n"
   "           <geneTrackId><trackId>\n"
