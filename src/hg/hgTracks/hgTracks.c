@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.935 2005/03/28 20:56:38 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.936 2005/03/30 00:08:26 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9288,6 +9288,13 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }	/*	void loadCustomTracks(struct track **pGroupList)	*/
 
+boolean restrictionEnzymesOk()
+/* Check to see if it's OK to do restriction enzymes. */
+{
+hSetDb2("hgFixed");
+return hTableExists2("cutters") && hTableExists2("rebaseRefs") && hTableExists2("rebaseCompanies");
+}
+
 #ifdef UNUSED
 void hideAllTracks(struct track *trackList)
 /* hide all the tracks (and any in trackDb too) */
@@ -9702,7 +9709,8 @@ registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
-slSafeAddHead(&trackList, cuttersTg());
+if (restrictionEnzymesOk())
+    slSafeAddHead(&trackList, cuttersTg());
 loadCustomTracks(&trackList);
 
 /* Get visibility values if any from ui. */

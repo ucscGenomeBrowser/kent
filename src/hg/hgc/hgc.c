@@ -165,7 +165,7 @@
 #include "gencodeIntron.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.863 2005/03/29 03:10:09 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.864 2005/03/29 15:57:32 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14589,12 +14589,12 @@ static void doCutters(char *item)
 struct sqlConnection *conn;
 struct cutter *cut = NULL;
 char query[100];
+char helpName[PATH_LEN], *helpBuf;
 
 hSetDb2("hgFixed");
 conn = hAllocConn2();
 safef(query, sizeof(query), "select * from cutters where name=\'%s\'", item);
 cut = cutterLoadByQuery(conn, query);  
-char helpName[PATH_LEN], *helpBuf;
 cartWebStart(cart, "Restriction Enzymes from REBASE");
 if (cut)
     {
