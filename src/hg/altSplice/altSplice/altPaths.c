@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.13 2005/02/09 22:51:48 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.14 2005/02/09 23:00:29 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -734,6 +734,7 @@ struct path *shortPath = splice->paths;
 struct path *longPath = splice->paths->next;
 int *shortVerts = shortPath->vertices;
 int *longVerts = longPath->vertices;
+int vCount = ag->vertexCount;
 unsigned char *vTypes = ag->vTypes;
 boolean retInt = FALSE;
 /* RetInts have 2 vertices in their long path and 4 in the short path.
@@ -746,13 +747,21 @@ assert(shortVerts[0] == longVerts[0] && shortVerts[3] == longVerts[1]);
 /* If one path has an intron and the other doesn't and are mutually
    exclusive they are retInt. */
 if(shortPath->vCount == 4 && longPath->vCount == 2 &&
+   /* These are all internal exons. */
    (vTypes[shortVerts[0]] == ggHardStart || vTypes[shortVerts[0]] == ggSoftStart) &&
    vTypes[shortVerts[1]] == ggHardEnd &&
    vTypes[shortVerts[2]] == ggHardStart &&
    (vTypes[shortVerts[3]] == ggHardEnd || vTypes[shortVerts[3]] == ggSoftEnd) &&
    vTypes[longVerts[0]] == ggHardStart &&
    vTypes[longVerts[1]] == ggHardEnd &&
-   isMutuallyExclusive(splice, ag, em, source,sink))
+   /* There aren't any other oddities coming in or out of this sub graph. */
+   outDegree(em, shortVerts[0], 0, vCount) == 2 &&  /* first 3' to 2 downstream. */
+   inDegree(em, shortVerts[1], 0, vCount) == 1  &&  /* internal 5' splice site has 1 connection in. */
+   outDegree(em, shortVerts[1], 0, vCount) == 1 &&  /* internal 5' ss has one connection out. */
+   inDegree(em, shortVerts[2], 0, vCount) == 1  &&  /* internal 3' ss has 1 connection in. */
+   outDegree(em, shortVerts[2], 0, vCount) == 1 &&  /* internal 3' ss has 1 connection out. */
+   inDegree(em, shortVerts[3], 0, vCount) == 2  &&  /* downstream 5' ss has two connections upstream. */
+   (splice, ag, em, source,sink))
     retInt = TRUE;
 return retInt;
 }
