@@ -173,10 +173,10 @@ while (lineFileRow(lf, row))
 	}
     nt->sumSize += clone->goldEnd - clone->goldStart;
     ntClone = hashFindVal(cloneHash, nt->name);
-    if (ntClone != NULL && clone->ntEnd > ntClone->size)
+    if (ntClone != NULL && clone->goldEnd > ntClone->size)
 	{
 	warn("Clone %s NT end position %d, NT size %d, line %d of %s", 
-	    clone->name, clone->goldEnd, clone->size, lf->lineIx, lf->fileName);
+	    clone->name, clone->goldEnd, ntClone->size, lf->lineIx, lf->fileName);
 	nt->problem = TRUE;
 	}
     if (ntClone != NULL)
@@ -453,6 +453,7 @@ for (i=0; i<ctgCount; ++i)
     sprintf(oldName, "%s/ooGreedy.%s.gl.noNt", contig, oogVersion);
     sprintf(newName, "%s/ooGreedy.%s.gl", contig, oogVersion);
     patchOneGl(oldName, ntHash, newName);
+    uglyf("Patched %s to %s\n", oldName, newName);
     }
 }
 
