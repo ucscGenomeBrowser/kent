@@ -473,7 +473,16 @@ psl/$(root1)_$(root2).psl}
     # Special case: fr1 has only chrUn, so no need to index tName!
     hgLoadPsl -noTNameIx -fastLoad -table=blatFr1 xenTro1 blatFr1_all.psl
     #load of blatFr1 did not go as planned: 1360912 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
+    featureBits xenTro1 blatFr1
+    # 27096524 bases of 1381238994 (1.962%) in intersection
+    featureBits hg17 blatFr1
+    #21977081 bases of 2866216770 (0.767%) in intersection
 
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR xenTro1 (DONE 10/28/04 Fan)
+    ssh hgwdev
+    echo 'insert into blatServers values("xenTro1", "blat13", "17780", 1, 0); \
+    insert into blatServers values("xenTro1", "blat13", "17781", 0, 1);' \
+    | hgsql -h genome-testdb hgcentraltest
 
 # ALIGN TO CHICKEN (BLASTZ/CHAIN/NET DONE 10/28/04 JK)
   ssh kk
