@@ -1419,10 +1419,13 @@ printf("<B>%s position:</B> %s:%d-%d<BR>\n",
 printf("<B>strand:</B> %c<BR>\n", net.strand[0]);
 printf("<B>score:</B> %1.1f<BR>\n", net.score);
 if (net.chainId)
+    {
     printf("<B>chain ID:</B> %u<BR>\n", net.chainId);
-printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net.qOver);
-printf("<B>%s parent distance:</B> %u<BR>\n", otherOrg, net.qFar);
-printf("<B>%s based duplicated:</B> %u<BR>\n", otherOrg, net.qDup);
+    printf("<B>bases aligning:</B> %u<BR>\n", net.ali);
+    printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net.qOver);
+    printf("<B>%s parent distance:</B> %u<BR>\n", otherOrg, net.qFar);
+    printf("<B>%s bases duplicated:</B> %u<BR>\n", otherOrg, net.qDup);
+    }
 printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", org, net.tN, 100.0*net.tN/tSize);
 printf("<B>N's in %s:</B> %u (%1.1f%%)<BR>\n", otherOrg, net.qN, 100.0*net.qN/qSize);
 printf("<B>%s tandem repeat (trf) bases:</B> %u (%1.1f%%)<BR>\n", 
