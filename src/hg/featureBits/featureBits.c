@@ -207,7 +207,7 @@ void isolateTrackPartOfSpec(char *spec, char track[512])
 {
 char *s;
 strcpy(track, spec);
-s = strrchr(track, ':');
+s = strchr(track, ':');
 if (s != NULL) *s = 0;
 }
 
@@ -379,7 +379,7 @@ if (!faIndependent)
 	totalBases += chromSize;
 	totalBits += chromBitSize;
 	}
-    printf("%1.0f bases of %1.0f (%3.2f%%) in intersection\n",
+    printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
 	totalBits, totalBases, 100.0*totalBits/totalBases);
     }
 else
