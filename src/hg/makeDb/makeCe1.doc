@@ -322,26 +322,15 @@ MAKE GCPERCENT AND GAP tracks (DONE 2003-05-12 - Hiram)
      hgGoldGapGl -noGl ce1 /cluster/store5/worm/ce1 sangerFa
     # there are no gaps in these chromosomes.  They are all making
     # empty tables
-    # nothing gets created for chrM - make one manually:
-    #	HACK ALERT - code below was taken from hgGoldGapGl.c
-	# there should be a way to do this in the same manner as the
-	# grp table was created above by copying from one of the other
-	# existing tables.  This is not the right way to do this.
-    cat << '_EOF_' | hgsql ce1
-CREATE TABLE chrM_gap (
-    bin smallint not null,
-    chrom varchar(255) not null,
-    chromStart int unsigned not null,
-    chromEnd int unsigned not null,
-    ix int not null,
-    n char(1) not null,
-    size int unsigned not null,
-    type varchar(255) not null,
-    bridge varchar(255) not null,
-    UNIQUE(chromStart),
-    UNIQUE(chromEnd)
-);
-'_EOF_'
+    #  So, remove them:
+    echo "drop table chrI_gap;" | hgsql ce1
+    echo "drop table chrII_gap;" | hgsql ce1
+    echo "drop table chrIII_gap;" | hgsql ce1
+    echo "drop table chrIV_gap;" | hgsql ce1
+    echo "drop table chrV_gap;" | hgsql ce1
+    echo "drop table chrX_gap;" | hgsql ce1
+    #  hgGoldGapGl needs to be fixed so it can create a gold track
+    #	and not need to create a gap track.
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
     # next machine
