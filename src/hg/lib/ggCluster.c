@@ -63,7 +63,7 @@ return FALSE;
 }
 
 
-static struct ggMrnaCluster *mcFromCda(struct ggMrnaAli *ma, struct dnaSeq *genoSeq)
+static struct ggMrnaCluster *mcFromMa(struct ggMrnaAli *ma, struct dnaSeq *genoSeq)
 /* Make up a ggMrnaCluster with just one thing on it. */
 {
 static struct ggVertex *vertices = NULL;	/* Resized array. */
@@ -229,7 +229,7 @@ if (aMc->tEnd < bMc->tEnd)
 freeMem(bMc);
 }
 
-static struct ggMrnaCluster *clustersFromCdas(struct ggMrnaAli *maList, struct dnaSeq *genoSeq)
+static struct ggMrnaCluster *clustersFromMas(struct ggMrnaAli *maList, struct dnaSeq *genoSeq)
 /* Given a sorted ggMrnaAli list return list of mRNA clusters. */
 {
 struct ggMrnaCluster *activeClusters = NULL;	/* List that can still add to. */
@@ -241,7 +241,7 @@ for (ma = maList; ma != NULL; ma = ma->next)
     {
     struct ggMrnaCluster *mergableClusters, *newMc;
     updateActiveClusters(&activeClusters, &finishedClusters, ma->strand, ma->tStart);
-    newMc = mcFromCda(ma, genoSeq);
+    newMc = mcFromMa(ma, genoSeq);
     if (newMc)
 	{
 	mergableClusters = findMergableClusters(&activeClusters, newMc);
@@ -274,7 +274,7 @@ struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci)
 {
 struct ggMrnaCluster *mc;
 slSort(&ci->maList, cmpGgMrnaAliTargetStart);
-mc =  clustersFromCdas(ci->maList, ci->genoSeq);
+mc =  clustersFromMas(ci->maList, ci->genoSeq);
 return mc;
 }
 
