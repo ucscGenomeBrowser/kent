@@ -468,6 +468,12 @@ identifier chain[${chainDest}]Id
     $gbd.net[]NonGap.chainId exclude=0
     $gbd.netSynteny[].chainId exclude=0
 
+identifier rBestChainPanTro1Id
+"Link together reciprocal best chain/net"
+    hg16.rBestChainPanTro1.id $split
+    hg16.rBestChainPanTro1Link.chainId $split full
+    hg16.rBestNetPanTro1.chainId exclude=0
+
 identifier mouseChainId 
 "Link together chain/net on hg13,hg15 for mouse"
     hg13,hg15.mouseChain.id $split
