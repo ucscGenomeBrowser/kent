@@ -4948,7 +4948,7 @@ tg->items = agList;
 void altGraphFreeItems(struct trackGroup *tg)
 /* free up tha altGraph items in tg->items */
 {
-altGraphFreeList(tg->items);
+altGraphFreeList((struct altGraph**)(&tg->items));
 }
 
 static int altGraphFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
