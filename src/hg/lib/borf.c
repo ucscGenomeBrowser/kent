@@ -7,8 +7,14 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "borf.h"
+#include "hdb.h"
+#include "dnaseq.h"
+#include "fa.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: borf.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: borf.c,v 1.3 2003/08/14 17:16:31 sugnet Exp $";
+static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
+static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
 
 void borfStaticLoad(char **row, struct borf *ret)
 /* Load a row from borf table into ret.  The contents of ret will
@@ -190,3 +196,103 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+void borfSetExeAndParam(char *exePath, char *paramPath)
+/* Set the path to the bestOrf probram and parameter file to be used
+   for running borfFromGenomeBed. */
+{
+_bestOrfExe = exePath;
+_bestOrfParam = paramPath;
+}
+
+static char *borfMustFindLine(struct lineFile *lf, char *pat)
+/* Find line that starts (after skipping white space)
+ * with pattern or die trying.  Skip over pat in return*/
+{
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    line = skipLeadingSpaces(line);
+    if (startsWith(pat, line))
+	{
+	line += strlen(pat);
+	return skipLeadingSpaces(line);
+	}
+    }
+errAbort("borf::borfMustFindLine() - Couldn't find %s in %s\n", pat, lf->fileName);
+return NULL;
+}
+
+
+struct borf *borfFromBestorfOutput(char *fileName)
+/* Convert bestorf output to borf structure. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line = borfMustFindLine(lf, "BESTORF");
+char *word=NULL;
+char *row[13];
+struct borf *borf = NULL;
+int i=0;
+struct dnaSeq seq;
+int seqSize = 0;
+AllocVar(borf);
+ZeroVar(&seq);
+
+line = borfMustFindLine(lf, "Seq name:");
+word = nextWord(&line);
+borf->name = cloneString(word);                            /* Name */
+line = borfMustFindLine(lf, "Length of sequence:");
+borf->size = atoi(line);                                /* Size */
+lineFileNeedNext(lf, &line, NULL);
+line = skipLeadingSpaces(line);
+if (startsWith("no reliable", line))
+    {
+    return borf;
+    }
+else
+    {
+    line = borfMustFindLine(lf, "G Str F");
+    lineFileSkip(lf, 1);
+    lineFileRow(lf, row);
+    safef(borf->strand, sizeof(borf->strand),"%s", row[1]); /* Strand. */
+    borf->feature = cloneString(row[3]);                    /* Feature. */
+    borf->cdsStart = lineFileNeedNum(lf, row, 4) - 1;       /* cdsStart */
+    borf->cdsEnd = lineFileNeedNum(lf, row, 6);             /* cdsEnd */
+    borf->score = atof(row[7]);                             /* score */
+    borf->orfStart = lineFileNeedNum(lf, row, 8) - 1;       /* orfStart */
+    borf->orfEnd = lineFileNeedNum(lf, row, 10);            /* orfEnd */
+    borf->cdsSize = atoi(row[11]);                          /* cdsSize. */
+    safef(borf->frame, sizeof(borf->frame), "%s", row[12]); /* Frame */
+    line = borfMustFindLine(lf, "Predicted protein");
+    if (!faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+	errAbort("Can't find peptide in %s", lf->fileName);
+    borf->protein = cloneString(seq.dna);                   /* Protein. */
+    }
+lineFileClose(&lf);
+return borf;
+}
+
+struct borf *borfFromGenomeBed(struct bed *bed)
+/* borfBig - Run Victor Solovyev's bestOrf on a genome bed's coordinates. */
+{
+static char *tmpFa = NULL;
+static char *tmpOrf = NULL;
+struct borf *borf = NULL;
+struct dnaSeq *seq = NULL;
+struct dyString *cmd = newDyString(256);
+int retVal = 0;
+if(tmpFa == NULL)
+    tmpFa = rTempName("/tmp", "borf", ".fa");
+if(tmpOrf == NULL)
+    tmpOrf = rTempName("/tmp", "borf", ".out");
+seq = hSeqForBed(bed);
+faWrite(tmpFa, seq->name, seq->dna, seq->size);
+dyStringClear(cmd);
+dyStringPrintf(cmd, "%s %s %s > %s", _bestOrfExe, _bestOrfParam, tmpFa, tmpOrf);
+retVal = system(cmd->string);
+borf = borfFromBestorfOutput(tmpOrf);
+remove(tmpFa);
+remove(tmpOrf);
+dyStringFree(&cmd);
+dnaSeqFree(&seq);
+return borf;
+}

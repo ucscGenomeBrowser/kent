@@ -5,6 +5,14 @@
 #ifndef BORF_H
 #define BORF_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 struct borf
 /* Parsed output from Victor Solovyev's bestorf program */
     {
@@ -60,6 +68,18 @@ void borfOutput(struct borf *el, FILE *f, char sep, char lastSep);
 
 #define borfCommaOut(el,f) borfOutput(el,f,',',',');
 /* Print out borf as a comma separated list including final comma. */
+
+/*------------ End AutoSql generated code. -------------------*/
+
+struct borf *borfFromBestorfOutput(char *fileName);
+/* Convert bestorf output to borf structure. */
+
+struct borf *borfFromGenomeBed(struct bed *bed);
+/* borfBig - Run Victor Solovyev's bestOrf on a genome bed's coordinates. */
+
+void borfSetExeAndParam(char *exePath, char *paramPath);
+/* Set the path to the bestOrf probram and parameter file to be used
+   for running borfFromGenomeBed. */
 
 #endif /* BORF_H */
 
