@@ -1,4 +1,10 @@
-/* hgMaf.c - Stuff to load up mafs from the browser database. */
+/* hgMaf.c - Stuff to load up mafs from the browser database. 
+ *           Also, items for maf track display */
+
+/* Track settings and variables */
+#define SPECIES_ORDER_VAR       "speciesOrder"
+#define PAIRWISE_VAR            "pairwise"
+#define BASE_COLORS_VAR         "baseColors"
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
