@@ -267,6 +267,14 @@ visibility full
 spectrum on
 type psl .
 
+track tightMrna
+shortLabel Tight mRNAS
+longLabel Tightly Filtered Human mRNAs from Genbank
+priority 18.1
+visibility hide
+spectrum on
+type psl .
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel Human ESTs That Have Been Spliced
@@ -279,6 +287,14 @@ track est
 shortLabel Human ESTs
 longLabel Human ESTs Including Unspliced
 priority 19
+visibility hide
+spectrum on
+type psl est
+
+track tightEst
+shortLabel Tight ESTs
+longLabel Tightly Filtered Human ESTs Including Unspliced
+priority 19.1
 visibility hide
 spectrum on
 type psl est
