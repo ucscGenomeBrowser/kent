@@ -5785,6 +5785,7 @@ if (calledSelf)
 if(hTableExists("browserTable"))
    tableList = checkDbForTables();
 /* Make list of all track groups. */
+loadCustomTracks(&tGroupList);
 if (hTableExists("cytoBand")) slSafeAddHead(&tGroupList, cytoBandTg());
 if (hTableExists("mapGenethon")) slSafeAddHead(&tGroupList, genethonTg());
 if (hTableExists("stsMarker")) slSafeAddHead(&tGroupList, stsMarkerTg());
