@@ -1329,8 +1329,7 @@ SEQ2_LEN=$BASE/S2.len
         # 42 jobs
     head jobList
 
-    cd /cluster/data/hg16/bed/blastz.mm3
-    cd run.2
+    cd /cluster/data/hg16/bed/blastz.mm3/run.2
     para create jobList
     para try
     para check
