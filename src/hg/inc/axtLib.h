@@ -1,11 +1,6 @@
 #ifndef AXTLIB_H
 #define AXTLIB_H
 
-struct axt *convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
-	struct hash *qChromHash, char *nibDir,
-	struct chain *chain, FILE *gapFile);
-/* Convert subset of chain as defined by fill to axt. */
-
 void axtListReverse(struct axt **axtList, char *queryDb);
 /* reverse complement an entire axtList */
 
@@ -13,15 +8,14 @@ struct axt *createAxtGap(char *nibFile, char *chrom,
 			 int start, int end, char strand);
 /* return an axt alignment with the query all deletes - null aligment */
 
-void axtFillGap(struct axt **aList, char *nib);
+void axtFillGap(struct axt **aList, char *nibDir);
 /* fill gaps between blocks with null axts with seq on t and q seq all gaps*/
 
 char *getAxtFileName(char *chrom, char *toDb, char *alignment, char *fromDb);
 /* return file name for a axt alignment */
 
-struct axt *axtListFromChain(struct chain *chain, 
-	struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset, int maxGap);
-/* Convert a chain to a list of axt's. */
-
+struct axt *netFillToAxt(struct cnFill *fill, struct dnaSeq *tChrom, int tSize,
+	struct hash *qChromHash, char *nibDir,
+	struct chain *chain, boolean swap);
+/* Convert subset of chain as defined by fill to axt. swap query and target if swap is true.*/
 #endif

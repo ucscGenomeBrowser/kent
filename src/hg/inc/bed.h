@@ -109,6 +109,9 @@ struct bed *bedLoad12(char **row);
 struct bed *bedLoadN(char *row[], int wordCount);
 /* Convert a row of strings to a bed. */
 
+struct bed *bedLoadNBin(char *row[], int wordCount);
+/* Convert a row of strings to a bed. */
+
 void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 /* Write a bed of wordCount fields. */
 
