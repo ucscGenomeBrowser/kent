@@ -562,7 +562,7 @@ hPrintf("</TABLE>");
 freez(&table);
 sqlDisconnect(&conn);
 hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoFilterSubmit, "(Submit)");
+cgiMakeButton(hgtaDoFilterSubmit, "Submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 }
