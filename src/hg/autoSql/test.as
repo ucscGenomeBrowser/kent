@@ -43,3 +43,9 @@ simple twoPoint
     simple pt[2] points; "points as array"
     )
 
+table stringArray
+"An array of strings"
+    (
+    int numNames;	"Number of names"
+    string[numNames] names;   "Array of names"
+    )
