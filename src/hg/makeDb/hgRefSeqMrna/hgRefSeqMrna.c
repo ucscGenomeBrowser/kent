@@ -21,7 +21,7 @@ void usage()
 errAbort(
   "hgRefSeqMrna - Load refSeq mRNA alignments and other info into refGene table\n"
   "usage:\n"
-  "   hgRefSeqMrna database refSeq.fa refSeq.ra refSeq.psl loc2ref refSeqPep.fa\n"
+  "   hgRefSeqMrna database refSeq.fa refSeq.ra refSeq.psl loc2ref refSeqPep.fa mim2loc\n"
   "options:\n"
   "   -dots=N Output a dot every N records parsed\n"
   "   -test Generates tab files but doesn't actually load database.\n");
@@ -36,11 +36,13 @@ char *refLinkTableDef =
 "    geneName int unsigned not null,	# pointer to geneName table\n"
 "    prodName int unsigned not null,	# pointer to product name table\n"
 "    locusLinkId int unsigned not null,	# Locus Link ID\n"
+"    omimId int unsigned not null,	# Locus Link ID\n"
 "              #Indices\n"
 "    PRIMARY KEY(mrnaAcc(12)),\n"
 "    index(name(10)),\n"
 "    index(protAcc(10)),\n"
 "    index(locusLinkId),\n"
+"    index(omimId),\n"
 "    index(prodName),\n"
 "    index(geneName)\n"
 ")";
@@ -127,6 +129,7 @@ struct refSeqInfo
     char *geneName;		/* Gene name */
     char *productName;		/* Product name (long name for protein) or NULL. */
     int locusLinkId;		/* LocusLink id (of mRNA) */
+    int omimId;			/* OMIM id (or 0) */
     int size;                   /* mRNA size. */
     int cdsStart, cdsEnd;       /* start/end of coding region (mRNA coords) */
     int ngi;			/* Nucleotide GI number. */
@@ -296,12 +299,13 @@ return s;
 }
 
 void processRefSeq(char *faFile, char *raFile, char *pslFile, char *loc2refFile, 
-	char *pepFile)
+	char *pepFile, char *mim2locFile)
 /* hgRefSeqMrna - Load refSeq mRNA alignments and other info into 
  * refSeqGene table. */
 {
 struct lineFile *lf;
 struct hash *raHash, *rsiHash = newHash(0);
+struct hash *loc2mimHash = newHash(0);
 struct refSeqInfo *rsiList = NULL, *rsi;
 char *s, *row[5];
 int i, dotMod = 0;
@@ -333,6 +337,17 @@ sqlUpdate(conn, "delete from refPep");
 sqlMaybeMakeTable(conn, "refMrna", refMrnaTableDef);
 sqlUpdate(conn, "delete from refMrna");
 
+/* Scan through locus link to omim ID file and put in hash. */
+    {
+    char *row[2];
+    printf("Scanning %s\n", mim2locFile);
+    lf = lineFileOpen(mim2locFile, TRUE);
+    while (lineFileRow(lf, row))
+	{
+	hashAdd(loc2mimHash, row[1], intToPt(atoi(row[0])));
+	}
+    lineFileClose(&lf);
+    }
 
 /* Scan through .ra file and make up start of refSeqInfo
  * objects in hash and list. */
@@ -380,9 +395,12 @@ printf("Scanning %s\n", loc2refFile);
 lf = lineFileOpen(loc2refFile, TRUE);
 while (lineFileRow(lf, row))
     {
+    int mimVal;
     if ((rsi = hashFindVal(rsiHash, row[1])) != NULL)
         {
+	void *v;
 	rsi->locusLinkId = lineFileNeedNum(lf, row, 0);
+	rsi->omimId = ptToInt(hashFindVal(loc2mimHash, row[0]));
 	rsi->proteinAcc = cloneString(row[4]);
 	}
     }
@@ -398,13 +416,13 @@ for (rsi = rsiList; rsi != NULL; rsi = rsi->next)
         ++noLocCount;
     if (rsi->proteinAcc == NULL)
         ++noProtCount;
-    fprintf(refLinkTab, "%s\t%s\t%s\t%s\t%u\t%u\t%u\n",
+    fprintf(refLinkTab, "%s\t%s\t%s\t%s\t%u\t%u\t%u\t%u\n",
 	emptyForNull(rsi->geneName), 
 	emptyForNull(rsi->productName),
     	emptyForNull(rsi->mrnaAcc), 
 	emptyForNull(rsi->proteinAcc),
 	rsi->geneNameId, rsi->productNameId, 
-	rsi->locusLinkId);
+	rsi->locusLinkId, rsi->omimId);
     }
 if (noLocCount) 
     printf("Missing locusLinkIds for %d of %d\n", noLocCount, rsiCount);
@@ -461,12 +479,12 @@ hgEndUpdate(&conn, "Added refSeq genes");
 }
 
 void hgRefSeqMrna(char *database, char *faFile, char *raFile, char *pslFile, 
-	char *loc2refFile, char *pepFile)
+	char *loc2refFile, char *pepFile, char *mim2locFile)
 /* hgRefSeqMrna - Load refSeq mRNA alignments and other info into 
  * refSeqGene table. */
 {
 hgSetDb(database);
-processRefSeq(faFile, raFile, pslFile, loc2refFile, pepFile);
+processRefSeq(faFile, raFile, pslFile, loc2refFile, pepFile, mim2locFile);
 }
 
 int main(int argc, char *argv[])
@@ -475,8 +493,8 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 clTest = cgiBoolean("test");
 clDots = cgiOptionalInt("dots", clDots);
-if (argc != 7)
+if (argc != 8)
     usage();
-hgRefSeqMrna(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
+hgRefSeqMrna(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
 return 0;
 }
