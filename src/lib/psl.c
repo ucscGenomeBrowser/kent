@@ -16,7 +16,7 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.23 2003/06/09 20:47:04 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.24 2003/06/10 17:26:10 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -718,6 +718,9 @@ return ffList;
 int pslOrientation(struct psl *psl)
 /* Translate psl strand + or - to orientation +1 or -1 */
 {
+/* code below doesn't support negative target strand (translated blat) */
+if (psl->strand[1] == '-')
+    errAbort("pslOrientation doesn't support a negative target strand");
 if (psl->strand[0] == '-')
     return -1;
 else
@@ -734,6 +737,10 @@ int intronDir = 0;
 int oneDir;
 int i;
 DNA *dna = genoSeq->dna;
+
+/* code below doesn't support negative target strand (translated blat) */
+if (psl->strand[1] == '-')
+    errAbort("pslWeightedIntronOrientation doesn't support a negative target strand");
 
 for (i=1; i<psl->blockCount; ++i)
     {
@@ -779,8 +786,16 @@ for (i=1; i<blockCount; ++i)
     end = qStarts[i];
     if (start == end)
         {
-	start = tStarts[i-1]+blockSize-seqOffset;
-	end = tStarts[i]-seqOffset;
+        if (psl->strand[1] == '-')
+            {
+            start = (psl->tSize-tStarts[i-1])-seqOffset;
+            end = (psl->tSize-tStarts[i])+blockSize-seqOffset;
+            }
+        else
+            {
+            start = tStarts[i-1]+blockSize-seqOffset;
+            end = tStarts[i]-seqOffset;
+            }
 	if (intronOrientation(dna+start, dna+end) != 0)
 	    return TRUE;
 	}
