@@ -71,6 +71,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	clone->chrom = cloneString(chrom);
 	clone->chromStart = gl.start;
 	clone->chromEnd = gl.end;
+	clone->faFile = cloneString("");
 	slAddHead(pCloneList, clone);
 	hashAdd(cloneHash, cloneName, clone);
 	}
@@ -135,42 +136,54 @@ return cloneList;
 void addStageInfo(char *gsDir, struct hash *cloneHash)
 /* Add info about which file and what stage clone is in. */
 {
-static char *subDirs[] = {"fin/fa", "draft/fa", "predraft/fa", "extras/fa"};
+static char *finfFiles[] = {"ffa/finished.finf", "ffa/draft.finf",
+			    "ffa/predraft.finf", "ffa/extras.finf"};
 static char stages[] = "FDPD";
+struct lineFile *lf;
+char *line;
+char *words[7];
 int numStages = strlen(stages);
 int i;
 char pathName[512];
-struct slName *dirList, *dirEl;
-char *subDir, stage;
+char *finfFile, stage;
 int warnsLeft = 10;	/* Only give first 10 warnings about missing clones. */
 char cloneName[256];
 struct clonePos *clone;
+int wordCount, cloneCount;
 
 for (i=0; i<numStages; ++i)
    {
-   subDir = subDirs[i];
+   finfFile = finfFiles[i];
    stage = stages[i];
-   sprintf(pathName, "%s/%s", gsDir, subDir);
+   sprintf(pathName, "%s/%s", gsDir, finfFile);
    printf("Processing %s\n", pathName);
-   dirList = listDir(pathName, "*.fa");
-   printf("Got %d fa files in %s\n", slCount(dirList), pathName);
-   for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
+   lf = lineFileOpen(pathName, TRUE);
+   cloneCount = 0;
+   while (lineFileNext(lf, &line, NULL))
        {
-       strcpy(cloneName, dirEl->name);
+       wordCount = chopLine(line, words);
+       assert(wordCount == 7);
+       strncpy(cloneName, words[1], sizeof(cloneName));
        chopSuffix(cloneName);
        if ((clone = hashFindVal(cloneHash, cloneName)) == NULL)
             {
 	    if (warnsLeft > 0)
 	       {
 	       --warnsLeft;
-	       warn("%s not in ooDir", cloneName);
+	       warn("%s is in %s but not in ooDir/*/*.gl", cloneName, pathName);
 	       }
+	    else if (warnsLeft == 0)
+		{
+		--warnsLeft;
+		warn("(Truncating additional warnings)");
+		}
 	    continue;
 	    }
-       sprintf(pathName, "%s/%s/%s", gsDir, subDir, dirEl->name);
-       clone->faFile = cloneString(pathName);
        clone->stage[0] = stage;
+       cloneCount++;
        }
+   lineFileClose(&lf);
+   printf("Got %d clones in %s\n", cloneCount, pathName);
    }
 }
 
@@ -203,8 +216,13 @@ while (lineFileNext(lf, &line, &lineSize))
 	    if (warnsLeft > 0)
 	       {
 	       --warnsLeft;
-	       warn("%s not in ooDir", gs.acc);
+	       warn("%s is in %s but not in ooDir/*/*.gl", gs.acc, seqInfoName);
 	       }
+	    else if (warnsLeft == 0)
+		{
+		--warnsLeft;
+		warn("(Truncating additional warnings)");
+		}
 	    continue;
 	    }
 	clone->seqSize = gs.size;
@@ -228,11 +246,10 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
 	    warn("Missing size info on %s (not in sequence.inf)", clone->name);
 	++errCount;
 	}
-    if (clone->faFile == NULL)
+    if (clone->stage[0] == 0)
         {
 	if (errCount < 20)
-	    warn("Missing file location on %s (not under gsDir)", clone->name);
-	clone->faFile = cloneString("");
+	    warn("Missing stage info on %s (not in *.finf)", clone->name);
         clone->stage[0] = 'D';
 	++errCount;
 	}
@@ -248,14 +265,14 @@ void saveClonePos(struct clonePos *cloneList, char *database)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct clonePos *clone;
-char tabFileName[L_tmpnam];
+struct tempName tn;
 FILE *f;
 struct dyString *ds = newDyString(2048);
 
 /* Create tab file from clone list. */
 printf("Creating tab file\n");
-tmpnam(tabFileName);
-f = mustOpen(tabFileName, "w");
+makeTempName(&tn, "hgCP", ".tab");
+f = mustOpen(tn.forCgi, "w");
 for (clone = cloneList; clone != NULL; clone = clone->next)
     clonePosTabOut(clone, f);
 fclose(f);
@@ -266,11 +283,11 @@ printf("Loading clonePos table\n");
 sqlMaybeMakeTable(conn, "clonePos", createClonePos);
 sqlUpdate(conn, "DELETE from clonePos");
 dyStringPrintf(ds, "LOAD data local infile '%s' into table clonePos", 
-    tabFileName);
+    tn.forCgi);
 sqlUpdate(conn, ds->string);
 
 /* Clean up. */
-remove(tabFileName);
+remove(tn.forCgi);
 sqlDisconnect(&conn);
 }
 
