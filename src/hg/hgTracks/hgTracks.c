@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.772 2004/07/27 16:39:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.773 2004/07/27 19:54:45 hartera Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2013,6 +2013,19 @@ void bacEndPairsLongMethods(struct track *tg)
 {
 linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairsLong;
+}
+
+void loadBacEndSingles(struct track *tg)
+/* Load up BAC end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("bacEndSingles", winStart, winEnd, chromName);
+}
+
+void bacEndSinglesMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndSingles;
 }
 
 void loadFosEndPairs(struct track *tg)
@@ -6312,7 +6325,6 @@ if (rulerMode != RULER_MODE_OFF)
     yAfterRuler += basePositionHeight;
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
-
     if (rulerMode == RULER_MODE_FULL && 
             (zoomedToBaseLevel || zoomedToCdsColorLevel))
         {
@@ -6476,7 +6488,6 @@ if (withLeftLabels)
                                         track->minRange );
    	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
                                         track->maxRange);
-	
 	/*  if a track can do its own left labels, do them after drawItems */
 	if (track->drawLeftLabels != NULL)
 	    {
@@ -8057,6 +8068,7 @@ registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
 registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
+registerTrackHandler("bacEndSingles", bacEndSinglesMethods);
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
