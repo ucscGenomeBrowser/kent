@@ -7,7 +7,7 @@ MAILTO=genbank@cse.ucsc.edu
 
 # during the week and weekends we do both mRNAs and ESTs.  Only on this
 # machine, MGC needs current ESTs and this is also nice sanity check for other
-# machines.
-# daily, 22:00-4:00
-30 22-23,00-04 * * *	/genbank/etc/mgc-dbload -inclEsts -extFileUpdate
+# machines.  Only do extFileUpdate on weekends.
+30 22-23,00-04 * * 1-5	/genbank/etc/mgc-dbload -inclEsts
+30 22-23,00-04 * * 0,6	/genbank/etc/mgc-dbload -inclEsts -extFileUpdate
 

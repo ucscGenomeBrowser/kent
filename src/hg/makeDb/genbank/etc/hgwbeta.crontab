@@ -11,6 +11,5 @@ MAILTO=genbank@cse.ucsc.edu
 
 # on weekends, both mRNAs and ESTS, and downloads if more than 5 days old
 # poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
-30 0-23 * * 6	/genbank/etc/hgwbeta-dbload -inclEsts -getDownloadSeqs=5
-30 0-18 * * 0	/genbank/etc/hgwbeta-dbload -inclEsts -getDownloadSeqs=5
+30 0-23 * * 0,6	/genbank/etc/hgwbeta-dbload -inclEsts -getDownloadSeqs=5
 
