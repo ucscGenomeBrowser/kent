@@ -696,3 +696,11 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
     - gbStatus doesn't have proteins.
 
 - load XM_* and `dna based genes' from refseq.
+
+- save protein product acc for mrnas so it can be search
+- save GI numbers.
+- make est downloads
+- add mechanism to specify > 4gb tables for panTro xenoEst, etc
+    alter table panTro1.xenoEst MAX_ROWS = 65527380 AVG_ROW_LENGTH=130;
+
+- for scafold-based genomes (ci1), the tName index is not big enough.
