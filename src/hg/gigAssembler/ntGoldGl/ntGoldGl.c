@@ -1,6 +1,7 @@
 /* ntGoldGl - Update gold.NN and gl.NN files to unpack NT contig info.. */
 #include "common.h"
 #include "hash.h"
+#include "portable.h"
 #include "linefile.h"
 #include "agpFrag.h"
 #include "agpGap.h"
@@ -442,6 +443,11 @@ for (i=0; i<ctgCount; ++i)
     contig = ctgNames[i];
     printf(" %s\n", contig);
     sprintf(oldName, "%s/gold.%s.noNt", contig, oogVersion);
+    if (!fileExists(oldName))
+        {
+	warn("%s doesn't exist", oldName);
+	continue;
+	}
     sprintf(newName, "%s/gold.%s", contig, oogVersion);
     patchOneGold(oldName, ntHash, newName);
     sprintf(oldName, "%s/ooGreedy.%s.gl.noNt", contig, oogVersion);
