@@ -17,15 +17,15 @@ tags:
 	ctags *.c *.h ../lib/*.c ../inc/*.h
 
 test::
-	blat hCrea.geno hCrea.mrna testRna.psl
+	blat -verbose=0 hCrea.geno hCrea.mrna testRna.psl
 	cmp testRna.psl refRna.psl
-	blat -prot hCrea.pep mCrea.pep testProt.psl
+	blat -verbose=0 -prot hCrea.pep mCrea.pep testProt.psl
 	cmp testProt.psl refProt.psl
-	blat -t=dnax -q=prot hCrea.geno mCrea.pep testProtX.psl
+	blat -verbose=0 -t=dnax -q=prot hCrea.geno mCrea.pep testProtX.psl
 	cmp testProtX.psl refProtX.psl
-	blat -t=dnax -q=rnax hCrea.geno mCrea.mrna testRnaX.psl
+	blat -verbose=0 -t=dnax -q=rnax hCrea.geno mCrea.mrna testRnaX.psl
 	cmp testRnaX.psl refRnaX.psl
-	blat -fine hCrea.geno hCrea.mrna testFine.psl
+	blat -verbose=0 -fine hCrea.geno hCrea.mrna testFine.psl
 	cmp testFine.psl refFine.psl
 
 clean::
