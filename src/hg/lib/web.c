@@ -459,9 +459,9 @@ param cart - The cart to use to first search for a suitable database name
 return - The database matching this organism type
 */
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-char *dbOrg = hOrganism(retDb);
+char *queryOrganism = hOrganism(retDb);
 
-if (!strstrNoCase(organism, dbOrg))
+if (!strstrNoCase(organism, queryOrganism))
     {
     retDb = hDefaultDbForOrganism(organism);
     }
@@ -484,6 +484,7 @@ was in their cart, unless the organism doesn't match.
 {
 *retDb = cgiOptionalString(dbCgiName);
 *retOrganism = cgiOptionalString(orgCgiName);
+
 if (*retDb)
     {
     *retOrganism = hOrganism(*retDb);
