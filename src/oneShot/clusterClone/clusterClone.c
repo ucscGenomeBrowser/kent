@@ -7,14 +7,16 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.5 2004/06/18 20:51:36 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.6 2004/06/18 23:54:38 hiram Exp $";
 
 float minCover = 80.0;		/*	percent coverage to count hit */
 unsigned maxGap = 1000;		/*	maximum gap between pieces */
+boolean agp = FALSE;		/*	AGP output requested, default BED */
 
 static struct optionSpec options[] = {
    {"minCover", OPTION_FLOAT},
    {"maxGap", OPTION_INT},
+   {"agp", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -28,6 +30,7 @@ errAbort(
   "options:\n"
   "   -minCover=P - minimum P percent coverage to count an alignment (default 80.0)\n"
   "   -maxGap=M - maximum M bases gap between pieces to stitch together, default 1000\n"
+  "   -agp - output AGP format (default is bed format)\n"
   "   -verbose=N - set verbose level N (3: everything, 2: important stuff)"
   );
 }
@@ -59,8 +62,13 @@ const struct coordEl *b = *((struct coordEl **)vb);
 return (int)b->end - (int)a->end;
 }
 
+/*	Start at the calculated median point, scan through the
+ *	coordinates and adjust the start and end of the clustered region
+ *	to include the appropriate section.
+ */
 static void extendLimits(struct coordEl **coordListPt, unsigned median,
-    unsigned querySize, unsigned *startExtended, unsigned *endExtended)
+    unsigned querySize, unsigned *startExtended, unsigned *endExtended,
+    char *ctgName)
 {
 struct coordEl *coord;
 unsigned halfLength = querySize / 2;
@@ -73,6 +81,54 @@ else
 
 *endExtended = median + halfLength;
 verbose(2,"# starting limits: %u - %u\n", *startExtended, *endExtended);
+
+/*	sort the list descending by end coordinates	*/
+slSort(coordListPt,endDescending);
+
+if (coordListPt) coord = *coordListPt;
+else coord = NULL;
+
+/*	Walk through this list extending the start.
+ *	Same discussion as below, although reverse the sense of start
+ *	and end.  Here the list is sorted in descending order by end
+ *	coordinate.  Those end coordinates are compared with the
+ *	extending start coordinate to move it out.
+ */
+verbose(2,"# after end sort\n");
+
+firstCoordinate = TRUE;
+while (coord != NULL)
+    {
+    if (firstCoordinate)
+	{
+	if (*endExtended > coord->end)
+	    {
+	    *endExtended = coord->end;
+	    verbose(2,"# end brought in to: %u\n", *endExtended);
+	    }
+	firstCoordinate = FALSE;
+	}
+    verbose(2,"# %s %u - %u %u %u %c\n", coord->name, coord->start, coord->end, *startExtended, coord->qSize, (coord->strand == 1) ? '+' : '-');
+    if (coord->end < *startExtended)
+	{
+	unsigned gap = *startExtended - coord->end;
+
+	if (gap > maxGap)
+	    {
+	    verbose(2,"# more than max Gap encountered: %u\n", gap);
+	    break;	/*	exit this while loop	*/
+	    }
+	*startExtended = coord->start;
+	verbose(2,"# start extended to: %u\n", *startExtended);
+	}
+    else if (coord->start < *startExtended)
+	{
+	*startExtended = coord->start;
+	verbose(2,"# start extended to: %u\n", *startExtended);
+	}
+
+    coord = coord->next;
+    }
 
 /*	sort the list by start coordinates	*/
 slSort(coordListPt,startCompare);
@@ -131,52 +187,26 @@ while (coord != NULL)
     coord = coord->next;
     }
 
-/*	sort the list descending by end coordinates	*/
-slSort(coordListPt,endDescending);
-
-if (coordListPt) coord = *coordListPt;
-else coord = NULL;
-
-/*	Walk through this list extending the start.
- *	Same discussion as above, although reverse the sense of start
- *	and end.  Here the list is sorted in descending order by end
- *	coordinate.  Those end coordinates are compared with the
- *	extending start coordinate to move it out.
- */
-verbose(2,"# after end sort\n");
-
-firstCoordinate = TRUE;
-while (coord != NULL)
+/*	If agp output, we need to do it here	*/
+if (agp)
     {
-    if (firstCoordinate)
-	{
-	if (*endExtended > coord->end)
-	    {
-	    *endExtended = coord->end;
-	    verbose(2,"# end brought in to: %u\n", *endExtended);
-	    }
-	firstCoordinate = FALSE;
-	}
-    verbose(2,"# %s %u - %u %u %u %c\n", coord->name, coord->start, coord->end, *startExtended, coord->qSize, (coord->strand == 1) ? '+' : '-');
-    if (coord->end < *startExtended)
-	{
-	unsigned gap = *startExtended - coord->end;
+    if (coordListPt) coord = *coordListPt;
+    else coord = NULL;
 
-	if (gap > maxGap)
-	    {
-	    verbose(2,"# more than max Gap encountered: %u\n", gap);
-	    break;	/*	exit this while loop	*/
-	    }
-	*startExtended = coord->start;
-	verbose(2,"# start extended to: %u\n", *startExtended);
-	}
-    else if (coord->start < *startExtended)
+    int cloneCount = 0;
+    while (coord != NULL)
 	{
-	*startExtended = coord->start;
-	verbose(2,"# start extended to: %u\n", *startExtended);
+	if ( (coord->start >= *startExtended) &&
+		(coord->end <= *endExtended))
+	    {
+	    ++cloneCount;
+    printf("%s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName, coord->start,
+	coord->end, cloneCount, coord->name,
+	coord->start - *startExtended + 1, coord->end - *startExtended + 1,
+	(coord->strand == 1) ? '+' : '-');
+	    }
+	coord = coord->next;
 	}
-
-    coord = coord->next;
     }
 }	/*	static void extendLimits() */
 
@@ -187,7 +217,7 @@ struct hashCookie cookie;
 struct hashEl *hashEl;
 int highCount = 0;
 int secondHighest = 0;
-char *highName = (char *)NULL;
+char *ctgName = (char *)NULL;
 char *secondHighestName = (char *)NULL;
 struct hashEl *coords;
 int coordCount;
@@ -212,31 +242,31 @@ cookie=hashFirst(chrHash);
 while ((hashEl = hashNext(&cookie)) != NULL)
     {
     int count = ptToInt(hashEl->val);
-verbose(2,"# chr%s %d\n", hashEl->name, count);
+verbose(2,"# %s %d\n", hashEl->name, count);
     if (count >= highCount)
 	{
 	secondHighest = highCount;
 	if (secondHighestName)
 	    freeMem(secondHighestName);
 	highCount = count;
-	if (highName)
+	if (ctgName)
 	    {
-	    secondHighestName = cloneString(highName);
-	    freeMem(highName);
+	    secondHighestName = cloneString(ctgName);
+	    freeMem(ctgName);
 	    }
-	highName = cloneString(hashEl->name);
+	ctgName = cloneString(hashEl->name);
 	}
     }
-verbose(2,"# chr%s %d highest count, next: %s %d\n", highName, highCount, secondHighestName, secondHighest);
+verbose(2,"# %s %d highest count, next: %s %d\n", ctgName, highCount, secondHighestName, secondHighest);
 
 if (highCount == secondHighest)
     {
-verbose(1,"# ERROR TIE for high count chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
+verbose(1,"# ERROR TIE for high count %s %d highest count, next: %s %d  TIE *\n", ctgName, highCount, secondHighestName, secondHighest);
     }
 
 /*	for that highest count chrom, examine its coordinates, find high
  *	and low */
-coords = hashLookup(coordHash, highName);
+coords = hashLookup(coordHash, ctgName);
 
 if (coords) coordListPt = coords->val;
 else coordListPt = NULL;
@@ -295,18 +325,23 @@ if (coordCount > 0)
 	coord = coord->next;
 	}
     median = (unsigned) doubleMedian(coordCount, midPoints);
-    extendLimits(coordListPt, median, querySize, &startExtended, &endExtended);
+    extendLimits(coordListPt, median, querySize, &startExtended, &endExtended,
+	ctgName);
     verbose(2,
 	"# qSize: %u, Median: %u implies %u-%u %s\n#\textended to%u-%u\n",
 	querySize, median, median - (querySize/2), median+(querySize/2),
 	accName, startExtended, endExtended);
-    printf("chr%s\t%u\t%u\t%s\t%c\n", highName, startExtended, endExtended,
+    /*	if BED output, output the line here, AGP was done in extendLimits */
+    if (!agp)
+	{
+    printf("%s\t%u\t%u\t%s\t%c\n", ctgName, startExtended, endExtended,
 	accName, strandSum > (coordCount/2) ? '+' : '-');
+	}
     freeMem(midPoints);
     }
 else
     {
-    verbose(1,"# ERROR - no coordinates found ? %s\n", highName);
+    verbose(1,"# ERROR - no coordinates found ? %s\n", ctgName);
     }
 
 /*	free the chrom coordinates lists	*/
@@ -330,7 +365,7 @@ while ((hashEl = hashNext(&cookie)) != NULL)
     if (coordListPt)
 	slFreeList(coordListPt);
     }
-freeMem(highName);
+freeMem(ctgName);
 }	/*	static void processResult()	*/
 
 static void clusterClone(int argc, char *argv[])
@@ -401,7 +436,7 @@ for (i=1; i < argc; ++i)
 	    }
 
 	chrName = cloneString(psl->tName);
-	stripString(chrName, "chr");
+	/*stripString(chrName, "chr");*/
 	/*	keep a hash of chrom names encountered	*/
 	el = hashLookup(chrHash, chrName);
 	if (el == NULL)
@@ -470,9 +505,11 @@ if (argc < 2)
 
 minCover = optionFloat("minCover", 80.0);
 maxGap = optionInt("maxGap", 1000);
+agp = optionExists("agp");
 
 verbose(2,"#\tminCover: %% %g\n", minCover);
 verbose(2,"#\tmaxGap: %u\n", maxGap);
+verbose(2,"#\toutput type: %s\n", agp ? "AGP" : "BED");
 
 clusterClone(argc, argv);
 
