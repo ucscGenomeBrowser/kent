@@ -934,4 +934,4 @@ shortLabel Multiple species alignments
 longLabel Multiple species alignments
 priority 51
 visibility hide
-type psl
+type psl xeno
