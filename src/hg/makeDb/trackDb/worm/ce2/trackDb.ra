@@ -159,6 +159,20 @@ altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
 
+track conservation
+shortLabel Conservation
+longLabel Blastz Alignment with C. Briggsae & Conservation 
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder cb1
+
 track blastzSelf
 shortLabel Self Blastz
 longLabel Blastz C. elegans (self)
