@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.699 2004/07/24 00:09:50 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.700 2004/07/26 17:40:44 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13664,7 +13664,7 @@ if ((pos = strchr(acc, '.')) != NULL)
 	    *prot++ = 0;
 	}
     }
-
+printf("Acc is %s\n", acc);
 cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
@@ -14091,7 +14091,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") )
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") || sameWord(track, "affyZebrafish") )
     {
     doAffy(tdb, item, NULL);
     }
