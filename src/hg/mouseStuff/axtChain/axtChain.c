@@ -260,57 +260,11 @@ static double gapInitTGap[] = {
    350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
 };
 static double gapInitBothGap[] = { 
-   500+350, 500+425, 500+450, 500+600, 500+900, 500+2900, 
-   500+22900, 500+57900, 500+117900, 500+217900, 500+317900,
+   400+350, 400+425, 400+450, 400+600, 400+900, 400+2900, 
+   400+22900, 400+57900, 400+117900, 400+217900, 400+317900,
 };
 
-#ifdef OLD
-static int gapInitPos[] = { 
-   1, 3, 11, 111, 2111, 12111, 20000, 120000,
-};
-static int gapInitQGap[] = { 
-   400, 500, 700, 900, 2900, 22900, 40000, 140000,
-};
-static int gapInitTGap[] = { 
-   400, 500, 700, 900, 2900, 22900, 40000, 140000,
-};
-static int gapInitBothGap[] = { 
-   500+400, 500+500, 500+700, 500+900, 500+2900, 500+22900, 500+40000, 500+140000,
-};
-#endif /* OLD */
 
-/* Tables that define piecewise linear gap costs. 
- * These were created by looking at the 'main chain'
- * of alignments between human chromosome 22 and mouse
- * chromosome 2 using a preliminary gap cost of
- * 400 * pow(dq+dt, 0.4).   The program 'gapCost' 
- * did this. */
-
-#ifdef OLD
-static int gapInitPos[29] = { 
-	1,2,3,4,5,6,7,8,9,10,
-        15,20,30,40,60,80,
-	100,150,200,300,400,500,
-	1000,2000,5000,10000,20000,
-	50000,100000,};
-static int gapInitQGap[] = { 
-	397,454,478,497,532,558,578,595,611,626,
-	698,752,833,899,989,1027,
-	1033,1052,1054,1155,1147,1224,
-	1350,1500,};
-static int gapInitTGap[] = { 
-	359,412,443,467,492,512,528,540,555,565,
-	619,669,763,842,956,1022,
-	1078,1148,1177,1037,1192,1253,
-	1350,1500,};
-static int gapInitBothGap[] = { 
-	800,820,830,840,850,860,870,880,890,900,
-	950,1000,1050,1100,1200,1300,
-	1400,1600,1750,1950,2100,2250,
-	/* Linear from here... */
-	3000,4000,7000,12000,22000,
-	52000,102000};
-#endif /* OLD */
 
 struct gapAid
 /* A structure that bundles together stuff to help us
