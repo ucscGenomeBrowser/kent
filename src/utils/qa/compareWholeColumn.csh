@@ -16,7 +16,7 @@ if ($#argv != 3) then
   # no command line args
   echo
   echo "  gets a column from a table on dev and beta and checks diffs."
-  echo "  reports numbers of rows unique to each and common"
+  echo "  reports numbers of rows unique to each and common."
   echo "  writes files of everything."
   echo
   echo "    usage:  database, table, column "
@@ -29,12 +29,15 @@ else
 endif
 
 # --------------------------------------------
-#  get sets of KG, FB, PB tables:
+#  get files of tables and compare:
 
 hgsql -N -e "SELECT $column FROM $table" $db | sort  > $db.$table.$column.dev
 hgsql -N -h hgwbeta -e "SELECT $column FROM $table" $db | sort  > $db.$table.$column.beta
 comm -23 $db.$table.$column.dev $db.$table.$column.beta >$db.$table.$column.devOnly
 comm -13 $db.$table.$column.dev $db.$table.$column.beta >$db.$table.$column.betaOnly
 comm -12 $db.$table.$column.dev $db.$table.$column.beta >$db.$table.$column.common
-wc -l $db.$table.$column.devOnly $db.$table.$column.betaOnly $db.$table.$column.common
+echo
+wc -l $db.$table.$column.devOnly $db.$table.$column.betaOnly \
+  $db.$table.$column.common | grep -v "total"
+echo
 
