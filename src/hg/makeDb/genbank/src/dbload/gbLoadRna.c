@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.15 2003/11/16 19:31:28 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.16 2004/02/02 01:32:30 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -812,7 +812,7 @@ if ((drop+move+copy) > 1)
 
 gbVerbInit(optionInt("verbose", 0));
 if (verbose >= 5)
-    sqlTrace = TRUE;  /* global flag in jksql */
+    sqlMonitorEnable(JKSQL_TRACE);
 if (drop)
     dropAll(argv[1]);
 else if (move)
