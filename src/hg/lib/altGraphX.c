@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.25 2004/07/10 19:26:47 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.26 2004/07/13 00:23:34 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -2301,20 +2301,7 @@ for(compIx = 0; compIx < compCount; compIx++)
 	if(mapping[eStarts[i]] != -1) 
 	    {
 	    agxNew->edgeStarts[eCNew] = mapping[eStarts[i]];
-	    /* Check to make sure this connects to something. 
-	       Basic connected components doesn't allow for a vertex
-	       to be in two components. */
-	    if(mapping[eEnds[i]] == - 1)
-		{
-		agxNew->vTypes[vCNew] = agx->vTypes[eEnds[i]];
-		agxNew->vPositions[vCNew] = agx->vPositions[i];
-		agxNew->tStart = min(agxNew->tStart, agxNew->vPositions[vCNew]);
-		agxNew->tEnd = min(agxNew->tEnd, agxNew->vPositions[vCNew]);
-		agxNew->edgeEnds[eCNew] = vCNew;
-		vCNew++;
-		}
-	    else
-		agxNew->edgeEnds[eCNew] = mapping[eEnds[i]];
+	    agxNew->edgeEnds[eCNew] = mapping[eEnds[i]];
 	    agxNew->edgeTypes[eCNew] = mapping[agx->edgeTypes[i]];
 	    /* Add evidence to growing list. */
 	    slAddHead(&evList, evNew[i]);
@@ -2398,10 +2385,14 @@ AllocArray(vComponents, vC);
 for(i = 0; i < vC; i++)
     AllocArray(adjList[i], vC);
 
-/* Fill in the adjList. Wow, a lot happens in those
- two lines of code... */
+/* Fill in the adjList. Connect all edges both ways, want to connecte
+   everything possible. Wow, a lot happens in those two lines of
+   code... */
 for(i = 0; i < eC; i++)
+    {
     adjList[eS[i]][adjCounts[eS[i]]++] = eE[i];
+    adjList[eE[i]][adjCounts[eE[i]]++] = eS[i];
+    }
 
 for(vertIx = 0; vertIx < vC; vertIx++)
     if(vColors[vertIx] == agWhite)
