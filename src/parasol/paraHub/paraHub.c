@@ -105,7 +105,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "   -machineCheckPeriod=N Minutes between checking on machine - default %d\n"
 	 "   -subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
 	 "   -nextJobId=N  Starting job ID number\n"
-	 "   -logFacility=facility log to the specified syslog facility - default local0.\n"
+	 "   -logFacility=facility Log to the specified syslog facility - default local0.\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
