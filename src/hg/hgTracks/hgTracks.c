@@ -33,6 +33,7 @@
 #include "mapSts.h"
 #include "est3.h"
 #include "exoFish.h"
+#include "roughAli.h"
 #include "snp.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
@@ -2395,7 +2396,7 @@ return tg;
 }
 
 void loadExoFish(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+/* Load up exoFish from database table to trackGroup items. */
 {
 bedLoadItem(tg, "exoFish", (ItemLoader)exoFishLoad);
 }
@@ -2429,7 +2430,7 @@ return shadesOfGray[grayLevel];
 
 
 struct trackGroup *exoFishTg()
-/* Make track group for simple repeats. */
+/* Make track group for exoFish. */
 {
 struct trackGroup *tg = bedTg();
 
@@ -2444,6 +2445,63 @@ tg->ignoresColor = TRUE;
 tg->itemColor = exoFishColor;
 return tg;
 }
+
+void loadExoMouse(struct trackGroup *tg)
+/* Load up exoMouse from database table to trackGroup items. */
+{
+bedLoadItem(tg, "exoMouse", (ItemLoader)roughAliLoad);
+if (tg->visibility == tvDense && slCount(tg->items) < 1000)
+    {
+    slSort(&tg->items, bedCmpScore);
+    }
+}
+
+void freeExoMouse(struct trackGroup *tg)
+/* Free up isochore items. */
+{
+roughAliFreeList((struct roughAli**)&tg->items);
+}
+
+char *exoMouseName(struct trackGroup *tg, void *item)
+/* Return what to display on left column of open track. */
+{
+struct roughAli *exo = item;
+static char name[17];
+
+strncpy(name, exo->name, sizeof(name)-1);
+return name;
+}
+
+
+Color exoMouseColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of exoMouse track item. */
+{
+struct roughAli *el = item;
+int ppt = el->score;
+int grayLevel;
+
+grayLevel = grayInRange(ppt, -100, 1000);
+return shadesOfGray[grayLevel];
+}
+
+
+struct trackGroup *exoMouseTg()
+/* Make track group for exoMouse. */
+{
+struct trackGroup *tg = bedTg();
+
+tg->mapName = "hgExoMouse";
+tg->visibility = tvDense;
+tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Exonerate)";
+tg->shortLabel = "Exonerate Mouse";
+tg->loadItems = loadExoMouse;
+tg->freeItems = freeExoMouse;
+tg->itemName = exoMouseName;
+tg->ignoresColor = TRUE;
+tg->itemColor = exoMouseColor;
+return tg;
+}
+
 
 void loadSnp(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
@@ -4226,6 +4284,7 @@ if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
+if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
 if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg());

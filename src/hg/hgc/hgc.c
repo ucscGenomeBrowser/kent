@@ -38,6 +38,7 @@
 #include "knownMore.h"
 #include "snp.h"
 #include "softberryHom.h"
+#include "roughAli.h"
 
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
@@ -906,8 +907,11 @@ void printPos(char *chrom, int start, int end)
 /* Print position lines. */
 {
 printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
-printf("<B>Begin in chromosome:</B> %d<BR>\n", start);
+printf("<B>Begin in chromosome:</B> %d<BR>\n", start+1);
 printf("<B>End in chromosome:</B> %d<BR>\n", end);
+printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
+      "View DNA for this feature</A><BR>\n",  hgcPath(),
+      start, chrom, start, end, database);
 }
 
 void bedPrintPos(struct bed *bed)
@@ -1609,7 +1613,7 @@ hFreeConn(&conn);
 }
 
 void doExoFish(char *itemName)
-/* Handle click on genomic dup track. */
+/* Handle click on exoFish track. */
 {
 struct exoFish el;
 int start = cgiInt("o");
@@ -1648,6 +1652,40 @@ puts("<P>The Exofish track shows regions of homology with the "
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+void doExoMouse(char *itemName)
+/* Handle click on exoMouse track. */
+{
+struct roughAli el;
+int start = cgiInt("o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+htmlStart("Exonerate Mouse");
+printf("<H2>Exonerate Mouse</A></H2>\n");
+
+sprintf(query, "select * from exoMouse where chrom = '%s' and chromStart = %d and name = '%s'",
+    seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    roughAliStaticLoad(row, &el);
+    printf("<B>score:</B> %d<BR>\n", el.score);
+    bedPrintPos((struct bed *)&el);
+    htmlHorizontalLine();
+    }
+
+puts("<P>The Exonerate mouse shows regions of homology with the "
+     "mouse based on Exonerate alignments of mouse random reads "
+     "with the human genome.  The data for this track was kindly provided by "
+     "Guy Slater, Michele Clamp, and Ewan Birney at "
+     "<A HREF=\"http://www.ensembl.org\" TARGET=_blank>Ensembl</A>.");
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 void doEst3(char *itemName)
 /* Handle click on EST 3' end track. */
@@ -2044,6 +2082,10 @@ else if (sameWord(group, "hgGenomicDups"))
 else if (sameWord(group, "hgExoFish"))
     {
     doExoFish(item);
+    }
+else if (sameWord(group, "hgExoMouse"))
+    {
+    doExoMouse(item);
     }
 else if (sameWord(group, "hgEst3"))
     {
