@@ -910,7 +910,8 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    if (lt->stringy)
 		{
 		fprintf(f, "/* All strings in %s are allocated at once, so only need to free first. */\n", colName);
-		fprintf(f, "freeMem(el->%s[0]);\n", colName);
+		fprintf(f, "if (el->%s != NULL)\n", colName);
+		fprintf(f, "    freeMem(el->%s[0]);\n", colName);
 		}
 	    if (!col->fixedSize)
 		fprintf(f, "freeMem(el->%s);\n", colName);
