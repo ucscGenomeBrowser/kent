@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.151 2004/07/14 05:51:59 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.152 2004/07/19 17:46:43 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1800,7 +1800,7 @@ for (i=0;  i < numWords;  i++)
     vals[i] = ptrs[i][0];
 vals[i] = 0;
 *retVals = vals;
-*retInv = sameString("does", dd);
+*retInv = sameString("doesn't", dd);
 }
 
 void cgiToStringFilter(char *dd, char *pat, enum stringFilterType *retSft,
