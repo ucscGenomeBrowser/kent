@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.4 2004/09/30 21:08:54 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.5 2004/10/07 18:05:30 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -49,6 +49,7 @@ static struct optionSpec optionSpecs[] = {
 #define BLOCKEND_LT_BLOCKSTART "%s.%s has %d records with blockEnd[i] < blockStart[i].\n"
 #define BLOCKS_NOT_ASCEND "%s.%s has %d records with blocks not in ascending order.\n"
 #define BLOCKS_OVERLAP "%s.%s has %d records with overlapping blocks.\n"
+#define BLOCKEND_GT_END "%s.%s has %d records with blockEnd[i] > end.\n"
 #define BLOCKEND_NOT_END "%s.%s has %d records with blockEnd[n-1] != end.\n"
 
 
@@ -287,7 +288,7 @@ boolean checkBlocks(struct bed *bedList, char *table, struct hTableInfo *hti)
 {
 boolean gotError = FALSE;
 struct bed *bed = NULL;
-int bSNotStart=0, bELTBS=0, bENotEnd=0;
+int bSNotStart=0, bELTBS=0, bENotEnd=0, bEGTEnd=0;
 int bNotAscend=0, bOverlap=0;
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
@@ -331,6 +332,17 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		       i, bed->blockSizes[i]);
 	    bELTBS++;
 	    }
+	if (bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]
+	    > bed->chromEnd)
+	    {
+	    if (verboseBlocks || verboseLevel() >= 2)
+		verbose(0, "%s.%s item %s %s:%d-%d: blockEnd[%d] (%d) > chromEnd.\n",
+		       db, table, bed->name, bed->chrom,
+		       bed->chromStart, bed->chromEnd,
+		       i, (bed->chromStart + bed->chromStarts[i] +
+			   bed->blockSizes[i]));
+	    bEGTEnd++;
+	    }
 	lastStart = bed->chromStarts[i];
 	lastEnd = bed->chromStarts[i] + bed->blockSizes[i];
 	}
@@ -348,6 +360,7 @@ gotError |= reportErrors(BLOCKSTART_NOT_START, table, bSNotStart);
 gotError |= reportErrors(BLOCKEND_LT_BLOCKSTART, table, bELTBS);
 gotError |= reportErrors(BLOCKS_NOT_ASCEND, table, bNotAscend);
 gotError |= reportErrors(BLOCKS_OVERLAP, table, bOverlap);
+gotError |= reportErrors(BLOCKEND_GT_END, table, bEGTEnd);
 gotError |= reportErrors(BLOCKEND_NOT_END, table, bENotEnd);
 return gotError;
 }

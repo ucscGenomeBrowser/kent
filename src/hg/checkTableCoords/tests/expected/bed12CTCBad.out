@@ -6,6 +6,7 @@ test.bed12CTCBad has 1 records with end > chromSize.
 test.bed12CTCBad item endLTStart chrFake:2-1: thickEnd (1) < thickStart (2)
 test.bed12CTCBad item cdsELTCS chrFake:20-200: thickEnd (21) < thickStart (25)
 test.bed12CTCBad has 2 records with cdsEnd < cdsStart.
+test.bed12CTCBad item endLTStart chrFake:2-1: blockEnd[0] (3) > chromEnd.
 test.bed12CTCBad item endLTStart chrFake:2-1: end of last block (3) is not the same as chromEnd (1).
 test.bed12CTCBad item bOverlap chrFake:10-20: blocks 0 and 1 overlap.
 test.bed12CTCBad item bOverlap chrFake:10-20: blocks 1 and 2 overlap.
@@ -21,4 +22,5 @@ test.bed12CTCBad has 1 records with blockStart[0] != start.
 test.bed12CTCBad has 1 records with blockEnd[i] < blockStart[i].
 test.bed12CTCBad has 1 records with blocks not in ascending order.
 test.bed12CTCBad has 4 records with overlapping blocks.
+test.bed12CTCBad has 1 records with blockEnd[i] > end.
 test.bed12CTCBad has 4 records with blockEnd[n-1] != end.
