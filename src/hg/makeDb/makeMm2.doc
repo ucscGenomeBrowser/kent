@@ -1,3 +1,4 @@
+#
 This file describes how we made the browser database on the mouse
 genome, February 2002 build.
 
@@ -1400,4 +1401,20 @@ REATING THE musHumL SAMPLE TRACK (a.k.a WIGGLE TRACK)
 ------------------------------------------------------
 o - refer to the script at src/hg/sampleTracks/makeMm2Hg12.doc
 
-     
+####################################################################
+## NIA Mouse Gene Index - (WORKING - 2004-01-07 - Hiram)
+#	requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+#	pick up data (available only this one time)
+    ssh hgwdev
+    mkdir /cluster/data/mm2/bed/NIAGene
+    cd /cluster/data/mm2/bed/NIAGene
+    wget --timestamping \
+	http://lgsun.grc.nia.nih.gov/geneindex/blatNAP-genome.txt
+    #	This file seems to have an extra field at the end ?
+    #	It is always a 1 except for two entries that do not have
+    #	this extra field.
+    awk '{for (i=1; i<21; ++i) { printf "%s\t",$i; } printf "%s\n",$21;}' \
+	blatNAP-genome.txt > blatNAP-genome.psl
+    hgLoadPsl mm2 -table=NIAGene blatNAP-genome.psl
+# load of NIAGene did not go as planned: 114560 record(s), 0 row(s) skipped,
+#	12 warning(s) loading psl.tab
