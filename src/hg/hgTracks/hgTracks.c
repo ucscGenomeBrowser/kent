@@ -2002,6 +2002,7 @@ for (i=0; i<sampleCount; ++i)
     sf->grayIx = grayIx;
     slAddHead(&sfList, sf);
     }
+slReverse(&sfList);
 lf->components = sfList;
 finishLf(lf);
 return lf;
