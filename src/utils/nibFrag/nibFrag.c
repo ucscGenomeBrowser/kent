@@ -5,7 +5,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.12 2004/02/29 00:21:51 daryl Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.13 2004/08/30 23:53:28 daryl Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"masked", OPTION_BOOLEAN},
@@ -13,6 +13,7 @@ static struct optionSpec optionSpecs[] = {
     {"upper", OPTION_BOOLEAN},
     {"name", OPTION_STRING},
     {"dbHeader", OPTION_STRING},
+    {"tbaHeader", OPTION_STRING},
     {NULL, 0}
 };
 void usage()
@@ -28,6 +29,7 @@ errAbort(
   "   -upper - use uppper case characters for all bases\n"
   "   -name=name Use given name after '>' in output sequence\n"
   "   -dbHeader=db Add full database info to the header, with or without -name option\n"
+  "   -tbaHeader=db Format header for compatibility with tba, takes database name as argument\n"
   );
 }
 
@@ -39,7 +41,7 @@ char header[255];
 char name[128];
 int chromLength;
 
-if (strand != '+' && strand != '-'&& strand != 'm')
+if (strand != '+' && strand != '-' && strand != 'm')
    usage();
 if (strand == 'm')
     strand = '-';
@@ -60,6 +62,14 @@ if (optionExists("dbHeader"))
 	  optionVal("name", seq->name), optionVal("dbHeader", "db"),
 	  name, start, end, strand, chromLength);
     }
+else if (optionExists("tbaHeader"))
+    {
+    chromLength = nibGetSize(nibFile);
+    splitPath(nibFile, NULL, name, NULL);
+    safef(header,sizeof(header),"%s.%s:%d-%d of %d", 
+	  optionVal("tbaHeader", "tba"),
+	  name, start, end, chromLength);
+    }
 else
     safef(header,sizeof(header),"%s",optionVal("name", seq->name));
 faWrite(faFile, header, seq->dna, seq->size);
@@ -78,8 +88,6 @@ if(optionExists("masked") && optionExists("hardMasked"))
     warn("\nError: Must choose 'masked' or 'hardMasked' but not both.\n");
     usage();
     }
-if(optionExists("dbHeader") && !optionExists("name"))
-    warn("\nPossible error: 'dbHeader' option chosen without 'name' option.\n");
 if (optionExists("masked"))
     options = NIB_MASK_MIXED;
 if(optionExists("hardMasked"))
