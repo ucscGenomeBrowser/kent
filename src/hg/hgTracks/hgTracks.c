@@ -1541,6 +1541,8 @@ int bin;	      /* Sample Y coordinates are first converted to
                        * bin coordinates, and then to pixels.  I'm not
 		       * totally sure why.  */
 
+int *maxPix;	/*an array of maximum y-value for each x-screen value*/
+
 
 int currentX, currentXEnd, currentWidth;
 
@@ -1641,6 +1643,10 @@ else if( sameString( tg->mapName, "zoo" ) )
     lineGapSize = -1;
     }
 
+maxPix = needMem( sizeof(int) * (tl.picWidth+1) );
+for( i=0; i<tl.picWidth; i++ )
+	maxPix[i] = tl.picWidth + 2;
+
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     gapPrevX = -1;
@@ -1651,6 +1657,14 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	{
 	sampleX = sf->start;
 	sampleY = sf->end - sampleX;	// Stange encoding but so it is. 
+					// It is to deal with the fact that
+					// for a BED: sf->end = sf->start + length
+					// but in our case length = height (or y-value)
+					// so to recover height we take
+					// height = sf->end - sf->start.
+					// Otherwise another sf variable would 
+					// be needed.
+ 
 
 	/*mapping or sequencing gap*/
 	if (sampleY == 0)
@@ -1671,8 +1685,11 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    sampleY = minRange;
 	bin = -whichSampleBin( sampleY, minRange, maxRange, binCount );
 
+
 	x1 = round((double)(sampleX-winStart)*scale) + xOff;
 	y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
+
+	
 
 	if (prevX > 0)
 	    {
@@ -1692,12 +1709,17 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 		}
 	    }
 
+	//if( x1 < 0 || x1 > tl.picWidth )
+	//printf("x1 = %d, sampleX=%d, winStart = %d\n<br>", x1, sampleX, winStart );
+	if( x1 >= 0 && x1 <= tl.picWidth && y1 < maxPix[x1] )
+	{
+	maxPix[x1] = y1;
 	/* Draw the points themselves*/
-	drawScaledBox(vg, sampleX, sampleX+1, scale, 
-		xOff, (int)y1-1, 3, color);
+	drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1-1, 3, color);
 	if( fill )
 		drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
-	    			ybase-y1-2, bColor);
+			      ybase-y1-2, bColor);
+	}
 
 	prevX = gapPrevX = sampleX;
 	prevY = y1;
@@ -5247,12 +5269,6 @@ bedLoadItem(tg, "syntenyMouse", (ItemLoader)synteny100000Load);
 slSort(&tg->items, bedCmp);
 }
 
-void loadSyntenyHuman(struct track *tg)
-{
-bedLoadItem(tg, "syntenyHuman", (ItemLoader)synteny100000Load);
-slSort(&tg->items, bedCmp);
-}
-
 void loadSynteny100000(struct track *tg)
 {
 bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
@@ -5422,15 +5438,6 @@ tg->subType = lfWithBarbs ;
 void synteny100000Methods(struct track *tg)
 {
 tg->loadItems = loadSynteny100000;
-tg->freeItems = freeSynteny100000;
-tg->itemColor = syntenyItemColor;
-tg->drawName = FALSE;
-tg->subType = lfWithBarbs ;
-}
-
-void syntenyHumanMethods(struct track *tg)
-{
-tg->loadItems = loadSyntenyHuman;
 tg->freeItems = freeSynteny100000;
 tg->itemColor = syntenyItemColor;
 tg->drawName = FALSE;
@@ -7272,6 +7279,8 @@ else if(z == 3)
 	    "zoom2500", tg->mapName);
 else
     snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+
+printf("(%s)", tableName );
 
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
     where, &rowOffset);
@@ -10029,7 +10038,6 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
-registerTrackHandler("syntenyHuman", syntenyHumanMethods);
 registerTrackHandler("syntenyMouse", syntenyMouseMethods);
 registerTrackHandler("syntenyRat", syntenyRatMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
