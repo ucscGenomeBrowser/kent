@@ -18,7 +18,6 @@
  * are actually pretty good (they're just passed on from
  * mySQL). */
 
-int sqlCountColumns(struct sqlResult *sr);
 
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database. */
@@ -56,6 +55,8 @@ struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
 
 void sqlFreeResult(struct sqlResult **pRes);
 /* Free up a result. */
+
+int sqlCountColumns(struct sqlResult *sr);
 
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
