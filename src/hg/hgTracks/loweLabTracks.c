@@ -296,9 +296,8 @@ char **row;
 char *tempstring;
 int rowOffset;
 int length, x, y, z;
-char codeList[16] = {'c','e','o','b','u','v','t','h','d','m','a','n','g', 'k', 'l', 'r'};
-char *codeNames[16] = 
-{"crenarchaea","euryarchaea","nanoarchaea","bacteria","eukarya","viral","thermophile","hyperthermophile","acidophile","methanogen","strict aerobe","strict anaerobe", "genus", "alkali", "halophile", "anerobe or aerobe"}; int i;
+char codeList[18] = {'g', 'z', 'c','e','o','b','v','u', 'y', 't','h','d','k','l', 'm','a','n','r'};
+char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", "eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anerobe or aerobe"}; int i;
  
  sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
 sr = sqlGetResult(conn, query);
@@ -328,8 +327,8 @@ for(cb = list; cb != NULL; cb = cb->next)
     tempstring=cloneString(cb->code);
  
     chopString(tempstring, "," , temparray, ArraySize(temparray));
-    temparray3=(char**)calloc(16*8,8);
-    for(x=0; x<16; x++){
+    temparray3=(char**)calloc(18*8,8);
+    for(x=0; x<18; x++){
 	temparray3[x]=cloneString(temparray[x]);	
     }
     lf->extra = temparray3;
@@ -350,7 +349,7 @@ if(tg->limitedVis != tvDense)
     {
 
     originalLfs = tg->items;
-    for (i = 0; i < 16; i++)
+    for (i = 0; i < 18; i++)
         {
 	struct linkedFeatures *lfList = NULL;
         AllocVar(codeLfs);
@@ -360,7 +359,7 @@ if(tg->limitedVis != tvDense)
             {
 	    lf = lfsToLf(lfs);
             temparray2=((char**)(lfs->features->extra))[i];
-	    if (atoi(temparray2)!=-9999)
+	    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)!=-9999)
                 {
 		lf->score=atoi(temparray2);
                 slAddHead(&lfList,lf);
@@ -423,7 +422,7 @@ void loadRnaGenes(struct track *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
 {
-struct rnaGenes *bed, *list = NULL;
+struct bed *bed, *list = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -432,8 +431,7 @@ int rowOffset;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    bed = rnaGenesLoad(row+rowOffset);
-
+    bed = bedLoadN(row+rowOffset,6);
     slAddHead(&list, bed);
     }
 sqlFreeResult(&sr);
@@ -445,7 +443,7 @@ tg->items = list;
 Color rgGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw gene in. */
 {
-struct bed *lf=item;
+struct rnaGenes *lf=item;
 makeRedGreenShades(vg);
 if (lf->score ==100) {return shadesOfGreen[15];}
 if (lf->score == 300) {return shadesOfRed[15];}

@@ -148,7 +148,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.762 2004/10/05 15:27:20 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.763 2004/10/07 17:52:03 kschneid Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13004,7 +13004,7 @@ void printCode(char code)
 	    printf("Bacteria");
 	    break;
 	case 'c':
-	    printf("Crenarchae");
+	    printf("Crenarchea");
 	    break;
 	case 'd':
 	    printf("Acidophile");
@@ -13031,7 +13031,7 @@ void printCode(char code)
 	    printf("Thermophile");
 	    break;
 	case 'u':
-	    printf("Eukaryotic");
+	    printf("Eukaryia");
 	    break;
 	case 'v':
 	    printf("Viral");
@@ -13042,8 +13042,11 @@ void printCode(char code)
 	case 'l':
 	    printf("Halophile");
     	    break;
+	case 'r':
+	    printf("Both Aerobic and Anerobic");
+    	    break;
 	default:
-	    printf("Bad code");
+	    printf("Bad code %c", code);
 	    break;
        }
 }
@@ -13137,7 +13140,77 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, cbs);
     }
 
-/*Print out the table for the alignments*/
+
+/*Print out table with Blast information*/
+printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
+printf(" <tbody>\n    <tr>\n");
+printf("     <td style=\"vertical-align: top;\"><b>Blast Against Category</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Organism Name</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Gene Name</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Product</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>NCBI Link</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Evalue</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Percent Identity</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Alignment Length</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<b>Gap openings</b>");
+printf("</td>\n    </tr>\n    <tr>");
+
+flag=0;
+for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
+    {
+    if(sameString(trnaName, cbs2->qName))
+        {
+	if(flag==0)
+	    {
+	    currentGI=cbs2->GI;
+	    printf("\n      \n      <td style=\"vertical-align: top;\">");
+	    flag=1;
+	    }
+			
+	if((cbs2->next!=NULL) && (currentGI== cbs2->GI) && (currentGI== cbs2->next->GI)  )
+	    {
+	    printCode(cbs2->code[0]);
+            printf(", ");
+	    } 
+			
+	else
+	    {
+	   
+	    printCode(cbs2->code[0]);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	   
+	    printf("<a name=\"%i-desc\"></a>",cbs2->GI);
+	
+	    printf("<a\nhref=\"#%i-align\">%s</a>",cbs2->GI,cbs2->species);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%s",cbs2->name);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%s",cbs2->product);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&amp;val=%i\">NCBI Link</a>",cbs2->GI);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%s",cbs2->evalue);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%f",cbs2->PI);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%i",cbs2->length);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("%i",cbs2->gap);
+	    printf("<br></td>\n    </tr>\n");
+	    flag=0;
+	    
+	    }               
+        }               
+    }	
+    
+    /*Print out the table for the alignments*/
 printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
 printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
@@ -13200,77 +13273,9 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
                      
     }
    
-/*Print out table with Blast information*/
-printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
-printf(" <tbody>\n    <tr>\n");
-printf("     <td style=\"vertical-align: top;\"><b>Blast Against Category</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Organism Name</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Gene Name</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Product</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>NCBI Link</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Evalue</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Percent Identity</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Alignment Length</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Gap openings</b>");
-printf("</td>\n    </tr>\n    <tr>");
-
-flag=0;
-for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
-    {
-    if(sameString(trnaName, cbs2->qName))
-        {
-	if(flag==0)
-	    {
-	    currentGI=cbs2->GI;
-	    printf("\n      \n      <td style=\"vertical-align: top;\">");
-	    flag=1;
-	    }
-			
-	if((cbs2->next!=NULL) && (currentGI== cbs2->GI) && (currentGI== cbs2->next->GI)  )
-	    {
-	    printCode(cbs2->code[0]);
-            printf(", ");
-	    } 
-			
-	else
-	    {
-	   
-	    printCode(cbs2->code[0]);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	   
-	    printf("<a name=\"%i-desc\"></a>",cbs2->GI);
-	
-	    printf("<a\nhref=\"#%i-align\">%s</a>",cbs2->GI,cbs2->species);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%s",cbs2->name);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%s",cbs2->product);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&amp;val=%i\">NCBI Link</a>",cbs2->GI);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%f",cbs2->evalue);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%f",cbs2->PI);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%i",cbs2->length);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%i",cbs2->gap);
-	    printf("<br></td>\n    </tr>\n");
-	    flag=0;
-	    
-	    }               
-        }               
-    }	
 printf("  <br><br></tbody>\n</table>  \n");
-printf("  </tbody>\n</table>  \n");
-
+/*\printf("  </tbody>\n</table>  \n");
+*/
 /*Free the data*/
 
 hFreeConn(&conn);
