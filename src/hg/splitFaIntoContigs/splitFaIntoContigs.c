@@ -73,13 +73,23 @@ fflush(stdout);
     exit(-1);
 }
 
-void writeAgpLiftData(struct agpData *startData, struct agpData *endData, int chromSize, int contigSize, FILE *fp, char sep, char lastSep)
+void writeLiftData(struct agpData *startData, int chromSize, int contigSize, FILE *fp, char sep, char lastSep)
 {
 fprintf(fp, "%d%c", startData->data.pGap->chromStart, sep);
 fprintf(fp, "%s/%s%c", &(startData->data.pGap->chrom[3]), startData->contigName, sep);
 fprintf(fp, "%d%c", contigSize, sep);
 fprintf(fp, "%s%c", startData->data.pGap->chrom, sep);
 fprintf(fp, "%d%c", chromSize, lastSep);
+}
+
+void writeListData(struct agpData *startData, FILE *fp)
+{
+fprintf(fp, "%s\n", startData->contigName);
+}
+
+void writeListOutData(struct agpData *startData, FILE *fp)
+{
+fprintf(fp, "%s/%s.fa.out\n", startData->contigName, startData->contigName);
 }
 
 void writeLiftFiles(char *chromName, int chromSize, struct agpData *startAgpData, char *destDir)
@@ -126,9 +136,9 @@ while (NULL != curData)
     if (curData->endOfContig)
 	{
 	contigSize = curData->data.pGap->chromEnd - loopStartData->data.pGap->chromStart;
-	writeLiftData(loopStartData, curData, chromSize, contigSize, fpLft, '\t', '\n');
-	writeListData(loopStartData, fpLft);
-	writeListOutData(loopStartData, fpLft);
+	writeLiftData(loopStartData, chromSize, contigSize, fpLft, '\t', '\n');
+	writeListData(loopStartData, fpLst);
+	writeListOutData(loopStartData, fpLstOut);
 	loopStartData = NULL;
 	}
 
