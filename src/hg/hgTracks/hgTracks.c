@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.667 2004/02/05 18:27:21 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.668 2004/02/06 04:53:01 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3193,7 +3193,7 @@ tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
 }
 
-void loadtfbsCons(struct track *tg)
+void loadTfbsCons(struct track *tg)
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -3206,9 +3206,7 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffse
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tfbs = tfbsConsLoad(row+rowOffset);
-    if (lastName == NULL)
-	lastName = cloneString(tfbs->name);
-    else if (!sameString(lastName, tfbs->name))
+    if ((lastName == NULL) || !sameString(lastName, tfbs->name))
 	{
 	slAddHead(&list, tfbs);
 	freeMem(lastName);
@@ -3225,7 +3223,7 @@ tg->items = list;
 void tfbsConsMethods(struct track *tg)
 {
     bedMethods(tg);
-    tg->loadItems = loadtfbsCons;
+    tg->loadItems = loadTfbsCons;
 }
 
 void isochoreLoad(struct track *tg)
