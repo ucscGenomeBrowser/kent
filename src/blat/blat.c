@@ -139,7 +139,7 @@ boolean gotSingle = FALSE;
 char *buf;		/* This will leak memory but won't matter. */
 
 /* Detect nib files by suffix since that is standard. */
-if (isNib(fileName))
+if (isNib(fileName) || sameString(fileName, "stdin"))
     gotSingle = TRUE;
 /* Detect .fa files (where suffix is not standardized)
  * by first character being a '>'. */
@@ -273,7 +273,7 @@ if (hardMask)
 }
 
 bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, 
-	boolean isProt, boolean isTransDna, char *maskType)
+	boolean isProt, boolean isTransDna, char *maskType, boolean showStatus)
 /* From an array of .fa and .nib file names, create a
  * list of dnaSeqs. */
 {
@@ -334,7 +334,8 @@ for (i=0; i<fileCount; ++i)
     /* Move local list to head of bigger list. */
     seqList = slCat(list, seqList);
     }
-printf("Loaded %lu letters in %d sequences\n", totalSize, count);
+if (showStatus)
+    printf("Loaded %lu letters in %d sequences\n", totalSize, count);
 slReverse(&seqList);
 return seqList;
 }
@@ -440,7 +441,7 @@ if (trimA)
 }
 
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
-	boolean isProt, struct hash *maskHash, FILE *outFile)
+	boolean isProt, struct hash *maskHash, FILE *outFile, boolean showStatus)
 /* Search all sequences in all files against single genoFind index. */
 {
 int i;
@@ -515,7 +516,8 @@ for (i=0; i<fileCount; ++i)
 	}
     }
 carefulClose(&outFile);
-printf("Searched %lu bases in %d sequences\n", totalSize, count);
+if (showStatus)
+    printf("Searched %lu bases in %d sequences\n", totalSize, count);
 }
 
 struct trans3 *seqListToTrans3List(struct dnaSeq *seqList, aaSeq *transLists[3], struct hash **retHash)
@@ -566,7 +568,7 @@ for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     }
 }
 
-void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna, FILE *out)
+void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna, FILE *out, boolean showStatus)
 /* Run query against translated DNA database (3 frames on each strand). */
 {
 int frame, i;
@@ -583,7 +585,8 @@ boolean toggle = FALSE;
 boolean maskUpper = FALSE;
 
 ZeroVar(&trimmedSeq);
-printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
+if (showStatus)
+    printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
 
 /* Figure out how to manage query case.  Proteins want to be in
  * upper case, generally, nucleotides in lower case.  But there
@@ -684,17 +687,19 @@ boolean tIsProt = (tType == gftProt);
 boolean qIsProt = (qType == gftProt);
 boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
 FILE *f = mustOpen(outName, "w");
+boolean showStatus = (f != stdout);
 
 databaseName = dbFile;
 getFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
     gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, tType);
-    printf("Done making %s\n", makeOoc);
+    if (showStatus)
+	printf("Done making %s\n", makeOoc);
     exit(0);
     }
 getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash, tIsProt, tType == gftDnaX, mask);
+dbSeqList = getSeqList(dbCount, dbFiles, dbHash, tIsProt, tType == gftDnaX, mask, showStatus);
 databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
     databaseLetters += seq->size;
@@ -718,16 +723,16 @@ if (bothSimpleNuc || (tIsProt && qIsProt))
 		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
         unmaskNucSeqList(dbSeqList);
 	}
-    searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f);
+    searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f, showStatus);
     freeHash(&maskHash);
     }
 else if (tType == gftDnaX && qType == gftProt)
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE, f);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE, f, showStatus);
     }
 else if (tType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX, f);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX, f, showStatus);
     }
 else
     {
