@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.15 2003/06/14 07:43:39 kent Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.16 2004/02/24 22:04:14 kent Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -388,7 +388,7 @@ for (i=0; i<size; ++i)
     nibStreamOne(ns, *dna++);
 }
 
-boolean isNib(char *fileName)
+boolean nibIsFile(char *fileName)
 /* Return TRUE if file is a nib file. */
 {
 boolean isANib;
@@ -401,7 +401,7 @@ if (subrange != NULL)
 return isANib;
 }
 
-boolean isNibSubrange(char *fileName)
+boolean nibIsRange(char *fileName)
 /* Return TRUE if file specifies a subrange of a nib file. */
 {
 boolean isANib;

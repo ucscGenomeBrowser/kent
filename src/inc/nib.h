@@ -63,10 +63,10 @@ void nibWriteMasked(int options, struct dnaSeq *seq, char *fileName);
 /* Write out file in format of four bits per nucleotide, with control over
  * handling of masked positions. */
 
-boolean isNib(char *fileName);
+boolean nibIsFile(char *fileName);
 /* Return TRUE if file is a nib file. */
 
-boolean isNibSubrange(char *fileName);
+boolean nibIsRange(char *fileName);
 /* Return TRUE if file specifies a subrange of a nib file. */
 
 struct nibStream *nibStreamOpen(char *fileName);

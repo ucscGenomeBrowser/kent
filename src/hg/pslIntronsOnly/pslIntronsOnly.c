@@ -7,7 +7,7 @@
 #include "nib.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.6 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.7 2004/02/24 22:04:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -94,14 +94,14 @@ void initGenoRead(char *inGenoFile)
 /* initialize for reading the genome sequence */
 {
 strcpy(genoFileName, inGenoFile);
-if (isNibSubrange(inGenoFile))
+if (nibIsRange(inGenoFile))
     {
     nibSubrange = TRUE;
     genoSeqCache = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME,
                                     genoFileName);
     tolowers(genoSeqCache->dna);
     }
-else if (isNib(inGenoFile))
+else if (nibIsFile(inGenoFile))
     {
     nibOpenVerify(genoFileName, &nibFile, &nibSize);
     }

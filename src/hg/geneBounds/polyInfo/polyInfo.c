@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.10 2003/09/04 23:56:13 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.11 2004/02/24 22:04:11 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -207,7 +207,7 @@ static struct dnaSeq est;
 struct lineFile *lf = NULL;
 FILE *f = NULL;
 
-if (isNib(genoFile))
+if (nibIsFile(genoFile))
     geno = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
 else
     geno = faReadDna(genoFile);

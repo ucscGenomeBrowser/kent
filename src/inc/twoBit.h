@@ -43,6 +43,29 @@ struct twoBitHeader
     struct hash *hash;	/* Hash of sequences. */
     };
 
+struct twoBitHeader *twoBitHeaderRead(char *fileName, FILE *f);
+/* Read in header and index from already opened file.  
+ * Squawk and die if there is a problem. */
+
+void twoBitHeaderFree(struct twoBitHeader **pTbh);
+/* Free up resources associated with twoBitHeader. */
+
+struct dnaSeq *twoBitReadSeqFrag(struct twoBitHeader *tbh, char *name,
+	int fragStart, int fragEnd);
+/* Read part of sequence from .2bit file.  To read full
+ * sequence call with start=end=0.  Note that sequence will
+ * be mixed case, with repeats in lower case and rest in
+ * upper case. */
+
+struct dnaSeq *twoBitLoadAll(char *spec);
+/* Return list of all sequences matching spec.  If
+ * spec is a simple file name then this will be
+ * all sequence in file. Otherwise it will be
+ * the sequence in the file specified by spec,
+ * which is in format
+ *    file/path/name:seqName:start-end
+ * or
+ *    file/path/name:seqName */
 
 struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask);
 /* Convert dnaSeq representation in memory to twoBit representation.
@@ -57,16 +80,24 @@ void twoBitWriteHeader(struct twoBit *twoBitList, FILE *f);
 /* Write out header portion of twoBit file, including initial
  * index */
 
-struct twoBitHeader *twoBitHeaderRead(char *fileName, FILE *f);
-/* Read in header and index from already opened file.  
- * Squawk and die if there is a problem. */
+boolean twoBitIsFile(char *fileName);
+/* Return TRUE if file is in .2bit format. */
 
-void twoBitHeaderFree(struct twoBitHeader **pTbh);
-/* Free up resources associated with twoBitHeader. */
+boolean twoBitParseRange(char *rangeSpec, char **retFile, 
+	char **retSeq, int *retStart, int *retEnd);
+/* Parse out something in format
+ *    file/path/name:seqName:start-end
+ * or
+ *    file/path/name:seqName
+ * This will destroy the input 'rangeSpec' in the process.
+ * Returns FALSE if it doesn't fit this format. 
+ * If it is the shorter form then start and end will both
+ * be returned as zero, which is ok by twoBitReadSeqFrag. */
 
-struct dnaSeq *twoBitReadSeqFrag(struct twoBitHeader *tbh, char *name,
-	int fragStart, int fragEnd);
-/* Read part of sequence from .2bit file.  To read full
- * sequence call with start=end=0. */
+boolean twoBitIsRange(char *rangeSpec);
+/* Return TRUE if it looks like a two bit range specifier. */
+
+boolean twoBitIsFileOrRange(char *spec);
+/* Return TRUE if it is a two bit file or subrange. */
 
 #endif /* TWOBIT_H */

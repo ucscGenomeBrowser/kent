@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.2 2004/02/23 09:04:00 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.3 2004/02/24 22:04:14 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -352,7 +352,9 @@ for (;;)
 struct dnaSeq *twoBitReadSeqFrag(struct twoBitHeader *tbh, char *name,
 	int fragStart, int fragEnd)
 /* Read part of sequence from .2bit file.  To read full
- * sequence call with start=end=0. */
+ * sequence call with start=end=0.  Note that sequence will
+ * be mixed case, with repeats in lower case and rest in
+ * upper case. */
 {
 struct dnaSeq *seq;
 bits32 seqSize;
@@ -369,6 +371,7 @@ UBYTE *packed, *packedAlloc;
 DNA *dna;
 
 /* Find offset in index and seek to it */
+dnaUtilOpen();
 index = hashFindVal(tbh->hash, name);
 if (index == NULL)
      errAbort("%s is not in %s", name, tbh->fileName);
@@ -425,7 +428,14 @@ readBits32(f, isSwapped);
 
 /* Allocate dnaSeq, and fill in zero tag at end of sequence. */
 AllocVar(seq);
-seq->name = cloneString(name);
+if (outSize == seqSize)
+    seq->name = cloneString(name);
+else
+    {
+    char buf[256*2];
+    safef(buf, sizeof(buf), "%s:%d-%d", name, fragStart, fragEnd);
+    seq->name = cloneString(buf);
+    }
 seq->size = outSize;
 dna = seq->dna = needLargeMem(outSize+1);
 seq->dna[outSize] = 0;
@@ -537,4 +547,117 @@ if (maskBlockCount > 0)
 
 return seq;
 }
+
+struct dnaSeq *twoBitLoadAll(char *spec)
+/* Return list of all sequences matching spec.  If
+ * spec is a simple file name then this will be
+ * all sequence in file. Otherwise it will be
+ * the sequence in the file specified by spec,
+ * which is in format
+ *    file/path/name:seqName:start-end
+ * or
+ *    file/path/name:seqName */
+{
+struct dnaSeq *list = NULL, *seq;
+struct twoBitHeader *tbh = NULL;
+FILE *f = NULL;
+if (twoBitIsRange(spec))
+    {
+    char *dupe = cloneString(spec);
+    char *file, *seqName;
+    int start, end;
+    twoBitParseRange(dupe, &file, &seqName, &start, &end);
+    f = mustOpen(file, "rb");
+    tbh = twoBitHeaderRead(file, f);
+    list = twoBitReadSeqFrag(tbh, seqName, start, end);
+    freez(&dupe);
+    }
+else
+    {
+    struct twoBitIndex *index;
+    f = mustOpen(spec, "rb");
+    tbh = twoBitHeaderRead(spec, f);
+    for (index = tbh->indexList; index != NULL; index = index->next)
+	{
+	seq = twoBitReadSeqFrag(tbh, index->name, 0, 0);
+	slAddHead(&list, seq);
+	}
+    slReverse(&list);
+    }
+twoBitHeaderFree(&tbh);
+return list;
+}
+
+boolean twoBitIsFile(char *fileName)
+/* Return TRUE if file is in .2bit format. */
+{
+return endsWith(fileName, ".2bit");
+}
+
+boolean twoBitParseRange(char *rangeSpec, char **retFile, 
+	char **retSeq, int *retStart, int *retEnd)
+/* Parse out something in format
+ *    file/path/name:seqName:start-end
+ * or
+ *    file/path/name:seqName
+ * This will destroy the input 'rangeSpec' in the process.
+ * Returns FALSE if it doesn't fit this format. 
+ * If it is the shorter form then start and end will both
+ * be returned as zero, which is ok by twoBitReadSeqFrag. */
+{
+char *s, *e;
+
+/* Save file name. */
+*retFile = s = rangeSpec;
+
+/* Grab seqName, zero terminate fileName. */
+s = strchr(s, ':');
+if (s == NULL)
+    return FALSE;
+*s++ = 0;
+*retSeq = s;
+
+/* Grab start, zero terminate seqName. */
+s = strchr(s, ':');
+if (s == NULL)
+    {
+    *retStart = *retEnd = 0;
+    return TRUE;
+    }
+*s++ = 0;
+if (!isdigit(s[0]))
+    return FALSE;
+*retStart = atoi(s);
+
+/* Grab end. */
+s = strchr(s, '-');
+if (s == NULL)
+    return FALSE;
+s += 1;
+if (!isdigit(s[0]))
+    return FALSE;
+*retEnd = atoi(s);
+return TRUE;
+}
+
+boolean twoBitIsRange(char *rangeSpec)
+/* Return TRUE if it looks like a two bit range specifier. */
+{
+char *dupe = cloneString(rangeSpec);
+char *file, *seq;
+int start, end;
+boolean isRange = twoBitParseRange(dupe, &file, &seq, &start, &end);
+if (isRange)
+    isRange = twoBitIsFile(file);
+freeMem(dupe);
+return isRange;
+}
+
+boolean twoBitIsFileOrRange(char *spec)
+/* Return TRUE if it is a two bit file or subrange. */
+{
+return twoBitIsFile(spec) || twoBitIsRange(spec);
+}
+
+
 

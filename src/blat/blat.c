@@ -9,6 +9,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "psl.h"
 #include "sig.h"
 #include "options.h"
@@ -17,7 +18,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.90 2004/02/23 18:10:31 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.91 2004/02/24 22:04:11 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -57,18 +58,20 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "blat - Standalone BLAT v. %d fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %dx1 fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
-  "   database is either a .fa file, a .nib file, or a list of .fa or .nib\n"
-  "   files, query is similarly a .fa, .nib, or list of .fa or .nib files\n"
+  "   database and database are each either a .fa , .nib or .2bit file,\n"
+  "   or a list these files one file name per line.\n"
   "   -ooc=11.ooc tells the program to load over-occurring 11-mers from\n"
   "               and external file.  This will increase the speed\n"
   "               by a factor of 40 in many cases, but is not required\n"
   "   output.psl is where to put the output.\n"
-  "   Subranges of nib files may specified using the syntax:\n"
+  "   Subranges of nib and .2bit files may specified using the syntax:\n"
   "      /path/file.nib:seqid:start-end\n"
+  "   or\n"
+  "      /path/file.2bit:seqid:start-end\n"
   "   or\n"
   "      /path/file.nib:start-end\n"
   "   With the second form, a sequence id of file:start-end will be used.\n"
@@ -155,8 +158,8 @@ void getFileArray(char *fileName, char ***retFiles, int *retFileCount)
 boolean gotSingle = FALSE;
 char *buf;		/* This will leak memory but won't matter. */
 
-/* Detect nib files by suffix since that is standard. */
-if (isNib(fileName) || sameString(fileName, "stdin"))
+if (nibIsFile(fileName) || twoBitIsFileOrRange(fileName) 
+	|| sameString(fileName, "stdin"))
     gotSingle = TRUE;
 /* Detect .fa files (where suffix is not standardized)
  * by first character being a '>'. */
@@ -297,8 +300,6 @@ bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash,
 int i;
 char *fileName;
 bioSeq *seqList = NULL, *seq;
-int count = 0; 
-unsigned long totalSize = 0;
 boolean doMask = (maskType != NULL);
 
 for (i=0; i<fileCount; ++i)
@@ -306,53 +307,44 @@ for (i=0; i<fileCount; ++i)
     struct dnaSeq *list = NULL, sseq;
     ZeroVar(&sseq);
     fileName = files[i];
-    if (isNib(fileName))
-        {
-	char root[128];
-	seq = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
-	slAddHead(&list, seq);
-	hashAddUnique(hash, seq->name, seq);
-	totalSize += seq->size;
-	count += 1;
-	if (!doMask)
-	    faToDna(seq->dna, seq->size);
-	}
+    if (nibIsFile(fileName))
+	list = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
+    else if (twoBitIsFileOrRange(fileName))
+	list = twoBitLoadAll(fileName);
     else
-        {
-	struct lineFile *lf = lineFileOpen(fileName, TRUE);
-	while (faMixedSpeedReadNext(lf, &sseq.dna, &sseq.size, &sseq.name))
-	    {
-	    seq = cloneDnaSeq(&sseq);
-	    if (!doMask)
-	        {
-		if (isProt)
-		    faToProtein(seq->dna, seq->size);
-		else
-		    faToDna(seq->dna, seq->size);
-		}
-	    hashAddUnique(hash, seq->name, seq);
-	    slAddHead(&list, seq);
-	    totalSize += seq->size;
-	    count += 1;
-	    }
-	faFreeFastBuf();
-	lineFileClose(&lf);
-	}
+	list = faReadAllSeq(fileName, !isProt);
 
     /* If necessary mask sequence from file. */
     if (doMask)
 	{
-	slReverse(&list);
 	maskNucSeqList(list, fileName, maskType, isTransDna);
-	slReverse(&list);
 	}
-
-    /* Move local list to head of bigger list. */
-    seqList = slCat(list, seqList);
+    else
+        {
+	/* If not masking send everything to proper case here. */
+	for (seq = list; seq != NULL; seq = seq->next)
+	    {
+	    if (isProt)
+		faToProtein(seq->dna, seq->size);
+	    else
+		faToDna(seq->dna, seq->size);
+	    }
+	}
+    /* Move local list to end of bigger list. */
+    seqList = slCat(seqList, list);
     }
 if (showStatus)
+    {
+    /* Total up size and sequence count and report. */
+    int count = 0; 
+    unsigned long totalSize = 0;
+    for (seq = seqList; seq != NULL; seq = seq->next)
+        {
+	totalSize += seq->size;
+	count += 1;
+	}
     printf("Loaded %lu letters in %d sequences\n", totalSize, count);
-slReverse(&seqList);
+    }
 return seqList;
 }
 
@@ -474,7 +466,7 @@ gfOutputHead(gvo, outFile);
 for (i=0; i<fileCount; ++i)
     {
     fileName = files[i];
-    if (isNib(fileName))
+    if (nibIsFile(fileName))
         {
 	FILE *f;
 	struct dnaSeq *seq;

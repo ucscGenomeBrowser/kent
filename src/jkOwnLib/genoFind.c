@@ -15,7 +15,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.9 2004/02/03 03:48:13 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.10 2004/02/24 22:04:14 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -1778,7 +1778,7 @@ for (i=0; i<fileCount; ++i)
     {
     inName = files[i];
     printf("Loading %s\n", inName);
-    if (isNib(inName))
+    if (nibIsFile(inName))
         {
 	seqList = nibLoadAll(inName);
 	}
