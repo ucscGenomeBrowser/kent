@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.472 2003/09/12 01:43:39 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.473 2003/09/16 04:32:35 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6267,9 +6267,18 @@ if (!startsWith("Worm", organism))
 htmlHorizontalLine();
 
 /* print alignments that track was based on */
-pslList = getAlignments(conn, "refSeqAli", rl->mrnaAcc);
+{
+char *refSeqAli = "refSeqAli";
+char *xenoRefSeqAli = "xenoRefSeqAli";
+
+if (!sqlTableExists(conn, refSeqAli))
+    if (sqlTableExists(conn, xenoRefSeqAli))
+	refSeqAli = xenoRefSeqAli;
+
+pslList = getAlignments(conn, refSeqAli, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", "refSeqAli", rl->mrnaAcc);
+printAlignments(pslList, start, "htcCdnaAli", refSeqAli, rl->mrnaAcc);
+}
 
 htmlHorizontalLine();
 
@@ -12573,6 +12582,10 @@ else if (sameWord(track, "ensGene"))
     {
     doEnsemblGene(tdb, item, NULL);
     }
+else if (sameWord(track, "xenoRefGene"))
+    {
+    doRefGene(tdb, item);
+    }
 else if (sameWord(track, "refGene"))
     {
     doRefGene(tdb, item);
@@ -12689,7 +12702,7 @@ else if (sameWord(track, "chesChordataPsl") ||
     }
 else if (sameWord(track, "hg15PepPsl") )
     {
-    doBlatCompGeno(tdb, item, "Human Protein");
+    chesProtein(tdb, item);
     }
 else if (sameWord(track, "hg15repeats") )
     {
