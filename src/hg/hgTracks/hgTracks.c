@@ -60,7 +60,7 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 #include "sample.h"
-#include "uPennClones.h"
+#include "genMapDb.h"
 #include "altGraphX.h"
 #include "genomicSuperDups.h"
 #include "celeraDupPositive.h"
@@ -4438,23 +4438,23 @@ tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
 }
 
-void loadUPennClones(struct trackGroup *tg)
-/* Load up uPennClones from database table to trackGroup items. */
+void loadGenMapDb(struct trackGroup *tg)
+/* Load up genMapDb from database table to trackGroup items. */
 {
-bedLoadItem(tg, "uPennClones", (ItemLoader)uPennClonesLoad);
+bedLoadItem(tg, "genMapDb", (ItemLoader)genMapDbLoad);
 }
 
-void freeUPennClones(struct trackGroup *tg)
-/* Free up uPennClones items. */
+void freeGenMapDb(struct trackGroup *tg)
+/* Free up genMapDb items. */
 {
-uPennClonesFreeList((struct uPennClones**)&tg->items);
+genMapDbFreeList((struct genMapDb**)&tg->items);
 }
 
-void uPennClonesMethods(struct trackGroup *tg)
-/* Make track group for U Penn Clones */
+void genMapDbMethods(struct trackGroup *tg)
+/* Make track group for GenMapDb Clones */
 {
-tg->loadItems = loadUPennClones;
-tg->freeItems = freeUPennClones;
+tg->loadItems = loadGenMapDb;
+tg->freeItems = freeGenMapDb;
 }
 
 char *fishClonesFilter;
@@ -8897,7 +8897,7 @@ withRuler = sameWord(s, "on");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
-registerTrackHandler("uPennClones", uPennClonesMethods);
+registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
 registerTrackHandler("fishClones", fishClonesMethods);

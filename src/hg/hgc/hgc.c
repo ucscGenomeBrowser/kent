@@ -68,7 +68,7 @@
 #include "ancientRref.h"
 #include "jointalign.h"
 #include "gcPercent.h"
-#include "uPennClones.h"
+#include "genMapDb.h"
 #include "geneGraph.h"
 #include "altGraphX.h"
 #include "stsMapMouse.h"
@@ -104,6 +104,7 @@ char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=un
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
+char *genMapDbScript = "http://genomics.med.upenn.edu/cgi-bin/genmapdb/byclonesearch.pl?clone=";
 
 static void hgcStart(char *title)
 /* Print out header of web page with title.  Set
@@ -146,6 +147,12 @@ void printCloneRegUrl(FILE *f, char *clone)
 /* Print URL for Clone Registry at NCBI for a clone */
 {
 fprintf(f, "\"%s%s\"", cloneRegScript, clone);
+}
+
+void printGenMapDbUrl(FILE *f, char *clone)
+/* Print URL for GenMapDb at UPenn for a clone */
+{
+fprintf(f, "\"%s%s\"", genMapDbScript, clone);
 }
 
 char *hgcPath()
@@ -4370,8 +4377,8 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doUPennClones(struct trackDb *tdb, char *clone)
-/* Handle click on the Univ of Penn clones track */
+void doGenMapDb(struct trackDb *tdb, char *clone)
+/* Handle click on the GenMapDb clones track */
 {
 char query[256];
 struct sqlConnection *conn = hAllocConn();
@@ -4379,15 +4386,15 @@ struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
-struct uPennClones *upc;
+struct genMapDb *upc;
 char sband[32], eband[32];
-int i;
+int i,size;
 
 /* Print out non-sequence info */
-cartWebStart("University of Penn BAC Clones");
+cartWebStart("GenMapDB BAC Clones");
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM uPennClones WHERE name = '%s' 
+sprintf(query, "SELECT * FROM genMapDb WHERE name = '%s' 
                 AND chrom = '%s' AND chromStart = %d
                 AND chromEnd = %d",
 	        clone, seqName, start, end);  
@@ -4396,16 +4403,18 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     boolean gotS, gotB;
-    upc = uPennClonesLoad(row);
+    upc = genMapDbLoad(row);
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
-    printCloneRegUrl(stdout, clone);
+    printGenMapDbUrl(stdout, clone);
     printf(">%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    size = end - start + 1;
+    printf("<TR><TH ALIGN=left>Size:</TH><TD>%d</TD></TR>\n",size);
     gotS = chromBand(seqName, start, sband);
     gotB = chromBand(seqName, end, eband);
     if (gotS && gotB)
@@ -4683,12 +4692,6 @@ if (sameString("bacEndPairs", track))
     lfLabel = "BAC ends";
     table = track;
     }
-if (sameString("uPennBacEndPairs", track)) 
-    {
-    sprintf(title, "Location of %s using BAC end sequences", clone);
-    lfLabel = "BAC ends";
-    table = track;
-    }
 
 /* Print out non-sequence info */
 cartWebStart(title);
@@ -4703,7 +4706,7 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
-    if ((sameString("bacEndPairs", track)) || (sameString("uPennBacEndPairs", track))) 
+    if ((sameString("bacEndPairs", track))) 
     {
     printf("<H2><A HREF=");
     printCloneRegUrl(stdout, clone);
@@ -7140,9 +7143,9 @@ else if (sameWord(track, "stsMap"))
     {
     doStsMarker(tdb, item);
     }
-else if (sameWord(track, "uPennClones"))
+else if (sameWord(track, "genMapDb"))
     {
-    doUPennClones(tdb, item);
+    doGenMapDb(tdb, item);
     }
 else if (sameWord(track, "mouseSyn"))
     {
@@ -7184,10 +7187,6 @@ else if (sameWord(track, "tigrGeneIndex"))
 #endif /*ROGIC_CODE*/
 #ifdef FUREY_CODE
  else if (sameWord(track, "bacEndPairs"))
-   {
-     doLinkedFeaturesSeries(track, item, tdb);
-   }
- else if (sameWord(track, "uPennBacEndPairs"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
