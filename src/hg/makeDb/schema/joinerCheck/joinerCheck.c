@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.26 2004/08/10 16:53:36 heather Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.27 2004/08/10 17:05:31 heather Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -578,7 +578,7 @@ struct joinerField *keyField;
 
 if (js->isFuzzy)
     {
-    printf("warning: fuzzy qualifier not implemented\n");
+    printf("warning: fuzzy qualifier not implemented (%s)\n", js->name);
     return;
     }
 if ((keyField = js->fieldList) == NULL)
