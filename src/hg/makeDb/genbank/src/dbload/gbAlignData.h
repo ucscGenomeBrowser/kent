@@ -43,8 +43,8 @@ void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
                                char *tmpDirPath);
 /* delete outdated alignment data */
 
-void gbAlignDataDrop(struct sqlConnection *conn);
-/* Drop alignment tables from database. */
+struct slName* gbAlignDataListTables(struct sqlConnection *conn);
+/* Get list of alignment tables from database. */
 
 #endif
 

@@ -43,11 +43,12 @@ void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               char *tmpDir);
 /* delete outdated metadata */
 
-void gbMetaDataDrop(struct sqlConnection *conn);
-/* Drop metadata tables from database. */
-
 void gbMetaDataFree();
 /* Free data structures */
+
+struct slName* gbMetaDataListTables(struct sqlConnection *conn);
+/* Get a list of metadata tables that exist in the database */
+
 #endif
 /*
  * Local Variables:

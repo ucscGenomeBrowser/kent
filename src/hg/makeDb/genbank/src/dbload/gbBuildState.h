@@ -22,6 +22,8 @@ struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
  * compared to the database.  If maxShrinkage is exeeeded, the list of deleted
  * accessions is printed and maxShrinkageExceeded is set to true. */
 
+/* a few extra functions, since this was a common module */
+
 #endif
 /*
  * Local Variables:

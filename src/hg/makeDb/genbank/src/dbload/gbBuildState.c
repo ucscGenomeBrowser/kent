@@ -18,7 +18,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.4 2003/07/10 16:49:28 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.5 2003/07/11 04:13:40 markd Exp $";
 
 #define DO_EXT_CHANGE FALSE
 
@@ -558,6 +558,7 @@ if (gErrorCnt > 0)
 gbVerbLeave(1, "build state table");
 return statusTbl;
 }
+
 /*
  * Local Variables:
  * c-file-style: "jkent-c"

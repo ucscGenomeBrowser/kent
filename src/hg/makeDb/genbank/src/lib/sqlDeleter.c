@@ -5,8 +5,9 @@
 #include "localmem.h"
 #include "gbFileOps.h"
 #include "sqlUpdater.h"
+#include "gbSql.h"
 
-static char const rcsid[] = "$Id: sqlDeleter.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: sqlDeleter.c,v 1.2 2003/07/11 04:13:41 markd Exp $";
 
 #define DIRECT_MAX 50000  /* maximum number to directly delete */
 
@@ -96,32 +97,6 @@ for (acc = sd->accs; acc != NULL; acc = acc->next)
     }
 }
 
-static void dupTableDef(struct sqlConnection *conn, char* table,
-                        char* newTable)
-/* create a duplicate of a table with the right indices. */
-{
-char query[2048], *createArgs;
-struct sqlResult* sr;
-char** row;
-
-/* Returns two columns of table name and command */
-safef(query, sizeof(query), "SHOW CREATE TABLE %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameString(row[0], table))
-        break;
-    }
-if (row == NULL)
-    errAbort("can't get create table command for: %s", table);
-createArgs = strchr(row[1], '(');
-if (createArgs == NULL)
-    errAbort("don't understand returned create table command: %s", row[1]);
-safef(query, sizeof(query), "CREATE TABLE %s %s", newTable, createArgs);
-sqlFreeResult(&sr);
-sqlUpdate(conn, query);
-}
-
 static void deleteJoin(struct sqlDeleter* sd, struct sqlConnection *conn,
                        char* table, char* column)
 /* delete by creating a new table with a join */
@@ -143,7 +118,7 @@ safef(oldTmpTable, sizeof(oldTmpTable), "%s_old_tmp", table);
 sqlDropTable(conn, newTmpTable);
 sqlDropTable(conn, oldTmpTable);
 
-dupTableDef(conn, table, newTmpTable);
+gbSqlDupTableDef(conn, table, newTmpTable);
 
 /* do join into new table of entries not in accession table */
 safef(query, sizeof(query),

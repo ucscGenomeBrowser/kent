@@ -29,8 +29,9 @@
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 #include "genbank.h"
+#include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.7 2003/07/10 16:49:28 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.8 2003/07/11 04:13:40 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -447,10 +448,11 @@ for (;;)
         raFaSize = gbParseUnsigned(raLf, val);
     else if (sameString(tag, "prt"))
         {
-        /* version is optional */
-        safef(raProtAcc, sizeof(raProtAcc), "%s", val);
+        /* version is optional, remove it if it exists  */
         if (strchr(val, '.') != NULL)
-            raProtVersion = gbSplitAccVer(val, NULL);
+            raProtVersion = gbSplitAccVer(val, raProtAcc);
+        else
+            safef(raProtAcc, sizeof(raProtAcc), "%s", val);
         }
     else if (sameString(tag, "prs"))
         raProtSize = gbParseUnsigned(raLf, val);
@@ -864,19 +866,21 @@ gbMetaDataDeleteFromTables(conn, select->release->srcDb, deleter);
 sqlDeleterFree(&deleter);
 } 
 
-void gbMetaDataDrop(struct sqlConnection *conn)
-/* Drop metadata tables from database. */
+struct slName* gbMetaDataListTables(struct sqlConnection *conn)
+/* Get a list of metadata tables that exist in the database */
 {
+static char* TABLE_NAMES[] = {
+    "gbSeq", "gbExtFile", "mrna", "refSeqStatus", "refLink",
+    "imageClone", NULL
+};
+struct slName* tables = NULL;
 int i;
 
-sqlDropTable(conn, SEQ_TBL);
-sqlDropTable(conn, "mrna");
-sqlDropTable(conn, "refSeqStatus");
-sqlDropTable(conn, "refLink");
-sqlDropTable(conn, IMAGE_CLONE_TBL);
-for (i=0; raFieldTables[i] != NULL; ++i)
-    sqlDropTable(conn, raFieldTables[i]);
-sqlDropTable(conn, EXT_FILE_TBL);
+for (i = 0; TABLE_NAMES[i] != NULL; i++)
+    gbAddTableIfExists(conn, TABLE_NAMES[i], &tables);
+for (i = 0; raFieldTables[i] != NULL; ++i)
+    gbAddTableIfExists(conn, raFieldTables[i], &tables);
+return tables;
 }
 
 /*

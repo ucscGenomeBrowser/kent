@@ -24,12 +24,13 @@
 #include "gbAlignData.h"
 #include "gbLoadedTbl.h"
 #include "gbIgnore.h"
+#include "gbSql.h"
 #include "sqlUpdater.h"
 #include "sqlDeleter.h"
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.5 2003/07/10 16:49:28 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.6 2003/07/11 04:13:40 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 /* FIXME: ignored deletion could be in it's own module */
@@ -37,6 +38,8 @@ static char const rcsid[] = "$Id: gbLoadRna.c,v 1.5 2003/07/10 16:49:28 markd Ex
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"drop", OPTION_BOOLEAN},
+    {"move", OPTION_BOOLEAN},
+    {"copy", OPTION_BOOLEAN},
     {"release", OPTION_STRING},
     {"srcDb", OPTION_STRING},
     {"type", OPTION_STRING},
@@ -706,17 +709,96 @@ if (gMaxShrinkageError)
              "partitions. Investigate and rerun with -allowLargeDeletes.");
 }
 
+struct slName* getTableList(struct sqlConnection *conn)
+/* get the list of existing tables */
+{
+struct slName *tables = NULL;
+tables = slCat(tables, gbMetaDataListTables(conn));
+tables = slCat(tables, gbAlignDataListTables(conn));
+gbAddTableIfExists(conn, "gbLoaded", &tables);
+gbAddTableIfExists(conn, "gbStatus", &tables); /* must be last */
+slReverse(&tables);
+return tables;
+}
+
 void dropAll(char *database)
 /* Drop all gbLoadRna tables from database. */
 {
+struct slName *tables, *tbl;
 struct sqlConnection *conn;
 hgSetDb(database);
 conn = hAllocConn();
 
-gbMetaDataDrop(conn);
-gbAlignDataDrop(conn);
-sqlDropTable(conn, "gbLoaded");
-sqlDropTable(conn, "gbStatus"); /* must be last */
+tables = getTableList(conn);
+for (tbl = tables; tbl != NULL; tbl = tbl->next)
+    sqlDropTable(conn, tbl->name);
+slFreeList(&tables);
+hFreeConn(&conn);
+}
+
+void moveAll(char *srcDb, char* destDb)
+/* Rename all gbLoadRna tables from database to another. */
+{
+struct slName *tables, *tbl;
+struct sqlConnection *conn;
+struct dyString* sqlCmd = dyStringNew(256);
+char *sep;
+hgSetDb(srcDb);
+conn = hAllocConn();
+
+/* using one does rename atomically */
+tables = getTableList(conn);
+dyStringAppend(sqlCmd, "rename table");
+sep = " "; /* before first table arg */
+for (tbl = tables; tbl != NULL; tbl = tbl->next)
+    {
+    dyStringPrintf(sqlCmd, "%s%s to %s.%s",
+                   sep,tbl->name, destDb, tbl->name);
+    sep = ", "; /* before other table arg */
+    }
+sqlUpdate(conn, sqlCmd->string);
+dyStringFree(&sqlCmd);
+slFreeList(&tables);
+hFreeConn(&conn);
+}
+
+void copyTable(struct sqlConnection *conn, char* destDb, char* srcTable,
+               char* destTable)
+/* copy a table from one database to another */
+{
+char destDbTable[512], sqlCmd[512];
+safef(destDbTable, sizeof(destDbTable), "%s.%s", destDb, destTable);
+
+gbSqlDupTableDef(conn, srcTable, destDbTable);
+
+safef(sqlCmd, sizeof(sqlCmd), "insert into %s select * from %s",
+      destDbTable, srcTable);
+sqlUpdate(conn, sqlCmd);
+}
+
+void copyAll(char *srcDb, char* destDb)
+/* Copy all gbLoadRna tables from database to another. */
+{
+struct slName *tables, *tbl;
+struct sqlConnection *conn;
+struct dyString* sqlCmd = dyStringNew(256);
+char *sep;
+hgSetDb(srcDb);
+conn = hAllocConn();
+
+/* using one does rename atomically */
+tables = getTableList(conn);
+dyStringAppend(sqlCmd, "rename table");
+sep = " "; /* before first table arg */
+for (tbl = tables; tbl != NULL; tbl = tbl->next)
+    {
+    dyStringPrintf(sqlCmd, "%s%s to %s.%s",
+                   sep,tbl->name, destDb, tbl->name);
+    sep = ", "; /* before other table arg */
+    }
+sqlUpdate(conn, sqlCmd->string);
+dyStringFree(&sqlCmd);
+slFreeList(&tables);
 hFreeConn(&conn);
 }
 
@@ -729,8 +811,18 @@ errAbort(
   "   gbLoadRna [options] db\n"
   "     db - database for the alignment\n"
   "   gbLoadRna -drop db\n"
+  "   gbLoadRna -move db db2\n"
+  "   gbLoadRna -copy db db2\n"
   "Options:\n"
   "     -drop - Drop the database tables instead of loading.\n"
+  "\n"
+  "     -move - move the genbank related tables to another database.\n"
+  "      They should not already exist in that database.  This is used\n"
+  "      to backup tables when a reload is being done.\n"
+  "\n"
+  "     -copy - copy the genbank related tables to another database.\n"
+  "      They should not already exist in that database.  This is used\n"
+  "      to backup tables.\n"
   "\n"
   "     -release=relname - Just load release name (e.g. genbank.131.0),\n"
   "      If not specified, the newest aligned genbank and refseq is loaded.\n"
@@ -809,7 +901,7 @@ gStopWhenSafe = TRUE;
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-boolean drop;
+boolean drop, move, copy;
 struct sigaction sigSpec;
 setlinebuf(stdout);
 setlinebuf(stderr);
@@ -822,15 +914,27 @@ if (sigaction(SIGUSR1, &sigSpec, NULL) < 0)
 
 optionInit(&argc, argv, optionSpecs);
 drop = optionExists("drop");
-if (argc != 2)
+move = optionExists("move");
+copy = optionExists("copy");
+if (move || copy) 
+    {
+    if (argc != 3)
+        usage();
+    }
+else if (argc != 2)
     usage();
+if ((drop+move+copy) > 1)
+    errAbort("can only specify one of -drop, -move, or -copy");
+
 gbVerbInit(optionInt("verbose", 0));
 if (verbose >= 5)
     sqlTrace = TRUE;  /* global flag in jksql */
 if (drop)
-    {
     dropAll(argv[1]);
-    }
+else if (move)
+    moveAll(argv[1], argv[2]);
+else if (copy)
+    copyAll(argv[1], argv[2]);
 else
     {
     char *reloadList = optionVal("reloadList", NULL);

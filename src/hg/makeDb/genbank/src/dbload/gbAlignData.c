@@ -24,9 +24,10 @@
 #include "sqlUpdater.h"
 #include "estOrientInfo.h"
 #include "gbBuildState.h"
+#include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.6 2003/07/10 16:49:28 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.7 2003/07/11 04:13:40 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -618,38 +619,35 @@ gbAlignDataDeleteFromTables(conn, select->release->srcDb, select->type,
 sqlDeleterFree(&deleter);
 } 
 
-void gbAlignDataDrop(struct sqlConnection *conn)
-/* Drop alignment tables from database. */
+struct slName* gbAlignDataListTables(struct sqlConnection *conn)
+/* Get list of alignment tables from database. */
 {
+static char* TABLE_NAMES[] = {
+    "all_mrna", "all_est", "xenoMrna", "xenoEst", "mrnaOrientInfo",
+    "estOrientInfo", "refSeqAli", "refGene", "refFlat",
+    "xenoRefSeqAli", "xenoRefGene", "xenoRefFlat",
+    NULL
+};
+struct slName* tables = NULL;
+int i;
 char table[64];
 struct slName* chrom;
 if (gChroms == NULL)
     gChroms = hAllChromNames();
 
-/* genebank tables */
-sqlDropTable(conn, "all_mrna");
-sqlDropTable(conn, "all_est");
-sqlDropTable(conn, "xenoMrna");
-sqlDropTable(conn, "xenoEst");
+for (i = 0; TABLE_NAMES[i] != NULL; i++)
+    gbAddTableIfExists(conn, TABLE_NAMES[i], &tables);
 
 for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
     {
     safef(table, sizeof(table), "%s_mrna", chrom->name);
-    sqlDropTable(conn, table);
+    gbAddTableIfExists(conn, table, &tables);
     safef(table, sizeof(table), "%s_est", chrom->name);
-    sqlDropTable(conn, table);
+    gbAddTableIfExists(conn, table, &tables);
     safef(table, sizeof(table), "%s_intronEst", chrom->name);
-    sqlDropTable(conn, table);
+    gbAddTableIfExists(conn, table, &tables);
     }
-sqlDropTable(conn, "mrnaOrientInfo");
-sqlDropTable(conn, "estOrientInfo");
-
-sqlDropTable(conn, REF_SEQ_ALI);
-sqlDropTable(conn, REF_GENE_TBL);
-sqlDropTable(conn, REF_FLAT_TBL);
-sqlDropTable(conn, XENO_REF_SEQ_ALI);
-sqlDropTable(conn, XENO_REF_GENE_TBL);
-sqlDropTable(conn, XENO_REF_FLAT_TBL);
+return tables;
 }
 
 /*
