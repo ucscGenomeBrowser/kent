@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.65 2005/02/01 01:19:32 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.66 2005/02/07 20:29:15 hiram Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -590,9 +590,9 @@ hPrintf("</TABLE>\n");
 	char *maxOutput = maxOutMenu[0];
 
 	if (isCustomTrack(curTable))
-	    name = filterFieldVarName("ct", curTable, "", filterMaxOutputVar);
+	    name=filterFieldVarName("ct", curTable, "_", filterMaxOutputVar);
 	else
-	    name = filterFieldVarName(database,curTable, "",filterMaxOutputVar);
+	    name=filterFieldVarName(database,curTable, "_",filterMaxOutputVar);
 
 	maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
 
