@@ -1,3 +1,7 @@
+29:
+     o Made -out=blast9 and -out=blast8 report e values in format
+       that will print 1.3e-123 instead of 0.00000.
+
 28:
      o Blat, gfClient, and gfServer now work with .2bit files.
        Like .nib files, .2bit files are a compressed binary
