@@ -117,7 +117,7 @@ altColor 255,240,200
 type bed 5+
 
 track synteny100000
-shortLabel UCSC Synteny
+shortLabel UCSC  Synteny
 longLabel Human/Mouse Synteny using blastz single coverage with 100,000 base window
 priority 4.3
 visibility hide
@@ -785,6 +785,20 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno
+
+track gpcr
+shortLabel Gpcr
+longLabel Gpcr from softberry and rachel's hmm
+priority 25.80
+visibility dense
+type genePred
+
+track gpcrKnown
+shortLabel Gpcr Known
+longLabel Gpcr from gpcrdb and genewise 
+priority 25.80
+visibility dense
+type genePred
 
 track blastzMouseSyn
 shortLabel Net Synteny  
