@@ -1,5 +1,6 @@
 package edu.ucsc.genome.qa.lib;
 import com.meterware.httpunit.*;
+import com.meterware.httpunit.parsing.*;
 
 /**
  *  This container holds the data for a robot
@@ -37,6 +38,10 @@ public class Robot {
   public static int getResponseCode(WebConversation wc, WebLink link) {
     try {
         link.click();
+
+        // disable Javscript spew
+        HttpUnitOptions.setExceptionsThrownOnScriptError(false);
+
 	WebResponse resp = wc.getCurrentPage();
 	return resp.getResponseCode();
     } catch (Exception e) {
