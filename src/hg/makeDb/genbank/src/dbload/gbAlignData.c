@@ -25,7 +25,7 @@
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.1 2003/06/03 01:27:42 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.2 2003/06/10 17:52:22 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -443,11 +443,14 @@ if (!fileExists(pslPath))
 
 processPslFile(conn, select, statusTbl, pslPath);
 
-/* get the associated orientInfo file */
-strcpy(oiPath, pslPath);
-assert(endsWith(pslPath, ".psl.gz"));
-strcpy(oiPath + strlen(oiPath) - 7, ".oi.gz");
-processOIFile(conn, select, statusTbl, oiPath);
+/* load the associated orientInfo file if native */
+if (select->orgCats == GB_NATIVE)
+    {
+    strcpy(oiPath, pslPath);
+    assert(endsWith(pslPath, ".psl.gz"));
+    strcpy(oiPath + strlen(oiPath) - 7, ".oi.gz");
+    processOIFile(conn, select, statusTbl, oiPath);
+    }
 
 /* for native ESTs, we might have an intronPsl file */
 if ((select->type == GB_EST) && (select->orgCats == GB_NATIVE))
