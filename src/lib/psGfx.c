@@ -72,6 +72,9 @@ ps->fontHeight = 10;
 ps->yScale = -ps->yScale;
 ps->yOff = ps->ptHeight - ps->yOff;
 
+/* Set line width to a single pixel. */
+fprintf(ps->f, "%f setlinewidth\n", ps->xScale);
+
 return ps;
 }
 
