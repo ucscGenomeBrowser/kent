@@ -32,7 +32,7 @@
 #define NOTPSEUDO -1
 #define BETTER -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.18 2004/05/06 05:07:38 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.19 2004/05/06 05:11:27 baertsch Exp $";
 
 char *db;
 char *nibDir;
