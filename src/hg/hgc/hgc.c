@@ -3799,32 +3799,60 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 char *itemForUrl = item;
+int numSnpsReq = -1;
 if(tdb == NULL)
     errAbort("TrackDb entry null for perlegen, item=%s\n", item);
+
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb->url, itemForUrl, item == itemForUrl);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
     	table, item, seqName, start);
 sr = sqlGetResult(conn, query);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name;
+    /* set up for first time */
     if (firstTime)
 	firstTime = FALSE;
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, 12);
+
+    /* chop leading digits off name which should be in xx/yyyyyy format */
     name = strstr(bed->name, "/");
     if(name == NULL)
 	name = bed->name;
     else
 	name++;
+
+    /* determine number of SNPs required from score */ 
+    switch(bed->score)
+    {
+    case 1000:
+	numSnpsReq = 0;
+	break;
+    case 650:
+	numSnpsReq = 1;
+	break;
+    case 500:
+	numSnpsReq = 2;
+	break;
+    case 250:
+	numSnpsReq = 3;
+	break;
+    case 50:
+	numSnpsReq = 4;
+	break;
+    }
+    
+    /* finish off report ... */
     printf("<B>Block:</B> %s<BR>\n", name);
-    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",(bed->score/100 -1));
+    printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
+    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     bedPrintPos(bed);
     }
