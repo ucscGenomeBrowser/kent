@@ -20,7 +20,7 @@ type lookup sangerToRefSeq name value
 
 name altSplice
 shortLabel Alt Splice
-longLabel Alternate-Splicing Curated by Zahler Lab
+longLabel Alternative Splicing Curated by Zahler Lab
 priority 2.5
 visibility off
 type lookup altSplice name value
