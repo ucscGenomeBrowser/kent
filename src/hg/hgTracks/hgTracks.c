@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.620 2003/10/24 19:27:38 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.621 2003/10/25 00:43:57 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6674,7 +6674,7 @@ if (!hideControls)
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" size %s ", buf);
-	hWrites(" image width ");
+	hWrites(" bp. image width: ");
 	hIntVar("pix", tl.picWidth, 4);
 	hWrites(" ");
 	hButton("submit", "jump");
