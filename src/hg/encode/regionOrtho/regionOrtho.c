@@ -23,7 +23,7 @@ if (fileExists(regionSource))
 	{
 	if (sameString(row[0], "chrom"))
 	    continue;
-	if (excludeRandoms && endsWith(row[0], "random"))
+	if (excludeRandoms && (startsWith(row[0], "chrUn") || endsWith(row[0], "random")))
 	    continue;
 	AllocVar(sl);
 	sl->chrom      = cloneString(row[0]);
@@ -50,7 +50,7 @@ else
 	{
 	if (sameString(row[0], "chrom"))
 	    continue;
-	if (excludeRandoms && endsWith(row[0], "random"))
+	if (excludeRandoms && (startsWith(row[0], "chrUn") || endsWith(row[0], "random")))
 	    continue;
 	AllocVar(sl);
 	sl->chrom      = cloneString(row[0]);
