@@ -396,33 +396,6 @@ fputc(lastSep,f);
 
 
 
-int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offSet)
-/* Return 1 if introns make it look like alignment is on + strand,
- *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
-{
-int intronDir = 0;
-int oneDir;
-int i;
-DNA *dna = genoSeq->dna;
-
-for (i=1; i<psl->blockCount; ++i)
-    {
-    int iStart, iEnd;
-    iStart = psl->tStarts[i-1] + psl->blockSizes[i-1] - offSet;
-    iEnd = psl->tStarts[i] - offSet;
-    oneDir = intronOrientation(dna+iStart, dna+iEnd);
-    if (oneDir != 0)
-	{
-	if (intronDir && intronDir != oneDir)
-	    return 0;
-	intronDir = oneDir;
-	}
-    }
-return intronDir;
-}
-
-
 struct ggMrnaAli *pslToGgMrnaAli(struct psl *psl, char *chrom, unsigned int chromStart,
 				 unsigned int chromEnd, struct dnaSeq *genoSeq)
 /* Convert from psl format of alignment to ma format.  Return
@@ -434,23 +407,31 @@ int i;
 int blockCount;
 struct ggMrnaBlock *blocks, *block;
 int iOrientation; 
+char *strand;
 
 /* convert psl to our local genoSeq coordinates */
 pslTargetOffset(psl, -1*chromStart);
 
 /* Figure out orientation and direction based on introns. */
 iOrientation = pslIntronOrientation(psl, genoSeq, 0);
+strand = psl->strand;
+if (iOrientation < 0)
+    strand = "-";
+else if (iOrientation > 0)
+    strand = "+";
 
 AllocVar(ma);
 ma->orientation = iOrientation;
 ma->qName = cloneString(psl->qName);
+ma->qStart = psl->qStart;
+ma->qEnd = psl->qEnd;
 ma->baseCount = psl->qSize;
 ma->milliScore = psl->match + psl->repMatch - psl->misMatch - (psl->blockCount-1)*2;
-snprintf(ma->strand, sizeof(ma->strand), "%s", psl->strand);
+snprintf(ma->strand, sizeof(ma->strand), "%s", strand);
 ma->hasIntrons = (iOrientation == 0 ? FALSE : TRUE);
 ma->tName = cloneString(psl->tName);
-ma->tStart = chromStart;
-ma->tEnd = chromEnd;
+ma->tStart = psl->tStart;
+ma->tEnd = psl->tEnd;
 ma->blockCount = blockCount = psl->blockCount;
 ma->blocks = AllocArray(blocks, blockCount);
 

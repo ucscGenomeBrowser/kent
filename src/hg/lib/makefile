@@ -10,7 +10,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
-    dbDb.o est3.o estPair.o exoFish.o  \
+    dbDb.o est3.o estOrientInfo.o estPair.o exoFish.o exprBed.o \
     featureBits.o fishClones.o gcPercent.o geneGraph.o \
     genePred.o genomicDups.o \
     ggCluster.o altGraph.o ggDbIo.o \
@@ -35,6 +35,9 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
 clean:
 	rm -f $(O);
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
+
+ctags:
+	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
 
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
