@@ -1226,3 +1226,21 @@ gridDefault OFF
 color 0,128,255
 altColor 255,128,0
 type wig 0 100 
+
+track gc5Base
+shortLabel GC Percent
+longLabel GC Percent in 5 base windows
+group map
+priority 23.5
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 30:70
+type wig 0 100 
+
+
