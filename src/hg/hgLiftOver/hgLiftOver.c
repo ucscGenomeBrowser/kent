@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.1 2004/03/18 03:51:49 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.2 2004/03/18 04:18:13 kate Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -43,7 +43,8 @@ cart = theCart;
 cartWebStart(cart, "Convert Genome Coordinates");
 
 printf("<P>"
-    "This tool converts genome coordinates and genome annotation files between assemblies."
+    "This tool converts genome coordinates and genome annotation files "
+    "between assemblies.&nbsp;&nbsp;"
     "The input data can be pasted into the text box, or uploaded from a file."
     "");
 /* Get data to convert - from userData variable, or if 
@@ -90,7 +91,10 @@ printf("</TABLE>\n");
 
 /* next row -- file format menu */
 printf("<P>\n");
-printf("Data input formats marked with star (*) are suitable for ENCODE data submission.\n");
+printf("Data input formats marked with star (*) are suitable for "
+        "ENCODE data submission.&nbsp;&nbsp;"
+        "For the \"position\" format, enter a list of "
+        "chromosome positions using the format chrN:X.\n");
 printf("<TABLE>\n");
 printf("<TR>\n");
 printf("<TD>");
