@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.36 2004/05/21 19:06:32 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.37 2004/05/21 19:42:47 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -47,7 +47,7 @@ char *qaUser = NULL;
 
 #define MAXCOLS 28
 
-#define TITLE "Push Queue v"VERSION
+#define TITLE "Push Queue v"CGI_VERSION
 
 time_t curtime;
 struct tm *loctime;
