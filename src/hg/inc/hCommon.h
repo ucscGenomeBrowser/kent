@@ -17,6 +17,9 @@ char *hgcName();
 char *hgTracksName();
 /* Relative URL to browser. */
 
+char *hgTrackUiName();
+/* Relative URL to extended track UI. */
+
 char *hgcFullName();
 /* Absolute URL to click processing program. */
 

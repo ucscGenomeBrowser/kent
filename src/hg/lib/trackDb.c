@@ -5,6 +5,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "dystring.h"
 #include "trackDb.h"
 
 struct trackDb *trackDbLoad(char **row)
@@ -55,6 +56,32 @@ lineFileClose(&lf);
 slReverse(&list);
 return list;
 }
+
+struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all trackDb from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with cartDbFreeList(). */
+{
+struct trackDb *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = trackDbLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+return list;
+}
+
 
 struct trackDb *trackDbCommaIn(char **pS, struct trackDb *ret)
 /* Create a trackDb out of a comma separated string. 

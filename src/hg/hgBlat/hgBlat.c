@@ -2,6 +2,7 @@
 #include "common.h"
 #include "errabort.h"
 #include "hCommon.h"
+#include "jksql.h"
 #include "portable.h"
 #include "linefile.h"
 #include "dnautil.h"
@@ -11,6 +12,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "hdb.h"
+#include "hui.h"
 #include "cart.h"
 
 struct cart *cart;	/* The user's ui state. */
@@ -558,6 +560,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("BLAT Search", doMiddle, "hguid", excludeVars);
+cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }

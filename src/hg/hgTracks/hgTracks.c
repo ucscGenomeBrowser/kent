@@ -13,6 +13,7 @@
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
+#include "hui.h"
 #include "hgFind.h"
 #include "spaceSaver.h" 
 #include "wormdna.h"
@@ -53,11 +54,10 @@
 #include "mcnBreakpoints.h"
 #include "expRecord.h"
 
-#define CHUCK_CODE 1
+#define CHUCK_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
 #define MAX_CONTROL_COLUMNS 5
-#define CONTROL_TABLE_WIDTH 610
 #ifdef CHUCK_CODE
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
@@ -129,14 +129,6 @@ tl.leftLabelWidth = 100;
 tl.picWidth = 610;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
-
-char *tvStrings[] = 
-/* User interface strings for above. */
-    {
-    "hide",
-    "dense",
-    "full",
-    };
 
 
 char *offOn[] =
@@ -221,10 +213,9 @@ struct trackGroup
     Color (*itemColor)(struct trackGroup *tg, void *item, struct memGfx *mg);
     /* Get color of item (optional). */
 
-    void (*extraUi)(struct trackGroup *tg);
     void *extraUiData;
     void (*trackFilter)(struct trackGroup *tg);
-    /* Stuff to draw extra user interface parts. */
+    /* Stuff to handle user interface parts. */
 
     void *customPt;            /* Misc pointer variable unique to group. */
     int customInt;             /* Misc int variable unique to group. */
@@ -326,62 +317,6 @@ if (!tg->limitedVisSet)
 return tg->limitedVis;
 }
 
-struct controlGrid
-/* Keep track of a control grid (table) */
-    {
-    int columns;	/* How many columns in grid. */
-    int columnIx;	/* Index (0 based) of current column. */
-    char *align;	/* Which way to align. */
-    };
-
-struct controlGrid *startControlGrid(int columns, char *align)
-/* Start up a control grid. */
-{
-struct controlGrid *cg;
-AllocVar(cg);
-cg->columns = columns;
-cg->align = cloneString(align);
-return cg;
-}
-
-void controlGridStartCell(struct controlGrid *cg)
-/* Start a new cell in control grid. */
-{
-if (cg->columnIx == cg->columns)
-    {
-    printf("</tr>\n<tr>");
-    cg->columnIx = 0;
-    }
-if (cg->align)
-    printf("<td align=%s>", cg->align);
-else
-    printf("<td>");
-}
-
-void controlGridEndCell(struct controlGrid *cg)
-/* End cell in control grid. */
-{
-printf("</td>");
-++cg->columnIx;
-}
-
-void endControlGrid(struct controlGrid **pCg)
-/* Finish up a control grid. */
-{
-struct controlGrid *cg = *pCg;
-if (cg != NULL)
-    {
-    int i;
-    if (cg->columnIx != 0 && cg->columnIx < cg->columns)
-	for( i = cg->columnIx; i <= cg->columns; i++)
-	    printf("<td>&nbsp</td>\n");
-    printf("</tr>\n</table>\n");
-    freeMem(cg->align);
-    freez(pCg);
-    }
-}
-
-
 static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
  * format.  If toggleGroup is non-null the visibility of that
@@ -400,13 +335,23 @@ for (tg = tGroupList; tg != NULL; tg = tg->next)
 	    vis = tvFull;
 	else if (vis == tvFull)
 	    vis = tvDense;
-	dyStringPrintf(dy, "&%s=%s", tg->mapName, tvStrings[vis]);
+	dyStringPrintf(dy, "&%s=%s", tg->mapName, hStringFromTv(vis));
 	}
     }
 return dy;
 }
 
 
+void mapBoxTrackUi(int x, int y, int width, int height, struct trackGroup *tg)
+/* Print out image map rectangle that invokes hgTrackUi. */
+{
+char *track = tg->mapName;
+printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+printf("HREF=\"%s?%s=%u&c=%s&g=%s", hgTrackUiName(), 
+	    cartSessionVarName(), cartSessionId(cart),
+	    chromName, tg->mapName);
+printf(" ALT= \" %s controls\">\n", tg->shortLabel);
+}
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
 	struct trackGroup *toggleGroup, char *chrom,
@@ -437,12 +382,14 @@ else
 }
 
 
+#ifdef OLD
 void mapBoxToggleVis(int x, int y, int width, int height, struct trackGroup *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
 mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, NULL);
 }
+#endif /* OLD */
 
 void mapBoxJumpTo(int x, int y, int width, int height, char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
@@ -1534,120 +1481,6 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 return lfFromPslx(psl, 1, isXeno);
 }
 
-
-struct mrnaFilter
-/* Info on one type of mrna filter. */
-   {
-   struct  mrnaFilter *next;	/* Next in list. */
-   char *label;	  /* Filter label. */
-   char *key;     /* Suffix of cgi variable holding search pattern. */
-   char *table;	  /* Associated table to search. */
-   char *pattern; /* Pattern to find. */
-   int mrnaTableIx;	/* Index of field in mrna table. */
-   struct hash *hash;  /* Hash of id's in table that match pattern */
-   };
-
-struct mrnaUiData
-/* Data for mrna-specific user interface. */
-   {
-   char *filterTypeVar;	/* cgi variable that holds type of filter. */
-   char *logicTypeVar;	/* cgi variable that indicates logic. */
-   struct mrnaFilter *filterList;	/* List of filters that can be applied. */
-   };
-
-void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)
-/* Add an mrna filter */
-{
-struct mrnaFilter *fil;
-char buf[64];
-AllocVar(fil);
-fil->label = label;
-sprintf(buf, "%s_%s", track, key);
-fil->key = cloneString(buf);
-fil->table = table;
-slAddTail(&mud->filterList, fil);
-}
-
-struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)
-/* Make a new  in extra-ui data structure for mRNA. */
-{
-struct mrnaUiData *mud;
-char buf[64];
-AllocVar(mud);
-sprintf(buf, "%sFt", track);
-mud->filterTypeVar = cloneString(buf);
-sprintf(buf, "%sLt", track);
-mud->logicTypeVar = cloneString(buf);
-if (isXeno)
-    addMrnaFilter(mud, track, "organism", "org", "organism");
-addMrnaFilter(mud, track, "author", "aut", "author");
-addMrnaFilter(mud, track, "library", "lib", "library");
-addMrnaFilter(mud, track, "tissue", "tis", "tissue");
-addMrnaFilter(mud, track, "cell", "cel", "cell");
-addMrnaFilter(mud, track, "keyword", "key", "keyword");
-addMrnaFilter(mud, track, "gene", "gen", "geneName");
-addMrnaFilter(mud, track, "product", "pro", "productName");
-addMrnaFilter(mud, track, "description", "des", "description");
-return mud;
-}
-
-void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
-/* Print out user interface for one type of mrna filter. */
-{
-controlGridStartCell(cg);
-printf("%s:<BR>", text);
-cgiMakeTextVar(var, cartUsualString(cart, var, ""), 19);
-controlGridEndCell(cg);
-}
-
-void radioButton(char *var, char *val, char *ourVal)
-/* Print one radio button */
-{
-cgiMakeRadioButton(var, ourVal, sameString(ourVal, val));
-printf("%s ", ourVal);
-}
-
-void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none)
-/* Put up some filter buttons. */
-{
-printf("<B>Filter:</B> ");
-radioButton(filterTypeVar, filterTypeVal, "red");
-radioButton(filterTypeVar, filterTypeVal, "green");
-radioButton(filterTypeVar, filterTypeVal, "blue");
-radioButton(filterTypeVar, filterTypeVal, "exclude");
-radioButton(filterTypeVar, filterTypeVal, "include");
-if (none)
-    radioButton(filterTypeVar, filterTypeVal, "none");
-}
-
-void mrnaUi(struct trackGroup *tg)
-/* Put up UI for an mRNA (or EST) track. */
-{
-struct mrnaUiData *mud = tg->extraUiData;
-struct mrnaFilter *fil;
-struct controlGrid *cg = NULL;
-char *filterTypeVar = mud->filterTypeVar;
-char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
-char *logicTypeVar = mud->logicTypeVar;
-char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
-
-/* Define type of filter. */
-filterButtons(filterTypeVar, filterTypeVal, FALSE);
-printf("  <B>Combination Logic:</B> ");
-radioButton(logicTypeVar, logicTypeVal, "and");
-radioButton(logicTypeVar, logicTypeVal, "or");
-
-cgiMakeButton("submit", "refresh");
-printf("<BR>\n");
-
-/* List various fields you can filter on. */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
-cg = startControlGrid(4, NULL);
-for (fil = mud->filterList; fil != NULL; fil = fil->next)
-     oneMrnaFilterUi(cg, fil->label, fil->key);
-endControlGrid(&cg);
-}
-
 void filterMrna(struct trackGroup *tg, struct linkedFeatures **pLfList)
 /* Apply filters if any to mRNA linked features. */
 {
@@ -2392,14 +2225,12 @@ void estMethods(struct trackGroup *tg)
 {
 tg->itemColor = estColor;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-tg->extraUi = mrnaUi;
 }
 
 void mrnaMethods(struct trackGroup *tg)
 /* Make track group of mRNA methods. */
 {
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-tg->extraUi = mrnaUi;
 }
 
 
@@ -3417,7 +3248,6 @@ void xenoMrnaMethods(struct trackGroup *tg)
 {
 tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
-tg->extraUi = mrnaUi;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -3501,7 +3331,6 @@ void loadStsMarker(struct trackGroup *tg)
 bedLoadItem(tg, "stsMarker", (ItemLoader)stsMarkerLoad);
 }
 
-
 void freeStsMarker(struct trackGroup *tg)
 /* Free up stsMarker items. */
 {
@@ -3524,30 +3353,8 @@ tg->freeItems = freeStsMarker;
 tg->itemColor = stsMarkerColor;
 }
 
-static char *stsMapOptions[] = {
-    "All Genetic",
-    "Genethon",
-    "Marshfield",
-    "GeneMap 99",
-    "Whitehead YAC",
-    "Whitehead RH",
-    "Stanford TNG",
-};
-
-enum stsMapOptEnum {
-   smoeGenetic = 0,
-   smoeGenethon = 1,
-   smoeMarshfield = 2,
-   smoeGm99 = 3,
-   smoeWiYac = 4,
-   smoeWiRh = 5,
-   smoeTng = 6,
-};
-
-char *stsMapFilterVar = "stsFilter";
-char *stsMapFilterVal;
-char *stsMapMapVar = "stsType";
-char *stsMapMapVal;
+char *stsMapFilter;
+char *stsMapMap;
 enum stsMapOptEnum stsMapType;
 int stsMapFilterColor = MG_BLACK;
 
@@ -3588,29 +3395,18 @@ switch (stsMapType)
 void loadStsMap(struct trackGroup *tg)
 /* Load up stsMarkers from database table to trackGroup items. */
 {
-stsMapFilterVal = cartUsualString(cart, stsMapFilterVar, "blue");
-stsMapMapVal = cartUsualString(cart, stsMapMapVar, stsMapOptions[0]);
-stsMapType = stringIx(stsMapMapVal, stsMapOptions);
+stsMapFilter = cartUsualString(cart, "stsMap.filter", "blue");
+stsMapMap = cartUsualString(cart, "stsMap.type", smoeEnumToString(0));
+stsMapType = smoeStringToEnum(stsMapMap);
 bedLoadItem(tg, "stsMap", (ItemLoader)stsMapLoad);
-filterItems(tg, stsMapFilterItem, stsMapFilterVal);
-stsMapFilterColor = getFilterColor(stsMapFilterVal);
+filterItems(tg, stsMapFilterItem, stsMapFilter);
+stsMapFilterColor = getFilterColor(stsMapFilter);
 }
 
 void freeStsMap(struct trackGroup *tg)
 /* Free up stsMap items. */
 {
 stsMapFreeList((struct stsMap**)&tg->items);
-}
-
-void stsMapUi(struct trackGroup *tg)
-/* Put up UI stsMarkers. */
-{
-filterButtons(stsMapFilterVar, stsMapFilterVal, TRUE);
-printf(" ");
-cgiMakeDropList(stsMapMapVar, stsMapOptions, ArraySize(stsMapOptions), 
-	stsMapMapVal);
-printf(" ");
-cgiMakeButton("submit", "refresh");
 }
 
 Color stsMapColor(struct trackGroup *tg, void *item, struct memGfx *mg)
@@ -3635,7 +3431,6 @@ void stsMapMethods(struct trackGroup *tg)
 tg->loadItems = loadStsMap;
 tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
-tg->extraUi = stsMapUi;
 }
 
 void loadFishClones(struct trackGroup *tg)
@@ -5072,7 +4867,7 @@ void lfsFromNci60Bed(struct trackGroup *tg)
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL;
-char *grouping = cartUsualString(cart, "nci60_group", "Tissue");
+char *grouping = cartUsualString(cart, "nci60.group", "Tissue");
 int i=0;
 bedList = tg->items;
 
@@ -5090,20 +4885,6 @@ else
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0);
     }
 }
-
-void nci60Ui(struct trackGroup *tg)
-/* put up UI for the nci60 track from stanford track */
-{
-char *names[] = {"Tissue","All Experiments"};
-printf("<b>Group By: </b>");
-cgiMakeDropList("nci60_group",names, 2, cartUsualString(cart, "nci60_group", names[0]));
-printf(" <b>Color Scheme</b>: ");
-cgiMakeRadioButton("nci60_color", "rg", sameString(cartUsualString(cart,"nci60_color","rg"), "rg"));
-printf(" red/green ");
-cgiMakeRadioButton("nci60_color", "rb", sameString(cartUsualString(cart,"nci60_color","rb"), "rb"));
-printf(" red/blue ");
-cgiMakeButton("submit", "refresh");
-} 
 
 struct linkedFeaturesSeries *lfsFromMsBed(struct trackGroup *tg, struct bed *bedList)
 /* create a linkedFeatureSeries from a bed list making each
@@ -5164,7 +4945,7 @@ float val = lf->score;
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
-char *colorScheme = cartUsualString(cart, "nci60_color", "rb");
+char *colorScheme = cartUsualString(cart, "nci60.color", "rb");
 /* colorScheme should be stored somewhere not looked up every time... */
 if(val == -10000)
     return shadesOfGray[5];
@@ -5238,7 +5019,6 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = nci60Color;
 tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromNci60Bed ;
-tg->extraUi = nci60Ui;
 }
 
 
@@ -5856,11 +5636,7 @@ if (withCenterLabels)
 	    {
 	    Color color = group->ixColor;
 	    mgTextCentered(mg, xOff, y+1, clWidth, insideHeight, color, font, group->longLabel);
-	    mapBoxToggleVis(0,y+1,pixWidth,insideHeight,group);
-#ifdef SOMEDAY
-	    mgTextCentered(mg, ochXoff, y+1, openCloseHideWidth, insideHeight, 
-		color, font, "[open] [close] [hide]");
-#endif
+	    mapBoxTrackUi(0, y+1, pixWidth, insideHeight, group);
 	    y += fontHeight;
 	    y += group->height;
 	    }
@@ -5912,7 +5688,7 @@ for (group = groupList; group != NULL; group = group->next)
 	    case tvDense:
 		if (withCenterLabels)
 		    y += fontHeight;
-		mapBoxToggleVis(0,y,pixWidth,group->lineHeight,group);
+		mapBoxTrackUi(0,y,pixWidth,group->lineHeight,group);
 		y += group->lineHeight;
 		break;
 	    }
@@ -6341,7 +6117,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     tg = newCustomTrack(ct);
     vis = cartOptionalString(cart, tg->mapName);
     if (vis != NULL)
-	tg->visibility = stringArrayIx(vis, tvStrings, ArraySize(tvStrings));
+	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
 
@@ -6389,7 +6165,7 @@ fputs("</TR></TABLE>", stdout);
 fputs("</TD></TR></TABLE>\n", stdout);
 }
 
-void doForm()
+void doTrackForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
 {
@@ -6471,12 +6247,7 @@ for (group = tGroupList; group != NULL; group = group->next)
     {
     char *s = cartOptionalString(cart, group->mapName);
     if (s != NULL)
-	{
-	int vis = stringArrayIx(s, tvStrings, ArraySize(tvStrings));
-	if (vis < 0)
-	    errAbort("Unknown value %s for %s", s, group->mapName);
-	group->visibility = vis;
-	}
+	group->visibility = hTvFromString(s);
     }
 
 /* Tell groups to load their items. */
@@ -6589,12 +6360,12 @@ if (!hideControls)
     for (group = tGroupList; group != NULL; group = group->next)
 	{
 	controlGridStartCell(cg);
-	if (group->visibility != tvHide && group->extraUi != NULL)
-	    printf("<A HREF=\"#%s\">", group->mapName);
+	printf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+	    cartSessionVarName(), cartSessionId(cart),
+	    chromName, group->mapName);
 	printf(" %s<BR> ", group->shortLabel);
-	if (group->visibility != tvHide && group->extraUi != NULL)
-	    printf("</A>");
-	cgiMakeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
+	printf("</A>");
+	hTvDropDown(group->mapName, group->visibility);
 	controlGridEndCell(cg);
 	}
     /* now finish out the table */
@@ -6603,20 +6374,6 @@ if (!hideControls)
            "dense mode.");
 
     printf("</CENTER>\n");
-
-    /* Do Extra parts of UI. */
-    htmlHorizontalLine();
-    printf("<H2>Additional Track Options</H2>\n");
-    for (group = tGroupList; group != NULL; group = group->next)
-	{
-	if (group->visibility != tvHide && group->extraUi != NULL)
-	    {
-	    printf("<A NAME=\"%s\">", group->mapName);
-	    printf("<H3><B>%s</B> - %s</H3>\n", group->shortLabel, group->longLabel);
-	    group->extraUi(group);
-	    htmlHorizontalLine();
-	    }
-	}
     }
 
 
@@ -6743,23 +6500,10 @@ else
 freeDyString(&ui);
 }
 
-
-void doMiddle(struct cart *theCart)
-/* Print the body of an html file.  This routine handles zooming and
+void tracksDisplay()
+/* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
-char *submitVal;
-boolean testing = FALSE;
-
-/* Initialize layout and database. */
-cart = theCart;
-database = cartOptionalString(cart, "db");
-if (database == NULL)
-    database = hGetDb();
-hSetDb(database);
-hDefaultConnect();
-initTl();
-
 /* Read in input from CGI. */
 position = cartString(cart, "position");
 if (!findGenomePos(position, &chromName, &winStart, &winEnd))
@@ -6827,7 +6571,24 @@ if (winBaseCount <= 0)
 otherFrame = cartOptionalString(cart, "of");
 thisFrame = cartOptionalString(cart, "tf");
 
-doForm();
+doTrackForm();
+}
+
+
+void doMiddle(struct cart *theCart)
+/* Print the body of an html file.   */
+{
+/* Initialize layout and database. */
+cart = theCart;
+database = cartOptionalString(cart, "db");
+if (database == NULL)
+    database = hGetDb();
+hSetDb(database);
+hDefaultConnect();
+initTl();
+
+/* Do main display. */
+tracksDisplay();
 }
 
 void doDown(struct cart *cart)
@@ -6849,14 +6610,14 @@ char *excludeVars[] = { "submit", "Submit",
 	"hgt.left1", "hgt.left2", "hgt.left3", 
 	"hgt.right1", "hgt.right2", "hgt.right3", 
 	"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-	"hgt.customText", "hgt.customFile",
+	"hgt.customText", "hgt.customFile", "hgt.tui",
 	NULL };
 
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, "hguid", excludeVars);
+cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
 

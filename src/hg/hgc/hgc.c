@@ -20,6 +20,7 @@
 #include "seqOut.h"
 #include "trackDb.h"
 #include "hdb.h"
+#include "hui.h"
 #include "hgRelate.h"
 #include "psl.h"
 #include "bed.h"
@@ -4774,6 +4775,6 @@ char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrac
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc,argv);
-cartEmptyShell(cartDoMiddle, "hguid", excludeVars);
+cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars);
 return 0;
 }

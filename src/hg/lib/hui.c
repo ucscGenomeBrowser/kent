@@ -1,0 +1,170 @@
+/* hui - human genome user interface common controls. */
+
+#include "common.h"
+#include "hash.h"
+#include "cheapcgi.h"
+#include "htmshell.h"
+#include "jksql.h"
+#include "cart.h"
+#include "hdb.h"
+#include "hui.h"
+
+char *hUserCookie()
+/* Return our cookie name. */
+{
+return "hguid";
+}
+
+/******  Some stuff for tables of controls ******/
+
+struct controlGrid *startControlGrid(int columns, char *align)
+/* Start up a control grid. */
+{
+struct controlGrid *cg;
+AllocVar(cg);
+cg->columns = columns;
+cg->align = cloneString(align);
+return cg;
+}
+
+void controlGridStartCell(struct controlGrid *cg)
+/* Start a new cell in control grid. */
+{
+if (cg->columnIx == cg->columns)
+    {
+    printf("</tr>\n<tr>");
+    cg->columnIx = 0;
+    }
+if (cg->align)
+    printf("<td align=%s>", cg->align);
+else
+    printf("<td>");
+}
+
+void controlGridEndCell(struct controlGrid *cg)
+/* End cell in control grid. */
+{
+printf("</td>");
+++cg->columnIx;
+}
+
+void endControlGrid(struct controlGrid **pCg)
+/* Finish up a control grid. */
+{
+struct controlGrid *cg = *pCg;
+if (cg != NULL)
+    {
+    int i;
+    if (cg->columnIx != 0 && cg->columnIx < cg->columns)
+	for( i = cg->columnIx; i <= cg->columns; i++)
+	    printf("<td>&nbsp</td>\n");
+    printf("</tr>\n</table>\n");
+    freeMem(cg->align);
+    freez(pCg);
+    }
+}
+
+/******  Some stuff for hide/dense/full controls ******/
+
+static char *hTvStrings[] = 
+/* User interface strings for track visibility controls. */
+    {
+    "hide",
+    "dense",
+    "full",
+    };
+
+enum trackVisibility hTvFromString(char *s)
+/* Given a string representation of track visibility, return as
+ * equivalent enum. */
+{
+enum trackVisibility vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
+if (vis < 0)
+   errAbort("Unknown visibility %s", s);
+return vis;
+}
+
+char *hStringFromTv(enum trackVisibility vis)
+/* Given enum representation convert to string. */
+{
+return hTvStrings[vis];
+}
+
+void hTvDropDown(char *varName, enum trackVisibility vis)
+/* Make track visibility drop down for varName */
+{
+cgiMakeDropList(varName, hTvStrings, ArraySize(hTvStrings), hTvStrings[vis]);
+}
+
+/****** Some stuff for stsMap related controls *******/
+
+static char *stsMapOptions[] = {
+    "All Genetic",
+    "Genethon",
+    "Marshfield",
+    "GeneMap 99",
+    "Whitehead YAC",
+    "Whitehead RH",
+    "Stanford TNG",
+};
+
+enum stsMapOptEnum smoeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, stsMapOptions);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *smoeEnumToString(enum stsMapOptEnum x)
+/* Convert from enum to string representation. */
+{
+return stsMapOptions[x];
+}
+
+void smoeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, stsMapOptions, ArraySize(stsMapOptions), 
+	curVal);
+}
+
+/****** Some stuff for mRNA and EST related controls *******/
+
+static void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)
+/* Add an mrna filter */
+{
+struct mrnaFilter *fil;
+char buf[64];
+AllocVar(fil);
+fil->label = label;
+sprintf(buf, "%s_%s", track, key);
+fil->key = cloneString(buf);
+fil->table = table;
+slAddTail(&mud->filterList, fil);
+}
+
+struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)
+/* Make a new  in extra-ui data structure for mRNA. */
+{
+struct mrnaUiData *mud;
+char buf[64];
+AllocVar(mud);
+sprintf(buf, "%sFt", track);
+mud->filterTypeVar = cloneString(buf);
+sprintf(buf, "%sLt", track);
+mud->logicTypeVar = cloneString(buf);
+if (isXeno)
+    addMrnaFilter(mud, track, "organism", "org", "organism");
+addMrnaFilter(mud, track, "author", "aut", "author");
+addMrnaFilter(mud, track, "library", "lib", "library");
+addMrnaFilter(mud, track, "tissue", "tis", "tissue");
+addMrnaFilter(mud, track, "cell", "cel", "cell");
+addMrnaFilter(mud, track, "keyword", "key", "keyword");
+addMrnaFilter(mud, track, "gene", "gen", "geneName");
+addMrnaFilter(mud, track, "product", "pro", "productName");
+addMrnaFilter(mud, track, "description", "des", "description");
+return mud;
+}
+

@@ -41,6 +41,11 @@ struct trackDb *trackDbLoadAll(char *fileName);
 /* Load all trackDb from a tab-separated file.
  * Dispose of this with trackDbFreeList(). */
 
+struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all trackDb from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with cartDbFreeList(). */
+
 struct trackDb *trackDbCommaIn(char **pS, struct trackDb *ret);
 /* Create a trackDb out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
