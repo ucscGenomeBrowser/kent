@@ -23,7 +23,13 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.37 2004/05/21 19:42:47 galt Exp $";
+/* stuff to support outputting Release Log html */
+#include "web.h"
+#include "hui.h"
+#include "dbDb.h"
+
+
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.38 2004/05/24 08:24:10 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -45,7 +51,7 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
-#define MAXCOLS 28
+#define MAXCOLS 29
 
 #define TITLE "Push Queue v"CGI_VERSION
 
@@ -67,7 +73,7 @@ char *oldRandState = NULL;
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
-pushState,initdate,bounces,lockUser,lockDateTime";
+pushState,initdate,bounces,lockUser,lockDateTime,releaseLog";
 */
 
 /* structural improvements suggested by MarkD:
@@ -116,7 +122,8 @@ static char const *colName[] = {
  "initdate"  ,  
  "bounces"   , 
  "lockUser"  , 
- "lockDateTime"
+ "lockDateTime",
+ "releaseLog"
 };
 
 
@@ -148,7 +155,8 @@ e_pushState ,
 e_initdate  ,
 e_bounces   ,
 e_lockUser  ,
-e_lockDateTime
+e_lockDateTime,
+e_releaseLog
 };
 
 char *colHdr[] = {
@@ -179,8 +187,11 @@ char *colHdr[] = {
 "Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date",
 "Bounce Count",
 "Lock User",
-"Lock&nbsp;Date&nbsp;Time"
+"Lock&nbsp;Date&nbsp;Time",
+"Release&nbsp;Log"
 };
+
+char *numberToMonth[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
 
 char pushQtbl[256] = "pushQ";   /* default */
 
@@ -339,7 +350,7 @@ mySqlReleaseLock("qapushq");
 
 
 
-enum colEnum mapFieldToEnum(char *f)
+enum colEnum mapFieldToEnum(char *f, bool must)
 {
 int i = 0;
 for(i=0;i<MAXCOLS;i++)
@@ -349,7 +360,14 @@ for(i=0;i<MAXCOLS;i++)
 	return (enum colEnum) i;
 	}
     }
-errAbort("Field not found in mapFieldToEnum: %s",f);
+if (must)
+    {
+    errAbort("Field not found in mapFieldToEnum: %s",f);
+    }
+else
+    {
+    return -1;
+    }
 }
 
 
@@ -450,17 +468,29 @@ while(TRUE)
 
 
 
-void initColsFromString(char *s)
+void initColsFromString()
 {
-int i = 0;
-char tempVal[256];
+int i = 0, e=0;
+char colName[256];
+char sep[2]="";
+struct dyString * s = NULL;
 
-while(parseList(s,',',i,tempVal,sizeof(tempVal)))
+s = newDyString(2048);  /* need room */
+numColumns=0;
+while(parseList(showColumns,',',i,colName,sizeof(colName)))
     {
-    colOrder[i] = mapFieldToEnum(tempVal);
+    e = mapFieldToEnum(colName,FALSE);
+    if (e >= 0) /* tolerate old nonexistent colnames in pseudocart more gracefully */ 
+	{
+	colOrder[i] = e;
+	dyStringPrintf(s, "%s%s", sep, colName);
+	safef(sep,sizeof(sep),",");
+	numColumns++;
+	}
     i++;
     }
-numColumns=i;
+showColumns = cloneString(s->string);
+freeDyString(&s);
 
 }
 
@@ -512,6 +542,7 @@ replaceInStr(html, sizeof(html) , "<!extSource>"   , ki->extSource );
 replaceInStr(html, sizeof(html) , "<!openIssues>"  , ki->openIssues); 
 replaceInStr(html, sizeof(html) , "<!notes>"       , ki->notes     );
 replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  ); 
+replaceInStr(html, sizeof(html) , "<!releaseLog>"  , ki->releaseLog); 
 
 replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  ); 
 
@@ -667,6 +698,7 @@ strcpy(q.extSource ,"");
 q.openIssues   = "";
 q.notes   = "";
 strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically use today date */
+q.releaseLog = "";
 
 if (sameString(myUser.role,"dev"))
     {
@@ -849,6 +881,11 @@ switch(col)
 	printf("<td>%s</td>\n", ki->lockDateTime );
 	break;
 	
+    case e_releaseLog:
+	dotdotdot(ki->releaseLog,MAXBLOBSHOW);  /* chr(255) */
+	printf("<td>%s</td>\n", ki->releaseLog   );
+	break;
+	
     default:
 	errAbort("drawDisplayLine: unexpected case enum %d.",col);
 	
@@ -871,7 +908,7 @@ int c = 0;
 char monthsql[256];
 
 /* initialize column display order */
-initColsFromString(showColumns);
+initColsFromString();
 
 safef(monthsql,sizeof(monthsql),"");
 if (!sameString(month,""))
@@ -924,7 +961,8 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol&cb=%s>All Columns</A>\n
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDefaultCol&cb=%s>Default Columns</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths&cb=%s>Log by Month</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway&cb=%s>Gateway</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp&cb=%s target=\"_blank\">Help</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp target=\"_blank\">Help</A>\n");
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLog target=\"_blank\">Release Log</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
 //printf("&nbsp;newRandState=%s\n",newRandState);
 //printf("&nbsp;oldRandState=%s\n",oldRandState);
@@ -1190,7 +1228,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lockUser, *lockDateTime;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lockUser, *lockDateTime, *releaseLog;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1216,6 +1254,7 @@ pushState = sqlEscapeString(el->pushState);
 initdate = sqlEscapeString(el->initdate);
 lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
+releaseLog = sqlEscapeString(el->releaseLog);
 
 dyStringPrintf(update, 
 "update %s set "
@@ -1223,14 +1262,14 @@ dyStringPrintf(update,
 "track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
 "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
 "sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',pushState='%s',initdate='%s',bounces='%u',lockUser='%s',lockDateTime='%s' "
+"openIssues='%s',notes='%s',pushState='%s',initdate='%s',bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
 "where qid='%s'", 
 	tableName,  
 	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
 	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
 	onlineHelp,  ndxYN,  joinerYN,  stat,  
 	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  pushState, initdate, el->bounces, lockUser, lockDateTime, 
+	openIssues,  notes,  pushState, initdate, el->bounces, lockUser, lockDateTime, releaseLog, 
 	qid
 	);
 
@@ -1261,6 +1300,7 @@ freez(&pushState);
 freez(&initdate);
 freez(&lockUser);
 freez(&lockDateTime);
+freez(&releaseLog);
 }
 
 void getCgiData(bool *isOK, bool isPtr, void *ptr, int size, char *name)
@@ -1460,6 +1500,7 @@ getCgiData(&isOK, FALSE, q.extSource , sizeof(q.extSource ), "extSource" );
 getCgiData(&isOK, TRUE ,&q.tbls      , -1                  , "tbls"      );  
 getCgiData(&isOK, TRUE ,&q.openIssues, -1                  , "openIssues");
 getCgiData(&isOK, TRUE ,&q.notes     , -1                  , "notes"     );
+getCgiData(&isOK, TRUE ,&q.releaseLog, -1                  , "releaseLog");
 
 
 /* debug!
@@ -2091,7 +2132,7 @@ s = newDyString(2048);  /* need room */
 
 colName = cgiString("colName");
 
-mapFieldToEnum(colName);  /* this will make sure it exists or errAbort */
+mapFieldToEnum(colName,TRUE);  /* this will make sure it exists or errAbort */
 
 if (strstr(showColumns,colName)==NULL)  /* make sure not already in list */
     {
@@ -2751,6 +2792,7 @@ printf("Initial submission - displays date automatically generated when push que
 printf("Date Opened - date QA (re)opened. (YYYY-MM-DD) Defaults originally to current date to save typing.<br>\n");
 printf("New track? - choose Y if this is a new track (i.e. has never before appeared on beta).<br>\n");
 printf("Track - enter the track name as it will appear in the genome browser (use the shortLabel).<br>\n");
+printf("Release Log- enter the short Label (usually) followed by notes in parentheses if any. This appears in the release log unless empty.<br>\n");
 printf("Databases - enter db name. May be comma-separated list if more than one organism, etc.<br>\n");
 printf("Tables - enter as comma-separated list all tables that apply. They must exist in the database specified. Wildcard * supported. (Put comments in parentheses).<br>\n");
 printf("CGIs - enter names of any new cgis that are applicable. Must be found on hgwbeta.<br>\n");
@@ -2856,6 +2898,156 @@ doDisplay();
 
 }
 
+
+/* ======================================================== */
+		
+
+void doDrawReleaseLog()
+/* Test - draw the release log using log data in pushQ  */
+{
+
+char *centraldb  = NULL;
+char *chost       = NULL;
+char *cuser       = NULL;
+char *cpassword   = NULL;
+
+struct sqlConnection *betaconn = NULL;
+
+struct dbDb *ki, *kiList = NULL, dbDbTemp;
+struct sqlResult *sr;
+char **row;
+char query[256];
+char tempName[256];
+
+int y=0,m=0,d=0;
+
+ZeroVar(&dbDbTemp);
+
+centraldb = "hgcentralbeta";
+
+chost     = cfgOption("db.host"    );
+cuser     = cfgOption("db.user"    );
+cpassword = cfgOption("db.password");
+
+if (sameString(utsName.nodename,"hgwdev"))
+    {
+    chost     = cfgOption("central.host"    );
+    cuser     = cfgOption("central.user"    );
+    cpassword = cfgOption("central.password");
+    }
+
+
+webStart(NULL, "Track and Table Releases");
+
+
+//printf("%s %s %s %s</br>\n",centraldb, host, user, password);
+
+// is this necessary? it sucks!
+sqlDisconnect(&conn);
+
+betaconn = sqlConnectRemote(chost, cuser, cpassword, centraldb);
+    
+
+printf(" This page contains track and table release information for the following genome assemblies:<br>\n");
+printf("<ul>\n");
+
+safef(query,sizeof(query),
+    "select * from dbDb "
+    "where active=1 "
+    "and name not like 'zoo%%' "
+    "order by orderKey, name desc");
+sr = sqlGetResult(betaconn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ki = dbDbLoad(row);
+    slAddHead(&kiList, ki);
+    }
+sqlFreeResult(&sr);
+
+dbDbTemp.name        = cloneString("zoo1");
+dbDbTemp.description = cloneString("Jun. 2002");
+dbDbTemp.organism    = cloneString("NISC (Zoo)");
+slAddHead(&kiList, &dbDbTemp);
+
+slReverse(&kiList);
+sqlDisconnect(&betaconn);
+
+// is this necessary? it sucks! are we really only allowed one remoteconn at a time?
+conn = sqlConnectRemote(host, user, password, database);
+
+for (ki = kiList; ki != NULL; ki = ki->next)
+    {
+    safef(tempName,sizeof(tempName),ki->organism);
+    if (strncmp(ki->organism,"Worm",4)==0)
+	{
+	safef(tempName,sizeof(tempName),ki->scientificName);
+	}
+    if (strncmp(ki->organism,"Yeast",5)==0)
+	{
+	safef(tempName,sizeof(tempName),ki->scientificName);
+	}
+    printf("<li><a CLASS=\"toc\" HREF=\"#%s\">%s %s (%s)</a></li>",
+	ki->name,tempName,ki->description,ki->name);
+    }
+
+printf("</ul>\n");
+printf("<p>\n");
+printf(" For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/gbdDescriptions.html>Description of the annotation database</a> and the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<br>\n");
+
+for (ki = kiList; ki != NULL; ki = ki->next)
+    {
+    safef(tempName,sizeof(tempName),ki->organism);
+    if (strncmp(ki->organism,"Worm",4)==0)
+	{
+	safef(tempName,sizeof(tempName),ki->scientificName);
+	}
+    if (strncmp(ki->organism,"Yeast",5)==0)
+	{
+	safef(tempName,sizeof(tempName),ki->scientificName);
+	}
+    
+    webNewSection("<A NAME=%s></A>%s %s (%s)", 
+	ki->name, tempName, ki->description, ki->name);
+    printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%\">\n"
+	"<TR><TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
+	"    <TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT>\n"
+	"</TD></TR>\n"
+	);
+    
+    safef(query,sizeof(query),
+	"select releaseLog, qadate from pushQ "
+	"where priority='L' and dbs like '%%%s%%' "
+	"order by qadate desc, qid desc",
+	ki->name);
+	
+    //printf("query=%s\n",query);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	sscanf(cloneStringZ(&row[1][5],2),"%d",&m);
+	sscanf(cloneStringZ(&row[1][8],2),"%d",&d);
+	printf("<TR valign=top><TD align=left>\n"
+	    "%s</td>\n"
+	    "<td>%02d %s %s</td>\n"
+	    "</tr>\n",
+	    row[0], d, numberToMonth[m-1], cloneStringZ(row[1],4) );
+	}
+    sqlFreeResult(&sr);
+    printf("</table>\n");
+
+    }
+sqlFreeResult(&sr);
+
+
+dbDbFreeList(&kiList);
+
+webEnd();
+}
+
+
+
+
+/* ======================================================== */
 
 /* ------------------------------------------------------- */
 
@@ -3063,6 +3255,14 @@ password = cfgOption("pq.password");
 action = cgiUsualString("action","display");  /* get action, defaults to display of push queue */
 /* initCgiInput() is not exported in cheapcgi.h, but it should get called by cgiUsualString
 So it will find all input regardless of Get/Put/Post/etc and make available as cgivars */
+
+
+if (sameString(action,"releaseLog"))
+    {
+    doDrawReleaseLog();
+    return 0;
+    }
+
 
 qaUser = findCookieData("qapushq");  /* will also cause internal structures to load cookie data */
 if ((qaUser == NULL) || (sameString(qaUser,"")))
