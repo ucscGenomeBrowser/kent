@@ -221,19 +221,13 @@ rsync --progress --partial -avz \
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg17/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg17/database/ \
+  $WEBROOT/goldenPath/hg17/
 </PRE>
 
 <LI>Get Human July, 2003 full data set (hg16: 15 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg16/bigZips/ \
-  $WEBROOT/goldenPath/hg16/
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg16/chromosomes/ \
-  $WEBROOT/goldenPath/hg16/
 rsync --progress --partial -avz  \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg16/database/ \
   $WEBROOT/goldenPath/hg16/
@@ -242,12 +236,6 @@ rsync --progress --partial -avz  \
 <LI>Get Human April 10, 2003 full data set (hg15: 7.8 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/10april2003/bigZips/ \
-  $WEBROOT/goldenPath/10april2003/
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/10april2003/chromosomes/ \
-  $WEBROOT/goldenPath/10april2003/
 rsync --progress --partial -avz  \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/10april2003/database/ \
   $WEBROOT/goldenPath/10april2003/
@@ -257,35 +245,29 @@ rsync --progress --partial -avz  \
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/panTro1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/panTro1/database/ \
+  $WEBROOT/goldenPath/panTro1/
 </PRE>
 
 <LI>Get Dog July, 2004 full data set (canFam1: 5.6 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/canFam1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/canFam1/database/ \
+  $WEBROOT/goldenPath/canFam1/
 </PRE>
 
 <LI>Get Mouse May, 2004 full data set (mm5: 14 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm5/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm5/database/ \
+  $WEBROOT/goldenPath/mm5/
 </PRE>
 
 <LI>Get Mouse October, 2003 full data set (mm4: 12 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm4/bigZips/ \
-  $WEBROOT/goldenPath/mm4/
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm4/chromosomes/ \
-  $WEBROOT/goldenPath/mm4/
 rsync --progress --partial -avz  \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm4/database/ \
   $WEBROOT/goldenPath/mm4/
@@ -295,19 +277,13 @@ rsync --progress --partial -avz  \
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJun2003/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJun2003/database/ \
+  $WEBROOT/goldenPath/rnJun2003/
 </PRE>
 
 <LI>Get Rat January, 2003 full data set (rn2: 4.1 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJan2003/bigZips/ \
-  $WEBROOT/goldenPath/rnJan2003/
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJan2003/chromosomes/ \
-  $WEBROOT/goldenPath/rnJan2003/
 rsync --progress --partial -avz  \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJan2003/database/ \
   $WEBROOT/goldenPath/rnJan2003/
@@ -317,96 +293,104 @@ rsync --progress --partial -avz  \
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/galGal2/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/galGal2/database/ \
+  $WEBROOT/goldenPath/galGal2/
+</PRE>
+
+<LI>Get Zebrafish November, 2003 full data set (danRer1: 2.1 Gb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/danRer1/database/ \
+  $WEBROOT/goldenPath/danRer1/
 </PRE>
 
 <LI>Get C. intestinalis December, 2002 full data set (ci1: 715 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci1/database/ \
+  $WEBROOT/goldenPath/ci1/
 </PRE>
 
 <LI>Get Fugu August, 2003 full data set (fr1: 800 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/fr1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/fr1/database/ \
+  $WEBROOT/goldenPath/fr1/
 </PRE>
 
 <LI>Get Fruitfly January, 2003 full data set (dm1: 400 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dm1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dm1/database/ \
+  $WEBROOT/goldenPath/dm1/
 </PRE>
 
 <LI>Get D. pseudoobscura August 2003 full data set (dp1: 178 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dp1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dp1/database/ \
+  $WEBROOT/goldenPath/dp1/
 </PRE>
 
 <LI>Get D. yakuba April 2004 full data set (droYak1: 439 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droYak1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droYak1/database/ \
+  $WEBROOT/goldenPath/droYak1/
 </PRE>
 
 <LI>Get A. gambiae Feb 2003 full data set (anoGam1: 731 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/anoGam1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/anoGam1/database/ \
+  $WEBROOT/goldenPath/anoGam1/
 </PRE>
 
 <LI>Get C. elegans March, 2004 full data set (ce2: 1.0 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ce2/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ce2/database/ \
+  $WEBROOT/goldenPath/ce2/
 </PRE>
 
 <LI>Get C. elegans May, 2003 full data set (ce1: 2.1 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ceMay2003/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ceMay2003/database/ \
+  $WEBROOT/goldenPath/ceMay2003/
 </PRE>
 
 <LI>Get C. briggsae July, 2002 full data set (cb1: 315 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/cbJul2002/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/cbJul2002/database/ \
+  $WEBROOT/goldenPath/cbJul2002/
 </PRE>
 
 <LI>Get Yeast (Saccharomyces cerevisiae) October, 2003 full data set (sacCer1: 91 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/sacCer1/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/sacCer1/database/ \
+  $WEBROOT/goldenPath/sacCer1/
 </PRE>
 
 <LI>Get SARS coronavirus April, 2003 full data set (sc1: 106 Mb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/scApr2003/ \
-  $WEBROOT/goldenPath/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/scApr2003/database/ \
+  $WEBROOT/goldenPath/scApr2003/
 </PRE>
 
 </OL>
@@ -451,6 +435,7 @@ assembly:
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
 <TR><TD> galGal2     </TD><TD></TD><TD> galGal2     </TD></TR>
+<TR><TD> danRer1     </TD><TD></TD><TD> danRer1     </TD></TR>
 <TR><TD> fr1         </TD><TD></TD><TD> fr1         </TD></TR>
 <TR><TD> ci1         </TD><TD></TD><TD> ci1         </TD></TR>
 <TR><TD> dm1         </TD><TD></TD><TD> dm1         </TD></TR>
