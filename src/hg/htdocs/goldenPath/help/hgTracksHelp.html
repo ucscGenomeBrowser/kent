@@ -51,7 +51,7 @@
 	Haussler</A> of UCSC,<BR> in collaboration with the <BR>
 	<A HREF="http://www.nature.com/genomics/human/papers/409860a0_fs_1.html">genome analysis group of the International Human Genome Project</A><BR>
 	and the <A HREF="http://www.cse.ucsc.edu/centers/cbe/Genome/">UCSC Human Genome Project</A>.<BR>
-	Individual tracks contributed by various <A HREF="http://genome.cse.ucsc.edu/goldenPath/credits.html">individuals</A> and <A HREF="http://genome.cse.ucsc.edu/goldenPath/other.resources.html">institutions</A>.<BR>
+	Individual tracks contributed by various <A HREF="http://genome.ucsc.edu/goldenPath/credits.html">individuals</A> and <A HREF="http://genome.ucsc.edu/goldenPath/other.resources.html">institutions</A>.<BR>
 	Last updated 24 Jun 02; questions and suggestions welcome.</FONT></CENTER>
 </TD></TR></TABLE></CENTER>
 <BR>
@@ -142,7 +142,7 @@ or <A HREF="http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi" TARGET=_blank>N
 Viewer</A> annotation.
 <P>
 The browser data represents an immense 
-<A HREF="http://genome.cse.ucsc.edu/goldenPath/credits.html">collaborative effort</A> 
+<A HREF="http://genome.ucsc.edu/goldenPath/credits.html">collaborative effort</A> 
 involving thousands of people from the international biomedical research community. 
 UCSC itself does no sequencing and creates only about half of the tracks in-house. Its 
 other major roles include building genome assemblies, creating the Genome Browser work 
@@ -214,7 +214,7 @@ entries, withdrawn gene names, and abandoned synonyms.
 <P>
 <B>Finding a genome location using BLAT</B><BR>
 If you have genomic, mRNA, or protein sequence, but don't know the name or
-the location to which it maps in the genome, the <A HREF="http://genome.cse.ucsc.edu/cgi-bin/hgBlat">
+the location to which it maps in the genome, the <A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">
 BLAT</A> tool will rapidly locate the position by homology alignment, provided that the 
 region has been sequenced. This search will find close members of the gene
 family, as well as assembly duplication artifacts. An entire set of query sequences can 
@@ -268,7 +268,7 @@ TARGET=_blank>Troubleshooting Annotation Display Problems</A>.
 <P>
 <B>Viewing genome data as text</B><BR> 
 The 
-<A HREF="http://genome.cse.ucsc.edu/goldenPath/hgText.html" TARGET=_blank>Table Browser</A>,
+<A HREF="http://genome.ucsc.edu/goldenPath/hgText.html" TARGET=_blank>Table Browser</A>,
 a portal to the underlying open source <A
 HREF="http://www.MySQL.com" TARGET=_blank>MySQL</A> relational database driving the Genome
 Browser, displays genomic data as columns of text rather than as
@@ -299,13 +299,13 @@ on an unfinished chromosome may change from one assembly to the next as
 gaps are filled, artifactual duplications are reduced, and strand orientations
 are corrected.  The Genome Browser offers a tool that can correctly 
 convert coordinates between different assembly releases. To access the <A
-HREF="http://genome.cse.ucsc.edu/cgi-bin/hgCoordConv" TARGET=_blank>conversion
+HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv" TARGET=_blank>conversion
 tool</A>, click the Convert link on the top menu bar
 on the Genome Browser window.
 <P>
 To ensure uninterrupted browser services for your research during UCSC server 
 maintenance and power outages, bookmark a geographically convenient 
-<A HREF="http://genome.cse.ucsc.edu/mirror.html" TARGET=_blank>mirror</A> site that replicates the 
+<A HREF="http://genome.ucsc.edu/mirror.html" TARGET=_blank>mirror</A> site that replicates the 
 UCSC genome browser.
 <P>
 Bear in mind that the Genome Browser cannot outperform the underlying quality of 
@@ -406,6 +406,11 @@ display conventions:<BR>
 	chromosomal location of the sequence in the organism's genome, as shown by the
 	Chromosome Color Key below the annotation track window.</TD></TR>
 
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Wiggle tracks:</B> 
+	These tracks plot a continuous function along a chromosome. Data is 
+	displayed in windows of a set number of bp in width. 
+	The score for each window is given on a logarithmic scale, called the 
+	<I>L-score</I>.  The L-scores display as "mountain ranges".</TD></TR>
 </TABLE> 
 <P>
 <B>Changing the display mode of an individual annotation track</B><BR>
@@ -571,7 +576,7 @@ Some common uses of BLAT include:
 To locate a nucleotide or protein within a genome using BLAT: 
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
-	Open the <A HREF="http://genome.cse.ucsc.edu/cgi-bin/hgBlat?command=start" 
+	Open the <A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat?command=start" 
 	TARGET=_blank>BLAT Search Genome page</A> by clicking the BLAT link on the top 
 	blue menu bar of any of the Genome Browser pages.</TD></TR> 
 
@@ -629,12 +634,12 @@ start coordinate, paste in the highest chromosome end coordinate from the list o
 matches, then click the <I>Jump</I> button. 
 <P><B>Creating a custom annotation track from BLAT output</B><BR>
 To make a custom track directly from BLAT, select the 
-<A HREF="http://genome.cse.ucsc.edu/goldenPath/help/customTrack.html#PSL">PSL format</A>
+<A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#PSL">PSL format</A>
 output option. The resulting PSL track can be uploaded into the Genome Browser by 
 pasting it into the <I>Add Your Own Tracks</I> section at the bottom of the Browser 
 Gateway page.
 <P><B>Using BLAT for large jobs or commercial use</B><BR>
-The BLAT servers are <A HREF="http://genome.cse.ucsc.edu/mirror.html"
+The BLAT servers are <A HREF="http://genome.ucsc.edu/mirror.html"
 TARGET=_blank>mirrored</A> at several institutions to ensure continuous availability. 
 For large batch jobs and internal parameter changes, it is best to install
 command line BLAT on your own Linux server. Sources and executables are free for
@@ -709,7 +714,7 @@ To display a table, follow these steps:
 	Choose one of the options from either the <I>Positional tables</I> or
 	<I>Non-positional tables</I> lists. Positional tables are listed by their symbolic names. For a
 	complete description of the tables, refer to the documentation on the 
-	<A HREF="http://genome.cse.ucsc.edu/goldenPath/gbdDescriptions.html"
+	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html"
 	TARGET=_blank>Genome Browser database</A>.
 	</TD></TR>
 
@@ -887,7 +892,7 @@ acknowledge the contributor(s) of the data you use.
 Genome data can be downloaded in two different ways:
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Via the Downloads link:</B> Click the
-	<A HREF="http://hgwdev-learithe.cse.ucsc.edu/downloads.html"
+	<A HREF="http:/genome.ucsc.edu/downloads.html"
 	TARGET=_blank>Downloads</A> link on the left side bar on the UCSC 
 	Genome Bioinformatics home page to display a list of all database directories 
 	available for 
@@ -900,7 +905,7 @@ Genome data can be downloaded in two different ways:
 	ftp:</B>The UCSC Genome Bioinformatics ftp site contains download
 	directories for all genome versions currently accessible in the
 	Genome Browser. The ftp command
-	<tt>ftp://genome.cse.ucsc.edu/goldenPath/</tt> will take you to a
+	<tt>ftp://genome.ucsc.edu/goldenPath/</tt> will take you to a
 	directory that contains the genome download directories. 
 	</TD></TR>
 
@@ -1142,8 +1147,8 @@ that correspond to the feature names in your web page.
 
 <P><B><I>Example:</I></B><BR>
 Here is an example of a file in which the <I>url</I> attribute has been set to
-point to the file <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/clones.html"
-TARGET=_blank>http://genome.cse.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
+point to the file <A HREF="http://genome.ucsc.edu/goldenPath/help/clones.html"
+TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
 appended to the end of the file name in the example points to the HTML NAME tag within the file that 
 matches the name of the feature (cloneA, cloneB, etc.). 
 NOTE: The track line in this example has been split over 3 lines for 
@@ -1154,7 +1159,7 @@ the browser, you must remove the line breaks to display the track successfully.
 browser hide all
 track name=clones description="Clones" visibility=2
 color=0,128,0 useScore=1 
-url="http://genome.cse.ucsc.edu/goldenPath/help/clones.html#$$"
+url="http://genome.ucsc.edu/goldenPath/help/clones.html#$$"
 chr22 1000 5000 cloneA 960 
 chr22 2000 6000 cloneB 200 
 chr22 5000 9000 cloneC 700 
@@ -1191,8 +1196,8 @@ coordinates. Examples of this include: position=chr22, position=chr22:15916196-3
 of the form <tt>hgt.customText=URL</tt>, where
 <I>URL</I> points to the annotation file on your website. An example of an
 annotation file URL is <font color="000099"><A
-HREF="http://genome.cse.ucsc.edu/goldenPath/help/test.bed"
-TARGET=_blank>http://genome.cse.ucsc.edu/goldenPath/help/test.bed</A></font>.  
+HREF="http://genome.ucsc.edu/goldenPath/help/test.bed"
+TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.  
 </UL>
 
 <P>Combine the above pieces of information into a URL of the following
@@ -1207,12 +1212,12 @@ human genome (hg11), and will display the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 
 <font color="000099"><A HREF="
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome.cse.ucsc.edu/goldenPath/help/test.bed"
-TARGET=_blank><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome.cse.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
+TARGET=_blank><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
 
 <P>If you'd like to share your annotation track with a broader audience, send the URL for your track - along with a description of 
 the format, methods, and data used - to the UCSC Genome mailing list 
-<A HREF="mailto:genome@cse.ucsc.edu">genome@cse.ucsc.edu</A>.</P>
+<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>.</P>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -1261,7 +1266,7 @@ and using the tracks displayed in the Genome Browser track window, see the secti
 	Track data can be viewed equivalently in columns as text tables using
 	the <A HREF="#TableBrowser">Table Browser</A>. </TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<A HREF="http://genome.cse.ucsc.edu/goldenPath/credits.html">Credit</A>
+	<A HREF="http://genome.ucsc.edu/goldenPath/credits.html">Credit</A>
 	goes to many individuals and institutions for generously contributing
 	the tracks. For specific information about the contributors to a given track,
 	look at the track's description page.</TD></TR>  
@@ -1295,6 +1300,8 @@ displayed.
 	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE>
+
+
 
 <P><B>Assembly</B><BR>
 This track shows the draft assembly of the human genome. This assembly merges
@@ -2091,7 +2098,7 @@ L-score of 3 means a 1/1000 probability, etc. The L-scores display as
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
-	The L-scores in this track display as "mountain ranges". 
+	This track uses the display conventions for wiggle tracks.
 	</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track filter:</I></B> 
@@ -2184,7 +2191,7 @@ cancer drug screen</A>.
 	<B><I>Display conventions:</I></B>
 	To understand the track, experiment with it set to 
 	full mode but other tracks (except known genes) hidden, while reading its
-	<A HREF="http://genome.cse.ucsc.edu/cgi-bin/hgTrackUi?hgsid=1017057&c=chr3&g=nci60"> 
+	<A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=1017057&c=chr3&g=nci60"> 
 	filter page</A>. Each column of colored boxes represents variation in 
 	transcript levels for a given cDNA across array experiments; each row 
 	represents the measured transcript levels for all genes in a single sample. 
@@ -2382,9 +2389,11 @@ identity to be kept.
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
-	This track uses the display conventions for known genes and gene predictions 
-	tracks.
-	Non-coding RNA genes have their own track in some assemblies. </TD></TR>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks. Non-coding RNA genes have their own track in some 
+	assemblies. The color shading indicates the level of review that the 
+	RefSeq record has undergone: predicted (light), provisional (medium), 
+	reviewed (dark). </TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display provides provides links to the 
@@ -2659,6 +2668,26 @@ indices for mouse, rat, cow, and pig also contribute to this track.
 	<I>tigrGeneIndex</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Transcriptome</B><BR>
+This track shows transcriptome data for chromosomes 21 and 22 from Affymetrix. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for wiggle tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD> 
+	<B><I>Track details:</I></B> 
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyTranscriptome</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#sample9"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
