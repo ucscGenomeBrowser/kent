@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.73 2004/09/27 18:15:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.74 2004/09/27 18:19:19 kent Exp $";
 
 
 void usage()
@@ -49,7 +49,6 @@ struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
-boolean inHtml;		/* Set to TRUE if in a html (as opposed to text) page. */
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -85,7 +84,6 @@ static void vaHtmlOpen(char *format, va_list args)
 {
 puts("Content-Type:text/html\n");
 cartVaWebStart(cart, format, args);
-inHtml = TRUE;
 }
 
 void htmlOpen(char *format, ...)
@@ -274,7 +272,7 @@ char retAddr[512];
 char position[512];
 safef(retAddr, sizeof(retAddr), "%s", "../cgi-bin/hgTables");
 hgp = findGenomePosWeb(range, &region->chrom, &region->start, &region->end,
-	cart, !inHtml, retAddr);
+	cart, TRUE, retAddr);
 if (hgp == NULL || hgp->singlePos == NULL)
     {
     errAbort("Please go back and try another position");
