@@ -4867,7 +4867,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
  //   if( (x2-x1) > 0 && (y2-y1) > 0 )
  //   mgDrawBox(mg, x1, y1, x2-x1, y2-y1, color);
     //
-	drawScaledBox(mg, s+1, prevEnd, scale, xOff, y, 1, shadesOfSea[3]);
+	drawScaledBox(mg, s+1, prevEnd, scale, xOff, y-e+s+10, 1, shadesOfSea[3]);
 
 	}
 
