@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.118 2003/11/22 06:11:28 daryl Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.119 2003/11/23 15:12:51 braney Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3066,8 +3066,8 @@ if (startOffset != NULL)
 	endOffset = trimSpaces(endOffset);
 	if ((isdigit(startOffset[0])) && (isdigit(endOffset[0])))
 	    {
-	    iStart = atoi(startOffset)-1;
-	    iEnd = atoi(endOffset);
+	    iStart = atoi(stripCommas(startOffset))-1;
+	    iEnd = atoi(stripCommas(endOffset));
 	    relativeFlag = TRUE;
 	    query = buf;
 	    }
