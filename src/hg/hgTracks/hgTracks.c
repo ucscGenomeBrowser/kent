@@ -5204,8 +5204,11 @@ lf->grayIx = grayIx;
 if (nameGetsPos)
     {
     char buf[256];
+    snprintf(buf, sizeof(buf), "%d", chain->id);
+#ifdef OLD
     snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", chain->qName, chain->qStart, chain->qEnd,
     	chain->tName, chain->tStart, chain->tEnd);
+#endif /* OLD */
     lf->extra = cloneString(buf);
     snprintf(lf->name, sizeof(lf->name), "id %d %s %dk", chain->id, chain->qName, chain->qStart/1000);
     }

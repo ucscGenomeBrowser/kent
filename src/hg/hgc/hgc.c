@@ -89,6 +89,7 @@
 #include "axtInfo.h"
 #include "jaxQTL.h"
 #include "hgSeq.h"
+#include "chain.h"
 
 char mousedb[] = "mm1";
 
@@ -4861,33 +4862,50 @@ freez(&cgiItem);
 void chainClick(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable, char *otherDb)
 {
-int left = cartIntExp( cart, "l" );
-int right = cartIntExp( cart, "r" );
+int left = cartIntExp( cart, "l" );   /* This is in the global winStart. */
+int right = cartIntExp( cart, "r" );  /* This is in the global winEnd. */
 int start = cartIntExp( cart, "o" );
 int end = cartIntExp( cart, "t" );
-char *cgiItem = cgiEncode(item);
-char *name = cartOptionalString(cart, "i");
-char tName[128]  ="xxxxxx", qName[128] = "xxxxxx";
-int tStart = 0, tEnd = 0, qStart = 0, qEnd = 0, qNum = 0, tNum = 0;
-char otherString[128];
+char *cgiItem = cgiEncode(item);	
+char chrom[128]  ="xxxxxx";
 char *thisOrg = hOrganism(database);
+char table[64];
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int binOffset;
+struct chain chain;
+int qs, qe;
 
-    cartWebStart(cart, tdb->longLabel);
-    sscanf(name,"%3s%d:%d-%d %3s%d:%d-%d", qName, &qNum, &qStart, &qEnd, tName, &tNum, &tStart, &tEnd);
-   printf("<B>%s position:</B> %s%d:%d-%d</a>  size: %d <BR>\n",
-        thisOrg, tName, tNum, tStart+1, tEnd, tEnd-tStart);
-   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%d%%3A%d-%d\">%s:%d-%d</a>  size: %d<BR>\n",
-        otherOrg, otherDb, qName, qNum, qStart+1, qEnd, qName, qStart+1, qEnd, qEnd - qStart);
-
-   /*
-printf("<B>%s size:</B> %d<BR>\n", otherOrg, qEnd - qStart);
-    sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", tStart, 
-    pslTableName, otherOrg, "chromInfo" , otherDb );
+if (!hFindSplitTable(seqName, tdb->tableName, table, &binOffset))
+    errAbort("No %s track in database", tdb->tableName);
+snprintf(query, sizeof(query), 
+	"select * from %s where id = %s", table, item);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Can't find %s in %s", item, table);
+chainStaticLoad(row + binOffset, &chain);
+printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
+    thisOrg, chain.tName, chain.tStart+1, chain.tEnd, chain.tEnd-chain.tStart);
+printf("<B>strand:</B> %c<BR>\n", chain.qStrand);
+if (chain.qStrand == '-')
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, tName);
-    printf("View details of parts of alignment within browser window.</A><BR>\n");
+    qs = chain.qSize - chain.qEnd+1;
+    qe = chain.qSize - chain.qStart;
     }
-    */
+else
+    {
+    qs = chain.qStart+1;
+    qe = chain.qEnd;
+    }
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>  size: %d<BR>\n",
+    otherOrg, otherDb, chain.qName, qs, qe, chain.qName, 
+    qs, qe, chain.qEnd - chain.qStart);
+printf("<B>chain id:</B> %s<BR>\n", item);
+printf("<B>score:</B> %1.0f<BR>\n", chain.score);
+
 /*
 if (hTableExists("axtInfo"))
     {
@@ -4900,6 +4918,8 @@ printf("</UL>\n");
 */
 printTrackHtml(tdb);
 freez(&cgiItem);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void doBlatMus(struct trackDb *tdb, char *item)
@@ -4945,6 +4965,7 @@ void chainClickHandler(struct trackDb *tdb, char *item)
 {
 chainClick(tdb, item, "Mouse", "chromInfo", "mm2");
 }
+
 void netAlignClickHandler(struct trackDb *tdb, char *item)
 /* Put up details of one netted alignment */
 {
