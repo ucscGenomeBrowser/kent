@@ -3517,3 +3517,16 @@ o Adjust drawing parameters for Proteome Browser stamps
 o Perform preliminary review of Proteome Browser for rn3
 
 o Notify QA for formal review, when all PB build steps done.
+
+#  miRNA track (DONE - 2004-05-04 - Hiram)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    ssh hgwdev
+    mkdir /cluster/data/rn3/bed/miRNA
+    cd /cluster/data/rn3/bed/miRNA
+    wget --timestamping \
+    "ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/rno_rgsc3_1.*"
+    grep -v "^track " rno_rgsc3_1.bed | sed -e "s/ /\t/g" > rn3.bed
+    hgLoadBed rn3 miRNA rn3.bed
+    # entry in trackDb/trackDb.ra already there

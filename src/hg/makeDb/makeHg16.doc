@@ -7711,16 +7711,37 @@ cat > wigZoom1K.csh << 'EOF'
     rm up.bed
     end
 
-#  miRNA track (DONE - 2004-03-02 - Hiram)
+
+#  miRNA track (DONE - 2004-05-04 - Hiram)
     #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
     #	and Michel.Weber@ibcg.biotoul.fr
     #	notify them if this assembly updates to renew this track
-    mkdir /cluster/data/hg16/bed/miRNA
-    cd /cluster/data/hg16/bed/miRNA
+    ssh hgwdev
+    mkdir /cluster/data/rn3/bed/miRNA
+    cd /cluster/data/rn3/bed/miRNA
     wget --timestamping \
-    "http://www.sanger.ac.uk/Software/Rfam/mirna/data/ucsc_human_mir_track.txt"
-    grep "^chr" ucsc_human_mir_track.txt | sed -e "s/ /\t/g" > human.mir.bed
-    hgLoadBed hg16 miRNA human.mir.bed
+    hgLoadBed rn3 miRNA rn3.bed
+    # entry in trackDb/trackDb.ra already there
+
+#  miRNA track (UPDATED - 2004-05-04 - Hiram)
+    #	(first version done 2004-03-02)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    cd /cluster/data/hg16/bed
+    mv miRNA miRNA.2004_03_02
+    mkdir miRNA
+    cd miRNA
+    wget --timestamping \
+    "ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/hsa_ncbi34.*"
+    grep -v "^track " hsa_ncbi34.bed | sed -e "s/ /\t/g" > hg16.bed
+    #	check existing track for comparison after update load
+    #	featureBits hg16 miRNA
+    #	15385 bases of 2865248791 (0.001%) in intersection
+    hgLoadBed hg16 miRNA hg16.bed
+    #	featureBits hg16 miRNA
+    #	16923 bases of 2865248791 (0.001%) in intersection
+
     # added an entry to trackDb/trackDb.ra:  (good for Mm4 and Ce1 too)
 track miRNA
 shortLabel miRNA
@@ -7734,7 +7755,7 @@ type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
     #	Note the useScore item.  This colors plus strand items in black
     #	and minus strand items in gray.  A rarely used option.
-    #	This same track is in Mm4 and Ce1 too.  Added
+    #	This same track is in Rn3, Mm4 and Ce2 too.  Added
     #	findBedPos(query, hgp, "miRNA");
     #	to lib/hgFind.c to allow searching for these items.
 

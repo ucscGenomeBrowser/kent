@@ -1699,3 +1699,21 @@ zip -j est.zip est.fa
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats. 
 
+
+#  miRNA track (DONE - 2004-05-04 - Hiram)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    ssh hgwdev
+    mkdir /cluster/data/ce2/bed/miRNA
+    cd /cluster/data/ce2/bed/miRNA
+    wget --timestamping \
+    "ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/cel_ws120.*"
+    grep -v "^track " cel_ws120.bed | sed -e "s/ /\t/g" > ce2.bed
+    hgLoadBed ce2 miRNA ce2.bed
+    # entry in trackDb/trackDb.ra already there
+    #	Compare with Ce1:
+    #	featureBits ce1 miRNA
+    #	10329 bases of 100277784 (0.010%) in intersection
+    #	featureBits ce2 miRNA
+    #	11382 bases of 100291761 (0.011%) in intersection

@@ -3911,18 +3911,27 @@ hgsql \
  -e 'update gdbPdb set proteomeDb = "proteins040115" where genomeDb = "mm4";' \
         -h genome-testdb hgcentraltest
 
-#  miRNA track (DONE - 2004-03-02 - Hiram)
+#  miRNA track (UPDATED - 2004-05-04 - Hiram)
+    #	(first version done 2004-03-02)
     #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
     #	and Michel.Weber@ibcg.biotoul.fr
     #	notify them if this assembly updates to renew this track
-    mkdir /cluster/data/mm4/bed/miRNA
-    cd /cluster/data/mm4/bed/miRNA
+    #  for the update, save the previous version
+    cd /cluster/data/mm4/bed
+    mv miRNA miRNA.2004_03_02
+    mkdir miRNA
+    cd miRNA
     wget --timestamping \
-    "http://www.sanger.ac.uk/Software/Rfam/mirna/data/ucsc_mouse_mir_track.txt"
-    grep "^chr" ucsc_mouse_mir_track.txt | sed -e "s/ /\t/g" > mouse.mir.bed
-    hgLoadBed mm4 miRNA mouse.mir.bed
-    # entry in trackDb/trackDb.ra already there for same track in Hg16
-    #	see makeHg16.doc for more comments on this
+    "ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/mmu_ncbi32.*"
+    grep -v "^track " mmu_ncbi32.bed | sed -e "s/ /\t/g" > mm4.bed
+    #  check existing track before update
+    #	featureBits mm4 miRNA
+    #	17260 bases of 2627444668 (0.001%) in intersection
+    hgLoadBed mm4 miRNA mm4.bed
+    # entry in trackDb/trackDb.ra already there
+    #	and verify similar numbers after:
+    #	featureBits mm4 miRNA
+    #	17782 bases of 2627444668 (0.001%) in intersection
 
 #  gc5Base wiggle TRACK (DONE - 2004-04-07 - Hiram)
     # Perform a gc count with a 5 base
