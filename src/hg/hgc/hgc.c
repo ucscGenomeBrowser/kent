@@ -671,7 +671,7 @@ else if (gp->strand[0] == '-')
     nextStart = (gp->exonEnds[nextEndIndex]);
     nextEnd = (gp->exonStarts[nextEndIndex]);
     tStart =  gp->cdsEnd-1 ;
-    tEnd = gp->cdsStart+1 ;
+    tEnd = gp->cdsStart ;
     posStrand=FALSE;
     if (axtList != NULL)
         tPtr = axtList->tEnd;
@@ -4828,6 +4828,98 @@ puts(
    "mRNA associated with this gene in the main browser window.</P>");
 }
 
+void doViralProt(struct trackDb *tdb, char *geneName)
+/* Handle click on known viral protein track. */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+char *track = tdb->tableName;
+char *transName = geneName;
+struct knownMore *km = NULL;
+boolean anyMore = FALSE;
+boolean upgraded = FALSE;
+char *knownTable = "knownInfo";
+boolean knownMoreExists = FALSE;
+struct psl *pslList = NULL;
+
+cartWebStart(cart, "Viral Gene");
+printf("<H2>Viral Gene %s</H2>\n", geneName);
+        printf("<A test HREF=");
+        printSwissProtProteinUrl(stdout, geneName);
+        printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+
+pslList = getAlignments(conn, "chr1_viralProt", geneName);
+htmlHorizontalLine();
+printf("<H3>Gene Alignments</H3>");
+printAlignments(pslList, start, "htcBlatXeno", "chr1_viralProt", geneName);
+
+if (hTableExists("knownMore"))
+    {
+    knownMoreExists = TRUE;
+    knownTable = "knownMore";
+    }
+    
+if (knownMoreExists)
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    struct sqlConnection *conn = hAllocConn();
+
+    upgraded = TRUE;
+    sprintf(query, "select * from knownMore where transId = '%s'", transName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+       {
+       km = knownMoreLoad(row);
+       }
+    sqlFreeResult(&sr);
+
+    hFreeConn(&conn);
+    }
+
+if (km != NULL)
+    {
+    geneName = km->name;
+    if (km->hugoName != NULL && km->hugoName[0] != 0)
+	medlineLinkedLine("Name", km->hugoName, km->hugoName);
+    if (km->aliases[0] != 0)
+	printf("<B>Aliases:</B> %s<BR>\n", km->aliases);
+    if (km->omimId != 0)
+	{
+	printf("<B>OMIM:</B> <A HREF=\"");
+	printEntrezOMIMUrl(stdout, km->omimId);
+	printf("\" TARGET=_blank>%d</A><BR>\n", km->omimId);
+	}
+    if (km->locusLinkId != 0)
+        {
+	printf("<B>LocusLink:</B> ");
+	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
+		km->locusLinkId);
+	printf("%d</A><BR>\n", km->locusLinkId);
+	}
+    anyMore = TRUE;
+    }
+/*
+if (geneName != NULL) 
+    {
+    medlineLinkedLine("Symbol", geneName, geneName);
+    printGeneLynxName(geneName);
+    printf("<B>GeneCards:</B> ");
+    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
+	    geneName);
+    printf("%s</A><BR>\n", geneName);
+    anyMore = TRUE;
+    }
+*/
+if (anyMore)
+    htmlHorizontalLine();
+
+/*
+geneShowCommon(transName, tdb, "genieKnownPep");
+*/
+}
+
 void doSPGene(struct trackDb *tdb, char *mrnaName)
 /* Process click on a known gene. */
 {
@@ -5590,7 +5682,7 @@ if (sqlTableExists(conn, table))
         printf("<A HREF=");
         sprintf(query, "%s", parts[1]);
         printSwissProtProteinUrl(stdout, query);
-        printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+        printf(" TARGET=_blank>Jump to SwissProt %s </A> " ,geneName);
         }
     printf(" %s <BR><BR>Alignment Information:<BR><BR>%s<BR>", clone, hom.description);
 	}
@@ -10739,6 +10831,10 @@ else if (sameWord(track, "mgcGenes"))
 else if (sameWord(track, "genieKnown"))
     {
     doKnownGene(tdb, item);
+    }
+else if (sameWord(track, "viralProt"))
+    {
+    doViralProt(tdb, item);
     }
 else if (sameWord(track, "softberryGene"))
     {
