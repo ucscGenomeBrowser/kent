@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.433 2003/06/17 06:53:45 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.434 2003/06/17 15:31:35 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1715,7 +1715,7 @@ if (net->chainId != 0)
 	}
     else
 	{
-	printf("Too see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
+	printf("To see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
 	}
     chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
