@@ -58,7 +58,7 @@ type psl xeno hg15
 otherDb hg15
 
 track blastzHg15
-shortLabel Human All
+shortLabel Human All 15
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 114
@@ -310,7 +310,7 @@ url http://www.genoscope.cns.fr/comparative?premier=Rat&deuxieme=Tetraodon&posit
 urlLabel Exofish Ecotig Display Link:
 
 track blastzHg17
-shortLabel Hg17 Blastz
+shortLabel Human Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 130
@@ -322,7 +322,7 @@ type psl xeno hg17
 otherDb hg17
 
 track blastzBestHg17
-shortLabel Hg17 Best
+shortLabel Human Best
 longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 131
@@ -334,7 +334,7 @@ type psl xeno hg17
 otherDb hg17
 
 track blastzTightHg17
-shortLabel Hg17 Tight
+shortLabel Human Tight
 longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 132
@@ -346,7 +346,7 @@ type psl xeno hg17
 otherDb hg17
 
 track chainHg17
-shortLabel Hg17 Chain 
+shortLabel Human Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 133
@@ -358,7 +358,7 @@ type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel Hg17 Net
+shortLabel Human Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134
@@ -368,7 +368,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track ensRatMusHom
-shortLabel Hg17 Synteny
+shortLabel Human Synteny
 longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 135
@@ -379,7 +379,7 @@ type bed 6+
 otherDb hg17
 
 track syntenyNetHg17
-shortLabel Hg17 Syntenic Net
+shortLabel Human Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 136
