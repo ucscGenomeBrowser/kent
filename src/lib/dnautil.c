@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.34 2005/02/10 19:48:33 hiram Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.35 2005/02/10 20:00:20 hiram Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -40,12 +40,12 @@ struct codonTable codonTable[] =
 
     {"tat", 'Y', 'Y',},
     {"tac", 'Y', 'Y',},
-    {"taa", 0, 'W',},
+    {"taa", 0, 0,},
     {"tag", 0, 0,},
 
     {"tgt", 'C', 'C',},
     {"tgc", 'C', 'C',},
-    {"tga", 0, 0,},
+    {"tga", 0, 'W',},
     {"tgg", 'W', 'W',},
 
 
