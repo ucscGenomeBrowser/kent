@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.9 2004/03/24 04:20:51 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.10 2004/03/24 23:15:10 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -215,7 +215,7 @@ else
                         chainHash);
     ct = liftOverBed(
                 oldTn.forCgi, chainHash, LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
-                                 mapped, unmapped, &errCt);
+                                 FALSE, mapped, unmapped, &errCt);
     webNewSection("Results");
     if (ct)
         {
