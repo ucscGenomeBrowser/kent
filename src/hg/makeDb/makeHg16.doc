@@ -8056,7 +8056,6 @@ EOF
 #exonArrows on
 #type bed 12
 
-<<<<<<< makeHg16.doc
 
 # PREP FOR LIFTOVER CHAINS TO HG16
 #    This is doc'ed in bed/bedOver/liftOver.doc
