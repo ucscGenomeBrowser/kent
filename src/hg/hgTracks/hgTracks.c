@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.512 2003/05/08 23:19:06 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.513 2003/05/09 01:11:00 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -3866,6 +3866,9 @@ boolean isFull = (vis == tvFull);
 Color brown = color;
 Color gold = tg->ixAltColor;
 Color col;
+Color pink = 0;
+Color pink1 = vgFindColorIx(vg, 240, 140, 140);
+Color pink2 = vgFindColorIx(vg, 240, 100, 100);
 int ix = 0;
 double scale = scaleForPixels(width);
 
@@ -3888,8 +3891,10 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
     x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
     w = x2-x1;
     color =  ((ix&1) ? gold : brown);
+    pink = ((ix&1) ? pink1 : pink2);
     if (w < 1)
 	w = 1;
+    if (sameString(frag->type, "A")) color = pink;
     vgBox(vg, x1, y, w, heightPer, color);
     if (isFull)
 	y += lineHeight;
@@ -3921,6 +3926,16 @@ else
     	font, color, vis);
 }
 
+Color goldColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw known gene in. */
+{
+struct agpFrag *frag = item;
+Color pink = vgFindColorIx(vg, 240, 140, 140);
+Color color = (sameString(frag->type, "A") ? pink : tg->ixColor);
+
+return color;
+}
+
 void goldMethods(struct track *tg)
 /* Make track for golden path */
 {
@@ -3930,6 +3945,7 @@ tg->drawItems = goldDraw;
 tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = goldName;
 tg->mapItemName = goldName;
+tg->itemColor = goldColor;
 }
 
 
