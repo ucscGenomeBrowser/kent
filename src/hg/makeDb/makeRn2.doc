@@ -168,7 +168,7 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE 02/11/03)
       | hgsql rn2
 
 
-REPEAT MASKING (DONE 02/06/03)
+REPEAT MASKING (DONE 03/06/03)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -245,12 +245,13 @@ MAKE LIFTALL.LFT (DONE 02/05/03)
     cd ~/rn2
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
-VERIFY REPEATMASKER RESULTS (DONE 02/06/03)
+VERIFY REPEATMASKER RESULTS (DONE 03/06/03)
 
     # Run featureBits on rn2 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits rn2 rmsk
-    # --> 1058156286 bases of 2764911379 (38.271%) in intersection
+    # --> 1100534407 bases of 2764911379 (39.804%) in intersection
+    # --> (orig run, July libs) 1058156286 bases of 2764911379 (38.271%) in intersection
     featureBits rn1 rmsk
     # --> 1081814344 bases of 2852382926 (37.927%) in intersection
 
@@ -372,10 +373,10 @@ PROCESS SIMPLE REPEATS INTO MASK (DONE 02/07/03)
     end
 
 
-MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 02/07/03)
+MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 03/06/03)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
-    # TRF as well, so do this after the "PREPARING SEQUENCE" step above.
+    # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
     ssh eieio
     cd ~/rn2
     #- Soft-mask (lower-case) the contig and chr .fa's
@@ -385,16 +386,20 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 02/07/03)
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.sh
     # Copy the masked contig fa to /scratch:
-    rm -f /scratch/hg/rn2/trfFa
+    ssh kkstore
+    rm -rf /scratch/hg/rn2/trfFa
     mkdir -p /scratch/hg/rn2/trfFa
     cp -p ~/rn2/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /scratch/hg/rn2/trfFa
 
 
-MAKE DOWNLOADABLE SEQUENCE FILES (DONE 02/07/03)
+MAKE DOWNLOADABLE SEQUENCE FILES (DONE 03/06/03)
     ssh eieio
     cd ~/rn2
     #- Build the .zip files
     ./jkStuff/zipAll.sh |& tee zipAll.log
+    mkdir zip
+    mv *.zip* zip
+    cd zip
     #- Look at zipAll.log to make sure all file lists look reasonable.  
     #- Check zip file integrity:
     foreach f (*.zip)
@@ -405,19 +410,19 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE 02/07/03)
 
     #- Copy the .zip files to hgwdev:/usr/local/apache/...
     ssh hgwdev
-    cd ~/rn2
-    ./jkStuff/cpToWeb.sh
+    cd ~/rn2/zip
+    ../jkStuff/cpToWeb.sh
     cd /usr/local/apache/htdocs/goldenPath/rnJan2003
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
-PREPARE CLUSTER FOR BLASTZ RUN (DONE 02/07/03)
+PREPARE CLUSTER FOR BLASTZ RUN (DONE 03/06/03)
     # This needs to be done after trf-masking and nib generation.
     ssh kkstore
     # Extract lineage-specific repeats using Arian Smit's script:
     mkdir -p ~/rn2/bed/linSpecRep
     cd ~/rn2/bed/linSpecRep
-    foreach f (~/rn2/*/*.out)
+    foreach f (~/rn2/*/chr*.out)
         ln -sf $f .
     end
     /cluster/bin/scripts/rodentSpecificRepeats.pl *.out
@@ -583,7 +588,7 @@ LOAD MRNA DATA (DONE 02/09/03)
       /cluster/store2/mrna.133/org/Rattus_norvegicus/est.ra
 
 
-PRODUCING ESTORIENTINFO TABLE (IN PROGRESS)
+PRODUCING ESTORIENTINFO TABLE (DONE 03/06/03)
 
 This table is needed for proper orientation of ESTs in the
 browser.  Many will appear on the wrong strand without it.
@@ -592,16 +597,17 @@ as so:
      ssh eieio
      cd ~/rn2/bed/est
      pslSortAcc nohead contigs /cluster/store2/temp contig.psl
+     ssh kkstore
      mkdir /mnt/scratch/hg/rn2/est
      cd ~/rn2/bed/est
      cp -r contigs /mnt/scratch/hg/rn2/est
 
 Wait for these to finish.
-     cd ..
-     mkdir estOrientInfo
-     cd estOrientInfo
+     mkdir -p ~/rn2/bed/estOrientInfo
+     cd ~/rn2/bed/estOrientInfo
      mkdir ei
      ls -1S /mnt/scratch/hg/rn2/est/contigs/* > psl.lst
+     echo placeholder > single
      cp ~/rn1/bed/estOrientInfo/gsub .
 Update gsub to refer to rat contig sequence currently on
 /mnt//scratch/hg/rn2/trfFa, and rat ESTs on /mnt/scratch/hg/rn2/est/contigs
@@ -617,31 +623,57 @@ Then run the  job on the cluster
      para check
 If things look good
      para push
-DONE TO HERE
 Wait for this to finish then
      liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
 Load them into database as so:
      ssh hgwdev
      cd ~/rn2/bed/estOrientInfo
-     hgLoadBed rn2 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+     hgLoadBed rn2 estOrientInfo estOrientInfo.bed \
+       -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
      
-CREATE RNACLUSTER TABLE (TODO)
- Make sure that refSeqAli and estOrientInfo tables are made already
- (see above).
+PRODUCING MRNAORIENTINFO TABLE (DONE 03/06/03)
+    ssh eieio
+    cd ~/rn2/bed/mrna
+    pslSortAcc nohead contig /cluster/store2/temp contig.psl
+    ssh kkstore
+    mkdir /mnt/scratch/hg/rn2/mrna
+    cp -r ~/rn2/bed/mrna/contig /mnt/scratch/hg/rn2/mrna
+    mkdir -p ~/rn2/bed/mrnaOrientInfo/oi
+    cd ~/rn2/bed/mrnaOrientInfo
+    ls -1S /mnt/scratch/hg/rn2/mrna/contig/* > psl.lst
+    cp ~/lastRn/bed/mrnaOrientInfo/gsub .
+    echo placeholder > single
+    gensub2 psl.lst single gsub spec
 
-   ssh hgwdev
-   cd ~/rn2/bed
-   mkdir rnaCluster
-   cd rnaCluster
-   mkdir rna est
-   foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Un)
-       clusterRna rn2 rna/chr$i.bed est/chr$i.bed -chrom=chr$i
-       echo done $i
-   end
-   hgLoadBed rn2 rnaCluster est/*.bed
+    ssh kk
+    cd ~/rn2/bed/mrnaOrientInfo
+    para create spec
+    para try, para check, para push, para check,...
+    liftUp mrnaOrientInfo.bed ../../jkStuff/liftAll.lft warn oi/*.tab
+
+    ssh hgwdev
+    cd ~/rn2/bed/mrnaOrientInfo
+    hgLoadBed rn2 mrnaOrientInfo mrnaOrientInfo.bed \
+       -sqlTable=/cluster/home/kent/src/hg/lib/mrnaOrientInfo.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (DONE 02/11/03)
+CREATE RNACLUSTER TABLE (DONE 03/06/03)
+    # Make sure that refSeqAli, estOrientInfo and mrnaOrientInfo tables are 
+    # made already (see above).
+    ssh hgwdev
+    mkdir -p ~/rn2/bed/rnaCluster/chrom
+    cd ~/rn2/bed/rnaCluster
+    foreach i (~/rn2/?{,?})
+      foreach f ($i/chr*.fa)
+        set c = $f:t:r
+        clusterRna rn2 /dev/null chrom/$c.bed -chrom=$c
+        echo done $c
+      end
+    end
+    hgLoadBed rn2 rnaCluster chrom/*.bed
+
+
+PRODUCING GENSCAN PREDICTIONS (TODO - REDO)
     
     # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
     # cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
@@ -830,93 +862,8 @@ TWINSCAN GENE PREDICTIONS (TODO)
     ldHgGene rn2 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
     hgPepPred rn2 generic twinscanPep chr_ptx/chr*-fixed.fa
 
-DOING HUMAN/RAT ALIGMENTS (todo)
 
-o - Download the lower-case-masked assembly and put it in
-    eieio:/cluster/store1/a2ms.
-   
-o - Download the assembled rat genome in lower-case
-    masked form to /cluster/store1/arachne.3/whole.  
-    Execute the script splitAndCopy.csh to chop it
-    into roughly 50M pieces in arachne.3/parts
-o - Set up the para job to do the alignment as so:
-       ssh eieio
-       cd /cluster/store4/rn2
-       mkdir blatRat.phusion
-       cd blatRat.phusion
-       ls -1S /scratch/hg/gs.13/build30/contigTrf/* > human.lst
-       ls -1 /scratch/hg/rn2/trfFa/* > rat.lst
-    Make a file 'gsub' with the following three lines in it
-#LOOP
-/cluster/home/kent/bin/i386/blat -q=dnax -t=dnax {check in line+ $(path2)} {check in line+ $(path1)}  {check out line+ psl/$(root2)_$(root1).psl} -minScore=20 -minIdentity=20 -tileSize=4 -minMatch=2 -oneOff=0 -ooc={check in exists /scratch/hg/h/4.pooc} -qMask=lower -mask=lower
-#ENDLOOP
-    Process this into a para file and launch the first set
-    of jobs (10,000 out of 70,000) as so:
-        gensub2 rat.lst human.lst gsub spec
-        para create spec
-        para push
-    Do a 'para check' after a few minutes and make sure everything is right.
-        para time > time
-
-o - Sort alignments as so 
-       ssh eieio
-       cd /cluster/store4/rn2/blatRat
-       pslCat -dir -check psl | liftUp -type=.psl stdout ../liftAll.lft warn stdin | pslSortAcc nohead chrom /cluster/store2/temp stdin
-o - Get rid of big pile-ups due to contamination as so:
-       cd chrom
-       foreach i (*.psl)
-           echo $i
-           mv $i xxx
-           pslUnpile -maxPile=600 xxx $i
-       rm xxx
-       end
-o - Remove long redundant bits from read names by making a file
-    called subs.in with the following line:
-        gnl|ti^ti
-        contig_^tig_
-    and running the commands
-        cd ~/rat/vsOo33/blatRat.phusion/chrom
-        subs -e -c ^ *.psl > /dev/null
-o - Copy over to network where database is:
-        ssh kks00
-        cd ~/rn2/bed
-        mkdir blatRat
-        mkdir blatRat/ph.chrom600
-        cd !$
-        cp /cluster/store4/rn2/blatRat.phusion/chrom/*.psl .
-o - Rename to correspond with tables as so and load into database:
-       ssh hgwdev
-       cd ~/rn2/bed/blatRat/ph.chrom600
-       foreach i (chr?{,?}{,_random}.psl)
-           set r = $i:r
-           mv $i ${r}_blatRat.psl
-       end
-       hgLoadPsl rn2 *.psl
-o - load sequence into database as so:
-        ssh kks00
-        faSplit about /projects/hg3/rat/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/rat/arachne.3/whole/unplaced
-        ssh hgwdev
-        hgLoadRna addSeq '-abbr=gnl|' rn2 /projects/hg3/rat/arachne.3/whole/unpla*.fa
-        hgLoadRna addSeq '-abbr=con' rn2 /projects/hg3/rat/arachne.3/whole/SET*.mfa
-    This will take quite some time.  Perhaps an hour .
-
-o - Produce 'best in genome' filtered version:
-        ssh kks00
-        cd ~/rat/vsOo33
-        pslSort dirs blatRatAll.psl temp blatRat
-        pslReps blatRatAll.psl bestRatAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
-        pslSortAcc nohead bestRat temp bestRatAll.psl
-        cd bestRat
-        foreach i (chr?{,?}{,_random}.psl)
-           set r = $i:r
-           mv $i ${r}_bestRat.psl
-        end
-o - Load best in genome into database as so:
-        ssh hgwdev
-        cd ~/rat/vsOo33/bestRat
-        hgLoadPsl rn2 *.psl
-
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (DONE 2/12/03 - MATT)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO - REDO)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -1087,7 +1034,7 @@ LOAD BACTIG POSITIONS (DONE 02/18/03)
       -noBin -sqlTable=$HOME/kent/src/hg/lib/bactigPos.sql
 
 
-LOAD CPGISSLANDS (DONE 02/10/03)
+LOAD CPGISSLANDS (DONE 03/06/03)
     ssh eieio
     mkdir -p ~/rn2/bed/cpgIsland
     cd ~/rn2/bed/cpgIsland
@@ -1308,18 +1255,6 @@ LOAD GENIE CLONE BOUNDS (TODO)
        tail +2 chr${c}_cb.bed > chr${c}_cb-fixed.bed
      end
      hgLoadBed rn2 genieBounds *-fixed.bed
-
-LOAD JACKSON LABS QTL (TODO)
-     Carol Bult at Jackson Labs sent us tab-separated QTL info -- 
-     See RT289.  
-     - Reformat QTL info into bed 6 + (really bed 5, no strand).
-       There will be some complaints about lines that are missing 
-       chromStart, chromEnd (they're on MIT Markers that we don't have 
-       in our stsMapRat table...?)
-     cd ~/rn2/bed/qtl
-     ./fixit.pl mgi_qtl.rpt > mgi_qtl.bed
-     hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \
-       rn2 jaxQTL mgi_qtl.bed
 
 LOAD SOFTBERRY GENES (todo)
      - ln -s /cluster/store4/rn2 ~/rn2
