@@ -1210,3 +1210,13 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
+
+track exoniphy
+shortLabel Exoniphy 
+longLabel Exoniphy: Conserved Exon Predictions (Human/Mouse/Rat)
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+exonArrows on
+type bed 12
