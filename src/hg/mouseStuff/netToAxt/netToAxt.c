@@ -11,7 +11,7 @@
 #include "nib.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.12 2003/06/14 07:43:39 kent Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.13 2003/06/21 18:44:30 baertsch Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -31,6 +31,7 @@ errAbort(
   );
 }
 
+#ifdef DUPE // moved to chain.c
 struct hash *chainReadAll(char *fileName)
 /* Read chains into a hash keyed by id. */
 {
@@ -64,6 +65,7 @@ sprintf(nameBuf, "%x", id);
 return hashMustFindVal(hash, nameBuf);
 }
 
+#endif
 
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
@@ -154,7 +156,7 @@ FILE *gapFile = NULL;
 
 if (gapFileName)
     gapFile = mustOpen(gapFileName, "w");
-chainHash = chainReadAll(chainName);
+chainHash = chainReadAllSwap(chainName, qChain);
 while ((net = chainNetRead(lf)) != NULL)
     {
     fprintf(stderr, "Processing %s\n", net->name);
