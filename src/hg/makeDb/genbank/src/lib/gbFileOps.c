@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.9 2004/12/02 10:00:32 genbank Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.10 2005/03/21 05:46:49 markd Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -269,8 +269,7 @@ return res;
 
 time_t gbParseChkDate(char* dateStr, boolean* isOk)
 /* parse a date, in YYYY-MM-DD format, converting it to a unix time (as
- * returned by time()).  Sets isOk to false if an error, does not change
- * if ok */
+ * returned by time()).  Sets isOk to false if an error */
 {
 struct tm tm;
 time_t numTime;
