@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.894 2005/02/08 21:22:57 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.895 2005/02/09 08:23:35 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9117,23 +9117,12 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
-    if (!ct->wiggle)
-	{
-	tg = newCustomTrack(ct);
-	vis = cartOptionalString(cart, tg->mapName);
-	if (vis != NULL)
-	    tg->visibility = hTvFromString(vis);
-	slAddHead(pGroupList, tg);
-	}
-    else
-	{
-	tg = newCustomTrack(ct);
-	vis = cartOptionalString(cart, tg->mapName);
-	if (vis != NULL)
-	    tg->visibility = hTvFromString(vis);
 
-	slAddHead(pGroupList, tg);
-	}
+    tg = newCustomTrack(ct);
+    vis = cartOptionalString(cart, tg->mapName);
+    if (vis != NULL)
+	tg->visibility = hTvFromString(vis);
+    slAddHead(pGroupList, tg);
     }
 }	/*	void loadCustomTracks(struct track **pGroupList)	*/
 
