@@ -236,6 +236,7 @@ void loadSampleIntoLinkedFeature(struct trackGroup *tg);
 
 struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
 
+struct trackGroup *sortGroupList = NULL; /* Used temporarily for sample sorting. */
 static boolean tgLoadNothing(){return TRUE;}
 static void tgDrawNothing(){}
 static void tgFreeNothing(){}
@@ -280,8 +281,8 @@ return tg->height;
 
 
 int updateY( char *name, char *nextName, int lineHeight )
-  /*only increment height when name root (minus the period if
-  *there is one) is different from previous one.
+/* only increment height when name root (minus the period if
+ * there is one) is different from previous one.
   *This assumes that the entries are sorted by name as they would
   *be if loaded by hgLoadSample*/
 {
@@ -1092,9 +1093,9 @@ shades = tg->colorShades;
 
 lf=tg->items;    
 if(lf==NULL) return;
-sprintf( o1, "%s.linear.interp", tg->mapName);
-sprintf( o2, "%s.anti.alias", tg->mapName);
-sprintf( o3, "%s.fill", tg->mapName);
+snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
+snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
+snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
@@ -1119,84 +1120,74 @@ hFactor = (double)heightPer/1000.0;
 //errAbort( "(%s)", lf->name );
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
-
-
-
     for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-
-	    s = sf->start;
-	    e = sf->end;
+	{
+	s = sf->start;
+	e = sf->end;
 
         if( (sf->start - sf->end) == 0 ) /*ignore scores of 0*/
-        {
+	    {
             prevEnd = -1;  /*set so no interpolation where no data*/
             continue;
-        }
-
+	    }
+	
         tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 1000 );
 
         if( -(sf->start - sf->end) < minRange || -(sf->start - sf->end) > maxRange)
-        {
-
+	    {
+	    
             prevEnd = -1;  /*set so no interpolation where no data*/
             continue;
-        }
-
+	    }
+	
         /*
-        if( tmp != -(sf->end - sf->start) )
-        {
-            errAbort( "binning error:  s-e = %d, tmp=%d\n",
-                        sf->end - sf->start, tmp );
-        }
+	  if( tmp != -(sf->end - sf->start) )
+	  {
+	  errAbort( "binning error:  s-e = %d, tmp=%d\n",
+	  sf->end - sf->start, tmp );
+	  }
         */  
         
         //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         ybase = (int)((double)y+hFactor+(double)heightPer);
-
+	
         if (prevEnd > 0)
-	        {
+	    {
             y2 = prevY;
-	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-
+	    x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+	    
             if( (x2-x1) > 0)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
-
-
+		    
+		    
                     if( sameString( aa, "on" )) /*use anti-aliasing*/
                         mgConnectingLine( mg, x1, y1, x2, y2,
-                            shades, ybase, 1, fill );
+					  shades, ybase, 1, fill );
                     else
                         mgConnectingLine( mg, x1, y1, x2, y2,
-                            shades, ybase, 0, fill );
+					  shades, ybase, 0, fill );
                     }
                 }
-
-	        }
-
-
+	    }
+	
         /*draw the points themselves*/
         //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
-        if( fill )
-	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2,
-            ybase-y1-2, shades[3]);
 
+	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
+        if( fill )
+	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2,
+			  ybase-y1-2, shades[3]);
         prevEnd = s;
         prevY = y1;
-
-
-	    }
-
+	
+	
+	}
         if( isFull && lf->next != NULL )
             y += updateY( lf->name, lf->next->name, lineHeight );
-
-
-
     }
 }
 
@@ -6879,18 +6870,18 @@ if (withLeftLabels)
 		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
 	    }
 
-
-    if( sameString( group->mapName, "humMus" ) )
-    {
-        sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
-        sprintf( maxRangeStr, "%g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
-    }
-    else
-    {
-        sprintf( minRangeStr, "%g", whichNum( 1.0, 1.0, 100.0, 1000 ));
-        sprintf( maxRangeStr, "%g", whichNum( 1000.0, 1.0, 100.0, 1000 ));
-    }
-
+	
+	if( sameString( group->mapName, "humMus" ) )
+	    {
+	    sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
+	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+	    }
+	else
+	    {
+	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 1.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    }
+	
 	switch (group->limitedVis)
 	    {
 	    case tvHide:
@@ -6898,80 +6889,89 @@ if (withLeftLabels)
 	    case tvFull:
 		if (withCenterLabels)
 		    y += fontHeight;
-        start = 1;
+		start = 1;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
-            newy = y;
-
-
-            /* Set the clipping rectangle to account for the buttons */
-            mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
-
-            /*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
-            if( !start && group->loadItems == loadSampleIntoLinkedFeature &&
-                group->heightPer > (3 * fontHeight ) )
-                {
-                if( item->next != NULL )
-                    {
-                    newy += updateY( name, group->itemName(group, item->next), itemHeight );
-                    if( newy == y )
-                        continue;
-                    }
-
-                ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-                ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-		        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-			        group->ixAltColor, font, minRangeStr );
-		        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-			        group->ixAltColor, font, maxRangeStr );
-
-		        mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
-                    /* Reset the clipping rectangle to its original proportions */
-                    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
-
-                }
-                else
-                {
-                    newy += itemHeight;
-
-                    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-                    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-		            mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-			            group->ixAltColor, font, minRangeStr );
-		            mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-			            group->ixAltColor, font, maxRangeStr );
-
-		            mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
-                    /* Reset the clipping rectangle to its original proportions */
-                    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
-                }
-
-                start = 0;
-
-               y = newy;
+		    newy = y;
+		    
+		    
+		    /* Set the clipping rectangle to account for the buttons */
+		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+		    
+		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
+		    if(group->loadItems == loadSampleIntoLinkedFeature)
+			{
+			if( !start && group->heightPer > (3 * fontHeight ) )
+			    {
+			    if( item->next != NULL )
+				{
+				newy += updateY( name, group->itemName(group, item->next), itemHeight );
+				if( newy == y )
+				    continue;
+				else
+				    name = group->itemName(group, item->next);
+				}
+			    
+			    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+			    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+			    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+					group->ixAltColor, font, minRangeStr );
+			    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+					group->ixAltColor, font, maxRangeStr );
+			    
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+			    /* Reset the clipping rectangle to its original proportions */
+			    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			    
+			    }
+			else
+			    {
+			    newy += itemHeight;
+			    
+			    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+			    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+			    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+					group->ixAltColor, font, minRangeStr );
+			    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+					group->ixAltColor, font, maxRangeStr );
+			    
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+			    /* Reset the clipping rectangle to its original proportions */
+			    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			    }
+			start = 0;
+			y = newy;
+			}
+		    else
+			{
+			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+                        /* Reset the clipping rectangle to its original proportions */
+			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
+			y += itemHeight;
+			}
 		    }
 		break;
 	    case tvDense:
-
+		
 		if (withCenterLabels)
 		    y += fontHeight;
-
-        /*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
-        if( group->loadItems == loadSampleIntoLinkedFeature &&
-            group->heightPer > (3 * fontHeight ) )
-            {
-
-            ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-            ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+		
+		/*draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
+		if( group->loadItems == loadSampleIntoLinkedFeature &&
+		    group->heightPer > (3 * fontHeight ) )
+		    {
+		    
+		    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+		    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
 		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
-			    group->ixAltColor, font, minRangeStr );
+				group->ixAltColor, font, minRangeStr );
 		    mgTextRight(mg, gfxBorder, ymax, inWid-1, group->lineHeight, 
-			    group->ixAltColor, font, maxRangeStr );
-            }
+				group->ixAltColor, font, maxRangeStr );
+		    }
 		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
-			group->ixColor, font, group->shortLabel);
+			    group->ixColor, font, group->shortLabel);
 		y += group->lineHeight;
 		break;
 	    }
@@ -7090,40 +7090,38 @@ for (group = groupList; group != NULL; group = group->next)
 	    case tvFull:
 		if (withCenterLabels)
 		    y += fontHeight;
-        start = 1;
+		start = 1;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
 		    int height = group->itemHeight(group, item);
-
-            /*wiggle tracks don't always increment height (y-value) here*/
+		    
+		    /*wiggle tracks don't always increment height (y-value) here*/
 		    newy = y;
-            if( !start && group->loadItems == loadSampleIntoLinkedFeature )
-                {
-                if( item->next != NULL )
-                    {
-                    newy += updateY( group->itemName(group, item), 
-                            group->itemName(group, item->next), height );
-                    if( newy == y )
-                        {
-                        start = 0;
-                        continue;
-                        }
-                    }
-                }
-                else
-                    newy += height;
-                start = 0;
-
+		    if( !start && group->loadItems == loadSampleIntoLinkedFeature )
+			{
+			if( item->next != NULL )
+			    {
+			    newy += updateY( group->itemName(group, item), 
+					     group->itemName(group, item->next), height );
+			    if( newy == y )
+				{
+				start = 0;
+				continue;
+				}
+			    }
+			}
+		    else
+			newy += height;
+		    start = 0;
+		    
 		    if (!group->mapsSelf)
 			{
 			mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-			    trackPastTabX,y,trackPastTabWidth,height, group->mapName, 
-			    group->mapItemName(group, item), 
-			    group->itemName(group, item));
+				 trackPastTabX,y,trackPastTabWidth,height, group->mapName, 
+				 group->mapItemName(group, item), 
+				 group->itemName(group, item));
 			}
-            
-            y = newy;
-
+		    y = newy;
 		    }
 		break;
 	    case tvDense:
@@ -7264,6 +7262,28 @@ slReverse(&lfList);
 tg->items = lfList;
 }
 
+int lfNamePositionCmp(const void *va, const void *vb)
+/* Compare based on name, then chromStart, used for
+   sorting sample based tracks. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+int dif;
+char *tgName = NULL;
+if(sortGroupList != NULL)
+    tgName = sortGroupList->shortLabel;
+if(tgName != NULL)
+    {
+    if(sameString(a->name, tgName) && differentString(b->name, tgName))
+	return -1;
+    if(sameString(b->name, tgName) && differentString(a->name, tgName))
+	return 1;
+    }
+dif = strcmp(a->name, b->name);
+if (dif == 0)
+    dif = a->start - b->start;
+return dif;
+}
 
 void loadSampleIntoLinkedFeature(struct trackGroup *tg)
 /* Convert sample info in window to linked feature. */
@@ -7274,8 +7294,23 @@ char **row;
 int rowOffset;
 struct sample *sample;
 struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+/* If we're in dense mode and have a summary table load it. */
+if(tg->visibility == tvDense)
+    {
+    snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+    hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
+    if(hasDense != NULL)
+	{
+	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	where = cloneString(query);
+	}
+    }
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row+rowOffset);
@@ -7283,9 +7318,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&lfList, lf);
     sampleFree(&sample);
     }
+if(where != NULL)
+    freez(&where);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&lfList);
+
+/* sort to bring items with common names to the same line. */
+sortGroupList = tg; /* used to put track name at top of sorted list. */
+slSort(&lfList, lfNamePositionCmp);
+sortGroupList = NULL;
 tg->items = lfList;
 }
 
@@ -7350,9 +7392,9 @@ else if (sameWord(type, "sample"))
 	group->loadItems = loadSampleIntoLinkedFeature;
 	}
     else
-    {
-    errAbort("A 'sample' track must have exactly 9 fields.(%d)", fieldCount);
-    }
+	{
+	errAbort("A 'sample' track must have exactly 9 fields.(%d)", fieldCount);
+	}
     }
 else if (sameWord(type, "genePred"))
     {
