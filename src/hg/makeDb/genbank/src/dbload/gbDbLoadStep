@@ -20,6 +20,8 @@
 #    refseq data, not just what is being loaded.
 #  -gbdbGenBank=dir - Use dir instead of /gbdb/genbank, for testing.
 #
+# $Id: gbDbLoadStep,v 1.13 2003/07/29 04:44:32 markd Exp $
+#
 use strict;
 use warnings;
 use File::Basename;
@@ -145,11 +147,17 @@ sub makeMrnaZip($) {
     removeDir($downloadTmpDir);
 }
 
+# get download time file for a db
+sub getDownloadTimeFile($) {
+    my($db) = @_;
+    return "download/" . getConf("$db.downloadDir") . "/download.time";
+}
+
 # handle download file processing
 sub handleDownloadDump($$) {
     my($db, $downloadDumpDays) = @_;
     # check time 
-    my $timeFile = "download/" . getConf("$db.downloadDir") . "/download.time";
+    my $timeFile = getDownloadTimeFile($db);
     my $downloadTime;
     if (! -e $timeFile) {
         $downloadTime = 0;
@@ -166,26 +174,36 @@ sub handleDownloadDump($$) {
     }
 }
 
-# update the download files for the web server. Just use rsync to detect
-# if anything changed, don't bother with time files
+# update the download files for the web server.  Must check time file
+# to keep in-progress dump from being updated
 sub updateDownload($) {
     my($db) = @_;
     my $dbDir = getConf("$db.downloadDir");
-
-    # download dir can't have trailing / for rsync
-    my $downloadDir = "download/$dbDir";
-    $downloadDir =~ s/\/$//;
     my $htdocsDir = "/usr/local/apache/htdocs/goldenPath";
 
-    makeDir("$htdocsDir/$dbDir");
-    runProg("rsync -r $downloadDir $htdocsDir");
+    my $downloadTime = getDownloadTimeFile($db);
+    my $htdocsTime = "$htdocsDir/$dbDir/download.time";
+
+    if ((-e $downloadTime) 
+        && ((!-e $htdocsTime)
+            || (loadTimeFile($downloadTime) > loadTimeFile($htdocsTime)))) {
+        # download dir can't have trailing / for rsync
+        my $downloadDir = "download/$dbDir";
+        $downloadDir =~ s/\/$//;
+        my $htdocsDir = "/usr/local/apache/htdocs/goldenPath";
+        if ($gbCommon::verbose) {
+            prMsg("update download files for $db");
+        }
+        makeDir("$htdocsDir/$dbDir");
+        runProg("rsync -r $downloadDir $htdocsDir");
+    }
 }
 
 # drop genbank tables
 sub dropTables($) {
     my($db) = @_;
     if ($gbCommon::verbose) {
-        prMsg("droping tables from $db");
+        prMsg("dropping tables from $db");
     }
     runProg("gbLoadRna -drop $db");    
 }
