@@ -19,6 +19,11 @@ void verboseVa(int verbosity, char *format, va_list args);
 void verboseDot();
 /* Write I'm alive dot (at verbosity level 1) */
 
+boolean verboseDotsEnabled();
+/* check if outputting of happy dots are enabled.  They will be enabled if the
+ * verbosity is > 0, stderr is a tty and we don't appear to be running an
+ * emacs shell. */
+
 int verboseLevel();
 /* Get verbosity level. */
 
