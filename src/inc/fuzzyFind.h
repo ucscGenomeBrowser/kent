@@ -89,7 +89,14 @@ int ffScoreCdna(struct ffAli *ali);
  * be the number of bases in needle. */
 
 int ffScore(struct ffAli *ali, enum ffStringency stringency);
-/* Score alignment. */
+/* Score DNA based alignment. */
+
+int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency);
+/* Figure out overall score of protein alignment. */
+
+int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
+   boolean isProt);
+/* Score any alignment. */
 
 int ffScoreSomeAlis(struct ffAli *ali, int count, enum ffStringency stringency);
 /* Figure out score of count consecutive alis. */
