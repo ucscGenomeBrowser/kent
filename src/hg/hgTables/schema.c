@@ -18,8 +18,26 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.16 2004/07/22 01:36:22 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.17 2004/07/23 03:11:25 kent Exp $";
 
+static struct slName *storeRow(struct sqlConnection *conn, char *query)
+/* Just save the results of a single row query in a string list. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+struct slName *list = NULL, *el;
+int i, colCount = sqlCountColumns(sr);
+if ((row = sqlNextRow(sr)) != NULL)
+     {
+     for (i=0; i<colCount; ++i)
+         {
+	 el = slNameNew(row[i]);
+	 slAddTail(&list, el);
+	 }
+     }
+sqlFreeResult(&sr);
+return list;
+}
 
 void describeFields(char *db, char *table, 
 	struct asObject *asObj, struct sqlConnection *conn)
@@ -32,20 +50,37 @@ char **row;
 boolean tooBig = (sqlTableSize(conn, table) > TOO_BIG_FOR_HISTO);
 char button[64];
 char query[256];
+struct slName *exampleList, *example;
 
+safef(query, sizeof(query), "select * from %s limit 1", table);
+exampleList = storeRow(conn, query);
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 
 hTableStart();
-hPrintf("<TR> <TH>field</TH> <TH>SQL type</TH> ");
+hPrintf("<TR><TH>field</TH>");
+if (exampleList != NULL)
+    hPrintf("<TH>example</TH>");
+hPrintf("<TH>SQL type</TH> ");
 if (!tooBig)
     hPrintf("<TH>info</TH> ");
 if (asObj != NULL)
     hPrintf("<TH>description</TH> ");
 puts("</TR>\n");
+example = exampleList;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<TR> <TD><TT>%s</TT></TD> <TD><TT>%s</TT></TD>", row[0], row[1]);
+    hPrintf("<TR><TD><TT>%s</TT></TD> ", row[0]);
+    if (exampleList != NULL)
+        {
+	hPrintf("<TD>");
+	if (example != NULL)
+	     hPrintf("%s", example->name);
+	else
+	     hPrintf("n/a");
+	hPrintf("</TD>");
+	}
+    hPrintf("<TD><TT>%s</TT></TD>", row[1]);
     if (!tooBig)
 	{
 	hPrintf(" <TD>");
@@ -93,6 +128,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hPrintf("</TD>");
 	}
     puts("</TR>");
+    example = example->next;
     }
 hTableEnd();
 sqlFreeResult(&sr);
