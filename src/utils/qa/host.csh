@@ -9,5 +9,5 @@ rm -f /tmp/hostlist
 uniq -c /tmp/hostlist.sort > /tmp/hostlist.uniq
 rm -f /tmp/hostlist.sort
 
-sort -nr /tmp/hostlist.uniq > hostcount
+sort -nr /tmp/hostlist.uniq 
 rm -f /tmp/hostlist.uniq
