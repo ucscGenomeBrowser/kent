@@ -23,6 +23,7 @@ enum ffStringency
 /* How tight of a match is required. */
     {
     ffExact = 0,	/* Only an exact match will do. */
+
     ffCdna = 1,		/* Near exact.  Tolerate long gaps in target (genomic) */
     ffTight = 2,        /* Near exact.  Not so tolerant of long gaps in target. */
     ffLoose = 3,        /* Less exact. */
