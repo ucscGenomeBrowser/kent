@@ -2669,17 +2669,18 @@ sqlFreeResult(&sr);
 hgFreeConn(&conn);
 }
 
-void doLinkedFeaturesSeries(char *track, char *clone)
+void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 /* Create detail page for linked features series tracks */ 
 {
 char query[256];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
+struct sqlResult *sr = NULL, *sr1 = NULL;
+char **row, **row1;
 char *type = NULL, *lfLabel = NULL;
 char *table = NULL, *pslTable;
 int start = cgiInt("o");
 int end = cgiInt("t");
+int i;
 struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
 
@@ -2706,7 +2707,7 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
-    printf("<H2>%s - %s\n", type, clone);
+    printf("<H2>%s - %s</H2>\n", type, clone);
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
@@ -2723,14 +2724,34 @@ if (row != NULL)
 	printOtherLFS(clone, table, start, end);
 	}
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
-    printf("<H4>Genome alignments of %s:</H4>\n", lfLabel);
+    printf("<H3>Genomic alignments of %s:</H3>\n", lfLabel);
+    
+    for (i = 0; i < lfs->lfCount; i++) 
+      {
+      sqlFreeResult(&sr);
+      sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
+	        lfs->pslTable, lfs->lfNames[i]);  
+      sr = sqlMustGetResult(conn, query);
+      while ((row1 = sqlNextRow(sr)) != NULL)
+          {
+          psl = pslLoad(row1);
+          slAddHead(&pslList, psl);
+      }
+      slReverse(&pslList);
+      printf("<H3><A HREF=");
+      printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
+      printf(" >%s</A></H3>\n", lfs->lfNames[i]);
+      printAlignments(pslList, lfs->lfStarts[i], "htcCdnaAli", lfs->pslTable, lfs->lfNames[i]);
+      htmlHorizontalLine();
+      pslFreeList(&pslList);
+      }
     }
 else
     {
     warn("Couldn't find %s in %s table", clone, table);
     }
 sqlFreeResult(&sr);
-
+puts(tdb->html);
 
 hgFreeConn(&conn);
 } 
@@ -3498,7 +3519,7 @@ else if (sameWord(track, "uniGene"))
 #ifdef FUREY_CODE
  else if (sameWord(track, "bacEndPairs"))
    {
-     doLinkedFeaturesSeries(track, item);
+     doLinkedFeaturesSeries(track, item, tdb);
    }
 #endif /*FUREY_CODE*/
 else if (sameWord(track, "htcCloneSeq"))
