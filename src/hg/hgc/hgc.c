@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.438 2003/06/18 21:16:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.439 2003/06/19 12:34:48 weber Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12140,6 +12140,11 @@ else if( sameWord( track, "hg15Mm3L" ))
     {
     humMusClickHandler( tdb, item, "Mouse", "mm3", "blastzBestMm3", 0 );
     }
+else if( sameWord( track, "mm3Hg15L ))
+    {
+    humMusClickHandler( tdb, item, "Human", "hg15", "blastzNetHuman" , 0);
+    }
+
 else if( sameWord( track, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
