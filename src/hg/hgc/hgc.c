@@ -125,7 +125,7 @@
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.550 2004/01/21 23:13:03 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.551 2004/01/23 17:22:42 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1926,7 +1926,7 @@ sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromSta
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    tfbsConsStaticLoadWBin(row, &tfbs);
+    tfbsConsStaticLoad(row+1, &tfbs);
 
     printf("<B>Item:</B> %s<BR>\n", tfbs.name);
     printf("<B>Score:</B> %d<BR>\n", tfbs.score );
@@ -1941,7 +1941,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
 
-    tfbsConsStaticLoadWBin(row, &tfbs);
+    tfbsConsStaticLoad(row+1, &tfbs);
    
     printf("<B>Factor:</B> %s<BR>\n", tfbs.factor);
     printf("<B>Species:</B> %s<BR>\n", tfbs.species);
@@ -12791,7 +12791,7 @@ if (sqlTableExists(conn, "sgdClone"))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	sgdCloneStaticLoadWBin(row, &sgd);
+	sgdCloneStaticLoad(row+1, &sgd);
 	dyStringPrintf(dy, "<B>ATCC catalog number:</B> %s <BR>\n", sgd.atccName);
 	}
     sqlFreeResult(&sr);
