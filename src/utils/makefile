@@ -4,7 +4,7 @@ include ../inc/common.mk
 
 BIN_DIR = $(HOME)/bin
 
-all:    scripts
+all:    
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
 	    ( cd $$D && echo $$D && $(MAKE) ) ;\
@@ -20,6 +20,8 @@ scripts:
 	    cp -p $$F ${SCRIPTS}; \
 	 done
 
+alpha: scripts all
+
 test:
 	cd faToTwoBit && ${MAKE} test
 	cd twoBitToFa && ${MAKE} test
@@ -32,7 +34,8 @@ clean:
 SCRIPT_FILES = \
 	blastz-make-joblist \
         iSync \
-        lodToBedScore
+        lodToBedScore \
+	partitionSequence.pl
 
 # List of directories to build
 USE_DIRS = $(DIRS)
