@@ -1,4 +1,4 @@
-/* pbTracks - UCSC Proteome Browser main cgi script. */
+/* pbTracks.c - UCSC Proteome Browser main cgi script. */
 #include "common.h"
 #include "hCommon.h"
 #include "portable.h"
@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.6 2003/12/18 23:03:04 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.7 2003/12/20 18:06:09 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -192,7 +192,11 @@ if (cgiOptionalString("pbScale") != NULL)
 	}
 
 pixWidth = 160+ protSeqLen*pbScale;
-//pixWidth = 160+ protSeqLen*pbScale/2;
+if (pixWidth > 30000)
+   {
+   pixWidth = 30000;
+   }
+//printf("<br>pixWidth=%d\n", pixWidth);fflush(stdout);
 
 if (pixWidth < 550) pixWidth = 550;
 insideWidth = pixWidth-gfxBorder;
@@ -230,6 +234,7 @@ vgClose(&vg);
 if (cgiOptionalString("exonNum") == NULL)
     {
     hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
+    //hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
             gifTn.forCgi, pixWidth, pixHeight, mapName);
 
     hPrintf("Current scale: ");
@@ -242,7 +247,7 @@ if (cgiOptionalString("exonNum") == NULL)
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
     hPrintf("&nbsp&nbsp&nbsp&nbsp");
-    hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
+    hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
     hPrintf("Explanation of Tracks</A>");
     }
 hPrintf("<P>");
@@ -283,7 +288,7 @@ hPrintf("<P>");
 hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
             gifTn2.forCgi, pixWidth, pixHeight, mapName);
 //for (i=0; i<26; i++)hPrintf("&nbsp&nbsp&nbsp");
-hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
 hPrintf("Explanation of Protein Property Histograms</A><BR>");
 
 hPrintf("<P>");
@@ -292,7 +297,7 @@ histDone:
 
 domainsPrint(conn, proteinID);
 
-//if (cgiOptionalString("exonNum") == NULL)printExonAA(proteinID, protSeq, -1);
+printFASTA(proteinID, protSeq);
 hPrintf("<P>");
 doPathwayLinks(protDisplayID, mrnaID);
 doGenomeBrowserLink(protDisplayID, mrnaID);
@@ -311,7 +316,7 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", 
 	"UCSC Proteome Browser (V1.0)");
-hPrintf("<TD ALIGN=Right><A HREF=\"../pbHelp.html\">%s</A></TD>",
+hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/hgTracksHelp.html\">%s</A></TD>",
         wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
 fflush(stdout);
