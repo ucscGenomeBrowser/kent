@@ -37,7 +37,7 @@ hPrintf("%s",
  "<P>Following a successful search, the Browser displays a table containing "
  "the specified gene -- highlighted in light green -- and its relatives, "
  "each on a separate line. If the search was based on genomic position, "
- "the selected gene is shown in the middle row of the table. In all other "
+ "the selected gene is shown in the middle row of the table. In most other "
  "cases, the highlighted gene appears first. To adjust the number of rows "
  "shown, select an option from the <em>display</em> pull-down menu. "
  "To fine-tune the list of displayed genes to a subset based on a selection of "
