@@ -35,7 +35,7 @@
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "stsMap.h"
-#include "stsAlias.h"
+/*#include "stsAlias.h"*/
 #include "mouseSyn.h"
 #include "cytoBand.h"
 #include "knownMore.h"
@@ -2530,7 +2530,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		 }
 	    if (!firstAlias)
 		 printf("<BR>\n");
-	    }
+		 } */
 	if (newStyle)
 	    {
 	    stsMapStaticLoad(row+rowOffset, &el);
@@ -2540,7 +2540,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    struct stsMarker oldEl;
 	    stsMarkerStaticLoad(row+rowOffset, &oldEl);
 	    stsMapFromStsMarker(&oldEl, &el);
-	    } */
+	    } 
 	printf("<B>STS id:</B> %d<BR>\n", el.identNo);
 	if (!sameString(el.ctgAcc, "-"))
 	    printf("<B>clone hit:</B> %s<BR>\n", el.ctgAcc);
