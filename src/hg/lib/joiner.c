@@ -1047,6 +1047,17 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+void joinerPairDump(struct joinerPair *jpList, FILE *out)
+/* Write out joiner pair list to file mostly for debugging. */
+{
+struct joinerPair *jp;
+for (jp = jpList; jp != NULL; jp = jp->next)
+    fprintf(out, "%s.%s.%s (via %s) %s.%s.%s\n",
+    	jp->a->database, jp->a->table, jp->a->field,
+	jp->identifier->name,
+    	jp->b->database, jp->b->table, jp->b->field);
+}
+
 static struct joinerField *joinerSetIncludesTable(struct joinerSet *js, 
 	char *database, char *table)
 /* If joiner set includes database and table, return the associated field. */

@@ -151,6 +151,9 @@ void joinerPairFree(struct joinerPair **pJp);
 void joinerPairFreeList(struct joinerPair **pList);
 /* Free up memory associated with list of joinerPairs. */
 
+void joinerPairDump(struct joinerPair *jpList, FILE *out);
+/* Write out joiner pair list to file mostly for debugging. */
+
 struct joinerPair *joinerRelate(struct joiner *joiner, char *database, 
 	char *table);
 /* Get list of all ways to link table in given database to other tables,
