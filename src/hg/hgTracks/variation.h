@@ -36,11 +36,6 @@ void snpMapDrawItemAt(struct track *tg, void *item,
         double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single snpMap item at position. */
 
-static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis);
-/* Draw snpMap items. */
-
 void snpMapMethods(struct track *tg);
 /* Make track for snps. */
 
@@ -50,12 +45,6 @@ char *perlegenName(struct track *tg, void *item);
 int haplotypeHeight(struct track *tg, struct linkedFeatures *lf,
                     struct simpleFeature *sf);
 /* if the item isn't the first or the last make it smaller */
-
-static void haplotypeLinkedFeaturesDrawAt(struct track *tg, void *item,
-               struct vGfx *vg, int xOff, int y, double scale, 
-	       MgFont *font, Color color, enum trackVisibility vis);
-/* draws and individual haplotype and a given location */
-
 
 void haplotypeMethods(struct track *tg);
 /* setup special methods for haplotype track */
