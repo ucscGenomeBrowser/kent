@@ -19,4 +19,9 @@ hgsql bioImage < bioImage.sql
 #     convert -size 200x200 in.jpg -resize 200x200 out.jpg
 # and then tell bioImage database about it with
 
+cd ~/kent/src/hg/bioImage/loadMahoney
+loadMahoney /gbdb/bioImage cloning.tab output
+cd output
+bioImageLoad whole.ra whole.tab
+bioImageLoad slices.ra slices.tab
 
