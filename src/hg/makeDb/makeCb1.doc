@@ -336,3 +336,118 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
     hgLoadBed cb1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
     # Loaded 32763 elements
+
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 2003-06-12 - Hiram)
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Cbriggsae/mRNA
+    mkdir -p /iscratch/i/worms/Cbriggsae/EST
+    cd /iscratch/i/worms/Cbriggsae/mRNA
+    # there are 33 sequences in mrna.fa, break up byname, each one to a file
+    #	(the 100 argument is necessary, but ignored)
+    faSplit byname \
+	/cluster/store5/mrna.134/org/Caenorhabditis_briggsae/mrna.fa 100
+    cd /iscratch/i/worms/Cbriggsae/EST
+    # there are 2424 ESTs.  (The 100 argument is necessary but ignored)
+    faSplit byname \
+	/cluster/store5/mrna.134/org/Caenorhabditis_briggsae/est.fa 100
+    ~kent/bin/iSync
+
+    # next machine, small cluster is fine, there are few tiny jobs
+    ssh kkr1u00
+    cd ~/cb1/bed
+    mkdir mrna est
+    cd mrna
+    mkdir psl
+    ls -1S /iscratch/i/worms/Cbriggsae/bothMasksNib/chr*.nib > worm.lst
+    ls -1S /iscratch/i/worms/Cbriggsae/mRNA/*.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fine -q=rna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 worm.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push		# there are only 33 jobs
+    ... etc ...
+# Average job time:                  22s       0.36m     0.01h    0.00d
+# Longest job:                       25s       0.42m     0.01h    0.00d
+
+
+    # cluster run done
+    pslSort dirs raw.psl /tmp psl
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl all_mrna.psl \
+      /dev/null
+    pslSortAcc nohead chrom /tmp all_mrna.psl
+
+    # load mrna tables
+    # next machine
+    ssh hgwdev
+    cd ~/cb1/bed/mrna/chrom
+    # names must be chr*_mrna.psl, there is only one
+    mv chrUn.psl chrUn_mrna.psl
+    # this load command rewrites these table entirely if they exist
+    hgLoadPsl cb1 *.psl
+    mkdir /gbdb/cb1/mrna.134
+    ln -s /cluster/store5/mrna.134/org/Caenorhabditis_briggsae/mrna.fa \
+	/gbdb/cb1/mrna.134
+    # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
+    hgLoadRna add -type=mRNA cb1 /gbdb/cb1/mrna.134/mrna.fa \
+	/cluster/store5/mrna.134/org/Caenorhabditis_briggsae/mrna.ra
+    cd ~/cb1/bed/mrna
+    hgLoadPsl cb1 all_mrna.psl
+
+    # /iscratch/i was setup with est.fa file above
+
+    # Let's try the bluearc server
+    ssh kk
+    cd ~/cb1/bed/est
+    mkdir psl
+    ls -1S /cluster/bluearc/iscratch/i/worms/Cbriggsae/bothMasksNib/chr*.nib > worm.lst
+    # names are too long for an ls all the way over in /cluster/bluearc
+    ln -s /cluster/bluearc/iscratch/i/worms/Cbriggsae/EST cbaEST
+    ls -1S cbaEST/* > est.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 worm.lst est.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+# Average job time:                  80s       1.33m     0.02h    0.00d
+# Longest job:                      537s       8.95m     0.15h    0.01d
+    #  I had trouble getting the cluster to finish these jobs
+    #  They would appear to be running, but when I checked on them, they
+    #  were not accumulating any CPU time.  Had to stop and re-push a
+    #  number of times to get them all to complete
+
+    # cluster run done
+    # next machine
+    ssh hgwdev
+    cd ~/cb1/bed/est
+    pslSort dirs raw.psl /tmp psl
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl all_est.psl \
+      /dev/null
+    pslSortAcc nohead chrom /tmp all_est.psl
+    cd chrom
+    # name must be chr*_est.psl
+    mv chrUn.psl chrUn_est.psl
+    # this load command rewrites these table entirely if they exist
+    hgLoadPsl cb1 *.psl
+
+    ln -s /cluster/store5/mrna.134/org/Caenorhabditis_briggsae/est.fa \
+	/gbdb/cb1/mrna.134
+    # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
+    hgLoadRna add -mrnaType=EST -type=EST cb1 /gbdb/cb1/mrna.134/est.fa \
+	/cluster/store5/mrna.134/org/Caenorhabditis_briggsae/est.ra
+    cd ~/cb1/bed/est
+    hgLoadPsl cb1 all_est.psl -nobin
+
+# END ====  MAKING AND STORING mRNA AND EST ALIGNMENTS
