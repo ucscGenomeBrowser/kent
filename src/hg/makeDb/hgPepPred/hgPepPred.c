@@ -134,7 +134,7 @@ freeHash(&uniq);
 }
 
 
-void oneGenieFile(char *fileName, struct hash *uniq, FILE *known, FILE *alt)
+void oneGenieFile(char *fileName, struct hash *uniq, FILE *f)
 /* Process one genie peptide prediction file into known and alt tab files. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -142,7 +142,6 @@ char *line;
 int lineSize;
 boolean firstTime = TRUE;
 char *trans;
-FILE *f = NULL;
 boolean skip = FALSE;
 
 /* Do cursory sanity check. */
@@ -170,12 +169,6 @@ while (lineFileNext(lf, &line, &lineSize))
 	else
 	    {
 	    hashAdd(uniq, trans, NULL);
-	    if (startsWith("RS.", trans) || startsWith("C.", trans) || startsWith("AK.", trans))
-		f = known;
-	    else if (startsWith("A.", trans) || startsWith("S.", trans))
-		f = alt;
-	    else
-		errAbort("Unrecognized name type %s line %d of %s", trans, lf->lineIx, lf->fileName);
 	    fprintf(f, "%s\t", trans);
 	    skip = FALSE;
 	    }
@@ -185,33 +178,27 @@ while (lineFileNext(lf, &line, &lineSize))
 	mustWrite(f, line, lineSize-1);
 	}
     }
-fputc('\n', alt);
-fputc('\n', known);
+fputc('\n', f);
 lineFileClose(&lf);
 }
 
 void geniePepPred(char *database, int fileCount, char *fileNames[])
 /* Load Genie peptide predictions into database. */
 {
-char *knownTab = "known.tab";
 char *altTab = "alt.tab";
-FILE *known = mustOpen(knownTab, "w");
 FILE *alt =  mustOpen(altTab, "w");
 struct hash *uniq = newHash(16);
 int i;
 char *fileName;
 
-makeCustomTable(database, "genieKnownPep", createString);
 makeCustomTable(database, "genieAltPep", createString);
 for (i=0; i<fileCount; ++i)
     {
     fileName = fileNames[i];
     printf("Processing %s\n", fileName);
-    oneGenieFile(fileName, uniq, known, alt);
+    oneGenieFile(fileName, uniq, alt);
     }
-carefulClose(&known);
 carefulClose(&alt);
-loadTableFromTabFile(database, "genieKnownPep", knownTab);
 loadTableFromTabFile(database, "genieAltPep", altTab);
 freeHash(&uniq);
 }
