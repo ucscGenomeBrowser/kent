@@ -66,7 +66,6 @@ int dnaSize = 0;
 char sequenceName[32];
 
 printf("Writing gap file for chromo %s\n", endGap->chrom);
-printf("Writing file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 
 /*
 
@@ -93,6 +92,7 @@ sprintf(command, "mkdir -p %s", destDir);
 system(command);
 sprintf(filename, "%s/%s_%d.fa", destDir, startGap->chrom, sequenceNum);
 printf("Filename = %s\n", filename);
+printf("Writing file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 
 sprintf(sequenceName, "%s_%d %d-%d", startGap->chrom, sequenceNum, startOffset, endOffset);
 dnaSize = endOffset - startOffset;
@@ -196,7 +196,7 @@ printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bas
 /* For each chromosome entry */
 while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     {
-    printf("\nAnalyzing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
+    printf("\nProcessing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
 
     writeChromFaFile(chromName, dna, dnaSize);
     makeSuperContigs(lfAgp, dna, dnaSize, splitSize);
