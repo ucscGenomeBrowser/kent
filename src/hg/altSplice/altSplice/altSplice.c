@@ -73,7 +73,7 @@
 
 #define USUAL
 // #define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.10 2003/11/25 07:17:12 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.11 2003/12/09 04:12:12 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -331,7 +331,7 @@ char **tables = NULL;
 int i,j,k,l;
 char buff[256];
 struct ggMrnaAli *maList=NULL, *ma=NULL, *maNext=NULL, *maSameStrand=NULL;
-struct psl *pslList = NULL;
+struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
 char *chrom = gp->chrom;
 int chromStart = gp->txStart;
 int chromEnd = gp->txEnd;
@@ -361,8 +361,18 @@ expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
 /* get the sequence */
 genoSeq = hDnaFromSeq(gp->chrom, chromStart, chromEnd, dnaLower);
 
+for(psl = pslList; psl != NULL; psl = pslNext)
+    {
+    pslNext = psl->next;
+    if(pslHasIntron(psl, genoSeq, chromStart))
+	{
+	slAddHead(&pslCluster, psl);
+	}
+    else 
+	pslFree(&psl);
+    }
 /* load and check the alignments */
-maList = pslListToGgMrnaAliList(pslList, gp->chrom, chromStart, chromEnd, genoSeq, maxGap);
+maList = pslListToGgMrnaAliList(pslCluster, gp->chrom, chromStart, chromEnd, genoSeq, maxGap);
 
 /* BAD_CODE: Not sure if this step is necessary... */
 for(ma = maList; ma != NULL; ma = maNext)
@@ -387,7 +397,7 @@ else
     dnaSeqFree(&genoSeq);
     ggMrnaAliFreeList(&maSameStrand);
     }
-pslFreeList(&pslList);
+pslFreeList(&pslCluster);
 return ag;
 }
 
