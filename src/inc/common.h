@@ -510,6 +510,10 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
 /* Return amount of bases two ranges intersect over, 0 or negative if no
  * intersection. */
 
+int  positiveRangeIntersection(int start1, int end1, int start2, int end2);
+/* Return amount of bases two ranges intersect over, 0 or negative if no
+ * intersection. */
+
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
 
