@@ -8,7 +8,7 @@
 #include "dystring.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: motifLogo.c,v 1.4 2004/09/12 21:30:02 kent Exp $";
+static char const rcsid[] = "$Id: motifLogo.c,v 1.5 2004/09/13 15:01:54 kent Exp $";
 
 char *tempDir = ".";
 char *gsExe = "gs";
@@ -39,9 +39,9 @@ if (motif == NULL)
     errAbort("No motifs in %s", motifFile);
 if (motif->next != NULL)
     warn("%s contains multiple motifs, only using first", motifFile);
-dnaMotifMakeProbabilitic(motif);
-// dnaMotifToLogoPs(motif, 40, 120, outFile);
-dnaMotifToLogoPng(motif, 40, 120, gsExe, tempDir, outFile);
+dnaMotifMakeProbabalistic(motif);
+dnaMotifToLogoPs(motif, 40, 120, outFile);
+// dnaMotifToLogoPng(motif, 40, 120, gsExe, tempDir, outFile);
 }
 
 int main(int argc, char *argv[])
