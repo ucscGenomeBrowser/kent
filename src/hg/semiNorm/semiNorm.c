@@ -269,8 +269,8 @@ int main(int argc, char* argv[]) {
     globalNumber = atol(argv[3]); // 100516125;
     globalPercentId = atof(argv[4]); // 0.668947295769709;
 
-    fprintf(stderr, "maxRadius: %ld\n", maxRadius);
-    fprintf(stderr, "number of windows: %ld\n", numberOfWindows - 2);
+    /*fprintf(stderr, "maxRadius: %ld\n", maxRadius);*/
+    fprintf(stderr, "loaded %ld background window\n", numberOfWindows - 2);
 
     windowsFile = mustOpen(argv[2], "r");
     /* see if the first character is a # */
