@@ -19,7 +19,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.53 2004/08/27 15:50:42 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.54 2004/08/28 00:38:17 angie Exp $";
 
 
 void usage()
@@ -91,22 +91,6 @@ void htmlClose()
 /* Close down html format page. */
 {
 cartWebEnd();
-}
-
-void hTableStart()
-/* For some reason BORDER=1 does not work in our web.c nested table scheme.
- * So use web.c's trick of using an enclosing table to provide a border.   */
-{
-puts("<!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
-}
-
-void hTableEnd()
-/* Close out table started with hTableStart() */
-{
-puts("</TABLE>");
-puts("</TR></TD></TABLE>");
 }
 
 void explainWhyNoResults()

@@ -19,6 +19,10 @@
 #include "hdb.h"
 #endif
 
+#ifndef HCOMMON_H
+#include "hCommon.h"
+#endif
+
 #ifndef GRP_H
 #include "grp.h"
 #endif
@@ -59,13 +63,6 @@ void htmlClose();
 
 void textOpen();
 /* Start up page in text format. (No need to close this). */
-
-void hTableStart();
-/* For some reason BORDER=1 does not work in our web.c nested table scheme.
- * So use web.c's trick of using an enclosing table to provide a border.   */
-
-void hTableEnd();
-/* Close out table started with hTableStart() */
 
 void explainWhyNoResults();
 /* Put up a little explanation to user of why they got nothing. */
