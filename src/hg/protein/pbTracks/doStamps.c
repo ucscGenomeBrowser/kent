@@ -400,6 +400,14 @@ hFreeConn(&conn2);
 return(pbStampPtr);
 }
 
+void mapBoxStamp(int x, int y, int width, int height, char *title, char *tagName)
+{
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
+hPrintf("HREF=\"../goldenPath/help/pb%s.shtml\"", tagName);
+hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
+//hPrintf(" target=\"HistogramHelp\" ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
+}
+
 void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
@@ -439,6 +447,9 @@ ih = stampPictPtr->height;
 xScale = (double)(iw)/(txmax - txmin);
 yScale = (double)(ih)/(tymax - tymin);
    
+calStampXY(stampPictPtr, txmin, tymax, &xx, &yy);
+mapBoxStamp(xx, yy, iw, ih, stampTitle, stampName);
+
 calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
 vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, stampTitle);
     
@@ -509,6 +520,9 @@ ih = stampPictPtr->height;
 
 xScale = (double)(iw)/(txmax - txmin);
 yScale = (double)(ih)/(tymax - tymin);
+
+calStampXY(stampPictPtr, txmin, tymax, &xx, &yy);
+mapBoxStamp(xx, yy, iw, ih, "Amino Acid Anomalies", "pepAnomalies");
  
 calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
 vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomalies");
