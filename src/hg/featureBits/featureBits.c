@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.32 2005/02/27 02:25:40 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.33 2005/03/02 04:32:19 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -167,25 +167,20 @@ if (lastBit && i-start >= minSize)
     }
 }
 
-void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *bin, int binSize)
+void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize)
 /* Write out binned counts of bits. */
 {
-int i, count=0;
+int bin, count;
 
-if (!bin)
+if (!binFile)
     return;
-for (i=0; i<chromSize; ++i)
+for (bin=0; bin+binSize<chromSize; bin=bin+binSize)
     {
-    if (bitReadOne(bits, i))
-	count++;
-    if ( (i%binSize)==0 && i>0 )
-	{
-	fprintf(bin, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, i-binSize, i, count, chrom, i/binSize);
-	count=0;
-	}
+    count = bitCountRange(bits, bin, binSize);
+    fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, bin+binSize, count, chrom, bin/binSize+1);
     }
-if ( (i%binSize)>0 && i>0 )
-    fprintf(bin, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, (chromSize/binSize)*binSize, i, count, chrom, i/binSize);
+count = bitCountRange(bits, bin, chromSize-bin);
+fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, chromSize, count, chrom, bin/binSize+1);
 }
 
 void check(struct sqlConnection *conn, char *table)
