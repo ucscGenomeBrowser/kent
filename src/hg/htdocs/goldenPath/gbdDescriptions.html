@@ -86,8 +86,15 @@ table names are hyperlinked to an <a href=" http://www.soe.ucsc.edu/~kent/exe/do
 format description of their fields.</P>
 <UL>
   <LI><A 
-  href="#PslInfo">chrN_mrna</A> 
-  - mRNA alignments 
+  href="#PslInfo">chrN_blatFish</A> 
+  - Translated BLAT alignments of Tetraodon nigrovirisi against the draft human
+    genome</LI>
+  <LI><A 
+  href="#PslInfo">chrN_blatHuman</A> 
+  - Translated BLAT alignments of human genome vs. mouse genome</LI>
+  <LI><A 
+  href="#PslInfo">chrN_blatMouse</A> 
+  - Mouse whole genome shotgun alignments 
   <LI><A 
   href="#PslInfo">chrN_est</A> 
   - EST alignments 
@@ -95,20 +102,20 @@ format description of their fields.</P>
   href="#PslInfo">chrN_intronEst</A> 
   - EST alignments in introns 
   <LI><A 
-  href="#PslInfo">chrN_blatMouse</A> 
-  - Mouse whole genome shotgun alignments 
-  <LI><A 
   href="#GapInfo">chrN_gap</A> 
-  - gap locations and types 
+  - Gap locations and types 
   <LI><A 
   href="#FragInfo">chrN_gl</A> 
-  - golden path positions of all clone fragments 
+  - Golden path positions of all clone fragments 
   <LI><A 
   href="#GpInfo">chrN_gold</A> 
-  - instructions on creating golden path from fragments 
+  - Instructions on creating golden path from fragments 
+  <LI><A 
+  href="#PslInfo">chrN_mrna</A> 
+  - mRNA alignments 
   <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
-  - repeating elements created using RepeatMasker </LI>
+  - Repeating elements created using RepeatMasker </LI>
 </UL>
 
 <P>The following tables contain data that is placed on the golden path, but is 
@@ -119,7 +126,11 @@ stored in a single table rather than one table per chromosome:</P>
   - Acembly Gene Predictions With Alt-splicing </LI>
   <LI><A 
   href="#PepPredictions">acemblyPep</A> 
-  - Translations of Acembly gene predictions into corresponding amino acid sequences </LI>
+  - Translations of Acembly gene predictions into corresponding amino acid
+    sequences </LI>
+  <LI><A 
+  href="#LFS">affyRatio</A> 
+  - Expression data from GNF using Affymetrix GeneChips</LI>
   <LI><A 
   href="#PslInfo">all_bacends</A> 
   - BLAT alignment information for BAC clone end sequences on 
@@ -142,25 +153,25 @@ stored in a single table rather than one table per chromosome:</P>
   href="#LFS">bacEndPairs</A> 
   - Locations of BAC clones using placements of its 5' and 3' 
     end sequences.  BAC end sequence information comes from the dbGSS 
-    portion of GenBank. </LI>
+    portion of GenBank </LI>
   <LI><A 
   href="#ChromInfo">chromInfo</A> 
-  - describes name and size of each chromosome as well as an external file 
+  - Describes name and size of each chromosome as well as an external file 
   containing the chromosome 
   <LI><A 
   href="#CloneInfo">clonePos</A> 
-  - positions of all clones in golden path. Also HTG phase, 
-  finished/draft/predraft stage, and sequence size. 
+  - Positions of all clones in golden path. Also HTG phase, 
+  finished/draft/predraft stage, and sequence size
   <LI><A 
   href="#CpG Islands">cpgIsland</A> 
   - CpG islands contributed by Baylor University and Washington University 
   <LI><A 
   href="#ContigInfo">ctgPos</A> 
-  - the name, size, and golden path position of all FPC contigs. 
+  - Name, size, and golden path position of all FPC contigs
   <LI><A 
   href="#ChromosomeBand">cytoBand</A> 
   - 800 chromosome bands mapped to golden path by Terry Furey using
-  fish data from BAC Resource Consortium.
+  fish data from BAC Resource Consortium
   <LI><A 
   href="#GenePredictions">ensGene</A> 
   - Ensembl Gene Predictions </LI>
@@ -169,35 +180,38 @@ stored in a single table rather than one table per chromosome:</P>
   - Translations of Ensembl gene predictions into corresponding amino acid sequences </LI>
   <LI><A 
   href="#Exofish">exoFish</A> 
-  - Genescope Exofish Tetraodon evolutionarily conserved regions. 
+  - Genescope Exofish Tetraodon evolutionarily conserved regions
   <LI><A 
   href="#ExoMouse">exoMouse</A> 
-  - Exonerate mouse/human evolutionarily conserved regions. (Last used Apr. 2001) </LI>
+  - Exonerate mouse/human evolutionarily conserved regions (Last used Apr. 2001) </LI>
   <LI><A 
   href="#FishClones">fishClones</A> 
-  - Clones placed on Cytogenetic Map using FISH. </LI>
+  - Clones placed on Cytogenetic Map using FISH </LI>
   <LI><A 
   href="#GCpercent">gcPercent</A> 
-  - average number of G and C per 1000 bases in non-overlapping 20Kb windows 
+  - Average number of G and C per 1000 bases in non-overlapping 20Kb windows 
   <LI><A 
   href="#GenomicDups">genomicDups</A> 
   - Duplications of >1000 Bases Sequence </LI>
   <LI><A 
+  href="#GenePredictions">geneid</A> 
+  - Gene predictions from the geneid program </LI>
+  <LI><A 
   href="#GenePredictions">genieAlt</A> 
   - Genie gene predictions - all constrained by one degree or another by EST or 
-  mRNA. 
+  mRNA 
   <LI><A 
   href="#PepPredictions">genieAltPep</A> 
-  - translations of Genie gene predictions into its corresponding amino acid 
+  - Translations of Genie gene predictions into its corresponding amino acid 
   sequence 
   <LI><A 
   href="#GenePredictions">genieKnown</A> 
-  - known genes processed a little by Genie to allow sequencing error. (Oct. 
-  2000 and earlier known gene track). 
+  - Known genes processed a little by Genie to allow sequencing error (Oct. 
+  2000 and earlier known gene track)
   <LI><A 
   href="#PepPredictions">genieKnownPep</A> 
-  - translations of known genes into its corresponding amino acid sequence (Oct. 
-  2000 and earlier known gene track). 
+  - Translations of known genes into its corresponding amino acid sequence (Oct. 
+  2000 and earlier known gene track) 
   <LI><A 
   href="#GenePredictions">genScan</A> 
   - Genscan Gene Predictions </LI>
@@ -206,40 +220,40 @@ stored in a single table rather than one table per chromosome:</P>
   - Translations of Genscan gene predictions into corresponding amino acid sequences </LI>
   <LI><A 
   href="#LFS">genscanSubopt</A> 
-  - Genscan byproducts: good individual exons out of frame with main predictions. (Last used Apr. 2001) </LI>
+  - Genscan byproducts: good individual exons out of frame with main predictions (Last used Apr. 2001) </LI>
   <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
   <LI><A 
   href="#OtherKnown">knownInfo</A> 
-  - other information about known genes (Oct. 2000 and earlier known gene 
-  track). 
+  - Other information about known genes (Oct. 2000 and earlier known gene 
+  track) 
   <LI><A 
   href="#MoreKnown">knownMore</A> 
-  - links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD. 
-  (Oct. 2000 and earlier known gene track). 
+  - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
+  (Oct. 2000 and earlier known gene track) 
   <LI><A 
   href="#MouseSyn">mouseSyn</A> 
-  - synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
+  - Synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
   <LI><A 
   href="#BED">nci60</A> 
   - Microarray Experiments for NCI 60 Cell Lines </LI>
   <LI><A 
   href="#BED">perlegen</A> 
-  - Perlegen Common High-Resolution Haplotype Blocks. </LI>
+  - Perlegen Common High-Resolution Haplotype Blocks </LI>
   <LI><A 
   href="#LFS">phMouse</A> 
   - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
   <LI><A 
   href="#RefFlat">refFlat</A> 
-  - Known Genes (from RefSeq), with additional name (as it appears in genome browser) field.  </LI>
+  - Known Genes (from RefSeq), with additional name (as it appears in genome browser) field  </LI>
   <LI><A 
   href="#GenePredictions">refGene</A> 
   - Known Genes (from RefSeq) </LI>
   <LI><A 
   href="#GenePredictions">refKnown</A> 
-  - known genes as derived from alignments of RefSeq mRNA (Dec 2000 and later 
-  known gene track). 
+  - Known genes as derived from alignments of RefSeq mRNA (Dec 2000 and later 
+  known gene track) 
   <LI><A 
   href="#PepPredictions">refPep</A> 
   - RefSeq translated proteins (Dec. 2000 and later) 
@@ -265,8 +279,11 @@ stored in a single table rather than one table per chromosome:</P>
   href="#RikenSeq">rikenseq</A> 
   - Riken sequence table (Mouse Feb. 2002 and later)</LI>
   <LI><A 
+  href="#RNAcluster">rnaCluster</A> 
+  - Gene boundaries deduced from clustering spliced ESTs and mRNAs against the genome (Apr. 2002 and later) </LI>
+  <LI><A 
   href="#RNAgenes">rnaGene</A> 
-  - functional RNA genes (Last used Apr. 2001) </LI>
+  - Functional RNA genes (Last used Apr. 2001) </LI>
   <LI><A 
   href="#BED">rosetta</A> 
   - Rosetta Experimental Confirmation of Chr22 Exons </LI>
@@ -284,19 +301,19 @@ stored in a single table rather than one table per chromosome:</P>
   - Additional information about a Sanger 20 or 22 gene </LI>
   <LI><A 
   href="#SimpleRepeats">simpleRepeats</A> 
-  - simple tandem repeats generated with the TRF program 
+  - Simple tandem repeats generated with the TRF program 
   <LI><A 
   href="#SNPsites">snpNih</A> 
-  - locations of overlap SNPs as determined by the SNP Consortium 
+  - Locations of overlap SNPs as determined by the SNP Consortium 
   <LI><A 
   href="#SNPsites">snpTsc</A> 
-  - locations of random SNPs as determined by the SNP Consortium 
+  - Locations of random SNPs as determined by the SNP Consortium 
   <LI><A 
   href="#GenePredictions">softberryGene</A> 
   - Fgenesh++ Gene Predictions </LI>
   <LI><A 
   href="#SoftberryHom">softberryHom</A> 
-  - String with Genbank gi and accession. </LI>
+  - String with Genbank gi and accession </LI>
   <LI><A 
   href="#PepPredictions">softberryPep</A> 
   - Translations of Fgenesh++ gene predictions into corresponding amino acid sequences </LI>
@@ -334,75 +351,75 @@ stored in a single table rather than one table per chromosome:</P>
 <UL>
   <LI><A 
   href="#MrnaInfo">mrna</A> 
-  - very relational mRNA and EST information table. Consists mostly of the mRNA 
+  - Very relational mRNA and EST information table. Consists mostly of the mRNA 
   accession and pointers into the tables below. 
   <LI><A 
   href="#MrnaInfo">author</A> 
-  - list of authors 
+  - List of authors 
   <LI><A 
   href="#MrnaInfo">bacClone</A> 
-  - name of the Bacterial Artificial Chromosome clone that a sequence 
+  - Name of the Bacterial Artificial Chromosome clone that a sequence 
     was grown in, if applicable </LI>
   <LI><A 
   href="#MrnaInfo">cds</A> 
-  - coding sequence in Genbank format 
+  - Coding sequence in Genbank format 
   <LI><A 
   href="#MrnaInfo">cell</A> 
-  - cell types 
+  - Cell types 
   <LI><A 
   href="#MrnaInfo">center</A> 
-  - sequencing center 
+  - Sequencing center 
   <LI><A 
   href="#MrnaInfo">chromosome</A> 
-  - chromosome ID and name
+  - Chromosome ID and name
   <LI><A 
   href="#MrnaInfo">cytoMap</A> 
-  - position on a cytological map 
+  - Position on a cytological map 
   <LI><A 
   href="#MrnaInfo">description</A> 
-  - a short (one line) description 
+  - Short (one line) description 
   <LI><A 
   href="#MrnaInfo">development</A> 
-  - stage of development of organism 
+  - Stage of development of organism 
   <LI><A 
   href="#MrnaInfo">geneName</A> 
-  - name of gene 
+  - Name of gene 
   <LI><A 
   href="#MrnaInfo">keyword</A> 
-  - associated keywords in Genbank 
+  - Associated keywords in Genbank 
   <LI><A 
   href="#MrnaInfo">library</A> 
-  - clone library (mostly for ESTs) 
+  - Clone library (mostly for ESTs) 
   <LI><A 
   href="#MrnaInfo">mrnaClone</A> 
-  - clone name (mostly for ESTs) 
+  - Clone name (mostly for ESTs) 
   <LI><A 
   href="#MrnaInfo">organism</A> 
-  - name of organism 
+  - Name of organism 
   <LI><A 
   href="#MrnaInfo">productName</A> 
-  - protein product name 
+  - Protein product name 
   <LI><A 
   href="#MrnaInfo">sex</A> 
-  - sex of organism 
+  - Sex of organism 
   <LI><A 
   href="#MrnaInfo">source</A> 
-  - source field in Genbank, often fairly redundant with other fields 
+  - Source field in Genbank, often fairly redundant with other fields 
   <LI><A 
   href="#MrnaInfo">tissue</A> 
-  - tissue isolated from </LI></UL>
+  - Tissue isolated from </LI></UL>
 <P>The last four tables are primarily for internal use:</P>
 <UL>
   <LI><A 
   href="#seqInfo">seq</A> 
-  - describes where mRNA sequence lives. Includes reference to an external file. 
+  - Describes where mRNA sequence lives. Includes reference to an external file. 
 
   <LI><A 
   href="#extFileInfo">extFile</A> 
-  - references to external files, again only used by RNA. 
+  - References to external files, again only used by RNA. 
   <LI><A 
   href="#HistoryInfo">history</A> 
-  - modification history of database, only used by RNA programs </LI>
+  - Modification history of database, only used by RNA programs </LI>
   <LI><A 
   href="#TrackDB">trackDb</A> 
   - Describes an annotation track </LI>
@@ -448,6 +465,7 @@ rosetta uses the first 15 fields of this table. <BR>
     int[expCount] expScores; "Experiment scores."
     )
 </PRE>
+
 <H3><A name=ChromInfo></A>Chromosome Information</H3>
 <PRE>table chromInfo
 "Chromosome names and sizes"
@@ -602,8 +620,7 @@ Last used Apr. 2001.
    )                                                                            
 </PRE>
 <H3><A name=GenePredictions></A>Gene Predictions and Known Genes</H3>
-The following definition is used for the refGene, ensGene, genieAlt, 
-acembly, ensGene, genScan, genscanSubopt, sanger20, sanger22, softberryGene, tigrGeneIndex 
+The following definition is used for the acembly, ensGene, geneid, genieAlt, genScan, genscanSubopt, refGene, sanger20, sanger22, softberryGene, tigrGeneIndex 
 and similar tables. In alternative splicing situations
 each transcript has a row in this table.
 <PRE>table genePred
@@ -808,10 +825,8 @@ Last used Apr. 2001.
 </PRE>
 
 <H3><A name=PslInfo></A>mRNA/EST/Mouse Alignments</H3>
-The following definition is used for the chrN_mrna, chrN_est, chrN_intronEst, 
-all_mrna, all_est 
-uniGene, xenoEst and xenoMrna 
-tables.<BR><BR>
+The following definition is used for the chrN_blatMouse, chrN_blatFish, chrN_blatHuman, chrN_mrna, chrN_est, chrN_intronEst, 
+all_mrna, all_est uniGene, xenoEst and xenoMrna tables.<BR><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0 BORDER=0>
 <TR><TD><PRE>table psl  </TD></TR>
 <TR><TD><PRE>"Summary info about a patSpace alignment"  </TD></TR>
@@ -967,6 +982,27 @@ These tables were created from RepeatMasker .out files.
     string  Comment;        "Comment"
     )
 </PRE>
+
+<H3><A name=RNAcluster></A>Gene Boundaries as Defined by RNA and Spliced
+EST Clusters</H3>
+<PRE>table rnaCluster
+"Gene boundaries deduced from clustering spliced ESTs and mRNAs against the genome"
+    (
+    smallint bin;           "Index"
+    string chrom;           "Human chromosome or FPC contig"
+    uint   chromStart;      "Start position in chromosome"
+    uint   chromEnd;        "End position in chromosome"
+    string name;            "Name of item"
+    uint   score;           "Score from 0-1000"
+    char[1] strand;         "+ or -"
+    uint thickStart;        "Start of where display should be thick (start codon)"
+    uint thickEnd;          "End of where display should be thick (stop codon)"
+    uint reserved;          "Always zero for now"
+    int blockCount;         "Number of blocks"
+    longblob blockSizes;    "Size of each block"
+    longblob chromStarts;   "Start position of each block in chromosome"
+    ) 
+</PRE>    
 
 <H3><A name=RNAgenes></A>RNA Gene Positions</H3>
 Last used Apr. 2001.
