@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.66 2004/07/30 19:28:40 hiram Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.67 2004/07/30 22:01:28 hiram Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1132,24 +1132,6 @@ for (;;)
     if (c == 0) 
 	break;
     if (!isspace(c))
-	*out++ = c;
-    }
-*out++ = 0;
-}
-
-/* Remove specified character from a string */
-void eraseCharacter(char *s, char e)
-{
-char *in, *out;
-char c;
-
-in = out = s;
-for (;;)
-    {
-    c = *in++;
-    if (c == 0) 
-	break;
-    if (c != e)
 	*out++ = c;
     }
 *out++ = 0;
