@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.24 2004/10/13 14:32:46 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.24.18.1 2005/02/15 17:15:41 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -379,22 +379,26 @@ if (((raRefSeqSummary->stringSize > 0) || (raRefSeqCompleteness != NULL))
 static void refLinkUpdate(struct sqlConnection *conn, struct gbStatus* status)
 /* Update the refLink table for the current entry */
 {
+int geneId;
 char *gen = emptyForNull(raFieldCurVal("gen"));
 char *pro = emptyForNull(raFieldCurVal("pro"));
-
 gen = sqlEscapeString2(alloca(2*strlen(gen)+1), gen);
 pro = sqlEscapeString2(alloca(2*strlen(pro)+1), pro);
+
+/* can either have locus id (old locus link db) or gene id, or both,
+ * in which case the geneId is used */
+geneId = (raGeneId != 0) ? raGeneId : raLocusLinkId;
 
 if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(refLinkUpd, "%s\t%s\t%s\t%s\t%u\t%u\t%u\t%u",
                      gen, pro, raAcc, raProtAcc, raFieldCurId("gen"),
-                     raFieldCurId("pro"), raLocusLinkId, raOmimId);
+                     raFieldCurId("pro"), geneId, raOmimId);
 else if (status->stateChg & GB_META_CHG)
     sqlUpdaterModRow(refLinkUpd, 1, "name='%s', product='%s', protAcc='%s', "
                      "geneName=%u, prodName=%u, locusLinkId=%u, "
                      "omimId=%u where mrnaAcc='%s'",
                      gen, pro, raProtAcc, raFieldCurId("gen"),
-                     raFieldCurId("pro"), raLocusLinkId, raOmimId, raAcc);
+                     raFieldCurId("pro"), geneId, raOmimId, raAcc);
 }
 
 static void refSeqPepUpdate(struct sqlConnection *conn, HGID pepFaId)

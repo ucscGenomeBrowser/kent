@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.7 2004/03/09 02:11:36 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.7.80.1 2005/02/15 17:15:42 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -71,6 +71,7 @@ static struct kvt *kvt;
 static struct dyString *dbXrefBuf = NULL;
 static struct dyString *omimIdBuf = NULL;
 static char locusLinkId[64];
+static char geneId[64];
 static char faOffStr[128], faSizeStr[64];
 static char pepSizeStr[64], pepFaOffStr[128], pepFaSizeStr[64];
 
@@ -857,10 +858,12 @@ void parseDbXrefs()
  * in the kvt and to obtain the locus and mim ids for the kvt */
 {
 static char* LOCUS_ID = "LocusID:";
+static char* GENE_ID = "GeneID:";
 static char* MIM_ID = "MIM:";
 struct slName* head = NULL, *xref, *prevXref;
 struct keyVal* dbXrefKv = NULL;
 struct keyVal* locusLinkIdKv = NULL;
+struct keyVal* geneIdKv = NULL;
 struct keyVal* omimIdKv = NULL;
 if (dbXrefBuf == NULL)
     dbXrefBuf = dyStringNew(256);
@@ -889,12 +892,18 @@ while (xref != NULL)
         dyStringAppend(dbXrefBuf, xref->name);
         updateKvt(&dbXrefKv, "dbx", dbXrefBuf->string);
 
-        /* find number in db_xref like LocusID:27 */
+        /* find number in db_xref like LocusID:27 or GeneID:27 */
         if (startsWith(LOCUS_ID, xref->name))
             {
             safef(locusLinkId, sizeof(locusLinkId), "%s",
                   xref->name+strlen(LOCUS_ID));
             updateKvt(&locusLinkIdKv, "loc", locusLinkId);
+            }
+        else if (startsWith(GENE_ID, xref->name))
+            {
+            safef(geneId, sizeof(geneId), "%s",
+                  xref->name+strlen(GENE_ID));
+            updateKvt(&geneIdKv, "gni", geneId);
             }
         else if (startsWith(MIM_ID, xref->name))
             {

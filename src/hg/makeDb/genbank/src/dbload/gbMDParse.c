@@ -12,7 +12,7 @@
 #include "gbFileOps.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.3 2004/03/09 02:11:36 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.3.80.1 2005/02/15 17:15:41 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -33,6 +33,7 @@ char *raRefSeqStatus;
 char *raRefSeqCompleteness;
 struct dyString* raRefSeqSummary = NULL;
 unsigned raLocusLinkId;
+unsigned raGeneId;
 unsigned raOmimId;
 char raCds[8192];  /* Big due to join() specification.  FIXME: make dstring */
 char raProtAcc[GB_ACC_BUFSZ];
@@ -223,6 +224,7 @@ if (raRefSeqSummary == NULL)
     raRefSeqSummary = dyStringNew(1024);
 dyStringClear(raRefSeqSummary);
 raLocusLinkId = 0;
+raGeneId = 0;
 raOmimId = 0;
 raCds[0] = '\0';
 raProtAcc[0] = '\0';
@@ -287,6 +289,8 @@ for (;;)
         dyStringAppend(raRefSeqSummary, val);
     else if (sameString(tag, "loc"))
         raLocusLinkId = gbParseUnsigned(gRaLf, val);
+    else if (sameString(tag, "gni"))
+        raGeneId = gbParseUnsigned(gRaLf, val);
     else if (sameString(tag, "lot"))
         dyStringAppend(raLocusTag, val);
     else if (sameString(tag, "mim"))

@@ -27,7 +27,8 @@ pha - Phase of HTGS.  Either 0, 1, 2, or 3.  Corresponds to HTGS_PHASE0,
       are unorders.
 cen - Sequencing center.  May be Sanger, Whitehead, etc.
 frg - Number of fragments (contigs) in sequence.
-loc - LocusLink ID
+loc - LocusID db_xref
+gni - GeneID db_xref
 mim - OMIM id.
 dbx - space separate libs of database cross-references
 rss - RefSeq status:
@@ -52,4 +53,4 @@ rsc - RefSeq completeness from comment.
         incmpl3 = incomplete on the 3' end.
         part    = not full length.
         unk     = unknown
-        
+rsd - space seperated list of accessions that a RefSeq was derived from.

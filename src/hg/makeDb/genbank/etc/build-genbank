@@ -16,7 +16,7 @@ exec </dev/null
 ulimit -c 256000
 
 # initialize
-gbRoot=/cluster/store5/genbank
+gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

@@ -17,7 +17,7 @@
 # -genbank - only update genbank
 # -refseq - only update refseq
 #
-# $Id: gbDownloadStep,v 1.7 2004/10/20 00:23:45 markd Exp $
+# $Id: gbDownloadStep,v 1.7.16.1 2005/02/15 17:15:41 markd Exp $
 #
 
 use strict;
@@ -154,7 +154,7 @@ sub downloadOrCheckDaily($$$) {
 # files.
 sub updateGenBank() {
     my($version) = getGenBankVer();
-    my $fullRE = qr/(^gb.*\.seq\.gz$)|(^.*\.txt$)|(^README.*$)|(^gb*\.txt\.gz$)/;
+    my $fullRE = qr/(^gb.*\.seq\.gz$)|(^.*\.txt$)|(^README.*$)|(^gb*\.txt\.gz$)|(^gbacc\.idx\.gz$)/;
     my $dailyRE = qr/^nc.*\.flat\.gz$/;
     my $fullExcludeRE = qr/(^gbgss.*\.seq\.gz$)/;
 

@@ -7,9 +7,9 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.6 2004/12/02 18:26:01 genbank Exp $";
+static char const rcsid[] = "$Id: sqlUpdater.c,v 1.6.4.1 2005/02/15 17:15:41 markd Exp $";
 
-#define UPDATE_QUERY_MAX 4096
+#define UPDATE_QUERY_MAX (10*1024)
 
 struct sqlUpdateCmd 
 /* object to hold one update command */
