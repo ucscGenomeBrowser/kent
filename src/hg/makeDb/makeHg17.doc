@@ -9180,3 +9180,41 @@ end
     cd ../utr5
     rm -r split fold err batch.bak
 
+####### BUILD RGD HUMAN QTL TRACKS (DONE 10/7/04 Fan) ##############
+
+mkdir -p /cluster/store8/rgd/human041007
+ln -s /cluster/store8/rgd/human041007 /cluster/data/hg17/bed/rgdQtl
+cd /cluster/data/hg17/bed/rgdQtl
+
+# download data files from RGD
+
+wget --timestamp ftp://rgd.mcw.edu/pub/RGD_genome_annotations/human/human_QTL.gff
+
+# remove extra line feed character at the end of lines
+
+rmLf human_QTL.gff > rgdQtl.gff
+
+# create rgdQtl.tab
+awk '{print $1"\t"$4"\t"$5"\t"$10}'  rgdQtl.gff |sed -e 's/Chr/chr/g'| \
+sed -e 's/"//g' |sed -e 's/RGD://g' | sed -e 's/;//g' > rgdQtl.tab
+
+# create rgdQtlLink.tab
+
+awk '{printf "%s\t%s\t", $12, $10; for (i = 14;i <= NF; ++i ) {printf "%s ", $i} printf "\n"} ' rgdQtl.gff | \
+sed -e 's/"//g'| sed -e 's/RGD://g' | sed -e 's/;//g'| sed -e 's/Note//g' > rgdQtlLink.tab
+
+# load rgdQtl table
+hgLoadBed hg17 rgdQtl rgdQtl.tab
+
+# check rgdQtl table
+checkTableCoords hg17 rgdQtl
+
+# load rgdQtlLink table
+hgsql hg17 -e "drop table hg17.rgdQtlLink;"
+hgsql hg17 <~/kent/src/hg/lib/rgdQtlLink.sql
+hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLink;'
+
+# updated trackDb.ra under /kent/src/hg/makeDb/trackDb/human/hg17 and
+# added rgdQtl.html.
+
+
