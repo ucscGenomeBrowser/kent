@@ -42,7 +42,7 @@ else
     hostent = gethostbyname(hostName);
     if (hostent == NULL)
 	{
-	warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
+	warn("Couldn't find host %s. h_errno %d (%s)", hostName, h_errno, hstrerror(h_errno));
 	return FALSE;
 	}
     memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
