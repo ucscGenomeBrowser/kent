@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.28 2004/05/19 07:23:10 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.29 2004/05/19 16:36:57 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -889,7 +889,7 @@ if (!sameString(month,""))
 safef(query, sizeof(query), "select * from %s%s%s", 
     pushQtbl,
     monthsql,
-    " order by priority,rank,qid desc limit 100"
+    " order by priority,rank, pushdate desc, qid desc limit 100"
     );
 
 // debug printf("query=%s",query); 
@@ -2826,7 +2826,25 @@ printf("<br>\n");
 printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a> <br>\n",newRandState);
 }
 
+void doUnlock()
+/* currently a backdoor for logged-in users to unlock a record */
+{
+struct pushQ q;
+int updateSize = 2456; /* almost anything works here */
 
+ZeroVar(&q);
+safef(q.qid, sizeof(q.qid), cgiString("qid"));   /* required cgi var */
+
+loadPushQ(q.qid, &q, FALSE);
+
+/* unlock record */
+safef(q.lockUser, sizeof(q.lockUser), "");
+safef(q.lockDateTime, sizeof(q.lockDateTime), "");
+
+/* update existing record */
+pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+						
+}
 
 
 /* ------------------------------------------------------- */
@@ -2881,6 +2899,14 @@ if (!sameString(newmonth,""))
 	    safef(month,sizeof(month),newmonth);
 	    }
 	}
+    }
+
+
+
+if (sameString(action,"unlock"))
+    {
+    /* user probably didnt type in the right cachebuster cb= parm, we will supply it. */
+    cgiVarSet("cb",oldRandState);
     }
 
 reqRandState = cgiUsualString("cb","");  /* get cb (cache-buster), ignores request, defaults to main display page */
@@ -2972,6 +2998,11 @@ else if (sameString(action,"showSizes" ))
 else if (sameString(action,"showGateway" )) 
     {
     doShowGateway();
+    }
+
+else if (sameString(action,"unlock" )) 
+    {
+    doUnlock();
     }
 
 else

@@ -23,7 +23,13 @@ an MD5 hash of the password using extended linux crypt(3), becoming the new pass
   
 When pushing, it checks to make sure that joiner, index, and makedoc
 have been verified, and that the size field is not blank.
-   
+
+To prevent lost updates record-lock fields are implemented.
+
+To prevent incorrect states or accidentally reposting twice,
+ cache-busting cb=randomDigits is added to all links and forms except popup help.
+
+
 Currently users must be added manually to the database:
 hgsql qapushq
 insert into users values ('newname','','','','');
