@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.33 2004/01/29 09:17:39 genbank Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.34 2004/01/31 02:57:34 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -660,7 +660,7 @@ cartExclude(cart, sessionVar);
 
 /* Write out cookie for next time. */
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\n",
-	cookieName, cart->userInfo->id, cfgOption("central.domain"), cookieDate());
+	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
 if (doContentType)
     {
     puts("Content-Type:text/html");
