@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: expRecord.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: expRecord.c,v 1.3 2003/10/06 23:14:54 kent Exp $";
 
 struct expRecord *expRecordLoad(char **row)
 /* Load a expRecord from row fetched with select * from expRecord
@@ -222,4 +222,25 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+void expRecordCreateTable(struct sqlConnection *conn, char *table)
+/* Create expression record format table of given name. */
+{
+char query[1024];
+
+safef(query, sizeof(query),
+"CREATE TABLE %s (\n"
+"    id int unsigned not null,	# internal id of experiment\n"
+"    name varchar(255) not null,	# name of experiment\n"
+"    description longblob not null,	# description of experiment\n"
+"    url longblob not null,	# url relevant to experiment\n"
+"    ref longblob not null,	# reference for experiment\n"
+"    credit longblob not null,	# who to credit with experiment\n"
+"    numExtras int unsigned not null,	# number of extra things\n"
+"    extras longblob not null,	# extra things of interest, i.e. classifications\n"
+"              #Indices\n"
+"    PRIMARY KEY(id)\n"
+")\n",   table);
+sqlRemakeTable(conn, table, query);
+}
 

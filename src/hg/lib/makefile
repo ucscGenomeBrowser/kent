@@ -12,9 +12,9 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     celeraDupPositive.o celeraCoverage.o cgh.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chromInfo.o chromInserts.o chr18deletions.o \
-    clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
-    defaultDb.o dbDb.o dnaMotif.o ensFace.o \
-    est3.o estOrientInfo.o estPair.o exoFish.o \
+    clonePos.o coordConv.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
+    defaultDb.o dbDb.o dnaMotif.o dnaProbe.o ensFace.o \
+    est3.o estOrientInfo.o estPair.o exoFish.o expData.o expRecord.o \
     featureBits.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
     genePred.o genomicDups.o genomicSuperDups.o \
     ggCluster.o ggDbIo.o ggGraph.o goa.o goaPart.o grp.o \
@@ -36,7 +36,6 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     stsMapMouseNew.o stsInfoMouseNew.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o \
     trackDb.o trackDbCustom.o trackTable.o wabAli.o \
-    coordConv.o expRecord.o dnaProbe.o \
     ggMrnaAli.o genbank.o \
     glDbRep.o ggDump.o sample.o exprBed.o genMapDb.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
