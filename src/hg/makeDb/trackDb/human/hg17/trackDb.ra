@@ -23,7 +23,7 @@ shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
 priority 109
-visibility pack
+visibility hide
 #color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
@@ -89,6 +89,14 @@ speciesOrder chimp mm4 rat chicken fugu zebrafish
 track varMultizMm5Rn3GalGal2Fr1
 shortLabel varMultiz5Way
 longLabel Human/Mouse/Rat/Chicken/Fugu VarMultiz 
+group compGeno
+priority 191
+visibility hide
+type maf
+
+track varMultizHMRDEC
+shortLabel varMultiz6Way
+longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
 group compGeno
 priority 191
 visibility hide
