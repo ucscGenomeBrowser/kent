@@ -8165,6 +8165,37 @@ dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
 
+void doSnpLocusLink(struct trackDb *tdb, char *name)
+/* print link to Locus Link for this SNP */
+{
+char *group = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+snprintf(query, sizeof(query),
+         "select kg.name, "
+         "       proteinID, "
+         "       alignID "
+         "from   knownGene kg, "
+         "       %s snp "
+         "where  snp.chrom = kg.chrom "
+         "  and  txStart < chromStart "
+         "  and  txEnd > chromEnd "
+         "  and  snp.name = '%s'", group, name);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    printf("locusId=%s\" TARGET=_blank>LocusLink for ", row[2]);
+    printf("%s (%s)</A></P>\n", row[1], row[0]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -8181,9 +8212,12 @@ int rowOffset;
 ncbiName += 2;
 cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
-
-sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
-	group, seqName, start, itemName);
+sprintf(query, "select * "
+	       "from   %s "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and name = '%s'",
+        group, seqName, start, itemName);
 rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -8192,9 +8226,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed *)&snp, 3);
     }
 doDbSnpRS(ncbiName);
-printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s", 
-       snp.name);
-printf("\" TARGET=_blank>dbSNP link</A></P>\n");
+printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
+doSnpLocusLink(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
