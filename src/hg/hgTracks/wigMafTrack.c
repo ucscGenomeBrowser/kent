@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.21 2004/04/19 18:02:34 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.22 2004/04/19 18:35:17 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -700,11 +700,15 @@ spreadString(vg, x, y, width, mi->height-1, color,
 y += mi->height;
 
 /* draw base-level alignments */
-safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_VAR);
-if (cartCgiUsualBoolean(cart, buf, TRUE))
-    alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
-	tl.mWidth, winBaseCount, 4,
-	MG_WHITE, shadesOfSea[0]);
+    {
+    int alternateColorBaseCount;
+    safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_VAR);
+    alternateColorBaseCount = cartCgiUsualInt(cart, buf, 0);
+    if (alternateColorBaseCount != 0)
+        alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
+            tl.mWidth, winBaseCount, alternateColorBaseCount,
+            MG_WHITE, shadesOfSea[0]);
+    }
 
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
