@@ -14,7 +14,10 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.95 2004/04/09 11:37:44 weber Exp $";
+#define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
+#define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
+
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.96 2004/04/12 13:32:13 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -251,6 +254,10 @@ void cdsColorOptions(char *tableName, int value)
     safef(cdsColorVar, 128, "%s.cds.draw", tableName );
     drawOption = cartUsualString(cart, cdsColorVar, CDS_DRAW_DEFAULT);
     cdsColorDropDown(cdsColorVar, drawOption, value);
+    if(value>0)
+        printf("(<a href=%s>genePred coloring help</a>)<br>",CDS_HELP_PAGE);
+    else
+        printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
 }
 
 void refGeneUI(struct trackDb *tdb)
@@ -300,6 +307,9 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
+if(sameString(tdb->tableName,"mrna") || 
+   sameString(tdb->tableName,"xenoMrna"))
+        cdsColorOptions(tdb->tableName, -1);
 }
 
 void bedUi(struct trackDb *tdb)
@@ -788,8 +798,8 @@ else
                 if (wordCount == 3)
                         if(sameWord(words[1], "xeno"))
 	                        crossSpeciesUi(tdb);
-
-                /*cdsColorOptions(tdb->tableName,-1);*/
+                if (sameString(tdb->tableName,"mrnaBlastz"))
+                        cdsColorOptions(tdb->tableName,-1);
                 }
     freeMem(typeLine);
     }
