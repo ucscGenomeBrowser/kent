@@ -370,11 +370,12 @@ end
 
 ######## MAKING FAMILY BROWSER TABLES #######
 
+# GETTING STARTED WITH FAMILY BROWSER (DONE 2003-11-29 Jim)
     # Making tables to cluster splice varients
     ssh hgwdev
     hgClusterGenes sacCer1 sgdGene sgdIsoforms sgdCanonical
 
-    # Make self mapping table for expression. (Done)
+    # Make self mapping table for expression. 
     echo 'create table sgdToSgd ( \
           name varchar(10) not null, \
 	  value varchar(10) not null, \
@@ -385,16 +386,370 @@ end
     echo 'load data local infile "sgdToSgd.tab" into table sgdToSgd' \
          | hgsql sacCer1
 
-    # Make expression similarity table. (Done)
+    # Make expression similarity table. 
     cd ~/src/hg/near/hgExpDistance
     hgExpDistance sacCer1 hgFixed.yeastChoCellCycle hgFixed.yeastChoCellCycleExps choExpDistance 
 
+
+#DOING SELF-PROTEIN ALIGNMENTS AND LOADING (DONE 2003-12-8 Jim)
     # Extract peptides from genome database into fasta file
-    # and create a blast database out of them. (IN PROGRESS JK)
+    # and create a blast database out of them. 
     mkdir -p /cluster/data/sacCer1/bed/blastp
     cd /cluster/data/sacCer1/bed/blastp
     pepPredToFa sacCer1 sgdPep sgdPep.faa
     formatdb -i sgdPep.faa -t sgdPep -n sgdPep
     cd ..
 
+    # Copy over database to /scratch
+    ssh kk
+    mkdir -p /scratch/sacCer1/blastp
+    cp /cluster/data/sacCer1/bed/blastp/sgdPep.p* /scratch/sacCer1/blastp
+    sudo /cluster/install/utilities/updateLocal
+
+    # Split up fasta file into bite sized chunks for cluster
+    cd /cluster/data/sacCer1/bed/blastp
+    mkdir split
+    faSplit sequence sgdPep.faa 6000 split/kg
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/self
+    cd /cluster/data/sacCer1/bed/blastp/self
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /scratch/blast/data
+/scratch/blast/blastall -p blastp -d /scratch/sacCer1/blastp/sgdPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1000
+end
+    chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+    # This should finish in 1 minute if the cluster is free.
+#Completed: 5743 of 5743 jobs
+#CPU time in finished jobs:       3570s      59.50m     0.99h    0.04d  0.000 y
+#IO & Wait Time:                 14973s     249.55m     4.16h    0.17d  0.000 y
+#Average job time:                   3s       0.05m     0.00h    0.00d
+#Longest job:                       12s       0.20m     0.00h    0.00d
+#Submission to last job:            55s       0.92m     0.02h    0.00d
+
+    # Load into database.  This takes a minute 
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/self/run/out
+    hgLoadBlastTab sacCer1 sgdBlastTab *.tab
+#Scanning through 5743 files
+#Loading database with 52725 rows
+
+
+#DOING C.ELEGANS-PROTEIN ALIGNMENTS AND LOADING (DONE 2003-12-8 Jim)
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/ce1
+    cd /cluster/data/sacCer1/bed/blastp/ce1
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/scratch/blast/blastall -p blastp -d /iscratch/i/ce1/blastp/wormPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+Completed: 5743 of 5743 jobs
+#CPU time in finished jobs:       9397s     156.62m     2.61h    0.11d  0.000 y
+#IO & Wait Time:                 21849s     364.15m     6.07h    0.25d  0.001 y
+#Average job time:                   5s       0.09m     0.00h    0.00d
+#Longest job:                       26s       0.43m     0.01h    0.00d
+#Submission to last job:            75s       1.25m     0.02h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/ce1/run/out
+    hgLoadBlastTab sacCer1 ceBlastTab -maxPer=1 *.tab
+
+#DOING MOUSE-PROTEIN ALIGNMENTS AND LOADING (DONE 2003-12-8 Jim)
+    # Make mouse ortholog column using blastp on mouse known genes.
+    # First make mouse protein database and copy it to iscratch/i
+    # if it doesn't exist already
+    cd /cluster/data/mm4/bed
+    mkdir blastp
+    cd blastp
+    pepPredToFa mm4 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+    ssh kkr1u00
+    if (-e /iscratch/i/mm4/blastp) then
+       rm -r /iscratch/i/mm4/blastp
+    endif
+    mkdir -p /iscratch/i/mm4/blastp
+    cp /cluster/data/mm4/bed/blastp/known.p?? /iscratch/i/mm4/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/mm4
+    cd /cluster/data/sacCer1/bed/blastp/mm4
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/scratch/blast/blastall -p blastp -d /iscratch/i/mm4/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+#Completed: 5743 of 5743 jobs
+#CPU time in finished jobs:      13913s     231.88m     3.86h    0.16d  0.000 y
+#IO & Wait Time:                 27267s     454.45m     7.57h    0.32d  0.001 y
+#Average job time:                   7s       0.12m     0.00h    0.00d
+#Longest job:                       40s       0.67m     0.01h    0.00d
+#Submission to last job:            80s       1.33m     0.02h    0.00d
+
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/mm4/run/out
+    hgLoadBlastTab sacCer1 mmBlastTab -maxPer=1 *.tab
+
+#DOING ZEBRAFISH-PROTEIN ALIGNMENTS AND LOADING (DONE 2003-12-8 Jim)
+    # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+    # First make protein database and copy it to iscratch/i
+    # if it doesn't exist already
+    cd /cluster/data/dr1/bed
+    mkdir blastp
+    cd blastp
+    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH2.pep.fa.gz 
+    zcat Dan*.pep.fa.gz > ensembl.faa
+    echo "Translation:" > subs.in
+    subs -e ensembl.faa > /dev/null
+    formatdb -i ensembl.faa -t ensembl -n ensembl
+    ssh kkr1u00
+    if (-e /iscratch/i/dr1/blastp) then
+       rm -r /iscratch/i/dr1/blastp
+    endif
+    mkdir -p /iscratch/i/dr1/blastp
+    cp /cluster/data/dr1/bed/blastp/ensembl.p?? /iscratch/i/dr1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/dr1
+    cd /cluster/data/sacCer1/bed/blastp/dr1
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/scratch/blast/blastall -p blastp -d /iscratch/i/dr1/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
+end
+    chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+#Completed: 5743 of 5743 jobs
+#CPU time in finished jobs:      11135s     185.58m     3.09h    0.13d  0.000 y
+#IO & Wait Time:                 23501s     391.69m     6.53h    0.27d  0.001 y
+#Average job time:                   6s       0.10m     0.00h    0.00d
+#Longest job:                       40s       0.67m     0.01h    0.00d
+#Submission to last job:            71s       1.18m     0.02h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/dr1/run/out
+    hgLoadBlastTab sacCer1 drBlastTab -maxPer=1 *.tab
+
+#DOING FRUITFLY-PROTEIN ALIGNMENTS AND LOADING (DONE 2003-12-8 Jim)
+    # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+    # First make SwissProt protein database and copy it to iscratch/i
+    # if it doesn't exist already
+    cd /cluster/data/dm1/bed
+    mkdir blastp
+    cd blastp
+    pepPredToFa dm1 bdgpGenePep bdgp.faa
+    formatdb -i bdgp.faa -t bdgp -n bdgp
+    ssh kkr1u00
+    if (-e /iscratch/i/dm1/blastp) then
+       rm -r /iscratch/i/dm1/blastp
+    endif
+    mkdir -p /iscratch/i/dm1/blastp
+    cp /cluster/data/dm1/bed/blastp/bdgp.p?? /iscratch/i/dm1/blastp
+    iSync
+
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/dm1
+    cd /cluster/data/sacCer1/bed/blastp/dm1
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/scratch/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/bdgp -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+#Completed: 5743 of 5743 jobs
+#CPU time in finished jobs:       9749s     162.49m     2.71h    0.11d  0.000 y
+#IO & Wait Time:                 22247s     370.78m     6.18h    0.26d  0.001 y
+#Average job time:                   6s       0.09m     0.00h    0.00d
+#Longest job:                       28s       0.47m     0.01h    0.00d
+#Submission to last job:            64s       1.07m     0.02h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/dm1/run/out
+    hgLoadBlastTab sacCer1 dmBlastTab -maxPer=1 *.tab
+
+#DOING HUMAN-PROTEIN ALIGNMENTS AND LOADING (DONE 2003-12-8 Jim)
+    # Make human ortholog column using blastp on human known genes.
+    # First make human protein database and copy it to iscratch/i
+    # if it doesn't exist already
+    cd /cluster/data/hg16/bed
+    mkdir blastp
+    cd blastp
+    pepPredToFa hg16 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+    ssh kkr1u00
+    if (-e /iscratch/i/hg16/blastp) then
+       rm -r /iscratch/i/hg16/blastp
+    endif
+    mkdir -p /iscratch/i/hg16/blastp
+    cp /cluster/data/hg16/bed/blastp/known.p?? /iscratch/i/hg16/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/hg16
+    cd /cluster/data/sacCer1/bed/blastp/hg16
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/scratch/blast/blastall -p blastp -d /iscratch/i/hg16/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try
+
+    # Wait a couple of minutes, and do a para check,  if all is good
+    # then do a
+    para push
+#Completed: 5743 of 5743 jobs
+#CPU time in finished jobs:      16096s     268.27m     4.47h    0.19d  0.001 y
+#IO & Wait Time:                 29943s     499.05m     8.32h    0.35d  0.001 y
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest job:                       65s       1.08m     0.02h    0.00d
+#Submission to last job:           100s       1.67m     0.03h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/hg16/run/out
+    hgLoadBlastTab sacCer1 hgBlastTab -maxPer=1 *.tab
 
