@@ -3,14 +3,14 @@
 #include "linefile.h"
 #include "obscure.h"
 #include "hash.h"
-#include "cheapcgi.h"
 #include "jksql.h"
 #include "dystring.h"
 #include "bed.h"
 #include "hdb.h"
 #include "chainNet.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.9 2003/11/17 18:27:54 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.10 2003/12/08 09:42:51 kate Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -18,6 +18,18 @@ boolean oldTable = FALSE;	/* Don't redo table. */
 boolean warnFlag = FALSE;           /* load even with missing fields */
 boolean warned = FALSE;
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
+char *qPrefix = NULL;		/* Prepend prefix and "-" to query name */
+boolean test = FALSE;
+
+static struct optionSpec optionSpecs[] = {
+        {"noBin", OPTION_BOOLEAN},
+        {"oldTable", OPTION_BOOLEAN},
+        {"warn", OPTION_BOOLEAN},
+        {"sqlTable", OPTION_STRING},
+        {"qPrefix", OPTION_STRING},
+        {"test", OPTION_BOOLEAN},
+        {NULL, 0}
+};
 
 
 void usage()
@@ -31,7 +43,9 @@ errAbort(
   "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
+  "   -qPrefix=xxx prepend \"xxx-\" to query name\n"
   "   -warn load even with missing fields\n"
+  "   -test suppress loading table\n"
   );
 }
 
@@ -105,6 +119,7 @@ sqlDisconnect(&conn);
 void cnWriteTables(char *chrom, struct cnFill *fillList, FILE *f, int depth)
 /* Recursively write out fill and gap lists. */
 {
+char qName[64];
 struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
@@ -128,12 +143,19 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fill->score = 0;
     if (!noBin)
 	fprintf(f, "%d\t", hFindBin(fill->tStart, fill->tStart + fill->tSize));
+    qName[0] = 0;
+    if (qPrefix != NULL)
+        {
+        strcat(qName, qPrefix);
+        strcat(qName, "-");
+        }
+    strcat(qName, fill->qName);
     fprintf(f, "%d\t", depth);
     fprintf(f, "%s\t", chrom);
     fprintf(f, "%d\t", fill->tStart);
     fprintf(f, "%d\t", fill->tStart + fill->tSize);
     fprintf(f, "%c\t", fill->qStrand);
-    fprintf(f, "%s\t", fill->qName);
+    fprintf(f, "%s\t", qName);
     fprintf(f, "%d\t", fill->qStart);
     fprintf(f, "%d\t", fill->qStart + fill->qSize);
     fprintf(f, "%d\t", fill->chainId);
@@ -182,20 +204,25 @@ for (i=0; i<netCount; ++i)
 
     }
 fclose(alignFile);
-loadDatabase(database, alignFileName, track);
-remove(alignFileName);
+if (!test)
+    {
+    loadDatabase(database, alignFileName, track);
+    remove(alignFileName);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage();
-noBin = cgiBoolean("noBin");
-oldTable = cgiBoolean("oldTable");
-warnFlag = cgiBoolean("warn");
-sqlTable = cgiOptionalString("sqlTable");
+noBin = optionExists("noBin");
+oldTable = optionExists("oldTable");
+warnFlag = optionExists("warn");
+sqlTable = optionVal("sqlTable", NULL);
+qPrefix = optionVal("qPrefix", NULL);
+test = optionExists("test");
 hgLoadNet(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }

@@ -3,19 +3,31 @@
 #include "linefile.h"
 #include "obscure.h"
 #include "hash.h"
-#include "cheapcgi.h"
 #include "jksql.h"
 #include "dystring.h"
 #include "bed.h"
 #include "hdb.h"
 #include "chainBlock.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.7 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.8 2003/12/08 09:42:51 kate Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+        {"noBin", OPTION_BOOLEAN},
+        {"oldTable", OPTION_BOOLEAN},
+        {"sqlTable", OPTION_STRING},
+        {"qPrefix", OPTION_STRING},
+        {"test", OPTION_BOOLEAN},
+        {NULL, 0}
+};
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
+char *qPrefix = NULL;		/* prefix to prepend (with -) to query name */
+boolean test = FALSE;		/* suppress loading to table */
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +40,8 @@ errAbort(
   "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
+  "   -qPrefix=xxx   prepend \"xxx-\" to query name\n"
+  "   -test    suppress loading to database\n"
   );
 }
 
@@ -43,11 +57,20 @@ fprintf(f,"%s\t%d\t%d\t%d\t%d\n",
 void writeChain(struct chain *a, FILE *f)
 /* Write out chain (just the header parts) in tab separated format. */
 {
+char qName[64];
+
 if (!noBin)
     fprintf(f,"%u\t", hFindBin(a->tStart, a->tEnd));
+qName[0] = 0;
+if (qPrefix != NULL)
+    {
+    strcat(qName, qPrefix);
+    strcat(qName, "-");
+    }
+strcat(qName, a->qName);
 fprintf(f, "%f\t%s\t%d\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%d\n",
 	a->score, a->tName, a->tSize, a->tStart, a->tEnd, 
-	a->qName, a->qSize, a->qStrand, a->qStart, a->qEnd, a->id);
+	qName, a->qSize, a->qStrand, a->qStart, a->qEnd, a->id);
 }
 
 
@@ -187,9 +210,12 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 				  * chain links it looks like! */
 fclose(chainFile);
 fclose(linkFile);
-printf("Loading %d chains into %s.%s\n", count, database, track);
-loadDatabaseChain(database, chainFileName, track);
-loadDatabaseLink(database, linkFileName, linkTrack);
+if (!test)
+    {
+    printf("Loading %d chains into %s.%s\n", count, database, track);
+    loadDatabaseChain(database, chainFileName, track);
+    loadDatabaseLink(database, linkFileName, linkTrack);
+    }
 //remove(chainFile);
 //remove(linkFile);
 }
@@ -197,12 +223,14 @@ loadDatabaseLink(database, linkFileName, linkTrack);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
-noBin = cgiBoolean("noBin");
-oldTable = cgiBoolean("oldTable");
-sqlTable = cgiOptionalString("sqlTable");
+noBin = optionExists("noBin");
+oldTable = optionExists("oldTable");
+sqlTable = optionVal("sqlTable", NULL);
+qPrefix = optionVal("qPrefix", NULL);
+test = optionExists("test");
 hgLoadChain(argv[1], argv[2], argv[3]);
 return 0;
 }

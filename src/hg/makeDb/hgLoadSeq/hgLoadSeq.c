@@ -8,16 +8,20 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.4 2003/11/04 15:48:37 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.5 2003/12/08 09:42:51 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"abbr", OPTION_STRING},
+    {"prefix", OPTION_STRING},
+    {"test", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 /* Command line options and defaults. */
 char *abbr = NULL;
+char *prefix = NULL;
+boolean test = FALSE;
 
 char seqTable[] =
 /* This keeps track of a sequence. */
@@ -61,7 +65,8 @@ if (s != NULL && fluff != NULL)
     }
 }
 
-boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, FILE *seqTab)
+boolean loadFaSeq(
+            struct lineFile *faLf, HGID extFileId, FILE *seqTab)
 /* Add next sequence in fasta file to tab file */
 {
 off_t faOffset, faEndOffset;
@@ -69,8 +74,9 @@ int faSize;
 char *s, *faLine;
 int faLineSize, faNameSize;
 int dnaSize = 0;
-char faAcc[32];
+char faAcc[48];
 HGID seqId;
+int prefixLen = 0;
 
 /* Get Next FA record. */
 if (!lineFileNext(faLf, &faLine, &faLineSize))
@@ -83,9 +89,17 @@ abbreviate(s, abbr);
 faNameSize = strlen(s);
 if (faNameSize == 0)
     errAbort("Missing accession line %d of %s", faLf->lineIx, faLf->fileName);
-if (strlen(faLine+1) >= sizeof(faAcc))
+if (prefix != NULL)
+    prefixLen = strlen(prefix) + 1;
+if (strlen(faLine+1) + prefixLen >= sizeof(faAcc))
     errAbort("Fasta name too long line %d of %s", faLf->lineIx, faLf->fileName);
-strcpy(faAcc, s);
+faAcc[0] = 0;
+if (prefix != NULL)
+    {
+    strcat(faAcc, prefix);
+    strcat(faAcc, "-");
+    }
+strcat(faAcc, s);
 if (faSeekNextRecord(faLf))
     lineFileReuse(faLf);
 faEndOffset = faLf->bufOffsetInFile + faLf->lineStart;
@@ -94,6 +108,7 @@ faSize = (int)(faEndOffset - faOffset);
 seqId = hgNextId();
 
 /* note: sqlDate column is empty */
+
 fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
         seqId, faAcc, dnaSize, extFileId, faOffset, faSize);
 return TRUE;
@@ -102,7 +117,8 @@ return TRUE;
 void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab)
 /* Add sequences in a fasta file to a seq table tab file */
 {
-HGID extFileId = hgAddToExtFile(faFile, conn);
+HGID extFileId; 
+extFileId = test ? 0 : hgAddToExtFile(faFile, conn);
 struct lineFile *faLf = lineFileOpen(faFile, TRUE);
 unsigned count = 0;
 
@@ -129,19 +145,26 @@ struct sqlConnection *conn;
 int i;
 FILE *seqTab;
 
-hgSetDb(database);
-conn = hgStartUpdate();
-sqlMaybeMakeTable(conn, "seq", seqTable);
+if (!test)
+    {
+    hgSetDb(database);
+    conn = hgStartUpdate();
+    sqlMaybeMakeTable(conn, "seq", seqTable);
+    }
 
+printf("Creating .tab file\n");
 seqTab = hgCreateTabFile(".", "seq");
 for (i=0; i<fileCount; ++i)
     {
     loadFa(fileNames[i], conn, seqTab);
     }
-printf("Updating seq table\n");
-hgLoadTabFile(conn, ".", "seq", &seqTab);
-hgEndUpdate(&conn, "Add sequences");
-printf("All done\n");
+if (!test)
+    {
+    printf("Updating seq table\n");
+    hgLoadTabFile(conn, ".", "seq", &seqTab);
+    hgEndUpdate(&conn, "Add sequences");
+    printf("All done\n");
+    }
 }
 
 void usage()
@@ -154,7 +177,9 @@ errAbort(
   "This loads sequence file info only, it is not used for genbank data.\n"
   "\n"
   "Options:\n"
-  "  -abbr=junk - remove junk from the start of each seq accesions\n"
+  "  -abbr=junk - remove junk from the start of each seq accession\n"
+  "  -prefix=xxx - prepend \"xxx-\" to each seq accession\n"
+  "  -test - do not load databse table\n"
   );
 }
 
@@ -165,6 +190,8 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
 abbr = optionVal("abbr", NULL);
+prefix = optionVal("prefix", NULL);
+test = optionExists("test");
 hgLoadSeq(argv[1], argc-2, argv+2);
 return 0;
 }
