@@ -13,7 +13,7 @@
 #include "sample.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.72 2003/09/27 15:19:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.73 2003/09/29 22:47:51 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -300,7 +300,7 @@ void wigUi(struct trackDb *tdb)
 char *typeLine = NULL;	/*	to clone the tdb->type string	*/
 char *words[8];		/*	chopping the typeLine	*/
 int wordCount = 0;	/*	number of words found in typeLine */
-char options[8][256];	/*	our option strings here	*/
+char options[9][256];	/*	our option strings here	*/
 char *heightPer;	/*	string from cart	*/
 char *minY_str;	/*	string from cart	*/
 char *maxY_str;	/*	string from cart	*/
@@ -311,6 +311,7 @@ double maxY;	/*	from the typeLine	*/
 int thisHeightPer = DEFAULT_HEIGHT_PER;	/*	pixels per item	*/
 char *interpolate;	/*	points only, or interpolate	*/
 char *horizontalGrid;	/*	Grid lines, off by default */
+char *lineBar;	/*	Line or Bar graph */
 
 minY = DEFAULT_MIN_Yv;
 maxY = DEFAULT_MAX_Yv;
@@ -330,6 +331,7 @@ snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
 snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
 snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
 snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
+snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
 minY_str = cartOptionalString(cart, &options[4][0]);
 maxY_str = cartOptionalString(cart, &options[5][0]);
 
@@ -344,25 +346,37 @@ else maxYc = maxY;
 
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
 
+/*
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown(&options[1][0], interpolate );
 printf(" ");
+*/
 
 horizontalGrid = cartUsualString(cart, &options[7][0], "OFF");
+lineBar = cartUsualString(cart, &options[8][0], "Bar");
 
-printf("<p><b>Horizontal Grid Lines: </b> ");
+printf("<TABLE BORDER=0><TR><TD>\n");
+
+printf("<b>Type of graph: </b> ");
+wiggleGraphDropDown(&options[8][0], lineBar );
+printf("</TD><TD>\n");
+
+printf("<b>Horizontal Grid Lines: </b> ");
 wiggleGridDropDown(&options[7][0], horizontalGrid );
-printf(" ");
+printf("</TD></TR><TR><TD COLSPAN=2>\n");
 
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+printf("<b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
-printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)", MIN_HEIGHT_PER, DEFAULT_HEIGHT_PER);
+printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)",
+	MIN_HEIGHT_PER, DEFAULT_HEIGHT_PER);
+printf("</TD></TR><TR><TD COLSPAN=2>\n");
 
-printf("<p><b>Vertical Range</b>:&nbsp;&nbsp;\nmin:");
+printf("<b>Vertical Viewing Range</b>:&nbsp;&nbsp;\nmin:");
 cgiMakeDoubleVar(&options[4][0], minYc, 6 );
 printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
 cgiMakeDoubleVar(&options[5][0], maxYc, 6 );
-printf("&nbsp;(range:&nbsp;%.1f-%.1f)", minY, maxY);
+printf("<BR>(data range limits:&nbsp;%.1f-%.1f)", minY, maxY);
+printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
 }
