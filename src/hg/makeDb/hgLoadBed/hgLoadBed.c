@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.22 2004/02/03 22:06:01 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.23 2004/02/04 04:49:28 braney Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -234,7 +234,11 @@ if (!noSort)
     printf("Sorted\n");
     }
 else
+    {
     printf("Not Sorting\n");
+    slReverse(&bedList);
+    }
+
 loadDatabase(database, track, bedSize, bedList);
 }
 
