@@ -50,6 +50,19 @@ ds->stringSize = newSize;
 buf[newSize] = 0;
 }
 
+char dyStringAppendC(struct dyString *ds, char c)
+/* Append char to end of string.  You might want to use the generally faster dyStringPut. */
+{
+char *s;
+if (ds->stringSize >= ds->bufSize)
+     dyStringExpandBuf(ds, ds->bufSize+256);
+s = ds->string + ds->stringSize++;
+*s++ = c;
+*s = 0;
+return c;
+}
+
+void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 void dyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString. */
 {

@@ -554,17 +554,17 @@ return dnaOrAaScoreMatch(a, b, size, 1, -1, 'n');
 }
 
 int aaScore2(AA a, AA b)
-/* Score match between two bases (relatively crudely). */
+/* Score match between two amino acids (relatively crudely). */
 {
 if (a == 'X' || b == 'X') return 0;
-if (a == b) return 3;
+if (a == b) return 2;
 else return -1;
 }
 
 int aaScoreMatch(AA *a, AA *b, int size)
 /* Compare two peptides aa by aa. */
 {
-return dnaOrAaScoreMatch(a, b, size, 3, -1, 'X');
+return dnaOrAaScoreMatch(a, b, size, 2, -1, 'X');
 }
 
 

@@ -29,6 +29,9 @@ void dyStringAppend(struct dyString *ds, char *string);
 void dyStringAppendN(struct dyString *ds, char *string, int stringSize);
 /* Append string of given size to end of string. */
 
+char dyStringAppendC(struct dyString *ds, char c);
+/* Append char to end of string.  You might want to use the generally faster dyStringPut. */
+
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString. */
 
@@ -36,6 +39,7 @@ void dyStringPrintf(struct dyString *ds, char *format, ...);
 /*  Printf to end of dyString.  Don't do more than 1000 characters this way... */
 
 #define dyStringClear(ds) (ds->string[0] = ds->stringSize = 0)
+/* Clear string. */
 
 #endif /* DYSTRING_H */
 
