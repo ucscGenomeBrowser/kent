@@ -702,11 +702,12 @@ sub getDbConfNo($$) {
     }
 }
 
-# convert a space seperate list into a list, pass back undef
+# convert a space seperate list into a list, if strList is undef, pass back
+# an empty list
 sub splitSpaceList($) {
     my($strList) = @_;
     if (!defined($strList)) {
-        return undef;
+        return ();
     } else {
         return split(/\s+/, $strList);
     }
