@@ -1255,10 +1255,11 @@ else
    }
 }
 
-void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
+static void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, FILE *out,
-	struct hash *t3Hash, boolean reportTargetStrand, boolean targetIsRc)
+	struct hash *t3Hash, boolean reportTargetStrand, boolean targetIsRc,
+	struct hash *maskHash, int minIdentity)
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format (or pslX format - if t3Hash is non-NULL).  */
 {
@@ -1285,12 +1286,13 @@ int i;
 struct trans3 *t3 = NULL;
 struct trans3 *t3List = NULL;
 int score = 0;
+Bits *maskBits = NULL;
 
 
+if (maskHash != NULL)
+    maskBits = hashMustFindVal(maskHash, genoSeq->name);
 if (t3Hash != NULL)
-    {
     t3List = hashMustFindVal(t3Hash, genoSeq->name);
-    }
 hStart = t3GenoPos(ali->hStart, genoSeq, t3List, FALSE) + chromOffset;
 hEnd = t3GenoPos(right->hEnd, genoSeq, t3List, TRUE) + chromOffset;
 
@@ -1311,7 +1313,18 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	else
 	    {
 	    if (n == h)
-		++matchCount;
+		{
+		if (maskBits != NULL)
+		    {
+		    int seqOff = hp + i - hay;
+		    if (bitReadOne(maskBits, seqOff))
+		        ++repMatch;
+		    else
+		        ++matchCount;
+		    }
+		else
+		    ++matchCount;
+		}
 	    else
 		++mismatchCount;
 	    }
@@ -1337,49 +1350,54 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	}
     }
 
-/* See if it looks good enough to output. */
+/* See if it looks good enough to output, and output. */
 if (score >= minMatch)
     {
-    if (isRc)
+    int gaps = nInsertCount + (stringency == ffCdna ? 0: hInsertCount);
+    int id = roundingScale(1000, matchCount + repMatch - 2*gaps, matchCount + repMatch + mismatchCount);
+    if (id >= minIdentity)
 	{
-	int temp;
-	int oSize = otherSeq->size;
-	temp = nStart;
-	nStart = oSize - nEnd;
-	nEnd = oSize - temp;
-	}
-    if (targetIsRc)
-        {
-	int temp;
-	temp = hStart;
-	hStart = chromSize - hEnd;
-	hEnd = chromSize - temp;
-	}
-    fprintf(out, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%c",
-	matchCount, mismatchCount, repMatch, countNs, nInsertCount, nInsertBaseCount, hInsertCount, hInsertBaseCount,
-	(isRc ? '-' : '+'));
-    if (reportTargetStrand)
-        fprintf(out, "%c", (targetIsRc ? '-' : '+') );
-    fprintf(out, "\t%s\t%d\t%d\t%d\t"
-		 "%s\t%d\t%d\t%d\t%d\t",
-	otherSeq->name, otherSeq->size, nStart, nEnd,
-	chromName, chromSize, hStart, hEnd,
-	ffAliCount(ali));
-    for (ff = ali; ff != NULL; ff = ff->right)
-	fprintf(out, "%d,", ff->nEnd - ff->nStart);
-    fprintf(out, "\t");
-    for (ff = ali; ff != NULL; ff = ff->right)
-	fprintf(out, "%d,", ff->nStart - needle);
-    fprintf(out, "\t");
-    for (ff = ali; ff != NULL; ff = ff->right)
-	{
-	fprintf(out, "%d,", t3GenoPos(ff->hStart, genoSeq, t3List, FALSE) + chromOffset);
-	}
-    fprintf(out, "\n");
-    if (ferror(out))
-	{
-	perror("");
-	errAbort("Write error to .psl");
+	if (isRc)
+	    {
+	    int temp;
+	    int oSize = otherSeq->size;
+	    temp = nStart;
+	    nStart = oSize - nEnd;
+	    nEnd = oSize - temp;
+	    }
+	if (targetIsRc)
+	    {
+	    int temp;
+	    temp = hStart;
+	    hStart = chromSize - hEnd;
+	    hEnd = chromSize - temp;
+	    }
+	fprintf(out, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%c",
+	    matchCount, mismatchCount, repMatch, countNs, nInsertCount, nInsertBaseCount, hInsertCount, hInsertBaseCount,
+	    (isRc ? '-' : '+'));
+	if (reportTargetStrand)
+	    fprintf(out, "%c", (targetIsRc ? '-' : '+') );
+	fprintf(out, "\t%s\t%d\t%d\t%d\t"
+		     "%s\t%d\t%d\t%d\t%d\t",
+	    otherSeq->name, otherSeq->size, nStart, nEnd,
+	    chromName, chromSize, hStart, hEnd,
+	    ffAliCount(ali));
+	for (ff = ali; ff != NULL; ff = ff->right)
+	    fprintf(out, "%d,", ff->nEnd - ff->nStart);
+	fprintf(out, "\t");
+	for (ff = ali; ff != NULL; ff = ff->right)
+	    fprintf(out, "%d,", ff->nStart - needle);
+	fprintf(out, "\t");
+	for (ff = ali; ff != NULL; ff = ff->right)
+	    {
+	    fprintf(out, "%d,", t3GenoPos(ff->hStart, genoSeq, t3List, FALSE) + chromOffset);
+	    }
+	fprintf(out, "\n");
+	if (ferror(out))
+	    {
+	    perror("");
+	    errAbort("Write error to .psl");
+	    }
 	}
     }
 }
@@ -1390,7 +1408,7 @@ void gfSavePsl(char *chromName, int chromSize, int chromOffset,
 /* Save psl for simple nucleotide/nucleotide alignments. */
 {
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, outputData, NULL, FALSE, FALSE);
+    isRc, stringency, minMatch, outputData, NULL, FALSE, FALSE, NULL, 0);
 }
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
@@ -1400,6 +1418,7 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 {
 struct gfSavePslxData *data = outputData;
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, data->f, data->t3Hash, data->reportTargetStrand, data->targetRc);
+    isRc, stringency, minMatch, data->f, data->t3Hash, data->reportTargetStrand, data->targetRc,
+    data->maskHash, data->minGood);
 }
 

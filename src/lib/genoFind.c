@@ -148,12 +148,19 @@ void genoFindFree(struct genoFind **pGenoFind)
 /* Free up a genoFind index. */
 {
 struct genoFind *gf = *pGenoFind;
+int i;
+struct gfSeqSource *sources;
 if (gf != NULL)
     {
     freeMem(gf->lists);
     freeMem(gf->listSizes);
     freeMem(gf->allocated);
-    freeMem(gf->sources);
+    if ((sources = gf->sources) != NULL)
+	{
+	for (i=0; i<gf->sourceCount; ++i)
+	    bitFree(&sources[i].maskedBits);
+	freeMem(sources);
+	}
     freez(pGenoFind);
     }
 }
@@ -716,9 +723,24 @@ for (isRc=0; isRc <= 1; ++isRc)
     }
 }
 
+Bits *maskFromUpper(bioSeq *seq)
+/* Allocate a mask for sequence and fill it in based on
+ * sequence case. */
+{
+int size = seq->size, i;
+char *poly = seq->dna;
+Bits *b = bitAlloc(size);
+for (i=0; i<size; ++i)
+    {
+    if (isupper(poly[i]))
+        bitSetOne(b, i);
+    }
+return b;
+}
+
 struct genoFind *gfSmallIndexSeq(struct genoFind *gf, bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
-	boolean isPep)
+	boolean isPep, boolean maskUpper)
 /* Make index for all seqs in list. */
 {
 int seqCount = slCount(seqList);
@@ -744,6 +766,8 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     ss->start = offset;
     offset += seq->size;
     ss->end = offset;
+    if (maskUpper)
+	ss->maskedBits = maskFromUpper(seq);
     }
 gf->totalSeqSize = offset;
 gfZeroOverused(gf);
@@ -752,7 +776,7 @@ return gf;
 
 struct genoFind *gfLargeIndexSeq(struct genoFind *gf, bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
-	boolean isPep)
+	boolean isPep, boolean maskUpper)
 /* Make index for all seqs in list. */
 {
 int seqCount = slCount(seqList);
@@ -776,6 +800,8 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     ss->start = offset;
     offset += seq->size;
     ss->end = offset;
+    if (maskUpper)
+	ss->maskedBits = maskFromUpper(seq);
     }
 gf->totalSeqSize = offset;
 gfZeroOverused(gf);
@@ -785,7 +811,7 @@ return gf;
 
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
-	boolean isPep, boolean allowOneMismatch)
+	boolean isPep, boolean allowOneMismatch, boolean maskUpper)
 /* Make index for all seqs in list.  For DNA sequences upper case bits will
  * be unindexed. */
 {
@@ -793,11 +819,11 @@ struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat,
 				oocFile, isPep, allowOneMismatch);
 if (gf->segSize > 0)
     {
-    gfLargeIndexSeq(gf, seqList, minMatch, maxGap, tileSize, maxPat, oocFile, isPep);
+    gfLargeIndexSeq(gf, seqList, minMatch, maxGap, tileSize, maxPat, oocFile, isPep, maskUpper);
     }
 else
     {
-    gfSmallIndexSeq(gf, seqList, minMatch, maxGap, tileSize, maxPat, oocFile, isPep);
+    gfSmallIndexSeq(gf, seqList, minMatch, maxGap, tileSize, maxPat, oocFile, isPep, maskUpper);
     }
 return gf;
 }
