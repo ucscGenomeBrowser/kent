@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.21 2004/01/07 00:28:46 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.22 2004/01/13 04:44:02 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -955,8 +955,10 @@ int main(int argc, char *argv[])
 {
 char *path = getenv("PATH_INFO");
 
+#ifdef DEBUG
 if (path == NULL)
     path = cloneString("hg16/features");
+#endif /* DEBUG */
 cgiSpoof(&argc, argv);
 verbose = cgiVarExists("verbose");
 if (argc == 2)
