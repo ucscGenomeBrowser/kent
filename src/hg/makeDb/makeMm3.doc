@@ -36,7 +36,7 @@
         gbToFaRa humanXenoRna.fil humanXenoEst.fa humanXenoEst.ra humanXenoEst.ta stdin
 
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (IN PROGRESS - 2/10/02 -MATT)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (DONE - 2/10/03 -MATT)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -94,7 +94,7 @@ Make the xenoRna file
        cd /gbdb/mm3/mrna.133
        ln -s /cluster/store2/mrna.133/mouseXenoRna.fa mouseXenoRna.fa
        ln -s /cluster/store2/mrna.133/mouseXenoRna.ra mouseXenoRna.ra
-       hgLoadRna add -type=xenoRna rn2 /gbdb/mm3/mrna.133/mouseXenoRna.fa  /gbdb/rn2/mrna.133/mouseXenoRna.ra
+       hgLoadRna add -type=xenoRna mm3 /gbdb/mm3/mrna.133/mouseXenoRna.fa  /gbdb/mm3/mrna.133/mouseXenoRna.ra
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TODO)
 

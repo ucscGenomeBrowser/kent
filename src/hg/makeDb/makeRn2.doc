@@ -849,7 +849,7 @@ o - Load best in genome into database as so:
         cd ~/rat/vsOo33/bestRat
         hgLoadPsl rn2 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (DONE 2/12/03 - MATT)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -900,9 +900,6 @@ Load into database as so:
        hgLoadPsl rn2 xenoMrna.psl -tNameIx
 
 Make the xenoRna file
-        cd /cluster/store2/mrna.133
-        gunzip -c /cluster/store2/genbank.133/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
-        | gbToFaRa ratXenoRna.fil ratXenoRna.fa ratXenoRna.ra ratXenoRna.ta stdin
 
        Make a /gbdb symlink
        cd /gbdb/rn2/mrna.133
