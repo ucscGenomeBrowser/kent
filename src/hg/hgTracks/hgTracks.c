@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.604 2003/09/25 15:36:45 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.605 2003/09/26 20:07:14 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1865,7 +1865,7 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 tg->mapName = "hgUserPsl";
-tg->visibility = tvPack;
+tg->visibility = tvFull;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
