@@ -498,6 +498,8 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 
+// Was the database passed in as a cgi param?
+// If so, it takes precedence and determines the genome.
 if (*retDb)
     {
     if (!hDbExists(*retDb))
@@ -506,14 +508,39 @@ if (*retDb)
         }
     *retGenome = hGenome(*retDb);
     }
+// If no db was passed in as a cgi param then was the organism (a.k.a. genome)
+// passed in as a cgi param?
+// If so, the we use the proper database for that genome.
 else if (*retGenome)
     {
     *retDb = getDbForGenome(*retGenome, cart);
     *retGenome = hGenome(*retDb);
     }
+// If no cgi params passed in then we need to inspect the session
 else
     {
-    *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-    *retGenome = hGenome(*retDb);
+    *retDb = cartOptionalString(cart, dbCgiName);
+    // If there was a db found in the session that determines everything.
+    if (*retDb) 
+        {
+        *retGenome = hGenome(*retDb);
+        }
+    // If no db was found in the session then check if the organism is in
+    // the session.
+    else
+        {
+        *retGenome = cartOptionalString(cart, orgCgiName);
+        // If the organism was found in the genome then get its default db.
+        if (*retGenome)
+            {
+            *retDb = hDefaultDbForGenome(*retGenome);
+            }
+        // If no organism in the session then get the default db and organism.
+        else
+            {
+            *retDb = hGetDb();
+            *retGenome = hGenome(*retDb);
+            }
+        }
     }
 }
