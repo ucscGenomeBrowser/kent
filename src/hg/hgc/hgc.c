@@ -3544,6 +3544,43 @@ printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
+
+void longXenoPsl1zoo(struct trackDb *tdb, char *item, 
+	char *otherOrg, char *otherChromTable)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+struct psl *psl = NULL, *trimmedPsl = NULL;
+char otherString[256];
+char *cgiItem = cgiEncode(item);
+char *thisOrg = hOrganism(database);
+
+cartWebStart(tdb->longLabel);
+psl = loadPslFromRangePair(tdb->tableName, item);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+	psl->qName, psl->qStart, psl->qEnd);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
+	psl->tName, psl->tStart, psl->tEnd);
+printf("<B>%s size:</B> %d<BR>\n", thisOrg,
+	psl->tEnd - psl->tStart);
+printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
+printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
+printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
+printf("Blah blah blah<BR>\n");
+sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
+	tdb->tableName, otherOrg, otherChromTable);
+if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
+    {
+    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    printf("View details of parts of alignment within browser window.</A><BR>\n");
+    }
+printTrackHtml(tdb);
+freez(&cgiItem);
+}
+
 void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
@@ -3575,7 +3612,7 @@ if (!(strcmp(otherName,"human")
       && strcmp(otherName,"zebrafish")))
     {
     sprintf( chromStr, "%sChrom" , otherName );
-    longXenoPsl1(tdb, item, otherName, chromStr );
+    longXenoPsl1zoo(tdb, item, otherName, chromStr );
     }
 
 }
