@@ -537,7 +537,7 @@ exit; # don't actually run this like a script :)
     # This time around, Markd handled adding the new species to gbGenome.c 
     # because it's not yet in the kent tree.  
 
-    # Edit /cluster/data/genebank/etc/genbank.conf and add:
+    # Edit /cluster/data/genbank/etc/genbank.conf and add:
 # dm1
 dm1.genome = /cluster/bluearc/drosophila/dm1/nib/chr*.nib
 dm1.lift = /cluster/data/dm1/jkStuff/liftAll.lft
