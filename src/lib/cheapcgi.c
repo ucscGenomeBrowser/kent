@@ -319,6 +319,12 @@ errAbort("Unknown key %s for variable %s\n", key, varName);
 return val;
 }
 
+void cgiMakeButton(char *name, char *value)
+/* Make 'submit' type button. */
+{
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
+}
+
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
