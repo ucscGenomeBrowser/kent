@@ -610,6 +610,60 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in gene prediction table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char *chrom;
+struct snp snp;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+
+localName = spec;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%%%s%%'", tableName, localName);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->name = cloneString(query->string);
+	slAddHead(&hgp->tableList, table);
+	}
+    snpStaticLoad(row+rowOffset, &snp);
+    if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s", snp.chrom, tableName); 
+    AllocVar(pos);
+    pos->chrom = chrom;
+    pos->chromStart = snp.chromStart - 5000;
+    pos->chromEnd = snp.chromEnd + 5000;
+    pos->name = cloneString(spec);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
+
 static boolean findSnpPos(char *spec, struct hgPositions *hgp, char *tableName)
 /* Look for position in stsMarker table. */
 {
@@ -1091,6 +1145,18 @@ else if (findSnpPos(query, hgp, "snpTsc"))
     {
     }
 else if (findSnpPos(query, hgp, "snpNih"))
+    {
+    }
+else if (findGenePred(query, hgp, "sanger22"))
+    {
+    }
+else if (findGenePred(query, hgp, "ensGene"))
+    {
+    }
+else if (findGenePred(query, hgp, "genieAlt"))
+    {
+    }
+else if (findGenePred(query, hgp, "softberryGene"))
     {
     }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
