@@ -30,6 +30,6 @@ track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
 priority 14
-visibility dense
+visibility hide
 color 125,0,150
 type genePred genieAltPep
