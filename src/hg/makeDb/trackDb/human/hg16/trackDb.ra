@@ -14,6 +14,28 @@ group map
 visibility hide
 altColor 180,180,180 
 
+track vegaGene
+shortLabel Vega Genes
+longLabel Vega Annotations from Sanger, Genoscope
+group genes
+priority 36
+visibility hide
+chromosomes chr14,chr20,chr22,
+color 0,100,180
+type genePred vegaPep
+url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
+
+track vegaPseudoGene
+shortLabel Vega Pseudogenes
+longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
+group genes
+priority 36.1
+visibility hide
+chromosomes chr14,chr20,chr22,
+color 30,130,210
+type genePred
+url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
