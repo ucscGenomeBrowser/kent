@@ -30,7 +30,7 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.5 2003/06/30 10:47:56 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.6 2003/06/30 11:02:01 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -185,7 +185,7 @@ static void raFieldFree(struct raField *raf)
 {
 dyStringFree(&raf->valBuf);
 uniqueStrTblFree(&raf->ust);
-freeMem(&raf);
+freeMem(raf);
 }
 
 static void raFieldsInit(struct sqlConnection *conn)
