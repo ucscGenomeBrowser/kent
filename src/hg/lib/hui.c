@@ -76,7 +76,8 @@ static char *hTvStrings[] =
     "hide",
     "dense",
     "full",
-    "pack"
+    "pack",
+    "squish"
     };
 
 enum trackVisibility hTvFromString(char *s)
@@ -108,10 +109,11 @@ static char *pack[] =
     {
     "hide",
     "dense",
+    "squish",
     "pack",
     "full",
     };
-static int packIx[] = {0,1,3,2};
+static int packIx[] = {tvHide,tvDense,tvSquish,tvPack,tvFull};
 if (canPack)
     cgiMakeDropList(varName, pack, ArraySize(pack), pack[packIx[vis]]);
 else

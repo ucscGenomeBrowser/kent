@@ -39,7 +39,8 @@ enum trackVisibility
     tvHide=0, 		/* Hide it. */
     tvDense=1,          /* Squish it together. */
     tvFull=2,           /* Expand it out. */
-    tvPack=3,         /* Zig zag it up and down. */
+    tvPack=3,           /* Zig zag it up and down. */
+    tvSquish=4,         /* Pack with thin boxes and no labels. */
     };  
 
 enum trackVisibility hTvFromString(char *s);
