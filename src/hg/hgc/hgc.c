@@ -3174,7 +3174,7 @@ puts(
      "is a quantative measurement gene expression. Data is presented for every cluster contained "
      "in the browser window and the selected cluster name is highlighted in red. All data is from "
      "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>"
-     "project. Selecting the UniGene cluster name will display SageMap's page for that cluster.");
+     "project downloaded Jul 26, 2001. Selecting the UniGene cluster name will display SageMap's page for that cluster.");
 printSageGraphUrl(sgList);
 puts(
      "<p><b>Brief Methodology:</b> SAGE counts are produced "
