@@ -146,4 +146,12 @@ enum trackVisibility
     tvFull=2        /* Expand it out. */
     };  
 
+boolean hgParseChromRange(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd);
+/* Parse something of form chrom:start-end into pieces. */
+
+boolean hgIsChromRange(char *spec);
+/* Returns TRUE if spec is chrom:N-M for some human
+ * chromosome chrom and some N and M. */
+
 #endif /* HDB_H */

@@ -4,20 +4,12 @@
 #define HCOMMON_H
 
 extern char *hgChromNames[]; /* Array of all human chromosome names (including _randoms) */
-int hgChromCount;  /* Size of above array. */
+extern int hgChromCount;  /* Size of above array. */
 
 char *hgOfficialChromName(char *chrom);
 /* Returns "cannonical" name of chromosome (from hgChromNames) or NULL
  * if not a chromosome. */
 
-
-boolean hgParseChromRange(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd);
-/* Parse something of form chrom:start-end into pieces. */
-
-boolean hgIsChromRange(char *spec);
-/* Returns TRUE if spec is chrom:N-M for some human
- * chromosome chrom and some N and M. */
 
 char *hgcName();
 /* Relative URL to click processing program. */
