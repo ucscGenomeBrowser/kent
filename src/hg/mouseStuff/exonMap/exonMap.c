@@ -101,9 +101,9 @@ void mapBlocks(struct psl *qPsl, struct psl *tPsl, funcPtr func, void *funcData)
 	{
 	out = FALSE;
 	AllocVar(psl);
-	psl->tStarts = malloc(sizeof(int) * 500); 
-	psl->qStarts = malloc(sizeof(int) * 500); 
-	psl->blockSizes = malloc(sizeof(int) * 500); 
+	psl->tStarts = malloc(sizeof(int) * 50); 
+	psl->qStarts = malloc(sizeof(int) * 50); 
+	psl->blockSizes = malloc(sizeof(int) * 50); 
 
 	qStart = qPsl->qStarts[ii];
 	qEnd = qStart + qPsl->blockSizes[ii];
@@ -127,6 +127,7 @@ void mapBlocks(struct psl *qPsl, struct psl *tPsl, funcPtr func, void *funcData)
 		psl->match += psl->blockSizes[psl->blockCount];
 		psl->blockCount++;
 		tBlock++;
+		assert(tBlock < 50);
 		}
 
 	    psl->tEnd =  psl->tStarts[psl->blockCount-1] + psl->blockSizes[psl->blockCount-1];
@@ -168,37 +169,42 @@ void exonMap(char *query, char *target, char *output)
 {
 struct lineFile *qlf = pslFileOpen(query);
 struct lineFile *tlf = pslFileOpen(target);
-struct psl *psl, *pslList, *newPslList;
+struct psl *psl, *pslList, *newPslList, *pslRef;
 struct hash *pslHash = newHash(0);  
 FILE *outF = mustOpen(output, "w");
 
 while ((psl = pslNext(qlf)) != NULL)
     {
     pslList = hashFindVal(pslHash, psl->qName);
-    if (pslList != NULL)
-	errAbort("each qName in query psl file must be unique (%s)",psl->qName);
-
-    hashAdd(pslHash, psl->qName, psl);
+    if (pslList == NULL)
+	hashAdd(pslHash, psl->qName, psl);
+    else
+	{
+	psl->next = pslList->next;
+	pslList->next = psl;
+	}
     }
 
 while ((psl = pslNext(tlf)) != NULL)
     {
     struct psl *newPsl = NULL;
 
-    pslList = hashFindVal(pslHash, psl->qName);
-    if (pslList == NULL)
-	errAbort("can't find %s in query file",psl->qName);
+    pslList = hashFindVal(pslHash,psl->qName);
+//    if (pslList == NULL)
+//	errAbort("can't find %s in query file",psl->qName);
 
-    if (optionExists("exons"))
-	mapBlocks(pslList, psl, outPsl, (void *)outF);
-    else
+    for(pslRef = pslList; pslRef ; pslRef = pslRef->next )
 	{
-	newPsl = NULL;
-	mapBlocks(pslList, psl, addPsl, &newPsl);
-	pslTabOut(newPsl, outF);
+	if (optionExists("exons"))
+	    mapBlocks(pslRef, psl, outPsl, (void *)outF);
+	else
+	    {
+	    newPsl = NULL;
+	    mapBlocks(pslRef, psl, addPsl, &newPsl);
+	    pslTabOut(newPsl, outF);
+	    }
 	}
     }
-
 }
 
 int main(int argc, char *argv[])
