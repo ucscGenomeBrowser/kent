@@ -5,18 +5,19 @@
 #include "nib.h"
 #include "fa.h"
 #include "dnaseq.h"
-
+#include "dystring.h"
 void usage()
 {
 errAbort("runSlam - runs the Slam program program given a reference chromosome\n"
-	 "and some aligned bits.\n"
+	 "and some aligned bits. Now does chdir().\n"
 	 "usage:\n\t"
 	 "runSlam <chromNibDir> <bitsNibDir> <resultsDir> <refPrefix> <alignPrefix> <chrN:1-10000.gff> <chrN:1-10000.gff> <chromPiece [chrN:1-10000]> <otherBits chrN[1-1000]....>\n");
 }
-char *slamBin = "/scratch/hg/slam/";
+char *slamBin = "/cluster/home/sugnet/slam/";
 char *repeatMaskBin = "/scratch/hg/RepeatMasker/";
 char *outputRoot = "/tmp/slam/";
-boolean runAvidFirst = FALSE; 
+boolean runAvidFirst = TRUE; 
+int bpLimit = 125000; /* maximum nubmer of base pairs to allow in a fasta file. */
 
 struct genomeBit
 /* Piece of the genome */
@@ -165,6 +166,7 @@ void removeTempDir(struct genomeBit *target, struct genomeBit *align)
 struct genomeBit *gb = NULL;
 char *file = NULL;
 char buff[2048];
+int retVal = 0;
 int i=0;
 char *alignSuffixes[] = { ".fa.aat", ".fa.minfo", ".fa.mout" };
 for(i=0; i<ArraySize(fileSuffixes); i++)
@@ -176,7 +178,6 @@ for(i=0; i<ArraySize(fileSuffixes); i++)
 for(i=0; i<ArraySize(fileSuffixes); i++)
     {
     file = fileNameFromGenomeBit(outputRoot, fileSuffixes[i], align);
-    warn("Removing %s", file);
     remove(file);
     freez(&file);
     }
@@ -187,21 +188,19 @@ for(i=0; i<ArraySize(alignSuffixes); i++)
     tmpFile = cloneString(file);
     ExpandArray(file, strlen(file), (2*strlen(file)+100));
     snprintf(file, (2*strlen(file)+100), "%s_%s:%u-%u%s", tmpFile, align->chrom, align->chromStart, align->chromEnd,alignSuffixes[i]);
-    warn("Removing %s", file);
     remove(file);
     freez(&file);
     freez(&file);
     }
 snprintf(buff, sizeof(buff),"%score", outputRoot);
-warn("Removing %s", buff);
 remove(buff);
 snprintf(buff, sizeof(buff),"%s*", outputRoot);
-warn("Removing %s", buff);
 remove(buff);
 rmdir(outputRoot);
- snprintf(buff, sizeof(buff), "rm -rf %s", outputRoot);
- warn("Executing '%s' just to be sure.", buff);
- system(buff);
+snprintf(buff, sizeof(buff), "rm -rf %s", outputRoot);
+warn("Executing '%s' just to be sure.", buff);
+retVal = system(buff);
+warn( "%s exited with value %d", buff, retVal);
 }
 
 char *nibFileFromChrom(char *root, char *chromName)
@@ -219,13 +218,29 @@ void repeatMaskFile(char *outDir, struct genomeBit *gb)
 {
 char *fileName = fileNameFromGenomeBit("",".fa", gb);
 char buff[2048];
-snprintf(buff, sizeof(buff), "cd %s && %sprep_lc_rm_for_slam %s ",  outDir, slamBin, fileName);
+int retVal = 0;
+snprintf(buff, sizeof(buff), "%sRepeatMasak %s ",  repeatMaskBin, fileName);
 warn("running %s", buff);
-system(buff);
+retVal = system(buff);
+warn("%s exited with value %d", buff, retVal);
 freez(&fileName);
 }
 
-void createFastaFilesForBits(char *root, struct genomeBit *gbList)
+void fakeRepeatMaskFile(char *outDir, struct genomeBit *gb)
+/* use this on files that are repeat masked via case, creates
+   dummy.masked and dummy.masked out files for slam. */
+{
+char *fileName = fileNameFromGenomeBit("",".fa", gb);
+char buff[2048];
+int retVal = 0;
+snprintf(buff, sizeof(buff), "%sprep_lc_rm_for_slam %s ", slamBin, fileName);
+warn("running %s", buff);
+retVal = system(buff);
+warn("%s exited with value %d", buff, retVal);
+freez(&fileName);
+}
+
+void createFastaFilesForBits(char *root, struct genomeBit *gbList, boolean addDummy)
 /* load all of the fasta records for the bits in the genome list into one
    fasta file. */
 {
@@ -234,6 +249,7 @@ struct genomeBit *gb = NULL;
 FILE *faOut = NULL;
 char *faFile = NULL;
 char *nibFile = NULL;
+int totalBp = 0;
 assert(gbList);
 faFile = fileNameFromGenomeBit(outputRoot, ".fa", gbList);
 faOut = mustOpen(faFile, "w");
@@ -243,13 +259,34 @@ for(gb = gbList; gb != NULL; gb = gb->next)
     snprintf(buff, sizeof(buff), "%s:%u-%u", gb->chrom, gb->chromStart, gb->chromEnd);
     nibFile = nibFileFromChrom(root, gb->chrom);
     seq = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, gb->chromStart, gb->chromEnd-gb->chromStart);
+    totalBp += strlen(seq->dna);
+    if(totalBp >= bpLimit)
+	errAbort("runSlam()::createFastaFilesForBits() - trying to write %d to fasta file which is greater than limit of %d for %s\n",
+		 totalBp, bpLimit, faFile);
     faWriteNext(faOut, buff, seq->dna, seq->size);
     dnaSeqFree(&seq);
     freez(&nibFile);
     }
+/* Add a dummy fasta record so that avid will order and orient things for us.. */
+if(addDummy)
+    faWriteNext(faOut, "garbage", "nnnnnnnnnn", 10);
 carefulClose(&faOut);
-repeatMaskFile(outputRoot, gbList);
+/** This bit is commented out as we are now using nnnn's as repeat masking */
+/*  if(slCount(gbList) > 1) */
+/*      repeatMaskFile(outputRoot, gbList); */
+/*  else */
+/*    fakeRepeatMaskFile(outputRoot, gbList); */
 freez(&faFile);
+}
+
+void touchFile(char *root, char *suffix)
+{
+struct dyString *file = newDyString(2048);
+FILE *touch = NULL;
+dyStringPrintf(file, "%s%s", root, suffix);
+touch = mustOpen(file->string, "w");
+carefulClose(&touch);
+dyStringFree(&file);
 }
 
 void runSlamExe(char *outputDir, struct genomeBit *target, struct genomeBit *aligns, char *refPrefix, char *alignPrefix)
@@ -259,65 +296,102 @@ char *fa1 = NULL;
 char *fa2 = NULL;
 char *gff1 = NULL;
 char *gff2 = NULL;
+struct dyString *dy = newDyString(1024);
+
 char command[2048];
+int retVal = 0;
 fa1 = fileNameFromGenomeBit("", ".fa", target);
 fa2 = fileNameFromGenomeBit("", ".fa", aligns);
 gff1 = fileNameFromGenomeBit("", "", target);
 gff2 = fileNameFromGenomeBit("", "", aligns);
 
-if(runAvidFirst)
-    {
-    snprintf(command, sizeof(command), "cd %s && %savid %s %s",
-	     outputRoot, slamBin, fa1, fa2);
-    warn("Running avid first %s", command);
-    system(command);
-    }
+
 
 if(runAvidFirst)
     {
-    snprintf(command, sizeof(command), 
-	     "cd %s && %sslam.pl %s %s.merged -outDir %s -o1 %s.%s -o2 %s.%s.merged >& %s/%s.%s_%s.%s.log",  
-	     outputRoot, slamBin, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2,
-	     outputDir, refPrefix, gff1, alignPrefix, gff2);
+    snprintf(command, sizeof(command), "%savid -nm=both  %s %s",
+	       slamBin, fa1, fa2); 
+    retVal = system(command);
+    warn("%s exited with value %d", command, retVal);
+    }
+
+touchFile(fa1, ".out");
+touchFile(fa1, ".masked");
+touchFile(fa2, ".merged.out");
+touchFile(fa2, ".merged.masked");
+
+if(runAvidFirst)
+    {
+      snprintf(command, sizeof(command),  
+  	     "%sslam.pl %s %s.merged -outDir %s -o1 %s.%s -o2 %s.%s.merged",   
+  	     slamBin, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2); 
     }
 else 
     {
-    snprintf(command, sizeof(command), 
-	     "cd %s && %sslam.pl %s %s -outDir %s -o1 %s.%s -o2 %s.%s >& %s/%s.%s_%s.%s.log",  
-	     outputRoot, slamBin, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2,
-	     outputDir, refPrefix, gff1, alignPrefix, gff2);
+      snprintf(command, sizeof(command),  
+  	     "%sslam.pl %s %s -outDir %s -o1 %s.%s -o2 %s.%s",   
+  	     slamBin, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2); 
     }
 warn("Running %s", command);
-system(command);
+retVal = system(command);
+warn("%s exited with value %d", command, retVal);
 freez(&fa1);
 freez(&fa2);
 freez(&gff1);
 freez(&gff2);
 }
 
-//void runSlam(char *chrNibDir, char *bitsNibDir char *slamDir, char *genomeBit, char **alignBits, int numAlignBits)
 void runSlam(char *chrNibDir, char *alignNibDir, char *outputDir, char *refPrefix, char *alignPrefix,  char *pos, char **alignBits, int numAlignBits)
 /* Top level function */
 {
 char *tmpDir = NULL;
 struct genomeBit *target = parseGenomeBit(pos);
 struct genomeBit *aligns = parseGenomeBits(alignBits, numAlignBits);
-
-if(slCount(aligns) > 1)
-    runAvidFirst = TRUE; 
+char *fa1 = NULL;
+char *fa2 = NULL;
+char *gff1 = NULL;
+char *gff2 = NULL;
+char buff[4096];
+char cwdBuff[4096];
+char *cwd = NULL;
+int fileNo = 0, stderrNo = 0, stdoutNo =0;
+FILE *logFile = NULL;
+char *host = NULL;
+fa1 = fileNameFromGenomeBit("", ".fa", target);
+fa2 = fileNameFromGenomeBit("", ".fa", aligns);
+gff1 = fileNameFromGenomeBit("", "", target);
+gff2 = fileNameFromGenomeBit("", "", aligns);
+// if(slCount(aligns) > 1) Now we need to run avid every time to ensure that stuff is oriented...
+runAvidFirst = TRUE; 
 tmpDir = slamTempName("/tmp", "slam", "/");
 outputRoot = tmpDir;
 makeTempDir();
+cwd = getcwd(cwdBuff, ArraySize(cwdBuff));
+assert(cwd);
+chdir(outputRoot);
+snprintf(buff, sizeof(buff), "%s/%s.%s_%s.%s.log", outputDir, refPrefix, gff1, alignPrefix, gff2);
+logFile = mustOpen(buff, "w");
+fileNo = fileno(logFile);
+stderrNo = fileno(stderr);
+stdoutNo = fileno(stdout);
+setbuf(logFile, NULL);
+dup2(fileNo, stderrNo);
+dup2(fileNo,stdoutNo);
+host = slamGetHost();
+warn("Host is: %s", host);
 warn("creating %s", target->chrom);
-createFastaFilesForBits(chrNibDir, target); 
+createFastaFilesForBits(chrNibDir, target, FALSE); 
 warn("creating %s", aligns->chrom); 
-createFastaFilesForBits(alignNibDir, aligns);
+createFastaFilesForBits(alignNibDir, aligns, TRUE);
 warn("running slam"); 
 runSlamExe(outputDir,target, aligns, refPrefix, alignPrefix);
 warn("removing stuff"); 
-//removeTempDir(target, aligns);
+carefulClose(&logFile);
+chdir(cwd);
+removeTempDir(target, aligns);
 genomeBitFreeList(&target);
 genomeBitFreeList(&aligns);
+
 }
 
 int main(int argc, char *argv[])
