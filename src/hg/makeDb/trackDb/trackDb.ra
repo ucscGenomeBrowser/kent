@@ -1615,7 +1615,7 @@ shortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
-padding 5000
+padding 250
 
 searchName snpShort
 searchTable snp
@@ -1625,7 +1625,7 @@ shortCircuit 1
 termRegex (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
-padding 5000
+padding 250
 
 searchTable ensGene
 searchType genePred
@@ -1748,7 +1748,7 @@ searchType bed
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16
-padding 5000
+padding 250
 
 searchName snpLong
 searchTable snp
@@ -1757,7 +1757,7 @@ searchType bed
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
 dontCheck (rs[0-9]{3}[0-9]+|SNP_A-[0-9]+(_[0-9]+)?)
 searchPriority 16
-padding 5000
+padding 250
 
 searchTable genieAlt
 searchType genePred
