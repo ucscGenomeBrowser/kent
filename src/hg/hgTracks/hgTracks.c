@@ -5077,7 +5077,7 @@ for(bed = bedList; bed != NULL; )
     else if(et == 1)
 	{
 	tmp = bed->next;
-	if(strstr(bed->name, "te"))
+	if(bed->name[strlen(bed->name) -2] == 't')
 	    slSafeAddHead(&tmpList, bed);
 	else
 	    bedFree(&bed);
@@ -5086,7 +5086,7 @@ for(bed = bedList; bed != NULL; )
     else if(et == 2)
 	{
 	tmp = bed->next;
-	if(strstr(bed->name, "pe"))
+	if(bed->name[strlen(bed->name) -2] == 'p')
 	    slSafeAddHead(&tmpList, bed);
 	else
 	    bedFree(&bed);
@@ -5227,6 +5227,7 @@ if(!exprBedColorsMade)
     makeRedGreenShades(mg);
 if(val == -10000)
     return shadesOfGray[5];
+
 if(tg->visibility == tvDense) 
     /* True value stored as integer in score field and was multiplied by 100 */ 
     absVal = absVal/100;
@@ -5273,16 +5274,35 @@ float val = lf->score;
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
-char *colorScheme = cartUsualString(cart, "nci60.color", "rg");
-/* colorScheme should be stored somewhere not looked up every time... */
+static char *colorSchemes[] = { "rg", "rb" };
+static char *colorScheme = NULL;
+static int colorSchemeFlag = -1;
+
+/* set up the color scheme items if not done yet */
+if(colorScheme == NULL)
+    colorScheme = cartUsualString(cart, "exprssn.color", "rg");
+if(colorSchemeFlag == -1)
+    colorSchemeFlag = stringArrayIx(colorScheme, colorSchemes, ArraySize(colorSchemes));
+
+/* if val is error value show make it gray */
 if(val == -10000)
     return shadesOfGray[5];
-if(tg->visibility == tvDense)
-    val = val/100;
 
+/* we approximate a float by storing it as an int,
+   thus to bring us back to right scale divide by 100.
+   i.e. 1.27 was stored as 127 and needs to be converted to 1.27 */
+if(tg->limitedVis == tvDense)
+    absVal = absVal/100;
 
 if(!exprBedColorsMade)
     makeRedGreenShades(mg);
+
+/* cap the value to be less than or equal to maxDeviation */
+if (tg->limitedVis == tvFull)
+    maxDeviation = 0.9;
+else 
+    maxDeviation = 0.6;
+
 /* cap the value to be less than or equal to maxDeviation */
 if(absVal > maxDeviation)
     absVal = maxDeviation;
@@ -5296,7 +5316,7 @@ if(val > 0)
     return shadesOfRed[colorIndex];
 else 
     {
-    if(sameString(colorScheme, "rg"))
+    if(colorSchemeFlag == 0)
 	return shadesOfGreen[colorIndex];
     else 
 	return shadesOfBlue[colorIndex];
