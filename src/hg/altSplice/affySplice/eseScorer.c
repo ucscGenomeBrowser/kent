@@ -200,7 +200,7 @@ warn("Read %d sequences from %s.", slCount(seqList), faFile);
 out = mustOpen(outFile, "w");
 
 /* Print out header for output file. */
-fprintf(out, "name\tsize");
+fprintf(out, "size");
 for(m = mList; m != NULL; m = m->next) 
     fprintf(out, "\t%s", m->name);
 fprintf(out, "\n");
