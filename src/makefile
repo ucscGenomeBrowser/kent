@@ -9,8 +9,11 @@ topLibs:
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
 
-libs: topLibs
+hgLib:
+	@./hg/sqlEnvTest.sh
 	cd hg/lib && ${MAKE}
+
+libs: topLibs hgLib
 	cd hg/protein/lib && ${MAKE}
 
 cgi: libs
