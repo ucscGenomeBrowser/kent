@@ -39,26 +39,6 @@ spectrum on
 type psl .
 intronGap 30
 
-track intronEst
-shortLabel Spliced ESTs
-longLabel $Organism ESTs That Have Been Spliced
-group rna
-priority 56
-visibility hide
-spectrum on
-type psl est
-intronGap 30
-
-track est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility dense
-spectrum on
-type psl est
-intronGap 30
-
 track transRegCode
 shortLabel Regulatory Code 
 longLabel Transcriptional Regulatory Code from Harbison Gordon et al.
