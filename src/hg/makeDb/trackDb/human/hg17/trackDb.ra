@@ -142,12 +142,9 @@ priority 94
 group regulation
 visibility hide
 type bed 6+
+scoreMin 711
+scoreMax 1000
 spectrum on
-colorLo 0,0,0
-colorMid 255,255,0
-colorHigh 255,0,0
-scoreMid 10.93
-scoreHigh 20.47
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
