@@ -120,8 +120,52 @@ file by entering the name of your file in the Annotation File box or by pasting 
 box. Scroll back to the top of the page and click the Submit button to
 display the Genome Browser track window with your annotation. If you
 encounter difficulties in displaying your annotation, read the section <A HREF="#TROUBLE">Troubleshooting Annotation Display Problems</A>.</P> 
+<P>
+To upload a custom annotation track from another machine or web site, paste the
+URL of the track into the large edit box. Custom tracks can be displayed in
+conjunction with ordinary BLAT tracks.</P>
 
-<P><B>Step 5. (Optional) Share your annotation track with others</B><BR>
+<P><B>Step 5. (Optional) Add details pages for individual track features</B><BR>
+After you've constructed your track and have successfully displayed it in the
+Genome Browser, you may wish to customize the details pages for individual track
+features.  The Genome Browser automatically creates a default details page for each
+feature in the track containing the feature's name, position information, and a
+link to the corresponding DNA sequence. To view the
+details page for a feature in your custom annotation track (in full display
+mode), click on the item's label in the annotation track window. 
+<P>
+You can add a link from a details page to an external web page containing
+additional information about the feature by using the track line <I>url</I> attribute. 
+In the annotation file, set the <I>url</I> attribute in the track line to point
+to a publicly available page on a web server. The <I>url</I> attribute 
+substitutes each occurrence of '$$' in the URL string with the name defined by the 
+<I>name</I> attribute. You can take advantage of this feature to provide 
+individualized information for each feature in your track by creating HTML anchors 
+that correspond to the feature names in your web page.
+
+<P><B><I>Example:</I></B><BR>
+Here is an example of a file in which the <I>url</I> attribute has been set to
+point to the file <A HREF="http://genome-test.cse.ucsc.edu/clones.html"
+TARGET=_blank>http://genome-test.cse.ucsc.edu/clones.html</A>. The '#$$'
+appended to the end of the file name in the example points to the HTML NAME tag within the file that 
+matches the name of the feature (cloneA, cloneB, etc.). 
+NOTE: The track line in this example has been split over 2 lines for 
+documentation purposes. If you paste this example into
+the browser, you must remove the line break to display the track successfully.
+<BR><BR>
+<PRE><TT>browser position chr22:1000-10000
+browser hide all
+track name=clones description="Clones" visibility=2
+color=0,128,0 useScore=1 url="http://genome-test.cse.ucsc.edu/clones.html#$$"
+chr22 1000 5000 cloneA 960 
+chr22 2000 6000 cloneB 200 
+chr22 5000 9000 cloneC 700 
+chr22 6000 10000 cloneD 600
+chr22 11000 15000 cloneE 300
+chr22 13000 17000 cloneF 100 
+</TT></PRE>
+<P>
+<P><B>Step 6. (Optional) Share your annotation track with others</B><BR>
 The previous steps showed you how to upload annotation data for your own use on your own machine. However, many users would like to 
 share their annotation data with members of their research group on different machines or with colleagues at other sites. To learn how 
 to make your Genome Browser annotation track viewable by others, read the section <A HREF="#SHARE">Sharing Your Annotation Track with
@@ -466,7 +510,8 @@ chr22  TeleGene	promoter  1020000  1020000  800	-  .  touch2</TT></PRE>
 <P>GTF format is a refinement to GFF that tightens the specification in
 many ways.  The first eight GTF fields are the same
 as GFF.  The ninth field has been expanded to include a list of
-semicolon-separated attribute/value pairs. 
+semicolon-separated attribute/value pairs. For more information on this format,
+see <A HREF="http://genes.cs.wustl.edu/GTF2.html" TARGET=_blank>http://genes.cs.wustl.edu/GTF2.html</A>.
 
 <P><B><I>Example:</I></B><BR>
 Here is an example of the ninth field in a GTF data line:
