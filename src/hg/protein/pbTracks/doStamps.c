@@ -34,7 +34,6 @@ void calStampXY(struct pbStampPict *PictPtr, double xin, double yin, int *outxp,
     double xScale0, yScale0;
     xScale0 = (double)(PictPtr->width) /(PictPtr->stampDataPtr->xmax - PictPtr->stampDataPtr->xmin);
     yScale0 = (double)(PictPtr->height)/(PictPtr->stampDataPtr->ymax - PictPtr->stampDataPtr->ymin);
-    //*outxp =  (int)(xin*xScale0) + PictPtr->xOrig;
     *outxp =  (int)((xin - PictPtr->stampDataPtr->xmin)*xScale0) + PictPtr->xOrig;
     *outyp = -(int)((yin - PictPtr->stampDataPtr->ymin)*yScale0) + PictPtr->yOrig;
     }
@@ -311,9 +310,6 @@ void markStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
 	    }
 	}
     vLineM(tx[iTarget]+(tx[iTarget+1]-tx[iTarget])/2.0, 0, ytop, 2,  MG_BLUE);
-
-    //calStampXY(stampPictPtr,  tx[iTarget]+(tx[iTarget+1]-tx[iTarget])/2.0, ytop, &xx, &yy);
-    //vgText(g_vg, xx+4, yy-6, MG_BLUE, g_font, valStr);
     }
 
 struct pbStamp *getStampData(char *stampName)
@@ -658,7 +654,6 @@ if (answer != NULL)
     }
 
 xPosition = 15;
-//yPosition = yPosition + 100;
 yPosition = yPosition + 170;
 
 // draw family size stamp
