@@ -43,6 +43,7 @@ extern AA aaChars[256];
 extern int ntVal[256];
 extern int aaVal[256];
 extern int ntValLower[256];	/* NT values only for lower case. */
+extern int ntValUpper[256];	/* NT values only for upper case. */
 
 /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent nucleotides. */
 extern int ntValNoN[256];     
@@ -183,6 +184,10 @@ int dnaScoreMatch(DNA *a, DNA *b, int size);
  * subtracted from total matches and returned as score. 'N's 
  * neither hurt nor help score. */
 
+double dnaMatchEntropy(DNA *query, DNA *target, int baseCount);
+/* Return entropy of matching bases - a number between 0 and 1, with
+ * higher numbers the more diverse the matching bases. */
+
 int aaScore2(AA a, AA b);
 /* Score match between two bases (relatively crudely). */
 
@@ -195,5 +200,13 @@ int  dnaOrAaScoreMatch(char *a, char *b, int size, int matchScore, int mismatchS
 
 void writeSeqWithBreaks(FILE *f, char *letters, int letterCount, int maxPerLine);
 /* Write out letters with newlines every maxLine. */
+
+int maskTailPolyA(DNA *dna, int size);
+/* Convert PolyA at end to n.  This allows a few non-A's as noise to be 
+ * trimmed too.  Returns number of bases trimmed.  */
+
+int maskHeadPolyT(DNA *dna, int size);
+/* Convert PolyT at start.  This allows a few non-T's as noise to be 
+ * trimmed too.  Returns number of bases trimmed.  */
 
 #endif /* DNAUTIL_H */

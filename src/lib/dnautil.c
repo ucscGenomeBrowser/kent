@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.31 2004/09/02 19:52:31 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.32 2005/01/10 00:19:07 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -119,6 +119,7 @@ struct codonTable codonTable[] =
  * and gives -1 for all others. */
 int ntVal[256];
 int ntValLower[256];	/* NT values only for lower case. */
+int ntValUpper[256];	/* NT values only for upper case. */
 int ntVal5[256];
 int ntValNoN[256]; /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent ones. */
 DNA valToNt[(N_BASE_VAL|MASKED_BASE_BIT)+1];
@@ -136,7 +137,7 @@ if (!inittedNtVal)
     int i;
     for (i=0; i<ArraySize(ntVal); i++)
         {
-	ntValLower[i] = ntVal[i] = -1;
+	ntValUpper[i] = ntValLower[i] = ntVal[i] = -1;
         ntValNoN[i] = T_BASE_VAL;
 	if (isspace(i) || isdigit(i))
 	    ntVal5[i] = ntValMasked[i] = -1;
@@ -146,11 +147,16 @@ if (!inittedNtVal)
 	    ntValMasked[i] = (islower(i) ? (N_BASE_VAL|MASKED_BASE_BIT) : N_BASE_VAL);
             }
         }
-    ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = ntValLower['t'] = T_BASE_VAL;
-    ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = ntValLower['u'] = U_BASE_VAL;
-    ntVal5['c'] = ntVal5['C'] = ntValNoN['c'] = ntValNoN['C'] = ntVal['c'] = ntVal['C'] = ntValLower['c'] = C_BASE_VAL;
-    ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = ntValLower['a'] = A_BASE_VAL;
-    ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = ntValLower['g'] = G_BASE_VAL;
+    ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = 
+    	ntValLower['t'] = ntValUpper['T'] = T_BASE_VAL;
+    ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = 
+    	ntValLower['u'] = ntValUpper['U'] = U_BASE_VAL;
+    ntVal5['c'] = ntVal5['C'] = ntValNoN['c'] = ntValNoN['C'] = ntVal['c'] = ntVal['C'] = 
+    	ntValLower['c'] = ntValUpper['C'] = C_BASE_VAL;
+    ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = 
+    	ntValLower['a'] = ntValUpper['A'] = A_BASE_VAL;
+    ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = 
+    	ntValLower['g'] = ntValUpper['G'] = G_BASE_VAL;
 
     valToNt[T_BASE_VAL] = valToNt[T_BASE_VAL|MASKED_BASE_BIT] = 't';
     valToNt[C_BASE_VAL] = valToNt[C_BASE_VAL|MASKED_BASE_BIT] = 'c';
@@ -714,6 +720,38 @@ int dnaScoreMatch(DNA *a, DNA *b, int size)
 return dnaOrAaScoreMatch(a, b, size, 1, -1, 'n');
 }
 
+double dnaMatchEntropy(DNA *query, DNA *target, int baseCount)
+/* Return entropy of matching bases - a number between 0 and 1, with
+ * higher numbers the more diverse the matching bases. */
+{
+#define log4 1.386294
+#define invLog4 (1.0/log4)
+double p, q, e = 0, invTotal;
+int c, count[4], total;
+int i, qVal, tVal;
+count[0] = count[1] = count[2] = count[3] = 0;
+for (i=0; i<baseCount; ++i)
+    {
+    qVal = ntVal[query[i]];
+    tVal = ntVal[target[i]];
+    if (qVal == tVal && qVal >= 0)
+	count[qVal] += 1;
+    }
+total = count[0] + count[1] + count[2] + count[3];
+invTotal = 1.0/total;
+for (i=0; i<4; ++i)
+    {
+    if ((c = count[i]) > 0)
+        {
+	p = c * invTotal;
+	q = log(p);
+	e -= p*q;
+	}
+    }
+e *= invLog4;
+return e;
+}
+
 int aaScore2(AA a, AA b)
 /* Score match between two amino acids (relatively crudely). */
 {
@@ -744,6 +782,108 @@ while (lettersLeft > 0)
     lettersLeft -= lineSize;
     }
 }
+
+int maskTailPolyA(DNA *dna, int size)
+/* Convert PolyA at end to n.  This allows a few non-A's as noise to be 
+ * trimmed too.  Returns number of bases trimmed.  */
+{
+int i;
+int score = 10;
+int bestScore = 10;
+int pastPoly = 0;
+int trimSize = 0;
+
+for (i=size-1; i>=0; --i)
+    {
+    DNA b = dna[i];
+    if (b == 'n' || b == 'N')
+        continue;
+    if (score > 20) score = 20;
+    if (b == 'a' || b == 'A')
+	{
+        score += 1;
+	if (score > bestScore)
+	    bestScore = score;
+	}
+    else
+	{
+        score -= 10;
+	}
+    if (score < 0)
+	{
+	pastPoly = i;
+        break;
+	}
+    }
+if (bestScore > 10)
+    {
+    pastPoly += 5;
+    if (pastPoly > size-1) pastPoly = size-1;
+    while (pastPoly >= 0)
+        {
+	DNA b = dna[pastPoly];
+	if (b != 'a' && b != 'A')
+	    break;
+	pastPoly -= 1;
+	}
+    for (i=pastPoly+1; i<size; ++i)
+	{
+        dna[i] = 'n';
+	++trimSize;
+	}
+    }
+return trimSize;
+}
+
+int maskHeadPolyT(DNA *dna, int size)
+/* Convert PolyT at start.  This allows a few non-T's as noise to be 
+ * trimmed too.  Returns number of bases trimmed.  */
+{
+int i;
+int score = 10;
+int bestScore = 10;
+int pastPoly = 0;
+int trimSize = 0;
+
+for (i=0; i<size; ++i)
+    {
+    DNA b = dna[i];
+    if (b == 'n' || b == 'N')
+        continue;
+    if (score > 20) score = 20;
+    if (b == 't' || b == 'T')
+	{
+        score += 1;
+	if (score > bestScore)
+	    bestScore = score;
+	}
+    else
+	{
+        score -= 10;
+	}
+    if (score < 0)
+	{
+	pastPoly = i;
+        break;
+	}
+    }
+if (bestScore > 10)
+    {
+    pastPoly -= 5;
+    if (pastPoly < 0) pastPoly = 0;
+    while (pastPoly < size)
+        {
+	DNA b = dna[pastPoly];
+	if (b != 't' && b != 'T')
+	    break;
+	pastPoly += 1;
+	}
+    trimSize = pastPoly;
+    memset(dna, 'n', trimSize);
+    }
+return trimSize;
+}
+
 
 /* Tables to convert from 0-20 to ascii single letter representation
  * of proteins. */
