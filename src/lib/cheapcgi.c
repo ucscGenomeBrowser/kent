@@ -319,6 +319,27 @@ errAbort("Unknown key %s for variable %s\n", key, varName);
 return val;
 }
 
+void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
+/* Make a text control filled with initial value.  If charSize
+ * is zero it's calculated from initialVal size. */
+{
+if (charSize == 0) charSize = strlen(initialVal);
+if (charSize == 0) charSize = 8;
+
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\">", varName, 
+	charSize, initialVal);
+}
+
+void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
+/* Make a text control filled with initial value.  */
+{
+if (maxDigits == 0) maxDigits = 4;
+
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName, 
+	maxDigits, initialVal);
+}
+
+
 void cgiMakeHiddenVar(char *varName, char *string)
 /* Store string in hidden input for next time around. */
 {
