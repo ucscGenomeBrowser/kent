@@ -31,7 +31,7 @@ altColor 255,240,200
 spectrum on
 type psl xeno rn2
 
-track blastzHg
+track blastzHuman
 shortLabel Blastz Human
 longLabel All Blastz Human(Nov02) Blastz Alignments
 group compGeno
