@@ -1168,9 +1168,9 @@ altColor 255,240,200
 spectrum on
 type psl xeno 
 
-track blastzBestMonDom0
-shortLabel Possum Best
-longLabel Possum Blastz Best-in-Genome Alignments
+track blastzBestDasNov0
+shortLabel Armadillo Best
+longLabel Armadillo Blastz Best-in-Genome Alignments
 group compGeno
 priority 165
 visibility hide
