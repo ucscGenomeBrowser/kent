@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.16 2003/11/05 07:37:04 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.17 2003/11/21 16:09:24 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -60,7 +60,6 @@ static char* mrnaCreate =
   "author int unsigned not null,"                 /* Ref in author table. */
            /* Extra indices. */
   "unique(acc),"
-  "unique(acc, version),"
   "index(type),"
   "index(library),"
   "index(mrnaClone),"

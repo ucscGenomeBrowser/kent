@@ -632,4 +632,4 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 - hg16 got this message , looks like species is reversed are reversed:
   entry AF283900 2003-10-12 organism previously specified as "Rattus norvegicus" (native), is specfied as "Homo sapiens" (xeno) in /cluster/data/genbank/data/processed/genbank.138.0/daily.1113/mrna.gbidx, add one to ignored.idx
 
-- mrna (acc,version) index unnecessary (and large)
+- gbGetSeqs of psl missed NM_012335, others.
