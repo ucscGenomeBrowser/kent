@@ -26,7 +26,6 @@
      set mm = mm2
      set rn = rn1
 
-
 #Set the pairwise alignment directories
      set hm = $h/bed/blastz.mm2.2002-12-5-ASH/axtBest
      set mr = $m/bed/blastz.rn1.2003-01-09-ASH/axtBest
