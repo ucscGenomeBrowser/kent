@@ -287,7 +287,7 @@ spectrum on
 type chain panTro1
 otherDb panTro1
 
-track rBestNetPanTro1
+track netPanTro1
 shortLabel Chimp Net
 longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net
 group compGeno
