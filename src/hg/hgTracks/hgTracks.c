@@ -174,7 +174,7 @@ void hPutc(char c)
 /* putc than can be suppressed if not makeing html. */
 {
 if (!suppressHtml)
-    fputc('\n', stdout);
+    fputc(c, stdout);
 }
 
 void hWrites(char *string)
@@ -472,6 +472,37 @@ for (tg = tGroupList; tg != NULL; tg = tg->next)
 return dy;
 }
 
+#ifdef ROBERTS_EXPERIMENT
+void mapStatusMessage(char *format, ...)
+/* Write out stuff that will cause a status message to
+ * appear when the mouse is over this box. */
+{
+if( withPopUps ) 
+    {
+    va_list(args);
+    va_start(args, format);
+    hPrintf(" onMouseover=\"javascript:popup('");
+    hvPrintf(format, args);
+    hPrintf("');\" onMouseOut=\"javascript:popupoff();\"");
+    va_end(args);
+    }
+}
+#endif /* ROBERTS_EXPERIMENT */
+
+void mapStatusMessage(char *format, ...)
+/* Write out stuff that will cause a status message to
+ * appear when the mouse is over this box. */
+{
+if( withPopUps ) 
+    {
+    va_list(args);
+    va_start(args, format);
+    hPrintf(" ALT=\"");
+    hvPrintf(format, args);
+    hPutc('"');
+    va_end(args);
+    }
+}
 
 void mapBoxTrackUi(int x, int y, int width, int height, struct trackGroup *tg)
 /* Print out image map rectangle that invokes hgTrackUi. */
@@ -481,8 +512,7 @@ hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-if( withPopUps ) 
-    hPrintf(" onMouseOver=\"javascript:popup('%s controls');\" onMouseOut=\"javascript:popupoff();\"", tg->shortLabel);
+mapStatusMessage("%s controls", tg->shortLabel);
 hPrintf(">\n");
 }
 
@@ -506,12 +536,8 @@ hPrintf("HREF=\"%s?position=%s:%d-%d",
 	hgTracksName(), chrom, start+1, end);
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
-
-/*if (toggleGroup && withPopUps)
-        hPrintf(" onMouseOver=\"javascript:popup('Change between dense and full view of %s track');\" onMouseOut=\"javascript:popupoff();\"", toggleGroup->shortLabel);
-else
-    if( withPopUps ) 
-        hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",message);*/
+if (message != NULL)
+    mapStatusMessage("%s", message);
 hPrintf(">\n");
 }
 
@@ -521,7 +547,10 @@ void mapBoxToggleVis(int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
-mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, NULL);
+char buf[256];
+snprintf(buf, sizeof(buf), 
+	"Change between dense and full view of %s", curGroup->shortLabel);
+mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, buf);
 }
 
 void mapBoxJumpTo(int x, int y, int width, int height, 
@@ -563,8 +592,7 @@ if (x < xEnd)
 	chromName, winStart, winEnd, 
 	database, tl.picWidth);
     /*if (start !=-1)*/
-    if( withPopUps ) 
-	hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",statusLine);
+    mapStatusMessage("%s", statusLine);
     hPrintf(">\n");
     freeMem(encodedItem);
     }
@@ -9117,9 +9145,12 @@ hPrintf("</MAP>\n");
 vgClose(&vg);
 smallBreak();
 smallBreak();
-hPrintf(
-    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>\n",
+hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s ",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
+#ifdef ROBERTS_EXPERIMENT
+hPrintf("onMouseOut=\"javascript:popupoff();\"");
+#endif /* ROBERTS_EXPERIMENT */
+hPrintf("><BR>\n");
 }
 
 
