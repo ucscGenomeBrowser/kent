@@ -5763,6 +5763,29 @@ EOF
 	VALUES ("hg16","proteins040115");' \
 	-h genome-testdb hgcentraltest
 
+# VEGA GENES UPDATE from 2004/01/15 below  (2004-02-04 - Hiram)
+    mv ~/hg16/bed/vega ~/hg16/bed/vega.badcds
+    mkdir /cluster/data/hg16/bed/vegaUpdate
+    cd /cluster/data/hg16/bed/vegaUpdate
+    
+    wget --timestamping ftp://ftp.sanger.ac.uk/pub/searle/*.gtf.gz
+
+    # Load genes and Immunoglobulin/Pseudogenes into 2 separate tracks.  Just
+    # omit snoRNAs, as there are so few of them
+    zcat *.gtf.gz | awk '!(/small nucleolar RNA/ || $2 == "Pseudogene" || $2 == "Ig_Pseudogene_Segment" || $2 == "Ig_Segment") {print "chr"$0}'  > vegaGene.gtf
+    zcat *.gtf.gz | awk '($2 == "Pseudogene" || $2 == "Ig_Pseudogene_Segment" || $2 == "Ig_Segment") {print "chr"$0}'  > vegaPseudoGene.gtf
+
+    ldHgGene -gtf hg16 vegaGeneUpdate vegaGene.gtf
+    ldHgGene -gtf hg16 vegaPseudoGeneUpdate vegaPseudoGene.gtf
+
+    wget http://www.sanger.ac.uk/Users/keenan/vega_pep_dump_ncbi34.fa.gz
+    hgPepPred hg16 generic vegaPep vega_pep_dump_ncbi34.fa
+
+    vegaBuildInfo vega_homo_sapiens_core_4_0.gtf vegaInfo.tab
+    hgsql hg16 < ~/kent/src/hg/lib/vegaInfo.sql
+    hgsql -e "load data local infile 'vegaInfo.tab' into table vegaInfo" hg16
+
+
 # LOAD VEGA GENES AND PSEUDOGENES (reloaded 2004/01/15 markd)
     # reloaded due to bug in creating bogus CDS
     mv ~/hg16/bed/vega ~/hg16/bed/vega.badcds
@@ -6130,4 +6153,14 @@ axtFilter -notQ=chrUn $1 \
     # Add entries for chainGalGal1, netGalGal1, syntenyGalGal1 to 
     # human/hg16 trackDb
 
+
+# LOAD SOFTBERRY GENES (DONE - 2004-02-10 - Hiram)
+     mkdir -p /cluster/data/hg16/bed/softberry
+     cd /cluster/data/hg16/bed/softberry
+     set file = Soft_fgenesh_jul03.tar.gz
+     wget --timestamping ftp://www.softberry.com/pub/SC_HUM_JUL03/$file
+     tar xzvf $file
+     ldHgGene hg16 softberryGene fgenesh_jul03/chr*.gff
+     hgPepPred hg16 softberry fgenesh_jul03/*.protein
+     hgSoftberryHom hg16 fgenesh_jul03/*.protein
 
