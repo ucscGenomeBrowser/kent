@@ -9,7 +9,7 @@
 #include "internet.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: bottleneck.c,v 1.3 2004/02/04 07:00:40 kent Exp $";
+static char const rcsid[] = "$Id: bottleneck.c,v 1.4 2004/06/15 17:20:53 kent Exp $";
 
 int port = 17776;	/* Default bottleneck port. */
 char *host = "localhost";   /* Default host. */
@@ -21,7 +21,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bottleneck - A server that helps slow down hyperactive web robots\n"
+  "bottleneck v2 - A server that helps slow down hyperactive web robots\n"
   "usage:\n"
   "   bottleneck start\n"
   "Start up bottleneck server\n"
@@ -29,6 +29,8 @@ errAbort(
   "Ask bottleneck server how long to wait to service ip-address\n"
   "   bottleneck list\n"
   "List accessing sites\n"
+  "   bottleneck set ip-address milliseconds\n"
+  "Set current delay for given ip-address\n"
   "options:\n"
   "   -port=XXXX - Use specific tcp/ip port. Default %d.\n"
   "   -host=XXXXX - Use specific host.  Default %s.\n"
@@ -67,8 +69,25 @@ struct tracker
 
 struct hash *trackerHash = NULL;	/* Hash of all trackers. */
 struct tracker *trackerList;		/* List of all trackers. */
+time_t now;				/* Current time. */
 
-int calcDelay(struct tracker *tracker, time_t now)
+struct tracker *trackerForIp(char *ip)
+/* Find tracker for given IP address.  Make it up if it
+ * doesn't already exist. */
+{
+struct tracker *tracker = hashFindVal(trackerHash, ip);
+if (tracker == NULL)
+    {
+    lmAllocVar(trackerHash->lm, tracker);
+    hashAddSaveName(trackerHash, ip, tracker, &tracker->name);
+    tracker->lastAccess = now;
+    tracker->curDelay = -penalty;
+    slAddHead(&trackerList, tracker);
+    }
+return tracker;
+}
+
+int calcDelay(struct tracker *tracker)
 /* Figure out recommended delay. */
 {
 int timeDiff = now - tracker->lastAccess;
@@ -86,7 +105,6 @@ void returnList(int socket)
 {
 struct tracker *tracker;
 char buf[256];
-time_t now = time(NULL);
 int timeDiff;
 safef(buf, sizeof(buf), "#IP_ADDRESS\thits\ttime\tmax\tcurrent");
 netSendString(socket, buf);
@@ -95,7 +113,7 @@ for (tracker = trackerList; tracker != NULL; tracker = tracker->next)
     timeDiff = now - tracker->lastAccess;
     safef(buf, sizeof(buf), "%s\t%d\t%d\t%d\t%d", 
     	tracker->name, tracker->accessCount, timeDiff, 
-	tracker->maxDelay, calcDelay(tracker, now));
+	tracker->maxDelay, calcDelay(tracker));
     if (!netSendString(socket, buf))
         break;
     }
@@ -143,27 +161,38 @@ trackerHash = newHash(18);
 acceptor = netAcceptingSocket(port, 64);
 for (;;)
     {
+    struct tracker *tracker;
     int socket = netAcceptFrom(acceptor, parsedSubnet);
     char buf[256], *s;
     s = netGetString(socket, buf);
     if (s != NULL)
 	{
+	now = time(NULL);
 	if (s[0] == '?')
-	    forkOutList(socket);
+	    {
+	    if (s[1] == 0)
+		forkOutList(socket);
+	    else
+	        {
+		char *command = nextWord(&s);
+		if (sameString(command, "?set"))
+		    {
+		    char *ip = nextWord(&s);
+		    char *millis = nextWord(&s);
+		    if (millis != NULL)
+		        {
+			tracker = trackerForIp(ip);
+			tracker->curDelay = atoi(millis) - penalty;
+			tracker->lastAccess = now;
+			}
+		    }
+		}
+	    }
 	else
 	    {
-	    time_t now = time(NULL);
-	    struct tracker *tracker = hashFindVal(trackerHash, s);
-	    if (tracker == NULL)
-		{
-		lmAllocVar(trackerHash->lm, tracker);
-		hashAddSaveName(trackerHash, s, tracker, &tracker->name);
-		tracker->lastAccess = now;
-		tracker->curDelay = -penalty;
-		slAddHead(&trackerList, tracker);
-		}
+	    tracker = trackerForIp(s);
 	    tracker->accessCount += 1;
-	    tracker->curDelay = calcDelay(tracker, now);
+	    tracker->curDelay = calcDelay(tracker);
 	    if (tracker->maxDelay < tracker->curDelay)
 	        tracker->maxDelay = tracker->curDelay;
 	    tracker->lastAccess = now;
@@ -207,6 +236,17 @@ for (i=0; i<count; ++i)
     close(socket);
     }
 }
+
+void setUser(char *ip, char *millis)
+/* Set user current delay. */
+{
+int socket = netMustConnect(host, port);
+char buf[256];
+safef(buf, sizeof(buf), "?set %s %s", ip, millis);
+netSendString(socket, buf);
+close(socket);
+}
+
 
 void listAll()
 /* Ask server for info on all IP addresses. */
@@ -253,6 +293,12 @@ else if (sameString(command, "query"))
 else if (sameString(command, "list"))
     {
     listAll();
+    }
+else if (sameString(command, "set"))
+    {
+    if (argc != 4)
+        usage();
+    setUser(argv[2], argv[3]);
     }
 else
     {
