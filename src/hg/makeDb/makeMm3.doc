@@ -3287,3 +3287,47 @@ zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | \
 hgsql \
  -e 'update gdbPdb set proteomeDb = "proteins040115" where genomeDb = "mm3";' \
         -h genome-testdb hgcentraltest
+
+# ECORES FROM GENOSCOPE [DONE, hartera, 2004-03-31]
+# download data from  http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecores
+# ecotigMF - ecores on Mouse, genome conserved with Fugu
+# ecotigMT - ecores on Mouse, genome conserved with Tetraodon
+
+    ssh hgwdev
+    mkdir /cluster/data/mm3/bed/ecores/
+    # add parse_ecotig.pl to this directory
+
+# FUGU
+    mkdir /cluster/data/mm3/bed/ecores/fr1
+    cd /cluster/data/mm3/bed/ecores/fr1/
+
+    # download data for ecotigMF to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigMF > ecotigMF.bed
+
+    # change from upper to lower case for "CHR"
+    perl -pi.bak -e 's/CHR/chr/g' ecotigMF.bed
+
+    hgLoadBed -tab mm3 ecoresFr1 ecotigMF.bed
+    # clean up
+    rm *.bak
+
+# TETRAODON
+    mkdir /cluster/data/mm3/bed/ecores/tetraodon
+    cd /cluster/data/mm3/bed/ecores/tetraodon/
+
+    # download data for ecotigMT to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigMT > ecotigMT.bed
+    # change from upper to lower case for "CHR"
+    perl -pi.bak -e 's/CHR/chr/g' ecotigMT.bed
+    
+    hgLoadBed -tab mm3 ecoresTetraodon ecotigMT.bed
+
+    # clean up
+    rm *.bak
+
+    # add entries in kent/src/hg/makeDb/trackDb/mouse/mm3/trackDb.ra
+    # add html for details pages to this directory:
+    # ecoresFr1.html and ecoresTetraodon.html
+

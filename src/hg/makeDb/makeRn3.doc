@@ -2962,17 +2962,17 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # remove temp files
     # rm dbSnpRs*
 
-# ECORES FROM GENOSCOPE [in progress, hartera, 2004-03-24]
+# ECORES FROM GENOSCOPE [DONE, hartera, 2004-03-31]
 # download data from  http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecores# ecotigRF - ecores on Rat, genome conserved with Fugu
 # ecotigRT - ecores on Rat, genome conserved with Tetraodon
                                                                                 
     ssh hgwdev
-    mkdir /cluster/data/rn3/bed/Ecores/
+    mkdir /cluster/data/rn3/bed/ecores/
     # add parse_ecotig.pl to this directory
                                                                                 
 # FUGU
-    mkdir /cluster/data/rn3/bed/Ecores/fugu
-    cd /cluster/data/rn3/bed/Ecores/fugu/
+    mkdir /cluster/data/rn3/bed/ecores/fr1
+    cd /cluster/data/rn3/bed/ecores/fr1/
                                                                                 
     # download data for ecotigRF to this directory
     # parse ecotig files to produce a bed format file
@@ -2981,10 +2981,11 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # change from upper to lower case for "CHR"
     perl -pi.bak -e 's/CHR/chr/g' ecotigRF.bed
                                                                                 
-    # NEED TO LOAD BED FILE INTO DATABASE                                                                            
+    hgLoadBed -tab rn3 ecoresFr1 ecotigRF.bed
+                                                                               
 # TETRAODON
-    mkdir /cluster/data/rn3/bed/Ecores/tetraodon
-    cd /cluster/data/rn3/bed/Ecores/tetraodon/
+    mkdir /cluster/data/rn3/bed/ecores/tetraodon
+    cd /cluster/data/rn3/bed/ecores/tetraodon/
                                                                                 
     # download data for ecotigHT to this directory
     # parse ecotig files to produce a bed format file
@@ -2992,14 +2993,14 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # change from upper to lower case for "CHR"
     perl -pi.bak -e 's/CHR/chr/g' ecotigRT.bed
 
-    hgLoadBed -tab hg16 ecoresTetraodon ecotigRT.bed
+    hgLoadBed -tab rn3 ecoresTetraodon ecotigRT.bed
                                                                                 
     # clean up
     rm *.bak
                                                                                 
     # add entries in kent/src/hg/makeDb/trackDb/rat/rn3/trackDb.ra
     # add html for details pages to this directory:
-    # ecoresFugu.html and ecoresTetraodon.html
+    # ecoresFr1.html and ecoresTetraodon.html
 
 # Affymetrix RAE230 GeneChip track - affyRAE230
 # [DONE, hartera, 2003-03-26]
