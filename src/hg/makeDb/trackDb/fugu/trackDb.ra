@@ -67,3 +67,11 @@ spectrum on
 type psl xeno hg16
 otherDb hg16
 colorChromDefault off
+
+track blastHg15KG
+shortLabel human protein blast
+longLabel human protein blast
+group x
+priority 1101
+visibility dense
+type psl protein
