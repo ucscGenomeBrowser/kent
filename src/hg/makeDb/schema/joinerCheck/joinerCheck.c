@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.17 2004/03/13 16:55:18 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.18 2004/03/16 01:05:17 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -523,13 +523,162 @@ if (outName != NULL)
 return fieldHash;
 }
 
+void reportErrorList(struct slName **pList, char *message)
+/* Report error on list of string references. */
+/* Convert a list of string references to a comma-separated
+ * slName.  Free up refList. */
+{
+if (*pList != NULL)
+    {
+    struct dyString *dy = dyStringNew(0);
+    struct slName *name, *list;
+    slReverse(pList);
+    list = *pList;
+    dyStringAppend(dy, list->name);
+    for (name = list->next; name != NULL; name = name->next)
+	{
+        dyStringAppendC(dy, ',');
+	dyStringAppend(dy, name->name);
+	}
+    warn("Error: %s %s", dy->string, message);
+    slFreeList(pList);
+    dyStringFree(&dy);
+    }
+}
+
+
+static void joinerCheckDbCoverage(struct joiner *joiner)
+/* Complain about databases that aren't in databasesChecked or ignored. */
+{
+struct slName *missList = NULL, *miss;
+struct slName *db, *dbList = sqlListOfDatabases();
+
+/* Keep a list of databases that aren't in either hash. */
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (!hashLookup(joiner->databasesChecked, db->name) 
+        && !hashLookup(joiner->databasesIgnored, db->name))
+	{
+	miss = slNameNew(db->name);
+	slAddHead(&missList, miss);
+	}
+    }
+
+/* If necessary report (in a single message) database not in joiner file. */
+reportErrorList(&missList, "not in databasesChecked or databasesIgnored");
+}
+
+static void addTablesLike(struct hash *hash, struct sqlConnection *conn,
+	char *spec)
+/* Add tables like spec to hash. */
+{
+if (sqlWildcardIn(spec))
+    {
+    struct sqlResult *sr;
+    char query[512], **row;
+    safef(query, sizeof(query), 
+	    "show tables like '%s'", spec);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	hashAdd(hash, row[0], NULL);
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    hashAdd(hash, spec, NULL);
+    }
+}
+
+
+struct hash *getCoveredTables(struct joiner *joiner, char *db, 
+	struct sqlConnection *conn)
+/* Get list of tables covered in database. */
+{
+struct hash *hash = hashNew(0);
+struct joinerIgnore *ig;
+struct slName *spec;
+struct joinerSet *js;
+struct joinerField *jf;
+
+/* First put in all the ignored tables. */
+for (ig = joiner->tablesIgnored; ig != NULL; ig = ig->next)
+    {
+    if (slNameInList(ig->dbList, db))
+        {
+	for (spec = ig->tableList; spec != NULL; spec = spec->next)
+	    {
+	    addTablesLike(hash, conn, spec->name);
+	    }
+	}
+    }
+
+/* Now put in tables that are in one of the identifiers. */
+for (js = joiner->jsList; js != NULL; js = js->next)
+    {
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+        {
+	if (slNameInList(jf->dbList, db))
+	    {
+	    char spec[512];
+	    safef(spec, sizeof(spec), "%s%s%s",
+	        emptyForNull(jf->splitPrefix), jf->table,
+		emptyForNull(jf->splitSuffix));
+	    addTablesLike(hash, conn, spec);
+	    }
+	}
+    }
+return hash;
+}
+
+void joinerCheckTableCoverage(struct joiner *joiner)
+/* Check that all tables either are part of an identifier or
+ * are in the tablesIgnored statements. */
+{
+struct slName *miss, *missList = NULL;
+struct hashEl *dbList, *db;
+
+uglyf("Checking tables are covered\n");
+dbList = hashElListHash(joiner->databasesChecked);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    struct sqlConnection *conn = sqlMayConnect(db->name);
+    if (conn == NULL)
+        warn("Error: database %s doesn't exist", db->name);
+    else
+        {
+	struct slName *table;
+	struct slName *tableList = sqlListTables(conn);
+	struct hash *hash = getCoveredTables(joiner, db->name, conn);
+	for (table = tableList; table != NULL; table = table->next)
+	    {
+	    if (!hashLookup(hash, table->name))
+	        {
+		char fullName[256];
+		safef(fullName, sizeof(fullName), "%s.%s", 
+			db->name, table->name);
+		miss = slNameNew(fullName);
+		slAddHead(&missList, miss);
+		}
+	    }
+	slFreeList(&tableList);
+	freeHash(&hash);
+	reportErrorList(&missList, "tables not in .joiner file");
+	}
+    sqlDisconnect(&conn);
+    }
+slFreeList(&dbList);
+}
+
 void joinerCheck(char *fileName)
 /* joinerCheck - Parse and check joiner file. */
 {
 struct joiner *joiner = joinerRead(fileName);
 if (!parseOnly)
     {
-    struct hash *fieldHash = processFieldHash(fieldListIn, fieldListOut);
+    struct hash *fieldHash;
+    joinerCheckDbCoverage(joiner);
+    joinerCheckTableCoverage(joiner);
+    fieldHash = processFieldHash(fieldListIn, fieldListOut);
     joinerValidateFields(joiner, fieldHash, identifier);
     if (foreignKeys)
 	joinerValidateKeys(joiner, identifier, database);
