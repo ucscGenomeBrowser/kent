@@ -19,6 +19,7 @@ struct gbProcessed
     struct gbUpdate* update;        /* update we are associated with */
     struct gbProcessed* updateLink; /* update list */
     short version;                  /* version number */
+    short orgCat;                   /* organism category */
     time_t modDate;                 /* GenBank modification date */
     char* organism;                 /* organism name */
 };

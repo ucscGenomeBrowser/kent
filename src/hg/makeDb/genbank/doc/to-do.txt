@@ -597,3 +597,11 @@ without refseq:
 
 - in sqlLoadTablFile make this version 10 robust:
   boolean isMySql4 = (conn->conn->server_version[0] > '3');
+
+- Use livelists to construct deleted accession tables.  Since this doesn't
+  give an explicit status, only the latest one can be used, since
+  surpressed entries can come back to life. This also doesn't work for
+  refseq,but could be constructed by downloading the cummulative
+   ftp://ftp.ncbi.nih.gov/genbank/livelists
+
+- TPA records are not in downloads, where are they?  e.g. BK000688

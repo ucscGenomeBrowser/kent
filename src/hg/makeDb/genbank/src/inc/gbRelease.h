@@ -92,7 +92,8 @@ void gbReleaseLoadAligned(struct gbSelect* select);
 /* load index files from an aligned directory. */
 
 void gbReleaseClearSelectVer(struct gbRelease* release);
-/* clear the selected version field in all gbEntry objects in the release */
+/* clear the selected version and clientFlags fields in all gbEntry objects in
+ * the release */
 
 void gbReleaseDump(struct gbRelease* release, FILE* out, int indent);
 /* print a gbRelease object for debugging */

@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbRelease.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbRelease.c,v 1.2 2003/09/12 15:24:24 markd Exp $";
 
 /* size power of hash tables for shared strings */
 #define STR_MEM_HASH_SIZE   20
@@ -400,12 +400,17 @@ select->update = saveUpdate;
 }
 
 void gbReleaseClearSelectVer(struct gbRelease* release)
-/* clear the selected version field in all gbEntry objects in the release */
+/* clear the selected version and clientFlags fields in all gbEntry objects in
+ * the release */
 {
 struct hashCookie cookie = hashFirst(release->entryTbl);
 struct hashEl* hel;
 while ((hel = hashNext(&cookie)) != NULL)
-    ((struct gbEntry*)hel->val)->selectVer = NULL_VERSION;
+    {
+    struct gbEntry* entry = hel->val;
+    entry->selectVer = NULL_VERSION;
+    entry->clientFlags = 0;
+    }
 }
 
 void gbReleaseDump(struct gbRelease* release, FILE* out, int indent)

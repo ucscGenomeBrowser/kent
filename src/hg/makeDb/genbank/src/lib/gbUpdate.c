@@ -6,7 +6,7 @@
 #include "gbEntry.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbUpdate.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbUpdate.c,v 1.2 2003/09/12 15:24:24 markd Exp $";
 
 void gbUpdateNameFromFile(char* updateName, char* fileName)
 /* Get an update name from a file name in the dir */
@@ -113,15 +113,18 @@ return prev;
 }
 
 void gbUpdateClearSelectVer(struct gbUpdate* update)
-/* Clear the selected version field in all gbEntry objects in the update.
- * note that since entries are shared by multiple updates, this can't be used
- * to use with multiple updates at the same time.  It's intended to be a
- * quicker way to clear selectVer by limiting it to one update.
+/* Clear the selected version and clientFlags fields in all gbEntry objects in
+ * the update.  note that since entries are shared by multiple updates, this
+ * can't be used to use with multiple updates at the same time.  It's intended
+ * to be a quicker way to clear selectVer by limiting it to one update.
  */
 {
 struct gbProcessed* proc;
 for (proc = update->processed; proc != NULL; proc = proc->next)
+    {
     proc->entry->selectVer = NULL_VERSION;
+    proc->entry->clientFlags = 0;
+    }
 }
 /*
  * Local Variables:

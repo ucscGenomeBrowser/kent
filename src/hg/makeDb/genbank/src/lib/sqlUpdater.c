@@ -7,7 +7,7 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.2 2003/08/24 17:31:43 markd Exp $";
+static char const rcsid[] = "$Id: sqlUpdater.c,v 1.3 2003/09/12 15:24:24 markd Exp $";
 
 #define UPDATE_QUERY_MAX 4096
 
@@ -135,7 +135,7 @@ if (ferror(su->tabFh))
     errnoAbort("writing %s", su->tabFile);
 carefulClose(&su->tabFh);
 sqlLoadTabFile(conn, su->tabFile, su->table,
-               SQL_TAB_FILE_ON_SERVER|SQL_TAB_FILE_CONCURRENT);
+               SQL_TAB_FILE_ON_SERVER/*|SQL_TAB_FILE_CONCURRENT*/);
 }
 
 void sqlUpdaterCommit(struct sqlUpdater* su, struct sqlConnection *conn)

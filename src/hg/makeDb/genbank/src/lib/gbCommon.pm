@@ -47,6 +47,13 @@ BEGIN {
     $newPath .= "$rootDir/bin:$rootDir/bin/$arch:/cluster/bin/$arch";
     $main::ENV{PATH} = $newPath . $main::ENV{PATH};
 
+    # also allow for shared libraries in lib/$arch
+    if (defined($main::ENV{LD_LIBRARY_PATH})) {
+        $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$arch:$main::ENV{LD_LIBRARY_PATH}";
+    } else {
+        $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$arch";
+    }
+
     # set umask to preserve group writability
     umask 0022;
         

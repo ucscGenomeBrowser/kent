@@ -15,8 +15,8 @@ struct gbUpdate
     char* name;                     /* update name */
     char* shortName;                /* short name, date or "full" */
     boolean isFull;                 /* is this a full or daily */
-    boolean selectProc;             /* processed selected flag (not in db) */
-    boolean selectAlign;            /* aligned selected flag (not in db) */
+    unsigned selectProc;            /* processed selected flags (not in db) */
+    unsigned selectAlign;           /* aligned selected flags (not in db) */
     struct gbRelease* release;      /* release we are associated with */
     struct gbProcessed* processed;  /* list of processed entries */
     struct gbAligned* aligned;      /* list of aligned entries */
@@ -51,10 +51,10 @@ struct gbUpdate* gbUpdateGetPrev(struct gbUpdate* update);
 /* get the next oldest update */
 
 void gbUpdateClearSelectVer(struct gbUpdate* update);
-/* Clear the selected version field in all gbEntry objects in the update.
- * note that since entries are shared by multiple updates, this can't be used
- * to use with multiple updates at the same time.  It's intended to be a
- * quicker way to clear selectVer by limiting it to one update.
+/* Clear the selected version and clientFlags fields in all gbEntry objects in
+ * the update.  note that since entries are shared by multiple updates, this
+ * can't be used to use with multiple updates at the same time.  It's intended
+ * to be a quicker way to clear selectVer by limiting it to one update.
  */
 #endif
 /*

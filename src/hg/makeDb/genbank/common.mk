@@ -41,7 +41,7 @@ TESTBINARCH = ${TESTBIN}/$(MACHTYPE)
 
 $(BINARCH)/%: ${O} makefile ${LIBGENBANK}
 	@mkdir -p ${BINARCH}
-	gcc -O -o $@ $O $(LIBS)
+	gcc ${CFLAGS} -o $@ $O $(LIBS)
 
 ${BINDIR}/%: %
 	mkdir -p ${BINDIR}

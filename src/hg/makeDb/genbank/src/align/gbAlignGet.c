@@ -18,7 +18,11 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.3 2003/08/19 19:15:40 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.4 2003/09/12 15:24:24 markd Exp $";
+
+/* version to set in gbEntry.selectVer to indicate an entry is being
+ * migrated */
+#define MIGRATE_VERSION -2  
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -31,24 +35,6 @@ static struct optionSpec optionSpecs[] = {
 /* global parameters from command line */
 static char* workDir;
 static unsigned maxFaSize;
-
-struct alignCnts
-/* Counts of alignments */
-{
-    unsigned alignCnt;
-    unsigned migrateCnt;
-    unsigned nativeCnt;
-    unsigned xenoCnt;
-};
-
-void alignCntsSum(struct alignCnts* accum, struct alignCnts* cnts)
-/* add fields in cnts to accum */
-{
-accum->alignCnt += cnts->alignCnt;
-accum->migrateCnt += cnts->migrateCnt;
-accum->nativeCnt += cnts->nativeCnt;
-accum->xenoCnt += cnts->xenoCnt;
-}
 
 struct outFa
 /* Output fasta file info, opened in a lazy manner, split into native and
@@ -113,7 +99,7 @@ gbFaWriteFromFa(outFa->fa, inFa, NULL);
 
 boolean copyFastaRec(struct gbSelect* select, struct gbFa* inFa,
                      struct outFa* nativeFa, struct outFa* xenoFa)
-/* Read and copy a record to one of the output files */
+/* Read and copy a record to one of the output files, if selected */
 {
 char acc[GB_ACC_BUFSZ];
 unsigned version;
@@ -126,24 +112,34 @@ version = gbSplitAccVer(inFa->id, acc);
 entry = gbReleaseFindEntry(select->release, acc);
 if (entry != NULL)
     {
-    if (version == entry->selectVer)
+    if ((version == entry->selectVer) && (entry->clientFlags & ALIGN_FLAG))
         {
         outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa), inFa );
         if (verbose >= 3)
-            gbVerbPr(3, "align: %s %s", inFa->id,
-                     ((entry->orgCat == GB_NATIVE) ? "native": "xeno"));
+            gbVerbPr(3, "aligning %s %s", inFa->id,
+                     gbOrgCatName(entry->orgCat));
         }
-    else
+    else if ((version == entry->selectVer) && (entry->clientFlags & MIGRATE_FLAG))
         {
         if (verbose >= 3)
-            gbVerbPr(3, "skip, version doesn't match: %s != %d", inFa->id,
+            gbVerbPr(3, "migrating %s %s", inFa->id,
+                     gbOrgCatName(entry->orgCat));
+        }
+    else 
+        {
+        assert(version != entry->selectVer);
+        if (verbose >= 3)
+            gbVerbPr(3, "skip %s, wrong version %s != %d", 
+                     gbOrgCatName(entry->orgCat), inFa->id,
                      entry->selectVer);
         }
     }
 else
+    {
     if (verbose >= 3)
-        gbVerbPr(3, "skip, no entry: %s.%d", inFa->id, version);
-
+        gbVerbPr(3, "skip %s, no entry: %s", inFa->id,
+                 gbOrgCatName(entry->orgCat));
+    }
 
 return TRUE;
 }
@@ -170,39 +166,6 @@ gbFaClose(&inFa);
 gbVerbLeave(2, "copying from %s", inFasta);
 }
 
-void needAlignedCallback(struct gbSelect* select,
-                         struct gbProcessed* processed,
-                         struct gbAligned* prevAligned,
-                         void* clientData)
-/* Function called for each sequence that needs aligned */
-{
-struct alignCnts* alignCnts = clientData;
-
-/* Skip if sequence is aligned in the previous release, otherwise mark the
- * entry with the version.  Don't migrate if type or orgCat changed */
-if ((prevAligned != NULL)
-    && (prevAligned->entry->type == processed->entry->type)
-    && (prevAligned->entry->orgCat == processed->entry->orgCat))
-    {
-    if (verbose >= 3)
-        gbVerbPr(3, "migrate %s.%d", processed->entry->acc,
-                 processed->version);
-    alignCnts->migrateCnt++;
-    }
-else
-    {
-    if (verbose >= 3)
-        gbVerbPr(3, "need to align %s.%d", processed->entry->acc,
-                 processed->version);
-    processed->entry->selectVer = processed->version;
-    alignCnts->alignCnt++;
-    }
-if (processed->entry->orgCat == GB_NATIVE)
-    alignCnts->nativeCnt++;
-else
-    alignCnts->xenoCnt++;
-}
-
 void markAligns(struct gbSelect* select, unsigned orgCat)
 /* create a file indicating that sequences either needs aligned or migated for
  * this for this partation.  This is used to determine what needs to be
@@ -221,21 +184,20 @@ gbOutputRename(path, &fh);
 select->orgCats = orgCatsHold;
 }
 
-struct alignCnts alignGet(struct gbSelect* select, struct gbSelect* prevSelect,
-                          unsigned orgCats)
+struct gbAlignInfo gbAlignGet(struct gbSelect* select,
+                              struct gbSelect* prevSelect)
 /* Build files to align in the work directory.  If this is not a full release,
- * or there is no previously aligned release, prevGenome should be NULL.
+ * or there is no previously aligned release, prevSelect should be NULL.
  */
 {
-struct alignCnts alignCnts;
-ZeroVar(&alignCnts);
+struct gbAlignInfo alignInfo;
 
 gbVerbEnter(1, "gbAlignGet: %s", gbSelectDesc(select));
-select->orgCats = orgCats;
+select->orgCats = GB_NATIVE|GB_XENO;
 if (prevSelect != NULL)
-    prevSelect->orgCats = orgCats;
+    prevSelect->orgCats = GB_NATIVE|GB_XENO;
 
-/* load required entry date */
+/* load the required entry data */
 gbReleaseLoadProcessed(select);
 if (prevSelect != NULL)
     {
@@ -245,18 +207,19 @@ if (prevSelect != NULL)
 
 /* select entries to align */
 gbVerbEnter(2, "selecting seqs to align");
-gbAlignFindNeedAligned(select, prevSelect, needAlignedCallback, &alignCnts);
+alignInfo = gbAlignFindNeedAligned(select, prevSelect);
 gbVerbLeave(2, "selecting seqs to align");
-    
-if (alignCnts.migrateCnt > 0)
-    gbVerbMsg(1, "gbAlignGet: %d %s sequences will be migrated",
-              alignCnts.migrateCnt, gbFmtSelect(select->type));
+
+if (alignInfo.migrate.accTotalCnt > 0)
+    gbVerbMsg(1, "gbAlignGet: %d %s entries, %d alignments will be migrated",
+              alignInfo.migrate.accTotalCnt, gbFmtSelect(select->type),
+              alignInfo.migrate.recTotalCnt);
 
 /* create fasta with sequences to align if not empty */
-if (alignCnts.alignCnt > 0)
+if (alignInfo.align.accTotalCnt > 0)
     {
     gbVerbMsg(1, "gbAlignGet: %d %s sequences will be align",
-              alignCnts.alignCnt, gbFmtSelect(select->type));
+              alignInfo.align.accTotalCnt, gbFmtSelect(select->type));
     copySelectedFasta(select);
     }
 
@@ -271,21 +234,7 @@ gbVerbLeave(1, "gbAlignGet: %s", gbSelectDesc(select));
 gbReleaseUnload(select->release);
 if (prevSelect != NULL)
     gbReleaseUnload(prevSelect->release);
-return alignCnts;
-}
-
-struct alignCnts gbAlignGet(struct gbSelect* select,
-                            struct gbSelect* prevSelect)
-/* Build files to align in the work directory.  If this is not a full release,
- * or there is no previously aligned release, prevGenome should be NULL. */
-{
-struct alignCnts cnts;
-struct alignCnts alignCnts;
-ZeroVar(&alignCnts);
-
-cnts = alignGet(select, prevSelect, GB_NATIVE|GB_XENO);
-alignCntsSum(&alignCnts, &cnts);
-return alignCnts;
+return alignInfo;
 }
 
 void usage()
@@ -324,7 +273,7 @@ char *relName, *updateName, *typeAccPrefix, *database, *sep;
 struct gbIndex* index;
 struct gbSelect select;
 struct gbSelect* prevSelect = NULL;
-struct alignCnts alignCnts;
+struct gbAlignInfo alignInfo;
 ZeroVar(&select);
 
 optionInit(&argc, argv, optionSpecs);
@@ -360,17 +309,17 @@ gbVerbMsg(0, "gbAlignGet: %s/%s/%s/%s", select.release->name,
 /* Get the release to migrate, if applicable */
 prevSelect = gbAlignGetMigrateRel(&select);
 
-alignCnts = gbAlignGet(&select, prevSelect);
+alignInfo = gbAlignGet(&select, prevSelect);
 
 /* always print stats */
 fprintf(stderr, "gbAlignGet: %s/%s/%s/%s: align=%d, migrate=%d\n",
         select.release->name, select.release->genome->database,
         select.update->name, typeAccPrefix,
-        alignCnts.alignCnt, alignCnts.migrateCnt);
+        alignInfo.align.accTotalCnt, alignInfo.migrate.accTotalCnt);
 gbIndexFree(&index);
 
 /* print alignment count, which is read by the driver program */
-printf("alignCnt: %d\n", alignCnts.alignCnt);
+printf("alignCnt: %d\n", alignInfo.align.accTotalCnt);
 return 0;
 }
 /*
