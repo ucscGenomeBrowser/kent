@@ -740,6 +740,22 @@ else
     return pp;
 }
 
+static void flipNameUseToVarDec(struct pfParse *pp, struct pfParse *type, struct pfParse *parent)
+{
+struct pfParse *dupeType, *dupeName;
+
+
+AllocVar(dupeName);
+*dupeName = *pp;
+
+AllocVar(dupeType);
+*dupeType = *type;
+pp->children = dupeType;
+dupeType->next = dupeName;
+dupeName->next = NULL;
+pp->type = pptVarDec;
+}
+
 static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
 /* If first element of tuple is typed, then make sure rest
  * is typed too. */
@@ -747,7 +763,8 @@ static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
 struct pfParse *vars = tuple->children, *next;
 if (vars != NULL)
     {
-    if (vars->type == pptVarDec)
+    if (vars->type == pptVarDec || 
+        vars->type == pptAssignment && vars->children->type == pptVarDec)
 	{
 	struct pfParse *type = NULL;
 	struct pfParse *pp;
@@ -756,21 +773,24 @@ if (vars != NULL)
 	    if (pp->type == pptVarDec)
 		{
 	        type = pp->children;
+		pp->name = type->next->name;
 		}
 	    else if (pp->type == pptNameUse)
 	        {
-		struct pfParse *decl = pfParseNew(pptVarDec, pp->tok, tuple);
-		struct pfParse *dupeType, *dupeName;
-		pp->type = pptVarDec;
-
-		AllocVar(dupeName);
-		*dupeName = *pp;
-
-		AllocVar(dupeType);
-		*dupeType = *type;
-		pp->children = dupeType;
-		dupeType->next = dupeName;
-		dupeName->next = NULL;
+		flipNameUseToVarDec(pp, type, tuple);
+		}
+	    else if (pp->type == pptAssignment)
+	        {
+		struct pfParse *sub = pp->children;
+		if (sub->type == pptVarDec)
+		    {
+		    type = pp->children->children;
+		    sub->name = type->next->name;
+		    }
+		else if (sub->type == pptNameUse)
+		    {
+		    flipNameUseToVarDec(sub, type, pp);
+		    }
 		}
 	    }
 	}
