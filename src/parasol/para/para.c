@@ -341,6 +341,8 @@ static int dotMod = 600;
 static int dot = 600;
 if (--dot <= 0)
     {
+    fflush(stdout);
+    fflush(stderr);
     sleep(1);
     dot = dotMod;
     }
@@ -765,7 +767,8 @@ for (job=db->jobList; job != NULL; job = job->next)
 	}
     }
 freeHash(&checkHash);
-printf("\n");
+if (doHappytDots)
+    printf("\n");
 return resultsHash;
 }
 
@@ -877,6 +880,8 @@ for (;;)
     jobDbFree(&db);
     if (!anyUnfinished)
         break;
+    fflush(stdout);
+    fflush(stderr);
     sleep(curSleep);
     if (curSleep < maxSleep)
         curSleep += 15;
