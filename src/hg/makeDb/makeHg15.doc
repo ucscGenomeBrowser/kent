@@ -2215,28 +2215,27 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
       popd
     end
 
-#  LOOP Running Hiram 2003-05-06 15:49
-
-# STOPPED HERE -- big data, low demand.
     # Translate the sorted axt files into psl:
     cd $base
     mkdir -p pslChrom
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
-      axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
     # Load tables
     ssh hgwdev
-    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-03-18-ASH"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
     set tbl="blastzRn2"
     cd $base/pslChrom
-    hgLoadPsl hg15 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
+
+#	DONE - hgLoadPsl is in progress 2003-05-08 13:55 - Hiram
 
 # MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (TO DO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-03-18-ASH"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
     set tbl="blastzBestRn2"
     cd $base
     mkdir -p axtBest pslBest
@@ -2245,15 +2244,15 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
       echo axtBesting $chr
       axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
       echo translating axtBest to psl for $chr
-      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+      /cluster/bin/i386/axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-03-18-ASH"
+     set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
      set tbl="blastzBestRn2"
      cd $base/pslBest
-     hgLoadPsl hg15 chr*_${tbl}.psl
+     /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
 
     # Make /gbdb links and add them to the axtInfo table:
 # Not done for build 32:
