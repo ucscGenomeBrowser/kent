@@ -11,6 +11,6 @@ hgMedianMicroarray: $O $(MYLIBS)
 	strip $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray
 
 test:
-	hgMedianMicroarray ce1 kimLifeCycle kimWormLifeCycle kimMed.ra kimLifeCycleMedian kimWormLifeCycleMedian -tab=output -noLoad -limit=100
-	diff -r expected output
+	hgMedianMicroarray ce1 kimLifeCycle kimWormLifeCycle kimMed.ra kimLifeCycleMedian kimWormLifeCycleMedian -tab=output -noLoad -limit=500
+	diff -x CVS -r expected output
 	rm -r output

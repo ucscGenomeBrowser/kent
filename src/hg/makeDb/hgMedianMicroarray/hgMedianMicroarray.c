@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.1 2003/10/01 22:06:48 kent Exp $";
+static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.2 2003/10/01 22:24:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -179,6 +179,8 @@ safef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
+#define missingData -10000
+
 void makeNewDataTable(char *database, char *oldTable, struct medSpec *medList, char *newTable)
 /* Create new table in database based on medians of data
  * in old table as defined by medList. */
@@ -213,8 +215,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     sqlDoubleDynamicArray(row[1], &vals, &valCount);
     for (med = medList; med != NULL; med = med->next)
 	{
-	int i, ix;
-	double *selVals;
+	int i, ix, realCount = 0;
+	double *selVals, val;
 	AllocArray(selVals, med->count);
 	for (i=0; i<med->count; ++i)
 	    {
@@ -222,9 +224,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (ix >= valCount)
 	        errAbort("%d index in median list, but only %d total", 
 			ix, valCount);
-	    selVals[i] = vals[ix];
+	    val = vals[ix];
+	    if (val > missingData)
+	        {
+		selVals[realCount] = vals[ix];
+		++realCount;
+		}
 	    }
-	median = doubleMedian(med->count, selVals);
+	if (realCount < 2)
+	    median = missingData;
+	else
+	    median = doubleMedian(realCount, selVals);
 	fprintf(f, "%0.3f,", median);
 	freeMem(selVals);
 	}
