@@ -166,6 +166,9 @@ format description of their fields.</P>
   href="#PslInfo">chrN_mrna</A> 
   - mRNA alignments 
   <LI><A 
+  href="#wiggleTrack">chrN_musHumL</A> 
+  - Mouse/Human Evolutionary Conservation Scores 
+  <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
   - Repeating elements created using RepeatMasker </LI>
   <LI><A 
@@ -193,7 +196,7 @@ stored in a single table rather than one table per chromosome:</P>
   - Translations of Acembly gene predictions into corresponding amino acid
     sequences </LI>
   <LI><A 
-  href="#LFS">affyRatio</A> 
+  href="#BED">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
   <LI><A 
   href="#wiggleTrack">affyTranscriptome</A> 
@@ -205,6 +208,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#PslInfo">all_est</A> 
   - EST alignments (concatenation of chr*_est) 
+  <LI><A 
+  href="#PslInfo">all_fosends</A> 
+  - Fosmid end alignments 
   <LI><A 
   href="#PslInfo">all_mrna</A> 
   - mRNA alignments (concatenation of chr*_mrna) 
@@ -245,7 +251,7 @@ stored in a single table rather than one table per chromosome:</P>
   - Positions of all clones in golden path. Also HTG phase, 
   finished/draft/predraft stage, and sequence size
   <LI><A 
-  href="#CpG Islands">cpgIsland</A> 
+  href="#CpGIslands">cpgIsland</A> 
   - CpG islands contributed by Baylor University and Washington University 
   <LI><A 
   href="#ContigInfo">ctgPos</A> 
@@ -340,6 +346,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#BED">haplotype</A> 
   - Common Haplotype Blocks - U. of Oxford and Sanger Institute (chr22 only) </LI>
+  <LI><A 
+  href="#Chain">humanChain</A> 
+  - Summary info about chain of human alignments </LI>
+  <LI><A 
+  href="#NetAlign">humanNet</A> 
+  - Database representation of a net of alignments with human </LI>
   <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
@@ -558,6 +570,9 @@ cover the same region </LI>
   href="#STSinfoMouseNew">stsInfoMouseNew</A> 
   - Constant STS marker information (NCBI)</LI>
   <LI><A 
+  href="#STSinfoRat">stsInfoRat</A> 
+  - Constant STS marker information - rat assembly</LI>
+  <LI><A 
   href="#STSmap">stsMap</A> 
   - STS markers on genetic (blue) and radiation hybrid (black) maps </LI> 
   <LI><A 
@@ -737,10 +752,11 @@ autoSql format.
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
+- affyRatio -all 15 fields <BR>
 - haplotype - first 12 fields <BR>
-- nci60 - first 15 fields <BR>
+- nci60 - all 15 fields <BR>
 - perlegen - first 12 fields <BR>
-- rosetta - first 15 fields <BR>
+- rosetta - all 15 fields <BR>
 - slamNonCoding* - first 5 fields <BR>
 - superfamily - first 4 fields  <BR>
 - uniGene_2 - first 12 fields <BR>
@@ -861,7 +877,7 @@ The following definition is used for several tables as follows:<BR>
     )
 </PRE>
 
-<H4><A name="CpG Islands"></A>CpG Islands</H4>
+<H4><A name="CpGIslands"></A>CpG Islands</H4>
 <PRE>table cpgIsland
 "Describes CpG Islands of 50 bases or more that are at least 50% G/C"
    (
@@ -1359,10 +1375,8 @@ Last used Apr. 2001.
 </PRE>
 
 <H4><A name=PslInfo></A>mRNA/EST/Blat Alignments</H4>
-The following definition is used for the chrN_blatMouse, chrN_blatFish, 
-chrN_blatHuman, chrN_mrna, chrN_est, chrN_intronEst, all_est, all_mrna, 
-blastzBestMouse, blastzTightMouse, blatChimp, dbtssAli, uniGene, xenoEst, and 
-xenoMrna tables.<BR><BR>
+The following definition is used for the blat and blastz tables, EST tables, mRNA
+tables, dbtssAli, and uniGene.<BR><BR>
 <PRE>table psl  
 "Summary info about a patSpace alignment" 
     ( 
@@ -1714,7 +1728,7 @@ Last used Apr. 2001.
 </PRE>
 
 <H4><A name=wiggleTrack></A>Sample Tracks for Plotting Real-valued Data</H4>
-The following definition is used for: chrN_humMusL, chrN_zoom2500_humMusL, 
+The following definition is used for: chrN_humMusL, chrN_musHumL, chrN_zoom2500_humMusL, 
 chrN_zoom50_humMusL, chrN_zoom1_humMusL, affyTranscriptome, zoom1_affyTranscriptome, zoom2_affyTranscriptome.
 Each table entry in the chrN_humMusL is displayed as a "mountain range" on
 the browser and corresponds to one blastz alignment. The zoom tables
@@ -2164,6 +2178,45 @@ The bacEndPairs table uses all fields.
 <H4><A name=STSinfoMouseNew></A>STS Marker Constant Information (Mouse - mm3 and higher)</H4>
 <PRE>table stsInfoMouseNew
 "Constant STS marker information for the mouse genome - mm3 and higher"
+    (
+    uint identNo;                "UCSC identification number"
+    string name;                 "Official UCSC name"
+    uint RGDId;		   	 "Marker's RGD ID"
+    string RGDName;		 "Marker's RGD name"	
+    uint UiStsId;		 "Marker's UiStsId"	   
+    uint nameCount;		 "Number of alias"
+    string alias;		 "Alias, or N/A"
+
+    
+    string primer1;          	 "Primer1 sequence"
+    string primer2;          	 "Primer2 sequence"
+    string distance;             "Length of STS sequence"
+    uint sequence;               "Whether the full sequence is available (1) or not (0) for STS"
+    string organis; 		 "Organism for which STS discovered"
+   
+    string fhhName;	         "WI_Mouse_Genetic map"
+    string fhhChr;               "Chromosome in Genetic map"
+    float fhhGeneticPos;         "Position in Genetic map"
+    
+    string shrspName;	         "MGD map"
+    string shrspChr;             "Chromosome in Genetic map"
+    float shrspGeneticPos;       "Position in Genetic map"
+
+    string rhName;	    	 "MRC_RH map"
+    string rhChr;                "Chromosome in Genetic map"
+    float rhGeneticPos;          "Position in Genetic map"
+    float RHLOD;		 "LOD score of RH map"
+
+
+    string GeneName;             "Associated gene name"
+    string GeneID;               "Associated gene ID"
+    string clone;		 "Clone sequence"
+    )
+</PRE>
+
+<H4><A name=STSinfoRat></A>STS Marker Constant Information (Rat)</H4>
+<PRE>table stsInfoRat
+"Constant STS marker information for the rat genome"
     (
     uint identNo;                "UCSC identification number"
     string name;                 "Official UCSC name"
