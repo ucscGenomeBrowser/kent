@@ -302,7 +302,7 @@ for (i=0; i<psl->blockCount; ++i)
     {
     tStart = psl->tStarts[i];
     tEnd = tStart + psl->blockSizes[i];
-    if (exon == NULL || tStart - exon->end > 5)
+    if (exon == NULL || tStart - exon->end > 8)
         {
 	AllocVar(exon);
 	slAddHead(&exonList, exon);

@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.21 2004/01/23 21:23:13 weber Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.22 2004/09/04 17:36:54 kent Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -325,7 +325,7 @@ for (i=0; i<psl->blockCount; ++i)
     {
     tStart = psl->tStarts[i];
     tEnd = tStart + psl->blockSizes[i];
-    if (exon == NULL || tStart - exon->end > 5)
+    if (exon == NULL || tStart - exon->end > 8)
         {
 	AllocVar(exon);
 	slAddHead(&exonList, exon);
