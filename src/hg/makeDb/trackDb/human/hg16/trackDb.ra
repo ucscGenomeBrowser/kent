@@ -865,13 +865,25 @@ priority 1101
 visibility hide
 type psl protein
 
-track phyloHMMcons_HMR
-shortLabel phyloHMMcons HMR
-longLabel phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
+track phyloHMMcons_CFTR
+shortLabel phyloHMMcons CFTR
+longLabel phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
 group compGeno
-priority 150
+priority 151
 visibility hide
 color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
+
+track phyloHMMcons_HMR
+shortLabel phyloHMMcons HMR
+longLabel phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
+group compGeno
+priority 150
+visibility full
+color 175,150,128
+altColor 255,128,0
+type wig 0.0 1.0
+autoScaleDefault Off
+
