@@ -25,10 +25,11 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadRna.c,v 1.25 2003/06/12 23:57:16 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadRna.c,v 1.26 2003/06/18 17:57:10 kate Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
+boolean filesOnly = FALSE;
 boolean ignore = FALSE;
 
 char historyTable[] =	
@@ -368,10 +369,10 @@ errAbort(
   "usage:\n"
   "   hgLoadRna new database\n"
   "This creates freshly the RNA part of the database\n"
-  "   hgLoadRna add [-type=type] database /full/path/mrna.fa mrna.ra [-ignore]\n"
+  "   hgLoadRna add [-type=type] [-mrnaType=type] [-filesOnly] database /full/path/mrna.fa mrna.ra [-ignore]\n"
   "      type can be mRNA or EST or whatever goes into extFile.name\n"
-  "      The type for the mrna table (mRNA or EST) will be guest from type.\n"
-  "      If it can't be guest, it must be specified with -mrnaType=\n"
+  "      The type for the mrna table (mRNA or EST) will be guessed from type.\n"
+  "      If it can't be guessed, it must be specified with -mrnaType=\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
   "This drops the tables created by hgLoadRna from database.\n"
@@ -381,6 +382,8 @@ errAbort(
   "The -ignore flag tells hgLoadRna not to validate the contents of the extFile table.\n"
   "It is only to be used if a normal load fails.\n"
   "Please notify someone responsible if an error is flagged.\n"
+  "The -filesOnly flag tells hgLoadRna to suppress loading the database.\n"
+  "HgLoadRna will exit after generating the database upload files (<table>.tab)\n"
   );
 }
 
@@ -395,7 +398,7 @@ int faLineSize;
 char faAcc[32];
 char nameBuf[512];
 DNA *faDna;
-long extFileId = hgStoreExtFilesTable(conn, symFaName, faName);
+long extFileId = 0;
 boolean gotFaStart = FALSE;
 char *raTag;
 char *raVal;
@@ -411,6 +414,10 @@ struct uniqueTable *uniSrc, *uniOrg, *uniLib, *uniClo, *uniSex,
                    *uniTis, *uniDev, *uniCel, *uniCds, *uniGen,
 		   *uniPro, *uniAut, *uniKey, *uniDef;
 
+if (!filesOnly)
+    {
+    extFileId= hgStoreExtFilesTable(conn, symFaName, faName);
+    }
 hashAdd(raFieldHash, "src", uniSrc = getUniqueTable(conn, "source", "src"));
 hashAdd(raFieldHash, "org", uniOrg = getUniqueTable(conn, "organism", "org"));
 hashAdd(raFieldHash, "lib", uniLib = getUniqueTable(conn, "library", "lib"));
@@ -492,8 +499,22 @@ for (;;)
 
 	if (!lineFileNext(raLf, &raTag, &raLineSize))
 	    errAbort("Unexpected eof in %s", raName);
+
 	if (raTag[0] == 0)
 	    break;
+
+        /* null out trailing \, if any */
+        /* occasionally Genbank lines have this unfortunate format */
+        /* DEBUG
+        printf("raTag=%s, raLineSize=%d, raTag[raLineSize-2]=%c\n", 
+                        raTag, raLineSize, raTag[raLineSize-2]);
+        */
+        if (raTag[raLineSize-2] == '\\')
+            {
+            raLineSize--;
+            raTag[raLineSize-1] = 0;
+            }
+
 	raVal = strchr(raTag, ' ');
 	if (raVal == NULL)
 	    errAbort("Badly formatted tag line %d of %s", raLf->lineIx, raLf->fileName);
@@ -548,6 +569,13 @@ for (;;)
             uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
     }
 printf("%d\n", count);
+
+if (filesOnly) 
+    {
+    /* command-line option to suppress loading database */
+    printf("Created tab files... exiting\n");
+    exit(0);
+    }
 printf("Updating tissue, lib, etc. values\n");
 storeUniqueTables(conn);
 lineFileClose(&faLf);
@@ -588,15 +616,16 @@ if (type == NULL)
 
 if (mrnaType == NULL)
     {
+    printf("guessing mrnatype\n");
     if (strstrNoCase(type, "rna") || strstrNoCase(type, "refseq"))
         mrnaType = "mRNA";
     else if (strstrNoCase(type, "est"))
-        type = "EST";
+        mrnaType = "EST";
     else
         errAbort("can't guess mrna type from \"%s\", specify with -mrnaType");
     }
 
-printf("Adding data of type: %s\n", type);
+printf("Adding data of type: %s, mrna type: %s\n", type, mrnaType);
 addRna(faPath, type, raFile, type, mrnaType);
 }
 
@@ -773,6 +802,7 @@ if (argc < 2)
 
 abbr = cgiOptionalString("abbr");
 ignore = (NULL != cgiOptionalString("ignore"));
+filesOnly = (NULL != cgiOptionalString("filesOnly"));
 command = argv[1];
 
 if (sameString(command, "new"))
