@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.111 2003/09/24 17:43:06 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.112 2003/10/02 05:25:30 angie Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1049,6 +1049,7 @@ else
     char suffix[16];
     struct hgPosTable *table;
     struct hgPos *pos;
+    char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 
     strncpy(suffix, type, sizeof(suffix));
     tolowers(suffix);
@@ -1091,8 +1092,8 @@ else
 	    pos->chromStart = psl->tStart;
 	    pos->chromEnd = psl->tEnd;
 	    pos->name = cloneString(psl->qName);
-	    dyStringPrintf(dy, "<A HREF=\"%s?position=%s",
-	        hgAppName, hgPosBrowserRange(pos, NULL) );
+	    dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s",
+	        hgAppName, hgAppCombiner, hgPosBrowserRange(pos, NULL) );
 	    if (ui != NULL)
 	        dyStringPrintf(dy, "&%s", ui);
 	    dyStringPrintf(dy, "%s\">",
@@ -1804,6 +1805,7 @@ boolean isXenoItem;
 char *mrnaType;
 int itemOrganismID;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
+char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 
 AllocVar(table);
 
@@ -1838,8 +1840,8 @@ for (el = accList; el != NULL; el = el->next)
     if (aligns)
         {
         /* accession has link only if it aligns */
-        dyStringPrintf(dy, "<A HREF=\"%s?position=%s",
-                                         hgAppName, acc);
+        dyStringPrintf(dy, "<A HREF=\"%s%cposition=%s",
+		       hgAppName, hgAppCombiner, acc);
         if (ui != NULL)
             dyStringPrintf(dy, "&%s", ui);
         dyStringPrintf(dy, "%s\">", 
@@ -3007,6 +3009,7 @@ char *desc;
 char range[64];
 char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
+char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 
 if (useWeb)
     webStart(cart, "Select Position");
@@ -3026,8 +3029,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	    else
 		{
 		hgPosBrowserRange(pos, range);
-		fprintf(f, "<A HREF=\"%s?position=%s",
-		    hgAppName, range);
+		fprintf(f, "<A HREF=\"%s%cposition=%s",
+			hgAppName, hgAppCombiner, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
 		fprintf(f, "%s&%s=%s\">%s at %s</A>",
