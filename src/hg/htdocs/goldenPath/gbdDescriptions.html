@@ -334,6 +334,12 @@
   href="#Chain">chrN_ce2Chain</A> 
   - Summary info about chain of C. elegans</em> (ce2 assembly) alignments </LI>
   <LI><A 
+  href="#Chain">chrN_chainAnoGam1</A> 
+  - Summary info about chain of <em>A. gambiae</em> (anoGam1 assembly) alignments </LI>
+  <LI><A 
+  href="#ChainLink">chrN_chainCanFam1Link</A> 
+  - Alignment block in <em>A. gambiae</em> (anoGam1 assembly) chain </LI>
+  <LI><A 
   href="#Chain">chrN_chainCanFam1</A> 
   - Summary info about chain of dog (canFam1 assembly) alignments </LI>
   <LI><A 
@@ -366,6 +372,18 @@
   <LI><A 
   href="#Chain">chrN_chainDp1Link</A> 
   - Alignment block in <em>D. pseudoobscura</em> (dp1 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainDp2</A> 
+  - Summary info about chain of <em>D. pseudoobscura</em> (dp2 assembly) alignments</LI>
+  <LI><A 
+  href="#Chain">chrN_chainDp2Link</A> 
+  - Alignment block in <em>D. pseudoobscura</em> (dp2 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainDroYak1</A> 
+  - Summary info about chain of <em>D. yakuba</em> (droYak1 assembly) alignments</LI>
+  <LI><A 
+  href="#Chain">chrN_chainDroYak1</A> 
+  - Alignment block in <em>D. yakuba</em> (droYak1 assembly) chain </LI>
   <LI><A 
   href="#Chain">chrN_chainFr1</A> 
   - Summary info about chain of Fugu (fr1 assembly) alignments</LI>
@@ -968,6 +986,9 @@
   href="#EnsTranscript">ensTranscript</A> 
   - Table transcript downloaded from Ensembl </LI>
   <LI><A 
+  href="#EsRegGeneToMotif">esRegGeneToMotif</A> 
+  - Eran Segal regulatory module predicted trancription factor binding sites
+  <LI><A 
   href="#OrientInfo">estOrientInfo</A> 
   - Extra information on ESTs calculated by polyInfo program
   <LI><A 
@@ -982,6 +1003,33 @@
   - Exonerate mouse/human evolutionarily conserved regions (Last used Apr. 2001) </LI>
 
 <A NAME="F_GBD"></A>
+  <LI><A 
+  href="#FbAllele">fbAllele</A> 
+  - Alleles of a FlyBase gene
+  <LI><A 
+  href="#FbGene">fbGene</A> 
+  - Links FlyBase IDs, gene symbols and gene names
+  <LI><A 
+  href="#FbGo">fbGo</A> 
+  - Links FlyBase gene IDs and GO IDs/aspects
+  <LI><A 
+  href="#fbPhenotype">fbPhenotype</A> 
+  - FlyBase observed phenotype in mutant 
+  <LI><A 
+  href="#FbRef">fbRef</A> 
+  - FlyBase literature or database reference
+  <LI><A 
+  href="#FbRole">fbRole</A> 
+  - FlyBase role of gene in wildType
+  <LI><A 
+  href="#FbSynonym">fbSynonym</A> 
+  - Links FlyBase ID to gene synonyms in database
+  <LI><A 
+  href="#FbTranscript">fbTranscript</A> 
+  - Links FlyBase gene IDs and BDGP transcript IDs
+  <LI><A 
+  href="#FlyBaseSwissProt">flyBaseSwissProt</A> 
+  - FlyBase acc to SwissProt acc, plus some other SwissProt info
   <LI><A 
   href="#BED">firstEF</A> 
   - First Exon Finder (FirstEF) exon and promoter predictions</LI>
@@ -1211,7 +1259,7 @@
   href="#HgFindSpec">hgFindSpec</A> 
   - Information that defines a search performed by hgFind binary</LI>
   <LI><A 
-  href="#GenePredictions">hoxGene</A> 
+  href="#GenePredictions">hoxGenes</A> 
   - HOX gene mRNAs</LI>
   <LI><A 
   href="#Hugo">hugo</A> 
@@ -1492,6 +1540,23 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#ScoredRef">multizYeast</A> 
   - <em>Multiz</em> multiple alignments of 7 yeast species against S. cerevisiae (sc1) </LI>
   <LI><A 
+  href="#ScoredRef">mzDy1Dp2Ag1_phast</A> 
+  - Index of multiz multiple alignments of <em>D. melanogaster</em>, 
+  <em>D. pseudoobscura</em>, and <em>A. gambiae</em>
+  NOTE: To obtain the conservation scores associated with this
+  assembly, download the data from the assembly's <em>phastCons</em> directory
+  on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
+  TARGET=_blank>FTP server</A>.
+  <LI><A 
+  href="#WiggleTrack2">mzDy1Dp2Ag1_phast_wig</A> 
+  - "Wiggle track" display of evolutionary conservation in 
+  <em>D. melanogaster</em>, <em>D. pseudoobscura</em>, and <em>A. gambiae</em>
+  based on a phylogentiec hidden Markov model, using multiz alignments. 
+  NOTE: To obtain the conservation scores associated with this
+  assembly, download the data from the assembly's <em>phastCons</em> directory
+  on the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/" 
+  TARGET=_blank>FTP server</A>.
+  <LI><A 
   href="#ScoredRef">mzHg17Mm5_phast</A> 
   - Evolutionary conservation in current species, human, and mouse based on a phylogentiec 
   hidden Markov model, using multiz alignments. 
@@ -1516,6 +1581,10 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#ExpRecord">nci60Exps</A> 
   - Experiment descriptive data</LI>
   <LI><A 
+  href="#NetAlign">netAnoGam1</A> 
+  - Database representation of a net of alignments with <em>A. gambiae</em>
+  anoGam1 assembly </LI>
+  <LI><A 
   href="#NetAlign">netCanFam1</A> 
   - Database representation of a net of alignments with dog assembly canFam1 </LI>
   <LI><A 
@@ -1530,6 +1599,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#NetAlign">netDp1</A> 
   - Database representation of a net of alignments with <em>D. pseudoobscura</em> assembly dp1 </LI>
+  <LI><A 
+  href="#NetAlign">netDp2</A> 
+  - Database representation of a net of alignments with <em>D. pseudoobscura</em> assembly dp2 </LI>
+  <LI><A 
+  href="#NetAlign">netDroYak1</A> 
+  - Database representation of a net of alignments with <em>D. yakuba</em> assembly droYak1 </LI>
   <LI><A 
   href="#NetAlign">netFr1</A> 
   - Database representation of a net of alignments with Fugu assembly fr1 </LI>
@@ -1662,6 +1737,10 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BED">pjt_genscan</A> 
   - Genscan gene predictions for Zoo</LI>
+  <LI><A 
+  href="#Pscreen">pscreen</A> 
+  - P-screen (BDGP Gene Disruption Project) P element insertion locations 
+  and genes
   <LI><A 
   href="#PseudoGeneLink">pseudoGeneLink</A> 
   - Links between predicted gene/pseudogene and ortholog/paralog information</LI>
@@ -1885,8 +1964,11 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#GenePredExt">snapGene</A> 
   - Alignments of SNAP genes (Semi-HMM-based Nucleic Acid Parser) against the current genome
   <LI><A 
+  href="#Snp">snp</A> 
+  - SNP positions from various sources (hg17 human assemblies and later)</LI>
+  <LI><A 
   href="#SnpMap">snpMap</A> 
-  - SNP positions from various sources</LI>
+  - SNP positions from various sources (hg13, hg15, and  hg16 human assemblies)</LI>
   <LI><A 
   href="#BED">snpNih</A> 
   - Locations of SNPs detected by aligning reads from random genomic clones against the genome (replaced by snpMap starting with hg13) </LI>
@@ -2971,6 +3053,96 @@ Last used Apr. 2001.
    )
 </PRE>
 
+<H4><A name=FlyBaseSwissProt></A>FlyBase Accessions Linked to SwissProt Accesions</H4>
+<PRE>table flyBaseSwissProt
+"FlyBase acc to SwissProt acc, plus some other SwissProt info"
+    (
+    string flyBaseId;	"FlyBase FBgn ID"
+    string swissProtId;	"SwissProt ID"
+    string spGeneName;	"Gene name from SwissProt (long)"
+    string spSymbol;	"Symbolic-looking gene ID from SwissProt"
+    )
+</PRE>
+
+<H4><A name=FbAllele></A>FlyBase Alleles</H4>
+<PRE>table fbAllele
+"The alleles of a gene"
+    (
+    int id;		"Allele ID"
+    string geneId;	"FlyBase ID of gene"
+    string name;	"Allele name"
+    )
+</PRE>
+
+<H4><A name=FbSynonym></A>FlyBase Gene Synonyms</H4>
+<PRE>table fbSynonym
+"Links all the names we call a gene to its FlyBase ID"
+    (
+    string geneId;	"FlyBase ID"
+    string name;	"A name (synonym or real)"
+    )
+</PRE>
+
+<H4><A name=FbGene></A>FlyBase Genes</H4>
+<PRE>table fbGene
+"Links FlyBase IDs, gene symbols and gene names"
+    (
+    string geneId;	"FlyBase ID"
+    string geneSym;	"Short gene symbol"
+    string geneName;	"Gene name - up to a couple of words"
+    )
+</PRE>
+
+<H4><A name=FbTranscript></A>FlyBase Genes Linked to BDGP Transcript IDs</H4>
+<PRE>table fbTranscript
+"Links FlyBase gene IDs and BDGP transcript IDs"
+    (
+    string geneId;	 "FlyBase gene ID"
+    string transcriptId; "BDGP Transcript ID"
+    )
+</PRE>
+
+<H4><A name=FbGo></A>FlyBase Genes Linked to GO IDs</H4>
+<PRE>table fbGo
+"Links FlyBase gene IDs and GO IDs/aspects"
+    (
+    string geneId;      "FlyBase gene ID"
+    string goId;        "GO ID"
+    string aspect;      "P (process), F (function) or C (cellular component)"
+    )
+</PRE>
+
+<H4><A name=FbPhenotype></A>FlyBase Observed Phenotype in Mutant</H4>
+<PRE>table fbPhenotype
+"Observed phenotype in mutant. Sometimes contains gene function info"
+    (
+    string geneId;	"FlyBase gene ID"
+    int fbAllele;	"ID in fbAllele table or 0 if not allele-specific"
+    int fbRef;		"ID in fbRef table"
+    lstring text;	"Descriptive text"
+    )
+</PRE>
+
+<H4><A name=FbRef></A>FlyBase Reference</H4>
+<PRE>table fbRef
+"A literature or sometimes database reference"
+    (
+    int id;		"Reference ID"
+    lstring text;	"Usually begins with FlyBase ref ID, but not always"
+    )
+</PRE>
+
+<H4><A name=FbRole></A>FlyBase Role of Gene in Wildtype</H4>
+<PRE>table fbRole
+"Role of gene in wildType"
+    (
+    string geneId;	"FlyBase gene ID"
+    int fbAllele;	"ID in fbAllele table or 0 if not allele-specific"
+    int fbRef;		"ID in fbRef table"
+    lstring text;	"Descriptive text"
+    )
+</PRE>
+
 <H4><A name=FosEndPairs></A>Fosmid End Pairs</H4>
 <PRE>table fosEndPairs
 "Positions of end pairs for fosmids"
@@ -2980,7 +3152,6 @@ Last used Apr. 2001.
    uint   chromStart; 	      "Start position of fosmid in chromosome"
    uint   chromEnd;   	      "End position of fosmid in chromosome"
    string name;       	      "Name of fosmid"
-
    uint   score;      	      "Score = 1000/(# of times fosmid appears in assembly)"
    char[1] strand;    	      "Value should be + or -"
    string pslTable;   	      "Table which contains corresponding PSL records for linked 
@@ -3913,6 +4084,22 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
     )
 </PRE>
 
+<H4><A name=Pscreen></A>P-Screen Data (BDGP Gene Disruption Project)</H4>
+<PRE>table pscreen
+"P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes"
+    (
+    string chrom;      		"Chromosome"
+    uint   chromStart; 		"Start position in chromosome"
+    uint   chromEnd;   		"End position in chromosome"
+    string name;       		"Name of item (mutant strain with P el. insert here)"
+    uint   score;      		"Score from 0-1000 (placeholder! for bed 6 compat)"
+    char[1] strand;    		"+ or -"
+    uint stockNumber;  		"Mutant strain stock number, for ordering"
+    uint geneCount;    		"Number of genes disrupted by this insert"
+    string[geneCount] geneIds;  "IDs of disrupted genes"
+    )
+</PRE>
+
 <H4><A name=PseudoGeneLink></A>Pseudogene Link to Ortholog/Paralog</H4>
 <PRE>
 table pseudoGeneLink
@@ -4049,6 +4236,21 @@ First used Oct. 2003
 			Complete3End, FullLength, IncompleteBothEnds, 
 			Incomplete5End, Incomplete3End, Partial"
     string summary;	"Summary text"
+    )
+</PRE>
+
+<H4><A name=EsRegGeneToMotif></A>Regulatory Module TFBS Predictions (Eran Segal)</H4>
+<PRE>table esRegGeneToMotif
+"Browser extensible data with gene field"
+    (
+    string    chrom;      "Chromosome"
+    uint      chromStart; "Start position in chromosome"
+    uint      chromEnd;   "End position in chromosome"
+    string    name;       "Motif name"
+    uint      score;      "Score from 0-1000"
+    char[1]   strand;     "+ or -"
+    varchar   gene;    	  "Gene name"
+
     )
 </PRE>
 
@@ -4427,7 +4629,29 @@ of finding simple tandem repeats than RepeatMasker does.
    )
 </PRE>
 
-<H4><A name=SnpMap></A>SNP Map (combined table of SNPs)</H4>
+<H4><A name=Snp></A>SNP Map (combined table of SNPs, hg17 and later)</H4>
+<PRE>table snp
+"Polymorphism data from dbSnp XML files or genotyping arrays"
+    (
+    string  chrom;      "Chromosome"
+    uint    chromStart; "Start position in chrom"
+    uint    chromEnd;   "End position in chrom"
+    string  name;       "Reference SNP identifier or Affy SNP name"
+    uint    score;      "Not used"
+    char[1] strand;     "Which DNA strand contains the observed alleles"
+    string  observed;   "The sequences of the observed alleles"
+    string  molType;    "Sample type from exemplar ss"
+    string  class;      "The class of variant"
+    string  valid;      "The validation status of the SNP"
+    float   avHet;      "The average heterozygosity from all observations"
+    float   avHetSE;    "The Standard Error for the average heterozygosity"
+    string  func;       "The functional category of the SNP"
+    string  locType;    "How the variant affects the reference sequence"
+    string  source;     "Source of the data - dbSnp, Affymetrix, ..."
+    )
+</PRE>
+
+<H4><A name=SnpMap></A>SNP Map (combined table of SNPs, hg13-hg16)</H4>
 <PRE>table snpMap
 "SNP positions from various sources"
     (
