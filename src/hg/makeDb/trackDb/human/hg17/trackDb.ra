@@ -27,7 +27,7 @@ visibility pack
 #color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle multiz8wayCons
+wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
@@ -76,17 +76,6 @@ spectrum on
 exonArrows off
 type bed 5 .
 
-track phastConsNew
-shortLabel PhastCons New
-longLabel PhastCons Conservation Score, New Version
-group compGeno
-priority 109.09
-visibility hide
-color 0,10,100
-maxHeightPixels 40
-type wig 0.0 1.0
-autoScaleDefault off
-
 track tba37CFTR
 shortLabel 37 Species CFTR
 longLabel CFTR Region 37 Species TBA Alignments & phastCons
@@ -103,21 +92,6 @@ pairwise tba37CFTR 15
 autoScaleDefault Off
 speciesOrder chimp gorilla orangutan baboon macaque vervet marmoset dusky_titi squirrel_monkey mouse_lemur lemur galago rabbit rat mouse cow sheep muntjak_indian pig horse cat dog ajbat cpbat hedgehog armadillo opossum monodelphis wallaby dunnart platypus chicken tortoise zebrafish tetra fugu
 chromosomes chr7
-
-track multiz7way
-shortLabel 7Way Cons
-longLabel Hu/Chimp/Mouse/Rat/Chicken/Fugu/Zfish Multiz Alignments & PhyloHMM Cons 
-group compGeno
-priority 149.1
-visibility hide
-#color 0, 10, 100
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons
-yLineOnOff Off
-autoScaleDefault Off
-pairwise netBlastz
-speciesOrder chimp mm4 rat chicken fugu zebrafish
 
 track varMultizMm5Rn3GalGal2Fr1
 shortLabel varMultiz5Way
