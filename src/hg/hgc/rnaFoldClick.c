@@ -15,7 +15,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.2 2005/03/09 18:07:22 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.3 2005/03/14 18:52:10 jsp Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define INTRON 10 
@@ -221,7 +221,7 @@ if (scores)
      scoreColorFormat = mkScoreColorFormat(scores, strlen(fold), referenceText);
      }
 
-/* Figure out length of source (species) field. */
+/* Find length of source (species) field. */
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     int len = strlen(mc->src);
@@ -304,12 +304,13 @@ return maf;
 void doRnaSecStr(struct trackDb *tdb, char *itemName)
 /* Handle click on rnaSecStr type elements. */
 {
-char *track = tdb->tableName;
+char *table = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 struct rnaSecStr *item;
-char query[256];
+char extraWhere[256];
 char **row;
+int  rowOffset = 0;
 char *mafTrack = trackDbRequiredSetting(tdb, "mafTrack");
 int start = cartInt(cart, "o");
 struct mafAli *maf;
@@ -320,13 +321,13 @@ genericHeader(tdb, itemName);
 genericBedClick(conn, tdb, itemName, start, 6);
 htmlHorizontalLine();
 
-/* get the rnaSecStr from db */
-sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'", track, seqName, start, itemName);
-
-sr   = sqlGetResult(conn, query);
+/* get the rnaSecStr and maf from db */
+sprintf(extraWhere, "chromStart = %d and name = '%s'", start, itemName);
+sr   = hExtendedChromQuery(conn, table, seqName, extraWhere,  FALSE, NULL, &rowOffset);
 row  = sqlNextRow(sr);
-item = rnaSecStrLoad(row);
-maf = mafFromRnaSecStrItem(mafTrack, item);
+item = rnaSecStrLoad(row + rowOffset);
+maf  = mafFromRnaSecStrItem(mafTrack, item);
+
 mafAndFoldHeader(stdout);
 htmlPrintMafAndFold(stdout, maf, item->secStr, item->conf, 100);
 
