@@ -1785,3 +1785,43 @@ o - refer to the script at src/hg/sampleTracks/makeMm3Rn2.doc
 # this will be automated in the incremental genbank update
 /cluster/store5/genbank/bin/i386/mgcDbLoad mm3 /cluster/store5/genbank/data/download/mgc/2003.05.06/mgcFullStatus.tab.gz 
 
+
+MAKE THE affyU74 TRACK
+----------------------------------
+# Load up semi-local disk with target sequences for Affy mouse U74 chips.
+ssh kkr1u00
+mkdir -p /iscratch/i/affy
+cp /projects/compbio/data/microarray/affyGnfMouse/sequences/u74*.fa /iscratch/i/affy
+iSync
+
+# Run cluster job to do alignments
+ssh kk
+cd /cluster/data/mm3/bed
+mkdir affyU74
+cd affyU74
+mkdir run
+cd run
+mkdir psl
+echo /scratch/hg/mm3/trfFa/*.fa | wordLine stdin > genome.lst
+ls -1 /iscratch/i/affy/u74*.fa > affy.lst
+echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > gsub
+gensub2 genome.lst affy.lst gsub spec
+para create spec
+para try
+# Then do para check/para push etc. until job is done, or para make. 
+
+# Do sort, best in genome filter, and convert to chromosome coordinates
+# to create affyU74.psl.
+pslSort dirs raw.psl tmp psl
+pslReps -minCover=0.85 -minAli=0.95 raw.psl contig.psl /dev/null
+liftUp ../all_affyU74.psl ../../../jkStuff/liftAll.lft warn contig.psl
+cd ..
+
+# Sort by chromosome and load into database.
+ssh hgwdev
+cd /cluster/data/mm3/bed/affyU74
+pslSortAcc nohead chrom temp all_affyU74.psl
+cat chrom/chr?.psl chr??.psl chr*_random.psl > affyU74.ps
+hgLoadPsl mm3 affyU74.psl -tNameIx
+rm -r chrom temp run
+
