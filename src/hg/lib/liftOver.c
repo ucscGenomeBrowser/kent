@@ -8,8 +8,10 @@
 #include "bed.h"
 #include "genePred.h"
 #include "sample.h"
+#include "hdb.h"
+#include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.4 2004/03/25 23:55:06 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.5 2004/04/12 23:42:52 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -28,32 +30,6 @@ else if (c == '+')
 else
     return c;
 }
-
-/*
-void readLiftOverTable(char *db, char *tableName, struct hash *chainHash)
-/* Read map file into hashes. */
-/*
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct chain *chain;
-struct chromMap *map;
-int chainCount = 0;
-
-struct sqlConnect *conn = = hAllocConn();
-while ((chain = chainRead(lf)) != NULL)
-    {
-    if ((map = hashFindVal(chainHash, chain->tName)) == NULL)
-	{
-	AllocVar(map);
-	map->bk = binKeeperNew(0, chain->tSize);
-	hashAddSaveName(chainHash, chain->tName, map, &map->name);
-	}
-    binKeeperAdd(map->bk, chain->tStart, chain->tEnd, chain);
-    ++chainCount;
-    }
-hFreeConn(&conn);
-}
-*/
 
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
@@ -1200,4 +1176,16 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
+struct liftOverChain *liftOverChainList()
+/* Get list of all liftOver chains in the central database */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct liftOverChain *list = NULL;
 
+if (conn)
+    {
+    list = liftOverChainLoadByQuery(conn, "select * from liftOverChain");
+    hDisconnectCentral(&conn);
+    }
+return list;
+}
