@@ -245,7 +245,7 @@ type chain hg16
 otherDb hg16
 
 track tfbsCons
-shortLabel TFBS_Conserved
+shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
 priority 1000
 group regulation
