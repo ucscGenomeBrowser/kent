@@ -7,12 +7,13 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.28 2003/12/12 21:47:08 kate Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.29 2004/02/13 19:34:30 angie Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 double minScore = 2000;	/* Minimum chain score to look at. */
 boolean verbose = FALSE;/* Verbose output. */
+boolean usingStdout = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -654,8 +655,6 @@ else
 	int subSize = chainBaseCountSubT(chain, start, end);
 	*retScore = chain->score * subSize / fullSize;
 	*retSize = subSize;
-	if (chain->id == 7307)
-	    uglyf("subchainInfo T %d,%d %d,%d ali %d, subSize %d, score %f, subScore %f\n", start, end, chain->tStart, chain->tEnd, fullSize, subSize, chain->score, *retScore);
 	}
     }
 }
@@ -742,10 +741,14 @@ struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
 double lastScore = -1;
 
+if (sameWord(tNet, "stdout") || sameWord(qNet, "stdout"))
+    usingStdout = TRUE;
+
 makeChroms(qSizes, &qHash, &qChromList);
 makeChroms(tSizes, &tHash, &tChromList);
-printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
-	slCount(qChromList), qSizes);
+if (! usingStdout)
+    printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
+	   slCount(qChromList), qSizes);
 
 /* Loop through chain file building up net. */
 while ((chain = chainRead(lf)) != NULL)
@@ -785,17 +788,21 @@ while ((chain = chainRead(lf)) != NULL)
  * reasons this is not done during the main build up.   
  * It's a little less efficient this way, but to change it
  * some hard reverse strand issues would have to be juggled. */
-printf("Finishing nets\n");
+if (! usingStdout)
+    printf("Finishing nets\n");
 finishNet(qChromList, TRUE);
 finishNet(tChromList, FALSE);
 
 /* Write out basic net files. */
-printf("writing %s\n", tNet);
+if (! usingStdout)
+    printf("writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
-printf("writing %s\n", qNet);
+if (! usingStdout)
+    printf("writing %s\n", qNet);
 outputNetSide(qChromList, qNet, TRUE);
 
-printMem();
+if (! usingStdout)
+    printMem();
 }
 
 int main(int argc, char *argv[])
