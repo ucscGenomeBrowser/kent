@@ -42,7 +42,11 @@ set max=0
 # write header ot file
 rm -f $output
 echo "\ntotal hits: $totalHits" >> $output
-echo "users with the most hits:\n" >> $output
+echo "users with the most hits:" >> $output
+echo "                                                                  per   per" >> $output
+echo "  hits                                          from    hours    hour   min" >> $output
+echo "---------------------------------------------------------------------------" >> $output
+
 while ($checked < $size)
 
   # get next line 
@@ -67,10 +71,9 @@ while ($checked < $size)
 
   # write a line in output file for this record
   # s is string, d is decimal
-  # echo "$num hits from $host" | gawk '{ printf("%8s %4s %4s %40s\n", $1, $2, $3, $4) }' >> $output
-  echo "$num hits from $host $timeHours hrs $hitsPerHr per hr $hitsPerMin per min" \
-       | gawk '{ printf("%8s %4s %4s %40s %5s %2s %5s %3s %2s %5s %3s %3s \n", \
-       $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) }' >> $output
+  echo "$num $host $timeHours $hitsPerHr $hitsPerMin " \
+       | gawk '{ printf("%6s %45s %8s %7s %5s\n", \
+       $1, $2, $3, $4, $5) }' >> $output
   @ checked ++
 end
 
