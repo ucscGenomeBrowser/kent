@@ -1,3 +1,12 @@
+track ensGene
+shortLabel Ensembl Genes
+longLabel Preliminary Ensembl Gene Predictions
+group genes
+priority 40
+visibility pack
+color 150,0,0
+type genePred ensPep
+
 track gold
 shortLabel Assembly 
 longLabel Assembly from Fragments 
