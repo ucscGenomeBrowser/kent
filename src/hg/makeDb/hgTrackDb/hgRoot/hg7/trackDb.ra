@@ -43,6 +43,19 @@ private on
 chromosomes chr22,
 type bed 6 .
 
+track mouseRef
+shortLabel Blastz Mouse
+longLabel Mouse BLASTZ Alignments (Penn State) 
+priority 25.801
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+chromosomes chr22,
+private on
+type bed 6 +
+
+
 track tblastxMouse
 shortLabel Mouse TBLASTX
 longLabel Mouse Translated BLAST Alignments
