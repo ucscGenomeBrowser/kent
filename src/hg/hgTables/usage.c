@@ -4,15 +4,13 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.6 2004/09/25 05:16:07 kent Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.7 2004/09/25 05:19:58 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
 {
 hPrintf("%s",
-"    <P>This section provides a brief summary of the Table Browser control \n"
-"    functionality. For more detailed information on using the Table Browser, \n"
-"    see the User's Guide.\n"
+"<P>Here is a line-by-line description of the table browser controls:\n"
 "        <UL>\n"
 "        <LI><B>genome: </B>Specifies which organism data to use.</LI>\n"
 "        \n"
