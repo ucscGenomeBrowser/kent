@@ -35,7 +35,7 @@ exit; # don't actually run this like a script :)
     gzip -4 *.fsa
 
 # Download other info from the FTP site.
-    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/chromosomal_features
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/chromosomal_feature
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/gene_registry
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/literature_curation
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/oracle_schema
@@ -43,6 +43,11 @@ exit; # don't actually run this like a script :)
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence_similarity
     wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/systematic_results
     wget -nH --cut-dirs=5 -r -l 2 ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein
+
+    # Check that the genome is in sync with the annotations
+    cd /cluster/data/sacCer1
+    checkSgdSync download
+    # This showed 5 of 5788 with no ATG.  I sent these to Mike Cherry.
 
 #Make dummy gap files
 #    cd /cluster/data/sacCer1
@@ -153,6 +158,9 @@ exit; # don't actually run this like a script :)
       | hgsql -h genome-testdb hgcentraltest
 
 # CREATING SGD-BASED KNOWN GENES (DONE 2003-11-25 Jim)
+# Note initially the s_cerevisiae.gff3 file ended up being out of
+# sync with the genome. Mike Cherry (cherry@genome.stanford.edu)
+# regenerated it.  The format may end up changing in the future though.
     ssh hgwdev
     cd /cluster/data/sacCer1/bed
     mkdir sgdGene
@@ -217,44 +225,15 @@ sacCer1.genbank.mrna.xeno.load = yes
 sacCer1.genbank.est.xeno.load = no
 sacCer1.downloadDir = sacCer1
 
+    # Do the alignments
     ssh eieio
     cd /cluster/data/genbank
-    # This is an -initial run, mRNA only:
-    # It will take about 8 minutes.
-    time nice bin/gbAlignStep -iserver=no \
+    nice bin/gbAlignStep -iserver=no \
       -clusterRootDir=/cluster/bluearc/genbank \
-      -srcDb=genbank -type=mrna -verbose=1 -initial sacCer1
+      -verbose=1 -initial sacCer1
 
     # Load the results from the above
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
-
-    ssh eieio
-    # To get this next one started, the work directory of the initial run 
-    # needs to be moved out of the way.  
-    rm -r /cluster/bluearc/genbank/work/initial.sacCer1
-    # Now align refseqs:
-    cd /cluster/data/genbank
-    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
-      -srcDb=refseq -type=mrna -verbose=1 -initial sacCer1
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 sacCer1
-
-    ssh eieio
-    # To get this next one started, the work directory of the initial run 
-    # needs to be moved out of the way.  
-    rm -r /cluster/bluearc/genbank/work/initial.sacCer1
-    # Now align ESTs:
-    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
-      -srcDb=genbank -type=est -verbose=1 -initial sacCer1
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 sacCer1
-    # Clean up:
-    rm -r /cluster/bluearc/genbank/work/initial.sacCer1
-
 
