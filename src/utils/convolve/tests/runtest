@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+convolve -verbose test0.probs
+
+exit 0
+
+convolve empty.test
+convolve long_line.test
