@@ -128,6 +128,8 @@ void tabOutSelectedFields(
 #define hgtaDoUploadIdentifiers "hgta_doUploadIdentifiers"
 #define hgtaDoClearIdentifiers "hgta_doClearIdentifiers"
 #define hgtaDoFilterPage "hgta_doFilterPage"
+#define hgtaDoFilterSubmit "hgta_doFilterSubmit"
+#define hgtaDoFilterMore "hgtd_doFilterMore"
 #define hgtaDoTest "hgta_doTest"
 #define hgtaDoSchema "hgta_doSchema"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
@@ -225,6 +227,16 @@ void doSetAllField(char *dbTable);
 
 void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */
+
+void doFilterPage(struct sqlConnection *conn);
+/* Respond to filter create/edit button */
+
+void doFilterMore(struct sqlConnection *conn);
+/* Continue with Filter Page. */
+
+void doFilterSubmit(struct sqlConnection *conn);
+/* Respond to submit on filters page. */
+
 
 void printMainHelp();
 /* Put up main page help info. */

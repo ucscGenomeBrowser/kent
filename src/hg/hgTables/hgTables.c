@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.28 2004/07/18 06:44:27 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.29 2004/07/18 16:04:13 kent Exp $";
 
 
 void usage()
@@ -475,14 +475,6 @@ return track;
 
 
 
-void doFilterPage(struct sqlConnection *conn)
-/* Respond to filter create/edit button */
-{
-htmlOpen("Table Browser Filter");
-hPrintf("Theoretically making filter.");
-htmlClose();
-}
-
 void addWhereClause(struct dyString *query, boolean *gotWhere)
 /* Add where clause to query.  If already have a where clause
  * add 'and' to it. */
@@ -656,6 +648,10 @@ else if (cartVarExists(cart, hgtaDoClearIdentifiers))
     doClearIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoFilterPage))
     doFilterPage(conn);
+else if (cartVarExists(cart, hgtaDoFilterMore))
+    doFilterMore(conn);
+else if (cartVarExists(cart, hgtaDoFilterSubmit))
+    doFilterSubmit(conn);
 else if (cartVarExists(cart, hgtaDoSchema))
     {
     doTableSchema( cartString(cart, hgtaDoSchemaDb), 
