@@ -4,7 +4,7 @@
 #include "xa.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgWaba.c,v 1.4 2003/06/19 18:54:55 hiram Exp $";
+static char const rcsid[] = "$Id: hgWaba.c,v 1.5 2003/07/09 18:48:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -127,11 +127,9 @@ if (chromOffset == 0)
     }
 
 /* Make a temp file for each table we'll update. */
-tmpnam(fullTabName);
-strcpy(fullTabName, "full_waba.tab");	/* uglyf */
+strcpy(fullTabName, "full_waba.tab");
 fullTab = mustOpen(fullTabName, "w");
-tmpnam(chromTabName);
-strcpy(chromTabName, "chrom_waba.tab");	/* uglyf */
+strcpy(chromTabName, "chrom_waba.tab");	
 chromTab = mustOpen(chromTabName, "w");
 
 /* Write out tab-delimited files. */
