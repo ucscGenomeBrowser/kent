@@ -6692,6 +6692,22 @@ if (sameWord(type, "bed"))
 	group->loadItems = loadGappedBed;
 	}
     }
+else if (sameWord(type, "sample"))
+    {
+    int fieldCount = 12;
+    if (wordCount > 1)
+        fieldCount = atoi(words[1]);
+    group->bedSize = fieldCount;
+    if (fieldCount == 12)
+	{
+	linkedFeaturesMethods(group);
+	group->loadItems = loadGappedBed;
+	}
+    else
+    {
+    errAbort("A 'sample' track must have eactly 12 fields.");
+    }
+    }
 else if (sameWord(type, "genePred"))
     {
     linkedFeaturesMethods(group);
