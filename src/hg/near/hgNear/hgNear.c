@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.82 2003/09/21 06:42:19 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.83 2003/09/21 06:50:59 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1095,7 +1095,7 @@ if ((ra = hashFindVal(hashOfHash, name)) == NULL)
     {
     ra = newHash(7);
     hashAdd(hashOfHash, name, ra);
-    hashAdd(ra, "name", name);
+    hashAdd(ra, "name", lmCloneString(ra->lm, name));
     }
 
 /* Fill in fields of ra hash with data up to next
