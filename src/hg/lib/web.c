@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.33 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.34 2003/05/23 03:51:09 baertsch Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -460,7 +460,7 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
 		    javascript);
 }
 
-void printAlignmentListHtml(char *db, char *alCgiName)
+void printAlignmentListHtml(char *db, char *alCgiName, char *selected)
 {
 /* Find all the alignments (from axtInfo) that pertain to the selected
  * genome.  Prints to stdout the HTML to render a dropdown list
@@ -469,10 +469,11 @@ void printAlignmentListHtml(char *db, char *alCgiName)
 char *alignmentList[128];
 char *values[128];
 int numAlignments = 0;
-struct axtInfo *alignList = hGetAxtAlignments(db);
+struct axtInfo *alignList = NULL;
 struct axtInfo *cur = NULL;
 char *organism = hOrganism(db);
-char *alignment = NULL;
+
+alignList = hGetAxtAlignments(db);
 
 for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
     {
@@ -493,13 +494,15 @@ for (cur = alignList; ((cur != NULL) && (numAlignments < 128)); cur = cur->next)
         numAlignments++;
         }
 
+
     /* Save a pointer to the current alignment */
-    if (strstrNoCase(db, cur->species))
-       {
-       alignment = cur->alignment;
-       }
+    if (selected == NULL)
+        if (strstrNoCase(db, cur->species))
+           {
+           selected = cur->alignment;
+           }
     }
-cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, alignment, NULL);
+cgiMakeDropListFull(alCgiName, alignmentList, values, numAlignments, selected, NULL);
 }
 
 char *getDbForGenome(char *genome, struct cart *cart)
