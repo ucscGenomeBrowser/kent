@@ -417,7 +417,7 @@ for (ord = ordList; ord != NULL; ord = ord->next)
     }
 
 hPrintf("<CENTER>");
-cgiMakeButton("submit", "Return to Main Page");
+cgiMakeButton("submit", "return to main page");
 hPrintf("</CENTER>");
 controlPanelEnd();
 hPrintf("</FORM>");

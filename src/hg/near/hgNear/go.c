@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.13 2004/05/25 18:15:58 donnak Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.14 2005/03/03 07:10:57 donnak Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -181,9 +181,9 @@ static void goFilterControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
 hPrintf("<A HREF=\"%s\">", "http://www.geneontology.org");
-hPrintf("Gene Ontology</A> search.  Please enclose term in single quotes if it "
-        "contains multiple words.<BR>You can search with IDs (such as "
-	"GO:0005884) as well as terms (such as 'actin filament').<BR>");
+hPrintf("Gene Ontology</A> search.  Enclose term in single quotes if it "
+        "contains multiple words.<BR>You may search with IDs (<em>e.g.</em> "
+	"GO:0005884) as well as terms (<em>e.g.</em> 'actin filament').<BR>");
 hPrintf("Term(s): ");
 advFilterRemakeTextVar(col, "terms", 35);
 hPrintf(" Include if ");

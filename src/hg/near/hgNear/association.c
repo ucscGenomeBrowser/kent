@@ -358,8 +358,8 @@ static void associationFilterControls(struct column *col,
 	struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
-hPrintf("Please enclose term in single quotes if it "
-        "contains multiple words.  You can include "
+hPrintf("Enclose term in single quotes if it "
+        "contains multiple words.  You may include "
 	"* and ? wildcards.<BR>\n");
 hPrintf("Term(s): ");
 advFilterRemakeTextVar(col, "terms", 35);

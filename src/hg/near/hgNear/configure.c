@@ -14,7 +14,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.42 2004/05/25 18:00:43 donnak Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.43 2005/03/03 07:10:57 donnak Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -195,23 +195,23 @@ struct userSettings *us = colUserSettings();
 controlPanelStart();
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
-cgiMakeButton("submit", "Submit");
+cgiMakeButton("submit", "submit");
 hPrintf("</TD><TD> ");
 hPrintf("</TD><TD> ");
 hPrintf("</TD><TD>");
 hPrintf("Columns:");
 hPrintf("</TD><TD> ");
-cgiMakeButton(hideAllConfName, "Hide All");
+cgiMakeButton(hideAllConfName, "hide all");
 hPrintf("</TD><TD>");
-cgiMakeButton(showAllConfName, "Show All");
+cgiMakeButton(showAllConfName, "show all");
 hPrintf("</TD><TD>");
-cgiMakeButton(defaultConfName, "Default");
+cgiMakeButton(defaultConfName, "default");
 hPrintf("</TD><TD>");
 hPrintf("Settings:");
 hPrintf("</TD><TD>");
-cgiMakeButton(saveCurrentConfName, "Save");
+cgiMakeButton(saveCurrentConfName, "save");
 hPrintf("</TD><TD>");
-cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
+cgiMakeOptionalButton(useSavedConfName, "load", !userSettingsAnySaved(us));
 hPrintf("</TD></TR></TABLE>");
 
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
@@ -223,7 +223,7 @@ hPrintf("Show all splicing variants: ");
 cgiMakeCheckBox(showAllSpliceVarName, 
 	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
 hPrintf("</TD><TD>");
-cgiMakeButton(customPageDoName, "Custom Columns");
+cgiMakeButton(customPageDoName, "custom columns");
 hPrintf("</TD></TR></TABLE>");
 controlPanelEnd();
 }

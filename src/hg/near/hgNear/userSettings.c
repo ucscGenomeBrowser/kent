@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.6 2004/04/24 19:07:03 kent Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.7 2005/03/03 07:10:58 donnak Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -149,9 +149,9 @@ hPrintf("<H2>Save %s</H2>\n", us->formTitle);
 hPrintf("Please name this setup:\n");
 cartMakeTextVar(us->cart, us->nameVar, "", 16);
 hPrintf(" ");
-cgiMakeButton(us->formVar, "Save");
+cgiMakeButton(us->formVar, "save");
 hPrintf(" ");
-cgiMakeButton(us->formVar, "Cancel");
+cgiMakeButton(us->formVar, "cancel");
 
 /* Put up additional controls if have saved settings already. */
 if (list != NULL)
@@ -170,7 +170,7 @@ if (list != NULL)
     printLabelList(us, list);
     hPrintf("</SELECT>\n");
 
-    cgiMakeButton(us->formVar, "Delete Existing Setup");
+    cgiMakeButton(us->formVar, "delete existing setup");
     }
 
 /* Cleanup. */
@@ -195,9 +195,9 @@ hPrintf("<SELECT NAME=\"%s\" SIZE=%d>",
 printLabelList(us, list);
 hPrintf("</SELECT>");
 hPrintf("</TD><TD>");
-cgiMakeButton(us->formVar, "Load");
+cgiMakeButton(us->formVar, "load");
 hPrintf(" ");
-cgiMakeButton(us->formVar, "Cancel");
+cgiMakeButton(us->formVar, "cancel");
 hPrintf("</TD></TR></TABLE>");
 
 /* Cleanup. */

@@ -22,9 +22,9 @@ static void pfamFilterControls(struct column *col,
 /* Print out controls for advanced filter. */
 {
 hPrintf(
-  "The terms can be either Pfam descriptions such as 'Cytochrome P450'<BR>"
+  "Terms can include Pfam descriptions such as 'Cytochrome P450'<BR>"
   "or Pfam IDs such as PF00067. Please enclose term in single quotes<BR>"
-  "if it contains multiple words. You can use * and ? wildcards.<BR>\n");
+  "if it contains multiple words. You may use * and ? wildcards.<BR>\n");
 hPrintf("Term(s): ");
 advFilterRemakeTextVar(col, "terms", 35);
 hPrintf(" Include if ");

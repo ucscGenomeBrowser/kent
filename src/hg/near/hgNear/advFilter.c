@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.24 2004/05/25 18:19:52 donnak Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.25 2005/03/03 07:10:57 donnak Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -82,7 +82,7 @@ cartMakeTextVar(cart, var, NULL, size);
 void advFilterKeyUploadButton(struct column *col)
 /* Make a button for uploading keywords. */
 {
-colButton(col, keyWordUploadPrefix, "Upload List");
+colButton(col, keyWordUploadPrefix, "upload list");
 }
 
 struct column *advFilterKeyUploadPressed(struct column *colList)
@@ -101,20 +101,19 @@ cartRemovePrefix(cart, keyWordUploadPrefix);
 hPrintf("<H2>Upload List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
 cartSaveSession(cart);
-hPrintf("Please enter the name of a file from your computer that contains a space,");
-hPrintf("tab, or ");
-hPrintf("line separated list of the items you want to include.<BR>");
+hPrintf("Enter the name of a file from your computer that contains a list");
+hPrintf("of items separated by a space, tab or line.<BR>");
 
 varName = colVarName(col, keyWordPastedPrefix);
 hPrintf("<INPUT TYPE=FILE NAME=\"%s\"> ", varName);
-cgiMakeButton("submit", "Submit");
+cgiMakeButton("submit", "submit");
 hPrintf("</FORM>");
 }
 
 void advFilterKeyPasteButton(struct column *col)
 /* Make a button for uploading keywords. */
 {
-colButton(col, keyWordPastePrefix, "Paste List");
+colButton(col, keyWordPastePrefix, "paste list");
 }
 
 struct column *advFilterKeyPastePressed(struct column *colList)
@@ -134,7 +133,7 @@ hPrintf("<H2>Paste List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 hPrintf("Paste in a list of items to match. ");
-cgiMakeButton("submit", "Submit");
+cgiMakeButton("submit", "submit");
 hPrintf("<BR>\n");
 varName = colVarName(col, keyWordPastedPrefix);
 cgiMakeTextArea(varName, "", 10, 60);
@@ -236,13 +235,13 @@ static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-cgiMakeButton("submit", "Submit");
+cgiMakeButton("submit", "submit");
 hPrintf("</TD><TD>");
-cgiMakeButton(advFilterClearVarName, "Clear Filter");
+cgiMakeButton(advFilterClearVarName, "clear filter");
 hPrintf("</TD><TD>");
-cgiMakeButton(filSaveCurrentVarName, "Save Filter");
+cgiMakeButton(filSaveCurrentVarName, "save filter");
 hPrintf("</TD><TD>");
-cgiMakeOptionalButton(filUseSavedVarName, "Load Filter", 
+cgiMakeOptionalButton(filUseSavedVarName, "load filter", 
 	!userSettingsAnySaved(filUserSettings()));
 hPrintf("</TD></TR></TABLE>");
 }
@@ -262,12 +261,12 @@ cartSaveSession(cart);
 
 controlPanelStart();
 hPrintf("On this page you can restrict which genes appear in the main table<BR>");
-hPrintf("based on the values in any column. Click the Submit button to return<BR>");
+hPrintf("based on the values in any column. Click the <em>submit</em> button to return<BR>");
 hPrintf("to the main Gene Sorter page with the current filter settings applied.");
 bigButtons();
 hPrintf("Quickly obtain a list of gene "
  "names that pass the filter: ");
-cgiMakeButton(advFilterListVarName, "List Names");
+cgiMakeButton(advFilterListVarName, "list names");
 controlPanelEnd();
 
 /* See if have any to do in either first (displayed columns)
@@ -307,7 +306,7 @@ for (onOff = 1; onOff >= 0; --onOff)
 	    }
 	hPrintf("</TABLE>\n");
 	hPrintf("<BR>");
-	cgiMakeButton("submit", "Submit");
+	cgiMakeButton("submit", "submit");
 	}
     }
 hPrintf("</FORM>\n");

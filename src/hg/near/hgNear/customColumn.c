@@ -59,16 +59,16 @@ controlPanelStart();
 hPrintf("<TABLE><TR><TD>");
 hPrintf("Custom column action: ");
 hPrintf("</TD><TD>");
-cgiMakeOptionalButton(customClearDoName, "Clear", 
+cgiMakeOptionalButton(customClearDoName, "clear", 
 	customFileName() == NULL);
 hPrintf("</TD><TD>");
-cgiMakeButton(customPasteDoName, "Paste In");
+cgiMakeButton(customPasteDoName, "paste in");
 hPrintf("</TD><TD>");
-cgiMakeButton(customUploadDoName, "From File");
+cgiMakeButton(customUploadDoName, "from file");
 hPrintf("</TD><TD>");
-cgiMakeButton(customFromUrlDoName, "From URL");
+cgiMakeButton(customFromUrlDoName, "from URL");
 hPrintf("</TD><TD>");
-cgiMakeButton(confVarName, "Cancel");
+cgiMakeButton(confVarName, "cancel");
 hPrintf("</TD></TR></TABLE>");
 controlPanelEnd();
 
@@ -79,11 +79,11 @@ static void submitCancel()
 /* Put up little table with submit and cancle buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
-cgiMakeButton(customSubmitDoName, "Submit");
+cgiMakeButton(customSubmitDoName, "submit");
 hPrintf("</TD><TD>");
 hPrintf(" ");
 hPrintf("</TD><TD>");
-cgiMakeButton(customPageDoName, "Cancel");
+cgiMakeButton(customPageDoName, "cancel");
 hPrintf("</TD></TR></TABLE>");
 }
 
