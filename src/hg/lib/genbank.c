@@ -20,7 +20,7 @@ if (startBuf[0] == '<')
     startBuf++;
 if (!convertCoord(startBuf, cdsStart))
     return FALSE;
-cdsStart--;  /* convert to zero-based */
+(*cdsStart)--;  /* convert to zero-based */
 return TRUE;
 }
 
