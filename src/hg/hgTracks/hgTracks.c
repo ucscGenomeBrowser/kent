@@ -85,7 +85,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.843 2004/12/01 00:40:35 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.844 2004/12/01 18:26:06 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6985,8 +6985,6 @@ static int doDrawItems(struct track *track, struct vGfx *vg, MgFont *font,
                                     int y, long *lastTime)
 /* Draw track items.  Return y coord */
 {
-if (track->subtracks)
-    verbose(5, "subtracks");
 int fontHeight = mgFontLineHeight(font);
 int pixWidth = tl.picWidth;
 if (withCenterLabels)
