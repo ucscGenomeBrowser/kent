@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.809 2004/10/04 19:56:49 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.810 2004/10/04 22:15:50 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -9222,7 +9222,11 @@ if (NULL == position)
     position = cloneString(cartUsualString(cart, "position", NULL));
     }
 
-if((position == NULL) || sameString(position, ""))
+/* default if not set at all, as would happen if it came from a URL with no
+ * position. Otherwise tell them to go back to the gateway */
+if ((position == NULL) && (defaultPosition != NULL))
+    position = cloneString(defaultPosition);
+if (sameString(position, ""))
     {
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
     }
