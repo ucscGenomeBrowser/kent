@@ -4398,10 +4398,8 @@ cartWebStart(cart, tdb->longLabel);
 if( sameString( otherOrg, "Mouse" ) )
 {
     //marie
-    printf("<B>%s position:</B> <a
-        href=\"http:/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d&hgsid=%d\"&
-        target=\"_blank\">%s:%d-%d</a><BR>\n",
-        otherOrg, psl->qName, psl->qStart+1, psl->qEnd, hgsid,
+    printf("<B>%s position:</B> <a target=\"_blank\" href=\"http:/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+        otherOrg, psl->qName, psl->qStart+1, psl->qEnd, 
 	    psl->qName, psl->qStart+1, psl->qEnd);
 }
 else
