@@ -1153,7 +1153,7 @@ track blastzStrictChainChimp
 shortLabel Blastz Chimp
 longLabel Strict Chain Blastz Chimp Alignments
 priority 28.02
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1163,7 +1163,7 @@ track blastzStrictChainBaboon
 shortLabel Blastz Baboon
 longLabel Strict Chain Blastz Baboon Alignments
 priority 28.03 
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1175,7 +1175,7 @@ track blastzStrictChainCat
 shortLabel Blastz Cat
 longLabel Strict Chain Blastz Cat Alignments
 priority 28.04 
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1185,7 +1185,7 @@ track blastzStrictChainDog
 shortLabel Blastz Dog
 longLabel Strict Chain Blastz Dog Alignments
 priority 28.05 
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1197,7 +1197,7 @@ track blastzStrictChainCow
 shortLabel Blastz Cow
 longLabel Strict Chain Blastz Cow Alignments
 priority 28.06 
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1207,7 +1207,7 @@ track blastzStrictChainPig
 shortLabel Blastz Pig
 longLabel Strict Chain Blastz Pig Alignments
 priority 28.07 
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1217,7 +1217,7 @@ track blastzStrictChainRat
 shortLabel Blastz Rat
 longLabel Strict Chain Blastz Rat Alignments
 priority 28.08
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1239,7 +1239,7 @@ track blastzStrictChainChicken
 shortLabel Blastz Chicken
 longLabel Strict Chain Blastz Chicken Alignments
 priority 28.10
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1249,7 +1249,7 @@ track blastzStrictChainFugu
 shortLabel Blastz Fugu
 longLabel Strict Chain Blastz Fugu Alignments
 priority 28.11
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1260,7 +1260,7 @@ track blastzStrictChainTetra
 shortLabel Blastz Tetra
 longLabel Strict Chain Blastz Tetra Alignments
 priority 28.12 
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -1270,7 +1270,7 @@ track blastzStrictChainZebrafish
 shortLabel Blastz Zebrafish
 longLabel Strict Chain Blastz Zebrafish Alignments
 priority 28.13
-visibility hide
+visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
