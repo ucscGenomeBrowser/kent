@@ -1174,6 +1174,12 @@ longLabel TwinScan MGC candidates
 group x
 priority 159
 visibility hide
-spectrum on
 type psl .
 
+track mgcUcscEst
+shortLabel UCSC MGC ESTs
+longLabel UCSC MGC Candidates
+group x
+priority 160
+visibility hide
+type psl .
