@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.141 2004/04/28 21:58:08 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.142 2004/04/29 22:28:28 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -640,7 +640,7 @@ return FALSE;
 }
 
 void doGateway()
-/* Table Browser gateway page: select organism, db, position */
+/* Table Browser gateway page: select organism, db */
 {
 webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
@@ -727,7 +727,6 @@ cgiMakeHiddenVar("org", organism);
 cgiMakeHiddenVar("db", database);
 cartSetString(cart, "db",database);
 cartSetString(cart, "org", organism);
-cartSetString(cart, "position",position);
 cartSaveSession(cart);
 puts("</FORM>");
 
