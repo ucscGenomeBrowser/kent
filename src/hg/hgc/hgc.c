@@ -49,7 +49,7 @@
 #include "sage.h"
 #include "sageExp.h"
 #include "pslWScore.h"
-#define CHUCK_CODE 0
+#define CHUCK_CODE 1
 #define ROGIC_CODE 1
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
@@ -2936,10 +2936,11 @@ chuckHtmlContactInfo();
 
 struct sageExp *loadSageExps(char *tableName, struct pslWScore  *psList)
 /* load the sage experiment data 
- * This data should be moved from the temporary database on peep to main db.
  */
 {
-struct sqlConnection *sc = sqlConnectRemote("peep.cse.ucsc.edu", "sugnet", "169Mpls", "sugnet");
+char *user = cfgOption("db.user");
+char *password = cfgOption("db.password");
+struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed");
 char query[256];
 struct sageExp *seList = NULL, *se=NULL;
 char **row;
@@ -2962,10 +2963,11 @@ return seList;
 
 struct sage *loadSageData(char *table, struct pslWScore* pslList)
 /* load the sage data by constructing a query based on the qNames of the pslList
- * This data should be moved from the temporary database on peep to main db.
  */
 {
-struct sqlConnection *sc = sqlConnectRemote("peep.cse.ucsc.edu", "sugnet", "169Mpls", "sugnet");
+char *user = cfgOption("db.user");
+char *password = cfgOption("db.password");
+struct sqlConnection *sc = sqlConnectRemote("localhost", user, password, "hgFixed");
 struct dyString *query = newDyString(2048);
 struct sage *sgList = NULL, *sg=NULL;
 struct pslWScore *psl=NULL;
