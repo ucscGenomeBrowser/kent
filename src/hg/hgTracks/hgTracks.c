@@ -4805,6 +4805,7 @@ struct customTrack *ctList = NULL, *ct;
 struct trackGroup *tg;
 char *customText = cgiOptionalString("customText");
 char *fileName = cgiOptionalString("ct");
+struct slName *browserLines = NULL, *bl;
 
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && bogusMacEmptyChars(customText))
@@ -4816,15 +4817,56 @@ if (customText != NULL && customText[0] != 0)
     {
     static struct tempName tn;
     makeTempName(&tn, "ct", ".bed");
-    ctList = customTracksFromText(customText);
+    ctList = customTracksParse(customText, FALSE, &browserLines);
     ctFileName = tn.forCgi;
     customTrackSave(ctList, tn.forCgi);
     makeHiddenVar("ct", tn.forCgi);
     }
 else if (fileName != NULL)
     {
-    ctList = customTracksFromFile(fileName);
+    ctList = customTracksParse(fileName, TRUE, &browserLines);
     ctFileName = fileName;
+    }
+
+/* Process browser commands in custom track. */
+for (bl = browserLines; bl != NULL; bl = bl->next)
+    {
+    char *words[96];
+    int wordCount;
+    wordCount = chopLine(bl->name, words);
+    if (wordCount > 1)
+        {
+	char *command = words[1];
+	if (sameString(command, "hide") || 
+		sameString(command, "dense") || sameString(command, "full"))
+	    {
+	    if (wordCount > 2)
+	        {
+		int i;
+		for (i=2; i<wordCount; ++i)
+		    {
+		    char *s = words[i];
+		    struct trackGroup *tg;
+		    boolean toAll = sameWord(s, "all");
+		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
+		        {
+			if (toAll || sameString(s, tg->mapName))
+			    cgiVarSet(tg->mapName, command);
+			}
+		    }
+		}
+	    }
+	else if (sameString(command, "position"))
+	    {
+	    char *chrom;
+	    int start, end;
+	    if (wordCount < 3)
+	        errAbort("Expecting 3 words in browser position line");
+	    if (!hgIsChromRange(words[2]))
+	        errAbort("browser position needs to be in chrN:123-456 format");
+	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+	    }
+	}
     }
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
@@ -4835,6 +4877,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	tg->visibility = stringArrayIx(vis, tvStrings, ArraySize(tvStrings));
     slAddHead(pGroupList, tg);
     }
+
 }
 
 
@@ -4896,11 +4939,12 @@ registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("rosettaTe",rosettaTeMethods);   
 registerTrackHandler("rosettaPe",rosettaPeMethods); 
 registerTrackHandler("uniGene",uniGeneMethods);
-/* Load first track user has pasted or blatted in. Then tracks
- * that are built into database. */
-loadCustomTracks(&tGroupList);
-if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
+
+/* Load regular tracks, blatted tracks, and custom tracks. 
+ * Best to load custom last. */
 loadFromTrackDb(&tGroupList, privateVersion());
+if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
+loadCustomTracks(&tGroupList);
 slSort(&tGroupList, tgCmpPriority);
 
 /* Get visibility values if any from ui. */
@@ -4957,6 +5001,9 @@ if (!hideControls)
 
     /* Make line that says position. */
 	{
+	char buf[256];
+	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
+	position = cloneString(buf);
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
 	printf("  size %d, ", winEnd-winStart);
@@ -5242,12 +5289,6 @@ else if (cgiVarExists("out2"))
 else if (cgiVarExists("out3"))
     zoomAroundCenter(10.0);
 
-/* Format position string. */
-    {
-    char buf[256];
-    sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
-    position = cloneString(buf);
-    }
 /* Chuck code for synching with different frames */
 otherFrame = cgiOptionalString("of");
 thisFrame = cgiOptionalString("tf");

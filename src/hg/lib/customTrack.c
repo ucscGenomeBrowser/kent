@@ -414,7 +414,8 @@ for (group = gff->groupList; group != NULL; group = group->next)
 return bedList;
 }
 
-struct customTrack *customTracksParse(char *text, boolean isFile)
+struct customTrack *customTracksParse(char *text, boolean isFile,
+	struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.*/
 {
@@ -443,6 +444,16 @@ for (;;)
     if (line[0] == '#' || line[0] == 0)
         continue;
 
+    /* Move lines that start with 'browser' to retBrowserLines. */
+    if (startsWith("browser", line))
+        {
+	if (retBrowserLines != NULL)
+	    {
+	    struct slName *s = newSlName(line);
+	    slAddHead(retBrowserLines, s);
+	    }
+	continue;
+	}
     /* Skip lines that are psl header. */
     if (startsWith("psLayout version", line))
         {
@@ -544,6 +555,8 @@ for (track = trackList; track != NULL; track = track->next)
 	 track->tdb->priority = prio;
 	 }
      }
+if (retBrowserLines != NULL)
+    slReverse(retBrowserLines);
 return trackList;
 }
 
@@ -582,13 +595,13 @@ for (track = trackList; track != NULL; track = track->next)
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */
 {
-return customTracksParse(text, FALSE);
+return customTracksParse(text, FALSE, NULL);
 }
 
 struct customTrack *customTracksFromFile(char *text)
 /* Parse file into a custom set of tracks. */
 {
-return customTracksParse(text, TRUE);
+return customTracksParse(text, TRUE, NULL);
 }
 
 static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb)

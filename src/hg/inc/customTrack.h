@@ -29,9 +29,11 @@ struct customTrack *customTracksFromText(char *text);
 struct customTrack *customTracksFromFile(char *text);
 /* Parse file into a custom set of tracks. */
 
-struct customTrack *customTracksParse(char *text, boolean isFile);
+struct customTrack *customTracksParse(char *text, boolean isFile, 
+	struct slName **retBrowserLines);
 /* Parse text into a custom set of tracks.  Text parameter is a
- * file name if 'isFile' is set.*/
+ * file name if 'isFile' is set.  If retBrowserLines is non-null
+ * then it will return a list of lines starting with the word "browser". */
 
 void customTrackSave(struct customTrack *trackList, char *fileName);
 /* Save out custom tracks. */
