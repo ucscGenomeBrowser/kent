@@ -164,7 +164,7 @@ struct stringArray
 /* An array of strings */
     {
     struct stringArray *next;  /* Next in singly linked list. */
-    int numNames;	/* Number of names */
+    short numNames;	/* Number of names */
     char **names;	/* Array of names */
     };
 

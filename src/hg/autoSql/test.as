@@ -46,6 +46,6 @@ simple twoPoint
 table stringArray
 "An array of strings"
     (
-    int numNames;	"Number of names"
+    short numNames;	"Number of names"
     string[numNames] names;   "Array of names"
     )
