@@ -94,23 +94,16 @@
 
 char mousedb[] = "mm1";
 
-static char * const orgCgiName = "org";
-static char * const dbCgiName = "db";
-char *organism = NULL;
-
 struct cart *cart;	/* User's settings. */
 
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
-char *database2;		/* Name of secondary mySQL database. (for comparision/ orthology)*/
-char *db = NULL;
 
-/* JavaScript to copy input data on the change genome button to a hidden form
-This was done in order to be able to flexibly arrange the UI HTML
-*/
-char *onChangeText = "onchange=\"document.orgForm.org.value = document.compareForm.org.options[document.compareForm.org.selectedIndex].value; document.orgForm.submit();\"";
-char *onChangeAssemblyText = "onchange=\"document.orgForm.db2.value = document.compareForm.db2.options[document.compareForm.db2.selectedIndex].value; document.orgForm.submit();\"";
+/* JavaScript to automatically submit the form when certain values are
+ * changed. */
+char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
+
 #define NUMTRACKS 9
 int prevColor[NUMTRACKS]; /* used to opetimize color change html commands */
 int currentColor[NUMTRACKS]; /* used to opetimize color change html commands */
@@ -229,11 +222,19 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 }
 
 
-void hgcAnchorSomewhereTag(char *group, char *item, char *other, char *chrom, char *tag)
-/* Generate an anchor that calls click processing program with item and other parameters. */
+void hgcAnchorGenePsl(char *item, char *other, char *chrom, char *tag)
+/* Generate an anchor to htcGenePsl. */
 {
+struct dbDb *dbList = hGetAxtInfoDbs();
+char *db2;
+if (dbList != NULL)
+    db2 = dbList->name;
+else
+    db2 = "mm2";
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db2=%s&xyzzy=xyzzy#%s\">",
-	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, "mm2",tag);
+       hgcPathAndSettings(), "htcGenePsl", item, chrom, winStart, winEnd,
+       other, db2, tag);
+dbDbFreeList(&dbList);
 }
 
 void hgcAnchorSomewhereDb(char *group, char *item, char *other, char *chrom, char *db)
@@ -1034,29 +1035,43 @@ axt->tSym = cloneMem(seq->dna, size+1);
 axt->qSym = cloneMem(gapPt, size+1);
 return axt;
 }
-void axtGenePrettyHtml(struct genePred *gp, char *table, char *nib, char *db)
+
+void axtGenePrettyHtml(struct genePred *gp, char *table, char *nib, char *db,
+		       char *alignment)
 /* axtPretty - Convert axt to more human readable format.. */
 {
 struct lineFile *lf ;
 struct axt *axt, *axtGap;
 struct axt *axtList = NULL;
-struct axtInfo *ai;
+struct axtInfo *ai = NULL;
 int lineSize = 70;
-int prevEnd = gp->txStart; /* change this to gp->cdsStart if you want to display coding */
-int prevStart = gp->txEnd; /* change this to gp->cdsStart if you want to display coding */
-char query[255];
+int prevEnd = gp->txStart;
+int prevStart = gp->txEnd;
+char query[256];
 struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
 char **row;
 int tmp;
 
-sprintf(query, "select * from %s where chrom = '%s' and species = '%s'", table, gp->chrom, db);
+if (alignment != NULL)
+    snprintf(query, sizeof(query),
+	     "select * from %s where chrom = '%s' and species = '%s' and alignment = '%s'",
+	     table, gp->chrom, db, alignment);
+else
+    snprintf(query, sizeof(query),
+	     "select * from %s where chrom = '%s' and species = '%s'",
+	     table, gp->chrom, db);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     ai = axtInfoLoad(row );
     }
-printf("file = %s\n",ai->fileName);
+if (ai == NULL)
+    {
+    printf("\nNo alignments available for %s (database %s).\n\n",
+	   hFreezeFromDb(db), db);
+    return;
+    }
 lf = lineFileOpen(ai->fileName, TRUE);
 while ((axt = axtRead(lf)) != NULL)
     {
@@ -1192,7 +1207,7 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A> from assembly\n");
 if (hTableExists("axtInfo"))
     {
-    hgcAnchorSomewhereTag("htcGenePsl", geneName, geneTable, seqName,"startcodon");
+    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
     printf("<LI>Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
     }
 printf("</UL>\n");
@@ -4509,159 +4524,102 @@ longXenoPsl1(tdb, item, "Human", "chromInfo", database);
 }
 
 void htcGenePsl(char *htcCommand, char *item)
+/* Interface for selecting & displaying alignments from axtInfo 
+ * for an item from a genePred table. */
 {
-char *chromTable = "chromInfo";
-char *track = cartString(cart, "o");
-char *chrom = cartString(cart, "c");
-char *hgsid = cartString(cart, "hgsid");
-char *left = cartString(cart, "l");
-char *right = cartString(cart, "r");
-char *trackName = cartString(cart, "g");
-char *seqName = cartOptionalString(cart, "i");
-char *alignment = "Blastz"; //cartOptionalString(cart, "alignment");
-char *db2 = cartOptionalString(cart, "db2");
-char table[64];
-char title[256];
-struct hash *trackHash;
-struct trackDb *tdb;
-char query[512];
-char nibFile[512];
+struct genePred *gp = NULL;
+struct axtInfo *aiList = NULL, *ai;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-struct genePred *gp = NULL;
-int white = WHITE;
+char *track = cartString(cart, "o");
+char *chrom = cartString(cart, "c");
+char *name = cartOptionalString(cart, "i");
+char *alignment = cgiOptionalString("alignment");
+char *db2 = cartString(cart, "db2");
+int left = cgiInt("l");
+int right = cgiInt("r");
+char table[64];
+char query[512];
+char nibFile[512];
 boolean hasBin; 
-char *oldDb = NULL;
-struct dbDb *dbList = hGetIndexedDatabases();
+boolean alignmentOK;
 
+cartWebStart(cart, "Alignment of %s in %s to %s",
+	     name, hOrganism(database), hOrganism(db2));
 
-database = cartUsualString(cart, "db", hGetDb());
-database2 = cartUsualString(cart, "db2", hGetDb2());
-
-db = cartUsualString(cart, "db", hGetDb());
-organism = cgiOptionalString(orgCgiName);
-if (organism == NULL)
-    organism = hOrganism(db);
-///hDefaultConnect(); 	/* set up default connection settings */
-//hSetDb(database);
-//
-//chrom = cartString(cart, "c");
-
-
-    if (db2==NULL)
-        {
-        db2 = hDefaultDbForOrganism(organism);
-        }
-    else
-        {
-//        db2 = cartUsualString(cart, dbCgiName, hGetDb());
-        organism = hOrganism(db2);
-        }
-
-    if (strlen(db2) < 2)
-        db2 = hDefaultDbForOrganism(organism);
-if (organism == NULL)
-    {
-    organism = hOrganism(db2);
-    }
-
-chrom = cartString(cart, "c");
-sprintf(query, "select fileName from %s where chrom = '%s'", 
-	chromTable, chrom);
+// get nibFile
+sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
 if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
     errAbort("Sequence %s isn't in chromInfo", chrom);
 
+// get gp
 hFindSplitTable(chrom, track, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s'", table, seqName);
+snprintf(query, sizeof(query),
+	 "select * from %s where name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
+	 table, name, chrom, right, left);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + hasBin);
     }
-    htmlSetBgColor(&white);
-    htmStart(stdout, "alignment");
-    fprintf(stdout, "<TT><PRE>");
-    fprintf(stdout, "<H3>Alignment of %s in %s to %s </H3>", seqName, hOrganism(db), organism);
-puts(
-"<TABLE bgcolor=\"FFFEF3\" border=0>\n"
-"<tr>\n"
-"<td>\n"
-"<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"compareForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
-"<TABLE><tr>\n"
-//"<td align=center valign=baseline>genome</td>\n"
-"<td align=center valign=baseline>genome/version</td>\n"
-"<td align=center valign=baseline>alignment</td>\n"
-"<td align=center valign=baseline>exon</td>\n"
-);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (gp == NULL)
+    errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
+	     database, table, name, chrom, left+1, right);
 
-cgiMakeHiddenVar("i", seqName);
-cgiMakeHiddenVar("hgsid", hgsid);
-cgiMakeHiddenVar("g", trackName);
-cgiMakeHiddenVar("o", track);
-cgiMakeHiddenVar("org", organism);
-cgiMakeHiddenVar("c", chrom);
-
-//cgiMakeTextVar("l", left, 30);
-//cgiMakeTextVar("r", right, 30);
-////"	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
-
-
-puts("<tr>\n");
-//puts("<td align=center>\n");
-//printOrgListHtml(db2, onChangeText);
-//puts("</td>\n");
-
+puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
+cartSaveSession(cart);
+cgiContinueHiddenVar("g");
+cgiContinueHiddenVar("i");
+cgiContinueHiddenVar("o");
+cgiContinueHiddenVar("c");
+cgiContinueHiddenVar("l");
+cgiContinueHiddenVar("r");
+puts("\n<TABLE><tr>");
+puts("<td align=center valign=baseline>genome/version</td>");
+puts("<td align=center valign=baseline>alignment</td>");
+puts("</tr>");
+puts("<tr>");
 puts("<td align=center>\n");
-printOrgAssemblyListHtmlParm(db2,dbList, "db2",onChangeAssemblyText);
+printOrgAssemblyListAxtInfo("db2", onChangeAssemblyText);
 puts("</td>\n");
-
 puts("<td align=center>\n");
-printAlignmentListHtml(db2);
-//cgiMakeTextVar("alignment",alignment, 30);
-printf("</td>\n");
-
-freez(&alignment);
-alignment = NULL;
-
-
-puts("<td align=center>\n");
-cgiMakeIntVar("exon", cartUsualInt(cart, "exon", 1), 4);
+printAlignmentListHtml(db2, "alignment");
 printf("</td>\n");
 printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
 printf("</td>\n");
+puts("</tr></TABLE>");
+puts("</FORM>");
 
-puts(
-"</tr></TABLE>\n"
-"</td></tr><tr><td><center>\n"
-"</td></tr></TABLE>\n"
-"</center>\n"
-);
-    fprintf(stdout, "<TT><PRE>");
-    fprintf(stdout, "<TABLE>");
-    axtGenePrettyHtml( gp ,"axtInfo", nibFile, db2);
-    fprintf(stdout, "</TABLE>");
-fprintf(stdout,"</FORM>\n");
-printf("<FORM ACTION=\"/cgi-bin/hgc\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
-//cartSaveSession(cart);
-printf("<input type=\"hidden\" name=\"g\" value=\"htcGenePsl\">\n");
-printf("<input type=\"hidden\" name=\"i\" value=\"%s\">\n",seqName);
-printf("<input type=\"hidden\" name=\"db2\" value=\"\">\n");
-printf("<input type=\"hidden\" name=\"c\" value=\"%s\">\n",chrom);
-printf("<input type=\"hidden\" name=\"l\" value=\"%s\">\n",left);
-printf("<input type=\"hidden\" name=\"r\" value=\"%s\">\n",right);
-printf("<input type=\"hidden\" name=\"o\" value=\"%s\">\n",track);
-printf("<input type=\"hidden\" name=\"alignment\" value=\"%s\">\n",alignment);
-printf("<input type=\"hidden\" name=\"exon\" value=\"1\">\n");
-printf("<input type=\"hidden\" name=\"hgsid\" value=\"%s\">\n",hgsid);
-puts("</FORM>"
-"\n");
-////"	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
-////"	</TD></TR></TABLE>\n"
-////"			\n"
-////"</TD></TR></TABLE>
+// Make sure alignment is not just a leftover from previous db2.
+aiList = hGetAxtAlignments(db2);
+if (alignment != NULL)
+    {
+    alignmentOK = FALSE;
+    for (ai=aiList;  ai != NULL;  ai=ai->next)
+	{
+	if (sameString(ai->alignment, alignment))
+	    {
+	    alignmentOK = TRUE;
+	    break;
+	    }
+	}
+    if (! alignmentOK)
+	alignment = NULL;
+    }
+if ((alignment == NULL) && (aiList != NULL))
+    {
+    alignment = aiList->alignment;
+    }
+
+puts("<TT><PRE>");
+axtGenePrettyHtml(gp, "axtInfo", nibFile, db2, alignment);
+puts("</PRE></TT>");
+axtInfoFreeList(&aiList);
+webEnd();
 }
 
 void htcLongXenoPsl2(char *htcCommand, char *item)
