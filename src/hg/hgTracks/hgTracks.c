@@ -43,6 +43,7 @@
 #include "fishClones.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "recombRate.h"
 #include "mouseOrtho.h"
 #include "humanParalog.h"
 #include "synteny100000.h"
@@ -4246,6 +4247,54 @@ tg->freeItems = freeGcPercent;
 tg->itemName = gcPercentName;
 tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
+}
+
+void loadRecombRate(struct trackGroup *tg)
+/* Load up recombRate from database table to trackGroup items. */
+{
+bedLoadItem(tg, "recombRate", (ItemLoader)recombRateLoad);
+}
+
+void freeRecombRate(struct trackGroup *tg)
+/* Free up recombRate items. */
+{
+recombRateFreeList((struct recombRate**)&tg->items);
+}
+
+char *recombRateName(struct trackGroup *tg, void *item)
+/* Return name of gcPercent track item. */
+{
+struct recombRate *rr = item;
+static char buf[32];
+
+sprintf(buf, "%3.1f cM/Mb", rr->recombRate);
+return buf;
+}
+
+static int recombRateMin = 320;
+static int recombRateMax = 600;
+
+Color recombRateColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color for item in recombRate track item. */
+{
+struct recombRate *rr = item;
+float rate = rr->recombRate;
+int rcr;
+int grayLevel;
+
+rcr = (int)(rr->recombRate * 200);
+grayLevel = grayInRange(rcr, recombRateMin, recombRateMax);
+return shadesOfGray[grayLevel];
+}
+
+void recombRateMethods(struct trackGroup *tg)
+/* Make track group for recombination rates. */
+{
+tg->loadItems = loadRecombRate;
+tg->freeItems = freeRecombRate;
+tg->itemName = recombRateName;
+tg->colorShades = shadesOfGray;
+tg->itemColor = recombRateColor;
 }
 
 /* Make track group for simple repeats. */
@@ -9242,6 +9291,7 @@ registerTrackHandler("fishClones", fishClonesMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
+registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
