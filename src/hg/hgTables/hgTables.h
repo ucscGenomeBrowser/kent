@@ -174,6 +174,7 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaDoSelectFieldsMore "hgta_doSelectFieldsMore"
 #define hgtaDoClearAllFieldPrefix "hgta_doClearAllField."
 #define hgtaDoSetAllFieldPrefix "hgta_doSetAllField."
+#define hgtaDoGenePredSequence "hgta_doGenePredSequence"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -189,6 +190,7 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
 #define hgtaFilterOn "hgta_filterOn"
+#define hgtaGeneSeqType "hgta_geneSeqType"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -287,6 +289,9 @@ void doSetAllField(char *dbTable);
 void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */
 
+void doOutSequence(struct trackDb *track, struct sqlConnection *conn);
+/* Output sequence page. */
+
 void doFilterPage(struct sqlConnection *conn);
 /* Respond to filter create/edit button */
 
@@ -298,6 +303,9 @@ void doFilterSubmit(struct sqlConnection *conn);
 
 void doClearFilter(struct sqlConnection *conn);
 /* Respond to click on clear filter. */
+
+void doGenePredSequence(struct sqlConnection *conn);
+/* Output genePred sequence. */
 
 void printMainHelp();
 /* Put up main page help info. */

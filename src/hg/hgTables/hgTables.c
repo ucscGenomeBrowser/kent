@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.35 2004/07/19 17:47:08 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.36 2004/07/19 21:09:33 kent Exp $";
 
 
 void usage()
@@ -616,6 +616,8 @@ else if (sameString(output, outSchema))
     doTrackSchema(track, conn);
 else if (sameString(output, outSelectedFields))
     doOutSelectedFields(track, conn);
+else if (sameString(output, outSequence))
+    doOutSequence(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -672,6 +674,8 @@ else if ((varList = cartFindPrefix(cart, hgtaDoClearAllFieldPrefix)) != NULL)
     doClearAllField(varList->name + strlen(hgtaDoClearAllFieldPrefix));
 else if ((varList = cartFindPrefix(cart, hgtaDoSetAllFieldPrefix)) != NULL)
     doSetAllField(varList->name + strlen(hgtaDoSetAllFieldPrefix));
+else if (cartVarExists(cart, hgtaDoGenePredSequence))
+    doGenePredSequence(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else	/* Default - put up initial page. */
