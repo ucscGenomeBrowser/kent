@@ -9,7 +9,7 @@
 #include "dlist.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainBlock.c,v 1.14 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: chainBlock.c,v 1.15 2005/01/10 00:13:45 kent Exp $";
 
 struct kdBranch
 /* A kd-tree. That is a binary tree which partitions the children
@@ -29,7 +29,7 @@ struct kdLeaf
 /* A leaf in our kdTree. */
     {
     struct kdLeaf *next;	/* Next in list. */
-    struct boxIn *cb;	        /* Start position and score from user. */
+    struct cBlock *cb;	        /* Start position and score from user. */
     struct kdBranch *bestPred;	/* Best predecessor. */
     double totalScore;		/* Total score of chain up to here. */
     bool hit;			/* This hit? Used by system internally. */
@@ -206,6 +206,7 @@ static struct predScore bestPredecessor(
 	struct kdLeaf *lonely,	    /* We're finding this leaf's predecessor */
 	ConnectCost connectCost,    /* Cost to connect two leafs. */
 	GapCost gapCost,	    /* Lower bound on gap cost. */
+	void *gapData,		    /* Data to pass to Gap/Connect cost */
 	int dim,		    /* Dimension level of tree splits on. */
 	struct kdBranch *branch,    /* Subtree to explore */
 	struct predScore bestSoFar) /* Best predecessor so far. */
@@ -222,7 +223,7 @@ double maxScore = branch->maxScore + lonely->cb->score;
 if (maxScore < bestSoFar.score)
     return bestSoFar;
 maxScore -= gapCost(lonely->cb->qStart - branch->maxQ, 
-	lonely->cb->tStart - branch->maxT);
+	lonely->cb->tStart - branch->maxT, gapData);
 if (maxScore < bestSoFar.score)
     return bestSoFar;
 
@@ -235,7 +236,7 @@ else if ((leaf = branch->leaf) != NULL)
      && leaf->cb->tStart < lonely->cb->tStart)
 	{
 	double score = leaf->totalScore + lonely->cb->score - 
-		connectCost(leaf->cb, lonely->cb);
+		connectCost(leaf->cb, lonely->cb, gapData);
 	if (score > bestSoFar.score)
 	   {
 	   bestSoFar.score = score;
@@ -255,10 +256,10 @@ else
      * scores.  However only explore it if it can have things starting
      * before us. */
     if (dimCoord > branch->cutCoord)
-         bestSoFar = bestPredecessor(lonely, connectCost, gapCost, newDim, 
-	 	branch->hi, bestSoFar);
-    bestSoFar = bestPredecessor(lonely, connectCost, gapCost, newDim, 
-    	branch->lo, bestSoFar);
+         bestSoFar = bestPredecessor(lonely, connectCost, gapCost, gapData,
+	 	newDim, branch->hi, bestSoFar);
+    bestSoFar = bestPredecessor(lonely, connectCost, gapCost, gapData,
+    	newDim, branch->lo, bestSoFar);
     return bestSoFar;
     }
 }
@@ -281,7 +282,7 @@ if (branch->leaf == NULL)
 }
 
 static void findBestPredecessors(struct kdTree *tree, struct kdLeaf *leafList, 
-	ConnectCost connectCost, GapCost gapCost)
+	ConnectCost connectCost, GapCost gapCost, void *gapData)
 /* Find best predecessor for each leaf. */
 {
 static struct predScore noBest;
@@ -292,7 +293,7 @@ double bestScore = 0;
 for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     {
     struct predScore best;
-    best = bestPredecessor(leaf, connectCost, gapCost, 0, tree->root, noBest);
+    best = bestPredecessor(leaf, connectCost, gapCost, gapData, 0, tree->root, noBest);
     if (best.score > leaf->totalScore)
         {
 	leaf->totalScore = best.score;
@@ -307,16 +308,17 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     }
 }
 
-static double scoreBlocks(struct boxIn *blockList, ConnectCost connectCost)
+static double scoreBlocks(struct cBlock *blockList, ConnectCost connectCost,
+	void *gapData)
 /* Score list of blocks including gaps between blocks. */
 {
-struct boxIn *block, *lastBlock = NULL;
+struct cBlock *block, *lastBlock = NULL;
 double score = 0;
 for (block = blockList; block != NULL; block = block->next)
     {
     score += block->score;
     if (lastBlock != NULL)
-	score -= connectCost(lastBlock, block);
+	score -= connectCost(lastBlock, block, gapData);
     lastBlock = block;
     }
 return score;
@@ -361,7 +363,7 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
 	    chain->tStart = lf->cb->tStart;
 	    if (details)
 	        {
-		struct boxIn *b = lf->cb;
+		struct cBlock *b = lf->cb;
 		fprintf(details, "%d\t%f\t%d\t%d\t%d\n", b->score, lf->totalScore,
 			b->tStart, b->qStart, b->qEnd - b->qStart);
 		}
@@ -371,8 +373,8 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
 	        {
 		if (details)
 		    {
-		    struct boxIn *b = lf->cb;
-		    struct boxIn *a = lf->bestPred->leaf->cb;
+		    struct cBlock *b = lf->cb;
+		    struct cBlock *a = lf->bestPred->leaf->cb;
 		    fprintf(details, " gap %d\t%d\n", 
 			b->tStart - a->tEnd, b->qStart - a->qEnd);
 		    }
@@ -387,9 +389,14 @@ slReverse(&chainList);
 return chainList;
 }
 
-struct chain *chainBlocks(char *qName, int qSize, char qStrand,
-	char *tName, int tSize, struct boxIn **pBlockList, 
-	ConnectCost connectCost, GapCost gapCost, FILE *details)
+struct chain *chainBlocks(
+	char *qName, int qSize, char qStrand,	/* Info on query sequence */
+	char *tName, int tSize, 		/* Info on target. */
+	struct cBlock **pBlockList, 		/* Unordered ungapped alignments. */
+	ConnectCost connectCost, 		/* Calculate cost to connect nodes. */
+	GapCost gapCost, 			/* Cost for non-overlapping nodes. */
+	void *gapData, 				/* Passed through to connect/gapCosts */
+	FILE *details)				/* NULL except for debugging */
 /* Create list of chains from list of blocks.  The blockList will get
  * eaten up as the blocks are moved from the list to the chain. 
  * The list of chains returned is sorted by score. 
@@ -399,12 +406,13 @@ struct chain *chainBlocks(char *qName, int qSize, char qStrand,
  *
  * Note that the connectCost needs to adjust for possibly partially 
  * overlapping blocks, and that these need to be taken out of the
- * resulting chains in general.  See src/hg/axtChain for an example
- * of coping with this. */
+ * resulting chains in general.  This can get fairly complex.  Also
+ * the chains will need some cleanup at the end.  Use the chainConnect
+ * module to help with this.  See hg/mouseStuff/axtChain for example usage. */
 {
 struct kdTree *tree;
 struct kdLeaf *leafList = NULL, *leaf;
-struct boxIn *block;
+struct cBlock *block;
 struct chain *chainList = NULL, *chain;
 struct lm *lm;
 
@@ -425,13 +433,13 @@ for (block = *pBlockList; block != NULL; block = block->next)
 /* Figure out chains. */
 slSort(&leafList, kdLeafCmpT);
 tree = kdTreeMake(leafList, lm);
-findBestPredecessors(tree, leafList, connectCost, gapCost);
+findBestPredecessors(tree, leafList, connectCost, gapCost, gapData);
 slSort(&leafList, kdLeafCmpTotal);
 chainList = peelChains(qName, qSize, qStrand, tName, tSize, leafList, details);
 
 /* Rescore chains (since some truncated) */
 for (chain = chainList; chain != NULL; chain = chain->next)
-    chain->score = scoreBlocks(chain->blockList, connectCost);
+    chain->score = scoreBlocks(chain->blockList, connectCost, gapData);
 slSort(&chainList,  chainCmpScore);
 
 /* Clean up and go home. */
