@@ -979,7 +979,7 @@ pairwise hmrg
 speciesOrder mouse rat chicken
 
 track mzPt1Mm3Rn3Gg2_pHMM
-shortLabel Hu/Chmp/Mouse/Rat/Chck
+shortLabel Hu/Chmp/Mo/Ra/Chck
 longLabel Human/Chimp/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
 group compGeno
 priority 100
