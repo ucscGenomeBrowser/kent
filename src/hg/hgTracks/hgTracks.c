@@ -5024,13 +5024,15 @@ int compCount = 0;
 int w;
 int prevEnd = -1;
 double prevY = -1;
+int ybase;
 
 
 /*process cart options*/
 
 char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
 enum wiggleOptEnum wiggleType = wiggleStringToEnum(interpolate);
-char *aa = cartUsualString(cart, "anti.alias", "on");
+char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
+int fill = atoi(cartUsualString(cart, "wiggle.fill", "0"));
 
 lf=tg->items;    
 for(lf = tg->items; lf != NULL; lf = lf->next) 
@@ -5046,6 +5048,8 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)s-e)*(double)heightPer/100.0+(double)heightPer);
 
+        ybase = (int)((double)y+(double)heightPer/100.0+(double)heightPer);
+
         if (prevEnd > 0)
 	        {
             y2 = prevY;
@@ -5056,9 +5060,11 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
                     if( sameString( aa, "on" )) /*use anti-aliasing*/
-                        mgConnectingLine( mg, x1, y1, x2, y2, shadesOfGray );
+                        mgConnectingLine( mg, x1, y1, x2, y2,
+                            shadesOfGray, ybase, 1, fill );
                     else
-                        mgDrawLine( mg, x1, y1, x2, y2, blackIndex() );
+                        mgConnectingLine( mg, x1, y1, x2, y2,
+                            shadesOfGray, ybase, 0, fill );
                     }
                 else if( wiggleType == wiggleNoInterpolation )
                     {
@@ -5069,9 +5075,11 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	        }
 
 
-    //mgConnectingLine( mg, x1, y1, x1+1, y1, shadesOfGray );
+    /*draw the points themselves*/
     //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
 	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, blackIndex());
+    if( fill )
+	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shadesOfGray[3]);
 
     prevEnd = s;
     prevY = y1;
