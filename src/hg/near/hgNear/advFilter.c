@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.8 2003/09/12 11:06:51 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.9 2003/09/13 04:10:42 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -102,8 +102,7 @@ void advFilterRemakeTextVar(struct column *col, char *varName, int size)
  * the existing value if any. */
 {
 char *var = advFilterName(col, varName);
-char *val = cartOptionalString(cart, var);
-cgiMakeTextVar(var, val, size);
+cartMakeTextVar(cart, var, NULL, size);
 }
 
 void advFilterKeyUploadButton(struct column *col)

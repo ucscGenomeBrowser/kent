@@ -203,8 +203,10 @@ for (term = termList; term != NULL; term = term->next)
 	if (key != NULL)
 	    {
 	    ++keyRow;
-	    if (prevHash == NULL || hashLookup(prevHash, row[0]) != NULL)
+	    if (prevHash == NULL || hashLookup(prevHash, key) != NULL)
+		{
 		hashStore(passHash, key);
+		}
 	    }
 	}
     if (!orLogic)
@@ -267,11 +269,14 @@ safef(query, sizeof(query), col->queryOne, key);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (!gotOne)
-        gotOne = TRUE;
-    else
-	dyStringAppend(dy, ", ");
+    boolean needQuote = hasWhiteSpace(row[0]);
+    if (needQuote)
+    	dyStringAppendC(dy, '\'');
     dyStringAppend(dy, row[0]);
+    if (needQuote)
+    	dyStringAppendC(dy, '\'');
+    dyStringAppend(dy, ",");
+    gotOne = TRUE;
     }
 sqlFreeResult(&sr);
 if (gotOne)
@@ -280,12 +285,54 @@ dyStringFree(&dy);
 return result;
 }
 
+static void associationCellPrint(struct column *col, struct genePos *gp, 
+	struct sqlConnection *conn)
+/* Print cell in association table. */
+{
+char query[1024];
+struct sqlResult *sr;
+char **row;
+boolean gotOne = FALSE;
+char *key = (col->protKey ? gp->protein : gp->name);
+
+hPrintf("<TD>");
+safef(query, sizeof(query), col->queryOne, key);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *s = row[0];
+    boolean needQuote = hasWhiteSpace(s);
+    if (!gotOne)
+        gotOne = TRUE;
+    else
+	hPrintf("&nbsp;");
+    if (needQuote)
+        hPrintf("'");
+    if (col->itemUrl)
+	{
+	hPrintf("<A HREF=\"");
+	hPrintf(col->itemUrl, s);
+	hPrintf("\" TARGET=_blank>");
+	}
+    hPrintNonBreak(s);
+    if (col->itemUrl)
+        {
+	hPrintf("</A>");
+	}
+    if (needQuote)
+        hPrintf("'");
+    }
+sqlFreeResult(&sr);
+if (!gotOne)
+    hPrintf("n/a");
+hPrintf("</TD>");
+}
 
 static void associationFilterControls(struct column *col, 
 	struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
-hPrintf("Please enclose term in quotes if it "
+hPrintf("Please enclose term in single quotes if it "
         "contains multiple words.  You can include "
 	"* and ? wildcards, though this will be slower.<BR>\n");
 hPrintf("Term(s): ");
@@ -311,5 +358,6 @@ col->exists = associationExists;
 col->filterControls = associationFilterControls;
 col->advFilter = associationAdvFilter;
 col->cellVal = associationCellVal;
+col->cellPrint = associationCellPrint;
 }
 

@@ -11,7 +11,7 @@
 #include "goa.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.8 2003/09/11 21:20:14 hiram Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.9 2003/09/13 04:10:42 kent Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goa table exists. */
@@ -48,11 +48,11 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	if (!hashLookup(hash, name))
 	    {
 	    hashAdd(hash, name, NULL);
-	    if (!gotOne)
-		gotOne = TRUE;
-	    else
-		dyStringAppend(dy, ", ");
+	    gotOne = TRUE;
+	    dyStringAppend(dy, "'");
 	    dyStringAppend(dy, name);
+	    dyStringAppend(dy, "'");
+	    dyStringAppendC(dy, ',');
 	    }
 	}
     sqlFreeResult(&sr);
@@ -91,13 +91,15 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    if (!gotOne)
 		gotOne = TRUE;
 	    else
-		hPrintNonBreak(", ");
+		hPrintf("&nbsp;");
+	    hPrintf("'");
 	    hPrintf("<A HREF=\"http://www.godatabase.org/cgi-bin/go.cgi?query=%s&view=details\" TARGET=_blank>", row[1]);
 	    // hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/GSearch?query=%s&mode=id\" TARGET=_blank>", row[1]);
 	    // hPrintf("<A HREF=\"http://www.ebi.ac.uk/ego/DisplayGoTerm?id=%s&viz=tree\" TARGET=_blank>", row[1]);
 
 	    hPrintNonBreak(row[0]);
 	    hPrintf("</A>");
+	    hPrintf("'");
 	    }
 	}
     sqlFreeResult(&sr);
@@ -180,7 +182,7 @@ static void goFilterControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
 hPrintf("<A HREF=\"%s\">", "http://www.geneontology.org");
-hPrintf("Gene Ontology</A> search.  Please enclose term in quotes if it "
+hPrintf("Gene Ontology</A> search.  Please enclose term in single quotes if it "
         "contains multiple words.<BR>You can search with ID's (such as "
 	"GO:0005884) as well as terms (such as 'actin filament').<BR>");
 hPrintf("Term(s): ");

@@ -104,14 +104,25 @@ type distance knownBlastTab query target identity
 
 name knownPos
 shortLabel Genome Position
-longLabel genome position/link to Genome Browser
+longLabel Genome position/link to Genome Browser
 priority 7
 visibility on
 type knownPos 
 
+name codingSnps
+shortLabel Coding SNPs
+longLabel Simple nucleotide polymorphisms in coding regions
+priority 7.5
+visibility off
+type association knownToCdsSnp
+queryFull select name,value from knownToCdsSnp
+queryOne select value from knownToCdsSnp where name = '%s'
+invQueryOne select name from knownToCdsSnp where value = '%s'
+itemUrl http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s
+
 name description
 shortLabel Description
-longLabel short description line/link to details page
+longLabel Short description line/link to details page
 priority 8
 visibility on
 type knownDetails kgXref kgID description
