@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.21 2004/02/15 02:22:27 baertsch Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.22 2004/02/15 21:23:27 baertsch Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -154,7 +154,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	name = convertSoftberryName(name);
 	}
     if (isGtf)
-        gp = genePredFromGroupedGtf(gff, group, name);
+        gp = genePredFromGroupedGtf(gff, group, name, gFrame);
     else
         gp = genePredFromGroupedGff(gff, group, name, exonType, gFrame);
     if (gp != NULL)
