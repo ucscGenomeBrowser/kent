@@ -75,8 +75,24 @@ void doMiddle()
 static struct dnaSeq *seq;
 struct tempName pslTn, faTn;
 char *userSeq = cgiString("userSeq");
+char *port = cgiOptionalString("port");
+char *host = cgiOptionalString("host");
+char *nib = cgiOptionalString("nib");
+char *db = cgiOptionalString("db");
+char *userFile = cgiOptionalString("userFile");
 FILE *f;
 int maxSize = 20000;
+
+if (port != NULL)
+    hostPort = port;
+if (host != NULL)
+    hostName = host;
+if (nib != NULL)
+    nibDir = nib;
+if (db != NULL)
+    database = db;
+    
+uglyf("userFile = %s<BR>\n", userFile);
 
 /* Load up sequence from CGI. */
 seq = faFromMemText(cloneString(userSeq));
