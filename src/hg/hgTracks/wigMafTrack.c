@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.28 2004/05/28 01:32:39 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.29 2004/06/26 00:31:55 angie Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -92,7 +92,7 @@ struct wigMafItem *miList = NULL, *mi;
 struct mafAli *maf; 
 char buf[64];
 char *otherOrganism;
-char *myOrg = hOrganism(database);
+char *myOrg = hgDirForOrg(hOrganism(database));
 struct sqlConnection *conn = hAllocConn();
 tolowers(myOrg);
 
@@ -141,7 +141,8 @@ slAddHead(&miList, mi);
 		mi->db = cloneString(buf);
                 otherOrganism = hOrganism(mi->db);
                 mi->name = 
-                    (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
+                    (otherOrganism == NULL ? cloneString(buf) :
+		                             hgDirForOrg(otherOrganism));
                 tolowers(mi->name);
 		mi->height = tl.fontHeight;
 		hashAdd(hash, mi->name, mi);
@@ -153,6 +154,8 @@ slAddHead(&miList, mi);
         {
         if ((el = hashLookup(hash, species[i])) != NULL)
             slAddHead(&miList, (struct wigMafItem *)el->val);
+	else
+	    errAbort("loadBaseByBaseItems: species %s not found", species[i]);
         }
     hashFree(&hash);
     }
