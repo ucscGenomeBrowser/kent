@@ -3,7 +3,6 @@
 #include "errabort.h"
 #include "hash.h"
 #include "cheapcgi.h"
-#include "jksql.h"
 #include "cartDb.h"
 #include "htmshell.h"
 #include "hgConfig.h"
@@ -12,6 +11,9 @@
 #include "hdb.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
+
+DbConnector cartDefaultConnector = hConnectCentral;
+DbDisconnect cartDefaultDisconnector = hDisconnectCentral;
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -99,7 +101,7 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude
 {
 struct cgiVar *cv, *cvList = cgiVarList();
 struct cart *cart;
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
 char *booShadow = cgiBooleanShadowPrefix();
 int booSize = strlen(booShadow);
@@ -160,7 +162,7 @@ dyStringFree(&dy);
 static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
 {
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = cartDefaultConnector();
 struct dyString *encoded = newDyString(4096);
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
@@ -188,7 +190,7 @@ updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
-hDisconnectCentral(&conn);
+cartDefaultDisconnector(&conn);
 hashElFreeList(&elList);
 dyStringFree(&encoded);
 }
@@ -436,10 +438,10 @@ void cartResetInDb(char *cookieName)
 {
 int hguid = getCookieId(cookieName);
 int hgsid = getSessionId();
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = cartDefaultConnector();
 clearDbContents(conn, "userDb", hguid);
 clearDbContents(conn, "sessionDb", hgsid);
-hDisconnectCentral(&conn);
+cartDefaultDisconnector(&conn);
 }
 
 struct cart *cartAndCookie(char *cookieName, char **exclude)
@@ -475,7 +477,7 @@ if (status == 0)
 popAbortHandler();
 }
 
-static void cartEarlyWarningHandler(char *format, va_list args)
+void cartEarlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
@@ -487,7 +489,7 @@ if (!initted)
 htmlVaParagraph(format,args);
 }
 
-static void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
+void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
 /* Wrap error and warning handlers around doMiddl. */
 {
 pushWarnHandler(warner);
@@ -546,3 +548,18 @@ cartCheckout(&cart);
 htmlEnd();
 }
 
+void cartSetDbConnector(DbConnector connector) 
+/* Set the connector that will be used by the cart to connect
+ * to the database. Due to the module's legacy the default connector
+ * is hConnectCentral */
+{
+cartDefaultConnector = connector;
+}
+
+void cartSetDbDisconnector(DbDisconnect disconnector) 
+/* Set the connector that will be used by the cart to disconnect
+ * from the database. Due to the module's legacy the default connector
+ * is hDisconnectCentral */
+{
+cartDefaultDisconnector = disconnector;
+}

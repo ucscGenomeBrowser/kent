@@ -5,6 +5,22 @@
 #ifndef CART_H
 #define CART_H
 
+#ifndef JKSQL
+#include "jksql.h"
+#endif
+
+#ifndef ERRABORT_H
+#include "errabort.h"
+#endif
+
+
+typedef struct sqlConnection *(*DbConnector)();  
+/* funtion type used to get a connection to database */
+
+typedef void (*DbDisconnect)(struct sqlConnection **pConn); 
+/* function type used to cleanup a connection from database */
+
+
 struct cart
 /* A cart of settings that persist. */
    {
@@ -100,6 +116,12 @@ void cartDump(struct cart *cart);
 void cartResetInDb(char *cookieName);
 /* Clear cart in database. */
 
+void cartEarlyWarningHandler(char *format, va_list args);
+/* Write an error message so user can see it before page is really started */
+
+void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner);
+/* Wrap error and warning handlers around doMiddl. */
+
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude);
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
@@ -122,6 +144,22 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cooki
  * with cart, and write end of web-page.   Exclude may be NULL.  If it exists it's a
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
+
+struct cart *cartAndCookie(char *cookieName, char **exclude);
+/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
+ * HTTP preamble to web page.  Don't write any HTML though. */
+
+void cartSetDbConnector(DbConnector connector);
+/* Set the connector that will be used by the cart to connect
+ * to the database. Due to the module's legacy the default connector
+ * is hConnectCentral */
+
+void cartSetDbDisconnector(DbDisconnect disconnector);
+/* Set the connector that will be used by the cart to disconnect
+ * from the database. Due to the module's legacy the default connector
+ * is hDisconnectCentral */
+
+
 
 #endif /* CART_H */
 
