@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.20 2004/02/12 18:47:25 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.21 2004/03/04 07:46:54 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -571,6 +571,7 @@ struct mafAli *mafList;
 struct sqlConnection *conn = hAllocConn();
 struct mafItem *miList = tg->items, *mi = miList;
 char buf[64];
+char *suffix;
 
 mafList = tg->customPt;
 if (mafList == NULL)
@@ -588,12 +589,16 @@ if (vis == tvFull)
     while ((mi = mi->next) != NULL)
         {
         /* construct pairwise table name for this organism */
-        /* NOTE: might want a "pairwise" trackDb setting for this */
-        char bzTable[64];
-        safef(bzTable, 64, "%s_%s", mi->name, tg->mapName);
-        if (!hTableExistsDb(database, bzTable))
+        /* if there's a value for the "pairwise" trackDb setting, use this
+         * to construct the tablename, otherwise, use the track name */
+        char mafTable[64];
+        if ((suffix = trackDbSetting(tg->tdb, "pairwise")) == NULL ||
+            *suffix == 0)
+                suffix = tg->mapName;
+        safef(mafTable, sizeof(mafTable), "%s_%s", mi->name, suffix);
+        if (!hTableExistsDb(database, mafTable))
             continue;
-        mafList = mafLoadInRegion(conn, bzTable, chromName, seqStart, seqEnd);
+        mafList = mafLoadInRegion(conn, mafTable, chromName, seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
         drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
