@@ -232,17 +232,32 @@ struct fishClone *createFishClone(char *name)
   return(ret);
 }
 
-struct map *createMap(char *mapInfo, char *center)
+struct map *createMap(char *mapInfo, char *center, char *chr)
 /* Create a map record */
 {
   struct map *ret;
-  char *bands[16];
+  char *bands[16], band[16];
   int wordCount;
 
   AllocVar(ret);
   ret->next = NULL;
 
-  wordCount = chopByChar(mapInfo, '-', bands, ArraySize(bands));
+  if (stringIn("~\0", mapInfo))
+    {
+      wordCount = chopByChar(mapInfo, '~', bands, ArraySize(bands));
+      if ((wordCount == 2) && stringIn("p\0", bands[0]))
+	{
+	  sprintf(band, "%sp%s", chr, bands[1]); 
+	  bands[1] = cloneString(band);
+	}
+      else if ((wordCount == 2) && stringIn("q\0", bands[0]))
+	{
+	  sprintf(band, "%sq%s", chr, bands[1]); 
+	  bands[1] = cloneString(band);
+	}
+    }
+  else
+    wordCount = chopByChar(mapInfo, '-', bands, ArraySize(bands));
   ret->band1 = cloneString(bands[0]);
   if (wordCount == 1) 
     ret->band2 = cloneString(bands[0]);
@@ -363,7 +378,7 @@ void readFishInfo(struct lineFile *ff)
 	  wordCount1 = chopByChar(mapInfoCen[0], ',', mapInfo, ArraySize(mapInfo));
 	  for (j = 0; j < wordCount1; j++)
 	    {
-	      m =  createMap(mapInfo[j], center);
+	      m =  createMap(mapInfo[j], center, chr);
 	      slAddHead(&fc->cyto, m);
 	      fc->numCyto++;
 	    }
