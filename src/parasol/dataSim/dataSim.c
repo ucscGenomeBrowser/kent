@@ -41,9 +41,11 @@ struct machine
     struct machine *next;	/* Next in list. */
     struct dlNode *node;	/* Node on doubly-linked list. */
     char *name;			/* Machine name */
-    struct hash *files;		/* List of files in machine */
+    struct hash *files;		/* Hash of files in machine */
+    struct slRef *fileList;	/* List of files in machine. */
     struct job *job;		/* Job on machine. */
-    boolean isServer;		/* True if won't run jobs. */
+    bool isServer;		/* True if won't run jobs. */
+    bool busy;			/* Machine is busy. */
     };
 struct machine *machineList = NULL;
 
@@ -61,10 +63,18 @@ struct job
     struct inFile *input; /* List of input files. */
     struct machine *machine;	/* Machine if any this is running on. */
     int estTime;	/* Estimated run time. */
-    bool running;	/* Job is running */
     bool isStaged;	/* Jobs input is in place. */
     };
 struct job *jobList = NULL;
+
+struct fileMarket
+/* A place where files get exchanged. */
+    {
+    struct fileMarket *next;	/* Next in list. */
+    struct fileSize *file;	/* File we're shopping for. */
+    struct slRef *demand;	/* Machines that want this file. */
+    struct slRef *supply;	/* Machines that have this file. */
+    };
 
 struct dlList *jobRunning;   /* Jobs running */
 struct dlList *jobWaiting;   /* Jobs waiting */
@@ -330,11 +340,11 @@ void makeCopyJob(struct dlNode *source, struct dlNode *dest, struct fileSize *fi
 /* Make up job to copy file */
 {
 struct machine *s = source->val, *d = dest->val;
+printf("%d copy %s(%d) from %s to %s\n", now, file->name, file->size, s->name, d->name);
 dlRemove(source);
 dlRemove(dest);
 dlAddTail(machBusy, source);
 dlAddTail(machBusy, dest);
-printf("%d copy %s(%d) from %s to %s\n", now, file->name, file->size, s->name, d->name);
 addMessage(now + file->size, "copyDone", s, d, file, NULL);
 }
 
@@ -348,6 +358,7 @@ printf("%d run '%s' on %s\n", now, job->command, mach->name);
 addMessage(now + job->estTime, "jobDone", mach, NULL, NULL, job);
 }
 
+#ifdef OLD
 boolean findSource(struct dlList *sourceList, struct dlNode *dest,
 	struct dlNode **retSource, struct fileSize **retFile)
 /* Try and find a machine in sourceList that has a file that
@@ -410,6 +421,144 @@ for (node = machStaging->head; !dlEnd(node); node = next)
     }
 return staged;
 }
+#endif /* OLD */
+
+int fileMarketCmp(const void *va, const void *vb)
+/* Compare to sort based on size of file in market. */
+{
+const struct fileMarket *a = *((struct fileMarket **)va);
+const struct fileMarket *b = *((struct fileMarket **)vb);
+return b->file->size - a->file->size;
+}
+
+boolean marketDay(struct fileMarket *marketList)
+/* Try and match up supplies and demands. Return TRUE if succeed anywhere */
+{
+boolean anyMet = FALSE;
+struct fileMarket *market;
+for (market = marketList; market != NULL; market = market->next)
+    {
+    struct slRef *rSupply, *rDemand;
+    struct machine *supply, *demand;
+    int demandCount = slCount(market->demand);
+    int demandsMet = 0;
+    for (rSupply = market->supply; rSupply != NULL; rSupply = rSupply->next)
+         {
+	 boolean metOne = FALSE;
+	 supply = rSupply->val;
+	 if (!supply->busy)
+	     {
+	     for (rDemand = market->demand; rDemand != NULL; rDemand = rDemand->next)
+		 {
+		 demand = rDemand->val;
+		 if (!demand->busy)
+		     {
+		     makeCopyJob(supply->node, demand->node, market->file);
+		     supply->busy = demand->busy = TRUE;
+		     metOne = TRUE;
+		     break;
+		     }
+		 }
+	     }
+	 if (metOne)
+	     {
+	     anyMet = TRUE;
+	     if (++demandsMet == demandCount)
+	         break;
+	     }
+	 }
+    }
+return anyMet;
+}
+
+void addSupply(struct hash *marketHash, struct dlList *machList)
+/* Add supplies from machines to markets. */
+{
+struct dlNode *node;
+int supplyCount = 0;
+for (node = machList->head;  !dlEnd(node); node = node->next)
+    {
+    struct machine *mach = node->val;
+    struct slRef *ref;
+    for (ref = mach->fileList; ref != NULL; ref = ref->next)
+        {
+	struct fileSize *file = ref->val;
+	struct fileMarket *market;
+	if ((market = hashFindVal(marketHash, file->name)) != NULL)
+	    {
+	    refAdd(&market->supply, mach);
+	    ++supplyCount;
+	    }
+	}
+    mach->busy = FALSE;
+    }
+}
+
+boolean stageJobs()
+/* Copy data to set up runs. */
+{
+boolean staged = FALSE;
+struct dlNode *node, *source;
+struct fileSize *file;
+struct fileMarket *marketList = NULL, *market;
+struct hash *marketHash = newHash(9);
+struct inFile *in;
+int demandCount = 0;
+
+/* Build up markets and  list of demands. */
+for (node = machStaging->head; !dlEnd(node); node = node->next)
+    {
+    struct machine *mach = node->val;
+    struct job *job = mach->job;
+    if (!job->isStaged)
+	{
+	for (in = job->input; in != NULL; in = in->next)
+	    {
+	    if (!in->isStaged)
+	        {
+		struct fileSize *file = in->file;
+		if ((market = hashFindVal(marketHash, file->name)) == NULL)
+		    {
+		    AllocVar(market);
+		    market->file = file;
+		    slAddHead(&marketList, market);
+		    hashAdd(marketHash, file->name, market);
+		    ++demandCount;
+		    }
+		refAdd(&market->demand, mach);
+		}
+	    }
+	}
+    }
+slReverse(&marketList);
+for (market = marketList; market != NULL; market = market->next)
+    slReverse(&market->demand);
+
+/* Add supply from other staging area machines and run market. */
+addSupply(marketHash, machStaging);
+for (market = marketList; market != NULL; market = market->next)
+    slReverse(&market->supply);
+staged |= marketDay(marketList);
+
+/* Replace supplies with those from server and run market. */
+for (market = marketList; market != NULL; market = market->next)
+    slFreeList(&market->supply);
+addSupply(marketHash, serverFree);
+for (market = marketList; market != NULL; market = market->next)
+    slReverse(&market->supply);
+staged |= marketDay(marketList);
+
+/* Clean up markets. */
+for (market = marketList; market != NULL; market = market->next)
+    {
+    slFreeList(&market->supply);
+    slFreeList(&market->demand);
+    }
+slFreeList(&marketList);
+freeHash(&marketHash);
+
+return staged;
+}
 
 boolean runJobs()
 /* Run any jobs that are all staged. */
@@ -461,12 +610,15 @@ if (node != NULL)
 	}
     else if (sameString(mess->type, "copyDone"))
         {
+	struct machine *dest = mess->m2;
+	struct fileSize *file = mess->file;
 	printf("%s from %s to %s\n", 
-		mess->file->name, mess->m1->name, mess->m2->name);
-	hashAdd(mess->m2->files, mess->file->name, mess->file);
-	markIfStaged(mess->m2->job);
+		file->name, mess->m1->name, dest->name);
+	hashAdd(dest->files, file->name, file);
+	refAdd(&dest->fileList, file);
+	markIfStaged(dest->job);
 	stageAgain(mess->m1);
-	stageAgain(mess->m2);
+	stageAgain(dest);
 	}
     else
         {
@@ -503,6 +655,7 @@ struct fileSize *fs;
 struct job *job;
 struct machine *machine;
 struct inFile *in;
+struct slRef *fileRefList = NULL;
 
 hmDim[0] = aCount;
 hmDim[1] = bCount;
@@ -520,6 +673,7 @@ for (dim=0; dim < ArraySize(hmDim); ++dim)
 	AllocVar(fs);
 	fs->size = i;
 	hashAddSaveName(fileHash, buf, fs, &fs->name);
+	refAdd(&fileRefList, fs);
 	}
     }
 
@@ -540,12 +694,13 @@ for (i=0; i<=machineCount; ++i)
     if (i == 0)	/* File server is machine 0. */
        {
        machine->files = fileHash;
+       machine->fileList = fileRefList;
        machine->isServer = TRUE;
        dlAddTail(serverFree, machine->node);
        }
     else
        {
-       machine->files = newHash(12);
+       machine->files = newHash(11);
        dlAddTail(machFree, machine->node);
        }
     }
