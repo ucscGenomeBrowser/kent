@@ -189,6 +189,38 @@ for (i=0; i<hash->size; ++i)
     }
 }
 
+struct hashEl *hashElListHash(struct hash *hash)
+/* Return a list of all elements of hash.   Free return with hashElFreeList. */
+{
+int i;
+struct hashEl *hel, *dupe, *list = NULL;
+for (i=0; i<hash->size; ++i)
+    {
+    for (hel = hash->table[i]; hel != NULL; hel = hel->next)
+	{
+	dupe = cloneMem(hel, sizeof(*hel));
+	slAddHead(&list, hel);
+	}
+    }
+return list;
+}
+
+
+void hashElFree(struct hashEl **pEl)
+/* Free hash el list returned from hashListAll.  (Don't use
+ * this internally.) */
+{
+freez(pEl);
+}
+
+void hashElFreeList(struct hashEl **pList)
+/* Free hash el list returned from hashListAll.  (Don't use
+ * this internally. */
+{
+slFreeList(pList);
+}
+
+
 void freeHash(struct hash **pHash)
 /* Free up hash table. */
 {

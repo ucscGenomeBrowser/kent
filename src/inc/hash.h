@@ -70,6 +70,16 @@ void hashTraverseEls(struct hash *hash, void (*func)(struct hashEl *hel));
 void hashTraverseVals(struct hash *hash, void (*func)(void *val));
 /* Apply func to every element of hash with hashEl->val as parameter. */
 
+struct hashEl *hashElListHash(struct hash *hash);
+/* Return a list of all elements of hash.   Free return with hashElFreeList. */
+
+void hashElFree(struct hashEl **pEl);
+/* Free hash el list returned from hashListAll.  */
+
+void hashElFreeList(struct hashEl **pList);
+/* Free hash el list returned from hashListAll.  (Don't use
+ * this internally. */
+
 struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */
 #define hashNew(a) newHash(a)	/* Synonym */
