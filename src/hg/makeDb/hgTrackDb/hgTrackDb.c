@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.21 2004/07/09 21:26:13 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.22 2005/01/25 01:17:54 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -67,7 +67,9 @@ if (strict != NULL)
     for (td = tdList; td != NULL; td = tdNext)
         {
         tdNext = td->next;
-        if (hTableOrSplitExistsDb(database, td->tableName))
+        if (hTableOrSplitExistsDb(database, td->tableName) ||
+                trackDbSetting(td, "compositeTrack"))
+                /* don't require table for composite spec */
             {
 	    slAddHead(&strictList, td);
             }
@@ -89,7 +91,7 @@ for (td = tdList; td != NULL; td = tdNext)
     if (!hashLookup(uniqHash, td->tableName))
         {
 	hashAdd(uniqHash, td->tableName, td);
-	slAddHead(pTrackList, td);
+        slAddHead(pTrackList, td);
 	}
     }
 for (td = *pTrackList; td != NULL; td = td->next)
@@ -265,7 +267,7 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 	char *html = hashFindVal(htmlHash, td->tableName);
         if (html == NULL)
 	    {
-	    if (strict != NULL)
+	    if (strict != NULL  && !trackDbSetting(td, "subTrack"))
 		{
 		printf("html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
 		}
