@@ -2538,3 +2538,24 @@ cat > subset.csh << 'EOF'
     ln -s /cluster/data/hg12/bed/bedOver/hg12ToHg16.over.chain \
         /gbdb/hg12/liftOver
     hgAddLiftOverChain hg12 hg16
+
+
+LIFTOVER CHAIN TO HG13 (2003-04-14 daryl ?, 2004-04-15 kate)
+-------------------------------------------
+    cp /cluster/data/hg13/bedOver/over.chain \
+        /cluster/data/hg12/bed/bedOver/hg12ToHg13.over.chain
+
+    # save to download area
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg12
+    mkdir -p liftOver
+    cp /cluster/data/hg12/bed/bedOver/hg12ToHg13.over.chain liftOver
+    gzip liftOver/hg12ToHg13.over.chain
+
+    # load into database
+    mkdir -p /gbdb/hg12/liftOver
+    ln -s /cluster/data/hg12/bed/bedOver/hg12ToHg13.over.chain \
+        /gbdb/hg12/liftOver
+    hgAddLiftOverChain hg12 hg13
+
+
