@@ -26,7 +26,7 @@ formPushQ.h: formPushQ.html
 	echo ";" >> formPushQ.h
 	
 
-$(EXE).o: formPushQ.h
+$(EXE).o: formPushQ.h versionInfo.h
 
 O = $(EXE).o
 
@@ -50,5 +50,6 @@ push:
 
 clean:
 	rm -f *.o
-	rm $(EXE)
+	rm -f formPushQ.h
+	rm -f $(EXE)
 

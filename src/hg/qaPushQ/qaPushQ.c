@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.10 2004/05/09 09:55:53 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.11 2004/05/10 17:43:04 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -952,9 +952,8 @@ int getNextAvailQid()
 struct pushQ q;
 int newqid = 0;
 char query[256];
-char *tbl = "pushQ";
 char *quickres = NULL;
-safef(query, sizeof(query), "select qid from %s order by qid desc limit 1",tbl);
+safef(query, sizeof(query), "select max(qid) from pushQ");
 quickres = sqlQuickString(conn, query);
 if (quickres != NULL) 
     {
@@ -1164,14 +1163,7 @@ safef(newQid,      sizeof(newQid)     , cgiString("qid"));
 safef(newPriority, sizeof(newPriority), cgiString("priority"));
 
 
-if (sameString(newQid,"")) 
-    {
-    newqid = getNextAvailQid();
-    safef(q.pqid, sizeof(q.pqid), "");
-    strcpy(q.reqdate   ,"" ); 
-    strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
-    }
-else
+if (!sameString(newQid,"")) 
     {
     /* we need to preload q with existing values 
      * because some fields like rank are not carried in form */
@@ -1179,8 +1171,17 @@ else
 	/* true means optional, it was asked if we could tolerate this, 
 	 *  e.g. delete, then hit back-button */
 	{
-	safef(q.qid, sizeof(q.qid), newQid);
+	/* user is trying to use back button to recover deleted rec */
+	safef(newQid, sizeof(newQid), ""); /* signals need newqid */ 
 	}
+    }
+    
+if (sameString(newQid,"")) 
+    {
+    newqid = getNextAvailQid();
+    safef(q.pqid, sizeof(q.pqid), "");
+    strcpy(q.reqdate   ,"" ); 
+    strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
     }
 
     
@@ -1201,7 +1202,6 @@ if (!sameString(delbutton,"delete"))
 	{
 	q.rank = getNextAvailRank(newPriority);
 	safef(q.priority, sizeof(q.priority), newPriority);
-	safef(newQid,     sizeof(newQid)    , cgiString("qid"));
 	}
     }
 
@@ -1374,41 +1374,39 @@ void doEdit()
 /* Handle edit request for a pushQ entry */
 {
 
-struct pushQ targ;
-struct pushQ *ki, *kiList = NULL;
-char query[256];
+struct pushQ q;
+char tempSizeMB[sizeof(q.sizeMB)];
 
-ZeroVar(&targ);
+ZeroVar(&q);
 
-safef(targ.qid, sizeof(targ.qid), cgiString("qid"));
+safef(q.qid, sizeof(q.qid), cgiString("qid"));
 
-/* Get a list of all that have that ID. */
-safef(query, sizeof(query), "select * from pushQ where qid = '%s'",targ.qid);
-kiList=pushQLoadByQuery(conn, query);
-
-if (kiList == NULL) 
+if (!loadPushQ(q.qid, &q,TRUE))
     {
-    printf("%s not found.", targ.qid);
+    printf("%s not found.", q.qid);
     return;
     }
-
-if (kiList->next != NULL) 
-    {
-    printf("More than one record with queue id = %s found, but it should be unique.",targ.qid);
-    return;
-    }
-
-ki = kiList;
 
 strcpy(html,formQ); 
-replacePushQFields(ki);
+
+
+safef(tempSizeMB,sizeof(tempSizeMB), cgiUsualString("sizeMB",""));
+if (!sameString(tempSizeMB,""))
+    {
+    if (sscanf(tempSizeMB,"%u",&q.sizeMB) != 1)
+	{
+	q.sizeMB = 0;
+	}
+    }
+
+replacePushQFields(&q);
 
 replaceInStr(html, sizeof(html), 
     "<!delbutton>" , 
     "<input TYPE=SUBMIT NAME=\"delbutton\"  VALUE=\"delete\">"
     );
     
-if (ki->priority[0]!='L')
+if (q.priority[0]!='L')
     {
     replaceInStr(html, sizeof(html), 
     "<!pushbutton>", 
@@ -1416,7 +1414,7 @@ if (ki->priority[0]!='L')
     ); 
     }
     
-if (ki->priority[0]!='L')
+if (q.priority[0]!='L')
     {
     replaceInStr(html, sizeof(html), 
     "<!clonebutton>", 
@@ -1426,7 +1424,6 @@ if (ki->priority[0]!='L')
     
 printf("%s",html);
 
-pushQFreeList(&kiList);
 cleanUp();
 
 }
@@ -1744,7 +1741,7 @@ htmShellWithHead(TITLE, meta, doMsg, NULL);
 }
 
 
-void doShowAllColumns()
+void olddoShowAllColumns()
 /* Promote the ranking of this Q item 
  * >0 means promote, <0 means demote */
 {
@@ -1778,6 +1775,54 @@ htmShellWithHead(TITLE, meta, doMsg, NULL);
 
 }
 
+void doShowAllColumns()
+/* Display hidden columns available for resurrection */ 
+{
+int c = 0;
+
+printf("<h4>Show Hidden Columns</h4>\n");
+printf("<br>\n");
+printf("Click on any column below to un-hide it.<br>\n");
+printf("<br>\n");
+
+for (c=0; c<MAXCOLS; c++)
+    {
+    if (strstr(showColumns,colName[c])==NULL)
+	{
+	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s\">%s</a><br><br>", 
+	    colName[c], colName[c]);
+	}
+    }
+
+cleanUp();
+}
+
+
+void doShowColumn()
+/* Promote the ranking of this Q item 
+ * >0 means promote, <0 means demote */
+{
+int c = 0;
+struct dyString * s = newDyString(2048);  /* need room */
+char *colName = NULL;
+char *meta = ""
+"<head>"
+"<title>Meta Redirect Code</title>"
+"<meta http-equiv=\"refresh\" content=\"0;url=/cgi-bin/qaPushQ?action=display\">"
+"</head>";
+
+colName = cgiString("colName");
+dyStringAppend(s, showColumns);
+dyStringPrintf(s, ",%s", colName);
+
+showColumns = needMem(2048);
+safef(showColumns, 2048, "%s", s->string);
+freeDyString(&s);
+
+safef(msg,sizeof(msg),"Column %s now visible.<br>\n",colName);
+htmShellWithHead(TITLE, meta, doMsg, NULL);
+
+}
 
 
 void doShowDefaultColumns()
@@ -2250,6 +2295,8 @@ sprintLongWithCommas(nicenumber, totalsize / (1024 * 1024) );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%s\">"
+       "Set Size as %s MB</a> <br>\n",newQid,nicenumber,nicenumber);
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",newQid);
 cleanUp();
 }
@@ -2392,9 +2439,9 @@ else if (sameString(action,"pushDone"))
     doPushDone();  /* htmShell not used here, will redirect back to display  */
     }
     
-else if (sameString(action,"promoteColumn")) 
+else if (sameString(action,"demoteColumn" )) 
     {
-    doPromoteColumn( 1 );  /* htmShell not used here, will redirect back to display  */
+    doPromoteColumn(-1 );  /* htmShell not used here, will redirect back to display  */
     }
 
 else if (sameString(action,"hideColumn"   )) 
@@ -2402,14 +2449,19 @@ else if (sameString(action,"hideColumn"   ))
     doPromoteColumn( 0 );  /* htmShell not used here, will redirect back to display  */
     }
 
-else if (sameString(action,"demoteColumn" )) 
+else if (sameString(action,"promoteColumn")) 
     {
-    doPromoteColumn(-1 );  /* htmShell not used here, will redirect back to display  */
+    doPromoteColumn( 1 );  /* htmShell not used here, will redirect back to display  */
     }
 
 else if (sameString(action,"showAllCol" )) 
     {
-    doShowAllColumns();  /* htmShell not used here, will redirect back to display  */
+    htmShell(TITLE, doShowAllColumns, NULL); 
+    }
+
+else if (sameString(action,"showColumn"   )) 
+    {
+    doShowColumn();  /* htmShell not used here, will redirect back to display  */
     }
 
 else if (sameString(action,"showDefaultCol" )) 
