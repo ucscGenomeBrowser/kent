@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.10 2004/02/03 22:11:54 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.11 2004/03/08 01:37:13 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -24,7 +24,8 @@ static int altTotalCount = 0;
 static int totalLoci = 0;
 static int totalSplices = 0;
 static int splicedLoci = 0;
-
+static int minControlConf = 0; /* Minimum number of edges before an
+				* exon is considered a control. */
 FILE *bedViewOutFile = NULL;/* File for bed containing region of alt-splicing. */
 FILE *RData = NULL;         /* File for outputting summaries about alts, useful for R. */
 FILE *RDataCont = NULL;     /* File for outputting summaries about controls, useful for R. */
@@ -1453,35 +1454,42 @@ void outputControlExonBeds(struct altGraphX *ag, int v1, int v2)
 {
 int *vPos = ag->vPositions;
 struct bed bedUp, bedDown, bedAlt;
-/* Initialize some beds for reporting. */
-bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
-bedUp.name = bedDown.name = bedAlt.name = ag->name;
-bedUp.score = bedDown.score = bedAlt.score = altControl;
-safef(bedUp.strand, sizeof(bedUp.strand), "%s", ag->strand);
-safef(bedDown.strand, sizeof(bedDown.strand), "%s", ag->strand);
-safef(bedAlt.strand, sizeof(bedDown.strand), "%s", ag->strand);
-/* Alt spliced region. */
-bedAlt.chromStart = vPos[v1];
-bedAlt.chromEnd = vPos[v2];
+struct evidence *ev = slElementFromIx(ag->evidence, altGraphXGetEdgeNum(ag, v1, v2));
 
-/* Upstream/down stream */
-if(sameString(ag->strand, "+"))
+/* Make sure that this edge has enough support 
+   that we believe it. */
+if(ev->evCount >= minControlConf)
     {
-    bedUp.chromStart = vPos[v1] - flankingSize;
-    bedUp.chromEnd = vPos[v1];
-    bedDown.chromStart = vPos[v2];
-    bedDown.chromEnd = vPos[v2] + flankingSize;
+    /* Initialize some beds for reporting. */
+    bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
+    bedUp.name = bedDown.name = bedAlt.name = ag->name;
+    bedUp.score = bedDown.score = bedAlt.score = altControl;
+    safef(bedUp.strand, sizeof(bedUp.strand), "%s", ag->strand);
+    safef(bedDown.strand, sizeof(bedDown.strand), "%s", ag->strand);
+    safef(bedAlt.strand, sizeof(bedDown.strand), "%s", ag->strand);
+    /* Alt spliced region. */
+    bedAlt.chromStart = vPos[v1];
+    bedAlt.chromEnd = vPos[v2];
+    
+    /* Upstream/down stream */
+    if(sameString(ag->strand, "+"))
+	{
+	bedUp.chromStart = vPos[v1] - flankingSize;
+	bedUp.chromEnd = vPos[v1];
+	bedDown.chromStart = vPos[v2];
+	bedDown.chromEnd = vPos[v2] + flankingSize;
+	}
+    else 
+	{
+	bedDown.chromStart = vPos[v1] - flankingSize;
+	bedDown.chromEnd = vPos[v1];
+	bedUp.chromStart = vPos[v2];
+	bedUp.chromEnd = vPos[v2] + flankingSize;
+	}
+    bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
+    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
+    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
     }
-else 
-    {
-    bedDown.chromStart = vPos[v1] - flankingSize;
-    bedDown.chromEnd = vPos[v1];
-    bedUp.chromStart = vPos[v2];
-    bedUp.chromEnd = vPos[v2] + flankingSize;
-    }
-bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
-bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
-bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
 }
 
 
@@ -1769,6 +1777,7 @@ minConfidence = optionInt("minConf", 0);
 altLogFileName = optionVal("altLogFile", NULL);
 flankingSize = optionInt("flankingSize", 100);
 bedViewOutFileName = optionVal("bedViewFile", NULL);
+minControlConf = optionInt("minControlConf", 0);
 warn("Flanking size is: %d", flankingSize);
 if(altLogFileName != NULL)
     altLogFile = mustOpen(altLogFileName, "w");
