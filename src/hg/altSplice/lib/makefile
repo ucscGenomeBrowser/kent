@@ -1,8 +1,14 @@
 OPT= -ggdb 
+#OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
+MYLIBDIR = ../../../lib/$(MACHTYPE)
+LIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ./$(MACHTYPE)/libSpliceGraph.a
 
 #Optimized for performance
 .c.o:
-	gcc -ggdb -O -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I../../../inc -I$(MYSQLINC) -c $*.c
+	gcc $(OPT) -Wformat -Wimplicit  -I../inc -I../../inc -I../../../inc -I$(MYSQLINC) -c $*.c
+
+%Test: %Test.c 
+	gcc -Wimplicit -ggdb  -I../inc -I../../inc -I../../../inc -I$(MYSQLINC)  -o $@ $(addsuffix .c,$@) $(LIBS) 
 
 #For debugging
 #.c.o:
@@ -12,7 +18,9 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = spliceGraph.o
+O = spliceGraph.o exonGraph.o heap.o 
+
+TESTS = heapTest
 
 ./$(MACHTYPE)/libSpliceGraph.a: $(O) 
 	@[ -d $(MACHTYPE) ] || mkdir -p $(MACHTYPE)	
@@ -21,6 +29,7 @@ O = spliceGraph.o
 
 clean:
 	rm -f $(O);
+	rm -r $(TESTS)
 	rm -f ./$(MACHTYPE)/jkhgap.a;
 
 ctags:
@@ -29,6 +38,5 @@ ctags:
 tags:
 	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
 
-tests: 	
-#	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_ggMrnaAli test_ggMrnaAli.c  $(MYLIBS) $L
-	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_geneGraph test_geneGraph.c  $(MYLIBS) $L
+tests: 	$(TESTS) $(O)
+
