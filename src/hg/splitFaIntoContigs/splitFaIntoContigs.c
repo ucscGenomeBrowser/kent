@@ -462,7 +462,7 @@ char command[DEFAULT_PATH_SIZE];
 printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bases\n", agpFile, faFile, splitSize);
 
 /* For each chromosome entry */
-while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
+while (faMixedSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     {
     printf("\nProcessing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
 
@@ -513,7 +513,8 @@ system(command);
 
 if (5 == argc) 
     {
-    /* TODO: ensure that this arg is a number/integer */
+    if (!isdigit(argv[4][0]))
+        usage();
     size = atoi(argv[4]);
     size *= 1000;
     }
