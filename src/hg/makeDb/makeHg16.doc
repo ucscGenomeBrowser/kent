@@ -3624,7 +3624,7 @@ o - # ssh hgwdev
     # hgLoadPsl hg16 affyU95.psl
     #	by the following:
     sed -e "s/U95Av2://" affyU95.psl | sed -e "s/;//" > affyU95shortQname.psl
-    hgLoadPsl hg16 -table=affyU95.psl affyU95shortQname.psl
+    hgLoadPsl hg16 -table=affyU95 affyU95shortQname.psl
     # Clean up
     rm -r psl tmp err affyRatio.bed affyRatio.exr bed.tab scores.tab *.debug batch.bak contig.psl raw.psl
 
