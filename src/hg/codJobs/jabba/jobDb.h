@@ -13,8 +13,9 @@ struct submission
     char *errFile;	/* Error file associated with submission */
     char *outFile;	/* Output file associated with submission */
     float cpuTime;	/* CPU time in seconds */
-    int startTime;	/* Start time of job */
-    int endTime;	/* End time of job */
+    char *submitTime;	/* Time submitted */
+    char *startTime;	/* Start time of job */
+    char *endTime;	/* End time of job */
     int retVal;	/* Return value of job */
     unsigned char gotRetVal;	/* True if got return value */
     unsigned char submitError;	/* An error occurred submitting it */

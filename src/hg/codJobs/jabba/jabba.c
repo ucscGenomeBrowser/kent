@@ -13,6 +13,8 @@ void usage()
 {
 errAbort(
   "jabba - A program to launch,  monitor, and restart jobs via Codine\n"
+  "Normal usage is to do a 'jabba make' followed by 'jabba push' until\n"
+  "job is done.  Use 'jabba check' to check status\n"
   "usage:\n"
   "   jabba command batch.hut [command-specific arguments]\n"
   "The commands are:\n"
@@ -21,6 +23,14 @@ errAbort(
   "   command line for each job on a separate line\n"
   "jabba check batch.hut\n"
   "   This checks on the progress of the jobs.\n"
+  "jabba stop batch.hut\n"
+  "   This stops all the jobs in the batch\n"
+  "jabba hung batch.hut\n"
+  "   List hung jobs in the batch\n"
+  "jabba crashed batch.hut\n"
+  "   List jobs that crashed or failed output checks\n"
+  "jabba failed batch.hut\n"
+  "   List jobs that crashed or hung\n"
   "jabba push batch.hut\n"
   "   This pushes forward the batch of jobs by submitting jobs to codine\n"
   "   It will try and keep the codine queue a size that is efficient for\n"
@@ -32,8 +42,8 @@ errAbort(
   "      -maxPush=N  Maximum numer of jobs to queue - default 10000\n"
   "      -warnTime=N Number of minutes job can run before hang warning - default 4320 (3 days)\n"
   "      -killTime=N Number of minutes job can run before push kills it - default 20160 (2 weeks)\n"
-  "jabba stop batch.hut\n"
-  "   This stops all the jobs in the batch\n"
+  "jabba try batch.hut\n"
+  "      This is like jabba push, but only submits up to 10 jobs\n"
   );
 }
 
@@ -50,6 +60,7 @@ int killTime = 14*24*60;
 char *tempName = "jabba.tmp";	/* Name for temp files. */
 char *submitCommand = "/cluster/gridware/bin/glinux/qsub -cwd -o out -e err";
 char *statusCommand = "/cluster/gridware/bin/glinux/qstat";
+char *killCommand = "/cluster/gridware/bin/glinux/qdel";
 char *runJobCommand = "/cluster/bin/scripts/runJob";
 
 /* Places that can be checked. */
@@ -57,6 +68,25 @@ char *checkWhens[] = {"in", "out"};
 
 /* Types of checks. */
 char *checkTypes[] = {"exists", "exists+", "line", "line+"};
+
+char *nowAsString()
+/* Return current time and date in more or less above format. */
+{
+time_t timer;
+char *s;
+time(&timer);
+s = ctime(&timer);
+return trimSpaces(s);
+}
+
+char *replaceNullString(char *s)
+/* Return s if non-NULL.  If s is NULL, return clone of "". */
+{
+if (s == NULL)
+   return cloneString("");
+else
+    return s;
+}
 
 struct job *jobFromLine(struct lineFile *lf, char *line)
 /* Parse out the beginnings of a job from input line. 
@@ -339,7 +369,9 @@ err = system(cmd->string);
 AllocVar(sub);
 slAddHead(&job->submissionList, sub);
 job->submissionCount += 1;
-
+sub->submitTime = cloneString(nowAsString());
+sub->startTime = cloneString("");
+sub->endTime = cloneString("");
 if (err != 0)
     {
     sub->submitError = TRUE;
@@ -490,12 +522,10 @@ return result;
 long nowInSeconds()
 /* Return current date in above format. */
 {
-time_t timer;
-timer = time(NULL);
-return dateToSeconds(ctime(&timer));
+return dateToSeconds(nowAsString());
 }
 
-void parseRunJobOutput(char *fileName, int *retStartTime, int *retEndTime, float *retCpuTime,
+void parseRunJobOutput(char *fileName, char **retStartTime, char **retEndTime, float *retCpuTime,
 	int *retRet, boolean *gotRet, boolean *retTrackingError)
 /* Parse a run job output file.  Might have trouble if the program output
  * is horribly complex. */
@@ -510,7 +540,8 @@ boolean gotStart = FALSE, gotEnd = FALSE;
 boolean gotCpu = FALSE, gotReturn = FALSE;
 
 /* Set up default return values. */
-*retCpuTime = *retStartTime = *retEndTime = *retRet = *gotRet = *retTrackingError = 0;
+*retCpuTime = *retRet = *gotRet = *retTrackingError = 0;
+*retStartTime = *retEndTime = NULL;
 
 lf = lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
@@ -523,13 +554,13 @@ while (lineFileNext(lf, &line, NULL))
     if (startsWith(startPattern, line))
         {
 	line += strlen(startPattern);
-	*retStartTime = dateToSeconds(line);
+	*retStartTime = cloneString(trimSpaces(line));
 	gotStart = TRUE;
 	}
     else if (startsWith(endPattern, line))
 	{
 	line += strlen(endPattern);
-	*retEndTime = dateToSeconds(line);
+	*retEndTime = cloneString(trimSpaces(line));
 	gotEnd = TRUE;
 	break;
 	}
@@ -564,6 +595,19 @@ if (gotEnd)
 lineFileClose(&lf);
 }
 
+void killSubmission(struct submission *sub)
+/* Kill a submission. */
+{
+struct dyString *cmd = newDyString(256);
+int err;
+dyStringPrintf(cmd, "%s %s", killCommand, sub->id);
+err = system(cmd->string);
+uglyf("%s\n", cmd->string);
+if (err != 0)
+   warn("Couldn't kill job id %s", sub->id);
+freeDyString(&cmd);
+}
+
 void markRunJobStatus(struct jobDb *db)
 /* Mark jobs based on runJob output file. */
 {
@@ -585,27 +629,40 @@ for (job=db->jobList; job != NULL; job = job->next)
 	 * possibly finished. */
 	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->ranOk)
 	    {
-	    parseRunJobOutput(sub->outFile, &sub->startTime, &sub->endTime, 
+	    char *startTime, *endTime;
+	    parseRunJobOutput(sub->outFile, &startTime, &endTime, 
 	        &sub->cpuTime, &sub->retVal, &gotRet, &trackingError);
-	    sub->gotRetVal = gotRet;
-	    sub->trackingError = trackingError;
-	    if (gotRet)
+	    if (trackingError)
 	        {
-		if (sub->retVal == 0 && checkOne(job, "out", checkHash) == 0)
-		    sub->ranOk = TRUE;
-		else
-		    sub->crashed = TRUE;
+		long subTime, curTime;
+		subTime = dateToSeconds(sub->submitTime);
+		curTime = nowInSeconds();
+		duration = curTime - subTime;
+		if (duration > 60*10)	/* Give it up to 10 minutes to show up. */
+		    sub->trackingError = TRUE;
 		}
 	    else
 	        {
-		if (!sub->trackingError)
+		sub->startTime = replaceNullString(startTime);
+		sub->endTime = replaceNullString(endTime);
+		sub->gotRetVal = gotRet;
+		if (gotRet)
 		    {
-		    duration = nowInSeconds() - sub->startTime;
-		    uglyf("now %ld, start %d, diff %ld\n", nowInSeconds(), sub->startTime, duration);
+		    if (sub->retVal == 0 && checkOne(job, "out", checkHash) == 0)
+			sub->ranOk = TRUE;
+		    else
+			sub->crashed = TRUE;
+		    }
+		else
+		    {
+		    duration = nowInSeconds() - dateToSeconds(sub->startTime);
 		    if (duration >= killSeconds)
-		        sub->hung = TRUE;
+			{
+			sub->hung = TRUE;
+			killSubmission(sub);
+			}
 		    else if (duration >= warnSeconds)
-		        sub->slow = TRUE;
+			sub->slow = TRUE;
 		    }
 		}
 	    }
@@ -620,6 +677,56 @@ boolean needsRerun(struct submission *sub)
 if (sub == NULL)
     return TRUE;
 return sub->submitError || sub->queueError || sub->crashed || sub->trackingError;
+}
+
+void jabbaPush(char *batch)
+/* Push a batch of jobs forward - submit jobs. */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+int queueSize;
+int pushCount = 0, retryCount = 0;
+int tryCount;
+boolean finished = FALSE;
+
+makeDir("err");
+makeDir("out");
+queueSize = markQueuedJobs(db);
+printf("jobs already in Codine queue: %d\n", queueSize);
+markRunJobStatus(db);
+
+for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
+    {
+    for (job = db->jobList; job != NULL; job = job->next)
+        {
+	if (job->submissionCount < tryCount && 
+	   (job->submissionList == NULL || needsRerun(job->submissionList)))
+	    {
+	    submitJob(job);    
+	    printf(".");
+	    fflush(stdout);
+	    ++pushCount;
+	    if (tryCount > 1)
+	        ++retryCount;
+	    if (pushCount >= maxPush)
+	        {
+		finished = TRUE;
+		break;
+		}
+	    if (pushCount + queueSize >= maxQueue && pushCount >= minPush)
+	        {
+		finished = TRUE;
+		break;
+		}
+	    }
+	}
+    }
+writeBatch(db, batch);
+if (pushCount > 0)
+   printf("\n");
+printf("Pushed Jobs: %d\n", pushCount);
+if (retryCount > 0)
+    printf("Retried jobs: %d\n", retryCount);
 }
 
 void reportOnJobs(struct jobDb *db)
@@ -659,7 +766,7 @@ if (queueError > 0)
 if (trackingError > 0)
    printf("tracking errors: %d\n", trackingError);
 if (inQueue > 0)
-   printf("in queue: %d\n", inQueue);
+   printf("jobs (from this batch) in queue: %d\n", inQueue);
 if (crashed > 0)
    printf("crashed: %d\n", crashed);
 if (slow > 0)
@@ -671,54 +778,8 @@ if (running > 0)
 if (ranOk > 0)
    printf("ranOk: %d\n", ranOk);
 if (failed > 0)
-   printf("failed: %d\n", failed);
+   printf("failed %d times: %d\n", retries, failed);
 printf("total jobs in batch: %d\n", total);
-}
-
-void jabbaPush(char *batch)
-/* Push a batch of jobs forward - submit jobs. */
-{
-struct jobDb *db = readBatch(batch);
-struct job *job;
-int queueSize;
-int pushCount = 0, retryCount = 0;
-int tryCount;
-boolean finished = FALSE;
-
-makeDir("err");
-makeDir("out");
-queueSize = markQueuedJobs(db);
-printf("jobs already in Codine queue: %d\n", queueSize);
-markRunJobStatus(db);
-
-for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
-    {
-    for (job = db->jobList; job != NULL; job = job->next)
-        {
-	if (job->submissionCount < tryCount && 
-	   (job->submissionList == NULL || needsRerun(job->submissionList)))
-	    {
-	    submitJob(job);    
-	    ++pushCount;
-	    if (tryCount > 1)
-	        ++retryCount;
-	    if (pushCount >= maxPush)
-	        {
-		finished = TRUE;
-		break;
-		}
-	    if (pushCount + queueSize >= maxQueue && pushCount >= maxPush)
-	        {
-		finished = TRUE;
-		break;
-		}
-	    }
-	}
-    }
-writeBatch(db, batch);
-printf("Pushed Jobs: %d\n", pushCount);
-if (retryCount > 0)
-    printf("Retried jobs: %d\n", retryCount);
 }
 
 void jabbaCheck(char *batch)
@@ -735,10 +796,48 @@ reportOnJobs(db);
 writeBatch(db, batch);
 }
 
+void jabbaListFailed(char *batch, boolean showHung, boolean showCrashed)
+/* List all jobs that failed. */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+struct submission *sub;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    sub = job->submissionList;
+    if (sub != NULL)
+        {
+	if (showHung && sub->hung)
+	    printf("%s\n", job->spec);
+	else if (showCrashed && job->submissionCount >= retries && needsRerun(sub))
+	    printf("%s\n", job->spec);
+	}
+    }
+}
+
 void jabbaStop(char *batch)
 /* Stop batch of jobs. */
 {
+struct jobDb *db = readBatch(batch);
+struct job *job;
+struct submission *sub;
+markQueuedJobs(db);
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    sub = job->submissionList;
+    if (sub != NULL)
+        {
+	if (sub->inQueue || sub->running)
+	   killSubmission(sub);
+	sub->crashed = TRUE;
+	}
+    }
+writeBatch(db, batch);
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -771,9 +870,26 @@ else if (sameString(command, "push"))
     {
     jabbaPush(batch);
     }
+else if (sameString(command, "try"))
+    {
+    maxPush = 10;
+    jabbaPush(batch);
+    }
 else if (sameString(command, "stop"))
     {
     jabbaStop(batch);
+    }
+else if (sameString(command, "hung"))
+    {
+    jabbaListFailed(batch, TRUE, FALSE);
+    }
+else if (sameString(command, "crashed"))
+    {
+    jabbaListFailed(batch, FALSE, TRUE);
+    }
+else if (sameString(command, "failed"))
+    {
+    jabbaListFailed(batch, TRUE, TRUE);
     }
 else
     {
