@@ -1588,6 +1588,7 @@ aa = cartUsualString(cart, o2, "on");
 antiAlias = sameString(aa, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
 
+
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
 //display range.
 minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, tg->minRange );
@@ -1666,26 +1667,27 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    x2 = round((double)(prevX-winStart)*scale) + xOff;
 
 	    /*connect samples*/
-            if( lineGapSize < 0 || prevX - sampleX <= lineGapSize )
-                /*don't interpolate over large gaps*/
-                {
-                if (fill)
-                    vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
-                else
-                    vgLine(vg, x1,y1, x2,y2, color);
-                }
+	    if( wiggleType == wiggleLinearInterpolation )
+	    	{
+            	if( lineGapSize < 0 || prevX - sampleX <= lineGapSize )
+                    /*don't interpolate over large gaps*/
+                    {
+                    if (fill)
+                        vgFillUnder(vg, x1,y1, x2,y2, ybase, bColor);
+                    else
+                        vgLine(vg, x1,y1, x2,y2, color);
+                    }
             
-	    }
+	        }
+           }
         
 	/* Draw the points themselves*/
-	if (wiggleType != wiggleLinearInterpolation)
-	    {
-	    drawScaledBox(vg, sampleX, sampleX+1, scale, 
-	    	xOff, (int)y1-1, 3, color);
-	    if( fill )
-		drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
-		    ybase-y1-2, bColor);
-	    }
+	drawScaledBox(vg, sampleX, sampleX+1, scale, 
+	    xOff, (int)y1-1, 3, color);
+	if( fill )
+	    drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
+	        ybase-y1-2, bColor);
+
 	prevX = gapPrevX = sampleX;
 	prevY = y1;
 	}
