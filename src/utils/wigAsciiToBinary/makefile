@@ -2,14 +2,15 @@ include ../../inc/common.mk
 
 L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
 
+XINC=-I../../hg/inc
 
 O = wigAsciiToBinary.o
 
 A = wigAsciiToBinary
 
-all::	${A} wigZoom
+all::	${A} wigZoom wigBedToBinary
 
 $A: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
@@ -19,12 +20,16 @@ wigZoom: wigZoom.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigZoom wigZoom.o ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/wigZoom${EXE}
 
+wigBedToBinary: wigBedToBinary.o ${MYLIBS}
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigBedToBinary wigBedToBinary.o ${MYLIBS} $L
+
 test:
 	cd test_data && ./runtest
 
 clean:
 	rm -f ${HOME}/bin/${MACHTYPE}/${A} $O \
 	${HOME}/bin/${MACHTYPE}/wigZoom wigZoom.o \
+	${HOME}/bin/${MACHTYPE}/wigBedToBinary wigBedToBinary.o \
 	test_data/chrM.ascii test_data/chr0.wib test_data/chr0.wig \
 	test_data/chrM_256.ascii test_data/chrS.wib test_data/chrS.wig \
 	test_data/chrM_256.wib test_data/chrM_256.wig \
