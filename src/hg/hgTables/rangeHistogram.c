@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: rangeHistogram.c,v 1.1 2004/07/19 20:18:55 kent Exp $";
+static char const rcsid[] = "$Id: rangeHistogram.c,v 1.2 2004/08/28 23:42:15 kent Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */
@@ -58,7 +58,7 @@ void doValueHistogram(char *field)
 /* Put up value histogram. */
 {
 char *db = cartString(cart, hgtaDatabase);
-char *table = cartString(cart, hgtaTable);
+char *table = cartString(cart, hgtaHistoTable);
 htmlOpen("Value histogram for %s.%s.%s", db, table, field);
 printValueHistogram(db, table, field);
 htmlClose();
@@ -91,7 +91,7 @@ void doValueRange(char *field)
 /* Put up value histogram. */
 {
 char *db = cartString(cart, hgtaDatabase);
-char *table = cartString(cart, hgtaTable);
+char *table = cartString(cart, hgtaHistoTable);
 htmlOpen("Value range for %s.%s.%s", db, table, field);
 printValueRange(db, table, field);
 htmlClose();

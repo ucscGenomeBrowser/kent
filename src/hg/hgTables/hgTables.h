@@ -175,7 +175,7 @@ struct asObject *asForTable(struct sqlConnection *conn, char *table);
 struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 /* Return named column. */
 
-char *connectingTableForTrack(struct trackDb *track);
+char *connectingTableForTrack(char *rawTable);
 /* Return table name to use with all.joiner for track. 
  * You can freeMem this when done. */
 
@@ -338,6 +338,7 @@ boolean anyIntersection();
 #define hgtaOutputType "hgta_outputType"
 #define hgtaDatabase "hgta_database"  /* In most cases use "db" */
 #define hgtaTable "hgta_table"
+#define hgtaHistoTable "hgta_histoTable"
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
 #define hgtaFilterOn "hgta_filterOn"
@@ -502,22 +503,22 @@ void doClearAllField(char *dbTable);
 void doSetAllField(char *dbTable);
 /* Set all checks by fields in db.table. */
 
-void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
+void doOutSelectedFields(char *table, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */
 
-void doOutSequence(struct trackDb *track, struct sqlConnection *conn);
+void doOutSequence(struct sqlConnection *conn);
 /* Output sequence page. */
 
-void doOutBed(struct trackDb *track, struct sqlConnection *conn);
+void doOutBed(char *table, struct sqlConnection *conn);
 /* Put up form to select BED output format. */
 
-void doOutHyperlinks(struct trackDb *track, struct sqlConnection *conn);
+void doOutHyperlinks(char *table, struct sqlConnection *conn);
 /* Output as genome browser hyperlinks. */
 
-void doOutGff(struct trackDb *track, struct sqlConnection *conn);
+void doOutGff(char *table, struct sqlConnection *conn);
 /* Save as GFF. */
 
-void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn);
+void doOutCustomTrack(char *table, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
 
 void doSummaryStats(struct sqlConnection *conn);

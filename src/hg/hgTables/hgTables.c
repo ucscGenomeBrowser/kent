@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.56 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.57 2004/08/28 23:42:15 kent Exp $";
 
 
 void usage()
@@ -311,29 +311,29 @@ else
 return sr;
 }
 
-char *trackTable(struct trackDb *track)
+char *trackTable(char *rawTable)
 /* Return table name for track, substituting all_mrna
  * for mRNA if need be. */
 {
-char *table = track->tableName;
+char *table = rawTable;
 if (sameString(table, "mrna"))
     return "all_mrna";
 else
     return table;
 }
 
-char *connectingTableForTrack(struct trackDb *track)
+char *connectingTableForTrack(char *rawTable)
 /* Return table name to use with all.joiner for track. 
  * You can freeMem this when done. */
 {
-if (sameString(track->tableName, "mrna"))
+if (sameString(rawTable, "mrna"))
     return cloneString("all_mrna");
-else if (sameString(track->tableName, "intronEst"))
+else if (sameString(rawTable, "intronEst"))
     return cloneString("all_est");
-else if (sameString(track->tableName, "est"))
+else if (sameString(rawTable, "est"))
     return cloneString("all_est");
 else 
-    return cloneString(track->tableName);
+    return cloneString(rawTable);
 }
 
 char *chromTable(struct sqlConnection *conn, char *table)
@@ -694,18 +694,17 @@ else
     }
 }
 
-void doOutPrimaryTable(struct trackDb *track, 
+void doOutPrimaryTable(char *table, 
 	struct sqlConnection *conn)
 /* Dump out primary table. */
 {
 textOpen();
-doTabOutTable(database, trackTable(track), conn, NULL);
+doTabOutTable(database, trackTable(table), conn, NULL);
 }
 
-void doOutHyperlinks(struct trackDb *track, struct sqlConnection *conn)
+void doOutHyperlinks(char *table, struct sqlConnection *conn)
 /* Output as genome browser hyperlinks. */
 {
-char *table = track->tableName;
 char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
 struct region *region, *regionList = getRegions();
 char posBuf[64];
@@ -716,7 +715,7 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bedList, *bed;
-    bedList = cookedBedList(conn, track->tableName, region, lm);
+    bedList = cookedBedList(conn, table, region, lm);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	char *name;
@@ -753,21 +752,22 @@ void doTopSubmit(struct sqlConnection *conn)
 {
 char *output = cartString(cart, hgtaOutputType);
 char *trackName = cartString(cart, hgtaTrack);
+char *table = cartString(cart, hgtaTable);
 struct trackDb *track = mustFindTrack(trackName, fullTrackList);
 if (sameString(output, outPrimaryTable))
-    doOutPrimaryTable(track, conn);
+    doOutPrimaryTable(table, conn);
 else if (sameString(output, outSelectedFields))
-    doOutSelectedFields(track, conn);
+    doOutSelectedFields(table, conn);
 else if (sameString(output, outSequence))
-    doOutSequence(track, conn);
+    doOutSequence(conn);
 else if (sameString(output, outBed))
-    doOutBed(track, conn);
+    doOutBed(table, conn);
 else if (sameString(output, outCustomTrack))
-    doOutCustomTrack(track, conn);
+    doOutCustomTrack(table, conn);
 else if (sameString(output, outGff))
-    doOutGff(track, conn);
+    doOutGff(table, conn);
 else if (sameString(output, outHyperlinks))
-    doOutHyperlinks(track, conn);
+    doOutHyperlinks(table, conn);
 else if (sameString(output, outWigData))
     doOutWigData(track, conn);
 else

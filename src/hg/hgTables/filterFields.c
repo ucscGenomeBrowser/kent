@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.5 2004/08/28 20:07:38 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.6 2004/08/28 23:42:14 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -372,10 +372,10 @@ char *table = cartString(cart, hgtaTable);
 doBigSelectPage(db, table);
 }
 
-void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn)
+void doOutSelectedFields(char *table, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
-char *table = connectingTableForTrack(track);
+table = connectingTableForTrack(table);
 cartRemovePrefix(cart, hgtaFieldSelectPrefix);
 doBigSelectPage(database, table);
 }
@@ -729,9 +729,7 @@ doBigFilterPage(conn, db, table);
 void doFilterPage(struct sqlConnection *conn)
 /* Respond to filter create/edit button */
 {
-char *trackName = cartString(cart, hgtaTrack);
-struct trackDb *track = mustFindTrack(trackName, fullTrackList);
-char *table = connectingTableForTrack(track);
+char *table = connectingTableForTrack(curTable);
 doBigFilterPage(conn, database, table);
 }
 

@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.21 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.22 2004/08/28 23:42:15 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -116,7 +116,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    hPrintf("<A HREF=\"../cgi-bin/hgTables");
 	    hPrintf("?%s", cartSidUrlString(cart));
 	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaTable, table);
+	    hPrintf("&%s=%s", hgtaHistoTable, table);
 	    hPrintf("&%s=%s", hgtaDoValueHistogram, row[0]);
 	    hPrintf("\">");
 	    hPrintf("values");
@@ -127,7 +127,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    hPrintf("<A HREF=\"../cgi-bin/hgTables");
 	    hPrintf("?%s", cartSidUrlString(cart));
 	    hPrintf("&%s=%s", hgtaDatabase, db);
-	    hPrintf("&%s=%s", hgtaTable, table);
+	    hPrintf("&%s=%s", hgtaHistoTable, table);
 	    hPrintf("&%s=%s", hgtaDoValueRange, row[0]);
 	    hPrintf("\">");
 	    hPrintf("range");
@@ -329,7 +329,7 @@ void doSchema(struct sqlConnection *conn)
 if (sameString(curTrack->tableName, curTable))
     {
     struct trackDb *track = curTrack;
-    char *table = connectingTableForTrack(track);
+    char *table = connectingTableForTrack(curTable);
     htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
     showSchema(database, table);
     htmlClose();

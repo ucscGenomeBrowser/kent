@@ -17,7 +17,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.11 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.12 2004/08/28 23:42:14 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -313,17 +313,16 @@ char *ctVisMenu[] =
 };
 int ctVisMenuSize = 5;
 
-void doBedOrCtOptions(struct trackDb *track, struct sqlConnection *conn, 
+void doBedOrCtOptions(char *table, struct sqlConnection *conn, 
 	boolean doCt)
 /* Put up form to get options on BED or custom track output. */
 /* (Taken from hgText.c/doBedCtOptions) */
 {
-char *table = track->tableName;
 char *table2 = NULL;	/* For now... */
 struct hTableInfo *hti = getHti(database, table);
 char buf[256];
 char *setting;
-htmlOpen("Output %s as %s", (doCt ? "Custom Track" : "BED"), track->shortLabel);
+htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 hPrintf("%s\n", "<A HREF=\"/goldenPath/help/hgTextHelp.html#BEDOptions\">"
      "<B>Help</B></A><P>");
@@ -379,16 +378,16 @@ hPrintf("</FORM>\n");
 htmlClose();
 }
 
-void doOutBed(struct trackDb *track, struct sqlConnection *conn)
+void doOutBed(char *table, struct sqlConnection *conn)
 /* Put up form to select BED output format. */
 {
-doBedOrCtOptions(track, conn, FALSE);
+doBedOrCtOptions(table, conn, FALSE);
 }
 
-void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn)
+void doOutCustomTrack(char *table, struct sqlConnection *conn)
 /* Put up form to select Custom Track output format. */
 {
-doBedOrCtOptions(track, conn, TRUE);
+doBedOrCtOptions(table, conn, TRUE);
 }
 
 static void removeNamedCustom(struct customTrack **pList, char *name)

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.8 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.9 2004/08/28 23:42:15 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -233,8 +233,8 @@ for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
     struct bed *bed, *bedList = cookedBedList(conn, curTable, region, lm);
-    for (bed = bedList; bed != NULL; bed = bed->next)
-	hgSeqBed(hti, bed);
+    int uglyCount = 0;
+    hgSeqBed(hti, bedList);
     lmCleanup(&lm);
     }
 }
@@ -257,15 +257,12 @@ else
     genomicFormatPage(conn);
 }
 
-void doOutSequence(struct trackDb *track, struct sqlConnection *conn)
+void doOutSequence(struct sqlConnection *conn)
 /* Output sequence page. */
 {
-char *table = track->tableName;
-char *type = track->type;
-if (startsWith("genePred", type))
-    genePredOptions(track, type, conn);
+if (sameString(curTrack->tableName, curTable) 
+	&& startsWith("genePred", curTrack->type))
+    genePredOptions(curTrack, curTrack->type, conn);
 else
-    {
     genomicFormatPage(conn);
-    }
 }

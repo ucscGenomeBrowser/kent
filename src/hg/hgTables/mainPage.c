@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.27 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.28 2004/08/28 23:42:15 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -395,6 +395,12 @@ hPrintf("<TABLE BORDER=0>\n");
     makeRegionButton("range", regionType);
     hPrintf(" range ");
     cgiMakeTextVar(hgtaRange, range, 29);
+#ifdef JAVASCRIPT_EXPERIMENT_THAT_DOESNT_WORK
+    hPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=30 VALUE=\"%s\"",
+    	hgtaRange, range);
+    hPrintf(" onChange=\"document.mainForm.%s.value='range';document.mainForm.%s.checked=TRUE;\">",
+    	hgtaRegionType);
+#endif /* OLD */
     hPrintf("</TD></TR>\n");
     }
 
