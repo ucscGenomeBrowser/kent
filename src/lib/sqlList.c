@@ -285,6 +285,25 @@ if (size > 0)
 }
 
 /*-------------------------*/
+int sqlDoubleArray(char *s, double *array, int maxArraySize)
+/* Convert comma separated list of floating point numbers to an array.  
+ * Pass in array and max size of array. */
+{
+unsigned count = 0;
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0 || count == maxArraySize)
+	break;
+    e = strchr(s, ',');
+    if (e != NULL)
+	*e++ = 0;
+    array[count++] = atof(s);
+    s = e;
+    }
+return count;
+}
+
 
 int sqlFloatArray(char *s, float *array, int maxArraySize)
 /* Convert comma separated list of floating point numbers to an array.  
@@ -305,11 +324,11 @@ for (;;)
 return count;
 }
 
-void sqlFloatStaticArray(char *s, float **retArray, int *retSize)
+void sqlDoubleStaticArray(char *s, double **retArray, int *retSize)
 /* Convert comma separated list of numbers to an array which will be
  * overwritten next call to this function, but need not be freed. */
 {
-static float *array = NULL;
+static double *array = NULL;
 static unsigned alloc = 0;
 unsigned count = 0;
 
@@ -334,6 +353,54 @@ for (;;)
     }
 *retSize = count;
 *retArray = array;
+}
+
+void sqlFloatStaticArray(char *s, float **retArray, int *retSize)
+/* Convert comma separated list of numbers to an array which will be
+ * overwritten next call to this function, but need not be freed. */
+{
+static float *array = NULL;
+static unsigned alloc = 0;
+unsigned count = 0;
+
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0)
+	break;
+    e = strchr(s, ',');
+    if (e != NULL)
+	*e++ = 0;
+    if (count >= alloc)
+	{
+	if (alloc == 0)
+	    alloc = 128;
+	else
+	    alloc <<= 1;
+	ExpandArray(array, count, alloc);
+	}
+    array[count++] = atof(s);
+    s = e;
+    }
+*retSize = count;
+*retArray = array;
+}
+
+void sqlDoubleDynamicArray(char *s, double **retArray, int *retSize)
+/* Convert comma separated list of numbers to an dynamically allocated
+ * array, which should be freeMem()'d when done. */
+{
+double *sArray, *dArray = NULL;
+int size;
+
+sqlDoubleStaticArray(s, &sArray, &size);
+if (size > 0)
+    {
+    AllocArray(dArray,size);
+    CopyArray(sArray, dArray, size);
+    }
+*retArray = dArray;
+*retSize = size;
 }
 
 void sqlFloatDynamicArray(char *s, float **retArray, int *retSize)
@@ -567,6 +634,20 @@ if (size > 0)
     }
 *retArray = dArray;
 *retSize = size;
+}
+
+char *sqlDoubleArrayToString( double *array, int arraySize)
+{
+int i;
+struct dyString *string = newDyString(256);
+char *toRet = NULL;
+for( i = 0 ; i < arraySize; i++ )
+    {
+    dyStringPrintf(string, "%f,", array[i]);
+    }
+toRet = cloneString(string->string);
+dyStringFree(&string);
+return toRet;
 }
 
 char *sqlFloatArrayToString( float *array, int arraySize)
