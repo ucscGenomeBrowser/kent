@@ -7,9 +7,10 @@
 #include "xAli.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.16 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.17 2003/12/17 22:23:51 baertsch Exp $";
 
 unsigned pslCreateOpts = 0;
+unsigned pslLoadOpts = 0;
 boolean append = FALSE;
 boolean exportOutput = FALSE;
 char *clTableName = NULL;
@@ -25,9 +26,12 @@ errAbort(
   "It will create a table for each psl file.\n"
   "options:\n"
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
-  "   -tNameIx  add target name index\n"
-  "   -xa    Include sequence info\n"
-  "   -export - create output in a manner similar to mysqlexport -T.\n"
+  "   -tNameIx    add target name index\n"
+  "   -xa         Include sequence info\n"
+  "   -concurrent Browser will not lock up if someone opens this table during loading\n"
+  "   -onServer   This will speed things up if you're running in a directory that\n"
+  "               the mysql server can access.\n"
+  "   -export     create output in a manner similar to mysqlexport -T.\n"
   "      This create a sql script $table.sql and tab seperate file $table.txt\n"
   "      Useful when a psl is to be loaded in multiple databases or to avoid\n"
   "      writing an intermediate PSL file when used in a pipeline. The database is\n"
@@ -60,7 +64,7 @@ int i;
 char table[128];
 char *pslName;
 struct sqlConnection *conn = NULL;
-struct dyString *ds = newDyString(2048);
+
 if (!exportOutput)
     conn = sqlConnect(database);
 
@@ -116,10 +120,7 @@ for (i = 0; i<pslCount; ++i)
         createTable(conn, table);
     if (!exportOutput)
         {
-        dyStringClear(ds);
-        dyStringPrintf(ds, 
-           "LOAD data local infile '%s' into table %s", tabFile, table);
-        sqlUpdate(conn, ds->string);
+        sqlLoadTabFile(conn, tabFile, table, pslLoadOpts);
         }
     }
 if (conn != NULL)
@@ -136,6 +137,10 @@ if (!optionExists("nobin"))
     pslCreateOpts |= PSL_WITH_BIN;
 if (optionExists("xa"))
     pslCreateOpts |= PSL_XA_FORMAT;
+if (optionExists("concurrent"))
+    pslLoadOpts |= SQL_TAB_FILE_CONCURRENT;
+if (optionExists("onServer"))
+    pslLoadOpts |= SQL_TAB_FILE_ON_SERVER;
 clTableName = optionVal("table", NULL);
 append = optionExists("append");
 exportOutput = optionExists("export");
