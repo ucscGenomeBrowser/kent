@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.16 2003/11/05 21:22:17 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.17 2003/11/15 18:07:17 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1458,6 +1458,8 @@ for(sr = ss->rowList; sr != NULL; sr = sr->next)
     }
 }
 
+
+
 static int findBestMidPoint(int s, int e, struct spaceSaver *ss, struct spliceEdge *eg, double scale)
 /* Try to find a good place to put the splice eg midpoint. */
 {
@@ -1535,8 +1537,6 @@ for(eg = egList; eg != NULL; eg = egNext)
 	eg->rowEnds = CloneArray(sjEnds, ss->rowCount);
     eg->rowCount = ss->rowCount;
     eg->mid = findBestMidPoint(x1, x2, ss, eg, scale) - (scale*offSet);
-    x1++;
-    x1--;
     }
 freeHashAndVals(&spliceHash);
 }
@@ -1571,10 +1571,16 @@ for(eg = egList; eg != NULL; eg = egNext)
 	else 
 	    {
 	    slAddHead(&egNext, eg);
-	    if(!vSeen[eg->v2])
-		slAddHead(&egNext, createFakeExon(eg->v2, eg->end, eg->conf));
-	    if(!vSeen[eg->v1])
-		slAddHead(&egNext, createFakeExon(eg->v1, eg->start-1, eg->conf));
+	    if(!vSeen[eg->v2]) 
+		{
+		struct spliceEdge *tmp = createFakeExon(eg->v2, eg->end, eg->conf);
+		slAddHead(&egNext, tmp);
+		}
+	    if(!vSeen[eg->v1]) 
+		{
+		struct spliceEdge *tmp = createFakeExon(eg->v1, eg->start-1, eg->conf);
+		slAddHead(&egNext, tmp);
+		}
 	    }
 	continue;
 	}
