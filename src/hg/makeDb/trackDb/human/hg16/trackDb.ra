@@ -14,6 +14,15 @@ group map
 visibility hide
 altColor 180,180,180 
 
+track gcPercent
+shortLabel GC% 20K
+longLabel Percentage GC in 20,000 Base Windows
+group map
+priority 23
+visibility hide
+spectrum on
+type bed 4 +
+
 track vegaGene
 shortLabel Vega Genes
 longLabel Vega Annotations 
@@ -923,6 +932,14 @@ autoScaleDefault Off
 pairwise hmrg
 speciesOrder chimp mouse rat chicken
 
+track pHMM_5_WayTop5
+shortLabel Top 5% 5-Way
+longLabel Top 5 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
+priority 100.1
+group compGeno
+visibility hide
+type bed 4
+
 track leptin
 shortLabel Leptin TBA
 longLabel Leptin Region TBA alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
@@ -1204,8 +1221,8 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 track gc5Base
-shortLabel GC% 5 base
-longLabel GC Percent in 5 base windows
+shortLabel GC Percent
+longLabel Percentage GC in 5 base windows
 group map
 priority 23.5
 visibility hide
@@ -1214,8 +1231,8 @@ maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Mean
-color 0,128,255
-altColor 255,128,0
+color 0,0,0
+altColor 128,128,128
 defaultViewLimits 30:70
 type wig 0 100 
 
