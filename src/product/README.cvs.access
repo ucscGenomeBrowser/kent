@@ -11,8 +11,11 @@ where you want the source downloaded:
 
 cvs login		# this will ask for a password
 			# use the word: genome
-cvs co kent		# will create the source hierarchy
+cvs co -rbeta kent	# will create the source hierarchy
 			# in a directory called ./kent
+			# the -rbeta will obtain the most recent
+			# release of the source code
+			# (usually updated weekly)
 
 A fully built source tree hierarchy occupies approximately 60 Mb
 
