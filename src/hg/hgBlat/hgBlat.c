@@ -529,7 +529,7 @@ printf("Output type:<BR>");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
 puts("</TD>\n");
 
-puts("<TD><CENTER>&nbsp;<BR><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
+puts("<TD><CENTER>&nbsp;<BR><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\"> <INPUT TYPE=RESET NAME=Reset VALUE=Reset Align=\"bottom\">\n"
     "</TD>\n"
     "</TR>\n"
     "</TABLE>\n"
