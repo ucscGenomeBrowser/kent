@@ -218,6 +218,7 @@ struct linkedFeaturesSeries
 struct trackLayout
 /* This structure controls the basic dimensions of display. */
     {
+    char *textSize;		/* Symbolic name of text size. */
     MgFont *font;		/* What font to use. */
     int leftLabelWidth;		/* Width of left labels. */
     int trackWidth;		/* Width of tracks. */
@@ -225,6 +226,8 @@ struct trackLayout
     int mWidth;			/* Width of 'M' in font. */
     int nWidth;			/* Width of 'N' in font. */
     int fontHeight;		/* Height of font. */
+    int barbHeight;		/* Height of arrows on introns. */
+    int barbSpacing;		/* Space between arrows on introns. */
     };
 
 extern struct trackLayout tl;
@@ -246,7 +249,11 @@ extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
 
+extern char *ctFileName;	/* Custom track file. */
+extern struct customTrack *ctList;  /* Custom tracks. */
+extern struct slName *browserLines; /* Custom track "browser" lines. */
 
+extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
 
@@ -276,6 +283,15 @@ void makeRedGreenShades(struct vGfx *vg);
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
 
+struct track *getTrackList();
+/* Return list of all tracks. */
+
+void groupTracks(struct track **pTrackList, struct group **pGroupList);
+/* Make up groups and assign tracks to groups. */
+
+void removeTrackFromGroup(struct track *track);
+/* Remove track from group it is part of. */
+
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
  * All cgi output should go through here, hPuts, hPutc
@@ -289,6 +305,18 @@ void hPutc(char c);
 
 void hWrites(char *string);
 /* Write string with no '\n' if not suppressed. */
+
+void hTextVar(char *varName, char *initialVal, int charSize);
+/* Write out text entry field if not suppressed. */
+
+void hIntVar(char *varName, int initialVal, int maxDigits);
+/* Write out numerical entry field if not supressed. */
+
+void hCheckBox(char *varName, boolean checked);
+/* Make check box if not suppressed. */
+
+void hDropList(char *name, char *menu[], int menuSize, char *checked);
+/* Make a drop-down list with names if not suppressed. */
 
 void printHtmlComment(char *format, ...);
 /* Function to print output as a comment so it is not seen in the HTML
@@ -688,11 +716,14 @@ void drawScaledBoxSample(struct vGfx *vg,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
 
+boolean genePredClassFilter(struct track *tg, void *item);
+/* Returns true if an item should be added to the filter. */
+
 Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color to draw a genePred based on looking up the gene class */
-/* in an itemClass table */
+/* in an itemClass table. */
         
-struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks);
+struct track *trackFromTrackDb(struct trackDb *tdb);
 
 int leftLabelX;			/* Start of area to draw left labels on. */
 int leftLabelWidth;		/* Width of area to draw left labels on. */
@@ -720,6 +751,28 @@ char *dnaInWindow();
 
 Color lighterColor(struct vGfx *vg, Color color);
 /* Get lighter shade of a color */ 
+
+struct track *chromIdeoTrack(struct track *trackList);
+/* Find chromosome ideogram track */
+
+void setRulerMode();
+/* Set the rulerMode variable from cart. */
+
+
+#define configHideAll "hgt_doConfigHideAll"
+#define configShowAll "hgt_doConfigShowAll"
+#define configDefaultAll "hgt_doDefaultShowAll"
+#define configGroupTarget "hgt_configGroupTarget"
+
+void configPage();
+/* Put up configuration page. */
+
+void configPageSetTrackVis(int vis);
+/* Do config page after setting track visibility. If vis is -2, then visibility 
+ * is unchanged.  If -1 then set visibility to default, otherwise it should 
+ * be tvHide, tvDense, etc. */
+
+#define textSizeVar "textSize"	/* Variable name used for text size. */
 
 #endif /* HGTRACKS_H */
 

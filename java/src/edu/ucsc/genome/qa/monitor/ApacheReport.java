@@ -18,6 +18,7 @@ import java.util.Calendar;
 public class ApacheReport {
 
     static String fileMonth;
+    static DecimalFormat df = new DecimalFormat("#,##0.00");
 
    /**
     *  Get the proper digit for the 0-based month variable
@@ -76,14 +77,14 @@ public class ApacheReport {
     */
     static PrintWriter setDailyFile(String outpath, int year, int month, int day) throws Exception {
       DecimalFormat df2 = new DecimalFormat("#,#00");
-      String filename = outpath + year + "-" + getMonth(month) + "-" 
+      String filename = outpath + year + "-" + getMonth(month) + "-"
                         + df2.format(day) + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       String url = "/usr/local/apache/htdocs/";
       if (outpath.startsWith(url)) {
         String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
         System.out.println("Try the URL directly: \n" +
-                           urlpath + year + "-" + getMonth(month) + "-" 
+                           urlpath + year + "-" + getMonth(month) + "-"
                            + df2.format(day) + ".html");
       }
       FileWriter fout = new FileWriter(filename);
@@ -155,10 +156,10 @@ public class ApacheReport {
       pw.print("<HTML>\n");
       pw.print("<HEAD>\n");
       if (fileFlag.equals("daily")) {
-        pw.print("<TITLE>Daily Apache Report -- " + getMonthText(month) + " " +  
+        pw.print("<TITLE>Daily Apache Report -- " + getMonthText(month) + " " +
            day + ", " + year + " </TITLE>\n");
       } else {
-        pw.print("<TITLE>Daily Apache Report -- " + getMonthText(month) + ", "  
+        pw.print("<TITLE>Daily Apache Report -- " + getMonthText(month) + ", "
            + year + " </TITLE>\n");
       }
       pw.print("</HEAD>\n");
@@ -345,7 +346,6 @@ public class ApacheReport {
       // pw.close();  // that worked to trap header.
 
       // set percent output to two decimals
-      DecimalFormat df = new DecimalFormat("#,##0.00");
 
       // iterate through 24 hours
       int secondsInHour = 60 * 60;
@@ -427,7 +427,7 @@ public class ApacheReport {
       pw.print("<TD>Totals</TD>\n");
       pw.print("<TD>" + totalAccess + "</TD>\n");
       pw.print("<TD>" + totalError + "</TD>\n");
-      
+
       String printTotPercent = df.format(totalPercent);
       pw.print("<TD>" + printTotPercent + "</TD>\n");
       // System.out.println("totalAccess = " + totalAccess);
@@ -483,26 +483,78 @@ public class ApacheReport {
     // write new data on next line
     String row = tableRow(dayYesterday, totalAccess, totalError, printTotPercent);
     ll.addLast(row);
-
     FileWriter fwMonth  = new FileWriter(fileMonth);
     PrintWriter pwMonth = new PrintWriter(fwMonth);
 
-    // print LinkedList
+    // print LinkedList and tally totals for access and errors
     ListIterator iter = ll.listIterator(0);
-
     String outLine = "";
+    int accTot = 0;
+    int errTot = 0;
+    float pctTot = 0;
     while (iter.hasNext()) {
-      String prevLine = outLine; 
+      // keep existing line to compare
+      String prevLine = outLine;
       outLine = iter.next().toString() + "\n";
-      // don't reprint line if run twice in same day
-      if (! outLine.equals(prevLine)) {
+      // don't reprint line if run twice in same day or if is Total line
+      if ( !(outLine.equals(prevLine) || outLine.matches("Total"))) {
         pwMonth.print(outLine);
+        int [] tots = parseRow(outLine);
+        accTot = accTot + tots[0];
+        errTot = errTot + tots[1];
+        // System.out.println("accTot  = " + accTot);
+        // System.out.println("errTot  = " + errTot);
+      }
+      if (accTot == 0) {
+        pctTot = 0;
+      } else {
+        pctTot = (float) errTot / (float) accTot * 100;
       }
     }
+    // print Total row.
+    String printPct = df.format(pctTot);
+    // System.out.println("pctTot   = " + pctTot);
+    // System.out.println("printPct = " + printPct);
+    String totLine = tableRow(0, accTot, errTot, printPct); 
+    totLine = totLine.replaceFirst("<TD>0", "<TD>Totals");
+    pwMonth.print(totLine);
 
     // print footer back.
     printFooter(pwMonth);
     pwMonth.close();
+  }
+
+ /**
+  *  Parse out values from access row.
+  *
+  *  @param outLine          A row from Monthly Report table.
+  *
+  *  @return                 Access and error values from row.
+  */
+  private static int[] parseRow(String outLine) {
+    int begTag = outLine.indexOf("</TD>");
+    String [] tdFrag = null;
+    tdFrag = outLine.split("<TD>");
+    int acc = 0;
+    int err = 0;
+    // System.out.println("outLine = \n" + outLine);
+
+    if ( begTag == -1 ) {
+      // not a data row.
+    } else {
+      String [] accGrab = null;
+      accGrab = tdFrag[2].split("</TD>");
+      String access = accGrab[0];
+      String [] errGrab = null;
+      errGrab = tdFrag[3].split("</TD>");
+      String errors = errGrab[0];
+      acc = Integer.parseInt(access);
+      err = Integer.parseInt(errors);
+    }
+    int [] outval = new int[2];
+    outval[0] = acc;
+    outval[1] = err;
+    return(outval);
   }
 
  /**

@@ -5,7 +5,7 @@
 #include "jksql.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.10 2004/07/16 06:37:10 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.11 2005/02/03 01:05:39 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -98,17 +98,21 @@ static struct mgcStatusType *mgcStatusList[] = {
 /* hash of status code to status object */
 static struct hash *statusHash = NULL;
 
-/* Table mapping organism names from MGC tables to two-letter organism
- * codes */
+/* Table mapping organism names from MGC tables to organism codes.
+ *
+ * FIXME: These use 2 char organism codes at one time, but they are being
+ * switched to UCSC organism names.
+ */
 static char *organismNameMap[][2] =
 {
-    {"Homo sapiens", "hs"},
+    {"Homo sapiens", "hg"},
     {"Mus musculus", "mm"},
-    {"Danio rerio", "dr"},
-    {"Silurana tropicalis", "st"},
-    {"Xenopus laevis", "xl"},
-    {"Xenopus tropicalis", "xt"},
+    {"Danio rerio", "danRer"},
+    {"Silurana tropicalis", "silTro"},
+    {"Xenopus laevis", "xenLae"},
+    {"Xenopus tropicalis", "xenTro"},
     {"Rattus norvegicus", "rn"},
+    {"Bos taurus", "bosTau"},
     {NULL, NULL}
 };
 
@@ -154,7 +158,7 @@ char *mgcStatusCreateSql =
 "       'problem'"
 "   ) NOT NULL,"
 "   acc CHAR(12) NOT NULL,"       /* genbank accession */
-"   organism CHAR(2) NOT NULL,"   /* two letter MGC organism */
+"   organism CHAR(6) NOT NULL,"   /* organism code */
 "   geneName CHAR(16) NOT NULL,"  /* RefSeq acc for gene, if available */
 "   INDEX(imageId),"
 "   INDEX(status),"

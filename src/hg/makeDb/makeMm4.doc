@@ -4978,3 +4978,17 @@ o Perform preliminary review of Proteom Browser for mm4, then
     
         kent/src/hg/makeDb/trackDb/mouse/mm4
 
+# CHUCK'S MM4->MM5 LIFTOVER CHAIN STUFF (DONE 2/2/05 Andy)
+    # Chuck made a liftOver.chain file it looks like, but it's not in the standard
+    # places.
+    mkdir /cluster/data/mm4/bed/liftOver
+    cd /cluster/data/mm4/bed/liftOver
+    ln -s ../blat.mm5/mm4.mm5.liftOver.chain mm4ToMm5.chain
+    mdkir /gbdb/mm4/liftOver
+    cd /gbdb/mm4/liftOver
+    ln -s /cluster/data/mm4/bed/liftOver/mm4ToMm5.chain mm4ToMm5.over.chain
+    mkdir /usr/local/apache/htdocs/goldenPath/mm4/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/mm4/liftOver
+    cp /cluster/data/mm4/bed/liftOver/mm4ToMm5.chain .
+    gzip mm4ToMm5.chain
+    hgAddLiftOverChain mm4 mm5

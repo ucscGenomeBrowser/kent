@@ -7046,8 +7046,7 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain .
     gzip hg17ToMm5.chain
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain /gbdb/hg17/liftOver/hg17ToMm5.over.chain
-    echo 'insert into liftOverChain values ("hg17","mm5","/gbdb/hg17/liftOver/hg17ToMm5.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOver -multiple hg17 mm5
 
 # HG17 TO CANFAM1 LIFTOVER CHAIN (DONE 1/7/05 Andy)
     ssh kolossus
@@ -7064,8 +7063,7 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToCanFam1.chain .
     gzip hg17ToCanFam1.chain
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToCanFam1.chain /gbdb/hg17/liftOver/hg17ToCanFam1.over.chain
-    echo 'insert into liftOverChain values ("hg17","canFam1","/gbdb/hg17/liftOver/hg17ToCanFam1.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOver -multiple hg17 canFam1
 
 # HG17 TO PANTRO1 LIFTOVER CHAIN (DONE 1/20/05 Andy)
     ssh kolossus
@@ -7082,8 +7080,7 @@ cat > makeMaf.csh << '_EOF_'
     cp /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain .
     gzip hg17ToPanTro1.chain
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain /gbdb/hg17/liftOver/hg17ToPanTro1.over.chain
-    echo 'insert into liftOverChain values ("hg17","panTro1","/gbdb/hg17/liftOver/hg17ToPanTro1.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOver -multiple hg17 panTro1    
 
 # ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
     ssh hgwdev
@@ -12499,3 +12496,89 @@ rm $tmpfile
 #refGene:cds 1.308%, tetNig1.chr1.mafRanges.bed 1.384%, both 0.805%, cover 61.57%, enrich 44.50x
 #refGene:cds 1.308%, danRer1.chr1.mafRanges.bed 2.716%, both 0.847%, cover 64.81%, enrich 23.86x
 
+# BLASTZ BOREOEUTHERIAN (BOREUT1) (DONE 1/29/05 braney)
+    ssh kk
+    mkdir /cluster/data/borEut1/bed/zb.hg17 
+    ln -s /cluster/data/borEut1/bed/zb.hg17 /cluster/data/hg17/bed/blastz.borEut1
+    cd /cluster/data/hg17/bed/blastz.borEut1
+    # Use default (Human-Mouse) settings for starters.
+    cat << '_EOF_' > DEF
+# human vs. dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/scratch/hg/gs.18/build35/linSpecRep.notInDog
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog
+SEQ2_DIR=/iscratch/i/borEut1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/scratch/hg/canFam1/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.borEut1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para push
+# Completed: 2728 of 2728 jobs
+# CPU time in finished jobs:     621440s   10357.34m   172.62h    7.19d  0.020 y
+# IO & Wait Time:                 19079s     317.98m     5.30h    0.22d  0.001 y
+# Average job time:                 235s       3.91m     0.07h    0.00d
+# Longest job:                     2340s      39.00m     0.65h    0.03d
+# Submission to last job:          2837s      47.28m     0.79h    0.03d
+
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.borEut1
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+
+    cd run.1
+    para push
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:         95s       1.58m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                   825s      13.75m     0.23h    0.01d  0.000 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest job:                       10s       0.17m     0.00h    0.00d
+# Submission to last job:            73s       1.22m     0.02h    0.00d
+
+    ssh kk
+    cd /cluster/data/hg17/bed/blastz.borEut1
+    /cluster/data/hg17/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para push
+
+# /cluster/data/hg17/bed/blastz.borEut1/axtChrom/chr18_random.axt is empty
+# /cluster/data/hg17/bed/blastz.borEut1/axtChrom/chr19_random.axt is empty
+# ..
+# Completed: 44 of 46 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:        104s       1.73m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                   482s       8.04m     0.13h    0.01d  0.000 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest job:                      134s       2.23m     0.04h    0.00d
+# Submission to last job:           142s       2.37m     0.04h    0.00d
+
+# END BLASTZ BOREOEUTHERIAN

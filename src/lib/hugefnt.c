@@ -2,7 +2,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: hugefnt.c,v 1.4 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: hugefnt.c,v 1.5 2005/02/02 07:09:24 kent Exp $";
 
 UBYTE hugefnt_data[] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
@@ -1952,7 +1952,9 @@ struct font_hdr hugefnt_font = {
 1, 3, 0x5555, 0x5555,
 0x0, NULL, hugefnt_ch_ofst, hugefnt_data,
 364, 42,
-NULL,};
+NULL,
+0, -1,	/* x/y offset */
+};
 
 MgFont *mgHugeFont()
 {

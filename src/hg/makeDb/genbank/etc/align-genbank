@@ -17,10 +17,10 @@ trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
 exec </dev/null
 
 # config
-databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1 danRer2 ci1 canFam1 anoGam1 tetNig1 dp2 xenTro1 apiMel1 bosTau1 droYak1 droMoj1 droVir1 droAna1 monDom1"
+databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1 danRer2 ci1 canFam1 anoGam1 tetNig1 dp2 xenTro1 apiMel1 droYak1 droMoj1 droVir1 droAna1 monDom1"
 
 # initialize
-gbRoot=/cluster/store5/genbank
+gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

@@ -17,6 +17,7 @@ static struct optionSpec optionSpecs[] =
     {"agxFile", OPTION_STRING},
     {"inGraph", OPTION_STRING},
     {"notInGraph", OPTION_STRING},
+    {"cassetteBeds", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -29,18 +30,20 @@ static char *optionDescripts[] =
     "File containing altGraphX records.",
     "File to output beds found in graphs.",
     "File to output beds not found in graphs.",
+    "Assume beds are cassette exons with 1bp on either end and look\n\t\tfor skipping in addition to include",
 };
 
 void usage()
 /** Print usage and quit. */
 {
 int i=0;
-warn("Program to determine if bed records are a valid\n"
-     "path through a splice graph. Original motivation to see which\n"
-     "alt-spliced probe sets are conserved in human from mouse.\n");
+warn("Program to determine if bed exons are contained in\n"
+     "a splice graph. Original motivation to see which alt-spliced\n"
+     "probe sets are also alt in human (in addition to mouse).\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
-errAbort("\nusage:\n   ");
+errAbort("\nusage:\n   "
+	 "bedInGraph -db=mm5 -agxFile=file.agx -bedFile=file.bed -inGraph=contained.bed -notInGraph=notContained.bed\n");
 }
 
 void setupChromKeeper(char *db, char *agxFile)
@@ -80,16 +83,76 @@ for(i = 0; i < bed->blockCount; i++)
     {
     int startIx = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
     int endIx = bed->chromStart + bed->chromStarts[i+1];
+    boolean edgeFound = FALSE;
     for(edgeIx = 0; edgeIx < eC; edgeIx++)
 	{
-	if(starts[edgeIx] == startIx && ends[edgeIx] == endIx)
-	    inGraph &= TRUE;
+	if(vPos[starts[edgeIx]] == startIx && vPos[ends[edgeIx]] == endIx)
+	    edgeFound = TRUE;
 	}
+    if(!edgeFound)
+	return FALSE;
+    edgeFound = FALSE;
     }
 return inGraph;
 }
 
-boolean bedInSomeGraph(struct bed *bed)
+boolean edgeExists(struct altGraphX *agx, int pos1, int pos2)
+/* Return TRUE if there exists an edge connecting position 1 and
+   position 2 in the graph. */
+{
+int i = 0;
+int *vPos = agx->vPositions;
+int *starts = agx->edgeStarts;
+int *ends = agx->edgeEnds;
+int edgeIx = 0;
+int eC = agx->edgeCount;
+for(edgeIx = 0; edgeIx < eC; edgeIx++)
+    {
+    if(vPos[starts[edgeIx]] == pos1 && vPos[ends[edgeIx]] == pos2)
+	return TRUE;
+    }
+return FALSE;
+}
+
+boolean cassetteInGraph(struct bed *bed, struct altGraphX *agx)
+/* Assume bed is a cassette exon 1bp---intron---cassette---intron---1bp and
+   see if it is in the graph. */
+{
+int *vPos = agx->vPositions;
+int *starts = agx->edgeStarts;
+int *ends = agx->edgeEnds;
+int posIx = 0, edgeIx = 0;
+boolean inGraph = TRUE;
+int eC = agx->edgeCount;
+int i = 0;
+int start = 0;
+int end = 0;
+assert(bed);
+assert(agx);
+if(bed->blockCount != 3 || bed->blockSizes[0] != 1 || bed->blockSizes[2] != 1)
+    errAbort("%s doesn't look like a cassette bed.", bed->name);
+/* Check first intron. */
+inGraph &= edgeExists(agx, 
+		     bed->chromStart + bed->chromStarts[0] + bed->blockSizes[0],
+		     bed->chromStart + bed->chromStarts[1]);
+/* Check exon. */
+inGraph &= edgeExists(agx, 
+		      bed->chromStart + bed->chromStarts[1],
+		      bed->chromStart + bed->chromStarts[1] + bed->blockSizes[1]);
+
+/* Check second intron. */
+inGraph &= edgeExists(agx, 
+		     bed->chromStart + bed->chromStarts[1] + bed->blockSizes[1],
+		     bed->chromStart + bed->chromStarts[2]);
+
+/* Check skipping intron. */
+inGraph &= edgeExists(agx, 
+		     bed->chromStart + bed->chromStarts[0] + bed->blockSizes[0],
+		     bed->chromStart + bed->chromStarts[2]);
+return inGraph;
+}
+
+boolean bedInSomeGraph(struct bed *bed, boolean doCassette)
 /* Is this bed in a alt graph structures. */
 {
 struct altGraphX *agx = NULL;
@@ -99,7 +162,9 @@ beList = chromKeeperFind(bed->chrom, bed->chromStart, bed->chromEnd);
 for(be = beList; be != NULL; be = be->next)
     {
     agx = be->val;
-    if(bedInGraph(bed, agx))
+    if(doCassette && cassetteInGraph(bed, agx))
+	inGraph = TRUE;
+    if(!doCassette && bedInGraph(bed, agx))
 	inGraph = TRUE;
     }
 slFreeList(&beList);
@@ -107,10 +172,12 @@ return inGraph;
 }
 
 void bedsInGraphs()
+/* Look in a graph for the beds. */
 {
 char * bedFile = NULL, *agxFile = NULL;
 char *inGraphFile = NULL, *notInGraphFile = NULL;
 char *db = NULL;
+boolean doCassette = optionExists("cassetteBeds");
 struct altGraphX *agxList = NULL, *agx = NULL;
 struct bed *bedList = NULL, *bed = NULL;
 FILE *inAgx = NULL, *notInAgx = NULL;
@@ -140,7 +207,7 @@ warn("Examiningg beds.");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     dotForUser();
-    if(bedInSomeGraph(bed))
+    if(bedInSomeGraph(bed, doCassette))
 	{
 	inAgxCount++;
 	bedTabOutN(bed, 12, inAgx);

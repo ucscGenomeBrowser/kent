@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.872 2005/01/29 00:34:38 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.890 2005/02/04 21:39:09 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -143,7 +143,6 @@ int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
-static char *ctFileName = NULL;	/* Custom track file. */
 
 int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
 int trackTabWidth = 11;
@@ -159,6 +158,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 
 /* These variables are set by getPositionFromCustomTracks() at the very 
  * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
+char *ctFileName = NULL;	/* Custom track file. */
 struct customTrack *ctList = NULL;  /* Custom tracks. */
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
@@ -169,11 +169,7 @@ boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
-#define RULER_MODE_OFF 0
-#define RULER_MODE_ON 1
-#define RULER_MODE_FULL 2
-
-int rulerMode = RULER_MODE_ON;         /* on, off, full */
+int rulerMode = tvHide;         /* on, off, full */
 
 char *rulerMenu[] =
 /* dropdown for ruler visibility */
@@ -309,12 +305,24 @@ void initTl()
  * wide. */
 {
 MgFont *font;
-
-font = tl.font = mgSmallFont();
+tl.textSize = cartUsualString(cart, textSizeVar, "small");
+if (sameString(tl.textSize, "tiny"))
+     font = mgTinyFont();
+else if (sameString(tl.textSize, "medium"))
+     font = mgSmallishFont();
+else if (sameString(tl.textSize, "large"))
+     font = mgMediumFont();
+else if (sameString(tl.textSize, "huge"))
+     font = mgLargeFont();
+else
+     font = mgSmallFont();
+tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
-tl.nWidth = mgFontStringWidth(font, "N");
+tl.nWidth = mgFontStringWidth(font, "n");
 tl.fontHeight = mgFontLineHeight(font);
-tl.leftLabelWidth = hgDefaultLeftLabelWidth;
+tl.barbHeight = tl.fontHeight/4;
+tl.barbSpacing = (tl.fontHeight+1)/2;
+tl.leftLabelWidth = 17*tl.nWidth + trackTabWidth;
 tl.picWidth = hgDefaultPixWidth;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
@@ -557,7 +565,7 @@ for (tg = trackList; tg != NULL; tg = tg->next)
 	    else
 		vis = tvFull;
 	    }
-	else if (vis == tvFull || vis == tvPack)
+	else if (vis == tvFull || vis == tvPack || vis == tvSquish)
 	    vis = tvDense;
 	dyStringPrintf(dy, "&%s=%s", tg->mapName, hStringFromTv(vis));
 	}
@@ -1297,7 +1305,7 @@ if (!hideLine)
     innerLine(vg, x1, midY, w, color);
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
-	clippedBarbs(vg, x1, midY, w, 2, 5, 
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 		 lf->orientation, bColor, FALSE);
 	}
     }
@@ -1347,8 +1355,9 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
                     x1 = round((double)((int)s-winStart)*scale) + xOff;
                     x2 = round((double)((int)e-winStart)*scale) + xOff;
                     w = x2-x1;
-                    clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
-                                 MG_WHITE, TRUE);
+                    clippedBarbs(vg, x1+1, midY, x2-x1-2, 
+		    		tl.barbHeight, tl.barbSpacing, lf->orientation,
+                                MG_WHITE, TRUE);
                     }
             }
 	}
@@ -1400,7 +1409,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    w = x2-x1;
 	    qGap = sf->qStart - sf->next->qEnd;
 	    if ((qGap == 0) && (tGap >= intronGap))
-		clippedBarbs(vg, x1, midY, w, 2, 5, 
+		clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 			 lf->orientation, bColor, FALSE);
 	    }
 	}
@@ -1420,7 +1429,8 @@ if (start != -1 && !lfs->noLine)
     if (w > 0)
 	{
 	if (vis == tvFull || vis == tvPack) 
-	  clippedBarbs(vg, x1, midY, w, 2, 5, lfs->orientation, bColor, TRUE);
+	  clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+	  	lfs->orientation, bColor, TRUE);
 	vgLine(vg, x1, midY, x2, midY, color);
 	}
     }
@@ -1587,9 +1597,14 @@ if (vis == tvPack || vis == tvSquish)
             {
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
+	    boolean snapLeft = FALSE;
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
-            if (textX < insideX)        /* Snap label to the left. */
+	    snapLeft = (textX < insideX);
+	    /* Special tweak for expRatio in pack mode: force all labels 
+	     * left to prevent only a subset from being placed right: */
+	    snapLeft |= (startsWith("expRatio", tg->tdb->type));
+            if (snapLeft)        /* Snap label to the left. */
 		{
 		textX = leftLabelX;
 		vgUnclip(vg);
@@ -2295,8 +2310,8 @@ AllocVar(tdb);
 tg->mapName = "hgUserPsl";
 tg->canPack = TRUE;
 tg->visibility = tvPack;
-tg->longLabel = "Your Sequence from BLAT Search";
-tg->shortLabel = "BLAT Sequence";
+tg->longLabel = "Your Sequence from Blat Search";
+tg->shortLabel = "Blat Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
 tg->priority = 100;
@@ -2956,7 +2971,8 @@ if (tg->subType == lfWithBarbs)
 	{
 	int midY = y + (heightPer>>1);
 	Color textColor = contrastingColor(vg, color);
-	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 	
+		dir, textColor, TRUE);
 	}
     }
 }
@@ -3757,7 +3773,8 @@ if (tg->subType == lfWithBarbs || tg->exonArrows)
 	{
 	int midY = y + (heightPer>>1);
 	Color textColor = contrastingColor(vg, color);
-	clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+		dir, textColor, TRUE);
 	}
     }
 }
@@ -4008,14 +4025,14 @@ tg->items = list;
 
 void tfbsConsSitesMethods(struct track *tg)
 {
-    bedMethods(tg);
-    tg->loadItems = loadTfbsConsSites;
+bedMethods(tg);
+tg->loadItems = loadTfbsConsSites;
 }
 
 void tfbsConsMethods(struct track *tg)
 {
-    bedMethods(tg);
-    tg->loadItems = loadTfbsCons;
+bedMethods(tg);
+tg->loadItems = loadTfbsCons;
 }
 
 void isochoreLoad(struct track *tg)
@@ -6709,11 +6726,42 @@ mapBoxToggleComplement(x, y, width, height, NULL, chromName, winStart, winEnd,
                                 "complement bases");
 }
 
+struct track *chromIdeoTrack(struct track *trackList)
+/* Find chromosome ideogram track */
+{
+struct track *track;
+for(track = trackList; track != NULL; track = track->next)
+    {
+    if(sameString(track->mapName, "cytoBandIdeo"))
+	{
+	if (hTableExists(track->mapName))
+	    return track;
+	else
+	    return NULL;
+	}
+    }
+return NULL;
+}
+
+void removeTrackFromGroup(struct track *track)
+/* Remove track from group it is part of. */
+{
+struct trackRef *tr = NULL;
+for(tr = track->group->trackList; tr != NULL; tr = tr->next)
+    {
+    if(tr->track == track)
+	{
+	slRemoveEl(&track->group->trackList, tr);
+	break;
+	}
+    }
+}
+
 void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
 /* Make an ideogram image of the chromsome and our position in
    it. */
 {
-struct track *track = NULL, *ideoTrack = NULL;
+struct track *ideoTrack = NULL;
 MgFont *font = tl.font;
 char *mapName = "ideoMap";
 struct vGfx *vg;
@@ -6722,29 +6770,17 @@ boolean doIdeo = TRUE;
 int ideoWidth = round(.65 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
-/* Find the ideogram track. */
-for(track = *pTrackList; track != NULL; track = track->next)
-    {
-    if(sameString(track->mapName, "cytoBandIdeo"))
-	{
-	ideoTrack = track;
-	break;
-	}
-    }
+
+ideoTrack = chromIdeoTrack(*pTrackList);
+
 /* If no ideogram don't draw. */
-if(ideoTrack == NULL || !hTableExists(track->mapName))
+if(ideoTrack == NULL)
     doIdeo = FALSE;
 else
     {
-    struct trackRef *tr = NULL;
-    /* Find and remove the track from the group and track list. */
     ideogramAvail = TRUE;
-    for(tr = ideoTrack->group->trackList; tr != NULL; tr = tr->next)
-	{
-	if(tr->track == ideoTrack)
-	    break;
-	}
-    slRemoveEl(&ideoTrack->group->trackList, tr);
+    /* Remove the track from the group and track list. */
+    removeTrackFromGroup(ideoTrack);
     slRemoveEl(pTrackList, ideoTrack);
 
     /* Fix for hide all button hiding the ideogram as well. */
@@ -7169,18 +7205,37 @@ if (track->tdb)
 return FALSE;
 }
 
-static bool subtrackVisible(char *tableName)
+static void setSubtrackVisible(char *tableName, bool visible)
 {
 char option[64];
-safef(option, sizeof(option), "%s", tableName);
-return cartUsualBoolean(cart, option, TRUE);
+safef(option, sizeof(option), "%s_sel", tableName);
+cartSetBoolean(cart, option, visible);
 }
 
-static void setSubtrackVisible(char *tableName)
+static void subtrackVisibleTdb(struct trackDb *tdb)
+/* Determine if subtrack should be displayed.  Save in cart */
 {
 char option[64];
-safef(option, sizeof(option), "%s", tableName);
-cartSetBoolean(cart, option, TRUE);
+char *words[2];
+char *setting;
+bool selected = TRUE;
+
+if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            selected = FALSE;
+    }
+safef(option, sizeof(option), "%s_sel", tdb->tableName);
+selected = cartCgiUsualBoolean(cart, option, selected);
+setSubtrackVisible(tdb->tableName, selected);
+}
+
+static bool isSubtrackVisible(char *table)
+{
+char option[64];
+safef(option, sizeof(option), "%s_sel", table);
+return cartCgiUsualBoolean(cart, option, TRUE);
 }
 
 static int subtrackCount(struct track *trackList)
@@ -7188,7 +7243,7 @@ static int subtrackCount(struct track *trackList)
 struct track *subtrack;
 int ct = 0;
 for (subtrack = trackList; subtrack; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack->mapName))
+    if (isSubtrackVisible(subtrack->mapName))
         ct++;
 return ct;
 }
@@ -7262,14 +7317,14 @@ pixWidth = tl.picWidth;
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
-if (rulerMode != RULER_MODE_OFF)
+if (rulerMode != tvHide)
     {
     if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
     yAfterRuler += basePositionHeight;
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
-    if (rulerMode == RULER_MODE_FULL && 
+    if (rulerMode == tvFull && 
             (zoomedToBaseLevel || zoomedToCdsColorLevel))
         {
         yAfterRuler += rulerTranslationHeight;
@@ -7289,7 +7344,7 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                if (!subtrackVisible(subtrack->mapName))
+                if (!isSubtrackVisible(subtrack->mapName))
                     continue;
                 subtrack->visibility = track->visibility;
                 pixHeight = limitTrackVis(subtrack, pixHeight, fontHeight);
@@ -7317,7 +7372,7 @@ makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
 brickColor = makeBrickColor(vg);
 
-if (rulerMode == RULER_MODE_FULL &&
+if (rulerMode == tvFull &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
     {
     makeCdsShades(vg, cdsColor);
@@ -7340,7 +7395,7 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                if (!subtrackVisible(subtrack->mapName))
+                if (!isSubtrackVisible(subtrack->mapName))
                     continue;
                 subtrack->ixColor = vgFindRgb(vg, &subtrack->color);
                 subtrack->ixAltColor = vgFindRgb(vg, &subtrack->altColor);
@@ -7359,11 +7414,11 @@ if (withLeftLabels && psOutput == NULL)
     boolean grayButtonGroup = FALSE;
     struct group *lastGroup = NULL;
     y = gfxBorder;
-    if (rulerMode != RULER_MODE_OFF)
+    if (rulerMode != tvHide)
         {
         /* draw button for Base Position pseudo-track */
         int height = basePositionHeight;
-        if (rulerMode == RULER_MODE_FULL && 
+        if (rulerMode == tvFull && 
                         (zoomedToBaseLevel || zoomedToCdsColorLevel))
             height += rulerTranslationHeight;
         drawGrayButtonBox(vg, trackTabX, y, trackTabWidth, height, TRUE);
@@ -7413,16 +7468,16 @@ if (withLeftLabels)
     vgBox(vg, leftLabelX + leftLabelWidth, 0,
     	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
-    if (rulerMode != RULER_MODE_OFF)
+    if (rulerMode != tvHide)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, RULER_TRACK_LABEL);
 	if (zoomedToBaseLevel || 
-                (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
+                (zoomedToCdsColorLevel && rulerMode == tvFull))
 	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
 				leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
-        if ((rulerMode == RULER_MODE_FULL) &&
+        if ((rulerMode == tvFull) &&
                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             y += rulerTranslationHeight;
 	}
@@ -7433,7 +7488,7 @@ if (withLeftLabels)
             {
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (subtrackVisible(subtrack->mapName))
+                if (isSubtrackVisible(subtrack->mapName))
                     y = doLeftLabels(subtrack, vg, font, y);
             }
         else
@@ -7461,7 +7516,7 @@ if (withGuidelines)
     }
 
 /* Show ruler at top. */
-if (rulerMode != RULER_MODE_OFF)
+if (rulerMode != tvHide)
     {
     struct dnaSeq *seq = NULL;
     y = 0;
@@ -7517,7 +7572,7 @@ if (rulerMode != RULER_MODE_OFF)
 	}
     }
     if (zoomedToBaseLevel || 
-            (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
+            (zoomedToCdsColorLevel && rulerMode == tvFull))
         {
         Color baseColor = MG_BLACK;
         int start, end, chromSize;
@@ -7558,13 +7613,13 @@ if (rulerMode != RULER_MODE_OFF)
             {
             char newRulerVis[100];
             safef(newRulerVis, 100, "%s=%s", RULER_TRACK_NAME,
-                         rulerMode == RULER_MODE_FULL ?  
-                                rulerMenu[RULER_MODE_ON] : 
-                                rulerMenu[RULER_MODE_FULL]);
+                         rulerMode == tvFull ?  
+                                rulerMenu[tvDense] : 
+                                rulerMenu[tvFull]);
             mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
                                 NULL, NULL, 0, 0, "", newRulerVis);
             }
-        if (rulerMode == RULER_MODE_FULL && 
+        if (rulerMode == tvFull && 
                                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             {
             /* display codons */
@@ -7621,7 +7676,7 @@ if (withCenterLabels)
             {
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (subtrackVisible(subtrack->mapName))
+                if (isSubtrackVisible(subtrack->mapName))
                     y = doCenterLabels(subtrack, track, vg, font, y);
             }
         else
@@ -7645,7 +7700,7 @@ if (withCenterLabels)
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (subtrackVisible(subtrack->mapName))
+                if (isSubtrackVisible(subtrack->mapName))
                     y = doDrawItems(subtrack, vg, font, y, &lastTime);
             }
         else
@@ -7672,7 +7727,7 @@ if (withLeftLabels)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL;
                              subtrack = subtrack->next)
-                    if (subtrackVisible(subtrack->mapName))
+                    if (isSubtrackVisible(subtrack->mapName))
                         y = doOwnLeftLabels(subtrack, vg, font, y);
                 }
             else
@@ -7714,7 +7769,7 @@ for (track = trackList; track != NULL; track = track->next)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL;
                                 subtrack = subtrack->next)
-                    if (subtrackVisible(subtrack->mapName))
+                    if (isSubtrackVisible(subtrack->mapName))
                         y = doMapItems(subtrack, fontHeight, y);
                 }
             else
@@ -7772,7 +7827,7 @@ else
     end = winEnd;
     }
 ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end);
-hPrintf("<A HREF=\"%s\" TARGET=_blank>", ensUrl->string);
+hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: probably should free mem from dir and scientificName ?*/
 dyStringFree(&ensUrl);
 }
@@ -7819,10 +7874,15 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-char optionScoreStr[128]; /* Option -  score filter */
+char option[128]; /* Option -  score filter */
+char *words[3];
 char *optionScoreVal;
 int optionScore = 0;
-char extraWhere[128] ;
+char query[128] ;
+char *scoreCtString = NULL;
+bool doScoreCtFilter = FALSE;
+int scoreFilterCt = 0;
+char *topTable = NULL;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -7832,28 +7892,61 @@ else if (tg->bedSize == 5)
     loader = bedLoad5;
 else
     loader = bedLoad6;
-safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+
+/* limit to a specified count of top scoring items.
+ * If this is selected, it overrides selecting item by specified score */
+scoreCtString = trackDbSetting(tg->tdb, "filterTopScorers");
+if (scoreCtString != NULL)
+    {
+    safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+    doScoreCtFilter = 
+        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+    safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+    scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+    topTable = words[2];
+    }
+
+/* limit to items above a specified score */
+safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
-optionScore = cartUsualInt(cart, optionScoreStr, optionScore);
-if (optionScore > 0) 
+optionScore = cartUsualInt(cart, option, optionScore);
+
+if (hTableExists(topTable) && doScoreCtFilter)
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    safef(query, sizeof(query), 
+                "select * from %s order by score desc limit %d", 
+                                topTable, scoreFilterCt);
+    sr = sqlGetResult(conn, query);
+    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
+    }
+else if (optionScore > 0)
+    {
+    safef(query, sizeof(query), "score >= %d",optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
+                         query, &rowOffset);
     }
 else
     {
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
+                         NULL, &rowOffset);
     }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
     slAddHead(&list, bed);
     }
+if (doScoreCtFilter)
+    {
+    /* filter out items not in this window */
+    struct bed *newList = 
+        bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
+    list = newList;
+    }
+slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-slReverse(&list);
 tg->items = list;
 }
 
@@ -8198,7 +8291,7 @@ innerLine(vg, x1, midY, w, color);
 /*
 if (vis == tvFull || vis == tvPack)
     {
-    clippedBarbs(vg, x1, midY, w, 2, 5, 
+    clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 		 lf->orientation, color, FALSE);
     }
     */
@@ -8336,11 +8429,57 @@ bedMethods(tg);
 tg->drawItemAt = triangleDrawAt;
 }
 
+boolean genePredClassFilter(struct track *tg, void *item)
+/* Returns true if an item should be added to the filter. */
+{
+struct linkedFeatures *lf = item;
+char *classString;
+char *table = tg->mapName;
+char *classType = NULL;
+enum acemblyOptEnum ct;
+struct sqlConnection *conn = NULL;
+char query[256];
+char **row = NULL;
+struct sqlResult *sr;
+char *classTable = NULL;
+/* default is true then for no filtering */
+boolean sameClass = TRUE;
+classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
+
+AllocVar(classString);
+if (classTable != NULL && hTableExists(classTable))
+    {
+    classString = addSuffix(table, ".type");
+    if (sameString(table, "acembly"))
+        {
+        classType = cartUsualString(cart, classString, acemblyEnumToString(0));
+        ct = acemblyStringToEnum(classType);
+        if (ct == acemblyAll)
+            return sameClass;
+        }
+    conn = hAllocConn();
+    sprintf(query, "select class from %s where name = '%s'", classTable,
+lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        /* check if this is the same as the class required */
+        if (!sameString(row[0], classType))
+            sameClass = FALSE;
+        }
+    sqlFreeResult(&sr);
+    }
+freeMem(classString);
+hFreeConn(&conn);
+return sameClass;
+}
 
 void loadGenePred(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
+/* filter items on selected criteria if filter is available */
+filterItems(tg, genePredClassFilter, "include");
 }
 
 Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
@@ -8356,7 +8495,7 @@ else
 
 Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a genePred based on looking up the gene class */
-/* in an itemClass table */
+/* in an itemClass table. */
 {
 char *geneClasses = trackDbSetting(tg->tdb, GENEPRED_CLASS_VAR);
 char *gClassesClone = NULL;
@@ -8541,7 +8680,7 @@ static void compositeLoad(struct track *track)
 {
 struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack->mapName))
+    if (isSubtrackVisible(subtrack->mapName))
         subtrack->loadItems(subtrack);
 }
 
@@ -8551,7 +8690,7 @@ static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 struct track *subtrack;
 int height = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack->mapName))
+    if (isSubtrackVisible(subtrack->mapName))
         height += subtrack->totalHeight(subtrack, vis);
 track->height = height;
 return height;
@@ -8579,6 +8718,7 @@ struct trackDb *subTdb;
 /* number of possible subtracks for this track */
 int subtrackCt = slCount(tdb->subtracks);
 int altColors = subtrackCt - 1;
+TrackHandler handler;
 
 /* ignore if no subtracks */
 if (!subtrackCt)
@@ -8601,23 +8741,28 @@ if (altColors && (finalR || finalG || finalB))
 subtrackCt = 0;
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
-    if (subtrackVisible(subTdb->tableName))
+    subtrackVisibleTdb(subTdb);
+    if (isSubtrackVisible(subTdb->tableName))
         subtrackCt++;
     }
 /* if no subtracks are selected in cart, turn them all on */
 if (!subtrackCt)
     for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-        setSubtrackVisible(subTdb->tableName);
+        setSubtrackVisible(subTdb->tableName, TRUE);
 
 /* fill in subtracks of composite track */
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
     struct track *subtrack;
-    if (!subtrackVisible(subTdb->tableName))
+    if (!isSubtrackVisible(subTdb->tableName))
         continue;
 
     /* initialize from composite track settings */
-    subtrack = trackFromTrackDb(tdb, FALSE);
+    subtrack = trackFromTrackDb(tdb);
+    /* install parent's track handler */
+    handler = lookupTrackHandler(tdb->tableName);
+    if (handler != NULL)
+	handler(subtrack);
 
     /* add subtrack settings (table, colors, labels, vis & pri) */
     subtrack->mapName = subTdb->tableName;
@@ -8650,7 +8795,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 slSort(&track->subtracks, trackPriCmp);
 }
 
-struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks)
+struct track *trackFromTrackDb(struct trackDb *tdb)
 /* Create a track based on the tdb. */
 {
 struct track *track = trackNew();
@@ -8700,9 +8845,6 @@ iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 fillInFromType(track, tdb);
-
-if (doSubtracks && slCount(tdb->subtracks))
-    makeCompositeTrack(track, tdb);
 return track;
 }
 
@@ -8717,19 +8859,21 @@ TrackHandler handler;
 tdbList = hTrackDb(chromName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    track = trackFromTrackDb(tdb, TRUE);
+    track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
     if (handler != NULL)
 	handler(track);
+
+    if (slCount(tdb->subtracks) != 0)
+        makeCompositeTrack(track, tdb);
+
     if (track->loadItems == NULL)
         warn("No load handler for %s", tdb->tableName);
     else if (track->drawItems == NULL)
         warn("No draw handler for %s", tdb->tableName);
     else
-        {
         slAddHead(pTrackList, track);
-	}
     }
 }
 
@@ -8840,7 +8984,7 @@ struct track *newCustomTrack(struct customTrack *ct)
 {
 struct track *tg;
 boolean useItemRgb = FALSE;
-tg = trackFromTrackDb(ct->tdb, TRUE);
+tg = trackFromTrackDb(ct->tdb);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
@@ -9020,29 +9164,29 @@ char *orgEnc = cgiEncode(organism);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", orgEnc, wrapWhiteFont("Home"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\" class=\"topbar\">Home</A></TD>", orgEnc);
 
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\">%s</A></TD>", orgEnc, database, wrapWhiteFont("Genomes"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Genomes</A></TD>", orgEnc, database);
 
 if (gotBlat)
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
     }
 if (hgPcrOk(database))
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("PCR"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A></TD>", uiVars->string);
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
+hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
       " %s </A></TD>",  hgcNameAndSettings(),
-      winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\">%s</A></TD>",
+      winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&hgta_regionType=range&%s=%u\" class=\"topbar\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
-       cartSessionId(cart), wrapWhiteFont("Tables"));
+       cartSessionId(cart), "Tables");
 
 if (hgNearOk(database))
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\">%s</A></TD>",
-                 uiVars->string, wrapWhiteFont("Gene Sorter"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
+                 uiVars->string, "Gene Sorter");
     }
 
 if (gotBlat)
@@ -9050,7 +9194,7 @@ if (gotBlat)
     /* the only zoo organism this currently works with is human.
      * blastz tables need to be generated for the other organisms. */
     if (!startsWith("zoo", database) || startsWith("zooHuman", database))
-        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
+        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\" class=\"topbar\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, "Convert");
     }
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
@@ -9061,32 +9205,32 @@ if (sameString(database, "hg17")
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
-    hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    hPrintf("%s</A></TD>", "Ensembl");
     }
 
 /* Print NCBI MapView anchor */
 if (sameString(database, "hg17"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
+    hPrintf("%s</A></TD>", "NCBI");
     }
 if (sameString(database, "mm5"))
     {
     hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
     	skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
+    hPrintf("%s</A></TD>", "NCBI");
     }
 
 if (sameString(database, "ce2"))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank>%s</A></TD>", 
-        skipChr(chromName), winStart+1, winEnd, wrapWhiteFont("WormBase"));
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>", 
+        skipChr(chromName), winStart+1, winEnd, "WormBase");
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\">%s</A></TD>\n",cartSessionVarName(),
-       cartSessionId(cart), wrapWhiteFont("PDF/PS"));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Help"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" class=\"topbar\">%s</A></TD>\n",cartSessionVarName(),
+       cartSessionId(cart), "PDF/PS");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
@@ -9184,41 +9328,10 @@ else
 hButton(var, paddedLabel);
 }
 
-void doTrackForm(char *psOutput)
-/* Make the tracks display form with the zoom/scroll
- * buttons and the active image. */
+struct track *getTrackList()
+/* Return list of all tracks. */
 {
-struct group *group;
-struct track *track;
-char *freezeName = NULL;
-boolean hideAll = cgiVarExists("hgt.hideAll");
-boolean showedRuler = FALSE;
-long thisTime = 0, lastTime = 0;
-
-zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
-zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
-zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
-
-if (psOutput != NULL)
-   {
-   suppressHtml = TRUE;
-   hideControls = TRUE;
-   }
-
-/* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
-cartSaveSession(cart);
-
-/* See if want to include sequence search results. */
-userSeqString = cartOptionalString(cart, "ss");
-if (userSeqString && !ssFilesExist(userSeqString))
-    {
-    userSeqString = NULL;
-    cartRemove(cart, "ss");
-    }
-if (!hideControls)
-    hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
-
+struct track *track, *trackList = NULL;
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
@@ -9420,16 +9533,66 @@ if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
 loadCustomTracks(&trackList);
 
-
-groupTracks(&trackList, &groupList);
-
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
     if (s != NULL)
+	{
 	track->visibility = hTvFromString(s);
+	if (isCompositeTrack(track))
+	    {
+	    struct track *subtrack;
+	    for (subtrack = track->subtracks; subtrack != NULL;
+		 subtrack = subtrack->next)
+		{
+		subtrack->visibility = track->visibility;
+		}
+	    }
+	}
     }
+
+return trackList;
+}
+
+void doTrackForm(char *psOutput)
+/* Make the tracks display form with the zoom/scroll
+ * buttons and the active image. */
+{
+struct group *group;
+struct track *track;
+char *freezeName = NULL;
+boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean showedRuler = FALSE;
+long thisTime = 0, lastTime = 0;
+
+zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
+zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
+zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
+
+if (psOutput != NULL)
+   {
+   suppressHtml = TRUE;
+   hideControls = TRUE;
+   }
+
+/* Tell browser where to go when they click on image. */
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
+cartSaveSession(cart);
+
+/* See if want to include sequence search results. */
+userSeqString = cartOptionalString(cart, "ss");
+if (userSeqString && !ssFilesExist(userSeqString))
+    {
+    userSeqString = NULL;
+    cartRemove(cart, "ss");
+    }
+if (!hideControls)
+    hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
+
+trackList = getTrackList();
+
+groupTracks(&trackList, &groupList);
 
 /* If hideAll flag set, make all tracks hidden */
 if(hideAll)
@@ -9555,17 +9718,21 @@ if (!hideControls)
 	hWrites("position ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
-	hPrintf(" size %s ", buf);
-	hWrites(" bp. &nbsp;image width: ");
-	hIntVar("pix", tl.picWidth, 4);
 	hWrites(" ");
 	hButton("submit", "jump");
+	hPrintf(" size %s bp. ", buf);
+#ifdef OLD
+	hWrites("&nbsp;image width: ");
+	hIntVar("pix", tl.picWidth, 4);
+#endif /* OLD */
+        hButton("hgTracksConfigPage", "configure");
 	hPutc('\n');
 	}
     }
 
 /* Make chromsome ideogram gif and map. */
 makeChromIdeoImage(&trackList, psOutput);
+
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 if (!hideControls)
@@ -9589,12 +9756,14 @@ if (!hideControls)
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
     hPrintf("</TD></TR></TABLE>\n");
-    smallBreak();
+    // smallBreak();
 
     /* Display bottom control panel. */
     hButton("hgt.reset", "reset all");
     hPrintf(" ");
     hButton("hgt.hideAll", "hide all");
+
+#ifdef OLD
     if(ideogramAvail)
 	{
 	hPrintf(" Chromosome");
@@ -9608,7 +9777,13 @@ if (!hideControls)
     hPrintf("center ");
     hCheckBox("centerLabels", withCenterLabels);
     hPrintf(" ");
+#endif /* OLD */
+
+    hPrintf(" ");
+    hButton("hgTracksConfigPage", "configure");
+    hPrintf(" ");
     hButton("submit", "refresh");
+
     hPrintf("<BR>\n");
 
     /* Display viewing options for each track. */
@@ -9703,7 +9878,7 @@ if (!hideControls)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL; 
                                                     subtrack = subtrack->next)
-                    if (subtrackVisible(subtrack->mapName))
+                    if (isSubtrackVisible(subtrack->mapName))
                         hPrintf("%s, %d, %d<BR>\n", subtrack->shortLabel, 
                                 subtrack->loadTime, subtrack->drawTime);
                 }
@@ -9786,7 +9961,7 @@ void zoomToBaseLevel()
 /* Set things so that it's zoomed to base level. */
 {
 zoomToSize(insideWidth/tl.mWidth);
-if (rulerMode == RULER_MODE_OFF)
+if (rulerMode == tvHide)
     cartSetString(cart, "ruler", "dense");
 }
 
@@ -9934,13 +10109,24 @@ for(name = nameList; name != NULL; name = name->next)
 slFreeList(&nameList);
 }
 
+void setRulerMode()
+/* Set the rulerMode variable from cart. */
+{
+char *s = cartUsualString(cart, RULER_TRACK_NAME, "full");
+if (sameWord(s, "full") || sameWord(s, "on"))
+    rulerMode = tvFull;
+else if (sameWord(s, "dense"))
+    rulerMode = tvDense;
+else
+    rulerMode = tvHide;
+}
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
-char *s;
 char *motifString = cartOptionalString(cart,"hgt.motifs");
 boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 position = getPositionFromCustomTracks();
@@ -10000,13 +10186,7 @@ insideWidth = tl.picWidth-gfxBorder-insideX;
 
 if (cgiVarExists("hgt.hideAll"))
     cartSetString(cart, RULER_TRACK_NAME, "dense");
-s = cartUsualString(cart, RULER_TRACK_NAME, "full");
-if (sameWord(s, "full") || sameWord(s, "on"))
-    rulerMode = RULER_MODE_FULL;
-else if (sameWord(s, "dense"))
-    rulerMode = RULER_MODE_ON;
-else
-    rulerMode = RULER_MODE_OFF;
+setRulerMode();
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
@@ -10179,15 +10359,32 @@ chromInfoTotalRow(total);
 slFreeList(&chromList);
 }
 
-void chromInfoRowsNonChrom()
+void chromInfoRowsNonChrom(int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 long long total = 0;
+char query[512];
+char msg1[512], msg2[512];
+int seqCount = 0;
+boolean truncating;
 
-sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
+seqCount = sqlQuickNum(conn, "select count(*) from chromInfo");
+truncating = (limit > 0) && (seqCount > limit);
+
+if (!truncating)
+    {
+    sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
+    }
+else
+    {
+
+    safef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit %d", limit);
+    sr = sqlGetResult(conn, query);
+    }
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned size = sqlUnsigned(row[1]);
@@ -10203,7 +10400,23 @@ while ((row = sqlNextRow(sr)) != NULL)
     cgiTableRowEnd();
     total += size;
     }
-chromInfoTotalRow(total);
+if (!truncating)
+    {
+    chromInfoTotalRow(total);
+    }
+else
+    {
+    safef(msg1, sizeof(msg1), "Limit reached");
+    safef(msg2, sizeof(msg2), "%d rows displayed", limit);
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printf(msg1);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf(msg2);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -10215,7 +10428,7 @@ char *position = cartUsualString(cart, "position", hDefaultPos(database));
 struct dyString *title = dyStringNew(512);
 dyStringPrintf(title, "%s %s (%s) Browser Sequences",
 	       hOrganism(database), hFreezeFromDb(database), database);
-webStartWrapper(cart, title->string, NULL, FALSE, FALSE);
+webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
 printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
 cartSaveSession(cart);
 
@@ -10239,13 +10452,14 @@ cgiTableRowEnd();
 if (startsWith("chr", hDefaultChrom()))
     chromInfoRowsChrom();
 else
-    chromInfoRowsNonChrom();
+    chromInfoRowsNonChrom(1000);
 
 hTableEnd();
 
 hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
 dyStringFree(&title);
+webEndSectionTables();
 }
 
 
@@ -10299,6 +10513,26 @@ else if (cartVarExists(cart, "chromInfoPage"))
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();
     }
+else if (cartVarExists(cart, "hgTracksConfigPage"))
+    {
+    cartRemove(cart, "hgTracksConfigPage");
+    configPage();
+    }
+else if (cartVarExists(cart, configHideAll))
+    {
+    cartRemove(cart, configHideAll);
+    configPageSetTrackVis(tvHide);
+    }
+else if (cartVarExists(cart, configShowAll))
+    {
+    cartRemove(cart, configShowAll);
+    configPageSetTrackVis(tvDense);
+    }
+else if (cartVarExists(cart, configDefaultAll))
+    {
+    cartRemove(cart, configDefaultAll);
+    configPageSetTrackVis(-1);
+    }
 else
     {
     tracksDisplay();
@@ -10338,6 +10572,7 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
+htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

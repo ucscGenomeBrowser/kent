@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.14 2004/12/06 22:33:46 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.15 2005/01/27 18:59:45 angie Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -94,7 +94,7 @@ else
     return atoi(s);
 }
 
-boolean checkRepeat(struct rmskOut *r)
+boolean checkRepeat(struct rmskOut *r, struct lineFile *lf)
 /* check for bogus repeat */
 {
 /* this is bogus on both strands */
@@ -103,8 +103,8 @@ if (r->repStart > r->repEnd)
     badRepCnt++;
     if (verboseLevel() > 1)
         {
-        verbose(2, "bad rep range in: ");
-        rmskOutTabOut(r, stderr);
+        verbose(2, "bad rep range [%d, %d] line %d of %s \n",
+		r->repStart, r->repEnd, lf->lineIx, lf->fileName);
         }
     return FALSE;
     }
@@ -173,7 +173,7 @@ while (lineFileNext(lf, &line, &lineSize))
     r.repEnd = atoi(words[12]);
     r.repLeft = parenSignInt(words[13], lf);
     r.id[0] = ((wordCount > 14) ? words[14][0] : ' ');
-    if (checkRepeat(&r))
+    if (checkRepeat(&r, lf))
         {
         if (!noBin)
             fprintf(f, "%u\t", hFindBin(r.genoStart, r.genoEnd));

@@ -2,13 +2,12 @@
 #include "ldUi.h"
 #include "common.h"
 
-char   *ldValue;
-char   *ldPos;
-char   *ldNeg;
-char   *ldOut;
-boolean ldCeu;
-boolean ldHcb;
-boolean ldJpt;
-boolean ldYri;
-int     ldCov;
-int     ldHeight;
+boolean ldCeu   = ldCeuDefault;
+boolean ldHcb   = ldHcbDefault;
+boolean ldJpt   = ldJptDefault;
+boolean ldYri   = ldYriDefault;
+char   *ldValue = NULL;
+char   *ldPos   = NULL;
+char   *ldNeg   = NULL;
+char   *ldOut   = NULL;
+boolean ldTrim  = ldTrimDefault;

@@ -13,9 +13,9 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.14 2004/07/20 21:43:41 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.15 2005/01/27 02:21:06 sugnet Exp $";
 
-static int maxEvidence = 50;
+static int maxEvidence = 500;
 
 enum{ softEndBleedLimit = 5};  /* For soft ends allow some bleeding into next intron */
 
@@ -67,11 +67,24 @@ static int vertexIx(struct ggVertex *array, int arraySize, int pos, int type)
 /* Return index of vertex in array, or -1 if not in array. */
 {
 int i;
-for (i=0; i<arraySize; ++i)
+
+/* Check for a hard vertex first. */
+if(type == ggSoftStart || type == ggSoftEnd)
     {
-    if (array->position == pos && array->type == type)
+    for (i=0; i<arraySize; ++i)
+	{
+	/* if position is right and can sub a soft vertex for a hard one
+	   do so. */
+	if(array[i].position == pos && 
+	   ((array[i].type == ggHardStart && type == ggSoftStart) ||
+	    (array[i].type == ggHardEnd && type == ggSoftEnd)))
+	    return i;
+	}
+    }
+for(i=0; i<arraySize; ++i)
+    {
+    if(array[i].position == pos && array[i].type == type)
 	return i;
-    ++array;
     }
 return -1;
 }
@@ -156,7 +169,6 @@ for (ref = mc->refList, i=0; ref != NULL; ref = ref->next, ++i)
      gg->mrnaRefs[i] = cloneString(ref->ma->qName);
 
 /* Allocate gene graph and edge matrix. Also the evidence matrix */
-
 gg->vertexCount = vAllCount;
 AllocArray(gg->vertices, vAllCount);
 memcpy(gg->vertices, vAll, vAllCount*sizeof(*vAll));
@@ -446,22 +458,12 @@ blocks1 = ai1->ma->blocks;
 blocks2 = ai2->ma->blocks;
 for(i=0; i<ai1->ma->blockCount; i++)
     {
-    /* If this block is the reason for startIx and endIx. Can't do
-       exact match as the edges may have been extended. */
-    if(v[startIx].position <= blocks1[i].tStart && v[endIx].position >= blocks1[i].tEnd)
+    /* Find the matching block in the other mRNA. */
+    for(j=0; j<ai2->ma->blockCount; j++)
 	{
-	/* Find the matching block in the other mRNA. */
-	for(j=0; j<ai2->ma->blockCount; j++)
+	if(blocksOverlap(&blocks1[i], &blocks2[j]) > 0)
 	    {
-	    /* If this block is the reason for start2Ix and end2Ix. Can't do
-	       exact match as the edges may have been extended. */
-	    if(v[start2Ix].position <= blocks2[j].tStart && v[end2Ix].position >= blocks2[j].tEnd)
-		{
-		if(blocksOverlap(&blocks1[i], &blocks2[j]) > 0)
-		    {
-		    return TRUE;
-		    }
-		}
+	    return TRUE;
 	    }
 	}
     }
@@ -568,10 +570,12 @@ int consensusSoftStartVertex(struct geneGraph *gg, int softStartIx, int hardEndI
 int bestVertex = -1;
 struct ggVertex *v = gg->vertices;
 struct ggEvidence ***e = gg->evidence;
+int longerBetterPrior = 5;
 int maxDistance = 3000;
+int minDistance = 20;
 int i=0; 
-int bestCount = 0;
-int bestDist = 0;
+int bestCount = -1;
+int bestDist = -1;
 boolean isHard = FALSE;
 for(i=0; i<oCount; i++)
     {
@@ -580,7 +584,8 @@ for(i=0; i<oCount; i++)
     if( (curDist >= 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
 	(!isHard || v[oIndex[i]].type  == ggHardStart) &&     /* Replace if not replacing hard with soft. */
 	(curCount > bestCount ||                              /* and current count is better. */
-	 (curCount == bestCount && curDist > bestDist && curDist < maxDistance) )) /* or start is farther upstream. */
+	 (((curCount +longerBetterPrior) >= bestCount || curDist - bestDist <= minDistance) && /* end has decent evidence or is close */
+	  curDist >= bestDist && curDist <= maxDistance) )) /* or start is farther upstream. */
 	{
 	if(v[oIndex[i]].type == ggHardStart)
 	    isHard = TRUE;
@@ -598,16 +603,17 @@ int consensusSoftEndVertex(struct geneGraph *gg, int hardStartIx, int softEndIx,
 /** Pick the best hard end out of oIndex. Return index of best hard end index
     into gg->vertices, -1 if no vertex found. Allow smaller exon only if allowSmaller == TRUE.
     Best is defined by:
-    - Number of other alignments that support it.
-    - Distance from softStartIx. */
+    - Number of other alignments that support it.    - Distance from softStartIx. */
 {
 int bestVertex = -1;
 struct ggVertex *v = gg->vertices;
 struct ggEvidence ***e = gg->evidence;
 int i=0; 
-int bestCount = 0;
-int bestDist = 0;
+int longerBetterPrior = 5;
+int bestCount = -1;
+int bestDist = -1;
 int maxDist = 3000;
+int minDist = 20;
 boolean isHard = FALSE;
 for(i=0; i<oCount; i++)
     {
@@ -616,15 +622,18 @@ for(i=0; i<oCount; i++)
     if( (curDist >= 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
         (!isHard || v[oIndex[i]].type == ggHardEnd) &&  /* Replace if not replacing hard with soft. */
 	(curCount > bestCount ||                        /* and current count is better. */
-	(curCount == bestCount && curDist > bestDist && curDist < maxDist) )) /* or end is farther downstream. */
+	 (((curCount + longerBetterPrior )>= bestCount || curDist - bestDist <= minDist) && /* end has decent evidence or is close */
+	 curDist >= bestDist && curDist <= maxDist) )) /* and end is farther downstream. */
 	{
 	if(v[oIndex[i]].type == ggHardEnd)
 	    isHard = TRUE;
 	bestVertex = oIndex[i];
 	bestCount = curCount;
 	bestDist = curDist;
+
 	}
     }
+
 return bestVertex;
 }
 
@@ -656,7 +665,6 @@ for (i=0; i<vCount; ++i)
 	    {
 	    struct ggEvidence *ge = NULL;
 	    em[softStartIx][i] = FALSE;
-//	    ge = ggEvidenceClone(gg->evidence[softStartIx][i]);
 	    moveEvidenceIfUnique(&gg->evidence[bestStart][i], &gg->evidence[softStartIx][i]);
 	    em[bestStart][i] = TRUE; 
 	    changed=TRUE;
@@ -694,9 +702,7 @@ for (i=0; i<vCount; ++i)
 	    {
 	    struct ggEvidence *ge = NULL;
 	    em[i][softEndIx] = FALSE;
-//	    ge = ggEvidenceClone(gg->evidence[i][softEndIx]);
 	    moveEvidenceIfUnique(&gg->evidence[i][bestEnd], &gg->evidence[i][softEndIx]);
-//	    ggEvidenceFreeList(&gg->evidence[i][softEndIx]);
 	    em[i][bestEnd] = TRUE; 
 	    changed=TRUE;
 	    }
@@ -1093,6 +1099,54 @@ for(i=0; i<vCount; i++)
 	}
     }
 }
+
+void fixLargeMrnaInserts(struct geneGraph *gg)
+/* If there is an insert in the mRNA can end up with cases where there
+   is a soft end and soft start at the same genomic position. Splice
+   these out and connect the two upstream and downstream vertices. */
+{
+struct ggVertex *v = gg->vertices;
+int vStart = -1, vEnd = -1, vUp = -1, vDown = -1;
+int vC = gg->vertexCount;
+bool **em = gg->edgeMatrix;
+for(vStart = 0; vStart < vC; vStart++)
+    {
+    for(vEnd = 0; vEnd < vC; vEnd++) 
+	{
+	/* If we have two vertices with same position
+	   that connect to eachother try to find outside
+	   things that they connect to and splice out self
+	   connection. */
+	if(v[vStart].position == v[vEnd].position &&
+	   em[vStart][vEnd] &&
+	   v[vStart].type == ggSoftEnd && v[vEnd].type == ggSoftStart)
+	    {
+	    /* Got one - Try to find all upstream and downstream connections. */
+	    boolean foundOne = FALSE;
+	    for(vUp = 0; vUp < vC; vUp++) 
+		{
+		for(vDown = 0; vDown < vC; vDown++)
+		    {
+		    if(em[vUp][vStart] && em[vEnd][vDown])
+			{
+			struct ggEvidence *newList = ggEvidenceClone(gg->evidence[vStart][vEnd]);
+			moveEvidenceIfUnique(&gg->evidence[vUp][vDown], &newList);
+			em[vUp][vDown] = TRUE;
+			em[vUp][vStart] = FALSE;
+			em[vEnd][vDown] = FALSE;
+			foundOne = TRUE;
+			}
+		    }
+		}
+	    if(foundOne == TRUE)
+		{
+		em[vStart][vEnd] = FALSE;
+		ggEvidenceFreeList(&gg->evidence[vStart][vEnd]);
+		}
+	    }
+	}
+    }
+}
 		
 struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
 					  struct hash *tissLibHash, boolean fillInEvidence)
@@ -1122,10 +1176,10 @@ for(i=0; i<gg->vertexCount; i++)
     else if(gg->vertices[i].type == ggSoftEnd)
 	softEndOverlapConsensusArcs(gg, aliHash, i, ggHardEnd, FALSE);
     }
-//softlyTrim(gg);
 /* Fill in soft ends and starts with the "best" soft end or start. */
 softlyTrimConsensus(gg, aliHash);
 hideLittleOrphans(gg);
+fixLargeMrnaInserts(gg); 
 if(fillInEvidence)
     {
     if(tissLibHash == NULL)
@@ -1156,3 +1210,21 @@ hFreeConn(&conn);
 return gg;
 }
 
+
+void printEdgesWithVertex(struct geneGraph *gg, int queryIx)
+/* Print all of the edges that contain a given vertex. Useful
+   for debugging. */
+{
+int i = 0;
+int vC = gg->vertexCount;
+bool **em = gg->edgeMatrix;
+struct ggVertex *query = &gg->vertices[queryIx];
+for(i = 0; i < vC; i++) 
+    {
+    struct ggVertex *v = &gg->vertices[i];
+    if(em[i][queryIx])
+	printf("%d-%d %d-%d %d-%d\n", i, queryIx, v->position, query->position, v->type, query->type);
+    if(em[queryIx][i])
+	printf("%d-%d %d-%d %d-%d\n", queryIx, i, query->position, v->position, query->type, v->type);
+    }
+}

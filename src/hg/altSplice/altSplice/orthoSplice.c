@@ -34,15 +34,12 @@
 #include "chainDb.h"
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
-#include "rbTree.h"
 #include "binRange.h"
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.30 2005/01/10 00:31:59 kent Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.31 2005/01/27 18:26:25 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
-static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
-static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
 boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
 static struct binKeeper *possibleExons = NULL; /* List of possible exons common to human and mouse. */
@@ -254,7 +251,9 @@ for (el = *pList; el != NULL; el = next)
 void orthoAgReportHeader(FILE *out)
 /** Output a header for the orthoAgReport fields. */
 {
-fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", "numVertexes", "vertexMap",  "ssSoftFound", "ssSoftMissing", "ssHardFound", "ssHardMissing", "ssDoubles", "ssVeryClose", "altEdges", "altEdgesFound");
+fprintf(out, "#%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "agName", "orhtoAgName", 
+	"numVertexes", "vertexMap",  "ssSoftFound", "ssSoftMissing", "ssHardFound", 
+	"ssHardMissing", "ssDoubles", "ssVeryClose", "altEdges", "altEdgesFound");
 }
 
 void orthoAgReportTabOut(struct orthoAgReport *r, FILE *out)
@@ -264,8 +263,9 @@ int i;
 fprintf(out, "%s\t%s\t%d\t", r->agName, r->orthoAgName, r->numVertexes);
 for(i=0; i<r->numVertexes; i++)
     fprintf(out, "%d,", r->vertexMap[i]);
-fprintf(out, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", r->ssSoftFound, r->ssSoftMissing, r->ssHardFound, 
-	r->ssHardMissing, r->ssDoubles, r->ssVeryClose, r->alt, r->altFound);
+fprintf(out, "\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", r->ssSoftFound, 
+	r->ssSoftMissing, r->ssHardFound,  r->ssHardMissing, r->ssDoubles, 
+	r->ssVeryClose, r->alt, r->altFound);
 }
 
 void orthoSpliceEdgeHeader(FILE *out)
@@ -279,7 +279,8 @@ fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "#c
 void orthoSpliceEdgeTabOut(struct orthoSpliceEdge *se, FILE *out)
 /** Write out a splice edge record. */
 {
-fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", se->chrom, se->chromStart, se->chromEnd, 
+fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", 
+	se->chrom, se->chromStart, se->chromEnd, 
 	se->agName, se->conf, se->strand,
 	se->type, se->v1, se->v2, se->orthoV1, se->orthoV2,
 	se->alt, se->altCons, se->conserved, se->soft);
@@ -375,8 +376,6 @@ for(i=0; i<ag->edgeCount; i++)
     e->chromEnd = vPos[ends[i]];
     e->v1 = starts[i];
     e->v2 = ends[i];
-/*     e->conf = ag->evidence[i].evCount; */
-/*     e->conf = altGraphConfidenceForEdge(ag, i); */
     slAddHead(&eList, e);
     } 
 return eList;
@@ -468,20 +467,6 @@ slFreeList(&nameList);
 usingChromKeeper = TRUE;
 }
 
-struct rbTree *rbTreeFromAgxFile(char *fileName)
-/* Build an rbTree from an agxt file */
-{
-struct rbTree *rbTree = rbTreeNew(agxRangeCmp);
-struct altGraphX *ag = NULL, *agList = NULL;
-agList = altGraphXLoadAll(fileName);
-
-for(ag=agList; ag != NULL; ag = ag->next)
-    {
-    rbTreeAdd(rbTree, ag);
-    }
-return rbTree;
-}
-
 int cnFillRangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
@@ -494,20 +479,6 @@ else if (b->tStart + b->tSize <= a->tStart)
     return 1;
 else
     return 0;
-}
-
-struct rbTree *rbTreeFromNetFile(char *fileName)
-/* Build an rbTree from a net file */
-{
-struct rbTree *rbTree = rbTreeNew(cnFillRangeCmp);
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct chainNet *cn = chainNetRead(lf);
-struct cnFill *fill = NULL;
-for(fill=cn->fillList; fill != NULL; fill = fill->next)
-    {
-    rbTreeAdd(rbTree, fill);
-    }
-return rbTree;
 }
 
 void addFillToBk(struct binKeeper *bk, struct cnFill *fill)
@@ -531,7 +502,6 @@ struct binKeeper *bk = binKeeperNew(0,cn->size);
 for(fill=cn->fillList; fill != NULL; fill = fill->next)
     {
     binKeeperAdd(bk, fill->tStart, fill->tStart+fill->tSize, fill);
-//    addFillToBk(bk, fill);
     }
 return bk;
 }
@@ -715,28 +685,20 @@ void chainNetGetRange(char *db, char *netTable, char *chrom,
 {
 struct cnFill *searchHi=NULL, *searchLo = NULL;
 struct slRef *refList = NULL, *ref = NULL;
-
+struct binElement *beList = NULL, *be = NULL;
 (*fill) = NULL;
 (*toFree) = NULL;
 if(differentString(workingChrom, chrom))
     return;
-if(netTree != NULL)
+
+if(netBins != NULL)
     {
-    AllocVar(searchLo);
-    searchLo->tStart = start;
-    searchLo->tSize = 0;
-    AllocVar(searchHi);
-    searchHi->tStart = end;
-    searchHi->tSize = 0;
-    refList = rbTreeItemsInRange(netTree, searchLo, searchHi);
-    for(ref = refList; ref != NULL; ref = ref->next)
+    beList = binKeeperFind(netBins, start, end);
+    for(be = beList; be != NULL; be = be->next)
 	{
-	slSafeAddHead(fill, ((struct slList *)ref->val));
+	slSafeAddHead(fill, ((struct slList *)be->val));
 	}
-    slReverse(fill);
-    freez(&searchHi);
-    freez(&searchLo);
-    (*toFree) = NULL;
+    slFreeList(&beList);
     }
 else
     {
@@ -1406,7 +1368,8 @@ if(!usingChromKeeper)
     char query[256];
     struct sqlConnection *orthoConn = NULL; 
     orthoConn = hAllocConn2();
-    safef(query, sizeof(query), "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%s'",
+    safef(query, sizeof(query), 
+	  "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%s'",
 	  altTable, chrom, chromEnd, chromStart, strand);
     agxList = altGraphXLoadByQuery(orthoConn, query);
     hFreeConn2(&orthoConn);
@@ -1634,7 +1597,8 @@ seList = altGraphXToOSEdges(ag);
 for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     {
     int oIndex = slIxFromElement(orthoAgList, oAg);
-    makeVertexMap(ag, oAg, chain, vertexMap, orthoAgIx, vertexOrthoPos, vCount, oIndex, seList, agRep, reverse);
+    makeVertexMap(ag, oAg, chain, vertexMap, orthoAgIx, vertexOrthoPos, 
+		  vCount, oIndex, seList, agRep, reverse);
     }
 
 /* Go back and try to map soft starts and ends that we missed before. */
@@ -1645,7 +1609,8 @@ for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     int oIndex = slIxFromElement(orthoAgList, oAg);
     orthoEm = altGraphXCreateEdgeMatrix(oAg);    
     orthoEmP[oIndex] = orthoEm;
-    findSoftStartsEnds(ag, agEm, oAg, orthoEm, chain, vertexMap, orthoAgIx, vCount, oIndex, agRep, reverse);
+    findSoftStartsEnds(ag, agEm, oAg, orthoEm, chain, vertexMap, orthoAgIx, 
+		       vCount, oIndex, agRep, reverse);
     }
 
 /* Find the common subGraph. */
@@ -1842,14 +1807,12 @@ if(optionExists("exonFile"))
 if(netFile != NULL)
     {
     warn("Loading net info from file %s", netFile);
-    netTree = rbTreeFromNetFile(netFile);
-//    netBins = binKeeperFromNetFile(netFile);
+    netBins = binKeeperFromNetFile(netFile);
     }
 if(orthoAgxFile != NULL)
     {
     warn("Loading orthoAltGraphX records from file", orthoAgxFile);
     initAgxChromKeeper(orthoAgxFile);
-/*     orthoAgxTree = rbTreeFromAgxFile(orthoAgxFile); */
     }
 /* Want to read in and process each altGraphX record individually
    to save memory, so figure out how many columns in each row we have currently and

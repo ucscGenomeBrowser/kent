@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define LIFTOVERCHAIN_NUM_COLS 3
+#define LIFTOVERCHAIN_NUM_COLS 9
 
 struct liftOverChain
 /* Chain file for lifting annotations between assemblies */
@@ -18,6 +18,12 @@ struct liftOverChain
     char *fromDb;	/* Short name of 'from' database.  'hg15' or the like */
     char *toDb;	/* Short name of 'to' database.  'hg16' or the like */
     char *path;	/* Path to chain file */
+    float minMatch;	/* Minimum ratio of bases that must remap. */
+    unsigned minSizeT;	/* Minimum chain size in target. */
+    unsigned minSizeQ;	/* Minimum chain size in query. */
+    char multiple[2];	/* Use -multiple by default. */
+    float minBlocks;	/* Min ratio of alignment blocks/exons that must map. */
+    char fudgeThick[2];	/* If thickStart/thickEnd is not mapped, use the closest mapped base. */
     };
 
 void liftOverChainStaticLoad(char **row, struct liftOverChain *ret);

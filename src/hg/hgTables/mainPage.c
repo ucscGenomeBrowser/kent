@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.64 2004/12/02 00:53:27 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.65 2005/02/01 01:19:32 angie Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -39,6 +39,18 @@ jsTextCarryOver(dy, hgtaRange);
 jsDropDownCarryOver(dy, hgtaOutputType);
 jsTextCarryOver(dy, hgtaOutFileName);
 return dy;
+}
+
+static char *onChangeClade()
+/* Return javascript executed when they change clade. */
+{
+struct dyString *dy = onChangeStart();
+jsDropDownCarryOver(dy, "clade");
+jsDropDownCarryOver(dy, hgtaTable);
+dyStringAppend(dy, " document.hiddenForm.org.value=0;");
+dyStringAppend(dy, " document.hiddenForm.db.value=0;");
+dyStringAppend(dy, " document.hiddenForm.position.value='';");
+return jsOnChangeEnd(&dy);
 }
 
 static char *onChangeOrg()
@@ -395,12 +407,24 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig, isPositional = FALSE, isMaf = FALSE;
+boolean gotClade = hGotClade();
 hPrintf("<TABLE BORDER=0>\n");
 
-/* Print genome and assembly line. */
+/* Print clade, genome and assembly line. */
     {
-    hPrintf("<TR><TD><B>genome:</B>\n");
-    printGenomeListHtml(database, onChangeOrg());
+    if (gotClade)
+	{
+	hPrintf("<TR><TD><B>clade:</B>\n");
+	printCladeListHtml(hOrganism(database), onChangeClade());
+	nbSpaces(3);
+	hPrintf("<B>genome:</B>\n");
+	printGenomeListForCladeHtml(database, onChangeOrg());
+	}
+    else
+	{
+	hPrintf("<TR><TD><B>genome:</B>\n");
+	printGenomeListHtml(database, onChangeOrg());
+	}
     nbSpaces(3);
     hPrintf("<B>assembly:</B>\n");
     printAssemblyListHtml(database, onChangeDb());
@@ -623,7 +647,7 @@ hPrintf("</FORM>\n");
 /* Hidden form - for benefit of javascript. */
     {
     static char *saveVars[] = {
-      "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
+      "clade", "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
       hgtaRange, hgtaOutputType, hgtaOutFileName};
     jsCreateHiddenForm(saveVars, ArraySize(saveVars));
     }

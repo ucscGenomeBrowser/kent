@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.231 2005/01/26 11:51:47 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.235 2005/02/03 00:56:29 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2895,10 +2895,15 @@ if (table != NULL)
     dyStringPrintf(query, "%s<%u and %s>%u", 
     	hti->startField, end, hti->endField, start);
     if (extraWhere)
-        dyStringPrintf(query, " and %s", extraWhere);
+        {
+        /* allow more flexible additions to where clause */
+        if (!startsWith("order", extraWhere) && 
+            !startsWith("limit", extraWhere))
+                dyStringAppend(query, " and ");
+        dyStringPrintf(query, " %s", extraWhere);
+        }
     if (order)
         dyStringPrintf(query, " order by %s", hti->startField);
-    //printf(" %s <p>",query->string);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
@@ -3104,17 +3109,23 @@ while (tdbLocalList != NULL)
 nextTdb = tdbFullList;
 for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
     {
-    char *composite = trackDbSetting(tdb, "subTrack");
+    char *words[1];
+    char *setting;
+
     nextTdb = tdb->next;
-    if (composite)
+    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
         {
-        compositeTdb = (struct trackDb *)hashFindVal(compositeHash, composite);
-        if (compositeTdb)
+        if (chopLine(cloneString(setting), words) >= 1)
             {
-            /* should be a short list -- we can shortcut and add to tail
-             * rather than reversing later */
-            tdb->type = cloneString(compositeTdb->type);
-            slAddTail(&compositeTdb->subtracks, tdb);
+            compositeTdb = 
+                (struct trackDb *)hashFindVal(compositeHash, words[0]);
+            if (compositeTdb)
+                {
+                /* should be a short list -- we can shortcut and add to tail
+                 * rather than reversing later */
+                tdb->type = cloneString(compositeTdb->type);
+                slAddTail(&compositeTdb->subtracks, tdb);
+                }
             }
         }
     else
@@ -3131,7 +3142,7 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn, char *tra
 struct trackDb *tdb, *nextTdb, *tdbList, *compositeTdb = NULL;
 char where[256];
 
-safef(where, sizeof(where), "tableName = '%s' or settings like '%%subTrack %s\n%%'", track, track);
+safef(where, sizeof(where), "tableName = '%s' or settings like '%%subTrack %s%%'", track, track);
 
 tdbList = loadTrackDbLocal(conn, where);
 if (tdbList == NULL)
@@ -3419,7 +3430,7 @@ struct slName *hLiftOverOrgs(boolean from, char *fromDb)
 {
 struct slName *dbs = (from) ? hLiftOverFromDbs() : hLiftOverToDbs(fromDb);
 struct slName *names = NULL, *org;
-for (org = dbs; org != NULL; org=org->next)
+for (org = dbs; org != NULL; org = org->next)
     slNameStore(&names, hArchiveOrganism(org->name));
 slReverse(&names);
 slFreeList(&dbs);
@@ -3448,7 +3459,7 @@ struct dbDb *hGetLiftOverFromDatabases()
  * from this assembly to another.
  * Dispose of this with dbDbFreeList. */
 {
-struct dbDb *currentDbList = NULL, *archiveDbList = NULL;
+struct dbDb *allDbList = NULL;
 struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
@@ -3463,13 +3474,11 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         hashAdd(hash, chain->fromDb, chain->fromDb);
     }
 
-/* Get list of all current databases */
-currentDbList = hDbDbList();
-/* Get list of all archived databases */
-archiveDbList = hArchiveDbDbList();
+/* Get list of all current and archived databases */
+allDbList = slCat(hDbDbList(),hArchiveDbDbList());
 
 /* Create a new dbDb list of all entries in the liftOver hash */
-for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
+for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     /* current dbDb entries */
     nextDbDb = dbDb->next;
@@ -3477,18 +3486,6 @@ for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
 	{
         slAddHead(&liftOverDbList, dbDb);
 	hashAdd(dbNameHash, dbDb->name, dbDb->name);
-	}
-    else
-        dbDbFree(&dbDb);
-    }
-for (dbDb = archiveDbList; dbDb != NULL; dbDb = nextDbDb)
-    {
-    /* archived dbDb entries */
-    nextDbDb = dbDb->next;
-    if (hashFindVal(hash, dbDb->name) && !hashFindVal(dbNameHash, dbDb->name))
-	{
-        slAddHead(&liftOverDbList, dbDb);
-	hashAdd(dbNameHash, dbDb->name, dbDb->name);	
 	}
     else
         dbDbFree(&dbDb);
@@ -3509,6 +3506,7 @@ struct dbDb *hGetLiftOverToDatabases(char *fromDb)
 struct dbDb *allDbList = NULL, *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0);
+struct hash *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainList();
@@ -3519,14 +3517,18 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	hashAdd(hash, chain->toDb, chain->toDb);
 
 /* Get list of all current databases */
-allDbList = hDbDbList();
+allDbList = slCat(hDbDbList(),hArchiveDbDbList());
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     nextDbDb = dbDb->next;
-    if (hashFindVal(hash, dbDb->name))
+    if (hashFindVal(hash, dbDb->name) && !hashFindVal(dbNameHash, dbDb->name))
+	{	
         slAddHead(&liftOverDbList, dbDb);
+	/* to avoid duplicates in the returned list. */
+	hashAdd(dbNameHash, dbDb->name, dbDb->name);
+	}
     else
         dbDbFree(&dbDb);
     }
@@ -4084,4 +4086,14 @@ struct slName *sln1 = *(struct slName **)el1;
 struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
+
+int getTableSize(char *table)
+/* Get count of rows in a table in the primary database */
+{
+struct sqlConnection *conn = hAllocConn();
+int ct = sqlTableSize(conn, table);
+hFreeConn(&conn);
+return ct;
+}
+
 

@@ -29,7 +29,7 @@ for (i=0; i<sizeof(unpacked); ++i)
 return TRUE;
 }
 
-static void *sockSuckDeamon(void *vptr)
+static void *sockSuckDaemon(void *vptr)
 /* Shovel messages from short socket queue to our
  * larger hub message queue. */
 {
@@ -53,6 +53,7 @@ for (;;)
 	    unpackIp(pm->ipAddress.sin_addr.s_addr, ip);
 	    warn("unauthorized access by %d.%d.%d.%d\n", 
                  ip[0], ip[1], ip[2], ip[3]);
+	    freez(&pm);
 	    }
 	}
     else
@@ -64,7 +65,7 @@ for (;;)
 void sockSuckStart(struct rudp *ru)
 /* Start socket sucker deamon.  */
 {
-int err = pthread_create(&sockSuckThread, NULL, sockSuckDeamon, ru);
+int err = pthread_create(&sockSuckThread, NULL, sockSuckDaemon, ru);
 if (err < 0)
     errAbort("Couldn't create sockSuckThread %s", strerror(err));
 }

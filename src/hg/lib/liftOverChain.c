@@ -8,18 +8,22 @@
 #include "jksql.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: liftOverChain.c,v 1.1 2004/04/13 16:43:44 kate Exp $";
+static char const rcsid[] = "$Id: liftOverChain.c,v 1.2 2005/02/02 08:45:37 aamp Exp $";
 
 void liftOverChainStaticLoad(char **row, struct liftOverChain *ret)
 /* Load a row from liftOverChain table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->fromDb = row[0];
 ret->toDb = row[1];
 ret->path = row[2];
+ret->minMatch = atof(row[3]);
+ret->minSizeT = sqlUnsigned(row[4]);
+ret->minSizeQ = sqlUnsigned(row[5]);
+strcpy(ret->multiple, row[6]);
+ret->minBlocks = atof(row[7]);
+strcpy(ret->fudgeThick, row[8]);
 }
 
 struct liftOverChain *liftOverChainLoad(char **row)
@@ -27,13 +31,17 @@ struct liftOverChain *liftOverChainLoad(char **row)
  * from database.  Dispose of this with liftOverChainFree(). */
 {
 struct liftOverChain *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->fromDb = cloneString(row[0]);
 ret->toDb = cloneString(row[1]);
 ret->path = cloneString(row[2]);
+ret->minMatch = atof(row[3]);
+ret->minSizeT = sqlUnsigned(row[4]);
+ret->minSizeQ = sqlUnsigned(row[5]);
+strcpy(ret->multiple, row[6]);
+ret->minBlocks = atof(row[7]);
+strcpy(ret->fudgeThick, row[8]);
 return ret;
 }
 
@@ -43,7 +51,7 @@ struct liftOverChain *liftOverChainLoadAll(char *fileName)
 {
 struct liftOverChain *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +69,7 @@ struct liftOverChain *liftOverChainLoadAllByChar(char *fileName, char chopper)
 {
 struct liftOverChain *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -105,8 +113,8 @@ void liftOverChainSaveToDb(struct sqlConnection *conn, struct liftOverChain *el,
  * If worried about this use liftOverChainSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%s)", 
-	tableName,  el->fromDb,  el->toDb,  el->path);
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,'%s',%g,'%s')", 
+	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minSizeT,  el->minSizeQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -121,18 +129,22 @@ void liftOverChainSaveToDbEscaped(struct sqlConnection *conn, struct liftOverCha
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *fromDb, *toDb, *path;
+char  *fromDb, *toDb, *path, *multiple, *fudgeThick;
 fromDb = sqlEscapeString(el->fromDb);
 toDb = sqlEscapeString(el->toDb);
 path = sqlEscapeString(el->path);
+multiple = sqlEscapeString(el->multiple);
+fudgeThick = sqlEscapeString(el->fudgeThick);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  fromDb,  toDb,  path);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%g,%u,%u,'%s',%g,'%s')", 
+	tableName,  fromDb,  toDb,  path, el->minMatch , el->minSizeT , el->minSizeQ ,  multiple, el->minBlocks ,  fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&fromDb);
 freez(&toDb);
 freez(&path);
+freez(&multiple);
+freez(&fudgeThick);
 }
 
 struct liftOverChain *liftOverChainCommaIn(char **pS, struct liftOverChain *ret)
@@ -141,13 +153,18 @@ struct liftOverChain *liftOverChainCommaIn(char **pS, struct liftOverChain *ret)
  * return a new liftOverChain */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
 ret->fromDb = sqlStringComma(&s);
 ret->toDb = sqlStringComma(&s);
 ret->path = sqlStringComma(&s);
+ret->minMatch = sqlFloatComma(&s);
+ret->minSizeT = sqlUnsignedComma(&s);
+ret->minSizeQ = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->multiple, sizeof(ret->multiple));
+ret->minBlocks = sqlFloatComma(&s);
+sqlFixedStringComma(&s, ret->fudgeThick, sizeof(ret->fudgeThick));
 *pS = s;
 return ret;
 }
@@ -181,7 +198,6 @@ for (el = *pList; el != NULL; el = next)
 void liftOverChainOutput(struct liftOverChain *el, FILE *f, char sep, char lastSep) 
 /* Print out liftOverChain.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->fromDb);
 if (sep == ',') fputc('"',f);
@@ -192,6 +208,22 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->path);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%g", el->minMatch);
+fputc(sep,f);
+fprintf(f, "%u", el->minSizeT);
+fputc(sep,f);
+fprintf(f, "%u", el->minSizeQ);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->multiple);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%g", el->minBlocks);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->fudgeThick);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

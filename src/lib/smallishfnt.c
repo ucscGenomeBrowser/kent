@@ -2,7 +2,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: smallishfnt.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: smallishfnt.c,v 1.5 2005/02/02 07:09:24 kent Exp $";
 
 static UBYTE font_data[] = {
 0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
@@ -336,7 +336,9 @@ STPROP, 3584, "smallish", 0, 254,
 0, 0, 0x0, 0x0,
 0x0, NULL, font_ch_ofst, font_data,
 164, 14,
-NULL,};
+NULL,
+0, 0, /* x/y offset */
+};
 
 MgFont *mgSmallishFont()
 {

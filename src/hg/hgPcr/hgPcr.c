@@ -20,8 +20,9 @@
 #include "blatServers.h"
 #include "web.h"
 #include "botDelay.h"
+#include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.9 2004/12/06 23:06:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.10 2005/02/01 17:08:41 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -344,21 +345,30 @@ if (errCatchStart(errCatch))
 	printf("<TT><PRE>");
 	gfPcrOutputWriteAll(gpoList, "fa", url->string, "stdout");
 	printf("</PRE></TT>");
-        ok = TRUE;
 	dyStringFree(&url);
 	}
     else
-	errAbort("No matches to %s %s in %s %s", fPrimer, rPrimer, 
+	{
+	printf("No matches to %s %s in %s %s", fPrimer, rPrimer, 
 		server->genome, server->description);
+	}
+    ok = TRUE;
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
-     {
      warn(errCatch->message->string);
-     }
 errCatchFree(&errCatch); 
 if (flipReverse)
     reverseComplement(rPrimer, strlen(rPrimer));
+webNewSection("Primer Melting Temperatures");
+printf("<TT>");
+printf("<B>Forward:</B> %4.1f C %s<BR>\n", oligoTm(fPrimer, 50.0, 50.0), fPrimer);
+printf("<B>Reverse:</B> %4.1f C %s<BR>\n", oligoTm(rPrimer, 50.0, 50.0), rPrimer);
+printf("</TT>");
+printf("The temperature calculations are done assuming 50 mM salt and 50 nM annealing "
+       "oligo concentration.  The code to calculate the melting temp comes from "
+       "<A HREF=\"http://frodo.wi.mit.edu/cgi-bin/primer3/primer3_www.cgi\" target=_blank>"
+       "Primer3</A>.");
 return ok;
 }
 

@@ -1,16 +1,26 @@
-track mzDy1Dp2Ag1_phast
+track multiz8way
 shortLabel Conservation
-longLabel D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
+longLabel 6 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
 group compGeno
 priority 100
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle mzDy1Dp2Ag1_phast_wig
+wiggle phastCons8way
 yLineOnOff Off
 autoScaleDefault Off
-pairwise mypa
-speciesOrder droYak1 dp2 anoGam1
+pairwise 050201
+speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1
+
+track phastConsElements8way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements (6 Flies, Mosquito and Honeybee)
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track flyBaseGene
 shortLabel FlyBase

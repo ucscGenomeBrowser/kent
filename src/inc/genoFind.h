@@ -363,7 +363,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
 	int minDistance, int maxDistance);
 /* Find possible PCR hits.  The fPrimer and rPrimer are on opposite strands. */
 
-#define gfVersion 31	/* Current BLAT version number */
+#define gfVersion 32	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

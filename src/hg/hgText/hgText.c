@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.161 2004/11/23 00:12:47 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.162 2005/02/07 06:50:14 donnak Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -645,7 +645,7 @@ return FALSE;
 void doGateway()
 /* Table Browser gateway page: select organism, db */
 {
-webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
+webStart(cart, "Table Browser: Choose Organism and Assembly");
 
 if (! hDbIsActive(database))
     {

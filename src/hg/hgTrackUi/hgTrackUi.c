@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.168 2005/01/22 20:56:21 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.173 2005/02/03 19:01:53 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -214,15 +214,10 @@ void ldUi(struct trackDb *tdb)
 /* Put up UI snp data. */
 {
 ldValue  = cartUsualString(cart,  "ldValues", "rsquared");
-ldCeu    = cartUsualBoolean(cart, "ldCeu",    TRUE);
-ldHcb    = cartUsualBoolean(cart, "ldHcb",    FALSE);
-ldJpt    = cartUsualBoolean(cart, "ldJpt",    FALSE);
-ldYri    = cartUsualBoolean(cart, "ldYri",    FALSE);
-ldCov    = cartUsualInt(cart,     "ldCov",    100000);
-ldHeight = cartUsualInt(cart,     "ldHeight", 200);
+ldTrim   = cartUsualBoolean(cart, "ldTrim",   TRUE);
 ldPos    = cartUsualString(cart,  "ldPos",    "red");
 ldNeg    = cartUsualString(cart,  "ldNeg",    "blue");
-ldOut    = cartUsualString(cart,  "ldOut",    "yellow");
+ldOut    = cartUsualString(cart,  "ldOut",    "none");
 
 /* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
 
@@ -234,15 +229,9 @@ printf("&nbsp;D'&nbsp;&nbsp;");
 cgiMakeRadioButton("ldValues", "lod",      sameString("lod",      ldValue));
 printf("&nbsp;LOD<BR>");
 
-printf("<BR><B>Populations:</B> <font color=red>THESE CONTROLS ARE NOT FUNCTIONAL YET</font><BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("ldCeu", ldCeu); printf("&nbsp;Northern European from Utah (CEPH)<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("ldHcb", ldHcb); printf("&nbsp;Han Chinese from Beijing<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("ldJpt", ldJpt); printf("&nbsp;Japanese from Tokyo<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("ldYri", ldYri); printf("&nbsp;Yoruba from Ibidan<BR>\n");
-
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
-cgiMakeIntVar("ldCov",    ldCov,    6); printf("&nbsp; Maximum window of LD to show (maximum of 500,000 bases)<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n");
-cgiMakeIntVar("ldHeight", ldHeight, 3); printf("&nbsp;Track height (maximum of 400 pixels)<BR>\n");
+cgiMakeCheckBox("ldTrim", ldTrim); 
+printf("&nbsp;Trim to triangle<BR>\n");
 
 printf("<BR><B>Colors:</B><BR>&nbsp;&nbsp;");
 radioButton("ldPos", ldPos, "red");
@@ -914,15 +903,24 @@ void compositeUi(struct trackDb *tdb)
 {
 struct trackDb *subtrack;
 char option[64];
+char *words[2];
 
 puts("<P>");
 puts("<TABLE>");
+slSort(&(tdb->subtracks), trackDbCmp);
 for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
+    boolean alreadySet = TRUE;
+    char *setting;
     puts("<TR>");
     puts("<TD>");
-    safef(option, sizeof(option), "%s", subtrack->tableName);
-    cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+        if (chopLine(cloneString(setting), words) >= 2)
+            alreadySet = differentString(words[1], "off");
+    alreadySet = cartUsualBoolean(cart, option, alreadySet);
+    cgiMakeCheckBox(option, alreadySet);
+		    
     printf ("%s", subtrack->longLabel);
     puts("</TD>");
     puts("</TR>");
@@ -1217,6 +1215,15 @@ cgiMakeCheckBox("affyTransfrags.skipDups", skipDups);
 printf(" Remove transfrags that have a BLAT match elsewhere in the genome from display.<br>");
 }
 
+void acemblyUi(struct trackDb *tdb)
+/* Options for filtering the acembly track based on gene class */
+{
+char *acemblyClass = cartUsualString(cart, "acembly.type", acemblyEnumToString(0));
+printf("<p><b>Gene Class: </b>");
+acemblyDropDown("acembly.type", acemblyClass);
+printf("  ");
+}
+
 void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
@@ -1338,7 +1345,11 @@ else if (tdb->type != NULL)
     if (wordCount > 0)
 	{
 	if (sameWord(words[0], "genePred"))
+            {
+            if (sameString(track, "acembly"))
+                acemblyUi(tdb);
 	    cdsColorOptions(tdb, 2);
+            }
 	/* if bed has score then show optional filter based on score */
 	if (sameWord(words[0], "bed") && wordCount == 3)
 	    {

@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.27 2004/12/08 00:23:52 hiram Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.31 2005/02/01 01:04:45 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -29,6 +29,8 @@ static char *panTroNames[] = {"Pan troglodytes", NULL};
 static char *monDomNames[] = {"Monodelphis domestica", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *ceNames[] = {"Caenorhabditis elegans", NULL};
+static char *cbNames[] = {"Caenorhabditis briggsae", NULL};
+static char *caeRemNames[] = {"Caenorhabditis remanei", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
 static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
 			      "Canis canis", NULL};
@@ -42,15 +44,8 @@ static char *apiMelNames[] = {"Apis mellifera", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", NULL};
-
-/* species currently unique to zoo */
-static char *zooCatNames[] = {"Felis catus", "Felis sp.", NULL};
-static char *zooBaboonNames[] = {"Papio hamadryas", "Papio sp.", NULL};
-static char *zooCowNames[] = {"Bos taurus", "Bos sp.", NULL};
-static char *zooFrogNames[] = {"Xenopus tropicalis", "Xen sp.", NULL};
-static char *zooPigNames[] = {"Sus scrofa", "Sus sp.", NULL};
-static char *zooTetraNames[] = {"Tetraodon nigroviridis", NULL};
-static char *zooZebrafishNames[] = {"Danio rerio", NULL};
+/* hypothetical ancestor, will never match native */
+static char *borEutNames[] = {"BoreoEutherian ancestor", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -67,6 +62,9 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"monDom", monDomNames, NULL},
     {"galGal", galGalNames, NULL},
     {"ce", ceNames, NULL},
+    {"cb", cbNames, NULL},
+    {"caeRem", caeRemNames, NULL},
+    {"caeRei", caeRemNames, NULL}, /* db spelling mistake, should be Rem */
     {"danRer", danRerNames, NULL},
     {"canFam", canFamNames, NULL},
     {"droYak", droYakNames, NULL},
@@ -80,20 +78,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"tetNig", tetNigNames, "Tetraodon"},
     {"bosTau", bosTauNames, "Bos taurus "},
     {"xenTro", xenTroNames, "Xenopus tropicalis "},
-    {"zooHuman", hgNames, NULL},
-    {"zooCat", zooCatNames, NULL},
-    {"zooChicken", galGalNames, NULL},
-    {"zooBaboon", zooBaboonNames, NULL},
-    {"zooChimp", panTroNames, "Pan troglodytes "},
-    {"zooCow", zooCowNames, NULL},
-    {"zooFrog", zooFrogNames, NULL},
-    {"zooDog", canFamNames, NULL},
-    {"zooFugu", frNames, NULL},
-    {"zooMouse", mmNames, "Mus musculus "},
-    {"zooPig", zooPigNames, "Sus scrofa "},
-    {"zooRat", rnNames, NULL},
-    {"zooTetra", zooTetraNames, NULL},
-    {"zooZebrafish", zooZebrafishNames, NULL},
+    {"borEut", borEutNames, NULL},
     {NULL, endNames, NULL}
 };
 

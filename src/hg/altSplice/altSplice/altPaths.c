@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.11 2005/01/06 23:24:43 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.12 2005/01/27 18:26:25 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -361,12 +361,14 @@ path->vertices[path->vCount++] = vert;
 }
     
 struct path *pathsBetweenVerts(int **distance, int source, int sink, 
-				struct altGraphX *ag, bool **em, int startIx, int endIx)
+				struct altGraphX *ag, bool **em, int startIx, int endIx, 
+			       int *depthCount)
 /* Enumerate all the paths between startIx and endIx. */
 {
 struct path *pathList = NULL;
 struct path *path = NULL;
 int i = 0, j = 0;
+int maxDepth = 50;
 
 /* This amounts to a breadth first search of paths
    between startIx and endIx. */
@@ -392,13 +394,29 @@ for(i = source; i <= sink; i++)
 	    /* We need to recurse and find all the paths out
 	       of this vertex that lead to the endIx eventually. */
 	    struct path *sub = NULL, *subNext = NULL;
-	    struct path *subPaths = pathsBetweenVerts(distance, source, sink, ag,
-						      em, i, endIx);
+	    struct path *subPaths = NULL;
+	    /* Lets not go too deep, otherwise we run out of memory */
+	    if((*depthCount)++ > maxDepth)
+		{
+		pathFreeList(&pathList);
+		return NULL;
+		}
+	    subPaths = pathsBetweenVerts(distance, source, sink, ag,
+						      em, i, endIx, depthCount);
+
+	    /* If we went too deep and got NULL back
+	       free up memory and pass NULL back up to the 
+	       calling function. */
+	    if(subPaths == NULL)
+		{
+		pathFreeList(&pathList);
+		return NULL;
+		}
 	    for(sub = subPaths; sub != NULL; sub = subNext)
 		{
 		subNext = sub->next;
 		/* Add to tail for now. Later reverse the 
-		   order. Running ou tof memory here...*/
+		   order. */
 		pathAddTail(sub, startIx); 
 		slAddHead(&pathList, sub);
 		}
@@ -1040,22 +1058,32 @@ for(i = vertIx + 1; i <= sink; )
     if(connections == altCount)
 	{
 	int altBpSize = 0;
+	int currDepth = 0;
 	/* Found end of altsplice event. Enumerate all the paths
 	   between it and end vertex. */
 	*endIx = i;
 	splice->paths = pathsBetweenVerts(distance, source, sink, ag,
-					  em, vertIx, i);
-	reverseVertOrder(splice->paths);
-	splice->pathCount = slCount(splice->paths);
-	simplifyAndOrderPaths(splice, distance, ag, source, sink);
-	splice->type = typeForSplice(splice, ag, em, source, sink);
-	/* For now just keep track of difference between first
-	   two paths. That way can find 3bp differences. */
-	if(splice->pathCount >= 2)
-	    altBpSize = splice->paths->next->bpCount - splice->paths->bpCount;
+					  em, vertIx, i, &currDepth);
+
+	/* If splice->paths is NULL that means that we 
+	   recursed down too far and we're just going to assume
+	   that the splice is an altOther. */
+	if(splice->paths != NULL)
+	    {
+	    reverseVertOrder(splice->paths);
+	    splice->pathCount = slCount(splice->paths);
+	    simplifyAndOrderPaths(splice, distance, ag, source, sink);
+	    splice->type = typeForSplice(splice, ag, em, source, sink);
+	    /* For now just keep track of difference between first
+	       two paths. That way can find 3bp differences. */
+	    if(splice->pathCount >= 2)
+		altBpSize = splice->paths->next->bpCount - splice->paths->bpCount;
+	    else
+		altBpSize = splice->paths->bpCount;
+	    logSpliceType(splice->type, altBpSize);
+	    }
 	else
-	    altBpSize = splice->paths->bpCount;
-	logSpliceType(splice->type, altBpSize);
+	    logSpliceType(altOther, 0);
 	break;
 	}
     else if(connections > 0)
@@ -1327,9 +1355,6 @@ while(lineFileRow(lf, row))
     struct altGraphX *subAgx = NULL, *subAgxList = NULL;
     boolean counted = FALSE;
     agx = altGraphXLoad(row);
-    if(agx->vertexCount > 250)
-	warn("\nDoing: %s", agx->name);
-	
     dotForUser();
     /* Break the graph into connected components, 
        with the orthologous graphs it is possible that the

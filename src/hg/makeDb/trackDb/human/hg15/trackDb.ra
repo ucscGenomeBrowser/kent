@@ -26,6 +26,16 @@ color 0,100,180
 type genePred vegaPep
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
+track acembly
+shortLabel Acembly Genes
+longLabel AceView Gene Models With Alt-Splicing
+group genes
+priority 41
+visibility dense
+color 155,0,125
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=hg15&l=$$
+
 track vegaPseudoGene
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments

@@ -77,7 +77,7 @@ struct mgcStatus
     unsigned imageId;                 /* image clone id number */
     struct mgcStatusType *status;     /* current status information */
     char *acc;                        /* accession, or null if not available */
-    char organism[3];                 /* two-letter organism code */
+    char organism[7];                 /* organism code */
     char *geneName;                   /* target gene (RefSeq acc) */
 };
 

@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: sixhi.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: sixhi.c,v 1.5 2005/02/02 07:09:24 kent Exp $";
 
 UBYTE sixhi_data[] = {
 0x0,0x82,0x4,0x21,0xcf,0xb6,0xd,0xe3,
@@ -196,7 +196,9 @@ STPROP, 8, "", 0, 255,
 0xc, NULL, 
 sixhi_ch_ofst, sixhi_data,
 192, 6,
-NULL,};
+NULL,
+1, 0, /* x/y offset */
+};
 
 MgFont *mgTinyFont()
 {

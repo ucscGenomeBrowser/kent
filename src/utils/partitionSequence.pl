@@ -9,7 +9,7 @@
 # Actual batch list creation can be done with gensub2 and a spec,
 # using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.4 2005/01/27 01:00:32 angie Exp $
+# $Id: partitionSequence.pl,v 1.5 2005/01/27 17:36:25 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -287,7 +287,8 @@ foreach my $partRef (@partRefs) {
   my ($part, $file) = @{$partRef};
   print "$file\n";
   if ($opt_xdir) {
-    print XDIR "mkdir $opt_rawDir/$part\n";
+    $file =~ s/(.*\/)?//;
+    print XDIR "mkdir $opt_rawDir/$file\n";
   }
 }
 if ($opt_xdir) {

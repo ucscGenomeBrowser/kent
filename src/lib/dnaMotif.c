@@ -4,11 +4,132 @@
 
 #include "common.h"
 #include "linefile.h"
+#include "sqlList.h"
 #include "dystring.h"
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.1 2005/01/26 14:13:12 baertsch Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.2 2005/01/27 22:33:48 baertsch Exp $";
+
+struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret)
+/* Create a dnaMotif out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new dnaMotif */
+{
+char *s = *pS;
+int i;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->name = sqlStringComma(&s);
+ret->columnCount = sqlSignedComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->aProb, ret->columnCount);
+for (i=0; i<ret->columnCount; ++i)
+    {
+    ret->aProb[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->cProb, ret->columnCount);
+for (i=0; i<ret->columnCount; ++i)
+    {
+    ret->cProb[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->gProb, ret->columnCount);
+for (i=0; i<ret->columnCount; ++i)
+    {
+    ret->gProb[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->tProb, ret->columnCount);
+for (i=0; i<ret->columnCount; ++i)
+    {
+    ret->tProb[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+*pS = s;
+return ret;
+}
+
+void dnaMotifFree(struct dnaMotif **pEl)
+/* Free a single dynamically allocated dnaMotif such as created
+ * with dnaMotifLoad(). */
+{
+struct dnaMotif *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->aProb);
+freeMem(el->cProb);
+freeMem(el->gProb);
+freeMem(el->tProb);
+freez(pEl);
+}
+
+void dnaMotifFreeList(struct dnaMotif **pList)
+/* Free a list of dynamically allocated dnaMotif's */
+{
+struct dnaMotif *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    dnaMotifFree(&el);
+    }
+*pList = NULL;
+}
+
+void dnaMotifOutput(struct dnaMotif *el, FILE *f, char sep, char lastSep) 
+/* Print out dnaMotif.  Separate fields with sep. Follow last field with lastSep. */
+{
+int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->columnCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->columnCount; ++i)
+    {
+    fprintf(f, "%f", el->aProb[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->columnCount; ++i)
+    {
+    fprintf(f, "%f", el->cProb[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->columnCount; ++i)
+    {
+    fprintf(f, "%f", el->gProb[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->columnCount; ++i)
+    {
+    fprintf(f, "%f", el->tProb[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(lastSep,f);
+}
 
 float dnaMotifSequenceProb(struct dnaMotif *motif, DNA *dna)
 /* Return probability of dna according to motif.  Make sure

@@ -1284,8 +1284,7 @@ axtChain $1 \
     gzip canFam1ToMm5.chain
     mkdir -p /gbdb/canFam1/liftOver
     ln -s /cluster/data/canFam1/bed/liftOver/canFam1ToMm5.chain /gbdb/canFam1/liftOver/canFam1ToMm5.over.chain
-    echo 'insert into liftOverChain values ("canFam1","mm5","/gbdb/canFam1/liftOver/canFam1ToMm5.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOverChain -multiple canFam1 mm5
 
 # MAKE HG17 LIFTOVER CHAIN FILE (DONE 1/17/05 Andy)
     # Maybe I can do without the net splitting this time... 
@@ -1308,8 +1307,7 @@ axtChain $1 \
     cp /cluster/data/canFam1/bed/liftOver/canFam1ToHg17.chain .
     gzip canFam1ToHg17.chain
     ln -s /cluster/data/canFam1/bed/liftOver/canFam1ToHg17.chain /gbdb/canFam1/liftOver/canFam1ToHg17.over.chain
-    echo 'insert into liftOverChain values ("canFam1","hg17","/gbdb/canFam1/liftOver/canFam1ToHg17.over.chain")' \
-       | hgsql -h genome-testdb hgcentraltest
+    hgAddLiftOverChain -multiple canFam1 hg17
 
 # PHASTCONS DOG/HUMAN/MOUSE (DONE 7/21/04 angie)
 # NOTE: REPLACED, SEE "NEW PHASTCONS" BELOW
@@ -1548,228 +1546,6 @@ rm $TMP/$root.ss.gz
     mv /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/gzMaf mm5
     md5sum *.gz */*.gz > md5sum.txt
     # make a README.txt file
-
-
-# BLASTZ SELF (TODO 7/9/04 angie)
-    ssh kk
-    mkdir -p /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-    cat << '_EOF_' > DEF
-# dog vs. dog
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
-
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
-BLASTZ_L=6000
-BLASTZ_ABRIDGE_REPEATS=0
-
-# TARGET
-# Dog
-SEQ1_DIR=/scratch/hg/canFam1/nib
-SEQ1_RMSK=
-SEQ1_FLAG=
-SEQ1_SMSK=
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY
-# Dog
-SEQ2_DIR=/scratch/hg/canFam1/nib
-SEQ2_RMSK=
-SEQ2_FLAG=
-SEQ2_SMSK=
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
-SEQ2_LAP=10000
-
-BASE=/cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-'_EOF_'
-    # << this line makes emacs coloring happy
-
-    # Save the DEF file in the current standard place
-    chmod +x DEF
-    cp DEF ~angie/hummus/DEF.canFam1-canFam1
-
-    # source the DEF file
-    bash
-    . ./DEF
-    mkdir -p $BASE/run
-    ~angie/hummus/make-joblist $DEF > $BASE/run/j
-    sh $BASE/xdir.sh
-    cd $BASE/run
-    # now edit j to prefix path to executable name
-    sed -e 's#^#/cluster/bin/penn/#' j > j2
-    wc -l j*
-    head j2
-    # make sure the j2 edits are OK, then use it:
-    mv j2 j
-    para create j
-    para try, check, push, check, ...
-#Completed: 22801 of 22801 jobs
-#Average job time:                 257s       4.29m     0.07h    0.00d
-#Longest job:                     1238s      20.63m     0.34h    0.01d
-#Submission to last job:          6939s     115.65m     1.93h    0.08d
-
-    # --- normalize (PennSpeak for lift)
-    ssh kki
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-    # run bash shell if not running it already
-    source DEF
-    mkdir -p $BASE/run.1
-    mkdir -p $BASE/lav
-    # create a new job list to convert out files to lav
-    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
-                        > run.1/jobList
-    cd run.1
-    wc -l jobList
-    head jobList
-    # make sure the job list is OK
-    para create jobList
-    para push
-#Completed: 151 of 151 jobs
-#Average job time:                  24s       0.41m     0.01h    0.00d
-#Longest job:                      127s       2.12m     0.04h    0.00d
-#Submission to last job:           246s       4.10m     0.07h    0.00d
-
-    # convert lav files to axt
-    ssh kki
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-    mkdir axtChrom
-    # a new run directory
-    mkdir run.2
-    cd run.2
-    cat << '_EOF_' > do.csh
-#!/bin/csh
-cd $1
-cat `ls -1 *.lav | sort -g` \
-| lavToAxt -dropSelf stdin /iscratch/i/canFam1/nib /iscratch/i/canFam1/nib \
-    stdout \
-| axtSort stdin $2
-'_EOF_'
-    # << this line makes emacs coloring happy
-    chmod a+x do.csh
-    cat << '_EOF_' > gsub
-#LOOP
-./do.csh {check in exists $(path1)} {check out line+ /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChrom/$(root1).axt}
-#ENDLOOP
-'_EOF_'
-    # << this line makes emacs coloring happy
-    \ls -1Sd ../lav/chr* > chrom.list
-    gensub2 chrom.list single gsub jobList
-    wc -l jobList
-    head jobList
-    para create jobList
-    para try, check, push, check,...
-
-
-# CHAIN SELF BLASTZ (TODO 7/9/04 angie)
-    # Run axtChain on little cluster
-    ssh kki
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
-    mkdir -p axtChain/run1
-    cd axtChain/run1
-    mkdir out chain
-    ls -1S /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChrom/*.axt \
-      > input.lst
-    cat << '_EOF_' > gsub
-#LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
-#ENDLOOP
-'_EOF_'
-    # << this line makes emacs coloring happy
-
-    cat << '_EOF_' > doChain
-#!/bin/csh
-axtFilter -notQ=chrUn $1 \
-| axtChain stdin /iscratch/i/canFam1/nib /iscratch/i/canFam1/nib $2 \
-  > $3
-'_EOF_'
-    # << this line makes emacs coloring happy
-    chmod a+x doChain
-    gensub2 input.lst single gsub jobList
-    para create jobList
-    para try, check, push, check...
-
-    # now on the cluster server, sort chains
-    ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
-    chainMergeSort run1/chain/*.chain > all.chain
-    chainSplit chain all.chain
-    rm run1/chain/*.chain
-
-    # take a look at score distr's
-    foreach f (chain/*.chain)
-      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
-      echo $f:t:r
-      textHistogram -binSize=10000 /tmp/score.$f:t:r
-      echo ""
-    end
-
-    # trim to minScore=20000 to cut some of the fluff
-    mkdir chainFilt
-    foreach f (chain/*.chain)
-      chainFilter -minScore=20000 $f > chainFilt/$f:t
-    end
-
-    # Load chains into database
-    ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain/chainFilt
-    foreach i (*.chain)
-        set c = $i:r
-        echo loading $c
-        hgLoadChain canFam1 ${c}_chainSelf $i
-    end
-
-
-# NET SELF BLASTZ (TODO 7/9/04 angie)
-    ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
-    chainPreNet all.chain ../S1.len ../S2.len stdout \
-    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
-    | netSyntenic stdin noClass.net
-
-    # Add classification info using db tables:
-    ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
-    netClass -noAr noClass.net canFam1 canFam1 self.net
-
-    # Make a 'syntenic' subset:
-    ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
-    rm noClass.net
-    netFilter -syn self.net > selfSyn.net
-
-    # Load the nets into database 
-    ssh hgwdev
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
-    netFilter -minGap=10 self.net |  hgLoadNet canFam1 netSelf stdin
-    netFilter -minGap=10 selfSyn.net | hgLoadNet canFam1 netSyntenySelf stdin
-    # Add entries for chainSelf, netSelf, netSyntenySelf to 
-    # dog/canFam1 trackDb
-
-
-# MAKE VSSELF DOWNLOADABLES (TODO 7/9/04 angie)
-    ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
-    cp all.chain self.chain
-    zip /cluster/data/canFam1/zip/self.chain.zip self.chain
-    rm self.chain
-    zip /cluster/data/canFam1/zip/self.net.zip self.net
-
-    ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsSelf
-    cd /usr/local/apache/htdocs/goldenPath/canFam1/vsSelf
-    mv /cluster/data/canFam1/zip/self*.zip .
-    md5sum *.zip > md5sum.txt
-    # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
 # PRODUCING GENSCAN PREDICTIONS (DONE 7/9/04 angie)
@@ -2031,119 +1807,6 @@ set chr = "chr$c"
     # load in addition to existing data
     hgLoadWiggle -oldTable -pathPrefix=/gbdb/canFam1/wib/qual \
       canFam1 quality *.wig
-
-
-# MAKE UNIGENE ALIGNMENTS (TODO 7/10/04 angie)
-    ssh kksilo
-    mkdir /cluster/data/canFam1/bed/unigene
-    cd /cluster/data/canFam1/bed/unigene
-    # Download dog Unigene and run Chuck's preproc scripts:
-    wget ftp://ftp.ncbi.nih.gov/repository/UniGene/Cfa.info
-    wget ftp://ftp.ncbi.nih.gov/repository/UniGene/Cfa.seq.uniq.gz
-    wget ftp://ftp.ncbi.nih.gov/repository/UniGene/Cfa.data.gz
-    gunzip *.gz
-    # Chuck's script expects human (Hs) -- use Cfa for dog:
-    sed -e 's/Hs/Cfa/g' /projects/cc/hg/sugnet/uniGene/countSeqsInCluster.pl \
-    > ./countSeqsInCluster.pl
-    chmod a+x ./countSeqsInCluster.pl
-    ./countSeqsInCluster.pl Cfa.data counts.tab
-    /projects/cc/hg/sugnet/uniGene/parseUnigene.pl Cfa.seq.uniq \
-      Cfa.seq.uniq.simpleHeader.fa leftoverData.tab
-    # Put on iscratch for cluster run
-    ssh kkr1u00
-    mkdir /iscratch/i/canFam1/unigene
-    cp -p /cluster/data/canFam1/bed/unigene/Cfa.seq.uniq.simpleHeader.fa \
-      /iscratch/i/canFam1/unigene/
-    iSync
-    # align on big cluster
-    ssh kk
-    cd /cluster/data/canFam1/bed/unigene
-    ls -1S /iscratch/i/canFam1/maskedContigs/*.fa > allctg.lst
-    ls -1S /iscratch/i/canFam1/unigene/*.fa > uniGene.lst
-    cat << '_EOF_' > template.sub
-#LOOP
-/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/iscratch/i/canFam1/11.ooc {check in line+ $(path1)} {check in line+ $(path2)}  {check out line+ psl/$(root1)_$(root2).psl}
-#ENDLOOP
-'_EOF_'
-    # << this line makes emacs coloring happy
-    gensub2 allctg.lst uniGene.lst template.sub jobList
-    para create jobList
-    mkdir psl
-    para try, check, push, check
-    # postprocess
-    ssh kksilo
-    pslSort dirs raw.psl tmp psl >& pslSort.log
-    liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
-    | pslReps -minCover=0.2 -minAli=0.965 -nearTop=0.002 \
-      stdin uniGene.lifted.pslReps.psl /dev/null
-    rm raw.psl
-    gzip Cfa.seq.uniq Cfa.data 
-    # load into db
-    ssh hgwdev
-    cd /cluster/data/canFam1/bed/unigene
-    mkdir /gbdb/canFam1/unigene
-    ln -s /cluster/data/canFam1/bed/unigene/Cfa.seq.uniq.simpleHeader.fa \
-      /gbdb/canFam1/unigene/
-    hgLoadSeq canFam1 /gbdb/canFam1/unigene/Cfa.seq.uniq.simpleHeader.fa
-    hgLoadPsl -fastLoad -table=uniGene_cf canFam1 uniGene.lifted.pslReps.psl
-
-
-# RUN GENE-CHECK ON MRNA W/CDS, ENSEMBL (TODO 9/1/04 angie)
-    # Note: /cluster/bin/scripts/runGeneCheck should make this easier 
-    # in the future, but this also shows how MarkD ran gene-check on 
-    # mRNAs with annotated CDS:
-
-    # get mrna data from hgwbeta, which is most current:
-    ssh hgwbeta
-    mkdir /cluster/store7/markd/canFam1
-    cd /cluster/store7/markd/canFam1
-    mkdir data
-    hgsql -N -e 'select * from all_mrna' canFam1 |cut -f 2-30 \
-      > data/all_mrna.psl
-    hgsql -N -e 'select mrna.acc,cds.name from mrna,cds,all_mrna where all_mrna.qName=mrna.acc and mrna.cds = cds.id' canFam1 \
-      > data/cds.tab
-    nice mrnaToGene -cdsFile=data/cds.tab data/all_mrna.psl data/all_mrna.gp \
-      >& data/all_mrna.log
-
-    # get ensGene data from hgwdev:
-    ssh hgwdev
-    cd /cluster/store7/markd/canFam1
-    hgsql -N -e 'select * from ensGene ' canFam1 >data/ensGene.gp
-
-    # run gene-check and gene-extract
-    ssh kksilo
-    cd /cluster/store7/markd/canFam1
-    mkdir results
-    ~markd/bin/gene-check -incl-ok -nib-dir /cluster/data/canFam1/nib \
-      -details-out results/all_mrna.details data/all_mrna.gp \
-      results/all_mrna.chk >& all_mrna.log
-    ~markd/bin/gene-check -incl-ok -nib-dir /cluster/data/canFam1/nib \
-      -details-out results/ensGene.details data/ensGene.gp \
-      results/ensGene.chk >& ensGene.log
-    ~markd/bin/gene-extract -nib-dir  /cluster/data/canFam1/nib \
-      -all-cds-fa results/all_mrna.cds.fa  data/all_mrna.gp >& all_mrna.log
-    ~markd/bin/gene-extract -nib-dir  /cluster/data/canFam1/nib \
-      -all-cds-fa results/ensGene.cds.fa  data/ensGene.gp >&ensGene.log
-    # Files in results/
-    #     *.chk - output of the gene-check program, rdb format
-    #     *.details - details of problems detected 
-    #     *.cds.fa - fasta of CDS taken from genome
-    # Columns in *.chk file are
-    #     acc - name field from genePred
-    #     chr  - genome location from genePred
-    #     chrStart
-    #     chrEnd
-    #     strand
-    #     stat - overall status based on other data: ok or err
-    #     frame - is the frame annotation sane (mult of 3): ok, bad, or noCDS
-    #             if noCDS, other CDS checks are not done.
-    #     start - Is there a valid start codon: ok or no
-    #     stop - Is there a valid stop codon: ok or no
-    #     orfStop - Number of in-frame stop codons
-    #     smallGap - Number of small gaps, too small to be introns
-    #     unknownSplice - Number of introns with unknown splicing patterns 
-    #          (considers the three most common splicing patterns as valid)
-    #     causes - list of symbolic names summarizing the failures 
 
 
 # ANDY LAW CPGISSLANDS (DONE 7/22/04 angie)
@@ -2551,6 +2214,109 @@ zcat `ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS/$chr.*.pp.gz \
     rm -r /cluster/bluearc/canFam1/chrom
 
 
+# NEW REPEATMASKER (DONE 10/5/04 angie)
+    # Use the new version of RepeatMasker, load up as rmskNew, 
+    # compare results w/orig.
+
+    #- contigs have already been split into 500kb chunks, at gaps if possible.
+
+    #- Make the run directory and job list:
+    ssh kksilo
+    cd /cluster/data/canFam1
+    cat << '_EOF_' > jkStuff/NewRMDog
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/canFam1/$2
+/bin/cp $2 /tmp/canFam1/$2/
+cd /tmp/canFam1/$2
+/cluster/bluearc/RepeatMasker.040909/RepeatMasker -s -spec dog $2
+popd
+/bin/cp /tmp/canFam1/$2/$2.out ./$2.new.out
+/bin/rm -fr /tmp/canFam1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/canFam1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/canFam1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/NewRMDog
+    mkdir NewRMRun
+    cp /dev/null NewRMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/canFam1/jkStuff/NewRMDog \
+                 /cluster/data/canFam1/$d $f \
+               '{'check out line+ /cluster/data/canFam1/$d/$f.new.out'}' \
+              >> NewRMRun/RMJobs
+          end
+      end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/canFam1/NewRMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+#Completed: 6373 of 6373 jobs
+#CPU time in finished jobs:   26081453s  434690.89m  7244.85h  301.87d  0.827 y
+#IO & Wait Time:                281283s    4688.05m    78.13h    3.26d  0.009 y
+#Average job time:                4137s      68.94m     1.15h    0.05d
+#Longest job:                     6392s     106.53m     1.78h    0.07d
+#Submission to last job:         50241s     837.35m    13.96h    0.58d
+    # Some jobs crashed, but succeeded after repushing --> longer total time.
+
+    #- Lift up the 500KB chunk .new.out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/canFam1
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.new.out $d/$contig.lft warn $d/${contig}_*.fa.new.out \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      liftUp chr$c.fa.new.out lift/ordered.lft warn `sed -e 's/\.out$/.new.out/' lift/oOut.lst` > /dev/null
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/canFam1
+    # Doh, hgLoadOut can't deal with too many .suffixes, abbreviate:
+    foreach f (*/chr*.fa.new.out)
+      mv $f $f:r:r:r.new.out
+    end
+    hgLoadOut -table=rmskNew canFam1 */chr*.new.out
+    # chr22 looks like the winner here, send example to Robert Hubley:
+#Strange perc. field -24.8 line 5580 of 10/chr10.new.out
+#Strange perc. field -1.8 line 5580 of 10/chr10.new.out
+#Strange perc. field -0.2 line 27436 of 13/chr13.new.out
+#Strange perc. field -0.1 line 27436 of 13/chr13.new.out
+#Strange perc. field -0.9 line 7302 of 2/chr2.new.out
+#Strange perc. field -5.3 line 15894 of 2/chr2.new.out
+#Strange perc. field -4.1 line 15894 of 2/chr2.new.out
+#Strange perc. field -677.0 line 78121 of 22/chr22.new.out
+#Strange perc. field -174.9 line 78121 of 22/chr22.new.out
+#Strange perc. field -11.7 line 85036 of 23/chr23.new.out
+#Strange perc. field -0.8 line 85036 of 23/chr23.new.out
+#Strange perc. field -2.3 line 17185 of 27/chr27.new.out
+#Strange perc. field -5.0 line 34029 of 27/chr27.new.out
+#Strange perc. field -1.8 line 26743 of 29/chr29.new.out
+#Strange perc. field -22.6 line 90657 of 4/chr4.new.out
+#Strange perc. field -1.1 line 50705 of 5/chr5.new.out
+    nice featureBits canFam1 rmskNew
+#901188175 bases of 2359845093 (38.188%) in intersection
+    # Yep, pretty close to original rmsk coverage:
+#896773874 bases of 2359845093 (38.001%) in intersection
+
+
 # TWINSCAN (DONE 11/9/04 angie)
     ssh kksilo
     mkdir /cluster/data/canFam1/bed/twinscan
@@ -2723,4 +2489,347 @@ chainSome $(path1)
     # back to kksilo
     rm -rf blastOut
 # End tblastn
+
+
+# NEW NEW REPEATMASKER (DONE 1/27/05 angie)
+    # Use the new version of RepeatMasker w/new dog lib, load up as rmskNew, 
+    # compare results w/orig.
+
+    #- contigs have already been split into 500kb chunks, at gaps if possible.
+
+    #- Make the run directory and job list:
+    ssh kksilo
+    cd /cluster/data/canFam1
+    cat << '_EOF_' > jkStuff/NewRMDog
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/canFam1/$2
+/bin/cp $2 /tmp/canFam1/$2/
+cd /tmp/canFam1/$2
+/cluster/bluearc/RepeatMasker050112/RepeatMasker -s -spec dog $2
+popd
+/bin/cp /tmp/canFam1/$2/$2.out ./$2.new.out
+/bin/rm -fr /tmp/canFam1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/canFam1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/canFam1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/NewRMDog
+    mkdir NewRMRun
+    cp /dev/null NewRMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/canFam1/jkStuff/NewRMDog \
+                 /cluster/data/canFam1/$d $f \
+               '{'check out line+ /cluster/data/canFam1/$d/$f.new.out'}' \
+              >> NewRMRun/RMJobs
+          end
+      end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/canFam1/NewRMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+#Completed: 4676 of 4676 jobs
+#CPU time in finished jobs:   23753156s  395885.93m  6598.10h  274.92d  0.753 y
+#IO & Wait Time:                122587s    2043.12m    34.05h    1.42d  0.004 y
+#Average job time:                5106s      85.10m     1.42h    0.06d
+#Longest job:                    11286s     188.10m     3.13h    0.13d
+#Submission to last job:         73093s    1218.22m    20.30h    0.85d
+
+    #- Lift up the 500KB chunk .new.out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/canFam1
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.new.out $d/$contig.lft warn $d/${contig}_*.fa.new.out \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      liftUp chr$c.fa.new.out lift/ordered.lft warn `sed -e 's/\.out$/.new.out/' lift/oOut.lst` > /dev/null
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/canFam1
+    # Doh, hgLoadOut can't deal with too many .suffixes, abbreviate:
+    foreach f (*/chr*.fa.new.out)
+      mv $f $f:r:r:r.new.out
+    end
+    hgLoadOut -table=rmskNew canFam1 */chr*.new.out
+     # Lots of these warnings:
+#Strange perc. field -29.7 line 40263 of 7/chr7.new.out
+#Strange perc. field -29.7 line 40266 of 7/chr7.new.out
+    # And this new one:
+#note: 27 records dropped due to repStart > repEnd
+#      run with -verbose=2 for details
+
+   nice featureBits canFam1 rmskNew
+#948099821 bases of 2359845093 (40.176%) in intersection
+    # Good, coverage has increased since original:
+#896773874 bases of 2359845093 (38.001%) in intersection
+
+
+# MAKE BETTER-MASKED SEQUENCE FOR SELF ALIGNMENTS (DONE 1/27/05 angie)
+    # I tried self alignments with the sequence masked by the original 
+    # RepeatMasker run, but some jobs ran for >1 day and then crashed 
+    # due to some heinous chrUn sequence, presumably undermasked.  
+    # Since we just ran the new RepeatMasker and coverage improved a 
+    # bit, try making a separate newly-masked copy of the sequence and 
+    # using that in the blastz self run.  The increase in coverage for 
+    # chrUn was pretty significant (yikes, look where it was already):
+    # featureBits -chrom=chrUn canFam1 rmsk
+#39357392 bases of 69040064 (57.007%) in intersection
+    # featureBits -chrom=chrUn canFam1 rmskNew
+#47147529 bases of 69040064 (68.290%) in intersection
+    # So the problematic parts of chrUn may still run forever and crash,
+    # but if they do, at least we did our best.  :)
+    ssh kkr1u00
+    mkdir /iscratch/i/canFam1/newRMNib
+    cd /iscratch/i/canFam1/newRMNib
+    set trfDir = /cluster/data/canFam1/bed/simpleRepeat/trfMaskChrom
+    foreach f (/cluster/data/canFam1/*/chr*.fa)
+      set chr = $f:t:r
+      set newRmOut = $f:r.new.out
+      echo $chr
+      maskOutFa -soft $f $newRmOut $chr.fa
+      maskOutFa -softAdd $chr.fa $trfDir/$chr.bed $chr.fa
+      faToNib -softMask $chr.fa $chr.nib
+    end
+    rm chr*.fa
+    iSync
+
+
+# BLASTZ SELF (DONE 2/2/05 angie)
+    ssh kk
+    mkdir -p /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27
+    ln -s blastz.canFam1.2005-01-27 /cluster/data/canFam1/bed/blastz.canFam1
+    cat << '_EOF_' > DEF
+# dog vs. dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET
+# Dog
+SEQ1_DIR=/iscratch/i/canFam1/newRMNib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Dog
+SEQ2_DIR=/iscratch/i/canFam1/newRMNib
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/canFam1/bed/blastz.canFam1.2005-01-27
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cp /cluster/data/canFam1/chrom.sizes S1.len
+    cp /cluster/data/canFam1/chrom.sizes S2.len
+    mkdir run
+    cd run
+    partitionSequence.pl 10000000 10000 /iscratch/i/canFam1/newRMNib ../S1.len \
+      -xdir xdir.sh -rawDir ../lav \
+    > canFam1.lst
+    csh -ef xdir.sh
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/scripts/blastz-run-ucsc $(path1) $(path2) ../DEF {check out line ../lav/$(file1)/$(file1)_$(file2).lav}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 canFam1.lst canFam1.lst gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+    # Tolerating some jobs that crashed blastz due to nasty sequence.  
+    # All were on chunks in chrUn:10000000-90010000 to themselves or 
+    # each other, so just include a note on the details page that results 
+    # are incomplete in that region.
+#Completed: 75569 of 75625 jobs
+#Crashed: 56 jobs
+#CPU time in finished jobs:   13811407s  230190.12m  3836.50h  159.85d  0.438 y
+#IO & Wait Time:                295434s    4923.90m    82.06h    3.42d  0.009 y
+#Average job time:                 187s       3.11m     0.05h    0.00d
+#Longest job:                    65494s    1091.57m    18.19h    0.76d
+#Submission to last job:        411521s    6858.68m   114.31h    4.76d
+
+    # convert lav files to psl 
+    # First, combine all files per partition (too many files per chrom
+    # to do in one swoop!).  Then do another round to collect all files 
+    # per chrom.  
+    ssh kki
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27
+    mkdir pslChrom pslParts run.lavToPsl
+    cd run.lavToPsl
+    ls -1d ../lav/* | sed -e 's@/$@@' > parts.lst
+    # For self alignments, we need lavToAxt's -dropSelf behavior, 
+    # so go lav->axt->psl... could add -dropSelf to lavToPsl, but that 
+    # might be somewhat invasive and perhaps not really much faster (?) 
+    # because the sequence must be dug up in order to rescore...
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cat $1/*.lav \
+| lavToAxt -dropSelf stdin /iscratch/i/canFam1/newRMNib \
+                           /iscratch/i/canFam1/newRMNib stdout \
+| axtToPsl stdin ../S1.len ../S2.len stdout \
+| sort -k 14,14 -k 16n,17n \
+| gzip -c > $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh $(path1) {check out exists ../pslParts/$(file1).psl.gz }
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 parts.lst single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 275 of 275 jobs
+#Average job time:                  35s       0.59m     0.01h    0.00d
+#Longest job:                      417s       6.95m     0.12h    0.00d
+#Submission to last job:          1017s      16.95m     0.28h    0.01d
+    awk '{print $1;}' /cluster/data/canFam1/chrom.sizes > chroms.lst
+    cat << '_EOF_' > doChrom.csh
+#!/bin/csh -ef
+zcat ../pslParts/$1.*.psl.gz \
+| sort -k 14,14 -k 16n,17n \
+| gzip -c > $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChrom.csh
+    cat << '_EOF_' > gsub.chroms
+#LOOP
+./doChrom.csh $(root1) {check out exists ../pslChrom/$(root1).psl.gz }
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 chroms.lst single gsub.chroms jobList
+    para create jobList
+    para try, check, push, check, ...
+    # This would have been done in 97s if not for monster chrUn!
+#Completed: 41 of 41 jobs
+#Average job time:                  42s       0.70m     0.01h    0.00d
+#Longest job:                      928s      15.47m     0.26h    0.01d
+#Submission to last job:           987s      16.45m     0.27h    0.01d
+
+
+# CHAIN SELF BLASTZ (TODO 2/2/05 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S ../../pslChrom/*.psl.gz > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
+                            /iscratch/i/canFam1/newRMNib stdout \
+| chainAntiRepeat /iscratch/i/canFam1/newRMNib /iscratch/i/canFam1/newRMNib \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+
+    # now on the cluster server, sort chains
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # trim to minScore=20000 to cut some of the fluff
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      chainFilter -minScore=20000 $f > chainFilt/$f:t
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain/chainFilt
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain canFam1 ${c}_chainSelf $i
+    end
+
+
+# NET SELF BLASTZ (TODO 2/2/05 angie)
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain
+    netClass -noAr noClass.net canFam1 canFam1 self.net
+    rm noClass.net
+    # Load the nets into database 
+    netFilter -minGap=10 self.net |  hgLoadNet canFam1 netSelf stdin
+    # Add entries for chainSelf, netSelf to dog/canFam1 trackDb
+
+
+# MAKE VSSELF DOWNLOADABLES (TODO 2/2/05 angie)
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/blastz.canFam1.2005-01-27/axtChain
+    gzip all.chain self.net
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/canFam1/vsSelf
+    cp -p /cluster/data/canFam1/bed/blastz.canFam1/axtChain/all.chain.gz \
+      self.chain.gz
+    cp -p /cluster/data/canFam1/bed/blastz.canFam1/axtChain/self.net.gz .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
 

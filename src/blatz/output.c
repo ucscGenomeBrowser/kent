@@ -210,6 +210,8 @@ struct hash *targetHash = hashTargetsFromIndex(targetIndexList);
 struct chain *chainList = *pChainList;
 char *out = bzp->out;
 
+if (bzp->bestScoreOnly && chainList != NULL)
+    chainFreeList(&chainList->next);
 if (sameString(out, "chain"))
     {
     blatzOffsetChains(chainList, queryStart, queryEnd, queryParentSize, targetHash);

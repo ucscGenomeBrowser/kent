@@ -13,7 +13,7 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.7 2004/05/24 20:31:54 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.8 2005/02/02 20:27:52 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -162,7 +162,7 @@ return(queryFormat);
 
 static char *queryFormatRegex =
     "^select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ "
-    "from %s where [[:alnum:]]+ (like|=) ['\"]?.*%s.*['\"]?$";
+    "from %s where [[:alnum:]]+ (r?like|=) ['\"]?.*%s.*['\"]?$";
 static char *exactTermFormatRegex = "['\"]?.*%s.*['\"]?$";
 static char *prefixTermFormatRegex = "['\"]?%s.*%%['\"]?$";
 

@@ -2,6 +2,17 @@
  * generated dnaMotifSql.c and dnaMotifSql.sql.  This header links the database and
  * the RAM representation of objects. */
 
+#include "jksql.h"
+#ifndef JKSQL_H
+#define JKSQL_H
+#endif /* JKSQL_H */
+
+#ifndef DNAMOTIF_H
+#define DNAMOTIF_H
+
+#include "dnaMotif.h"
+#endif /* DNAMOTIF_H */
+
 #ifndef DNAMOTIFSQL_H
 #define DNAMOTIFSQL_H
 
@@ -12,27 +23,6 @@ struct dnaMotif *dnaMotifLoad(char **row);
 struct dnaMotif *dnaMotifLoadAll(char *fileName);
 /* Load all dnaMotif from a tab-separated file.
  * Dispose of this with dnaMotifFreeList(). */
-
-struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret);
-/* Create a dnaMotif out of a comma separated string. 
- * This will fill in ret if non-null, otherwise will
- * return a new dnaMotif */
-
-void dnaMotifFree(struct dnaMotif **pEl);
-/* Free a single dynamically allocated dnaMotif such as created
- * with dnaMotifLoad(). */
-
-void dnaMotifFreeList(struct dnaMotif **pList);
-/* Free a list of dynamically allocated dnaMotif's */
-
-void dnaMotifOutput(struct dnaMotif *el, FILE *f, char sep, char lastSep);
-/* Print out dnaMotif.  Separate fields with sep. Follow last field with lastSep. */
-
-#define dnaMotifTabOut(el,f) dnaMotifOutput(el,f,'\t','\n');
-/* Print out dnaMotif as a line in a tab-separated file. */
-
-#define dnaMotifCommaOut(el,f) dnaMotifOutput(el,f,',',',');
-/* Print out dnaMotif as a comma separated list including final comma. */
 
 struct dnaMotif *dnaMotifLoadWhere(struct sqlConnection *conn, char *table, char *where);
 /* Load all dnaMotif from table that satisfy where clause. The

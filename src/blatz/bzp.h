@@ -13,6 +13,7 @@ struct bzp
     int weight;	      /* Weight of seed. */
     boolean rna;	/* True if want to find introns. */
     int minScore;     /* Minimum score for final chain to be output. */
+    boolean bestScoreOnly;  /* Only output best scoring chain */
     int multiHits;	/* If non-zero takes two hits on diag to trigger MSP. */
     int transition;   /* If non-zero look allow one transition in seed. */
     int minGapless;    /* Min score for MSP to trigger extension */
@@ -25,11 +26,11 @@ struct bzp
     struct axtScoreScheme *ss; /* Matrix and affine gap info. */
     struct gapCalc *cheapGap;  /* Gap calculation info for first pass. */
     struct gapCalc *gapCalc;   /* Gap calculation info for final pass. */
-    boolean bestChainOnly;  /* Only keep best chain (from MSP on) */
     boolean unmask;	/* Unmask lower case sequence. */
     char *out;		/* Output format.  Chain, axt, psl, etc. */
     char *mafQ;		/* Prefix for query side of maf output. */
     char *mafT;		/* Prefix for target side of maf output. */
+    boolean bestChainOnly;	/* Only keep best scoring chain (from MSP on). Not exported */
     };
 
 struct bzp *bzpDefault();
@@ -50,9 +51,10 @@ void bzpServerOptionsHelp(struct bzp *bzp);
 
 #define BZP_CLIENT_OPTIONS \
    {"rna", OPTION_BOOLEAN}, \
+   {"minScore", OPTION_INT}, \
+   {"bestScoreOnly", OPTION_BOOLEAN}, \
    {"multiHits", OPTION_INT}, \
    {"transition", OPTION_INT}, \
-   {"minScore", OPTION_INT}, \
    {"minGapless", OPTION_INT}, \
    {"minChain", OPTION_INT}, \
    {"maxDrop", OPTION_INT}, \

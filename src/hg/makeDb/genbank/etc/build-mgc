@@ -10,7 +10,7 @@ set -e
 trap "echo Error: mgc-build failed on `hostname` >&2;exit 1" ERR
 
 # initialize
-gbRoot=/cluster/store5/genbank
+gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 

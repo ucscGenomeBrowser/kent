@@ -11,7 +11,7 @@ struct acemblyClass
 /* Class for Acembly genes */
     {
     struct acemblyClass *next;  /* Next in singly linked list. */
-    char *name;	/* Gene ID for Acembly gene */
+    char *name;	/* Transcript ID for Acembly gene */
     char *class;	/* Class of gene */
     };
 

@@ -171,23 +171,31 @@ All ra fields that are not explictly handled in trackDbCustom.c:trackDbAddInfo
 are added to the trackDb->settingsHash table.
 
 Some settings used by various tracks:
-    o exonArrows - if speciufied to draw strand arrows on exons.
+    o exonArrows - if specified to draw strand arrows on exons.
     o itemAttrTbl - table used to color individual items in a track, selected
       by name and locations.  Currently works for genePred tracks.
 
+Composite Tracks
+================
 Tracks of the same type can be grouped in a single "composite track",
 using the "compositeTrack on" setting.  The track name for the
 composite track is a placeholder, that is referenced in entries for the
 subtracks.  The subtracks have a "subTrack" setting that references
 the composite track name.  The composite track entry contains all
-normal settings for the track type.  The subtrack track entries
-need contain only the short and long labels, they may optionally have
-a color setting.  If they do not, and if color is set on the composite
+normal settings for the track type.  
+
+The subtrack track entries need contain only the short and long labels, 
+they may optionally have a color setting and a priority within the 
+composite track.  
+
+If the subtracks lack color settings, and if color is set on the composite
 track, the subtracks will be displayed with different colors in
 a gradient from color to altColor.
 
-Example:
+To hide a subtrack initially, append "off" to the end of the
+subtrack setting.
 
+Example:
 ---------------------
 track encodeDnaRep
 compositeTrack on
@@ -204,10 +212,17 @@ track encodeDnaRep0
 subTrack encodeDnaRep
 shortLabel 0-2hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+priority 1
 
 track encodeDnaRep2
-subTrack encodeDnaRep
+subTrack encodeDnaRep off
 shortLabel 2-4hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+priority 2
+
+track encodeDnaRep3
+subTrack encodeDnaRep
+shortLabel 2-4hr
+priority 3
 ---------------------
 

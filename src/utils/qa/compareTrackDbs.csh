@@ -18,18 +18,52 @@ endif
 set machine1 = $argv[1]
 set machine2 = $argv[2]
 set db = $argv[3]
+set cent=""
+set host=""
+
+# check validity of machine name and existence of db on the machine
+foreach machine ( $machine1 $machine2 )
+  checkMachineName.csh $machine
+  if ( $status ) then
+    echo ${0}:
+    $0
+    exit 1
+  endif
+  if ( $machine == "hgwdev" ) then
+    set cent="test"
+    set host=""
+  else
+    if ( $machine == "hgwbeta" ) then
+      set cent="beta"
+      set host="-h hgwbeta"
+    else
+      set cent=""
+      set host="-h genome-centdb"
+    endif
+  endif
+  hgsql -N $host -e "SELECT name FROM dbDb" hgcentral$cent | grep "$db" >& /dev/null
+  if ( $status ) then
+    echo
+    echo "  database $db is not found on $machine"
+    echo
+    echo ${0}:
+    $0
+    exit 1
+  endif
+  
+end
 
 checkMachineName.csh $machine1
 if ( $status ) then
-  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
-  echo
+  echo ${0}:
+  $0
   exit 1
 endif
 
 checkMachineName.csh $machine2
 if ( $status ) then
-  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
-  echo
+  echo ${0}:
+  $0
   exit 1
 endif
 
@@ -42,9 +76,10 @@ if ( $#argv == 4 ) then
   hgsql -t -e "DESC $table" $db | grep -w $field | wc -l > /dev/null
   if ( $status ) then
     echo
-    echo " $field is not a valid field for $table"
-    echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
+    echo "  $field is not a valid field for $table"
     echo
+    echo ${0}:
+    $0
     exit 1
   endif
 endif
@@ -70,19 +105,10 @@ rm -f $machine1.$db.$table
 rm -f $machine2.$db.$table 
 
 set machine=$machine1
-wget -q -O $machine1.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$url6a$url6$url7"
-set mach1Count=`wc -l $machine1.$db.$table | gawk '{print $1}'`
-
-set machine=$machine2
-wget -q -O $machine2.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$url6a$url6$url7"
-
-set mach1Count=`wc -l $machine1.$db.$table | gawk '{print $1}'`
-set mach2Count=`wc -l $machine2.$db.$table | gawk '{print $1}'`
-
-if ($mach1Count == 0 | $mach2Count == 0) then
-  echo "\n  At least one of these machines does not have the database $db.\n"
-  exit 1
-endif
+foreach mach ( $machine1 $machine2 )
+  set url="$url1$mach$url2$db$url3$db$url4$table$url5$url6a$url6$url7"
+  wget -q -O $mach.$db.$table "$url"
+end
 
 diff $machine1.$db.$table $machine2.$db.$table
 if ( $status ) then

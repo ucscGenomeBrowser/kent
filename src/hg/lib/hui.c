@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.54 2005/01/12 03:39:56 donnak Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.56 2005/02/03 19:00:02 hartera Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1099,3 +1099,34 @@ while (tdbs != NULL)
 
 return trackHash;
 }
+
+/****** Stuff for acembly related options *******/
+
+static char *acemblyOptions[] = {
+    "All Genes",
+    "main",
+    "putative",
+};
+
+enum acemblyOptEnum acemblyStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, acemblyOptions);
+if (x < 0)
+   errAbort("hui::acemblyStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *acemblyEnumToString(enum acemblyOptEnum x)
+/* Convert from enum to string representation. */
+{
+return acemblyOptions[x];
+}
+
+void acemblyDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, acemblyOptions, ArraySize(acemblyOptions), 
+	curVal);
+}
+
