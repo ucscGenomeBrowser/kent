@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.545 2003/06/30 23:26:43 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.546 2003/06/30 23:29:49 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -6987,8 +6987,7 @@ int z;
 float pixPerBase = 0;
 
 if(tl.picWidth == 0)
-    errAbort("hgTracks.c::loadHumMusL() - can't have pixel
-	    width of 0");
+    errAbort("hgTracks.c::loadHumMusL() - can't have pixel width of 0");
 pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
