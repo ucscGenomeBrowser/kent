@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.27 2005/02/07 23:08:42 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.28 2005/02/08 00:28:14 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1016,7 +1016,7 @@ else
     char varName[256];
     safef(varName, sizeof(varName),
 	  "%slinked.%s.%s", hgtaFilterPrefix, db, table);
-    return cartBoolean(cart, varName);
+    return cartUsualBoolean(cart, varName, FALSE);
     }
 }
 
@@ -1144,10 +1144,12 @@ for (var = varList; var != NULL; var = var->next)
     memcpy(field, s, fieldNameSize);
     field[fieldNameSize] = 0;
     type += 1;
-    /*	rawLogic and rawQuery are handled below	*/
-    if (startsWith("raw",type))
+    /* rawLogic and rawQuery are handled below; 
+     * filterMaxOutputVar is not really a filter variable and is handled 
+     * in wiggle.c. */
+    if (startsWith("raw", type) || sameString(filterMaxOutputVar, type))
 	continue;
-    /*	Any variables that are missing a name:
+    /*	Any other variables that are missing a name:
      *		<varPrefix>..<type>
      *	are illegal
      */
