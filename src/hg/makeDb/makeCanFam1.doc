@@ -1263,6 +1263,46 @@ axtChain $1 \
       /gbdb/canFam1/mouse_chm
     hgLoadMaf -WARN canFam1 mouse_chm
 
+# MAKE MM5 LIFTOVER CHAIN FILE (DONE 1/17/05 Andy)
+    # This took over an hour.  Maybe it's that slow no matter what if 
+    # the big chain isn't split up first.
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/blastz.mm5/axtChain
+    mkdir over
+    netSplit mouse.net net
+    mkdir /cluster/data/canFam1/bed/liftOver
+    for file in net/*.net; do
+       chrom=`basename $file .net`
+       netChainSubset net/$chrom.net all.chain.gz over/$chrom.over
+       cat over/$chrom.over >> /cluster/data/canFam1/bed/liftOver/canFam1ToMm5.chain
+    done
+    rm -rf over/
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/canFam1/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/canFam1/liftOver
+    cp /cluster/data/canFam1/bed/liftOver/canFam1ToMm5.chain .
+    gzip canFam1ToMm5.chain
+
+# MAKE HG17 LIFTOVER CHAIN FILE (DONE 1/17/05 Andy)
+    # Maybe I can do without the net splitting this time... 
+    # nope, ran out of memory.  I split up the all.chain file as another step.  It
+    # took 1.5 hrs to run.
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/blastz.hg17/axtChain
+    mkdir over
+    netSplit human.net net
+    mkdir chain
+    for file in net/*.net; do
+       chrom=`basename $file .net`
+       chainFilter -t=$chrom all.chain.gz > chain/$chrom.chain
+       netChainSubset net/$chrom.net chain/$chrom.chain over/$chrom.over
+       cat over/$chrom.over >> /cluster/data/canFam1/bed/liftOver/canFam1ToHg17.chain
+    done
+    rm -rf over/ net/
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/canFam1/liftOver
+    cp /cluster/data/canFam1/bed/liftOver/canFam1ToHg17.chain .
+    gzip canFam1ToHg17.chain
 
 # PHASTCONS DOG/HUMAN/MOUSE (DONE 7/21/04 angie)
 # NOTE: REPLACED, SEE "NEW PHASTCONS" BELOW
