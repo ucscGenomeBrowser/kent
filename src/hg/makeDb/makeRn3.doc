@@ -2197,11 +2197,11 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     hgPepPred rn3 generic sgpPep download/*-fixed.prot
 
 
-TIGR GENE INDEX (TO DO)
-    mkdir -p ~/rn3/bed/tigr
-    cd ~/rn3/bed/tigr
-    wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_RatGenome_Feb2002.tgz
-    gunzip -c TGI_track_RatGenome_Feb2002.tgz | tar xvf -
+# TIGR GENE INDEX (DONE 2003-10-31 kate)
+    mkdir -p /cluster/data/rn3/bed/tigr
+    cd /cluster/data/rn3/bed/tigr
+    wget ftp://ftp.tigr.org//pub/data/tgi/TGI_track_RatGenome_Jun2003.tgz
+    tar xvfz TGI_track_RatGenome_Jun2003.tgz
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
@@ -2213,6 +2213,9 @@ TIGR GENE INDEX (TO DO)
       end
     end
     ldHgGene -exon=TC rn3 tigrGeneIndex *.gff
+       # 139456 gene predictions
+    gzip *TCs *.gff
+
 
 
 LOAD STS MAP (TO DO )
@@ -2488,6 +2491,23 @@ foreach chr (?{,?})
   end
   cd ..
 end
+
+
+# TBA ALIGNMENT - NON-MAMMAL SPECIES INCLUDED (Fugu & Chicken)  2003-10-20 kate
+    ssh hgwdev
+    mkdir -p  /cluster/data/rn3/bed/nisc/cftr
+    ln -s /cluster/data/nisc/targets/cftr/CFTR.non-mammal/rat.out \
+                /cluster/data/rn3/bed/nisc/cftr/tbaFishBird.maf
+    set table = tbaFishBirdCFTR
+    mkdir -p /gbdb/rn3/$table
+    cd /gbdb/rn3/$table
+    ln -s /cluster/data/rn3/bed/nisc/cftr/tbaFishBird.maf tba.maf
+    cd /cluster/data/rn3/bed/nisc/cftr
+    /cluster/bin/i386/hgLoadMaf -WARN rn3 $table
+        # 463 warnings
+        # 4604 rows loaded
+    
+=======
 
 # BLASTZ Mm4 (WORKING - 2003-10-29 - Hiram)
 

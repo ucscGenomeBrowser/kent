@@ -569,6 +569,10 @@ exit; # don't actually run this like a script :)
     # Copy over grp table (for track grouping) from another database:
     echo "create table grp (PRIMARY KEY(NAME)) select * from hg15.grp" \
     | hgsql hg16
+    # add ENCODE track.  Move Repeats lower in priority
+    echo 'UPDATE grp SET priority=8 WHERE name="varRep"'| hgsql hg16
+
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encode", "ENCODE Tracks", 7)' | hgsql hg16
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2003-07-26 - Hiram)
     ssh hgwdev
@@ -2713,9 +2717,19 @@ EOF
     end
 
     # load into database
-    cd $multizDir/hmr/*.maf
+    #cd $multizDir/hmr/*.maf
     /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
 
+<<<<<<< makeHg16.doc
+    # copy files to download area (2003-10-24 kate)
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
+    mkdir -p $dir
+    cp -p /gbdb/hg16/humorMm3Rn3/*.maf $dir
+    cd $dir
+    gzip *
+    # edit downloads page to add linke to humorMm3Rn3
+
+=======
     # Create upstream files
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
@@ -3755,12 +3769,70 @@ end
     cd ../utr3
     rm -r split fold err batch.bak
 
+
+# TBA (Webb Miller's Threaded Blockset Aligner) Alignments (CFTR region)   2003-10-17 kate
+# 9-way alignment: human, chimp, baboon, mouse, rat, doc, cat, cow, pig
+# Using sequences from browser (human, mouse, rat), and from
+# Elliot Margulies at NISC (via Webb)
+
+    # unrolled sequences and ran TBA in /cluster/data/nisc/targets/cftr/tba9Mammal
+    ssh kksilo
+    mkdir -p /cluster/data/hg16/bed/nisc/cftr
+    ln -s /cluster/data/nisc/targets/cftr/tba9Mammal/human.out \
+                /cluster/data/hg16/bed/nisc/cftr/tba9Mammal.maf
+
+    # setup external files for database reference
+    ssh hgwdev
+    set table = tba9MammalCFTR
+    mkdir -p /gbdb/hg16/$table
+    cd /gbdb/hg16/$table
+    ln -s /cluster/data/hg16/bed/nisc/cftr/tba9Mammal.maf tba.maf
+    mkdir -p /gbdb/hg16/${table}_fullScoring
+    cd /gbdb/hg16/${table}_fullScoring
+    ln -s /cluster/data/hg16/bed/nisc/cftr/tba9Mammal.maf tba.maf
+
+    # load into database
+    cd /cluster/data/hg16/bed/nisc/cftr
+    /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
+    /cluster/bin/i386/hgLoadMaf -WARN -full hg16 ${table}_fullScoring
+
+# TBA with Non-mammalian species included (Fugu & Chicken)  2003-10-20 kate
+    ssh hgwdev
+    ln -s /cluster/data/nisc/targets/cftr/CFTR.non-mammal/human.out \
+                /cluster/data/hg16/bed/nisc/cftr/tbaFishBird.maf
+    set table = tbaFishBirdCFTR
+    mkdir -p /gbdb/hg16/$table
+    cd /gbdb/hg16/$table
+    ln -s /cluster/data/hg16/bed/nisc/cftr/tbaFishBird.maf tba.maf
+    cd /cluster/data/hg16/bed/nisc/cftr
+    /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
+        # 1072 warnings (mostly score=0's, a few minus scores)
+        # 4377 rows
+    /cluster/bin/i386/hgLoadMaf -WARN -full hg16 ${table}_fullScoring
+
+# TBA 25-species CFTR region  (DONE 2003-10-28 kate)
+# run in /cluster/data/nisc/targets/cftr/25way, using makefile
+
+    ssh hgwdev
+    ln -s /cluster/data/nisc/targets/cftr/25way/human.maf \
+                /cluster/data/hg16/bed/nisc/cftr/tba25.maf
+    set table = tba25CFTR
+    mkdir -p /gbdb/hg16/$table
+    cd /gbdb/hg16/$table
+    ln -s /cluster/data/hg16/bed/nisc/cftr/tba25.maf tba.maf
+    cd /cluster/data/hg16/bed/nisc/cftr/25way
+    /cluster/bin/i386/hgLoadMaf -WARN hg16 $table
+        # 22267 rows
+        # 24 warnings
+    
+
 # CREATING KNOWNtOsUPER (which enables superFamily stuff in hgNear/hgGene)
 # First see if need to update superfamily data from 
 # ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
 # in /cluster/store1/superFamily/genomes/README.ucsc.  Then
 # make sure that knownToEnsembl and ensGtp tables are created, then:
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg16 hs stdin
+
 
 # BLASTZ Mm4  (WORKING - 2003-10-29 - Hiram)
 
@@ -3905,4 +3977,25 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzMm4.psl
 
     # this is a 55 minute job
-XXXX running 2003-10-31 11:55
+<<<<<<< makeHg16.doc
+
+
+# TIGR GENE INDEX (DONE 2003-10-31 kate)
+    mkdir -p /cluster/data/hg16/bed/tigr    
+    cd /cluster/data/hg16/bed/tigr  
+    wget ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_build34.tgz
+    tar xvzf TGI*.tgz
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (mouse cow human pig rat)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC hg16 tigrGeneIndex *.gff
+        #245154 gene predictions
+    gzip *.gff *TCs
+
