@@ -51,9 +51,6 @@
 #include "lfs.h"
 #include "mcnBreakpoints.h"
 
-static char *selfName(){return "../cgi-bin/jkTracks";}	/* uglyf */
-#define hgTracksName selfName
-
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -1576,11 +1573,10 @@ struct mrnaUiData *mud = tg->extraUiData;
 struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
 char *filterTypeVar = mud->filterTypeVar;
-char *filterTypeVal = cgiUsualString(filterTypeVar, "none");
+char *filterTypeVal = cgiUsualString(filterTypeVar, "red");
 
 /* Define type of filter. */
 printf("<B>Filter:</B> ");
-mudRadio(filterTypeVar, filterTypeVal, "none");
 mudRadio(filterTypeVar, filterTypeVal, "red");
 mudRadio(filterTypeVar, filterTypeVal, "green");
 mudRadio(filterTypeVar, filterTypeVal, "blue");
@@ -1609,14 +1605,26 @@ int i = 0;
 boolean anyFilter = FALSE;
 boolean colorIx = 0;
 boolean isExclude = FALSE;
+char query[256];
+struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = NULL;
 
 if (*pLfList == NULL || mud == NULL)
     return;
-type = cgiUsualString(mud->filterTypeVar, "none");
-if (sameString(type, "none"))
+
+/* First make a quick pass through to see if we actually have
+ * to do the filter. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    fil->pattern = cgiUsualString(fil->key, "");
+    if (fil->pattern[0] != 0)
+        anyFilter = TRUE;
+    }
+if (!anyFilter)
     return;
+
+type = cgiUsualString(mud->filterTypeVar, "red");
 if (sameString(type, "red"))
     colorIx = MG_RED;
 else if (sameString(type, "green"))
@@ -1638,90 +1646,83 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
     fil->pattern = cgiUsualString(fil->key, "");
     if (fil->pattern[0] != 0)
 	{
-        anyFilter = TRUE;
 	fil->hash = newHash(10);
 	if ((fil->mrnaTableIx = sqlFieldIndex(conn, "mrna", fil->table)) < 0)
 	    internalErr();
 	}
     }
 
-if (anyFilter)
+/* Scan tables id/name tables to build up hash of matching id's. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    char query[256];
-    struct sqlResult *sr;
-
-    /* Scan tables id/name tables to build up hash of matching id's. */
-    for (fil = mud->filterList; fil != NULL; fil = fil->next)
-        {
-	struct hash *hash = fil->hash;
-	if (hash != NULL)
-	    {
-	    char *pattern = fil->pattern;
-	    boolean anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
-	    sprintf(query, "select * from %s", fil->table);
-	    touppers(pattern);
-	    sr = sqlGetResult(conn, query);
-	    while ((row = sqlNextRow(sr)) != NULL)
-	        {
-		boolean gotMatch;
-		touppers(row[1]);
-		if (anyWild)
-		    gotMatch = wildMatch(pattern, row[1]);
-		else
-		    gotMatch = sameString(pattern, row[1]);
-		if (gotMatch)
-		    {
-		    hashAdd(hash, row[0], NULL);
-		    }
-		}
-	    sqlFreeResult(&sr);
-	    }
-	}
-
-    /* Scan through linked features coloring and or including/excluding ones that 
-     * match filter. */
-    for (lf = *pLfList; lf != NULL; lf = next)
+    struct hash *hash = fil->hash;
+    if (hash != NULL)
 	{
-	boolean passed = TRUE;
-	next = lf->next;
-	sprintf(query, "select * from mrna where acc = '%s'", lf->name);
+	char *pattern = fil->pattern;
+	boolean anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
+	sprintf(query, "select * from %s", fil->table);
+	touppers(pattern);
 	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    for (fil = mud->filterList; fil != NULL; fil = fil->next)
-	        {
-		if (fil->hash != NULL)
-		    if (hashLookup(fil->hash, row[fil->mrnaTableIx]) == NULL)
-			passed = FALSE;
+	    boolean gotMatch;
+	    touppers(row[1]);
+	    if (anyWild)
+		gotMatch = wildMatch(pattern, row[1]);
+	    else
+		gotMatch = sameString(pattern, row[1]);
+	    if (gotMatch)
+		{
+		hashAdd(hash, row[0], NULL);
 		}
 	    }
 	sqlFreeResult(&sr);
-	if (colorIx > 0)
-	    {
-	    if (passed)
-	        lf->filterColor = colorIx;
-	    }
-	else
-	    {
-	    if (passed ^ isExclude)
-	        {
-		slAddHead(&newList, lf);
-		}
-	    }
 	}
-    
-    /* Unless it's just a color tweak, update list. */
-    if (colorIx <= 0)
-        {
-	slReverse(&newList);
-	*pLfList = newList;
-	}
+    }
 
-    /* Free up hashes, etc. */
-    for (fil = mud->filterList; fil != NULL; fil = fil->next)
-        {
-	hashFree(&fil->hash);
+/* Scan through linked features coloring and or including/excluding ones that 
+ * match filter. */
+for (lf = *pLfList; lf != NULL; lf = next)
+    {
+    boolean passed = TRUE;
+    next = lf->next;
+    sprintf(query, "select * from mrna where acc = '%s'", lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	for (fil = mud->filterList; fil != NULL; fil = fil->next)
+	    {
+	    if (fil->hash != NULL)
+		if (hashLookup(fil->hash, row[fil->mrnaTableIx]) == NULL)
+		    passed = FALSE;
+	    }
 	}
+    sqlFreeResult(&sr);
+    if (colorIx > 0)
+	{
+	if (passed)
+	    lf->filterColor = colorIx;
+	}
+    else
+	{
+	if (passed ^ isExclude)
+	    {
+	    slAddHead(&newList, lf);
+	    }
+	}
+    }
+
+/* Unless it's just a color tweak, update list. */
+if (colorIx <= 0)
+    {
+    slReverse(&newList);
+    *pLfList = newList;
+    }
+
+/* Free up hashes, etc. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    hashFree(&fil->hash);
     }
 hFreeConn(&conn);
 }
