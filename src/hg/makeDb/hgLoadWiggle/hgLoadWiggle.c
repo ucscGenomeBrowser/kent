@@ -10,21 +10,21 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.8 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.9 2004/03/30 00:47:06 hiram Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
-char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
+char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"sqlTable", OPTION_BOOLEAN},
     {"smallInsertSize", OPTION_INT},
     {"tab", OPTION_BOOLEAN},
     {"noBin", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
+    {"pathPrefix", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -38,8 +38,8 @@ errAbort(
   "options:\n"
   "   -noBin\t suppress bin field\n"
   "   -oldTable\t add to existing table\n"
-  "   -sqlTable=table.sql\t Create table from .sql file\n"
-  "   -tab\t\tSeparate by tabs rather than space\n"
+  "   -tab\tSeparate by tabs rather than space\n"
+  "   -pathPrefix=<path>\t.wib file path prefix to use (default /gbdb/<DB>/wib)"
   );
 }
 
@@ -120,10 +120,8 @@ void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList,
 struct wiggleStub *wiggle;
 FILE *f = mustOpen(fileName, "w");
 char *words[64];
-int i, j, wordCount;
+int i, wordCount;
 unsigned int wiggleCount;
-char **wiggleValueStrings;
-unsigned char *wiggleValues;
 
 for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
     {
@@ -136,7 +134,12 @@ for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
     for (i=0; i<wordCount; ++i)
         {
 	if (i==7)
+	    {
+	    if (pathPrefix )
+		fprintf(f,"%s/", pathPrefix );
+	    else
 		fprintf(f,"/gbdb/%s/wib/", database );
+	    }
 	fputs(words[i], f);
 	if (i == wordCount-1)
 	    fputc('\n', f);
@@ -157,20 +160,7 @@ char *tab = "wiggle.tab";
 
 verbose(1, "Connected to database %s for track %s\n", database, track);
 /* First make table definition. */
-if (sqlTable != NULL)
-    {
-    /* Read from file. */
-    char *sql, *s;
-    readInGulp(sqlTable, &sql, NULL);
-
-    /* Chop of end-of-statement semicolon if need be. */
-    s = strchr(sql, ';');
-    if (s != NULL) *s = 0;
-    
-    sqlRemakeTable(conn, track, sql);
-    freez(&sql);
-    }
-else if (!oldTable)
+if (!oldTable)
     {
     /* Create definition statement. */
     verbose(1, "Creating table definition with %d columns in %s.%s\n",
@@ -194,9 +184,11 @@ else if (!oldTable)
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
-    dyStringAppend(dy, "  INDEX(name(16)),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
+    else
+	{
+	dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
+	dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
+	}
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }
@@ -215,7 +207,7 @@ void hgLoadWiggle(char *database, char *track, int wiggleCount, char *wiggleFile
 /* hgLoadWiggle - Load a generic wiggle file into database. */
 {
 int wiggleSize = findWiggleSize(wiggleFiles[0]);
-struct wiggleStub *wiggleList = NULL, *wiggle;
+struct wiggleStub *wiggleList = NULL;
 int i;
 
 for (i=0; i<wiggleCount; ++i)
@@ -234,13 +226,13 @@ if (argc < 4)
 noBin = optionExists("noBin");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
-sqlTable = optionVal("sqlTable", NULL);
+pathPrefix = optionVal("pathPrefix",NULL);
 verbose(2, "noBin: %s, tab: %s, oldTable: %s\n",
 	noBin ? "TRUE" : "FALSE",
 	strictTab ? "TRUE" : "FALSE",
 	oldTable ? "TRUE" : "FALSE");
-if( sqlTable )
-    verbose(2, "using sql definition file: %s\n", sqlTable);
+if (pathPrefix)
+    verbose(2, "pathPrefix: %s\n", pathPrefix);
 hgLoadWiggle(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
