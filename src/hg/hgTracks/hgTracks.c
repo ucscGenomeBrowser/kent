@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.543 2003/06/26 21:21:31 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.544 2003/06/27 17:34:32 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10422,16 +10422,51 @@ else
 freez(&pdfFile);
 }
 
+boolean isGenome(char *pos)
+/* Return TRUE if pos is genome. */
+{
+pos = trimSpaces(pos);
+return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
+}
+
+char *searchPosition(char *pos, char **retChrom, int *retStart, int *retEnd)
+/* Use hgFind if necessary; return NULL 
+ * if we had to display the gateway page or hgFind's selection page. */
+{
+if (! isGenome(pos))
+    {
+    struct hgPositions *hgp = hgPositionsFind(pos, "", "", cart);
+
+    if ((hgp == NULL) || (hgp->singlePos == NULL))
+	{
+	return NULL;
+	}
+    }
+return(pos);
+}
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
 char newPos[256];
+char *defaultPosition = hDefaultPos(database);
+char *chrom;
+int start, end;
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
-    /* Read in input from CGI. */
-    position = cartUsualString(cart, "position", hDefaultPos(database));
+    position = cloneString(cartUsualString(cart, "position", NULL));
+    if ( position != NULL && ! isGenome(position))
+	position = searchPosition(position, &chrom, &start, &end);
+
+    if (position == NULL)
+	{
+	position = defaultPosition;
+	cartRemove(cart, "hgt.customText");
+	cartRemove(cart, "hgt.customFile");
+	cartRemove(cart, "ct");
+	}
     }
 
 if(sameString(position, ""))
@@ -10534,6 +10569,8 @@ if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
+cartSetString(cart, "org", organism);
+cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
 if (cgiVarExists("hgt.psOutput"))
     handlePostscript();
