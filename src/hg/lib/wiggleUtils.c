@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.15 2004/04/19 23:11:52 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.16 2004/04/28 22:39:58 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -508,7 +508,7 @@ while ((! reachedDataLimit) && (el = hashNext(&cookie)) != NULL)
 	}
 	/*	perhaps last bed line	*/
     if (!firstSpanDone && createBedList &&
-	(wigStatsAcc.bedElEnd > wigStatsAcc.bedElStart))
+	(wigStatsAcc.bedElEnd > wigStatsAcc.bedElStart) && wigData)
 	{
 	struct bed *bedEl;
 	bedEl = bedElement(wigData->chrom, wigStatsAcc.bedElStart,
