@@ -200,7 +200,7 @@ AllocVar(col);
 settings = col->settings = hashVarLine(line, lf->lineIx);
 addIfMissing(settings, "name", "custom");
 addIfMissing(settings, "shortLabel", "User Column");
-addIfMissing(settings, "longLabel", "Custom user column");
+addIfMissing(settings, "longLabel", "User custom column");
 addIfMissing(settings, "visibility", "on");
 addIfMissing(settings, "priority", "2.01");
 addIfMissing(settings, "org", genome);
@@ -216,11 +216,18 @@ struct column *verifyCopyColumn(struct sqlConnection *conn,
 /* Parse out column from line file.  If output is non-NULL
  * then also save it to output. */
 {
-char *word;
+char *word, *name;
 struct column *col = parseColumnLine(lf, line);
-struct hash *lookupHash = NULL;
+struct hash *lookupHash = NULL, *gpHash = newHash(16);
 char *lookup = NULL;
-int hitCount = 0, missCount = 0;
+int hitCount = 0, missCount = 0, badGeneCount = 0;
+struct genePos *gpList, *gp;
+char *oneMiss = NULL, *oneBadGene = NULL;
+
+/* Build up hash & list of all known genes. */
+gpList = knownPosAll(conn);
+for (gp = gpList; gp != NULL; gp = gp->next)
+    hashAdd(gpHash, gp->name, gp);
 
 /* Deal with non-uniq names. */
 if (hashLookup(uniqHash, col->name))
@@ -245,11 +252,9 @@ hashAdd(uniqHash, col->name, col);
 if ((lookup = hashFindVal(col->settings, "idLookup")) != NULL)
     {
     struct column *lookupCol = findNamedColumn(lookup);
-    struct genePos *gpList, *gp;
     if (lookupCol == NULL)
         errAbort("Couldn't find column %s for idLookup line %d of %s",
 		lookup, lf->lineIx, lf->fileName);
-    gpList = knownPosAll(conn);
     lookupHash = hashNew(16);
     for (gp = gpList; gp != NULL; gp = gp->next)
         {
@@ -280,7 +285,7 @@ while (lineFileNext(lf, &line, NULL))
 	lineFileReuse(lf);
 	break;
 	}
-    word = nextWord(&line);
+    name = word = nextWord(&line);
     line = skipLeadingSpaces(line);
     if (line == NULL || line[0] == 0)
         {
@@ -289,21 +294,40 @@ while (lineFileNext(lf, &line, NULL))
 	}
     if (lookupHash != NULL)
 	{
-	word = hashFindVal(lookupHash, word);
-	if (word == NULL)
+	name = hashFindVal(lookupHash, word);
+	if (name == NULL)
 	    {
 	    ++missCount;
+	    if (oneMiss == NULL)
+	        oneMiss = cloneString(word);
 	    continue;
 	    }
 	}
+    else
+        {
+	if (!hashLookup(gpHash, name))
+	    {
+	    ++badGeneCount;
+	    if (oneBadGene == NULL)
+	        {
+		oneBadGene = cloneString(name);
+		continue;
+		}
+	    }
+	}
     ++hitCount;
-    fprintf(output, "%s %s\n", word, line);
+    fprintf(output, "%s %s\n", name, line);
     }
 fprintf(output, "\n");
 if (missCount > 0)
    {
-   warn("%d items not found (and %d found) in %s", 
-   	missCount, hitCount, lookup);
+   warn("%d items including '%s' not found (and %d found) in %s", 
+   	missCount, oneMiss, hitCount, lookup);
+   }
+if (badGeneCount > 0)
+   {
+   warn("%d gene ID's including '%s' not found (and %d found)", 
+   	badGeneCount, oneBadGene, hitCount);
    }
 hashFree(&lookupHash);
 return col;
