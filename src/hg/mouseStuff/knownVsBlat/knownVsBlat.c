@@ -10,6 +10,10 @@
 #include "refLink.h"
 #include "nib.h"
 
+/* Variables that can be set from command line. */
+int dotEvery = 0;	/* How often to print I'm alive dots. */
+char *clChrom = "all";	/* Which chromosome. */
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -18,8 +22,24 @@ errAbort(
   "usage:\n"
   "   knownVsBlat database\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -dots=N - Output a dot evern N known genes\n"
+  "   -chrom=chrN - Restrict to a single chromosome\n"
   );
+}
+
+void dotOut()
+/* Put out a dot every now and then if user want's to. */
+{
+static int mod = 1;
+if (dotEvery > 0)
+    {
+    if (--mod <= 0)
+	{
+	fputc('.', stdout);
+	fflush(stdout);
+	mod = dotEvery;
+	}
+    }
 }
 
 struct stat
@@ -47,6 +67,8 @@ struct blatStats
     struct stat middleIntron;	/* Middle introns. */
     struct stat endCds;		/* Coding part of last coding exon. */
     struct stat endIntron;	/* Last intron. */
+    struct stat splice5;	/* First 10 bases of intron. */
+    struct stat splice3;	/* Last 10 bases of intron. */
     struct stat utr3;		/* 3' UTR. */
     struct stat downstream200;	/* 200 bases past end of UTR. */
     };
@@ -83,6 +105,8 @@ reportStat(f, "middleCds", &stats->middleCds);
 reportStat(f, "middleIntron", &stats->middleIntron);
 reportStat(f, "endCds", &stats->endCds);
 reportStat(f, "endIntron", &stats->endIntron);
+reportStat(f, "splice5", &stats->splice5);
+reportStat(f, "splice3", &stats->splice3);
 reportStat(f, "utr3", &stats->utr3);
 reportStat(f, "downstream200", &stats->downstream200);
 }
@@ -112,6 +136,8 @@ addStat(&a->middleIntron, &acc->middleIntron);
 addStat(&a->endCds, &acc->endCds);
 addStat(&a->endIntron, &acc->endIntron);
 addStat(&a->utr3, &acc->utr3);
+addStat(&a->splice5, &acc->splice5);
+addStat(&a->splice3, &acc->splice3);
 addStat(&a->downstream200, &acc->downstream200);
 }
 
@@ -126,29 +152,46 @@ return stats;
 }
 
 struct blatStats *geneStats(char *chrom, 
-	char *nibName, FILE *nibFile, int chromSize,
+	struct dnaSeq *geno, int genoStart, int genoEnd,
+	struct psl *pslList,
 	struct genePred *gp)
 /* Figure out how BLAT hits gene and return resulting stats. */
 {
-int extraBefore = 800;
-int extraAfter = 200;
-int startRegion, endRegion;
-int sizeRegion;
-struct dnaSeq *geno;
 struct blatStats *stats;
+struct hash *traceHash = newHash(0);
+struct dnaSeq *traceList = NULL, *trace = NULL;
+struct psl *psl;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256], **row;
+char *traceName;
+int uglyLook = 0, uglyUse = 0, uglyTrace = 0;
 
 AllocVar(stats);
 
-/* Expand region around gene a little and load corresponding sequence. */
-startRegion = gp->txStart - extraBefore;
-if (startRegion < 0) startRegion = 0;
-endRegion = gp->txEnd + extraAfter;
-if (endRegion > chromSize)
-    endRegion = chromSize;
-sizeRegion = endRegion - startRegion;
-geno = nibLdPart(nibName, nibFile, chromSize, startRegion, sizeRegion);
+/* Load traces for all blat psls that intersect window. */
+for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
+    {
+    ++uglyLook;
+    if (psl->tStart < genoEnd && psl->tEnd > genoStart)
+	{
+	++uglyUse;
+	traceName = psl->qName;
+	if ((trace = hashFindVal(traceHash, traceName)) == NULL)
+	    {
+	    ++uglyTrace;
+	    trace = hExtSeq(traceName);
+	    slAddHead(&traceList, trace);
+	    hashAdd(traceHash, traceName, trace);
+	    }
+	}
+    }
+uglyf("%d of %d psl's used.  %d traces loaded\n", uglyUse, uglyLook, uglyTrace);
 
-freeDnaSeq(&geno);
+
+hFreeConn(&conn);
+freeHash(&traceHash);
+freeDnaSeqList(&traceList);
 return stats;
 }
 
@@ -158,6 +201,7 @@ struct geneIsoforms
     struct geneIsoforms *next;
     char *name;			/* Name of gene. Not allocated here. */
     struct genePred *gpList;	/* List of isoforms. */
+    int start, end;		/* Start/end in chromosome. */
     };
 
 void geneIsoformsFree(struct geneIsoforms **pGi)
@@ -203,14 +247,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row);
     geneName = hashMustFindVal(nmToGeneHash, gp->name);
-    if ((gi = hashFindVal(geneHash, geneName)) == NULL)
+    if ((gi = hashFindVal(geneHash, geneName)) == NULL || 
+    	rangeIntersection(gi->start, gi->end, gp->txStart, gp->txEnd) <= 0)
         {
 	AllocVar(gi);
 	slAddHead(&giList, gi);
 	gi->name = geneName;
+	gi->start = gp->txStart;
+	gi->end = gp->txEnd;
 	hashAdd(geneHash, geneName, gi);
 	}
     slAddTail(&gi->gpList, gp);
+    if (gp->txStart < gi->start) gi->start = gp->txStart;
+    if (gp->txEnd > gi->end) gi->end = gp->txEnd;
     }
 
 freeHash(&geneHash);
@@ -227,7 +276,8 @@ hFreeConn(&conn);
 	    maxIsoGene = gi->name;
 	    }
 	}
-    uglyf("Maximum isoforms on %s is %d on %s\n", chrom, maxIsoforms, maxIsoGene);
+    uglyf("Maximum isoforms on %s is %d on %s (of %d genes)\n", chrom, maxIsoforms, maxIsoGene,
+    	slCount(giList));
     }
 slReverse(&giList);
 return giList;
@@ -252,6 +302,29 @@ for (gp = gi->gpList; gp != NULL; gp = gp->next)
 return maxGp;
 }
 
+struct psl *getChromBlatMouse(char *chrom)
+/* Get all blatMouse alignments for chromosome sorted by chromosome
+ * start position. */
+{
+char query[256], **row;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+struct psl *pslList = NULL, *psl;
+
+sprintf(query, "select * from %s_blatMouse", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&pslList);
+return pslList;
+}
+
+
 struct blatStats *chromStats(char *chrom, struct hash *nmToGeneHash)
 /* Produce stats for one chromosome. Just consider longest isoform
  * of each gene. */
@@ -262,19 +335,55 @@ struct genePred *gp;
 char nibName[512];
 FILE *nibFile;
 int chromSize;
+struct psl *pslList, *psl;
+struct dnaSeq *geno;
+int extraBefore = 800;
+int extraAfter = 200;
+int startRegion, endRegion;
+int sizeRegion;
+int uglySkipCount;
 
 hNibForChrom(chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);
+psl = pslList = getChromBlatMouse(chrom);
 AllocVar(stats);
 giList = getChromGenes(chrom, nmToGeneHash);
 for (gi = giList; gi != NULL; gi = gi->next)
     {
     gp = longestIsoform(gi);
-    gStats = geneStats(chrom, nibName, nibFile, chromSize, gp);
+
+    /* Expand region around gene a little and load corresponding sequence. */
+    if (gp->strand[0] == '+')
+        {
+	startRegion = gp->txStart - extraBefore;
+	endRegion = gp->txEnd + extraAfter;
+	}
+    else
+        {
+	startRegion = gp->txStart - extraAfter;
+	endRegion = gp->txEnd + extraBefore;
+	}
+    if (startRegion < 0) startRegion = 0;
+    if (endRegion > chromSize)
+	endRegion = chromSize;
+    sizeRegion = endRegion - startRegion;
+
+    uglySkipCount = 0;
+    for ( ;psl != NULL && psl->tEnd < startRegion; psl = psl->next)
+	++uglySkipCount;
+    uglyf("Skipping %d for %s\n", uglySkipCount, gi->name);
+
+    geno = nibLdPart(nibName, nibFile, chromSize, startRegion, sizeRegion);
+    gStats = geneStats(chrom, geno, startRegion, endRegion, psl, gp);
     addStats(gStats, stats);
     freez(&gStats);
+    freeDnaSeq(&geno);
+    dotOut();
     }
+if (dotEvery > 0)
+   printf("\n");
 geneIsoformsFreeList(&giList);
+pslFreeList(&pslList);
 return stats;
 }
 
@@ -307,16 +416,20 @@ struct hash *nmToGeneHash;
 
 hSetDb(database);
 nmToGeneHash = makeNmToGeneHash();
-allChroms = hAllChromNames();
+if (sameWord(clChrom, "all"))
+    allChroms = hAllChromNames();
+else
+    allChroms = newSlName(clChrom);
 for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
     {
     stats = chromStats(chrom->name, nmToGeneHash);
     slAddHead(&statsList, stats);
-    break;	/* uglyf */
     }
 slReverse(statsList);
 sumStats = sumStatsList(statsList);
+#ifdef SOON
 reportStats(stdout, sumStats);
+#endif /* SOON */
 freeHashAndVals(&nmToGeneHash);
 }
 
@@ -324,6 +437,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+dotEvery = cgiUsualInt("dots", dotEvery);
+clChrom = cgiUsualString("chrom", clChrom);
 if (argc != 2)
     usage();
 knownVsBlat(argv[1]);
