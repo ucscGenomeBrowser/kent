@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.24 2003/10/21 17:15:57 angie Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.25 2003/10/21 17:53:39 angie Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -478,16 +478,24 @@ char *addCommasToPos(char *position)
 {
 static    char buffer[1000];
 char *optr = buffer;
+char *ptr = NULL;
 
 if (position == NULL)
     return NULL;
-while((*optr++ = *position++) != ':')
-    ;
-commaNumberStr(&position, &optr);
-position++; /*  - */
-*optr++ = '-';
-commaNumberStr(&position, &optr);
-
+if ((ptr = strchr(position, ':')) == NULL)
+    {
+    strncpy(buffer, position, sizeof(buffer));
+    }
+else
+    {
+    while((*optr++ = *position++) != ':')
+	;
+    commaNumberStr(&position, &optr);
+    position++; /*  - */
+    *optr++ = '-';
+    commaNumberStr(&position, &optr);
+    *optr = '\0';
+    }
 return buffer;
 }
 
