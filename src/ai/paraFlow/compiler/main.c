@@ -808,6 +808,36 @@ trueBody->next = falseBody;
 return pp;
 }
 
+static struct pfParse *parseWhile(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse if statement (which may include else) */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptWhile, tok, parent);
+struct pfParse *conditional, *body;
+
+tok = tok->next;	/* Skip 'while' */
+
+/* Get conditional. */
+if (tok->type != '(')
+    expectingGot("(", tok);
+tok = tok->next;
+conditional = pfParseExpression(pp, &tok, scope);
+if (tok->type != ')')
+    expectingGot(")", tok);
+tok = tok->next;
+
+/* Body */
+body = pfParseSemiStatement(pp, &tok, scope);
+
+*pTokList = tok;
+
+pp->children = conditional;
+conditional->next = body;
+return pp;
+}
+
+
 static struct pfParse *parseForeach(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse foreach statement */
@@ -904,6 +934,9 @@ switch (tok->type)
 	break;
     case pftIf:
         statement = parseIf(parent, &tok, scope);
+	break;
+    case pftWhile:
+        statement = parseWhile(parent, &tok, scope);
 	break;
     case pftForeach:
 	statement = parseForeach(parent, &tok, scope);
