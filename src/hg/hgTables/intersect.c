@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.8 2004/07/23 22:32:29 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.9 2004/08/27 15:50:42 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -85,6 +85,8 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
+
+hPrintf("Please select a group and track to intersect with:<BR>\n");
 iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange, 
 	hgtaNextIntersectTrack, onChange, conn);
 iName = iTrack->shortLabel;

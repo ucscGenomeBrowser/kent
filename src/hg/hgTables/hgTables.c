@@ -19,7 +19,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.52 2004/08/26 21:05:43 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.53 2004/08/27 15:50:42 kent Exp $";
 
 
 void usage()
@@ -681,9 +681,9 @@ char *table = track->tableName;
 char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
 struct region *region, *regionList = getRegions();
 char posBuf[64];
-htmlOpen("Hyperlinks to Genome Browser");
 int count = 0;
 
+htmlOpen("Hyperlinks to Genome Browser");
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
