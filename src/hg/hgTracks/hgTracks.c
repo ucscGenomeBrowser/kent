@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.847 2004/12/06 17:53:07 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.848 2004/12/07 15:07:48 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3998,7 +3998,6 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)ro->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)ro->chromEnd-winStart)*scale) + xOff;
 int w;
-struct trackDb *tdb = tg->tdb;
 
 color = tg->colorShades[ro->score];
 w = x2-x1;
@@ -4043,10 +4042,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-char *lastName = NULL;
 struct tfbsConsSites *ro, *list = NULL;
-struct linkedFeatures *lfList = NULL, *lf;
-struct simpleFeature *sf, *sfList = NULL;
 double scoreMid = atof(trackDbSettingOrDefault(tg->tdb, "scoreMid", "1.93"));
 double scoreHigh = atof(trackDbSettingOrDefault(tg->tdb, "scoreHigh", "2.47"));
 
