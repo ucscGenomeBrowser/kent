@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.467 2003/08/12 07:11:51 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.468 2003/08/12 19:38:29 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4371,7 +4371,8 @@ char **row;
 struct psl *psl;
 struct dnaSeq *rnaSeq;
 char *type;
-int start, cdsStart = 0, cdsEnd = 0;
+int start;
+unsigned int cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
 
 /* Print start of HTML. */
@@ -8316,9 +8317,9 @@ sprintf(title, "STS Marker %s\n", marker);
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                AND chrom = '%s' AND chromStart = %d
-                AND chromEnd = %d",
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+                "AND chrom = '%s' AND chromStart = %d "
+                "AND chromEnd = %d",
 	        table, marker, seqName, start, end);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -8460,8 +8461,8 @@ if (row != NULL)
 	    sqlFreeResult(&sr);
             printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
             printf("<TABLE>\n");
-	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
-                           AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
+	    sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+		"AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
 	            table, marker, seqName, start, end); 
             sr = sqlGetResult(conn,query);
             while ((row = sqlNextRow(sr)) != NULL)
@@ -12936,7 +12937,7 @@ else if (sameWord(track, "genomicSuperDups"))
     }
 else if (sameWord(track, "celeraCoverage"))
     {
-    doCeleraCoverage(track, item);
+    doCeleraCoverage();
     }
 else if (sameWord(track, "celeraDupPositive"))
     {
