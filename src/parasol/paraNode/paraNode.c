@@ -197,8 +197,8 @@ if (grandChildId != 0)
     {
     kill(-grandChildId, SIGTERM);
     grandChildId = 0;
-    sleep(3);
-    kill(-grandChildId, SIGKILL);
+    // sleep(3);
+    // kill(-grandChildId, SIGKILL);
     }
 }
 
@@ -683,7 +683,7 @@ for (;;)
 			    }
 			freez(&buf);
 			}
-		    logIt("node  %s: done command\n", hostName, line);
+		    logIt("node  %s: done command\n", hostName);
 		    }
 		}
 	    }
@@ -715,6 +715,7 @@ if (fork() == 0)
     {
     /* Set up log handler. */
     setupDaemonLog(log);
+    logFlush = TRUE;
 
     /* Execute daemon. */
     paraNode();
