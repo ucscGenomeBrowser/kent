@@ -10,4 +10,5 @@ CREATE TABLE bacEndAlias (
     acc varchar(255) not null,	# GenBank accession for the BAC End
               #Indices
     PRIMARY KEY(alias)
+    INDEX(identNo)
 );
