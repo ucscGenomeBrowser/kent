@@ -21,6 +21,7 @@ struct dnaSeq
     char *name;           /* Name of sequence. */
     DNA *dna;             /* Sequence base by base. */
     int size;             /* Size of sequence. */
+    Bits* mask;           /* Repeat mask (optional) */
     };
 
 typedef struct dnaSeq bioSeq;	/* Preferred use if either DNA or protein. */

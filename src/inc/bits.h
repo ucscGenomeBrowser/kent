@@ -8,6 +8,9 @@ typedef unsigned char Bits;
 Bits *bitAlloc(int bitCount);
 /* Allocate bits. */
 
+Bits *bitClone(Bits* orig, int bitCount);
+/* Clone bits. */
+
 void bitFree(Bits **pB);
 /* Free bits. */
 

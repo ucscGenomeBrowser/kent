@@ -1,5 +1,5 @@
 .c.o:
-	gcc -D_GNU_SOURCE -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
+	gcc -D_GNU_SOURCE -g -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
 
 O = aliType.o bits.o binRange.o \
     blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \

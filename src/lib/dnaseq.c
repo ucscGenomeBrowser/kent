@@ -19,6 +19,7 @@ if (name != NULL)
     seq->name = cloneString(name);
 seq->dna = dna;
 seq->size = size;
+seq->mask = NULL;
 return seq;
 }
 
@@ -29,6 +30,11 @@ struct dnaSeq *seq = CloneVar(orig);
 seq->name = cloneString(seq->name);
 seq->dna = needHugeMem(seq->size+1);
 memcpy(seq->dna, orig->dna, seq->size+1);
+seq->mask = NULL;
+if (orig->mask != NULL)
+    {
+    seq->mask = bitClone(orig->mask, seq->size);
+    }
 return seq;
 }
 
@@ -40,6 +46,7 @@ if (seq == NULL)
     return;
 freeMem(seq->name);
 freeMem(seq->dna);
+bitFree(&seq->mask);
 freez(pSeq);
 }
 

@@ -61,6 +61,15 @@ extern DNA ntMixedCaseChars[256];
 /* Another array to help us do complement of DNA  */
 extern DNA ntCompTable[256];
 
+/* Arrays to convert between lower case indicating repeat masking, and
+ * a 1/2 byte representation where the 4th bit indicates if the characeter
+ * is masked. Uses N_BASE_VAL for `n', `x', etc.
+*/
+#define MASKED_BASE_BIT 8
+extern int ntValMasked[256];
+extern DNA valToNtMasked[256];
+
+
 /* Reverse complement DNA. */
 void reverseComplement(DNA *dna, long length);
 

@@ -49,6 +49,15 @@ int byteCount = ((bitCount+7)>>3);
 return needLargeZeroedMem(byteCount);
 }
 
+Bits *bitClone(Bits* orig, int bitCount)
+/* Clone bits. */
+{
+int byteCount = ((bitCount+7)>>3);
+Bits* bits = needLargeZeroedMem(byteCount);
+memcpy(bits, orig, byteCount);
+return bits;
+}
+
 void bitFree(Bits **pB)
 /* Free bits. */
 {

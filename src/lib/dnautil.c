@@ -112,6 +112,10 @@ int ntVal5[256];
 int ntValNoN[256]; /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent ones. */
 DNA valToNt[5];
 
+/* convert tables for bit-4 indicating masked */
+int ntValMasked[256];
+DNA valToNtMasked[256];
+
 static boolean inittedNtVal = FALSE;
 
 
@@ -126,9 +130,12 @@ if (!inittedNtVal)
 	ntValLower[i] = ntVal[i] = -1;
         ntValNoN[i] = T_BASE_VAL;
 	if (isspace(i) || isdigit(i))
-	    ntVal5[i] = -1;
+	    ntVal5[i] = ntValMasked[i] = -1;
 	else
+            {
 	    ntVal5[i] = N_BASE_VAL;
+	    ntValMasked[i] = (islower(i) ? (N_BASE_VAL|MASKED_BASE_BIT) : N_BASE_VAL);
+            }
         }
     ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = ntValLower['t'] = T_BASE_VAL;
     ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = ntValLower['u'] = U_BASE_VAL;
@@ -136,11 +143,37 @@ if (!inittedNtVal)
     ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = ntValLower['a'] = A_BASE_VAL;
     ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = ntValLower['g'] = G_BASE_VAL;
 
-    valToNt[T_BASE_VAL] = 't';
-    valToNt[C_BASE_VAL] = 'c';
-    valToNt[A_BASE_VAL] = 'a';
-    valToNt[G_BASE_VAL] = 'g';
-    valToNt[N_BASE_VAL] = 'n';
+    valToNt[T_BASE_VAL] = valToNt[T_BASE_VAL|MASKED_BASE_BIT] = 't';
+    valToNt[C_BASE_VAL] = valToNt[C_BASE_VAL|MASKED_BASE_BIT] = 'c';
+    valToNt[A_BASE_VAL] = valToNt[A_BASE_VAL|MASKED_BASE_BIT] = 'a';
+    valToNt[G_BASE_VAL] = valToNt[G_BASE_VAL|MASKED_BASE_BIT] = 'g';
+    valToNt[N_BASE_VAL] = valToNt[N_BASE_VAL|MASKED_BASE_BIT] = 'n';
+
+    /* masked values */
+    ntValMasked['T'] = T_BASE_VAL;
+    ntValMasked['U'] = U_BASE_VAL;
+    ntValMasked['C'] = C_BASE_VAL;
+    ntValMasked['A'] = A_BASE_VAL;
+    ntValMasked['G'] = G_BASE_VAL;
+
+    ntValMasked['t'] = T_BASE_VAL|MASKED_BASE_BIT;
+    ntValMasked['u'] = U_BASE_VAL|MASKED_BASE_BIT;
+    ntValMasked['c'] = C_BASE_VAL|MASKED_BASE_BIT;
+    ntValMasked['a'] = A_BASE_VAL|MASKED_BASE_BIT;
+    ntValMasked['g'] = G_BASE_VAL|MASKED_BASE_BIT;
+
+    valToNtMasked[T_BASE_VAL] = 'T';
+    valToNtMasked[C_BASE_VAL] = 'C';
+    valToNtMasked[A_BASE_VAL] = 'A';
+    valToNtMasked[G_BASE_VAL] = 'G';
+    valToNtMasked[N_BASE_VAL] = 'N';
+
+    valToNtMasked[T_BASE_VAL|MASKED_BASE_BIT] = 't';
+    valToNtMasked[C_BASE_VAL|MASKED_BASE_BIT] = 'c';
+    valToNtMasked[A_BASE_VAL|MASKED_BASE_BIT] = 'a';
+    valToNtMasked[G_BASE_VAL|MASKED_BASE_BIT] = 'g';
+    valToNtMasked[N_BASE_VAL|MASKED_BASE_BIT] = 'n';
+
     inittedNtVal = TRUE;
     }
 }
