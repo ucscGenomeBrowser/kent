@@ -76,6 +76,7 @@ struct altEvent
     double *avgExpVals;          /* Average value for each exp. */
     double flipScore;            /* Number of times on version - number of times other / sum of both. */
     double percentUltra;           /* Percentage of bases that overlap very conserved elements. */
+    double pVal;                   /* PVal of being differentially expressed. */
     boolean isExpressed;         /* Is this altEvent Expressed. */
     boolean isAltExpressed;      /* Is this altEvent alt-expressed? */
 };
@@ -138,6 +139,11 @@ static struct optionSpec optionSpecs[] =
     {"notHumanCassettes", OPTION_STRING},
     {"pValThresh", OPTION_FLOAT},
     {"controlStats", OPTION_STRING},
+    {"sortScore", OPTION_STRING},
+    {"plotDir", OPTION_STRING},
+    {"minFlip", OPTION_FLOAT},
+    {"maxFlip", OPTION_FLOAT},
+    {"minIntCons", OPTION_FLOAT},
     {"doTests", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -178,8 +184,14 @@ static char *optionDescripts[] =
     "Cassettes that are not in human (in new genome).",
     "Threshold to filter pvalue at, default .001",
     "Output some stats for control exons to this file.",
+    "Score to replace flipScore for sorting, etc.",
+    "Directory plots are in.",
+    "Minimum Flip Score to output fasta record for.",
+    "Maximum Flip Score to output fasta record for.",
+    "Minimum intron conservation percent to output fasta records for.",
     "Do some unit tests."
 };
+
 
 int isBrainTissue[256]; /* Global brain identifier. */
 struct hash *liftOverHash = NULL; /* Hash holding chains for lifting. */
@@ -199,6 +211,7 @@ boolean useExonBedsToo = FALSE; /* Use exon beds too, not just splice junction b
 int intronsConserved = 0;
 int intronsConsCounted = 0;
 struct slRef *brainSpEvents = NULL; /* List of brain specific events. */
+FILE *probeMappingsOut = NULL;
 FILE *ratioStatOut = NULL;  /* File to output a matrix of ratios of skip/includes. */
 FILE *ratioSkipIntenOut = NULL; /* Intensity file for skip paths. */
 FILE *ratioIncIntenOut = NULL; /* Intensity file for skip paths. */
@@ -215,6 +228,7 @@ double pvalThresh = 2; //.05 / 1263; /* Threshold at which we believe pval is re
 struct hash *notHumanHash = NULL;    /* Hash of exons that are not even aligned to human. */
 struct hash *conservedHash = NULL;   /* Hash of conserved exon events. */
 struct hash *splicePValsHash = NULL; /* Hash of pvals of interest. */
+struct hash *sortScoreHash = NULL; /* Hash of pvals of interest. */
 struct hash *outputPValHash = NULL; /* Hash of selected names. */
 struct hash *psToRefGeneHash = NULL; /* Hash of probe set to affy genes. */
 struct hash *psToKnownGeneHash = NULL; /* Hash of probe set to known genes. */
@@ -225,9 +239,13 @@ struct bindSite *bindSiteList = NULL; /* List of rna binding sites to look for. 
 struct bindSite **bindSiteArray = NULL; /* array of rna binding sites to look for. */
 int bindSiteCount = 0;             /* Number of binding sites to loop through. */
 int cassetteExonCount = 0;         /* Number of cassette exons examined. */
+int cassetteExonSkipCount = 0;         /* Number of cassette exons examined. */
 int *cassetteUpMotifs = NULL;      /* Counts of motifs upstream cassette exons. */
 int *cassetteDownMotifs = NULL;    /* Counts of moitfs downstream cassette exons. */
 int *cassetteInsideMotifs = NULL;    /* Counts of moitfs downstream cassette exons. */
+int *cassetteSkipUpMotifs = NULL;      /* Counts of motifs upstream cassette exons for skipping exons. */
+int *cassetteSkipDownMotifs = NULL;    /* Counts of moitfs downstream cassette exon for skipping exons. */
+int *cassetteSkipInsideMotifs = NULL;    /* Counts of moitfs downstream cassette exons for skipping exons. */
 int controlExonCount = 0;         /* Number of control exons examined. */
 int *controlUpMotifs = NULL;      /* Counts of motifs upstream cassette exons. */
 int *controlDownMotifs = NULL;    /* Counts of moitfs downstream cassette exons. */
@@ -248,6 +266,7 @@ FILE *brainSpConsDnaOut = NULL;
 FILE *brainSpConsBedOut = NULL;
 FILE *brainSpDnaUpDownOut = NULL;
 FILE *brainSpDnaDownOut = NULL;
+FILE *brainSpDnaMergedOut = NULL;
 FILE *brainSpBedUpOut = NULL;  /* File for paths (in bed format) that
 			      * are brain specific. */
 FILE *brainSpBedDownOut = NULL;
@@ -664,6 +683,42 @@ if(d == NULL)
 return d->val;
 }
 
+void initSortScore()
+/* Load up the pvals of interest generated in a separate file. */
+{
+struct lineFile *lf = NULL;
+char *fileName = optionVal("sortScore", NULL);
+char *words[2];
+struct slDouble *sd = NULL;
+assert(fileName);
+sortScoreHash = newHash(10);
+lf = lineFileOpen(fileName, TRUE);
+while(lineFileNextRow(lf, words, ArraySize(words)))
+    {
+    char *mark = NULL;
+    double d = 0;
+    d = sqlDouble(words[1]);
+    if((mark = strchr(words[0], ':')) != NULL)
+	*mark = '\0';
+    sd = slDoubleNew(d);
+    hashAddUnique(sortScoreHash, words[0], sd);
+    }
+lineFileClose(&lf);
+}
+
+double sortScoreForSplice(char *name)
+/* Return a pval as specified in the splicePVal file or 2 if not there. */
+{
+struct slDouble *d = NULL;
+if(sortScoreHash == NULL)
+    errAbort("Need to specify -sortScore file if using pvalForSplice");
+assert(name);
+d = hashFindVal(sortScoreHash, name);
+if(d == NULL)
+    return 0;
+return d->val;
+}
+
 void initPsToRefGene()
 /* Load up a file that converts from affy psName to gene names. */
 {
@@ -783,7 +838,7 @@ slAddHead(&bsList, bs);
 AllocVar(bs);
 bs->motifCount = 1;
 AllocArray(bs->motifs, bs->motifCount);
-bs->motifs[0] = cloneString("ACTGAA");
+bs->motifs[0] = cloneString("TCCTT");
 bs->rnaBinder = cloneString("ChuckFav");
 slAddHead(&bsList, bs);
 
@@ -796,6 +851,9 @@ for(bs = bsList; bs != NULL; bs = bs->next)
 AllocArray(cassetteUpMotifs, bindSiteCount);
 AllocArray(cassetteDownMotifs, bindSiteCount);
 AllocArray(cassetteInsideMotifs, bindSiteCount);
+AllocArray(cassetteSkipUpMotifs, bindSiteCount);
+AllocArray(cassetteSkipDownMotifs, bindSiteCount);
+AllocArray(cassetteSkipInsideMotifs, bindSiteCount);
 AllocArray(controlUpMotifs, bindSiteCount);
 AllocArray(controlDownMotifs, bindSiteCount);
 AllocArray(controlInsideMotifs, bindSiteCount);
@@ -1607,8 +1665,8 @@ return pathExp;
 
 
 
-double calculateFlipScore(struct altEvent *event, struct dMatrix *probM, 
-			boolean *isBrain, boolean doAll, int *incBrain, int *skipBrain)
+double calculateFlipScore(struct altEvent *event, char *name, struct dMatrix *probM, 
+			  boolean *isBrain, boolean doAll, int *incBrain, int *skipBrain)
 
 /* Calculate |(#times skip > include) - (#times skip < include)|/totalTissues */
 {
@@ -1624,6 +1682,19 @@ skip = event->altPathList;
 include = event->altPathList->next;
 assert(probM);
 assert(probM->colCount > 0);
+
+/* Use the sortScore hash if it is setup. */
+if(sortScoreHash != NULL)
+    {
+    double result = sortScoreForSplice(event->splice->name);
+    if(result > 0) 
+	*incBrain = 1;
+    else if(result < 0)
+	*skipBrain = 1;
+    return result;
+    }
+
+/* Else do some calculations. */
 for(tissueIx = 0; tissueIx < probM->colCount; tissueIx++)
     {
     if(geneExpressed(event, tissueIx) || doAll)
@@ -1707,8 +1778,8 @@ if(!initDone)
     initDone = TRUE;
     }
 
-if(event->splice->type == altCassette)
-    event->flipScore = calculateFlipScore(event, probM, isBrainTissue, FALSE, &incBrain, &skipBrain);
+/* if(event->splice->type == altCassette) */
+/*     event->flipScore = calculateFlipScore(event, probM, isBrainTissue, FALSE, &incBrain, &skipBrain); */
 
 /* If we have pvals specified by the user use them instead. */
 if(splicePValsHash != NULL)
@@ -1995,6 +2066,38 @@ if(strand == '-' && *exonNum != -1)
 bedFreeList(&bedList);
 }
 
+double percentIntronBasesOverlappingConsSide(char *table, char *chrom, int chromStart, int chromEnd, boolean upStream)
+/* Percentage of intron bases that overlap a phastCons element. */
+{
+int intronOffset = 100, overlap = 0;
+double percent = 0;
+if(hTableExists2(table))
+    {
+    struct bed *upstream = NULL;
+    struct bed *bed = NULL;
+    if(upStream == TRUE)
+	upstream = phastConForRegion(table, chrom, chromStart-intronOffset, chromStart);
+    else
+	upstream = phastConForRegion(table, chrom, chromEnd, chromEnd + intronOffset);
+
+    for(bed = upstream; bed != NULL; bed = bed->next)
+	{
+	if(upStream == TRUE)
+	    {
+	    overlap += positiveRangeIntersection(chromStart-intronOffset, chromStart,
+						 bed->chromStart, bed->chromEnd);
+	    }
+	else 
+	    {
+	    overlap += positiveRangeIntersection(chromEnd, chromEnd+intronOffset,
+						 bed->chromStart, bed->chromEnd);
+	    }
+	}
+    percent = (double)overlap / (intronOffset);
+    bedFreeList(&upstream);
+    }
+return percent;
+}
 
 double percentIntronBasesOverlappingCons(char *table, char *chrom, int chromStart, int chromEnd)
 /* Percentage of intron bases that overlap a phastCons element. */
@@ -2029,6 +2132,7 @@ void printLinks(struct altEvent *event, struct bed *pathBed)
 struct splice *s = NULL;
 struct path *lastPath = NULL;
 struct splice *splice = event->splice;
+char *brainDiffDir = optionVal("plotDir","brainDiffPlots.9");
 char *chrom = NULL;
 char strand;
 int chromStart = 0,  chromEnd = 0;
@@ -2063,26 +2167,27 @@ fprintf(brainSpTableHtmlOut, "<tr><td>");
 if(overlapsPhasCons)
     fprintf(brainSpTableHtmlOut, "<font color=red> * </font>");
 fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\",>", browserName,
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\",>", browserName,
 	useDb, chrom, chromStart-100, chromEnd+100);
 fprintf(brainSpTableHtmlOut,"%s </a><font size=-1>%s</font>\n", 
 	refSeqForPSet(event->altPathList->beds[0]->name), useDb);
 
 fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\">[u]</a>", 
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\">[u]</a>", 
 	browserName, useDb, chrom, chromStart-95, chromStart+5,
 	strand == '-' ? 1 : 0);
 fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG\">[d]</a>", 
+	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\">[d]</a>", 
 	browserName, useDb, chrom, chromEnd-5, chromEnd+95,
 	strand == '-' ? 1 : 0);
-fprintf(brainSpTableHtmlOut, "<a target=\"plots\" href=\"./brainDiffPlots.9/%s:%s:%s:%s:%s:%s:%d:%d.jpg\">[f]</a>", 
+fprintf(brainSpTableHtmlOut, "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:%d:%d.jpg\">[f]</a>", 
+	brainDiffDir,
 	splice->name, refSeqForPSet(event->altPathList->beds[0]->name), 
 	nameForType(splice->type), event->altPathList->beds[0]->name,
 	splice->strand, splice->tName, splice->tStart, splice->tEnd);
 makeJunctMdbGenericLink(splice, buff, "[p]");
 fprintf(brainSpTableHtmlOut, "%s", buff->string);
-fprintf(brainSpTableHtmlOut, "(%5.2f%%) ", 100.0 * event->percentUltra);
+fprintf(brainSpTableHtmlOut, "(%5.2f%%, %5.5f) ", 100.0 * event->percentUltra, event->pVal);
 if(splice->type == altCassette)
     {
     int i = 0;
@@ -2144,9 +2249,23 @@ double upIntCons = 0;
 double downIntCons = 0;
 double ultraCons = 0;
 int exonCount = -1, exonNum = -1;
-    
+double cons = 0;
+
 /* Add event to our list for later sorting, etc. */
-ultraCons = percentIntronBasesOverlappingCons("phastConsOrig90", chrom, exonStart,exonEnd);
+ultraCons = cons = percentIntronBasesOverlappingConsSide("phastConsOrig90", chrom, exonStart,exonEnd, TRUE);
+
+/* Percent ultra. */
+safef(buff, sizeof(buff), "%.4f", cons);
+vmAddVal(vm, name, "intronUltraConsUpStream", buff);
+
+cons = percentIntronBasesOverlappingConsSide("phastConsOrig90", chrom, exonStart,exonEnd, FALSE);
+ultraCons += cons;
+
+/* Percent ultra. */
+safef(buff, sizeof(buff), "%.4f", cons);
+vmAddVal(vm, name, "intronUltraConsDownStream", buff);
+
+ultraCons = ultraCons / 2;
 
 /* Percent ultra. */
 safef(buff, sizeof(buff), "%.4f", ultraCons);
@@ -2265,6 +2384,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     double percentPhastCons = 0;
     double upIntCons = 0;
     double downIntCons = 0;
+    double cons = 0, ultraCons = 0;
     double flipScore = 0;
     int incBrain = 0, skipBrain =0;
     int exonCount = -1, exonNum = -1;
@@ -2288,6 +2408,11 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     brainEvent->val = event;
     slAddHead(&brainSpEvents, brainEvent);
 
+    /* Lets do some stat recording. */
+    skipPath = event->altPathList;
+    skipPSet = skipPath->beds[0]->name;
+    incPath = event->altPathList->next;
+
 /*     /\* Calculate the flip score for now. *\/ */
 /*     if(onlyTwoPaths(event)) */
 /* 	calculateFlipScore(event, probM); */
@@ -2303,16 +2428,27 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 	{
 	lifted = liftOverCoords(&chrom, &chromStart, &chromEnd, &strand);
 	}
-    event->percentUltra = percentIntronBasesOverlappingCons("phastConsOrig90", chrom, chromStart,chromEnd);
+    /* Add event to our list for later sorting, etc. */
+    ultraCons = cons = percentIntronBasesOverlappingConsSide("phastConsOrig90", chrom, chromStart,chromEnd, TRUE);
+
+    /* Percent ultra. */
+    safef(buff, sizeof(buff), "%.4f", cons);
+    vmAddVal(brainSpecificValues, skipPSet, "intronUltraConsUpStream", buff);
+    
+    cons = percentIntronBasesOverlappingConsSide("phastConsOrig90", chrom, chromStart,chromEnd, FALSE);
+    ultraCons += cons;
+    
+    /* Percent ultra. */
+    safef(buff, sizeof(buff), "%.4f", cons);
+    vmAddVal(brainSpecificValues, skipPSet, "intronUltraConsDownStream", buff);
+    
+    ultraCons = ultraCons / 2;
+    event->percentUltra = ultraCons;
+/*     event->percentUltra = percentIntronBasesOverlappingCons("phastConsOrig90", chrom, chromStart,chromEnd); */
     if(event->percentUltra >= .20)
 	intronsConserved++;
     intronsConsCounted++;
 
-/* Lets do some stat recording. */
-    skipPath = event->altPathList;
-    skipPSet = skipPath->beds[0]->name;
-    incPath = event->altPathList->next;
-    
     /* Percent ultra. */
     safef(buff, sizeof(buff), "%.4f", event->percentUltra);
     vmAddVal(brainSpecificValues, skipPSet, "intronUltraCons", buff);
@@ -2351,13 +2487,12 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     vmAddVal(brainSpecificValues, skipPSet, "strand", splice->strand);
     
     /* Pvalue. */
-    safef(buff, sizeof(buff), "%g", pvalForSplice(event->splice->name));
-    vmAddVal(brainSpecificValues, skipPSet, "bsPVal", buff);
-    
-    /* Pvalue. */
-    safef(buff, sizeof(buff), "%.4f", event->flipScore);
-    vmAddVal(brainSpecificValues, skipPSet, "flipScore", buff);
-    
+    if(splicePValsHash != NULL)
+	{
+	safef(buff, sizeof(buff), "%g", pvalForSplice(event->splice->name));
+	vmAddVal(brainSpecificValues, skipPSet, "bsPVal", buff);
+	event->pVal = atof(buff);    
+	}
 
     /* GC Percent. */
     safef(buff, sizeof(buff), "%.4f", gcPercentForRegion(pathBed->chrom, pathBed->chromStart, pathBed->chromEnd, db));
@@ -2380,12 +2515,16 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 
     /* Calculate a flip score using all tissues even if they
        aren't expressed. */
-    flipScore = calculateFlipScore(event, probM, isBrainTissue, TRUE, &incBrain, &skipBrain);
+    event->flipScore = flipScore = calculateFlipScore(event, skipPSet, probM, isBrainTissue, TRUE, &incBrain, &skipBrain);
     safef(buff, sizeof(buff), "%.4f", flipScore);
     vmAddVal(brainSpecificValues, skipPSet, "flipScoreAllTissues", buff);
 
+    /* flip. */
+    safef(buff, sizeof(buff), "%.4f", event->flipScore);
+    vmAddVal(brainSpecificValues, skipPSet, "flipScore", buff);
+
     /* Calculate times brain includes and brain excludes. */
-    flipScore = calculateFlipScore(event, probM, isBrainTissue, FALSE, &incBrain, &skipBrain);
+    flipScore = calculateFlipScore(event, skipPSet, probM, isBrainTissue, FALSE, &incBrain, &skipBrain);
     safef(buff, sizeof(buff), "%d", incBrain);
     vmAddVal(brainSpecificValues, skipPSet, "incBrain", buff);
     safef(buff, sizeof(buff), "%d", skipBrain);
@@ -2440,13 +2579,23 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 	    int total = altPath->motifUpCounts[i] + altPath->motifDownCounts[i] + altPath->motifInsideCounts[i];
 	    safef(buff, sizeof(buff), "%d", total);
 	    vmAddVal(brainSpecificValues, skipPSet, bindSiteArray[i]->rnaBinder, buff);
+	    if(event->flipScore >=0)
+		{
+		cassetteSkipUpMotifs[i] += event->altPathList->next->motifUpCounts[i];
+		cassetteSkipDownMotifs[i] += event->altPathList->next->motifDownCounts[i];
+		cassetteSkipInsideMotifs[i] += event->altPathList->next->motifInsideCounts[i];
+		}
+	    else 
+		{
+		brainSpecificMotifUpCounts[i] += altPath->motifUpCounts[i];
+		brainSpecificMotifDownCounts[i] += altPath->motifDownCounts[i];
+		brainSpecificMotifInsideCounts[i] += altPath->motifInsideCounts[i];
+		}
 
-	    brainSpecificMotifUpCounts[i] += altPath->motifUpCounts[i];
-	    brainSpecificMotifDownCounts[i] += altPath->motifDownCounts[i];
-	    brainSpecificMotifInsideCounts[i] += altPath->motifInsideCounts[i];
 	    }
+	if(event->flipScore >=0)
+	    cassetteExonSkipCount++;
 	}
-	
     brainSpecificPathCount++;
     brainSpecificEvent = TRUE;
     fillInSequences(event, slLastEl(event->splice->paths),
@@ -2454,24 +2603,31 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 
     
     /* Write out the data. */
-    if(event->percentUltra >= .20)
+    if(event->flipScore >= optionFloat("minFlip", -200000) && 
+       event->flipScore <= optionFloat("maxFlip", 200000) &&
+       event->percentUltra >= optionFloat("minIntCons", 0.0))
 	{
+	struct dyString *dna = newDyString(2*upSeq->size+5);
+	dyStringPrintf(dna, "%sNNN%s", upSeq->dna, downSeq->dna);
 	if(lifted)
 	    {
 	    writeOutOverlappingUltra(brainSpConsDnaOut, brainSpConsBedOut, 
 				     chrom, chromStart, chromEnd, strand);
 	    }
+	upSeqBed->score = downSeqBed->score = pathBed->score = event->percentUltra*100;
+	if(event->isAltExpressed)
+	    pathBed->score = pathBed->score * -1;
 	faWriteNext(brainSpDnaUpOut, upSeq->name, upSeq->dna, upSeq->size);
 	bedTabOutN(upSeqBed, 6, brainSpBedUpOut);
 	faWriteNext(brainSpDnaDownOut, downSeq->name, downSeq->dna, downSeq->size);
 	bedTabOutN(downSeqBed, 6, brainSpBedDownOut);
+	faWriteNext(brainSpDnaMergedOut, upSeqBed->name, dna->string, dna->stringSize);
 	bedTabOutN(pathBed, 6, brainSpPathBedOut);
 	}
     bedFree(&upSeqBed);
     bedFree(&downSeqBed);
     dnaSeqFree(&upSeq);
     dnaSeqFree(&downSeq);
-/*     freez(&chrom); */
     }
 
 if(brainSpecificEvent == TRUE)
@@ -2725,7 +2881,15 @@ if(onlyTwoPaths(event) && ratioStatOut)
     }
 
 /* Get a background count of motifs in the cassettes. */
-if(event->isAltExpressed && event->splice->type == altCassette)
+
+
+if(brainSpBedUpOut != NULL)
+    outputBrainSpecificEvents(event, expressed, notExpressed, pathCount, probM);
+
+if(tissueSpecificOut != NULL && event->isExpressed == TRUE)
+    outputTissueSpecificEvents(event, expressed, notExpressed, pathCount, probM);
+
+if(event->isAltExpressed && event->splice->type == altCassette && event->pVal < pvalThresh)
     {
     for(i = 0; i < bindSiteCount; i++)
 	{
@@ -2735,12 +2899,6 @@ if(event->isAltExpressed && event->splice->type == altCassette)
 	}
     cassetteExonCount++;
     }
-
-if(brainSpBedUpOut != NULL)
-    outputBrainSpecificEvents(event, expressed, notExpressed, pathCount, probM);
-
-if(tissueSpecificOut != NULL && event->isExpressed == TRUE)
-    outputTissueSpecificEvents(event, expressed, notExpressed, pathCount, probM);
 
 /* Cleanup some memory. */
 for(i = 0; i < pathCount; i++)
@@ -2908,9 +3066,9 @@ const struct slRef *a = *((struct slRef**)va);
 const struct slRef *b = *((struct slRef **)vb);
 struct altEvent *aE = a->val;
 struct altEvent *bE = b->val;
-if( aE->flipScore > bE->flipScore)
+if(fabs(aE->flipScore) > fabs(bE->flipScore))
     return -1;
-else if(aE->flipScore < bE->flipScore)
+else if(fabs(aE->flipScore) < fabs(bE->flipScore))
     return 1;
 return 0;
 }
@@ -3119,8 +3277,13 @@ if(brainSpDnaUpOut != NULL)
 	int *d = brainSpecificMotifDownCounts;
 	int *i = brainSpecificMotifInsideCounts;
 	struct bindSite **b = bindSiteArray;
-	fprintf(stderr,"Cassette binding sites:\n");
-	reportMotifCounts(u,d,i,bC[altCassette]);
+	fprintf(stderr,"Cassette binding sites in %d include exons:\n", bC[altCassette]-cassetteExonSkipCount);
+	reportMotifCounts(u,d,i,bC[altCassette] - cassetteExonSkipCount);
+	u = cassetteSkipUpMotifs;
+	d = cassetteSkipDownMotifs;
+	i = cassetteSkipInsideMotifs;
+	fprintf(stderr,"Cassette binding sites in %d skip exons:\n", cassetteExonSkipCount);
+	reportMotifCounts(u,d,i,cassetteExonSkipCount);
 	}
     }
 }
@@ -3166,8 +3329,9 @@ if(bindSiteCount != 0)
     int *d = cassetteDownMotifs;
     int *i = cassetteInsideMotifs;
     struct bindSite **b = bindSiteArray;
-    fprintf(stderr,"Cassette binding sites in %d exons:\n", cassetteExonCount);
+    fprintf(stderr,"Cassette binding sites in included %d include exons:\n", cassetteExonCount);
     reportMotifCounts(u,d,i,cassetteExonCount);
+
     }
 
 if(bindSiteCount != 0)
@@ -3258,6 +3422,10 @@ brainSpPathBedOut = mustOpen(file->string, "w");
 dyStringClear(file);
 dyStringPrintf(file, "%s.up.fa", prefix);
 brainSpDnaUpOut = mustOpen(file->string, "w");
+
+dyStringClear(file);
+dyStringPrintf(file, "%s.merged.fa", prefix);
+brainSpDnaMergedOut = mustOpen(file->string, "w");
 
 dyStringClear(file);
 dyStringPrintf(file, "%s.cons.fa", prefix);
@@ -3980,6 +4148,11 @@ if(optionExists("controlStats"))
     {
     controlValuesVm = newValuesMat(1000, 15);
     controlValuesOut = mustOpen(optionVal("controlStats", NULL), "w");
+    }
+
+if(optionExists("sortScore"))
+    {
+    initSortScore();
     }
 
 if(selectedPValues != NULL)
