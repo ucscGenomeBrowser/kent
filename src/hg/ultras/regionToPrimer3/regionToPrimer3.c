@@ -31,6 +31,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"exe", OPTION_STRING},
    {"minTm", OPTION_DOUBLE},
    {"maxTm", OPTION_DOUBLE},
    {NULL, 0},
