@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.35 2004/01/04 05:42:14 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.36 2004/01/09 19:10:31 heather Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -354,6 +354,57 @@ if (ferror(f))
     perror("Error writing psl file\n");
     errAbort("\n");
     }
+}
+
+void pslOutFormat(struct psl *el, FILE *f, char sep, char lastSep) 
+/* Print out selected psl values.  Separate fields with sep. Follow last field with lastSep. */
+/* Prints out a better format with bold field headings followed by value */
+/* Requires further upstream work to ensure that only the field headers */
+/* declared here are printed if replacing an existing psl print function*/
+{
+const char *headers[] = {"Matches", "Mismatches", "Matches in repeats", "Number of N bases", "Query name", "Size", "Start", "End", "Chromosome", "Strand", "Start", "End"};
+char *hformat = "<B>%s:</B> "; /* string for formatted print for headers */
+char *uformat = "<B>%s:</B> %u%c"; /* string for formatted print for unsigned variable */
+
+fprintf(f, uformat, headers[0], el->match, sep);
+fprintf(f, uformat, headers[1], el->misMatch, sep);
+fprintf(f, uformat, headers[2], el->repMatch, sep);
+fprintf(f, uformat, headers[3], el->nCount, sep);
+
+fprintf(f, hformat, headers[4]);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->qName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+fprintf(f, uformat, headers[5], el->qSize, sep);
+fprintf(f, uformat, headers[6], el->qStart, sep);
+fprintf(f, uformat, headers[7], el->qEnd, sep);
+
+fprintf(f, hformat, headers[8]);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", skipChr(el->tName));
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+fprintf(f, hformat, headers[9]);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+fprintf(f, uformat, headers[10], el->tStart, sep);
+fprintf(f, uformat, headers[11], el->tEnd, sep);
+
+fputc(lastSep,f);
+fprintf(f, "</FONT>");
+
+if (ferror(f))
+    {
+    perror("Error writing psl file\n");
+    errAbort("\n");
+    }
+
 }
 
 struct psl *pslLoadAll(char *fileName)
