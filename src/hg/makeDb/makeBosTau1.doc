@@ -179,6 +179,11 @@ exit; # don't actually run this like a script :)
 
 # REPEATMASKER (DONE, Oct. 5, 2004, Heather)
 # using the split scaffold fa files generated earlier
+
+# note the version of RepeatMasker in use; will want this for download README
+  cat /cluster/bluearc/RepeatMasker/Libraries/version
+  # RepBase Update 9.04, RM database version 20040702
+
 # do a trial run
   ssh hgwdev
   cd /cluster/data/bosTau1/scaffolds/0/0/0
