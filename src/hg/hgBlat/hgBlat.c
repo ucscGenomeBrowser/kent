@@ -265,9 +265,9 @@ else
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
 	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
-	    psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
+	    psl->qName, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    skipChr(psl->tName), psl->strand, psl->tStart, psl->tEnd);
+	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd);
 	}
     }
 pslFreeList(&pslList);
