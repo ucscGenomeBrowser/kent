@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.14 2004/03/12 19:11:04 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.15 2004/03/13 01:43:55 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -86,39 +86,34 @@ return list;
 }
 
 static boolean fieldExists(struct hash *fieldHash,
-	struct hash *dbChromHash,
 	struct joinerSet *js, struct joinerField *jf)
 /* Make sure field exists in at least one database. */
 {
 struct slName *db;
-
-/* First try to find it as non-split in some database. */
-for (db = jf->dbList; db != NULL; db = db->next)
+boolean gotIt = FALSE;
+for (db = jf->dbList; db != NULL && !gotIt; db = db->next)
     {
+    struct sqlConnection *conn = sqlConnect(db->name);
+    struct slName *table, *tableList = getTablesForField(conn,
+    			jf->splitPrefix, jf->table);
     char fieldName[512];
-    safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
-    	db->name, jf->table, jf->field);
-    if (hashLookup(fieldHash, fieldName))
-        return TRUE;
-    }
-
-/* Next try to find it as split. */
-for (db = jf->dbList; db != NULL; db = db->next)
-    {
-    struct slName *chrom, *chromList = hashFindVal(dbChromHash, db->name);
-    char fieldName[512];
-    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-        {
-	safef(fieldName, sizeof(fieldName), "%s.%s_%s.%s", 
-	    db->name, chrom->name, jf->table, jf->field);
+    sqlDisconnect(&conn);
+    for (table = tableList; table != NULL; table = table->next)
+	{
+	safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
+	    db->name, table->name, jf->field);
 	if (hashLookup(fieldHash, fieldName))
-	    return TRUE;
+	    {
+	    gotIt = TRUE;
+	    break;
+	    }
 	}
+    slFreeList(&tableList);
     }
-
-return FALSE;
+return gotIt;
 }
 
+#ifdef OLD
 static struct hash *getDbChromHash()
 /* Return hash with chromosome name list for each database
  * that has a chromInfo table. */
@@ -152,6 +147,7 @@ for (db = dbList; db != NULL; db = db->next)
 slFreeList(&dbList);
 return dbHash;
 }
+#endif /* OLD */
 
 
 void joinerValidateFields(struct joiner *joiner, struct hash *fieldHash,
@@ -162,7 +158,6 @@ void joinerValidateFields(struct joiner *joiner, struct hash *fieldHash,
 struct joinerSet *js;
 struct joinerField *jf;
 struct slName *db;
-struct hash *dbChromHash = getDbChromHash();
 
 for (js=joiner->jsList; js != NULL; js = js->next)
     {
@@ -170,7 +165,7 @@ for (js=joiner->jsList; js != NULL; js = js->next)
 	{
 	for (jf = js->fieldList; jf != NULL; jf = jf->next)
 	    {
-	    if (!fieldExists(fieldHash, dbChromHash, js, jf))
+	    if (!fieldExists(fieldHash, js, jf))
 		 {
 		 if (!js->expanded)
 		     {
@@ -222,7 +217,7 @@ struct sqlConnection *sqlWarnConnect(char *db)
 {
 struct sqlConnection *conn = sqlMayConnect(db);
 if (conn == NULL)
-    warn("Couldn't connect to database %s", db);
+    warn("Error: Couldn't connect to database %s", db);
 return conn;
 }
 
@@ -270,12 +265,13 @@ else
 
     if (rowCount > 0)
 	{
+	if (hashSize > hashMaxSize)
+	    hashSize = hashMaxSize;
 	keyHash = hashNew(hashSize);
 	for (table = tableList; table != NULL; table = table->next)
 	    {
 	    safef(query, sizeof(query), "select %s from %s", 
 		keyField->field, table->name);
-	    uglyf("%s\n", query);
 	    sr = sqlGetResult(conn, query);
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
@@ -284,9 +280,13 @@ else
 		    {
 		    if (!keyField->dupeOk)
 			{
-			if (dupeCount == 0)
-			    dupe = cloneString(id);
-			++dupeCount;
+			if (keyField->exclude == NULL || 
+				!slNameInList(keyField->exclude, id))
+			    {
+			    if (dupeCount == 0)
+				dupe = cloneString(id);
+			    ++dupeCount;
+			    }
 			}
 		    }
 		else
@@ -299,12 +299,12 @@ else
 	    }
 	if (dupe != NULL)
 	    {
-	    warn("%d duplicates in %s.%s.%s including %s",
+	    warn("Error: %d duplicates in %s.%s.%s including '%s'",
 		    dupeCount, db, keyField->table, keyField->field, dupe);
 	    freez(&dupe);
 	    }
-	uglyf("%d items in %s.%s.%s\n", 
-		itemCount, db, keyField->table, keyField->field);
+	verbose(1, "%s.%s.%s - %d unique identifiers\n", 
+		db, keyField->table, keyField->field, itemCount);
 	}
     slFreeList(&tableList);
     }
@@ -331,7 +331,8 @@ if (jf->exclude == NULL || !slNameInList(jf->exclude, id))
 }
 
 void doMinCheck(char *db, struct joiner *joiner, struct joinerSet *js, 
-	struct hash *keyHash, struct joinerField *jf)
+	struct hash *keyHash, struct joinerField *keyField,
+	struct joinerField *jf)
 {
 struct sqlConnection *conn = sqlMayConnect(db);
 if (conn != NULL)
@@ -347,7 +348,6 @@ if (conn != NULL)
 	struct sqlResult *sr;
 	safef(query, sizeof(query), "select %s from %s", 
 		jf->field, table->name);
-	uglyf("db %s: %s\n", db, query);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -370,7 +370,7 @@ if (conn != NULL)
 		        safef(buf, sizeof(buf), "%d", ix);
 			id = buf;
 			}
-		    addHitMiss(keyHash, row[0], jf, &hits, &miss, &total);
+		    addHitMiss(keyHash, el->name, jf, &hits, &miss, &total);
 		    }
 		slFreeList(&list);
 		}
@@ -379,13 +379,15 @@ if (conn != NULL)
 	}
     if (tableList != NULL)
 	{
+	verbose(1, "%s.%s.%s - hits %d of %d\n", db, jf->table, jf->field, hits, total);
 	hitsNeeded = round(total * jf->minCheck);
 	if (hits < hitsNeeded)
 	    {
-	    warn("%d of %d elements of %s.%s.%s are not in key line %d of %s\n"
-		 "Example miss: %s\n"
-		, total - hits, total, db, jf->table, jf->field, jf->lineIx,
-		joiner->fileName, miss);
+	    warn("Error: %d of %d elements of %s.%s.%s are not in key %s.%s line %d of %s\n"
+		 "Example miss: %s"
+		, total - hits, total, db, jf->table, jf->field
+		, keyField->table, keyField->field
+		, jf->lineIx, joiner->fileName, miss);
 	    }
 	freez(&miss);
 	sqlDisconnect(&conn);
@@ -431,7 +433,7 @@ if (keyHash != NULL)
     for (jf = js->fieldList; jf != NULL; jf = jf->next)
 	{
 	if (jf != keyField && slNameInList(jf->dbList, db))
-	    doMinCheck(db, joiner, js, keyHash, jf);
+	    doMinCheck(db, joiner, js, keyHash, keyField, jf);
 	}
     }
 hashFree(&localKeyHash);
