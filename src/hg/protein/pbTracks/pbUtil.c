@@ -1,4 +1,4 @@
-/* various utility functions for Proteome Browser */
+/* pbUtil.c various utility functions for Proteome Browser */
 #include "common.h"
 #include "hCommon.h"
 #include "portable.h"
@@ -14,8 +14,6 @@
 #include "hgColors.h"
 #include "pbStamp.h"
 #include "pbTracks.h"
-
-//static struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 
 void aaPropertyInit(int *hasResFreq)
 // initialize AA properties 
@@ -314,6 +312,33 @@ for (i=0; i<blockCount; i++)
 *chrom     = tNameStr;
 }
 
+void printFASTA(char *proteinID, char *aa)
+//print the FASTA format protein sequence
+{
+int i, j, k, jj;
+int l;
+char *chp;
+	
+l =strlen(aa);
+
+hPrintf("<pre>");
+
+hPrintf(">%s|%s|%s", proteinID, protDisplayID, description);
+
+chp = aa;
+for (i=0; i<l; i++)
+    {
+    if ((i%50) == 0) hPrintf("\n");
+	
+    hPrintf("%c", *chp);
+    chp++;
+    }
+hPrintf("\n\n");
+
+hPrintf("Total amino acids: %d\n", strlen(aa));
+hPrintf("</pre>");
+}
+
 //more sophisticated processing can be done using genome coordinates
 void printExonAA(char *proteinID, char *aa, int exonNum)
 {
@@ -386,7 +411,6 @@ for (i=istart; i<=iend; i++)
     if (i == aaStart[j])
 	{
 	j++;
-//	if (j == 1) hPrintf("</font>");
 	k=j%2;
 	if (k) 
 	    {
@@ -429,7 +453,7 @@ hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
 
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID)
 {
-hPrintf("\n<BR><B>UCSC Gene Family Browser: </B> ");
+hPrintf("\n<B>UCSC Gene Family Browser: </B> ");
 if (mrnaID != NULL)
     {
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", mrnaID);
@@ -445,7 +469,7 @@ void doGeneDetailsLink(char *protDisplayID, char *mrnaID)
 {
 if (mrnaID != NULL)
     {
-    hPrintf("\n<BR><B>UCSC Gene Details Page: </B> ");
+    hPrintf("\n<B>UCSC Gene Details Page: </B> ");
     hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s\"", mrnaID);
     hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
     }
