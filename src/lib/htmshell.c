@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.21 2003/09/20 01:22:18 braney Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.22 2003/11/13 16:13:32 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -163,6 +163,7 @@ void _htmStart(FILE *f, char *title)
 {
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n", title);
+fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 if (htmlStyle != NULL)
     fputs(htmlStyle, f);
 fputs("</HEAD>\n\n",f);

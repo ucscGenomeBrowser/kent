@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.43 2003/10/30 08:33:17 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.44 2003/11/13 16:13:46 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -80,6 +80,7 @@ puts(
     );
 printf("\t%s\n", headerText);
 puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+     "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
      "\t<TITLE>"
      );
 
