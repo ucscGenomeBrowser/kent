@@ -33,7 +33,7 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.87 2003/06/19 22:58:10 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.88 2003/06/24 21:27:18 donnak Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -2776,7 +2776,7 @@ else if (strstrNoCase(organism, "SARS"))
 "Sequence Alignment and Modeling (SAM) T02</A> \n"
 "tool. UCSC does not plan to provide a comprehensive set of browsers for viruses.  \n"
 "However, this browser will be maintained as long as there is strong scientific  \n"
-"and public interest in the SARS conronavirus TOR2.\n</P>");
+"and public interest in the SARS coronavirus TOR2.\n</P>");
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
 "<P>A genome position can be specified by the accession number of an "
