@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.62 2004/11/08 18:15:22 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.63 2004/12/15 00:29:36 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -17,6 +17,7 @@ boolean webHeadAlreadyOutputed = FALSE;
 boolean webInTextMode = FALSE;
 static char *dbCgiName = "db";
 static char *orgCgiName = "org";
+static char *cladeCgiName = "clade";
 
 void textVaWarn(char *format, va_list args)
 {
@@ -365,6 +366,30 @@ if (validDatabases == NULL)
 return (hashLookup(validDatabases, db) != NULL);
 }
 
+void printCladeListHtml(char *genome, char *onChangeText)
+/* Make an HTML select input listing the clades. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char *clades[128];
+char *labels[128];
+int numClades = 0;
+
+sr = sqlGetResult(conn, "select name, label from clade order by priority");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    clades[numClades] = cloneString(row[0]);
+    labels[numClades] = cloneString(row[1]);
+    numClades++;
+    if (numClades >= ArraySize(clades))
+	internalErr();
+    }
+
+cgiMakeDropListFull(cladeCgiName, labels, clades, numClades, 
+		    hClade(genome), onChangeText);
+}
+
 void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
@@ -407,6 +432,15 @@ void printGenomeListHtml(char *db, char *onChangeText)
  *                              any onChange javascript. */
 {
 printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
+}
+
+void printGenomeListForCladeHtml(char *db, char *onChangeText)
+/* Prints to stdout the HTML to render a dropdown list containing 
+ * a list of the possible genomes from selOrganism's clade to choose from.  
+ * selOrganism is the default for the select.
+ */
+{
+printSomeGenomeListHtml(db, hGetIndexedDatabasesForClade(db), onChangeText);
 }
 
 void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
@@ -614,7 +648,7 @@ if (!hDbExists(retDb))
     }
 
 /* If genomes don't match, then get the default db for that genome */
-if (!containsStringNoCase(genome, hGenome(retDb)))
+if (differentWord(genome, hGenome(retDb)))
     {
     retDb = hDefaultDbForGenome(genome);
     }
@@ -622,13 +656,32 @@ if (!containsStringNoCase(genome, hGenome(retDb)))
 return retDb;
 }
 
-void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
+static char *getGenomeForClade(char *clade, struct cart *cart)
+/* Given a clade, return which genome/organism to default to.  
+ * If cart specifies a db or "org"/genome, use that genome, otherwise 
+ * just use the default. */
+{
+char *db = cartUsualString(cart, dbCgiName, hGetDb());
+char *genome = cartUsualString(cart, orgCgiName, hGenome(db));
+
+if (!hDbExists(db))
+    genome = hGenome(hDefaultDb());
+
+/* If cart-specified genome differs from passed-in genome, then use default: */
+if (differentWord(clade, hClade(genome)))
+    genome = hDefaultGenomeForClade(clade);
+
+return genome;
+}
+
+void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
+		      char **retClade)
 /*
  * The order of preference here is as follows:
  * If we got a request that explicitly names the db, that takes
  * highest priority, and we synch the organism to that db.
  * If we get a cgi request for a specific organism then we use that
- * organism to choose the DB.
+ * organism to choose the DB.  If just clade, go from there.
 
  * In the cart only, we use the same order of preference.
  * If someone requests an Genome we try to give them the same db as
@@ -637,6 +690,7 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 {
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
+*retClade = cgiOptionalString(cladeCgiName);
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
@@ -647,40 +701,54 @@ if (*retDb && hDbExists(*retDb))
 /* If no db was passed in as a cgi param then was the organism (a.k.a. genome)
  * passed in as a cgi param?
  * If so, the we use the proper database for that genome. */
-else if (*retGenome)
+else if (*retGenome && !sameWord(*retGenome, "0"))
     {
     *retDb = getDbForGenome(*retGenome, cart);
     *retGenome = hGenome(*retDb);
+    }
+else if (*retClade)
+    {
+    *retGenome = getGenomeForClade(*retClade, cart);
+    *retDb = getDbForGenome(*retGenome, cart);
     }
 /* If no cgi params passed in then we need to inspect the session */
 else
     {
     *retDb = cartOptionalString(cart, dbCgiName);
+    *retGenome = cartOptionalString(cart, orgCgiName);
+    *retClade = cartOptionalString(cart, cladeCgiName);
     /* If there was a db found in the session that determines everything. */
     if (*retDb && hDbExists(*retDb))
         {
         *retGenome = hGenome(*retDb);
         }
-    /* If no db was found in the session then check if the organism is in
-     * the session. */
+    else if (*retGenome)
+	{
+	*retDb = hDefaultDbForGenome(*retGenome);
+	}
+    else if (*retClade)
+	{
+	*retGenome = getGenomeForClade(*retClade, cart);
+	*retDb = getDbForGenome(*retGenome, cart);
+	}
+    /* If no organism in the session then get the default db and organism. */
     else
-        {
-        *retGenome = cartOptionalString(cart, orgCgiName);
-        /* If the organism was found in the genome then get its default db. */
-        if (*retGenome)
-            {
-            *retDb = hDefaultDbForGenome(*retGenome);
-            }
-        /* If no organism in the session then get the default db and organism. */
-        else
-            {
-            *retDb = hDefaultDb();
-            *retGenome = hGenome(*retDb);
-            }
+	{
+	*retDb = hDefaultDb();
+	*retGenome = hGenome(*retDb);
         }
     }
 *retDb = cloneString(*retDb);
 *retGenome = cloneString(*retGenome);
+*retClade = hClade(*retGenome);
+}
+
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
+/* Get just the db and genome. */
+{
+char *garbage = NULL;
+getDbGenomeClade(cart, retDb, retGenome, &garbage);
+freeMem(garbage);
 }
 
 void saveDbAndGenome(struct cart *cart, char *db, char *genome)

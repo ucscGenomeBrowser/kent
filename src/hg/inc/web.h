@@ -31,10 +31,13 @@ void webVaWarn(char *format, va_list args);
 void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 
-void printGenomeListHtml(char *selOrganism, char *onChangeText);
+void printCladeListHtml(char *genome, char *onChangeText);
+/* Make an HTML select input listing the clades. */
+
+void printGenomeListHtml(char *db, char *onChangeText);
 /* Prints to stdout the HTML to render a dropdown list containing 
  * a list of the possible genomes to choose from.  
- * param curOrganism - The organism to choose as selected. 
+ * param db - The database whose genome will be selected by default. 
  * If NULL, no default selection.  
  * param onChangeText - Optional (can be NULL) text to pass in any 
  * onChange javascript.
@@ -47,6 +50,12 @@ void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText);
  *                       If NULL, no default selection.  
  * param onChangeText - Optional (can be NULL) text to pass in 
  *                              any onChange javascript. */
+
+void printGenomeListForCladeHtml(char *db, char *onChangeText);
+/* Prints to stdout the HTML to render a dropdown list containing 
+ * a list of the possible genomes from db's clade to choose from.  
+ * db's genome is the default for the select.
+ */
 
 void webPushErrHandlers();
 /* Push warn and abort handler for errAbort(). */
@@ -121,18 +130,22 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
-void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
+void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
+	char **retClade);
 /*
   The order of preference here is as follows:
 If we got a request that explicitly names the db, that takes
 highest priority, and we synch the organism to that db.
 If we get a cgi request for a specific organism then we use that
-organism to choose the DB.
+organism to choose the DB.  If just clade, go from there.
 
 In the cart only, we use the same order of preference.
 If someone requests an organism we try to give them the same db as
 was in their cart, unless the organism doesn't match.
 */
+
+void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome);
+/* Like getDbGenomeClade above, but just get db and genome. */
 
 void saveDbAndGenome(struct cart *cart, char *db, char *genome);
 /* Save db and genome (as org) in cart. */
