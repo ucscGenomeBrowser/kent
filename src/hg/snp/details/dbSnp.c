@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.13 2004/03/10 16:10:33 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.14 2004/03/21 20:29:34 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */
@@ -49,7 +49,7 @@ struct fileInfo
     char   rsId[20];            /* reference Snp ID (name) */
     float  avgHet;              /* Average Heterozygosity Standard Error */
     float  avgHetSE;            /* Average Heterozygosity */
-    char   valid[20];           /* validation status */
+    char   valid[256];          /* validation status */
     char   allele1[ALLELE+1];   /* First allele */
     char   allele2[ALLELE+1];   /* Second allele */ 
     char   seq5[FLANK+1];       /* 5' flanking sequence */
