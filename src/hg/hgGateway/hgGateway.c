@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.73 2004/04/13 17:09:46 angie Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.74 2004/10/12 00:33:53 fanhsu Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -65,7 +65,7 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
 puts(
-"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
+"<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
@@ -159,7 +159,7 @@ hgPositionsHelpHtml(organism, db);
 puts("</FORM>\n"
 );
 
-printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+printf("<FORM ACTION=\"../cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
 cartSaveSession(cart);
 puts("</FORM><BR>");
