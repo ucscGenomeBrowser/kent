@@ -8,6 +8,7 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "paraLib.h"
+#include "cheapcgi.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -30,12 +31,9 @@ for (i=0; i<mCount; ++i)
     {
     name = mNames[i];
     uglyf("Starting up %s\n", name);
-    if (fork() == 0)
-	{
-	execlp("rsh", name,
-		"/projects/compbiousr/kent/html/parasol/paraNode/paraNode", 
-		"start", NULL);
-	}
+    execlp("rsh", name,
+	    "/projects/cc/hg/jk/src/parasol/paraNode/paraNode", 
+	    "start", NULL);
     }
 }
 
@@ -43,6 +41,7 @@ for (i=0; i<mCount; ++i)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc != 2)
     usage();
 paraStart(argv[1]);

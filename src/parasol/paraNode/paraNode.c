@@ -9,7 +9,7 @@
 
 int socketHandle;		/* Handle to socket to hub. */
 int connectionHandle;	        /* Connection to singel hub request. */
-char execCommand[512];          /* Name of command currently executing. */
+char execCommand[16*1024];          /* Name of command currently executing. */
 
 boolean busy = FALSE;           /* True if executing a command. */
 boolean gotZombie = FALSE;      /* True if command finished. */
@@ -37,7 +37,6 @@ void clearZombie()
 if (gotZombie)
     {
     int pid, status;
-    uglyf("Waiting on zombie\n");
     pid = wait(&status);
     if (pid == childId)
 	{
@@ -61,7 +60,7 @@ if (grandId != 0)
 exit(-1);
 }
 
-void manageExec(char *exe, char *params)
+void manageExec(char *exe, char *params[])
 /* This routine is the child process of doExec.
  * It spawns a grandchild that actually does the
  * work and waits on it.  It then lets the hub
@@ -71,7 +70,8 @@ if ((grandId = fork()) == 0)
     {
     close(socketHandle);
     close(connectionHandle);
-    if (execlp(exe, exe, params, NULL) < 0)
+    uglyf("manageExec(%s, %s %s %s)\n", exe, params[0], params[1], params[2]);
+    if (execv(exe, params) < 0)
 	{
 	perror("");
 	errAbort("Error execlp'ing %s %s", exe, params);
@@ -95,6 +95,8 @@ else
 void doExec(char *line)
 /* Execute string. */
 {
+static char *args[1024];
+int argCount;
 if (line == NULL)
     warn("Executing nothing...");
 else if (!busy || gotZombie)
@@ -102,13 +104,16 @@ else if (!busy || gotZombie)
     char *exe;
     if (gotZombie)
 	clearZombie();
-    printf("executing %s\n", line);
+    printf("ExEcUtInG %s\n", line);
     strcpy(execCommand, line);
-    exe = nextWord(&line);
+    argCount = chopLine(line, args);
+    if (argCount >= ArraySize(args))
+        errAbort("Too many arguments");
+    args[argCount] = NULL;
     signal(SIGCHLD, childSignalHandler);
     if ((childId = fork()) == 0)
 	{
-	manageExec(exe, line);
+	manageExec(args[0], args);
 	}
     else
 	{
@@ -152,7 +157,7 @@ if (busy)
 write(connectionHandle, dy->string, dy->stringSize);
 }
 
-void paraNode(char *xxx)
+void paraNode()
 /* paraNode - a net server. */
 {
 struct sockaddr_in sai;
@@ -167,6 +172,7 @@ char *hostName = getenv("HOST");
 if (hostName == NULL)
     hostName = "localhost";
 
+uglyf("HOST %s\n", hostName);
 /* Set up socket and self to listen to it. */
 hostent = gethostbyname(hostName);
 if (hostent == NULL)
@@ -194,7 +200,7 @@ for (;;)
 	continue;
 	}
     line = buf + sigLen;
-    uglyf("server read '%s'\n", line);
+    uglyf("paraNode %s: read '%s'\n", hostName, line);
     command = nextWord(&line);
     if (sameString("quit", command))
 	break;
@@ -216,7 +222,8 @@ int main(int argc, char *argv[])
 {
 if (argc != 2)
     usage();
-paraNode(argv[1]);
+if (fork() == 0)
+    paraNode();
 }
 
 
