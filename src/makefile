@@ -3,7 +3,7 @@ DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
        scanIntrons tracks weblet wormAli xenoAli
 
 all: libs
-	for i in $(DIRS); do cd $$i; make; cd ..; done
+	for i in $(DIRS); do cd $$i; make; cd ..; done; cd hg; make;
 
 libs:
 	cd lib; make; cd ..
