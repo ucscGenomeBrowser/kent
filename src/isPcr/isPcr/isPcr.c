@@ -148,7 +148,7 @@ while (lineFileRow(lf, row))
     struct gfPcrInput gpi;
     gfPcrInputStaticLoad(row, &gpi);
     pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '+', out, f);
-    pcrStrand(gf, gpi.name, gpi.fPrimer, gpi.rPrimer, 0, maxSize, '-', out, f);
+    pcrStrand(gf, gpi.name, gpi.rPrimer, gpi.fPrimer, 0, maxSize, '-', out, f);
     }
 lineFileClose(&lf);
 carefulClose(&f);
