@@ -1412,3 +1412,14 @@ visibility hide
 color 20,0,50
 type bed 4
 
+track encodeStanfordPromoters
+shortLabel Stanford Promoters
+longLabel Stanford Promoter Luciferase Activity in ENCODE Regions
+group encode
+priority 20.1
+visibility hide
+type expRatio
+expTable encodeStanfordPromotersExps
+expScale 999
+expStep 100
+chip x
