@@ -2734,7 +2734,8 @@ struct oogClone *clone;
 for (raft = raftList; raft != NULL; raft = raft->next)
     {
     clone = raft->fragList->frag->clone;
-    assert(clone->barge != NULL);
+    if (clone->barge == NULL)
+	errAbort("Clone %s never assigned a barge", clone->name);
     raft->barge = clone->barge;
     }
 }

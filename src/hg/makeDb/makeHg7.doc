@@ -451,16 +451,15 @@ o - Load chromosome bands: (done)
 o - Load STSs (done)
      - login to cc94
       cd ~/oo/bed
-      hg7 < ~/src/hg/lib/stsMarker.sql
-      mkdir stsMarker
-      cd stsMarker
-      bedSort /projects/cc/hg/mapplots/data/tracks/oo.29/stsMarker.bed stsMarker.bed
+      hg7 < ~/src/hg/lib/stsMap.sql
+      mkdir stsMap
+      cd stsMap
+      bedSort /projects/cc/hg/mapplots/data/tracks/oo.29/stsMap.bed stsMap.bed
       - Enter database with "hg7" command.
       - At mysql> prompt type in:
-          load data local infile 'stsMarker.bed' into table stsMarker;
+          load data local infile 'stsMap.bed' into table stsMap;
       - At mysql> prompt type
           quit
-      - Ignore warnings from extra fields (7611 of them).
 
 o - Load in Exonerate alignments (done)
       ssh cc94

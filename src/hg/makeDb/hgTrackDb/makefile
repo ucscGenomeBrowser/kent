@@ -12,6 +12,6 @@ hgTrackDb: $O $(MYLIBS)
 	strip $(HOME)/bin/$(MACHTYPE)/hgTrackDb
 
 update:
-	hgTrackDb hg5 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg6 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg7 ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg8 ../../lib/trackDb.sql hgRoot

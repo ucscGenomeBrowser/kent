@@ -48,6 +48,7 @@ static char* createTableCmd =
 "    alignSeq longblob not null,	        # Aligned sequence, contains - for human seq inserts\n"
 "    attribs varchar(255) not null,	# Comma seperated list of attribute names\n"
 "    #Indices\n"
+"    PRIMARY KEY(name(12)),"		/* Alignment name. */
 "    %s"				/* Optional bin */
 "    %s(%schromStart),\n"           /* different depending if using one */
 "    %s(%schromEnd)\n"              /* table per chrom or a single table */

@@ -173,10 +173,10 @@ while (lineFileRow(lf, row))
 	}
     nt->sumSize += clone->goldEnd - clone->goldStart;
     ntClone = hashFindVal(cloneHash, nt->name);
-    if (ntClone != NULL && clone->goldEnd > ntClone->size)
+    if (ntClone != NULL && clone->ntEnd > ntClone->size)
 	{
 	warn("Clone %s NT end position %d, NT size %d, line %d of %s", 
-	    clone->name, clone->goldEnd, ntClone->size, lf->lineIx, lf->fileName);
+	    clone->name, clone->ntEnd, ntClone->size, lf->lineIx, lf->fileName);
 	nt->problem = TRUE;
 	}
     if (ntClone != NULL)

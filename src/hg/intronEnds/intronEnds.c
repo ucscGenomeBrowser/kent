@@ -1,6 +1,7 @@
 /* intronEnds - Gather stats on intron ends.. */
 #include "common.h"
 #include "linefile.h"
+#include "dystring.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "dnautil.h"
@@ -20,13 +21,14 @@ errAbort(
   "   intronEnds database geneTable\n"
   "options:\n"
   "   -chrom=chrN - restrict to a particular chromosome\n"
+  "   -withUtr - restrict to genes with UTR regions\n"
   );
 }
 
 void intronEnds(char *database, char *table)
 /* intronEnds - Gather stats on intron ends.. */
 {
-char query[256];
+struct dyString *query = newDyString(1024);
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
@@ -45,12 +47,15 @@ char strand;
 hSetDb(database);
 rowOffset = hOffsetPastBin(NULL, table);
 conn = hAllocConn(database);
+dyStringPrintf(query, "select * from %s", table);
 if (chromName != NULL)
-    sprintf(query, "select * from %s where chrom = '%s'", table, chromName);
-else
-    sprintf(query, "select * from %s", table);
-
-sr = sqlGetResult(conn, query);
+    dyStringPrintf(query, " where chrom = '%s'", chromName);
+if (cgiBoolean("withUtr"))
+    {
+    dyStringPrintf(query, " %s txStart != cdsStart", 
+        (chromName == NULL ? "where" : "and"));
+    }
+sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row+rowOffset);

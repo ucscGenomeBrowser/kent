@@ -16,11 +16,11 @@ o - Create the database.
         alias hg8 mysql -u hguser -phguserstuff -A hg8
 o - Make sure there is at least 5 gig free on cc94:/usr/local/mysql 
 o - Store the mRNA (non-alignment) info in database.
-     - hgLoadRna new hg8
-     - hgLoadRna add hg8 /projects/hg2/mrna.123/mrna.fa /projects/hg2/mrna.123/mrna.ra
-     - hgLoadRna add hg8 /projects/hg2/mrna.123/est.fa /projects/hg2/mrna.123/est.ra
+     hgLoadRna new hg8
+     hgLoadRna add hg8 /projects/hg2/mrna.125/mrna.fa /projects/hg2/mrna.125/mrna.ra
+     hgLoadRna add hg8 /projects/hg2/mrna.125/est.fa /projects/hg2/mrna.125/est.ra
     The last line will take quite some time to complete.  It will count up to
-    about 3,200,000 before it is done.
+    about 3,800,000 before it is done.
 
 REPEAT MASKING 
 
@@ -45,7 +45,7 @@ from Victor or elsewhere.  When it does:
 o - Cd ~/oo/bed/rmskVictor
 o - Unzip and process Victor's stuff with doMerge.sh and victor_merge_rm_out1.pl.
 o - Remove fragments as so:
-       cd out_oo29
+       cd out_oo31
        rm */ctg*/ctg*.*.fa.out
 
 o - Copy in Victor's repeat masking runs over the contig runs in ~/oo/*/ctg*
@@ -70,28 +70,28 @@ o - Load RepeatMasker output into database again:
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
 
 o - Create packed chromosome sequence files and put in database
-     - hg8 < ~/src/hg/lib/chromInfo.sql
+     - mysql -A -u hgcat -pbigsecret hg8  < ~/src/hg/lib/chromInfo.sql
      - cd /projects/hg3/gs.8/oo.31
      - hgNibSeq hg8 /projects/hg3/gs.8/oo.31/nib ?/chr*.fa ??/chr*.fa
 
 
 o - Store o+o info in database.
-     - cd /projects/hg3/gs.8/oo.31
-     - jkStuff/liftGl.sh ooGreedy.99.gl
-     - hgGoldGapGl hg8 /projects/hg3/gs.8 oo.31 
-     - cd /projects/hg3/gs.8
-     - hgClonePos hg8 oo.31 ffa/sequence.inf /projects/hg3/gs.8
-       (Ignore warnings about missing clones - these are in chromosomes 21 and 22)
-       (Had to patch sequence.inf and fin/fa from Genbank for
-       missing AL109841, AL132768, AL161945 in chromosome 20)
-     - hgCtgPos hg8 oo.31
+     cd /projects/hg3/gs.8/oo.31
+     jkStuff/liftGl.sh ooGreedy.99.gl
+     hgGoldGapGl hg8 /projects/hg3/gs.8 oo.31 
+     cd /projects/hg3/gs.8
+     hgClonePos hg8 oo.31 ffa/sequence.inf /projects/hg3/gs.8
+   (Ignore warnings about missing clones - these are in chromosomes 21 and 22)
+   (Had to patch sequence.inf and fin/fa from Genbank for
+   missing AL109841, AL132768, AL161945 in chromosome 20)
+     hgCtgPos hg8 oo.31
 
 o - Make and load GC percent table
      - login to cc94
      - cd /projects/hg3/gs.8/oo.31/bed
      - mkdir gcPercent
      - cd gcPercent
-     - hg8 < ~/src/hg/lib/gcPercent.sql
+     - mysql -A -u hgcat -pbigsecret hg8  < ~/src/hg/lib/gcPercent.sql
      - hgGcPercent hg8 ../../nib
 
 
@@ -99,7 +99,7 @@ o - Make and load GC percent table
 MAKING AND STORING mRNA AND EST ALIGNMENTS
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    from /projects/hg2/mrna.123  into /var/tmp/hg/h/mrna
+    from /projects/hg2/mrna.125  into /var/tmp/hg/h/mrna
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       ssh cc01
@@ -110,6 +110,7 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
       ssh kks00
+      mkdir /projects/hg3/gs.8/oo.31/psl
       cd /projects/hg3/gs.8/oo.31/psl
       source ../jkStuff/postSort.sh
     (If the est alignments exceed 2 gig use ../jkStuff/postSortBig.sh instead)
@@ -148,19 +149,18 @@ o - Go to the Entrez browser at http://www.ncbi.nlm.nih.gov/Entrez/
     and select Nucleotide in the search box.  Go to Limits and select
     'exclude all of the above', Molecule: mRNA, Only from: RefSeq,
     and then put "Homo sapiens" [organism] in the search box and hit 
-    go.  Tweak things so can save it to /projects/hg3/refseq.123/refseq.gb
+    go.  Tweak things so can save it to /projects/hg2/refseq.123/refseq.gb
     in GenBank flat file format.
 o - Download ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2acc and
-    mim2loc to /projects/hg3/refseq.123
+    mim2loc to /projects/hg2/refseq.123
 o - Similarly download refSeq proteins in fasta format to refSeq.pep
 o - Align these by processes described under mRNA/EST alignments above.
-    pslSortAcc head chrom temp rsVsOo27Mixed.psl
     cd ~/oo/psl
-    pslCat -nohead refSeq/*.psl | grep NM_ >/projects/hg3/refseq.123/known.oo29.psl
+    pslCat -nohead refSeq/*.psl | grep NM_ >/projects/hg2/refseq.123/known.oo31.psl
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
      ssh cc94
-     cd /projects/hg3/refseq.123
-     hgRefSeqMrna hg8 refSeq.fa refSeq.ra known.oo29.psl loc2ref refSeqPep.fa mim2loc
+     cd /projects/hg2/refseq.123
+     hgRefSeqMrna hg8 refSeq.fa refSeq.ra known.oo31.psl loc2ref refSeqPep.fa mim2loc
     
 
 
@@ -482,12 +482,12 @@ o - Load SNPs into database.
       - cd ~/oo/bed
       - mkdir snp
       - cd snp
-      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.oo29.gz
+      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.oo31.gz
       - Unpack.
-        grep RANDOM gp.oo29 > snpTsc.txt
-        grep MIXED  gp.oo29 >> snpTsc.txt
-        grep BAC_OVERLAP  gp.oo29 > snpNih.txt
-        grep OTHER  gp.oo29 >> snpNih.txt
+        grep RANDOM gp.oo31 > snpTsc.txt
+        grep MIXED  gp.oo31 >> snpTsc.txt
+        grep BAC_OVERLAP  gp.oo31 > snpNih.txt
+        grep OTHER  gp.oo31 >> snpNih.txt
         awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
         awk -f filter.awk snpNih.txt > snpNih.contig.bed
         liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed

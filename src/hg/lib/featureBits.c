@@ -10,12 +10,12 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static boolean promoterQualifier(char *qualifier, char *extra, int *retSize)
-/* Return TRUE if it's a promoter qualifier. */
+static boolean fetchQualifiers(char *type, char *qualifier, char *extra, int *retSize)
+/* Return true if qualifier is of type.  Convert extra to *retSize. */
 {
-if (qualifier != NULL && sameString(qualifier, "promoter"))
+if (qualifier != NULL && sameWord(qualifier, type))
     {
-    int size = 100;
+    int size = 0;
     if (extra != NULL)
         size = atoi(extra);
     *retSize = size;
@@ -25,6 +25,37 @@ else
     return FALSE;
 }
 
+static boolean promoterQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a promoter qualifier. */
+{
+return fetchQualifiers("promoter", qualifier, extra, retSize);
+}
+
+static boolean exonQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a exon qualifier. */
+{
+return fetchQualifiers("exon", qualifier, extra, retSize);
+}
+
+static boolean cdsQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a exon qualifier. */
+{
+return fetchQualifiers("cds", qualifier, extra, retSize);
+}
+
+void setRangePlusExtra(Bits *bits, int s, int e, int extraStart, int extraEnd, int chromSize)
+/* Set range between s and e plus possibly some extra. */
+{
+int w;
+s -= extraStart;
+if (s < 0) s = 0;
+e += extraEnd;
+if (e > chromSize) e = chromSize;
+w = e - s;
+if (w > 0)
+    bitSetRange(bits, s, w);
+}
+
 static void fbOrPslBits(Bits *bits, int chromSize, struct sqlResult *sr, int rowOffset,
 	char *qualifier, char *extra)
 /* Given a sqlQuery result on a psl table - or results exon by exon into bits. */
@@ -32,10 +63,11 @@ static void fbOrPslBits(Bits *bits, int chromSize, struct sqlResult *sr, int row
 struct psl *psl;
 char **row;
 int i, blockCount, *tStarts, *blockSizes, s, e, w;
-boolean doPromo;
-int promoSize;
+boolean doPromo, doExon;
+int promoSize, extraSize = 0;
 
 doPromo = promoterQualifier(qualifier, extra, &promoSize);
+doExon = exonQualifier(qualifier, extra, &extraSize);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     psl = pslLoad(row+rowOffset);
@@ -59,13 +91,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		w = blockSizes[i];
 		s = chromSize - tStarts[i] - w;
-		bitSetRange(bits, s, w);
+		e = s + w;
+		setRangePlusExtra(bits, s, e, (i == 0 ? 0 : extraSize), 
+			(i == blockCount-1 ?  0 : extraSize), chromSize);
 		}
 	    }
 	else
 	    {
 	    for (i=0; i<blockCount; ++i)
-		bitSetRange(bits, tStarts[i], blockSizes[i]);
+		{
+		s = tStarts[i];
+		e = s + blockSizes[i];
+		setRangePlusExtra(bits, s, e, (i == 0 ? 0 : extraSize), 
+			(i == blockCount-1 ? 0 : extraSize), chromSize);
+		}
 	    }
 	}
     pslFree(&psl);
@@ -94,20 +133,20 @@ static void fbOrGenePredBits(Bits *bits, int chromSize, struct sqlResult *sr, in
 struct genePred *gp;
 char **row;
 int i, count, s, e, w, *starts, *ends;
-int uglyCount = 0;
-boolean doPromo, doCds = FALSE;
-int promoSize;
+boolean doPromo, doCds = FALSE, doExon;
+int promoSize, extraSize = 0;
 
-doPromo = promoterQualifier(qualifier, extra, &promoSize);
-if (!doPromo)
+if ((doPromo = promoterQualifier(qualifier, extra, &promoSize)) != FALSE)
     {
-    if (qualifier != NULL && sameWord(qualifier, "CDS"))
-        doCds = TRUE;
     }
-
+else if ((doCds = cdsQualifier(qualifier, extra, &extraSize)) != FALSE)
+    {
+    }
+else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
+    {
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    ++uglyCount;
     gp = genePredLoad(row+rowOffset);
     if (doPromo)
 	{
@@ -130,14 +169,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 		if (s < gp->cdsStart) s = gp->cdsStart;
 		if (e > gp->cdsEnd) e = gp->cdsEnd;
 		}
-	    w = e - s;
-	    if (w > 0)
-		bitSetRange(bits, s, w);
+	    setRangePlusExtra(bits, s, e, 
+	    	(i == 0 ? 0 : extraSize), 
+		(i == count-1 ? 0 : extraSize), chromSize);
 	    }
 	}
     genePredFree(&gp);
     }
-uglyf("Got %d rows of genePreds\n", uglyCount);
 }
 
 static void fbOrRmskBits(Bits *bits, int chromSize, struct sqlResult *sr, int rowOffset,
@@ -179,6 +217,7 @@ int rowOffset;
 struct sqlResult *sr;
 char *track, *qualifier, *extra;
 
+trackQualifier = cloneString(trackQualifier);
 parseTrackQualifier(trackQualifier, &track, &qualifier, &extra);
 tdb = hTrackInfo(conn, track);
 sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
@@ -205,5 +244,6 @@ else
     errAbort("Unknown table type %s", type);
     }
 sqlFreeResult(&sr);
+freeMem(trackQualifier);
 }
 

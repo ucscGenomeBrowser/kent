@@ -1,12 +1,13 @@
 <H2>Methods</H2>
 <P>This track displays alignments of 16 million mouse whole genome shotgun 
 reads (3x coverage) vs. the draft human genome.  The alignments were done 
-with BLAT in translated protein mode requiring two perfect 4-mer hits 
-within 100 amino acids of each other to trigger an alignment.  The human 
+with BLAT in translated protein mode requiring 7 out of 8 amino acids in a
+row to match to trigger a detailed alignment.  The human
 genome was masked with RepeatMasker and Tandem Repeat Finder before 
-running BLAT.  Places where more than 150 reads aligned were filtered out 
-as were alignments of greater than 95% base identity (to avoid human 
-contaminants in the mouse data). </P>
+running BLAT.  Places where more than 400 reads aligned were filtered out.
+Beware of alignments of greater than 97% identity.  These may reflect
+mouse contamination of the human draft, or human contamination of the
+mouse shotgun data.</P>
 <H2>Data Release Policy</H2>
 These data are made available before scientific publication with the 
 following understanding:<BR>

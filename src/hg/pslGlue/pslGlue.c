@@ -140,8 +140,8 @@ for (psl = pslList; psl != NULL; psl = nextPsl)
     slAddHead(&localList, psl);
     }
 glueCount += output(pslOut, gluOut, &localList);
-printf("Got %d gluing mRNAs out of %d psls in %d bundles %d ltot %d mtot\n", 
-	glueCount, pslCount, outCount, ltot, mtot);
+printf("Got %d gluing mRNAs out of %d psls in %d bundles %d ltot %d mtot to %s\n", 
+	glueCount, pslCount, outCount, ltot, mtot, gluName);
 fclose(pslOut);
 fclose(gluOut);
 }
