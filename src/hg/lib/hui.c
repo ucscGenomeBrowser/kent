@@ -164,6 +164,44 @@ cgiMakeDropList(var, fishClonesOptions, ArraySize(fishClonesOptions),
 	curVal);
 }
 
+/****** Some stuff for CGH NCI60 related controls *******/
+
+static char *cghNci60Options[] = {
+    "Tissue Averages",
+    "BREAST",
+    "CNS",
+    "COLON",
+    "LEUKEMIA",
+    "LUNG",
+    "MELANOMA",
+    "OVARY",
+    "PROSTATE",
+    "RENAL",
+    "All Cell Lines",
+};
+
+enum cghNci60OptEnum cghoeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, cghNci60Options);
+if (x < 0)
+   errAbort("Unknown option %s", string);
+return x;
+}
+
+char *cghoeEnumToString(enum cghNci60OptEnum x)
+/* Convert from enum to string representation. */
+{
+return cghNci60Options[x];
+}
+
+void cghoeDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, cghNci60Options, ArraySize(cghNci60Options), 
+	curVal);
+}
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 static void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)

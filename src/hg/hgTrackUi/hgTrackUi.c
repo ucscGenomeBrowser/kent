@@ -57,6 +57,21 @@ printf(" ");
 fcoeDropDown("fishClones.type", fishClonesMap);
 }
 
+void cghNci60Ui(struct trackDb *tdb)
+/* Put up UI cghNci60. */
+{
+char *cghNci60Map = cartUsualString(cart, "cghNci60.type", cghoeEnumToString(0));
+char *col = cartUsualString(cart, "cghNci60.color", "rg");
+printf(" <b>Cell Lines: </b> ");
+cghoeDropDown("cghNci60.type", cghNci60Map);
+printf(" ");
+printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("cghNci60.color", "rg", sameString(col, "rg"));
+printf(" red/green ");
+cgiMakeRadioButton("cghNci60.color", "rb", sameString(col, "rb"));
+printf(" red/blue ");
+}
+
 void nci60Ui(struct trackDb *tdb)
 /* put up UI for the nci60 track from stanford track */
 {
@@ -117,6 +132,8 @@ else if (sameString(track, "fishClones"))
     fishClonesUi(tdb);
 else if (sameString(track, "nci60"))
     nci60Ui(tdb);
+else if (sameString(track, "cghNci60"))
+    cghNci60Ui(tdb);
 else if (sameString(track, "mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "est"))

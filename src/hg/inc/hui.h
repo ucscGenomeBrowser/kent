@@ -89,6 +89,30 @@ char *fcoeEnumToString(enum fishClonesOptEnum x);
 void fcoeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for cghNci60 related controls *******/
+enum cghNci60OptEnum {
+   cghoeTissue = 0,
+   cghoeBreast = 1,
+   cghoeCns = 2,
+   cghoeColon = 3,
+   cghoeLeukemia = 4,
+   cghoeLung = 5,
+   cghoeMelanoma = 6,
+   cghoeOvary = 7,
+   cghoeProstate = 8,
+   cghoeRenal = 9,
+   cghoeAll = 10,
+};
+
+enum cghNci60OptEnum cghoeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *cghoeEnumToString(enum cghNci60OptEnum x);
+/* Convert from enum to string representation. */
+
+void cghoeDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 struct mrnaFilter
