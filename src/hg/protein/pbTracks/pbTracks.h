@@ -30,6 +30,7 @@ extern struct cart *cart;	/* The cart where we keep persistent variables. */
  * next - living mostly in the cart. */
 extern char *database;			/* Name of database we're using. */
 extern char *organism;			/* Name of organism we're working on. */
+extern char *hgsid;
 
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
