@@ -11,14 +11,19 @@
 #include "axt.h"
 #include "psl.h"
 #include "boxClump.h"
-#include "chainBlock.h"
 #include "portable.h"
+#include "chainBlock.h"
+#include "gapCalc.h"
+#include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.30 2004/11/09 06:45:32 angie Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.31 2005/01/10 00:36:36 kent Exp $";
 
+/* Variables set via command line. */
 int minScore = 1000;
 char *detailsName = NULL;
 char *gapFileName = NULL;
+struct gapCalc *gapCalc = NULL;	/* Gap scoring scheme to use. */
+struct axtScoreScheme *scoreScheme = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,16 +43,11 @@ errAbort(
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
   "   -linearGap=filename Read piecewise linear gap from tab delimited file\n"
   "   sample linearGap file \n"
-  "tablesize 11\n"
-  "smallSize 111\n"
-  "position 1 2 3 11 111 2111 12111 32111 72111 152111 252111\n"
-  "qGap 350 425 450 600 900 2900 22900 57900 117900 217900 317900\n"
-  "tGap 350 425 450 600 900 2900 22900 57900 117900 217900 317900\n"
-  "bothGap 750 825 850 1000 1300 3300 23300 58300 118300 218300 318300\n"
-  , minScore
-
+  "%s"
+  , minScore, gapCalcSampleFileContents()
   );
 }
+
 
 struct seqPair
 /* Pair of sequences. */
@@ -57,7 +57,7 @@ struct seqPair
     char *qName;		/* Name of query sequence. */
     char *tName;		/* Name of target sequence. */
     char qStrand;		/* Strand of query sequence. */
-    struct boxIn *blockList; /* List of alignments. */
+    struct cBlock *blockList; /* List of alignments. */
     int axtCount;		/* Count of axt's that make this up (just for stats) */
     };
 
@@ -75,13 +75,13 @@ if (dif == 0)
 return dif;
 }
 
-void addPslBlocks(struct boxIn **pList, struct psl *psl)
+void addPslBlocks(struct cBlock **pList, struct psl *psl)
 /* Add blocks (gapless subalignments) from psl to block list. */
 {
 int i;
 for (i=0; i<psl->blockCount; ++i)
     {
-    struct boxIn *b;
+    struct cBlock *b;
     int size;
     AllocVar(b);
     size = psl->blockSizes[i];
@@ -174,24 +174,12 @@ else
     }
 }
 
-int boxInCmpBoth(const void *va, const void *vb)
-/* Compare to sort based on query, then target. */
-{
-const struct boxIn *a = *((struct boxIn **)va);
-const struct boxIn *b = *((struct boxIn **)vb);
-int dif;
-dif = a->qStart - b->qStart;
-if (dif == 0)
-    dif = a->tStart - b->tStart;
-return dif;
-}
-
-void removeExactOverlaps(struct boxIn **pBoxList)
+void removeExactOverlaps(struct cBlock **pBoxList)
 /* Remove from list blocks that start in exactly the same
  * place on both coordinates. */
 {
-struct boxIn *newList = NULL, *b, *next, *last = NULL;
-slSort(pBoxList, boxInCmpBoth);
+struct cBlock *newList = NULL, *b, *next, *last = NULL;
+slSort(pBoxList, cBlockCmpBoth);
 for (b = *pBoxList; b != NULL; b = next)
     {
     next = b->next;
@@ -212,564 +200,6 @@ slReverse(&newList);
 *pBoxList = newList;
 }
 
-double scoreBlock(char *q, char *t, int size, int matrix[256][256])
-/* Score block through matrix. */
-{
-double score = 0;
-int i;
-for (i=0; i<size; ++i)
-    score += matrix[q[i]][t[i]];
-return score;
-}
-
-
-static void findCrossover(struct boxIn *left, struct boxIn *right,
-	struct dnaSeq *qSeq, struct dnaSeq *tSeq,  
-	int overlap, int matrix[256][256], int *retPos, int *retScoreAdjustment)
-/* Find ideal crossover point of overlapping blocks.  That is
- * the point where we should start using the right block rather
- * than the left block.  This point is an offset from the start
- * of the overlapping region (which is the same as the start of the
- * right block). */
-{
-int bestPos = 0;
-char *rqStart = qSeq->dna + right->qStart;
-char *lqStart = qSeq->dna + left->qEnd - overlap;
-char *rtStart = tSeq->dna + right->tStart;
-char *ltStart = tSeq->dna + left->tEnd - overlap;
-int i;
-double score, bestScore, rScore, lScore;
-
-/* Make sure overlap is not larger than either block size: */
-if (overlap > (left->tEnd - left->tStart) ||
-    overlap > (right->tEnd - right->tStart))
-    errAbort("overlap is %d -- too large for one of these:\n"
-	     "qSize=%d  tSize=%d\n"
-	     "left: qStart=%d qEnd=%d (%d) tStart=%d tEnd=%d (%d)\n"
-	     "right: qStart=%d qEnd=%d (%d) tStart=%d tEnd=%d (%d)\n",
-	     overlap, qSeq->size, tSeq->size,
-	     left->qStart, left->qEnd, left->qEnd - left->qStart,
-	     left->tStart, left->tEnd, left->tEnd - left->tStart,
-	     right->qStart, right->qEnd, right->qEnd - right->qStart, 
-	     right->tStart, right->tEnd, right->tEnd - right->tStart);
-
-score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix);
-lScore = scoreBlock(lqStart, ltStart, overlap, matrix);
-for (i=0; i<overlap; ++i)
-    {
-    score += matrix[lqStart[i]][ltStart[i]];
-    score -= matrix[rqStart[i]][rtStart[i]];
-    if (score > bestScore)
-	{
-	bestScore = score;
-	bestPos = i+1;
-	}
-    }
-*retPos = bestPos;
-*retScoreAdjustment = rScore + lScore - bestScore;
-}
-
-struct scoreData
-/* Data needed to score block. */
-    {
-    struct dnaSeq *qSeq;	/* Query sequence. */
-    struct dnaSeq *tSeq;	/* Target sequence. */
-    struct axtScoreScheme *ss;  /* Scoring scheme. */
-    };
-struct scoreData scoreData;
-struct axtScoreScheme *scoreScheme = NULL;
-
-int interpolate(int x, int *s, double *v, int sCount)
-/* Find closest value to x in s, and then lookup corresponding
- * value in v.  Interpolate where necessary. */
-{
-int i, ds, ss;
-double dv;
-for (i=0; i<sCount; ++i)
-    {
-    ss = s[i];
-    if (x == ss)
-        return v[i];
-    else if (x < ss)
-        {
-	ds = ss - s[i-1];
-	dv = v[i] - v[i-1];
-	return v[i-1] + dv * (x - s[i-1]) / ds;
-	}
-    }
-/* If get to here extrapolate from last two values */
-ds = s[sCount-1] - s[sCount-2];
-dv = v[sCount-1] - v[sCount-2];
-return v[sCount-2] + dv * (x - s[sCount-2]) / ds;
-}
-
-static int *gapInitPos ;  
-static double *gapInitQGap ;  
-static double *gapInitTGap ;  
-static double *gapInitBothGap ;
-
-static int gapInitPosDefault[] = { 
-   1,   2,   3,   11,  111, 2111, 12111, 32111,  72111, 152111, 252111,
-};
-static double gapInitQGapDefault[] = { 
-   350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
-};
-static double gapInitTGapDefault[] = { 
-   350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
-};
-static double gapInitBothGapDefault[] = { 
-   400+350, 400+425, 400+450, 400+600, 400+900, 400+2900, 
-   400+22900, 400+57900, 400+117900, 400+217900, 400+317900,
-};
-
-
-
-struct gapAid
-/* A structure that bundles together stuff to help us
- * calculate gap costs quickly. */
-    {
-    int smallSize; /* Size of tables for doing quick lookup of small gaps. */
-    int *qSmall;   /* Table for small gaps in q; */
-    int *tSmall;   /* Table for small gaps in t. */
-    int *bSmall;   /* Table for small gaps in either. */
-    int *longPos;/* Table of positions to interpolate between for larger gaps. */
-    double *qLong; /* Values to interpolate between for larger gaps in q. */
-    double *tLong; /* Values to interpolate between for larger gaps in t. */
-    double *bLong; /* Values to interpolate between for larger gaps in both. */
-    int longCount;	/* Number of long positions overall in longPos. */
-    int qPosCount;	/* Number of long positions in q. */
-    int tPosCount;	/* Number of long positions in t. */
-    int bPosCount;	/* Number of long positions in b. */
-    int qLastPos;	/* Maximum position we have data on in q. */
-    int tLastPos;	/* Maximum position we have data on in t. */
-    int bLastPos;	/* Maximum position we have data on in b. */
-    double qLastPosVal;	/* Value at max pos. */
-    double tLastPosVal;	/* Value at max pos. */
-    double bLastPosVal;	/* Value at max pos. */
-    double qLastSlope;	/* What to add for each base after last. */
-    double tLastSlope;	/* What to add for each base after last. */
-    double bLastSlope;	/* What to add for each base after last. */
-    } aid;
-
-double calcSlope(double y2, double y1, double x2, double x1)
-/* Calculate slope of line from x1/y1 to x2/y2 */
-{
-return (y2-y1)/(x2-x1);
-}
-
-void initGapAid(char *gapFileName)
-/* Initialize gap aid structure for faster gap
- * computations. */
-{
-int i, tableSize, startLong = -1;
-char *sizeDesc[2];
-char *words[128];
-
-if (gapFileName != NULL)
-    {
-    struct lineFile *lf = lineFileOpen(gapFileName, TRUE);
-    int count;
-
-    lineFileNextRowTab(lf, sizeDesc, 2);
-    tableSize = atoi(sizeDesc[1]);
-    AllocArray(gapInitPos,tableSize);
-    AllocArray(gapInitQGap,tableSize);
-    AllocArray(gapInitTGap,tableSize);
-    AllocArray(gapInitBothGap,tableSize);
-    while (count = lineFileChopNext(lf, words, tableSize+1))
-        {
-        if (sameString(words[0],"smallSize"))
-            {
-            aid.smallSize = atoi(words[1]);
-            }
-        if (sameString(words[0],"position"))
-            {
-            for (i=0 ; i<count-1 ; i++)
-                gapInitPos[i] = atoi(words[i+1]);
-            }
-        if (sameString(words[0],"qGap"))
-            {
-            for (i=0 ; i<count-1 ; i++)
-                gapInitQGap[i] = atoi(words[i+1]);
-            }
-        if (sameString(words[0],"tGap"))
-            {
-            for (i=0 ; i<count-1 ; i++)
-                gapInitTGap[i] = atoi(words[i+1]);
-            }
-        if (sameString(words[0],"bothGap"))
-            {
-            for (i=0 ; i<count-1 ; i++)
-                gapInitBothGap[i] = atoi(words[i+1]);
-            }
-            
-        }
-    if (aid.smallSize == 0)
-        errAbort("missing smallSize parameter in %s\n",gapFileName);
-    lineFileClose(&lf);
-    }
-else
-    {
-    /* if no gap file, then setup default values */ 
-    /* Set up to handle small values */
-    aid.smallSize = 111;
-    tableSize = 11;
-    AllocArray(gapInitPos,tableSize);
-    AllocArray(gapInitQGap,tableSize);
-    AllocArray(gapInitTGap,tableSize);
-    AllocArray(gapInitBothGap,tableSize);
-    for (i = 0 ; i < tableSize ; i++)
-        {
-        gapInitPos[i] = gapInitPosDefault[i];
-        gapInitTGap[i] = gapInitTGapDefault[i];
-        gapInitQGap[i] = gapInitQGapDefault[i];
-        gapInitBothGap[i] = gapInitBothGapDefault[i];
-        }
-    }
-    AllocArray(aid.qSmall, aid.smallSize);
-    AllocArray(aid.tSmall, aid.smallSize);
-    AllocArray(aid.bSmall, aid.smallSize);
-    for (i=1; i<aid.smallSize; ++i)
-        {
-        aid.qSmall[i] = 
-            interpolate(i, gapInitPos, gapInitQGap, tableSize);
-        aid.tSmall[i] = 
-            interpolate(i, gapInitPos, gapInitTGap, tableSize);
-        aid.bSmall[i] = interpolate(i, gapInitPos, 
-            gapInitBothGap, tableSize);
-        }
-
-    /* Set up to handle intermediate values. */
-    for (i=0; i<tableSize; ++i)
-        {
-        if (aid.smallSize == gapInitPos[i])
-            {
-            startLong = i;
-            break;
-            }
-        }
-    if (startLong < 0)
-        errAbort("No position %d in initGapAid()\n", aid.smallSize);
-    aid.longCount = tableSize - startLong;
-    aid.qPosCount = tableSize - startLong;
-    aid.tPosCount = tableSize - startLong;
-    aid.bPosCount = tableSize - startLong;
-    aid.longPos = cloneMem(gapInitPos + startLong, aid.longCount * sizeof(int));
-    aid.qLong = cloneMem(gapInitQGap + startLong, aid.qPosCount * sizeof(double));
-    aid.tLong = cloneMem(gapInitTGap + startLong, aid.tPosCount * sizeof(double));
-    aid.bLong = cloneMem(gapInitBothGap + startLong, aid.bPosCount * sizeof(double));
-
-    /* Set up to handle huge values. */
-    aid.qLastPos = aid.longPos[aid.qPosCount-1];
-    aid.tLastPos = aid.longPos[aid.tPosCount-1];
-    aid.bLastPos = aid.longPos[aid.bPosCount-1];
-    aid.qLastPosVal = aid.qLong[aid.qPosCount-1];
-    aid.tLastPosVal = aid.tLong[aid.tPosCount-1];
-    aid.bLastPosVal = aid.bLong[aid.bPosCount-1];
-    aid.qLastSlope = calcSlope(aid.qLastPosVal, aid.qLong[aid.qPosCount-2],
-                               aid.qLastPos, aid.longPos[aid.qPosCount-2]);
-    aid.tLastSlope = calcSlope(aid.tLastPosVal, aid.tLong[aid.tPosCount-2],
-                               aid.tLastPos, aid.longPos[aid.tPosCount-2]);
-    aid.bLastSlope = calcSlope(aid.bLastPosVal, aid.bLong[aid.bPosCount-2],
-                               aid.bLastPos, aid.longPos[aid.bPosCount-2]);
-}
-
-int gapCost(int dq, int dt)
-/* Figure out gap costs. */
-{
-if (dt < 0) dt = 0;
-if (dq < 0) dq = 0;
-if (dt == 0)
-    { 
-    if (dq < aid.smallSize)
-        return aid.qSmall[dq];
-    else if (dq >= aid.qLastPos)
-        return aid.qLastPosVal + aid.qLastSlope * (dq-aid.qLastPos);
-    else
-        return interpolate(dq, aid.longPos, aid.qLong, aid.qPosCount);
-    }
-else if (dq == 0)
-    {
-    if (dt < aid.smallSize)
-        return aid.tSmall[dt];
-    else if (dt >= aid.tLastPos)
-        return aid.tLastPosVal + aid.tLastSlope * (dt-aid.tLastPos);
-    else
-        return interpolate(dt, aid.longPos, aid.tLong, aid.tPosCount);
-    }
-else
-    {
-    int both = dq + dt;
-    if (both < aid.smallSize)
-        return aid.bSmall[both];
-    else if (both >= aid.bLastPos)
-        return aid.bLastPosVal + aid.bLastSlope * (both-aid.bLastPos);
-    else
-        return interpolate(both, aid.longPos, aid.bLong, aid.bPosCount);
-    }
-}
-
-static int connCount = 0;
-static int overlapCount = 0;
-
-int connectCost(struct boxIn *a, struct boxIn *b)
-/* Calculate connection cost - including gap score
- * and overlap adjustments if any. */
-{
-int dq = b->qStart - a->qEnd;
-int dt = b->tStart - a->tEnd;
-int overlapAdjustment = 0;
-
-if (a->qStart >= b->qStart || a->tStart >= b->tStart)
-    {
-    errAbort("a (%d %d) not strictly before b (%d %d)",
-    	a->qStart, a->tStart, b->qStart, b->tStart);
-    }
-if (dq < 0 || dt < 0)
-   {
-   int bSize = b->qEnd - b->qStart;
-   int aSize = a->qEnd - a->qStart;
-   int overlap = -min(dq, dt);
-   int crossover;
-   if (overlap >= bSize || overlap >= aSize) 
-       {
-       /* One of the blocks is enclosed completely on one dimension
-        * or other by the other.  Discourage this overlap. */
-       overlapAdjustment = 100000000;
-       }
-   else
-       {
-       findCrossover(a, b, scoreData.qSeq, scoreData.tSeq, overlap, 
-	    scoreData.ss->matrix,
-	    &crossover, &overlapAdjustment);
-       dq += overlap;
-       dt += overlap;
-       ++overlapCount;
-       }
-   }
-++connCount;
-return overlapAdjustment + gapCost(dq, dt);
-}
-
-void calcChainBounds(struct chain *chain)
-/* Recalculate chain boundaries. */
-{
-struct boxIn *b = chain->blockList;
-if (chain->blockList == NULL)
-    return;
-chain->qStart = b->qStart;
-chain->tStart = b->tStart;
-b = slLastEl(chain->blockList);
-chain->qEnd = b->qEnd;
-chain->tEnd = b->tEnd;
-}
-
-boolean removeNegativeBlocks(struct chain *chain)
-/* Removing the partial overlaps occassional results
- * in all of a block being removed.  This routine
- * removes the dried up husks of these blocks 
- * and returns TRUE if it finds any. */
-{
-struct boxIn *newList = NULL, *b, *next;
-boolean gotNeg = FALSE;
-for (b = chain->blockList; b != NULL; b = next)
-    {
-    next = b->next;
-    if (b->qStart >= b->qEnd || b->tStart >= b->tEnd)
-	{
-        gotNeg = TRUE;
-	freeMem(b);
-	}
-    else
-        {
-	slAddHead(&newList, b);
-	}
-    }
-slReverse(&newList);
-chain->blockList = newList;
-if (gotNeg)
-    calcChainBounds(chain);
-return gotNeg;
-}
-
-void mergeAbutting(struct chain *chain)
-/* Merge together blocks in a chain that abut each
- * other exactly. */
-{
-struct boxIn *newList = NULL, *b, *last = NULL, *next;
-for (b = chain->blockList; b != NULL; b = next)
-    {
-    next = b->next;
-    if (last == NULL || last->qEnd != b->qStart || last->tEnd != b->tStart)
-	{
-	slAddHead(&newList, b);
-	last = b;
-	}
-    else
-        {
-	last->qEnd = b->qEnd;
-	last->tEnd = b->tEnd;
-	freeMem(b);
-	}
-    }
-slReverse(&newList);
-chain->blockList = newList;
-}
-
-
-void checkChainIncreases(struct chain *chain, char *message)
-/* Check that qStart and tStart both strictly increase
- * in chain->blockList. */
-{
-struct boxIn *a, *b;
-a = chain->blockList;
-if (a == NULL)
-    return;
-for (b = a->next; b != NULL; b = b->next)
-    {
-    if (a->qStart >= b->qStart || a->tStart >= b->tStart)
-	{
-	errAbort("a (%d %d) not before b (%d %d) %s",
-	    a->qStart, a->tStart, b->qStart, b->tStart, message);
-	}
-    a = b;
-    }
-}
-
-void checkStartBeforeEnd(struct chain *chain, char *message)
-/* Check qStart < qEnd, tStart < tEnd for each block. */
-{
-struct boxIn *b;
-for (b = chain->blockList; b != NULL; b = b->next)
-    {
-    if (b->qStart >= b->qEnd || b->tStart >= b->tEnd)
-	errAbort("Start after end in (%d %d) to (%d %d) %s",
-	    b->qStart, b->tStart, b->qEnd, b->tEnd, message);
-    }
-}
-
-void checkChainGaps(struct chain *chain, char *message)
-/* Check that gaps between blocks are non-negative. */
-{
-struct boxIn *a, *b;
-a = chain->blockList;
-if (a == NULL)
-    return;
-for (b = a->next; b != NULL; b = b->next)
-    {
-    if (a->qEnd > b->qStart || a->tEnd > b->tStart)
-	{
-	errAbort("Negative gap between (%d %d - %d %d) and (%d %d - %d %d) %s",
-	    a->qStart, a->tStart, a->qEnd, a->tEnd, 
-	    b->qStart, b->tStart, b->qEnd, b->tEnd, message);
-	}
-    a = b;
-    }
-}
-
-void setChainBounds(struct chain *chain)
-/* Set chain overall bounds to fit blocks. */
-{
-struct boxIn *b = chain->blockList;
-chain->qStart = b->qStart;
-chain->tStart = b->tStart;
-while (b->next != NULL)
-     b = b->next;
-chain->qEnd = b->qEnd;
-chain->tEnd = b->tEnd;
-}
-
-void removePartialOverlaps(struct chain *chain, 
-	struct dnaSeq *qSeq, struct dnaSeq *tSeq, int matrix[256][256])
-/* If adjacent blocks overlap then find crossover points between them. */
-{
-struct boxIn *a, *b;
-boolean totalTrimA, totalTrimB;
-
-assert(chain->blockList != NULL);
-
-/* Do an internal sanity check to make sure that things
- * really are sorted by both qStart and tStart. */
-checkChainIncreases(chain, "before removePartialOverlaps");
-
-/* Remove overlapping portion of blocks.  In some
- * tricky repeating regions this can result in 
- * complete blocks being removed.  This complicates
- * the loop below in some cases, forcing us to essentially
- * start over when the first of the two blocks we
- * are examining gets trimmed out completely. */
-for (;;)
-    {
-    totalTrimA = totalTrimB = FALSE;
-    a = chain->blockList;
-    b = a->next;
-    for (;;)
-        {
-	int dq, dt;
-	if (b == NULL)
-	    break;
-	dq = b->qStart - a->qEnd;
-	dt = b->tStart - a->tEnd;
-	if (dq < 0 || dt < 0)
-	   {
-	   int overlap = -min(dq, dt);
-	   int aSize = a->qEnd - a->qStart;
-	   int bSize = b->qEnd - b->qStart;
-	   int crossover, invCross, overlapAdjustment;
-	   if (overlap >= aSize || overlap >= bSize)
-	       {
-	       totalTrimB = TRUE;
-	       }
-	   else
-	       {
-	       findCrossover(a, b, scoreData.qSeq, scoreData.tSeq, overlap, 
-		    scoreData.ss->matrix,
-		    &crossover, &overlapAdjustment);
-	       b->qStart += crossover;
-	       b->tStart += crossover;
-	       invCross = overlap - crossover;
-	       a->qEnd -= invCross;
-	       a->tEnd -= invCross;
-	       if (b->qEnd <= b->qStart)
-		   {
-		   totalTrimB = TRUE;
-		   }
-	       else if (a->qEnd <= a->qStart)
-		   {
-		   totalTrimA = TRUE;
-		   }
-	       }
-	   }
-	if (totalTrimA == TRUE)
-	    {
-	    removeNegativeBlocks(chain);
-	    break;
-	    }
-	else if (totalTrimB == TRUE)
-	    {
-	    b = b->next;
-	    freez(&a->next);
-	    a->next = b;
-	    totalTrimB = FALSE;
-	    }
-	else
-	    {
-	    a = b;
-	    b = b->next;
-	    }
-	}
-    if (!totalTrimA)
-        break;
-    }
-
-/* Reset chain bounds - may have clipped them in this
- * process. */
-setChainBounds(chain);
-
-/* Do internal sanity checks. */
-checkChainGaps(chain, "after removePartialOverlaps");
-checkStartBeforeEnd(chain, "after removePartialOverlaps");
-}
 
 #ifdef TESTONLY
 void abortChain(struct chain *chain, char *message)
@@ -781,7 +211,7 @@ errAbort("%s tName %s, tStart %d, tEnd %d, qStrand %c, qName %s, qStart %d, qEnd
 void checkChainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq)
 /* Check that chain score is reasonable. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int totalBases = 0;
 double maxPerBase = 100, maxScore;
 int gapCount = 0;
@@ -803,7 +233,7 @@ if (maxScore < chain->score)
     for (b = chain->blockList; b != NULL; b = b->next)
         {
 	size = b->qEnd - b->qStart;
-	oneScore = scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, size, scoreData.ss->matrix);
+	oneScore = chainScoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, size, scoreData.ss->matrix);
         verbose(1, " q %d, t %d, size %d, score %d\n",
              b->qStart, b->tStart, size, oneScore);
 	gaplessScore += oneScore;
@@ -814,47 +244,31 @@ if (maxScore < chain->score)
 }
 #endif /* TESTONLY */
 
-double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
-    int matrix[256][256], int (*gapCost)(int dt, int dq))
-/* Calculate score of chain from scratch looking at blocks. */
-{
-struct boxIn *b, *a = NULL;
-double score = 0;
-int size = 0;
-for (b = chain->blockList; b != NULL; b = b->next)
-    {
-    size = b->qEnd - b->qStart;
-    score += scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, 
-    	size, matrix);
-    if (a != NULL)
-	score -= gapCost(b->tStart - a->tEnd, b->qStart - a->qEnd);
-    a = b;
-    }
-return score;
-}
-
 void chainPair(struct seqPair *sp,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct chain **pChainList,
 	FILE *details)
 /* Chain up blocks and output. */
 {
 struct chain *chainList, *chain, *next;
-struct boxIn *b;
+struct cBlock *b;
 long startTime, dt;
 int size = 0;
+struct chainConnect cc;
 
 verbose(1, "chainPair %s\n", sp->name);
 
 /* Set up info for connect function. */
-scoreData.qSeq = qSeq;
-scoreData.tSeq = tSeq;
-scoreData.ss = scoreScheme;
+ZeroVar(&cc);
+cc.query = qSeq;
+cc.target = tSeq;
+cc.ss = scoreScheme;
+cc.gapCalc = gapCalc;
 
 /* Score blocks. */
 for (b = sp->blockList; b != NULL; b = b->next)
     {
     size = b->qEnd - b->qStart;
-    b->score = axtScoreUngapped(scoreData.ss, 
+    b->score = axtScoreUngapped(scoreScheme, 
     	qSeq->dna + b->qStart, tSeq->dna + b->tStart, size);
     }
 
@@ -862,14 +276,17 @@ for (b = sp->blockList; b != NULL; b = b->next)
 /* Get chain list and clean it up a little. */
 startTime = clock1000();
 chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand, 
-	sp->tName, tSeq->size, &sp->blockList, connectCost, gapCost, details);
+	sp->tName, tSeq->size, &sp->blockList, 
+	(ConnectCost)chainConnectCost, (GapCost)chainConnectGapCost, 
+	&cc, details);
 dt = clock1000() - startTime;
 verbose(1, "Main chaining step done in %ld milliseconds\n", dt);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    removePartialOverlaps(chain, qSeq, tSeq, scoreData.ss->matrix);
-    mergeAbutting(chain);
-    chain->score = chainScore(chain, qSeq, tSeq, scoreData.ss->matrix, gapCost);
+    chainRemovePartialOverlaps(chain, qSeq, tSeq, scoreScheme->matrix);
+    chainMergeAbutting(chain);
+    chain->score = chainCalcScore(chain, scoreScheme, gapCalc,
+    	qSeq, tSeq);
     }
 
 /* Move chains scoring over threshold to master list. */
@@ -1036,24 +453,14 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 carefulClose(&f);
 }
 
-void testGaps()
+struct gapCalc *gapCalcReadOrDefault(char *fileName)
+/* Return gaps from file, or default if fileName is NULL. */
 {
-int i;
-for (i=1; i<=10; i++)
-   {
-   verbose(1, "%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
-   }
-for (i=1; ; i *= 10)
-   {
-   verbose(1, "%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
-   if (i == 1000000000)
-       break;
-   }
-verbose(1, "%d %d cost %d\n", 6489540, 84240, gapCost(84240, 6489540));
-verbose(1, "%d %d cost %d\n", 2746361, 1075188, gapCost(1075188, 2746361));
-verbose(1, "%d %d cost %d\n", 6489540 + 2746361 + 72, 84240 + 1075188 + 72, gapCost(84240 + 1075188 + 72, 6489540 + 2746361 + 72));
+if (fileName != NULL)
+    return gapCalcFromFile(fileName);
+else
+    return gapCalcDefault();
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -1072,7 +479,7 @@ if (scoreSchemeName != NULL)
 else
     scoreScheme = axtScoreSchemeDefault();
 dnaUtilOpen();
-initGapAid(gapFileName);
+gapCalc = gapCalcReadOrDefault(gapFileName);
 /* testGaps(); */
 if (argc != 5)
     usage();
