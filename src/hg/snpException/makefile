@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-MYLIBDIR = ${KENTROOT}/lib/${MACHTYPE}
+MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 L = ${MYSQLLIBS} -lm
 HG_WARN = -Wall
