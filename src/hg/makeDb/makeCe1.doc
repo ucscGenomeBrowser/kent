@@ -8,6 +8,7 @@ exit; # don't actually run this like a script :)
 
 DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 
+    # next machine
     ssh eieio
     mkdir -p /cluster/store4/worm/ce1/sanger
     cd /cluster/store4/worm/ce1/sanger
@@ -59,6 +60,7 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 CREATING DATABASE (DONE 2003-05-12 - Hiram)
 
     # Create the database.
+    # next machine
     ssh hgwdev
     echo 'create database ce1' | hgsql ''
     # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
@@ -73,6 +75,7 @@ CREATING DATABASE (DONE 2003-05-12 - Hiram)
 
 
 CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
+    # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
     #	grp in the database rn1 to our new database ce1
@@ -84,6 +87,7 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
 
     # Make symbolic links from /gbdb/ce1/nib to the real nibs.
+    # next machine
     ssh hgwdev
     mkdir -p /gbdb/ce1/nib
     foreach f (/cluster/store4/worm/ce1/nib/*.nib)
@@ -130,6 +134,7 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
 
 
 MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
+    # next machine
      ssh hgwdev
      mkdir -p /cluster/store4/worm/ce1/bed/gcPercent
      cd /cluster/store4/worm/ce1/bed/gcPercent
@@ -139,6 +144,7 @@ MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
      hgGcPercent ce1 ../../nib
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
+    # next machine
      ssh hgwdev
     echo 'insert into defaultDb values("C. elegans", "ce1");' \
       | hgsql -h genome-testdb hgcentraltest
@@ -146,7 +152,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
 	echo 'delete from defaultDb where name="ce1";' \
         | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("ce1", "May 2003", \
-	"/gbdb/ce1/nib", "worm", "chrII:9449525-9452749", 1, 10, \
+	"/gbdb/ce1/nib", "worm", "chrII:9423581-9478692", 1, 10, \
 	"C. elegans");' \
 	| hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
@@ -162,6 +168,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
 
 MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
 
+    # next machine
     ssh eieio
     mkdir -p /cluster/store4/worm/ce1/bed/sangerGene
     cd /cluster/store4/worm/ce1/bed/sangerGene
@@ -191,6 +198,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
 # -rw-rw-r--    1 hiram     3787721 May 19 12:03 chrX.gff
 
     # now load database with those transformed gff files
+    # next machine
     ssh hgwdev
     cd /cluster/store4/worm/ce1/bed/sangerGene
     ldHgGene ce1 sangerGene *.gff
@@ -202,6 +210,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
 	echo 'drop table sangerGene' | hgsql ce1
 
 PREPARE Split contigs into 100,000 bp chunks for cluster runs
+    # next machine
     ssh eieio
     cd ~/ce1
     rm -fr ./split
@@ -219,6 +228,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
 # 1 pieces of 1 written
     cat split/*.lft > liftAll.lft
     # copy them to /iscratch/i for cluster rsync
+    # next machine
     ssh kkr1u00
     cd ~/ce1/split
     foreach c (I II III IV V X M)
@@ -229,6 +239,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     ~kent/bin/iSync
 
 # Run RepeatMasker on the chromosomes (DONE 2003-05-27 - Hiram)
+    # next machine
     ssh kk
     cd ~/ce1
     mkdir RMRun
@@ -249,23 +260,27 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     para try
     para check
     # when they are finished, liftUp and load the .out files into the database:
+    # next machine
     ssh eieio
     cd ~/ce1/RMRun
     foreach c (I II III IV V X M)
 	liftUp chr${c}.fa.out ../split/chr${c}.lft warn ${c}/*.fa.out
     end
     
+    # next machine
     ssh hgwdev
     cd ~/ce1/RMRun
     hgLoadOut ce1 chr*.fa.out
 
 # SIMPLE REPEAT [TRF] TRACK (DONE 2003-05-27 - Hiram)
     # ensure chr*.fa files exist on /iscratch/i
+    # next machine
     ssh kkr1u00
     cp -p /cluster/store4/worm/ce1/*.fa  /iscratch/i/worms/Celegans
     ~kent/bin/iSync
 
     # Create cluster parasol job:
+    # next machine
     ssh kk
     mkdir -p ~/ce1/bed/simpleRepeat
     cd ~/ce1/bed/simpleRepeat
@@ -283,12 +298,14 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     cat trf/*.bed > simpleRepeat.bed
     
     # Load into the database:
+    # next machine
     ssh hgwdev
     cd ~/ce1/bed/simpleRepeat
     /cluster/bin/i386/hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 2003-05-27 - Hiram)
+    # next machine
     ssh eieio
     cd ~/ce1/bed/simpleRepeat
     mkdir -p trfMask
@@ -298,6 +315,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
 
 # Create Soft and Hard masks from RepeatMaster and TRF outputs:
 #  and rebuild the nib files
+    # next machine
     ssh eieio
     cd ~/ce1
     mkdir softMask
@@ -319,6 +337,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     end
 
     #  With masked nib files ready, prepare cluster for blastz runs
+    # next machine
     ssh kkr1u00
     cd ~/ce1/softMask
     mkdir -p /iscratch/i/worms/Celegans/trfFa
@@ -326,29 +345,110 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
 
 
 # MAKING AND STORING mRNA AND EST ALIGNMENTS (WORKING 2003-05-28 - Hiram)
+    # next machine
     ssh kkr1u00
     cd /iscratch/i/worms/Celegans
     mkdir mRNA
+    # there are 1644 sequences in mrna.fa, the 1000000 makes 1644 files
     faSplit sequence /iscratch/i/mrna.134/Caenorhabditis_elegans/mrna.fa \
 		1000000 mRNA/m
-    mkdir EST
-    faSplit sequence /iscratch/i/mrna.134/Caenorhabditis_elegans/est.fa \
-		1000000 EST/e
     ~kent/bin/iSync
 
-    ssh kkstore
+    # next machine
+    ssh kk
     cd ~/ce1/bed
     mkdir mrna est
     cd mrna
     mkdir psl
-    ls -1S /iscratch/i/worms/Celegans/trfFa/chr*.fa > genome.lst
+    ls -1S /cluster/store4/worm/ce1/nib/chr*.nib > worm.lst
     ls -1S /iscratch/i/worms/Celegans/mRNA/m*.fa > mrna.lst
-    cp ~/hg15/bed/mrna/gsub .
-    gensub2 genome.lst mrna.lst gsub spec
+    echo '#LOOP
+/cluster/bin/i386/blat -q=dna -t=dna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP' > gsub
+    gensub2 worm.lst mrna.lst gsub spec
     para create spec
     para try
+    para check
+    para push
+    ... etc ...
+# Longest job:                      328s       5.47m     0.09h    0.00d
+
+    # cluster run done
+    pslSort dirs raw.psl /tmp psl
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl all_mrna.psl \
+      /dev/null
+    pslSortAcc nohead chrom /tmp all_mrna.psl
+
+    # load mrna tables
+    # next machine
+    ssh hgwdev
+    cd ~/ce1/bed/mrna/chrom
+    # names must be chr*_mrna.psl
+    foreach d (I II III IV V X M)
+	rm -f chr${d}_mrna.psl
+	mv chr${d}.psl chr${d}_mrna.psl
+    end
+    # there is no chrM file, above will display error on that one
+    hgLoadPsl ce1 *.psl
+    mkdir /gbdb/ce1/mrna.134
+    ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.fa \
+	/gbdb/ce1/mrna.134
+    hgLoadRna add -type=mRNA ce1 /gbdb/ce1/mrna.134/mrna.fa \
+	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.ra
+
+    # setup /iscratch/i with the est.fa file for blat run
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Celegans/EST
+    cd /iscratch/i/worms/Celegans/EST
+    # create about a 1000 files to provide about 7000 jobs to the cluster
+    #	(these jobs are too small)
+    faSplit sequence \
+	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa 1000 e
+    ~kent/bin/iSync
+
+    # next machine
+    ssh kk
+    cd ~/ce1/bed/est
+    mkdir psl
+    ls -1S /cluster/store4/worm/ce1/nib/chr*.nib > worm.lst
+    ls -1S /iscratch/i/worms/Celegans/EST/e*.fa > est.lst
+    echo '#LOOP
+/cluster/bin/i386/blat -q=dna -t=dna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP' > gsub
+    gensub2 worm.lst est.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    # those 7000 jobs were too small:
+# Longest job:                       35s       0.58m     0.01h    0.00d
+
+    # cluster run done
+    # next machine
+    ssh hgwdev
+    cd ~/ce1/bed/est
+    pslSort dirs raw.psl /tmp psl
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl all_est.psl \
+      /dev/null
+    pslSortAcc nohead chrom /tmp all_est.psl
+    cd chrom
+    # names must be chr*_est.psl
+    foreach d (I II III IV V X M)
+	rm -f chr${d}_est.psl
+	mv chr${d}.psl chr${d}_est.psl
+    end
+    hgLoadPsl ce1 *.psl
 
 
+    ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa \
+	/gbdb/ce1/mrna.134
+    hgLoadRna add -type=EST ce1 /gbdb/ce1/mrna.134/est.fa \
+	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.ra
+    hgLoadPsl ce1 all_est.psl -nobin
+
+    
+    # next machine
     ssh kk
     cd ~/ce1/bed/mrna
     mkdir psl
@@ -359,6 +459,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     para try
 
 MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (TODO)
+    # next machine
     ssh hgwdev
     echo 'insert into blatServers values("ce1", "blat10", "17778", "1"); \
           insert into blatServers values("ce1", "blat10", "17779", "0");' \
@@ -368,6 +469,7 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (TODO)
 SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
     # This TRF run takes about an hour on eieio
     # so instead of binrsyncing and para-running, just do this on eieio:
+    # next machine
     ssh eieio
     mkdir ~/ce1/bed/simpleRepeat
     cd ~/ce1/bed/simpleRepeat
@@ -385,6 +487,7 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
 
     # When jobs are done,
     # To Load this into the database as so
+    # next machine
     ssh hgwdev
     cd ~/ce1/bed/simpleRepeat
     cat trf/chr*.bed > simpleRepeat.bed
@@ -394,6 +497,7 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
 PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
     # Assumes masked NIBs have been prepared as above
     # and Fugu pieces are already on kluster /iscratch/i.
+    # next machine
     ssh kk
     mkdir -p ~/ce1/bed/blatFugu
     cd ~/ce1/bed/blatFugu
@@ -414,6 +518,7 @@ PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
 
     # want names chrI_blatFugu
     #  When cluster run is done, sort alignments
+    # next machine
     ssh eieio
     cd ~/ce1/bed/blatFugu
     foreach d (I II III IV V X M)
@@ -424,38 +529,67 @@ PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
 	mv chrom/chr${d}.psl chrom/chr${d}_blatFugu.psl
     end
 
+    # next machine
     ssh hgwdev
     cd ~/ce1/bed/blatFugu/chrom
     hgLoadPsl ce1 chr*_blatFugu.psl
 
     # Make fugu /gbdb/ symlink and load Fugu sequence data.
     mkdir /gbdb/ce1/fuguSeq
-    cd /gbdb/ce1/fuguSeq
-    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
-    cd /cluster/store2/tmp
+    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta /gbdb/ce1/fuguSeq
     hgLoadRna addSeq ce1 /gbdb/ce1/fuguSeq/fugu_v3_mask.fasta
 
 RUN Waba alignment with briggsae
     # prepare contigs from C. briggsae
     #   Assumes C. briggsae data has been downloaded according to
     #   makeCb1.doc
+    # next machine
     ssh kkr1u00
     mkdir -p /iscratch/i/worms/Cbriggsae/waba_contigs
-    zcat /cluster/store4/worm/cb1/sanger/cb25.agp8.contigs.fasta.gz \
-	| faSplit sequence stdin 1000000 c
-    # there are 5341 sequences in that file.  The 1000000 will allow
-    # faSplit to get them each into their own file.  I don't know why
-    # faSplit has this wierd thing with the numbering.  It needs to be
-    # fixed.
+    cd /iscratch/i/worms/Cbriggsae/waba_contigs
+    faSplit sequence ../contigs.fa 2000 c
     ~kent/bin/iSync
     
+    # next machine
     ssh kk
     mkdir ~/ce1/bed/waba/out
     cd ~/ce1/bed/waba
-    ls /iscratch/i/worms/Cbriggsae/waba.contigs/ > briggsae.lst
-    ls /iscratch/i/worms/Celegans/chr*.fa > elegans.lst
-    gensub2 elegans.lst briggsae.lst gsub spec
-    
+    ls /iscratch/i/worms/Cbriggsae/waba.contigs/c*.fa > briggsae.lst
+    ls /iscratch/i/worms/Celegans/trfFa/chr*.fa > elegans.lst
+    echo "" > dummy.lst
+    # create scripts to be used here
+    echo '#!/bin/csh -fe
+#
+#	$1 - full pathname to a waba.contig
+#	$2 - file path to elegans.lst
+#	$3 - result file full pathname
+#
+set f = $1:t
+mkdir -p /tmp/$f
+cp $1 /tmp/$f
+pushd .
+cd /tmp/$f
+set t = $f:r
+/cluster/bin/i386/waba 1 $f $2 $t.1
+/cluster/bin/i386/waba 2 $t.1 $t.2
+/cluster/bin/i386/waba 3 $t.2 $t.wab
+cp $t.wab $3
+popd
+rm -f /tmp/$f/$t.*
+rmdir --ignore-fail-on-non-empty /tmp/$f' > wabaRun
+    chmod +x wabaRun
+
+    echo '#LOOP
+/cluster/store4/worm/ce1/bed/waba/wabaRun {check in exists+ $(path1)} /cluster/store4/worm/ce1/bed/waba/elegans.lst {check out line+ /cluster/store4/worm/ce1/bed/waba/out/$(root1).wab}
+#ENDLOOP' > gsub
+
+    gensub2 briggsae.lst dummy.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    ... etc ...
+
 
 RUN BLASTZ with C. briggsae
     #  Still trying to figure out how this works.  There is more to this
@@ -473,6 +607,7 @@ MAKING VIRAL mRNA FILES (DONE 04/15/03)
     hgLoadRna add -type=mrna sc1 /gbdb/sc1/mrna.134/viralRna.fa \
       /cluster/store5/mrna.134/viralRna.ra
     # distribute to /iscratch/i/
+    # next machine
     ssh kkr1u00
     mkdir -p /iscratch/i/mrna.134
     cp -p /cluster/store5/mrna.134/viralRna.fa  /iscratch/i/mrna.134
