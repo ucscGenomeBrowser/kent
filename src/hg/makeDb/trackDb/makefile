@@ -71,6 +71,7 @@ strict:
 	hgTrackDb -strict=yes human hg16 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes mouse mm2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes mouse mm3 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes mouse mm4 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes -visibility=rat/visibility.ra rat rn3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes sars sc1 trackDb ../../lib/trackDb.sql .
