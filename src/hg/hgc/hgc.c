@@ -482,11 +482,6 @@ if (wordCount > 0)
 	genericPslClick(conn, tdb, item, start, subType);
 	}
     }
-if (tdb->html != NULL && tdb->html[0] != 0)
-    {
-    htmlHorizontalLine();
-    puts(tdb->html);
-    }
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
