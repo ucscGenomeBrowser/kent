@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.765 2004/10/08 17:18:09 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.766 2004/10/08 19:58:22 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13297,7 +13297,9 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&amp;val=%i\">NCBI Link</a>",cbs2->GI);
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+#ifdef SOON
 	    printf("%s",cbs2->evalue);
+#endif /* SOON */
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("%f",cbs2->PI);
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -15498,7 +15500,8 @@ else if (sameWord(track, "transRegCode"))
     }
 else if (sameWord(track, "transRegCodeProbe"))
     {
-    doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif");
+    doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
+    	"transRegCodeCondition", "growthCondition");
     }
 
 else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
