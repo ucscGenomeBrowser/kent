@@ -92,7 +92,7 @@ mafTrack multiz8way
 
 track rnafold
 shortLabel RNAfold
-longLabel RNAfold predictions of RNA secondary structure
+longLabel RNAfold predictions of RNA secondary structure (id_strand_score)
 group genes
 priority 63.3
 visibility hide
@@ -102,7 +102,7 @@ mafTrack multiz10way
 
 track evofold
 shortLabel evofold
-longLabel evofold predictions of RNA secondary structure (id_score)
+longLabel evofold predictions of RNA secondary structure (id_strand_score)
 group genes
 priority 63
 visibility hide
