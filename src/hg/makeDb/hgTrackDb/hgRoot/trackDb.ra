@@ -200,7 +200,7 @@ shortLabel Fosmid End Pairs
 longLabel Fosmid End Pairs
 priority 10.1
 visibility hide
-
+type bed 6 +
 
 track genomicSuperDups
 shortLabel filtered WGAC
