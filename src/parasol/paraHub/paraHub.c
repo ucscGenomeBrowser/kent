@@ -731,17 +731,19 @@ void writeJobResults(struct job *job, time_t now, char *status,
  * will create the output queue if it doesn't yet
  * exist. */
 {
+struct batch *batch = job->batch;
 if (sameString(status, "0"))
     {
     ++finishedJobCount;
-    ++job->batch->doneCount;
+    ++batch->doneCount;
+    ++batch->user->doneCount;
     }
 else
     {
     ++crashedJobCount;
-    ++job->batch->crashCount;
+    ++batch->crashCount;
     }
-writeResults(job->batch->name, job->batch->user->name, job->machine->name,
+writeResults(batch->name, batch->user->name, job->machine->name,
 	job->id, job->exe, job->submitTime, 
 	job->startTime, job->err, job->cmd,
 	now, status, uTime, sTime);
@@ -1002,12 +1004,11 @@ void finishJob(struct job *job)
 {
 struct machine *mach = job->machine;
 struct batch *batch = job->batch;
+struct user *user = batch->user;
 if (mach != NULL)
-    {
     recycleMachine(mach);
-    batch->runningCount -= 1;
-    batch->user->runningCount -= 1;
-    }
+batch->runningCount -= 1;
+user->runningCount -= 1;
 recycleJob(job);
 }
 
@@ -1158,6 +1159,23 @@ netSendLongString(fd, "");
 freeDyString(&dy);
 }
 
+int countUserActiveBatches(struct user *user)
+/* Count active batches for user. */
+{
+int count = dlCount(user->curBatches);
+/* Start with batches with pending jobs. */
+struct dlNode *node;
+
+/* Add in batches with running but no pending jobs. */
+for (node = user->oldBatches->head; !dlEnd(node); node = node->next)
+    {
+    struct batch *batch = node->val;
+    if (batch->runningCount > 0)
+	++count;
+    }
+return count;
+}
+
 void listUsers(int fd)
 /* Write list of users to fd.  Format is one user per line
  * followed by a blank line. */
@@ -1166,13 +1184,13 @@ struct dyString *dy = newDyString(256);
 struct user *user;
 for (user = userList; user != NULL; user = user->next)
     {
-    int activeBatch = dlCount(user->curBatches);
+    int totalBatch = dlCount(user->curBatches) + dlCount(user->oldBatches);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s ", user->name);
     dyStringPrintf(dy, 
-    	"%d jobs running, %d jobs waiting, %d of %d batches active", 
-	user->runningCount,  userQueuedCount(user),
-	activeBatch, activeBatch + dlCount(user->oldBatches));
+    	"%d jobs running, %d waiting, %d finished, %d of %d batches active", 
+	user->runningCount,  userQueuedCount(user), user->doneCount,
+	countUserActiveBatches(user), totalBatch);
     netSendLongString(fd, dy->string);
     }
 netSendLongString(fd, "");
@@ -1362,23 +1380,6 @@ for (user = userList; user != NULL; user = user->next)
     {
     if (user->runningCount > 0 || !dlEmpty(user->curBatches))
         ++count;
-    }
-return count;
-}
-
-int countUserActiveBatches(struct user *user)
-/* Count active batches for user. */
-{
-int count = dlCount(user->curBatches);
-/* Start with batches with pending jobs. */
-struct dlNode *node;
-
-/* Add in batches with running but no pending jobs. */
-for (node = user->oldBatches->head; !dlEnd(node); node = node->next)
-    {
-    struct batch *batch = node->val;
-    if (batch->runningCount > 0)
-	++count;
     }
 return count;
 }
