@@ -80,3 +80,10 @@ hgMapBedToGene $db knownGene affyUcla knownToAffyUcla
 # Create expression distance table.  This will take about an hour.
 cd ~/src/hg/near/hgExpDistance
 hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToAffyUcla
+
+# New Column domains
+# Add the domain structure of SWISSPROT and TrEMBL proteins according to Pfam
+mkdir -p ~/hg15/bed/nearDomain
+cd ~/hg15/bed/nearDomain
+
+wget ftp://ftp.genetics.wustl.edu/pub/Pfam/swisspfam.gz
