@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.28 2004/10/26 23:05:59 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.29 2004/11/16 01:05:18 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -505,6 +505,7 @@ boolean isCustom = FALSE;
 struct wiggleDataStream *wds = NULL;
 unsigned long long valuesMatched = 0;
 int regionCount = 0;
+int regionsDone = 0;
 unsigned span = 0;
 char *dataConstraint;
 double ll = 0.0;
@@ -541,6 +542,8 @@ for (region = regionList; region != NULL; region = region->next)
     struct bed *intersectBedList = NULL;
     boolean hasBin;
     int operations;
+
+    ++regionsDone;
 
     if (table2)
 	{
@@ -641,6 +644,11 @@ for (region = regionList; region != NULL; region = region->next)
 	wds->freeStats(wds);
 	gotSome = TRUE;
 	}
+    if ((regionCount > 300) && (regionsDone > 299))
+	{
+	hPrintf("<TR><TH ALIGN=CENTER COLSPAN=12> Can not display more than 300 regions, <BR> would take too much time </TH></TR>\n");
+	break;	/*	exit this for loop	*/
+	}
     }
 
 if (1 == regionCount)
@@ -702,6 +710,7 @@ else
     hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", variance);
     hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", stddev);
     hPrintf("</TR>\n");
+    wigStatsTableHeading(stdout, TRUE);
     hPrintf("</TABLE></TD></TR></TABLE></P>\n");
     }
 
@@ -746,3 +755,20 @@ floatStatRow("load and calc time", 0.001*wigFetchTime);
 hTableEnd();
 htmlClose();
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
+
+void wigShowFilter(struct sqlConnection *conn)
+/* print out wiggle data value filter */
+{
+double ll, ul;
+char *constraint;
+
+if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
+{
+    if (constraint && sameWord(constraint, "in range"))
+	{
+	hPrintf("&nbsp;&nbsp;data value %s [%g : %g)\n", constraint, ll, ul);
+	}
+    else
+	hPrintf("&nbsp;&nbsp;data value %s %g\n", constraint, ll);
+}
+}
