@@ -5738,13 +5738,19 @@ void loadEnsPhusionBlast(struct trackGroup *tg)
 /* Load up ensPhusionBlast from database table to trackGroup items. */
 {
 struct ensPhusionBlast *epb;
+char *ptr;
 char buf[16];
 
 bedLoadItem(tg, tg->mapName, (ItemLoader)ensPhusionBlastLoad);
 // for name, append abbreviated starting position to the xeno chrom:
 for (epb=tg->items;  epb != NULL;  epb=epb->next)
     {
-    snprintf(buf, sizeof(buf), "%s %dk", epb->name, (int)(epb->xenoStart/1000));
+    ptr = strchr(epb->name, '.');
+    if (ptr == NULL)
+	ptr = epb->name;
+    else
+	ptr++;
+    snprintf(buf, sizeof(buf), "%s %dk", ptr, (int)(epb->xenoStart/1000));
     free(epb->name);
     epb->name = cloneString(buf);
     }
