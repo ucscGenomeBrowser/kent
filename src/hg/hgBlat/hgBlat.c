@@ -467,10 +467,8 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	{
 	static struct gfSavePslxData outForm;
 	outForm.f = f;
-	uglyf("%s<BR>\n", seq->dna);
 	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 16, gfSavePslx, &outForm);
 	reverseComplement(seq->dna, seq->size);
-	uglyf("%s<BR>\n", seq->dna);
 	conn = gfConnect(serve->host, serve->port);
 	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 16, gfSavePslx, &outForm);
 	}
