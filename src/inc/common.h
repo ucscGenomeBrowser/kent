@@ -13,7 +13,10 @@
 
 /* Some stuff to support large files in Linux. */
 #define _LARGEFILE_SOURCE 1
+
+#ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
