@@ -606,10 +606,10 @@ sr = sqlGetResult(conn, query);
      printf("<B>chromosome:</B> %s<BR>\n", ep->chrom); 
      printf("<B>Start position in chromosome :</B> %u<BR>\n", ep->chromStart); 
      printf("<B>End position in chromosome :</B> %u<BR>\n", ep->chromEnd);
-     printf("<B>5' accession:</B> <A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start5, ep->end5, ep->acc5, ep->chrom, winStart, winEnd, database, s, ep->acc5); 
+     printf("<B>5' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start5, ep->end5, ep->acc5, ep->chrom, winStart, winEnd, database, s, ep->acc5); 
      printf("<B>Start position of 5' est in chromosome :</B> %u<BR>\n", ep->start5); 
      printf("<B>End position of 5' est in chromosome :</B> %u<BR>\n", ep->end5); 
-     printf("<B>3' accession:</B> <A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start3, ep->end3, ep->acc3, ep->chrom, winStart, winEnd, database, s, ep->acc3);  
+     printf("<B>3' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start3, ep->end3, ep->acc3, ep->chrom, winStart, winEnd, database, s, ep->acc3);  
      printf("<B>Start position of 3' est in chromosome :</B> %u<BR>\n", ep->start3); 
      printf("<B>End position of 3' est in chromosome :</B> %u<BR>\n", ep->end3);
    }
@@ -3155,7 +3155,7 @@ void printSageGraphUrl(struct sage *sgList)
 {
 struct sage *sg = NULL;
 printf("Please click ");
-printf("<a target=other href=\"http://genome-test.cse.ucsc.edu/cgi-bin/sageVisCGI?");
+printf("<a target=other href=\"../cgi-bin/sageVisCGI?");
 for(sg = sgList; sg != NULL; sg = sg->next)
     {
     if(sg->next == NULL)
