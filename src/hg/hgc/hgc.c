@@ -73,6 +73,7 @@
 #include "altGraphX.h"
 #include "stsMapMouse.h"
 #include "stsInfoMouse.h"
+#include "dnaMotif.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -2257,6 +2258,155 @@ else
     puts("<P>Click directly on a CpG island for specific information on that island</P>");
     }
 printTrackHtml(tdb);
+}
+
+void printProbRow(char *label, float *p, int pCount)
+/* Print one row of a probability profile. */
+{
+int i;
+printf("%s ", label);
+for (i=0; i < pCount; ++i)
+    printf("%4.2f ", p[i]);
+printf("\n");
+}
+
+#ifdef NEVER
+char *motifConsensus(struct dnaMotif *motif)
+/* Return consensus sequence for motif.  freeMem
+ * result when done. */
+{
+int i, size = motif->columnCount;
+char *consensus = needMem(size+1);
+char c;
+float best;
+for (i=0; i<size; ++i)
+    {
+    c = 'a';
+    best = motif->aProb[i];
+    if (motif->cProb[i] > best)
+       {
+       best = motif->cProb[i];
+       c = 'c';
+       }
+    if (motif->gProb[i] > best)
+       {
+       best = motif->gProb[i];
+       c = 'g';
+       }
+    if (motif->tProb[i] > best)
+       {
+       best = motif->tProb[i];
+       c = 't';
+       }
+    consensus[i] = c;
+    }
+return consensus;
+}
+#endif /* NEVER */
+
+void printSpacedDna(char *dna, int size)
+/* Print string with spaces between each letter. */
+{
+int i;
+printf("  ");
+for (i=0; i<size; ++i)
+     printf(" %c   ", dna[i]);
+}
+
+void printConsensus(struct dnaMotif *motif)
+/* Print motif - use bold caps for strong letters, then
+ * caps, then small letters, then .'s */
+{
+int i, size = motif->columnCount;
+char c;
+float best;
+printf("  ");
+for (i=0; i<size; ++i)
+    {
+    c = 'a';
+    best = motif->aProb[i];
+    if (motif->cProb[i] > best)
+       {
+       best = motif->cProb[i];
+       c = 'c';
+       }
+    if (motif->gProb[i] > best)
+       {
+       best = motif->gProb[i];
+       c = 'g';
+       }
+    if (motif->tProb[i] > best)
+       {
+       best = motif->tProb[i];
+       c = 't';
+       }
+    printf(" ");
+    if (best >= 0.90)
+	printf("<B>%c</B>", toupper(c));
+    else if (best >= 0.75)
+        printf("%c", toupper(c));
+    else if (best >= 0.50)
+        printf("%c", tolower(c));
+    else if (best >= 0.40)
+        printf("<FONT COLOR=\"#A0A0A0\">%c</FONT>", tolower(c));
+    else
+        printf("<FONT COLOR=\"#A0A0A0\">.</FONT>");
+    printf("   ");
+    }
+}
+
+void doTriangle(struct trackDb *tdb, char *item)
+/* Display detailed info on a regulatory triangle item. */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+char query[256];
+struct dnaSeq *seq = NULL;
+char *table = tdb->tableName;
+int rowOffset = hOffsetPastBin(seqName, table);
+struct sqlResult *sr;
+char **row;
+struct bed *hit = NULL;
+struct dnaMotif *motif;
+
+cartWebStart("Regulatory Triangle Info");
+genericBedClick(conn, tdb, item, start, 6);
+
+webNewSection("Motif:");
+sprintf(query, 
+	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    hit = bedLoadN(row + rowOffset, 6);
+sqlFreeResult(&sr);
+
+printf("<PRE>");
+if (hit != NULL)
+    {
+    int i;
+    seq = hDnaFromSeq(hit->chrom, hit->chromStart, hit->chromEnd, dnaLower);
+    if (hit->strand[0] == '-')
+       reverseComplement(seq->dna, seq->size);
+    touppers(seq->dna);
+    printSpacedDna(seq->dna, seq->size);
+    printf("sequence here\n");
+    }
+
+sprintf(query, "name = '%s'", item);
+motif = dnaMotifLoadWhere(conn, "dnaMotif", query);
+if (motif != NULL)
+    {
+    printConsensus(motif);
+    printf("motif consensus\n");
+    printProbRow("A", motif->aProb, motif->columnCount);
+    printProbRow("C", motif->cProb, motif->columnCount);
+    printProbRow("G", motif->gProb, motif->columnCount);
+    printProbRow("T", motif->tProb, motif->columnCount);
+    }
+printf("</PRE>");
+
 }
 
 void printLines(FILE *f, char *s, int lineSize)
@@ -6520,6 +6670,10 @@ else if( sameWord(track, "gcPercent"))
 else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
+    }
+else if (sameWord(track, "triangle"))
+    {
+    doTriangle(tdb, item);
     }
 else if (tdb != NULL)
    {
