@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.517 2003/05/15 00:16:44 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.518 2003/05/17 06:26:57 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9504,6 +9504,12 @@ else if (sameWord(type, "netAlign"))
 else if (sameWord(type, "maf"))
     {
     mafMethods(track);
+    }
+else if (sameWord(type, "axt"))
+    {
+    if (wordCount < 2)
+        errAbort("Expecting 2 words in axt track type for %s", tdb->tableName);
+    axtMethods(track, words[1]);
     }
 }
 
