@@ -245,6 +245,16 @@ else
     return queryNext(gpr);
 }
 
+struct genePred *genePredReaderAll(struct genePredReader* gpr)
+/* Read the all of genePreds */
+{
+struct genePred* gpList = NULL, *gp;
+while ((gp = genePredReaderNext(gpr)) != NULL)
+    slAddHead(&gpList, gp);
+slReverse(&gpList);
+return gpList;
+}
+
 void genePredReaderFree(struct genePredReader** gprPtr)
 /* Free the genePredRead object. */
 {

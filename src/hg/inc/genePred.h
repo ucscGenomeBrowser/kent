@@ -112,6 +112,12 @@ struct genePred *genePredExtLoad(char **row, int numCols, unsigned fields);
  * Present columns must be in the same order as the struct and there must be a
  * sufficient number of columns. Dispose of this with genePredFree(). */
 
+struct genePred *genePredExtLoadAll(char *fileName, unsigned fields);
+/* Load all genePreds with from tab-separated file, specifying the list of
+ * optional fields.  Present columns must be in the same order as the struct
+ * and there must be a sufficient number of columns. Dispose of this with
+ * genePredFreeList(). */
+
 char *genePredCdsStatStr(enum cdsStatus stat);
 /* get string value of a cdsStatus */
 

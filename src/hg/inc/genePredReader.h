@@ -32,6 +32,9 @@ struct genePredReader *genePredReaderFile(char* gpFile, unsigned optFields,
 struct genePred *genePredReaderNext(struct genePredReader* gpr);
 /* Read the next genePred, returning NULL if no more */
 
+struct genePred *genePredReaderAll(struct genePredReader* gpr);
+/* Read the all of genePreds */
+
 void genePredReaderFree(struct genePredReader** gprPtr);
 /* Free the genePredRead object. */
 

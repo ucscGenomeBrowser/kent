@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.19 2004/02/03 22:25:39 braney Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.20 2004/02/14 20:52:25 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -26,6 +26,7 @@ static struct optionSpec optionSpecs[] = {
     {"gtf", OPTION_BOOLEAN},
     {"predTab", OPTION_BOOLEAN},
     {"requireCDS", OPTION_BOOLEAN},
+    {"frame", OPTION_BOOLEAN},
     {"out", OPTION_STRING},
     {NULL, 0}
 };
@@ -44,56 +45,30 @@ errAbort(
     "     -predTab     input is already in genePredTab format\n"
     "     -requireCDS  discard genes that don't have CDS annotation\n"
     "     -out=gpfile  write output, in genePred format, instead of loading\n"
-    "                  table. Database is ignored.\n");
+    "                  table. Database is ignored.\n"
+    "     -frame       load frame information\n");
 }
 
-char *createString = 
-"CREATE TABLE %s ( \n"
-"   name varchar(255) not null,	# Name of gene \n"
-"   chrom varchar(255) not null,	# Chromosome name \n"
-"   strand char(1) not null,	# + or - for strand \n"
-"   txStart int unsigned not null,	# Transcription start position \n"
-"   txEnd int unsigned not null,	# Transcription end position \n"
-"   cdsStart int unsigned not null,	# Coding region start \n"
-"   cdsEnd int unsigned not null,	# Coding region end \n"
-"   exonCount int unsigned not null,	# Number of exons \n"
-"   exonStarts longblob not null,	# Exon start positions \n"
-"   exonEnds longblob not null,	# Exon end positions \n"
-          "   #Indices \n"
-"   INDEX(name(16)), \n"
-"   INDEX(chrom(8),txStart), \n"
-"   INDEX(chrom(8),txEnd) \n"
-")";
-
+boolean gFrame = FALSE;
 
 void loadIntoDatabase(char *database, char *table, char *tabName,
                       bool appendTbl)
 /* Load tabbed file into database table. Drop and create table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct dyString *ds = newDyString(2048);
-char comment[256];
 
 if (!appendTbl)
     {
-    dyStringPrintf(ds, createString, table);
-    sqlMaybeMakeTable(conn, table, ds->string);
-    dyStringClear(ds);
-    dyStringPrintf(ds, 
-       "truncate table %s", table);
-    sqlUpdate(conn, ds->string);
-    dyStringClear(ds);
+    unsigned optFields = gFrame ? (genePredCdsStatFld|genePredExonFramesFld) : 0;
+    char *createSql = genePredGetCreateSql(table,  optFields, 0);
+    sqlRemakeTable(conn, table, createSql);
+    freeMem(createSql);
     }
-dyStringPrintf(ds, 
-   "LOAD data local infile '%s' into table %s", tabName, table);
+sqlLoadTabFile(conn, tabName, table, SQL_TAB_FILE_WARN_ON_WARN);
 
-sqlUpdate(conn, ds->string);
-
-/* add a comment and ids to the history table and finish up connection */
-safef(comment, sizeof(comment), "Add gene predictions to %s table", table);
-hgHistoryComment(conn, comment);
+/* add a comment to the history table and finish up connection */
+hgHistoryComment(conn, "Add gene predictions to %s table", table);
 sqlDisconnect(&conn);
-freeDyString(&ds);
 }
 
 char *convertSoftberryName(char *name)
@@ -112,16 +87,15 @@ void ldHgGenePred(char *database, char *table, int gCount, char *gNames[])
 /* Load up database from a bunch of genePred files. */
 {
 char *tabName = "genePred.tab";
+unsigned optFields = gFrame ? (genePredCdsStatFld|genePredExonFramesFld) : 0;
 FILE *f;
 struct genePred *gpList = NULL, *gp;
 int i;
-char *fileName;
 
 for (i=0; i<gCount; ++i)
     {
-    fileName = gNames[i];
-    printf("Reading %s\n", fileName);
-    gpList = slCat(genePredLoadAll(gNames[i]), gpList);
+    printf("Reading %s\n", gNames[i]);
+    gpList = slCat(genePredExtLoadAll(gNames[i], optFields), gpList);
     }
 printf("%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);
@@ -147,7 +121,6 @@ void ldHgGene(char *database, char *table, int gtfCount, char *gtfNames[])
 struct gffFile *gff = gffFileNew("");
 struct gffGroup *group;
 int i;
-char *fileName;
 int lineCount;
 struct genePred *gpList = NULL, *gp;
 char *tabName = "genePred.tab";
@@ -161,9 +134,8 @@ boolean isSanger22 = sameWord("sanger22", table);
 
 for (i=0; i<gtfCount; ++i)
     {
-    fileName = gtfNames[i];
-    printf("Reading %s\n", fileName);
-    gffFileAdd(gff, fileName, 0);
+    printf("Reading %s\n", gtfNames[i]);
+    gffFileAdd(gff, gtfNames[i], 0);
     }
 lineCount = slCount(gff->lineList);
 printf("Read %d transcripts in %d lines in %d files\n", 
@@ -224,6 +196,8 @@ if (optionExists("exon") && optionExists("gtf"))
 exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
+gFrame = optionExists("frame");
+
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
 else

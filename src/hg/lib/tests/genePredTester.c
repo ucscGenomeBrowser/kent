@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.1 2004/02/14 10:36:58 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.2 2004/02/14 20:52:24 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -158,6 +158,7 @@ struct genePred* gp;
 int numRows = 0;
 char tabFile[PATH_LEN];
 FILE *tabFh;
+
 
 safef(tabFile, sizeof(tabFile), "genePred.%d.tmp", getpid());
 tabFh = mustOpen(tabFile, "w");

@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.27 2004/02/14 10:36:57 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.28 2004/02/14 20:52:24 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -39,15 +39,15 @@ static char *binFieldSql =
 
 static char *idFieldSql = 
 "    id int unsigned not null,"    /* Numeric id of gene annotation. */
-"    UNIQUE INDEX id,";
+"    PRIMARY KEY(id),";
 
 static char *name2FieldSql = 
 "   name2 varchar(255) not null,"    /* Secondary name. (e.g. name of gene) or NULL if not available */
 "   INDEX(name2(10)),";
 
 static char *cdsStatFieldSql = 
-"   cdsStartStat enum(none, incmpl, cmpl) not, null,"    /* Status of cdsStart annotation */
-"   cdsEndStat enum(none, incmpl, cmpl) not, null,";     /* Status of cdsEnd annotation */
+"   cdsStartStat enum('none', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
+"   cdsEndStat enum('none', 'incmpl', 'cmpl') not null,";     /* Status of cdsEnd annotation */
 
 static char *exonFramesFieldSql = 
 "    exonFrames longblob not null,";    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */
@@ -295,28 +295,32 @@ errAbort("invalid genePred cdsStatus: \"%s\"", statStr);
 return cdsNone;  /* make compiler happy */
 }
 
+static int calcNumCols(unsigned fields)
+/* calculate the expected number of columns based on the optional fields */
+{
+int numCols = GENEPRED_NUM_COLS;
+if (fields & genePredIdFld)
+    numCols++;
+if (fields & genePredName2Fld)
+    numCols++;
+if (fields & genePredCdsStatFld)
+    numCols += 2;
+if (fields & genePredExonFramesFld)
+    numCols++;
+return numCols;
+}
+
 struct genePred *genePredExtLoad(char **row, int numCols, unsigned fields)
 /* Load a genePred with from a row, specifying the list of optional fields.
  * Present columns must be in the same order as the struct and there must be a
  * sufficient number of columns. Dispose of this with genePredFree(). */
 {
 struct genePred *ret;
-int sizeOne,i, iCol;
-char *s;
-
-/* verify that there are enough columns */
-iCol = 10;
-if (fields & genePredIdFld)
-    iCol++;
-if (fields & genePredName2Fld)
-    iCol++;
-if (fields & genePredCdsStatFld)
-    iCol += 2;
-if (fields & genePredExonFramesFld)
-    iCol++;
-if (iCol > numCols)
+int sizeOne, iCol;
+int needNumCols = calcNumCols(fields);
+if (numCols < needNumCols)
     errAbort("not enough columns for genePred; needed %d, got %d",
-             iCol, numCols);
+             needNumCols, numCols);
 
 AllocVar(ret);
 ret->exonCount = sqlUnsigned(row[7]);
@@ -334,7 +338,7 @@ assert(sizeOne == ret->exonCount);
 
 ret->optFields = fields;
 
-iCol=10;
+iCol=GENEPRED_NUM_COLS;
 if (fields & genePredIdFld)
     ret->id = sqlUnsigned(row[iCol++]);
 if (fields & genePredName2Fld)
@@ -350,6 +354,28 @@ if (fields & genePredExonFramesFld)
     assert(sizeOne == ret->exonCount);
     }
 return ret;
+}
+
+struct genePred *genePredExtLoadAll(char *fileName, unsigned fields)
+/* Load all genePreds with from tab-separated file, specifying the list of
+ * optional fields.  Present columns must be in the same order as the struct
+ * and there must be a sufficient number of columns. Dispose of this with
+ * genePredFreeList(). */
+{
+struct genePred *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[GENEPREDX_NUM_COLS];
+int numCols;
+
+while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
+    {
+    lineFileExpectAtLeast(lf, calcNumCols(fields), numCols);
+    el = genePredExtLoad(row, numCols, fields);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 int genePredCmp(const void *va, const void *vb)
@@ -772,7 +798,7 @@ char *cdsStatFld = (extFields & genePredCdsStatFld) ? cdsStatFieldSql : "";
 char *exonFramesFld = (extFields & genePredExonFramesFld) ? exonFramesFieldSql : "";
 
 safef(sqlCmd, sizeof(sqlCmd), createSql, table,
-      binFld, idFld, name2Fld, cdsStatFld, exonFramesFieldSql);
+      binFld, idFld, name2Fld, cdsStatFld, exonFramesFld);
 
 return cloneString(sqlCmd);
 }

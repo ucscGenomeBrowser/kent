@@ -7,6 +7,7 @@ GENE_PRED_TESTER = ${BIN_DIR}/genePredTester
 EXP_DIR = expected/genePred
 OUT_DIR = output/genePred
 DB=hg16
+TEST_TBL=gpTest_${USER}
 
 
 # Data file used by tests:
@@ -20,7 +21,8 @@ DB=hg16
 #   - refSeqFrame.gp - with cdsStat and frame fields (from mrnaToGene)
 
 
-test: fileTests fromPslTests compatTblTests
+test: fileTests tableTests fromPslTests compatTblTests
+	hgsql -e "drop table ${TEST_TBL}" ${DB}
 
 ###
 # test of reading/writing tab-separated files.
@@ -43,7 +45,6 @@ fileIdName2Test:
 fileFrameTest:
 	${doFileTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
 
-
 # Recurisve target to run a file read/write test.  Will diff the output
 # with the input, which should be identical.
 # Expects the following variables to be set:
@@ -51,8 +52,44 @@ fileFrameTest:
 #  inGp - genePred (omitting dir)
 #  opts - genePredTester options to add
 doFileTest: mkout
-	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp readFile input/genePred/${inGp}
+	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp -info=${OUT_DIR}/${id}.info readFile input/genePred/${inGp}
 	diff -u input/genePred/${inGp} ${OUT_DIR}/${id}.gp
+	diff -u expected/genePred/${id}.info ${OUT_DIR}/${id}.info
+
+###
+# test of loading and reading database tables
+###
+tableTests: tableMinTest tableIdTest tableName2Test tableIdName2Test tableFrameTest
+doTableTest = ${MAKE} -f genePredTests.mk doTableTest
+
+tableMinTest:
+	${doTableTest} id=$@ inGp=refSeqMin.gp
+
+tableIdTest:
+	${doTableTest} id=$@ inGp=refSeqId.gp opts="-idFld"
+
+tableName2Test:
+	${doTableTest} id=$@ inGp=refSeqName2.gp opts="-name2Fld"
+
+tableIdName2Test:
+	${doTableTest} id=$@ inGp=refSeqIdName2.gp opts="-idFld -name2Fld"
+
+tableFrameTest:
+	${doTableTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
+
+
+# Recurisve target to run a table read/write test.  Will diff the output
+# with the input, which should be identical.
+# Expects the following variables to be set:
+#  id - test id
+#  inGp - genePred (omitting dir)
+#  opts - genePredTester options to add
+doTableTest: mkout
+	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp loadTable ${DB} ${TEST_TBL} input/genePred/${inGp}
+	${GENE_PRED_TESTER} ${opts} -needRows=5 -output=${OUT_DIR}/${id}.gp -info=${OUT_DIR}/${id}.info readTable ${DB} ${TEST_TBL}
+	diff -u input/genePred/${inGp} ${OUT_DIR}/${id}.gp
+	diff -u expected/genePred/${id}.info ${OUT_DIR}/${id}.info
+
 
 ###
 # test of genePredFromPsl2 with various various optional fields
@@ -77,7 +114,7 @@ doFromPslTest: mkout
 	diff -u ${EXP_DIR}/${id}.gp ${OUT_DIR}/${id}.gp
 
 
-# tests of reading existing tables; thse don't diff output, since tables
+# tests of reading existing tables; these don't diff output, since tables
 # are not stable, but at least see if we can read them
 compatTblTests: refFlatTest refGeneTest knownGeneTest
 doCompatTblTest = ${MAKE} -f genePredTests.mk doCompatTblTest
@@ -92,7 +129,7 @@ knownGeneTest:
 # recursive target to read table
 # id, tbl
 doCompatTblTest: mkout
-	${GENE_PRED_TESTER} -maxRows=1000 -info=${OUT_DIR}/${id}.info readTable ${DB} ${tbl}
+	${GENE_PRED_TESTER} -maxRows=1000 -needRows=1000 -info=${OUT_DIR}/${id}.info readTable ${DB} ${tbl}
 	diff -u ${EXP_DIR}/${id}.info ${OUT_DIR}/${id}.info
 
 
