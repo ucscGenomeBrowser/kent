@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.14 2004/04/13 17:46:13 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.15 2004/04/19 02:21:02 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -58,18 +58,19 @@ ret->label = sqlUnsigned(row[33]);
 ret->milliBad = sqlUnsigned(row[34]);
 ret->oldScore = sqlUnsigned(row[35]);
 ret->oldIntronCount = sqlSigned(row[36]);
-ret->intronScores = cloneString(row[37]);
-ret->axtScore = sqlSigned(row[38]);
-ret->refSeq = cloneString(row[39]);
-ret->rStart = sqlSigned(row[40]);
-ret->rEnd = sqlSigned(row[41]);
-ret->mgc = cloneString(row[42]);
-ret->mStart = sqlSigned(row[43]);
-ret->mEnd = sqlSigned(row[44]);
-ret->kgName = cloneString(row[45]);
-ret->kStart = sqlSigned(row[46]);
-ret->kEnd = sqlSigned(row[47]);
-ret->kgId = sqlSigned(row[48]);
+ret->conservedIntrons = sqlSigned(row[37]);
+ret->intronScores = cloneString(row[38]);
+ret->axtScore = sqlSigned(row[39]);
+ret->refSeq = cloneString(row[40]);
+ret->rStart = sqlSigned(row[41]);
+ret->rEnd = sqlSigned(row[42]);
+ret->mgc = cloneString(row[43]);
+ret->mStart = sqlSigned(row[44]);
+ret->mEnd = sqlSigned(row[45]);
+ret->kgName = cloneString(row[46]);
+ret->kStart = sqlSigned(row[47]);
+ret->kEnd = sqlSigned(row[48]);
+ret->kgId = sqlSigned(row[49]);
 return ret;
 }
 
@@ -79,7 +80,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[49];
+char *row[50];
 
 while (lineFileRow(lf, row))
     {
@@ -97,7 +98,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[49];
+char *row[50];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -170,6 +171,7 @@ ret->label = sqlUnsignedComma(&s);
 ret->milliBad = sqlUnsignedComma(&s);
 ret->oldScore = sqlUnsignedComma(&s);
 ret->oldIntronCount = sqlSignedComma(&s);
+ret->conservedIntrons = sqlSignedComma(&s);
 ret->intronScores = sqlStringComma(&s);
 ret->axtScore = sqlSignedComma(&s);
 ret->refSeq = sqlStringComma(&s);
@@ -328,6 +330,8 @@ fputc(sep,f);
 fprintf(f, "%u", el->oldScore);
 fputc(sep,f);
 fprintf(f, "%d", el->oldIntronCount);
+fputc(sep,f);
+fprintf(f, "%d", el->conservedIntrons);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->intronScores);

@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 49
+#define PSEUDOGENELINK_NUM_COLS 50
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -48,6 +48,7 @@ struct pseudoGeneLink
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome */
     unsigned oldScore;	/* another heuristic */
     int oldIntronCount;	/* old simple intron count */
+    int conservedIntrons;	/* conserved intron count */
     char *intronScores;	/* Intron sizes in gene/pseudogene */
     int axtScore;	/* blastz score, gene mrna aligned to pseudogene */
     char *refSeq;	/* Name of closest regSeq to gene */

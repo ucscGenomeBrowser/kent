@@ -38,6 +38,7 @@ table pseudoGeneLink
     uint milliBad;      "milliBad score, pseudogene aligned to genome"
     uint oldScore;      "another heuristic"
     int oldIntronCount; "old simple intron count"
+    int conservedIntrons; "conserved intron count"
     string intronScores; "Intron sizes in gene/pseudogene"
     int axtScore;       "blastz score, gene mrna aligned to pseudogene"
     string refSeq;	"Name of closest regSeq to gene"

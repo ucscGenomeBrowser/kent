@@ -43,6 +43,7 @@ CREATE TABLE pseudoGeneLink (
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome
     oldScore int unsigned not null,	# another heuristic
     oldIntronCount int not null,	# old simple intron count
+    conservedIntrons int not null,	# conserved intron count
     intronScores varchar(255) not null,	# Intron sizes in gene/pseudogene
     axtScore int not null,	# blastz score, gene mrna aligned to pseudogene
     refSeq varchar(255) not null,	# Name of closest regSeq to gene
@@ -54,7 +55,7 @@ CREATE TABLE pseudoGeneLink (
     kgName varchar(255) not null,	# Name of closest knownGene to gene
     kStart int not null,	# kg alignment start position
     kEnd int not null,	# kg alignment end position
-    kgId int not null,	# kg id
+    kgId int ,	# kg id
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
     INDEX (name(8))
