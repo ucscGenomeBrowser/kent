@@ -160,6 +160,7 @@ DIRS = \
 	ooSplitFins \
 	ooTester \
 	ooWeedZero \
+	pairedReads \
 	patCount \
 	psLayout \
 	pslCat \
