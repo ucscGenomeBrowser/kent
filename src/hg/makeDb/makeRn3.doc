@@ -661,16 +661,17 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
     rm upstream5000.fa
 
 
-XXXXXXXXX  Currently stuck on this one 2003-07-09 - the lineage specific
-XXXXXXXXX  repeats business is now different.
-XXXXXXXXX  Trying to work the kinks out of that.
-PREPARE CLUSTER FOR BLASTZ RUN (NOT DONE - 2003-06-27 - Hiram)
+# PREPARE CLUSTER FOR BLASTZ RUN (IN PROGRESS - 2003-07-10 - kate)
     # This needs to be done after trf-masking and nib generation.
 
     # NOTE: generated lineage-specific .out files
     # using "old" script, for use vs. human 
     # Will need species-specific version for mouse 
     # 2003-07-09 kate
+    # Before mouse run:
+    # XXXXXXXXX  Currently stuck on this one 2003-07-09 - the lineage specific
+    # XXXXXXXXX  repeats business is now different.
+    # XXXXXXXXX  Trying to work the kinks out of that. Hiram
     ssh kkstore
     # Extract lineage-specific repeats using Arian Smit's script:
     mkdir -p ~/rn3/bed/linSpecRep
@@ -714,6 +715,147 @@ PREPARE CLUSTER FOR BLASTZ RUN (NOT DONE - 2003-06-27 - Hiram)
     # get out of having to run the inverse of 1,2 & 3,  though
     # 2 in particular is so fast perhaps it's just as well to
     # do the inverse explicitly.
+
+
+# SWAPPING HUMAN-RAT BLASTZ ALIGNMENTS TO RAT-HUMAN (IN PROGRESS 2003-07-11 kate)
+    ssh kkstore
+    # Human-rat alignments were already run and processed into axt.  
+    # Swap target and query to get rat-human alignments.  
+    set aliDir = "/cluster/data/hg15/bed/blastz.rn3"
+    set revAliDir = "/cluster/data/rn3/bed/blastz.hg15.swap"
+    mkdir $revAliDir
+    cd $revAliDir
+    # axtBest will need .len files - copy those, swap S1<->S2
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    # Swap target and query coords, then re-apportion alignments so that 
+    # unsorted/chrN.axt has all the alignments with chrN as target.
+    cat $aliDir/axtChrom/chr*.axt \
+    | /cluster/bin/i386/axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | /cluster/bin/i386/axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    rm -r unsorted
+
+    # Create psl from sorted axt
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.hg15.swap
+    set tbl = "blastzHg15"
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # load blastz results
+    ssh hgwdev
+    cd /cluster/data/rn3/bed
+    mv blastz.hg15.swap blastz.hg15
+    cd blastz.hg15
+    cd pslChrom
+    /cluster/bin/i386/hgLoadPsl rn3 chr*_*.psl
+    # create trackDb/rat/rn3/trackDb.ra entry:
+# track blastzHg15
+# shortLabel BLASTZ Human
+# longLabel All BLASTZ Human alignments
+# group compGeno
+# priority 111
+# visibility hide
+# color 100,50,0
+# altColor 255,240,200
+# spectrum on
+# type psl xeno hg15
+
+
+# MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN3 AXT FILES (TO DO)
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    set base="/cluster/store3/rn3/bed/blastz.hg13.2003-03-13-SWAP"
+    set seq1_dir="/cluster/store3/rn3/mixedNib/"
+    set seq2_dir="/cluster/store3/gs.14/build31/mixedNib/"
+    set tbl="blastzBestHg13"
+    cd $base
+    mkdir -p axtBest pslBest
+    foreach f (axtChrom/chr*.axt)
+      set chr=$f:t:r
+      echo axtBesting $chr
+      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      echo translating axtBest to psl for $chr
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+    # If some chromosome's alignments were too big and caused axtSort to 
+    # run out of memory, split it in half (by 4-line axt records) and 
+    # run axtBest just on the halves.  
+    foreach chr (chr1)
+      echo two-pass axtBesting $chr
+      set len = `wc -l < axtChrom/$chr.axt`
+      set numRec = `expr $len / 4`
+      if (($numRec * 4) != $len) then
+        echo "Uh-oh: length of axtChrom/$chr.axt is $len, not a multiple of 4"
+        break
+      endif
+      set halfRec   = `expr $numRec / 2`
+      set halfLen   = `expr $halfRec \* 4`
+      set halfLenp1 = `expr $halfLen + 1`
+      head -$halfLen   axtChrom/$chr.axt > axtChrom/$chr.h0.axt
+      tail +$halfLenp1 axtChrom/$chr.axt > axtChrom/$chr.h1.axt
+      axtBest axtChrom/$chr.h0.axt $chr axtChrom/$chr.h0.axtBest -minScore=300
+      axtBest axtChrom/$chr.h1.axt $chr axtChrom/$chr.h1.axtBest -minScore=300
+      cat axtChrom/$chr.h{0,1}.axtBest > axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+      rm axtChrom/$chr.h*
+    end
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/store3/rn3/bed/blastz.hg13.2003-03-13-SWAP"
+     set tbl="blastzBestHg13"
+     cd $base/pslBest
+     hgLoadPsl rn3 chr*_${tbl}.psl
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/rn3/axtBestHg13
+     cd /gbdb/rn3/axtBestHg13
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/rn3/axtBestHg13/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo VALUES ('hg13','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql rn3 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql rn3 < axtInfoInserts.sql
+
+# MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TO DO)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kkstore
+    cd ~/rn3/bed/blastz.hg13.2003-03-13-SWAP/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightHg13.psl
+    end
+    # Load tables into database
+    ssh hgwdev
+    cd ~/rn3/bed/blastz.hg13.2003-03-13-SWAP/pslTight
+    hgLoadPsl rn3 chr*_blastzTightHg13.psl
+
 
 AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
 
@@ -856,120 +998,6 @@ PRODUCING GENSCAN PREDICTIONS (DONE - 2003-07-09 - Hiram)
     ldHgGene rn3 genscan genscan.gtf
     hgPepPred rn3 generic genscanPep genscan.pep
     hgLoadBed rn3 genscanSubopt genscanSubopt.bed
-
-
-SWAPPING HUMAN-RAT BLASTZ ALIGNMENTS TO RAT-HUMAN: (TO DO)
-
-    ssh kkstore
-    # Human-rat alignments were already run and processed into axt.  
-    # Swap target and query to get rat-human alignments.  
-    set aliDir = "/cluster/store3/gs.14/build31/bed/blastz.rn3.2003-03-13-ASH"
-    set revAliDir = "/cluster/store3/rn3/bed/blastz.hg13.2003-03-13-SWAP"
-    mkdir $revAliDir
-    cd $revAliDir
-    # axtBest will need .len files - copy those, swap S1<->S2
-    cp $aliDir/S1.len S2.len
-    cp $aliDir/S2.len S1.len
-    mkdir unsorted axtChrom
-    # Swap target and query coords, then re-apportion alignments so that 
-    # unsorted/chrN.axt has all the alignments with chrN as target.
-    cat $aliDir/axtChrom/chr*.axt \
-    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
-    | axtSplitByTarget stdin unsorted
-    # Sorted the shuffled .axt files.
-    foreach f (unsorted/*.axt)
-      echo sorting $f:t:r
-      axtSort $f axtChrom/$f:t
-    end
-    rm -r unsorted
-    # Don't bother creating psl for these unfiltered alignments -- but 
-    # tell Jim so he can do chaining/netting.
-
-
-MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN3 AXT FILES (TO DO)
-
-    # Consolidate AXT files to chrom level, sort, pick best, make psl.
-    ssh kkstore
-    set base="/cluster/store3/rn3/bed/blastz.hg13.2003-03-13-SWAP"
-    set seq1_dir="/cluster/store3/rn3/mixedNib/"
-    set seq2_dir="/cluster/store3/gs.14/build31/mixedNib/"
-    set tbl="blastzBestHg13"
-    cd $base
-    mkdir -p axtBest pslBest
-    foreach f (axtChrom/chr*.axt)
-      set chr=$f:t:r
-      echo axtBesting $chr
-      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
-      echo translating axtBest to psl for $chr
-      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
-    end
-    # If some chromosome's alignments were too big and caused axtSort to 
-    # run out of memory, split it in half (by 4-line axt records) and 
-    # run axtBest just on the halves.  
-    foreach chr (chr1)
-      echo two-pass axtBesting $chr
-      set len = `wc -l < axtChrom/$chr.axt`
-      set numRec = `expr $len / 4`
-      if (($numRec * 4) != $len) then
-        echo "Uh-oh: length of axtChrom/$chr.axt is $len, not a multiple of 4"
-        break
-      endif
-      set halfRec   = `expr $numRec / 2`
-      set halfLen   = `expr $halfRec \* 4`
-      set halfLenp1 = `expr $halfLen + 1`
-      head -$halfLen   axtChrom/$chr.axt > axtChrom/$chr.h0.axt
-      tail +$halfLenp1 axtChrom/$chr.axt > axtChrom/$chr.h1.axt
-      axtBest axtChrom/$chr.h0.axt $chr axtChrom/$chr.h0.axtBest -minScore=300
-      axtBest axtChrom/$chr.h1.axt $chr axtChrom/$chr.h1.axtBest -minScore=300
-      cat axtChrom/$chr.h{0,1}.axtBest > axtBest/$chr.axt
-      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
-      rm axtChrom/$chr.h*
-    end
-
-    # Load tables
-     ssh hgwdev
-     set base="/cluster/store3/rn3/bed/blastz.hg13.2003-03-13-SWAP"
-     set tbl="blastzBestHg13"
-     cd $base/pslBest
-     hgLoadPsl rn3 chr*_${tbl}.psl
-
-    # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/rn3/axtBestHg13
-     cd /gbdb/rn3/axtBestHg13
-     foreach f ($base/axtBest/chr*.axt)
-       ln -s $f .
-     end
-     cd $base/axtBest
-     rm -f axtInfoInserts.sql
-     touch axtInfoInserts.sql
-     foreach f (/gbdb/rn3/axtBestHg13/chr*.axt)
-       set chr=$f:t:r
-       echo "INSERT INTO axtInfo VALUES ('hg13','Blastz Best in Genome','$chr','$f');" \
-         >> axtInfoInserts.sql
-     end
-     hgsql rn3 < ~/kent/src/hg/lib/axtInfo.sql
-     hgsql rn3 < axtInfoInserts.sql
-
-MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TO DO)
-    # After creating axtBest alignments above, use subsetAxt to get axtTight:
-    ssh kkstore
-    cd ~/rn3/bed/blastz.hg13.2003-03-13-SWAP/axtBest
-    mkdir -p ../axtTight
-    foreach i (*.axt)
-      subsetAxt  $i ../axtTight/$i \
-        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
-    end
-    # translate to psl
-    cd ../axtTight
-    mkdir -p ../pslTight
-    foreach i (*.axt)
-      set c = $i:r
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightHg13.psl
-    end
-    # Load tables into database
-    ssh hgwdev
-    cd ~/rn3/bed/blastz.hg13.2003-03-13-SWAP/pslTight
-    hgLoadPsl rn3 chr*_blastzTightHg13.psl
 
 
 TWINSCAN GENE PREDICTIONS (TO DO)
