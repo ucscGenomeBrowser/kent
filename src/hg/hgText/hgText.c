@@ -30,7 +30,7 @@
 #include "hgColors.h"
 #include "tableDescriptions.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.104 2003/11/08 00:35:18 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.105 2003/12/11 00:49:30 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2299,7 +2299,8 @@ char *track = getTrackName();
 int fields;
 int i, totalCount;
 
-checkTableExists(fullTableName);
+if (! tableExists(fullTableName, db))
+    return NULL;
 constraints = constrainFields(NULL);
 if (ignoreConstraints ||
     ((constraints != NULL) && (constraints[0] == 0)))
@@ -2315,6 +2316,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     bedListChrom = NULL;
     getFullTableName(fullTableName, chromPtr->name, table);
+    if (! tableExists(fullTableName, db))
+	continue;
     if (sameString(customTrackPseudoDb, db))
 	{
 	struct customTrack *ct = lookupCt(table);
@@ -2323,8 +2326,10 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 					 chrom, winStart, winEnd);
 	}
     else
+	{
 	bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
 				   winEnd, constraints);
+	}
     bedFilterBatch(&bedListT1);
     /* If 2 tables are named, get their intersection. */
     if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
@@ -2359,8 +2364,9 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 		table2, constraints2,
 		op, moreThresh, lessThresh, invTable, invTable2);
 	getFullTableName(fullTableName2, chromPtr->name, table2);
-	checkTable2Exists(fullTableName2);
-	if (sameString(customTrackPseudoDb, db2))
+	if (! tableExists(fullTableName2, db2))
+	    fbListT2 = NULL;
+	else if (sameString(customTrackPseudoDb, db2))
 	    {
 	    struct customTrack *ct2 = lookupCt(table2);
 	    struct bedFilter *bf2 = constrainBedFields("2");
@@ -3064,6 +3070,8 @@ if (tableIsSplit)
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
 	getFullTableName(fullTableName, chromPtr->name, table);
+	if (! sqlTableExists(conn, fullTableName))
+	    continue;
 	dyStringClear(query);
 	dyStringPrintf(query, "SELECT %s FROM %s",
 		       fieldSpec->string, fullTableName);
@@ -4603,6 +4611,8 @@ conn = hAllocOrConnect(db);
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
     {
     getFullTableName(fullTableName, chromPtr->name, table);
+    if (! sqlTableExists(conn, fullTableName))
+	continue;
     dyStringClear(query);
     if (isBatch() && hti->nameField[0] != 0)
 	{
