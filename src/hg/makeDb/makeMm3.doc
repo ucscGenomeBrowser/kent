@@ -1,3 +1,900 @@
+# This file describes how we made the browser database on the mouse
+# genome, February 2003 build.
+
+DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 02/06/03)
+    mkdir -p /cluster/store2/mm.2003.02/ncbi
+    cd /cluster/store2/mm.2003.02/ncbi
+    mkdir chrfasta contigfasta
+    ftp ftp.ncbi.nih.gov
+      # user hgpguest, password from /cse/guests/kent/buildHg6.doc
+      cd cd mouse_30
+      prompt
+      bin
+      mget *
+      quit
+    gunzip *.agp.gz
+
+BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 02/06/03)
+
+    # This version of the mouse sequence data is in 
+    # /cluster/store2/mm.2003.02/mm3/assembly
+    # This will split the mouse sequence into approx. 5 Mbase supercontigs 
+    # between non-bridged clone contigs and drop the resulting dir structure 
+    # in /cluster/store2/mm.2003.02/mm3.
+    # The resulting dir structure will include 1 dir for each chromosome, 
+    # each of which has a set of subdirectories, one subdir per supercontig. 
+    ssh hgwdev
+    # cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
+    make
+    ssh kkstore
+    mkdir /cluster/store2/mm.2003.02/mm3
+    cd /cluster/store2/mm.2003.02/mm3
+    # splitFaIntoContigs doesn't do right with agp lines arriving in a 
+    # different order than fasta chrom sequences.  so split up the agp 
+    # into one per chrom.
+    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y Un )
+      mkdir $c
+      perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+        ../ncbi/allrefcontig.chr.agp \
+        > $c/chr$c.agp
+    end
+    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y Un )
+      gunzip -c /cluster/store2/mm.2003.02/ncbi/chrfasta/chr$c.fa.gz \
+        | perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' \
+        | splitFaIntoContigs $c/chr$c.agp \
+          stdin /cluster/store2/mm.2003.02/mm3 -nSize=5000000
+    end
+
+
+CREATING DATABASE (DONE 02/06/03)
+
+o - Create the database.
+     - ssh hgwdev
+     - Enter mysql via:
+           mysql -u hgcat -pbigsecret
+     - At mysql prompt type:
+        create database mm3;
+        quit
+     - make a semi-permanent read-only alias:
+        alias mm3 "mysql -u hguser -phguserstuff -A mm3"
+o - Use df to ake sure there is at least 5 gig free on hgwdev:/var/lib/mysql
+
+
+CREATING GRP TABLE FOR TRACK GROUPING (DONE 02/11/03)
+    ssh hgwdev
+    echo "create table grp (PRIMARY KEY(NAME)) select * from mm2.grp" \
+      | hgsql mm3
+
+
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 02/06/03)
+
+    # Create (unmasked) nib files 
+    ssh kkstore
+    cd ~/mm
+    mkdir -p nib
+    foreach c (?{,?}/chr*.fa)
+        echo $f:t:r
+        faToNib $f nib/$f:t:r.nib
+      end
+    end
+    # Create symbolic links from /gbdb/mm3/nib to real nib files
+    ssh hgwdev
+    mkdir -p /gbdb/mm3/nib
+    foreach f (/cluster/store2/mm.2003.02/mm3/nib/chr*.nib)
+      ln -s $f /gbdb/mm3/nib
+    end
+
+    # Load /gbdb nib paths into database and save size info.
+    ssh hgwdev
+    hgsql mm3  < ~/src/hg/lib/chromInfo.sql
+    cd ~/mm
+    hgNibSeq -preMadeNib mm3 /gbdb/mm3/nib ?/chr*.fa ??/chr*.fa 
+    echo "select chrom,size from chromInfo" | hgsql -N mm3 > chrom.sizes
+
+Store o+o info in database.
+     cd /cluster/store2/mm.2003.02/mm3
+     hgGoldGapGl mm3 /cluster/store2/mm.2003.02 mm3 -noGl
+
+Make and load GC percent table
+     ssh hgwdev
+     mkdir -p /cluster/store2/mm.2003.02/mm3/bed/gcPercent
+     cd /cluster/store2/mm.2003.02/mm3/bed/gcPercent
+     hgsql mm3  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent mm3 ../../nib
+
+
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM3 (DONE 02/06/03)
+    # Enter mm3 into hgcentraltest.dbDb so test browser knows about it:
+    mysql -h genome-testdb -u root -pbigSecret -A hgcentraltest
+      insert into dbDb values("mm3", "Mouse Feb. 2003",
+        "/gbdb/mm3/nib", "Mouse", "Bard1", 1,
+        30, "Mouse");
+      quit
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add mm3 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM3 (TODO)
+    ssh hgwdev
+    mysql -h genome-testdb -u hgcat -pBIGSECRET -A hgcentraltest
+      insert into blatServers values("mm3", "blat?", "17778", "1");
+      insert into blatServers values("mm3", "blat?", "17779", "0");
+      quit
+
+
+REPEAT MASKING (DONE 02/07/03)
+   Split contigs, run RepeatMasker, lift results
+   Notes: 
+   * If there is a new version of RepeatMasker, build it and ask the admins 
+     to binrsync it (kkstore:/scratch/hg/RepeatMasker/*).
+   * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
+     RepeatMasker runs manageable on the cluster ==> results need lifting.
+   * For the NCBI assembly we repeat mask on the sensitive mode setting
+     (RepeatMasker -m -s)
+
+        #- Split contigs into 500kb chunks:
+        cd ~/mm3
+        foreach d ( */chr*_?{,?} )
+          cd $d
+          set contig = $d:t
+          faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -maxN=500000
+          cd ../..
+        end
+
+        #- Make the run directory and job list:
+        cd ~/mm3
+        mkdir RMRun
+        rm -f RMRun/RMJobs
+        touch RMRun/RMJobs
+        foreach d ( ?{,?}/chr*_?{,?} )
+          foreach f ( $d/chr*_*_*.fa )
+            set f = $f:t
+            echo /cluster/bin/scripts/RMMouse \
+                 /cluster/store2/mm.2003.02/mm3/$d $f \
+               '{'check out line+ /cluster/store2/mm.2003.02/mm3/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+        end
+
+        #- Do the run
+        ssh kk
+        cd ~/mm3/RMRun
+        para create RMJobs
+        para try, para check, para check, para push, para check,...
+
+        #- Lift up the split-contig .out's to contig-level .out's
+	ssh kkstore
+        cd ~/mm3
+        foreach d ( ?{,?}/chr*_?{,?} )
+          cd $d
+          set contig = $d:t
+          liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
+          cd ../..
+        end
+
+        #- Lift up the contig-level .out's to chr-level
+        cd ~/mm3
+        ./jkStuff/liftOut5.sh
+
+        #- Load the .out files into the database with:
+        ssh hgwdev
+        cd ~/mm3
+        hgLoadOut mm3 ?/*.fa.out ??/*.fa.out
+Strange perc. field -0.3 line 35355 of 7/chr7.fa.out
+Strange perc. field -3.6 line 35355 of 7/chr7.fa.out
+Strange perc. field -0.3 line 35359 of 7/chr7.fa.out
+Strange perc. field -3.6 line 35359 of 7/chr7.fa.out
+Strange perc. field -0.3 line 35361 of 7/chr7.fa.out
+Strange perc. field -3.6 line 35361 of 7/chr7.fa.out
+7/chr7_4/chr7_4_04.fa.out:  865  -0.3 44.1 -3.6  chr7_4_04  363507 363581 (136419) +  ZP3AR_MM       Satellite                  1   39  (359) 1188  
+7/chr7_4/chr7_4_04.fa.out:  865  -0.3 44.1 -3.6  chr7_4_04  363666 363717 (136283) +  ZP3AR_MM       Satellite                 39   65  (333) 1188  
+7/chr7_4/chr7_4_04.fa.out:  865  -0.3 44.1 -3.6  chr7_4_04  363760 363776 (136224) +  ZP3AR_MM       Satellite                 65  398    (0) 1188  
+VERIFY REPEATMASKER RESULTS (IN PROGRESS)
+
+    # Run featureBits on mm3 and on a comparable genome build, and compare:
+    ssh hgwdev
+    featureBits mm3 rmsk
+    # --> 1001999794 bases of 2577261074 (38.878%) in intersection
+    featureBits mm2 rmsk
+    # --> 1037964664 bases of 2726995854 (38.063%) in intersection
+
+
+MAKE LIFTALL.LFT (DONE 02/06/03)
+
+    cd ~/mm3
+    cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
+
+SIMPLE REPEAT TRACK (DONE 02/07/03)
+    # TRF runs pretty quickly now... it takes a few hours total runtime.
+    # Also, it ignores masking of input sequence, so this can be run in 
+    # parallel with RepeatMasker!
+    # So instead of binrsyncing and para-running, just do this on kkstore:
+    ssh kkstore
+    mkdir ~/mm3/bed/simpleRepeat
+    cd ~/mm3/bed/simpleRepeat
+    mkdir trf
+    rm -f jobs.csh
+    touch jobs.csh
+    foreach f (/cluster/store2/mm.2003.02/mm3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa)
+      set fout = $f:t:r.bed
+      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    tcsh jobs.csh |& tee jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    # When job is done do:
+    liftUp simpleRepeat.bed ~/mm3/jkStuff/liftAll.lft warn trf/*.bed
+
+    # Load this into the database as so
+    ssh hgwdev
+    cd ~/mm3/bed/simpleRepeat
+    hgLoadBed mm3 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+PROCESS SIMPLE REPEATS INTO MASK (DONE 02/07/03)
+
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh kkstore
+    cd ~/mm3/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd ~/mm3
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c (?{,?})
+      perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+        $c/lift/ordered.lst > $c/lift/oTrf.lst
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+      endif
+      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+        jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      if (-e $c/lift/rTrf.lst) then
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+
+MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 02/09/03)
+    ssh kkstore
+    cd ~/mm3
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    tcsh jkStuff/makeFaMasked.sh
+    #- Make hard-masked .fa.masked files as well:
+    tcsh jkStuff/makeHardMasked.sh
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    tcsh jkStuff/makeNib.sh
+    # Copy the masked contig fa to /scratch:
+    rm -f /scratch/hg/mm3/trfFa
+    mkdir -p /scratch/hg/mm3/trfFa
+    cp -p ~/mm3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /scratch/hg/mm3/trfFa
+
+
+MAKE DOWNLOADABLE SEQUENCE FILES (DONE 02/09/03)
+    ssh kkstore
+    cd ~/mm3
+    #- Build the .zip files
+    jkStuff/zipAll.sh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd ~/mm3
+    ./jkStuff/cpToWeb.sh
+    cd /usr/local/apache/htdocs/goldenPath/mmFeb2003
+    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+
+PREPARE CLUSTER FOR BLASTZ RUN (DONE 02/07/03)
+    # This needs to be done after trf-masking and nib generation.
+    ssh kkstore
+    # Extract lineage-specific repeats using Arian Smit's script:
+    mkdir -p ~/mm3/bed/linSpecRep
+    cd ~/mm3/bed/linSpecRep
+    foreach f (~/mm3/*/*.out)
+        ln -sf $f .
+    end
+    /cluster/bin/scripts/rodentSpecificRepeats.pl *.out
+    /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
+    /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
+    rm *.out
+    cd ..
+    rm -rf /scratch/hg/mm3/linSpecRep
+    mkdir -p /scratch/hg/mm3
+    cp -Rp linSpecRep /scratch/hg/mm3
+    # RepeatMasker .out:
+    cd ~/mm3
+    rm -rf /scratch/hg/mm3/rmsk
+    mkdir -p /scratch/hg/mm3/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /scratch/hg/mm3/rmsk
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /scratch/hg/mm3/chromTrfMixedNib
+    mkdir -p /scratch/hg/mm3/chromTrfMixedNib
+    cp -p mixedNib/chr*.nib /scratch/hg/mm3/chromTrfMixedNib
+    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+
+    # Jim's comments Feb 12 '03 about the order in which to run blastz:
+    # In general we should do
+    # 1) hg/mm
+    # 2) mm/rn
+    # 3) rn/hg
+    # 4) hg/hg
+    # 5) mm/mm
+    # 6) rn/rn
+    # There is now an 'axtSwap' program that might let us
+    # get out of having to run the inverse of 1,2 & 3,  though
+    # 2 in particular is so fast perhaps it's just as well to
+    # do the inverse explicitly.
+
+
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 02/09/03)
+
+    # Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
+    # from /cluster/store2/mrna.133  into /scratch/hg/mrna.133
+    # Make sure that /scratch/hg/mm3/trfFa is loaded with chr*_*.fa and pushed 
+    # to the cluster nodes.
+    ssh kk
+    cd ~/mm/bed
+    foreach i (refSeq mrna est)
+      mkdir $i
+      cd $i
+      ls -1S /mnt/scratch/hg/mm3/trfFa/*.fa > genome.lst
+      ls -1 /mnt/scratch/hg/mrna.133/Mus_musculus/$i.fa > mrna.lst
+      cp -p ~/lastMm/bed/$i/gsub .
+      mkdir psl
+      gensub2 genome.lst mrna.lst gsub spec
+      para create spec
+      cd ..
+    end 
+
+    # In each dir: para try, para check, para push, para check....
+      
+    # Process refSeq mRNA and EST alignments into near best in genome.
+    ssh kkstore
+    cd ~/mm/bed
+
+      cd refSeq
+      pslSort dirs raw.psl /cluster/store2/tmp psl
+      pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
+      liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft warn contig.psl
+      pslSortAcc nohead chrom /cluster/store2/tmp all_refSeq.psl
+      pslCat -dir chrom > refSeqAli.psl
+      cd ..
+
+      cd mrna
+      pslSort dirs raw.psl /cluster/store2/tmp psl
+      pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
+      liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft warn contig.psl
+      pslSortAcc nohead chrom /cluster/store2/tmp all_mrna.psl
+      cd ..
+
+      cd est
+      pslSort dirs raw.psl /cluster/store2/tmp psl
+      pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
+      liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft warn contig.psl
+      pslSortAcc nohead chrom /cluster/store2/tmp all_est.psl
+      cd ..
+
+    # Load refSeq alignments into database
+      ssh hgwdev
+      cd ~/mm/bed/refSeq
+      hgLoadPsl mm3 -tNameIx refSeqAli.psl
+
+    # Load mRNA alignments into database.
+      ssh hgwdev
+      cd ~/mm/bed/mrna/chrom
+      foreach i (*.psl)
+          mv $i $i:r_mrna.psl
+      end
+      hgLoadPsl mm3 *.psl
+      cd ..
+      hgLoadPsl mm3 all_mrna.psl -nobin
+
+    # Load EST alignments into database.
+      ssh hgwdev
+      cd ~/mm/bed/est/chrom
+      foreach i (*.psl)
+            mv $i $i:r_est.psl
+      end
+      hgLoadPsl mm3 *.psl
+      cd ..
+      hgLoadPsl mm3 all_est.psl -nobin
+
+    # Create subset of ESTs with introns and load into database.
+      - ssh kkstore
+      cd ~/mm
+      tcsh jkStuff/makeIntronEst.sh
+      - ssh hgwdev
+      cd ~/mm/bed/est/intronEst
+      hgLoadPsl mm3 *.psl
+
+
+CREATE REFSEQ GENES TRACK (DONE 02/09/03)
+    # Load the refSeq mRNA
+    ssh hgwdev
+    mkdir -p /gbdb/mm3/mrna.133
+    ln -s /cluster/store2/mrna.133/refSeq/org/Mus_musculus/refSeq.fa \
+      /gbdb/mm3/mrna.133
+    hgLoadRna new mm3
+    hgLoadRna add -type=refSeq mm3 /gbdb/mm3/mrna.133/refSeq.fa \
+      /cluster/store2/mrna.133/refSeq/org/Mus_musculus/refSeq.ra
+
+    # Produce refGene, refPep, refMrna, and refLink tables as so:
+    # Get the proteins:
+    ssh kkstore
+    cd ~/mm/bed/refSeq
+    wget ftp://ftp.ncbi.nih.gov/refseq/M_musculus/mRNA_Prot/mouse.faa.gz
+    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
+    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
+    gunzip mouse.faa.gz
+    ssh hgwdev
+    cd ~/mm/bed/refSeq
+    hgRefSeqMrna mm3 \
+      /gbdb/mm3/mrna.133/refSeq.fa \
+      /cluster/store2/mrna.133/refSeq/org/Mus_musculus/refSeq.ra \
+      all_refSeq.psl loc2ref mouse.faa mim2loc
+    # Don't worry about the "No gene name" errors
+
+    # Add RefSeq status info
+    hgRefSeqStatus mm3 loc2ref
+
+
+REFFLAT (DONE 02/09/03)
+    # create precomputed join of refFlat and refGene:
+    echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql mm3
+
+
+LOAD MRNA DATA (DONE 02/09/03)
+    ssh hgwdev
+    ln -s /cluster/store2/mrna.133/org/Mus_musculus/mrna.fa /gbdb/mm3/mrna.133
+    ln -s /cluster/store2/mrna.133/org/Mus_musculus/est.fa /gbdb/mm3/mrna.133
+    hgLoadRna add -type=mRNA mm3 /gbdb/mm3/mrna.133/mrna.fa \
+      /cluster/store2/mrna.133/org/Mus_musculus/mrna.ra
+    hgLoadRna add -type=EST mm3 /gbdb/mm3/mrna.133/est.fa \
+      /cluster/store2/mrna.133/org/Mus_musculus/est.ra
+
+
+PRODUCING ESTORIENTINFO TABLE (TODO)
+
+This table is needed for proper orientation of ESTs in the
+browser.  Many will appear on the wrong strand without it.
+This involves a cluster run.  First load the EST psl files
+as so:
+     ssh kkstore
+     cd ~/mm/bed/est
+     pslSortAcc nohead contig /cluster/store2/tmp contig.psl
+     mkdir /scratch/hg/mm3/est
+     cp -r contig /scratch/hg/mm3/est
+     sudo /cluster/install/utilities/updateLocal
+Wait for these to finish.
+     cd ..
+     mkdir estOrientInfo
+     cd estOrientInfo
+     mkdir ei
+     ls -1S /scratch/hg/mm3/est/contig > psl.lst
+     cp ~/lastMm/bed/estOrientInfo/gsub .
+Update gsub to refer to mouse contig sequence currently on
+/scratch, and mouse ESTs on /scratch.
+     gensub2 psl.lst single gsub spec
+     para create spec
+Then run the  job on the cluster
+     ssh kk
+     cd ~/mm/bed/estOrientInfo
+     para try
+     sleep 60
+     para check
+If things look good
+     para push
+Wait for this to finish then
+     liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
+Load them into database as so:
+     ssh hgwdev
+     cd ~/mm/bed/estOrientInfo
+     hgLoadBed mm3 estOrientInfo estOrientInfo.bed -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+     
+CREATE RNACLUSTER TABLE (TODO)
+ Make sure that refSeqAli and estOrientInfo tables are made already
+ (see above).
+
+   ssh hgwdev
+   cd ~/mm/bed
+   mkdir rnaCluster
+   cd rnaCluster
+   mkdir rna est
+   foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Un)
+       clusterRna mm3 rna/chr$i.bed est/chr$i.bed -chrom=chr$i
+       echo done $i
+   end
+   hgLoadBed mm3 rnaCluster est/*.bed
+
+
+LOADING MOUSE MM3 HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 02/10/03)
+
+    # Translate Penn State .lav files into sorted axt:
+    ssh kkstore
+    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-02-07-ASH"
+    set seq1_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
+    set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
+    set tbl="blastzHg"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $out
+      popd
+    end
+
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load tables
+    ssh hgwdev
+    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-02-07-ASH"
+    set tbl="blastzHg"
+    cd $base/pslChrom
+    hgLoadPsl mm3 chr*_${tbl}.psl
+
+MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE MM3 AXT FILES (DONE 02/10/03)
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-02-07-ASH"
+    set seq1_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
+    set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
+    set tbl="blastzBestHuman"
+    cd $base
+    mkdir -p axtBest pslBest
+    foreach chrdir (lav/chr*)
+      set chr=$chrdir:t
+      echo axtBesting $chr
+      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      echo translating axtBest to psl for $chr
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+    # If a chromosome has so many alignments that axtBest runs out of mem,
+    # run axtBest in 2 passes to reduce size of the input to final axtBest:
+    foreach chrdir (lav/chr7)
+      set chr=$chrdir:t
+      echo two-pass axtBesting $chr
+      foreach d ($chrdir/*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $smallout
+      end
+      foreach a ($chrdir/*.axt)
+        axtBest $a $chr $a:r.axtBest
+      end
+      cat `ls -1 $chrdir/*.axtBest | sort -g` \
+        > $chrdir/$chr.axtBestPieces
+      axtBest $chrdir/$chr.axtBestPieces $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-02-07-ASH"
+     set tbl="blastzBestHuman"
+     cd $base/pslBest
+     hgLoadPsl mm3 chr*_${tbl}.psl
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm3/axtBestHg13
+     cd /gbdb/mm3/axtBestHg13
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/mm3/axtBestHg13/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo VALUES ('hg13','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql mm3 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql mm3 < axtInfoInserts.sql
+
+MAKING THE HUMAN AXTTIGHT FROM AXTBEST (DONE 02/10/03)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kkstore
+    cd ~/mm3/bed/blastz.hg13.2003-02-07-ASH/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightHuman.psl
+    end
+    # Load tables into database
+    ssh hgwdev
+    cd ~/mm3/bed/blastz.hg13.2003-02-07-ASH/pslTight
+    hgLoadPsl mm3 chr*_blastzTightHuman.psl
+
+
+LOADING MOUSE MM3 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
+
+    # Translate Penn State .lav files into sorted axt:
+    ssh kkstore
+    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.rn1.2003-01-09-ASH"
+    set seq1_dir="/cluster/store2/mm.2003.02/mm3/trfMixedNib/"
+    set seq2_dir="/cluster/store4/rn1/mixedNib/"
+    set tbl="blastzRn1"
+    cd $base
+    mkdir -p axtChrom
+    # Some chromosomes have so many alignments that axtSort runs out of mem,
+    # so generate a sorted .axt for each small .lav chunk, then cat a sorted 
+    # list of chunk .axt files together to make the chrom .axt:
+    foreach c (lav/chr*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo two-pass lavToAxting $chr
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` \
+        > $out
+      popd
+    end
+
+    # Mouse-rat alignments are quite large, and the unfiltered .axt's are 
+    # not used as often (or by the browser) as the axtBest .axt's... so 
+    # compress them to save disk space:
+    cd $base/axtChrom
+    gzip chr*.axt
+
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r:r
+       axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load tables
+    ssh hgwdev
+    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.rn1.2003-01-09-ASH"
+    set tbl="blastzRn1"
+    cd $base/pslChrom
+    hgLoadPsl mm3 chr*_${tbl}.psl
+
+MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE MM3 AXT FILES (TODO)
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.rn1.2003-01-09-ASH"
+    set seq1_dir="/cluster/store2/mm.2003.02/mm3/trfMixedNib/"
+    set seq2_dir="/cluster/store4/rn1/mixedNib/"
+    set tbl="blastzBestRat"
+    cd $base
+    mkdir -p axtBest pslBest
+    # Again, run in 2 passes (axtBest on small chunks, then axtBest on 
+    # those results to resolve overlaps) to avoid running axtBest out of mem.
+    foreach chrdir (lav/chr*)
+      set chr=$chrdir:t
+      echo two-pass axtBesting $chr
+      foreach a ($chrdir/*.lav.axt)
+        axtBest $a $chr $a:r.axtBest
+      end
+      cat `ls -1 $chrdir/*.axtBest | sort -g` | \
+        axtBest stdin $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+
+    # Now clean up chunk .axt files to save disk space:
+    cd $base
+    rm lav/chr*/*.lav.axt*
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/store2/mm.2003.02/mm3/bed/blastz.rn1.2003-01-09-ASH"
+     set tbl="blastzBestRat"
+     cd $base/pslBest
+     hgLoadPsl mm3 chr*_${tbl}.psl
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm3/axtBestRn1
+     cd /gbdb/mm3/axtBestRn1
+     rm -f *
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/mm3/axtBestRn1/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo VALUES ('rn1','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql mm3 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql mm3 < axtInfoInserts.sql
+
+MAKING THE RAT AXTTIGHT FROM AXTBEST (TODO)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kkstore
+    cd ~/mm3/bed/blastz.rn1.2003-01-09-ASH/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRat.psl
+    end
+    # Load tables into database
+    ssh hgwdev
+    cd ~/mm3/bed/blastz.rn1.2003-01-09-ASH/pslTight
+    hgLoadPsl mm3 chr*_blastzTightRat.psl
+
+
+PRODUCING GENSCAN PREDICTIONS (DONE 02/12/03)
+    
+    ssh kkstore
+    mkdir -p ~/mm3/bed/genscan
+    cd ~/mm3/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir -p gtf pep subopt
+       
+    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kkr1u00
+    cd ~/mm3/bed/genscan
+    ls -1S /cluster/store2/mm.2003.02/mm3/?{,?}/chr*_*/chr*_*.fa.masked \
+      > genome.list
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    # Note: I changed this to 1800000 in this build because some jobs were 
+    # taking so long I thought they had crashed.
+#LOOP
+/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=1800000
+#ENDLOOP
+    echo "" > dummy.list
+    gensub2 genome.list dummy.list gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    # Issue either one of the following two commands to check the
+    # status of the cluster and your jobs, until they are done.
+    parasol status
+    para check
+    # If there were out-of-memory problems (run "para problems"), then 
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.  
+    # chr8_24
+
+    # Convert these to chromosome level files as so:     
+    ssh kkstore
+    cd ~/mm3/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/chr*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/chr*.bed > \
+      /dev/null
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/mm3/bed/genscan
+    ldHgGene mm3 genscan genscan.gtf
+    hgPepPred mm3 generic genscanPep genscan.pep
+    hgLoadBed mm3 genscanSubopt genscanSubopt.bed > /dev/null
+
+
+TWINSCAN GENE PREDICTIONS (TODO)
+
+    mkdir -p ~/mm3/bed/twinscan
+    cd ~/mm3/bed/twinscan
+    mv Gtf.tgz Gtf.020610.tgz
+    mv Ptx.tgz Ptx.020610.tgz
+    rm chr*.gtf chr*.ptx chr*.fa *.tab
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
+      wget http://genes.cs.wustl.edu/mouse/12-3-02/gtf/chr$c.gtf
+      wget http://genes.cs.wustl.edu/mouse/12-3-02/ptx/chr$c.ptx
+    end
+    ldHgGene mm3 twinscan chr*.gtf -exon=CDS
+    - pare down to id:
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
+      perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
+        chr$c.ptx > chr$c-fixed.fa
+    end
+    hgPepPred mm3 generic twinscanPep chr*-fixed.fa
+
+NCBI GENE MODELS (TODO)
+
+    mkdir -p ~/mm3/bed/ncbiGenes
+    cd ~/mm3/bed/ncbiGenes
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_genes.gtf.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/protein.fa.gz
+    gunzip chr_genes.gtf.gz
+    gunzip protein.fa.gz
+    - Process the .gtf and .fa together to join IDs
+    ../../jkStuff/mungeNCBIids chr_genes.gtf protein.fa |& uniq
+    ldHgGene mm3 ncbiGenes chr_genes-fixed.gtf
+    hgPepPred mm3 generic ncbiPep protein-fixed.fa
+
+NCBI GENOMESCAN MODELS (TODO)
+
+    mkdir -p ~/mm3/bed/genomeScan
+    cd ~/mm3/bed/genomeScan
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_GenomeScan.gtf.gz
+    # Remove the ".1" at the end of transcript_id's:
+    gunzip -c chr_GenomeScan.gtf.gz | \
+      perl -wpe 's/transcript_id "([^\"]+)\.1"/transcript_id "$1"/' > \
+      chr_GenomeScan-fixed.gtf
+    ldHgGene mm3 genomeScan chr_GenomeScan-fixed.gtf
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
+    hgPepPred mm3 generic genomeScanPep GS_prot.fsa
+
+
+GET FRESH MRNA SEQUENCE FROM GENBANK
+
+This will create a genbank.133 directory containing compressed
+GenBank flat files and a mrna.133 containing unpacked sequence
+info and auxiliary info in a relatively easy to parse (.ra)
+format.
+
+  o - Point your browser to ftp://ftp.ncbi.nih.gov/genbank and
+      look at the README.genbank.  Figure out the current release number
+      (which is 133).
+  o - Consider deleting one of the older genbank releases.  It''s
+      good to at least keep one previous release though.
+  o - Where there is space make a new genbank directory.  Create a
+      symbolic link to it:
+          mkdir /cluster/store2/genbank.133
+          ln -s /cluster/store2/genbank.133 ~/genbank
+      cd ~/genbank
+  o - ftp ftp.ncbi.nih.gov  (do anonymous log-in).  Then do the
+      following commands inside ftp:
+           cd genbank
+           prompt
+           mget gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv* gbbct* gbhtc* gbpat* gbphg* gbpln*
+      This will take at least 2 hours.
+  o - Make the refSeq subdir and download files:
+       mkdir -p /cluster/store2/mrna.133/refSeq
+       cd /cluster/store2/mrna.133/refSeq
+
   o - ftp ftp.ncbi.nih.gov  (do anonymous log-in).  Then do the
       following commands inside ftp:
            cd refseq/cumulative
@@ -134,7 +1031,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadRna addSeq mm3 /gbdb/mm3/fish_seq15jun2001/*.fa
 
 
-PRODUCING FUGU FISH ALIGNMENTS (IN PROGRESS)
+PRODUCING FUGU FISH ALIGNMENTS (DONE 02/11/03)
 
     # sequence was previously downloaded to /cluster/store3/fuguSeq/ from
     #   ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_mask.fasta.Z
@@ -152,7 +1049,7 @@ PRODUCING FUGU FISH ALIGNMENTS (IN PROGRESS)
     # Create dir structure for run
     mkdir psl
     foreach ctg (`ls -1 /mnt/scratch/hg/mm3/trfFa/`)
-      mkdir psl/$ctg:t
+      mkdir psl/$ctg:t:r
     end
     cp ~/lastMm/bed/blatFugu/gsub .
     gensub2 mouse.lst fugu.lst gsub spec
