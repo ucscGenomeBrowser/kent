@@ -1,8 +1,7 @@
 
 #include "retroGene.h"
-//#include "hgTracks.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.1 2005/03/24 05:31:11 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.2 2005/03/24 11:16:18 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg)
 /* Return a linked feature from a retroGene. */
@@ -56,20 +55,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-//slReverse(&list);
 
 for (pg = list; pg != NULL; pg = pg->next)
     {
-    //struct simpleFeature *sf; int i;
     lf = lfFromRetroGene(pg);
     lf->grayIx = 9;
     slReverse(&lf->components);
-    //for (sf = lf->components, i = 0; sf != NULL && i < bed->expCount;
-//		sf = sf->next, i++)
-//	{
-//	sf->grayIx = bed->expIds[i];
-	//sf->grayIx = grayInRange((int)(bed->expIds[i]),11,13);
-//	}
     slAddHead(&lfList,lf);
     }
 tg->items = lfList;
@@ -119,7 +110,6 @@ void loadRetroGene(struct track *tg)
 /* Load up RetroGenes. */
 {
 enum trackVisibility vis = tg->visibility;
-//tg->items = lfFromBed(tg, tg->mapName, chromName, winStart, winEnd);
 lfRetroGene(tg);
 if (vis != tvDense)
     {

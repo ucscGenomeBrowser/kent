@@ -13,7 +13,6 @@
 #include "memgfx.h"
 #include "vGfx.h"
 #include "browserGfx.h"
-#include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
