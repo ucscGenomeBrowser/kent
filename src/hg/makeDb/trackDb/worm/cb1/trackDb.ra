@@ -101,3 +101,8 @@ spectrum on
 type chain ce2
 otherDb ce2
 
+searchTable twinscan
+searchType genePred
+termRegex (cb25)?.*\.[0-9]+\.[0-9]+\.[a-z]
+searchPriority 50
+
