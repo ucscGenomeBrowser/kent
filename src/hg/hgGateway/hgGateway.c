@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.45 2003/06/19 15:29:38 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.46 2003/06/20 05:43:48 braney Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -57,7 +57,6 @@ if (oldDb && !containsStringNoCase(oldDb, db))
     position = defaultPosition;
     removeCustomTrackData();
     }
-cartSetString(cart, "position",position);
 
 puts(
 "<CENTER>"
@@ -114,6 +113,10 @@ puts("</td>\n");
 puts("<td align=center>\n");
 cgiMakeTextVar("position", position, 30);
 printf("</td>\n");
+
+cartSetString(cart, "position",position);
+cartSetString(cart, "db",db);
+cartSetString(cart, "org",organism);
 
 freez(&defaultPosition);
 position = NULL;
