@@ -169,6 +169,25 @@ void wiggleDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 
+/*** Some Stuff for the chimp track ***/
+
+enum chimpOptEnum {
+   chimpNoInterpolation = 0,
+   chimpLinearInterpolation = 1,
+};
+
+enum chimpOptEnum chimpStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *chimpEnumToString(enum chimpOptEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+
+
+
 
 /*** Some Stuff for the AFFY track ***/
 

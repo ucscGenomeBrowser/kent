@@ -9,6 +9,11 @@
 #include "linefile.h"
 #endif
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
+
 struct trackDb
 /* This describes an annotation track. */
     {

@@ -54,5 +54,7 @@ display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
 a make update.
 
-
+The shortLabel and longLabel fields may have the following
+variables, which will be substituted:
+     $ORGANISM
 

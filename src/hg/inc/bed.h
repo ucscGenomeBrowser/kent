@@ -5,6 +5,10 @@
 #ifndef BED_H
 #define BED_H
 
+#ifndef PSL_H
+#include "psl.h"
+#endif
+
 struct bed
 /* Browser extensible data */
     {
@@ -24,8 +28,8 @@ struct bed
     int *blockSizes;     /* Comma separated list of block sizes.  */
     int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
     int expCount;	/* Experiment count */
-    int *expIds;		/* Experiment ids */
-    float *expScores;	/* Experiment scores. */
+    int *expIds;		/* Comma separated list of Experiment ids */
+    float *expScores;	/* Comma separated list of Experiment scores. */
     };
 
 void bedStaticLoad(char **row, struct bed *ret);
@@ -110,6 +114,9 @@ void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 
 #define bedCommaOutN(el,wordCount, f) bedOutputN(el,wordCount,f,',',',');
 /* Print out bed as a comma separated list including final comma. */
+
+struct bed *bedFromPsl(struct psl *psl);
+/* Convert a single psl to a bed structure */
 
 #endif /* BED_H */
 

@@ -23,6 +23,7 @@
 #include "gdf.h"
 #endif
 
+
 struct wormCdnaInfo 
 /* Extra info stored in cDNA database other than string. */
     {
@@ -120,6 +121,9 @@ char *wormGeneFirstOrfName(char *geneName);
 boolean wormGeneForOrf(char *orfName, char *geneNameBuf, int bufSize);
 /* Look for gene type (unc-12 or something) synonym for cosmid.N name. */
 
+boolean getWormGeneExonDna(char *name, DNA **retDna);
+/* get the exon sequence for a gene */
+
 boolean getWormGeneDna(char *name, DNA **retDna, boolean upcExons);
 /* Get the DNA associated with a gene.  Optionally upper case exons. */
 
@@ -172,7 +176,6 @@ boolean wormIsNamelessCluster(char *name);
 
 DNA *wormGetNamelessClusterDna(char *name);
 /* Get DNA associated with nameless cluster */
-
 
 struct wormFeature
 /* This holds info on where something is in the genome. */

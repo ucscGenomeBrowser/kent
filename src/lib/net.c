@@ -9,85 +9,124 @@
 #include "net.h"
 #include "linefile.h"
 
-static struct sockaddr_in sai;		/* Some system socket info. */
 
-static int setupSocket(char *hostName, char *portName)
-/* Set up our socket. */
+static int netStreamSocket()
+/* Create a TCP/IP streaming socket.  Complain and return something
+ * negative if can't */
 {
-int port;
-int sd;
-struct hostent *hostent;
-
-if (!isdigit(portName[0]))
-    errAbort("Expecting a port number got %s", portName);
-port = atoi(portName);
-hostent = gethostbyname(hostName);
-if (hostent == NULL)
-    {
-    errAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
-    }
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
-sd = socket(AF_INET, SOCK_STREAM, 0);
+int sd = socket(AF_INET, SOCK_STREAM, 0);
+if (sd < 0)
+    warn("Couldn't make AF_INET socket.");
 return sd;
 }
 
-int netConnect(char *hostName, char *portName)
-/* Start connection with server. */
+static boolean netFillInAddress(char *hostName, int port, struct sockaddr_in *address)
+/* Fill in address. Return FALSE if can't.  */
 {
-/* Connect to server. */
-int sd = setupSocket(hostName, portName);
-int err;
-if (sd < 0)
+struct hostent *hostent;
+ZeroVar(address);
+address->sin_family = AF_INET;
+address->sin_port = htons(port);
+if (hostName == NULL)
+    address->sin_addr.s_addr = INADDR_ANY;
+else
     {
-    warn("Couldn't setup socket %s %s", hostName, portName);
-    return sd;
+    hostent = gethostbyname(hostName);
+    if (hostent == NULL)
+	{
+	warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
+	return FALSE;
+	}
+    memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
     }
+return TRUE;
+}
+
+int netConnect(char *hostName, int port)
+/* Start connection with a server. */
+{
+int sd, err;
+struct sockaddr_in sai;		/* Some system socket info. */
+
+if (hostName == NULL)
+    {
+    warn("NULL hostName in netConnect");
+    return -1;
+    }
+if (!netFillInAddress(hostName, port, &sai))
+    return -1;
+if ((sd = netStreamSocket()) < 0)
+    return sd;
 if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)
    {
-   warn("Couldn't connect to %s %s", hostName, portName);
+   warn("Couldn't connect to %s %d", hostName, port);
+   close(sd);
    return err;
    }
 return sd;
 }
 
-int netMustConnect(char *hostName, char *portName)
+int netMustConnect(char *hostName, int port)
 /* Start connection with server or die. */
 {
-int sd = netConnect(hostName, portName);
+int sd = netConnect(hostName, port);
 if (sd < 0)
    noWarnAbort();
 return sd;
 }
 
-volatile boolean netPipeFlag = FALSE;	/* Flag broken pipes here. */
-static boolean plumberInstalled = FALSE;	/* True if have installed pipe handler. */
-
-static void netPipeHandler(int sigNum)
-/* Set broken pipe flag. */
+int netMustConnectTo(char *hostName, char *portName)
+/* Start connection with a server and a port that needs to be converted to integer */
 {
-netPipeFlag = TRUE;
+if (!isdigit(portName[0]))
+    errAbort("netConnectTo: ports must be numerical, not %s", portName);
+return netMustConnect(hostName, atoi(portName));
 }
 
-boolean netPipeIsBroken()
-/* Return TRUE if pipe is broken */
+static int netAcceptingSocketFrom(int port, int queueSize, char *host)
+/* Create a socket that can accept connections from a particular
+ * host.  If host is NULL then accept from anyone. */
 {
-return netPipeFlag;
+struct sockaddr_in sai;
+int sd;
+
+netBlockBrokenPipes();
+if ((sd = netStreamSocket()) < 0)
+    return sd;
+if (!netFillInAddress(host, port, &sai))
+    return -1;
+if (bind(sd, &sai, sizeof(sai)) == -1)
+    {
+    warn("Couldn't bind socket to %d", port);
+    close(sd);
+    return -1;
+    }
+listen(sd, queueSize);
+return sd;
 }
 
-void  netClearPipeFlag()
-/* Clear broken pipe flag. */
+int netAcceptingSocket(int port, int queueSize)
+/* Create a socket that can accept connections from
+ * anywhere. */
 {
-netPipeFlag = FALSE;
+return netAcceptingSocketFrom(port, queueSize, NULL);
 }
 
-void netCatchPipes()
-/* Set up to catch broken pipe signals. */
+int netAccept(int sd)
+/* Accept incoming connection from socket descriptor. */
+{
+int fromLen;
+return accept(sd, NULL, &fromLen);
+}
+
+static boolean plumberInstalled = FALSE;
+
+void netBlockBrokenPipes()
+/* Make it so a broken pipe doesn't kill us. */
 {
 if (!plumberInstalled)
     {
-    signal(SIGPIPE, netPipeHandler);
+    signal(SIGPIPE, SIG_IGN);       /* Block broken pipe signals. */
     plumberInstalled = TRUE;
     }
 }
@@ -101,15 +140,14 @@ size_t totalRead = 0;
 int oneRead;
 
 if (!plumberInstalled)
-    netCatchPipes();
-netPipeFlag = FALSE;
+    netBlockBrokenPipes();
 while (totalRead < size)
     {
     oneRead = read(sd, buf + totalRead, size - totalRead);
     if (oneRead < 0)
-        {
 	return oneRead;
-	}
+    if (oneRead == 0)
+        break;
     totalRead += oneRead;
     }
 return totalRead;
@@ -196,7 +234,7 @@ int sd;
 netParseUrl(url, &npu);
 if (!sameString(npu.protocol, "http"))
     errAbort("Sorry, can only slurp http's currently");
-sd = netMustConnect(npu.host, npu.port);
+sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* Ask remote server for a file. */
 dyStringPrintf(dy, "GET %s HTTP/1.0\r\n\r\n", npu.file);
@@ -257,5 +295,123 @@ int sd = netUrlOpen(url);
 struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
 netSkipHttpHeaderLines(lf);
 return lf;
+}
+
+boolean netSendString(int sd, char *s)
+/* Send a string down a socket - length byte first. */
+{
+int length = strlen(s);
+UBYTE len;
+
+if (length > 255)
+    errAbort("Trying to send a string longer than 255 bytes (%d bytes)", length);
+len = length;
+if (write(sd, &len, 1)<0)
+    {
+    warn("Couldn't send string to socket");
+    return FALSE;
+    }
+if (write(sd, s, length)<0)
+    {
+    warn("Couldn't send string to socket");
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean netSendLongString(int sd, char *s)
+/* Send a long string down socket: two bytes for length. */
+{
+unsigned length = strlen(s);
+UBYTE b[2];
+
+if (length >= 64*1024)
+    {
+    warn("Trying to send a string longer than 64k bytes (%d bytes)", length);
+    return FALSE;
+    }
+b[0] = (length>>8);
+b[1] = (length&0xff);
+if (write(sd, b, 2) < 0)
+    {
+    warn("Couldn't send long string to socket");
+    return FALSE;
+    }
+if (write(sd, s, length)<0)
+    {
+    warn("Couldn't send long string to socket");
+    return FALSE;
+    }
+return TRUE;
+}
+
+char *netGetString(int sd, char buf[256])
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Print warning message
+ * and return NULL if any problem. */
+{
+static char sbuf[256];
+UBYTE len;
+int length;
+if (buf == NULL) buf = sbuf;
+if (read(sd, &len, 1)<0)
+    {
+    warn("Couldn't read string length");
+    return NULL;
+    }
+length = len;
+if (length > 0)
+    if (netReadAll(sd, buf, length) < 0)
+	{
+	warn("Couldn't read string body");
+	return NULL;
+	}
+buf[length] = 0;
+return buf;
+}
+
+char *netGetLongString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. */
+{
+UBYTE b[2];
+char *s = NULL;
+int length = 0;
+if (netReadAll(sd, b, 2)<0)
+    {
+    warn("Couldn't read long string length");
+    return NULL;
+    }
+length = (b[0]<<8) + b[1];
+s = needMem(length+1);
+if (length > 0)
+    if (netReadAll(sd, s, length) < 0)
+	{
+	warn("Couldn't read long string body");
+	return NULL;
+	}
+s[length] = 0;
+return s;
+}
+
+
+char *netRecieveString(int sd, char buf[256])
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Abort if any problem. */
+{
+char *s = netGetString(sd, buf);
+if (s == NULL)
+     noWarnAbort();   
+return s;
+}
+
+char *netRecieveLongString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. Abort if any problem*/
+{
+char *s = netGetLongString(sd);
+if (s == NULL)
+     noWarnAbort();   
+return s;
 }
 

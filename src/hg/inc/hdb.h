@@ -19,6 +19,17 @@
 #include "trackDb.h"
 #endif
 
+struct blatServerTable
+/* Information about a BLAT server. */
+{
+    char *db;		/* Database name. */
+    char *genome;	/* Genome name. */
+    boolean isTrans;	/* Is tranlated to protein? */
+    char *host;		/* Name of machine hosting server. */
+    char *port;		/* Port that hosts server. */
+    char *nibDir;	/* Directory of sequence files. */
+};
+
 struct hTableInfo
 /* Some info to track table. */
     {
@@ -204,6 +215,10 @@ boolean hgIsContigRange(char *spec);
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database. */
 
+struct dbDb *hGetIndexedDatabases();
+/* Get list of databases for which there is a nib dir. 
+ * Dispose of this with dbDbFreeList. */
+
 struct dbDb *hGetBlatIndexedDatabases();
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */
@@ -211,5 +226,18 @@ struct dbDb *hGetBlatIndexedDatabases();
 boolean hIsBlatIndexedDatabase(char *db);
 /* Return TRUE if have a BLAT server on sequence corresponding 
  * to give database. */
+
+struct blatServerTable *hFindBlatServer(char *db, boolean isTrans);
+/* return the blat server information corresponding to the database */
+
+char *hOrganism(char *database);
+/* Return organism associated with database.   Use freeMem on
+ * return value when done. */
+
+char *hLookupStringVars(char *in, char *database);
+/* Expand $ORGANISM and other variables in input. */
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database);
+/* Lookup strings in track database. */
 
 #endif /* HDB_H */

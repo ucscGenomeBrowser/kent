@@ -18,7 +18,8 @@
  * if they run out of memory.  
  */
 
-
+#ifndef ERRABORT_H
+#define ERRABORT_H
 void errAbort(char *format, ...);
 /* Abort function, with optional (printf formatted) error message. */
 
@@ -58,3 +59,4 @@ void pushWarnHandler(WarnHandler handler);
 void popWarnHandler();
 /* Revert to old warn handler. */
 
+#endif /* ERRABORT_H */

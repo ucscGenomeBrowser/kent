@@ -133,8 +133,9 @@ for (;;)
         xpError(xp, "End of file in comment that started line %d", startLine);
     if (c == '\n')
         ++xp->lineIx;
-    if (c == '>' && lastC == commentC)
+    if (c == '>')
         {
+	if (lastC == commentC || commentC == '!')
 	break;
 	}
     lastC = c;
@@ -442,10 +443,8 @@ else
 		xpError(xp, "Mismatch between start tag %s and end tag %s",  stack->tag->string, dy->string);
 	    break;
 	    }
-	else if (c == '?' || c == '-')
+	else if (c == '?' || c == '-' || c == '!')
 	    xpEatComment(xp, c);
-	else if (c == '!')
-	    xpEatComment(xp, '-');
 	else
 	    {
 	    xpUngetChar(xp);
@@ -478,13 +477,9 @@ for (;;)
 	{
 	if ((c = xpGetChar(xp)) == 0)
 	    xpUnexpectedEof(xp);
-	if (c == '?' || c == '-')
+	if (c == '?' || c == '-' || c == '!')
 	    {
 	    xpEatComment(xp, c);
-	    }
-	else if (c == '!')
-	    {
-	    xpEatComment(xp, '-');
 	    }
 	else
 	    {

@@ -442,3 +442,45 @@ if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
 
+
+struct bed *bedFromPsl(struct psl *psl)
+/* Convert a single psl to a bed structure */
+{
+struct bed *bed;
+int i, blockCount, *chromStarts, chromStart;
+
+/* A tiny bit of error checking on the psl. */
+if (psl->qStart >= psl->qEnd || psl->qEnd > psl->qSize 
+    || psl->tStart >= psl->tEnd || psl->tEnd > psl->tSize)
+    {
+    errAbort("mangled psl format for %s", psl->qName);
+    }
+
+/* Allocate bed and fill in from psl. */
+AllocVar(bed);
+bed->chrom = cloneString(psl->tName);
+bed->chromStart = bed->thickStart = chromStart = psl->tStart;
+bed->chromEnd = bed->thickEnd = psl->tEnd;
+bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
+if (bed->score < 0) bed->score = 0;
+strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+bed->blockCount = blockCount = psl->blockCount;
+bed->blockSizes = (int *)cloneMem(psl->blockSizes,(sizeof(int)*psl->blockCount));
+bed->chromStarts = chromStarts = (int *)cloneMem(psl->tStarts, (sizeof(int)*psl->blockCount));
+bed->name = cloneString(psl->qName);
+
+/* Switch minus target strand to plus strand. */
+if (psl->strand[1] == '-')
+    {
+    int chromSize = psl->tSize;
+    reverseInts(bed->blockSizes, blockCount);
+    reverseInts(chromStarts, blockCount);
+    for (i=0; i<blockCount; ++i)
+	chromStarts[i] = chromSize - chromStarts[i];
+    }
+
+/* Convert coordinates to relative. */
+for (i=0; i<blockCount; ++i)
+    chromStarts[i] -= chromStart;
+return bed;
+}

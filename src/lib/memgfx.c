@@ -129,7 +129,7 @@ void mgClearPixels(struct memGfx *mg)
 zeroBytes(mg->pixels, mg->width*mg->height);
 }
 
-Color _mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
+Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create
  * exact color in map. */
@@ -140,12 +140,6 @@ if ((che = colHashLookup(mg->colorHash, r, g, b)) != NULL)
 if (mgColorsFree(mg))
     return mgAddColor(mg, r, g, b);
 return mgClosestColor(mg, r, g, b);
-}
-
-Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
-{
-Color c = _mgFindColor(mg, r, g, b);
-return c;
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
@@ -619,8 +613,77 @@ mgDrawRulerBumpText(mg, xOff, yOff, height, width, color, font,
 }
 
 
+void mgFilledSlopedLine( struct memGfx *mg, Color *pt1,
+            Color *pt1Home, double slope, int mult, int w, double h, 
+            Color *colors, int colRange, Color *pt1Base )
+/*Fills in the space below the line of width w and slope slope
+and height h with a fixed color of light gray for now.*/
+{
+int j;
+int yUpper, yLower;
+int pUpper, pLower;
+double sum = 0.0;
+int prevX = -1;
 
-void mgDrawXSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1, Color *pt1Home, double slope, int mult, int w, double h, Color *colors, double colRange )
+if( abs(slope) < 1 )
+    {
+    for (j=0; j<w; j += 1)
+        {
+        sum += slope;
+        yUpper = min(abs((int)sum)+1,(int)h);
+        yLower = min(abs((int)sum),(int)h);
+        pUpper = (int)(colRange * ((double)min(fabs(sum),h) - (double)yLower));
+        pLower = (int)colRange - pUpper;
+
+        if( pLower != colRange ) 
+            pt1 = (mult * yUpper) + pt1Home;
+        else
+            pt1 = (mult * yLower) + pt1Home;
+
+        while( pt1 < pt1Base )
+            {
+            pt1 += sign(slope)*mult;
+            pt1[j] = colors[3];
+            }
+        }
+    }
+else
+    {
+    for (j=1; j<=h; j += 1)
+        {
+        sum += 1.0 / slope;
+        pt1 = (mult * j) + pt1Home;
+
+        yLower = min(abs((int)sum),w);
+        yUpper = min(abs((int)sum)+1,w);
+        pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
+        pLower = (int)colRange - pUpper;
+
+        while( pt1 < pt1Base )
+            {
+            pt1 += sign(slope)*mult;
+            pt1[yLower] = colors[3];
+            }
+
+        if( prevX != yUpper && yLower != yUpper  )
+            while( pt1 < pt1Base )
+                {
+                pt1 += sign(slope)*mult;
+                pt1[yUpper] = colors[3];
+                }
+
+        prevX = yUpper;
+       }
+
+
+    }
+
+}
+
+
+void mgDrawXSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1,
+        Color *pt1Home, double slope, int mult, int w, double h, Color
+        *colors, double colRange, Color *pt1Base, int aa, int fill )
     /*draws a sloped line that is dominated by x-component movement
      * with anti-aliasing in the sense that for the y-value 0.3 with a
      * 1 pixel thick line the shading is 70% in the lower pixel and
@@ -628,6 +691,7 @@ void mgDrawXSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1, Color *pt1Home
      * pixel with 100% shading.*/
 {
 
+int fillStart;
 int j;
 int yLower, pLower;
 int yUpper, pUpper;
@@ -641,52 +705,84 @@ for (j=0; j<w; j += 1)
     pUpper = (int)(colRange * ((double)min(fabs(sum),h) - (double)yLower));
     pLower = (int)colRange - pUpper;
 
-    if( pUpper != colRange )
+    if( aa == 1 )  //anti-aliasing is on
         {
-        pt1 = (mult * yLower) + pt1Home;
-        pt1[j] = colors[max(pLower,3)];
+        if( pUpper != colRange )
+            {
+            pt1 = (mult * yLower) + pt1Home;
+            pt1[j] = colors[max(pLower,3)];
+            }
+
+        if( pLower != colRange )
+            {
+            pt1 = (mult * yUpper) + pt1Home;
+            pt1[j] = colors[max(pUpper,3)];
+            }
+        }
+    else
+        {
+        if( pLower != colRange ) 
+            {
+            pt1 = (mult * yUpper) + pt1Home;
+            pt1[j] = colors[(int)colRange];
+            }
+        else
+            {
+            pt1 = (mult * yLower) + pt1Home;
+            pt1[j] = colors[(int)colRange];
+            }
         }
 
-    if( pLower != colRange )
-        {
-        pt1 = (mult * yUpper) + pt1Home;
-        pt1[j] = colors[max(pUpper,3)];
-        }
-            
+
     }
 }
 
 
-void mgDrawYSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1, Color *pt1Home, double slope, int mult, int w, int h, Color *colors, double colRange )
-     /*draws a sloped line that is dominated by y-component movement
-     * with anti-aliasing. See mgDrawXSlopedLineAntiAlias above.*/
+void mgDrawYSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1,
+        Color *pt1Home, double slope, int mult, int w, int h, Color
+        *colors, double colRange, Color *pt1Base, int aa, int fill )
+/*draws a sloped line that is dominated by y-component movement
+* with anti-aliasing. See mgDrawXSlopedLineAntiAlias above.*/
 {
 
 int j;
 int yLower, pLower;
 int yUpper, pUpper;
 double sum = 0.0;
-for (j=0; j<h; j += 1)
+int prevX = -1;
+
+for (j=1; j<=h; j += 1)
     {
     sum += 1.0 / slope;
-    pt1 += mult;
+    pt1 = (mult * j) + pt1Home;
 
     yLower = min(abs((int)sum),w);
     yUpper = min(abs((int)sum)+1,w);
     pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
     pLower = (int)colRange - pUpper;
 
-    if( pUpper != colRange )
-        pt1[yLower] = colors[max(pLower,3)];
+    if( aa == 1 )  //anti-aliasing is on
+        {
+        if( pUpper != colRange )
+            pt1[yLower] = colors[max(pLower,3)];
 
-    if( pLower != colRange )
-        pt1[yUpper] = colors[max(pUpper,3)];
-            
+        if( pLower != colRange )
+            pt1[yUpper] = colors[max(pUpper,3)];
+        }
+    else
+        {
+        if( pLower != colRange )
+            pt1[yUpper] = colors[(int)colRange];
+        else
+            pt1[yLower] = colors[(int)colRange];
+        }
+
     }
 
 }
 
-void mgConnectingLine( struct memGfx *mg, int x1, double y1d, int x2, double y2d, Color *colors )
+void mgConnectingLine( struct memGfx *mg, int x1, double y1d, int x2,
+double y2d, Color *colors, int ybase, int aa, int fill )
 /*Draw a line between two points, (x1,y1) to (x2,y2). Will be used
  * with wiggle tracks to interpolate between samples, connecting the
  * end of one block to the beginning of the next one.   */
@@ -696,13 +792,14 @@ int yLower, pLower;
 int yUpper, pUpper;
 int mult;
 
-int y1i = (int)y1d;
-int y2i = (int)y2d;
+int y1i;
+int y2i;
     
 int minY;
 int maxY;
 Color *pt1;
 Color *pt1Home;
+Color *pt1Base;
 int j;
 int offset;
 double sum, slope;
@@ -710,16 +807,31 @@ int bpr = _mgBpr(mg);
 double h = fabs(y2d-y1d);
 double colRange = 9.0;
 
+
+//adjust y if x is cutoff 
+slope = (double)(y2d - y1d)/(double)(x2-x1);
 if (x1 < mg->clipMinX)
+    {
+    y1d += ((double)(mg->clipMinX - x1)) * slope;
     x1 = mg->clipMinX;
+    }
 if (x2 > mg->clipMaxX)
+    {
+    y2d += -((double)(x2 - mg->clipMaxX)) * slope;
     x2 = mg->clipMaxX;
+    }
+
 if ((x2 - x1) <= 0)
     return;
+
+
+y1i = (int)y1d;
+y2i = (int)y2d;
 
 minY = mg->clipMinY;
 maxY = mg->clipMaxY;
 pt1Home = pt1 = _mgPixAdr(mg,x1,y1i);
+pt1Base = _mgPixAdr(mg,x1,ybase);
 offset = 0;
 
 slope = (double)(y2d - y1d)/(double)(x2-x1);
@@ -730,59 +842,22 @@ sum = 0.0;
 if (minY <= y1i && y1i < maxY
      && minY <= y2i && y2i < maxY)
     {
+
     if( fabs( slope ) > 1.0 )  /*y-dominated movement*/
-        mgDrawYSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult, x2-x1,(int)h, colors, colRange );
+        mgDrawYSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult,
+            x2-x1,(int)h, colors, colRange, pt1Base, aa, fill );
     else                    /*x-dominated movement*/
-        mgDrawXSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult, x2-x1, h, colors, colRange );
+        mgDrawXSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult,
+            x2-x1, h, colors, colRange, pt1Base, aa, fill );
+
+    //fill in area below the line
+    if( fill )
+        mgFilledSlopedLine( mg, pt1, pt1Home, slope, mult, 
+            x2-x1, h, colors, colRange, pt1Base );
+
     }
 
 }
-
-void mgDrawPointAntiAlias( struct memGfx *mg, int x1, double y1d, Color *colors )
-    /*Draws a one base dot (or line) at a fractional position
-     * (possibly) between two pixels so 14.2 and 14.3 are displayed differently.*/
-{
-
-int yLower, pLower;
-int yUpper, pUpper;
-    
-int minY;
-int maxY;
-Color *pt1;
-double sum, slope;
-int bpr = _mgBpr(mg);
-int thisMaxY = 10;
-double colRange = 9.0;
-
-int y1i = (int)y1d;
-
-if (x1 < mg->clipMinX)
-    x1 = mg->clipMinX;
-
-minY = mg->clipMinY;
-maxY = mg->clipMaxY;
-pt1 = _mgPixAdr(mg,x1,y1i);
-
-if (minY <= y1i && y1i < maxY )
-    {
-
-    yLower = min(abs((int)y1d), thisMaxY);
-    yUpper = min(abs((int)y1d)+1, thisMaxY );
-    pUpper = (int)(colRange * ((double)min(y1d,thisMaxY) - (double)yLower));
-    pLower = (int)colRange - pUpper;
-
-    if( pUpper != colRange )
-        pt1[0] = colors[pLower];
-
-    pt1 -= bpr;
-    if( pLower != colRange )
-        pt1[0] = colors[pUpper];
-            
-    }
-
-}
-
-
 
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,

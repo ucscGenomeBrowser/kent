@@ -3628,6 +3628,12 @@ if (sameString("bacEndPairs", track))
     lfLabel = "BAC ends";
     table = track;
     }
+if (sameString("uPennBacEndPairs", track)) 
+    {
+    sprintf(title, "Location of %s using BAC end sequences", clone);
+    lfLabel = "BAC ends";
+    table = track;
+    }
 
 /* Print out non-sequence info */
 cartWebStart(title);
@@ -3642,7 +3648,7 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
-    if (sameString("bacEndPairs", track)) 
+    if ((sameString("bacEndPairs", track)) || (sameString("uPennBacEndPairs", track))) 
     {
     printf("<H2><A HREF=");
     printCloneRegUrl(stdout, clone);
@@ -3667,7 +3673,6 @@ if (row != NULL)
 
     sprintf(title, "Genomic alignments of %s:", lfLabel);
     webNewSection(title);
-    /*printf("<H3>Genomic alignments of %s:</H3>\n", lfLabel);*/
     
     for (i = 0; i < lfs->lfCount; i++) 
       {
@@ -4356,12 +4361,14 @@ numColumns = maxVal/stepSize *2+1;
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
 printf("<th colspan=%d>False Color Key, all values log base 2</th></tr><tr>\n",numColumns);
-for(currentVal = minVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+/* have to add the stepSize/2 to account for the ability to 
+   absolutely represent some numbers as floating points */
+for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
     printf("<th><b>%.2f</b></th>", currentVal);
     }
 printf("</tr><tr>\n");
-for(currentVal = minVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
     struct rgbColor rgb = getColor(currentVal, maxVal);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
@@ -4700,7 +4707,7 @@ char *itemName = cgiUsualString("i2","none");
 char *nameTmp=NULL;
 char buff[256];
 char *plotType = NULL;
-float maxScore = 1.6;
+float maxScore = 2.0;
 char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
 char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
 enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
@@ -4767,7 +4774,7 @@ struct expRecord *erList = NULL, *er;
 char buff[32];
 struct hash *erHash;
 float stepSize = 0.2;
-float maxScore = 1.6;
+float maxScore = 2.0;
 bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
 
@@ -4803,7 +4810,7 @@ char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
-    printf("at Affymetrix's netaffx.com website. [registration required]\n");
+    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
     printf("<ul>\n");
     printf("<li> Information about probe sequences is <a href=\"%s%s\">available there</a></li>\n",
 	   netaffx, name);
@@ -4816,7 +4823,7 @@ if(name != NULL)
 }
 
 void affyDetails(struct trackDb *tdb, char *expName) 
-/* print out a page for the affy data from stanford */
+/* print out a page for the affy data from gnf */
 {
 struct bed *bedList;
 char *tableName = "affyExps";
@@ -4853,6 +4860,47 @@ else
     }
 webEnd();
 }
+
+void affyRatioDetails(struct trackDb *tdb, char *expName) 
+/* print out a page for the affy data from gnf based on ratio of
+* measurements to the median of the measurements. */
+{
+struct bed *bedList;
+char *tableName = "affyExps";
+char *itemName = cgiUsualString("i2","none");
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+float stepSize = 0.5;
+float maxScore = 3.0;
+
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+genericHeader(tdb, itemName);
+printf("<h2></h2><p>\n");
+printf("%s", tdb->html);
+
+printAffyLinks(itemName);
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(tableName, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    printf("<h2></h2><p>\n");
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize,
+		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+webEnd();
+}
+
 
 struct rgbColor getColorForCghBed(float val, float max)
 /* Return the correct color for a given score */
@@ -5285,6 +5333,7 @@ sr = sqlGetResult(conn, "select * from trackDb");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tdb = trackDbLoad(row);
+    hLookupStringsInTdb(tdb, database);
     if (hTrackOnChrom(tdb, chrom))
 	hashAdd(trackHash, tdb->tableName, tdb);
     else
@@ -5328,7 +5377,8 @@ else if (sameWord(track, "htcGetDna3"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
 	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-	sameWord(track, "xenoEst") || sameWord(track, "psu"))
+	sameWord(track, "xenoEst") || sameWord(track, "psu") ||
+	sameWord(track, "tightMrna") | sameWord(track, "tightEst"))
     {
     doHgRna(tdb, item);
     }
@@ -5465,6 +5515,10 @@ else if (sameWord(track, "tigrGeneIndex"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
+ else if (sameWord(track, "uPennBacEndPairs"))
+   {
+     doLinkedFeaturesSeries(track, item, tdb);
+   }
  else if (sameWord(track, "cgh"))
    {
      doCgh(track, item, tdb);
@@ -5542,6 +5596,10 @@ else if(sameWord(track, "affy"))
     {
     affyDetails(tdb, item);
     }
+else if(sameWord(track, "affyRatio"))
+    {
+    affyRatioDetails(tdb, item);
+    }
 else if(sameWord(track, "loweProbes"))
     {
     doProbeDetails(tdb, item);
@@ -5579,6 +5637,6 @@ char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrac
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc,argv);
-cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars);
+cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

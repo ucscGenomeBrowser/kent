@@ -12,12 +12,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/* The size of a file. */
-long fileSize(char *fileName);
-
-/* Does a file exist? */
-boolean fileExists(char *fileName);
-
 /* Return an alphabetized list of all files that match 
  * the wildcard pattern in directory. */
 struct slName *listDir(char *dir, char *pattern);
