@@ -7383,6 +7383,10 @@ done
     hgPepPred hg16 generic acemblyPep \
 	acembly.ncbi_34.genes.proteins.fasta/*.fasta
 
+    #	check that the track is OK
+    checkTableCoords hg16 acembly
+    #	should display no errors
+
 # MAKE HUMAN-CHIMP OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
 g 
     ssh kolossus
