@@ -392,7 +392,7 @@ lineFileClose(&lf);
 char *submitJobToHub(char *jobMessage)
 /* Submit job to hub.  Return jobId, or NULL on failure. */
 {
-int hubFd = netConnect(getHost(), paraPort);
+int hubFd = netConnect("localhost", paraPort);
 char *jobIdString;
 
 if (hubFd < 0)
@@ -480,7 +480,7 @@ struct slRef *hubMultilineQuery(char *query)
 {
 struct slRef *list = NULL, *el;
 char *line;
-int hubFd = netConnect(getHost(), paraPort);
+int hubFd = netConnect("localhost", paraPort);
 if (hubFd > 0)
     {
     if (sendWithSig(hubFd, query))
