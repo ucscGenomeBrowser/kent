@@ -66,5 +66,10 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#define DEFAULT_MIN_Yv	0.0
+#define DEFAULT_MAX_Yv	127.0
+#define DEFAULT_HEIGHT_PER	128
+#define MIN_HEIGHT_PER	11
+
 #endif /* WIGGLE_H */
 
