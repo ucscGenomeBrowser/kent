@@ -45,7 +45,7 @@ if ( $err ) then
  exit 1
 endif 
 
-echo "Done running robots TrackCheck and hgNearTest."
+echo "Done running robots TrackCheck, hgNearTest, and hgTablesTest."
 ./unsymtrick.csh
 exit 0
 

@@ -102,7 +102,7 @@ if ( $status ) then
 endif
 
 echo
-./buildUtils.csh
+ssh hgwbeta $WEEKLYBLD/buildUtils.csh
 if ( $status ) then
  exit 1
 endif
