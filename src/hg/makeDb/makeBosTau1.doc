@@ -923,12 +923,14 @@ chainSome $(path1)
 
     # axtChain
     ssh kki
-    cd /cluster/data/bosTau1/bed/blastz
+    cd /cluster/data/bosTau1/bed
+    mv blastz zb.hg17
+    cd zb.hg17
     mv run1 run1-dec15
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chainRaw
-    ls -1S /cluster/data/bosTau1/bed/blastz/axtTemp/*.axt > input.lst
+    ls -1S /cluster/data/bosTau1/bed/zb.hg17/axtTemp/*.axt > input.lst
 
     cat << '_EOF_' > gsub
     #LOOP
@@ -958,12 +960,12 @@ chainSome $(path1)
 
     # mergesort
     ssh kksilo
-    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
     /cluster/bin/i386/chainMergeSort run1/chainRaw/*.chain > all.chain.jan3
 
     # chainAntiRepeat
     ssh kksilo
-    cd /cluster/data/bosTau1/bed/blastz/axtChain/run1
+    cd /cluster/data/bosTau1/bed/zb.hg17/axtChain/run1
     mkdir chainAntiRepeat
     # test with just one
     /cluster/bin/i386/chainAntiRepeat /cluster/store5/gs.18/build35/nib /cluster/data/bosTau1/bosTau1.2bit \
@@ -978,7 +980,7 @@ chainSome $(path1)
 
     # mergesort again
     ssh kksilo
-    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
     /cluster/bin/i386/chainMergeSort run1/chainAntiRepeat/*.chain > all.chain.jan5
     gzip all.chain.jan3
 
@@ -1007,7 +1009,7 @@ chainSome $(path1)
     # load
     ssh hgwdev
     # drop the old chrN_chainBosTau1 tables from hg17
-    cd /cluster/data/bosTau1/bed/blastz/axtChain/chain
+    cd /cluster/data/bosTau1/bed/zb.hg17/axtChain/chain
     foreach i (*.chain)
       set c = $i:r
       echo loading $c
