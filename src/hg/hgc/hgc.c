@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.638 2004/05/21 00:03:43 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.639 2004/05/21 13:25:18 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7230,11 +7230,12 @@ printStanSource(rl->mrnaAcc, "mrna");
 htmlHorizontalLine();
 
 /* print alignments that track was based on */
-
+{
 char *aliTbl = (sameString(track, "rgdGene") ? "refSeqAli" : "xenoRGDAli");
 struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
 printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+}
 
 htmlHorizontalLine();
 
