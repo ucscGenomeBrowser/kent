@@ -2,8 +2,10 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "localmem.h"
 #include "options.h"
 #include "dlist.h"
+#include "rbTree.h"
 
 int maxChainSize = 3;
 
@@ -32,8 +34,7 @@ static struct optionSpec options[] = {
 struct wordTree
 /* A tree of words. */
     {
-    struct wordTree *next;	/* Next in somebody's following list. */
-    struct wordTree *following;	/* List of words that we've seen follow us. */
+    struct rbTree *following;	/* Binary tree of words that follow us. */
     char *word;			/* The word itself including comma, period etc. */
     int useCount;		/* Number of times word used. */
     };
@@ -47,42 +48,42 @@ wt->word = cloneString(word);
 return wt;
 }
 
-int wordTreeCmpWord(const void *va, const void *vb)
+int wordTreeCmpWord(void *va, void *vb)
 /* Compare two wordTree. */
 {
-const struct wordTree *a = *((struct wordTree **)va);
-const struct wordTree *b = *((struct wordTree **)vb);
+struct wordTree *a = va, *b = vb;
 return strcmp(a->word, b->word);
 }
 
 
-struct wordTree *wordTreeFind(struct wordTree *list, char *word)
-/* Return matching element in list or NULL if not found. */
-{
-struct wordTree *wt;
-for (wt = list; wt != NULL; wt = wt->next)
-    {
-    if (sameString(wt->word, word))
-        return wt;
-    }
-return NULL;
-}
-
-struct wordTree *wordTreeAddFollowing(struct wordTree *wt, char *word)
+struct wordTree *wordTreeAddFollowing(struct wordTree *wt, char *word, 
+	struct lm *lm, struct rbTreeNode **stack)
 /* Make word follow wt in tree.  If word already exists among followers
  * return it and bump use count.  Otherwise create new one. */
 {
-struct wordTree *w = wordTreeFind(wt->following, word);
+struct wordTree *w;
+if (wt->following == NULL)
+    {
+    wt->following = rbTreeNewDetailed(wordTreeCmpWord, lm, stack);
+    w = NULL;
+    }
+else
+    {
+    struct wordTree key;
+    key.word = word;
+    w = rbTreeFind(wt->following, &key);
+    }
 if (w == NULL)
     {
     w = wordTreeNew(word);
-    slAddHead(&wt->following, w);
+    rbTreeAdd(wt->following, w);
     }
 w->useCount += 1;
 return w;
 }
 
-void addChainToTree(struct wordTree *wt, struct dlList *chain)
+void addChainToTree(struct wordTree *wt, struct dlList *chain, 
+	struct lm *lm, struct rbTreeNode **stack)
 /* Add chain of words to tree. */
 {
 struct dlNode *node;
@@ -90,7 +91,8 @@ wt->useCount += 1;
 for (node = chain->head; !dlEnd(node); node = node->next)
     {
     char *word = node->val;
-    wt = wordTreeAddFollowing(wt, word);
+    verbose(2, "  %s\n", word);
+    wt = wordTreeAddFollowing(wt, word, lm, stack);
     }
 }
 
@@ -98,41 +100,58 @@ void wordTreeDump(int level, struct wordTree *wt, FILE *f)
 /* Write out wordTree to file. */
 {
 static char *words[64];
+struct slRef *list, *ref;
 int i;
+int followingCount = 0;
 assert(level < ArraySize(words));
 words[level] = wt->word;
 for (i=1; i<=level; ++i)
     fprintf(f, "%s ", words[i]);
-fprintf(f, "%d %d\n", wt->useCount, slCount(wt->following));
-for (wt = wt->following; wt != NULL; wt = wt->next)
-    wordTreeDump(level+1, wt, f);
+if (wt->following)
+    followingCount = wt->following->n;
+fprintf(f, "%d %d\n", wt->useCount, followingCount);
+if (wt->following != NULL)
+    {
+    list = rbTreeItems(wt->following);
+    for (ref = list; ref != NULL; ref = ref->next)
+        wordTreeDump(level+1, ref->val, f);
+    slFreeList(&list);
+    }
 }
 
-void wordTreeSort(struct wordTree *wt)
-/* Recursively sort tree. */
+int totalUses = 0;
+int curUses = 0;
+int useThreshold = 0;
+char *pickedWord;
+
+void addUse(void *v)
+/* Add up to total uses. */
 {
-slSort(&wt->following, wordTreeCmpWord);
-for (wt = wt->following; wt != NULL; wt = wt->next)
-    wordTreeSort(wt);
+struct wordTree *wt = v;
+totalUses += wt->useCount;
 }
 
-char *pickRandomWord(struct wordTree *list)
+void pickIfInThreshold(void *v)
+/* See if inside threshold, and if so store it in pickedWord. */
+{
+struct wordTree *wt = v;
+int top = curUses + wt->useCount;
+if (curUses <= useThreshold && useThreshold < top)
+    pickedWord = wt->word;
+curUses = top;
+}
+
+char *pickRandomWord(struct rbTree *rbTree)
 /* Pick word from list randomly, but so that words more
  * commonly seen are picked more often. */
 {
-int totalUses = 0, curUses = 0, useThreshold;
-struct wordTree *wt;
-for (wt = list; wt != NULL; wt = wt->next)
-    totalUses += wt->useCount;
-useThreshold = rand()%totalUses + 1;
-for (wt = list; wt != NULL; wt = wt->next)
-    {
-    curUses += wt->useCount;
-    if (curUses >= useThreshold)
-	break;
-    }
-assert(wt != NULL);
-return wt->word;
+pickedWord = NULL;
+curUses = 0;
+totalUses = 0;
+rbTreeTraverse(rbTree, addUse);
+rbTreeTraverse(rbTree, pickIfInThreshold);
+assert(pickedWord != NULL);
+return pickedWord;
 }
 
 char *predictNext(struct wordTree *wt, struct dlList *recent)
@@ -142,7 +161,9 @@ struct dlNode *node;
 for (node = recent->head; !dlEnd(node); node = node->next)
     {
     char *word = node->val;
-    wt = wordTreeFind(wt->following, word);
+    struct wordTree key;
+    key.word = word;
+    wt = rbTreeFind(wt->following, &key);
     if (wt == NULL)
         errAbort("%s isn't a follower of %s\n", word, wt->word);
     }
@@ -214,11 +235,15 @@ struct dlNode *node;
 int llSize = 0;
 struct wordTree *wt = wordTreeNew("");
 int wordCount = 0;
+struct lm *lm = lmInit(0);
+struct rbTreeNode **stack;
 
+stack = lmAllocArray(lm, stack, 256);
 while (lineFileNext(lf, &line, NULL))
     {
     while ((word = nextWord(&line)) != NULL)
 	{
+	verbose(2, "%s\n", word);
 	if (wordCount == 0)
 	    firstWord = cloneString(word);
 
@@ -227,7 +252,7 @@ while (lineFileNext(lf, &line, NULL))
 	    dlAddValTail(ll, cloneString(word));
 	    ++llSize;
 	    if (llSize == maxSize)
-		addChainToTree(wt, ll);
+		addChainToTree(wt, ll, lm, stack);
 	    }
 	else
 	    {
@@ -235,22 +260,21 @@ while (lineFileNext(lf, &line, NULL))
 	    freeMem(node->val);
 	    node->val = cloneString(word);
 	    dlAddTail(ll, node);
-	    addChainToTree(wt, ll);
+	    addChainToTree(wt, ll, lm, stack);
 	    }
 	++wordCount;
 	}
     }
 if (llSize < maxSize)
-    addChainToTree(wt, ll);
+    addChainToTree(wt, ll, lm, stack);
 while ((node = dlPopHead(ll)) != NULL)
     {
-    addChainToTree(wt, ll);
+    addChainToTree(wt, ll, lm, stack);
     freeMem(node->val);
     freeMem(node);
     }
 dlListFree(&ll);
 lineFileClose(&lf);
-wordTreeSort(wt);
 
 if (optionExists("chain"))
     {
