@@ -280,9 +280,4 @@ searchType genePred
 termRegex chr.*\.[0-9]+\.[0-9]+
 searchPriority 50
 
-searchTable wabaCbr
-searchMethod exact
-query select chrom,chromStart,chromEnd,query from %s where query like '%s'
-searchPriority 64
-
  
