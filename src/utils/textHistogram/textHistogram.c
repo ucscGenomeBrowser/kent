@@ -64,7 +64,8 @@ if (doLog)
     maxCt = log(maxCt);
 if (noStar)
     {
-    printf("%d\t%d\n", i*binSize + minVal, hist[i]);
+    for (i=minData; i<=maxData; ++i)
+	printf("%d\t%d\n", i*binSize + minVal, hist[i]);
     }
 else
     {
