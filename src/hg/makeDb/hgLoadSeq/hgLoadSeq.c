@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.1 2003/06/01 07:26:31 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.2 2003/07/07 17:09:18 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -149,7 +149,7 @@ void usage()
 errAbort(
   "hgLoadSeq - load browser database with sequence file info.\n"
   "usage:\n"
-  "   hgLoadRna [-abbr=junk] database file(s).fa\n"
+  "   hgLoadSeq [-abbr=junk] database file(s).fa\n"
   "This loads sequence file info only, it is not used for genbank data.\n"
   "\n"
   "Options:\n"
