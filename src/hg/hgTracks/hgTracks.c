@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.623 2003/10/30 17:18:25 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.624 2003/11/01 02:54:07 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5170,10 +5170,11 @@ void smallBreak()
 hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
-void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
-/* Draw a min-raised looking button. */
+void drawColoredButtonBox(struct vGfx *vg, int x, int y, int w, int h, 
+                                int enabled, Color shades[])
+/* draw button box, providing shades of the desired button color */
 {
-int light = shadesOfGray[1], mid = shadesOfGray[2], dark = shadesOfGray[4];
+int light = shades[1], mid = shades[2], dark = shades[4];
 if (enabled) 
     {
     vgBox(vg, x, y, w, 1, light);
@@ -5193,6 +5194,23 @@ else				/* try to make the button look as if
     }
 }
 
+void drawGrayButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
+/* Draw a gray min-raised looking button. */
+{
+    drawColoredButtonBox(vg, x, y, w, h, enabled, shadesOfGray);
+}
+
+void drawBlueButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
+/* Draw a blue min-raised looking button. */
+{
+    drawColoredButtonBox(vg, x, y, w, h, enabled, shadesOfSea);
+}
+
+void drawButtonBox(struct vGfx *vg, int x, int y, int w, int h, int enabled)
+/* Draw a standard (gray) min-raised looking button. */
+{
+    drawGrayButtonBox(vg, x, y, w, h, enabled);
+}
 
 void beforeFirstPeriod( char *str )
 {
@@ -5321,6 +5339,8 @@ leftLabelWidth = insideX - gfxBorder*3;
 if (withLeftLabels && psOutput == NULL)
     {
     int butOff;
+    boolean grayButtonGroup = FALSE;
+    struct group *lastGroup = NULL;
     y = gfxBorder;
     if (withRuler)
         y += basePositionHeight;
@@ -5334,10 +5354,19 @@ if (withLeftLabels && psOutput == NULL)
 	    y += track->height;
 	    yEnd = y;
 	    h = yEnd - yStart - 1;
-	    drawButtonBox(vg, trackTabX, yStart, trackTabWidth, 
-	    	h, track->hasUi); 
+
+            /* alternate button colors for track groups*/
+            if (track->group != lastGroup)
+                grayButtonGroup = !grayButtonGroup;
+            lastGroup = track->group;
+            if (grayButtonGroup) 
+                drawGrayButtonBox(vg, trackTabX, yStart, trackTabWidth, 
+	    	                h, track->hasUi); 
+            else
+                drawBlueButtonBox(vg, trackTabX, yStart, trackTabWidth, 
+	    	                h, track->hasUi); 
 	    if (track->hasUi)
-		mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
+                mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
 	    }
 	}
     butOff = trackTabX + trackTabWidth;
