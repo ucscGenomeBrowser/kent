@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.18 2004/05/11 23:55:46 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.19 2004/05/12 00:02:08 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -722,7 +722,7 @@ if (sameString(utsName.nodename,"hgwdev"))
     printf("<p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO <a href=http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
     }
 
-if (sameString(month,""))
+if ((sameString(month,"")) || (sameString(month,"current")))
     {
     printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=add>ADD</A>\n");
     }
