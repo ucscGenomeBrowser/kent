@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.134 2004/03/03 20:29:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.135 2004/03/04 07:54:51 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1472,6 +1472,7 @@ for (col = colList; col != NULL; col = col->next)
 hPrintf("</TR>\n");
 
 /* Print other rows. */
+hPrintf("<!-- Start Rows -->");
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
     if (sameString(gene->name, curGeneId->name))
@@ -1489,10 +1490,11 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 		col->cellPrint(col,gene,conn);
 	    }
 	}
-    hPrintf("</TR>\n");
+    hPrintf("</TR><!-- Row -->\n");
     if (ferror(stdout))
         errAbort("Write error to stdout");
     }
+hPrintf("<!-- End Rows -->");
 
 hPrintf("</TABLE>");
 }

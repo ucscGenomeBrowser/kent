@@ -7,3 +7,4 @@ pepTable bdgpGenePep
 allTranscriptQuery select name,chrom,txStart,txEnd,proteinID from bdgpGene
 allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from bdgpCanonical
 oneGeneQuery select name,chrom,txStart,txEnd,proteinId from bdgpGene where name = '%s'
+idColumn flyBdgp
