@@ -78,59 +78,89 @@ return hash;
 
 
 struct libInfo
-/* Info on a library */
+/* Info on a batch of ESTs */
     {
     struct libInfo *next;
-    char *id;			/* Id in ascii form. */
-    char *name;			/* Full name of library. */
+    char *libName;		/* Full name of library. */
+    char *author;		/* Library authors. */
     int estCount;		/* Total count of ESTs. */
     struct estInfo *threePrime;	/* List of 3' ESTs. */
     struct estInfo *fivePrime;      /* List of 5' ESTs. */
     struct estInfo *unPrime;       /* List of unknown orientation ests. */
     };
 
-void readLibs(char *database, struct libInfo **retList, struct hash **retHash)
-/* Scan database for libraries and put in list. */
+int libInfoCmp(const void *va, const void *vb)
+/* Compare to sort based on query. */
+{
+const struct libInfo *a = *((struct libInfo **)va);
+const struct libInfo *b = *((struct libInfo **)vb);
+return b->estCount - a->estCount;
+}
+
+struct nameId
+/* A name/id pair. */
+    {
+    struct nameId *next;
+    char *id;		/* Ascii numerical id. */
+    char *name;		/* Often longish name with white space. */
+    };
+
+struct hash *readIdHash(char *database, char *table)
+/* Put an id/name table into a hash keyed by id with
+ * nameId as value. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *hash = newHash(0);
+char query[256];
 struct sqlResult *sr;
 char **row;
-struct libInfo *liList = NULL, *li;
+struct nameId *nid;
 
-sr = sqlGetResult(conn, "select id,name from author");
+sprintf(query, "select id,name from %s", table);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    AllocVar(li);
-    li->name = cloneString(row[1]);
-    hashAddSaveName(hash, row[0], li, &li->id);
-    slAddHead(&liList, li);
+    AllocVar(nid);
+    nid->name = cloneString(row[1]);
+    hashAddSaveName(hash, row[0], nid, &nid->id);
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
-slReverse(&liList);
-*retList = liList;
-*retHash = hash;
+return hash;
 }
 
-void addEsts(char *database, struct hash *eiHash, struct hash *liHash)
+struct libInfo *addEsts(char *database, struct hash *eiHash, 
+	struct hash *libHash, struct hash *authorHash,
+	struct hash *liHash)
 /* Read in all ESTs from mRNA table in database and add them to 
  * library they belong to. */
 {
-struct libInfo *li;
+struct libInfo *liList = NULL, *li;
 struct estInfo *ei;
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr = NULL;
+char liId[256];
 char **row;
+struct nameId *library, *author;
 
-sr = sqlGetResult(conn, "select acc,author,direction from mrna where type = 'EST'");
+sr = sqlGetResult(conn, "select acc,library,author,direction from mrna where type = 'EST'");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    li = hashMustFindVal(liHash, row[1]);
+    library = hashMustFindVal(libHash, row[1]);
+    author = hashMustFindVal(authorHash, row[2]);
+    sprintf(liId, "%s.%s", library->id, author->id);
+    if ((li = hashFindVal(liHash, liId)) == NULL)
+        {
+	AllocVar(li);
+	li->libName = library->name;
+	li->author = author->name;
+	hashAdd(liHash, liId, li);
+	slAddHead(&liList, li);
+	}
     li->estCount += 1;
     if ((ei = hashFindVal(eiHash, row[0])) != NULL)
         {
-	switch (row[2][0])
+	switch (row[3][0])
 	    {
 	    case '5':
 	        slAddHead(&li->fivePrime, ei);
@@ -142,13 +172,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        slAddHead(&li->unPrime, ei);
 		break;
 	    default:
-	        errAbort("Unknown type '%s' for %s", row[2], row[0]);
+	        errAbort("Unknown type '%s' for %s", row[3], row[0]);
 		break;
 	    }
 	}
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
+slSort(&liList, libInfoCmp);
+return liList;
 }
 
 void sumStrandAndScore(struct estInfo *eiList, int *retStrand, int *retScore)
@@ -232,7 +264,7 @@ fprintf(f, "#ests\tsize\tstartDate\tendngDate\t");
 labelGroup(f, "3'");
 labelGroup(f, "5'");
 labelGroup(f, "?");
-fprintf(f, "name\n");
+fprintf(f, "library\tauthor\n");
 
 for (li = liList; li != NULL; li = li->next)
     {
@@ -252,17 +284,10 @@ for (li = liList; li != NULL; li = li->next)
     printGroupStats(f, li->threePrime);
     printGroupStats(f, li->fivePrime);
     printGroupStats(f, li->unPrime);
-    fprintf(f, "%s\n", li->name);
+    fprintf(f, "%s\t", li->libName);
+    fprintf(f, "%s\n", li->author);
     }
 carefulClose(&f);
-}
-
-int libInfoCmp(const void *va, const void *vb)
-/* Compare to sort based on query. */
-{
-const struct libInfo *a = *((struct libInfo **)va);
-const struct libInfo *b = *((struct libInfo **)vb);
-return b->estCount - a->estCount;
 }
 
 void addSizes(char *database, struct hash *eiHash, struct hash *dateHash)
@@ -290,19 +315,20 @@ sqlDisconnect(&conn);
 void estLibStats(char *database, char *eiInfoBed, char *output)
 /* estLibStats - Calculate some stats on EST libraries given file from polyInfo. */
 {
-struct hash *eiHash = NULL, *liHash = NULL;
+struct hash *eiHash = NULL, *liHash = newHash(0);
+struct hash *libHash = NULL, *authorHash = NULL;
 struct hash *dateHash = newHash(0);
 struct libInfo *liList = NULL, *li;
 
-readLibs(database, &liList, &liHash);
-printf("Read %d libs\n", slCount(liList));
+libHash = readIdHash(database, "library");
+authorHash = readIdHash(database, "author");
+printf("Read libs and authors\n");
 eiHash = readEstInfo(eiInfoBed);
 printf("Read %s\n", eiInfoBed);
 addSizes(database, eiHash, dateHash);
 printf("Added size info\n");
-addEsts(database, eiHash, liHash);
+liList = addEsts(database, eiHash, libHash, authorHash, liHash);
 printf("Read in 3' and other info from %s\n", database);
-slSort(&liList, libInfoCmp);
 printLibStats(liList, output);
 }
 
