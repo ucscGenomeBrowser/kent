@@ -164,6 +164,14 @@ chromosomes chr22,
 color 0,100,180
 type genePred
 
+track loweProbes
+shortLabel Lowe's Probes
+longLabel 3 Olidogs selected per exon on Chr22
+priority 12.99
+visibility hide
+chromosomes chr22,
+type bed 6
+
 track freen
 shortLabel Pet Freen 
 longLabel Jims Pet Freen
