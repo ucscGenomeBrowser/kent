@@ -1808,6 +1808,19 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
+void loadUPennBacEndPairs(struct trackGroup *tg)
+/* Load up bac end pairs from table into trackGroup items. */
+{
+tg->items = lfsFromBedsInRange("uPennBacEndPairs", winStart, winEnd, chromName);
+}
+
+void uPennBacEndPairsMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadUPennBacEndPairs;
+}
+
 #endif /* FUREY_CODE */
 
 #ifdef ROGIC_CODE
@@ -7025,6 +7038,7 @@ withRuler = sameWord(s, "on");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
+registerTrackHandler("uPennBacEndPairs", uPennBacEndPairsMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
 registerTrackHandler("fishClones", fishClonesMethods);

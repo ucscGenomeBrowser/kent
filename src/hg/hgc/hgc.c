@@ -3628,6 +3628,12 @@ if (sameString("bacEndPairs", track))
     lfLabel = "BAC ends";
     table = track;
     }
+if (sameString("uPennBacEndPairs", track)) 
+    {
+    sprintf(title, "Location of %s using BAC end sequences", clone);
+    lfLabel = "BAC ends";
+    table = track;
+    }
 
 /* Print out non-sequence info */
 cartWebStart(title);
@@ -3642,7 +3648,7 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
-    if (sameString("bacEndPairs", track)) 
+    if ((sameString("bacEndPairs", track)) || (sameString("uPennBacEndPairs", track))) 
     {
     printf("<H2><A HREF=");
     printCloneRegUrl(stdout, clone);
@@ -3667,7 +3673,6 @@ if (row != NULL)
 
     sprintf(title, "Genomic alignments of %s:", lfLabel);
     webNewSection(title);
-    /*printf("<H3>Genomic alignments of %s:</H3>\n", lfLabel);*/
     
     for (i = 0; i < lfs->lfCount; i++) 
       {
@@ -5506,6 +5511,10 @@ else if (sameWord(track, "tigrGeneIndex"))
 #endif /*ROGIC_CODE*/
 #ifdef FUREY_CODE
  else if (sameWord(track, "bacEndPairs"))
+   {
+     doLinkedFeaturesSeries(track, item, tdb);
+   }
+ else if (sameWord(track, "uPennBacEndPairs"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
    }
