@@ -23,6 +23,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hgRelate.h"
+#include "htmlPage.h"
 #include "psl.h"
 #include "cogs.h"
 #include "cogsxra.h"
@@ -155,7 +156,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.812 2005/01/10 08:18:06 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.813 2005/01/12 08:45:50 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4826,7 +4827,8 @@ freeDnaSeq(&tSeq);
 return blockCount;
 }
 
-int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, FILE *body, int cdsS, int cdsE)
+int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, 
+		     FILE *body, int cdsS, int cdsE)
 /* Show alignment for accession. */
 {
 struct dnaSeq *dnaSeq;
@@ -4876,7 +4878,8 @@ return blockCount;
 }
 
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
-		       enum gfType qType, int qStart, int qEnd, char *qName, int cdsS, int cdsE)
+		       enum gfType qType, int qStart, int qEnd, 
+		       char *qName, int cdsS, int cdsE)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount, i;
@@ -5050,7 +5053,6 @@ else
 writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
-
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
@@ -11146,7 +11148,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void writeSnpException(char *exceptionList)
+void writeSnpException(char *exceptionList, char *itemName, int rowOffset)
 {
 char *tokens;
 struct lineFile *lf;
@@ -11158,6 +11160,9 @@ char **row;
 char query[256];
 char *id;
 char *br=" ";
+char *noteColor="#7f0000";
+boolean firstException=TRUE;
+boolean multiplePositions=FALSE;
 
 if (sameString(exceptionList,"0"))
     return;
@@ -11166,72 +11171,96 @@ lf=lineFileOnString("snpExceptions", TRUE, tokens);
 tkz=tokenizerOnLineFile(lf);
 while ((id=tokenizerNext(tkz))!=NULL)
     {
+    if (firstException)
+	{
+	printf("<B><font color=%s>Note(s):</font></B><BR>\n",noteColor);
+	firstException=FALSE;
+	}
     if (sameString(id,",")) /* is there a tokenizer that doesn't return separators? */
 	continue;
+    if (sameString(id,"18")||sameString(id,"19")||sameString(id,"20"))
+	multiplePositions=TRUE;
     br=cloneString("<BR>");
     safef(query, sizeof(query), "select * from snpExceptions where exceptionId = %s", id);
-    if ((sr = sqlGetResult(conn, query)) == NULL)
-	printf("<B>Unknown Exception %s!</B><BR>\n", id);
+    sr = sqlGetResult(conn, query);
      /* exceptionId is a primary key; at most 1 record returned */
     while ((row = sqlNextRow(sr))!=NULL)
 	{
 	snpExceptionsStaticLoad(row, &se);
-	printf("<font color=red><B>Data Exception:&nbsp;%s</B></font><BR>\n",se.description);
+	printf("&nbsp;&nbsp;&nbsp;<font color=%s><B>%s</B></font><BR>\n",
+	       noteColor,se.description);
 	}
     }
 printf("%s\n",br);
+if (multiplePositions)
+    {
+    struct snp snp;
+    printf("<font color=#7f0000><B>Other Positions</font></B>:<BR>");
+    safef(query, sizeof(query), "select * from snp where name='%s'", itemName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr))!=NULL)
+	{
+	snpStaticLoad(row+rowOffset, &snp);
+	bedPrintPos((struct bed *)&snp, 3);
+	printf("<BR>\n");
+	}
+    }
+}
+
+void printSnpInfo(struct snp snp)
+/* print info on a snp */
+{
+if (strcmp(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
+printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
+printf("<BR><B><A HREF=\"#Source\">Source</A>: </B>%s\n",           snp.source);
+printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
+printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
+printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
+printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
+printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
+if (snp.avHet>0)
+    printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+printf("<P>\n");
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
-/* Put up info on a SNP. */
+/* Process SNP details. */
 {
-char *group = tdb->tableName;
+char   *group = tdb->tableName;
 struct snp snp;
-int start = cartInt(cart, "o");
+int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char query[256];
-int rowOffset;
-int firstOne=1;
+char   query[256];
+int    rowOffset=hOffsetPastBin(seqName, group);
+int    firstOne=1;
+char  *exception=0;
 
 cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
-safef(query, sizeof(query),
-	"select * "
-	"from   %s "
-	"where  chrom = '%s' "
-	"  and  chromStart = %d "
-	"  and  name = '%s'",
-        group, seqName, start, itemName);
-rowOffset = hOffsetPastBin(seqName, group);
+safef(query, sizeof(query), "select * from %s where chrom='%s' and "
+      "chromStart=%d and name='%s'", group, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr))!=NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
     if (firstOne)
 	{
-	if (hTableExists("snpExceptions") && differentString(snp.exception,"0"))
-	    writeSnpException(snp.exception);
+	exception=cloneString(snp.exception);
 	bedPrintPos((struct bed *)&snp, 3);
 	printf("<BR>\n");
-	firstOne=0; /* rs5886636 is good to test this */
+	printSnpAlignment(snp);
+	printf("<BR>\n");
+	firstOne=0;
 	}
-    if (strcmp(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
-    printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
-    printf("<BR><B><A HREF=\"#Source\">Source</A>: </B>%s\n",           snp.source);
-    printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
-    printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
-    printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
-    printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
-    printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
-    if (snp.avHet>0)
-	printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-    printf("<P>\n");
+    printSnpInfo(snp);
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
 doSnpLocusLink(tdb, itemName);
+if (hTableExists("snpExceptions") && differentString(exception,"0"))
+    writeSnpException(exception, itemName,rowOffset);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
