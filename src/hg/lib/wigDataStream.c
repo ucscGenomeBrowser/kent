@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.26 2004/08/25 22:09:32 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.27 2004/08/26 17:30:41 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -668,6 +668,11 @@ if (doDataArray && wDS->winEnd && wDS->chrName)
 	verbose(VERBOSE_CHR_LEVEL,
 	    "#\tgetData: created data array for %d values (%u b) in %ld ms\n",
 		winSize, size, et);
+	verbose(VERBOSE_CHR_LEVEL,
+	    "#\tdata array begins at %#x, last at %#x, size: %#x\n",
+		(unsigned long) dataArrayPtr,
+			(unsigned long) (((unsigned long) dataArrayPtr) +
+				((unsigned long) size)), (unsigned long) size);
 	}
     }
 else if (doDataArray && !(doNoOp || doAscii || doBed || doStats))
@@ -1291,6 +1296,13 @@ if (bedList && *bedList)
 	if (verboseLevel() >= VERBOSE_CHR_LEVEL)
 	    startTime = clock1000();
 	bedArray = (char *)needLargeMem(bedArraySize);
+
+	verbose(VERBOSE_CHR_LEVEL,
+	    "#\tbed array begins at %#x, last at %#x, size: %#x\n",
+		(unsigned long) bedArray,
+		(unsigned long) (((unsigned long) bedArray) +
+			((unsigned long) bedArraySize)),
+				(unsigned long) bedArraySize );
 
 	/*	set them all to FALSE to begin with	*/
 	memset((void *)bedArray, FALSE, bedArraySize);
