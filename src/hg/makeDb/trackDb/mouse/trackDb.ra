@@ -200,8 +200,8 @@ spectrum on
 type psl xeno
 
 track blastzBestMouse
-shortLabel Best Mouse
-longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
+shortLabel Self Best
+longLabel Self Blastz Best-in-Genome Alignments
 group varRep
 priority 132
 visibility hide
