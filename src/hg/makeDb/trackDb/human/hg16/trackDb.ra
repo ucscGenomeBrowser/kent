@@ -1782,55 +1782,47 @@ shortLabel RNA 32hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
-track encode_UVA_DNARep_0_2
-shortLabel DNA Rep/UVA 0-2hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+track encode_UVA_DNARep
+compositeTrack On
+shortLabel DNA Rep/UVA
+longLabel Univ. Virginia Temporal Profiling of DNA Replication in ENCODE Regions
 group encode
 priority 50.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-color 60,75,60
+color 10,130,10
+altColor 50,50,50
 type bed 3 .
+
+track encode_UVA_DNARep_0_2
+subTrack encode_UVA_DNARep
+shortLabel DNA Rep 0-2hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+priority 1
 
 track encode_UVA_DNARep_2_4
-shortLabel DNA Rep/UVA 2-4hr
+subTrack encode_UVA_DNARep
+shortLabel DNA Rep 2-4hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCODE Regions
-group encode
-priority 50.2
-color 45,80,45
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 3 .
+priority 2
 
 track encode_UVA_DNARep_4_6
-shortLabel DNA Rep/UVA 4-6hr
+subTrack encode_UVA_DNARep
+shortLabel DNA Rep 4-6hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) in ENCODE Regions
-group encode
-priority 50.3
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 30,90,30
-type bed 3 .
+priority 3
 
 track encode_UVA_DNARep_6_8
-shortLabel DNA Rep/UVA 6-8hr
+subTrack encode_UVA_DNARep
+shortLabel DNA Rep 6-8hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) in ENCODE Regions
-group encode
-priority 50.4
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 20,110,20
-type bed 3 .
+priority 4
 
 track encode_UVA_DNARep_8_10
-shortLabel DNA Rep/UVA 8-10hr
+subTrack encode_UVA_DNARep
+shortLabel DNA Rep 8-10hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) in ENCODE Regions
-group encode
-priority 50.5
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 10,130,10
-type bed 3 .
+priority 5
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
