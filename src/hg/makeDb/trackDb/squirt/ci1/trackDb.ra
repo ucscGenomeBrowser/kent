@@ -241,3 +241,11 @@ group rna
 priority 50
 visibility dense
 type genePred refPep refMrna
+
+track blastHg15KG
+shortLabel human protein blast
+longLabel human protein blast
+group x
+priority 1101
+visibility dense
+type psl protein
