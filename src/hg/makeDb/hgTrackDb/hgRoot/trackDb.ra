@@ -106,6 +106,14 @@ longLabel Duplications of >98% Identity >1kb
 visibility dense
 type bed 6 .
 
+track cgh
+shortLabel UCSF CGH
+longLabel UCSF Comparative Genomic Hybridizations
+priority 11.5
+visibility hide
+type bed 4 +
+private on
+
 track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
