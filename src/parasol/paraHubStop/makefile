@@ -10,4 +10,4 @@ O = paraHubStop.o
 paraHubStop: $O $(MYLIBS)
 	gcc -o $(HOME)/bin/$(MACHTYPE)/paraHubStop $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip $(HOME)/bin/$(MACHTYPE)/paraHubStop
-	chmod 744 $(HOME)/bin/$(MACHTYPE)/paraHubStart
+	chmod 744 $(HOME)/bin/$(MACHTYPE)/paraHubStop
