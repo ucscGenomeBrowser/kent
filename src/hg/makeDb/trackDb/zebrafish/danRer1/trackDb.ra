@@ -223,3 +223,8 @@ searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
+searchTable rhMap
+searchMethod prefix
+searchType psl
+termRegex [[:alnum:]\._]+
+searchPriority 8
