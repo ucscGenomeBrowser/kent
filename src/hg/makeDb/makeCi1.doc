@@ -678,14 +678,18 @@ chainSome $(path1)
 	echo $i
     done
 
-    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > ../preblastHg17KG.psl
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > ../blastHg17KG.psl
     cd ..
-    blatDir=/cluster/data/hg17/bed/blat.hg17KG
-    protDat -kg preblastHg17KG.psl $blatDir/hg17KG.psl $blatDir/kg.mapNames blastHg17KG.psl
 
     ssh hgwdev
     cd /cluster/data/ci1/bed/tblastn.hg17KG
     hgLoadPsl ci1 blastHg17KG.psl
+    echo "drop index tName on blastHg17KG ;" | hgsql ci1
+    echo "drop index tName_2 on blastHg17KG ;" | hgsql ci1
+    echo "drop index tName_3 on blastHg17KG ;" | hgsql ci1
+    echo "create index tName on blastHg17KG (tName(13), bin) ;" | hgsql ci1
+    echo "create index tName_2 on blastHg17KG  (tName(13), tStart);" | hgsql ci1
+    echo "create index tName_3 on blastHg17KG  (tName(13), tEnd);" | hgsql ci1
     exit
 
     # back to kksilo
