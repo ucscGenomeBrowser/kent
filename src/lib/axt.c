@@ -183,6 +183,16 @@ if (qSize != axt->qEnd - axt->qStart)
 return TRUE;
 }
 
+int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size)
+/* Score ungapped alignment. */
+{
+int score = 0;
+int i;
+for (i=0; i<size; ++i)
+    score += ss->matrix[q[i]][t[i]];
+return score;
+}
+
 
 int axtScore(struct axt *axt, struct axtScoreScheme *ss)
 /* Return calculated score of axt. */
@@ -293,7 +303,7 @@ struct axtScoreScheme *axtScoreSchemeDefault()
  * this. */
 {
 static struct axtScoreScheme *ss;
-static int twoCase[2][4] = {{'a', 'g', 'c', 't'},{'A','C','G','T'},};
+static int twoCase[2][4] = {{'a', 'c', 'g', 't'},{'A','C','G','T'},};
 int i1,i2,j1,j2;
 
 if (ss != NULL)
@@ -322,8 +332,8 @@ ss->matrix['t']['g'] = -114;
 ss->matrix['t']['t'] = 91;
 
 /* Propagate to other case combinations. */
-for (i1=0; i1<0; ++i1)
-    for (i2=0; i2<0; ++i2)
+for (i1=0; i1<=1; ++i1)
+    for (i2=0; i2<=1; ++i2)
        {
        if (i1 == 0 && i2 == 0)
            continue;

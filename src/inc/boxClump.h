@@ -8,9 +8,10 @@ struct boxIn
 /* Input to box clumper. */
     {
     struct boxIn *next;		 /* Next in list. */
+    void *data;			 /* Some user-associated data. */
     int qStart, qEnd;		 /* Range covered in query. */
     int tStart, tEnd;		 /* Range covered in target. */
-    void *data;			 /* Some user-associated data. */
+    int score;			 /* Score associated with box */
     };
 
 struct boxClump

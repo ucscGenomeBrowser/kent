@@ -99,6 +99,9 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 int axtScore(struct axt *axt, struct axtScoreScheme *ss);
 /* Return calculated score of axt. */
 
+int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size);
+/* Score ungapped alignment. */
+
 int axtScoreDnaDefault(struct axt *axt);
 /* Score DNA-based axt using default scheme. */
 
