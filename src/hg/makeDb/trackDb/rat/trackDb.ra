@@ -67,3 +67,11 @@ visibility dense
 color 0,90,100
 type genePred sgpPep
 
+track stsMapRat
+shortLabel STS Markers
+longLabel STS Markers on STS Maps
+group map
+priority 5
+visibility dense
+altColor 128,128,255
+type bed 5 +
