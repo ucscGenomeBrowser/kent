@@ -41,6 +41,7 @@
 #include "roughAli.h"
 #include "exprBed.h"
 #include "refLink.h"
+#include "browserTable.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -2744,6 +2745,64 @@ printf("</td></tr></table></td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
+struct browserTable *checkDbForTables()
+/* Look in the database meta table to get information on which
+ *   tables to load that aren't hardcoded into the database. */
+{
+struct browserTable *tableList = NULL;
+struct browserTable *table = NULL;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+
+sprintf(query, "select * from browserTable order by priority");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    table = browserTableLoad(row);
+    slAddHead(&tableList, table);
+    }
+slReverse(&tableList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return tableList;
+}
+
+struct browserTable *getBrowserTableFromList(char *group, struct browserTable *tableList)
+/* Look through list to see if that group is defined in meta-table */
+{
+struct browserTable *table = NULL;
+for(table=tableList; table!=NULL; table=table->next)
+    {
+    if(sameString(group,table->mapName))
+	return table;
+    }
+return NULL;
+}
+
+boolean inBrowserTable(char *group, struct browserTable *tableList)
+{
+struct browserTable *table = getBrowserTableFromList(group,tableList);
+if(table == NULL)
+    return FALSE;
+else
+    return TRUE;
+}
+
+void doBrowserTable(char *group, struct browserTable *tableList)
+{
+struct browserTable *table = getBrowserTableFromList(group,tableList);
+htmlStart(table->shortLabel);
+printf("<h2>Track: %s, Version: %s.</h2>\n",table->shortLabel, table->version);
+printf("<p>This track was prepared by:<br>%s\n",table->credit);
+if(table->other != NULL)
+    printf("<p>%s\n", table->other);
+printf("<p>For more information please see <a href=\"%s\">%s</a>.\n", table->url, table->url);
+
+}
+
+
 #endif /*CHUCK_CODE*/
 
 void doMiddle()
@@ -2752,7 +2811,7 @@ void doMiddle()
 char *group = cgiString("g");
 char *item = cgiOptionalString("i");
 char title[256];
-
+struct browserTable *tableList = NULL;
 database = cgiOptionalString("db");
 if (database == NULL)
     database = "hg5";
@@ -2760,7 +2819,7 @@ hSetDb(database);
 seqName = cgiString("c");
 winStart = cgiInt("l");
 winEnd = cgiInt("r");
-
+tableList = checkDbForTables();
 if (sameWord(group, "getDna"))
     {
     doGetDna();
@@ -2952,8 +3011,13 @@ else if (sameWord(group, "rosettaTe"))
 #endif /*ROGIC_CODE*/
 else
    {
-   htmlStart(group);
-   printf("Sorry, clicking there doesn't do anything yet (%s).", group);
+   if(inBrowserTable(group,tableList))
+       doBrowserTable(group, tableList);
+   else 
+       {
+       htmlStart(group);
+       printf("Sorry, clicking there doesn't do anything yet (%s).", group);
+       }
    }
 htmlEnd();
 }
