@@ -177,10 +177,13 @@ for (i=0; i<aliSize; ++i)
     {
     q = qString[i];
     t = tString[i];
-    if (q == t)
-	++match;
-    else
-	++misMatch;
+    if (q != '-' && t != '-')
+	{
+	if (q == t)
+	    ++match;
+	else
+	    ++misMatch;
+	}
     }
 
 /* Deal with minus strand. */
