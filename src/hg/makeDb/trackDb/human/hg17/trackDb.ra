@@ -6,6 +6,36 @@ group map
 visibility dense
 type bed 3 +
 
+track rnaGene
+shortLabel RNA Genes
+longLabel Non-coding RNA Genes (dark) and Pseudogenes (light) [Lifted from hg16]
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
+
+track RfamSeed
+shortLabel Rfam seed ncRNAs
+longLabel ncRNAs from Rfam seed
+group genes
+priority 61
+visibility hide
+color 3,70,1 
+type bed 6 .
+url http://www.sanger.ac.uk/Software/Rfam/
+
+track RfamFull
+shortLabel Rfam full ncRNAs
+longLabel ncRNAs from Rfam full
+group genes
+priority 62
+visibility hide
+color 100,50,0
+type bed 6 .
+url http://www.sanger.ac.uk/Software/Rfam/
+
 track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
@@ -841,14 +871,4 @@ priority 11
 group x
 visibility dense
 type bed 3 +
-
-track rnaGene
-shortLabel RNA Genes
-longLabel Non-coding RNA Genes (dark) and Pseudogenes (light) [Lifted from hg16]
-group genes
-priority 52
-visibility hide
-color 170,80,0
-altColor 230,180,130
-type bed 6 +
 
