@@ -71,6 +71,14 @@ struct flank
     char *observed;		/* observed   */
     };
 
+int slFlankCmp(const void *va, const void *vb)
+/* Compare two slNames. */
+{
+const struct flank *a = *((struct flank **)va);
+const struct flank *b = *((struct flank **)vb);
+return strcmp(a->rsId, b->rsId);
+}
+
 struct flank *flankLoad(char **row)
 /* Load a flank from row fetched from linefile
  * Dispose of this with flankFree(). */
@@ -765,10 +773,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	if (!sameWord(chr,cn->name))
 	    continue;
 
-    //uglyf("testDb: beginning chrom %s \n",cn->name);
+    uglyf("beginning chrom %s \n",cn->name);
    
     chromSeq = hLoadChrom(cn->name);
-    printf("testDb: chrom %s :  size (%u) \n",cn->name,chromSeq->size);
+    printf("chrom %s :  size (%u) \n",cn->name,chromSeq->size);
     
     //debug: removed
     //snps = readSnpMap(cn->name);
@@ -778,7 +786,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
     printf("read %s.snp where chrom=%s \n",db,cn->name);
         
     flanks = readFlank(cn->name);
-    printf("readFlanks: chrom %s \n",cn->name);
+    slSort(&flanks, slFlankCmp);
+    printf("readFlanks,slSort: chrom %s \n",cn->name);
+
     
     flank   = flanks; 
     //dbSnp   = dbSnps; 
@@ -797,7 +807,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 
 	
 	//debug: 
-    	printf("%s %u %u %s %s\n",
+    	printf("debug %s %u %u %s %s\n",
 	  snp->chrom,
 	  snp->chromStart,
 	  snp->chromEnd,
