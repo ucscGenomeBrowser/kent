@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.510 2003/11/04 17:46:44 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.511 2003/11/04 18:52:40 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2398,7 +2398,7 @@ puts("<H3>Further Details and Ideas</H3>");
 puts("<P>Copying and pasting the web page output to a text editor such as Word "
      "will retain upper case but lose colors and other formatting. That's still "
      "useful because other web tools such as "
-     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\">NCBI Blast</A> "
+     "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi\" TARGET=_BLANK>NCBI Blast</A> "
      "can be set to ignore lower case.  To fully capture formatting such as color "
      "and underlining, view the output as \"source\" in your web browser, or download "
      "it, or copy the output page into an html editor.</P>");
@@ -6239,7 +6239,8 @@ if (hasMedical)
 			printf("<B>Mouse Genome Informatics:</B> ");
 			mgiID = strdup(row[0]);
 			printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
-			printf("id=%s\">%s</A><BR>\n",mgiID, mgiID);
+			printf("id=%s\" TARGET=_BLANK>%s</A><BR>\n",
+			       mgiID, mgiID);
 			}
 		    else
 			{
@@ -6571,7 +6572,7 @@ if (rl->locusLinkId != 0)
 	    printf("<B>Mouse Genome Informatics:</B> ");
 	    mgiID = strdup(row[0]);
 		
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</A><BR>\n",mgiID, mgiID);
+	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
 	    }
 	else
 	    {
@@ -8483,7 +8484,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS id:</TH><TD>%d</TD></TR>\n", stsRow.identNo);
 	printf("<TR><TH ALIGN=left>UniSTS id:</TH><TD><A HREF=");
 	printUnistsUrl(stdout, infoRow->dbSTSid);
-	printf(">%d</A></TD></TR>\n", infoRow->dbSTSid);
+	printf(" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->dbSTSid);
 	if (infoRow->otherDbstsCount > 0) 
 	    {
 	    printf("<TR><TH ALIGN=left>Related UniSTS ids:</TH>");
@@ -8491,7 +8492,7 @@ if (row != NULL)
 		{
 		printf("<TD><A HREF=");
 		printUnistsUrl(stdout, infoRow->otherDbSTS[i]);
-		printf(">%d</A></TD>", infoRow->otherDbSTS[i]);
+		printf(" TARGET=_BLANK>%d</A></TD>", infoRow->otherDbSTS[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -8502,7 +8503,7 @@ if (row != NULL)
 		{
 		printf("<TD><A HREF=\"");
 		printEntrezNucleotideUrl(stdout, infoRow->genbank[i]);
-		printf("\">%s</A></TD>", infoRow->genbank[i]);
+		printf("\" TARGET=_BLANK>%s</A></TD>", infoRow->genbank[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -8513,7 +8514,7 @@ if (row != NULL)
 		{
 		printf("<TD><A HREF=");
 		printGdbUrl(stdout, infoRow->gdb[i]);
-		printf(">%s</A></TD>", infoRow->gdb[i]);
+		printf(" TARGET=_BLANK>%s</A></TD>", infoRow->gdb[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -8902,7 +8903,7 @@ int pslStart;
 /* Print out non-sequence info */
 
 sprintf(title, "STS Marker %s\n", marker);
-/* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\">%s</A>\n", marker, marker); */
+/* sprintf(title, "STS Marker <A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?string\%%3AmousemarkerID=%s\" TARGET=_BLANK>%s</A>\n", marker, marker); */
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
@@ -8933,11 +8934,11 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
 	if( infoRow->UiStsId != 0)
 	    {
-	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
 	    }
 	if( infoRow->MGIId != 0)
 	    {
-	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\">%d</A></TD></TR>\n",sChar,infoRow->MGIId,infoRow->MGIId ); 
+	      printf("<TR><TH ALIGN=left>MGI Marker ID:</TH><TD><B><A HREF=\"http://www.informatics.jax.org/searches/marker_report.cgi?accID=MGI%c3A%d\" TARGET=_BLANK>%d</A></TD></TR>\n",sChar,infoRow->MGIId,infoRow->MGIId ); 
 	    }
 	if( strcmp(infoRow->MGIName, "") )
 	    {
@@ -9128,11 +9129,11 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>UCSC STS Marker ID:</TH><TD>%d</TD></TR>\n", infoRow->identNo);
 	if( infoRow->UiStsId != 0)
 	    {
-	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\">%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
+	    printf("<TR><TH ALIGN=left>UniSts Marker ID:</TH><TD><A HREF=\"http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=%d\" TARGET=_BLANK>%d</A></TD></TR>\n", infoRow->UiStsId, infoRow->UiStsId);
 	    }
 	if( infoRow->RGDId != 0)
 	    {
-	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\">%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
+	      printf("<TR><TH ALIGN=left>RGD Marker ID:</TH><TD><B><A HREF=\"http://rgd.mcw.edu/tools/query/query.cgi?id=%d\" TARGET=_BLANK>%d</A></TD></TR>\n",infoRow->RGDId,infoRow->RGDId ); 
 	    }
 	if( strcmp(infoRow->RGDName, "") )
 	    {
@@ -9300,7 +9301,7 @@ if (row != NULL)
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
     printCloneRegUrl(stdout, clone);
-    printf(">%s</A></H2>\n", clone);
+    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
@@ -9333,7 +9334,7 @@ if (row != NULL)
 	    {
 	    printf("<TD><A HREF=\"");
 	    printEntrezNucleotideUrl(stdout, fc->accNames[i]);
-	    printf("\">%s</A></TD>", fc->accNames[i]);	  
+	    printf("\" TARGET=_BLANK>%s</A></TD>", fc->accNames[i]);	  
 	    }
 	printf("</TR>\n");
 	}
@@ -9353,7 +9354,7 @@ if (row != NULL)
 	    {
 	    printf("<TD><A HREF=\"");
 	    printEntrezNucleotideUrl(stdout, fc->beNames[i]);
-	    printf("\">%s</A></TD>", fc->beNames[i]);
+	    printf("\" TARGET=_BLANK>%s</A></TD>", fc->beNames[i]);
 	    }
 	printf("</TR>\n");
 	} 
@@ -9480,7 +9481,7 @@ if (row != NULL)
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
     printGenMapDbUrl(stdout, clone);
-    printf(">%s</A></H2>\n", clone);
+    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
@@ -9512,7 +9513,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>T7 end sequence:</TH>");
 	printf("<TD><A HREF=\"");
 	printEntrezNucleotideUrl(stdout, upc->accT7);
-	printf("\">%s</A></TD>", upc->accT7);
+	printf("\" TARGET=_BLANK>%s</A></TD>", upc->accT7);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->startT7, upc->endT7);
 	printf("</TR>\n");
@@ -9522,7 +9523,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>SP6 end sequence:</TH>");
 	printf("<TD><A HREF=\"");
 	printEntrezNucleotideUrl(stdout, upc->accSP6);
-	printf("\">%s</A></TD>", upc->accSP6);
+	printf("\" TARGET=_BLANK>%s</A></TD>", upc->accSP6);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->startSP6, upc->endSP6);
 	printf("</TR>\n");
@@ -9532,7 +9533,7 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>STS Marker:</TH>");
 	printf("<TD><A HREF=\"");
 	printEntrezUniSTSUrl(stdout, upc->stsMarker);
-	printf("\">%s</A></TD>", upc->stsMarker);
+	printf("\" TARGET=_BLANK>%s</A></TD>", upc->stsMarker);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->stsStart, upc->stsEnd);
 	printf("</TR>\n");
@@ -10201,7 +10202,7 @@ if (row != NULL)
 	{
 	printf("<H2><A HREF=");
 	printCloneRegUrl(stdout, clone);
-	printf(">%s</A></H2>\n", clone);
+	printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
 	}
     else 
 	{
@@ -10257,7 +10258,7 @@ if (row != NULL)
 	    {
 	    printf("<H3><A HREF=");
 	    printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
-	    printf(">%s</A></H3>\n",lfs->lfNames[i]);
+	    printf(" TARGET=_BLANK>%s</A></H3>\n",lfs->lfNames[i]);
 	    }
 	else 
 	    {
@@ -10647,7 +10648,7 @@ printEntrezNucleotideUrl(stdout, acc);
 puts("');"); 
 printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <B><A HREF=\"");
 printEntrezNucleotideUrl(stdout, acc);
-puts("\">continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
+puts("\" TARGET=_BLANK>continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
@@ -11059,7 +11060,7 @@ for(i = 0; i < length; i++)
 	
 	/* if we have a url, create a reference */
 	if(differentString(url,""))
-	    printf("<a href=\"%s\">%c</a>", url, header[i]);
+	    printf("<a href=\"%s\" TARGET=_BLANK>%c</a>", url, header[i]);
 	else
 	    printf("%c", header[i]);
 
@@ -11186,7 +11187,7 @@ struct sage *sg = NULL;
 if (sgList == NULL)
     return;
 printf("Please click ");
-printf("<a target=other href=\"../cgi-bin/sageVisCGI?");
+printf("<a target=_blank href=\"../cgi-bin/sageVisCGI?");
 for(sg = sgList; sg != NULL; sg = sg->next)
     {
     if(sg->next == NULL)
@@ -11203,28 +11204,6 @@ printf(" to see the data as a graph.\n");
 void printSageReference(struct sage *sgList, struct trackDb *tdb)
 {
 printf("%s", tdb->html);
-
-/* puts( */
-/*      "<table width=600 cellpadding=0 cellspacing=0><tr><td><p><b>Description: S</b>erial <b>A</b>nalysis of <b>G</b>ene <b>E</b>xpression (SAGE)" */
-/*      "is a quantative measurement gene expression. Data is presented for every cluster contained " */
-/*      "in the browser window and the selected cluster name is highlighted in red. All data is from " */
-/*      "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>" */
-/*      "project downloaded Jul 26, 2002. Selecting the UniGene cluster name will display SageMap's page for that cluster."); */
-/* printSageGraphUrl(sgList); */
-/* puts( */
-/*      "<p><b>Brief Methodology:</b> SAGE counts are produced " */
-/*      "by sequencing small \"tags\" of DNA believed to be associated with a " */
-/*      "gene. These tags are produced by attatching poly-A RNA to oligo-dT " */
-/*      "beads. After synthesis of double stranded cDNA transcripts are " */
-/*      "cleaved by an anchoring enzyme (usually NIaIII). Then small tags are " */
-/*      "produced by ligation with a linker containing a type IIS restriction " */
-/*      "enzyme site and cleavage with the tagging enzyme (usually BsmFI). The " */
-/*      "tags are then concatenated together and sequenced. The frequency of each " */
-/*      "tag is counted and used to infer expression level of transcripts that can " */
-/*      "be matched to that tag. All SAGE data presented here was mapped to UniGene " */
-/*      "transcripts by the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>" */
-/*      "project at <a href=\"http://www.ncbi.nlm.nih.gov\"> NCBI </a>.</td></tr></table><br><br>" */
-/* ); */
 }
 
 void sagePrintTable(struct bed *bedList, char *itemName, struct trackDb *tdb) 
