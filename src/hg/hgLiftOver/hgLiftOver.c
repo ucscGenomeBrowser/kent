@@ -15,14 +15,17 @@
 #include "web.h"
 #include "hash.h"
 #include "liftOver.h"
+#include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.32 2004/11/05 19:04:46 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.33 2005/01/26 11:55:20 aamp Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft_dataFile"     /* file of data to convert */
 #define HGLFT_DATAFORMAT_VAR "hglft_dataFormat" /* format of data to convert */
+#define HGLFT_FROMORG_VAR "hglft_fromOrg"         /* FROM organism */
 #define HGLFT_FROMDB_VAR "hglft_fromDb"         /* FROM assembly */
+#define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
 #define HGLFT_TODB_VAR   "hglft_toDb"           /* TO assembly */
 #define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
 
@@ -47,16 +50,32 @@ char *formatList[] =
 /* Javascript to support New Assembly pulldown when Orig Assembly changes */
 /* Copies selected value from the Original Assembly pulldown to a hidden form
 */
+char *onChangeFromOrg = 
+"onchange=\"document.dbForm.hglft_fromOrg.value = "
+"document.mainForm.hglft_fromOrg.options[document.mainForm.hglft_fromOrg.selectedIndex].value;"
+"document.dbForm.hglft_fromDb.value = 0;"
+"document.dbForm.hglft_toOrg.value = 0;"
+"document.dbForm.hglft_toDb.value = 0;"
+"document.dbForm.submit();\"";
+
 char *onChangeFromDb = 
 "onchange=\"document.dbForm.hglft_fromDb.value = "
 "document.mainForm.hglft_fromDb.options[document.mainForm.hglft_fromDb.selectedIndex].value;"
+"document.dbForm.hglft_toOrg.value = 0;"
+"document.dbForm.hglft_toDb.value = 0;"
 "document.dbForm.submit();\"";
 
-void webMain(char *organism, char *fromDb, char *toDb, char *dataFormat)
-    /* set up page for entering data */
-{
-    struct dbDb *dbList;
+char *onChangeToOrg = 
+"onchange=\"document.dbForm.hglft_toOrg.value = "
+"document.mainForm.hglft_toOrg.options[document.mainForm.hglft_toOrg.selectedIndex].value;"
+"document.dbForm.hglft_toDb.value = 0;"
+"document.dbForm.submit();\"";
 
+void webMain(struct liftOverChain *chain, char *dataFormat)
+/* set up page for entering data */
+{
+struct dbDb *dbList;
+char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb);
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
@@ -73,8 +92,9 @@ puts("\n<TABLE WIDTH=\"100%%\">\n");
 
 /* top two rows -- genome and assembly menus */
 cgiSimpleTableRowStart();
-cgiTableField("Genome: ");
+cgiTableField("Original Genome: ");
 cgiTableField("Original Assembly: ");
+cgiTableField("New Genome: ");
 cgiTableField("New Assembly: ");
 cgiTableRowEnd();
 
@@ -83,21 +103,25 @@ cgiSimpleTableRowStart();
 /* genome */
 cgiSimpleTableFieldStart();
 dbList = hGetLiftOverFromDatabases();
-printSomeGenomeListHtml(fromDb, dbList, "");
+printSomeGenomeListHtmlNamed(HGLFT_FROMORG_VAR, chain->fromDb, dbList, onChangeFromOrg);
 cgiTableFieldEnd();
 
 /* from assembly */
 cgiSimpleTableFieldStart();
-printAllAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, 
-                                TRUE, onChangeFromDb);
+printAllAssemblyListHtmlParm(chain->fromDb, dbList, HGLFT_FROMDB_VAR, 
+			     TRUE, onChangeFromDb);
 cgiTableFieldEnd();
 
 /* to assembly */
+
 cgiSimpleTableFieldStart();
-if (dbList)
-    dbDbFreeList(&dbList);
-dbList = hGetLiftOverToDatabases(fromDb);
-printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
+dbDbFreeList(&dbList);
+dbList = hGetLiftOverToDatabases(chain->fromDb);
+printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, chain->toDb, dbList, onChangeToOrg);
+cgiTableFieldEnd();
+
+cgiSimpleTableFieldStart();
+printAllAssemblyListHtmlParm(chain->toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -162,13 +186,19 @@ puts("</FORM>\n");
 
 /* Hidden form to support menu pulldown behavior */
 printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
-       " METHOD=\"GET\" NAME=\"dbForm\">"
-       "<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
-                        HGLFT_FROMDB_VAR, fromDb);
+       " METHOD=\"GET\" NAME=\"dbForm\">");
+printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
+                        HGLFT_FROMORG_VAR, fromOrg);
+printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
+                        HGLFT_FROMDB_VAR, chain->fromDb);
+printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
+                        HGLFT_TOORG_VAR, toOrg);
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
-                        HGLFT_TODB_VAR, toDb);
+                        HGLFT_TODB_VAR, chain->toDb);
 cartSaveSession(cart);
 puts("</FORM>");
+freeMem(fromOrg);
+freeMem(toOrg);
 }
 
 void webDataFormats()
@@ -198,16 +228,128 @@ cgiParagraph(
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
 }
 
+struct liftOverChain *findLiftOverChain(struct liftOverChain *chainList, char *fromDb, char *toDb)
+/* Return TRUE if there's a chain with both fromDb and
+ * toDb. */
+{
+struct liftOverChain *chain;
+if (!fromDb || !toDb)
+    return NULL;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    if (sameString(chain->fromDb,fromDb) && sameString(chain->toDb,toDb))
+	return chain;
+return NULL;
+}
+
+struct liftOverChain *defaultChoices(struct liftOverChain *chainList)
+/* Out of a list of liftOverChains and a cart, choose a
+ * list to display. */
+{
+char *fromOrg, *fromDb, *toOrg, *toDb, *orgFromDb, *orgToDb;
+struct slName *fromOrgs = hLiftOverFromOrgs();
+struct slName *fromDbs = hLiftOverFromDbs();
+struct slName *toOrgs = hLiftOverToOrgs(NULL);
+struct slName *toDbs = hLiftOverToDbs(NULL);
+struct liftOverChain *choice = NULL;
+
+/* Get the initial values. */
+fromOrg = cartCgiUsualString(cart, HGLFT_FROMORG_VAR, "0");
+fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, "0");
+toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
+toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
+orgFromDb = hArchiveOrganism(fromDb); 
+orgToDb = hArchiveOrganism(toDb);
+if (sameWord(fromOrg,"0"))
+    fromOrg = NULL;
+if (sameWord(fromDb,"0"))
+    fromDb = NULL;
+if (sameWord(toOrg,"0"))
+    toOrg = NULL;
+if (sameWord(toDb,"0"))
+    toDb = NULL;
+choice = findLiftOverChain(chainList,fromDb,toDb);
+
+if (!choice)
+    {
+    /* Check the validness of the stuff first. */
+    if (fromDb && toDb)
+	toDb = fromDb = toOrg = fromOrg = NULL;
+    if (fromDb && !slNameInList(fromDbs, fromDb))
+	fromDb = fromOrg = NULL;
+    if (toDb && !slNameInList(toDbs, toDb))
+	toDb = toOrg = NULL;
+    if (fromOrg && !slNameInList(fromOrgs, fromOrg))
+	toDb = fromDb = toOrg = fromOrg = NULL;
+    if (toOrg && !slNameInList(toOrgs, toOrg))
+	toOrg = toDb = NULL;
+    if (fromOrg && fromDb && !sameWord(fromOrg,orgFromDb))
+	fromDb = fromOrg = toOrg = toDb = NULL;
+    if (toOrg && toDb && !sameWord(toOrg,orgToDb))
+	toDb = toOrg = NULL;
+    if (toOrg && !fromDb)
+	fromOrg = fromDb = toOrg = toDb = NULL;
+    if (toDb && !fromDb) 
+	fromOrg = fromDb = toOrg = toDb = NULL;
+    
+    /* Find some defaults. The branching is incomplete because of all
+     * the earlier variable manipulation. */
+    if (fromOrg && !fromDb)
+	{
+	for (choice = chainList; choice != NULL; choice = choice->next)
+	    {
+	    char *org = hArchiveOrganism(choice->fromDb);
+	    if (sameString(org,fromOrg))
+		{
+		freeMem(org);
+		break;
+		}
+	    freeMem(org);
+	    }
+	}
+    else if (fromOrg && fromDb && !toOrg)
+	{
+	for (choice = chainList; choice != NULL; choice = choice->next)
+	    if (sameString(fromDb,choice->fromDb))
+		break;
+ 	}
+    else if (fromOrg && fromDb && toOrg && !toDb)
+	{
+	for (choice = chainList; choice != NULL; choice = choice->next)
+	    {
+	    char *org = hArchiveOrganism(choice->toDb);
+	    if (sameString(org,toOrg))
+		{
+		freeMem(org);
+		break;
+		}
+	    freeMem(org);
+	    }
+	}
+    }
+
+if (!choice)
+    choice = chainList;
+slFreeList(&fromOrgs);
+slFreeList(&fromDbs);
+slFreeList(&toOrgs);
+slFreeList(&toDbs);
+freeMem(orgFromDb);
+freeMem(orgToDb);
+return choice;
+}
+
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
+/* struct liftOverChain *chainList = NULL, *chain; */
 char *userData;
-char *dataFile;
+/* char *dataFile; */
 char *dataFormat;
 char *organism;
 char *db, *previousDb;    
-char *fromDb, *toDb;
-char *err = NULL;
+/* char *err = NULL; */
+struct liftOverChain *chainList = NULL, *choice;
+
 cart = theCart;
 
 if (cgiOptionalString(HGLFT_ERRORHELP_VAR))
@@ -231,9 +373,11 @@ cartWebStart(cart, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism);
 previousDb = hPreviousAssembly(db);
-fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, previousDb);
-toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, db);
-webMain(organism, fromDb, toDb, dataFormat);
+
+chainList = liftOverChainList();
+choice = defaultChoices(chainList);
+webMain(choice, dataFormat);
+liftOverChainFreeList(&chainList);
 
 if (userData != NULL && userData[0] != '\0')
     {
