@@ -38,66 +38,79 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 identifier goAccession external=GO
 "Gene ontology term accessions.  Example - GO:0003574"
-    $dm.bdgpInfo.go comma
-    $dm.bdgpNonCodingInfo comma
-    go.goaPart.goId
-    go.term.acc
+     $dm.bdgpInfo.go comma
+     $dm.bdgpNonCodingInfo comma
+     go.goaPart.goId
+     go.term.acc
 
 identifier goId external=GO
 "Gene ontology term ID's.  Shouldn't be used outside of go database"
-    go.term.id
-    go.term2term.term1_id
-    go.term2term.term2_id
-    go.term_audit.term_id
-    go.term_dbxref.term_id
-    go.term_definition.term_id
-    go.term_synonym.term_id
+     go.term.id
+     go.term2term.term1_id
+     go.term2term.term2_id
+     go.term_audit.term_id
+     go.term_dbxref.term_id
+     go.term_definition.term_id
+     go.term_synonym.term_id
 
 # SwissProt Related Stuff
 
 identifier swissProtId external=SwissProt
 "Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
-    $gbd.dupSpMrna.proteinID
-    $gbd.dupSpMrna.dupProteinID
-    $knownDb.kgProtAlias.displayID
-    $knownDb.kgXref.spDisplayID
-    $knownDb.knownCanonical.protein
-    $knownDb.knownGene.proteinId
-    $gbd.spMrna.spID
-    $dm.bdgpSwissProt.spSymbol
-    $dm.flyBaseSwissProt.spSymbol
-    go.goaPart.dbObjectSymbol
+     $gbd.dupSpMrna.proteinID
+     $gbd.dupSpMrna.dupProteinID
+     $knownDb.kgProtAlias.displayID
+     $knownDb.kgXref.spDisplayID
+     $knownDb.knownCanonical.protein
+     $knownDb.knownGene.proteinId
+     $gbd.spMrna.spID
+     $dm.bdgpSwissProt.spSymbol
+     $dm.flyBaseSwissProt.spSymbol
+     go.goaPart.dbObjectSymbol
+     swissProt.displayId.val
 
 identifier swissProtAccession external=SwissProt
 "SwissProt Accession"
-    $knownDb.kgProtAlias.alias part
-    $knownDb.kgProtMap.qName
-    $knownDb.kgXref.spID
-    $gbd.pepMwAa.accession
-    $gbd.pepPi.accession
-    $ce.sangerCanonical.protein
-    $ce.sangerGene.proteinID
-    $ce.sangerLinks.protName
-    $dm.bdgpCanonical.protein
-    $dm.bdgpGene.proteinId
-    $dm.bdgpSwissProt.swissProtId
-    $dm.flyBaseSwissProt.swissProtId
-    $sacCer.sgdGene.proteinID
-    $sacCer.sgdCanonical.protein
-    $sacCer.sgdToSwissProt.value
-    go.goaPart.dbObjectId
-    swissProt.accToKeyword.acc
-    swissProt.accToTaxon.acc
-    swissProt.citation.acc
-    swissProt.comment.acc
+     $knownDb.kgProtAlias.alias part
+     $knownDb.kgProtMap.qName
+     $knownDb.kgXref.spID
+     $gbd.pepMwAa.accession
+     $gbd.pepPi.accession
+     $ce.sangerCanonical.protein
+     $ce.sangerGene.proteinID
+     $ce.sangerLinks.protName
+     $dm.bdgpCanonical.protein
+     $dm.bdgpGene.proteinId
+     $dm.bdgpSwissProt.swissProtId
+     $dm.flyBaseSwissProt.swissProtId
+     $sacCer.sgdGene.proteinID
+     $sacCer.sgdCanonical.protein
+     $sacCer.sgdToSwissProt.value
+     go.goaPart.dbObjectId
+     swissProt.accToKeyword.acc
+     swissProt.accToTaxon.acc
+     swissProt.citation.acc
+     swissProt.comment.acc
+     swissProt.description.acc
+     swissProt.displayId.acc
+     swissProt.extDbRef.acc
+     swissProt.feature.acc
+     swissProt.gene.acc
+     swissProt.geneLogic.acc
+     swissProt.info.acc
+     swissProt.otherAcc.acc
+     swissProt.protein.acc
 
 identifier swissProtAuthor
 "Author ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
     swissProt.author.id
+    swissProt.referenceAuthors.author
 
 identifier swissProtReference
 "Reference (journal) ID in SwissProt (just inside UCSC Relationalized)"
     swissProt.citation.reference
+    swissProt.reference.id
+    swissProt.referenceAuthors.reference
 
 identifier swissProtCitation
 "Citation ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
@@ -120,15 +133,45 @@ identifier swissProtRcVal
     swissProt.rcVal.id
 
 identifier swissProtCommentType
-"Type of swissProt comment (just inside UCSC Relationalized)"
+"Type of swissProt comment type (just inside UCSC Relationalized)"
     swissProt.comment.commentType
     swissProt.commentType.id
 
 identifier swissProtCommentVal
-"Test of swissProt comment (just inside UCSC Relationalized)"
+"Text of swissProt comment text (just inside UCSC Relationalized)"
      swissProt.comment.commentVal
      swissProt.commentVal.id
 
+identifier swissProtExtDb
+"SwissProt external database ID (just inside UCSC Relationalized)"
+     swissProt.extDb.id
+     swissProt.extDbRef.extDb
+
+identifier swissProtFeatureClass
+"Type of swissProt feature class (just inside UCSC Relationalized)"
+     swissProt.feature.featureClass
+     swissProt.featureClass.id
+
+identifier swissProtFeatureType
+"Type of swissProt feature type (just inside UCSC Relationalized)"
+     swissProt.feature.featureType
+     swissProt.featureType.id
+
+identifier swissProtOrganelle
+"Type of swissProt organelle ID (just inside UCSC Relationalized)"
+     swissProt.info.organelle
+     swissProt.organelle.id
+
+identifier swissProtKeyword
+"SwissProt keyword ID (just inside UCSC Relationalized)"
+     swissProt.accToKeyword.keyword
+     swissProt.keyword.id
+
+identifier ncbiTaxon
+"NCBI Taxon ID - number for a species.  Used by SwissProt too"
+     swissProt.accToTaxon.taxon
+     swissProt.commonName.taxon
+     swissProt.taxon.id
 
 # Various types of gene predictions in UCSC Genome Browser
 
