@@ -23,6 +23,14 @@ group map
 visibility dense
 type bed 3 +
 
+track rhMap
+shortLabel Radiation Hybrid Map
+longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+group map
+priority 14
+visibility hide
+type psl .
+
 track affyZebrafish
 shortLabel Affy Zebrafish
 longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
@@ -37,6 +45,12 @@ shortCircuit 1
 termRegex (ctg|BX|AL)[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
+
+searchTable rhMap
+searchMethod prefix
+searchType psl
+termRegex [[:alnum:]\._]+
+searchPriority 8
 
 searchTable ensGene
 searchType genePred
@@ -88,3 +102,4 @@ searchType psl
 shortCircuit 1
 termRegex [Dr][[:alnum:]_\.]+.*_at
 searchPriority 15
+
