@@ -1289,7 +1289,7 @@ tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
 }
 
 struct trackGroup *blatMouseTg()
-/* Make track group of full length mRNAs. */
+/* Make track group of mouse alignments. */
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgBlatMouse";
@@ -1304,6 +1304,54 @@ tg->color.g = brownColor.g;
 tg->color.b = brownColor.b;
 return tg;
 }
+
+void loadMus7of8(struct trackGroup *tg)
+/* Load up mouse alignments (psl format) from table. */
+{
+tg->items = lfFromPslsInRange("mus7of8", winStart, winEnd, NULL, TRUE);
+}
+
+struct trackGroup *mus7of8Tg()
+/* Make track group of mouse alignments. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgMus7of8";
+tg->visibility = tvDense;
+tg->longLabel = "Clipped Mouse Translated Blat Alignments, 7 of 8 Seed";
+tg->shortLabel = "Mouse 7 of 8";
+tg->loadItems = loadMus7of8;
+tg->subType = lfSubXeno;
+tg->colorShades = shadesOfBrown;
+tg->color.r = brownColor.r;
+tg->color.g = brownColor.g;
+tg->color.b = brownColor.b;
+return tg;
+}
+
+void loadMusPairOf5(struct trackGroup *tg)
+/* Load up mouse alignments (psl format) from table. */
+{
+tg->items = lfFromPslsInRange("musPairOf4", winStart, winEnd, NULL, TRUE);
+}
+
+struct trackGroup *musPairOf4Tg()
+/* Make track group of mouse alignments. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgMusPairOf4";
+tg->visibility = tvDense;
+tg->longLabel = "Clipped Mouse Translated Blat Alignments, Pair of 4 Seed";
+tg->shortLabel = "Mouse Pair of 4";
+tg->loadItems = loadMus7of8;
+tg->subType = lfSubXeno;
+tg->colorShades = shadesOfBrown;
+tg->color.r = brownColor.r;
+tg->color.g = brownColor.g;
+tg->color.b = brownColor.b;
+return tg;
+}
+
+
 
 struct linkedFeatures *lfFromGenePredInRange(char *table, 
 	char *chrom, int start, int end)
@@ -2864,7 +2912,10 @@ struct trackGroup *exoMouseTg()
 struct trackGroup *tg = bedTg();
 
 tg->mapName = "hgExoMouse";
-tg->visibility = tvHide;
+if (sameString(database, "hg6") && sameString(chromName, "chr22") && privateVersion())
+    tg->visibility = tvDense;
+else
+    tg->visibility = tvHide;
 tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Exonerate)";
 tg->shortLabel = "Exonerate Mouse";
 tg->loadItems = loadExoMouse;
@@ -4960,11 +5011,16 @@ if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
-if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
+if (privateVersion())
+    {
+    if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
+    if (hTableExists("mus7of8")) slSafeAddHead(&tGroupList, mus7of8Tg());
+    if (hTableExists("musPairOf4")) slSafeAddHead(&tGroupList, musPairOf4Tg());
+    if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
+    if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
+    }
 if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
-if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
-if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
 if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg());
@@ -5074,7 +5130,8 @@ if (!hideControls)
 	printEnsemblAnchor();
 	fputs("Visit Ensembl</A></TD>", stdout);
 	}
-    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD>", database);
+    if (sameString(database, "hg5") || sameString(database, "hg6") || sameString(database, "hg7"))
+	fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD>", database);
     fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
     fputs("</TR>", stdout);
     fputs("</TABLE><CENTER>\n", stdout);

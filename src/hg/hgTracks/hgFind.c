@@ -457,6 +457,7 @@ else
     if (pslCount <= 0)
         {
 	errAbort("%s %s doesn't align anywhere in the draft genome", type, acc);
+	return FALSE;
 	}
     else
         {
