@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.34 2005/01/06 16:09:11 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.35 2005/01/07 19:04:33 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -527,8 +527,8 @@ char *netGetString(int sd, char buf[256])
 static char sbuf[256];
 UBYTE len = 0;
 int length;
-if (buf == NULL) buf = sbuf;
 int sz;
+if (buf == NULL) buf = sbuf;
 sz = netReadAll(sd, &len, 1);
 if (sz == 0)
     return NULL;
