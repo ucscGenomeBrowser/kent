@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpMap.h"
 
-static char const rcsid[] = "$Id: snpMap.c,v 1.1 2004/01/31 08:10:42 daryl Exp $";
+static char const rcsid[] = "$Id: snpMap.c,v 1.2 2004/02/19 01:52:33 daryl Exp $";
 
 void snpMapStaticLoad(char **row, struct snpMap *ret)
 /* Load a row from snpMap table into ret.  The contents of ret will
@@ -18,7 +18,7 @@ int sizeOne,i;
 char *s;
 
 ret->chrom = row[0];
-ret->chromStart = sqlSigned(row[1]);
+ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->source = row[4];
@@ -35,7 +35,7 @@ char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
-ret->chromStart = sqlSigned(row[1]);
+ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->source = cloneString(row[4]);
@@ -111,7 +111,7 @@ void snpMapSaveToDb(struct sqlConnection *conn, struct snpMap *el, char *tableNa
  * If worried about this use snpMapSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%d,%u,'%s','%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s','%s')", 
 	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->source,  el->type);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -133,7 +133,7 @@ name = sqlEscapeString(el->name);
 source = sqlEscapeString(el->source);
 type = sqlEscapeString(el->type);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%d,%u,'%s','%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s','%s')", 
 	tableName,  chrom, el->chromStart , el->chromEnd ,  name,  source,  type);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -154,7 +154,7 @@ int i;
 if (ret == NULL)
     AllocVar(ret);
 ret->chrom = sqlStringComma(&s);
-ret->chromStart = sqlSignedComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
@@ -198,7 +198,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->chromStart);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
 fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);

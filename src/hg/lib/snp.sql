@@ -5,11 +5,14 @@
 
 #Single nucleotide polymorphisms
 CREATE TABLE snp (
-    chrom varchar(255) not null,	# Human chromosome or FPC contig
+    bin        smallint unsigned not null, 
+    chrom      varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
-    chromEnd int unsigned not null,	# End position in chromosome
-    name varchar(255) not null,	# Name of SNP
+    chromEnd   int unsigned not null,	# End position in chromosome
+    name       varchar(255) not null,	# Name of SNP
               #Indices
-    PRIMARY KEY(chrom(12),chromStart),
-    UNIQUE(chrom(12),chromStart)
+    INDEX(chrom(12),bin),
+    INDEX(chrom(12),chromStart),
+    INDEX(chrom(12),chromEnd),
+    INDEX(name)
 );

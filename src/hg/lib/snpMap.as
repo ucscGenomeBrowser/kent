@@ -2,9 +2,9 @@ table snpMap
 "SNP positions from various sources"
     (
     string chrom;	"Chromosome or 'unknown'"
-    int    chromStart;  "Start position in chrom - negative 1 if unpositioned"
+    uint   chromStart;  "Start position in chrom"
     uint   chromEnd;	"End position in chrom"
-    string name;	"Name of SNP"
-    string source;	"BAC_OVERLAP | MIXED | RANDOM | OTHER"
+    string name;	"Name of SNP - rsId or Affy name"
+    string source;	"BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K"
     string type;        "SNP | INDEL | SEGMENTAL"
     )
