@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.33 2003/11/19 18:19:13 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.34 2003/12/01 19:09:18 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -545,9 +545,9 @@ struct psl *pslxLoadLm(char **row, struct lm *lm)
 {
 struct psl *ret = pslLoadLm(row, lm);
 ret->qSequence = lmAlloc(lm, sizeof(ret->qSequence[0]) * ret->blockCount);
-sqlStringArray(row[21],ret->qSequence, ret->blockCount);
+sqlStringArray(lmCloneString(lm,row[21]),ret->qSequence, ret->blockCount);
 ret->tSequence = lmAlloc(lm, sizeof(ret->tSequence[0]) * ret->blockCount);
-sqlStringArray(row[22],ret->tSequence, ret->blockCount);
+sqlStringArray(lmCloneString(lm,row[22]),ret->tSequence, ret->blockCount);
 return ret;
 }
 
