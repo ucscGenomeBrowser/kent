@@ -1,0 +1,88 @@
+
+Tables created in the target database:
+
+              Typical row count		Created by
+  1 cgapAlias 153984		src/hg/hgCGAP/cgapAlias.sql
+  2 cgapBiocDesc 3730		src/hg/hgCGAP/cgapBiocDesc.sql
+  3 cgapBiocPathway 3730	src/hg/hgCGAP/cgapBiocPathway.sql
+  4 dupSpMrna 5993		src/hg/lib/dupSpMrna.sql
+  5 keggMapDesc 119		src/hg/protein/keggMapDesc.sql
+  6 keggPathway 4661		src/hg/protein/keggPathway.sql
+  7 kgAlias 101162		src/hg/lib/kgAlias.sql
+  8 kgProtAlias 41061		src/hg/lib/kgProtAlias.sql
+  9 kgXref 41061		src/hg/lib/kgXref.sql
+ 10 knownGene 42260		src/hg/lib/knownGene.sql;
+ 11 knownGeneLink 481		src/hg/lib/knownGeneLink.sql;
+ 12 knownGeneMrna 41061		src/hg/lib/knownGeneMrna.sql
+ 13 knownGenePep 41061		src/hg/lib/knownGenePep.sql
+ 14 mrnaRefseq 231441		src/hg/protein/KGprocess.sh
+ 15 spMrna 46559		src/hg/lib/spMrna.sql
+
+Tables created in the target database:
+              Typical row count		Populated by
+  1 cgapAlias 153984		hgCGAP
+  2 cgapBiocDesc 3730		hgCGAP
+  3 cgapBiocPathway 3730	hgCGAP
+  4 dupSpMrna 5993		spm7 result duplicate.tab
+  5 keggMapDesc 119		hgKegg result keggMapDesc.tab
+  6 keggPathway 4661		hgKegg result keggPathway.tab
+  7 kgAlias 101162		kgAliasM, kgAliasP, kgAliasRefseq, kgAliasKgXref
+  8 kgProtAlias 41061		kgProtAlias result kgProtAlias.tab
+  9 kgXref 41061		kgXref result kgXref.tab
+ 10 knownGene 42260		spm7 result knownGene.tab + dnaGene dnaGene.tab
+ 11 knownGeneLink 481		dnaGene result dnaLink.tab
+ 12 knownGeneMrna 41061		rmKGPepMran result knownGeneMrna.tab
+ 13 knownGenePep 41061		rmKGPepMrna result knownGenePep.tab
+ 14 mrnaRefseq 231441		hgMrnaRefseq result mrnaRefseq.tab
+ 15 spMrna 46559		kgResultBestMrna result best.lis
+
+===========================================================================
+And in the Temp database:
+				Created by
+  1 geneName 20880		src/hg/protein/Temp.sql
+  2 history 1			hgKgMrna
+  3 keggList 3978		src/hg/protein/Temp.sql
+  4 knownGene 0			src/hg/protein/Temp.sql
+  5 knownGene0 48040		src/hg/protein/Temp.sql
+  6 locus2Acc0 291320		src/hg/protein/Temp.sql
+  7 locus2Ref0 121896		src/hg/protein/Temp.sql
+  8 mrnaGene 70656		src/hg/protein/Temp.sql
+  9 pepSequence 0		src/hg/protein/Temp.sql
+ 10 productName 43258		src/hg/protein/Temp.sql
+ 11 refGene 70656		src/hg/protein/Temp.sql
+ 12 refLink 138782		src/hg/protein/Temp.sql
+ 13 refMrna 138782		src/hg/protein/Temp.sql
+ 14 refPep 69337		src/hg/protein/Temp.sql
+ 15 spMrna 69541		src/hg/protein/Temp.sql
+
+And in the Temp database:
+				Populated by
+  1 geneName 20880		hgKgMrna
+  2 history 1			hgKgMrna
+  3 keggList 3978		getKeggList.pl result keggList.tab
+  4 knownGene 0			NOT LOADED
+  5 knownGene0 48040		spm6 result knownGene0.tab
+  6 locus2Acc0 291320		ftp.ncbi.nih.gov/refseq/LocusLink/loc2acc
+  7 locus2Ref0 121896		ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
+  8 mrnaGene 70656		a copy of refGene ?
+  9 pepSequence 0		NOT LOADED
+ 10 productName 43258		hgKgMrna
+ 11 refGene 70656		hgKgMrna
+ 12 refLink 138782		hgKgMrna
+ 13 refMrna 138782		hgKgMrna (knownGeneMrna?)
+ 14 refPep 69337		hgKgMrna (knownGenePep?)
+ 15 spMrna 69541		spm3 result proteinMrna.tab
+
+=======================================================================
+Puzzles to be resolved:
+
+Why do I find geneName,refGene,refLink tables in current
+	assemblies that have had the knownGenes process run on them ?
+	I can not find anything in the build that would make them
+	in that database.
+
+Why is kgXref working differently today than it did when Mm4 KG was built ?
+	Today it can not find the geneSymbol and is instead putting
+	the kgID in the geneSymbol column.  This causes kgAliasM
+	to find nothing.  I can not reproduce the behavior that worked
+	in the Mm4 KG build.
