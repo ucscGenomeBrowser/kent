@@ -6,6 +6,7 @@
 #include "jksql.h"
 #include "cartDb.h"
 #include "htmshell.h"
+#include "hgConfig.h"
 #include "cart.h"
 #include "web.h"
 #include "hdb.h"
@@ -454,8 +455,8 @@ struct cart *cart = cartNew(hguid, hgsid, exclude);
 cartExclude(cart, sessionVar);
 
 /* Write out cookie for next time. */
-printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
-	cookieName, cart->userInfo->id, cookieDate());
+printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\n",
+	cookieName, cart->userInfo->id, cfgOption("central.domain"), cookieDate());
 puts("Content-Type:text/html");
 puts("\n");
 
