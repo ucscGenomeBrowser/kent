@@ -627,6 +627,9 @@ para push
 	          100 is low for bottomfeeders.
 	          Setting priority higher than normal (1-9) will be logged.
 		  Please keep low priority jobs short, they won't be pre-empted.
+      -maxNode=x  Limit the number of nodes the batch can use.
+               Default unlimited or -1.
+	       
 
 para try
    This is like para push, but only submits up to 10 jobs.
@@ -679,6 +682,8 @@ para recover jobList newJobList
 para priority 999
    Set batch priority. Values explained under 'push' options above.
 
+para maxNode 999
+   Set batch maxNode. Values explained under 'push' options above.
 	 
 </pre>
 <h4>
