@@ -1,4 +1,4 @@
-# First chimp release
+hmsk# First chimp release
 
 # DOWNLOAD FILES FROM WHITEHEAD   (kate)
 
@@ -89,12 +89,12 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
     end
     #5367 RMJobs
 
-# Run cluster job
-
+    # Run cluster job
     sh kk
     cd /cluster/data/panTro1/RMRun
     para create RMJobs
     para try, para check, para check, para push, para check,...
+
 
 
 # TRF: Tandem Repeat Finder (DONE 2004-01-19 kate)
@@ -126,10 +126,10 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
     para try
     para push
 
-# FILTER SIMPLE REPEATS INTO MASK (IN PROGRESS 2004-01-20 kate)
+# FILTER SIMPLE REPEATS INTO MASK (DONE 2004-01-25 kate)
     # make a filtered version # of the trf output: 
     # keep trf's with period <= 12:
-    # NOTE: in the future, use -maxPeriod=12 option to trfBig ??
+    # NOTE: did chr1_random on 2004-01-26 kate)
     
     ssh kksilo
     cd /cluster/data/panTro1/bed/simpleRepeat
@@ -138,6 +138,7 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
         echo "filtering $f"
         awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
     end
+
 
 # MASK CONTIGS WITH REPEATMASKER (DONE 2004-01-20 kate)
     ssh kksilo
@@ -202,6 +203,7 @@ cat > bed/simpleRepeat/runTrf.csh << 'EOF'
 
 
 # MAKE CHROMS FROM SCAFFOLDS (DONE 2004-01-20 kate, except chrUn)
+#    NOTE: chr1_random lost somewhere -- redone 2004-01-26 kate
 
     ssh kksilo
     cd /cluster/data/panTro1
@@ -218,7 +220,7 @@ cat > jkStuff/makeChr.csh << 'EOF'
             sed -e 's/#.*//' -e 's/ptr/chr/' ptr${c}.agp > ../$c/chr${c}.agp
             ~/bin/x86_64/agpToFa -simpleMultiMixed \
                 ../$c/chr${c}.agp chr${c} \
-                /cluster/data/panTro1/$c/${c}.fa \
+                /cluster/data/panTro1/$c/chr${c}.fa \
                 /cluster/bluearc/panTro1/scaffolds.msk.fa
         endif
         if (-e ptr${c}_random.agp) then
@@ -226,7 +228,7 @@ cat > jkStuff/makeChr.csh << 'EOF'
                         > ../$c/chr${c}_random.agp
             ~/bin/x86_64/agpToFa -simpleMultiMixed \
                 ../$c/chr${c}_random.agp chr${c}_random \
-                /cluster/data/panTro1/$c/${c}_random.fa \
+                /cluster/data/panTro1/$c/chr${c}_random.fa \
                 /cluster/bluearc/panTro1/scaffolds.msk.fa
         endif
     end
@@ -278,17 +280,6 @@ cat > jkStuff/makeNib.csh << 'EOF'
       ln -s $f /gbdb/panTro1/nib
     end
 
-    # Make lift files
-    ssh kksilo
-    cd /cluster/data/panTro1
-    foreach d (?{,})
-        echo $d
-        cd $d
-        foreach f (*.agp)
-            /cluster/bin/scripts/agpToLift < $f > $f:r.lft
-        end
-        cd ..
-    end
 
 # CREATE DATABASE (IN PROGRESS 2004-01-21 kate, still needs chrUn in chromINfo)
 
@@ -340,13 +331,13 @@ cat > jkStuff/makeNib.csh << 'EOF'
     # Edit that makefile to add panTro1 in all the right places and do
     make update
 
-# ASSEMBLY AND GAP TRACKS (IN PROGRESS 2004-01-21 kate)
+# ASSEMBLY AND GAP TRACKS (DONE 2004-01-26 kate)
 
     hgGoldGapGl -noGl panTro1 /cluster/data/panTro1 .
     featureBits panTro1 gold
-        #  3087948639 bases of 3087948639 (100.000%) in intersection
+        # 3109246583 bases of 3109246583 (100.000%) in intersection
     featureBits panTro1 gap
-        #  1242278857 bases of 3087948639 (40.230%) in intersection
+        # 1311128857 bases of 3109246583 (42.169%) in intersection
 
 
 # REPEATMASKER TRACK (IN PROGRESS 2004-01-21 kate)
@@ -454,6 +445,54 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
     para try, para check, para check, para push, para check,...
 
     # additional run for chrUn in RMRun.chrUn (2004-01-24 kate)
+    # additional run for chr1_random in RMRun.chr1_random (2004-01-26 kate)
+        # 383 jobs written to batch
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/panTro1
+cat > jkStuff/liftPseudoContigOuts.csh << 'EOF'
+    foreach d ( ?{,?}/chr*_?{,?} )
+      cd $d
+      set contig = $d:t
+      echo $contig
+      liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out ${contig}_*.fa.chimp.out > /dev/null
+      cd ../..
+    end
+'EOF'
+    csh jkStuff/liftPseudoContigOuts.csh >&! jkStuff/liftPseudoContigOuts.log &
+    tail -100f jkStuff/liftPseudoContigOuts.log
+
+    # Lift pseudo-contigs to chromosome level
+cat > jkStuff/liftToChromOut.csh << 'EOF'
+    foreach i (?{,?})
+        echo lifting $i
+        cd $i
+        if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+            liftUp chr$i.fa.out lift/ordered.lft warn `cat lift/oOut.lst` > /dev/null
+        else
+            echo "Can not find $i/lift/ordered.lft ."
+        endif
+        if (-e lift/random.lft && ! -z lift/random.lft) then
+            liftUp chr${i}_random.fa.out lift/random.lft warn `cat lift/rOut.lst` > /dev/null
+        endif
+        cd ..
+    end
+'EOF'
+    csh jkStuff/liftToChromOut.csh >&! jkStuff/liftToChromOut.log &
+    tail -100f jkStuff/liftToChromOut.log
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/panTro1
+    #    ./jkStuff/dropSplitTable.csh rmsk
+    hgLoadOut panTro1 ?/*.fa.out ??/*.fa.out
+        # warnings: "Strange perc. field" in several chroms -- occurs w/ negative percent ins.
+        # 1_random, 2, 3, X, 
+
+    featureBits panTro1 rmsk
+        # 1311281819 bases of 3109246583 (42.174%) in intersection
+    featureBits hg16 rmsk
 
 
 # SIMPLE REPEATS TRACK (IN PROGRESS 2004-01-21 kate)
@@ -480,6 +519,9 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
     # in bash:  ./jobs.csh > jobs.log 2>&1 &
     tail -f jobs.log
 
+    # Additional run for chrUn (2004-01-24 kate)
+    # Additional run for chr1_random (2004-01-26 kate)
+        #  27 jobs.chr1_random.csh
 
     # When job is done lift output files
     liftUp simpleRepeat.bed /cluster/data/panTro1/jkStuff/liftAll.lft warn trf/*.bed
@@ -491,11 +533,50 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
     # Loaded 531061 elements of size 16
     featureBits panTro1 simpleRepeat
-       # 41451754 bases of 3017878835 (1.374%) in intersection
+        # 53732632 bases of 3109246583 (1.728%) in intersection
     featureBits hg16 simpleRepeat
         # 54320136 bases of 2865248791 (1.896%) in intersectio
 
-    # Additional run for chrUn (2004-01-24 kate)
+
+# MASK 5M PSEUDO-CONTIGS (DONE 2004-01-26 kate)
+
+    ssh kksilo
+    cd /cluster/data/panTro1
+cat > jkStuff/maskContigs.csh << 'EOF'
+   foreach i (?{,?})
+       cd $i
+       echo masking $i pseudo-contigs
+       foreach j (chr*_*/chr${i}{,_random}_?{,?}.fa)
+          set c = $j:t:r
+          echo masking $j
+         /cluster/bin/i386/maskOutFa $j $j.out $j.rmsk -soft
+         /cluster/bin/i386/maskOutFa $j ../bed/simpleRepeat/trfMask/$c.bed $j.msk -softAdd
+         mv $j $j.nomask
+         mv $j.msk $j
+         /cluster/bin/i386/maskOutFa $j hard $j.hmsk
+       end
+       cd ..
+    end
+'EOF'
+    csh jkStuff/maskContigs.csh > jkStuff/maskContigs.log &
+    tail -100f jkStuff/maskContigs.log
+
+cat > jkStuff/hardMaskChrom.csh << 'EOF'
+   foreach i (?{,?})
+       cd $i
+       if (-e chr${i}.fa) then
+           echo hard-masking chr$i.fa
+           /cluster/bin/i386/maskOutFa chr$i.fa hard chr$i.fa.hmsk
+       endif
+       if (-e chr${i}_random.fa) then
+           echo hard-masking chr$i.fa
+         /cluster/bin/i386/maskOutFa chr${i}_random.fa hard \
+                        chr${i}_random.fa.hmsk
+       endif
+       cd ..
+    end
+'EOF'
+
 
 # DOWNLOADS (IN PROGRESS 2003-01-23 kate)
 
@@ -539,38 +620,60 @@ cat > jkStuff/zipChroms.csh << 'EOF'
 	panTro1.genome = /scratch/chimp/panTro1/nib/chr*.nib
 	panTro1.lift = /cluster/store6/panTro1/jkStuff/liftAll.lft
 	panTro1.downloadDir = panTro1
+        panTro1.genbank.est.xeno.load = yes
+        pantro1.refseq.mrna.xeno.load  = no
+
+    # NOTE: Mark D must add the new species to the auto-update code
 
     ssh eieio
     cd /cluster/store5/genbank
     nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
 	-srcDb=genbank -type=mrna -verbose=1 -initial panTro1
-# Completed: 49591 of 49591 jobs
-# CPU time in finished jobs:    3853288s   64221.47m  1070.36h   44.60d  0.122 y
-# IO & Wait Time:                246323s    4105.38m    68.42h    2.85d  0.008 y
-# Average job time:                  83s       1.38m     0.02h    0.00d
-# Longest job:                    21265s     354.42m     5.91h    0.25d
-# Submission to last job:         22930s     382.17m     6.37h    0.27d
+# Completed: 25695 of 25695 jobs
+# CPU time in finished jobs:    5494741s   91579.01m  1526.32h   63.60d  0.174 y
+# IO & Wait Time:               1311129s   21852.16m   364.20h   15.18d  0.042 y
+# Average job time:                 265s       4.41m     0.07h    0.00d
+# Longest job:                     9318s     155.30m     2.59h    0.11d
+# Submission to last job:          9383s     156.38m     2.61h    0.11d
 
     # Load the results from the above
     ssh hgwdev
     cd /cluster/store5/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg16
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
 
 #	To get this next one started, the above results need to be
 #	moved out of the way.  These things can be removed if there are
 #	no problems to debug
     ssh eieio
+    cd /cluster/bluearc/genbank/work
+    mv initial.panTro1 initial.panTro1.genbank.mrna
+    cd /cluster/store5/genbank
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=refseq -type=mrna -verbose=1 -initial panTro1
+
+    ssh hgwdev
+    cd /cluster/store5/genbank
+    nice bin/gbDbLoadStep -verbose=1 panTro1
+
+    # the big EST alignment job
+    ssh eieio
+    cd /cluster/store5/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial panTro1
+
+    ssh hgwdev
+    cd /cluster/store5/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
 
 
 # GENSCAN PREDICTIONS (IN PROGRESS - 2004-01-24 kate)
 
-    ssh eieio
+    ssh kksilo
     mkdir -p /cluster/data/panTro1/bed/genscan
     cd /cluster/data/panTro1/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir -p gtf pep subopt
     # Generate a list file, genome.list, of all the pseudo-contigs
-    ls -1S /cluster/data/panTro1/?{,?}/chr*_*/chr*_*.fa.masked  > genome.list
+    ls -1S /cluster/data/panTro1/?{,?}/chr*_*/chr*_*.fa.hmsk  > genome.list
         
     # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
     # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
@@ -587,6 +690,7 @@ cat > jkStuff/zipChroms.csh << 'EOF'
     # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
+        # 568 jobs written to batch
     para try
     para check
     para push
@@ -596,7 +700,7 @@ cat > jkStuff/zipChroms.csh << 'EOF'
     # to 1200000.  In build33, this was 22/NT_011519.
     #  In build34 there were NO failures !
     # Convert these to chromosome level files as so:     
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/panTro1/bed/genscan
     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/N{T,G}*.gtf
     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/N{T,G}*.bed
