@@ -280,6 +280,15 @@ priority 147
 visibility hide
 type maf
 
+track multizMm3Rn3Pt0
+shortLabel HMRP
+longLabel Human/Mouse/Rat/Chimp Multiz Alignments (mm3-Feb03, rn3-Jun03, 
+pt0-Nov03)
+group compGeno
+priority 147.1
+visibility hide
+type maf
+
 track celeraHCM
 shortLabel celera HPM
 longLabel Human/Chimp/Mouse Celera Alignments (Science issue 302)
