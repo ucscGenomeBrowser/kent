@@ -10,8 +10,8 @@ PATH="$gbRoot/bin:$gbRoot/bin/i386:$PATH"
 #
 # gbCheckLock lockFile
 #
-# Check for a lock file.  If the lock file exists and is less than
-# a day old, silently exit 0.  If the lock file is more than a day old,
+# Check for a lock or stop file file.  If the lock file exists and is less
+# than a day old, silently exit 0.  If the lock file is more than a day old,
 # generate an error.  A absolute path to lockFile will result in a better
 # error message.  This scheme supports light-weight polling.
 #
@@ -22,7 +22,7 @@ gbCheckLock() {
         awk -v "lockFile=$lockFile" '{
            modTime=$1;
            if (systime() > modTime+(60*60*24)) {
-                print "Error: lock file more than 1 day old: " lockFile  > "/dev/stderr"
+                print "Error: lock or stop file more than 1 day old: " lockFile  > "/dev/stderr"
                 exit(1);
            }
         }' $lockFile

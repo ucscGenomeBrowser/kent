@@ -77,6 +77,9 @@ mkdir -p $dbloadVar
 # and is less than one day old,  error if older.
 gbCheckLock $dbloadVar/run/dbload.lock
 
+# do same for the stop file
+gbCheckLock var/dbload.stop
+
 # check if the build is newer that what was last loaded
 if ! gbCmpTimeFiles $timeFile $lastTime ; then
     exit 0
