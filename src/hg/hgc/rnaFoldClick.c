@@ -15,7 +15,7 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.4 2005/03/28 22:45:50 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.5 2005/03/28 23:54:08 jsp Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define RED 0xFF0000
@@ -179,7 +179,8 @@ N = slCount(maf->components);
 AllocArray(mafColorFormats, N);
 for (i = 0; i < N; i++)
     mafColorFormats[i] = AllocArray(mafColorFormats[i], refLength);
-fold2pairingList(adjFold, refLength, pairList);
+fold2pairingList(adjFold, refLength, &pairList);
+
 for (mc = maf->components, i = 0; mc != NULL; mc = mc->next, i++)
     markCompensatoryMutations(mc->text, referenceText, pairList, mafColorFormats[i]);
 defineMafSubstColors(&mafColors);
