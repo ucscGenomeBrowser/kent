@@ -4,11 +4,16 @@
 #include <signal.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <errno.h>
+#include <string.h>
 #include "common.h"
 #include "errabort.h"
 #include "net.h"
 #include "linefile.h"
 
+/* Brought errno in to get more useful error messages */
+
+extern int errno;
 
 static int netStreamSocket()
 /* Create a TCP/IP streaming socket.  Complain and return something
@@ -89,7 +94,8 @@ static int netAcceptingSocketFrom(int port, int queueSize, char *host)
 {
 struct sockaddr_in sai;
 int sd;
-int flag = 1; 
+int flag = 1;
+ int len;
 
 netBlockBrokenPipes();
 if ((sd = netStreamSocket()) < 0)
@@ -98,9 +104,12 @@ if (!netFillInAddress(host, port, &sai))
     return -1;
 if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(int)))
     return -1;
+if (getsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, &len))
+    warn("getsockopt error\n");
+warn("SO_REUSEADDR set to %d", flag);
 if (bind(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
     {
-    warn("Couldn't bind socket to %d", port);
+    warn("Couldn't bind socket to %d: %s", port, strerror(errno));
     close(sd);
     return -1;
     }
