@@ -264,7 +264,6 @@ if (subStart <= chain->tStart && subEnd >= chain->tEnd)
     *retChainToFree = NULL;
     return;
     }
-
 /* Build new block list and calculate bounds. */
 for (oldB = chain->blockList; oldB != NULL; oldB = oldB->next)
     {
