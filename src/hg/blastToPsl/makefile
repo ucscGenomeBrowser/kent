@@ -7,15 +7,15 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = blastToPsl
 O = $A.o 
 
-my: compile scoreSort blast0To8 smashTab  blast0ToPsl pslUniq vegaBuildInfo pslChain
+my: compile scoreSort blast0To8 pslUniq pslChain
 	mv $A $(HOME)/bin/$(MACHTYPE)
 	mv scoreSort $(HOME)/bin/$(MACHTYPE)
 	mv blast0To8 $(HOME)/bin/$(MACHTYPE)
 #	mv smashTab $(HOME)/bin/$(MACHTYPE)
-	mv blast0ToPsl $(HOME)/bin/$(MACHTYPE)
 	mv pslUniq $(HOME)/bin/$(MACHTYPE)
-	mv vegaBuildInfo $(HOME)/bin/$(MACHTYPE)
+#	mv vegaBuildInfo $(HOME)/bin/$(MACHTYPE)
 	mv pslChain $(HOME)/bin/$(MACHTYPE)
+	cp -f blastToPsl $(HOME)/bin/$(MACHTYPE)
 
 pslChain: pslChain.o
 	${CC} -static pslChain.o ${F64} ${MYLIBS} ${L} 
@@ -58,11 +58,11 @@ debug: $O
 	mv a.out $A
 
 test:	compile
-	cd test && ${MAKE}
+	cd tests && ${MAKE} test
 
 clean:
-	cd test && ${MAKE} clean
-	rm -f $O $A scoreSort.o
+	cd tests && ${MAKE} clean
+	rm -f *.o scoreSort blast0To8 smashTab blast0ToPsl pslUniq vegaBuildInfo pslChain
 
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
