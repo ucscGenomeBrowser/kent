@@ -3250,6 +3250,8 @@ kent/src/hg/sampleTracks/makeHg15Mm3.csh
 # Michael Zhang <mzhang@cshl.edu>
 # Got firstef.tar.gz from Gengzin 6/30/03
 # Done 2003-07-02 braney
+# Got firstef.tar.gz from Gengzin 7/30/03
+# Done again 2003-07-31 braney
 ssh kk
 set db=/cluster/data/hg15
 cd $db
@@ -3317,19 +3319,9 @@ cd out/$f/firstef
 ./runProg .fa.masked /tmp/$f.fa.masked ../$f.bed $3 $4 $5 
 '_EOF_'
 chmod a+x doit
-# mail from Ivo
-# The standard parameters that we implemented in our web 
-# server are good for biologists interested in specific genes, interested in 
-# alternative first exons, etc.  For them we made the cutoff values very low, 
-# namely 0.5, 0.4, 0.4.  This makes FirstEF very sensitive, but it sacrifices 
-# specificity.  For users interested in genome-wide analyses, we suggest 
-# 0.95, 0.9., 0.9.  This makes FirstEF very specific, but it sacrifices 
-# sensitivity.  For users interested in genomic analyses on a sub-chromosomal 
-# level, we suggest 0.7, 0.6, 0.6, with an intermediate sensitivity and 
-# specificity.
-set pExon=0.7
-set pPromoter=0.6
-set pDonor=0.6
+set pExon=0.4
+set pPromoter=0.3
+set pDonor=0.4
 set param="$pPromoter $pDonor $pExon"
 echo "#LOOP " > gsub
 echo "./doit \044(path1) {check out line+ out/\044(root1)/\044(root1).bed} $param" >> gsub
@@ -3350,14 +3342,18 @@ para create spec
 para try
 para check
 para push
-para check
+para times
 
-#when jobs are done
+#Average job time:                 547s       9.11m     0.15h    0.01d
+#Longest job:                     1739s      28.98m     0.48h    0.02d
+# Two jobs fail 
+# out/chrY_random/chrY_random.bed is empty
+# out/chrM/chrM.bed is empty
+ssh hgwdev
 cat out/*/*.bed > firstEF.bed
 echo "drop table firstEF;" | hgsql hg15
 hgLoadBed hg15 firstEF firstEF.bed
 rm -rf out
-
 
 # RUN 3-WAY ALIGNMENTS HUMAN/RAT/MOUSE USING MULTIZ
 
