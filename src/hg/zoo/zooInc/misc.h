@@ -7,3 +7,6 @@ void *safe_alloc(size_t );
 
 /* Create new copy of string */
 char *strClone(char *s2);
+
+/* Open safely */
+FILE *safe_open(char *name, char *mode);
