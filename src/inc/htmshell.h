@@ -60,7 +60,7 @@ void htmlSetBackground(char *imageFile);
 /* Set background image - needs to be called before htmlStart
  * or htmShell. */
 
-void htmlSetBgColor(int *color);
+void htmlSetBgColor(int color);
 /* Set background color - needs to be called before htmlStart
  * or htmShell. */
 

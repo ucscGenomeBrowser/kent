@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.19 2003/09/13 04:15:09 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.20 2003/09/17 17:14:08 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -113,13 +113,15 @@ void htmlSetBackground(char *imageFile)
 htmlBackground = imageFile;
 }
 
-static int *htmlBgColor = NULL;
+static int htmlBgColor = 0xFFFFFF;
+boolean gotBgColor = FALSE;
 
-void htmlSetBgColor(int *color)
+void htmlSetBgColor(int color)
 /* Set background color - needs to be called before htmlStart
  * or htmShell. */
 {
 htmlBgColor = color;
+gotBgColor = TRUE;
 }
 
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure)
@@ -163,8 +165,8 @@ fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
 if (htmlBackground != NULL )
     fprintf(f, " BACKGROUND=\"%s\"", htmlBackground);
-if (htmlBgColor != NULL)
-    fprintf(f, " BGCOLOR=\"%X\"", *htmlBgColor);
+if (gotBgColor)
+    fprintf(f, " BGCOLOR=\"%X\"", htmlBgColor);
 fputs(">\n",f);
 }
 
