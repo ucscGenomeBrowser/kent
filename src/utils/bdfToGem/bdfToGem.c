@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.12 2005/02/24 00:57:34 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.13 2005/02/24 18:32:33 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -114,6 +114,22 @@ for (row = 0; row < (*glyph)->h; ++row)
 freez(glyph);
 }
 
+static void freeGlyphList(struct bdfGlyph **glyph)
+{
+struct bdfGlyph *gl, *next;
+
+if ((struct bdfGlyph **)NULL == glyph) return;
+if ((struct bdfGlyph *)NULL == *glyph) return;
+
+for (gl = *glyph; (struct bdfGlyph *)NULL !=  gl; gl = next)
+    {
+    next = gl->next;
+    freeGlyph(&gl);
+    }
+freez(glyph);
+return;
+}
+
 static int encodeCmp(const void *va, const void *vb)
 /* Compare to sort based on encoding value */
 {
@@ -127,7 +143,7 @@ static unsigned char leftMasks[8] =
     0x0, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe
     };
 
-static previousLastOffset = -1;
+static int previousLastOffset = -1;
 
 /*  This bitsCopy is a specific limited form of a blit.  The limitation
  *	is allowed because the source bitmap always has the characteristic
@@ -158,15 +174,6 @@ for (destRow = startRow; (srcRow < glyph->h) && (destRow < maxYextent);
 
     destColumn = (offset + glyph->xOff) >> 3;
 
-if (destRow == startRow)
-  verbose(4,"prevLastOffset: %d, destOffset: %d, xOff: %d, offset: %d w: %d d: %d'%c'\n",
-    previousLastOffset, (offset + glyph->xOff), glyph->xOff, offset,
-	glyph->w, glyph->dWidth, glyph->encoding);
-if (((offset + glyph->xOff) <= previousLastOffset) && (destRow == startRow))
-    verbose(4,"overlapping glyphs at encoding %d '%c', last: %d, this: %d, diff: %d\n",
-	glyph->encoding, glyph->encoding, previousLastOffset,
-	(offset + glyph->xOff), (offset + glyph->xOff) - previousLastOffset);
-
     if (0 == bitsOnLeft)
 	{
 	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
@@ -179,9 +186,8 @@ if (((offset + glyph->xOff) <= previousLastOffset) && (destRow == startRow))
 	unsigned char maskRight = ~maskLeft;
 	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
 	    {
-	    unsigned char dest;
+	    unsigned char dest = bitmap[destRow][destColumn];
 	    unsigned char src = glyph->bitmap[srcRow][col];
-	    dest = bitmap[destRow][destColumn];
 	    bitmap[destRow][destColumn] =
 		(dest & maskLeft) | ((src >> bitsOnLeft) & maskRight);
 	    bitmap[destRow][destColumn+1] = ((src << bitsOnRight) & maskLeft);
@@ -190,6 +196,9 @@ if (((offset + glyph->xOff) <= previousLastOffset) && (destRow == startRow))
 }
 previousLastOffset = offset + glyph->xOff + glyph->w;
 
+/*	The maximum of glyph->dWidth or (glyph->xOff + glyph->w)
+ *	prevents overlaps between characters in the all char bitmap
+ */
 return(glyph->dWidth > (glyph->xOff + glyph->w) ? glyph->dWidth :
 	(glyph->xOff + glyph->w));
 }
@@ -202,29 +211,28 @@ unsigned char **bitmap = (unsigned char **)NULL; /* all glyphs together */
 FILE *f = mustOpen(out,"w");
 struct bdfGlyph *glyph = (struct bdfGlyph *)NULL;
 struct bdfGlyph *fillChar = (struct bdfGlyph *)NULL;
-int glyphCount = 0;
+int glyphCount = 0;	/* a count of glyphs to work on */
 int maxGlyphCount = HI_LMT - LO_LMT + 1;
-int encoding = 0;
-int lastEncoding = 0;
-int missing = 0;
-int offset = 0;
-int minXoff = BIGNUM;
-int maxXoff = -BIGNUM;
-int minYoff = BIGNUM;	/* lowest y coordinate found in incoming glyphs */
-int maxYoff = -BIGNUM;	/* highest y coordinate found in incoming glyphs */
-int maxYextent = 0;
-int maxXextent = 0;
-int maxDwidth = 0;
-int bytesOut = 0;
-int row;
-int combinedWidth = 0;
-int *offsets = (int *)NULL;
-int widthSpace = 0;
-int bitmapColumn = 0;
-int maxYcoord = -BIGNUM;
-int minYcoord = BIGNUM;
-int maxXcoord = -BIGNUM;
-int minXcoord = BIGNUM;
+int encoding = 0;	/* a character's ascii value */
+int lastEncoding = 0;	/* used to find missing glyphs */
+int missing = 0;	/* a count of missing glyphs */
+int offset = 0;		/* pixel(bit) offset into the all char bitmap */
+int minXoff = BIGNUM;	/* lowest x offset found in incoming glyphs */
+int maxXoff = -BIGNUM;	/* highest x offset found in incoming glyphs */
+int minYoff = BIGNUM;	/* lowest y offset found in incoming glyphs */
+int maxYoff = -BIGNUM;	/* highest y offset found in incoming glyphs */
+int maxYextent = 0;	/* maxium height of all chars with offset incl */
+int maxXextent = 0;	/* maxium width of all chars with offset incl */
+int maxDwidth = 0;	/* maximum declared width of all chars */
+int bytesOut = 0;	/* a loop counter for output line break calc */
+int row;		/* row = 0 at top of a bitmap	*/
+int combinedWidth = 0;	/* sum of all character widths */
+int *offsets = (int *)NULL;	/* offset array to be filled in and printed */
+int widthSpace = 0;	/* the space character is used for missing glyphs */
+int maxYcoord = -BIGNUM;/* highest Y coordinate found in incoming glyphs*/
+int minYcoord = BIGNUM; /* lowest Y coordinate found in incoming glyphs*/
+int maxXcoord = -BIGNUM;/* highest X coordinate found in incoming glyphs*/
+int minXcoord = BIGNUM; /* lowest Y coordinate found in incoming glyphs*/
 
 
 slSort(&glyphs, encodeCmp);	/*	order glyphs by encoding value */
@@ -261,14 +269,6 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
     if (xRight > maxXcoord) maxXcoord = xRight;
     if (yTop > maxYcoord) maxYcoord = yTop;
     if (yBottom < minYcoord) minYcoord = yBottom;
-/*
-    if (yExtent < 0)
-	errAbort("negative yExtent for glyph: %d, h: %d, yOff: %d",
-		glyph->encoding, glyph->h, glyph->yOff);
-    if (yExtent > font->frm_hgt)
-	errAbort("yExtent larger than possible for glyph: %d, h: %d, yOff: %d",
- 		glyph->encoding, glyph->h, glyph->yOff);
-*/
     if (glyph->dWidth > maxDwidth) maxDwidth = glyph->dWidth;
     if ((maxYcoord - minYcoord) > maxYextent)
 	maxYextent = maxYcoord - minYcoord;
@@ -321,8 +321,6 @@ bitmap = allocRows(font->frm_wdt * 8, font->frm_hgt);
 verbose(2,"#\tallocated bitmap: %d x %d pixels = %d x %d bytes\n",
 	font->frm_wdt * 8, font->frm_hgt, font->frm_wdt, font->frm_hgt);
 
-//#       min,max X offsets: -1, 2, maxXextent: 16
-//#       min,max Y offsets: -4, 11, maxYextent: 18
 /*	Now that we know our and minYoff, this becomes our
  *	reference to coordinate Y=0 in the global bitmap.
  *	To copy an individual glyph into its place in the global bitmap,
@@ -358,7 +356,6 @@ verbose(2,"#\tallocated bitmap: %d x %d pixels = %d x %d bytes\n",
  */
 
 offset = 0;		/*  offset=bit (pixel) position in global bitmap */
-bitmapColumn = 0;		/*  offset in bytes == column in bitmap[][] */
 glyphCount = 0;
 glyph = glyphs;		/*	the first one is (LO_LMT)	*/
 for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
@@ -374,8 +371,8 @@ for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
     if (encoding != glyph->encoding)	/*	missing glyph ?	*/
 	{
 	glyphToUse = fillChar;	/*	use FILL_CHAR (space)	*/
-verbose(5,"#\tmissing glyph at encoding %d '%c'\n", encoding,
-	isprint((char)encoding) ? (char)encoding : ' ');
+	verbose(5,"#\tmissing glyph at encoding %d '%c'\n", encoding,
+	    isprint((char)encoding) ? (char)encoding : ' ');
 	}
     else
 	glyph = glyph->next;	/*	not missing, OK to go to next */
@@ -389,9 +386,11 @@ offsets[glyphCount] = offset;
 if ((char *)NULL == name)
 	name = cloneString(DEFAULT_FONT);	/*	default name of font */
 
+/*	And now to start the output of the C source code	*/
+
 fprintf(f, "\n/* %s.c - compiled data for font %s */\n", name,font->facename);
 if (! noHeader)
-    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.12 2005/02/24 00:57:34 hiram Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.13 2005/02/24 18:32:33 hiram Exp $\";\n");
 
 fprintf(f, "/* generated source code by utils/bdfToGem, do not edit */\n");
 fprintf(f, "/* BDF data file input: %s */\n\n", inputFileName);
@@ -429,10 +428,10 @@ fprintf(f, "static WORD %s_ch_ofst[%d] = {\n", name, maxGlyphCount+1);
 for (glyphCount = 0; glyphCount < maxGlyphCount+1; ++glyphCount)
     {
     fprintf(f,"%d,",offsets[glyphCount]);
-    if (0 == (glyphCount % 8))	/*	every eight produces new line */
+    if (0 == ((glyphCount+1) % 10))	/*	every ten produces new line */
 	fprintf(f,"\n");
     }
-if (0 != (glyphCount % 8))	/* if not already a new line for the last one */
+if (0 != (glyphCount % 10))	/* if not already a new line for the last one */
     fprintf(f,"\n");
 
 font->top_dist = font->frm_hgt;
@@ -730,8 +729,8 @@ fontHeader.frm_hgt = maxYcoord - minYcoord;
 fontHeader.ADE_lo = asciiLo;
 fontHeader.ADE_hi = asciiHi;
 
-
 outputGem(outputFile, &fontHeader, glyphList, bdfFile);
+freeGlyphList(&glyphList);
 }
 
 int main( int argc, char *argv[] )
