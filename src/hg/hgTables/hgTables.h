@@ -7,6 +7,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef LOCALMEM_H
+#include "localmem.h"
+#endif
+
 #ifndef DYSTRING_H
 #include "dystring.h"
 #endif
@@ -104,15 +108,20 @@ struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
     char *trackVar, char *trackScript, struct sqlConnection *conn);
 /* Show group & track row of controls.  Returns selected track */
 
-
 /* --------- Utility functions --------------------- */
 
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
+char *getRegionName();
+/* Get a name for selected region.  Don't free this. */
+
 struct region *getRegionsWithChromEnds();
 /* Get list of regions.  End field is set to chrom size rather
  * than zero for full chromosomes. */
+
+void regionFillInChromEnds(struct region *regionList);
+/* Fill in end fields if set to zero to be whole chrom. */
 
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */
@@ -174,18 +183,53 @@ void doTabOutTable(char *database, char *table,
 /* Do tab-separated output on table. */
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region);
+	struct trackDb *track, struct region *region, struct lm *lm);
 /* Get list of beds on single region that pass filtering. */
 
 struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	struct trackDb *track);
+	struct trackDb *track, struct lm *lm);
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 
+void bedSqlFieldsExceptForChrom(struct hTableInfo *hti,
+	int *retFieldCount, char **retFields);
+/* Given tableInfo figure out what fields are needed to
+ * add to a database query to have information to create
+ * a bed. The chromosome is not one of these fields - we
+ * assume that is already known since we're processing one
+ * chromosome at a time.   Return a comma separated (no last
+ * comma) list of fields that can be freeMem'd, and the count
+ * of fields (this *including* the chromosome). */
+
+struct bed *bedFromRow(
+	char *chrom, 		  /* Chromosome bed is on. */
+	char **row,  		  /* Row with other data for bed. */
+	int fieldCount,		  /* Number of fields in final bed. */
+	boolean isPsl, 		  /* True if in PSL format. */
+	boolean isGenePred,	  /* True if in GenePred format. */
+	boolean isBedWithBlocks,  /* True if BED with block list. */
+	boolean *pslKnowIfProtein,/* Have we figured out if psl is protein? */
+	boolean *pslIsProtein,    /* True if we know psl is protien. */
+	struct lm *lm);		  /* Local memory pool */
+/* Create bed from a database row when we already understand
+ * the format pretty well.  The bed is allocated inside of
+ * the local memory pool lm.  Generally use this in conjunction
+ * with the results of a SQL query constructed with the aid
+ * of the bedSqlFieldsExceptForChrom function. */
+
 struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
-	struct trackDb *track);
-/* get list of beds in selected regions that pass intersection
- * (and filtering). */
+	struct trackDb *track, struct lm *lm);
+/* Get list of beds in selected regions that pass intersection
+ * (and filtering). Do lmCleanup (not bedFreeList) when done. */
+
+struct bed *cookedBedList(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region, struct lm *lm);
+/* Get data for track in region after all processing steps (filtering
+ * intersecting etc.) in BED format. */
+
+struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
+	struct trackDb *track, struct region *regionList, struct lm *lm);
+/* Get cooked beds on all regions. */
 
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
@@ -230,10 +274,11 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define filterRawLogicVar "rawLogic"
 #define filterRawQueryVar "rawQuery"
 
-/* Functions related to intersecting. */
+/* --------- Functions related to intersecting. --------------- */
 
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
+
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -328,7 +373,7 @@ boolean anyIntersection();
 #define outHyperlinks "hyperlinks"
 #define outWigData "wigData"
 
-/* Identifier list handling stuff. */
+/* --------- Identifier list handling stuff. ------------ */
 
 char *identifierFileName();
 /* File name identifiers are in, or NULL if no such file. */
@@ -336,12 +381,34 @@ char *identifierFileName();
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
 
+/* --------- Summary and stats stuff -------------- */
+long long basesInRegion(struct region *regionList);
+/* Count up all bases in regions. */
+
+long long gapsInRegion(struct sqlConnection *conn, struct region *regionList);
+/* Return count of gaps in all regions. */
+
+void percentStatRow(char *label, long long p, long long q);
+/* Print label, p, and p/q */
+
+void numberStatRow(char *label, long long x);
+/* Print label, x in table. */
+
+void floatStatRow(char *label, double x);
+/* Print label, x in table. */
+
+void stringStatRow(char *label, char *val);
+/* Print label, string value. */
+
 /* ----------- Wiggle stuff. -------------------- */
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
 void doOutWigData(struct trackDb *track, struct sqlConnection *conn);
 /* Save as wiggle data. */
+
+void doSummaryStatsWiggle(struct sqlConnection *conn);
+/* Put up page showing summary stats for wiggle track. */
 
 /* ----------- Custom track stuff. -------------- */
 boolean isCustomTrack(char *table);
@@ -354,7 +421,7 @@ struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	boolean *retGotFilter, boolean *retGotIds);
+	struct lm *lm, boolean *retGotFilter, boolean *retGotIds);
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
  * this when done.  

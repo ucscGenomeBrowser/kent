@@ -20,20 +20,25 @@ char *cleanName = NULL;
 struct hash *iHash = newHash(12);
 char buff[256];
 char *tmp;
+int currColCount = 0;
 /* Get the headers. */
 lineFileNextReal(lf, &line);
 while(line[0] == '\t')
     line++;
-colCount = chopString(line, "\t", NULL, 0);
+colCount = chopByWhite(line, NULL, 0);
 AllocArray(colNames, colCount);
 AllocArray(words, colCount+1);
 AllocArray(rowNames, rowMax);
 AllocArray(M, rowMax);
-/* tmp = cloneString(line);*/
 tmp = replaceChars(line, "\"", "");
 chopByChar(tmp, '\t', colNames, colCount);
-while(lineFileNextRow(lf, words, colCount+1))
+while(lineFileNextReal(lf, &line))
     {
+    currColCount = chopByWhite(line, words, colCount+1);
+    /* Sanity check. */
+    if(currColCount != colCount +1)
+	errAbort("Wrong number of columns at line %d. Got %d expecting %d",
+		 lf->lineIx, currColCount, colCount+1);
     if(rowCount+1 >=rowMax)
 	{
 	ExpandArray(rowNames, rowMax, 2*rowMax);
@@ -51,7 +56,6 @@ while(lineFileNextRow(lf, words, colCount+1))
 	}
     rowNames[rowCount] = replaceChars(words[0], "\"","");
     hashAddInt(iHash, rowNames[rowCount], rowCount);
-/*     rowNames[rowCount] = cloneString(words[0]); */
     AllocArray(M[rowCount], colCount);
     for(i=1; i<=colCount; i++) /* Starting at 1 here as name is 0. */
 	{

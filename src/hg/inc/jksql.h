@@ -146,8 +146,8 @@ void sqlFreeResult(struct sqlResult **pRes);
 int sqlCountColumns(struct sqlResult *sr);
 /* Count the number of columns in result. */
 
-int sqlCountRows(struct sqlConnection *sc, char *table);
-/* Count the number of rows in a table. */
+int sqlCountColumnsInTable(struct sqlConnection *sc, char *table);
+/* Return the number of columns in a table */
 
 boolean sqlDatabaseExists(char *database);
 /* Return TRUE if database exists. */

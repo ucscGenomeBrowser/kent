@@ -1517,6 +1517,10 @@ cat > gsub << 'EOF'
     # NOTE: truncates file to 0 if -nobin is used
     hgLoadPsl hg17 -table=all_bacends bacEnds.load.psl
         #load of all_bacends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
+    # Reloaded table, 2004-07-21, and got more rows:
+    # load of all_bacends did not go as planned: 1698790 record(s), 
+    # 0 row(s) skipped, 63 warning(s) loading psl.tab
+
     # load BAC end sequences
 
     mkdir -p /gbdb/hg17/bacends
@@ -2100,7 +2104,7 @@ cat > split.csh << 'EOF'
     iSync
 
 
-# STS MARKERS (WORKING 2004-07-13 kate)
+# STS MARKERS (DONE 2004-07-21 kate)
     # Terry's sts.9 dir is in /cluster/store5/sts.2004-07.old
     # remove this after verifying the newer version
 
@@ -2323,7 +2327,7 @@ cat > template << 'EOF'
     wc -l stsMarkers.extra.found
         #   149 out of 3142 attempted
         # out of 92674 total sequences
-    cp stsMarkers.final stsMarkers.*lifted.psl.initial* stsMarkers.found \
+    cp stsMarkers.final stsMarkers.lifted.psl stsMarkers.*lifted.psl.initial* stsMarkers.found \
                 /cluster/data/hg17/bed/sts
 
     # primers
@@ -2496,27 +2500,25 @@ cat > template << 'EOF'
     /cluster/bin/scripts/createSTSbed /cluster/data/ncbi/sts.9/stsInfo2.bed \
                 stsMarkers_pos.rdb > stsMap.bed
 
-# GOT HERE
-
     # Set up sequence files
     ssh hgwdev
     mkdir -p /gbdb/hg17/sts.9/
     ln -s /cluster/data/ncbi/sts.9/all.STS.fa /gbdb/hg17/sts.9/all.STS.fa
-    # TODO: relink this (it's currently linked to sts.terry
-    ln -s /cluster/data/ncbi/sts.9/all.primers.fa /gbdb/hg17/sts.9/all.primers.fa
+    ln -s /cluster/data/ncbi/sts.9/all.primers.fa \
+        /gbdb/hg17/sts.9/all.primers.fa
 
     # Load all files
     cd /cluster/data/hg17/bed/sts
     hgLoadSeq hg17 /gbdb/hg17/sts.9/all.STS.fa /gbdb/hg17/sts.9/all.primers.fa
     hgsql hg17 < ~kent/src/hg/lib/stsInfo2.sql
     hgsql hg17 < ~kent/src/hg/lib/stsAlias.sql
-    hgsql hg17
-    mysql> load data local infile 'stsInfo2.bed' into table stsInfo2;
-    mysql> load data local infile 'stsAlias.bed' into table stsAlias;
+    cp /cluster/data/ncbi/sts.9/{stsInfo2.bed,stsAlias.bed} .
+    hgsql hg17 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
+    hgsql hg17 -e 'load data local infile "stsAlias.bed" into table stsAlias'
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
 	hg17 stsMap stsMap.bed
     hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
-    hgLoadPsl -nobin -table=all_sts_seq hg17 run/stsMarkers.lifted.psl
+    hgLoadPsl -nobin -table=all_sts_seq hg17 stsMarkers.lifted.psl
 
     
 # RECOMBINATION RATES (2004-07-13 Terry)
@@ -2531,6 +2533,7 @@ cat > template << 'EOF'
 	cd recombRate
 
 # Copy other necessary files here (in future, can take from previous version)
+# NOTE: these are stable, and could be saved in a permanent spot
     cp /projects/hg2/booch/psl/info/decode_all .
     cp /projects/hg2/booch/psl/info/marshfield_all .
     cp /projects/hg2/booch/psl/info/genethon_all .
@@ -2577,14 +2580,12 @@ cat > template << 'EOF'
     /cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
         marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv \
                 > recombRate.bed
-
-        # GOT HERE
     hgLoadBed -noBin -tab \
         -sqlTable=/cluster/home/kent/src/hg/lib/recombRate.sql \
 	    hg17 recombRate recombRate.bed
 	   
 
-# FISH CLONES (2004-07-13 Terry)
+# FISH CLONES (DONE 2004-07-22 Kate)
 
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
 # creating this track
@@ -2617,10 +2618,9 @@ cat > template << 'EOF'
             fishClones_initial
 	     
 # Get sequences for accessions not in genome
-    ssh kolossus
+    ssh eieio
     mkdir -p /cluster/bluearc/hg17/fishClones/
     cd /cluster/bluearc/hg17/fishClones/
-# GOT HERE
 	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
 	# select file "/cluster/data/hg17/bed/fishClones/fishClones_initial.acc"
 	# change output to FASTA format
@@ -2629,24 +2629,28 @@ cat > template << 'EOF'
 # Align these using blat
     cp ~booch/tracks/gs.17/build34/fish/convert.pl .
     cp ~booch/tracks/gs.17/build34/fish/blatAll.pl .
+        # edited to use ooc file on bluearc, so can run on kolossus
     convert.pl  < notFound.fa > notFound.convert.fa
     mkdir out
     blatAll.pl /cluster/data/hg17 notFound.convert.fa out
+        # creates raw.psl, not.found.psl
 
 # Make final fishClones file with this new clone placement info
     cd /cluster/data/hg17/bed/fishClones
     fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin \
-         -psl=/cluster/bluearc/hg17/fishClones/notFound.psl hg17 \
+         -psl=/cluster/bluearc/hg17/fishClones/not.found.psl hg17 \
          /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
          /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
          /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
          /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones
 
 # Load the track
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/fishClones
     hgLoadBed -noBin -tab \
         -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
 	hg17 fishClones fishClones.bed
-
+            # Loaded 10601 elements of size 16
 
 # CHROMOSOME BANDS TRACK (2004-07-13 Terry)
 
@@ -2683,6 +2687,57 @@ cat > template << 'EOF'
 # Load ideogram table
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
 	hg17 cytoBandIdeo cytobands.bed
+
+
+# CHROMOSOME BANDS TRACK REDO (2004-07-22 Kate)
+#       Just to make sure we know the proper steps.
+#       The tables were not reloaded, as Terry has already
+#       sent the data to NCBI
+
+# This must wait until the Fish Clones tracks is done
+    ssh kolossus
+    mkdir -p /cluster/data/hg17/bed/cytoband.kate
+    cd /cluster/data/hg17/bed/cytoband.kate
+
+# Copy in some necessary files (usually from previous version)
+    cp /projects/hg2/booch/psl/cytobands/pctSetBands.txt .
+    cp /projects/hg2/booch/psl/cytobands/ISCN800.txt .
+
+# Create some preliminary information files
+    /cluster/bin/scripts/createSetBands pctSetBands.txt \
+	/cluster/data/hg17/inserts /cluster/data/hg17  100 > setBands.txt
+    /cluster/bin/scripts/makeBands ISCN800.txt \
+        /cluster/data/hg17 > cytobands.pct.bed
+    /cluster/bin/scripts/makeBandRanges cytobands.pct.bed \
+        > cytobands.pct.ranges
+
+# Reformat fishClones file
+    /cluster/bin/scripts/createBanderMarkers \
+	/cluster/data/hg17/bed/fishClones/fishClones.bed > fishClones.txt
+
+# Create bed file
+    ssh eieio
+    cd /cluster/data/hg17/bed/cytoband.kate
+    /cluster/bin/scripts/runBander fishClones.txt \
+	ISCN800.txt setBands.txt /cluster/data/hg17
+    # NOTE: fails on kolossus (C++ compiler different ??)
+
+    # Should be 862 bands
+    wc  -l cytobands.bed
+    # 862    cytobands.bed
+
+# NOTE - don't load tracks, as Terry has already sent his
+#       versions to NCBI
+
+# Load track
+    #hgLoadBed -noBin -tab \
+        # -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql \
+	# hg17 cytoBand cytobands.bed
+	    
+# Load ideogram table
+    #hgLoadBed -noBin -tab \
+        # -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
+	# hg17 cytoBandIdeo cytobands.bed
 
 
 # LOAD AFFYRATIO (DONE - 2004-07-14 - Hiram)
@@ -3173,7 +3228,7 @@ cat << 'EOF' > gsub
     #	load of blatFr1 did not go as planned: 216595 record(s),
     #	0 row(s) skipped, 3 warning(s) loading psl.tab
     #	featureBits hg17 blatFr1 refGene:CDS
-    #	13476002 bases of 2866216770 (0.470%) in intersectio
+    #	13563544 bases of 2866216770 (0.473%) in intersection
     #	featureBits hg16 blatFr1 refGene:CDS
     #	13547219 bases of 2865248791 (0.473%) in intersection
     #	featureBits hg15 blatFugu refGene:CDS
@@ -3293,7 +3348,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     cd /cluster/data/hg17/bed/blastz.rn3/pslChrom
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done: ${I}"
     done
     # this is a 55 minute job
@@ -3305,7 +3360,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 
 # CHAIN RN3 BLASTZ (DONE - 2004-06-14 - Hiram)
 #  re-worked with no 'axtFilter -notQ_random' on the axtChain step - 2004-06-23
-    axtFilter -notQ_random $1 | axtChain stdin \
+#    used to be: axtFilter -notQ_random $1 | axtChain stdin
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -3511,7 +3566,7 @@ cat << 'EOF' > makeMaf.csh
     cd /cluster/data/hg17/bed/blastz.rn3/pslBest
     for I in chr*BestRn3.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -3598,7 +3653,7 @@ hgLoadBed hg17 ensRn3MusHom ucsc100k.bed -sqlTable=ensRn3MusHom.sql
     cd /cluster/data/hg17/bed/blastz.rn3/pslTight
     for I in chr*TightRn3.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -3743,7 +3798,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     bash
     for I in *.psl
     do
-        /cluster/bin/i386/hgLoadPsl hg17 ${I}
+        /cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
         echo "done: ${I}"
     done   
 
@@ -4072,6 +4127,16 @@ hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio \
     #	real    21m37.703s
     #	user    13m35.110s
     #	sys     0m28.470s
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes only 10 minutes.)
+
+hgMapToGene hg17 affyGnf1h knownGene knownToGnf1h
+hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1h
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 9756 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
@@ -4552,7 +4617,7 @@ SEQ2_LEN=$BASE/S2.len
     bash
     for F in chr*_blastzMm4.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${F}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${F}
 	echo "${F} done"
     done
     # this is a 55 minute job
@@ -4766,7 +4831,7 @@ cat > makeMaf.csh << '_EOF_'
     cd /cluster/data/hg17/bed/blastz.mm4/pslBest
     for I in chr*BestMm4.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -4849,7 +4914,7 @@ hgLoadBed hg17 ensRatMm4Hom ucsc100k.bed -sqlTable=ensRatMm4Hom.sql
     cd /cluster/data/hg17/bed/blastz.mm4/pslTight
     for I in chr*TightMm4.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -5004,7 +5069,7 @@ cat > load.csh << 'EOF'
     foreach f (chr*.psl)
 	set table = $f:r_blastzPanTro1
 	echo "loading ${table}"
-	/cluster/bin/i386/hgLoadPsl hg17 -table=$f:r_${table} $f
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 -table=$f:r_${table} $f
     end
 'EOF'
 # << for emacs
@@ -6030,7 +6095,7 @@ root=`basename $file .ss.gz`
 chrom=`echo $root | awk -F\. '{print $1}'`
 
 mkdir -p $TMP 
-zcat $file | $PHAST/phastCons - hg17panTro1mm4rn3galGal2fr1danRer1.mod --rates-cut 1 --nrates 40 --suppress-missing --cut-params 0.080,0.008 --quiet > $TMP/$root.pp
+zcat $file | $PHAST/phastCons - hg17panTro1mm4rn3galGal2fr1danRer1.mod --nrates 40 --suppress-missing --transitions 0.080,0.008 --quiet > $TMP/$root.pp
 mkdir -p PHASTCONS/$chrom
 gzip -c $TMP/$root.pp > PHASTCONS/$chrom/$root.pp.gz
 rm $TMP/$root.pp
@@ -6732,7 +6797,7 @@ SEQ2_LEN=$BASE/S2.len
     bash		#	for tcsh users
     for F in chr*_blastzMm5.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${F}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${F}
 	echo "${F} done"
     done
     # this is a 40 minute job
@@ -6964,7 +7029,7 @@ cat > makeMaf.csh << '_EOF_'
     cd /cluster/data/hg17/bed/blastz.mm5/pslBest
     for I in chr*BestMm5.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -6995,7 +7060,7 @@ cat > makeMaf.csh << '_EOF_'
 # SWAP BLASTZ ZEBRAFISH-HUMAN (danRer1-hg17) to HUMAN-ZEBRAFISH (hg17-danRer1)
 # USE RESCORED ALIGNMENTS (see makeDanRer1.doc)
 # (DONE, 2004-06-22, hartera)
-
+# CONVERT AXTs TO PSL AND LOAD INTO DATABASE (DONE, 2004-07-08, hartera)
     ssh kolossus
     mkdir /cluster/data/hg17/bed/blastz.danRer1.swap
     cd /cluster/data/hg17/bed/blastz.danRer1.swap
@@ -7015,8 +7080,24 @@ cat > makeMaf.csh << '_EOF_'
     du -sh $aliDir/axtChrom unsorted axtChrom
 # 19G     /cluster/data/danRer1/bed/blastz.hg17/axtChrom
 # 19G     unsorted
-
     rm -r unsorted
+   # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.danRer1.swap
+    mkdir -p pslChrom
+    set tbl = "blastzDanRer1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer1.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl hg17 $f
+      echo "$f Done"
+    end
 
 # CHAIN ZEBRAFISH (danRer1) BLASTZ (DONE, 2004-06-23, hartera)
     # Run axtChain on little cluster
@@ -7216,6 +7297,14 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
+# BLASTZ ZEBRAFISH (danRer1) CLEAN UP (DONE, 2004-07-19, hartera)
+
+     ssh eieio
+     cd /cluster/data/hg17/bed/blastz.danRer1.swap
+     nice rm axtChain/run1/chain/* &
+     nice rm -fr axtChain/n1 axtChain/hNoClass.net &
+     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+ 
 # MAKING MOUSE SYNTENY (DONE - 2004-07-03 - Hiram)
 
 ssh hgwdev
@@ -7282,7 +7371,7 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     cd /cluster/data/hg17/bed/blastz.mm5/pslTight
     for I in chr*TightMm5.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -7533,7 +7622,7 @@ cat `ls -1 *.lav.axt | sort -g` > $BASE/$OUT
     bash # if a csh/tcsh user
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done: ${I}"
     done
     # exit bash if you are tcsh
@@ -7625,7 +7714,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     for I in *.chain
     do
         c=${I/.chain/}
-        hgLoadChain hg17 ${c}_chainSelf $I
+        $HOME/bin/i386/hgLoadChain -normScore hg17 ${c}_chainSelf $I
         echo done $c
     done
     # exit bash if you are tcsh
@@ -7780,7 +7869,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     bash # if a csh/tcsh user
     for I in chr*BestSelf.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
     # exit bash if you are tcsh
@@ -7803,3 +7892,21 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     nice rm -fr axtChain/n1 axtChain/hNoClass.net &
     nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
 
+# CREATING BIG ZIPS (DONE - 2004-07-23 - Hiram)
+    ssh eieio
+    cd /cluster/data/hg17/jkStuff
+    time ./zipAll.sh > zipAll.out 2>&1
+
+    ssh hgwdev
+    #  This stuff has to work in a different way because this stuff
+    #	updates on a daily basis.
+    cd /usr/local/apache/htdocs/goldenPath/hg17/bigZips
+    featureBits hg17 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    rm upstream1000.fa
+    featureBits hg17 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    rm upstream2000.fa
+    featureBits hg17 refGene:upstream:5000 -fa=upstream5000.fa
+    zip upstream5000.zip upstream5000.fa
+    rm upstream5000.fa

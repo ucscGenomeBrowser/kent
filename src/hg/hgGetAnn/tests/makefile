@@ -1,6 +1,7 @@
 include ../../../inc/common.mk
 
-DB=hg16
+# use hg15 to avoid incremental update
+DB=hg15
 
 all:
 
@@ -55,7 +56,7 @@ geneNameQuery:
 
 # aligns in 9 places
 geneAccQuery:
-	hgGetAnn ${DB} refGene NM_201402 output/$@.gp
+	hgGetAnn ${DB} refGene NM_005083 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 # aligns in 10 places
@@ -67,8 +68,6 @@ mrnaAccQuery:
 keywordQuery::
 	hgGetAnn ${DB} mrna "breast cancer early onset" output/$@.psl
 	diff expected/$@.psl output/$@.psl
-
-
 
 clean::
 	rm -rf output

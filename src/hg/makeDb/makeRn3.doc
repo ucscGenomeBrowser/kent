@@ -933,7 +933,7 @@ SEQ2_LEN=$BASE/S2.len
     set tbl = "blastzMm3"
     cd /cluster/data/rn3/bed/blastz.mm3
     cd pslChrom
-    /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_${tbl}.psl
     # create trackDb/rat/rn3/trackDb.ra entry:
 # track blastzMm3
 # shortLabel BLASTZ Mouse
@@ -1008,7 +1008,7 @@ doBestAxt $(root1) /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/$(root1).axt 
      set base="/cluster/data/rn3/bed/blastz.mm3"
      set tbl="blastzBestMm3"
      cd $base/pslBest
-     /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
+     /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_${tbl}.psl
 
      # check results
      featureBits rn3 blastzBestMm3
@@ -1484,7 +1484,7 @@ SEQ2_LEN=$BASE/S2.len
     mv blastz.hg15.swap blastz.hg15
     cd blastz.hg15
     cd pslChrom
-    /cluster/bin/i386/hgLoadPsl rn3 chr*_*.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_*.psl
     # create trackDb/rat/rn3/trackDb.ra entry:
 # track blastzHg15
 # shortLabel BLASTZ Human
@@ -1651,7 +1651,7 @@ SEQ2_LEN=$BASE/S2.len
      set base="/cluster/store3/rn3/bed/blastz.hg15"
      set tbl="blastzBestHg15"
      cd $base/pslBest
-     hgLoadPsl rn3 chr*_${tbl}.psl
+     hgLoadPsl -noTNameIx rn3 chr*_${tbl}.psl
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/rn3/axtBestHg15
@@ -1701,7 +1701,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     cd /cluster/data/rn3/bed/blastz.hg15.2003-07-09
     cd pslTight
-    /cluster/bin/i386/hgLoadPsl rn3 chr*_blastzTightHg15.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_blastzTightHg15.psl
 
 
 # MAKE MULTIPLE ALIGNMENT (MAF) FILES FROM BEST AXT'S (In Progress 2003-07-22 kate)
@@ -2017,7 +2017,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
            set r = $i:r
            mv $i ${r}_blatFish.psl
        end
-       hgLoadPsl rn3 *.psl
+       hgLoadPsl -noTNameIx rn3 *.psl
        hgLoadRna addSeq rn3 /cluster/store2/fish/seq15jun2001/*.fa
 
 # PRODUCING SQUIRT ALIGNMENTS  (TO DO)
@@ -2055,7 +2055,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
         set r = $i:r
         mv $i ${r}_blatCi1.psl
     end
-    hgLoadPsl rn3 *.psl
+    hgLoadPsl -noTNameIx rn3 *.psl
 
     # Make squirt /gbdb/ symlink
     mkdir /gbdb/rn3/squirtSeq
@@ -2110,7 +2110,7 @@ PRODUCING FUGU FISH ALIGNMENTS (TO DO)
         set r = $i:r
         mv $i ${r}_blatFugu.psl
     end
-    hgLoadPsl rn3 *.psl
+    hgLoadPsl -noTNameIx rn3 *.psl
     mkdir -p /gbdb/rn3/fuguSeq
     cd /gbdb/rn3/fuguSeq
     ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
@@ -2512,7 +2512,7 @@ AXTBEST
     set base="/cluster/store3/rn3/bed/blastz.hg15"
     set tbl="blastzBestHg15"
     cd $base/pslBest
-    hgLoadPsl hg15 chr*_${tbl}.psl
+    hgLoadPsl -noTNameIx hg15 chr*_${tbl}.psl
 
                                                                                 
 # LIFTING REPEATMASKER .ALIGN FILES (TODO)
@@ -2720,7 +2720,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     set tbl = "blastzMm4"
     cd /cluster/data/rn3/bed/blastz.mm4/pslChrom
-    /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_${tbl}.psl
     # real    162m7.520s
     # user    32m40.530s
     # sys     5m31.500s
@@ -2898,7 +2898,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Load tables
     ssh hgwdev
     cd /cluster/data/rn3/bed/blastz.mm4/pslBest
-    time /cluster/bin/i386/hgLoadPsl rn3 chr*_blastzBestMm4.psl
+    time /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_blastzBestMm4.psl
     # real    10m47.853s
     # user    2m48.700s
     # sys     0m24.250s
@@ -2950,7 +2950,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/rn3/bed/blastz.mm4/pslTight
-    hgLoadPsl rn3 chr*_blastzTightMm4.psl
+    hgLoadPsl -noTNameIx rn3 chr*_blastzTightMm4.psl
 
     # copy to axt's to download area
     cd /cluster/data/rn3/bed/blastz.mm4/axtTight
@@ -3866,7 +3866,7 @@ SEQ2_LEN=$BASE/S2.len
     # this is a 55 minute job
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl rn3 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx rn3 ${I}
 	echo "done: ${I}"
     done
 
@@ -4058,7 +4058,7 @@ axtFilter -notQ_random $1 | axtChain stdin \
     cd /cluster/data/rn3/bed/blastz.hg17/pslBest
     for I in chr*BestHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl rn3 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx rn3 ${I}
 	echo "done ${I}"
     done
 
@@ -4138,7 +4138,7 @@ hgLoadBed rn3 ensRatMusHom ucsc100k.bed -sqlTable=ensRatMusHom.sql
     cd /cluster/data/hg17/bed/blastz.rn3/pslTight
     for I in chr*TightRn3.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done ${I}"
     done
 
@@ -4271,7 +4271,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     cd /cluster/data/hg17/bed/blastz.galGal2/pslChrom
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx hg17 ${I}
 	echo "done: ${I}"
     done
 
@@ -4899,7 +4899,7 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
     cd /cluster/data/rn3/bed/blastz.hg17/pslTight
     for I in chr*TightHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl rn3 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx rn3 ${I}
 	echo "done ${I}"
     done
 

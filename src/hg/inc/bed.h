@@ -161,6 +161,9 @@ struct bed *cloneBed(struct bed *bed);
 struct bed *cloneBedList(struct bed *bed);
 /* Make an all-newly-allocated list copied from bed. */
 
+struct bed *lmCloneBed(struct bed *bed, struct lm *lm);
+/* Make a copy of bed in local memory. */
+
 /* Constraints that can be placed on bed fields: */
 enum charFilterType
     {

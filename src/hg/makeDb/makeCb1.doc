@@ -406,7 +406,7 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
     # names must be chr*_mrna.psl, there is only one
     mv chrUn.psl chrUn_mrna.psl
     # this load command rewrites these table entirely if they exist
-    hgLoadPsl cb1 *.psl
+    hgLoadPsl -noTNameIx cb1 *.psl
     mkdir /gbdb/cb1/mrna.134
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_briggsae/mrna.fa \
 	/gbdb/cb1/mrna.134
@@ -456,7 +456,7 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
     # name must be chr*_est.psl
     mv chrUn.psl chrUn_est.psl
     # this load command rewrites these table entirely if they exist
-    hgLoadPsl cb1 *.psl
+    hgLoadPsl -noTNameIx cb1 *.psl
 
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_briggsae/est.fa \
 	/gbdb/cb1/mrna.134
@@ -554,7 +554,7 @@ Longest job:                     3821s      63.68m     1.06h    0.04d
     # next machine
     ssh hgwdev
     cd ~/cb1/bed/blastzCe1/pslChrom
-    /cluster/bin/i386/hgLoadPsl cb1 chr*_*.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx cb1 chr*_*.psl
 # trackDb/worm/cb1/trackDb.ra entry:
 #   track blastzCe1
 #   shortLabel briggsae Blastz
@@ -764,7 +764,7 @@ SEQ2_LEN=$BASE/S2.len
    # Load database tables
     ssh hgwdev
     cd /cluster/data/cb1/bed/blastzCe2/pslChrom
-    /cluster/bin/i386/hgLoadPsl cb1 chrUn_blastzCe2.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx cb1 chrUn_blastzCe2.psl
     # alignments have gone from 1668769 for Ce1 to 1256139 for Ce2
 
 # trackDb/worm/cb1/trackDb.ra entry:

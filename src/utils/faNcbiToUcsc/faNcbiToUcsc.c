@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.11 2004/05/24 17:06:10 kate Exp $";
+static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.12 2004/07/23 16:51:55 booch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +38,8 @@ struct dnaSeq seq;
 FILE *f = NULL;
 char *wordBefore = cgiUsualString("wordBefore", "gb");
 int wordIx = cgiUsualInt("wordIx", -1);
+char *e = NULL;
+char *nt = NULL;
 ZeroVar(&seq);
 
 if (split)
@@ -50,11 +52,11 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	if (ntLast || encode)
 	    {
-            char *nt;
+	    nt = NULL;
             if (ntLast)
                 {
+		e = NULL;
                 nt = stringIn("NT_", line);
-                char *e;
                 if (nt == NULL)
                     nt = stringIn("NG_", line);
                 if (nt == NULL)

@@ -20,12 +20,14 @@ errAbort(
   "options:\n"
   "   -maxGap=N    defines max gap possible (default 250,000)\n"
   "   -outPsl      output psl format instead of chain\n"
+  "   -ignoreQ     ignore query name and link together everything\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"maxGap", OPTION_INT},
    {"outPsl", OPTION_BOOLEAN},
+   {"ignoreQ", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -361,7 +363,10 @@ while ((psl = pslNext(pslLf)) != NULL)
     //assert((psl->strand[1] == 0) || (psl->strand[1] == '+'));
     count++;
     dyStringClear(dy);
-    dyStringPrintf(dy, "%s%s%s", psl->qName, psl->strand, psl->tName);
+    if ( optionExists("ignoreQ"))
+	dyStringPrintf(dy, "%s%s%s", "", psl->strand, psl->tName);
+    else
+	dyStringPrintf(dy, "%s%s%s", psl->qName, psl->strand, psl->tName);
     sp = hashFindVal(pslHash, dy->string);
     if (sp == NULL)
         {
@@ -467,7 +472,10 @@ for(sp = spList; sp; sp = sp->next)
 	if (outPsl)
 	    chainToPslWrite(chain, outChains, sp->tSize, sp->qSize);
 	else
+	    {
+	    chain->qEnd = (chain->qEnd < chain->qSize)? chain->qEnd : chain->qSize;
 	    chainWrite(chain, outChains);
+	    }
 	}
     }
 

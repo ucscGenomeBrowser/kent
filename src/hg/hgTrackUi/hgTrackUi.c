@@ -17,11 +17,12 @@
 #include "hgMaf.h"
 #include "obscure.h"
 #include "chainCart.h"
+#include "chainDb.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.123.2.1 2004/07/26 16:21:12 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.126 2004/07/26 19:01:34 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -383,16 +384,27 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
+static void filterByChrom(struct trackDb *tdb)
+{
+char *filterSetting;
+char filterVar[256];
+char *filterVal = "";
+
+printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
+filterSetting = cartUsualString(cart, filterVar, filterVal);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
+}
+
 void crossSpeciesUi(struct trackDb *tdb)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
 char colorVar[256];
-char filterVar[256];
-char *colorSetting, *filterSetting;
-char *filterVal = "";
+char *colorSetting;
 /* initial value of chromosome coloring option is "on", unless
  * overridden by the colorChromDefault setting in the track */
 char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
+
 printf("<p><b>Color track based on chromosome</b>: ");
 snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
 colorSetting = cartUsualString(cart, colorVar, colorDefault);
@@ -401,10 +413,7 @@ printf(" on ");
 cgiMakeRadioButton(colorVar, "off", sameString(colorSetting, "off"));
 printf(" off ");
 printf("<br><br>");
-printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
-filterSetting = cartUsualString(cart, filterVar, filterVal);
-cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
+filterByChrom(tdb);
 }
 
 void scoreUi(struct trackDb *tdb)
@@ -501,16 +510,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 void chainColorUi(struct trackDb *tdb)
 /* UI for the chain tracks */
 {
-char options[1][256];	/*	our option strings here	*/
-char *colorOpt;
+if (chainDbNormScoreAvailable(chromosome, tdb->tableName, NULL))
+    {
+    char options[1][256];	/*	our option strings here	*/
+    char *colorOpt;
+    (void) chainFetchColorOption(tdb, &colorOpt);
+    snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
+    printf("<p><b>Color chains by:&nbsp;</b>");
+    chainColorDropDown(&options[0][0], colorOpt);
 
-(void) chainFetchColorOption(tdb, &colorOpt);
+    freeMem (colorOpt);
+    filterByChrom(tdb);
+    }
+else
+    crossSpeciesUi(tdb);
 
-snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
-printf("<p><b>Color chains by:&nbsp;</b>");
-chainColorDropDown(&options[0][0], colorOpt);
-
-freeMem (colorOpt);
 }
 
 void wigUi(struct trackDb *tdb)

@@ -12,7 +12,7 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.25 2004/04/04 04:03:45 sugnet Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.26 2004/07/23 21:51:02 kent Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -731,6 +731,19 @@ fbOrTableBitsQueryMinSize(bits, trackQualifier, chrom, chromSize, conn,
 			  sqlConstraints, clipToWindow, filterOutNoUTR, 0);
 }
 
+struct bed *fbToBedOne(struct featureBits *fb)
+/* Translate a featureBits item into (scoreless) bed 6. */
+{
+struct bed *bed;
+AllocVar(bed);
+bed->chrom = cloneString(fb->chrom);
+bed->chromStart = fb->start;
+bed->chromEnd = fb->end;
+bed->name = cloneString(fb->name);
+bed->strand[0] = fb->strand;
+return bed;
+}
+
 struct bed *fbToBed(struct featureBits *fbList)
 /* Translate a list of featureBits items into (scoreless) bed 6. */
 {
@@ -739,12 +752,7 @@ struct featureBits *fb;
 
 for (fb=fbList;  fb != NULL;  fb=fb->next)
     {
-    AllocVar(bed);
-    bed->chrom = cloneString(fb->chrom);
-    bed->chromStart = fb->start;
-    bed->chromEnd = fb->end;
-    bed->name = cloneString(fb->name);
-    bed->strand[0] = fb->strand;
+    bed = fbToBedOne(fb);
     slAddHead(&bedList, bed);
     }
 return(bedList);

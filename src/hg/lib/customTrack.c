@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.45 2004/05/14 22:16:03 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.47 2004/07/30 22:00:36 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -204,11 +204,16 @@ if ((val = hashFindVal(hash, "type")) != NULL)
     }
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
+    char *tmp;
     char buf[256];
     tdb->shortLabel = cloneString(val);
-    sprintf(buf, "ct_%s", tdb->shortLabel);
-    eraseWhiteSpace(buf);
+    tmp = cloneString(tdb->shortLabel);
+    eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
+    stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
+    stripChar(tmp,'-');	/*	since that's the Invalid table */
+    sprintf(buf, "ct_%s", tmp);	/*	name check in hgText	*/
     tdb->tableName = cloneString(buf);
+    freeMem(tmp);
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     tdb->longLabel = cloneString(val);

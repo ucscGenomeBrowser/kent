@@ -2,6 +2,7 @@
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
+#include "obscure.h"
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "jksql.h"
@@ -15,7 +16,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.2 2004/07/21 03:43:04 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.3 2004/07/22 20:53:52 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -927,7 +928,7 @@ for (var = varList; var != NULL; var = var->next)
 	    if (needAnd) dyStringAppend(dy, " and ");
 	    if (composite) dyStringAppendC(dy, '(');
 	    needAnd = TRUE;
-	    while ((word = nextWord(&line)) != NULL)
+	    while ((word = nextQuotedWord(&line)) != NULL)
 		{
 		if (needOr)
 		    dyStringAppend(dy, " OR ");

@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.34 2004/07/06 16:58:03 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.35 2004/07/27 23:01:53 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -716,5 +716,51 @@ for (el = *pList; el != NULL; el = next)
     axtBundleFree(&el);
     }
 *pList = NULL;
+}
+
+void axtAddBlocksToBoxInList(struct boxIn **pList, struct axt *axt)
+/* Add blocks (gapless subalignments) from (non-NULL!) axt to block list. 
+ * Note: list will be in reverse order of axt blocks. */
+{
+boolean thisIn, lastIn = FALSE;
+int qPos = axt->qStart, tPos = axt->tStart;
+int qStart = 0, tStart = 0;
+int i;
+
+for (i=0; i<=axt->symCount; ++i)
+    {
+    int advanceQ = (isalpha(axt->qSym[i]) ? 1 : 0);
+    int advanceT = (isalpha(axt->tSym[i]) ? 1 : 0);
+    thisIn = (advanceQ && advanceT);
+    if (thisIn)
+        {
+	if (!lastIn)
+	    {
+	    qStart = qPos;
+	    tStart = tPos;
+	    }
+	}
+    else
+        {
+	if (lastIn)
+	    {
+	    int size = qPos - qStart;
+	    assert(size == tPos - tStart);
+	    if (size > 0)
+	        {
+		struct boxIn *b;
+		AllocVar(b);
+		b->qStart = qStart;
+		b->qEnd = qPos;
+		b->tStart = tStart;
+		b->tEnd = tPos;
+		slAddHead(pList, b);
+		}
+	    }
+	}
+    lastIn = thisIn;
+    qPos += advanceQ;
+    tPos += advanceT;
+    }
 }
 

@@ -18,8 +18,26 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.15 2004/07/21 09:35:33 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.18 2004/07/23 03:18:31 kent Exp $";
 
+static struct slName *storeRow(struct sqlConnection *conn, char *query)
+/* Just save the results of a single row query in a string list. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+struct slName *list = NULL, *el;
+int i, colCount = sqlCountColumns(sr);
+if ((row = sqlNextRow(sr)) != NULL)
+     {
+     for (i=0; i<colCount; ++i)
+         {
+	 el = slNameNew(row[i]);
+	 slAddTail(&list, el);
+	 }
+     }
+sqlFreeResult(&sr);
+return list;
+}
 
 void describeFields(char *db, char *table, 
 	struct asObject *asObj, struct sqlConnection *conn)
@@ -32,20 +50,37 @@ char **row;
 boolean tooBig = (sqlTableSize(conn, table) > TOO_BIG_FOR_HISTO);
 char button[64];
 char query[256];
+struct slName *exampleList, *example;
 
+safef(query, sizeof(query), "select * from %s limit 1", table);
+exampleList = storeRow(conn, query);
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 
 hTableStart();
-hPrintf("<TR> <TH>field</TH> <TH>SQL type</TH> ");
+hPrintf("<TR><TH>field</TH>");
+if (exampleList != NULL)
+    hPrintf("<TH>example</TH>");
+hPrintf("<TH>SQL type</TH> ");
 if (!tooBig)
     hPrintf("<TH>info</TH> ");
 if (asObj != NULL)
     hPrintf("<TH>description</TH> ");
 puts("</TR>\n");
+example = exampleList;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<TR> <TD><TT>%s</TT></TD> <TD><TT>%s</TT></TD>", row[0], row[1]);
+    hPrintf("<TR><TD><TT>%s</TT></TD> ", row[0]);
+    if (exampleList != NULL)
+        {
+	hPrintf("<TD>");
+	if (example != NULL)
+	     hPrintf("%s", example->name);
+	else
+	     hPrintf("n/a");
+	hPrintf("</TD>");
+	}
+    hPrintf("<TD><TT>%s</TT></TD>", row[1]);
     if (!tooBig)
 	{
 	hPrintf(" <TD>");
@@ -93,6 +128,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hPrintf("</TD>");
 	}
     puts("</TR>");
+    example = example->next;
     }
 hTableEnd();
 sqlFreeResult(&sr);
@@ -146,6 +182,24 @@ hTableEnd();
 explainCoordSystem();
 }
 
+static int joinerPairCmpOnB(const void *va, const void *vb)
+/* Compare two joinerPair based on b element of pair. */
+{
+const struct joinerPair *jpA = *((struct joinerPair **)va);
+const struct joinerPair *jpB = *((struct joinerPair **)vb);
+struct joinerDtf *a = jpA->b;
+struct joinerDtf *b = jpB->b;
+int diff;
+diff = strcmp(a->database, b->database);
+if (diff == 0)
+   {
+   diff = strcmp(a->table, b->table);
+   if (diff == 0)
+       diff = strcmp(a->field, b->field);
+   }
+return diff;
+}
+
 
 static void showSchemaDb(char *db, char *table)
 /* Show schema to open html page. */
@@ -166,6 +220,7 @@ hPrintf("<BR>\n");
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
+slSort(&jpList, joinerPairCmpOnB);
 if (jpList != NULL)
     {
     webNewSection("Connected Tables and Joining Fields");
@@ -188,10 +243,16 @@ webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
 }
 
-static void showSchemaCt(char *table)
-/* Show schema on custom track. */
+static void showSchemaCtWiggle(char *table, struct customTrack *ct)
+/* Show schema on wiggle format custom track. */
 {
-struct customTrack *ct = lookupCt(table);
+hPrintf("<B>Wiggle Custom Track ID:</B> %s<BR>\n", table);
+hPrintf("Wiggle custom tracks are stored in a dense binary format.");
+}
+
+static void showSchemaCtBed(char *table, struct customTrack *ct)
+/* Show schema on bed format custom track. */
+{
 struct bed *bed;
 int count = 0;
 
@@ -206,6 +267,16 @@ hPrintf("<TT><PRE>");
 for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
     bedTabOutN(bed, ct->fieldCount, stdout);
 hPrintf("</PRE></TT>\n");
+}
+
+static void showSchemaCt(char *table)
+/* Show schema on custom track. */
+{
+struct customTrack *ct = lookupCt(table);
+if (ct->wiggle)
+    showSchemaCtWiggle(table, ct);
+else
+    showSchemaCtBed(table, ct);
 }
 
 static void showSchema(char *db, char *table)

@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.18 2004/07/20 23:15:22 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.21 2004/07/26 19:27:18 hiram Exp $";
 
 
 struct cartOptions
@@ -239,7 +239,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     lf->start = lf->tallStart = chain.tStart;
     lf->end = lf->tallEnd = chain.tEnd;
     lf->grayIx = maxShade;
-    lf->score = chain.score;
+    if (chainCart->chainColor == chainColorScoreColors)
+	{
+	float normScore = sqlFloat((row+rowOffset)[11]);
+	lf->grayIx = (int) ((float)maxShade * (normScore/100.0));
+	if (lf->grayIx > (maxShade+1)) lf->grayIx = maxShade+1;
+	lf->score = normScore;
+	}
+    else
+	lf->score = chain.score;
+
     lf->filterColor = -1;
 
     if (chain.qStrand == '-')
@@ -261,26 +270,28 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, lf);
     }
 
-/* Make sure this is sorted if in full mode. */
+/* Make sure this is sorted if in full mode. Sort by score when
+ * coloring by score and in dense */
 if (tg->visibility != tvDense)
     slSort(&list, linkedFeaturesCmpStart);
+else if ((tg->visibility == tvDense) &&
+	(chainCart->chainColor == chainColorScoreColors))
+    slSort(&list, chainCmpScore);
 else
     slReverse(&list);
 tg->items = list;
 
+
 /* Clean up. */
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-}
+}	/*	chainLoadItems()	*/
 
 static Color chainScoreColor(struct track *tg, void *item, struct vGfx *vg)
 {
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
-int shadeOfGray = 0;
 
-shadeOfGray = (int) (10 * ((double)(lf->score-2002)/63560.0));
-
-return(tg->colorShades[shadeOfGray%11]);
+return(tg->colorShades[lf->grayIx]);
 }
 
 static Color chainNoColor(struct track *tg, void *item, struct vGfx *vg)
@@ -288,41 +299,70 @@ static Color chainNoColor(struct track *tg, void *item, struct vGfx *vg)
 return(tg->ixColor);
 }
 
+static void setNoColor(struct track *tg)
+{
+tg->itemColor = chainNoColor;
+tg->color.r = 0;
+tg->color.g = 0;
+tg->color.b = 0;
+tg->altColor.r = 127;
+tg->altColor.g = 127;
+tg->altColor.b = 127;
+tg->ixColor = MG_BLACK;
+tg->ixAltColor = MG_GRAY;
+}
+
 void chainMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {
+
+boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
 
 AllocVar(chainCart);
 
+normScoreAvailable = chainDbNormScoreAvailable(chromName, tg->mapName, NULL);
+
+/*	what does the cart say about coloring option	*/
 chainCart->chainColor = chainFetchColorOption(tdb, (char **) NULL);
 
 linkedFeaturesMethods(tg);
+tg->itemColor = lfChromColor;	/*	default coloring option */
 
-tg->itemColor = lfChromColor;
-
-switch (chainCart->chainColor)
+/*	if normScore column is available, then allow coloring	*/
+if (normScoreAvailable)
     {
-    case (chainColorScoreColors):
-	tg->itemColor = chainScoreColor;
-	tg->colorShades = shadesOfGray;
-	break;
-    case (chainColorNoColors):
-	tg->itemColor = chainNoColor;
-	tg->color.r = 0;
-	tg->color.g = 0;
-	tg->color.b = 0;
-	tg->altColor.r = 127;
-	tg->altColor.g = 127;
-	tg->altColor.b = 127;
-	tg->ixColor = MG_BLACK;
-	tg->ixAltColor = MG_GRAY;
-	break;
-    default:
-    case (chainColorChromColors):
-	break;
+    switch (chainCart->chainColor)
+	{
+	case (chainColorScoreColors):
+	    tg->itemColor = chainScoreColor;
+	    tg->colorShades = shadesOfGray;
+	    break;
+	case (chainColorNoColors):
+	    setNoColor(tg);
+	    break;
+	default:
+	case (chainColorChromColors):
+	    break;
+	}
     }
+else
+    {
+    char option[128]; /* Option -  rainbow chromosome color */
+    char *optionStr;	/* this old option was broken before */
+
+    snprintf(option, sizeof(option), "%s.color", tg->mapName);
+    optionStr = cartUsualString(cart, option, "on");
+    if (differentWord("on",optionStr))
+	{
+	setNoColor(tg);
+	chainCart->chainColor = chainColorNoColors;
+	}
+    else
+	chainCart->chainColor = chainColorChromColors;
+    }
+
 tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
 tg->mapItemName = lfMapNameFromExtra;

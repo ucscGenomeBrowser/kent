@@ -435,6 +435,7 @@ void customTrackFilteredBedOnRegion(
 	struct customTrack *ct, /* Custom track. */
 	struct hash *idHash,	/* Hash of identifiers or NULL */
 	struct bedFilter *bf,	/* Filter or NULL */
+	struct lm *lm,		/* Local memory pool. */
 	struct bed **pBedList  /* Output get's appended to this list */
 	)
 /* Get the custom tracks passing filter on a single region. */
@@ -452,7 +453,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 		{
 		if (bf == NULL || bedFilterOne(bf, bed))
 		    {
-		    struct bed *copy = cloneBed(bed);
+		    struct bed *copy = lmCloneBed(bed, lm);
 		    slAddHead(pBedList, copy);
 		    }
 		}
@@ -462,7 +463,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 }
 
 struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
-	boolean *retGotFilter, boolean *retGotIds)
+	struct lm *lm, boolean *retGotFilter, boolean *retGotIds)
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
  * this when done.  
@@ -485,7 +486,7 @@ if (ct->fieldCount > 3)
 
 /* Grab filtered beds for each region. */
 for (region = regionList; region != NULL; region = region->next)
-    customTrackFilteredBedOnRegion(region, ct, idHash, bf, &bedList);
+    customTrackFilteredBedOnRegion(region, ct, idHash, bf, lm, &bedList);
 
 /* Set return variables and clean up. */
 if (retGotFilter != NULL)
@@ -502,8 +503,9 @@ void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
-struct bed *bed, *bedList = getAllIntersectedBeds(conn, track);
+struct region *regionList = getRegions(), *region;
 struct slName *chosenFields, *field;
+int count = 0;
 if (fields == NULL)
     {
     struct customTrack *ct = lookupCt(track->tableName);
@@ -521,9 +523,18 @@ for (field = chosenFields; field != NULL; field = field->next)
     }
 hPrintf("\n");
 
-for (bed = bedList; bed != NULL; bed = bed->next)
-    tabBedRow(bed, chosenFields);
-if (bedList == NULL)
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct lm *lm = lmInit(64*1024);
+    struct bed *bed, *bedList = cookedBedList(conn, track, region, lm);
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	tabBedRow(bed, chosenFields);
+	++count;
+	}
+    lmCleanup(&lm);
+    }
+if (count == 0)
     explainWhyNoResults();
 }
 

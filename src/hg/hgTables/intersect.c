@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.5 2004/07/21 07:26:25 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.8 2004/07/23 22:32:29 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -217,7 +217,8 @@ else
 }
 
 static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
-	char *chrom, int minSize, int rangeStart, int rangeEnd)
+	char *chrom, int minSize, int rangeStart, int rangeEnd,
+	struct lm *lm)
 /* Translate ranges of set bits to bed 4 items. */
 {
 struct bed *bedList = NULL, *bed;
@@ -257,12 +258,12 @@ for (i=0;  i < bitSize+8;  ++i)
 	    ((rangeStart == 0) || (start > 0)) &&
 	    ((rangeEnd == bitSize) || (end < bitSize)))
 	    {
-	    AllocVar(bed);
+	    lmAllocVar(lm, bed);
 	    bed->chrom = cloneString(chrom);
 	    bed->chromStart = start;
 	    bed->chromEnd = end;
 	    snprintf(name, sizeof(name), "%s.%d", chrom, ++id);
-	    bed->name = cloneString(name);
+	    bed->name = lmCloneString(lm, name);
 	    slAddHead(&bedList, bed);
 	    }
 	}
@@ -274,15 +275,17 @@ return(bedList);
 
 
 
-struct bed *intersectOnRegion(
+static struct bed *intersectOnRegion(
 	struct sqlConnection *conn,	/* Open connection to database. */
 	struct region *region, 		/* Region to work inside */
 	struct trackDb *track1,		/* Track input list is from. */
-	struct bed *bedList1)	/* List before intersection, should be
+	struct bed *bedList1,	/* List before intersection, should be
 	                                 * all within region. */
+	struct lm *lm)	   /* Local memory pool. */
 /* Intersect bed list, consulting CGI vars to figure out
  * with what table and how.  Return intersected result,
- * which is independent from input. */
+ * which is independent from input.  This potentially will
+ * chew up bedList1. */
 {
 /* Grab parameters for intersection from cart. */
 int moreThresh = cgiOptionalInt(hgtaMoreThreshold, 0);
@@ -294,7 +297,8 @@ char *table2 = cartString(cart, hgtaIntersectTrack);
 /* Load up intersecting bedList2 (to intersect with) */
 struct hTableInfo *hti2 = getHti(database, table2);
 struct trackDb *track2 = findTrack(table2, fullTrackList);
-struct bed *bedList2 = getFilteredBeds(conn, track2, region);
+struct lm *lm2 = lmInit(64*1024);
+struct bed *bedList2 = getFilteredBeds(conn, track2, region, lm2);
 /* Set up some other local vars. */
 char *table1 = track1->tableName;
 struct hTableInfo *hti1 = getHti(database, table1);
@@ -346,19 +350,20 @@ if (isBpWise)
 	bitOr(bits1, bits2, chromSize);
     /* translate back to bed */
     intersectedBedList = bitsToBed4List(bits1, chromSize, 
-    	region->chrom, 1, region->start, region->end);
+    	region->chrom, 1, region->start, region->end, lm);
     bitFree(&bits1);
     }
 else
     {
+    struct bed *nextBed;
     /* Loop through primary bed list seeing if each one intersects
      * enough to keep. */
-    for (bed = bedList1;  bed != NULL;  bed = bed->next)
+    for (bed = bedList1;  bed != NULL;  bed = nextBed)
 	{
-	struct bed *newBed;
 	int numBasesOverlap = countBasesOverlap(bed, bits2, hti1->hasBlocks);
 	int length = 0;
 	double pctBasesOverlap;
+	nextBed = bed->next;
 	if (hti1->hasBlocks)
 	    {
 	    int i;
@@ -377,52 +382,51 @@ else
 	    (sameString("less", op) &&
 	     (pctBasesOverlap <= lessThresh)))
 	    {
-	    newBed = cloneBed(bed);		    
-	    slAddHead(&intersectedBedList, newBed);
+	    slAddHead(&intersectedBedList, bed);
 	    }
 	}
     slReverse(&intersectedBedList);
     } 
 bitFree(&bits2);
+lmCleanup(&lm2);
 return intersectedBedList;
 }
 
-struct bed *getIntersectedBeds(struct sqlConnection *conn,
-	struct trackDb *track, struct region *region)
+static struct bed *getIntersectedBeds(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region, struct lm *lm)
 /* Get list of beds in region that pass intersection
  * (and filtering) */
 {
-struct bed *bedList = getFilteredBeds(conn, track, region);
+struct bed *bedList = getFilteredBeds(conn, track, region, lm);
 if (anyIntersection())
     {
-    struct bed *iBedList = intersectOnRegion(conn, region, track, bedList);
-    bedFreeList(&bedList);
+    struct bed *iBedList = intersectOnRegion(conn, region, track, bedList, lm);
     return iBedList;
     }
 else
     return bedList;
 }
 
-struct bed *getIntersectedBedsOnRegions(struct sqlConnection *conn, 
-	struct trackDb *track, struct region *regionList)
-/* Get list of beds in regionList that pass intersection
- * (and filtering). */
+struct bed *cookedBedList(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region, struct lm *lm)
+/* Get data for track in region after all processing steps (filtering
+ * intersecting etc.) in BED format. */
+{
+return getIntersectedBeds(conn, track, region, lm);
+}
+
+
+struct bed *cookedBedsOnRegions(struct sqlConnection *conn, 
+	struct trackDb *track, struct region *regionList, struct lm *lm)
+/* Get cooked beds on all regions. */
 {
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    struct bed *rBedList = getIntersectedBeds(conn, track, region);
+    struct bed *rBedList = getIntersectedBeds(conn, track, region, lm);
     bedList = slCat(bedList, rBedList);
     }
 return bedList;
-}
-
-struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
-	struct trackDb *track)
-/* get list of beds in selected regions that pass intersection
- * (and filtering). */
-{
-return getIntersectedBedsOnRegions(conn, track, getRegions());
 }
 

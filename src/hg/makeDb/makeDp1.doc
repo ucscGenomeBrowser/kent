@@ -443,7 +443,7 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     cd /cluster/data/dp1/bed/drosRefSeq
     # hgc needs the track table name to start with xeno...
     ln -s drosRefSeq.psl xenoDrosRefSeq.psl
-    hgLoadPsl dp1 xenoDrosRefSeq.psl -tNameIx
+    hgLoadPsl dp1 xenoDrosRefSeq.psl
     mkdir /gbdb/dp1/drosMrna
     ln -s /cluster/data/dp1/bed/drosRefSeq/drosRefSeq.fa /gbdb/dp1/drosMrna/
     hgLoadSeq dp1 /gbdb/dp1/drosMrna/drosRefSeq.fa
@@ -494,7 +494,7 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     cd /cluster/data/dp1/bed/drosMrna
     # hgc needs the track table name to start with xeno...
     ln -s drosMrna.psl xenoDrosMrna.psl
-    hgLoadPsl dp1 xenoDrosMrna.psl -tNameIx
+    hgLoadPsl dp1 xenoDrosMrna.psl
     ln -s /cluster/data/dp1/bed/drosMrna/drosMrna.fa /gbdb/dp1/drosMrna/
     hgLoadSeq dp1 /gbdb/dp1/drosMrna/drosMrna.fa
 
@@ -547,7 +547,7 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     cd /cluster/data/dp1/bed/drosEst
     # hgc needs the track table name to start with xeno...
     ln -s drosEst.psl xenoDrosEst.psl
-    hgLoadPsl dp1 xenoDrosEst.psl -tNameIx
+    hgLoadPsl dp1 xenoDrosEst.psl
     ln -s /cluster/data/dp1/bed/drosEst/drosEst.fa /gbdb/dp1/drosMrna/
     hgLoadSeq dp1 /gbdb/dp1/drosMrna/drosEst.fa
 

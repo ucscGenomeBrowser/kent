@@ -147,7 +147,7 @@ ci1.perChromTables = no
     do 
     	trfBig $i /dev/null -bedAt=trf/`basename $i .fa`.bed > /dev/null 2>&1 ; echo $i;
     done
-    cat trf/* > simpleRepeat.sql
+    cat trf/* > simpleRepeat.bed
 
     ssh hgwdev
     hgLoadBed ci1 simpleRepeat /cluster/data/ci1/bed/simpleRepeat/simpleRepeat.bed \

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.4 2004/07/21 07:26:25 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.7 2004/07/23 22:32:29 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -148,10 +148,15 @@ hashFree(&uniqHash);
 void doGenePredNongenomic(struct sqlConnection *conn, int typeIx)
 /* Get mrna or protein associated with selected genes. */
 {
+/* Note this does do the whole genome at once rather than one
+ * chromosome at a time, but that's ok because the gene prediction
+ * tracks this serves are on the small side. */
 char *dupType = cloneString(curTrack->type);
 char *typeWords[3];
 char *table;
-struct bed *bed, *bedList = getAllIntersectedBeds(conn, curTrack);
+struct lm *lm = lmInit(64*1024);
+struct bed *bed, *bedList = cookedBedsOnRegions(conn, curTrack, getRegions(),
+	lm);
 int typeWordCount;
 
 textOpen();
@@ -198,7 +203,7 @@ else
     internalErr();
     }
 freez(&dupType);
-slFreeList(&bedList);
+lmCleanup(&lm);
 }
 
 
@@ -221,12 +226,17 @@ htmlClose();
 void doGenomicDna(struct sqlConnection *conn)
 /* Get genomic sequence (UI has already told us how). */
 {
-struct bed *bed, *bedList = getAllIntersectedBeds(conn, curTrack);
+struct region *region, *regionList = getRegions();
 struct hTableInfo *hti = getHti(database, curTrack->tableName);
 textOpen();
-for (bed = bedList; bed != NULL; bed = bed->next)
-    hgSeqBed(hti, bed);
-slFreeList(&bedList);
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct lm *lm = lmInit(64*1024);
+    struct bed *bed, *bedList = cookedBedList(conn, curTrack, region, lm);
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	hgSeqBed(hti, bed);
+    lmCleanup(&lm);
+    }
 }
 
 void doGenePredSequence(struct sqlConnection *conn)

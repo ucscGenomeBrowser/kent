@@ -1421,10 +1421,10 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     set tbl = "blastzMm3"
     cd /cluster/data/hg16/bed/blastz.mm3/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_${tbl}.psl
     # This takes 30 minutes to an hour
     # and later chr19
-    /cluster/bin/i386/hgLoadPsl hg16 chr19_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr19_${tbl}.psl
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 #	track blastzMm3
 #	shortLabel Mouse Blastz
@@ -1499,7 +1499,7 @@ SEQ2_LEN=$BASE/S2.len
     hgsql hg16 -e "drop table chr1_blastzMm3"
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr1_blastzMm3.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr1_blastzMm3.psl
 
     # make chain
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain/run1
@@ -1578,7 +1578,7 @@ SEQ2_LEN=$BASE/S2.len
     # Load table into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/pslTight
-    hgLoadPsl hg16 chr1_blastzTightMm3.psl
+    hgLoadPsl -noTNameIx hg16 chr1_blastzTightMm3.psl
         # $ featureBits -chrom=chr1 hg16 chr1_blastzTightMm3.psl
         # 14052627 bases of 221562941 (6.342%) in intersection
         # hg15: 13990547 bases of 218713898 (6.397%) in intersection
@@ -1786,7 +1786,7 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
      set base="/cluster/data/hg16/bed/blastz.mm3"
      set tbl="blastzBestMm3"
      cd $base/pslBest
-     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+     /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_${tbl}.psl
 
      # check results
      # the original axtBest stuff from the axtBest operation:
@@ -1845,7 +1845,7 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/pslTight
-    hgLoadPsl hg16 chr*_blastzTightMm3.psl
+    hgLoadPsl -noTNameIx hg16 chr*_blastzTightMm3.psl
 
     # copy to axt's to download area (DONE 2003-09-24 kate)
     cd /cluster/data/hg16/bed/blastz.mm3/axtTight
@@ -2151,7 +2151,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     set tbl = "blastzRn3"
     cd /cluster/data/hg16/bed/blastz.rn3/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_${tbl}.psl
     # This takes 30 minutes to an hour
     #	New entry in human/hg16/trackDb.ra
 #	track blastzRn3
@@ -2275,7 +2275,7 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
     # Load tables
      ssh hgwdev
      cd /cluster/data/hg16/bed/blastz.rn3/pslBest
-     /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzBestRn3.psl
+     /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_blastzBestRn3.psl
 
      # check results
 #  Via the netToAxt process:
@@ -2332,7 +2332,7 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.rn3/pslTight
-    hgLoadPsl hg16 chr*_blastzTightRn3.psl
+    hgLoadPsl -noTNameIx hg16 chr*_blastzTightRn3.psl
 
     # copy  axt's to download area (DONE 2003-09-24 kate)
     ssh eieio
@@ -3035,7 +3035,7 @@ XXXX Pick this up tomorrow, 03-09-12 with pslChromDroppedFix
     ssh hgwdev
     set tbl = "blastzSelf"
     cd /cluster/data/hg16/bed/blastzSelf/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzSelf.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_blastzSelf.psl
     # This takes 30 minutes to an hour
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 
@@ -3111,7 +3111,7 @@ cat << 'EOF' > gsub
     # so you can link to other browser.  And don't need to load sequence
     # liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
 
-    hgLoadPsl hg16 *.psl
+    hgLoadPsl -noTNameIx hg16 *.psl
         # $ featureBits hg16 blatFr1 refGene:CDS
         # 12787423 bases of 2865248791 (0.446%) in intersection
         # $ featureBits hg15 blatFugu refGene:CDS
@@ -3247,7 +3247,7 @@ Out of memory - request size 973662824 bytes
      set base="/cluster/data/hg16/bed/blastzSelf"
      set tbl="blastzBestSelf"
      cd $base/pslBest
-     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+     /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_${tbl}.psl
 
     # check results
     #  After going through the chain->net->axt operation:
@@ -3468,7 +3468,7 @@ cp -p chain/chr19*.chain ../run1/chain
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastzSelf/pslTight
-    hgLoadPsl hg16 chr*_blastzTightSelf.psl
+    hgLoadPsl -noTNameIx hg16 chr*_blastzTightSelf.psl
 
 # MAKING SELF SYNTENY - Can be done after Best (NEEDS TO BE REDONE 2003-09-09)
 
@@ -4463,7 +4463,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     set tbl = "blastzGg0"
     cd /cluster/data/hg16/bed/blastz.gg0/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_${tbl}.psl
     #	New entry in human/hg16/trackDb.ra
 #	track blastzGg0
 #	shortLabel Chicken Blastz
@@ -4743,7 +4743,7 @@ SEQ2_LEN=$BASE/S2.len
     # Load database tables
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzMm4.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_blastzMm4.psl
     # this is a 55 minute job
 
     # featureBits on blastzMm3 or 4 will not work on hgwdev, runs out of
@@ -4939,7 +4939,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Load tables
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslBest
-    time /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzBestMm4.psl
+    time /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*_blastzBestMm4.psl
     # real    10m47.853s
     # user    2m48.700s
     # sys     0m24.250s
@@ -4990,7 +4990,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslTight
-    hgLoadPsl hg16 chr*_blastzTightMm4.psl
+    hgLoadPsl -noTNameIx hg16 chr*_blastzTightMm4.psl
 
     # check results
     # featureBits hg16 blastzTightMm4
@@ -5772,7 +5772,7 @@ EOF
     # Load database tables
     ssh hgwdev
     cd /cluster/data/hg16/bed/blat.gg0/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx hg16 chr*.psl
     #	New entry in human/hg16/trackDb.ra
 #	track blatGg0
 #	shortLabel Chicken Blat
@@ -6434,7 +6434,7 @@ hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
         sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl) > kgProtMap.out 2>&1
     # this table data is ready to load, verify it by comparison with
     # existing kgProtMap data, then load:
-    hgLoadPsl -tNameIx hg16 kgProtMap.psl
+    hgLoadPsl hg16 kgProtMap.psl
 
 
 # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN (DONE 2/18/04 angie)
@@ -9496,7 +9496,7 @@ for i in `awk '{print $1}' S1.len`; do chainToPsl ../preNet/$i.chain ../S1.len .
 ssh kk9-10
 para create spec.chain2psl.new
 
-for i in `awk '{print $1}' S1.len`; do hgLoadPsl hg16 -table=${i}_mrnaBlastz psl/$i.psl ; echo $i done ; done
+for i in `awk '{print $1}' S1.len`; do hgLoadPsl -noTNameIx hg16 -table=${i}_mrnaBlastz psl/$i.psl ; echo $i done ; done
 
 ## end of blastz Mrna track
 

@@ -917,7 +917,7 @@ cat `ls -1 *.lav | sort -g` \
     cd /cluster/data/danRer1/bed/blastz.hg17/pslChrom
                                                                                 
     foreach f (./*.psl)
-      /cluster/bin/i386/hgLoadPsl danRer1 $f
+      /cluster/bin/i386/hgLoadPsl -noTNameIx danRer1 $f
       echo "$f Done"
     end
 # To tune Blastz parameters: these parameters above where used but it was 
@@ -1203,3 +1203,63 @@ danRer1.downloadDir = danRer1
     # Save as ensemblGene.gtf.gz
 
 
+# Human Proteins - tBLASTn of hg16 knownGene (2004-07-27, braney)
+    ssh kksilo
+    bash
+
+    mkdir -p /cluster/data/danRer1/bed/tblastn.hg16KG
+    cd /cluster/data/danRer1/bed/tblastn.hg16KG
+
+    ls -1S /iscratch/i/danRer1/blastdb/*.nsq | sed "s/\.nsq//" >  fish.lst
+    mkdir kgfas
+    split -l 68 /cluster/data/hg16/bed/blat.hg16KG.2004-05-27/hg16KG.psl kgfas/kg
+    cd kgfas
+    for i in *
+    do
+	pslxToFa $i $i.fa
+	rm $i
+    done
+    ls -1S kgfas/*.fa > kg.lst
+
+    # use bluearc to hold our temp output
+    mkdir -p /cluster/bluearc/danRer1/bed/tblastn.hg16KG/blastOut
+    ln -s  /cluster/bluearc/danRer1/bed/tblastn.hg16KG/blastOut .
+    for i in `cat kg.lst`
+    do
+	mkdir blastOut/$i
+    done
+
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } {check out exists blastOut/$(root2)/q.$(root1).bscore} {check out exists blastOut/$(root2)/t.$(root1).psl } {check out exists blastOut/$(root2)/t.$(root1).bscore}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 fish.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/danRer1/bed/tblastn.hg16KG
+    para create blastSpec
+    para push
+
+    cd blastOut
+    for i in kg??
+    do
+	cat $i/q.*.psl > q.$i.psl
+	cat $i/q.*.bscore > q.$i.bscore
+	cat $i/t.*.psl > t.$i.psl
+	cat $i/t.*.bscore > t.$i.bscore
+	simpleChain -maxGap=27000 -outPsl q.$i.psl c.$i.psl
+	sort -rn c.$i.psl | pslUniq stdin stdout | awk "((\$13 - \$12) / \$11) > 0.6 {print}" > u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c.$i.psl > m60.$i.psl
+	echo $i
+    done
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > preblastHg16KG.psl
+
+    blatDir=/cluster/data/hg16/bed/blat.hg16KG.2004-05-27
+    protDat preblastHg16KG.psl $blatDir/hg16KG.psl $blatDir/kg.mapNames blastHg16KG.psl
+
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/tblastn.hg16KG/blastOut
+    hgLoadPsl danRer1 blastHg16KG.psl
+#end Human Proteins

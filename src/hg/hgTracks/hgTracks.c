@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.770 2004/07/24 15:48:01 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.775 2004/07/30 18:34:53 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -299,7 +299,6 @@ void initTl()
  * wide. */
 {
 MgFont *font;
-char *s;
 
 font = tl.font = mgSmallFont();
 tl.mWidth = mgFontStringWidth(font, "M");
@@ -373,7 +372,6 @@ struct slList *item;
 MgFont *font = tl.font;
 int extraWidth = tl.mWidth * 2;
 long long start, end;
-int height;
 double scale = (double)insideWidth/(winEnd - winStart);
 spaceSaverFree(&tg->ss);
 ss = tg->ss = spaceSaverNew(0, insideWidth, maxCount);
@@ -908,7 +906,7 @@ void linkedFeaturesSeriesToLinkedFeatures(struct track *tg)
 /* Convert a linked features series struct to a linked features struct */
 {
 struct linkedFeaturesSeries *lfs;
-struct linkedFeatures *lfList = NULL, *lf;
+struct linkedFeatures *lfList = NULL;
 
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
@@ -1234,7 +1232,6 @@ if (chainLines && (vis == tvSquish))
     }
 lfColors(tg, lf, vg, &color, &bColor);
 
-
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
 if (tallStart == 0 && tallEnd == 0)
@@ -1472,8 +1469,7 @@ void genericDrawItems(struct track *tg,
 double scale = scaleForWindow(width, seqStart, seqEnd);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int s, e;
-int y, x1, x2, w;
+int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 boolean doHgGene = trackWantsHgGene(tg);
 
@@ -1705,9 +1701,7 @@ static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd
 /* Draw dense items doing color averaging items. */
 {
 int baseWidth = seqEnd - seqStart;
-double scale = scaleForPixels(width);
 UBYTE *useCounts;
-int i;
 int lineHeight = mgFontLineHeight(font);
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
@@ -1958,8 +1952,23 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs; 
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
 
-sr = hOrderedRangeQuery(conn, table, chromName, start, end, NULL, &rowOffset);
+safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", table);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    char extraWhere[128];
+    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    sr = hOrderedRangeQuery(conn, table, chromName, start, end,
+	extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hOrderedRangeQuery(conn, table, chromName, start, end,
+	NULL, &rowOffset);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct lfs *lfsbed = lfsLoad(row+rowOffset);
@@ -2013,6 +2022,19 @@ void bacEndPairsLongMethods(struct track *tg)
 {
 linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairsLong;
+}
+
+void loadBacEndSingles(struct track *tg)
+/* Load up BAC end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("bacEndSingles", winStart, winEnd, chromName);
+}
+
+void bacEndSinglesMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndSingles;
 }
 
 void loadFosEndPairs(struct track *tg)
@@ -2203,7 +2225,6 @@ struct linkedFeatures *connectedLfFromGenePredInRange(
 {
 struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
-int rowOffset;
 struct genePredReader *gpr = NULL;
 struct genePred *gp = NULL;
 
@@ -2303,7 +2324,6 @@ void lookupKnownNames(struct linkedFeatures *lfList)
 struct linkedFeatures *lf;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
-char *newName;
 
 if (hTableExists("knownMore"))
     {
@@ -2400,7 +2420,6 @@ void lookupKnownGeneNames(struct linkedFeatures *lfList)
 struct linkedFeatures *lf;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
-char *newName;
 char *seqType;
 char *refSeqName;
 char *proteinID;
@@ -2597,7 +2616,6 @@ char *superfamilyName(struct track *tg, void *item)
 {
 char *name;
 char *proteinName;
-char *genomeName;
 struct sqlConnection *conn = hAllocConn();
 char conditionStr[256];
 
@@ -2651,7 +2669,6 @@ char *superfamilyMapName(struct track *tg, void *item)
 {
 char *name;
 char *proteinName;
-char *genomeName;
 struct sqlConnection *conn = hAllocConn();
 char conditionStr[256];
 
@@ -2707,11 +2724,10 @@ char *superfamilyNameLong(struct track *tg, void *item)
 {
 struct bed *sw = item;
 struct sqlConnection *conn;
-struct linkedFeatures *lf = item;
 int sfCnt;
 char *desc;
 char query[256];
-struct sqlResult *sr, *sr2;
+struct sqlResult *sr;
 char **row;
 char *chp;
 int i;
@@ -2878,8 +2894,6 @@ void lookupRefNames(struct track *tg)
 struct linkedFeatures *lf;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
-char *newName;
-boolean isMgc = hIsMgcServer();
 boolean isNative = sameString(tg->mapName, "refGene");
 char *refGeneLabel = cartUsualString(cart, (isNative ? "refGene.label" : "xenoRefGene.label"), "gene");
 boolean useGeneName = sameString(refGeneLabel, "gene")
@@ -2889,7 +2903,6 @@ boolean useAcc = sameString(refGeneLabel, "accession")
 
 if (hTableExists("refLink"))
     {
-    struct knownMore *km;
     struct sqlResult *sr;
     char **row;
 
@@ -3009,7 +3022,6 @@ void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
 enum trackVisibility vis = tg->visibility;
-struct sqlConnection *conn = hAllocConn();
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 if (vis != tvDense)
     {
@@ -3601,7 +3613,6 @@ static void isochoreDraw(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw isochore items. */
 {
-int baseWidth = seqEnd - seqStart;
 struct isochores *item;
 int y = yOff;
 int heightPer = tg->heightPer;
@@ -3660,7 +3671,7 @@ celeraDupPositiveFreeList((struct celeraDupPositive**)&tg->items);
 Color celeraDupPositiveColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
-struct celeraDupPositive *dup = item;
+/*struct celeraDupPositive *dup = item;*/
 /*int ppt = dup->score;*/
 int grayLevel;
 
@@ -3723,7 +3734,7 @@ celeraCoverageFreeList((struct celeraCoverage**)&tg->items);
 Color celeraCoverageColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return name of gcPercent track item. */
 {
-struct celeraDupPositive *dup = item;
+/*struct celeraDupPositive *dup = item; */
 /*int ppt = dup->score;*/
 int grayLevel;
 
@@ -3997,7 +4008,6 @@ char *rgdGeneItemName(struct track *tg, void *item)
 {
 static char name[32];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
 struct dyString *ds = newDyString(256);
 struct linkedFeatures *lf = item;
 
@@ -4181,7 +4191,6 @@ Color recombRateColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color for item in recombRate track item. */
 {
 struct recombRate *rr = item;
-float rate = rr->decodeAvg;
 int rcr;
 int grayLevel;
 
@@ -4259,7 +4268,6 @@ Color recombRateRatColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color for item in recombRateRat track item. */
 {
 struct recombRateRat *rr = item;
-float rate = rr->shrspAvg;
 int rcr;
 int grayLevel;
 
@@ -4338,7 +4346,6 @@ Color recombRateMouseColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color for item in recombRateMouse track item. */
 {
 struct recombRateMouse *rr = item;
-float rate = rr->wiAvg;
 int rcr;
 int grayLevel;
 
@@ -4376,12 +4383,10 @@ static void drawChr18deletions(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chr18deletions items. */
 {
-int baseWidth = seqEnd - seqStart;
 struct chr18deletions *cds;
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-int midLineOff = heightPer/2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, shortStart, shortEnd;
 boolean isFull = (vis == tvFull);
@@ -4396,7 +4401,6 @@ if (vis == tvDense)
 
 for (cds = tg->items; cds != NULL; cds = cds->next)
     {
-    int midY = y + midLineOff;
     int wTall, wShort, end, start, blocks;
 
     for (blocks = 0; blocks < cds->ssCount; blocks++) 
@@ -4685,7 +4689,6 @@ char *rnaGeneName(struct track *tg, void *item)
 struct rnaGene *el = item;
 char *full = el->name;
 static char abbrev[64];
-int len;
 char *e;
 
 strcpy(abbrev, skipChr(full));
@@ -4853,7 +4856,7 @@ void stsMapMethods(struct track *tg)
 /* Make track for sts markers. */
 {
 struct sqlConnection *conn = hAllocConn();
-if (sqlCountRows(conn, "stsMap") == 26) 
+if (sqlCountColumnsInTable(conn, "stsMap") == 26) 
     {
     tg->loadItems = loadStsMap;
     }
@@ -5687,7 +5690,7 @@ void lfFromAncientRBed(struct track *tg)
 into a linkedFeaturesSeries as determined by
 minimum munber of aligned bases cutoff */
 {
-struct bed *bed = NULL, *bedList= NULL, *tmp=NULL, *tmpList=NULL;
+struct bed *bedList= NULL;
 int ancientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
 bedList = tg->items;
 tg->items = bedFilterMinLength(bedList, ancientRMinLength);
@@ -5824,7 +5827,6 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 Color col;
-int ix = 0;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
@@ -5839,7 +5841,6 @@ if (isFull)
     {
     /* Create tissue specific average track */
     struct hash *hash = newHash(6);
-    char statusLine[128];
 
     for (cghi = tg->items; cghi != NULL; cghi = cghi->next)
         {
@@ -5934,7 +5935,6 @@ if (vis == tvDense)
 	Color gold = vgFindColorIx(vg, 250,190,60);
 	int promoSize = 1000;
 	int rowOffset;
-	int baseWidth = seqEnd - seqStart;
 	double scale = scaleForPixels(width);
 	struct sqlConnection *conn = hAllocConn();
 	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName, 
@@ -5984,7 +5984,6 @@ if (vis == tvDense)
 	int heightPer = tg->heightPer;
 	Color gold = vgFindColorIx(vg, 250,190,60);
 	int rowOffset;
-	int baseWidth = seqEnd - seqStart;
 	double scale = scaleForPixels(width);
 	struct sqlConnection *conn = hAllocConn();
 	struct sqlResult *sr = hRangeQuery(conn, "esRegUpstreamRegion", 
@@ -6175,10 +6174,7 @@ void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
 struct track *track = NULL, *ideoTrack = NULL;
 MgFont *font = tl.font;
 char *mapName = "ideoMap";
-int fontHeight = mgFontLineHeight(font);
-int insideHeight = fontHeight-1;
 struct vGfx *vg;
-int trackTabX = gfxBorder;
 struct tempName gifTn;
 boolean doIdeo = TRUE;
 int ideoWidth = round(.65 *tl.picWidth);
@@ -6283,7 +6279,6 @@ int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
 int y;
-int typeCount = slCount(trackList);
 int rulerHeight = fontHeight;
 int baseHeight = fontHeight;
 int basePositionHeight = rulerHeight;
@@ -6292,9 +6287,7 @@ int rulerTranslationHeight = codonHeight * 3;        // 3 frames
 int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
-int i;
 int ymin, ymax;
-int scaledHeightPer;
 double minRange, maxRange;
 char minRangeStr[32];
 char maxRangeStr[32];
@@ -6312,7 +6305,6 @@ if (rulerMode != RULER_MODE_OFF)
     yAfterRuler += basePositionHeight;
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
-
     if (rulerMode == RULER_MODE_FULL && 
             (zoomedToBaseLevel || zoomedToCdsColorLevel))
         {
@@ -6434,12 +6426,12 @@ if (withLeftLabels)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, RULER_TRACK_LABEL);
-	if(zoomedToBaseLevel || 
+	if (zoomedToBaseLevel || 
                 (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
 	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
 				leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
-        if (rulerMode == RULER_MODE_FULL & 
+        if ((rulerMode == RULER_MODE_FULL) &&
                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             y += rulerTranslationHeight;
 	}
@@ -6476,7 +6468,6 @@ if (withLeftLabels)
                                         track->minRange );
    	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
                                         track->maxRange);
-	
 	/*  if a track can do its own left labels, do them after drawItems */
 	if (track->drawLeftLabels != NULL)
 	    {
@@ -6636,11 +6627,8 @@ else
 /* Draw guidelines. */
 if (withGuidelines)
     {
-    int clWidth = insideWidth;
-    int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
-    int lineHeight = tl.fontHeight+1;
     Color lightBlue = vgFindRgb(vg, &guidelineColor);
 
     vgSetClip(vg, insideX, gfxBorder, insideWidth, height);
@@ -6654,10 +6642,7 @@ if (withGuidelines)
 /* Show ruler at top. */
 if (rulerMode != RULER_MODE_OFF)
     {
-    struct track *track = trackList;
-    struct dnaSeq *seq = NULL, *extraSeq = NULL;
-                                /* extraSeq has extra leading & trailing bases
-                                 * for translation in to amino acids */
+    struct dnaSeq *seq = NULL;
     y = 0;
     vgSetClip(vg, insideX, y, insideWidth, yAfterRuler-y+1);
     relNumOff = winStart;
@@ -6716,6 +6701,8 @@ if (rulerMode != RULER_MODE_OFF)
         Color baseColor = MG_BLACK;
         int start, end, chromSize;
         struct dnaSeq *extraSeq;
+		    /* extraSeq has extra leading & trailing bases
+		     * for translation in to amino acids */
         boolean complementRulerBases = 
                 cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
         if (complementRulerBases)
@@ -6760,7 +6747,6 @@ if (rulerMode != RULER_MODE_OFF)
                                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             {
             /* display codons */
-            char codon[4];
             int frame;
             int firstFrame = 0;
             int mod;            // for determining frame ordering on display
@@ -6807,7 +6793,6 @@ if (rulerMode != RULER_MODE_OFF)
 if (withCenterLabels)
     {
     int clWidth = insideWidth;
-    int ochXoff = insideX + clWidth;
     vgSetClip(vg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
     for (track = trackList; track != NULL; track = track->next)
@@ -6896,10 +6881,6 @@ if (withLeftLabels)
     }
 
 /* Make map background. */
-{
-int currentX, currentXEnd, currentWidth;
-int leftSide, rightSide;
-
 y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -6966,7 +6947,6 @@ for (track = trackList; track != NULL; track = track->next)
 	    break;
 	}
     }
-}
 hashFree(&trackHash);
 /* Finish map. */
 hPrintf("</MAP>\n");
@@ -7149,16 +7129,10 @@ struct linkedFeatures *lf, *next, *newList = NULL, *oldList = NULL;
 struct mrnaUiData *mud = tg->extraUiData;
 struct mrnaFilter *fil;
 char *type;
-int i = 0;
 boolean anyFilter = FALSE;
 boolean colorIx = 0;
 boolean isExclude = FALSE;
 boolean andLogic = TRUE;
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct sqlConnection *conn = NULL;
-boolean isDense;
 
 if (*pLfList == NULL || mud == NULL)
     return;
@@ -7295,7 +7269,6 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
     hashFree(&fil->hash);
     }
-hFreeConn(&conn);
 }
 
 void loadGappedBed(struct track *tg)
@@ -7345,7 +7318,6 @@ tg->items = lfList;
 void loadBlast(struct track *tg)
 {
 enum trackVisibility vis = tg->visibility;
-struct sqlConnection *conn = hAllocConn();
 loadProteinPsl(tg);
 if (vis != tvDense)
     {
@@ -7428,8 +7400,6 @@ void drawColorMethods(struct track *tg)
 /* Fill in color track items based on chrom  */
 {
 char option[128]; /* Option -  rainbow chromosome color */
-char optionChr[128]; /* Option -  chromosome filter */
-char *optionChrStr; 
 char *optionStr ;
 safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "off");
@@ -7564,10 +7534,12 @@ track->tdb = tdb;
 exonArrows = trackDbSetting(tdb, "exonArrows");
 /* default exonArrows to on, except for tracks in regulation/expression group */
 if (exonArrows == NULL)
+    {
     if (sameString(tdb->grp, "regulation"))
        exonArrows = "off";
     else
        exonArrows = "on";
+    }
 track->exonArrows = sameString(exonArrows, "on");
 
 iatName = trackDbSetting(tdb, "itemAttrIdTbl");
@@ -7678,7 +7650,6 @@ struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
 struct track *tg;
-char buf[64];
 tg = trackFromTrackDb(ct->tdb);
 
 if (ct->wiggle)
@@ -7776,9 +7747,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	else if (sameString(command, "position"))
 	    {
-	    char *chrom;
-	    int start, end;
-            
 	    if (wordCount < 3)
 	        errAbort("Expecting 3 words in browser position line");
 	    if (!hgIsChromRange(words[2])) 
@@ -7795,7 +7763,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    }
 	else if (sameString(command, "pix"))
 	    {
-	    int width;
 	    if (wordCount != 3)
 	        errAbort("Expecting 3 words in pix line");
 	    setPicWidth(words[2]);
@@ -7830,7 +7797,6 @@ void hideAllTracks(struct track *trackList)
 /* hide all the tracks (and any in trackDb too) */
 {
 struct sqlConnection *conn = hAllocConn();
-char *name;
 struct sqlResult *sr;
 char **row;
 char *trackDb = hTrackDbName();
@@ -7865,6 +7831,10 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s\">%s</A
 if (gotBlat)
     {
     hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    }
+if (hgPcrOk(database))
+    {
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("PCR"));
     }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
@@ -7924,7 +7894,6 @@ struct group *group, *list = NULL;
 struct hash *hash = newHash(8);
 struct track *track;
 struct trackRef *tr;
-boolean gotUserTracks = FALSE;
 struct grp* grps = hLoadGrps();
 struct grp *grp;
 
@@ -8017,8 +7986,6 @@ void doTrackForm(char *psOutput)
 struct group *group;
 struct track *track;
 char *freezeName = NULL;
-int controlColNum=0;
-char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
 
@@ -8053,6 +8020,7 @@ registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
 registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
+registerTrackHandler("bacEndSingles", bacEndSinglesMethods);
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
@@ -8120,6 +8088,7 @@ registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
@@ -8696,8 +8665,6 @@ void tracksDisplay()
 {
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
-char *chrom;
-int start, end;
 char *s;
 
 position = getPositionFromCustomTracks();
@@ -8902,7 +8869,8 @@ void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
 char *debugTmp = NULL;
-struct dyString *state = NULL;
+/* Uncomment this to see parameters for debugging. */
+/* struct dyString *state = NULL; */
 /* Initialize layout and database. */
 cart = theCart;
 /* Uncomment this to see parameters for debugging. */
@@ -8958,8 +8926,6 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 
 int main(int argc, char *argv[])
 {
-/* 'except' is for resetting the cart without affecting the db and position */
-static char *except[] = {"db", "position", NULL};
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */

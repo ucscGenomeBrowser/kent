@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.22 2004/07/20 00:27:24 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.23 2004/07/27 11:36:56 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -652,8 +652,6 @@ while (js != NULL)
     }
 return NULL;
 }
-
-
 
 struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
 	char *primaryDb, char *primaryTable,

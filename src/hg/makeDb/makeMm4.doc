@@ -841,7 +841,7 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     ssh hgwdev
     set tbl = "blastzHg16"
     cd /cluster/data/mm4/bed/blastz.hg16/pslChrom
-    /cluster/bin/i386/hgLoadPsl mm4 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx mm4 chr*_${tbl}.psl
     # this is a 55 minute job
 
 # CHAIN HG16 BLASTZ (DONE - 2003-10-24 - Hiram)
@@ -1020,7 +1020,7 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     # Load tables
     ssh hgwdev
     cd /cluster/data/mm4/bed/blastz.hg16/pslBest
-    time /cluster/bin/i386/hgLoadPsl mm4 chr*_blastzBestHg16.psl
+    time /cluster/bin/i386/hgLoadPsl -noTNameIx mm4 chr*_blastzBestHg16.psl
     # real    10m47.853s
     # user    2m48.700s
     # sys     0m24.250s
@@ -1072,7 +1072,7 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/mm4/bed/blastz.hg16/pslTight
-    hgLoadPsl mm4 chr*_blastzTightHg16.psl
+    hgLoadPsl -noTNameIx mm4 chr*_blastzTightHg16.psl
 
     # copy to axt's to download area
     cd /cluster/data/mm4/bed/blastz.hg16/axtTight
@@ -1190,7 +1190,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     set tbl = "blastzRn3"
     cd /cluster/data/mm4/bed/blastz.rn3/pslChrom
-    /cluster/bin/i386/hgLoadPsl mm4 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl -noTNameIx mm4 chr*_${tbl}.psl
 
 
 # CHAIN Rn3 BLASTZ (DONE - 2003-10-30 - Hiram)
@@ -1389,7 +1389,7 @@ SEQ2_LEN=$BASE/S2.len
     # Load tables
     ssh hgwdev
     cd /cluster/data/mm4/bed/blastz.rn3/pslBest
-    time /cluster/bin/i386/hgLoadPsl mm4 chr*_blastzBestRn3.psl
+    time /cluster/bin/i386/hgLoadPsl -noTNameIx mm4 chr*_blastzBestRn3.psl
     # real    9m7.118s
     # user    2m32.780s
     # sys     0m25.300s
@@ -1443,7 +1443,7 @@ SEQ2_LEN=$BASE/S2.len
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/mm4/bed/blastz.rn3/pslTight
-    time hgLoadPsl mm4 chr*_blastzTightRn3.psl
+    time hgLoadPsl -noTNameIx mm4 chr*_blastzTightRn3.psl
     # real    9m53.256s
     # user    2m2.170s
     # sys     0m17.370s
@@ -2812,7 +2812,7 @@ pslSortAcc nohead chrom temp all_affyU74.psl
 cat chrom/*.psl > affyU74.psl
 # shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
 # and reload data into table
-hgLoadPsl mm4 affyU74.psl -tNameIx
+hgLoadPsl mm4 affyU74.psl
 rm -fr chrom temp run
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-01-06 - Hiram)
@@ -4553,7 +4553,14 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm4 \
         > refToLl.txt
 hgMapToGene mm4 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 #       row count is 30313
- 
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm4 knownGene name proteinID Pfam knownToPfam
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm4 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
 ######## PROTEOME BROWSER BUILD #######  (REBUILT - 2004-04-19 - Fan)
 # These are instructions for building or rebuilding tables 
 # needed for the Proteome Browser.  

@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.697 2004/07/23 06:44:12 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.708 2004/07/29 17:43:10 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1793,6 +1793,7 @@ int chainWinSize;
 double subSetScore = 0.0;
 int qs, qe;
 boolean nullSubset = FALSE;
+char *foundTable = (char *)NULL;
 
 if (! sameWord(otherDb, "seq"))
     {
@@ -1830,11 +1831,28 @@ else
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
 printf("<B>Score:</B> %1.0f\n", chain->score);
+
 if (nullSubset)
     printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
 else
     printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
+
+if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, ArraySize(query), 
+	 "select normScore from %s where id = '%s'", foundTable, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	printf("<B>Normalized Score:</B> %1.0f (bases matched: %d)<BR>\n",
+	    atof(row[0]), (int) (chain->score/atof(row[0])));
+    sqlFreeResult(&sr);
+    freeMem(foundTable);
+    }
+
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
@@ -3889,6 +3907,74 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
+void doRHmap(struct trackDb *tdb, char *itemName) 
+/* Put up RHmap information for Zebrafish */
+{
+char *dupe, *type, *words[16];
+char buffer[1024];
+char title[256];
+char *item = NULL;
+char *ext = NULL;
+char *accType = NULL;
+char *id = NULL;
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+
+strcpy(buffer, itemName);
+item = buffer;
+if ((ext = strchr(item, '.')) != NULL)
+    {
+    *ext++ = 0;
+    if ((accType = strchr(ext, '.')) != NULL)
+	{
+	*accType++ = 0;
+	}
+        if (startsWith("EMB",accType) && ((id = strchr(accType, ':')) != NULL) ) 
+            {
+            *id++ = 0;
+            }
+    }
+
+if (item != NULL) 
+    {
+    genericHeader(tdb, item);
+    }
+else 
+    {
+    genericHeader(tdb, itemName);
+    }
+/* Print non-sequence info */
+cartWebStart(cart, title);
+
+if (id != NULL)
+    {
+    printf("<H3>Genbank Accession: <A HREF=\"");
+    printEntrezNucleotideUrl(stdout, id);
+    printf("\" TARGET=_blank>%s</A><BR></H3>", id);
+    }
+
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 0)
+    {
+    type = words[0];
+
+    if (sameString(type, "psl"))
+        {
+	char *subType = ".";
+	if (wordCount > 1)
+	    subType = words[1];
+        printPslFormat(conn, tdb, itemName, start, subType);
+	}
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+}
+
 void doRikenRna(struct trackDb *tdb, char *item)
 /* Put up Riken RNA stuff. */
 {
@@ -4677,12 +4763,19 @@ if (addp == 1)
     {
     char *ptr;
     sprintf(buffer, "%s",readName);
-    if ((ptr = strchr(buffer, '.')) != NULL)
+    if (sameString("blastDm1FB",table))
 	{
-	*ptr = 0;
 	psl->qName = cloneString(buffer);
+	ptr = &buffer[strlen(buffer)];
 	*ptr++ = 'p';
 	*ptr = 0;
+	}
+    else if ((ptr = strchr(buffer, '.')) != NULL)
+	{
+	*ptr = 0;
+	*ptr++ = 'p';
+	*ptr = 0;
+	psl->qName = cloneString(buffer);
 	}
     seq = hPepSeq(buffer);
     }
@@ -5436,7 +5529,7 @@ struct dnaSeq *seq;
 int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(seqName, table);
 
-hgcStart("DNA Near Gene");
+hgcStart("Predicted mRNA from genome");
 safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -7223,7 +7316,7 @@ cartWebStart(cart, acc);
 printRnaSpecs(tdb, acc);
 htmlHorizontalLine();
 geneShowPosAndLinks(acc, acc, tdb, NULL, NULL,
-                    "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+                    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 
 /* print alignments that track was based on */
 pslList = getAlignments(conn, "all_mrna", acc);
@@ -11495,9 +11588,9 @@ void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 {
 char query[256];
 char title[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
-char **row, **row1, **row2;
+struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
+struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL, *srb = NULL;
+char **row, **row1, **row2, **rowb;
 char *type = NULL, *lfLabel = NULL;
 char *table = NULL;
 int start = cartInt(cart, "o");
@@ -11581,10 +11674,35 @@ if (row != NULL)
     lfs = lfsLoad(row+hasBin);
     if (sameString("bacEndPairs", track)) 
 	{
-	printf("<H2><A HREF=");
-	printCloneRegUrl(stdout, clone);
-	printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
-	}
+        if (sameString("Zebrafish", organism) )
+            {
+            /* query to bacCloneXRef table to get Genbank accession */
+            /* and external name for clones in the NCBI Clone Registry */      
+            sprintf(query, "SELECT acc FROM bacCloneXRef WHERE extName = '%s'"
+                   , clone);  
+            srb = sqlMustGetResult(conn1, query);
+            rowb = sqlNextRow(srb);
+            if (rowb != NULL)
+                {
+	        printf("<H2><A HREF=");
+	        printCloneRegUrl(stdout, clone);
+	        printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
+                printf("<H3>Genbank Accession: <A HREF=");
+                printEntrezNucleotideUrl(stdout, rowb[0]);
+                printf(" TARGET=_BLANK>%s</A></H3>\n", rowb[0]);
+                }
+            else
+                {
+                printf("<H2>%s</H2>\n", clone);
+                }
+            }
+        else 
+            {
+	    printf("<H2><A HREF=");
+	    printCloneRegUrl(stdout, clone);
+	    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
+	    }
+        }
     else 
 	{
 	printf("<B>%s</B>\n", clone);
@@ -11682,9 +11800,13 @@ else
     warn("Couldn't find %s in %s table", clone, table);
     }
 sqlFreeResult(&sr);
+sqlFreeResult(&sr1);
+sqlFreeResult(&sr2);
+sqlFreeResult(&srb);
 webNewSection("Notes:");
 puts(tdb->html);
 hgFreeConn(&conn);
+hgFreeConn(&conn1);
 } 
 
 void fillCghTable(int type, char *tissue, boolean bold)
@@ -13647,36 +13769,35 @@ if ((pos = strchr(acc, '.')) != NULL)
 	    *prot++ = 0;
 	}
     }
-
 cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
     {
-    printf("Human Position:\n");
+    printf("<B>Human position:</B>\n");
     printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
 	hgTracksName(), pos, "hg16");
     printf("%s</A><BR>",pos);
     }
 if (acc != NULL)
     {
-    printf("Human mRNA: <A HREF=\"");
+    printf("<B>Human mRNA:</B> <A HREF=\"");
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
 if (prot != NULL)
     {
-    printf("SwissProt: ");
+    printf("<B>SwissProt:</B> ");
     printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
 		"TARGET=_blank>%s</A></B>\n",
 		prot, prot);
     }
-printf("<BR>protein length: %d<BR>\n",pslList->qSize);
+printf("<BR><B>Protein length:</B> %d<BR>\n",pslList->qSize);
 
 slSort(&pslList, pslCmpMatch);
 if (slCount(pslList) > 1)
     printf("<P>The alignment you clicked on is first in the table below.<BR>\n");
 printf("<TT><PRE>");
-printf("                                   QUERY            TARGET\n");
+printf("                                     QUERY             TARGET\n");
 printf("ALIGNMENT PEPTIDE COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
 printf("--------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
@@ -13709,6 +13830,9 @@ for (same = 1; same >= 0; same -= 1)
 	    }
 	}
     }
+    printf("</PRE></TT>");
+    /* Add description */
+    printTrackHtml(tdb);
 }
 
 static void doSgdOther(struct trackDb *tdb, char *item)
@@ -14074,7 +14198,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
     {
     doHgRna(tdb, item);
     }
-else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") )
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") || sameWord(track, "affyRAE230") || sameWord(track, "affyZebrafish") )
     {
     doAffy(tdb, item, NULL);
     }
@@ -14274,7 +14398,7 @@ else if (sameWord(track, "firstEF"))
     firstEF(tdb, item);
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
-        sameWord(track, "tblastnHg16KGPep") )
+        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") )
     {
     blastProtein(tdb, item);
     }
@@ -14338,6 +14462,10 @@ else if(sameWord(track, "stsMapRat"))
 else if (sameWord(track, "stsMap"))
     {
     doStsMarker(tdb, item);
+    }
+else if (sameWord(track, "rhMap")) 
+    {
+    doRHmap(tdb, item);
     }
 else if (sameWord(track, "recombRate"))
     {

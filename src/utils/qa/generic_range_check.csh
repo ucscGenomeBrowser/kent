@@ -72,6 +72,7 @@ while ( $del_num != $linenum )
 	$col_type =~ enum* || \
 	$col_type =~ text || \
 	$col_type =~ char* || \
+	$col_type =~ date || \
 	$col_type =~ longtext ) then
                        set cnt_min="na"
                        set cnt_max="na"

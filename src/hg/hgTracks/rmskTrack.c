@@ -92,7 +92,8 @@ if (isFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    sr = hRangeQuery(conn, "rmsk", chromName, winStart, winEnd, NULL, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL,
+		     &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	rmskOutStaticLoad(row+rowOffset, &ro);
@@ -132,14 +133,14 @@ else
     boolean hasBin;
     struct dyString *query = newDyString(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(chromName, "rmsk", table, &hasBin))
+    if (hFindSplitTable(chromName, tg->mapName, table, &hasBin))
         {
 	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
 	if (hasBin)
 	    hAddBinToQuery(winStart, winEnd, query);
 	dyStringPrintf(query, "genoStart<%u and genoEnd>%u ", winEnd, winStart);
 	/* if we're using a single rmsk table, add genoName to the where clause */
-	if (sameString("rmsk", table))
+	if (startsWith("rmsk", table))
 	    dyStringPrintf(query, " and genoName = '%s' ", chromName);
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)

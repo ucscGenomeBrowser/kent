@@ -45,5 +45,10 @@ void chainHeadOutput(struct chain *el, FILE *f, char sep, char lastSep);
 void chainDbAddBlocks(struct chain *chain, char *track, struct sqlConnection *conn);
 /* Add blocks to chain header. */
 
+boolean chainDbNormScoreAvailable(char *chromName, char *mapName,
+	char **foundTable);
+/*	check if normScore column is available in this table	*/
+
+
 #endif /* CHAINDB_H */
 

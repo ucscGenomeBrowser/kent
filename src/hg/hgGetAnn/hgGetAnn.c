@@ -7,7 +7,7 @@
 #include "hgFind.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGetAnn.c,v 1.2 2004/07/21 16:09:13 hiram Exp $";
+static char const rcsid[] = "$Id: hgGetAnn.c,v 1.4 2004/07/23 17:30:18 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -26,13 +26,15 @@ errAbort(
     "column of the table will be not be included in the output. If the spec\n"
     "contains whitespace or shell meta-characters, it must be quoted.\n"
     "For split tables, the leading chrN_ should be omitted.  Use `mrna' or\n"
-    "`est' for mRNAs/ESTs\n"
+    "`est' for mRNAs/ESTs.  If spec is \"-\", then all rows are retrieved.\n"
+    "This will even work for split tables.\n"
     "\n"
     "Options:\n"
     "   -colHeaders - Include column headers with leading #\n"
     "   -tsvHeaders - Include TSV style column headers\n"
     "   -keepBin - don't exclude bin column\n"
     "   -noMatchOk - don't generated an error if nothing is found\n"
+    "   -noRandom - Exclude *_random chromsomes\n"
     "   -verbose=n - 2 is basic info, 3 prints positions found\n",
     msg);
 }
@@ -44,6 +46,7 @@ static struct optionSpec optionSpec[] = {
     {"tsvHeaders", OPTION_BOOLEAN},
     {"keepBin", OPTION_BOOLEAN},
     {"noMatchOk", OPTION_BOOLEAN},
+    {"noRandom", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -51,6 +54,7 @@ boolean colHeaders;
 boolean tsvHeaders;
 boolean keepBin;
 boolean noMatchOk;
+boolean noRandom;
 
 struct cart *cart = NULL; /* hgFind assumes this global */
 
@@ -116,6 +120,35 @@ for (pos = positions; pos != NULL; pos = pos->next)
     printHgPositions(1, pos);
 } 
 
+boolean inclChrom(char *chrom)
+/* test if chromsome should be included, NULL chrom returns TRUE. */
+{
+if (noRandom)
+    return (strstr(chrom, "_random") == NULL);
+else
+    return TRUE;
+}
+
+int getChromCol(struct sqlResult *sr, struct hTableInfo *tableInfo)
+/* get the chromosome column in a result set, or -1 if it's not defined */
+{
+int iCol = 0;
+char *field;
+if (strlen(tableInfo->chromField) == 0)
+    return -1;
+
+while ((field = sqlFieldName(sr)) != NULL)
+    {
+    if (sameString(field, tableInfo->chromField))
+        return iCol;
+    iCol++;
+    }
+errAbort("chrom field %s.%s not in result set", tableInfo->rootName,
+         tableInfo->chromField);
+return -1;
+}
+
+
 int countFindMatches(struct hgPositions *positions)
 /* count number of matches to query */
 {
@@ -150,13 +183,47 @@ else
 return tableDesc;
 }
 
+struct hgPositions* findAllChroms()
+/* generate a hgPositions record for the full range of all chromsomes */
+{
+struct hgPositions *positions;
+struct hgPosTable *posTab;
+struct slName *chrom;
+
+/* setup s hgPositions object */
+AllocVar(positions);
+positions->query = cloneString("-");
+positions->database = hGetDb();
+
+AllocVar(posTab);
+posTab->name = "chromInfo";
+posTab->description = "all rows";
+positions->tableList = posTab;
+
+for (chrom = hAllChromNames(); chrom != NULL; chrom = chrom->next)
+    {
+    struct hgPos *pos;
+    AllocVar(pos);
+    pos->chrom = chrom->name;
+    pos->chromStart = 0;
+    pos->chromEnd = hChromSize(pos->chrom);
+    slAddHead(&posTab->posList, pos);
+    positions->posCount++;
+    }
+slReverse(&posTab->posList);
+return positions;
+}
+
 struct hgPositions *findPositions(char *spec)
 /* query database with hgFind algorithm */
 {
 struct hgPositions *positions;
 verbose(2, "begin position query: %s\n", spec);
 
-positions = hgPositionsFind(spec, NULL, "hgGetAnn", NULL, FALSE);
+if (sameString(spec, "-"))
+    positions = findAllChroms();
+else
+    positions = hgPositionsFind(spec, NULL, "hgGetAnn", NULL, FALSE);
 
 verbose(2, "end position query: %d matches\n", countFindMatches(positions));
 if (verboseLevel() >= 2)
@@ -229,6 +296,7 @@ fputc('\n', outFh);
 int outputRows(FILE *outFh, struct hTableInfo *tableInfo, struct sqlResult *sr)
 /* read query resuts and output rows, */
 {
+int chromCol =  getChromCol(sr, tableInfo);
 int rowOff = tableInfo->hasBin ? 1 : 0;
 int numCols, rowCnt = 0;
 char **row;
@@ -238,8 +306,11 @@ numCols = sqlCountColumns(sr) - rowOff;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    outputRow(outFh, row+rowOff, numCols);
-    rowCnt++;
+    if ((chromCol < 0) || inclChrom(row[chromCol]))
+        {
+        outputRow(outFh, row+rowOff, numCols);
+        rowCnt++;
+        }
     }
 return rowCnt;
 }
@@ -343,8 +414,8 @@ else if (!tableInfo->isSplit)
     /* table not split */
     rowCnt += outputByName(outFh, tableInfo, tableInfo->rootName, pos);
     }
-else if (pos->chrom != NULL)
-    {
+else if (pos->chrom != NULL) 
+   {
     /* split table, but we have chrom */
     rowCnt += outputByName(outFh, tableInfo, getTableName(pos->chrom, tableInfo), pos);
     }
@@ -433,6 +504,7 @@ colHeaders = optionExists("colHeaders");
 tsvHeaders = optionExists("tsvHeaders");
 keepBin = optionExists("keepBin");
 noMatchOk = optionExists("noMatchOk");
+noRandom = optionExists("noRandom");
 
 hgGetAnn(argv[1], argv[2], argv[3], argv[4]);
 return 0;

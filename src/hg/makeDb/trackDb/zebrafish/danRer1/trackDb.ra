@@ -101,8 +101,8 @@ visibility hide
 type psl .
 
 track wz_ests
-shortLabel $Organism WZ EST clusters
-longLabel $Organism WZ ESTs clusters from Washington University
+shortLabel Zfish WZ EST Clusters
+longLabel $Organism WZ EST Clusters from Washington University
 group rna
 priority 58
 visibility hide
@@ -110,13 +110,14 @@ spectrum on
 type psl est
 
 track tblastnHg16KGPep
-shortLabel Hg17 knownGenePep tBLASTn
-longLabel Human (hg17) knownGenePep tBLASTn
+shortLabel Human tBLASTn
+longLabel $o_Organism ($o_date/$o_db) KnownGenePep tBLASTn
 group compGeno
 priority 142
 visibility hide
 colorChromDefault off
 type psl protein
+otherDb hg16
 
 track bacEndPairs
 shortLabel BAC End Pairs
@@ -144,6 +145,14 @@ priority 17
 visibility hide
 type bed 6 +
 exonArrows off
+
+track rhMap
+shortLabel Radiation Hybrid Map
+longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+group map
+priority 14
+visibility hide
+type psl .
 
 searchTable ensGene
 searchType genePred
@@ -196,3 +205,27 @@ shortCircuit 1
 termRegex [Dr][[:alnum:]_\.]+.*_at
 searchPriority 15
 
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex (ctg|BX|AL)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+                                                                                
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+                                                                                
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+
+searchTable rhMap
+searchMethod prefix
+searchType psl
+termRegex [[:alnum:]\._]+
+searchPriority 8

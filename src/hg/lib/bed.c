@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.27 2004/07/19 17:46:20 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.28 2004/07/23 08:09:27 kent Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -669,6 +669,41 @@ if (psl->strand[1] == '-')
 for (i=0; i<blockCount; ++i)
     chromStarts[i] -= chromStart;
 return bed;
+}
+
+struct bed *lmCloneBed(struct bed *bed, struct lm *lm)
+/* Make a copy of bed in local memory. */
+{
+struct bed *newBed;
+if (bed == NULL)
+    return NULL;
+lmAllocVar(lm, newBed);
+newBed->chrom = lmCloneString(lm, bed->chrom);
+newBed->chromStart = bed->chromStart;
+newBed->chromEnd = bed->chromEnd;
+newBed->name = lmCloneString(lm, bed->name);
+newBed->score = bed->score;
+strncpy(newBed->strand, bed->strand, sizeof(bed->strand));
+newBed->thickStart = bed->thickStart;
+newBed->thickEnd = bed->thickEnd;
+newBed->reserved = bed->reserved;
+newBed->blockCount = bed->blockCount;
+if (bed->blockCount > 0)
+    {
+    newBed->blockSizes = lmCloneMem(lm, bed->blockSizes, 
+    	bed->blockSizes[0] * bed->blockCount);
+    newBed->chromStarts = lmCloneMem(lm, bed->chromStarts, 
+    	bed->chromStarts[0] * bed->blockCount);
+    }
+newBed->expCount = bed->expCount;
+if (bed->expCount > 0)
+    {
+    newBed->expIds = lmCloneMem(lm, bed->expIds, 
+    	bed->expIds[0] * bed->expCount);
+    newBed->expScores = lmCloneMem(lm, bed->expScores, 
+    	bed->expScores[0] * bed->expCount);
+    }
+return(newBed);
 }
 
 

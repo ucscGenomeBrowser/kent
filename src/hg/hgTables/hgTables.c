@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.46 2004/07/21 21:03:50 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.50 2004/07/27 11:36:56 kent Exp $";
 
 
 void usage()
@@ -228,11 +228,14 @@ else if (sameString(regionType, "range"))
     {
     char *range = cartString(cart, hgtaRange);
     regionList = AllocVar(region);
-    if (!hgParseChromRange(range, &region->chrom, &region->start, &region->end))
-        {
-	errAbort("%s is not a chromosome range.  "
-	         "Please go back and enter something like chrX:1000000-1100000 "
-		 "in the range control.", range);
+    if ((region->chrom = hgOfficialChromName(range)) == NULL)
+	{
+	if (!hgParseChromRange(range, &region->chrom, &region->start, &region->end))
+	    {
+	    errAbort("%s is not a chromosome range.  "
+		     "Please go back and enter something like chrX:1000000-1100000 "
+		     "in the range control.", range);
+	    }
 	}
     }
 else if (sameString(regionType, "encode"))
@@ -243,21 +246,36 @@ else
     {
     errAbort("Unrecognized region type %s", regionType);
     }
-// uglyf("regionTYpe %s\n", regionType);
-// for (region=regionList;region!=NULL;region=region->next) uglyf("%s:%d-%d\n", region->chrom, region->start, region->end);
 return regionList;
 }
 
-struct region *getRegionsWithChromEnds()
-/* Get list of regions.  End field is set to chrom size rather
- * than zero for full chromosomes. */
+char *getRegionName()
+/* Get a name for selected region.  Don't free this. */
 {
-struct region *region, *regionList = getRegions();
+char *region = cartUsualString(cart, hgtaRegionType, "genome");
+if (sameString(region, "range"))
+    region = cartUsualString(cart, hgtaRange, "n/a");
+return region;
+}
+
+void regionFillInChromEnds(struct region *regionList)
+/* Fill in end fields if set to zero to be whole chrom. */
+{
+struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
     if (region->end == 0)
         region->end = hChromSize(region->chrom);
     }
+}
+
+
+struct region *getRegionsWithChromEnds()
+/* Get list of regions.  End field is set to chrom size rather
+ * than zero for full chromosomes. */
+{
+struct region *regionList = getRegions();
+regionFillInChromEnds(regionList);
 return regionList;
 }
 
@@ -294,6 +312,17 @@ else
     dyStringFree(&query);
     }
 return sr;
+}
+
+char *trackTable(struct trackDb *track)
+/* Return table name for track, substituting all_mrna
+ * for mRNA if need be. */
+{
+char *table = track->tableName;
+if (sameString(table, "mrna"))
+    return "all_mrna";
+else
+    return table;
 }
 
 char *connectingTableForTrack(struct trackDb *track)
@@ -512,6 +541,14 @@ boolean htiIsPositional(struct hTableInfo *hti)
 return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 }
 
+int countTableColumns(struct sqlConnection *conn, char *table)
+/* Count columns in table. */
+{
+char *splitTable = chromTable(conn, table);
+int count = sqlCountColumnsInTable(conn, splitTable);
+freez(&splitTable);
+return count;
+}
 
 static void doTabOutDb( char *db, char *table, 
 	struct sqlConnection *conn, char *fields)
@@ -524,15 +561,25 @@ struct dyString *fieldSpec = newDyString(256);
 struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
+boolean doIntersection;
 char *filter = filterClause(db, table);
+int fieldCount;
+int bedFieldsOffset, bedFieldCount;
 
 hti = getHti(db, table);
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
+    {
     dyStringAppend(fieldSpec, fields);
+    fieldCount = countChars(fields, ',') + 1;
+    }
 else
+    {
     dyStringAppend(fieldSpec, "*");
+    fieldCount = countTableColumns(conn, table);
+    }
+bedFieldsOffset = fieldCount;
 
 /* If table has and identity (name) field, and user has
  * uploaded list of identifiers, create identifier hash
@@ -542,27 +589,37 @@ if (hti->nameField[0] != 0)
     idHash = identifierHash();
     if (idHash != NULL)
 	{
-	dyStringAppend(fieldSpec, ",");
+	dyStringAppendC(fieldSpec, ',');
 	dyStringAppend(fieldSpec, hti->nameField);
+	bedFieldsOffset += 1;
 	}
     }
 isPositional = htiIsPositional(hti);
+
+/* If intersecting add fields needed to calculate bed as well. */
+doIntersection = (anyIntersection() && isPositional);
+if (doIntersection)
+    {
+    char *bedFields;
+    bedSqlFieldsExceptForChrom(hti, &bedFieldCount, &bedFields);
+    dyStringAppendC(fieldSpec, ',');
+    dyStringAppend(fieldSpec, bedFields);
+    freez(&bedFields);
+    }
+
+uglyf("fields to fetch: %s\n", fieldSpec->string);
 
 /* Loop through each region. */
 for (region = regionList; region != NULL; region = region->next)
     {
     struct sqlResult *sr;
     char **row;
-    int colIx, colCount, lastCol;
+    int colIx, lastCol = fieldCount-1;
     char chromTable[256];
     boolean gotWhere = FALSE;
 
     sr = regionQuery(conn, table, fieldSpec->string, 
     	region, isPositional, filter);
-    colCount = sqlCountColumns(sr);
-    if (idHash != NULL)
-        colCount -= 1;
-    lastCol = colCount - 1;
 
     /* First time through print column names. */
     if (region == regionList)
@@ -576,7 +633,7 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	if (idHash == NULL || hashLookup(idHash, row[colCount]))
+	if (idHash == NULL || hashLookup(idHash, row[fieldCount]))
 	    {
 	    for (colIx = 0; colIx < lastCol; ++colIx)
 		hPrintf("%s\t", row[colIx]);
@@ -591,23 +648,7 @@ for (region = regionList; region != NULL; region = region->next)
 
 /* Do some error diagnostics for user. */
 if (outCount == 0)
-    {
-    int regionCount = slCount(regionList);
-    if (idHash != NULL)
-	{
-	if (regionCount <= 1)
-	    hPrintf("#No items in selected region matched identifier list\n");
-	else
-	    hPrintf("#No items matched identifier list");
-	}
-    else if (regionCount <= 1)
-        {
-	hPrintf("#No items in selected region");
-	}
-    if (filter != NULL)
-        hPrintf(" passing filter");
-    hPrintf(".");
-    }
+    explainWhyNoResults();
 freez(&filter);
 hashFree(&idHash);
 }
@@ -631,41 +672,50 @@ void doOutPrimaryTable(struct trackDb *track,
 /* Dump out primary table. */
 {
 textOpen();
-doTabOutTable(database, track->tableName, conn, NULL);
+doTabOutTable(database, trackTable(track), conn, NULL);
 }
 
 void doOutHyperlinks(struct trackDb *track, struct sqlConnection *conn)
 /* Output as genome browser hyperlinks. */
 {
-struct bed *bedList, *bed;
 char *table = track->tableName;
 char *table2 = cartOptionalString(cart, hgtaIntersectTrack);
+struct region *region, *regionList = getRegions();
 char posBuf[64];
 htmlOpen("Hyperlinks to Genome Browser");
-bedList = getAllIntersectedBeds(conn, track);
-for (bed = bedList; bed != NULL; bed = bed->next)
+int count = 0;
+
+for (region = regionList; region != NULL; region = region->next)
     {
-    char *name;
-    safef(posBuf, sizeof(posBuf), "%s:%d-%d",
-    		bed->chrom, bed->chromStart+1, bed->chromEnd);
-    /* Construct browser anchor URL with tracks we're looking at open. */
-    hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
-    hPrintf("&db=%s", database);
-    hPrintf("&position=%s", posBuf);
-    hPrintf("&%s=%s", table, hTrackOpenVis(table));
-    if (table2 != NULL)
-	hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
-    hPrintf("\" TARGET=_blank>");
-    name = bed->name;
-    if (bed->name == NULL)
-        name = posBuf;
-    if (sameString(name, posBuf))
-	hPrintf("%s", posBuf);
-    else
-        hPrintf("%s at %s", name, posBuf);
-    hPrintf("</A><BR>\n");
+    struct lm *lm = lmInit(64*1024);
+    struct bed *bedList, *bed;
+    bedList = cookedBedList(conn, track, region, lm);
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	char *name;
+	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
+		    bed->chrom, bed->chromStart+1, bed->chromEnd);
+	/* Construct browser anchor URL with tracks we're looking at open. */
+	hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
+	hPrintf("&db=%s", database);
+	hPrintf("&position=%s", posBuf);
+	hPrintf("&%s=%s", table, hTrackOpenVis(table));
+	if (table2 != NULL)
+	    hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+	hPrintf("\" TARGET=_blank>");
+	name = bed->name;
+	if (bed->name == NULL)
+	    name = posBuf;
+	if (sameString(name, posBuf))
+	    hPrintf("%s", posBuf);
+	else
+	    hPrintf("%s at %s", name, posBuf);
+	hPrintf("</A><BR>\n");
+	++count;
+	}
+    lmCleanup(&lm);
     }
-if (bedList == NULL)
+if (count == 0)
     hPrintf("\n# No results returned from query.\n\n");
 htmlClose();
 }

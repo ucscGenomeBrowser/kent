@@ -777,15 +777,6 @@ spectrum on
 type netAlign hg16 chainSelf
 otherDb hg16
 
-track encodeRegions
-shortLabel ENCODE Regions
-longLabel Encyclopedia of DNA Elements (ENCODE) Regions
-group encode
-priority 170
-color 150,100,30
-visibility hide
-type bed 4 .
-
 track blastzMm4
 shortLabel Mm4 Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
@@ -887,6 +878,29 @@ altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
 
+track phastCons
+shortLabel phastCons 
+longLabel phastCons Conservation Score, Human/Chimp/Mouse/Rat/Chicken
+group compGeno
+priority 100.11
+visibility hide
+color 0,10,100
+maxHeightPixels 40
+type wig 0.0 1.0
+autoScaleDefault off
+
+track phastConsElements
+shortLabel Cons Elements
+longLabel phastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
+group compGeno
+priority 100.12
+visibility hide
+spectrum on
+color 0,60,120
+altColor 200,220,255
+exonArrows off
+type bed 12 .
+
 track multizMm3Rn3GalGal2_phyloHMM
 shortLabel Hu/Mouse/Rat/Chick
 longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
@@ -924,6 +938,14 @@ priority 100.1
 group compGeno
 visibility hide
 type bed 5
+
+track cns
+shortLabel CNS
+longLabel Conserved non-coding (Cons elements minus predicted coding)
+priority 100.12
+group compGeno
+visibility hide
+type bed 4
 
 track pHMM_3_WayTop5
 shortLabel Most 3-Way Cons
@@ -1379,6 +1401,7 @@ spectrum on
 type chain galGal2
 otherDb galGal2
 
+
 track chainGalGal2ProtEx
 shortLabel chainGalGal2ProtEx
 longLabel chainGalGal2ProtEx
@@ -1418,10 +1441,4 @@ priority 161
 visibility hide
 color 20,0,50
 type bed 4
-
-searchTable HInvGeneMrna
-searchMethod exact
-searchType psl
-termRegex HIT[0-9]{9,9}
-searchPriority 50
 

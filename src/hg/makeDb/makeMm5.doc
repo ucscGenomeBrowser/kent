@@ -990,7 +990,7 @@ SEQ2_LEN=$BASE/S2.len
     bash		#	for tcsh users
     for F in chr*_blastzHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${F}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${F}
 	echo "${F} done"
     done
     # this is a 40 minute job
@@ -1216,7 +1216,7 @@ XXX - running 2004-07-13 14;18
     cd /cluster/data/mm5/bed/blastz.hg17/pslBest
     for I in chr*BestHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
 	echo "done ${I}"
     done
 
@@ -1309,7 +1309,7 @@ hgLoadBed mm5 ensRatMusHg17 ucsc100k.bed -sqlTable=ensRatMusHg17.sql
     cd /cluster/data/mm5/bed/blastz.hg17/pslTight
     for I in chr*TightHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
 	echo "done ${I}"
     done
 
@@ -1505,6 +1505,7 @@ done
 # BLASTZ CHICKEN (GALGAL2) (DONE 7/19/04 angie)
     ssh kk
     mkdir /cluster/data/mm5/bed/blastz.galGal2.2004-07-15
+    ln -s blastz.galGal2.2004-07-15 /cluster/data/mm5/bed/blastz.galGal2
     cd /cluster/data/mm5/bed/blastz.galGal2.2004-07-15
     # Use human-chicken params: set L=10000 (higher threshold on blastz's 
     # outer loop) and abridge repeats.
@@ -1724,7 +1725,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     mkdir mafNet
     foreach f (axtNet/chr*.axt)
-      set maf = mafNet/$f:t:r.mg.maf
+      set maf = mafNet/$f:t:r.maf
       axtToMaf $f \
             /cluster/data/mm5/chrom.sizes /cluster/data/galGal2/chrom.sizes \
             $maf -tPrefix=mm5. -qPrefix=galGal2.
@@ -1782,6 +1783,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # BLASTZ DOG (CANFAM1) (DONE 7/16/04 angie)
     ssh kk
     mkdir /cluster/data/mm5/bed/blastz.canFam1.2004-07-15
+    ln -s blastz.canFam1.2004-07-15 /cluster/data/mm5/bed/blastz.canFam1
     cd /cluster/data/mm5/bed/blastz.canFam1.2004-07-15
     # Use default (Human-Mouse) settings for starters.
     cat << '_EOF_' > DEF
@@ -2021,7 +2023,7 @@ axtChain $1 \
     end
     mkdir mafNet
     foreach f (axtNet/chr*.axt)
-      set maf = mafNet/$f:t:r.mc.maf
+      set maf = mafNet/$f:t:r.maf
       axtToMaf $f \
             /cluster/data/mm5/chrom.sizes /cluster/data/canFam1/chrom.sizes \
             $maf -tPrefix=mm5. -qPrefix=canFam1.
@@ -2093,7 +2095,7 @@ pslSortAcc nohead chrom temp all_affyU74.psl
 cat chrom/*.psl > affyU74.psl
 # shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
 # and reload data into table
-hgLoadPsl mm5 affyU74.psl -tNameIx
+hgLoadPsl mm5 affyU74.psl
 rm -fr chrom temp run
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-07-18 - Fan)
@@ -2702,6 +2704,14 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm5 \
 hgMapToGene mm5 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 #       row count is 30303
 
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
+# row count is 29069
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm5 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
 # ENABLE GENE SORTER FOR mm5 IN HGCENTRALTEST (DONE 7/20/04 Fan)
     echo "update dbDb set hgNearOk = 1 where name = 'mm5';" \
       | hgsql -h genome-testdb hgcentraltest
@@ -2709,4 +2719,712 @@ hgMapToGene mm5 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
 # END OF GENE SORTER STUFF
 #############################################################################
+
+#  BLASTZ RAT RN3 (DONE - 2004-07-15 - Fan)
+
+    ssh kk
+    mkdir -p /cluster/data/mm5/bed/blastz.rn3.2004-07-14
+    cd /cluster/data/mm5/bed
+    ln -s  blastz.rn3.2004-07-14 blastz.rn3
+    cd blastz.rn3
+
+    cat << '_EOF_' > DEF
+# rat vs. mouse
+export 
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartz
+bin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Mouse
+SEQ1_DIR=/scratch/mus/mm5/softNib
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/mus/mm5/linSpecRep.notInRat
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Rat
+SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm5/bed/blastz.rn3
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/mm5/bed/blastz.rn3
+    bash
+    source ./DEF
+    # script copied over from /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    #	it is a generic script and works for any assembly
+
+    cp /cluster/data/hg17/jkStuff/BlastZ_run0.sh \
+       /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+
+Completed: 41943 of 41943 jobs
+CPU time in finished jobs:   16854319s  280905.31m  4681.76h  195.07d  0.534 y
+IO & Wait Time:                448464s    7474.41m   124.57h    5.19d  0.014 y
+Average job time:                 413s       6.88m     0.11h    0.00d
+Longest job:                     9358s     155.97m     2.60h    0.11d
+Submission to last job:         73416s    1223.60m    20.39h    0.85d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.rn3
+    # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
+    #	fixup machine check, should be kki, not kk
+    cp /cluster/data/mm4/jkStuff/BlastZ_run1.sh \
+       /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    vi /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+
+    /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       7859s     130.98m     2.18h    0.09d  0.000 y
+# IO & Wait Time:                104771s    1746.19m    29.10h    1.21d  0.003 y
+# Average job time:                 330s       5.50m     0.09h    0.00d
+# Longest job:                     1625s      27.08m     0.45h    0.02d
+# Submission to last job:          8535s     142.25m     2.37h    0.10d
+
+    #	Third cluster run to convert lav's to axt's
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.rn3
+    bash
+    source ./DEF
+    #	The copy of this in mm4 was broken, use the hg17 one instead
+    cp /cluster/data/hg17/jkStuff/BlastZ_run2.sh \
+       /cluster/data/mm5/jkStuff/BlastZ_run2.sh
+    # vi /cluster/data/mm5/jkStuff/BlastZ_run2.sh
+    /cluster/data/mm5/jkStuff/BlastZ_run2.sh
+    cd run.2
+    #edited gsub to change /scratch/mus/mm5 to /cluster/bluearc/scratch/mus/mm5
+    # and recreated jobList by:
+    gensub2 chrom.list single gsub jobList
+    para create jobList
+    para try, check, push, etc ...
+
+# Completed: 42 of 43 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:       2050s      34.17m     0.57h    0.02d  0.000 y
+# IO & Wait Time:                143135s    2385.58m    39.76h    1.66d  0.005 y
+# Average job time:                3457s      57.61m     0.96h    0.04d
+# Longest job:                    14460s     241.00m     4.02h    0.17d
+# Submission to last job:         14849s     247.48m     4.12h    0.17d
+
+# Note: previous numbers were:
+
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:        426s       7.09m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                  7283s     121.39m     2.02h    0.08d  0.000 y
+# Average job time:                 168s       2.79m     0.05h    0.00d
+# Longest job:                      642s      10.70m     0.18h    0.01d
+# Submission to last job:           642s      10.70m     0.18h    0.01d
+# probably due to data on bluearc instead of on kki nodes.
+
+# One job failed consistently because short of memory error
+# went to kkr4u00 to run the following job:
+# Per Angie's advice, created /cluster/bin/scripts/blastz-chromlav2axtLargeMem
+# by from /cluster/bin/scripts/blastz-chromlav2axt and changed /cluster/bin/i386
+# to /cluster/bin/x86_64 and then ran: 
+
+/cluster/bin/scripts/blastz-chromlav2axtLargeMem 
+/cluster/data/mm5/bed/blastz.rn3/lav/chr2 
+/cluster/data/mm5/bed/blastz.rn3/axtChrom/chr2.axt 
+/cluster/bluearc/scratch/mus/mm5/softNib /iscratch/i/rn3/bothMaskedNibs
+
+# It worked!
+
+    # translate sorted axt files into psl
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3
+    mkdir pslChrom
+    set tbl = "blastzRn3"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 2 hours
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3/pslChrom
+    bash
+for I in *.psl
+do
+/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
+echo "done: ${I}"
+done
+    # Check results
+    #	featureBits hg16 blastzRn3
+    # 1013603401 bases of 2865248791 (35.376%) in intersection
+
+    #	featureBits mm5 blastzRn3 ran out of memory.  
+    # So check a few specific chromosomes
+
+    # featureBits mm5 blastzRn3 -chrom=chr17
+    # 61029084 bases of 86658738 (70.425%) in intersection
+    # featureBits mm4 blastzRn3 -chrom=chr17
+    # 62824556 bases of 89616841 (70.104%) in intersection
+
+    # featureBits mm5 blastzRn3 -chrom=chr18
+    # 61442155 bases of 86685738 (70.879%) in intersection
+    # featureBits mm4 blastzRn3 -chrom=chr18
+    # 57158006 bases of 81388777 (70.228%) in intersection
+    
+# CHAIN RN3 BLASTZ (DONE - 2004-07-22 - Fan)
+
+# The axtChain is best run on the small kluster, or the kk9 kluster
+    ssh kki
+    mkdir -p /cluster/data/mm5/bed/blastz.rn3/axtChain/run1
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/mm5/bed/blastz.rn3/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} 
+out/$(root1).out
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtChain $1 \
+	/iscratch/i/mus/mm5/softNib \
+	/iscratch/i/rn3/bothMaskedNibs $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+
+    # 46 jobs
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para push # ... etc ...
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:      18318s     305.30m     5.09h    0.21d  0.001 y
+# IO & Wait Time:                 41906s     698.44m    11.64h    0.49d  0.001 y
+# Average job time:                1401s      23.34m     0.39h    0.02d
+# Longest job:                     5598s      93.30m     1.55h    0.06d
+# Submission to last job:          5635s      93.92m     1.57h    0.07d
+    # now on the file server, sort chains
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain &
+    # real    26m14.694s
+    # user    16m16.190s
+    # sys     2m19.520s
+
+    time chainSplit chain all.chain &
+    # real    26m29.801s
+    # user    15m40.780s
+    # sys     2m40.610s
+
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain mm5 ${c}_chainRn3 $i
+        echo done $c
+    end
+
+    # featureBits mm4 chainRn3Link -chrom=chr16
+    # 67474802 bases of 95076222 (70.969%) in intersection
+    # featureBits mm5 chainRn3Link -chrom=chr16
+    # 66703715 bases of 92679592 (71.972%) in intersection
+
+    # featureBits mm4 chainRn3Link -chrom=chr17
+    # 61932430 bases of 89616841 (69.108%) in intersection
+    # featureBits mm5 chainRn3Link -chrom=chr17
+    # 60676019 bases of 86658738 (70.017%) in intersection
+
+# NET RN3 (DONE - 2004-07-23 - Fan)
+
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/mm5/chrom.sizes \
+                        /cluster/data/rn3/chrom.sizes ../preNet/$i
+    end
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/mm5/chrom.sizes \
+                            /cluster/data/rn3/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 1850904576, utime 9294 s/100, stime 2079
+
+    # The netClass operations requires an "ancientRepeat" table to exist
+    # in either mm5 or rn3.  So, create the table:
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm5/bed/ancientRepeat
+    cd /cluster/data/mm5/bed/ancientRepeat
+    # mysqldump needs write permission to this directory
+    # and you need to use your read/write enabled user with password
+    chmod 777 .
+    hgsqldump --all --tab=. mm4 ancientRepeat
+    chmod 775 .
+    hgsql mm5 < ancientRepeat.sql
+    mysqlimport -u<r/w user> -p<r/w pass> mm5 ancientRepeat.txt
+    # This is a hand curated table obtained from Arian.
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    time netClass hNoClass.net mm5 rn3 rat.net \
+	-tNewR=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInRat \
+	-qNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+    # 508.060u 89.340s 12:10.36 81.7% 0+0k 0+0io 201pf+0w
+    
+    # If things look good do
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    time netFilter -syn rat.net > ratSyn.net
+
+    # real    5m5.494s
+    # user    3m52.710s
+    # sys     0m32.670s
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    netFilter -minGap=10 rat.net |  hgLoadNet mm5 netRn3 stdin
+    netFilter -minGap=10 ratSyn.net | hgLoadNet mm5 syntenyNetRn3 stdin
+
+    # real    8m50.781s
+    # user    4m59.660s
+    # sys     0m52.840s
+    
+    # check results
+    # featureBits mm4 netRn3
+    # 96806381 bases of 95076222 (101.820%) in intersection
+    # featureBits mm5 netRn3
+    # 2638255333 bases of 2615483787 (100.871%) in intersection
+
+    # featureBits mm4 syntenyNetRn3
+    # 96760405 bases of 95076222 (101.771%) in intersection
+    # featureBits mm5 syntenyNetRn3
+    # 2600849289 bases of 2615483787 (99.440%) in intersection
+
+    # Add entries for net and chain to mouse/mm5 trackDb
+
+    # make net
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    mkdir ratNet
+    time netSplit rat.net ratNet
+    # real    5m28.037s
+    # user    3m58.150s
+    # sys     0m37.870s
+
+    # extract axts from net 
+    mkdir ../axtNet 
+    foreach n (ratNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt ratNet/$c.net chain/$c.chain \
+		/cluster/data/mm5/nib \
+		/cluster/data/rn3/nib ../axtNet/$c.axt
+	echo "Complete: $c.net -> axtNet/$c.axt"
+    end
+    # sort axt's and convert to maf format
+    mkdir ../mafNet
+cat << 'EOF' > makeMaf.csh
+    foreach f (../axtNet/chr*.axt)
+        set c=$f:t:r
+        echo $c.axt
+        mv ../axtNet/$c.axt ../axtNet/$c.unsorted.axt
+        axtSort ../axtNet/$c.unsorted.axt ../axtNet/$c.axt
+        rm ../axtNet/$c.unsorted.axt
+        axtToMaf ../axtNet/$c.axt \
+            /cluster/data/mm5/chrom.sizes /cluster/data/rn3/chrom.sizes \
+                ../mafNet/$c.maf -tPrefix=mm5. -qPrefix=rn3.
+    end
+'EOF'
+    #csh makeMaf.csh >&! makeMaf.log &
+    csh makeMaf.csh > makeMaf.log &
+    tail -100f makeMaf.log
+    # THE ABOVE DID NOT WORK.  TRIED THE FOLLOWING:
+    foreach f (../axtNet/chr*.axt)
+        set c=$f:t:r
+        echo $c.axt
+        mv ../axtNet/$c.axt ../axtNet/$c.unsorted.axt
+        axtSort ../axtNet/$c.unsorted.axt ../axtNet/$c.axt
+        rm ../axtNet/$c.unsorted.axt
+        axtToMaf ../axtNet/$c.axt \
+            /cluster/data/mm5/chrom.sizes /cluster/data/rn3/chrom.sizes \
+                ../mafNet/$c.maf -tPrefix=mm5. -qPrefix=rn3.
+    end
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm5/bed/blastz.rn3/axtBest
+    cd /cluster/data/mm5/bed/blastz.rn3/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/axtNet
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
+
+    #  Convert those axt files to psl
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3/pslBest
+    bash
+    for I in chr*BestRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
+	echo "done ${I}"
+    done
+
+     # check results
+    # featureBits mm5 blastzBestRn3
+    # 1778653886 bases of 2615483787 (68.005%) in intersection
+    # featureBits mm4 blastzBestRn3
+    # 1780774716 bases of 2627444668 (67.776%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm5/axtBest/Rn3
+     cd /gbdb/mm5/axtBest/Rn3
+     ln -s /cluster/data/mm5/bed/blastz.rn3/axtNet/chr*.axt .
+     cd /cluster/data/mm5/bed/blastz.rn3/axtNet
+     rm -f axtInfoInserts.sql
+     foreach f (/gbdb/mm5/axtBest/Rn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+    hgsql mm5 < ~/kent/src/hg/lib/axtInfo.sql
+    #	table axtInfo may already exist, ignore create error.
+    hgsql mm5 < axtInfoInserts.sql
+
+# BLASTZ RN3 CLEAN UP (DONE - 2004-07-26 - Fan)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3
+    nice rm -rf raw &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
+
+# UPDATE BACEND SEQUENCES (DONE - 2004-07-20 - Fan)
+
+    # Download new files
+    ssh kksilo
+    mkdir –p /cluster/data/mm5/bed/bacends/ncbi
+    cd /cluster/data/mm5/bed/bacends/ncbi
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/AllBACends.mfa.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/cl_acc_gi_len.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/README
+    gunzip AllBACends.mfa.gz
+    gunzip cl_acc_gi_len.gz
+
+    # Convert fa file
+    cat << '_EOF_' > convert.pl
+#!/usr/local/bin/perl -w
+
+use strict;
+
+while (my $line = <>) {
+    if (substr($line,0,1) ne ">") {
+        print $line;
+    } else {
+        my @fields = split(/\|/, $line);
+        my $printed = 0;
+        for (my $i = 0; $i < $#fields; $i++) {
+                if ($fields[$i] eq "gb") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $#fields;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+    chmod +x convert.pl
+    ./convert.pl < AllBACends.mfa > BACends.fa
+
+    # Create new pairs files
+    convertBacEndPairInfo cl_acc_gi_len
+
+    # Split file into pieces and copy to cluster to propagate
+    ssh kksilo
+    cd /cluster/data/mm5/bed/bacends/ncbi
+    /cluster/bin/i386/faSplit sequence BACends.fa 100 BACends
+    rm -rf /cluster/bluearc/scratch/mus/mm5/bacEnds
+    mkdir /cluster/bluearc/scratch/mus/mm5/bacEnds
+    mv BACends???.fa /cluster/bluearc/scratch/mus/mm5/bacEnds
+    cp -p BACends.fa /cluster/bluearc/scratch/mus/mm5/bacEnds
+
+    # Ask for propagation from sysadmin
+
+    # Load the sequences (change bacends.# to match correct location)
+    ssh hgwdev
+    mkdir /gbdb/mm5/bacends
+    cd /gbdb/mm5/bacends
+    ln -s /cluster/data/mm5/bed/bacends/ncbi/BACends.fa .
+    cd /tmp
+    hgLoadSeq mm5 /gbdb/mm5/bacends/BACends.fa
+    #Adding /gbdb/mm5/bacends/BACends.fa
+    #452237 sequences
+    #Updating seq table
+    #All done
+
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2004-07-23 - Fan)
+    # (alignments done without RepeatMasking)
+    #	We need an ooc file for this genome
+    ssh kksilo
+    mkdir /cluster/data/mm5/ooc
+    cd /cluster/data/mm5/ooc
+    ls ../unmaskedNib/chr*.nib > nib.list
+    blat -makeOoc=11.ooc -repMatch=1024 nib.list nib.list output.psl
+    # Wrote 26077 overused 11-mers to 11.ooc
+    # Did not end using this.  Used an old one instead.
+
+    # Create full sequence alignments
+    ssh kk
+    cd /cluster/data/mm5/bed/bacends
+
+    /cluster/bin/scripts/splitContigList -scratch 
+/iscratch/i/mus/mm5/maskedContigs 1
+
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+
+    cat << '_EOF_' > runBlat.sh
+#!/bin/sh
+path1=$1
+path2=$2
+root1=$3
+root2=$4
+result=$5
+rm -fr /tmp/${root1}_${root2}
+mkdir /tmp/${root1}_${root2}
+pushd /tmp/${root1}_${root2}
+/cluster/bin/i386/blat ${path1} ${path2} -ooc=/scratch/hg/h/mouse11.ooc \
+	${root1}.${root2}.psl
+popd
+rm -f ${result}
+mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /tmp/${root1}_${root2}
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x runBlat.sh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.sh {check in exists $(path1)} {check in exists $(path2)} $(root1) 
+$(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    #ls -1S /iscratch/i/mm5/bacEnds/BACends???.fa > bacEnds.lst
+    ls -1S /scratch/mus/mm5/bacEnds/BACends???.fa > bacEnds.lst
+    mkdir bacEnds.out
+    #	create results directories for each to avoid the all result files in
+    #	one directory problem
+    foreach f (`cat bacEnds.lst`)
+	set b = $f:t:r
+	echo $b
+	mkdir bacEnds.out/$b
+    end
+
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+    # 62622 jobs written to batch
+    para try, check, push, etc ...
+
+# Completed: 62622 of 62622 jobs
+# CPU time in finished jobs:    3760354s   62672.57m  1044.54h   43.52d  0.119 y
+# IO & Wait Time:               3216480s   53608.00m   893.47h   37.23d  0.102 y
+# Average job time:                 111s       1.86m     0.03h    0.00d
+# Longest job:                     2841s      47.35m     0.79h    0.03d
+# Submission to last job:          9395s     156.58m     2.61h    0.11d
+
+# Compile alignments and lift the files.
+# First attempt failed due to /cluster/store6 ran out of space.
+# Redoing it 7/22/04.
+
+    ssh kksilo
+    cd /cluster/data/mm5/bed/bacends
+
+    mkdir /cluster/store8/fanTemp
+    time pslSort dirs raw.psl /cluster/store8/fanTemp bacEnds.out/* \
+      > time.out &
+
+    # This may take over over 14 hours!
+
+    ssh kolossus
+    cd /cluster/data/mm5/bed/bacends
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl  
+bacEnds.psl /dev/null
+# Processed 562840490 alignments
+
+    rmdir temp
+    #	You will want to keep this file around until later processing is
+    #	proven correct
+    rm raw.psl		# 72 Gb !  It takes a while even to remove it.
+
+    ssh kksilo
+    cd /cluster/data/mm5/bed/bacends
+
+    time /cluster/bin/scripts/lifter -psl -mouse /cluster/data/mm5 bacEnds.psl 
+    # real    130m36.149s
+    # user    82m38.180s
+    # sys     10m59.580s
+
+    cp -p ~booch/clusterJobs/bacends/split.pl .
+    cp -p ~booch/clusterJobs/bacends/header .
+    time ./split.pl header < bacEnds.psl.lifted
+    # real    2m16.354s
+    # user    0m36.390s
+    # sys     0m42.290s
+
+    cp -p bacEnds.psl.lifted bacEnds.psl.lifted.save
+    time pslSort dirs bacEnds.psl.lifted temp split
+
+    # real    17m2.353s
+    # user    14m17.040s
+    # sys     1m38.560s
+
+    rmdir temp
+    rm -r split
+
+    # Copy files to final destination and remove
+    mkdir /cluster/data/mm5/bacends
+    cp -p bacEnds.psl.lifted /cluster/data/mm5/bacends
+
+# BACEND PAIRS TRACK (DONE  2004-07-27 - Fan)
+
+    ssh kolossus
+    cd /cluster/data/mm5/bacends
+
+bash
+time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+-mismatch -verbose bacEnds.psl.lifted \
+	../bed/bacends/ncbi/bacEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > 
+header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    # edit header to make sure \t is/become tab character
+
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start | headchg -
+del > bacEndPairs.bed
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch 
+bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del > 
+bacEndPairsBad.bed
+
+# The following took too long, break it into 3 steps.
+#    extractPslLoad -noBin bacEnds.psl.lifted bacEndPairs.bed \
+#    bacEndPairsBad.bed | sorttbl tname tstart | headchg -del > bacEnds.load.psl
+
+    extractPslLoad -noBin bacEnds.psl.lifted bacEndPairs.bed   \
+    bacEndPairsBad.bed >j1.out
+    cat j1.out| sorttbl tname tstart >j2.out
+    cat j2.out | headchg -del > bacEnds.load.psl
+
+    rm j1.out j2.out
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm5/bacends
+
+    # edit bacEndPairs.bed to fix one ID that has a blank character in it.
+    hgLoadBed mm5 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairs.sql
+        # Loaded 168535
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed mm5 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairsBad.sql
+        # Loaded 43182
+    #hgLoadPsl mm5 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl mm5 -table=all_bacends bacEnds.load.psl
+    # load of all_bacends did not go as planned: 14426473 record(s), 0 row(s) 
+skipped, 4519 warning(s) loading psl.tab
+    
+# featureBits mm5 all_bacends
+# 268502414 bases of 2615483787 (10.266%) in intersection
+# featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+
+# featureBits mm5 bacEndPairs
+# 2567958504 bases of 2615483787 (98.183%) in intersection
+# featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+
+# featureBits mm5 bacEndPairsBad
+# 541027882 bases of 2615483787 (20.686%) in intersection
+# featureBits mm4 bacEndPairsBad
+# 1074505863 bases of 2627444668 (40.895%) in intersection
 

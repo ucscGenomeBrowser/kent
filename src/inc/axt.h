@@ -28,6 +28,8 @@
 #include "dnaseq.h"
 #endif
 
+#include "boxClump.h"
+
 struct axt
 /* This contains information about one xeno alignment. */
     {
@@ -185,6 +187,11 @@ struct axt *axtAffine(bioSeq *query, bioSeq *target, struct axtScoreScheme *ss);
 boolean axtAffineSmallEnough(double querySize, double targetSize);
 /* Return TRUE if it is reasonable to align sequences of given sizes
  * with axtAffine. */
+
+void axtAddBlocksToBoxInList(struct boxIn **pList, struct axt *axt);
+/* Add blocks (gapless subalignments) from (non-NULL!) axt to block list. 
+ * Note: list will be in reverse order of axt blocks. */
+
 
 #endif /* AXT_H */
 
