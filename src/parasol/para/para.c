@@ -414,7 +414,7 @@ struct dyString *cmd = dyStringNew(1024);
 struct submission *sub;
 char *jobId = NULL;
 
-dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", getlogin(), curDir, curDir, job->command);
+dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", cuserid(NULL), curDir, curDir, job->command);
 jobId = submitJobToHub(cmd->string);
 AllocVar(sub);
 slAddHead(&job->submissionList, sub);

@@ -1,5 +1,7 @@
 #ifndef PARALIB_H
 
+extern char *cuserid(char *__s);  /* Linux should define this but... */
+
 extern char paraSig[];  /* Mild security measure. */
 extern int paraPort;		      /* Our port */
 

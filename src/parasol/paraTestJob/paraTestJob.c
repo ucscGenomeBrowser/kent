@@ -16,6 +16,7 @@ errAbort(
   "options:\n"
   "   -crash - Try to write to NULL when done.\n"
   "   -err   - Return -1 error code when done\n"
+  "   -output=file - make some output in file as well\n"
   "   -sleep=n Sleep for N seconds\n"
   );
 }
@@ -32,7 +33,7 @@ cumErr += diff;
 
 void compute()
 /* Do a relatively time consuming calculation.
- * This should last about a second. */
+ * This should last about 1/10 second. */
 {
 int i;
 double res;
@@ -48,8 +49,19 @@ void paraTestJob(char *countString)
 /* paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash. */
 {
 int i, count = atoi(countString);
+char *outName = optionVal("output", NULL);
+FILE *f = NULL;
+if (outName != NULL)
+    f = mustOpen(outName, "w");
 for (i=0; i<count; ++i)
+    {
     compute();
+    if (f != NULL)
+        {
+	fprintf(f, "Computation number %d of %d.  Error so far is %f\n",
+		i+1, count, cumErr);
+	}
+    }
 printf("Cumulative error %f\n", cumErr);
 if (optionExists("sleep"))
     sleep(optionInt("sleep", 1));

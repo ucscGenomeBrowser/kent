@@ -2,6 +2,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <unistd.h>
+#include <stdio.h>
 #include "common.h"
 #include "net.h"
 #include "linefile.h"
@@ -12,6 +14,14 @@
 #include "paraLib.h"
 
 int hubFd;	/* Network connection to paraHub. */
+char userName[128];	/* Name of user. */
+
+void mustBeRoot()
+/* Abort if we're not root. */
+{
+if (!sameString(userName, "root"))
+    errAbort("That command can only be run by root.");
+}
 
 void closeHubFd()
 /* Close connection to hub if it's open. */
@@ -100,6 +110,7 @@ void addMachine(char *machine, char *tempDir)
 /* Tell hub about a new machine. */
 {
 char buf[512];
+mustBeRoot();
 sprintf(buf, "%s %s %s", "addMachine", machine, tempDir);
 commandHub(buf);
 }
@@ -119,7 +130,7 @@ int i;
 
 getcwd(curDir, sizeof(curDir));
 sprintf(defaultResults, "%s/results", curDir);
-dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, results);
+dyStringPrintf(dy, "addJob %s %s %s %s %s", userName, dir, in, out, results);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
 jobIdString = hubCommandGetReciept(dy->string);
@@ -137,6 +148,7 @@ freez(&jobIdString);
 void addSpoke()
 /* Tell hub to add a spoke. */
 {
+mustBeRoot();
 commandHub("addSpoke");
 }
 
@@ -144,6 +156,7 @@ void removeMachine(char *machine)
 /* Tell hub to get rid of machine. */
 {
 char buf[512];
+mustBeRoot();
 sprintf(buf, "%s %s", "removeMachine", machine);
 commandHub(buf);
 }
@@ -255,6 +268,8 @@ void removeUserJobs(char *user, int argc, char *argv[])
 {
 struct jobInfo *jobList = getJobList(), *job;
 char *wildCard = NULL;
+if (!sameString(user, userName) && !sameString("root", userName))
+    errAbort("You can only remove your own jobs (unless you are root).");
 if (argc > 0) wildCard = argv[0];
 for (job = jobList; job != NULL; job = job->next)
     {
@@ -372,6 +387,7 @@ closeHubFd();
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cuserid(userName);
 optionHashSome(&argc, argv, TRUE);
 if (argc < 2)
     usage();

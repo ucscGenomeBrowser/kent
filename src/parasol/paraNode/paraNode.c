@@ -5,6 +5,7 @@
 #include <sys/times.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <pwd.h>
 #include "common.h"
 #include "errabort.h"
 #include "dystring.h"
@@ -95,6 +96,13 @@ char **env = envExpand(1);
 *env = envPair(name, val);
 }
 
+void changeUid(char *name)
+/* Try and change process user id to that of name. */
+{
+struct passwd *pw = getpwnam(name);
+setuid(pw->pw_uid);
+}
+
 void execProc(char *managingHost, char *jobIdString, char *reserved,
 	char *user, char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
@@ -107,7 +115,8 @@ if (fork() == 0)
     {
     int newStdin, newStdout, newStderr, execErr;
 
-    /* Change to given dir. */
+    /* Change to given user and dir. */
+    changeUid(user);
     chdir(dir);
 
     /* Redirect standard io.  There has to  be a less
