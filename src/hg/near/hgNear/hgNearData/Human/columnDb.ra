@@ -38,6 +38,20 @@ all gnfHumanAtlas2AllExps gnfHumanAtlas2AllRatio gnfHumanAtlas2All 80,81,56,57,4
 ratioMax 5.0
 absoluteMax 30000 
 
+name gnfAtlas2Max
+shortLabel Max GNF Atlas2
+longLabel Maximum Expression Value of GNF Expression Atlas2
+priority 2.71
+visibility off
+type expMax knownToGnfAtlas2 gnfHumanAtlas2Median
+
+name gnfAtlas2Distance
+shortLabel GNF Atlas2 Delta
+longLabel Normalized Difference in GNF Expression Atlas2 from Selected Gene
+priority 2.72
+visibility off
+type distance gnfAtlas2Distance query target distance
+
 name expDense
 shortLabel Short Expression
 longLabel Selected UCLA Expression Data
@@ -56,12 +70,13 @@ type expRatio knownToU133 affyUcla hgFixed.affyUclaExps
 max 1.0
 representatives 3,4,9,2,8,36,5,6,-1,37,1,33,23,25,20,-1,24,0,29,38,-1,17,7,31,41,-1,30,34,18,32,10,-1,11,12,13,39,26,-1,14,19,15,21,16,22,-1,35,27,28,40,
 
-name expDistance
-shortLabel Exp Delta
-longLabel Normalized Difference in Expression from Selected Gene
+name uclaExpDistance
+shortLabel UCLA Exp Delta
+longLabel Normalized Difference in UCLA U133 Expression Levels
 priority 2.9
 visibility off
-type distance knownExpDistance query target distance
+type distance uclaExpDistance query target distance
+
 
 name gnfU95
 shortLabel GNF U95
@@ -76,7 +91,7 @@ ratioMax 5.0
 absoluteMax 30000 
 
 name gnfU95Max
-shortLabel Max GNF 
+shortLabel Max GNF U95
 longLabel Maximum Expression Value of GNF Expression Atlas
 priority 3.1
 visibility off
