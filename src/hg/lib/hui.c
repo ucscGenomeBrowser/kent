@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.56 2005/02/03 19:00:02 hartera Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.57 2005/02/06 04:17:34 kent Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -84,7 +84,7 @@ if (cg != NULL)
     int i;
     if (cg->columnIx != 0 && cg->columnIx < cg->columns)
 	for( i = cg->columnIx; i <= cg->columns; i++)
-	    printf("<td>&nbsp</td>\n");
+	    printf("<td>&nbsp;</td>\n");
     if (cg->rowOpen)
 	printf("</tr>\n");
     printf("</table>\n");

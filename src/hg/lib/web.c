@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.72 2005/02/04 20:43:22 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.73 2005/02/06 04:17:34 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -109,7 +109,7 @@ if (withHtmlHeader)
 	"	</TITLE>" "\n"
 	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
 	"</HEAD>" "\n"
-	"<BODY BGCOLOR=\""HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" 
+	"<BODY BGCOLOR=\"#"HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" 
 	);
     }
 puts(
@@ -156,11 +156,11 @@ else
     }
 
 puts(
-       "<!--HOTLINKS BAR---------------------------------------------------------->" "\n"
+       "<!-- +++++++++++++++++++++ HOTLINKS BAR +++++++++++++++++++ -->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
-       "<table bgcolor=\"000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
-       "<tr bgcolor=\""HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
-       "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\""HG_COL_HOTLINKS"\" height=\"24\"><TR>" "\n	"
+       "<table bgcolor=\"#000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%%\" height=\"27\">" "\n"
+       "<tr bgcolor=\"#"HG_COL_HOTLINKS"\"><td valign=\"middle\">" "\n"
+       "	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"#"HG_COL_HOTLINKS"\" height=\"24\"><TR>" "\n	"
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
        );
 
@@ -229,19 +229,19 @@ if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
     puts(
-	 "<!--Content Tables------------------------------------------------------->" "\n"
+         "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
 	 "<TR><TD COLSPAN=3>	" "\n"
 	 "  	<!--outer table is for border purposes-->" "\n"
 	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-	 "    <TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-	 "	<TABLE BGCOLOR=\""HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+	 "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+	 "	<TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
 	 "		<FONT SIZE=\"4\"><b>&nbsp;"
 	 );
     htmlTextOut(textOutBuf);
 
     puts(
 	 "</b></FONT></TD></TR></TABLE>" "\n"
-	 "	<TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
+	 "	<TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
 	 );
@@ -314,14 +314,14 @@ va_list args;
 va_start(args, format);
 
 webEndSection();
-puts("<!--START SECOND SECTION ------------------------------------------------------->");
+puts("<!-- +++++++++++++++++++++ START NEW SECTION +++++++++++++++++++ -->");
 puts(
     "<BR>" "\n"
     "" "\n"
     "  	<!--outer table is for border purposes-->" "\n"
     "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-    "    <TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-    "	<TABLE BGCOLOR=\""HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+    "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+    "	<TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
     "		<FONT SIZE=\"4\"><b>&nbsp; "
 );
 
@@ -329,7 +329,7 @@ vprintf(format, args);
 
 puts(
     "	</b></FONT></TD></TR></TABLE>" "\n"
-    "	<TABLE BGCOLOR=\""HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
+    "	<TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
     "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
     "" "\n"
 );

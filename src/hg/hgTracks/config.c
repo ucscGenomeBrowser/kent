@@ -171,8 +171,8 @@ if (sameString(groupTarget, "none"))
 
 dyStringPrintf(title, "Configure Image",
 	       hOrganism(database), hFreezeFromDb(database), database);
-webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
+webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);
 
 hPrintf(" image width: ");
@@ -219,10 +219,10 @@ hPrintf(" ");
 hPrintf("or control tracks visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
-hPrintf("</FORM>");
 dyStringFree(&title);
 freez(&groupTarget);
 webEndSectionTables();
+hPrintf("</FORM>");
 }
 
 

@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.892 2005/02/05 22:52:44 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.893 2005/02/06 04:18:31 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9701,9 +9701,10 @@ if (!hideControls)
      * from. */
     hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\""
             "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
-    hPrintf("</FORM>\n");
+    hPrintf("</CENTER></FORM>\n");
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
     cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    hPrintf("<CENTER>");
 
 
     /* Make line that says position. */
@@ -9803,7 +9804,7 @@ if (!hideControls)
     // smallBreak();
     // hPrintf("<B>Track Controls:</B>");
     // hPrintf("</th></tr>\n");
-    hPrintf("<tr><td colspan='5' align='middle' nowrap>"
+    hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
 	   "Use drop down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
@@ -9822,7 +9823,7 @@ if (!hideControls)
 	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
 		MAX_CONTROL_COLUMNS);
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
-	hPrintf("\n<A NAME=\"#%s\">\n",group->name);
+	hPrintf("\n<A NAME=\"#%s\"></A>\n",group->name);
 	hPrintf("</th>\n", MAX_CONTROL_COLUMNS);
 	controlGridEndRow(cg);
 

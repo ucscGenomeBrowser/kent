@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.27 2004/11/07 16:42:31 kent Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.28 2005/02/06 04:17:34 kent Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
@@ -225,7 +225,7 @@ void hTableStart()
 {
 puts("<!--hTableStart-->" "\n"
      "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+puts("<TABLE BORDER=\"1\" BGCOLOR=\"#"HG_COL_INSIDE"\" CELLSPACING=\"0\">");
 }
 
 void hTableEnd()
