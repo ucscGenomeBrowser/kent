@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.11 2004/01/29 01:32:20 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.12 2004/02/13 22:42:16 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -197,6 +197,15 @@ for (da = mc->mrnaList; da != NULL; da = da->next)
 freeMem(vAll);
 
 return gg;
+}
+
+void printEdges(struct geneGraph *gg, int position)
+/* Print verices with position. */
+{
+int i;
+for(i = 0; i < gg->vertexCount; i++)
+    if(gg->vertices[i].position == position)
+	fprintf(stderr, "%d\t%d\t%d\n", i, gg->vertices[i].position, gg->vertices[i].type);
 }
 
 static int findFurthestLinkedStart(struct geneGraph *gg, int endIx)
@@ -547,7 +556,7 @@ for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[oIndex[i]][hardEndIx]);
     int curDist = v[softStartIx].position - v[oIndex[i]].position;
-    if( (curDist > 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
+    if( (curDist >= 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
 	(!isHard || v[oIndex[i]].type  == ggHardStart) &&     /* Replace if not replacing hard with soft. */
 	(curCount > bestCount ||                              /* and current count is better. */
 	 (curCount == bestCount && curDist > bestDist && curDist < maxDistance) )) /* or start is farther upstream. */
@@ -583,7 +592,7 @@ for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[hardStartIx][oIndex[i]]);
     int curDist = v[oIndex[i]].position - v[softEndIx].position;
-    if( (curDist > 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
+    if( (curDist >= 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
         (!isHard || v[oIndex[i]].type == ggHardEnd) &&  /* Replace if not replacing hard with soft. */
 	(curCount > bestCount ||                        /* and current count is better. */
 	(curCount == bestCount && curDist > bestDist && curDist < maxDist) )) /* or end is farther downstream. */
