@@ -1,3 +1,10 @@
+track partMrnas
+shortLabel Partially Found mRNAs
+longLabel Partially Found RefSeq and MGC mRNAs
+priority 0.5
+visibility hide
+type psl .
+
 track cytoBand
 shortLabel Chromosome Band
 longLabel Chromosome Bands Localized by FISH Mapping Clones
