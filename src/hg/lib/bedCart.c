@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedCart.c,v 1.1 2004/11/23 22:21:28 hiram Exp $";
+static char const rcsid[] = "$Id: bedCart.c,v 1.2 2004/11/24 19:42:35 hiram Exp $";
 
 #if defined(NOT_YET)
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
@@ -19,8 +19,11 @@ extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 /******	itemRgb - not on by default **************************/
 boolean bedItemRgb(struct trackDb *tdb)
 {
-char *Default="Off";
-char *tdbDefault = trackDbSetting(tdb, OPT_ITEM_RGB);
+char *Default="Off";	/* anything different than this will turn it on */
+char *tdbDefault = (char *)NULL;
+
+if (tdb)
+    tdbDefault = trackDbSetting(tdb, OPT_ITEM_RGB);
 
 if (tdbDefault)
     {
