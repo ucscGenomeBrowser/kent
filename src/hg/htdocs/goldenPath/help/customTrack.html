@@ -3,7 +3,7 @@
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>Human Genome Working Draft: Custom Track Formats</TITLE>
-	<LINK REL="STYLESHEET" HREF="http://genome.ucsc.edu/style/HGStyle.css">
+	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
@@ -17,7 +17,7 @@
    <CENTER>
 	<TABLE WIDTH="100%" BGCOLOR="#000000" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
 	<TABLE WIDTH="100%" BGCOLOR="#2636D1" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
-		<TABLE WIDTH=515 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>
+		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>
 		<TD WIDTH=1></TD>
 		<TD WIDTH=75>
 			<A HREF="/index.html" onMouseOver="HOME.src='/images/hl_home.jpg'" onMouseOut="HOME.src='/images/h_home.jpg'">
@@ -28,12 +28,13 @@
 		<TD WIDTH=100>
 			<A HREF="/cgi-bin/hgBlat?command=start" onMouseOver="SEARCH.src='/images/hl_blat.jpg'" onMouseOut="SEARCH.src='/images/h_blat.jpg'">
 			<IMG SRC="/images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>	
-		<TD WIDTH=30>
-			<A HREF="/FAQ.html" onMouseOver="FAQ.src='/images/hl_faq.jpg'" onMouseOut="FAQ.src='/images/h_faq.jpg'">
-			<IMG SRC="/images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="FAQ" ALT="&nbsp;&nbsp; FAQ"></A></TD>
-		<TD WIDTH=155>
-			<A HREF="/goldenPath/help/hgTracksHelp.html" onMouseOver="GUIDE.src='/images/h_guide.jpg'" onMouseOut="GUIDE.src='/images/hl_guide.jpg'">
-			<IMG SRC="/images/hl_guide.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; User's Guide"></A></TD>
+		<TD WIDTH=100>
+			<A HREF="/FAQ.html" onMouseOver="GUIDE.src='/images/hl_faq.jpg'" onMouseOut="GUIDE.src='/images/h_faq.jpg'">
+			<IMG SRC="/images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; FAQ"></A></TD>
+				<TD WIDTH=100>
+			<A HREF="/goldenPath/help/hgTracksHelp.html" onMouseOver="GUIDE.src='/images/hl_guide.jpg'" onMouseOut="GUIDE.src='/images/h_guide.jpg'">
+			<IMG SRC="/images/h_guide.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; FAQ"></A></TD>
+		</TR></TABLE>
 		</TR></TABLE>
 	 </TD></TR></TABLE>
 	 </TD></TR></TABLE>
@@ -46,32 +47,68 @@
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
 	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  Formats for Adding Your Own Track  </b></FONT>
+		<FONT SIZE="4"><b>&nbsp;  Adding Your Own Track  </b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-	
-<P>You can temporarily add your own tracks to the genome browser by uploading or pasting in text in the formats
-described in this document.    Here is a simple example:</P>
+
+<P>You can temporarily add your own tracks to the genome browser by uploading
+or pasting in text in the formats described in this document. Here is a
+simple example:</P>
+
+<P><B>Step 1.</B><BR>
+Formulate the data set as a tab-separated file using one of the
+formats listed in the sections below.
+Here is an example of a simple track that defines blue 1-base tick marks and
+red 100-base features alternating with blank space across chr22:
 <PRE><TT>browser position chr22:1-20001
-track name=spacer
-      description=&quot;Blue ticks every 10000 bases&quot;
-      color=0,0,255
-chr22	0	 1
-chr22	10000 10001
-chr22	20000 20001
-track name=even
-      description=&quot;This track paints 100 bases red, skips 100&quot;
-      color=255,0,0
-chr22	0	100 first
-chr22	200	300 second
-chr22	400	500 third</TT></PRE>
-<P>The format is line oriented.  A line can describe a track, or an item in a track. Empty lines and lines starting with # are ignored.  Track lines always
-begin with the word 'track'.  Item lines can be in any one of four formats: 
+track name=spacer description="Blue ticks every 10000 bases" color=0,0,255
+chr22   0        1
+chr22   10000 10001
+chr22   20000 20001
+track name=even description="This track paints 100 bases red, skips 100"
+color=255,0,0
+chr22   0       100 first
+chr22   200     300 second
+chr22   400     500 third</TT></PRE>
+
+The format is line- oriented. A line can describe a track, or an item in a
+track. Empty lines and lines starting
+with # are ignored. Track lines always begin with the word 'track'. Item
+lines can be in any one of four
+formats:
 	<A HREF="#BED">BED</A>, 
 	<A HREF="#PSL">PSL</A>,  
 	<A HREF="#GFF">GFF</A> or 
-	<A HREF="#GTF">GTF</A>.  All the lines for a given track must be in the same format. </P>
+	<A HREF="#GTF">GTF</A>.  
+All the lines for a given track must be in
+the same format. For syntax information, refer to the sections below.</P>
+
+<P><B>Step 2.</B><BR>
+Point your browser at 
+<a href="http://genome.ucsc.edu/goldenPath/aug2001Tracks.html#custom">http://genome.ucsc.edu/goldenPath/aug2001Tracks.html#custom</a>
+and upload your tab-separated file to see how it looks in the context of the
+other data tracks on the browser.</P>
+
+<P><B>Step 3.</B><BR>
+When you are ready to share your track with the world, or with the
+other members of your research group, put your tab-separated file on a web
+site. You can then construct a URL that will link your file to the browser.
+<BR><BR>
+For example, if the URL for your track file is <tt>http://anyu.edu/mytrack.html</tt>,
+you can use the URL<BR>
+<font color="000099"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?position=chr22&quot;db=hg10&quot;customText=http://anyu.edu/mytrack.html</tt></font>
+<BR>to share your track with others, either by mailing it to colleagues or putting 
+it on your web page.
+<BR><BR>
+In this URL example, "db=hg10" specifies the Dec. '02 freeze and
+"position=chr22" tells the browser where to start. The customText variable
+tells the browser where to find your track file.
+<BR><BR>
+You can include features on several chromosome in mytrack.html. When the
+browser is started with a track that includes multiple chromosomes, you will
+be able to switch between chromosomes while you are browsing and still see
+your custom annotations.</P>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -130,7 +167,6 @@ word 'track' and are followed by a number of attribute=value settings.   Here ar
 	<LI>altColor - secondary color for the track.  Default is a lighter shade of whatever color is set to.
 	<LI>useScore - If this attribute is present and set to one then the 'score' field will be reflected as the level
 	of gray in the display.
-	<LI>priority - A number controlling where a custom track is displayed.  Lower numbers are displayed higher.  Try priority=11.9 to get just above the known genes track, priority=18.4 to get just above the spliced ESTs.
 	<LI>offset - A number to be added to all coordinates in track.
 	<LI>url - A URL for an external link associated with this track.  Any '$$' in this string this will be substituted
 	with the item name. No default.
