@@ -2,7 +2,10 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
+
+/* strand to us for target */
+char* targetStrand = "+";
 
 void usage()
 /* Explain usage and exit. */
@@ -12,7 +15,7 @@ errAbort(
   "usage:\n"
   "   lavToPsl in.lav out.psl\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -target-strand=c set the target strand to c (default +)\n"
   );
 }
 
@@ -78,10 +81,7 @@ if (psl)
     {
     fprintf(f, "%d\t%d\t0\t0\t", match, mismatch);
     fprintf(f, "%d\t%d\t%d\t%d\t", qNumInsert, qBaseInsert, tNumInsert, tBaseInsert);
-    if (isRc)
-	fprintf(f, "-\t");
-    else
-	fprintf(f, "+\t");
+    fprintf(f, "%c%s\t", (isRc ? '-' : '+'), targetStrand);
     fprintf(f, "%s\t%d\t%d\t%d\t", qName, qSize, qTotalStart, qTotalEnd);
     fprintf(f, "%s\t%d\t%d\t%d\t", tName, tSize, tTotalStart, tTotalEnd);
     fprintf(f, "%d\t", blockCount);
@@ -192,8 +192,7 @@ for (i=0; ; ++i)
         *tName = cloneString(word);
     else if (i == 1)
         *qName = cloneString(word);
-    word = nextWord(&line);
-    if (word != NULL && startsWith("(reverse", word))
+    if ((line != NULL) && (stringIn("(reverse", line) != NULL))
         *isRc = TRUE;
     }
 }
@@ -286,9 +285,10 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 3)
     usage();
+targetStrand = optionVal("target-strand", "+");
 lavToPsl(argv[1], argv[2]);
 return 0;
 }
