@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.29 2004/06/26 00:31:55 angie Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.30 2004/06/28 04:34:04 angie Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -154,8 +154,6 @@ slAddHead(&miList, mi);
         {
         if ((el = hashLookup(hash, species[i])) != NULL)
             slAddHead(&miList, (struct wigMafItem *)el->val);
-	else
-	    errAbort("loadBaseByBaseItems: species %s not found", species[i]);
         }
     hashFree(&hash);
     }
