@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.13 2003/08/13 04:38:47 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.14 2003/09/14 23:17:02 sugnet Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -454,4 +454,21 @@ if (bList != NULL)
 *retSubChain = *retChainToFree = sub;
 }
 
+void chainRangeQPlusStrand(struct chain *chain, int *retQs, int *retQe)
+/* Return range of bases covered by chain on q side on the plus
+ * strand. */
+{
+if (chain == NULL)
+    errAbort("chain::chainRangeQPlusStrand() - Can't find range in null query chain.");
+if (chain->qStrand == '-')
+    {
+    *retQs = chain->qSize - chain->qEnd;
+    *retQe = chain->qSize - chain->qStart;
+    }
+else
+    {
+    *retQs = chain->qStart;
+    *retQe = chain->qEnd;
+    }
+}
 
