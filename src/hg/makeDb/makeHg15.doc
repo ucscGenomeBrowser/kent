@@ -2,7 +2,7 @@
 exit; # don't actually run this like a script :)
 
 # This file describes how we made the browser database on 
-# NCBI build 32 (March, 2003 freeze)
+# NCBI build 33 (April, 2003 freeze)
 
 # [For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
 
