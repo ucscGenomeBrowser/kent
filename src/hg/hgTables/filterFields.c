@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.26 2005/01/03 22:36:38 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.27 2005/02/07 23:08:42 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -479,10 +479,25 @@ return filterFieldVarName(db, table, field, filterPatternVar);
 }
 
 boolean anyFilter()
-/* Return TRUE if any filter set. */
+/* Return TRUE if any filter set.  If there is filter state from a filter 
+ * defined on a different table, clear it. */
 {
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
-return (filterTable != NULL && sameString(filterTable, curTable));
+if (filterTable == NULL)
+    return FALSE;
+else
+    {
+    char dbTable[256];
+    safef(dbTable, sizeof(dbTable), "%s.%s", database, curTable);
+    if (sameString(filterTable, dbTable))
+	return TRUE;
+    else
+	{
+	cartRemovePrefix(cart, hgtaFilterPrefix);
+	cartRemove(cart, hgtaFilterTable);
+	return FALSE;
+	}
+    }
 }
 
 /* Droplist menus for filtering on fields: */
@@ -830,7 +845,9 @@ doBigFilterPage(conn, db, table);
 void doFilterSubmit(struct sqlConnection *conn)
 /* Respond to submit on filters page. */
 {
-cartSetString(cart, hgtaFilterTable, curTable);
+char dbTable[256];
+safef(dbTable, sizeof(dbTable), "%s.%s", database, curTable);
+cartSetString(cart, hgtaFilterTable, dbTable);
 doMainPage(conn);
 }
 
@@ -983,6 +1000,26 @@ static boolean cmpReal(char *pat)
 return pat != NULL && pat[0] != 0 && !sameString(pat, cmpOpMenu[0]);
 }
 
+static boolean filteredOrLinked(char *db, char *table)
+/* Return TRUE if this table is the table to be filtered or if it is to be 
+ * linked with that table. */
+{
+char dbTable[256];
+if (sameString(db, database))
+    safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
+else
+    safef(dbTable, sizeof(dbTable), "%s.%s.%s", database, db, table);
+if (sameString(dbTable, cartUsualString(cart, hgtaFilterTable, "")))
+    return TRUE;
+else
+    {
+    char varName[256];
+    safef(varName, sizeof(varName),
+	  "%slinked.%s.%s", hgtaFilterPrefix, db, table);
+    return cartBoolean(cart, varName);
+    }
+}
+
 struct joinerDtf *filteringTables()
 /* Get list of tables we're filtering on as joinerDtf list (with
  * the field entry NULL). */
@@ -1014,6 +1051,8 @@ else
 	field = parts[2];
 	type = parts[3];
 	safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
+	if (! filteredOrLinked(db, table))
+	    continue;
 	if (!hashLookup(uniqHash, dbTable))
 	    {
 	    boolean gotFilter = FALSE;
@@ -1062,6 +1101,10 @@ char splitTable[256];
 char oldDb[128];
 char explicitDb[128];
 
+/* Return NULL if no filter on us. */
+if (! (anyFilter() && filteredOrLinked(db, table)))
+    return NULL;
+
 safef(oldDb, sizeof(oldDb), "%s", db);
 dbOverrideFromTable(dbTableBuf, &db, &table);
 if (!sameString(oldDb, db))
@@ -1078,11 +1121,7 @@ else
     sqlDisconnect(&conn);
     }
 
-/* Get list of filter variables for this table.  Return
- * NULL if no filter on us. */
-if (!anyFilter())
-    return NULL;
-
+/* Get list of filter variables for this table. */
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);
