@@ -41,7 +41,7 @@ $printHeaders="FALSE";
 if ($printHeaders eq "TRUE")
 {
     print DET "chr/acc\tctgStrt\tctgEnd\trsId\tscore\tstrand\tmolType\tclass\tvalid\t";
-    print DET "avHet\tavHetSE\tfunc\tlocType\thitQual\tmapWt\tchrHits\tctgHits\tseqHits\n";
+    print DET "avHet\tavHetSE\tfunc\tlocType\thitQual\tmapWt\tchrHits\tctgHits\tseqHits\tsource\n";
     print STR "rsId\tprotAcc\tprotGi\tstructGi\tprotLoc\trsRes\tprotRes\tstructRes\tstructLoc\n";
     print LOC "rsId\tlocusId\tsymbol\tmrnaAcc\tprotAcc\tfunc\tframe\tallele\tresidue\taaPos\n";
     print SEQ "rsId\tflank5\tflank3\tobserved\n";
@@ -144,7 +144,7 @@ while (<IN>)
 	    print DET "$strand\t$observed\t$molType\t$class\t$valid\t";
 	    if ($avHet>0)        { printf DET ("%.3f\t%.3f\t",$avHet,$avHetSE); }
 	    else                 { print  DET "0\t0\t"; }
-	    print DET "$func\t$locType\t$hitQuality\t$mapWeight\t$chromHits\t$contigHits\t$seqHits\n";
+	    print DET "$func\t$locType\t$hitQuality\t$mapWeight\t$chromHits\t$contigHits\t$seqHits\tdbSnp\n";
 	}
 	%mapLoc=();
     }
