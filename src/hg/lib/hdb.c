@@ -184,14 +184,20 @@ hFreeConn(&conn);
 return hash;
 }
 
+struct dnaSeq *hChromSeq(char *chrom, int start, int end)
+/* Return lower case DNA from chromosome. */
+{
+char fileName[512];
+hNibForChrom(chrom, fileName);
+return nibLoadPart(fileName, start, end-start);
+}
+
+
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA */
 {
 char fileName[512];
-struct dnaSeq *seq;
-
-hNibForChrom(seqName, fileName);
-seq = nibLoadPart(fileName, start, end-start);
+struct dnaSeq *seq = hChromSeq(seqName, start, end);
 if (dnaCase == dnaUpper)
     touppers(seq->dna);
 return seq;
@@ -515,6 +521,29 @@ if (hashLookup(hash, chrom) && hashLookup(hash, start) && hashLookup(hash, end))
 else
     return FALSE;
 }
+
+boolean hIsBinned(char *table)
+/* Return TRUE if a table is binned. */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+boolean binned = FALSE;
+
+/* Read table description into hash. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[0], "bin"))
+        binned = TRUE;
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return binned;
+}
+
 
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],

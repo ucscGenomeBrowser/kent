@@ -87,9 +87,12 @@ boolean hTableExists(char *table);
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
 
+struct dnaSeq *hChromSeq(char *chrom, int start, int end);
+/* Return lower case DNA from chromosome. */
+
 struct dnaSeq *hDnaFromSeq(char *seqName, 
 	int start, int end, enum dnaCase dnaCase);
-/* Fetch DNA */
+/* Fetch DNA in a variety of cases.  */
 
 struct dnaSeq *hLoadChrom(char *chromName);
 /* Fetch entire chromosome into memory. */
@@ -142,6 +145,9 @@ struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
+
+boolean hIsBinned(char *table);
+/* Return TRUE if a table is binned. */
 
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
