@@ -3252,14 +3252,14 @@ hFreeConn(&conn);
 void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
-enum trackVisibility vis;
+enum trackVisibility vis = tg->visibility;
 tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
-vis = limitVisibility(tg);
 if (vis != tvDense)
     {
     lookupRefNames(tg->items);
     slSort(&tg->items, linkedFeaturesCmpStart);
     }
+vis = limitVisibility(tg);
 }
 
 
