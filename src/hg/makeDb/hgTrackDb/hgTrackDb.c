@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.23 2005/02/07 17:39:38 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.24 2005/04/04 23:44:20 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,7 +71,7 @@ if (strict != NULL)
     for (td = tdList; td != NULL; td = tdNext)
         {
         tdNext = td->next;
-        if (hTableOrSplitExistsDb(database, td->tableName))
+        if (hTableOrSplitExists(td->tableName))
             {
 	    slAddHead(&strictList, td);
             if ((setting = trackDbSetting(td, "subTrack")) != NULL)
