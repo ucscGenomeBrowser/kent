@@ -38,7 +38,7 @@ number of letters and numbers.  The value extends to the end of the
 line.  Once a variable is defined this way, $varName afterwards
 will be replaced with the value from the set line.  Variable can
 be defined in terms of other variables.  In some cases it may be
-necessary to usee ${varName} rather than $varName if doing a substitution
+necessary to use ${varName} rather than $varName if doing a substitution
 in the middle of another word.
 
 THE IDENTIFIER STATEMENT
