@@ -125,7 +125,7 @@ type netAlign hg15 humanChain
 
 track syntenyHuman
 shortLabel Human Synteny
-longLabel Human/Mouse Synteny Using BLASTZ Single Coverage (100k window)
+longLabel Human/Mouse Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 127
 visibility hide
@@ -157,7 +157,7 @@ type psl xeno hg13
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny Using BLASTZ Single Coverage (100k window)
+longLabel $Organism/Rat Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 140
 visibility hide
