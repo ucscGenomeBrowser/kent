@@ -6,7 +6,7 @@
 #include "psl.h"
 #include "fa.h"
 #include "jksql.h"
-#include "estInfo.h"
+#include "estOrientInfo.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -145,20 +145,27 @@ if (pos >= 0)
 return 0;
 }
 
-void fillInEstInfo(struct estInfo *ei, struct dnaSeq *est, struct dnaSeq *geno,
+void fillInEstInfo(struct estOrientInfo *ei, struct dnaSeq *est, struct dnaSeq *geno,
 	struct psl *psl)
-/* Fill in estInfo struct by examining alignment and est and genomic
+/* Fill in estOrientInfo struct by examining alignment and est and genomic
  * sequences.  Corrects EST according to genome and may reverse complement's 
  * est as a side effect. */
 {
 static char *signals[] = {"aataaa", "attaaa"};
+int unAliSize;
 ei->chrom = psl->tName;
 ei->chromStart = psl->tStart;
 ei->chromEnd = psl->tEnd;
 ei->name = psl->qName;
 ei->intronOrientation = findIntronOrientation(psl, geno);
 ei->sizePolyA = countCharAtEnd('a', est->dna, est->size);
+unAliSize = psl->qSize - psl->qEnd;
+if (ei->sizePolyA > unAliSize)
+    ei->sizePolyA = unAliSize;
+unAliSize = psl->qStart;
 ei->revSizePolyA = countCharAtStart('t', est->dna, est->size);
+if (ei->revSizePolyA > unAliSize)
+    ei->revSizePolyA = unAliSize;
 correctEst(psl, est, geno);
 
 /* Find poly A signal - first looking for most common signal, then
@@ -196,14 +203,14 @@ while (faSpeedReadNext(lf, &est.dna, &est.size, &est.name))
     {
     struct pslList *pl;
     struct psl *psl;
-    struct estInfo ei;
+    struct estOrientInfo ei;
     if ((pl = hashFindVal(pslHash, est.name)) != NULL)
         {
 	for (psl = pl->list; psl != NULL; psl = psl->next)
 	    {
 	    ZeroVar(&ei);
 	    fillInEstInfo(&ei, &est, geno, psl);
-	    estInfoTabOut(&ei, f);
+	    estOrientInfoTabOut(&ei, f);
 	    }
 	}
     }
