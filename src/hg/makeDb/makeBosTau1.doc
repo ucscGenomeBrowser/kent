@@ -64,6 +64,23 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze >& check.out
   /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze > check.err
 
+# SELECTED DOWNLOAD FILES
+
+  ssh hgwdev
+
+  cd /cluster/data/bosTau1/downloads
+  cd contigs
+  cp *agp /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips/scaffoldAgp
+  cd /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips
+  nice gzip scaffoldAgp
+
+  # takes about 30 minutes for gzip
+  cd /cluster/data/bosTau1/downloads
+  cd scaffolds
+  cp Btau20040927-freeze-assembly.fa /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips/scaffoldFa
+  cd /usr/local/apache/htdocs/goldenPath/bosTau1/bigZips
+  nice gzip scaffoldFa
+
 
 # SPLIT SCAFFOLDS (DONE Sep. 30, 2004, Heather)
 
