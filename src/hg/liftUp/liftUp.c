@@ -1,6 +1,7 @@
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "linefile.h"
 #include "portable.h"
 #include "hash.h"
@@ -16,7 +17,10 @@ errAbort(
  "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf .gdup or .bed files\n"
  "to parent coordinate system. \n"
  "usage:\n"
- "   liftUp destFile liftSpec how sourceFile(s)\n"
+ "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
+ "The optional -type parameter tells what type of files to lift\n"
+ "If omitted the type is inferred from the suffix of destFile\n"
+ "Type is one of the suffixes described above.\n"
  "DestFile will contain the merged and lifted source files,\n"
  "with the coordinates translated as per liftSpec.  LiftSpec\n"
  "is tab-delimited with each line of the form:\n"
@@ -671,6 +675,7 @@ void liftUp(char *destFile, char *liftFile, char *how, int sourceCount, char *so
 struct liftSpec *lifts = readLifts(liftFile);
 struct hash *liftHash;
 char *source = sources[0];
+char *destType = cgiUsualString("type", destFile);
 
 if (sameWord(how, "carry"))
     carryMissing = TRUE;
@@ -681,48 +686,48 @@ else if (sameWord(how, "drop"))
 else
     usage();
 
-if (endsWith(destFile, ".out"))
+if (endsWith(destType, ".out"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftOut(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".psl"))
+else if (endsWith(destType, ".psl") || endsWith(destType, ".pslx"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftPsl(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".agp"))
+else if (endsWith(destType, ".agp"))
     {
     liftHash = hashLift(lifts);
     liftAgp(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".gl"))
+else if (endsWith(destType, ".gl"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftGl(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".gff") || endsWith(destFile, ".gtf"))
+else if (endsWith(destType, ".gff") || endsWith(destType, ".gtf"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftGff(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".gdup"))
+else if (endsWith(destType, ".gdup"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftGdup(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".bed"))
+else if (endsWith(destType, ".bed"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftBed(destFile, liftHash, sourceCount, sources);
     }
-else if (strstr(destFile, "gold"))
+else if (strstr(destType, "gold"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
@@ -730,13 +735,14 @@ else if (strstr(destFile, "gold"))
     }
 else 
     {
-    errAbort("Unknown file type in %s\n", destFile);
+    errAbort("Unknown file suffix for %s\n", destType);
     }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);
