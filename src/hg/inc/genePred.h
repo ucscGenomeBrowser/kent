@@ -72,5 +72,10 @@ struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
  * than insertMergeSize, will be dropped and the blocks merged.  CDS start or
  * end of -1 creates without CDS annotation*/
 
+char* genePredGetCreateSql(char* table, unsigned options);
+/* Get SQL required to create a genePred table.  No options defined yet,
+ * specify 0. */
+
+
 #endif /* GENEPRED_H */
 

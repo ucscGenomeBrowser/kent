@@ -9,6 +9,25 @@
 #include "linefile.h"
 #include "genePred.h"
 
+/* SQL to create a genePred table */
+static char *createSql = 
+"CREATE TABLE %s ("
+"   name varchar(255) not null,"	/* mrna accession of gene */
+"   chrom varchar(255) not null,"	/* Chromosome name */
+"   strand char(1) not null,"		/* + or - for strand */
+"   txStart int unsigned not null,"	/* Transcription start position */
+"   txEnd int unsigned not null,"	/* Transcription end position */
+"   cdsStart int unsigned not null,"	/* Coding region start */
+"   cdsEnd int unsigned not null,"	/* Coding region end */
+"   exonCount int unsigned not null,"	/* Number of exons */
+"   exonStarts longblob not null,"	/* Exon start positions */
+"   exonEnds longblob not null,"	/* Exon end positions */
+"   INDEX(name(10)),"
+"   INDEX(chrom(12),txStart),"
+"   INDEX(chrom(12),txEnd)"
+")";
+
+
 struct genePred *genePredLoad(char **row)
 /* Load a genePred from row fetched with select * from genePred
  * from database.  Dispose of this with genePredFree(). */
@@ -372,3 +391,13 @@ pslToExons(psl, gene, insertMergeSize);
 return gene;
 }
 
+char* genePredGetCreateSql(char* table, unsigned options)
+/* Get SQL required to create a genePred table.  No options defined yet,
+ * specify 0. */
+{
+char sqlCmd[1024];
+
+safef(sqlCmd, sizeof(sqlCmd), createSql, table);
+
+return cloneString(sqlCmd);
+}
