@@ -1326,3 +1326,19 @@ priority 1100
 group x
 visibility hide
 type bed 12
+
+track ancestor4way
+shortLabel Ancestor TBA
+longLabel Ancestral TBA 4-way Multiple Alignment
+group x
+priority 110
+visibility pack
+type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+# wiggle phastCons5
+# spanList 1
+# yLinOnOff Off
+# autoScaleDefault Off
+#pairwise fakePairwise
+summary ancestor4waySummary
+speciesOrder eutPri2 eutGli2 borEut2 
