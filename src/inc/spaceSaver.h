@@ -16,10 +16,12 @@ struct spaceSaver
     struct spaceSaver *next;	/* Next in list. */
     struct spaceNode *nodeList; /* List of things put in space saver. */
     struct spaceRowTracker *rowList; /* List of rows. */
-    int rowCount;              /* Number of rows. */
-    int winStart,winEnd;	/* Start and end of area we're modeling. */
-    int cellsInRow;             /* Number of cells per row. */
-    float scale;                /* What to scale by to get to cell coordinates. */
+    int rowCount;             /* Number of rows. */
+    int winStart,winEnd;      /* Start and end of area we're modeling. */
+    int cellsInRow;           /* Number of cells per row. */
+    double scale;             /* What to scale by to get to cell coordinates. */
+    int maxRows;	      /* Maximum number of rows.  */
+    boolean isFull;	      /* Set to true if can't fit data into maxRows. */
     };
 
 struct spaceNode
@@ -37,7 +39,7 @@ struct spaceRowTracker
     bool *used;                 /* A flag for each spot used. */
     };
 
-struct spaceSaver *spaceSaverNew(int winStart, int winEnd);
+struct spaceSaver *spaceSaverNew(int winStart, int winEnd, int maxRows);
 /* Create a new space saver around the given window.   */
 
 void spaceSaverFree(struct spaceSaver **pSs);
