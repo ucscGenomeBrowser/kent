@@ -161,6 +161,7 @@ boolean checkDatabases(char *databases);
 
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
+#define hggDoKgMethod "hgg_do_kgMethod"
 #define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"
 #define hggDoGetProteinSeq "hgg_do_getProteinSeq"
 #define hggDoRnaFoldDisplay "hgg_do_rnaFoldDisplay"
@@ -168,6 +169,9 @@ boolean checkDatabases(char *databases);
 #define geneCgi "../cgi-bin/hgGene"
 
 /* -------- Commands ---------- */
+
+void doKgMethod(struct sqlConnection *conn);
+/* Present KG Method, Credits, and Data Use Restrictions. */
 
 void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 /* Get mRNA sequence in a simple page. */
