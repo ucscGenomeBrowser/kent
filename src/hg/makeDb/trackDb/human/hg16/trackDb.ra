@@ -881,7 +881,7 @@ shortLabel phyloHMMcons HMR
 longLabel phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
 group compGeno
 priority 150
-visibility full
+visibility hide
 color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
