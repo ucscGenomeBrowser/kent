@@ -11,7 +11,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraHubStop - Shut down paraHub daemon\n"
+  "paraHubStop - Shut down paraHub daemon.\n"
   "usage:\n"
   "   paraHubStop now\n");
 }
