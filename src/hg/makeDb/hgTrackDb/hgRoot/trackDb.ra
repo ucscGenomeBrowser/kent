@@ -148,13 +148,7 @@ shortLabel Human mRNAs
 longLabel Human mRNAs from Genbank
 priority 18
 visibility full
-type psl .
-
-track xenoMrna
-shortLabel Other mRNAs
-longLabel Non-Human mRNAs from Genbank
-priority 18.2
-visibility full
+spectrum on
 type psl .
 
 track intronEst
@@ -162,6 +156,7 @@ shortLabel Spliced ESTs
 longLabel Human ESTs That Have Been Spliced
 priority 18.5
 visibility dense
+spectrum on
 type psl est
 
 track est
@@ -169,6 +164,7 @@ shortLabel Human ESTs
 longLabel Human ESTs Including Unspliced
 priority 19
 visibility hide
+spectrum on
 type psl est
 
 track estPair
@@ -184,6 +180,7 @@ shortLabel MGC mRNAs
 longLabel Mammalian Gene Collection mRNAs
 priority 21
 visibility hide
+spectrum on
 type psl .
 
 track cpgIsland
@@ -195,11 +192,37 @@ color 0,100,0
 altColor 128,228,128
 type bed 4 +
 
+track xenoMrna
+shortLabel Other mRNAs
+longLabel Non-Human mRNAs from Genbank
+priority 23
+visibility dense
+spectrum on
+type psl xeno
+
+track xenoBestMrna
+shortLabel Other Best mRNAs
+longLabel Non-Human mRNAs from Genbank Best in Genome Alignments
+priority 23.1
+visibility dense
+spectrum on
+type psl xeno
+
 track blatMouse
 shortLabel Mouse Blat
 longLabel Mouse Translated Blat Alignments
 priority 24
 visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track bestMouse
+shortLabel Mouse Best Blat
+longLabel Mouse Best Translated Blat Alignments
+priority 24.1
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
