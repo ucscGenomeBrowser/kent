@@ -54,7 +54,7 @@ struct dyString *webWarning = NULL; /* set this string with warnings for user,
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", NULL};
-struct cart *cart;
+struct cart *cart = NULL;
 
 
 void usage()
@@ -356,9 +356,7 @@ cartWebStart(cart, "Coordinate Conversion for %s %s:%d-%d",
 	     ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
-
 printSucessWarningZoo(); 
-
 printf("<ul><li><b>Original Coordinates:</b> %s %s:%d-%d  ", 
        ccr->from->date ,ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
 
@@ -636,8 +634,10 @@ struct blatServerTable *serve = NULL;
 struct coordConvRep *ccr = NULL;
 boolean success = FALSE;
 serve = hFindBlatServer(newGenome, FALSE);
+
 ccr = coordConvConvertPos(chrom, chromStart, chromEnd, origGenome, newGenome, 
 	       	       serve->host, serve->port, serve->nibDir);
+
 if(ccr->good)
     {
     goodResult(goodOut, ccr);
@@ -652,10 +652,11 @@ coordConvRepFreeList(&ccr);
 return success;
 }
 
-void doConvertCoordinates()
+void doConvertCoordinates(struct cart *lcart)
 /* tries to convert the coordinates given */
 {
-/* Seperate zoo conversions from non-zoo conversions... */
+/* Separate zoo conversions from non-zoo conversions... */
+cart = lcart;
 
 if(strstr(origGenome, "zoo")){
     convertCoordinatesZoo(stdout, stdout, doGoodReportZoo, doBadReportZoo);
