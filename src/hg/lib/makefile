@@ -5,20 +5,20 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
+O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     axtInfo.o axtLib.o bbRepMask.o bed.o blastTab.o \
     blastzNet.o blatServers.o \
-    borf.o borkPseudoHom.o cart.o cartDb.o cgh.o \
+    borf.o borkPseudoHom.o cart.o cartDb.o \
+    celeraDupPositive.o celeraCoverage.o cgh.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chromInfo.o chromInserts.o chr18deletions.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     defaultDb.o dbDb.o dnaMotif.o ensFace.o \
     est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
-    genePred.o genomicDups.o \
-    genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
-    ggCluster.o altGraph.o ggDbIo.o \
-    ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
+    genePred.o genomicDups.o genomicSuperDups.o \
+    ggCluster.o ggDbIo.o ggGraph.o goa.o grp.o \
+    hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o \
     jaxOrtholog.o jaxQTL.o jksql.o \
     knownInfo.o knownMore.o lfs.o \
@@ -35,8 +35,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     stsMap.o stsMapMouse.o  stsMarker.o stsInfoMouse.o synteny100000.o\
     stsMapMouseNew.o stsInfoMouseNew.o\
     syntenyBerk.o syntenySanger.o tilingPath.o traceInfo.o \
-    trackDb.o \
-    trackDbCustom.o trackTable.o wabAli.o \
+    trackDb.o trackDbCustom.o trackTable.o wabAli.o \
     coordConv.o expRecord.o dnaProbe.o \
     ggMrnaAli.o genbank.o \
     glDbRep.o ggDump.o sample.o exprBed.o genMapDb.o \
