@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.22 2003/10/01 23:12:32 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.23 2003/10/20 21:47:38 braney Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -451,4 +451,51 @@ if (count > 1)
     slReverse(&list);
     *pL = list;       
     }
+}
+
+static void commaNumberStr(char **number, char **out)
+/* add commas to a char * pointing at digits */
+{
+    int count;
+    char *iptr;
+
+    for(iptr = *number; isdigit(*iptr); iptr++)
+	;
+    count = iptr - *number;
+    while(count--)
+	{
+	*(*out)++ = *(*number)++;
+	if (count && (count % 3) == 0)
+	    *(*out)++ = ',';
+	}
+}
+
+char *addCommasToPos(char *position)
+/* add commas to the numbers in a position 
+ * returns pointer to static */
+{
+static    char buffer[1000];
+    char *optr = buffer;
+
+    while((*optr++ = *position++) != ':')
+	;
+    commaNumberStr(&position, &optr);
+    position++; /*  - */
+    *optr++ = '-';
+    commaNumberStr(&position, &optr);
+
+    return buffer;
+}
+
+char *stripCommas(char *position)
+/* make a new string with commas stripped out */
+{
+char *newPos = cloneString(position);
+char *nPtr = newPos;
+
+while(*nPtr = *position++) 
+    if (*nPtr != ',')
+	nPtr++;
+
+return newPos;
 }
