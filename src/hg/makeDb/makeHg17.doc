@@ -3698,11 +3698,10 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     #	(1.9 Gb result file !)
 
     time chainSplit chain all.chain
-    #	real    5m39.214s
-    #	user    4m42.800s
-    #	sys     0m19.550s
+    #	real    27m32.278s
+    #	user    9m46.970s
+    #	sys     2m45.960s
 
-    # these steps take ~20 minutes
     # optionally: rm run1/chain/*.chain
 
     # Load chains into database
@@ -3711,13 +3710,15 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
-        hgLoadChain hg17 ${c}_chainmm4 $i
+        hgLoadChain hg17 ${c}_chainMm4 $i
         echo done $c
     end
-    #	featureBits hg17 chainmm4
-    #	2826192649 bases of 2866216770 (98.604%) in intersection
-    #	featureBits hg16 chainmm4
-    #	2830563493 bases of 2865248791 (98.789%) in intersection
+
+    #	featureBits hg17 chainMm4
+XXX - running 2004-06-22 16:40
+    #	xxx 2826192649 bases of 2866216770 (98.604%) in intersection
+    #	featureBits hg16 chainMm4
+    #	xxx 2830563493 bases of 2865248791 (98.789%) in intersection
 
 # NET MM4 (WORKING - 2004-06-22 - Hiram)
 
@@ -3738,18 +3739,19 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
       set n = $i:r.net
       echo primary netting $i
       /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg17/chrom.sizes \
-                            /cluster/data/mm4/chrom.sizes ../n1/$n /dev/null
+	/cluster/data/mm4/chrom.sizes ../n1/$n /dev/null
     end
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    #	memory usage 2494730240, utime 19278 s/100, stime 4508
+    #	memory usage 2504171520, utime 19373 s/100, stime 5906
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
-    time netClass hNoClass.net hg17 mm4 rat.net \
-	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInRat \
-	-qNewR=/cluster/bluearc/rat/mm4/linSpecRep.notInHuman
+    time netClass hNoClass.net hg17 mm4 mouse.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInMouse \
+	-qNewR=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman
+XXX - running 2004-06-22 16:50
     #	real    19m33.421s
     #	user    10m37.130s
     #	sys     1m45.630s
@@ -3759,7 +3761,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
-    time netFilter -syn rat.net > ratSyn.net
+    time netFilter -syn mouse.net > mouseSyn.net
     #	real    13m24.885s
     #	user    7m37.100s
     #	sys     1m5.760s
@@ -3767,8 +3769,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.mm4/axtChain
-    netFilter -minGap=10 rat.net |  hgLoadNet hg17 netmm4 stdin
-    netFilter -minGap=10 ratSyn.net | hgLoadNet hg17 syntenyNetmm4 stdin
+    netFilter -minGap=10 mouse.net |  hgLoadNet hg17 netMm4 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg17 syntenyNetMm4 stdin
 #   real    12m53.070s
 #   user    6m6.540s
 #   sys     0m50.580s
