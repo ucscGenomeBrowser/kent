@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.56 2004/06/15 20:29:43 baertsch Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.57 2004/07/21 16:56:41 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -63,6 +63,7 @@ void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
 {
 char uiState[256];
 char *scriptName = cgiScriptName();
+char *db = cartOptionalString(theCart, "db");
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -145,14 +146,23 @@ if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
 	   uiState);
     puts("           Genome Browser</A> &nbsp; - &nbsp;");
     }
-printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
-       uiState);
-puts("           Gene Sorter</A> &nbsp; - &nbsp;");
+if (db == NULL || hgNearOk(db))
+    {
+    printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
+	   uiState);
+    puts("           Gene Sorter</A> &nbsp; - &nbsp;");
+    }
 printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
        uiState+1);
 puts("           Blat</A> &nbsp; - &nbsp;");
+if (db == NULL || hgPcrOk(db))
+    {
+    printf("       <A HREF=\"/cgi-bin/hgPcr%s\" class=\"topbar\">\n",
+	   uiState);
+    puts("           PCR</A> &nbsp; - &nbsp;");
+    }
 printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
-puts("           Table Browser</A> &nbsp; - &nbsp;");
+puts("           Tables</A> &nbsp; - &nbsp;");
 puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
      );
