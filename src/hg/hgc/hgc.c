@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.651 2004/06/01 22:05:03 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.652 2004/06/01 22:15:43 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14220,6 +14220,7 @@ genericHeader(tdb, item);
 /* make into item for URL */
 if (hScaffoldPos(bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName,            &scaffoldStart, &scaffoldEnd) )
    {
+   scaffoldStart += 1; 
    dyStringPrintf(itemUrl, "%s:%d-%d", scaffoldName, scaffoldStart,                           scaffoldEnd);
    /* remove underscore in scaffold name */
    d = dyStringSub(itemUrl->string, old, new);
