@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.9 2004/08/04 22:02:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.10 2004/08/05 20:57:24 hiram Exp $";
 
 /* Command line switches. */
 static boolean silent = FALSE;	/*	no data points output */
@@ -56,35 +56,6 @@ errAbort(
   );
 }
 
-static boolean wigNextRow(struct wiggleDataStream *wDS, char *row[],
-	int maxRow)
-/*	read next wig row from sql query or lineFile	*/
-{
-int numCols;
-
-if (wDS->isFile)
-    {
-    numCols = lineFileChopNextTab(wDS->lf, row, maxRow);
-    if (numCols != maxRow) return FALSE;
-    verbose(3, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
-	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
-    }
-else
-    {
-    int i;
-    char **sqlRow;
-    sqlRow = sqlNextRow(wDS->sr);
-    if (sqlRow == NULL)
-	return FALSE;
-    /*	skip the bin column sqlRow[0]	*/
-    for (i=1; i <= maxRow; ++i)
-	{
-	row[i-1] = sqlRow[i];
-	}
-    }
-return TRUE;
-}
-
 static void hgWiggle(struct wiggleDataStream *wDS, int trackCount,
 	char *tracks[])
 /* hgWiggle - dump wiggle data from database or .wig file */
@@ -120,7 +91,7 @@ for (i=0; i<trackCount; ++i)
     unsigned long chrNoDataBytes = 0;
 
     wDS->openWigConn(wDS, tracks[i]);
-    while (wigNextRow(wDS, row, WIGGLE_NUM_COLS))
+    while (wDS->nextRow(wDS, row, WIGGLE_NUM_COLS))
 	{
 	++rowCount;
 	++chrRowCount;
@@ -245,7 +216,7 @@ for (i=0; i<trackCount; ++i)
 	    freeMem(ReadData);
 	    }	/*	if (!skipDataRead)	*/
 	wiggleFree(&wiggle);
-	}	/*	while (wigNextRow())	*/
+	}	/*	while (nextRow())	*/
     endClock = clock1000();
     totalRows += rowCount;
     if (timing)
