@@ -10,13 +10,14 @@
 #include "dnautil.h"
 #include "dbDb.h"
 #include "axtInfo.h"
+#include "hCommon.h"
 #include "hgGene.h"
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
 /* Print genomic sequence anchor. */
 {
-hPrintf("<A HREF=\"http://hgwdev-kent.cse.ucsc.edu/cgi-bin/hgc?%s",
+hPrintf("<A HREF=\"%s?%s", hgcName(),
    cartSidUrlString(cart));
 hPrintf("&g=htcGeneInGenome&i=%s", itemName);
 hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
@@ -46,7 +47,7 @@ if (sqlTableExists(conn, "axtInfo"))
 	char *db2 = dbList->name;
 	struct axtInfo *aiList = hGetAxtAlignments(db2);
 	hPrintLinkCellStart();
-	hPrintf("<A HREF=\"../cgi-bin/hgc?%s", cartSidUrlString(cart) );
+	hPrintf("<A HREF=\"%s?%s", hgcName(), cartSidUrlString(cart) );
 	hPrintf("&g=htcGenePsl&i=%s&c=%s&l=%d&r=%d", 
 		geneId, curGeneChrom, curGeneStart, curGeneEnd);
 	hPrintf("&o=%s&alignment=%s&db2=%s\"",
