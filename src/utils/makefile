@@ -20,6 +20,7 @@ scripts:
 test:
 	cd faToTwoBit && ${MAKE} test
 	cd twoBitToFa && ${MAKE} test
+	cd twoBitInfo && ${MAKE} test
 
 clean:
 	touch non-empty-rm.o
@@ -87,6 +88,7 @@ DIRS = \
 	tickToDate \
 	toLower \
 	toUpper \
+	twoBitInfo \
 	twoBitToFa \
 	undupFa \
 	upper \
