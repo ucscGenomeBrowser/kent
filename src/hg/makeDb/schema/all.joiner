@@ -764,6 +764,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
     $kgDb.blastKGPep00.name minCheck=0.90
+    $kgDb.blastKGPep01.name minCheck=0.99
+    $kgDb.blastKGRef01.acc minCheck=0.99
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
@@ -1325,12 +1327,25 @@ identifier blastHg17KGPep00Id
      $hg.blastKGPep00.name
      $xenTro.blastHg17KG.qName
 
-identifier blastHg17KGPep01Id 
+identifier blastKG01 
 "hg17 proteins 01"
+     $gbd.blastHg17KG.qName dupeOk
+     hg17.blastKGPep01.name
+     hg17.blastKGRef01.acc
+
+identifier blastHg17KGPep01Id 
+"hg17 peptides 01"
      $hg.blastKGPep01.name
+     $hg.knownGene.name  minCheck=0.95
+     $hg.blastKGRef01.acc
      $monDom.blastHg17KG.qName
      $danRer.blastHg17KG.qName
      $bosTau.blastHg17KG.qName
+
+identifier blastHg17KGRef01SwissId 
+"hg17 proteins swiss 01"
+     $hg.blastKGRef01.extra1 dupeOk
+     swissProt.displayId.acc
 
 identifier tfbsCons
 "transcription factor binding sites"
