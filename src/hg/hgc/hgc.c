@@ -162,9 +162,10 @@
 #include "jalview.h"
 #include "flyreg.h"
 #include "putaInfo.h"
+#include "gencodeIntron.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.855 2005/03/22 02:12:27 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.856 2005/03/22 02:33:13 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14485,6 +14486,32 @@ if (stripped[len-3] == '-' &&
 return(stripped);
 }
 
+static void doGencodeIntron(struct trackDb *tdb, char *item)
+/* Intron validation from ENCODE Gencode/Havana gene predictions */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+struct gencodeIntron *intron, *intronList = NULL;
+char query[256];
+
+genericHeader(tdb, item);
+safef(query, sizeof query, 
+        "select * from %s where name='%s' and chrom='%s' and chromStart=%d",
+                tdb->tableName, item, seqName, start);
+intronList = gencodeIntronLoadByQuery(conn, query);
+for (intron = intronList; intron != NULL; intron = intron->next)
+    {
+    printf("<B>Intron:</B> %s<BR>\n", intron->name);
+    printf("<B>Status:</B> %s<BR>\n", intron->status);
+    printf("<B>Gene:</B> %s<BR>\n", intron->geneId);
+    printf("<B>Transcript:</B> %s<BR>\n", intron->transcript);
+    printPos(intron->chrom, intron->chromStart, 
+            intron->chromEnd, intron->strand, TRUE, intron->name);
+    }
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
@@ -15627,6 +15654,11 @@ else if (startsWith("pscreen", track))
 else if (startsWith("flyreg", track))
     {
     doFlyreg(tdb, item);
+    }
+/* ENCODE tracks */
+else if (startsWith("encodeGencodeIntron", track))
+    {
+    doGencodeIntron(tdb, item);
     }
 else if (tdb != NULL)
     {
