@@ -21,7 +21,6 @@ struct wiggleDataStream *wds = wiggleDataStreamNew();
 unsigned long long valuesMatched = 0;
 struct histoResult *histoGramResult;
 float *valuesArray = NULL;
-float *fptr = NULL;
 size_t valueCount = 0;
 struct customTrack *ct;
 boolean isCustom = FALSE;
@@ -46,7 +45,8 @@ if (startsWith("ct_", tdb->tableName))
 else
     {
     hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-    span = spanInUse(conn, table, chrom, winStart, winEnd, cart);
+    /*span = spanInUse(conn, table, chrom, winStart, winEnd, cart);*/
+    span = minSpan(conn, table, chrom, winStart, winEnd, cart);
     }
 
 /*	if for some reason we don't have a chrom and win positions, this
