@@ -195,7 +195,7 @@ longLabel TBlastN Human(hg15) Known Gene Pep PSL
 group compgeno
 priority 50
 visibility dense
-type psl .
+type psl protein
 
 track hg15Pep
 shortLabel Human KGPep
