@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.25 2003/06/25 06:29:41 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.26 2003/06/25 15:20:43 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -914,9 +914,11 @@ char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
 makeTitle(buf, "hgNear.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
+cartSaveSession(cart);
 controlPanel(curGeneId);
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
+hPrintf("</FORM>");
 }
 
 void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
@@ -984,8 +986,6 @@ else
     doSearch(conn, colList, cartOptionalString(cart, searchVarName));
 cartRemoveLike(cart, "near.up.*");
 cartRemoveLike(cart, "near.down.*");
-cartSaveSession(cart);
-hPrintf("</FORM>");
 hFreeConn(&conn);
 }
 
