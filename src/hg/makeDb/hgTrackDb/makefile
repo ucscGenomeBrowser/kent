@@ -42,10 +42,12 @@ beta_old_update:
 	hgTrackDb hg6  trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg7  trackDb ../../lib/trackDb.sql hgRoot
 
+beta: beta_update
+
 beta_update:
 	hgTrackDb hg8 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg9 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg10 trackDb ../../lib/trackDb.sql hgRoo
+	hgTrackDb hg10 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg11 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
