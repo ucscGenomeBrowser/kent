@@ -9,6 +9,7 @@
 boolean recurse = FALSE;
 char *wildCard = NULL;
 char *suffix = NULL;
+boolean nonz = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +22,8 @@ errAbort(
   "options:\n"
   "   -r            Recurse into subdirectories\n"
   "   -suffix=.suf  This will restrict things to files ending in .suf\n"
-  "   '-wild=*.???' This will match wildcards.\n");
+  "   '-wild=*.???' This will match wildcards.\n"
+  "   -nonz         Prints file name of non-zero length files\n");
 }
 
 void catFile(char *fileName)
@@ -32,6 +34,15 @@ int fd;
 fd = open(fileName, O_RDONLY);
 if (fd == -1)
     errnoAbort("Couldn't open %s", fileName);
+if (nonz)
+    {
+    char c;
+    if (read(fd, &c, 1) > 0)
+	{
+        printf("%s\n%c", fileName, c);
+	fflush(stdout);
+	}
+    }
 cpFile(fd, fileno(stdout));
 close(fd);
 }
@@ -72,6 +83,7 @@ if (argc < 2)
 recurse = cgiBoolean("r");
 suffix = cgiOptionalString("suffix");
 wildCard = cgiOptionalString("wild");
+nonz = cgiBoolean("nonz");
 catDir(argc-1, argv+1);
 return 0;
 }
