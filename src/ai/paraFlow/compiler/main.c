@@ -31,6 +31,7 @@ enum pfParseType
     pptNop,
     pptCompound,
     pptTuple,
+    pptDot,
     pptOf,
     pptIf,
     pptElse,
@@ -95,6 +96,8 @@ switch (type)
         return "pptTuple";
     case pptOf:
         return "pptOf";
+    case pptDot:
+        return "pptDot";
     case pptIf:
     	return "pptIf";
     case pptElse:
@@ -356,11 +359,40 @@ pp->var = pfScopeFindOrCreateVar(scope, tok->val.s);
 return pp;
 }
 
+struct pfParse *parseDottedNames(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+/* Parse this.that.the.other */
+{
+struct pfParse *pp = parseNameUse(parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
+struct pfParse *dots = NULL;
+if (tok->type == '.')
+    {
+    dots = pfParseNew(pptDot, tok, parent);
+    dots->children = pp;
+    pp->parent = dots;
+    while (tok->type == '.')
+	{
+	tok = tok->next;
+	pp = parseNameUse(dots, &tok, scope);
+	slAddHead(&dots->children, pp);
+	}
+    }
+*pTokList = tok;
+if (dots != NULL)
+    {
+    slReverse(&dots->children);
+    return dots;
+    }
+else
+    return pp;
+}
+
+
 struct pfParse *parseOfs(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse of separated expression. */
 {
-struct pfParse *pp = parseNameUse(parent, pTokList, scope);
+struct pfParse *pp = parseDottedNames(parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 struct pfParse *ofs = NULL;
 if (tok->type == pftOf)
@@ -371,7 +403,7 @@ if (tok->type == pftOf)
     while (tok->type == pftOf)
 	{
 	tok = tok->next;
-	pp = parseNameUse(ofs, &tok, scope);
+	pp = parseDottedNames(ofs, &tok, scope);
 	slAddHead(&ofs->children, pp);
 	}
     }
@@ -399,14 +431,14 @@ if (baseType != NULL)
 	struct pfParse *name, *type;
 	struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
 	type = parseOfs(pp, &tok, scope);
-	name = parseNameUse(pp, &tok, scope);
+	name = parseDottedNames(pp, &tok, scope);
 	pp->children = type;
 	type->next = name;
 	*pTokList = tok;
 	return pp;
 	}
     }
-return parseNameUse(parent, pTokList, scope);
+return parseDottedNames(parent, pTokList, scope);
 }
 
 struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
@@ -974,9 +1006,9 @@ struct pfParse *collection;
 struct pfParse *statement;
 
 tok = tok->next;	/* Skip over 'foreach' */
-element = parseNameUse(pp, &tok, scope);
+element = parseDottedNames(pp, &tok, scope);
 skipRequiredName("in", &tok);
-collection = parseNameUse(pp, &tok, scope);
+collection = parseDottedNames(pp, &tok, scope);
 statement = pfParseSemiStatement(pp, &tok, scope);
 slAddHead(&pp->children, statement);
 slAddHead(&pp->children, collection);
