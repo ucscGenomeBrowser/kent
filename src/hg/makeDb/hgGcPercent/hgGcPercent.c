@@ -8,18 +8,23 @@
 #include "cheapcgi.h"
 #include "options.h"
 #include "twoBit.h"
+#include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.17 2005/02/17 19:55:52 aamp Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.18 2005/03/20 19:31:30 daryl Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
 boolean noLoad = FALSE;		/* Suppress loading mysql table . */
 char *file = (char *)NULL;	/* file name for output */
 char *chr = (char *)NULL;	/* process only chromosome listed */
+boolean noRandom = FALSE;	/* process only non-random chromosomes  */
 boolean noDots = FALSE;	        /* TRUE == do not display ... progress */
 boolean doGaps = FALSE;	        /* TRUE == process gaps correctly */
 boolean wigOut = FALSE;	        /* TRUE == output wiggle ascii data */
 int overlap = 0;                /* overlap size */
+char *bedRegionInName = NULL;   /* file of regions for calculating gc content */
+char *bedRegionOutName = NULL;  /* output file of regions for gc content */
+FILE *bedRegionOutFile = NULL;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,10 +32,13 @@ static struct optionSpec optionSpecs[] = {
     {"noLoad", OPTION_BOOLEAN},
     {"file", OPTION_STRING},
     {"chr", OPTION_STRING},
+    {"noRandom", OPTION_BOOLEAN},
     {"noDots", OPTION_BOOLEAN},
     {"doGaps", OPTION_BOOLEAN},
     {"overlap", OPTION_INT},
     {"wigOut", OPTION_BOOLEAN},
+    {"bedRegionIn", OPTION_STRING},
+    {"bedRegionOut", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -50,11 +58,14 @@ errAbort(
   "   -noLoad - do not load mysql table - create bed file\n"
   "   -file=<filename> - output to <filename> (stdout OK) (implies -noLoad)\n"
   "   -chr=<chrN> - process only chrN from the nibDir\n"
+  "   -noRandom - ignore randome chromosomes from the nibDir\n"
   "   -noDots - do not display ... progress during processing\n"
   "   -doGaps - process gaps correctly (default: gaps are not counted as GC)\n"
   "   -wigOut - output wiggle ascii data ready to pipe to wigBedToBinary\n"
   "   -overlap=N - overlap windows by N bases (default 0)\n"
-  "   -verbose=N - display details to stderr during processing\n\n"
+  "   -verbose=N - display details to stderr during processing\n"
+  "   -bedRegionIn=input.bed   Read in a bed file for GC content in specific regions and write to bedRegionsOut\n"
+  "   -bedRegionOut=output.bed Write a bed file of GC content in specific regions from bedRegionIn\n\n"
   "example:\n"
   "  calculate GC percent in 5 base windows using a 2bit nib assembly (dp2):\n"
   "  hgGcPercent -wigOut -doGaps -file=stdout -win=5 dp2 \\\n"
@@ -154,30 +165,90 @@ else
 }
 
 
-void makeGcTabFromNib(char *nibFile, char *chrom, FILE *f)
+void writeBedLineCountFromSeq(struct dnaSeq *seq, char *chrom, int start, int end,
+		       FILE *f)
+/* Given a window of sequence, print out a line of BED 5 with the GC counts
+ * in the window. (not percents or parts per thousand)*/
+{
+static int dotMod = 0;
+DNA *dna = seq->dna;
+int minCount = winSize/4;
+int i, count, gcCount, val, gapCount;
+
+if ((++dotMod&127) == 0 && !noDots)
+	{
+	verbose(1, ".");
+	if ((dotMod & 8191) == 0)
+	    verbose(1, "\n");
+	fflush(stdout);
+	}
+gapCount = count = gcCount = 0;
+for (i=0; i < seq->size; ++i)
+    if ((val = ntVal[(int)dna[i]]) >= 0)
+	{
+	++count;
+	if (val == G_BASE_VAL || val == C_BASE_VAL)
+	    ++gcCount;
+	}
+    else
+	++gapCount;
+
+if (doGaps)
+    {
+    if (gapCount < seq->size)
+	fprintf(f, "%s\t%d\t%d\t%d\t%s\n", chrom, start, end, gcCount, "GC");
+    }
+else
+    fprintf(f, "%s\t%d\t%d\t%d\t%s\n", chrom, start, end, gcCount, "GC");
+}
+
+
+void makeGcTabFromNib(char *nibFile, char *chrom, FILE *f, struct bed *bedRegions)
 /* Scan through nib file and write out GC percentage info. */
 {
 int start = 0, end = 0;
 int chromSize;
 FILE *nf = NULL;
 struct dnaSeq *seq = NULL;
+struct bed *bed;
     
 nibOpenVerify(nibFile, &nf, &chromSize);
 seq = nibLdPart(nibFile, nf, chromSize, 0, chromSize);
 
-for (start=0, end=0;  start < chromSize && end < chromSize;  
-     start = end - overlap)
-    {
-    struct dnaSeq *subSeq = NULL;
-    DNA *subSeqDNA = NULL;
-    end = start + winSize;
-    if (end > chromSize)
-        end = chromSize;
-    subSeqDNA = cloneStringZ(seq->dna + start, end - start);
-    subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
-    makeGcLineFromSeq(subSeq, chrom, start, end, f);
-    freeDnaSeq(&subSeq);
-    }
+if (f==NULL)
+    errAbort("No output file");
+
+if (bedRegionInName)
+    for (bed=bedRegions; bed!=NULL; bed=bed->next)
+	{
+	if(differentString(bed->chrom,chrom))
+	    continue;
+	else
+	    {
+	    struct dnaSeq *subSeq = NULL;
+	    DNA *subSeqDNA = NULL;
+	    if (bed->chromEnd > chromSize)
+		bed->chromEnd = chromSize;
+	    subSeqDNA = cloneStringZ(seq->dna + bed->chromStart, bed->chromEnd - bed->chromStart);
+	    subSeq = newDnaSeq(subSeqDNA, bed->chromEnd - bed->chromStart, NULL);
+	    writeBedLineCountFromSeq(subSeq, chrom, bed->chromStart, bed->chromEnd, f);
+	    freeDnaSeq(&subSeq);
+	    }
+	}
+else
+    for (start=0, end=0;  start < chromSize && end < chromSize;  
+	 start = end - overlap)
+	{
+	struct dnaSeq *subSeq = NULL;
+	DNA *subSeqDNA = NULL;
+	end = start + winSize;
+	if (end > chromSize)
+	    end = chromSize;
+	subSeqDNA = cloneStringZ(seq->dna + start, end - start);
+	subSeq = newDnaSeq(subSeqDNA, end - start, NULL);
+	makeGcLineFromSeq(subSeq, chrom, start, end, f);
+	freeDnaSeq(&subSeq);
+	}
 freeDnaSeq(&seq);
 carefulClose(&nf);
 if (!noDots)
@@ -233,6 +304,7 @@ void hgGcPercent(char *database, char *nibDir)
 char *tabFileName = file ? file : "gcPercent.bed";
 FILE *tabFile = mustOpen(tabFileName, "w");
 char twoBitFile[512];
+struct bed *bedRegionList = NULL;
 
 verbose(1, "#\tCalculating gcPercent with window size %d\n", winSize);
 verbose(2, "#\tWriting to tab file %s\n", tabFileName);
@@ -251,6 +323,8 @@ else
         {
 	char dir[256], chrom[128], ext[64];
         splitPath(nibEl->name, dir, chrom, ext);
+	if (noRandom && endsWith(chrom,"random"))
+	    continue;
         if (chr)
 	    {
 	    verbose(2, "#\tchecking name: %s =? %s\n", chrom, chr);
@@ -258,7 +332,26 @@ else
 		continue;
 	    }
 	verbose(1, "#\tProcessing %s\n", nibEl->name);
-	makeGcTabFromNib(nibEl->name, chrom, tabFile);
+
+	if (bedRegionInName)
+	    {
+	    struct lineFile *lf = lineFileOpen(bedRegionInName, TRUE);
+	    struct bed *bed;
+	    char *row[3];
+	    
+	    while (lineFileRow(lf, row))
+		{
+		if (startsWith(row[0],"#"))
+		    continue;
+		bed = bedLoad3(row);
+		slAddHead(&bedRegionList, bed);
+		}
+	    lineFileClose(&lf);
+	    slReverse(bedRegionList);
+	    makeGcTabFromNib(nibEl->name, chrom, bedRegionOutFile, bedRegionList);
+	    }
+	else
+	    makeGcTabFromNib(nibEl->name, chrom, tabFile, NULL);
         }
     slFreeList(&nibList);
     }
@@ -298,6 +391,10 @@ wigOut = optionExists("wigOut");
 overlap = optionInt("overlap", 0);
 file = optionVal("file", NULL);
 chr = optionVal("chr", NULL);
+noRandom = optionExists("noRandom");
+file = optionVal("file", NULL);
+bedRegionInName = optionVal("bedRegionIn", NULL);
+bedRegionOutName = optionVal("bedRegionOut", NULL);
 
 /*	sending output to file implies no loading of DB, and also if the
  *	stated file is "stdout" we should not do ... progress reports
@@ -308,6 +405,11 @@ if (file)
     if (sameString(file,"stdout")) noDots = TRUE;
     }
 
+if (bedRegionOutName)
+    bedRegionOutFile = mustOpen(bedRegionOutName, "w");
+
+if ((bedRegionInName && !bedRegionOutName) || (!bedRegionInName && bedRegionOutName))
+    errAbort("bedRegionIn and bedRegionOut must both be specified");
 
 if (verboseLevel() >= 2)
     {
