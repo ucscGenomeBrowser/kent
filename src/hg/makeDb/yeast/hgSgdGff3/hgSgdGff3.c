@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.2 2003/11/25 20:34:20 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.3 2003/12/01 20:20:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -110,7 +110,7 @@ for (tf = tfList; tf != NULL; tf = nextTf)
     {
     char *type = tf->fields[2];
     nextTf = tf->next;
-    if (sameString("CDS", type)) 
+    if (startsWith("CDS", type) && !sameString("CDS:Pseudogene", type) )
         {
 	/* Write exons to coding output. */
 	if (nextTf == NULL || !sameString("exon", nextTf->fields[2]))
