@@ -110,4 +110,3 @@ for (i = startByte+1; i<endByte; ++i)
 count += bitsInByte[b[endByte] & rightMask[endBits]];
 return count;
 }
-
