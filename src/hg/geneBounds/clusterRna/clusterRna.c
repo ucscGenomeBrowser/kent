@@ -618,11 +618,11 @@ categorizeEsts(eoiList, splicedHash, tailedHash, otherHash);
 /* Load mRNA. */
 refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName, 
 	chrom, TRUE, TRUE);
-mrnaMaList = maFromPslTable(conn, "tightMrna", chromName, 
+mrnaMaList = maFromPslTable(conn, "mrna", chromName, 
 	chrom, FALSE, FALSE);
 
 /* Load ESTs into three separate lists. */
-estPslList = loadPsls(conn, "tightEst", chromName);
+estPslList = loadPsls(conn, "est", chromName);
 splicedEstMaList = maFromSomePsls(estPslList, chromName, 
 	chrom, splicedHash, FALSE, FALSE);
 tailedEstMaList = maFromSomePsls(estPslList, chromName, 
