@@ -7340,6 +7340,11 @@ registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
+/* MGC related */
+registerTrackHandler("mgcNcbiPicks", estMethods);
+registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
+registerTrackHandler("mgcUcscPicks", intronEstMethods);
+
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */

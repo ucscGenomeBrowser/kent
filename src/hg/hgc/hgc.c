@@ -1242,7 +1242,8 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
     type = "non-Human RNA";
     table = track;
     }
-else if (stringIn("est", track) || stringIn("Est", track))
+else if (stringIn("est", track) || stringIn("Est", track) ||
+         (stringIn("mgc", track) && stringIn("Picks", track)))
     {
     type = "EST";
     table = "all_est";
@@ -6256,7 +6257,10 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
 	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
 	sameWord(track, "xenoEst") || sameWord(track, "psu") ||
-	sameWord(track, "tightMrna") | sameWord(track, "tightEst"))
+	sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
+	sameWord(track, "mgcNcbiPicks") ||
+        sameWord(track, "mgcNcbiSplicedPicks") ||
+	sameWord(track, "mgcUcscPicks"))
     {
     doHgRna(tdb, item);
     }
