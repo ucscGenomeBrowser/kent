@@ -264,13 +264,13 @@ shortLabel Pfam Domains
 longLabel Protein Family Domain Structure
 priority 9
 visibility off
-type pfam proteins.pfamXref proteins.pfamDesc
-queryFull select swissDisplayID,description from proteins.pfamXref,proteins.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteins.pfamDesc.pfamAC from proteins.pfamXref,proteins.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissDisplayID from proteins.pfamXref,proteins.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
+type pfam proteome.pfamXref proteome.pfamDesc
+queryFull select swissDisplayID,description from proteome.pfamXref,proteome.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
+queryOne select description,proteome.pfamDesc.pfamAC from proteome.pfamXref,proteome.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+invQueryOne select swissDisplayID from proteome.pfamXref,proteome.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 protKey on
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
-protDb proteins
+protDb proteome
 
 name superfamily
 shortLabel Superfamily
@@ -289,11 +289,11 @@ shortLabel PDB
 longLabel Protein Data Bank
 priority 9.5
 visibility off
-type association proteins.pdbSP
+type association proteome.pdbSP
 protKey on
-queryFull select sp,pdb from proteins.pdbSP
-queryOne select pdb,pdb from proteins.pdbSP where sp = '%s'
-invQueryOne select sp from proteins.pdbSP where pdb = '%s'
+queryFull select sp,pdb from proteome.pdbSP
+queryOne select pdb,pdb from proteome.pdbSP where sp = '%s'
+invQueryOne select sp from proteome.pdbSP where pdb = '%s'
 itemUrl http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s
 search exact
 
