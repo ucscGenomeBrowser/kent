@@ -374,6 +374,8 @@ spectrum on
 type chain hg16
 otherDb hg16
 
+
+
 searchTable affyGnf
 searchMethod exact
 searchType bed
@@ -397,6 +399,14 @@ shortCircuit 1
 termRegex HG-U133:.+
 searchPriority 16
 termPrefix HG-U133:
+
+searchTable miRNA
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex hsa-(mir|let)-.+
+searchPriority 18
+
 
 searchTable uniGene_2
 searchType bed
