@@ -33,22 +33,6 @@ static char *ctWigCountMenu[] =
 };
 static int ctWigCountMenuSize = sizeof(ctWigCountMenu)/sizeof(char *);
 
-struct wiggleStats
-/* linked list of wiggle statistics */
-    {
-    struct wiggleStats *next;  /* Next in singly linked list. */
-    char *chrom;	/* chromosome or contig */
-    unsigned chromStart;    /* Start position, first value */
-    unsigned chromEnd;      /* End position, last value */
-    unsigned span;	/* each value spans this many bases */
-    unsigned count;	/* number of values in this block */
-    double lowerLimit;	/* lowest data value in this block */
-    double dataRange;	/* lowerLimit + dataRange = upperLimit */
-    double mean;	/* mean of data points */
-    double variance;	/* variance of data points */
-    double stddev;	/* standard deviation of data points */
-    };
-
 struct wiggleStats *wigStatsList[2] =
 {
     (struct wiggleStats *) NULL,
@@ -61,29 +45,6 @@ static void printBedEl(struct bed *bedEl)
 {
 printf("%s\t%u\t%u\t%s\t0\t+\n", bedEl->chrom, bedEl->chromStart,
 	bedEl->chromEnd, bedEl->name);
-}
-
-static void freeBedElement(struct bed *bedEl)
-{
-freeMem(bedEl->chrom);
-freeMem(bedEl->name);
-freeMem(bedEl);
-}
-
-static struct bed *bedElement(char *chrom, unsigned start, unsigned end,
-	char *table, unsigned lineCount)
-{
-struct bed *bed;
-char name[128];
-
-AllocVar(bed);
-bed->chrom = cloneString(chrom);
-bed->chromStart = start;
-bed->chromEnd = end;
-snprintf(name, sizeof(name), "%s.%u",
-    table, lineCount);
-bed->name = cloneString(name);
-return bed;
 }
 
 /*********   wiggle compare functions   ***********************************/
@@ -214,22 +175,6 @@ if (strlen(pat)>0)
     }
 }
 
-static void wigStatsCalc(unsigned count, double wigSumData,
-    double wigSumSquares, double *mean, double *variance, double *stddev)
-{
-*mean = 0.0;
-*variance = 0.0;
-*stddev = 0.0;
-if (count > 0)
-    *mean = wigSumData / count;
-if (count > 1)
-    {
-    *variance = (wigSumSquares - ((wigSumData*wigSumData)/count)) / (count-1);
-    if (*variance > 0.0)
-	*stddev = sqrt(*variance);
-    }
-}
-
 static void wigPrintRow(struct wiggleStats *wigStats)
 {
 printf("<TR><TH ALIGN=LEFT> %s </TH>\n", wigStats->chrom);
@@ -270,148 +215,30 @@ else
     return FALSE;
 }
 
-static void wigStatsRow(char *chrom, unsigned start, unsigned end,
-    int span, unsigned count, double wigUpperLimit, double wigLowerLimit,
-    double mean, double variance, double stddev, int tableId)
+static void wigMarkDone(int tableId, char *chrom)
 {
-struct wiggleStats *wigStats = (struct wiggleStats *) NULL;
-
-AllocVar(wigStats);
-wigStats->chrom = cloneString(chrom);
-wigStats->chromStart = start;
-wigStats->chromEnd = end;
-wigStats->span = span;
-wigStats->count = count;
-wigStats->lowerLimit = wigLowerLimit;
-wigStats->dataRange = wigUpperLimit - wigLowerLimit;
-wigStats->mean = mean;
-wigStats->variance = variance;
-wigStats->stddev = stddev;
-slAddHead(&wigStatsList[tableId],wigStats);
-
-/*	there can be more than one row of stats for a chrom: other spans */
-
 if ((struct hash *)NULL == chromsDone[tableId])
     chromsDone[tableId] = newHash(0);
 if ( (struct hashEl *)NULL == hashLookup(chromsDone[tableId],chrom))
     hashAdd(chromsDone[tableId],chrom,NULL);
 }
 
-static void wigProcessData(struct wiggleData *wigData, char *table, int tableId,
-	char *chrom, boolean createBedList)
+void wigMakeBedList(char *database, char *table, char *chrom, 
+	char *constraints, int tableId)
 {
-unsigned span = 0;
-double wigLowerLimit = 1.0e+300;
-double wigUpperLimit = -1.0e+300;
-double wigSumData = 0.0;
-double wigSumSquares = 0.0;
-unsigned count = 0;
-unsigned chromStart = BIGNUM;
-unsigned chromEnd = 0;
-struct wiggleData *wdPtr;
-double mean;
-double variance;
-double stddev;
-unsigned bedElStart = 0;
-unsigned bedElEnd = 0;
-unsigned bedLineCount = 0;
 char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
 unsigned maxLinesOut = MAX_LINES_OUT;
 
 if (setting != (char *) NULL)
     maxLinesOut = sqlUnsigned(setting);
 
-for (wdPtr = wigData; wdPtr != (struct wiggleData *) NULL;
-	    wdPtr= wdPtr->next)
-    {
-    if (span != wdPtr->span)
-	{
-	if (span > 0)	/*	encountered next span	*/
-	    {
-	    wigStatsCalc(count, wigSumData, wigSumSquares,
-		    &mean, &variance, &stddev);
-	    wigStatsRow(chrom, chromStart, chromEnd, span, count,
-		wigUpperLimit, wigLowerLimit, mean, variance, stddev,
-		    tableId);
-	    }
-	span = wdPtr->span;
-	wigLowerLimit = 1.0e+300;
-	wigUpperLimit = -1.0e+300;
-	wigSumData = 0.0;
-	wigSumSquares = 0.0;
-	count = 0;
-	chromStart = BIGNUM;
-	chromEnd = 0;
-	}
-    wigSumData += wdPtr->sumData;
-    wigSumSquares += wdPtr->sumSquares;
-    count += wdPtr->count;
-    if (wdPtr->lowerLimit < wigLowerLimit)
-	    wigLowerLimit = wdPtr->lowerLimit;
-    if (wdPtr->lowerLimit+wdPtr->dataRange > wigUpperLimit)
-	    wigUpperLimit = wdPtr->lowerLimit+wdPtr->dataRange;
-    if (wdPtr->chromStart < chromStart)
-	    chromStart = wdPtr->chromStart;
-    if (wdPtr->chromEnd > chromEnd)
-	    chromEnd = wdPtr->chromEnd;
-    if (createBedList && wdPtr->data)
-	{
-	struct wiggleDatum *wd = wdPtr->data;
-	int i;
-	for (i = 0; (i < wdPtr->count); ++i)
-	    {
-	    if (wd->chromStart == bedElEnd)
-		bedElEnd += wdPtr->span;
-	    else if (wd->chromStart < bedElEnd) /* do not start */
-		break;	/* over again (do not repeat for next span) */
-	    else if (bedLineCount > maxLinesOut)
-		break;			/* too many */
-	    else
-		{
-		if (bedElEnd > bedElStart)
-		    {
-		    struct bed *bedEl;
-		    bedEl = bedElement(chrom, bedElStart, bedElEnd,
-			table, ++bedLineCount);
-		    slAddHead(&bedListWig[tableId], bedEl);
-		    }
-		bedElStart = wd->chromStart;
-		bedElEnd = bedElStart + wdPtr->span;
-		}
-	    ++wd;
-	    }
-	}
-    }
-/*	last bed line perhaps	*/
-if (createBedList && (bedElEnd > bedElStart))
-    {
-    struct bed *bedEl;
-    bedEl = bedElement(chrom, bedElStart, bedElEnd,
-	table, ++bedLineCount);
-    slAddHead(&bedListWig[tableId], bedEl);
-    }
-
-if (span > 0)	/*	check that yes data was encountered */
-    {
-    wigStatsCalc(count, wigSumData, wigSumSquares,
-	&mean, &variance, &stddev);
-    wigStatsRow(chrom, chromStart, chromEnd, span, count,
-	wigUpperLimit, wigLowerLimit, mean, variance, stddev,
-	    tableId);
-    }
-
-}	/*	static void wigProcessData()	*/
-
-void wigMakeBedList(char *database, char *table, char *chrom, 
-	char *constraints, int tableId)
-{
 if ( ! wigStatsDone(tableId, chrom))
     {
     wigData[tableId] = wigFetchData(database, table, chrom, winStart, winEnd,
-	WIG_ALL_DATA, WIG_RETURN_DATA, tableId, wiggleCompare[tableId],
-	    constraints);
-    wigProcessData(wigData[tableId], table, tableId, chrom, TRUE);
-    wigFreeData(&wigData[tableId]);
+	WIG_ALL_DATA, WIG_DATA_NOT_RETURNED, tableId, wiggleCompare[tableId],
+	    constraints, &bedListWig[tableId], maxLinesOut,
+		&wigStatsList[tableId]);
+    wigMarkDone(tableId, chrom);
     }
 }
 
@@ -425,7 +252,12 @@ struct sqlResult *sr = (struct sqlResult *)NULL;
 char query[256];
 char **row = (char **)NULL;
 char wigFullTableName[256];
+char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
+unsigned maxLinesOut = MAX_LINES_OUT;
+int numChroms = 0;
 
+if (setting != (char *) NULL)
+    maxLinesOut = sqlUnsigned(setting);
 
 if (tableIsSplit)
     {
@@ -470,6 +302,7 @@ printf("<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
 printf("<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
 printf("<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
 
+numChroms = slCount(chromList);
 for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
@@ -479,11 +312,17 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 
     if ( ! wigStatsDone(tableId, chrom))
 	{
+	if (numChroms > 1)
 	wigData[tableId] = wigFetchData(database, wigFullTableName, chrom,
-	    winStart, winEnd, WIG_ALL_DATA, WIG_RETURN_DATA, tableId,
-		wiggleCompare[tableId], constraints);
-	wigProcessData(wigData[tableId], table, tableId, chrom, FALSE);
-	wigFreeData(&wigData[tableId]);
+	    winStart, winEnd, WIG_SUMMARY_ONLY, WIG_DATA_NOT_RETURNED, tableId,
+		wiggleCompare[tableId], constraints, (struct bed **)NULL,
+		    maxLinesOut, &wigStatsList[tableId]);
+	else
+	wigData[tableId] = wigFetchData(database, wigFullTableName, chrom,
+	    winStart, winEnd, WIG_ALL_DATA, WIG_DATA_NOT_RETURNED, tableId,
+		wiggleCompare[tableId], constraints, (struct bed **)NULL,
+		    0, &wigStatsList[tableId]);
+	wigMarkDone(tableId, chrom);
 	}
 
     if (wigStatsDone(tableId, chrom))
@@ -618,7 +457,12 @@ boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt);
 char *constraints;
 char *setting = cartCgiUsualString(cart, "tbWigCount", ctWigCountMenu[1]);
 unsigned maxLinesOut = MAX_LINES_OUT;
-unsigned bedLineCount = 0;
+char *longLabel = cloneString("User Supplied Track");
+char *ctDesc = cgiUsualString("tbCtDesc", table);
+char *ctName = cgiUsualString("tbCtName", table);
+char *ctVis  = cgiUsualString("tbCtVis", "hide");
+char tableName[128];
+char *visibility;
 
 if (! sameString(customTrackPseudoDb, db))
     {
@@ -640,46 +484,79 @@ if ((constraints != NULL) && (constraints[0] == 0))
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
+if (differentWord(ctName,table) )
+    snprintf(tableName, sizeof(tableName), "%s", ctName);
+else
+    snprintf(tableName, sizeof(tableName), "tb_%s", table);
+
+if (ctDesc != (char *)NULL)
+    {
+    freeMem(longLabel);
+    longLabel = cloneString(ctDesc);
+    }
+
+if (ctVis != (char *)NULL)
+    visibility = cloneString(ctVis);
+else
+    visibility = cloneString("hide");
+
 if (allGenome)
     chromList = getOrderedChromList();
 else
     chromList = newSlName(chrom);
+
+if (doCtHdr && wigBED)
+    {
+    printf("track name=%s description=\"%s\" "
+	"visibility=%s\n", tableName, longLabel, visibility);
+    }
+showConstraints(constraints, WIG_TABLE_1);
 
 for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
     char wigFullTableName[256];
+    int bedLength = 0;
 
     getFullTableName(wigFullTableName, chrom, table);
 
-    wigData = wigFetchData(database, table, chrom, winStart, winEnd,
-	WIG_ALL_DATA, WIG_RETURN_DATA, WIG_TABLE_1,
-	    wiggleCompare[WIG_TABLE_1], constraints);
+    if (wigBED)
+	{
+	wigData = wigFetchData(database, table, chrom, winStart, winEnd,
+	    WIG_ALL_DATA, WIG_DATA_NOT_RETURNED, WIG_TABLE_1,
+		wiggleCompare[WIG_TABLE_1], constraints,
+		    &bedListWig[WIG_TABLE_1], maxLinesOut,
+			(struct wiggleStats **)NULL);
+	wigMarkDone(WIG_TABLE_1, chrom);
+	bedLength = slCount(bedListWig[WIG_TABLE_1]);
+	}
+    else
+	{
+	wigData = wigFetchData(database, table, chrom, winStart, winEnd,
+	    WIG_ALL_DATA, WIG_RETURN_DATA, WIG_TABLE_1,
+		wiggleCompare[WIG_TABLE_1], constraints,
+		    (struct bed **)NULL, maxLinesOut,
+			(struct wiggleStats **)NULL);
+	wigMarkDone(WIG_TABLE_1, chrom);
+	}
 
     if (wigData)
 	{
 	unsigned span = 0;
 	char *chrom = (char *) NULL;
-	char *longLabel;
-	char tableName[128];
-	char *visibility;
 	unsigned char colorR, colorG, colorB;
 	unsigned char altColorR, altColorG, altColorB;
 	float priority;
 	int wordCount;
 	char *words[128];
 	char *trackType = (char *) NULL;
-	char *ctName = cgiUsualString("tbCtName", table);
-	char *ctDesc = cgiUsualString("tbCtDesc", table);
-	char *ctVis  = cgiUsualString("tbCtVis", "full");
-	unsigned bedElStart = 0;
-	unsigned bedElEnd = 0;
 	boolean nextSpan = FALSE;
 
 	if (tdb && tdb->type)
 	    {
 	    char *typeLine = cloneString(tdb->type);
+	    freeMem(longLabel);
 	    longLabel = cloneString(tdb->longLabel);
 	    priority = tdb->priority;
 	    wordCount = chopLine(typeLine,words);
@@ -688,28 +565,14 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 	    colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
 	    altColorR = tdb->altColorR; altColorG = tdb->altColorG;
 	    altColorB = tdb->altColorB;
-	    if (ctVis != (char *)NULL)
-		visibility = cloneString(ctVis);
-	    else
-		visibility = cloneString("full");
-	    if (differentWord(ctName,table) )
-		snprintf(tableName, sizeof(tableName), "%s", ctName);
-	    else
-		snprintf(tableName, sizeof(tableName), "tb_%s", table);
-	    if (ctDesc != (char *)NULL)
-		{
-		freeMem(longLabel);
-		longLabel = cloneString(ctDesc);
-		}
 	    }
 	else
 	    {
 	    priority = 42;
+	    freeMem(longLabel);
 	    longLabel = cloneString("User Supplied Track");
 	    colorR = colorG = colorB = 255;
 	    altColorR = altColorG = altColorB = 128;
-	    visibility = cloneString("full");
-	    snprintf(tableName, sizeof(tableName), "User Track");
 	    }
 
 	if (doCtHdr && (!wigBED))
@@ -719,12 +582,6 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		"priority=%g\n", tableName, longLabel, visibility,
 		colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
 	    }
-	else if (doCtHdr && wigBED)
-	    {
-	    printf("track name=%s description=\"%s\" "
-		"visibility=%s\n", tableName, longLabel, visibility);
-	    }
-	showConstraints(constraints, WIG_TABLE_1);
 
 	for (wdPtr = wigData; (linesOutput < maxLinesOut) &&
 		(wdPtr != (struct wiggleData *) NULL); wdPtr= wdPtr->next)
@@ -753,52 +610,25 @@ for (chromPtr=chromList;  chromPtr != NULL && (linesOutput < maxLinesOut);
 		struct wiggleDatum *wd = wdPtr->data;
 		int i;
 		for (i = 0; (!nextSpan) && (linesOutput < maxLinesOut) &&
-			    (i < wdPtr->count); ++i)
+			    (i < wdPtr->count); ++i, ++wd)
 		    {
-		    if (!nextSpan && wigBED)
-			{
-			if (wd->chromStart == bedElEnd)
-			    bedElEnd += wdPtr->span;
-			else if (wd->chromStart < bedElEnd) /* do not start */
-			    {
-			    nextSpan = TRUE;
-			    break;	/* over again (do not repeat for next span) */
-			    }
-			else
-			    {
-			    if (bedElStart | bedElEnd)
-				{
-				struct bed *bedEl;
-				bedEl = bedElement(chrom, bedElStart, bedElEnd,
-				    table, ++bedLineCount);
-				printBedEl(bedEl);
-				++linesOutput;
-				freeBedElement(bedEl);
-				}
-			    bedElStart = wd->chromStart;
-			    bedElEnd = bedElStart + wdPtr->span;
-			    }
-			}
-		    else
-			{
-			printf("%u\t%g\n", wd->chromStart+1, wd->value);
-			++linesOutput;
-			}
-		    ++wd;
+		    printf("%u\t%g\n", wd->chromStart+1, wd->value);
+		    ++linesOutput;
 		    }
+		}
+	    else if (bedLength > 0)
+		{
+		struct bed *bedEl = bedListWig[WIG_TABLE_1];
+		for ( ; linesOutput < maxLinesOut && bedEl;
+			bedEl = bedEl->next)
+		    {
+		    printBedEl(bedEl);
+		    ++linesOutput;
+		    }
+		bedFreeList(&bedListWig[WIG_TABLE_1]);
 		}
 	    else
 		printf("#\tno data in this block ?  (may be a data table ERROR)\n");
-	    }
-	if (wigBED && (bedElStart | bedElEnd))
-	    /* last one perhaps */
-	    {
-	    struct bed *bedEl;
-	    bedEl = bedElement(chrom, bedElStart, bedElEnd,
-		table, ++bedLineCount);
-	    printBedEl(bedEl);
-	    ++linesOutput;
-	    freeBedElement(bedEl);
 	    }
 	wigFreeData(&wigData);
 	}
