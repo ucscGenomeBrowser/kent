@@ -1,6 +1,6 @@
 track cytoBandIdeo
-shortLabel Chromosome Band
-longLabel Chromosome Bands
+shortLabel Chromosome Band (Low-res)
+longLabel Chromosome Bands (Low-resolution for Chromosome Ideogram)
 group map
 priority .1
 visibility dense
