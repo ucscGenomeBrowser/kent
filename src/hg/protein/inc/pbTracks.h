@@ -13,7 +13,7 @@
 
 #define MAX_PB_ORG 50		/* max number of oganisms that support PB */
 
-#define GLOBAL_PB_DB "proteins"
+#define GLOBAL_PB_DB "proteome"
 
 #ifndef VGFX_H
 #include "vGfx.h"
