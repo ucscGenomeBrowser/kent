@@ -120,10 +120,11 @@
 #include "encodeErge.h"
 #include "encodeErgeHssCellLines.h"
 #include "sgdDescription.h"
+#include "sgdClone.h"
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.548 2004/01/15 16:33:59 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.549 2004/01/17 20:07:41 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12715,6 +12716,34 @@ genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
 }
 
+static void doSgdClone(struct trackDb *tdb, char *item)
+/* Display information about other Sacchromyces Genome Database
+ * other (not-coding gene) info. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dyString *dy = dyStringNew(1024);
+
+if (sqlTableExists(conn, "sgdClone"))
+    {
+    /* print out url with ATCC number */
+    struct sgdClone sgd;
+    struct sqlResult *sr;
+    char query[256], **row;
+    safef(query, sizeof(query),
+    	"select * from sgdClone where name = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	sgdCloneStaticLoadWBin(row, &sgd);
+	dyStringPrintf(dy, "<B>ATCC catalog number:</B> %s <BR>\n", sgd.atccName);
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+genericClickHandlerPlus(tdb, item,  NULL, dy->string);
+dyStringFree(&dy);
+}
+
 static void doSimpleDiff(struct trackDb *tdb, char *otherOrg)
 /* Print out simpleDiff info. */
 {
@@ -13361,6 +13390,10 @@ else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVi
 	 sameWord(track, "encodeErgeSummary"))
     {
     doEncodeErge(tdb, item);
+    }
+else if(sameWord(track, "sgdClone"))
+    {
+    doSgdClone(tdb, item);
     }
 else if (sameWord(track, "sgdOther"))
     {
