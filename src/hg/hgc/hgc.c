@@ -9312,7 +9312,7 @@ else if (sameWord(track, "blastzMmHg12"))
     {
     doBlatHuman12(tdb, item);
     }
-else if (sameWord(track, "blastzBestHuman"))
+else if (startsWith("blastz", track) && stringIn("Human", track))
     {
     doBlatHuman(tdb, item);
     }
