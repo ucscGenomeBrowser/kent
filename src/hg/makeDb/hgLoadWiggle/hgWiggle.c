@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.15 2004/08/11 18:56:25 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.16 2004/08/11 21:55:05 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -25,6 +25,7 @@ static char *db = NULL;			/* database specification	*/
 static char *chr = NULL;		/* work on this chromosome only */
 static char *chromLst = NULL;	/*	file with list of chroms to process */
 static char *position = NULL;	/*	to specify a range on a chrom */
+static char *bedFile = NULL;	/*	to constrain via bedFile */
 static unsigned winStart = 0;	/*	from the position specification */
 static unsigned winEnd = 0;	/*	from the position specification */
 
@@ -34,6 +35,7 @@ static struct optionSpec optionSpecs[] = {
     {"chr", OPTION_STRING},
     {"chromLst", OPTION_STRING},
     {"position", OPTION_STRING},
+    {"bedFile", OPTION_STRING},
     {"dataConstraint", OPTION_STRING},
     {"noAscii", OPTION_BOOLEAN},
     {"doStats", OPTION_BOOLEAN},
@@ -58,7 +60,8 @@ errAbort(
   "options:\n"
   "   -db=<database> - use specified database\n"
   "   -chr=chrN - examine data only on chrN\n"
-  "   -position=start-end - examine data in window start-end (1-relative)\n"
+  "   -position=[chrN:]start-end - examine data in window start-end (1-relative)\n"
+  "             (the chrN: is optional)\n"
   "   -chromLst=<file> - file with list of chroms to examine\n"
   "   -noAscii - do *not* perform the default ascii output\n"
   "   -doStats - perform stats measurement\n"
@@ -67,6 +70,7 @@ errAbort(
   "   -fetchNothing - scanning data only, *NOT* preparing result\n"
   "   -timing - display timing statistics\n"
   "   -skipDataRead - do not read the .wib data (for no-read speed check)\n"
+  "   -bedFile=<file> - constrain output to ranges specified in bed <file>\n"
   "   -dataConstraint='DC' - where DC is one of < = >= <= == != 'in range'\n"
   "   -ll=<F> - lowerLimit compare data values to F (float) (all but 'in range')\n"
   "   -ul=<F> - upperLimit compare data values to F (float)\n\t\t(need both ll and ul when 'in range')\n"
@@ -74,7 +78,9 @@ errAbort(
   "   example using the file gc5Base.wig:\n"
   "                hgWiggle -chr=chrM gc5Base\n"
   "   example using the database table hg17.gc5Base:\n"
-  "                hgWiggle -chr=chrM -db=hg17 gc5Base"
+  "                hgWiggle -chr=chrM -db=hg17 gc5Base\n"
+  "   the case of multiple track names is most appropriate with .wig files\n"
+  "        it will work with a database, but doesn't make much sense."
   );
 }
 
@@ -82,7 +88,8 @@ static void hgWiggle(struct wiggleDataStream *wDS, int trackCount,
 	char *tracks[])
 /* hgWiggle - dump wiggle data from database or .wig file */
 {
-struct slName *chromList = NULL;	/*	 list of chroms to process */
+struct slName *chromList = NULL;	/*	list of chroms to process */
+struct bed *bedList = NULL;		/*	from bedFile if there is one */
 int i;
 long startClock;
 long endClock;
@@ -132,7 +139,7 @@ for (i=0; i<trackCount; ++i)
     for (chromPtr=chromList;  (once == 1) || (chromPtr != NULL); )
 	{
 	long chrStartClock = clock1000();
-	int whatToDo = wigFetchAscii;
+	int operations = wigFetchAscii;
 
 	if (chromPtr)
 	    {
@@ -140,17 +147,26 @@ for (i=0; i<trackCount; ++i)
 	    verbose(2,"#\tchrom: %s\n", chromPtr->name);
 	    }
 
-
 	if (noAscii)
-		whatToDo &= ~wigFetchAscii;
+		operations &= ~wigFetchAscii;
 	if (doStats)
-		whatToDo |= wigFetchStats;
+		operations |= wigFetchStats;
 	if (doBed)
-		whatToDo |= wigFetchBed;
+		operations |= wigFetchBed;
 	if (fetchNothing)
-		whatToDo |= wigFetchNoOp;
+		operations |= wigFetchNoOp;
 
-	wDS->getData(wDS, db, tracks[i], whatToDo);
+	if (bedFile)
+	    {
+	    if (wDS->chrName)
+		bedList = bedLoadNAllChrom(bedFile, 3, wDS->chrName);
+	    else
+		errAbort("can not do bedList option without a chrom specified");
+	    wDS->getDataViaBed(wDS, db, tracks[i], operations, &bedList);
+	    bedFreeList(&bedList);
+	    }
+	else
+	    wDS->getData(wDS, db, tracks[i], operations);
 
 	if (!silent)
 	    {
@@ -226,12 +242,12 @@ static char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
 
 optionInit(&argc, argv, optionSpecs);
 
-wDS = newWigDataStream();
 
 db = optionVal("db", NULL);
 chr = optionVal("chr", NULL);
 chromLst = optionVal("chromLst", NULL);
 position = optionVal("position", NULL);
+bedFile = optionVal("bedFile", NULL);
 dataConstraint = optionVal("dataConstraint", NULL);
 noAscii = optionExists("noAscii");
 doStats = optionExists("doStats");
@@ -254,6 +270,10 @@ if (chromLst && chr)
     warn("ERROR: both specified: -chr=%s and -chromLst=%s", chr, chromLst);
     errAbort("ERROR: specify only one of -chr or -chromLst but not both");
     }
+
+/*	create the object here to allow constraint settings	*/
+wDS = newWigDataStream();
+
 if (chr)
     {
     wDS->setChromConstraint(wDS, chr);
@@ -264,6 +284,23 @@ if (position)
     char *startEnd[2];
     char *stripped = stripCommas(position);
     
+    /*	allow chrN: or not	*/
+    if (2 == chopByChar(stripped, ':', startEnd, 2))
+	{
+	if (chr)
+	    {
+	    if (differentString(chr, startEnd[0]))
+		{
+	warn("different chroms specified via -chr and -position arguments\n");
+	warn("uncertain which one it should be: %s vs. %s\n", chr, startEnd[0]);
+		usage();
+		}
+	    }
+	    else
+		chr = cloneString(startEnd[0]);
+	freeMem(stripped);
+	stripped = stripCommas(startEnd[1]);
+	}
     if (2 != chopByChar(stripped, '-', startEnd, 2))
 	errAbort("can not parse position: '%s'", position);
     winStart = sqlUnsigned(startEnd[0]) - 1;	/* !!! 1-relative coming in */
@@ -291,6 +328,11 @@ if (span)
     wDS->setSpanConstraint(wDS, span);
     verbose(2, "#\tspan constraint: %u\n", wDS->spanLimit);
     }
+
+if (bedFile)
+    verbose(2, "#\twill constrain to ranges specified in bed file: %s\n",
+	bedFile);
+
 if (dataConstraint)
     {
     if (sameString(dataConstraint, "in range"))
