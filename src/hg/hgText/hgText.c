@@ -797,9 +797,9 @@ if (tableIsPositional)
     {
     puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
     puts("Note: Output Format must be FASTA, BED, Hyperlinks or GTF \n"
-	 "for this feature.  (Tab-separated dumps are not supported.) <P>");
+	 "for this feature.  <P>");
     categorizeTables(&posTableList, &nonposTableList);
-    puts("Choose a positional table:");
+    puts("Choose a second table:");
     puts("<SELECT NAME=table2 SIZE=1>");
     printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
     printSelectOptions(posTableList, "table2");
@@ -2637,7 +2637,7 @@ boolean gotFirst;
 
 webStart(cart, "Table Browser: %s: %s", freezeName, intersectOptionsPhase);
 checkTableExists(fullTableName);
-if (sameString("Choose table", table2))
+if (table2 == NULL)
     webAbort("Missing table selection",
 	     "Please choose a table and try again.");
 getFullTableName(fullTableName2, chrom, table2);
@@ -2648,7 +2648,8 @@ if (! sameString(outputType, seqOptionsPhase) &&
     ! sameString(outputType, bedOptionsPhase) &&
     ! sameString(outputType, linksPhase) &&
     ! sameString(outputType, gffPhase))
-    webAbort("Error", "Output format \"%s\" is not supported for intersection of tables.", outputType);
+    webAbort("Error", "Please choose one of the supported output formats "
+	     "(FASTA, BED, HyperLinks or GTF) for intersection of tables.");
 
 puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);
