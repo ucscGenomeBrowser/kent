@@ -1521,7 +1521,6 @@ int subOffset, subSize, nextOffset;
 DNA saveEnd, *endPos;
 struct ssBundle *oneBunList = NULL, *bigBunList = NULL, *bun;
 struct hash *bunHash = newHash(8);
-int pieceCount = 0;
 
 for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     {
@@ -1558,7 +1557,6 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     gfClumpFreeList(&clumpList);
     gfRangeFreeList(&rangeList);
     *endPos = saveEnd;
-    ++pieceCount;
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
@@ -1587,7 +1585,6 @@ int subOffset, subSize, nextOffset;
 DNA saveEnd, *endPos;
 struct ssBundle *oneBunList = NULL, *bigBunList = NULL, *bun;
 struct hash *bunHash = newHash(8);
-int pieceCount = 0;
 
 for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     {
@@ -1618,12 +1615,10 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     oneBunList = gfTransTransFindBundles(gfs, &subQuery, t3Hash, qIsRc, minScore, qIsRna);
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     *endPos = saveEnd;
-    ++pieceCount;
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    if (pieceCount > 1)
-	ssStitch(bun, ffCdna);
+    ssStitch(bun, ffCdna);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, outData, qIsRc, stringency, minScore, outFunction);
     }
