@@ -417,12 +417,14 @@ if (strand == '-')
     {
     for (i=0; i<(exonCount-2); i++)
     	{
+    	//printf("<br>%d %d %d\n", i, prevGBStartPos, blockGenomeStartPositive[exonCount-1]);fflush(stdout); 
     	if ((prevGBStartPos < blockGenomeStartPositive[i]) &&
             (prevGBStartPos > blockGenomeEndPositive[i+1]) )
 	    {
 	    iPrevExon = i;
 	    jPrevExonPos = blockStartPositive[i+1];
 	    }
+    	//printf("<br>%d %d %d\n", i, iPrevExon, jPrevExonPos); fflush(stdout);
     	}
 
     // handle special cases at both ends when previous GB position is outside CDS
@@ -482,7 +484,7 @@ for (j = 0; j < mrnaLen; j++)
 	{
     	currentPos = blockGenomeStartPositive[exonNumber-1]+(j - blockStartPositive[exonNumber-1])+1;
     	}
-
+    //printf("<br>currentPos=%d\n", currentPos);fflush(stdout);
     if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
 	{
         jcnt++;
@@ -686,7 +688,8 @@ else
 	}
     else
 	{
-    	vgTextCentered(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
+    	//vgTextCentered(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
+    	vgTextRight(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
     	}
     }
 
@@ -1241,7 +1244,9 @@ if (mrnaID != NULL)
 	{
 	prevGBOffsetSav = calPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
 	trackOrigOffset = prevGBOffsetSav;
-    	}
+    	if (trackOrigOffset > (protSeqLen*pbScale - 600))
+	    trackOrigOffset = protSeqLen*pbScale - 600;
+	}
     }
 
 pixWidth = 160+ protSeqLen*pbScale;
@@ -1256,6 +1261,7 @@ if ((protSeqLen*pbScale - trackOrigOffset) < MAX_PB_PIXWIDTH)
     }
 
 if (pixWidth < 550) pixWidth = 550;
+
 insideWidth = pixWidth-gfxBorder;
 
 pixHeight = 260;
