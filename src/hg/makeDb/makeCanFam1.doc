@@ -978,12 +978,15 @@ axtChain $1 \
 # MAKE VSHG17 DOWNLOADABLES (DONE 7/27/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/bed/blastz.hg17/axtChain
-    ln all.chain human.chain
-    foreach f (human.chain human.net)
-      gzip -c $f > $f.gz
+    gzip -c all.chain > /cluster/data/canFam1/zip/human.chain.gz
+    gzip -c human.net > /cluster/data/canFam1/zip/human.net.gz
+    # Added 9/15/04:
+    mkdir /cluster/data/canFam1/zip/axtNet
+    foreach f (../axtNet/chr*.axt)
+      gzip -c $f > /cluster/data/canFam1/zip/axtNet/$f:t.gz
     end
-    rm human.chain
-    # Make chain-format of raw alignments 
+    
+    # Make chain-format of raw alignments -- special request by Broad
     cd /cluster/data/canFam1/bed/blastz.hg17
     mkdir blastzECF
     foreach f (axtChrom/chr*.axt.gz)
@@ -996,8 +999,9 @@ axtChain $1 \
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsHg17
     cd /usr/local/apache/htdocs/goldenPath/canFam1/vsHg17
-    mv /cluster/data/canFam1/bed/blastz.hg17/axtChain/human*.gz .
-    md5sum *.gz > md5sum.txt
+    mv /cluster/data/canFam1/zip/human*.gz .
+    mv /cluster/data/canFam1/zip/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
     # Not for pushing -- handle separately.
     mv /cluster/data/canFam1/bed/blastz.hg17/blastzECF .
@@ -1146,12 +1150,14 @@ axtChain $1 \
 # MAKE VSMM5 DOWNLOADABLES (DONE 7/28/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/bed/blastz.mm5/axtChain
-    ln all.chain mouse.chain
-    foreach f (mouse.chain mouse.net)
-      gzip -c $f > $f.gz
+    gzip -c all.chain > /cluster/data/canFam1/zip/mouse.chain.gz
+    gzip -c mouse.net > /cluster/data/canFam1/zip/mouse.net.gz
+    # Added 9/15/04:
+    mkdir /cluster/data/canFam1/zip/axtNet
+    foreach f (../axtNet/chr*.axt)
+      gzip -c $f > /cluster/data/canFam1/zip/axtNet/$f:t.gz
     end
-    rm mouse.chain
-    # Make chain-format of raw alignments 
+    # Make chain-format of raw alignments -- special request by Broad
     cd /cluster/data/canFam1/bed/blastz.mm5
     mkdir blastzECF
     foreach f (axtChrom/chr*.axt)
@@ -1163,7 +1169,8 @@ axtChain $1 \
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsMm5
     cd /usr/local/apache/htdocs/goldenPath/canFam1/vsMm5
-    mv /cluster/data/canFam1/bed/blastz.mm5/axtChain/mouse*.gz .
+    mv /cluster/data/canFam1/zip/mouse*.gz .
+    mv /cluster/data/canFam1/zip/axtNet .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
     # Not for pushing -- handle separately.
