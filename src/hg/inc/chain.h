@@ -4,7 +4,6 @@
 
 #ifndef CHAIN_H
 #define CHAIN_H
-#include "chainBlock.h"
 
 void chainStaticLoad(char **row, struct chain *ret);
 /* Load a row from chain table into ret.  The contents of ret will
@@ -40,11 +39,6 @@ void chainOutput(struct chain *el, FILE *f, char sep, char lastSep);
 /* Print out chain as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
-struct chain *chainLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all chain from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
- * Dispose of this with chainFreeList(). */
 
 #endif /* CHAIN_H */
 
