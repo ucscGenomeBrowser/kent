@@ -1,5 +1,6 @@
 /* hgText - a.k.a. Table Browser. */
 #include "common.h"
+#include "obscure.h"
 #include "hCommon.h"
 #include "linefile.h"
 #include "cheapcgi.h"
@@ -27,7 +28,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.99 2003/10/15 03:58:28 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.100 2003/10/20 22:05:18 braney Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -329,7 +330,7 @@ void positionLookup(char *phase)
 if (position == NULL || position[0] == 0)
     position = cloneString("genome");
 
-cgiMakeTextVar("position", position, 30);
+cgiMakeTextVar("position", addCommasToPos(position), 30);
 cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
@@ -387,7 +388,7 @@ if (tableIsPositional)
 	puts("</TT>)<P>");
 	}
     else
-	printf("position: %s<P>\n", position);
+	printf("position: %s<P>\n", addCommasToPos(position));
     }
 printf("<A HREF=\"%s?hgsid=%d&phase=table&tbPosOrKeys=pos\">New query</A><P>",
        hgTextName(), cartSessionId(cart));
@@ -742,7 +743,7 @@ char *getPosition(char **retChrom, int *retStart, int *retEnd)
 /* Get position from cgi (not cart); use hgFind if necessary; return NULL 
  * if we had to display the gateway page or hgFind's selection page. */
 {
-char *pos = cloneString(cgiOptionalString("position"));
+char *pos = stripCommas(cgiOptionalString("position"));
 char rawPos[64];
 
 if ((pos != NULL) && (pos[0] != 0))
