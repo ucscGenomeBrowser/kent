@@ -453,6 +453,130 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
+boolean childMatch(struct elChild *children, struct element *el)
+/* Return TRUE if any of children are el. */
+{
+struct elChild *ec;
+for (ec = children; ec != NULL; ec = ec->next)
+    {
+    if (ec->el == el)
+	return TRUE;
+    }
+return FALSE;
+}
+
+boolean anyParent(struct element *elList, struct element *child)
+/* Return TRUE if anybody in elList could be a parent to child. */
+{
+struct element *el;
+struct elChild *ec;
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (childMatch(el->children, child))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void startHandler(struct element *elList, FILE *f)
+/* Create function that gets called by expat at start of tag. */
+{
+struct element *el;
+struct attribute *att;
+
+fprintf(f, "void *%sStartHandler(struct xap *xp, char *name, char **atts)\n", prefix);
+fprintf(f, "/* Called by expat with start tag.  Does most of the parsing work. */\n");
+fprintf(f, "{\n");
+fprintf(f, "struct xapStack *st = xp->stack+1;\n");
+fprintf(f, "int depth = xp->stackDepth;\n");
+fprintf(f, "int i;\n");
+fprintf(f, "\n");
+for (el = elList; el != NULL; el = el->next)
+    {
+    fprintf(f, "%sif (sameString(name, \"%s\"))\n", (el == elList ? "" : "else "), el->name);
+    fprintf(f, "    {\n");
+    fprintf(f, "    struct %s *obj;\n", el->mixedCaseName);
+    fprintf(f, "    AllocVar(obj);\n");
+    if (el->attributes != NULL)
+        {
+	boolean first = TRUE;
+	for (att = el->attributes; att != NULL; att = att->next)
+	    {
+	    if (att->usual != NULL)
+		{
+		char *quote = "\"";
+		if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"));
+		    quote = "";
+	        fprintf(f, "    obj->%s = %s%s%s;\n", att->name, quote, att->usual, quote);
+		}
+	    }
+	fprintf(f, "    for (i=0; atts[i] != NULL; i += 2)\n");
+	fprintf(f, "        {\n");
+	fprintf(f, "        char *name = atts[i], *val = atts[i+1];\n");
+	for (att = el->attributes; att != NULL; att = att->next)
+	    {
+	    fprintf(f, "        %s (sameString(name, \"%s\"))\n",
+		    (first ? "if " : "else if"), att->name);
+	    if (sameWord(att->type, "INT"))
+		fprintf(f, "            obj->%s = atoi(val);\n", att->name);
+	    else if (sameWord(att->type, "FLOAT"))
+		fprintf(f, "            obj->%s = atof(val);\n", att->name);
+	    else
+	        fprintf(f, "            obj->%s = cloneString(val);\n", att->name);
+	    first = FALSE;
+	    }
+	fprintf(f, "        }\n");
+	for (att = el->attributes; att != NULL; att = att->next)
+	    {
+	    if (att->required)
+	        {
+		if (sameWord(att->type, "INT") || sameWord(att->type, "FLOAT"))
+		    {
+		    /* For the moment can't check these. */
+		    }
+		else
+		    {
+		    fprintf(f, "    if (obj->%s == NULL)\n", att->name);
+		    fprintf(f, "        xapError(xp, \"missing %s\");\n", att->name);
+		    }
+		}
+	    }
+	}
+    if (anyParent(elList, el))
+        {
+	struct element *parent;
+	boolean first = TRUE;
+	fprintf(f, "    if (depth > 1)\n");
+	fprintf(f, "        {\n");
+	for (parent = elList; parent != NULL; parent = parent->next)
+	    {
+	    if (childMatch(parent->children, el))
+	        {
+		fprintf(f, "        %s (sameString(st->elName, \"%s\"))\n", 
+			(first ? "if " : "else if"), parent->name);
+		fprintf(f, "            {\n");
+		fprintf(f, "            struct %s *parent = st->object;\n", parent->mixedCaseName);
+		fprintf(f, "            slAddHead(&parent->%s, obj);\n", el->mixedCaseName);
+		fprintf(f, "            }\n");
+		first = FALSE;
+		}
+	    }
+	fprintf(f, "        else\n");
+	fprintf(f, "            xapError(xp, \"%%s misplaced\", name);\n");
+	fprintf(f, "        }\n");
+	}
+    fprintf(f, "    return obj;\n");
+    fprintf(f, "    }\n");
+    }
+fprintf(f, "else\n");
+fprintf(f, "    {\n");
+fprintf(f, "    xapSkip(xp);\n");
+fprintf(f, "    return NULL;\n");
+fprintf(f, "    }\n");
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
 void makeC(struct element *elList, char *fileName)
 /* Produce C code file. */
 {
@@ -474,6 +598,7 @@ for (el = elList; el != NULL; el = el->next)
     saveFunctionPrototype(el, f, FALSE);
     saveFunctionBody(el, f);
     }
+startHandler(elList, f);
 }
 
 void autoXml(char *dtdxFile, char *outRoot)

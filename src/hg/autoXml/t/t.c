@@ -120,7 +120,7 @@ else if (sameString(name, "DESCRIPTION"))
     }
 else
     {
-    xapError(xp, "Unknown type %s\n", name);
+    xapSkip(xp);
     }
 return NULL;
 }
