@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.56 2005/03/08 02:11:08 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.57 2005/03/09 01:43:05 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -216,27 +216,29 @@ char *words[2];
 int wordCount;
 char *settings;
 struct track *wigTrack = track->subtracks;
-int pairwiseHeight;
+int pairwiseHeight = tl.fontHeight;
+int consWigHeight = 0;
 
-if (wigTrack == NULL)
-    return 0;
+if (wigTrack)
+    {
+    consWigHeight = wigTotalHeight(wigTrack, tvFull);
+    pairwiseHeight = max(consWigHeight/3 - 1, pairwiseHeight);
+    }
+
 settings = cloneString(trackDbSetting(track->tdb, PAIRWISE_VAR));
 if (settings == NULL)
-    return 0;
+    return pairwiseHeight;
 
 /* get height for pairwise wiggles */
-/* default height */
-pairwiseHeight = max(wigTotalHeight(wigTrack, tvFull)/3 - 1, tl.fontHeight);
-wordCount = chopLine(settings, words);
-if (wordCount > 1)
+if ((wordCount = chopLine(settings, words)) > 1)
     {
-    int height = atoi(words[1]);
-    if (height < tl.fontHeight)
+    int settingsHeight = atoi(words[1]);
+    if (settingsHeight < tl.fontHeight)
        pairwiseHeight = tl.fontHeight;
-    else if (height > wigTotalHeight(wigTrack, tvFull))
-        pairwiseHeight = wigTotalHeight(wigTrack, tvFull);
+    else if (settingsHeight > consWigHeight && consWigHeight > 0)
+        pairwiseHeight = consWigHeight;
     else
-        pairwiseHeight = height;
+        pairwiseHeight = settingsHeight;
     }
 freez(&settings);
 return pairwiseHeight;
@@ -267,7 +269,7 @@ return pairwiseSuffix(track) || summarySetting(track);
 }
 
 static boolean displayZoomedIn(struct track *track)
-/* determine if maf tables are loaded -- zoomed in display */
+/* determine if mafs are loaded -- zoomed in display */
 {
 return track->customPt != NULL;
 }
@@ -283,7 +285,7 @@ static struct wigMafItem *loadPairwiseItems(struct track *track)
 struct wigMafItem *miList = NULL, *speciesItems = NULL, *mi;
 struct track *wigTrack = track->subtracks;
 
-if (winEnd - winStart < 300000)
+if (winEnd - winStart < 1000000)
     {
     /* "close in" display uses actual alignments from file */
     struct sqlConnection *conn = hAllocConn();
@@ -587,8 +589,7 @@ sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
                         NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    AllocVar(ms);
-    mafSummaryStaticLoad(row + rowOffset, ms);
+    ms = mafSummaryLoad(row + rowOffset);
     if ((hel = hashLookup(componentHash, ms->src)) == NULL)
         hashAdd(componentHash, ms->src, ms);
     else
