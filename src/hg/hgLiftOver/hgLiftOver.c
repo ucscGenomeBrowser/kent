@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.3 2004/03/20 03:29:49 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.4 2004/03/22 22:43:41 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -103,11 +103,11 @@ cgiTableEnd();
 /* next row -- file format menu */
 //printf("Data input formats marked with star (*) are suitable for "
         //"ENCODE data submission.&nbsp;&nbsp;"
-cgiParagraph("For the \"Position\" format, enter a list of "
-            "chromosome positions using the format chrN:X.\n");
+cgiParagraph(
+         "&nbsp;For descriptions of the supported data formats, see the bottom of this page.");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
-cgiTableField("Format: ");
+cgiTableField("Data Format: ");
 cgiSimpleTableFieldStart();
 cgiMakeDropList(HGLFT_DATAFORMAT_VAR, formatList, 2, "BED");
 cgiTableFieldEnd();
@@ -115,12 +115,12 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* text box and two buttons (submit, reset) */
-cgiParagraph("Paste in data:\n");
+cgiParagraph("&nbsp;Paste in data:\n");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
 cgiSimpleTableFieldStart();
-cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 15, 75);
+cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 15, 80);
 cgiTableFieldEnd();
 
 /* right element of table is a nested table
@@ -147,16 +147,23 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* next  row -- file upload controls */
-cgiParagraph("Or upload data from a file:");
+cgiParagraph("&nbsp;Or upload data from a file:");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
-printf("<TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit File></TD>\n");
+printf("<TD><INPUT TYPE=SUBMIT NAME=Submit VALUE=\"Submit File\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
 
 printf("</FORM>\n");
 
+webNewSection("Data Formats");
+printf("<UL>");
+printf("<LI>");
+printf("For <B>Position</B> format, enter the <I>chromosome</I>, <I>start</I>, and <I>end</I> positions, in the format <B>chrN:S-E</B>\n");
+printf("<LI>");
+printf("<A HREF=\"http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED\">Browser Extensible Data (BED)</A>\n");
+printf("</UL>");
 }
 
 void doMiddle(struct cart *theCart)
