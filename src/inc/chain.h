@@ -26,7 +26,7 @@ struct chain
     char *tName;		  /* target name, allocated here. */
     int tSize;			  /* Overall size of target. */
     /* tStrand always + */
-    int tStart,tEnd;		  /* Range covered in query. */
+    int tStart,tEnd;		  /* Range covered in target. */
     char *qName;		  /* query name, allocated here. */
     int qSize;			  /* Overall size of query. */
     char qStrand;		  /* Query strand. */
