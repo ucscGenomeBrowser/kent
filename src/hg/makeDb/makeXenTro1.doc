@@ -472,3 +472,1125 @@ psl/$(root1)_$(root2).psl}
     # Special case: fr1 has only chrUn, so no need to index tName!
     hgLoadPsl -noTNameIx -fastLoad -table=blatFr1 xenTro1 blatFr1_all.psl
     #load of blatFr1 did not go as planned: 1360912 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
+
+
+# ALIGN TO CHICKEN (BLASTZ/CHAIN/NET DONE 10/28/04 JK)
+  ssh kk
+  mkdir -p /cluster/data/xenTro1/bed/zb.galGal2
+  cd /cluster/data/xenTro1/bed/zb.galGal2
+
+  # Create DEF file for run of scaffolds vs. chicken chromosomes
+  cat << '_EOF_' > DEF
+
+# chicken vs. xenopus
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Set up blastz parameters using parameters between chicken and fish,
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chicken
+SEQ1_DIR=/iscratch/i/galGal2/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus
+SEQ2_DIR=/scratch/hg/xenTro1/maskedPieces
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/xenTro1/bed/zb.galGal2
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+
+  # << this line keeps emacs coloring happy
+  bash
+  source DEF
+  mkdir $RAW run.0
+  cp /cluster/data/galGal2/chrom.sizes $BASE/S1.len
+  cp /cluster/data/xenTro1/chrom.sizes $BASE/S2.len
+  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  sh ./xdir.sh
+  cd run.0
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 52397 of 52397 jobs
+# CPU time in finished jobs:   19113995s  318566.59m  5309.44h  221.23d  0.606 y
+# IO & Wait Time:                212544s    3542.40m    59.04h    2.46d  0.007 y
+# Average job time:                 369s       6.15m     0.10h    0.00d
+# Longest job:                     3764s      62.73m     1.05h    0.04d
+# Submission to last job:         39454s     657.57m    10.96h    0.46d
+
+  # second cluster run: lift raw alignments -> lav dir
+  ssh kki
+  cd /cluster/data/xenTro1/bed/zb.galGal2
+  bash # if a csh/tcsh user
+  source DEF
+  mkdir run.1 lav
+  /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+  cd run.1
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 151 of 151 jobs
+# CPU time in finished jobs:       1583s      26.38m     0.44h    0.02d  0.000 y
+# IO & Wait Time:                  2086s      34.77m     0.58h    0.02d  0.000 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest job:                      115s       1.92m     0.03h    0.00d
+# Submission to last job:           703s      11.72m     0.20h    0.01d
+
+    # Convert lav to axt.  This takes 5 or 10 minutes
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.galGal2
+    mkdir axtTemp
+    cd lav
+    foreach i (*)
+	catDir $i | \
+            | lavToAxt stdin  /cluster/data/galGal2/nib \
+	    /cluster/data/xenTro1/xenTro1.2bit ../axtTemp/$i.axt
+        echo done $i
+    end
+
+
+# CHAIN CHICKEN BLASTZ 
+    # Run axtChain on little cluster
+    # Note, for this one might as well do it serially on file server too.
+    # The longest job (chr19) takes up 90% of the time.
+    ssh kki
+    cd /cluster/data/xenTro1/bed/zb.galGal2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/xenTro1/bed/zb.galGal2/axtTemp/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../xenopusHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../xenopusHumanTuned.gap \
+                      -minScore=5000 $1 \
+       /iscratch/i/galGal2/nib \
+       /iscratch/i/xenTro1/xenTro1.2bit $2 \
+    | chainAntiRepeat /iscratch/i/galGal2/nib  \
+       /iscratch/i/xenTro1/xenTro1.2bit stdin $3 \
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+# Completed: 52 of 54 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:        495s       8.25m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                   281s       4.68m     0.08h    0.00d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest job:                      215s       3.58m     0.06h    0.00d
+# Submission to last job:           215s       3.58m     0.06h    0.00d
+#
+# Note, the two crashed were from chr6_random and chr8_random, that simply
+# had no alignments and thus produced empty files, so no problem.
+
+    # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
+    # steps both take about 10 minutes
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    rm run1/chain/*.chain
+    rm -r ../axtTemp
+    chainSplit chain all.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain galGal2 ${c}_chainXenTro1 $i
+    end
+    featureBits galGal2 chainXenTro1Link
+
+# NET XENOPUS BLASTZ
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    cd noClass
+    mkdir ../../axtNet
+    foreach i (*.net)
+	netToAxt $i ../chain/$i:r.chain /cluster/data/galGal2/nib /cluster/data/xenTro1/xenTro1.2bit ../../axtNet/$i:r.axt
+    end
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: (Stopped here, need gap tables)
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+    netClass -noAr noClass.net galGal2 xenTro1 galGal2.net
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.galGal2/axtChain
+    netFilter -minGap=10 galGal2.net |  hgLoadNet galGal2 netXenTro1 stdin
+
+# SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed
+    mkdir -p bz.galGal2/axtChain
+    chainSwap zb.galGal2/axtChain/all.chain bz.galGal2/axtChain/all.chain
+    cd bz.galGal2/axtChain
+    chainPreNet all.chain ../../zb.galGal2/S2.len ../../zb.galGal2/S1.len stdout \
+    | chainNet stdin -minSpace=1 ../../zb.galGal2/S2.len ../../zb.galGal2/S1.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/xenTro1/xenTro1.2bit /cluster/data/galGal2/nib \
+	../axtNet/all.axt
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/bz.galGal2/axtChain
+    netClass -noAr noClass.net xenTro1 galGal2 xenTro1.net
+    rm noClass.net
+    netFilter -minGap=10 xenTro1.net | hgLoadNet xenTro1 netGalGal2 stdin
+
+    # Load chains into database (takes about 2 hours).
+    hgLoadChain -tIndex xenTro1 chainGalGal2 all.chain
+    rm chain.tab link.tab
+
+# ALIGN TO HUMAN (BLASTZ/CHAIN/NET DONE 10/28/04 JK)
+  ssh kk
+  mkdir -p /cluster/data/xenTro1/bed/zb.hg17
+  cd /cluster/data/xenTro1/bed/zb.hg17
+
+  # Create DEF file for run of scaffolds vs. human chromosomes
+  cat << '_EOF_' > DEF
+
+# human vs. xenopus
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Set up blastz parameters using parameters between chicken and fish,
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus
+SEQ2_DIR=/scratch/hg/xenTro1/maskedPieces
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/xenTro1/bed/zb.hg17
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+
+  # << this line keeps emacs coloring happy
+  bash
+  source DEF
+  mkdir $RAW run.0
+  cp /cluster/data/hg17/chrom.sizes $BASE/S1.len
+  cp /cluster/data/xenTro1/chrom.sizes $BASE/S2.len
+  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  sh ./xdir.sh
+  cd run.0
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 118327 of 118327 jobs
+# CPU time in finished jobs:   28921705s  482028.42m  8033.81h  334.74d  0.917 y
+# IO & Wait Time:                400616s    6676.93m   111.28h    4.64d  0.013 y
+# Average job time:                 248s       4.13m     0.07h    0.00d
+# Longest job:                     5415s      90.25m     1.50h    0.06d
+# Submission to last job:         35773s     596.22m     9.94h    0.41d
+
+  # second cluster run: lift raw alignments -> lav dir
+  ssh kki
+  cd /cluster/data/xenTro1/bed/zb.hg17
+  bash # if a csh/tcsh user
+  source DEF
+  mkdir run.1 lav
+  /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+  cd run.1
+  wc -l jobList
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       4477s      74.62m     1.24h    0.05d  0.000 y
+# IO & Wait Time:                 12372s     206.19m     3.44h    0.14d  0.000 y
+# Average job time:                  49s       0.82m     0.01h    0.00d
+# Longest job:                      305s       5.08m     0.08h    0.00d
+# Submission to last job:          1113s      18.55m     0.31h    0.01d
+
+    # third run: lav -> axt
+    # (Note - this seems to be i/o bound even on a single CPU.  Next time
+    # I'd suggest just running it serially on the file server -jk )
+    ssh kki
+    cd /cluster/data/xenTro1/bed/zb.hg17
+    mkdir axtChrom run.2
+    cd run.2
+    cat << 'EOF' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin \
+        /iscratch/i/hg17/bothMaskedNibs /iscratch/i/xenTro1/xenTro1.2bit ../../axtChrom/$chr.axt
+'EOF'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+        # 46 jobs
+    para try
+    para check
+    para push
+
+
+# CHAIN HUMAN BLASTZ 
+    # Run axtChain on little cluster
+    # Note, for this one might as well do it serially on file server too.
+    # The longest job (chr19) takes up 90% of the time.
+    ssh kki
+    cd /cluster/data/xenTro1/bed/zb.hg17
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/xenTro1/bed/zb.hg17/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../xenopusHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../xenopusHumanTuned.gap \
+                      -minScore=5000 $1 \
+    /iscratch/i/hg17/bothMaskedNibs \
+    /iscratch/i/xenTro1/xenTro1.2bit $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+Completed: 46 of 46 jobs
+CPU time in finished jobs:       2396s      39.94m     0.67h    0.03d  0.000 y
+IO & Wait Time:                  7221s     120.34m     2.01h    0.08d  0.000 y
+Average job time:                 209s       3.48m     0.06h    0.00d
+Longest job:                     2042s      34.03m     0.57h    0.02d
+Submission to last job:          2042s      34.03m     0.57h    0.02d
+
+    # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
+    # steps both take about 10 minutes
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain hg17 ${c}_chainXenTro1 $i
+    end
+    featureBits hg17 chainXenTro1Link
+
+# NET XENOPUS BLASTZ
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    cd noClass
+    mkdir ../../axtNet
+    foreach i (*.net)
+	netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/xenTro1/xenTro1.2bit ../../axtNet/$i:r.axt
+    end
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: 
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    netClass -noAr noClass.net hg17 xenTro1 human.net
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/zb.hg17/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg17 netXenTro1 stdin
+
+# SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed
+    mkdir -p bz.hg17/axtChain
+    chainSwap zb.hg17/axtChain/all.chain bz.hg17/axtChain/all.chain
+    cd bz.hg17/axtChain
+    chainPreNet all.chain ../../zb.hg17/S2.len ../../zb.hg17/S1.len stdout \
+    | chainNet stdin -minSpace=1 ../../zb.hg17/S2.len ../../zb.hg17/S1.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/xenTro1/xenTro1.2bit /cluster/data/hg17/nib \
+	../axtNet/all.axt
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/bz.hg17/axtChain
+    netClass -noAr noClass.net xenTro1 hg17 xenTro1.net
+    rm noClass.net
+    netFilter -minGap=10 xenTro1.net | hgLoadNet xenTro1 netHg17 stdin
+
+    # Load chains into database (takes about 2 hours).
+    hgLoadChain -tIndex xenTro1 chainHg17 all.chain
+    rm chain.tab link.tab
+
+
+# ALIGN TO MOUSE (BLASTZ/CHAIN/NET DONE 10/24/04 JK))
+  ssh kk
+  mkdir -p /cluster/data/xenTro1/bed/zb.mm5
+  cd /cluster/data/xenTro1/bed/zb.mm5
+
+  # Create DEF file for run of scaffolds vs. human chromosomes
+  cat << '_EOF_' > DEF
+
+# mouse vs. xenopus
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Set up blastz parameters using parameters between chicken and fish,
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: mouse
+SEQ1_DIR=/scratch/mus/mm5/softNib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus
+SEQ2_DIR=/scratch/hg/xenTro1/maskedPieces
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/xenTro1/bed/zb.mm5
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+
+  # << this line keeps emacs coloring happy
+  bash
+  source DEF
+  mkdir $RAW run.0
+  cp /cluster/data/mm5/chrom.sizes $BASE/S1.len
+  cp /cluster/data/xenTro1/chrom.sizes $BASE/S2.len
+  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  sh ./xdir.sh
+  cd run.0
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 118327 of 118327 jobs
+# CPU time in finished jobs:   26625995s  443766.59m  7396.11h  308.17d  0.844 y
+# IO & Wait Time:                407224s    6787.06m   113.12h    4.71d  0.013 y
+# Average job time:                 228s       3.81m     0.06h    0.00d
+# Longest job:                     2642s      44.03m     0.73h    0.03d
+# Submission to last job:         47229s     787.15m    13.12h    0.55d
+
+  # second cluster run: lift raw alignments -> lav dir
+  ssh kki
+  cd /cluster/data/xenTro1/bed/zb.mm5
+  bash # if a csh/tcsh user
+  source DEF
+  mkdir run.1 lav
+  /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+  cd run.1
+  wc -l jobList
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       3787s      63.12m     1.05h    0.04d  0.000 y
+# IO & Wait Time:                  6585s     109.75m     1.83h    0.08d  0.000 y
+# Average job time:                  30s       0.51m     0.01h    0.00d
+# Longest job:                      163s       2.72m     0.05h    0.00d
+# Submission to last job:           752s      12.53m     0.21h    0.01d
+
+    # Convert lav to axt.  This takes 30 minutes
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.mm5
+    mkdir axtTemp
+    cd lav
+    foreach i (*)
+	catDir $i | \
+            | lavToAxt stdin  /cluster/data/mm5/nib \
+	    /cluster/data/xenTro1/xenTro1.2bit ../axtTemp/$i.axt
+        echo done $i
+    end
+
+
+# CHAIN HUMAN BLASTZ 
+    # Run axtChain on little cluster
+    # The longest job (chr19) takes up 90% of the time.
+    ssh kki
+    cd /cluster/data/xenTro1/bed/zb.mm5
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/xenTro1/bed/zb.mm5/axtTemp/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../xenopusHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../xenopusHumanTuned.gap \
+                      -minScore=5000 $1 \
+    /scratch/mus/mm5/softNib \
+    /iscratch/i/xenTro1/xenTro1.2bit $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+Completed: 46 of 46 jobs
+CPU time in finished jobs:       2396s      39.94m     0.67h    0.03d  0.000 y
+IO & Wait Time:                  7221s     120.34m     2.01h    0.08d  0.000 y
+Average job time:                 209s       3.48m     0.06h    0.00d
+Longest job:                     2042s      34.03m     0.57h    0.02d
+Submission to last job:          2042s      34.03m     0.57h    0.02d
+
+    # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
+    # steps both take about 10 minutes
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.mm5/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.mm5/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain mm5 ${c}_chainXenTro1 $i
+    end
+    featureBits mm5 chainXenTro1Link
+
+# NET XENOPUS BLASTZ
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.mm5/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    cd noClass
+    mkdir ../../axtNet
+    foreach i (*.net)
+	netToAxt $i ../chain/$i:r.chain /cluster/data/mm5/nib /cluster/data/xenTro1/xenTro1.2bit ../../axtNet/$i:r.axt
+    end
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: (Stopped here, need gap tables)
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.mm5/axtChain
+    netClass -noAr noClass.net mm5 xenTro1 mm5.net
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/zb.mm5/axtChain
+    netFilter -minGap=10 mm5.net |  hgLoadNet mm5 netXenTro1 stdin
+
+# SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed
+    mkdir -p bz.mm5/axtChain
+    chainSwap zb.mm5/axtChain/all.chain bz.mm5/axtChain/all.chain
+    cd bz.mm5/axtChain
+    chainPreNet all.chain ../../zb.mm5/S2.len ../../zb.mm5/S1.len stdout \
+    | chainNet stdin -minSpace=1 ../../zb.mm5/S2.len ../../zb.mm5/S1.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/xenTro1/xenTro1.2bit /cluster/data/mm5/nib \
+	../axtNet/all.axt
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/bz.mm5/axtChain
+    netClass -noAr noClass.net xenTro1 mm5 xenTro1.net
+    rm noClass.net
+    netFilter -minGap=10 xenTro1.net | hgLoadNet xenTro1 netMm5 stdin
+
+    # Load chains into database (takes about 2 hours).
+    hgLoadChain -tIndex xenTro1 chainMm5 all.chain
+    rm chain.tab link.tab
+
+# ALIGN TO ZEBRAFISH (BLASTZ/CHAIN/NET DONE 10/24/04 JK))
+  ssh kk
+  mkdir -p /cluster/data/xenTro1/bed/zb.danRer1
+  cd /cluster/data/xenTro1/bed/zb.danRer1
+
+  # Create DEF file for run of scaffolds vs. zebrafish chromosomes
+  cat << '_EOF_' > DEF
+
+# zebrafish vs. xenopus
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Set up blastz parameters using parameters between chicken and fish,
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chicken
+SEQ1_DIR=/iscratch/i/danRer1/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Xenopus
+SEQ2_DIR=/scratch/hg/xenTro1/maskedPieces
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/xenTro1/bed/zb.danRer1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+
+  # << this line keeps emacs coloring happy
+  bash
+  source DEF
+  mkdir $RAW run.0
+  cp /cluster/data/danRer1/chrom.sizes $BASE/S1.len
+  cp /cluster/data/xenTro1/chrom.sizes $BASE/S2.len
+  /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+  sh ./xdir.sh
+  cd run.0
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para create jobList
+  para try, push check, para push, para check....
+# Completed: 58990 of 58990 jobs
+# CPU time in finished jobs:   10946601s  182443.35m  3040.72h  126.70d  0.347 y
+# IO & Wait Time:                389169s    6486.15m   108.10h    4.50d  0.012 y
+# Average job time:                 192s       3.20m     0.05h    0.00d
+# Longest job:                     5028s      83.80m     1.40h    0.06d
+# Submission to last job:        138773s    2312.88m    38.55h    1.61d
+
+  # second cluster run: lift raw alignments -> lav dir
+  ssh kki
+  cd /cluster/data/xenTro1/bed/zb.danRer1
+  bash # if a csh/tcsh user
+  source DEF
+  mkdir run.1 lav
+  /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+  cd run.1
+  para create jobList
+# Completed: 170 of 170 jobs
+# CPU time in finished jobs:       5013s      83.55m     1.39h    0.06d  0.000 y
+# IO & Wait Time:                 14173s     236.22m     3.94h    0.16d  0.000 y
+# Average job time:                 113s       1.88m     0.03h    0.00d
+# Longest job:                      333s       5.55m     0.09h    0.00d
+# Submission to last job:          2837s      47.28m     0.79h    0.03d
+
+    # Convert lav to axt.  This takes about 2 hours
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.danRer1
+    mkdir axtTemp
+    cd lav
+    foreach i (*)
+	catDir $i | \
+            lavToAxt stdin  /cluster/data/danRer1/nib \
+	    /cluster/data/xenTro1/xenTro1.2bit ../axtTemp/$i.axt
+        echo done $i
+    end
+
+
+# CHAIN CHICKEN BLASTZ 
+    # Run axtChain on little cluster
+    # Note, for this one might as well do it serially on file server too.
+    # The longest job (chr19) takes up 90% of the time.
+    ssh kki
+    cd /cluster/data/xenTro1/bed/zb.danRer1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/xenTro1/bed/zb.danRer1/axtTemp/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../xenopusHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../xenopusHumanTuned.gap \
+                      -minScore=5000 $1 \
+    /iscratch/i/danRer1/nib \
+    /iscratch/i/xenTro1/xenTro1.2bit $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+# Completed: 52 of 54 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:        495s       8.25m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                   281s       4.68m     0.08h    0.00d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest job:                      215s       3.58m     0.06h    0.00d
+# Submission to last job:           215s       3.58m     0.06h    0.00d
+#
+# Note, the two crashed were from chr6_random and chr8_random, that simply
+# had no alignments and thus produced empty files, so no problem.
+
+    # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
+    # steps both take about 10 minutes
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+    rm -r ../axtTemp
+
+    # Load chains into database.  This takes an hour or three 
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain danRer1 ${c}_chainXenTro1 $i
+    end
+    featureBits danRer1 chainXenTro1Link
+
+# NET XENOPUS BLASTZ
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    cd noClass
+    mkdir ../../axtNet
+    foreach i (*.net)
+	netToAxt $i ../chain/$i:r.chain /cluster/data/danRer1/nib /cluster/data/xenTro1/xenTro1.2bit ../../axtNet/$i:r.axt
+    end
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
+    netClass -noAr noClass.net danRer1 xenTro1 danRer1.net
+    rm noClass.net
+
+    # Load the nets into database  
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/zb.danRer1/axtChain
+    netFilter -minGap=10 danRer1.net |  hgLoadNet danRer1 netXenTro1 stdin
+
+# SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed
+    mkdir -p bz.danRer1/axtChain
+    chainSwap zb.danRer1/axtChain/all.chain bz.danRer1/axtChain/all.chain
+    cd bz.danRer1/axtChain
+    chainPreNet all.chain ../../zb.danRer1/S2.len ../../zb.danRer1/S1.len stdout \
+    | chainNet stdin -minSpace=1 ../../zb.danRer1/S2.len ../../zb.danRer1/S1.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/xenTro1/xenTro1.2bit /cluster/data/danRer1/nib \
+	../axtNet/all.axt
+
+    # Classify net and load into database
+    ssh hgwdev 
+    cd /cluster/data/xenTro1/bed/bz.danRer1/axtChain
+    netClass -noAr noClass.net xenTro1 danRer1 xenTro1.net
+    rm noClass.net
+    netFilter -minGap=10 xenTro1.net | hgLoadNet xenTro1 netDanRer1 stdin
+
+    # Load chains into database (takes about 3 hours).  These are so large
+    # we have to split them first.  
+    ssh kksilo
+    cd /cluster/store8/xenTro1/bed/bz.danRer1/axtChain
+    chainSplit -lump=10 lumps all.chain
+
+    ssh hgwdev (TODO - loaded up to 005.chain overnight)
+    cd /cluster/store8/xenTro1/bed/bz.danRer1/axtChain/lumps
+    hgLoadChain -tIndex xenTro1 chainDanRer1 000.chain
+    rm 000.chain
+    foreach i (*.chain)
+	echo loading $i
+        hgLoadChain -tIndex -oldTable xenTro1 chainDanRer1 $i
+    end
+    rm chain.tab link.tab
+
+
+# CREATE MULTIPLE ALIGNMENTS WITH MULTIZ (DONE 10/24/04 JK)
+  ssh kksilo
+  cd /cluster/data/xenTro1/bed
+  mkdir -p multiz
+  axtSort bz.galGal2/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
+     -tPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes \
+     -qPrefix=galGal2. /cluster/data/galGal2/chrom.sizes \
+     multiz/galGal2
+  axtSort bz.hg17/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
+     -tPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes \
+     -qPrefix=hg17. /cluster/data/hg17/chrom.sizes \
+     multiz/hg17
+  axtSort bz.mm5/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
+     -tPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes \
+     -qPrefix=mm5. /cluster/data/mm5/chrom.sizes \
+     multiz/mm5
+  axtSort bz.danRer1/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
+     -tPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes \
+     -qPrefix=danRer1. /cluster/data/danRer1/chrom.sizes \
+     multiz/danRer1
+
+# Do multiz in a tizzy (takes about an hour)
+  ssh kksilo
+  cd /cluster/data/xenTro1/bed/multiz
+  echo galGal2 hg17 mm5 danRer1 > dirList
+  awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > scaffoldList
+  multizzy dirList scaffoldList mtz
+  catDir mtz | mafFilter stdin -minScore=500 > multiz5way.maf
+
+# Load into database
+  ssh hgwdev
+  cd /cluster/data/xenTro1/bed/multiz
+  mkdir -p /gbdb/xenTro1/multiz5way
+  ln -s /cluster/data/xenTro1/bed/multiz/multiz5way.maf /gbdb/xenTro1/multiz5way
+  hgLoadMaf xenTro1 multiz5way
+
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS (DONE 10/25/04 JK)
+
+# Estimate phastCons parameters
+  ssh kksilo
+  cd /cluster/data/xenTro1/bed/multiz
+  mkdir cons
+  cd cons
+
+  # Create a starting-tree.mod based on scaffold_1.
+  twoBitToFa ../../xenTro1.2bit -seq=scaffold_1 scaffold_1.fa
+  /cluster/bin/phast/msa_split ../mtz/scaffold_1.maf --refseq scaffold_1.fa --in-format MAF --windows 100000000,1000 --out-format SS --between-blocks 5000 --out-root s1
+  /cluster/bin/phast/phyloFit -i SS s1.*.ss --tree "((((hg17,mm5),galGal2),xenTro1),danRer1)" --out-root starting-tree.mod
+  rm scaffold_1.fa scaffold1.*.ss
+
+  # Create directory full of sequence in individual scaffold files on bluearc.
+  ssh kksilo
+  mkdir -p /cluster/bluearc/xenTro1/scaffoldFa
+  cd /cluster/bluearc/xenTro1/scaffoldFa
+  twoBitToFa /cluster/data/xenTro1/xenTro1.2bit stdout | faSplit byname stdin foo
+
+  # Create big bad bloated SS files in bluearc (takes ~45 minutes)
+  mkdir -p /cluster/bluearc/xenTro1/cons/ss
+  cd /cluster/bluearc/xenTro1/cons/ss
+  foreach i (`awk '{print $1}' /cluster/data/xenTro1/chrom.sizes`)
+      if (-e /cluster/data/xenTro1/bed/multiz/mtz/$i.maf) then
+	  echo msa_split $i
+	  /cluster/bin/phast/msa_split /cluster/data/xenTro1/bed/multiz/mtz/$i.maf \
+	     --refseq /cluster/bluearc/xenTro1/scaffoldFa/$i.fa \
+	     --in-format MAF --windows 1000000,1000 --between-blocks 5000 \
+	     --out-format SS --out-root $i
+      endif
+  end
+
+  # Create a random list of 50 1 mb regions 
+  ls -l | awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs
+
+  # Set up parasol directory to calculate trees on these 50 regions
+  ssh kk9
+  cd /cluster/bluearc/xenTro1/cons
+  mkdir treeRun1
+  cd treeRun1
+  mkdir tree log
+
+  # Create little script that calls phastCons with right arguments
+  cat > makeTree << '_EOF_'
+  /cluster/bin/phast/phastCons ../ss/$1.ss \
+      /cluster/data/xenTro1/bed/multiz/cons/starting-tree.mod \
+      --gc 0.410 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.35 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+  chmod a+x makeTree
+
+  # Create gensub file
+  cat > gsub << '_EOF_'
+#LOOP
+makeTree $(root1)
+#ENDLOOP
+'_EOF_'
+
+  # Make cluster job and run it
+  gensub2 ../randomSs single gsub jobList
+  para create jobList
+  para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       2004s      33.40m     0.56h    0.02d  0.000 y
+# IO & Wait Time:                   257s       4.28m     0.07h    0.00d  0.000 y
+# Average job time:                  45s       0.75m     0.01h    0.00d
+# Longest job:                       91s       1.52m     0.03h    0.00d
+# Submission to last job:            92s       1.53m     0.03h    0.00d
+
+
+  # Now combine parameter estimates.  We can average the .mod files
+  # using phyloBoot.  This must be done separately for the conserved
+  # and nonconserved models
+  ls tree/*.cons.mod > cons.txt
+  /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' --output-average ../ave.cons.mod > cons_summary.txt
+  ls tree/*.noncons.mod > noncons.txt
+  /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' --output-average ../ave.noncons.mod > noncons_summary.txt
+  cd ..
+  cp ave.*.mod /cluster/data/xenTro1/bed/multiz/cons
+
+  # Create cluster dir to do main phastCons run
+  mkdir consRun1
+  cd consRun1
+  mkdir ppRaw bed
+
+  # Create script to run phastCons with right parameters
+cat > doPhast << '_EOF_'
+mkdir -p ppRaw/$2
+/cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
+   --expected-lengths 12 --target-coverage 0.35 --quiet --seqname $2 \
+   --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 \
+   ppRaw/$2/$1.pp
+'_EOF_'
+  chmod a+x doPhast
+
+  # Create gsub file
+cat > gsub << '_EOF_'
+#LOOP
+doPhast $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+
+  # Create parasol batch and run it
+  ls -1 ../ss | sed 's/.ss//' > in.lst> in.lst
+  gensub2 in.lst single gsub jobList
+  para create jobList
+  # para try/check/push/etc.
+# Completed: 12869 of 12869 jobs
+# CPU time in finished jobs:      11470s     191.17m     3.19h    0.13d  0.000 y
+# IO & Wait Time:                 40795s     679.91m    11.33h    0.47d  0.001 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest job:                       20s       0.33m     0.01h    0.00d
+# Submission to last job:           675s      11.25m     0.19h    0.01d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    catDir bed | awk 
+    	'{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+        /cluster/bin/scripts/lodToBedScore /dev/stdin > \
+	/cluster/data/xenTro1/bed/multiz/mostConserved.bed
+
+    # Figure out how much is actually covered by the bed files as so:
+    awk '{print $3 - $2;}' /cluster/data/xenTro1/bed/multiz/mostConserved.bed | addCols stdin
+    # If the results of the this divided by the non-n genome size (1.5G) aren't around 4%, then
+    # do it again, adjusting the target-coverage phastCons parameter.  Actually when I
+    # took the target-coverage up to 0.61, it started putting negative numbers into the
+    # score column, so left it at 0.35, which results in  0.3% coverage.  
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/multiz
+    hgLoadBed xenTro1 mostConserved mostConserved.bed
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kksilo
+    cd /cluster/bluearc/xenTro1/cons/consRun1
+    wigAsciiCrunch -dirDir ppRaw /cluster/data/xenTro1/bed/multiz/cons/phastCons5.pp
+    cd /cluster/data/xenTro1/bed/multiz/cons
+    wigAsciiToBinary -wibFile=phastCons5 phastCons5.pp
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    ln -s /cluster/data/xenTro1/bed/multiz/cons/phastCons5.wib /gbdb/xenTro1/wib/phastCons5.wib
+    cd /cluster/data/xenTro1/bed/multiz/cons
+    hgLoadWiggle xenTro1 phastCons5 phastCons5.wig
+
