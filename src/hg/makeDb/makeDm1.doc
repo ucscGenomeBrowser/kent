@@ -346,8 +346,9 @@ exit; # don't actually run this like a script :)
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DROSOPHILA (DONE 10/17/03 angie)
     ssh hgwdev
     # Get appropriate hostname from cluster admins
-    echo 'insert into blatServers values("dm1", "blat10", "17787", "1"); \
-          insert into blatServers values("dm1", "blat10", "17786", "0");' \
+    # 8/26/04: set canPcr=1 for untranslated blat server.
+    echo 'insert into blatServers values("dm1", "blat10", 17787, 1, 0); \
+          insert into blatServers values("dm1", "blat10", 17786, 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
 
 
@@ -514,6 +515,14 @@ exit; # don't actually run this like a script :)
       delete from pscreen where name = "EY14401" or name = "PA07741"; \
       delete from pscreen where name = "EY14474" and chromEnd = "8975785"; \
       delete from pscreen where name = "KV00692" and chromEnd = "4702749";'
+    # 8/26/04: Drop geneDeltas column due to incomplete / possibly stale 
+    # data.  (removed it from pscreen.as & derivatives, hgc.c first)
+    # Also remove 3 items mapped off the end of chrX.
+    hgsql dm1 -e 'alter table pscreen drop column geneDeltas;'
+    hgsql dm1 -e '\
+      delete from pscreen where name = "KG03740"; \
+      delete from pscreen where name = "BG01196"; \
+      delete from pscreen where name = "EY02003";'
 
 
 # FLYBASE IN SITU IMAGES / EXPRESSION (REDONE 6/17/04 angie)
