@@ -91,3 +91,12 @@ group x
 priority 1101
 visibility dense
 type psl protein
+
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex scaffold_[0-9]+
+searchPriority 8
+

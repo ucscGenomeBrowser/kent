@@ -317,3 +317,24 @@ priority 89.01
 visibility hide
 type bed 12
 
+
+searchTable affyGnf
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex HG-U95:.+
+searchPriority 15
+termPrefix HG-U95:
+
+searchTable affyUcla
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex HG-U133:.+
+searchPriority 16
+termPrefix HG-U133:
+
+searchTable uniGene_2
+searchType bed
+searchPriority 20
+

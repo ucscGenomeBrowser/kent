@@ -132,3 +132,19 @@ priority 90
 visibility hide
 type psl .
 
+
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex RNOR[0-9]{8}
+searchPriority 8
+
+searchTable bactigPos
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex [gkt][a-z]{3}(_[gkt][a-z]{3})?(_[0-9])?
+searchPriority 15
+

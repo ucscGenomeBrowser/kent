@@ -69,3 +69,12 @@ type maf
 color 0,0,20
 altColor 0,0,20
 
+
+searchTable sgdGene
+searchType sgdGene
+searchPriority 1
+
+searchTable sgdOther
+searchType bed
+searchPriority 20
+

@@ -1228,3 +1228,260 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
+
+
+
+
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex (ctg|NT_)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchTable cytoBand
+searchMethod exact
+searchType cytoBand
+shortCircuit 1
+termRegex (x|y|[1-9][0-9]?)(p|q)[0-9]+(.[0-9]+)?
+searchPriority 6
+padding 500000
+
+searchTable clonePos
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex [a-z].{4}.?.?.?.?[0-9]
+searchPriority 7
+
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex [abz].[0-9]+(\.[0-9]+)?
+searchPriority 8
+
+searchTable mrna
+searchMethod prefix
+searchType mrnaAcc
+shortCircuit 1
+termRegex ([^nx]|..[^_])
+searchPriority 10
+
+searchTable encodeRegions
+searchMethod exact
+searchType bed
+termRegex EN[rm][0-9]+
+searchPriority 11
+
+searchTable knownGene
+searchType knownGene
+searchPriority 1
+
+searchName refGeneMrna
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex (N|X)M_[0-9]{6}
+searchDescription mRNA Accession of RefSeq Gene
+searchPriority 2
+
+searchName refGeneProt
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex (N|X)P_[0-9]{6}
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where protAcc like '%s'
+searchDescription Protein Accession of RefSeq Gene
+searchPriority 3
+
+searchName refGeneLocus
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex [0-9]+
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where locusLinkId = %s
+searchDescription LocusLink ID of RefSeq Gene
+searchPriority 4
+
+searchName refGeneOmim
+searchTable refGene
+searchMethod exact
+searchType genePred
+termRegex [0-9]+
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where omimId = %s
+searchDescription OMIM ID of RefSeq Gene
+searchPriority 5
+
+searchName refGeneName
+searchTable refGene
+searchMethod prefix
+searchType genePred
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where name like '%s%%'
+searchDescription RefSeq Gene
+searchPriority 5.1
+
+searchName refGeneProduct
+searchTable refGene
+searchMethod fuzzy
+searchType genePred
+xrefTable refLink
+xrefQuery select mrnaAcc from %s where product like '%%%s%%'
+searchDescription Product RefSeq Gene
+searchPriority 5.2
+
+searchTable superfamily
+searchType bed
+searchMethod fuzzy
+xrefTable sfDescription
+xrefQuery select name from %s where description like '%%%s%%'
+searchDescription Description of Superfamily Protein
+searchPriority 6
+padding 100
+
+searchTable fishClones
+searchMethod exact
+searchType bed
+termRegex (RP|CT|GS)[:alnum:]+-[:alnum:]+
+searchPriority 7
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([:alnum:]+|(RP|CT|GS)[:alnum:]+-[:alnum:]+|-[:alnum:]+-[:alnum:]+)
+searchPriority 8
+
+searchTable fosEndPairs
+searchMethod exact
+searchType bed
+termRegex ([:alnum:]+|(RP|CT|GS)[:alnum:]+-[:alnum:]+|-[:alnum:]+-[:alnum:]+)
+searchPriority 9
+
+searchTable fosEndPairsBad
+searchMethod exact
+searchType bed
+termRegex ([:alnum:]+|(RP|CT|GS)[:alnum:]+-[:alnum:]+|-[:alnum:]+-[:alnum:]+)
+searchPriority 10
+
+searchName stsMapAlias
+searchTable stsMap
+searchType bed
+xrefTable stsAlias
+xrefQuery select trueName from %s where alias like '%s'
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
+searchTable stsMap
+searchType bed
+searchPriority 12
+padding 100000
+
+searchTable mrna
+searchType mrnaKeyword
+searchPriority 15
+
+searchTable xenoMrna
+searchType mrnaKeyword
+searchPriority 15.1
+
+searchTable snpMap
+searchMethod exact
+searchType bed
+termRegex rs[0-9]+
+searchPriority 16
+padding 5000
+
+searchTable affyGeno
+searchMethod exact
+searchType bed
+termRegex [0-9]+
+searchPriority 18
+
+searchTable ensGene
+searchType genePred
+searchPriority 50
+
+searchTable genieAlt
+searchType genePred
+searchPriority 50
+
+searchTable softberryGene
+searchType genePred
+searchPriority 50
+
+searchTable acembly
+searchType genePred
+searchPriority 50
+
+searchTable genscan
+searchType genePred
+searchPriority 50
+
+searchTable twinscan
+searchType genePred
+searchPriority 50
+
+searchTable ECgene
+searchType genePred
+searchPriority 50
+
+searchTable sangerGene
+searchType genePred
+searchPriority 50
+
+searchTable vegaGene
+searchType genePred
+searchPriority 50
+
+searchTable slamRat
+searchType genePred
+searchPriority 50
+
+searchTable slamMouse
+searchType genePred
+searchPriority 50
+
+searchTable slamHuman
+searchType genePred
+searchPriority 50
+
+searchTable tigrGeneIndex
+searchType genePred
+searchPriority 50
+
+searchTable gbProtCode
+searchType gbProtCode
+searchPriority 60
+
+searchName tigrCmrORFsCommon
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+xrefTable tigrCmrORFsInfo
+xrefQuery select name from %s where tigrCommon like '%%%s%%'
+searchDescription Common Name of TIGR Locus
+searchPriority 61
+
+searchName tigrCmrORFsMainRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+xrefTable tigrCmrORFsInfo
+xrefQuery select name from %s where tigrMainRole like '%%%s%%'
+searchDescription Main Role of TIGR Locus
+searchPriority 62
+
+searchName tigrCmrORFsSubRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+xrefTable tigrCmrORFsInfo
+xrefQuery select name from %s where tigrSubRole like '%%%s%%'
+searchDescription SubRole of TIGR Locus
+searchPriority 63
+
