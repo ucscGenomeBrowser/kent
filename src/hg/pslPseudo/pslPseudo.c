@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.28 2004/08/22 07:37:17 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.29 2004/08/25 01:50:33 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -575,7 +575,7 @@ if (pseudoScore > 0)
 else 
     pg->score = 0;
 pg->coverage = ((psl->match+psl->repMatch)*100)/psl->qSize;
-pg->oldScore = (pg->milliBad - (100-log(pg->polyA)*20) - (pg->overlapDiag*2) - (100-pg->coverage) 
+pg->oldScore = (pg->milliBad - (100-log(pg->polyAlen)*20) - (pg->overlapDiag*2) - (100-pg->coverage) 
         + log(psl->match+psl->repMatch)*100)/2 ;
 
 pg->chrom = cloneString(psl->tName);
@@ -648,7 +648,7 @@ void initWeights()
     0 = + milliBad
     1 = + exon Coverage
     2 = + log axtScore
-    3 = + log polyA
+    3 = + log polyAlen
     4 = - overlapDiag
     5 = NOT USED log (qSize - qEnd)
     6 = + intronCount ^.5
@@ -849,10 +849,10 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 return FALSE;
 }
 
-//#ifdef NEVER
-int scoreWindow(char c, char *s, int size, int *score, int *start, int *end, int match, int misMatch)
+int scoreWindow(char c, char *s, int size, int *score, int *start, int *end, int match, int misMatch, float threshold)
 /* calculate score array with score at each position in s, match to char c adds 1 to score, mismatch adds -1 */
 /* index of max score is returned , size is size of s */
+/* number char c within window must have density greater than threshold */
 {
 int i=0, j=0, max=2, count = 0; 
 
@@ -878,8 +878,8 @@ for (i=0 ; i<size ; i++)
                 *start = j+1;
                 break;
                 }
-        verbose(4,"max is %d %d - %d score=%d i=%d",max, *start, *end, score[i],i);
         }
+    verbose(4,"max is %d %d - %d score=%d i=%d\n",max, *start, *end, score[i],i);
     if (score[i] < 0) 
         score[i] = 0;
     }
@@ -898,9 +898,15 @@ for (i=*start ; i<=*end ; i++)
     if (toupper(s[i]) == toupper(c) )
         count++;
     }
+if (*end != 0 && *start != 0)
+    {
+    if (count/(*end-*start) < threshold)
+        count = 0;
+    }
+else
+    count = 0;
 return count;
 }
-//#endif
    
 
 #ifdef NEVER
@@ -940,14 +946,15 @@ int score[POLYAREGION+1], pStart = 0;
 struct seqFilePos *sfp = hashMustFindVal(tHash, chrom);
 FILE *f = openFromCache(fileCache, sfp->file);
 int match = 1;
-float misMatch = 1.0/(4.0*(1.0-(100.0/divergence)));
+int misMatch = -1;
+float threshold = divergence/100;
 seqSize = sfp->pos;
 
 assert(region > 0);
 assert(end != 0);
 *polyAstart = 0 , *polyAend = 0;
 safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, chrom);
-verbose(2,"polyA file %s size %d start %d tSize %d match %d misMatch %f %f\n",
+verbose(2,"polyA file %s size %d start %d tSize %d match %d misMatch %d %f\n",
         sfp->file, seqSize, seqStart, tSize,match,misMatch,divergence);
 assert (seqSize == tSize);
 if (seqStart < 0) seqStart = 0;
@@ -960,24 +967,24 @@ if (strand[0] == '+')
     {
     assert (seq->size <= POLYAREGION);
 verbose(4,"\n + range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
-    count = scoreWindow('A',seq->dna,seq->size, score, polyAstart, polyAend, match, misMatch);
+    count = scoreWindow('A',seq->dna,seq->size, score, polyAstart, polyAend, match, misMatch, threshold);
     }
 else
     {
     assert (seq->size <= POLYAREGION);
 verbose(4,"\n - range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
-    count = scoreWindow('T',seq->dna,seq->size, score, polyAend, polyAstart, match, misMatch);
+    count = scoreWindow('T',seq->dna,seq->size, score, polyAend, polyAstart, match, misMatch, threshold);
     }
 pStart += seqStart;
 *polyAstart += seqStart;
 *polyAend += seqStart;
-length = strand[0]=='+'?*polyAend-*polyAstart:(*polyAstart)-(*polyAend);
+length = (strand[0]=='+'?*polyAend-*polyAstart:(*polyAstart)-(*polyAend))+1;
 verbose(3,"\npolyA is %d from end. seqStart=%d %s polyS/E %d-%d exact matches %d length %d \n",
         strand[0]=='+'?*polyAstart-seqStart:*polyAend-seqStart+seq->size, 
 	seqStart, seq->dna+(*polyAstart)-seqStart, 
 	*polyAstart, *polyAend, count, length);
 freeDnaSeq(&seq);
-return length;
+return count;
 }
 
 void pslMergeBlocks(struct psl *psl, struct psl *outPsl,
@@ -1467,8 +1474,8 @@ if (trfHash != NULL)
 return (float)trf/(float)(psl->match+psl->misMatch);
 }
 
-int overlapSplicedMrna(struct psl *psl, struct hash *mrnaHash, int *exonCount, struct psl **overlapPsl)
-/* count bases that spliced mrna overlaps with pseudogenes. If self match then don't filter it.*/
+int overlapMrna(struct psl *psl, struct hash *mrnaHash, int *exonCount, struct psl **overlapPsl)
+/* count bases that mrna overlaps with pseudogenes. If self match then don't filter it.*/
 /* exonCount has number of exons in matched mRna */
 {
 int maxOverlap = 0;
@@ -1505,11 +1512,12 @@ if (mrnaHash != NULL)
                 else
                     {
                     mrnaBases += positiveRangeIntersection(psl->tStart, psl->tEnd, mPsl->tStart, mPsl->tEnd);
-                    verbose(5,"blk %d %s %d ec %d\n",mPsl->blockCount, mPsl->qName, mrnaBases, exonCount);
-                    verbose(5,"blk merge %d %s %d ec %d\n",mPslMerge->blockCount, mPsl->qName, mrnaBases, exonCount);
+                    verbose(5,"blk %d %s %d ec %d\n",mPsl->blockCount, mPsl->qName, mrnaBases, *exonCount);
+                    verbose(5,"blk merge %d %s %d ec %d\n",mPslMerge->blockCount, mPsl->qName, mrnaBases, *exonCount);
                     }
-                verbose(2,"MRNABASES %d cnt %d %s %s %d-%d\n",mrnaBases, mPslMerge->blockCount, mPslMerge->qName, mPsl->qName, mPsl->tStart, mPsl->tEnd);
-                if (mrnaBases > 50 && (mPslMerge->blockCount > 1))
+                verbose(2,"MRNABASES %d cnt %d %s %s %d-%d\n",
+                        mrnaBases, mPslMerge->blockCount, mPslMerge->qName, mPsl->qName, mPsl->tStart, mPsl->tEnd);
+                if (mrnaBases > 50 && (mPslMerge->blockCount > 0) && mrnaBases > maxOverlap)
                     {
                         *exonCount = (int)mPslMerge->blockCount;
                         safef(mrnaOverlap,255,"%s",mPsl->qName);
@@ -1558,7 +1566,7 @@ pg->overStart = pg->overEnd = pg->kStart = pg->kEnd = pg->rStart = pg->rEnd = pg
 strncpy(pg->gStrand, psl->strand , sizeof(pg->gStrand));
 pg->polyA = polyACalc(psl->tStart, psl->tEnd, psl->strand, psl->tSize, psl->tName, 
                 POLYAREGION, &polyAstart, &polyAend, pg->milliBad/10);
-pg->polyAlen = abs(polyAend-polyAstart);
+pg->polyAlen = abs(polyAend-polyAstart)+1;
 pg->polyAstart = polyAstart;
 /* count # of alignments that span introns */
 pg->exonCover = pslCountExonSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
@@ -1689,7 +1697,7 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
         int exonCount = -1;
         struct genePred *gene = getOverlappingGene(&gpList1, "refGene", psl->tName, psl->tStart, 
                             psl->tEnd , psl->qName, &geneOverlap);
-        int maxOverlap = overlapSplicedMrna(psl, mrnaHash, &exonCount, &mPsl);
+        int maxOverlap = overlapMrna(psl, mrnaHash, &exonCount, &mPsl);
         pg->maxOverlap = maxOverlap;
         if ((float)maxOverlap/(float)(psl->match+psl->misMatch+psl->repMatch) > splicedOverlapRatio 
                 && maxOverlap > 50 ) 
@@ -1718,13 +1726,15 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
            }
         if (keepChecking)
            {
-            verbose(2,"YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d polyA %d start %d\n",
+            verbose(2,"YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d polyA %d start %d overlap ratio %d/%d %s\n",
                 psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
                 psl->tEnd-psl->tStart,psl->tName, pg->intronCount, 
                 maxExons , pg->bestAliCount, pg->exonCover,
                 calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
                 minCoverPseudo * (float)psl->qSize, pg->tReps + pg->qReps, pg->polyA, pg->overlapDiag,
-                pg->polyA, pg->polyAstart );
+                pg->polyAlen, pg->polyAstart ,
+                maxOverlap,psl->match+psl->misMatch+psl->repMatch , pg->overName
+                );
            if (pg->exonCover < 2)
                {
                dyStringAppend(reason,"singleExon ");
