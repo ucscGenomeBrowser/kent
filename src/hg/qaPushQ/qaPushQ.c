@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.49 2004/06/07 08:07:01 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.50 2004/06/07 23:41:11 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -164,7 +164,7 @@ char *colHdr[] = {
 "Parent Queue ID",
 "Priority",
 "Rank",
-"&nbsp;&nbsp;Submission&nbsp;&nbsp; Date",
+"&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;",
 "New?",
 "Track",
 "Databases",
@@ -3041,6 +3041,10 @@ sqlDisconnect(&betaconn);
 // is this necessary? are we really only allowed one remoteconn at a time?
 conn = sqlConnectRemote(host, user, password, database);
 
+/* Most Recent Updates */
+printf("<li><a CLASS=\"toc\" HREF=\"#recent\"> 10 Most Recent Changes (all assemblies) </a></li>");
+
+/* regular log index #links */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
     safef(tempName,sizeof(tempName),ki->organism);
@@ -3059,6 +3063,37 @@ printf(" For more information about the tracks and tables listed on this page, r
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
 printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
 
+/* 10 MOST RECENT CHANGES */
+webNewSection("<A NAME=recent></A> 10 Most Recent Changes (all assemblies)");
+printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
+    "<TR>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Assemblies</B></FONT></TD>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT></TD>\n"
+    "</TR>\n"
+    );
+safef(query,sizeof(query),
+    "select releaseLog, dbs, qadate from pushQ "
+    "where priority='L' and releaseLog != '' and dbs != '' "
+    "order by qadate desc, qid desc " 
+    "limit 10 " 
+    );
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sscanf(cloneStringZ(&row[2][5],2),"%d",&m);
+    sscanf(cloneStringZ(&row[2][8],2),"%d",&d);
+    printf("<TR valign=top><TD align=left>\n"
+	"%s</td>\n"
+	"<td>%s</td>\n"
+	"<td>%02d %s %s</td>\n"
+	"</tr>\n",
+	row[0], row[1], d, numberToMonth[m-1], cloneStringZ(row[2],4) );
+    }
+sqlFreeResult(&sr);
+printf("</table>\n");
+
+/* REGULAR LOG */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
     safef(tempName,sizeof(tempName),ki->organism);
