@@ -1040,7 +1040,7 @@ CONTIG POSITIONS (DONE 12/02/02)
     echo 'LOAD data local infile "ctgPos.tab" into table ctgPos' | hgsql rn1
 
 
-LOAD CPGISSLANDS (DONE 12/3/02)
+LOAD CPGISSLANDS (DONE 12/5/02)
     ssh eieio
     mkdir -p ~/rn1/bed/cpgIsland
     cd ~/rn1/bed/cpgIsland
@@ -1050,14 +1050,11 @@ LOAD CPGISSLANDS (DONE 12/3/02)
     cd cpg_dist
     gcc readseq.c cpg_lh.c -o cpglh.exe
     cd ..
-    foreach f (../../?{,?}/chr?{,?}{,_random}.fa)
-      set fout=$f:t
-      tr '[a-z]' 'N' < $f | sed -e 's/^>NNN/>chr/' > $fout
-      echo masked $fout
-      ./cpg_dist/cpglh.exe $fout > $fout.cpg
-      echo Done with $fout
+    foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
+      set fout=$f:t:r:r.cpg
+      echo running cpglh on $f to $fout
+      ./cpg_dist/cpglh.exe $f > $fout.cpg
     end
-    rm chr*.fa
     # copy filter.awk from a previous release
     cp ~/lastRn/bed/cpgIsland/filter.awk .
     awk -f filter.awk chr*.cpg > cpgIsland.bed
