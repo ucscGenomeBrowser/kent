@@ -203,3 +203,9 @@ boolean cgiFromFile(char *fileName);
  * cgiGetVar() commands can be used. Useful when a program 
  * has a lot of possible parameters.
  */
+
+void cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList);
+/* Parse cgi-style input into a hash table and list.  This will alter
+ * the input data.  The hash table will contain references back 
+ * into input, so please don't free input until you're done with 
+ * the hash. */

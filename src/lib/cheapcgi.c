@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.53 2003/11/11 22:09:53 jill Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.54 2003/12/23 20:24:12 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -301,7 +301,7 @@ if (inputString == NULL)
     }
 }
 
-static void cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList)
+void cgiParseInput(char *input, struct hash **retHash, struct cgiVar **retList)
 /* Parse cgi-style input into a hash table and list.  This will alter
  * the input data.  The hash table will contain references back 
  * into input, so please don't free input until you're done with 
