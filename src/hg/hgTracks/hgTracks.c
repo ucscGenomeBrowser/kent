@@ -94,7 +94,7 @@ boolean chromosomeColorsMade = FALSE; /* Have the 3 shades of 8 chromosome color
 Color chromColor[CHROMOSOME_SHADES * 8];
 
 int z;
-int maxCount ;
+int maxCount;
 int bestColor;
 int maxChromShade = CHROMOSOME_SHADES - 1;
 int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
@@ -174,7 +174,7 @@ MgFont *font;
 char *s;
 
 font = tl.font = mgSmallFont();
-tl.leftLabelWidth = 110;
+tl.leftLabelWidth = 120;
 tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
