@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.11 2003/11/07 22:27:49 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.12 2003/11/12 18:51:10 kent Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -202,6 +202,8 @@ col->advFilter = goAdvFilter;
 col->goaIdColumn = columnRequiredSetting(col, "goaIdColumn");
 }
 
+#ifdef OLD
+
 static boolean goOrderExists(struct order *ord, struct sqlConnection *ignore)
 /* This returns true if go database and goaPart table exists. */
 {
@@ -214,7 +216,6 @@ if (conn != NULL)
     }
 return gotIt;
 }
-
 
 static void goCalcDistances(struct order *ord, 
 	struct sqlConnection *ignore, /* connection to main database. */
@@ -295,4 +296,4 @@ ord->keyField = hashFindVal(ord->settings, "goaIdColumn");
 if (ord->keyField == NULL)
     errAbort("Missing goaIdColumn field in order.ra for go");
 }
-
+#endif /* OLD */

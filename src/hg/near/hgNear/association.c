@@ -425,3 +425,100 @@ if (columnSetting(col, "search", NULL))
     col->simpleSearch = associationSimpleSearch;
 }
 
+/* ----- Ordering by association. ----- */
+
+static boolean associationOrderExists(struct order *ord, 
+	struct sqlConnection *conn)
+/* This returns true if needed tables exist. */
+{
+return sqlTablesExist(conn, ord->tables);
+}
+
+
+static void associationCalcDistances(struct order *ord, 
+	struct sqlConnection *conn, /* connection to main database. */
+	struct genePos **pGeneList, struct hash *geneHash, int maxCount)
+/* Fill in distance fields in geneList. */
+{
+struct sqlResult *sr;
+char **row;
+struct hash *curTerms = newHash(8);
+struct hash *protHash = NULL;
+struct hash *lookupHash = geneHash;
+char query[512];
+struct genePos *gp;
+char *geneId = curGeneId->name;
+
+if (ord->protKey)
+    {
+    /* Build up hash of genes keyed by protein names. (The geneHash
+     * passed in is keyed by the mrna name. */
+    protHash = newHash(17);
+    for (gp = *pGeneList; gp != NULL; gp = gp->next)
+	{
+	char *id = (ord->protKey ? gp->protein : gp->name);
+	hashAdd(protHash, id, gp);
+	}
+
+    /* Also switch current gene id and lookup hash to protein. */
+    geneId = curGeneId->protein;
+    lookupHash = protHash;
+    }
+
+
+/* Build up hash full of all go IDs associated with gene. */
+if (geneId != NULL)
+    {
+    safef(query, sizeof(query), ord->queryOne, geneId);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	hashAdd(curTerms, row[0], NULL);
+	}
+    sqlFreeResult(&sr);
+    }
+
+/* Stream through association table counting matches. */
+sr = sqlGetResult(conn, ord->queryAll);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (hashLookup(curTerms, row[1]))
+	{
+	struct hashEl *hel = hashLookup(lookupHash, row[0]);
+	while (hel != NULL)
+	    {
+	    gp = hel->val;
+	    gp->count += 1;
+	    hel = hashLookupNext(hel);
+	    }
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Go through list translating non-zero counts to distances. */
+for (gp = *pGeneList; gp != NULL; gp = gp->next)
+    {
+    if (gp->count > 0)
+        {
+	gp->distance = 1.0/gp->count;
+	gp->count = 0;
+	}
+    if (sameString(gp->name, curGeneId->name))	/* Force self to top of list. */
+        gp->distance = 0;
+    }
+
+hashFree(&protHash);
+hashFree(&curTerms);
+}
+
+void associationSimilarityMethods(struct order *ord, char *parameters)
+/* Fill in associationSimilarity methods. */
+{
+ord->exists = associationOrderExists;
+ord->calcDistances = associationCalcDistances;
+ord->tables = cloneString(parameters);
+ord->protKey = orderSettingExists(ord, "protKey");
+ord->queryOne = orderRequiredSetting(ord, "queryOne");
+ord->queryAll = orderRequiredSetting(ord, "queryAll");
+}
+
