@@ -51,6 +51,7 @@
 #include "pslWScore.h"
 #include "lfs.h"
 #include "mcnBreakpoints.h"
+#include "expRecord.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -221,6 +222,7 @@ struct trackGroup
 
     void (*extraUi)(struct trackGroup *tg);
     void *extraUiData;
+    void (*trackFilter)(struct trackGroup *tg);
     /* Stuff to draw extra user interface parts. */
 
     void *customPt;            /* Misc pointer variable unique to group. */
@@ -491,12 +493,13 @@ struct simpleFeature
 enum {lfSubXeno = 1};
 
 struct linkedFeatures
-    {
+{
     struct linkedFeatures *next;
     int start, end;			/* Start/end in browser coordinates. */
     int tallStart, tallEnd;		/* Start/end of fat display. */
     int grayIx;				/* Average of components. */
     int filterColor;			/* Filter color (-1 for none) */
+    float score;                        /* score for this feature */
     char name[32];			/* Accession of query seq. */
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
@@ -4730,6 +4733,316 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	y += lineHeight;
     }
 }
+struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList)
+{
+struct linkedFeaturesSeries *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL;
+/* create one linkedFeatureSeries with average score for each lf
+   in bed->score */
+AllocVar(lfs);
+snprintf(lfs->name, sizeof(lfs->name), "%s", bedList->name);
+for(bed = bedList; bed != NULL; bed = bed->next)
+    {
+    lf = lfFromBed(bed);
+    lf->tallStart = bed->chromStart;
+    lf->tallEnd = bed->chromEnd;
+    lf->score = bed->score;
+    slAddHead(&lfs->features, lf);  
+    }
+return lfs;
+}
+
+void expRecordMapTypes(struct hash *indexes, int *numIndexes, struct expRecord *erList,  int index)
+{
+struct expRecord *er = NULL;
+struct slRef *srList=NULL, *sr=NULL, *val=NULL;
+struct hash *seen = newHash(2);
+char buff[256];
+int unique = 0;
+for(er = erList; er != NULL; er = er->next)
+    {
+    val = hashFindVal(seen, er->extras[index]);
+    if(val == NULL)
+	{
+	/* if this type is new 
+        save the index for this type */
+	AllocVar(sr);
+	snprintf(buff, sizeof(buff), "%d", unique);
+	sr->val = buff;
+	hashAdd(seen, er->extras[index], sr);
+
+	/* save the indexes associated with this index */
+	AllocVar(sr);
+	sr->val = &er->id;
+	hashAdd(indexes, buff, sr);
+	unique++;
+	}
+    else
+	{
+	/* if this type has been seen before 
+	   tack the new index on the end of the list */
+	AllocVar(sr);
+	srList = hashMustFindVal(indexes, val->val);
+	sr->val = &er->id;
+	slAddTail(&srList,sr);
+	}
+    }
+/* need to free all the slRefs in the 'seen' hash here */
+hashFree(&seen);
+*numIndexes = unique;
+}
+
+int lfsSortByName(const void *va, const void *vb)    
+{
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
+return(strcmp(a->name, b->name));
+}
+
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex) 
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
+struct linkedFeatures *lf = NULL;
+struct sqlConnection *conn = sqlConnect(database);
+struct hash *indexes = newHash(2);
+struct hash *expTypes = newHash(2);
+int numIndexes = 0, currentIndex, i;
+struct expRecord *erList = NULL, *er=NULL;
+struct slRef *srList = NULL, *sr=NULL;
+char buff[256];
+struct bed *bed;
+
+/* load the experiment information */
+snprintf(buff, sizeof(buff), "select * from %s", table);
+erList = expRecordLoadByQuery(conn, buff);
+if(erList == NULL)
+    errAbort("hgTracks::msBedGroupByIndex() - can't get any records for %s in table %s\n", buff, table);
+sqlDisconnect(&conn);
+
+/* build hash to map experiment ids to types */
+for(er = erList; er != NULL; er = er->next)
+    {
+    snprintf(buff, sizeof(buff), "%d", er->id);
+    hashAdd(expTypes, buff, er->extras[expIndex]);
+    }
+
+/* get the number of indexes and the experiment values associated
+   with each index */
+expRecordMapTypes(indexes, &numIndexes, erList, expIndex);
+lfsArray = needMem(sizeof(struct linkedFeaturesSeries*) * numIndexes);
+
+/* initialize our different tissue linkedFeatureSeries) */
+for(i=0;i<numIndexes;i++)
+    AllocVar(lfsArray[i]);
+
+/* for every bed we need to group together the tissue specific
+ scores in that bed */
+for(bed = bedList; bed != NULL; bed = bed->next)
+    {
+    /* for each tissue we need to average the scores together */
+    for(i=0; i<numIndexes; i++) 
+	{
+	float aveScores = 0;
+	int aveCount =0;
+	char *name;
+
+	/* get the indexes of experiments that we want to average 
+	 in form of a slRef list */
+	snprintf(buff, sizeof(buff), "%d", i);
+	srList = hashMustFindVal(indexes, buff);
+	currentIndex = *((int *)srList->val);
+
+	/* create the linked features */
+	lf = lfFromBed(bed);
+	lf->tallStart = bed->chromStart;
+	lf->tallEnd = bed->chromEnd;
+	if(bed == bedList) 
+	    {
+	    snprintf(buff, sizeof(buff), "%d", bed->expIds[currentIndex]);
+	    name = hashMustFindVal(expTypes, buff);	
+	    snprintf(lfsArray[i]->name, sizeof(lf->name), "%s", name);
+	    }
+	/* average the scores together to get the ave score for this
+	   tissue type */
+	for(sr = srList; sr != NULL; sr = sr->next)
+	    {
+	    currentIndex = *((int *)sr->val);
+	    if( bed->expScores[currentIndex] != -10000) 
+		{
+		aveScores += bed->expScores[currentIndex];
+		aveCount++;
+		}
+	    }
+
+	/* if there were some good values do the average 
+	   otherwise mark as missing */
+	if(aveCount != 0)
+	    lf->score = aveScores/aveCount;
+	else
+	    lf->score = -10000;
+	
+	/* add this linked feature to the correct 
+	   linkedFeaturesSeries */
+	slAddHead(&lfsArray[i]->features, lf);
+	}
+    }
+/* Summarize all of our linkedFeatureSeries in one linkedFeatureSeries list */
+for(i=0; i<numIndexes; i++)
+    {
+    slAddHead(&lfsList, lfsArray[i]);
+    }
+slSort(&lfsList,lfsSortByName);
+return lfsList;
+}
+
+void lfsFromNci60Bed(struct trackGroup *tg)
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL, *bedList= NULL;
+int i=0;
+bedList = tg->items;
+
+if(tg->visibility == tvDense)
+    {
+    tg->items = lfsFromMsBedSimple(bedList);
+    }
+else 
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 1);
+    }
+}
+
+struct linkedFeaturesSeries *lfsFromMsBed(struct trackGroup *tg, struct bed *bedList)
+/* create a linkedFeatureSeries from a bed list making each
+   experiment a different linkedFeaturesSeries */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL;
+int i=0;
+if(tg->visibility == tvDense)
+    {
+    lfsList = lfsFromMsBedSimple(bedList);
+    }
+else 
+    {
+    /* for each experiment create a linked features series */
+    for(i = 0; i < bedList->expCount; i++) 
+	{
+	AllocVar(lfs);
+	snprintf(lfs->name, sizeof(lfs->name), "%d", bedList->expIds[i]);
+	for(bed = bedList; bed != NULL; bed = bed->next)
+	    {
+	    lf = lfFromBed(bed);
+	    lf->tallStart = bed->chromStart;
+	    lf->tallEnd = bed->chromEnd;
+	    lf->score = bed->expScores[i];
+	    slAddHead(&lfs->features, lf);
+	    }
+	slReverse(&lfs->features);
+	slAddHead(&lfsList, lfs);
+	}
+    slReverse(&lfsList);
+    }
+return lfsList;
+}
+
+void makeRedGreenShades(struct memGfx *mg) 
+/* Allocate the  shades of Red, Green and Blue */
+{
+int i;
+int maxShade = ArraySize(shadesOfGreen) -1;
+for(i=0; i<=maxShade; i++) 
+    {
+    struct rgbColor rgbGreen, rgbRed, rgbBlue;
+    int level = (255*i/(maxShade));
+    if(level<0) level = 0;
+    shadesOfRed[i] = mgFindColor(mg, level, 0, 0);
+    shadesOfGreen[i] = mgFindColor(mg, 0, level, 0);
+    shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
+    }
+exprBedColorsMade = TRUE;
+}
+
+Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
+{
+struct linkedFeatures *lf = item;
+float val = lf->score;
+float absVal = fabs(val);
+int colorIndex = 0;
+float maxDeviation = 1.0;
+
+
+if(val == -10000)
+    return shadesOfGray[5];
+if(tg->visibility == tvDense)
+    val = val/100;
+
+if(!exprBedColorsMade)
+    makeRedGreenShades(mg);
+/* cap the value to be less than or equal to maxDeviation */
+if(absVal > maxDeviation)
+    absVal = maxDeviation;
+
+/* project the value into the number of colors we have.  
+ *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
+ * 1 * 15 /2.0 = 7.5 = 7
+ */
+colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
+if(val > 0) 
+    return shadesOfRed[colorIndex];
+else 
+    return shadesOfGreen[colorIndex];
+}
+
+
+
+void loadMultScoresBed(struct trackGroup *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bedList = NULL, *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 15);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&bedList);
+if(tg->trackFilter != NULL)
+    {
+    /* let the filter do the assembly of the linkedFeaturesList */
+    tg->items = bedList;
+    tg->trackFilter(tg);
+    }
+else
+    {
+    /* use default behavior of one row for each experiment */
+    tg->items = lfsFromMsBed(tg, bedList);
+    bedFreeList(&bedList);
+    }
+}
+
+void nci60Methods(struct trackGroup *tg)
+/* set up special methods for NCI60 track and tracks with multiple
+   scores in general */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = nci60Color;
+tg->loadItems = loadMultScoresBed;
+tg->trackFilter = lfsFromNci60Bed ;
+}
+
 
 void perlegenMethods(struct trackGroup *tg)
 /* setup special methods for haplotype track */
@@ -4819,22 +5132,6 @@ switch (vis)
 return tg->height;
 }
 
-void makeRedGreenShades(struct memGfx *mg) 
-/* Allocate the  shades of Red, Green and Blue */
-{
-int i;
-int maxShade = ArraySize(shadesOfGreen) -1;
-for(i=0; i<=maxShade; i++) 
-    {
-    struct rgbColor rgbGreen, rgbRed, rgbBlue;
-    int level = (255*i/(maxShade));
-    if(level<0) level = 0;
-    shadesOfRed[i] = mgFindColor(mg, level, 0, 0);
-    shadesOfGreen[i] = mgFindColor(mg, 0, level, 0);
-    shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
-    }
-exprBedColorsMade = TRUE;
-}
 
 
 Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
@@ -5609,7 +5906,7 @@ if (sameWord(type, "bed"))
 	bedMethods(group);
 	group->loadItems = loadSimpleBed;
 	}
-    else
+    else 
 	{
 	linkedFeaturesMethods(group);
 	group->loadItems = loadGappedBed;
@@ -5978,6 +6275,7 @@ registerTrackHandler("rosettaTe",rosettaTeMethods);
 registerTrackHandler("rosettaPe",rosettaPeMethods); 
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
+registerTrackHandler("nci60", nci60Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
