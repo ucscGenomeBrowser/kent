@@ -1721,11 +1721,11 @@ SGP GENE PREDICTIONS (4/17/03 KRR)
     hgPepPred mm3 generic sgpPep download/*-fixed.prot
 
 
-TIGR GENE INDEX (TODO)
-    mkdir -p ~/mm3/bed/tigr
-    cd ~/mm3/bed/tigr
-    wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_MouseGenome_Nov2002.tgz
-    gunzip -c TGI*.tgz | tar xvf -
+# TIGR GENE INDEX (DONE 2003-10-31 kate)
+    mkdir -p /cluster/data/mm3/bed/tigr
+    cd /cluster/data/mm3/bed/tigr
+    wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_TGI_track_MouseGenome_Feb2003.tgz
+    tar xvfz TGI*.tgz
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
@@ -1737,6 +1737,8 @@ TIGR GENE INDEX (TODO)
       end
     end
     ldHgGene -exon=TC mm3 tigrGeneIndex *.gff
+       # 247855 gene predictions
+    gzip *TCs *.gff
 
 
 LOAD STS MAP (TODO)
