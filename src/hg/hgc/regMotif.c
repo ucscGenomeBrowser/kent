@@ -253,6 +253,23 @@ if (columns > 1)
 printf(">%s</TH>", label);
 }
 
+struct tfData
+/* Data associated with one transcription factor. */
+   {
+   struct tfData *next;
+   char *name;	/* Transcription factor name. */
+   struct slName *conditionList;	/* List of growth conditions. */
+   struct transRegCode *trcList;	/* List of binding sites. */
+   };
+
+int tfDataCmpName(const void *va, const void *vb)
+/* Compare two tfData names. */
+{
+const struct tfData *a = *((struct tfData **)va);
+const struct tfData *b = *((struct tfData **)vb);
+return strcmp(a->name, b->name);
+}
+
 void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
 	char *codeTable, char *motifTable)
 /* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
@@ -263,6 +280,7 @@ char **row;
 int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
 struct sqlConnection *conn = hAllocConn();
 struct transRegCodeProbe *probe = NULL;
+struct transRegCode *trc;
 
 cartWebStart(cart, "CHIP/CHIP Probe Info");
 safef(query, sizeof(query), "select * from %s where name = '%s'",
@@ -273,9 +291,39 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 if (probe != NULL)
     {
-    /* Make up a hash of all motif hits in region. */
-    struct hash *trcHash = newHash(0);
+    struct tfData *tfList = NULL, *tf;
+    struct hash *tfHash = newHash(0);
     struct transRegCode *trc;
+    int i;
+
+    /* Print basic info. */
+    printf("<B>Name:</B> %s<BR>\n", probe->name);
+    printPosOnChrom(probe->chrom, probe->chromStart, probe->chromEnd, 
+    	NULL, TRUE, probe->name);
+    printf("<BR>\n");
+
+    /* Make up list of all transcriptionFactors. */
+    for (i=0; i<probe->tfCount; ++i)
+        {
+	/* Parse out factor and condition. */
+	char *tfName = probe->tfList[i];
+	char *condition = strchr(tfName, '_');
+	if (condition != NULL)
+	    *condition++ = 0;
+	else
+	    condition = "n/a";
+	tf = hashFindVal(tfHash, tfName);
+	if (tf == NULL)
+	    {
+	    AllocVar(tf);
+	    hashAddSaveName(tfHash, tfName, tf, &tf->name);
+	    slAddHead(&tfList, tf);
+	    }
+	slNameAddHead(&tf->conditionList, condition);
+	}
+    slSort(&tfList, tfDataCmpName);
+
+    /* Fold in motif hits in region. */
     if (sqlTableExists(conn, codeTable))
         {
 	sr = hRangeQuery(conn, codeTable, 
@@ -284,21 +332,19 @@ if (probe != NULL)
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    trc = transRegCodeLoad(row+rowOffset);
-	    hashAdd(trcHash, trc->name, trc);
+	    tf = hashFindVal(tfHash, trc->name);
+	    if (tf != NULL)
+		slAddTail(&tf->trcList, trc);
 	    }
 	sqlFreeResult(&sr);
 	}
 
-    printf("<B>Name:</B> %s<BR>\n", probe->name);
-    printPosOnChrom(probe->chrom, probe->chromStart, probe->chromEnd, 
-    	NULL, TRUE, probe->name);
-    printf("<BR>\n");
+    /* Print info on individual transcription factors. */
     webNewSection("Experiments with Significant Enrichment After IP");
-    if (probe->tfCount == 0)
+    if (tfList == NULL)
         printf("No significant immunoprecipitation of this probe.");
     else
         {
-	int i;
 	hTableStart();
 	printf("<TR>");
 	colLabel("Transcription", 1);
@@ -307,51 +353,42 @@ if (probe != NULL)
 	printf("</TR>\n");
 	printf("<TR>");
 	colLabel("Factor", 1);
-	colLabel("Condition", 1);
+	colLabel("Conditions", 1);
 	colLabel("Hits", 1);
 	colLabel("Scores", 1);
 	colLabel("Conservation (2 max)", 1);
 	printf("</TR>\n");
-	for (i=0; i<probe->tfCount; ++i)
+
+	for (tf = tfList; tf != NULL; tf = tf->next)
 	    {
-	    char *tfName = probe->tfList[i];
-	    char *condition;
-	    double motifScore;
-	    struct transRegCode *trcList = NULL, *trc;
+	    struct slName *cond;
 	    printf("<TR>");
 
 	    /* Parse out factor and growth condition and print. */
-	    condition = strchr(tfName, '_');
-	    if (condition != NULL)
-	        *condition++ = 0;
-	    printf("<TD>%s</TD> ", tfName);
-	    if (condition == NULL)
-	        condition = "n/a";
-	    printf("<TD>%s</TD> ", condition);
-
-	    /* Get list of motifs that hit. */
+	    printf("<TD>%s</TD>", tf->name);
+	    printf("<TD>");
+	    slSort(&tf->conditionList, slNameCmp);
+	    for (cond = tf->conditionList; cond != NULL; cond = cond->next)
 	        {
-		struct hashEl *el = hashLookup(trcHash, tfName);
-		while (el != NULL)
-		    {
-		    trc = el->val;
-		    slAddTail(&trcList, trc);
-		    el = el->next;
-		    }
-		}
+		if (cond != tf->conditionList)
+		    printf(", ");
+		printf("%s", cond->name);
+	         }
+	    printf("</TD>");
+
 
 	    /* Print motif info. */
-	    if (trcList == NULL)
+	    if (tf->trcList == NULL)
 	        printf("<TD>0</TD><TD>n/a</TD><TD>n/a</TD>\n");
 	    else
 	        {
-		printf("<TD>%d</TD>", slCount(trcList));
+		printf("<TD>%d</TD>", slCount(tf->trcList));
 		/* Print scores. */
 		printf("<TD>");
-		for (trc = trcList; trc != NULL; trc = trc->next)
+		for (trc = tf->trcList; trc != NULL; trc = trc->next)
 		    {
 		    double score;
-		    if (trc != trcList)
+		    if (trc != tf->trcList)
 		        printf(", ");
 		    score = motifScoreHere(
 		    	trc->chrom, trc->chromStart, trc->chromEnd,
@@ -359,9 +396,9 @@ if (probe != NULL)
 		    printf("%3.1f", score);
 		    }
 		printf("</TD><TD>");
-		for (trc = trcList; trc != NULL; trc = trc->next)
+		for (trc = tf->trcList; trc != NULL; trc = trc->next)
 		    {
-		    if (trc != trcList)
+		    if (trc != tf->trcList)
 		        printf(", ");
 		    printf("%d", trc->consSpecies);
 		    }
