@@ -1035,23 +1035,11 @@ chainSome $(path1)
   /cluster/home/heather/bin/x86_64/netSyntenic bosTau1.net.raw bosTau1.net.syn
   # memory usage 2757492736, utime 13404 s/100, stime 616
 
-  # gzip
+  # backup/compress
   ssh kksilo
   cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
   gzip bosTau1.net.raw
-
-  # split
-  ssh kksilo
-  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
-  mkdir net
-  /cluster/bin/i386/netSplit bosTau1.net.syn net
-
-  # generate axts
-  mkdir ../axtNet
-  cd net
-  foreach i (*.net)
-    /cluster/bin/i386/netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/bosTau1/bosTau1.2bit ../../axtNet/$i:r.axt
-  end
+  cp bosTau1.net.syn bosTau1.net.syn.backup
 
   # netClass
   # takes about 4 hours
@@ -1059,9 +1047,8 @@ chainSome $(path1)
   cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
   /cluster/bin/i386/netClass -noAr bosTau1.net.syn hg17 bosTau1 bosTau1.net
 
-  # backups/compress
+  # backups
   ssh kksilo
-  gzip bosTau1.net.syn
   cp bosTau1.net bosTau1.net.backup
   rm bosTau1.net.syn.backup
 
@@ -1070,3 +1057,20 @@ chainSome $(path1)
   cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
   /cluster/bin/i386/netFilter -minGap=10 bosTau1.net | /cluster/bin/i386/hgLoadNet hg17 netBosTau1 stdin
   rm bosTau1.net.backup
+
+  # index has NULL cardinality; analzye to fix
+  hgsql hg17
+  analyze table netBosTau1
+
+  # generate axts 
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  mkdir net
+  /cluster/bin/i386/netSplit bosTau1.net.syn net
+  mkdir ../axtNet
+  cd net
+  foreach i (*.net)
+    /cluster/bin/i386/netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/bosTau1/bosTau1.2bit ../../axtNet/$i:r.axt
+  end
+  gzip bosTau1.net.syn
+  gzip bosTau1.net
