@@ -98,6 +98,7 @@ UTIL_DIRS = \
 	affyTransciptome \
 	agpCloneCheck \
 	agpCloneList \
+	agpAllToFaFile \
 	agpToFa \
 	agpToGl \
 	autoSql \
