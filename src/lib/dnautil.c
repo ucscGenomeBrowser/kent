@@ -15,100 +15,101 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.33 2005/01/10 22:02:02 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.34 2005/02/10 19:48:33 hiram Exp $";
 
 struct codonTable
 /* The dread codon table. */
     {
     DNA *codon;		/* Lower case. */
-    AA protCode;	/* Upper case. */
+    AA protCode;	/* Upper case. The "Standard" code */
+    AA mitoCode;	/* Upper case. Vertebrate Mitochondrial translations */
     };
 
 struct codonTable codonTable[] = 
 /* The master codon/protein table. */
 {
-    {"ttt", 'F',},
-    {"ttc", 'F',},
-    {"tta", 'L',},
-    {"ttg", 'L',},
+    {"ttt", 'F', 'F',},
+    {"ttc", 'F', 'F',},
+    {"tta", 'L', 'L',},
+    {"ttg", 'L', 'L',},
 
-    {"tct", 'S',},
-    {"tcc", 'S',},
-    {"tca", 'S',},
-    {"tcg", 'S',},
+    {"tct", 'S', 'S',},
+    {"tcc", 'S', 'S',},
+    {"tca", 'S', 'S',},
+    {"tcg", 'S', 'S',},
 
-    {"tat", 'Y',},
-    {"tac", 'Y',},
-    {"taa", 0,},
-    {"tag", 0,},
+    {"tat", 'Y', 'Y',},
+    {"tac", 'Y', 'Y',},
+    {"taa", 0, 'W',},
+    {"tag", 0, 0,},
 
-    {"tgt", 'C',},
-    {"tgc", 'C',},
-    {"tga", 0,},
-    {"tgg", 'W',},
-
-
-    {"ctt", 'L',},
-    {"ctc", 'L',},
-    {"cta", 'L',},
-    {"ctg", 'L',},
-
-    {"cct", 'P',},
-    {"ccc", 'P',},
-    {"cca", 'P',},
-    {"ccg", 'P',},
-
-    {"cat", 'H',},
-    {"cac", 'H',},
-    {"caa", 'Q',},
-    {"cag", 'Q',},
-
-    {"cgt", 'R',},
-    {"cgc", 'R',},
-    {"cga", 'R',},
-    {"cgg", 'R',},
+    {"tgt", 'C', 'C',},
+    {"tgc", 'C', 'C',},
+    {"tga", 0, 0,},
+    {"tgg", 'W', 'W',},
 
 
-    {"att", 'I',},
-    {"atc", 'I',},
-    {"ata", 'I',},
-    {"atg", 'M',},
+    {"ctt", 'L', 'L',},
+    {"ctc", 'L', 'L',},
+    {"cta", 'L', 'L',},
+    {"ctg", 'L', 'L',},
 
-    {"act", 'T',},
-    {"acc", 'T',},
-    {"aca", 'T',},
-    {"acg", 'T',},
+    {"cct", 'P', 'P',},
+    {"ccc", 'P', 'P',},
+    {"cca", 'P', 'P',},
+    {"ccg", 'P', 'P',},
 
-    {"aat", 'N',},
-    {"aac", 'N',},
-    {"aaa", 'K',},
-    {"aag", 'K',},
+    {"cat", 'H', 'H',},
+    {"cac", 'H', 'H',},
+    {"caa", 'Q', 'Q',},
+    {"cag", 'Q', 'Q',},
 
-    {"agt", 'S',},
-    {"agc", 'S',},
-    {"aga", 'R',},
-    {"agg", 'R',},
+    {"cgt", 'R', 'R',},
+    {"cgc", 'R', 'R',},
+    {"cga", 'R', 'R',},
+    {"cgg", 'R', 'R',},
 
 
-    {"gtt", 'V',},
-    {"gtc", 'V',},
-    {"gta", 'V',},
-    {"gtg", 'V',},
+    {"att", 'I', 'I',},
+    {"atc", 'I', 'I',},
+    {"ata", 'I', 'M',},
+    {"atg", 'M', 'M',},
 
-    {"gct", 'A',},
-    {"gcc", 'A',},
-    {"gca", 'A',},
-    {"gcg", 'A',},
+    {"act", 'T', 'T',},
+    {"acc", 'T', 'T',},
+    {"aca", 'T', 'T',},
+    {"acg", 'T', 'T',},
 
-    {"gat", 'D',},
-    {"gac", 'D',},
-    {"gaa", 'E',},
-    {"gag", 'E',},
+    {"aat", 'N', 'N',},
+    {"aac", 'N', 'N',},
+    {"aaa", 'K', 'K',},
+    {"aag", 'K', 'K',},
 
-    {"ggt", 'G',},
-    {"ggc", 'G',},
-    {"gga", 'G',},
-    {"ggg", 'G',},
+    {"agt", 'S', 'S',},
+    {"agc", 'S', 'S',},
+    {"aga", 'R', 0,},
+    {"agg", 'R', 0,},
+
+
+    {"gtt", 'V', 'V',},
+    {"gtc", 'V', 'V',},
+    {"gta", 'V', 'V',},
+    {"gtg", 'V', 'V',},
+
+    {"gct", 'A', 'A',},
+    {"gcc", 'A', 'A',},
+    {"gca", 'A', 'A',},
+    {"gcg", 'A', 'A',},
+
+    {"gat", 'D', 'D',},
+    {"gac", 'D', 'D',},
+    {"gaa", 'E', 'E',},
+    {"gag", 'E', 'E',},
+
+    {"ggt", 'G', 'G',},
+    {"ggc", 'G', 'G',},
+    {"gga", 'G', 'G',},
+    {"ggg", 'G', 'G',},
 };
 
 /* A table that gives values 0 for t
@@ -194,9 +195,9 @@ if (!inittedNtVal)
 }
 
 /* Returns one letter code for protein, 
-   0 for stop codon or X for bad input,
- */
-char lookupCodon(DNA *dna)
+ * 0 for stop codon or X for bad input,
+ * The "Standard" Code */
+AA lookupCodon(DNA *dna)
 {
 int ix;
 int i;
@@ -213,6 +214,30 @@ for (i=0; i<3; ++i)
     ix = (ix<<2) + bv;
     }
 c = codonTable[ix].protCode;
+c = toupper(c);
+return c;
+}
+
+/* Returns one letter code for protein, 
+ * 0 for stop codon or X for bad input,
+ * Vertebrate Mitochondrial Code */
+AA lookupMitoCodon(DNA *dna)
+{
+int ix;
+int i;
+char c;
+
+if (!inittedNtVal)
+    initNtVal();
+ix = 0;
+for (i=0; i<3; ++i)
+    {
+    int bv = ntVal[dna[i]];
+    if (bv<0)
+	return 'X';
+    ix = (ix<<2) + bv;
+    }
+c = codonTable[ix].mitoCode;
 c = toupper(c);
 return c;
 }
@@ -372,7 +397,6 @@ for (i=0; i<length; ++i)
 /* Reverse complement DNA. */
 void reverseComplement(DNA *dna, long length)
 {
-int i;
 reverseBytes(dna, length);
 complement(dna, length);
 }
