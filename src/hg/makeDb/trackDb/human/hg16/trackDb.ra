@@ -888,11 +888,21 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 track phastCons
+shortLabel phastCons 
+longLabel phastCons Conservation Score, Human/Chimp/Mouse/Rat/Chicken
+group compGeno
+priority 100.11
+visibility hide
+color 0,10,100
+maxHeightPixels 40
+type wig 0.0 1.0
+autoScaleDefault off
+
 track phastConsElements
 shortLabel Cons Elements
 longLabel phastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
 group compGeno
-priority 100.11
+priority 100.12
 visibility hide
 spectrum on
 color 0,60,120
