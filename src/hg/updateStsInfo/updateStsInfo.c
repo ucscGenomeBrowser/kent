@@ -588,11 +588,37 @@ void readDbstsNames(struct lineFile *daf)
 				 
 }
 
+void readAllSts(FILE *asf) 
+/* Read in current sequences for sts markers */
+{
+  struct dnaSeq *ds;
+  struct sts *s;
+  char *name, *words[8];
+
+
+  ds = faReadOneDnaSeq(asf, "default", TRUE);
+  while (ds != NULL)
+    {
+      /* Determine the UCSC id */
+      name = cloneString(ds->name);
+      chopByWhite(name, words, ArraySize(words));
+      stripString(words[0], ">");
+      /* Find the record and attach */
+      if (hashLookup(stsHash, words[0]))
+	{
+	  s = hashMustFindVal(stsHash, words[0]);
+	  s->fa = ds;
+	}
+      ds = faReadOneDnaSeq(asf, "default", TRUE);
+    }
+}
+
 void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 /* Write out update files for info, primers, and sequences */
 {
   struct sts *s;
   struct stsInfo2 *si;
+  char name[256], *gb;
   int i;
 
   slReverse(&sList);
@@ -654,10 +680,13 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 	    if (differentString(si->otherNames[i], si->name))
 	      fprintf(oaf, "%s\t%d\t%s\n", si->otherNames[i], si->identNo, si->name);
 	  
-
 	  /* Write out to fa file */
-
-
+	  if (s->fa != NULL)
+	    {
+	      gb = sqlStringArrayToString(si->genbank, si->gbCount);
+	      sprintf(name, "%s %s %s", s->fa->name, si->name, gb);
+	      faWriteNext(off, name, s->fa->dna, s->fa->size);
+	    }
 	}
       else
 	verbose(1, "%d\t%s\t%d\t(%d) not in dbSTS anymore\n", si->identNo, si->name, si->dbSTSid, s->dbstsIdExists);
@@ -666,8 +695,8 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 
 int main(int argc, char *argv[])
 {
-  struct lineFile *sif, *asf, *dsf, *daf, *dff, *gbf;
-  FILE *of, *opf, *oaf, *off;
+  struct lineFile *sif, *dsf, *daf, *gbf;
+  FILE *of, *opf, *oaf, *off, *asf, *dff;
   char filename[256], *gbName;
   int verb = 0;
 
@@ -685,10 +714,10 @@ verboseSetLevel(verb);
  if (gbName) 
    gbf = lineFileOpen(gbName, TRUE);
  sif = lineFileOpen(argv[1], TRUE);
- asf = lineFileOpen(argv[2], TRUE);
+ asf = mustOpen(argv[2], "r");
  dsf = lineFileOpen(argv[3], TRUE);
  daf = lineFileOpen(argv[4], TRUE);
- dff = lineFileOpen(argv[5], TRUE);
+ dff = mustOpen(argv[5], "r");
 
  sprintf(filename, "%s.info", argv[6]);
  of = mustOpen(filename, "w");
@@ -718,14 +747,21 @@ verboseSetLevel(verb);
  verbose(1, "Reading current dbSTS.aliases file\n");
  readDbstsNames(daf);
 
+ /* Read in current sequences for sts markers */
+ verbose(1, "Reading current all.STS file\n");
+ readAllSts(asf);
+
+ /* Read in new sequences from dbSTS.fa */
+ verbose(1, "Reading dbSTS.fa file\n");
+
  /* Print out the new files */
  verbose(1, "Creating output files\n");
  writeOut(of, opf, oaf, off);
 
- lineFileClose(&asf);
+ fclose(asf);
  lineFileClose(&dsf);
  lineFileClose(&daf);
- lineFileClose(&dff);
+ fclose(dff);
  if (gbName)
    lineFileClose(&gbf);   
  fclose(of);
