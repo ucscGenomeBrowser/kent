@@ -115,8 +115,10 @@ int xx, yy;
 currentYoffset = *yOffp;
     
 calxy(0, *yOffp, &xx, &yy);
-vgTextRight(g_vg, xx-25, yy-4, 10, 10,
-	    MG_BLACK, g_font, "Polarity");
+
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "Polarity");
+vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_RED,  g_font, "+");
+vgTextRight(g_vg, xx-14, yy, 10, 10, MG_BLUE, g_font, "-");
     
 for (index=0; index < len; index++)
     {
@@ -221,6 +223,7 @@ calxy(0, *yOffp, &xx, &yy);
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, "Cysteines");
     
 vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, "Glycosylation");
+vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, "(potential)");
     
 for (index=0; index < len; index++)
     {
@@ -662,6 +665,7 @@ int aaResCnt[30];
 double aaResFreqDouble[30];
 int aaResFound;
 int totalResCnt;
+int hasResFreq;
 
 char *aap;
 double molWeight, hydroSum;
@@ -670,7 +674,7 @@ struct pbStamp *stampDataPtr;
 Color bkgColor;
 
 // initialize AA properties
-aaPropertyInit();
+aaPropertyInit(&hasResFreq);
 
 g_vg = vg;
 g_font = mgSmallFont();
@@ -685,13 +689,14 @@ if ((exonNumStr=cgiOptionalString("exonNum")) != NULL)
 
 l=strlen(aa);
 
-//yOffp = &y0;
-
 doAAScale(l, yOffp, 1);
 if (pbScale >= 6) do_residues_track(aa, l, yOffp);
 
-get_exons(proteinID, mrnaID);
-do_exons_track(exCount, yOffp, mrnaID);
+if (mrnaID != NULL)
+    {
+    get_exons(proteinID, mrnaID);
+    do_exons_track(exCount, yOffp, mrnaID);
+    }
 
 doCharge(aa, l, yOffp);
 
@@ -699,10 +704,11 @@ doHydrophobicity(aa, l, yOffp);
 
 doCysteines(aa, l, yOffp);
 
+// Temporarily disable superfamily track until suprfam data built for hg16
 sf_cnt = get_superfamilies(proteinID, ensPepName);
 if (sf_cnt > 0) doSuperfamily(ensPepName, sf_cnt, yOffp); 
 
-doAnomalies(aa, l, yOffp);
+if (hasResFreq) doAnomalies(aa, l, yOffp);
 
 doAAScale(l, yOffp, -1);
 }
