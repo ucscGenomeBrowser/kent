@@ -470,8 +470,18 @@ altColor 160,0,0
 visibility full
 type sample
 
-track longMCS
-shortLabel Intersecting MCSs
+
+track intersectingMergedMCS
+shortLabel MCSinterMerged
+longLabel Merged Intersecting MCSs
+group compGeno
+priority 50
+visibility hide
+color 0,160,0
+type bed 4 .
+
+track intersectingMCS
+shortLabel MCSinter
 longLabel Intersecting MCSs
 group compGeno
 priority 50
