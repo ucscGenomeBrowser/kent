@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.470 2003/08/22 13:45:39 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.470.2.1 2003/08/29 16:54:25 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6878,7 +6878,7 @@ if (hTableExists("vegaInfo"))
     }
 
 genericHeader(tdb, geneName);
-printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE);
+// printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE);
 if (vi != NULL)
     {
     printf("<B>VEGA Gene Name:</B> %s<BR>\n", vi->geneId);
