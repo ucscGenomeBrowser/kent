@@ -131,3 +131,11 @@ priority 217
 visibility hide
 spectrum on
 type netAlign mm3 chainMm3
+
+track multizHg15Mm3
+shortLabel Rat/Mouse/Human
+longLabel Human/Mouse/Rat Alignments
+group compGeno
+priority 300 
+visibility full
+type maf
