@@ -88,10 +88,14 @@ endif
 
 # check for chain identifiers
 echo $table | grep "chain" >& /dev/null
-
 if ( $status == 0 ) then
-  echo ${table}Id > xxIDxx
   echo "\nchain and net use same identifier"
+  echo $table | grep "chainSelf" >& /dev/null
+  if ( $status == 0 ) then
+    echo ${table} > xxIDxx
+  else
+    echo ${table}Id > xxIDxx
+  endif
 else
   # set non-chain identifiers
   tac $joinerPath/all.joiner \
@@ -103,10 +107,9 @@ else
     tac $joinerPath/all.joiner \
       | sed "/$table/,/^tablesIgnored/\!d" | \
       grep "^tablesIgnored"
-
-	  if ( $status ) then 
-		echo "\nIdentifier not found, and not in tablesIgnored"
-	  endif
+    if ( $status ) then 
+      echo "\n  Identifier not found, and not in tablesIgnored"
+    endif
 
     rm -f xxIDxx
     rm -fr xxJoinDirxx 
