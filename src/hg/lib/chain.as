@@ -8,7 +8,7 @@ table chain
     uint tEnd; "Alignment end position in target"
     string qName; "Query sequence name"
     uint qSize; "Query sequence size"
-    char[1] qStrand; "Query strand"
+    char qStrand; "Query strand"
     uint qStart; "Alignment start position in query"
     uint qEnd; "Alignment end position in query"
     uint id; "chain id"
