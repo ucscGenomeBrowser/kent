@@ -1,0 +1,27 @@
+This directory contains the track database for
+the UCSC human genome browser.  The program
+hgTrackDb converts the information here into
+a 'trackDb' table in the database.
+
+The bulk of the information about a track is
+contained in the trackDb.ra file.  Tracks are
+separated from each other in this file by 
+a blank line.  Each line begins with an
+attribute name and is followed by attribute
+value.
+
+The html text about a track is in separate
+files named xxx.html where xxx is a
+track name.   
+
+There may be subdirectories for each database,
+such as 'hg7'.  There is a trackDb.ra file
+and xxx.html files in these subdirectories.
+Tracks descriptions in the subdirectory will
+over-ride track descriptions in this directory.
+This allows you to customize a track for
+each version of the database.
+
+After editing a track definition here
+don't forget to run hgTrackDb to bring
+it into the MySQL database.

@@ -125,6 +125,7 @@ priority 15
 visibility dense
 color 150,0,0
 type genePred ensPep
+url http://www.ensembl.org/perl/transview?transcript=$$
 
 track softberryGene
 shortLabel Fgenesh++ Genes
@@ -217,13 +218,14 @@ type bed 4 .
 
 track exoFish
 shortLabel Exofish Ecores
-longLabel Exofish Tetraodon/Human Conserved Regions (ecores)
+longLabel Exofish Tetraodon/Human Evolutionarily Conserved Regions
 priority 27
 visibility dense
 color 0,60,120
 altColor 200,220,255
 spectrum on
 type bed 5 .
+url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
 shortLabel Fish Blat
