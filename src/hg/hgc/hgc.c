@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.685 2004/07/13 16:32:26 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.686 2004/07/14 21:11:27 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7546,7 +7546,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type;
-char table[256];
 char where[256];
 boolean hasBin;
 struct pseudoGeneLink *pg;
@@ -7572,23 +7571,6 @@ slSort(&pslList, pslCmpScoreDesc);
 
 /* print header */
 genericHeader(tdb, acc);
-if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track ))
-    {
-    type = "mRNA";
-    if (hTableExists("mrnaBlastz") )
-        safef(table, sizeof(table), "mrnaBlastz");
-    else
-        {
-        if (hTableExists("pseudoMrna") )
-            safef(table, sizeof(table), "pseudoMrna");
-        }
-    }
-else 
-    {
-    type = "mRNA";
-    safef(table, sizeof(table), "all_mrna");
-    }
-
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
