@@ -192,7 +192,7 @@ void process_maf(struct mafAli *a) {
 	uchar **AL, **GC, **AL_new;
 
 /*
-printf("processing:\n");
+fprintf(stderr, "processing from %d\n", a->components->start);
 mafWrite(stdout, a);
 */
 
@@ -217,6 +217,7 @@ fatalf("a2->size = %d, j = %d\n", a2->size, j);
 	     m->components->start <= a2->start+a2->size-1;
 	      q = m1->start + m1->size) {
 		m1 = m->components;
+// fprintf(stderr, "m1->start = %d\n", m1->start);
 		mend1 = m1->start + m1->size - 1;
 		m2 = m1->next;
 		mend2 = m2->start + m2->size - 1;
@@ -327,9 +328,9 @@ fatalf("a2->size = %d, j = %d\n", a2->size, j);
 		human[j] = '\0';
 
 		M = col_mr_end - col_mr_start;
-		if (M < MIN_PRINT)
-			continue;
 		N = strlen((const char *)human);
+		if (M < MIN_PRINT || N < MIN_PRINT)
+			continue;
 
 		AL = (uchar **)ckalloc(M*sizeof(uchar *)) - 1;
 
