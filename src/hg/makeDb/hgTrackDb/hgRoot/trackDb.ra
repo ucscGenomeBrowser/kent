@@ -46,7 +46,7 @@ altColor 128,128,255,
 type bed 5 +
 
 track mouseSyn
-shortLabel Mouse Synteny
+shortLabel NCBI Synteny
 longLabel Corresponding Chromosome in Mouse
 priority 4 
 visibility hide
@@ -54,20 +54,50 @@ color 120,70,30
 altColor 0,0,0
 type bed 4+
 
+track syntenySanger
+shortLabel Sanger Synteny
+longLabel Sanger Corresponding Chromosome in Mouse (100k window)
+priority 4.4
+visibility hide
+color 120,70,30
+altColor 0,0,0
+type bed 4+
+
 track mouseOrtho
 shortLabel Mouse Ortholog
-longLabel Mouse Orthology using Fgenesh++ Gene Predictions
+longLabel Mouse Orthology using Fgenesh++ Gene Predictions (top 4 reciprocal best)
 priority 4.1
+visibility dense
+spectrum on
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
+track mouseOrthoSeed
+shortLabel Tight Ortholog
+longLabel Tight Mouse Orthology using Fgenesh++ Gene Predictions (only reciprocal best)
+priority 4.1
+visibility dense
+spectrum on
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
+track humanParalog
+shortLabel Human Paralog 
+longLabel Human Paralogs using Fgenesh++ Gene Predictions
+priority 4.2
 visibility hide
+spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
 
 track synteny100000
-shortLabel Mouse2 Synteny
+shortLabel UCSC Synteny
 longLabel Mouse Synteny using blastz single coverage with 100,000 base window
 priority 4.3
-visibility dense
+visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 .
@@ -123,7 +153,7 @@ track clonePos
 priority 9.5
 shortLabel Coverage
 longLabel Clone Coverage/Fragment Position
-visibility dense
+visibility hide
 altColor 180,180,180 
 
 track bacEndPairs
@@ -145,14 +175,14 @@ type bed 6
 track celeraDupPositive
 shortLabel WSSD Duplication
 longLabel Sequence identified as duplicate by high depth Celera Reads 
-priority 10.2
+priority 10
 visibility hide
 type bed 6 +
 
 track celeraCoverage
 shortLabel WSSD Coverage
 longLabel Regions Assayed for SDD
-priority 10.1
+priority 10
 visibility hide
 type bed 6 +
 
@@ -230,7 +260,7 @@ type genePred
 
 track loweProbes
 shortLabel Lowe's Probes
-longLabel 3 Olidogs selected per exon on Chr22
+longLabel 3 Oligos selected from sanger 22 on Chr22
 priority 12.99
 visibility hide
 chromosomes chr22,
@@ -255,12 +285,12 @@ color 30,130,210
 type genePred
 
 track genieAlt
-shortLabel Affy Genes
-longLabel Affymetrix Gene Predictions
+shortLabel AltGenie
+longLabel Genie Gene Predictions from Affymetrix
 priority 14
 visibility dense
 color 125,0,150
-type genePred geniePep
+type genePred genieAltPep
 
 track acembly
 shortLabel Acembly Genes
@@ -269,7 +299,7 @@ priority 14.5
 visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
-url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=human&l=$$
 
 track aceTest
 shortLabel Acembly Test
@@ -288,6 +318,27 @@ visibility dense
 color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
+
+track ensEst
+shortLabel Ensembl ESTs
+longLabel $Organism ESTs From Ensembl
+priority 15
+visibility dense
+type genePred ensEstPep
+
+track ncbiGenes
+shortLabel NCBI Gene Models
+longLabel $Organism Gene Models from NCBI
+priority 15
+visibility dense
+type genePred ncbiPep
+
+track genomeScan
+shortLabel NCBI GenomeScan
+longLabel $Organism GenomeScan Models from NCBI
+priority 15
+visibility dense
+type genePred genomeScanPep
 
 track mouseOrtho
 shortLabel Mouse Ortholog
@@ -310,7 +361,7 @@ track softberryGene
 shortLabel Fgenesh++ Genes
 longLabel Fgenesh++ Gene Predictions
 priority 16
-visibility dense
+visibility hide
 color 0,100,0
 type genePred softberryPep
 
@@ -351,7 +402,7 @@ track npredGene
 shortLabel NCBI Prediction
 longLabel NCBI Gene Predictions
 priority 17.8
-visibility full
+visibility hide
 color 170,100,0
 type genePred npredPep 
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
@@ -380,11 +431,19 @@ visibility hide
 color 200,0,50
 type bed 12
 
+track genieBounds
+shortLabel Clone Bounds 
+longLabel Clone Boundaries from EST Mate Pairs
+priority 18.2
+visibility hide
+color 178,34,34
+type bed 9
+
 track transfacHit
 shortLabel Transfac Hits 
 longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
 priority 18.28
-visibility dense
+visibility hide
 spectrum on
 type bed 6
 
@@ -392,7 +451,7 @@ track triangleSelf
 shortLabel Golden Triangle  
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
 priority 18.29
-visibility dense
+visibility hide
 spectrum on
 type bed 6
 
@@ -449,7 +508,7 @@ track uniGene
 shortLabel UniGene
 longLabel UniGene Alignments and SAGE Info
 priority 20.5
-visibility dense
+visibility hide
 type psl .
 
 track mgc_mrna
@@ -582,10 +641,40 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
+track blastzBestMouse
+shortLabel Blastz Mus Best
+longLabel Blastz Mouse Best in Genome Alignments 
+priority 25.801
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
 track blastzMm2Sc
 shortLabel Blastz Mouse SC
 longLabel Merged Blastz Mouse Single Coverage Alignments
 priority 25.81
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzMmHg
+shortLabel Blastz Human
+longLabel Merged Blastz Human Dec Freeze Alignments
+priority 25.82
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzMmHgRef
+shortLabel Blastz Ref Human
+longLabel Blastz Human Dec Freeze Reference Alignment
+priority 25.84
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -612,10 +701,20 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-track blastzHg
-shortLabel Blastz Human 
-longLabel Blastz Human Human
-priority 25.89
+track blastzHgRef
+shortLabel Blastz Human Ref
+longLabel Blastz Human Human Reference Alignment 
+priority 25.86
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzHgTop
+shortLabel Blastz Human Top
+longLabel Blastz Human Human Top Scoring Alignments
+priority 25.87
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -677,6 +776,24 @@ altColor 255,240,200
 spectrum on
 chromosomes chr22,
 type bed 5 +
+
+track humMus
+shortLabel Mouse Evolution
+longLabel Human/Mouse Evolutionary Mutual Information
+altColor 10,50,100
+priority 25.6
+visibility hide
+type sample 9 
+
+track zooCons
+shortLabel Zoo Conservation
+longlabel ZooSeq 11 Scaled Conservation (100 base windows)
+color 0,60,120
+altColor 0,128,0
+priority 25.7
+visibility hide
+type sample 9
+
 
 track exoFish
 shortLabel Exofish Ecores
@@ -877,3 +994,107 @@ visibility hide
 spectrum on
 private 1
 type psl est
+
+track affyTranscriptome 
+shortLabel Transcriptome
+longLabel Affymetrix Experimentally Derived Transcriptome
+priority 50
+visibility hide
+color 100,50,0
+altColor 0,0,255
+chromosomes chr22,chr21
+type sample 9
+
+
+track multAlignWebbbaboon
+shortLabel Baboon
+longLabel Baboon alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbcat
+shortLabel Cat
+longLabel Cat alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbchicken
+shortLabel Chicken
+longLabel Chicken alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbchimp
+shortLabel Chimp
+longLabel Chimp alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbcow
+shortLabel Cow
+longLabel Cow alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbdog
+shortLabel Dog
+longLabel Dog alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbfugu
+shortLabel Fugu
+longLabel Fugu alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbhuman
+shortLabel Human
+longLabel Human alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbmouse
+shortLabel Mouse
+longLabel Mouse alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbpig
+shortLabel Pig
+longLabel Pig alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbrat
+shortLabel Rat
+longLabel Rat alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track multAlignWebbzebrafish
+shortLabel Zebrafish
+longLabel Zebrafish alignment from Webb's Multiple alignment
+priority 51
+visibility dense
+type psl xeno
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+priority 15
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred twinscanPep
