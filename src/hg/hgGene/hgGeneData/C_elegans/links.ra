@@ -16,7 +16,6 @@ idSql select name from sangerGene where name = '%s'
 url http://www.wormbase.org/db/gene/gene?name=%s
 priority 25
 
-
 name swissProt
 tables sangerLinks
 idSql select protName from sangerLinks where orfName = '%s'
@@ -29,39 +28,24 @@ idSql select value from sangerToRefSeq where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 priority 40
 
-#name locusLink
-#tables sangerToRefSeq
-#idSql select refLink.locusLinkId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc
-#url http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%s
-#priority 45
+name locusLink
+hide
 
-#name genBank
-#shortLabel GenBank
-#tables kgXref
-#idSql select kgID from kgXref where kgID = '%s'
-#url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-#priority 50
+name genBank
+hide
 
 name pubMed
 shortLabel PubMed
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
+tables orfToGene
+idSql select value from orfToGene where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 60
 
 name geneCards
-shortLabel GeneCards
-tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
-url http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s
-priority 80
+hide
 
 name stanfordSource
-shortLabel Stanford SOURCE
-tables kgXref
-idSql select kgID from kgXref where kgID = '%s'
-url http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?option=Number&criteria=%s&choice=Gene
-priority 90
+hide
 
 name cgap
 hide
