@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.55 2004/09/23 00:29:14 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.56 2004/09/25 01:07:18 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1120,7 +1120,7 @@ return sub;
 
 /* header for job status output */
 static char *jobStatusHdr =
-"#state\ttries\treal\tcpu\thost\tcmd\n";
+    "#state\ttries\treal\tcpu\thost\tjobid\tcmd\n";
 
 void paraJobStatus(struct job *job, struct hash *resultsHash, time_t now)
 /* Print status of a job. */
@@ -1131,6 +1131,7 @@ double realTime = 0.0;
 double cpuTime = 0.0;
 struct submission *sub = getLastSubmission(job);
 struct jobResult *jr = NULL;
+char *jobId = "";
 char *host = "";
 
 if (sub != NULL)
@@ -1144,16 +1145,17 @@ if (sub != NULL)
         {
         realTime = jrRealTime(jr);
         cpuTime = jrCpuTime(jr);
+        jobId = jr->jobId;
         }
     host = sub->host;
     }
 
 subChar(job->command, '\t', ' ');  /* tabs not allowed in column */
 
-printf("%s\t%d\t%0.2f\t%0.2f\t%s\t%s\n",
+printf("%s\t%d\t%0.2f\t%0.2f\t%s\t%s\t%s\n",
        stateStr,
        job->submissionCount,
-       realTime, cpuTime, host,
+       realTime, cpuTime, host, jobId,
        job->command);
 }
 

@@ -8,6 +8,7 @@
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"logFacility", OPTION_STRING},
+    {"log", OPTION_STRING},
     {"hub", OPTION_STRING},
     {"umask", OPTION_INT},
     {"userPath", OPTION_STRING},
@@ -32,6 +33,7 @@ errAbort(
  "options:\n"
  "    -exe=/path/to/paraNode\n"
  "    -logFacility=facility  Log to the specified syslog facility - default local0.\n"
+ "    -log=file  Log to file instead of syslog.\n"
  "    -umask=000  Set umask to run under - default 002.\n"
  "    -randomDelay=N  Set random start delay in milliseconds - default 5000.\n"
  "    -userPath=bin:bin/i386  User dirs to add to path.\n"
@@ -67,6 +69,7 @@ while (lineFileRow(lf, row))
     dyStringClear(dy);
     dyStringPrintf(dy, "%s %s %s start -cpu=%d", rsh, name, exe, cpu);
     carryOption("logFacility", dy);
+    carryOption("log", dy);
     carryOption("hub", dy);
     carryOption("umask", dy);
     carryOption("sysPath", dy);

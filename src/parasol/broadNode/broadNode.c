@@ -12,6 +12,7 @@ static struct optionSpec optionSpecs[] = {
     {"hubInPort", OPTION_INT},
     {"nodeInPort", OPTION_INT},
     {"logFacility", OPTION_STRING},
+    {"log", OPTION_STRING},
     {"drop", OPTION_INT},
     {"ip", OPTION_STRING},
     {"broadIp", OPTION_STRING},
@@ -31,6 +32,7 @@ errAbort(
   "   -hubInPort=N (default %d)\n"
   "   -nodeInPort=N (default %d)\n"
   "   -logFacility=facility log to the specified syslog facility.\n"
+  "   -log=file - log to file instead of syslog.\n"
   "   -drop=N - Drop every Nth packet\n"
   "   -ip=NNN.NNN.NNN.NNN ip address of current machine, usually needed.\n"
   "   -broadIp - network broadcast address, %s by default\n"
@@ -353,7 +355,7 @@ else
 		}
 	    }
 	}
-    logDebug("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
+    logDebug("%d missing %d of %d", sectionIx, missingCount, blockCount);
     if (missingCount == 0)
 	{
 	/* Check md5 signature.  If it matches we're good to go, otherwise
@@ -364,7 +366,7 @@ else
 	    ft->sectionClosed = TRUE;
 	else
 	    {
-	    logDebug("Section %d of %s failed md5 check\n", sectionIx, ft->fileName);
+	    logDebug("Section %d of %s failed md5 check", sectionIx, ft->fileName);
 	    for (i=0; i<blockCount; ++i)
 		{
 		section->blockTracker[i] = FALSE;
@@ -404,7 +406,7 @@ while (alive)
 	warn("bdReceive error %s", strerror(err));
     else
 	{
-	// logDebug("got message type %d size %d sourceIp %x\n", m->type, m->size, sourceIp);
+	// logDebug("got message type %d size %d sourceIp %x", m->type, m->size, sourceIp);
 	if (dropTest != 0)
 	    {
 	    if (--drop <= 0)
@@ -433,7 +435,7 @@ while (alive)
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, err);
 		break;
 	    case bdmPing:
-		// logDebug("<PING>\n%s</PING>\n", m->data);
+		// logDebug("<PING>%s</PING>", m->data);
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, 0);
 		break;
 	    case bdmSectionQuery:
@@ -462,7 +464,10 @@ void forkDaemon()
  * Set up log file if any here as well. */
 {
 /* Set up log handler. */
-logOpen("paraNode", optionVal("logFacility", NULL));
+if (optionExists("log"))
+    logOpenFile("broadNode", optionVal("log", NULL));
+else    
+    logOpenSyslog("broadNode", optionVal("logFacility", NULL));
 
 /* Close standard file handles. */
 close(0);

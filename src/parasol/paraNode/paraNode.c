@@ -20,6 +20,7 @@
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"logFacility", OPTION_STRING},
+    {"log", OPTION_STRING},
     {"hub", OPTION_STRING},
     {"umask", OPTION_INT},
     {"userPath", OPTION_STRING},
@@ -38,6 +39,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    paraNode start\n"
 	 "options:\n"
 	 "    -logFacility=facility  Log to the specified syslog facility - default local0.\n"
+         "    -log=file  Log to file instead of syslog.\n"
 	 "    -hub=host  Restrict access to connections from hub.\n"
 	 "    -umask=000  Set umask to run under - default 002.\n"
 	 "    -userPath=bin:bin/i386  User dirs to add to path.\n"
@@ -49,7 +51,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.70 2004/09/24 17:01:57 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.71 2004/09/25 01:07:19 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -458,7 +460,7 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
 	err = waitpid(job->pid, &status, 0);
 	if (err == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0)
 	    {
-	    logDebug("paraNode sheparding %s pid %d status %d err %d errno %d\n", 
+	    logDebug("paraNode sheparding %s pid %d status %d err %d errno %d", 
                      jobIdString, job->pid, status, err, errno);
 	    }
 	job->doneMessage = cloneString(line);
@@ -745,7 +747,7 @@ mainRudp->maxRetries = 12;
 
 /* Event loop. */
 findNow();
-logInfo("starting %s\n", hostName);
+logInfo("starting %s", hostName);
 for (;;)
     {
     /* Get next incoming message and optionally check to make
@@ -808,6 +810,10 @@ void paraFork()
 {
 /* Set up log handler. */
 logOpenSyslog("paraNode", optionVal("logFacility", NULL));
+if (optionExists("log"))
+    logOpenFile("paraNode", optionVal("log", NULL));
+else    
+    logOpenSyslog("paraNode", optionVal("logFacility", NULL));
 
 /* Close standard file handles. */
 close(0);

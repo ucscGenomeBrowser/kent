@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.74 2004/09/23 00:29:14 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.75 2004/09/25 01:07:18 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -77,6 +77,7 @@ static struct optionSpec optionSpecs[] = {
     {"subnet", OPTION_STRING},
     {"nextJobId", OPTION_INT},
     {"logFacility", OPTION_STRING},
+    {"log", OPTION_STRING},
     {"noResume", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -108,6 +109,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "   -subnet=XXX.YYY.ZZZ  Only accept connections from subnet (example 192.168).\n"
 	 "   -nextJobId=N  Starting job ID number.\n"
 	 "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
+         "   -log=file  Log to file instead of syslog.\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes.\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
@@ -643,7 +645,7 @@ struct dlNode *node = dlPopHead(freeSpokes);
 struct spoke *spoke;
 if (node == NULL)
     {
-    logDebug("hub: out of spokes!\n");
+    logDebug("hub: out of spokes!");
     return FALSE;
     }
 dlAddTail(busySpokes, node);
@@ -817,7 +819,7 @@ for (rq = resultQueues; rq != NULL; rq = next)
     next = rq->next;
     if (now - rq->lastUsed > 1*MINUTE)
 	{
-	logDebug("hub: closing results file %s\n", rq->name);
+	logDebug("hub: closing results file %s", rq->name);
         resultQueueFree(&rq);
 	}
     else
@@ -882,7 +884,7 @@ boolean sendKillJobMessage(struct machine *machine, int jobId)
 {
 char message[64];
 sprintf(message, "kill %d", jobId);
-logDebug("hub: %s %s\n", machine->name, message);
+logDebug("hub: %s %s", machine->name, message);
 if (!sendViaSpoke(machine, message))
     {
     return FALSE;
@@ -1018,7 +1020,7 @@ if (status != NULL)
 	        dlAddTail(freeMachines, mach->node);
 		}
 	    requeueJob(job);
-	    logDebug("hub:  requeueing job in nodeCheckIn\n");
+	    logDebug("hub:  requeueing job in nodeCheckIn");
 	    runner(1);
 	    }
 	}
@@ -1108,7 +1110,7 @@ if (batch == NULL) return 0;
 batch->priority = priority;
 updateUserPriority(user);
 if ((priority>=1)&&(priority<NORMAL_PRIORITY))
-    logInfo("paraHub: User %s set priority=%d for batch %s\n", userName, priority, dir);
+    logInfo("paraHub: User %s set priority=%d for batch %s", userName, priority, dir);
 return priority;
 }
 
@@ -1182,7 +1184,7 @@ boolean removeJobId(int id)
 struct job *job = jobFind(runningJobs, id);
 if (job != NULL)
     {
-    logDebug("Removing %s's %s\n", job->batch->user->name, job->cmd);
+    logDebug("Removing %s's %s", job->batch->user->name, job->cmd);
     if (!removeRunningJob(job))
         return FALSE;
     }
@@ -1191,7 +1193,7 @@ else
     job = findWaitingJob(id);
     if (job != NULL)
 	{
-	logDebug("Pending job %s\n", job->cmd);
+	logDebug("Pending job %s", job->cmd);
 	removePendingJob(job);
 	}
     }
@@ -1939,7 +1941,7 @@ struct existingResults *erList = NULL;
 struct hash *mmHash = newHash(0);	/* Hash of machines. */
 struct multiMachine *mmList = NULL, *mm;
 
-printf("Checking for jobs already running on nodes\n");
+logInfo("Checking for jobs already running on nodes");
 for (mach = machineList; mach != NULL; mach = mach->next)
     {
     mm = hashFindVal(mmHash, mach->name);
@@ -1957,7 +1959,7 @@ for (mm = mmList; mm != NULL; mm = mm->next)
     {
     struct paraMessage pm;
     struct rudp *ru = rudpNew(rudpOut->socket);	/* Get own resend timing */
-    printf("%s\n", mm->name);
+    logDebug("check for jobs on %s", mm->name);
     pmInitFromName(&pm, mm->name, paraNodePort);
     if (!pmSendString(&pm, ru, "listJobs"))
         {
@@ -1976,7 +1978,7 @@ existingResultsFreeList(&erList);
 hashFree(&erHash);
 
 /* Report results. */
-printf("%d running jobs, %d jobs that finished while hub was down\n",
+logInfo("%d running jobs, %d jobs that finished while hub was down",
 	running, finished);
 }
 
@@ -1993,8 +1995,11 @@ startupTime = now;
 
 /* Find name and IP address of our machine. */
 hubHost = getMachine();
-logOpenSyslog("paraHub", optionVal("logFacility", NULL));
-logInfo("Starting paraHub on %s\n", hubHost);
+if (optionExists("log"))
+    logOpenFile("paraHub", optionVal("log", NULL));
+else    
+    logOpenFile("paraHub", optionVal("logFacility", NULL));
+logInfo("starting paraHub on %s", hubHost);
 
 /* Set up various lists. */
 hubMessageQueueInit();
@@ -2020,7 +2025,7 @@ if (!optionExists("noResume"))
     checkForJobsOnNodes();
 
 openJobId();
-printf("Starting paraHub. Next job ID is %d.\n", nextJobId);
+logInfo("Starting paraHub. Next job ID is %d.", nextJobId);
 
 /* Bump up our priority to just shy of real-time. */
 nice(-40);
@@ -2031,7 +2036,7 @@ for (;;)
     struct paraMessage *pm = hubMessageGet();
     findNow();
     line = pm->data;
-    logDebug("hub: %s\n", line);
+    logDebug("hub: %s", line);
     command = nextWord(&line);
     if (sameWord(command, "jobDone"))
 	 jobDone(line);
