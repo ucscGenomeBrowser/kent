@@ -24,7 +24,10 @@ each version of the database.
 
 After editing a track definition here
 don't forget to run hgTrackDb to bring
-it into the MySQL database.
+it into the MySQL database.  The easiest
+way to do this is from this directory:
+    cd ..
+    make update
 
 Most of the fields in the track.ra file should 
 be reasonably self explanitory.  A notable exception
