@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.5 2004/10/30 04:55:54 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.6 2004/11/15 17:08:08 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -578,7 +578,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
     alignComponents(range, bun, ffCdna);
-    ssStitch(bun, ffCdna, minMatch, 3);
+    ssStitch(bun, ffCdna, minMatch, 16);
     saveAlignments(targetName, range->tTotalSize, range->tStart, 
 	bun, NULL, isRc, FALSE, ffCdna, minMatch, out);
     ssBundleFree(&bun);
