@@ -350,7 +350,7 @@ searchMethod prefix
 shortCircuit 1
 query select chrom,chromStart,chromEnd,name from %s where name like '%s %%'
 termRegex Contig[0-9]+
-dontCheck Contig[0-9]+ \([0-9\-]+\)
+dontCheck Contig[0-9]+ \\([0-9-]+\\)
 searchPriority 8.5
 
 searchTable bgiSnp
