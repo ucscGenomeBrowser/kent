@@ -241,3 +241,19 @@ sacCer1.downloadDir = sacCer1
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
 
+# ADDING LOCALIZATION AND ABUNDANCE INFO FROM SGD AND
+# http://yeastgfp.ucsf.edu
+	ssh hgwdef
+	cd /cluster/data/sacCer1/bed
+	mkdir sgdLocalization
+	cd sgdLocalization
+	hgSgdGfp ../../download/systematic_results/localization/OS*.tab .
+        # Put a # to comment out any lines the program complains about
+	# and run again.
+	hgSgdGfp sacCer1 ../../download/systematic_results/localization/OS*.tab .
+
+######## MAKING FAMILY BROWSER TABLES #######
+
+    # Making tables to cluster splice varients
+    ssh hgwdev
+    hgClusterGenes sacCer1 sgdGene sgdIsoforms sgdCanonical
