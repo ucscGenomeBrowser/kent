@@ -306,3 +306,30 @@ cat > load.csh << 'EOF'
 
 
 # TODO: Remove Nov08 data
+
+# GENCODE Sanger Havana annotations
+    ssh hgwdev
+    mkdir -p /cluster/data/encode/sanger/havana
+    cd /cluster/data/encode/sanger/havana
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 \
+	"ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
+#  This fetches the directories:
+#	drwxrwxr-x  2 4096 Mar  7 16:01 CHR_coord
+#	drwxrwxr-x  2 4096 Mar  7 16:02 ENCODE_coord
+#	-rw-r--r--  1 2874 Feb 10 13:44 README.txt
+#	drwxrwxr-x  4 4096 Mar  7 16:02 old
+
+    ldHgGene -gtf hg16 encodeSangerGencode CHR_coord/EN????_CHR_coord.gtf
+    #	Read 777 transcripts in 11213 lines in 12 files
+    #	777 groups 8 seqs 16 sources 3 feature types
+    # trackDb entry placed into human/trackDb.ra
+track encodeSangerGencode
+shortLabel Gene/Havana
+longLabel Gencode annotations - Sanger Havana group predictions
+group encode
+priority 113
+visibility hide
+color 170,100,0
+type genePred
