@@ -8923,7 +8923,7 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
     | sed -e 's/\..\"/\"/g' \
     > ensGene.gtf
     ssh hgwdev
-    /cluster/bin/i386/ldHgGene hg16 ensGene \
+    /cluster/bin/i386/ldHgGene -gtf -genePredExt hg16 ensGene \
       /cluster/data/hg16/bed/ensembl34d/ensGene.gtf
 
     # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
