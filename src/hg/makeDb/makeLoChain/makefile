@@ -14,6 +14,6 @@ all:
             if test "$$F.csh" -nt "$(SCRIPT_DIR)/$$F"; then \
                 echo "installing $$F" ;\
                 cp $$F.csh $(SCRIPT_DIR)/$$F ;\
-                chmod 7755 $(SCRIPT_DIR)/$$F ;\
+                chmod 775 $(SCRIPT_DIR)/$$F ;\
             fi ;\
 	done
