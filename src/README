@@ -118,7 +118,7 @@ CODE CONVENTIONS
 
 INDENTATION:
 
-The code follows an indentation conventions that is a bit
+The code follows an indentation convention that is a bit
 unusual for C.  Opening and closing braces are on
 a line by themselves and are indented at the same
 level as the block they enclose:
