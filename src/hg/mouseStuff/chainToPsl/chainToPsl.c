@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.9 2003/07/26 22:12:03 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.10 2004/08/12 10:16:56 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -407,7 +407,6 @@ for (b = chain->blockList; b != NULL; b = nextB)
                     }
                 qq = qSeq->dna[i];
                 tt = tSeq->dna[j++];
-                printf("qs ts %d %d %c %c %d %d %s\n",i,j,qq,tt, match, misMatch, qName);
                 if (toupper(qq) == toupper(tt))
                     ++match;
                 else 
