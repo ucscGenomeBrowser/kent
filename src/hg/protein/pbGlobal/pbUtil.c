@@ -811,7 +811,6 @@ while (row3 != NULL)
     row3 = sqlNextRow(srCentral);
     }
 maxPbOrg = i;
-
 /* go through each genome DB that supports PB */
 safef(queryCentral, sizeof(queryCentral),
       "select defaultDb.name, dbDb.organism, dbDb.scientificName from dbDb,defaultDb where hgPbOk=1 and defaultDb.name=dbDb.name");
@@ -846,11 +845,12 @@ while (row3 != NULL)
 	    {
    	    spID = row[0];
 	    
-	    proteinsConn = sqlConnect("proteins");
+	    protDbName = hPdbFromGdb(gDatabase);
+	    proteinsConn = sqlConnect(protDbName);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
-    	    displayID = sqlGetField(proteinsConn, "proteins", "spXref3", "displayID", cond_str);
+    	    displayID = sqlGetField(proteinsConn, protDbName, "spXref3", "displayID", cond_str);
     	    safef(cond_str, sizeof(cond_str), "accession='%s'", spID);
-    	    desc = sqlGetField(proteinsConn, "proteins", "spXref3", "description", cond_str);
+    	    desc = sqlGetField(proteinsConn, protDbName, "spXref3", "description", cond_str);
 
 	    /* display a protein */
 	    hPrintf(
