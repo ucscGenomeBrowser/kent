@@ -1243,7 +1243,8 @@ autoSql format.
     char[2]    baseB;     "The second allele (B)"
     char[34]   sequenceA; "The A allele with flanking sequence"
     char[34]   sequenceB; "The B allele with flanking sequence"
-    char[8]    enzyme;    "The enzyme that was used to prepare the sample (HindIII or XbaI)"
+    char[8]    enzyme;    "The enzyme that was used to prepare the sample (HindIII
+			   or XbaI)"
 )
 </PRE>
 
@@ -1257,10 +1258,12 @@ autoSql format.
     char[2]    baseB;     "The second allele (B)"
     char[34]   sequenceA; "The A allele with flanking sequence"
     char[34]   sequenceB; "The B allele with flanking sequence"
-    char[8]    enzyme;    "The enzyme that was used to prepare the sample (HindIII or XbaI)"
+    char[8]    enzyme;    "The enzyme that was used to prepare the sample (HindIII
+			   or XbaI)"
     float      minFreq;   "The minimum allele frequency"
     float      hetzyg;    "The heterozygosity from all observations"
-    float      avHetSE;   "The Standard Error for the average heterozygosity (not used)"
+    float      avHetSE;   "The Standard Error for the average heterozygosity (not
+			   used)"
     char[2]    NA04477;   "Individual 01"
     char[2]    NA04479;   "Individual 02"
     char[2]    NA04846;   "Individual 03"
@@ -1332,7 +1335,8 @@ autoSql format.
     uint    sampleCount;                "Number of samples in this block"
     uint[sampleCount] samplePosition;   "Base position of each sample in this
                                          block, relative to chromStart"
-    uint[sampleCount] sampleHeight;     "Score for each sample (y-value) from 0 to 1000"
+    uint[sampleCount] sampleHeight;     "Score for each sample (y-value) from 0 to
+					 1000"
    )
 </PRE>
 
@@ -1357,8 +1361,10 @@ autoSql format.
     int[edgeCount] edgeTypes;       	"Type for each edge, ggExon, ggIntron, etc"
     int mrnaRefCount;               	"Number of supporting mRNAs"
     string[mrnaRefCount] mrnaRefs;  	"Ids of mrnas supporting this"
-    int[mrnaRefCount] mrnaTissues;  	"Ids of tissues that mrnas come from, indexes into tissue table"
-    int[mrnaRefCount] mrnaLibs;     	"Ids of libraries that mrnas come from, indexes into library table"
+    int[mrnaRefCount] mrnaTissues;  	"Ids of tissues that mrnas come from, indexes 
+					 into tissue table"
+    int[mrnaRefCount] mrnaLibs;     	"Ids of libraries that mrnas come from, indexes 
+					 into library table"
    )
 </PRE>
 
@@ -1640,7 +1646,8 @@ The following definition is used for several tables as follows:<BR>
     (
     uint    rsId;    	"RS identifier"
     float   avHet;   	"Average heterozygosity from all observations"
-    float   avHetSE; 	"Standard Error for the average heterozygosity from all observations"
+    float   avHetSE; 	"Standard Error for the average heterozygosity from all 
+			 observations"
     string  valid;   	"Validation status of the SNP"
     char[1] base1;   	"Base of the first allele"
     char[1] base2;   	"Base of the second allele"
@@ -1681,7 +1688,8 @@ The following definition is used for several tables as follows:<BR>
 
 <H4><A name=EnsemblXref></A>EnsemblXref</H4>
 <PRE>table ensemblXref
-"Cross-reference info between transcript entries and translation entries of Ensembl genes."  
+"Cross-reference info between transcript entries and translation entries of Ensembl 
+genes"  
    (
    string db;			"Ensembl Database"
    int gene_id;			"Gene ID number"
@@ -1697,8 +1705,8 @@ The following definition is used for several tables as follows:<BR>
 
 <H4><A name=EnsemblXref2></A>EnsemblXref2</H4>
 <PRE>table ensemblXref2
-"Cross-reference info between transcript entries and translation entries of Ensembl genes 
-(alternative table used in some assemblies)."  
+"Cross-reference info between transcript entries and translation entries of Ensembl 
+genes (alternative table used in some assemblies)"  
    (
    string transcript_name; 	"Transcript name"
    string translation_name; 	"Translation name"
@@ -1837,7 +1845,8 @@ Last used Apr. 2001.
    string[accCount] accNames;      "Accession associated with clone"
    uint stsCount;                  "Number of STS markers associated with this clone"
    string[stsCount] stsNames;      "Names of STS  markers"
-   uint beCount;                   "Number of BAC end sequences associated with this clone"
+   uint beCount;                   "Number of BAC end sequences associated with this 
+				    clone"
    string[beCount] beNames;        "Accessions of BAC ends"
    )
 </PRE>
@@ -1854,7 +1863,8 @@ Last used Apr. 2001.
 
    uint   score;      	      "Score = 1000/(# of times fosmid appears in assembly)"
    char[1] strand;    	      "Value should be + or -"
-   string pslTable;   	      "Table which contains corresponding PSL records for linked features"
+   string pslTable;   	      "Table which contains corresponding PSL records for linked 
+			       features"
    uint   lfCount;    	      "Number of linked features in the series"
    uint[lfCount]   lfStarts;  "Comma-separated list of start positions of each linked 
 				feature in genomic"
@@ -2037,7 +2047,7 @@ The following definition is used for tables that link a predicted peptide to a p
 
 <H4><A name=ImageClone></A>ImageClone</H4>
 <PRE>table imageClone
-"Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing
+"Used with image consortium's cumulative_plate files: ftp://image.llnl.gov/image/outgoing"
     (
     uint id; 			"IMAGE clone ID"
     string library; 		"Clone collection (LLAM for amp-resistant libraries,
@@ -2215,7 +2225,8 @@ of a gene into a cluster.
 "Links together various transcripts of a gene into a cluster"
     (
     int clusterId;      "Unique id for transcript cluster (aka gene)"
-    string transcript;  "Corresponds to name in knownGene table, transcript in knownCanonical"
+    string transcript;  "Corresponds to name in knownGene table, transcript in 
+			 knownCanonical"
     )
 </PRE>
 
@@ -2662,7 +2673,8 @@ table pbStamp
 
 <H4><A name=RecombRate></A>Recombination Rate</H4>
 <PRE>table recombRate
-"Describes the recombination rate in 1Mb intervals based on deCODE, Marshfield and Genethon maps"
+"Describes the recombination rate in 1Mb intervals based on deCODE, Marshfield and
+ Genethon maps"
     (
     string  chrom;            "Human chromosome number"
     uint    chromStart;       "Start position in genoSeq"
@@ -2914,7 +2926,8 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
     uint    chromStart;                 "Start position in chromosome"
     uint    chromEnd;                   "End position in chromosome"
     string  name;                       "Unique index given to each block of samples"
-    uint    score;                      "Overall block score from 0 to 1000 (chrN_humMusL only)"
+    uint    score;                      "Overall block score from 0 to 1000 (chrN_humMusL 
+					 only)"
     char[1] strand;                     "Strand: + or -"
     uint    sampleCount                 "Number of samples in this block"
     uint[sampleCount]   samplePosition  "Base position of each sample in this
@@ -2958,7 +2971,7 @@ The following definition is used for: regPotential2X, regPotential3X.
 
 <H4><A name=ScopDes></A>SCOP Descriptions</H4>
 <PRE>table scopDes
-"Structural Classification of Proteins Description. See Lo Conte, Brenner et al. NAR 2002"
+"Structural Classification of Proteins description"
     (
     int sunid;  		"Unique integer"
     char[2] type;       	"Type.  sf=superfamily, fa = family, etc."
@@ -3028,7 +3041,8 @@ The following table is used for humor alignments.
    date gb_date;	  "Modification date for genbank mRNAs/ESTs"
    int extFile;		  "ID of file in extFile table"
    int file_offset;	  "Byte offset of sequence start in fasta file"
-   int file_size;	  "Size of sequence record in fasta file (includes fasta sequence header"
+   int file_size;	  "Size of sequence record in fasta file (includes fasta 
+			   sequence header"
    )                                                                           
 </PRE>
 
@@ -3098,7 +3112,8 @@ The bacEndPairs table uses all fields.
 
    uint   score;                "Score = 1000/(# of times clone appears in assembly)"
    char[1] strand;              "Value should be + or -"
-   string pslTable;             "Table which contains corresponding PSL records for linked features"
+   string pslTable;             "Table which contains corresponding PSL records for 
+				 linked features"
    uint   lfCount;              "Number of linked features in the series"
    uint[lfCount]   lfStarts;    "Comma-separated list of start positions of each linked 
 				 feature in genomic"
@@ -3272,7 +3287,8 @@ The bacEndPairs table uses all fields.
     string rightPrimer;           "3' primer sequence"
     string distance;              "Length of STS sequence"
     string organism;              "Organism for which STS discovered"
-    uint sequence;                "Whether the full sequence is available (1) or not (0) for STS"
+    uint sequence;                "Whether the full sequence is available (1) or not
+				   (0) for STS"
 
     uint otherUCSCcount;          "Number of related active UCSC ids"
     uint[otherUCSCcount] otherUCSC;  "Related active UCSC ids"
@@ -3330,7 +3346,8 @@ The bacEndPairs table uses all fields.
     string rightPrimer;           "3' primer sequence"
     string distance;              "Length of STS sequence"
     string organism;              "Organism for which STS discovered"
-    uint sequence;                "Whether the full sequence is available (1) or not (0) for STS"
+    uint sequence;                "Whether the full sequence is available (1) or not 
+				   (0) for STS"
 
     uint otherUCSCcount;          "Number of related active UCSC ids"
     uint[otherUCSCcount] otherUCSC;  "Related active UCSC ids"
@@ -3408,7 +3425,8 @@ The bacEndPairs table uses all fields.
     string primer1;          	 "Primer1 sequence"
     string primer2;          	 "Primer2 sequence"
     string distance;             "Length of STS sequence"
-    uint sequence;               "Whether the full sequence is available (1) or not (0) for STS"
+    uint sequence;               "Whether the full sequence is available (1) or not 
+				  (0) for STS"
     string organis; 		 "Organism for which STS discovered"
    
     string fhhName;	         "WI_Mouse_Genetic map"
@@ -3447,7 +3465,8 @@ The bacEndPairs table uses all fields.
     string primer1;          	 "Primer1 sequence"
     string primer2;          	 "Primer2 sequence"
     string distance;             "Length of STS sequence"
-    uint sequence;               "Whether the full sequence is available (1) or not (0) for STS"
+    uint sequence;               "Whether the full sequence is available (1) or not 
+				  (0) for STS"
     string organis; 		 "Organism for which STS discovered"
    
     string fhhName;	         "WI_Mouse_Genetic map"
