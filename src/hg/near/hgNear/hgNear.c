@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.84 2003/09/24 04:11:52 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.85 2003/09/24 11:21:32 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -26,9 +26,6 @@ char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
 	advFilterListVarName, 
-#ifdef OLD
-	advFilterListProtVarName, advFilterListAccVarName, 
-#endif /* OLD */
 	idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
@@ -308,15 +305,24 @@ if (s == NULL)
     }
 else
     {
-    if (col->itemUrl != NULL)
+    if (col->selfLink)
+        {
+	selfAnchorId(gp);
+	hPrintNonBreak(s);
+        hPrintf("</A>");
+	}
+    else if (col->itemUrl != NULL)
         {
 	hPrintf("<A HREF=\"");
 	hPrintf(col->itemUrl, s);
 	hPrintf("\" TARGET=_blank>");
-	}
-    hPrintNonBreak(s);
-    if (col->itemUrl != NULL)
+	hPrintNonBreak(s);
         hPrintf("</A>");
+	}
+    else
+        {
+	hPrintNonBreak(s);
+	}
     freeMem(s);
     }
 hPrintf("</TD>");
@@ -1121,18 +1127,25 @@ if (lf != NULL)
 
 static char *rootDir = "hgNearData";
 
-static struct hash *readRas(char *rootName)
+char *dirForOrg(char *org)
+/* Make directory name from organism name. */
+{
+org = cloneString(org);
+stripChar(org, '.');
+subChar(org, ' ', '_');
+return org;
+}
+
+struct hash *readRas(char *rootName)
 /* Read in ra in root, root/org, and root/org/database. */
 {
 struct hash *hashOfHash = newHash(10);
-char *org = cloneString(genome);
+char *org = dirForOrg(genome);
 char fileName[512];
 struct hashEl *helList, *hel;
 struct hash *raList = NULL, *ra;
 
 /* Create hash of hash. */
-stripChar(org, '.');
-subChar(org, ' ', '_');
 safef(fileName, sizeof(fileName), "%s/%s", rootDir, rootName);
 foldInRa(fileName, hashOfHash);
 safef(fileName, sizeof(fileName), "%s/%s/%s", rootDir, org, rootName);
@@ -1179,6 +1192,7 @@ struct column *getColumns(struct sqlConnection *conn)
 char *raName = "columnDb.ra";
 struct column *col, *colList = NULL;
 struct hash *raList = readRas(raName), *raHash;
+char *selfLink;
 
 if (raList == NULL)
     errAbort("Couldn't find anything from %s", raName);
@@ -1192,6 +1206,9 @@ for (raHash = raList; raHash != NULL; raHash = raHash->next)
     col->on = col->defaultOn = sameString(mustFindInRaHash(raName, raHash, "visibility"), "on");
     col->type = mustFindInRaHash(raName, raHash, "type");
     col->itemUrl = hashFindVal(raHash, "itemUrl");
+    selfLink = hashFindVal(raHash, "selfLink");
+    if (selfLink != NULL && selfLink[0] != '0')
+        col->selfLink = TRUE;
     col->settings = raHash;
     columnDefaultMethods(col);
     setupColumnType(col);
@@ -1400,7 +1417,7 @@ char query[256];
 char buf[64];
 safef(query, sizeof(query), 
 	"select protein from %s where transcript='%s'", 
-	genomeSetting("cannonicalTable"), mrnaName);
+	genomeSetting("canonicalTable"), mrnaName);
 if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
     return NULL;
 return cloneString(buf);
@@ -1454,7 +1471,15 @@ static char *colHtmlFileName(struct column *col)
  * freeMem this when done. */
 {
 char name[PATH_LEN];
-safef(name, sizeof(name), "hgNearData/%s.html", col->name);
+char *org = dirForOrg(genome);
+safef(name, sizeof(name), "%s/%s/%s/%s.html", rootDir, org, database, col->name);
+if (!fileExists(name))
+    {
+    safef(name, sizeof(name), "%s/%s/%s.html", rootDir, org, col->name);
+    if (!fileExists(name))
+	safef(name, sizeof(name), "%s/%s.html", rootDir, col->name);
+    }
+freez(&org);
 return cloneString(name);
 }
 

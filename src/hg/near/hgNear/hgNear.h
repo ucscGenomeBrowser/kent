@@ -107,6 +107,7 @@ struct column
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
    char *valField;		/* Value field in associated table. */
+   boolean selfLink;		/* Put in link to self. */
 
       /* The distance type columns like homology need this field too. */
    char *curGeneField;		/* curGeneId field in associated table.  Used by distance columns*/
@@ -142,6 +143,7 @@ struct order
     char *shortLabel;		/* Short readable label. */
     char *longLabel;		/* Longer description. */
     char *type;			/* Type - encodes which methods to used etc. */
+    float priority;		/* Order to display in. */
     struct hash *settings;	/* Settings from ra file. */
 
     boolean (*exists)(struct order *ord, struct sqlConnection *conn);
@@ -213,12 +215,6 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 	/* Advanced filter browse  button. */
 #define advFilterListVarName "near.do.advFilterList" 
 	/* Advanced filter submit list. */
-#ifdef OLD
-#define advFilterListProtVarName "near.do.advFilterListProt" 
-	/* Advanced filter submit protein list. */
-#define advFilterListAccVarName "near.do.advFilterListAcc" 
-	/* Advanced filter submit accession list. */
-#endif /* OLD */
 
 #define filSaveSettingsPrefix "near_filUserSet_" /* Prefix for filter sets. */
     /* Underbars on this one for sake of javascript. */
@@ -267,6 +263,9 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
+
+struct hash *readRas(char *rootName);
+/* Read in ra in root, root/org, and root/org/database. */
 
 char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name);
 /* Look up in ra hash or die trying. */
@@ -359,11 +358,6 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 
 struct genePos *knownPosAll(struct sqlConnection *conn);
 /* Get all positions in knownGene table. */
-
-#ifdef OLD 
-struct hash *knownCannonicalHash(struct sqlConnection *conn);
-/* Get all cannonical gene names in hash. */
-#endif /* OLD */
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
@@ -526,11 +520,11 @@ void goSimilarityMethods(struct order *ord, char *parameters);
 /* Set up go similarity ordering. */
 
 /* ---- Get config options ---- */
-boolean showOnlyCannonical();
-/* Return TRUE if we only show cannonical splicing varients. */
+boolean showOnlyCanonical();
+/* Return TRUE if we only show canonical splicing varients. */
 
-struct hash *cannonicalHash();
-/* Get cannonicalHash if necessary, otherwise return NULL. */
+struct hash *canonicalHash();
+/* Get canonicalHash if necessary, otherwise return NULL. */
 
 boolean expRatioUseBlue();
 /* Return TRUE if should use blue instead of red

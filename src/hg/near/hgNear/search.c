@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.10 2003/09/24 04:11:52 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.11 2003/09/24 11:21:33 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -53,30 +53,39 @@ struct columnSearchResults
     struct searchResult *results; /* List of results. */
     };
 
-static void transformToCannonical(struct searchResult *list,
+static void transformToCanonical(struct searchResult *list,
 	struct sqlConnection *conn)
-/* Transform search results to cannonical versions.  */
+/* Transform search results to canonical versions.  */
 {
 char buf[64];
+struct dyString *dy = newDyString(1024);
+char *cannon = genomeSetting("canonicalTable");
+char *isoform = genomeSetting("isoformTable");
 char query[512];
 struct sqlResult *sr;
 char **row;
 struct searchResult *el;
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query),
-    	"select knownCannonical.transcript,knownCannonical.chrom,"
-	          "knownCannonical.chromStart,knownCannonical.chromEnd,"
-		  "knownCannonical.protein "
-	"from knownIsoforms,knownCannonical "
-	"where knownIsoforms.transcript = '%s' "
-	"and knownIsoforms.clusterId = knownCannonical.clusterId"
-	, el->gp.name);
-    sr = sqlGetResult(conn, query);
+    dyStringClear(dy);
+    dyStringPrintf(dy, 
+    	"select %s.transcript,%s.chrom,%s.chromStart,%s.chromEnd,%s.protein ",
+	cannon, cannon, cannon, cannon, cannon);
+    dyStringPrintf(dy,
+	"from %s,%s ",
+	isoform, cannon);
+    dyStringPrintf(dy,
+        "where %s.transcript = '%s' ",
+	isoform, el->gp.name);
+    dyStringPrintf(dy,
+        "and %s.clusterId = %s.clusterId",
+	isoform, cannon);
+    sr = sqlGetResult(conn, dy->string);
     if ((row = sqlNextRow(sr)) != NULL)
 	genePosFillFrom5(&el->gp, row);
     sqlFreeResult(&sr);
     }
+dyStringFree(&dy);
 }
 
 static struct searchResult *removeDupes(struct searchResult *list)
@@ -113,9 +122,9 @@ for (col = colList; col != NULL; col = col->next)
     if (col->simpleSearch)
 	 {
          srList = col->simpleSearch(col, conn, search);
-	 if (showOnlyCannonical() && srList != NULL)
+	 if (showOnlyCanonical() && srList != NULL)
 	     {
-	     transformToCannonical(srList, conn);
+	     transformToCanonical(srList, conn);
 	     srList = removeDupes(srList);
 	     }
 	 if (srList != NULL)

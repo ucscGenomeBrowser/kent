@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.28 2003/09/17 17:16:49 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.29 2003/09/24 11:21:32 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -176,8 +176,8 @@ char *val = cartUsualString(cart, expRatioColorVarName, colorSchemeVals[0]);
 return !sameString(val, colorSchemeVals[0]);
 }
 
-boolean showOnlyCannonical()
-/* Return TRUE if we only show cannonical splicing varients. */
+boolean showOnlyCanonical()
+/* Return TRUE if we only show canonical splicing varients. */
 {
 return !cartUsualBoolean(cart, showAllSpliceVarName, FALSE);
 }
