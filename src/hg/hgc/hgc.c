@@ -148,7 +148,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.763 2004/10/07 17:52:03 kschneid Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.764 2004/10/08 00:07:07 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6771,7 +6771,7 @@ if (url != NULL && url[0] != 0)
     char **row;
     char *chrom, *chromStart, *chromEnd;
 
-    printf("<H3>Rat QTL %s: ", itemName);
+    printf("<H3>%s QTL %s: ", organism, itemName);
     sprintf(query, "select description from rgdQtlLink where name='%s';", itemName);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
