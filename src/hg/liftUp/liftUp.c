@@ -293,11 +293,23 @@ for (i=0; i<sourceCount; ++i)
 	    offset = spec->offset;
 	    psl->tStart += offset;
 	    psl->tEnd += offset;
-	    psl->tSize = spec->size;
 	    blockCount = psl->blockCount;
 	    tStarts = psl->tStarts;
-	    for (j=0; j<blockCount; ++j)
-		tStarts[j] += offset;
+	    if (psl->strand[1] == '-')
+	        {
+		for (j=0; j<blockCount; ++j)
+		    {
+		    int tr = psl->tSize - tStarts[j];
+		    tr += offset;
+		    tStarts[j] = spec->size - tr;
+		    }
+		}
+	    else
+	        {
+		for (j=0; j<blockCount; ++j)
+		    tStarts[j] += offset;
+		}
+	    psl->tSize = spec->size;
 	    psl->tName = spec->newName;
 	    }
 	pslTabOut(psl, dest);
