@@ -10661,3 +10661,44 @@ cat `ls -1 *.lav | sort -g` \
     para create jobList
         # 29 jobs
     para try, check, push, check,...
+
+
+# SEGMENTAL DUPLICATIONS (DONE 10/21/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/hg16/bed/genomicSuperDups
+    cd /cluster/data/hg16/bed/genomicSuperDups
+    wget http://humanparalogy.gs.washington.edu/segDupDb.tar
+    # This tar file contains files for both hg16 and hg17.  A note 
+    # from Xinwei She about the contents:
+#Build34 contains 4 tables: 3 of them are already in the genome browser source code:
+#genomicSuperDups, celereCoverage and celeraDupPositive. A new table, vanillaTrack,
+#which display the Celera assembly overlay in the public assembly build34, is added.
+#There trackDb entries can be founded in the file trackDb.add.
+#
+#Build35 contains only 2 tables: genomicSuperDups and celeraDupPositive.
+    tar xvf segDupDb.tar 
+    cd bd34
+    # use tail +2 to skip past the header line:
+    zcat celeraCoverage.tab.gz | tail +2 \
+    | hgLoadBed -tab hg16 celeraCoverage stdin
+    zcat celeraDupPositive.tab.gz | tail +2 \
+    | hgLoadBed -tab -sqlTable=$HOME/kent/src/hg/lib/celeraDupPositive.sql \
+        hg16 celeraDupPositive stdin
+    zcat genomicSuperDups.tab.gz | tail +2 \
+    | hgLoadBed -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql \
+        hg16 genomicSuperDups stdin
+    # Change the name of "vanillaTrack" to celeraOverlay:
+    zcat vanillaTrack.mysqldump.gz | sed -e 's/vanillaTrack/celeraOverlay/g' \
+    | hgsql hg16
+    # It needs a new index, and it needs a bin field, so dump out its 
+    # contents and load them back in using hgLoadBed and an edited 
+    # SQL definition:
+    hgsql hg16 -N -e 'select * from celeraOverlay' > celeraOverlay.bed
+    # Make a ~/kent/src/hg/lib/celeraOverlay.as and run autoSql.  
+    # Add bin and indices to celeraOverlay.sql, and reload with hgLoadBed:
+    hgLoadBed -tab -sqlTable=$HOME/kent/src/hg/lib/celeraOverlay.sql \
+      hg16 celeraOverlay celeraOverlay.bed
+    # clean up
+    rm celeraOverlay.bed bed.tab
+
+
