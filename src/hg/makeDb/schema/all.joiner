@@ -7,7 +7,7 @@
 
 # Define databases used for various organisms
 set hg hg13,hg15,hg16,hg17
-set mm mm3,mm4
+set mm mm3,mm4,mm5
 set rn rn2,rn3
 set fr fr1
 set ce ce1,ce2
