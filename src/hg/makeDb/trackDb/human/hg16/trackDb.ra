@@ -265,7 +265,7 @@ otherDb rn3
 
 track chainPanTro1
 shortLabel Chimp All Chain
-longLabel Chimp (Nov 03 - panTro1) Chained Alignments
+longLabel Chimp (panTro1-Nov 03) Chained Alignments
 group compGeno
 priority 200
 visibility hide
@@ -277,7 +277,7 @@ otherDb panTro1
 
 track rBestChainPanTro1
 shortLabel Chimp Best Chain 
-longLabel Chimp (Nov 03 - panTro1) Reciprocal Best Chained Alignments
+longLabel Chimp (panTro1-Nov 03) Reciprocal Best Chained Alignments
 group compGeno
 priority 201
 visibility hide
