@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.11 2005/02/23 01:02:12 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.12 2005/02/24 00:57:34 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -27,13 +27,22 @@ errAbort(
 "options:\n"
 "    -name=Small - the name of the font to place into the .c file\n"
 "               - should be one of: Tiny Small Smallish Medium Large\n"
-"    -verbose=4 - to see all glyphs as they are processed\n"
-"    -verbose=2 - to see processing statistics"
+"    -noHeader  - do not output the C include lines at the beginning\n"
+"               - to be used to concatinate source into one file\n"
+"    -verbose=2 - to see processing statistics\n"
+"    -verbose=5 - to see all missing glyphs"
 );
 }
 
-/*	lower and upper limit of character values to accept	*/
-#define LO_LMT	0
+/*	lower and upper limit of character values to accept
+ *	Tried going down to zero since there was a glyph for it, but of
+ *	course you can't print an ascii value of zero from a string
+ *	since that is the end of string indication in C
+ *	LO_LMT of 32 is assuming normal ASCII business which is the
+ *	lowest printable ascii character 'space'
+ *	There may be a case someday where encodings below 32 may be appropriate
+ */
+#define LO_LMT	32
 #define HI_LMT	(255)
 #define FILL_CHAR	((int)' ')
 /*	given w pixels, round up to number of bytes needed	*/
@@ -117,6 +126,9 @@ static unsigned char leftMasks[8] =
     {
     0x0, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe
     };
+
+static previousLastOffset = -1;
+
 /*  This bitsCopy is a specific limited form of a blit.  The limitation
  *	is allowed because the source bitmap always has the characteristic
  *	that it is upper left justified in its bitmap space.  Also, the
@@ -136,13 +148,25 @@ int startRow = maxYextent -
 		(((glyph->h + glyph->yOff) - 1) - minYoff) - 1;
 int destRow = startRow;
 int srcRow = 0;
+int bitsOnLeft = (offset + glyph->xOff) & 0x7;	/* range: [0-7]	*/
+int destColumn = (offset + glyph->xOff) >> 3;
 
 for (destRow = startRow; (srcRow < glyph->h) && (destRow < maxYextent);
 	++destRow, ++srcRow)
 {
-    int destColumn = (offset + glyph->xOff) >> 3;
-    int bitsOnLeft = (offset + glyph->xOff) & 0x7;	/* range: [0-7]	*/
     int col;
+
+    destColumn = (offset + glyph->xOff) >> 3;
+
+if (destRow == startRow)
+  verbose(4,"prevLastOffset: %d, destOffset: %d, xOff: %d, offset: %d w: %d d: %d'%c'\n",
+    previousLastOffset, (offset + glyph->xOff), glyph->xOff, offset,
+	glyph->w, glyph->dWidth, glyph->encoding);
+if (((offset + glyph->xOff) <= previousLastOffset) && (destRow == startRow))
+    verbose(4,"overlapping glyphs at encoding %d '%c', last: %d, this: %d, diff: %d\n",
+	glyph->encoding, glyph->encoding, previousLastOffset,
+	(offset + glyph->xOff), (offset + glyph->xOff) - previousLastOffset);
+
     if (0 == bitsOnLeft)
 	{
 	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
@@ -164,7 +188,10 @@ for (destRow = startRow; (srcRow < glyph->h) && (destRow < maxYextent);
 	    }
 	}
 }
-return(glyph->dWidth);
+previousLastOffset = offset + glyph->xOff + glyph->w;
+
+return(glyph->dWidth > (glyph->xOff + glyph->w) ? glyph->dWidth :
+	(glyph->xOff + glyph->w));
 }
 
 static void outputGem(char *out, struct font_hdr *font,
@@ -215,7 +242,7 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
     int yBottom;
     if (glyph->encoding != (encoding + 1))
 	{
-	verbose(2, "#\tmissing glyph for encodings: %d - %d\n", 
+	verbose(5, "#\tmissing glyph for encodings: %d - %d\n", 
 		encoding + 1, glyph->encoding - 1);
 	missing += glyph->encoding - encoding - 1;
 	}
@@ -347,16 +374,12 @@ for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
     if (encoding != glyph->encoding)	/*	missing glyph ?	*/
 	{
 	glyphToUse = fillChar;	/*	use FILL_CHAR (space)	*/
-verbose(2,"#\tmissing glyph at encoding %d '%c'\n", encoding,
+verbose(5,"#\tmissing glyph at encoding %d '%c'\n", encoding,
 	isprint((char)encoding) ? (char)encoding : ' ');
 	}
     else
 	glyph = glyph->next;	/*	not missing, OK to go to next */
 
-if ((int)'a' == encoding)
-    verbose(4,"#\tchar %d '%c' h bytes: %d, h,yOff: %d, %d\n",
-	encoding, (char)encoding, glyphToUse->h, glyphToUse->h,
-		glyphToUse->yOff);
     offset += bitsCopy(bitmap, offset, maxYextent, minYoff, glyphToUse);
     ++glyphCount;
     }
@@ -367,6 +390,9 @@ if ((char *)NULL == name)
 	name = cloneString(DEFAULT_FONT);	/*	default name of font */
 
 fprintf(f, "\n/* %s.c - compiled data for font %s */\n", name,font->facename);
+if (! noHeader)
+    fprintf(f, "static char const rcsid[] = \"$Id: bdfToGem.c,v 1.12 2005/02/24 00:57:34 hiram Exp $\";\n");
+
 fprintf(f, "/* generated source code by utils/bdfToGem, do not edit */\n");
 fprintf(f, "/* BDF data file input: %s */\n\n", inputFileName);
 
@@ -520,9 +546,6 @@ while (lineFileNext(lf, &line, NULL))
 	int len = strlen(line);
 	char *c = line;
 	j = 0;
-if ((int)'a' == encoding)
-    verbose(4, "processing bitmap line: %s at line %d, char: %d '%c' row %d:",
-	line, lineCount, encoding, (char) encoding, glyphRow);
 	for (i = 0; i < len; ++i)
 	    {
 	    uc <<= 4;
@@ -534,6 +557,9 @@ if ((int)'a' == encoding)
 		    break;
 		case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
 		    uc |= (*c++ - 'A' + 10) & 0x0f;
+		    break;
+		case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+		    uc |= (*c++ - 'a' + 10) & 0x0f;
 		    break;
 		default:
 		    errAbort("unrecognized hex digit: %c at line %d",
@@ -550,12 +576,6 @@ if ((int)'a' == encoding)
 	    uc <<= 4;
 	    curGlyph->bitmap[glyphRow][j] = uc;
 	    errAbort("odd length of %d at line %d\n", lineCount);
-	    }
-	if ((int)'a' == encoding)
-	    {
-	    for (i = 0; i < j; ++i)
-		verbose(4, "%02X", curGlyph->bitmap[glyphRow][i]);
-	    verbose(4,"\n");
 	    }
 	++glyphRow;
 	continue;
