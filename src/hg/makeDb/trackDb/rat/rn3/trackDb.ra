@@ -111,7 +111,7 @@ type psl xeno mm3
 otherDb mm3
 
 track blastzMm3
-shortLabel Mouse All
+shortLabel Mouse Blastz
 longLabel Mouse (Feb. 03) All Blastz Alignments
 group compGeno
 priority 214
@@ -172,7 +172,7 @@ visibility full
 type maf
 
 track blastzMm4
-shortLabel Mm4 All
+shortLabel Mm4 Blastz
 longLabel Mouse (Oct 03/Mm4) All Blastz Alignments
 group compGeno
 priority 214.1
