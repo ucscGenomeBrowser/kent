@@ -139,6 +139,7 @@ struct simpleFeature
     struct simpleFeature *next;
     int start, end;			/* Start/end in browser coordinates. */
     int grayIx;                         /* Level of gray usually. */
+				    /* in chains it's query start*/
     };
 
 /* Some details of how to draw linked features. */
@@ -146,6 +147,7 @@ enum {lfSubXeno = 1};
 enum {lfSubSample = 2};
 enum {lfWithBarbs = 3}; /* Turn on barbs to show direction based on 
                          * strand field */
+enum {lfSubChain = 4};
 
 struct linkedFeatures
 /* A linked set of features - drawn as a bunch of boxes (often exons)
