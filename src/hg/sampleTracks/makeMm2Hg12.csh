@@ -3,14 +3,13 @@
 set scriptDir="/projects/compbio/usr/weber/kent/src/hg/sampleTracks/bin/"
 
 #track specific values
-alias foreachChrom 'foreach f (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)'
-set baseDir="/cluster/store4/weber/human824/"
-set target="hg12"
-set query="Mm2"
-set queryTable="blastzBestMouse"
-set axtDir="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24/axtBest"
-set outTable="humMusL"
-
+alias foreachChrom 'foreach f (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)'
+set baseDir="/cluster/store5/weber/mouse830/"
+set target="mm2"
+set query="Hg12"
+set queryTable="blastzBestHuman"
+set axtDir="/cluster/store2/mm.2002.02/mm2/bed/blastz.gs13.2002-08-30/axtBest/"
+set outTable="musHumL"
 
 mkdir $baseDir
 cd $baseDir

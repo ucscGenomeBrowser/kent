@@ -4,11 +4,11 @@ set scriptDir="/projects/compbio/usr/weber/kent/src/hg/sampleTracks/bin/"
 
 #track specific values
 alias foreachChrom 'foreach f (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)'
-set baseDir="/cluster/store4/weber/human824/"
-set target="hg12"
+set baseDir="/cluster/store4/weber/human512/"
+set target="hg13"
 set query="Mm2"
 set queryTable="blastzBestMouse"
-set axtDir="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24/axtBest"
+set axtDir="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH/axtBest/"
 set outTable="humMusL"
 
 
