@@ -133,6 +133,35 @@ for (i=0; i<size; ++i)
 return count;
 }
 
+static int countGaps(char *a, char *b, int size)
+/* Count number of inserts in either strand. */
+{
+int count = 0;
+int i;
+for (i=0; i<size; ++i)
+   {
+   if (a[i] == '-')
+       ++count;
+   if (b[i] == '-')
+       ++count;
+   }
+return count;
+}
+
+static int countPositives(char *a, char *b, int size)
+/* Count positive (not necessarily identical) protein matches. */
+{
+int count = 0;
+int i;
+struct axtScoreScheme *ss = axtScoreSchemeProteinDefault();
+for (i=0; i<size; ++i)
+    {
+    if (ss->matrix[a[i]][b[i]] > 0)
+        ++count;
+    }
+return count;
+}
+
 static int plusStrandPos(int pos, int size, char strand, boolean isEnd)
 /* Return position on plus strand, one based. */
 {
@@ -339,6 +368,7 @@ for (target = targetList; target != NULL; target = target->next)
 	    if (axt->qStrand == strand)
 		{
 		int matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+		int positives = countPositives(axt->qSym, axt->tSym, axt->symCount);
 		if (!saidStrand)
 		    {
 		    saidStrand = TRUE;
@@ -350,10 +380,17 @@ for (target = targetList; target != NULL; target = target->next)
 		     blastzScoreToWuBits(axt->score, isProt),
 		     blastzScoreToWuExpectation(axt->score, databaseLetterCount),
 		     blastzScoreToWuExpectation(axt->score, databaseLetterCount));
-		fprintf(f, " Identities = %d/%d (%d%%), Positives = %d/%d (%d%%), Strand = %s / Plus\n",
+		fprintf(f, " Identities = %d/%d (%d%%), Positives = %d/%d (%d%%)",
 		     matches, axt->symCount, round(100.0 * matches / axt->symCount),
-		     matches, axt->symCount, round(100.0 * matches / axt->symCount),
-		     strandName);
+		     positives, axt->symCount, round(100.0 * positives / axt->symCount));
+		if (isProt)
+		    {
+		    if (axt->frame != 0)
+		        fprintf(f, ", Frame = %c%d", axt->tStrand, axt->frame);
+		    fprintf(f, "\n");
+		    }
+		else
+		    fprintf(f, ", Strand = %s / Plus\n", strandName);
 		fprintf(f, "\n");
 		blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
 		}
@@ -386,8 +423,7 @@ else
 
 
 static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
-	FILE *f, 
-	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	FILE *f, char *databaseName, int databaseSeqCount, double databaseLetterCount, 
 	char *ourId)
 /* Do ncbiblast-like output at end of processing query. */
 {
@@ -438,22 +474,40 @@ for (target = targetList; target != NULL; target = target->next)
     {
     struct axtRef *ref;
     struct axt *axt;
-    int matches;
+    int matches, gaps;
     fprintf(f, "\n\n>%s\n", target->name);
     fprintf(f, "          Length = %d\n", target->size);
     for (ref = target->axtList; ref != NULL; ref = ref->next)
 	{
 	axt = ref->axt;
-	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
 	fprintf(f, "\n");
 	fprintf(f, " Score = %d bits, Expect = ",
 	     blastzScoreToNcbiBits(axt->score));
 	ncbiPrintE(f, blastzScoreToNcbiExpectation(axt->score));
 	fprintf(f, "\n");
-	fprintf(f, " Identities = %d/%d (%d%%)\n",
-	     matches, axt->symCount, round(100.0 * matches / axt->symCount));
-	fprintf(f, " Strand = %s / %s\n", nameForStrand(axt->qStrand),
-	    nameForStrand(axt->tStrand));
+	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+	if (isProt)
+	    {
+	    int positives = countPositives(axt->qSym, axt->tSym, axt->symCount);
+	    gaps = countGaps(axt->qSym, axt->tSym, axt->symCount);
+	    fprintf(f, " Identities = %d/%d (%d%%),",
+		 matches, axt->symCount, round(100.0 * matches / axt->symCount));
+	    fprintf(f, " Positives = %d/%d (%d%%),",
+		 positives, axt->symCount, round(100.0 * positives / axt->symCount));
+	    fprintf(f, " Gaps = %d/%d (%d%%)\n",
+		 gaps, axt->symCount, round(100.0 * gaps / axt->symCount));
+	    if (axt->frame != 0)
+	         {
+		 fprintf(f, " Frame = %c%d\n", axt->tStrand, axt->frame);
+		 }
+	    }
+	else
+	    {
+	    fprintf(f, " Identities = %d/%d (%d%%)\n",
+		 matches, axt->symCount, round(100.0 * matches / axt->symCount));
+	    fprintf(f, " Strand = %s / %s\n", nameForStrand(axt->qStrand),
+		nameForStrand(axt->tStrand));
+	    }
 	fprintf(f, "\n");
 	fprintf(f, "\n");
 	blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
@@ -478,6 +532,8 @@ void axtBlastOut(struct axtBundle *abList, int queryIx, boolean isProt,
  *   ourId - optional (may be NULL) thing to put in header
  */
 {
+if (abList == NULL)
+    return;
 if (isWu)
     wuBlastOut(abList, queryIx, isProt, f, databaseName,
    	databaseSeqCount, databaseLetterCount, ourId);

@@ -165,16 +165,17 @@ void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
 /* Print out info on clump */
 
 typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, bioSeq *genoSeq, struct hash *t3Hash, bioSeq *otherSeq, 
-	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
+	struct ffAli *ali, bioSeq *tSeq, struct hash *t3Hash, bioSeq *qSeq, 
+	boolean qIsRc, boolean tIsRc,
+	enum ffStringency stringency, int minMatch, void  *outputData);
 /* This is the type of a client provided function to save an alignment. 
  * The parameters are:
  *     chromName - name of target (aka genomic or database) sequence.
  *     chromSize - size of target sequence.
  *     chromOffset - offset of genoSequence in target.
- *     ffAli - alignment with pointers into genoSeq/otherSeq or in
+ *     ffAli - alignment with pointers into tSeq/qSeq or in
  *             translated target case, into t3Hash.
- *     genoSeq - part of target sequence in normal case.   In translated
+ *     tSeq - part of target sequence in normal case.   In translated
  *             target case look at t3Hash instead.
  *     t3Hash - used only in translated target case.  A hash keyed by
  *             target sequence name with values *lists* of trans3 structures.
@@ -182,7 +183,7 @@ typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
  *             untranslated versions of the bits of the target that are in 
  *             memory.  (You can assume at this point all parts needed for
  *             output are indeed in memory.)
- *     otherSeq - query sequence (this isn't segmented at all). 
+ *     qSeq - query sequence (this isn't segmented at all). 
  *     isRc - True if query is reverse complemented.
  *     stringency - ffCdna, etc.  I'm hoping to move this elsewhere.
  *     minMatch - minimum score to output.  Also should be moved elsewhere.
@@ -199,7 +200,7 @@ void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq
  * outFunction/outData. */
 
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
-	int minMatch,  GfSaveAli outFunction, void *outData);
+	boolean tIsRc, int minMatch, GfSaveAli outFunction, void *outData);
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
 
@@ -224,7 +225,6 @@ struct gfSavePslxData
     FILE *f;			/* Output file. */
     // uglyf struct hash *t3Hash;	/* Hash to associate names and frames. */
     boolean reportTargetStrand; /* Report target as well as query strand? */
-    boolean targetRc;		/* Is target reverse complemented? */
     struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
     int minGood;		/* Minimum sequence identity in parts per thousand. */
     boolean qIsProt;		/* Query is peptide. */
@@ -234,8 +234,9 @@ struct gfSavePslxData
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, 
-	struct dnaSeq *genoSeq, struct hash *t3Hash, struct dnaSeq *otherSeq, 
-	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
+	struct dnaSeq *tSeq, struct hash *t3Hash, struct dnaSeq *qSeq, 
+	boolean qIsRc, boolean tIsRc, 
+	enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * pslx format.  This is meant for translated alignments. */
 
@@ -253,8 +254,9 @@ struct gfSaveAxtData
 
 void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, 
-	struct dnaSeq *genoSeq, struct hash *t3Hash, struct dnaSeq *otherSeq, 
-	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
+	struct dnaSeq *tSeq, struct hash *t3Hash, struct dnaSeq *qSeq, 
+	boolean qIsRc, boolean tIsRc, 
+	enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough save it in axtBundle. */
 
 
@@ -266,13 +268,13 @@ void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
  * outFunction to use. */
 
 void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq,
-    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData);
+    int minMatch, GfSaveAli outFunction, void *outData);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
 void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, boolean isRc,
-    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData, boolean isRna);
+    int minMatch, GfSaveAli outFunction, void *outData, boolean isRna);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
@@ -291,7 +293,7 @@ void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf,
  * together again. */
 
 void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3], 
-   struct hash *t3Hash, boolean qIsRc, boolean qIsRna,
+   struct hash *t3Hash, boolean qIsRc, boolean tIsRc, boolean qIsRna,
    int minScore, GfSaveAli outFunction, void *outData);
 /* Chop up query into pieces, align each in translated space, and stitch back
  * together again as nucleotides. */

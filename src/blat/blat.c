@@ -526,7 +526,6 @@ dotOut();
 if (isProt)
     {
     searchOneProt(seq, gf, f);
-    finishBasicOutput(f);
     }
 else
     {
@@ -535,8 +534,8 @@ else
     reverseComplement(seq->dna, seq->size);
     searchOneStrand(seq, gf, f, TRUE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
-    finishBasicOutput(f);
     }
+finishBasicOutput(f);
 }
 
 void trimSeq(struct dnaSeq *seq, struct dnaSeq *trimmed)
@@ -685,9 +684,8 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-pslxOutData.targetRc = dbIsRc;
 pslxOutData.reportTargetStrand = TRUE;
-gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gvo.out, gvo.data);
+gfFindAlignAaTrans(gfs, qSeq, t3Hash, dbIsRc, minScore, gvo.out, gvo.data);
 }
 
 void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
@@ -696,15 +694,11 @@ void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash
 {
 int qIsRc;
 pslxOutData.reportTargetStrand = TRUE;
-pslxOutData.targetRc = dbIsRc;
-
 for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
-    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, !qIsDna, minScore, gvo.out, gvo.data);
+    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, dbIsRc, !qIsDna, minScore, gvo.out, gvo.data);
     if (qIsDna)
-	{
         reverseComplement(qSeq->dna, qSeq->size);
-	}
     }
 }
 
@@ -792,6 +786,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	        transTripleSearch(&trimmedSeq, gfs, t3Hash, isRc, qIsDna, out);
 	    else
 		tripleSearch(&trimmedSeq, gfs, t3Hash, isRc, out);
+	    finishBasicOutput(out);
 	    }
 	lineFileClose(&lf);
 	}
