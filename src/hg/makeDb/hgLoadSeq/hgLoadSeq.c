@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.2 2003/07/07 17:09:18 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.3 2003/07/07 17:56:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -23,13 +23,14 @@ char seqTable[] =
 /* This keeps track of a sequence. */
 "create table seq ("
   "id int unsigned not null primary key," /* Unique ID across all tables. */
-  "acc varchar(24) not null ,"	 /* GenBank accession number or other ID. */
+  "acc varchar(128) not null ,"	          /* seq  ID. */
   "size int unsigned not null,"           /* Size of sequence in bases. */
-  "gb_date date not null,"       /* GenBank last modified date. */
-  "extFile int unsigned not null,"       /* File it is in. */
-  "file_offset bigint not null,"         /* Offset in file. */
+  "gb_date date not null,"                /* GenBank last modified date,
+                                           * not used, for compatbility with older databases. */
+  "extFile int unsigned not null,"        /* File it is in. */
+  "file_offset bigint not null,"          /* Offset in file. */
   "file_size int unsigned not null,"      /* Size in file. */
-	       /* Extra indices. */
+  /* Extra indices. */
   "unique (acc))";
 
 boolean faSeekNextRecord(struct lineFile *faLf)
