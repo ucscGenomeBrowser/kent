@@ -7,10 +7,17 @@
 #include "dnaseq.h"
 #include "dnautil.h"
 #include "chromKeeper.h"
+#include "options.h"
+
 void usage()
 {
-errAbort("axtCountBeds bedFile axtFile db outFile chrom\n");
+errAbort("axtCountBeds.c - Program to count matching bases in bed and output\n"
+	 "positional information as well.\n"
+	 "usage:\n   "
+	 "axtCountBeds bedFile axtFile db outFile chrom\n");
 }
+
+
 
 struct axt* axtReadAll(char* fileName)
 /* Read all of the axt records from a file. */
@@ -60,7 +67,7 @@ void scoreMatches(struct axt *axt, int *matches, char *dna, int matchCount, int 
 /* Look through the axt record and score mathes in matches. */
 {
 int start = chromStart - axt->tStart;
-int end = min(chromEnd - axt->tStart, axt->tEnd = axt->tStart);
+int end = min(chromEnd - axt->tStart, axt->tEnd - axt->tStart);
 int i =0;
 int position = 0;
 tolowers(axt->qSym);
@@ -72,7 +79,7 @@ while(position < end && axt->qSym[i] != '\0')
 	i++;
 	continue;
 	}
-    else if(position >= start && position <end)
+    else if(position >= start && position < end)
 	{
 	dna[position + axt->tStart - chromStart] = axt->tSym[i];
 	if(axt->qSym[i] == axt->tSym[i])
@@ -108,7 +115,46 @@ fprintf(out,"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 	"match", "mismatch", "notAlign", "percentId", "dna", "matchesSize", "matches");
 }
 
-void countMatches(struct bed *bed, FILE *out)
+void writeAxt(FILE *out, struct bed *bed, struct axt *axt)
+{
+struct dyString *outSeq = newDyString(bed->chromEnd - bed->chromStart+100);
+struct dyString *outSeqOrtho = newDyString(bed->chromEnd - bed->chromStart+100);
+
+if(bed->chromStart >= axt->tStart && bed->chromEnd <= axt->tEnd)
+    {
+    int start = bed->chromStart - axt->tStart;
+    int end = bed->chromEnd - axt->tStart;
+    int pos = 0;
+    int i = 0;
+    fprintf(out, ">%s.%d.%s.%s:%d-%d\n", 
+	    bed->name, bed->score, bed->strand, 
+	    bed->chrom, bed->chromStart,bed->chromEnd);
+    /* Loop through incrementing position when non-indel characters
+       are found in target sequence. */
+    while(pos < end && axt->qSym[i] != '\0') 
+	{
+	if(pos >= start && pos < end)
+	    {
+	    dyStringPrintf(outSeq, "%c", axt->tSym[i]);
+	    dyStringPrintf(outSeqOrtho, "%c", axt->qSym[i]);
+	    }
+	if(axt->tSym[i] != '-')
+	    pos++;
+	i++;
+	}
+    if(bed->strand[0] == '-')
+	{
+	reverseComplement(outSeq->string, outSeq->stringSize);
+	reverseComplement(outSeqOrtho->string, outSeqOrtho->stringSize);
+	}
+    fprintf(out, "%s\n", outSeq->string);
+    fprintf(out, "%s\n", outSeqOrtho->string);
+    }
+dyStringFree(&outSeq);
+dyStringFree(&outSeqOrtho);
+}
+
+void countMatches(struct bed *bed, FILE *out, FILE *axtOut)
 /* Count up the matches for a particular bed. */
 {
 struct axt *axtList = NULL, *axt;
@@ -116,6 +162,7 @@ struct binElement *beList = NULL, *be = NULL;
 int *matches = NULL;
 int matchSize = 0, i = 0;
 int match = 0, misMatch=0, notAlign=0;
+
 struct slRef *refList = NULL, *ref = NULL;
 char *dna = NULL;
 struct dnaSeq *seq = NULL;
@@ -129,6 +176,12 @@ for(be = beList; be != NULL; be = be->next)
     axt = be->val;
     scoreMatches(axt, matches, dna, matchSize, bed->chromStart, bed->chromEnd);
     } 
+
+if(axtOut != NULL && slCount(beList) == 1 )
+    {
+    axt = beList->val;
+    writeAxt(axtOut, bed, axt);
+    }
 
 /* Output bed. */
 bedOutputN(bed, 6, out, '\t', '\t');
@@ -180,6 +233,9 @@ void axtCountBeds(char *bedFile, char *axtFile, char *db, char *outFile, char *c
 struct bed *bedList = NULL, *bed = NULL;
 struct rbTree *axtTree = NULL;
 FILE *out = NULL;
+FILE *axtOut = NULL;
+char *axtOutName = optionVal("axtOut", NULL);
+
 warn("Loading Beds.");
 bedList = bedLoadNAll(bedFile, 6);
 warn("Loading Axts.");
@@ -188,18 +244,22 @@ warn("Counting Matches.");
 out = mustOpen(outFile, "w");
 outputHeader(out);
 hSetDb(db);
+if(axtOutName != NULL)
+    axtOut = mustOpen(axtOutName, "w");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     if(differentString(bed->chrom, chrom))
 	continue;
-    countMatches(bed, out);
+    countMatches(bed, out, axtOut);
     }
 carefulClose(&out);
+carefulClose(&axtOut);
 warn("Done.");
 }
 
 int main(int argc, char *argv[])
 {
+optionInit(&argc, argv, NULL);
 if(argc <= 2)
     usage();
 dnaUtilOpen();
