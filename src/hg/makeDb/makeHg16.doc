@@ -1548,7 +1548,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         echo done $c
     end
 
-# NET MOUSE BLASTZ (WORKING - 2003-08-08 - Hiram)
+# NET MOUSE BLASTZ (DONE - 2003-08-08 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain
@@ -1575,11 +1575,9 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
     # memory usage 2459066368, utime 15182 s/100, stime 3645
 
-XXXX netClass is sensitive to the headers in the linSpecRep files, need
-	to remove those headers or fix netClass
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain
-    netClass hNoClass.net hg16 mm3 mouse.net \
+    ~/bin/i386/netClass hNoClass.net hg16 mm3 mouse.net \
 	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse \
 	-qNewR=/cluster/bluearc/mm3.RM030619/linSpecRep.notInHuman
 
@@ -1594,7 +1592,7 @@ XXXX netClass is sensitive to the headers in the linSpecRep files, need
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm3/axtChain
     netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netMm3 stdin
-    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyMm3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetMm3 stdin
 
     # Add entries for net and chain to human/hg16 trackDb
 
@@ -1972,29 +1970,101 @@ CREATE bigZips stuff for release (DONE 2003-08-01, 08-06, 08-08 - Hiram)
 # MAKING MOUSE AND RAT SYNTENY (MOUSE TBD)(RAT TBD)
 
 ssh hgwdev
-cd /cluster/data/hg16/bed
-mkdir syntenyMouse
-cd syntenyMouse
+mkdir -p /cluster/data/hg16/bed/syntenyMm3
+cd /cluster/data/hg16/bed/syntenyMm3
 # Copy all the needed scripts from /cluster/data/hg15/bed/syntenyMouse
 cp -p /cluster/data/hg15/bed/syntenyMouse/*.pl .
 
 ./syntenicBest.pl -db=hg16 -table=blastzBestMm3
 ./smooth.pl
 ./joinsmallgaps.pl
-XXXX - The following produces an empty file: genomeBestFinal
 ./fillgap.pl -db=hg16 -table=blastzBestMm3
 ./synteny2bed.pl
-hgLoadBed hg16 syntenyMouse ucsc100k.bed
+hgLoadBed hg16 syntenyMm3 ucsc100k.bed
+# Save the files from the above procedures.  The scripts are going
+# to rewrite the same file names
+mv genomeBest1phase genomeBest1phase.Mm3
+mv genomeBest2phase genomeBest2phase.Mm3
+mv genomeBest3phase genomeBest3phase.Mm3
+mv genomeBestFinal genomeBestFinal.Mm3
+mv ucsc100k.bed ucsc100k.bed.Mm3
+
 # syntenicBest.pl will overwrite the genomeBest1phase created by the
-#	the previous run of this above.  It takes several hours to run.
-syntenicBest.pl -db=hg16 -table=blastzBestRn2
+#	the previous run of this above.  It takes about 3 hours to run.
+./syntenicBest.pl -db=hg16 -table=blastzBestRn3
 #	smooth.pl overwrites genomeBest2phase created by the previous
 #	run of this above.  Runs quickly.
-smooth.pl
+./smooth.pl
 # joinsmallgaps.pl overwrites genomeBest3phase created above. Runs quickly.
-joinsmallgaps.pl
+./joinsmallgaps.pl
 # fillgap.pl creates genomeBestFinal
-fillgap.pl -db=hg16 -table=blastzBestRn2
+./fillgap.pl -db=hg16 -table=blastzBestRn3
+XXXX
 # synteny2bed.pl creates ucsc100k.bed
-synteny2bed.pl
-hgLoadBed hg16 syntenyRat ucsc100k.bed
+./synteny2bed.pl
+hgLoadBed hg16 syntenyRn3 ucsc100k.bed
+# Loaded 1537 elements
+
+# NET RAT BLASTZ (WORKING - 2003-08-11 - Hiram)
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/rn3/chrom.sizes ../preNet/$i
+    end
+    # This foreach loop will take about 15 min to execute.
+
+    cd ..
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
+                            /cluster/data/rn3/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 2511495168, utime 15658 s/100, stime 3383
+
+    # The netClass operations requires an "ancientRepeat" table to exist
+    # in either hg16 or rn3.  So, create the table:
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg16/bed/ancientRepeat
+    cd /cluster/data/hg16/bed/ancientRepeat
+    # mysqldump needs write permission to this directory
+    # and you need to use your read/write enabled user with password
+    chmod 777 .
+    mysqldump --user=<r/w user> --password=<r/w pass> --all --tab=. hg16 \
+	ancientRepeat
+    chmod 775 .
+    hgsql hg16 < ancientRepeat.sql
+    mysqlimport -u<r/w user> -p<r/w pass> hg16 ancientRepeat.txt
+    # This is a hand curated table obtained from Arian.
+	
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain
+    /cluster/bin/i386/netClass hNoClass.net hg16 rn3 mouse.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInRat \
+	-qNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netRn3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetRn3 stdin
+
+    # Add entries for net and chain to human/hg16 trackDb
+
