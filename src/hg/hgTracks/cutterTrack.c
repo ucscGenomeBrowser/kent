@@ -125,15 +125,7 @@ if (winSize < 200000)
     else
 	cullCutters(cutters, FALSE, NULL, NULL, 6);
  /*    printf("<-- %d -->\n", slCount(cutters)); */
-    plus = matchEnzymes(cutters, windowDna, '+', TRUE, winStart);
-    reverseComplement(windowDna->dna, windowDna->size);
-    minus = matchEnzymes(cutters, windowDna, '-', FALSE, winStart);
-    if (plus && minus)
-	bedList = slCat(plus, minus);
-    else if (plus)
-	bedList = plus;
-    else 
-	bedList = minus;
+    bedList = matchEnzymes(cutters, windowDna, winStart);
     tg->items = bedList;
     }
 hFreeConn2(&conn);
