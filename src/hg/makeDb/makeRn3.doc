@@ -441,24 +441,64 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN3 (TO DO)
       | hgsql -h genome-testdb hgcentraltest
 
 
-SIMPLE REPEAT TRACK (TO DO)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
-    # so instead of binrsyncing and para-running, just do this on kkstore:
+SIMPLE REPEAT TRACK (DONE - 2003-06-24 - Hiram)
+    #  Need to be careful with this one on the cluster.  This trf
+    #  thing does a lot of I/O on the input and output file.
+    #  Place the splits on /cluster/bluearc for cluster access
     ssh kkstore
+    mkdir -p /cluster/bluearc/rat/rn3
+    cd /cluster/store3/rn3/
+    ls ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa  \
+	| cpio -pdm /cluster/bluearc/rat/rn3
+
+    # now, a safe cluster job to trf mask
+    ssh kk
     mkdir ~/rn3/bed/simpleRepeat
     cd ~/rn3/bed/simpleRepeat
     mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    foreach f (/cluster/store3/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
-    end
-    tcsh jobs.csh |& tee jobs.log
-    wc -l jobs.csh
-    ls -1 trf | wc -l
-    # When job is done do:
+    ls /cluster/bluearc/rat/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
+	2> /dev/null > genome.lst
+
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+    chmod +x runTrf
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    ... etc ...
+# Completed: 591 of 591 jobs
+# CPU time in finished jobs:      27858s     464.30m     7.74h    0.32d  0.001 y
+# IO & Wait Time:                 30794s     513.24m     8.55h    0.36d  0.001 y
+# Average job time:                  99s       1.65m     0.03h    0.00d
+# Longest job:                      242s       4.03m     0.07h    0.00d
+# Submission to last job:           337s       5.62m     0.09h    0.00d
+
+    ssh kkstore
     liftUp simpleRepeat.bed ~/rn3/jkStuff/liftAll.lft warn trf/*.bed
 
     # Load this into the database as so
@@ -467,8 +507,7 @@ SIMPLE REPEAT TRACK (TO DO)
     hgLoadBed rn3 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 
-
-PROCESS SIMPLE REPEATS INTO MASK (TO DO)
+PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-24 - Hiram)
 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
@@ -507,6 +546,8 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
     ./jkStuff/makeFaMasked.sh
     #- Make hard-masked .fa.masked files as well:
     ./jkStuff/makeHardMasked.sh
+XXXX Running the above 2003-06-24 17:17 - Hiram
+
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.sh
     # Copy the masked contig fa to /scratch:
