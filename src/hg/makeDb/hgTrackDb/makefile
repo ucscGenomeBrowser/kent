@@ -20,3 +20,6 @@ update:
 	hgTrackDb hg9 ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg10 ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 ../../lib/trackDb.sql hgRoot
+
+zooMouse1:
+	hgTrackDb zooMouse1 ../../lib/trackDb.sql hgRoot
