@@ -297,7 +297,7 @@ group genes
 priority 34
 visibility pack
 color 12,12,120
-type genePred knownGenePep 
+type genePred knownGenePep knownGeneMrna
 hgGene on
 cdsDrawDefault genomic\ codons
 
