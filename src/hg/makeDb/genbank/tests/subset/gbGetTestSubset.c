@@ -15,7 +15,7 @@
 #include "errabort.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.4 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.5 2004/02/23 16:46:00 kent Exp $";
 
 /* FIXME: need a way to get both native and xenos that are know to align */
 
@@ -690,6 +690,7 @@ int numEsts;
 char *accList, *selectAccFile;
 char *database, *relName, *outDir;
 
+verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
