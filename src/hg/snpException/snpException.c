@@ -13,7 +13,7 @@
 #include "snp.h"
 #include "snpExceptions.h"
 
-static char const rcsid[] = "$Id: snpException.c,v 1.3 2005/01/10 08:18:17 daryl Exp $";
+static char const rcsid[] = "$Id: snpException.c,v 1.4 2005/01/20 00:56:37 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -173,6 +173,7 @@ for (el=exceptionList; el!=NULL; el=el->next)
     carefulClose(&outFile);
     printf("Invariant %d has %lu exceptions, written to this file: %s\n", 
 	   el->exceptionId, invariantCount, thisFile);
+    fflush(stdout);
     safef(query, sizeof(query),
 	  "update snpExceptions set num=%lu where exceptionId=%d",
 	  invariantCount, el->exceptionId);    
