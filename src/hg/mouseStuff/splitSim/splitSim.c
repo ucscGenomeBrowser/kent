@@ -16,9 +16,9 @@ errAbort(
   );
 }
 
-#define countCount 100
+#define countCount 300
 int counts[countCount];
-int simSize = 1000000;
+int simSize = 1000001;
 double aveSize = 30;
 
 void splitSim(char *XXX)
@@ -31,8 +31,15 @@ int i;
 uglyf("split count %d\n", splitCount);
 for (i=0; i<splitCount; ++i)
      {
-     int rPos = rand()%simSize;
-     splitBuf[rPos] = 1;
+     for (;;)
+	 {
+	 int rPos = random()%simSize;
+	 if (splitBuf[rPos] == 0)
+	     {
+	     splitBuf[rPos] = 1;
+	     break;
+	     }
+	 }
      }
 splitBuf[simSize] = 1;
 start = 0;
