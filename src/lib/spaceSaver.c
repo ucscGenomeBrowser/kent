@@ -8,7 +8,7 @@
 #include "common.h"
 #include "spaceSaver.h"
 
-static char const rcsid[] = "$Id: spaceSaver.c,v 1.9 2004/09/01 00:20:21 sugnet Exp $";
+static char const rcsid[] = "$Id: spaceSaver.c,v 1.10 2004/09/02 20:08:44 kent Exp $";
 
 
 struct spaceSaver *spaceSaverMaxCellsNew(int winStart, int winEnd, int maxRows, int maxCells)
@@ -64,8 +64,7 @@ struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int en
 					void *val, boolean allowOverflow)
 /* Add a new node to space saver. Returns NULL if can't fit item in
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
- * that won't fit in first row (ends up being last row after
- * spaceSaverFinish()). */
+ * that won't fit in last row. */
 {
 int cellStart, cellEnd, cellWidth;
 struct spaceRowTracker *srt, *freeSrt = NULL;
@@ -118,7 +117,7 @@ if (freeSrt == NULL)
 	}
     }
 
-/* Mark that part of row used. */
+/* Mark that part of row used (except in overflow case). */
 if(freeSrt != NULL)
     memset(freeSrt->used + cellStart, 1, cellWidth);
 
