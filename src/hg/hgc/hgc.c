@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.836 2005/02/24 20:26:30 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.837 2005/02/25 00:59:55 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6203,6 +6203,7 @@ char *dupe, *type, *words[16];
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
+char condStr[256];
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -6210,19 +6211,26 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
-if (wordCount > 0)
+
+/* skip the rest if this gene is not in ensGene */
+sprintf(condStr, "name='%s'", item);
+if (sqlGetField(conn, database, "ensGene", "name", condStr) != NULL)
     {
-    type = words[0];
-    if (sameString(type, "genePred"))
-        {
-	char *pepTable = NULL, *mrnaTable = NULL;
-	if (wordCount > 1)
-	    pepTable = words[1];
-	if (wordCount > 2)
-	    mrnaTable = words[2];
-	genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
-	}
+    if (wordCount > 0)
+    	{
+    	type = words[0];
+    	if (sameString(type, "genePred"))
+            {
+	    char *pepTable = NULL, *mrnaTable = NULL;
+	    if (wordCount > 1)
+	    	pepTable = words[1];
+	    if (wordCount > 2)
+	    	mrnaTable = words[2];
+	    genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
+	    }
+        }
     }
+
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
