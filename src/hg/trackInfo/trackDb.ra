@@ -72,11 +72,18 @@ type bed 3 +
 track genomicDups
 priority 10
 shortLabel Duplications
-longLabel Duplications of >1000 Bases of non-RepeatMasked Sequence"
+longLabel Duplications of >1000 Bases of non-RepeatMasked Sequence
 visibility dense
 color 230,120,0
 altColor 220,180,0
 type bed 6 +
+
+track clonePos
+priority 10.5
+shortLabel Coverage
+longLabel Clone Coverage/Fragment Position
+visibility dense
+altColor 180,180,180 
 
 track genieKnown
 shortLabel Known Genes

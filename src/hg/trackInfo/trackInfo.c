@@ -37,7 +37,7 @@ carefulClose(&f);
 printf("Loaded %d track descriptions from %s\n", slCount(btList), raFile);
 
 readInGulp(sqlFile, &create, NULL);
-trimSpaces(&create);
+create = trimSpaces(create);
 end = create + strlen(create)-1;
 if (end == ';') *end = 0;
 sqlRemakeTable(conn, "trackDb", create);
