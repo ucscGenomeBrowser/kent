@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.16 2003/12/13 01:12:51 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.17 2004/01/08 19:17:22 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -93,7 +93,7 @@ errAbort(
     "\tset the output file names.  Otherwise use the -wibFile option.\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
     "First column of data is a chromosome location.\n"
-    "Second column is data value for that location, range [0:127]\n"
+    "Second column is data value for that location, any real data value allowed.\n"
 );
 }
 
