@@ -2182,3 +2182,9 @@ while (<>) {
     DateStamp=031112
     ~/kent/src/hg/protein/KGprocess.sh ${DateStamp}
     # that should run to completion and the known genes track is ready
+
+    # Add the proteins link into gdbPdb.hgcentral:
+    hgsql -e 'INSERT INTO gdbPdb (genomeDb, proteomeDb) \
+	VALUES ("mm4","proteins031112");' \
+	-h genome-testdb hgcentraltest
+
