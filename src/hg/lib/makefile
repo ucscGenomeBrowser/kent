@@ -14,7 +14,7 @@ O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
     chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o columnInfo.o coordConv.o \
     cpgIsland.o ctgPos.o customTrack.o cytoBand.o dbDb.o \
-    dbSnpRS.o defaultDb.o dnaMotif.o dnaProbe.o encodeErge.o \
+    dbSnpRS.o defaultDb.o dnaMotif.o dnaProbe.o encodeErge.o encodeErgeHssCellLines.o\
     encodeRegionInfo.o encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
