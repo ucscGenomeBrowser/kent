@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.861 2005/01/17 19:29:35 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.862 2005/01/20 00:19:35 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8476,28 +8476,33 @@ unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
 struct trackDb *subTdb;
 /* number of possible subtracks for this track */
 int subtrackCt = slCount(tdb->subtracks);
+int altColors = subtrackCt - 1;
+
+/* ignore if no subtracks */
+if (!subtrackCt)
+    return;
 
 /* setup function handlers for composite track */
 track->loadItems = compositeLoad;
 track->totalHeight = compositeTotalHeight;
 
-if (finalR || finalG || finalB)
+if (altColors && (finalR || finalG || finalB))
     {
     /* not black -- make a color gradient for the subtracks,
                 from black, to the specified color */
-    deltaR = (finalR - altR) / (subtrackCt-1);
-    deltaG = (finalG - altG) / (subtrackCt-1);
-    deltaB = (finalB - altB) / (subtrackCt-1);
+    deltaR = (finalR - altR) / altColors;
+    deltaG = (finalG - altG) / altColors;
+    deltaB = (finalB - altB) / altColors;
     }
 
 /* count number of visible subtracks for this track */
-/* if no subtracks are selected in cart, turn them all on */
 subtrackCt = 0;
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
     if (subtrackVisible(subTdb->tableName))
         subtrackCt++;
     }
+/* if no subtracks are selected in cart, turn them all on */
 if (!subtrackCt)
     for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
         setSubtrackVisible(subTdb->tableName);
