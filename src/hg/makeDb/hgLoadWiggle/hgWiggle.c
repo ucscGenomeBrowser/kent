@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.19 2004/08/17 18:17:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.20 2004/08/17 19:36:55 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -228,7 +228,7 @@ for (i=0; i<trackCount; ++i)
     }
 endClock = clock1000();
 
-if (0 == totalMatched)
+if ((!doStats) && (0 == totalMatched))
     verbose(1,"#\tno values found with these constraints\n");
 
 if (timing)
