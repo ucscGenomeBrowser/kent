@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.37 2003/06/21 02:19:59 braney Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.38 2003/06/21 02:40:33 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -329,12 +329,12 @@ void printGenomeListHtml(char *db, char *onChangeText)
  * (can be NULL) text to pass in any onChange javascript. */
 {
 char *orgList[128];
+char *values[128];
 int numGenomes = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *selGenome = hGenome(db);
-char *values [128];
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
@@ -344,9 +344,10 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         orgList[numGenomes] = cur->genome;
         values[numGenomes] = cur->genome;
         numGenomes++;
+	if (numGenomes >= ArraySize(orgList))
+	    internalErr();
         }
     }
-
 cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChangeText);
 hashFree(&hash);
 }
@@ -378,6 +379,8 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
         numAssemblies++;
+	if (numAssemblies >= ArraySize(assemblyList))
+	    internalErr();
         }
 
     /* Save a pointer to the current assembly */
@@ -534,60 +537,21 @@ return retDb;
 }
 
 void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
-/*
- * The order of preference here is as follows:
- * If we got a request that explicitly names the db, that takes
- * highest priority, and we synch the organism to that db.
- * If we get a cgi request for a specific organism then we use that
- * organism to choose the DB.
-
- * In the cart only, we use the same order of preference.
- * If someone requests an Genome we try to give them the same db as
- * was in their cart, unless the Genome doesn't match.
- */
+/* Get current database and genome from cart.  The database will have
+ * precedence over the genome if they are in conflict in the cart.
+ * If the database doesn't exist or is bad (moved to archives perhaps?)
+ * then get default database for organism (for human if no organism
+ * specified). */
 {
-*retDb = cgiOptionalString(dbCgiName);
-*retGenome = cgiOptionalString(orgCgiName);
+char *db = cartOptionalString(cart, dbCgiName);
+char *org = cartOptionalString(cart, orgCgiName);
 
-/* Was the database passed in as a cgi param?
- * If so, it takes precedence and determines the genome. */
-if (*retDb && hDbExists(*retDb))
-    {
-    *retGenome = hGenome(*retDb);
-    }
-/* If no db was passed in as a cgi param then was the organism (a.k.a. genome)
- * passed in as a cgi param?
- * If so, the we use the proper database for that genome. */
-else if (*retGenome)
-    {
-    *retDb = getDbForGenome(*retGenome, cart);
-    *retGenome = hGenome(*retDb);
-    }
-/* If no cgi params passed in then we need to inspect the session */
-else
-    {
-    *retDb = cartOptionalString(cart, dbCgiName);
-    /* If there was a db found in the session that determines everything. */
-    if (*retDb && hDbExists(*retDb))
-        {
-        *retGenome = hGenome(*retDb);
-        }
-    /* If no db was found in the session then check if the organism is in
-     * the session. */
-    else
-        {
-        *retGenome = cartOptionalString(cart, orgCgiName);
-        /* If the organism was found in the genome then get its default db. */
-        if (*retGenome)
-            {
-            *retDb = hDefaultDbForGenome(*retGenome);
-            }
-        /* If no organism in the session then get the default db and organism. */
-        else
-            {
-            *retDb = hDefaultDb();
-            *retGenome = hGenome(*retDb);
-            }
-        }
-    }
+/* Get rid of out of date databases. */
+if (db && !hDbExists(db))
+    db = NULL;
+if (db == NULL)
+    db = hDefaultDbForGenome(org);  /* This handles NULL organism ok. */
+org = hGenome(db);
+*retDb = db;
+*retGenome = org;
 }
