@@ -12,7 +12,7 @@
 #include "genoFind.h"
 #include "cheapcgi.h"
 
-int version = 3;
+int version = 5;
 int maxSeqSize = 20000;
 int minMatch = gfMinMatch;	/* Can be overridden from command line. */
 int tileSize = gfTileSize;	/* Can be overridden from command line. */
@@ -178,7 +178,7 @@ for (;;)
 	    if (seq.size > 0)
 		{
 		++queryCount;
-		seq.dna = needLargeMem(seq.size);
+		seq.dna = needLargeMem(seq.size+1);
 		if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
 		    {
 		    warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
@@ -189,6 +189,9 @@ for (;;)
 		    struct gfClump *clumpList = NULL, *clump;
 		    int limit = 100;
 
+		    seq.dna[seq.size] = 0;
+		    seq.size = dnaFilteredSize(seq.dna);
+		    dnaFilter(seq.dna, seq.dna);
 		    if (seq.size > maxSeqSize)
 		        {
 			++trimCount;
@@ -199,6 +202,7 @@ for (;;)
 #ifdef DEBUG
 #endif /* DEBUG */
 		    faWriteNext(logFile, "query", seq.dna, seq.size);
+		    fflush(logFile);
 		    clumpList = gfFindClumps(gf, &seq);
 		    logIt(logFile, "%d hits\n", slCount(clumpList));
 		    if (clumpList == NULL)
@@ -377,7 +381,6 @@ if (cgiVarExists("tileSize"))
     tileSize = cgiInt("tileSize");
 if (cgiVarExists("minMatch"))
     minMatch = cgiInt("minMatch");
-uglyf("tileSize %d, minMatch %d\n", tileSize, minMatch);
 if (argc < 2)
     usage();
 if (sameWord(command, "direct"))

@@ -3,6 +3,8 @@
 #include "linefile.h"
 #include "fa.h"
 #include "genoFind.h"
+#include "psl.h"
+#include "cheapcgi.h"
 
 void gfClient(char *hostName, char *portName, char *nibDir, char *inName, char *outName)
 /* gfClient - A client for the genomic finding program that produces a .psl file. */
@@ -13,12 +15,14 @@ struct ssBundle *bundleList;
 enum ffStringency stringency = ffCdna;
 FILE *out = mustOpen(outName, "w");
 
+if (!cgiVarExists("nohead"))
+    pslWriteHead(out);
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     printf("Processing %s\n", seq.name);
-    gfAlignStrand(hostName, portName, nibDir, &seq, FALSE, stringency, 40, gfSavePsl, out);
+    gfAlignStrand(hostName, portName, nibDir, &seq, FALSE, stringency, 36, gfSavePsl, out);
     reverseComplement(seq.dna, seq.size);
-    gfAlignStrand(hostName, portName, nibDir, &seq, TRUE,  stringency, 40, gfSavePsl, out);
+    gfAlignStrand(hostName, portName, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
     }
 printf("Output is in %s\n", outName);
 }
@@ -29,12 +33,15 @@ void usage()
 errAbort(
   "gfClient - A client for the genomic finding program that produces a .psl file\n"
   "usage:\n"
-  "   gfClient host port nibDir in.fa out.psl\n");
+  "   gfClient host port nibDir in.fa out.psl\n"
+  "options:\n"
+  "   -nohead   Suppresses psl five line header");
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc != 6)
     usage();
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5]);
