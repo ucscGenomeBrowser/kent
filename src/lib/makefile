@@ -17,9 +17,12 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
     xa.o xap.o xenbig.o xenshow.o xensmall.o xp.o
 
 
-$(MACHTYPE)/jkweb.a: $(O) 
+$(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 	ar rcu $(MACHTYPE)/jkweb.a $(O)
 	ranlib $(MACHTYPE)/jkweb.a
+
+$(MACHTYPE):
+	mkdir $(MACHTYPE)
 
 clean:
 	rm -f ${O} $(MACHTYPE)/jkweb.a
