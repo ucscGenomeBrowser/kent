@@ -45,11 +45,11 @@
 #define	CHROM_10_B	0x00
 
 #define	CHROM_11_R	0xcc
-#define	CHROM_11_G	0xcc
+#define	CHROM_11_G	0xff
 #define	CHROM_11_B	0x00
 
 #define	CHROM_12_R	0x00
-#define	CHROM_12_G	0xcc
+#define	CHROM_12_G	0xff
 #define	CHROM_12_B	0x00
 
 #define	CHROM_13_R	0x35
