@@ -1027,7 +1027,6 @@ altColor 160,0,0
 visibility hide
 type sample 9
 
-
 track footPrinter
 shortLabel FootPrinter
 longlabel FootPrinter Conservation Score
@@ -1252,3 +1251,11 @@ visibility dense
 color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
+
+track lineageMutations
+shortLabel linMut
+longlabel Lineage Specific Mutations
+priority 51.01
+altColor 0,160,0
+visibility hide
+type sample 9
