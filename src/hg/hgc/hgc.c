@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.768 2004/10/12 06:04:01 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.769 2004/10/12 08:11:53 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13181,13 +13181,14 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-if (trna != NULL && (trna->ci[0]=='N' || trna->ci[0]=='Y'))
+if (trna->scan > 0)
     {
     printf("<B>Amino acid: </B> %s<BR>\n",trna->aa);
     printf("<B>tRNA anti-codon: </B> %s<BR>\n",trna->ac);
-    printf("<B>Contains an inton? </B> %s<BR>\n",(trna->ci[0]=='Y'?"Yes":"No"));    
     printf("<B>tRNAScanSE score: </B> %.2f<BR>\n",trna->scan);    
     }
+if (trna->ci[0]=='Y')
+    printf("<B>This RNA contains an inton.</B>\n");
 printTrackHtml(tdb);
 rnaGenesFree(&trna);
 }
