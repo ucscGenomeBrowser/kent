@@ -6,12 +6,9 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = dnadust.o 
 
-#dnadust.exe: $(O)
-#	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
-#	mv a.out dnadust.exe
-#	chmod a+rx dnadust.exe
-#	mv dnadust.exe ${CGI_BIN}-${USER}
+dnadust.exe: $(O)
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	mv a.out dnadust.exe
+	chmod a+rx dnadust.exe
+	mv dnadust.exe ${CGI_BIN}-${USER}
 
-dnadust: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/dnadust${EXE} $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/dnadust${EXE}
