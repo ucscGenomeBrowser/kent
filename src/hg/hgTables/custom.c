@@ -357,7 +357,6 @@ struct bedFilter *bedFilterForCustomTrack(char *ctName)
 struct hashEl *var, *varList = cartFindPrefix(cart, hgtaFilterVarPrefix);
 int prefixSize = strlen(hgtaFilterVarPrefix);
 struct bedFilter *bf = NULL;
-boolean gotAny = FALSE;
 int *trash;	
 
 for (var = varList; var != NULL; var = var->next)
@@ -473,28 +472,49 @@ struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
 {
 struct customTrack *ct = lookupCt(name);
 struct bedFilter *bf = NULL;
-struct bed *bedList = NULL, *bed;
+struct bed *bedList = NULL;
 struct hash *idHash = NULL;
 struct region *region;
 
-/* Figure out how to filter things. */
 if (ct == NULL)
     errAbort("Can't find custom track %s", name);
-bf = bedFilterForCustomTrack(name);
-if (ct->fieldCount > 3)
-    idHash = identifierHash();
 
-/* Grab filtered beds for each region. */
-for (region = regionList; region != NULL; region = region->next)
-    customTrackFilteredBedOnRegion(region, ct, idHash, bf, lm, &bedList);
+if (ct->wiggle)
+    {
+    struct bed *wigBedList = NULL, *bed;
 
-/* Set return variables and clean up. */
-if (retGotFilter != NULL)
-    *retGotFilter = (bf != NULL);
-if (retGotIds != NULL)
-    *retGotIds = (idHash != NULL);
-hashFree(&idHash);
-slReverse(&bedList);
+    /* Grab filtered beds for each region. */
+    for (region = regionList; region != NULL; region = region->next)
+	{
+	wigBedList = getWiggleAsBed(NULL, name, region, NULL, NULL, lm, NULL);
+	for (bed = wigBedList; bed != NULL; bed = bed->next)
+	    {
+	    struct bed *copy = lmCloneBed(bed, lm);
+	    slAddHead(&bedList, copy);
+	    }
+	bedFree(&wigBedList);
+	}
+    }
+else
+    {
+    /* Figure out how to filter things. */
+    bf = bedFilterForCustomTrack(name);
+    if (ct->fieldCount > 3)
+	idHash = identifierHash();
+
+    /* Grab filtered beds for each region. */
+    for (region = regionList; region != NULL; region = region->next)
+	customTrackFilteredBedOnRegion(region, ct, idHash, bf, lm, &bedList);
+
+    /* Set return variables and clean up. */
+    if (retGotFilter != NULL)
+	*retGotFilter = (bf != NULL);
+    if (retGotIds != NULL)
+	*retGotIds = (idHash != NULL);
+    hashFree(&idHash);
+    slReverse(&bedList);
+    }
+
 return bedList;
 }
 
