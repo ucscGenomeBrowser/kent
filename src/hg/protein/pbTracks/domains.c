@@ -8,7 +8,7 @@
 #include "spDb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.2 2004/01/09 15:34:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.3 2004/01/29 19:57:41 donnak Exp $";
 
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
@@ -25,10 +25,10 @@ if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    hPrintf("<B>InterPro Domains</B> - ");
+    hPrintf("<B>InterPro Domains: </B>");
     hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
-    hPrintf("Graphical view of domain structure.</A><BR>");fflush(stdout);
+    hPrintf("Graphical view of domain structure</A><BR>\n<UL>");fflush(stdout);
     safef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
@@ -37,10 +37,10 @@ if (list != NULL)
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
-	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+	hPrintf("<LI><A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+	hPrintf("%s</A> - %s</LI>\n", row[0], row[1]);
 	}
-    hPrintf("<BR>\n");
+    hPrintf("</UL>\n");
     slFreeList(&list);
     }
 
@@ -48,7 +48,7 @@ list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
 if (list != NULL)
 if (list != NULL)
     {
-    hPrintf("<B>Pfam Domains</B><BR>");
+    hPrintf("<B>Pfam Domains:</B>\n<UL>");
     for (el = list; el != NULL; el = el->next)
 	{
 	char query[256];
@@ -59,13 +59,13 @@ if (list != NULL)
 	description = sqlQuickString(conn, query);
 	if (description == NULL)
 	    description = cloneString("n/a");
-	hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	hPrintf("<LI><A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
 	    el->name);
-	hPrintf("%s</A> - %s<BR>\n", el->name, description);
+	hPrintf("%s</A> - %s</LI>\n", el->name, description);
 	freez(&description);
 	}
     slFreeList(&list);
-    hPrintf("<BR>\n");
+    hPrintf("</UL>\n");
     }
 
 list = spExtDbAcc1List(spConn, swissProtAcc, "PDB");
@@ -90,7 +90,7 @@ if (list != NULL)
 	    column = 1;
 	    if (rowCount == 0)
 	        {
-		hPrintf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth only images from the first %d structures are shown.</I>", maxColumn);
+		hPrintf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth, only the images from the first %d structures are shown.</I>", maxColumn);
 		hPrintf("</TR><TR>");
 		}
 	    ++rowCount;
@@ -109,9 +109,9 @@ if (list != NULL)
 
 /* Do modBase link. */
     {
-    hPrintf("<B>ModBase Predicted Comparative 3D Structure on");
+    hPrintf("<B>ModBase Predicted Comparative 3D Structure on ");
     modBaseAnchor(swissProtAcc);
-    hPrintf(" %s", swissProtAcc);
+    hPrintf("%s", swissProtAcc);
     hPrintf("</A></B><BR>\n");
     hPrintf("<TABLE><TR>");
     hPrintf("<TD>");
@@ -130,7 +130,7 @@ if (list != NULL)
     hPrintf("</TR></TABLE>\n");
     hPrintf("<I>The pictures above may be empty if there is no "
             "ModBase structure for the protein.  The ModBase structure "
-	    "frequently just covers a fragment of the protein.  You may "
+	    "frequently covers just a fragment of the protein.  You may "
 	    "be asked to log onto ModBase the first time you click on the "
 	    "pictures. It is simplest after logging in to just click on "
 	    "the picture again to get to the specific info on that model.</I>");

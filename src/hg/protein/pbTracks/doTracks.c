@@ -1444,7 +1444,7 @@ hPrintf(
 "\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
         gifTn.forCgi, pixWidth, pixHeight, mapName);
 
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
 hPrintf("Explanation of Protein Tracks</A><br>");
 
 sprintf(trackOffset, "%d", trackOrigOffset);
