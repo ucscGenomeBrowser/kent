@@ -915,16 +915,18 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
-<H4><A name=SyntenyHuman></A>Synteny Alignments between Mouse and Human</H4>
+<H4><A name=SyntenyHuman></A>Human Synteny Alignments</H4>
 <PRE>table syntenyHuman
 "Human synteny alignnments from blastz single coverage"
     (
     string chrom;       "Mouse Chrom"
     uint chromStart;    "Start on Mouse"
     uint chromEnd;      "End on Mouse"
-    string humanChrom;    "Human Chromosome"
+    string name;      	"Human Chromosome"
     uint score;         "score always zero"
     char[1] strand;     "+ direction matches - opposite"
+    uint thickStart;    "Start of where display should be thick"
+    uint thickEnd;      "End of where display should be thick"
     )
 </PRE>
 
@@ -979,58 +981,6 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank"
     )
 </PRE>
 
-<H4><A name=MGIid></A>MGI ID</H4>
-<PRE>table MIGIid
-"Links MGI ID to Locus Link ID (Mouse)"
-    (
-    char[8]  LLid;       "Locus Link ID"
-    char[12] MGIid;      "MGI ID"
-    char[32] symbol;     "Symbol"
-    )
-</PRE>
-
-<H4><A name=MouseSyn></A>Mouse Synteny</H4>
-Last used Apr. 2001.
-<PRE>table mouseSyn
-"Synteny between mouse and human chromosomes."
-    (
-    string  chrom;       "Name of chromosome"
-    uint    chromStart;  "Start in chromosome"
-    uint    chromEnd;    "End in chromosome"
-    string  name;        "Name of mouse chromosome"
-    int     segment;     "Number of segment"
-    )
-</PRE>
-
-<H4><A name=SyntenyMouse></A>Synteny Alignments between Human and Mouse</H4>
-<PRE>table syntenyMouse
-"Mouse synteny alignnments from blastz single coverage"
-    (
-    string chrom;       "Human Chrom"
-    uint chromStart;    "Start on Human"
-    uint chromEnd;      "End on Human"
-    string mouseChrom;  "Mouse Chromosome"
-    uint score;         "score always zero"
-    char[1] strand;     "+ direction matches - opposite"
-    )
-</PRE>
-
-<H4><A name=MouseSynWhd></A>Mouse Synteny (Whitehead)</H4>
-<PRE>table mouseSynWhd
-"Whitehead synteny between mouse and human chromosomes."
-    (
-    string  chrom;       "Human chromosome"
-    uint    chromStart;  "Start position in human chromosome"
-    uint    chromEnd;    "End position in human chromosome"
-    string  name;        "Name of mouse chromosome"
-    uint    score;       "Unused (bed 6 compatibility)"
-    char[1] strand;      "+ or - (orientation of fragment)"
-    uint    mouseStart;  "Start position in mouse chromosome"
-    unit    mouseEnd;    "End position in mouse chromosome"
-    string  segLabel;    "Whitehead segment label"
-    )
-</PRE>
-
 <H4><A name=MoreKnown></A>Known (RefSeq) Gene IDs in Other Databases</H4>
 Last used Oct. 2000 <BR><BR>
 <PRE>table knownMore 
@@ -1074,6 +1024,59 @@ Last used Oct. 2000
     string ngi;          "Genbank gi of nucleotide seq."
     string pgi;          "Genbank gi of protein seq."
     )                                                                           
+</PRE>
+<H4><A name=MGIid></A>MGI ID</H4>
+<PRE>table MIGIid
+"Links MGI ID to Locus Link ID (Mouse)"
+    (
+    char[8]  LLid;       "Locus Link ID"
+    char[12] MGIid;      "MGI ID"
+    char[32] symbol;     "Symbol"
+    )
+</PRE>
+
+<H4><A name=MouseSyn></A>Mouse Synteny</H4>
+Last used Apr. 2001.
+<PRE>table mouseSyn
+"Synteny between mouse and human chromosomes."
+    (
+    string  chrom;       "Name of chromosome"
+    uint    chromStart;  "Start in chromosome"
+    uint    chromEnd;    "End in chromosome"
+    string  name;        "Name of mouse chromosome"
+    int     segment;     "Number of segment"
+    )
+</PRE>
+
+<H4><A name=SyntenyMouse></A>Mouse Synteny Alignments</H4>
+<PRE>table syntenyMouse
+"Mouse synteny alignnments from blastz single coverage"
+    (
+    string chrom;       "Human Chrom"
+    uint chromStart;    "Start on Human"
+    uint chromEnd;      "End on Human"
+    string name;  	"Mouse Chromosome"
+    uint score;         "score always zero"
+    char[1] strand;     "+ direction matches - opposite"
+    uint thickStart;    "Start of where display should be thick"
+    uint thickEnd;      "End of where display should be thick"
+    )
+</PRE>
+
+<H4><A name=MouseSynWhd></A>Mouse Synteny (Whitehead)</H4>
+<PRE>table mouseSynWhd
+"Whitehead synteny between mouse and human chromosomes."
+    (
+    string  chrom;       "Human chromosome"
+    uint    chromStart;  "Start position in human chromosome"
+    uint    chromEnd;    "End position in human chromosome"
+    string  name;        "Name of mouse chromosome"
+    uint    score;       "Unused (bed 6 compatibility)"
+    char[1] strand;      "+ or - (orientation of fragment)"
+    uint    mouseStart;  "Start position in mouse chromosome"
+    unit    mouseEnd;    "End position in mouse chromosome"
+    string  segLabel;    "Whitehead segment label"
+    )
 </PRE>
 
 <H4><A name=MrnaPredictions></A>mRNA Sequences</H4>
@@ -1165,16 +1168,18 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
    )
 </PRE>
 
-<H4><A name=SyntenyRat></A>Synteny Alignments between Human and Rat</H4>
+<H4><A name=SyntenyRat></A>Rat Synteny Alignments </H4>
 <PRE>table syntenyRat
 "Rat synteny alignnments from blastz single coverage"
     (
     string chrom;       "Human Chrom"
     uint chromStart;    "Start on Human"
     uint chromEnd;      "End on Human"
-    string ratChrom;    "Rat Chromosome"
+    string name;    	"Rat Chromosome"
     uint score;         "score always zero"
     char[1] strand;     "+ direction matches - opposite"
+    uint thickStart;    "Start of where display should be thick"
+    uint thickEnd;      "End of where display should be thick"
     )
 </PRE>
 
