@@ -36,7 +36,6 @@ visibility pack
 color 178,34,34
 chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
 type genePred 
-url http://www.wormbase.org/db/gene/gene?name=$$
 
 track wabaCbr
 shortLabel Briggsae Waba
