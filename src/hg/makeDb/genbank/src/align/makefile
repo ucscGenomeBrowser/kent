@@ -11,9 +11,9 @@ PROGS = ${BINDIR}/gbAlignSetup \
 	${BINDIR}/gbAlignFinish \
 	${BINDIR}/gbAlignStep \
 	${BINDIR}/gbBlat \
+	${BINDIR}/alignStats \
 	${BINARCH}/gbAlignGet \
-	${BINARCH}/gbAlignInstall \
-	${BINARCH}/alignStats
+	${BINARCH}/gbAlignInstall
 
 all: ${PROGS}
 
