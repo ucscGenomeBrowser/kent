@@ -14,11 +14,11 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.1 2004/02/12 18:47:25 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.2 2004/02/27 22:23:25 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
- * a line of bases (base level) or pairwise density gradient (zoomed out. */
+ * a line of bases (base level) or pairwise density gradient (zoomed out). */
     {
     struct wigMafItem *next;
     char *name;		/* Common name */
@@ -409,10 +409,10 @@ hFreeConn(&conn);
 return ret;
 }
 
-static void wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
+static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw base-by-base view. */
+/* Draw base-by-base view, return new Y offset. */
 {
 struct wigMafItem *miList = track->items, *mi;
 struct mafAli *mafList = track->customPt, *maf, *sub;
@@ -505,10 +505,15 @@ for (mi = miList, i=0; mi != NULL; mi = mi->next, ++i)
         {
 	int x1, x2;
 	x -= (width/winBaseCount)/2;
+        spreadString(vg, x, y, width, mi->height-1, color,
+                        font, line, winBaseCount);
 	}
-    // draw letters
-    spreadString(vg, x, y, width, mi->height-1, color, font, 
-    	line, winBaseCount);
+    else
+        {
+        // draw letters
+        spreadAlignString(vg, x, y, width, mi->height-1, color,
+    	                        font, line, selfLine, winBaseCount);
+        }
     y += mi->height;
     }
 
@@ -517,23 +522,28 @@ for (i=0; i<lineCount-1; ++i)
     freeMem(lines[i]);
 freez(&lines);
 hashFree(&miHash);
+return y;
 }
 
-static void wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
+static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 {
-/* Draw routine for score graph */
+/* Draw routine for score graph, returns new Y offset */
 struct track *wigTrack = track->subtracks;
 
+int y = 0;
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, vis);
+    y = wigTotalHeight(wigTrack, vis);
     }
+return yOff + y;
 }
+
 
 static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -542,15 +552,15 @@ static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
 {
 if (zoomedToBaseLevel)
     {
-    wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, yOff, width, font,
+    yOff = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, yOff, width, font,
                         color, vis);
-    wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, yOff, width, font,
-                        color, vis);
+    wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, yOff, width,
+                         font, color, vis);
     }
 else 
     {
-    wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, yOff, width, font,
-                        color, vis);
+    yOff = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, yOff, width,
+                             font, color, vis);
     if (!wigMafDrawPairwise(track, seqStart, seqEnd, vg, xOff, yOff, 
                                 width, font, color, vis))
             // no hgc box if there's no display for this
@@ -558,6 +568,41 @@ else
     }
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 
     track->mapName, NULL);
+}
+
+static void wigMafLeftLabels(struct track *track, int seqStart, int seqEnd,
+                          struct vGfx *vg, int xOff, int yOff, 
+                          int width, int height, boolean withCenterLabels, 
+                          MgFont *font, Color color, enum trackVisibility vis)
+/* Draw species labels for each line of alignment or pairwise display */
+{
+int fontHeight = mgFontLineHeight(font);
+int centerOffset = withCenterLabels ? fontHeight : 0;
+struct wigMafItem *item;
+
+switch (vis)
+    {
+    case tvHide:
+    case tvPack:
+    case tvSquish:
+        break;
+    case tvFull:
+        yOff += centerOffset;
+        for (item = track->items; item != NULL; item = item->next)
+            {
+            char *name = track->itemName(track, item);
+            int itemHeight = track->itemHeight(track, item);
+            vgTextRight(vg, xOff, yOff, width - 1,
+                            track->itemHeight(track, item), color, font, name);
+            yOff += itemHeight;
+            }
+        break;
+    case tvDense:
+        vgTextRight(vg, xOff, yOff, width - 1, height-centerOffset,
+                            track->ixColor, font, track->shortLabel);
+        break;
+    }
+    vgUnclip(vg);
 }
 
 void wigMafMethods(struct track *track, struct trackDb *tdb,
@@ -579,6 +624,7 @@ track->itemHeight = wigMafItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
+track->drawLeftLabels = wigMafLeftLabels;
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
     if (hTableExists(wigTable))
