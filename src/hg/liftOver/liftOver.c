@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.17 2004/10/18 00:09:30 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.18 2004/11/18 16:42:52 kent Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
@@ -30,6 +30,8 @@ errAbort(
   "   liftOver oldFile map.chain newFile unMapped\n"
   "oldFile and newFile are in bed format by default, but can be in GFF and\n"
   "maybe eventually others with the appropriate flags below.\n"
+  "The map.chain file has the old genome as the target and the new genome\n"
+  "as the query.\n"
   "options:\n"
   "   -minMatch=0.N Minimum ratio of bases that must remap. Default %3.2f\n"
   "   -gff  File is in gff/gtf format.  Note that the gff lines are converted\n"
