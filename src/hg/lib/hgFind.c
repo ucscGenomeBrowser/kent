@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.101 2003/08/08 17:26:49 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.102 2003/08/08 19:03:36 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3050,7 +3050,9 @@ if (strstrNoCase(organism, "human"))
 "the gene-containing regions in the genome, and has been sequenced to an \n"
 "accuracy of 99.99 percent. \n"
 "Of note in this release is the addition of the pseudoautosomal regions \n"
-"of the Y chromosome. \n"
+"of the Y chromosome. This sequence was taken from the corresponding regions \n"
+"in the X chromosome and is an exact duplication of that sequence.\n"
+"<P>"
 "There are 2,843,433,602 finished sequenced bases in the \n"
 "ordered and oriented portion of the assembly, which is an increase of 0.4 \n" 
 "percent, or approximately 11 Mb, over the Build 33 assembly. \n"
@@ -3062,7 +3064,15 @@ if (strstrNoCase(organism, "human"))
 "bases) and highly contiguous (with the only remaining gaps corresponding \n"
 "to regions whose sequence cannot be reliably resolved with current \n"
 "technology). Future work on the reference sequence will focus on improving \n"
-"accuracy and reducing gaps in the sequence.\n<P></P>");
+"accuracy and reducing gaps in the sequence.\n"
+"<P>"
+"Some sequence joins between adjacent clones in this assembly could not be \n"
+"computationally validated because the clones originated from different \n"
+"haplotypes and contained polymorphisms in the overlapping sequence, or the \n"
+"overlap was too small to be to be reliable. In these instances, the \n"
+"sequencing center responsible for the particular chromosome has provided \n"
+"data to support the join in the form of an electronic certificate. These \n"
+"certificates may be reviewed through the link below. </P>");
 
     puts("<P><H3>Statistical information</P></H3>\n");
     puts(
