@@ -89,7 +89,7 @@ exit; # don't actually run this like a script :)
 # 6.1) Copy over jkStuff from previous build
     mkdir jkStuff
     cp /cluster/store1/gs.14/build31/jkStuff/*.sh jkStuff
-    cp /cluster/store1/gs.14/build31/jkStuff/*.csh jkStuff
+    /build31/jkStuff/*.csh jkStuff
     cp /cluster/store1/gs.14/build31/jkStuff/*.gsub jkStuff        
 
 # 6.3) Create chromosome gl files
@@ -415,9 +415,8 @@ exit; # don't actually run this like a script :)
     ssh eieio
     cd ~/hg15/bed/refSeq
     pslSort dirs raw.psl /tmp psl
-    pslReps -minCover=0.10 -sizeMatters -minAli=0.96 -nearTop=0.001 raw.psl \
-      contig.psl /dev/null
-    liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft warn contig.psl
+    pslReps -minCover=0.15 -sizeMatters -minAli=0.98 -nearTop=0.001 raw.psl \
+      all_refSeq.psl /dev/null
     pslSortAcc nohead chrom /tmp all_refSeq.psl
     pslCat -dir chrom > refSeqAli.psl
     # After the database has been created, go to "LOAD REFGENE" below...
@@ -690,7 +689,7 @@ exit; # don't actually run this like a script :)
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
-# MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 4/12/2002 MS&JK)
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 4/12/2002 MS&JK ESTs Partially Redone)
     # Make sure that /scratch/hg/gs.16/build33/trfFa is loaded with NT_*.fa 
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
     # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
@@ -846,7 +845,7 @@ DONE TO HERE - MATT
     hgLoadBed hg15 rnaCluster chrom/*.bed > /dev/null
 
 
-# GENEBANDS (TO DO)
+# GENEBANDS (DONE 4/13/03 JK)
     # Create precomputed geneBands table:
     ssh hgwdev
     hgGeneBands hg15 geneBands.txt
@@ -856,7 +855,7 @@ DONE TO HERE - MATT
     rm geneBands.txt
 
 
-# PRODUCING GENSCAN PREDICTIONS (TO DO)
+# PRODUCING GENSCAN PREDICTIONS (DONE 4/13/03 MS&JK)
 
     ssh eieio
     mkdir -p ~/hg15/bed/genscan
@@ -897,7 +896,6 @@ DONE TO HERE - MATT
     # If there were out-of-memory problems (run "para problems"), then 
     # re-run those jobs by hand but change the -window arg from 2400000
     # to 1200000.  In build33, this was 22/NT_011519.
-DONE TO HERE - MATT
     # Convert these to chromosome level files as so:     
     ssh eieio
     cd ~/hg15/bed/genscan
@@ -1946,7 +1944,7 @@ o - # ssh hgwdev
     cd ~/hg15/bed/uniGene.$version
     pslSort dirs raw.psl tmp psl >& pslSort.log
     liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
-    | pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 \
+    | pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
       stdin hg15.uniGene.lifted.pslReps.psl /dev/null
     # use hg15.uniGene.lifted.pslReps.psl for building SAGE track (above).
 
@@ -2462,7 +2460,7 @@ o - Process refFull alignments into near best in genome.
       cd ~/hg15/bed
       cd refFull
       pslSort dirs raw.psl /tmp psl/*
-      pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
+      pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.001 raw.psl contig.psl /dev/null
       liftUp -nohead all_refFull.psl ../../jkStuff/liftAll.lft warn contig.psl
       pslSortAcc nohead chrom /tmp all_refFull.psl
 
