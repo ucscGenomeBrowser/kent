@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.129 2004/03/02 18:37:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.130 2004/03/03 05:59:31 daryl Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1849,8 +1849,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		 row[0], tableName); 
     AllocVar(pos);
     pos->chrom = chrom;
-    pos->chromStart = sqlUnsigned(row[1]) - 5000;
-    pos->chromEnd = sqlUnsigned(row[2]) + 5000;
+    pos->chromStart = sqlUnsigned(row[1]);
+    pos->chromEnd = sqlUnsigned(row[2]);
     pos->name = cloneString(spec);
     slAddHead(&table->posList, pos);
     }
