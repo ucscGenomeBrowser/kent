@@ -293,8 +293,38 @@ slReverse(&bedList);
 return bedList;
 }
 
+struct dMatrix *ndr2BedTestMat(boolean probability)
+/* Create a fake matrix of probabilities. If probability is TRUE fill
+ in a probability matrix, otherwise fill in an intensity matrix. */
+{
+struct dMatrix *probs = NULL;
+static char *colNames[] = {"cerebellum", "cortex", "heart", "skeletal"};
+static char *rowNames[] = {"G6912708@J918653_RC@j_at", "G6912708@J918654_RC@j_at", 
+		    "G6912708@J918655_RC@j_at", "G6912708_RC_a_at"};
+double probM[4][4] = {{.8, 1, 0, .5},{0, 0, 0, 1}, {.8, 0, 0, .5}, {1, 0, .5, 1}};
+double intenM[4][4] = {{1, 1, 0, .5}, {1, 1, 1, 1}, {1, 1, 0, .5}, {1, 1, 1, .5}};
+double **matrix = NULL;
+int count = 0;
+AllocVar(probs);
+AllocArray(matrix, ArraySize(rowNames));
+probs->nameIndex = newHash(3);
 
+for(count = 0; count < ArraySize(colNames); count++)
+    {
+    if(probability)
+	matrix[count] = CloneArray(probM[count], ArraySize(probM[count])); 
+    else
+	matrix[count] = CloneArray(intenM[count], ArraySize(intenM[count])); 
+    hashAddInt(probs->nameIndex, rowNames[count], count); 
+    }
 
+probs->colNames = colNames;
+probs->colCount = ArraySize(colNames);
+probs->rowNames = rowNames;
+probs->rowCount = ArraySize(rowNames);
+probs->matrix = matrix;
+return probs;
+}
 
 void logSpliceType(enum altSpliceType type)
 /* Log the different types of splicing. */
@@ -935,7 +965,7 @@ if(probCount == 0)
     return FALSE;
 if(probCount == 1 && probProduct == 0)
     return FALSE; combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); 
-combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); //combination = gsl_cdf_gamma_P(-2.0*probProduct,1.0 * probCount, 2.0); 
+combination = gsl_cdf_chisq_P(-2.0*probProduct,2.0*probCount); 
 if(combination <= 1 - presThresh)
     return TRUE;
 return FALSE;
@@ -2321,6 +2351,81 @@ dyStringFree(&error);
 return result;
 }
 
+struct altEvent *setupNdr2AltEvent()
+/* Setup an ndr2 fake event for testing. */
+{
+struct splice *splice = ndr2CassTest();
+struct altEvent *event = NULL;
+struct path *path = NULL;
+struct altPath *altPath = NULL;
+struct dMatrix *probM = ndr2BedTestMat(TRUE);
+struct dMatrix *intenM = ndr2BedTestMat(FALSE);
+double expression = 0;
+
+AllocVar(event);
+event->splice = splice;
+AllocArray(event->geneExpVals, 1);
+AllocArray(event->genePVals, 1);
+event->geneProbeCount = 1;
+event->altPathProbeCount = 2;
+event->geneExpVals[0] = intenM->matrix[3];
+event->genePVals[0] = probM->matrix[3];
+
+AllocVar(altPath);
+altPath->path = splice->paths;
+altPath->probeCount = 1;
+AllocArray(altPath->expVals, altPath->probeCount);
+altPath->expVals[0] =  intenM->matrix[1];
+AllocArray(altPath->pVals, altPath->probeCount);
+altPath->pVals[0] = probM->matrix[1];
+slAddHead(&event->altPathList, altPath);
+    
+AllocVar(altPath);
+altPath->path = splice->paths->next;
+altPath->probeCount = 2;
+AllocArray(altPath->expVals, altPath->probeCount);
+altPath->expVals[0] = intenM->matrix[0];
+altPath->expVals[1] = intenM->matrix[2];
+AllocArray(altPath->pVals, altPath->probeCount);
+altPath->pVals[0] = probM->matrix[0];
+altPath->pVals[1] = probM->matrix[2];
+slAddHead(&event->altPathList, altPath);
+
+slReverse(&event->altPathList);
+return event;
+}
+
+boolean testAltPathProbesExpressed(struct unitTest *test)
+/* Test to see if presense abs software is calling. */
+{
+struct altEvent *event = setupNdr2AltEvent();
+struct dyString *error = newDyString(128);
+double expression = 0;
+boolean result = TRUE;
+useMaxProbeSet = TRUE;
+if(altPathProbesExpressed(event, event->altPathList->next, 1, 0, &expression) != FALSE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Max probe set calling false positive, ");
+    }
+if(altPathProbesExpressed(event, event->altPathList, 0, 3, &expression) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Max probe set calling positive false, ");
+    }
+
+useMaxProbeSet = FALSE;
+useComboProbes = TRUE;
+if(altPathProbesExpressed(event, event->altPathList->next, 1, 0, &expression) != TRUE)
+    {
+    result = FALSE;
+    dyStringPrintf(error, "Combo probes not combining correctly, ");
+    }
+test->errorMsg = cloneString(error->string);
+dyStringFree(&error);
+return result;
+}
+
 void initTests()
 {
 struct unitTest *test = NULL;
@@ -2347,6 +2452,12 @@ slAddHead(&tests, test);
 AllocVar(test);
 test->test = testPathContainsBed;
 test->description = "Match beds to paths";
+slAddHead(&tests, test);
+
+/* Testing finding blocks on paths. */
+AllocVar(test);
+test->test = testAltPathProbesExpressed;
+test->description = "Call paths as expressed or not.";
 slAddHead(&tests, test);
 
 slReverse(&tests);
