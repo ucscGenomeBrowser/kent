@@ -153,9 +153,14 @@ if (chromInserts != NULL)
 	addN(f, bi->size);
 	actualChromSize += bi->size;
 	}
-if ((liftHash != NULL) && (actualChromSize != liftChromSize))
-    errAbort("Error: chromosome size from lift file is %d, but actual fa size is %d.  Possible inconsistency between lift and inserts?",
-	     liftChromSize, actualChromSize);
+if (liftHash != NULL)
+    {
+    if (actualChromSize > liftChromSize)
+	errAbort("Error: chromosome size from lift file is %d, but actual fa size is %d.  Possible inconsistency between lift and inserts?",
+		 liftChromSize, actualChromSize);
+    else if (actualChromSize < liftChromSize)
+	addN(f, (liftChromSize - actualChromSize));
+    }
 if (linePos != 0)
    fputc('\n', f);
 fclose(f);
