@@ -1,5 +1,4 @@
 "/logoFont {\n"
-"%/Times-Roman findfont\n"
 "/Helvetica findfont\n"
 "10 scalefont\n"
 "setfont\n"

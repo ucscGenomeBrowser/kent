@@ -7,8 +7,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "dnaMotif.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.3 2004/09/12 21:30:17 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -193,5 +194,235 @@ for (i=0; i<el->columnCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
+}
+
+/********** Start of custom hand-generated code. *************/
+
+void dnaMotifNormalize(struct dnaMotif *motif)
+/* Make all columns of motif sum to one. */
+{
+int i;
+for (i=0; i<motif->columnCount; ++i)
+    {
+    float sum = motif->aProb[i] + motif->cProb[i] + motif->gProb[i] + motif->tProb[i];
+    if (sum < 0)
+        errAbort("%s has negative numbers, perhaps it's score not probability based", 
+		motif->name);
+    if (sum == 0)
+         motif->aProb[i] = motif->cProb[i] = motif->gProb[i] = motif->tProb[i] = 0.25;
+    motif->aProb[i] /= sum;
+    motif->cProb[i] /= sum;
+    motif->gProb[i] /= sum;
+    motif->tProb[i] /= sum;
+    }
+}
+
+boolean dnaMotifIsScoreBased(struct dnaMotif *motif)
+/* Return TRUE if dnaMotif is score-based (which we decide by
+ * the presense of negative values. */
+{
+int i;
+for (i=0; i<motif->columnCount; ++i)
+    {
+    if (motif->aProb[i] < 0) return TRUE;
+    if (motif->cProb[i] < 0) return TRUE;
+    if (motif->gProb[i] < 0) return TRUE;
+    if (motif->tProb[i] < 0) return TRUE;
+    }
+return FALSE;
+}
+
+void dnaMotifScoreToProb(struct dnaMotif *motif)
+/* Convert motif that is log-odds score based to motif
+ * that is probability based.  This assumes that the
+ * background distribution is simple: 25% for each base */
+{
+int i;
+for (i=0; i<motif->columnCount; ++i)
+    {
+    motif->aProb[i] = exp(motif->aProb[i]);
+    motif->cProb[i] = exp(motif->cProb[i]);
+    motif->gProb[i] = exp(motif->gProb[i]);
+    motif->tProb[i] = exp(motif->tProb[i]);
+    }
+dnaMotifNormalize(motif);
+}
+
+void dnaMotifMakeProbabilitic(struct dnaMotif *motif)
+/* Change motif, which may be score or count based, to 
+ * probabalistic one, where each column adds to 1.0 */
+{
+if (dnaMotifIsScoreBased(motif))
+    dnaMotifScoreToProb(motif);
+else
+    dnaMotifNormalize(motif);
+}
+
+static double u1(double prob)
+/* Calculate partial uncertainty for one base. */
+{
+if (prob == 0)
+    return 0;
+return prob * logBase2(prob);
+}
+
+static double uncertainty(struct dnaMotif *motif, int pos)
+/* Return the uncertainty at pos of motif.  This corresponds
+ * to the H function in logo.pm */
+{
+return -( u1(motif->aProb[pos]) + u1(motif->cProb[pos])
+	+ u1(motif->gProb[pos]) +u1(motif->gProb[pos]) );
+}
+
+static double bitsOfInfo(struct dnaMotif *motif, int pos)
+/* Return bits of information at position. */
+{
+return 2 - uncertainty(motif, pos);
+}
+
+struct letterProb
+/* A letter tied to a probability. */
+    {
+    struct letterProb *next;
+    double prob;	/* Probability for this letter. */
+    char letter;	/* The letter (upper case) */
+    };
+
+static struct letterProb *letterProbNew(char letter, double prob)
+/* Make a new letterProb. */
+{
+struct letterProb *lp;
+AllocVar(lp);
+lp->letter = letter;
+lp->prob = prob;
+return lp;
+}
+
+static int letterProbCmp(const void *va, const void *vb)
+/* Compare to sort highest probability first. */
+{
+const struct letterProb *a = *((struct letterProb **)va);
+const struct letterProb *b = *((struct letterProb **)vb);
+double dif = a->prob - b->prob;
+if (dif < 0)
+   return -1;
+else if (dif > 0)
+   return 1;
+else
+   return 0;
+}
+
+static void addBaseProb(struct letterProb **pList, char letter, double prob)
+/* If prob > 0 add letterProb to list. */
+{
+if (prob > 0)
+    {
+    struct letterProb *lp = letterProbNew(letter, prob);
+    slAddHead(pList, lp);
+    }
+}
+
+static struct letterProb *letterProbFromMotifColumn(struct dnaMotif *motif, int pos)
+/* Return letterProb list corresponding to column of motif. */
+{
+struct letterProb *lpList = NULL, *lp;
+addBaseProb(&lpList, 'A', motif->aProb[pos]);
+addBaseProb(&lpList, 'C', motif->cProb[pos]);
+addBaseProb(&lpList, 'G', motif->gProb[pos]);
+addBaseProb(&lpList, 'T', motif->tProb[pos]);
+slSort(&lpList, letterProbCmp);
+return lpList;
+}
+
+static void psOneColumn(struct dnaMotif *motif, int pos,
+    double xStart, double yStart, double width, double totalHeight,
+    FILE *f)
+/* Write one column of logo to postScript. */
+{
+struct letterProb *lp, *lpList = letterProbFromMotifColumn(motif, pos);
+double x = xStart, y = yStart, w = width, h;
+for (lp = lpList; lp != NULL; lp = lp->next)
+    {
+    h = totalHeight * lp->prob;
+    fprintf(f, "%cColor ", tolower(lp->letter));
+    fprintf(f, "%3.2f ", x);
+    fprintf(f, "%3.2f ", y);
+    fprintf(f, "%3.2f ", x + w);
+    fprintf(f, "%3.2f ", y + h);
+    fprintf(f, "(%c) textInBox\n", lp->letter);
+    y += h;
+    }
+fprintf(f, "\n");
+slFreeList(&lpList);
+}
+
+static void dnaMotifDims(struct dnaMotif *motif, double widthPerBase, double height, 
+	int *retWidth, int *retHeight)
+/* Calculate dimensions of motif when rendered. */
+{
+static int widthFudgeFactor = 2;
+*retWidth = ceil(widthPerBase * motif->columnCount) + widthFudgeFactor;
+*retHeight = ceil(height);
+}
+
+void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, char *fileName)
+/* Write logo corresponding to motif to postScript file. */
+{
+FILE *f = mustOpen(fileName, "w");
+int i;
+int xStart = 0;
+int w, h;
+char *s = 
+#include "dnaMotif.pss"
+;
+
+dnaMotifDims(motif, widthPerBase, height, &w, &h);
+fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
+fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n\n", w, h);
+fprintf(f, "%s", s);
+
+fprintf(f, "%s", "% Start of code for this specific logo\n");
+
+for (i=0; i<motif->columnCount; ++i)
+    {
+    double infoScale = bitsOfInfo(motif, i)/2.0;
+    psOneColumn(motif, i, xStart, 0, widthPerBase, infoScale * height, f);
+    xStart += widthPerBase;
+    }
+fprintf(f, "showpage\n");
+carefulClose(&f);
+}
+
+void dnaMotifToLogoPng(
+	struct dnaMotif *motif,	/* Motif to draw. */
+	double widthPerBase, 	/* Width of each base. */
+	double height, 		/* Max height. */
+	char *gsExe, 		/* ghostscript executable, NULL for default */
+	char *tempDir,          /* temp dir , NULL for default */
+	char *fileName)		/* output png file name. */
+/* Write logo corresponding to motif to png file. */
+{
+char *psName = rTempName(tempDir, "dnaMotif", ".ps");
+struct dyString *dy = dyStringNew(0);
+int w, h;
+int sysRet;
+
+if (gsExe == NULL) gsExe = "gs";
+if (tempDir == NULL) tempDir = "/tmp";
+dnaMotifToLogoPs(motif, widthPerBase, height, psName);
+dnaMotifDims(motif, widthPerBase, height, &w, &h);
+dyStringAppend(dy, gsExe);
+dyStringAppend(dy, " -sDEVICE=png16m -sOutputFile=");
+dyStringAppend(dy, fileName);
+dyStringAppend(dy, " -dBATCH -dNOPAUSE -q ");
+dyStringPrintf(dy, "-g%dx%d ", w, h);
+dyStringAppend(dy, psName);
+sysRet = system(dy->string);
+if (sysRet != 0)
+    errAbort("System call returned %d for:\n  %s", sysRet, dy->string);
+
+/* Clean up. */
+dyStringFree(&dy);
+remove(psName);
 }
 

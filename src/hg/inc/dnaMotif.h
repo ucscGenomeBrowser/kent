@@ -57,5 +57,36 @@ void dnaMotifOutput(struct dnaMotif *el, FILE *f, char sep, char lastSep);
 #define dnaMotifCommaOut(el,f) dnaMotifOutput(el,f,',',',');
 /* Print out dnaMotif as a comma separated list including final comma. */
 
+/********** Start of custom hand-generated code. *************/
+
+void dnaMotifNormalize(struct dnaMotif *motif);
+/* Make all columns of motif sum to one. */
+
+boolean dnaMotifIsScoreBased(struct dnaMotif *motif);
+/* Return TRUE if dnaMotif is score-based (which we decide by
+ * the presense of negative values. */
+
+void dnaMotifScoreToProb(struct dnaMotif *motif);
+/* Convert motif that is log-odds score based to motif
+ * that is probability based.  This assumes that the
+ * background distribution is simple: 25% for each base */
+
+void dnaMotifMakeProbabilitic(struct dnaMotif *motif);
+/* Change motif, which may be score or count based, to 
+ * probabalistic one, where each column adds to 1.0 */
+
+void dnaMotifToLogoPs(struct dnaMotif *motif, double widthPerBase, double height, 
+	char *fileName);
+/* Write logo corresponding to motif to postScript file. */
+
+void dnaMotifToLogoPng(
+	struct dnaMotif *motif,	/* Motif to draw. */
+	double widthPerBase, 	/* Width of each base. */
+	double height, 		/* Max height. */
+	char *gsExe, 		/* ghostscript executable, NULL for default */
+	char *tempDir,          /* temp dir , NULL for default */
+	char *fileName);	/* output png file name. */
+/* Write logo corresponding to motif to png file. */
+
 #endif /* DNAMOTIF_H */
 
