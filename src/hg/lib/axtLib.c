@@ -9,7 +9,9 @@
 #include "dnaseq.h"
 #include "nib.h"
 #include "axt.h"
+#include "axtLib.h"
 #include "axtInfo.h"
+#include "chainToAxt.h"
 #include "hdb.h"
 
 
@@ -47,6 +49,7 @@ sprintf(nameBuf, "%x", id);
 return hashMustFindVal(hash, nameBuf);
 }
 
+#ifdef DUPE
 struct nibInfo
 /* Info on a nib file. */
     {
@@ -140,6 +143,7 @@ struct axt *axtListFromChain(struct chain *chain,
 	struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset, int maxGap)
 /* Convert a chain to a list of axt's. */
+REPLACED BY chainToAxt in lib/chainToAxt.c
 {
 struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
 struct axt *axtList = NULL, *axt;
@@ -164,6 +168,7 @@ slAddHead(&axtList, axt);
 slReverse(&axtList);
 return axtList;
 }
+#endif DUPE
 
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
@@ -214,7 +219,7 @@ chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize,
 	&subChain, &chainToFree);
 if (subChain == NULL)
     subChain = chain;
-axtList = axtListFromChain(subChain, qSeq, qOffset, tChrom, fill->tStart, 200);
+axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 100);
 chainFree(&chainToFree);
 freeDnaSeq(&qSeq);
 return axtList;
