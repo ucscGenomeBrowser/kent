@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.55 2004/03/12 06:38:42 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.56 2004/03/12 06:58:58 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -457,6 +457,15 @@ strcpy(sn->name, name);
 return sn;
 }
 
+struct slName *slNameNewN(char *name, int size)
+/* Return new slName of given size. */
+{
+struct slName *sn = needMem(sizeof(*sn) + size);
+memcpy(sn->name, name, size);
+return sn;
+}
+
+
 int slNameCmp(const void *va, const void *vb)
 /* Compare two slNames. */
 {
@@ -519,6 +528,31 @@ for (el = list; el != NULL; el = el->next)
 slReverse(&newList);
 return newList;
 }
+
+struct slName *slNameListFromString(char *s, char delimiter)
+/* Return list of slNames gotten from parsing delimited string.
+ * The final delimiter is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. */
+{
+char *e;
+struct slName *list = NULL, *el;
+while (s != NULL && s[0] != 0)
+    {
+    e = strchr(s, delimiter);
+    if (e == NULL)
+	el = slNameNew(s);
+    else
+	{
+        el = slNameNewN(s, e-s);
+	e += 1;
+	}
+    slAddHead(&list, el);
+    s = e;
+    }
+slReverse(&list);
+return list;
+}
+
 
 struct slRef *refOnList(struct slRef *refList, void *val)
 /* Return ref if val is already on list, otherwise NULL. */

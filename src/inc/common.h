@@ -350,6 +350,9 @@ struct slName *newSlName(char *name);
 #define slNameNew newSlName
 /* Return a new name. */
 
+struct slName *slNameNewN(char *name, int size);
+/* Return new slName of given size. */
+
 int slNameCmp(const void *va, const void *vb);
 /* Compare two slNames. */
 
@@ -369,6 +372,14 @@ char *slNameStore(struct slName **pList, char *string);
 
 struct slName *slNameCloneList(struct slName *list);
 /* Return clone of list. */
+
+struct slName *slNameListFromString(char *s, char delimiter);
+/* Return list of slNames gotten from parsing delimited string.
+ * The final delimiter is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. */
+
+#define slNameListFromComma(s) slNameListFromString(s, ',')
+/* Parse out comma-separated list. */
 
 struct slRef
 /* Singly linked list of generic references. */
