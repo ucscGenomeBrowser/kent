@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.538 2003/12/24 02:14:20 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.539 2003/12/24 18:04:25 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10225,7 +10225,7 @@ if (snp!=NULL)
     printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
     printf("%s\" TARGET=_blank>Affymetrix NetAffx Analysis Center link for %s</A></P>\n",snp->affyId, snp->affyId);
 
-    if (snp->rsId>0)
+    if (strncmp(snp->rsId,"unmapped",8))
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n", snp->rsId, snp->rsId);
