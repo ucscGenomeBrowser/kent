@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.53 2003/06/21 16:43:44 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.54 2003/06/22 03:07:20 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -63,16 +63,11 @@ if (oldDb != NULL && !sameString(oldDb, db))
 /* Figure out organism from database. */
 organism = hGenome(db);
 
+
 /* Update position if need be. */
 if (position == NULL)
     position = hDefaultPos(db);
     
-/* Save all this recomputed stuff to the cart. */
-cartSetString(cart, "position",position);
-cartSetString(cart, "db",db);
-cartSetString(cart, "org",organism);
-
-
 puts(
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
@@ -82,6 +77,7 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,\n"
+"<A HREF=\"http://www.soe.ucsc.edu/~baertsch\">Robert Baertsch</A>,\n"
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
 "<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
 "<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
@@ -149,6 +145,7 @@ puts(
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 "</center>\n"
+
 );
 
 hgPositionsHelpHtml(organism);
@@ -178,6 +175,7 @@ puts("</FORM>"
 "	</TD></TR></TABLE>\n"
 "			\n"
 "</TD></TR></TABLE>\n");
+cartSetString(cart, dbCgiName, db);	/* Note this trashed db. */
 freez(&position);
 }
 
