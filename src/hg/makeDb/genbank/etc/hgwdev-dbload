@@ -6,6 +6,7 @@
 # errors terminate with message
 set -e
 trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
+exec </dev/null
 
 # databases to update
 databases="rn3 hg16"

@@ -7,9 +7,10 @@
 # errors terminate with message
 set -e
 trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
+exec </dev/null
 
 # databases to update
-databases="hg15 mm3 rn2"
+databases="hg15 mm3 rn2 hg16 rn3"
 
 # gbRoot on hgnfs1
 gbRoot=/genbank
