@@ -29,7 +29,7 @@
 #include "sqlDeleter.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.1 2003/06/03 01:27:43 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.2 2003/06/14 07:52:59 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -567,8 +567,12 @@ else if (status->stateChg & GB_META_CHG)
 static void refLinkUpdate(struct gbStatus* status)
 /* Update the refLink table for the current entry */
 {
-char *gen = sqlEscapeString(emptyForNull(raFieldCurVal("gen")));
-char *pro = sqlEscapeString(emptyForNull(raFieldCurVal("pro")));
+char *gen = emptyForNull(raFieldCurVal("gen"));
+char *pro = emptyForNull(raFieldCurVal("pro"));
+
+gen = sqlEscapeString2(alloca(2*strlen(gen)+1), gen);
+pro = sqlEscapeString2(alloca(2*strlen(pro)+1), pro);
+
 if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(refLinkUpd, "%s\t%s\t%s\t%s\t%u\t%u\t%u\t%u",
                      gen, pro, raAcc, raProtAcc,
@@ -581,8 +585,6 @@ else if (status->stateChg & GB_META_CHG)
                      gen, pro, raProtAcc,
                      raFieldCurId("gen"), raFieldCurId("pro"),
                      raLocusLinkId, raOmimId, raAcc);
-free(gen);
-free(pro);
 }
 
 static void refSeqPepUpdate(struct sqlConnection *conn, HGID pepFaId)

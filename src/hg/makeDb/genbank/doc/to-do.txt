@@ -460,3 +460,6 @@
 - make sure directorys have the group stick bit maintained.
 
 - make sure all I/O inside of perl does error checking.
+
+- need to follow Kent argument conventions completely:
+   bin/gbDbLoadStep -verbose=1 -initialLoad ci1 -noPerChrom=ci1 &

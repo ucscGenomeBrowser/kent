@@ -5,7 +5,7 @@
 #include "jksql.h"
 #include "sqlUpdater.h"
 
-static char const rcsid[] = "$Id: uniqueStrTbl.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: uniqueStrTbl.c,v 1.2 2003/06/14 07:52:59 markd Exp $";
 
 /*
  * The id is not auto_increment, as the zero id didn't work with mysqlimport
@@ -94,14 +94,13 @@ static struct hashEl *loadStr(struct uniqueStrTbl *ust,
 {
 struct hashEl* hel = NULL;
 bits32 crc = hashCrc(str);
-char *escStr = sqlEscapeString(str);
+char *escStr = sqlEscapeString2(alloca(2*strlen(str)+1), str);
 int qlen = strlen(escStr)+256;
 char *query = alloca(qlen);
 HGID id;
 
 safef(query, qlen, "SELECT id FROM %s WHERE (crc = %u) and (name = '%s')",
       ust->updater->table, crc, escStr);
-free(escStr);
 
 id = sqlQuickNum(conn, query);
 if (id != 0)
@@ -142,9 +141,9 @@ static HGID uniqueStrTblAdd(struct uniqueStrTbl *ust,
 {
 struct hashEl *el;
 bits32 crc = hashCrc(str);
-char *escStr = sqlEscapeString(str);
+char *escStr = sqlEscapeTabFileString2(alloca(2*strlen(str)+1), str);
+
 sqlUpdaterAddRow(ust->updater, "%u\t%s\t%u", ust->nextId, escStr, crc);
-freez(&escStr);
 el = hashAdd(ust->hash, str, (void*)ust->nextId);
 ust->nextId++;
 if (strVal != NULL)

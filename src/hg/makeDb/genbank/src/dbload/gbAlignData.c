@@ -25,7 +25,7 @@
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.2 2003/06/10 17:52:22 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.3 2003/06/14 07:52:59 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -406,13 +406,12 @@ static void updateRefFlatEntry(struct sqlConnection *conn,
 /* Update the gene names in the refFlat for an entry */
 {
 char* geneName = (status->geneName == NULL) ? "" : status->geneName;
-geneName = sqlEscapeString(geneName);
+geneName = sqlEscapeString2(alloca(2*strlen(geneName)+1), geneName);
 
 /* creates updater if it doesn't exist */
 getOtherTabFile("refFlat", conn, gRefFlatTableDef, &gRefFlatUpd);
 sqlUpdaterModRow(gRefFlatUpd, status->numAligns,
                    "geneName='%s' WHERE name='%s'", geneName, status->acc);
-free(geneName);
 }
 
 static void updateRefFlat(struct sqlConnection *conn, struct gbSelect* select,
