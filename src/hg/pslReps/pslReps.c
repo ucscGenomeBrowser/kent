@@ -73,6 +73,7 @@ for (i=1; i<blockCount; ++i)
     qe = qs + sz;
     te = ts + sz;
     }
+if (bonus > 10) bonus = 10;
 return bonus;
 }
 
@@ -97,7 +98,7 @@ return score;
 boolean uglyTarget(struct psl *psl)
 /* Return TRUE if it's the one we're snooping on. */
 {
-return sameString(psl->qName, "NM_004772");
+return sameString(psl->qName, "AF103731");
 }
 
 
