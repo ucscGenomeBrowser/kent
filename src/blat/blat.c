@@ -145,6 +145,7 @@ gfAlignSeqClumps(clumpList, seq, isRc, ffCdna, minBases, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
 }
 
+#ifdef SOON
 void searchOneProtStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl)
 /* Search for protein seq in index and write results to psl. */
 {
@@ -153,16 +154,18 @@ uglyf("Found %d clumps in %s\n", slCount(clumpList), seq->name);
 for (clump = clumpList; clump != NULL; clump = clump->next)
     gfClumpDump(gf, clump, uglyOut);
 }
+#endif
 
 void searchOne(struct dnaSeq *seq, struct genoFind *gf, FILE *psl)
 /* Search for seq on either strand in index. */
 {
-uglyf("searching for %s\n", seq->name);
+#ifdef SOON
 if (isProt)
     {
     searchOneProtStrand(seq, gf, psl);
     }
 else
+#endif
     {
     searchOneStrand(seq, gf, psl, FALSE);
     reverseComplement(seq->dna, seq->size);
@@ -232,10 +235,12 @@ struct genoFind *gf;
 getFileArray(dbFile, &dbFiles, &dbCount);
 getFileArray(queryFile, &queryFiles, &queryCount);
 dbSeqList = getSeqList(dbCount, dbFiles, dbHash);
+#ifdef SOON
 if (isProt)
     gf = gfPepIndexNibs(dbCount, dbFiles, 3, 0, 4, 4096);
 else
-    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc);
+#endif
+    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, FALSE);
 searchIndex(queryCount, queryFiles, gf, pslOut);
 }
 
