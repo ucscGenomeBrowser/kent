@@ -6770,8 +6770,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 #  	None.
 
 # Add "chr" to front of each line in the gene data gtf file to make 
-# it compatible with ldHgGene 
+# it compatible with ldHgGene
     sed -e "s/^/chr/" unrandom.gtf > ensGene.gtf
+#	(should also fixup chrMT name here too - 2005-02-28 - Hiram)
+#    sed -e "s/^/chr/" unrandom.gtf | sed -e "s/chrMT/chrM/" > ensGene.gtf
     ldHgGene mm5 ensGene ensGene.gtf
 # Read 31035 transcripts in 551352 lines in 1 files
 #   31035 groups 22 seqs 1 sources 4 feature types
@@ -6779,6 +6781,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 #	save space, gzip them:
     gzip unrandom.gtf
     gzip ensGene.gtf
+#  The name on chrM was incorrect, fixed (2005-02-28 - Hiram)
+    hgsql mm5 -e 'update ensGene set chrom="chrM" where chrom="chrMT";'
 
 # Load Ensembl peptides:
         Get the ensembl protein data from http://www.ensembl.org/
