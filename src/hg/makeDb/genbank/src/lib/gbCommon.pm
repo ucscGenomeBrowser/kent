@@ -50,6 +50,9 @@ BEGIN {
     $newPath .= "$rootDir/bin:$rootDir/bin/$arch:/cluster/bin/$arch";
     $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
 
+    # eieio has LANG set to en_US.UTF-8, which broken sort.
+    $main::ENV{LANG} = "C";
+
     # also allow for shared libraries in lib/$arch
     if (defined($main::ENV{LD_LIBRARY_PATH})) {
         $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$arch:$main::ENV{LD_LIBRARY_PATH}";
