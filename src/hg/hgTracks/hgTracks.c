@@ -4167,6 +4167,22 @@ sprintf(buf, "%s%s", skipChr(band->chrom), band->name);
 return buf;
 }
 
+char *rgdGeneItemName(struct track *tg, void *item)
+/* Return name of RGD gene track item. */
+{
+static char name[32];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+struct linkedFeatures *lf = item;
+
+dyStringPrintf(ds, "select name from rgdLink where id = '%s'", lf->name);
+sqlQuickQuery(conn, ds->string, name, sizeof(name));
+freeDyString(&ds);
+hFreeConn(&conn);
+return name;
+}
+
 char *abbreviatedBandName(struct track *tg, struct cytoBand *band, MgFont *font, int width)
 /* Return a string abbreviated enough to fit into space. */
 {
@@ -4279,6 +4295,12 @@ tg->drawItemAt = cytoBandDrawAt;
 tg->itemColor = cytoBandColor;
 tg->itemName = cytoBandName;
 tg->drawName = TRUE;
+}
+
+void rgdGeneMethods(struct track *tg)
+/* Make track for simple repeats. */
+{
+tg->itemName = rgdGeneItemName;
 }
 
 void loadGcPercent(struct track *tg)
@@ -9935,6 +9957,7 @@ s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
 /* Register tracks that include some non-standard methods. */
+registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);

@@ -1829,52 +1829,6 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
-static void findRgdGenes(char *spec, struct hgPositions *hgp)
-/* Look up zoo gene names in manual annotation table. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *ds = newDyString(256);
-char **row = NULL;
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-char *specCopy = NULL;
-char *specPtr = spec;
-char name[32];
-
-AllocVar(table);
-slAddHead(&hgp->tableList, table);
-/* Default values */
-table->description = cloneString("RGD Curated Genes");
-table->name = cloneString("rgdGene");
-
-if (sqlTableExists(conn, "rgdLink") && sqlTableExists(conn, "rgdGene"))
-    {
-    dyStringPrintf(ds, "select name from rgdLink where id = '%s'", spec);
-    sqlQuickQuery(conn, ds->string, name, sizeof(name));
-    specPtr = name; 
-/* Use the id->name relationship 
-   and then search the main table using name found in ID table */
-    dyStringClear(ds);
-    dyStringPrintf(ds, "select * from rgdGene where name like '%%%s%%'", specPtr);    
-    sr = sqlGetResult(conn, ds->string);
-
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        AllocVar(pos);
-        slAddHead(&table->posList, pos);
-        pos->name = cloneString(row[0]);
-        pos->description = cloneString(row[0]);
-        pos->chrom = hgOfficialChromName(row[1]);
-        pos->chromStart = sqlUnsigned(row[5]);
-        pos->chromEnd = sqlUnsigned(row[6]);
-        }
-    }
-
-freeDyString(&ds);
-hFreeConn(&conn);
-}
-
 static void findZooGenes(char *spec, struct hgPositions *hgp)
 /* Look up zoo gene names in manual annotation table. */
 {
@@ -1909,6 +1863,43 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chrom = hgOfficialChromName(row[0]);
     pos->chromStart = sqlUnsigned(row[6]);
     pos->chromEnd = sqlUnsigned(row[7]);
+    }
+
+freeDyString(&ds);
+hFreeConn(&conn);
+}
+
+static void findRgdGenes(char *spec, struct hgPositions *hgp)
+/* Look up zoo gene names in manual annotation table. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+char **row = NULL;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+
+AllocVar(table);
+slAddHead(&hgp->tableList, table);
+/* Default values */
+table->description = cloneString("RGD Curated Genes");
+table->name = cloneString("rgdGene");
+
+if (sqlTableExists(conn, "rgdGene"))
+    {
+    dyStringPrintf(ds, "select * from rgdGene where name = '%s'", spec);    
+    sr = sqlGetResult(conn, ds->string);
+    
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        AllocVar(pos);
+        slAddHead(&table->posList, pos);
+        pos->name = cloneString(row[0]);
+        pos->description = cloneString(row[0]);
+        pos->chrom = hgOfficialChromName(row[1]);
+        pos->chromStart = sqlUnsigned(row[5]);
+        pos->chromEnd = sqlUnsigned(row[6]);
+        }
     }
 
 freeDyString(&ds);
