@@ -622,10 +622,10 @@ slReverse(&bunList);
 return bunList;
 }
 
-static int maxDown = 10;
 
 static void extendHitRight(int qMax, int tMax,
-	char **pEndQ, char **pEndT, int (*scoreMatch)(char a, char b))
+	char **pEndQ, char **pEndT, int (*scoreMatch)(char a, char b), 
+	int maxDown)
 /* Extend endQ/endT as much to the right as possible. */
 {
 int maxScore = 0;
@@ -653,7 +653,8 @@ for (i=0; i<last; ++i)
 }
 
 static void extendHitLeft(int qMax, int tMax,
-	char **pStartQ, char **pStartT, int (*scoreMatch)(char a, char b))
+	char **pStartQ, char **pStartT, int (*scoreMatch)(char a, char b),
+	int maxDown)
 /* Extend startQ/startT as much to the left as possible. */
 {
 int maxScore = 0;
@@ -682,7 +683,8 @@ for (i=-1; i>=last; --i)
 
 
 static void clumpToHspRange(struct gfClump *clump, bioSeq *qSeq, int tileSize,
-	int frame, struct trans3 *t3, struct gfRange **pRangeList, boolean isProt)
+	int frame, struct trans3 *t3, struct gfRange **pRangeList, 
+	boolean isProt, boolean fastMap)
 /* Covert clump->hitList to HSPs (high scoring local sequence pair,
  * that is longest alignment without gaps) and add resulting HSPs to
  * rangeList. */
@@ -697,6 +699,19 @@ boolean outOfIt = TRUE;		/* Logically outside of a clump. */
 struct gfRange *range;
 BIOPOL *lastQs = NULL, *lastQe = NULL, *lastTs = NULL, *lastTe = NULL;
 int (*scoreMatch)(char a, char b) = (isProt ? aaScore2 : dnaScore2);
+int maxDown, minSpan;
+
+if (fastMap)
+    {
+    maxDown = 1;
+    minSpan = 50;
+    }
+else
+    {
+    maxDown = 10;
+    minSpan = 0;
+    }
+
 
 if (tSeq == NULL)
     internalErr();
@@ -728,25 +743,28 @@ for (hit = clump->hitList; ; hit = hit->next)
 	    qe = qSeq->dna + qEnd;
 	    te = tSeq->dna + tEnd;
 	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
-		&qe, &te, scoreMatch);
-	    extendHitLeft(qStart, tStart, &qs, &ts, scoreMatch);
+		&qe, &te, scoreMatch, maxDown);
+	    extendHitLeft(qStart, tStart, &qs, &ts, scoreMatch, maxDown);
 	    if (qs != lastQs || ts != lastTs || qe != lastQe || qs !=  lastQs)
 		{
 		lastQs = qs;
 		lastTs = ts;
 		lastQe = qe;
 		lastTe = te;
-		AllocVar(range);
-		range->qStart = qs - qSeq->dna;
-		range->qEnd = qe - qSeq->dna;
-		range->tName = cloneString(tSeq->name);
-		range->tSeq = tSeq;
-		range->tStart = ts - tSeq->dna;
-		range->tEnd = te - tSeq->dna;
-		range->hitCount = qe - qs;
-		range->frame = frame;
-		range->t3 = t3;
-		slAddHead(pRangeList, range);
+		if (qe - qs >= minSpan)
+		    {
+		    AllocVar(range);
+		    range->qStart = qs - qSeq->dna;
+		    range->qEnd = qe - qSeq->dna;
+		    range->tName = cloneString(tSeq->name);
+		    range->tSeq = tSeq;
+		    range->tStart = ts - tSeq->dna;
+		    range->tEnd = te - tSeq->dna;
+		    range->hitCount = qe - qs;
+		    range->frame = frame;
+		    range->t3 = t3;
+		    slAddHead(pRangeList, range);
+		    }
 		}
 	    outOfIt = TRUE;
 	    }
@@ -804,7 +822,7 @@ bioSeq *targetSeq;
 struct ssBundle *bunList = NULL, *bun;
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
-    clumpToHspRange(clump, qSeq, gf->tileSize, 0, NULL, &rangeList, FALSE);
+    clumpToHspRange(clump, qSeq, gf->tileSize, 0, NULL, &rangeList, FALSE, TRUE);
 slReverse(&rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, 256);
@@ -841,7 +859,7 @@ if (isProt)
     intronMax /= 3;
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
-    clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList, isProt);
+    clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList, isProt, FALSE);
     }
 slReverse(&rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
@@ -909,7 +927,7 @@ for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	{
-	clumpToHspRange(clump, qSeq, tileSize, frame, NULL, &rangeList, TRUE);
+	clumpToHspRange(clump, qSeq, tileSize, frame, NULL, &rangeList, TRUE, FALSE);
 	}
     }
 slReverse(&rangeList);
@@ -1047,7 +1065,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	    ss->seq = t3->trans[frame];
 	    ss->start = t3->start/3;
 	    ss->end = t3->end/3;
-	    clumpToHspRange(clump, seq, tileSize, frame, t3, &rangeList, TRUE);
+	    clumpToHspRange(clump, seq, tileSize, frame, t3, &rangeList, TRUE, FALSE);
 	    }
 	}
     slReverse(&rangeList);
@@ -1174,7 +1192,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 		ss->seq = t3->trans[tFrame];
 		ss->start = t3->start/3;
 		ss->end = t3->end/3;
-		clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, t3, &rangeSet, TRUE);
+		clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, t3, &rangeSet, TRUE, FALSE);
 		untranslateRangeList(rangeSet, qFrame, tFrame, NULL, t3, t3->start);
 		rangeList = slCat(rangeSet, rangeList);
 		}
@@ -1247,7 +1265,7 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfRange *rangeSet = NULL;
-	    clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, NULL, &rangeSet, TRUE);
+	    clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, NULL, &rangeSet, TRUE, FALSE);
 	    untranslateRangeList(rangeSet, qFrame, tFrame, t3Hash, NULL, 0);
 	    rangeList = slCat(rangeSet, rangeList);
 	    }
@@ -1468,7 +1486,8 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna, minScore);
-    refineSmallExonsInBundle(bun);
+    if (!fastMap)
+	refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, isRc, FALSE, ffCdna, minScore, out);
     }
