@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.6 2003/06/18 17:51:11 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.7 2003/06/18 18:05:47 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -451,7 +451,7 @@ AllocVar(col);
 col->name = "bitScore";
 col->label = "Bits";
 col->priority = 3;
-col->on = TRUE;
+col->on = FALSE;
 bitScoreMethods(col);
 if (col->exists(col, conn))
     slAddHead(&colList, col);
@@ -460,7 +460,7 @@ AllocVar(col);
 col->name = "eVal";
 col->label = "E Value";
 col->priority = 4;
-col->on = FALSE;
+col->on = TRUE;
 eValMethods(col);
 if (col->exists(col, conn))
     slAddHead(&colList, col);
