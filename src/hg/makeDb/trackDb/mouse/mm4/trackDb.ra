@@ -53,7 +53,7 @@ otherDb hg16
 
 track blastzBestHg16
 shortLabel Human Best
-longLabel Blastz Human (Jul 03/Hg16)/$Organism Best in Genome Alignments
+longLabel Blastz Human (Jul 03/Hg16)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 117
 visibility hide
@@ -131,7 +131,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (Jun 03/Rn3)/$Organism Best in Genome Alignments
+longLabel Blastz Rat (Jun 03/Rn3)/$Organism Best-in-Genome Alignments
 group compGeno
 priority 143
 visibility hide

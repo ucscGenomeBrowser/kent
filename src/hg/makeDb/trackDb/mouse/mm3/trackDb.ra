@@ -76,7 +76,7 @@ otherDb rn2
 
 track blastzBestRat
 shortLabel Rat Best
-longLabel Blastz Rat Best in Genome Alignments
+longLabel Blastz Rat Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -165,7 +165,7 @@ type bed 4 +
 
 track blastzBestHuman
 shortLabel Human Best
-longLabel Blastz Human (hg15-Apr 03) Best in Genome Alignments
+longLabel Blastz Human (hg15-Apr 03) Best-in-Genome Alignments
 group compGeno
 priority 127.5
 visibility hide
