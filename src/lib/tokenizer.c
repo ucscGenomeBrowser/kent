@@ -8,18 +8,24 @@
 #include "linefile.h"
 #include "tokenizer.h"
 
-static char const rcsid[] = "$Id: tokenizer.c,v 1.2 2004/04/09 05:20:55 kent Exp $";
+static char const rcsid[] = "$Id: tokenizer.c,v 1.3 2004/07/14 05:47:14 kent Exp $";
 
-struct tokenizer *tokenizerNew(char *fileName)
-/* Return a new tokenizer. */
+struct tokenizer *tokenizerOnLineFile(struct lineFile *lf)
+/* Create a new tokenizer on open lineFile. */
 {
 struct tokenizer *tkz;
 AllocVar(tkz);
 tkz->sAlloc = 128;
 tkz->string = needMem(tkz->sAlloc);
-tkz->lf = lineFileOpen(fileName, TRUE);
+tkz->lf = lf;
 tkz->curLine = tkz->linePt = "";
 return tkz;
+}
+
+struct tokenizer *tokenizerNew(char *fileName)
+/* Return a new tokenizer. */
+{
+return tokenizerOnLineFile(lineFileOpen(fileName, TRUE));
 }
 
 void tokenizerFree(struct tokenizer **pTkz)
