@@ -3,7 +3,7 @@
 #
 package gbCommon;
 use strict;
-use warnings;
+use warnings FATAL => qw(all);
 use Carp;
 use FindBin;
 use File::Basename;
@@ -36,6 +36,9 @@ BEGIN {
     }
     $newPath .= "$rootDir/bin:$rootDir/bin/$main::ENV{MACHTYPE}:";
     $main::ENV{PATH} = $newPath . $main::ENV{PATH};
+
+    # set umask to preserve group writability
+    umask 0022
 }
 
 # Enable to track programs execution for debugging.
@@ -77,7 +80,7 @@ sub loadTimeFile($) {
     # really sucks that TIME is global scope
     open(TIME, $timeFile) || die("can't open $timeFile");
     my $line = <TIME>;
-    close(TIME);
+    close(TIME) || die("close failed");
 
     my $time;
     if (defined($line)) {
@@ -509,7 +512,7 @@ sub readFile($) {
     while ($line = <FILE>) {
         $str .= $line;
     }
-    close(FILE);
+    close(FILE) || die("close failed");
     return $str;
 }
 

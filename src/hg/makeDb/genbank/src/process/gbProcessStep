@@ -85,7 +85,7 @@ sub processSeqs($$$@) {
         gbError("unknown type '$type'");
     }
     print FILT "hide mol\n";
-    close(FILT);
+    close(FILT) || die("close failed");
 
     # Create file in an atomic manner.  For ESTs we split by first two
     # letters of accession, so we can have multiple.
@@ -150,7 +150,7 @@ sub processSeqs($$$@) {
     } else {
         # no files create for this type, create an empty file md4 file
         open(md5File, ">", $md5File) || die("can't create $md5File");
-        close(md5File);
+        close(md5File) || die("close failed");
     }
 }
 

@@ -45,7 +45,7 @@ sub parseGenBankVer($) {
             $version = $1;
         }
     }
-    close(FH);
+    close(FH) || die("close failed");
     if (!defined($version)) {
         die("can't parse GenBank release from $readme");
     }
