@@ -133,6 +133,9 @@ static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
 static char *_hgcFullName = "http://genome.ucsc.edu/cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksFullName = "http://genome.ucsc.edu/cgi-bin/hgTracks"; /* Path back to self. */
 
+static char *_hgTextName = "/cgi-bin/hgText"; /* Path back to the text browser. */
+static char *_hgTextFullName = "http://genome.ucsc.edu/cgi-bin/hgText"; /* Path back to the text browser. */
+
 char *hgcName()
 /* Relative URL to click processing program. */
 {
@@ -157,6 +160,17 @@ char *hgTracksFullName()
 return _hgTracksFullName;
 }
 
+char *hgTextName()
+/* Relative URL to browser. */
+{
+return _hgTextName;
+}
+
+char *hgTextFullName()
+/* Absolute URL to browser. */
+{
+return _hgTextFullName;
+}
 
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
 /* Finish conversion from frag to clone or clone.ver name. */
