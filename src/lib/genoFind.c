@@ -412,6 +412,14 @@ gfZeroOverused(gf);
 return gf;
 }
 
+void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
+    int minMatch, int maxGap, int tileSize, int maxPat)
+/* Make translated (6 frame) index for all nib files. */
+{
+uglyf("gfIndexTransNibs\n");
+uglyAbort("All for now\n");
+}
+
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, boolean isPep)
 /* Make index for all seqs in list. */
@@ -769,7 +777,7 @@ else
     return gfFindDnaClumps(gf, seq);
 }
 
-void gfTransFindClumps(struct genoFind *gfs[3], bioSeq *seq, struct gfClump *clumps[3])
+void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3])
 /* Find clumps associated with one sequence in three translated reading frames. */
 {
 int frame;
@@ -777,4 +785,14 @@ for (frame = 0; frame < 3; ++frame)
     clumps[frame] = gfFindPepClumps(gfs[frame], seq);
 }
 
+void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
+	struct gfClump *clumps[3][3])
+/* Find clumps associated with three sequences in three translated 
+ * reading frames. Used for translated/translated protein comparisons. */
+{
+int qFrame;
+
+for (qFrame = 0; qFrame<3; ++qFrame)
+    gfTransFindClumps(gfs, seqs[qFrame], clumps[qFrame]);
+}
 

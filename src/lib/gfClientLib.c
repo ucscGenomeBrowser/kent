@@ -655,7 +655,8 @@ for (range = rangeList; range != NULL; range = range->next)
 	bun, outData, FALSE, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
     }
-/* ~~~ free clumps[3] ??? */
+for (frame=0; frame<3; ++frame)
+    gfClumpFreeList(&clumps[frame]);
 }
 
 void untranslateRangeList(struct gfRange *rangeList, int qFrame, int tFrame, struct hash *t3Hash)
@@ -688,9 +689,9 @@ int tileSize = gfs[0]->tileSize;
 bioSeq *targetSeq;
 struct ssBundle *bun;
 
+gfTransTransFindClumps(gfs, qTrans->trans, clumps);
 for (qFrame = 0; qFrame<3; ++qFrame)
     {
-    gfTransFindClumps(gfs, qTrans->trans[qFrame], clumps[qFrame]);
     for (tFrame=0; tFrame<3; ++tFrame)
 	{
 	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
@@ -719,7 +720,9 @@ for (range = rangeList; range != NULL; range = range->next)
     ssBundleFree(&bun);
     }
 trans3Free(&qTrans);
-/* ~~~ free clumps[3][3] ??? */
+for (qFrame = 0; qFrame<3; ++qFrame)
+    for (tFrame=0; tFrame<3; ++tFrame)
+	gfClumpFreeList(&clumps[qFrame][tFrame]);
 }
 
 int t3Offset(char *pt, bioSeq *seq, struct hash *t3Hash)

@@ -442,7 +442,7 @@ const struct ssFfItem *b = *((struct ssFfItem **)vb);
 return b->trimScore - a->trimScore;
 }
 
-static void trimBundle(struct ssBundle *bundle, int maxFfCount,
+static boolean trimBundle(struct ssBundle *bundle, int maxFfCount,
 	enum ffStringency stringency)
 /* Trim out the relatively insignificant alignments from bundle. */
 {
@@ -466,13 +466,17 @@ for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
     else
 	{
 	if (lastFfl == NULL)
-	    errAbort("Can't stitch, single alignment more than %d blocks", maxFfCount);
+	    {
+	    warn("Can't stitch, single alignment more than %d blocks", maxFfCount);
+	    return FALSE;
+	    }
 	lastFfl->next = NULL;
 	ssFfItemFreeList(&ffl);
 	break;
 	}
     lastFfl = ffl;
     }
+return TRUE;
 }
 
 int ssStitch(struct ssBundle *bundle, enum ffStringency stringency)
@@ -489,7 +493,7 @@ struct ssGraph *graph;
 int score;
 int newAliCount = 0;
 int totalFfCount = 0;
-int trimCount = qSeq->size/200 + 1000;
+int trimCount = qSeq->size/200 + 2000;
 
 if (bundle->ffList == NULL)
     return;
@@ -506,7 +510,11 @@ if (totalFfCount > trimCount)
     {
     if (totalFfCount > 6*trimCount)
 	warn("In %s vs. %s trimming from %d to %d blocks", qSeq->name, genoSeq->name, totalFfCount, trimCount);
-    trimBundle(bundle, trimCount, stringency);
+    if (!trimBundle(bundle, trimCount, stringency))
+	{
+	warn("Skipping %s vs. %s\n", qSeq->name, genoSeq->name);
+        return;
+	}
     }
 
 /* Create ffAlis for all in bundle and move to one big list. */
