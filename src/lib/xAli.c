@@ -267,3 +267,14 @@ if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
 
+/* --------------------Start of human generated code. -------------------- */
+
+struct xAli *xAliNext(struct lineFile *lf)
+/* Read next line from file and convert it to xAli.  Return
+ * NULL at eof. */
+{
+char *row[23];
+if (!lineFileRow(lf, row))
+    return NULL;
+return xAliLoad(row);
+}

@@ -9,25 +9,6 @@
 #include "portimpl.h"
 #include "obscure.h"
 
-char *getHost()
-/* Return host name. */
-{
-static char *hostName = NULL;
-static char buf[128];
-if (hostName == NULL)
-    {
-    hostName = getenv("HTTP_HOST");
-    if (hostName == NULL)
-        {
-	hostName = "";
-	}
-    strncpy(buf, hostName, sizeof(buf));
-    chopSuffix(buf);
-    hostName = buf;
-    }
-return hostName;
-}
-
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 /* Figure out a temp name, and how CGI and HTML will access it. */

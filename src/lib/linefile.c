@@ -17,7 +17,7 @@ struct lineFile *lf;
 AllocVar(lf);
 lf->fileName = cloneString(fileName);
 lf->fd = fd;
-lf->bufSize = 64*1024;
+lf->bufSize = 256*1024;
 lf->zTerm = zTerm;
 lf->buf = needMem(lf->bufSize+1);
 return lf;

@@ -66,22 +66,3 @@ setupWss();
 return wss->speed();
 }
 
-char *mysqlHost()
-/* Return host computer on network for mySQL database. */
-{
-boolean gotIt = FALSE;
-static char *host = NULL;
-if (!gotIt)
-    {
-    static char hostBuf[128];
-    gotIt = TRUE;
-    if (fileExists("mysqlHost"))
-	{
-	return (host = firstWordInFile("mysqlHost", hostBuf, sizeof(hostBuf)));
-	}
-    else
-	return (host = getenv("MYSQLHOST"));
-    }
-return host;
-}
-

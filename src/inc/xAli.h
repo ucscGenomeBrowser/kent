@@ -63,5 +63,11 @@ void xAliOutput(struct xAli *el, FILE *f, char sep, char lastSep);
 #define xAliCommaOut(el,f) xAliOutput(el,f,',',',');
 /* Print out xAli as a comma separated list including final comma. */
 
+/* ----------------  Start human generated code. ------------------ */
+
+struct xAli *xAliNext(struct lineFile *lf);
+/* Read next line from file and convert it to xAli.  Return
+ * NULL at eof. */
+
 #endif /* XALI_H */
 

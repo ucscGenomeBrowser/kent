@@ -76,6 +76,9 @@ double machineSpeed();
 /* Return host computer on network for mySQL database. */
 char *mysqlHost();
 
+/* Get name of this machine. */
+char *getHost();
+
 /* Invoke the debugger. */
 void uglyfBreak();
 

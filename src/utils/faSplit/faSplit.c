@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "obscure.h"
 #include "fa.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "bits.h"
 
 void usage()
@@ -296,8 +296,8 @@ void splitByCount(char *inName, int pieceSize, char *outRoot, unsigned long estS
 {
 unsigned long pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
-int maxN = cgiUsualInt("maxN", pieceSize/2);
-boolean oneFile = cgiBoolean("oneFile");
+int maxN = optionInt("maxN", pieceSize/2);
+boolean oneFile = optionExists("oneFile");
 char fileName[512];
 char dirOnly[256], noPath[128];
 char numOut[128];
@@ -307,8 +307,8 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = NULL;
 Bits *bits = NULL;
 int seqCount = 0;
-char *outFile = cgiOptionalString("out");
-char *liftFile = cgiOptionalString("lift");
+char *outFile = optionVal("out", NULL);
+char *liftFile = optionVal("lift", NULL);
 FILE *lift = NULL;
 
 splitPath(outRoot, dirOnly, noPath, NULL);
@@ -385,7 +385,7 @@ else
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 5 || !isdigit(argv[3][0]))
     usage();
 dnaUtilOpen();
