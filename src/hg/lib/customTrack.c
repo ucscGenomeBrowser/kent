@@ -29,10 +29,10 @@ AllocVar(bt);
 strncpy(bt->tableName, "custom", sizeof(bt->tableName));
 strncpy(bt->longLabel, "User Supplied Track", sizeof(bt->longLabel));
 strncpy(bt->shortLabel, "User Track", sizeof(bt->shortLabel));
-strncpy(bt->mapName, "custom", sizeof(bt->mapName));
+strncpy(bt->mapName, "ct_user", sizeof(bt->mapName));
 strncpy(bt->trackType, "bed", sizeof(bt->trackType));
 bt->visibility = 1;
-bt->version = cloneString("");
+bt->version = cloneString("custom");
 return bt;
 }
 
@@ -65,7 +65,13 @@ struct browserTable *bt = btDefault();
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
+    {
+    char buf[256];
     strncpy(bt->shortLabel, val, sizeof(bt->shortLabel));
+    sprintf(buf, "ct_%s", bt->shortLabel);
+    eraseWhiteSpace(buf);
+    strncpy(bt->mapName, buf, sizeof(bt->mapName));
+    }
 if ((val = hashFindVal(hash, "description")) != NULL)
     strncpy(bt->longLabel, val, sizeof(bt->longLabel));
 if ((val = hashFindVal(hash, "url")) != NULL)
