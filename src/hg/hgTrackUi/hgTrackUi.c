@@ -93,8 +93,14 @@ void affyUi(struct trackDb *tdb)
 /* put up UI for the affy track from stanford track */
 {
 char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(affyTissue));
+char *col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Experiment Display: </b> ");
 affyDropDown("affy.type", affyMap);
+printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
+printf(" red/green ");
+cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
+printf(" red/blue ");
 }
 
 void rosettaUi(struct trackDb *tdb)
@@ -220,7 +226,7 @@ else if (sameString(track, "xenoEst"))
     mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
-else if (sameString(track, "affy"))
+else if (sameString(track, "affyRatio"))
     affyUi(tdb);
 else if (sameString(track, "wiggle"))
     wiggleUi(tdb);
