@@ -636,6 +636,12 @@ stored in a single table rather than one table per chromosome:</P>
   href="#ExpDistance">gnfU95Distance</A> 
   - Describes the distance between genes in the expression space (GNF U95)
   <LI><A 
+  href="#HInv">HInv</A> 
+  - Full-length cDNAs from the H-Invitational Human Gene Annotation Database</LI>
+  <LI><A 
+  href="#PslInfo">HInvGeneMrna</A> 
+  - H-Invitational genes mRNA data </LI>
+  <LI><A 
   href="#BED">haplotype</A> 
   - Common Haplotype Blocks - U. of Oxford and Sanger Institute (chr22 only) </LI>
   <LI><A 
@@ -729,10 +735,13 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Associates known gene and coding SNP IDs
   <LI><A 
   href="#KnownTo">knownToEnsembl</A> 
-  - Associates known gene and Ensembl transcript
+  - Associates known gene and Ensembl transcripts
   <LI><A 
   href="#KnownTo">knownToGnfAtlas2</A> 
   - Associates known gene and Atlas2 expression data
+  <LI><A 
+  href="#KnownTo">knownToHInv</A> 
+  - Associates known gene and HInv transcripts
   <LI><A 
   href="#KnownTo">knownToLocusLink</A> 
   - Associates known gene and LocusLink ID
@@ -2016,8 +2025,8 @@ EST Clusters</H4>
 </PRE>    
 
 <H4><A name=GenePredictions></A>Gene Predictions and RefSeq Genes</H4>
-The following definition is used for the acembly, ECgene, ensGene, geneid, genieAlt, genScan, genscanSubopt, mgcGenes, refGene, sanger20, sanger22, slam*, softberryGene, tigrGeneIndex, twinscan, vegaGene, vegaPseudoGene, and similar tables. In alternative splicing situations
-each transcript has a row in this table.
+The following definition is used for gene prediction tables. In 
+alternative-splicing situations, each transcript has a row in this table.
 <PRE>table genePred
 "A gene prediction."
     (
@@ -2096,7 +2105,7 @@ The following definition is used for tables that link a predicted peptide to a p
                          tables August 2001"
     uint    matches;    "Number of bases that match that aren't repeats"
     uint    misMatches; "Number of bases that don't match"
-    string  chrom;      "which chromosome"
+    string  chrom;      "Which chromosome"
     uint    chromStart; "Start position in chromosome"
     uint    chromEnd;   "End position in chromosome"
     int     ix;         "Ix of this fragment (useless)"
@@ -2108,6 +2117,16 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
+<H4><A name=HInv></A>H-Invitational Human Gene Annotation Database Data</H4>
+<PRE>table HInv
+"H-Invitational gene data"
+    (
+    string geneId; 	"Gene ID"
+    string clusterId;	"Gene cluster ID"
+    string mrnaAcc; 	"GenBank mRNA accession"
+    )
+</PRE>
+
 <H4><A name=SyntenyHuman></A>Human Synteny Alignments</H4>
 <PRE>table syntenyHuman
 "Human synteny alignnments from blastz single coverage"
@@ -2116,7 +2135,7 @@ The following definition is used for tables that link a predicted peptide to a p
     uint chromStart;    "Start on Mouse"
     uint chromEnd;      "End on Mouse"
     string name;      	"Human Chromosome"
-    uint score;         "score always zero"
+    uint score;         "Score (always zero)"
     char[1] strand;     "+ direction matches - opposite"
     uint thickStart;    "Start of where display should be thick"
     uint thickEnd;      "End of where display should be thick"
