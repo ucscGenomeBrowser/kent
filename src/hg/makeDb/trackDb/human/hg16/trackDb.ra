@@ -294,7 +294,7 @@ group compGeno
 priority 202
 visibility hide
 spectrum on
-type netAlign panTro1 chainPanTro1
+type netAlign panTro1 rBestChainPanTro1
 
 track chimpDels
 shortLabel Chimp Deletions
