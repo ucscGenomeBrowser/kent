@@ -1,5 +1,5 @@
 #
-# load database on hgwbeta server
+# dbload of hgwbeta
 #
 
 SHELL=/bin/sh

@@ -1,0 +1,9 @@
+#
+# dbload of round-robin servers.
+#
+
+SHELL=/bin/sh
+MAILTO=genbank@cse.ucsc.edu
+
+# poll every hour at 30 minutes after
+30 0-23 * * *	/export/genbank/etc/rr-dbload
