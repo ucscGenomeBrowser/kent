@@ -293,13 +293,6 @@ _EOF_
           insert into blatServers values("apiMel2", "blat14", "17793", 0, 1);' \
       | hgsql -N hgcentraltest
 
-# MAKE GCPERCENT (DONE 2/4/2005 Andy)
-    ssh hgwdev
-    mkdir /cluster/data/apiMel2/bed/gcPercent
-    cd /cluster/data/apiMel2/bed/gcPercent
-    # create and load gcPercent table
-    hgGcPercent apiMel2 /gbdb/apiMel2/nib
-
 # MAKE DOWNLOADABLE FILES (DONE 2/6/2005 Andy)
     ssh kksilo
     cd /cluster/data/apiMel2
@@ -420,6 +413,15 @@ _EOF_
     hgPepPred apiMel2 generic genscanPep genscan.pep
     hgLoadBed apiMel2 genscanSubopt genscanSubopt.bed
 
+# GENBANK mRNA AND EST COUNTS (DONE 2/14/2005 Andy)
+    # Go to the latest GenBank full release dir and get an idea of how
+    # many mRNAs and ESTs there are to align.
+    ssh eieio
+    cd /cluster/data/genbank/data/processed/genbank.145.0/full
+    awk '$4 == "Apis" {print $4 " " $5;}' mrna.gbidx | sort | uniq -c
+#    199 Apis mellifera
+    awk '$4 == "Apis" {print $4 " " $5;}' est*.gbidx | sort | uniq -c
+#  24643 Apis mellifera
 
 # AUTO UPDATE GENBANK MRNA RUN  (DONE 2/8/2005 Andy)
     ssh hgwdev
