@@ -21,7 +21,8 @@ use strict;
 #
 # Default behaviors, changeable by command line args:
 #
-my $webserv = 'hgwdev';
+my $webserv = $ENV{HOST};
+$webserv = 'hgwdev' if (! defined $webserv);
 my $db      = 'hg10';
 my $cookies = 'y';
 my $sid     = 'n';
@@ -294,6 +295,11 @@ sub hgTracks {
 	}
 	# click every submit button on this page.
 	my $form  = HTML::Form->parse($html, $page);
+	if (! defined $form) {
+	    $bad++;
+	    print "Couldn't parse $page?$query text!\n";
+	    return ($good, $bad);
+	}
 	my @inputs = $form->inputs();
 	print "hgTracks: Checking " . scalar(@inputs) . " form inputs.\n" if ($verbose);
 	foreach my $i (@inputs) {
