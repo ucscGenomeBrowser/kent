@@ -1431,6 +1431,23 @@ searchPriority 50
 searchTable tigrGeneIndex
 searchType genePred
 termRegex [[:alnum:]]+_[[:alnum:]]+(_[0-9]+)?
+
+searchPriority 50
+searchTable rgdQtl
+searchType bed
+searchMethod fuzzy
+searchPriority 50
+
+searchTable rgdSslp
+searchType bed
+searchPriority 50
+
+searchTable rgdEst
+searchType psl
+searchPriority 50
+
+searchTable rgdGene
+searchType genePred
 searchPriority 50
 
 searchTable gbProtCode
