@@ -15,7 +15,7 @@ void usage()
 errAbort(
   "pslSwap - Swap query and target in  PSL  \n"
   "usage:\n"
-  "   pslPretty in.psl out.psl\n"
+  "   pslSwap in.psl out.psl\n"
   );
 }
 
