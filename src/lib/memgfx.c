@@ -12,9 +12,9 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.39 2005/01/21 05:45:02 kent Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.40 2005/01/21 08:04:09 daryl Exp $";
 
-void mgSetDefaultColorMap(struct memGfx *mg)
+static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
 /* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
@@ -386,7 +386,7 @@ if (x1 == x2)
     else
         mgDrawBox(mg, x1, y, 1, height, color);
     }
-else if (y1 == y2 && FALSE)
+else if (y1 == y2)
     {
     int x,width;
     if (x1 > x2)
@@ -515,8 +515,7 @@ else
     int delta_x = x2-x1;
     int delta_y = y2-y1;
     int dots;
-    /* printf("<BR>(x1,y1):(%d,%d) (x2,y2):(%d,%d) trapHeight:%d color:%d fill:%d",
-       x1,y1,x2,y2,trapHeight,color,fill); */
+
     if (delta_y < 0) 
 	{
 	delta_y = -delta_y;
@@ -540,7 +539,7 @@ else
 	    else
 		{
 		mgPutDot(mg,x1,y1,color);
-		mgPutDot(mg,x1,y1,color);
+		mgPutDot(mg,x1,y1-trapHeight,color);
 		}
 	    duty_cycle -= delta_y;
 	    x1 += 1;
