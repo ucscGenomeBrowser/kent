@@ -72,7 +72,7 @@ return s;
 
 
 static void singlePos(struct hgPositions *hgp, char *tableDescription, char *posDescription,
-	char *posName, char *chrom, int start, int end)
+                      char *tableName, char *posName, char *chrom, int start, int end)
 /* Fill in pos for simple case single position. */
 {
 struct hgPosTable *table;
@@ -83,7 +83,8 @@ AllocVar(pos);
 
 slAddHead(&hgp->tableList, table);
 table->posList = pos;
-table->name = cloneString(tableDescription);
+table->description = cloneString(tableDescription);
+table->name = cloneString(tableName);
 pos->chrom = chrom;
 pos->chromStart = start;
 pos->chromEnd = end;
@@ -483,7 +484,7 @@ return pslMrnaScore(b) - pslMrnaScore(a);
 static void mrnaHtmlStart(struct hgPosTable *table, FILE *f)
 /* Print preamble to mrna alignment positions. */
 {
-fprintf(f, "<H2>%s</H2>", table->name);
+fprintf(f, "<H2>%s</H2>", table->description);
 fprintf(f, "This aligns in multiple positions.  Click on a hyperlink to ");
 fprintf(f, "go to tracks display at a particular alignment.<BR>");
 
@@ -511,7 +512,7 @@ static boolean findMrnaPos(char *acc,  struct hgPositions *hgp, boolean useHgTra
 char *type;
 char *extraCgi = hgp->extraCgi;
 char *ui = getUiUrl(cart);
-
+char tableName [64];
 if ((type = mrnaType(acc)) == NULL || type[0] == 0)
     return FALSE;
 else
@@ -541,13 +542,23 @@ else
 	else
 		browserUrl = hgTextName();
 	
+        if (NULL == type)
+            {
+            strncpy(tableName, "xenoMrna", sizeof(tableName));
+            }
+        else
+            {
+            snprintf(tableName, sizeof(tableName), "all_%s", type);      
+            }
+
 	AllocVar(table);
 	table->htmlStart = mrnaHtmlStart;
 	table->htmlEnd = mrnaHtmlEnd;
 	table->htmlOnePos = mrnaHtmlOnePos;
 	slAddHead(&hgp->tableList, table);
 	dyStringPrintf(dy, "%s Alignments", acc);
-	table->name = cloneString(dy->string);
+	table->description = cloneString(dy->string);
+        table->name = cloneString(tableName);
 	slSort(&pslList, pslCmpScore);
 	for (psl = pslList; psl != NULL; psl = psl->next)
 	    {
@@ -647,7 +658,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    dyStringPrintf(query, "STS %s uses name %s in browser", alias, spec);
 	else
 	    dyStringPrintf(query, "STS %s Positions", spec);
-	table->name = cloneString(query->string);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
 	slAddHead(&hgp->tableList, table);
 	}
     if (mouse)
@@ -732,7 +744,8 @@ if (hTableExists("fishClones"))
 	pos->chromEnd = fc->chromEnd + 100000;
 	pos->name = cloneString(spec);
 	dyStringPrintf(query, "%s Positions in FISH Clones track", spec);
-	table->name = cloneString(query->string);
+	table->description = cloneString(query->string);
+	table->name = cloneString("fishClones");
 	slAddHead(&table->posList, pos);
 	fishClonesFree(&fc);
 	}
@@ -784,7 +797,8 @@ if (hTableExists("bacEndPairs"))
 	pos->chromEnd = be->chromEnd + 100000;
 	pos->name = cloneString(spec);
 	dyStringPrintf(query, "%s Positions found using BAC end sequences", spec);
-	table->name = cloneString(query->string);
+	table->description = cloneString(query->string);
+	table->name = cloneString("bacEndPairs");
 	slAddHead(&table->posList, pos);
 	lfsFree(&be);
 	}
@@ -829,7 +843,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		AllocVar(table);
 		dyStringClear(query);
 		dyStringPrintf(query, "%s Gene Predictions", tableName);
-		table->name = cloneString(query->string);
+		table->description = cloneString(query->string);
+		table->name = cloneString(tableName);
 		slAddHead(&hgp->tableList, table);
 		}
 
@@ -884,7 +899,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	AllocVar(table);
 	dyStringClear(query);
 	dyStringPrintf(query, "SNP %s Position", spec);
-	table->name = cloneString(query->string);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
 	slAddHead(&hgp->tableList, table);
 	}
     snpStaticLoad(row+rowOffset, &snp);
@@ -1107,7 +1123,8 @@ if (allKeysList == NULL)
 dy = newDyString(256);
 AllocVar(table);
 slAddHead(&hgp->tableList, table);
-table->name = cloneString("mRNA Associated Search Results");
+table->name = NULL;
+table->description = cloneString("mRNA Associated Search Results");
 table->htmlOnePos = mrnaKeysHtmlOnePos;
 
 /* Fetch descriptions of all matchers and display. */
@@ -1179,7 +1196,8 @@ if (kiTable != NULL)
 	    gotOne = TRUE;
 	    AllocVar(table);
 	    slAddHead(&hgp->tableList, table);
-	    table->name = cloneString("RefSeq Genes");
+	    table->description = cloneString("RefSeq Genes");
+	    table->name = cloneString(kiTable);
 	    }
 	knownInfo = knownInfoLoad(row);
 	AllocVar(pos);
@@ -1206,6 +1224,8 @@ if (kiTable != NULL)
 	    freez(&pos->description);
 	    genePredFree(&gp);
 	    sqlFreeResult(&sr);
+	    table->description = cloneString("RefSeq Genes");
+	    table->name = cloneString("genieKnown");
 	    }
 	}
     }
@@ -1289,7 +1309,8 @@ if (rlList != NULL)
     struct hash *hash = newHash(8);
     AllocVar(table);
     slAddHead(&hgp->tableList, table);
-    table->name = cloneString("RefSeq Genes");
+    table->description = cloneString("RefSeq Genes");
+    table->name = cloneString("refGene");
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
         /* Don't return duplicate mrna accessions */
@@ -1377,8 +1398,9 @@ struct dyString *ui;
 if (strstr(spec,";") != NULL)
     return handleTwoSites(spec, retChromName, retWinStart, retWinEnd, cart);
 
-
 hgp = hgPositionsFind(spec, "", TRUE, cart);
+fprintf(stderr, "TABLE NAME: %s XXXXXXXXXXXXXXXX\n", hgp->tableList->name);
+
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
@@ -1487,7 +1509,6 @@ char *startOffset,*endOffset;
 int iStart = 0, iEnd = 0;
 
 AllocVar(hgp);
-
 hgp->useAlias = FALSE;
 query = trimSpaces(query);
 if(query == 0)
@@ -1533,12 +1554,12 @@ if (hgIsChromRange(query))
 	end = start + iEnd;
 	start = start + iStart;
 	}
-    singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
+    singlePos(hgp, "Chromosome Range", NULL, NULL, query, chrom, start, end);
     }
 else if (isAffyProbeName(query))
     {
     findAffyProbePos(query, &chrom, &start, &end);
-    singlePos(hgp, "GNF Ratio Expression data", NULL, query, chrom, start, end);
+    singlePos(hgp, "GNF Ratio Expression data", NULL, "affyRatio", query, chrom, start, end);
     }
 else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
     {
@@ -1547,11 +1568,11 @@ else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
 	end = start + iEnd;
 	start = start + iStart;
 	}
-    singlePos(hgp, "Map Contig", NULL, query, chrom, start, end);
+    singlePos(hgp, "Map Contig", NULL, "ctgPos", query, chrom, start, end);
     }
 else if (hgFindCytoBand(query, &chrom, &start, &end))
     {
-    singlePos(hgp, "Cytological Band", NULL, query, chrom, start, end);
+    singlePos(hgp, "Cytological Band", NULL, "cytoBand", query, chrom, start, end);
     }
 else if (hgFindClonePos(query, &chrom, &start, &end))
     {
@@ -1560,7 +1581,7 @@ else if (hgFindClonePos(query, &chrom, &start, &end))
 	end = start + iEnd;
 	start = start + iStart;
 	}
-    singlePos(hgp, "Genomic Clone", NULL, query, chrom, start, end);
+    singlePos(hgp, "Genomic Clone", NULL, "clonePos", query, chrom, start, end);
     }
 else if (findMrnaPos(query, hgp, useHgTracks, cart))
     {
@@ -1594,7 +1615,7 @@ else if (findGenePred(query, hgp, "genscan"))
     }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
     {
-    singlePos(hgp, "STS Position", NULL, query, chrom, start, end);
+    singlePos(hgp, "STS Position", NULL, "mapGenethon", query, chrom, start, end);
     }
 else 
     {
@@ -1697,7 +1718,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
-	    fprintf(f, "<H2>%s</H2><PRE><TT>", table->name);
+	    fprintf(f, "<H2>%s</H2><PRE><TT>", table->description);
 	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
 	    hgPosBrowserRange(pos, range);
