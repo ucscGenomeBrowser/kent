@@ -816,15 +816,19 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
+	x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+	x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	w = x2-x1;
+	bColor = mgFindColor(mg,0,0,0);
 	if ((isFull) && (prevEnd != -1)) 
 	    {
-	    bColor = mgFindColor(mg,0,0,0);
-	    x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	    w = x2-x1;
-	    mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
 		 		     lfs->orientation, bColor, TRUE);
-	    }	
+	    }
+	if (prevEnd != -1) 
+	    {
+	    mgDrawBox(mg, x1, midY, w, 1, bColor);
+	    }
 	prevEnd = lf->end;
 
 	if (lf->filterColor > 0)
@@ -1096,14 +1100,14 @@ static void linkedFeaturesSeriesAverageDense(struct trackGroup *tg, int seqStart
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features series items. */
 {
-if (vis == tvFull)
-    {
+  /*if (vis == tvFull)
+    {*/
     linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }
+    /*    }
 else if (vis == tvDense)
     {
     linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
-    }
+    }*/
 }
 #endif /* FUREY_CODE */
 
