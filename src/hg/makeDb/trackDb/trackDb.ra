@@ -300,6 +300,15 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track mgcGenes
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
+group genes
+priority 36
+visibility hide
+color 34,139,34
+type genePred
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
