@@ -412,22 +412,23 @@ boolean haveAffyGeno = sqlTableExists(conn, "affyGeno");
 
 if (haveSnpTsc)
     {
-    sprintf(query, "select * from snpTsc where chrom = '%s' and chromStart = %d", chr, position); 
+    sprintf(query, "select hgFixed.dbSnpRS.base1, hgFixed.dbSnpRS.base2 from snpTsc, hgFixed.dbSnpRS where snpTsc.chrom = '%s' and snpTsc.chromStart = %d and hgFixed.dbSnpRS.rsID=substring(snpTsc.name,3) and length(hgFixed.dbSnpRS.base1)=1 and length(hgFixed.dbSnpRS.base2)=1", chr, position); 
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL) 
-      ret = 1;
+      if ((row[0][0] != '-') && (row[1][0] != '-'))
+	ret = 1;
     sqlFreeResult(&sr);
     }
 
 if ((haveSnpNih) && (!ret))
     {
-    sprintf(query, "select * from snpNih where chrom = '%s' and chromStart = %d", chr, position); 
+    sprintf(query, "select hgFixed.dbSnpRS.base1, hgFixed.dbSnpRS.base2 from snpNih, hgFixed.dbSnpRS where snpNih.chrom = '%s' and snpNih.chromStart = %d and hgFixed.dbSnpRS.rsID=substring(snpNih.name,3) and length(hgFixed.dbSnpRS.base1)=1 and length(hgFixed.dbSnpRS.base2)=1", chr, position); 
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL) 
-        ret = 1;
+      if ((row[0][0] != '-') && (row[1][0] != '-'))
+	ret = 1;
     sqlFreeResult(&sr);
     }
-
 /* if ((haveAffyGeno) && (!ret))
     {
     sprintf(query, "select * from affyGeno where chrom = '%s' and chromStart = %d", chr, position); 
@@ -670,7 +671,7 @@ if (type == INDEL)
 else
     getCoords(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand);
 /* Get the corresponding mRNA or EST  sequence */
-struct dnaSeq *seq = hRnaSeq(ni->mrna->name);
+struct dnaSeq *seq = hRnaSeq(psl->qName);
 if (thisStrand[0] != strand[0])
     {
     int temp = start;
@@ -687,6 +688,7 @@ if ((end-start) > 0)
 else
     dna = cloneString("");
 
+/* fprintf(stderr, "Comparing genomic %s at %d vs. %s %s vs. %s %s (%d-%d, %s vs. %s)\n", gseq->dna, ni->chromStart, ni->mrna->name, mdna, psl->qName, dna, start, end, thisStrand, strand);*/
 /* If it doesn't align to this region */
 if (start == end)
     {
@@ -902,7 +904,7 @@ struct evid *ev;
 }
 
 struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, char* chr, int gbase, 
-			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc)
+			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, boolean snp)
 /* Create a record of a mismatch */
 {
   struct indel *mi;
@@ -916,7 +918,8 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
   mi->mrnaStart = mi->mrnaEnd = mbase;
   mi->hs = createEvid();
   mi->xe = createEvid();
-  
+  mi->knownSnp = snp;
+
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
   searchTrans(conn, "mrna", rna, mi, strand, MISMATCH, cloneId);
   searchTrans(conn, "est", rna, mi, strand, MISMATCH, cloneId);
@@ -981,7 +984,7 @@ int nCodonBases = 0;   /* to deal with partial codons */
 struct indel *mi, *miList=NULL;
 struct indel *codonSub, *codonSubList=NULL;
 ZeroVar(codonGenPos);
-boolean knownSnp = FALSE;
+boolean knownSnp = FALSE, mmSnp = FALSE;
 
 strcpy(rCodon, "---");
 strcpy(dCodon, "---");
@@ -1028,13 +1031,18 @@ for (i = 0; i < pi->psl->blockCount; i++)
                 pi->cdsMatch++;
                 pi->snp++;
                 codonSnps++;
+		if (mismatchReport)
+		    {
+		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, TRUE);
+		    slAddHead(&miList,mi);
+		    }
                 }
             else
                 {
                 pi->cdsMismatch++;
 		if (mismatchReport)
 		    {
-		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna);
+		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, FALSE);
 		    slAddHead(&miList,mi);
 		    }
                 codonMismatches++;
@@ -1348,8 +1356,14 @@ for (indel = iList; indel != NULL; indel=indel->next)
 		indel->size, indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->mrnaEnd,
 		indel->chrom, indel->chromStart, indel->chromEnd);
     else if (type == MISMATCH)
-	fprintf(of, "Mismatch at %s.%s:%d vs. %s:%d\n",
+       {
+       fprintf(of, "Mismatch at %s.%s:%d vs. %s:%d",
 	    indel->mrna->name, indel->mrna->version, indel->mrnaStart, indel->chrom, indel->chromStart);
+       if (indel->knownSnp)
+	   fprintf(of, ", SNP\n");
+       else
+	   fprintf(of, "\n");	   
+       }
     else if (type == CODONSUB)
        {
        char mrnaAA = lookupCodon(indel->mrnaCodon);
