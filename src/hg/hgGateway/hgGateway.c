@@ -10,8 +10,9 @@
 #include "dbDb.h"
 #include "hgFind.h"
 #include "hCommon.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.57 2003/07/02 02:14:25 kate Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.58 2003/07/07 18:19:44 braney Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
