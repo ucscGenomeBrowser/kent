@@ -7,7 +7,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtSort.c,v 1.5 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtSort.c,v 1.6 2004/03/27 17:24:36 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +18,7 @@ errAbort(
   "   axtSort in.axt out.axt\n"
   "options:\n"
   "   -query - Sort by query position, not target\n"
+  "   -byScore - Sort by score\n"
   );
 }
 
@@ -32,7 +33,9 @@ while ((axt = axtRead(lf)) != NULL)
     {
     slAddHead(&axtList, axt);
     }
-if (byQuery)
+if (optionExists("byScore"))
+    slSort(&axtList, axtCmpScore);
+else if (byQuery)
     slSort(&axtList, axtCmpQuery);
 else
     slSort(&axtList, axtCmpTarget);
