@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.11 2005/03/23 01:09:00 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.12 2005/03/25 00:32:37 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -694,13 +694,49 @@ note: 394 records dropped due to repStart > repEnd
     cp -p nib/* /panasas/store/mm6/nib
 
 #########################################################################
+# CONTIG SPLIT UP - (DONE - 2005-03-24 - Hiram)
+    #	A first attempt was made to allow the genbank alignments to work
+    #	from just the 2bit file, but that leads to some large job
+    #	situations and things are not split up as best as they could be.
+    #	A survey was taken of the gaps and longest stretch of unbroken
+    #	sequence (see /cluster/data/mm6/gapAnalysis/ )
+    #	and there are only 30 stretches of sequence longer than 5 Mb
+    #	Going to try an faSplit in a 10 Mb basis (this used to be 5
+    #	Mb in the past, split on contigs) and see how that goes.
+
+# BREAK UP SEQUENCE INTO 10 MB CHUNKS AT GAPS OF AT LEAST 100
+    ssh kksilo
+    cd /cluster/data/mm6
+    mkdir ctgs10Mb
+    mkdir ctgs10Mb/lift
+    for C in ? ??
+    do
+	mkdir ctgs10Mb/${C}
+	if [ -s ${C}/chr${C}.fa ]; then
+	    echo -n "working: chr${C} ... "
+	    $HOME/bin/i386/faSplit -minGapSize=100 \
+		-lift=ctgs10Mb/lift/chr${C}.lft gap \
+		    ${C}/chr${C}.fa 10000000 ctgs10Mb/${C}/chr${C}_
+	fi
+	if [ -s ${C}/chr${C}_random.fa ]; then
+	    echo -n "working: chr${C}_random ... "
+	    $HOME/bin/i386/faSplit -minGapSize=100 \
+		-lift=ctgs10Mb/lift/chr${C}_random.lft gap \
+		    ${C}/chr${C}_random.fa 10000000 \
+			ctgs10Mb/${C}/chr${C}_random_
+	fi
+    done
+    cat ctgs10Mb/lift/*.lft > jkStuff/liftAll.lft
+    cp -p jkStuff/liftAll.lft /panasas/store/mm6
+
+#########################################################################
 # GENBANK auto update started (WORKING - 2005-03-15 - Hiram)
     ssh eieio
     cd /cluster/data/genbank
     #	edit etc/genbank.conf, add the following section:
 # mm6
 mm6.genome = /panasas/store/mm6/mm6.2bit
-mm6.lift = no
+mm6.lift = /panasas/store/mm6/liftAll.lft
 mm6.downloadDir = mm6
 mm6.genbank.est.xeno.load = yes
 mm6.mgcTables.default = full
@@ -708,6 +744,16 @@ mm6.mgcTables.mgc = all
 
     #	Do the refseq's first, they are the quick ones
     nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial mm6
+    #	RUNNING - 2005-03-24 16:22
+
+# Completed: 1384 of 1384 jobs
+# CPU time in finished jobs:       2751s      45.85m     0.76h    0.03d  0.000 y
+# IO & Wait Time:                  5028s      83.80m     1.40h    0.06d  0.000 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:            68s       1.13m     0.02h    0.00d
+
 # Completed: 200 of 200 jobs
 # CPU time in finished jobs:      31586s     526.43m     8.77h    0.37d  0.001 y
 # IO & Wait Time:                  6911s     115.18m     1.92h    0.08d  0.000 y
@@ -773,13 +819,20 @@ mm6.mgcTables.mgc = all
     ssh eieio
     screen -d -r
 
-XXXX - RUNNING - 2005-03-16 10:43
-XXXX - FAILED - 2005-03-20 21:00 - out of disk space on store3
+    #	RUNNING - 2005-03-16 10:43
+    #	FAILED - 2005-03-20 21:00 - out of disk space on store3
 	the initial.mm6 directory it created in .../work/ was 45 Gb !
 	This job needs to be redone, but point genbank.conf at nibs
 	instead of the 2bit file.  There are still difficulties
 	processing the 2bit file.
-
+    #	The difficulty turned out to be a missing lift parameter in the
+    #	genbank.conf file
+    #	Mark performed some recovery surgery to this business, ready to
+    #	load:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
+    #	LOADING - 2005-03-23 - 09:30
 
 #########################################################################
 # PRODUCING GENSCAN PREDICTIONS (DONE 2005-03-14 - 2005-03-17 Hiram)
@@ -975,7 +1028,116 @@ SEQ2_LEN=$BASE/S2.len
 
 #########################################################################
 # BLASTZ RAT Rn3 (FIRST TRY - 2005-03-15 - 2005-03-17 - Hiram)
-#   REDONE 2005-03-22 - more stringent BLASTZ parameters and chain filtering
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_22
+    cd /cluster/data/mm6/bed/blastzRn3.2005_03_22
+    cat << '_EOF_' > DEF
+# mouse vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Mouse
+SEQ1_DIR=/panasas/store/mm6/nib
+# not used
+SEQ1_RMSK=/panasas/store/mm6/rmsk
+# not used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInRat
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Rat
+SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
+# RMSK not currently used
+SEQ2_RMSK=
+# FLAG not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzRn3.2005_03_15
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/rn3/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
+	blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+# Completed: 40713 of 40713 jobs
+# CPU time in finished jobs:   18170174s  302836.24m  5047.27h  210.30d  0.576 y
+# IO & Wait Time:               1770530s   29508.83m   491.81h   20.49d  0.056 y
+# Average job time:                 490s       8.16m     0.14h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           28252s     470.87m     7.85h    0.33d
+# Submission to last job:         69864s    1164.40m    19.41h    0.81d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:       1168s      19.46m     0.32h    0.01d  0.000 y
+# IO & Wait Time:                  3047s      50.79m     0.85h    0.04d  0.000 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest job:                      119s       1.98m     0.03h    0.00d
+# Submission to last job:           359s       5.98m     0.10h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:      12274s     204.56m     3.41h    0.14d  0.000 y
+# IO & Wait Time:                  1719s      28.66m     0.48h    0.02d  0.000 y
+# Average job time:                 350s       5.83m     0.10h    0.00d
+# Longest job:                     1016s      16.93m     0.28h    0.01d
+# Submission to last job:          1482s      24.70m     0.41h    0.02d
+
+    #	After this was complete, realized that it needs a minScore
+    #	filter on the chaining step.   Also, we need some pslChrom files
+    #	for Gill's work:
+    ssh kksilo
+    /cluster/data/mm6/bed/blastzRn3.2005_03_15
+    cat << '_EOF_' > mkPslChrom.sh
+#!/bin/sh
+
+if [ -d pslChrom ]; then
+    mv pslChrom pslChrom.0
+    rm -fr pslChrom.0 &
+fi
+
+mkdir pslChrom
+
+ls pslParts | sed -e "s/.nib.*//" | sort -u | while read C
+do
+    echo -n "working: ${C} ... "
+    zcat `ls pslParts/${C}.nib* | sort --field-separator=':' -k1,1 -k3,3n` \
+            > pslChrom/${C}.psl
+    echo "done"
+done
+'_EOF_'
+    # << keep emacs coloring happy
+    chmod +x mkPslChrom.sh
+    ./mkPslChrom.sh
+
+
+#########################################################################
+# BLASTZ RAT REDONE 2005-03-22 
+#	 more stringent BLASTZ parameters and chain filtering
+#   COMPLETE 2005-03-23 - swap to place chainMm6 and netMm6 on rn3 browser
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_22
     cd /cluster/data/mm6/bed/blastzRn3.2005_03_22
@@ -1068,12 +1230,17 @@ SEQ2_LEN=$BASE/S2.len
     #	trying to do the chainLink's requires kolossus, big memory
     ssh kolossus
     #	specify a .hg.conf file with read-only passwords:
-    #	these take about 90 minutes
+    #	these take about 15 and 90 minutes (the mm5's are much larger)
     HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
 	featureBits mm6 chainRn3Link
+    #	1652692239 bases of 2597150411 (63.635%) in intersection
+    #	real 864.72
+    #	user 211.05
+    #	sys 66.95
+
     #	1802980225 bases of 2597150411 (69.421%) in intersection
     HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
-	featureBits mm6 chainRn3Link
+	featureBits mm5 chainRn3Link
     #	1798705001 bases of 2615483787 (68.771%) in intersection
 
 
@@ -1088,21 +1255,16 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
 	swap.run.out 2>&1 &
     #	STARTED - 2005-03-22 16:15
-    #	real    908m11.042s
-    #	user    0m0.467s
-    #	sys     0m0.353s
+    #	FINISHED - 2005-03-22 17:41
 
     #	check the numbers
     featureBits rn3 chainMm6
-    #	2827312772 bases of 2571104688 (109.965%) in intersection
+    #	2819351420 bases of 2571104688 (109.655%) in intersection
     featureBits rn3 chainMm5
     #	2786666162 bases of 2571104688 (108.384%) in intersection
-    #	something is unusual here, the chainMm5 measurement takes 20
-    #	seconds, the chainMm6 measurement takes 12 minutes.
-    #	These chain tables ended up to be too large.
 
     featureBits rn3 netMm6
-    #	2820715431 bases of 2571104688 (109.708%) in intersection
+    #	2808675438 bases of 2571104688 (109.240%) in intersection
     featureBits rn3 netMm5
     #	2778454647 bases of 2571104688 (108.065%) in intersection
 
