@@ -1161,7 +1161,7 @@ while (right != NULL)
     blockScore -= aPenalty(left->nStart, left->nEnd - left->nStart);
     iStart = left->hEnd;
     iEnd = right->hStart;
-    gapPenalty = ffCalcCdnaGapPenalty(iEnd-iStart, 
+    gapPenalty = 2*ffCalcCdnaGapPenalty(iEnd-iStart, 
     	right->nStart - left->nEnd) + 4;
     gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
     	iEnd[-2], iEnd[-1], orientation);
@@ -1188,7 +1188,7 @@ while (left != NULL)
     blockScore -= aPenalty(right->nStart, right->nEnd - right->nStart);
     iStart = left->hEnd;
     iEnd = right->hStart;
-    gapPenalty = ffCalcCdnaGapPenalty(iEnd-iStart, 
+    gapPenalty = 2*ffCalcCdnaGapPenalty(iEnd-iStart, 
     	right->nStart - left->nEnd) + 4;
     gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
     	iEnd[-2], iEnd[-1], orientation);
