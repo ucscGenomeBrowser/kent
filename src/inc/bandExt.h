@@ -11,7 +11,7 @@
 boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
 	char *aStart, int aSize, char *bStart, int bSize, int dir,
 	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
-	int *retStartA, int *retStartB);
+	int *retRevStartA, int *retRevStartB);
 /* Try to extend an alignment from aStart/bStart onwards.
  * If global is set it will always go to end (aStart+aSize-1,
  * bStart+bSize-1).  Set maxInsert to the maximum gap size allowed.  
