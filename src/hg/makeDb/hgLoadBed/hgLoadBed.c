@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.30 2004/11/23 00:51:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.31 2004/11/23 19:40:32 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -18,6 +18,7 @@ boolean noBin = FALSE;		/* Suppress bin field. */
 boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
+boolean noLoad = FALSE;		/* Do not load DB or remove tab file */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
 /* command line option specifications */
@@ -30,6 +31,7 @@ static struct optionSpec optionSpecs[] = {
     {"sqlTable", OPTION_STRING},
     {"tab", OPTION_BOOLEAN},
     {"hasBin", OPTION_BOOLEAN},
+    {"noLoad", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -49,6 +51,7 @@ errAbort(
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
+  "   -noLoad  - Do not load database and do not clean up tab files\n"
   );
 }
 
@@ -162,10 +165,14 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 				"found: '%s'", words[8]);
 		else
 		    fprintf(f,"%d", itemRgb);
+		verbose(2, "itemRgb: %s, rgb: %#x\n", words[8], itemRgb);
 		}
-
+	    else
+		fputs(words[i], f);
 	    }
-	fputs(words[i], f);
+	else
+	    fputs(words[i], f);
+
 	if (i == wordCount-1)
 	    fputc('\n', f);
 	else
@@ -178,11 +185,14 @@ fclose(f);
 void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedList)
 /* Load database from bedList. */
 {
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn;
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
 int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 char comment[256];
+
+if ( ! noLoad )
+    conn = sqlConnect(database);
 
 /* First make table definition. */
 if (sqlTable != NULL)
@@ -195,7 +205,9 @@ if (sqlTable != NULL)
     s = strchr(sql, ';');
     if (s != NULL) *s = 0;
     
-    sqlRemakeTable(conn, track, sql);
+    if ( ! noLoad )
+	sqlRemakeTable(conn, track, sql);
+
     freez(&sql);
     }
 else if (!oldTable)
@@ -246,19 +258,28 @@ else if (!oldTable)
     dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
     dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", minLength);
     dyStringAppend(dy, ")\n");
-    sqlRemakeTable(conn, track, dy->string);
+    if ( ! noLoad )
+	sqlRemakeTable(conn, track, dy->string);
     }
 
 verbose(1, "Saving %s\n", tab);
 writeBedTab(tab, bedList, bedSize);
 
-verbose(1, "Loading %s\n", database);
-sqlLoadTabFile(conn, tab, track, loadOptions);
+if ( ! noLoad )
+    {
+    verbose(1, "Loading %s\n", database);
+    sqlLoadTabFile(conn, tab, track, loadOptions);
 
-/* add a comment to the history table and finish up connection */
-safef(comment, sizeof(comment), "Add %d element(s) from bed list to %s table", slCount(bedList), track);
-hgHistoryComment(conn, comment);
-sqlDisconnect(&conn);                                                           }
+    /* add a comment to the history table and finish up connection */
+    safef(comment, sizeof(comment),
+	"Add %d element(s) from bed list to %s table",
+	    slCount(bedList), track);
+    hgHistoryComment(conn, comment);
+    sqlDisconnect(&conn);
+    }
+else
+    verbose(1, "No load option selected, see file: %s\n", tab);
+}
 
 void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */
@@ -306,6 +327,7 @@ strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", sqlTable);
 hasBin = optionExists("hasBin");
+noLoad = optionExists("noLoad");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
