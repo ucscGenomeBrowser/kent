@@ -3967,14 +3967,14 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     hgLoadBed hg17 gnfAtlas2 gnfAtlas2.bed
     #	Loaded 34319 elements of size 15
 
-# LOAD SNPS ( Daryl Thomas; November 7, 2004 )
+# LOAD SNPS ( Daryl Thomas; November 7, 2004 ; snpExceptions added January 8, 2005 )
     set db    = hg17
     set org   = human
     set build = 123
     set dir   = /cluster/bluearc/snp/$db/build$build
 
     # ssh to some quiet machine with fast access to the bluearc
-    # it takes 2.5-3 hours to download the data
+    # it takes ~3 hours to download the data
     mkdir -p $dir
     cd $dir
     screen
@@ -4003,6 +4003,25 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     time liftUp $db.build$build.bed liftAll.lft warn $db.build$build.contig.bed # ~7 minutes
     time hgLoadBed $db snp $db.build$build.bed -sqlTable=${HOME}/kent/src/hg/lib/snp.sql # ~45 minutes
     mv -r $dir /cluster/data/$db/bed/snp/build$build
+
+    # basic snp table is now loaded, but exception column needs to be updated
+    # ~ 3 hours wall clock time from here to end
+
+    # run queries from snpException.query against snp table
+    time snpException hg17 0 hg17snpException > log
+    # 8.780u 16.590s 49:41.52 0.8%    0+0k 0+0io 301pf+0w
+
+    # check alignment of flanking sequences
+    time snpValid hg17 /cluster/data/hg17/bed/snp/build123/seq > hg17.log
+    # 5258.690u 187.500s 1:38:45.90 91.9%     0+0k 0+0io 50390pf+0w
+
+    # create list of statements to update the snp table and run them
+    time tail +3 hg17snpException.* | awk '/rs/ {printf "%s\t%d\t%d\n",$4,$2,$5}' | sort -k1,2n > exceptionList.txt
+    # ~10 seconds
+    time updateExceptionList.pl < exceptionList.txt > updateExceptionList.sql
+    # 7.660u 0.460s 0:08.11 100.1%    0+0k 0+0io 337pf+0w
+    time hgsql hg17 < updateExceptionList.sql
+    # 8.420u 10.370s 11:58.44 2.6%    0+0k 0+0io 413pf+0w  (this is mostly a mysql process)
 
 
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
