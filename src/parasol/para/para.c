@@ -728,6 +728,7 @@ int wordCount;
 long killSeconds = killTime*60;
 long warnSeconds = warnTime*60;
 long duration;
+ int numChecked = 0;
 struct hash *checkHash = newHash(0);
 struct hash *resultsHash = hashResults(resultsName);
 char host[128];
@@ -767,8 +768,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 	}
     }
 freeHash(&checkHash);
-if (doHappytDots)
-    printf("\n");
+ printf("\n");
 return resultsHash;
 }
 
