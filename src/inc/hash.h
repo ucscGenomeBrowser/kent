@@ -81,7 +81,7 @@ void *hashFindVal(struct hash *hash, char *name);
 void hashAddInt(struct hash *hash, char *name, int val);
 /* Store integer value in hash */
 
-int hashIntVal(struct hash *hash, char *name);
+#define hashIntVal(hash, name) hashFindSize(hash, name) /* Synonym */
 /* Return integer value associated with name in a simple 
  * hash of ints. */
 
