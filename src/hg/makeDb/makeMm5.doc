@@ -2721,7 +2721,7 @@ hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
 #############################################################################
 
 #  BLASTZ RAT RN3 (DONE - 2004-07-15 - Fan)
-
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-30. Fan.
     ssh kk
     mkdir -p /cluster/data/mm5/bed/blastz.rn3.2004-07-14
     cd /cluster/data/mm5/bed
@@ -2902,6 +2902,7 @@ done
     # 57158006 bases of 81388777 (70.228%) in intersection
     
 # CHAIN RN3 BLASTZ (DONE - 2004-07-22 - Fan)
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-30. Fan.
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -2974,6 +2975,7 @@ out/$(root1).out
     # 60676019 bases of 86658738 (70.017%) in intersection
 
 # NET RN3 (DONE - 2004-07-23 - Fan)
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-31. Fan.
 
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.rn3/axtChain
@@ -3163,6 +3165,7 @@ cat << 'EOF' > makeMaf.csh
     hgsql mm5 < axtInfoInserts.sql
 
 # BLASTZ RN3 CLEAN UP (DONE - 2004-07-26 - Fan)
+#  NOTE: THIS IS RE-DONE.  SEE THE SAME SECTION OF 2008-08-31. Fan.
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.rn3
     nice rm -rf raw &
@@ -4955,3 +4958,383 @@ CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
 #  32232 sequences
    # DONE - 2004-08-24 17:02
 
+#  BLASTZ RAT RN3 (RE-DONE - 2004-08-30 - Fan)
+
+# Reason for rebuild is to use more stringent blastz parameters to reduce size
+# of output files.
+
+# BLASTZ_H=2000
+# BLASTZ_Y=3400
+# BLASTZ_L=50000
+# scoring matrix
+# BLASTZ_Q=/cluster/data/blastz/mus_rat.q
+
+# MAKE SURE TO INCLUDE THE RESCORE STEP TO CORRECT A BLASTZ PROBLEM.
+# (axtRescore -scoreScheme=/cluster/data/blastz/mus_rat.q ...)
+
+    ssh kk
+    mkdir -p /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    cd blastz.rn3.2004-08-29
+
+    cat << '_EOF_' > DEF
+# rat vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=50000
+BLASTZ_T=2
+# scoring matrix
+BLASTZ_Q=/cluster/data/blastz/mus_rat.q 
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Mouse
+SEQ1_DIR=/scratch/mus/mm5/softNib
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/mus/mm5/linSpecRep.notInRat
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Rat
+SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm5/bed/blastz.rn3.2004-08-29
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    bash
+    source ./DEF
+    # script copied over from /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    #	it is a generic script and works for any assembly
+
+    cp -p /cluster/data/hg17/jkStuff/BlastZ_run0.sh \
+       /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+
+# Completed: 41943 of 41943 jobs
+# CPU time in finished jobs:    4656727s   77612.11m  1293.54h   53.90d  0.148 y
+# IO & Wait Time:                460782s    7679.70m   128.00h    5.33d  0.015 y
+# Average job time:                 122s       2.03m     0.03h    0.00d
+# Longest job:                     2042s      34.03m     0.57h    0.02d
+# Submission to last job:          8307s     138.45m     2.31h    0.10d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
+    #	fixup machine check, should be kki, not kk
+    cp /cluster/data/mm4/jkStuff/BlastZ_run1.sh \
+       /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    vi /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+
+    /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       1293s      21.54m     0.36h    0.01d  0.000 y
+# IO & Wait Time:                  2113s      35.22m     0.59h    0.02d  0.000 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest job:                       54s       0.90m     0.01h    0.00d
+# Submission to last job:           719s      11.98m     0.20h    0.01d
+
+# NOTE: BlastZ_run2.sh is not used here.  Instead Angie's approach 
+# (using Rescore) is adopted here.
+
+    # third run: lav -> axt
+    # NOTE: use axtRescore here because we used a non-default BLASTZ_Q matrix 
+    # and abridged repeats (Penn State's restore_rpts program rescores with 
+    # default matrix, oops).
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    # mv old subdirectories
+    mv axtChrom axtChrom.old
+    mv run.2 run.2.old
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+set path = (/cluster/bin/x86_64 $path)
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin \
+    /iscratch/i/mus/mm5/softNib /iscratch/i/rn3/bothMaskedNibs stdout \
+| axtRescore -scoreScheme=/cluster/data/blastz/mus_rat.q stdin stdout \
+| axtSort stdin ../../axtChrom/$chr.axt 
+axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+  ../../pslChrom/$chr.psl
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:        498s       8.31m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                  3367s      56.11m     0.94h    0.04d  0.000 y
+# Average job time:                  90s       1.50m     0.02h    0.00d
+# Longest job:                      299s       4.98m     0.08h    0.00d
+# Submission to last job:           685s      11.42m     0.19h    0.01d
+
+# CHAIN RAT BLASTZ (RE-DONE 8/30/04 Fan)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/mus_rat.q \
+         -minScore=5000 $1 \
+    /iscratch/i/mus/mm5/softNib \
+    /iscratch/i/rn3/bothMaskedNibs $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       3145s      52.42m     0.87h    0.04d  0.000 y
+# IO & Wait Time:                   989s      16.48m     0.27h    0.01d  0.000 y
+# Average job time:                  96s       1.60m     0.03h    0.00d
+# Longest job:                      280s       4.67m     0.08h    0.00d
+# Submission to last job:          1219s      20.32m     0.34h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=5000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain mm5 ${c}_chainRn3 $i
+    end
+    featureBits mm5 chainRn3Link
+# 1677291680 bases of 2615483787 (64.129%) in intersection
+    nice featureBits hg17 chainRn3Link
+# 982059013 bases of 2866216770 (34.263%) in intersection
+
+# NET RAT BLASTZ (RE-DONE 8/31/04 Fan)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin hNoClass.net
+# memory usage 1710399488, utime 7360 s/100, stime 1891
+
+# The above adapted from Angie's approach 
+
+    # The netClass operations requires an "ancientRepeat" table to exist
+    # in either mm5 or rn3.  So, create the table:
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm5/bed/ancientRepeat
+    cd /cluster/data/mm5/bed/ancientRepeat
+    # mysqldump needs write permission to this directory
+    # and you need to use your read/write enabled user with password
+    chmod 777 .
+    hgsqldump --all --tab=. mm4 ancientRepeat
+    chmod 775 .
+    hgsql mm5 < ancientRepeat.sql
+    mysqlimport -u<r/w user> -p<r/w pass> mm5 ancientRepeat.txt
+    # This is a hand curated table obtained from Arian.
+
+# The ancientRepeat table was loaded during the first build of NET RAT BLASTZ.
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain
+    time netClass hNoClass.net mm5 rn3 rat.net \
+	-tNewR=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInRat \
+	-qNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+    # 491.210u 96.250s 12:27.37 78.6% 0+0k 0+0io 249pf+0w
+    
+    # If things look good do
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain
+    rm -r hNoClass.net
+    # Make a 'syntenic' subset of these with
+    time netFilter -syn rat.net > ratSyn.net
+    # 216.290u 34.220s 4:27.60 93.6%  0+0k 0+0io 119pf+0w
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain
+    netFilter -minGap=10 rat.net |  hgLoadNet mm5 netRn3 stdin
+    netFilter -minGap=10 ratSyn.net | hgLoadNet mm5 syntenyNetRn3 stdin
+
+    # check results
+    # featureBits mm4 netRn3
+    # 96806381 bases of 95076222 (101.820%) in intersection
+    # featureBits mm5 netRn3
+    # 2601384082 bases of 2615483787 (99.461%) in intersection
+
+    # featureBits mm4 syntenyNetRn3
+    # 96760405 bases of 95076222 (101.771%) in intersection
+    # featureBits mm5 syntenyNetRn3
+    # 2575035774 bases of 2615483787 (98.454%) in intersection
+
+    # Add entries for net and chain to mouse/mm5 trackDb
+
+    # make net
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtChain
+    mkdir ratNet
+    time netSplit rat.net ratNet
+    # 218.990u 29.290s 4:27.86 92.6%  0+0k 0+0io 190pf+0w
+
+
+    # extract axts from net 
+    mkdir ../axtNet 
+    foreach n (ratNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt ratNet/$c.net chain/$c.chain \
+		/cluster/data/mm5/nib \
+		/cluster/data/rn3/nib ../axtNet/$c.axt
+	echo "Complete: $c.net -> axtNet/$c.axt"
+    end
+    # sort axt's and convert to maf format
+    mkdir ../mafNet
+    foreach f (../axtNet/chr*.axt)
+        set c=$f:t:r
+        echo $c.axt
+        mv ../axtNet/$c.axt ../axtNet/$c.unsorted.axt
+        axtSort ../axtNet/$c.unsorted.axt ../axtNet/$c.axt
+        rm ../axtNet/$c.unsorted.axt
+        axtToMaf ../axtNet/$c.axt \
+            /cluster/data/mm5/chrom.sizes /cluster/data/rn3/chrom.sizes \
+                ../mafNet/$c.maf -tPrefix=mm5. -qPrefix=rn3.
+    end
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtBest
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsRn3/axtNet
+    nice gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
+
+    #  Convert those axt files to psl
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/pslBest
+    bash
+    for I in chr*BestRn3.psl
+do
+/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
+echo "done ${I}"
+done
+
+     # check results
+    # featureBits mm5 blastzBestRn3
+    # 1674716868 bases of 2615483787 (64.031%) in intersection
+    # featureBits mm4 blastzBestRn3
+    # 1780774716 bases of 2627444668 (67.776%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm5/axtBest/Rn3
+     cd /gbdb/mm5/axtBest/Rn3
+     rm *
+     ln -s /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtNet/chr*.axt .
+
+     ssh hgwdev
+     cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29/axtNet
+     rm -f axtInfoInserts.sql
+     foreach f (/gbdb/mm5/axtBest/Rn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+    
+    hgsql mm5 -e 'drop table mm5.axtInfo;'
+    hgsql mm5 < ~/kent/src/hg/lib/axtInfo.sql
+    hgsql mm5 < axtInfoInserts.sql
+
+    cd /cluster/data/mm5/bed
+    rm blastz.rn3
+    ln -s  blastz.rn3.2004-08-29 blastz.rn3
+    
+# BLASTZ RN3 CLEAN UP (RE-DONE - 2004-08-31 - Fan)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3.2004-08-29
+    nice rm -rf raw 
+    nice rm axtChain/run1/chain/* 
+
+# do the following later, after rn3-mm5 net and chain done.
+#    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
