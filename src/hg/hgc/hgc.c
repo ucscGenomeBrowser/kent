@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.722 2004/08/19 23:27:37 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.723 2004/08/24 20:46:45 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2334,6 +2334,10 @@ if (wordCount > 0)
         {
 	genericExpRatio(conn, tdb, item, start);
 	}
+    else if (sameString(type, "wig"))
+        {
+	genericWiggleClick(conn, tdb, item, start);
+        }
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -11755,6 +11759,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     printf("<TR><TH ALIGN=left>Length:</TH><TD>%d</TD></TR>\n",length);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
+    printf("<TR><TH ALIGN=left>Score:</TH><TD>%d</TD></TR>\n", lfs->score);
     gotS = hChromBand(seqName, start, sband);
     gotB = hChromBand(seqName, end, eband);
     if (gotS && gotB)
