@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.11 2003/06/18 19:46:17 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.12 2003/06/18 20:24:30 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -1548,4 +1548,28 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
     yOff += ss->rowCount *lineHeight;
     }
 freeHashAndVals(&spliceHash);
+}
+
+void altGraphXReverseComplement(struct altGraphX *ag)
+/* Switch an altGraphX record around so it looks like the
+   chromosomal coordinates were reverse complemented. */
+{
+int i;
+int width = ag->tEnd - ag->tStart;
+int *tmp = NULL;
+for(i=0; i<ag->vertexCount; i++)
+    {
+    ag->vPositions[i] = (width - (ag->vPositions[i] - ag->tStart)) + ag->tStart;
+    if(ag->vTypes[i] == ggHardEnd)
+	ag->vTypes[i] = ggHardStart;
+    else if(ag->vTypes[i] ==ggHardStart)
+	ag->vTypes[i] = ggHardEnd;
+    else if(ag->vTypes[i] == ggSoftEnd)
+	ag->vTypes[i] = ggSoftStart;
+    else if(ag->vTypes[i] == ggSoftStart)
+	ag->vTypes[i] = ggSoftEnd;
+    }
+tmp = ag->edgeEnds;
+ag->edgeEnds = ag->edgeStarts;
+ag->edgeStarts = tmp;
 }
