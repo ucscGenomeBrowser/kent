@@ -40,8 +40,8 @@ static char* createTableCmd =
 "    alignSeq varchar(255) not null,	# Aligned sequence, contains - for human seq inserts\n"
 "    #Indices\n"
 "    %s"				/* Optional bin */
-"    INDEX(%schromStart),\n"             /* different depending if using one */
-"    INDEX(%schromEnd)\n"               /* table per chrom or a single table */
+"    UNIQUE(%schromStart),\n"             /* different depending if using one */
+"    UNIQUE(%schromEnd)\n"               /* table per chrom or a single table */
 ")\n";
 
 static int countInserts(char* insertSeq, char* otherSeq, int* numInsert,
@@ -143,11 +143,16 @@ static void createTable(struct sqlConnection *conn,
 /* create a refAlign table, dropping old if it exists */
 {
 struct dyString *sqlCmd = newDyString(2048);
-char *extraIx = (tablePerChrom ? "" : "tName(12),");
+char *extraIx = (tablePerChrom ? "" : "chrom(8),");
+char binIx[64];
+if (tablePerChrom)
+    sprintf(binIx, "INDEX(bin),\n");
+else
+    sprintf(binIx, "INDEX(chrom(8),bin),\n");
 
 dyStringPrintf(sqlCmd, createTableCmd, table, 
                (noBin ? "" : "bin smallint unsigned not null,\n"),
-               (noBin ? "" : "INDEX(bin),\n"),
+               (noBin ? "" : binIx),
                extraIx, extraIx);
 sqlRemakeTable(conn, table, sqlCmd->string);
 dyStringFree(&sqlCmd);
