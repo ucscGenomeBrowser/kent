@@ -75,11 +75,12 @@ struct psl *pslLoadByQuery(struct sqlConnection *conn, char *query)
 struct psl *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
-
+int offSet = 0;
 sr = sqlGetResult(conn, query);
+offSet = sqlCountColumns(sr) - 21;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = pslLoad(row);
+    el = pslLoad(row+offSet);
     slAddHead(&list, el);
     }
 slReverse(&list);
