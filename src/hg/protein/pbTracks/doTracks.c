@@ -1187,13 +1187,13 @@ for (ii=0; ii<sf_cnt; ii++)
 	    }
 
 	len = strlen(superfam_name[ii]);
-	vgDrawBox(g_vg, xx, yy-9+(jj%3)*4, (sfEnd[ii] - sfStart[ii])*pbScale, 9, sfColor);
-	mapBoxSuperfamily(xx, yy-9+(jj%3)*4, 
+	vgDrawBox(g_vg, xx, yy-9+(jj%4)*5, (sfEnd[ii] - sfStart[ii])*pbScale, 9, sfColor);
+	mapBoxSuperfamily(xx, yy-9+(jj%4)*5, 
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,
 		 	  superfam_name[ii], sfId[ii]);
     	if (show_name) vgTextRight(g_vg, 
 	    			   xx+(sfEnd[ii] - sfStart[ii])*pbScale/2 + (len/2)*5, 
-				   yy-9+(jj%3)*4, 10, 10, MG_BLACK, g_font, superfam_name[ii]);
+				   yy-9+(jj%4)*5, 10, 10, MG_BLACK, g_font, superfam_name[ii]);
 	}
     }
 calxy0(0, *yOffp, &xx, &yy);
