@@ -350,7 +350,7 @@ printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 printf("HREF=\"%s?%s=%u&c=%s&g=%s", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-printf(" ALT= \" %s controls\">\n", tg->shortLabel);
+printf(" ALT= \"%s controls\">\n", tg->shortLabel);
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -6614,16 +6614,26 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	"hgt.customText", "hgt.customFile", "hgt.tui",
 	NULL };
 
+void resetVars()
+/* Reset vars except for position and database. */
+{
+static char *except[] = {"db", "position", NULL};
+char *cookieName = hUserCookie();
+int sessionId = cgiUsualInt(cartSessionVarName(), 0);
+char *hguidString = findCookieData(cookieName);
+int userId = (hguidString == NULL ? 0 : atoi(hguidString));
+struct cart *oldCart = cartNew(userId, sessionId, NULL);
+cartRemoveExcept(oldCart, except);
+cartCheckout(&oldCart);
+cgiVarExcludeExcept(except);
+}
+
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
-    {
-    static char *except[] = {"position", "db", NULL};
-    cgiVarExcludeExcept(except);
-    cartResetInDb(hUserCookie());
-    }
+    resetVars();
 cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }

@@ -39,6 +39,11 @@ unsigned int cartUserId(struct cart *cart);
 void cartRemove(struct cart *cart, char *var);
 /* Remove variable from cart. */
 
+void cartRemoveExcept(struct cart *cart, char **except);
+/* Remove variables except those in null terminated except array
+ * from cart.  Except array may be NULL in which case all
+ * are removed. */
+
 char *cartString(struct cart *cart, char *var);
 /* Return string valued cart variable. */
 

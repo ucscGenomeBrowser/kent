@@ -244,6 +244,36 @@ if (hel != NULL)
     }
 }
 
+void cartRemoveExcept(struct cart *cart, char **except)
+/* Remove variables except those in null terminated except array
+ * from cart.  Except array may be NULL in which case all
+ * are removed. */
+{
+struct hash *exceptHash = newHash(10);
+struct hashEl *list = NULL, *el;
+char *s;
+
+/* Build up hash of things to exclude. */
+if (except != NULL)
+    {
+    while ((s = *except++) != NULL)
+	hashAdd(exceptHash, s, NULL);
+    }
+
+/* Get all cart variables and remove most of them. */
+list = hashElListHash(cart->hash);
+for (el = list; el != NULL; el = el->next)
+    {
+    if (!hashLookup(exceptHash, el->name))
+	cartRemove(cart, el->name);
+    }
+
+/* Clean up. */
+hashFree(&exceptHash);
+hashElFreeList(&list);
+}
+
+
 char *cartString(struct cart *cart, char *var)
 /* Return string valued cart variable. */
 {
@@ -380,7 +410,7 @@ return "Thu, 31-Dec-2037 23:59:59 GMT";
 static int getCookieId(char *cookieName)
 /* Get id value from cookie. */
 {
-char *hguidString = findCookieData("hguid");
+char *hguidString = findCookieData(cookieName);
 return (hguidString == NULL ? 0 : atoi(hguidString));
 }
 
