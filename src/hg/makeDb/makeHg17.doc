@@ -5299,8 +5299,9 @@ SEQ2_LEN=$BASE/S2.len
     # featureBits hg16 blastzMm5
     # 1056761609 bases of 2865248791 (36.882%) in intersection
     # featureBits hg17 blastzMm5
-XXX - running 2004-07-02
-    # XXX 1056201417 bases of 2866216770 (36.850%) in intersection
+    #	1052077141 bases of 2866216770 (36.706%) in intersection
+    # featureBits hg17 blastzMm4
+    #  1056201417 bases of 2866216770 (36.850%) in intersection
 
 # CHAIN MM5 BLASTZ (DONE - 2004-07-02 - Hiram)
 
@@ -5440,12 +5441,13 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	2830625630 bases of 2866216770 (98.758%) in intersection
 
     #	featureBits hg17 netMm4
-XXX - running 2004-07-02 15:21
     #	2824272033 bases of 2866216770 (98.537%) in intersection
     # featureBits hg16 netMm5
     #	2823565051 bases of 2865248791 (98.545%) in intersection
 
     # featureBits hg17 syntenyNetMm5
+    #	2799194300 bases of 2866216770 (97.662%) in intersection
+    # featureBits hg17 syntenyNetMm4
     #	2785830955 bases of 2866216770 (97.195%) in intersection
     # featureBits hg16 syntenyNetMm5
     #	2786960572 bases of 2865248791 (97.268%) in intersection
@@ -5484,7 +5486,7 @@ cat > makeMaf.csh << '_EOF_'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
-XXX - running 2004-07-02 14:35
+XXX - DONE 2004-07-02 15:37
 
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/blastz.mm5/axtBest
