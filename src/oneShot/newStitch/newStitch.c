@@ -92,6 +92,14 @@ for (i=1; i<=graph->nodeCount; ++i)
     }
 }
 
+int asBlockCmp(const void *va, const void *vb)
+/* Compare to sort based on target start. */
+{
+const struct asBlock *a = *((struct asBlock **)va);
+const struct asBlock *b = *((struct asBlock **)vb);
+return a->tStart - b->tStart;
+}
+
 
 int defaultGapPenalty(int qSize, int tSize)
 /* A logarithmic gap penalty scaled to axt defaults. */
@@ -126,6 +134,7 @@ for (i=nodeIx+1; i<graph->nodeCount+1; ++i)
     dlAddTail(&scratchList, dlNode);
     }
 
+// uglyf("following %d,%d %d\n", qPrev, tPrev, dlCount(&scratchList));
 /* Pop head of list of possible followers and check if it
  * actually could follow.   If so create an edge into it,
  * and remove nodes that could follow it from list since
@@ -166,7 +175,7 @@ while ((dlHead = dlPopHead(&scratchList)) != NULL)
 	    dlNext = dlNode->next;
 	    asNode = dlNode->val;
 	    block = asNode->block;
-	    if (block->qStart >= qCur && block->tStart >= tCur)
+	    if (block->qStart > qCur && block->tStart > tCur)
 	        dlRemove(dlNode);
 	    }
 	}
@@ -329,7 +338,7 @@ for (axtNode = axtList->head; !dlEnd(axtNode); axtNode = axtNode->next)
     block->ali = axtNode;
     slAddHead(&blockList, block);
     }
-slReverse(&blockList);
+slSort(&blockList, asBlockCmp);
 
 /* Make up graph. */
 /* Make up graph and time and dump it for debugging. */
