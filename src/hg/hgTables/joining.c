@@ -12,7 +12,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.5 2004/07/17 02:57:14 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.6 2004/07/17 03:44:58 kent Exp $";
 
 struct joinableRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -143,7 +143,7 @@ struct slName *keyOut;
 struct region *region;
 int keyInField = -1;
 
-uglyf("fetchKeyFields from %s,  fields %s, keyIn %s\n",
+uglyf("fetchKeyedFields from %s,  fields %s, keyIn %s\n",
 	table, fields, keyIn);
 dyStringAppend(fieldSpec, fields);
 for (keyOut = keyOutList; keyOut != NULL; keyOut = keyOut->next)
@@ -295,6 +295,7 @@ struct tableJoiner
     char *table;		/* Table we're in.  Not alloced here. */
     struct joinerDtf *fieldList;	/* Fields. */
     struct slRef *keysOut;	/* Keys that connect to output - value is joinerPair. */
+    struct joinableTable *loaded;  /* Loaded table. */
     };
 
 void tableFieldsFree(struct tableJoiner **pTf)
@@ -459,9 +460,11 @@ if (slCount(tjList) == 1)
 else
     {
     struct joiner *joiner = joinerRead("all.joiner");
-    struct joinerPair *routeList, *route;
+    struct joinerPair *routeList, *route, *lastRoute;
     struct joinerDtf *tableDtfs;
     struct hash *tableHash = newHash(8);
+    struct sqlConnection *conn = sqlConnect(primaryDb);
+    struct region *regionList = getRegions(conn);
 
     for (tj = tjList; tj != NULL; tj = tj->next)
 	{
@@ -492,7 +495,45 @@ else
 	uglyf("\n");
 	}
 
+    lastRoute = NULL;
+    for (route = routeList; route != NULL; route = route->next)
+         {
+	 char fullName[256];
+	 struct joinerDtf *a = route->a;
+	 safef(fullName, sizeof(fullName), "%s.%s", a->database, a->table);
+	 tj = hashMustFindVal(tableHash, fullName);
+	 if (tj->loaded == NULL)
+	     {
+	     struct sqlConnection *conn2 = sqlConnect(a->database);
+	     struct hTableInfo *hti = getHti(a->database, a->table);
+	     boolean isPositional = htiIsPositional(hti);
+	     struct dyString *fields = dyStringNew(256);
+	     struct joinerDtf *dtf;
+	     struct slName *keyOutList = NULL, *key;
+	     struct slRef *ref;
 
+	     for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
+	         {
+		 if (fields->stringSize != 0)
+		     dyStringAppendC(fields, ',');
+		 dyStringAppend(fields, dtf->field);
+		 }
+	     uglyf("fields: %s\n", fields->string);
+	     for (ref = tj->keysOut; ref != NULL; ref = ref->next)
+	         {
+		 struct joinerPair *jp = ref->val;
+		 key = slNameNew(jp->a->field);
+		 slAddTail(&keyOutList, key);
+		 }
+	     tj->loaded = fetchKeyedFields(regionList, conn2, a->table,
+	         isPositional,  fields->string, 
+		 NULL, NULL, NULL, NULL, keyOutList);
+	     uglyf("Got %d rows loaded from %s\n", tj->loaded->rowCount, a->table);
+	     dyStringFree(&fields);
+	     sqlDisconnect(&conn2);
+	     }
+	 }
+    sqlDisconnect(&conn);
     joinerDtfFreeList(&tableDtfs);
     hashFree(&tableHash);
     }

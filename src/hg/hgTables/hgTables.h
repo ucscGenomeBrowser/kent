@@ -96,6 +96,12 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 void doTabOutTable(char *table, struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
 
+struct hTableInfo *getHti(char *db, char *table);
+/* Return primary table info. */
+
+boolean htiIsPositional(struct hTableInfo *hti);
+/* Return TRUE if hti looks like it's from a positional table. */
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from
