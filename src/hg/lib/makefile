@@ -1,7 +1,12 @@
 OPT= -ggdb 
 
+#Optimized for performance
 .c.o:
 	gcc -O -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+
+# For debugging
+#.c.o:
+#	gcc -ggdb -Wformat -Wimplicit  -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)

@@ -10,10 +10,11 @@ CREATE TABLE stsMapMouse (
     chromEnd int unsigned not null,	# End position in chrom
     name varchar(255) not null,	# Name of STS marker
     score int unsigned not null,	# Score of a marker = 1000/(# of placements)
-    identNo int unsigned not null,	# Marker Identification number of STS
+    identNo int unsigned not null,	# UCSC Id No.
     probeId int unsigned not null,	# Probe Identification number of STS
+    markerId int unsigned not null,	# Marker Identification number of STS
               #Indices
-    INDEX(name),
+    PRIMARY KEY(identNo),
     INDEX(chrom(8),chromStart),
     INDEX(chrom(8),chromEnd)
 );

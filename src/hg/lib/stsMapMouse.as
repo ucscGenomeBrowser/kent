@@ -6,6 +6,7 @@ table stsMapMouse
     uint chromEnd;	"End position in chrom"
     string name;	"Name of STS marker"
     uint score;	        "Score of a marker = 1000/(# of placements)"
-    uint identNo;	"Marker Identification number of STS"
+    uint identNo;	"UCSC Id No."
     uint probeId;       "Probe Identification number of STS"
+    uint markerId; 	"Marker Identification number of STS"
     )
