@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.14 2004/11/08 19:47:07 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.15 2004/11/08 20:19:43 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -597,8 +597,8 @@ end = middle+2500000;
 if (start < 0) start = 0;
 if (end > ci.size) end = ci.size;
 safef(region, regionSize, "%s:%d-%d", ci.chrom, start+1, end);
-verbose(1, "Testing at position %s\n", region);
-fprintf(logFile, "Testing at position %s\n", region);
+verbose(1, "Testing %s at position %s\n", db, region);
+fprintf(logFile, "Testing %s at position %s\n", db, region);
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 }
@@ -733,6 +733,74 @@ htmlPageFree(&allPage);
 verbose(1, "Tested joining on swissProt.taxon & commonName\n");
 }
 
+void checkXenopus(char *s)
+/* Check that all lines start with xenopus, and that we
+ * see laevis in there somewhere. */
+{
+char *e;
+boolean gotLaevis = FALSE;
+while (s != NULL && s[0] != 0)
+    {
+    s = skipLeadingSpaces(s);
+    e = strchr(s, '\n');
+    if (e != NULL)
+        *e++ = 0;
+    if (s[0] != '#')
+	{
+	if (!startsWith("Xenopus", s))
+	    {
+	    qaStatusSoftError(tablesTestList->status, 
+	         "Xenopus filter passing non-Xenopus");
+	    return;
+	    }
+	if (sameString(s, "Xenopus laevis"))
+	    gotLaevis = TRUE;
+	}
+    s = e;
+    }
+if (!gotLaevis)
+    qaStatusSoftError(tablesTestList->status, 
+	 "Can't find Xenopus laevis in filtered swissProt.taxon");
+}
+
+void testFilter(struct htmlPage *rootPage)
+/* Simulate pressing buttons to get a reasonable filter on
+ * swissProt taxon. */
+{
+char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt",
+	*table = "swissProt.taxon";
+struct htmlPage *page;
+page = quickSubmit(rootPage, org, db, group, "swissProt", 
+	table, "taxonFilter1", hgtaDoFilterPage, "submit");
+if (page != NULL)
+    {
+    struct htmlFormVar *var = htmlFormVarGet(page->forms, 
+    	"hgta_fil.v.swissProt.taxon.binomial.pat");
+    if (var == NULL)
+        internalErr();
+    htmlPageSetVar(page, NULL, "hgta_fil.v.swissProt.taxon.binomial.pat",
+        "Xenopus*");
+    serialSubmit(&page, org, db, group, track, table, "taxonFilter2",
+    	hgtaDoFilterSubmit, "submit");
+    if (page != NULL)
+        {
+	htmlPageSetVar(page, NULL, hgtaOutputType, "selectedFields");
+	serialSubmit(&page, org, db, group, track, table, "taxonFilter3",
+	    hgtaDoTopSubmit, "submit");
+	if (page != NULL)
+	    {
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial",
+	    	"on");
+	    serialSubmit(&page, org, db, group, track, table, "taxonFilter4",
+		hgtaDoPrintSelectedFields, "submit");
+	    if (page != NULL)
+		checkXenopus(page->htmlText);
+	    htmlPageFree(&page);
+	    }
+	}
+    }
+}
+
 void statsOnSubsets(struct tablesTest *list, int subIx, FILE *f)
 /* Report tests of certain subtype. */
 {
@@ -833,6 +901,7 @@ else
 	}
     }
 testJoining(rootPage);
+testFilter(rootPage);
 htmlPageFree(&rootPage);
 slReverse(&tablesTestList);
 reportSummary(tablesTestList, stdout);
