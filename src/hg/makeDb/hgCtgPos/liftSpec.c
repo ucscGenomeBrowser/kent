@@ -6,15 +6,12 @@
 #include "jksql.h"
 #include "liftSpec.h"
 
-static char const rcsid[] = "$Id: liftSpec.c,v 1.3 2003/06/10 16:53:07 kent Exp $";
+static char const rcsid[] = "$Id: liftSpec.c,v 1.4 2004/06/08 22:00:40 hiram Exp $";
 
 void liftSpecStaticLoad(char **row, struct liftSpec *ret)
 /* Load a row from liftSpec table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->offset = sqlSigned(row[0]);
 ret->oldName = row[1];
 ret->oldSize = sqlSigned(row[2]);
@@ -27,8 +24,6 @@ struct liftSpec *liftSpecLoad(char **row)
  * from database.  Dispose of this with liftSpecFree(). */
 {
 struct liftSpec *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->offset = sqlSigned(row[0]);
@@ -45,7 +40,6 @@ struct liftSpec *liftSpecCommaIn(char **pS, struct liftSpec *ret)
  * return a new liftSpec */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -86,7 +80,6 @@ for (el = *pList; el != NULL; el = next)
 void liftSpecOutput(struct liftSpec *el, FILE *f, char sep, char lastSep) 
 /* Print out liftSpec.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->offset);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
