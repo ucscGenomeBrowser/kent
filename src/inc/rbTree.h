@@ -71,5 +71,11 @@ void rbTreeDump(struct rbTree *tree, FILE *f,
 	void (*dumpItem)(void *item, FILE *f));
 /* Dump out rb tree to file, mostly for debugging. */
 
+int rbTreeCmpString(void *a, void *b);	
+/* Set up rbTree so as to work on strings. */
+
+int rbTreeCmpWord(void *a, void *b);	
+/* Set up rbTree so as to work on case-insensitive strings. */
+
 #endif /* RBTREE_H */
 

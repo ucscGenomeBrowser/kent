@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: rbTree.c,v 1.6 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: rbTree.c,v 1.7 2004/11/16 22:04:32 kent Exp $";
 
 
 static struct rbTreeNode *restructure(struct rbTree *t, int tos, 
@@ -70,26 +70,28 @@ else
 return midNode;
 }
 
-
-static void recycle(struct rbTree *tree, struct rbTreeNode *node)
-/* Recycle node memory. */
-{
-/* For now do nothing. */
-}
-    
-struct rbTree *rbTreeNew(int (*compare)(void *, void *))
-/* rbTreeNew() - Allocates space for a red-black tree and returns a pointer
- * to it.  The function compare compares they keys of two items, and returns a
- * negative, zero, or positive integer depending on whether the first item is
- * less than, equal to, or greater than the second.
- */
+struct rbTree *rbTreeNewDetailed(int (*compare)(void *, void *), struct lm *lm, 
+	struct rbTreeNode *stack[256])
+/* Allocate rbTree on an existing local memory & stack.  This is for cases
+ * where you want a lot of trees, and don't want the overhead for each one. 
+ * Note, to clean these up, just do freez(&rbTree) rather than rbFreeTree(&rbTree). */
 {
 struct rbTree *t;
 AllocVar(t);
 t->root = NULL;
 t->compare = compare;
-t->lm = lmInit(0);
+t->lm = lm;
+t->stack = stack;	
+t->n = 0;
+return t;
+}
 
+struct rbTree *rbTreeNew(int (*compare)(void *, void *))
+/* rbTreeNew() - Allocates space for a red-black tree and returns a pointer
+ * to it.  The function compare compares they keys of two items, and returns a
+ * negative, zero, or positive integer depending on whether the first item is
+ * less than, equal to, or greater than the second.  */
+{
 /* The stack keeps us from having to keep explicit
  * parent, grandparent, greatgrandparent variables.
  * It needs to be big enough for the maximum depth
@@ -98,9 +100,9 @@ t->lm = lmInit(0);
  * that deep, just 2*log2(N).  Therefore a stack of
  * 256 is good for up to 2^128 items in stack, which
  * should keep us for the next couple of millenia... */
-t->stack = lmAlloc(t->lm, 256 * sizeof(t->stack[0]));	
-t->n = 0;
-return t;
+struct lm *lm = lmInit(0);
+struct rbTreeNode **stack = lmAlloc(lm, 256 * sizeof(stack[0]));	
+return rbTreeNewDetailed(compare, lm, stack);
 }
 
 
@@ -648,4 +650,16 @@ itList = NULL;
 rbTreeTraverseRange(tree, minItem, maxItem, addRef);
 slReverse(&itList);
 return itList;
+}
+
+int rbTreeCmpString(void *a, void *b)
+/* Set up rbTree so as to work on strings. */
+{
+return strcmp(a, b);
+}
+
+int rbTreeCmpWord(void *a, void *b)	
+/* Set up rbTree so as to work on case-insensitive strings. */
+{
+return differentWord(a,b);
 }
