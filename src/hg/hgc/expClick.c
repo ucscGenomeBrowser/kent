@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.1 2003/09/23 20:28:06 kent Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.2 2003/09/24 01:25:11 kuhn Exp $";
 
 struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -192,7 +192,7 @@ printf("<th colspan=%d>False Color Key, all values log base %d</th></tr><tr>\n",
    absolutely represent some numbers as floating points */
 for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
     {
-    printf("<th><b>%.2f</b></th>", currentVal);
+    printf("<th><b>%.1f&nbsp;&nbsp;</b></th>", currentVal);
     }
 printf("</tr><tr>\n");
 for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
@@ -629,22 +629,24 @@ else
 void printAffyGnfLinks(char *name, char *chip)
 /* print out links to affymetrix's netaffx website */
 {
-char *netaffx = "https://www.netaffx.com/LinkServlet?array=;";
-char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
+char *netaffx = "https://www.affymetrix.com/LinkServlet?array=";
+/*char *netaffx = "https://www.netaffx.com/LinkServlet?array=;";*/
+char *netaffxDisp = "https://www.affymetrix.com/svghtml?query=";
+/*char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";*/
 char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
 /* char *gnf = "http://expression.gnf.org/promoter/tissue/images/"; */
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
-    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
+    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\" TARGET=\"_blank\">netaffx.com</a> website. [registration required]\n");
     printf("<ul>\n");
-    printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\">available there</a></li>\n",
+    printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\" TARGET=\"_blank\">available there</a></li>\n",
 	   netaffx, chip, name);
-    printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
-    printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
+    printf("<li> A graphical representation is also <a href=\"%s%s\" TARGET=\"_blank\">available</a> ",netaffxDisp, name);
+    printf("&nbsp;[SVG viewer required]</li>\n");
     printf("</ul>\n");
-    printf("<p>A <a href=\"%s%s\">histogram</a> of the data for the probe set selected (%s) over all ",gnfDetailed, name, name);
-    printf("tissues is available at the<a href=\"http://expression.gnf.org/cgi-bin/index.cgi\"> GNF web supplement</a>.\n");
+    printf("<p>A <a href=\"%s%s#Q\">histogram</a> of the data for the selected probe set (%s) used against all ",gnfDetailed, name, name);
+    printf("tissues is available at the <a href=\"http://expression.gnf.org/cgi-bin/index.cgi\" TARGET=\"_blank\">GNF web supplement</a>.\n");
     }
 }
 
