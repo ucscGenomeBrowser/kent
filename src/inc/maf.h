@@ -103,6 +103,11 @@ struct mafComp *mafFindComponent(struct mafAli *maf, char *src);
 void mafMoveComponentToTop(struct mafAli *maf, char *componentSource);
 /* Move given component to head of component list. */
 
+struct mafAli *mafFromAxt(struct axt *pAxt, int tSize, 
+	char *tPrefix, int qSize, char *qPrefix);
+/* Make up a maf file from axt.  Slower than mafFromAxtTemp,
+ * but the axt and maf are independent afterwards. */
+
 void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
 	struct mafAli *temp);
 /* Make a maf out of axt,  parasiting on the memory in axt.
