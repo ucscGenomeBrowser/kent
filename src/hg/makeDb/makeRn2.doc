@@ -1141,7 +1141,7 @@ LOAD GENEID GENES (DONE 04/01/03)
     ldHgGene rn2 geneid download/*.gtf -exon=CDS
     hgPepPred rn2 generic geneidPep download/*-fixed.prot
 
-SGP GENE PREDICTIONS (DONE 2003-05-19 - Hiram)
+SGP GENE PREDICTIONS (DONE 2003-05-19 - Hiram)  (RELOADED 10/28/03 angie)
     mkdir -p ~/rn2/bed/sgp/download
     cd ~/rn2/bed/sgp/download
     foreach f (~/rn2/?{,?}/chr?{,?}{,_random}.fa)
