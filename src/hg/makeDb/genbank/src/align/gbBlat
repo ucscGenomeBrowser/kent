@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.19 2004/02/28 03:40:32 markd Exp $
+# $Id: gbBlat,v 1.20 2004/04/02 18:32:01 markd Exp $
 #
 set -e
 
@@ -172,8 +172,11 @@ case "$database" in
                 blatParams="-q=rna -fine -mask=lower" ;;
         esac ;;
     sacCer*) 
-        # limit intron size on yeast 
+        # limit intron size to 5K
         blatParams="${blatParams} -maxIntron=5000" ;;
+    ce*) 
+        # limit intron size to 100K
+        blatParams="${blatParams} -maxIntron=100000" ;;
 esac
 
 
