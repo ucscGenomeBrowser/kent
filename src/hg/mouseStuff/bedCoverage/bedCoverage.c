@@ -239,7 +239,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     s = sqlUnsigned(row[1+rowOffset]);
     e = sqlUnsigned(row[2+rowOffset]);
     assert(s >= 0);
-    assert(e < size);
+    assert(e <= size);
     memset(cov + s, restricted, e - s);
     }
 sqlFreeResult(&sr);
