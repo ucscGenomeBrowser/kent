@@ -472,8 +472,8 @@ spectrum on
 type bed 5 +
 
 track avidUnique
-shortLabel Avid Mouse
-longLabel Regions Conserved in Avid Mouse/Human Alignments
+shortLabel AVID Mouse
+longLabel Regions Conserved in AVID Mouse/Human Alignments
 priority 25.9
 visibility dense
 color 100,50,0
@@ -484,8 +484,8 @@ visibility dense
 url http://pipeline.lbl.gov/cgi-bin/zBrowser.pl?chrom=$s&from=$[&to=$]&hg=$D&dGenome=dGenome2
 
 track avidRepeat
-shortLabel Avid Rep Mouse
-longLabel Repeating Regions Conserved in Avid Mouse/Human Alignments
+shortLabel AVID Rep Mouse
+longLabel Repeating Regions Conserved in AVID Mouse/Human Alignments
 priority 25.9
 visibility dense
 color 100,50,0
