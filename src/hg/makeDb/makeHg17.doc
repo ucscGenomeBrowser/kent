@@ -2728,7 +2728,7 @@ hgLoadBed hg17 ensRatMusHom ucsc100k.bed -sqlTable=ensRatMusHom.sql
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
 
-# BLASTZ CHICKEN (GALGAL2) (WORKING - 2004-06-14 - Fan)
+# BLASTZ CHICKEN (GALGAL2) (DONE - 2004-06-14 - Fan)
 
     ssh kk
     mkdir /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
@@ -2817,7 +2817,6 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 # Submission to last job:           590s       9.83m     0.16h    0.01d
 
     #	Third cluster run to convert lav's to axt's
-    bash
     source DEF
     cd /cluster/data/hg17/bed/blastz.galGal2
     #	The copy of this in mm4 was broken, fixed here
@@ -2846,11 +2845,13 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
     # Load database tables
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.galGal2/pslChrom
+    bash
     for I in *.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
-	echo "done: ${I}"
-    done
+        /cluster/bin/i386/hgLoadPsl hg17 ${I}
+        echo "done: ${I}"
+    done   
+
 
 # LOAD AffyUclaRatio (WORKING - 2004-06-15 - Hiram)
 #LOAD AffyUclaRatio and AFFY U133A and U133B sequences[DONE hartera Feb 3, 2004]
