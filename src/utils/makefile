@@ -19,6 +19,7 @@ DIRS = \
 	calc \
 	catDir \
 	catUncomment \
+	ccCp \
 	chopFaLines \
 	detab \
 	dnsInfo \
@@ -64,7 +65,6 @@ DIRS = \
 	wordLine
 
 BAD_DIRS= \
-	ccCp \
 	ccCpLock \
 	countChars \
 	geneStarts \
