@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.4 2003/09/07 19:28:31 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.5 2003/09/09 07:33:46 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -103,7 +103,7 @@ void advFilterRemakeTextVar(struct column *col, char *varName, int size)
 {
 char *var = advFilterName(col, varName);
 char *val = cartOptionalString(cart, var);
-cgiMakeTextVar(var, val, 8);
+cgiMakeTextVar(var, val, size);
 }
 
 void advFilterKeyUploadButton(struct column *col)
@@ -356,11 +356,6 @@ doAdvFilter(conn, colList);
 void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList)
 /* List gene names matching advanced filter. */
 {
-if (gotAdvFilter())
-    {
-    // groupOn = "advanced filter";
-    // cartSetString(cart, groupVarName, groupOn);
-    }
 doSearch(conn, colList);
 }
 
@@ -445,17 +440,4 @@ void doUseSavedFilters(struct sqlConnection *conn, struct column *colList)
 userSettingsUseSelected(filUserSettings());
 doAdvFilter(conn, colList);
 }
-
-#ifdef OLD
-struct genePos *getSearchNeighbors(struct column *colList, 
-	struct sqlConnection *conn, struct hash *goodHash, int maxCount)
-/* Get neighbors by search. */
-{
-struct genePos *list, *rejectList = NULL;
-
-list = advFilterResults(colList, conn);
-list = firstBitsOfList(list, maxCount, &rejectList);
-return list;
-}
-#endif /* OLD */
 

@@ -296,6 +296,14 @@ struct hash *knownCannonicalHash(struct sqlConnection *conn);
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
 
+struct hash *keyFileHash(struct column *col);
+/* Make up a hash from key file for this column. 
+ * Return NULL if no key file. */
+
+struct slName *keyFileList(struct column *col);
+/* Make up list from key file for this column.
+ * return NULL if no key file. */
+
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn);
 /* Get list of genes that pass all advanced filter filters.  

@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.63 2003/09/09 00:50:05 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.64 2003/09/09 07:33:46 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -210,9 +210,9 @@ if (endsWith(colName, "__filename"))
 return findNamedColumn(colList, colName);
 }
 
-struct hash *keyFileHash(struct column *col)
-/* Make up a hash from key file for this column. 
- * Return NULL if no key file. */
+static char *keyFileName(struct column *col)
+/* Return key file name for this column.  Return
+ * NULL if no key file. */
 {
 char *fileName = advFilterVal(col, "keyFile");
 if (fileName == NULL)
@@ -222,6 +222,32 @@ if (!fileExists(fileName))
     cartRemove(cart, advFilterName(col, "keyFile"));
     return NULL;
     }
+return fileName;
+}
+
+struct slName *keyFileList(struct column *col)
+/* Make up list from key file for this column.
+ * return NULL if no key file. */
+{
+char *fileName = keyFileName(col);
+char *buf;
+struct slName *list;
+
+if (fileName == NULL)
+    return NULL;
+readInGulp(fileName, &buf, NULL);
+list = stringToSlNames(buf);
+freez(&buf);
+return list;
+}
+
+struct hash *keyFileHash(struct column *col)
+/* Make up a hash from key file for this column. 
+ * Return NULL if no key file. */
+{
+char *fileName = keyFileName(col);
+if (fileName == NULL)
+    return NULL;
 return hashWordsInFile(fileName, 16);
 }
 
@@ -437,6 +463,7 @@ if (wild != NULL)
     slReverse(&newList);
     list = newList;
     }
+hashFree(&keyHash);
 return list;
 }
 
@@ -568,6 +595,7 @@ if (wild != NULL || keyHash != NULL)
     sqlFreeResult(&sr);
     hashFree(&hash);
     }
+hashFree(&keyHash);
 return list;
 }
 
