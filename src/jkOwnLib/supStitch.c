@@ -14,7 +14,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.20 2004/02/01 12:50:51 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.21 2004/06/03 20:58:58 galt Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -81,8 +81,8 @@ void dumpFf(struct ffAli *left, DNA *needle, DNA *hay)
 struct ffAli *ff;
 for (ff = left; ff != NULL; ff = ff->right)
     {
-    printf("(%d - %d)[%d-%d] ", ff->hStart-hay, ff->hEnd-hay,
-	ff->nStart - needle, ff->nEnd - needle);
+    printf("(%ld - %ld)[%ld-%ld] ", (long)(ff->hStart-hay), (long)(ff->hEnd-hay),
+	(long)(ff->nStart - needle), (long)(ff->nEnd - needle));
     }
 printf("\n");
 }

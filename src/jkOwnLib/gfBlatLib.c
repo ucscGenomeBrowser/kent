@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.1 2004/06/01 16:49:03 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.2 2004/06/03 20:51:07 galt Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -88,7 +88,18 @@ int diff;
 
 diff = strcmp(a->tName, b->tName);
 if (diff == 0)
-    diff = (int)(a->t3) - (int)(b->t3);	/* Casts needed for Solaris.  Thanks Darren Platt! */
+    {
+    long lDiff = a->t3 - b->t3;
+    if (lDiff < 0)
+       diff = -1;
+    else if (lDiff > 0)
+       diff = 1;
+    else
+       diff = 0;
+#ifdef SOLARIS_WORKAROUND_COMPILER_BUG_BUT_FAILS_IN_64_BIT
+    diff = (unsigned long)(a->t3) - (unsigned long)(b->t3);	/* Casts needed for Solaris.  Thanks Darren Platt! */
+#endif /* SOLARIS_WORKAROUND_COMPILER_BUG_BUT_FAILS_IN_64_BIT */
+    }
 if (diff == 0)
     diff = a->tStart - b->tStart;
 return diff;
