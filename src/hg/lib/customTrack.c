@@ -181,12 +181,14 @@ if (wordCount > 7)
      bed->thickEnd = needNum(row[7], lineIx, 7);
      if (bed->thickEnd < bed->thickStart)
 	 errAbort("line %d of custom input: thickStart after thickEnd", lineIx);
-     if ((bed->thickStart < bed->chromStart) ||
-	 (bed->thickStart > bed->chromEnd))
-	 errAbort("line %d of custom input: thickStart out of range (chromStart to chromEnd)", lineIx);
-     if ((bed->thickEnd < bed->chromStart) ||
-	 (bed->thickEnd > bed->chromEnd))
-	 errAbort("line %d of custom input: thickEnd out of range (chromStart to chromEnd)", lineIx);
+     if ((bed->thickStart != 0) &&
+	 ((bed->thickStart < bed->chromStart) ||
+	  (bed->thickStart > bed->chromEnd)))
+	 errAbort("line %d of custom input: thickStart out of range (chromStart to chromEnd, or 0 if no CDS)", lineIx);
+     if ((bed->thickEnd != 0) &&
+	 ((bed->thickEnd < bed->chromStart) ||
+	  (bed->thickEnd > bed->chromEnd)))
+	 errAbort("line %d of custom input: thickEnd out of range (chromStart to chromEnd, or 0 if no CDS)", lineIx);
      }
 else
      bed->thickEnd = bed->chromEnd;
