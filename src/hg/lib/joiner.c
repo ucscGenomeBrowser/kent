@@ -297,6 +297,10 @@ while ((word = nextWord(&line)) != NULL)
         {
 	js->isFuzzy = TRUE;
 	}
+    else if (sameString(word, "dependency"))
+        {
+	js->isDependency = TRUE;
+	}
     else
 	{
         errAbort("Unknown attribute %s line %d of %s", word, 
@@ -582,6 +586,7 @@ for (js=joiner->jsList; js != NULL; js = nextJs)
 	    newJs->description = cloneString(js->description);
 	    newJs->isFuzzy = js->isFuzzy;
 	    newJs->lineIx = js->lineIx;
+	    newJs->isDependency = js->isDependency;
 
 	    /* Fill in new joiner fieldList */
 	    for (jf = js->fieldList; jf != NULL; jf = jf->next)

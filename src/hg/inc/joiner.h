@@ -46,6 +46,7 @@ struct joinerSet
     struct joinerField *fieldList;	/* List of fields. */
     boolean isFuzzy;		/* True if no real primary key. */
     boolean expanded;		/* True if an expanded set. */
+    boolean isDependency;	/* Primary key update forces full update? */
     };
 
 struct joinerIgnore

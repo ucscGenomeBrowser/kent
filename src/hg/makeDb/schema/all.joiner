@@ -539,7 +539,7 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
     $gbd.xenoRefSeqAli.name
     $gbd.xenoRefFlat.name
 
-identifier knownGeneId typeOf=nativeMrnaAccession
+identifier knownGeneId typeOf=nativeMrnaAccession dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
     $kgDb.bioCycPathway.kgID
@@ -761,7 +761,7 @@ identifier wormBaseIsoformCluster
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId
 
-identifier wormBaseId external=WormBase
+identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
     $ce.sangerGene.name
     $gbd.ceBlastTab.target minCheck=0.95
@@ -821,7 +821,7 @@ identifier bdgpGeneId external=BDGP
     $dm.bdgpExprLink.bdgpName minCheck=0.99
     $dm.bdgpToCanonical.value
 
-identifier bdgpTranscriptId external=BDGP
+identifier bdgpTranscriptId external=BDGP dependency
 "Berkeley Drosophila Genome Project Transcript ID"
     $dm.bdgpGene.name
     $dm.arbExpDistance.query
@@ -858,7 +858,7 @@ identifier sgdIsoformCluster
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-identifier sgdCodingId typeOf=sgdId
+identifier sgdCodingId typeOf=sgdId dependency
 "Sacchromyces Genome Database ID"
     $sacCer.sgdGene.name
     $gbd.scBlastTab.target minCheck=0.90
@@ -904,7 +904,7 @@ identifier ensemblProteinId external=Ensembl
     $gbd.sfDescription.proteinID minCheck=0.10
     $gbd.sfAssign.seqID minCheck=0.01
 
-identifier ensemblTranscriptId external=Ensembl
+identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
     $gbd.ensGene.name chopAfter=.
     $gbd.superfamily.name
