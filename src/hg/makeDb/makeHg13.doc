@@ -1792,7 +1792,7 @@ o - # ssh hgwdev
     mkdir /cluster/store4/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-LOAD SAGE DATA (DONE 02/18/03)
+LOAD SAGE DATA (DONE 03/16/03)
     ssh hgwdev
     cd ~/kent/src/hg/sage
     make
@@ -1826,8 +1826,9 @@ LOAD SAGE DATA (DONE 02/18/03)
     # Create the uniGene alignments 
     # ~/hg13/uniGene/hg13.uniGene.lifted.pslReps.psl
     # -- see "MAKE UNIGENE ALIGNMENTS" below
-    cd /projects/cc/hg/sugnet/sage/sage.XXX/extr
-    addAveMedScoreToPsls ~/hg13/bed/uniGene/hg13.uniGene.lifted.pslReps.psl \
+    cd /projects/cc/hg/sugnet/sage/sage.$version/extr
+    addAveMedScoreToPsls \
+      ~/hg13/bed/uniGene.$version/hg13.uniGene.lifted.pslReps.psl \
       sageSummary.sage  uniGene.wscores.bed
     hgLoadBed hg13 uniGene_2 uniGene.wscores.bed
     hgsql hg13 < ~kent/src/hg/lib/sage.sql 
@@ -1841,7 +1842,7 @@ LOAD SAGE DATA (DONE 02/18/03)
     # with current uniGene date. 
 
     
-MAKE UNIGENE ALIGNMENTS (DONE 02/18/03)
+MAKE UNIGENE ALIGNMENTS (DONE 03/16/03)
     # Download of the latest UniGene version is now automated by a 
     # cron job -- see /cluster/home/angie/crontab , 
     # /cluster/home/angie/unigeneVers/unigene.csh .  
@@ -1856,34 +1857,38 @@ MAKE UNIGENE ALIGNMENTS (DONE 02/18/03)
     gunzip Hs.seq.uniq.gz 
     ../countSeqsInCluster.pl Hs.data counts.tab
     ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
-    # ssh kkstore
-    mkdir -p /scratch/hg/gs.14/build31/uniGene
+    # Distribute UniGene sequence to /iscratch/i/ (kkstore can see /projects)
+    ssh kkstore
     set version = XXX # same as above
+    mkdir -p /iscratch/i/uniGene.$version
     cp -p \
   /projects/cc/hg/sugnet/uniGene/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
-      /scratch/hg/gs.14/build31/uniGene
-    # email cluster-admin to push /scratch/hg/gs.14/build31/uniGene to cluster
-    mkdir -p ~/hg13/bed/uniGene
-    cd ~/hg13/bed/uniGene
-    ls -1S /cluster/store4/gs.14/build31/trfFa/ > allctg.lst
-    echo "/scratch/hg/gs.14/build31/uniGene/Hs.seq.uniq.simpleHeader.fa" \
+      /iscratch/i/uniGene.$version
+    ssh kkr1u00
+    ~kent/bin/iSync
+    ssh kk
+    set version = XXX # same as above
+    mkdir -p ~/hg13/bed/uniGene.$version
+    cd ~/hg13/bed/uniGene.$version
+    ls -1S /cluster/store4/gs.14/build31/trfFa/* > allctg.lst
+    ls -1  /iscratch/i/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store4/gs.14/build31/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
-    # ssh kk
     para create para.spec
     mkdir psl
     para try
     para check
     para push
-    # ssh eieio
-    cd ~/hg13/bed/uniGene
-    pslSort dirs hg13.uniGene.psl tmp psl >& pslSort.log
-    liftUp hg13.uniGene.lifted.psl \
-      /cluster/store4/gs.14/build31/jkStuff/liftAll.lft carry hg13.uniGene.psl
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 \
-      hg13.uniGene.lifted.psl hg13.uniGene.lifted.pslReps.psl /dev/null
+    ssh eieio
+    set version = XXX # same as above
+    cd ~/hg13/bed/uniGene.$version
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
+    | pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 \
+      stdin hg13.uniGene.lifted.pslReps.psl /dev/null
     # use hg13.uniGene.lifted.pslReps.psl for building SAGE track (above).
+
 
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
