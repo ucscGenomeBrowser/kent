@@ -94,6 +94,7 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   mkdir /gbdb/bosTau1
   mkdir /gbdb/bosTau1/nib
+  # could get rid of the nib in this path, 2bit isn't a nib (4bit)
   ln -s /cluster/data/bosTau1/bosTau1.2bit /gbdb/bosTau1/nib
 
 # CREATE DATABASE
@@ -281,6 +282,7 @@ exit; # don't actually run this like a script :)
   # note: size match
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, Oct. 10, 2004, Heather)
+  # could get rid of the nib in this path, 2bit isn't a nib (4bit)
   ssh kkr1u00
   mkdir -p /iscratch/i/bosTau1/nib
   cp -p /cluster/data/bosTau1/bosTau1.2bit /iscratch/i/bosTau1/nib
@@ -342,3 +344,20 @@ exit; # don't actually run this like a script :)
   cd /cluster/data/genbank
   nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad bosTau1
   # logged to /cluster/data/genbank/var/dbload/hgwdev/logs/YYMMDDHHMMSS.dbload.log
+
+  # GC PERCENT (DONE Oct. 17, 2004, Heather)
+  # use old-style (non-wiggle)
+  # run on kolossus (serialized)
+  # use default window size (20K); only applies to 25k scaffolds
+  # ran from Friday night 4pm to Sunday morning 7am
+  # dominated one CPU
+  ssh kolossus
+  mkdir /cluster/data/bosTau1/bed/gcPercent
+  cd /cluster/data/bosTau1/bed/gcPercent
+  # gcPercent modified to recognize 2bit file
+  /cluster/bin/x86_64/gcPercent -noLoad bosTau1 /gbdb/bosTau1/nib
+  ssh hgwdev
+  cd /cluster/home/heather/kent/src/hg/lib
+  hgsql bosTau1 < gcPercent.sql
+  load data local infile 'gcPercent.bed' into table gcPercent
+
