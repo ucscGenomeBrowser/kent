@@ -410,14 +410,16 @@ The Scheduling System
 The Hub Daemon and Its Spokes and Heartbeat
 </h4>
 The hub daemon is the heart of the parasol scheduling system. 
-The hub daemon spawns the heartbeat daemon and the spoke daemons on startup. 
-The hub daemon then goes into a loop processing messages it recieves on the hub TCP/IP socket.  
+On startup,the hub daemon spawns 
+the heartbeat thread daemon, the spoke daemon threads,
+and the socketSucker thread, which constantly reads from 
+the input UDP socket queue and places the messages on a large
+internal thread-safe queue so that none are lost.
+The main hub daemon thread then goes into a loop processing messages from
+the internal queue.
 The hub daemon does not do anything time consuming in this loop.   
 The main thing the hub daemon does is put jobs on the job list,  
 move machines from the busy list to the free list,  and call the 'runner' routine.
-There is also a thread that just sucks messages from the udp socket queue
-and places them on a more spacious queue for the main message thread to pick up.
-This ensures that no incoming message from the paraNode daemons are missed.
 <br>
 <br>
 
@@ -515,7 +517,7 @@ The Node Daemon
 </h4>
 The node daemon is relatively simple.  
 It forks off a process to run a job in response to a "run" message over it's 
-TCP/IP socket from a spoke.  
+UDP socket from a spoke.  
 It sends a "jobDone" message to the hub with the return status code and 
 user and system run times when a job finishes.  
 It keeps a count of CPUs free, and refuses to start a job unless a CPU is free.   
