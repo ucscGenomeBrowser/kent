@@ -1,5 +1,5 @@
 track xenoRefGene
-shortLabel All Species RefSeq
+shortLabel All RefSeq
 longLabel All Species RefSeq Genes
 group genes
 priority 35.1
@@ -8,7 +8,7 @@ color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
 track xenoMrna
-shortLabel All Species mRNAs
+shortLabel All mRNAs
 longLabel All Species mRNAs from GenBank
 group rna
 priority 63
@@ -18,7 +18,7 @@ type psl xeno
 cdsDrawOptions enabled
 
 track xenoEst
-shortLabel All Species ESTs
+shortLabel All ESTs
 longLabel All Species ESTs from GenBank 
 group rna
 priority 65
@@ -109,7 +109,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track chainEutGli1
-shortLabel Euarchontoglires Anc Chain 
+shortLabel Eu..glires Chain 
 longLabel Euarchontoglires Ancestor Chained Blastz Alignments
 group compGeno
 priority 128
@@ -121,7 +121,7 @@ type chain eutGli1
 otherDb eutGli1
 
 track netEutGli1
-shortLabel Euarchontoglires Anc Net
+shortLabel Eu..glires Net
 longLabel Euarchontoglires Ancestor Alignment Net
 group compGeno
 priority 129
@@ -131,7 +131,7 @@ type netAlign eutGli1 chainEutGli1
 otherDb eutGli1
 
 track netSyntenyEutGli1
-shortLabel Euarchontoglires Anc Synteny
+shortLabel Eu..glires Synt
 longLabel Euarchontoglires Ancestor Syntenic Alignment Net
 group compGeno
 priority 130
@@ -142,7 +142,7 @@ type netAlign eutGli1 chainEutGli1
 otherDb eutGli1
 
 track chainEutPri1
-shortLabel Primate Ancestor Chain 
+shortLabel Primate Chain 
 longLabel Primate Ancestor Chained Blastz Alignments
 group compGeno
 priority 131
@@ -154,7 +154,7 @@ type chain eutPri1
 otherDb eutPri1
 
 track netEutPri1
-shortLabel Primate Ancestor Net
+shortLabel Primate Net
 longLabel Primate Ancestor Alignment Net
 group compGeno
 priority 132
@@ -164,7 +164,7 @@ type netAlign eutPri1 chainEutPri1
 otherDb eutPri1
 
 track netSyntenyEutPri1
-shortLabel Primate Ancestor Synteny
+shortLabel Primate Synteny
 longLabel Primate Ancestor Syntenic Alignment Net
 group compGeno
 priority 133
