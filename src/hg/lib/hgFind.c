@@ -638,21 +638,21 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (ok == FALSE)
         {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "%s Gene Predictions", tableName);
-	table->name = cloneString(query->string);
-	slAddHead(&hgp->tableList, table);
-	}
+		ok = TRUE;
+		AllocVar(table);
+		dyStringClear(query);
+		dyStringPrintf(query, "%s Gene Predictions", tableName);
+		table->name = cloneString(query->string);
+		slAddHead(&hgp->tableList, table);
+		}
     snpStaticLoad(row+rowOffset, &snp);
     if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s", snp.chrom, tableName); 
+		errAbort("Internal Database error: Odd chromosome name '%s' in %s", snp.chrom, tableName); 
     AllocVar(pos);
     pos->chrom = chrom;
     pos->chromStart = snp.chromStart - 5000;
     pos->chromEnd = snp.chromEnd + 5000;
-    pos->name = cloneString(spec);
+    pos->name = cloneString(snp.name);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL)
