@@ -9134,6 +9134,46 @@ slReverse(&list);
 tg->items = list;
 }
 
+void loadBed8(struct track *tg)
+/* Convert bed 8 info in window to linked feature. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 8);
+    // Make up a block: the whole thing.
+    bed->blockCount  = 1;
+    bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
+    bed->chromStarts = needMem(bed->blockCount * sizeof(int));
+    bed->blockSizes[0]  = bed->chromEnd - bed->chromStart;
+    bed->chromStarts[0] = 0;
+    // Some tracks overload thickStart and thickEnd -- catch garbage here.
+    if ((bed->thickStart != 0) &&
+	((bed->thickStart < bed->chromStart) ||
+	 (bed->thickStart > bed->chromEnd)))
+	bed->thickStart = bed->chromStart;
+    if ((bed->thickEnd != 0) &&
+	((bed->thickEnd < bed->chromStart) ||
+	 (bed->thickEnd > bed->chromEnd)))
+	bed->thickEnd = bed->chromEnd;
+    lf = lfFromBed(bed);
+    slAddHead(&lfList, lf);
+    bedFree(&bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
 void loadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -9347,10 +9387,15 @@ if (sameWord(type, "bed"))
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
     track->bedSize = fieldCount;
-    if (fieldCount < 12)
+    if (fieldCount < 8)
 	{
 	bedMethods(track);
 	track->loadItems = loadSimpleBed;
+	}
+    else if (fieldCount < 12)
+	{
+	linkedFeaturesMethods(track);
+	track->loadItems = loadBed8;
 	}
     else 
 	{
