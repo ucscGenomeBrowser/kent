@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.197 2004/07/18 01:14:09 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.198 2004/07/20 16:13:23 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2387,6 +2387,22 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
     }
 return hti;
 }
+
+int hTableInfoBedFieldCount(struct hTableInfo *hti)
+/* Return number of BED fields needed to save hti. */
+{
+if (hti->hasBlocks)
+    return 12;
+else if (hti->hasCDS)
+    return 8;
+else if (hti->strandField[0] != 0)
+    return 6;
+else if (hti->scoreField[0] != 0)
+    return 5;
+else
+    return 4;
+}
+
 
 
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)

@@ -384,6 +384,9 @@ struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 struct hTableInfo *hFindTableInfoDb(char *db, char *chrom, char *rootName);
 /* Find table information in specified db.  Return NULL if no table. */
 
+int hTableInfoBedFieldCount(struct hTableInfo *hti);
+/* Return number of BED fields needed to save hti. */
+
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
