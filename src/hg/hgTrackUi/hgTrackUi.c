@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.140 2004/09/13 04:03:11 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.141 2004/09/26 07:59:12 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -529,6 +529,35 @@ scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( scoreVar, tempScore, 4);
 }
+
+void transRegCodeUi(struct trackDb *tdb)
+/* Put upt UI for transcriptional regulatory code - not
+ * much more than score UI. */
+{
+scoreUi(tdb);
+printf("%s",
+	"<BR>The scoring ranges from 0 to 1000, and is based on the number of lines "
+	"of evidence that support the motif being active.  Each of the two "
+	"<I>sensu stricto</I> species that the motif was conserved in counts "
+	"as a line of evidence.  If the CHIP/CHIP data showed good (P 0.001) "
+	"evidence of binding to the transcription factor associated with the "
+	"motif, that counts as two lines of evidence.  If the CHIP/CHIP data "
+	"showed weaker (P 0.005) evidence of binding, that counts as just one line "
+	"of evidence.  The following table shows the relationship between lines "
+	"of evidence and score.");
+printf("<P>");
+hTableStart();
+printf("%s",
+   "<TR><TH>Evidence</TH><TH>Score</TH></TR>\n"
+   "<TR><TD>4</TD><TD>1000</TD></TR>\n"
+   "<TR><TD>3</TD><TD>500</TD></TR>\n"
+   "<TR><TD>2</TD><TD>333</TD></TR>\n"
+   "<TR><TD>1</TD><TD>250</TD></TR>\n"
+   "<TR><TD>0</TD><TD>200</TD></TR>\n"
+   );
+hTableEnd();
+}
+
 
 void zooWiggleUi(struct trackDb *tdb )
 /* put up UI for zoo track with one species on each line
@@ -1052,6 +1081,8 @@ else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
     oligoMatchUi(tdb);
 else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
+else if (sameString(track, "transRegCode"))
+    transRegCodeUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
