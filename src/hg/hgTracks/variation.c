@@ -234,7 +234,7 @@ char  *funcString = NULL;
 int    snpValid = 0;
 int    snpFunc = 0;
 
-switch (stringArrayIx(snpColorSource, snpColorSourceLabels, snpColorSourceLabelsSize))
+switch (stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStringsSize))
     {
     case snpColorSourceSource:
 	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpSourceCart[stringArrayIx(el->source,snpSourceDataName,snpSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
