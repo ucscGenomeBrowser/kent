@@ -97,6 +97,14 @@ priority 118.2
 visibility hide
 type maf
 
+track humor300
+shortLabel Human/Mouse/Rat (Humor)
+longLabel Human/Mouse/Rat Humor Alignments
+group compGeno
+priority 118.3
+visibility full
+type maf
+
 track mammalNotHumanSynt
 shortLabel Not Human Synteny 
 longLabel Mammal Not Human Synteny (mm3)

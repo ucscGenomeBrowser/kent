@@ -860,7 +860,7 @@ url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
 shortLabel Tetraodon Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+longLabel Tetraodon nigroviridis Translated Blat Alignments
 group compGeno
 priority 112
 visibility dense
