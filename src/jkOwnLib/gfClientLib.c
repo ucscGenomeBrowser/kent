@@ -117,7 +117,7 @@ lineFileClose(&lf);
 static void maskNucSeqList(struct dnaSeq *seqList, char *seqFileName, char *maskType,
 	boolean hardMask, float minRepDivergence)
 /* Apply masking to simple nucleotide sequence by making masked nucleotides
- * upper case (since normal DNA sequence is lower case for us. */
+ * upper case (since normal DNA sequence is lower case for us). */
 {
 struct dnaSeq *seq;
 DNA *dna;
