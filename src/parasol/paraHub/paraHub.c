@@ -79,7 +79,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-int version = 9;	/* Version number. */
+int version = 10;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
