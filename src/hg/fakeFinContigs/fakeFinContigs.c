@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fakeFinContigs.c,v 1.6 2003/05/06 07:22:16 kate Exp $";
+static char const rcsid[] = "$Id: fakeFinContigs.c,v 1.7 2003/10/14 01:25:20 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,6 +65,9 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     lineFileExpectWords(lf, 9, wordCount);
     agp = agpFragLoad(words);
+    // file is 1-based but agpFragLoad() now assumes 0-based:
+    agp->chromStart -= 1;
+    agp->fragStart  -= 1;
     if (contig == NULL)
 	{
         AllocVar(contig);

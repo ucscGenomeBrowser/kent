@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: liftAgp.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: liftAgp.c,v 1.3 2003/10/14 01:25:20 angie Exp $";
 
 struct bedStub
 /* A line in a bed file with chromosome, start, end position parsed out. */
@@ -536,9 +536,21 @@ struct commonBlock *cbList = NULL;
 /* Load the agp fragments. */
 warn("Loading oldAgp from %s", oldAgpFile);
 oldFrag = agpFragLoadAllNotGaps(oldAgpFile);
+for (tmpFrag=oldFrag;  tmpFrag != NULL;  tmpFrag=tmpFrag->next)
+    {
+    // file is 1-based but agpFragLoad() now assumes 0-based:
+    tmpFrag->chromStart -= 1;
+    tmpFrag->fragStart  -= 1;
+    }
 slSort(&oldFrag, agpFragChrCmp);
 warn("Loading newAgp from %s", newAgpFile);
 newFrag = agpFragLoadAllNotGaps(newAgpFile);
+for (tmpFrag=newFrag;  tmpFrag != NULL;  tmpFrag=tmpFrag->next)
+    {
+    // file is 1-based but agpFragLoad() now assumes 0-based:
+    tmpFrag->chromStart -= 1;
+    tmpFrag->fragStart  -= 1;
+    }
 slSort(&newFrag, agpFragChrCmp);
 dnaSize = calcAgpSize(newFrag);
 

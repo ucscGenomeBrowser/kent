@@ -9,7 +9,7 @@
 #include "rmskOut.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: liftFrags.c,v 1.3 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: liftFrags.c,v 1.4 2003/10/14 01:25:21 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +38,9 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
         {
 	lineFileExpectWords(lf, 9, wordCount);
 	frag = agpFragLoad(words);
+	// file is 1-based but agpFragLoad() now assumes 0-based:
+	frag->chromStart -= 1;
+	frag->fragStart  -= 1;
 	slAddHead(&fragList, frag);
 	hashAddUnique(fragHash, frag->frag, frag);
 	end = frag->chromEnd;

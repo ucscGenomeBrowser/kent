@@ -6,7 +6,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: ntGoldGl.c,v 1.7 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: ntGoldGl.c,v 1.8 2003/10/14 01:25:21 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -98,6 +98,9 @@ int ntOrder = 0;
 while (lineFileRow(lf, row))
     {
     agpFragStaticLoad(row, &frag);
+    // file is 1-based but agpFragLoad() now assumes 0-based:
+    frag.chromStart -= 1;
+    frag.fragStart  -= 1;
     if (nt == NULL || !sameString(frag.chrom, nt->name))
         {
 	AllocVar(nt);

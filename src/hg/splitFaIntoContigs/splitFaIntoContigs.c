@@ -13,7 +13,7 @@ and split each chromosomes into subdirs and files for each supercontig.
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.19 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.20 2003/10/14 01:25:21 angie Exp $";
 
 /* Default array size for file paths */
 #define DEFAULT_PATH_SIZE 1024
@@ -374,6 +374,9 @@ if ('N' == words[4][0])
 else
     {
     agpFrag = agpFragLoad(words);
+    // file is 1-based but agpFragLoad() now assumes 0-based:
+    agpFrag->chromStart -= 1;
+    agpFrag->fragStart  -= 1;
     /* If we find a fragment and not a gap */
     if (0 == startIndex)
         {

@@ -11,7 +11,7 @@ that they are in synch.
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.3 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.4 2003/10/14 01:25:20 angie Exp $";
 
 void usage()
 /* 
@@ -188,6 +188,9 @@ while (faSpeedReadNext(lfFa, &retDna, &retSize, &retName))
             {
             lineFileExpectWords(lfAgp, 9, wordCount);
             agpFrag = agpFragLoad(words);
+	    // file is 1-based but agpFragLoad() now assumes 0-based:
+	    agpFrag->chromStart -= 1;
+	    agpFrag->fragStart  -= 1;
             agpFragOutput(agpFrag, stdout, ' ', '\n');
             if (agpFrag->chromEnd - agpFrag->chromStart != agpFrag->fragEnd - agpFrag->fragStart)
                {
