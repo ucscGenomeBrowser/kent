@@ -139,7 +139,7 @@ else
 }
 
 
-void doGateway(char *errorMsg)
+void doGateway()
 /* Table Browser gateway page: select organism, db, position */
 {
 char *organism;
@@ -287,7 +287,7 @@ if (pos == NULL)
     pos = "";
 if (pos[0] == '\0')
     {
-    doGateway("Missing position: Please enter a position");
+    doGateway();
     return NULL;
     }
 if (strcmp(pos, "genome"))
@@ -1322,6 +1322,7 @@ sr = sqlGetResult(conn, query);
 
 
 printf("<H3> Select Fields of Table %s: </H3>\n", getTableName());
+cgiMakeHiddenVar("origPhase", cgiString("phase"));
 cgiMakeButton("submit", "Check All");
 cgiMakeButton("submit", "Clear All");
 
@@ -1829,7 +1830,8 @@ if (position == NULL)
     return;
 allGenome = sameString("genome", position);
 
-if (existsAndEqual("submit", "Look up"))
+if (existsAndEqual("submit", "Look up") ||
+    (cgiOptionalString("phase") == NULL))
     {
     // Stay in same phase if we're just looking up position.
     char *origPhase = cgiOptionalString("origPhase");
