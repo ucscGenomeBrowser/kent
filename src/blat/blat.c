@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.87 2004/01/31 21:21:45 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.88 2004/02/11 01:07:02 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -58,7 +58,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "blat - Standalone BLAT v. %d.x3 fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %d fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
