@@ -1399,9 +1399,9 @@ struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char
   ni->genSeq = NULL;
   ni->mrnaSeq = NULL;
   if (insert)
-      ni->mrnaSeq = seq;
+    ni->mrnaSeq = seq;
   else
-    ni->genSeq = NULL;
+    ni->genSeq = seq;
   
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
   searchTrans(conn, "mrna", rna, ni, strand, INDEL, cloneId, left, right);
@@ -1904,6 +1904,7 @@ struct lineFile *pf, *cf, *lf, *vf=NULL, *df=NULL;
 FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
 char *faFile, *db, filename[64], *vfName = NULL, *dfName = NULL;
 char *user, *password;
+int verb = 0;
 
 /* try read-only first */
 user = cfgOption("ro.user");
@@ -1917,12 +1918,14 @@ verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     {
-    fprintf(stderr, "USAGE: pslAnal [-db=db -ver=<mrna versions> -der=<refseq derived accs> -verbose -xeno -indels -mismatches -codonsub] <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
+    fprintf(stderr, "USAGE: pslAnal [-db=db -ver=<mrna versions> -noVersions -der=<refseq derived accs> -verbose=<level> -xeno -indels -unaligned -mismatches -codonsub] <psl file> <cds file> <loci file> <fa file> <out file prefix>\n");
     return 1;
     }
 db = optionVal("db", "hg15");
 vfName = optionVal("ver", NULL);
 dfName = optionVal("der", NULL);
+verb = optionInt("verbose", 0);
+verboseSetLevel(verb);
 indelReport = optionExists("indels");
 unaliReport = optionExists("unaligned");
 mismatchReport = optionExists("mismatches");
