@@ -1,64 +1,50 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML>
-<HEAD>
-  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-  <META name="description" content="ENCODE Project at UCSC: Data Submission">
-  <META name="keywords" content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
-  <TITLE>ENCODE Project at UCSC: Data Submission</TITLE>
-  <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
-</HEAD>
+  <HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <META name="description" content="ENCODE Project at UCSC: Data Submission">
+    <META name="keywords" content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
+    <TITLE>ENCODE Project at UCSC: Data Submission</TITLE>
+    <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+  </HEAD>
 
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
-<A NAME="TOP"></A>
+  <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+  <A NAME="TOP"></A>
 
 <!-- Header Images and links -->
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-  <TR>
-    <TH COLSPAN=2 ALIGN="left">&nbsp;&nbsp;
-      <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="/images/encodelogo.gif" height=50 ALT="ENCODE Project at NHGRI"></A>
-      &nbsp;&nbsp;
-      <A HREF="/encode/"><IMG SRC="/images/encode.jpg" ALT="ENCODE Project at UCSC"></A>
-    </TH>
-  </TR>
-</TABLE>
+    <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+      <TR>
+        <TH COLSPAN=2 ALIGN="left">&nbsp;&nbsp;
+          <A HREF="http://www.genome.gov/10005107" TARGET=_BLANK><IMG SRC="/images/encodelogo.gif" height=50 ALT="ENCODE Project at NHGRI"></A>
+          &nbsp;&nbsp;
+          <A HREF="/encode/"><IMG SRC="/images/encode.jpg" ALT="ENCODE Project at UCSC"></A>
+        </TH>
+      </TR>
 
-<!--Hotlinks bar------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR><TH COLSPAN=2 ALIGN="left"></TH></TR>
-  <TR>
-  <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.topbar.html"--></TD></TR>
-  </TR>
-</TABLE>
+<!-- Topbar menu -------------->
+      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/encode.topbar.html"--></TD></TR>
 
 <!-- Overview ------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR><TH COLSPAN=2 ALIGN="left"></TH></TR>
-  <TR>
-    <TD CELLPADDING=10>	
-      <!--outer table is for border purposes-->
-      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR>
-	  <TD>	
+      <TR HEIGHT="100%" VALIGN="top"><TD VALIGN="top">
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+          <TR><TD>	
             <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-	      <TR>
-	        <TD>	
-	          <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
-		    <TR>
-		      <TD>
-			<FONT SIZE="4"><B>&nbsp; Submission of ENCODE data </B></FONT>
-		      </TD>
-		    </TR> 
-		  </TABLE>
-		  <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-		    <TR><TH HEIGHT=3></TH></TR> 
-		    <TR>
-		      <TD WIDTH=10></TD>
-		      <TD> 
-		        We are looking forward to the submission of
-                        ENCODE-related data, and are ready to help
-                        throughout the process.  We recommend the
-                        following steps: <UL>
-
+	      <TR><TD>	
+	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+		  <TR><TD>
+		    <FONT SIZE="4"><B>&nbsp; Submission of ENCODE data </B></FONT>
+		  </TD></TR> 
+		</TABLE>
+		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+		  <TR><TH HEIGHT=3></TH></TR> 
+		  <TR><TD WIDTH=10></TD><TD> 
+		    <P>
+		    We are looking forward to the submission of
+                    ENCODE-related data, and are ready to help
+                    throughout the process.  We recommend the
+                    following steps: 
+		    <UL>
 			<LI>Choose an appropriate format 
 			(<A HREF="#BED">BED</A>, <A HREF="#GFF">GFF</A>,
 		        <A HREF="#GTF">GTF</A>, <A HREF="#MAF">MAF</A>, or 
@@ -95,43 +81,31 @@
 		        contact us</A> to load the tracks into the
 		        database.  This makes the data available to
 		        the rest of the ENCODE community and to the
-		        public.</LI> </UL>
-	              </TD>
-		    </TR>
-		  </TABLE>
-		</TD>
-	      </TR>
+		        public.</LI> 
+		    </UL>
+                  </TD><TD WIDTH=15></TD></TR>
+	        </TABLE>
+	      <BR></TD></TR>
 	    </TABLE>
-          </TD>
-	</TR>
+          </TD></TR>
       </TABLE>
-    </TD>
-  </TR>
-</TABLE>
+      <BR>
 
 <!-- BED ------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR>
-    <TD>
       <!--outer table is for border purposes-->
       <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR>
-	  <TD>
-            <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-              <TR>
-		<TD>
-		  <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
-		    <TR>
-		      <TD>
-		        <FONT SIZE="4"><A name="BED"></A><B>&nbsp;Browser Extensible Data Format (BED)</B></FONT>
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-		    <TR><TH HEIGHT=10></TH></TR>
-		    <TR>
-		      <TD WIDTH=10>&nbsp;</TD>
-		      <TD>
+        <TR><TD>
+          <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+            <TR><TD>
+	      <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
+		<TR><TD>
+		   <FONT SIZE="4"><A name="BED"></A><B>&nbsp;Browser Extensible Data Format (BED)</B></FONT>
+		  </TD></TR>
+	 	</TABLE>
+	  	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	    	  <TR><TH HEIGHT=10></TH></TR>
+		  <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		    <P>
 		        The BED format was defined for the efficient
 		        storage and retrieval of genomic annotations.
 		        It provides a flexible way to define the data
@@ -141,43 +115,29 @@
 		        BED format description</A> on the 
 		        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">
 		        custom tracks</A> page for more details.
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <BR>
-		</TD>
-	      </TR>
+                  </TD><TD WIDTH=15></TD></TR>
+		</TABLE>
+	      <BR></TD></TR>
 	    </TABLE>
-	  </TD>
-	</TR>
-      </TABLE>
-    </TD>
-  </TR>
-</TABLE>
+	  </TD></TR>
+        </TABLE>
+	<BR>
 
 <!-- GFF ------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR>
-    <TD>
-      <!--outer table is for border purposes-->
-      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR>
-	  <TD>
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+          <TR><TD>
             <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-              <TR>
-		<TD>
-		  <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
-		    <TR>
-		      <TD>
-		        <FONT SIZE="4"><A name="GFF"></A><B>&nbsp; General Feature Format (GFF) </B> </FONT>
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-		    <TR><TH HEIGHT=10></TH></TR>
-		    <TR>
-		      <TD WIDTH=10>&nbsp;</TD>
-		      <TD>
+              <TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
+		  <TR><TD>
+		    <FONT SIZE="4"><A name="GFF"></A><B>&nbsp; General Feature Format (GFF) </B> </FONT>
+		  </TD></TR>
+		</TABLE>
+		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+		  <TR><TH HEIGHT=10></TH></TR>
+		  <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		    <P>
 			GFF is used for data where there are a set of
 			linked features, such as gene models that have
 			introns, exons, promoters, and transcription
@@ -191,43 +151,29 @@
 		        GFF description</A> on the 
 		        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">
 		        custom tracks</A> page for more details.
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <BR>
-		</TD>
-	      </TR>
+                  </TD><TD WIDTH=15></TD></TR>
+		</TABLE>
+	      <BR></TD></TR>
 	    </TABLE>
-	  </TD>
-	</TR>
-      </TABLE>
-    </TD>
-  </TR>
-</TABLE>
+	  </TD></TR>
+        </TABLE>
+	<BR>
 
 <!-- GTF ------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR>
-    <TD>
-      <!--outer table is for border purposes-->
-      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR>
-	  <TD>
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+          <TR><TD>
             <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-              <TR>
-		<TD>
-		  <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
-		    <TR>
-		      <TD>
-		        <FONT SIZE="4"><A name="GTF"></A><B>&nbsp; Gene Transfer Format (GTF)</B></FONT>
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-		    <TR><TH HEIGHT=10></TH></TR>
-		    <TR>
-		      <TD WIDTH=10>&nbsp;</TD>
-		      <TD>
+              <TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
+		  <TR><TD>
+		    <FONT SIZE="4"><A name="GTF"></A><B>&nbsp; Gene Transfer Format (GTF)</B></FONT>
+		  </TD></TR>
+		</TABLE>
+		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+		  <TR><TH HEIGHT=10></TH></TR>
+		  <TR><TD WIDTH=10>&nbsp;</TD><TD>
+		    <P>
 			GTF is a refinement of GFF that tightens the
 			specification and allows arbitrary
 			supplemental information for each gene.
@@ -236,43 +182,29 @@
 		        GTF description</A> on the 
 		        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">
 		        custom tracks</A> page for more details.
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <BR>
-		</TD>
-	      </TR>
+                  </TD><TD WIDTH=15></TD></TR>
+		</TABLE>
+	      <BR></TD></TR>
 	    </TABLE>
-	  </TD>
-	</TR>
-      </TABLE>
-    </TD>
-  </TR>
-</TABLE>
+	  </TD></TR>
+        </TABLE>
+	<BR>
 
 <!-- MAF ------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR>
-    <TD>
-      <!--outer table is for border purposes-->
-      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR>
-	  <TD>	
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+          <TR><TD>	
             <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-              <TR>
-	        <TD>	
-	          <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
-		    <TR>
-		      <TD>
-	                <FONT SIZE="4"><A NAME="MAF"></A><B>&nbsp; Multiple Alignment Format (MAF)</B></FONT>
-		      </TD>
-		    </TR>
-		  </TABLE>
-	          <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-                    <TR><TH HEIGHT=10></TH></TR>
-                    <TR>
-		      <TD WIDTH=10></TD>
-		      <TD>
+              <TR><TD>	
+	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
+	   	  <TR><TD>
+	            <FONT SIZE="4"><A NAME="MAF"></A><B>&nbsp; Multiple Alignment Format (MAF)</B></FONT>
+		  </TD></TR>
+		</TABLE>
+	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                  <TR><TH HEIGHT=10></TH></TR>
+                  <TR><TD WIDTH=10></TD><TD>
+		    <P>
 		        The multiple alignment format stores a series
 		        of multiple alignments in a format that is
 		        easy to parse and relatively easy to read.
@@ -284,43 +216,29 @@
 		        MAF description help page</A> and the 
 		        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">
 		        custom tracks</A> page for more details.
-			<P>
-		      </TD>
-		    </TR>
-		  </TABLE>
-		</TD>
-	      </TR>
+                  </TD><TD WIDTH=15></TD></TR>
+		</TABLE>
+	      <BR></TD></TR>
 	    </TABLE>
-	  </TD>
-	</TR>
-      </TABLE>
-    </TD>
-  </TR>
-</TABLE>
+	  </TD></TR>
+        </TABLE>
+	<BR>
 
 <!-- WIG ------------------------------------------------------->
-<TABLE BORDER=0 WIDTH="100%">
-  <TR>
-    <TD>
-      <!--outer table is for border purposes-->
-      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR>
-	  <TD>	
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+          <TR><TD>	
             <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-              <TR>
-	        <TD>	
-	          <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
-		    <TR>
-		      <TD>
-		        <FONT SIZE="4"><A NAME="WIG"></A><B>&nbsp; Wiggle Format (WIG)</B></FONT>
-		      </TD>
-		    </TR>
-		  </TABLE>
-		  <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-                    <TR><TH HEIGHT=10></TH></TR>
-                    <TR>
-		      <TD WIDTH=10></TD>
-		      <TD>
+              <TR><TD>	
+	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH="100%">
+		  <TR><TD>
+		    <FONT SIZE="4"><A NAME="WIG"></A><B>&nbsp; Wiggle Format (WIG)</B></FONT>
+		  </TD></TR>
+		</TABLE>
+		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                  <TR><TH HEIGHT=10></TH></TR>
+                  <TR><TD WIDTH=10></TD><TD>
+		    <P>
 		        The wiggle (WIG) format allows display of
 		        continuous-valued data in track format.  This
 		        is useful for GC percent, probability scores,
@@ -331,19 +249,13 @@
 		        WIG description help page</A> and the 
 		        <A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html">
 		        custom tracks</A> page for more details.
-			<P>
-		      </TD>
-		    </TR>
-		  </TABLE>
-		</TD>
-	      </TR>
+                  </TD><TD WIDTH=15></TD></TR>
+		</TABLE>
+	      <BR></TD></TR>
 	    </TABLE>
-          </TD>
-	</TR>
-      </TABLE>
-    </TD>
-  </TR>
-</TABLE>
-
-</BODY>
+	  </TD></TR>
+        </TABLE>
+      <BR></TD></TR>
+    </TABLE>
+  </BODY>
 </HTML>
