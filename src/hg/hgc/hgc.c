@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.567 2004/02/19 02:24:52 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.568 2004/02/20 05:02:47 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7407,6 +7407,7 @@ if (sqlTableExists(conn, tdb->tableName))
 	{
         bed = bedLoadN(row+1, 6);
         }
+    //sqlFreeResult(&sr);
     pseudoPrintPosHeader(bed);
     sprintf(query, "select * from pseudoGeneLink where name = '%s'", geneName);
     sr = sqlGetResult(conn, query);
@@ -7426,7 +7427,6 @@ printf("<p><A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   bed->chromStart, cgiEncode(bed->name), bed->chrom, bed->chromStart,
            bed->chromEnd, "+", tbl);
 printTrackHtml(tdb);
-sqlFreeResult(&sr);
 }
 
 void doSoftberryPred(struct trackDb *tdb, char *geneName)
