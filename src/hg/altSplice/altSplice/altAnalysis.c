@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.5 2003/11/21 21:10:58 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.6 2003/11/24 07:30:39 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -322,7 +322,7 @@ return FALSE;
 }
 
 boolean isAlt5Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
-		    int *altBpStart, int *altBpEnd)
+		    int *altBpStart, int *altBpEnd, int *termExonStart, int *termExonEnd)
 /* Return TRUE if we have an edge pattern of:
    hs->he----->hs
      \-->he--/
@@ -360,6 +360,10 @@ if(em[vs][ve1] && em[vs][ve2])
 		{
 		int *vPos = ag->vPositions;
 		struct bed bedUp, bedDown, bedAlt, bedConst;
+		
+		/* Report the first and last vertexes. */
+		*termExonStart = i;
+		*termExonEnd = findClosestDownstreamVertex(ag, em, i);
                 /* Initialize some beds for reporting. */
 		bedConst.chrom = bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
 		bedConst.name = bedUp.name = bedDown.name = bedAlt.name = ag->name;
@@ -694,6 +698,279 @@ struct evidence *ev = slElementFromIx(ag->evidence, edgeNum);
 return ev;
 }
 
+
+void reportAlt5Prime(struct altGraphX *ag, bool **em, int vs, int ve1, int ve2, 
+		    int altBpStart, int altBpEnd, int termExonStart, int termExonEnd, FILE *out)
+/* Write out an altGraphX record for an alt5Prime splicing
+event. Variable names are consistent with the rest of the program, but
+can be misleading. Specifically vs = start of alt splicing, ve1 =
+first end of alt splicing, etc. even though "vs" is really the end of
+an exon. For an alt5Prime splice the edges are:
+
+ Name       Vertexes         Class
+ ------     ----------       -----
+exon1:      vs->ve1       constituative (0)
+exon2:      vs->ve2        alternative (1)
+junction1:  ve1->termExonStart          alternative (2)
+junction2:  ve2->termExonStart          alternative (1)
+exon3:      termExonStart->termExonEnd        constituative(0)
+*/
+{
+struct altGraphX *agLoc = NULL;  /* Local altGraphX. */
+struct evidence *ev = NULL, *evLoc = NULL;
+int *vPos = ag->vPositions;
+unsigned char *vT = ag->vTypes;
+int *vPosLoc = NULL;    /* Vertex Positions. */
+int *eStartsLoc = NULL; /* Edge Starts. */
+int *eEndsLoc = NULL;   /* Edge ends. */
+unsigned char *vTLoc = NULL;      /* Vertex Types. */
+int *eTLoc = NULL;      /* Edge Types. */
+int vCLoc = 0;
+int eCLoc = 0;
+int edgeIx = 0, vertexIx = 0;
+int i =0;
+struct dyString *dy = NULL;
+
+if(out == NULL)
+    return;
+AllocVar(agLoc);
+agLoc->tName = cloneString(ag->tName);
+agLoc->name = cloneString(ag->name);
+agLoc->tStart = vPos[vs];
+agLoc->tEnd = vPos[termExonEnd];
+agLoc->strand[0] = ag->strand[0];
+agLoc->vertexCount = vCLoc = 5;
+agLoc->edgeCount = eCLoc = 5;
+agLoc->id = alt5Prime;
+/* Allocate some arrays. */
+AllocArray(vPosLoc, vCLoc);
+AllocArray(eStartsLoc, eCLoc);
+AllocArray(eEndsLoc, eCLoc);
+AllocArray(vTLoc, vCLoc);
+AllocArray(eTLoc, eCLoc);
+
+/* Fill in the vertex positions. */
+vertexIx = 0;
+vPosLoc[vertexIx++] = vPos[vs]; /* 0 */
+vPosLoc[vertexIx++] = vPos[ve1];     /* 1 */
+vPosLoc[vertexIx++] = vPos[ve2];    /* 2 */
+vPosLoc[vertexIx++] = vPos[termExonStart];    /* 3 */
+vPosLoc[vertexIx++] = vPos[termExonEnd];   /* 4 */
+
+/* Fill in the vertex types. */
+vertexIx = 0;
+vTLoc[vertexIx++] = vT[vs];
+vTLoc[vertexIx++] = vT[ve1];
+vTLoc[vertexIx++] = vT[ve2];
+vTLoc[vertexIx++] = vT[termExonStart];
+vTLoc[vertexIx++] = vT[termExonEnd];
+
+edgeIx = 0;
+/* Constitutive first exon. */
+eStartsLoc[edgeIx] = 0;
+eEndsLoc[edgeIx] = 1;
+eTLoc[edgeIx] = 0;
+ev = evidenceForEdge(ag, vs, ve1);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Alternative second exon. */
+eStartsLoc[edgeIx] = 0;
+eEndsLoc[edgeIx] = 2;
+eTLoc[edgeIx] = 1;
+ev = evidenceForEdge(ag, vs, ve2);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Alt2 junction (longer) */
+eStartsLoc[edgeIx] = 1;
+eEndsLoc[edgeIx] = 3;
+eTLoc[edgeIx] = 2;
+ev = evidenceForEdge(ag, ve1, termExonStart);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Alt1 junction (shorter) */
+eStartsLoc[edgeIx] = 2;
+eEndsLoc[edgeIx] = 3;
+eTLoc[edgeIx] = 1;
+ev = evidenceForEdge(ag, ve2, termExonStart);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Exon 3 constitutive (longer exon) */
+eStartsLoc[edgeIx] = 3;
+eEndsLoc[edgeIx] = 4;
+eTLoc[edgeIx] = 0;
+ev = evidenceForEdge(ag, termExonStart, termExonEnd);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Package up the evidence, tissues, etc. */
+slReverse(&agLoc->evidence);
+dy = newDyString(ag->mrnaRefCount*36);
+agLoc->mrnaRefCount = ag->mrnaRefCount;
+for(i=0; i<ag->mrnaRefCount; i++)
+    dyStringPrintf(dy, "%s,", ag->mrnaRefs[i]);
+sqlStringDynamicArray(dy->string, &agLoc->mrnaRefs, &i);
+dyStringFree(&dy);
+agLoc->mrnaTissues = CloneArray(ag->mrnaTissues, ag->mrnaRefCount);
+agLoc->mrnaLibs = CloneArray(ag->mrnaLibs, ag->mrnaRefCount);
+agLoc->vPositions = vPosLoc;
+agLoc->edgeStarts = eStartsLoc;
+agLoc->edgeEnds = eEndsLoc;
+agLoc->vTypes = vTLoc;
+agLoc->edgeTypes = eTLoc;
+altGraphXTabOut(agLoc, out);
+altGraphXFree(&agLoc);
+}
+
+void reportAlt3Prime(struct altGraphX *ag, bool **em, int vs, int ve1, int ve2, 
+		    int altBpStart, int altBpEnd, int startV, int endV, FILE *out)
+/* Write out an altGraphX record for an alt3Prime splicing
+event. Variable names are consistent with the rest of the program, but
+can be misleading. Specifically vs = start of alt splicing, ve1 =
+first end of alt splicing, etc. even though "vs" is really the end of
+an exon. For an alt5Prime splice the edges are:
+
+ Name       Vertexes         Class
+ ------     ----------       -----
+exon1:      startV->vs       constituative (0)
+junction1:  vs->ve1          alternative (1)
+junction2:  vs->ve2          alternative (2)
+exon2:      ve1->endV        alternative (1)
+exon3:      ve2->endV        constituative (0)
+*/
+{
+struct altGraphX *agLoc = NULL;  /* Local altGraphX. */
+struct evidence *ev = NULL, *evLoc = NULL;
+int *vPos = ag->vPositions;
+unsigned char *vT = ag->vTypes;
+int *vPosLoc = NULL;    /* Vertex Positions. */
+int *eStartsLoc = NULL; /* Edge Starts. */
+int *eEndsLoc = NULL;   /* Edge ends. */
+unsigned char *vTLoc = NULL;      /* Vertex Types. */
+int *eTLoc = NULL;      /* Edge Types. */
+int vCLoc = 0;
+int eCLoc = 0;
+int edgeIx = 0, vertexIx = 0;
+int i =0;
+struct dyString *dy = NULL;
+
+if(out == NULL)
+    return;
+AllocVar(agLoc);
+agLoc->tName = cloneString(ag->tName);
+agLoc->name = cloneString(ag->name);
+agLoc->tStart = vPos[startV];
+agLoc->tEnd = vPos[endV];
+agLoc->strand[0] = ag->strand[0];
+agLoc->vertexCount = vCLoc = 5;
+agLoc->edgeCount = eCLoc = 5;
+agLoc->id = alt3Prime;
+/* Allocate some arrays. */
+AllocArray(vPosLoc, vCLoc);
+AllocArray(eStartsLoc, eCLoc);
+AllocArray(eEndsLoc, eCLoc);
+AllocArray(vTLoc, vCLoc);
+AllocArray(eTLoc, eCLoc);
+
+/* Fill in the vertex positions. */
+vertexIx = 0;
+vPosLoc[vertexIx++] = vPos[startV]; /* 0 */
+vPosLoc[vertexIx++] = vPos[vs];     /* 1 */
+vPosLoc[vertexIx++] = vPos[ve1];    /* 2 */
+vPosLoc[vertexIx++] = vPos[ve2];    /* 3 */
+vPosLoc[vertexIx++] = vPos[endV];   /* 4 */
+
+/* Fill in the vertex types. */
+vertexIx = 0;
+vTLoc[vertexIx++] = vT[startV];
+vTLoc[vertexIx++] = vT[vs];
+vTLoc[vertexIx++] = vT[ve1];
+vTLoc[vertexIx++] = vT[ve2];
+vTLoc[vertexIx++] = vT[endV];
+
+edgeIx = 0;
+/* Constitutive first exon. */
+eStartsLoc[edgeIx] = 0;
+eEndsLoc[edgeIx] = 1;
+eTLoc[edgeIx] = 0;
+ev = evidenceForEdge(ag, startV, vs);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Alternative1 junction (shorter). */
+eStartsLoc[edgeIx] = 1;
+eEndsLoc[edgeIx] = 2;
+eTLoc[edgeIx] = 1;
+ev = evidenceForEdge(ag, vs, ve1);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Alt2 junction (longer). */
+eStartsLoc[edgeIx] = 1;
+eEndsLoc[edgeIx] = 3;
+eTLoc[edgeIx] = 2;
+ev = evidenceForEdge(ag, vs, ve2);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Alt1 exon. */
+eStartsLoc[edgeIx] = 2;
+eEndsLoc[edgeIx] = 4;
+eTLoc[edgeIx] = 1;
+ev = evidenceForEdge(ag, ve1, endV);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Exon 2 constitutive (shorter exon) */
+eStartsLoc[edgeIx] = 3;
+eEndsLoc[edgeIx] = 4;
+eTLoc[edgeIx] = 0;
+ev = evidenceForEdge(ag, ve2, endV);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+edgeIx++;
+
+/* Package up the evidence, tissues, etc. */
+slReverse(&agLoc->evidence);
+dy = newDyString(ag->mrnaRefCount*36);
+agLoc->mrnaRefCount = ag->mrnaRefCount;
+for(i=0; i<ag->mrnaRefCount; i++)
+    dyStringPrintf(dy, "%s,", ag->mrnaRefs[i]);
+sqlStringDynamicArray(dy->string, &agLoc->mrnaRefs, &i);
+dyStringFree(&dy);
+agLoc->mrnaTissues = CloneArray(ag->mrnaTissues, ag->mrnaRefCount);
+agLoc->mrnaLibs = CloneArray(ag->mrnaLibs, ag->mrnaRefCount);
+agLoc->vPositions = vPosLoc;
+agLoc->edgeStarts = eStartsLoc;
+agLoc->edgeEnds = eEndsLoc;
+agLoc->vTypes = vTLoc;
+agLoc->edgeTypes = eTLoc;
+altGraphXTabOut(agLoc, out);
+altGraphXFree(&agLoc);
+}
+
 void reportCassette(struct altGraphX *ag, bool **em, int vs, int ve1, int ve2, 
 		    int altBpStart, int altBpEnd, int startV, int endV, FILE *out)
 /* Write out both an altGraphX and two bed files. For a cassette exon the
@@ -837,6 +1114,7 @@ IIIIIIIIEEEEEEEEEIIIIIIIIIIEEEEEEEEEEIIIIIIIIII
 {
 enum altSpliceType ast = altOther;
 int startVertex=-1, endVertex = -1;
+int termExonStart = -1, termExonEnd = -1;
 if(ve1 == ve2)
     {
     ast = altIdentity;
@@ -844,9 +1122,15 @@ if(ve1 == ve2)
     *altBpEnd = ve1;
     }
 else if(isAlt3Prime(ag, em, vs, ve1, ve2, altBpStart, altBpEnd, &startVertex, &endVertex))
+    {
     ast = alt3Prime;
-else if(isAlt5Prime(ag, em, vs, ve1, ve2, altBpStart, altBpEnd))
+    reportAlt3Prime(ag, em, vs, ve1, ve2, *altBpStart, *altBpEnd, startVertex, endVertex, altGraphXOut);
+    }
+else if(isAlt5Prime(ag, em, vs, ve1, ve2, altBpStart, altBpEnd, &termExonStart, &termExonEnd))
+    {
     ast = alt5Prime;
+    reportAlt5Prime(ag, em, vs, ve1, ve2, *altBpStart, *altBpEnd, termExonStart, termExonEnd, altGraphXOut);
+    }
 else if(isCassette(ag, em, vs, ve1, ve2, altBpStart, altBpEnd, &startVertex, &endVertex))
     {
     ast = altCassette;
