@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.60 2003/06/04 23:33:29 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.61 2003/06/18 19:03:43 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -56,11 +56,11 @@ char *cbrWabaFilter = cartUsualString(cart, "cbrWaba.filter", "red");
 char *cbrWabaMap = cartUsualString(cart, "cbrWaba.type", fcoeEnumToString(0));
 int start = cartInt(cart, "cbrWaba.start");
 int end = cartInt(cart, "cbrWaba.end");
-/*filterButtons("cbrWaba.filter", cbrWabaFilter, TRUE);*/
 chromosome = cartString(cart, "c");
+/*   This link is disabled in the external browser
 printf(
 "<P><A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
-/*fcoeDropDown("cbrWaba.type", cbrWabaMap);*/
+*/
 }
 
 void fishClonesUi(struct trackDb *tdb)
