@@ -170,7 +170,7 @@ hashElFreeList(&elList);
 dyStringFree(&encoded);
 }
 
-void cartFree(struct cart **pCart)
+void cartCheckout(struct cart **pCart)
 /* Free up cart and save it to database. */
 {
 struct cart *cart = *pCart;
@@ -408,11 +408,11 @@ if (status == 0)
     doMiddle(cart);
     if (!savedSession)
 	errAbort("Program error - need to call saveSession inside form");
+    cartCheckout(&cart);
     }
 
 popWarnHandler();
 popAbortHandler();
-cartFree(&cart);
 htmlEnd();
 }
 

@@ -21,8 +21,8 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 
-void cartFree(struct cart **pCart);
-/* Free up cart and save it to database. */
+void cartCheckout(struct cart **pCart);
+/* Save cart to database and free it up. */
 
 void cartRemove(struct cart *cart, char *var);
 /* Remove variable from cart. */

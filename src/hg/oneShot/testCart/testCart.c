@@ -39,6 +39,7 @@ printf("<BR>\n");
 printf("</FORM>");
 printf("<TT><PRE>");
 cartDump(cart);
+errAbort("All for now");
 }
 
 char *exclude[] = {"hgsid", "submit", NULL};
