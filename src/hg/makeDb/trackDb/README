@@ -92,4 +92,9 @@ variables are available
      $o_db - other database (like mm3, hg15, etc.)
      $o_date - freeze date of underlying other assembly
 
+If there is a colorChromDefault field (values "on" or "off"), it
+is used to set the default value for chromosome coloring
+in affected tracks (type psl xeno <db>).  Without the field,
+the default is "on".
+
 

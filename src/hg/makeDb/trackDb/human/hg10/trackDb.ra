@@ -18,6 +18,7 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm2
 otherDb mm2
+colorChromDefault off
 
 track blastzBestMouse
 shortLabel Best Mouse 
@@ -54,4 +55,5 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm1
 otherDb mm1
+colorChromDefault off
 

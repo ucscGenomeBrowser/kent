@@ -8,6 +8,14 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track ensGene
 shortLabel Ensembl Genes
 longLabel Ensembl Gene Predictions
@@ -47,4 +55,4 @@ altColor 200,220,255
 spectrum on
 type psl xeno hg16
 otherDb hg16
-colorByChrom 0
+colorChromDefault off
