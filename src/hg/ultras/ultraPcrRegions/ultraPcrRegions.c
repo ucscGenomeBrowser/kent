@@ -11,7 +11,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: ultraPcrRegions.c,v 1.1 2004/09/03 23:27:33 kent Exp $";
+static char const rcsid[] = "$Id: ultraPcrRegions.c,v 1.2 2004/11/18 16:43:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,8 +54,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     seqSize = seqEnd - seqStart;
     firstParenPos = bed->chromStart - seqStart;
     secondParenPos = firstParenPos + bedSize;
-    hNibForChrom(bed->chrom, fileName);
-    seq = nibLoadPartMasked(NIB_MASK_MIXED, fileName, seqStart, seqSize);
+    seq = hChromSeqMixed(bed->chrom, seqStart, seqEnd);
     dy = dyStringNew(seqSize+2);
     dyStringAppendN(dy, seq->dna, firstParenPos);
     dyStringAppendC(dy, '(');
