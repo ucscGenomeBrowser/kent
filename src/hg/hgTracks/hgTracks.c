@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.586 2003/08/25 23:25:44 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.586.2.1 2003/08/28 18:08:02 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -7159,6 +7159,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v31", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v32", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
