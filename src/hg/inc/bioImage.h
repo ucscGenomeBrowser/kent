@@ -48,8 +48,8 @@ char *bioImageSliceType(struct sqlConnection *conn, int id);
 char *bioImageTreatment(struct sqlConnection *conn, int id);
 /* Return treatment if any.  FreeMem this when done.*/
 
-char *bioImageContributers(struct sqlConnection *conn, int id);
-/* Return comma-separated list of contributers in format Kent W.H, Wu F.Y. 
+char *bioImageContributors(struct sqlConnection *conn, int id);
+/* Return comma-separated list of contributors in format Kent W.H, Wu F.Y. 
  * FreeMem this when done. */
 
 char *bioImagePublication(struct sqlConnection *conn, int id);
@@ -61,11 +61,11 @@ char *bioImagePubUrl(struct sqlConnection *conn, int id);
  * FreeMem this when done. */
 
 char *bioImageSetUrl(struct sqlConnection *conn, int id);
-/* Return contributer url associated with image set if any. 
+/* Return contributor url associated with image set if any. 
  * FreeMem this when done. */
 
 char *bioImageItemUrl(struct sqlConnection *conn, int id);
-/* Return contributer url associated with this image. 
+/* Return contributor url associated with this image. 
  * Substitute in submitId for %s before using.  May be null.
  * FreeMem when done. */
 

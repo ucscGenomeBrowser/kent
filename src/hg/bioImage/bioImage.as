@@ -33,10 +33,10 @@ table imageType
     string name;	"Name of image type"
     )
 
-table contributer
+table contributor
 "Info on contributor"
     (
-    int id;	"ID of contributer"
+    int id;	"ID of contributor"
     string name;	"Name in format like Kent W.J."
     )
 
@@ -44,18 +44,18 @@ table submissionSet
 "Info on a batch of images submitted at once"
     (
     int id;			"ID of submission set"
-    lstring contributers;	"Comma separated list of contributers in format Kent W.J., Wu F.Y."
+    lstring contributors;	"Comma separated list of contributors in format Kent W.J., Wu F.Y."
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     lstring setUrl;		"URL for whole set"
     lstring itemUrl;		"URL for item.  Put %s where image.submitId should go"
     )
 
-table submissionContributer
-"Association between contributers and submissionSets"
+table submissionContributor
+"Association between contributors and submissionSets"
     (
     int submissionSet;	"ID in submissionSet table"
-    int contributer;	"ID in contributer table"
+    int contributor;	"ID in contributor table"
     )
 
 table sectionSet

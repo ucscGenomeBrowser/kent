@@ -74,7 +74,7 @@ return val;
 }
 
 static char *requiredItemFields[] = {"fileName", "submitId"};
-static char *requiredSetFields[] = {"contributer"};
+static char *requiredSetFields[] = {"contributor"};
 static char *requiredFields[] = {"fullDir", "screenDir", "thumbDir", "taxon", "isEmbryo", "age", "bodyPart", 
 	"sliceType", "imageType", };
 static char *optionalFields[] = {"sectionSet", "sectionIx", "gene", "locusLink", "refSeq", "genbank", };
@@ -89,17 +89,17 @@ return val;
 }
 
 int findExactSubmissionId(struct sqlConnection *conn,
-	char *contributers, char *publication, 
+	char *contributors, char *publication, 
 	char *pubUrl, char *setUrl, char *itemUrl)
 /* Find ID of submissionSet that matches all parameters.  Return 0 if none found. */
 {
 char query[1024];
 safef(query, sizeof(query),
       "select id from submissionSet "
-      "where contributers = \"%s\" "
+      "where contributors = \"%s\" "
       "and publication = \"%s\" "
       "and pubUrl = '%s' and setUrl = '%s' and itemUrl = '%s'"
-      , contributers, publication, pubUrl, setUrl, itemUrl);
+      , contributors, publication, pubUrl, setUrl, itemUrl);
 return sqlQuickNum(conn, query);
 }
 
@@ -123,9 +123,9 @@ return id;
 }
 
 int createSubmissionId(struct sqlConnection *conn,
-	char *contributers, char *publication, 
+	char *contributors, char *publication, 
 	char *pubUrl, char *setUrl, char *itemUrl)
-/* Add submission and contributers to database and return submission ID */
+/* Add submission and contributors to database and return submission ID */
 {
 struct slName *slNameListFromString(char *s, char delimiter);
 struct slName *contribList = NULL, *contrib;
@@ -135,17 +135,17 @@ char query[1024];
 safef(query, sizeof(query),
     "insert into submissionSet "
     "values(default, \"%s\", \"%s\", '%s', '%s', '%s')",
-    contributers, publication, pubUrl, setUrl, itemUrl);
+    contributors, publication, pubUrl, setUrl, itemUrl);
 sqlUpdate(conn, query);
 submissionSetId = sqlLastAutoId(conn);
 
-contribList = slNameListFromComma(contributers);
+contribList = slNameListFromComma(contributors);
 for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     {
-    int contribId = findOrAddIdTable(conn, "contributer", "name", 
+    int contribId = findOrAddIdTable(conn, "contributor", "name", 
     	skipLeadingSpaces(contrib->name));
     safef(query, sizeof(query),
-          "insert into submissionContributer values(%d, %d)",
+          "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
     sqlUpdate(conn, query);
     }
@@ -154,19 +154,19 @@ return submissionSetId;
 }
 
 int saveSubmissionSet(struct sqlConnection *conn, struct hash *raHash)
-/* Create submissionSet, submissionContributer, and contributer records. */
+/* Create submissionSet, submissionContributor, and contributor records. */
 {
-char *contributer = hashMustFindVal(raHash, "contributer");
+char *contributor = hashMustFindVal(raHash, "contributor");
 char *publication = hashValOrDefault(raHash, "publication", "");
 char *pubUrl = hashValOrDefault(raHash, "pubUrl", "");
 char *setUrl = hashValOrDefault(raHash, "setUrl", "");
 char *itemUrl = hashValOrDefault(raHash, "itemUrl", "");
-int submissionId = findExactSubmissionId(conn, contributer, 
+int submissionId = findExactSubmissionId(conn, contributor, 
 	publication, pubUrl, setUrl, itemUrl);
 if (submissionId != 0)
      return submissionId;
 else
-     return createSubmissionId(conn, contributer, 
+     return createSubmissionId(conn, contributor, 
      	publication, pubUrl, setUrl, itemUrl);
 }
 
@@ -242,7 +242,7 @@ if (rowSize >= ArraySize(words))
 	}
     }
 
-/* Create submission record. */
+/* Create/find submission record. */
 submissionSetId = saveSubmissionSet(conn, raHash);
 
 /* Process rest of tab file. */

@@ -60,12 +60,12 @@ if (publication != NULL)
         printf("%s", publication);
     printf("<BR>\n");
     }
-printf("<B>contributors:</B> %s<BR>\n", naForNull(bioImageContributers(conn,id)));
+printf("<B>contributors:</B> %s<BR>\n", naForNull(bioImageContributors(conn,id)));
 setUrl = bioImageSetUrl(conn, id);
 itemUrl = bioImageItemUrl(conn, id);
 if (setUrl != NULL || itemUrl != NULL)
     {
-    printf("<B>contributer links:</B> ");
+    printf("<B>contributor links:</B> ");
     if (setUrl != NULL)
         printf("<A HREF=\"%s\" target=_blank>image set</A> ", setUrl);
     if (itemUrl != NULL)

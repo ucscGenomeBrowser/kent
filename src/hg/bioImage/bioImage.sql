@@ -47,8 +47,8 @@ CREATE TABLE imageType (
 );
 
 # Info on contributor
-CREATE TABLE contributer (
-    id int auto_increment not null,   # ID of contributer
+CREATE TABLE contributor (
+    id int auto_increment not null,   # ID of contributor
     name varchar(255) not null,	# Name in format like Kent W.J.
          #Indices
     PRIMARY KEY(id),
@@ -58,7 +58,7 @@ CREATE TABLE contributer (
 # Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set
-    contributers longblob not null,	# Comma separated list of contributers in format Kent W.J., Wu F.Y.
+    contributors longblob not null,	# Comma separated list of contributors in format Kent W.J., Wu F.Y.
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     setUrl longblob not null,	# URL for whole set
@@ -67,13 +67,13 @@ CREATE TABLE submissionSet (
     PRIMARY KEY(id)
 );
 
-# Association between contributers and submissionSets"
-CREATE TABLE submissionContributer (
+# Association between contributors and submissionSets"
+CREATE TABLE submissionContributor (
     submissionSet int not null,  # ID in submissionSet table
-    contributer int not null,    # ID in contributer table
+    contributor int not null,    # ID in contributor table
           #Indices
     INDEX(submissionSet),
-    INDEX(contributer)
+    INDEX(contributor)
 );
 
 #Info on a bunch of sections through same sample

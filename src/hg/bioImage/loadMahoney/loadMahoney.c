@@ -28,7 +28,7 @@ void raCommon(FILE *f)
 fprintf(f, "%s",
 "taxon 10090\n"
 "imageType RNA in situ\n"
-"contributer Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q.\n"
+"contributor Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q.\n"
 "publication Mouse brain organization revealed through direct genome-scale TF expression analysis. \n"
 "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15618518\n"
 "setUrl http://mahoney.chip.org/mahoney/\n"
