@@ -10,12 +10,13 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.10 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.11 2004/07/23 23:42:48 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
         {"noBin", OPTION_BOOLEAN},
         {"oldTable", OPTION_BOOLEAN},
+        {"normScore", OPTION_BOOLEAN},
         {"sqlTable", OPTION_STRING},
         {"qPrefix", OPTION_STRING},
         {"test", OPTION_BOOLEAN},
@@ -23,13 +24,14 @@ static struct optionSpec optionSpecs[] = {
 };
 
 /* Command line switches. */
-boolean noBin = FALSE;		/* Suppress bin field. */
-boolean oldTable = FALSE;	/* Don't redo table. */
-char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
-char *qPrefix = NULL;		/* prefix to prepend (with -) to query name */
-boolean test = FALSE;		/* suppress loading to table */
+static boolean noBin = FALSE;		/* Suppress bin field. */
+static boolean oldTable = FALSE;	/* Don't redo table. */
+static boolean normScore = FALSE;	/* Add normScore column */
+static char *sqlTable = NULL;	/* Read table from this .sql if non-NULL. */
+static char *qPrefix = NULL;	/* prefix to prepend (with -) to query name */
+static boolean test = FALSE;		/* suppress loading to table */
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -37,15 +39,16 @@ errAbort(
   "usage:\n"
   "   hgLoadChain database chrN_track chrN.chain\n"
   "options:\n"
-  "   -noBin   suppress bin field\n"
-  "   -oldTable add to existing table\n"
+  "   -noBin   suppress bin field, default: bin field is added\n"
+  "   -oldTable add to existing table, default: create new table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
+  "   -normScore add normalized score column to table, default: not added\n"
   "   -qPrefix=xxx   prepend \"xxx-\" to query name\n"
   "   -test    suppress loading to database\n"
   );
 }
 
-void writeLink(struct boxIn *b, char *tName, int chainId, FILE *f)
+static void writeLink(struct boxIn *b, char *tName, int chainId, FILE *f)
 /* Write out a single link in tab separated format. */
 {
 if (!noBin)
@@ -54,7 +57,7 @@ fprintf(f,"%s\t%d\t%d\t%d\t%d\n",
 	tName, b->tStart, b->tEnd, b->qStart, chainId);
 }
 
-void writeChain(struct chain *a, FILE *f)
+static void writeChain(struct chain *a, FILE *f, int basesMatched)
 /* Write out chain (just the header parts) in tab separated format. */
 {
 char qName[64];
@@ -68,13 +71,19 @@ if (qPrefix != NULL)
     strcat(qName, "-");
     }
 strcat(qName, a->qName);
-fprintf(f, "%f\t%s\t%d\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%d\n",
-	a->score, a->tName, a->tSize, a->tStart, a->tEnd, 
-	qName, a->qSize, a->qStrand, a->qStart, a->qEnd, a->id);
+if (normScore)
+    fprintf(f, "%f\t%s\t%d\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%d\t%.1f\n",
+	    a->score, a->tName, a->tSize, a->tStart, a->tEnd, 
+	    qName, a->qSize, a->qStrand, a->qStart, a->qEnd, a->id,
+	    a->score/basesMatched);
+else
+    fprintf(f, "%f\t%s\t%d\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%d\n",
+	    a->score, a->tName, a->tSize, a->tStart, a->tEnd, 
+	    qName, a->qSize, a->qStrand, a->qStart, a->qEnd, a->id);
 }
 
 
-void loadDatabaseLink(char *database, char *tab, char *track)
+static void loadDatabaseLink(char *database, char *tab, char *track)
 /* Load database from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
@@ -118,7 +127,7 @@ sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
 
-void loadDatabaseChain(char *database, char *tab, char *track)
+static void loadDatabaseChain(char *database, char *tab, char *track)
 /* Load database from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
@@ -154,6 +163,8 @@ else if (!oldTable)
     dyStringAppend(dy, "  qStart int unsigned not null,\n");
     dyStringAppend(dy, "  qEnd int unsigned not null,\n");
     dyStringAppend(dy, "  id int unsigned not null,\n");
+    if (normScore)
+	dyStringAppend(dy, "  normScore double not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(bin),\n");
@@ -169,18 +180,23 @@ sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
 
-void oneChain(struct chain *chain, FILE *linkFile, FILE *chainFile)
+static void oneChain(struct chain *chain, FILE *linkFile, FILE *chainFile)
 /* Put one chain into tab delimited chain and link files. */
 {
+int basesMatched = 0;
 struct boxIn *b;
-writeChain(chain, chainFile);
+
 for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    basesMatched += b->qEnd - b->qStart;
     writeLink(b, chain->tName, chain->id, linkFile);
+    }
+writeChain(chain, chainFile, basesMatched);
 }
 	
 
 
-void hgLoadChain(char *database, char *track, char *fileName)
+static void hgLoadChain(char *database, char *track, char *fileName)
 /* hgLoadChain - Load a Chain file into database. */
 {
 int count = 0;
@@ -228,6 +244,7 @@ if (argc != 4)
     usage();
 noBin = optionExists("noBin");
 oldTable = optionExists("oldTable");
+normScore = optionExists("normScore");
 sqlTable = optionVal("sqlTable", NULL);
 qPrefix = optionVal("qPrefix", NULL);
 test = optionExists("test");
