@@ -251,6 +251,9 @@ int main(int argc, char* argv[]) {
     
     long globalNumber;
     double globalPercentId;
+
+    long numWindowsScored = 0;
+    long numWindowsDefaulted = 0;
     
     /* make sure that there are the correct number of arguments */
     if(argc < 5 || argc > 6) {
@@ -297,6 +300,8 @@ int main(int argc, char* argv[]) {
             /* used the genome-wide background numbers */
             backgroundPercentId = globalPercentId;
             backgroundNumber = globalNumber;
+
+            numWindowsDefaulted++;
         } else {
             backgroundPercentId = background->score;
             backgroundNumber = background->number;
@@ -311,7 +316,11 @@ int main(int argc, char* argv[]) {
         else
             score = number * (percentId - backgroundPercentId) / sqrt(number);
         printf("%s\t%ld\t%ld\t%lf\t%ld\n", chrom, chromStart, chromEnd, score, number);
+
+        numWindowsScored++;
     }
+    
+    fprintf(stderr, "%ld windows of the %ld total windows scored used the default background\n", numWindowsDefaulted, numWindowsScored);
     
     return 0;
 }
