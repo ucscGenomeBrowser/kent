@@ -34,7 +34,11 @@ Notes for qaPushQ gateway, adding new queues:
 CREATE TABLE hg17 (UNIQUE (qid)) SELECT * FROM pushQ;
 delete from hg17;
 this will dupe the table structure.
-																       
+
+A new template that may be useful for staging new assemblies:
+CREATE TABLE newAssm (UNIQUE (qid)) SELECT * FROM zTemplate;
+
+
 when the new org/assembly has been finished and the separate staging queue is 
 no longer needed, make a way to quickly append its records
 to the end of the main queue and clear out or delete the separate queue tbl.
