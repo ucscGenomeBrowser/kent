@@ -211,6 +211,17 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other);
 }
 
+void hgcAnchorWindow(char *group, char *item, int thisWinStart, 
+        int thisWinEnd, char *other, char *chrom)
+/* Generate an anchor that calls click processing program with item
+ * and other parameters, INCLUDING the ability to specify left and
+ * rigmt window positions different from the current window*/
+{
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
+	hgcPathAndSettings(), group, item, chrom, thisWinStart, thisWinEnd, other);
+}
+
+
 void hgcAnchorSomewhereTag(char *group, char *item, char *other, char *chrom, char *tag)
 /* Generate an anchor that calls click processing program with item and other parameters. */
 {
@@ -4417,6 +4428,7 @@ printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, wi
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
 	tdb->tableName, otherOrg, otherChromTable);
+//joni
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
@@ -8021,6 +8033,27 @@ if (dy == NULL)
     } 
 return dy->string; 
 }
+
+void printWindow( struct psl *thisPsl, int thisWinStart, int thisWinEnd, char *winStr )
+{
+
+    char otherString[256];
+    char pslItem[1024];
+    char *cgiPslItem;
+
+    char pslTableName[128] = "blastzBestMouse";
+
+    sprintf( pslItem, "%s:%d-%d %s:%d-%d", thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
+    cgiPslItem = cgiEncode(pslItem);
+    sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", thisPsl->tStart, 
+    pslTableName, "Mouse", "mouseChrom" );
+    if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
+        {
+        hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
+                thisWinEnd, otherString, thisPsl->tName);
+        printf("%s</A>\n", winStr );
+        }
+}
                                                         
 
 void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -8041,12 +8074,14 @@ boolean firstTime = TRUE;
 struct psl *psl;
 struct psl *thisPsl;
 
+char pslItem[1024];
+char str[256];
+char *cgiPslItem;
+
+char pslTableName[128] = "blastzBestMouse";
+
 struct sqlResult *pslSr;
-
-
 struct sqlConnection *conn2 = hAllocConn();
-
-//joni
 
 int first;
 int left = cartIntExp( cart, "l" );
@@ -8064,11 +8099,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	htmlHorizontalLine();
     smp = sampleLoad(row+hasBin);
     printf("<B>Item:</B> %s<BR>\n", smp->name);
-    printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
+    printPos(smp->chrom, winStart, winEnd, NULL, TRUE);
 
 
-    sprintf( tempTableName, "%s_%s", smp->chrom, "blastzBestMouse" );
-    hFindSplitTable(seqName, "blastzBestMouse", table, &hasBin);
+    sprintf( tempTableName, "%s_%s", smp->chrom, pslTableName );
+    hFindSplitTable(seqName, pslTableName, table, &hasBin);
     sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
         table, smp->chrom, left, right );
 
@@ -8076,7 +8111,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 
     htmlHorizontalLine();
-    printf("<h3>Corresponding blastz mouse 'best in genome' alignments </h3>
+    printf("<h3>Blastz Alignments Windows </h3>
             <b>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stop
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</b><br>" );
 
@@ -8100,10 +8135,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                 && smp->chromStart + smp->samplePosition[i+1] > thisPsl->tEnd  ) 
                     continue;
 
-           if( !first && smp->samplePosition[i-1] + 1 < smp->samplePosition[i] ) 
-               printf("<br>");
-
-            first = 0;
+                       first = 0;
 
             if( smp->sampleHeight[i] != smp->sampleHeight[i+1] )
                 errAbort("regions not paired properly(%d,%d,%d,%d)!!!\n",
@@ -8111,29 +8143,28 @@ while ((row = sqlNextRow(sr)) != NULL)
                     smp->sampleHeight[i], smp->sampleHeight[i+1],
                     smp->sampleHeight[i+2]);
 
-            printf("%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+            snprintf( str, 256, "%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
                 smp->chromStart + smp->samplePosition[i],
                 smp->chromStart +  smp->samplePosition[i+1],
                 whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
+
+            printWindow( thisPsl, 
+                    smp->chromStart + smp->samplePosition[i], 
+                    smp->chromStart + smp->samplePosition[i+1],
+                    str );
+
+            if( smp->samplePosition[i+1] + 5 < smp->samplePosition[i+2] ) 
+               printf("<br>");
+
+                //errAbort( "(%d,%d,%d,%d)\n", smp->samplePosition[i-1],  smp->samplePosition[i], smp->samplePosition[i+1], smp->samplePosition[i+2]);
+
+
         }
         
-        if( !first )
-        {
-            printf("<A HREF=\"%s&o=%d&t=%d&g=%s&i=%s%%3A%d%%2D%d+%s%%3A%d%%2D%d&c=%s&l=%d&r=%d&db=%s&pix=%d\"\\>%s:%d-%d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s:%d-%d</A><BR><BR>",
-                hgcNameAndSettings(), thisPsl->tStart, thisPsl->tEnd, "blastzBestMouse",
-                thisPsl->qName, thisPsl->qStart, thisPsl->qEnd,
-                thisPsl->tName, thisPsl->tStart, thisPsl->tEnd, 
-                 thisPsl->tName, left, right,
-                "hg10", 600, 
-                thisPsl->tName, thisPsl->tStart, thisPsl->tEnd,
-                thisPsl->qName, thisPsl->qStart,
-                thisPsl->qEnd );
-        }
-
-
-
-
     }
+
+    printf("<BR><BR>Note: these alignments can extend beyond
+            the browsers current viewing window.<BR>");
 
     hFreeConn(&conn2);
     }
@@ -8351,7 +8382,8 @@ else if (sameWord("blastzMm2", track)
          || sameWord("blastzMm2Sc", track)
          || sameWord("blastzMm2Ref", track)
 	 || sameWord("blastzBestMouse", track)
-         || (sameWord("aarMm2", track)))
+         || (sameWord("aarMm2", track))
+         || sameWord("blastzStrictChainMouse", track))
     {
     doBlatMus(tdb, item);
     }
@@ -8359,7 +8391,8 @@ else if (startsWith("multAlignWebb", track))
     {
     doMultAlignZoo(tdb, item, &track[13] );
     }
-else if (sameWord(track, "blatHuman"))
+else if (sameWord(track, "blatHuman") 
+        || sameWord(track, "blastzStrictChainHuman"))
     {
     doBlatHuman(tdb, item);
     }
