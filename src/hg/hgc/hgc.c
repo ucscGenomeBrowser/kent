@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.577 2004/03/02 04:52:46 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.578 2004/03/04 07:11:13 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2084,6 +2084,10 @@ if (wordCount > 0)
         {
 	genericMafClick(conn, tdb, item, start);
 	}
+    else if (sameString(type, "wigMaf"))
+        {
+	genericMafClick(conn, tdb, item, start);
+        }
     else if (sameString(type, "axt"))
         {
 	genericAxtClick(conn, tdb, item, start, words[1]);
