@@ -1320,16 +1320,16 @@ spectrum on
 type bed 12 .
 
 track luPosi
-shortLabel potential_code
-longLabel potential coding fragments
+shortLabel Potential_code
+longLabel Potential Coding Fragments
 priority 1100
 group x
 visibility hide
 type bed 12
 
 track luNega
-shortLabel potential_pseudo
-longLabel potential pseudo fragments
+shortLabel Potential_pseudo
+longLabel Potential Pseudo Fragments
 priority 1100
 group x
 visibility hide
