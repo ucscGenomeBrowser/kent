@@ -179,7 +179,12 @@ while ((chain = chainRead(lf)) != NULL)
 slSort(&chainList, chainCmpTarget);
 for (chain = chainList; chain != NULL; chain = chain->next)
     oneChain(chain, linkFile, chainFile);
-chainFreeList(&chainList);
+/* chainFreeList(&chainList); */ /* This slows things way down, especially on
+                                  * chromosome 19.  I'm not sure if it's just
+				  * the usual slow Linux free on 100 million
+				  * items or so, or something else. It's a
+				  * good thing hgTracks uses lmAlloc on the
+				  * chain links it looks like! */
 fclose(chainFile);
 fclose(linkFile);
 printf("Loading %d chains into %s.%s\n", count, database, track);
