@@ -746,3 +746,9 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - lower number of retries on para make, or have and a smarter option that
   doesn't retry if a certain threshold of jobs has crashed.
+
+- NM_005541 split into two pieces because it has a gap in an intron
+       -human chr1 uses 362M for blat
+      - maybe allow small gaps in windows??
+      - windows don't really have to be a multiple of overlap, can
+        have relatively large windows with small overalp.

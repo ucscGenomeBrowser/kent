@@ -30,11 +30,23 @@
               IdentityFile ~/.ssh/nokey_dsa
               IdentityFile ~/.ssh/id_dsa
       </PRE>
-      <LI> Verify that you can ssh from <CODE>kkstore</CODE> to <CODE>kk</CODE>,
-          If you are using <CODE>ssh-agent</CODE>, exit it before testing.
+      <LI> Verify that you can ssh from <CODE>eieio</CODE> to <CODE>kk</CODE>
+           and the iservers.
+           If you are using <CODE>ssh-agent</CODE>, exit it before testing.
       <PRE>
-      ssh kk uname -a
+      foreach h (kk kkr1u00 kkr2u00 kkr3u00 kkr4u00 kkr5u00 kkr6u00 kkr7u00 kkr8u00)
+         ssh $h uname -a
+      end
       </PRE>
+      <LI>If you have never ssh-ed to a machine before, you will be prompted
+          the first time to add it to your ~/.ssh/known_hosts file.  If you
+          have ssh-ed to a machine, but the host key has changed (often
+          happens on an OS update), then you must edit ~/.ssh/known_hosts to
+          remove the remote host entry, then repeat the ssh to add the host
+          under the new host key.  Don't start the alignments until you can
+          ssh to kk and the iservers without being prompted.
+
+
       <LI> If you have started an alignment and discover that the
           <CODE>ssh</CODE> is not working correctly, fix the
           problem and restart <CODE>gbAlignStep</CODE> process
