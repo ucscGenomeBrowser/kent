@@ -24,7 +24,7 @@ errAbort(
   "usage:\n"
   "   hgLoadBed database track files(s).bed\n"
   "options:\n"
-  "   -nobin   suppress bin field\n"
+  "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -tab  Separate by tabs rather than space\n"
