@@ -1279,17 +1279,16 @@ LOAD GENIE CLONE BOUNDS (done 6/3/02)
      end
      hgLoadBed mm2 genieBounds *-fixed.bed
 
-LOAD JACKSON LABS QTL (done 7/16/02)
-     Carol Bult at Jackson Labs sent us tab-separated QTL info -- 
-     See RT289.  
-     - Reformat QTL info into bed 6 + (really bed 5, no strand).
-       There will be some complaints about lines that are missing 
-       chromStart, chromEnd (they're on MIT Markers that we don't have 
-       in our stsMapMouse table...?)
-     cd ~/mm2/bed/qtl
-     ./fixit.pl mgi_qtl.rpt > mgi_qtl.bed
-     hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \
-       mm2 jaxQTL mgi_qtl.bed
+
+LOAD JACKSON LABS QTL (DONE 03/13/03)
+    mkdir ~/mm2/bed/jaxQTL2
+    # Save the email attachment from Sridhar Ramachandran at Jackson Labs
+    # (bed 8+, jaxQTL2 format).
+    # Strip the column headers and load into the database.  
+    tail +2 QTLBedFormat.txt > jaxQTL2.bed
+    hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL2.sql \
+      mm2 jaxQTL2 jaxQTL2.bed
+
 
 LOAD SOFTBERRY GENES (todo)
      - ln -s /cluster/store2/mm.2002.02/mm2 ~/mm
