@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.6 2003/06/04 16:17:01 kate Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.7 2003/10/10 19:35:28 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -234,7 +234,7 @@ void agpToFa(char *agpFile, char *agpSeq, char *faOut, char *seqDir)
 struct lineFile *lf = lineFileOpen(agpFile, TRUE);
 char *line, *words[16];
 int lineSize, wordCount;
-int lastPos = 0;
+int lastPos = 1; // file is 1-based but agpFragLoad() now assumes 0-based.
 struct agpFrag *agpList = NULL, *agp;
 DNA *dna;
 
@@ -258,11 +258,15 @@ while (lineFileNext(lf, &line, &lineSize))
 		    agp->chrom, agp->frag, lf->lineIx, lf->fileName);
 	    slAddHead(&agpList, agp);
 	    lastPos = agp->chromEnd;
+	    // file is 1-based but agpFragLoad() now assumes 0-based:
+	    lastPos++;
 	    }
 	}
     else
         {
 	lastPos = lineFileNeedNum(lf, words, 2);
+	// file is 1-based but agpFragLoad() now assumes 0-based:
+	lastPos++;
 	}
     }
 slReverse(&agpList);
