@@ -9,6 +9,21 @@ FILE* createXMLFile(char* proteinID, char *path);
 void populateXMLFile(FILE *outfile, int tmNumber, char *proteinID, char *path);
 void addCoordinatesToXMLFile(FILE *outfile, int start, int end, char* mapTo, int count);
 void finishXMLFile(FILE *outfile, char *proteinID, int seqLength);
+void usage(char **argv);
+
+void usage(char **argv)
+{
+   if(argv[1] == NULL || argv[2] == NULL) 
+        {
+        errAbort(
+          "gpcrParser - Create xml files for gpcr snakeplots.\n"
+          "usage:\n   gpcrParser TMHMMresult.htm path\n"
+          "    The first parameter is the html output from www.cbs.dtu.dk\n"
+          "    Path is the working directory holding the *.seq files needed to\n"
+          "    create the xml files. The xml files will be created in the path location.\n"
+           );
+         }
+}
 
 void catSeqFile(FILE* outfile, char* filename)
 /** Copies contents of one file to another file */
@@ -16,12 +31,10 @@ void catSeqFile(FILE* outfile, char* filename)
 FILE* infile;
 char* line = NULL;
 infile = mustOpen(filename, "r");
-line = readLine(infile);
-     while( line  != NULL )
+     while( (line = readLine(infile))  != NULL )
      {
      fprintf(outfile, "\t\t%s\n", line);
      freeMem(line);
-     line = readLine(infile);
      }
 carefulClose(&infile);
 }
@@ -70,11 +83,9 @@ void populateXMLFile(FILE *outfile, int tmNumber, char *proteinID, char *path)
 /** Adds the number of TM helices and sequence the the xml file */
 {
 char *filename = (char*)malloc(128*sizeof(char));
-    if(path != NULL)
-        {
-        strcpy(filename,path);
-        strcat(filename, "/");
-        }
+strcpy(filename,path);
+        if(!endsWith(path, "/"))
+           strcat(filename, "/");
 strcat(filename, proteinID);
 strcat(filename, ".seq"); 
 fprintf(outfile, 
@@ -119,23 +130,25 @@ while( ( line  = readLine(infile) ) != NULL )
     {  /*grab the protein ID after each <PRE> tag*/
     while( (token = nextWord(&line)) != NULL )
         {
-   	    if( sameString(token,"<PRE>#") )
+   	    if( sameString(token,"<PRE>#"))
                 {  /*create a new xml file*/
                 token = nextWord(&line);
-       	        proteinID = cloneString(token);
+       	        proteinID = (char*)malloc(24*sizeof(char));
+                strcpy(proteinID, token);
                 outfile = createXMLFile(proteinID, path);
 	        token = lastWordInLine(line);
                 seqLength = atoi(token);
                 }
             if( sameString(token,"predicted") )
                 {   /*grab the number of transmembrane helices*/
-                tmNumber = atoi(lastWordInLine(line));
+                token = lastWordInLine(line); 
+                tmNumber = atoi(token);
                 populateXMLFile(outfile, tmNumber, proteinID, path);
                 }
             if( sameString(token,"</PRE>") )
                 {  /*close the xml file*/
 	        carefulClose(&outfile);
-  	        freeMem(proteinID);
+  	        free(proteinID);
                 count = 0;
                 }
             if( sameString(token,"TMhelix") )
@@ -163,28 +176,9 @@ while( ( line  = readLine(infile) ) != NULL )
 int main(int argc, char** argv)
 {
 FILE *infile;
-char * filename = (char*)malloc(128*sizeof(char));
-    if(argv[1] == NULL)
-        {
-        errAbort(
-          "gpcrParser - Create xml files for gpcr snakeplots.\n"
-          "usage:\n   gpcrParser path\n"
-          "    Where path is the working directory holding the THMMH output,\n"
-          "    result.htm, and the *.seq files you wish to create xml files for.\n"
-          "    The xml files will also be put in the path location.  If no parameter\n"
-          "    is specified the files are expected to be in the same directory as\n"
-          "    the executable."
-           );
-         }
-    if( argv[1] != NULL )
-        {
-        strcpy(filename, argv[1]);
-        strcat(argv[1], "/result.htm");
-        }
-    else
-       strcpy(filename, "result.htm");
-infile = mustOpen(filename, "r");
-getTransFromFile(infile, argv[1]);
+usage(argv);
+infile = mustOpen(argv[1], "r");
+getTransFromFile(infile, argv[2]);
 carefulClose(&infile);
 return 0;
 }
