@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.598 2004/03/27 15:10:39 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.599 2004/03/30 17:22:57 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3257,6 +3257,7 @@ static char *mgcStatusDesc[][2] =
     {"artifact", "library artifacts"},
     {"noPolyATail", "no polyA-tail"},
     {"cantSequence", "unable to sequence"},
+    {"inconsistentWithGene", "inconsistent with known gene structure"},
     {NULL, NULL}
 };
 
@@ -7642,26 +7643,19 @@ sqlFreeResult(&sr);
 struct hash *makeTrackHash(char *chrom)
 /* Make hash of trackDb items for this chromosome. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdbs = hTrackDb(chrom);
 struct hash *trackHash = newHash(7);
-struct sqlResult *sr;
-char **row;
-struct trackDb *tdb;
-char *trackDb = hTrackDbName();
-char query[256];
-snprintf(query, sizeof(query), "select * from %s", trackDb);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+
+while (tdbs != NULL)
     {
-    tdb = trackDbLoad(row);
+    struct trackDb *tdb = slPopHead(&tdbs);
     hLookupStringsInTdb(tdb, database);
     if (hTrackOnChrom(tdb, chrom))
 	hashAdd(trackHash, tdb->tableName, tdb);
     else
         trackDbFree(&tdb);
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+
 return trackHash;
 }
 
@@ -13435,7 +13429,7 @@ seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
 trackHash = makeTrackHash(seqName);
-tdb = hashFindVal(trackHash, track);
+tdb = hashMustFindVal(trackHash, track);
 if (sameWord(track, "getDna"))
     {
     doGetDna1();
