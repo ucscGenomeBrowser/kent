@@ -1340,6 +1340,10 @@ searchTable refGene
 searchType refGene
 searchPriority 2
 
+searchTable xenoRefGene
+searchType refGene
+searchPriority 1
+
 searchTable superfamily
 searchType bed
 searchMethod fuzzy
