@@ -42,7 +42,11 @@
 #include "fishClones.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "stsMapMouseNew.h"
+#include "stsMapRat.h"
 #include "recombRate.h"
+#include "recombRateRat.h"
+#include "recombRateMouse.h"
 #include "chr18deletions.h"
 #include "mouseOrtho.h"
 #include "humanParalog.h"
@@ -69,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.637 2003/12/04 17:30:02 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.638 2003/12/05 19:06:33 booch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1856,6 +1860,34 @@ void fosEndPairsLongMethods(struct track *tg)
 {
 linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadFosEndPairsLong;
+}
+
+void loadEarlyRep(struct track *tg)
+/* Load up early replication cosmid  pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("earlyRep", winStart, winEnd, chromName);
+}
+
+void earlyRepMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadEarlyRep;
+}
+
+
+void loadEarlyRepBad(struct track *tg)
+/* Load up bad early replication pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("earlyRepBad", winStart, winEnd, chromName);
+}
+
+
+void earlyRepBadMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadEarlyRepBad;
 }
 
 char *lfMapNameFromExtra(struct track *tg, void *item)
@@ -3719,6 +3751,163 @@ tg->colorShades = shadesOfGray;
 tg->itemColor = recombRateColor;
 }
 
+char *recombRateRatMap;
+enum recombRateRatOptEnum recombRateRatType;
+
+boolean recombRateRatSetRate(struct track *tg, void *item)
+/* Change the recombRateRat value to the one chosen */
+{
+struct recombRateRat *el = item;
+switch (recombRateRatType)
+    {
+    case rrroeShrspAvg:
+	return TRUE;
+        break;
+    case rrroeFhhAvg:
+	el->shrspAvg = el->fhhAvg;
+	return TRUE;
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
+void loadRecombRateRat(struct track *tg)
+/* Load up recombRateRat from database table to track items. */
+{
+recombRateRatMap = cartUsualString(cart, "recombRateRat.type", rrroeEnumToString(0));
+recombRateRatType = rrroeStringToEnum(recombRateRatMap);
+bedLoadItem(tg, "recombRateRat", (ItemLoader)recombRateRatLoad);
+filterItems(tg, recombRateRatSetRate, "include");
+}
+
+void freeRecombRateRat(struct track *tg)
+/* Free up recombRateRat items. */
+{
+recombRateRatFreeList((struct recombRateRat**)&tg->items);
+}
+
+char *recombRateRatName(struct track *tg, void *item)
+/* Return name of recombRateRat track item. */
+{
+struct recombRateRat *rr = item;
+static char buf[32];
+
+switch (recombRateRatType)
+    {
+    case rrroeShrspAvg: case rrroeFhhAvg:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
+        break;
+    default:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
+        break;
+    }
+return buf;
+}
+
+Color recombRateRatColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color for item in recombRateRat track item. */
+{
+struct recombRateRat *rr = item;
+float rate = rr->shrspAvg;
+int rcr;
+int grayLevel;
+
+rcr = (int)(rr->shrspAvg * 200);
+grayLevel = grayInRange(rcr, recombRateMin, recombRateMax);
+return shadesOfGray[grayLevel];
+}
+
+void recombRateRatMethods(struct track *tg)
+/* Make track for rat recombination rates. */
+{
+tg->loadItems = loadRecombRateRat;
+tg->freeItems = freeRecombRateRat;
+tg->itemName = recombRateRatName;
+tg->colorShades = shadesOfGray;
+tg->itemColor = recombRateRatColor;
+}
+
+
+char *recombRateMouseMap;
+enum recombRateMouseOptEnum recombRateMouseType;
+
+boolean recombRateMouseSetRate(struct track *tg, void *item)
+/* Change the recombRateMouse value to the one chosen */
+{
+struct recombRateMouse *el = item;
+switch (recombRateMouseType)
+    {
+    case rrmoeWiAvg:
+	return TRUE;
+        break;
+    case rrmoeMgdAvg:
+	el->wiAvg = el->mgdAvg;
+	return TRUE;
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
+void loadRecombRateMouse(struct track *tg)
+/* Load up recombRateMouse from database table to track items. */
+{
+recombRateMouseMap = cartUsualString(cart, "recombRateMouse.type", rrmoeEnumToString(0));
+recombRateMouseType = rrmoeStringToEnum(recombRateMouseMap);
+bedLoadItem(tg, "recombRateMouse", (ItemLoader)recombRateMouseLoad);
+filterItems(tg, recombRateMouseSetRate, "include");
+}
+
+void freeRecombRateMouse(struct track *tg)
+/* Free up recombRateMouse items. */
+{
+recombRateMouseFreeList((struct recombRateMouse**)&tg->items);
+}
+
+char *recombRateMouseName(struct track *tg, void *item)
+/* Return name of recombRateMouse track item. */
+{
+struct recombRateMouse *rr = item;
+static char buf[32];
+
+switch (recombRateMouseType)
+    {
+    case rrmoeWiAvg: case rrmoeMgdAvg:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
+        break;
+    default:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
+        break;
+    }
+return buf;
+}
+
+Color recombRateMouseColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color for item in recombRateMouse track item. */
+{
+struct recombRateMouse *rr = item;
+float rate = rr->wiAvg;
+int rcr;
+int grayLevel;
+
+rcr = (int)(rr->wiAvg * 200);
+grayLevel = grayInRange(rcr, recombRateMin, recombRateMax);
+return shadesOfGray[grayLevel];
+}
+
+void recombRateMouseMethods(struct track *tg)
+/* Make track for mouse recombination rates. */
+{
+tg->loadItems = loadRecombRateMouse;
+tg->freeItems = freeRecombRateMouse;
+tg->itemName = recombRateMouseName;
+tg->colorShades = shadesOfGray;
+tg->itemColor = recombRateMouseColor;
+}
+
 
 /* Chromosome 18 deletions track */
 void loadChr18deletions(struct track *tg)
@@ -4217,6 +4406,146 @@ else
 hFreeConn(&conn);
 tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
+}
+
+char *stsMapMouseFilter;
+char *stsMapMouseMap;
+enum stsMapMouseOptEnum stsMapMouseType;
+int stsMapMouseFilterColor = MG_BLACK;
+
+boolean stsMapMouseFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct stsMapMouseNew *el = item;
+switch (stsMapMouseType)
+    {
+    case smmoeGenetic:
+       return el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0';
+       break;
+    case smmoeWig:
+	return el->wigChr[0] != '\0';
+        break;
+    case smmoeMgi:
+	return el->mgiChrom[0] != '\0';
+        break;
+    case smmoeRh:
+	return el->rhChrom[0] != '\0';
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
+
+void loadStsMapMouse(struct track *tg)
+/* Load up stsMarkers from database table to track items. */
+{
+stsMapMouseFilter = cartUsualString(cart, "stsMapMouse.filter", "blue");
+stsMapMouseMap = cartUsualString(cart, "stsMapMouse.type", smmoeEnumToString(0));
+stsMapMouseType = smmoeStringToEnum(stsMapMouseMap);
+bedLoadItem(tg, "stsMapMouseNew", (ItemLoader)stsMapMouseNewLoad);
+filterItems(tg, stsMapMouseFilterItem, stsMapMouseFilter);
+stsMapMouseFilterColor = getFilterColor(stsMapMouseFilter, MG_BLACK);
+}
+
+void freeStsMapMouse(struct track *tg)
+/* Free up stsMap items. */
+{
+stsMapMouseNewFreeList((struct stsMapMouseNew**)&tg->items);
+}
+
+Color stsMapMouseColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of stsMap track item. */
+{
+if (stsMapMouseFilterItem(tg, item))
+    return stsMapMouseFilterColor;
+else
+    {
+    struct stsMapMouseNew *el = item;
+    if (el->score >= 900)
+        return MG_BLACK;
+    else
+        return MG_GRAY;
+    }
+}
+
+void stsMapMouseMethods(struct track *tg)
+/* Make track for sts markers. */
+{
+tg->loadItems = loadStsMapMouse;
+tg->freeItems = freeStsMapMouse;
+tg->itemColor = stsMapMouseColor;
+}
+
+char *stsMapRatFilter;
+char *stsMapRatMap;
+enum stsMapRatOptEnum stsMapRatType;
+int stsMapRatFilterColor = MG_BLACK;
+
+boolean stsMapRatFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct stsMapRat *el = item;
+switch (stsMapRatType)
+    {
+    case smroeGenetic:
+       return el->fhhChr[0] != '\0' || el->shrspChrom[0] != '\0';
+       break;
+    case smroeFhh:
+	return el->fhhChr[0] != '\0';
+        break;
+    case smroeShrsp:
+	return el->shrspChrom[0] != '\0';
+        break;
+    case smroeRh:
+	return el->rhChrom[0] != '\0';
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
+
+void loadStsMapRat(struct track *tg)
+/* Load up stsMarkers from database table to track items. */
+{
+stsMapRatFilter = cartUsualString(cart, "stsMapRat.filter", "blue");
+stsMapRatMap = cartUsualString(cart, "stsMapRat.type", smroeEnumToString(0));
+stsMapRatType = smroeStringToEnum(stsMapRatMap);
+bedLoadItem(tg, "stsMapRat", (ItemLoader)stsMapRatLoad);
+filterItems(tg, stsMapRatFilterItem, stsMapRatFilter);
+stsMapRatFilterColor = getFilterColor(stsMapRatFilter, MG_BLACK);
+}
+
+void freeStsMapRat(struct track *tg)
+/* Free up stsMap items. */
+{
+stsMapRatFreeList((struct stsMapRat**)&tg->items);
+}
+
+Color stsMapRatColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of stsMap track item. */
+{
+if (stsMapRatFilterItem(tg, item))
+    return stsMapRatFilterColor;
+else
+    {
+    struct stsMapRat *el = item;
+    if (el->score >= 900)
+        return MG_BLACK;
+    else
+        return MG_GRAY;
+    }
+}
+
+void stsMapRatMethods(struct track *tg)
+/* Make track for sts markers. */
+{
+tg->loadItems = loadStsMapRat;
+tg->freeItems = freeStsMapRat;
+tg->itemColor = stsMapRatColor;
 }
 
 void loadGenMapDb(struct track *tg)
@@ -6541,6 +6870,8 @@ zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
+registerTrackHandler("earlyRep", earlyRepMethods);
+registerTrackHandler("earlyRepBad", earlyRepBadMethods);
 registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
@@ -6548,7 +6879,11 @@ registerTrackHandler("fishClones", fishClonesMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
+registerTrackHandler("stsMapMouseNew", stsMapMouseMethods);
+registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("recombRate", recombRateMethods);
+registerTrackHandler("recombRateMouse", recombRateMouseMethods);
+registerTrackHandler("recombRateRat", recombRateRatMethods);
 registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
