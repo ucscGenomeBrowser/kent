@@ -4,7 +4,7 @@
 # automatic way.
 
 #SNP positions from various sources
-CREATE TABLE snp (
+CREATE TABLE snpSingleValid (
     bin        smallint unsigned not null, 
     chrom      enum (
 		'unknown',	#
