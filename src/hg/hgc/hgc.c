@@ -109,8 +109,10 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 #include "ensFace.h"
+#include "bdgpGeneInfo.h"
+#include "flyBaseSwissProt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.489 2003/10/07 18:25:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.490 2003/10/09 01:24:09 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -227,6 +229,18 @@ static void printGenMapDbUrl(FILE *f, char *clone)
 /* Print URL for GenMapDb at UPenn for a clone */
 {
 fprintf(f, "\"%s%s\"", genMapDbScript, clone);
+}
+
+static void printFlyBaseUrl(FILE *f, char *fbId)
+/* Print URL for FlyBase browser. */
+{
+fprintf(f, "\"http://flybase.bio.indiana.edu/.bin/fbidq.html?%s\"", fbId);
+}
+
+static void printBDGPUrl(FILE *f, char *bdgpName)
+/* Print URL for Berkeley Drosophila Genome Project browser. */
+{
+fprintf(f, "\"http://www.fruitfly.org/cgi-bin/annot/gene?%s\"", bdgpName);
 }
 
 char *hgcPath()
@@ -7236,6 +7250,142 @@ printTrackHtml(tdb);
 }
 
 
+void doBDGPGene(struct trackDb *tdb, char *geneName)
+/* Show Berkeley Drosophila Genome Project gene info. */
+{
+struct bdgpGeneInfo *bgi = NULL;
+struct flyBaseSwissProt *fbsp = NULL;
+char *geneTable = tdb->tableName;
+char *truncName = cloneString(geneName);
+char *ptr = strchr(truncName, '-');
+char infoTable[128];
+char pepTable[128];
+char query[512];
+
+if (ptr != NULL)
+    *ptr = 0;
+safef(infoTable, sizeof(infoTable), "%sInfo", geneTable);
+
+genericHeader(tdb, geneName);
+
+if (hTableExists(infoTable))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query),
+	  "select * from %s where bdgpName = \"%s\";",
+	  infoTable, truncName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	bgi = bdgpGeneInfoLoad(row);
+	if (hTableExists("flyBaseSwissProt"))
+	    {
+	    safef(query, sizeof(query),
+		  "select * from flyBaseSwissProt where flyBaseId = \"%s\"",
+		  bgi->flyBaseId);
+	    sqlFreeResult(&sr);
+	    sr = sqlGetResult(conn, query);
+	    if ((row = sqlNextRow(sr)) != NULL)
+		fbsp = flyBaseSwissProtLoad(row);
+	    }
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+if (bgi != NULL)
+    {
+    if (!sameString(bgi->symbol, geneName))
+	{
+	printf("<B>Gene symbol:</B> %s<BR>\n", bgi->symbol);
+	}
+    if (fbsp != NULL)
+	{
+	printf("<B>SwissProt:</B> <A HREF=");
+	printSwissProtProteinUrl(stdout, fbsp->swissProtId);
+	printf(" TARGET=_BLANK>%s</A> (%s) %s<BR>\n",
+	       fbsp->swissProtId, fbsp->spSymbol, fbsp->spGeneName);
+	}
+    printf("<B>FlyBase:</B> <A HREF=");
+    printFlyBaseUrl(stdout, bgi->flyBaseId);
+    printf(" TARGET=_BLANK>%s</A><BR>\n", bgi->flyBaseId);
+    printf("<B>BDGP:</B> <A HREF=");
+    printBDGPUrl(stdout, truncName);
+    printf(" TARGET=_BLANK>%s</A><BR>\n", truncName);
+    }
+printCustomUrl(tdb, geneName, FALSE);
+showGenePos(geneName, tdb);
+if (bgi != NULL)
+    {
+    if (bgi->go != NULL && bgi->go[0] != 0)
+	{
+	struct sqlConnection *goConn = sqlMayConnect("go");
+	char *goTerm = NULL;
+	char *words[10];
+	char buf[512];
+	int wordCount = chopCommas(bgi->go, words);
+	int i;
+	puts("<B>Gene Ontology terms from BDGP:</B> <BR>");
+	for (i=0;  i < wordCount && words[i][0] != 0;  i++)
+	    {
+	    if (i > 0 && sameWord(words[i], words[i-1]))
+		continue;
+	    goTerm = "";
+	    if (goConn != NULL)
+		{
+		safef(query, sizeof(query),
+		      "select name from term where acc = 'GO:%s';",
+		      words[i]);
+		goTerm = sqlQuickQuery(goConn, query, buf, sizeof(buf));
+		if (goTerm == NULL)
+		    goTerm = "";
+		}
+	    printf("&nbsp;&nbsp;&nbsp;GO:%s: %s<BR>\n",
+		   words[i], goTerm);
+	    }
+	sqlDisconnect(&goConn);
+	}
+    if (bgi->cytorange != NULL && bgi->cytorange[0] != 0)
+	{
+	printf("<B>Cytorange:</B> %s<BR>", bgi->cytorange);
+	}
+    }
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+
+safef(pepTable, sizeof(pepTable), "%sPep", geneTable);
+if (hGenBankHaveSeq(geneName, pepTable))
+    {
+    puts("<LI>\n");
+    hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
+		       seqName);
+    printf("Predicted Protein</A> \n"); 
+    puts("</LI>\n");
+    }
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+printf("%s</A> may be different from the genomic sequence.\n", 
+       "Predicted mRNA");
+puts("</LI>\n");
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
+
+if (hTableExists("axtInfo"))
+    {
+    puts("<LI>\n");
+    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
+    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    puts("</LI>\n");
+    }
+printf("</UL>\n");
+printTrackHtml(tdb);
+}
+
 void parseChromPointPos(char *pos, char *retChrom, int *retPos)
 /* Parse out chrN:123 into chrN and 123. */
 {
@@ -12438,6 +12588,10 @@ else if (sameWord(track, "jaxQTL"))
 else if (sameWord(track, "gbProtAnn"))
     {
     doGbProtAnn(tdb, item);
+    }
+else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
+    {
+    doBDGPGene(tdb, item);
     }
 else if (tdb != NULL)
     {
