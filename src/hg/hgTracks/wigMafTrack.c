@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.8 2004/03/10 22:17:20 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.9 2004/03/10 22:58:41 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -152,7 +152,8 @@ slAddHead(&miList, mi);
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
-    mi = scoreItem(wigTotalHeight(track->subtracks, track->visibility));
+    mi = scoreItem(wigTotalHeight(track->subtracks, 
+                                track->visibility == tvFull ? tvFull : tvDense));
     slAddHead(&miList, mi);
     }
 slReverse(&miList);
@@ -664,18 +665,31 @@ return y;
 
 static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+        MgFont *font, Color color, enum trackVisibility vis, boolean zoomedToBaseLevel)
 {
 /* Draw routine for score graph, returns new Y offset */
 struct track *wigTrack = track->subtracks;
 
-/* wiggle is displayed full for all wigMaf visibilities, except dense */
-enum trackVisibility wigVis = (vis == tvDense ? tvDense : tvFull);
+/* wiggle is displayed dense for all visibilities except full */
+enum trackVisibility wigVis = (vis == tvFull ? tvFull : tvDense);
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
-    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
+    /*
+     * TODO: debug this -- the squished wiggle seems to persist, and
+     * leak into other tracks.  
+    if (zoomedToBaseLevel && (vis == tvSquish || vis == tvPack))
+        {
+        /* display squished wiggle by reducing wigTrack height */
+    /*
+        wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
+                                                            tl.fontHeight - 1;
+        vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
+        }
+    else
+        */
+        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
     vgUnclip(vg);
@@ -696,12 +710,12 @@ if (zoomedToBaseLevel)
     y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
                                 color, vis);
     wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
-                                font, color, vis);
+                                font, color, vis, zoomedToBaseLevel);
     }
 else 
     {
     y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
-                                font, color, vis);
+                                font, color, vis, zoomedToBaseLevel);
     if (vis == tvFull || vis == tvPack)
         wigMafDrawPairwise(track, seqStart, seqEnd, vg, xOff, y, 
                                 width, font, color, vis);
@@ -709,45 +723,6 @@ else
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 
             track->mapName, NULL);
 }
-
-/*
-TODO:  REMOVE OR USE
-static void wigMafLeftLabels(struct track *track, int seqStart, int seqEnd,
-                          struct vGfx *vg, int xOff, int yOff, 
-                          int width, int height, boolean withCenterLabels, 
-                          MgFont *font, Color color, enum trackVisibility vis)
-/* Draw species labels for each line of alignment or pairwise display */
-/*
-{
-int fontHeight = mgFontLineHeight(font);
-int centerOffset = withCenterLabels ? fontHeight : 0;
-struct wigMafItem *item;
-
-switch (vis)
-    {
-    case tvHide:
-    case tvPack:
-    case tvSquish:
-        break;
-    case tvFull:
-        yOff += centerOffset;
-        for (item = track->items; item != NULL; item = item->next)
-            {
-            char *name = track->itemName(track, item);
-            int itemHeight = track->itemHeight(track, item);
-            vgTextRight(vg, xOff, yOff, width - 1,
-                            track->itemHeight(track, item), color, font, name);
-            yOff += itemHeight;
-            }
-        break;
-    case tvDense:
-        vgTextRight(vg, xOff, yOff, width - 1, height-centerOffset,
-                            track->ixColor, font, track->shortLabel);
-        break;
-    }
-    vgUnclip(vg);
-}
-*/
 
 void wigMafMethods(struct track *track, struct trackDb *tdb,
                                         int wordCount, char *words[])
