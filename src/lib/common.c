@@ -1183,7 +1183,7 @@ return TRUE;
 char *strstrNoCase(char *haystack, char *needle)
 /*
   A case-insensitive strstr function
-
+Will also robustly handle null strings
 param haystack - The string to be searched
 param needle - The string to llok for in the haystack string
 
@@ -1193,8 +1193,26 @@ return - A pointer to the first occurence of the desired substring
 char *haystackCopy = NULL;
 char *needleCopy = NULL;
 int index = 0;
-int haystackLen = strlen(haystack);
-int needleLen = strlen(needle);
+int haystackLen = NULL;
+int needleLen = NULL;
+
+if (NULL == haystack) 
+    {
+    haystackLen = 0;
+    }
+else
+    {
+    haystackLen = strlen(haystack);
+    }
+
+if (NULL == needle) 
+    {
+    needleLen = 0;
+    }
+else
+    {
+    needleLen = strlen(needle);
+    }
 
 haystackCopy = (char*) needMem(haystackLen + 1);
 needleCopy = (char*) needMem(needleLen + 1);
