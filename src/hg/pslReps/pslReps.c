@@ -11,7 +11,9 @@
 double minAli = 0.93;
 double nearTop = 0.01;
 double minCover = 0.0;
-boolean sizeMatters = TRUE;
+boolean ignoreSize = FALSE;
+boolean singleHit = FALSE;
+int minNearTopSize = 20;
 
 void usage()
 /* Print usage instructions and exit. */
@@ -25,12 +27,15 @@ errAbort(
     "sorted by pslSort, out.psl is the best alignment output\n"
     "and out.psr contains repeat info\n"
     "options:\n"
-    "    -sizeMatters Will avoid smaller alignments if have a larger one\n"
+    "    -ignoreSize Will not weigh in favor of larger alignments so much\n"
+    "    -singleHit  Takes single best hit, not splitting into parts\n"
     "    -minCover=0.N minimum coverage to output.  Default is 0.\n"
     "    -minAli=0.N minimum alignment ratio\n"
     "               default is 0.93\n"
     "    -nearTop=0.N how much can deviate from top and be taken\n"
-    "               default is 0.01\n");
+    "               default is 0.01\n"
+    "    -minNearTopSize=N  Minimum size of alignment that is near top\n"
+    "               for aligmnent to be kept.  Default 20.\n");
 }
 
 int calcMilliScore(struct psl *psl)
@@ -43,9 +48,9 @@ int sizeFactor(struct psl *psl)
 /* Return a factor that will favor longer alignments. */
 {
 int score;
-if (!sizeMatters) return 0;
-score = 6*round(sqrt(psl->match + psl->repMatch/4));
-if (psl->tNumInsert == 0) score -= 10 + psl->match/100;
+if (ignoreSize) return 0;
+score = 4*round(sqrt(psl->match + psl->repMatch/4));
+if (psl->tNumInsert == 0) score -= 20;
 return score;
 }
 
@@ -74,7 +79,7 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 	{
 	if (scoreTrack[i] <= threshold)
 	    {
-	    if (++topCount >= 20)
+	    if (++topCount >= minNearTopSize)
 		return TRUE;
 	    }
 	}
@@ -82,8 +87,8 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 return FALSE;
 }
 
-void doOneAcc(char *acc, struct psl *pslList, FILE *bestFile, FILE *repFile)
-/* Process alignments of one piece of mRNA. */
+void processBestMulti(char *acc, struct psl *pslList, FILE *bestFile, FILE *repFile)
+/* Find psl's that are best anywhere along their length. */
 {
 struct psl *psl;
 int qSize;
@@ -196,6 +201,38 @@ freeMem(repTrack);
 freeMem(scoreTrack);
 }
 
+void processBestSingle(char *acc, struct psl *pslList, FILE *bestFile, FILE *repFile)
+/* Find single best psl in list. */
+{
+struct psl *bestPsl = NULL, *psl;
+int bestScore = 0, score, threshold;
+
+for (psl = pslList; psl != NULL; psl = psl->next)
+    {
+    score = pslScore(psl);
+    if (score > bestScore)
+        {
+	bestScore = score;
+	bestPsl = psl;
+	}
+    }
+threshold = round((1.0 - nearTop)*bestScore);
+for (psl = pslList; psl != NULL; psl = psl->next)
+    {
+    if (pslScore(psl) >= threshold)
+        pslTabOut(psl, bestFile);
+    }
+}
+
+void doOneAcc(char *acc, struct psl *pslList, FILE *bestFile, FILE *repFile)
+/* Process alignments of one piece of mRNA. */
+{
+if (singleHit)
+    processBestSingle(acc, pslList, bestFile, repFile);
+else
+    processBestMulti(acc, pslList, bestFile, repFile);
+}
+
 void pslReps(char *inName, char *bestAliName, char *repName)
 /* Analyse inName and put best alignments for eacmRNA in estAliName.
  * Put repeat info in repName. */
@@ -248,10 +285,11 @@ cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 minAli = cgiOptionalDouble("minAli", minAli);
-uglyf("minAli = %f\n", minAli);
 nearTop = cgiOptionalDouble("nearTop", nearTop);
 minCover = cgiOptionalDouble("minCover", minCover);
-sizeMatters = cgiBoolean("sizeMatters");
+minNearTopSize = cgiOptionalInt("minNearTopSize", minNearTopSize);
+ignoreSize = cgiBoolean("ignoreSize");
+singleHit = cgiBoolean("singleHit");
 pushCarefulMemHandler(30000000);
 pslReps(argv[1], argv[2], argv[3]);
 return 0;
