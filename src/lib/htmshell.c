@@ -150,9 +150,10 @@ fprintf(f,"<div id=\"jstooldiv\" style=\"position: absolute;visibility: hidden;\
 #endif /* ROBERTS_EXPERIMENT */
 }
 
-/* Write the start of an html from CGI */
 void htmlStart(char *title)
+/* Write the start of an html from CGI */
 {
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 puts("Content-Type:text/html");
 puts("\n");
 
