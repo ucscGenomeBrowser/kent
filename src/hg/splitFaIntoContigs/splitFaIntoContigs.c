@@ -13,8 +13,10 @@ and split each chromosomes into subdirs and files for each supercontig.
 
 /* Default array size for file paths */
 #define DEFAULT_PATH_SIZE 1024
+
 /* Default array size for normal char arrays */
 #define BUF_SIZE 128
+
 /* 
 Flag showing that we have a non-bridged gap, indicating
 that we can split a sequence at the end of it into supercontigs
@@ -51,7 +53,7 @@ struct agpData
 /* Name of the contig that this agp entry starts */
     char contigName[BUF_SIZE];
 
-/* Union to hold either and agpGap or agpFrag, depending on isGap flag. */
+/* Union to hold either and agpGap or agpFrag, depending on the isGap flag. */
     union
     {
 	struct agpGap *pGap;
@@ -68,7 +70,7 @@ fflush(stdout);
     printf(
       "\nsplitFaIntoContigs - takes a .agp file and .fa file a destination directory in which to save data and a size (default 1Mbase) into which to split each chromosome of the fa file along non-bridged gaps\n"
       "usage:\n\n"
-      "   splitFaIntoContigs in.agp in.fa storageDir [approx size in kilobases (default 1000)]\n"
+      "   splitFaIntoContigs in.agp in.fa outputDir [approx size in kilobases (default 1000)]\n"
       "\n");
     exit(-1);
 }
@@ -82,14 +84,26 @@ fprintf(fp, "%s%c", startData->data.pGap->chrom, sep);
 fprintf(fp, "%d%c", chromSize, lastSep);
 }
 
-void writeListData(struct agpData *startData, FILE *fp)
+void writeListData(struct agpData *agpData, FILE *fp)
+/* 
+Writes the ordered.lst output lift file 
+
+param startData - The contig that we are writing data for
+param fp - The file pointer we are writing to
+*/
 {
-fprintf(fp, "%s\n", startData->contigName);
+fprintf(fp, "%s\n", agpData->contigName);
 }
 
-void writeListOutData(struct agpData *startData, FILE *fp)
+void writeListOutData(struct agpData *agpData, FILE *fp)
+/* 
+Writes the oOut.lst output lift file 
+
+param startData - The contig that we are writing data for
+param fp - The file pointer we are writing to
+*/
 {
-fprintf(fp, "%s/%s.fa.out\n", startData->contigName, startData->contigName);
+fprintf(fp, "%s/%s.fa.out\n", agpData->contigName, agpData->contigName);
 }
 
 void writeLiftFiles(char *chromName, int chromSize, struct agpData *startAgpData, char *destDir)
