@@ -11,7 +11,7 @@ track vegaGene
 shortLabel Vega Genes
 longLabel Vega Annotations from Sanger, Genoscope
 group genes
-priority 36
+priority 37
 visibility hide
 chromosomes chr14,chr20,chr22,
 color 0,100,180
@@ -22,7 +22,7 @@ track vegaPseudoGene
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
-priority 36.1
+priority 37.1
 visibility hide
 chromosomes chr14,chr20,chr22,
 color 30,130,210
@@ -33,7 +33,7 @@ track sanger20
 shortLabel Sanger 20
 longLabel Sanger Institute Chromosome 20 Genes
 group genes
-priority 36.2
+priority 37.2
 visibility pack
 chromosomes chr20,
 color 0,100,180
@@ -43,7 +43,7 @@ track sanger22
 shortLabel Sanger 22
 longLabel Sanger Institute Chromosome 22 Genes
 group genes
-priority 37
+priority 37.3
 visibility pack
 chromosomes chr22,
 color 0,100,180
@@ -53,7 +53,7 @@ track sanger22pseudo
 shortLabel Sanger 22 Pseudo
 longLabel Sanger Center Chromosome 22 Pseudogenes
 group genes
-priority 38
+priority 37.4
 visibility hide
 chromosomes chr22,
 color 30,130,210

@@ -18,7 +18,7 @@ track vegaGene
 shortLabel Vega Genes
 longLabel Vega Annotations from Sanger, Genoscope
 group genes
-priority 36
+priority 37
 visibility hide
 color 0,100,180
 type genePred vegaPep
@@ -28,7 +28,7 @@ track vegaPseudoGene
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
-priority 36.1
+priority 37.1
 visibility hide
 color 30,130,210
 type genePred
