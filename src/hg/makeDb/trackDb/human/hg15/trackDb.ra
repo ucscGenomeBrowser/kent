@@ -6,6 +6,14 @@ group map
 visibility dense
 type bed 3 +
 
+track clonePos
+priority 14
+shortLabel Coverage
+longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180 
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
