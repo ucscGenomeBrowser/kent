@@ -1,6 +1,6 @@
 all: cgi
 
-alpha: clean cgi-alpha
+alpha: clean cgi-alpha blat
 
 beta: clean cgi-beta
 
@@ -18,6 +18,10 @@ cgi-alpha: libs
 cgi-beta: libs
 	cd hg; make beta; cd ..
 
+blat: libs
+	cd blat; make; make test; cd ..
+	cd gfClient; make; cd ..
+	cd gfServer; make; cd ..
 clean:
 	cd lib; make clean; cd .. 
 	cd hg; make clean; cd ..
