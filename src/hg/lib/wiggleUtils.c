@@ -7,8 +7,43 @@
 #include "hdb.h"
 #include "wiggle.h"
 #include "hCommon.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.20 2004/08/27 20:12:54 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.21 2004/08/30 19:51:35 hiram Exp $";
+
+void statsPreamble(struct wiggleDataStream *wDS, char *chrom,
+    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched)
+{
+char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+
+sprintLongWithCommas(num1Buf, winStart + 1);
+sprintLongWithCommas(num2Buf, winEnd);
+printf("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
+sprintLongWithCommas(num1Buf, winEnd - winStart);
+printf("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
+
+/*	This printout is becoming common to what is already in
+ *	hgc/wiggleClick.c, need to put this in one of the library files.
+ */
+if (valuesMatched == 0)
+    {
+    if ( span < (3 * (winEnd - winStart)))
+	{
+	printf("<P><B> XXX Viewpoint has too few bases to calculate statistics. </B></P>\n");
+	printf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
+	}
+    else
+	printf("<P><B> No data found in this region. </B></P>\n");
+    }
+else
+    {
+    sprintLongWithCommas(num1Buf, wDS->stats->count * wDS->stats->span);
+    printf(
+	"<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
+	num1Buf,
+	100.0*(wDS->stats->count * wDS->stats->span)/(winEnd - winStart));
+    }
+}
 
 int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
 	int winStart, int winEnd, struct cart *cart)
