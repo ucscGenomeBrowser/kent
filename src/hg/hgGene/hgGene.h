@@ -104,6 +104,10 @@ struct section *rnaStructureSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create rnaStructure section. */
 
+struct section *sgdLocalizationSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create SGD Localization section. */
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
