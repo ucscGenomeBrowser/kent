@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.912 2005/02/22 21:28:18 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.913 2005/02/22 22:30:00 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -306,18 +306,20 @@ void initTl()
 /* Initialize layout around small font and a picture about 600 pixels
  * wide. */
 {
-MgFont *font;
+MgFont *font = (MgFont *)NULL;
 tl.textSize = cartUsualString(cart, textSizeVar, "small");
-if (sameString(tl.textSize, "tiny"))
+if (sameString(tl.textSize, "small"))
+     font = mgSmallFont();
+else if (sameString(tl.textSize, "tiny"))
      font = mgTinyFont();
 else if (sameString(tl.textSize, "medium"))
-     font = mgSmallishFont();
-else if (sameString(tl.textSize, "large"))
      font = mgMediumFont();
-else if (sameString(tl.textSize, "huge"))
+else if (sameString(tl.textSize, "large"))
      font = mgLargeFont();
+else if (sameString(tl.textSize, "huge"))
+     font = mgHugeFont();
 else
-     font = mgSmallFont();
+     errAbort("incorrect text size '%s' in cart: %s", textSizeVar, tl.textSize);
 tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "n");
