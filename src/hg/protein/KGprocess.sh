@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.11 2004/02/23 17:18:22 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.12 2004/02/25 17:23:15 hiram Exp $"
 #
 #	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
@@ -258,7 +258,7 @@ fi
 #	Filter the all_mrna's to create tight_mrna.psl
 if [ ! -s tight_mrna.psl ]; then
     echo "`date` running: pslReps all_mrna.psl tight_mrna.psl"
-    pslReps -minCover=0.40 -sizeMatters -minAli=0.97 -nearTop=0.002 \
+    pslReps -minCover=0.40 -minAli=0.97 -nearTop=0.002 \
 	all_mrna.psl tight_mrna.psl /dev/null
     rm -f ${DB}KgMrna.out
 fi
