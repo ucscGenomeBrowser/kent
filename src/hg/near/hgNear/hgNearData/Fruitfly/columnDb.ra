@@ -63,5 +63,5 @@ name percentId
 type distance bdgpBlastTab query target identity
 
 name description
-type lookup bdgpSwissProt bdgpName spGeneName
+type knownDetails bdgpSwissProt bdgpName spGeneName
 
