@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.46 2003/06/20 05:43:48 braney Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.47 2003/06/20 21:43:31 donnak Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -73,6 +73,9 @@ puts(
 "<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
 "<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
+"<A HREF=\"mailto:hiram@soe.ucsc.edu\">Hiram Clawson</A>,\n"
+"<A HREF=\"mailto:kate@soe.ucsc.edu\">Kate Rosenbloom</A>,\n"
+"<A HREF=\"mailto:braney@soe.ucsc.edu\">Brian Raney</A>,\n"
 "and the Genome Bioinformatics Group of UC Santa Cruz.\n"
 "<BR>"
 "Copyright 2001 The Regents of the University of California.\n"
