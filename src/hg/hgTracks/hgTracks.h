@@ -80,7 +80,7 @@ struct track
     /* Return start of item in base pairs. */
 
     int (*itemEnd)(struct track *tg, void *item);
-    /* Return start of item in base pairs. */
+    /* Return end of item in base pairs. */
 
     void (*freeItems)(struct track *tg);
     /* Free item list. */
@@ -319,6 +319,10 @@ void mapBoxJumpTo(int x, int y, int width, int height,
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
+
+void mapStatusMessage(char *format, ...);
+/* Write out stuff that will cause a status message to
+ * appear when the mouse is over this box. */
 
 double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
