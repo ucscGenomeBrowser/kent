@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.30 2004/08/31 23:12:22 sugnet Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.31 2004/09/11 16:43:44 sugnet Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -374,6 +374,9 @@ char *line = NULL;
 lineFileNextReal(lf, &line);
 numFields = chopByWhite(line, NULL, 0);
 lineFileClose(&lf);
+if(numFields < 4) /* Minimum number of fields. */
+    errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d",
+	      fileName, numFields);
 /* Now load them up with that number of fields. */
 list = bedLoadNAll(fileName, numFields);
 return list;
