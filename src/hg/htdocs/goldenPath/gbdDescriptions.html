@@ -108,6 +108,11 @@ format description of their fields.</P>
     best match for a given region of the human genome, and further filtered to 
     high-scoring matches
   <LI><A 
+  href="#PslInfo">chrN_blastzTightMm4</A> 
+  - Blastz alignments of mouse (mm4) vs. human, filtered to retain only the 
+    best match for a given region of the human genome, and further filtered to 
+    high-scoring matches
+  <LI><A 
   href="#PslInfo">chrN_blastzTightMouse</A> 
   - Blastz alignments 
     of mouse vs. human, filtered to retain only the best match for a given 
@@ -228,23 +233,26 @@ stored in a single table rather than one table per chromosome:</P>
   href="#BED">affy10K</A> 
   - SNPs on the Affymetrix 10K SNP Genotyping Array</LI>
   <LI><A 
+  href="#Affy10KDetails">affy10KDetails</A> 
+  - Affymetrix 10K SNP sequence details</LI>
+  <LI><A 
   href="#BED">affyGeno</A> 
   - SNPs on the Affymetrix 120K SNP Genotyping Array</LI>
   <LI><A 
+  href="#AffyGenoDetails">affyGenoDetails</A> 
+  - Affymetrix 120K SNP array information</LI>
+  <LI><A 
   href="#BED">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
+  <LI><A 
+  href="#AffyTranscriptome">affyTranscriptome</A> 
+  - Transcriptome data for chr21 and chr22 from Affymetrix </LI>
   <LI><A 
   href="#PslInfo">affyU133</A> 
   - Consensus and exemplar sequences used for probe selection on Affy HG-U133A and HG-U133B chips</LI>
   <LI><A 
   href="#PslInfo">affyU95</A> 
   - Consensus and exemplar sequences used for probe selection on Affy HG-U95Av2 chip</LI>
-  <LI><A 
-  href="#AffyTranscriptome">affyTranscriptome</A> 
-  - Transcriptome data for chr21 and chr22 from Affymetrix </LI>
-  <LI><A 
-  href="#atlasOncoGene">atlasOncoGene</A> 
-  - Link to Atlas Oncology site</LI>
   <LI><A 
   href="#PslInfo">all_bacends</A> 
   - BLAT alignment information for BAC clone end sequences on 
@@ -269,6 +277,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#AltGraphX">altGraphX</A> 
   - Summary of alt-splicing in EST and mRNA tracks
+  <LI><A 
+  href="#atlasOncoGene">atlasOncoGene</A> 
+  - Link to Atlas Oncology site</LI>
   <LI><A 
   href="#LFS">bacEndPairs</A> 
   - Locations of BAC clones using placements of its 5' and 3' 
@@ -362,6 +373,15 @@ stored in a single table rather than one table per chromosome:</P>
   href="#DbSnp">dbSnpRS</A> 
   - Information from dbSNP at the reference SNP level </LI>
   <LI><A 
+  href="#DbSnp">dbSnpRsHg</A> 
+  - Human genome information from dbSNP at the reference SNP level </LI>
+  <LI><A 
+  href="#DbSnp">dbSnpRsMm</A> 
+  - Mouse genome information from dbSNP at the reference SNP level </LI>
+  <LI><A 
+  href="#DbSnp">dbSnpRsRn</A> 
+  - Rat genome information from dbSNP at the reference SNP level </LI>
+  <LI><A 
   href="#PslInfo">dbtssAli</A> 
   - RefSeq mRNA extended to the 5' end from DBTSS (Database of Transcriptional Start Sites)</LI>
   <LI><A 
@@ -379,6 +399,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#GenePredictions">ECgene</A> 
   - ECGene gene predictions </LI>
+  <LI><A 
+  href="#PepPredictions">ECgenePep</A> 
+  - Translations of ECgene genes into corresponding amino acid sequences </LI>
   <LI><A 
   href="#BED">encodeRegions</A> 
   - Names and positions of selected regions for the ENCODE project</LI>
@@ -401,11 +424,14 @@ stored in a single table rather than one table per chromosome:</P>
   href="#GenePredictions">ensGene</A> 
   - Ensembl Gene Predictions </LI>
   <LI><A 
-  href="#PepPredictions">ensPep</A> 
-  - Translations of Ensembl gene predictions into corresponding amino acid sequences </LI>
-  <LI><A 
   href="#EnsGeneXref">ensGeneXref</A> 
   - Table gene_xref downloaded from Ensembl </LI>
+  <LI><A 
+  href="#EnsGtp">ensGtp</A> 
+  - Associates Ensembl gene, transcript, and protein IDs</LI>
+  <LI><A 
+  href="#PepPredictions">ensPep</A> 
+  - Translations of Ensembl gene predictions into corresponding amino acid sequences </LI>
   <LI><A 
   href="#EnsTranscript">ensTranscript</A> 
   - Table transcript downloaded from Ensembl </LI>
@@ -517,6 +543,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#KgProtAlias">kgProtAlias</A> 
   - Links together a Known Gene ID and a protein alias
   <LI><A 
+  href="#PslInfo">kgProtMap</A> 
+  - Known Genes protein mapping
+  <LI><A 
   href="#KgXref">kgXref</A> 
   - Links together a Known Gene ID and mRNA, SwissProt, RefSeq, and NCBI accessions/IDs
   <LI><A 
@@ -539,8 +568,21 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#KnownGeneLink">knownGeneLink</A> 
   - Stores the seqType info for Known Genes track entries.
   <LI><A 
+  href="#MrnaPredictions">knownGeneMrna</A> 
+  - Known Genes mRNA
+  <LI><A 
+  href="#PepPredictions">knownGenePep</A> 
+  - Known Genes translated proteins
+  <LI><A 
+  href="#OtherKnown">knownInfo</A> 
+  - Other information about known genes (Oct. 2000 and earlier known gene track) 
+  <LI><A 
   href="#KnownIsoforms">knownIsoforms</A> 
   - Links together various transcripts of a gene into a cluster
+  <LI><A 
+  href="#MoreKnown">knownMore</A> 
+  - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
+  (Oct. 2000 and earlier known (RefSeq) gene track) 
   <LI><A 
   href="#KnownTo">knownToCdsSnp</A> 
   - Associates known gene and coding SNP IDs
@@ -568,19 +610,6 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownTo">knownToU95</A> 
   - Associates known gene and Affy U95 chip ID
-  <LI><A 
-  href="#MrnaPredictions">knownGeneMrna</A> 
-  - Known Genes mRNA
-  <LI><A 
-  href="#PepPredictions">knownGenePep</A> 
-  - Known Genes translated proteins
-  <LI><A 
-  href="#OtherKnown">knownInfo</A> 
-  - Other information about known genes (Oct. 2000 and earlier known gene track) 
-  <LI><A 
-  href="#MoreKnown">knownMore</A> 
-  - Links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD
-  (Oct. 2000 and earlier known (RefSeq) gene track) 
   <LI><A 
   href="#BED">mcs_b</A> 
   - Binomial-based Multi-Species Conserved Sequences (MCSs) (Zoo)
@@ -673,6 +702,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#PepMwAa">pepMwAa</A> 
   - Proteome Browser molecular weight and AA length of proteins
   <LI><A 
+  href="#PepPi">pepPi</A> 
+  - Proteome Browser protein pIs 
+  <LI><A 
   href="#PepPiDist">pepPiDist</A> 
   - Proteome Browser pI distribution
   <LI><A 
@@ -725,7 +757,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#RefSeqStatus">refSeqStatus</A> 
   - Associates RefSeq mRNA accessions with corresponding RefSeq status (Dec. 2001 and later) 
   <LI><A 
-  href="#RefSeqSummary">RefSeqSummary</A> 
+  href="#RefSeqSummary">refSeqSummary</A> 
   - Sparse summary table created only for refSeqs that have "Summary:" or "COMPLETENESS:" in comment
   <LI><A 
   href="#WiggleTrack2">regPotential2X</A> 
@@ -757,6 +789,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BED">rosetta</A> 
   - Rosetta Experimental Confirmation of Chr22 Exons </LI>
+  <LI><A 
+  href="#RosettaExps">rosettaExps</A> 
+  - Rosetta Experimental Confirmation information</LI>
   <LI><A 
   href="#Sage">sage</A> 
   - Stores SAGE data in terms of UniGene identifiers</LI>
@@ -803,6 +838,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BlastTab">scBlastTab</A> 
   - Blastp results of known genes vs. one another (SARS)
+  <LI><A 
+  href="#ScopDes">scopDes</A> 
+  - Structural Classification of Proteins description. See Lo Conte, Brenner et al. NAR 2002"
   <LI><A 
   href="#Seq">seq</A> 
   - Locations of database table sequences referenced in external fasta files </LI>
@@ -902,7 +940,10 @@ cover the same region </LI>
   href="#SyntenyHuman">syntenyHuman</A> 
   - Human synteny alignnments from blastz single coverage </LI>
   <LI><A 
-  href="#SyntenyMouse">syntenyMouse</A> 
+  href="#BED">syntenyMm3</A> 
+  - Synteny between mouse (mm3) and human chromosomes</LI>
+  <LI><A 
+  href="#BED">syntenyMouse</A> 
   - Synteny between mouse and human chromosomes (First used in hg13) </LI>
   <LI><A 
   href="#SyntenyRat">syntenyRat</A> 
@@ -1036,11 +1077,20 @@ cover the same region </LI>
   href="#extFileInfo">extFile</A> 
   - References to external files, again only used by RNA. 
   <LI><A 
+  href="#GbExtFile">gbExtFile</A> 
+  - References to external GenBank files. 
+  <LI><A 
+  href="#GbLoaded">gbLoaded</A> 
+  - GenBank incremental update information. 
+  <LI><A 
   href="#TrackGroups">grp</A> 
   - Track group types in browser display window
   <LI><A 
   href="#HistoryInfo">history</A> 
   - Modification history of database, only used by RNA programs </LI>
+  <LI><A 
+  href="#TableDesc">tableDescriptions</A> 
+  - Descriptive information about database tables form autoSQL/gbdDescriptions
   <LI><A 
   href="#TrackDB">trackDb</A> 
   - Describes an annotation track </LI>
@@ -1059,6 +1109,93 @@ cover the same region </LI>
 This section describes the format of each table field by field in 
 autoSql format.
 
+<H4><A name=Affy10KDetails></A>Affymetrix 10K SNP Details</H4>
+<PRE>table affy10KDetails
+"Information representing the Affymetrix 10K Mapping Array"
+(       
+    string     affyId;    "Affymetrix SNP id"
+    string     rsId;      "RS identifier (some are null)"
+    string     tscId;     "TSC identifier (some are null)"
+    char[2]    baseA;     "The first allele (A)"
+    char[2]    baseB;     "The second allele (B)"
+    char[34]   sequenceA; "The A allele with flanking sequence"
+    char[34]   sequenceB; "The B allele with flanking sequence"
+    char[8]    enzyme;    "The enzyme that was used to prepare the sample (HindIII or XbaI)"
+)
+</PRE>
+
+<H4><A name=AffyGenoDetails></A>Affymetrix 120K SNP Array Information</H4>
+<PRE>table affyGenoDetails
+"Information representing the Affymetrix 120K SNP array"
+(       
+    uint       affyId;    "Affymetrix SNP id"
+    uint       rsId;      "RS identifier (some are null)"
+    char[2]    baseA;     "The first allele (A)"
+    char[2]    baseB;     "The second allele (B)"
+    char[34]   sequenceA; "The A allele with flanking sequence"
+    char[34]   sequenceB; "The B allele with flanking sequence"
+    char[8]    enzyme;    "The enzyme that was used to prepare the sample (HindIII or XbaI)"
+    float      minFreq;   "The minimum allele frequency"
+    float      hetzyg;    "The heterozygosity from all observations"
+    float      avHetSE;   "The Standard Error for the average heterozygosity (not used)"
+    char[2]    NA04477;   "Individual 01"
+    char[2]    NA04479;   "Individual 02"
+    char[2]    NA04846;   "Individual 03"
+    char[2]    NA11036;   "Individual 04"
+    char[2]    NA11038;   "Individual 05"
+    char[2]    NA13056;   "Individual 06"
+    char[2]    NA17011;   "Individual 07"
+    char[2]    NA17012;   "Individual 08"
+    char[2]    NA17013;   "Individual 09"
+    char[2]    NA17014;   "Individual 10"
+    char[2]    NA17015;   "Individual 11"
+    char[2]    NA17016;   "Individual 12"
+    char[2]    NA17101;   "Individual 13"
+    char[2]    NA17102;   "Individual 14"
+    char[2]    NA17103;   "Individual 15"
+    char[2]    NA17104;   "Individual 16"
+    char[2]    NA17105;   "Individual 17"
+    char[2]    NA17106;   "Individual 18"
+    char[2]    NA17201;   "Individual 19"
+    char[2]    NA17202;   "Individual 20"
+    char[2]    NA17203;   "Individual 21"
+    char[2]    NA17204;   "Individual 22"
+    char[2]    NA17205;   "Individual 23"
+    char[2]    NA17206;   "Individual 24"
+    char[2]    NA17207;   "Individual 25"
+    char[2]    NA17208;   "Individual 26"
+    char[2]    NA17210;   "Individual 27"
+    char[2]    NA17211;   "Individual 28"
+    char[2]    NA17212;   "Individual 29"
+    char[2]    NA17213;   "Individual 30"
+    char[2]    PD01;      "Individual 31"
+    char[2]    PD02;      "Individual 32"
+    char[2]    PD03;      "Individual 33"
+    char[2]    PD04;      "Individual 34"
+    char[2]    PD05;      "Individual 35"
+    char[2]    PD06;      "Individual 36"
+    char[2]    PD07;      "Individual 37"
+    char[2]    PD08;      "Individual 38"
+    char[2]    PD09;      "Individual 39"
+    char[2]    PD10;      "Individual 40"
+    char[2]    PD11;      "Individual 41"
+    char[2]    PD12;      "Individual 42"
+    char[2]    PD13;      "Individual 43"
+    char[2]    PD14;      "Individual 44"
+    char[2]    PD15;      "Individual 45"
+    char[2]    PD16;      "Individual 46"
+    char[2]    PD17;      "Individual 47"
+    char[2]    PD18;      "Individual 48"
+    char[2]    PD19;      "Individual 49"
+    char[2]    PD20;      "Individual 50"
+    char[2]    PD21;      "Individual 51"
+    char[2]    PD22;      "Individual 52"
+    char[2]    PD23;      "Individual 53"
+    char[2]    PD24;      "Individual 54"
+)
+</PRE>
+
+
 <H4><A name=AffyTranscriptome></A>Affymetrix Transcriptome</H4>
 <PRE>table affyTranscriptome
 "Describes (x,y) pairs of samples"
@@ -1073,6 +1210,7 @@ autoSql format.
     uint[sampleCount] samplePosition;   "Base position of each sample in this
                                          block, relative to chromStart"
     uint[sampleCount] sampleHeight;     "Score for each sample (y-value) from 0 to 1000"
+   )
 </PRE>
 
 <H4><A name=AltGraphX></A>Alternative Splicing</H4>
@@ -1187,6 +1325,8 @@ The following definition is used for several tables as follows:<BR>
 - rosetta - all 15 fields <BR>
 - slamNonCoding* - first 5 fields <BR>
 - superfamily - first 4 fields  <BR>
+- syntenyMm3 - first 8 fields  <BR>
+- syntenyMouse - first 8 fields  <BR>
 - uniGene_2 - first 12 fields <BR>
 <PRE>table bed
 "Browser extensible data"
@@ -1403,6 +1543,16 @@ The following definition is used for several tables as follows:<BR>
     string name;        "Name of region"
     string descr;       "Description (gene region, random pick, etc.)"
     )
+</PRE>
+
+<H4><A name=EnsGtp></A>Ensembl Gene XRef</H4>
+<PRE>table ensGtp
+"Associates Ensembl gene, transcript, and protein IDs"
+   (
+   string gene; 	"Gene ID"
+   string transcript; 	"Transcript ID"
+   string protein; 	"Protein ID"
+   )
 </PRE>
 
 <H4><A name=EnsemblXref></A>EnsemblXref</H4>
@@ -1668,7 +1818,7 @@ information. In alternative splicing situations each transcript has a row in thi
 </PRE>
 
 <H4><A name=PepPredictions></A>Gene Predictions and RefSeq Genes Amino Acid Translations</H4>
-The following definition is used for tables that link a predicted peptide to a predicted gene: acemblyPep, ensPep, genieAltPep, genieKnownPep, genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPep.
+The following definition is used for tables that link a predicted peptide to a predicted gene: acemblyPep, ECgenePep, ensPep, genieAltPep, genieKnownPep, genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPep.
 <PRE>table pepPred
 "A predicted peptide linked to a predicted gene."
     (
@@ -2303,6 +2453,15 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
     )
 </PRE>
 
+<H4><A name=PepPi></A>Proteome Browser Protein pIs</H4>
+<PRE>table pepPi
+"Protein pIs" 
+   (
+   string accession;     "Protein accession number" 
+   float pI;             "pI value"
+   )
+</PRE>
+
 <H4><A name=PbResAvgStd></A>Proteome Browser Residue Average/Standard Deviation</H4>
 <PRE>table pbResAvgStd
 "Residue average and standard deviation"
@@ -2536,6 +2695,21 @@ Last used Apr. 2001.
     )                                                                           
 </PRE>
 
+<H4><A name=RosettaExps></A>Rosetta Information </H4>
+<PRE>table rosettaExps
+"Rosetta Experimental Confirmation information"
+    (
+    int	      ID;        	
+    string    name;   	
+    longblob  description;
+    longblob  URL;       
+    longblob  ref;      
+    longblob  credit;  
+    uint      numExtras;
+    longblob  extra;   
+    )                                                                           
+</PRE>
+
 <H4><A name=Sage></A>Sage</H4>
 <PRE>table sage
 "Stores SAGE data in terms of UniGene identifiers"
@@ -2634,6 +2808,19 @@ The following definition is used for: regPotential2X, regPotential3X.
     string cdsType;	  "Type field from Sanger CDS GFFs"
     )
 </PRE>
+
+<H4><A name=ScopDes></A>SCOP Descriptions</H4>
+<PRE>table scopDes
+"Structural Classification of Proteins Description. See Lo Conte, Brenner et al. NAR 2002"
+    (
+    int sunid;  		"Unique integer"
+    char[2] type;       	"Type.  sf=superfamily, fa = family, etc."
+    string sccs;        	"Dense hierarchy info."
+    string sid;         	"Older ID."
+    lstring description; 	"Descriptive text."
+   )
+</PRE>
+
 
 <H4><A name=ScoredRef></A>Scored Ref</H4>
 The following table is used for humor alignments.
@@ -3323,6 +3510,16 @@ reference in the above mrna table.
   )
 </PRE>
 
+<H4><A name=TableDesc></A>Database Table Descriptive Info</H4>
+<PRE>table tableDescriptions
+"Descriptive information about database tables from autoSql / gbdDescriptions"
+  (
+  string  tableName;	"Name of table (with chr*_ replaced with chrN_)"
+  lstring autoSqlDef;	"Contents of autoSql (.as) table definition file"
+  string  gbdAnchor;	"Anchor for table description in gbdDescriptions.html"
+  )
+</PRE>
+
 <H4><A name=HistoryInfo></A>History Table - Tracks Modification History of mRNA Table and Linked Tables</H4>
 <PRE>table history
   (
@@ -3332,6 +3529,19 @@ reference in the above mrna table.
   string    who       "User who updated"
   string    what      "What they did"
   timestamp when      "When they did it"
+  )
+</PRE>
+
+<H4><A name=GbLoaded></A>Reference Information for GenBank Updates</H4>
+<PRE>table gbLoaded
+"GenBank incremental update information"
+  (
+  int srcDb;       	"DB name (GenBank)"
+  int type;     	"Type of data"
+  string loadRelease;   "Release number"
+  string loadUpdate;   	"Update number"
+  string accPrefix;   	"Accession number prefix"
+  timestamp time;    	"Time stamp of update"
   )
 </PRE>
 
@@ -3353,6 +3563,16 @@ reference in the above mrna table.
   (
   uint   id           "Unique ID for each file"
   string name         "Symbolic name of file"
+  string path         "Full path. Ends in '/' if a dir"
+  uint   size         "Size of file (checked)"
+  )
+</PRE>
+
+<H4><A name=GbExtFile></A>Reference to an External GenBank File</H4>
+<PRE>table gbExtFile 
+"This keeps track of external files and directories"
+  (
+  uint   id           "Unique ID for each file"
   string path         "Full path. Ends in '/' if a dir"
   uint   size         "Size of file (checked)"
   )
