@@ -1866,8 +1866,13 @@ while (my $line = <>) {
     #Adding /gbdb/mm4/bacends/BACends.fa)
     #452237 sequences
     #Updating seq table
-    #All done
 
+    # One additional step 9/10/04 Fan.
+    # Create a composite index to speed up hgTracks display when BAC Ends track selected.
+    hgsql mm4 -e 'create index bacIndex2 on all_bacends(tName, qName(8));'
+    # This will take hours.
+    #All done
+    
 # BACEND SEQUENCE ALIGNMENTS (DONE - 2003-10-28 - Hiram)
     # (alignments done without RepeatMasking)
     #	We need an ooc file for this genome
