@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.238 2005/02/14 21:09:08 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.239 2005/02/23 18:48:48 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -4038,20 +4038,27 @@ return dif;
 
 
 int chrNameCmp(char *str1, char *str2)
-/* Compare chromosome names by number, then suffix.  str1 and str2 must 
- * match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
+/* Compare chromosome or linkage group names by number, then suffix.  
+ * str1 and str2 must match the regex 
+ * "(chr|Group)([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 {
 int num1 = 0, num2 = 0;
 int match1 = 0, match2 = 0;
 char suffix1[512], suffix2[512];
 
-/* get past "chr" prefix: */
-if (!startsWith("chr", str1))
+/* get past "chr" or "Group" prefix: */
+if (startsWith("chr", str1))
+    str1 += 3;
+else if (startsWith("Group", str1))
+    str1 += 5;
+else
     return -1;
-if (!startsWith("chr", str2))
+if (startsWith("chr", str2))
+    str2 += 3;
+else if (startsWith("Group", str2))
+    str2 += 5;
+else
     return 1;
-str1 += 3;
-str2 += 3;
 /* If only one is numeric, that one goes first. */
 /* If both are numeric, compare by number; if same number, look at suffix. */
 /* Otherwise go alph. but put M and U/Un/Un_random at end. */
