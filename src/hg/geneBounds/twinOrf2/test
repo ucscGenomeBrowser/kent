@@ -1,1 +1,1 @@
-newProg -cvs kent/src/hg/geneBounds/twinOrf2 Predict open reading frame in cDNA given a cross species alignment
+twinOrf2 /cluster/store1/gs.11/build28/bed/axtForEst/twinOrf2.stats /cluster/store1/gs.11/build28/bed/axtForEst/refSeq.axt out.orf

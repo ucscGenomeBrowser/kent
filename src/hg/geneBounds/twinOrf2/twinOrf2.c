@@ -32,6 +32,7 @@ struct mrnaInfo
 #define neverProb (1.0E-100)
 
 double never;	/* Probability that should never happen */
+double nunca = -2000; /* Probability that really never should happen */
 double always;	/* Probability that should always happen */
 
 enum aStates 
@@ -265,6 +266,10 @@ char ixToSym[] = {'T', 'C', 'A', 'G', 'N', '-', '.'};
 char lixToSym[] = {'t', 'c', 'a', 'g', 'n', '-', '.'};
 int symToIx[256];
 
+#define ix2(t,q)  ((t)*7 + (q))
+#define symIx2(t,q)  ix2(symToIx[t],symToIx[q])
+/* Go from pair of letters to single letter in larger alphabet. */
+
 void initSymToIx()
 /* Initialize lookup table. */
 {
@@ -341,34 +346,28 @@ struct markov1 *readM1Odds(struct lineFile *lf, char **initRow)
 /* Read a 1st order Markov odds table. Don't convert to logs. */
 {
 struct  markov1 *o;
-int i,j;
+int i,i1,i2,j;
 double p;
+char rowLabel[4];
 char *row[7*7+1], *name;
 AllocVar(o);
 o->observations = atoi(initRow[1]);
-for (i=0; i<7*7; ++i)
+for (i1=0; i1<7; ++i1)
     {
-    /* Decompose i into pairs. */
-    int c[2];
-    int k, ic=i;
-    for (k=1; k>=0; --k)
-        {
-	c[k] = ic%7;
-	ic /= 7;
-	}
-    /* Read line and make sure first word matches. */
-    lineFileRow(lf, row);
-    name = row[0];
-    if (name[0] != ixToSym[c[0]] || name[1] != ixToSym[c[1]])
-        {
-	errAbort("Expecting %c%c line %d of %s\n",
-		ixToSym[c[0]], ixToSym[c[1]], lf->lineIx, lf->fileName);
-	}
-    for (j=0; j<7*7; ++j)
+    for (i2=0; i2<7; ++i2)
 	{
-	p = atof(row[j+1]);
-	if (p <= 0) p = neverProb;
-	o->odds[i][j] = p;
+	i = i1*7 + i2;
+	lineFileRow(lf, row);
+	sprintf(rowLabel, "%c/%c", ixToSym[i1], ixToSym[i2]);
+	if (!sameWord(rowLabel, row[0]))
+	     errAbort("Expecting %s line %d of %s\n", 
+		rowLabel, lf->lineIx, lf->fileName);
+	for (j=0; j<7*7; ++j)
+	    {
+	    p = atof(row[j+1]);
+	    if (p <= 0) p = neverProb;
+	    o->odds[i][j] = p;
+	    }
 	}
     }
 return o;
@@ -456,9 +455,6 @@ for (i=0; i<7*7; ++i)
 	   for (k=0; k<7*7; ++k)
 	       o->odds[i][j][k] = scaledLog(o->odds[i][j][k]/rowTotal);
 	   }
-	for (k=0; k<7*7; ++k)
-	    uglyf(" %f", o->odds[i][j][k]);
-	uglyf("\n");
        }
    }
 }
@@ -485,64 +481,73 @@ for (i=0; i<3; ++i)
 return ix;
 }
 
-#ifdef SOON
-void killStopCodons(struct codonOdds *o)
+void killStopCodons(struct markov2 *o)
 /* Set any target sequence involving stop codons to very low probability */
 {
-static char *stopCodons[] = {"taa", "tag", "tga"};
-int i, j, ix;
-for (i=0; i<3; ++i)
+static char *stopCodons[] = {"TAA", "TAG", "TGA"};
+int i1,i2,j1,j2,k1,k2,i,j,k;
+int s, c;
+for (i1=0; i1<7; ++i1)
     {
-    ix = ixForCodon(stopCodons[i]);
-    for (j=0; j<7*7*7; ++j)
-        o->odds[ix][j] = -2000;
+    for (i2=0; i2<7; ++i2)
+        {
+	i = ix2(i1,i2);
+	for (j1 = 0; j1<7; ++j1)
+	    {
+	    for (j2 = 0; j2<7; ++j2)
+	        {
+		j = ix2(j1,j2);
+		for (k1=0; k1<7; ++k1)
+		    {
+		    for (k2=0; k2<7; ++k2)
+		        {
+			k = ix2(k1, k2);
+			for (s=0; s<ArraySize(stopCodons); ++s)
+			    {
+			    char *stop = stopCodons[s];
+			    if (symToIx[stop[0]] == i1
+			     && symToIx[stop[1]] == j1
+			     && symToIx[stop[2]] == k1)
+			         o->odds[i][j][k] = -2000;
+			    }
+			}
+		    }
+		}
+	    }
+	}
     }
 }
 
-void killInsertsInCodons(struct codonOdds *o)
-/* Get rid of inserts in the target.  Scale down
- * inserts in the query except for '---' */
+void killInsertsInCodons(struct markov2 *o)
+/* Get rid of inserts in the target. */
 {
-int dashIx = symToIx['-'];
-int i1,i2,i3;
-int i,j;
+int i1,i2,j1,j2,k1,k2,i,j,k;
+int dash = symToIx['-'];
+int s, c;
 for (i1=0; i1<7; ++i1)
     {
     for (i2=0; i2<7; ++i2)
         {
-	for (i3=0; i3<7; ++i3)
+	i = ix2(i1,i2);
+	for (j1 = 0; j1<7; ++j1)
 	    {
-	    if (i1 == '-' || i2 == '-' || i3 == '-')
-	         {
-		 i = i1*7*7 + i2*7 + i3;
-		 for (j=0; j<7*7*7; ++j)
-		     o->odds[i][j] = -2000;
-		 }
-	    }
-	}
-    }
-for (i1=0; i1<7; ++i1)
-    {
-    for (i2=0; i2<7; ++i2)
-        {
-	for (i3=0; i3<7; ++i3)
-	    {
-	    int dashCount = 0;
-	    if (i1 == '-') ++dashCount;
-	    if (i2 == '-') ++dashCount;
-	    if (i3 == '-') ++dashCount;
-	    if (dashCount > 0)
-	         {
-		 int penalty = (dashCount == 3 ? 4 : 12);
-		 i = i1*7*7 + i2*7 + i3;
-		 for (j=0; j<7*7*7; ++j)
-		     o->odds[j][i] -= penalty;
-		 }
+	    for (j2 = 0; j2<7; ++j2)
+	        {
+		j = ix2(j1,j2);
+		for (k1=0; k1<7; ++k1)
+		    {
+		    for (k2=0; k2<7; ++k2)
+		        {
+			k = ix2(k1, k2);
+			if (i1 == dash || j1 == dash || k1 == dash)
+		             o->odds[i][j][k] = -2000;
+			}
+		    }
+		}
 	    }
 	}
     }
 }
-#endif /* SOON */
 
 struct trainingData
 /* Stuff loaded from training stats file. */
@@ -580,13 +585,10 @@ while (lineFileNext(lf, &line, NULL))
      type = row[0];
      if (sameString(type, "c1_utr5"))
          td->m0Utr5 = readBaseOdds(lf, row);
-#ifdef SOON
      else if (sameString(type, "c2_utr5"))
          td->m1Utr5 = m1FromCountsInFile(lf, row);
-#endif /* SOON */
      else if (sameString(type, "c3_utr5"))
          td->m2Utr5 = m2FromCountsInFile(lf, row);
-#ifdef SOON
      else if (sameString(type, "c1_utr3"))
          td->m0Utr3 = readBaseOdds(lf, row);
      else if (sameString(type, "c2_utr3"))
@@ -607,11 +609,14 @@ while (lineFileNext(lf, &line, NULL))
 	 ix += 5;
 	 if (ix < 0 || ix >= 10)
 	     errAbort("kozak out of range line %d of %s", lf->lineIx, lf->fileName);
-	 td->m1Kozak[ix] = readBaseOdds(lf, row);
+	 td->m1Kozak[ix] = m1FromCountsInFile(lf, row);
 	 }
-     else if (sameString(type, "codon"))
-         td->codon = readCodonOdds(lf, row);
-#endif /* SOON */
+     else if (sameString(type, "cod1"))
+         td->cod1 = m2FromCountsInFile(lf, row);
+     else if (sameString(type, "cod2"))
+         td->cod2 = m2FromCountsInFile(lf, row);
+     else if (sameString(type, "cod3"))
+         td->cod3 = m2FromCountsInFile(lf, row);
      else
          {
 	 /* If don't recognize type skip to next blank line. */
@@ -649,10 +654,10 @@ for (i=0; i<10; ++i)
     if (td->m1Kozak[i] == NULL)
 	errAbort("Missing 'c2_kozak[%d]' record from %s\n", i-5, fileName);
     }
-#ifdef SOON
-killStopCodons(td->codon);
-killInsertsInCodons(td->codon);
-#endif /* SOON */
+killStopCodons(td->cod3);
+killInsertsInCodons(td->cod1);
+killInsertsInCodons(td->cod2);
+killInsertsInCodons(td->cod3);
 return td;
 }
 
