@@ -11,7 +11,7 @@
 #include "nib.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.13 2003/06/21 18:44:30 baertsch Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.14 2003/08/06 20:59:07 baertsch Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -87,7 +87,7 @@ struct axt *axt, *axtList;
 
 if (gapFile != NULL)
     writeGaps(chain, gapFile);
-axtList = chainToAxt(chain, qSeq, qOffset, tSeq, tOffset, maxGap);
+axtList = chainToAxt(chain, qSeq, qOffset, tSeq, tOffset, maxGap, BIGNUM);
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
 axtFreeList(&axtList);
