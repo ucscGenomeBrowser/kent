@@ -77,4 +77,20 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define MAX_WIG_VALUE	127
 #define MAX_OPT_STRLEN	128
 
+extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
+    double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
+/* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
+extern void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
+    int *Default, int wordCount, char *words[]);
+/* return pixels heights allowable from trackDb or cart in lib/wiggleCart.c */
+extern enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
+    char **optString, int wordCount, char *words[]);
+/* return horizontalGrid setting	*/
+extern enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb,
+    char **optString, int wordCount, char *words[]);
+/* return autoScale setting	*/
+extern enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb,
+	char **optString, int wordCount, char **words);
+/* return graph type, line(points) or bar graph	*/
+
 #endif /* WIGGLE_H */
