@@ -129,7 +129,7 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-29 - Hiram)
       endif
     end
 
-BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
+BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS (DONE - 2003-06-29)
 					(DONE - 2003-06-29 - Hiram)
 
     # This will split the rat sequence into approx. 5 Mbase
@@ -371,15 +371,22 @@ VERIFY REPEATMASKER RESULTS (DONE - 2003-06-24 - Hiram)
 
     # Run featureBits on rn3 and on a comparable genome build, and compare:
     ssh hgwdev
-    featureBits rn3 rmsk
+    featureBits rn3 rmsk  (rat version 3.1)
+    #	1117483165 bases of 2571104688 (43.463%) in intersection
+    featureBits rn3 rmsk  (rat version 3.0)
     #   1117328265 bases of 2571104688 (43.457%) in intersection
-    featureBits rn1 rmsk
-    #	1081814344 bases of 2555848684 (42.327%) in intersection
-    featureBits rn2 rmsk
+    featureBits rn2 rmsk  (Jan 2003)
     #	1100534407 bases of 2495551408 (44.100%) in intersection
+    featureBits rn1 rmsk  (Nov 2002)
+    #	1081814344 bases of 2555848684 (42.327%) in intersection
 
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-07-02 - Hiram)
+
+    # XXXXX - These unmasked nibs are unnecessary.  They will be
+    # replaced below by soft masked nibs.  This is only done here in
+    # order to quickly get a browser going so that other tracks and
+    # tests can be begun.
 
     # Make (unmasked) nibs
     ssh kkstore
@@ -395,9 +402,8 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-07-02 - Hiram)
     end
 
     # Make symbolic links from /gbdb/rn3/nib to the real nibs.
-    # It is unclear to me what kind of nibs these links are supposed to
-    # point to.  Below, after the soft masked nibs are created, I am
-    # going to reset these links to point to the soft masked nibs.
+    # Below, after the soft masked nibs are created, these
+    # links will be reset to point to the soft masked nibs.
     ssh hgwdev
     mkdir -p /gbdb/rn3/nib
     foreach f (/cluster/store3/rn3/nibNotMasked/chr*.nib)
@@ -462,10 +468,10 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
     cvs commit makefile
 
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN3 (TO DO)
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN3 (DONE - 2003-07-04 - Jorge)
     ssh hgwdev
-    echo 'insert into blatServers values("rn3", "blat10", "17778", "1"); \
-          insert into blatServers values("rn3", "blat10", "17779", "0");' \
+    echo 'insert into blatServers values("rn3", "blat11", "17778", "1"); \
+          insert into blatServers values("rn3", "blat11", "17779", "0");' \
       | hgsql -h genome-testdb hgcentraltest
 
 
@@ -540,6 +546,7 @@ PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-07-02 - Hiram)
 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
+    # XXXX The next time we do this, we want to experiment with period <= 8
     ssh kkstore
     cd ~/rn3/bed/simpleRepeat
     mkdir -p trfMask
@@ -565,7 +572,7 @@ PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-07-02 - Hiram)
     end
 
 
-MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE - 2003-07-02)
 			(DONE - 2003-07-02 - Hiram)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
@@ -590,11 +597,9 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
 
 RESET NIB POINTERS TO softNib (DONE - 2003-07-02 - Hiram)
 
-    # As mentioned above the first time this was done, I don't know if
-    # this needs to done to reset the links, but I'm going to do it.
-    # In fact, if you have been watching carefully, I am actually
-    # changing the names of where things are.  This used to be
-    # nibNotMasked, now it is softNib which is both masks.
+    # As mentioned above the first time this was done, the first set
+    # of nibs linked to were unnecessary.  Here, we change the links to
+    # point to softNib which is both repeat masker and trf masked
     ssh hgwdev
     cd /gbdb/rn3/nib
     rm -f *
@@ -614,7 +619,7 @@ RESET NIB POINTERS TO softNib (DONE - 2003-07-02 - Hiram)
     wc chrom.sizes
     #	44      88     778 chrom.sizes
 
-MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
+MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
     ssh kkstore
     cd ~/rn3
     #- Build the .zip files
@@ -650,7 +655,10 @@ MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
     rm upstream5000.fa
 
 
-PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-06-27 - Hiram)
+XXXXXXXXX  Currently stuck on this one 2003-07-09 - the lineage specific
+XXXXXXXXX  repeats business is now different.
+XXXXXXXXX  Trying to work the kinks out of that.
+PREPARE CLUSTER FOR BLASTZ RUN (NOT DONE - 2003-06-27 - Hiram)
     # This needs to be done after trf-masking and nib generation.
     ssh kkstore
     # Extract lineage-specific repeats using Arian Smit's script:
@@ -726,119 +734,6 @@ AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
     nice ./bin/gbDbLoadStep -verbose=1 -initialLoad rn3
     # This load took about 7 hours
 
-CREATE REFSEQ GENES TRACK (TO DO)
-    # Load the refSeq mRNA
-    ssh hgwdev
-    mkdir -p /gbdb/rn3/mrna.133
-    ln -s /cluster/store2/mrna.133/refSeq/org/Rattus_norvegicus/refSeq.fa \
-      /gbdb/rn3/mrna.133
-    hgLoadRna new rn3
-    hgLoadRna add -type=refSeq rn3 /gbdb/rn3/mrna.133/refSeq.fa \
-      /cluster/store2/mrna.133/refSeq/org/Rattus_norvegicus/refSeq.ra
-
-    # Produce refGene, refPep, refMrna, and refLink tables as so:
-    # Get the proteins:
-    ssh kkstore
-    cd ~/rn3/bed/refSeq
-    wget ftp://ftp.ncbi.nih.gov/refseq/R_norvegicus/mRNA_Prot/rat.faa.gz
-    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref
-    wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc
-    gunzip rat.faa.gz
-    ssh hgwdev
-    cd ~/rn3/bed/refSeq
-    hgRefSeqMrna rn3 \
-      /gbdb/rn3/mrna.133/refSeq.fa \
-      /cluster/store2/mrna.133/refSeq/org/Rattus_norvegicus/refSeq.ra \
-      all_refSeq.psl loc2ref rat.faa mim2loc
-    # Don't worry about the "No gene name" errors
-
-    # Add RefSeq status info
-    hgRefSeqStatus -rat rn3 loc2ref
-
-
-REFFLAT (TO DO)
-    # create precomputed join of refFlat and refGene:
-    echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql rn3
-
-
-LOAD MRNA DATA (TO DO)
-    ssh hgwdev
-    ln -s /cluster/store2/mrna.133/org/Rattus_norvegicus/mrna.fa /gbdb/rn3/mrna.133
-    ln -s /cluster/store2/mrna.133/org/Rattus_norvegicus/est.fa /gbdb/rn3/mrna.133
-    hgLoadRna add -type=mRNA rn3 /gbdb/rn3/mrna.133/mrna.fa \
-      /cluster/store2/mrna.133/org/Rattus_norvegicus/mrna.ra
-    hgLoadRna add -type=EST rn3 /gbdb/rn3/mrna.133/est.fa \
-      /cluster/store2/mrna.133/org/Rattus_norvegicus/est.ra
-
-
-PRODUCING ESTORIENTINFO TABLE (TO DO)
-
-This table is needed for proper orientation of ESTs in the
-browser.  Many will appear on the wrong strand without it.
-This involves a cluster run.  First load the EST psl files
-as so:
-     ssh kkstore
-     cd ~/rn3/bed/est
-     pslSortAcc nohead contigs /cluster/store2/temp contig.psl
-     ssh kkstore
-     mkdir /mnt/scratch/hg/rn3/est
-     cd ~/rn3/bed/est
-     cp -r contigs /mnt/scratch/hg/rn3/est
-
-Wait for these to finish.
-     mkdir -p ~/rn3/bed/estOrientInfo
-     cd ~/rn3/bed/estOrientInfo
-     mkdir ei
-     ls -1S /mnt/scratch/hg/rn3/est/contigs/* > psl.lst
-     echo placeholder > single
-     cp ~/rn1/bed/estOrientInfo/gsub .
-Update gsub to refer to rat contig sequence currently on
-/mnt//scratch/hg/rn3/trfFa, and rat ESTs on /mnt/scratch/hg/rn3/est/contigs
-and the rat est in /scratch/hg/mrna.133/Rattus_norvegicus/est.fa.
-     gensub2 psl.lst single gsub spec
-
-     ssh kk
-     para create spec
-Then run the  job on the cluster
-     cd ~/rn3/bed/estOrientInfo
-     para try
-     sleep 60
-     para check
-If things look good
-     para push
-Wait for this to finish then
-     liftUp estOrientInfo.bed ../../jkStuff/liftAll.lft warn ei/*.tab
-Load them into database as so:
-     ssh hgwdev
-     cd ~/rn3/bed/estOrientInfo
-     hgLoadBed rn3 estOrientInfo estOrientInfo.bed \
-       -sqlTable=$HOME/kent/src/hg/lib/estOrientInfo.sql
-     
-PRODUCING MRNAORIENTINFO TABLE (TO DO)
-    ssh kkstore
-    cd ~/rn3/bed/mrna
-    pslSortAcc nohead contig /cluster/store2/temp contig.psl
-    ssh kkstore
-    mkdir /mnt/scratch/hg/rn3/mrna
-    cp -r ~/rn3/bed/mrna/contig /mnt/scratch/hg/rn3/mrna
-    mkdir -p ~/rn3/bed/mrnaOrientInfo/oi
-    cd ~/rn3/bed/mrnaOrientInfo
-    ls -1S /mnt/scratch/hg/rn3/mrna/contig/* > psl.lst
-    cp ~/lastRn/bed/mrnaOrientInfo/gsub .
-    echo placeholder > single
-    gensub2 psl.lst single gsub spec
-
-    ssh kk
-    cd ~/rn3/bed/mrnaOrientInfo
-    para create spec
-    para try, para check, para push, para check,...
-    liftUp mrnaOrientInfo.bed ../../jkStuff/liftAll.lft warn oi/*.tab
-
-    ssh hgwdev
-    cd ~/rn3/bed/mrnaOrientInfo
-    hgLoadBed rn3 mrnaOrientInfo mrnaOrientInfo.bed \
-       -sqlTable=$HOME/kent/src/hg/lib/mrnaOrientInfo.sql
-
 
 CREATE RNACLUSTER TABLE (TO DO)
     # Make sure that refSeqAli, estOrientInfo and mrnaOrientInfo tables are 
@@ -856,7 +751,7 @@ CREATE RNACLUSTER TABLE (TO DO)
     hgLoadBed rn3 rnaCluster chrom/*.bed
 
 
-PRODUCING GENSCAN PREDICTIONS (TO DO)
+PRODUCING GENSCAN PREDICTIONS (DONE - 2003-07-09 - Hiram)
     
     # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
     # cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
@@ -891,6 +786,17 @@ PRODUCING GENSCAN PREDICTIONS (TO DO)
     # If a job crashes due to genscan running out of memory, re-run it 
     # manually with "-window=1200000" instead of "-window=2400000".
     # chr14_21, chr16_4
+    #	There was one job that did crash in this manner.
+    #	It was run manually:
+    # /cluster/home/hiram/bin/i386/gsBig /cluster/store3/rn3/10/chr10_3/chr10_3.fa.masked gtf/chr10_3.fa.gtf -trans=pep/chr10_3.fa.pep -subopt=subopt/chr10_3.fa.bed -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=1200000
+# Checking finished jobsCompleted: 590 of 591 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:     312553s    5209.22m    86.82h    3.62d  0.010 y
+# IO & Wait Time:                  1927s      32.11m     0.54h    0.02d  0.000 y
+# Average job time:                 533s       8.88m     0.15h    0.01d
+# Longest job:                    23072s     384.53m     6.41h    0.27d
+# Submission to last job:         43744s     729.07m    12.15h    0.51d
+
     
     # Convert these to chromosome level files as so:
     ssh kkstore
@@ -1351,7 +1257,7 @@ TIGR GENE INDEX (TO DO)
     ldHgGene -exon=TC rn3 tigrGeneIndex *.gff
 
 
-LOAD STS MAP (todo)
+LOAD STS MAP (TO DO )
      - login to hgwdev
       cd ~/rn3/bed
       rn3 < ~/src/hg/lib/stsMap.sql
@@ -1377,7 +1283,7 @@ LOAD MGI IDs (TO DO)
       - At mysql> prompt type
           quit
 
-LOAD CHROMOSOME BANDS (todo)
+LOAD CHROMOSOME BANDS (TO DO )
       - login to hgwdev
       cd /cluster/store3/rn3/bed
       mkdir cytoBands
