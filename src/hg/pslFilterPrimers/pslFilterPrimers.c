@@ -186,6 +186,21 @@ while (lineFileChopNext(sf, words, 5))
     }
 }
 
+boolean epcrInList(struct epcr *eList, struct epcr *epcr)
+/* Determine if current epcr record is already in the list */
+{
+  struct epcr *e;
+
+  for (e = eList; e != NULL; e = e->next)
+    if ((sameString(e->contig, epcr->contig)) &&
+	(sameString(e->bases, epcr->bases)) &&
+	(sameString(e->dbstsId, epcr->dbstsId)) &&
+	(sameString(e->ucscId, epcr->ucscId)))
+      return(1);
+
+  return(0);
+}
+
 void readEpcr(struct lineFile *ef)
 /* Read in and record epcr records */
 {
@@ -211,10 +226,32 @@ while (lineFileChopNext(ef, words, 4))
 	epcr->start = sqlUnsigned(pos[0]);
 	epcr->end = sqlUnsigned(pos[2]);
 	sts = hashMustFindVal(stsHash, epcr->dbstsId);
-	slAddHead(&sts->epcr, epcr);
-	sts->epcrCount++;
+	if (!epcrInList(sts->epcr, epcr))
+	  {
+	    slAddHead(&sts->epcr, epcr);
+	    sts->epcrCount++;
+	  } 	  
       }
     }
+}
+
+boolean pslInList(struct psl *pList, struct psl *psl)
+/* Determine if current psl record is already in the list */
+{
+  struct psl *p;
+
+  for (p = pList; p != NULL; p = p->next)
+    if ((p->match == psl->match) &&
+	(p->misMatch == psl->misMatch) &&
+	(sameString(p->qName, psl->qName)) &&
+	(p->qStart == psl->qStart) &&
+	(p->qEnd == psl->qEnd) &&
+	(sameString(p->tName, psl->tName)) &&
+	(p->tStart == psl->tStart) &&
+	(p->tEnd == psl->tEnd))
+      return(1);
+
+  return(0);
 }
 
 int calcUnali(struct sts *sts, struct psl *psl)
@@ -336,14 +373,18 @@ while (lineFileNext(pf, &line, &lineSize))
     if (sts)
       {
 	AllocVar(place);
-	slAddHead(&place->psl, psl);
-	place->unali = calcUnali(sts, psl);
-	place->sizeDiff = calcSizeDiff(sts, psl);
-	place->badBits = calcBadBits(place);
-	if (place->sizeDiff < (200 - (place->badBits * 50)))
-	  slAddHead(&sts->place, place);
-	else
-	  placeFree(&place);
+	/* Check if this psl record is already present */
+	if (!pslInList(place->psl, psl))
+	  {
+	    slAddHead(&place->psl, psl);
+	    place->unali = calcUnali(sts, psl);
+	    place->sizeDiff = calcSizeDiff(sts, psl);
+	    place->badBits = calcBadBits(place);
+	    if (place->sizeDiff < (200 - (place->badBits * 50)))
+	      slAddHead(&sts->place, place);
+	    else
+	      placeFree(&place);
+	  }
       }
     }
  if (sts != NULL)
