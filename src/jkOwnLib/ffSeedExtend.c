@@ -263,7 +263,7 @@ if (extraList != NULL)
     AllocVar(ffi);
     ffi->ff = extraList;
     slAddHead(&bun->ffList, ffi);
-    ssStitch(bun, ffCdna, 16);
+    ssStitch(bun, ffCdna, 16, 1);
     ffList = bun->ffList->ff;
     bun->ffList->ff = NULL;
     ssBundleFree(&bun);
@@ -282,6 +282,7 @@ struct gfHit *hitList = NULL, *hit;
 struct dnaSeq qSubSeq;
 struct ffAli *extraList = NULL;
 int tileSize = gf->tileSize;
+int biggestToFind = 200;	/* Longer should be found at an earlier stage */
 
 /* Handle problematic empty case immediately. */
 if (ffList == NULL)
@@ -292,18 +293,17 @@ ZeroVar(&qSubSeq);
 /* Look for initial gap. */
 qGap = ff->nStart - qSeq->dna;
 tGap = ff->hStart - tSeq->dna;
-if (qGap >= tileSize && tGap >= tileSize)
+if (qGap >= tileSize && qGap <= biggestToFind && tGap >= tileSize)
     {
-    tStart = 0;
+    tStart = ff->hStart - tSeq->dna;
     if (tGap > ffIntronMax) 
 	{
-	tStart = tGap - ffIntronMax;
 	tGap = ffIntronMax;
 	}
     qSubSeq.dna = qSeq->dna;
     qSubSeq.size = qGap;
     hitList = gfFindHitsInRegion(gf, &qSubSeq, qMaskBits, qMaskOffset,
-	lm, target, tStart, tStart + tGap);
+	lm, target, tStart - tGap, tStart);
     addExtraHits(hitList, tileSize, &qSubSeq, tSeq, &extraList);
     }
 
@@ -316,7 +316,7 @@ for (;;)
 	break;
     qGap = ff->nStart - lastFf->nEnd;
     tGap = ff->hStart - lastFf->hEnd;
-    if (qGap >= tileSize && tGap >= tileSize)
+    if (qGap >= tileSize && qGap <= biggestToFind && tGap >= tileSize)
 	 {
 	 qStart = lastFf->nEnd - qSeq->dna;
 	 tStart = lastFf->hEnd - tSeq->dna;
@@ -331,7 +331,7 @@ for (;;)
 /* Look for end gaps. */
 qGap = qSeq->dna + qSeq->size - lastFf->nEnd;
 tGap = tSeq->dna + tSeq->size - lastFf->hEnd;
-if (qGap >= tileSize && tGap >= tileSize)
+if (qGap >= tileSize && qGap < biggestToFind && tGap >= tileSize)
     {
     if (tGap > ffIntronMax) tGap = ffIntronMax;
     qStart = lastFf->nEnd - qSeq->dna;
@@ -425,7 +425,7 @@ int seedResolvePower(int seedSize)
  * size. */
 {
 if (seedSize >= 15)
-    return BIGNUM;
+    return ffIntronMax;
 return 1 << (seedSize+seedSize-3);
 }
 
@@ -520,7 +520,7 @@ if (nGap <= 12 )
 		ff->nStart = nStart;
 		ff->nEnd = nEnd;
 		ff->hStart = hPos;
-		ff->hEnd = hPos + nGap + i;
+		ff->hEnd = hPos + nGap;
 		return ff;
 		}
 	    }
@@ -545,7 +545,7 @@ if (nGap <= 12 )
 		AllocVar(ff);
 		ff->nStart = nStart;
 		ff->nEnd = nEnd;
-		ff->hStart = hPos;
+		ff->hStart = hPos + i;
 		ff->hEnd = hPos + nGap + i;
 		return ff;
 		}
@@ -575,7 +575,7 @@ if (nGap <= 12 )
 		AllocVar(ff);
 		ff->nStart = nStart;
 		ff->nEnd = nEnd;
-		ff->hStart = hPos;
+		ff->hStart = hPos + i;
 		ff->hEnd = hPos + nGap + i;
 		return ff;
 		}
@@ -588,6 +588,7 @@ else
         {
 	if ((hPos = scanExactLeft(nStart, nGap, hGap, hEnd)) != NULL)
 	    {
+	    AllocVar(ff);
 	    ff->nStart = nStart;
 	    ff->nEnd = nEnd;
 	    ff->hStart = hPos;
@@ -647,21 +648,53 @@ if (nGap >= seedSize && nGap < 80)
 return NULL;
 }
 
+static int countT(char *s, int size)
+/* Count number of initial T's. */
+{
+int i;
+for (i=0; i<size; ++i)
+    {
+    if (s[i] != 't')
+	break;
+    }
+return i;
+}
+
+static int countA(char *s, int size)
+/* Count number of terminal A's. */
+{
+int count = 0;
+int i;
+for (i=size-1; i >= 0; --i)
+    {
+    if (s[i] == 'a')
+	++count;
+    else
+	break;
+    }
+return count;
+}
+
 struct ffAli *frizzyFind(char *nStart, char *nEnd, char *hStart, char *hEnd, 
 	boolean isRc, boolean scanLeft, boolean scanRight)
 /* Try and add some exon candidates in the region. */
 {
 struct ffAli *ff;
 int nGap = nEnd - nStart;
-if (nGap < gfIndexShouldFindSize)
+if (nGap > gfIndexShouldFindSize)	
     return NULL;
+if (scanLeft && isRc)
+    nStart += countT(nStart, nGap);
+if (scanRight && !isRc)
+    nEnd -= countA(nStart, nGap);
+#ifdef SOON
+#endif /* SOON */
 ff = exactPlusSplice(nStart, nEnd, hStart, hEnd, isRc, scanLeft, scanRight);
 if (ff != NULL)
     return ff;
 return frizzyFindFromSmallerSeeds(nStart, nEnd, hStart, hEnd, isRc,
 	scanLeft, scanRight, 11);
 }
-
 
 static struct ffAli *scanForTinyExons(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	boolean isRc, struct ffAli *ffList)
@@ -720,6 +753,7 @@ int calcSpliceScore(struct axtScoreScheme *ss,
 /* Return adjustment for match/mismatch of consensus. */
 {
 int score = 0;
+int matchScore = ss->matrix['c']['c'];
 if (orientation >= 0)  /* gt/ag or gc/ag */
     {
     score += ss->matrix[a1]['g'];
@@ -736,6 +770,8 @@ else		       /* ct/ac or ct/gc */
 	score += ss->matrix[b1]['a'];
     score += ss->matrix[b2]['c'];
     }
+if (score >= 3* matchScore)
+    score += matchScore;
 return score;
 }
 
@@ -747,6 +783,28 @@ memcpy(hSeq, hpStart, iPos);
 memcpy(hSeq+iPos, hpStart+iPos+iSize, modPeelSize - iPos);
 hSeq[modPeelSize] = 0;
 }
+
+#ifdef UNTESTED
+struct ffAli *removeFf(struct ffAli *ff, struct ffAli *ffList)
+/* Remove ffAli and free it.  Return resulting list. */
+{
+struct ffAli *right = ff->right;
+struct ffAli *left;
+if (ff == ffList)
+    {
+    if (right != NULL)
+	right->left = NULL;
+    freeMem(ff);
+    return right;
+    }
+left = ff->left;
+left->right = right;
+if (right != NULL)
+    right->left = left;
+freeMem(ff);
+return ffList;
+}
+#endif /* UNTESTED */
 
 static struct ffAli *hardRefineSplice(struct ffAli *left, struct ffAli *right,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct ffAli *ffList, 
@@ -767,13 +825,15 @@ int hGap = right->hStart - right->hEnd;
 int peelLeft = (peelSize - nGap)/2;
 int intronSize = hGap - nGap;
 char *npStart = left->nEnd - peelLeft;
+char *npEnd = npStart + peelSize;
 char *hpStart = left->hEnd - peelLeft;
+char *hpEnd = npEnd + (right->hStart - right->nStart);
 struct axtScoreScheme *ss = axtScoreSchemeRnaDefault();
 static int modSize[3] = {0, 1, -1};
 int modIx;
 int bestPos = -1, bestMod = 0;
+int iPos;
 
-uglyf("peelLeft %d, intronSize %d\n", peelLeft, intronSize);
 memcpy(nSeq, npStart, peelSize);
 nSeq[peelSize] = 0;
 for (modIx=0; modIx < ArraySize(modSize); ++modIx)
@@ -781,8 +841,6 @@ for (modIx=0; modIx < ArraySize(modSize); ++modIx)
     int modOne = modSize[modIx];
     int modPeelSize = peelSize - modOne;
     int iSize = intronSize + modOne;
-    int iPos;
-    uglyf("-----modOne %d------\n", modOne);
     for (iPos=0; iPos <= modPeelSize; iPos++)
         {
 	grabAroundIntron(hpStart, iPos, iSize, modPeelSize, hSeq);
@@ -798,8 +856,117 @@ for (modIx=0; modIx < ArraySize(modSize); ++modIx)
 	    bestPos = iPos;
 	    bestMod = modOne;
 	    }
-	uglyf("aligned: score %d, %c%c/%c%c %d [%d vs %d]\n", seqScore, hpStart[iPos], hpStart[iPos+1], hpStart[iPos+iSize-2], hpStart[iPos+iSize-1], spliceScore, score, maxScore);
-	uglyf(" %s\n %s\n\n", nSym, hSym);
+	}
+    }
+if (maxScore > 0)
+    {
+    int modPeelSize = peelSize - bestMod;
+    int i,diff, cutSymIx = 0;
+    int nIx, hIx;
+    struct ffAli *ff;
+
+    uglyf("hardRefiningSpliceSite\n");
+    /* Regenerate the best alignment. */
+    grabAroundIntron(hpStart, bestPos, intronSize + bestMod, modPeelSize, hSeq); 
+    bandExt(TRUE, ss, 2, nSeq, peelSize, hSeq, modPeelSize, 1,
+	    sizeof(hSym), &symCount, nSym, hSym, &dummy, &dummy);
+
+    /* Peel back surrounding ffAli's */
+    if (left->nStart > npStart || right->nEnd < npEnd)
+	{
+	warn("Unable to peel in hardRefineSplice\n");
+	/* It would take a lot of code to handle this case. 
+	 * I believe it is rare enough that it's not worth
+	 * it.  This warning will help keep track of how
+	 * often it comes up. */
+	return ffList;
+	}
+    diff = left->nEnd - npStart;
+    left->nEnd -= diff;
+    left->hEnd -= diff;
+    diff = right->nStart - npEnd;
+    right->nStart -= diff;
+    right->hStart -= diff;
+
+    /* Step through base by base alignment from the left until
+     * hit intron, converting it into ffAli format. */
+    nIx = hIx = 0;
+    ff = left;
+    for (i=0; i<symCount; ++i)
+	{
+	if (hIx == bestPos)
+	    {
+	    cutSymIx = i;
+	    break;
+	    }
+	if (hSym[i] == '-')
+	    {
+	    ff = NULL;
+	    nIx += 1;
+	    }
+	else if (nSym[i] == '-')
+	    {
+	    ff = NULL;
+	    hIx += 1;
+	    }
+	else
+	    {
+	    if (ff == NULL)
+		{
+		AllocVar(ff);
+		uglyf("starting insert\n");
+		ff->left = left;
+		ff->right = right;
+		left->right = ff;
+		right->left = ff;
+		left = ff;
+		ff->nStart = ff->nEnd = npStart + nIx;
+		ff->hStart = ff->hEnd = hpStart + hIx;
+		uglyf("ending insert\n");
+		}
+	    ++nIx;
+	    ++hIx;
+	    ff->nEnd += 1;
+	    ff->hEnd += 1;
+	    }
+	}
+
+    /* Step through base by base alignment from the right until
+     * hit intron, converting it into ffAli format. */
+    ff = right;
+    hIx = nIx = 0;	/* Index from right side. */
+    for (i = symCount-1; i >= cutSymIx; --i)
+	{
+	if (hSym[i] == '-')
+	    {
+	    ff = NULL;
+	    nIx += 1;
+	    }
+	else if (nSym[i] == '-')
+	    {
+	    ff = NULL;
+	    hIx += 1;
+	    }
+	else
+	    {
+	    if (ff == NULL)
+		{
+		AllocVar(ff);
+		uglyf("starting insert 2\n");
+		ff->left = left;
+		ff->right = right;
+		left->right = ff;
+		right->left = ff;
+		left = ff;
+		ff->nStart = ff->nEnd = npEnd - nIx;
+		ff->hStart = ff->hEnd = hpEnd - hIx;
+		uglyf("ending insert 2\n");
+		}
+	    ++nIx;
+	    ++hIx;
+	    ff->nStart -= 1;
+	    ff->hStart -= 1;
+	    }
 	}
     }
 return ffList;
@@ -817,11 +984,8 @@ static struct ffAli *refineSpliceSites(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 {
 int orientation = ffIntronOrientation(ffList);
 struct ffAli *ff, *nextFf;
-uglyf("refineSpliceSites:\n");
-dumpFf(ffList, qSeq->dna, tSeq->dna);
 if (orientation == 0)
     return ffList;
-uglyf("orientation = %d\n", orientation);
 if (ffSlideOrientedIntrons(ffList, orientation))
     ffList = ffRemoveEmptyAlis(ffList, TRUE);
 for (ff = ffList; ff != NULL; ff = nextFf)
@@ -833,8 +997,6 @@ for (ff = ffList; ff != NULL; ff = nextFf)
     hGap = nextFf->hStart - ff->hEnd;
     if (nGap > 0 && nGap <= 6 && hGap >= 30)
 	{
-	uglyf("Refining....\n");
-	uglyf("nGap %d, hGap %d\n", nGap, hGap);
 	if (nGap == 1)
 	    {
 	    if (tradeMismatchToCloseSpliceGap(ff, nextFf, orientation))
@@ -843,6 +1005,8 @@ for (ff = ffList; ff != NULL; ff = nextFf)
 	ffList = hardRefineSplice(ff, nextFf, qSeq, tSeq, ffList, orientation);
 	}
     }
+// uglyf("after refinement:\n");
+// dumpFf(ffList, qSeq->dna, tSeq->dna);
 return ffList;
 }
 
@@ -893,7 +1057,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
-    aliCount = ssStitch(bun, ffCdna, 16);
+    aliCount = ssStitch(bun, ffCdna, 16, 1);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     slAddHead(&bunList, bun);
     }

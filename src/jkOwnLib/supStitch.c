@@ -713,7 +713,7 @@ else
 
 
 int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
-	int minScore)
+	int minScore, int maxToReturn)
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */
@@ -778,6 +778,11 @@ while (ffList != NULL)
 	ffFreeAli(&bestPath);
 	}
     firstTime = FALSE;
+    if (--maxToReturn <= 0)
+	{
+	ffFreeAli(&ffList);
+	break;
+	}
     }
 slReverse(&bundle->ffList);
 return newAliCount;
@@ -856,7 +861,7 @@ cdna = cSeq->dna;
 
 for (bun = bundleList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, stringency, 20);
+    ssStitch(bun, stringency, 20, 3);
     }
 return bundleList;
 }

@@ -502,7 +502,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     alignComponents(range, bun, ffCdna);
-    ssStitch(bun, ffCdna, minMatch);
+    ssStitch(bun, ffCdna, minMatch, 3);
     saveAlignments(chromName, range->tTotalSize, range->tStart, 
 	bun, NULL, isRc, FALSE, ffCdna, minMatch, out);
     ssBundleFree(&bun);
@@ -590,7 +590,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     alignComponents(range, bun, ffCdna);
-    ssStitch(bun, ffCdna, minScore);
+    ssStitch(bun, ffCdna, minScore, 3);
     slAddHead(&bunList, bun);
     }
 slReverse(&bunList);
@@ -849,7 +849,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->data = range;
     bun->ffList = gfRangesToFfItem(range->components, seq);
     bun->isProt = isProt;
-    ssStitch(bun, stringency, minMatch);
+    ssStitch(bun, stringency, minMatch, 3);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
 	bun, NULL, isRc, FALSE, stringency, minMatch, out);
     ssBundleFree(&bun);
@@ -920,7 +920,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = TRUE;
     bun->t3List = t3;
-    ssStitch(bun, ffCdna, minMatch);
+    ssStitch(bun, ffCdna, minMatch, 3);
     saveAlignments(targetSeq->name, t3->seq->size, 0, 
 	bun, t3Hash, FALSE, tIsRc, ffCdna, minMatch, out);
     ssBundleFree(&bun);
@@ -1060,7 +1060,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	bun->isProt = TRUE;
 	t3 = hashMustFindVal(t3Hash, range->tName);
 	bun->t3List = t3;
-	ssStitch(bun, ffCdna, minMatch);
+	ssStitch(bun, ffCdna, minMatch, 3);
 	splitPath(range->tName, dir, chromName, ext);
 	saveAlignments(chromName, t3->nibSize, 0, 
 	    bun, t3Hash, FALSE, isRc, ffCdna, minMatch, out);
@@ -1188,7 +1188,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->genoSeq = targetSeq;
 	bun->data = range;
 	bun->ffList = gfRangesToFfItem(range->components, qSeq);
-	ssStitch(bun, stringency, minMatch);
+	ssStitch(bun, stringency, minMatch, 3);
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
@@ -1256,7 +1256,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
-    ssStitch(bun, stringency, minMatch);
+    ssStitch(bun, stringency, minMatch, 3);
     slAddHead(&bunList, bun);
     }
 for (qFrame = 0; qFrame<3; ++qFrame)
@@ -1463,7 +1463,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, ffCdna, minScore);
+    ssStitch(bun, ffCdna, minScore, 3);
     if (!fastMap && !band)
 	refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
@@ -1523,7 +1523,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, ffCdna, minScore);
+    ssStitch(bun, ffCdna, minScore, 3);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, qIsRc, tIsRc, stringency, minScore, out);
     }

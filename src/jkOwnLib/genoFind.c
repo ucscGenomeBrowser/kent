@@ -1635,7 +1635,7 @@ struct gfHit *hitList = NULL;
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
     {
     hitList = gfFastFindDnaHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount,
-	NULL, 0, 0);
+	target, tMin, tMax);
     }
 else
     {
