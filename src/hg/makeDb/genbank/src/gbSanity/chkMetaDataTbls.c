@@ -17,7 +17,7 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.1 2003/06/03 01:27:43 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
 
 
 static char* validRefSeqStatus[] = {
@@ -541,9 +541,8 @@ void chkMetaDataGbEntry(struct metaDataTbls* metaDataTbls,
 /* Check metadata against a gbEntry object */
 {
 struct metaData* md;
-/* RefSeq non-native are not loaded (FIXME: excluded may not be neededany more) */
-boolean excluded = (select->release->srcDb == GB_REFSEQ)
-    && (entry->orgCat != GB_NATIVE);
+/* RefSeq non-native are optional */
+boolean excluded = ((entry->orgCat & select->orgCats) == 0);
 
 md = metaDataTblsFind(metaDataTbls, entry->acc);  /* null if not found */
 

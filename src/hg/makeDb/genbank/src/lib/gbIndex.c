@@ -19,7 +19,7 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbIndex.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbIndex.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
 
 unsigned gbTypeFromName(char* fileName, boolean checkSpecies)
 /* Determine the type flags for a filename based on the naming conventions.
@@ -240,13 +240,10 @@ static void getReleasePartitions(struct gbSelect** selectList,
                                  struct gbRelease* release,
                                  unsigned state,
                                  unsigned types,
+                                 unsigned orgCats,
                                  char *limitAccPrefix)
 /* Get partitions for a release and add to list */
 {
-/* refseq only loads native */
-unsigned orgCats = (release->srcDb == GB_REFSEQ) ? GB_NATIVE
-    : (GB_NATIVE|GB_XENO);
-
 if (types & GB_MRNA)
     getTypePartitions(selectList, release, GB_MRNA, orgCats, NULL);
 if ((types & GB_EST) && (release->srcDb != GB_REFSEQ))
@@ -268,6 +265,7 @@ struct gbSelect* gbIndexGetPartitions(struct gbIndex* index,
                                       unsigned srcDbs,
                                       char *limitRelName,
                                       unsigned types,
+                                      unsigned orgCats,
                                       char *limitAccPrefix)
 /* Generate a list of gbSelect objects for partitions of the data that have
  * been processed or aligned based on various filters.  state is GB_PROCESSED
@@ -286,7 +284,8 @@ if (limitRelName != NULL)
     /* specified release */
     struct gbRelease* release = gbIndexMustFindRelease(index, limitRelName);
     if (release->srcDb & srcDbs)
-        getReleasePartitions(&selectList, release, state, types, limitAccPrefix);
+        getReleasePartitions(&selectList, release, state, types, orgCats,
+                             limitAccPrefix);
     }
 else
     {
@@ -297,7 +296,7 @@ else
             = gbIndexNewestRelease(index, state, GB_GENBANK, types,
                                    limitAccPrefix);
         if (gbRel != NULL)
-            getReleasePartitions(&selectList, gbRel, state, types,
+            getReleasePartitions(&selectList, gbRel, state, types, orgCats,
                                  limitAccPrefix);
         }
     
@@ -307,7 +306,7 @@ else
             = gbIndexNewestRelease(index, state, GB_REFSEQ, types,
                                    limitAccPrefix);
         if (rsRel != NULL)
-            getReleasePartitions(&selectList, rsRel, state, types,
+            getReleasePartitions(&selectList, rsRel, state, types, orgCats,
                                  limitAccPrefix);
         }
     }

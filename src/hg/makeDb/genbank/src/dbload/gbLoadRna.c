@@ -31,7 +31,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.1 2003/06/03 01:27:43 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 /* FIXME: ignored deletion could be in it's own module */
@@ -43,6 +43,7 @@ static struct optionSpec optionSpecs[] = {
     {"type", OPTION_STRING},
     {"accPrefix", OPTION_STRING},
     {"workdir", OPTION_STRING},
+    {"xenoRefSeq", OPTION_BOOLEAN},
     {"goFaster", OPTION_BOOLEAN},
     {"dryRun", OPTION_BOOLEAN},
     {"initialLoad", OPTION_BOOLEAN},
@@ -58,6 +59,7 @@ static struct optionSpec optionSpecs[] = {
 
 /* command list parameters */
 static char *gDatabase = NULL;        /* database to load */
+static boolean gXenoRefSeq = FALSE;   /* create xeno RefSeq tables */
 static boolean gGoFaster = FALSE;     /* optmized for speed */
 static boolean gInitialLoad = FALSE;  /* initial load of database */
 static boolean gDryRun = FALSE;       /* don't modify the database */
@@ -459,8 +461,10 @@ void processUpdateAligns(struct sqlConnection *conn, struct gbSelect* select,
 select->update = update;
 gbVerbEnter(1, "process alignments: %s", gbSelectDesc(select));
 
-processUpdateAlignsForOrgCat(conn, select, GB_NATIVE, statusTbl);
-processUpdateAlignsForOrgCat(conn, select, GB_XENO, statusTbl);
+if (select->orgCats & GB_NATIVE)
+    processUpdateAlignsForOrgCat(conn, select, GB_NATIVE, statusTbl);
+if (select->orgCats & GB_XENO)
+    processUpdateAlignsForOrgCat(conn, select, GB_XENO, statusTbl);
 
 gbUpdateClearSelectVer(select->update);
 
@@ -476,11 +480,26 @@ gbAlignDataDbLoad(conn);
 gbVerbLeave(1, "load alignments");
 }
 
-void processAligns(struct sqlConnection *conn, struct gbSelect* select,
-                   struct gbStatusTbl* statusTbl, char* tmpDir)
-/* load the alignments */
+boolean updateSelected(struct gbUpdate* update, struct gbSelect* select)
+/* check if an update is selected and has alignments based on selection
+ * criteria */
 {
 int typeIdx = gbTypeIdx(select->type);
+if (!update->selectAlign)
+    return FALSE;  /* not selected */
+
+return ((select->orgCats & GB_NATIVE)
+        && (update->numNativeAligns[typeIdx] > 0))
+    || ((select->orgCats & GB_XENO)
+        && (update->numXenoAligns[typeIdx] > 0));
+
+}
+
+void processAligns(struct sqlConnection *conn, struct gbSelect* select,
+                   struct gbStatusTbl* statusTbl, char* tmpDir)
+/* load the alignments.  select->orgCat determines if native and/or xeno
+* are loaded */
+{
 struct gbUpdate* update;
 
 gbVerbEnter(1, "processing alignments");
@@ -489,9 +508,7 @@ gbAlignDataInit(tmpDir, gNoPerChrom);
 /* load alignments for updates that are new and actually had sequences align */
 for (update = select->release->updates; update != NULL; update = update->next)
     {
-    if (update->selectAlign &&
-        ((update->numNativeAligns[typeIdx] > 0)
-         || (update->numXenoAligns[typeIdx] > 0)))
+    if (updateSelected(update, select))
         processUpdateAligns(conn, select, update, statusTbl);
     }
 select->update = NULL;
@@ -595,7 +612,6 @@ void loadPartition(struct gbSelect* select, struct sqlConnection* conn,
  * partition of the data.  The gbLoadedTbl is loaded as needed for new
  * release. forceLoad overrides checking the gbLoaded table */
 {
-
 /* Need to make sure this release has been loaded into the gbLoaded obj */
 gbLoadedTblUseRelease(gLoadedTbl, conn, select->release);
 
@@ -649,9 +665,11 @@ void gbLoadRna(char *database, char* relName, char* typesStr, char* limitAccPref
 {
 struct gbIndex* index = gbIndexNew(database, NULL);
 unsigned types = (typesStr != NULL) ? gbParseType(typesStr) : GB_MRNA|GB_EST;
-struct gbSelect* selectList, *select;
+struct gbSelect* selectList, *gbSelectList, *rsSelectList, *select;
 struct sqlConnection* conn;
 boolean forceLoad = (reloadList != NULL);
+unsigned orgCats;
+
 hgSetDb(database);
 conn = hAllocConn();
 
@@ -662,9 +680,15 @@ if (gInitialLoad)
 if (!gDryRun && (reloadList != NULL))
     deleteReload(reloadList);
 
-/* get list of partitions to process */
-selectList = gbIndexGetPartitions(index, GB_ALIGNED, (GB_GENBANK|GB_REFSEQ),
-                                  relName, types, limitAccPrefix);
+/* get list of partitions to process.  Only include xeno refses if
+ * explictly requested. */
+orgCats = (GB_NATIVE|GB_XENO);
+gbSelectList = gbIndexGetPartitions(index, GB_ALIGNED, GB_GENBANK,
+                                    relName, types, orgCats, limitAccPrefix);
+orgCats = gXenoRefSeq ? (GB_NATIVE|GB_XENO) : GB_NATIVE;
+rsSelectList = gbIndexGetPartitions(index, GB_ALIGNED, GB_REFSEQ,
+                                    relName, types, orgCats, limitAccPrefix);
+selectList = slCat(gbSelectList, rsSelectList);
 if (gInitialLoad && (selectList == NULL))
     errAbort("-initialLoad specified and no sequences were found to load");
 
@@ -732,6 +756,8 @@ errAbort(
   "\n"
   "     -accPrefix=ac - Only process ESTs with this 2 char accession prefix.\n"
   "      Must specify -type=est, mostly useful for debugging.\n"
+  "     -xenoRefSeq - Build xeno RefSeq alignment tables.  By default, only\n"
+  "      native RefSeq alignments are loaded.\n"
   "\n"
   "     -gbdbGenBank=dir - set gbdb path to dir, default /gbdb/genbank\n"
   "\n"
@@ -759,7 +785,9 @@ errAbort(
   "\n"
   "     -workdir=work/load - Temporary directory for load files.\n"
   "      would require more memory.\n"
+  "\n"
   "     -noPerChrom - don't build the per-chromosome tables.\n"
+  "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity:\n"
   "              n >= 1 - basic information abourt each step\n"
@@ -767,8 +795,10 @@ errAbort(
   "              n >= 4 - information about each selected sequence\n"
   "              n >= 5 - SQL queries\n"
   "      would require more memory.\n"
+  "\n"
   "     -dryRun - go throught the selection process,  but don't update.\n"
   "      This will still remove ignored accessions.\n"
+  "\n"
   "     -reloadList=file - File containing sequence ids, one per line, to\n"
   "      remove from the databases before updating.  This causes these\n" 
   "      sequences to be reloaded.  This optional also causes all partations\n"
@@ -826,6 +856,7 @@ else
     if (gInitialLoad)
         gGoFaster = TRUE;
     gMaxShrinkage = optionFloat("maxShrinkage", 0.1);
+    gXenoRefSeq = optionExists("xenoRefSeq");
     gAllowLargeDeletes = optionExists("allowLargeDeletes");
     gGbdbGenBank = optionVal("gbdbGenBank", "/gbdb/genbank");
     gNoPerChrom = optionExists("noPerChrom");

@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.1 2003/06/03 01:27:43 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -408,19 +408,37 @@ static void chkRefSeqAlignTables(struct gbSelect* select,
 {
 char* database = select->release->genome->database;
 char dbTableDesc[256];
-unsigned typeFlags = (GB_REFSEQ|GB_MRNA|GB_NATIVE);
 
-safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refSeqAli");
-chkPslTable(select, conn, "refSeqAli", NULL, metaDataTbls, typeFlags);
-chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+if (select->orgCats & GB_NATIVE)
+    {
+    unsigned typeFlags = GB_REFSEQ|GB_MRNA|GB_NATIVE;
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refSeqAli");
+    chkPslTable(select, conn, "refSeqAli", NULL, metaDataTbls, typeFlags);
+    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
 
-safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refGene");
-chkGenePredTable(select, conn, "refGene", FALSE, metaDataTbls, typeFlags);
-chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refGene");
+    chkGenePredTable(select, conn, "refGene", FALSE, metaDataTbls, typeFlags);
+    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refFlat");
+    chkGenePredTable(select, conn, "refFlat", TRUE, metaDataTbls, typeFlags);
+    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    }
+if (select->orgCats & GB_XENO)
+    {
+    unsigned typeFlags = GB_REFSEQ|GB_MRNA|GB_XENO;
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefSeqAli");
+    chkPslTable(select, conn, "xenoRefSeqAli", NULL, metaDataTbls, typeFlags);
+    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
 
-safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "refFlat");
-chkGenePredTable(select, conn, "refFlat", TRUE, metaDataTbls, typeFlags);
-chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefGene");
+    chkGenePredTable(select, conn, "xenoRefGene", FALSE, metaDataTbls, typeFlags);
+    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    
+    safef(dbTableDesc, sizeof(dbTableDesc), "%s:%s", database, "xenoRefFlat");
+    chkGenePredTable(select, conn, "xenoRefFlat", TRUE, metaDataTbls, typeFlags);
+    chkAlignCounts(metaDataTbls, dbTableDesc, typeFlags);
+    }
 }
 
 void chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,

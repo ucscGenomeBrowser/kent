@@ -25,35 +25,21 @@
 #include "gbBuildState.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.3 2003/06/14 07:52:59 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.4 2003/06/15 07:11:24 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
 static char *REF_GENE_TBL = "refGene";
 static char *REF_FLAT_TBL = "refFlat";
+static char *XENO_REF_SEQ_ALI = "xenoRefSeqAli";
+static char *XENO_REF_GENE_TBL = "xenoRefGene";
+static char *XENO_REF_FLAT_TBL = "xenoRefFlat";
 
 /* strings to create refSeq tables are put here */
-static char *gRefGeneTableDef;
-static char *gRefFlatTableDef = 
-"CREATE TABLE refFlat ( \n"
-"   geneName varchar(255) not null,	# name of gene \n"
-"   name varchar(255) not null,	# mrna accession of gene \n"
-"   chrom varchar(255) not null,	# Chromosome name \n"
-"   strand char(1) not null,	# + or - for strand \n"
-"   txStart int unsigned not null,	# Transcription start position \n"
-"   txEnd int unsigned not null,	# Transcription end position \n"
-"   cdsStart int unsigned not null,	# Coding region start \n"
-"   cdsEnd int unsigned not null,	# Coding region end \n"
-"   exonCount int unsigned not null,	# Number of exons \n"
-"   exonStarts longblob not null,	# Exon start positions \n"
-"   exonEnds longblob not null,	# Exon end positions \n"
-          "   #Indices \n"
-"   INDEX(geneName(10)), \n"
-"   INDEX(name(10)), \n"
-"   INDEX(chrom(12),txStart), \n"
-"   INDEX(chrom(12),txEnd) \n"
-")";
-
+static char *gRefGeneTableDef = NULL;
+static char *gRefFlatTableDef = NULL;
+static char *gXenoRefGeneTableDef = NULL;
+static char *gXenoRefFlatTableDef = NULL;
 
 /* global conf */
 static char gTmpDir[PATH_LEN];
@@ -79,6 +65,29 @@ static struct sqlUpdater* gIntronEstUpd = NULL;  /* when doing single table */
 static struct sqlUpdater* gRefSeqAliUpd = NULL;
 static struct sqlUpdater* gRefGeneUpd = NULL;
 static struct sqlUpdater* gRefFlatUpd = NULL;
+static struct sqlUpdater* gXenoRefSeqAliUpd = NULL;
+static struct sqlUpdater* gXenoRefGeneUpd = NULL;
+static struct sqlUpdater* gXenoRefFlatUpd = NULL;
+
+void makeRefGeneCreateSql(char *geneTable, char *flatTable,
+                          char **geneTableDef, char **flatTableDef)
+/* generate the string for create one of the refGene/refFlat pair tables */
+{
+char editDef[1024], *tmpDef, *part2, *p;
+*geneTableDef = genePredGetCreateSql(geneTable, 0);
+    
+/* edit generated SQL to add geneName column and index */
+tmpDef = genePredGetCreateSql(flatTable, 0);
+part2 = strchr(tmpDef, '(');
+*(part2++) = '\0';
+p = strrchr(part2, ')');
+*p = '\0';
+safef(editDef, sizeof(editDef),
+      "%s(geneName varchar(255) not null, %s, INDEX(geneName(10)))",
+      tmpDef, part2);
+*flatTableDef = cloneString(editDef);
+free(tmpDef);
+}
 
 void gbAlignDataInit(char *tmpDirPath, boolean noPerChrom)
 /* initialize for outputing PSL files, called once per genbank type */
@@ -88,23 +97,14 @@ gBuildPerChrom = !noPerChrom;
 if (gChroms == NULL)
     gChroms = hAllChromNames();
 
-/* get sql to create tables for first go */
+/* get sql to create tables for first go, always get xeno, even if not
+ * used  */
 if (gRefGeneTableDef == NULL)
     {
-    char editDef[1024], *tmpDef, *part2, *p;
-    gRefGeneTableDef = genePredGetCreateSql(REF_GENE_TBL, 0);
-    
-    /* edit generated SQL to add geneName column and index */
-    tmpDef = genePredGetCreateSql(REF_FLAT_TBL, 0);
-    part2 = strchr(tmpDef, '(');
-    *(part2++) = '\0';
-    p = strrchr(part2, ')');
-    *p = '\0';
-    safef(editDef, sizeof(editDef),
-          "%s(geneName varchar(255) not null, %s, INDEX(geneName(10)))",
-          tmpDef, part2);
-    gRefFlatTableDef = cloneString(editDef);
-    free(tmpDef);
+    makeRefGeneCreateSql(REF_GENE_TBL, REF_FLAT_TBL,
+                         &gRefGeneTableDef, &gRefFlatTableDef);
+    makeRefGeneCreateSql(XENO_REF_GENE_TBL, XENO_REF_FLAT_TBL,
+                         &gXenoRefGeneTableDef, &gXenoRefFlatTableDef);
     }
 }
 static FILE* getPslTabFile(char* table, struct sqlConnection* conn,
@@ -246,15 +246,31 @@ static void writeRefSeqPsl(struct sqlConnection *conn, struct gbSelect* select,
 {
 /* only native refseq have been selected */
 struct genePred* gene;
-FILE *fh = getPslTabFile(REF_SEQ_ALI, conn, &gRefSeqAliUpd);
+FILE *fh;
+
+if (select->orgCats == GB_NATIVE)
+    fh = getPslTabFile(REF_SEQ_ALI, conn, &gRefSeqAliUpd);
+else
+    fh = getPslTabFile(XENO_REF_SEQ_ALI, conn, &gXenoRefSeqAliUpd);
+
 writePsl(fh, psl);
 
 /* genePred and geneFlat tables, merge insert <= 5 bases */
 gene = genePredFromPsl(psl, status->cdsStart, status->cdsEnd, 5);
-fh= getOtherTabFile(REF_GENE_TBL, conn, gRefGeneTableDef, &gRefGeneUpd);
+if (select->orgCats == GB_NATIVE)
+    fh= getOtherTabFile(REF_GENE_TBL, conn, gRefGeneTableDef,
+                        &gRefGeneUpd);
+else
+    fh= getOtherTabFile(XENO_REF_GENE_TBL, conn, gXenoRefGeneTableDef,
+                        &gXenoRefGeneUpd);
 genePredTabOut(gene, fh);
 
-fh = getOtherTabFile(REF_FLAT_TBL, conn, gRefFlatTableDef, &gRefFlatUpd);
+if (select->orgCats == GB_NATIVE)
+    fh = getOtherTabFile(REF_FLAT_TBL, conn, gRefFlatTableDef,
+                         &gRefFlatUpd);
+else
+    fh = getOtherTabFile(XENO_REF_FLAT_TBL, conn, gXenoRefFlatTableDef,
+                         &gXenoRefFlatUpd);
 fprintf(fh, "%s\t", ((status->geneName == NULL) ? "" : status->geneName));
 genePredTabOut(gene, fh);
 
@@ -626,9 +642,12 @@ for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
 sqlDropTable(conn, "mrnaOrientInfo");
 sqlDropTable(conn, "estOrientInfo");
 
-sqlDropTable(conn, "refSeqAli");
-sqlDropTable(conn, "refGene");
-sqlDropTable(conn, "refFlat");
+sqlDropTable(conn, REF_SEQ_ALI);
+sqlDropTable(conn, REF_GENE_TBL);
+sqlDropTable(conn, REF_FLAT_TBL);
+sqlDropTable(conn, XENO_REF_SEQ_ALI);
+sqlDropTable(conn, XENO_REF_GENE_TBL);
+sqlDropTable(conn, XENO_REF_FLAT_TBL);
 }
 
 /*

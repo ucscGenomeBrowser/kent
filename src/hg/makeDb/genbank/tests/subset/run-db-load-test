@@ -12,6 +12,7 @@ GBROOT=`dirname $dir`
 doOrphanTest=NO
 
 #doNoPerChrom="-noPerChrom"
+doXenoRefSeq="-xenoRefSeq"
 
 shopt -s nullglob
 
@@ -20,14 +21,14 @@ rm -rf out
 mkdir -p out
 reset-db 
 chmod ug+rwx data/processed/*/* data/aligned/*/${TESTDB}/*
-db-load-test -initialLoad $doNoPerChrom all
+db-load-test -initialLoad $doNoPerChrom $doXenoRefSeq all
 
 dailies=`(cd data/processed/genbank.${RELVERSION} && echo daily.*)`
 
 reset-db 
 chmod a-rwx data/processed/*/daily.* data/aligned/*/${TESTDB}/daily.*
 
-db-load-test $doNoPerChrom full
+db-load-test $doNoPerChrom $doXenoRefSeq full
 
 if [ $doOrphanTest = "YES" ] ; then
     echo "NOTE: doing orphan test"
@@ -44,7 +45,7 @@ for daily in $dailies ; do
     chmod ug+rwx data/aligned/genbank.${RELVERSION}/${TESTDB}/$daily
     chmod ug+rwx data/processed/refseq.${RELVERSION}/*
     chmod ug+rwx data/aligned/refseq.${RELVERSION}/${TESTDB}/*
-    db-load-test $doNoPerChrom $reloadList $daily
+    db-load-test $doNoPerChrom $doXenoRefSeq $reloadList $daily
     reloadList=""
 done
 

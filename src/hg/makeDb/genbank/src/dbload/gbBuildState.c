@@ -17,7 +17,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.1 2003/06/03 01:27:42 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.2 2003/06/15 07:11:24 markd Exp $";
 
 #define DO_EXT_CHANGE FALSE
 
@@ -59,20 +59,6 @@ if (aligned != NULL)
     
 *retAligned = aligned;
 return processed;
-}
-
-static boolean shouldInclude(struct gbSelect* select, struct gbEntry* entry)
-/* Determine if an entry should be included in the database based on special
- * species.  Neep in sync with gbSanity/metaData.c.  */
-{
-/* FIXME: drop, selected at a higher level now */
-if (select->release->srcDb == GB_REFSEQ)
-    {
-    /* refseq tracks only includes native */
-    return (entry->orgCat == GB_NATIVE);
-    }
-else
-    return TRUE;  /* use all genbank */
 }
 
 static void markDeleted(struct gbStatusTbl* statusTbl,
@@ -253,8 +239,7 @@ else
 if (entry != NULL)
     processed = getProcAligned(entry, &aligned);
 /* if no entry or not aligned, or if it shouldn't be included, delete */
-if ((entry == NULL) || (aligned == NULL)
-    || !shouldInclude(ssData->select, entry))
+if ((entry == NULL) || (aligned == NULL))
     markDeleted(statusTbl, tmpStatus);
 else
     {
@@ -286,7 +271,7 @@ static void checkNewEntry(struct gbSelect* select, struct gbStatusTbl* statusTbl
                           struct gbEntry* entry)
 /* check if an entry is new */
 {
-if ((entry->selectVer == NULL_VERSION) && shouldInclude(select, entry))
+if (entry->selectVer == NULL_VERSION)
     {
     /* new entry, get the alignment.  However if the processed directory
      * has not been aligned yet, it might not exist, in which case, it's

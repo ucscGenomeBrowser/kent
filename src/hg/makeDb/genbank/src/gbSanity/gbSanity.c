@@ -37,13 +37,14 @@
 #include "chkAlignTbls.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.1 2003/06/03 01:27:44 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"gbdbCurrent", OPTION_STRING},
     {"release", OPTION_STRING},
     {"type", OPTION_STRING},
+    {"xenoRefSeq", OPTION_BOOLEAN},
     {"accPrefix", OPTION_STRING},
     {"test", OPTION_BOOLEAN},
     {"checkExtSeqRecs", OPTION_BOOLEAN},
@@ -54,7 +55,8 @@ static struct optionSpec optionSpecs[] = {
 
 /* global parameters from command line */
 static char* gGbdbMapToCurrent = NULL;  /* map this gbdb root to current */
-static boolean gNoPerChrom = FALSE;   /* don't check per-chrom tables */
+static boolean gNoPerChrom = FALSE;    /* don't check per-chrom tables */
+static boolean gXenoRefSeq = FALSE;    /* have xeno RefSeq tables */
 static boolean gCheckExtSeqRecs = FALSE;
 
 void checkMrnaStrKeys(struct sqlConnection* conn)
@@ -118,7 +120,7 @@ metaDataTblsFree(&metaDataTbls);
 }
 
 void checkRelease(struct gbRelease* release, char* database,
-                  unsigned type, char* accPrefix)
+                  unsigned type, unsigned orgCats, char* accPrefix)
 /* Check a release/type */
 {
 struct sqlConnection* conn = hAllocConn();
@@ -128,18 +130,18 @@ ZeroVar(&select);
 select.release = release;
 select.type = type;
 
-select.orgCats = GB_NATIVE|GB_XENO;
+select.orgCats = orgCats;
 select.accPrefix = accPrefix;
 checkSanity(&select, conn);
 hFreeConn(&conn);
 }
 
 void releaseSanity(struct gbRelease* release, char *database,
-                   unsigned types, char* limitAccPrefix)
+                   unsigned types, unsigned orgCats, char* limitAccPrefix)
 /* Run sanity checks on a release */
 {
 if (types & GB_MRNA)
-    checkRelease(release, database, GB_MRNA, NULL);
+    checkRelease(release, database, GB_MRNA, orgCats, NULL);
 if ((types & GB_EST) && (release->srcDb == GB_GENBANK))
     {
     struct slName* prefixes, *prefix;
@@ -148,7 +150,7 @@ if ((types & GB_EST) && (release->srcDb == GB_GENBANK))
     else
         prefixes = gbReleaseGetAccPrefixes(release, GB_PROCESSED, GB_EST);
     for (prefix = prefixes; prefix != NULL; prefix = prefix->next)
-        checkRelease(release, database, GB_EST, prefix->name);
+        checkRelease(release, database, GB_EST, orgCats, prefix->name);
     slFreeList(&prefixes);
     }
 }
@@ -187,6 +189,7 @@ struct gbIndex* index = gbIndexNew(database, NULL);
 struct sqlConnection *conn;
 unsigned types = GB_MRNA|GB_EST;
 struct gbRelease* release;
+unsigned orgCats;
 hgSetDb(database);
 gbErrorSetDb(database);
 
@@ -199,15 +202,22 @@ if (relName == NULL)
      * release */
     release = newestReleaseWithAligns(index, database, GB_GENBANK);
     if (release != NULL)
-        releaseSanity(release, database, types, limitAccPrefix);
+        {
+        orgCats = GB_NATIVE|GB_XENO;
+        releaseSanity(release, database, types, orgCats, limitAccPrefix);
+        }
+
     release = newestReleaseWithAligns(index, database, GB_REFSEQ);
     if (release != NULL)
-        releaseSanity(release, database, types, NULL);
+        {
+        orgCats = gXenoRefSeq ? (GB_NATIVE|GB_XENO) : GB_NATIVE;
+        releaseSanity(release, database, types, orgCats, NULL);
+        }
     }
 else
     {
     release = gbIndexMustFindRelease(index, relName);
-    releaseSanity(release, database, types, NULL);
+    releaseSanity(release, database, types, orgCats, NULL);
     }
     
 gbIndexFree(&index);
@@ -273,6 +283,7 @@ limitAccPrefix = optionVal("accPrefix", NULL);
 testMode = optionExists("test");
 gCheckExtSeqRecs = optionExists("checkExtSeqRecs");
 gNoPerChrom = optionExists("noPerChrom");
+gXenoRefSeq = optionExists("xenoRefSeq");
 database = argv[1];
 
 gbVerbEnter(0, "gbSanity: begin: %s", database);

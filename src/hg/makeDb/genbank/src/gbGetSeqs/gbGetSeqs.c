@@ -14,7 +14,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.1 2003/06/03 01:27:43 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -204,7 +204,7 @@ struct gbSelect* select;
 struct gbFa* outFa;
 
 selectList = gbIndexGetPartitions(index, GB_PROCESSED, srcDb,
-                                  NULL, type, NULL);
+                                  NULL, type, GB_NATIVE|GB_XENO, NULL);
 if (selectList == NULL)
     errAbort("no matching release or types");
 

@@ -14,8 +14,6 @@ use FindBin;
 use lib "$FindBin::Bin/../../lib";
 use gbCommon;
 
-my $quick = 0;  # skip PSLs if set
-
 setTaskName("dump-test-tables");
 
 # command to run mysql
@@ -51,36 +49,38 @@ if (-e "load") {
 
 my @chroms = callMySql("select chrom from chromInfo");
 push(@chroms, "all");
-my @tables = callMySql("show tables");
 
-if (!$quick) {
-    # Used to generate psl chromosome (and all) table names. Tables existance is
-    # check, so this can be a super-set.
-    my @pslTables;
-    foreach my $type ("mrna", "est", "intronEst") {
-        foreach my $chr (@chroms) {
-            push(@pslTables, $chr . "_" . $type);
-        }
-    }
-    push(@pslTables, "xenoMrna");
-    push(@pslTables, "xenoEst");
+my %tables;
+foreach my $table (callMySql("show tables")) {
+    $tables{$table} = 1;
+}
+
+# Used to generate psl chromosome (and all) table names. Tables existance is
+# check, so this can be a super-set.
+my @pslTables;
+foreach my $type ("mrna", "est", "intronEst") {
     foreach my $chr (@chroms) {
-        push(@pslTables, $chr . "_" . "intronEst");
+        push(@pslTables, $chr . "_" . $type);
     }
+}
+push(@pslTables, "xenoMrna");
+push(@pslTables, "xenoEst");
+foreach my $chr (@chroms) {
+    push(@pslTables, $chr . "_" . "intronEst");
+}
 
-    foreach my $tbl (@pslTables) {
-        if (inList($tbl, @tables)) {
-            runMySql("$tbldir/$tbl.tbl",
-                     "SELECT * FROM $tbl ORDER BY "
+foreach my $tbl (@pslTables) {
+    if (defined($tables{$tbl})) {
+        runMySql("$tbldir/$tbl.tbl",
+                 "SELECT * FROM $tbl ORDER BY "
                      . "tName,tStart,tEnd,qName,qStart,qEnd");
-        }
     }
 }
 
 # *OrientInfo tables
 foreach my $type ("mrna", "est") {
     my $tbl = "${type}OrientInfo";
-    if (inList($tbl, @tables)) {
+    if (defined($tables{$tbl})) {
         runMySql("$tbldir/$tbl.tbl", 
              "SELECT * FROM $tbl ORDER BY chrom,chromStart,chromEnd,name");
     }
@@ -109,9 +109,10 @@ my $mrnaSel =
 
 runMySql("$tbldir/mrna.tbl", $mrnaSel);
 
-# seq and file tables, dropping the ids
+# seq dropping any file specific info (which might be differed)
 runMySql("$tbldir/gbSeq.tbl",
-         "SELECT acc,version,size,file_offset,file_size,type,srcDb FROM gbSeq ORDER BY acc");
+         "SELECT acc,version,size,file_size,type,srcDb FROM gbSeq ORDER BY acc");
+
 # this always differs, so don't save in tbldir
 runMySql("$main::outdir/gbExtFile.tbl",
          "SELECT path,size FROM gbExtFile ORDER BY path");
@@ -137,11 +138,19 @@ runMySql("$tbldir/refSeqStatus.tbl",
 
 runMySql("$tbldir/refSeqAli.tbl",
          "SELECT * FROM refSeqAli ORDER BY tName,tStart,tEnd,qName,qStart,qEnd");
-
 runMySql("$tbldir/refGene.tbl",
          "SELECT * FROM refGene ORDER BY name,chrom,txStart,txEnd");
 runMySql("$tbldir/refFlat.tbl",
          "SELECT * FROM refFlat ORDER BY geneName,name,chrom,txStart,txEnd");
+
+if (defined($tables{xenoRefSeqAli})) {
+    runMySql("$tbldir/xenoRefSeqAli.tbl",
+             "SELECT * FROM xenoRefSeqAli ORDER BY tName,tStart,tEnd,qName,qStart,qEnd");
+    runMySql("$tbldir/xenoRefGene.tbl",
+             "SELECT * FROM xenoRefGene ORDER BY name,chrom,txStart,txEnd");
+    runMySql("$tbldir/xenoRefFlat.tbl",
+             "SELECT * FROM xenoRefFlat ORDER BY geneName,name,chrom,txStart,txEnd");
+}
 
 runMySql("$tbldir/gbLoaded.tbl",
          "SELECT srcDb,loadRelease,loadUpdate,type,accPrefix FROM gbLoaded ORDER BY srcDb,loadRelease,loadUpdate,type,accPrefix");
@@ -149,6 +158,3 @@ runMySql("$tbldir/gbLoaded.tbl",
 runMySql("$tbldir/imageClone.tbl",
          "SELECT imageId,acc,type FROM imageClone ORDER BY imageId,acc");
 
-# get gbSeq table join with gbExtFile
-runMySql("$tbldir/gbSeqExtFile.tbl", 
-         "SELECT gbSeq.acc,gbExtFile.path FROM gbSeq,gbExtFile WHERE gbSeq.gbExtFile=gbExtFile.id ORDER BY gbSeq.acc");

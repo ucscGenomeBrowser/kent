@@ -15,7 +15,9 @@
 #include "errabort.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.1 2003/06/03 01:27:49 markd Exp $";
+static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+
+/* FIXME: need a way to get both native and xenos that are know to align */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -528,7 +530,7 @@ return acc;
 
 void copyRefSeqPepFa(struct gbUpdate* update,
                      char* outDir, char *gbFile)
-/* copy a subset of the RefSeq peptided file for the select genes */
+/* copy a subset of the RefSeq peptide file for the select genes */
 {
 struct gbRelease* release = update->release;
 char faInPath[PATH_LEN];

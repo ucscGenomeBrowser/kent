@@ -61,6 +61,7 @@ struct gbSelect* gbIndexGetPartitions(struct gbIndex* index,
                                       unsigned srcDbs,
                                       char *limitRelName,
                                       unsigned types,
+                                      unsigned orgCats,
                                       char *limitAccPrefix);
 /* Generate a list of gbSelect objects for partitions of the data that have
  * been processed or aligned based on various filters.  state is GB_PROCESSED
