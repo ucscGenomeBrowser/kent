@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: expData.c,v 1.1 2003/10/06 23:14:14 kent Exp $";
+static char const rcsid[] = "$Id: expData.c,v 1.2 2003/10/07 05:47:21 kent Exp $";
 
 struct expData *expDataLoad(char **row)
 /* Load a expData from row fetched with select * from expData
@@ -124,7 +124,7 @@ fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->expCount; ++i)
     {
-    fprintf(f, "%f", el->expScores[i]);
+    fprintf(f, "%0.3f", el->expScores[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
