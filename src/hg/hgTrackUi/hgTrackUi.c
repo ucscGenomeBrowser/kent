@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.128 2004/08/04 17:46:35 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.129 2004/08/05 18:08:44 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -276,6 +276,32 @@ void cdsColorOptions(struct trackDb *tdb, int value)
         printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
 }
 
+void blastFBUi(struct trackDb *tdb)
+{
+char geneName[64];
+char accName[64];
+char sprotName[64];
+char posName[64];
+boolean useGene, useAcc, useSprot, usePos;
+
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
+useGene= cartUsualBoolean(cart, geneName, TRUE);
+useAcc= cartUsualBoolean(cart, accName, FALSE);
+usePos= cartUsualBoolean(cart, posName, FALSE);
+
+printf("<P><B>Label elements by: </B> ");
+cgiMakeCheckBox(geneName, useGene);
+printf("FlyBase Gene ");
+cgiMakeCheckBox(accName, useAcc);
+printf("D. melanogaster mRNA ");
+cgiMakeCheckBox(posName, usePos);
+printf("D. melanogaster Position");
+
+cdsColorOptions(tdb, 2);
+}
 void blastUi(struct trackDb *tdb)
 {
 char geneName[64];
@@ -899,6 +925,8 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
+else if (sameString(track, "blastDm1FB"))
+        blastFBUi(tdb);
 else if (sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
