@@ -17,6 +17,7 @@
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
+#include "spDb.h"
 #include "hui.h"
 #include "hgFind.h"
 #include "hgTracks.h"
@@ -88,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.906 2005/02/14 07:27:51 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.907 2005/02/14 23:21:57 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3165,7 +3166,7 @@ if ((blastRef != NULL) && (hTableExists(blastRef)))
 		if (added)
 		    strcat(lf->extra, "/");
 		added = TRUE;
-		strcat(lf->extra, row[2]);
+		strcat(lf->extra, uniProtFindPrimAcc(row[2]));
 		}
 	    if (usePos)
 		{
