@@ -86,5 +86,9 @@ void phmmPrintTrace(struct phmmMatrix *am, struct phmmAliPair *pairList,
 	boolean showStates, FILE *f, boolean extraAtEnds);
 /* Print out trace to file. */
 
+struct axt *phhmTraceToAxt(struct phmmMatrix *am, struct phmmAliPair *pairList, 
+	int score, char *qName, char *tName);
+/* Convert alignment from traceback format to axt. */
+
 #endif /* PAIRHMM_H */
 

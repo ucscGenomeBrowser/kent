@@ -5,7 +5,10 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "axt.h"
 #include "pairHmm.h"
+
+static char const rcsid[] = "$Id: pairHmm.c,v 1.3 2004/07/02 06:23:16 kent Exp $";
 
 UBYTE phmmNullMommy = 0; /* mommy value for orphans.... */
 
@@ -296,6 +299,49 @@ if (lineIx != 0)
     lineIx = 0;
     }
 #undef lineLen
+}
+
+struct axt *phhmTraceToAxt(struct phmmMatrix *am, struct phmmAliPair *pairList, 
+	int score, char *qName, char *tName)
+/* Convert alignment from traceback format to axt. */
+{
+struct axt *axt;
+struct phmmAliPair *pair;
+int qEnd, tEnd;
+char *qSym, *tSym;
+int i;
+
+/* Make sure got something real. */
+if ((pair = pairList) == NULL)
+    return NULL;
+
+/* Allocate memory for axt. */
+AllocVar(axt);
+axt->symCount = slCount(pairList);
+axt->qSym = AllocArray(qSym, axt->symCount);
+axt->tSym = AllocArray(tSym, axt->symCount);
+
+/* Fill in basic fields. */
+axt->qName = cloneString(qName);
+axt->tName = cloneString(tName);
+axt->qStrand = axt->tStrand = '+';
+axt->qStart = qEnd = pair->queryIx;
+axt->tStart = tEnd = pair->targetIx;
+axt->score = score;
+
+/* Store alignment symbols and keep track of last symbol used. */
+for (i=0, pair = pairList; pair != NULL; pair = pair->next, ++i)
+    {
+    qSym[i] = pair->querySym;
+    tSym[i] = pair->targetSym;
+    qEnd = pair->queryIx;
+    tEnd = pair->targetIx;
+    }
+
+/* Store end and return. */
+axt->qEnd = qEnd + 1;
+axt->tEnd = tEnd + 1;
+return axt;
 }
 
 

@@ -8,7 +8,7 @@
 #include "xenalign.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.8 2004/06/30 21:51:23 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.9 2004/07/02 06:23:16 kent Exp $";
 
 static double calcGcRatio(DNA *a, int aSize, DNA *b, int bSize)
 /* Figure out percentage of g/c in a and b. */
@@ -95,7 +95,6 @@ static int c1c2MatchTable[26*32];
 static int c3MatchTable[26*32];
 static int hiFiMatchTable[26*32];
 static int loFiMatchTable[26*32];
-static int matchTable[26*32];	/* Generic single match table */
 
 #define letterIx(a) ((a)-'a')
 
@@ -386,7 +385,9 @@ for (tIx = 1; tIx < a->tDim; tIx += 1)
             qSlipState(c1, insertFromCodingCost);
             qSlipState(c2, insertFromCodingCost);
             qSlipState(c3, insertFromCodingCost);
-	    qSlipState(it, 0);	/* Allow double gaps, T first always. */
+#ifdef SOON_I_HOPE
+	    qSlipState(it, largeGapExtensionCost); /* Allow double gaps, T first always. */
+#endif /* SOON_I_HOPE */
             shortEndState(iq);
             }
         
@@ -472,199 +473,3 @@ return bestScore;
 #undef endState
 }
 
-void setupMatchTable(int matchTable[26*32], int match, int mismatch)
-/* Setup simple match table. */
-{
-int i;
-for (i=0; i<26*32; ++i)
-    matchTable[i] = mismatch;
-for (i=0; i<26; ++i)
-    matchTable[32*i + i] = match;
-}
-
-
-int xenAlignAffine(char *query, int querySize, char *target, int targetSize, 
-	FILE *f, boolean printExtraAtEnds)
-/* Use dynamic programming to do protein/protein alignment. */
-{
-struct phmmMatrix *a;
-struct phmmState *hf, *iq, *it;
-int qIx, tIx, sIx;  /* Query, target, and state indices */
-int rowOffset, newCellOffset;
-struct phmmAliPair *pairList;
-int matchOff, qSlipOff, tSlipOff;
-int bestScore = -0x4fffffff;
-struct phmmMommy *bestCell = NULL;
-int badScore = -0x3fffffff;
-int matchPair;
-int matchTableOffset;
-int gapStart, halfGapStart, gapExt;
-
-/* Check that it's not too big. */
-if ((double)targetSize * querySize > 1.1E7)
-    errAbort("Can't align %d x %d, too big\n", querySize, targetSize);
-
-setupMatchTable(matchTable, 100, -50);
-gapStart = -100;
-halfGapStart = gapStart/2;
-gapExt = -20;
-
-/* Initialize 3 state matrix (match, query insert, target insert). */
-a = phmmMatrixNew(3, query, querySize, target, targetSize);
-hf = phmmNameState(a, hiFiIx, "match", 'M');
-iq = phmmNameState(a, qSlipIx, "qSlip", 'Q');
-it = phmmNameState(a, tSlipIx, "tSlip", 'T');
-
-qSlipOff = -a->qDim;
-tSlipOff = -1;
-matchOff = qSlipOff + tSlipOff;
-
-for (tIx = 1; tIx < a->tDim; tIx += 1)
-    {
-    UBYTE mommy = 0;
-    int score, tempScore;
-
-/* Macros to make me less mixed up when accessing scores from row arrays.*/
-#define matchScore lastScores[qIx-1]
-#define qSlipScore lastScores[qIx]
-#define tSlipScore scores[qIx-1]
-#define newScore scores[qIx]
-
-/* Start up state block (with all ways to enter state) */
-#define startState(state) \
-   score = 0;
-
-/* Define a transition from state while advancing over both
- * target and query. */
-#define matchState(state, addScore) \
-   { \
-   if ((tempScore = state->matchScore + addScore) > score) \
-        { \
-        mommy = phmmPackMommy(state->stateIx, -1, -1); \
-        score = tempScore; \
-        } \
-   } 
-
-/* Define a transition from state while slipping query
- * and advancing target. */
-#define qSlipState(state, addScore) \
-   { \
-   if ((tempScore = state->qSlipScore + addScore) > score) \
-        { \
-        mommy = phmmPackMommy(state->stateIx, 0, -1); \
-        score = tempScore; \
-        } \
-   }
-
-/* Define a transition from state while slipping target
- * and advancing query. */
-#define tSlipState(state, addScore) \
-   { \
-   if ((tempScore = state->tSlipScore + addScore) > score) \
-        { \
-        mommy = phmmPackMommy(state->stateIx, -1, 0); \
-        score = tempScore; \
-        } \
-   }
-
-/* End a block of transitions into state. */
-#define endState(state) \
-    { \
-    struct phmmMommy *newCell = state->cells + newCellOffset; \
-    if (score <= 0) \
-        { \
-        mommy = phmmNullMommy; \
-        score = 0; \
-        } \
-    newCell->mommy = mommy; \
-    state->newScore = score; \
-    if (score > bestScore) \
-        { \
-        bestScore = score; \
-        bestCell = newCell; \
-        } \
-    } 
-
-/* End a state that you know won't produce an optimal
- * final score. */
-#define shortEndState(state) \
-    { \
-    struct phmmMommy *newCell = state->cells + newCellOffset; \
-    if (score <= 0) \
-        { \
-        mommy = phmmNullMommy; \
-        score = 0; \
-        } \
-    newCell->mommy = mommy; \
-    state->newScore = score; \
-    }
-
-
-    rowOffset = tIx*a->qDim;
-    for (qIx = 1; qIx < a->qDim; qIx += 1)
-        {
-        int qBase = letterIx(a->query[qIx-1]);
-        int tBase = letterIx(a->target[tIx-1]);
-
-        newCellOffset = rowOffset + qIx;
-        
-        /* Figure the cost or bonus for pairing target and query residue here. */
-        matchTableOffset = (qBase<<5) + tBase;
-        matchPair = matchTable[matchTableOffset];
-
-        /* Update hiFi space. */
-            {
-            startState(hf);
-            matchState(hf, matchPair);
-            matchState(iq, matchPair + halfGapStart);
-            matchState(it, matchPair + halfGapStart);
-            endState(hf);
-            }
-
-        /* Update query slip space. */
-            {
-            startState(iq);
-            qSlipState(iq, gapExt);
-            qSlipState(hf, halfGapStart);            
-	    qSlipState(it, 0);	/* Allow double gaps, T first always. */
-            shortEndState(iq);
-            }
-        
-        /* Update target slip space. */
-            {
-            startState(it);
-            tSlipState(it, gapExt);
-            tSlipState(hf, halfGapStart);            
-            shortEndState(it);
-            }
-
-        }
-    /* Swap score columns so current becomes last, and last gets
-     * reused. */
-    for (sIx = 0; sIx < a->stateCount; ++sIx)
-        {
-        struct phmmState *as = &a->states[sIx];
-        int *swapTemp = as->lastScores;
-        as->lastScores = as->scores;
-        as->scores = swapTemp;
-        }
-    }
-
-/* Trace back from best scoring cell. */
-pairList = phmmTraceBack(a, bestCell);
-phmmPrintTrace(a, pairList, TRUE, f, printExtraAtEnds);
-
-slFreeList(&pairList);
-phmmMatrixFree(&a);
-return bestScore;
-#undef matchScore
-#undef qSlipScore
-#undef tSlipScore
-#undef newScore
-#undef startState
-#undef matchState
-#undef qSlipState
-#undef tSlipState
-#undef shortEndState
-#undef endState
-}

@@ -24,6 +24,10 @@
 #include "linefile.h"
 #endif 
 
+#ifndef DNASEQ_H
+#include "dnaseq.h"
+#endif
+
 struct axt
 /* This contains information about one xeno alignment. */
     {
@@ -172,6 +176,15 @@ void axtBlastOut(struct axtBundle *abList,
  *   blastType - blast/wublast/blast8/blast9/xml
  *   ourId - optional (may be NULL) thing to put in header
  */
+
+struct axt *axtAffine(bioSeq *query, bioSeq *target, struct axtScoreScheme *ss);
+/* Return alignment if any of query and target using scoring scheme.  This does
+ * dynamic program affine-gap based alignment.  It's not suitable for very large
+ * sequences. */
+
+boolean axtAffineSmallEnough(double querySize, double targetSize);
+/* Return TRUE if it is reasonable to align sequences of given sizes
+ * with axtAffine. */
 
 #endif /* AXT_H */
 

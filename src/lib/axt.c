@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.32 2004/06/02 14:25:49 braney Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.33 2004/07/02 06:23:16 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -537,19 +537,28 @@ for (line = text; line != NULL; line = nextLine)
     else
         {
 	int wordCount = chopLine(line, row);
-	char letter;
+	char letter, lcLetter;
 	if (wordCount != 25)
 	    badProteinMatrixLine(lineIx, fileName);
 	letter = row[0][0];
 	if (strlen(row[0]) != 1 || isdigit(letter))
 	    badProteinMatrixLine(lineIx, fileName);
+	lcLetter = tolower(letter);
 	for (i=1; i<wordCount; ++i)
 	    {
 	    char *s = row[i];
+	    int val;
+	    char otherLetter, lcOtherLetter;
 	    if (s[0] == '-') ++s;
 	    if (!isdigit(s[0]))
 		badProteinMatrixLine(lineIx, fileName);
-	    ss->matrix[letter][columns[i-1]] = atoi(row[i]);
+	    otherLetter = columns[i-1];
+	    lcOtherLetter = tolower(otherLetter);
+	    val = atoi(row[i]);
+	    ss->matrix[letter][otherLetter] = val;
+	    ss->matrix[lcLetter][otherLetter] = val;
+	    ss->matrix[letter][lcOtherLetter] = val;
+	    ss->matrix[lcLetter][lcOtherLetter] = val;
 	    }
 	}
     }
@@ -570,8 +579,8 @@ ss = axtScoreSchemeFromProteinText(blosumText, "blosum62");
 for (i=0; i<128; ++i)
     for (j=0; j<128; ++j)
         ss->matrix[i][j] *= 19;
-ss->gapOpen = 400;
-ss->gapExtend = 80;
+ss->gapOpen = 11;
+ss->gapExtend = 1;
 return ss;
 }
 
