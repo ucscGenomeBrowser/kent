@@ -28,6 +28,12 @@
 #include "refLink.h"
 #include "cheapcgi.h"
 
+static struct hgPositions *handleTwoSites(char *spec, char **retChromName, 
+                                          int *retWinStart, int *retWinEnd, struct cart *cart);
+/* Function declaration because of circular calls between this and genomePos */
+/* Deal with specifications that in form start;end. */
+
+
 void hgPositionsFree(struct hgPositions **pEl)
 /* Free up hgPositions. */
 {
@@ -519,13 +525,13 @@ else
     {
     struct psl *pslList, *psl;
     int pslCount;
-    char prefix[16];
+    char suffix[16];
     struct hgPosTable *table;
     struct hgPos *pos;
 
-    strncpy(prefix, type, sizeof(prefix));
-    tolowers(prefix);
-    pslList = psl = findAllAli(acc, prefix);
+    strncpy(suffix, type, sizeof(suffix));
+    tolowers(suffix);
+    pslList = psl = findAllAli(acc, suffix);
     pslCount = slCount(pslList);
     if (pslCount <= 0)
         {
@@ -548,7 +554,7 @@ else
             }
         else
             {
-            snprintf(tableName, sizeof(tableName), "all_%s", type);      
+            snprintf(tableName, sizeof(tableName), "%s", suffix);      
             }
 
 	AllocVar(table);
@@ -1127,6 +1133,7 @@ table->name = NULL;
 table->description = cloneString("mRNA Associated Search Results");
 table->htmlOnePos = mrnaKeysHtmlOnePos;
 
+/* Dummy block made to allow local declarations */
 /* Fetch descriptions of all matchers and display. */
     {
     struct sqlConnection *conn = hAllocConn();
@@ -1136,35 +1143,36 @@ table->htmlOnePos = mrnaKeysHtmlOnePos;
     char description[512];
     char *ui = getUiUrl(cart);
     for (el = allKeysList; el != NULL; el = el->next)
-	{
-	AllocVar(pos);
-	slAddHead(&table->posList, pos);
-	pos->name = cloneString(el->name);
-	dyStringClear(dy);
-
-	if(useHgTracks)
-		dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgTracksName(), el->name);
-	else
-		dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgTextName(), el->name);
-
-	if (ui != NULL)
-	    dyStringPrintf(dy, "&%s", ui);
-	dyStringPrintf(dy, "%s\">", 
-		hgp->extraCgi);
-	dyStringPrintf(dy, "%s </A>", el->name);
-	sprintf(query, 
-		"select description.name from mrna,description"
-		" where mrna.acc = '%s' and mrna.description = description.id",
-		el->name);
+        {
+        AllocVar(pos);
+        slAddHead(&table->posList, pos);
+        pos->name = cloneString(el->name);
+        dyStringClear(dy);
+        
+        if(useHgTracks)
+            dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgTracksName(), el->name);
+        else
+            dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgTextName(), el->name);
+        
+        if (ui != NULL)
+            dyStringPrintf(dy, "&%s", ui);
+        dyStringPrintf(dy, "%s\">", 
+                       hgp->extraCgi);
+        dyStringPrintf(dy, "%s </A>", el->name);
+        sprintf(query, 
+                "select description.name from mrna,description"
+                " where mrna.acc = '%s' and mrna.description = description.id",
+                el->name);
         if (sqlQuickQuery(conn, query, description, sizeof(description)))
-	    dyStringPrintf(dy, "- %s", description);
-	dyStringPrintf(dy, "\n");
-	pos->description = cloneString(dy->string);
-	}
+            dyStringPrintf(dy, "- %s", description);
+        dyStringPrintf(dy, "\n");
+        pos->description = cloneString(dy->string);
+        }
     slReverse(&table->posList);
     hFreeConn(&conn);
     }
-freeDyString(&dy);
+
+    freeDyString(&dy);
 }
 
 static void findKnownGenes(char *spec, struct hgPositions *hgp)
@@ -1384,7 +1392,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static boolean genomePos(char *spec, char **retChromName, 
+static struct hgPositions *genomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias)
 /* Search for positions in genome that match user query.   
  * Return TRUE if the query results in a unique position.  
@@ -1394,26 +1402,23 @@ struct hgPositions *hgp;
 struct hgPos *pos;
 struct dyString *ui;
 
-
 if (strstr(spec,";") != NULL)
     return handleTwoSites(spec, retChromName, retWinStart, retWinEnd, cart);
 
 hgp = hgPositionsFind(spec, "", TRUE, cart);
-fprintf(stderr, "TABLE NAME: %s XXXXXXXXXXXXXXXX\n", hgp->tableList->name);
-
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
     errAbort("Sorry, couldn't locate %s in genome database\n", spec);
-    return TRUE;
+    return NULL;
     }
+
 if (((pos = hgp->singlePos) != NULL) && (!showAlias || !hgp->useAlias))
     {
     *retChromName = pos->chrom;
     *retWinStart = pos->chromStart;
     *retWinEnd = pos->chromEnd;
-    hgPositionsFree(&hgp);
-    return TRUE;
+    return hgp;
     }
 else
     {
@@ -1421,14 +1426,13 @@ else
 	hgPositionsHtml(hgp, stdout, TRUE, cart);
     else
 	*retWinStart = hgp->posCount;
-    hgPositionsFree(&hgp);
-    return FALSE;
+
+    return hgp;
     }
 }
 
 
-
-boolean findGenomePos(char *spec, char **retChromName, 
+struct hgPositions *findGenomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart)
 /* Search for positions in genome that match user query.   
  * Return TRUE if the query results in a unique position.  
@@ -1437,12 +1441,10 @@ boolean findGenomePos(char *spec, char **retChromName,
 return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE);
 }
 
-boolean handleTwoSites(char *spec, char **retChromName, 
+static struct hgPositions *handleTwoSites(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart)
 /* Deal with specifications that in form start;end. */
 {
-struct hgPositions *hgp;
-struct hgPos *pos;
 struct dyString *ui;
 char firststring[512];
 char secondstring[512];
@@ -1453,13 +1455,11 @@ int firstWinEnd;
 char *secondChromName;
 int secondWinStart = 0;
 int secondWinEnd;
-boolean firstSuccess;
-boolean secondSuccess;
+struct hgPositions *firstSuccess;
+struct hgPositions *secondSuccess;
 
 firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites through */
 secondWinStart = 1;    /*    firstWinStart and secondWinStart.                        */
-
-
 
 commaspot = strcspn(spec,";");
 strncpy(firststring,spec,commaspot);
@@ -1467,30 +1467,30 @@ firststring[commaspot] = '\0';
 strncpy(secondstring,spec + commaspot + 1,strlen(spec));
 firstSuccess = genomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd, cart, FALSE);
 secondSuccess = genomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd, cart, FALSE); 
-if (firstSuccess == FALSE && secondSuccess == FALSE)
+if (NULL == firstSuccess && NULL == secondSuccess)
     {
     errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",firstWinStart,firststring,secondWinStart,secondstring);
-    return TRUE;
+    return NULL;
     }
-if (firstSuccess == FALSE) 
+if (NULL == firstSuccess) 
     {
     errAbort("%s not uniquely determined: %d locations.",firststring,firstWinStart);
-    return TRUE;
+    return secondSuccess;
     }
-if (secondSuccess == FALSE)
+if (NULL == secondSuccess)
     {
     errAbort("%s not uniquely determined: %d locations.",secondstring,secondWinStart);
-    return TRUE;
+    return firstSuccess;
     }
 if (strcmp(firstChromName,secondChromName) != 0)
     {
     errAbort("Sites occur on different chromosomes: %s,%s.",firstChromName,secondChromName);
-    return TRUE;
+    return firstSuccess;
     }
 *retChromName = firstChromName;
 *retWinStart = min(firstWinStart,secondWinStart);
 *retWinEnd = max(firstWinEnd,secondWinEnd);
-return TRUE;
+return firstSuccess;
 }
 
 

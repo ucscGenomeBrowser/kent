@@ -119,6 +119,12 @@ boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
+/* Structure returned from findGenomePos. 
+We use this to to expand any tracks to full
+ that were found to contain the searched-upon
+position string */
+struct hgPositions *hgp = NULL;
+
 struct trackLayout
 /* This structure controls the basic dimensions of display. */
     {
@@ -9942,7 +9948,6 @@ void tracksDisplay()
  * scrolling. */
 {
 char newPos[256];
-
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
@@ -9952,8 +9957,20 @@ if (NULL == position)
 
 if(sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
-if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart)) 
+
+chromName = NULL;
+hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
+if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
+    {
+    cartSetString(cart, hgp->tableList->name, "full");
+    fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
+    }
+
+/* This means that no result was found */
+if (NULL == chromName)
+    {
     return;
+    }
 
 seqBaseCount = hChromSize(chromName);
 winBaseCount = winEnd - winStart;
