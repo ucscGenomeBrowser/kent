@@ -2287,8 +2287,63 @@ cat > template << 'EOF'
     hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
     hgLoadPsl -nobin -table=all_sts_seq hg17 run/stsMarkers.lifted.psl
     
+# FISH CLONES
 
-    
+	mkdir -p /cluster/data/ncbi/fishClones/fishClones.2004-07/
+	cd /cluster/data/ncbi/fishClones/fishClones.2004-07/
+
+# Download information from NCBI
+        # point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+        # change "Show details on sequence-tag" to "yes"
+        # change "Download or Display" to "Download table for UNIX"
+        # press Submit - save as /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt
+	chmod 664 /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt
+
+# Get current clone/accession information
+	wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
+# Create initial Fish Clones bed file
+	mkdir -p /cluster/data/hg17/bed/fishClones
+	cd /cluster/data/hg17/bed/fishClones
+
+# Copy previous sts info from fhcrc (take from previous build in future)
+	cp ~/tracks/fish/fhcrc.sts .
+	fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin hg17 \
+	     /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
+	     /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
+	     /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
+	     /cluster/data/hg17/bed/bacends/bacEnds.psl fishClones_initial
+	     
+# Get sequences for accessions not in genome
+	ssh kolossus
+	mkdir -p /cluster/bluearc/hg17/fishClones/
+	cd /cluster/bluearc/hg17/fishClones/
+	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
+	# select file "/cluster/data/hg17/bed/fishClones/fishClones_initial.acc"
+	# change output to FASTA format
+	# download results to "/cluster/bluearc/hg17/fishClones/notFound.fa"
+
+# Align these using blat
+	cp ~/tracks/gs.17/build34/fish/convert.pl .
+	cp ~/tracks/gs.17/build34/fish/blatAll.pl .
+	convert.pl  < notFound.fa > notFound.convert.fa
+	mkdir out
+	blatAll.pl /cluster/data/hg17 notFound.convert.fa out
+
+# Make final fishClones file with this new clone placement info
+	cd /cluster/data/hg17/bed/fishClones
+	fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin \
+	     -psl=/cluster/bluearc/hg17/fishClones/notFound.psl hg17 \
+	     /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
+	     /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
+	     /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
+	     /cluster/data/hg17/bed/bacends/bacEnds.psl fishClones
+
+# Load the track
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
+	hg17 fishClones fishClones.bed
+
+
 # LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
 #	Copied from Hg16 doc
     # Set up cluster job to align consenesus/exemplars to hg17
