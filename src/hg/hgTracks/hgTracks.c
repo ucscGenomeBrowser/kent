@@ -100,7 +100,6 @@ struct trackLayout
     } tl;
 
 
-
 void setPicWidth(char *s)
 /* Set pixel width from ascii string. */
 {
@@ -933,6 +932,106 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     } 
 }
 
+
+static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
+ * it could be cleaned up some but more importantly it should be integrated back 
+ * into the main draw routine */
+{
+int baseWidth = seqEnd - seqStart;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2;
+double y1, y2;
+int midLineOff = heightPer/2;
+int shortOff = 2, shortHeight = heightPer-4;
+int s, e2, s2;
+double e;
+int itemOff, itemHeight;
+boolean isFull = (vis == tvFull);
+Color *shades = tg->colorShades;
+Color bColor = tg->ixAltColor;
+double scale = width/(double)baseWidth;
+boolean isXeno = tg->subType == lfSubXeno;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+int midY = y + midLineOff;
+int compCount = 0;
+int w;
+int prevEnd = -1;
+double prevY = -1;
+int ybase;
+
+
+/*process cart options*/
+
+char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
+enum wiggleOptEnum wiggleType = wiggleStringToEnum(interpolate);
+char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
+int fill = atoi(cartUsualString(cart, "wiggle.fill", "0"));
+
+lf=tg->items;    
+for(lf = tg->items; lf != NULL; lf = lf->next) 
+    {
+    
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	    {
+	    heightPer = tg->heightPer+1;
+	    s = sf->start;
+	    e = sf->end;
+
+        //errAbort( "heightPer = %d\n", heightPer );
+        x1 = round((double)((int)s+1-winStart)*scale) + xOff;
+        y1 = (int)((double)y+((double)s-e)*(double)heightPer/100.0+(double)heightPer);
+
+        ybase = (int)((double)y+(double)heightPer/100.0+(double)heightPer);
+
+        if (prevEnd > 0)
+	        {
+            y2 = prevY;
+	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+
+            if( (x2-x1) > 0)
+                {
+                if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
+                    {
+                    if( sameString( aa, "on" )) /*use anti-aliasing*/
+                        mgConnectingLine( mg, x1, y1, x2, y2,
+                            shadesOfGray, ybase, 1, fill );
+                    else
+                        mgConnectingLine( mg, x1, y1, x2, y2,
+                            shadesOfGray, ybase, 0, fill );
+                    }
+                else if( wiggleType == wiggleNoInterpolation )
+                    {
+                        /*do nothing*/
+                    }
+                }
+
+	        }
+
+
+    /*draw the points themselves*/
+    //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
+	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, blackIndex());
+    if( fill )
+	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shadesOfGray[3]);
+
+    prevEnd = s;
+    prevY = y1;
+
+
+	}
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+
 static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -1395,6 +1494,19 @@ tg->drawItems = linkedFeaturesDraw;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = linkedFeaturesItemStart;
+tg->itemEnd = linkedFeaturesItemEnd;
+}
+
+void sampleLinkedFeaturesMethods(struct trackGroup *tg)
+/* Fill in track group methods for 'sample' tracks. */
+{
+tg->freeItems = freeLinkedFeaturesItems;
+tg->drawItems = wiggleLinkedFeaturesDraw;
+tg->itemName = linkedFeaturesName;
+tg->mapItemName = linkedFeaturesName;
+tg->totalHeight = tgUserDefinedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
@@ -5006,104 +5118,6 @@ tg->mapsSelf = TRUE;
 tg->mapItem = altGraphMapItem;
 }
 
-static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
- * it could be cleaned up some but more importantly it should be integrated back 
- * into the main draw routine */
-{
-int baseWidth = seqEnd - seqStart;
-struct linkedFeatures *lf;
-struct simpleFeature *sf;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-double y1, y2;
-int midLineOff = heightPer/2;
-int shortOff = 2, shortHeight = heightPer-4;
-int s, e2, s2;
-double e;
-int itemOff, itemHeight;
-boolean isFull = (vis == tvFull);
-Color *shades = tg->colorShades;
-Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
-boolean isXeno = tg->subType == lfSubXeno;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
-int midY = y + midLineOff;
-int compCount = 0;
-int w;
-int prevEnd = -1;
-double prevY = -1;
-int ybase;
-
-
-/*process cart options*/
-
-char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
-enum wiggleOptEnum wiggleType = wiggleStringToEnum(interpolate);
-char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
-int fill = atoi(cartUsualString(cart, "wiggle.fill", "0"));
-
-lf=tg->items;    
-for(lf = tg->items; lf != NULL; lf = lf->next) 
-    {
-    
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    heightPer = tg->heightPer+1;
-	    s = sf->start;
-	    e = sf->end;
-
-        //errAbort( "heightPer = %d\n", heightPer );
-        x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)s-e)*(double)heightPer/100.0+(double)heightPer);
-
-        ybase = (int)((double)y+(double)heightPer/100.0+(double)heightPer);
-
-        if (prevEnd > 0)
-	        {
-            y2 = prevY;
-	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-
-            if( (x2-x1) > 0)
-                {
-                if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
-                    {
-                    if( sameString( aa, "on" )) /*use anti-aliasing*/
-                        mgConnectingLine( mg, x1, y1, x2, y2,
-                            shadesOfGray, ybase, 1, fill );
-                    else
-                        mgConnectingLine( mg, x1, y1, x2, y2,
-                            shadesOfGray, ybase, 0, fill );
-                    }
-                else if( wiggleType == wiggleNoInterpolation )
-                    {
-                        /*do nothing*/
-                    }
-                }
-
-	        }
-
-
-    /*draw the points themselves*/
-    //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
-	drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, blackIndex());
-    if( fill )
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shadesOfGray[3]);
-
-    prevEnd = s;
-    prevY = y1;
-
-
-	}
-    if (isFull)
-	y += lineHeight;
-    }
-}
-
 
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
 	char *group, char *item1, char *item2, char *statusLine)
@@ -5984,15 +5998,6 @@ tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
 
-void wiggleMethods(struct trackGroup *tg)
-/* setup special methods for wiggle track */
-{
-tg->drawItems = wiggleLinkedFeaturesDraw;
-tg->totalHeight = tgUserDefinedTotalHeight;
-}
-
-
-
 void loadAncientR(struct trackGroup *tg)
 /* Load up ancient repeats from database table to trackGroup items
  * filtering out those below a certain length threshold,
@@ -6700,7 +6705,7 @@ else if (sameWord(type, "sample"))
     group->bedSize = fieldCount;
     if (fieldCount == 12)
 	{
-	linkedFeaturesMethods(group);
+	sampleLinkedFeaturesMethods(group);
 	group->loadItems = loadGappedBed;
 	}
     else
@@ -7109,7 +7114,6 @@ registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
-registerTrackHandler("wiggle", wiggleMethods );
 registerTrackHandler("ancientR", ancientRMethods );
 registerTrackHandler("altGraph", altGraphMethods );
 
