@@ -116,8 +116,9 @@ struct wiggleStats
     double stddev;	/* standard deviation of data points */
     };
 
+/*	the object wiggleDataStream is implemented in lib/wigDataStream.c */
 struct wiggleDataStream
-/*	mechanism to access wiggle data, in DB or from file	*/
+/*	object definition to access wiggle data, in DB or from file	*/
     {
     char *db;			/*	database name	*/
     char *tblName;		/*	the table or file name	*/
@@ -145,6 +146,15 @@ struct wiggleDataStream
 	double upper);		/*	for comparing with SQL row values */
     boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
 				/*	for comparing to real data bytes */
+    void (*addChromConstraint)(struct wiggleDataStream *wDS, char *chr);
+    void (*addSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
+    void (*setDataConstraint)(struct wiggleDataStream *wDS,
+	char *dataConstraint, double lowerLimit, double upperLimit);
+    void (*setCompareByte)(struct wiggleDataStream *wDS,
+	double lower, double range);
+    void (*openWibFile)(struct wiggleDataStream *wDS, char *file);
+    void (*closeWigConn)(struct wiggleDataStream *wDS);
+    void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
     };
 
 #include "hdb.h"
