@@ -26,13 +26,13 @@
  	    <A HREF="../cgi-bin/hgNear" class="topbar">
 			Family Browser</a> &nbsp; - &nbsp; 
 	    <A HREF="../cgi-bin/hgBlat" class="topbar">
-			Blat Search</a> &nbsp; - &nbsp; 
+			Blat</a> &nbsp; - &nbsp; 
 	    <A HREF="../cgi-bin/hgText" class="topbar">
 			Table Browser</a> &nbsp; - &nbsp; 
 	    <A HREF="/FAQ/" class="topbar">
 			FAQ</a> &nbsp; - &nbsp; 
 	    <A HREF="goldenPath/help/hgTracksHelp.html" class="topbar">
-			User Guide</a> &nbsp; </FONT></TD>
+			Help</a> &nbsp; </FONT></TD>
         </TR></TABLE>
     </TD></TR></TABLE>
     </TD></TR>
@@ -50,7 +50,7 @@
                 <TR HEIGHT="100%">
 	        <TD BGCOLOR="738ED3" VALIGN="top" HEIGHT="100%" > 
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
-			Browser</A><HR>
+			Genome Browser</A><HR>
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgNear">
 			Family Browser</A><HR>
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgBlat">
@@ -78,7 +78,7 @@
   	        <A CLASS="leftbar" HREF="contacts.html">
 			Contact Us</A><HR>
 	        <BR>
-	        <IMG SRC="images/DOT.gif" ALT="" HEIGHT=1100 WIDTH=1>
+	        <IMG SRC="images/DOT.gif" ALT="" HEIGHT=1800 WIDTH=1>
    	    </TD></TR></TABLE>
         </TD></TR></TABLE>
     </TD></TR></TABLE>
@@ -100,23 +100,17 @@
                     <TR><TH HEIGHT=3></TH></TR>
                     <TR><TD WIDTH=10></TD><TD>
 	            <P>
-		    This site contains the reference sequence for the human
-	            and <em>C. elegans</em> genomes and working drafts for the mouse, rat, 
-		    Fugu, <em>C. briggsae</em>, and SARS genomes. It also provides access to the Target 1 
-		    sequence and annotations for the NIH Intramural Sequencing 
-		    Center (NISC) Comparative Sequencing Program, labeled as
-		    the &quot;Zoo&quot; genome in the browser. To access a genome, click 
-		    the Browser, Blat, or Tables link in the left sidebar. 
-	            <P>
-	            We encourage you to explore the reference sequence and 
-		    working drafts with the UCSC Genome Browser, which displays 
-                    the work of many annotators worldwide. The Genome Browser and 
-                    the data it displays are freely available for academic, 
-                    nonprofit, and personal use with a few exceptions. Check the 
-                    README.txt file in the download directory of a particular 
-                    assembly to view the use restrictions specific to that 
-                    release. Program-driven use is limited to a maximum of one 
-                    hit every 10 seconds and no more than 5,000 hits per day.  
+		    This site contains the reference sequence for the human and <em>C. elegans</em> 
+		    genomes and working drafts for the mouse, rat, Fugu, <em>C. briggsae</em>, and 
+		    SARS genomes.  It also contains the
+		    CFTR (cystic fibrosis) region in 13 species.  
+		    <P>
+		    We encourage you to explore these sequences with our tools. The Genome 
+		    Browser zooms and scrolls over chromosomes, showing the work of annotators 
+		    worldwide.  The Family Browser shows expression, homology and other 
+		    information on groups of genes that can be related in many ways.  
+		    The Table Browser provides convenient access to the underlying database.  
+		    Blat quickly maps your sequence to the genome.
 	            </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
 	    <BR></TD></TR></TABLE>
@@ -142,7 +136,7 @@
                     <TD>
 	            <P>
                     <FONT FACE="courier" SIZE=3><B>Sep. 23, 2003</B></FONT><BR>
-		    We have added the <em>Takifugu rubripes</em> (pufferfish) assembly to 
+		    We have added the <em>Takifugu rubripes</em> (Japanese pufferfish) assembly to 
 		    the growing collection of genomes available in the UCSC Genome Browser
 		    and Blat servers. The Fugu v.3.0 
 		    (Aug. 2002) whole genome shotgun assembly -- 
@@ -155,13 +149,15 @@
 
 		    <P>This assembly was 
 		    constructed with the JGI assembler, JAZZ, from paired end 
-		    sequencing reads produced at JGI, Myriad Genetics, and 
+		    sequencing reads produced at JGI, the Institute of Molecular
+		    and Cell Biology (IMCB), Myriad Genetics, and 
 		    Celera Genomics, resulting in a sequence coverage of 5.7X. 
 		    All reads are plasmid, cosmid, or BAC end sequences, with 
 		    the predominant coverage derived from 2 Kb insert plasmids. 
 		    This assembly contains 20,379 scaffolds totaling 319 million 
 		    base pairs. The largest 679 scaffolds total 160 million base 
-		    pairs.
+		    pairs. The Fugu genome was annotated using the Ensembl 
+		    system by the Fugu informatics group at IMCB in Singapore.
 		    
 		    <P>The Fugu, which was one of the first
 		    vertebrate genomes to be draft-sequenced after human, 
@@ -177,8 +173,7 @@
 		    <P>Bulk downloads of the Fugu sequence and annotation data are 
 		    available via FTP at
                     <A HREF="ftp://genome.ucsc.edu/goldenPath/fr1">ftp://genome.ucsc.edu/goldenPath/fr1</A> 
-        	    or through the Downloads 
-		    link on this page. We recommend that FTP be used rather than 
+        	    or through the Downloads link on this page. We recommend that FTP be used rather than 
 		    HTML for the download of large or multiple files. 
 		    
 		    <P>We'd like to thank JGI and the other members of the 
@@ -274,6 +269,32 @@
         </TD></TR></TABLE>
         <BR>
 	    	
+        <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+            <TR><TD>	
+            <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+                <TR><TD>	
+	        <TABLE BGCOLOR="D9E4F8" BACKGROUND="images/hr.gif" WIDTH="100%"><TR><TD>
+	            <A NAME="About"></A><FONT SIZE="4"><B>&nbsp; Conditions of Use</B></FONT>
+	        </TD></TR></TABLE>
+	
+	        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                    <TR><TH HEIGHT=3></TH></TR>
+                    <TR><TD WIDTH=10></TD><TD>
+	            <P>
+                    The Genome Browser and 
+                    the data it displays are freely available for academic, 
+                    nonprofit, and personal use with a few exceptions. Check the 
+                    README.txt file in the download directory of a particular 
+                    assembly to view the use restrictions specific to that 
+                    release. Program-driven use is limited to a maximum of one 
+                    hit every 10 seconds and no more than 5,000 hits per day.  
+	            </TD><TD WIDTH=15>
+                </TD></TR></TABLE>
+	    <BR></TD></TR></TABLE>
+        </TD></TR></TABLE>
+
+        <BR>
         <!--outer table is for border purposes-->
         <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
             <TR><TD>	
