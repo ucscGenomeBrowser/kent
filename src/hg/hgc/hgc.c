@@ -8348,7 +8348,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                 humMusWinSize / 2 + 1, thisStart + 1),
                 min(smp->chromStart +  smp->samplePosition[i] +
                 humMusWinSize / 2, thisEnd ),
-                whichNum(smp->sampleHeight[i],0.0,6.58323,1000) );
+                whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
 
             printWindow( thisPsl, 
                     smp->chromStart + smp->samplePosition[i] -

@@ -1347,8 +1347,8 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 0.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( minRange, 0.0, 6.58323, 1000 );
-    max0 = whichNum( maxRange, 0.0, 6.58323, 1000 );
+    min0 = whichNum( minRange, 0.0, 8.0, 1000 );
+    max0 = whichNum( maxRange, 0.0, 8.0, 1000 );
 
 
         if( isFull )
@@ -1371,7 +1371,7 @@ if( sameString( tg->mapName, "humMus" ) )
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         mgDrawHorizontalLine( mg, y1, lineColor );
 
-        tmp = -whichBin( 6.58323, min0, max0, 999 );
+        tmp = -whichBin( 8.0, min0, max0, 999 );
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         mgDrawHorizontalLine( mg, y1, lineColor );
         }
@@ -8289,9 +8289,6 @@ if (withLeftLabels)
 	if( sameString( group->mapName, "humMus" ) )
 	    {
 
-	    //sprintf( minRangeStr, "%0.2g", whichNum( 300.0, -7.98567, 6.53263, 1000 )  );
-	    //sprintf( maxRangeStr, "%0.2g", whichNum( 1000.0, -7.98567, 6.53263, 1000 )  );
-       
         min0 = whichNum( 300.0, -7.99515, 6.54171, 1000 );
         max0 =  whichNum( 1000.0, -7.99515, 6.54171, 1000 );
         sprintf( minRangeStr, "%0.2g", min0  );
@@ -8308,8 +8305,8 @@ if (withLeftLabels)
 	    }
     else if( sameString( group->mapName, "humMusL" ) )
     {
-        min0 = whichNum( 0.0, 0.0, 6.58323, 1000 );
-        max0 =  whichNum( 1000.0, 0.0, 6.58323, 1000 );
+        min0 = whichNum( 0.0, 0.0, 8.0, 1000 );
+        max0 =  whichNum( 1000.0, 0.0, 8.0, 1000 );
         sprintf( minRangeStr, " "  );
         sprintf( maxRangeStr, " " );
 
@@ -8318,7 +8315,7 @@ if (withLeftLabels)
         printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
         printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
         printYAxisLabel( mg, y+5, group, "3.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "6.6", min0, max0 );
+        printYAxisLabel( mg, y+5, group, "8.0", min0, max0 );
         }
         
     }
