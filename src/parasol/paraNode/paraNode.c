@@ -21,6 +21,7 @@
 static struct optionSpec optionSpecs[] = {
     {"logFacility", OPTION_STRING},
     {"log", OPTION_STRING},
+    {"debug", OPTION_BOOLEAN},
     {"hub", OPTION_STRING},
     {"umask", OPTION_INT},
     {"userPath", OPTION_STRING},
@@ -40,6 +41,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "options:\n"
 	 "    -logFacility=facility  Log to the specified syslog facility - default local0.\n"
          "    -log=file  Log to file instead of syslog.\n"
+         "    -debug  Don't daemonize\n"
 	 "    -hub=host  Restrict access to connections from hub.\n"
 	 "    -umask=000  Set umask to run under - default 002.\n"
 	 "    -userPath=bin:bin/i386  User dirs to add to path.\n"
@@ -51,7 +53,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.74 2004/09/28 08:22:38 galt Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.75 2004/09/29 02:25:42 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */

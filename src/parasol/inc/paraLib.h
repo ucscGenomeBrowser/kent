@@ -59,7 +59,8 @@ char* paraFormatIp(bits32 ip);
 
 void paraDaemonize(char *progName);
 /* daemonize parasol server process, closing open file descriptors and
- * starting logging based on the -logFacility and -log command line options */
+ * starting logging based on the -logFacility and -log command line options .
+ * if -debug is supplied , don't fork. */
 
 
 #define NORMAL_PRIORITY 10   /* 1 is highest priority */

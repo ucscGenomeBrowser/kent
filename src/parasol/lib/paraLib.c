@@ -89,23 +89,23 @@ return dottedQuad;
 
 void paraDaemonize(char *progName)
 /* daemonize parasol server process, closing open file descriptors and
- * starting logging based on the -logFacility and -log command line options */
+ * starting logging based on the -logFacility and -log command line options .
+ * if -debug is supplied , don't fork. */
 {
-if (forkOrDie() == 0)
+if (!optionExists("debug"))
     {
     int i, maxFiles = getdtablesize();
+    if (forkOrDie() != 0)
+        exit(0);  /* parent goes away */
 
     /* Close all open files first (before logging) */
     for (i = 0; i < maxFiles; i++)
         close(i);
-
-    /* Set up log handler. */
-    logOpenSyslog("paraNode", optionVal("logFacility", NULL));
-    if (optionExists("log"))
-        logOpenFile("paraNode", optionVal("log", NULL));
-    else    
-        logOpenSyslog("paraNode", optionVal("logFacility", NULL));
     }
-else
-    exit(0);  /* parent exits now */
+
+/* Set up log handler. */
+if (optionExists("log"))
+    logOpenFile(progName, optionVal("log", NULL));
+else    
+    logOpenSyslog(progName, optionVal("logFacility", NULL));
 }

@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.76 2004/09/25 01:30:17 markd Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.77 2004/09/29 02:25:42 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -78,6 +78,7 @@ static struct optionSpec optionSpecs[] = {
     {"nextJobId", OPTION_INT},
     {"logFacility", OPTION_STRING},
     {"log", OPTION_STRING},
+    {"debug", OPTION_BOOLEAN},
     {"noResume", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -110,6 +111,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "   -nextJobId=N  Starting job ID number.\n"
 	 "   -logFacility=facility  Log to the specified syslog facility - default local0.\n"
          "   -log=file  Log to file instead of syslog.\n"
+         "   -debug  Don't daemonize\n"
 	 "   -noResume  Don't try to reconnect with jobs running on nodes.\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
@@ -1998,7 +2000,7 @@ hubHost = getMachine();
 if (optionExists("log"))
     logOpenFile("paraHub", optionVal("log", NULL));
 else    
-    logOpenFile("paraHub", optionVal("logFacility", NULL));
+    logOpenSyslog("paraHub", optionVal("logFacility", NULL));
 logInfo("starting paraHub on %s", hubHost);
 
 /* Set up various lists. */
