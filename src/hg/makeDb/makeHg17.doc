@@ -9031,3 +9031,42 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgRnaGenes hg17 rnaGeneLift.gff
 
     
+# BUILD BioCyc TABLES (DONE 10/1/04 Fan)
+
+  - Create bioCycMapDesc table.
+
+	CREATE TABLE bioCycMapDesc (
+  	mapID varchar(40) NOT NULL default '',
+  	description varchar(255) NOT NULL default '',
+  	KEY mapID (mapID)
+	) TYPE=MyISAM;
+
+  - Crate bioCycPathway table.
+
+	CREATE TABLE bioCycPathway (
+  	kgID varchar(40) NOT NULL default '',
+  	geneID varchar(40) NOT NULL default '',
+  	mapID varchar(40) NOT NULL default '',
+  	KEY kgID (kgID),
+ 	KEY geneID (geneID),
+  	KEY mapID (mapID)
+	) TYPE=MyISAM;
+
+  Using data files sent by Peter Carp from SRI,
+  per Peter's email of 10/1/04, they don't have recent update,
+  so data files received last year are used.
+  
+  Save the BioCyc Pathway name and description table as names.txt.
+  Save the pathway data file as gene-pathway.dat.
+  Make sure there is no extra ^M at end of the lines.
+
+  hgsql hg17 -e	'LOAD DATA local INFILE 'names.txt' into table bioCycMapDesc'
+
+  Run hgBioCyc program to generate the file bioCycPathway.tab.
+
+	 hgBioCyc gene-pathway.dat hg17
+
+  Load into hg17.
+ 
+	 hgsql hg17 -e 'LOAD DATA local INFILE "bioCycPathway.tab" into table bioCycPathway'
+	 
