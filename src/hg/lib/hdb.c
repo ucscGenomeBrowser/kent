@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.154 2003/10/29 19:02:44 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.155 2003/11/21 17:07:40 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1294,9 +1294,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	bedItem->blockCount = atoi(row[7]);
 	sqlSignedDynamicArray(row[8], &bedItem->chromStarts, &count);
-	assert(count == bedItem->blockCount);
+	if (count != bedItem->blockCount)
+	    errAbort("Data error: block count (%d) must be the same as the number of block starts (%d) for item %s %s:%d-%d",
+		     bedItem->blockCount, count, bedItem->name, bedItem->chrom,
+		     bedItem->chromStart, bedItem->chromEnd);
 	sqlSignedDynamicArray(row[9], &bedItem->blockSizes, &count);
-	assert(count == bedItem->blockCount);
+	if (count != bedItem->blockCount)
+	    errAbort("Data error: block count (%d) must be the same as the number of block ends/sizes (%d) for item %s %s:%d-%d",
+		     bedItem->blockCount, count, bedItem->name, bedItem->chrom,
+		     bedItem->chromStart, bedItem->chromEnd);
 	if (sameString("exonEnds", hti->endsSizesField))
 	    {
 	    // genePred: translate ends to sizes
@@ -1340,7 +1346,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 			bedItem->blockSizes[i] *= 3;
 		    }
 		}
-	    assert(bedItem->chromStart == bedItem->chromStarts[0]);
+	if (bedItem->chromStart != bedItem->chromStarts[0])
+	    errAbort("Data error: start (%d) must be the same as first block start (%d) for item %s %s:%d-%d",
+		     bedItem->chromStart, bedItem->chromStarts[0],
+		     bedItem->name,
+		     bedItem->chrom, bedItem->chromStart, bedItem->chromEnd);
 	    }
 	if (! (sameString("chromStarts", hti->startsField) ||
 	       sameString("blockStarts", hti->startsField)) )
