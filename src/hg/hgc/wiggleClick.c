@@ -86,20 +86,16 @@ wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
     hMin = min(minY,tDbMinY);
     hMax = max(maxY,tDbMaxY);
     hRange = hMax - hMin;
-     /*  need to make hMax slightly larger to get the last data point
-     *  in the last bin.  This is a floating point round off situation.
-     */
-    hMax = hMax + (hRange/1000000.0);
-    hRange = hMax - hMin;
-
 
     /*	convert the ascii data listings to one giant float array 	*/
     valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
 
-    /*	If we have a valid range, use a specified 20 bin histogram */
+    /*	If we have a valid range, use a specified 20 bin histogram
+     *	NOTE: pass 21 as binCount to get a 20 bin histogram
+     */
     if (hRange > 0.0)
 	histoGramResult = histoGram(valuesArray, valueCount, (hRange/20.0),
-	    (unsigned) 20, hMin, hMin, hMax, (struct histoResult *)NULL);
+	    (unsigned) 21, hMin, hMin, hMax, (struct histoResult *)NULL);
     else
 	histoGramResult = histoGram(valuesArray, valueCount,
 	    NAN, (unsigned) 0, NAN, (float) wds->stats->lowerLimit,
