@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.185 2005/03/21 23:55:52 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.186 2005/03/24 05:31:56 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -553,6 +553,22 @@ radioButton(varName, refGeneLabel, "gene");
 radioButton(varName, refGeneLabel, "accession");
 radioButton(varName, refGeneLabel, "both");
 radioButton(varName, refGeneLabel, "none");
+
+cdsColorOptions(tdb, 2);
+}
+
+void retroGeneUI(struct trackDb *tdb)
+/* Put up retroGene-specifc controls */
+{
+char varName[64];
+char *retroGeneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+retroGeneLabel = cartUsualString(cart, varName, "gene");
+printf("<B>Label:</B> ");
+radioButton(varName, retroGeneLabel, "gene");
+radioButton(varName, retroGeneLabel, "accession");
+radioButton(varName, retroGeneLabel, "both");
+radioButton(varName, retroGeneLabel, "none");
 
 cdsColorOptions(tdb, 2);
 }
@@ -1299,6 +1315,8 @@ else if (sameString(track, "xenoRefGene"))
         refGeneUI(tdb);
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
+else if (sameString(track, "pseudoGeneLink"))
+        retroGeneUI(tdb);
 else if (sameString(track, "all_mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "mrna"))
