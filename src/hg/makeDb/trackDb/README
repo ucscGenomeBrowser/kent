@@ -89,8 +89,13 @@ For wigMaf tracks:
     o wiggle setting - contains table name of conservation wiggle 
                           (loaded with hgLoadWiggle)
     o species order - specifies the order of each pairwise items in the display
+        Each species is specified with the "organism" field of dbDb,
+        the first letter lower-cased.
+        For organism names with embedded dots and/or spaces,
+        these are stripped and replaced with underscore.
+        E.g. (C. elegans -> c_elegans).
     o pairwise setting - contains suffix of the pairwise maf tables.
-            The prefix is generated from the species name.
+            The prefix is generated from the species name, as specified above.
             An underscore is used to separate (e.g. chimp_hmrg if
             setting is "hmrg").  If there is a wig table named
             <species>_<suffix>_wig, this is used for pairwise display.
