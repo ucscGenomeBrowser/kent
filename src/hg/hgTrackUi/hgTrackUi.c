@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.117 2004/06/28 16:57:41 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.118 2004/07/04 00:22:56 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -301,7 +301,7 @@ printf("SwissProt ");
 cgiMakeCheckBox(posName, usePos);
 printf("Human Position ");
 
-//cdsColorOptions(tdb, 2);
+cdsColorOptions(tdb, 2);
 }
 
 void refGeneUI(struct trackDb *tdb)
