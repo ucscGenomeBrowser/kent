@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.8 2003/05/06 07:41:08 kate Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.9 2003/08/14 05:41:30 baertsch Exp $";
 
 int binSize = 1;
 int maxBinCount = 25;
@@ -46,6 +46,7 @@ int i,j;
 int minData = maxBinCount, maxData = 0;
 double maxCount = 0;
 double maxCt;
+int truncation = 0;
 
 /* Allocate histogram and optionally space for
  * second column totals. */
@@ -71,8 +72,12 @@ while (wordCount = lineFileChop(lf, row))
 	    if (aveCol >= 0)
 	        total[x] += atof(row[aveCol]);
 	    }
+        else
+            truncation = x;
 	}
     }
+if (truncation > 0)
+    fprintf(stderr,"large values truncated: need %d bins or larger binSize than %d.\n",truncation, binSize);
 
 /* Figure out range that has data, maximum data
  * value and optionally compute averages. */
