@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.34 2005/03/14 23:27:42 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.34.2.1 2005/03/30 19:48:41 heather Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1219,7 +1219,7 @@ char *filterClause(char *db, char *table, char *chrom)
 /* Get filter clause (something to put after 'where')
  * for table */
 {
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = NULL;
 char varPrefix[128];
 int varPrefixSize, fieldNameSize;
 struct hashEl *varList, *var;
@@ -1234,6 +1234,7 @@ char explicitDbTable[512];
 /* Return NULL if no filter on us. */
 if (! (anyFilter() && filteredOrLinked(db, table)))
     return NULL;
+conn = sqlConnect(db);
 
 safef(oldDb, sizeof(oldDb), "%s", db);
 dbOverrideFromTable(dbTableBuf, &db, &table);
@@ -1254,7 +1255,10 @@ safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);
 if (varList == NULL)
+    {
+    sqlDisconnect(&conn);
     return NULL;
+    }
 
 /* Create filter clause string, stepping through vars. */
 dy = dyStringNew(0);
