@@ -1,5 +1,7 @@
 /* hgFind.h - Find things in human genome annotations. */
 
+boolean handleTwoSites(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
+/* Handle queries of the form site1,site2. */
 
 boolean hgFindCytoBand(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
 /* Return position associated with cytological band if spec looks to be in that form. */
