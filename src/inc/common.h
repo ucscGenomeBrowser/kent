@@ -48,6 +48,10 @@
 #define uglyAbort errAbort /* debugging error abort. */
 #define uglyOut stdout /* debugging fprintf target. */
 
+/* removes the '\r' character from a string */
+/* the source and destination strings can be the same, if there are no threads */
+void removeReturns(char* dest, char* src);
+		
 void *needMem(size_t size);
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
