@@ -56,7 +56,7 @@ struct lineFile *lineFileOpen(char *fileName, bool zTerm)
 {
 struct lineFile *lf = lineFileMayOpen(fileName, zTerm);
 if (lf == NULL)
-    errAbort("Couldn't open %s", fileName);
+    errAbort("Couldn't open %s , %s", fileName, strerror(errno));
 return lf;
 }
 

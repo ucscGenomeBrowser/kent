@@ -1,5 +1,0 @@
-This is the preamble
-#LOOP
-$(root1) loves $(root2)
-#ENDLOOP
-The End
