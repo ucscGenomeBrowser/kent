@@ -5,14 +5,16 @@
 #ifndef STSINFOMOUSENEW_H
 #define STSINFOMOUSENEW_H
 
+#define STSINFOMOUSENEW_NUM_COLS 25
+
 struct stsInfoMouseNew
 /* Constant STS marker information */
     {
     struct stsInfoMouseNew *next;  /* Next in singly linked list. */
     unsigned identNo;	/* UCSC identification number */
     char *name;	/* Official UCSC name */
-    unsigned RGDId;	/* Marker's RGD Id */
-    char *RGDName;	/* Marker's RGD name */
+    unsigned MGIId;	/* Marker's MGI Id */
+    char *MGIName;	/* Marker's MGI name */
     unsigned UiStsId;	/* Marker's UiStsId */
     unsigned nameCount;	/* Number of alias */
     char *alias;	/* alias, or N/A */
@@ -21,13 +23,13 @@ struct stsInfoMouseNew
     char *distance;	/* Length of STS sequence */
     unsigned sequence;	/* Whether the full sequence is available (1) or not (0) for STS */
     char *organis;	/* Organism for which STS discovered */
-    char *fhhName;	/* WI_Mouse_Genetic map */
-    char *fhhChr;	/* Chromosome in Genetic map */
-    float fhhGeneticPos;	/* Position in Genetic map */
-    char *shrspName;	/* MGD map */
-    char *shrspChr;	/* Chromosome in Genetic map */
-    float shrspGeneticPos;	/* Position in Genetic map */
-    char *rhName;	/* MRC_RH map */
+    char *wigName;	/* WI_Mouse_Genetic map */
+    char *wigChr;	/* Chromosome in Genetic map */
+    float wigGeneticPos;	/* Position in Genetic map */
+    char *mgiName;	/* MGI map */
+    char *mgiChr;	/* Chromosome in Genetic map */
+    float mgiGeneticPos;	/* Position in Genetic map */
+    char *rhName;	/* WhiteHead_RH map */
     char *rhChr;	/* Chromosome in Genetic map */
     float rhGeneticPos;	/* Position in Genetic map. */
     float RHLOD;	/* LOD score of RH map */
@@ -45,12 +47,15 @@ struct stsInfoMouseNew *stsInfoMouseNewLoad(char **row);
  * from database.  Dispose of this with stsInfoMouseNewFree(). */
 
 struct stsInfoMouseNew *stsInfoMouseNewLoadAll(char *fileName);
-/* Load all stsInfoMouseNew from a tab-separated file.
+/* Load all stsInfoMouseNew from whitespace-separated file.
  * Dispose of this with stsInfoMouseNewFreeList(). */
 
-struct stsInfoMouseNew *stsInfoMouseNewLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all stsInfoMouseNew from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct stsInfoMouseNew *stsInfoMouseNewLoadAllByChar(char *fileName, char chopper);
+/* Load all stsInfoMouseNew from chopper separated file.
+ * Dispose of this with stsInfoMouseNewFreeList(). */
+
+#define stsInfoMouseNewLoadAllByTab(a) stsInfoMouseNewLoadAllByChar(a, '\t');
+/* Load all stsInfoMouseNew from tab separated file.
  * Dispose of this with stsInfoMouseNewFreeList(). */
 
 struct stsInfoMouseNew *stsInfoMouseNewCommaIn(char **pS, struct stsInfoMouseNew *ret);
@@ -73,6 +78,8 @@ void stsInfoMouseNewOutput(struct stsInfoMouseNew *el, FILE *f, char sep, char l
 
 #define stsInfoMouseNewCommaOut(el,f) stsInfoMouseNewOutput(el,f,',',',');
 /* Print out stsInfoMouseNew as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* STSINFOMOUSENEW_H */
 

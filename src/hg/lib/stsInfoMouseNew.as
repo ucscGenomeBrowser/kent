@@ -3,8 +3,8 @@ table stsInfoMouseNew
     (
     uint identNo;                 "UCSC identification number"
     string name;                  "Official UCSC name"
-    uint RGDId;		   	  "Marker's RGD Id"
-    string RGDName;		  "Marker's RGD name"	
+    uint MGIId;		   	  "Marker's MGI Id"
+    string MGIName;		  "Marker's MGI name"	
     uint UiStsId;		  "Marker's UiStsId"	   
     uint nameCount;		  "Number of alias"
     string alias;		  "alias, or N/A"
@@ -16,15 +16,15 @@ table stsInfoMouseNew
     uint sequence;                 "Whether the full sequence is available (1) or not (0) for STS"
     string organis; 		    "Organism for which STS discovered"
    
-    string fhhName;	    "WI_Mouse_Genetic map"
-    string fhhChr;                     "Chromosome in Genetic map"
-    float fhhGeneticPos;               "Position in Genetic map"
+    string wigName;	    "WI_Mouse_Genetic map"
+    string wigChr;                     "Chromosome in Genetic map"
+    float wigGeneticPos;               "Position in Genetic map"
     
-    string shrspName;	    "MGD map"
-    string shrspChr;                     "Chromosome in Genetic map"
-    float shrspGeneticPos;               "Position in Genetic map"
+    string mgiName;	    "MGI map"
+    string mgiChr;                     "Chromosome in Genetic map"
+    float mgiGeneticPos;               "Position in Genetic map"
 
-    string rhName;	    	    "MRC_RH map"
+    string rhName;	    	    "WhiteHead_RH map"
     string rhChr;                     "Chromosome in Genetic map"
     float rhGeneticPos;               "Position in Genetic map."
     float RHLOD;		    "LOD score of RH map"

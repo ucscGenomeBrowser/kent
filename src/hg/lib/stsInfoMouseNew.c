@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "stsInfoMouseNew.h"
 
-static char const rcsid[] = "$Id: stsInfoMouseNew.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsInfoMouseNew.c,v 1.3 2003/07/17 18:25:29 ytlu Exp $";
 
 void stsInfoMouseNewStaticLoad(char **row, struct stsInfoMouseNew *ret)
 /* Load a row from stsInfoMouseNew table into ret.  The contents of ret will
@@ -19,8 +19,8 @@ char *s;
 
 ret->identNo = sqlUnsigned(row[0]);
 ret->name = row[1];
-ret->RGDId = sqlUnsigned(row[2]);
-ret->RGDName = row[3];
+ret->MGIId = sqlUnsigned(row[2]);
+ret->MGIName = row[3];
 ret->UiStsId = sqlUnsigned(row[4]);
 ret->nameCount = sqlUnsigned(row[5]);
 ret->alias = row[6];
@@ -29,12 +29,12 @@ ret->primer2 = row[8];
 ret->distance = row[9];
 ret->sequence = sqlUnsigned(row[10]);
 ret->organis = row[11];
-ret->fhhName = row[12];
-ret->fhhChr = row[13];
-ret->fhhGeneticPos = atof(row[14]);
-ret->shrspName = row[15];
-ret->shrspChr = row[16];
-ret->shrspGeneticPos = atof(row[17]);
+ret->wigName = row[12];
+ret->wigChr = row[13];
+ret->wigGeneticPos = atof(row[14]);
+ret->mgiName = row[15];
+ret->mgiChr = row[16];
+ret->mgiGeneticPos = atof(row[17]);
 ret->rhName = row[18];
 ret->rhChr = row[19];
 ret->rhGeneticPos = atof(row[20]);
@@ -55,8 +55,8 @@ char *s;
 AllocVar(ret);
 ret->identNo = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
-ret->RGDId = sqlUnsigned(row[2]);
-ret->RGDName = cloneString(row[3]);
+ret->MGIId = sqlUnsigned(row[2]);
+ret->MGIName = cloneString(row[3]);
 ret->UiStsId = sqlUnsigned(row[4]);
 ret->nameCount = sqlUnsigned(row[5]);
 ret->alias = cloneString(row[6]);
@@ -65,12 +65,12 @@ ret->primer2 = cloneString(row[8]);
 ret->distance = cloneString(row[9]);
 ret->sequence = sqlUnsigned(row[10]);
 ret->organis = cloneString(row[11]);
-ret->fhhName = cloneString(row[12]);
-ret->fhhChr = cloneString(row[13]);
-ret->fhhGeneticPos = atof(row[14]);
-ret->shrspName = cloneString(row[15]);
-ret->shrspChr = cloneString(row[16]);
-ret->shrspGeneticPos = atof(row[17]);
+ret->wigName = cloneString(row[12]);
+ret->wigChr = cloneString(row[13]);
+ret->wigGeneticPos = atof(row[14]);
+ret->mgiName = cloneString(row[15]);
+ret->mgiChr = cloneString(row[16]);
+ret->mgiGeneticPos = atof(row[17]);
 ret->rhName = cloneString(row[18]);
 ret->rhChr = cloneString(row[19]);
 ret->rhGeneticPos = atof(row[20]);
@@ -82,7 +82,7 @@ return ret;
 }
 
 struct stsInfoMouseNew *stsInfoMouseNewLoadAll(char *fileName) 
-/* Load all stsInfoMouseNew from a tab-separated file.
+/* Load all stsInfoMouseNew from a whitespace-separated file.
  * Dispose of this with stsInfoMouseNewFreeList(). */
 {
 struct stsInfoMouseNew *list = NULL, *el;
@@ -99,28 +99,21 @@ slReverse(&list);
 return list;
 }
 
-struct stsInfoMouseNew *stsInfoMouseNewLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all stsInfoMouseNew from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct stsInfoMouseNew *stsInfoMouseNewLoadAllByChar(char *fileName, char chopper) 
+/* Load all stsInfoMouseNew from a chopper separated file.
  * Dispose of this with stsInfoMouseNewFreeList(). */
 {
 struct stsInfoMouseNew *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[25];
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = stsInfoMouseNewLoad(row);
     slAddHead(&list, el);
     }
+lineFileClose(&lf);
 slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -136,8 +129,8 @@ if (ret == NULL)
     AllocVar(ret);
 ret->identNo = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->RGDId = sqlUnsignedComma(&s);
-ret->RGDName = sqlStringComma(&s);
+ret->MGIId = sqlUnsignedComma(&s);
+ret->MGIName = sqlStringComma(&s);
 ret->UiStsId = sqlUnsignedComma(&s);
 ret->nameCount = sqlUnsignedComma(&s);
 ret->alias = sqlStringComma(&s);
@@ -146,12 +139,12 @@ ret->primer2 = sqlStringComma(&s);
 ret->distance = sqlStringComma(&s);
 ret->sequence = sqlUnsignedComma(&s);
 ret->organis = sqlStringComma(&s);
-ret->fhhName = sqlStringComma(&s);
-ret->fhhChr = sqlStringComma(&s);
-ret->fhhGeneticPos = sqlFloatComma(&s);
-ret->shrspName = sqlStringComma(&s);
-ret->shrspChr = sqlStringComma(&s);
-ret->shrspGeneticPos = sqlFloatComma(&s);
+ret->wigName = sqlStringComma(&s);
+ret->wigChr = sqlStringComma(&s);
+ret->wigGeneticPos = sqlFloatComma(&s);
+ret->mgiName = sqlStringComma(&s);
+ret->mgiChr = sqlStringComma(&s);
+ret->mgiGeneticPos = sqlFloatComma(&s);
 ret->rhName = sqlStringComma(&s);
 ret->rhChr = sqlStringComma(&s);
 ret->rhGeneticPos = sqlFloatComma(&s);
@@ -171,16 +164,16 @@ struct stsInfoMouseNew *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
-freeMem(el->RGDName);
+freeMem(el->MGIName);
 freeMem(el->alias);
 freeMem(el->primer1);
 freeMem(el->primer2);
 freeMem(el->distance);
 freeMem(el->organis);
-freeMem(el->fhhName);
-freeMem(el->fhhChr);
-freeMem(el->shrspName);
-freeMem(el->shrspChr);
+freeMem(el->wigName);
+freeMem(el->wigChr);
+freeMem(el->mgiName);
+freeMem(el->mgiChr);
 freeMem(el->rhName);
 freeMem(el->rhChr);
 freeMem(el->GeneName);
@@ -212,10 +205,10 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->RGDId);
+fprintf(f, "%u", el->MGIId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->RGDName);
+fprintf(f, "%s", el->MGIName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->UiStsId);
@@ -245,24 +238,24 @@ fprintf(f, "%s", el->organis);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->fhhName);
+fprintf(f, "%s", el->wigName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->fhhChr);
+fprintf(f, "%s", el->wigChr);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->fhhGeneticPos);
+fprintf(f, "%f", el->wigGeneticPos);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->shrspName);
+fprintf(f, "%s", el->mgiName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->shrspChr);
+fprintf(f, "%s", el->mgiChr);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->shrspGeneticPos);
+fprintf(f, "%f", el->mgiGeneticPos);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->rhName);
@@ -289,4 +282,6 @@ fprintf(f, "%s", el->clone);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

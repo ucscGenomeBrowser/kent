@@ -14,8 +14,8 @@ table stsMapMouseNew
     string rhChrom;       "Chromosome (no chr) from RH map or 0 if none"
     float rhPos;          "Position on rh map"
     float rhLod;	  "Lod score of RH map"
-    string fhhChr;     	  "Chromosome (no chr) from FHHxACI genetic or 0 if none"
-    float fhhPos;        "Position on FHHxACI map"
-    string shrspChrom;        "Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none"
-    float shrspPos;           "Position on SHRSPxBN genetic map"
+    string wigChr;     	  "Chromosome (no chr) from FHHxACI genetic or 0 if none"
+    float wigPos;        "Position on FHHxACI map"
+    string mgiChrom;        "Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none"
+    float mgiPos;           "Position on SHRSPxBN genetic map"
     )

@@ -7,8 +7,8 @@
 CREATE TABLE stsInfoMouseNew (
     identNo int unsigned not null,	# UCSC identification number
     name varchar(255) not null,	# Official UCSC name
-    RGDId int unsigned not null,	# Marker's RGD Id
-    RGDName varchar(255) not null,	# Marker's RGD name
+    MGIId int unsigned not null,	# Marker's MGI Id
+    MGIName varchar(255) not null,	# Marker's MGI name
     UiStsId int unsigned not null,	# Marker's UiStsId
     nameCount int unsigned not null,	# Number of alias
     alias varchar(255) not null,	# alias, or N/A
@@ -17,13 +17,13 @@ CREATE TABLE stsInfoMouseNew (
     distance varchar(255) not null,	# Length of STS sequence
     sequence int unsigned not null,	# Whether the full sequence is available (1) or not (0) for STS
     organis varchar(255) not null,	# Organism for which STS discovered
-    fhhName varchar(255) not null,	# WI_Mouse_Genetic map
-    fhhChr varchar(255) not null,	# Chromosome in Genetic map
-    fhhGeneticPos float not null,	# Position in Genetic map
-    shrspName varchar(255) not null,	# MGD map
-    shrspChr varchar(255) not null,	# Chromosome in Genetic map
-    shrspGeneticPos float not null,	# Position in Genetic map
-    rhName varchar(255) not null,	# MRC_RH map
+    wigName varchar(255) not null,	# WI_Mouse_Genetic map
+    wigChr varchar(255) not null,	# Chromosome in Genetic map
+    wigGeneticPos float not null,	# Position in Genetic map
+    mgiName varchar(255) not null,	# MGI map
+    mgiChr varchar(255) not null,	# Chromosome in Genetic map
+    mgiGeneticPos float not null,	# Position in Genetic map
+    rhName varchar(255) not null,	# WhiteHead_RH map
     rhChr varchar(255) not null,	# Chromosome in Genetic map
     rhGeneticPos float not null,	# Position in Genetic map.
     RHLOD float not null,	# LOD score of RH map

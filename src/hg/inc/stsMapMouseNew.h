@@ -5,6 +5,8 @@
 #ifndef STSMAPMOUSENEW_H
 #define STSMAPMOUSENEW_H
 
+#define STSMAPMOUSENEW_NUM_COLS 15
+
 struct stsMapMouseNew
 /* STS marker and its position on golden path and various maps */
     {
@@ -20,10 +22,10 @@ struct stsMapMouseNew
     char *rhChrom;	/* Chromosome (no chr) from RH map or 0 if none */
     float rhPos;	/* Position on rh map */
     float rhLod;	/* Lod score of RH map */
-    char *fhhChr;	/* Chromosome (no chr) from FHHxACI genetic or 0 if none */
-    float fhhPos;	/* Position on FHHxACI map */
-    char *shrspChrom;	/* Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none */
-    float shrspPos;	/* Position on SHRSPxBN genetic map */
+    char *wigChr;	/* Chromosome (no chr) from FHHxACI genetic or 0 if none */
+    float wigPos;	/* Position on FHHxACI map */
+    char *mgiChrom;	/* Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none */
+    float mgiPos;	/* Position on SHRSPxBN genetic map */
     };
 
 void stsMapMouseNewStaticLoad(char **row, struct stsMapMouseNew *ret);
@@ -35,12 +37,15 @@ struct stsMapMouseNew *stsMapMouseNewLoad(char **row);
  * from database.  Dispose of this with stsMapMouseNewFree(). */
 
 struct stsMapMouseNew *stsMapMouseNewLoadAll(char *fileName);
-/* Load all stsMapMouseNew from a tab-separated file.
+/* Load all stsMapMouseNew from whitespace-separated file.
  * Dispose of this with stsMapMouseNewFreeList(). */
 
-struct stsMapMouseNew *stsMapMouseNewLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all stsMapMouseNew from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct stsMapMouseNew *stsMapMouseNewLoadAllByChar(char *fileName, char chopper);
+/* Load all stsMapMouseNew from chopper separated file.
+ * Dispose of this with stsMapMouseNewFreeList(). */
+
+#define stsMapMouseNewLoadAllByTab(a) stsMapMouseNewLoadAllByChar(a, '\t');
+/* Load all stsMapMouseNew from tab separated file.
  * Dispose of this with stsMapMouseNewFreeList(). */
 
 struct stsMapMouseNew *stsMapMouseNewCommaIn(char **pS, struct stsMapMouseNew *ret);
@@ -63,6 +68,8 @@ void stsMapMouseNewOutput(struct stsMapMouseNew *el, FILE *f, char sep, char las
 
 #define stsMapMouseNewCommaOut(el,f) stsMapMouseNewOutput(el,f,',',',');
 /* Print out stsMapMouseNew as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* STSMAPMOUSENEW_H */
 

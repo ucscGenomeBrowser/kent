@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "stsMapMouseNew.h"
 
-static char const rcsid[] = "$Id: stsMapMouseNew.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsMapMouseNew.c,v 1.3 2003/07/17 18:26:22 ytlu Exp $";
 
 void stsMapMouseNewStaticLoad(char **row, struct stsMapMouseNew *ret)
 /* Load a row from stsMapMouseNew table into ret.  The contents of ret will
@@ -28,10 +28,10 @@ ret->otherAcc = row[7];
 ret->rhChrom = row[8];
 ret->rhPos = atof(row[9]);
 ret->rhLod = atof(row[10]);
-ret->fhhChr = row[11];
-ret->fhhPos = atof(row[12]);
-ret->shrspChrom = row[13];
-ret->shrspPos = atof(row[14]);
+ret->wigChr = row[11];
+ret->wigPos = atof(row[12]);
+ret->mgiChrom = row[13];
+ret->mgiPos = atof(row[14]);
 }
 
 struct stsMapMouseNew *stsMapMouseNewLoad(char **row)
@@ -54,15 +54,15 @@ ret->otherAcc = cloneString(row[7]);
 ret->rhChrom = cloneString(row[8]);
 ret->rhPos = atof(row[9]);
 ret->rhLod = atof(row[10]);
-ret->fhhChr = cloneString(row[11]);
-ret->fhhPos = atof(row[12]);
-ret->shrspChrom = cloneString(row[13]);
-ret->shrspPos = atof(row[14]);
+ret->wigChr = cloneString(row[11]);
+ret->wigPos = atof(row[12]);
+ret->mgiChrom = cloneString(row[13]);
+ret->mgiPos = atof(row[14]);
 return ret;
 }
 
 struct stsMapMouseNew *stsMapMouseNewLoadAll(char *fileName) 
-/* Load all stsMapMouseNew from a tab-separated file.
+/* Load all stsMapMouseNew from a whitespace-separated file.
  * Dispose of this with stsMapMouseNewFreeList(). */
 {
 struct stsMapMouseNew *list = NULL, *el;
@@ -79,28 +79,21 @@ slReverse(&list);
 return list;
 }
 
-struct stsMapMouseNew *stsMapMouseNewLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all stsMapMouseNew from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
+struct stsMapMouseNew *stsMapMouseNewLoadAllByChar(char *fileName, char chopper) 
+/* Load all stsMapMouseNew from a chopper separated file.
  * Dispose of this with stsMapMouseNewFreeList(). */
 {
 struct stsMapMouseNew *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[15];
 
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = stsMapMouseNewLoad(row);
     slAddHead(&list, el);
     }
+lineFileClose(&lf);
 slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -125,10 +118,10 @@ ret->otherAcc = sqlStringComma(&s);
 ret->rhChrom = sqlStringComma(&s);
 ret->rhPos = sqlFloatComma(&s);
 ret->rhLod = sqlFloatComma(&s);
-ret->fhhChr = sqlStringComma(&s);
-ret->fhhPos = sqlFloatComma(&s);
-ret->shrspChrom = sqlStringComma(&s);
-ret->shrspPos = sqlFloatComma(&s);
+ret->wigChr = sqlStringComma(&s);
+ret->wigPos = sqlFloatComma(&s);
+ret->mgiChrom = sqlStringComma(&s);
+ret->mgiPos = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -145,8 +138,8 @@ freeMem(el->name);
 freeMem(el->ctgAcc);
 freeMem(el->otherAcc);
 freeMem(el->rhChrom);
-freeMem(el->fhhChr);
-freeMem(el->shrspChrom);
+freeMem(el->wigChr);
+freeMem(el->mgiChrom);
 freez(pEl);
 }
 
@@ -200,16 +193,18 @@ fputc(sep,f);
 fprintf(f, "%f", el->rhLod);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->fhhChr);
+fprintf(f, "%s", el->wigChr);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->fhhPos);
+fprintf(f, "%f", el->wigPos);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->shrspChrom);
+fprintf(f, "%s", el->mgiChrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->shrspPos);
+fprintf(f, "%f", el->mgiPos);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

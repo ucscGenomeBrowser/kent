@@ -16,12 +16,10 @@ CREATE TABLE stsMapMouseNew (
     rhChrom varchar(255) not null,	# Chromosome (no chr) from RH map or 0 if none
     rhPos float not null,	# Position on rh map
     rhLod float not null,	# Lod score of RH map
-    fhhChr varchar(255) not null,	# Chromosome (no chr) from FHHxACI genetic or 0 if none
-    fhhPos float not null,	# Position on FHHxACI map
-    shrspChrom varchar(255) not null,	# Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none
-    shrspPos float not null,	# Position on SHRSPxBN genetic map
+    wigChr varchar(255) not null,	# Chromosome (no chr) from FHHxACI genetic or 0 if none
+    wigPos float not null,	# Position on FHHxACI map
+    mgiChrom varchar(255) not null,	# Chromosome (no chr) from SHRSPxBN geneticmap or 0 if none
+    mgiPos float not null,	# Position on SHRSPxBN genetic map
               #Indices
-    INDEX(identNo),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
-   );
+    PRIMARY KEY(chrom)
+);
