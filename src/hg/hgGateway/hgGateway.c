@@ -39,11 +39,27 @@ if (oldDb != NULL && !sameString(db, oldDb))
     }
 
 puts(
+"<CENTER>"
+"Web tool created by "
+"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>, "
+"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
+"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A> and "
+"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A> "
+"of UC Santa Cruz.<BR></CENTER>\n");
+
+puts(
+"<center>\n"
+"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
+"<tr><td>\n"
+"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
+"<tr><td>\n"
+);
+
+puts(
+"<table><tr>\n"
+"<td valign=\"top\">genome</td></tr>\n"
+"<tr><td valign=\"top\">\n"
 "<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">\n"
-"<!--cheap trick to get background on row to be continuous-->\n"
-"<table CELLPADDING=3 CELLSPACING=0 MARGIN=0 WIDTH=100%><tr>\n"
-"<td ALIGN=\"left\">&nbsp;</td>\n"
-"<td ALIGN=\"right\">change genome:</font>\n"
 );
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -62,29 +78,23 @@ cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms,
 cartSaveSession(cart);
 
 puts(
-"</td></tr></table>\n"
-"</FORM>\n"
-"<CENTER>"
-"Web tool created by "
-"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>, "
-"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A> and "
-"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A> "
-"of UC Santa Cruz.<BR>\n");
-
-printf("</CENTER><P>");
+"</FORM></td></tr>\n"
+"<tr><td>&nbsp</td></tr>\n"
+"</table>\n"
+"</td>\n"
+);
 
 puts(
-"<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
-"<center>\n"
-"<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0><tr><td>\n"
-"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<tr>\n"
-"<td ALIGN=\"middle\">\n"
-"<table bgcolor=\"FFFEF3\" border=0 cellspacing=\"4\">\n"
+"<td>\n"
+"<table bgcolor=\"FFFEF3\" border=0>\n"
 "<tr>\n"
 "<td>\n"
-"<center>&nbsp;&nbsp; assembly\n"
+"<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+"<table><tr>\n"
+"<td>&nbsp; assembly</td>\n"
+"<td>&nbsp; position</td>\n"
+"<td>&nbsp; pixel width</td></tr>\n"
+"<tr><td>\n"
 );
 
 /* Find all the assemblies that pertain to the selected genome */
@@ -115,28 +125,29 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     }
 
 cgiMakeDropListFull(assemblyCgiName, assemblyList, values, numAssemblies, assembly, NULL);
-
-printf(" position\n");
-
+printf("</td>\n");
+printf("<td>\n");
 cgiMakeTextVar("position", position, 30);
+printf("</td>\n");
 freez(&defaultPosition);
 position = NULL;
-printf(" pixel width ");
+printf("<td>\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
-printf(" ");
+printf("</td></tr><tr><td colspan=\"3\">");
 cgiMakeButton("Submit", "Submit");
 cartSetString(cart, "db", db);
 cartSaveSession(cart);
 
 puts(
-"&nbsp;&nbsp;</center></td></tr><tr><td><center>\n"
+"</td></tr></table>\n"
+"</td></tr><tr><td><center>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.\n"
 "</center>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
 "</center>\n"
-     );
+);
 
 if (strstrNoCase(organism, "human"))
     {
