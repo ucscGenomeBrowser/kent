@@ -31,7 +31,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     lfs.o liftUp.o llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
-    recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
+    rankProp.o recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
     sanger22extra.o scopDes.o scoredRef.o sgdAbundance.o sgdClone.o \
