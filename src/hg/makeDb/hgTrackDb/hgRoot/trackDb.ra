@@ -542,24 +542,6 @@ priority 35
 visibility hide
 type bed 4 +
 
-track rosettaTe
-shortLabel Rosetta T. E.
-longLabel Rosetta Confirmed Exon Data
-priority 36
-visibility dense
-chromosomes chr22,
-type bed 4 +
-private on
-
-track rosettaPe
-shortLabel Rosetta P. E.
-longLabel Rosetta Predicted Exon Data
-priority 37
-visibility dense
-chromosomes chr22,
-type bed 4 +
-private on
-
 track nci60
 shortLabel NCI60
 longLabel Microarray Experiments for NCI 60 Cell Lines
