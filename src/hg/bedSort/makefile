@@ -1,9 +1,8 @@
 include ../../inc/common.mk
 
-
-L = -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = ${MYSQLLIBS} -lm
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = bedSort.o
 
