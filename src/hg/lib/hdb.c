@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.185 2004/06/11 18:30:21 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.186 2004/06/11 18:34:31 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1979,32 +1979,8 @@ return binned;
 int hFieldIndex(char *table, char *field)
 /* Return index of field in table or -1 if it doesn't exist. */
 {
-char query[256];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int result = -1;
-int index = 0;
-int cols = 0;
-
-/* Read table description into hash. */
-sprintf(query, "describe %s", table);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    cols = sqlCountColumns(sr);
-    while (index < cols)
-        {
-        if (sameString(row[index], field))
-            {
-            result = index;
-            break;
-            }
-        index++;
-        }
-    }
-
-sqlFreeResult(&sr);
+int result = sqlFieldIndex(conn, table, field);
 hFreeConn(&conn);
 return result;
 }
