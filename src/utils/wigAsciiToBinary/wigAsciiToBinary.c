@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.26 2004/12/15 20:08:36 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.27 2005/03/04 20:49:31 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -192,7 +192,7 @@ if (bincount)
 "%s\t%llu\t%llu\t%s.%llu\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
 	chromName, chromStart+add_offset, chromEnd+add_offset,
 	featureName, rowCount, dataSpan, bincount,
-	fileOffsetBegin, basename(binfile), lowerLimit,
+	(unsigned long long)fileOffsetBegin, basename(binfile), lowerLimit,
 	dataRange, validCount, sumData, sumSquares);
     ++rowCount;
     }
