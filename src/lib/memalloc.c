@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.9 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.10 2003/12/18 04:27:39 kent Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -302,4 +302,74 @@ void pushCarefulMemHandler(long maxAlloc)
 {
 carefulMemInit(maxAlloc);
 carefulParent = pushMemHandler(&carefulMemHandler);
+}
+
+static boolean memTrackerOn;
+/* A memory tracker. */
+
+struct memTracker
+/* A structure to keep track of memory. */
+    {
+    struct memTracker *next;	 /* Next in list. */
+    struct dlList *list;	 /* List of allocated blocks. */
+    struct memHandler *parent;   /* Underlying memory handler. */
+    struct memHandler *handler;  /* Memory handler. */
+    };
+
+static struct memTracker *memTracker = NULL;	/* Head in memTracker list. */
+
+static void *memTrackerAlloc(size_t size)
+/* Allocate extra memory for cookies and list node, and then
+ * return memory block. */
+{
+struct dlNode *node;
+
+size += sizeof (*node);
+node = memTracker->parent->alloc(size);
+if (node == NULL)
+    return node;
+dlAddTail(memTracker->list, node);
+return (void*)(node+1);
+}
+
+static void memTrackerFree(void *vpt)
+/* Check cookies and free. */
+{
+struct dlNode *node = vpt;
+node -= 1;
+dlRemove(node);
+memTracker->parent->free(node);
+}
+
+void memTrackerStart()
+/* Push memory handler that will track blocks allocated so that
+ * they can be automatically released with memTrackerEnd().  You
+ * can have memTrackerStart one after the other, but memTrackerStart/End
+ * need to nest. */
+{
+struct memTracker *mt;
+
+if (memTracker != NULL)
+     errAbort("multiple memTrackerStart calls");
+AllocVar(mt);
+AllocVar(mt->handler);
+mt->handler->alloc = memTrackerAlloc;
+mt->handler->free = memTrackerFree;
+mt->list = dlListNew();
+mt->parent = pushMemHandler(mt->handler);
+memTracker = mt;
+}
+
+void memTrackerEnd()
+/* Free any remaining blocks and pop tracker memory handler. */
+{
+struct dlNode *node, *prev;
+struct memTracker *mt = memTracker;
+if (mt == NULL)
+    errAbort("memTrackerEnd without memTrackerStart");
+memTracker = NULL;
+popMemHandler();
+dlListFree(&mt->list);
+freeMem(mt->handler);
+freeMem(mt);
 }
