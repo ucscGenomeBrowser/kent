@@ -35,6 +35,7 @@ update:
 	hgTrackDb hg12 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	cd zoo; make update; cd ..
 
 beta_old_update:
 	hgTrackDb hg6  trackDb ../../lib/trackDb.sql hgRoot
@@ -52,35 +53,7 @@ beta_update:
 	hgTrackDb hg12 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
-
-betaZooUpdate:
-	hgTrackDb zooBaboon3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCat3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChicken3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChimp3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCow3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooDog3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooFugu3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooHuman3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooMouse3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooPig3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooRat3 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooZebrafish3 trackDb ../../lib/trackDb.sql hgRoot
-
-zooUpdate:
-	hgTrackDb zooBaboon3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCat3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChicken3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChimp3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCow3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooDog3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooFugu3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooHuman3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooMouse3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooPig3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooRat3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooZebrafish3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-
+	cd zoo; make beta_update; cd ..
 
 debug : $O
 	gcc -ggdb -o hgTrackDb $O $(MYLIBS) $L	
