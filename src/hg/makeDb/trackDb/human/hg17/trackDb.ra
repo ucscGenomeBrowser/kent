@@ -16,6 +16,17 @@ group map
 visibility dense
 type bed 3 +
 
+track pseudoGeneLink3
+shortLabel Pseudo Link3
+longLabel Processed Pseudogene Locus Based on mrna alignments 3rd SCORING
+group genes
+priority 53
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 
+
 track rnaGene
 shortLabel RNA Genes
 longLabel Non-coding RNA Genes (dark) and Pseudogenes (light) [Lifted from hg16]
@@ -308,7 +319,7 @@ type maf
 
 track blastzElephant
 shortLabel Elephant Blastz
-longLabel Human/Elephant Blastz (Loxodonta Africana Sep 2004 trimmed reads) Reciprocal Best
+longLabel Human/Elephant Blastz (Loxodonta Africana Sep 2004 trimmed reads) 
 group compGeno
 priority 165
 visibility hide
@@ -393,6 +404,8 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
+<<<<<<< trackDb.ra
+=======
 track blastzMm4
 shortLabel Mm4 Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
@@ -484,6 +497,7 @@ spectrum on
 type psl xeno canFam1
 otherDb canFam1
 
+>>>>>>> 1.61
 track chainCanFam1
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
@@ -600,7 +614,18 @@ otherDb mm5
 
 track ensRatMm5Hom
 shortLabel Mouse Synteny
-longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using ensembl
+priority 187.5
+group compGeno
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6+
+otherDb mm5
+
+track mouseSynBed
+shortLabel Mouse Synteny Ucsc
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Syntenic Net 
 priority 187.5
 group compGeno
 visibility hide
@@ -872,6 +897,14 @@ visibility hide
 spectrum on
 type netAlign tetNig1 chainTetNig1
 otherDb tetNig1
+
+track indelible
+shortLabel Human Insertions
+longLabel Insertions in Human Relative to Chimp and Mouse
+group compGeno
+priority 202.8
+visibility hide
+type bed 4 .
 
 track chimpDels
 shortLabel Chimp Deletions
