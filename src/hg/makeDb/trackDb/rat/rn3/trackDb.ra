@@ -155,6 +155,16 @@ spectrum on
 type netAlign mm3 chainMm3
 otherDb mm3
 
+track syntenyMm3
+shortLabel Mouse Synteny
+longLabel Rat/Mouse Synteny Using Blastz Single Coverage (100k window)
+group compGeno
+priority 218
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 .
+
 track multizHg15Mm3
 shortLabel Rat/Mouse/Human
 longLabel Human/Mouse/Rat Alignments
