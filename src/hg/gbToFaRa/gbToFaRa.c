@@ -1037,23 +1037,28 @@ if (dir == NULL)
 return dir;
 }
 
-static char * replaceChars(const char *src, char orig, char new)
+static char * replaceChars(const char *src, char *origList, char *newList)
 /*
 Utility function to replace all occurrences of the 
-original char with a new one in a string
+original chars with their respective new ones in a string.
+Each character at index X in the origList gets replaced by the
+corresponding one at the same index in newList.
 
 param src - The string to operate on.
-param orig - The char in the string to replace.
-param new - The new char to place in the string.
+param origList - The set of chars in the string to replace.
+param newList - The replacement set of char to place in the string.
 
 return - A newly allocated string containing the 
          chars that have been morphed.
  */
 {
-char *subStr = NULL;
 char *retStr = NULL;
 int strIndex = 0;
 int strLen = 0;
+int charNum = 0;
+int totalChars = strlen(origList);
+
+assert(totalChars == strlen(newList));
 
 if (NULL != src && 0 != strlen(src))
     {
@@ -1061,22 +1066,17 @@ if (NULL != src && 0 != strlen(src))
     retStr = needMem(strLen + 1);
     }
 
-for (strIndex = 0; strIndex < strLen; strIndex++)
-    {
-    if (src[strIndex] == orig) 
-        {
-        retStr[strIndex] = new;
-        }
-    else
-        {
-        retStr[strIndex] = src[strIndex];
-        }
-    } while(NULL != subStr);
+strcpy(retStr, src);
 
-/* Null terminate the string */
-if (NULL != retStr) 
+for (charNum = 0; charNum < totalChars; charNum++)
     {
-    retStr[strIndex] = 0;
+     for (strIndex = 0; strIndex < strLen; strIndex++)
+         {
+         if (retStr[strIndex] == origList[charNum]) 
+             {
+             retStr[strIndex] = newList[charNum];
+             }
+         }
     }
 
 return retStr;
@@ -1129,26 +1129,26 @@ while (readGbInfo(lf))
                 }
             else
                 {
-                orgDir = replaceChars(org, ' ', '.');
+                /* Replace illegal directory chars */
+                orgDir = replaceChars(org, " ()", ".##");
                 }
             
             sprintf(command, "mkdir -p %s/%s", gOutputDir, orgDir);
             system(command);
 
             sprintf(path, "%s/%s/%s", gOutputDir, orgDir, raName); 
-            printf ("RA PATH: %s\n", path);
+            /*printf ("RA PATH: %s\n", path);*/
             fflush(stdout);
             raFile = mustOpen(path, "wb");
 
             sprintf(path, "%s/%s/%s", gOutputDir, orgDir, faDir); 
-            printf ("FA PATH: %s\n", path);
+            /*printf("FA PATH: %s\n", path);*/
             fflush(stdout);
             faFile = mustOpen(path, "wb");
 
+            freez(&orgDir);
             hashAdd(raHash, org, raFile);   
             hashAdd(faHash, org, faFile);   
-
-            freez(&orgDir);
             }
 
         if (NULL == raFile) 
@@ -1160,6 +1160,10 @@ while (readGbInfo(lf))
             {
             faFile = (FILE*) hashMustFindVal(faHash, org);
             }
+
+        printf("ORG = : %s\n", org);
+        printf("raFile = %d\n", raFile);
+        printf("faFile = %d\n\n", faFile);
         }
 
     if (++gbCount % modder == 0)
@@ -1447,7 +1451,7 @@ while (readGbInfo(lf))
             seqKey->val = NULL; /* Don't write out sequence here. */
             if (commentKey != NULL)
                 commentKey->val = NULL;  /* Don't write out comment either. */
-            kvtWriteAll(kvt, raFile,filter->hideKeys);
+            kvtWriteAll(kvt, raFile, filter->hideKeys);
             if (formatType == ftBac)
                 {
                 bacWrite(faDir, accession, version, dna, dnaSize);
