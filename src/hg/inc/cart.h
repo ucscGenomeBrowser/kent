@@ -163,6 +163,9 @@ void cartDumpList(struct hashEl *elList);
 void cartDumpPrefix(struct cart *cart, char *prefix);
 /* Dump all cart variables with prefix */
 
+void cartDumpLike(struct cart *cart, char *wildcard);
+/* Dump all cart variables matching wildcard */
+
 struct hashEl *cartFindPrefix(struct cart *cart, char *prefix);
 /* Return list of name/val pairs from cart where name starts with 
  * prefix.  Free when done with hashElFreeList. */

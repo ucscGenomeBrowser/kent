@@ -6,16 +6,16 @@
 #include "cart.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.8 2004/04/19 20:45:46 kate Exp $";
+static char const rcsid[] = "$Id: cartDump.c,v 1.9 2004/04/19 23:49:12 kate Exp $";
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
 {
-#define PREFIX_VAR  "prefix"
+#define MATCH_VAR  "match"
 
 char *vName = "cartDump.varName";
 char *vVal = "cartDump.newValue";
-char *prefix;
+char *wildcard;
 
 if (cgiVarExists("submit"))
     {
@@ -32,9 +32,9 @@ if (cgiVarExists("submit"))
     cartRemove(cart, "submit");
     }
 printf("<TT><PRE>");
-prefix = cgiOptionalString(PREFIX_VAR);
-if (prefix)
-    cartDumpPrefix(cart, prefix);
+wildcard = cgiOptionalString(MATCH_VAR);
+if (wildcard)
+    cartDumpLike(cart, wildcard);
 else
     cartDump(cart);
 printf("</TT></PRE>");
@@ -48,7 +48,7 @@ printf("<BR>\n");
 printf("Put n/a in for the new value to clear a variable.");
 }
 
-char *excludeVars[] = { "submit", "Submit", PREFIX_VAR, NULL };
+char *excludeVars[] = { "submit", "Submit", MATCH_VAR, NULL };
 
 int main(int argc, char *argv[])
 /* Process command line. */

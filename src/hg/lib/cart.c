@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.38 2004/04/19 20:45:45 kate Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.39 2004/04/19 23:49:12 kate Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -561,6 +561,13 @@ void cartDumpPrefix(struct cart *cart, char *prefix)
 /* Dump all cart variables with prefix */
 {
 struct hashEl *elList = cartFindPrefix(cart, prefix);
+cartDumpList(elList);
+}
+
+void cartDumpLike(struct cart *cart, char *wildcard)
+/* Dump all cart variables matching wildcard */
+{
+struct hashEl *elList = cartFindLike(cart, wildcard);
 cartDumpList(elList);
 }
 
