@@ -18,6 +18,8 @@ int paraSigSize = 16;
 
 int paraHubPort = 0x46DC;		      /* Our hub port */
 int paraNodePort = 0x46DD;		      /* Our node port */
+int paraForkDepth = 0;                        /* fork depth, mainly used for
+                                               * debugging */
 
 char *getMachine()
 /* Return host name. */
@@ -44,6 +46,8 @@ int forkOrDie()
 int childId = fork();
 if (childId == -1)
     errnoAbort("Unable to fork");
+if (childId == 0)
+     paraForkDepth++;
 return childId;
 }
 

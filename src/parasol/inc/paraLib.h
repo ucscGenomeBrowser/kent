@@ -8,6 +8,8 @@ extern char *cuserid(char *__s);  /* Linux should define this but... */
 
 extern int paraHubPort;		      /* Port for hub. */
 extern int paraNodePort;	      /* Port for nodes. */
+extern int paraForkDepth;             /* fork depth, mainly used for
+                                       * debugging */
 
 boolean sendWithSig(int fd, char *string);
 /* Send a string with the signature prepended.  Warn 
