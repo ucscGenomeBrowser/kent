@@ -1,4 +1,4 @@
-#!/bin/bash -e
+/bash -e
 
 # align-genbank [-finish] [-workdir dir]
 
@@ -14,7 +14,7 @@
 # errors terminate with message
 set -e
 trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
-ec </dev/null
+exec </dev/null
 
 # config
 databases="hg15 mm3 rn3 hg16 fr1 dm1 mm4 sacCer1"
