@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.25 2004/02/10 18:40:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.26 2004/05/04 20:54:26 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -88,7 +88,6 @@ int exStart[500], exEnd[500];
 int exCount;
 int aaStart[500], aaEnd[500];
 
-//char kgProtMapTableName[20] = {"markdKgProtMap"}; 
 char kgProtMapTableName[20] = {"kgProtMap"}; 
 int blockSize[500], blockSizePositive[500];
 int blockStart[500], blockStartPositive[500];
@@ -96,8 +95,8 @@ int blockEnd[500],   blockEndPositive[500];
 int blockGenomeStart[500], blockGenomeStartPositive[500];
 int blockGenomeEnd[500], blockGenomeEndPositive[500];
 
-int trackOrigOffset = 0;	//current track display origin offset
-int aaOrigOffset = 0;		//current track AA base origin offset
+int trackOrigOffset = 0;	/* current track display origin offset */
+int aaOrigOffset = 0;		/* current track AA base origin offset */
 boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
 Color bkgColor;
@@ -109,14 +108,14 @@ void dvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
 {
 char temp[1000];
-sprintf(temp,"<br>%s", format);
+safef(temp, sizeof(temp), "<br>%s", format);
 
-    vprintf(temp, args);
+vprintf(temp, args);
 fflush(stdout);
 }
 
-// used for debugging only
-// #include "dPrint.c"
+/* used for debugging only */
+/* #include "dPrint.c" */
 
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
@@ -374,8 +373,8 @@ cart = theCart;
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-//state = cgiUrlString();
-//hPrintf("State: %s\n", state->string);   
+/* state = cgiUrlString();
+hPrintf("State: %s\n", state->string); */   
 
 getDbAndGenome(cart, &database, &organism);
 
@@ -394,7 +393,7 @@ conn  = hAllocConn();
 hgsid     = cartOptionalString(cart, "hgsid");
 if (hgsid != NULL)
     {
-    sprintf(hgsidStr, "&hgsid=%s", hgsid);
+    safef(hgsidStr, sizeof(hgsidStr), "&hgsid=%s", hgsid);
     }
 else
     {
@@ -403,13 +402,13 @@ else
 
 proteinID = cartOptionalString(cart, "proteinID");
 
-// check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID
-// then assign the accession number to global variable proteinID
-sprintf(cond_str, "accession='%s'", proteinID);
+/* check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID */
+/* then assign the accession number to global variable proteinID */
+safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
 if (proteinAC == NULL)
     {
-    sprintf(cond_str, "displayID='%s'", proteinID);
+    safef(cond_str, sizeof(cond_str), "displayID='%s'", proteinID);
     proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
@@ -423,17 +422,17 @@ if (proteinAC == NULL)
     }
 else
     {
-    sprintf(cond_str, "accession='%s'", proteinID);
+    safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
     protDisplayID = sqlGetField(conn, protDbName, "spXref3", "displayID", cond_str);
     }
 
-sprintf(cond_str, "proteinID='%s'", protDisplayID);
+safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
 mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
 
-sprintf(cond_str, "accession='%s'", proteinID);
+safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 description = sqlGetField(NULL, protDbName, "spXref3", "description", cond_str);
 
-// obtain previous genome position range selected by the Genome Browser user
+/* obtain previous genome position range selected by the Genome Browser user */
 positionStr = cloneString(cartOptionalString(cart, "position"));
 if (positionStr != NULL)
     {

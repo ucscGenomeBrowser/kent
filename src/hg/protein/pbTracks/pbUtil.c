@@ -104,7 +104,7 @@ else
     {
     *hasResFreq = 1;
     }
-sprintf(query,"select * from %s.pbResAvgStd", database);
+safef(query, sizeof(query), "select * from %s.pbResAvgStd", database);
 iaCnt = 0;
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -144,7 +144,7 @@ int i,len;
 char *seq;
     
 conn= hAllocConn();
-sprintf(query, "select val  from swissProt.protein where acc='%s';", pepAccession);
+safef(query, sizeof(query), "select val  from swissProt.protein where acc='%s';", pepAccession);
 
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -544,7 +544,7 @@ boolean hasPathway;
 
 if (hTableExists("kgXref"))
     {
-    sprintf(cond_str, "kgID='%s'", mrnaName);
+    safef(cond_str, sizeof(cond_str), "kgID='%s'", mrnaName);
     geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
     if (geneSymbol == NULL)
         {
@@ -563,12 +563,12 @@ cgapID     = NULL;
 /*Process BioCarta Pathway link data */
 if (sqlTableExists(conn, "cgapBiocPathway"))
     {
-    sprintf(cond_str, "alias='%s'", geneSymbol);
+    safef(cond_str, sizeof(cond_str), "alias='%s'", geneSymbol);
     cgapID = sqlGetField(conn2, database, "cgapAlias", "cgapID", cond_str);
 
     if (cgapID != NULL)
 	{
-    	sprintf(query, "select mapID from %s.cgapBiocPathway where cgapID = '%s'", database, cgapID);
+    	safef(query, sizeof(query), "select mapID from %s.cgapBiocPathway where cgapID = '%s'", database, cgapID);
     	sr = sqlGetResult(conn, query);
     	row = sqlNextRow(sr);
     	if (row != NULL)
@@ -583,7 +583,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	    {
 	    biocMapID = row[0];
 	    hPrintf("<LI>BioCarta - &nbsp");
-	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
+	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', biocMapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
 	    hPrintf("<A HREF = \"");
 	    hPrintf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
@@ -597,7 +597,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 /* Process KEGG Pathway link data */
 if (sqlTableExists(conn, "keggPathway"))
     {
-    sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
+    safef(query, sizeof(query), "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -612,7 +612,7 @@ if (sqlTableExists(conn, "keggPathway"))
             locusID = row[1];
 	    mapID   = row[2];
 	    hPrintf("<LI>KEGG - &nbsp");
-	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 	    hPrintf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
@@ -626,7 +626,7 @@ if (sqlTableExists(conn, "keggPathway"))
 /* Process SRI BioCyc link data */
 if (sqlTableExists(conn, "bioCycPathway"))
     {
-    sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
+    safef(query, sizeof(query), "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -641,7 +641,7 @@ if (sqlTableExists(conn, "bioCycPathway"))
             geneID  = row[1];
 	    mapID   = row[2];
 	    hPrintf("<LI>BioCyc - &nbsp");
-	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    safef(cond_str, sizeof(cond_str), "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 
