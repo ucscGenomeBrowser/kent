@@ -2161,3 +2161,257 @@ foreach chr (?{,?})
   echo removing symbolic links for chr$chr NT .fa.align files
   rm $chr/NT_??????.fa.align
 end
+
+#  BLASTZ SELF (Working - 2003-08-08 - Hiram)
+
+    # The procedure for lineage spec business with self is to simply
+    # use the actual repeat masker output for this human assembly as
+    # the lineage specific repeats for itself.  Thus, merely make
+    # symlinks to the repeat masker out files and name them as expected
+    # for blastz
+
+    ssh eieio
+    mkdir -p /cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman
+    cd /cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman
+    foreach f (../rmsk/*.fa.out)
+	set base = $f:t:r:r
+	echo $base.out.spec
+	ln -s $f $base.out.spec
+    end
+
+    ssh eieio
+    mkdir -p /cluster/data/hg16/bed/blastzSelf
+    cd /cluster/data/hg16/bed/blastzSelf
+
+    cat << '_EOF_' > DEF
+# human vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Human
+SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Human
+SEQ2_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/store4/gs.17/build34/bed/blastzSelf
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+
+# Save the DEF file in the current standard place
+    DS=`date -I`
+    cp DEF ~angie/hummus/DEF.hg16-hg16.$DS
+
+    ssh kk
+    cd /cluster/data/hg16/bed/blastzSelf
+
+    # source the DEF file to establish environment for following commands
+    . ./DEF
+
+    # follow the next set of directions slavishly
+    mkdir -p $BASE/run
+    # give up on avoiding angie's directories
+    # tcl script
+    # creates xdir.sh and joblist run/j
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    sh $BASE/xdir.sh
+    cd $BASE/run
+
+    # now edit j to prefix path to executable name
+    # NOTE: we should have a controlled version of schwartz bin executables
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
+    wc -l j*
+    # 114921 j
+    head j2
+
+    # make sure the j2 edits are OK, then use it:
+    mv j2 j
+
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+	# 114921 jobs
+    para try
+    para check
+    para push
+    # ... etc ...
+    #  With some cluster difficulties, bluearc hangups, etc:
+Completed: 114921 of 114921 jobs
+CPU time in finished jobs:   19898031s  331633.85m  5527.23h  230.30d  0.631 y
+IO & Wait Time:              42606494s  710108.24m 11835.14h  493.13d  1.351 y
+Average job time:                 544s       9.06m     0.15h    0.01d
+Longest job:                   111877s    1864.62m    31.08h    1.29d
+Submission to last job:        344744s    5745.73m    95.76h    3.99d
+
+    # post-process blastz
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf
+    #   source the DEF file again in case you are coming back to this
+    #	(must be bash shell)
+
+    . ./DEF
+    
+    # a new run directory
+    mkdir -p run.1
+    
+    mkdir -p $BASE/lav
+    
+    # create a new job list to convert out files to lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
+                        > run.1/jobList
+    cd run.1
+
+    # make sure the job list is OK
+    wc -l jobList
+       # 339 jobs 
+    head jobList
+
+    # run on cluster
+    ssh kk
+    cd /cluster/data/hg16/bed/blastzSelf/run.1
+    para create jobList
+    para try
+    para check
+    para push
+    # etc.
+#Completed: 339 of 339 jobs
+#CPU time in finished jobs:      21101s     351.68m     5.86h    0.24d  0.001 y
+#IO & Wait Time:                 74915s    1248.58m    20.81h    0.87d  0.002 y
+#Average job time:                 283s       4.72m     0.08h    0.00d
+#Longest job:                     2028s      33.80m     0.56h    0.02d
+#Submission to last job:          2993s      49.88m     0.83h    0.03d
+
+    # convert lav files to axt
+    ssh kk
+    cd /cluster/data/hg16/bed/blastzSelf
+    mkdir axtChrom
+    
+    # a new run directory
+    mkdir run.2
+    cd run.2
+
+    # create template file for gensub2
+    # usage:  blastz-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/scripts/blastz-chromlav2axt /cluster/store4/gs.17/build34/bed/blastzSelf/lav/$(root1) {check out line+ /cluster/store4/gs.17/build34/bed/blastzSelf/axtChrom/$(root1).axt} /iscratch/i/gs.17/build34/bothMaskedNibs /iscratch/i/gs.17/build34/bothMaskedNibs
+#ENDLOOP
+'_EOF_'
+    ls -1S /cluster/store4/gs.17/build34/bed/blastzSelf/lav > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 42 jobs
+    head jobList
+
+    cd /cluster/data/hg16/bed/blastzSelf/run.2
+    para create jobList
+    para try
+    para check
+    para push
+    # The two crashed jobs are about chr19_random
+    #  Its .fa file is almost all masked sequence
+    #  The resulting .axt file is empty
+#Completed: 40 of 42 jobs
+#Crashed: 2 jobs
+#CPU time in finished jobs:       1908s      31.80m     0.53h    0.02d  0.000 y
+#IO & Wait Time:                 22178s     369.64m     6.16h    0.26d  0.001 y
+#Average job time:                 602s      10.04m     0.17h    0.01d
+#Longest job:                     1723s      28.72m     0.48h    0.02d
+#Submission to last job:          1802s      30.03m     0.50h    0.02d
+    # To fixup the chr19 axtsort problem
+    # sometimes alignments are so huge that they cause axtSort to run out 
+    # of memory.  Run them in two passes like this:
+    ssh kkr1u00
+    cd /cluster/data/hg16/bed/blastzSelf
+    set base=/cluster/data/hg16/bed/blastzSelf
+    set seq1_dir=/iscratch/i/gs.17/build34/bothMaskedNibs
+    set seq2_dir=/iscratch/i/gs.17/build34/bothMaskedNibs
+    foreach c (lav/chr19)
+      pushd $c
+      set chr=$c:t
+      set out=axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtDropSelf stdin stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` > $base/$out
+      popd
+    end
+
+    #	Remove the empty axtChrom/chr19_random.axt file to avoid future
+    #	processing errors
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf
+    mkdir -p pslChrom
+    set tbl = "blastzMm3"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 20 minutes
+    #	chr19 came along later
+    ssh kkr1u00
+    set tbl = "blastzMm3"
+    foreach f (axtChrom/chr19.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load database tables
+    ssh hgwdev
+    set tbl = "blastzMm3"
+    cd /cluster/data/hg16/bed/blastzSelf/pslChrom
+    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    # This takes 30 minutes to an hour
+    # and later chr19
+    /cluster/bin/i386/hgLoadPsl hg16 chr19_${tbl}.psl
+    # create trackDb/human/hg16 and get a trackDb.ra file started with:
+#	track blastzMm3
+#	shortLabel Mouse Blastz
+#	longLabel Blastz All Mouse (Feb. 03) Alignments
+#	group compGeno
+#	priority 130
+#	visibility hide
+#	color 100,50,0
+#	altColor 255,240,200
+#	spectrum on
+#	type psl xeno mm3
+#	otherDb mm3
+    # remake trackDb tables
+
