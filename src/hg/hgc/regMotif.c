@@ -4,6 +4,8 @@
 #include "common.h"
 #include "hash.h"
 #include "dnaseq.h"
+#include "jksql.h"
+#include "hCommon.h"
 #include "hdb.h"
 #include "web.h"
 #include "portable.h"
@@ -12,6 +14,7 @@
 #include "hgc.h"
 #include "dnaMotif.h"
 #include "transRegCode.h"
+#include "transRegCodeProbe.h"
 
 static void printProbRow(char *label, float *p, int pCount)
 /* Print one row of a probability profile. */
@@ -199,4 +202,178 @@ motifHitSection(seq, motif);
 printTrackHtml(tdb);
 }
 
+static double motifScoreHere(char *chrom, int start, int end,
+	char *motifName, char *motifTable)
+/* Return score of motif at given position. */
+{
+double score;
+struct dnaSeq *seq = hDnaFromSeq(chrom, start, end, dnaLower);
+struct dnaMotif *motif = loadDnaMotif(motifName, motifTable);
+char strand = dnaMotifBestStrand(motif, seq->dna);
+if (strand == '-')
+    reverseComplement(seq->dna, seq->size);
+score = dnaMotifBitScore(motif, seq->dna);
+dnaMotifFree(&motif);
+dnaSeqFree(&seq);
+return score;
+}
+
+static void findBestScoringMotifHit(char *motifTable, struct hash *trcHash, 
+	char *name, struct transRegCode **retTrc, double *retScore, int *retCount)
+/* Find best hit of named motif in hash. */
+{
+struct transRegCode *trc, *bestTrc = NULL;
+double score, bestScore = -BIGNUM;
+struct hashEl *el = hashLookup(trcHash, name);
+int count = 0;
+while (el != NULL)
+    {
+    trc = el->val;
+    score = motifScoreHere(trc->chrom, trc->chromStart, trc->chromEnd,
+    	name, motifTable);
+    if (score > bestScore)
+        {
+	bestScore = score;
+	bestTrc = trc;
+	}
+    el = el->next;
+    ++count;
+    }
+*retTrc = bestTrc;
+*retScore = bestScore;
+*retCount = count;
+}
+
+static void colLabel(char *label, int columns)
+/* Print out label of given width. */
+{
+printf("<TH BGCOLOR=#%s", HG_COL_TABLE);
+if (columns > 1)
+    printf(" COLSPAN=%d", columns);
+printf(">%s</TH>", label);
+}
+
+void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
+	char *codeTable, char *motifTable)
+/* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
+struct sqlConnection *conn = hAllocConn();
+struct transRegCodeProbe *probe = NULL;
+
+cartWebStart(cart, "CHIP/CHIP Probe Info");
+safef(query, sizeof(query), "select * from %s where name = '%s'",
+	tdb->tableName, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    probe = transRegCodeProbeLoad(row+rowOffset);
+sqlFreeResult(&sr);
+if (probe != NULL)
+    {
+    /* Make up a hash of all motif hits in region. */
+    struct hash *trcHash = newHash(0);
+    struct transRegCode *trc;
+    if (sqlTableExists(conn, codeTable))
+        {
+	sr = hRangeQuery(conn, codeTable, 
+		probe->chrom, probe->chromStart, probe->chromEnd,
+		"chipEvidence != 'none'", &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    trc = transRegCodeLoad(row+rowOffset);
+	    hashAdd(trcHash, trc->name, trc);
+	    }
+	sqlFreeResult(&sr);
+	}
+
+    printf("<B>Name:</B> %s<BR>\n", probe->name);
+    printPosOnChrom(probe->chrom, probe->chromStart, probe->chromEnd, 
+    	NULL, TRUE, probe->name);
+    printf("<BR>\n");
+    webNewSection("Experiments with Significant Enrichment After IP");
+    if (probe->tfCount == 0)
+        printf("No significant immunoprecipitation of this probe.");
+    else
+        {
+	int i;
+	hTableStart();
+	printf("<TR>");
+	colLabel("Transcription", 1);
+	colLabel("Growth", 1);
+	colLabel("Motif Information", 3);
+	printf("</TR>\n");
+	printf("<TR>");
+	colLabel("Factor", 1);
+	colLabel("Condition", 1);
+	colLabel("Hits", 1);
+	colLabel("Scores", 1);
+	colLabel("Conservation (2 max)", 1);
+	printf("</TR>\n");
+	for (i=0; i<probe->tfCount; ++i)
+	    {
+	    char *tfName = probe->tfList[i];
+	    char *condition;
+	    double motifScore;
+	    struct transRegCode *trcList = NULL, *trc;
+	    printf("<TR>");
+
+	    /* Parse out factor and growth condition and print. */
+	    condition = strchr(tfName, '_');
+	    if (condition != NULL)
+	        *condition++ = 0;
+	    printf("<TD>%s</TD> ", tfName);
+	    if (condition == NULL)
+	        condition = "n/a";
+	    printf("<TD>%s</TD> ", condition);
+
+	    /* Get list of motifs that hit. */
+	        {
+		struct hashEl *el = hashLookup(trcHash, tfName);
+		while (el != NULL)
+		    {
+		    trc = el->val;
+		    slAddTail(&trcList, trc);
+		    el = el->next;
+		    }
+		}
+
+	    /* Print motif info. */
+	    if (trcList == NULL)
+	        printf("<TD>0</TD><TD>n/a</TD><TD>n/a</TD>\n");
+	    else
+	        {
+		printf("<TD>%d</TD>", slCount(trcList));
+		/* Print scores. */
+		printf("<TD>");
+		for (trc = trcList; trc != NULL; trc = trc->next)
+		    {
+		    double score;
+		    if (trc != trcList)
+		        printf(", ");
+		    score = motifScoreHere(
+		    	trc->chrom, trc->chromStart, trc->chromEnd,
+			trc->name, motifTable);
+		    printf("%3.1f", score);
+		    }
+		printf("</TD><TD>");
+		for (trc = trcList; trc != NULL; trc = trc->next)
+		    {
+		    if (trc != trcList)
+		        printf(", ");
+		    printf("%d", trc->consSpecies);
+		    }
+		printf("</TD>");
+		}
+	    printf("</TR>\n");
+	    }
+	hTableEnd();
+	}
+    printf("<BR>\n");
+    transRegCodeProbeFree(&probe);
+    }
+hFreeConn(&conn);
+}
 

@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.758 2004/09/25 20:06:59 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.759 2004/09/25 22:02:06 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15185,6 +15185,10 @@ else if (sameWord(track, "esRegGeneToMotif"))
 else if (sameWord(track, "transRegCode"))
     {
     doTransRegCode(tdb, item, "transRegCodeMotif");
+    }
+else if (sameWord(track, "transRegCodeProbe"))
+    {
+    doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif");
     }
 
 else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
