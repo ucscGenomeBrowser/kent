@@ -3633,18 +3633,20 @@ cat << 'EOF' > liftup.csh
 #LOAD AffyUclaRatio and AFFY U133A and U133B sequences[DONE hartera Feb 3, 2004]
 # Used consensus/exemplar sequences instead of target sequences
     # Set up cluster job to align consensus/exemplars to hg17
+    ssh hgwdev
+    cd /cluster/bluearc/affy
+    cp -p \
+	/projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
+    
     ssh kkr1u00
-    cd /cluster/data/hg17/bed
-    rm -rf affyUcla.2004-02-04/
-    mkdir affyUcla.2004-02-04
-    cd affyUcla.2004-02-04/
-    mkdir -p /iscratch/i/affy
-    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa /iscratch/i/affy
-    iSync
-
-XXXX use affyU133 directory here, not affyUcla
+    cd /iscratch/i/affy
+    cp -p /cluster/bluearc/affy/HG-U133AB_all.fa .
+    /cluster/bin/iSync
 
     ssh kk
+    mkdir /cluster/data/hg17/bed/affyU133.2004-07-14
+    cd /cluster/data/hg17/bed/affyU133.2004-07-14
+
     cd /cluster/data/hg17/bed/affyUcla.2004-02-04/
     ls -1 /iscratch/i/affy/HG-U133AB_all.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
@@ -3898,25 +3900,30 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
     	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
 # Got 35739 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
-XXX - running 2004-07-14 11:20
+    #	hgsql -e "select count(*) from gnfAtlas2Distance;" hg17
+    #	row count went from 35,817,000 in Hg16 to 35,739,000
+    #	real    108m1.671s
+    #	user    89m30.680s
+    #	sys     3m6.800s
 
 # Create a table that maps between known genes and 
 # the nice affy expression data.
 hgMapToGene "-type=bed 12" hg17 affyUclaNorm knownGene knownToU133
-#	row count went from 34148 to 36818
+    #	hgsql -e "select count(*) from knownToU133;" hg17
+    #	row count went from 37,634 in Hg16 to 36,795
 
-# Create expression distance table.  This will take about an hour.
-cd ~/kent/src/hg/near/hgExpDistance
+# Create expression distance table.  This will take about 2.5 hours
+cd /tmp
+cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
 time hgExpDistance hg17 affyUclaNorm affyUclaExp knownExpDistance \
 	-weights=affyUcla.weight -lookup=knownToU133
-# 42 genes, 42 weights, 26.500000 total wieght
-# Got 36818 unique elements in affyUcla
-# Made knownExpDistance.tab
-# Loaded knownExpDistance
-# Made query index
-# real    80m50.113s
-# user    62m33.290s
-# sys     2m15.200s
+XXX - running 2004-07-14 13:40
+    #	211 genes, 42 weights, 26.500000 total wieght
+    #	Got 36795 unique elements in affyUclaNorm
+    #	real    154m1.058s
+    #	user    134m45.000s
+    #	sys     3m1.990s
+
 
 #	This command should be done elsewhere, /tmp or something like that
 #	It makes a temporary .tab file of almost 1 Gb
@@ -6303,10 +6310,10 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     cd /cluster/data/hg17/bed/blastz.mm5/axtNet
     mkdir -p ../axtTight
     bash	#	for tcsh users
-    for i in *.axt
+    for I in *.axt
     do
-      echo $i
-      subsetAxt  $i ../axtTight/$i \
+      echo $I
+      subsetAxt  $I ../axtTight/$I \
 	~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
     done
     # exit bash if you are tcsh
@@ -6316,11 +6323,11 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     cd ../axtTight
     mkdir ../pslTight
     bash	#	for tcsh users
-    for i in *.axt
+    for I in *.axt
     do
-      c=${i/.axt/}
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm5.psl
-      echo "Done: $i -> ${c}_blastzTightMm5.psl"
+      C=${I/.axt/}
+      axtToPsl $I ../S1.len ../S2.len ../pslTight/${C}_blastzTightMm5.psl
+      echo "Done: $I -> ${C}_blastzTightMm5.psl"
     done
     # exit bash if you are tcsh
 
