@@ -1,6 +1,6 @@
 /* gensub2 - Generate job submission file from template and two file lists. */
 
-#include "common.h"
+#include "paraCommon.h"
 #include "linefile.h"
 #include "obscure.h"
 #include "options.h"
