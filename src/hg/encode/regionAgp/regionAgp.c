@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.7 2004/08/20 23:04:09 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.8 2004/08/23 19:10:52 daryl Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -29,7 +29,7 @@ errAbort("regionAgp - generate an AGP file for a region\n"
      "    regionAgp region.bed chrom.agp out\n\n"
      " region.bed describes the region with lines formatted:\n"
      "          <chrom> <start> <end> <region> <seq no>\n"
-     " chrom.agp is the intput AGP file\n"
+     " chrom.agp is the input AGP file\n"
      " out is the output AGP file, or directory if -dir option used\n"
      "\noptions:\n"
      "    -%s   directory for output AGP files, to be named <region>.agp",
