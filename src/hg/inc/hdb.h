@@ -127,6 +127,12 @@ struct sqlResult *hRangeQuery(struct sqlConnection *conn,
 /* Construct and make a query to tables that may be split and/or
  * binned. */
 
+struct sqlResult *hOrderedRangeQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	int start, int end, char *extraWhere, int *retRowOffset);
+/* Construct and make a query to tables that may be split and/or
+ * binned. Forces return values to be sorted by chromosome start. */
+
 struct sqlResult *hChromQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
 	char *extraWhere, int *retRowOffset);

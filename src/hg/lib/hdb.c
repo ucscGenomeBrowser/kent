@@ -596,9 +596,9 @@ dyStringAppend(query, ")");
 dyStringAppend(query, " and ");
 }
 
-struct sqlResult *hRangeQuery(struct sqlConnection *conn,
+static struct sqlResult *hExtendedRangeQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
-	int start, int end, char *extraWhere, int *retRowOffset)
+	int start, int end, char *extraWhere, int *retRowOffset, boolean order)
 /* Construct and make a query to tables that may be split and/or
  * binned. */
 {
@@ -645,12 +645,35 @@ if (table != NULL)
     	hti->startField, end, hti->endField, start);
     if (extraWhere)
         dyStringPrintf(query, " and %s", extraWhere);
+    if (order)
+        dyStringPrintf(query, " order by %s", hti->startField);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
 *retRowOffset = rowOffset;
 return sr;
 }
+
+struct sqlResult *hRangeQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	int start, int end, char *extraWhere, int *retRowOffset)
+/* Construct and make a query to tables that may be split and/or
+ * binned. */
+{
+return hExtendedRangeQuery(conn, rootTable, chrom, start, end, 
+	extraWhere, retRowOffset, FALSE);
+}
+
+struct sqlResult *hOrderedRangeQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	int start, int end, char *extraWhere, int *retRowOffset)
+/* Construct and make a query to tables that may be split and/or
+ * binned. Forces return values to be sorted by chromosome start. */
+{
+return hExtendedRangeQuery(conn, rootTable, chrom, start, end, 
+	extraWhere, retRowOffset, TRUE);
+}
+
 
 struct sqlResult *hChromQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
