@@ -7,22 +7,33 @@
 #include "hui.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: cartReset.c,v 1.5 2003/06/23 00:13:55 markd Exp $";
+static char const rcsid[] = "$Id: cartReset.c,v 1.6 2003/09/29 21:43:19 angie Exp $";
 
+
+static char *defaultDestination = "/cgi-bin/hgGateway";
 
 void doMiddle()
 /* cartReset - Reset cart. */
 {
+char *destination = cgiUsualString("destination", defaultDestination);
+
 cartResetInDb(hUserCookie());
 printf("Your settings are now reset to defaults.<BR>");
 printf("You will be automatically redirected to the gateway page in 2 seconds,\n"
-" or you can <BR> <A href=\"/cgi-bin/hgGateway\">click here to continue</A>.\n");
+" or you can <BR> <A href=\"%s\">click here to continue</A>.\n",
+       destination);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *headText = "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"2;URL=/cgi-bin/hgGateway\">";
-htmShellWithHead("Reset Cart", headText, doMiddle, NULL);
+struct dyString *headText = newDyString(512);
+char *destination = cgiUsualString("destination", defaultDestination);
+
+dyStringPrintf(headText,
+	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"2;URL=%s\">",
+	       destination);
+htmShellWithHead("Reset Cart", headText->string, doMiddle, NULL);
+dyStringFree(&headText);
 return 0;
 }
