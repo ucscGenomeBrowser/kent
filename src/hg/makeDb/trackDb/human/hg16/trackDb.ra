@@ -74,6 +74,15 @@ altColor 255,240,200
 spectrum on
 type genePred
 
+track uniGene_2
+shortLabel UniGene
+longLabel UniGene Hs 162 Alignments and SAGEmap Info
+group rna
+priority 69
+visibility hide
+spectrum on
+type bed 12 
+
 track tfbsCons
 shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
@@ -283,9 +292,17 @@ shortLabel Chimp Best Net
 longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net
 group compGeno
 priority 202
-visibility dense
+visibility hide
 spectrum on
 type netAlign panTro1 rBestChainPanTro1
+
+track chimpDels
+shortLabel Chimp Deletions
+longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
+group compGeno
+priority 203
+visibility hide
+type bed
 
 track chainPt0
 shortLabel Pt0 Chain
@@ -306,15 +323,6 @@ priority 209
 visibility hide
 spectrum on
 type netAlign seq chainPt0
-
-track chimpDels
-shortLabel Chimp Deletions
-longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
-group compGeno
-priority 203
-visibility hide
-type bed
-
 
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
@@ -366,7 +374,7 @@ shortLabel Tetra Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments
 group compGeno
 priority 140
-visibility dense
+visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
@@ -377,7 +385,7 @@ shortLabel Tetraodon
 longLabel Tetraodon nigroviridis Homologies
 group compGeno
 priority 115
-visibility dense
+visibility hide
 color 50,100,200
 altColor 85,170,225
 
@@ -778,15 +786,6 @@ color 150,100,30
 visibility hide
 type bed 4 .
 
-track uniGene_2
-shortLabel UniGene
-longLabel UniGene Hs 162 Alignments and SAGEmap Info
-group rna
-priority 69
-visibility hide
-spectrum on
-type bed 12 
-
 track blastzMm4
 shortLabel Mm4 Blastz
 longLabel Blastz All Mouse (Oct 03/Mm4) Alignments
@@ -891,7 +890,7 @@ shortLabel Hu/Mouse/Rat/Chick
 longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
 group compGeno
 priority 101
-visibility pack
+visibility hide
 color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
@@ -1329,7 +1328,7 @@ shortLabel cons snps
 longLabel Human Variation in Conserved Coding Regions
 group varRep
 priority 144.1
-visibility pack
+visibility hide
 useScore 1
 type bed 6
 
@@ -1338,7 +1337,7 @@ shortLabel cons non-coding transcribed snps
 longLabel Human Variation in Conserved Non-Coding Transcribed Regions
 group varRep
 priority 144.2
-visibility pack
+visibility hide
 useScore 1
 type bed 6
 
@@ -1347,7 +1346,7 @@ shortLabel cons non-coding snps
 longLabel Human Variation in Conserved Non-Coding Regions
 group varRep
 priority 144.3
-visibility pack
+visibility hide
 useScore 1
 type bed 6
 
