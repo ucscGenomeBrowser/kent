@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.91 2003/09/25 07:49:15 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.92 2003/09/25 08:45:33 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -355,7 +355,7 @@ void labelSimplePrint(struct column *col)
 {
 int colWidth = columnSettingInt(col, "colWidth", 0);
 
-hPrintf("<TH VALIGN=BOTTOM><B><PRE>");
+hPrintf("<TH ALIGN=LEFT VALIGN=BOTTOM><B><PRE>");
 /* The <PRE> above helps Internet Explorer avoid wrapping
  * in the label column, which helps us avoid wrapping in 
  * the data columns below.  Wrapping in the data columns
@@ -370,9 +370,8 @@ else
     int labelLen = strlen(col->shortLabel);
     int diff = colWidth - labelLen;
     if (diff < 0) diff = 0;
-    hPrintSpaces(diff/2);
     colInfoLink(col);
-    hPrintSpaces((diff+1)/2);
+    hPrintSpaces(diff);
     }
 hPrintf("</PRE></B></TH>");
 }
