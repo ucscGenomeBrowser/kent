@@ -854,6 +854,7 @@ freeDyString(&query);
 hFreeConn(&conn);
 }
 
+
 static void findRefGenes(char *spec, struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
