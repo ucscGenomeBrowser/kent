@@ -340,25 +340,24 @@ char *wiggleWindowingEnumToString(enum wiggleWindowingEnum x);
 void wiggleWindowingDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-/*	Wiggle track use Smoothing option, 1 is the same as Off	*/
+/*	Wiggle track use Smoothing option, 0 and 1 is the same as Off	*/
 enum wiggleSmoothingEnum {
    wiggleSmoothingOff = 0,
-   wiggleSmoothing1 = 1,
-   wiggleSmoothing2 = 2,
-   wiggleSmoothing3 = 3,
-   wiggleSmoothing4 = 4,
-   wiggleSmoothing5 = 5,
-   wiggleSmoothing6 = 6,
-   wiggleSmoothing7 = 7,
-   wiggleSmoothing8 = 8,
-   wiggleSmoothing9 = 9,
-   wiggleSmoothing10 = 10,
-   wiggleSmoothing11 = 11,
-   wiggleSmoothing12 = 12,
-   wiggleSmoothing13 = 13,
-   wiggleSmoothing14 = 14,
-   wiggleSmoothing15 = 15,
-   wiggleSmoothing16 = 16,
+   wiggleSmoothing2 = 1,
+   wiggleSmoothing3 = 2,
+   wiggleSmoothing4 = 3,
+   wiggleSmoothing5 = 4,
+   wiggleSmoothing6 = 5,
+   wiggleSmoothing7 = 6,
+   wiggleSmoothing8 = 7,
+   wiggleSmoothing9 = 8,
+   wiggleSmoothing10 = 9,
+   wiggleSmoothing11 = 10,
+   wiggleSmoothing12 = 11,
+   wiggleSmoothing13 = 12,
+   wiggleSmoothing14 = 13,
+   wiggleSmoothing15 = 14,
+   wiggleSmoothing16 = 15,
 };
 
 enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);

@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.33 2004/02/02 23:13:06 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.34 2004/02/02 23:21:04 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -797,7 +797,7 @@ cgiMakeDropList(var, wiggleWindowingOptions, ArraySize(wiggleWindowingOptions),
 /****** Options for the wiggle track Smoothing *******/
 
 static char *wiggleSmoothingOptions[] = {
-    "OFF", "OFF", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+    "OFF", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
     "12", "13", "14", "15", "16"
     };
 
