@@ -766,3 +766,5 @@
       testing.
 452 - Blat v. 20. Genome Browser v. 17 with relatively minor updates. 
       Parasol v. 6 (UDP + threads). 
+453 - Blat v. 21 (-fine option).  Gene Browser v. 17 with updates,
+      but still considered alpha.
