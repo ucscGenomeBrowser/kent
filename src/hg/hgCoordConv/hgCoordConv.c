@@ -62,6 +62,19 @@ errAbort("hgCoordConv - cgi program for converting coordinates from one draft\n"
 	 "usage:\n\thgCoordConv hgTest=on numTests=10 origGenome=hg10 newGenome=hg10\n");
 }
 
+int humanCount(struct dbDb *dbList)
+/* Count the number of human organism records. */
+{
+struct dbDb *db = NULL;
+int count = 0;
+for(db = dbList; db != NULL; db = db->next)
+    {
+    if(sameString("Human", db->organism))
+	count++;
+    }
+return count;
+}
+
 void getIndexedGenomeDescriptions(char ***retArray, int *retCount, boolean blatOnly)
 /* Find out the list of genomes that have blat servers on them. */
 {
@@ -72,13 +85,17 @@ if(blatOnly)
     dbList = hGetBlatIndexedDatabases();
 else
     dbList = hGetIndexedDatabases();
-count = slCount(dbList);
+count = humanCount(dbList);
 
 if (count == 0)
     errAbort("No active %s servers in database", (blatOnly ? "blat" : "nib" ));
 AllocArray(array, count);
-for (i=0, db=dbList; i<count; ++i, db=db->next)
-    array[i] = cloneString(db->description);
+i = 0;
+for (db=dbList; db != NULL; db=db->next)
+    {
+    if(sameString("Human", db->organism))
+	array[i++] = cloneString(db->description);
+    }
 dbDbFreeList(&dbList);
 *retArray = array;
 *retCount = count;
@@ -342,16 +359,18 @@ puts(
      "they are in the same order and orientation. In general the smaller the sequence the better\n"
      "the chances of successful conversion.\n"
      );
-printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
-printf("<br><br>\n");
-printf("<table><tr>\n");
-printf("<b><td><table><tr><td>Original Draft: </b>\n");
 
 getIndexedGenomeDescriptions(&genomeList, &genomeCount, FALSE);
 
 /* choose whether to use the db supplied by cgi or our default */
+if(origDb != NULL && strstr(origDb, "hg") == NULL)
+    errAbort("Sorry, currently the conversion program only works with human genomes.");
 dbChoice = chooseDb(origDb, genomeList[0]); 
 
+printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
+printf("<br><br>\n");
+printf("<table><tr>\n");
+printf("<b><td><table><tr><td>Original Draft: </b>\n");
 cgiMakeDropList("origGenome", genomeList, genomeCount, dbChoice);
 printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
