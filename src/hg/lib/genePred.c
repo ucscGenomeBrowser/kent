@@ -9,8 +9,7 @@
 #include "linefile.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.12 2003/05/08 23:29:12 markd Exp $";
-
+static char const rcsid[] = "$Id: genePred.c,v 1.13 2003/05/08 23:29:24 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
