@@ -1299,7 +1299,7 @@ group varRep
 priority 144.1
 visibility pack
 useScore 1
-type bed6
+type bed 6
 
 track DJT_snpSingleValid_knownGeneNotCds
 shortLabel cons non-coding transcribed snps
@@ -1308,7 +1308,7 @@ group varRep
 priority 144.2
 visibility pack
 useScore 1
-type bed6
+type bed 6
 
 track DJT_snpSingleValid_notKnownGene
 shortLabel cons non-coding snps
@@ -1317,7 +1317,7 @@ group varRep
 priority 144.3
 visibility pack
 useScore 1
-type bed6
+type bed 6
 
 track webbNonExonic
 shortLabel NonExonic
