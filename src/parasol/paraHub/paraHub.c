@@ -92,8 +92,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "    machineCheckPeriod=N Minutes between checking on machine - default %d\n"
 	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
 	 "    nextJobId=N  Starting job ID number\n"
-	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
-	 "    logFlush Flush log with every write\n"
+	 "    logFacility=facility log to the specified syslog facility.\n"
 	 "    noResume  Don't try to reconnect with jobs running on nodes\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
@@ -611,7 +610,7 @@ struct dlNode *node = dlPopHead(freeSpokes);
 struct spoke *spoke;
 if (node == NULL)
     {
-    logIt("hub: out of spokes!\n");
+    logDebug("hub: out of spokes!\n");
     return FALSE;
     }
 dlAddTail(busySpokes, node);
@@ -672,7 +671,7 @@ for (i=0; i<spokesToUse; ++i)
         {
 	if (now - job->lastClockIn >= MINUTE * assumeDeadPeriod)
 	    {
-	    logIt("hub: node %s running %d looks dead, burying\n", machine->name, job->id);
+	    warn("hub: node %s running %d looks dead, burying\n", machine->name, job->id);
 	    buryMachine(machine);
 	    }
 	else
@@ -784,7 +783,7 @@ for (rq = resultQueues; rq != NULL; rq = next)
     next = rq->next;
     if (now - rq->lastUsed > 1*MINUTE)
 	{
-	logIt("hub: closing results file %s\n", rq->name);
+	logDebug("hub: closing results file %s\n", rq->name);
         resultQueueFree(&rq);
 	}
     else
@@ -840,7 +839,6 @@ if (spokesToUse > 0)
     graveDigger(spokesToUse);
     hangman(spokesToUse);
     sweepResults();
-    flushLog();
     saveJobId();
     }
 }
@@ -850,7 +848,7 @@ boolean sendKillJobMessage(struct machine *machine, int jobId)
 {
 char message[64];
 sprintf(message, "kill %d", jobId);
-logIt("hub: %s %s\n", machine->name, message);
+logDebug("hub: %s %s\n", machine->name, message);
 if (!sendViaSpoke(machine, message))
     {
     return FALSE;
@@ -882,19 +880,19 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	mach->isDead = FALSE;
 	if (mach->deadJobId != 0)
 	    {
-	    logIt("hub: node %s assigned %d came back.\n", 
-	    	name, mach->deadJobId);
+	    warn("hub: node %s assigned %d came back.\n", 
+                 name, mach->deadJobId);
 	    while ((jobIdString = nextWord(&line)) != NULL)
 	        {
 		jobId = atoi(jobIdString);
 		if (jobId == mach->deadJobId)
 		    {
 		    struct job *job;
-		    logIt("hub: Looks like %s is still keeping track of %d\n", name, jobId);
+		    warn("hub: Looks like %s is still keeping track of %d\n", name, jobId);
 		    if ((job = findWaitingJob(jobId)) != NULL)
 			{
-			logIt("hub: Luckily rerun of job %d has not yet happened.\n", 
-				jobId);
+			warn("hub: Luckily rerun of job %d has not yet happened.\n", 
+                             jobId);
 			dlRemove(job->node);
 			dlRemove(mach->node);
 			job->machine = mach;
@@ -909,8 +907,8 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 			 * Kill it on both since the output it created could
 			 * be corrupt at this point.  Then add it back to job
 			 * queue. */
-			logIt("hub: Job %d is running on %s as well.\n", jobId,
-				job->machine->name);
+			warn("hub: Job %d is running on %s as well.\n", jobId,
+                             job->machine->name);
 			sendKillJobMessage(mach, job->id);
 			sendKillJobMessage(job->machine, job->id);
 			requeueJob(job);
@@ -921,8 +919,8 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 			 * a node is out of touch for 2 hours, but when it comes
 			 * back is running a job that we reran to completion
 			 * on another node. */
-			logIt("hub: Job %d has finished running, there is a conflict.  Data may be corrupted, and it will take a lot of logic to fix.\n", 
-				jobId);
+			warn("hub: Job %d has finished running, there is a conflict.  Data may be corrupted, and it will take a lot of logic to fix.\n", 
+                             jobId);
 			}
 		    }
 		}
@@ -977,7 +975,7 @@ if (status != NULL)
 	        dlAddTail(freeMachines, mach->node);
 		}
 	    requeueJob(job);
-	    logIt("hub:  requeueing job in nodeCheckIn\n");
+	    logDebug("hub:  requeueing job in nodeCheckIn\n");
 	    runner(1);
 	    }
 	}
@@ -1100,7 +1098,7 @@ boolean removeJobId(int id)
 struct job *job = jobFind(runningJobs, id);
 if (job != NULL)
     {
-    logIt("Removing %s's %s\n", job->batch->user->name, job->cmd);
+    logDebug("Removing %s's %s\n", job->batch->user->name, job->cmd);
     if (!removeRunningJob(job))
         return FALSE;
     }
@@ -1109,7 +1107,7 @@ else
     job = findWaitingJob(id);
     if (job != NULL)
 	{
-	logIt("Pending job %s\n", job->cmd);
+	logDebug("Pending job %s\n", job->cmd);
 	removePendingJob(job);
 	}
     }
@@ -1899,8 +1897,8 @@ startupTime = now;
 
 /* Find name and IP address of our machine. */
 hubHost = getMachine();
-setupDaemonLog(optionVal("log", NULL));
-logIt("Starting paraHub on %s\n", hubHost);
+logOpen("paraHub", optionVal("logFacility", NULL));
+logInfo("Starting paraHub on %s\n", hubHost);
 
 /* Set up various lists. */
 hubMessageQueueInit();
@@ -1937,7 +1935,7 @@ for (;;)
     struct paraMessage *pm = hubMessageGet();
     findNow();
     line = pm->data;
-    logIt("hub: %s\n", line);
+    logDebug("hub: %s\n", line);
     command = nextWord(&line);
     if (sameWord(command, "jobDone"))
 	 jobDone(line);

@@ -49,8 +49,8 @@ for (;;)
 	    {
 	    char ip[4];
 	    unpackIp(pm->ipAddress.sin_addr.s_addr, ip);
-	    logIt("sockSuck: unauthorized %d.%d.%d.%d\n", 
-		    ip[0], ip[1], ip[2], ip[3]);
+	    warn("unauthorized access by %d.%d.%d.%d\n", 
+                 ip[0], ip[1], ip[2], ip[3]);
 	    }
 	}
     else

@@ -210,8 +210,8 @@ if (ft != NULL)
 	{
 	if (!ft->sectionClosed)
 	    {
-	    logIt("Moving on with an unclosed section %d in %s", 
-	    	ft->curSectionIx, ft->fileName);
+	    logDebug("Moving on with an unclosed section %d in %s", 
+                     ft->curSectionIx, ft->fileName);
 	    return -222;
 	    }
 	ft->curSectionIx = sectionIx;
@@ -342,7 +342,7 @@ else
 		}
 	    }
 	}
-    logIt("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
+    logDebug("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
     if (missingCount == 0)
 	{
 	/* Check md5 signature.  If it matches we're good to go, otherwise
@@ -353,7 +353,7 @@ else
 	    ft->sectionClosed = TRUE;
 	else
 	    {
-	    logIt("Section %d of %s failed md5 check\n", sectionIx, ft->fileName);
+	    logDebug("Section %d of %s failed md5 check\n", sectionIx, ft->fileName);
 	    for (i=0; i<blockCount; ++i)
 		{
 		section->blockTracker[i] = FALSE;
@@ -393,7 +393,7 @@ while (alive)
 	warn("bdReceive error %s", strerror(err));
     else
 	{
-	// logIt("got message type %d size %d sourceIp %x\n", m->type, m->size, sourceIp);
+	// logDebug("got message type %d size %d sourceIp %x\n", m->type, m->size, sourceIp);
 	if (dropTest != 0)
 	    {
 	    if (--drop <= 0)
@@ -422,7 +422,7 @@ while (alive)
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, err);
 		break;
 	    case bdmPing:
-		// logIt("<PING>\n%s</PING>\n", m->data);
+		// logDebug("<PING>\n%s</PING>\n", m->data);
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, 0);
 		break;
 	    case bdmSectionQuery:

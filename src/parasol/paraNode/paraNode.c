@@ -21,7 +21,7 @@ errAbort("paraNode - parasol node serve.\n"
          "usage:\n"
 	 "    paraNode start\n"
 	 "options:\n"
-	 "    log=file - file may be 'stdout' to go to console\n"
+	 "    logFacility=facility log to the specified syslog facility.\n"
 	 "    hub=host - restrict access to connections from hub\n"
 	 "    umask=000 - set umask to run under, default 002\n"
 	 "    userPath=bin:bin/i386 User dirs to add to path\n"
@@ -311,7 +311,6 @@ if ((grandChildId = forkOrDie()) == 0)
 	}
 
     /* Redirect standard io. */
-    logClose();
     close(mainRudp->socket);
 
     newStdin = open(in, O_RDONLY);
@@ -406,13 +405,13 @@ struct paraMessage pm;
 bits32 ip;
 if (!internetDottedQuadToIp(managingHost, &ip))
     {
-    logIt("%s doesn't seem to be in dotted quad form\n", managingHost);
+    warn("%s doesn't seem to be in dotted quad form\n", managingHost);
     return;
     }
 pmInit(&pm, ip, paraHubPort);
 pmPrintf(&pm, "jobDone %s %s", jobIdString, line);
 if (!pmSend(&pm, mainRudp))
-    logIt("Couldn't send message to %s to say %s is done\n", managingHost, jobIdString);
+    warn("Couldn't send message to %s to say %s is done\n", managingHost, jobIdString);
 }
 
 void jobFree(struct job **pJob)
@@ -445,8 +444,8 @@ if (jobIdString != NULL && line != NULL && line[0] != 0)
 	err = waitpid(job->pid, &status, 0);
 	if (err == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0)
 	    {
-	    logIt("paraNode sheparding %s pid %d status %d err %d errno %d\n", 
-	    		jobIdString, job->pid, status, err, errno);
+	    logDebug("paraNode sheparding %s pid %d status %d err %d errno %d\n", 
+                     jobIdString, job->pid, status, err, errno);
 	    }
 	job->doneMessage = cloneString(line);
 	dlRemove(job->node);
@@ -730,7 +729,7 @@ mainRudp->maxRetries = 12;
 
 /* Event loop. */
 findNow();
-logIt("starting\n");
+logInfo("starting %s\n", hostName);
 for (;;)
     {
     /* Get next incoming message and optionally check to make
@@ -745,7 +744,7 @@ for (;;)
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logIt("message: %s\n", line);
+	    logDebug("message: %s\n", line);
 	    command = nextWord(&line);
 	    if (command != NULL)
 		{
@@ -768,11 +767,11 @@ for (;;)
 		else if (sameString("fetch", command))
 		    doFetch(line);
 		}
-	    logIt("done command\n");
+	    logDebug("done command\n");
 	    }
 	else
 	    {
-	    logIt("command from unauthorized host %x", pmIn.ipAddress.sin_addr.s_addr);
+	    logDebug("command from unauthorized host %x", pmIn.ipAddress.sin_addr.s_addr);
 	    }
 	}
     }
@@ -784,20 +783,16 @@ void paraFork()
  * removes dependence of paraNode daemon on terminal. 
  * Set up log file if any here as well. */
 {
-char *log = optionVal("log", NULL);
+/* Set up log handler. */
+logOpen("paraNode", optionVal("logFacility", NULL));
 
 /* Close standard file handles. */
 close(0);
-if (log == NULL || !sameString(log, "stdout"))
-    close(1);
+close(1);
 close(2);
 
 if (forkOrDie() == 0)
     {
-    /* Set up log handler. */
-    setupDaemonLog(log);
-    logFlush = TRUE;
-
     /* Execute daemon. */
     paraNode();
     }

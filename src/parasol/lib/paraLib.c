@@ -1,9 +1,15 @@
 #include "paraCommon.h"
 #include <sys/utsname.h>
+
+#define SYSLOG_NAMES  /* this gets the facilitynames compiled in */
+#include <syslog.h>
+
 #include "options.h"
 #include "errabort.h"
 #include "net.h"
 #include "paraLib.h"
+
+static char *gProgram = "unknown";  /* name of program if logging */
 
 time_t now;	/* Time when started processing current message */
 
@@ -72,84 +78,76 @@ void fillInErrFile(char errFile[512], int jobId, char *tempDir )
 sprintf(errFile, "%s/para%d.err", tempDir, jobId);
 }
 
-
-static FILE *logFile = NULL;  /* Log file - if NULL no logging. */
-boolean logFlush;
-
-void vLogIt(char *format, va_list args)
-/* Variable args logit. */
+void vLogDebug(char *format, va_list args)
+/* Variable args logDebug. */
 {
-if (logFile != NULL)
-    {
-    fprintf(logFile, "%lu ", now);
-    vfprintf(logFile, format, args);
-    if (logFlush)
-	fflush(logFile);
-    }
+vsyslog(LOG_DEBUG, format, args);
 }
 
-void logIt(char *format, ...)
-/* Print message to log file. */
+void logDebug(char *format, ...)
+/* Log a debug message. */
 {
-if (logFile != NULL)
-    {
-    va_list args;
-    va_start(args, format);
-    vLogIt(format, args);
-    va_end(args);
-    }
+va_list args;
+va_start(args, format);
+vLogDebug(format, args);
+va_end(args);
+}
+
+void vLogInfo(char *format, va_list args)
+/* Variable args logInfo. */
+{
+vsyslog(LOG_INFO, format, args);
+}
+
+void logInfo(char *format, ...)
+/* Log a info message. */
+{
+va_list args;
+va_start(args, format);
+vLogInfo(format, args);
+va_end(args);
 }
 
 static void warnToLog(char *format, va_list args)
 /* Warn handler that prints to log file. */
 {
-if (logFile != NULL)
-    {
-    fputs("warn: ", logFile);
-    vfprintf(logFile, format, args);
-    fputs("\n", logFile);
-    if (logFlush)
-	fflush(logFile);
-    }
+vsyslog(LOG_WARNING, format, args);
 }
 
-void flushLog()
-/* Flush log file */
+static void logAndExit()
+/* abort handler that logs this fact and exits. */
 {
-if (logFile != NULL)
-   fflush(logFile);
+vsyslog(LOG_ERR, "%s aborted", gProgram);
+exit(1);
 }
 
-static char *logName = NULL;
-
-static void reopenLog(int s)
-/* Close and reopen log files in response to signal. */
+static int parseFacility(char *facility)
+/* parse a facility name into a number, or use default if NULL. */
 {
-if (logName != NULL)
+int i;
+/* it appears that defining SYSLOG_NAMES before including syslog.h gets the
+ * facilitynames compiled in on most (all?) implementations.  if this doesn't
+ * prove protable, we will have code a fixed list here */
+if (facility == NULL)
+    return LOG_LOCAL0;
+for (i = 0; facilitynames[i].c_name != NULL; i++)
     {
-    carefulClose(&logFile);
-    logFile = fopen(logName, "w");
+    if (sameString(facilitynames[i].c_name, facility))
+        return facilitynames[i].c_val;
     }
+errAbort("invalid log facility: %s", facility);
+return 0; /* never reached */
 }
 
-void setupDaemonLog(char *fileName)
-/* Setup log file, and warning handler that goes to this
- * file.  If fileName is NULL then no log, and warning
- * messages go into the bit bucket. */
+void logOpen(char *program, char *facility)
+/* Setup logging.  This initializes syslog using the specified facility.
+ * Facility is the syslog facility as specified in syslog.conf.  If facility
+ * is NULL, local0 is used.  This adds a warn handlers that logs at level
+ * error for warn() and errAbort() calls. Use logInfo and logDebug for info
+ * and debug messages. */
 {
-if (fileName != NULL)
-    {
-    logFile = mustOpen(fileName, "w");
-    logName = cloneString(fileName);
-    }
-if (!logFlush)
-    logFlush = optionExists("logFlush");
-signal(SIGHUP, reopenLog);
+gProgram = cloneString(program);
+openlog(program, LOG_PID, parseFacility(facility));
 pushWarnHandler(warnToLog);
-}
-
-void logClose()
-/* Close log file. */
-{
-carefulClose(&logFile);
+pushAbortHandler(logAndExit);
 }

@@ -24,24 +24,24 @@ char *getMachine();
 char *getUser();
 /* Get user name */
 
-void vLogIt(char *format, va_list args);
-/* Variable args logit. */
+void vLogDebug(char *format, va_list args);
+/* Variable args logDebug. */
 
-void logIt(char *format, ...);
-/* Print message to log file. */
+void logDebug(char *format, ...);
+/* Log a debug message. */
 
-void flushLog();
-/* Flush log file. */
+void vLogInfo(char *format, va_list args);
+/* Variable args logInfo. */
 
-extern boolean logFlush; /* Set this to true to flush log after every logIt */
+void logInfo(char *format, ...);
+/* Log a info message. */
 
-void setupDaemonLog(char *fileName);
-/* Setup log file, and warning handler that goes to this
- * file.  If fileName is NULL then no log, and warning
- * messages go into the bit bucket. */
-
-void logClose();
-/* Close log file. */
+void logOpen(char *program, char *facility);
+/* Setup logging.  This initializes syslog using the specified facility.
+ * Facility is the syslog facility as specified in syslog.conf.  If facility
+ * is NULL, local0 is used.  This adds a warn handlers that logs at level
+ * error for warn() and errAbort() calls. Use logInfo and logDebug for info
+ * and debug messages. */
 
 struct runJobMessage
 /* Parsed out runJob message as paraNode sees it. */

@@ -87,7 +87,7 @@ for (;;)
     pthreadMutexUnlock(&spoke->messageMutex);
 
     line = message->data;
-    logIt("%s: %s\n", spoke->name, line);
+    logDebug("%s: %s\n", spoke->name, line);
     machine = nextWord(&line);
     dottedQuad = nextWord(&line);
     if (dottedQuad != NULL)
