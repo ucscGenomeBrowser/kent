@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.131 2003/08/15 21:41:07 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.132 2003/08/19 23:15:38 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -967,7 +967,7 @@ else
     {
     if (sqlTableExists(conn, "gbSeq"))
         haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq");
-    if ((!haveSeq) && sqlTableExists(conn, "gbSeq"))
+    if ((!haveSeq) && sqlTableExists(conn, "seq"))
         haveSeq = checkIfInTable(conn, acc, "acc", "seq");
     }
 
