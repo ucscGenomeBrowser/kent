@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.731 2004/08/26 18:28:03 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.732 2004/08/27 05:20:04 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14300,12 +14300,17 @@ static void doOligoMatch(char *item)
 {
 char *oligo = cartUsualString(cart, 
 	oligoMatchVar, cloneString(oligoMatchDefault));
+char helpName[PATH_LEN], *helpBuf;
 touppers(oligo);
 cartWebStart(cart, "Perfect Matches to Short Sequence");
 printf("<B>Sequence:</B> %s<BR>\n", oligo);
 printf("<B>Chromosome:</B> %s<BR>\n", seqName);
 printf("<B>Start:</B> %s<BR>\n", item+1);
 printf("<B>Strand:</B> %c<BR>\n", item[0]);
+htmlHorizontalLine();
+safef(helpName, 256, "%s/%s.html", HELP_DIR, OLIGO_MATCH_TRACK_NAME);
+readInGulp(helpName, &helpBuf, NULL);
+puts(helpBuf);
 }
 
 void doMiddle()
