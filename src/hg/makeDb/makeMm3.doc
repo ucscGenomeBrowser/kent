@@ -1,3 +1,6 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
 # This file describes how we made the browser database on the mouse
 # genome, February 2003 build.
 
@@ -882,6 +885,175 @@ MAKING THE RAT AXTTIGHT FROM AXTBEST (DONE 03/07/03)
     ssh hgwdev
     cd ~/mm3/bed/blastz.rn2.2003-03-07-ASH/pslTight
     hgLoadPsl mm3 chr*_blastzTightRat.psl
+
+
+CHAIN&NET MM3-RN3 AXT (SWAPPED FROM RN3-MM3 BLASTZ RUN): (DONE 9/22/03 angie)
+
+    ssh kkr1u00
+    cd /cluster/data/mm3/bed/blastz.rn3.swp
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/mm3/bed/blastz.rn3.swp/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ=chrUn_random $1 \
+    | axtChain stdin /iscratch/i/mm3/mixedNib /iscratch/i/rn3/bothMaskedNibs $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para push # ... etc ...
+#Completed: 37 of 37 jobs
+#CPU time in finished jobs:      10572s     176.20m     2.94h    0.12d  0.000 y
+#IO & Wait Time:                  2786s      46.43m     0.77h    0.03d  0.000 y
+#Average job time:                 361s       6.02m     0.10h    0.00d
+#Longest job:                      609s      10.15m     0.17h    0.01d
+#Submission to last job:          1098s      18.30m     0.30h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.rn3.swp/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Create the nets.  You can do this while the database is loading
+    # This is fastest done on the file server.  All told it takes about
+    # 40 minutes.
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.rn3.swp/axtChain
+    # First do a crude filter that eliminates many chains so the
+    # real chainer has less work to do.
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      chainPreNet $i /cluster/data/mm3/chrom.sizes \
+        /cluster/data/rn3/chrom.sizes ../preNet/$i
+    end
+    cd ..
+
+    # Run the main netter, putting the results in n1.
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      chainNet $i -minSpace=1 /cluster/data/mm3/chrom.sizes \
+        /cluster/data/rn3/chrom.sizes ../n1/$n /dev/null
+    end
+    cd ..
+    # Classify parts of net as syntenic, nonsyntenic etc.
+    cat n1/*.net | netSyntenic stdin hNoClass.net
+
+    # The final step of net creation needs the database.
+    # Best to wait for the database load to finish if it
+    # hasn't already.
+    ssh hgwdev
+    cd /cluster/data/mm3/bed/blastz.rn3.swp/axtChain
+    netClass hNoClass.net mm3 rn3 mouse.net \
+      -tNewR=/cluster/data/mm3/bed/linSpecRep \
+      -qNewR=/cluster/data/rn3/bed/linSpecRep
+    rm -r n1 hNoClass.net
+
+    # Move back to the file server to create axt files corresponding
+    # to the net.  Use netToAxt -maxGap=300 so we can pass nets to multiz.
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.rn3.swp/axtChain
+    mkdir ../axtNet300
+    netSplit mouse.net mouseNet
+    cd mouseNet
+    foreach i (*.net)
+        set c = $i:r
+	netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/mm3/mixedNib \
+          /cluster/data/rn3/softNib ../../axtNet300/$c.axt
+	echo done ../axt/$c.axt
+    end
+    cd ..
+    rm -r mouseNet
+
+    # Make maf's for multiz
+    cd /cluster/data/mm3/bed/blastz.rn3.swp
+    mkdir maf300
+    foreach i (axtNet300/chr*.axt)
+      set maf = maf300/$i:t:r.mr.maf.unfixed
+      axtToMaf $i \
+            /cluster/data/mm3/chrom.sizes /cluster/data/rn3/chrom.sizes \
+            $maf -tPrefix=mm3. -qPrefix=rn3.
+      /cluster/bin/scripts/fixmaf.pl < $maf > $maf:r
+    end
+    rm maf300/*.unfixed
+
+
+CREATE MAF FROM MOUSE-HUMAN NET FOR MULTIZ (DONE 9/22/03 angie)
+    # Use netToAxt -maxGap=300 so we can pass nets to multiz.
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.hg15.swap/axtChain
+    mkdir ../axtNet300
+    cd net
+    foreach i (chr*.net)
+        set c = $i:r
+	netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/mm3/mixedNib \
+          /cluster/data/hg15/nib ../../axtNet300/$c.axt
+	echo done ../axt/$c.axt
+    end
+    cd ..
+
+    # Make maf's for multiz
+    cd /cluster/data/mm3/bed/blastz.hg15.swap
+    mkdir maf300
+    foreach i (axtNet300/chr*.axt)
+      set maf = maf300/$i:t:r.mh.maf.unfixed
+      axtToMaf $i \
+            /cluster/data/mm3/chrom.sizes /cluster/data/hg15/chrom.sizes \
+            $maf -tPrefix=mm3. -qPrefix=hg15.
+      /cluster/bin/scripts/fixmaf.pl < $maf > $maf:r
+    end
+    rm maf300/*.unfixed
+
+
+RUN 3-WAY ALIGNMENTS MOUSE/HUMAN/RAT USING MULTIZ (DONE 9/23/03 angie)
+
+    ssh kkstore
+    mkdir /cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-09-23
+    cd /cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-09-23
+
+    cat << "EOF" > ./doMultiz.csh
+    foreach mh (/cluster/data/mm3/bed/blastz.hg15.swap/maf300/chr*.maf)
+      set c = $mh:t:r:r
+      set mr = /cluster/data/mm3/bed/blastz.rn3.swp/maf300/$c.mr.maf
+      echo multiz-ing $c
+      /cluster/bin/penn/multiz.7.23 $mh $mr - > $c.mhr.maf
+    end
+"EOF"
+    # << this line makes emacs coloring happy
+    csh -ef ./doMultiz.csh >& doMultiz.log &
+    tail -f doMultiz.log 
+    # setup up external files for database to reference
+    ssh hgwdev
+    mkdir /gbdb/mm3/multizHg15Rn3
+    cd /gbdb/mm3/multizHg15Rn3
+    foreach f (/cluster/data/mm3/bed/multiz.mm3hg15rn3.2003-09-23/*.maf)
+        ln -s $f .
+    end
+
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn mm3 multizHg15Rn3
+
+    # get featureBits coverage:
+    featureBits mm3 multizHg15Rn3
+    # 1738562766 bases of 2505900260 (69.379%) in intersection
 
 
 LOADING MOUSE MM3 SELF BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/10/03)
