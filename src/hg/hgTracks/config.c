@@ -64,17 +64,17 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s';\">", 
-	   configHideAll, "Hide All", configGroupTarget, group->name);
+	   configHideAll, "hide all", configGroupTarget, group->name);
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s';\">", 
-	   configShowAll, "Show All", configGroupTarget, group->name);
+	   configShowAll, "show all", configGroupTarget, group->name);
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
 	   "onClick=\"document.mainForm.%s.value='%s';\">", 
-	   configDefaultAll, "Default", configGroupTarget, group->name);
+	   configDefaultAll, "default", configGroupTarget, group->name);
     hPrintf(" ");
-    cgiMakeButton("submit", "Submit");
+    cgiMakeButton("submit", "submit");
     hPrintf("</TH>\n");
     hPrintf("</TR>");
 
@@ -170,7 +170,7 @@ hIntVar("pix", tl.picWidth, 4);
 hPrintf(" text size: ");
 textSizeDropDown();
 hPrintf(" ");
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("Submit", "submit");
 hPrintf("<P>");
 hTableStart();
 if (ideoTrack != NULL)
@@ -194,7 +194,7 @@ hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Display track description above each track");
+hPrintf("Display description above each track");
 hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("trackControlsOnMain", cartUsualBoolean(cart, "trackControlsOnMain", TRUE));
@@ -204,14 +204,14 @@ hPrintf("</TD></TR>");
 hTableEnd();
 
 webNewSection("Configure Tracks");
-hPrintf("Control tracks in all groups here ");
-cgiMakeButton(configHideAll, "Hide All");
+hPrintf("Control tracks in all groups here: ");
+cgiMakeButton(configHideAll, "hide all");
 hPrintf(" ");
-cgiMakeButton(configShowAll, "Show All");
+cgiMakeButton(configShowAll, "show all");
 hPrintf(" ");
-cgiMakeButton(configDefaultAll, "Default");
+cgiMakeButton(configDefaultAll, "default");
 hPrintf(" ");
-hPrintf("or control tracks visibility more selectively below.<P>");
+hPrintf("&nbsp;&nbsp;Control track visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
 dyStringFree(&title);
