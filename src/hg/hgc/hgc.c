@@ -1054,7 +1054,9 @@ if (row != NULL)
         printGeneLynx(acc);
 
   /* --- */
-
+  
+if (hTableExists("rikenaltid"))
+{	
 accession = strdup(acc);
 
 //!!! uncomment the following line, if you want to test Riken annotation 
@@ -1115,6 +1117,7 @@ if (row != NULL)
 		printf("<B>Riken/comment:</B> %s<BR>\n",comment);
 		}
 	}
+} /* end of if hTableExist */
     }
 else
     {
