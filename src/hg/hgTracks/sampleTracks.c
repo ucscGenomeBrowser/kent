@@ -65,7 +65,7 @@ int start, lines = 0;
 int heightFromCart;
 char o1[128];
 
-snprintf( o1, 128, "%s.heightPer", tg->mapName);
+safef( o1, 128, "%s.heightPer", tg->mapName);
 
 heightFromCart = atoi(cartUsualString(cart, o1, "50"));
 
@@ -270,12 +270,12 @@ lf=tg->items;
 if(lf==NULL) return;
 
 //take care of cart options
-snprintf( o1, 128,"%s.linear.interp", tg->mapName);
-snprintf( o2, 128, "%s.anti.alias", tg->mapName);
-snprintf( o3, 128,"%s.fill", tg->mapName);
-snprintf( o4, 128,"%s.min.cutoff", tg->mapName);
-snprintf( o5, 128,"%s.max.cutoff", tg->mapName);
-snprintf( o6, 128,"%s.interp.gap", tg->mapName);
+safef( o1, 128,"%s.linear.interp", tg->mapName);
+safef( o2, 128, "%s.anti.alias", tg->mapName);
+safef( o3, 128,"%s.fill", tg->mapName);
+safef( o4, 128,"%s.min.cutoff", tg->mapName);
+safef( o5, 128,"%s.max.cutoff", tg->mapName);
+safef( o6, 128,"%s.interp.gap", tg->mapName);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
@@ -303,9 +303,9 @@ lineGapSize = atoi(cartUsualString(cart, o6, "200"));
 
 //update cart settings to reflect truncated range cutoff values
 cartSetString( cart, "win", "F" );
-snprintf( cartStr, 64, "%g", minRangeCutoff );
+safef( cartStr, 64, "%g", minRangeCutoff );
 cartSetString( cart, o4, cartStr );
-snprintf( cartStr, 64, "%g", maxRangeCutoff );
+safef( cartStr, 64, "%g", maxRangeCutoff );
 cartSetString( cart, o5, cartStr );
 
 heightPer = tg->heightPer+1;
@@ -480,7 +480,7 @@ char *where = NULL;
 char query[256];
 
 /*see if we have a summary table*/
-snprintf(query, sizeof(query), 
+safef(query, sizeof(query), 
 	"select name from %s where name = '%s' limit 1", 
 	tg->mapName, tg->shortLabel);
 //errAbort( "%s", query );
@@ -491,7 +491,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	safef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }
@@ -595,16 +595,16 @@ pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
 if(z == 1 )
-    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
+    safef(tableName, sizeof(tableName), "%s_%s", "zoom1",
 	    tg->mapName);
 else if( z == 2)
-    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom50",
+    safef(tableName, sizeof(tableName), "%s_%s", "zoom50",
 	    tg->mapName);
 else if(z == 3)
-    snprintf(tableName, sizeof(tableName), "%s_%s",
+    safef(tableName, sizeof(tableName), "%s_%s",
 	    "zoom2500", tg->mapName);
 else
-    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s", tg->mapName);
 
 //printf("(%s)", tableName );
 
@@ -790,7 +790,7 @@ char option[64];
 zooSpeciesHashInit();
 
 /*see if we have a summary table*/
-snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+safef(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
 //errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
@@ -799,7 +799,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	safef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }
@@ -809,7 +809,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     sample = sampleLoad(row + rowOffset);
     lf = lfFromSample(sample);
-    snprintf( option, sizeof(option), "zooSpecies.%s", sample->name );
+    safef( option, sizeof(option), "zooSpecies.%s", sample->name );
     if( cartUsualBoolean(cart, option, TRUE ))
     slAddHead(&lfList, lf);
     sampleFree(&sample);
@@ -881,20 +881,20 @@ pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 /* Determine zoom level. */
 if(pixPerBase >= zoom1)
-    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s_%s", "zoom1", tg->mapName);
 else if(pixPerBase >= zoom2)
-    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom2", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s_%s", "zoom2", tg->mapName);
 else 
-    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+    safef(tableName, sizeof(tableName), "%s", tg->mapName);
 
 /*see if we have a summary table*/
 if(hTableExists(tableName))
-    snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tableName, tg->shortLabel);
+    safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tableName, tg->shortLabel);
 else
     {
     warn("<p>Couldn't find table %s<br><br>", tableName);
-    snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->mapName, tg->shortLabel);
-    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+    safef(query, sizeof(query), "select name from %s where name = '%s' limit 1",  tg->mapName, tg->shortLabel);
+    safef(tableName, sizeof(tableName), "%s", tg->mapName);
     }
 
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
@@ -904,7 +904,7 @@ if(tg->visibility == tvDense)
     {
     if(hasDense != NULL)
 	{
-	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	safef(query, sizeof(query), " name = '%s' ", tg->shortLabel);
 	where = cloneString(query);
 	}
     }

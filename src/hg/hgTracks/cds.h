@@ -21,21 +21,45 @@
 #include "hgTracks.h"
 #endif
 
-struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures *lf, 
-        struct genePred *gp, unsigned *gaps);
+struct simpleFeature *splitGenePredByCodon( char *chrom, 
+        struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps);
+/*divide a genePred record into a linkedFeature, where each simple
+  feature is a 3-base codon (or a partial codon if on a gap boundary).
+  It starts at the cdsStarts position on the genome and goes to 
+  cdsEnd. It only relies on the genomic sequence to determine the
+  frame so it works with any gene prediction track*/
+
 int getCdsDrawOptionNum(char *mapName);
+/*query the cart for the current track's CDS coloring option. See
+ * cdsColors.h for return value meanings*/
+
 void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade);
+/*divide a pslX record into a linkedFeature, where each simple feature
+ * is a 3-base codon (or a partial codon if on a boundary). Uses
+ * GenBank to get the CDS start/stop of the psl record and also grabs
+ * the sequence. This takes care of hidden gaps in the alignment, that
+ * alter the frame. Therefore this function relies on the mRNA
+ * sequence (rather than the genomic) to determine the frame.*/
+
+
 void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf,
         int grayIx, Color *cdsColor, struct vGfx *vg, int xOff, int y,
         double scale, MgFont *font, int s, int e, int heightPer,
         boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl
         *psl, int drawOptionNum, boolean errorColor, 
         boolean *foundStart, int maxPixels, int winStart);
- int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
-         struct dnaSeq *mrnaSeq, struct psl *psl, boolean *errorColor,
+/*draw a box that is colored by the bases inside it and its
+ * orientation. Stop codons are red, start are green, otherwise they
+ * alternate light/dark blue colors. These are defined in
+ * cdsColors.h*/
+
+
+int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
+         struct dnaSeq **mrnaSeq, struct psl **psl, boolean *errorColor,
          struct linkedFeatures *lf, boolean cdsColorsMade);
-struct dnaSeq *mustGetSeqUpper(char *name, char *tableName);
-struct psl *genePredLookupPsl(char *db, char *chrom, struct
-        linkedFeatures* lf, char *pslTable );
+/*gets the CDS coloring option, allocates colors, and returns the
+ * sequence and psl record for the given lf->name (only returns
+ sequence and psl for mRNA, EST, or xenoMrna*/
+
 #endif /* CDS_H */

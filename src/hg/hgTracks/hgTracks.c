@@ -75,7 +75,7 @@
 #include "cdsColors.h"
 #include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.654 2004/01/10 08:22:30 jill Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.655 2004/01/12 23:33:13 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -586,7 +586,7 @@ void mapBoxToggleVis(int x, int y, int width, int height,
  * program with the current track expanded. */
 {
 char buf[256];
-snprintf(buf, sizeof(buf), 
+safef(buf, sizeof(buf), 
 	"Toggle the display density of %s", curGroup->shortLabel);
 mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, buf);
 }
@@ -1161,33 +1161,9 @@ boolean errorColor = FALSE;
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
-if(zoomedToCdsColorLevel)
-{
-    drawOptionNum = cdsColorSetup(vg, tg, cdsColor, mrnaSeq, psl,
+if (zoomedToCdsColorLevel)
+    drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
             &errorColor, lf, cdsColorsMade);
-
-    if(drawOptionNum>0 && zoomedToCodonLevel)
-       {
-       char *database = cartUsualString(cart, "db", hGetDb());
-
-       if(sameString(tg->mapName,"mrna")   ||
-       sameString(tg->mapName,"est")    ||
-       sameString(tg->mapName,"xenoMrna"))
-            {
-
-            mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
-            psl = genePredLookupPsl(database, chromName, lf, tg->mapName);
-
-            if(mrnaSeq != NULL && psl != NULL && psl->strand[0] == '-')
-                reverseComplement(mrnaSeq->dna,strlen(mrnaSeq->dna));
-            else
-                errorColor = TRUE;
-            }
-
-       }
- 
-
-}
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1227,26 +1203,29 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	e2 = e;
 	if (e2 > tallStart) e2 = tallStart;
-	drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, 
+            color, lf->score);
 	s = e2;
 	}
     if (e > tallEnd)
 	{
 	s2 = s;
 	if (s2 < tallEnd) s2 = tallEnd; 
-	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, 
+            color, lf->score);
 	e = s2;
 	}
     if (e > s)
 	{
-        if(drawOptionNum>0 && zoomedToCdsColorLevel)
+        if (drawOptionNum>0 && zoomedToCdsColorLevel)
             drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
                 psl, drawOptionNum, errorColor, &foundStart,
                 MAXPIXELS, winStart);
         else
             {
-	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score );
+	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+                    color, lf->score );
 
 	        if (exonArrows)
 	            {
@@ -1334,9 +1313,9 @@ if (start != -1 && !lfs->noLine)
 }
 	
 
-static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, struct vGfx *vg, 
-	int xOff, int y, double scale,
-	MgFont *font, Color color, enum trackVisibility vis)
+static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
+        struct vGfx *vg, int xOff, int y, double scale,
+	    MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a linked features series item at position. */
 {
 struct linkedFeaturesSeries *lfs = item;
@@ -2088,7 +2067,7 @@ int grayIx = maxShade;
 int rowOffset;
 
 int drawOptionNum = 0; //off
-if(table != NULL)
+if (table != NULL)
     drawOptionNum = getCdsDrawOptionNum(table);
 
 sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
@@ -2102,7 +2081,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     strncpy(lf->name, gp->name, sizeof(lf->name));
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if(drawOptionNum>0 && zoomedToCdsColorLevel)
+    if (drawOptionNum>0 && zoomedToCdsColorLevel)
         sfList = splitGenePredByCodon(chrom, lf, gp,NULL);
     else
         {
@@ -2875,7 +2854,7 @@ int estOrient = 0;
 
 if(hTableExists("estOrientInfo"))
     {
-    snprintf(query, sizeof(query), 
+    safef(query, sizeof(query), 
 	     "select intronOrientation from estOrientInfo where name='%s' and chromStart=%d and chromEnd=%d and chrom='%s'", 
 	     lf->name, lf->start, lf->end, chromName);
     estOrient = sqlQuickNum(conn, query);
@@ -4818,7 +4797,7 @@ char *optionStr ;
 tg->loadItems = loadMouseOrtho;
 tg->freeItems = freeMouseOrtho;
 
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
 if( sameString( optionStr, "on" )) /*use anti-aliasing*/
     tg->itemColor = mouseOrthoItemColor;
@@ -4865,7 +4844,7 @@ char *optionStr ;
 tg->loadItems = loadHumanParalog;
 tg->freeItems = freeHumanParalog;
 
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
 if( sameString( optionStr, "on" )) /*use anti-aliasing*/
     tg->itemColor = humanParalogItemColor;
@@ -4994,7 +4973,7 @@ for (epb=tg->items;  epb != NULL;  epb=epb->next)
 	ptr = epb->name;
     else
 	ptr++;
-    snprintf(buf, sizeof(buf), "%s %dk", ptr, (int)(epb->xenoStart/1000));
+    safef(buf, sizeof(buf), "%s %dk", ptr, (int)(epb->xenoStart/1000));
     free(epb->name);
     epb->name = cloneString(buf);
     }
@@ -5932,8 +5911,8 @@ if (withLeftLabels)
 	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
 
 	minRange = 0.0;
-	snprintf( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
-	snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+	safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
+	safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
         minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
    	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
 	
@@ -6520,7 +6499,7 @@ char option[128]; /* Option -  rainbow chromosome color */
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "off");
 tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
@@ -6884,7 +6863,7 @@ char **row;
 char *trackDb = hTrackDbName();
 char query[256];
 assert(trackDb);
-snprintf(query, sizeof(query), "select tableName from %s", trackDb);
+safef(query, sizeof(query), "select tableName from %s", trackDb);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
