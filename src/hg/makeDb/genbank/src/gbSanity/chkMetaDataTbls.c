@@ -17,7 +17,7 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.3 2003/06/28 04:02:21 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.4 2003/07/29 17:02:59 markd Exp $";
 
 
 static char* validRefSeqStatus[] = {
@@ -601,8 +601,8 @@ md->excluded = excluded;
 if (md->inGbStatus)
     {
     if (md->excluded)
-        gbError("%s: excluded (xeno RefSeq) entry should not be in gbStatus table",
-                entry->acc);
+        gbError("%s: excluded (%s) entry should not be in gbStatus table",
+                gbOrgCatName(entry->orgCat), entry->acc);
     else
         chkGbStatusGbEntry(select, entry, md);
     }
