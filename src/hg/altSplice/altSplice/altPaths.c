@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.17 2005/03/15 23:28:14 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.18 2005/03/16 23:40:35 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -154,7 +154,8 @@ unsigned char *vTypes = agx->vTypes;
 return vTypes[v1] == ggHardStart && vTypes[v2] == ggHardEnd;
 }
 
-void outputConstitutiveExons(struct altGraphX *agx, struct splice *splice)
+void outputConstitutiveExons(struct altGraphX *agx, struct splice *splice,
+			     int source, int sink)
 /* Output the internal constitutive exons that are supported by 
    at least minConstExonCount transcripts. */
 {
@@ -170,6 +171,8 @@ if(constExonsOut != NULL)
        transcript support to print out as beds. */
     for(vertIx = 0; vertIx < vC - 1; vertIx++) 
 	{
+	if(v[vertIx] == source || v[vertIx+1] == sink)
+	    continue;
 	if(isHardExon(agx, v[vertIx], v[vertIx+1]))
 	    {
 	    int edgeIx = altGraphXGetEdgeNum(agx, v[vertIx], v[vertIx+1]);
@@ -1594,7 +1597,7 @@ for(vertIx = source; vertIx <= sink; )
 	    splice->type = altControl;
 	    finishSplice(splice, distance, agx, source, sink);
 	    logSpliceType(splice->type, splice->paths->bpCount);
-	    outputConstitutiveExons(agx, splice);
+	    outputConstitutiveExons(agx, splice, source, sink);
 	    slAddHead(&spliceList, splice);
 	    }
 	else
@@ -1631,7 +1634,7 @@ if(splice != NULL && splice->paths->vCount > 1)
     splice->type = altControl;
     finishSplice(splice, distance, agx, source, sink);
     logSpliceType(splice->type, splice->paths->bpCount);
-    outputConstitutiveExons(agx, splice);
+    outputConstitutiveExons(agx, splice, source, sink);
     slAddHead(&spliceList, splice);
     }
 else
