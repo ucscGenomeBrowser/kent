@@ -39,7 +39,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.26 2004/07/19 23:53:46 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.27 2004/08/24 21:17:07 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -889,6 +889,11 @@ else if(vMap[v] != -1 && vMap[v] != orthoV)
     }
 }
 
+boolean isHardVertex(struct altGraphX *ag, int vertex)
+{
+return (ag->vTypes[vertex] == ggHardStart || ag->vTypes[vertex] == ggHardEnd);
+}
+
 int vertexForPosition(struct altGraphX *ag, int position, struct orthoAgReport *agRep)
 /** Return the vetex that occurs at position otherwise return -1. */
 {
@@ -896,8 +901,10 @@ int i;
 int v = -1;
 for(i=0; i<ag->vertexCount; i++)
     {
-    if(ag->vPositions[i] == position)
+    if(ag->vPositions[i] == position && isHardVertex(ag, i))
 	return i;
+    else if(ag->vPositions[i] == position)
+	v = i;
     else if((ag->vPositions[i] +1 == position) || (ag->vPositions[i] - 1 == position))
 	agRep->ssVeryClose++;
     }
@@ -946,10 +953,7 @@ for(se = seList; se != NULL; se = se->next)
     }
 }
 
-boolean isHardVertex(struct altGraphX *ag, int vertex)
-{
-return (ag->vTypes[vertex] == ggHardStart || ag->vTypes[vertex] == ggHardEnd);
-}
+
 
 boolean isSoftEdge(struct altGraphX *ag, int v1, int v2)
 /* Is either v1 or v2 a soft edge? */
