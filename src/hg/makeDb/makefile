@@ -19,11 +19,13 @@ DIRS = \
 	hgCtgPos \
 	hgDeleteChrom \
 	hgExonerate \
+	hgExperiment \
 	hgFiberglass \
 	hgFindSpec \
 	hgFlyBase \
 	hgGcPercent \
 	hgGeneBands \
+	hgGnfMicroarray \
 	hgGoldGapGl \
 	hgKnownMore \
 	hgKnownMore.oo21 \
@@ -38,9 +40,12 @@ DIRS = \
 	hgLoadSeq \
 	hgLoadSample \
 	hgLoadWiggle \
+	hgMapMicroarray \
+	hgMedianMicroarray \
 	hgNibSeq \
 	hgPepPred \
 	hgPhMouse \
+	hgRatioMicroarray \
 	hgRefSeqMrna \
 	hgRefSeqStatus \
 	hgRnaGenes \
