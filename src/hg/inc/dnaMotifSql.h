@@ -34,5 +34,9 @@ void dnaMotifOutput(struct dnaMotif *el, FILE *f, char sep, char lastSep);
 #define dnaMotifCommaOut(el,f) dnaMotifOutput(el,f,',',',');
 /* Print out dnaMotif as a comma separated list including final comma. */
 
-#endif /* DNAMOTIFSQL_H */
+struct dnaMotif *dnaMotifLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all dnaMotif from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with dnaMotifFreeList(). */
 
+#endif /* DNAMOTIFSQL_H */
