@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.6 2004/03/24 16:54:56 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.7 2004/03/24 17:22:30 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -47,7 +47,7 @@ if (f != (FILE *) NULL)
     }
 }
 
-static struct wiggleData * readWigDataRow(struct wiggle *wiggle,
+static struct wiggleData * wigReadDataRow(struct wiggle *wiggle,
     int winStart, int winEnd, int tableId,
 	boolean (*wiggleCompare)(int tableId, double value))
 /*  read one row of wiggle data, return data values between winStart, winEnd */
@@ -75,7 +75,7 @@ readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
 itemsRead = fread(readData, (size_t) wiggle->count,
 	(size_t) sizeof(unsigned char), f);
 if (itemsRead != sizeof(unsigned char))
-    errAbort("readWigDataRow: can not read %u bytes from %s at offset %u",
+    errAbort("wigReadDataRow: can not read %u bytes from %s at offset %u",
 	wiggle->count, wiggle->file, wiggle->offset);
 
 /*	need at most this amount, perhaps less	*/
@@ -140,7 +140,7 @@ if (validCount)
     }
 
 return (ret);	/* may be null if validCount < 1	*/
-}	/*	static struct wiggleData * readWigDataRow()	*/
+}	/*	static struct wiggleData * wigReadDataRow()	*/
 
 static void insertOrderedWigData(struct wiggleData * *wdList, struct wiggleData *wd)
 /* insert wiggle data, keeping in chrom position order */
@@ -257,7 +257,7 @@ while ((el = hashNext(&cookie)) != NULL)
     {
     if (bewareConstraints)
 	{
-	snprintf(whereSpan, sizeof(whereSpan), "span = %s AND %s", el->name,
+	snprintf(whereSpan, sizeof(whereSpan), "((span = %s) AND %s)", el->name,
 	    constraints);
 	}
     else
@@ -270,12 +270,17 @@ while ((el = hashNext(&cookie)) != NULL)
 	{
 	++rowCount;
 	wiggle = wiggleLoad(row + rowOffset);
-	wigData = readWigDataRow(wiggle, winStart, winEnd,
-		tableId, wiggleCompare );
-	if (summaryOnly)
-	    freeMem(wigData->data);
-	if (wigData)
-	    slAddHead(&wdList,wigData);
+	if (wiggle->count > 0)
+	    {
+	    wigData = wigReadDataRow(wiggle, winStart, winEnd,
+		    tableId, wiggleCompare );
+	    if (wigData)
+		{
+		if (summaryOnly)
+		    freeMem(wigData->data);
+		slAddHead(&wdList,wigData);
+		}
+	    }
 	}
     sqlFreeResult(&sr);
     }
