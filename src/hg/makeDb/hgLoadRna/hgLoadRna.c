@@ -526,11 +526,11 @@ hgSetDb(database);
 type = cgiOptionalString("type");
 if (type == NULL)
     {
-    if (strstr(raFile, "xenoRna.ra"))
+    if (strstrNoCase(raFile, "xenoRna.ra"))
 	type = "xenoRna";
-    else if (strstr(raFile, "xenoEst"))
+    else if (strstrNoCase(raFile, "xenoEst"))
 	type = raFile;
-    else if (strstr(raFile, "est.ra"))
+    else if (strstrNoCase(raFile, "est.ra"))
 	type = "EST";
     else
 	type = "mRNA";
