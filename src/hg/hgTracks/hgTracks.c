@@ -169,6 +169,7 @@ struct trackGroup
     char *mapName;             /* Name on image map and for ui buttons. */
     enum trackVisibility visibility; /* How much of this to see if possible. */
     enum trackVisibility limitedVis; /* How much of this actually see. */
+    boolean limitedVisSet;	     /* Is limited visibility set? */
 
     char *longLabel;           /* Long label to put in center. */
     char *shortLabel;          /* Short label to put on side. */
@@ -308,6 +309,22 @@ else
     return '+';
 }
 
+enum trackVisibility limitVisibility(struct trackGroup *tg, void *items)
+/* Return default visibility limited by number of items. */
+{
+if (!tg->limitedVisSet)
+    {
+    enum trackVisibility vis = tg->visibility;
+    tg->limitedVisSet = TRUE;
+    if (vis == tvFull)
+	{
+	if (slCount(tg->items) > maxItemsInFullTrack)
+	    vis = tvDense;
+	}
+    tg->limitedVis = vis;
+    }
+return tg->limitedVis;
+}
 
 struct controlGrid
 /* Keep track of a control grid (table) */
@@ -481,6 +498,63 @@ if (w < 1)
 mgDrawBox(mg, x1, y, w, height, color);
 }
 
+void filterItems(struct trackGroup *tg, 
+    boolean (*filter)(struct trackGroup *tg, void *item),
+    char *filterType)
+/* Filter out items from trackGroup->itemList. */
+{
+struct slList *newList = NULL, *oldList = NULL, *el, *next;
+boolean exclude = FALSE;
+boolean color = FALSE;
+boolean isFull;
+
+if (sameWord(filterType, "none"))
+    return;
+
+isFull = (limitVisibility(tg, tg->items) == tvFull);
+if (sameWord(filterType, "include"))
+    exclude = FALSE;
+else if (sameWord(filterType, "exclude"))
+    exclude = TRUE;
+else
+    color = TRUE;
+for (el = tg->items; el != NULL; el = next)
+    {
+    next = el->next;
+    if (filter(tg, el) ^ exclude)
+        {
+	slAddHead(&newList, el);
+	}
+    else
+        {
+	slAddHead(&oldList, el);
+	}
+    }
+slReverse(&newList);
+if (color)
+   {
+   slReverse(&oldList);
+   /* Draw stuff that passes filter first in full mode, last in dense. */
+   if (isFull)
+       newList = slCat(newList, oldList);
+   else
+       newList = slCat(oldList, newList);
+   }
+tg->items = newList;
+}
+
+int getFilterColor(char *type)
+/* Get color corresponding to filter. */
+{
+int colorIx = MG_BLACK;
+if (sameString(type, "red"))
+    colorIx = MG_RED;
+else if (sameString(type, "green"))
+    colorIx = MG_GREEN;
+else if (sameString(type, "blue"))
+    colorIx = MG_BLUE;
+return colorIx;
+}
 
 struct simpleFeature
 /* Minimal feature - just stores position in browser coordinates. */
@@ -785,7 +859,7 @@ boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 if (tg->itemColor)	/* Item color overrides spectrum processing. */
     shades = NULL;
 
-if (vis == tvDense)
+if (vis == tvDense && shades)
     slSort(&tg->items, cmpLfWhiteToBlack);
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {
@@ -1526,11 +1600,24 @@ cgiMakeTextVar(var, cartUsualString(cart, var, ""), 19);
 controlGridEndCell(cg);
 }
 
-void mudRadio(char *var, char *val, char *ourVal)
+void radioButton(char *var, char *val, char *ourVal)
 /* Print one radio button */
 {
 cgiMakeRadioButton(var, ourVal, sameString(ourVal, val));
 printf("%s ", ourVal);
+}
+
+void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none)
+/* Put up some filter buttons. */
+{
+printf("<B>Filter:</B> ");
+radioButton(filterTypeVar, filterTypeVal, "red");
+radioButton(filterTypeVar, filterTypeVal, "green");
+radioButton(filterTypeVar, filterTypeVal, "blue");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+radioButton(filterTypeVar, filterTypeVal, "include");
+if (none)
+    radioButton(filterTypeVar, filterTypeVal, "none");
 }
 
 void mrnaUi(struct trackGroup *tg)
@@ -1545,15 +1632,10 @@ char *logicTypeVar = mud->logicTypeVar;
 char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
 
 /* Define type of filter. */
-printf("<B>Filter:</B> ");
-mudRadio(filterTypeVar, filterTypeVal, "red");
-mudRadio(filterTypeVar, filterTypeVal, "green");
-mudRadio(filterTypeVar, filterTypeVal, "blue");
-mudRadio(filterTypeVar, filterTypeVal, "exclude");
-mudRadio(filterTypeVar, filterTypeVal, "include");
+filterButtons(filterTypeVar, filterTypeVal, FALSE);
 printf("  <B>Combination Logic:</B> ");
-mudRadio(logicTypeVar, logicTypeVal, "and");
-mudRadio(logicTypeVar, logicTypeVal, "or");
+radioButton(logicTypeVar, logicTypeVal, "and");
+radioButton(logicTypeVar, logicTypeVal, "or");
 
 cgiMakeButton("submit", "refresh");
 printf("<BR>\n");
@@ -1569,7 +1651,7 @@ endControlGrid(&cg);
 void filterMrna(struct trackGroup *tg, struct linkedFeatures **pLfList)
 /* Apply filters if any to mRNA linked features. */
 {
-struct linkedFeatures *lf, *next, *newList = NULL;
+struct linkedFeatures *lf, *next, *newList = NULL, *oldList = NULL;
 struct mrnaUiData *mud = tg->extraUiData;
 struct mrnaFilter *fil;
 char *type;
@@ -1582,6 +1664,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = NULL;
+boolean isFull;
 
 if (*pLfList == NULL || mud == NULL)
     return;
@@ -1597,19 +1680,15 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 if (!anyFilter)
     return;
 
+isFull = (limitVisibility(tg, tg->items) == tvFull);
+
 type = cartUsualString(cart, mud->filterTypeVar, "red");
-if (sameString(type, "red"))
-    colorIx = MG_RED;
-else if (sameString(type, "green"))
-    colorIx = MG_GREEN;
-else if (sameString(type, "blue"))
-    colorIx = MG_BLUE;
-else if (sameString(type, "exclude"))
+if (sameString(type, "exclude"))
     isExclude = TRUE;
 else if (sameString(type, "include"))
     isExclude = FALSE;
 else
-    errAbort("Unknown filter type %s (%s)", type, mud->filterTypeVar);
+    colorIx = getFilterColor(type);
 type = cartUsualString(cart, mud->logicTypeVar, "and");
 andLogic = sameString(type, "and");
 
@@ -1692,26 +1771,33 @@ for (lf = *pLfList; lf != NULL; lf = next)
 	    }
 	}
     sqlFreeResult(&sr);
-    if (colorIx > 0)
+    if (passed ^ isExclude)
 	{
-	if (passed)
+	slAddHead(&newList, lf);
+	if (colorIx > 0)
 	    lf->filterColor = colorIx;
 	}
     else
-	{
-	if (passed ^ isExclude)
-	    {
-	    slAddHead(&newList, lf);
-	    }
+        {
+	slAddHead(&oldList, lf);
 	}
     }
 
-/* Unless it's just a color tweak, update list. */
-if (colorIx <= 0)
-    {
-    slReverse(&newList);
-    *pLfList = newList;
-    }
+slReverse(&newList);
+slReverse(&oldList);
+if (colorIx > 0)
+   {
+   /* Draw stuff that passes filter first in full mode, last in dense. */
+   if (isFull)
+       {
+       newList = slCat(newList, oldList);
+       }
+   else
+       {
+       newList = slCat(oldList, newList);
+       }
+   }
+*pLfList = newList;
 
 /* Free up hashes, etc. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
@@ -1721,7 +1807,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 hFreeConn(&conn);
 }
 
-struct linkedFeatures *lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
+void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
 	char *chromName, boolean isXeno)
 /* Return linked features from range of table. */
 {
@@ -1741,11 +1827,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
+if (limitVisibility(tg, &lfList) == tvFull)
+    slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-return lfList;
+tg->items = lfList;
 }
 
 #ifdef FUREY_CODE
@@ -2145,8 +2233,7 @@ void loadGenieKnown(struct trackGroup *tg)
 /* Load up Genie known genes. */
 {
 tg->items = lfFromGenePredInRange("genieKnown", chromName, winStart, winEnd);
-if (tg->visibility == tvFull && 
-	slCount(tg->items) <= maxItemsInFullTrack)
+if (limitVisibility(tg, tg->items) == tvFull)
     {
     lookupKnownNames(tg->items);
     }
@@ -2235,8 +2322,7 @@ void loadRefGene(struct trackGroup *tg)
 /* Load up RefSeq known genes. */
 {
 tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
-if (tg->visibility == tvFull && 
-	slCount(tg->items) <= maxItemsInFullTrack)
+if (limitVisibility(tg, tg->items) == tvFull)
     {
     lookupRefNames(tg->items);
     }
@@ -3158,7 +3244,7 @@ void loadGenomicDups(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
 bedLoadItem(tg, "genomicDups", (ItemLoader)genomicDupsLoad);
-if (tg->visibility == tvDense && slCount(tg->items) <= maxItemsInFullTrack)
+if (limitVisibility(tg, tg->items) == tvFull)
     slSort(&tg->items, bedCmpScore);
 else
     slSort(&tg->items, bedCmp);
@@ -3430,7 +3516,6 @@ return stsColor(mg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
     el->fishChrom, el->score);
 }
 
-
 void stsMarkerMethods(struct trackGroup *tg)
 /* Make track group for sts markers. */
 {
@@ -3439,12 +3524,77 @@ tg->freeItems = freeStsMarker;
 tg->itemColor = stsMarkerColor;
 }
 
+static char *stsMapOptions[] = {
+    "All Genetic",
+    "Genethon",
+    "Marshfield",
+    "GeneMap 99",
+    "Whitehead YAC",
+    "Whitehead RH",
+    "Stanford TNG",
+};
+
+enum stsMapOptEnum {
+   smoeGenetic = 0,
+   smoeGenethon = 1,
+   smoeMarshfield = 2,
+   smoeGm99 = 3,
+   smoeWiYac = 4,
+   smoeWiRh = 5,
+   smoeTng = 6,
+};
+
+char *stsMapFilterVar = "stsFilter";
+char *stsMapFilterVal;
+char *stsMapMapVar = "stsType";
+char *stsMapMapVal;
+enum stsMapOptEnum stsMapType;
+int stsMapFilterColor = MG_BLACK;
+
+boolean stsMapFilterItem(struct trackGroup *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct stsMap *el = item;
+switch (stsMapType)
+    {
+    case smoeGenetic:
+	return el->genethonChrom[0] != '0' || el->marshfieldChrom[0] != '0';
+        break;
+    case smoeGenethon:
+	return el->genethonChrom[0] != '0';
+        break;
+    case smoeMarshfield:
+	return el->marshfieldChrom[0] != '0';
+        break;
+    case smoeGm99:
+	return el->gm99Gb4Chrom[0] != '0';
+        break;
+    case smoeWiYac:
+	return el->wiYacChrom[0] != '0';
+        break;
+    case smoeWiRh:
+	return el->wiRhChrom[0] != '0';
+        break;
+    case smoeTng:
+	return el->shgcTngChrom[0] != '0';
+        break;
+    default:
+	return FALSE;
+        break;
+    }
+}
+
+
 void loadStsMap(struct trackGroup *tg)
 /* Load up stsMarkers from database table to trackGroup items. */
 {
+stsMapFilterVal = cartUsualString(cart, stsMapFilterVar, "blue");
+stsMapMapVal = cartUsualString(cart, stsMapMapVar, stsMapOptions[0]);
+stsMapType = stringIx(stsMapMapVal, stsMapOptions);
 bedLoadItem(tg, "stsMap", (ItemLoader)stsMapLoad);
+filterItems(tg, stsMapFilterItem, stsMapFilterVal);
+stsMapFilterColor = getFilterColor(stsMapFilterVal);
 }
-
 
 void freeStsMap(struct trackGroup *tg)
 /* Free up stsMap items. */
@@ -3452,12 +3602,30 @@ void freeStsMap(struct trackGroup *tg)
 stsMapFreeList((struct stsMap**)&tg->items);
 }
 
+void stsMapUi(struct trackGroup *tg)
+/* Put up UI stsMarkers. */
+{
+filterButtons(stsMapFilterVar, stsMapFilterVal, TRUE);
+printf(" ");
+cgiMakeDropList(stsMapMapVar, stsMapOptions, ArraySize(stsMapOptions), 
+	stsMapMapVal);
+printf(" ");
+cgiMakeButton("submit", "refresh");
+}
+
 Color stsMapColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of stsMap track item. */
 {
-struct stsMap *el = item;
-return stsColor(mg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
-    el->fishChrom, el->score);
+if (stsMapFilterItem(tg, item))
+    return stsMapFilterColor;
+else
+    {
+    struct stsMap *el = item;
+    if (el->score >= 900)
+        return MG_BLACK;
+    else
+        return MG_GRAY;
+    }
 }
 
 
@@ -3467,6 +3635,7 @@ void stsMapMethods(struct trackGroup *tg)
 tg->loadItems = loadStsMap;
 tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
+tg->extraUi = stsMapUi;
 }
 
 void loadFishClones(struct trackGroup *tg)
@@ -5479,18 +5648,6 @@ tg->freeItems = freeMcnBreakpoints;
 
 #endif /*FUREY_CODE*/
 
-enum trackVisibility limitVisibility(struct trackGroup *tg)
-/* Return default visibility limited by number of items. */
-{
-enum trackVisibility vis = tg->visibility;
-if (vis != tvFull)
-    return vis;
-if (slCount(tg->items) <= maxItemsInFullTrack)
-    return tvFull;
-else
-    return tvDense;
-}
-
 void smallBreak()
 /* Draw small horizontal break */
 {
@@ -5899,17 +6056,13 @@ tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
 void loadPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-tg->items = lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE);
-if (tg->visibility == tvFull)
-    slSort(&tg->items, linkedFeaturesCmpStart);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE);
 }
 
 void loadXenoPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-tg->items = lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE);
-if (tg->visibility == tvFull)
-    slSort(&tg->items, linkedFeaturesCmpStart);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE);
 }
 
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
@@ -6332,7 +6485,7 @@ for (group = tGroupList; group != NULL; group = group->next)
     if (group->visibility != tvHide)
 	{
 	group->loadItems(group); 
-	group->limitedVis = limitVisibility(group);
+	limitVisibility(group, group->items);
 	}
     }
 
