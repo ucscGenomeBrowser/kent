@@ -19,7 +19,7 @@ wiggle multiz8wayCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
-speciesOrder chimp mouse rat dog chicken fugu zebrafish
+speciesOrder chimp dog mouse rat chicken fugu zebrafish
 
 track multiz7way
 shortLabel 7Way Cons
