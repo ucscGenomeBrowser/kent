@@ -34,7 +34,7 @@ exit; # don't actually run this like a script :)
     mkdir /cluster/data/canFam1/bed
 
 
-# DOWNLOAD AGP, FASTA & QUAL (DONE 7/6/04 angie)
+# DOWNLOAD AGP, FASTA & QUAL (DONE 7/7/04 angie)
     ssh kksilo
     mkdir /cluster/data/canFam1/broad
     cd /cluster/data/canFam1/broad
@@ -50,9 +50,11 @@ exit; # don't actually run this like a script :)
     # Loaded the above 7/5; Reloaded new versions on 7/6 of 
     # Dog1.0.agp Dog1.0.agp.chromosome.fasta.gz 
     # Dog1.0.agp.chromosome.qual.gz Dog1.0.masked.agp.chromosome.fasta.gz
+    # And on 7/7 of Dog1.0.agp Dog1.0.agp.chromosome.fasta.gz 
+    # Dog1.0.agp.chromosome.qual.gz
 
 
-# UNPACK CHROM FASTA & AGP AND CROSS-CHECK (DONE 7/6/04 angie)
+# UNPACK CHROM FASTA & AGP AND CROSS-CHECK (DONE 7/7/04 angie)
     # For some reason, the chromosome fasta has been split into 5000000-base
     # chunks.  Fix the headers so that there is one record per chromosome,
     # and make one .fa file per chromosome.  
@@ -80,9 +82,9 @@ while (<>) {
     | ../jkStuff/fixBroadChromHeaders.pl \
     | faSplit byname stdin chroms/
     faSize chroms/chr*.fa
-#2518868366 bases (159832403 N's 2359035963 real) in 40 sequences in 40 files
-#Total size: mean 62971709.1 sd 23647185.5 min 26492144 (chr38) max 126913094 (chrX) median 61172541
-#N count: mean 3995810.1 sd 2935360.0
+#2519779136 bases (159950770 N's 2359828366 real) in 40 sequences in 40 files
+#Total size: mean 62994478.4 sd 23674450.6 min 26492144 (chr38) max 126913094 (chrX) median 61172541
+#N count: mean 3998769.2 sd 2953878.1
     # Make our usual chrom dir structure and move chr*.fa into it.
     cp /dev/null ../chrom.lst
     foreach f (chroms/chr*.fa)
@@ -101,9 +103,9 @@ while (<>) {
     end
     rm M/chrM.agp
     wc -l ?{,?}/chr*.agp
-# 119809 total
+# 119853 total
     wc -l broad/Dog1.0.agp
-# 119809 broad/Dog1.0.agp
+# 119853 broad/Dog1.0.agp
 
     # checkAgpAndFa prints out way too much info -- keep the end/stderr only:
     cd /cluster/data/canFam1
@@ -114,7 +116,7 @@ while (<>) {
     end
     
 
-# UNPACK CHROM QUAL SCORES (DONE 7/6/04 angie)
+# UNPACK CHROM QUAL SCORES (DONE 7/7/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/broad
     # Reuse fixBroadChromHeaders.pl script created in previous step, 
@@ -124,7 +126,7 @@ while (<>) {
     | qaToQac stdin fixedQuals.qac
 
 
-# DOUBLE-CHECK BY BUILDING ALT CHROM FASTA FROM CONTIGS+AGP (DONE 7/6/04 angie)
+# DOUBLE-CHECK BY BUILDING ALT CHROM FASTA FROM CONTIGS+AGP (DONE 7/7/04 angie)
     # This is a redundant check, very low chance of finding any problem 
     # since checkAgpAndFa passed.  It's also very slow.  So don't put this 
     # in the critical path to masked sequence -- run it in parallel.
@@ -132,6 +134,8 @@ while (<>) {
     cd /cluster/data/canFam1
     mkdir /cluster/bluearc/canFam1
     gunzip -c broad/contigs.bases.gz > /cluster/bluearc/canFam1/contigs.fa
+    # The number of "real" bases here should be equal to the number of 
+    # "real" bases in the chrom fasta -- and it is now on 7/7, whew.
     faSize /cluster/bluearc/canFam1/contigs.fa
 #2359828366 bases (0 N's 2359828366 real) in 59927 sequences in 1 files
 #Total size: mean 39378.4 sd 70249.8 min 352 (contig_41721) max 1356923 (contig_5971) median 8974
@@ -139,43 +143,45 @@ while (<>) {
     foreach agp (?{,?}/chr*.agp)
       set fa = $agp:r.fa2
       echo building $fa from $agp
-      agpToFa -simpleMultiMixed $agp $agp:t:r $fa \
-        /cluster/bluearc/canFam1/contigs.fa
+      awk '$5 == "W" {print $6;}' $agp > /tmp/contigs.lst
+      faSomeRecords /cluster/bluearc/canFam1/contigs.fa  /tmp/contigs.lst \
+        /tmp/contigs.fa
+      agpToFa -simpleMultiMixed $agp $agp:t:r $fa /tmp/contigs.fa
     end
     faSize */chr*.fa2
-#2518868366 bases (159832403 N's 2359035963 real) in 40 sequences in 40 files
-#Total size: mean 62971709.1 sd 23647185.5 min 26492144 (chr38) max 126913094 (chrX) median 61172541
-#N count: mean 3995810.1 sd 2935360.0
+#2519779136 bases (159950770 N's 2359828366 real) in 40 sequences in 40 files
+#Total size: mean 62994478.4 sd 23674450.6 min 26492144 (chr38) max 126913094 (chrX) median 61172541
+#N count: mean 3998769.2 sd 2953878.1
     foreach f (?{,?}/chr*.fa2)
       faCmp $f $f:r.fa
     end
     rm ?{,?}/chr*.fa2
 
 
-# COMPARE CONTIG & CHROM NON-N BASE COUNTS (DONE 7/6/04 angie)
-    # faSize showed different "real" base counts for contigs (2359828366)
-    # vs. chroms (2359035963): contigs have 792403 more non-N bases than
-    # chroms.  
-    # Here's how I determined that the difference is explained by the 
-    # omission of 22 contigs from the AGP.  I've asked David Jaffe if 
-    # those contigs were meant to be included in contigs.bases.gz but not 
-    # in Dog1.0.agp -- doh!  He says they were supposed to be in the AGP 
-    # so they have to rebuild and then we do.  C'est la vie.  
+# COMPARE CONTIG & CHROM NON-N BASE COUNTS (DONE 7/7/04 angie)
+    # In the 7/6 assembly, faSize showed different "real" base counts
+    # for contigs (2359828366) vs. chroms (2359035963): contigs have
+    # 792403 more non-N bases than chroms.
+    # Here's how I determined that the difference was explained by the 
+    # omission of some contigs from the AGP.  
+    # In the 7/7 assembly, all contigs are in the AGP so we're OK now.
     ssh kksilo
     cd /cluster/data/canFam1
     awk '$5 == "W" {print $6;}' broad/Dog1.0.agp | sort > /tmp/1
     uniq /tmp/1 > /tmp/2
     wc -l /tmp/[12]
-#  59905 /tmp/1
-#  59905 /tmp/2
-# 119810 total
+#  59927 /tmp/1
+#  59927 /tmp/2
+# 119854 total
     zcat broad/contigs.bases.gz | g '^>' | sed -e 's/^>//' | sort > /tmp/3
     wc -l /tmp/3
 #  59927 /tmp/3
     diff /tmp/1 /tmp/2
 # (no difference ==> each contig appears only once)
     diff /tmp/1 /tmp/3 | egrep -v '^[0-9]+' | wc -l
-#     22
+#     0
+    # Excellent!  0 contigs missing.  So we don't have to do this stuff,
+    # but here it is in case we need it again in the future:
     set missers =  `diff /tmp/1 /tmp/3 | egrep -v '^[0-9]+' | sed -e 's/^> //'`
     zcat broad/contigs.bases.gz | faSize -detailed=on stdin > /tmp/4
     set total = 0
@@ -185,10 +191,10 @@ while (<>) {
       set total = `expr $total + $size`
     end
     echo "total\t\t$total"
-#total           792403
+#total           0
 
 
-# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT CONTIGS/GAPS (DONE 7/6/04 angie)
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT CONTIGS/GAPS (DONE 7/7/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1
     foreach agp (?{,?}/chr*.agp)
@@ -206,14 +212,13 @@ while (<>) {
     echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
     echo "chrM_1" > M/lift/ordered.lst
     set msize = `faSize M/chrM.fa | awk '{print $1;}'`
-    echo "0	M/chrM_1	$msize	chrM	$msize" \
-    > M/lift/ordered.lft
+    echo "0\tM/chrM_1\t$msize\tchrM\t$msize" > M/lift/ordered.lft
     foreach f ( ?{,?}/chr*.fa.bak )
       faCmp $f $f:r
     end
 
 
-# MAKE LIFTALL.LFT (DONE 7/6/04 angie)
+# MAKE LIFTALL.LFT (DONE 7/7/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1
     cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
@@ -233,7 +238,7 @@ while (<>) {
       | hgsql canFam1
 
 
-# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 7/6/04 angie)
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 7/7/04 angie)
     # Make nib/, unmasked until RepeatMasker and TRF steps are done.
     # Do this now so we can load up RepeatMasker and run featureBits; 
     # can also load up other tables that don't depend on masking.  
@@ -256,23 +261,22 @@ while (<>) {
     hgsql canFam1  < $HOME/kent/src/hg/lib/chromInfo.sql
     hgNibSeq -preMadeNib canFam1 /gbdb/canFam1/nib */chr*.fa
     echo "select chrom,size from chromInfo" | hgsql -N canFam1 > chrom.sizes
-    # take a look at chrom.sizes, should be 54 lines
+    # take a look at chrom.sizes, should be 41 lines
     wc chrom.sizes
 #     41      82     603 chrom.sizes
 
 
-# GOLD AND GAP TRACKS (DONE 7/6/04 angie)
+# GOLD AND GAP TRACKS (DONE 7/7/04 angie)
     ssh hgwdev
     cd /cluster/data/canFam1
     hgGoldGapGl -noGl -chromLst=chrom.lst canFam1 /cluster/data/canFam1 .
     # featureBits fails if there's no chrM_gap, so make one:
     # echo "create table chrM_gap like chr1_gap" | hgsql canFam1
     # oops, that won't work until v4.1, so do this for the time being:
-    echo "create table chrM_gap select * from chr1_gap where 0=1" \
-    | hgsql canFam1
+    hgsql canFam1 -e "create table chrM_gap select * from chr1_gap where 0=1"
 
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CANFAM1 (DONE 7/6/04 angie)
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CANFAM1 (DONE 7/7/04 angie)
     ssh hgwdev
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -291,7 +295,7 @@ while (<>) {
           defaultPos, active, orderKey, genome, scientificName,  \
           htmlPath, hgNearOk)  \
           values("canFam1", "Jul. 2004", \
-          "/gbdb/canFam1/nib", "Dog", "chr13:13120186-13124117", 1, \
+          "/gbdb/canFam1/nib", "Dog", "chr14:10666612-10673232", 1, \
           18, "Dog", "Canis familiaris", \
           "/gbdb/canFam1/html/description.html", 0);' \
     | hgsql -h genome-testdb hgcentraltest
@@ -300,7 +304,7 @@ while (<>) {
     | hgsql -h genome-testdb hgcentraltest
 
 
-# REPEAT MASKING (IN PROGRESS 7/6/04 angie)
+# REPEAT MASKING (DONE 7/7/04 angie)
     #- Split contigs into 500kb chunks, at gaps if possible:
     ssh kksilo
     cd /cluster/data/canFam1
@@ -357,14 +361,12 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     cd /cluster/data/canFam1/RMRun
     para create RMJobs
     para try, para check, para check, para push, para check,...
-    # Chilled the run because of the bad news about the assembly needing 
-    # some more fixes.  Here's how far it got, operating on 477 nodes:
-#Completed: 1728 of 6369 jobs
-#Average job time:                3991s      66.52m     1.11h    0.05d
-#Longest job:                     6657s     110.95m     1.85h    0.08d
-#Submission to last job:         18105s     301.75m     5.03h    0.21d
-    # So probably ~7000 hours for a whole batch.  With half a cluster, 
-    # expect 15-16 hours; 8-9 hours if we get full cluster usage.  
+#Completed: 6373 of 6373 jobs
+#CPU time in finished jobs:   24949716s  415828.60m  6930.48h  288.77d  0.791 y
+#IO & Wait Time:                220014s    3666.90m    61.12h    2.55d  0.007 y
+#Average job time:                3949s      65.82m     1.10h    0.05d
+#Longest job:                     6389s     106.48m     1.77h    0.07d
+#Submission to last job:         31173s     519.55m     8.66h    0.36d
 
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
     ssh kksilo
@@ -390,14 +392,59 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     hgLoadOut canFam1 */chr*.fa.out
 
 
-# VERIFY REPEATMASKER RESULTS (TODO 7/6/04 angie)
+# VERIFY REPEATMASKER RESULTS (DONE 7/7/04 angie)
     # Eyeball some repeat annotations in the browser, compare to lib seqs.
     # Run featureBits on canFam1 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits canFam1 rmsk
+#896773874 bases of 2359845093 (38.001%) in intersection
+    # Good, 35-40% seems typical for mammals...
 
 
-# SIMPLE REPEATS (TRF) (DONE 7/6/04 angie)
+# COMPARE OUR REPEATMASKER .OUT'S TO BROAD'S (IN PROGRESS 7/9/04 angie)
+    ssh kksilo
+    cd /cluster/data/canFam1/broad
+    ftp ftp.broad.mit.edu
+      # same username & password as for fasta etc.
+      bin
+      get dog1.0_repeatinfo.tar.gz
+      bye
+    mkdir /cluster/data/canFam1/bed/compareRmsk
+    cd /cluster/data/canFam1/bed/compareRmsk
+    tar xvzf ../../broad/dog1.0_repeatinfo.tar.gz
+    rm dog1.0_repeatinfo/*.index
+    # compare... files?  definitely coverage --- make a bed4.
+    cp /dev/null broadRmskBed4.bed
+    foreach f (dog1.0_repeatinfo/chr*.fa.out)
+      tail +4 $f | awk '{print $5 "\t" $6-1 "\t" $7 "\t" $10;}' \
+      >> broadRmskBed4.bed
+    end
+    wc -l ../../?{,?}/chr*.fa.out | tail -1
+#4337285 total
+    wc -l dog1.0_repeatinfo/chr*.fa.out | tail -1
+#4059835 total
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/compareRmsk
+    #Compare coverage with our RepeatMasker run:
+#896773874 bases of 2359845093 (38.001%) in intersection
+    featureBits canFam1 broadRmskBed4.bed
+#883152916 bases of 2359845093 (37.424%) in intersection
+    featureBits canFam1 broadRmskBed4.bed \!rmsk -bed=notInRmsk.bed
+#7053647 bases of 2359845093 (0.299%) in intersection
+    featureBits canFam1 \!broadRmskBed4.bed rmsk -bed=notInBroad.bed
+#20674605 bases of 2359845093 (0.876%) in intersection
+    featureBits canFam1 broadRmskBed4.bed \!rmsk \!simpleRepeat \
+      -bed=notInRmskTRF.bed
+#6906446 bases of 2359845093 (0.293%) in intersection
+
+    # back on kksilo
+    wc -l notInRmsk.bed 
+# 256372 notInRmsk.bed
+    awk '$3-$2 >= 40 {print;}' notInRmsk.bed > notInRmskOver40.bed
+    # Take a look at some of those positions in the browser.
+
+
+# SIMPLE REPEATS (TRF) (DONE 7/7/04 angie)
     ssh kksilo
     mkdir /cluster/data/canFam1/bed/simpleRepeat
     cd /cluster/data/canFam1/bed/simpleRepeat
@@ -428,10 +475,10 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
       /cluster/data/canFam1/bed/simpleRepeat/simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
     featureBits canFam1 simpleRepeat
-#36502224 bases of 2359052690 (1.547%) in intersection
+#36509895 bases of 2359845093 (1.547%) in intersection
 
 
-# PROCESS SIMPLE REPEATS INTO MASK (TODO 7/6/04/ angie)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 7/7/04/ angie)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh kksilo
@@ -456,9 +503,12 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     cat /cluster/data/canFam1/bed/simpleRepeat/trfMaskChrom/*.bed \
       > /tmp/filtTrf.bed
     featureBits canFam1 /tmp/filtTrf.bed
+#23017541 bases of 2359845093 (0.975%) in intersection
+    featureBits canFam1 /tmp/filtTrf.bed \!rmsk
+#1275941 bases of 2359845093 (0.054%) in intersection
 
 
-# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO 7/6/04 angie)
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 7/7/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1
     # Soft-mask (lower-case) the contig and chr .fa's, 
@@ -473,6 +523,8 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
       echo "hard-masking $f"
       maskOutFa $f hard $f.masked
     end
+    # Tons of warnings like this, mostly for L1M*:
+#WARNING: negative rEnd: -189 chrX:117586389-117586475 L1M3e
     foreach c (`cat chrom.lst`)
       echo "repeat- and trf-masking contigs of chr$c"
       foreach d ($c/chr*_?{,?})
@@ -484,20 +536,20 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
       end
     end
     #- Rebuild the nib files, using the soft masking in the fa:
-    mkdir nib
     foreach f (*/chr*.fa)
       faToNib -softMask $f nib/$f:t:r.nib
     end
     # Make one big 2bit file as well, and make a link to it in 
     # /gbdb/canFam1/nib because hgBlat looks there:
     faToTwoBit */chr*.fa canFam1.2bit
+    ssh hgwdev
     ln -s /cluster/data/canFam1/canFam1.2bit /gbdb/canFam1/nib/
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (TODO 7/6/04 angie)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (DONE 7/13/04 angie)
     ssh hgwdev
-    echo 'insert into blatServers values("canFam1", "blat???", "17778", "1"); \
-          insert into blatServers values("canFam1", "blat???", "17779", "0");' \
+    echo 'insert into blatServers values("canFam1", "blat9", "17778", 1, 0); \
+          insert into blatServers values("canFam1", "blat9", "17779", 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
 
 
@@ -511,7 +563,7 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     # /gbdb/canFam1/html
 
 
-# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (TODO 7/6/04 angie)
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 7/7/04 angie)
     ssh kkr1u00
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
     rm -rf /iscratch/i/canFam1/nib
@@ -524,6 +576,10 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
       cp $d/$d:t.fa /iscratch/i/canFam1/maskedContigs
     end
     cp -p /cluster/data/canFam1/canFam1.2bit /iscratch/i/canFam1/
+    du -sh /iscratch/i/canFam1/*
+#631M    /iscratch/i/canFam1/canFam1.2bit
+#2.5G    /iscratch/i/canFam1/maskedContigs
+#1.2G    /iscratch/i/canFam1/nib
     iSync
     # Put nibs and rmsk files in /scratch for big cluster blastz.
     mkdir /cluster/bluearc/scratch/hg/canFam1
@@ -535,7 +591,7 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     # Ask cluster-admin for an rsync after the next step.  
 
 
-# MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (TODO 7/6/04 angie)
+# MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (DONE 7/7/04 angie)
     ssh kksilo
     cd /cluster/bluearc/scratch/hg/canFam1/rmsk
     # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
@@ -546,7 +602,7 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
         /cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
           ${outfl} -query dog -comp human -comp mouse
     end
-    # Now extract human (extra column 1), ignore mouse.
+    # Now extract human (extra column 1), mouse (extra column).
     cd /cluster/bluearc/scratch/hg/canFam1
     mkdir linSpecRep.notInHuman
     mkdir linSpecRep.notInMouse
@@ -558,28 +614,45 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
         /cluster/bin/scripts/extractLinSpecReps 2 $f > \
                         linSpecRep.notInMouse/$base.out.spec
     end
+    wc -l rmsk/*.out
+#4337285 total
+    wc -l linSpecRep.notInHuman/*
+#1333452 total
+    wc -l linSpecRep.notInMouse/*
+#1333452 total
+    # The linSpecReps.notIn{Human,Mouse} files are the same.  I asked Arian 
+    # if that's a bad thing last week (human vs. {dog,mouse} -> same).  
+    # Haven't heard back yet, but hey, we're all mammals here...
+    foreach f (linSpecRep.notInHuman/*)
+      echo $f:t
+      diff $f linSpecRep.notInMouse/$f:t | wc -l | g -vw 0
+    end
     # Clean up.
     rm /cluster/bluearc/scratch/hg/canFam1/rmsk/*.out_hum_mus
     # Ask cluster-admin for an rsync.
 
 
-# MAKE 10.OOC, 11.OOC FILES FOR BLAT (TODO 7/6/04 angie)
-    # Use -repMatch=??? (based on size -- for human we use 1024, and 
-    # dog size is ~??% of human)
-    ssh kkr1u00
+# MAKE 10.OOC, 11.OOC FILES FOR BLAT (DONE 7/7/04 angie)
+    # Use -repMatch=843 (based on size -- for human we use 1024, and 
+    # dog size is 2359845093 / 2866216770 = ~82.3% of human judging by 
+    # gapless genome size from featureBits)
+    ssh kolossus
     mkdir /cluster/data/canFam1/bed/ooc
     cd /cluster/data/canFam1/bed/ooc
     ls -1 /cluster/data/canFam1/nib/chr*.nib > nib.lst
     blat nib.lst /dev/null /dev/null -tileSize=11 \
-      -makeOoc=/cluster/bluearc/canFam1/11.ooc -repMatch=???
+      -makeOoc=/cluster/bluearc/canFam1/11.ooc -repMatch=843
+#Wrote 26268 overused 11-mers to /cluster/bluearc/canFam1/11.ooc
     blat nib.lst /dev/null /dev/null -tileSize=10 \
-      -makeOoc=/cluster/bluearc/canFam1/10.ooc -repMatch=???
-    mkdir /iscratch/i/canFam1
+      -makeOoc=/cluster/bluearc/canFam1/10.ooc -repMatch=843
+#Wrote 143003 overused 10-mers to /cluster/bluearc/canFam1/10.ooc
+    ssh kkr1u00
     cp -p /cluster/bluearc/canFam1/*.ooc /iscratch/i/canFam1/
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (TODO 7/6/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 7/8/04 angie)
+    ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
     cvsup .
@@ -613,32 +686,81 @@ canFam1.downloadDir = canFam1
     ssh eieio
     cd /cluster/data/genbank
     # This is an -initial run, mRNA only:
-    nice bin/gbAlignStep -clusterRootDir=/cluster/bluearc/genbank \
-      -iserver=kkr1u00 -iserver=kkr2u00 -iserver=kkr3u00 -iserver=kkr4u00 \
-      -iserver=kkr5u00 -iserver=kkr6u00 -iserver=kkr7u00 -iserver=kkr8u00 \
-      -srcDb=genbank -type=mrna -verbose=1 -initial canFam1
+    nice bin/gbAlignStep -clusterRootDir=/cluster/store7/genbank \
+      -srcDb=genbank -type=mrna -verbose=1 -initial canFam1 &
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad canFam1
+    featureBits canFam1 mrna
+#1850373 bases of 2359845093 (0.078%) in intersection
+    featureBits canFam1 xenoMrna
+#62236255 bases of 2359845093 (2.637%) in intersection
     # Clean up:
-    rm -r /cluster/bluearc/genbank/work/initial.canFam1
+    rm -r work/initial.canFam1
 
     ssh eieio
     # -initial for ESTs (now with /cluster/store7 and iservers):
     nice bin/gbAlignStep -clusterRootDir=/cluster/store7/genbank \
-      -iserver=kkr1u00 -iserver=kkr2u00 -iserver=kkr3u00 -iserver=kkr4u00 \
-      -iserver=kkr5u00 -iserver=kkr6u00 -iserver=kkr7u00 -iserver=kkr8u00 \
-      -srcDb=genbank -type=est -verbose=1 -initial canFam1
+      -srcDb=genbank -type=est -verbose=1 -initial canFam1 &
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 canFam1
+    nice bin/gbDbLoadStep -verbose=1 canFam1 &
+    featureBits canFam1 intronEst
+#4090352 bases of 2359845093 (0.173%) in intersection
+    featureBits canFam1 est
+#10958036 bases of 2359845093 (0.464%) in intersection
     # Clean up:
-    rm -r /cluster/store7/genbank/work/initial.canFam1
+    rm -r work/initial.canFam1
 
 
-# MAKE DOWNLOADABLE SEQUENCE FILES (TODO 7/6/04 angie)
+# COMPARE COUNTS OF ALIGNED VS NON-ALIGNED MRNAS (DONE 7/8/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/canFam1/bed/mrnaCheck
+    cd /cluster/data/canFam1/bed/mrnaCheck
+    # Get accs of all mRNAs and ESTs in our genbank build.  
+    # Note: if/when there's a RefSeq for dog, filter NM_* accessions 
+    # out of the mRNA list!
+    hgsql -N canFam1 -e 'select acc from mrna where type = "mRNA" and \
+                         organism = 2497 or organism = 2654' \
+    | sort > accs.mrna
+    hgsql -N canFam1 -e 'select acc from mrna where type = "EST" and \
+                         organism = 2497 or organism = 2654' \
+    | sort > accs.est
+    # Get accs of mRNAs and ESTs that were aligned:
+    hgsql -N canFam1 -e "select distinct(qName) from  all_mrna" \
+    | sort > alignedAccs.mrna
+    hgsql -N canFam1 -e "select distinct(qName) from  all_est" \
+    | sort > alignedAccs.est
+    # Get accs of mRNAs and ESTs that were not aligned:
+    diff accs.mrna alignedAccs.mrna | egrep -v '^[0-9]' | sed -e 's/^< //' \
+    > notAlignedAccs.mrna
+    diff accs.est alignedAccs.est | egrep -v '^[0-9]' | sed -e 's/^< //' \
+    > notAlignedAccs.est
+    # Look at counts, compute percentages.
+    wc -l *
+#  37387 accs.est
+#   1188 accs.mrna
+#  34781 alignedAccs.est
+#   1133 alignedAccs.mrna
+#   2606 notAlignedAccs.est
+#     55 notAlignedAccs.mrna
+    expr 37387 - 34781
+#2606  (93.0% aligned, 7.0% not aligned) 
+    expr 1188 - 1133
+#55    (95.4% aligned, 4.6% not aligned)
+    # Add descriptions to mRNAs not aligned.  
+    cp /dev/null notAlignedDesc.mrna
+    foreach acc (`cat notAlignedAccs.mrna`)
+      hgsql -N canFam1 \
+        -e 'select mrna.acc,description.name from mrna,description \
+            where mrna.acc = "'$acc'" and mrna.description = description.id' \
+      >> notAlignedDesc.mrna
+    end
+
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE 7/7/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1
     #- Build the .zip files
@@ -689,7 +811,7 @@ zip -j mrna.zip mrna.fa
     # Maybe ensGene when we get that.
 
 
-# SWAP BLASTZ HUMAN-DOG TO DOG-HUMAN (HG17) (TODO 7/6/04 angie)
+# SWAP BLASTZ HUMAN-DOG TO DOG-HUMAN (HG17) (DONE 7/9/04 angie)
     ssh kolossus
     mkdir /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
@@ -709,20 +831,7 @@ zip -j mrna.zip mrna.fa
     rm -r unsorted
 
 
-# RESCORE HUMAN BLASTZ (TODO 7/6/04 angie)
-  # DO THIS ONLY IF A NON-DEFAULT MATRIX WAS USED FOR BLASTZ_Q
-    ssh kolossus
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
-    mkdir axtChrom.rescore
-    foreach f (axtChrom/chr*.axt)
-      axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
-        $f axtChrom.rescore/$f:t
-    end
-    mv axtChrom axtChrom.orig
-    mv axtChrom.rescore axtChrom
-
-
-# CHAIN HUMAN BLASTZ (TODO 7/6/04 angie)
+# CHAIN HUMAN BLASTZ (DONE 7/10/04 angie)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
@@ -733,7 +842,7 @@ zip -j mrna.zip mrna.fa
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -749,10 +858,11 @@ axtChain $1 \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
-#Completed: 50 of 50 jobs
-#Average job time:                  69s       1.15m     0.02h    0.00d
-#Longest job:                      218s       3.63m     0.06h    0.00d
-#Submission to last job:           232s       3.87m     0.06h    0.00d
+    # Wow, chr1 dwarfs the others...
+#Completed: 41 of 41 jobs
+#Average job time:                 293s       4.88m     0.08h    0.00d
+#Longest job:                     4419s      73.65m     1.23h    0.05d
+#Submission to last job:          4419s      73.65m     1.23h    0.05d
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -765,21 +875,28 @@ axtChain $1 \
     foreach f (chain/*.chain)
       grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
       echo $f:t:r
-      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      textHistogram -binSize=4000 /tmp/score.$f:t:r
       echo ""
     end
+
+    # Lots of chaff with scores in the 3000's.  Many very-high-scoring 
+    # chains.  So filter the chain down somewhat...
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    rm chain/*
+    chainSplit chain all.chain
+    gzip all.chain.unfiltered
 
     # Load chains into database
     ssh hgwdev
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
-        echo loading $c
         hgLoadChain canFam1 ${c}_chainHg17 $i
     end
 
 
-# NET HUMAN BLASTZ (TODO 7/6/04 angie)
+# NET HUMAN BLASTZ (DONE 7/10/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -806,7 +923,7 @@ axtChain $1 \
     # Add entries for chaing16, netHg17, syntenyHg17 to dog/canFam1 trackDb
 
 
-# MAKE VSHG17 DOWNLOADABLES (TODO 7/6/04 angie)
+# MAKE VSHG17 DOWNLOADABLES (TODO 7/9/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     cp all.chain human.chain
@@ -823,7 +940,7 @@ axtChain $1 \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
-# BLASTZ SELF (TODO 7/6/04 angie)
+# BLASTZ SELF (TODO 7/9/04 angie)
     ssh kk
     mkdir -p /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
     cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
@@ -945,7 +1062,7 @@ cat `ls -1 *.lav | sort -g` \
     para try, check, push, check,...
 
 
-# CHAIN SELF BLASTZ (TODO 7/6/04 angie)
+# CHAIN SELF BLASTZ (TODO 7/9/04 angie)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03
@@ -1004,7 +1121,7 @@ axtFilter -notQ=chrUn $1 \
     end
 
 
-# NET SELF BLASTZ (TODO 7/6/04 angie)
+# NET SELF BLASTZ (TODO 7/9/04 angie)
     ssh kolossus
     cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -1031,7 +1148,7 @@ axtFilter -notQ=chrUn $1 \
     # dog/canFam1 trackDb
 
 
-# MAKE VSSELF DOWNLOADABLES (TODO 7/6/04 angie)
+# MAKE VSSELF DOWNLOADABLES (TODO 7/9/04 angie)
     ssh kolossus
     cd /cluster/data/canFam1/bed/blastz.canFam1.2004-03-03/axtChain
     cp all.chain self.chain
@@ -1047,7 +1164,7 @@ axtFilter -notQ=chrUn $1 \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
-# PRODUCING GENSCAN PREDICTIONS (TODO 7/6/04 angie)
+# PRODUCING GENSCAN PREDICTIONS (DONE 7/9/04 angie)
     ssh hgwdev
     mkdir /cluster/data/canFam1/bed/genscan
     cd /cluster/data/canFam1/bed/genscan
@@ -1070,16 +1187,28 @@ axtFilter -notQ=chrUn $1 \
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para create jobList
     para try, check, push, check, ...
+#Completed: 495 of 497 jobs
+#Crashed: 2 jobs
+#Average job time:                 803s      13.39m     0.22h    0.01d
+#Longest job:                    28087s     468.12m     7.80h    0.33d
+#Submission to last job:         34710s     578.50m     9.64h    0.40d
     # If there are crashes, diagnose with "para problems".  
     # If a job crashes due to genscan running out of memory, re-run it 
     # manually with "-window=1200000" instead of "-window=2400000".
+    ssh kkr7u00
+    cd /cluster/data/canFam1/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/data/canFam1/5/chr5_17/chr5_17.fa.masked gtf/chr5_17.fa.gtf -trans=pep/chr5_17.fa.pep -subopt=subopt/chr5_17.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+    /cluster/bin/x86_64/gsBig /cluster/data/canFam1/1/chr1_21/chr1_21.fa.masked gtf/chr1_21.fa.gtf -trans=pep/chr1_21.fa.pep -subopt=subopt/chr1_21.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+    ls -1 gtf | wc -l
+#    497
+    endsInLf gtf/*
 
     # Convert these to chromosome level files as so:
     ssh kksilo
@@ -1091,12 +1220,12 @@ axtFilter -notQ=chrUn $1 \
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/canFam1/bed/genscan
-    ldHgGene canFam1 genscan genscan.gtf
+    ldHgGene -gtf -genePredExt canFam1 genscan genscan.gtf
     hgPepPred canFam1 generic genscanPep genscan.pep
     hgLoadBed canFam1 genscanSubopt genscanSubopt.bed
 
 
-# PRODUCING FUGU BLAT ALIGNMENTS (TODO 7/6/04)
+# PRODUCING FUGU BLAT ALIGNMENTS (TODO 7/9/04)
     ssh kk
     mkdir /cluster/data/canFam1/bed/blatFr1
     cd /cluster/data/canFam1/bed/blatFr1
@@ -1183,41 +1312,53 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 # END BLAST
 
 
-# GC 5 BASE WIGGLE TRACK (TODO 7/6/04 angie)
-    ssh kksilo
+# GC 5 BASE WIGGLE TRACK (DONE 7/7/04 angie)
+    # put unmasked nibs in /iscratch for small cluster run.
+    ssk kkr1u00
+    mkdir /iscratch/i/canFam1/
+    cp -pR /cluster/data/canFam1/nib /iscratch/i/canFam1/
+    iSync
+    ssh kki
     mkdir /cluster/data/canFam1/bed/gc5Base
     cd /cluster/data/canFam1/bed/gc5Base
-    mkdir wigData5 dataLimits5
-    foreach n (../../nib/*.nib)
-      set c=`basename ${n} | sed -e "s/.nib//"`
-      set C=`echo $c | sed -e "s/chr//"`
-      echo "working on ${c} - ${C} ... "
-      hgGcPercent -chr=${c} -doGaps -file=stdout -win=5 canFam1 ../../nib \
-      | grep -w GC \
-      | awk '{ \
-               bases = $3 - $2 \
-               perCent = $5/10.0 \
-               printf "%d\t%.1f\n", $2+1, perCent \
-             }' \
-      | wigAsciiToBinary \
-        -dataSpan=5 -chrom=${c} -wibFile=wigData5/gc5Base_${C} \
-        -name=${C} stdin > dataLimits5/${c}
+    mkdir wigData dataLimits
+    cat > doGc5Base.csh <<'_EOF_'
+#!/bin/csh -fe
+set c = $1
+set chr = "chr$c"
+/cluster/bin/x86_64/hgGcPercent \
+  -chr=${chr} -doGaps -file=stdout -win=5 canFam1 ../../nib \
+| awk '$4 == "GC" && ($3-$2) >= 5 {printf "%d\t%.1f\n", $2+1, $5/10.0;}' \
+| /cluster/bin/x86_64/wigAsciiToBinary \
+    -dataSpan=5 -chrom=${chr} -wibFile=wigData/gc5Base_${c} \
+    -name=${c} stdin > dataLimits/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doGc5Base.csh
+    cp /dev/null spec
+    foreach c (`cat ../../chrom.lst`)
+      echo "./doGc5Base.csh $c" >> spec
     end
+    para create spec
+    para try, check, push, check, ...
+    # ran on kolossus (csh spec >& tee spec.log) because small cluster was 
+    # solidly hogged, oh well.
     # data is complete, load track on hgwdev
     ssh hgwdev
     cd /cluster/data/canFam1/bed/gc5Base
     # create symlinks for .wib files, then load track
-    mkdir /gbdb/canFam1/wib
-    ln -s `pwd`/wigData5/*.wib /gbdb/canFam1/wib
-    hgLoadWiggle canFam1 gc5Base wigData5/*.wig
+    mkdir -p /gbdb/canFam1/wib/gc5Base
+    ln -s `pwd`/wigData/*.wib /gbdb/canFam1/wib/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/canFam1/wib/gc5Base \
+      canFam1 gc5Base wigData/*.wig
 
 
-# CREATING QUALITY SCORE TRACK (TODO 7/6/04 angie)
-    ssh kksilo
+# CREATING QUALITY SCORE TRACK (DONE 7/7/04 angie)
+    ssh kolossus
     mkdir /cluster/data/canFam1/bed/qual
     cd /cluster/data/canFam1/bed/qual
     mkdir wigData dataLimits
-    foreach agp (?{,?}/chr*.agp)
+    foreach agp (../../?{,?}/chr*.agp)
       set chr = $agp:t:r
       set abbrev = `echo $chr | sed -e 's/^chr//;  s/_random/r/;'`
       echo $chr to $abbrev wiggle
@@ -1249,29 +1390,20 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     # To speed up display for whole chrom views, need to make zoomed
     # data views.  Zoom to 1K points per pixel.
-    ssh kksilo
-    cd /cluster/data/canFam1/bed/qual/wigData1K
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/qual
     mkdir -p wigData1K
     mkdir -p dataLimits1K
     foreach c (`cat ../../chrom.lst`)
       if (-f ../../${c}/chr${c}.agp) then
         echo "chr${c} quality 1K zoom"
-        qacToWig chrom.qac -name=chr${c} stdout \
+        qacToWig ../../broad/fixedQuals.qac -name=chr${c} stdout \
         | wigZoom stdin \
         | wigAsciiToBinary -dataSpan=1024 \
                 -chrom=chr${c} -wibFile=wigData1K/qc1K_${c} \
                 -name=${c} stdin > dataLimits1K/chr${c}
       endif
-      if (-f ../../${c}/chr${c}_random.agp) then
-        echo "chr${c}_random quality 1K zoom"
-        qacToWig chrom.qac -name=chr${c}_random stdout \
-        | wigZoom stdin \
-        | wigAsciiToBinary -dataSpan=1024 \
-                -chrom=chr${c}_random -wibFile=wigData1K/qc1K_${c}r \
-                -name=${c}_random stdin > dataLimits1K/chr${c}r
-      endif
     end
-
     ssh hgwdev
     cd /cluster/data/canFam1/bed/qual/wigData1K
     # create symlinks for .wib files
