@@ -2,7 +2,7 @@
 #include "common.h"
 #include "portable.h"
 #include "dystring.h"
-#include "cheapcgi.h"
+#include "options.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -30,7 +30,7 @@ fprintf(f, "/* %s - %s. */\n", name, description);
 fprintf(f, "#include \"common.h\"\n");
 fprintf(f, "#include \"linefile.h\"\n");
 fprintf(f, "#include \"hash.h\"\n");
-fprintf(f, "#include \"cheapcgi.h\"\n");
+fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 fprintf(f, "void usage()\n");
 fprintf(f, "/* Explain usage and exit. */\n");
@@ -56,7 +56,7 @@ fprintf(f, "\n");
 fprintf(f, "int main(int argc, char *argv[])\n");
 fprintf(f, "/* Process command line. */\n");
 fprintf(f, "{\n");
-fprintf(f, "cgiSpoof(&argc, argv);\n");
+fprintf(f, "optionHash(&argc, argv);\n");
 fprintf(f, "if (argc != 2)\n");
 fprintf(f, "    usage();\n");
 fprintf(f, "%s(argv[1]);\n", name);
@@ -98,7 +98,7 @@ char fileName[512];
 char dirName[512];
 char fileOnly[128];
 char command[512];
-boolean doCvs = cgiBoolean("cvs");
+boolean doCvs = optionExists("cvs");
 
 if (doCvs)
     {
@@ -144,7 +144,7 @@ struct dyString *ds = newDyString(1024);
 int i;
 boolean doCvs = FALSE;
 
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc < 3)
      usage();
 for (i=2; i<argc; ++i)
