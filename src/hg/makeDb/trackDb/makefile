@@ -34,6 +34,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	droEre1 \
 	anoGam1 \
 	apiMel1 \
+	apiMel2	\
 	ci1 \
 	ce1 ce2 \
 	cb1 \
