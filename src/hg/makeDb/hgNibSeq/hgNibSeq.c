@@ -9,6 +9,8 @@
 
 boolean preMadeNib = FALSE;
 char *tableName = "chromInfo";
+char *chromPrefix = "";
+boolean appendTbl = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +24,8 @@ errAbort(
   "options:\n"
   "   -preMadeNib  don't bother generating nib files, they exist already\n"
   "   -table=tableName - Use this table name rather than chromInfo\n"
+  "   -chromPrefix=str - prefix chrom names with this string\n"
+  "   -append - append to existing table, don't delete\n"
   );
 }
 
@@ -46,7 +50,7 @@ dyStringFree(&dy);
 void hgNibSeq(char *database, char *destDir, int faCount, char *faNames[])
 /* hgNibSeq - convert DNA to nibble-a-base and store location in database. */
 {
-char dir[256], name[128], ext[64];
+char dir[256], name[128], chromName[128], ext[64];
 char nibName[512];
 struct sqlConnection *conn = sqlConnect(database);
 char query[512];
@@ -60,7 +64,8 @@ if (!strchr(destDir, '/'))
    errAbort("Use full path name for nib file dir\n");
 
 makeDir(destDir);
-createTable(conn);
+if ((!appendTbl) || !sqlTableExists(conn, tableName))
+    createTable(conn);
 for (i=0; i<faCount; ++i)
     {
     faName = faNames[i];
@@ -85,8 +90,10 @@ for (i=0; i<faCount; ++i)
 	    freeDnaSeq(&seq);
 	    }
 	}
+    strcpy(chromName, chromPrefix);
+    strcat(chromName, name);
     sprintf(query, "INSERT into %s VALUES('%s', %d, '%s')",
-        tableName, name, size, nibName);
+        tableName, chromName, size, nibName);
     sqlUpdate(conn,query);
     total += size;
     }
@@ -102,6 +109,8 @@ if (argc < 3)
     usage();
 preMadeNib = optionExists("preMadeNib");
 tableName = optionVal("table", tableName);
+chromPrefix = optionVal("chromPrefix", chromPrefix);
+appendTbl = optionExists("append");
 hgNibSeq(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
