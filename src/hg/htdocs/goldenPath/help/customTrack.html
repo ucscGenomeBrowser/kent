@@ -44,7 +44,7 @@
 
 <P>The Genome Browser provides dozens of aligned annotation tracks that have been computed at UCSC or have been provided by
 outside collaborators. In addition to these standard tracks, it is also possible for users to upload their own annotations for
-temporary display in the browser. These custom annotation tracks are viewable only on the machine from which they were uploaded and are only 
+temporary display in the Genome Browser. These custom annotation tracks are viewable only on the machine from which they were uploaded and are only 
 kept for 8 hours after the last time they were accessed. Users can optionally make custom annotations viewable by others as well.
 
 <P>Genome Browser annotation tracks are based on files in line-oriented format. 
@@ -64,11 +64,11 @@ set in your annotation file. However, all of the data lines for a given annotati
 <P><B>Step 2. Define the Genome Browser display characteristics</B><BR>
 Add one or more optional <A HREF="#BROWSER">browser lines</A> to the beginning of your formatted data file to configure the overall 
 display of the Genome Browser when it initially displays your annotation data. Browser lines allow you to configure such things 
-as the genome position that the browser will initially open to, the width of the display, and the configuration of the other
+as the genome position that the Genome Browser will initially open to, the width of the display, and the configuration of the other
 annotation tracks that are shown (or hidden) in the initial display. NOTE: If
 the browser position is not explicitly set in the annotation file, the initial display will default
 to the position setting most recently used by the user, which may not be an
-appropriate postion for viewing the annotation track.
+appropriate position for viewing the annotation track.
 
 <P><B>Step 3. Define the annotation track display characteristics</B><BR>
 Following the browser lines - and immediately preceding the formatted data - add a <A HREF="#TRACK">track line</A> to 
@@ -101,7 +101,7 @@ labels display in green (0,128,0), and the gray level of the each feature
 reflects the score value of that line. NOTE: The track name line in this example
 has been
 split over 2 lines for documentation purposes. If you paste this example into
-the browser, you must remove the line break to display the track successfully.
+the Genome Browser, you must remove the line break to display the track successfully.
 <PRE><TT>browser position chr22:1000-10000
 browser hide all
 track name=pairedReads description="Clone Paired Reads" visibility=2
@@ -441,7 +441,7 @@ Here is a brief description of the GFF fields:</P>
 
 <P><B><I>Example:</I></B><BR>
 Here's an example of a GFF-based track. NOTE: If you paste this example into
-your browser, check that all fields remain tab-separated (some cut and
+the Genome Browser, check that all fields remain tab-separated (some cut and
 paste operations may inadvertently replace the tabs with spaces).</P>
 
 <PRE><TT>track name=regulatory description=&quot;TeleGene(tm) Regulatory Regions&quot;
@@ -588,8 +588,8 @@ the display mode for the track to <I>hide</I>. If you are using the
 Annotation File box on the Genome Browser Gateway page to upload the track, check that you've
 entered the correct file name. If neither of these are the cause of the problem, try resetting the Genome Browser to clear any 
 settings that may be preventing the annotation to display. To reset the Genome Browser, click on &quot;Click here to reset&quot; on the Gateway
-page. If the annotation track still doesn't display, you may need to clear the cookies in your internet browser as well
-(refer to your internet browser's documentation for further information).
+page. If the annotation track still doesn't display, you may need to clear the cookies in your Internet browser as well
+(refer to your Internet browser's documentation for further information).
 
 <P><B><I>Problem:</I></B> I've gotten my annotation track to display, but now I can't make it go away! How do I remove an annotation
 track from my Genome Browser display?<BR>
