@@ -658,11 +658,13 @@ type psl .
 
 track miRNA
 shortLabel miRNA
-longLabel Sanger miRNA Registry
-group rna
-priority 73
+longLabel MicroRNAs from the miRNA Registry
+group genes
+priority 63
 visibility hide
-type bed 5 +
+useScore 1
+color 255,64,64
+type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
 
 track cpgIsland
