@@ -327,6 +327,15 @@ visibility hide
 color 10,100,15
 type genePred
 
+track ncbiGeneCDS99
+shortLabel NCBI CDS 99 set
+longLabel NCBI $Organism 34.3 CDS 99 set
+group x
+priority 30.10
+visibility hide
+color 33,66,15
+type genePred
+
 track hinxtonGeneSet
 shortLabel Hinxton gene set
 longLabel Hinxton $Organism 34 gene set
