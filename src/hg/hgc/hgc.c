@@ -133,7 +133,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.589 2004/03/23 17:50:31 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.590 2004/03/24 18:44:50 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2082,9 +2082,9 @@ if (wordCount > 0)
     else if (sameString(type, "genePred"))
         {
 	char *pepTable = NULL, *mrnaTable = NULL;
-	if (wordCount > 1)
+	if ((wordCount > 1) && !sameString(words[1], "."))
 	    pepTable = words[1];
-	if (wordCount > 2)
+	if ((wordCount > 2) && !sameString(words[2], "."))
 	    mrnaTable = words[2];
 	genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
 	}
