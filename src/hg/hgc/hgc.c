@@ -5392,6 +5392,13 @@ char band[32], stsid[20];
 int i;
 struct psl *pslList = NULL, *psl;
 int pslStart;
+char *sqlMarker = marker;
+
+/* Make sure to escpae single quotes for DB parseability */
+if (strchr(marker, '\''))
+    {
+    sqlMarker = replaceChars(marker, "'", "''");
+    }
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
@@ -5401,7 +5408,7 @@ cartWebStart(cart, title);
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
                 AND chrom = '%s' AND chromStart = %d
                 AND chromEnd = %d",
-	        table, marker, seqName, start, end);  
+	        table, sqlMarker, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
