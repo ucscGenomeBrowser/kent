@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.29 2004/08/31 00:06:51 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.30 2004/09/02 18:07:20 hiram Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -420,21 +420,20 @@ if (!isWig)
     }
 
 /* Filter line. */
-if (!isWig)
+{
+hPrintf("<TR><TD><B>filter:</B>\n");
+if (anyFilter())
     {
-    hPrintf("<TR><TD><B>filter:</B>\n");
-    if (anyFilter())
-        {
-	cgiMakeButton(hgtaDoFilterPage, "Edit");
-	hPrintf(" ");
-	cgiMakeButton(hgtaDoClearFilter, "Clear");
-	}
-    else
-        {
-	cgiMakeButton(hgtaDoFilterPage, "Create");
-	}
-    hPrintf("</TD></TR>\n");
+    cgiMakeButton(hgtaDoFilterPage, "Edit");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoClearFilter, "Clear");
     }
+else
+    {
+    cgiMakeButton(hgtaDoFilterPage, "Create");
+    }
+hPrintf("</TD></TR>\n");
+}
 
 /* Intersection line. */
 if (isPositional && !isWig)
