@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.137 2004/04/14 21:59:23 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.138 2004/04/19 20:35:15 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1319,6 +1319,19 @@ sr = sqlGetResult(conn, query);
 puts("<TABLE><TR><TD>\n");
 puts("<TABLE>\n");
 gotFirst = FALSE;
+if (filterWiggle)
+    {
+    printf("<TR VALIGN=BOTTOM><TD> data value </TD><TD>\n");
+    puts(" is \n");
+    snprintf(name, sizeof(name), "cmp%s_wigDataValue", tableId);
+    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
+			    cgiUsualString(name, cmpOpMenu[0]));
+    puts("</TD><TD>\n");
+    newVal = "";
+    snprintf(name, sizeof(name), "pat%s_wigDataValue", tableId);
+    cgiMakeTextVar(name, cgiUsualString(name, newVal), 20);
+    gotFirst = TRUE;
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (! sameWord(row[1], "longblob"))
@@ -1360,19 +1373,6 @@ puts("Free-form query: ");
 snprintf(name, sizeof(name), "rawQuery%s", tableId);
 cgiMakeTextVar(name, cgiUsualString(name, ""), 50);
 puts("</TD></TR>");
-if (filterWiggle)
-    {
-    printf("<TR VALIGN=BOTTOM><TD><TABLE><TR VALIGN=BOTTOM><TD> data value </TD><TD>\n");
-    puts(" is \n");
-    snprintf(name, sizeof(name), "cmp%s_wigDataValue", tableId);
-    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
-			    cgiUsualString(name, cmpOpMenu[0]));
-    puts("</TD><TD>\n");
-    newVal = "";
-    snprintf(name, sizeof(name), "pat%s_wigDataValue", tableId);
-    cgiMakeTextVar(name, cgiUsualString(name, newVal), 20);
-    puts("</TD></TR></TABLE></TD></TR>\n");
-    }
 puts("</TABLE>");
 }
 
@@ -4259,8 +4259,8 @@ saveIntersectOptionsState();
 
 if (op == NULL)
     table2 = NULL;
-
-typeWiggle2 = isWiggle(db2, table2);
+else
+    typeWiggle2 = isWiggle(db2, table2);
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -4411,130 +4411,134 @@ if (table2 != NULL)
 	}
     }
 
-/* Print out a big table of stats... */
-puts("<P>");
-numCols = (numChroms > 1) ? numChroms+1 : 1;
-for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
+/* Print out a big table of stats... only when not just one wiggle */
+
+if (!(typeWiggle && (table2 == NULL)))
     {
-    struct bed *bedListConstr, *bed;
-    int count;
-    getFullTableName(fullTableName, chromPtr->name, table);
-
-    bedListConstr = getBedList(FALSE, chrom);
-    count = slCount(bedListConstr);
-
-    itemCounts[0] += count;
-    itemCounts[i] = count;
-    if (count > 0)
+    puts("<P>");
+    numCols = (numChroms > 1) ? numChroms+1 : 1;
+    for (chromPtr=chromList,i=1; chromPtr != NULL; chromPtr=chromPtr->next,i++)
 	{
-	struct featureBits *fbList =
-	    fbFromBed("out", hti, bedListConstr, winStart, winEnd,
-		      FALSE, FALSE);
-	int chromSize = hChromSize(chrom);
-	Bits *bits = bitAlloc(chromSize+8);
+	struct bed *bedListConstr, *bed;
+	int count;
+	getFullTableName(fullTableName, chromPtr->name, table);
 
-	fbOrBits(bits, chromSize, fbList, 0);
-	count = bitCountRange(bits, 0, chromSize);
-	bitFree(&bits);
-	}
-    else
-	count = 0;
-    bitCounts[0] += count;
-    bitCounts[i] = count;
-    if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
-	{
-	struct bed *bedListUnc = getBedList(TRUE, chrom);
+	bedListConstr = getBedList(FALSE, chrom);
+	count = slCount(bedListConstr);
 
-	count = slCount(bedListUnc);
-
-	itemUncCounts[0] += count;
-	itemUncCounts[i] = count;
-	}
-    if (itemCounts[i] > 0)
-	{
-	chromLengthArrs[i] = needMem(itemCounts[i] * sizeof(int));
-	for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
-	    chromLengthArrs[i][j] = bed->chromEnd - bed->chromStart;
-	intStatsFromArr(chromLengthArrs[i], itemCounts[i],
-			&(chromLengthStats[i]));
-	if (hti->scoreField[0] != 0)
+	itemCounts[0] += count;
+	itemCounts[i] = count;
+	if (count > 0)
 	    {
-	    scoreArrs[i] = needMem(itemCounts[i] * sizeof(int));
-	    for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
-		scoreArrs[i][j] = bed->score;
-	    intStatsFromArr(scoreArrs[i], itemCounts[i], &(scoreStats[i]));
+	    struct featureBits *fbList =
+		fbFromBed("out", hti, bedListConstr, winStart, winEnd,
+			  FALSE, FALSE);
+	    int chromSize = hChromSize(chrom);
+	    Bits *bits = bitAlloc(chromSize+8);
+
+	    fbOrBits(bits, chromSize, fbList, 0);
+	    count = bitCountRange(bits, 0, chromSize);
+	    bitFree(&bits);
 	    }
-	if (hti->strandField[0] != 0)
+	else
+	    count = 0;
+	bitCounts[0] += count;
+	bitCounts[i] = count;
+	if ((constraints != NULL)||((table2 != NULL)&&(constraints2 != NULL)))
 	    {
-	    for (bed=bedListConstr;  bed != NULL;  bed=bed->next)
+	    struct bed *bedListUnc = getBedList(TRUE, chrom);
+
+	    count = slCount(bedListUnc);
+
+	    itemUncCounts[0] += count;
+	    itemUncCounts[i] = count;
+	    }
+	if (itemCounts[i] > 0)
+	    {
+	    chromLengthArrs[i] = needMem(itemCounts[i] * sizeof(int));
+	    for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+		chromLengthArrs[i][j] = bed->chromEnd - bed->chromStart;
+	    intStatsFromArr(chromLengthArrs[i], itemCounts[i],
+			    &(chromLengthStats[i]));
+	    if (hti->scoreField[0] != 0)
 		{
-		if (bed->strand[0] == '+')
+		scoreArrs[i] = needMem(itemCounts[i] * sizeof(int));
+		for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+		    scoreArrs[i][j] = bed->score;
+		intStatsFromArr(scoreArrs[i], itemCounts[i], &(scoreStats[i]));
+		}
+	    if (hti->strandField[0] != 0)
+		{
+		for (bed=bedListConstr;  bed != NULL;  bed=bed->next)
 		    {
-		    strandPCounts[0]++;
-		    strandPCounts[i]++;
-		    }
-		else if (bed->strand[0] == '-')
-		    {
-		    strandMCounts[0]++;
-		    strandMCounts[i]++;
-		    }
-		else
-		    {
-		    strandQCounts[0]++;
-		    strandQCounts[i]++;
+		    if (bed->strand[0] == '+')
+			{
+			strandPCounts[0]++;
+			strandPCounts[i]++;
+			}
+		    else if (bed->strand[0] == '-')
+			{
+			strandMCounts[0]++;
+			strandMCounts[i]++;
+			}
+		    else
+			{
+			strandQCounts[0]++;
+			strandQCounts[i]++;
+			}
 		    }
 		}
-	    }
-	if (hti->hasCDS)
-	    {
-	    utr5Arrs[i] = needMem(itemCounts[i] * sizeof(int));
-	    cdsArrs[i]  = needMem(itemCounts[i] * sizeof(int));
-	    utr3Arrs[i] = needMem(itemCounts[i] * sizeof(int));
-	    getBedBaseCounts(bedListConstr, hti->hasBlocks,
-			     utr5Arrs[i], cdsArrs[i], utr3Arrs[i]);
-	    intStatsFromArr(utr5Arrs[i], itemCounts[i], &(utr5Stats[i]));
-	    intStatsFromArr(cdsArrs[i],  itemCounts[i], &(cdsStats[i]));
-	    intStatsFromArr(utr3Arrs[i], itemCounts[i], &(utr3Stats[i]));
-	    }
-	if (hti->hasBlocks)
-	    {
-	    blockCountArrs[i] = needMem(itemCounts[i] * sizeof(int));
-	    blockSizeArrs[i]  = needMem(itemCounts[i] * sizeof(int));
-	    for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+	    if (hti->hasCDS)
 		{
-		int k, totalSize = 0;
-		if (bed->blockCount < 1)
-		    errAbort("Illegal bed: appears to have blocks, but blockCount is %d (%s\t%d\t%d\t%s...)",
-			     bed->blockCount, bed->chrom, bed->chromStart,
-			     bed->chromEnd, bed->name);
-		blockCountArrs[i][j] = bed->blockCount;
-		for (k=0;  k < bed->blockCount;  k++)
-		    totalSize += bed->blockSizes[k];
-		// we lose some granularity here, but not too much...
-		blockSizeArrs[i][j] = round(totalSize / bed->blockCount);
+		utr5Arrs[i] = needMem(itemCounts[i] * sizeof(int));
+		cdsArrs[i]  = needMem(itemCounts[i] * sizeof(int));
+		utr3Arrs[i] = needMem(itemCounts[i] * sizeof(int));
+		getBedBaseCounts(bedListConstr, hti->hasBlocks,
+				 utr5Arrs[i], cdsArrs[i], utr3Arrs[i]);
+		intStatsFromArr(utr5Arrs[i], itemCounts[i], &(utr5Stats[i]));
+		intStatsFromArr(cdsArrs[i],  itemCounts[i], &(cdsStats[i]));
+		intStatsFromArr(utr3Arrs[i], itemCounts[i], &(utr3Stats[i]));
 		}
-	    intStatsFromArr(blockCountArrs[i], itemCounts[i],
-			    &(blockCountStats[i]));
-	    intStatsFromArr(blockSizeArrs[i], itemCounts[i],
-			    &(blockSizeStats[i]));
+	    if (hti->hasBlocks)
+		{
+		blockCountArrs[i] = needMem(itemCounts[i] * sizeof(int));
+		blockSizeArrs[i]  = needMem(itemCounts[i] * sizeof(int));
+		for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+		    {
+		    int k, totalSize = 0;
+		    if (bed->blockCount < 1)
+			errAbort("Illegal bed: appears to have blocks, but blockCount is %d (%s\t%d\t%d\t%s...)",
+				 bed->blockCount, bed->chrom, bed->chromStart,
+				 bed->chromEnd, bed->name);
+		    blockCountArrs[i][j] = bed->blockCount;
+		    for (k=0;  k < bed->blockCount;  k++)
+			totalSize += bed->blockSizes[k];
+		    // we lose some granularity here, but not too much...
+		    blockSizeArrs[i][j] = round(totalSize / bed->blockCount);
+		    }
+		intStatsFromArr(blockCountArrs[i], itemCounts[i],
+				&(blockCountStats[i]));
+		intStatsFromArr(blockSizeArrs[i], itemCounts[i],
+				&(blockSizeStats[i]));
+		}
 	    }
 	}
-    }
 
-getCumulativeStats(chromLengthArrs, itemCounts, numChroms,
-		   chromLengthStats);
-if (hti->scoreField[0] != 0)
-    getCumulativeStats(scoreArrs, itemCounts, numChroms, scoreStats);
-if (hti->hasCDS)
-    {
-    getCumulativeStats(utr5Arrs, itemCounts, numChroms, utr5Stats);
-    getCumulativeStats(cdsArrs,  itemCounts, numChroms, cdsStats);
-    getCumulativeStats(utr3Arrs, itemCounts, numChroms, utr3Stats);
-    }
-if (hti->hasBlocks)
-    {
-    getCumulativeStats(blockCountArrs, itemCounts, numChroms, blockCountStats);
-    getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
+    getCumulativeStats(chromLengthArrs, itemCounts, numChroms,
+		       chromLengthStats);
+    if (hti->scoreField[0] != 0)
+	getCumulativeStats(scoreArrs, itemCounts, numChroms, scoreStats);
+    if (hti->hasCDS)
+	{
+	getCumulativeStats(utr5Arrs, itemCounts, numChroms, utr5Stats);
+	getCumulativeStats(cdsArrs,  itemCounts, numChroms, cdsStats);
+	getCumulativeStats(utr3Arrs, itemCounts, numChroms, utr3Stats);
+	}
+    if (hti->hasBlocks)
+	{
+	getCumulativeStats(blockCountArrs,itemCounts,numChroms,blockCountStats);
+	getCumulativeStats(blockSizeArrs,itemCounts,numChroms,blockSizeStats);
+	}
     }
 
 if (typeWiggle)
