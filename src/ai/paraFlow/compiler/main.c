@@ -266,6 +266,23 @@ pp->parent = parent;
 return pp;
 }
 
+struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok)
+/* Return empty tuple. */
+{
+struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
+return tuple;
+}
+
+struct pfParse *singleTuple(struct pfParse *parent, struct pfToken *tok, struct pfParse *single)
+/* Wrap tuple around single. */
+{
+struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
+tuple->children = single;
+single->parent = tuple;
+single->next = NULL;
+return tuple;
+}
+
 static void skipRequiredName(char *name, struct pfToken **pTokList)
 /* Make sure next token matches name, and then skip it. */
 {
@@ -413,6 +430,67 @@ slAddHead(&pp->children, element);
 *pTokList = tok;
 slAddHead(&parent->children, pp);
 }
+
+static void parseFor(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse for statement */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptFor, tok, parent);
+struct pfParse *init;
+struct pfParse *check;
+struct pfParse *advance;
+
+scope = pfScopeNew(scope, 0);
+tok = tok->next;	/* Skip over 'for' */
+if (tok->type != '(')
+    expectingGot("(", tok);
+tok = tok->next;
+
+/* Parse up through first semicolon */
+if (tok->type == ';')
+    init = emptyTuple(pp, tok);
+else
+    {
+    pfParseStatement(pp, &tok, scope);
+    /* Ugh - better if pfParseStatement returned pfParse */
+    init = pp->children;
+    pp->children = NULL;
+    }
+if (tok->type != ';')
+    expectingGot(";", tok);
+tok = tok->next;
+
+/* Parse up through through semicolon */
+if (tok->type == ';')
+    check = emptyTuple(pp, tok);
+else
+    check = pfParseExpression(pp, &tok, scope);
+if (tok->type != ';')
+    expectingGot(";", tok);
+tok = tok->next;
+
+/* Parse advance statment and closing ')' */
+if (tok->type == ')')
+    advance = emptyTuple(pp, tok);
+else
+    {
+    pfParseStatement(pp, &tok, scope);
+    /* Ugh - better if pfParseStatement returned pfParse */
+    advance = pp->children;
+    pp->children = NULL;
+    }
+if (tok->type != ')')
+    expectingGot(")", tok);
+tok = tok->next;
+parseCompound(pp, &tok, scope);
+slAddHead(&pp->children, advance);
+slAddHead(&pp->children, check);
+slAddHead(&pp->children, init);
+slAddHead(&parent->children, pp);
+*pTokList = tok;
+}
+
 
 static void parseClass(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -624,23 +702,6 @@ else
     return pp;
 }
 
-struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok)
-/* Return empty tuple. */
-{
-struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
-return tuple;
-}
-
-struct pfParse *singleTuple(struct pfParse *parent, struct pfToken *tok, struct pfParse *single)
-/* Wrap tuple around single. */
-{
-struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
-tuple->children = single;
-single->parent = tuple;
-single->next = NULL;
-return tuple;
-}
-
 struct pfParse *pfParseExpression(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression. */
@@ -761,6 +822,8 @@ else if (tok->type == ';')
     *pTokList = tok->next;
 else if (tok->type == pftForeach)
     parseForeach(parent, pTokList, scope);
+else if (tok->type == pftFor)
+    parseFor(parent, pTokList, scope);
 else if (tok->type == pftClass)
     parseClass(parent, pTokList, scope);
 else if (tok->type == pftTo)
