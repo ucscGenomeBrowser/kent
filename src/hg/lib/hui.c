@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.30 2003/12/31 01:33:51 weber Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.31 2004/01/31 08:09:32 daryl Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -244,6 +244,190 @@ void smroeDropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, stsMapRatOptions, ArraySize(stsMapRatOptions), 
 	curVal);
+}
+
+/****** Some stuff for snp type related controls *******/
+
+static char *snpTypeLabels[] = {
+    "Single Nucleotide Polymorphisms",
+    "Insertions and Deletions",
+    "Segmental Duplications",
+};
+
+static char *snpTypes[] = {
+    "snpSingle.type",
+    "snpIndels.type",
+    "snpSegmental.type",
+};
+
+static char *snpTypeDataName[] = {
+    "SNP",
+    "INDEL",
+    "SEGMENTAL",
+};
+
+static char *snpTypeStates[] = {
+    "include",
+    "exclude",
+    "exclude",
+};
+
+enum snpTypeEnum snpTypeStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpTypes);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpTypeStringToEnum", string);
+return x;
+}
+
+char *snpTypeEnumToString(enum snpTypeEnum x)
+/* Convert from enum to string representation. */
+{
+return snpTypes[x];
+}
+
+enum snpTypeEnum snpTypeLabelStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpTypeLabels);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpTypeLabelStringToEnum", string);
+return x;
+}
+
+char *snpTypeLabelEnumToString(enum snpTypeEnum x)
+/* Convert from enum to string representation. */
+{
+return snpTypeLabels[x];
+}
+
+enum snpTypeEnum snpTypeStateStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpTypeStates);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpTypeStateStringToEnum", string);
+return x;
+}
+
+char *snpTypeStateEnumToString(enum snpTypeEnum x)
+/* Convert from enum to string representation. */
+{
+return snpTypeStates[x];
+}
+
+enum snpTypeEnum snpTypeDataStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpTypeDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpTypeDataStringToEnum", string);
+return x;
+}
+
+char *snpTypeDataEnumToString(enum snpTypeEnum x)
+/* Convert from enum to string representation. */
+{
+return snpTypeDataName[x];
+}
+
+/****** Some stuff for snp source related controls *******/
+
+static char *snpSourceLabels[] = {
+    "BAC Overlaps",
+    "Mixed",
+    "Random",
+    "Other",
+    "Affymetrix Genotyping Array 10K",
+    "Affymetrix Genotyping Array 120K",
+};
+
+static char *snpSourceStrings[] = {
+    "snpBAC.source",
+    "snpMIXED.source",
+    "snpRANDOM.source",
+    "snpOTHER.source",
+    "snpAffy10K.source",
+    "snpAffy120K.source",
+};
+
+static char *snpSourceDataName[] = {
+    "BAC_OVERLAP",
+    "MIXED",
+    "RANDOM",
+    "OTHER",
+    "Affy10K",
+    "Affy120K",
+};
+
+static char *snpSourceColor[] = {
+    "red",
+    "green",
+    "blue",
+    "black",
+    "exclude",
+    "exclude",
+};
+
+enum snpSourceEnum snpSourceStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpSourceStrings);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpSourceStringToEnum", string);
+return x;
+}
+
+char *snpSourceEnumToString(enum snpSourceEnum x)
+/* Convert from enum to string representation. */
+{
+return snpSourceStrings[x];
+}
+
+enum snpSourceEnum snpSourceLabelStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpSourceLabels);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpSourceLabelStringToEnum", string);
+return x;
+}
+
+char *snpSourceLabelEnumToString(enum snpSourceEnum x)
+/* Convert from enum to string representation. */
+{
+return snpSourceLabels[x];
+}
+
+enum snpSourceEnum snpSourceColorStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpSourceColor);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpSourceColorStringToEnum", string);
+return x;
+}
+
+char *snpSourceColorEnumToString(enum snpSourceEnum x)
+/* Convert from enum to string representation. */
+{
+return snpSourceColor[x];
+}
+
+enum snpSourceEnum snpSourceDataStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpSourceDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpSourceDataStringToEnum", string);
+return x;
+}
+
+char *snpSourceDataEnumToString(enum snpSourceEnum x)
+/* Convert from enum to string representation. */
+{
+return snpSourceDataName[x];
 }
 
 /****** Some stuff for fishClones related controls *******/
