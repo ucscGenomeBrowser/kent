@@ -54,6 +54,17 @@ chromosomes chr1,chr2,chr3,chr4,chr7,chr8,chr10,chr12,chr13,chr15,chr16,chr1_ran
 color 50,130,0
 type genePred
 
+track blastHg17KG
+shortLabel Human Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
+group genes
+priority 30
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
+
 searchTable gaze
 searchType genePred
 searchMethod exact
