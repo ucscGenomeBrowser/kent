@@ -22,6 +22,7 @@ with three sequences each:
 
 ##maf version=1 scoring=probability
 #mblastz 8.91 02-Jan-2005
+
 a score=0.128
 s human_hoxa 100  9 + 100257 ACA-TTACT
 s horse_hoxa 120 10 -  98892 ACAATTGCT
@@ -50,7 +51,8 @@ a paragraph by itself that begins with an 'a' line and
 which contains an 's' line for each sequence in the
 multiple alignment.  Parsers for now should ignore
 other types of paragraphs, and other types of lines within
-an alignment paragraph.
+an alignment paragraph. Parsers should also ignore extra
+blank lines before paragraphs.
 
 
 The First Line
