@@ -4095,18 +4095,27 @@ if (start != len)
 void showProteinPrediction(char *geneName, char *table)
 /* Fetch and display protein prediction. */
 {
-char query[512];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct pepPred *pp = NULL;
 
 if (!sqlTableExists(conn, table))
     {
     warn("Predicted peptide not yet available");
     }
+else if (sameString(table, "seq"))
+    {
+    aaSeq *seq = hPepSeq(geneName);
+    printf("<PRE><TT>");
+    printf(">%s\n", geneName);
+    printLines(stdout, seq->dna, 50);
+    printf("</TT></PRE>");
+    }
 else
     {
+    /* retrieve from a table containg the sequence */
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    struct pepPred *pp = NULL;
     sprintf(query, "select * from %s where name = '%s'", table, geneName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -4272,19 +4281,32 @@ void htcRefMrna(char *geneName)
 /* Display mRNA associated with a refSeq gene. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
 
 hgcStart("RefSeq mRNA");
-sprintf(query, "select name,seq from refMrna where name = '%s'", geneName);
-sr = sqlGetResult(conn, query);
 printf("<PRE><TT>");
-while ((row = sqlNextRow(sr)) != NULL)
+if (sqlTableExists(conn, "refMrna"))
     {
-    faWriteNext(stdout, row[0], row[1], strlen(row[1]));
+    /* older databases have sequence in a table */
+    struct sqlResult *sr;
+    char **row;
+    char query[256];
+
+    sprintf(query, "select name,seq from refMrna where name = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        faWriteNext(stdout, row[0], row[1], strlen(row[1]));
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+else
+    {
+    /* newer databases, go through seq table */
+    struct dnaSeq *seq = hRnaSeq(geneName);
+    faWriteNext(stdout, seq->name, seq->dna, seq->size);
+    dnaSeqFree(&seq);
+    }
+hFreeConn(&conn);
 }
 
 void htcKnownGeneMrna(char *geneName)
@@ -5051,6 +5073,7 @@ char **row;
 char query[256];
 char *mgiID;
 char *sqlRnaName = rnaName;
+char *pepTbl;
 struct refLink *rl;
 struct genePred *gp;
 
@@ -5163,7 +5186,9 @@ printStanSource(rl->mrnaAcc, "mrna");
 
 htmlHorizontalLine();
 
-geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
+/* older databases have peptide sequence in a table, newer have in ext file */
+pepTbl = sqlTableExists(conn, "refPep") ? "refPep" : "seq";
+geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, pepTbl, "htcTranslatedProtein",
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 printTrackHtml(tdb);
