@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.6 2005/03/15 00:43:50 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.7 2005/03/21 19:59:07 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -120,7 +120,11 @@ struct mafAli pairMaf;
 long componentCount = 0;
 struct mafComp *mcMaster = mafMaster(maf, mf, fileName);
 struct mafComp *oldMasterNext = mcMaster->next; 
+char *e, *chrom;
+char src[256];
 
+strcpy(src, mcMaster->src);
+chrom = chopPrefix(src);
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
     nextMc = mc->next;
@@ -129,13 +133,15 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
 
     /* create maf summary for this alignment component */
     AllocVar(ms);
-    ms->chrom = chopPrefix(cloneString(mcMaster->src));
+    ms->chrom = cloneString(chrom);
     /* both MAF and BED format define chromStart as 0-based */
     ms->chromStart = mcMaster->start;
     /* BED chromEnd is start+size */
     ms->chromEnd = mcMaster->start + mcMaster->size;
     ms->src = cloneString(mc->src);
-    chopSuffix(ms->src);
+    /* remove trailing components (following initial .) to src name */
+    if ((e = strchr(ms->src, '.')) != NULL)
+        *e = 0;
 
     /* construct pairwise maf for scoring */
     ZeroVar(&pairMaf);
