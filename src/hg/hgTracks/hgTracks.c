@@ -78,16 +78,14 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
-<<<<<<< hgTracks.c
 #include "itemAttr.h"
-=======
 #include "encode.h"
 #include "variation.h"
->>>>>>> 1.686
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.689 2004/03/24 18:55:17 angie Exp $";
+
+static char const rcsid[] = "$Id: hgTracks.c,v 1.690 2004/03/24 19:25:30 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
