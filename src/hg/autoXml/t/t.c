@@ -121,8 +121,8 @@ else if (sameString(name, "DESCRIPTION"))
 else
     {
     xapSkip(xp);
+    return NULL;
     }
-return NULL;
 }
 
 void testEndHandler(struct xap *xp, char *name)
@@ -176,6 +176,11 @@ fprintf(f, " id=\"%s\"", obj->id);
 if (obj->version != NULL)
     fprintf(f, " version=\"%s\"", obj->version);
 fprintf(f, ">%s</SOURCE>\n", obj->text);
+}
+
+struct source *sourceLoad(FILE *f)
+/* Load source from open file. */
+{
 }
 
 void descriptionSave(struct description *obj, int indent, FILE *f)
@@ -236,7 +241,6 @@ xapParse(xp, fileName);
 dasdsnSave(xp->topObject, 0, stdout);
 xapFree(&xp);
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */

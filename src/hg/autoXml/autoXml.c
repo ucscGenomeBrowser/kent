@@ -320,17 +320,34 @@ else
     return 's';
 }
 
-void saveFunctionPrototype(struct element *el, FILE *f, boolean addSemi)
+void saveFunctionPrototype(struct element *el, FILE *f, char *addSemi)
 /* Put up function prototype for elSave function. */
 {
 char *name = el->mixedCaseName;
-fprintf(f, "void %sSave(struct %s *obj, int indent, FILE *f)", name, name);
-if (addSemi)
-    fprintf(f, ";");
+fprintf(f, "void %sSave(struct %s *obj, int indent, FILE *f)%s", name, name, addSemi);
 fprintf(f, "\n");
 fprintf(f, "/* Save %s to file. */\n",  name);
 }
 
+void loadFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+/* Put up function prototype for elLoad function. */
+{
+char *name = el->mixedCaseName;
+fprintf(f, "struct %s *%sLoad(char *fileName)%s\n", name, name, addSemi);
+fprintf(f, "/* Load %s from file. */\n", name);
+}
+
+void loadFunctionBody(struct element *el, FILE *f)
+/* Write body of elLoad function. */
+{
+fprintf(f, "{\n");
+fprintf(f, "struct %s *obj;\n", el->mixedCaseName);
+fprintf(f, "xapParseAny(fileName, \"%s\", %sStartHandler, %sEndHandler, NULL, &obj);\n", 
+	el->name, prefix, prefix);
+fprintf(f, "return obj;\n");
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
 
 void makeH(struct element *elList, char *fileName)
 /* Produce C header file. */
@@ -384,7 +401,9 @@ for (el = elList; el != NULL; el = el->next)
 	}
     fprintf(f, "    };\n");
     fprintf(f, "\n");
-    saveFunctionPrototype(el, f, TRUE);
+    saveFunctionPrototype(el, f, ";");
+    fprintf(f, "\n");
+    loadFunctionPrototype(el, f, ";");
     fprintf(f, "\n");
     }
 
@@ -435,6 +454,7 @@ if (el->children == NULL)
     fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
 else
     {
+    fprintf(f, "fprintf(f, \"\\n\");\n");
     for (ec = el->children; ec != NULL; ec = ec->next)
 	{
 	char *name = ec->el->mixedCaseName;
@@ -478,14 +498,20 @@ for (el = elList; el != NULL; el = el->next)
 return FALSE;
 }
 
-void startHandler(struct element *elList, FILE *f)
+void startHandlerPrototype(FILE *f, char *addSemi)
+/* Print function prototype for startHandler. */
+{
+fprintf(f, "void *%sStartHandler(struct xap *xp, char *name, char **atts)%s\n", prefix, addSemi);
+fprintf(f, "/* Called by expat with start tag.  Does most of the parsing work. */\n");
+}
+
+void makeStartHandler(struct element *elList, FILE *f)
 /* Create function that gets called by expat at start of tag. */
 {
 struct element *el;
 struct attribute *att;
 
-fprintf(f, "void *%sStartHandler(struct xap *xp, char *name, char **atts)\n", prefix);
-fprintf(f, "/* Called by expat with start tag.  Does most of the parsing work. */\n");
+startHandlerPrototype(f, "");
 fprintf(f, "{\n");
 fprintf(f, "struct xapStack *st = xp->stack+1;\n");
 fprintf(f, "int depth = xp->stackDepth;\n");
@@ -505,7 +531,7 @@ for (el = elList; el != NULL; el = el->next)
 	    if (att->usual != NULL)
 		{
 		char *quote = "\"";
-		if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"));
+		if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
 		    quote = "";
 	        fprintf(f, "    obj->%s = %s%s%s;\n", att->name, quote, att->usual, quote);
 		}
@@ -577,6 +603,68 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
+
+void endHandlerPrototype(FILE *f, char *addSemi)
+/* Print function prototype for endHandler. */
+{
+fprintf(f, "void %sEndHandler(struct xap *xp, char *name)%s\n", prefix, addSemi);
+fprintf(f, "/* Called by expat with end tag.  Checks all required children are loaded. */\n");
+}
+
+void makeEndHandler(struct element *elList, FILE *f)
+/* Create function that gets called by expat at end of tag. */
+{
+struct element *el;
+struct elChild *ec;
+boolean first = TRUE;
+
+endHandlerPrototype(f, "");
+fprintf(f, "{\n");
+fprintf(f, "struct xapStack *stack = xp->stack;\n");
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (el->children || el->textType)
+        {
+	fprintf(f, "%sif (sameString(name, \"%s\"))\n", 
+	   (first ? "" : "else "), el->name);
+	fprintf(f, "    {\n");
+	fprintf(f, "    struct %s *obj = stack->object;\n", el->mixedCaseName);
+	for (ec = el->children; ec != NULL; ec = ec->next)
+	    {
+	    char *cBIG = ec->el->name;
+	    char *cSmall = ec->el->mixedCaseName;
+	    if (ec->copyCode == '1')
+	        {
+		fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
+		fprintf(f, "        xapError(xp, \"Missing %s\");\n", cBIG);
+		fprintf(f, "    if (obj->%s->next != NULL)\n", cSmall);
+		fprintf(f, "        xapError(xp, \"Multiple %s\");\n", cBIG);
+		}
+	    else if (ec->copyCode == '+')
+	        {
+		fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
+		fprintf(f, "        xapError(xp, \"Missing %s\");\n", cBIG);
+		}
+	    else if (ec->copyCode == '?')
+	        {
+		fprintf(f, "    if (obj->%s != NULL && obj->%s->next != NULL)\n", cSmall, cSmall);
+		fprintf(f, "        xapError(xp, \"Multiple %s\");\n", cBIG);
+		}
+	    }
+	if (el->textType)
+	    {
+	    fprintf(f, "    obj->%s = cloneString(stack->%s->string);\n", textField, textField);
+	    }
+	fprintf(f, "    }\n");
+	first = FALSE;
+	}
+    }
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
+
+
 void makeC(struct element *elList, char *fileName)
 /* Produce C code file. */
 {
@@ -593,12 +681,20 @@ fprintf(f, "#include \"xap.h\"\n");
 fprintf(f, "#include \"%s.h\"\n", prefix);
 fprintf(f, "\n");
 
+startHandlerPrototype(f, ";");
+fprintf(f, "\n");
+endHandlerPrototype(f, ";");
+fprintf(f, "\n");
+fprintf(f, "\n");
 for (el = elList; el != NULL; el = el->next)
     {
-    saveFunctionPrototype(el, f, FALSE);
+    saveFunctionPrototype(el, f, "");
     saveFunctionBody(el, f);
+    loadFunctionPrototype(el, f, "");
+    loadFunctionBody(el, f);
     }
-startHandler(elList, f);
+makeStartHandler(elList, f);
+makeEndHandler(elList, f);
 }
 
 void autoXml(char *dtdxFile, char *outRoot)
@@ -610,12 +706,12 @@ char fileName[512];
 
 splitPath(outRoot, NULL, prefix, NULL);
 parseDtdx(dtdxFile, &elList, &elHash);
-for (el = elList; el != NULL; el = el->next)
-    dumpElement(el, uglyOut);
+printf("Parsed %d elements in %s\n", slCount(elList), dtdxFile);
 sprintf(fileName, "%s.h", outRoot);
 makeH(elList, fileName);
 sprintf(fileName, "%s.c", outRoot);
 makeC(elList, fileName);
+printf("Generated code in %s\n", fileName);
 }
 
 int main(int argc, char *argv[])
