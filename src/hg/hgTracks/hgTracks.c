@@ -3145,7 +3145,7 @@ struct agpGap *gapList = NULL, *gap;
 struct wabaChromHit *wch, *wchList = NULL;
 
 /* Get the frags and load into tg->items. */
-sprintf(table, "%s%s", chromName, tg->customPt);
+sprintf(table, "%s%s", chromName, (char *)tg->customPt);
 sprintf(query, "select * from %s where chromStart<%u and chromEnd>%u",
     table, winEnd, winStart);
 sr = sqlGetResult(conn, query);
@@ -3738,7 +3738,7 @@ static UBYTE finishedInc[5] = {4, 4, 4, 4, 4};
 void incStage(UBYTE *b, int width, char stage)
 /* Increment b from 0 to width-1 according to stage. */
 {
-UBYTE *inc;
+UBYTE *inc = NULL;
 int i;
 
 if (stage == 'P')
@@ -3987,7 +3987,9 @@ if (glCloneList == NULL)
 	    *s = 0;
 	if ((hel = hashLookup(glCloneHash, cloneName)) == NULL)
 	    {
-	    if (!sameString(database, "hg4"))
+	    if (!sameString(database, "hg4") && !sameString(database, "hg5")
+	    	&& !sameString(database, "hg6") && !sameString(database, "hg7"))
+		/* Honestly, Asif and Jim will fix this someday! */
 		warn("%s not in range in clonePos", cloneName);
 	    continue;
 	    }
@@ -5313,5 +5315,6 @@ int main(int argc, char *argv[])
 htmlSetBackground("../images/floret.jpg");
 htmShell("Working Draft Genome Browser v5", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
+return 0;
 }
 
