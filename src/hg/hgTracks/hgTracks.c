@@ -9794,7 +9794,7 @@ registerTrackHandler("blastzStrictChainPig", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainRat", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainTetra", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainZebrafish", longXenoPslMethods);
-registerTrackHandler("chimpBlat", longXenoPslMethods);
+registerTrackHandler("blatChimp", longXenoPslMethods);
 registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
