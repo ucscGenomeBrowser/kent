@@ -1552,7 +1552,6 @@ int bin;	      /* Sample Y coordinates are first converted to
                        * bin coordinates, and then to pixels.  I'm not
 		       * totally sure why.  */
 
-int *maxPix;	/*an array of maximum y-value for each x-screen value*/
 
 
 int currentX, currentXEnd, currentWidth;
@@ -1631,6 +1630,7 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 if( sameString( tg->mapName, "humMusL" ) 
 	|| sameString( tg->mapName, "musHumL" )  
 	|| sameString( tg->mapName, "regpotent" )
+	|| sameString( tg->mapName, "mm3Rn2L" )
 	|| sameString( tg->mapName, "olly25")
 	|| sameString( tg->mapName, "olly2")
 	)
@@ -1648,21 +1648,18 @@ if( sameString( tg->mapName, "humMusL" )
 		binCount, y, hFactor, heightPer, gridColor );
 	}
     }
-else if( sameString( tg->mapName, "zoo" ) )
+else if( sameString( tg->mapName, "zoo" ) || sameString( tg->mapName, "zooNew" ) )
     {
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
     }
-
-maxPix = needMem( sizeof(int) * (tl.picWidth+1) );
-for( i=0; i<tl.picWidth; i++ )
-	maxPix[i] = tl.picWidth + 2;
 
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     gapPrevX = -1;
     prevX = -1;
     ybase = (int)((double)y+hFactor+(double)heightPer);
+
 
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
@@ -1722,9 +1719,8 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 
 	//if( x1 < 0 || x1 > tl.picWidth )
 	//printf("x1 = %d, sampleX=%d, winStart = %d\n<br>", x1, sampleX, winStart );
-	if( x1 >= 0 && x1 <= tl.picWidth && y1 < maxPix[x1] )
+	if( x1 >= 0 && x1 <= tl.picWidth )
 	{
-	maxPix[x1] = y1;
 	/* Draw the points themselves*/
 	drawScaledBox(vg, sampleX, sampleX+1, scale, xOff, (int)y1-1, 3, color);
 	if( fill )
@@ -1753,6 +1749,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	else
 	    y += lineHeight;
 	}
+
     }
 }
 
@@ -3454,77 +3451,6 @@ tg->itemName = sanger22Name;
 }
 
 
-Color vegaColor(struct track *tg, void *item, struct vGfx *vg)
-/* Return color to draw vega gene/pseudogene in. */
-{
-struct linkedFeatures *lf = item;
-Color col = tg->ixColor;
-struct rgbColor *normal = &(tg->color);
-struct rgbColor lighter, lightest;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-
-/* If vegaInfo is available, use it to determine the color:
- *  Known - black
- *  {Novel_CDS, Novel_Transcript} - dark blue
- *  {Putative,Ig_Segment} - medium blue
- *  {Predicted_gene,Pseudogene,Ig_Pseudogene_Segment} - light blue
- *  None of the above - gray
- * If no vegaGene, color it normally. 
- */
-if (hTableExists("vegaInfo"))
-    {
-    sprintf(query, "select method from vegaInfo where transcriptId = '%s'",
-	    lf->name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (sameWord("Known", row[0]))
-	    {
-	    col = blackIndex();
-	    }
-	else if (sameWord("Novel_CDS", row[0]) ||
-		 sameWord("Novel_Transcript", row[0]))
-	    {
-	    /* Use the usual color (dark blue) */
-	    }
-	else if (sameWord("Putative", row[0]) ||
-		 sameWord("Ig_Segment", row[0]))
-	    {
-	    lighter.r = (6*normal->r + 4*255) / 10;
-	    lighter.g = (6*normal->g + 4*255) / 10;
-	    lighter.b = (6*normal->b + 4*255) / 10;
-	    col = vgFindRgb(vg, &lighter);
-	    }
-	else if (sameWord("Predicted_gene", row[0]) ||
-		 sameWord("Pseudogene", row[0]) ||
-		 sameWord("Ig_Pseudogene_Segment", row[0]))
-	    {
-	    lightest.r = (1*normal->r + 2*255) / 3;
-	    lightest.g = (1*normal->g + 2*255) / 3;
-	    lightest.b = (1*normal->b + 2*255) / 3;
-	    col = vgFindRgb(vg, &lightest);
-	    }
-	else
-	    {
-	    col = lightGrayIndex();
-	    }
-	}
-    sqlFreeResult(&sr);
-    }
-hFreeConn(&conn);
-return(col);
-}
-
-void vegaMethods(struct track *tg)
-/* Special handling for vegaGene/vegaPseudoGene items. */
-{
-tg->itemColor = vegaColor;
-}
-
-
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
  * during repeatLoad, but rather query the database during the
@@ -3907,10 +3833,7 @@ int midLineOff = heightPer/2;
 boolean isFull = (vis == tvFull);
 Color brown = color;
 Color gold = tg->ixAltColor;
-Color col = 0;
-Color pink = 0;
-Color pink1 = vgFindColorIx(vg, 240, 140, 140);
-Color pink2 = vgFindColorIx(vg, 240, 100, 100);
+Color col;
 int ix = 0;
 double scale = scaleForPixels(width);
 
@@ -3933,8 +3856,6 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
     x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
     w = x2-x1;
     color =  ((ix&1) ? gold : brown);
-    pink = ((ix&1) ? pink1 : pink2);
-    color = (sameString(frag->type, "A") ? pink : color);
     if (w < 1)
 	w = 1;
     vgBox(vg, x1, y, w, heightPer, color);
@@ -3968,15 +3889,6 @@ else
     	font, color, vis);
 }
 
-Color goldColor(struct track *tg, void *item, struct vGfx *vg)
-/* Return color to draw known gene in. */
-{
-struct agpFrag *frag = item;
-Color pink = vgFindColorIx(vg, 240, 140, 140);
-Color color = (sameString(frag->type, "A") ? pink : tg->ixColor);
-return color;
-}
-
 void goldMethods(struct track *tg)
 /* Make track for golden path */
 {
@@ -3986,7 +3898,6 @@ tg->drawItems = goldDraw;
 tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = goldName;
 tg->mapItemName = goldName;
-tg->itemColor = goldColor;
 }
 
 
@@ -4201,7 +4112,7 @@ int grayLevel;
 char *verdict=dup->verdict;
 
 
-if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='A'))
+if ((verdict[0]=='B')&&(verdict[1]=='A')&&(verdict[2]=='D'))
     return vgFindColorIx(vg, 255,51,51);
 
 
@@ -6356,7 +6267,6 @@ int s, e, w;
 int log2 = digitsBaseTwo(baseWidth);
 int shiftFactor = log2 - 17;
 int sampleWidth;
-int ix = 0;
 
 if (shiftFactor < 0)
     shiftFactor = 0;
@@ -6375,12 +6285,9 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
 	if (e > sampleWidth) e = sampleWidth;
 	w = e - s;
 	if (w > 0)
-            {
 	    incStage(useCounts+s, w, stage);
-            }
 	}
     }
-
 resampleBytes(useCounts, sampleWidth, aveCounts, width);
 grayThreshold(aveCounts, width);
 vgVerticalSmear(vg,xOff,yOff,width,lineHeight,aveCounts,TRUE);
@@ -6404,10 +6311,9 @@ int tooBig = (winBaseCount > cloneFragMaxWin);
 int hilight = MG_CYAN;
 boolean gotTiling = hTableExists("tilingPath");
 struct sqlConnection *conn = NULL;
-Color bgColor;
+int bgColor;
 char accOnly[64];
-Color drawColor = color;
-Color pink = vgFindColorIx(vg, 240, 140, 140);
+
 
 if (gotTiling)
     conn = hAllocConn();
@@ -6430,9 +6336,7 @@ for (ci = tg->items; ci != NULL; ci = ci->next)
     x1 = roundingScale(ci->cloneStart-winStart, width, baseWidth)+xOff;
     x2 = roundingScale(ci->cloneEnd-winStart, width, baseWidth)+xOff;
     w = x2-x1;
-
-    drawColor = (ci->stage == 'A' ? pink : bgColor);
-    vgBox(vg, x1, y, w, oneHeight-1, drawColor);
+    vgBox(vg, x1, y, w, oneHeight-1, bgColor);
     if (!tooBig)
 	drawOneClone(ci, seqStart, seqEnd, vg, xOff, y+1, width, font, lineHeight, 
 		color, TRUE, tg->subType);
@@ -6657,6 +6561,7 @@ tg->itemStart = cloneItemStart;
 tg->itemEnd = cloneItemEnd;
 }
 
+
 void gapLoad(struct track *tg)
 /* Load up clone alignments from database tables and organize. */
 {
@@ -6814,77 +6719,89 @@ name = strstr(lf->name, "/");
 name ++;
 if(name != NULL)
     return name;
-return "unknown";
+else
+    return "unknown";
 }
 
-Color haplotypeColor(struct track *tg, struct linkedFeatures *lf, 
-		     struct simpleFeature *sf, struct vGfx *vg)
+Color perlegenColor(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct vGfx *vg)
 /* if it is the start or stop blocks make the color the shades
  * otherwise use black */
 {
 if(lf->components == sf || (sf->next == NULL))
     return tg->colorShades[lf->grayIx+tg->subType];
-return blackIndex();
+else
+    return blackIndex();
 }
 
-int haplotypeHeight(struct track *tg, struct linkedFeatures *lf, 
-		    struct simpleFeature *sf) 
+int perlegenHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
 /* if the item isn't the first or the last make it smaller */
 {
 if(sf == lf->components || sf->next == NULL)
     return tg->heightPer;
-return (tg->heightPer-4);
+else 
+    return (tg->heightPer-4);
 }
 
-static void haplotypeLinkedFeaturesDrawAt(struct track *tg, void *item,
-					  struct vGfx *vg, int xOff, int y, 
-					  double scale, MgFont *font, 
-					  Color color, enum trackVisibility vis)
-/* draws and individual haplotype and a given location */
+static void perlegenLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
+ * it could be cleaned up some but more importantly it should be integrated back 
+ * into the main draw routine */
 {
-struct linkedFeatures *lf = item;
-struct simpleFeature *sf = NULL;
-int x1 = 0;
-int x2 = 0;
-int w = 0;
+int baseWidth = seqEnd - seqStart;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+int y = yOff;
 int heightPer = tg->heightPer;
-//int shortHeight = heightPer - 4;
-int shortHeight = heightPer / 2;
-int s = 0;
-int e = 0;
+int lineHeight = tg->lineHeight;
+int x1,x2;
+int midLineOff = heightPer/2;
+int shortOff = 2, shortHeight = heightPer-4;
+int s, e, e2, s2;
+boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
-boolean isXeno = (tg->subType == lfSubXeno);
-boolean hideLine = (vis == tvDense && isXeno);
+Color bColor = tg->ixAltColor;
+double scale = scaleForPixels(width);
+boolean isXeno = tg->subType == lfSubXeno;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+int midY = y + midLineOff;
+int compCount = 0;
+int w;
+int prevEnd = -1;
 
-/* draw haplotype thick line ... */
-if (lf->components != NULL && !hideLine)
-  {
-    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-    w = x2 - x1;
-    color =  shades[lf->grayIx+isXeno];
-    vgBox(vg, x1, y+3, w, shortHeight-2, color);
-    if (vis==tvSquish)
-      vgBox(vg, x1, y+1, w, tg->heightPer/2, color);
-    else
-      vgBox(vg, x1, y+3, w, shortHeight-1, color);
-  }
-for (sf = lf->components; sf != NULL; sf = sf->next)
-  {
-    s = sf->start;
-    e = sf->end;
-    heightPer = haplotypeHeight(tg, lf, sf);
-    if (vis==tvSquish)
-      drawScaledBox(vg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
-    else
-      drawScaledBox(vg, s, e, scale, xOff, 
-		    y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
-  }
+lf=tg->items;    
+for(lf = tg->items; lf != NULL; lf = lf->next) 
+    {
+    if (lf->components != NULL && !hideLine)
+	{
+	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	w = x2-x1;
+	color =  shades[lf->grayIx+isXeno];
+	/* draw perlgen thick line ... */
+	vgBox(vg, x1, y+shortOff+1, w, shortHeight-2, color);
+	}
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	color = perlegenColor(tg, lf, sf, vg);
+	heightPer = perlegenHeight(tg, lf, sf);
+	s = sf->start;
+	e = sf->end;
+	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
+	/* if we're at the stop or start of a linked feature add a black tick for the snp 
+	 * in addtion to the larger tic of shaded color */
+	if(heightPer == tg->heightPer)
+	    drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
+	}
+    if (isFull)
+	y += lineHeight;
+    }
 }
 
 
-void altGraphXMapItem(struct track *tg, void *item, char *itemName, int start, 
-		      int end, int x, int y, int width, int height)
+void altGraphXMapItem(struct track *tg, void *item, char *itemName, int start, int end, 
+		    int x, int y, int width, int height)
 /* create a link for each altGraphX that centers it on browser with 
    known genes, human mrnas, and intron est tracks open */
 {
@@ -8267,17 +8184,10 @@ tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromCghNci60Bed;
 }
 
-void haplotypeMethods(struct track *tg)
+void perlegenMethods(struct track *tg)
 /* setup special methods for haplotype track */
 {
-tg->drawItemAt = haplotypeLinkedFeaturesDrawAt;
-tg->colorShades = shadesOfSea;
-}
-
-void perlegenMethods(struct track *tg)
-/* setup special methods for Perlegen haplotype track */
-{
-tg->drawItemAt = haplotypeLinkedFeaturesDrawAt;
+tg->drawItems = perlegenLinkedFeaturesDraw;
 tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
@@ -8761,7 +8671,8 @@ if (withLeftLabels)
 	    
 	
     	if( sameString( track->mapName, "humMusL" ) ||
-		 sameString( track->mapName, "musHumL" ) ||
+	    sameString( track->mapName, "musHumL" ) ||
+	    sameString( track->mapName, "mm3Rn2L" ) ||		
 	    sameString( track->mapName, "regpotent" ) )
 	    {
 	    int binCount = round(1.0/track->scaleRange);
@@ -8851,6 +8762,9 @@ if (withLeftLabels)
 			else if( sameString( track->mapName, "musHumL" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Human Cons");
+			else if( sameString( track->mapName, "mm3Rn2L" ))
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
+					track->ixColor, font, "Rat Cons");
 			else
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, rootName );
@@ -10079,8 +9993,6 @@ registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
-registerTrackHandler("vegaGene", vegaMethods);
-registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
@@ -10113,8 +10025,6 @@ registerTrackHandler("blastzTightRat", longXenoPslMethods);
 registerTrackHandler("blastzMm", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm3", longXenoPslMethods);
-registerTrackHandler("blastzBestMm3", longXenoPslMethods);
-registerTrackHandler("blastzTightMm3", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
 registerTrackHandler("blastzRecipBest", longXenoPslMethods);
@@ -10136,6 +10046,7 @@ registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
 registerTrackHandler("blastzTightMouse", longXenoPslMethods);
+registerTrackHandler("blastzBestMm3", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("blastzHgTop", longXenoPslMethods);
@@ -10149,7 +10060,6 @@ registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("blastzTightHuman", longXenoPslMethods);
 registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
-registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -10161,7 +10071,6 @@ registerTrackHandler("rmskNew", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
-registerTrackHandler("haplotype",haplotypeMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
@@ -10173,13 +10082,12 @@ registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
-registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
-registerTrackHandler("mgcFailedEst", intronEstMethods);
-registerTrackHandler("mgcPickedEst", intronEstMethods);
-registerTrackHandler("mgcUnpickedEst", intronEstMethods);
-
+registerTrackHandler("mgcNcbiPicks", estMethods);
+registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
+registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
+registerTrackHandler("mm3Rn2L", humMusLMethods);
 registerTrackHandler("zoo", zooMethods);
 registerTrackHandler("musHumL", musHumLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
@@ -10244,12 +10152,7 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
 	freezeName = "Unknown";
-    hPrintf("<FONT SIZE=5><B>");
-    if (hIsMgcServer())
-        hPrintf("MGC Genome Browser on %s %s Freeze",hOrganism(database), freezeName);
-    else
-        hPrintf("UCSC Genome Browser on %s %s Freeze",hOrganism(database), freezeName);
-    hPrintf("</B></FONT><BR>\n");
+    hPrintf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
@@ -10757,6 +10660,6 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 zooSpeciesHashInit();
-cartHtmlShell("UCSC Genome Browser v20-alpha", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v18-alpha", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
