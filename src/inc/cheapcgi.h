@@ -38,6 +38,9 @@ boolean cgiIsOnWeb();
 /* Return name of script so libs can do context-sensitive stuff. */
 char *cgiScriptName();
 
+/* Return name of server */
+char *cgiServerName();
+
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
 char *cgiString(char *varName);
