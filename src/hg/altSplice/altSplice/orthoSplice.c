@@ -12,7 +12,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.6 2003/05/26 21:32:48 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.7 2003/05/27 07:29:48 sugnet Exp $";
 
 struct spliceEdge 
 /* Structure to hold information about one edge in 
@@ -321,6 +321,47 @@ chainDbAddBlocks(chain, track, conn);
 return chain;
 }
 
+boolean checkChain(struct chain *chain, int start, int end)
+/* Return true if chain covers start, end, false otherwise. */
+{
+struct chain *subChain=NULL, *toFree=NULL;
+boolean good = FALSE;
+chainSubsetOnT(chain, start, end, &subChain, &toFree);    
+if(subChain != NULL)
+    good = TRUE;
+chainFree(&toFree);
+return good;
+}
+
+struct chain *lookForChain(struct cnFill *list, int start, int end)
+/* Recursively look for a chain in this list containing the coordinates 
+   desired. */
+{
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+
+struct chain *chain = NULL;
+for(fill = list; fill != NULL; fill = fill->next)
+    {
+    chain = chainFromId(fill->chainId);
+    if(checkChain(chain, start,end))
+	return chain;
+    for(gap = fill->children; gap != NULL; gap = gap->next)
+	{
+	chain = chainFromId(fill->chainId);
+	if(checkChain(chain, start,end))
+	    return chain;
+	if(gap->children)
+	    {
+	    chain = lookForChain(gap->children, start, end);
+	    if(checkChain(chain, start,end))
+		return chain;
+	    }
+	}
+    }
+return chain;
+}
+
 struct chain *chainForPosition(struct sqlConnection *conn, char *db, char *netTable, 
 			       char *chainTable, char *chrom, int start, int end)
 /** Load the chain in the database for this position from the net track. */
@@ -328,12 +369,16 @@ struct chain *chainForPosition(struct sqlConnection *conn, char *db, char *netTa
 char query[256];
 struct sqlResult *sr;
 char **row;
+struct cnFill *fill=NULL;
+struct cnFill *gap=NULL;
+struct chain *subChain=NULL, *toFree=NULL;
 struct chain *chain = NULL;
 struct chainNet *net = chainNetLoadRange(db, netTable, chrom,
 					 start, end, NULL);
 if(net == NULL)
     return NULL;
-chain = chainFromId(net->fillList->chainId);
+fill = net->fillList;
+chain = lookForChain(fill, start, end);
 //chain = chainDbLoad(conn, chainTable, chrom, net->fillList->chainId);
 chainNetFreeList(&net);
 return chain;
@@ -507,13 +552,13 @@ for(i=0; i<oVCount; i++)
 	edge = orthoEm[vMap[hardStart]][i];
     if(edge)
 	{
-	int oStart = orthoPos[i];
-	int oEnd = orthoPos[vMap[hardStart]];
+	int oStart = orthoPos[vMap[hardStart]];
+	int oEnd = orthoPos[i];
 	int overlap = 0;
 	if(reverse)
-	    overlap = rangeIntersection(qs, qe, oStart, oEnd);
-	else
 	    overlap = rangeIntersection(qs, qe, oEnd, oStart);
+	else
+	    overlap = rangeIntersection(qs, qe, oStart, oEnd);
 	if(overlap > bestOverlap)
 	    {
 	    overlap = bestOverlap;
@@ -643,17 +688,19 @@ for(i=0; i<vCount; i++)
 	/* Look for an edge with a vertex that is mapped. */
 	for(j=0; j<vCount; j++)
 	    {
+	    int orthoV = -1;
 	    /* If there is an edge with one vertex already found. */
-	    if(em[i][j] && vMap[j] != -1 && isExon(ag, i, j))
+	    if( vTypes[i] == ggSoftStart && em[i][j] && vMap[j] != -1 && isExon(ag, i, j))
 		{
-		int orthoV = -1;
-		if(vTypes[i] == ggSoftStart)
-		    orthoV = findBestOrthoStartByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
-		else
-		    orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
-		if(notAssigned(vMap, vCount, orthoV))
-		    vMap[i] = orthoV;
+		orthoV = findBestOrthoStartByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
 		}
+	    else if(vTypes[i] == ggSoftEnd && em[j][i] && vMap[j] != -1 && isExon(ag, j, i))
+		{
+		orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, j, i, reverse);
+		}
+	    if(notAssigned(vMap, vCount, orthoV))
+		vMap[i] = orthoV;
+	    orthoV = -1;
 	    }
 	}
     }
