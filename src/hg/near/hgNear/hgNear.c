@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.107 2003/10/21 17:56:40 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.108 2003/10/22 21:33:02 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -891,7 +891,7 @@ hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange=\"%s\"",
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
   "document.orgForm.db.value=0;"
-  "document.orgForm.near_search.value='';"
+  // "document.orgForm.near_search.value='';"
   "document.orgForm.submit();");
 hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
@@ -1576,10 +1576,14 @@ void doMiddle(struct cart *theCart)
 char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
+char *oldOrg;
 cart = theCart;
 
 getDbAndGenome(cart, &database, &genome);
 makeSureDbHasHgNear();
+oldOrg = cartOptionalString(cart, oldOrgVarName);
+if (oldOrg != NULL && !sameString(oldOrg, genome))
+   cartRemove(cart, searchVarName);
 hSetDb(database);
 getGenomeSettings();
 conn = hAllocConn();
@@ -1651,6 +1655,7 @@ else if (cartNonemptyString(cart, searchVarName))
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
+cartSetString(cart, oldOrgVarName, genome);
 }
 
 void usage()

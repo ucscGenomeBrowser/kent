@@ -34,3 +34,4 @@ compile: $O $(MYLIBS)
 
 test:
 	$(CGI_BIN)-$(USER)/hgNear
+
