@@ -8,6 +8,6 @@ table rnaSecStr
     uint    score;      "Score from 0-1000"
     char[1] strand;     "+ or -"
     uint    size;       "Size of element."
-    lstring secStr;     "Parenthesis and '.'s which define the secondary structure"
+    lstring secStr;     "Parentheses and '.'s which define the secondary structure"
     double[size]  conf; "Confidence of secondary-structure annotation per position (0.0-1.0)."
     )

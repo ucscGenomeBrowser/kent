@@ -12,10 +12,8 @@ CREATE TABLE rnaSecStr (
     score int unsigned not null,	# Score from 0-1000
     strand char(1) not null,	# + or -
     size int unsigned not null,	# Size of element.
-    secStr longblob not null,	# Parenthesis and '.'s which define the secondary structure
+    secStr longblob not null,	# Parentheses and '.'s which define the secondary structure
     conf longblob not null,	# Confidence of secondary-structure annotation per position (0.0-1.0).
               #Indices
-    INDEX(name(16)),
-    INDEX(chrom(8), chromStart),
-    INDEX(chrom(8), chromEnd)
+    PRIMARY KEY(chrom)
 );
