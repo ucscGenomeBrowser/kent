@@ -465,22 +465,8 @@ void cdsColorDropDown(char *var, char *curVal, int size);
 #define ZOOM_10X        "10x"
 #define ZOOM_BASE       "base"
 
-enum zoomOptEnum {
-   zoom1pt5x = 0,
-   zoom3x = 1,
-   zoom10x = 2,
-   zoomBase = 3
-};
-
 void zoomRadioButtons(char *var, char *curVal);
 /* Make a list of radio buttons for all zoom options */
-
-enum zoomOptEnum zoomStringToEnum(char *string);
-/* Convert from string to enum representation. */
-
-char *zoomEnumToString(enum zoomOptEnum x);
-/* Convert from enum to string representation. */
-
 
 /*** Some Stuff for the wiggle track ***/
 

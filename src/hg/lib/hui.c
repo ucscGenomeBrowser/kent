@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.41 2004/05/28 23:23:30 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.42 2004/05/30 17:10:28 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -692,21 +692,6 @@ for (i = 0; i < size; i++)
     printf("&nbsp; &nbsp; %s &nbsp;", s);   
     cgiMakeRadioButton(var, s, sameString(s, curVal));
     }
-}
-
-enum zoomOptEnum zoomStringToEnum(char *string)
-/* Convert from string to enum representation. */
-{
-int x = stringIx(string, zoomOptions);
-if (x < 0)
-   errAbort("hui::zoomStringToEnum() - Unknown option %s", string);
-return x;
-}
-
-char *zoomEnumToString(enum zoomOptEnum x)
-/* Convert from enum to string representation. */
-{
-return zoomOptions[x];
 }
 
 /****** Some stuff for affy related controls *******/
