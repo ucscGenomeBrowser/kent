@@ -1281,3 +1281,131 @@ SEQ2_LEN=$BASE/S2.len
     # add html for details pages to this directory:
     # ecoresMm3.html, ecoresRn3.html and ecoresHg16.html
 
+# MAKE Human Proteins track
+    ssh eieio
+    mkdir -p /cluster/data/fr1/blastDb
+    cd /cluster/data/fr1/blastDb
+    for i in ../superscaffolds/*.fa; do ln -s $i .; done
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/fr1/blastDb
+    cp /cluster/data/fr1/blastDb/* /iscratch/i/fr1/blastDb
+    (~kent/bin/iSync) 2>&1 > sync.out
+    
+    mkdir -p /cluster/data/fr1/bed/tblastn.hg16KG
+    cd /cluster/data/fr1/bed/tblastn.hg16KG
+    ls -1S /iscratch/i/fr1/blastDb/*.nsq | sed "s/\.nsq//" > fugu.lst
+    exit
+
+    # back to kksilo
+    cd /cluster/data/fr1/bed/tblastn.hg16KG
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl | awk "{print \\\$1}"`/\(150000/`wc fugu.lst | awk "{print \\\$1}"`\)
+    # 41117/(150000/578) = 158.437507
+    split -l 158 /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+f=/tmp/`basename $3`
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg16/bed/blat.hg16KG/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 fugu.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/fr1/bed/tblastn.hg16KG
+    para create blastSpec
+    para shove   # jobs will need to be restarted, but they should all finish
+# Completed: 150858 of 150858 jobs
+# CPU time in finished jobs:   10404860s  173414.33m  2890.24h  120.43d  0.330 y
+# IO & Wait Time:               2468643s   41144.06m   685.73h   28.57d  0.078 y
+# Average job time:                  85s       1.42m     0.02h    0.00d
+# Longest job:                      411s       6.85m     0.11h    0.00d
+# Submission to last job:         26364s     439.40m     7.32h    0.31d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -outPsl -maxGap=10000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/fr1/bed/tblastn.hg16KG
+    para create chainSpec
+    para push
+# Completed: 261 of 261 jobs
+# CPU time in finished jobs:        828s      13.81m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                 19521s     325.34m     5.42h    0.23d  0.001 y
+# Average job time:                  78s       1.30m     0.02h    0.00d
+# Longest job:                      270s       4.50m     0.07h    0.00d
+# Submission to last job:          3878s      64.63m     1.08h    0.04d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/fr1/bed/tblastn.hg16KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | liftUp -nosort -type=".psl" -nohead stdout /cluster/data/fr1/jkStuff/liftAll.lft warn stdin |  \
+    	sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastHg16KG.psl
+    cd ..
+    blatDir=/cluster/data/hg16/bed/blat.hg16KG
+    protDat -kg preblastHg16KG.psl $blatDir/hg16KG.psl $blatDir/kg.mapNames blastHg16KG.psl
+
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/tblastn.hg16KG
+    hgLoadPsl fr1 blastHg16KG.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
