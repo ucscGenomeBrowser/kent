@@ -74,7 +74,9 @@ struct genePred
  * Set to 8 due to microdeletions.
  */
 #define genePredStdInsertMergeSize 8
-
+#define GENEPRED_CLASS_VAR "geneClasses"
+#define GENEPRED_CLASS_PREFIX "gClass_"
+#define GENEPRED_CLASS_TBL "itemClassTbl"
 
 #define GENEPRED_NUM_COLS 10  /* number of columns in a genePred */
 #define GENEPREDX_NUM_COLS 15  /* max number of columns in extended genePred */
