@@ -53,7 +53,7 @@ Does:
    - create a list of all expected PSL files.";
 
 #
-# $Id: gbAlignSetup,v 1.11 2004/10/17 18:27:15 markd Exp $
+# $Id: gbAlignSetup,v 1.12 2004/11/13 17:23:19 markd Exp $
 #
 use strict;
 use warnings;
@@ -113,18 +113,22 @@ sub isTwoBitFile($) {
 }
 
 # get chroms and size in a twobit file.  This is does in one pass because
-# there can be a lot of scaffolds in a twobit Return list of chroms, sorted in
+# there can be a lot of scaffolds in a twobit. Return list of chroms, sorted in
 # assending size order, fill in hash with sizes.
 sub getTwoBitChromsSizes($$) {
     my($genomeFile, $sizeTblRef) = @_;
-    my @chromsSizes;
-    my $twoBitOut = callProg("twoBitInfo $genomeFile stdout | sort -k 2,2n");
+    my @chroms;
+    # warning: can't use pipe here, would be nice to just: | sort -k 2,2n
+    my $twoBitOut = callProg("twoBitInfo $genomeFile stdout");
     foreach my $line (split(/\n/, $twoBitOut)) {
         my @row = split(/\t/, $line);
         $sizeTblRef->{$row[0]} = $row[1];
-        push(@chromsSizes, $row[0]);
+        push(@chroms, $row[0]);
     }
-    return @chromsSizes;
+    
+    @chroms = sort {$sizeTblRef->{$a} - $sizeTblRef->{$b}} @chroms;
+
+    return @chroms;
 }
 
 # split unaligned string into it's component names
@@ -506,7 +510,7 @@ sub mondoBalance($@) {
     my $iBot = $#chroms;
     my @newChroms;
 
-    while ($iTop < $iBot) {
+    while ($iTop <= $iBot) {
         # 1 from bottom (larger)
         push(@newChroms, $chroms[$iBot--]);
         # 4 from top

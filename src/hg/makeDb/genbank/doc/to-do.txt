@@ -754,3 +754,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
         have relatively large windows with small overalp.
 
 - include version number in download fasta.
+
+- add a weekly analyze table.
