@@ -4764,15 +4764,12 @@ int prevEnd = -1;
 lf=tg->items;    
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
-    if (tg->itemColor && shades == NULL)
-	color = tg->itemColor(tg, lf, mg);
     if (lf->components != NULL && !hideLine)
 	{
 	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	w = x2-x1;
-	if (shades) 
-	    color =  shades[lf->grayIx+isXeno];
+	color =  shades[lf->grayIx+isXeno];
 	/* draw perlgen thick line ... */
 	mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, color);
 	}
@@ -5038,6 +5035,45 @@ freeHash(&expIndexesToNames);
 return lfsList;
 }
 
+
+void lfsFromAffyBed(struct trackGroup *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+filter type */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL, *bedList= NULL;
+char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(0));
+enum affyOptEnum affyType = affyStringToEnum(affyMap);
+int i=0;
+bedList = tg->items;
+
+if(tg->limitedVis == tvDense)
+    {
+    tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
+    }
+else if(affyType == affyTissue)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyTissue, NULL, -1);
+    slSort(&tg->items,lfsSortByName);
+    }
+else if(affyType == affyId)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyId, NULL, -1);
+    }
+else if(affyType == affyChipType)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyChipType, NULL, -1);
+    }
+else
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "affyExps", affyTissue, affyMap, 1);
+    slSort(&tg->items,lfsSortByName);
+    }
+bedFreeList(&bedList);
+}
+
 void lfsFromNci60Bed(struct trackGroup *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
@@ -5293,7 +5329,10 @@ else
     }
 }
 
-Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
+
+
+Color expressionColor(struct trackGroup *tg, void *item, struct memGfx *mg,
+		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
 {
 struct linkedFeatures *lf = item;
@@ -5326,9 +5365,9 @@ if(!exprBedColorsMade)
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull)
-    maxDeviation = 1.0 ;
+    maxDeviation = fullMax;
 else 
-    maxDeviation = .6;
+    maxDeviation = denseMax;
 
 /* cap the value to be less than or equal to maxDeviation */
 if(absVal > maxDeviation)
@@ -5350,6 +5389,54 @@ else
     }
 }
 
+Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Does the score->color conversion for various microarray tracks */
+{
+return expressionColor(tg, item, mg, .6, 1.0);
+}
+
+Color getColorForAffyExpssn(float val, float max)
+/* Return the correct color for a given score */
+{
+struct rgbColor color; 
+int colorIndex = 0;
+val = fabs(val);
+/* take the log for visualization */
+if(val > 0)
+    val = logBase2(val);
+else
+    val = 0;
+
+/* scale 4 down to 0 */
+if(val > 4) 
+    val -= 4;
+else
+    val = 0;
+
+if (max <= 0) 
+    errAbort("hgTracks::getColorForAffyExpssn() maxDeviation can't be zero\n"); 
+max = logBase2(max);
+max -= 4;
+if(max < 0)
+    errAbort("hgTracks::getColorForAffyExpssn() - Max val should be greater than 0 but it is: %g", max);
+    
+if(val > max) 
+    val = max;
+colorIndex = (int)(val * maxRGBShade/max);
+return shadesOfBlue[colorIndex];
+}
+
+Color affyColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Does the score->color conversion for affymetrix arrays */
+{
+struct linkedFeatures *lf = item;
+float score = lf->score;
+if(tg->visibility == tvDense)
+    score = score/10;
+if(!exprBedColorsMade)
+    makeRedGreenShades(mg);
+return getColorForAffyExpssn(score, 262144); /* 262144 == 2^18 */
+}
 
 void loadMultScoresBed(struct trackGroup *tg)
 /* Convert bed info in window to linked feature. */
@@ -5466,6 +5553,19 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = nci60Color;
 tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromNci60Bed ;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
+}
+
+
+void affyMethods(struct trackGroup *tg)
+/* set up special methods for NCI60 track and tracks with multiple
+   scores in general */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = affyColor;
+tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromAffyBed;
 tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
@@ -6203,7 +6303,7 @@ group->altColor.g = tdb->altColorG;
 group->altColor.b = tdb->altColorB;
 group->lineHeight = mgFontLineHeight(tl.font)+1;
 group->heightPer = group->lineHeight - 1;
-group->private = tdb->private;
+group->private = tdb->priv;
 group->priority = tdb->priority;
 if (tdb->useScore)
     {
@@ -6527,6 +6627,7 @@ registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
+registerTrackHandler("affy", affyMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
