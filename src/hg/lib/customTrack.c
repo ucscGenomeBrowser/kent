@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.43 2004/05/05 22:44:31 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.44 2004/05/10 23:43:41 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -91,14 +91,30 @@ static char *wigOptions[] =
     "wibFile",
 };
 static int wigOptCount = sizeof(wigOptions) / sizeof(char *);
-/*	to explicitly reference two of the above names	*/
 
+
+/*	Please note the dual nature of these variables.  Custom tracks
+ *	have to store all variables on the single track line in the form
+ *	of name=contents, but the hgTracks processing of tdb->settings
+ *	expects the variables to be in the form they would have come in
+ *	from the trackDb.ra file, which is each variable on a separate
+ *	line and no = sign between name and contents.  This parsing here
+ *	takes the name=contents variables from the track line and
+ *	converts them into the .ra format for use during hgTracks
+ *	processing.  Later, when the custom track
+ *	file is written out, these settings will be turned back into
+ *	the name=contents format in saveTdbLine()
+ */
 static void parseWiggleSettings(struct trackDb *tdb, struct hash *hash)
+/*	parse the track line looking for only the wiggle variables,
+ *	place them in the tdb->settings string in .ra format (one to a
+ *	line, no = sign)
+ */
 {
 struct dyString *wigSettings = newDyString(0);
 int i;
-char *format0="type='wiggle_0'";
-char *format1="\t%s='%s'";
+char *format0="type='wiggle_0'\n";	/* first one is special */
+char *format1="%s %s\n";		/* all following, like this */
 
 /* always at least one setting, our special type variable */
 
@@ -108,7 +124,9 @@ for (i = 0; i < wigOptCount; ++i)
     {
     char *val;
     if ((val = hashFindVal(hash, wigOptions[i])) != NULL)
-	dyStringPrintf(wigSettings, format1, wigOptions[i], val);
+	{
+	    dyStringPrintf(wigSettings, format1, wigOptions[i], val);
+	}
     }
 tdb->settings = dyStringCannibalize(&wigSettings);
 }
@@ -154,6 +172,9 @@ if ((val = hashFindVal(hash, "type")) != NULL)
 	else
 	    {
 	    track->wigFile = cloneString(wigFileNames);
+	    /*	the wig file may have expired	*/
+	    if (!fileExists(track->wigFile))
+		return ((struct customTrack *)NULL);
 	    track->wigAscii = (char *) NULL;
 	    }
 
@@ -169,6 +190,9 @@ if ((val = hashFindVal(hash, "type")) != NULL)
 	else
 	    {
 	    track->wibFile = cloneString(wigFileNames);
+	    /*	the wib file may have expired	*/
+	    if (!fileExists(track->wibFile))
+		return ((struct customTrack *)NULL);
 	    track->wigAscii = (char *) NULL;
 	    }
 
@@ -756,6 +780,10 @@ for (;;)
     /* Deal with line that defines new track. */
     if (parseTrackLine(line, lineIx, &track))
         {
+	if (track == (struct customTrack *)NULL)
+	    continue; /* may have expired wig, wib files */
+	    /* !!! next line of data !!!  */
+
 	if (track->wiggle)
 	    {
 	    slAddTail(&trackList, track);
@@ -1019,6 +1047,36 @@ if (retCtFileName != NULL)
 return ctList;
 }
 
+/*	settings string is a set of lines
+ *	the lines need to be output as name='value'
+ *	pairs all on a single line
+ */
+static void saveSettings(FILE *f, char *settings)
+{
+struct lineFile *lf;
+char *line;
+
+lf = lineFileOnString("settings", TRUE, settings);
+while (lineFileNext(lf, &line, NULL))
+    {
+    char *blank;
+    blank = strchr(line, ' ');
+    if (blank != (char *)NULL)
+	{
+	int nameLen = blank - line;
+	char name[256];
+
+	nameLen = (nameLen < 256) ? nameLen : 255;
+	strncpy(name, line, nameLen);
+	name[nameLen] = (char)NULL;
+	fprintf(f, "\t%s='%s'", name, blank+1);
+	}
+    else
+	fprintf(f, "\t%s", line);
+    }
+lineFileClose(&lf);
+}
+
 static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb)
 /* Write 'track' line that save trackDb info.  Only
  * write parts that aren't default. */
@@ -1048,7 +1106,7 @@ if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG
 	|| tdb->altColorB != tdb->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 if (tdb->settings && (strlen(tdb->settings) > 0))
-    fprintf(f, "\t%s", tdb->settings);
+    saveSettings(f, cloneString(tdb->settings));
 fputc('\n', f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
@@ -1100,7 +1158,6 @@ void customTrackSave(struct customTrack *trackList, char *fileName)
 struct customTrack *track;
 struct bed *bed;
 FILE *f = mustOpen(fileName, "w");
-int count = 0;
 
 #if defined(DEBUG)	/*	dbg	*/
     /* allow file readability for debug	*/
