@@ -1,7 +1,7 @@
 include ../../inc/common.mk
 
 L = -lm -lpthread
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = burstServer.o
