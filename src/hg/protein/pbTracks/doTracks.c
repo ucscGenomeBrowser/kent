@@ -308,14 +308,17 @@ vgBox(g_vg, 0, yy-15, xx, 33, bkgColor);
 trackTitle = cloneString("Cysteines");
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
-mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "cCntTr");
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-10, trackTitleLen*6+12, 12, trackTitle, "cCntTr");
 
-trackTitle = cloneString("Glycosylation");
+trackTitle = cloneString("Predicted");
 vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
-mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "glycosylation");
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy, trackTitleLen*6+12, 12, "Glycosylation", "glycosylation");
 
-vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, "(potential)");
+trackTitle = cloneString("Glycosylation");
+vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy+8, trackTitleLen*6+12, 12, trackTitle, "glycosylation");
     
 *yOffp = *yOffp + 15;
 }
