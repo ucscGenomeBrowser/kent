@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.3 2003/09/24 03:42:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.4 2003/09/24 03:57:00 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -390,11 +390,17 @@ debugPrint("wigDrawItems");
 	w = (sf->end - sf->start) * scale;
     	dataPtr = ReadData;
 	if( defaultSpan == 1 ) {
+    		int skipDataPoints = 0;
+		double skipping;
+    		skipping = (double)wi->Count / (double)w;
+snprintf(dbgMsg, DBGMSGSZ, "Data Points: %d, Width: %d, skip: %.4f", wi->Count, w, skipping );
+debugPrint("wigDrawItems");
 	for ( pixelsToDraw = 0; pixelsToDraw < w; ++pixelsToDraw )
 	    {
 		int boxHeight;
 		int dataValue;
-		dataValue = *(dataPtr + pixelsToDraw);
+    		skipDataPoints = skipping * pixelsToDraw;
+		dataValue = *(dataPtr + pixelsToDraw + skipDataPoints);
 		boxHeight = (h * dataValue) / 128;
 		x1 = pixelsToDraw + xOff + (sf->start - seqStart)*scale;
 		y1 = yOff - boxHeight + h;
