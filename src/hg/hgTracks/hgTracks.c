@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.783 2004/08/25 18:01:29 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.784 2004/08/25 18:15:08 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3026,6 +3026,7 @@ if ((blastRef != NULL) && (hTableExists(blastRef)))
 	    }
 	sqlFreeResult(&sr);
 	}
+    hFreeConn(&conn);
     return ;
     }
 
