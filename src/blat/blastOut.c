@@ -291,6 +291,20 @@ else
     return "Plus";
 }
 
+char *progType(boolean isProt, struct axtBundle *ab)
+/* Return blast 'program' */
+{
+if (!isProt)
+    return "BLASTN";
+else
+    {
+    if (ab->axtList->frame != 0)
+        return "TBLASTN";
+    else
+        return "BLASTP";
+    }
+}
+
 static void wuBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
 	FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
@@ -307,7 +321,7 @@ int querySize = abList->qSize;
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
     ourId = "axtBlastOut";
-fprintf(f, "BLAST%c 2.0MP-WashU [%s]\n", (isProt ? 'P' : 'N'), ourId);
+fprintf(f, "%s 2.0MP-WashU [%s]\n", progType(isProt, abList), ourId);
 fprintf(f, "\n");
 fprintf(f, "Copyright (C) 2000-2002 Jim Kent\n");
 fprintf(f, "All Rights Reserved\n");
@@ -437,7 +451,7 @@ int querySize = abList->qSize;
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
     ourId = "axtBlastOut";
-fprintf(f, "BLAST%c 2.2.4 [%s]\n", (isProt ? 'P' : 'N'), ourId);
+fprintf(f, "%s 2.2.4 [%s]\n", progType(isProt, abList), ourId);
 fprintf(f, "\n");
 fprintf(f, "Reference:  Kent, WJ. (2002) BLAT - The BLAST-like alignment tool\n");
 fprintf(f, "\n");

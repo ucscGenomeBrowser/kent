@@ -1,3 +1,4 @@
+15 - Blast output seems to work, in the blat standalone.
 14 - Starting to hack in blast output format. Added -trimHardA flag.
 13 - Made things so that BLAT could find perfect 21mer matches
      fairly reliably.
