@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = paraNodeStart.o
 
 paraNodeStart: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/paraNodeStart $O $(MYLIBS) $L
+	gcc -o $(HOME)/bin/$(MACHTYPE)/paraNodeStart $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip $(HOME)/bin/$(MACHTYPE)/paraNodeStart
