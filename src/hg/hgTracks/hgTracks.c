@@ -10558,6 +10558,8 @@ int dinkSize(char *var)
 {
 char *stringVal = cartOptionalString(cart, var);
 double x;
+int insideX = trackOffsetX(); /* The global versions of these are not yet set */
+int insideWidth = tl.picWidth-gfxBorder-insideX;
 double guideBases = (double)guidelineSpacing * (double)(winEnd - winStart) 
 	/ ((double)insideWidth);
 
