@@ -7,7 +7,6 @@
 #include "hCommon.h"
 #include "hgColors.h"
 #include "obscure.h"
-#include "histogram.h"
 #include "customTrack.h"
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -24,7 +23,6 @@ struct histoResult *histoGramResult;
 float *valuesArray = NULL;
 float *fptr = NULL;
 size_t valueCount = 0;
-struct wigAsciiData *asciiData = NULL;
 struct customTrack *ct;
 boolean isCustom = FALSE;
 
@@ -70,122 +68,21 @@ valuesMatched = wDS->getData(wDS, database, table,
 
 statsPreamble(wDS, chrom, winStart, winEnd, span, valuesMatched);
 
-/* For some reason BORDER=1 does not work in our web.c nested table
- * scheme.
- * So use web.c's trick of using an enclosing table to provide a border.  
- */
-puts("<P><!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"
-	HG_COL_BORDER
-	"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-
 /*	output statistics table	*/
 wDS->statsOut(wDS, "stdout", TRUE, TRUE);
-puts ("</TD></TR>\n");
 
-/*	histoGram() may return NULL if it doesn't work	*/
-
-AllocArray(valuesArray, valuesMatched);
+/*	convert the ascii data listings to one giant float array 	*/
+valuesArray = wDS->asciiToDataArray(wDS, valuesMatched, &valueCount);
 fptr = valuesArray;
 
-/*	the (valueCount <= valuesMatched) condition is for safety */
-for (asciiData = wDS->ascii; asciiData && (valueCount <= valuesMatched);
-	asciiData = asciiData->next)
-    {
-    if (asciiData->count)
-	{
-	struct asciiDatum *data;
-	unsigned i;
-
-	data = asciiData->data;
-	for (i = 0; (i < asciiData->count)&&(valueCount <= valuesMatched); ++i)
-	    {
-	    *fptr++ = data->value;
-	    ++data;
-	    ++valueCount;
-	    }
-	}
-    }
+/*	histoGram() may return NULL if it doesn't work	*/
 
 histoGramResult = histoGram(valuesArray, valueCount,
 	    NAN, (unsigned) 0, NAN, (float) wDS->stats->lowerLimit,
 		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange),
 		(struct histoResult *)NULL);
 
-/*	global enclosing table row, add a blank line	*/
-puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\"> &nbsp </TD></TR>\n");
-
-/*	And then the row to enclose the histogram table	*/
-puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\">\n");
-
-puts ("<TABLE ALIGN=CENTER COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
-
-printf ("<TR><TH ALIGN=CENTER COLSPAN=8> Histogram on %u values (zero count bins not shown)</TH></TR>\n",
-	valueCount);
-puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
-puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
-puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
-puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
-puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range </TH></TR>\n");
-puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
-puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
-puts ("      </TABLE>\n");
-puts ("    </TD>\n");
-puts ("    <TH ALIGN=CENTER> count </TH>\n");
-puts ("    <TH ALIGN=CENTER> p Value </TH>\n");
-puts ("    <TH ALIGN=CENTER> log2(p Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution </TH>\n");
-puts ("    <TH ALIGN=CENTER> 1.0 - CPD </TH></TR>\n");
-
-if (histoGramResult)
-    {
-    boolean someDisplayed = FALSE;
-    double cpd = 0.0;
-    double log2_0 = log(2.0);
-    int i;
-
-    for (i=0; i < histoGramResult->binCount; ++i)
-	{
-	if (histoGramResult->binCounts[i] > 0)
-	    {
-	    double min, max, pValue;
-
-	    min = ((double)i * histoGramResult->binSize) +
-				histoGramResult->binZero;
-	    max = min + histoGramResult->binSize;
-
-	    printf ("<TR><TD ALIGN=LEFT> %d </TD>\n", i );
-	    printf ("    <TD ALIGN=RIGHT> %g </TD><TD ALIGN=RIGHT> %g </TD>\n", min, max);
-	    printf ("    <TD ALIGN=RIGHT> %u </TD>\n",
-			    histoGramResult->binCounts[i] );
-	    if (histoGramResult->binCounts[i] > 0)
-		{
-		pValue = (double) histoGramResult->binCounts[i] /
-			    (double) histoGramResult->count;
-		cpd += pValue;
-		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", pValue);
-		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", log(pValue)/log2_0);
-		}
-	    else
-		{
-		printf ("    <TD ALIGN=RIGHT> 0.0 </TD>\n");
-		printf ("    <TD ALIGN=RIGHT> N/A </TD>\n");
-		}
-
-	    printf ("    <TD ALIGN=RIGHT> %g </TD>\n", cpd);
-	    printf ("    <TD ALIGN=RIGHT> %g </TD></TR>\n", 1.0 - cpd);
-	    someDisplayed = TRUE;
-	    }
-	}
-    if (!someDisplayed)
-	puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
-    }
-else
-    puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
-
-printf ("</TABLE>\n");
-
-/*	finish out the global enclosing table	*/
-puts ("</TD></TR></TABLE></P>\n");
+printHistoGram(histoGramResult);
 
 freeHistoGram(&histoGramResult);
 freeMem(valuesArray);
