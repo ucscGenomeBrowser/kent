@@ -13,7 +13,7 @@
 #include "errabort.h"
 #include "malloc.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.13 2005/01/06 23:24:44 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.14 2005/01/27 02:26:10 sugnet Exp $";
 
 void usage()
 {
@@ -92,6 +92,18 @@ if(sp->currCount + 1 >= sp->maxCount)
     sp->maxCount += 10;
     }
 sp->path[sp->currCount++] = id;
+}
+
+int exonPathCmp(const void *va, const void *vb)
+/* Compare to sort based on tStart, tEnd. */
+{
+const struct exonPath *a = *((struct exonPath **)va);
+const struct exonPath *b = *((struct exonPath **)vb);
+int dif;
+dif = a->tStart - b->tStart;
+if(dif == 0)
+    dif = b->tEnd - b->tEnd;
+return dif;
 }
 
 /* if we abort return with non-zero status */
@@ -998,6 +1010,8 @@ for(i=0; i < agx->mrnaRefCount; i++)
 		if(sig == exonProblem)
 		    pathNotCorrupt = FALSE;
 		lastSplice = ends[edgeIx];
+		/* We found a match alread for this exon, skip the rest. */
+		break;
 		}
 	    }
 	}
@@ -1005,7 +1019,8 @@ for(i=0; i < agx->mrnaRefCount; i++)
     finishPath(eg, &epList, ep, pathNotCorrupt, &goodPath);
     }
 altGraphXFreeEdgeMatrix(&em, agx->vertexCount);
-slReverse(&epList);
+/* slReverse(&epList); */
+slSort(&epList, exonPathCmp);
 slReverse(&eg->rejects);
 eg->pathCount = slCount(epList);
 eg->paths =  epList;
@@ -1219,7 +1234,7 @@ char *mark = NULL;
 /** Create string representations of our exon paths for comparison. */
 for(path1 = eg->paths; path1 != NULL; path1 = path1->next)
     {
-    for(path2 = path1->next; path2 != NULL; path2 = path2->next)
+    for(path2 = eg->paths; path2 != NULL; path2 = path2->next)
 	{
 	if(path1 != path2)
 	    exonPathConnectEquivalentNodes(path1, path2);
@@ -2010,7 +2025,8 @@ for(ep = eg->paths; ep != NULL; ep = ep->next)
     maxExons = max(ep->nodeCount, maxExons);
 
 /* Now remove paths that don't meet threshold. */
-threshold = floor(log2(maxExons));
+/* threshold = max(floor(log2(maxExons)-2), 2); */
+threshold = 2; 
 for(ep = eg->paths; ep != NULL; ep = epNext)
     {
     epNext = ep->next;
@@ -2067,7 +2083,7 @@ if(diagnostics)
     fprintf(cleanEsts, "track name=cleanEsts description=\"exonWalk cleaned ESTs\"\n");
     fprintf(whites, "track name=rejects description=\"exonWalk white nodes\" color=178,44,26\n"); 
     }
-fprintf(f, "track name=exonWalk description=\"exonWalk Final Picks\" color=23,117,15\n");
+/* fprintf(f, "track name=exonWalk description=\"exonWalk Final Picks\" color=23,117,15\n"); */
 warn("Creating exon graphs.");
 
 for(agx = agxList; agx != NULL; agx = agx->next)
@@ -2078,7 +2094,8 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	writeOutNodes(agx, exonSites);
 
     eg = exonGraphFromAgx(agx);
-    removeShortFragments(eg);
+    if(removeFrags)
+	removeShortFragments(eg);
     currentGraph = eg;
     if(diagnostics)
 	{
@@ -2132,6 +2149,8 @@ altGraphXFreeList(&agxList);
 }
 
 
+
+
 int main(int argc, char *argv[])
 {
 if(argc < 3)
@@ -2144,3 +2163,4 @@ debug = cgiBoolean("debug");
 exonWalk(argv[1], argv[2]);
 return 0;
 }
+
