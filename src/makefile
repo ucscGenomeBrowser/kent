@@ -26,6 +26,12 @@ blat: libs
 	cd blat && ${MAKE} && ${MAKE} test
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}
+	cd hg/pslPretty && ${MAKE}
+	cd hg/pslReps && ${MAKE}
+	cd hg/pslSort && ${MAKE}
+	cd utils/nibFrag && ${MAKE}
+	cd utils/faToNib && ${MAKE}
+
 clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
