@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.7 2004/03/11 23:40:13 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.8 2004/03/12 01:02:37 kent Exp $";
 
 boolean parseOnly; 
 
@@ -33,8 +33,12 @@ struct joinerField
     char *field;		/* Associated field. */
     char *chopBefore;		/* Chop before string */
     char *chopAfter;		/* Chop after string */
-    char *separator;		/* Separators for lists. */
+    char *separator;		/* Separators for lists or NULL if not list. */
     boolean indexOf;		/* True if id is index in this list. */
+    boolean isPrimary;		/* True if is primary key. */
+    boolean dupeOk;		/* True if duplication ok (in primary key) */
+    boolean oneToOne;		/* Is 1-1 with primary key? */
+    float minCheck;		/* Minimum ratio that must hit primary key */
     };
 
 struct joinerSet
@@ -49,6 +53,7 @@ struct joinerSet
     struct joinerField *fieldList;	/* List of fields. */
     char *fileName;		/* File parsed out of for error reporting */
     int lineIx;			/* Line index of start for error reporting */
+    boolean isFuzzy;		/* True if no real primary key. */
     boolean expanded;		/* True if an expanded set. */
     };
 
@@ -179,6 +184,14 @@ errAbort("%s must be followed by = line %d of %s", var,
 	lf->lineIx, lf->fileName);
 }
 
+char *cloneSpecified(struct lineFile *lf, char *var, char *val)
+/* Make sure that val exists, and return clone of it. */
+{
+if (val == NULL)
+    unspecifiedVar(lf, var);
+return cloneString(val);
+}
+
 struct joinerSet *parseOneJoiner(struct lineFile *lf, char *line, 
 	struct hash *symHash, struct dyString *dyBuf)
 /* Parse out one joiner record - keep going until blank line or
@@ -204,17 +217,25 @@ js->fileName = cloneString(lf->fileName);
 while ((word = nextWord(&line)) != NULL)
     {
     char *e = strchr(word, '=');
-    if (e == NULL)
-        errAbort("Expecting name=value pair line %d of %s", 
-		lf->lineIx, lf->fileName);
-    *e++ = 0;
+    if (e != NULL)
+	*e++ = 0;
     if (sameString(word, "typeOf"))
-	js->typeOf = cloneString(e);
+	{
+	js->typeOf = cloneSpecified(lf, word, e);
+	}
     else if (sameString(word, "external"))
-	js->external = cloneString(e);
+	{
+	js->external = cloneSpecified(lf, word, e);
+	}
+    else if (sameString(word, "fuzzy"))
+        {
+	js->isFuzzy = TRUE;
+	}
     else
+	{
         errAbort("Unknown attribute %s line %d of %s", word, 
 		lf->lineIx, lf->fileName);
+	}
     }
 
 /* Parse second line, make sure it is quoted, and save as description. */
@@ -247,6 +268,9 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
      AllocVar(jf);
      jf->table = cloneString(parts[1]);
      jf->field = cloneString(parts[2]);
+     if (js->fieldList == NULL && !js->isFuzzy)
+         jf->isPrimary = TRUE;
+     jf->minCheck = 1.0;
      slAddHead(&js->fieldList, jf);
 
      /* Database may be a comma-separated list.  Parse it here. */
@@ -275,28 +299,38 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	 if ((e = strchr(word, '=')) != NULL)
 	     *e++ = 0;
 	 if (sameString("comma", word))
+	     {
 	     jf->separator = cloneString(",");
+	     }
 	 else if (sameString("separator", word))
 	     {
-	     if (e == NULL)
-		 unspecifiedVar(lf, word);
-	     jf->separator = cloneString(e);
+	     jf->separator = cloneSpecified(lf, word, e);
 	     }
 	 else if (sameString("chopBefore", word))
 	     {
-	     if (e == NULL)
-		 unspecifiedVar(lf, word);
-	     jf->chopBefore = cloneString(e);
+	     jf->chopBefore = cloneSpecified(lf, word, e);
 	     }
 	 else if (sameString("chopAfter", word))
 	     {
-	     if (e == NULL)
-		 unspecifiedVar(lf, word);
-	     jf->chopAfter = cloneString(e);
+	     jf->chopAfter = cloneSpecified(lf, word, e);
 	     }
 	 else if (sameString("indexOf", word))
 	     {
 	     jf->indexOf = TRUE;
+	     }
+	 else if (sameString("dupeOk", word))
+	     {
+	     jf->dupeOk = TRUE;
+	     }
+	 else if (sameString("oneToOne", word))
+	     {
+	     jf->oneToOne = TRUE;
+	     }
+	 else if (sameString("minCheck", word))
+	     {
+	     if (e == NULL)
+	         unspecifiedVar(lf, word);
+	     jf->minCheck = atof(e);
 	     }
 	 else
 	     {
@@ -337,7 +371,7 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 			lf->lineIx, lf->fileName);
 	    hashAdd(symHash, var, cloneString(val));
 	    }
-	else if (sameString("joiner", word))
+	else if (sameString("identifier", word))
 	    {
 	    js = parseOneJoiner(lf, line, symHash, dyBuf);
 	    if (js != NULL)
@@ -412,6 +446,7 @@ for (js=jsList; js != NULL; js = nextJs)
 	    newJs->typeOf = cloneString(js->typeOf);
 	    newJs->external = cloneString(js->external);
 	    newJs->description = cloneString(js->description);
+	    newJs->isFuzzy = js->isFuzzy;
 	    newJs->fileName = cloneString(js->fileName);
 	    newJs->lineIx = js->lineIx;
 
@@ -427,6 +462,10 @@ for (js=jsList; js != NULL; js = nextJs)
 		newJf->chopAfter = cloneString(jf->chopAfter);
 		newJf->separator = cloneString(jf->separator);
 		newJf->indexOf = jf->indexOf;
+		newJf->isPrimary = jf->isPrimary;
+		newJf->dupeOk = jf->dupeOk;
+		newJf->oneToOne = jf->oneToOne;
+		newJf->minCheck = jf->minCheck;
 
 		/* Do substituted table field. */
 		if ((bs = strchr(jf->table, '[')) != NULL)
