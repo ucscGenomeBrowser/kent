@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.2 2003/09/23 23:58:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.3 2003/09/24 03:42:37 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -296,7 +296,6 @@ int itemCount = 0;
 char *currentFile = (char *) NULL;	/*	the binary file name */
 FILE *f = (FILE *) NULL;		/*	file handle to binary file */
 struct hashEl *el, *elList;
-struct hash *spans = NULL;	/* Spans encountered during load */
 
 if( scale > 0.0 )
     basesPerPixel = 1.0 / scale;
@@ -325,53 +324,93 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     struct simpleFeature *sf = lf->components;
     struct wigItem *wi = lf->extra;
     int defaultSpan = 1;
+    unsigned char *ReadData;
+    int pixelsToDraw = 0;
+    unsigned char *dataPtr;
 
+    /*	Take a look through the potential spans, and given what we have
+     *	here for basesPerPixel, pick the largest defaultSpan that is
+     *	not greater than the basesPerPixel
+     */
     el = hashLookup(trackSpans, lf->name);	/*  What Spans do we have */
-    if ( el )
-	spans = el->val;
-snprintf(dbgMsg, DBGMSGSZ, "spans for track: %s", lf->name );
-debugPrint("wigDrawItems");
-elList = hashElListHash(el->val);
-for (el = elList; el != NULL; el = el->next)
-{
-    int Span;
-    Span = (int) el->val;
-    if( Span < basesPerPixel )
+    elList = hashElListHash(el->val);		/* Our pointer to spans hash */
+    for (el = elList; el != NULL; el = el->next)
 	{
-	    if( Span > defaultSpan )
-		defaultSpan = Span;
+	int Span;
+	Span = (int) el->val;
+	if( (Span < basesPerPixel) && (Span > defaultSpan) )
+	    defaultSpan = Span;
 	}
-snprintf(dbgMsg, DBGMSGSZ, "Span: %s : %d -> %d ", el->name, Span, defaultSpan); debugPrint("wigDrawItems");
-}
-hashElFreeList(&elList);
+    hashElFreeList(&elList);
 
-snprintf(dbgMsg, DBGMSGSZ, "File: %s, using Span: %d", wi->File, defaultSpan );
-debugPrint("wigDrawItems");
+    /*	Now that we know what Span to draw, see if this item should be
+     *	drawn at all.
+     */
+    if( defaultSpan == wi->Span )
+	{
 	/*	Check our data file, see if we need to open a new one */
-    if( currentFile )
-    if( differentString(currentFile,wi->File) )
-	{
-	if( f != (FILE *) NULL )
+	if ( currentFile )
 	    {
-	    fclose(f);
-	    freeMem(currentFile);
+	    if( differentString(currentFile,wi->File) )
+		{
+		if( f != (FILE *) NULL )
+		    {
+		    fclose(f);
+		    freeMem(currentFile);
+		    }
+		currentFile = cloneString(wi->File);
+		f = mustOpen(currentFile, "r");
+		}
 	    }
-	currentFile = cloneString(wi->File);
-	f = mustOpen(currentFile, "r");
+	    else
+	    {
+	    currentFile = cloneString(wi->File);
+	    f = mustOpen(currentFile, "r");
+	    }
+	++itemCount;
+/*	Ready to draw, what do we know:
+ *	the feature being processed:
+ *	chrom coords:  [sf->start : sf-end)
+ *
+ *	The data to be drawn: to be read from file f at offset wi->Offset
+ *	data points available: wi->Count, representing wi->Span bases
+ *	for each data point
+ *
+ *	The drawing window, in pixels:
+ *	xOff = left margin, y1 = top margin, h = height
+ *	drawing window in chrom coords: seqStart, seqEnd
+ *	basesPerPixel is known, 'scale' is pixelsPerBase
+ */
+snprintf(dbgMsg, DBGMSGSZ, "seek to: %d, read: %d bytes", wi->Offset, wi->Count );
+debugPrint("wigDrawItems");
+	fseek(f, wi->Offset, SEEK_SET);
+	ReadData = (unsigned char *) needMem((size_t) (wi->Count + 1));
+	fread(ReadData, (size_t) wi->Count, (size_t) sizeof(unsigned char), f);
+
+	w = (sf->end - sf->start) * scale;
+    	dataPtr = ReadData;
+	if( defaultSpan == 1 ) {
+	for ( pixelsToDraw = 0; pixelsToDraw < w; ++pixelsToDraw )
+	    {
+		int boxHeight;
+		int dataValue;
+		dataValue = *(dataPtr + pixelsToDraw);
+		boxHeight = (h * dataValue) / 128;
+		x1 = pixelsToDraw + xOff + (sf->start - seqStart)*scale;
+		y1 = yOff - boxHeight + h;
+		vgBox(vg, x1, y1, 1, boxHeight, black);
+	    }
+	} else {
+	x1 = xOff + (sf->start - seqStart)*scale;
+	vgBox(vg, x1, y1, w, h, black);
 	}
-	else
-	{
-	currentFile = cloneString(wi->File);
-	f = mustOpen(currentFile, "r");
-	}
-    ++itemCount;
-    w = (sf->end - sf->start) * scale;
-    x1 = xOff + (sf->start - seqStart)*scale;
-    vgBox(vg, x1, y1, w, h, black);
 
 snprintf(dbgMsg, DBGMSGSZ, "itemCount: %d, start: %d, end: %d, X: %d->%d, File: %s", itemCount, sf->start, sf->end, x1, x1+w, wi->File );
 debugPrint("wigDrawItems");
-    }
+
+	freeMem(ReadData);
+	}	/*	Draw if span is correct	*/
+    }	/*	for ( each item )	*/
 if( f != (FILE *) NULL )
     {
     fclose(f);
