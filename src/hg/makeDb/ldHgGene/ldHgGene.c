@@ -11,11 +11,13 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.30 2004/03/31 18:08:15 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.31 2004/05/05 20:30:44 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
 char *outFile = NULL;	        /* Output file as alternative to database. */
+boolean gOptFields = 0;  /* optional fields from cmdline */
+
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -26,9 +28,7 @@ static struct optionSpec optionSpecs[] = {
     {"gtf", OPTION_BOOLEAN},
     {"predTab", OPTION_BOOLEAN},
     {"requireCDS", OPTION_BOOLEAN},
-    {"frame", OPTION_BOOLEAN},
-    {"geneName", OPTION_BOOLEAN},
-    {"id", OPTION_BOOLEAN},
+    {"genePredExt", OPTION_BOOLEAN},
     {"out", OPTION_STRING},
     {NULL, 0}
 };
@@ -48,12 +48,9 @@ errAbort(
     "     -requireCDS  discard genes that don't have CDS annotation\n"
     "     -out=gpfile  write output, in genePred format, instead of loading\n"
     "                  table. Database is ignored.\n"
-    "     -frame       load frame information\n"
-    "     -geneName    load gene name from gene_id in GTF\n"
-    "     -id          generate unique id and store in optional field\n");
+    "     -genePredExt create a extended genePred, including frame\n"
+    "                  information and gene name\n");
 }
-
-boolean gOptFields = 0;  /* optional fields from cmdline */
 
 void loadIntoDatabase(char *database, char *table, char *tabName,
                       bool appendTbl)
@@ -204,12 +201,8 @@ if (optionExists("exon") && optionExists("gtf"))
 exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
-if (optionExists("frame"))
-    gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
-if (optionExists("geneName"))
-    gOptFields |= genePredName2Fld;
-if (optionExists("id"))
-    gOptFields |= genePredIdFld;
+if (optionExists("genePredExt"))
+    gOptFields = genePredAllFlds;
 
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);

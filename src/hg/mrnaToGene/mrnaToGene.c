@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.9 2004/02/14 20:52:25 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.10 2004/05/05 20:30:38 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,7 +18,7 @@ static struct optionSpec optionSpecs[] = {
     {"cdsFile", OPTION_STRING},
     {"requireUtr", OPTION_BOOLEAN},
     {"smallInsertSize", OPTION_INT},
-    {"frame", OPTION_BOOLEAN},
+    {"genePredExt", OPTION_BOOLEAN},
     {"keepInvalid", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
     {NULL, 0}
@@ -28,7 +28,7 @@ static struct optionSpec optionSpecs[] = {
 static int gSmallInsertSize = 0;
 static boolean gRequireUtr = FALSE;
 static boolean gKeepInvalid = FALSE;
-static boolean gFrame = FALSE;
+static boolean gGenePredExt = FALSE;
 static boolean gQuiet = FALSE;
 
 /* hash table of accession to CDS */
@@ -59,7 +59,7 @@ errAbort(
   "   CDS the second\n"
   "  -smallInsertSize=5 - Merge inserts smaller than this many bases (default 5)\n"
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
-  "  -frame - create a PSL with frame information.\n"
+  "  -genePredExt - create a extended genePred, including frame information.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "  -quiet - Don't print print info about dropped sequences.\n"
   "\n");
@@ -138,7 +138,7 @@ struct genePred* pslToGenePred(struct psl *psl, char *cdsStr)
 {
 struct genbankCds cds;
 unsigned cdsStart = -1, cdsEnd = -1;
-unsigned optFields = gFrame ? (genePredCdsStatFld|genePredExonFramesFld) : 0;
+unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
 
 if (cdsStr == NULL)
     {
@@ -274,7 +274,7 @@ cdsDb = optionVal("cdsDb", NULL);
 cdsFile = optionVal("cdsFile", NULL);
 gRequireUtr = optionExists("requireUtr");
 gSmallInsertSize = optionInt("smallInsertSize", 5);
-gFrame = optionExists("frame");
+gGenePredExt = optionExists("genePredExt");
 gKeepInvalid = optionExists("keepInvalid");
 gQuiet = optionExists("quiet");
 

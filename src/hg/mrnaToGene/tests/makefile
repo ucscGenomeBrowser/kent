@@ -11,7 +11,7 @@ base: mkdirs
 
 # test with frame info
 frame: mkdirs
-	mrnaToGene -frame -cdsFile=input/base.cds input/base.psl output/frame.gp
+	mrnaToGene -genePredExt -cdsFile=input/base.cds input/base.psl output/frame.gp
 	diff -u expected/frame.gp output/frame.gp
 
 clean::
