@@ -233,7 +233,6 @@ void readPairFile(struct lineFile *prf)
 	  hashAdd(clones, words[2], clone);
 	  slAddHead(&cloneList,clone);
 	}
-      char *test;
       AllocVar(cloneName);
       sprintf(cloneName->name, "%s", words[2]);
       nameCount = chopCommas(words[0],names);
