@@ -13,7 +13,7 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.16 2003/07/15 17:52:25 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.17 2003/09/29 19:41:02 braney Exp $";
 
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
@@ -51,7 +51,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	lmAllocVar(lm, sf);
 	sf->start = sqlUnsigned(row[1]);
 	sf->end = sqlUnsigned(row[2]);
-	sf->grayIx = sqlUnsigned(row[3]); /* actually qStart */
+	sf->qStart = sqlUnsigned(row[3]); 
+	sf->qEnd = sf->qStart + (sf->end - sf->start);
 	slAddHead(&lf->components, sf);
 	}
     }
