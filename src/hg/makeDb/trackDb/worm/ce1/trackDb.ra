@@ -39,8 +39,8 @@ type psl .
 url http://www.wormbase.org/db/gene/gene?name=$$
 
 track cbr_waba
-shortLabel Briggsae WABA
-longLabel C. briggsae WABA Alignment
+shortLabel Briggsae Waba
+longLabel C. briggsae Waba Alignments
 # group compGeno
 group genes
 priority 50
