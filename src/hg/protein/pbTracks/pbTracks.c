@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.10 2003/12/30 15:03:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.11 2004/01/07 19:20:15 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -65,6 +65,7 @@ int  currentYoffset;
 int  pbScale = {6};
 char pbScaleStr[5];
 
+boolean scaleButtonPushed;
 double tx[100000], ty[100000];
 
 double xScale = 50.0;
@@ -87,6 +88,7 @@ int blockGenomeStart[500], blockGenomeStartPositive[500];
 int blockGenomeEnd[500], blockGenomeEndPositive[500];
 
 int trackOrigOffset = 0;	//current track display origin offset
+int aaOrigOffset = 0;		//current track AA base origin offset
 boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
 Color bkgColor;
@@ -206,6 +208,7 @@ bkgColor = vgFindColorIx(vg2, 255, 254, 232);
 vgBox(vg2, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
+mapName=strdup("pbStamps");
 hPrintf("<MAP Name=%s>\n", mapName);
 
 vgSetClip(vg2, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);

@@ -95,6 +95,8 @@ extern int blockEnd[], blockEndPositive[];
 extern int blockGenomeStart[], blockGenomeStartPositive[];
 extern int blockGenomeEnd[], blockGenomeEndPositive[];
 extern int trackOrigOffset;        //current track display origin offset
+extern int aaOrigOffset;           //current track AA base origin offset
+extern boolean scaleButtonPushed;
 
 extern struct vGfx *vg, *vg2;
 extern Color bkgColor;

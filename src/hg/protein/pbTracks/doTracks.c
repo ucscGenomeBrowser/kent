@@ -1163,6 +1163,7 @@ int yPosition;
 
 int aaResCnt[30];
 double aaResFreqDouble[30];
+char aaOrigOffsetStr[20];
 int aaResFound;
 int totalResCnt;
 int hasResFreq;
@@ -1186,14 +1187,19 @@ if (cgiOptionalString("pbScaleStr") != NULL)
 	}
 
 if (cgiOptionalString("pbScale") != NULL)
-	{
-	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
-	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
-	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
-	if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
-	sprintf(pbScaleStr, "%d", pbScale);
-	cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
-	}
+    {
+    scaleButtonPushed = TRUE;
+    if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
+    if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
+    if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
+    if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
+    sprintf(pbScaleStr, "%d", pbScale);
+    cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
+    }
+else
+    {
+    scaleButtonPushed = FALSE;
+    }
 
 if (cgiVarExists("hgt.left3"))
     {
@@ -1248,6 +1254,11 @@ if (mrnaID != NULL)
 	    trackOrigOffset = protSeqLen*pbScale - 600;
 	}
     }
+
+if ((cgiOptionalString("aaOrigOffset") != NULL) && scaleButtonPushed)
+     {
+     trackOrigOffset = atoi(cgiOptionalString("aaOrigOffset"))*pbScale;
+     }
 
 pixWidth = 160+ protSeqLen*pbScale;
 if (pixWidth > MAX_PB_PIXWIDTH)
@@ -1354,4 +1365,11 @@ hPrintf(
 
 hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
 hPrintf("Explanation of Tracks</A><br>");
+//printf("<br>trackOrigOffset=%d<br>", trackOrigOffset);fflush(stdout);
+
+//remember where the AA base origin is so that it can be passed to next PB page
+aaOrigOffset = trackOrigOffset/pbScale;
+sprintf(aaOrigOffsetStr, "%d", aaOrigOffset);
+cgiMakeHiddenVar("aaOrigOffset", aaOrigOffsetStr);
 }
+
