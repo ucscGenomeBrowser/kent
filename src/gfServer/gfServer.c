@@ -10,8 +10,12 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "genoFind.h"
+#include "cheapcgi.h"
 
-int version = 2;
+int version = 3;
+int maxSeqSize = 20000;
+int minMatch = gfMinMatch;	/* Can be overridden from command line. */
+int tileSize = gfTileSize;	/* Can be overridden from command line. */
 
 void usage()
 /* Explain usage and exit. */
@@ -35,7 +39,7 @@ errAbort(
 void genoFindDirect(char *probeName, int nibCount, char *nibFiles[])
 /* Don't set up server - just directly look for matches. */
 {
-struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, gfMaxTileUse);
 struct lineFile *lf = lineFileOpen(probeName, TRUE);
 struct dnaSeq seq;
 
@@ -80,10 +84,21 @@ memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr
 return socket(AF_INET, SOCK_STREAM, 0);
 }
 
+
+void logIt(FILE *logFile, char *format, ...)
+/* Print message to log file. */
+{
+va_list args;
+va_start(args, format);
+vfprintf(logFile, format, args);
+va_end(args);
+fflush(logFile);
+}
+
 void startServer(char *hostName, char *portName, int nibCount, char *nibFiles[])
 /* Load up index and hang out in RAM. */
 {
-struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+struct genoFind *gf;
 char buf[256];
 char *line, *command;
 int fromLen, readSize;
@@ -91,6 +106,13 @@ int socketHandle = 0, connectionHandle = 0;
 long baseCount = 0, queryCount = 0;
 int warnCount = 0;
 int noSigCount = 0;
+int missCount = 0;
+int trimCount = 0;
+FILE *logFile = mustOpen("gfServer.log", "w");
+
+logIt(logFile, "gfServer version %d on host %s, port %s\n", version, hostName, portName);
+gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+logIt(logFile, "indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = setupSocket(portName, hostName);
@@ -98,12 +120,14 @@ if (bind(socketHandle, &sai, sizeof(sai)) == -1)
      errAbort("Couldn't bind to %s port %s", hostName, portName);
 listen(socketHandle, 100);
 
+logIt(logFile, "Server ready for queries!\n");
 printf("Server ready for queries!\n");
 for (;;)
     {
     connectionHandle = accept(socketHandle, &sai, &fromLen);
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
     buf[readSize] = 0;
+    logIt(logFile, "%s\n", buf);
     if (!startsWith(gfSignature(), buf))
         {
 	++noSigCount;
@@ -124,7 +148,11 @@ for (;;)
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "bases %ld", baseCount);
 	gfSendString(connectionHandle, buf);
+	sprintf(buf, "misses %ld", missCount);
+	gfSendString(connectionHandle, buf);
 	sprintf(buf, "noSig %d", noSigCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "trimmed %ld", trimCount);
 	gfSendString(connectionHandle, buf);
 	sprintf(buf, "warnings %d", warnCount);
 	gfSendString(connectionHandle, buf);
@@ -150,7 +178,6 @@ for (;;)
 	    if (seq.size > 0)
 		{
 		++queryCount;
-		baseCount += seq.size;
 		seq.dna = needLargeMem(seq.size);
 		if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
 		    {
@@ -159,9 +186,23 @@ for (;;)
 		    }
 		else
 		    {
-		    struct gfClump *clumpList = gfFindClumps(gf, &seq), *clump;
+		    struct gfClump *clumpList = NULL, *clump;
 		    int limit = 100;
 
+		    if (seq.size > maxSeqSize)
+		        {
+			++trimCount;
+			seq.size = maxSeqSize;
+			seq.dna[maxSeqSize] = 0;
+			}
+		    baseCount += seq.size;
+#ifdef DEBUG
+#endif /* DEBUG */
+		    faWriteNext(logFile, "query", seq.dna, seq.size);
+		    clumpList = gfFindClumps(gf, &seq);
+		    logIt(logFile, "%d hits\n", slCount(clumpList));
+		    if (clumpList == NULL)
+		        ++missCount;
 		    for (clump = clumpList; clump != NULL; clump = clump->next)
 			{
 			struct gfSeqSource *ss = clump->target;
@@ -330,9 +371,15 @@ int main(int argc, char *argv[])
 {
 char *command;
 
+cgiSpoof(&argc, argv);
+command = argv[1];
+if (cgiVarExists("tileSize"))
+    tileSize = cgiInt("tileSize");
+if (cgiVarExists("minMatch"))
+    minMatch = cgiInt("minMatch");
+uglyf("tileSize %d, minMatch %d\n", tileSize, minMatch);
 if (argc < 2)
     usage();
-command = argv[1];
 if (sameWord(command, "direct"))
     {
     if (argc < 4)
