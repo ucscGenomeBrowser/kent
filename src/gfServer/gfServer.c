@@ -11,6 +11,7 @@
 #include "errabort.h"
 #include "genoFind.h"
 
+int version = 2;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +26,8 @@ errAbort(
   "   gfServer query host port probe.fa\n"
   "To process one probe fa file against a .nib format genome (not starting server):\n"
   "   gfServer direct probe.fa file(s).nib\n"
+  "To figure out usage level\n"
+  "   gfServer status host port\n"
   "To get input file list\n"
   "   gfServer files host port\n");
 }
@@ -105,6 +108,7 @@ char buf[256];
 char *line, *command;
 int fromLen, readSize;
 int socketHandle = 0, connectionHandle = 0;
+long baseCount = 0, queryCount = 0;
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = setupSocket(portName, hostName);
@@ -130,6 +134,16 @@ for (;;)
 	printf("Quitting genoFind server\n");
 	break;
 	}
+    else if (sameString("status", command))
+        {
+	sprintf(buf, "version %d", version);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "requests %ld", queryCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "bases %ld", baseCount);
+	gfSendString(connectionHandle, buf);
+	gfSendString(connectionHandle, "end");
+	}
     else if (sameString("query", command))
         {
 	int querySize;
@@ -148,6 +162,8 @@ for (;;)
 	    seq.name = NULL;
 	    if (seq.size > 0)
 		{
+		++queryCount;
+		baseCount += seq.size;
 		seq.dna = needLargeMem(seq.size);
 		if (readLarge(connectionHandle, seq.dna, seq.size) != seq.size)
 		    {
@@ -170,6 +186,7 @@ for (;;)
 			}
 		    gfClumpFreeList(&clumpList);
 		    }
+		freez(&seq.dna);
 		}
 	    gfSendString(connectionHandle, "end");
 	    }
@@ -198,7 +215,7 @@ close(socketHandle);
 }
 
 void stopServer(char *hostName, char *portName)
-/* Load up index and hang out in RAM. */
+/* Send stop message to server. */
 {
 char buf[256];
 int sd = 0;
@@ -217,8 +234,38 @@ close(sd);
 printf("sent stop message to server\n");
 }
 
+void statusServer(char *hostName, char *portName)
+/* Send status message to server arnd report result. */
+{
+char buf[256];
+char *line, *command;
+int fromLen, readSize;
+int sd = 0;
+int fileCount;
+int i;
+
+/* Set up socket.  Get ready to listen to it. */
+sd = setupSocket(portName, hostName);
+if (connect(sd, &sai, sizeof(sai)) == -1)
+     errAbort("Couldn't connect to %s port %s", hostName, portName);
+
+/* Put together command. */
+sprintf(buf, "%sstatus", gfSignature());
+write(sd, buf, strlen(buf));
+
+for (;;)
+    {
+    gfRecieveString(sd, buf);
+    if (sameString(buf, "end"))
+        break;
+    else
+        printf("%s\n", buf);
+    }
+close(sd);
+}
+
 void queryServer(char *hostName, char *portName, char *faName)
-/* Load up index and hang out in RAM. */
+/* Send simple query to server and report results. */
 {
 char buf[256];
 char *line, *command;
@@ -317,6 +364,12 @@ else if (sameWord(command, "query"))
     if (argc != 5)
 	usage();
     queryServer(argv[2], argv[3], argv[4]);
+    }
+else if (sameWord(command, "status"))
+    {
+    if (argc != 4)
+	usage();
+    statusServer(argv[2], argv[3]);
     }
 else if (sameWord(command, "files"))
     {
