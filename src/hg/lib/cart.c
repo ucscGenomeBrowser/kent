@@ -11,9 +11,10 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.23 2003/06/25 18:56:07 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.24 2003/08/06 03:19:25 baertsch Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
+static char *positionCgiName = "position";
 
 DbConnector cartDefaultConnector = hConnectCentral;
 DbDisconnect cartDefaultDisconnector = hDisconnectCentral;
@@ -697,11 +698,15 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
 {
 struct cart *cart;
 int status;
-
+char *db, *org, *pos;
+char titlePlus[128];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
+getDbAndGenome(cart, &db, &org);
+pos = cgiOptionalString(positionCgiName);
+safef(titlePlus,sizeof(titlePlus), "%s %s - %s",org,pos, title );
 popWarnHandler();
-htmStart(stdout, title);
+htmStart(stdout, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
 htmlEnd();

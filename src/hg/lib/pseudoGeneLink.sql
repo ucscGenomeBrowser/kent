@@ -16,6 +16,7 @@ CREATE TABLE pseudoGeneLink (
     score2 int unsigned not null,	# intron score of pseudogene with gap
     score3 int unsigned not null,	# intron score of pseudogene
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
+    strand varchar(255) not null,	# strand of gene
               #Indices
     PRIMARY KEY(name)
 );

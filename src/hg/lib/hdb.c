@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.125 2003/08/01 23:57:52 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.126 2003/08/06 03:19:26 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2437,7 +2437,7 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	    dyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
-dyStringPrintf(query, ") order by orderKey desc");
+dyStringPrintf(query, ") order by orderKey ");
 if (count > 0)
     {
     sr = sqlGetResult(conn, query->string);

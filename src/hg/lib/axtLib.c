@@ -59,7 +59,7 @@ struct nibInfo
     FILE *f;		/* Open file. */
     };
 
-
+#ifdef DUPZ
 struct axt *axtFromBlocks(
 	struct chain *chain,
 	struct boxIn *startB, struct boxIn *endB,
@@ -138,6 +138,7 @@ assert(symIx == symCount);
 axt->score = axtScoreDnaDefault(axt);
 return axt;
 }
+#endif /* DUEZ */
 
 struct axt *axtListFromChain(struct chain *chain, 
 	struct dnaSeq *qSeq, int qOffset,
@@ -220,7 +221,7 @@ chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize,
 	&subChain, &chainToFree);
 if (subChain != NULL)
     {
-    axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 100);
+    axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 100, BIGNUM);
     if (swap)
         {
         for (axt = axtList ; axt != NULL ; axt = axt->next)

@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.17 2003/07/24 20:10:52 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.18 2003/08/06 03:19:26 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -582,7 +582,7 @@ if (*list == NULL)
     }
 for (el = *list; el != NULL; el = el->next)
     {
-    if (chrom != NULL)
+    if (chrom != NULL && el->chrom != NULL)
         {
         overlap = 0;
         if ( sameString(chrom, el->chrom))
