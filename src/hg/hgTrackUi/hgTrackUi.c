@@ -196,7 +196,7 @@ int humMusHeightPer = atoi(cartUsualString(cart, "humMus.heightPer", "100"));
 char *interpolate = cartUsualString(cart, "humMus.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "humMus.anti.alias", "on");
 char *fill = cartUsualString(cart, "humMus.fill", "1");
-int humMusLineGap = atoi(cartUsualString(cart, "humMus.interp.gap", "10000"));
+int humMusLineGap = atoi(cartUsualString(cart, "humMus.interp.gap", "200"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("humMus.linear.interp", interpolate );
