@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.599 2004/03/30 17:22:57 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.600 2004/03/31 18:23:58 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13429,7 +13429,7 @@ seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
 trackHash = makeTrackHash(seqName);
-tdb = hashMustFindVal(trackHash, track);
+tdb = hashFindVal(trackHash, track);
 if (sameWord(track, "getDna"))
     {
     doGetDna1();
