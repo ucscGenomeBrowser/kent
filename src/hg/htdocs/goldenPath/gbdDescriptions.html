@@ -278,6 +278,12 @@ stored in a single table rather than one table per chromosome:</P>
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
   <LI><A 
+  href="#BED">encodeRegions</A> 
+  - Names and positions of selected regions for the ENCODE project</LI>
+  <LI><A 
+  href="#EncodeRegionInfo">encodeRegionInfo</A> 
+  - Descriptive, assembly-independent information about ENCODE regions</LI>
+  <LI><A 
   href="#EnsemblXref">ensemblXref</A> 
   - Cross-reference info between transcript entries and translation entries of Ensembl genes</LI>
   <LI><A 
@@ -367,6 +373,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#NetAlign">humanNet</A> 
   - Database representation of a net of alignments with human </LI>
   <LI><A 
+  href="#ImageClone">imageClone</A> 
+  - Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing"</LI>
+  <LI><A 
   href="#BED">intersectingMCS</A> 
   - Multi-Species Conserved Sequences (MCS) found by intersecting MCSs generated using binomial-based and parsimony p-value-based methods (Zoo) </LI>
   <LI><A 
@@ -381,7 +390,7 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#KnownGene">knownGene</A> 
   - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
-TrEMBL-NEW and their corresponding mRNAs from Genbank
+TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownGeneLink">knownGeneLink</A> 
   - Stores the seqType info for Known Genes track entries.
@@ -477,16 +486,19 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   - Relates RefSeq mRNA accession to LocusLink, HUGO, etc. (Dec. 2000 and later) 
   <LI><A 
   href="#MrnaPredictions">refMrna</A> 
-  - RefSeq mRNA (Dec. 2000 and later) 
+  - RefSeq mRNA (Dec. 2000 and later, not present in incrementally-updated assemblies) 
   <LI><A 
   href="#PepPredictions">refPep</A> 
-  - RefSeq translated proteins (Dec. 2000 and later) 
+  - RefSeq translated proteins (Dec. 2000 and later, not present in incrementally-updated assemblies) 
   <LI><A 
   href="#PslInfo">refSeqAli</A> 
   - RefSeq translated proteins (Dec. 2001 and later) 
   <LI><A 
   href="#RefSeqStatus">refSeqStatus</A> 
   - Associates RefSeq mRNA accessions with corresponding RefSeq status (Dec. 2001 and later) 
+  <LI><A 
+  href="#RefSeqSummary">RefSeqSummary</A> 
+  - Sparse summary table created only for refSeqs that have "Summary:" or "COMPLETENESS:" in comment
   <LI><A 
   href="#RikenAltid">rikenaltid</A> 
   - Riken altid table (Mouse Feb. 2002 and later)</LI>
@@ -581,7 +593,7 @@ cover the same region </LI>
   - Fgenesh++ Gene Predictions </LI>
   <LI><A 
   href="#SoftberryHom">softberryHom</A> 
-  - String with Genbank gi and accession </LI>
+  - String with GenBank gi and accession </LI>
   <LI><A 
   href="#PepPredictions">softberryPep</A> 
   - Translations of Fgenesh++ gene predictions into corresponding amino acid sequences </LI>
@@ -669,10 +681,10 @@ cover the same region </LI>
   - C. briggsae WABA alignments - full description
   <LI><A 
   href="#PslInfo">xenoEst</A> 
-  - Nonhuman ESTs from Genbank </LI>
+  - Nonhuman ESTs from GenBank </LI>
   <LI><A 
   href="#PslInfo">xenoMrna</A> 
-  - Nonhuman mRNAs from Genbank </LI>
+  - Nonhuman mRNAs from GenBank </LI>
   <LI><A 
   href="#wiggleTrack">zoo</A> 
   - Zoo conservation scores for each zoo species based on blastz pair-wise alignments </LI>
@@ -702,7 +714,7 @@ cover the same region </LI>
     was grown in, if applicable (Last used Aug. 2001) </LI>
   <LI><A 
   href="#MrnaInfo">cds</A> 
-  - Coding sequence in Genbank format 
+  - Coding sequence in GenBank format 
   <LI><A 
   href="#MrnaInfo">cell</A> 
   - Cell types 
@@ -726,7 +738,7 @@ cover the same region </LI>
   - Name of gene 
   <LI><A 
   href="#MrnaInfo">keyword</A> 
-  - Associated keywords in Genbank 
+  - Associated keywords in GenBank 
   <LI><A 
   href="#MrnaInfo">library</A> 
   - Clone library (mostly for ESTs) 
@@ -744,7 +756,7 @@ cover the same region </LI>
   - Sex of organism 
   <LI><A 
   href="#MrnaInfo">source</A> 
-  - Source field in Genbank, often fairly redundant with other fields 
+  - Source field in GenBank, often fairly redundant with other fields 
   <LI><A 
   href="#MrnaInfo">tissue</A> 
   - Tissue isolated from </LI></UL>
@@ -800,6 +812,7 @@ autoSql format.
 The following definition is used for several tables as follows:<BR>
 - affyRatio -all 15 fields <BR>
 - dhs - first 4 fields <BR>
+- encodeRegions - first 4 fields <BR>
 - firstEF - first 6 fields <BR>
 - haplotype - first 12 fields <BR>
 - intersectingMCS - first 4 fields <BR>
@@ -962,7 +975,6 @@ The following definition is used for several tables as follows:<BR>
     )
 </PRE>
 
-
 <H4><A name=DupSpMrna></A>DupSpMrna</H4>
 <PRE>table dupSpMrna
 "Duplicate mRNA/Protein entries that have identical CDS structures"
@@ -972,6 +984,15 @@ The following definition is used for several tables as follows:<BR>
    string dupMrnaID;     "mRNA ID of duplicated entry"
    string dupProteinId;  "Protein ID of duplicated entry"
    )
+</PRE>
+
+<H4><A name=EncodeRegionInfo></A>EncodeRegionInfo</H4>
+<PRE>table encodeRegionInfo
+"Descriptive, assembly-independent information about ENCODE regions"
+    (
+    string name;        "Name of region"
+    string descr;       "Description (gene region, random pick, etc.)"
+    )
 </PRE>
 
 <H4><A name=EnsemblXref></A>EnsemblXref</H4>
@@ -1244,6 +1265,25 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
+<H4><A name=ImageClone></A>ImageClone</H4>
+<PRE>table imageClone
+"Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing
+    (
+    uint id; 			"IMAGE clone ID"
+    string library; 		"Clone collection (LLAM for amp-resistant libraries,
+				 LLCM for chloramphenicol-resistant libraries, LLKM
+				 for kanamycin-resistant libraries.  No rearray 
+				 locations are given.)"
+    uint plateNum; 		"Plate number"
+    string row; 		"Row"
+    uint column; 		"Column"
+    uint libId; 		"IMAGE library ID"
+    string organism; 		"Species"
+    int numGenbank; 		"Number of GenBank records"
+    string[numGenbank] genbankIds; "GenBank accession number(s)"
+    )
+</PRE>
+
 <H4><A name=JaxOrtholog></A>Jackson Labs Mouse Orthologs</H4>
 <PRE>table jaxOrtholog
 "Jackson Labs Mouse Orthologs"
@@ -1278,7 +1318,7 @@ The following definition is used for tables that link a predicted peptide to a p
 <H4><A name=KnownGene></A>Known Genes</H4>
 <PRE>table knownGene
 "Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
-TrEMBL-NEW and their corresponding mRNAs from Genbank"
+TrEMBL-NEW and their corresponding mRNAs from GenBank"
     (
     string  name;               "Name of gene"
     string  chrom;              "Chromosome name"
@@ -1315,11 +1355,11 @@ Last used Oct. 2000 <BR><BR>
                            OMIM, gbGeneName, or transId"   
     string transId;       "Transcript id. Genie generated ID." 
     string geneId;        "Gene (not transcript) Genie ID"   
-    uint   gbGeneName;    "Connect to geneName table. Genbank gene name"   
-    uint   gbProductName; "Connects to productName table. Genbank product name" 
-    string gbProteinAcc;  "Genbank accession of protein"  
-    string gbNgi;         "Genbank gi of nucleotide seq." 
-    string gbPgi;         "Genbank gi of protein seq."   
+    uint   gbGeneName;    "Connect to geneName table. GenBank gene name"   
+    uint   gbProductName; "Connects to productName table. GenBank product name" 
+    string gbProteinAcc;  "GenBank accession of protein"  
+    string gbNgi;         "GenBank gi of nucleotide seq." 
+    string gbPgi;         "GenBank gi of protein seq."   
     uint   omimId;        "OMIM ID or 0 if none"  
     string omimName;      "OMIM primary name"  
     uint   hugoId;        "HUGO Nomeclature Committee ID or 0 if none" 
@@ -1345,9 +1385,9 @@ Last used Oct. 2000
     string geneId;       "Gene (not transcript) id"
     uint   geneName;     "Connect to geneName table"
     uint   productName;  "Connects to productName table"
-    string proteinId;    "Genbank accession of protein?"
-    string ngi;          "Genbank gi of nucleotide seq."
-    string pgi;          "Genbank gi of protein seq."
+    string proteinId;    "GenBank accession of protein?"
+    string ngi;          "GenBank gi of nucleotide seq."
+    string pgi;          "GenBank gi of protein seq."
     )                                                                           
 </PRE>
 
@@ -1361,7 +1401,7 @@ Last used Oct. 2000
 			 retainedIntron, mixedWells, noGrowth, noInsert, no5est,
 			 microDel, artifact, noPolyATail, or cantSequence. Status will
 			 always be fullLength on main databases."
-    char acc;		"Genbank accession"
+    char acc;		"GenBank accession"
     char organism;    	"Two letter MGC organism" 
     )
 </PRE>
@@ -1644,6 +1684,19 @@ First used Dec. 2001
     )
 </PRE>
 
+<H4><A name=RefSeqSummary></A>RefSeq Summary</H4>
+First used Oct. 2003
+<PRE>table refSeqStatus
+"Sparse summary table created for refSeqs with "Summary:" or "COMPLETENESS:" in comment"
+    (
+    string mrnaAcc; 	"RefSeq mRNA accession"
+    enum completeness; 	"Level of completeness: Unknown, Complete5End, 
+			Complete3End, FullLength, IncompleteBothEnds, 
+			Incomplete5End, Incomplete3End, Partial"
+    string summary;	"Summary text"
+    )
+</PRE>
+
 <H4><A name=RepeatInfo></A>Repeating Elements</H4>
 These tables were created from RepeatMasker .out files.
 <PRE>table chrN_rmsk
@@ -1761,7 +1814,7 @@ Last used Apr. 2001.
 "Stores SAGE data in terms of UniGene identifiers"
     (
     int uni;               "Number portion of UniGene identifier"
-    string gb;             "Genbank accession number"
+    string gb;             "GenBank accession number"
     string gi;             "gi field in UniGene descriptions"
     lstring description;   "Description from UniGene fasta headers"
     int numTags;           "Number of tags"
@@ -1927,7 +1980,7 @@ This table is used for both the snpNih and snpTsc tables.
 "Protein homologies behind Softberry genes"
     (
     string name;          "Softberry gene name"
-    string giString;      "String with Genbank gi and accession"
+    string giString;      "String with GenBank gi and accession"
     lstring description;  "Freeform (except for no tabs) description"
     )
 </PRE>
@@ -2407,36 +2460,41 @@ in the corresponding <TT>organism</TT> table will give the name of the organism.
 <PRE>table mrna
 "Basic information about mRNA and ESTs with links to other tables"
    (
-   uint   id               "Id, same as seq ID"
-   string acc              "Genbank accession"
-   enum   type             "Full length ('mRNA') or EST ('EST')"
-   enum   direction        "Read direction ('5','3','0')"
-   uint   source           "Ref in source table"
-   uint   organism         "Ref in organism table"
-   uint   library          "Ref in library table"
-   uint   mrnaClone        "Ref in clone table"
-   uint   sex              "Ref in sex table"
-   uint   tissue           "Ref in tissue table"
-   uint   development      "Ref in development table"
-   uint   cell             "Ref in cell table"
-   uint   cds              "Ref in CDS table"
-   uint   keyword          "Ref in key table"
-   uint   description      "Ref in description table"
-   uint   geneName         "Ref in geneName table"
-   uint   productName      "Ref in productName table"
-   uint   author           "Ref in author table"
+   uint   id;              "Id, same as seq ID"
+   string acc;             "GenBank accession"
+   int    version;         "GenBank version"
+   date   moddate;         "Last modification date"
+   enum   type;            "Full length ('mRNA') or EST ('EST')"
+   enum   direction;       "Read direction ('5','3','0')"
+   uint   source;          "Ref in source table"
+   uint   organism;        "Ref in organism table"
+   uint   library;         "Ref in library table"
+   uint   mrnaClone;       "Ref in clone table"
+   uint   sex;             "Ref in sex table"
+   uint   tissue;          "Ref in tissue table"
+   uint   development;     "Ref in development table"
+   uint   cell;            "Ref in cell table"
+   uint   cds;             "Ref in CDS table"
+   uint   keyword;         "Ref in key table"
+   uint   description;     "Ref in description table"
+   uint   geneName;        "Ref in geneName table"
+   uint   productName;     "Ref in productName table"
+   uint   author;          "Ref in author table"
    )
 </PRE>
 
 <H4>mRNA/EST Characteristic Tables</H4>
-This table is used for the author, bacClone, cds, cell, center, chromosome, cytoMap, description, development, geneName,
-keyword, library, mrnaClone, organism, productName, sex, source, and tissue tables.  Each has a 
+This table is used for the author, bacClone, cds, cell, center, chromosome, 
+cytoMap, description, development, geneName, keyword, library, mrnaClone, 
+organism, productName, sex, source, and tissue tables.  Each has a 
 reference in the above mrna table.
 <PRE>table mrnaCharacteristic
 "Characteristics of mRNA and EST referenced in the mrna table"
    (
-   int    id               "Unique id of characteristic in each table"
-   string name             "Characteristic"
+   int    id;              "Unique id of characteristic in each table"
+   string name;            "Characteristic"
+   int 	  crc;             "Cyclic redundancy check (performance optimization for
+			    loading tables)"
    )
 </PRE>
 
