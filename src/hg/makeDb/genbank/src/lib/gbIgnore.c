@@ -5,9 +5,10 @@
 #include "gbDefs.h"
 #include "gbFileOps.h"
 #include "gbIgnore.h"
+#include "gbIndex.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: gbIgnore.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbIgnore.c,v 1.2 2003/07/02 23:47:39 markd Exp $";
 
 /* column indices in ignore.idx files */
 #define IGIDX_ACC_COL       0
@@ -64,12 +65,15 @@ struct gbIgnore* gbIgnoreLoad(struct gbRelease* release)
  * the release, although it is not specific to the release. */
 {
 static char *IGNORE_IDX = "etc/ignore.idx";
+char ignoreIdx[PATH_LEN];
 struct gbIgnore* ignore;
 gbReleaseAllocEntryVar(release, ignore);
 ignore->accHash = hashNew(0);
 
-if (fileExists(IGNORE_IDX))
-    parseIndex(release, ignore, IGNORE_IDX);
+safef(ignoreIdx, sizeof(ignoreIdx), "%s/%s", release->index->gbRoot,
+      IGNORE_IDX);
+if (fileExists(ignoreIdx))
+    parseIndex(release, ignore, ignoreIdx);
 return ignore;
 }
 
