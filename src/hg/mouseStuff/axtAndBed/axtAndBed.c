@@ -107,18 +107,15 @@ while ((axt = axtRead(lf)) != NULL)
 	    int i, s = 0;
 	    char c, lastC = 0;
 	    char *merger = NULL;
-	    int uglyIx = 0;
 	    AllocArray(merger, tSize+1);
 	    for (el = list; el != NULL; el = el->next)
 		{
 		int s = el->start - tStart;
 		int e = el->end - tStart;
 		int sz;
-		uglyf("%d: tStart %d, tEnd %d, el->start %d, el->end %d, s %d, e %d, tSize %d\n", ++uglyIx, tStart, tEnd, el->start, el->end, s, e, tSize);
 		if (s < 0) s = 0;
 		if (e > tSize) e = tSize;
 		sz = e - s;
-		uglyf("  s %d, e %d, sz %d\n", s, e, sz);
 		if (sz > 0)
 		    memset(merger + s, 1, sz);
 		}
@@ -132,7 +129,6 @@ while ((axt = axtRead(lf)) != NULL)
 		    }
 		else if (!c && lastC)
 		    {
-		    uglyf("Subsetting %d %d\n", s+tStart, i+tStart);
 		    axtSubsetOnT(axt, s+tStart, i+tStart, ss, f);
 		    lastC = c;
 		    }
