@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.678 2004/02/28 11:48:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.679 2004/03/02 05:00:01 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6247,8 +6247,10 @@ if (withLeftLabels)
 	char o5[128];
 	struct slList *item;
 	enum trackVisibility vis = track->limitedVis;
+        enum trackVisibility savedVis = vis;
 	int tHeight;
-	Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+	Color labelColor = (track->labelColor ? 
+                                track->labelColor : track->ixColor);
 	if (vis == tvHide)
 	    continue;
 	tHeight = track->height;
@@ -6259,8 +6261,10 @@ if (withLeftLabels)
 	minRange = 0.0;
 	safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
 	safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
-        minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
-   	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
+        minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, 
+                                        track->minRange );
+   	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
+                                        track->maxRange);
 	
 	/*  if a track can do its own left labels, do them after drawItems */
 	if (track->drawLeftLabels != NULL)
@@ -6304,6 +6308,14 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
 	    sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
 	    }
+        /* special label handling for wigMaf type tracks -- they
+           display a left label in pack mode.  To use the full mode
+           labelling, temporarily set visibility to full.
+           Restore savedVis later */
+        {
+        if (sameString(track->tdb->type, "wigMaf"))
+            vis = tvFull;
+        }
 	switch (vis)
 	    {
 	    case tvHide:
@@ -6322,7 +6334,7 @@ if (withLeftLabels)
 		if( track->subType == lfSubSample && track->items == NULL )
 		    y += track->height;
 
-		for (item = track->items; item != NULL; item = item->next)
+                for (item = track->items; item != NULL; item = item->next)
 		    {
 	            char *rootName;
 		    char *name = track->itemName(track, item);
@@ -6401,6 +6413,10 @@ if (withLeftLabels)
 		y += track->height;
 		break;
 	    }
+        /* NOTE: might want to just restore savedVis here for all track types,
+           but I'm being cautious... */
+        if (sameString(track->tdb->type, "wigMaf"))
+            vis = savedVis;
 	vgUnclip(vg);
         }
     }
