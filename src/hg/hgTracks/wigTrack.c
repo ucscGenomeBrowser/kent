@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.50 2004/05/07 20:00:03 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.51 2004/06/04 18:17:48 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -796,7 +796,6 @@ for (x1 = 0; x1 < width; ++x1)
 	 */
 	if (fabs(dataValue) < epsilon)
 	    {
-	    boxTop -= 1;
 	    boxHeight = 1;
 	    }
 	/*	Last pixel (bottom) is a special case of a closed interval */
