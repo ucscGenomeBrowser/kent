@@ -230,7 +230,8 @@ while (row2 != NULL)
     
     // count exons, using coding exons from kgProtMap table
     sprintf(cond_str, "qName='%s'", accession);
-    answer2 = sqlGetField(conn, database, "markdKgProtMap", "blockCount", cond_str);
+    answer2 = sqlGetField(conn, database, "kgProtMap", "blockCount", cond_str);
+
     if (answer2 != NULL)
 	{
 	exonCnt = strdup(answer2);
