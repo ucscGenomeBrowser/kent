@@ -347,7 +347,7 @@ _EOF_
     # Hmmmmm... I'm not sure if that's enough sequence to justify an EST track.
     # At this point I'll just start with the mRNA and refgene mRNAs
 
-# AUTO UPDATE GENBANK MRNA RUN  (DONE 3/30/2005 Andy)
+# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 3/30/2005 Andy)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -373,15 +373,13 @@ caeRem1.perChromTables = no
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial caeRem1 &
     tail -f [its logfile]
     # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad caeRem1 &
-    featureBits caeRem1 all_mrna
-#171268 bases of 249601222 (0.069%) in intersection
-    featureBits caeRem1 xenoMrna
-#7237381 bases of 249601222 (2.900%) in intersection
-    # Clean up:
-    rm -rf work/initial.caeRem1
+#    ssh hgwdev
+#    cd /cluster/data/genbank
+#    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad caeRem1 &
+#    featureBits caeRem1 all_mrna
+#    featureBits caeRem1 xenoMrna
+#    # Clean up:
+#    rm -rf work/initial.caeRem1
 
     # At this point, I'm not adding ESTs.  But if we do put them in later,
     # it'll be better to use the -drop option to gbDbLoadStep and do the
