@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.59 2004/03/30 06:47:11 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.60 2004/04/12 22:26:29 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -671,16 +671,16 @@ int differentWord(char *s1, char *s2)
  * the same (ignoring case) otherwise returns difference
  * between first non-matching characters. */
 {
-	char c1, c2;
-	for (;;)
-	{
-		c1 = toupper(*s1++);
-		c2 = toupper(*s2++);
-		if (c1 != c2)
-			return c2-c1;
-		if (c1 == 0)
-			return 0;
-	}
+char c1, c2;
+for (;;)
+    {
+    c1 = toupper(*s1++);
+    c2 = toupper(*s2++);
+    if (c1 != c2) /* Takes care of end of string in one but not the other too */
+	return c2-c1;
+    if (c1 == 0)  /* Take care of end of string in both. */
+	return 0;
+    }
 }
 
 boolean startsWith(char *start,char *string)
