@@ -474,11 +474,10 @@ if ((c1 == NULL) || (c2 == NULL))
 return(0);
 }
 
-struct dnaSeq *getDna(struct psl *psl, int gstart, int gend, int *start, int *end, char *strand)
+void getCoords(struct psl *psl, int gstart, int gend, int *start, int *end, char *strand)
 /* Get the genomic DNA that corresponds to an indel, and determine the corresponding \
    start and end positions for this sequence in the query sequence */ 
 {
-struct dnaSeq *ret;
 int gs, ge, off, i;
 
 /* Reverse complement xeno alignments if done on target - strand */
@@ -510,7 +509,8 @@ for (i = 0; i < psl->blockCount; i++)
 	}
     }
 /*printf("Extracting %s:%d-%d of %d-%d\n",psl->tName, gstart, gend, gstart, gend);*/
-ret = hDnaFromSeq(psl->tName, gstart, gend, dnaLower);
+/*if (retSeq)
+  ret = hDnaFromSeq(psl->tName, gstart, gend, dnaLower);*/
 /* If opposite strand alignment, reverse the start and end positions in the mRNA */
 if (((psl->strand[0] == '-')  && (psl->strand[1] != '-')) 
      || ((psl->strand[0] == '+') && (psl->strand[1] == '-')))
@@ -518,31 +518,31 @@ if (((psl->strand[0] == '-')  && (psl->strand[1] != '-'))
     int tmp = *start;
     *start = psl->qSize - *end;
     *end = psl->qSize - tmp;
-    reverseComplement(ret->dna, ret->size);
+    /* reverseComplement(ret->dna, ret->size); */
     sprintf(strand, "-");
     }
 else
     sprintf(strand, "+");
    
 /*strcpy(strand, psl->strand); */
-return(ret);
+/*return(ret);*/
 }
 
-void searchTransPsl(char *table, char *mrnaName, DNA *mdna, struct indel *ni, char *strand, unsigned type, struct psl* psl)
+void searchTransPsl(char *table, char *mrnaName, DNA *mdna, struct indel *ni, char *strand, unsigned type, struct psl* psl, struct dnaSeq *gseq)
 /* process one mRNA or EST for searchTrans */
 {
 int start = 0, end = 0;
-struct dnaSeq *gseq = NULL, *mseq = NULL;
+struct dnaSeq *dummy = NULL, *mseq = NULL;
 char *dna = NULL;
 char thisStrand[2];
 struct acc *acc;
 struct sqlConnection *conn2 = hAllocConn();
 
-/* Get the DNA sequence for the region in question */
+/* Get the start and end coordinates for the mRNA or EST sequence */
 if (type == INDEL)
-    gseq = getDna(psl, ni->chromStart-2, ni->chromEnd+1, &start, &end, thisStrand);
+    getCoords(psl, ni->chromStart-1, ni->chromEnd+1, &start, &end, thisStrand);
 else
-    gseq = getDna(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand);
+    getCoords(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand);
 /* Get the corresponding mRNA or EST  sequence */
 struct dnaSeq *seq = hRnaSeq(psl->qName);
 if (thisStrand[0] != strand[0])
@@ -551,7 +551,6 @@ if (thisStrand[0] != strand[0])
     start = seq->size - end;
     end = seq->size - temp;
     reverseComplement(seq->dna, seq->size);
-    reverseComplement(gseq->dna, gseq->size);
     }
 if ((end-start) > 0)
     {
@@ -561,12 +560,13 @@ if ((end-start) > 0)
     }
 else
     dna = cloneString("");
+
 /* Classify this mrna/est */
 AllocVar(acc);
 acc->name = cloneString(seq->name);
 acc->organism = NULL;
 /* If it doesn't align to this region */
-if ((start == 0) && (end == 0))
+if (start == end)
     {
     if (sameString(table, "mrna"))
         {
@@ -671,7 +671,6 @@ else
     }  
 freez(&dna);
 dnaSeqFree(&seq);
-dnaSeqFree(&gseq);
 hFreeConn(&conn2);
 }
 
@@ -680,11 +679,13 @@ void searchTrans(struct sqlConnection *conn, char *table, char *mrnaName, struct
 {
 struct sqlResult *sr;
 char **row;
-int offset;
+int offset, start, end;
 struct clone *cloneId;
 struct psl *psl;
 DNA mdna[10000];
 struct sqlConnection *conn2 = hAllocConn();
+struct dnaSeq *gseq;
+char thisStrand[2];
 
 if (type == CODONSUB)
     assert(((ni->mrnaEnd-ni->mrnaStart)+1) == 3);
@@ -692,12 +693,12 @@ if (type == CODONSUB)
 /* Determine the sequence, If indel, add one base on each side */
 if (type == INDEL)
     {
-    if ((ni->mrnaEnd-ni->mrnaStart+4) > 0)
+    if ((ni->mrnaEnd-ni->mrnaStart) > 0)
         {
-	assert((ni->mrnaEnd-ni->mrnaStart+4) < sizeof(mdna));
-        strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
-        mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
-        /*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mseq->dna);*/
+	assert((ni->mrnaEnd-ni->mrnaStart+3) < sizeof(mdna));
+        strncpy(mdna,rna->dna + ni->mrnaStart - 1,ni->mrnaEnd-ni->mrnaStart+2);
+        mdna[ni->mrnaEnd-ni->mrnaStart+2] = '\0';
+        printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mdna);
         }
     else
         mdna[0] = '\0';
@@ -711,6 +712,15 @@ else
     /*printf("Mismatch in %s at %d in %s:%d bases %s\n", mrnaName, ni->mrnaStart, ni->chrom, ni->chromStart, mdna);*/
     }
 
+/* Get dna sequence */
+if (type == INDEL)
+  gseq = hDnaFromSeq(ni->chrom, ni->chromStart-1, ni->chromEnd+1, dnaLower);
+else
+  gseq = hDnaFromSeq(ni->chrom, ni->chromStart-1, ni->chromEnd, dnaLower);
+if (strand[0] == '-')
+  reverseComplement(gseq->dna, gseq->size);
+
+
 /* Find all sequences that span this region */
 if (type == INDEL)
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+1, NULL, &offset);
@@ -721,10 +731,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     psl = pslLoad(row+offset);
     cloneId = getMrnaCloneId(conn2, psl->qName);
     if ((!sameString(psl->qName,mrnaName)) && (!sameClone(cloneId,mrnaCloneId)))
-        searchTransPsl(table, mrnaName, mdna, ni, strand, type, psl);
+	searchTransPsl(table, mrnaName, mdna, ni, strand, type, psl, gseq);
     cloneFree(&cloneId);
     pslFree(&psl);
     }
+dnaSeqFree(&gseq);
 sqlFreeResult(&sr);
 hFreeConn(&conn2);
 }
