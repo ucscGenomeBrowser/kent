@@ -3024,7 +3024,7 @@ if (row != NULL)
 	        {  
 		psl = pslLoad(row);
 		if ((sameString(psl->tName, seqName)) 
-		    && (abs(psl->tStart - start) < 1000000))
+		    && (abs(psl->tStart - start) < 1000))
 		    {
 		    pslStart = psl->tStart;
 		    }
@@ -3052,7 +3052,7 @@ if (row != NULL)
 	        {  
 		psl = pslLoad(row);
 		if ((sameString(psl->tName, seqName)) 
-		    && (abs(psl->tStart - start) < 1000000))
+		    && (abs(psl->tStart - start) < 1000))
 		    {
 		    pslStart = psl->tStart;
 		    }
