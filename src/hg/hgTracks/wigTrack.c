@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.19 2003/11/08 00:26:14 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.20 2003/11/10 16:59:30 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -36,7 +36,7 @@ struct preDrawElement
 	double	max;	/*	maximum value seen for this point	*/
 	double	min;	/*	minimum value seen for this point	*/
 	unsigned long long	count;	/* number of datum at this point */
-	double	sum;	/*	sum of all values at this point	*/
+	double	sumData;	/*	sum of all values at this point	*/
 	double  sumSquares;	/* sum of (values squared) at this point */
     };
 
@@ -60,8 +60,8 @@ struct wigItem
     double lowerLimit;  /* lowest data value in this block */
     double dataRange;   /* lowerLimit + dataRange = upperLimit */
     unsigned validCount;        /* number of valid data values in this block */
-    double average;     /* average of the data valeus, we may need this later */
-    double stddev;      /* standard deviation, we may need this later */
+    double sumData;     /* sum of the data points, for average and stddev calc */
+    double sumSquares;      /* sum of data points squared, for stddev calc */
     };
 
 static void wigItemFree(struct wigItem **pEl)
@@ -306,8 +306,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wi->lowerLimit = wiggle->lowerLimit;
 	wi->dataRange = wiggle->dataRange;
 	wi->validCount = wiggle->validCount;
-	wi->average = wiggle->average;
-	wi->stddev = wiggle->stddev;
+	wi->sumData = wiggle->sumData;
+	wi->sumSquares = wiggle->sumSquares;
 
 	el = hashLookup(trackSpans, wi->name);
 	if ( el == NULL)
@@ -513,7 +513,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 				preDraw[xCoord].max = dataValue;
 			    if (dataValue < preDraw[xCoord].min)
 				preDraw[xCoord].min = dataValue;
-			    preDraw[xCoord].sum += dataValue;
+			    preDraw[xCoord].sumData += dataValue;
 			    preDraw[xCoord].sumSquares += dataValue * dataValue;
 			    }
 			}
@@ -535,9 +535,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    preDraw[xCoord].max = upperLimit;
 		if (wi->lowerLimit < preDraw[xCoord].min)
 		    preDraw[xCoord].min = wi->lowerLimit;
-		/*	looks like we will need sum and sumSquares for a
- 		 *	data block to be able to keep track of that here
-		 */
+		preDraw[xCoord].sumData += wi->sumData;
+		preDraw[xCoord].sumSquares += wi->sumSquares;
 snprintf(dbgMsg, DBGMSGSZ, "one whole block at item %d, with %d points", itemCount, wi->Count);
 wigDebugPrint("wigDrawItems");
 		}

@@ -41,7 +41,7 @@
 #define	NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.11 2003/11/07 00:47:27 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.12 2003/11/10 16:58:24 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -133,8 +133,6 @@ double upperLimit = -1.0e+300;
 double dataRange = 0.0;
 double sumData = 0.0;
 double sumSquares = 0.0;
-double stddev = 0.0;
-double average = 0.0;
 int maxScore = 0;		/* max score in this bin */
 int minScore = 1000000;		/* min score in this bin */
 unsigned long long i;
@@ -156,13 +154,6 @@ if (bincount)
 	}
     if (validCount < 1) {
 	errAbort("ERROR: empty row being produced at row: %d\n", rowCount);
-    } else if (validCount > 1) {
-	stddev = sqrt(
-	(sumSquares - ((sumData*sumData)/validCount))/(validCount-1) );
-	average = sumData / validCount;
-    } else {
-	average = sumData;
-	stddev = 0.0;
     }
     dataRange = upperLimit - lowerLimit;
     if (upperLimit > overallUpperLimit) overallUpperLimit = upperLimit;
@@ -200,7 +191,7 @@ if (bincount)
 	chromName, chromStart+add_offset, chromEnd+add_offset,
 	featureName, rowCount, spanName, maxScore, strand, minScore,
 	dataSpan, bincount, fileOffsetBegin, binfile, lowerLimit,
-	dataRange, validCount, average, stddev );
+	dataRange, validCount, sumData, sumSquares );
     ++rowCount;
     }
 bincount = 0;	/* to count up to binsize	*/
