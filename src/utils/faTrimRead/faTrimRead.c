@@ -48,17 +48,17 @@ void usage()
 /* Explain usage and exit */
 {
 errAbort(
-        "trimRead - trim reads based on qual scores - change low scoring bases to N's \n"
+        "faTrimRead - trim reads based on qual scores - change low scoring bases to N's \n"
         "usage:\n"
-        "       trimRead in.fa qual.fa out.fa out.lft\n"
+        "       faTrimRead in.fa qual.fa out.fa out.lft\n"
         "options:\n"
         "    -minScore=N  score threshold (default %d)\n"
         "    -minMatch N  minimum number of matches above threshold at start/end of read (default %d)\n"
         "    -window=N    window size to check for matches at start and end of read (default %d)\n"
         "    -lineSize=N  output line size (default 50)\n"
+        "    -lower       change low scoring bases to lower case instead of Ns\n"
+        "    -clip        trim start and end of sequence at low scoring ends \n"
         "    -showQual    show qual scores and trimmed bases for debugging\n",
-        "    -lower       change low scoring bases to lower case instead of Ns\n",
-        "    -clip        trim start and end of sequence at low scoring ends \n",
         MINSCORE,MINMATCH, WINDOW        );
 }
 

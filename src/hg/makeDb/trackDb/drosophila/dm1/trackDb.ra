@@ -144,43 +144,6 @@ type bed 12 .
 otherDb anoGam1
 url http://www.genoscope.cns.fr/comparative?premier=Drosophila&deuxieme=Anopheles&position=$$
 
-track phastCons
-shortLabel PhastCons 
-longLabel PhastCons Conservation Score, melanogaster/yakuba/pseudoobscura
-group compGeno
-priority 103
-visibility hide
-color 0,10,100
-maxHeightPixels 40
-type wig 0.0 1.0
-autoScaleDefault off
-
-track phastConsElements
-shortLabel PhastConsElements
-longLabel PhastCons Conserved Elements, melanogaster/yakuba/pseudoobscura
-group compGeno
-priority 105
-visibility hide
-spectrum on
-color 0,60,120
-altColor 200,220,255
-exonArrows off
-showTopScorers 200
-type bed 12 .
-
-track phastCons4wayElements
-shortLabel PhastCons4wayElements
-longLabel PhastCons4way Conserved Elements, melanogaster/yakuba/pseudoobscura/anopheles
-group compGeno
-priority 105
-visibility hide
-spectrum on
-color 0,60,120
-altColor 200,220,255
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track b100i100
 shortLabel b100i100
 longLabel Gill's Fly Ultras 100%id dm1-dy1-dp1 >= 100bp 

@@ -1,4 +1,5 @@
-/* hgTables - Get table data associated with tracks and intersect tracks. */
+/* hgTables - Main and utility functions for table browser. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -18,7 +19,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.50 2004/07/27 11:36:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.51 2004/08/25 15:35:44 kent Exp $";
 
 
 void usage()

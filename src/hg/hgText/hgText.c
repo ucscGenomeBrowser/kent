@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.155 2004/08/18 21:59:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.156 2004/08/23 20:16:07 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -5030,10 +5030,11 @@ else if (existsAndEqual("phase", chooseTablePhase))
     }
 else
     {
-    if (existsAndEqual("tbTrack", "Choose table") &&
-	existsAndEqual("tbCustomTrack", "Choose table") &&
-	existsAndEqual("table0", "Choose table") &&
-	existsAndEqual("table1", "Choose table"))
+    if ((existsAndEqual("tbTrack", "Choose table") &&
+	 existsAndEqual("tbCustomTrack", "Choose table") &&
+	 existsAndEqual("table0", "Choose table") &&
+	 existsAndEqual("table1", "Choose table")) ||
+	db == NULL || table == NULL)
 	webAbort("Missing table selection", "Please choose a table.");
 
     if ((! sameString(database, db)) && (! sameString(hGetDb2(), db)) &&

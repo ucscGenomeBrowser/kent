@@ -1,11 +1,12 @@
 /* encodeSynteny - create HTML files to compare syntenic predictions from liftOver and Mercator */
-#include "encodeSynteny.h"
+#include "regionOrtho.h"
 
 void usage()
 {
-errAbort("encodeSynteny - summarize synteny predictions from liftOver and mercator.\n"
-	 "                generates an HTML table with links to the browser to STDOUT.\n"
-	 "usage:\n\tencodeSynteny\n");
+errAbort("regionOrtho - summarize synteny predictions from liftOver and mercator.\n"
+	 "              generates an HTML table with links to the browser to STDOUT\n"
+	 "              and BED files for the regions.\n"
+	 "usage:\n\tregionOrtho\n");
 }
 
 struct sizeList *getEncodeNameSize()
@@ -146,11 +147,12 @@ void printLink(char *assembly, char *chrom, int chromStart, int chromEnd, char *
 {
 char URL[]="http://hgwdev-daryl.cse.ucsc.edu/cgi-bin/hgTracks?";
 char options[]="chainHg16=squish&chromInfo=full&encodeRegionLior"
-    "=pack&encodeRegions=pack&gap=dense&netHg16=full&rmsk=dense&ruler=dense";
+    "=pack&encodeRegions=pack&encodeConsensus=pack&gap=dense&"
+    "netHg16=full&rmsk=dense&ruler=dense";
 
 printf("          <A TARGET=\"_BLANK\" HREF=\"%s",URL);
 printf("db=%s&position=%s:%d-%d&%s\"><FONT color=%s>%s:%d-%d</FONT></A><BR>\n",
-       assembly,chrom,chromStart,chromEnd,options,color,chrom,chromStart,chromEnd);
+       assembly,chrom,chromStart+1,chromEnd,options,color,chrom,chromStart+1,chromEnd);
 }
 
 void printColumnSeparator()
@@ -202,15 +204,21 @@ struct sizeList *region, *encodeRegions = getEncodeNameSize();
 struct namedRegion *loRegion, *liftOver, *meRegion, *mercator;
 struct mercatorSummary *mes, *meSummary;
 struct consensusRegion *cr=NULL, *crList=NULL;
-int    i, printMercatorSegments=0;
+int    i, j, count, printMercatorSegments = 0;
 int    newStart, newEnd;
 char URL[]="http://hgwdev-daryl.cse.ucsc.edu/cgi-bin/hgTracks?";
 char options[]="chainHg16=squish&chromInfo=full&encodeRegionLior"
     "=pack&encodeRegions=pack&gap=dense&netHg16=full&rmsk=dense&ruler=dense";
+char fileName[255], bedLine[255];
+FILE  *f = NULL;
 
 /* Loop through each assembly. */
 for (i=0; i < assemblyCount; i++)
     {
+    if (f != NULL)
+	carefulCloseWarn(&f);
+    safef(fileName,sizeof(fileName),"%s.bed", assembly[i]);
+    f = mustOpen(fileName,"w");
     printTableHeader(printMercatorSegments);
 
     /* Loop through each ENCODE region. */
@@ -362,13 +370,16 @@ for (i=0; i < assemblyCount; i++)
 	    printf("        </TD>\n        <TD NOWRAP ALIGN=\"RIGHT\">\n");
 	    printf("          %s\n", mEndDiffs->string);
 	    }
-	    printColumnSeparator();
-
-	    /* 7: print Consensus Ranges (and get sizes) */
+	printColumnSeparator();
+	
+	/* 7: print Consensus Ranges (and get sizes) */
 	if (crList==NULL)
 	    printf("          <FONT color=red>(null)</FONT> \n");
-	for (cr=crList; cr!=NULL; cr=cr->next)
+	count=slCount(crList);
+	for (cr=crList, j=1; cr!=NULL; cr=cr->next, j++)
 	    {
+	    fprintf(f, "%s\t%d\t%d\t%s.%dof%d\n",
+		  cr->chrom, cr->chromStart, cr->chromEnd, region->name, j, count);
 	    if (cr->chromEnd-cr->chromStart<2000)
 		printLink(assembly[i], cr->chrom, cr->chromStart, cr->chromEnd,"red");
 	    else
@@ -382,9 +393,9 @@ for (i=0; i < assemblyCount; i++)
 	for (cr=crList; cr!=NULL; cr=cr->next)
 	    {
 	    if (cr->chromEnd-cr->chromStart<2000 || cr->chromEnd-cr->chromStart > (2*region->size))
-		printf("          <FONT COLOR=RED>%d</FONT><BR>\n",cr->chromEnd-cr->chromStart-1);
+		printf("          <FONT COLOR=RED>%d</FONT><BR>\n",cr->chromEnd-cr->chromStart);
 	    else
-		printf("          %d<BR>\n",cr->chromEnd-cr->chromStart-1);
+		printf("          %d<BR>\n",cr->chromEnd-cr->chromStart);
 	    }
 	printColumnSeparator();
 

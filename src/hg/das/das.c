@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.30 2004/08/18 16:30:25 angie Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.31 2004/08/20 00:37:52 angie Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -49,17 +49,23 @@ if (err != 200)
 printf("<?xml version=\"1.0\" standalone=\"no\"?>\n");
 }
 
-void abusage(char *host)
-/* Tell them they are hammering us too hard and to contact us. */
+void blockHog(char *hogHost, char *hogAddr)
+/* Compare host/addr to those of an abusive client that we want to block. */
 {
-dasHead(200);
-printf("Your host, %s, has been sending too many requests lately and is "
-       "unfairly loading our site, impacting performance for other users.  "
-       "Please contact genome@cse.ucsc.edu to ask for your site to "
-       "be reenabled.  Also please consider downloading sequence and/or "
-       "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
-       host);
-exit(0);
+char *rhost = getenv("REMOTE_HOST");
+char *raddr = getenv("REMOTE_ADDR");
+if ((rhost != NULL && sameWord(rhost, hogHost)) ||
+    (raddr != NULL && sameWord(raddr, hogAddr)))
+    {
+    dasHead(200);
+    printf("Your host, %s, has been sending too many requests lately and is "
+	   "unfairly loading our site, impacting performance for other users. "
+	   "Please contact genome@cse.ucsc.edu to ask for your site to "
+	   "be reenabled.  Also please consider downloading sequence and/or "
+	   "annotations in bulk -- see http://genome.ucsc.edu/downloads.html.",
+	   hogHost);
+    exit(0);
+    }
 }
 
 void dasHelp(char *s)
@@ -987,18 +993,15 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *path = getenv("PATH_INFO");
-char *rhost = getenv("REMOTE_HOST");
-char *raddr = getenv("REMOTE_ADDR");
 
 cgiSpoof(&argc, argv);
 if (cgiVarExists("verbose"))
     verboseSetLevel(cgiInt("verbose"));
 if (argc == 2)
     path = argv[1];
-/* Temporary measure to shut down abusive client */
-if ((rhost != NULL && sameWord(rhost, "pix39.systemsbiology.net")) ||
-    (raddr != NULL && sameWord(raddr, "198.107.152.39")))
-    abusage("pix39.systemsbiology.net");
+/* Temporary measure to shut down abusive client:
+   blockHog("pix39.systemsbiology.net", "198.107.152.39");
+*/
 das(path);
 return 0;
 }

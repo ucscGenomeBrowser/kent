@@ -17,7 +17,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.9 2004/07/24 05:32:38 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.10 2004/08/24 17:15:48 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -196,7 +196,7 @@ if (!isBedWithBlocks)
 return bed;
 }
 
-struct bed *getRegionAsBed(
+static struct bed *getRegionAsBed(
 	char *db, char *table, 	/* Database and table. */
 	struct region *region,  /* Region to get data for. */
 	char *filter, 		/* Filter to add to SQL where clause if any. */
@@ -225,7 +225,7 @@ isBedWithBlocks = (sameString("chromStarts", hti->startsField)
          && sameString("blockSizes", hti->endsSizesField));
 
 /* All beds have at least chrom,start,end.  We omit the chrom
- * form the query since we already know it. */
+ * from the query since we already know it. */
 sr = regionQuery(conn, table, fields, region, TRUE, filter);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -392,6 +392,22 @@ void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn)
 doBedOrCtOptions(track, conn, TRUE);
 }
 
+static void removeNamedCustom(struct customTrack **pList, char *name)
+/* Remove named custom track from list if it's on there. */
+{
+struct customTrack *newList = NULL, *ct, *next;
+for (ct = *pList; ct != NULL; ct = next)
+    {
+    next = ct->next;
+    if (!sameString(ct->tdb->shortLabel, name))
+        {
+	slAddHead(&newList, ct);
+	}
+    }
+slReverse(&newList);
+*pList = newList;
+}
+
 void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, boolean doCtFile)
 /* Actually output bed or custom track. */
 {
@@ -399,7 +415,7 @@ char *table = curTrack->tableName;
 struct hTableInfo *hti = getHti(database, table);
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
-boolean doCtHdr = (cartBoolean(cart, hgtaPrintCustomTrackHeaders) 
+boolean doCtHdr = (cartUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE) 
 	|| doCt || doCtFile);
 char *ctName = cgiUsualString(hgtaCtName, table);
 char *ctDesc = cgiUsualString(hgtaCtDesc, table);
@@ -416,7 +432,6 @@ if (!doCt)
     textOpen();
     }
 
-
 for (region = regionList; region != NULL; region = region->next)
     {
     struct bed *bedList, *bed;
@@ -428,10 +443,14 @@ for (region = regionList; region != NULL; region = region->next)
 	if (visNum < 0)
 	    visNum = 0;
 	if (doCt)
+	    {
 	    ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
+	    }
 	else
+	    {
 	    hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
 		   ctName, ctDesc, visNum, ctUrl);
+	    }
 	}
 
     if ((fbQual == NULL) || (fbQual[0] == 0))
@@ -476,23 +495,6 @@ for (region = regionList; region != NULL; region = region->next)
 	featureBitsFreeList(&fbList);
 	}
 
-    if ((ctNew != NULL) && (ctNew->bedList != NULL))
-	{
-	/* Load existing custom tracks and add this new one: */
-	struct customTrack *ctList = getCustomTracks();
-	char *ctFileName = cartOptionalString(cart, "ct");
-	struct tempName tn;
-	slReverse(&ctNew->bedList);
-	slAddHead(&ctList, ctNew);
-	/* Save the custom tracks out to file (overwrite the old file): */
-	if (ctFileName == NULL)
-	    {
-	    makeTempName(&tn, "hgtct", ".bed");
-	    ctFileName = cloneString(tn.forCgi);
-	    }
-	customTrackSave(ctList, ctFileName);
-	cartSetString(cart, "ct", ctFileName);
-	}
     bedList = NULL;
     lmCleanup(&lm);
     }
@@ -504,30 +506,50 @@ if (!gotResults)
     }
 else if (doCt)
     {
-    char browserUrl[256];
-    char headerText[512];
-    char posBuf[256];
-    char *position = cartOptionalString(cart, "position");
-    int redirDelay = 3;
-    if (position == NULL)
+    /* Load existing custom tracks and add this new one: */
 	{
-	struct bed *bed = ctNew->bedList;
-        safef(posBuf, sizeof(posBuf), 
-		"%s:%d-%d", bed->chrom, bed->chromStart+1, bed->chromEnd);
-	position = posBuf;
+	struct customTrack *ctList = getCustomTracks();
+	char *ctFileName = cartOptionalString(cart, "ct");
+	struct tempName tn;
+	removeNamedCustom(&ctList, ctNew->tdb->shortLabel);
+	slReverse(&ctNew->bedList);
+	slAddHead(&ctList, ctNew);
+	/* Save the custom tracks out to file (overwrite the old file): */
+	if (ctFileName == NULL)
+	    {
+	    makeTempName(&tn, "hgtct", ".bed");
+	    ctFileName = cloneString(tn.forCgi);
+	    }
+	customTrackSave(ctList, ctFileName);
+	cartSetString(cart, "ct", ctFileName);
 	}
-    safef(browserUrl, sizeof(browserUrl),
-	  "%s?db=%s&position=%s", hgTracksName(), database, position);
-    safef(headerText, sizeof(headerText),
-	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
-	  redirDelay, browserUrl);
-    webStartHeader(cart, headerText,
-		   "Table Browser: %s %s: %s", hOrganism(database), 
-		   freezeName, "Get Custom Track");
-    hPrintf("You will be automatically redirected to the genome browser in\n"
-	   "%d seconds, or you can <BR>\n"
-	   "<A HREF=\"%s\">click here to continue</A>.\n",
-	   redirDelay, browserUrl);
+    /*  Put up redirect-to-browser page. */
+	{
+	char browserUrl[256];
+	char headerText[512];
+	char posBuf[256];
+	char *position = cartOptionalString(cart, "position");
+	int redirDelay = 3;
+	if (position == NULL)
+	    {
+	    struct bed *bed = ctNew->bedList;
+	    safef(posBuf, sizeof(posBuf), 
+		    "%s:%d-%d", bed->chrom, bed->chromStart+1, bed->chromEnd);
+	    position = posBuf;
+	    }
+	safef(browserUrl, sizeof(browserUrl),
+	      "%s?db=%s&position=%s", hgTracksName(), database, position);
+	safef(headerText, sizeof(headerText),
+	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+	      redirDelay, browserUrl);
+	webStartHeader(cart, headerText,
+		       "Table Browser: %s %s: %s", hOrganism(database), 
+		       freezeName, "Get Custom Track");
+	hPrintf("You will be automatically redirected to the genome browser in\n"
+	       "%d seconds, or you can <BR>\n"
+	       "<A HREF=\"%s\">click here to continue</A>.\n",
+	       redirDelay, browserUrl);
+	}
     }
 }
 

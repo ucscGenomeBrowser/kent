@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.28 2004/07/23 08:09:27 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.29 2004/08/19 17:16:49 angie Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -961,6 +961,9 @@ struct bed *bedListOut = NULL, *bed=NULL;
 
 for (bed=bedList;  bed != NULL;  bed=bed->next)
     {
+    if (bed->name == NULL)
+	errAbort("bedFilterByNameHash: bed item at %s:%d-%d has no name.",
+		 bed->chrom, bed->chromStart+1, bed->chromEnd);
     if (hashLookup(nameHash, bed->name) != NULL)
 	{
 	struct bed *newBed = cloneBed(bed);
@@ -983,6 +986,9 @@ for (bed=bedList;  bed != NULL;  bed=bed->next)
     {
     for (wildName=wildNames;  wildName != NULL;  wildName=wildName->next)
 	{
+	if (bed->name == NULL)
+	    errAbort("bedFilterByWildNames: bed item at %s:%d-%d has no name.",
+		     bed->chrom, bed->chromStart+1, bed->chromEnd);
 	if (wildMatch(wildName->name, bed->name))
 	    {
 	    struct bed *newBed = cloneBed(bed);

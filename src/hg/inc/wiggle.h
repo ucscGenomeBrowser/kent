@@ -5,6 +5,8 @@
 #ifndef WIGGLE_H
 #define WIGGLE_H
 
+#include "cart.h"
+
 #define WIGGLE_NUM_COLS 13
 
 struct wiggle
@@ -177,12 +179,18 @@ void wigFreeData(struct wiggleData **wigData);
 
 #define wiggleDataFreeList(a) wigFreeData(a)
 
+int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
+	int winStart, int winEnd, struct cart *cart);
+/*	determine span used in drawing in hgTracks	*/
+
+/*	in lib/wiggleCart.c	*/
+
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
     double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
-/* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
+/* return min,max Y ranges from trackDb or cart */
 extern void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
     int *Default);
-/* return pixels heights allowable from trackDb or cart in lib/wiggleCart.c */
+/* return pixels heights allowable from trackDb or cart */
 extern enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
     char **optString);
 /* return horizontalGrid setting	*/

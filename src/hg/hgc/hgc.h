@@ -81,6 +81,10 @@ void printTableHeaderName(char *name, char *clickName, char *url);
  * basically creates a column of letters */
 
 /* ----Routines in other modules in the same directory---- */
+void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start);
+/* Display details for WIGGLE tracks. */
+
 void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start);
 /* Display details for MAF tracks. */

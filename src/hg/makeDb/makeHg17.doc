@@ -8520,17 +8520,17 @@ zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.
 
     cat ELEMENTS/*.bed | \
 	awk 'BEGIN { b = (300 * log(ENVIRON["x_max"]) - 1000 * log(ENVIRON["x_med"])) / \
-	    (log(ENVIRON["x_max"] - log(ENVIRON["x_med"]))) ;\
+	    (log(ENVIRON["x_max"]) - log(ENVIRON["x_med"])) ;\
 	    a = (1000 - b) / log(ENVIRON["x_max"]) ;\
 	    printf "a = %f; b = %f\n", a, b > "/dev/stderr" } \
-	    { printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
-	    $1, $2, $3, $5, a * log($5) + b, $6, $7, $8, $9, \
-	    $10, $11, $12}' > all.bed
+	    { printf "%s\t%s\t%s\tlod=%d\t%d\n", \
+	    $1, $2, $3, $5, a * log($5) + b}' > all.bed
 
-    # double check scores: max should be about 1000, median should be about 300
+    # double check scores: max should be about 1000, median should be
+    # about 300
     
     hgLoadBed hg17 phastConsElements all.bed
-    rm all.bed sorted_scores
+    rm sorted_scores
 
     # trackDb.ra entry
 # track phastConsElements
@@ -8564,7 +8564,6 @@ zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.
     mkdir -p /cluster/data/hg17/bed/firstEF
     cd /cluster/data/hg17/bed/firstEF
     wget "http://bioinformatics.med.ohio-state.edu/downloads/firstEFMay04.bed.gz"
-    gunzip firstEFMay04.bed.gz
     cat << '_EOF_' > sedScript
 s/chr23/chrX/g
 s/chr24/chrY/g
@@ -8573,9 +8572,29 @@ s/chr24/chrY/g
 /^No/d
 '_EOF_'
 
-    sed -f sedScript  firstEFMay04.bed.gz > firstEF.bed
+    zcat firstEFMay04.bed.gz | sed -f sedScript | awk  "{OFS=\"\t\"} {\$3 +=1; print  \$0}" > firstEF.bed
     hgLoadBed hg17 firstEF firstEF.bed
     rm firstEF.tab
     gzip *.bed
 #done firstEF
 
+#  miRNA track (DONE 2004-08-24 - Hiram)
+    #	The source data for this was received via email from Sam
+    #	Griffiths-Jones to Donna 16 August 2004.  In other email Michel
+    #	Weber asked to add one more data line to that file.
+
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    cd /cluster/data/hg17/bed
+    mkdir miRNA
+    cd miRNA
+    egrep -v "^track |^browser " miRNA_hg17_1.bed | sed -e "s/ /\t/g" > hg17.bed
+    hgLoadBed hg17 miRNA hg17.bed
+    #	compare with previous results, should be relatively similar
+    #	featureBits hg16 miRNA
+    #	16923 bases of 2865248791 (0.001%) in intersection
+    #	featureBits hg17 miRNA
+    #	18052 bases of 2866216770 (0.001%) in intersection
+
+    # entry is already in trackDb/trackDb.ra

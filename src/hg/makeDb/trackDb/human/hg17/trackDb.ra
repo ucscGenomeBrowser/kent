@@ -34,14 +34,15 @@ pairwise netBlastz
 speciesOrder chimp dog mouse rat chicken fugu zebrafish
 
 track phastConsElements
-shortLabel Cons Elements
-longLabel phastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
 group compGeno
 priority 109.1
 visibility hide
 spectrum on
 exonArrows off
-type bed 6 .
+showTopScorers 200
+type bed 5 .
 
 track cns
 shortLabel CNS
@@ -52,6 +53,23 @@ visibility hide
 spectrum on
 exonArrows off
 type bed 6 .
+
+track tba37CFTR
+shortLabel 37 Species CFTR
+longLabel CFTR Region 37 Species TBA Alignments & phastCons
+group compGeno
+priority 109.99
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle chr7_phyloHMMcons_CFTR
+yLineOnOff Off
+pairwise tba37CFTR 15
+autoScaleDefault Off
+speciesOrder chimp gorilla orangutan baboon macaque vervet marmoset dusky_titi squirrel_monkey mouse_lemur lemur galago rabbit rat mouse cow sheep muntjak_indian pig horse cat dog ajbat cpbat hedgehog armadillo opossum monodelphis wallaby dunnart platypus chicken tortoise zebrafish tetra fugu
+chromosomes chr7
 
 track multiz7way
 shortLabel 7Way Cons
@@ -71,6 +89,14 @@ speciesOrder chimp mm4 rat chicken fugu zebrafish
 track varMultizMm5Rn3GalGal2Fr1
 shortLabel varMultiz5Way
 longLabel Human/Mouse/Rat/Chicken/Fugu VarMultiz 
+group compGeno
+priority 191
+visibility hide
+type maf
+
+track varMultizHMRDEC
+shortLabel varMultiz6Way
+longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
 group compGeno
 priority 191
 visibility hide

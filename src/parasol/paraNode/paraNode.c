@@ -1,11 +1,6 @@
 /* paraNode - parasol node server. */
 
 #include "paraCommon.h"
-/* POSIX doesn't cover privileged, so we have to set _BSD_SOURCE to get
-* initgroups on linux */
-#ifndef _BSD_SOURCE
-#define _BSD_SOURCE
-#endif
 #include <grp.h>
 #include "errabort.h"
 #include "dystring.h"

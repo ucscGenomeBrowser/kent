@@ -709,3 +709,30 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
   - maybe put some sanity checks of indices when loading
 
 - would be nice to check for stop file in script rather than after starting load
+
+- use 2bit instead of fasta for sequences; looks like ~75% size reduction.
+
+- mod date in mrna table is off by one month (early); same with gbidx files.
+  appears to be problem in gbff parser, as this problem exists in
+  non-incremental databases.  However some weird behavior on 
+  last day of month:
+  rn3          AF076856         1998-10-01        31-OCT-1998
+  rn2              "            1998-09-31        31-OCT-1998
+
+  
+-  gbSanity should be smarter about updates that have not been loaded, or
+   at least a better error message, not:
+      Error: danRer1: CO400007: not in mrna table, referenced in gbIndex
+   also include update in gbIndex...
+
+- refFlat geneName not updated
+Error: danRer1: gene danRer1.refFlat:1402 NM_198363 chr3: NM_198363 geneName "tob1" does not match refLink name "tob1a"
+Error: danRer1: gene danRer1.refFlat:1431 NM_199678 chr3: NM_199678 geneName "zgc:65984" does not match refLink name "hmox1"
+Error: danRer1: gene danRer1.refFlat:1731 NM_131823 chr6: NM_131823 geneName "iro1" does not match refLink name "irx1b"
+Error: danRer1: gene danRer1.refFlat:1853 NM_131824 chr7: NM_131824 geneName "iro5" does not match refLink name "irx5a"
+Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "iro3" does not match refLink name "irx3"
+
+- need to be able to incrementally add/remove native/xeno orgCats.
+
+-  multi-line /product= are truncated to the first line:
+   NM_033227 NM_021201 NM_033227 NM_021201 NM_003808 NM_052901 NM_175739

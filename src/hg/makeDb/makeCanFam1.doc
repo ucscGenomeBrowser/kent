@@ -1378,7 +1378,7 @@ mkdir -p PREDICTIONS/$chrom
 cp $file $TMP/$root.ss.gz
 zcat $TMP/$root.ss.gz \
 | $PHAST/phastCons - rev-dg.mod --nrates 40 \
-  --quiet --viterbi PREDICTIONS/$chrom/$root.bed --score \
+  --quiet --viterbi PREDICTIONS/$chrom/$root.bed --score --seqname $chrom \
   --transitions 0.08,0.008 > $TMP/$root.pp
 mkdir -p POSTPROBS/$chrom
 gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
@@ -1420,33 +1420,12 @@ rm $TMP/$root.ss.gz
     hgLoadWiggle canFam1 mzHg17Mm5_phast_wig \
       -pathPrefix=/gbdb/canFam1/wib/mzHg17Mm5_phast wib/*.wig
 
-    # Create bed track; we want to tweak the scores and the names.
-    # Scores are transformed as follows, for a reasonable-looking 
-    # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
-    # (here x_max  = 2297) and let x_med be the median score (here x_med =
-    # 31).  The  scores are transformed via the function f(x) = a *
-    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
-    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
-    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
-    # 272.914, b = -1112.18 (see below).
-    # better done on kksilo:
-    # get max:
-    cat PREDICTIONS/*/*.bed > raw.bed
-    set max = `awk '{print $5;}' raw.bed | sort -n | tail -1`
-#2297
-    # get median:
-    set lineCount = `wc -l < raw.bed`
-    set medOffset = `expr '(' $lineCount / 2 ')' + 1`
-    set med = `awk '{print $5;}' raw.bed | sort -n \
-      | tail +$medOffset | head -1`
-#31
-    # b and a:
-    set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
-#-1112.18
-    set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
-#272.914
-    awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
-            $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
+    # Create bed track: tweak scores and names, trim the unused strand column.
+    cat PREDICTIONS/*/*.bed \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore \
+    > all.bed
+
     hgLoadBed canFam1 phastConsElements all.bed
     # make top-5000 list and launcher on Adam's home page:
     sort -k5,5nr raw.bed | head -5000 > top5000.bed

@@ -32,7 +32,7 @@ struct pseudoGeneLink
     char gStrand[3];	/* strand of gene */
     unsigned exonCount;	/* # of exons in gene  */
     unsigned geneOverlap;	/* bases overlapping */
-    unsigned polyA;	/* length of polyA */
+    unsigned polyA;	/* count of As in polyA */
     int polyAstart;	/* start of polyA, relative to end of pseudogene */
     unsigned exonCover;	/* number of exons in Gene covered */
     unsigned intronCount;	/* number of introns in pseudogene */
@@ -66,7 +66,7 @@ struct pseudoGeneLink
     char overStrand[3];	/* strand of overlapping mrna */
     int adaBoost;	/* adaBoost label */
     float posConf;	/* pvalue for positive */
-    float negConf;	/* pvalue for positive */
+    unsigned polyAlen;	/* length of polyA */
     };
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row);

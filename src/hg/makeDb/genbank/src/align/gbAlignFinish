@@ -15,7 +15,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.9 2003/10/08 21:06:18 markd Exp $
+# $Id: gbAlignFinish,v 1.10 2004/08/22 21:23:10 markd Exp $
 #
 use strict;
 use warnings;
@@ -317,22 +317,9 @@ sub combineIntronPsls($$$$$$$@) {
     }
 }
 
-# check if a set of alignments has already been installed. 
-sub checkIfDone($) {
-    my($dirPrefix) = @_;
-    # replace workdir
-    my $outDirPrefix = $dirPrefix;
-    $outDirPrefix =~ s/^[^\/]+\///;
-    $outDirPrefix = "aligned/$outDirPrefix";
-    if (-e "$outDirPrefix.alidx") {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
 # Do work of combining and install PSL, etc for a
-# release+update+typeAccPrefix+orgCat.  Skip if orgCat was not aligned.
+# release+update+typeAccPrefix+orgCat.  Skip if orgCat was not aligned
+# or has already been completed.
 sub finishOrgCatAligns($$$$) {
     my($db, $dirPrefix, $orgCat, $tmpDir) = @_;
     my($release, $database, $update, $type, $typeAccPrefix)
@@ -347,9 +334,9 @@ sub finishOrgCatAligns($$$$) {
     my $alignDir = "data/aligned/$release/$database/$update";
     my $alidxBase = "$alignDir/$typePrefix";
 
-    if (-e "$alidxBase.$orgCat.alidx") {
+    if (-e "$alidxBase.alidx") {
         if ($gbCommon::verbose > 1) {
-            print STDERR "finishAligns: $alidxBase.$orgCat.alidx exists, skipping,\n";
+            print STDERR "finishAligns: $alidxBase.alidx exists, skipping,\n";
         }
         return;
     }
@@ -508,8 +495,6 @@ verifyExpectedPsls();
 # process each update and type for each database
 foreach my $db (@databases) {
     foreach my $dirPrefix (getDirsPrefixes($db)) {
-        if (!checkIfDone($dirPrefix)) {
-            finishAligns($db, $dirPrefix);
-        }
+        finishAligns($db, $dirPrefix);
     }
 }

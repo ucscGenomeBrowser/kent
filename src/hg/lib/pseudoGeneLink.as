@@ -22,7 +22,7 @@ table pseudoGeneLink
     char[2] gStrand;    "strand of gene"
     uint exonCount;     "# of exons in gene "
     uint geneOverlap;   "bases overlapping"
-    uint polyA;         "length of polyA"
+    uint polyA;         "count of As in polyA"
     int polyAstart;     "start of polyA, relative to end of pseudogene"
     uint exonCover;     "number of exons in Gene covered"
     uint intronCount;   "number of introns in pseudogene"
@@ -56,5 +56,5 @@ table pseudoGeneLink
     char[2] overStrand;  "strand of overlapping mrna"
     int adaBoost;       "adaBoost label"
     float posConf;      "pvalue for positive"
-    float negConf;      "pvalue for positive"
+    uint polyAlen;      "length of polyA"
     )

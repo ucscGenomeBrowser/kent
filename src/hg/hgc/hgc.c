@@ -111,6 +111,7 @@
 #include "scoredRef.h"
 #include "minGeneInfo.h"
 #include "tigrCmrGene.h"
+#include "tigrOperon.h"
 #include "llaInfo.h"
 #include "loweTrnaGene.h"
 #include "blastTab.h"
@@ -141,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.721 2004/08/18 19:20:31 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.727 2004/08/26 00:12:24 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2334,6 +2335,10 @@ if (wordCount > 0)
         {
 	genericExpRatio(conn, tdb, item, start);
 	}
+    else if (sameString(type, "wig"))
+        {
+	genericWiggleClick(conn, tdb, item, start);
+        }
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -2582,9 +2587,10 @@ if (winEnd - winStart > 1000000)
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
 puts(
      "Use this page to highlight features in genomic DNA text. "
-     "DNA covered by a particular track can be hilighted by "
+     "DNA covered by a particular track can be highlighted by "
      "case, underline, bold, italic, or color.  See below for "
-     "details about color, and for examples. <P>");
+     "details about color, and for examples. Tracks in &quot;hide&quot; "
+     "display mode are not shown in the grid below. <P>");
 
 if (cgiBooleanDefined("hgSeq.revComp"))
     {
@@ -2709,7 +2715,7 @@ printf("</TABLE>\n");
 printf("</FORM>\n");
 printf("<H3>Coloring Information and Examples</H3>\n");
 puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
-puts("The examples below show a few ways to hilight individual tracks, "
+puts("The examples below show a few ways to highlight individual tracks, "
      "and their interplay. It's good to keep it simple at first.  It's easy "
      "to make pretty but completely cryptic displays with this feature.");
 puts(
@@ -2786,7 +2792,7 @@ if (psl->strand[1] == '+')
 if ((ptr = strchr(readName, '.')) != NULL)
     *ptr++ = 0;
 
-printf(">%s\n", readName);
+printf(">%s-%s\n", readName,database);
 tSeq = hDnaFromSeq(psl->tName, start, end, dnaLower);
 
 if (psl->strand[1] == '-')
@@ -7677,14 +7683,22 @@ if (!hTableExists(chainTable) )
 //    }
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<B>Syntenic&nbsp;in&nbsp;mouse: </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
-printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d&nbsp;bp \n",pg->polyA);
+printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Divergence:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
 printf("(%d&nbsp;%% of gene)<br>\n",pg->coverage);
+if (!sameString(pg->overName, "none"))
+    printf("<B>Bases&nbsp;overlapping mRNA:</B>&nbsp;%s&nbsp;(%d&nbsp;bp)<br>\n", pg->overName, pg->maxOverlap);
+else
+    printf("<B>No&nbsp;overlapping mRNA</B><br>");
 if (sameString(pg->type, "expressed"))
     {
     printf("<b>Type of RetroGene:&nbsp;</b>%s<p>\n",pg->type);
+    }
+else if (sameString(pg->type, "singleExon"))
+    {
+    printf("<b>Overlap with Parent:&nbsp;</b>%s<p>\n",pg->type);
     }
 else
     {
@@ -11754,6 +11768,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     printf("<TR><TH ALIGN=left>Length:</TH><TD>%d</TD></TR>\n",length);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
+    printf("<TR><TH ALIGN=left>Score:</TH><TD>%d</TD></TR>\n", lfs->score);
     gotS = hChromBand(seqName, start, sband);
     gotB = hChromBand(seqName, end, eband);
     if (gotS && gotB)
@@ -12974,6 +12989,70 @@ printTrackHtml(tdb);
 loweTrnaGeneFree(&trna);
 }
 
+void doTigrOperons(struct trackDb *tdb, char *opName)
+/* track handler for the TIGR operon predictions */
+{
+char *track = tdb->tableName;
+struct tigrOperon *op;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *dupe, *type, *words[16];
+char **row;
+int wordCount;
+int start = cartInt(cart, "o"), num = 0;
+
+genericHeader(tdb,opName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+genericBedClick(conn, tdb, opName, start, num);
+sprintf(query, "select * from %sInfo where name = '%s'", track, opName);
+sr = sqlGetResult(conn, query);
+/* Make the operon table like on the TIGR web page. */
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    int i,j;
+    char *infos[30];
+    op = tigrOperonLoad(row);
+    chopCommas(op->info,infos);
+    printf("<P>\n<TABLE BORDER=1 ALIGN=\"CENTER\">\n");
+    for (i = 0; i <= op->size; i++)
+	{
+	printf("  <TR ALIGN=\"CENTER\">");
+	for (j = 0; j <= op->size; j++)
+	    {
+	    printf("<TD>");
+	    if ((i == 0 || j == 0) && !(i == 0 && j == 0))
+		(i > j) ? printf("%s",op->genes[i-1]) : printf("%s",op->genes[j-1]);
+	    else if (i + j > 0)
+		{
+		char *data = infos[((i-1)*op->size)+(j-1)];
+		if (!sameString(data,"---"))
+		    {
+		    char *n, *conf;
+		    n = chopPrefixAt(data,'|');
+		    conf = data;
+		    printf("confidence = %.2f, n = %d",atof(conf),atoi(n));
+		    }
+		else
+		    printf("%s",data);
+		}
+	    printf("</TD>");
+	    }
+	printf("</TR>\n");
+	}
+    printf("</TABLE>\n</P>\n");
+    }
+printTrackHtml(tdb);
+/* clean up */
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tigrOperonFree(&op);
+}
+
 void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
 /* Handle the TIRG CMR gene track. */
 {
@@ -13024,88 +13103,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 printTrackHtml(tdb);
 tigrCmrGeneFree(&tigr);
-}
-
-void doCrudeBlastP(struct trackDb *tdb, char *itemName, char *trackName)
-/* For the P.furiosus/P.aerophilum BLASTP tracks. */
-{
-struct sqlConnection *conn = hAllocConn(), *conn2;
-struct sqlResult *sr = NULL;
-struct minGeneInfo *mgi = NULL;
-struct blastTab *bt = NULL;
-char *queryDb = replaceChars(trackName,"BlastP",""), *thisDb = hGetDbName();
-char *bothNames = cloneString(itemName), *qname = chopPrefix(itemName);
-char **row;
-char *queryGenome = cloneString(trackName);
-char query[512];
-int hit = 1;
-
-genericHeader(tdb,bothNames);
-
-/* Print Target information */
-
-printf("<B>Target protein: </B>%s<br>\n",itemName);
-sprintf(query,"select * from gbProtCodeXra where name='%s'",itemName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    mgi = minGeneInfoLoad(row);
-    if (mgi != NULL)
-	{
-	printf("<B>Target note: </B>%s<br>\n",mgi->note);
-	printf("<B>Target product: </B>%s<br>\n",mgi->product);
-	}
-    }
-sqlFreeResult(&sr);
-minGeneInfoFree(&mgi);
-hFreeConn(&conn);
-
-/* Print Query information */
-
-conn2 = hAllocOrConnect(queryDb);
-printf("<B>Query protein: </B>%s<br>\n",qname);
-sprintf(query,"select * from gbProtCodeXra where name='%s'",qname);
-sr = sqlGetResult(conn2, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    mgi = minGeneInfoLoad(row);
-    if (mgi != NULL)
-	{
-	printf("<B>Target note: </B>%s<br>\n",mgi->note);
-	printf("<B>Target product: </B>%s<br>\n",mgi->product);
-	}
-    }
-sqlFreeResult(&sr);
-minGeneInfoFree(&mgi);
-hFreeConn(&conn2);
-hSetDb(thisDb);
-
-/* Print all the BLASTP info */
-
-conn = hAllocConn();
-sprintf(query,"select * from %sStuff where target='%s' and query='%s'",trackName, itemName,qname);
-printf("<br><hr>\n");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bt = blastTabLoad(row);
-    printf("<u><h3>Hit #%d</h3></u>",hit++);
-    printf("<B>Percent Identity: </B>%.2f<BR>\n",bt->identity);
-    printf("<B>E-value: </B>%.2E<BR>\n",bt->eValue);
-    printf("<B>Bit score: </B>%.2f<BR>\n",bt->bitScore);
-    printf("<B>Length of alignment: </B>%d<BR>\n",bt->aliLength);
-    printf("<B>Number of mismatches: </B>%d<BR>\n",bt->mismatch);
-    printf("<B>Number of gap openings: </B>%d<BR>\n",bt->gapOpen);
-    printf("<B>Query Start: </B>%d<BR>\n",bt->qStart+1);
-    printf("<B>Query End: </B>%d<BR>\n",bt->qEnd);
-    printf("<B>Target Start: </B>%d<BR>\n",bt->tStart+1);
-    printf("<B>Target End: </B>%d<BR>\n",bt->tEnd);
-    blastTabFree(&bt);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-freeMem(queryDb);
-freeMem(bothNames);
 }
 
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
@@ -13783,7 +13780,7 @@ struct lineFile *lf;
 struct psl *psl = 0;
 enum gfType tt = gftDnaX, qt = gftProt;
 boolean isProt = 1;
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq;
 char query[256], **row;
@@ -13794,15 +13791,31 @@ struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
 char *useName = itemName;
 char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
-char buffer[1024];
+char *ptr;
+char *buffer;
 boolean isDm = FALSE;
 char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
+char *blastRef = trackDbSettingOrDefault(tdb, "blastRef", "NULL");
 
 if (sameString("blastDm1FB", tdb->tableName))
     isDm = TRUE;
+buffer = needMem(strlen(itemName)+ 1);
 strcpy(buffer, itemName);
 acc = buffer;
-if ((pos = strchr(acc, '.')) != NULL)
+if ((blastRef != NULL) && (hTableExists(blastRef)))
+    {
+    if (ptr = strchr(acc, '.'))
+	*ptr = 0;
+    safef(query, sizeof(query), "select geneId, extra1, refPos from %s where acc = '%s'", blastRef, acc);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	useName = row[0];
+	prot = row[1];
+	pos = row[2];
+	}
+    }
+else if ((pos = strchr(acc, '.')) != NULL)
     {
     *pos++ = 0;
     if ((gene = strchr(pos, '.')) != NULL)
@@ -13822,9 +13835,14 @@ if (pos != NULL)
     {
     if (isDm == FALSE)
 	{
+	char *assembly;
+	if (sameString("blastHg16KG", tdb->tableName))
+	    assembly = "hg16";
+	else
+	    assembly = "hg17";
 	printf("<B>Human position:</B>\n");
 	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
-	    hgTracksName(), pos, "hg16");
+	    hgTracksName(), pos, assembly);
 	}
     else
 	{
@@ -13893,6 +13911,8 @@ for (same = 1; same >= 0; same -= 1)
     printf("</PRE></TT>");
     /* Add description */
     printTrackHtml(tdb);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
 }
 
 static void doSgdOther(struct trackDb *tdb, char *item)
@@ -14257,7 +14277,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "query=%s&sections=FBgn&submit=issymbol\" TARGET=_BLANK>"
 		   "%s</A><BR>\n", gNum, stripped, psc->geneIds[i]);
 	    }
-	printf("<B>Gene%s delta:</B> %d<BR>\n", gNum, psc->geneDeltas[i]);
 	}
     pscreenFree(&psc);
     }
@@ -14525,7 +14544,8 @@ else if (sameWord(track, "firstEF"))
     firstEF(tdb, item);
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
-        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") )
+        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") ||
+        sameWord(track, "blastHg17KG") )
     {
     blastProtein(tdb, item);
     }
@@ -14824,13 +14844,13 @@ else if (sameWord(track, "tigrCmrORFs"))
     {
     doTigrCmrGene(tdb,item);
     }
+else if (sameWord(track, "tigrOperons"))
+    {
+    doTigrOperons(tdb,item);
+    }
 else if (sameWord(track, "loweTrnaGene"))
     {
     doLoweTrnaGene(tdb,item);
-    }
-else if (startsWith("BlastP", track))
-    {
-    doCrudeBlastP(tdb,item,track);
     }
 /* else if (startsWith("lla", track))  */
 /*     { */

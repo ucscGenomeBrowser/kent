@@ -5,7 +5,7 @@
 #ifndef PSCREEN_H
 #define PSCREEN_H
 
-#define PSCREEN_NUM_COLS 10
+#define PSCREEN_NUM_COLS 9
 
 struct pscreen
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes */
@@ -20,7 +20,6 @@ struct pscreen
     unsigned stockNumber;	/* Mutant strain stock number, for ordering */
     unsigned geneCount;	/* Number of genes disrupted by this insert */
     char **geneIds;	/* IDs of genes disrupted */
-    int *geneDeltas;	/* Offset of disruption relative to gene TS??? */
     };
 
 struct pscreen *pscreenLoad(char **row);

@@ -1,4 +1,4 @@
-/* encodeSynteny - create HTML files to compare syntenic predictions from liftOver and Mercator */
+/* regionOrtho - create HTML files to compare syntenic predictions from liftOver and Mercator */
 #include "common.h"
 #include "jksql.h"
 #include "dystring.h"

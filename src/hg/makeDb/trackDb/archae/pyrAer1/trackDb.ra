@@ -1,3 +1,12 @@
+track contigs
+shortLabel Contigs
+longLabel Contigs sequenced
+group map
+priority 1.5
+visibility hide
+url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=$$
+type bed 4 .
+ 
 track loweTrnaGene
 shortLabel Lowe tRNA
 longLabel tRNA genes found by Todd Lowe
@@ -44,13 +53,4 @@ expScale 4.0
 expStep 0.5
 expTable llaPaePrintAExps
 chip printA
-canPack off
-
-track codeBlast
-shortLabel BLASTP codes
-longLabel Conservation of proteins with BLASTP
-group compGeno
-priority 4.5
-visibility dense
-type bed 6 +
 canPack off

@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.4 2004/08/18 21:48:01 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.8 2004/08/23 19:10:52 daryl Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -29,7 +29,7 @@ errAbort("regionAgp - generate an AGP file for a region\n"
      "    regionAgp region.bed chrom.agp out\n\n"
      " region.bed describes the region with lines formatted:\n"
      "          <chrom> <start> <end> <region> <seq no>\n"
-     " chrom.agp is the intput AGP file\n"
+     " chrom.agp is the input AGP file\n"
      " out is the output AGP file, or directory if -dir option used\n"
      "\noptions:\n"
      "    -%s   directory for output AGP files, to be named <region>.agp",
@@ -58,6 +58,7 @@ struct agpFrag *agpFrag;
 struct agpGap *agpGap;
 char *chrom;
 struct agp *agpList, *agp;
+struct hashEl *el;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
@@ -99,18 +100,13 @@ while (lineFileNext(lf, &line, &lineSize))
         agp->entry = agpGap;
         agp->isFrag = FALSE;
         }
-    if ((agpList = hashFindVal(chromAgpHash, chrom)) == NULL)
+    if ((el = hashLookup(chromAgpHash, chrom)) == NULL)
         {
-        /* new chrom */
-        /* add to hashes of chrom agp lists and sizes */
-        agpList = agp;
+        /* new chrom - add to hashes of chrom agp lists and sizes */
+        hashAdd(chromAgpHash, chrom, agp);
         }
     else
-        {
-        slAddHead(&agpList, agp);
-        hashRemove(chromAgpHash, chrom);
-        }
-    hashAdd(chromAgpHash, chrom, agpList);
+        slAddHead(&(el->val), agp);
     }
 /* reverse AGP lists */
 hashTraverseVals(chromAgpHash, slReverse);
@@ -147,6 +143,8 @@ if (!dirOption)
 /* process BED lines, emitting an AGP file */
 for (pos = posList; pos != NULL; pos = pos->next)
     {
+    /* convert BED start to 1-based, since AGP is */
+    pos->chromStart++;
     if (pos->score == 1)
         /* score field of the BED is actually the sequence number
          * of the segment in the region */
@@ -165,7 +163,6 @@ for (pos = posList; pos != NULL; pos = pos->next)
         }
     agpList = (struct agp *)hashMustFindVal(agpHash, pos->chrom);
     for (agp = agpList; agp != NULL; agp = agp->next)
-    //for (agp = agpList->next; agp != NULL; agp = agp->next)
         {
         if (agp->isFrag)
             {

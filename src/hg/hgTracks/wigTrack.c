@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.54 2004/07/21 19:50:59 sugnet Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.57 2004/08/27 20:32:03 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -333,6 +333,8 @@ struct hash *spans = NULL;	/* Spans encountered during load */
 if (tg->customPt == (void *)NULL)
     errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
 
+/*	turn off maps self until we properly handle wiggle tracks in hgc */
+tg->mapsSelf = FALSE;
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
@@ -581,6 +583,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     /*	There may not be a span of 1, use whatever is lowest	*/
     if (minimalSpan > usingDataSpan)
 	usingDataSpan = minimalSpan;
+
 
     /*	Now that we know what Span to draw, see if this item should be
      *	drawn at all.
@@ -1017,6 +1020,12 @@ if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
 	}
 
     }	/*	drawing y= line marker	*/
+
+/*	Map this wiggle area if we are self mapping	*/
+if (tg->mapsSelf)
+    mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+            tg->mapName, NULL);
+
 freez(&colorArray);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
@@ -1204,6 +1213,7 @@ track->itemHeight = tgFixedItemHeight;
 
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
+/*	the wigMaf parent will turn mapsSelf off	*/
 track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;

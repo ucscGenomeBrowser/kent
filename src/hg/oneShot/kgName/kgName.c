@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "kgName - builds association table between knownPep and gene common name\n"
   "usage:\n"
-  "   kgName database idList outAssoc\n"
+  "   kgName database reference.psl outAssoc \n"
   );
 }
 
@@ -101,20 +101,27 @@ sprintf(cond_str, "mrnaID='%s'", id);
 return sqlGetField(conn, database, "spMrna", "spID", cond_str);
 }
 
-void kgName(char *database, char *protDb,  char *inList, char *outPsl)
+void kgName(char *database, char *protDb, char *refPsl,  char *outAssoc)
 /* kgName - builds association table between knownPep and gene common name. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect("swissProt");
 char *words[1], **row;
-FILE *f = mustOpen(outPsl, "w");
-struct lineFile *lf = lineFileOpen(inList, TRUE);
+FILE *f = mustOpen(outAssoc, "w");
 int count = 0, found = 0;
 char query[256];
+struct lineFile *pslLf = pslFileOpen(refPsl);
+struct psl *psl;
+
+while ((psl = pslNext(pslLf)) != NULL)
+    fprintf(f,"%s\t%s\t%s:%d-%d\t%s\n",psl->qName, lookupName(conn,psl->qName), 
+	psl->tName, psl->tStart, psl->tEnd, getSwiss(conn, psl->qName));
+/*
 while (lineFileRow(lf, words))
     {
     fprintf(f,"%s\t%s\t%s\n",words[0], lookupName(conn,words[0]), getSwiss(conn, words[0]));
     }
+    */
 hFreeConn(&conn);
 }
 

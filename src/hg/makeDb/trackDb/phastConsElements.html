@@ -1,41 +1,42 @@
 <H2>Description</H2> 
 <P> 
-This track shows predictions of conserved elements from the phastCons
-program.  PhastCons bases its predictions on a phylogenetic hidden Markov model
+This track shows predictions of conserved elements produced by the phastCons
+program.  They are based on a phylogenetic hidden Markov model
 (phylo-HMM), a type of probabilistic model that describes both the process
 of DNA substitution at each site in a genome and the way this process
 changes from one site to the next. </P>
 
-<H2>Methods</H2>
-<P> Best-in-genome pairwise alignments were generated for each species using
-blastz, followed by chaining and netting.  A multiple alignment was then
-constructed from these pairwise alignments using multiz.  A phylogenetic
-model was fitted to the multiz alignments by maximum likelihood,
-conditioning on the accepted tree topology.  This was accomplished with the
-program phyloFit, using the general reversible (REV) substitution model and
-discrete gamma model for rate variation (Yang, 1994).  (With some sets of
-species, special allowances are made for distant species, which can be
-aligned only in conserved regions.  Branch lengths to these species are
-estimated approximately, using branch length proportions inferred from
-sites in 3rd codon position.)</P>
-
-<P> The multiz alignments were split into fragments of approximately 1Mb in
-size, such that cut-points occurred between alignment blocks where
-possible.  The phastCons program was run on each of these fragments with
-the --viterbi option and the globally estimated phylogenetic model.
-PhastCons constructs a two-state phylo-HMM with a state for conserved
-regions and a state for non-conserved regions.  It "cuts" the estimated
-distribution of evolutionary rates at a designated quantile and creates a
-phylogenetic model for the conserved state based on the slower evolutionary
-rates and a phylogenetic model for the non-conserved state based on the
-faster evolutionary rates.  When run with the --viterbi option, the program
-identifies segments of the alignment that are likely to have been
-"generated" by the conserved state--i.e., maximal segments in which the
-maximum-likelihood (Viterbi) path through the phylo-HMM completely resides
-in the conserved state.  These predicted segments are combined across
-alignment fragments and used to construct the track.  The transition
+<H2>Methods</H2> <P> Best-in-genome pairwise alignments were generated for
+each species using blastz, followed by chaining and netting.  A multiple
+alignment was then constructed from these pairwise alignments using multiz.
+A phylogenetic model was fitted to the multiz alignments by maximum
+likelihood, using the general reversible (REV) substitution model and
+discrete gamma model for rate variation (Yang, 1994).  Predictions of
+conserved elements were then obtained by running phastCons on the multiple
+alignments with the --viterbi option and the globally estimated
+phylogenetic model.  PhastCons constructs a two-state phylo-HMM with a
+state for conserved regions and a state for non-conserved regions.  It
+"cuts" the estimated distribution of evolutionary rates at a designated
+quantile and creates a phylogenetic model for the conserved state based on
+the slower evolutionary rates and a phylogenetic model for the
+non-conserved state based on the faster evolutionary rates.  When run with
+the --viterbi option, phastCons identifies segments of the alignment that
+are likely to have been "generated" by the conserved state--i.e., maximal
+segments in which the maximum-likelihood (Viterbi) path through the
+phylo-HMM completely resides in the conserved state.  The transition
 probabilities between the states in the phylo-HMM are approximately
 estimated by maximum likelihood.</P>
+
+<P>Each predicted conserved element is assigned a log-odds score equal to
+its log probability under the conserved model minus its log probability
+under the non-conserved model.  The "score" field associated with this
+track contains transformed log-odds scores, taking values between 0 and
+1000.  (The scores are transformed using a monotonic function of the form a
+* log(x) + b.)  The transformed scores determine how darkly each element is
+shaded in the browser, with higher scores resulting in darker shading and
+lower scores resulting lighter shading.  The raw log odds scores are
+retained in the "name" field and can be seen on the details page or in the
+browser when the track's display mode is set to "pack" or "full".</P>
 
 <H2>Credits</H2>
 <P>
@@ -60,6 +61,13 @@ software by Adam Siepel at UCSC.
 Felsenstein J and Churchill GA (1996).  A hidden Markov model approach to
 variation among sites in rate of evolution.
 <em>Mol Biol Evol</em> 13:93-104. </P>
+<P>
+Siepel A and Haussler D (2003).  
+<a href="http://www.cse.ucsc.edu/~acs/phyhmm.pdf">Combining
+phylogenetic and hidden Markov models in biosequence analysis</a>.
+In <em> Proceedings of the Seventh Annual 
+International Conference on Computational Molecular Biology (RECOMB
+2003)</em>, pp. 277-286. </P>
 <P>
 Siepel A and Haussler D (2004). Phylogenetic hidden Markov models.
 In R. Nielsen, ed.,  Statistical Methods in Molecular Evolution, Springer  

@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.779 2004/08/13 23:24:04 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.784 2004/08/25 18:15:08 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -137,7 +137,7 @@ static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 static char *ctFileName = NULL;	/* Custom track file. */
 
-int gfxBorder = 1;		/* Width of graphics border. */
+int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
@@ -304,7 +304,7 @@ font = tl.font = mgSmallFont();
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "N");
 tl.fontHeight = mgFontLineHeight(font);
-tl.leftLabelWidth = 120;
+tl.leftLabelWidth = hgDefaultLeftLabelWidth;
 tl.picWidth = hgDefaultPixWidth;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
@@ -2948,6 +2948,8 @@ char geneName[64];
 char accName[64];
 char sprotName[64];
 char posName[64];
+char *blastRef;
+char *buffer;
 
 safef(geneName, sizeof(geneName), "%s.geneLabel", tg->tdb->tableName);
 safef(accName, sizeof(accName), "%s.accLabel", tg->tdb->tableName);
@@ -2957,6 +2959,76 @@ useGene= cartUsualBoolean(cart, geneName, TRUE);
 useAcc= cartUsualBoolean(cart, accName, FALSE);
 useSprot= cartUsualBoolean(cart, sprotName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
+blastRef = trackDbSettingOrDefault(tg->tdb, "blastRef", NULL);
+
+if ((blastRef != NULL) && (hTableExists(blastRef)))
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    struct sqlConnection *conn = hAllocConn();
+    boolean added = FALSE;
+    char *ptr;
+	
+    for (lf = tg->items; lf != NULL; lf = lf->next)
+	{
+	added = FALSE;
+	
+	buffer = needMem(strlen(lf->name) + 1);
+	strcpy(buffer, lf->name);
+	if (ptr = strchr(buffer, '.'))
+	    *ptr = 0;
+	if (!sameString("blastDm1FB", tg->tdb->tableName))
+	    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
+	else
+	    safef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    lf->extra = needMem(strlen(lf->name) + strlen(row[0])+ strlen(row[1])+ strlen(row[2]) + 1);
+	    if (useGene)
+		{
+		added = TRUE;
+		strcat(lf->extra, row[0]);
+		}
+	    if (useAcc )
+		{
+		if (added)
+		    strcat(lf->extra, "/");
+		added = TRUE;
+		strcat(lf->extra, lf->name);
+		}
+	    if (useSprot)
+		{
+		if (added)
+		    strcat(lf->extra, "/");
+		added = TRUE;
+		strcat(lf->extra, row[2]);
+		}
+	    if (usePos)
+		{
+		char *startPos = strchr(row[1], ':');
+		char *dash = strchr(row[1], '-');
+
+		if ((startPos != NULL) && (dash != NULL))
+		    {
+		    *startPos++ = 0;
+		    dash -= 3; /* divide by 1000 */
+		    *dash = 0;
+		    if (added)
+			strcat(lf->extra, "/");
+		    strcat(lf->extra, row[1]);
+		    strcat(lf->extra, " ");
+		    strcat(lf->extra, startPos);
+		    strcat(lf->extra, "k");
+		    }
+		}
+	    }
+	sqlFreeResult(&sr);
+	}
+    hFreeConn(&conn);
+    return ;
+    }
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
@@ -3042,6 +3114,7 @@ char *colon, *pos;
 char *buffer;
 char cMode[64];
 int colorMode;
+char *blastRef;
 
 if (getCdsDrawOptionNum(tg)>0 && zoomedToCdsColorLevel)
     return tg->ixColor;
@@ -3054,15 +3127,41 @@ switch(colorMode)
     case 0: /* pslScore */
 	col = shadesOfGray[lf->grayIx];
 	break;
-    case 1: /* pslScore */
+    case 1: /* human position */
 	acc = buffer = cloneString(lf->name);
-	if ((pos = strchr(acc, '.')) != NULL)
+	blastRef = trackDbSettingOrDefault(tg->tdb, "blastRef", NULL);
+	if ((blastRef != NULL) && hTableExists(blastRef))
 	    {
-	    pos +=4;
-	    if ((colon = strchr(pos, ':')) != NULL)
+	    char query[256];
+	    struct sqlResult *sr;
+	    char **row;
+	    struct sqlConnection *conn = hAllocConn();
+
+	    if ((pos = strchr(acc, '.')) != NULL)
+		*pos = 0;
+	    safef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
+	    sr = sqlGetResult(conn, query);
+	    if ((row = sqlNextRow(sr)) != NULL)
 		{
-		*colon = 0;
-		col = getChromColor(pos, vg);
+		if (startsWith("chr", row[0]) && ((colon = strchr(row[0], ':')) != NULL))
+		    {
+		    *colon = 0;
+		    col = getChromColor(row[0]+3, vg);
+		    }
+		}
+	    sqlFreeResult(&sr);
+	    hFreeConn(&conn);
+	    }
+	else
+	    {
+	    if ((pos = strchr(acc, '.')) != NULL)
+		{
+		pos +=4;
+		if ((colon = strchr(pos, ':')) != NULL)
+		    {
+		    *colon = 0;
+		    col = getChromColor(pos, vg);
+		    }
 		}
 	    }
 	break;
@@ -6127,23 +6226,24 @@ boolean *inMotif = NULL;
 int motifCount = 0;
 Color noMatchColor = lighterColor(vg, color);
 Color clr;
+int textLength = strlen(text);
 
 /* If we have motifs, look for them in the string. */
-if(motifString != NULL)
+if(motifString != NULL && strlen(motifString) != 0)
     {
     touppers(motifString);
     motifString = cloneString(motifString);
     motifCount = chopString(motifString, ",", NULL, 0);
     AllocArray(motifs, motifCount);
     chopString(motifString, ",", motifs, motifCount);
-    AllocArray(inMotif, strlen(text));
+    AllocArray(inMotif, textLength);
     for(i = 0; i < motifCount; i++)
 	{
 	char *mark = text;
 	while((mark = stringIn(motifs[i], mark)) != NULL)
 	    {
 	    int end = mark-text + strlen(motifs[i]);
-	    for(j = mark-text; j < end && j < count ; j++)
+	    for(j = mark-text; j < end && j < textLength ; j++)
 		{
 		inMotif[j] = TRUE;
 		}
@@ -6153,7 +6253,7 @@ if(motifString != NULL)
     freez(&motifString);
     }
 
-for (i=0; i<count; i++, text++)
+for (i=0; i<count; i++, text++, textPos++)
     {
     x1 = i * width / count;
     x2 = (i+1) * width/count;
@@ -6171,7 +6271,7 @@ for (i=0; i<count; i++, text++)
     if (match != NULL && match[i])
         if (*text != match[i])
             clr = noMatchColor;
-    if(inMotif != NULL && inMotif[i])
+    if(inMotif != NULL && textPos < textLength && inMotif[textPos])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
 	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, c);
@@ -6278,7 +6378,7 @@ else
 if(doIdeo)
     {
     /* Draw the ideogram. */
-    makeTempName(&gifTn, "hgt", ".gif");
+    makeTempName(&gifTn, "hgtIdeo", ".gif");
     /* Start up client side map. */
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
@@ -8144,6 +8244,7 @@ registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
+registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
 registerTrackHandler("xenoRefGene", xenoRefGeneMethods);
@@ -8212,6 +8313,7 @@ registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
 registerTrackHandler("llaPfuPrintA",llArrayMethods);
 registerTrackHandler("llaPaePrintA",llArrayMethods);
+registerTrackHandler("tigrOperons",tigrOperonMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -8232,7 +8334,7 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
-/* registerTrackHandler("altGraphXCon2", altGraphXMethods ); */
+registerTrackHandler("altGraphXCon2", altGraphXMethods ); 
 registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); 
 /* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
 /* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */

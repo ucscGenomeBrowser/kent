@@ -8,10 +8,6 @@ LIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ./${MACHTYPE}/libSpliceGraph.a
 %Test: %Test.c 
 	${CC} ${OPT} -I../inc -I../../inc -I../../../inc -I${MYSQLINC}  -o $@ ${addsuffix .c,$@} ${LIBS} 
 
-#For debugging
-#.c.o:
-#	${CC} -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${HG_WARN}  -I../inc -I../../inc -I${MYSQLINC} -c $*.c
-
 L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 

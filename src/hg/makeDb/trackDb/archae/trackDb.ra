@@ -1,9 +1,9 @@
-track gc5Base
+track gc20Base
 shortLabel GC Percent
-longLabel GC Percent in 5 base windows
+longLabel GC Percent in 20 base windows
 group map
-priority 23.5
-visibility hide
+priority 1.7
+visibility full
 autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
@@ -24,12 +24,39 @@ color 40,40,160
 altColor 255,0,0
 type bed 6 .
 
+track tigrOperons
+shortLabel TIGR operons
+longLabel Operon predictions by TIGR
+group genes
+priority 2.12
+visibility pack
+type bed 15 .
+
 track tigrCmrORFs
 shortLabel TIGR ORFs
 longLabel ORF annotation from TIGR
 group genes
-priority 2.2
+priority 2.15
 visibility dense
 color 0,0,0
 altColor 255,128,0
 type bed 6 +
+
+track gbRRNA
+shortLabel GenBank rRNA
+longLabel GenBank ribosomal RNA
+group genes
+priority 2.2
+visibility dense
+color 40,40,160
+altColor 255,0,0
+type bed 6 .
+
+track codeBlast
+shortLabel BLASTP codes
+longLabel Conservation of proteins with BLASTP
+group compGeno
+priority 4.5
+visibility dense
+type bed 6 +
+canPack off

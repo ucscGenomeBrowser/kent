@@ -20,7 +20,7 @@ static struct {
     char *name;   /* string name for facility */
     int   fac;    /* integer value */
 } facilityNameTbl[] =
-/* not all version of syslog have the facilitynames table, so  define out own */
+/* not all version of syslog have the facilitynames table, so  define our own */
 {
     {"auth",         LOG_AUTH},
 #ifdef LOG_AUTHPRIV

@@ -2754,34 +2754,16 @@ rm $TMP/$root.ss.gz
 #Longest job:                        9s       0.15m     0.00h    0.00d
 #Submission to last job:           287s       4.78m     0.08h    0.00d
 
-    # Create bed track; we want to tweak the scores and the names.
-    # Scores are transformed as follows, for a reasonable-looking 
-    # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
-    # (here x_max  = 1819) and let x_med be the median score (here x_med =
-    # 20).  The  scores are transformed via the function f(x) = a *
-    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
-    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
-    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
-    # 232.335, b = -743.92.
-    # better done on kksilo:
-    # get max:
-    cat PREDICTIONS/*/*.bed > raw.bed
-    set max = `awk '{print $5;}' raw.bed | sort -n | tail -1`
-#1819
-    # get median:
-    set lineCount = `cat raw.bed | wc -l`
-    set medOffset = `expr '(' $lineCount / 2 ')' + 1`
-    set med = `awk '{print $5;}' raw.bed | sort -n \
-               | tail +$medOffset | head -1`
-#20
-    # b and a:
-    set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
-#-743.92
-    set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
-#232.335
-    awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
-            $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
-    hgLoadBed dm1 phastCons4wayElements all.bed
+    # Reloaded 8/24/04 with corrected transform / new script:
+    # Create bed track: tweak scores and names, trim the unused strand column.
+    cat PREDICTIONS/*/*.bed \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore \
+    > all.bed
+
+    hgLoadBed dm1 phastConsElements all.bed
+    featureBits dm1 phastConsElements
+#22859943 bases of 126527731 (18.067%) in intersection
 
     # make top-5000 list and launcher on Adam's home page:
     sort -k5,5nr raw.bed | head -5000 > top5000.bed
@@ -2797,10 +2779,9 @@ rm $TMP/$root.ss.gz
     ssh hgwdev
     cd /cluster/data/dm1/bed
     mkdir blat.dm1FB
+    cd blat.dm1FB
     pepPredToFa dm1 bdgpGenePep dm1FB.fa
     hgPepPred dm1 generic blastFBPep00 dm1FB.fa
-    grep ">" dm1FB.fa | sed "s/>//" > dm1FB.lst
-    fbName dm1 dm1FB.lst dm1FB.mapNames
     ssh kk
     cd /cluster/data/hg17/bed/blat.dm1FB
     cat << '_EOF_' > blatSome
@@ -2843,10 +2824,14 @@ Submission to last job:          3506s      58.43m     0.97h    0.04d
     cd /cluster/data/dm1/bed/blat.dm1FB
     pslSort dirs raw.psl /tmp psl/*
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cov90.psl /dev/null
-    pslUniq cov90.psl dm1FB.psl
+    sort -rn cov90.psl | pslUniq stdin dm1FB.psl
     pslxToFa dm1FB.psl dm1FB_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
-    sed "s/>.*/&p/" dm1FB.fa > dm1FBp.fa
-
+    fbName dm1 dm1FB.psl blastFBRef00
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blat.dm1FB
+    hgsql dm1 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastFBRef00" | hgsql dm1
+    echo "load data local infile 'blastFBRef00' into table blastFBRef00" | hgsql dm1
 
 # MITOPRED DATA FOR HGGENE (DONE 8/10/04 angie)
     ssh hgwdev
@@ -2867,4 +2852,109 @@ CREATE TABLE mitopred (
     hgsql dm1 < mitopred.sql
     hgsql dm1 -e 'load data local infile "mitopred.tab" into table mitopred'
 
+# MAKE Human Proteins track
+    mkdir -p /cluster/data/dm1/bed/tblastn.hg16KG
+    cd /cluster/data/dm1/bed/tblastn.hg16KG
+    ls -1S /iscratch/i/dm1/blastDb/*.nsq | sed "s/\.nsq//" > bug.lst
+    exit
 
+    # back to kksilo
+    cd /cluster/data/dm1/bed/tblastn.hg16KG
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl | awk "{print \\\$1}"`/\(150000/`wc bug.lst | awk "{print \\\$1}"`\)
+    # 41117/(150000/578) = 158.437507
+    split -l 158 /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+f=/tmp/`basename $3`
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg16/bed/blat.hg16KG/protein.lft warn $f.2
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	    exit 0
+	fi
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 bug.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/dm1/bed/tblastn.hg16KG
+    para create blastSpec
+    para push
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/dm1/bed/tblastn.hg16KG
+    para create chainSpec
+    para push
+
+    exit
+    # back to kksilo
+    cd /cluster/data/dm1/bed/tblastn.hg16KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastHg16KG.psl
+    cd ..
+    blatDir=/cluster/data/hg16/bed/blat.hg16KG
+    protDat -kg preblastHg16KG.psl $blatDir/hg16KG.psl $blatDir/kg.mapNames blastHg16KG.psl
+
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/tblastn.hg16KG
+    hgLoadPsl dm1 blastHg16KG.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn

@@ -9,7 +9,20 @@
 #include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.30 2004/06/10 05:37:08 kent Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.31 2004/08/24 18:54:43 markd Exp $";
+
+static struct optionSpec optionSpecs[] = {
+    {"prot", OPTION_BOOLEAN},
+    {"q", OPTION_STRING},
+    {"t", OPTION_STRING},
+    {"minIdentity", OPTION_FLOAT},
+    {"minScore", OPTION_INT},
+    {"dots", OPTION_INT},
+    {"out", OPTION_STRING},
+    {"maxIntron", OPTION_INT},
+    {"nohead", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
@@ -143,7 +156,7 @@ gfFileCacheFree(&tFileCache);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 if (optionExists("prot"))

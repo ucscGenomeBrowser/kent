@@ -5,7 +5,7 @@
 
 #links a gene/pseudogene prediction to an ortholog or paralog.
 CREATE TABLE pseudoGeneLink (
-        bin int unsigned not null,
+    bin int unsigned not null,	# bin
     chrom varchar(255) not null,	# Chromosome name for pseudogene
     chromStart int unsigned not null,	# pseudogene alignment start position
     chromEnd int unsigned not null,	# pseudogene alignment end position
@@ -27,7 +27,7 @@ CREATE TABLE pseudoGeneLink (
     gStrand char(2) not null,	# strand of gene
     exonCount int unsigned not null,	# # of exons in gene 
     geneOverlap int unsigned not null,	# bases overlapping
-    polyA int unsigned not null,	# length of polyA
+    polyA int unsigned not null,	# count of As in polyA
     polyAstart int not null,	# start of polyA, relative to end of pseudogene
     exonCover int unsigned not null,	# number of exons in Gene covered
     intronCount int unsigned not null,	# number of introns in pseudogene
@@ -61,7 +61,7 @@ CREATE TABLE pseudoGeneLink (
     overStrand char(2) not null,	# strand of overlapping mrna
     adaBoost int not null,	# adaBoost label
     posConf float not null,	# pvalue for positive
-    negConf float not null,	# pvalue for positive
+    polyAlen int unsigned not null,	# length of polyA
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
     INDEX (name(8))

@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.16 2004/05/25 18:07:19 fanhsu Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.17 2004/08/24 17:50:04 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -181,7 +181,7 @@ return name;
 
 static boolean linksExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
-/* Return TRUE if GO database exists and has something
+/* Return TRUE if necessary database exists and has something
  * on this one. */
 {
 struct link *link, *linkList;

@@ -7,4 +7,5 @@ void tigrGeneMethods(struct track *tg);
 Color llArrayColor(struct track *tg, void *item, struct vGfx *vg);
 void lfsFromllArrayBed(struct track *tg);
 void llArrayMethods(struct track *tg);
+void tigrOperonMethods(struct track *tg);
 

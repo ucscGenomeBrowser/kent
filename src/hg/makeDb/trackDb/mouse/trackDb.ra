@@ -24,6 +24,15 @@ priority 8
 visibility hide
 type bed 4 +
 
+track ctgPos
+shortLabel Map Contigs
+longLabel Physical Map Contigs
+group map
+priority 9
+visibility hide
+color 150,0,0
+type ctgPos
+
 track gap
 shortLabel Gap
 longLabel Gap Locations

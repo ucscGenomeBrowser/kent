@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.47 2004/07/30 22:00:36 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.48 2004/08/24 17:14:47 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1093,8 +1093,6 @@ if (!sameString(tdb->shortLabel, def->shortLabel))
     fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
 if (!sameString(tdb->longLabel, def->longLabel))
     fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
-if (!sameString(tdb->tableName, def->tableName))
-    fprintf(f, "\t%s='%s'", "tableName", tdb->tableName);
 if (tdb->url != NULL)
     fprintf(f, "\t%s='%s'", "url", tdb->url);
 if (tdb->visibility != def->visibility)

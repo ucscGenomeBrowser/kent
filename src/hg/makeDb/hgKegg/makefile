@@ -1,13 +1,5 @@
 include ../../../inc/common.mk
 
-# For performance
-#.c.o:
-#	${CC} ${COPT} ${CFLAGS} -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
-
-#For debugging:
-.c.o:
-	${CC} ${COPT} ${CFLAGS} -Wformat -Wimplicit  -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
-
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a

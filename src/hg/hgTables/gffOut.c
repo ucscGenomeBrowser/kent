@@ -1,4 +1,4 @@
-/* bedList - get list of beds in region that pass filtering. */
+/* gffOut - output GFF (from bed data structures). */
 
 #include "common.h"
 #include "hash.h"
@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.6 2004/07/23 22:20:09 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.7 2004/08/25 15:35:44 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,

@@ -117,4 +117,81 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
+void loadOperon(struct track *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct linkedFeatures *lfList = NULL, *lf;
+struct bed *bed, *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 15);
+    slAddHead(&list, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+
+for (bed = list; bed != NULL; bed = bed->next)
+    {
+    struct simpleFeature *sf;
+    int i;
+    lf = lfFromBed(bed);
+    for (sf = lf->components, i = 0; sf != NULL, i < bed->expCount; sf = sf->next, i++)
+	sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
+    slAddHead(&lfList,lf);
+    }
+tg->items = lfList;
+}
+
+void tigrOperonDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw the operon at position. */
+{
+struct linkedFeatures *lf = item; 
+struct simpleFeature *sf;
+int heightPer = tg->heightPer;
+int x1,x2;
+int s, e, e2, s2;
+Color *shades = tg->colorShades;
+int midY = y + (heightPer>>1);
+int midY1 = midY - (heightPer>>2);
+int midY2 = midY + (heightPer>>2);
+int w;
+
+color = tg->ixColor;
+x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+w = x2-x1;
+innerLine(vg, x1, midY, w, color);
+if (vis == tvFull || vis == tvPack)
+    {
+    clippedBarbs(vg, x1, midY, w, 2, 5, 
+		 lf->orientation, color, FALSE);
+    }
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    s = sf->start; e = sf->end;
+    /* shade ORF (exon) based on the grayIx value of the sf */
+    color = shades[sf->grayIx];
+    drawScaledBox(vg, s, e, scale, xOff, y, heightPer,
+			color );
+    }
+}
+
+void tigrOperonMethods(struct track *tg)
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadOperon;
+tg->colorShades = shadesOfGray;
+tg->drawItemAt = tigrOperonDrawAt;
+}
+
 /**** End of Lowe lab additions ****/

@@ -1,4 +1,5 @@
 /* Put up pages for selecting and filtering on fields. */ 
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -16,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.3 2004/07/22 20:53:52 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.4 2004/08/25 15:35:44 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 

@@ -24,7 +24,6 @@ BAD_DIRS = \
 	hgBatch \
 	makeSeqs \
 	oneShot \
-	orthoMap \
 	synMap \
 	wikiPlot 
 
@@ -152,9 +151,9 @@ UTIL_DIRS = \
 	near/hgMapViaSwissProt \
 	near/pepPredToFa \
 	nci60 \
+	orthoMap \
 	overlapSelect \
 	patCount \
-	spideyToPsl \
 	pslCat \
 	pslCheck \
 	pslCoverage \
@@ -186,6 +185,7 @@ UTIL_DIRS = \
 	scanRa \
 	semiNorm \
 	sim4big \
+	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
 	test \

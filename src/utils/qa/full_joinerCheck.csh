@@ -30,9 +30,6 @@ echo "Running joinerCheck - this may take quite a while"
 nice joinerCheck -database=$db -keys all.joiner >& $db.complete_release_joinerCheck.txt
 
 # Filter the output
-echo ""
-echo "Remove all lines for unique entries and those where hits = hits
-echo ""
 
 echo ""
 echo "Remove all lines for unique entries and those where hits = hits"

@@ -92,9 +92,9 @@ exit; # don't actually run this like a script :)
 
 # BLASTZ CI1
     ssh kksilo
-    mkdir /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09
-    ln -s blastz.ci1.2004-08-09 /cluster/data/cioSav1/bed/blastz.ci1
+    mkdir /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21
+    ln -s blastz.ci1.2004-08-21 /cluster/data/cioSav1/bed/blastz.ci1
     cat << '_EOF_' > DEF
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
 
@@ -103,7 +103,6 @@ BLASTZ=blastz
 BLASTZ_H=2000
 BLASTZ_ABRIDGE_REPEATS=0
 
-# TARGET - D. melanogaster
 SEQ1_DIR=/iscratch/i/cioSav1/nib
 # unused: SEQ1_RMSK=
 SEQ1_SMSK=
@@ -112,7 +111,6 @@ SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY - D. pseudoobscura
 SEQ2_DIR=/cluster/data/ci1/maskedFa
 # unused: SEQ2_RMSK=
 SEQ2_SMSK=
@@ -121,7 +119,7 @@ SEQ2_IN_CONTIGS=1
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/cioSav1/bed/blastz.ci1.2004-08-09
+BASE=/cluster/data/cioSav1/bed/blastz.ci1.2004-08-21
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -144,42 +142,46 @@ SEQ2_LEN=$BASE/S2.len
     mv j2 j
     # cluster run
     ssh kk
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/run
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/run
     para create j
     para try, check, push, check, ....
 # Completed: 176616 of 176616 jobs
-# Average job time:                   6s       0.09m     0.00h    0.00d
+# CPU time in finished jobs:     327504s    5458.39m    90.97h    3.79d  0.010 y
+# IO & Wait Time:                558756s    9312.61m   155.21h    6.47d  0.018 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
 # Longest job:                      473s       7.88m     0.13h    0.01d
-# Submission to last job:          1218s      20.30m     0.34h    0.01d
+# Submission to last job:          1109s      18.48m     0.31h    0.01d
 
     # back in the bash shell on kksilo...
-    mkdir /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/run.1
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/run.1
+    mkdir /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/run.1
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/run.1
     /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
     # small cluster run
     ssh kki
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/run.1
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/run.1
     para create j
     para try, check, push, check, ....
+
 # Completed: 446 of 446 jobs
-# Average job time:                  10s       0.17m     0.00h    0.00d
-# Longest job:                       17s       0.28m     0.00h    0.00d
-# Submission to last job:           359s       5.98m     0.10h    0.00d
+# CPU time in finished jobs:       1629s      27.15m     0.45h    0.02d  0.000 y
+# IO & Wait Time:                  3359s      55.98m     0.93h    0.04d  0.000 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest job:                       22s       0.37m     0.01h    0.00d
+# Submission to last job:           322s       5.37m     0.09h    0.00d
 
     cd ..
     rm -r raw
 
     # Translate .lav to axt, with ci1 in scaffold coords for collaborators:
     ssh kksilo
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21
     mkdir axtChrom
     foreach c (lav/*)
       pushd $c
       set chr=$c:t
       set out=axtChrom/$chr.axt
       echo "Translating $chr lav to $out"
-      cat `ls -1 *.lav | sort -g` \
-        | lavToAxt stdin /cluster/data/cioSav1/nib /cluster/data/ci1/nib stdout \
+      cat `ls -1 *.lav | sort -g` | lavToAxt stdin /cluster/data/cioSav1/nib /cluster/data/ci1/nib stdout \
         | axtSort stdin ../../$out
       popd
     end
@@ -188,12 +190,11 @@ SEQ2_LEN=$BASE/S2.len
 # CHAIN CI1 BLASTZ 
     # Run axtChain on little cluster
     ssh kki
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChrom/*.axt \
-      > input.lst
+    ls -1S /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChrom/*.axt > input.lst
     cat << '_EOF_' > gsub
 #LOOP
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
@@ -203,9 +204,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-axtChain -verbose=0 $1 \
-  /iscratch/i/cioSav1/nib \
-  /iscratch/i/ci1/nib $2 > $3
+axtChain -verbose=0 $1 /iscratch/i/cioSav1/nib /iscratch/i/ci1/nib $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
@@ -223,7 +222,7 @@ axtChain -verbose=0 $1 \
 
     # now on the cluster server, sort chains
     ssh kksilo
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChain
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
 #    chainSplit chain all.chain
     rm run1/chain/*.chain
@@ -238,7 +237,7 @@ axtChain -verbose=0 $1 \
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChain/chain
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChain/chain
     hgLoadChain cioSav1 chainCi1 all.chain
 #    foreach i (*.chain)
 #        set c = $i:r
@@ -249,25 +248,25 @@ axtChain -verbose=0 $1 \
 
 # NET Ci1 BLASTZ 
     ssh kksilo
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChain
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
     | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
     | netSyntenic stdin noClass.net
 
     # Add classification info using db tables:
     ssh hgwdev
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChain
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChain
     netClass -noAr noClass.net cioSav1 ci1 ci1.net 
 
     # Make a 'syntenic' subset:
     ssh kksilo
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChain
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChain
     rm noClass.net
     netFilter -syn ci1.net > ci1Syn.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-09/axtChain
+    cd /cluster/data/cioSav1/bed/blastz.ci1.2004-08-21/axtChain
     netFilter -minGap=10 ci1.net |  hgLoadNet cioSav1 netCi1 stdin
     netFilter -minGap=10 ci1Syn.net | hgLoadNet cioSav1 netSyntenyCi1 stdin
 

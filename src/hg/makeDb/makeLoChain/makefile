@@ -5,17 +5,18 @@ include ../../../inc/common.mk
 SCRIPT_DIR = /cluster/bin/scripts
 
 SCRIPTS = \
-	makeLoChain-align \
-	makeLoChain-lift \
-        makeLoChain-chain \
-	makeLoChain-net \
-	makeLoChain-load \
+	makeLoChain-align.csh \
+	makeLoChain-lift.csh \
+	makeLoChain-chain.csh \
+	makeLoChain-net.csh \
+	makeLoChain-load.csh \
 
 all:
 	@for F in $(SCRIPTS); do \
-            if test "$$F.csh" -nt "$(SCRIPT_DIR)/$$F"; then \
-                echo "installing $$F" ;\
-                cp $$F.csh $(SCRIPT_DIR)/$$F ;\
-                chmod 775 $(SCRIPT_DIR)/$$F ;\
+            I=$${F%.*}; \
+            if test "$$F" -nt "$(SCRIPT_DIR)/$$I"; then \
+                echo "installing $$I" in ${SCRIPT_DIR} ;\
+                cp $$F $(SCRIPT_DIR)/$$I ;\
+                chmod 775 $(SCRIPT_DIR)/$$I ;\
             fi ;\
 	done
