@@ -4,10 +4,11 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.3 2003/11/19 18:20:07 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.4 2004/08/17 13:32:11 braney Exp $";
 
 /* global count of errors */
 int errCount = 0;
+int checkProt = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,6 +18,7 @@ errAbort(
   "usage:\n"
   "   pslCheck file(s)\n"
   "options:\n"
+  "   -prot  confirm psls are protein psls\n"
   "\n");
 }
 
@@ -31,6 +33,11 @@ while ((psl = pslNext(lf)) != NULL)
     {
     safef(pslDesc, sizeof(pslDesc), "%s:%u", fileName, lf->lineIx);
     errCount += pslCheck(pslDesc, stderr, psl);
+    if (checkProt && !pslIsProtein(psl))
+	{
+	errCount++;
+	fprintf(stderr, "%s not a protein psl\n",psl->qName);
+	}
     pslFree(&psl);
     }
 lineFileClose(&lf);
@@ -51,6 +58,8 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc < 2)
     usage();
+if (optionExists("prot"))
+    checkProt = TRUE;
 checkPsls(argc-1, argv+1);
 return ((errCount == 0) ? 0 : 1);
 }
