@@ -6818,6 +6818,7 @@ else if (sameWord(track, "blatMus"))
 else if (sameWord("blastzMm2", track)
          || sameWord("blastzMm2Sc", track)
          || sameWord("blastzMm2Ref", track)
+	 || sameWord("blastzBestMouse", track)
          || (sameWord("aarMm2", track)))
     {
     doBlatMus(tdb, item);
