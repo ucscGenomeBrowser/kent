@@ -159,6 +159,8 @@ boolean checkAccFormat(char *acc)
 /* Check accession is in reasonable format. */
 {
 int accLen = strlen(acc);
+if (startsWith("NG_", acc) && accLen == 9 && isdigit(acc[3]) && isdigit(acc[8]))
+    return TRUE;
 return !(accLen < 6 || accLen > 8 || !isupper(acc[0]) || !isdigit(acc[accLen-1]));
 }
 
