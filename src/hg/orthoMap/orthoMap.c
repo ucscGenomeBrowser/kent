@@ -9,10 +9,11 @@
 #include "axtInfo.h"
 #include "chainDb.h"
 #include "chainNetDbLoad.h"
+#include "altGraphX.h"
 #include "psl.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.2 2003/06/23 06:38:13 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.3 2003/07/22 02:42:25 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -23,9 +24,11 @@ static struct optionSpec optionSpecs[] =
     {"chrom", OPTION_STRING},
     {"pslFile", OPTION_STRING},
     {"pslTable", OPTION_STRING},
+    {"altGraphXFile", OPTION_STRING},
     {"netTable", OPTION_STRING},
     {"chainFile", OPTION_STRING},
     {"outBed", OPTION_STRING},
+    {"altGraphXOut", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -38,9 +41,11 @@ static char *optionDescripts[] =
     "Chromosme in db that we are working on.",
     "File containing psl alignments.",
     "Table containing psl alignments.",
+    "File containing altGraphX records.",
     "Datbase table containing net records, i.e. mouseNet.",
     "File containing the chains. Usually I do this on a chromosome basis.",
-    "File to output beds to."
+    "File to output beds to.",
+    "File to output altGraphX records to."
 };
 
 void usage()
@@ -154,12 +159,12 @@ for(fill = list; fill != NULL; fill = fill->next)
 	chain = chainFromId(fill->chainId);
 	if(checkChain(chain, start,end))
 	    return chain;
-	if(gap->children)
-	    {
-	    chain = lookForChain(gap->children, start, end);
-	    if(checkChain(chain, start,end))
-		return chain;
-	    }
+/* 	if(gap->children) */
+/* 	    { */
+/* 	    chain = lookForChain(gap->children, start, end); */
+/* 	    if(checkChain(chain, start,end)) */
+/* 		return chain; */
+/* 	    } */
 	}
     }
 return chain;
@@ -318,6 +323,141 @@ slReverse(&pslList);
 return pslList;
 }
 
+struct altGraphX *mapAltGraphX(struct altGraphX *ag, struct sqlConnection *conn,
+			       char *db, char *netTable )
+/* Map one altGraphX record. Return NULL if can't find. */
+{
+struct altGraphX *agNew = NULL;
+struct chain *chain = chainForPosition(conn, db, netTable, ag->tName, ag->tStart, ag->tEnd);
+struct chain *subChain = NULL, *toFree = NULL;
+int i,j,k;
+int edgeCountNew =0;
+int vCountNew=0;
+bool reverse = FALSE;
+if(chain == NULL)
+    return NULL;
+if ((chain->qStrand == '-'))
+    reverse = TRUE;
+agNew = altGraphXClone(ag);
+/* Map vertex positions using chain. */
+for(i = 0; i < agNew->vertexCount; i++)
+    {
+    struct boxIn *bi = NULL;
+    int targetPos = agNew->vPositions[i];
+    agNew->vPositions[i] = -1;
+    for(bi = chain->blockList; bi != NULL; bi = bi->next)
+	{
+	if(targetPos >= bi->tStart && targetPos <= bi->tEnd)
+	    {
+	    agNew->vPositions[i] = (targetPos - bi->tStart) + bi->qStart;
+	    break;
+	    }
+	}
+    }
+/* Prune out edges not found. */
+
+/* Set up to remember how many edges we have and our start and stop. */
+edgeCountNew = agNew->edgeCount;
+vCountNew = agNew->vertexCount;
+agNew->tStart = BIGNUM;
+agNew->tEnd = 0;
+for(i=0; i<agNew->vertexCount && i>= 0; i++)
+    {
+    struct evidence *ev = NULL;
+    if(agNew->vPositions[i] == -1)
+	{
+	/* Adjust positions, overwriting one that isn't found. */
+	vCountNew--;
+	for(j=i; j<agNew->vertexCount-1; j++)
+	    {
+	    agNew->vPositions[j] = agNew->vPositions[j+1];
+	    agNew->vTypes[j] = agNew->vTypes[j+1];
+	    }
+	/* Remove edges associated with this vertex. */
+	for(j=0; j<agNew->edgeCount && j>=0; j++)
+	    {
+	    if(agNew->edgeStarts[j] == i || agNew->edgeEnds[j] == i)
+		{
+		edgeCountNew--;
+		for(k=j; k<agNew->edgeCount -1; k++)
+		    {
+		    agNew->edgeStarts[k] = agNew->edgeStarts[k+1];
+		    agNew->edgeEnds[k] = agNew->edgeEnds[k+1];
+		    agNew->edgeTypes[k] = agNew->edgeTypes[k+1];
+		    }
+		j--;
+		agNew->edgeCount--;
+		}
+	    }
+	/* Subtract off one vertex from all the others. */
+	for(j=0; j<agNew->edgeCount; j++)
+	    {
+	    if(agNew->edgeStarts[j] > i)
+		agNew->edgeStarts[j]--; 
+	    if(agNew->edgeEnds[j] > i)
+		agNew->edgeEnds[j]--; 
+	    }
+	/* Remove evidence. */
+	ev = slElementFromIx(agNew->evidence, i);
+	slRemoveEl(&agNew->evidence, ev);
+	i--;
+	agNew->vertexCount--;
+	}
+    /* Else if vertex found set agNew start and ends. */
+    else
+	{
+	agNew->tStart = min(agNew->vPositions[i], agNew->tStart);
+	agNew->tEnd = max(agNew->vPositions[i], agNew->tEnd);
+	}
+    }
+/* Not going to worry about mRNAs that aren't used anymore. Leave them in
+   for now. */
+agNew->vertexCount = vCountNew;
+agNew->edgeCount = edgeCountNew;
+if(agNew->vertexCount == 0 || agNew->edgeCount == 0)
+    {
+    altGraphXFree(&agNew);
+    return NULL;
+    }
+for(i=0; i<agNew->edgeCount; i++)
+    {
+    if(agNew->edgeStarts[i] >= agNew->vertexCount ||
+       agNew->edgeEnds[i] >= agNew->vertexCount)
+	{
+	warn("For %s vertexes occur at %d when in reality there are only %d vertices.",
+	     agNew->name, max(agNew->edgeStarts[i], agNew->edgeEnds[i]), agNew->vertexCount);
+	}
+    }
+
+/* If it is on the other strand reverse it. */
+if(reverse)
+    altGraphXReverseComplement(agNew);
+return agNew;
+}
+
+void mapAltGraphXFile(struct sqlConnection *conn, char *db, char *orthoDb, 
+		      char *netTable, char *altGraphXFileName, 
+		      FILE *agxOut, int *foundCount, int *notFoundCount)
+/* Map over altGraphX Structures from one organism to
+another. Basically create a mapping for the vertices and then reverse
+them if on '-' strand.*/
+{
+struct bed *bed = NULL;
+struct altGraphX *agList = NULL, *ag = NULL, *agNew = NULL;
+agList = altGraphXLoadAll(altGraphXFileName);
+for(ag = agList; ag != NULL; ag = ag->next)
+    {
+    agNew = mapAltGraphX(ag, conn, db, netTable);
+    if(agNew == NULL)
+	(*notFoundCount)++;
+    else
+	{
+	(*foundCount)++;
+	altGraphXTabOut(agNew, agxOut);
+	altGraphXFree(&agNew);
+	}
+    }	
+}
 
 void orthoMap()
 /** Top level function. Load up the psls and transform them to beds. */
@@ -325,6 +465,8 @@ void orthoMap()
 char *pslTableName = NULL;
 char *pslFileName = NULL;
 char *outBedName = NULL;
+char *agxOutName = NULL;
+char *altGraphXFileName = NULL;
 char *db = NULL;
 char *orthoDb = NULL;
 char *netTable = NULL;
@@ -334,6 +476,8 @@ struct sqlConnection *conn = NULL;
 FILE *bedOut = NULL;
 int foundCount=0, notFoundCount=0;
 char *chrom = NULL;
+agxOutName = optionVal("altGraphXOut", NULL);
+altGraphXFileName = optionVal("altGraphXFile", NULL);
 pslTableName  = optionVal("pslTable", NULL);
 pslFileName = optionVal("pslFile", NULL);
 outBedName = optionVal("outBed", NULL);
@@ -342,33 +486,46 @@ db = optionVal("db", NULL);
 orthoDb = optionVal("orthoDb", NULL);
 chrom = optionVal("chrom", NULL);
 
-if(orthoDb == NULL || db == NULL || netTable == NULL || outBedName == NULL ||
-   chrom == NULL || (pslTableName == NULL && pslFileName == NULL))
+if(orthoDb == NULL || db == NULL || netTable == NULL || chrom == NULL || 
+   (outBedName == NULL && agxOutName == NULL) ||
+   (pslTableName == NULL && pslFileName == NULL && altGraphXFileName == NULL))
     usage();
 hSetDb(db);
 hSetDb2(orthoDb);
 conn = hAllocConn();
-/* Load psls. */
-warn("Loading psls.");
-if(pslFileName)
-    pslList=pslLoadAll(pslFileName);
-else
-    pslList=loadPslFromTable(conn, pslTableName, chrom, 0, BIGNUM);
-/* Convert psls. */
-warn("Converting psls.");
-bedOut = mustOpen(outBedName, "w");
-for(psl = pslList; psl != NULL; psl = psl->next)
+if(altGraphXFileName != NULL)
     {
-    occassionalDot();
-    bed = orthoBedFromPsl(conn, db, orthoDb, netTable, psl);
-    if(bed != NULL && bed->blockCount > 0)
-	{
-	foundCount++;
-	bedTabOutN(bed, 12, bedOut);
-	}
+    FILE *agxOut = NULL;
+    if(agxOutName == NULL)
+	errAbort("Must specify altGraphXOut if specifying altGraphXFile. Use -help for help");
+    agxOut = mustOpen(agxOutName, "w");
+    mapAltGraphXFile(conn, db, orthoDb, netTable, altGraphXFileName, agxOut, &foundCount, &notFoundCount);
+    carefulClose(&agxOut);
+    }
+else 
+    {
+/* Load psls. */
+    warn("Loading psls.");
+    if(pslFileName)
+	pslList=pslLoadAll(pslFileName);
     else
-	notFoundCount++;
-    bedFree(&bed);
+	pslList=loadPslFromTable(conn, pslTableName, chrom, 0, BIGNUM);
+/* Convert psls. */
+    warn("Converting psls.");
+    bedOut = mustOpen(outBedName, "w");
+    for(psl = pslList; psl != NULL; psl = psl->next)
+	{
+	occassionalDot();
+	bed = orthoBedFromPsl(conn, db, orthoDb, netTable, psl);
+	if(bed != NULL && bed->blockCount > 0)
+	    {
+	    foundCount++;
+	    bedTabOutN(bed, 12, bedOut);
+	    }
+	else
+	    notFoundCount++;
+	bedFree(&bed);
+	}
     }
 warn("\n%d found %d not found when moving from genome %s to genome %s", 
      foundCount, notFoundCount, db, orthoDb); 
