@@ -4,6 +4,8 @@
 #include "wiggle.h"
 #include "hgColors.h"
 #include "web.h"
+#include "cheapcgi.h"
+#include "hCommon.h"
 
 extern boolean typeWiggle;
 extern boolean typeWiggle2;
@@ -19,18 +21,50 @@ extern double wigDataConstraint[2][2];
 /*	to select one of the two tables	*/
 #define WIG_TABLE_1	0
 #define WIG_TABLE_2	1
+#define MAX_LINES_OUTPUT	150000
 
 extern boolean (*wiggleCompare[2])(int tableId, double value,
     boolean summaryOnly, struct wiggle *wiggle);
 
+extern char *database;
+extern char *chrom;
+extern int winStart;
+extern int winEnd;
 extern boolean tableIsSplit;
+extern boolean allGenome;
 extern char *getTableDb();
 extern void getFullTableName(char *dest, char *newChrom, char *table);
 extern char *getTableName();
+extern char *getTable2Name();
 extern char *getTrackName();
+extern char *getTableVar();
+extern void checkTableExists(char *table);
+extern boolean existsAndEqual(char *var, char *value);
+extern struct hTableInfo *getOutputHti();
 extern void saveOutputOptionsState();
 extern void saveIntersectOptionsState();
+extern void preserveConstraints(char *fullTblName, char *db, char *tableId);
+extern void preserveTable2();
+extern void displayPosition();
 extern char *customTrackPseudoDb;
+#define getOutputPhase      "Get results"
+#define getCtPhase          "Get Custom Track"
+#define getCtBedPhase       "Get Custom Track File"
+#define getWigglePhase      "Get data"
+#define getCtWigglePhase    "Get Custom Track Data File"
+extern struct cart *cart;
+extern char *freezeName;
+extern char fullTableName[256];
+extern char *httpFormMethod;
+
+/* Droplist menu for custom track visibility: */
+static char *ctWigVisMenu[] =
+{
+    "hide",
+    "dense",
+    "full",
+};
+static int ctWigVisMenuSize = sizeof(ctWigVisMenu)/sizeof(char *);
 
 /*********   wiggle compare functions   ***********************************/
 static boolean wigInRange(int tableId, double value, boolean summaryOnly,
@@ -335,7 +369,85 @@ printf("</TABLE>\n");
 puts("</TD></TR></TABLE></P>");
 }
 
-void doGetWiggleData()
+void doWiggleCtOptions(boolean doCt)
+{
+struct hTableInfo *hti = getOutputHti();
+char *table = getTableName();
+char *table2 = getTable2Name();
+char *op = cgiOptionalString("tbIntersectOp");
+char *db = getTableDb();
+char *outputType = cgiUsualString("outputType", cgiString("phase"));
+char *phase = (existsAndEqual("phase", getOutputPhase) ?
+	       cgiString("outputType") : cgiString("phase"));
+char *setting = NULL;
+char buf[256];
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database), freezeName,
+	 phase);
+checkTableExists(fullTableName);
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
+       hgTextName(), httpFormMethod);
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+
+cgiMakeHiddenVar("table", getTableVar());
+displayPosition();
+cgiMakeHiddenVar("outputType", outputType);
+preserveConstraints(fullTableName, db, NULL);
+preserveTable2();
+printf("<H3> Select %s Options for %s: </H3>\n",
+       (doCt ? "Custom Track" : "DATA"), hti->rootName);
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#BEDOptions\">"
+     "<B>Help</B></A><P>");
+puts("<TABLE><TR><TD>");
+if (doCt)
+    {
+    puts("</TD><TD>"
+	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
+	 "Custom track</A> header: </B>");
+    }
+else
+    {
+    cgiMakeCheckBox("tbDoCustomTrack",
+		    cartCgiUsualBoolean(cart, "tbDoCustomTrack", FALSE));
+    puts("</TD><TD> <B> Include "
+	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
+	 "custom track</A> header: </B>");
+    }
+puts("</TD></TR><TR><TD></TD><TD>name=");
+if (op == NULL)
+    table2 = NULL;
+snprintf(buf, sizeof(buf), "tb_%s", hti->rootName);
+setting = cgiUsualString("tbCtName", buf);
+cgiMakeTextVar("tbCtName", setting, 16);
+puts("</TD></TR><TR><TD></TD><TD>description=");
+snprintf(buf, sizeof(buf), "table browser query on %s%s%s",
+	 table,
+	 (table2 ? ", " : ""),
+	 (table2 ? table2 : ""));
+setting = cgiUsualString("tbCtDesc", buf);
+cgiMakeTextVar("tbCtDesc", setting, 50);
+puts("</TD></TR><TR><TD></TD><TD>visibility=");
+setting = cartCgiUsualString(cart, "tbCtVis", ctWigVisMenu[2]);
+cgiMakeDropList("tbCtVis", ctWigVisMenu, ctWigVisMenuSize, setting);
+puts("</TD></TR><TR><TD></TD></TR></TABLE>");
+if (doCt)
+    {
+    /*cgiMakeButton("phase", getCtPhase);*/
+    cgiMakeButton("phase", getCtWigglePhase);
+    }
+else
+    {
+    cgiMakeButton("phase", getWigglePhase);
+    }
+puts("</FORM>");
+webEnd();
+}	/*	void doWiggleCtOptions(boolean doCt)	*/
+
+void doGetWiggleData(boolean doCt)
 /* Find wiggle data and display it */
 {
 char *db = getTableDb();
@@ -344,6 +456,8 @@ struct wiggleData *wigData = (struct wiggleData *) NULL;
 struct wiggleData *wdPtr = (struct wiggleData *) NULL;
 struct trackDb *tdb = (struct trackDb *)NULL;
 char *track = getTrackName();
+unsigned linesOutput = 0;
+boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt);
 
 if (! sameString(customTrackPseudoDb, db))
     {
@@ -358,13 +472,10 @@ saveIntersectOptionsState();
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
-/* temporarily disabled until a method is determined to not kill a
- *	browser with a massive amount of output
 if (! allGenome)
     wigData = wigFetchData(database, table, chrom, winStart, winEnd,
 	WIG_ALL_DATA, WIG_RETURN_DATA, WIG_TABLE_1,
 	    wiggleCompare[WIG_TABLE_1], (char *)NULL);
-*/
 
 if (wigData)
     {
@@ -407,17 +518,21 @@ if (wigData)
 	visibility = 2;
 	}
 
-    printf("track type=wiggle_0 name=%s description=\"%s\" "
-	"visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
-	"priority=%g\n", table, longLabel, visibilities[visibility],
-	colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
-    for (wdPtr = wigData; wdPtr != (struct wiggleData *) NULL;
-		wdPtr= wdPtr->next)
+    if (doCtHdr)
+	printf("track type=wiggle_0 name=%s description=\"%s\" "
+	    "visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
+	    "priority=%g\n", table, longLabel, visibilities[visibility],
+	    colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
+
+    for (wdPtr = wigData; (linesOutput < MAX_LINES_OUTPUT) &&
+	    (wdPtr != (struct wiggleData *) NULL); wdPtr= wdPtr->next)
 	{
 	int i;
 	struct wiggleDatum *wd;
 	if ((chrom == (char *) NULL) || differentWord(chrom,wdPtr->chrom))
 	    {
+	    if (!doCtHdr)
+		printf("#\t");
 	    printf("variableStep chrom=%s span=%u\n",
 		wdPtr->chrom, wdPtr->span);
 	    chrom = wdPtr->chrom;
@@ -425,15 +540,18 @@ if (wigData)
 	    }
 	if (span != wdPtr->span)
 	    {
+	    if (!doCtHdr)
+		printf("#\t");
 	    printf("variableStep chrom=%s span=%u\n",
 		wdPtr->chrom, wdPtr->span);
 	    span = wdPtr->span;
 	    }
 	wd = wdPtr->data;
-	for (i = 0; i < wdPtr->count; ++i)
+	for (i = 0; (linesOutput < MAX_LINES_OUTPUT) && (i < wdPtr->count); ++i)
 	    {
 	    printf("%u\t%g\n", wd->chromStart, wd->value);
 	    ++wd;
+	    ++linesOutput;
 	    }
 	}
     wigFreeData(wigData);
@@ -441,5 +559,8 @@ if (wigData)
 else
     printf("#\tthis data fetch function is under development, expected early April 2004\n");
 
+if (linesOutput >= MAX_LINES_OUTPUT)
+    printf("#\tmaximum data output of %u lines reached\n", MAX_LINES_OUTPUT);
+
 webEnd();
-}
+}	/*	void doGetWiggleData(boolean doCt)	*/

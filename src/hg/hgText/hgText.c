@@ -33,12 +33,13 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.128 2004/03/30 20:19:22 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.129 2004/03/31 00:40:05 hiram Exp $";
 
 extern void wigDoStats(char *database, char *table, struct slName *chromList,
     int winStart, int winEnd, int tableId, char *constraints);
 extern void wiggleConstraints(char *cmp, char *pat, int tableIndex);
-extern void doGetWiggleData();
+extern void doGetWiggleData(boolean doCt);
+extern void doWiggleCtOptions(boolean doCt);
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -147,8 +148,10 @@ static char *onChangePos2 = "onchange=\"document.mainForm.tbTrack2.value = docum
 #define gffPhase            "GTF"
 #define bedOptionsPhase     "BED..."
 #define ctOptionsPhase      "Custom Track..."
+#define ctWigOptionsPhase   "Data custom track..."
 #define linksPhase          "Hyperlinks to Genome Browser"
 #define statsPhase          "Summary/Statistics"
+#define wigOptionsPhase     "Get data points"
 char *outputTypePosMenu[] =
 {
     bedOptionsPhase,
@@ -168,6 +171,13 @@ char *outputTypeNonPosMenu[] =
     statsPhase,
 };
 int outputTypeNonPosMenuSize = sizeof(outputTypeNonPosMenu)/sizeof(char *);
+char *outputTypeWiggleMenu[] =
+{
+    statsPhase,
+    wigOptionsPhase,
+    ctWigOptionsPhase,
+};
+int outputTypeWiggleMenuSize = sizeof(outputTypeWiggleMenu)/sizeof(char *);
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
 #define pasteNamesPhase     "Paste in Names/Accessions"
@@ -179,9 +189,10 @@ int outputTypeNonPosMenuSize = sizeof(outputTypeNonPosMenu)/sizeof(char *);
 #define getBedPhase         "Get BED"
 #define getCtPhase          "Get Custom Track"
 #define getCtBedPhase       "Get Custom Track File"
+#define getWigglePhase      "Get data"
+#define getCtWigglePhase    "Get Custom Track Data File"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
-#define wigglePhase         "Get data points"
 #define descTablePhase      "Describe table"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
@@ -857,7 +868,7 @@ if (! tableExists(table, getTable2Db()))
 	     getTable2Name(), table, getTable2Db());
 }
 
-static boolean existsAndEqual(char *var, char *value)
+boolean existsAndEqual(char *var, char *value)
 /* returns true is the given CGI var exists and equals value */
 {
 if (cgiOptionalString(var) != 0 && sameString(cgiOptionalString(var), value))
@@ -2195,15 +2206,20 @@ displayPosition();
 printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
      "<B>Help</B></A><P>");
+
 if (tableIsPositional)
-    cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		    cartCgiUsualString(cart, "outputType",
-				       outputTypePosMenu[0]));
+    if (typeWiggle)
+	cgiMakeDropList("outputType", outputTypeWiggleMenu,
+	    outputTypeWiggleMenuSize,
+	    cartCgiUsualString(cart, "outputType", outputTypeWiggleMenu[0]));
+    else
+	cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
+	    cartCgiUsualString(cart, "outputType", outputTypePosMenu[0]));
 else
     cgiMakeDropList("outputType", outputTypeNonPosMenu,
-		    outputTypeNonPosMenuSize,
-		    cartCgiUsualString(cart, "outputType",
-				       outputTypeNonPosMenu[0]));
+	outputTypeNonPosMenuSize,
+	    cartCgiUsualString(cart, "outputType", outputTypeNonPosMenu[0]));
+
 cgiMakeButton("phase", getOutputPhase);
 
 printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
@@ -2979,16 +2995,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	    ! sameString(row[1], "longblob"))
 	    {
-	    if (typeWiggle && sameString(row[0],"file"))
-		{
-		snprintf(button, sizeof(button), "%s", wigglePhase);
-		cgiMakeButton("phase", button);
-		}
-	    else
-		{
-		snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
-		cgiMakeButton("phase", button);
-		}
+	    snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
+	    cgiMakeButton("phase", button);
 	    }
 	else
 	    {
@@ -4283,8 +4291,14 @@ preserveTable2();
 printf("<H4> Get "
        "<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">Output</A>"
        ": </H4>\n");
-cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		statsPhase);
+
+if (typeWiggle)
+    cgiMakeDropList("outputType", outputTypeWiggleMenu,
+	outputTypeWiggleMenuSize, statsPhase);
+else
+    cgiMakeDropList("outputType", outputTypePosMenu,
+	outputTypePosMenuSize, statsPhase);
+
 cgiMakeButton("phase", getOutputPhase);
 puts("</FORM>");
 
@@ -4943,6 +4957,10 @@ else
 	    doGetBrowserLinks();
 	else if (existsAndEqual("outputType", statsPhase))
 	    doGetStats();
+	else if (existsAndEqual("outputType", ctWigOptionsPhase))
+	    doWiggleCtOptions(TRUE);
+	else if (existsAndEqual("outputType", wigOptionsPhase))
+	    doWiggleCtOptions(FALSE);
 	else
 	    webAbort("Table Browser: CGI option error",
 		     "Error: unrecognized value of CGI var outputType: %s",
@@ -4968,6 +4986,14 @@ else
 	doGetGFF();
     else if (existsAndEqual("phase", bedOptionsPhase))
 	doBedCtOptions(FALSE);
+    else if (existsAndEqual("phase", getCtWigglePhase))
+	doGetWiggleData(TRUE);
+    else if (existsAndEqual("phase", ctWigOptionsPhase))
+	doWiggleCtOptions(TRUE);
+    else if (existsAndEqual("phase", wigOptionsPhase))
+	doWiggleCtOptions(FALSE);
+    else if (existsAndEqual("phase", getWigglePhase))
+	doGetWiggleData(FALSE);
     else if (existsAndEqual("phase", ctOptionsPhase))
 	doBedCtOptions(TRUE);
     else if (existsAndEqual("phase", getBedPhase))
@@ -4984,8 +5010,6 @@ else
 	doIntersectOptions();
     else if (existsAndStartsWith("phase", histPhase))
 	doGetHistogram();
-    else if (existsAndEqual("phase", wigglePhase))
-	doGetWiggleData();
     else if (existsAndStartsWith("phase", descTablePhase))
 	doDescTable();
     else
@@ -5004,7 +5028,7 @@ if (position != NULL)
  * permanently. */
 char *excludeVars[] = {"Submit", "submit", 
 	"tbUserKeys",
-	"tbShowPasteResults", "tbShowUploadResults"};
+	"tbShowPasteResults", "tbShowUploadResults", NULL};
 
 
 int main(int argc, char *argv[])
