@@ -12,7 +12,7 @@
 #include "gbFileOps.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.2 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.3 2004/03/09 02:11:36 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -170,6 +170,8 @@ else if (sameString(rss, "pre"))
     return "Predicted";
 else if (sameString(rss, "inf"))
     return "Inferred";
+else if (sameString(rss, "mod"))
+    return "Model";
 else
     errAbort("invalid value for ra rss field \"%s\"", rss);
 return NULL; /* don't make it here */

@@ -19,6 +19,7 @@
 #include "gbAligned.h"
 #include "gbGenome.h"
 #include "gbStatusTbl.h"
+#include "gbProcessed.h"
 #include "gbFileOps.h"
 #include "gbVerb.h"
 #include "sqlUpdater.h"
@@ -27,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.10 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.11 2004/03/09 02:11:36 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -443,6 +444,7 @@ static void updateRefFlatEntry(struct sqlConnection *conn,
 char* geneName = (status->geneName == NULL) ? "" : status->geneName;
 geneName = sqlEscapeString2(alloca(2*strlen(geneName)+1), geneName);
 
+
 /* creates updater if it doesn't exist */
 getOtherTabFile("refFlat", conn, gRefFlatTableDef, &gRefFlatUpd);
 sqlUpdaterModRow(gRefFlatUpd, status->numAligns,
@@ -457,7 +459,10 @@ static void updateRefFlat(struct sqlConnection *conn, struct gbSelect* select,
 {
 struct gbStatus* status;
 for (status = statusTbl->metaChgList; status != NULL; status = status->next)
-    updateRefFlatEntry(conn, select, status);
+    {
+    if (status->selectProc->update == select->update)
+        updateRefFlatEntry(conn, select, status);
+    }
 }
 
 void gbAlignDataProcess(struct sqlConnection *conn, struct gbSelect* select,

@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.7 2003/10/16 20:27:17 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.8 2004/03/09 02:11:36 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -536,6 +536,8 @@ if (gbCommentField->val != NULL)
         stat = "pre";
     else if (startsWith("INFERRED REFSEQ:", gbCommentField->val->string))
         stat = "inf";
+    else if (startsWith("MODEL REFSEQ:", gbCommentField->val->string))
+        stat = "mod";
     }
 if (stat == NULL)
     {

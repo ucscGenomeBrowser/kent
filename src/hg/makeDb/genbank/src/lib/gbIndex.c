@@ -19,7 +19,7 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbIndex.c,v 1.3 2003/10/14 06:03:52 markd Exp $";
+static char const rcsid[] = "$Id: gbIndex.c,v 1.4 2004/03/09 02:11:36 markd Exp $";
 
 unsigned gbTypeFromName(char* fileName, boolean checkSpecies)
 /* Determine the type flags for a filename based on the naming conventions.
@@ -57,19 +57,28 @@ if (checkSpecies)
 return type;
 }
 
-static double parseRelVersion(char* name)
+static boolean isRealRefSeqVer(struct gbRelease *release)
+/* check if a refseq version is real or fake (one dot or two) */
+{
+char *dot = strchr(release->name, '.');
+if (dot == NULL)
+    errAbort("invalid refseq version: %s", release->name);
+return (strchr(dot+1, '.') == NULL);
+}
+
+static double parseRelVersion(struct gbRelease *release)
 /* parse the version from a release name */
 {
 char* verStr;
 char* stop = NULL;
 double ver = 0.0;
     
-verStr = strchr(name, '.');
+verStr = strchr(release->name, '.');
 if (verStr != NULL)
     ver = strtod(verStr+1, &stop);
 if ((verStr == NULL) || (*(verStr+1) == '\0') || (*stop != '\0'))
     errAbort("can't parse version from release name \"%s\"",
-             name);
+             release->name);
 return ver;
 }
 
@@ -77,8 +86,26 @@ static int releaseCmp(const void* r1, const void* r2)
 /* compare function for sorting gbRelease objects into newest to
  * oldest order. */
 {
-double ver1 = parseRelVersion((*(struct gbRelease**)r1)->name);
-double ver2 = parseRelVersion((*(struct gbRelease**)r2)->name);
+struct gbRelease *rel1 = *((struct gbRelease**)r1);
+struct gbRelease *rel2 = *((struct gbRelease**)r2);
+double ver1, ver2;
+
+/* special logic to handle going from the faked RefSeq releases
+ * numbers to the real ones.  The real RefSeq version, which
+ * don't contain a decimal, sort higher */
+if (rel1->srcDb == GB_REFSEQ)
+    {
+    boolean isReal1 = isRealRefSeqVer(rel1);
+    boolean isReal2 = isRealRefSeqVer(rel2);
+    if ((!isReal1) && isReal2)
+        return 1;
+    else if (isReal1 && (!isReal2))
+        return -1;
+    /* fall through to normal compare */
+    }
+
+ver1 = parseRelVersion(rel1);
+ver2 = parseRelVersion(rel2);
 if (ver1 < ver2)
     return 1;
 else if (ver1 > ver2)
@@ -185,7 +212,7 @@ if (srcDb == GB_REFSEQ)
 
 /* Find the first with at least one aligned index. Note that incomplete
  * alignments will not cause data lose here, if a partation (equal to a
- * *.alidx file is compelted, but others aren't, only it will be processed.
+ * *.alidx file is complete, but others aren't, only it will be processed.
  */
 while (release != NULL)
     {

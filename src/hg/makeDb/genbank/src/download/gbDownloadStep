@@ -17,7 +17,7 @@
 # -genbank - only update genbank
 # -refseq - only update refseq
 #
-# $Id: gbDownloadStep,v 1.5 2003/07/29 04:44:49 markd Exp $
+# $Id: gbDownloadStep,v 1.6 2004/03/09 02:11:36 markd Exp $
 #
 
 use strict;
@@ -54,7 +54,7 @@ sub parseGenBankVer($) {
     return $version;
 }
 
-# determine of version of genbank on the NCBI server by parsing the
+# determine of version of GenBank on the NCBI server by parsing the
 # README file.
 sub getGenBankVer() {
     ftpOpen();;
@@ -64,6 +64,23 @@ sub getGenBankVer() {
     ftpSafeGet($remReadme, $locReadme);
     my $version = parseGenBankVer($locReadme);
     unlink($locReadme);
+    return $version;
+}
+
+# determine of version of RefSeq on the NCBI server by examining the
+# release/release-catalog directory
+sub getRefSeqVer() {
+    ftpOpen();;
+    my @catFiles = ftpGetDirList("refseq/release/release-catalog");
+    my $version;
+    foreach my $file (@catFiles) {
+        if (($version) = ($file =~ m/release-catalog\/release(.+)\.files\.installed$/)) {
+            last;
+        }
+    }
+    if (!defined($version)) {
+        gbError("can't find ftp://$FTP_HOST/refseq/release/release-catalog/release*.files.installed");
+    }
     return $version;
 }
 
@@ -135,8 +152,8 @@ sub downloadOrCheckDaily($$$) {
 # Update GenBank files. If no directory exists for the curent genbank
 # version, download the full release. Get new, non-cumulative daily
 # files.
-sub updateGenBank($) {
-    my($version) = @_;
+sub updateGenBank() {
+    my($version) = getGenBankVer();
     my $fullRE = qr/(^gb.*\.seq\.gz$)|(^.*\.txt$)|(^README.*$)|(^gb*\.txt\.gz$)/;
     my $dailyRE = qr/^nc.*\.flat\.gz$/;
     my $fullExcludeRE = qr/(^gbsts.*\.seq\.gz$)|(^gbgss.*\.seq\.gz$)/;
@@ -147,7 +164,7 @@ sub updateGenBank($) {
 
     if (! -e "$genBankDir/full.md5") {
         # get the full directory.  Check summing the files takes enough
-        # time that the conection will probably time out, so reopen.
+        # time that the conection may time out, so reopen.
         downloadOrCheckFull(0, "genbank", $genBankDir, $fullRE, $fullExcludeRE);
 
         ftpOpen();  # reopen
@@ -164,30 +181,31 @@ sub updateGenBank($) {
     return $version;
 }
 
-# Update RefSeq files. If no directory exists for the curent genbank version,
-# download the full release. Get new, non-cumulative daily files.  Since
-# RefSeq doesn't do numbered releases, we fake it using the GenBank version
-# change as a time to grap a snapshot.  Since the cumulative file changes
-# every night, we can't verify it.
-sub updateRefSeq($) {
-    my($version) = @_;
-    my $fullRE = qr/(^rscu\.gbff\.Z$)|(^README$)/;
-    my $dailyRE = qr/(^.*\.gbff\.Z$)/;
+# Update RefSeq files. If no directory exists for the curent RefSeq version,
+# download the full release. Get new, non-cumulative daily files.  
+sub updateRefSeq() {
+    my($version) = getRefSeqVer();
+    my $fullRE = qr/(^complete.+.rna\.gbff\.gz$)/;
+    my $dailyRE = qr/(^rsnc.*\.gbff\.gz$)/;
 
     ftpOpen();
 
     my $refSeqDir = "data/download/refseq.$version";
 
-    if (! -e "$refSeqDir/cumulative/full.md5") {
-        # get the full directory.  Check summing the files takes enough
-        # time that the conection will probably time out, so reopen.
-        downloadOrCheckFull(0, "refseq/cumulative",
-                            "$refSeqDir/cumulative", $fullRE);
+    if (! -e "$refSeqDir/release/complete/full.md5") {
+        # get the full directory.  Check summing the files could take enough
+        # time that the conection maybe time out, so reopen.
+        downloadOrCheckFull(0, "refseq/release/complete",
+                            "$refSeqDir/release/complete", $fullRE);
         ftpOpen(); # reopen
+    } else {
+        # just check existance and size
+        downloadOrCheckFull(1, "refseq/release/complete",
+                            "$refSeqDir/release/complete", $fullRE);
     }
 
     # Get or verify dailies. We just download all dailiess, even if they are
-    # before cummulative download.  It's to risky to rely on my times.  my
+    # before cummulative download.  It's too risky to rely on the times.
     downloadOrCheckDaily("refseq/daily", "$refSeqDir/daily", $dailyRE);
     ftpClose();
 }
@@ -224,12 +242,11 @@ if ($#ARGV >= 0) {
 beginTask("build", "download");
 ftpInit($FTP_HOST);
 
-my $version = getGenBankVer();
 if ($main::genbankUpd) {
-    updateGenBank($version);
+    updateGenBank();
 }
 if ($main::refseqUpd) {
-    updateRefSeq($version);
+    updateRefSeq();
 }
 ftpClose();
 endTask();

@@ -28,7 +28,7 @@
               version.</LI>
 
               <LI>If version changed, create a new version directory and
-              download the full GenBank release and non-cumulative daily
+              download the full release and non-cumulative daily
               files.</LI>
 
               <LI>If the version is unchanged, download only the new,
@@ -37,17 +37,8 @@
           </LI>
 
           <LI>
-            Downloads RefSeq files: 
-
-            <UL>
-              <LI>If the GenBank version changed, create a new RefSeq `version'
-              directory name the current date and download the full
-              database.</LI>
-
-              <LI>If we are not changing versions, download new, daily
-              files.</LI>
+            Downloads RefSeq files, similar to GenBank download
             </UL>
-          </LI>
         </UL>
       </LI>
     </UL>
@@ -59,13 +50,9 @@
     <H3><A name="dir">Directory structure</A></H3>
     The directory structure for GenBank and RefSeq are a subset of the
     directories at the NCBI ftp site. Release version numbers are added to the
-    database directory names to allow keeping multiple versions. Since RefSeq
-    doesn't actually do versioned releases, the GenBank version number is used
-    for RefSeq as well. This implies that a full snapshot of RefSeq is obtained
-    when a new GenBank release is made. This fake versioning of RefSeq supports
-    both small, incremental downloads and allowing older files to be
-    periodically removed. 
-
+    database directory names to allow keeping multiple versions. Now
+    that RefSeq is doing versioned releases, it is handled in the same
+    manner as GenBank on an independent releases cycle.
     <UL>
       <LI>
         <CODE>$gbRoot/data/download/</CODE> - downloaded files from NCBI ftp 
@@ -107,13 +94,11 @@
 
             <UL>
               <LI>
-                <CODE>cummulative/</CODE> 
+                <CODE>release/complete/</CODE> 
 
                 <UL>
-                  <LI><CODE>rscu.gbff.Z</CODE> - flat-file containing</LI>
-
-                  <LI><CODE>rscu.gbff.Z</CODE> - flat-file containing full
-                  RefSeq distribution as of date of download.</LI>
+                  <LI><CODE>complete*.rna.gbff.gz</CODE> - flat-files containing full
+                  RefSeq mRNA .</LI>
 
                   <LI><CODE>full.md5</CODE> - md5 checksum of all files</LI>
                 </UL>
@@ -123,10 +108,10 @@
                 <CODE>daily/</CODE> 
 
                 <UL>
-                  <LI><CODE>rsnc.0101.2002.gbff.Z</CODE> - Flat-file update for
+                  <LI><CODE>rsnc.0101.2002.gbff.gz</CODE> - Flat-file update for
                   01/01/2002.</LI>
 
-                  <LI><CODE>rsnc.0101.2002.gbff.Z.md5</CODE> - md5
+                  <LI><CODE>rsnc.0101.2002.gbff.gz.md5</CODE> - md5
                   checksum</LI>
 
                   <LI>...</LI>

@@ -32,7 +32,7 @@ db-load-test $confFile full
 
 if [ $doOrphanTest = "YES" ] ; then
     echo "NOTE: doing orphan test"
-    echo 'DELETE FROM gbStatus limit 5' |hgcat-mysql ${TESTDB}
+    hgsql -e 'DELETE FROM gbStatus limit 5' ${TESTDB}
 fi
 
 if [ -e reload.acc ] ; then

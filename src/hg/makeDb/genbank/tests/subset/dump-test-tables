@@ -17,7 +17,7 @@ use gbCommon;
 setTaskName("dump-test-tables");
 
 # command to run mysql
-my $MYSQL = "hgu-mysql -N";
+my $MYSQL = "hgu-sql -N";
 
 # run mysql and output results to a file
 sub runMySql($$) {

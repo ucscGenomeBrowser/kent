@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.11 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.12 2004/03/09 02:11:36 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -95,7 +95,8 @@ static void markSeqChanged(struct gbStatusTbl* statusTbl,
                            struct gbStatus* tmpStatus,
                            struct gbProcessed* processed,
                            struct gbAligned* aligned)
-/* mark an entry as seqChanged */
+/* mark an entry as seqChanged; called if version or number of alignments
+* changes */
 {
 struct gbStatus* status = gbStatusStore(statusTbl, tmpStatus);
 
@@ -264,7 +265,8 @@ else
 
     /* flag updates for changed for latter processing, order of checks is
      * very important.*/
-    if (aligned->version > tmpStatus->version)
+    if ((aligned->version > tmpStatus->version)
+        || (aligned->numAligns != tmpStatus->numAligns))
         markSeqChanged(statusTbl, tmpStatus, processed, aligned);
     else if (processed->modDate > tmpStatus->modDate)
         markMetaChanged(ssData->select, statusTbl, tmpStatus, processed,
@@ -301,7 +303,7 @@ if (entry->selectVer == NULL_VERSION)
                              aligned->update->shortName, 0);
         markNew(statusTbl, status, processed, aligned);
         }
-    else if (verbose >= 4)
+    else if (gbVerbose >= 4)
         {
         gbVerbPr(4, "notAligned: %s.%d %s", entry->acc, entry->processed->version,
                  gbFormatDate(entry->processed->modDate));
@@ -603,7 +605,7 @@ seqTblAccs = seqTblLoadAcc(conn, select);
 gbStatAccs = gbStatusTblLoadAcc(conn,  statTblSelect,  NULL);
 
 /* build up deleter combining the two */
-deleter = sqlDeleterNew(tmpDirPath, (verbose >= 2));
+deleter = sqlDeleterNew(tmpDirPath, (gbVerbose >= 2));
 
 cookie = hashFirst(seqTblAccs);
 while ((hel = hashNext(&cookie)) != NULL)

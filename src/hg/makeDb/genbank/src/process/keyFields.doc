@@ -35,6 +35,7 @@ rss - RefSeq status:
         pro = provisional
         pre = predicted
         inf = inferred
+        mod = model
         unk = unknown, has RefSeq accession, but no status.
 prt - Protein product accession and version.
 prs - protein product sequence size.

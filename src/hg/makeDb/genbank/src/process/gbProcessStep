@@ -13,7 +13,7 @@
 # -keep - keep tmp files for debugging.
 # -verbose - print details
 #
-# $Id: gbProcessStep,v 1.5 2003/07/29 04:44:49 markd Exp $
+# $Id: gbProcessStep,v 1.6 2004/03/09 02:11:36 markd Exp $
 #
 use strict;
 use warnings;
@@ -69,7 +69,7 @@ sub renameOutFiles($$@) {
 
 # process a set of sequencesa
 sub processSeqs($$$@) {
-    my($type, $outDir, $isRefSeq, @gbFiles) = @_;
+    my($type, $outDir, $srcDb, @gbFiles) = @_;
     prMsg("processing $type $outDir");
 
     # remove old data files in case this is rerunning due to failure
@@ -105,7 +105,7 @@ sub processSeqs($$$@) {
         $cmd .= " -byAccPrefix=2";
     }
     my $inPepFa;
-    if ($isRefSeq) {
+    if ($srcDb eq "refseq") {
         # add option to output peptide seqs for refseq
         $cmd .= " -pepFa=$pepFa.tmp";
     }
@@ -151,7 +151,6 @@ sub processSeqs($$$@) {
 # all in their own division.
 sub processGenBankRel($) {
     my($rel) = @_;
-    my(@gbFiles, $gbFile, $update);
     my $gbMRnaSkip = "(/gbest.*)|(/gbgss.*)|(/gbhtg.*)";
     my $gbMRnaSkipRE = qr/$gbMRnaSkip/;
 
@@ -161,36 +160,36 @@ sub processGenBankRel($) {
     # do full mRNAs
     if (! -e "$procDir/mrna.md5") {
         # build list of files
-        @gbFiles = ();
-        foreach $gbFile (glob("$downDir/gb*.seq.gz")) {
+        my @gbFiles = ();
+        foreach my $gbFile (glob("$downDir/gb*.seq.gz")) {
             if (!($gbFile =~ $gbMRnaSkipRE)) {
                 push(@gbFiles, $gbFile);
             }
         }
         if ($#gbFiles >= 0) {
-            processSeqs("mrna", $procDir, 0, @gbFiles);
+            processSeqs("mrna", $procDir, "genbank", @gbFiles);
         }
     }
     
     # do full ESTs
     if (! -e "$procDir/est.md5") {
         # build list of files
-        @gbFiles = glob("$downDir/gbest*.seq.gz");
+        my @gbFiles = glob("$downDir/gbest*.seq.gz");
         if ($#gbFiles >= 0) {
-            processSeqs("est", $procDir, 0, @gbFiles);
+            processSeqs("est", $procDir, "genbank", @gbFiles);
         }
     }
 
     # genbank daily mRNAs and ESTS
-    foreach $gbFile (glob("$downDir/daily-nc/nc*.flat.gz")) {
-        $update = $gbFile;
+    foreach my $gbFile (glob("$downDir/daily-nc/nc*.flat.gz")) {
+        my $update = $gbFile;
         $update =~ s/^.*\/nc(.+)\.flat\.gz$/daily.$1/;
         $procDir = "data/processed/$rel/$update";
         if (! -e "$procDir/mrna.md5") {
-            processSeqs("mrna", $procDir, 0, ($gbFile));
+            processSeqs("mrna", $procDir, "genbank", ($gbFile));
         }
         if (! -e "$procDir/est.md5") {
-            processSeqs("est", $procDir, 0, ($gbFile));
+            processSeqs("est", $procDir, "genbank", ($gbFile));
         }
     }
 }
@@ -198,24 +197,28 @@ sub processGenBankRel($) {
 # process a RefSeq release
 sub processRefSeqRel($) {
     my($rel) = @_;
-    my($gbFile, $update);
     my $downDir = "data/download/$rel";
     my $procDir = "data/processed/$rel/full";
 
-    # full mRNAs (no ESTs in RefSeq)
+    # full mRNAs, handle old faked releases and real refseq releases
     if (! -e "$procDir/mrna.md5") {
-        $gbFile = "$downDir/cumulative/rscu.gbff.Z";
-        processSeqs("mrna", $procDir, 1, $gbFile);
+        my @gbFiles = glob("$downDir/release/complete/complete*.rna.gbff.gz");
+        my $oldGbFile ="$downDir/cumulative/rscu.gbff.Z";
+        if (-e $oldGbFile) {
+            push(@gbFiles, $oldGbFile);
+        }
+        processSeqs("mrna", $procDir, "refseq", @gbFiles);
     }
 
     # daily mRNAs,
-    foreach $gbFile (glob("$downDir/daily/rsnc.*.*.gbff.Z")) {
+    foreach my $gbFile (glob("$downDir/daily/rsnc.*.*.gbff.Z"),
+                        glob("$downDir/daily/rsnc.*.*.gbff.gz")) {
         # switch month-day and year so they sort sanely
-        $update = $gbFile;
-        $update =~ s/^.*\/rsnc\.([0-9]+)\.([0-9]+)\.gbff\.Z$/daily.$2.$1/;
+        my $update = $gbFile;
+        $update =~ s/^.*\/rsnc\.([0-9]+)\.([0-9]+)\.gbff\.(Z|gz)$/daily.$2.$1/;
         $procDir = "data/processed/$rel/$update";
         if (! -e "$procDir/mrna.md5") {
-            processSeqs("mrna", $procDir, 1, $gbFile);
+            processSeqs("mrna", $procDir, "refseq", $gbFile);
         }
     }
 }

@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.6 2003/10/15 19:06:46 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.7 2004/03/09 02:11:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -956,7 +956,7 @@ char *verChar = gbVersionField->val->string;
 char *s;
 char *org = gbOrganismField->val->string;
 struct keyVal *seqKey, *sizeKey, *commentKey;
-boolean isEst = FALSE;
+boolean isEst = FALSE, keepIt;
 char verNum[8];
 char *com = gbCommentField->val->string;
 
@@ -1049,7 +1049,17 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 /* Handle some other fields handling */
 parseDbXrefs();
 
-if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
+/* for refseqs, we only keep NC_, NR_ and NM_ */
+if (isupper(accession[0]) && isupper(accession[1])
+    && (accession[2] == '_'))
+    {
+    keepIt = startsWith("NC_", accession) || startsWith("NR_", accession)
+        || startsWith("NM_", accession);
+    }
+else
+    keepIt = TRUE;
+
+if (keepIt && ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt)))
     {
     /* Handle sequence part of read. */
     contigCount = 0;
