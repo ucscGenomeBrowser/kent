@@ -7139,15 +7139,15 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
            if( smp->chromStart + smp->samplePosition[i] < left
                &&  smp->chromStart + smp->samplePosition[i+1] < left ) continue;
-        //   if( smp->chromStart + smp->samplePosition[i] < thisPsl->tStart 
-        //        && smp->chromStart + smp->samplePosition[i+1] < thisPsl->tStart  ) 
-        //            continue;
+           if( smp->chromStart + smp->samplePosition[i] < thisPsl->tStart 
+                && smp->chromStart + smp->samplePosition[i+1] < thisPsl->tStart  ) 
+                    continue;
 
            if( smp->chromStart + smp->samplePosition[i] > right
                && smp->chromStart + smp->samplePosition[i+1]  > right ) continue;
-       //    if( smp->chromStart + smp->samplePosition[i] > thisPsl->tEnd 
-       //         && smp->chromStart + smp->samplePosition[i+1] > thisPsl->tEnd  ) 
-       //             continue;
+           if( smp->chromStart + smp->samplePosition[i] > thisPsl->tEnd 
+                && smp->chromStart + smp->samplePosition[i+1] > thisPsl->tEnd  ) 
+                    continue;
 
            if( !first && smp->samplePosition[i-1] + 1 < smp->samplePosition[i] ) 
                printf("<br>");
