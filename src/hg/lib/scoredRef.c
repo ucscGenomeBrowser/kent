@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: scoredRef.c,v 1.5 2003/12/30 16:04:51 heather Exp $";
+static char const rcsid[] = "$Id: scoredRef.c,v 1.6 2004/11/09 17:41:58 kent Exp $";
 
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
@@ -127,7 +127,7 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-void scoredRefTableCreate(struct sqlConnection *conn, char *tableName)
+void scoredRefTableCreate(struct sqlConnection *conn, char *tableName, int indexSize)
 /* Create a scored-ref table with the given name. */
 {
 static char *createString =
@@ -141,12 +141,12 @@ static char *createString =
 "    offset bigint not null,	# Offset in MAF file\n"
 "    score double not null,	# Score\n"
 "              #Indices\n"
-"    INDEX(chrom(8),bin),\n"
-"    INDEX(chrom(8),chromStart),\n"
-"    INDEX(chrom(8),chromEnd)\n"
+"    INDEX(chrom(%d),bin),\n"
+"    INDEX(chrom(%d),chromStart),\n"
+"    INDEX(chrom(%d),chromEnd)\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName);
+dyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }

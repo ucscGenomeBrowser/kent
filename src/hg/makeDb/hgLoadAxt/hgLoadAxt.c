@@ -37,7 +37,7 @@ hSetDb(database);
 safef(extFileDir, sizeof(extFileDir), "/gbdb/%s/%s", database, table);
 fileList = listDirX(extFileDir, "*.axt", TRUE);
 conn = hgStartUpdate();
-scoredRefTableCreate(conn, table);
+scoredRefTableCreate(conn, table, hGetMinIndexLength());
 if (fileList == NULL)
     errAbort("%s doesn't exist or doesn't have any axt files", extFileDir);
 for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)

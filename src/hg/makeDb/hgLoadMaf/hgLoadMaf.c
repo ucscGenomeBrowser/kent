@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.16 2004/10/27 07:55:19 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.17 2004/11/09 17:42:26 kent Exp $";
 
 /* Command line options */
 
@@ -97,7 +97,7 @@ else
         }
     fileList = listDirX(pathPrefix, "*.maf", TRUE);
     conn = hgStartUpdate();
-    scoredRefTableCreate(conn, table);
+    scoredRefTableCreate(conn, table, hGetMinIndexLength());
     }
 if (fileList == NULL)
     errAbort("%s doesn't exist or doesn't have any maf files", pathPrefix);
