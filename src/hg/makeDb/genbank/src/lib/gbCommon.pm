@@ -31,13 +31,20 @@ BEGIN {
     STDOUT->autoflush(1);
     STDERR->autoflush(1);
 
-    # add bin directories to path.
+    # Add bin directories to path.  Tools are normally taken from
+    # /cluster/bin, however we allow them to be overridden by puting them
+    # under gbRoot/bin/i386.  Use path to this script to find bin dir. Can't
+    # use MACHTYPE as it is i686-pc-linux-gnu on the cluster.
+    
     my $rootDir = "$FindBin::Bin/..";
     my $newPath;
-    if (!defined($main::ENV{MACHTYPE})) {
-        $main::ENV{MACHTYPE} = "i386";  # FIXME: hack for cron.
+    my $arch;
+    if (defined($main::ENV{MACHTYPE})) {
+        $arch = $main::ENV{MACHTYPE};
+    } else {
+        $arch = "i386";  # FIXME: hack for cron.
     }
-    $newPath .= "$rootDir/bin:$rootDir/bin/$main::ENV{MACHTYPE}:";
+    $newPath .= "$rootDir/bin:$rootDir/bin/$arch:/cluster/bin/$arch";
     $main::ENV{PATH} = $newPath . $main::ENV{PATH};
 
     # set umask to preserve group writability

@@ -8,10 +8,16 @@
 #  -keep - keep temporary files.
 # Arguments:
 #  - database - hg13, etc; used to determine ooc file to use.
+#
 #  - genomeFile - the contig fasta file or chromosome nib subseq spec.
+#
 #  - rnaFa.gz - the gzipped RNA/EST query fasta file.  The name of this file
 #    must be in the form type.orgCat.* (mrna.native, est.aa.xeno, etc).  This
-#    is used to determine various parameter settings.
+#    is used to determine various parameter settings.  File should be named
+#    in the form:
+#       ..../refseq.136.0/hg16/full/mrna.xeno.0.fa.gz
+#    so refseq.ver or genbank.ver can be used to determine srcDb.
+#    
 #  - out.psl.gz - PSL output file  The other output filenames are derived
 #    by removing the .psl.gz from the name.  If no sequences align, an
 #    empty psl is still created to server as a job-completed marker.
@@ -21,16 +27,21 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.6 2003/08/04 07:48:10 markd Exp $
+# $Id: gbBlat,v 1.7 2003/08/14 04:01:59 markd Exp $
 #
 set -e
 
-# tools are relative to current directory.  Use path to this script to find
-# bin dir. Can't use MACHTYPE as it is i686-pc-linux-gnu on the cluster.
-toolsBin=`dirname $0`/i386
-BLAT=$toolsBin/blat
-POLYINFO=$toolsBin/polyInfo
-PSL_INTRONS_ONLY=$toolsBin/pslIntronsOnly
+# Tools are normally taken from /cluster/bin, however we allow them to be
+# overridden by puting them under gbRoot/bin/i386.  Use path to this script to
+# find bin dir. Can't use MACHTYPE as it is i686-pc-linux-gnu on the cluster.
+gbBin=`dirname $0`/i386
+stdBin=/cluster/bin/i386
+PATH="$gbBin:$stdBin:$PATH"
+export PATH
+
+BLAT=blat
+POLYINFO=polyInfo
+PSL_INTRONS_ONLY=pslIntronsOnly
 
 HG_OOC=/scratch/hg/h/11.ooc
 MM_OOC=/scratch/hg/h/mouse11.ooc
@@ -74,13 +85,29 @@ if [ -e $outPsl ] ; then
 fi
 
 # Parse input file name for use in selecting parameters.
+
+# get srcDb by looking at the directory names:
+dir=`dirname $rnaFa`
+dir=`dirname $dir`
+dir=`dirname $dir`
+
+case "`basename $dir`" in
+    genbank.*)
+        srcDb="genbank";;
+    refseq.*)
+        srcDb="refseq";;
+    *) echo "Error: can't determine srcDb from $rnaFa" >&2
+        exit 1;;
+esac
+
+# get type and orgCat from filename.
 set -- `echo $rnaBase |sed 's/\./ /g'`
 if [ $# -lt 3 ] ; then
     echo "Error: can't parse mrna file name to get parameters: $rnaBase" >&2
     exit 1
 fi
 type=$1
-# ESTs split by accPrefix as well
+# get orgCat, ESTs are split by accPrefix as well
 if [ "x$type" = "xest" ] ; then
     orgCat=$3
 else
@@ -118,7 +145,14 @@ case "$orgCat" in
         isNative=YES
         case "$type" in
             mrna)
-                blatParams="-q=rna -fine -mask=lower $oocOpt" ;;
+                if [ "$srcDb" = "refseq" ] ; then
+                    #blatParams="-q=rna -fine -trimHardA $oocOpt"
+                    blatParams="-q=rna -fine -mask=lower $oocOpt"
+                else
+                    #blatParams="-q=rna -fine $oocOpt"
+                    blatParams="-q=rna -fine -mask=lower $oocOpt"
+                fi
+                ;;
             est)
                 blatParams="-mask=lower $oocOpt" ;;
         esac;;

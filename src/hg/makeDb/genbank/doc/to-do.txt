@@ -583,3 +583,5 @@ without refseq:
 - NCBI index has species wrong for AB107958
 
 - NC_005036 is incorrectly classified as mRNA
+
+- some kind of check for not running gbAlignStep on the right machine.
