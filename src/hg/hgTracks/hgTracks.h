@@ -692,7 +692,7 @@ Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color to draw a genePred based on looking up the gene class */
 /* in an itemClass table */
         
-struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks);
+struct track *trackFromTrackDb(struct trackDb *tdb);
 
 int leftLabelX;			/* Start of area to draw left labels on. */
 int leftLabelWidth;		/* Width of area to draw left labels on. */
