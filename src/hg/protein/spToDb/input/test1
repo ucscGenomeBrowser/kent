@@ -341,72 +341,6 @@ SQ   SEQUENCE   480 AA;  54625 MW;  BCD8A83DD1AED93C CRC64;
      TVNSHSVMYA TRGNARVQVV DNFGQSVFDG EVREGQVLMI PQNFVVIKRA SDRGFEWIAF
      KTNDNAITNL LAGRVSQMRM LPLGVLSNMY RISREEAQRL KYGQQEMRVL SPGRSQGRRE
 //
-ID   120K_RICRI     STANDARD;      PRT;  1300 AA.
-AC   P14914;
-DT   01-APR-1990 (Rel. 14, Created)
-DT   01-FEB-1996 (Rel. 33, Last sequence update)
-DT   01-OCT-2004 (Rel. 45, Last annotation update)
-DE   120 kDa surface-exposed protein.
-GN   Name=p120;
-OS   Rickettsia rickettsii.
-OC   Bacteria; Proteobacteria; Alphaproteobacteria; Rickettsiales;
-OC   Rickettsiaceae; Rickettsieae; Rickettsia.
-OX   NCBI_TaxID=783;
-RN   [1]
-RP   SEQUENCE FROM N.A.
-RC   STRAIN=R;
-RX   MEDLINE=90136087; PubMed=2515418;
-RA   Gilmore R.D. Jr., Joste N., McDonald G.A.;
-RT   "Cloning, expression and sequence analysis of the gene encoding the
-RT   120 kD surface-exposed protein of Rickettsia rickettsii.";
-RL   Mol. Microbiol. 3:1579-1586(1989).
-CC   -!- FUNCTION: Major structural protein which may play a role as
-CC       rickettsial virulence factor and/or immunogen during infection.
-CC   -!- SUBCELLULAR LOCATION: Cell wall. This bacterium is covered by a S-
-CC       layer with hexagonal symmetry.
-CC   -!- MISCELLANEOUS: Its C-terminus potentially may bear the epitopes
-CC       conferring antigenicity to the protein.
-CC   -!- SIMILARITY: Belongs to the rickettsiae ompA/ompB family.
-CC   --------------------------------------------------------------------------
-CC   This SWISS-PROT entry is copyright. It is produced through a collaboration
-CC   between  the Swiss Institute of Bioinformatics  and the  EMBL outstation -
-CC   the European Bioinformatics Institute.  There are no  restrictions on  its
-CC   use  by  non-profit  institutions as long  as its content  is  in  no  way
-CC   modified and this statement is not removed.  Usage  by  and for commercial
-CC   entities requires a license agreement (See http://www.isb-sib.ch/announce/
-CC   or send an email to license@isb-sib.ch).
-CC   --------------------------------------------------------------------------
-DR   EMBL; X16353; CAA34402.1; -.
-DR   PIR; S07575; S07575.
-DR   InterPro; IPR006315; Autotransporter.
-DR   InterPro; IPR005546; Auto_transptbeta.
-DR   Pfam; PF03797; Autotransporter; 1.
-DR   TIGRFAMs; TIGR01414; autotrans_barl; 2.
-KW   Antigen; Cell wall; Glycoprotein; S-layer; Virulence.
-SQ   SEQUENCE   1300 AA;  132801 MW;  E09E52C3F647243D CRC64;
-     MVIQSANATG QVNFRHIVDV GADGTTAFKT AASKVTITQD SNFGNTDFGN LAAQIKVPNA
-     ITLTGNFTGD ASNPGNTAGV ITFDANGTLE SASADANVAV TNNITAIEAS GAGVVQLSGT
-     HAAELRLGNA GSIFKLADGT VINGKVNQTA LVGGALAAGT ITLDGSATIT GDIGNAGGAA
-     ALQRITLAND AKKTLTLGGA NIIGAGGGTI DLQANGGTIK LTSTQNNIVV DFDLAIATDQ
-     TGVVDASSLT NAQTLTINGK IGTIGANNKT LGQFNIGSSK TVLSNGNVAI NELVIGNDGA
-     VQFAHDTYLI TRTTNAAGQG KIIFNPVVNN GTTLAAGTNL GSATNPLAEI NFGSKGVNVD
-     TVLNVGEGVN LYATNITTTD ANVGSFVFNA GGTNIVSGTV GGQQGNKFNT VALENGTTVK
-     FLGNATFNGN TTIAANSTLQ IGGNYTADCV ASADGTGIVE FVNTGPITVT LNKQAAPVNA
-     LKQITVSGPG NVVINEIGNA GNHHGAVTDT IAFENSSLGA VVFLPRGIPF NDAGNTMPLT
-     IKSTVGNKTA KGFDVPSVVV LGVDSVIADG QVIGDQNNIV GLGLGSDNGI IVNATTLYAG
-     ISTLNNNQGT VTLSGGVPNT PGTVYGLGTG IGASKFKQVT FTTDYNNLGN IIATNATIND
-     GVTVTTGGIA GIGFDGKITL GSVNGNGNVR FADGILSNST SMIGTTKANN GTVTYLGNAF
-     VGNIGDSDTP VASVRFTGSD SGAGLQGNIY SQVIDFGTYN LGIVNSNIIL GGGTTAINGK
-     IDLVTNTLTF ASGTSTWGNN TSIETTLTLA NGNIGHIVIL EGAQVNTTTT GTTTIKVQDN
-     ANANFSGTQT YTLIQGGARF NGTLGSPNFA VTGSNRFVNY SLIRAANQDY VITRTNNAEN
-     VVTNDIANSP FGGAPGVDQN VTTFVNATNT AAYNNLLLAK NSANSANFVG AIVTDTSAAI
-     TNVQLDLAKD IQAQLGNRLG ALRYLGTPET AEMAGPEAGA ISAAVAAGDE AIDNVAYGIW
-     AKPFYTDAHQ SKKGGLAGYK AKTTGVVIGL DTLANDNLMI GAAIGITKTD IKHQDYKKGD
-     KTDVNGFSFS LYGAQQLVKN FFAQGSAIFS LNQVKNKSQR YFFDANGNMS KQIAAGHYDN
-     MTFGGNLTVG YDYNAMQGVL VTPMAGLSYL KSSDENYKET GTTVANKQVN SKFSDRTDLI
-     VGAKVAGSTM NRTDLAVYPE VHAFVVHKVT GRLSKTQSVL DGQVTPCINQ PDRTTKTSYN
-     LGLSASIRSD AKMEYGIGYD AQISSKYTAH QGTLKVRVNF
-//
 ID   128U_DROME     STANDARD;      PRT;   368 AA.
 AC   P32234;
 DT   01-OCT-1993 (Rel. 27, Created)
@@ -561,7 +495,7 @@ ID   12S1_ARATH     STANDARD;      PRT;   472 AA.
 AC   P15455; Q9FFH7;
 DT   01-APR-1990 (Rel. 14, Created)
 DT   28-FEB-2003 (Rel. 41, Last sequence update)
-DT   05-JUL-2004 (Rel. 44, Last annotation update)
+DT   25-OCT-2004 (Rel. 45, Last annotation update)
 DE   12S seed storage protein CRA1 precursor [Contains: 12S seed storage
 DE   protein CRA1 alpha chain (12S seed storage protein CRA1 acidic chain);
 DE   12S seed storage protein CRA1 beta chain (12S seed storage protein
@@ -610,9 +544,18 @@ RT   genome.";
 RL   Science 302:842-846(2003).
 RN   [4]
 RP   SEQUENCE OF 420-472 FROM N.A.
-RC   STRAIN=cv. Columbia;
-RA   Raynal M., Grellet F., Laudie M., Meyer Y., Cooke R., Delseny M.;
-RL   Submitted (OCT-1992) to the EMBL/GenBank/DDBJ databases.
+RC   STRAIN=cv. Columbia; TISSUE=Green siliques;
+RX   MEDLINE=94108489; PubMed=8281187;
+RX   DOI=10.1046/j.1365-313X.1993.04061051.x;
+RA   Hoefte H., Desprez T., Amselem J., Chiapello H., Rouze P., Caboche M.,
+RA   Moisan A., Jourjon M.-F., Charpenteau J.-L., Berthomieu P.,
+RA   Guerrier D., Giraudat J., Quigley F., Thomas F., Yu D.-Y., Mache R.,
+RA   Raynal M., Cooke R., Grellet F., Delseny M., Parmentier Y.,
+RA   de Marcillac G., Gigot C., Fleck J., Philipps G., Axelos M.,
+RA   Bardet C., Tremousaygue D., Lescure B.;
+RT   "An inventory of 1152 expressed sequence tags obtained by partial
+RT   sequencing of cDNAs from Arabidopsis thaliana.";
+RL   Plant J. 4:1051-1061(1993).
 CC   -!- FUNCTION: This is a seed storage protein.
 CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
 CC       basic chain derived from a single precursor and linked by a
@@ -670,7 +613,7 @@ ID   12S2_ARATH     STANDARD;      PRT;   455 AA.
 AC   P15456; Q9SAW0;
 DT   01-APR-1990 (Rel. 14, Created)
 DT   28-FEB-2003 (Rel. 41, Last sequence update)
-DT   05-JUL-2004 (Rel. 44, Last annotation update)
+DT   25-OCT-2004 (Rel. 45, Last annotation update)
 DE   12S seed storage protein CRB precursor [Contains: 12S seed storage
 DE   protein CRB alpha chain (12S seed storage protein CRB acidic chain);
 DE   12S seed storage protein CRB beta chain (12S seed storage protein CRB
@@ -732,9 +675,18 @@ RT   genome.";
 RL   Science 302:842-846(2003).
 RN   [4]
 RP   SEQUENCE OF 240-360 FROM N.A.
-RC   STRAIN=cv. Columbia;
-RA   Raynal M., Grellet F., Laudie M., Meyer Y., Cooke R., Delseny M.;
-RL   Submitted (OCT-1992) to the EMBL/GenBank/DDBJ databases.
+RC   STRAIN=cv. Columbia; TISSUE=Green siliques;
+RX   MEDLINE=94108489; PubMed=8281187;
+RX   DOI=10.1046/j.1365-313X.1993.04061051.x;
+RA   Hoefte H., Desprez T., Amselem J., Chiapello H., Rouze P., Caboche M.,
+RA   Moisan A., Jourjon M.-F., Charpenteau J.-L., Berthomieu P.,
+RA   Guerrier D., Giraudat J., Quigley F., Thomas F., Yu D.-Y., Mache R.,
+RA   Raynal M., Cooke R., Grellet F., Delseny M., Parmentier Y.,
+RA   de Marcillac G., Gigot C., Fleck J., Philipps G., Axelos M.,
+RA   Bardet C., Tremousaygue D., Lescure B.;
+RT   "An inventory of 1152 expressed sequence tags obtained by partial
+RT   sequencing of cDNAs from Arabidopsis thaliana.";
+RL   Plant J. 4:1051-1061(1993).
 CC   -!- FUNCTION: This is a seed storage protein.
 CC   -!- SUBUNIT: Hexamer; each subunit is composed of an acidic and a
 CC       basic chain derived from a single precursor and linked by a
@@ -921,7 +873,7 @@ ID   13S3_FAGES     STANDARD;      PRT;   538 AA.
 AC   Q9XFM4; Q9M641;
 DT   10-OCT-2003 (Rel. 42, Created)
 DT   10-OCT-2003 (Rel. 42, Last sequence update)
-DT   01-OCT-2004 (Rel. 45, Last annotation update)
+DT   25-OCT-2004 (Rel. 45, Last annotation update)
 DE   13S globulin seed storage protein 3 precursor (Legumin-like protein 3)
 DE   (Allergen Fag e 1).
 GN   Name=FAGAG1;
