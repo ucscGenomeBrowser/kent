@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.24 2004/02/06 23:50:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.25 2004/02/10 18:40:08 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -342,7 +342,7 @@ else
     printf("<BR><BR>PDF format not available");
 
 printf("<BR><BR><A HREF=\"%s\">Click here to download</A> "
-       "the current protein histograms graphic in PostScript.  ", psTn.forCgi);
+       "the current protein histograms graphic in PostScript.  ", psTn2.forCgi);
 pdfFile = convertEpsToPdf(psTn2.forCgi);
 if(pdfFile != NULL) 
     {
