@@ -1,4 +1,4 @@
-JKSRCDIR = /projects/compbiousr/kent/src
+JKSRCDIR = $(HOME)/kent/src
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 
 .c.o:
