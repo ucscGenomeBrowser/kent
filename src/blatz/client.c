@@ -1,5 +1,5 @@
 /* blatz client main routine.  The server does almost all the 
- * work.  This just loads DNA, send it to the server, and
+ * work.  This just loads DNA, sends it to the server, and
  * prints the response.  It also allows most of the server
  * alignment options to be overridden from the command line. */
 /* Copyright 2005 Jim Kent.  All rights reserved. */
