@@ -4,16 +4,21 @@ L = $(MYSQLLIBS) -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = hgLoadMaf.o
+PROG1 = hgLoadMaf
+PROG2 = hgLoadMafSummary
 
-hgLoadMaf: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadMaf $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadMaf${EXE}
+all: ${PROG1} ${PROG2}
 
-test:
-	cd tests && ${MAKE} test
+${PROG1}: ${PROG1}.o $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${PROG1} ${PROG1}.o $(MYLIBS) $L
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/${PROG1}${EXE}
 
-clean:
-	rm -f $O $B
-	cd tests && ${MAKE} clean
+${PROG2}: ${PROG2}.o $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${PROG2} ${PROG2}.o $(MYLIBS) $L
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/${PROG2}${EXE}
+
+clean::
+	rm -f ${PROG1}.o ${PROG2}.o $B
+
+include tests/endcommon.mk
 
