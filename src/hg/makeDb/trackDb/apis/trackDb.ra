@@ -6,24 +6,14 @@ group map
 visibility dense
 type bed 3 +
 
-track all_est
-shortLabel A. mel. ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-
-track all_mrna
-shortLabel A. mel. mRNAs
-longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
+track xenoRefGene
+shortLabel Non-A. mel. RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
 visibility dense
-spectrum on
-type psl mrna
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
 
 track bdgpLiftGene
 shortLabel D.mel. BDGP Genes
@@ -34,6 +24,46 @@ visibility pack
 color 0,100,180
 type genePred bdgpLiftGenePep
 otherDb dm1
+
+track all_mrna
+shortLabel A. mel. mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility dense
+spectrum on
+type psl mrna
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
+track all_est
+shortLabel A. mel. ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+
+track xenoMrna
+shortLabel Non-A. mel. mRNAs
+longLabel Non-$Organism mRNAs from GenBank
+group rna
+priority 63
+visibility hide
+spectrum on
+type psl xeno
+cdsDrawOptions enabled
 
 track chainDm1
 shortLabel D. mel. Chain
@@ -57,26 +87,6 @@ spectrum on
 type netAlign dm1 chainDm1
 otherDb dm1
 
-track xenoMrna
-shortLabel Non-A. mel. mRNAs
-longLabel Non-$Organism mRNAs from GenBank
-group rna
-priority 63
-visibility hide
-spectrum on
-type psl xeno
-cdsDrawOptions enabled
-
-
-track xenoRefGene
-shortLabel Non-A. mel. RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
@@ -86,7 +96,6 @@ visibility dense
 spectrum on
 type rmsk
 canPack off
-
 
 
 searchTable gold
