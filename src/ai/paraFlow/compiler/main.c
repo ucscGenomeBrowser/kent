@@ -3,8 +3,9 @@
 #include "linefile.h"
 #include "options.h"
 #include "hash.h"
+#include "dystring.h"
 #include "localmem.h"
-#include "tokenizer.h"
+#include "paraToken.h"
 
 void usage()
 /* Explain command line and exit. */
@@ -20,133 +21,334 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-enum pfTokType
+enum pfParseType
+/* Parse type */
     {
-    pftName = 256,
-    pftString,
-    pftNumber,
+    pptProgram,
+    pptCompound,
+    pptIf,
+    pptWhile,
+    pptFor,
+    pptForeach,
+    pptClass,
+    pptVarDec,
+    pptVarUse,
+    pptToDec,
+    pptFlowDec,
+    pptParaDec,
+    pptCall,
+    pptBreak,
+    pptAssignment,
+    pptPlusEquals,
+    pptMinusEquals,
+    pptTimesEquals,
+    pptDivEquals,
+    pptModEquals,
+    pptIndex,
+    pptPlus,
+    pptMinus,
+    pptTimes,
+    pptDiv,
+    pptMod,
+    pptAnd,
+    pptOr,
+    pptComma,
+    pptSame,
+    pptNotSame,
+    pptNegate,
+    pptConstant,
     };
 
-char *pfTokTypeAsString(enum pfTokType type)
-/* Return string corresponding to pfTokType */
+
+static char *pfParseTypeAsString(enum pfParseType type)
+/* Return string corresponding to pfParseType */
 {
-static char buf[2];
 switch (type)
     {
-    case pftName: return "pftName";
-    case pftString: return "pftString";
-    case pftNumber: return "pftNumber";
+    case pptProgram:
+    	return "pptProgram";
+    case pptCompound:
+    	return "pptCompound";
+    case pptIf:
+    	return "pptIf";
+    case pptWhile:
+    	return "pptWhile";
+    case pptFor:
+	return "pptFor";
+    case pptForeach:
+	return "pptForeach";
+    case pptClass:
+	return "pptClass";
+    case pptVarDec:
+	return "pptVarDec";
+    case pptVarUse:
+	return "pptVarUse";
+    case pptToDec:
+	return "pptToDec";
+    case pptFlowDec:
+	return "pptFlowDec";
+    case pptParaDec:
+	return "pptParaDec";
+    case pptCall:
+	return "pptCall";
+    case pptBreak:
+	return "pptBreak";
+    case pptAssignment:
+	return "pptAssignment";
+    case pptPlusEquals:
+	return "pptPlusEquals";
+    case pptMinusEquals:
+	return "pptMinusEquals";
+    case pptTimesEquals:
+	return "pptTimesEquals";
+    case pptDivEquals:
+	return "pptDivEquals";
+    case pptModEquals:
+	return "pptModEquals";
+    case pptIndex:
+	return "pptIndex";
+    case pptPlus:
+	return "pptPlus";
+    case pptMinus:
+	return "pptMinus";
+    case pptTimes:
+	return "pptTimes";
+    case pptDiv:
+	return "pptDiv";
+    case pptMod:
+	return "pptMod";
+    case pptAnd:
+	return "pptAnd";
+    case pptOr:
+	return "pptOr";
+    case pptComma:
+	return "pptComma";
+    case pptSame:
+	return "pptSame";
+    case pptNotSame:
+	return "pptNotSame";
+    case pptNegate:
+	return "pptNegate";
+    case pptConstant:
+	return "pptConstant";
     default:
-        buf[0] = type;
-	return buf;
+        internalErr();
+	return NULL;
     }
 }
 
-struct pfSource
-/* A paraFlow source file. */
+struct paraSymbol
+/* A symbol table entry */
     {
-    struct pfSource *next;	/* Next in list. */
-    char *name;			/* File name. */
-    struct tokenizer *tkz;	/* Tokenizer on this source. */
+    char *name;	/* Allocated in hash */
+    bool defined;	/* True if defined in this scope. */
+    bool written;	/* True if written to. */
+    struct paraType *type;	/* Symbol type */
     };
 
-struct pfTokenizer
-/* Tokenizing structure. */
+struct pfParse
+/* The para parse tree. */
     {
-    struct pfTokenizer *next;	/* Next if any in list */
-    struct lm *lm;		/* Local memory pool for tokens etc. */
-    struct pfSource *source;	/* Current source file. */
-    struct pfSource *sourceList; /* List of all source files */
-    struct hash *symbols;	/* Hash containing all symbols. */
-    struct hash *strings;	/* Hash containing all strings. */
+    struct pfParse *next;	/* Next in list */
+    enum pfParseType type;	/* Node type */
+    struct pfToken *tok;	/* Token associated with node. */
+    struct pfParse *parent;	/* Parent statement if any. */
+    struct pfParse *children;	/* subparts. */
+    struct hash *symbols;	/* Symbol table (may be NULL) */
     };
 
-union pfTokVal
-/* The value field of a token. */
-    {
-    char *s;		/* A string (allocated in string table) 
-                         * This covers strings, names, and glyphs. */
-    long long i;	/* An integer type */
-    double x;		/* Floating point */
-    char c;		/* A single character symbol. */
-    };
-
-struct pfToken
-/* ParaFlow lexical token. */
-    {
-    struct pfToken *next;	/* Next token in list. */
-    enum pfTokType type;	/* Token type. */
-    union pfTokVal val;		/* Type-dependent value. */
-    struct pfSource *source;	/* Source file this is in. */
-    int startLine,startCol;	/* Position of token start within source. */
-    int endLine, endCol;	/* End of token within source. */
-    };
-
-struct pfSource *pfSourceNew(char *fileName)
-/* Create new pfSource based around file */
+void pfParseDump(struct pfParse *pp, int level, FILE *f)
+/* Write out pp (and it's children) to file */
 {
-struct pfSource *source;
-AllocVar(source);
-source->tkz = tokenizerNew(fileName);
-source->tkz->leaveQuotes = TRUE;
-source->tkz->uncommentC = TRUE;
-source->tkz->uncommentShell = TRUE;
-source->name = cloneString(fileName);
-return source;
+struct pfParse *child;
+spaceOut(f, level*3);
+fprintf(f, "%s\n", pfParseTypeAsString(pp->type));
+for (child = pp->children; child != NULL; child = child->next)
+    pfParseDump(child, level+1, f);
 }
 
-/* A paraFlow source file. */
-struct pfTokenizer *pfTokenizerNew(char *fileName)
-/* Create tokenizing structure on file. */
+
+struct pfParse *pfParseStatement(struct pfParse *parent, 
+	struct pfToken **pTokList);
+
+static void syntaxError(struct pfToken *tok)
+/* Complain about syntax error and quit. */
 {
-struct pfTokenizer *pfTkz;
-AllocVar(pfTkz);
-pfTkz->lm = lmInit(0);
-pfTkz->source = pfSourceNew(fileName);
-pfTkz->symbols = hashNew(16);
-pfTkz->strings = hashNew(16);
-return pfTkz;
+errAbort("Syntax error line %d of %s", tok->source->name, tok->startLine);
 }
 
-struct pfToken *pfTokenizerNext(struct pfTokenizer *pfTkz)
-/* Puts next token in token.  Returns token type. For single
- * character tokens, token type is just the char value,
- * other token types start at 256. */
+struct pfParse *pfParseNew(enum pfParseType type,
+	struct pfToken *tok, struct pfParse *parent)
+/* Return new parse node.  It's up to caller to fill in
+ * children later, and to make symbol table if needed. */
 {
-struct pfToken *tok;
-char *s, c;
-struct tokenizer *tkz = pfTkz->source->tkz;
-s = tokenizerNext(tkz);
-if (s == NULL)
-    return NULL;
-lmAllocVar(pfTkz->lm, tok);
-tok->source = pfTkz->source;
-tok->startLine = tkz->lf->lineIx;
-tok->startCol = tkz->linePt - tkz->curLine - strlen(s);
-c = s[0];
-if (c == '"' || c == '\'')
+struct pfParse *pp;
+AllocVar(pp);
+pp->type = type;
+pp->tok = tok;
+pp->parent = parent;
+return pp;
+}
+
+
+static void expectingGot(char *expecting, struct pfToken *got)
+/* Complain about unexpected stuff and quit. */
+{
+errAbort("Expecting %s line %d of %s", expecting, got->startLine,
+	got->source->name);
+}
+
+static void skipRequiredName(char *name, struct pfToken **pTokList)
+/* Make sure next token matches name, and then skip it. */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type != pftName || !sameString(tok->val.s, name))
+    expectingGot(name, tok);
+*pTokList = tok->next;
+}
+
+static void compoundToChildren(struct pfParse *pp, struct pfToken **pTokList)
+/* Parse {, a list of statements, and } and hang statements on
+ * pp->children. */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type != '{')
+    expectingGot("{", tok);
+tok = tok->next;
+for (;;)
     {
-    int len = strlen(s);
-    s[len-1] = 0;
-    tok->type = pftString;
-    tok->val.s = hashStoreName(pfTkz->strings, s+1);
+    struct pfParse *statement;
+    if (tok == NULL)
+	{
+	tok = *pTokList;
+        errAbort("End of file in compound statement.  Opening { line %d of %s",
+	     tok->startLine, tok->source->name);
+	}
+    if (tok->type == '}')
+        {
+	*pTokList = tok->next;
+	slReverse(&pp->children);
+	return;
+	}
+    statement = pfParseStatement(pp, &tok);
+    slAddHead(&pp->children, statement);
     }
-else if (isdigit(c))
+}
+
+struct pfParse *parseCompound(struct pfParse *parent,
+	struct pfToken **pTokList)
+/* Parse a compound statement (statement list surrounded
+ * by brackets */
+{
+struct pfParse *pp = pfParseNew(pptCompound, *pTokList, parent);
+compoundToChildren(pp, pTokList);
+return pp;
+}
+
+
+struct pfParse *varUse(struct pfParse *parent, struct pfToken **pTokList)
+/* Make sure have a name, and create a varUse type node
+ * based on it. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptVarUse, tok, parent);
+if (tok->type != pftName)
+    errAbort("Expecting variable name line %d of %s",
+    	tok->startLine, tok->source->name);
+*pTokList = tok->next;
+return pp;
+}
+
+struct pfParse *parseForeach(struct pfParse *parent,
+	struct pfToken **pTokList)
+/* Parse foreach statement */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptForeach, tok, parent);
+struct pfParse *element;
+struct pfParse *collection;
+struct pfParse *statement;
+
+tok = tok->next;	/* Skip over 'foreach' */
+element = varUse(pp, &tok);
+skipRequiredName("in", &tok);
+collection = varUse(pp, &tok);
+/* Make sure next token matches name, and then skip it. */
+statement = pfParseStatement(pp, &tok);
+slAddHead(&pp->children, statement);
+slAddHead(&pp->children, collection);
+slAddHead(&pp->children, element);
+*pTokList = tok;
+return pp;
+}
+
+struct pfParse *parseClass(struct pfParse *parent,
+	struct pfToken **pTokList)
+/* Parse class declaration statement. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp;
+skipRequiredName("class", &tok);
+pp = pfParseNew(pptClass, tok, parent);
+tok = tok->next;
+compoundToChildren(pp, &tok);
+*pTokList = tok;
+return pp;
+}
+
+struct pfParse *pfParseStatement(struct pfParse *parent, 
+	struct pfToken **pTokList)
+/* Parse a single statement. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = NULL;
+
+if (tok->type == '{')
+    pp = parseCompound(parent, pTokList);
+else if (tok->type == pftName)
     {
-    tok->type = pftNumber;
-    tok->val.i = atoll(s);
-    }
-else if (c == '_' || isalpha(c))
-    {
-    tok->type = pftName;
-    tok->val.s = hashStoreName(pfTkz->symbols, s);
+    char *s = tok->val.s;
+    if (sameString(s, "foreach"))
+        pp = parseForeach(parent, pTokList);
+    else if (sameString(s, "class"))
+        pp = parseClass(parent, pTokList);
+#ifdef SOON
+    else if (sameString(s, "to"))
+        pp = parseTo(parent, pTokList);
+    else if (sameString(s, "for"))
+        pp = parseFor(parent, pTokList);
+    else if (sameString(s, "while"))
+        pp = parseWhile(parent, pTokList);
+    else if (sameString(s, "flow"))
+        pp = parseFlow(parent, pTokList);
+    else if (sameString(s, "para"))
+        pp = parsePara(parent, pTokList);
+    else
+        pp = parseAssignOrCall(parent, pTokList);
+#endif /* SOON */
+    else
+	syntaxError(tok);
     }
 else
     {
-    tok->type = c;
-    tok->val.c = c;
+    syntaxError(tok);
     }
-return tok;
+return pp;
+}
+
+struct pfParse *pfParseProgram(struct pfToken *tokList)
+/* Convert token list to parsed program. */
+{
+struct pfToken *tok;
+struct pfParse *program = pfParseNew(pptProgram, tokList, NULL);
+
+while (tokList != NULL)
+    {
+    struct pfParse *statement = pfParseStatement(pptProgram, &tokList);
+    slAddHead(&program->children, statement);
+    }
+slReverse(&program->children);
+return program;
 }
 
 void paraFlowOnFile(char *fileName)
@@ -154,33 +356,18 @@ void paraFlowOnFile(char *fileName)
 {
 struct pfTokenizer *pfTkz = pfTokenizerNew(fileName);
 struct pfToken *tokList = NULL, *tok;
+struct pfParse *program;
+
 while ((tok = pfTokenizerNext(pfTkz)) != NULL)
     {
-    slAddHead(&tokList, tok);
+    if (tok->type != pftWhitespace && tok->type != pftComment)
+	{
+	slAddHead(&tokList, tok);
+	}
     }
 slReverse(&tokList);
-
-for (tok = tokList; tok != NULL; tok = tok->next)
-    {
-    printf("file %s, line %3d, column %2d, type %3d, value ",
-    	tok->source->name, tok->startLine, tok->startCol, tok->type);
-    switch (tok->type)
-        {
-	case pftName:
-	    printf("%s", tok->val.s);
-	    break;
-	case pftString:
-	    printf("\"%s\"", tok->val.s);
-	    break;
-	case pftNumber:
-	    printf("%lld", tok->val.i);
-	    break;
-	default:
-	    printf("%c", tok->val.c);
-	    break;
-        }
-    printf("\n");
-    }
+program = pfParseProgram(tokList);
+pfParseDump(program, 0, stdout);
 }
 
 int main(int argc, char *argv[])
@@ -190,6 +377,9 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 paraFlowOnFile(argv[1]);
+#ifdef SOON
+paraFlowOnFile("../testProg/easy/stringInit.pf");
+#endif /* SOON */
 return 0;
 }
 
