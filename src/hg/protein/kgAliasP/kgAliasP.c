@@ -37,7 +37,7 @@ char *answer;
 char *symbol, *alias, *aliases;
 
 char *id;
-char *chp0, *chp;
+char *chp0, *chp1, *chp2, *chp;
 
 char *kgID;
 char line[2000];
@@ -109,7 +109,49 @@ while (fgets(line, 1000, inf) != NULL)
 	    while (chp0 != NULL)
 	    	{
             	while (*chp0 == ' ') chp0++;
-            	chp = strstr(chp0, " OR ");
+
+            	chp1 = strstr(chp0, " OR ");
+            	chp2 = strstr(chp0, " AND ");
+
+		chp = NULL;
+		if (chp1 != NULL)
+		    {
+		    if (chp2 != NULL)
+			{	
+			if (chp1 < chp2)
+			    {
+			    chp = chp1;
+			    }
+			else
+			    {
+			    chp = chp2;
+			    }
+			}
+		    else
+			{
+			chp = chp1;
+			}
+		    }
+
+		if (chp2!= NULL)
+		    {
+		    if (chp1 != NULL)
+			{	
+			if (chp1 < chp2)
+			    {
+			    chp = chp1;
+			    }
+			else
+			    {
+			    chp = chp2;
+			    }
+			}
+		    else
+			{
+			chp = chp2;
+			}
+		    }
+
             	if (chp == NULL)
             	    {
                     alias = strdup(chp0);
@@ -121,8 +163,14 @@ while (fgets(line, 1000, inf) != NULL)
                     alias = strdup(chp0);
                     chp0 = chp+4;
                     }
+
  	    	if (kgID != NULL)
 		    {
+		    // clean up "(XXXX" or "XXXX)"
+		    if (*alias == '(') alias++;
+		    chp = strstr(alias, ")");
+		    if (chp != NULL) *chp = '\0';
+
 		    fprintf(o1, "%s\t%s\n", kgID, alias);
 		    }
 	    	}
