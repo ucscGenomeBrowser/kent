@@ -1770,7 +1770,7 @@ int running, recent, i, finCount = 0;
 struct runJobMessage rjm;
 char resultsFile[512], *resultsFileString;
 
-if (!pmReceive(pm, ru))
+if (!pmReceiveTimeOut(pm, ru, 2000000))
     {
     warn("%s: no listJobs response", mm->name);
     return FALSE;
@@ -1778,7 +1778,7 @@ if (!pmReceive(pm, ru))
 running = atoi(pm->data);
 for (i=0; i<running; ++i)
     {
-    if (!pmReceive(pm, ru))
+    if (!pmReceiveTimeOut(pm, ru, 2000000))
         {
 	pljErr(mm, 1);
 	return FALSE;
@@ -1792,7 +1792,7 @@ for (i=0; i<running; ++i)
     addRunningJob(&rjm, resultsFile, mm);
     }
 *pRunning += running;
-if (!pmReceive(pm, ru))
+if (!pmReceiveTimeOut(pm, ru, 2000000))
     {
     pljErr(mm, 3);
     return FALSE;
@@ -1802,7 +1802,7 @@ for (i=0; i<recent; ++i)
     {
     struct existingResults *er;
     char *startLine = NULL;
-    if (!pmReceive(pm, ru))
+    if (!pmReceiveTimeOut(pm, ru, 2000000))
         {
 	pljErr(mm, 4);
 	return FALSE;
@@ -1814,7 +1814,7 @@ for (i=0; i<recent; ++i)
 	freez(&startLine);
 	return FALSE;
 	}
-    if (!pmReceive(pm, ru))
+    if (!pmReceiveTimeOut(pm, ru, 2000000))
         {
 	pljErr(mm, 6);
 	freez(&startLine);
