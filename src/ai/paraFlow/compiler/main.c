@@ -167,6 +167,7 @@ if (pp->type == pptVarInit)
     }
 }
 
+
 void evalTypes(struct pfParse *pp)
 /* Go through and fill in pp->ct field on type
  * expressions. */
@@ -182,36 +183,58 @@ switch (pp->type)
     case pptVarInit:
 	{
 	struct pfParse *type = pp->children;
-	pp->ct = type->ct;
+	pp->ty = type->ty;
 	break;
 	}
     case pptOf:
         {
+	/* The symbols 'tree of dir of string' get converted
+	 * into a 'pptOf' parse tree with children tree,dir,string.
+	 * We convert this into a type heirachy with tree at top,
+	 * then dir, then string.  To do this we mix child and 
+	 * next pointers in a somewhat unholy fashion. */
 	struct pfParse *type = pp->children;
-	pp->ct = type->ct;
+	pp->ty = type->ty;
 	while (type != NULL)
 	     {
-	     struct pfParse *nextType = type->next;
-	     if (nextType != NULL)
-	          type->ct->next = nextType->ct;
-	     type = nextType;
+	     struct pfParse *childType = type->next;
+	     if (childType != NULL)
+	          type->ty->children = childType->ty;
+	     type = childType;
 	     }
 	break;
 	}
     case pptTypeName:
         {
-	struct pfBaseType *bt = pfScopeFindType(pp->scope, pp->name);
-	if (bt != NULL)
+	struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
+	if (base != NULL)
 	    {
-	    struct pfCollectedType *ct;
-	    AllocVar(ct);
-	    ct->base = bt;
-	    pp->ct = ct;
+	    struct pfType *ty = pfTypeNew(base);
+	    pp->ty = ty;
+	    }
+	break;
+	}
+    case pptTuple:
+        {
+	pp->ty = pfTypeNew(NULL);
+	pp->ty->isTuple = TRUE;
+	if (pp->children != NULL)
+	    {
+	    pp->ty->children = pp->children->ty;
+	    pp = pp->children;
+	    while (pp->next != NULL)
+	        {
+		if (pp->ty == NULL)
+		    errAt(pp->tok, "void value in tuple");
+		pp->ty->next = pp->next->ty;
+		pp = pp->next;
+		}
 	    }
 	break;
 	}
     }
 }
+
 
 void addDeclaredVarsToScopes(struct pfParse *pp)
 /* Go through and put declared variables into symbol table
@@ -226,10 +249,9 @@ switch (pp->type)
 	{
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
-	struct pfParse *initVal = name->next;
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
-	pfScopeAddVar(pp->scope, name->name, type->ct);
+	pfScopeAddVar(pp->scope, name->name, pp->ty);
 	break;
 	}
     case pptToDec:
@@ -245,12 +267,10 @@ switch (pp->type)
 	assert(output->type == pptTuple);
 	substituteType(input, pptTuple, pptTypeTuple);
 	substituteType(output, pptTuple, pptTypeTuple);
-#ifdef SOON
-#endif /* SOON */
 	if (hashLookup(pp->scope->parent->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
-	pfScopeAddVar(pp->scope->parent, name->name, NULL);
-        break;
+	pfScopeAddVar(pp->scope->parent, name->name, pp->ty);
+	break;
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
@@ -270,7 +290,7 @@ switch (pp->type)
 	    errAt(pp->tok, "Use of undefined variable %s", pp->name);
 	pp->var = var;
 	pp->type = pptVarUse;
-	pp->ct = var->ct;
+	pp->ty = var->ty;
         break;
 	}
     }
@@ -312,7 +332,7 @@ if (scope->vars->elCount > 0)
     fprintf(f, " vars: ");
     while ((var = hashNextVal(&hc)) != NULL)
 	{
-	pfCollectedTypeDump(var->ct, f);
+	pfTypeDump(var->ty, f);
         fprintf(f, " %s,", var->name);
 	}
     }
@@ -360,9 +380,9 @@ pfc->collectionType = pfScopeAddType(scope, "(collection)", TRUE, pfc->varType);
 pfc->tupleType = pfScopeAddType(scope, "(tuple)", TRUE, pfc->collectionType);
 pfc->classType = pfScopeAddType(scope, "(class)", TRUE, pfc->collectionType);
 pfc->functionType = pfScopeAddType(scope, "(function)", TRUE, pfc->varType);
-pfc->toType = pfScopeAddType(scope, "(to)", TRUE, pfc->functionType);
-pfc->paraType = pfScopeAddType(scope, "(para)", TRUE, pfc->functionType);
-pfc->flowType = pfScopeAddType(scope, "(flow)", TRUE, pfc->functionType);
+pfc->toType = pfScopeAddType(scope, "to", TRUE, pfc->functionType);
+pfc->paraType = pfScopeAddType(scope, "para", TRUE, pfc->functionType);
+pfc->flowType = pfScopeAddType(scope, "flow", TRUE, pfc->functionType);
 
 pfScopeAddType(scope, "string", FALSE, pfc->streamType);
 

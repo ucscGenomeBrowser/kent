@@ -190,10 +190,10 @@ void pfParseDump(struct pfParse *pp, int level, FILE *f)
 struct pfParse *child;
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
-if (pp->ct != NULL)
+if (pp->ty != NULL)
     {
     fprintf(f, " ");
-    pfCollectedTypeDump(pp->ct, f);
+    pfTypeDump(pp->ty, f);
     }
 if (pp->name != NULL)
     fprintf(f, " %s", pp->name);

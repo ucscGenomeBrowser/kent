@@ -30,22 +30,18 @@ struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name,
 	boolean isCollection, struct pfBaseType *parentType)
 /* Add new base type to scope. */
 {
-struct pfBaseType *bt;
-AllocVar(bt);
-bt->scope = scope;
-bt->parentType = parentType;
-bt->isCollection = isCollection;
-hashAddSaveName(scope->types, name, bt, &bt->name);
+struct pfBaseType *bt = pfBaseTypeNew(scope, name, isCollection, parentType);
+hashAdd(scope->types, name, bt);
 return bt;
 }
 
-struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfCollectedType *ct)
+struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfType *ty)
 /* Add type to scope. */
 {
 struct pfVar *var;
 AllocVar(var);
 var->scope = scope;
-var->ct = ct;
+var->ty = ty;
 hashAddSaveName(scope->vars, name, var, &var->name);
 return var;
 }

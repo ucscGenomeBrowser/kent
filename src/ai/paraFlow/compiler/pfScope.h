@@ -22,7 +22,7 @@ struct pfVar
      {
      char *name;			/* Name (not allocated here) */
      struct pfScope *scope;		/* Scope we're declared in. */
-     struct pfCollectedType *ct;	/* Variable type. */
+     struct pfType *ty;			/* Variable type. */
      };
 
 struct pfTokenizer;
@@ -36,7 +36,7 @@ struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name,
 	boolean isCollection, struct pfBaseType *parentType);
 /* Add new base type to scope. */
 
-struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfCollectedType *ct);
+struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfType *ty);
 /* Add type to scope. */
 
 struct pfBaseType *pfScopeFindType(struct pfScope *scope, char *name);

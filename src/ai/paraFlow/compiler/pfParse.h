@@ -89,7 +89,7 @@ struct pfParse
     char *name;			/* Node name - not allocated here */
     struct pfToken *tok;	/* Token associated with node. */
     struct pfScope *scope;	/* Associated scope. */
-    struct pfCollectedType *ct;	/* Type of expression associated with parse. */
+    struct pfType *ty;		/* Type of expression associated with parse. */
     struct pfVar *var;		/* Associated variable if any.  */
     struct pfParse *parent;	/* Parent statement if any. */
     struct pfParse *children;	/* subparts. */

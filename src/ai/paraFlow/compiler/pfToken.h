@@ -1,5 +1,4 @@
-/* paraToken - reads a line file and produces paraTokens from
- * it. */
+/* pfToken - turns files into lexical tokens. */
 
 #ifndef PFTOKEN_H
 #define PFTOKEN_H
