@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.17 2005/04/05 00:09:36 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.18 2005/04/05 23:54:27 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -1099,6 +1099,73 @@ SEQ2_LEN=$BASE/S2.len
     #	user    0m2.270s
     #	sys     0m0.870s
 
+    #	A measurement script to do all featureBits combinations:
+    cd /cluster/data/mm6/jkStuff
+    cat << '_EOF_' >  netChainCheck.sh
+#!/bin/sh
+
+usage()
+{
+echo "usage: netChainCheck.sh <db0> <db1> <targetDb>"
+echo "    does: featureBits <db0> net<targetDb>"
+echo "          featureBits <db1> net<targetDb>"
+echo "    as well as the chain and chainLink tables,"
+echo "    and on the targetDb:"
+echo "          featureBits <targetDb> net<db0>"
+echo "          featureBits <targetDb> net<db1>"
+echo "    and the chain and chainLink tables."
+echo -e "\texample: netChainCheck.sh mm6 mm5 fr1"
+}
+
+doOne() 
+{   
+db=$1
+tbl=$2
+echo "    featureBits $db $tbl"
+echo -en "    #\t"
+time featureBits $db $tbl
+}
+
+ucFirstLetter()
+{
+ucString="$1"
+fc=`echo "${ucString}" | sed -e "s/\(.\).*/\1/"`
+rest=`echo "${ucString}" | sed -e "s/.\(.*\)/\1/"`
+FC=`echo "${fc}" | tr '[a-z]' '[A-Z]'`
+echo "${FC}${rest}"
+}
+
+if [ "$#" -ne 3 ]; then
+    usage
+    exit 255
+fi
+
+db0=$1
+db1=$2
+targetDb=$3
+
+targetDB=`ucFirstLetter "${targetDb}"`
+DB0=`ucFirstLetter "${db0}"`
+DB1=`ucFirstLetter "${db1}"`
+
+export db0 db1 targetDb targetDB DB0 DB1
+# echo "${db0} ${db1} ${targetDb} ${targetDB} ${DB0} ${DB1}"
+
+doOne "${db0}" net${targetDB}
+doOne "${db1}" net${targetDB}
+doOne "${db0}" chain${targetDB}
+doOne "${db1}" chain${targetDB}
+doOne "${db0}" chain${targetDB}Link
+doOne "${db1}" chain${targetDB}Link
+doOne ${targetDb} net${DB0}
+doOne ${targetDb} net${DB1}
+doOne ${targetDb} chain${DB0}
+doOne ${targetDb} chain${DB1}
+doOne ${targetDb} chain${DB0}Link
+doOne ${targetDb} chain${DB1}Link
+'_EOF_'
+    # << keep emacs coloring happy
+
 #########################################################################
 # BLASTZ RAT Rn3 (FIRST TRY - 2005-03-15 - 2005-03-17 - Hiram)
 #	THESE ARE THE CORRECT PARAMETERS - the second try was not used
@@ -1317,6 +1384,7 @@ SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
 SEQ2_LEN=/iscratch/i/bosTau1/chrom.sizes
+#  XXXXXXXXXXXXXXX   ^^^^^^^  wrong file ! XXXXXXXXXXXXXX
 
 BASE=/cluster/data/mm6/bed/blastzRn3.2005_03_22
 
@@ -2071,7 +2139,28 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
 # Average job time:                  81s       1.36m     0.02h    0.00d
 # Longest job:                      334s       5.57m     0.09h    0.00d
 # Submission to last job:           365s       6.08m     0.10h    0.00d
- 
+
+    #	measurements:
+    time ../../jkStuff/netChainCheck.sh mm6 mm5 bosTau1 >measurements.out 2>&1 &
+    featureBits mm6 netBosTau1
+    #   1483158691 bases of 2597150411 (57.107%) in intersection
+    featureBits mm5 netBosTau1
+    #   1491250043 bases of 2615483787 (57.016%) in intersection
+    featureBits mm6 chainBosTau1
+    #   1551920940 bases of 2597150411 (59.755%) in intersection
+    featureBits mm5 chainBosTau1
+    #   1557897465 bases of 2615483787 (59.564%) in intersection
+    featureBits mm6 chainBosTau1Link
+    #   603091864 bases of 2597150411 (23.221%) in intersection
+    featureBits mm5 chainBosTau1Link
+    #   606973993 bases of 2615483787 (23.207%) in intersection
+
+    #	Looking OK, so do the swap
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	-swap `pwd`/DEF > swap.run.out 2>&1 &
+
 
 # BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
     # The procedure for lineage spec business with self is to simply
@@ -2177,6 +2266,17 @@ SEQ2_LEN=$BASE/S2.len
     #	chrY worked in 28 minutes
     ./chain.csh chrX.nib:chrX: chain/chrX.nib:chrX:.chain
     #	chrX worked in 44 minutes
+    #	The chrUn business, in fact any of the chr*_random's shouldn't
+    #	be chained anyway since they aren't contiguous sequence anyhow.
+    #	So, simply leave chrUn out of the chain and net stuff.
+    #	to continue:
+    ssh kk
+    cd /cluster/data/mm6/bed/blastzSelf/axtChain/run
+    para time > run.time
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzSelf
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-continue chainMerge -fileServer eieio `pwd`/DEF > merge.run.out 2>&1 &
 
 # BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
 
@@ -2379,3 +2479,124 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
     netFilter -minGap=10 mm6.monDom1.net | hgLoadNet \
 	-verbose=0 mm6 netMonDom1 stdin
     #	5 minute load time
+    #	continuing 2005-04-05 16:00
+    ssh eieio
+    cd  /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-continue download -fileServer eieio `pwd`/DEF > download.run.out 2>&1 &
+
+    #	And measurments:
+    ../../jkStuff/netChainCheck.sh mm6 mm5 monDom1 > measurements.out 2>&1 &
+
+# BLASTZ FROG Xenopus tropicalis (WORKING - 2005-04-05 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
+    cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
+
+    cat << '_EOF_' > DEF
+# mouse vs. frog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Set up blastz parameters using parameters between chicken and fish,
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: mouse mm6
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro1
+SEQ2_DIR=/iscratch/i/xenTro1/xenTro1.2bit
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzXenTro1.2005_04_05
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/xenTro1/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
+    #	STARTED 2005-04-05 10:30 - new machine serving this filesystem today
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+
+# BLASTZ CHIMP PanTro1 (WORKING - 2005-04-05 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+
+    #	Kate's note about chimp->human alignment:
+    # NOTE: Ran with abridge repeats=0, although SMSK was set
+    # Looked better than running with abridge=1, which had very
+    # chopped-up alignments
+    cat << '_EOF_' > DEF
+# mouse vs. chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+# Specific settings for chimp
+BLASTZ_Y=3400
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/penn/human_chimp.q
+
+# TARGET: Mouse mm5
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_RMSK=/panasas/store/mm6/rmsk
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp panTro1
+SEQ2_DIR=/scratch/chimp/panTro1/nib
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/panTro1/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+    #	STARTED - 2005-04-05 11:08
