@@ -259,7 +259,7 @@ void getTicksToHundreths()
  * under recent Linux's it doesn't. */
 {
 #ifdef CLK_TCK
-    ticksToHundreths = 100.0/CLK_TCK
+    ticksToHundreths = 100.0/CLK_TCK;
 #else
     ticksToHundreths = 100.0/sysconf(_SC_CLK_TCK);
 #endif /* CLK_TCK */
