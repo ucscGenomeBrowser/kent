@@ -125,6 +125,8 @@ We use this to to expand any tracks to full
 position string */
 struct hgPositions *hgp = NULL;
 
+struct hash *zooSpeciesHash = NULL;
+
 struct trackLayout
 /* This structure controls the basic dimensions of display. */
     {
@@ -274,6 +276,7 @@ struct trackGroup
 };
 
 void loadSampleIntoLinkedFeature(struct trackGroup *tg);
+void loadSampleZoo(struct trackGroup *tg);
 
 struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
 
@@ -6969,6 +6972,68 @@ if (dif == 0)
 return dif;
 }
 
+void zooSpeciesHashInit()
+/* Function to init list of zoo species */
+{
+char *name = NULL;
+char *val = NULL;
+
+zooSpeciesHash = hashNew(6);
+
+name = cloneString("Human");
+val = cloneString("1");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Chimpanzee");
+val = cloneString("2");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Baboon");
+val = cloneString("3");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Cat");
+val = cloneString("4");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Dog");
+val = cloneString("5");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Cow");
+val = cloneString("6");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Pig");
+val = cloneString("7");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Rat");
+val = cloneString("8");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Mouse");
+val = cloneString("9");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Chicken");
+val = cloneString("10");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Fugu");
+val = cloneString("11");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Tetraodon");
+val = cloneString("12");
+hashAdd(zooSpeciesHash, name, val);
+name = cloneString("Zebrafish");
+val = cloneString("13");
+hashAdd(zooSpeciesHash, name, val);
+}
+
+int lfZooCmp(const void *va, const void *vb)
+/* Compare based on name, then chromStart, used for
+   sorting sample based tracks. */
+{
+const struct linkedFeatures *a = *((struct linkedFeatures **)va);
+const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+char *aVal = (char*) hashFindVal(zooSpeciesHash, a->name);
+char *bVal = (char*) hashFindVal(zooSpeciesHash, b->name);
+int aV = atoi(aVal);
+int bV = atoi(bVal);
+return aV - bV;
+}
+
 void loadHumMusL(struct trackGroup *tg)
     /* Load humMusL track with 2 zoom levels and one normal level. */
 {
@@ -7044,8 +7109,11 @@ void loadHumMusL(struct trackGroup *tg)
     tg->limitedVisSet = TRUE;
 }
 
-
-
+void zooMethods( struct trackGroup *tg )
+/* Overide the zoo sample type load function to look for zoomed out tracks. */
+{
+   tg->loadItems = loadSampleZoo;
+}
 
 void humMusLMethods( struct trackGroup *tg )
 /* Overide the humMusL load function to look for zoomed out tracks. */
@@ -8947,7 +9015,6 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
-
 void loadSampleIntoLinkedFeature(struct trackGroup *tg)
 /* Convert sample info in window to linked feature. */
 {
@@ -8961,8 +9028,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
 char *where = NULL;
 char query[256];
-
-
 
 /*see if we have a summary table*/
 snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
@@ -8982,7 +9047,7 @@ if(tg->visibility == tvDense)
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    sample = sampleLoad(row+rowOffset);
+    sample = sampleLoad(row + rowOffset);
     lf = lfFromSample(sample);
     slAddHead(&lfList, lf);
     sampleFree(&sample);
@@ -9013,10 +9078,75 @@ if( tg->visibility == tvFull && tgUserDefinedTotalHeight( tg, tvFull ) > maxWigg
     tg->limitedVisSet = TRUE;
     tg->limitedVis = tvDense;
     }
-
-
 }
 
+void loadSampleZoo(struct trackGroup *tg)
+/* Convert sample info in window to linked feature. */
+{
+int maxWiggleTrackHeight = 2500;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
+
+/*see if we have a summary table*/
+snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+//errAbort( "%s", query );
+hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
+
+/* If we're in dense mode and have a summary table load it. */
+if(tg->visibility == tvDense)
+    {
+    if(hasDense != NULL)
+	{
+	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
+	where = cloneString(query);
+	}
+    }
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row + rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+if(where != NULL)
+    freez(&where);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+
+/* sort to bring items with common names to the same line
+but only for tracks with a summary table (with name=shortLabel) in
+dense mode*/
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
+
+// Sort in species phylogenetic order
+slSort(&lfList, lfZooCmp);
+
+tg->items = lfList;
+
+/*turn off full mode if there are too many rows or each row is too
+ * large. A total of maxWiggleTrackHeight is allowed for number of
+ * rows times the rowHeight*/
+if( tg->visibility == tvFull && tgUserDefinedTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+    {
+    tg->limitedVisSet = TRUE;
+    tg->limitedVis = tvDense;
+    }
+}
 
 void loadGenePred(struct trackGroup *tg)
 /* Convert bed info in window to linked feature. */
@@ -9715,6 +9845,7 @@ registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("humMusL", humMusLMethods);
+registerTrackHandler("zoo", zooMethods);
 registerTrackHandler("musHumL", musHumLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
@@ -10151,6 +10282,8 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
+
+zooSpeciesHashInit();
 
 cartHtmlShell("UCSC Genome Browser v15", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
