@@ -512,6 +512,11 @@ void axtMethods(struct track *tg, char *otherDb);
 void repeatMethods(struct track *tg);
 /* Make track for repeats. */
 
+void affyTransfragsMethods(struct track *tg);
+/* Substitute a new load method that filters based on score. Also add
+   a new itemColor() method that draws transfrags that overlap dups
+   and pseudoGenes in a different color. */
+
 struct repeatItem
 /* A repeat track item. */
     {
