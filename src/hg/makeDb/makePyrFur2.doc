@@ -54,6 +54,23 @@ exit; # don't actually run this like a script :)
     # GC percent for 2,000 base windows instead (simply cut and paste
     # ~/kent/src/hg/makeDb/trackDb/trackDb.ra).
 
+# GC 20 BASE WIGGLE TRACK (DONE 8/25)
+
+    mkdir /cluster/data/pyrFur2/bed/gc20Base
+    cd /cluster/data/pyrFur2/bed/gc20Base
+    mkdir wigData20 dataLimits20
+    hgGcPercent -chr=chr1 -file=stdout -win=20 pyrFur2 ../../nib | grep -w GC | \
+    awk '
+{
+    bases = $3 - $2
+    perCent = $5/10.0
+    printf "%d\t%.1f\n", $2+1, perCent
+}' | wigAsciiToBinary -dataSpan=20 -chrom=chr1 \
+	-wibFile=wigData20/gc20Base_1 -name=1 stdin > dataLimits20/chr1
+    hgLoadWiggle pyrFur2 gc20Base wigData20/*.wig
+    mkdir /gbdb/pyrFur2/wib
+    ln -s `pwd`/wigData20/*.wib /gbdb/pyrFur2/wib
+
 # GENBANK PROTEIN-CODING GENES (DONE 01/14/04)
 
     ssh hgwdev
@@ -120,4 +137,5 @@ note' > pyrFur2-params-xra.txt
     hgsql hgFixed < ~/kent/src/hg/lib/expRecord.sql
     echo RENAME TABLE expRecord to llaPfuPrintAExps | hgsql hgFixed
     echo LOAD DATA LOCAL INFILE \'Pfu-arrays.exps\' INTO TABLE llaPfuPrintAExps | hgsql hgFixed
+
 
