@@ -518,6 +518,14 @@ priority 165
 visibility hide
 type maf
 
+track rabbitMaf
+shortLabel Rabbit NISC/2X
+longLabel Rabbit NISC and 2X sequence blastz reciprocal best
+group x
+priority 165
+visibility hide
+type maf
+
 track multiz9way
 shortLabel 9way Multiz
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish/Elephant Multiz Alignments 
@@ -1154,17 +1162,17 @@ visibility hide
 type bed 14 .
 
 
-track scoreMm3X
-shortLabel Mm3X Scored
-longLabel Mm3X Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
+track rabbitScore
+shortLabel Rabbit Scored
+longLabel Rabbit Scored (black=correct,gray=mapped once,red=different bases)
 group x
 priority 200.9
 visibility hide
 type bed 14 .
 
-track scoreMm2X
-shortLabel  Mm2X Scored
-longLabel  Mm2X Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
+track armadilloScore
+shortLabel  Armadillo Scored
+longLabel  Armadillo Scored (black=correct,gray=mapped once,red=different bases)
 group x
 priority 201.9
 visibility hide
