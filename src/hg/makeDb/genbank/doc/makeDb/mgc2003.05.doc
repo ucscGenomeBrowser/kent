@@ -85,6 +85,7 @@ ids[$5] {print $0}
     ./bin/gbDbLoadStep -verbose=1 -initialLoad rn2&
     # this takes hours
 
+==============================================================================
 2003/07/30:
 
     The URL of  the exploratory PCR and full_ORF data are
@@ -98,6 +99,7 @@ ids[$5] {print $0}
     cd mgcTSFullOrfPcr
     ldHgGene -gtf hg15 mgcTSFullOrfPcr *.gtf
 
+==============================================================================
 2003/08/05:
    update twinscan PCR tracks
    cd /usr/local/apache/htdocs/mgc/twinscanPcr
@@ -119,3 +121,19 @@ ids[$5] {print $0}
 
    cd mgcTSFullOrfPcr
    ldHgGene -gtf hg15 mgcTSFullOrfPcr *.gtf
+==============================================================================
+2003/08/27: load updated twinscan PCR picks from Michael Brent
+
+        cd /usr/local/apache/htdocs/mgc/twinscanPcr
+        mkdir 
+
+        mkdir mgcTSExpPcr
+        cd mgcTSExpPcr
+        wget -nv -r --no-parent --accept='.gtf'  http://genes.cs.wustl.edu/predictions/MGC/human/8-27-2003/exploratory/chr_gtf
+        move to current directory and remove junk
+        ldHgGene -gtf hg15 mgcTSExpPcr *.gtf
+
+        cd mgcTSFullOrfPcr
+        wget -nv -r --no-parent --accept='.gtf'  http://genes.cs.wustl.edu/predictions/MGC/human/8-27-2003/full_ORF/chr_gtf
+        move to current directory and remove junk
+        ldHgGene -gtf hg15 mgcTSFullOrfPcr *.gtf
