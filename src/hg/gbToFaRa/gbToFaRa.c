@@ -56,7 +56,8 @@ struct gbField
     char *valBuf;               /* Buffer for value. */
     char *val;                  /* Value itself (may be null if not read). */
     boolean multiLine;          /* True if can be multiple line. */
-	boolean toLower;			/* Force to lower case. */
+    boolean endsAtSlash;	/* True if multiple line query broken by '/' */
+    boolean toLower;			/* Force to lower case. */
 
     char *readName;               /* GenBank's name for field. */
     char *writeName;               /* Jim's name for field.  If null field not saved. */
@@ -180,7 +181,8 @@ slAddTail(&gbs, c0);
         mapField = c2 = newGbField("/map", "map", TRUE, FALSE, 128);         
         slAddTail(&c1->children, c2);
 
-    c1 = newGbField("CDS", "cds", FALSE, FALSE, 128);
+    c1 = newGbField("CDS", "cds", FALSE, TRUE, 128);
+    c1->endsAtSlash = TRUE;
     slAddTail(&c0->children, c1);
         c2 = newGbField("/gene", "gen", TRUE, FALSE, 128);
         slAddTail(&c1->children, c2);
@@ -386,11 +388,14 @@ for (;;)
         line += 1;
         indentCount += 1;
         }
-    if (inSlashSub && line[0] == '/')
+    if (line[0] == '/')
         {
-        lineFileReuse(lf);
-        break;
-        }
+	if (gbf->endsAtSlash || inSlashSub)
+	    {
+	    lineFileReuse(lf);
+	    break;
+	    }
+	}
     if (indentCount < subIndent)
         {
         lineFileReuse(lf);
@@ -1035,7 +1040,7 @@ if (dir == NULL)
 return dir;
 }
 
-static char * replaceChars(const char *src, char *origList, char *newList)
+static char * replaceMultipleChars(char *src, char *origList, char *newList)
 /*
 Utility function to replace all occurrences of the 
 original chars with their respective new ones in a string.
@@ -1416,7 +1421,7 @@ while (readGbInfo(lf))
                     else
                         {
                         /* Replace illegal directory chars */
-                        orgDir = replaceChars(org, " ()'/", "_###~");
+                        orgDir = replaceMultipleChars(org, " ()'/", "_###~");
                         }
             
                     if (!hashLookup(orgHash, org))
