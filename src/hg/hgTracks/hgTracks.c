@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.511 2003/05/08 22:47:44 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.512 2003/05/08 23:19:06 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2979,7 +2979,18 @@ if (refAcc != NULL)
 	}
     }
 
-/* if a corresponding SWISS-PROT entry exists, set it to dark blue */
+/* if a corresponding SWISS-PROT entry exists, set it
+	    	if (startsWith("Provisional", row[0]))
+	    	    {
+	    	    lighter.r = (6*normal->r + 4*255) / 10;
+	    	    lighter.g = (6*normal->g + 4*255) / 10;
+	    	    lighter.b = (6*normal->b + 4*255) / 10;
+	    	    col = vgFindColorIx(vg, lighter.r, lighter.g, lighter.b);
+	    	    }
+		}	   
+	    }
+	sqlFreeResult(&sr);
+	} to dark blue */
 sprintf(cond_str, "name='%s'", (char *)(lf->name));
 proteinID= sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL)
@@ -10142,9 +10153,11 @@ registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
-registerTrackHandler("mgcNcbiPicks", estMethods);
-registerTrackHandler("mgcNcbiSplicedPicks", estMethods);
-registerTrackHandler("mgcUcscPicks", estMethods);
+registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
+registerTrackHandler("mgcFailedEst", estMethods);
+registerTrackHandler("mgcPickedEst", estMethods);
+registerTrackHandler("mgcUnpickedEst", estMethods);
+
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
