@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.427 2003/06/09 15:40:48 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.428 2003/06/10 16:52:23 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2084,10 +2084,20 @@ char *repMasking = cgiUsualString("hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
 char *pos = NULL;
 
+    
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
 
 cartWebStart(cart, "Extended DNA Case/Color");
+
+if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+if (winEnd - winStart > 1000000)
+    {
+    printf("Please zoom in to 1 million bases or less to color the DNA");
+    return;
+    }
+
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
 puts(
      "Use this page to highlight features in genomic DNA text. "
@@ -2272,6 +2282,7 @@ if (sameString(action, "Extended case/color options"))
     doGetDnaExtended1();
     return;
     }
+
 
 puts("<PRE>");
 if (tbl[0] == 0)
