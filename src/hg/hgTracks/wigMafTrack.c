@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.7 2004/03/09 02:03:21 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.8 2004/03/10 22:17:20 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -168,6 +168,24 @@ static int pairwiseWigHeight(struct track *wigTrack)
     return max(wigTotalHeight(wigTrack, tvFull)/3 - 1, tl.fontHeight);
 }
 
+static char *getWigTablename(char *species, char *suffix)
+/* generate tablename for wiggle pairwise: "<species>_<table>_wig" */
+{
+char table[64];
+
+safef(table, sizeof(table), "%s_%s_wig", species, suffix);
+return cloneString(table);
+}
+
+static char *getMafTablename(char *species, char *suffix)
+/* generate tablename for wiggle maf:  "<species>_<table>" */
+{
+char table[64];
+
+safef(table, sizeof(table), "%s_%s", species, suffix);
+return cloneString(table);
+}
+
 static struct wigMafItem *loadPairwiseItems(struct track *track)
 /* Make up items for modes where pairwise data are shown.
    First an item for the score wiggle, then a pairwise item
@@ -180,13 +198,15 @@ char buf[64];
 char *otherOrganism;
 struct track *wigTrack = track->subtracks;
 int smallWigHeight = pairwiseWigHeight(wigTrack);
+char *suffix;
 
 if (wigTrack != NULL)
     {
     mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
     slAddHead(&miList, mi);
     }
-if (trackDbSetting(track->tdb, "pairwise") != NULL)
+suffix = trackDbSetting(track->tdb, "pairwise");
+if (suffix != NULL);
 
 /* Make up items for other organisms by scanning through
  * all mafs and looking at database prefix to source. */
@@ -220,14 +240,21 @@ if (trackDbSetting(track->tdb, "pairwise") != NULL)
                 mi->name = 
                     (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
                 tolowers(mi->name);
-                if (track->visibility == tvFull)
-                    mi->height = smallWigHeight;
-                else
-                    mi->height = tl.fontHeight;
+
 		hashAdd(hash, mi->name, mi);
 		}
 	    }
 	}
+    if (track->visibility == tvFull)
+        /* check for existence of a wiggle table for first item.
+         * if missing, revert to pack mode */
+        if ((el = hashLookup(hash, species[0])) != NULL)
+            {
+            mi = (struct wigMafItem *)el->val;
+            if (!hTableExists(getWigTablename(mi->name, suffix)))
+                track->visibility = tvPack;
+            }
+
     /* build item list in species order */
     for (i = 0; i < speciesCt; i++)
         {
@@ -236,8 +263,16 @@ if (trackDbSetting(track->tdb, "pairwise") != NULL)
         /* skip this species if UI checkbox was unchecked */
         if (!cartUsualBoolean(cart, option, TRUE))
             continue;
+
         if ((el = hashLookup(hash, species[i])) != NULL)
-            slAddHead(&miList, (struct wigMafItem *)el->val);
+            {
+            mi = (struct wigMafItem *)el->val;
+            if (track->visibility == tvFull)
+                mi->height = smallWigHeight;
+            else
+                mi->height = tl.fontHeight;
+            slAddHead(&miList, mi);
+            }
         }
     hashFree(&hash);
     }
@@ -436,7 +471,7 @@ struct mafAli *mafList;
 struct sqlConnection *conn;
 boolean ret = FALSE;
 char *suffix;
-char table[64];
+char *tablename;
 Color newColor;
 struct track *wigTrack = track->subtracks;
 int wigTrackHeight = pairwiseWigHeight(wigTrack);
@@ -449,9 +484,12 @@ conn = hAllocConn();
 
 /* obtain suffix for pairwise wiggle tables */
 suffix = trackDbSetting(track->tdb, "pairwise");
+if (suffix == NULL)
+    return FALSE;
+
 if (vis == tvFull)
     {
-    if (suffix == NULL || wigTrack == NULL)
+    if (wigTrack == NULL)
         return FALSE;
     /* swap colors for pairwise wiggles */
     newColor = wigTrack->ixColor;
@@ -466,11 +504,11 @@ for (mi = miList; mi != NULL; mi = mi->next)
         {
         /* get wiggle table, of pairwise 
            for example, percent identity */
-        safef(table, sizeof(table), "%s_%s_wig", mi->name, suffix);
-        if (!hTableExistsDb(database, table))
+        tablename = getWigTablename(mi->name, suffix);
+        if (!hTableExists(tablename))
             continue;
         /* reuse the wigTrack for pairwise tables */
-        wigTrack->mapName = table;
+        wigTrack->mapName = tablename;
         wigTrack->loadItems(wigTrack);
         wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
                                                             wigTrackHeight - 1;
@@ -488,11 +526,10 @@ for (mi = miList; mi != NULL; mi = mi->next)
         {
         /* pack */
         /* get maf table, containing pairwise alignments for this organism */
-        safef(table, sizeof(table), "%s_%s", mi->name, suffix);
-        //safef(table, sizeof(table), "%s_%s", mi->name, track->mapName);
-        if (!hTableExistsDb(database, table))
+        tablename = getMafTablename(mi->name, suffix);
+        if (!hTableExists(tablename))
             continue;
-        mafList = wigMafLoadInRegion(conn, table, chromName, 
+        mafList = wigMafLoadInRegion(conn, tablename, chromName, 
                                     seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
         drawDenseMaf(mafList, mi->height, seqStart, seqEnd, 
@@ -732,7 +769,7 @@ track->itemHeight = wigMafItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
-track->canPack = TRUE;
+//track->canPack = TRUE;
 //track->drawLeftLabels = wigMafLeftLabels;
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
