@@ -1377,7 +1377,7 @@ o - Load Ensembl peptides:
     liftUp -type=.gff pseudo.gff hg12.lft Chr22.3.lx.pseudogene.gff
     ldHgGene hg12 sanger22pseudo pseudo.gff
 
-LOAD SANGER22 GENES 
+LOAD SANGER22 GENES  DONE 9/27/02 by MATT
       cd ~/oo/bed
       mkdir sanger22
       cd sanger22
