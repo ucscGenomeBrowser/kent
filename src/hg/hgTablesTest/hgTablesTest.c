@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.22 2004/11/10 02:12:06 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.23 2004/11/10 04:41:16 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -86,6 +86,7 @@ enum tablesTestInfoIx {
    ntiiTable,
    ntiiTotalCount,
 };
+
 
 char *tablesTestInfoTypes[] =
    { "type", "organism", "db", "group", "track", "table"};
@@ -391,11 +392,7 @@ if (outPage != NULL)
     	hgtaDoGetCustomTrackTb, "submit");
     if (outPage != NULL)
 	{
-	if (outPage->forms == NULL)
-	    {
-	    errAbort("Custom track submission didn't go back to main page");
-	    }
-	else
+	if (outPage->forms != NULL)
 	    {
 	    groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
 	    if (!slNameInList(groupVar->values, "user"))
