@@ -147,6 +147,7 @@ void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable);
 /* Display detailed info on a transcriptional regulatory code item. */
 
 void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
-	char *codeTable, char *motifTable);
+	char *codeTable, char *motifTable, 
+	char *tfToConditionTable, char *conditionTable);
 /* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
 

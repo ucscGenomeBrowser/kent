@@ -14,6 +14,7 @@
 #include "hgc.h"
 #include "genePred.h"
 #include "dnaMotif.h"
+#include "growthCondition.h"
 #include "transRegCode.h"
 #include "transRegCodeProbe.h"
 
@@ -319,53 +320,50 @@ const struct tfData *b = *((struct tfData **)vb);
 return strcmp(a->name, b->name);
 }
 
-static boolean tfBindAtLevel(struct tfData *tf, double minVal, double maxVal)
-/* Return TRUE if transcription factor binding between minVal and maxVal
- * for any condition. */
+static void ipPrintInRange(struct tfCond *condList, 
+	double minVal, double maxVal, struct hash *boundHash)
+/* Print growth conditions that bind within range of E values. 
+ * Add these to boundHash. */
 {
 struct tfCond *cond;
-for (cond = tf->conditionList; cond != NULL; cond = cond->next)
+boolean isFirst = TRUE;
+
+printf("<TD>");
+for (cond = condList; cond != NULL; cond = cond->next)
     {
     if (minVal <= cond->binding && cond->binding < maxVal)
-        return TRUE;
+	{
+	if (isFirst)
+	    isFirst = FALSE;
+	else
+	    printf(", ");
+	printf("%s", cond->name);
+	hashAdd(boundHash, cond->name, NULL);
+	}
     }
-return FALSE;
+printf("</TD>");
 }
 
-static boolean anyTfBindAtLevel(struct tfData *tfList, double minVal, double maxVal)
-/* Return true if some item in tfList binds at level. */
-{
-struct tfData *tf;
-for (tf = tfList; tf != NULL; tf = tf->next)
-    {
-    if (tfBindAtLevel(tf, minVal, maxVal))
-        return TRUE;
-    }
-return FALSE;
-}
-
-static void tfBindLevelSection(char *label, double minVal, double maxVal, 
-	struct tfData *tfList, struct sqlConnection *conn, char *motifTable)
+static void tfBindLevelSection(struct tfData *tfList, struct sqlConnection *conn, 
+	char *motifTable, char *tfToConditionTable)
 /* Print info on individual transcription factors that bind
  * with e-val between minVal and maxVal. */
 {
 struct tfData  *tf;
 struct transRegCode *trc;
 
-/* Make sure we have something to say first. */
-if (!anyTfBindAtLevel(tfList, minVal, maxVal))
-     return;
-
-webNewSection("Experiments with %s Enrichment After IP", label);
+webNewSection("Transcription Factors Showing IP Over this Probe ");
 hTableStart();
 printf("<TR>");
 colLabel("Transcription", 1);
-colLabel("Growth", 1);
+colLabel("Growth Condition", 3);
 colLabel("Motif Information", 3);
 printf("</TR>\n");
 printf("<TR>");
 colLabel("Factor", 1);
-colLabel("Conditions", 1);
+colLabel("Good IP (P<0.001)", 1);
+colLabel("Weak IP (P<0.005)", 1);
+colLabel("No IP (P>0.005)", 1);
 colLabel("Hits", 1);
 colLabel("Scores", 1);
 colLabel("Conservation (2 max)", 1);
@@ -373,68 +371,105 @@ printf("</TR>\n");
 
 for (tf = tfList; tf != NULL; tf = tf->next)
     {
-    if (tfBindAtLevel(tf, minVal, maxVal))
+    struct hash *boundHash = newHash(8);
+    slSort(&tf->conditionList, tfCondCmpName);
+    printf("<TR>");
+
+    /* Print transcription name. */
+    printf("<TD>");
+    sacCerHgGeneLinkName(conn, tf->name);
+    printf("</TD>");
+
+    /* Print stong and weak growth conditions. */
+    ipPrintInRange(tf->conditionList, 0.0, 0.002, boundHash);
+    ipPrintInRange(tf->conditionList, 0.002, 0.006, boundHash);
+
+    /* Grab list of all conditions tested from database and
+     * print out ones not in strong or weak as none. */
+         {
+	 char query[256], **row;
+	 struct sqlResult *sr;
+	 boolean isFirst = TRUE;
+	 safef(query, sizeof(query), 
+	 	"select growthCondition from %s where name='%s'",
+		tfToConditionTable, tf->name);
+	 sr = sqlGetResult(conn, query);
+	 printf("<TD>");
+	 while ((row = sqlNextRow(sr)) != NULL)
+	     {
+	     if (!hashLookup(boundHash, row[0]))
+	         {
+		 if (isFirst)
+		     isFirst = FALSE;
+		 else
+		     printf(", ");
+		 printf("%s", row[0]);
+		 }
+	     }
+	 sqlFreeResult(&sr);
+	 printf("</TD>");
+	 }
+
+
+    /* Print motif info. */
+    if (tf->trcList == NULL)
+	printf("<TD>0</TD><TD>n/a</TD><TD>n/a</TD>\n");
+    else
 	{
-	struct tfCond *cond;
-	boolean isFirst = TRUE;
-	printf("<TR>");
-
-	/* Print transcription factor and growth conditions. */
+	printf("<TD>%d</TD>", slCount(tf->trcList));
+	/* Print scores. */
 	printf("<TD>");
-	sacCerHgGeneLinkName(conn, tf->name);
-	printf("</TD>");
-	printf("<TD>");
-	slSort(&tf->conditionList, tfCondCmpName);
-	for (cond = tf->conditionList; cond != NULL; cond = cond->next)
+	for (trc = tf->trcList; trc != NULL; trc = trc->next)
 	    {
-	    if (minVal <= cond->binding && cond->binding < maxVal)
-		{
-		if (isFirst)
-		    isFirst = FALSE;
-		else
-		    printf(", ");
-		printf("%s", cond->name);
-		}
+	    double score;
+	    if (trc != tf->trcList)
+		printf(", ");
+	    score = motifScoreHere(
+		trc->chrom, trc->chromStart, trc->chromEnd,
+		trc->name, motifTable);
+	    transRegCodeAnchor(trc);
+	    printf("%3.1f</A>", score);
+	    }
+	printf("</TD><TD>");
+	for (trc = tf->trcList; trc != NULL; trc = trc->next)
+	    {
+	    if (trc != tf->trcList)
+		printf(", ");
+	    printf("%d", trc->consSpecies);
 	    }
 	printf("</TD>");
-
-
-	/* Print motif info. */
-	if (tf->trcList == NULL)
-	    printf("<TD>0</TD><TD>n/a</TD><TD>n/a</TD>\n");
-	else
-	    {
-	    printf("<TD>%d</TD>", slCount(tf->trcList));
-	    /* Print scores. */
-	    printf("<TD>");
-	    for (trc = tf->trcList; trc != NULL; trc = trc->next)
-		{
-		double score;
-		if (trc != tf->trcList)
-		    printf(", ");
-		score = motifScoreHere(
-		    trc->chrom, trc->chromStart, trc->chromEnd,
-		    trc->name, motifTable);
-		transRegCodeAnchor(trc);
-		printf("%3.1f</A>", score);
-		}
-	    printf("</TD><TD>");
-	    for (trc = tf->trcList; trc != NULL; trc = trc->next)
-		{
-		if (trc != tf->trcList)
-		    printf(", ");
-		printf("%d", trc->consSpecies);
-		}
-	    printf("</TD>");
-	    }
-	printf("</TR>\n");
 	}
+    printf("</TR>\n");
+    hashFree(&boundHash);
     }
 hTableEnd();
 }
 
+void growthConditionSection(struct sqlConnection *conn, char *conditionTable)
+/* Print out growth condition information. */
+{
+struct sqlResult *sr;
+char query[256], **row;
+webNewSection("Description of Growth Conditions");
+safef(query, sizeof(query), "select * from %s order by name", conditionTable);
+sr = sqlGetResult(conn, query);
+printf("<UL>");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct growthCondition gc;
+    growthConditionStaticLoad(row, &gc);
+    printf("<LI>");
+    printf("<A NAME=\"GC_%s\"></A>", gc.name);
+    printf("%s - <I>%s</I> %s\n",  gc.name, gc.shortLabel, gc.longLabel);
+    }
+printf("</UL>");
+sqlFreeResult(&sr);
+}
+
 void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
-	char *codeTable, char *motifTable)
+	char *codeTable, char *motifTable, 
+	char *tfToConditionTable, char *conditionTable)
+/* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
 /* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
 {
 char query[256];
@@ -507,10 +542,10 @@ if (probe != NULL)
 	printf("No significant immunoprecipitation.");
     else
 	{
-	tfBindLevelSection("Good (P 0.001)", 0.000, 0.004, tfList, conn, motifTable);
-	tfBindLevelSection("Weak (P 0.005)", 0.004, 0.010, tfList, conn, motifTable);
+	tfBindLevelSection(tfList, conn, motifTable, tfToConditionTable);
 	}
     transRegCodeProbeFree(&probe);
+    growthConditionSection(conn, conditionTable);
     }
 hFreeConn(&conn);
 }
