@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.13 2003/06/21 16:49:02 kent Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.14 2003/09/24 02:28:30 kent Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -129,7 +129,13 @@ struct sqlConnection *conn = sqlConnect(hgGetDb());
 if (!initialized)
     {
     if (sqlMaybeMakeTable(conn, "history", historyCreate))
-        sqlUpdate(conn, "INSERT into history VALUES(NULL,0,10,USER(),'New',NOW())");
+	{
+	char query[256];
+	safef(query, sizeof(query),
+		"INSERT into history VALUES(NULL,0,10,'%s','New',NOW())",
+		getUser());
+        sqlUpdate(conn, query);
+	}
     initialized = TRUE;
     }
 
@@ -146,8 +152,8 @@ struct dyString *query = newDyString(256);
 va_list args;
 va_start(args, comment);
 
-dyStringPrintf(query, "INSERT into history VALUES(NULL,%d,%d,USER(),\"", 
-	startUpdateId, endUpdateId);
+dyStringPrintf(query, "INSERT into history VALUES(NULL,%d,%d,'%s',\"", 
+	startUpdateId, endUpdateId, getUser());
 dyStringVaPrintf(query, comment, args);
 dyStringAppend(query, "\",NOW())");
 sqlUpdate(conn,query->string);
