@@ -46,7 +46,7 @@ for (;;)
         for (;;)
             {
             c = *s;
-            if (isalnum(c) || c == ':')
+            if (isalnum(c) || c == ':' || c == '_')
                 ++s;
             else if (c == '?' || (wildAst && c == '*'))
                 {
@@ -149,6 +149,16 @@ for (;;)
             type = kxtLT;
         end = s;
         }
+    else if (c == '.')
+        {
+        type = kxtDot;
+        end = s;
+	}
+    else if (ispunct(c))
+        {
+        type = kxtPunct;
+        end = s;
+	}
     else
         {
         errAbort("Unrecognized character %c", c);
