@@ -82,8 +82,9 @@
 #include "encode.h"
 #include "variation.h"
 #include "estOrientInfo.h"
+#include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.715 2004/04/22 02:30:04 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.716 2004/04/26 17:06:25 galt Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8319,6 +8320,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v61", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
