@@ -217,6 +217,23 @@ visibility hide
 color 12,12,120
 type bed 6
 
+track spliceSitesPValues
+shortLabel Splice Sites PValues
+longLabel Splice Sites PValues
+priority 452
+visibility hide
+color 12,12,120
+type bed 6
+
+
+track spliceSitesRatios
+shortLabel Splice Sites Ratios
+longLabel Slice sites Likelihood Ratios
+priority 453
+visibility hide
+color 12,12,120
+type bed 6
+
 track footPrinterHMR
 shortLabel FootPrinterHMR
 longlabel FootPrinter Conservation Score, Human/Mouse/Rat
@@ -388,3 +405,19 @@ priority 550
 visibility hide
 color 170,100,0
 type bed 12 .
+
+track rodentsGaps
+shortLabel rodentGaps 
+longLabel rodentGaps
+priority 560
+visibility hide
+color 170,100,0
+type bed 4 .
+
+track ACGaps
+shortLabel ACGaps 
+longLabel ACGaps
+priority 570
+visibility hide
+color 170,100,0
+type bed 4 .
