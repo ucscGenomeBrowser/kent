@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.88 2003/09/25 01:12:29 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.89 2003/09/25 03:04:19 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1383,7 +1383,7 @@ void doMainDisplay(struct sqlConnection *conn,
 {
 char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", genome);
-makeTitle(buf, "hgNear.html");
+makeTitle(buf, "hgNearHelp.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 controlPanel(curGeneId, ord, ordList);
