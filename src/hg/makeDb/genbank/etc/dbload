@@ -19,7 +19,7 @@ set -e
 trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
 exec </dev/null
 
-maxExtFileUpdate=50000000
+maxExtFileUpdate=10000000
 
 # parse command line
 inclEsts=NO
