@@ -190,6 +190,9 @@ boolean hTableExists2(char *table);
 boolean hTableExistsDb(char *db, char *table);
 /* Return TRUE if a table exists in db. */
 
+boolean hTableOrSplitExists(char *table);
+/* Return TRUE if table (or a chrN_table) exists in database. */
+
 boolean hTableOrSplitExistsDb(char *db, char *table);
 /* Return TRUE if table (or a chrN_table) exists in db. */
 
@@ -392,6 +395,9 @@ int hFieldIndex(char *table, char *field)
 
 boolean hHasField(char *table, char *field);
 /* Return TRUE if table has field */
+
+boolean hFieldHasIndex(char *table, char *field);
+/* Return TRUE if a SQL index exists for table.field. */
 
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],

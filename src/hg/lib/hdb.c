@@ -28,7 +28,7 @@
 #include "ra.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.173 2004/04/06 21:15:33 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.174 2004/04/06 23:26:29 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -587,6 +587,12 @@ if (! exists)
     }
 hFreeOrDisconnect(&conn);
 return exists;
+}
+
+boolean hTableOrSplitExists(char *table)
+/* Return TRUE if a table exists in database. */
+{
+return(hTableOrSplitExistsDb(hGetDb(), table));
 }
 
 void hParseTableName(char *table, char trackName[128], char chrom[32])
@@ -1850,6 +1856,36 @@ boolean hHasField(char *table, char *field)
 /* Return TRUE if table has field */
 {
 return hFieldIndex(table, field) >= 0;
+}
+
+boolean hFieldHasIndexDb(char *db, char *table, char *field)
+/* Return TRUE if a SQL index exists for table.field. */
+{
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlResult *sr = NULL;
+char **row = NULL;
+boolean gotIndex = FALSE;
+char query[512];
+
+safef(query, sizeof(query), "show index from %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[4], field))
+	{
+	gotIndex = TRUE;
+	break;
+	}
+    }
+sqlFreeResult(&sr);
+hFreeOrDisconnect(&conn);
+return(gotIndex);
+}
+
+boolean hFieldHasIndex(char *table, char *field)
+/* Return TRUE if a SQL index exists for table.field. */
+{
+return(hFieldHasIndexDb(hGetDb(), table, field));
 }
 
 boolean hFindBed12FieldsAndBinDb(char *db, char *table, 
