@@ -13,6 +13,7 @@
 #include "jksql.h"
 #include "chain.h"
 #include "chainDb.h"
+#include "hdb.h"
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
@@ -135,4 +136,29 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+void chainDbAddBlocks(struct chain *chain, char *track, struct sqlConnection *conn)
+/* Add blocks to chain header. */
+{
+struct dyString *query = newDyString(1024);
+struct sqlResult *sr = NULL;
+char **row;
+struct boxIn *b;
+
+dyStringPrintf(query, "select tStart,tEnd,qStart from %s_%sLink where chainId = %d",
+	chain->tName, track, chain->id);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(b);
+    b->tStart = sqlUnsigned(row[0]);
+    b->tEnd = sqlUnsigned(row[1]);
+    b->qStart = sqlUnsigned(row[2]);
+    b->qEnd = b->qStart + (b->tEnd - b->tStart);
+    slAddHead(&chain->blockList, b);
+    }
+slReverse(&chain->blockList);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+}
 

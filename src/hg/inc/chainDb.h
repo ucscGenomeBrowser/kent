@@ -42,5 +42,8 @@ void chainHeadOutput(struct chain *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+void chainDbAddBlocks(struct chain *chain, char *track, struct sqlConnection *conn);
+/* Add blocks to chain header. */
+
 #endif /* CHAINDB_H */
 
