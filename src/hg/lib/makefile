@@ -24,7 +24,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
     hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o \
     jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
     jksql.o knownInfo.o knownMore.o lfs.o \
-    mapSts.o mcnBreakpoints.o mouseSyn.o mouseOrtho.o \
+    mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
     qaSeq.o recombRate.o refLink.o riken.o rmskOut.o \
     rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
