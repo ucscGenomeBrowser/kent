@@ -502,22 +502,6 @@ altColor 0,160,0
 visibility hide
 type sample
 
-track snpNih
-shortLabel Overlap SNPs
-longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
-group varRep
-priority 144
-visibility hide
-type bed 4 .
-
-track snpTsc
-shortLabel Random SNPs
-longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
-group varRep
-priority 145
-visibility hide
-type bed 4 .
-
 track perlegen
 shortLabel Haplotype Blocks
 longLabel Perlegen Common High-Resolution Haplotype Blocks

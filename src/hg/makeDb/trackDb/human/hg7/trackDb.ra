@@ -74,22 +74,6 @@ private on
 chromosomes chr22,
 type bed 6 .
 
-track snpNih
-shortLabel Overlap SNPs
-longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
-group varRep
-priority 144
-visibility hide
-type bed 4 .
-
-track snpTsc
-shortLabel Random SNPs
-longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
-group varRep
-priority 145
-visibility hide
-type bed 4 .
-
 track psu
 shortLabel All mRNA  
 longLabel All mRNA Alignments (Human & Non-human not just best matches)
