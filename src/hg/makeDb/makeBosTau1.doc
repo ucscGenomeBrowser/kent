@@ -594,7 +594,11 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/axtToMaf $f /cluster/data/hg17/chrom.sizes /cluster/data/bosTau1/chrom.sizes mafNet/$c.maf -tPrefix=hg17. -qPrefix=bosTau1.
   end
 
-
+    # TODO: Load the nets into database 
+    # skipping netClass because of out of memory
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/blastz/axtChain
+    /cluster/bin/i386/netFilter -minGap=10 hg17.net | /cluster/bin/i386/hgLoadNet hg17 netBosTau1 stdin
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
     ssh kksilo
