@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.200 2004/07/22 23:09:54 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.201 2004/07/23 04:45:41 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2422,8 +2422,10 @@ else if (hti->strandField[0] != 0)
     return 6;
 else if (hti->scoreField[0] != 0)
     return 5;
-else
+else if (hti->nameField[0] != 0)
     return 4;
+else
+    return 3;
 }
 
 
