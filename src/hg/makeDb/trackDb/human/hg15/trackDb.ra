@@ -308,6 +308,16 @@ color 0,100,0
 altColor 255,240,200
 type bed 5 .
 
+track bacendsCow
+shortLabel Cow BAC Ends
+longLabel Cow BAC Ends (BLASTn)
+group compGeno
+priority 179
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 .
+
 track jkDuplicon
 shortLabel JK Duplicon
 longLabel Duplicated Regions of $Organism Genome Shaded by % ID
