@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.11 2003/06/11 03:24:47 kent Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.12 2003/06/13 00:29:25 kent Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -154,13 +154,10 @@ sqlUpdate(conn,query->string);
 sqlDisconnect(pConn);
 }
 
-static void getTabFile(char *tmpDir, char *tableName, char *path)
+static void getTabFile(char *tmpDir, char *tableName, char path[PATH_LEN])
 /* generate path to tab file */
 {
-strcpy(path, tmpDir);
-strcat(path, "/");
-strcat(path, tableName);
-strcat(path, ".tab");
+safef(path, PATH_LEN, "%s/%s.tab", tmpDir, tableName);
 }
 
 FILE *hgCreateTabFile(char *tmpDir, char *tableName)
@@ -186,7 +183,7 @@ void hgRemoveTabFile(char *tmpDir, char *tableName)
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
-if (remove(path < 0))
+if (remove(path) != -1)
     errnoAbort("Couldn't remove %s", path);
 }
 
