@@ -8,7 +8,12 @@
 #include "hgRelate.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.1 2004/12/08 06:51:02 markd Exp $";
+/*
+ * Note: need to keep in-sync with spPsiBlast.as, however the generated struct
+ * is not used due to a different in-memory representation.
+ */
+
+static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.2 2005/01/08 03:25:29 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,7 +56,7 @@ errAbort(
   "\n"
   "Load a file in the format:\n"
   "   Query= spId comment\n"
-  "      bitScore eVal hitSpId\n"
+  "      bitScore eValue hitSpId\n"
   "      ...\n"
   "   ...\n"
   "\n"
@@ -64,7 +69,7 @@ char createString[] =
     "CREATE TABLE %s (\n"
     "    kgId1 varchar(255) not null,	# known genes ids proteins\n"
     "    kgId2 varchar(255) not null,\n"
-    "    eval float not null,	# best e-value\n"
+    "    eValue float not null,	# best e-value\n"
     "              #Indices\n"
     "    INDEX(kgId1(12))\n"
     ");\n";
@@ -93,7 +98,7 @@ struct pairEval
     struct pairEval *next;
     struct kgEntry *kg1Entry;   /* pointers back to each entry */
     struct kgEntry *kg2Entry;
-    float eVal;   /* best e-value for the pair */
+    float eValue;   /* best e-value for the pair */
 };
 
 struct kgEntry *kgEntryAdd(struct hashEl* kgHel, struct pairEval *pairEval)
@@ -108,13 +113,13 @@ return kgEntry;
 }
 
 void pairEvalAdd(struct hashEl* kg1Hel, struct hashEl* kg2Hel, 
-                 float eVal)
+                 float eValue)
 /* add a new pairEval object to the hash */
 {
 struct pairEval *pairEval;
 
 lmAllocVar(gPairEvalHash->lm, pairEval);
-pairEval->eVal = eVal;
+pairEval->eValue = eValue;
 slAddHead(&gPairEvalList, pairEval);
 
 /* link both kgId objects in struct */
@@ -142,7 +147,7 @@ for (entry = queryHel->val; entry != NULL; entry = entry->next)
 return NULL;
 }
 
-void pairEvalSave(char *queryId, char *targetId, float eVal)
+void pairEvalSave(char *queryId, char *targetId, float eValue)
 /* save a bi-directional e-value for a query/target pair */
 {
 struct hashEl *queryHel = hashStore(gPairEvalHash, queryId);
@@ -150,11 +155,11 @@ struct hashEl *targetHel = hashStore(gPairEvalHash, targetId);
 struct pairEval *pairEval = pairEvalFind(queryHel, targetHel);
 if (pairEval != NULL)
     {
-    if (pairEval->eVal < eVal)
-        pairEval->eVal = eVal;
+    if (pairEval->eValue < eValue)
+        pairEval->eValue = eValue;
     }
 else
-    pairEvalAdd(queryHel, targetHel, eVal);
+    pairEvalAdd(queryHel, targetHel, eValue);
 }
 
 #define MAX_QUERY_ID  256 /* maximum size of an id + 1 */
@@ -180,7 +185,7 @@ safef(querySpId, MAX_QUERY_ID, "%s", row[1]);
 return TRUE;
 }
 
-char *readHit(struct lineFile* inLf, float *eValPtr)
+char *readHit(struct lineFile* inLf, float *eValuePtr)
 /* read the next hit for the current query, return NULL if
  * end of hits for query. */
 {
@@ -199,12 +204,12 @@ if (startsWith("Query=", line))
 nCols = chopByWhite(line, row, ArraySize(row));
 if (nCols < 3)
     lineFileExpectAtLeast(inLf, 3, nCols);
-*eValPtr = sqlFloat(row[1]);
+*eValuePtr = sqlFloat(row[1]);
 return row[2];  /* memory is in lineFile buffer */
 }
 
 void processQueryHit(struct lineFile* inLf, struct slName *queryKgIds,
-                     char *targetSpId, float eVal)
+                     char *targetSpId, float eValue)
 /* Process a query hit, save in table if it can be mapped to a known gene id */
 {
 struct slName *targetKgIds = spKgMapGet(gSpKgMap, targetSpId);
@@ -213,7 +218,7 @@ struct slName *tKgId, *qKgId;
 for (qKgId = queryKgIds; qKgId != NULL; qKgId = qKgId->next)
     {
     for (tKgId = targetKgIds; tKgId != NULL; tKgId = tKgId->next)
-        pairEvalSave(qKgId->name, tKgId->name, eVal);
+        pairEvalSave(qKgId->name, tKgId->name, eValue);
     }
 }
 
@@ -222,16 +227,16 @@ boolean readQuery(struct lineFile* inLf)
 {
 char querySpId[MAX_QUERY_ID], *targetSpId;
 struct slName *queryKgIds;
-float eVal;
+float eValue;
 
 if (!readQueryHeader(inLf, querySpId))
     return FALSE; /* eof */
 queryKgIds = spKgMapGet(gSpKgMap, querySpId);
 
-while ((targetSpId = readHit(inLf, &eVal)) != NULL)
+while ((targetSpId = readHit(inLf, &eValue)) != NULL)
     {
-    if ((queryKgIds != NULL) && (eVal <= gMaxEval))
-        processQueryHit(inLf, queryKgIds, targetSpId, eVal);
+    if ((queryKgIds != NULL) && (eValue <= gMaxEval))
+        processQueryHit(inLf, queryKgIds, targetSpId, eValue);
     }
 return TRUE;
 }
@@ -254,9 +259,9 @@ for (pairEval = gPairEvalList; pairEval != NULL; pairEval = pairEval->next)
     {
     /* write both directions */
     fprintf(tabFh, "%s\t%s\t%0.4g\n", pairEval->kg1Entry->id, pairEval->kg2Entry->id,
-            pairEval->eVal);
+            pairEval->eValue);
     fprintf(tabFh, "%s\t%s\t%0.4g\n", pairEval->kg2Entry->id, pairEval->kg1Entry->id,
-            pairEval->eVal);
+            pairEval->eValue);
     }
 }
 
