@@ -1413,6 +1413,107 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
 	warn repsSingle.psl
     hgLoadPsl -table=cloneTest hg17 chr22.psl
 
+    #	There are a number of clones listed in the sequence.inf file
+    #	as status W with names beginning AACC AADB AADC AADD
+    #	These are the Whole shotgun assemblies for the Celera genome.
+    #	A few of them were used in the assembly of the NCBI genome, namely:
+./11/AADB01066164.1.fa.gz
+./11/AADC01095577.1.fa.gz
+./11/AADD01116830.1.fa.gz
+./11/AADD01118406.1.fa.gz
+./11/AADD01116787.1.fa.gz
+./11/AADD01112371.1.fa.gz
+./11/AADD01116788.1.fa.gz
+./11/AADD01115518.1.fa.gz
+./11/AADD01118410.1.fa.gz
+./11/AADD01117999.1.fa.gz
+./21/AADD01172789.1.fa.gz
+./21/AADD01172788.1.fa.gz
+./21/AADD01209098.1.fa.gz
+./21/AADD01172902.1.fa.gz
+    #	And these have been distributed properly in their corresponding
+    #	chromosome.  The rest of them, 26, all with names starting AACC are in
+    #	the directory here: celeraOnly
+
+    #	To run the unPlaced alignments.
+    #	Prepare scratch and iscratch
+    ssh eieio
+    mkdir /cluster/bluearc/scratch/hg/gs.18/build35/clones/unPlaced
+    rsync -arlv /cluster/data/hg17/bed/contig_overlaps/unPlaced/ \
+	/cluster/bluearc/scratch/hg/gs.18/build35/clones/unPlaced
+    #	request scratch sync to cluster admins
+
+    ssh kkr1u00
+    mkdir /iscratch/i/gs.18/build35/clones/unPlaced
+    rsync -arlv /cluster/data/hg17/bed/contig_overlaps/unPlaced/ \
+	/iscratch/i/gs.18/build35/clones/unPlaced
+    /cluster/bin/iSync
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    #	There are too many to try them all, obtain guildelines from hg16
+    #	of clone to contig mapping:
+    hgsql -N -e "select name,chrom from clonePos;" hg16 > hg16.clone.chrom
+    hgsql -N -e "select contig,chrom from ctgPos;" hg16 > hg16.contig.chrom
+
+    ssh kk
+    mkdir /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    ls ../unPlaced | sed -e "s/.fa.gz//" > unPlaced.clone.list
+    wc -l unPlaced.clone.list
+    #	19836 unPlaced.clone.list
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs > contig.list
+    wc -l contig.list
+    #	380 contig.list
+
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#       kkiPsLayout.sh <clone> <contig>
+#       <clone> is one of the .fa.gz files in
+#               /scratch/hg/gs.18/build35/clones/unPlaced
+#               without the .fa.gz extension
+#       <contig> is one of the contigs found in:
+#               /iscratch/i/gs.18/build35/maskedContigs
+#
+CLONE=$1
+CONTIG=$2
+TARGET=/iscratch/i/gs.18/build35/maskedContigs/${CONTIG}.fa
+FAZ=/scratch/hg/gs.18/build35/clones/unPlaced/${CLONE}.fa.gz
+OOC=/iscratch/i/gs.18/build35/contigOoc10/${CONTIG}.10.ooc
+mkdir -p psl/${CONTIG}
+if [ ! -s ${FAZ} ]; then
+        echo "Can not find: ${FAZ}"
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}"
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}"
+        exit 255
+fi
+zcat ${FAZ} > /tmp/${CLONE}.fa
+$HOME/bin/i386/psLayout ${TARGET} \
+        /tmp/${CLONE}.fa genomic ${OOC} psl/${CONTIG}/${CLONE}.psl
+RET=$?
+rm -f /tmp/${CLONE}.fa
+exit ${RET}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runPsLayout.sh
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runPsLayout.sh $(path1) $(path2) {check out line+ psl/$(path2)/$(path1).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+-
+    gensub2 unPlaced.clone.list contig.list gsub jobList
+
+
 # BUILD KNOWN GENES TABLES (DONE 6/8/04 Fan)
 
   Build sp040515 and proteins040515 DBs first.
@@ -1471,3 +1572,76 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
     end
     iSync
   
+# LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
+#	Copied from Hg16 doc
+    # Set up cluster job to align consenesus/exemplars to hg17
+    ssh eieio
+    mkdir /cluster/bluearc/hg17/affyGnf
+    cp -p /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa /cluster/bluearc/hg17/affyGnf
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/affyGnf
+    cp -p /cluster/bluearc/hg17/affyGnf/* /iscratch/i/affyGnf
+    /cluster/bin/iSync
+
+    ssh kki
+    mkdir /cluster/data/hg17/bed/affyGnf.2004-06-09
+    cd /cluster/data/hg17/bed/affyGnf.2004-06-09
+    ls -1 /iscratch/i/affyGnf/* > affy.lst
+    ls -1 /iscratch/i/gs.18/build35/maskedContigs/* > allctg.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/gs.18/build35/hg17.11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 allctg.lst affy.lst template.sub jobList
+    mkdir psl
+    para create jobList
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:       2922s      48.70m     0.81h    0.03d  0.000 y
+# IO & Wait Time:                  1146s      19.10m     0.32h    0.01d  0.000 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest job:                       80s       1.33m     0.02h    0.00d
+# Submission to last job:           333s       5.55m     0.09h    0.00d
+
+XXXX - pause here while going to fishClone mapping
+
+Also do:
+# Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
+# final freeze of data set.
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all ./
+and
+# GNF ATLAS 2  [Done jk 3/29/2004]
+    # Align probes from GNF1H chip.
+
+######	 A second attempt at clone alignment###
+    #	Split the clones into 3K pieces into about 1000 fa files
+
+    #	Example:
+zcat Z99916.1.fa.gz Z99774.1.fa.gz Z99756.7.fa.gz | faSplit size stdin 3000 /tmp/name.fa -lift=/tmp/name.lft -oneFile
+
+    #	Trying this idea in unPlacedBatch
+    ssh kk0
+    mkdir /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs > nibList
+    ls -1S /cluster/data/hg17/bed/contig_overlaps/blatClones > cloneList
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fastMap -ooc=/scratch/hg/h/11.ooc -q=dna -t=dna {check in exists /scratch/hg/gs.18/build35/bothMaskedNibs/$(path1)} {check in exists+ /cluster/data/hg17/bed/contig_overlaps/blatClones/$(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    mkdir psl
+    cat nibList | sed -e "s/.nib//" | while read D
+do
+mkdir psl/$D
+done
+
+    gensub2 nibList cloneList gsub jobList
+    para create jobList
+
+
