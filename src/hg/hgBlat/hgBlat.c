@@ -593,7 +593,7 @@ printf("%s",
 "\n"
 "</FORM>\n");
 
-printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"GET\" NAME=\"orgForm\">"
+printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
        "<input type=\"hidden\" name=\"org\" value=\"%s\">\n"
        "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
        "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
