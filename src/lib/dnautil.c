@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.24 2004/03/25 00:40:32 baertsch Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.25 2004/03/25 02:17:54 baertsch Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -320,12 +320,13 @@ ntCompTable['C'] = 'G';
 ntCompTable['G'] = 'C';
 ntCompTable['T'] = 'A';
 ntCompTable['N'] = 'N';
-ntCompTable['R'] = 'N';
-ntCompTable['Y'] = 'N';
+ntCompTable['R'] = 'Y';
+ntCompTable['Y'] = 'R';
+ntCompTable['V'] = 'N';
 ntCompTable['S'] = 'N';
 ntCompTable['W'] = 'N';
-ntCompTable['r'] = 'N';
-ntCompTable['y'] = 'N';
+ntCompTable['r'] = 'y';
+ntCompTable['y'] = 'r';
 ntCompTable['s'] = 'N';
 ntCompTable['w'] = 'N';
 ntCompTable['('] = ')';
