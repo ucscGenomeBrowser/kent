@@ -839,11 +839,7 @@ fprintf(f, "}\n\n");
 void dynamicLoadAll(struct dbObject *table, FILE *f, FILE *hFile)
 /* Create C code to load a all objects from a tab separated file. */
 {
-int i;
 char *tableName = table->name;
-struct column *col;
-boolean isSizeLink;
-int tfIx;
 
 fprintf(hFile, "struct %s *%sLoadAll(char *fileName);\n", tableName, tableName);
 fprintf(hFile, "/* Load all %s from a tab-separated file.\n", tableName);
@@ -868,6 +864,46 @@ fprintf(f, "return list;\n");
 fprintf(f, "}\n\n");
 }
 
+void dynamicLoadWherePrintPrototype(char *tableName, FILE *f, boolean addSemi)
+/* Print out function prototype and opening comment. */
+{
+fprintf(f, 
+   "struct %s *%sLoadWhere(struct sqlConnection *conn, char *table, char *where)%s\n", 
+    tableName, tableName,
+    (addSemi ? ";" : ""));
+fprintf(f, "/* Load all %s from table that satisfy where clause. The\n", tableName);
+fprintf(f, " * where clause may be NULL in which case whole table is loaded\n");
+fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
+}
+
+void dynamicLoadWhere(struct dbObject *table, FILE *f, FILE *hFile)
+/* Create C code to build a list from a query. */
+{
+char *tableName = table->name;
+dynamicLoadWherePrintPrototype(tableName, hFile, TRUE);
+fprintf(hFile, "\n");
+dynamicLoadWherePrintPrototype(tableName, f, FALSE);
+fprintf(f, "{\n");
+fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
+fprintf(f, "struct dyString *query = dyStringNew(256);\n");
+fprintf(f, "struct sqlResult *sr;\n");
+fprintf(f, "char **row;\n");
+fprintf(f, "\n");
+fprintf(f, "dyStringPrintf(query, \"select * from %%s\", table);\n");
+fprintf(f, "if (where != NULL)\n");
+fprintf(f, "    dyStringPrintf(query, \" where %%s\", where);\n");
+fprintf(f, "sr = sqlGetResult(conn, query->string);\n");
+fprintf(f, "while ((row = sqlNextRow(sr)) != NULL)\n");
+fprintf(f, "    {\n");
+fprintf(f, "    el = %sLoad(row);\n", tableName);
+fprintf(f, "    slAddHead(&list, el);\n");
+fprintf(f, "    }\n");
+fprintf(f, "slReverse(&list);\n");
+fprintf(f, "sqlFreeResult(&sr);\n");
+fprintf(f, "dyStringFree(&query);\n");
+fprintf(f, "return list;\n");
+fprintf(f, "}\n\n");
+}
 
 void makeFree(struct dbObject *table, FILE *f, FILE *hFile)
 /* Make function that frees a dynamically allocated table. */
@@ -1151,6 +1187,7 @@ fprintf(hFile, "#define %s\n\n", defineName);
  * generating. */
 fprintf(cFile, "#include \"common.h\"\n");
 fprintf(cFile, "#include \"linefile.h\"\n");
+fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
@@ -1167,6 +1204,7 @@ for (obj = objList; obj != NULL; obj = obj->next)
 	    staticLoadRow(obj, cFile, hFile);
 	dynamicLoadRow(obj, cFile, hFile);
 	dynamicLoadAll(obj, cFile, hFile);
+	dynamicLoadWhere(obj, cFile, hFile);
 	}
     makeCommaIn(obj, cFile, hFile);
     if (!obj->isSimple)

@@ -76,6 +76,11 @@ struct polygon *polygonLoadAll(char *fileName);
 /* Load all polygon from a tab-separated file.
  * Dispose of this with polygonFreeList(). */
 
+struct polygon *polygonLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all polygon from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with polygonFreeList(). */
+
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret);
 /* Create a polygon out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -114,6 +119,11 @@ struct polyhedron *polyhedronLoad(char **row);
 
 struct polyhedron *polyhedronLoadAll(char *fileName);
 /* Load all polyhedron from a tab-separated file.
+ * Dispose of this with polyhedronFreeList(). */
+
+struct polyhedron *polyhedronLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all polyhedron from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
  * Dispose of this with polyhedronFreeList(). */
 
 struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret);
@@ -174,6 +184,11 @@ struct stringArray *stringArrayLoad(char **row);
 
 struct stringArray *stringArrayLoadAll(char *fileName);
 /* Load all stringArray from a tab-separated file.
+ * Dispose of this with stringArrayFreeList(). */
+
+struct stringArray *stringArrayLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all stringArray from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
  * Dispose of this with stringArrayFreeList(). */
 
 struct stringArray *stringArrayCommaIn(char **pS, struct stringArray *ret);

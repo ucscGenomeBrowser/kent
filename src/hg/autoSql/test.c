@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "linefile.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "test.h"
 
@@ -145,6 +146,31 @@ while (lineFileRow(lf, row))
     }
 lineFileClose(&lf);
 slReverse(&list);
+return list;
+}
+
+struct polygon *polygonLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all polygon from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with polygonFreeList(). */
+{
+struct polygon *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = polygonLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
 return list;
 }
 
@@ -301,6 +327,31 @@ slReverse(&list);
 return list;
 }
 
+struct polyhedron *polyhedronLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all polyhedron from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with polyhedronFreeList(). */
+{
+struct polyhedron *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = polyhedronLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+return list;
+}
+
 struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret)
 /* Create a polyhedron out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -353,7 +404,8 @@ struct polyhedron *el;
 
 if ((el = *pEl) == NULL) return;
 /* All strings in names are allocated at once, so only need to free first. */
-freeMem(el->names[0]);
+if (el->names != NULL)
+    freeMem(el->names[0]);
 polygonFreeList(&el->polygons);
 freez(pEl);
 }
@@ -518,6 +570,31 @@ slReverse(&list);
 return list;
 }
 
+struct stringArray *stringArrayLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all stringArray from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with stringArrayFreeList(). */
+{
+struct stringArray *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = stringArrayLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+return list;
+}
+
 struct stringArray *stringArrayCommaIn(char **pS, struct stringArray *ret)
 /* Create a stringArray out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -549,7 +626,8 @@ struct stringArray *el;
 
 if ((el = *pEl) == NULL) return;
 /* All strings in names are allocated at once, so only need to free first. */
-freeMem(el->names[0]);
+if (el->names != NULL)
+    freeMem(el->names[0]);
 freeMem(el->names);
 freez(pEl);
 }

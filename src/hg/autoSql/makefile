@@ -13,7 +13,7 @@ autoSql: $(O)
 	strip $(HOME)/bin/$(MACHTYPE)/autoSql
 
 test: test.o testHarness.o
-	gcc -o test testHarness.o test.o ../../lib/$(MACHTYPE)/jkweb.a $(L)
+	gcc -o test testHarness.o test.o $(MYLIBS) $(MYSQLLIBS)
 
 lib:
 	cd ../../lib; make
