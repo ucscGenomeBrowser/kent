@@ -2216,22 +2216,26 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
       -noBin rnaGene.bed
 
 
-# TWINSCAN FROM BRENT LAB (DONE 4/28/04 angie)
-    # contact: Paul Flicek 
+# TWINSCAN FROM BRENT LAB (DONE 5/1/04 angie)
+    # contact: Paul Flicek <paul.flicek@wustl.edu>
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/twinscan
     cd /cluster/data/galGal2/bed/twinscan
-    wget http://www.cs.wustl.edu/~pflicek/chicken/chicken.ts.tar.gz
-    tar xvzf chicken.ts.tar.gz 
+    wget http://www.cs.wustl.edu/~pflicek/chicken/chicken.043004.ts.tar.gz
+    tar xvzf chicken.043004.ts.tar.gz
     # No .ptx, just gtf.
-    # Fix formatting problem in chr16.gtf:
-    mv chr16.twinscan.042604.gtf chr16.twinscan.042604.gtf.orig
-    sed -e 's/1.twinscan.hs.cons.TWEAK400/chr16/g' \
-      chr16.twinscan.042604.gtf.orig > chr16.twinscan.042604.gtf
     ldHgGene -gtf -frame -id -geneName galGal2 twinscan chr*.gtf
+    runGeneCheck .
+#   1173 frameMismatch
+#    775 badFrame
+#    477 noStop
+#    237 gap
+#    223 noStart
+#     22 frameDiscontig
+#      6 inFrameStop
 
 
-# ISOCHORES FROM NEKRUTENKO LAB (DONE 4/27/04 angie)
+# ISOCHORES FROM NEKRUTENKO LAB (DONE 5/3/04 angie)
     # contact: Jianbin HE <jbhe@psu.edu>
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/isochore
