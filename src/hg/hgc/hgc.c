@@ -4221,14 +4221,22 @@ printf("</td></tr></table></td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
-void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
-/* print out a header with names for each bed with itemName highlighted */
+void msBedPrintTableHeader(struct bed *bedList, struct hash *erHash, char *itemName, 
+			    char **headerNames, int headerCount, char *scoresHeader)
+/* print out a bed with multiple scores header for a table.
+   headerNames contain titles of columns up to the scores columns. scoresHeader
+   is a single string that will span as many columns as there are beds.*/
 {
 struct bed *bed;
 int featureCount = slCount(bedList);
-printf("<tr><th align=center>Experiment</th>\n");
-printf("<th align=center colspan=%d valign=top>Item Name</th>\n",featureCount);
-printf("</tr>\n<tr><td>&nbsp</td>\n");
+int i=0;
+printf("<tr>");
+for(i=0;i<headerCount; i++)
+    printf("<th align=center>%s</th>\n",headerNames[i]);
+printf("<th align=center colspan=%d valign=top>%s</th>\n",featureCount, scoresHeader);
+printf("</tr>\n<tr>");
+for(i=0;i<headerCount; i++)
+    printf("<td>&nbsp</td>\n");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     printf("<td valign=top align=center>\n");
@@ -4236,6 +4244,22 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     printf("</td>");
     }
 printf("</tr>\n");
+}
+
+void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+/* print out a header with names for each bed with itemName highlighted */
+{
+char *headerNames[] = {"Experiment"};
+char *scoresHeader = "Item Name";
+msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
+}
+
+void rosettaPrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+/* print out the header for the rosetta details table */
+{
+char *headerNames[] = {"&nbsp", "Hybridization"};
+char *scoresHeader = "Exon Number";
+msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
 void printExprssnColorKey(float maxVal)
@@ -4246,10 +4270,10 @@ char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
 boolean redColor = sameString(colorScheme, "rg");
 int square = 10;
 int numColumns;
-float stepSize = .1;
+float stepSize = .2;
 assert(stepSize > 0);
 
-numColumns = maxVal/stepSize *2+2;
+numColumns = maxVal/stepSize *2+1;
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
 printf("<th colspan=%d>False Color Key, all values log base 2</th></tr><tr>\n",numColumns);
@@ -4317,7 +4341,6 @@ printf("<basefont size=-1>\n");
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
 printHeader(bedList, erHash, itemName);
-printf("</tr>\n<tr><td>&nbsp</td>\n");
 for(i=0; i<bedList->expCount; i++)
     {
     printRow(bedList, erHash, i, expName, maxScore);
@@ -4365,23 +4388,15 @@ struct bed *rosettaFilterByExonType(struct bed *bedList)
    seeing confirmed and/or predicted exons */
 {
 struct bed *bed=NULL, *tmp=NULL, *tmpList=NULL;
-char *exonTypes = cartUsualString(cart, "rosetta.et", "Confirmed Only");
-int et = -1;  /* et -> exonType */
+char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
+enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
 
-/* translate string to numeric flag so cheaper to compare. */
-if(sameString(exonTypes, "All"))
+if(et == rosettaAllEx)
     return bedList;
-else if(sameString(exonTypes, "Confirmed Only"))
-    et =1;
-else if(sameString(exonTypes, "Predicted Only"))
-    et =2;
-else 
-    errAbort("hgc::rosettaFilterByExonType() - don't recognize exonTypes: %s", exonTypes);
-
 /* go through and remove appropriate beds */
 for(bed = bedList; bed != NULL; )
     {
-    if(et == 1)
+    if(et == rosettaConfEx)
 	{
 	tmp = bed->next;
 	if(bed->name[strlen(bed->name) -2] == 't')
@@ -4390,7 +4405,7 @@ for(bed = bedList; bed != NULL; )
 	    bedFree(&bed);
 	bed = tmp;
 	}
-    else if(et == 2)
+    else if(et == rosettaPredEx)
 	{
 	tmp = bed->next;
 	if(bed->name[strlen(bed->name) -2] == 'p')
@@ -4404,29 +4419,43 @@ slReverse(&tmpList);
 return tmpList;
 }
 
-void rosettaDetails(struct trackDb *tdb, char *expName)
-/* print out a page for the rosetta data track */
+void rosettaPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+/* print a row in the details table for rosetta track, designed for
+   use msBedPrintTable */
 {
-struct bed *bedList, *bed=NULL;
-char *tableName = "rosettaExps";
-char *itemName = cgiUsualString("i2","none");
-char *nameTmp=NULL;
-struct expRecord *erList = NULL, *er;
 char buff[32];
-struct hash *erHash;
-float maxScore = 1.6;
-bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
-bedList = rosettaFilterByExonType(bedList);
+struct bed *bed = bedList;
+struct expRecord *er = NULL;
+char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
+int square = 10;
+boolean redColor = sameString(colorScheme, "rg");
+snprintf(buff, sizeof(buff), "%d", expIndex);
+er = hashMustFindVal(erHash, buff);
 
-for(bed=bedList; bed != NULL; bed = bed->next)
+sprintf(buff,"e%d",er->id);
+printf("<tr>\n");
+printf("<td align=left>");
+makeCheckBox(buff,FALSE);
+printf("</td>");
+if(strstr(er->name, expName))
+    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
+else
+    printf("<td align=left> %s</td>\n", er->name);
+for(bed = bedList;bed != NULL; bed = bed->next)
     {
-    nameTmp = abbrevExprBedName(bed->name);
-    freez(&bed->name);
-    bed->name = cloneString(nameTmp);
-    }
+	/* use the background colors to creat patterns */
+	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, redColor);
+	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+	}
+printf("</tr>\n");
+}
 
-genericHeader(tdb, itemName);
-
+void rosettaPrintDataTable(struct bed *bedList, char *itemName, char *expName, float maxScore, char *tableName)
+/* creates a false color table of the data in the bedList */
+{
+struct expRecord *erList = NULL, *er;
+struct hash *erHash;
+char buff[32];
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
 else 
@@ -4438,11 +4467,76 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey);
+    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
     }
+}
+
+void rosettaDetails(struct trackDb *tdb, char *expName)
+/* print out a page for the rosetta data track */
+{
+struct bed *bedList, *bed=NULL;
+char *tableName = "rosettaExps";
+char *itemName = cgiUsualString("i2","none");
+char *nameTmp=NULL;
+char buff[256];
+char *plotType = NULL;
+float maxScore = 1.6;
+char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
+char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
+enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
+
+/* get data from database and filter it */
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+bedList = rosettaFilterByExonType(bedList);
+
+
+/* abbreviate the names */
+for(bed=bedList; bed != NULL; bed = bed->next)
+    {
+    nameTmp = abbrevExprBedName(bed->name);
+    freez(&bed->name);
+    bed->name = cloneString(nameTmp);
+    }
+
+/* start html */
+snprintf(buff, sizeof(buff), "Rosetta Expression Data For: %s %d-%d</h2>", seqName, winStart, winEnd);
+cartWebStart(buff);
+printf("%s", tdb->html);
+printf("<br><br>");
+printf("<form action=\"../cgi-bin/rosChr22VisCGI\" method=get>\n");
+rosettaPrintDataTable(bedList, itemName, expName, maxScore, tableName);
+
+/* other info needed for plotting program */
+cgiMakeHiddenVar("table", tdb->tableName);
+cgiMakeHiddenVar("db", database);
+sprintf(buff,"%d",winStart);
+cgiMakeHiddenVar("winStart", buff);
+zeroBytes(buff,64);
+sprintf(buff,"%d",winEnd);
+
+/* plot type is passed to graphing program to tell it which exons to use */
+if(et == rosettaConfEx)
+    plotType = "te";
+else if(et == rosettaPredEx)
+    plotType = "pe";
+else if(et == rosettaAllEx) 
+    plotType = "e";
+else 
+    errAbort("hgc::rosettaDetails() - don't recognize rosettaExonOptEnum %d", et);
+cgiMakeHiddenVar("t",plotType);
+cgiMakeHiddenVar("winEnd", buff);
+printf("<br>\n");
+printf("<table width=\"100%%\" cellpadding=0 cellspacing=0>\n");
+printf("<tr><th align=left><h3>Plot Options:</h3></th></tr><tr><td><p><br>");
+cgiMakeDropList("mi",maxIntensity, 9, "20");
+printf(" Maximum Intensity value to allow.\n");
+printf("</td></tr><tr><td align=center><br>\n");
+printf("<b>Press Here to View Detailed Plots</b><br><input type=submit name=Submit value=submit>\n");
+printf("<br><br><br><b>Clear Values</b><br><input type=reset name=Reset></form>\n");
+printf("</td></tr></table>");
 webEnd();
 }
 
@@ -4459,6 +4553,8 @@ float maxScore = 1.6;
 bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
 
+printf("%s", tdb->html);
+printf("<br><br>");
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
 else 
