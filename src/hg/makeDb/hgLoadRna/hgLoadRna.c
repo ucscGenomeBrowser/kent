@@ -526,15 +526,16 @@ hgSetDb(database);
 type = cgiOptionalString("type");
 if (type == NULL)
     {
-    if (strstrNoCase(raFile, "xenoRna.ra"))
+    if (strstrNoCase(raFile, "xenoRna"))
 	type = "xenoRna";
     else if (strstrNoCase(raFile, "xenoEst"))
 	type = raFile;
-    else if (strstrNoCase(raFile, "est.ra"))
+    else if (strstrNoCase(raFile, "est"))
 	type = "EST";
     else
 	type = "mRNA";
     }
+printf("Adding data of type: %s\n", type);
 addRna(faPath, type, raFile, type);
 }
 
