@@ -6214,3 +6214,26 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     rm *.tab
     nice gzip *.txt
 
+## NIA Mouse Gene Index - (DONE - 2004-11-16 Fan)
+#       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+
+#       pick up data
+    ssh hgwdev 
+    mkdir -p /cluster/data/mm5/bed/NIAGene
+    cd /cluster/data/mm5/bed/NIAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/temp/NIA-Mouse-GeneIndex4-Transcript-to-Genome.psl
+
+    wget --timestamping \
+    http://lgsun.grc.nia.nih.gov/temp/NIA-Mouse-GeneIndex4-Transcripts.fasta
+    
+    hgLoadPsl mm5 -table=NIAGene NIA-Mouse-GeneIndex4-Transcript-to-Genome.psl
+
+    mkdir /gbdb/mm5/NIAGene
+    ln -s /cluster/data/mm5/bed/NIAGene/NIA-Mouse-GeneIndex4-Transcripts.fasta \
+        /gbdb/mm5/NIAGene/NIA-Mouse-GeneIndex4-Transcripts.fasta
+    
+    hgLoadSeq mm5 /gbdb/mm5/NIAGene/NIA-Mouse-GeneIndex4-Transcripts.fasta
+
+    Added and edited NIAGene.html and trackDb.ra under
+    
+        kent/src/hg/makeDb/trackDb/mouse/mm5
