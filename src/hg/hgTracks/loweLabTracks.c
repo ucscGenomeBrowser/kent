@@ -20,11 +20,8 @@ Color LLshadesOfRed[LL_EXPR_DATA_SHADES];
 boolean LLexprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int LLmaxRGBShade = LL_EXPR_DATA_SHADES - 1;
 
-
 #define LL_COG_SHADES 26
 Color LLshadesOfCOGS[LL_COG_SHADES];
-boolean LLexprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
-int LLmaxRGBShade = LL_EXPR_DATA_SHADES - 1;
 /**** Lowe lab additions ***/
 
 void initializeColors(struct vGfx *vg)
