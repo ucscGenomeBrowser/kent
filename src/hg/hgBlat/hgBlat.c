@@ -24,14 +24,14 @@ struct serverTable
    char *nibDir;	/* Directory of sequence files. */
    };
 
-char *genomeList[] = {/* "Oct. 7, 2000", */ "Dec. 12, 2000", "April 1, 2001"};
+char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000", "April 1, 2001"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
-char *outputList[] = {"hyperlink", "psl", "psl no head"};
+char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
 struct serverTable serverTable[] =  {
-// {"hg5", "Oct. 7, 2000", TRUE, "kks00", "17776", "/projects/cc/hg/oo.23/nib"},
-// {"hg5", "Oct. 7, 2000", FALSE, "kks00", "17777", "/projects/cc/hg/oo.23/nib"},
+{"hg5", "Oct. 7, 2000", TRUE, "blat3", "17778", "/projects/cc/hg/oo.23/nib"},
+{"hg5", "Oct. 7, 2000", FALSE, "blat3", "17779", "/projects/cc/hg/oo.23/nib"},
 {"hg6", "Dec. 12, 2000", TRUE,  "blat2", "17778", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
 {"hg7", "April 1, 2001", TRUE, "blat1", "17778", "/projects/hg3/gs.7/oo.29/nib"},
@@ -46,10 +46,6 @@ struct serverTable *serve;
 
 if (db == NULL)
     db = defaultDatabase;
-if (sameWord(db, "hg5"))
-    errAbort("Sorry, the October 2000 BLAT server was taken down to make room "
-             "for April 2001.  Hopefully we'll get an additional machine and "
-	     "restore this service in a week or two.");
 for (i=0; i<ArraySize(serverTable); ++i)
     {
     serve = &serverTable[i];
@@ -69,13 +65,6 @@ void usage()
 {
 errAbort(
   "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
-}
-
-int pslScore(const struct psl *psl)
-/* Return score for psl. */
-{
-return psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert
-  - psl->tNumInsert;
 }
 
 int pslCmpScore(const void *va, const void *vb)
