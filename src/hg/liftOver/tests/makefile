@@ -6,8 +6,8 @@ PROG=liftOver
 
 simpleTest:     mkdirs
 	${HOME}/bin/${MACHTYPE}/${PROG} \
-                input/mouseRegions.bed \
-                    input/hg16ToMm3.chr16.chain \
+            input/mouseRegions.bed \
+                /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr16.chain \
                     output/mouseRegions.good.bed \
                     output/mouseRegions.bad.bed
 	cat output/mouseRegions.{good,bad}.bed | \
