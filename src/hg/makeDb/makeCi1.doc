@@ -60,7 +60,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     mkdir ~/ci1/bed/blatHuman                        
     cd ~/ci1/bed/blatHuman                           
     ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
-    ls -1S /scratch/hg/ci1/nib/* > squirt.lst        
+    ls -1S /iscratch/i/squirt/ci1/scaffolds/* > squirt.lst        
     mkdir psl                                       
     cd psl
     foreach i (../../../nib/*.nib)
@@ -71,7 +71,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     <para procedure>
 
     ssh eieio                                       
-    cd ~/ci1/bed/blatFugu                           
+    cd ~/ci1/bed/blatHuman
     pslCat -dir psl/* | pslSortAcc nohead chrom /tmp stdin
 
     # FUGU Blat
@@ -126,4 +126,6 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
 
     # Load genbank entries
     cd /cluster/store5/genbank
-    ./bin/gbDbLoadStep -initialLoad ci1
+    ./bin/gbDbLoadStep -noPerChrom=ci1 -initialLoad ci1 
+    # ./bin/i386/gbLoadRna -drop ci1
+
