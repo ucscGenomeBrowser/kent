@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.63 2004/12/02 00:24:24 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.64 2004/12/02 00:53:27 hiram Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -549,7 +549,7 @@ showOutputTypeRow(isWig, isPositional, isMaf);
     hPrintf("&nbsp;plain text&nbsp&nbsp");
     cgiMakeRadioButton(hgtaCompressType, hgtaCompressGzip,
 	sameWord(hgtaCompressGzip,compressType));
-    hPrintf("&nbsp;gzip");
+    hPrintf("&nbsp;gzip compressed");
     hPrintf("</TD></TR>\n");
     }
 
