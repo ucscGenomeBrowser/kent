@@ -338,7 +338,7 @@ hDisconnectCentral(&connCentral);
 
 if (proteinInSupportedGenome || (blatGbDb != NULL))
     {
-    hPrintf("\n<B>UCSC links:</B><BR>\n ");
+    hPrintf("\n<B>UCSC Links:</B><BR>\n ");
     hPrintf("<UL>\n");
 
     /* Show GB links only if the protein belongs to a supported genome */
