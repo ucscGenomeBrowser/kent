@@ -1,0 +1,20 @@
+makeLoChain
+
+This directory contains a suite of scripts
+used for generating liftOver chain files and
+associated database entries, for use with
+the "liftOver" executable, and the "hgLiftOver" CGI.
+
+They are run in the following order:
+        align
+        lift
+        chain
+        net
+        load
+
+They are run on the KiloKluster, fileserver, or database server --
+each script tests that it is being executed on the appropriate
+host and gives warning.  Also, each script indicates which
+script to run next, and where.
+
+    Kate
