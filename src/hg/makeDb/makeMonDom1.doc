@@ -1023,6 +1023,14 @@ done
     featureBits hg17 chainMonDom1Link
     #	456069062 bases of 2866216770 (15.912%) in intersection
 
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.hg17/axtChain/chain
+    tar cvzf \
+	/usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1/opossum.chain.tgz \
+	./chr*.chain
+
 # NET OPOSSUM TO HUMAN BLASTZ (DONE - 2004-12-13 - Hiram)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
@@ -1068,6 +1076,15 @@ done
     #	2261085097 bases of 2866216770 (78.887%) in intersection
     featureBits hg17 netRn3
     #	2817656275 bases of 2866216770 (98.306%) in intersection
+
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.hg17/axtChain
+    cp -p human.net \
+	/usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1/opossum.net
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1
+    gzip opossum.net
 
 # MAKE NET MAFS FOR MULTIZ (2004-12-24 kate)
     ssh kksilo
@@ -1427,6 +1444,13 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits galGal2 chainMm5
     #	846905330 bases of 1054197620 (80.336%) in intersection
 
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/galGal2/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain/chain
+    tar cvzf \
+      /usr/local/apache/htdocs/goldenPath/galGal2/vsMonDom1/opossum.chain.tgz \
+	./chr*.chain
 
 # NET OPOSSUM TO CHICKEN BLASTZ (DONE - 2004-12-13 - Hiram)
     ssh eieio
@@ -1475,6 +1499,16 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     #	835277984 bases of 1054197620 (79.234%) in intersection
     featureBits galGal2 netXenTro1
     #	674438463 bases of 1054197620 (63.976%) in intersection
+
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/galGal2/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
+    cp -p chicken.net \
+	/usr/local/apache/htdocs/goldenPath/galGal2/vsMonDom1/opossum.net
+    cd /usr/local/apache/htdocs/goldenPath/galGal2/vsMonDom1
+    gzip opossum.net
+
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create CHICKEN TO OPOSSUM chain, net
@@ -1748,6 +1782,14 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits mm5 chainXenTro1
     #	1078618413 bases of 2615483787 (41.240%) in intersection
 
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain/chain
+    tar cvzf \
+	/usr/local/apache/htdocs/goldenPath/mm5/vsMonDom1/opossum.chain.tgz \
+	./chr*.chain
+
 # NET OPOSSUM TO MOUSE BLASTZ (TBD)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
@@ -1806,6 +1848,14 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits mm5 netDanRer2
     #	560950601 bases of 2615483787 (21.447%) in intersection
 
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    cp -p mouse.net \
+	/usr/local/apache/htdocs/goldenPath/mm5/vsMonDom1/opossum.net
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsMonDom1
+    gzip opossum.net
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create MOUSE TO OPOSSUM chain, net
@@ -2208,6 +2258,14 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     featureBits danRer2 chainFr1
     #	309784483 bases of 1560497282 (19.852%) in intersection
 
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/danRer2/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain/chain
+    tar cvzf \
+      /usr/local/apache/htdocs/goldenPath/danRer2/vsMonDom1/opossum.chain.tgz \
+	./chr*.chain
+
 # NET OPOSSUM TO ZEBRAFISH BLASTZ (TBD)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
@@ -2266,6 +2324,16 @@ XXX - TBD - 2004-12-19 20:15
     #	618111072 bases of 2615483787 (23.633%) in intersection
     featureBits danRer2 netDanRer2
     #	560950601 bases of 2615483787 (21.447%) in intersection
+
+    #	create a copy of these things for hgdownload  (2005-01-12 - Hiram)
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/danRer2/vsMonDom1
+    cd /cluster/data/monDom1/bed/zb.danRer2/axtChain
+    cp -p zfish.net \
+	/usr/local/apache/htdocs/goldenPath/danRer2/vsMonDom1/opossum.net
+    cd /usr/local/apache/htdocs/goldenPath/danRer2/vsMonDom1
+    gzip opossum.net
+
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create ZEBRAFISH TO OPOSSUM chain, net
