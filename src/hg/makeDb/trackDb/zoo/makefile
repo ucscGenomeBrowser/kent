@@ -7,49 +7,38 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
+DBS =   zooBaboon3 zooCat3 zooChicken3 zooChimp3 zooCow3 zooDog3 zooFugu3 \
+        zooHuman3 zooMouse3 zooPig3 zooRat3 zooTetra3 zooZebrafish3 
+
 update:
-	hgTrackDb zoo zooBaboon3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooCat3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooChicken3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooChimp3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooCow3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooDog3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooFugu3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooHuman3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooMouse3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooPig3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooRat3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooTetra3 trackDb_$(USER) ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooZebrafish3 trackDb_$(USER) ../../../lib/trackDb.sql .
+	@for DB in $(DBS) x; do \
+	    if test "$$DB" != "x" ; then \
+		cmd="hgTrackDb zoo $$DB trackDb_${USER} ../../../lib/trackDb.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+		cmd="hgFindSpec zoo $$DB hgFindSpec_${USER} ../../../lib/hgFindSpec.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+	    fi ; \
+	done
 
 alpha:
-	hgTrackDb zoo zooBaboon3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooCat3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooChicken3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooChimp3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooCow3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooDog3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooFugu3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooHuman3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooMouse3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooPig3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooRat3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
+	@for DB in $(DBS) x; do \
+	    if test "$$DB" != "x" ; then \
+		cmd="hgTrackDb zoo $$DB trackDb ../../../lib/trackDb.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+		cmd="hgFindSpec zoo $$DB hgFindSpec ../../../lib/hgFindSpec.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+	    fi ; \
+	done
 
 beta: alpha
 
 strict:
-	hgTrackDb -strict=yes zoo zooBaboon3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooCat3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooChicken3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooChimp3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooCow3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooDog3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooFugu3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooHuman3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooMouse3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooPig3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooRat3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb -strict=yes zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
+	@for DB in $(DBS) x; do \
+	    if test "$$DB" != "x" ; then \
+		cmd="hgTrackDb -strict=yes zoo $$DB trackDb ../../../lib/trackDb.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+		cmd="hgFindSpec -strict zoo $$DB hgFindSpec ../../../lib/hgFindSpec.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+	    fi ; \
+	done
+
