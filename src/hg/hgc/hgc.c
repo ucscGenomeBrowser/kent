@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.771 2004/10/12 13:32:56 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.772 2004/10/12 21:15:48 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -438,7 +438,7 @@ void printPosOnChrom(char *chrom, int start, int end, char *strand,
 {
 char band[64];
 
-printf("<B>Position:</B> <A HREF=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+printf("<B>Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
 	   hGetDb(), chrom, start+1, end);
 printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 if (hChromBand(chrom, (start + end)/2, band))
@@ -1846,14 +1846,14 @@ return chain;
 void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"../cgi-bin/hgTracks?db=%s&%s&position=%s%%3A%d-%d\">",
+printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&%s&position=%s%%3A%d-%d\">",
    otherDb, extra, chrom, start+1, end);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
    otherDb, chrom, start+1, end);
 }
 
@@ -1917,7 +1917,7 @@ if (sameWord(otherDb, "seq"))
     }
 else
     {
-    printf("<B>%s position:</B> <A target=\"_blank\" href=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
+    printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
 	   otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
 	   qs, qe, chain->qEnd - chain->qStart);
     }
@@ -2243,7 +2243,7 @@ if (printFactors)
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)                                                         
 		    {
-		    printf("<A HREF=\"../cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
 		    sqlFreeResult(&sr); 
 		    }
 		}
@@ -6134,7 +6134,7 @@ goto skipPB;
 
 // display link to UCSC Proteome Browser
 printf("<LI><B>UCSC Proteome Browser: </B>");
-printf("<A HREF=\"../cgi-bin/pb10?");
+printf("<A HREF=\"http:/cgi-bin/pb10?");
 printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
 printf(" target=_blank>");
 printf(" %s</A>", proteinID);
@@ -6146,7 +6146,7 @@ row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
     {
-    printf("<A HREF=\"../cgi-bin/pb10?");
+    printf("<A HREF=\"http:/cgi-bin/pb10?");
     printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
     printf(" target=_blank>");
     printf(" %s</A>", row[0]);
@@ -6162,7 +6162,7 @@ printf("</UL>");
 if (sqlTableExists(conn, "knownCanonical"))
     {
     printf("<B>UCSC Gene Sorter:</B> ");
-    printf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", mrnaName);
+    printf("<A HREF=\"/cgi-bin/hgNear?near_search=%s\"", mrnaName);
     printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
     printf("<BR><BR>");
     }
@@ -8523,10 +8523,10 @@ if (cgiVarExists("o"))
     while (row = sqlNextRow(sr))
 	{
 	genomicDupsStaticLoad(row+rowOffset, &dup);
-	printf("<B>Region Position:</B> <A HREF=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	printf("<B>Region Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
 	       hGetDb(), dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("%s:%d-%d</A><BR>\n", dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<B>Other Position:</B> <A HREF=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\" TARGET=_blank>",
+	printf("<B>Other Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\" TARGET=_blank>",
 	       hGetDb(), dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("%s:%d-%d</A><BR>\n", dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("<B>Relative orientation:</B> %s<BR>\n", dup.strand);
@@ -8723,7 +8723,7 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 
 
-printf("<B>%s position:</B> <a target=\"_blank\" href=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
        psl->qName, psl->qStart+1, psl->qEnd);
 
@@ -8771,7 +8771,7 @@ char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
-printf("<B>%s position:</B> <a target=\"_blank\" href=\"../cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
        otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
        psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
@@ -8796,7 +8796,7 @@ if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
 
 if (containsStringNoCase(otherDb, "zoo"))
     {
-    printf("<P><A HREF='../cgi-bin/hgTracks?db=%s'>Go to the browser view of the %s</A><BR>\n", otherDb, otherOrg);
+    printf("<P><A HREF='/cgi-bin/hgTracks?db=%s'>Go to the browser view of the %s</A><BR>\n", otherDb, otherOrg);
     }
 
 printTrackHtml(tdb);
@@ -9046,7 +9046,7 @@ if (gp->cdsEnd == 0)
     gp->cdsEnd = gp->txEnd;
 
 
-puts("<FORM ACTION=\"../cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
+puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
 cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("i");
