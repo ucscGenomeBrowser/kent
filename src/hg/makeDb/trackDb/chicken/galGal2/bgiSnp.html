@@ -12,6 +12,18 @@ associated with genes (annotations by BGI until Ensembl annotations
 are ready), and information on the association can be displayed along
 with a link to the details page for the gene.
 </P>
+<P>
+SNP names are of the format 
+snp.<EM>Supercontig</EM>.<EM>Contig</EM>.<EM>Position</EM>.<EM>Type</EM>.<EM>Strain</EM>:
+</P>
+<UL>
+<LI><EM>Supercontig</EM>: Supercontig number from assembly</LI>
+<LI><EM>Contig</EM>: Contig number (within supercontig) from assembly</LI>
+<LI><EM>Position</EM>: Starting offset within 
+    Contig.<EM>Supercontig</EM>.<EM>Contig</EM></LI>
+<LI><EM>Type</EM>: S=Substitution, I=Insertion or D=Deletion</LI>
+<LI><EM>Strain</EM>: 1=Broiler, 2=Layer, 3=Silkie</LI>
+</UL>
 
 <H2>Methods</H2>
 
@@ -20,7 +32,7 @@ Sequence reads from the Broiler, Layer and Silkie strains were mapped
 to the reference Chicken assembly with blast.  Then cross_match was
 used for the detailed base-by-base comparison.  The Phred quality
 scores (-10 * log_10 estimated error probability) are given for the 
-SNP base(s) in the assembly and the SNP read.  
+SNP base(s) in the assembly and the (single read) SNP read.  
 </P>
 
 
