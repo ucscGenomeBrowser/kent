@@ -174,7 +174,7 @@ spectrum on
 type psl xeno hg16
 otherDb hg16
 
-track selfChain
+track chainSelf
 shortLabel Self Chain 
 longLabel Chained Blastz Human/$Organism Alignments
 group varRep
