@@ -112,7 +112,7 @@ alpha:
 	    fi ; \
 	done
 	cd zoo && ${MAKE} alpha
-	cmd="../encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
+	cmd="../../encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
 
 strict:
 	cvs up -d -P .
