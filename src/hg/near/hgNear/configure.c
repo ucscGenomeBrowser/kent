@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.7 2003/06/23 19:15:46 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.8 2003/06/23 19:50:34 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -71,7 +71,8 @@ for (col = colList; col != NULL; col = col->next)
     if (col->configControls != NULL)
          col->configControls(col);
     else
-         hPrintf("<TD>n/a</TD");
+         hPrintf("<TD>n/a</TD>");
+
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
@@ -152,7 +153,6 @@ if (bumpVar)
     bumpColList(bumpVar, &colList);
 makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
-cartSaveSession(cart);
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 cgiMakeButton(defaultConfName, "Default Configuration");
