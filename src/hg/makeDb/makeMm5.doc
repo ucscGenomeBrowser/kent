@@ -6801,7 +6801,33 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
      zcat ensGeneMm5.pep.gz | sed "s/\*$//" > ensembl.pep
     ~matt/bin/fixPep.pl ensembl.pep fixPep_ensembl.pep
      hgPepPred mm5 generic ensPep fixPep_ensembl.pep
-
+#
+#	The chrMT (chrM) peptides as obtained via EnsMart have only
+#	aa's of: X				(2005-02-28 - Hiram)
+#	These 13 peptides were fixed up manually by fetching each
+#	one individually by following the 13 links from our browser
+#	to the ensemble protein, asking it to dump the protein
+#	sequence, cut and paste that answer to a local file.
+#	The 13 peptides were dropped from ensPep table via:
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082392.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082396.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082402.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082405.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082407.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082408.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082409.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082411.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082413.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082414.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082418.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082419.1";'
+hgsql mm5 -e 'delete from ensPep where name="ENSMUST00000082421.1";'
+#	Then explicitly reloaded with SQL statements such as:
+INSERT into ensPep (name, seq) VALUES ('ENSMUST00000082407.1', 'MPQLDTSTWFITIISSMITLFILFQLKVSSQTFPLAPSPKSLTTMKVKTPWELKWTKIYLPHSLPQQ');
+#	The 13 SQL statements were left in the file:
+#	/cluster/data/mm5/bed/ensembl/chrMPep.sql
+#	loaded via:
+    hgsql mm5 < chrMPep.sql
 # Load ensGtp table.
     # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
     # hgKnownToSuper.  Use ensMart to create it as above, except:
