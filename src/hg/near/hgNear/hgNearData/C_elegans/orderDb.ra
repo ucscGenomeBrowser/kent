@@ -1,5 +1,11 @@
 # This contains C. elegans specific ordering info.
 #
+name kimExpn
+shortLabel Expression (Kim)
+longLabel Difference in expression with selected gene
+type pair kimExpDistance query target distance 1
+priority 1
+
 name blastp
 type pair sangerBlastTab query target bitScore -1 
 
