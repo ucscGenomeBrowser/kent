@@ -1783,7 +1783,7 @@ for (i=0; i<count; ++i)
 }
 
 
-static void linkedFeaturesSeriesDrawAverage(struct track *tg, int seqStart, int seqEnd,
+static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
@@ -1793,63 +1793,34 @@ double scale = scaleForPixels(width);
 UBYTE *useCounts;
 int i;
 int lineHeight = mgFontLineHeight(font);
-struct simpleFeature *sf;
 struct linkedFeatures *lf;
-struct linkedFeaturesSeries *lfs;
+struct simpleFeature *sf;
 int x1, x2, w;
 
 AllocArray(useCounts, width);
 memset(useCounts, 0, width * sizeof(useCounts[0]));
-for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
+for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    /* int prevEnd = -1; */
-    int prevEnd = lfs->start;
-    for (lf = lfs->features; lf != NULL; lf = lf->next)
-        {
-	if (prevEnd != -1)
-	    {
-	    x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-            w = x2 - x1;
-            if (w > 0)
-	        vgBox(vg, x1, yOff + tg->heightPer/2, w, 1, vgFindColorIx(vg,0,0,0));
-            }
-        prevEnd = lf->end;
-        for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    x1 = roundingScale(sf->start-winStart, width, baseWidth);
-	    if (x1 < 0)
-	      x1 = 0;
-	    x2 = roundingScale(sf->end-winStart, width, baseWidth);
-	    if (x2 >= width)
-	      x2 = width-1;
-	    w = x2-x1;
-	    if (w >= 0)
-	      {
-		if (w == 0)
-		  w = 1;
-		incRange(useCounts+x1, w); 
-	      }
-	    }
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	x1 = roundingScale(sf->start-winStart, width, baseWidth);
+	if (x1 < 0)
+	  x1 = 0;
+	x2 = roundingScale(sf->end-winStart, width, baseWidth);
+	if (x2 >= width)
+	  x2 = width-1;
+	w = x2-x1;
+	if (w >= 0)
+	  {
+	  if (w == 0)
+	     w = 1;
+	  incRange(useCounts+x1, w); 
+	  }
 	}
     }
 grayThreshold(useCounts, width);
 vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
-}
-
-void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw dense clone items. */
-{
-// uglyf - get rid of this conversion now!
-/* Convert to a linked features series object */
-linkedFeaturesToLinkedFeaturesSeries(tg);
-/* Draw items */
-linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-/* Convert Back */
-linkedFeaturesSeriesToLinkedFeatures(tg);
 }
 
 static void linkedFeaturesAverageDense(struct track *tg, 
