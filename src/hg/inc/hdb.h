@@ -204,14 +204,6 @@ boolean hgIsChromRange(char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
  * chromosome chrom and some N and M. */
 
-boolean hgParseContigRange(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd);
-/* Parse something of form contig:start-end into pieces. */
-
-boolean hgIsContigRange(char *spec);
-/* Returns TRUE if spec is contig:N-M for some human
- * chromosome contig and some N and M. */
-
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database. */
 
