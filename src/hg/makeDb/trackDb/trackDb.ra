@@ -1822,18 +1822,6 @@ visibility hide
 color 0,100,0
 type bed 5 .
 
-# tmp for debugging: markd
-track mgcWUPcrHit
-shortLabel RT-PCR debug
-longLabel  RT-PCR debug
-group x
-priority 25
-visibility hide
-type psl
-color 10,100,150
-exonArrows on
-pslSequenceBases all
-
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
