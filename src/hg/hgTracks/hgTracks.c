@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.515 2003/05/13 17:39:44 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.516 2003/05/13 19:26:21 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10103,6 +10103,9 @@ registerTrackHandler("multAlignWebbzebrafish", longXenoPslMethods);
 registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzRn", longXenoPslMethods);
 registerTrackHandler("blastzRn1", longXenoPslMethods);
+registerTrackHandler("blastzRn2", longXenoPslMethods);
+registerTrackHandler("blastzBestRn2", longXenoPslMethods);
+registerTrackHandler("blastzTightRn2", longXenoPslMethods);
 registerTrackHandler("blastzRat", longXenoPslMethods);
 registerTrackHandler("blastzBestRat", longXenoPslMethods);
 registerTrackHandler("blastzTightRat", longXenoPslMethods);
