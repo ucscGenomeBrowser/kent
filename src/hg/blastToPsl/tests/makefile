@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest
+test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest megaBlast
 
 
 protMrnaTest: mkdirs
@@ -33,6 +33,12 @@ identityBugTest: mkdirs
 	../blastToPsl input/identityBug.blast output/identityBugTest.psl
 	pslCheck output/identityBugTest.psl
 	diff -u expected/identityBugTest.psl output/identityBugTest.psl
+
+megaBlast: mkdirs
+	../blastToPsl input/970.txt output/970.psl
+	pslCheck output/970.psl
+	diff -u expected/970.psl output/970.psl
+
 
 clean::
 	rm -rf output
