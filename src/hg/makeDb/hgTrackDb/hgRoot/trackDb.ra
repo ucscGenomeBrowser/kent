@@ -63,8 +63,8 @@ spectrum on
 type bed 4 +
 
 track ctgPos
-shortLabel FPC Contigs
-longLabel Fingerprint Map Contigs
+shortLabel Map Contigs
+longLabel Physical Map Contigs
 priority 7
 visibility hide
 color 150,0,0
