@@ -40,6 +40,7 @@ errAbort(
   "   parasol list machines\n"
   "   parasol list jobs\n"
   "   parasol add spoke\n"
+  "   parasol qstat\n"
   "   parasol status\n"
   );
 }
@@ -276,6 +277,12 @@ void status()
 hubCommandAndPrint("status");
 }
 
+void qstat()
+/* Send qstat to hub and print result. */
+{
+hubCommandAndPrint("qstat");
+}
+
 void ping(int count)
 /* Ping hub server given number of times. */
 {
@@ -354,6 +361,8 @@ else if (sameString(command, "ping"))
     }
 else if (sameString(command, "status"))
     status();
+else if (sameString(command, "qstat"))
+    qstat();
 else if (sameString(command, "close"))
     dehub();
 else

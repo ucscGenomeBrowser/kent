@@ -6,6 +6,7 @@ struct job
     {
     struct dlNode *node;        /* Job's node on doubly-linked list. */
     int id;			/* Uniq	job id. */
+    char *exe;			/* Executable name - no path or parameters. */
     char *cmd;                  /* Executable name plus parameters. */
     char *user;			/* User name. */
     char *dir;			/* Starting dir. */

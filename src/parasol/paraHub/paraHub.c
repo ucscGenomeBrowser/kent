@@ -1,4 +1,5 @@
 /* paraHub - parasol hub server. */
+#include <time.h>
 #include "common.h"
 #include "options.h"
 #include "linefile.h"
@@ -179,6 +180,39 @@ if ((mach = findMachine(name)) != NULL)
     }
 }
 
+char *exeFromCommand(char *cmd)
+/* Return executable name (without path) given command line. */
+{
+static char exe[128];
+char *s,*e,*x;
+int i, size;
+int lastSlash = -1;
+
+/* Isolate first space-delimited word between s and e. */
+s = skipLeadingSpaces(cmd);
+e = skipToSpaces(cmd);
+if (e == NULL) 
+    e = s + strlen(s);
+size = e - s;
+
+/* Find last '/' in this word if any, and reposition s after it. */
+for (i=0; i<size; ++i)
+    {
+    if (s[i] == '/')
+        lastSlash = i;
+    }
+if (lastSlash > 0)
+    s += lastSlash + 1;
+
+/* Copy whats left to string to return . */
+size = e - s;
+if (size >= sizeof(exe))
+    size = sizeof(exe)-1;
+memcpy(exe, s, size);
+exe[size] = 0;
+return exe;
+}
+
 struct job *jobNew(char *cmd, char *user, char *dir, char *in, char *out, char *err)
 /* Create a new job structure */
 {
@@ -187,6 +221,7 @@ AllocVar(job);
 AllocVar(job->node);
 job->node->val = job;
 job->id = ++nextJobId;
+job->exe = cloneString(exeFromCommand(cmd));
 job->cmd = cloneString(cmd);
 job->user = cloneString(user);
 job->dir = cloneString(dir);
@@ -222,6 +257,7 @@ if (!dlEmpty(freeMachines) && !dlEmpty(freeSpokes) && !dlEmpty(pendingJobs))
     struct spoke *spoke;
     struct job *job;
     struct machine *machine;
+    time_t now = time(NULL);
 
     /* Get free resources from free list and move them to busy lists. */
     mNode = dlPopHead(freeMachines);
@@ -233,12 +269,13 @@ if (!dlEmpty(freeMachines) && !dlEmpty(freeSpokes) && !dlEmpty(pendingJobs))
     sNode = dlPopHead(freeSpokes);
     dlAddTail(busySpokes, sNode);
     spoke = sNode->val;
-    spoke->lastPinged = time(NULL);
+    spoke->lastPinged = now;
     spoke->pingCount = 0;
 
     /* Tell machine, job, and spoke about each other. */
     machine->job = job;
     job->machine = machine;
+    job->startTime = now;
     spokeSendJob(spoke, machine, job);
     return TRUE;
     }
@@ -604,22 +641,54 @@ netSendLongString(fd, "");
 freeDyString(&dy);
 }
 
-void oneJobList(int fd, struct dlList *list, struct dyString *dy)
+void appendLocalTime(struct dyString *dy, time_t t)
+/* Append time t converted to day/time format to dy. */
+{
+struct tm *tm;
+tm = localtime(&t);
+dyStringPrintf(dy, "%02d/%02d/%d %02d:%02d:%02d",
+   tm->tm_mday, tm->tm_mon, tm->tm_year, tm->tm_hour, tm->tm_min, tm->tm_sec);
+}
+
+char *upToFirstDot(char *s, bool dotQ)
+/* Return string up to first dot. */
+{
+static char ret[128];
+int size;
+char *e = strchr(s, '.');
+if (e == NULL)
+    size = strlen(s);
+else
+    size = e - s;
+if (size >= sizeof(ret)-2)	/* Leave room for .q */
+    size = sizeof(ret)-3;
+memcpy(ret, s, size);
+ret[size] = 0;
+if (dotQ)
+    strcat(ret, ".q");
+return ret;
+}
+
+void oneJobList(int fd, struct dlList *list, struct dyString *dy, boolean sinceStart)
 /* Write out one job list. */
 {
 struct dlNode *el;
 struct job *job;
-struct machine *mach;
 char *machName;
 for (el = list->head; !dlEnd(el); el = el->next)
     {
-    machName = "none";
     job = el->val;
-    mach = job->machine;
-    if (mach != NULL)
-        machName = mach->name;
+    if (job->machine != NULL)
+        machName = upToFirstDot(job->machine->name, FALSE);
+    else
+	machName = "none";
     dyStringClear(dy);
-    dyStringPrintf(dy, "%-4d %-10s %-10s %s", job->id, machName, job->user, job->cmd);
+    dyStringPrintf(dy, "%-4d %-10s %-10s ", job->id, machName, job->user);
+    if (sinceStart)
+        appendLocalTime(dy, job->startTime);
+    else
+        appendLocalTime(dy, job->submitTime);
+    dyStringPrintf(dy, " %s", job->cmd);
     netSendLongString(fd, dy->string);
     }
 }
@@ -630,10 +699,55 @@ void listJobs(int fd)
 {
 struct dyString *dy = newDyString(256);
 
-oneJobList(fd, runningJobs, dy);
-oneJobList(fd, pendingJobs, dy);
+oneJobList(fd, runningJobs, dy, TRUE);
+oneJobList(fd, pendingJobs, dy, FALSE);
 netSendLongString(fd, "");
 freeDyString(&dy);
+}
+
+void oneQstatList(int fd, struct dlList *list, char *state, struct dyString *dy)
+/* Write out one job list in qstat format. */
+{
+struct dlNode *node;
+struct job *job;
+time_t t;
+char *machName;
+char *s;
+
+for (node = list->head; !dlEnd(node); node = node->next)
+    {
+    job = node->val;
+    if (job->machine != NULL)
+	{
+        machName = upToFirstDot(job->machine->name, TRUE);
+	}
+    else
+        machName = "none";
+    if (state[0] == 'r')
+        t = job->startTime;
+    else
+        t = job->submitTime;
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%-7d -100 %-10s %-12s %-5s ", job->id, job->exe, job->user, state);
+    appendLocalTime(dy, t);
+    dyStringPrintf(dy, " %-10s MASTER", machName);
+    netSendLongString(fd, dy->string);
+    }
+}
+
+void qstat(int fd)
+/* Write list of jobs in qstat format. */
+{
+if (!dlEmpty(runningJobs) || !dlEmpty(pendingJobs))
+    {
+    struct dyString *dy = newDyString(256);
+    netSendLongString(fd, "job-ID prior name       user         state submit/start at     queue      master  ja-task-ID");
+    netSendLongString(fd, "---------------------------------------------------------------------------------------------");
+    oneQstatList(fd, runningJobs, "r", dy);
+    oneQstatList(fd, pendingJobs, "qw", dy);
+    freeDyString(&dy);
+    }
+netSendLongString(fd, "");
 }
 
 void status(int fd)
@@ -785,6 +899,8 @@ for (;;)
          listMachines(connectionHandle);
     else if (sameWord(command, "status"))
          status(connectionHandle);
+    else if (sameWord(command, "qstat"))
+         qstat(connectionHandle);
     else if (sameWord(command, "addSpoke"))
          addSpoke(socketHandle, connectionHandle);
     if (sameWord(command, "quit"))
