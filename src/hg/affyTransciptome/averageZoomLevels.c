@@ -2,6 +2,8 @@
 #include "common.h"
 #include "sample.h"
 #include "hdb.h"
+#include <string.h>
+
 
 #define MAX_WINDOW_SIZE  2000
 void usage()
@@ -12,9 +14,11 @@ errAbort("averageZoomLevels - takes a sorted sample file and creates averaged\n"
 	 "about how many pixels there may be and then caclulate an average for each\n"
 	 "of those 2000 bins. Then reduce size of each bin by maginification and \n"
 	 "calculate average for each of those bins, etc. until we are less than\n"
-	 "magnification times the minimum separation in the file or we are at maxZoom.\n"
+	 "magnification times the minimum separation in the file or we are at maxZoom\n."
+     "The -max option uses the maximum score to summarize each bin rather than the mean.\n"
 	 "usage:\n\t"
-	 "averageZoomLevels <magnification int> <maxZoom int> <database - 'hg6','hg7',etc> <sample file>\n");
+	 "averageZoomLevels <magnification int> <maxZoom int> <database - 'hg6','hg7',etc> <sample file> [-max]\n");
+
 }
 
 struct bin 
@@ -70,12 +74,12 @@ int getBinNumForSample(struct sample *s, int sampleIndex, int binCount, int binS
 {
 int binNum = -1;
 binNum = (s->chromStart + s->samplePosition[sampleIndex]) / binSize;
-if(binNum > binCount)
-    binNum = -1;
+if(binNum >= binCount)
+    binNum = binCount-1;
 return binNum;
 }
 
-void addSampleToBin(struct bin *b, struct sample *s, int sampleIndex)
+void addSampleToBin(struct bin *b, struct sample *s, int sampleIndex, boolean useMax )
 /* Add a sample to the average of a bin. Also if the
    coordinates of the sample are closer to the center coordinates of
    than current pinStart and pinEnd, substitute them. */
@@ -83,7 +87,12 @@ void addSampleToBin(struct bin *b, struct sample *s, int sampleIndex)
 int midway = (b->chromEnd - b->chromStart)/2 + b->chromStart;
 int sampPos = (s->chromStart + s->samplePosition[sampleIndex]);
 b->sampleCount++;
-b->aveScore += s->sampleHeight[sampleIndex];
+
+if( useMax )
+    b->aveScore = max( s->sampleHeight[sampleIndex], b->aveScore );
+else //using the mean
+    b->aveScore += s->sampleHeight[sampleIndex];
+
 if( abs(b->pinStart - midway) > abs(midway - sampPos))
     {
     b->pinStart = sampPos;
@@ -91,7 +100,7 @@ if( abs(b->pinStart - midway) > abs(midway - sampPos))
     }
 }
 
-void averageBinTabOutSample(struct bin **pBin,int binCount,FILE * out)
+void averageBinTabOutSample(struct bin **pBin,int binCount,FILE * out, boolean useMax )
 {
 int i =0;
 struct bin *b = NULL;
@@ -101,7 +110,10 @@ for(i = 0; i < binCount; i++)
     b = pBin[i];
     if(b->sampleCount != 0)
 	{
-	b->aveScore  = b->aveScore / b->sampleCount;
+
+    if( !useMax )
+	    b->aveScore  = b->aveScore / b->sampleCount;
+    
 	name = b->name;
 	}
     if(b->pinStart == 0 || b->pinEnd == 0)
@@ -124,7 +136,7 @@ for(i = 0; i < binCount; i++)
 		
 
 
-void averageZoomLevels(int mag, int maxZoom, char *db, char *inputFile)
+void averageZoomLevels(int mag, int maxZoom, char *db, char *inputFile, boolean useMax )
 /* Main function, zooms through at different levels */
 {
 int currentZoom = 0;
@@ -140,6 +152,8 @@ FILE *out = NULL;
 int i;
 hSetDb(db);
 warn("Loading file %s\n", inputFile);
+if( useMax )
+    warn("Using MAX option not MEAN!!!\n");
 sampList = sampleLoadAll(inputFile);
 AllocArray(buff, (strlen(inputFile) + 100));
 
@@ -163,10 +177,10 @@ for(currentZoom = 1; currentZoom <= maxZoom; currentZoom *= mag)
 	    for(i =0; i<samp->sampleCount; i++)
 		{
 		int binIndex = getBinNumForSample(samp, i, binCount, binSize);
-		addSampleToBin(pBin[binIndex], samp, i);
+		addSampleToBin(pBin[binIndex], samp, i, useMax );
 		}
 	    }
-	averageBinTabOutSample(pBin, binCount, out);
+	averageBinTabOutSample(pBin, binCount, out, useMax );
 	for(i=0;i<binCount;i++)
 	    binFreeList(&pBin[i]);
 	boundarySamp = samp;
@@ -186,7 +200,7 @@ else
     {
     int mag = atoi(argv[1]);
     int maxZoom = atoi(argv[2]);
-    averageZoomLevels(mag, maxZoom, argv[3], argv[4]);
+    averageZoomLevels(mag, maxZoom, argv[3], argv[4], argc == 6 && sameString(argv[5], "-max" ));
     }
 return 0;
 }
