@@ -1,3 +1,4 @@
+include ../../../../inc/common.mk
 # tests for hgLoadMaf
 
 PROG = hgLoadMaf
@@ -19,5 +20,5 @@ testNan: init-tests
 	diff output/${TEST1}.log expected
 
 init-tests:
-	mkdir -p output
+	${MKDIR} output
 

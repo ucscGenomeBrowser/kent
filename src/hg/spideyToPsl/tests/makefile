@@ -34,7 +34,7 @@ clean::
 	rm -rf output
 
 mkdirs:
-	@mkdir -p output
+	@${MKDIR}p output
 
 # make alignments
 mkalns:
