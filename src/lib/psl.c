@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.48 2004/06/10 17:07:39 braney Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.49 2004/08/15 00:07:54 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1267,6 +1267,7 @@ static char* VALID_STRANDS[] = {
 };
 int i, errCount = 0;
 char strand;
+boolean isProt = FALSE;
 
 /* check strand value */
 for (i = 0; VALID_STRANDS[i] != NULL; i++)
@@ -1283,11 +1284,23 @@ if (VALID_STRANDS[i] == NULL)
     }
 
 /* check target */
+if (pslIsProtein(psl))
+    {
+    isProt = TRUE;
+    for (i = 0; i < psl->blockCount ; i++)
+	psl->blockSizes[i] *= 3;
+    }
+
 strand = ((psl->strand[1] == '\0') ? '+' : psl->strand[1]);
 chkRanges(pslDesc, out, psl, psl->tName, "target", 't',
           strand, psl->tSize, psl->tStart, psl->tEnd,
           psl->blockCount, psl->blockSizes, psl->tStarts,
           &errCount);
+if (isProt)
+    {
+    for (i = 0; i < psl->blockCount ; i++)
+	psl->blockSizes[i] /= 3;
+    }
 
 /* check query */
 strand = psl->strand[0];
