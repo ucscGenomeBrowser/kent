@@ -32,6 +32,7 @@ hgGnfMicroarray gnfMouseU74bAllExps gnfMouseU74bAll /projects/compbio/data/micro
 hgGnfMicroarray gnfMouseU74cAllExps gnfMouseU74cAll /projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt
 # Convert these to ratios using the median of medians of 
 # cell types as the denominator as so:
+
 cd ~/src/hg/makeDb/hgRatioMicroarray
 hgRatioMicroarray gnfMouseU74aAll gnfMouseU74aAllRatio -clump=gnfMouseU74aClump.ra
 hgRatioMicroarray gnfMouseU74bAll gnfMouseU74bAllRatio -clump=gnfMouseU74bClump.ra
@@ -82,3 +83,15 @@ wget http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.des.scop.txt_1.63
 grep -v '^#' dir.des.scop.txt* > scopDes.txt
 hgsql hgFixed < ~/kent/src/hg/lib/scopDes.sql
 echo "load data local infile 'scopDes.txt' into table scopDes;" | hgsql hgFixed
+
+# The Yeast Cell Cycle Time Course from Cho RJ et al 1998
+cd /cluster/data/sacCer1/download/systematic_results/expression_data
+hgGnfMicroarray yeastChoCellCycleExps yeastChoCellCycle  \
+	Cho_et_al_full_data.txt -chip=affyYeast \
+	-chopName=/ \
+	-url=http://yscdp.stanford.edu/yeast_cell_cycle/cellcycle.html \
+	-ref=http://www.pnas.org/cgi/content/abstract/95/7/3752 \
+	-credit=http://yscdp.stanford.edu/yeast_cell_cycle/cellcycle.html
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray yeastChoCellCycle yeastChoCellCycleRatio
+
