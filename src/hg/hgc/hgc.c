@@ -1438,9 +1438,10 @@ puts(
   "J. Jurka,  RepBase Update, <I>Trends in Genetics</I> 16:418-420, 2000");
 }
 
-void doHgIsochore(char *track, char *item)
+void doHgIsochore(struct trackDb *tdb, char *item)
 /* do click on isochore track. */
 {
+char *track = tdb->tableName;
 hgcStart("Isochore Info");
 printf("<H2>Isochore Information</H2>\n");
 if (cgiVarExists("o"))
@@ -1469,22 +1470,7 @@ if (cgiVarExists("o"))
     hFreeConn(&conn);
     }
 htmlHorizontalLine();
-puts(
-    "<h3>What's an Isochore</h3>"
-    "<P>Isochores describe a region of a chromosome where the CG-content is"
-    " either higher or lower than the whole genome average (42%).  A CG-rich"
-    " isochore is given a dark color, while a CG-poor isochore is a light"
-    " color.  </P>"
-    ""
-    "<P>Isochores were determined by first calculating the CG-content of 100,000bp"
-    " windows across the genome.  These windows were either labeled H or L"
-    " depending on whether the window contained a higher or lower GC-content"
-    " than average.  A two-state HMM was created in which one state represented"
-    " GC-rich regions, and the other GC-poor.  It was trained using the first 12"
-    " chromosomes. The trained HMM was used to generate traces over all chromosomes."
-    " These traces define the boundaries of the isochores,"
-    " and their type (GC-rich or AT-rich).</P>"
-    );
+puts(tdb->html);
 }
 
 void doSimpleRepeat(char *track, char *item)
@@ -3307,7 +3293,7 @@ else if (sameWord(track, "rmsk"))
     }
 else if (sameWord(track, "isochores"))
     {
-    doHgIsochore(track, item);
+    doHgIsochore(tdb, item);
     }
 else if (sameWord(track, "simpleRepeat"))
     {
