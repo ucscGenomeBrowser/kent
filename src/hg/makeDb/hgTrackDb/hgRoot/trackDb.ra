@@ -1201,9 +1201,10 @@ altColor 0,55,200
 spectrum on
 type psl xeno
 
-track blastzStrictChainZebrafish
-shortLabel Blastz Zebrafish
-longLabel Strict Chain Blastz Zebrafish Alignments
+
+track blastzStrictChainTetra
+shortLabel Blastz Tetra
+longLabel Strict Chain Blastz Tetra Alignments
 priority 41.12 
 visibility hide
 color 0,55,200
@@ -1211,16 +1212,15 @@ altColor 0,55,200
 spectrum on
 type psl xeno
 
-track blastzStrictChainTetra
-shortLabel Blastz Tetra
-longLabel Strict Chain Blastz Tetra Alignments
-priority 41.13 
+track blastzStrictChainZebrafish
+shortLabel Blastz Zebrafish
+longLabel Strict Chain Blastz Zebrafish Alignments
+priority 41.13
 visibility hide
 color 0,55,200
 altColor 0,55,200
 spectrum on
 type psl xeno
-
 
 
 track altGraph
