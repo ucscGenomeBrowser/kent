@@ -7,6 +7,7 @@
 #include "snp.h"
 #include "snpMap.h"
 #include "hui.h"
+#include "snpUi.h"
 #include "spaceSaver.h"
 #include "hgTracks.h"
 

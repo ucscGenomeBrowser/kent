@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.788 2004/11/23 18:43:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.789 2004/11/25 01:21:06 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11261,18 +11261,18 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     if (strcmp((&snp)->strand,"?")) {printf("<B>Strand: </B>%s\n", (&snp)->strand);}
     printf("<BR><B>Observed: </B>%s\n",          (&snp)->observed);
+    printf("<BR><B>Source: </B>%s\n",            (&snp)->source);
     printf("<BR><B>Molecule Type: </B>%s\n",     (&snp)->molType);
     printf("<BR><B>Variant Class: </B>%s\n",     (&snp)->class);
     printf("<BR><B>Validation Status: </B>%s\n", (&snp)->valid);
-    if ((&snp)->avHet>0) {printf("<BR><B>Average Heterozygosity: </B>%.3f +/- %.3f", (&snp)->avHet, (&snp)->avHetSE);}
     printf("<BR><B>Function: </B>%s\n",          (&snp)->func);
-    printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType);
-    printf("<BR><B>Hit Quality: </B>%s\n",       (&snp)->hitQuality);
-    if ((&snp)->mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", (&snp)->mapWeight);}
-    if ((&snp)->chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", (&snp)->chromHits);}
-    if ((&snp)->contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", (&snp)->contigHits);}
-    if ((&snp)->seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", (&snp)->seqHits);}
-    printf("<BR><B>Source: </B>%s\n",            (&snp)->source);
+    if ((&snp)->avHet>0) {printf("<BR><B>Average Heterozygosity: </B>%.3f +/- %.3f", (&snp)->avHet, (&snp)->avHetSE);}
+/*   printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType);
+ *   printf("<BR><B>Hit Quality: </B>%s\n",       (&snp)->hitQuality);
+ *   if ((&snp)->mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", (&snp)->mapWeight);}
+ *   if ((&snp)->chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", (&snp)->chromHits);}
+ *   if ((&snp)->contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", (&snp)->contigHits);}
+ *   if ((&snp)->seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", (&snp)->seqHits);} */
     printf("<P>\n");
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");

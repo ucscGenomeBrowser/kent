@@ -1,4 +1,5 @@
-/* variation.c - hgTracks routines that are specific to the SNP and haplotype tracks */
+/* variation.c - hgTracks routines that are specific to the SNP and
+ * haplotype tracks */
 
 #include "variation.h"
 
@@ -23,8 +24,8 @@ boolean snpMapSourceFilterItem(struct track *tg, void *item)
 struct snpMap *el = item;
 int    snpMapSource = 0;
 
-for (snpMapSource=0; snpMapSource<ArraySize(snpMapSourceCart); snpMapSource++)
-    if (containsStringNoCase(el->source,snpMapSourceDataString(snpMapSource)))
+for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
+    if (containsStringNoCase(el->source,snpMapSourceDataName[snpMapSource]))
  	if (strcmp(snpMapSourceCart[snpMapSource], "exclude"))
  	    return TRUE;
 return FALSE;
@@ -36,8 +37,8 @@ boolean snpMapTypeFilterItem(struct track *tg, void *item)
 struct snpMap *el = item;
 int    snpMapType = 0;
 
-for (snpMapType=0; snpMapType<ArraySize(snpMapTypeCart); snpMapType++)
-    if (containsStringNoCase(el->type,snpMapTypeDataString(snpMapType)))
+for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
+    if (containsStringNoCase(el->type,snpMapTypeDataName[snpMapType]))
  	if (strcmp(snpMapTypeCart[snpMapType], "exclude"))
  	    return TRUE;
 return FALSE;
@@ -50,7 +51,6 @@ struct slList *newList = NULL, *el, *next;
 
 for (el = tg->items; el != NULL; el = next)
     {
-    struct snp *s = (struct snp *)el;
     next = el->next;
     if (filter(tg, el))
  	slAddHead(&newList, el);
@@ -65,8 +65,8 @@ boolean snpSourceFilterItem(struct track *tg, void *item)
 struct snp *el = item;
 int    snpSource = 0;
 
-for (snpSource=0; snpSource<ArraySize(snpSourceCart); snpSource++)
-    if (containsStringNoCase(el->source,snpSourceDataString(snpSource)))
+for (snpSource=0; snpSource<snpSourceCartSize; snpSource++)
+    if (containsStringNoCase(el->source,snpSourceDataName[snpSource]))
  	if (strcmp(snpSourceCart[snpSource], "exclude") )
  	    return TRUE;
 return FALSE;
@@ -78,8 +78,8 @@ boolean snpMolTypeFilterItem(struct track *tg, void *item)
 struct snp *el = item;
 int    snpMolType = 0;
 
-for (snpMolType=0; snpMolType<ArraySize(snpMolTypeCart); snpMolType++)
-    if (containsStringNoCase(el->molType,snpMolTypeDataString(snpMolType)))
+for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
+    if (containsStringNoCase(el->molType,snpMolTypeDataName[snpMolType]))
  	if ( strcmp(snpMolTypeCart[snpMolType], "exclude") )
  	    return TRUE;
 return FALSE;
@@ -91,8 +91,8 @@ boolean snpClassFilterItem(struct track *tg, void *item)
 struct snp *el = item;
 int    snpClass = 0;
 
-for (snpClass=0; snpClass<ArraySize(snpClassCart); snpClass++)
-    if (containsStringNoCase(el->class,snpClassDataString(snpClass)))
+for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
+    if (containsStringNoCase(el->class,snpClassDataName[snpClass]))
  	if ( strcmp(snpClassCart[snpClass], "exclude") )
  	    return TRUE;
 return FALSE;
@@ -104,8 +104,8 @@ boolean snpValidFilterItem(struct track *tg, void *item)
 struct snp *el = item;
 int    snpValid = 0;
 
-for (snpValid=0; snpValid<ArraySize(snpValidCart); snpValid++)
-    if (containsStringNoCase(el->valid,snpValidDataString(snpValid)))
+for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
+    if (containsStringNoCase(el->valid,snpValidDataName[snpValid]))
  	if ( strcmp(snpValidCart[snpValid], "exclude") )
  	    return TRUE;
 return FALSE;
@@ -117,8 +117,8 @@ boolean snpFuncFilterItem(struct track *tg, void *item)
 struct snp *el = item;
 int    snpFunc = 0;
 
-for (snpFunc=0; snpFunc<ArraySize(snpFuncCart); snpFunc++)
-    if (containsStringNoCase(el->func,snpFuncDataString(snpFunc)))
+for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
+    if (containsStringNoCase(el->func,snpFuncDataName[snpFunc]))
  	if ( strcmp(snpFuncCart[snpFunc], "exclude") )
  	    return TRUE;
 return FALSE;
@@ -128,15 +128,14 @@ return FALSE;
 void loadSnpMap(struct track *tg)
 /* Load up snpMap from database table to track items. */
 {
-int  snpMapSource  = 0;
-int  snpMapType    = 0;
+int  snpMapSource, snpMapType;
 
-for (snpMapSource=0; snpMapSource<ArraySize(snpMapSourceCart); snpMapSource++)
+for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
     snpMapSourceCart[snpMapSource] = cartUsualString(cart, 
-       snpMapSourceString(snpMapSource), snpMapSourceDefaultString(snpMapSource));
-for (snpMapType=0; snpMapType<ArraySize(snpMapTypeCart); snpMapType++)
+       snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
+for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     snpMapTypeCart[snpMapType] = cartUsualString(cart, 
-       snpMapTypeString(snpMapType), snpMapTypeDefaultString(snpMapType));
+       snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
 if (strncmp(database,"hg",2))
     return;
@@ -153,21 +152,16 @@ int  snpClass   = 0;
 int  snpValid   = 0;
 int  snpFunc    = 0;
 
-for (snpSource=0; snpSource<ArraySize(snpSourceCart); snpSource++)
-    snpSourceCart[snpSource] = cartUsualString(cart, snpSourceString(snpSource),
- 			snpSourceDefaultString(snpSource));
-for (snpMolType=0; snpMolType<ArraySize(snpMolTypeCart); snpMolType++)
-    snpMolTypeCart[snpMolType] = cartUsualString(cart, snpMolTypeString(snpMolType),
- 			snpMolTypeDefaultString(snpMolType));
-for (snpClass=0; snpClass<ArraySize(snpClassCart); snpClass++)
-    snpClassCart[snpClass] = cartUsualString(cart, snpClassString(snpClass),
- 			snpClassDefaultString(snpClass));
-for (snpValid=0; snpValid<ArraySize(snpValidCart); snpValid++)
-    snpValidCart[snpValid] = cartUsualString(cart, snpValidString(snpValid),
- 			snpValidDefaultString(snpValid));
-for (snpFunc=0; snpFunc<ArraySize(snpFuncCart); snpFunc++)
-    snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncString(snpFunc),
- 			snpFuncDefaultString(snpFunc));
+for (snpSource=0;  snpSource  < snpSourceCartSize; snpSource++)
+    snpSourceCart[snpSource] = cartUsualString(cart, snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
+for (snpMolType=0; snpMolType < snpMolTypeCartSize; snpMolType++)
+    snpMolTypeCart[snpMolType] = cartUsualString(cart, snpMolTypeStrings[snpMolType], snpMolTypeDefault[snpMolType]);
+for (snpClass=0;   snpClass   < snpClassCartSize; snpClass++)
+    snpClassCart[snpClass] = cartUsualString(cart, snpClassStrings[snpClass], snpClassDefault[snpClass]);
+for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
+    snpValidCart[snpValid] = cartUsualString(cart, snpValidStrings[snpValid], snpValidDefault[snpValid]);
+for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
+    snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
 if (strncmp(database,"hg",2))
     return;
@@ -194,8 +188,9 @@ Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snpMap track item. */
 {
 struct snpMap *el = item;
-enum   snpColorEnum thisSnpColor = 
-    snpColorStringToEnum(snpMapSourceCart[snpMapSourceDataIndex(el->source)]);
+enum   snpColorEnum thisSnpColor;
+
+thisSnpColor = stringArrayIx(snpMapSourceCart[stringArrayIx(el->source,snpMapSourceDataName,snpMapSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
 switch (thisSnpColor)
     {
     case snpColorRed:
@@ -224,31 +219,28 @@ char  *funcString = NULL;
 int    snpValid = 0;
 int    snpFunc = 0;
 
-switch (snpColorSourceIndex(snpColorSource))
+switch (stringArrayIx(snpColorSource, snpColorSourceLabel, snpColorSourceLabelSize))
     {
     case snpColorSourceSource:
-	thisSnpColor = 
-	    snpColorStringToEnum(snpSourceCart[snpSourceDataIndex(el->source)]);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpSourceCart[stringArrayIx(el->source,snpSourceDataName,snpSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceMolType:
-	thisSnpColor = 
-	    snpColorStringToEnum(snpMolTypeCart[snpMolTypeDataIndex(el->molType)]);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpMolTypeCart[stringArrayIx(el->molType,snpMolTypeDataName,snpMolTypeDataNameSize)],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceClass:
-	thisSnpColor = 
-	    snpColorStringToEnum(snpClassCart[snpClassDataIndex(el->class)]);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpClassCart[stringArrayIx(el->class,snpClassDataName,snpClassDataNameSize)],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceValid:
 	validString = cloneString(el->valid);
-	for (snpValid=0; snpValid<ArraySize(snpValidCart); snpValid++)
-	    if (containsStringNoCase(validString,snpValidDataString(snpValid)))
-		thisSnpColor = snpColorStringToEnum(snpValidCart[snpValid]);
+	for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
+	    if (containsStringNoCase(validString, snpValidDataName[snpValid]))
+		thisSnpColor = (enum snpColorEnum) stringArrayIx(snpValidCart[snpValid],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceFunc:
 	funcString = cloneString(el->func);
-	for (snpFunc=0; snpFunc<ArraySize(snpFuncCart); snpFunc++)
-	    if (containsStringNoCase(funcString,snpFuncDataString(snpFunc)))
-		thisSnpColor = snpColorStringToEnum(snpFuncCart[snpFunc]);
+	for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
+	    if (containsStringNoCase(funcString, snpFuncDataName[snpFunc]))
+		thisSnpColor = (enum snpColorEnum) stringArrayIx(snpFuncCart[snpFunc],snpColorLabel,snpColorLabelSize);
 	break;
     default:
 	thisSnpColor = snpColorBlack;
@@ -283,11 +275,7 @@ struct snpMap *sm = item;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)sm->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)sm->chromEnd-winStart)*scale) + xOff;
-struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 Color itemColor = tg->itemColor(tg, sm, vg);
-Color itemNameColor = tg->itemNameColor(tg, sm, vg);
 
 vgBox(vg, x1, y, 1, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
@@ -305,11 +293,7 @@ struct snp *s = item;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)s->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
-struct trackDb *tdb = tg->tdb;
-int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 Color itemColor = tg->itemColor(tg, s, vg);
-Color itemNameColor = tg->itemNameColor(tg, s, vg);
 
 vgBox(vg, x1, y, 1, heightPer, itemColor);
 /* Clip here so that text will tend to be more visible... */
@@ -326,8 +310,7 @@ static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
 double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int s, e;
-int y, x1, x2, w;
+int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 boolean doHgGene = trackWantsHgGene(tg);
 
@@ -403,8 +386,7 @@ static void snpDrawItems(struct track *tg, int seqStart, int seqEnd,
 double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
-int s, e;
-int y, x1, x2, w;
+int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
 boolean doHgGene = trackWantsHgGene(tg);
 
@@ -531,8 +513,7 @@ int shortHeight = heightPer / 2;
 int s = 0;
 int e = 0;
 Color *shades = tg->colorShades;
-boolean isXeno = (tg->subType == lfSubXeno) 
-    			|| (tg->subType == lfSubChain);
+boolean isXeno = (tg->subType == lfSubXeno) || (tg->subType == lfSubChain);
 boolean hideLine = (vis == tvDense && isXeno);
 
 /* draw haplotype thick line ... */

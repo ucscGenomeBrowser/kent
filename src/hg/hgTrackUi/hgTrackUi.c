@@ -11,6 +11,7 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "snpUi.h"
 #include "sample.h"
 #include "cdsColors.h"
 #include "wiggle.h"
@@ -22,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.151 2004/11/24 22:46:12 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.152 2004/11/25 01:20:56 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -116,31 +117,26 @@ int   snpMapType = 0;
 if (strncmp(database,"hg",2))
     return;
 printf("<BR><B>Variant Sources:</B><BR>\n");
-for (snpMapSource=0; snpMapSource<ArraySize(snpMapSourceCart); snpMapSource++)
+for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
     {
     snpMapSourceCart[snpMapSource] = 
-	cartUsualString(cart, snpMapSourceString(snpMapSource),	snpMapSourceDefaultString(snpMapSource));
-    snpFilterButtons(snpMapSourceString(snpMapSource), snpMapSourceCart[snpMapSource]);
-    printf(" - <B>%s</B><BR>\n",snpMapSourceLabel(snpMapSource));
+	cartUsualString(cart, snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
+    snpFilterButtons(snpMapSourceStrings[snpMapSource], snpMapSourceCart[snpMapSource]);
+    printf(" - <B>%s</B><BR>\n", snpMapSourceLabels[snpMapSource]);
     }
 printf("<BR><B>Variant Types:</B><BR>\n");
-for (snpMapType=0; snpMapType<3; snpMapType++)
+for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     {
     snpMapTypeCart[snpMapType] = 
-	cartUsualString(cart, snpMapTypeString(snpMapType), snpMapTypeDefaultString(snpMapType));
-    snpMapTypeFilterButtons(snpMapTypeString(snpMapType), snpMapTypeCart[snpMapType]);
-    printf(" - <B>%s</B><BR>\n",snpMapTypeLabelStr(snpMapType));
+	cartUsualString(cart, snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
+    snpMapTypeFilterButtons(snpMapTypeStrings[snpMapType], snpMapTypeCart[snpMapType]);
+    printf(" - <B>%s</B><BR>\n", snpMapTypeLabels[snpMapType]);
     }
 }
 
 void snpUi(struct trackDb *tdb)
 /* Put up UI snp data. */
 {
-int   snpSourceCount  = ArraySize(snpSourceCart);
-int   snpMolTypeCount = ArraySize(snpMolTypeCart);
-int   snpClassCount   = ArraySize(snpClassCart);
-int   snpValidCount   = ArraySize(snpValidCart);
-int   snpFuncCount    = ArraySize(snpFuncCart);
 int   snpSource  = 0;
 int   snpMolType = 0;
 int   snpClass   = 0;
@@ -153,44 +149,39 @@ printf("<BR><B>Color Specification:</B><BR>\n");
     snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
     snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
 printf("<BR><BR><B>Sources:</B><BR>\n");
-for (snpSource=0; snpSource < snpSourceCount; snpSource++)
+for (snpSource=0; snpSource < snpSourceCartSize; snpSource++)
     {
-    snpSourceCart[snpSource] = 
-	cartUsualString(cart, snpSourceString(snpSource), snpSourceDefaultString(snpSource));
-    snpFilterButtons(snpSourceString(snpSource), snpSourceCart[snpSource]);
-    printf(" - <B>%s</B><BR>\n",snpSourceLabel(snpSource));
+    snpSourceCart[snpSource] = cartUsualString(cart, snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
+    snpFilterButtons(snpSourceStrings[snpSource], snpSourceCart[snpSource]);
+    printf(" - <B>%s</B><BR>\n", snpSourceLabels[snpSource]);
     }
 printf("<BR><B>Molecule Types:</B><BR>\n");
-for (snpMolType=0; snpMolType<snpMolTypeCount; snpMolType++)
+for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
     {
-    snpMolTypeCart[snpMolType] = 
-	cartUsualString(cart, snpMolTypeString(snpMolType), snpMolTypeDefaultString(snpMolType));
-    snpFilterButtons(snpMolTypeString(snpMolType), snpMolTypeCart[snpMolType]);
-    printf(" - <B>%s</B><BR>\n",snpMolTypeLabel(snpMolType));
+    snpMolTypeCart[snpMolType] = cartUsualString(cart, snpMolTypeStrings[snpMolType], snpMolTypeDefault[snpMolType]);
+    snpFilterButtons(snpMolTypeStrings[snpMolType], snpMolTypeCart[snpMolType]);
+    printf(" - <B>%s</B><BR>\n", snpMolTypeLabels[snpMolType]);
     }
 printf("<BR><B>Classes:</B><BR>\n");
-for (snpClass=0; snpClass<snpClassCount; snpClass++)
+for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
     {
-    snpClassCart[snpClass] = 
-	cartUsualString(cart, snpClassString(snpClass), snpClassDefaultString(snpClass));
-    snpFilterButtons(snpClassString(snpClass), snpClassCart[snpClass]);
-    printf(" - <B>%s</B><BR>\n",snpClassLabel(snpClass));
+    snpClassCart[snpClass] = cartUsualString(cart, snpClassStrings[snpClass], snpClassDefault[snpClass]);
+    snpFilterButtons(snpClassStrings[snpClass], snpClassCart[snpClass]);
+    printf(" - <B>%s</B><BR>\n", snpClassLabels[snpClass]);
     }
 printf("<BR><B>Validation Status:</B><BR>\n");
-for (snpValid=0; snpValid<snpValidCount; snpValid++)
+for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
     {
-    snpValidCart[snpValid] = 
-	cartUsualString(cart, snpValidString(snpValid), snpValidDefaultString(snpValid));
-    snpFilterButtons(snpValidString(snpValid), snpValidCart[snpValid]);
-    printf(" - <B>%s</B><BR>\n",snpValidLabel(snpValid));
+    snpValidCart[snpValid] = cartUsualString(cart, snpValidStrings[snpValid], snpValidDefault[snpValid]);
+    snpFilterButtons(snpValidStrings[snpValid], snpValidCart[snpValid]);
+    printf(" - <B>%s</B><BR>\n",snpValidLabels[snpValid]);
     }
 printf("<BR><B>Functional classification:</B><BR>\n");
-for (snpFunc=0; snpFunc<snpFuncCount; snpFunc++)
+for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     {
-    snpFuncCart[snpFunc] = 
-	cartUsualString(cart, snpFuncString(snpFunc), snpFuncDefaultString(snpFunc));
-    snpFilterButtons(snpFuncString(snpFunc), snpFuncCart[snpFunc]);
-    printf(" - <B>%s</B><BR>\n",snpFuncLabel(snpFunc));
+    snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
+    snpFilterButtons(snpFuncStrings[snpFunc], snpFuncCart[snpFunc]);
+    printf(" - <B>%s</B><BR>\n",snpFuncLabels[snpFunc]);
     }
 }
 
@@ -390,7 +381,7 @@ char accName[64];
 char sprotName[64];
 char posName[64];
 char cModeStr[64];
-boolean useGene, useAcc, useSprot, usePos;
+boolean useGene, useAcc, usePos;
 int cMode;
 char *cModes[3] = {"0", "1", "2"};
 
