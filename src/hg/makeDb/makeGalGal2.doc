@@ -1952,21 +1952,21 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
       bgiSnp.bed
 
 
-# LOAD PRELIM ENSEMBL GENE BUILD (DONE 3/28/04 angie)
+# ENSEMBL GENE BUILD (DONE 4/27/04 angie)
     ssh kksilo
     mkdir /cluster/data/galGal2/bed/ensembl
     cd /cluster/data/galGal2/bed/ensembl
-    wget ftp://ftp.sanger.ac.uk/pub/searle/chicken/chicken_midbuild.pep.gz
-    wget ftp://ftp.sanger.ac.uk/pub/searle/chicken/chicken_midbuild.gtf.gz
+    wget ftp://ftp.sanger.ac.uk/pub/searle/chicken/chicken_build.pep.gz
+    wget ftp://ftp.sanger.ac.uk/pub/searle/chicken/chicken_build.gtf.gz
     gunzip *.gz
-    sed -e 's/^/chr/' chicken_midbuild.gtf \
-      > chicken_midbuild.fixed.gtf
-    sed -e 's/midbuild_chicken_trans/midbuild_chicken_cdna/' \
-      chicken_midbuild.pep > chicken_midbuild.fixed.pep
+    sed -e 's/^/chr/' chicken_build.gtf \
+      > chicken_build.fixed.gtf
+    perl -wpe 's/^>.*trans_id=(\w+).*/>$1/' \
+      chicken_build.pep > chicken_build.fixed.pep
     ssh hgwdev
     cd /cluster/data/galGal2/bed/ensembl
-    hgPepPred galGal2 generic ensPep chicken_midbuild.fixed.pep
-    ldHgGene -gtf galGal2 ensGene chicken_midbuild.fixed.gtf
+    hgPepPred galGal2 generic ensPep chicken_build.fixed.pep
+    ldHgGene -gtf -frame -id -geneName galGal2 ensGene chicken_build.fixed.gtf
 
 
 # MAKE KNOWN REGULATORY REGIONS (DONE 3/29/04 angie)
@@ -2050,22 +2050,22 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     hgLoadBed galGal2 webbNonExonic webbNonExonic.bed
 
 
-# UN-ANNOTATED (EXCEPT FOR CROSS-SPECIES) REGIONS (DONE 4/9/04 angie)
+# UN-ANNOTATED (EXCEPT FOR CROSS-SPECIES) REGIONS (DONE 4/27/04 angie)
     # Anton Nekrutenko asked the chickenanalysis list for this... sounds 
     # like a job for featureBits.  :)
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/unAnnotated
     cd /cluster/data/galGal2/bed/unAnnotated
     nice featureBits galGal2 -minSize=12 \
-      \!gap \!bgiGene \!ensGene \!geneid \!genscan \
+      \!gap \!bgiGene \!ensGene \!geneid \!genscan \!twinscan \
       \!mrna \!intronEst \!est \!xenoMrna \
       \!uniGene_gg \!cpgIslandExt \!rmsk \!simpleRepeat \
       -bed=unAnnotated.bed
-#832258833 bases of 1054197620 (78.947%) in intersection
+#826274476 bases of 1054197620 (78.379%) in intersection
     hgLoadBed galGal2 unAnnotated unAnnotated.bed
     # not much of a drop in coverage with the -minSize:
     nice featureBits galGal2 unAnnotated
-#831761096 bases of 1054197620 (78.900%) in intersection
+#825770129 bases of 1054197620 (78.332%) in intersection
 
 
 # SYNTENY BY HOMOLOGY FROM EVGENY ZDOBNOV (DONE 4/15/04 angie)
@@ -2214,5 +2214,49 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
       gallus_gallus_ncrna_sgj_v1.gff > rnaGene.bed
     hgLoadBed galGal2 rnaGene -sqlTable=$HOME/kent/src/hg/lib/rnaGene.sql \
       -noBin rnaGene.bed
+
+
+# TWINSCAN FROM BRENT LAB (DONE 4/28/04 angie)
+    # contact: Paul Flicek 
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/twinscan
+    cd /cluster/data/galGal2/bed/twinscan
+    wget http://www.cs.wustl.edu/~pflicek/chicken/chicken.ts.tar.gz
+    tar xvzf chicken.ts.tar.gz 
+    # No .ptx, just gtf.
+    # Fix formatting problem in chr16.gtf:
+    mv chr16.twinscan.042604.gtf chr16.twinscan.042604.gtf.orig
+    sed -e 's/1.twinscan.hs.cons.TWEAK400/chr16/g' \
+      chr16.twinscan.042604.gtf.orig > chr16.twinscan.042604.gtf
+    ldHgGene -gtf -frame -id -geneName galGal2 twinscan chr*.gtf
+
+
+# ISOCHORES FROM NEKRUTENKO LAB (DONE 4/27/04 angie)
+    # contact: Jianbin HE <jbhe@psu.edu>
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/isochore
+    cd /cluster/data/galGal2/bed/isochore
+    wget http://www.bx.psu.edu/~jbhe/isochore/chi-iso.tar.gz
+    tar xvzf chi-iso.tar.gz
+    # Remove the custom track "browser" and "track" lines:
+    cat chr*.bed | egrep -v '^(browser|track)' > isochore.bed
+    hgLoadBed galGal2 isochore isochore.bed
+
+
+# SGP GENE PREDICTIONS (DONE 4/28/04 angie)
+    # contact: "EYRAS, EDUARDO" <eeyras@imim.es> (Roderic Guigo's group)
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/sgp
+    cd /cluster/data/galGal2/bed/sgp
+    wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402xhs/chicken.sgp2.prot.tar.gz
+    wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402xhs/chicken.sgp2.gtf.tar.gz
+    tar xvzf chicken.sgp2.gtf.tar.gz
+    tar xvzf chicken.sgp2.prot.tar.gz
+    cat chr*.prot.fa | perl -wpe 's/^>(\w+)/>$1.1/' > sgpPep.fa
+    hgPepPred galGal2 generic sgpPep sgpPep.fa
+    cat chr*.gtf \
+    | perl -wpe 's/gene_id\s+(\S+);\s+transcript_id\s+(\S+)/gene_id "$1"; transcript_id "$2";/' \
+    > sgpGene.gtf
+    ldHgGene -gtf -frame -id -geneName galGal2 sgpGene sgpGene.gtf
 
 
