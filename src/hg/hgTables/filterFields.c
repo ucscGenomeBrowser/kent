@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.30 2005/02/15 22:29:58 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.31 2005/02/17 17:47:17 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1039,10 +1039,10 @@ static boolean wildReal(char *pat)
 return pat != NULL && pat[0] != 0 && !sameString(pat, "*");
 }
 
-static boolean cmpReal(char *pat)
+static boolean cmpReal(char *pat, char *cmpOp)
 /* Return TRUE if we have a real cmpOp. */
 {
-return pat != NULL && pat[0] != 0 && !sameString(pat, cmpOpMenu[0]);
+return pat != NULL && pat[0] != 0 && !sameString(cmpOp, cmpOpMenu[0]);
 }
 
 static boolean filteredOrLinked(char *db, char *table)
@@ -1108,7 +1108,9 @@ else
 		}
 	    else if (sameString(type, filterCmpVar))
 	        {
-		gotFilter = cmpReal(var->val);
+		char *patVar = filterPatternVarName(db, table, field);
+		char *pat = trimSpaces(cartOptionalString(cart, patVar));
+		gotFilter = cmpReal(pat, var->val);
 		}
 	    else if (sameString(type, filterRawQueryVar))
 	        {
@@ -1249,7 +1251,7 @@ for (var = varList; var != NULL; var = var->next)
 	char *patVar = filterPatternVarName(db, table, field);
 	char *pat = trimSpaces(cartOptionalString(cart, patVar));
 	char *cmpVal = cartString(cart, var->name);
-	if (cmpReal(pat))
+	if (cmpReal(pat, cmpVal))
 	    {
 	    if (needAnd) dyStringAppend(dy, " and ");
 	    needAnd = TRUE;
