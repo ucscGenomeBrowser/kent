@@ -13,7 +13,7 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.8 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.9 2003/06/27 21:39:38 braney Exp $";
 
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
@@ -32,6 +32,7 @@ struct sqlResult *sr = NULL;
 struct lm *lm = lmInit(1024*4);
 char **row;
 double scale = ((double)(winEnd - winStart))/width;
+char fullName[64];
 
 if (tg->items != NULL)
     {
@@ -59,8 +60,11 @@ if (tg->items != NULL)
 	}
 
     /* Make up range query. */
-    dyStringPrintf(query, "select chainId,tStart,tEnd from %s_%sLink where ",
-	    chromName, tg->mapName);
+    sprintf(fullName, "%s_%s", chromName, tg->mapName);
+    if (!hTableExistsDb(hGetDb(), fullName))
+	strcpy(fullName, tg->mapName);
+    dyStringPrintf(query, 
+	    "select chainId,tStart,tEnd from %sLink where ",fullName);
     hAddBinToQuery(seqStart, seqEnd, query);
     dyStringPrintf(query, "tStart<%u and tEnd>%u", seqEnd, seqStart);
     sr = sqlGetResult(conn, query->string);
