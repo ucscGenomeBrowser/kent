@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredName.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.4 2004/03/09 01:42:41 daryl Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.5 2004/03/13 05:34:25 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +22,7 @@ errAbort(
   "options:\n"
   "   -utr   Add UTRs to the output\n"
   "   -order Order by chrom, txStart\n"
+  "   -source=src set source name to uses\n"
   "Note: use refFlat table to include geneName\n"
   );
 }
@@ -29,6 +30,8 @@ errAbort(
 static struct optionSpec options[] = {
    {"utr", OPTION_BOOLEAN},
    {"order", OPTION_BOOLEAN},
+   {"source", OPTION_STRING},
+   {NULL, 0}
 };
 
 char *findUniqueName(struct hash *dupeHash, char *root)
@@ -87,7 +90,7 @@ fprintf(f, "gene_id \"%s\"; ", name);
 fprintf(f, "transcript_id \"%s\"; ", name);
 fprintf(f, "exon_number \"%d\"; ", exonIx+1);
 fprintf(f, "exon_id \"%s.%d\";", name, exonIx+1);
-if (strlen(geneName)>0)
+if ((geneName != NULL) && (strlen(geneName)>0))
     fprintf(f, " gene_name \"%s\";", geneName);
 fprintf(f, "\n");
 }
@@ -130,27 +133,11 @@ for (i=0; i<gpn->exonCount; ++i)
     }
 }
 
-char *sqlUnsignedDynamicArraySpoof(int *ui, int length)
-{
-char *tmp=NULL;
-char *ret=NULL;
-int i;
-
-for (i=0; i<length; i++)
-    {
-    sprintf(tmp, ",%d", ui[i]);
-    strcat(ret, tmp);
-    }
-return ret+1;
-}
-
 struct genePredName *genePredNameSpoof(struct genePred *gp)
 /* Convert a genePred struct to a genePredName struct by adding a NULL geneName *
  * Dispose of this with genePredNameFree(). */
 {
 struct genePredName *ret;
-int sizeOne,i;
-char *s, *tmp;
 
 if (gp==NULL) 
     return NULL;
@@ -165,12 +152,8 @@ ret->txStart = gp->txStart;
 ret->txEnd = gp->txEnd;
 ret->cdsStart = gp->cdsStart;
 ret->cdsEnd = gp->cdsEnd;
-tmp=sqlUnsignedDynamicArraySpoof(ret->exonStarts, gp->exonCount);
-sqlUnsignedDynamicArray(tmp, &ret->exonStarts, &sizeOne);
-assert(sizeOne == ret->exonCount);
-tmp=sqlUnsignedDynamicArraySpoof(ret->exonEnds, gp->exonCount);
-sqlUnsignedDynamicArray(tmp, &ret->exonEnds, &sizeOne);
-assert(sizeOne == ret->exonCount);
+ret->exonStarts = cloneMem(gp->exonStarts, gp->exonCount*sizeof(gp->exonStarts[0]));
+ret->exonEnds = cloneMem(gp->exonEnds, gp->exonCount*sizeof(gp->exonEnds[0]));
 return ret;
 }
 
@@ -181,17 +164,22 @@ FILE *f = mustOpen(gtfOut, "w");
 struct hash *dupeHash = newHash(16);
 struct genePred *gpList = NULL, *gp = NULL;
 struct genePredName *gpnList = NULL, *gpn;
+char *source = optionVal("source", table);
 
 if (sameString(database, "file"))
     {
     printf("FILE\n");
     gpList = genePredLoadAll(table);
-    gpnList = genePredNameSpoof(gp);
+    for (gp = gpList; gp != NULL; gp = gp->next)
+        {
+        gpn = genePredNameSpoof(gp);
+        slAddHead(&gpnList, gpn);
+        }
     }
 else
     gpnList = genePredNameLoadTable(database, table);
 for (gpn = gpnList; gpn != NULL; gpn = gpn->next)
-    genePredWriteToGtf(gpn, table, dupeHash, f);
+    genePredWriteToGtf(gpn, source, dupeHash, f);
 carefulClose(&f);
 return;
 }
