@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.50 2004/09/24 20:35:19 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.51 2004/09/27 16:15:43 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1025,7 +1025,8 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 			{
 			unsigned span = wiggle->span;
 			unsigned inx;
-			unsigned gap = chromPosition - dataArrayPosition;
+			long long gap = (long long) chromPosition -
+				(long long) dataArrayPosition;
 
 			dataArrayPosition += gap;
 
