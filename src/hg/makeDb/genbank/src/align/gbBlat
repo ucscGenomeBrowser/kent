@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.21 2004/04/07 15:43:43 hartera Exp $
+# $Id: gbBlat,v 1.22 2004/06/10 15:37:12 hartera Exp $
 #
 set -e
 
@@ -49,6 +49,7 @@ RN_OOC=/scratch/hg/h/rat11.ooc
 PANTRO_OOC=/cluster/bluearc/hg/h/chimp11.ooc
 GALGAL_OOC=/iscratch/i/galGal2/11.ooc
 CE_OOC=/iscratch/i/worms/Celegans2/11.ooc
+DANRER_OOC=/iscratch/i/danRer1/11.ooc
 
 # entry, parse arguments
 keepTmp="NO"
