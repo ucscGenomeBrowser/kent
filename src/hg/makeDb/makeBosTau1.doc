@@ -332,6 +332,5 @@ exit; # don't actually run this like a script :)
 
   ssh eieio
   cd /cluster/data/genbank
-  nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial -verbose=3 bosTau1 &
+  nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial -verbose=1 bosTau1 &
   # logged to /cluster/data/genbank/var/build/logs/*.bosTau1.initalign.log
-  # 959261 mrna sequences will be align
