@@ -4990,6 +4990,7 @@ void doBlatMus(struct trackDb *tdb, char *item)
 longXenoPsl1(tdb, item, "Mouse", "chromInfo", "mm2");
 }
 
+#ifdef UNUSED
 void netAlignClick(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable, char *otherDb)
 /* Put up cross-species alignment when the second species
@@ -5021,17 +5022,20 @@ printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 printTrackHtml(tdb);
 freez(&cgiItem);
 }
+#endif /* UNUSED */
 
 void chainClickHandler(struct trackDb *tdb, char *item)
 {
 chainClick(tdb, item, "Mouse", "chromInfo", "mm2");
 }
 
+#ifdef UNUSED
 void netAlignClickHandler(struct trackDb *tdb, char *item)
 /* Put up details of one netted alignment */
 {
 netAlignClick(tdb, item, "Mouse", "chromInfo", "mm2");
 }
+#endif /* UNUSED */
 
 void doMultAlignZoo(struct trackDb *tdb, char *item, char *otherName )
 /* Put up cross-species alignment when the second species
@@ -9355,10 +9359,6 @@ else if (sameWord(track, "blatMus")
 else if (stringIn(track, "blastzChain"))
     {
     chainClickHandler(tdb, item);
-    }
-else if ((tdb != NULL) && sameString(tdb->type, "netAlign"))
-    {
-    netAlignClickHandler(tdb, item);
     }
 else if (startsWith("multAlignWebb", track))
     {
