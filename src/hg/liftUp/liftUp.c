@@ -40,6 +40,7 @@ errAbort(
 
 boolean silentDrop;	/* True if should silently drop items not in liftSpec. */
 boolean carryMissing;   /* True if should carry missing items untranslated. */
+boolean pipeOut;	/* True if main output is stdout. */
 
 struct liftSpec
 /* How to lift coordinates. */
@@ -77,7 +78,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     }
 slReverse(&list);
 lineFileClose(&lf);
-printf("Got %d lifts in %s\n", slCount(list), fileName);
+if (!pipeOut) printf("Got %d lifts in %s\n", slCount(list), fileName);
 if (list == NULL)
     errAbort("Empty liftSpec file %s", fileName);
 return list;
@@ -188,7 +189,7 @@ rmskOutWriteHead(dest);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     if (!fileExists(source))
 	{
 	warn("%s does not exist\n", source);
@@ -273,7 +274,7 @@ for (i=0; i<sourceCount; ++i)
 	warn("%s doesn't exist!", source);
 	continue;
 	}
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     lf = pslFileOpen(source);
     while ((psl = pslNext(lf)) != NULL)
 	{
@@ -353,7 +354,7 @@ strcpy(lastContig, "");
 for (i=1; i<sourceCount; ++i)
     {
     source = sources[i];
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     lf = lineFileMayOpen(source, TRUE);
     if (lf != NULL)
 	{
@@ -474,14 +475,12 @@ if (doubleLift)
    {
    int min2 = max3(ctgWord2, startWord2, endWord2);
    minFieldCount = max(minFieldCount, min2);
-   uglyf("doubleLift\n");
    }
-uglyf("MinFieldCount = %d\n", minFieldCount);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
     lf = lineFileOpen(source, TRUE);
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	if (line[0] == '#')
@@ -638,7 +637,7 @@ if (carryMissing)
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
-    printf("Processing %s\n", source);
+    if (!pipeOut) printf("Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
     if (!startsWith("ctg", contig))
         {
@@ -672,7 +671,7 @@ void liftUp(char *destFile, char *liftFile, char *how, int sourceCount, char *so
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 {
-struct liftSpec *lifts = readLifts(liftFile);
+struct liftSpec *lifts;
 struct hash *liftHash;
 char *source = sources[0];
 char *destType = cgiUsualString("type", destFile);
@@ -685,6 +684,8 @@ else if (sameWord(how, "drop"))
     silentDrop = TRUE;
 else
     usage();
+pipeOut = sameString(destFile, "stdout");
+lifts = readLifts(liftFile);
 
 if (endsWith(destType, ".out"))
     {
