@@ -11,7 +11,7 @@
 
 set tablename=""
 set machine="hgwbeta"
-set host=""
+set host="-h hgwbeta"
 set found=0
 set dbs=""
 set rr="false"
@@ -31,9 +31,10 @@ endif
 
 # assign command line arguments
 if ($#argv == 2) then
-  if ($argv[2] != "hgwdev") then
-    set host="-h $argv[2]"
-    set machine="$argv[2]"
+  set machine="$argv[2]"
+  set host="-h $argv[2]"
+  if ($argv[2] == "hgwdev") then
+    set host=""
   endif
 else
 endif
