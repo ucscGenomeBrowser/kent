@@ -4443,7 +4443,7 @@ hgsql \
 ######## PROTEOME BROWSER BUILD #######  (DONE - 2004-04-05 - Fan)
 # These are instructions for building the
 # Proteome Browser.  Don't start these until
-# there is a knownGene track.
+# tables for Known Genes track and kgProtMap table are built (or rebuilt).
 
 o Create the working directory
 
