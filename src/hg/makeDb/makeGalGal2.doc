@@ -2037,16 +2037,13 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     #     causes - list of symbolic names summarizing the failures 
 
 
-# WEBB'S PUTATIVE NON-EXONIC CONSERVED REGIONS (DONE 4/5/04 angie)
+# WEBB'S PUTATIVE NON-EXONIC CONSERVED REGIONS (REDONE 6/26/04 angie)
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/webbNonExonic
     cd /cluster/data/galGal2/bed/webbNonExonic
-    wget http://bio.cse.psu.edu/~webb/nonexonic.tar.gz
-    tar xvzf nonexonic.tar.gz 
-    # Score should really be scaled from 5k..276k --> 200-1000
-    cat chr* \
-    | awk '{printf "%s\t%d\t%d\t%s:%d-%d\t%d\t%c\n", $5, $6 - 1, $7, $2, $3, $4, $9, $8;}' \
-    > webbNonExonic.bed
+    # saved email attachment from Webb Miller (5/26/04)
+    awk 'BEGIN {i=1;} {print $1 "\t" $2-1 "\t" $3 "\t" $1 "." i; i++;}' \
+      chickenspans2.txt > webbNonExonic.bed
     hgLoadBed galGal2 webbNonExonic webbNonExonic.bed
 
 
@@ -2069,6 +2066,11 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
 
 
 # SYNTENY BY HOMOLOGY FROM EVGENY ZDOBNOV (DONE 4/15/04 angie)
+    # Note 6/3/04: This has been replaced by
+    # http://azra.embl-heidelberg.de/~zdobnov/Chicken/chicken-human-mm3_mouse-rat_synteny.txt
+    # -- but unfortunately that only has start coords, no ends (or lengths).
+    # could get lengths from ensmart... for all 4 genomes... see if there's 
+    # any demand/interest.
     ssh kksilo
     mkdir /cluster/data/galGal2/bed/zdobnov
     cd /cluster/data/galGal2/bed/zdobnov
@@ -2216,14 +2218,13 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
       -noBin rnaGene.bed
 
 
-# TWINSCAN FROM BRENT LAB (DONE 5/1/04 angie)
+# TWINSCAN FROM BRENT LAB (DONE 5/1/04 angie - protein added 6/12/04)
     # contact: Paul Flicek <paul.flicek@wustl.edu>
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/twinscan
     cd /cluster/data/galGal2/bed/twinscan
     wget http://www.cs.wustl.edu/~pflicek/chicken/chicken.043004.ts.tar.gz
     tar xvzf chicken.043004.ts.tar.gz
-    # No .ptx, just gtf.
     ldHgGene -gtf -frame -id -geneName galGal2 twinscan chr*.gtf
     runGeneCheck .
 #   1173 frameMismatch
@@ -2233,6 +2234,11 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
 #    223 noStart
 #     22 frameDiscontig
 #      6 inFrameStop
+    wget http://www.cs.wustl.edu/~pflicek/chicken/chicken.043004.ts.ptx.tar.gz
+    tar xvzf chicken.043004.ts.ptx.tar.gz
+    perl -wpe 's/^>(\S+)/>$1.a/' chr*.prot.fa > twinscanPep.fa
+    hgPepPred galGal2 generic twinscanPep twinscanPep.fa
+
 
 
 # ISOCHORES FROM NEKRUTENKO LAB (DONE 5/3/04 angie)
@@ -2247,7 +2253,7 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     hgLoadBed galGal2 isochore isochore.bed
 
 
-# SGP GENE PREDICTIONS (DONE 4/28/04 angie)
+# SGP GENE PREDICTIONS (REDONE 5/13/04 angie)
     # contact: "EYRAS, EDUARDO" <eeyras@imim.es> (Roderic Guigo's group)
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/sgp
@@ -2256,11 +2262,249 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402xhs/chicken.sgp2.gtf.tar.gz
     tar xvzf chicken.sgp2.gtf.tar.gz
     tar xvzf chicken.sgp2.prot.tar.gz
-    cat chr*.prot.fa | perl -wpe 's/^>(\w+)/>$1.1/' > sgpPep.fa
+    cat chr*.prot | perl -wpe 's/^>(\w+)/>$1.1/' > sgpPep.fa
     hgPepPred galGal2 generic sgpPep sgpPep.fa
-    cat chr*.gtf \
-    | perl -wpe 's/gene_id\s+(\S+);\s+transcript_id\s+(\S+)/gene_id "$1"; transcript_id "$2";/' \
-    > sgpGene.gtf
-    ldHgGene -gtf -frame -id -geneName galGal2 sgpGene sgpGene.gtf
+    ldHgGene -gtf -genePredExt galGal2 sgpGene chr*.gtf
+
+
+# CONTAMINATION (DONE 5/12/04)
+    # emailed from LaDeana Hillier <lhillier@watson.wustl.edu>
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/contamination
+    cd /cluster/data/galGal2/bed/contamination
+    # saved email attachments to that dir:
+    # weber_wgs_maize_mito.hits.txt, weber_wgs_vector_or_E.coli.txt,
+    # chicken_accession_to_contig_mapping
+    # One-shot perl script:
+    chmod a+x mkContam.pl
+    mkContam.pl weber_wgs_maize_mito.hits.txt weber_wgs_vector_or_E.coli.txt \
+      chicken_accession_to_contig_mapping \
+      ../../agp_040224/chr*.agp \
+    > contamination.bed
+    hgLoadBed galGal2 contamination \
+      -noBin -sqlTable=$HOME/kent/src/hg/lib/contamination.sql \
+      contamination.bed
+
+
+# FORMAT MARKER DATA FROM WUSTL (IN PROGRESS 5/14/04)
+    ssh kksilo
+    mkdir /cluster/data/galGal2/bed/markers
+    cd /cluster/data/galGal2/bed/markers
+    # Many files emailed from John Wallis <jwallis@watson.wustl.edu>
+    # saved to:
+    # accessionsDump040513.sql -- marker -> acc
+    # geneticPositionsDump040513.sql -- marker, chrom, genPos, error, 
+    #                                   primers(maybe), type(maybe), source
+    # jacobssonPositionsDump040513.sql -- some overlap w/geneticPostions;
+    #                                   marker, chrom, genPos, type, source
+    # sequencesDump040513.sql
+    # Uppsala_genetic.txt -- corrected positions for jacobssonPositions
+    # GeneticMarkerAccID.txt -- marker -> acc, some overlap w/accessionsDump
+
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/markers
+    hgsql -e "create database wallis"
+    cat *.sql | hgsql wallis
+
+
+
+# ANDY LAW CPGISSLANDS (DONE 6/16/04 angie)
+    # Andy Law found 60k CpG islands while we found only 22k.  Andy sent 
+    # his script (which needs another script/program to preprocess seq 
+    # into CpG offsets, GC-since-last-CpG and length-since-last-CpG) to 
+    # Laura Elnitski who sent it to us.  
+    # --> /cluster/home/angie/andy-cpg-island.pl
+    # His obs/exp calculation used a very rough approximation for number 
+    # of C and number of G: length / 4 for each!!  
+    # So I modified his script to take counts of C and G separately, 
+    # and use the obs/exp from this '87 paper that everybody claims to follow 
+    # (but they usually don't):
+    # Gardiner-Garden and Frommer, CpG Islands in Vertebrate Genomes
+    # J. Mol. Biol. (20 Jul. 1987)  196 (2), 261-282.
+    # --> /cluster/home/angie/ggf-andy-cpg-island.pl
+    # Had to write a oneshot program, preProcGgfAndy, to preprocess the 
+    # fasta for the script.
+    ssh kksilo
+    mkdir /cluster/data/galGal2/bed/cpgIslandGgfAndy
+    cd /cluster/data/galGal2/bed/cpgIslandGgfAndy
+    cp /dev/null cpgIslandAndy.bed
+    cp /dev/null cpgIslandGgfAndy.bed
+    foreach f (../../*/chr*.fa)
+      set chr = $f:t:r
+      echo preproc $chr
+      /cluster/home/angie/bin/$MACHTYPE/preProcGgfAndy $f > $chr.preproc
+      echo running original on $chr
+      awk '{print $1 "\t" $2 "\t" ($3 + $4) "\t" $5;}' $chr.preproc \
+      | /cluster/home/angie/andy-cpg-island.pl \
+      | perl -wpe '$i=0 if (not defined $i); \
+                   chomp; ($s,$e) = split("\t"); $s--; \
+                   $_ = "'$chr'\t$s\t$e\tcpg$i\n";  $i++' \
+      >> cpgIslandAndy.bed
+      echo running modified on $chr
+      /cluster/home/angie/ggf-andy-cpg-island.pl $chr.preproc \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndy.bed
+    end
+    # Now try Takai & Jones' script too, what the heck!  :)
+    # (it took 4 days though, and unless I modify it, no CpG count...:b).
+    cp /dev/null cpgIslandTJUnlifted.bed
+    foreach d (../../*/chr*_?{,?})
+      set ctg = $d:t
+      /cluster/home/angie/cpgi130.pl $d/$ctg.fa \
+      | tail +6 \
+      | perl -wpe 'if (/CpG island (\d+), start=(\d+), end=(\d+), %GC=([\d\.]+), ObsCpG\/ExpCpG=([\d\.]+), Length=(\d+)/) { \
+                     ($id, $s, $e, $pGc, $oE, $n) = ($1, $2-1, $3,$4,$5,$6); \
+                     $cpg = 0;  $gc = int($pGc * $n / 100.0); \
+                     $pCpG = 0; \
+                     $_ = "'$ctg'\t$s\t$e\tcpg$id\t$n\t$cpg\t$gc\t" . \
+                          "$pCpG\t$pGc\t$oE\n"; \
+                   } else { die "Cant parse this:\n$_\n"; }' \
+      >> cpgIslandTJUnlifted.bed
+    end
+    liftUp cpgIslandTJ.bed ../../jkStuff/liftAll.lft warn \
+      cpgIslandTJUnlifted.bed
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/cpgIslandGgfAndy
+    # this one is a bed 4:
+    hgLoadBed galGal2 cpgIAndy -tab -noBin cpgIslandAndy.bed
+    # this one is a cpgIslandExt but with a different table name:
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndy/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndy.sql
+    hgLoadBed galGal2 cpgIslandGgfAndy -tab -noBin \
+      -sqlTable=cpgIslandGgfAndy.sql cpgIslandGgfAndy.bed
+    # likewise for perl'd output of Takai & Jones:
+    sed -e 's/cpgIslandExt/cpgIslandTJ/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandTJ.sql
+    hgLoadBed galGal2 cpgIslandTJ -tab -noBin \
+      -sqlTable=cpgIslandTJ.sql cpgIslandTJ.bed
+    featureBits galGal2 cpgIslandExt
+#15097911 bases of 1054197620 (1.432%) in intersection
+    featureBits galGal2 cpgIAndy
+#84546678 bases of 1054197620 (8.020%) in intersection
+    featureBits galGal2 cpgIslandGgfAndy
+#60782698 bases of 1054197620 (5.766%) in intersection
+    featureBits galGal2 cpgIslandTJ
+#27489160 bases of 1054197620 (2.608%) in intersection
+    wc -l ../cpgIsland/cpgIsland.bed *bed
+#  21802 ../cpgIsland/cpgIsland.bed
+#  86247 cpgIslandAndy.bed
+#  73381 cpgIslandGgfAndy.bed
+#  25788 cpgIslandTJ.bed
+    # OK, just for fun let's run ggf-andy script with TJ parameters!
+    ssh kksilo
+    cd /cluster/data/galGal2/bed/cpgIslandGgfAndy
+    foreach f (../../*/chr*.fa)
+      set chr = $f:t:r
+      echo running modified w/TJ on $chr
+      /cluster/home/angie/ggf-andy-cpg-island.pl \
+         -min-length 500 -percent-gc 55 -obs-over-exp 0.65 \
+         $chr.preproc \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyTJ.bed
+    end
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/cpgIslandGgfAndy
+    # this one is a cpgIslandExt but with a different table name:
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyTJ/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyTJ.sql
+    hgLoadBed galGal2 cpgIslandGgfAndyTJ -tab -noBin \
+      -sqlTable=cpgIslandGgfAndyTJ.sql cpgIslandGgfAndyTJ.bed
+    featureBits galGal2 cpgIslandGgfAndyTJ
+#32146870 bases of 1054197620 (3.049%) in intersection
+    wc -l cpgIslandGgfAndyTJ.bed
+#  23685 cpgIslandGgfAndyTJ.bed
+    # LaDeana asked for a run on masked seq for comparison.
+    cp /dev/null cpgIslandAndyMasked.bed
+    cp /dev/null cpgIslandGgfAndyMasked.bed
+    foreach f (../../*/chr*.fa.masked)
+      set chr = $f:t:r:r
+      echo preproc masked $chr
+      /cluster/home/angie/bin/$MACHTYPE/preProcGgfAndy $f > $chr.masked.preproc
+      echo running original on $chr masked
+      awk '{print $1 "\t" $2 "\t" ($3 + $4) "\t" $5;}' $chr.masked.preproc \
+      | /cluster/home/angie/andy-cpg-island.pl \
+      | perl -wpe '$i=0 if (not defined $i); \
+                   chomp; ($s,$e) = split("\t"); $s--; \
+                   $_ = "'$chr'\t$s\t$e\tcpg$i\n";  $i++' \
+      >> cpgIslandAndyMasked.bed
+      echo running modified on $chr masked
+      /cluster/home/angie/ggf-andy-cpg-island.pl $chr.masked.preproc \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyMasked.bed
+    end
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/cpgIslandGgfAndy
+    hgLoadBed galGal2 cpgIAndyMasked -tab -noBin cpgIslandAndyMasked.bed
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed galGal2 cpgIslandGgfAndyMasked -tab -noBin \
+      -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
+    featureBits galGal2 cpgIAndyMasked
+#67353879 bases of 1054197620 (6.389%) in intersection
+    featureBits galGal2 cpgIslandGgfAndyMasked
+#47911662 bases of 1054197620 (4.545%) in intersection
+    wc -l cpgIslandAndyMasked.bed cpgIslandGgfAndyMasked.bed
+#  84570 cpgIslandAndyMasked.bed
+#  70655 cpgIslandGgfAndyMasked.bed
+
+
+# RELOAD ENSEMBL GENES (DONE 6/16/04 angie)
+    # previous set was sent out to chicken group -- pull in the released 
+    # version from Ensembl's main site.  Looks like 75 transcripts have 
+    # been yanked, will ask Steve Searle and Ewan.  
+    mkdir /cluster/data/galGal2/bed/ensembl
+    cd /cluster/data/galGal2/bed/ensembl
+    # Get the ensembl gene data from 
+    # http://www.ensembl.org/Gallus_gallus/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Gallus_gallus choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensembl.gff.gz
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    gunzip -c ensembl.gff.gz \
+    | perl -wpe 's/^([0-9]+|E\w+|[ZW]|Un(_random)?)/chr$1/ \
+                 || die "Line $. doesnt start with chicken chrom:\n$_"' \
+    > ensGene.gtf
+    ssh hgwdev
+    ldHgGene -gtf -genePredExt galGal2 ensGene \
+      /cluster/data/galGal2/bed/ensembl/ensGene.gtf
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql galGal2 < ~/kent/src/hg/lib/ensGtp.sql
+    hgsql galGal2 -e 'load data local infile "ensGtp.txt" into table ensGtp'
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip -c ensemblPep.fa.gz \
+    | perl -wpe 's/^(>ENSGALT\d+\.\d+).*/$1/' \
+    > ensPep.fa
+    hgPepPred galGal2 generic ensPep ensPep.fa
 
 
