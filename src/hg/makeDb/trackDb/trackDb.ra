@@ -1244,7 +1244,7 @@ track binMCS95_encode
 shortLabel MCSs (5%)
 longLabel Binomial-based MCSs from ENCODE TBA alignments (top 5%)
 group encode
-visibility dense
+visibility hide
 color 0,60,120
 useScore 1
 type bed 5 +
