@@ -48,7 +48,7 @@ type expRatio
 expScale 4.0
 expStep 0.5
 expTable affyGnfU74AExps
-chip U74A
+chip U74
 canPack off
 
 track affyGnfU74B
@@ -61,7 +61,7 @@ type expRatio
 expScale 4.0
 expStep 0.5
 expTable affyGnfU74BExps
-chip U74B
+chip U74
 canPack off
 
 track affyGnfU74C
@@ -74,7 +74,7 @@ type expRatio
 expScale 4.0
 expStep 0.5
 expTable affyGnfU74CExps
-chip U74C
+chip U74
 canPack off
 
 track affyU74
