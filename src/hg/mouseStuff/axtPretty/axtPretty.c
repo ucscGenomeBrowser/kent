@@ -1,4 +1,6 @@
-/* axtPretty - Convert axt to more human readable format.. */
+/* axtPretty - Convert axt to more human readable format.. 
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
