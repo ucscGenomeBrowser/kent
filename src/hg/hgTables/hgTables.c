@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.100 2005/02/21 23:56:33 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.101 2005/02/21 23:57:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1395,9 +1395,6 @@ if (lookupPosition())
     initGroupsTracksTables(conn);
     dispatch(conn);
     }
-uglyf("oldDb %s, database %s<BR>", oldDb, database);
-uglyf("oldGenome %s, genome %s<BR>", oldGenome, genome);
-uglyf("oldClade %s, clade %s<BR>", oldClade, clade);
 
 /* Save variables. */
 cartCheckout(&cart);
