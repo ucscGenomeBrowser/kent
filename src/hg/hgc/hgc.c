@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.677 2004/07/03 18:34:16 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.678 2004/07/05 12:39:16 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3709,17 +3709,17 @@ else if (sameWord("xenoBlastzMrna", track) )
     type = "Blastz to foreign mRNA";
     table = "xenoBlastzMrna";
     }
-else if (startsWith(track, "mrnaBlastz" ))
+else if (startsWith("mrnaBlastz",track  ))
     {
     type = "mRNA";
     table = track;
     }
-else if (startsWith(track,"pseudoMrna") || startsWith(track,"pseudoGeneLink"))
+else if (startsWith("pseudoMrna",track) || startsWith("pseudoGeneLink",track))
     {
     type = "mRNA";
     table = "mrnaBlastz";
     }
-else if (startsWith(track,"celeraMrna"))
+else if (startsWith("celeraMrna",track))
     {
     type = "mRNA";
     table = "celeraMrna";
@@ -7423,30 +7423,30 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
     sqlFreeResult(&sr);
     }
 
-if (hTableExists(alignTable))
+if (hTableExists("mrnaBlastz"))
     {
-    struct psl *pslList = loadPslRangeT(alignTable, pg->name, pg->gChrom, pg->gStart, pg->gEnd);
+    struct psl *pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
         {
-        printAlignments(pslList, pslList->tStart, "htcCdnaAli", alignTable, pg->name);
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "mrnaBlastz", pg->name);
         htmlHorizontalLine();
-        safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pseudoList->tName);
+        safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pg->chrom);
         if (hTableExists(chainTable_chrom) )
             {
                 /* lookup chain */
             dyStringPrintf(dy,
                 "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
-                pseudoList->tName, chainTable);
-            hAddBinToQuery(pseudoList->tStart, pseudoList->tEnd, dy);
+                pg->chrom, chainTable);
+            hAddBinToQuery(pg->chromStart, pg->chromEnd, dy);
             if (sameString(pg->gStrand,pg->strand))
                 dyStringPrintf(dy,
                     "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '+' ",
-                    pseudoList->tStart, pseudoList->tEnd, pg->gChrom, pg->gStart, pg->gEnd);
+                    pg->chromStart, pg->chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
             else
                 {
                 dyStringPrintf(dy,
                     "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
-                    pseudoList->tStart, pseudoList->tEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+                    pg->chromStart, pg->chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
                     hChromSize(pg->gChrom)-(pg->gStart));
                 }
             dyStringAppend(dy, " order by qStart");
@@ -7476,13 +7476,13 @@ if (hTableExists(alignTable))
                     }
                 //if (pg->chainId == 0) pg->chainId = chainId;
                 puts("<ul><LI>\n");
-                hgcAnchorPseudoGene(pg->kgName, "knownGene", pseudoList->tName, "startcodon", pseudoList->tStart, pseudoList->tEnd, 
+                hgcAnchorPseudoGene(pg->kgName, "knownGene", pg->chrom, "startcodon", pg->chromStart, pg->chromEnd, 
                         pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
                 printf("Annotated alignment</a> using self chain.\n");
                 printf("Score: %d \n", score);
                 puts("</LI>\n");
                 printf("<ul>Raw alignment: ");
-                hgcAnchorTranslatedChain(chainId, chainTable, pseudoList->tName, pg->gStart, pg->gEnd);
+                hgcAnchorTranslatedChain(chainId, chainTable, pg->chrom, pg->gStart, pg->gEnd);
                 printf("%s:%d-%d </A></ul> </ul>\n", pg->gChrom,qStart,qEnd);
                 }
             sqlFreeResult(&sr);
@@ -7518,8 +7518,8 @@ int rowOffset = 0;
 
 /* Get alignment info. */
 if (sameString(alignTable,"pseudoGeneLink2"))
-    alignTable = cloneString("pseudoMrna2");
-if (startsWith(alignTable,"pseudoGeneLink"))
+    alignTable = cloneString("mrnaBlastz");
+if (startsWith("pseudoGeneLink",alignTable))
     alignTable = cloneString("pseudoMrna");
 if (hTableExists(alignTable) )
     pslList = loadPslRangeT(alignTable, acc, chrom, winStart, winEnd);
@@ -7529,7 +7529,7 @@ slSort(&pslList, pslCmpScoreDesc);
 
 /* print header */
 genericHeader(tdb, acc);
-if (startsWith(track,"pseudoMrna") || startsWith(track,"pseudoGeneLink"))
+if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track ))
     {
     type = "mRNA";
     if (hTableExists("mrnaBlastz") )
@@ -7551,11 +7551,11 @@ cartWebStart(cart, acc);
 
 
 safef(where, sizeof(where), "name = '%s'", acc);
-sr = hRangeQuery(conn, "pseudoGeneLink", chrom, start, end, where, &rowOffset);
+sr = hRangeQuery(conn, track, chrom, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     pg = pseudoGeneLinkLoad(row+rowOffset);
-    if (hTableExists("axtInfo") )
+    if (pg != NULL)
         {
         pseudoPrintPos(pslList, pg, alignTable, start, acc);
         }
@@ -13842,7 +13842,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
 	 sameWord(track, "celeraMrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-         startsWith(track, "mrnaBlastz") || startsWith(track, "mrnaBad") || 
+         startsWith("mrnaBlastz",track ) || startsWith("mrnaBad",track ) || 
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
@@ -13976,7 +13976,7 @@ else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
     }
-else if (startsWith(track, "pseudoMrna") || startsWith(track, "pseudoGeneLink"))
+else if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track ))
     {
     doPseudoPsl(tdb, item);
     }
