@@ -7,7 +7,7 @@
 #include "localmem.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSelect.c,v 1.4 2004/05/11 01:17:45 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSelect.c,v 1.5 2004/07/29 00:10:54 baertsch Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -130,8 +130,10 @@ else
 while ((psl = pslNext(inPslLf)) != NULL)
     {
     if (mode == QT_START)
+        {
         if (pairSelected3(selectHash, psl->qName, psl->tName, psl->tStart))
             pslTabOut(psl, outPslFh);
+        }
     else if ((hel = selectedItem(selectHash, psl->qName, psl->tName)) != NULL)
         {
         if (mode == QUERY_PAIRS_MODE)
