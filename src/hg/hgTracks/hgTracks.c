@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.2 2003/08/14 17:11:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.3 2003/08/14 20:41:38 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1633,12 +1633,10 @@ antiAlias = sameString(aa, "on");
 if(sameString( tg->mapName, "pGC") && sameString(database,"zooHuman3"))
 {
         fill = atoi(cartUsualString(cart, o3, "0"));
-	    cartSetString(cart, o3, "0" );
 }
 else
 {
         fill = atoi(cartUsualString(cart, o3, "1"));
-	    cartSetString(cart, o3, "1" );
 }
 
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
