@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.14 2003/09/27 05:58:28 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.15 2003/11/16 19:31:28 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -723,12 +723,6 @@ errAbort(
   "\n"
   "     -accPrefix=ac - Only process ESTs with this 2 char accession prefix.\n"
   "      Must specify -type=est, mostly useful for debugging.\n"
-  "\n"
-  "     -xenoRefSeq - Build xeno RefSeq alignment tables.  By default, only\n"
-  "      native RefSeq alignments are loaded.\n"
-  "\n"
-  "     -xenoMrnaDesc - Load descriptions for xeno mRNAs.  By default, only\n"
-  "      native mRNA descriptions are loaded.\n"
   "\n"
   "     -gbdbGenBank=dir - set gbdb path to dir, default /gbdb/genbank\n"
   "\n"
