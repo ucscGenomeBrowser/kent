@@ -232,3 +232,33 @@ htmEmptyShell(doMiddle, method);
 htmlEnd();
 }
 
+/* Wrap an html file around the passed in function.
+ * The passed in function is already in the body. It
+ * should just make paragraphs and return. 
+ * Method should be "query" or "get" or "post".
+param title - The HTML page title
+param head - The head text: can be a refresh directive or javascript
+param method - The function pointer to execute in the middle
+param method - The browser request method to use
+ */
+void htmShellWithHead( char *title, char *head, void (*doMiddle)(), char *method)
+{
+/* Preamble. */
+dnaUtilOpen();
+
+puts("Content-Type:text/html");
+puts("\n");
+
+puts("<HTML>");
+printf("<HEAD>%s<TITLE>%s</TITLE>\n</HEAD>\n\n", head, title);
+if (htmlBackground == NULL)
+    puts("<BODY>\n");
+else
+    printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
+
+/* Call wrapper for error handling. */
+htmEmptyShell(doMiddle, method);
+
+/* Post-script. */
+htmlEnd();
+}

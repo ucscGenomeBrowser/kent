@@ -645,7 +645,7 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 }
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
-/* Make a drop-down list. */
+/* Make a drop-down list with names. */
 {
 int i;
 char *selString;
@@ -658,6 +658,24 @@ for (i=0; i<menuSize; ++i)
     else
         selString = "";
     printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
+    }
+printf("</SELECT>");
+}
+
+void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked)
+/* Make a drop-down list with names and values. */
+{
+int i;
+char *selString;
+if (checked == NULL) checked = menu[0];
+printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+for (i=0; i<menuSize; ++i)
+    {
+    if (!differentWord(menu[i], checked))
+        selString = " SELECTED";
+    else
+        selString = "";
+    printf("<OPTION%s VALUE=\"%s\">%s</OPTION>", selString, values[i], menu[i]);
     }
 printf("</SELECT>");
 }
