@@ -25,6 +25,7 @@ for (i=0; i<ArraySize(mgFixedColors); ++i)
     }
 }
 
+
 void mgSetClip(struct memGfx *mg, int x, int y, int width, int height)
 /* Set clipping rectangle. */
 {
