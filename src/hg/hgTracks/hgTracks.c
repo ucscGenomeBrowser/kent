@@ -3933,6 +3933,144 @@ tg->drawItems = cytoBandDraw;
 tg->itemName = cytoBandName;
 }
 
+static void swissDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw simple Bed items for protein track of SWISS-PROT, etc. */
+{
+int baseWidth = seqEnd - seqStart;
+struct bed *item;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+int invPpt;
+int midLineOff = heightPer/2;
+int midY = y + midLineOff;
+int dir;
+Color *shades = tg->colorShades;
+
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, mg);
+    else
+	{
+	if (shades)
+	    {
+	    color = shades[grayInRange(item->score, 0, 1000)];
+	    }
+	}
+    if (w < 1)
+	w = 1;
+    if (color)
+	{
+	if (strstr(item->name, "PDB")     != NULL) color = MG_BLACK;
+        if (strstr(item->name, "SWISS")  != NULL) 
+		{
+		color = mgFindColor(mg, 150, 0, 0);
+		}
+        if (strstr(item->name, "TrEMBL")  != NULL) 
+		{
+		color = mgFindColor(mg, 190, 100, 100);
+		}
+	
+	mgDrawBox(mg, x1, y, w, heightPer, color);
+	if (tg->drawName)
+	    {
+	    /* Clip here so that text will tend to be more visible... */
+	    char *s = tg->itemName(tg, item);
+	    if (x1 < xOff)
+		x1 = xOff;
+	    if (x2 > xOff + width)
+		x2 = xOff + width;
+	    w = x2-x1;
+	    if (w > mgFontStringWidth(font, s))
+		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+	    }
+	}
+    if (tg->subType == lfWithBarbs)
+        {
+        dir = 0;
+        if(sameString(item->strand , "+")) 
+            dir = 1;
+        if(sameString(item->strand , "-")) 
+            dir = -1;
+	    w = x2-x1;
+        if (dir != 0)
+        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+        }
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+static int swissMin = 320;
+static int swissMax = 600;
+
+Color swissColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return name of protein track item. */
+{
+int l;
+char *chp;
+struct bed *bed = item;
+
+l = strlen(bed->name);
+if (l > 6)
+    {
+    return(tg->ixColor);
+    }
+else return(MG_GRAY);
+}
+
+char *swissName(struct trackGroup *tg, void *item)
+/* Return name of xxx track item. */
+{
+struct bed *sw = item;
+static char buf[32];
+char *chp;
+
+sprintf(buf, "%s",  sw->name);
+
+chp = strstr(buf, "(SWISS)");
+if (chp != NULL)
+	{
+	chp = buf+strlen(buf)-strlen("(SWISS)");
+	*chp = '\0';
+	}
+			
+chp = strstr(buf, "(PDB)");
+if (chp != NULL)
+        {
+	chp = buf+strlen(buf)-strlen("(PDB)");
+	*chp = '\0';
+	}
+
+chp = strstr(buf, "(TrEMBL)");
+if (chp != NULL)
+        {
+	chp = buf+strlen(buf)-strlen("(TrEMBL)");
+	*chp = '\0';
+	}
+			
+return(buf);
+}
+
+void swissMethods(struct trackGroup *tg)
+/* Make track group for simple repeats. */
+{
+tg->drawItems = swissDraw;
+tg->itemName  = swissName;
+tg->itemColor = swissColor;
+tg->drawName  = TRUE;
+}
+
+
 void loadGcPercent(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
@@ -8993,6 +9131,7 @@ registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
+registerTrackHandler("swiss", swissMethods);
 registerTrackHandler("ctgPos", contigMethods);
 registerTrackHandler("gold", goldMethods);
 registerTrackHandler("gap", gapMethods);
