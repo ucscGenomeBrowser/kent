@@ -272,7 +272,7 @@ boolean exists;
 
 if (sameString(db, hGetDb()))
     conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     conn = hAllocConn2();
 else
     {
@@ -699,7 +699,7 @@ canDoIntrons = hti->hasBlocks;
 
 if (sameString(db, hGetDb()))
     conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     conn = hAllocConn2();
 else
     {
@@ -1208,7 +1208,7 @@ boolean gotIt = TRUE, binned = FALSE;
 
 if (sameString(db, hGetDb()))
     conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     conn = hAllocConn2();
 else
     {
