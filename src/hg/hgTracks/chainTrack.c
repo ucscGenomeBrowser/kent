@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.22 2004/09/05 18:25:12 baertsch Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.23 2004/09/08 00:40:47 braney Exp $";
 
 
 struct cartOptions
@@ -82,7 +82,7 @@ struct sqlConnection *conn;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
-struct simpleFeature *lastSf;
+struct simpleFeature *lastSf = NULL;
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
 
@@ -143,15 +143,12 @@ if (hash->size)
 	 * one or two lines to the edge of the screen.
 	 */
 #define STARTSLOP	10000
+#define MULTIPLIER	10
+#define MAXLOOK		100000
 	extra = (STARTSLOP < maxOverLeft) ? STARTSLOP : maxOverLeft;
 	start = seqStart - extra;
 	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
 	end = seqEnd + extra;
-        if (start < 0)
-            {
-            printf("<br>ERROR: start coordinate is negative %d - %d extra %d\n",seqStart,seqEnd,extra);
-            start = 0;
-            }
 	doQuery(conn, fullName, lm,  hash, start, end, NULL);
 
 	for (lf = tg->items; lf != NULL; lf = lf->next)
@@ -160,24 +157,36 @@ if (hash->size)
 		slSort(&lf->components, linkedFeaturesCmpStart);
 	    extra = (STARTSLOP < maxOverRight)?STARTSLOP:maxOverRight;
 	    end = seqEnd + extra;
+	    lastSf = NULL;
 	    while (lf->end > end )
 		{
 		for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
 		    ;
 
 		/* get out if we have an element off right side */
-		if ( (lastSf != NULL) &&(lastSf->end > seqEnd))
+		if (( (lastSf != NULL) &&(lastSf->end > seqEnd)) || (extra > MAXLOOK))
 		    break;
 
-		extra *= 10;
+		extra *= MULTIPLIER;
 		start = end;
 		end = start + extra;
-                if (start < 0 || end < 0)
-                    printf("<br>ERROR: start coordinate is negative %d - %d extra %d\n",
-                            seqStart,seqEnd,extra);
                 doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
 		if (lf->components != NULL)
 		    slSort(&lf->components, linkedFeaturesCmpStart);
+		}
+
+	    /* if we didn't find an element off to the right , add one */
+	    if ((lf->end > seqEnd) && ((lastSf == NULL) ||(lastSf->end < seqEnd)))
+		{
+		lmAllocVar(lm, sf);
+		sf->start = seqEnd;
+		sf->end = seqEnd+1;
+		sf->grayIx = lf->grayIx;
+		sf->qStart = 0;
+		sf->qEnd = sf->qStart + (sf->end - sf->start);
+		sf->next = lf->components;
+		lf->components = sf;
+		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 
 	    /* we know we have a least one component off right
@@ -185,19 +194,27 @@ if (hash->size)
 	     */
 	    extra = (STARTSLOP < maxOverLeft) ? STARTSLOP:maxOverLeft;
 	    start = seqStart - extra; 
-	    while((lf->start < start) && 
+	    while((extra < MAXLOOK) && (lf->start < seqStart) && 
 		(lf->components->start > seqStart))
 		{
-		extra *= 10;
+		extra *= MULTIPLIER;
 		end = start;
 		start = end - extra;
                 if (start < 0)
-                    {
-                    printf("<br>ERROR: start coordinate is negative %d - %d extra %d\n",
-                            seqStart,seqEnd,extra);
                     start = 0;
-                    }
 		doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
+		slSort(&lf->components, linkedFeaturesCmpStart);
+		}
+	    if ((lf->components->start > seqStart) && (lf->start < lf->components->start))
+		{
+		lmAllocVar(lm, sf);
+		sf->start = 0;
+		sf->end = 1;
+		sf->grayIx = lf->grayIx;
+		sf->qStart = lf->components->qStart;
+		sf->qEnd = sf->qStart + (sf->end - sf->start);
+		sf->next = lf->components;
+		lf->components = sf;
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    }
