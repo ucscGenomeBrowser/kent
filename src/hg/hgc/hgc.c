@@ -134,7 +134,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.595 2004/03/25 20:32:03 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.596 2004/03/25 22:14:20 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -557,7 +557,7 @@ if (url != NULL && url[0] != 0)
     uUrl = subMulti(url, ArraySize(ins), ins, outs);
     outs[0] = eItem;
     eUrl = subMulti(url, ArraySize(ins), ins, outs);
-    printf("<B>Outside Link: </B>");
+    printf("<B>%s </B>", trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
     printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
     
     if (sameWord(tdb->tableName, "npredGene"))
@@ -1923,6 +1923,9 @@ netAlignFree(&net);
 
 void tfbsCons(struct trackDb *tdb, char *item)
 {
+boolean printFactors = FALSE;
+boolean printedPlus = FALSE;
+boolean printedMinus = FALSE;
 char *dupe, *type, *words[16];
 char title[256];
 int wordCount;
@@ -1939,6 +1942,7 @@ struct tfbsCons *tfbsConsList = NULL;
 struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
 char *linkName = NULL;
+char *mappedId = NULL;
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -1954,34 +1958,72 @@ while ((row = sqlNextRow(sr)) != NULL)
     tfbs = tfbsConsLoad(row+hasBin);
     slAddHead(&tfbsConsList, tfbs);
     }
+sqlFreeResult(&sr); 
+slReverse(&tfbsConsList);
 
-if (tfbsConsList != NULL)
+if (hTableExists("tfbsConsMap"))
     {
-    slReverse(&tfbsConsList);
-    if (hTableExists("tfbsConsMap"))
+    sprintf(query, "select * from tfbsConsMap where id = '%s'", tfbsConsList->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
 	{
-	sprintf(query, "select * from tfbsConsMap where id = '%s'", tfbsConsList->name);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    tfbsConsMapStaticLoad(row, &tfbsConsMap);
-	    printCustomUrl(tdb, tfbsConsMap.ac, FALSE);
-	    }
+	tfbsConsMapStaticLoad(row, &tfbsConsMap);
+	mappedId = cloneString(tfbsConsMap.ac);
 	}
+    }
+sqlFreeResult(&sr); 
 
-    printf("<B>Item:</B> %s<BR>\n", tfbsConsList->name);
-    printf("<B>Score:</B> %d<BR>\n", tfbsConsList->score );
-    printf("<B>Strand:</B> %s<BR>\n", tfbsConsList->strand);
-    printPos(tfbsConsList->chrom, tfbsConsList->chromStart, tfbsConsList->chromEnd, NULL, TRUE, tfbsConsList->name);
+printf("<B><font size=\"5\">Transcription Factor Binding Site information:</font></B><BR><BR><BR>");
+for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
+    {
+    if (!sameString(tfbs->species, "N"))
+	printFactors = TRUE;
 
-    for(; tfbsConsList != NULL ; tfbsConsList = tfbsConsList->next)
+    /* print each strand only once */
+    if ((printedMinus && (tfbs->strand[0] == '-')) || (printedPlus && (tfbs->strand[0] == '+')))
+	continue;
+
+    if (!firstTime)
+	htmlHorizontalLine(); 
+    else
+	firstTime = FALSE;
+
+    printf("<B>Item:</B> %s<BR>\n", tfbs->name);
+    if (mappedId != NULL)
+	printCustomUrl(tdb, mappedId, FALSE);
+    printf("<B>Score:</B> %d<BR>\n", tfbs->score );
+    printf("<B>Strand:</B> %s<BR>\n", tfbs->strand);
+    printPos(tfbsConsList->chrom, tfbs->chromStart, tfbs->chromEnd, NULL, TRUE, tfbs->name);
+    printedPlus = printedPlus || (tfbs->strand[0] == '+');
+    printedMinus = printedMinus || (tfbs->strand[0] == '-');
+    }
+
+if (printFactors)
+    {
+    htmlHorizontalLine(); 
+    printf("<B><font size=\"5\">Transcription Factors known to bind to this site:</font></B><BR><BR>");
+    for(tfbs=tfbsConsList ; tfbs != NULL ; tfbs = tfbs->next)
 	{
-	printf("<BR>\n");
-	if (!sameString(tfbsConsList->factor, "N"))
+	/* print only the positive strand when factors are on both strands */
+	if ((tfbs->strand[0] == '-') && printedPlus)
+	    continue;
+
+	if (!sameString(tfbs->species, "N"))
 	    {
-	    printf("<B>Factor:</B> %s<BR>\n", tfbsConsList->factor);
-	    printf("<B>Species:</B> %s<BR>\n", tfbsConsList->species);
-	    printf("<B>SwissProt ID:</B> %s<BR>\n", tfbsConsList->id);
+	    printf("<BR><B>Factor:</B> %s<BR>\n", tfbs->factor);
+	    printf("<B>Species:</B> %s<BR>\n", tfbs->species);
+	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbs->id, "N")? "unknown": tfbs->id);
+
+	    /* Only display link if entry exists in protein browser */
+	    sprintf(query, "select * from hg16.kgProtMap where qName = '%s';", tfbs->id );
+	    sr = sqlGetResult(conn, query); 
+	    if ((row = sqlNextRow(sr)) != NULL)                                                         
+		{
+		printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s&db=hg16\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
+		sqlFreeResult(&sr); 
+		}
+	    else                                                                                          
+		printf("No Protein Browser entry.\n<BR><BR>"); 
 	    }
 	}
     }
