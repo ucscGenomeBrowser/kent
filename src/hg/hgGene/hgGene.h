@@ -112,6 +112,11 @@ struct section *localizationSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create Localization section. */
 
+struct section *transRegCodeMotifSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create dnaBindMotif section. */
+
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
