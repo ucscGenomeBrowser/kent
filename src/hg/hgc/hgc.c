@@ -8961,17 +8961,11 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
-<<<<<<< hgc.c
-else if( sameWord( track, "humMusL" ))
-  {
-    humMusClickHandler( tdb, item );
-  }
 /*BLANCHETTE'S CODE*/
 else if( sameWord( track, "footPrinter" ))
-  {
+    {
     footPrinterClickHandler( tdb, item );
-  }
-=======
+    }
 else if( sameWord( track, "humMusL" ) )
         {
         humMusClickHandler( tdb, item, 0 );
@@ -8980,7 +8974,7 @@ else if( sameWord( track, "musHumL" ) )
         {
         humMusClickHandler( tdb, item, 1 );
         }
->>>>>>> 1.246
+
 else if (sameWord(track, "jaxQTL"))
     {
     doJaxQTL(tdb, item);
