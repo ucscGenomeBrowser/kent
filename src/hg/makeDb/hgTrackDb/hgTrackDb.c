@@ -3,15 +3,15 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "trackDb.h"
 #include "sqlList.h"
+#include "jksql.h"
+#include "trackDb.h"
 #include "hdb.h"
 #include "obscure.h"
-#include "jksql.h"
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.9 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.10 2003/08/01 23:58:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -139,6 +139,27 @@ else
     }
 }
 
+
+static char *settingsFromHash(struct hash *hash)
+/* Create settings string from settings hash. */
+{
+if (hash == NULL)
+    return cloneString("");
+else
+    {
+    struct dyString *dy = dyStringNew(1024);
+    char *ret;
+    struct hashEl *el, *list = hashElListHash(hash);
+    slSort(&list, hashElCmp);
+    for (el = list; el != NULL; el = el->next)
+	dyStringPrintf(dy, "%s %s\n", el->name, (char *)el->val);
+    slFreeList(&list);
+    ret = cloneString(dy->string);
+    dyStringFree(&dy);
+    return ret;
+    }
+}
+
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
                char *visibilityRa)
 /* hgTrackDb - Create trackDb table from text files. */
@@ -189,12 +210,20 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     sprintf(query, "load data local infile '%s' into table %s", tab, trackDbName);
     sqlUpdate(conn, query);
 
-    /* Load in html fields. */
+    /* Load in html and settings fields. */
     for (td = tdList; td != NULL; td = td->next)
 	{
 	char *html = hashFindVal(htmlHash, td->tableName);
         if (html != NULL)
-	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, "html", html);
+	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, 
+	    	"html", html);
+	if (td->settingsHash != NULL)
+	    {
+	    char *settings = settingsFromHash(td->settingsHash);
+	    updateBigTextField(conn, trackDbName, "tableName", td->tableName, 
+	    	"settings", settings);
+	    freeMem(settings);
+	    }
 	}
 
     sqlDisconnect(&conn);
