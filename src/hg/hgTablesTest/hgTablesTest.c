@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.9 2004/11/08 00:14:55 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.10 2004/11/08 01:04:09 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -601,29 +601,81 @@ for (db = dbVar->values; db != NULL; db = db->next)
 htmlPageFree(&orgPage);
 }
 
+void verifyJoinedFormat(char *s)
+/* Verify that s consists of lines with two tab-separated fields,
+ * and that the second field has some n/a and some comma-separated lists. */
+{
+char *e;
+int lineIx = 0;
+boolean gotCommas = FALSE, gotNa = FALSE;
+
+while (s != NULL && s[0] != 0)
+    {
+    char *row[3];
+    int fieldCount;
+    ++lineIx;
+    e = strchr(s, '\n');
+    if (e != NULL)
+       *e++ = 0;
+    fieldCount = chopTabs(s, row);
+    if (fieldCount != 2)
+        {
+	qaStatusSoftError(tablesTestList->status, 
+		"Got %d fields line %s of  joined result, expected 2", 
+		fieldCount, lineIx);
+	break;
+	}
+    if (sameString(row[1], "n/a"))
+         gotNa = TRUE;
+    if (countChars(s, ',') >= 2)
+         gotCommas = TRUE;
+    s = e;
+    }
+if (!gotCommas)
+    qaStatusSoftError(tablesTestList->status, 
+           "Expected some rows in join to have comma separated lists.");
+if (!gotNa)
+    qaStatusSoftError(tablesTestList->status, 
+           "Expected some rows in joint to have n/a.");
+}
+
 void testJoining(struct htmlPage *rootPage)
 /* Simulate pressing buttons to get a reasonable join on a
  * couple of swissProt tables. */
 {
 struct htmlPage *allPage, *page;
+char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt";
 struct sqlConnection *conn = sqlConnect("swissProt");
 int expectedCount = sqlTableSize(conn, "taxon");
 
-allPage = quickSubmit(rootPage, NULL, "swissProt", "allTables", "swissProt", 
+allPage = quickSubmit(rootPage, org, db, group, "swissProt", 
 	"swissProt.taxon", "swissProtTables", NULL, NULL);
 if (allPage != NULL)
     {
-    int count = testAllFields(allPage, allPage->forms, NULL, "swissProt",
-    	"allTables", "swissProt", "swissProt.taxon");
+    int count = testAllFields(allPage, allPage->forms, org, db,
+    	group, track, "swissProt.taxon");
     if (count != expectedCount)
 	qaStatusSoftError(tablesTestList->status, 
 		"Got %d rows in swissProt.taxon, expected %d", count, 
 		expectedCount);
+    htmlPageSetVar(allPage, NULL, hgtaOutputType, "selectedFields");
+    page = quickSubmit(allPage, org, db, group, track, 
+    	"swissProt.taxon", "taxonFields", hgtaDoTopSubmit, "submit");
+    htmlPageSetVar(page, NULL, "hgta_fs.linked.swissProt.commonName", "on");
+    serialSubmit(&page, org, db, group, track, NULL, "taxonLinks",
+	hgtaDoSelectFieldsMore, "submit");
+    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
+    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
+    serialSubmit(&page, org, db, group, track, NULL, "taxonJoined",
+	hgtaDoPrintSelectedFields, "submit");
+    checkExpectedSimpleRows(page, expectedCount);
+    verifyJoinedFormat(page->htmlText);
+    htmlPageFree(&page);
     }
-
 
 htmlPageFree(&allPage);
 sqlDisconnect(&conn);
+verbose(1, "Tested joining on swissProt.taxon & commonName\n");
 }
 
 void statsOnSubsets(struct tablesTest *list, int subIx, FILE *f)
