@@ -745,66 +745,75 @@ void getCoords(struct psl *psl, int gstart, int gend, int *start, int *end, char
 {
 int gs = 0, ge = 0, off, i, bStart = -1, bEnd = -1;
 
-/* Reverse complement xeno alignments if done on target - strand */
-if (psl->strand[1] == '-')
-    pslRcBoth(psl);
-
-/* Look in all blocks for the indel */
-for (i = 0; i < psl->blockCount; i++) 
-    {
-    /* If the block contains the indel */   
-    if (((psl->tStarts[i] + psl->blockSizes[i]) >= gstart) && (psl->tStarts[i] < gend))
-       {
-       /* Determine the start position offset */
-       if (gstart >= psl->tStarts[i])
-	  {
-	  *start = psl->qStarts[i] + (gstart - psl->tStarts[i]);
-	  /*gs = gstart;*/
-	  bStart = i;
-	  }
-       /* Determine the end position offset */
-       if (gend <= (psl->tStarts[i]+psl->blockSizes[i]))
-	  {
-	  *end = psl->qStarts[i] + gend - psl->tStarts[i];
-	  /*ge = gend;*/
-	   bEnd = i;
-	  }
-       }
-    if ((gstart < psl->tStarts[i]) && (bStart < 0))
-      {
-	*start = psl->qStarts[i];
-	bStart = i;
-      }
-    if ((gend > (psl->tStarts[i] + psl->blockSizes[i])) && (!*end))
-      bEnd = i;
-    }
-
-if ((bEnd >= 0) && (!*end))
-   *end = psl->qStarts[bEnd] + psl->blockSizes[bEnd];
-
-/* If opposite strand alignment, reverse the start and end positions in the mRNA */
-if (((psl->strand[0] == '-')  && (psl->strand[1] != '-')) 
-     || ((psl->strand[0] == '+') && (psl->strand[1] == '-')))
-    {
-    int tmp = *start;
-    *start = psl->qSize - *end;
-    *end = psl->qSize - tmp;
-    /* reverseComplement(ret->dna, ret->size); */
-    sprintf(strand, "-");
-    }
-else
-    sprintf(strand, "+");
-   
-/* Check if mrna aligns completely in this region */
- if (((*end - *start) == (gend - gstart)) && (bStart > 0))
-   *nogap = TRUE;
-else if ((bStart < bEnd) && (bStart > 0))
+/* Check that alignment covers the range */
+if ((psl->tStart < gstart) && (psl->tEnd > gend))
   {
-    /*nogap = TRUE;
-    for (i = bStart; i < bEnd; i++) 
-    if ((psl->qStarts[i] + psl->blockSizes[i]) < psl->qStarts[i+1]) */
+    /* Reverse complement xeno alignments if done on target - strand */
+    if (psl->strand[1] == '-')
+      pslRcBoth(psl);
+    
+    /* Look in all blocks for the indel */
+    for (i = 0; i < psl->blockCount; i++) 
+      {
+	/* If the block contains the indel */   
+	if (((psl->tStarts[i] + psl->blockSizes[i]) >= gstart) && (psl->tStarts[i] < gend))
+	  {
+	    /* Determine the start position offset */
+	    if (gstart >= psl->tStarts[i])
+	      {
+		*start = psl->qStarts[i] + (gstart - psl->tStarts[i]);
+		/*gs = gstart;*/
+		bStart = i;
+	      }
+	    /* Determine the end position offset */
+	    if (gend <= (psl->tStarts[i]+psl->blockSizes[i]))
+	      {
+		*end = psl->qStarts[i] + gend - psl->tStarts[i];
+		/*ge = gend;*/
+		bEnd = i;
+	      }
+	  }
+	if ((gstart < psl->tStarts[i]) && (bStart < 0))
+	  {
+	    *start = psl->qStarts[i];
+	    bStart = i;
+	  }
+	if ((gend > (psl->tStarts[i] + psl->blockSizes[i])) && (!*end))
+	  bEnd = i;
+      }
+    
+    if ((bEnd >= 0) && (!*end))
+      *end = psl->qStarts[bEnd] + psl->blockSizes[bEnd];
+    
+    /* If opposite strand alignment, reverse the start and end positions in the mRNA */
+    if (((psl->strand[0] == '-')  && (psl->strand[1] != '-')) 
+	|| ((psl->strand[0] == '+') && (psl->strand[1] == '-')))
+      {
+	int tmp = *start;
+	*start = psl->qSize - *end;
+	*end = psl->qSize - tmp;
+	/* reverseComplement(ret->dna, ret->size); */
+	sprintf(strand, "-");
+      }
+    else
+      sprintf(strand, "+");
+    
+    /* Check if mrna aligns completely in this region */
+    if (((*end - *start) == (gend - gstart)) && (bStart > 0))
+      *nogap = TRUE;
+    else if ((bStart < bEnd) && (bStart > 0))
+      {
+	/*nogap = TRUE;
+	  for (i = bStart; i < bEnd; i++) 
+	  if ((psl->qStarts[i] + psl->blockSizes[i]) < psl->qStarts[i+1]) */
 	*nogap = FALSE;
+      }
   }
+ else 
+   {
+     *start = 0;
+     *end = 0;
+   }
 
 }
 
@@ -949,7 +958,7 @@ else if ((sameString(gseq->dna, dna)) || (((type == INDEL) || (type == UNALIGNED
 /* If it agrees with the mrna sequence */
 else if ((sameString(mdna, dna)) || 
 	 (((type == INDEL) || (type == UNALIGNED)) && 
-	  ((strlen(dna) == strlen(mdna)) || (sameString(dna, dnaStart)) || (sameString(dna, dnaEnd)))))
+	  ((strlen(dna) == strlen(mdna)) || (sameString(mdna, dnaStart)) || (sameString(mdna, dnaEnd)))))
   {
     if (sameString(table, "mrna"))
         {
