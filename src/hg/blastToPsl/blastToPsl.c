@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.7 2003/09/10 13:19:43 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.8 2003/09/10 23:31:02 braney Exp $";
 
 
 int minScore = -1000000;
@@ -761,9 +761,11 @@ while ((bt = blastTabNext(lf)) != NULL)
     AllocVar(b);
     b->score = bt->bitScore;
     b->qStart = bt->qStart - 1;
-    b->qEnd = bt->qEnd - 1;
+    b->qEnd = bt->qEnd;
     b->tStart = bt->tStart - 1;
-    b->tEnd = bt->tEnd;
+    /* don't use tblastn's bad number*/
+    b->tEnd = (strand == '+') ?   b->tStart + (b->qEnd - b->qStart) * 3 :
+	 b->tStart - (b->qEnd - b->qStart) * 3;
     slAddHead(&sp->blockList, b);
 
     sp->axtCount += 1;
