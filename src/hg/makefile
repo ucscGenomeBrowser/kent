@@ -168,6 +168,7 @@ UTIL_DIRS = \
 	orthoMap \
 	overlapSelect \
 	patCount \
+	pslCDnaFilter \
 	pslCat \
 	pslCheck \
 	pslCoverage \
@@ -175,6 +176,7 @@ UTIL_DIRS = \
 	pslFilter \
 	pslFilterPrimers \
 	pslGlue \
+	pslHisto \
 	pslHitPercent \
 	pslIntronsOnly \
 	pslMap \
@@ -186,6 +188,7 @@ UTIL_DIRS = \
 	pslSimp \
 	pslSort \
 	pslSortAcc \
+	pslStats \
 	pslSwap \
 	pslUnpile \
 	qaToQac \
