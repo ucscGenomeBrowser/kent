@@ -595,3 +595,10 @@ visibility hide
 chromosomes chr21,
 type bed 12
 private on
+
+track altGraph
+shortLabel altGraph
+longLabel altGraph
+priority 42
+visibility hide
+type psl
