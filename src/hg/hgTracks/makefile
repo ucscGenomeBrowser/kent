@@ -24,7 +24,7 @@ mgsc: compile
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A
-#	strip $A
+	strip $A
 	chmod a+rx $A
 
 debug: $O
