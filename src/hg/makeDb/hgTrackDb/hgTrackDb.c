@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.17 2004/04/01 02:26:13 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.18 2004/04/01 02:32:15 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -184,7 +184,10 @@ void layerOn(char *strict, char *database, char *dir, struct hash *uniqHash,
  * and layer them on top of whatever is in tdList. */
 {
 char raFile[512];
-sprintf(raFile, "%s/%s", dir, raName);
+if (raName[0] != '/') 
+    safef(raFile, sizeof(raFile), "%s/%s", dir, raName);
+else
+    safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
     addVersion(strict, database, dir, raFile, uniqHash, htmlHash, tdList);
