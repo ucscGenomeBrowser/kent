@@ -1,0 +1,9 @@
+# Rat-specific link info.
+
+name cgap
+url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Rn&CID=%s
+
+name ensembl
+url http://www.ensembl.org/Rattus_norvegicus/geneview?transcript=%s
+
+

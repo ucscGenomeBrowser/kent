@@ -27,19 +27,6 @@ idSql select value from bdgpToRefSeq where name = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 priority 40
 
-#name locusLink
-#tables sangerToRefSeq
-#idSql select refLink.locusLinkId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc
-#url http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%s
-#priority 45
-
-#name genBank
-#shortLabel GenBank
-#tables kgXref
-#idSql select kgID from kgXref where kgID = '%s'
-#url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
-#priority 50
-
 name pubMed
 shortLabel PubMed
 tables bdgpSwissProt

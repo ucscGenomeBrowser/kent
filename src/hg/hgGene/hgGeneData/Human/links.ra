@@ -7,6 +7,20 @@ idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.ref
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu
 priority 65
 
+name geneLynx
+shortLabel GeneLynx
+tables kgXref
+idSql select geneSymbol from kgXref where kgID = '%s'
+url http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1
+priority 70
+
+name geneCards
+shortLabel GeneCards
+tables kgXref
+idSql select geneSymbol from kgXref where kgID = '%s'
+url http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s
+priority 80
+
 name cgap
 url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
 
@@ -14,4 +28,8 @@ name ensembl
 url http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
 name aceView
+shortLabel AceView
+tables kgXref
+idSql select geneSymbol from kgXref where kgID = '%s'
+priority 110
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s

@@ -4,8 +4,9 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "hgGene.h"
 #include "hui.h"
+#include "hdb.h"
+#include "hgGene.h"
 
 struct link
 /* A link to another web site. */
@@ -91,6 +92,13 @@ struct sqlResult *sr;
 char **row;
 char *url = NULL;
 
+/* Some special case code here for things that need to
+ * do more than check a table. */
+if (sameString(link->name, "family"))
+    {
+    if (!hgNearOk(database))
+        return NULL;
+    }
 safef(query, sizeof(query), link->idSql, geneId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
