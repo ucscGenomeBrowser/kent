@@ -12,7 +12,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.25 2003/10/13 19:29:24 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.26 2003/10/13 19:33:15 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *lookupConn,
@@ -341,7 +341,7 @@ int height = gifLabelMaxWidth(experiments, representativeCount);
 
 for (i=0; i<representativeCount; i += groupSize+1)
     {
-    hPrintf("<TD>");
+    hPrintf("<TD VALIGN=\"BOTTOM\">");
     groupSize = countNonNull(experiments+i, representativeCount-i);
     safef(gifName, sizeof(gifName), "../trash/near_%s_%s%d.gif", 
     	colName, subName, ++gifCount);
