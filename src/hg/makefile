@@ -22,7 +22,6 @@ BAD_DIRS = \
 	autoXml \
 	cgiExample \
 	checkAgpAndFa \
-	geneBounds \
 	geneOverlap \
 	hgBatch \
 	makeSeqs \
@@ -120,6 +119,7 @@ DIRS = \
 	gapper \
 	gbOneAcc \
 	gbToFaRa \
+	geneBounds \
 	getFeatDna \
 	getRna \
 	getRnaPred \
