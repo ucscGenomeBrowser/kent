@@ -16,6 +16,6 @@ CREATE TABLE cpgIslandExt (
     perGc float not null,	# Percentage of island that is C or G
     obsExp float not null,	# Ratio of observed(cpgNum) to expected(numC*numG/length) CpG in island
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(14),chromStart),
+    INDEX(chrom(14),chromEnd)
 );
