@@ -87,10 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.899 2005/02/09 19:57:54 sugnet Exp $";
-
-extern void bedGraphMethods(struct track *track, struct trackDb *tdb, 
-	int wordCount, char *words[]);
+static char const rcsid[] = "$Id: hgTracks.c,v 1.900 2005/02/09 20:02:33 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */

@@ -608,6 +608,8 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 void ctWigLoadItems(struct track *tg);
 void wigMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
+void bedGraphMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[]);
 
 /* Make track group for wig - wiggle tracks. */
 
