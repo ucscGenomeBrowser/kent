@@ -561,7 +561,7 @@ else
 	    proteinInSupportedGenome = FALSE;
 	    database = strdup(GLOBAL_PB_DB);
 	    organism = strdup("");
-    	    protDbName = strdup("proteins");
+    	    protDbName = strdup(PROTEOME_DB_NAME);
 	    proteinID = strdup(answer);
 	    }
 	}
