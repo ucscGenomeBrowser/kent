@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.744 2004/05/28 23:23:30 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.745 2004/05/30 17:11:33 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7726,6 +7726,32 @@ hashFree(&hash);
 *pGroupList = list;
 }
 
+void topButton(char *var, char *label)
+/* create a 3 or 4-char wide button for top line of display.
+ * 3 chars wide for odd-length labels, 4 for even length.
+ * Pad with spaces so label is centered */
+{
+char paddedLabel[5] = "    ";
+int len = strlen(label);
+if (len > 4)
+    {
+    /* truncate */
+    /* or maybe errabort ? */
+    label[3] = 0;
+    len = 4;
+    }
+if (len % 2 != 0)
+    paddedLabel[3] = 0;
+if (len == strlen(paddedLabel))
+    strcpy(paddedLabel, label);
+else
+    {
+    int i;
+    for (i=0; i<len; i++)
+        paddedLabel[i+1] = label[i];
+    }
+hButton(var, paddedLabel);
+}
 
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
@@ -8001,14 +8027,15 @@ if (!hideControls)
     hButton("hgt.right2", ">> ");
     hButton("hgt.right3", ">>>");
     hWrites(" zoom in ");
-    hButton("hgt.in1", ZOOM_1PT5X);
-    hButton("hgt.in2", ZOOM_3X);
-    hButton("hgt.in3", ZOOM_10X);
-    hButton("hgt.inBase", ZOOM_BASE);
+    /* use button maker that determines padding, so we can share constants */
+    topButton("hgt.in1", ZOOM_1PT5X);
+    topButton("hgt.in2", ZOOM_3X);
+    topButton("hgt.in3", ZOOM_10X);
+    topButton("hgt.inBase", ZOOM_BASE);
     hWrites(" zoom out ");
-    hButton("hgt.out1", ZOOM_1PT5X);
-    hButton("hgt.out2", ZOOM_3X);
-    hButton("hgt.out3", ZOOM_10X);
+    topButton("hgt.out1", ZOOM_1PT5X);
+    topButton("hgt.out2", ZOOM_3X);
+    topButton("hgt.out3", ZOOM_10X);
     hWrites("<BR>\n");
 
     /* Break into a second form so that zooming and scrolling
