@@ -3,6 +3,9 @@ the UCSC human genome browser.  The program
 hgTrackDb converts the information here into
 a 'trackDb' table in the hgN MySQL database.
 
+SEE ALSO: source tree file: src/product/README.trackDb
+	for a general discussion of developing tracks.
+
 The bulk of the information about a track is
 contained in the trackDb.ra file.  Tracks are
 separated from each other in this file by 
