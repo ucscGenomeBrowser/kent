@@ -65,7 +65,7 @@ if [ "$?" -ne 0 ]; then
 fi
 
 TF=/tmp/wigEncode.$$.txt
-wget "http://hgwbeta.cse.ucsc.edu/encode/wiggleExample.txt" -O "${TF}" \
+wget "http://genome.ucsc.edu/encode/wiggleExample.txt" -O "${TF}" \
 	> /dev/null 2> /dev/null
 oneTest "${WIGENCODE} ${TF} stdout /dev/null 2> /dev/null" "04152     2"
 rm -f "${TF}"
