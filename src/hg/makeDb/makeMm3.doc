@@ -704,7 +704,7 @@ CREATING HUMAN/MOUSE CHAINS AND NET BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
     cd axtChain
     mkdir run1
     cd run1
-    ls -1S ../../axtChrom/*.axt.gz | input.lst
+    ls -1S ../../axtChrom/*.axt.gz > input.lst
     echo '#LOOP' > gsub
     echo 'doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}' >> gsub
     echo '#ENDLOOP' >> gsub
@@ -712,6 +712,7 @@ CREATING HUMAN/MOUSE CHAINS AND NET BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
     para create spec
     echo '#!/bin/csh' > doChain
     echo 'gunzip -c $1 | axtChain stdin  ~/mm/mixedNib ~/oo/mixedNib $2 > $3' >> doChain
+    chmod a+x doChain
     para shove
 
     # Do some sorting on the little cluster job on the file server

@@ -7,6 +7,8 @@
 # some variable you need to set before running this script
 set tDbName = mm3
 set qDbName = rn2
+set tOrg = mouse
+set qOrg = rat
 set aliDir = /cluster/store2/mm.2003.02/mm3/bed/blastz.rn2.2003-03-07-ASH
 set chainDir = $aliDir/axtChain
 set tSeqDir = /cluster/store2/mm.2003.02/mm3
@@ -62,7 +64,7 @@ cat > loadChains.csh <<endCat
     cd chain
     foreach i (*.chain)
 	set c = \$i:r
-	hgLoadChain $tDbName \${c}_humanChain \$i
+	hgLoadChain $tDbName \${c}_${qOrt}Chain \$i
 	echo done \$c
     end
 endCat
@@ -108,7 +110,7 @@ cat > finishLoadNet.csh <<endCat
     rm -r n1 hNoClass.net
 
     # Load the net into the database as so:
-    netFilter -minGap=10 mouse.net |  hgLoadNet $tDbName humanNet stdin
+    netFilter -minGap=10 mouse.net |  hgLoadNet $tDbName ${qOrt}Net stdin
 endCat
 
 cat > makeAxtNet.csh <<endCat
