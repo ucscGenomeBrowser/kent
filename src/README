@@ -19,7 +19,7 @@ GENERAL INSTALL INSTRUCTIONS
 
 1. Create a directory named "jksrc" and go to it.
 2. Unzip jksrcXXX.zip, where XXX is the latest version,
-   currently 417.
+   currently 446.
 3. Check that the environment variable MACHTYPE
    exists on your system.  It should on Unix.  
    (And making this on non-Unix systems is beyond
@@ -37,7 +37,8 @@ GENERAL INSTALL INSTRUCTIONS
    some warning messages about "crudeAli.c"
    otherwise it should compile cleanly.
    It's using gcc.
-7. Go to the application you want to make and type 
+7. Go to jksrc/jkOwnLib and type make.
+8. Go to the application you want to make and type 
    make.  (If you're not sure, as a simple test
    go to jksrc/utils/fixcr and type make,
    then 'rehash' if necessary so your shell
