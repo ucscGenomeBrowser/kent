@@ -17,7 +17,7 @@ errAbort(
  "     <name> <number of cpus>\n"
  "It may have other columns as well\n"
  "options:\n"
- "    exe=/path/to/paranode\n"
+ "    exe=/path/to/paraNode\n"
  "    log=/path/to/log/file\n"
  "    umask=000 - set file creation mask, defaults to 002\n"
  "    userPath=bin:bin/i386 User dirs to add to path\n"
