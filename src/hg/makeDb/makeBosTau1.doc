@@ -1175,7 +1175,7 @@ chainSome $(path1)
   cd /genbank
   ./bin/gbDbLoadStep -getDownloadSeqs=1 bosTau1
   # output goes to /genbank/download/bosTau1/bigZips
-  # these are automatically resynced to hgnfs1 (which hgdownload reads)
+  # these are automatically rsynced to hgnfs1 (which hgdownload reads)
 
 
 # SWAP human(target)/cow(query) alignments to make bosTau1.chainHg17
