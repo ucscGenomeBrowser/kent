@@ -10,7 +10,7 @@ import org.xml.sax.*;
  * LinkCheck.java
  * Purpose: check all links on a web page and report ok links and
  *   error links in separate files
- * Accepts command line input:  path in htdocs, file[.html], yymmmdd
+ * Accepts command line input:  path in htdocs, file[.html], [yymmmdd]
  * Use zero for path if at top level
  * @author Heather Trumbower
  * @author Robert Kuhn
@@ -63,13 +63,13 @@ class LinkCheck {
      */
 
     // set parameters for naming file to check here and using as variable
-    String localPath = "";  // new String("FAQ/");
-    String file      = "";  // new String("index");
-    String yymmmdd   = "";  // new String("04ooo01");
+    String localPath = "";
+    String file      = "";
+    String yymmmdd   = "today";
 
-    if (args.length == 0) {
+    if (args.length < 2) {
        System.out.println("\n  Checks all links on a web page.");
-       System.out.println("  Usage: path in htdocs, file[.html], yymmmdd.");
+       System.out.println("  Usage: path in htdocs, file[.html], [dateString].");
        System.out.println("  Use zero for path if at htdocs level.\n");
        System.exit(-1);
      } else {
@@ -82,8 +82,10 @@ class LinkCheck {
          localPath = args[0] + "/";
        }
        file      = args[1];
-       yymmmdd   = args[2];
-
+       
+       if (args.length == 3) {
+         yymmmdd   = args[2];
+       }
        // clean off extra "/" if present
        localPath = localPath.replaceAll("//", "/");
      }
@@ -92,8 +94,8 @@ class LinkCheck {
     String outputPath = localPath.replaceAll("/", ".");
 
 
-    System.out.println("localPath: " + localPath + "\n");
-    System.out.println("outputPath: " + outputPath + "\n");
+    // System.out.println("localPath: " + localPath + "\n");
+    // System.out.println("outputPath: " + outputPath + "\n");
 
 
 
