@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.132 2003/08/19 23:15:38 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.133 2003/08/28 04:53:22 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1387,7 +1387,7 @@ char *hOrganism(char *database)
 {
 if (sameString(database, "rep"))    /* bypass dbDb if repeat */
     return cloneString("Repeat");
-return hDbDbField(database, "organism");
+return hDbDbOptionalField(database, "organism");
 }
 
 char *hGenome(char *database)
@@ -1439,24 +1439,28 @@ sub = subTextNew(fullName, value);
 slAddHead(pList, sub);
 }
 
+
 static void addDbSubVars(char *prefix, char *database, struct subText **pList)
 /* Add substitution variables associated with database to list. */
 {
 char *organism = hOrganism(database);
-char *lcOrg = cloneString(organism);
-char *ucOrg = cloneString(organism);
-char *date = hFreezeDate(database);
-tolowers(lcOrg);
-touppers(ucOrg);
-addSubVar(prefix, "Organism", organism, pList);
-addSubVar(prefix, "ORGANISM", ucOrg, pList);
-addSubVar(prefix, "organism", lcOrg, pList);
+if (organism != NULL)
+    {
+    char *lcOrg = cloneString(organism);
+    char *ucOrg = cloneString(organism);
+    char *date = hFreezeDate(database);
+    tolowers(lcOrg);
+    touppers(ucOrg);
+    addSubVar(prefix, "Organism", organism, pList);
+    addSubVar(prefix, "ORGANISM", ucOrg, pList);
+    addSubVar(prefix, "organism", lcOrg, pList);
+    addSubVar(prefix, "date", date, pList);
+    freez(&date);
+    freez(&ucOrg);
+    freez(&lcOrg);
+    freez(&organism);
+    }
 addSubVar(prefix, "db", database, pList);
-addSubVar(prefix, "date", date, pList);
-freez(&date);
-freez(&ucOrg);
-freez(&lcOrg);
-freez(&organism);
 }
 
 static void subOut(struct trackDb *tdb, char **pString, struct subText *subList)
