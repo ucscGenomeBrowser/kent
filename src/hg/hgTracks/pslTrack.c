@@ -201,16 +201,46 @@ hFreeConn(&conn);
 }
 
 
+
+struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int sizeMul)
+{
+        struct simpleFeature *sf = NULL, *sfList = NULL;
+        unsigned *starts = psl->tStarts;
+        unsigned *qStarts = psl->qStarts;
+        unsigned *sizes = psl->blockSizes;
+        int i, blockCount = psl->blockCount;
+        boolean rcTarget = (psl->strand[1] == '-');
+
+        for (i=0; i<blockCount; ++i)
+                {
+                AllocVar(sf);
+                sf->start = sf->end = starts[i];
+                sf->end += sizes[i]*sizeMul;
+                sf->qStart = sf->qEnd = qStarts[i];
+                sf->qEnd += sizes[i];
+                if (rcTarget)
+                    {
+	                int s, e;
+	                s = psl->tSize - sf->end;
+	                e = psl->tSize - sf->start;
+	                sf->start = s;
+	                sf->end = e;
+	                }
+                sf->grayIx = grayIx;
+                slAddHead(&sfList, sf);
+                }
+        return(sfList);
+}
+
+
+
+
 struct linkedFeatures *lfFromPslx(struct psl *psl, 
 	int sizeMul, boolean isXeno, boolean nameGetsPos, char *mapName)
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 {
-unsigned *starts = psl->tStarts;
-unsigned *qStarts = psl->qStarts;
-unsigned *sizes = psl->blockSizes;
-int i, blockCount = psl->blockCount;
-struct simpleFeature *sfList = NULL, *sf;
+struct simpleFeature *sfList = NULL;
 int grayIx = pslGrayIx(psl, isXeno, maxShade);
 struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
@@ -246,25 +276,7 @@ if (drawOptionNum>0 && zoomedToCdsColorLevel)
         lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade);
     else
         {
-        for (i=0; i<blockCount; ++i)
-            {
-            AllocVar(sf);
-            sf->start = sf->end = starts[i];
-            sf->end += sizes[i]*sizeMul;
-            sf->qStart = sf->qEnd = qStarts[i];
-            sf->qEnd += sizes[i];
-            if (rcTarget)
-                {
-	            int s, e;
-	            s = psl->tSize - sf->end;
-	            e = psl->tSize - sf->start;
-	            sf->start = s;
-	            sf->end = e;
-	            }
-            sf->grayIx = grayIx;
-            slAddHead(&sfList, sf);
-            }
-
+        sfList = sfFromPslX(psl, grayIx, sizeMul);
         slReverse(&sfList);
         lf->components = sfList;
         linkedFeaturesBoundsAndGrays(lf);

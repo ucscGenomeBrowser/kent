@@ -76,7 +76,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.660 2004/01/26 22:21:47 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.661 2004/01/29 17:22:30 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1218,11 +1218,12 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	}
     if (e > s)
 	{
-        if (drawOptionNum>0 && zoomedToCdsColorLevel)
-            drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
+            if (zoomedToCdsColorLevel && drawOptionNum>0 && 
+                    e + 6 >= winStart && s - 6 < winEnd) 
+                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
-                psl, drawOptionNum, errorColor, &foundStart,
-                MAXPIXELS, winStart);
+                    psl, drawOptionNum, errorColor, &foundStart,
+                    MAXPIXELS, winStart);
         else
             {
 	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 

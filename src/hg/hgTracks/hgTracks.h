@@ -487,8 +487,14 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 
+
+struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int
+                sizeMul);
+
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
+
+
 
 void wigMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
 /* Make track group for wig - wiggle tracks. */
