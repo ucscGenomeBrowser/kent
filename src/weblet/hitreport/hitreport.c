@@ -43,21 +43,11 @@ const struct user *b = *((struct user **)vb);
 return b->lastTime - a->lastTime;
 }
 
-void readString(FILE *f, char *s, int sLen)
+void readStringz(FILE *f, char *s, int sLen)
 /* Read in a zero terminated string from file into a
  * character array of given size. */
 {
-int c;
-int i;
-sLen -= 1;  /* Keep room for zero tag at end. */
-for (i=0; i<sLen; ++i)
-    {
-    c = fgetc(f);
-    if (c <= 0)
-        break;
-    s[i] = (char)c;
-    }
-s[i] = 0;
+fgets(s, sLen, f);
 }
 
 void printList(struct user *userList, int topCount)
@@ -104,7 +94,7 @@ for (i=0; i<count; ++i)
     {
     if (!readOne(f, time))
         break;
-    readString(f, ipNameBuf, sizeof(ipNameBuf));
+    readStringz(f, ipNameBuf, sizeof(ipNameBuf));
     if ((hel = hashLookup(hash, ipNameBuf)) == NULL)
         {
         AllocVar(user);
@@ -115,7 +105,7 @@ for (i=0; i<count; ++i)
     if (readWhence)
         {
         struct hashEl *wHel;
-        readString(f, whenceNameBuf, sizeof(whenceNameBuf));
+        readStringz(f, whenceNameBuf, sizeof(whenceNameBuf));
         if ((wHel = hashLookup(whenceHash, whenceNameBuf)) == NULL)
             {
             wHel = hashAdd(whenceHash, whenceNameBuf, NULL);
