@@ -6,6 +6,8 @@
         as well as it has as long as it has with this bug!
      d) Put back in old stitcher to handle small cases, with less than
         10 blocks.  It's faster in these cases.
+     e) Put a 'Database: ' line at the end of the blast output to make
+        bioperl happy.
 18 - a) Fixed bug where you had to do -oneOff=1 rather than -oneOff
      in command line of blat.  
      b) Clarified makeOoc usage message.

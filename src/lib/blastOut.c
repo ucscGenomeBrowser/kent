@@ -485,7 +485,6 @@ for (target = targetList; target != NULL; target = target->next)
     fprintf(f, "\n");
     }
 fprintf(f, "\n");
-fprintf(f, "ALIGNMENTS\n");
 
 /* Print out details on each target. */
 for (target = targetList; target != NULL; target = target->next)
@@ -499,8 +498,9 @@ for (target = targetList; target != NULL; target = target->next)
 	{
 	axt = ref->axt;
 	fprintf(f, "\n");
-	fprintf(f, " Score = %d bits, Expect = ",
-	     blastzScoreToNcbiBits(axt->score));
+	fprintf(f, " Score = %d bits (%d), Expect = ",
+	     blastzScoreToNcbiBits(axt->score),
+	     blastzScoreToNcbiScore(axt->score));
 	ncbiPrintE(f, blastzScoreToNcbiExpectation(axt->score));
 	fprintf(f, "\n");
 	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
@@ -514,10 +514,8 @@ for (target = targetList; target != NULL; target = target->next)
 		 positives, axt->symCount, round(100.0 * positives / axt->symCount));
 	    fprintf(f, " Gaps = %d/%d (%d%%)\n",
 		 gaps, axt->symCount, round(100.0 * gaps / axt->symCount));
-	    if (axt->frame != 0)
-	         {
-		 fprintf(f, " Frame = %c%d\n", axt->tStrand, axt->frame);
-		 }
+	    if (axt->frame != 0) 
+		fprintf(f, " Frame = %c%d\n", axt->tStrand, axt->frame);
 	    }
 	else
 	    {
@@ -527,10 +525,11 @@ for (target = targetList; target != NULL; target = target->next)
 		nameForStrand(axt->tStrand));
 	    }
 	fprintf(f, "\n");
-	fprintf(f, "\n");
 	blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
 	}
     }
+
+fprintf(f, "  Database: %s\n", databaseName);
 
 /* Cleanup time. */
 targetHitsFreeList(&targetList);
