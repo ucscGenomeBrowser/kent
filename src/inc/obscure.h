@@ -27,6 +27,9 @@ void readAllWords(char *fileName, char ***retWords, int *retWordCount, char **re
 /* Read in whole file and break it into words. You need to freeMem both
  * *retWordCount and *retBuf when done. */
 
+int countWordsInFile(char *fileName);
+/* Count number of words in file. */
+
 struct slName *readAllLines(char *fileName);
 /* Read all lines of file into a list.  (Removes trailing carriage return.) */
 
@@ -58,6 +61,10 @@ struct slName *stringToSlNames(char *string);
 struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
+
+struct hash *hashWordsInFile(char *fileName, int hashSize);
+/* Create a hash of space delimited words in file. 
+ * hashSize is as in hashNew() - pass 0 for default. */
 
 void shuffleArrayOfPointers(void *pointerArray, int arraySize, 
 	int shuffleCount);

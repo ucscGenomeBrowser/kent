@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.17 2003/07/31 02:50:40 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.18 2003/08/21 01:56:45 kent Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -99,6 +99,34 @@ if (wordCount != 0)
 *retWordCount = wordCount;
 *retBuf = buf;
 }
+
+int countWordsInFile(char *fileName)
+/* Count number of words in file. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+int wordCount = 0;
+while (lineFileNext(lf, &line, NULL))
+    wordCount += chopByWhite(line, NULL, 0);
+lineFileClose(&lf);
+return wordCount;
+}
+
+struct hash *hashWordsInFile(char *fileName, int hashSize)
+/* Create a hash of space delimited words in file. */
+{
+struct hash *hash = newHash(hashSize);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+while (lineFileNext(lf, &line, NULL))
+    {
+    while ((word = nextWord(&line)) != NULL)
+        hashAdd(hash, word, NULL);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
 
 struct slName *readAllLines(char *fileName)
 /* Read all lines of file into a list.  (Removes trailing carriage return.) */
