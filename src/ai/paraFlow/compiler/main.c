@@ -45,6 +45,85 @@ hashAddInt(hash, "continue", pftContinue);
 return hash;
 }
 
+void collectDots(struct dyString *dy, struct pfParse *pp)
+/* Make sure that pp is really a pptDots or a pptName. 
+ * Output name plus any necessary dots into dy. */
+{
+if (pp->type == pptNameUse)
+    {
+    dyStringAppend(dy, pp->name);
+    return;
+    }
+else if (pp->type == pptDot)
+    {
+    for (pp = pp->children; pp != NULL; pp = pp->next)
+        {
+	switch (pp->type)
+	    {
+	    case pptNameUse:
+		dyStringAppend(dy, pp->name);
+		if (pp->next != NULL)
+		    dyStringAppend(dy, ".");
+		break;
+	    case pptRoot:
+	        dyStringAppend(dy, "/");
+		break;
+	    case pptParent:
+	        dyStringAppend(dy, "../");
+		break;
+	    case pptSys:
+	    case pptUser:
+	    case pptSysOrUser:
+	        break;
+	    }
+	}
+    }
+else
+    expectingGot("name", pp->tok);
+}
+
+void expandInto(struct pfParse *program, 
+	struct pfTokenizer *tkz, struct pfParse *pp)
+/* Go through program walking into modules. */
+{
+if (pp->type == pptInto)
+    {
+    struct dyString *dy = dyStringNew(0);
+    struct hashEl *hel;
+    char *module = NULL;
+    collectDots(dy, pp->children);
+    dyStringAppend(dy, ".pf");
+
+    hel = hashLookup(tkz->modules, dy->string);
+    if (hel != NULL)
+        module = hel->name;
+
+    if (module == NULL)
+        {
+	struct pfSource *oldSource = tkz->source;
+	char *oldPos = tkz->pos;
+	char *oldEndPos = tkz->endPos;
+	struct pfParse *mod;
+	tkz->source = pfSourceNew(dy->string);
+	tkz->pos = tkz->source->contents;
+	tkz->endPos = tkz->pos + tkz->source->contentSize;
+	mod = pfParseFile(dy->string, tkz, program);
+	expandInto(program, tkz, mod);
+	tkz->source = oldSource;
+	tkz->pos = oldPos;
+	tkz->endPos = oldEndPos;
+	slAddHead(&program->children, mod);
+	module = hashStoreName(tkz->modules, dy->string);
+	}
+    pp->name = module;
+#ifdef SOON
+#endif /* SOON */
+    dyStringFree(&dy);
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    expandInto(program, tkz, pp);
+}
+
 void paraFlow(char *fileName)
 /* parse and dump. */
 {
@@ -52,7 +131,17 @@ struct hash *reservedWords = createReservedWords();
 struct pfTokenizer *tkz = pfTokenizerNew(fileName, reservedWords);
 struct pfParse *program = pfParseNew(pptProgram, NULL, NULL);
 struct pfParse *pp = pfParseFile(fileName, tkz, program);
+
+
 program->children = pp;
+pfParseDump(program, 0, stdout);
+
+uglyf(">>>AND NOW<<<\n");
+
+expandInto(program, tkz, program);
+#ifdef SOON
+#endif /* SOON */
+
 pfParseDump(program, 0, stdout);
 }
 

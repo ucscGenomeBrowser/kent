@@ -10,6 +10,7 @@ enum pfParseType
     pptScope,
     pptInto,
     pptModule,
+    pptModuleRef,
     pptNop,
     pptCompound,
     pptTuple,

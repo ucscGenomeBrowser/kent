@@ -120,7 +120,7 @@ switch (type)
     }
 }
 
-static struct pfSource *pfSourceNew(char *fileName)
+struct pfSource *pfSourceNew(char *fileName)
 /* Create new pfSource based around file */
 {
 struct pfSource *source;

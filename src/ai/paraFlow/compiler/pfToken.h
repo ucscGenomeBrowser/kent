@@ -71,6 +71,9 @@ struct pfSource
     size_t contentSize;		/* Size of contents. */
     };
 
+struct pfSource *pfSourceNew(char *fileName);
+/* Create new pfSource based around file */
+
 struct pfTokenizer
 /* Tokenizing structure. */
     {

@@ -22,6 +22,8 @@ switch (type)
         return "pptInto";
     case pptModule:
         return "pptModule";
+    case pptModuleRef:
+        return "pptModuleRef";
     case pptNop:
     	return "pptNop";
     case pptCompound:
@@ -1168,7 +1170,7 @@ while (tok->type == ';')
 return statement;
 }
 
-static struct pfParse *pfParseProgram(struct pfToken *tokList, struct pfScope *scope,
+static struct pfParse *pfParseTokens(struct pfToken *tokList, struct pfScope *scope,
 	struct pfParse *program)
 /* Convert token list to parsed program. */
 {
@@ -1211,11 +1213,11 @@ struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz,
 {
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfParse *program = pfParseNew(pptModule, NULL, parent);
+struct pfParse *modParse = pfParseNew(pptModule, NULL, parent);
 struct pfScope *scope = pfScopeNew(tkz->scope, 16);
 char *module = hashStoreName(tkz->modules, fileName);
 
-program->name = module;
+modParse->name = module;
 
 /* Read tokens, add scoping info, and add to list. */
 while ((tok = pfTokenizerNext(tkz)) != NULL)
@@ -1246,7 +1248,7 @@ while (--endCount >= 0)
 slReverse(&tokList);
 
 addClasses(tokList, scope);
-pfParseProgram(tokList, scope, program);
-return program;
+pfParseTokens(tokList, scope, modParse);
+return modParse;
 }
 
