@@ -95,6 +95,14 @@ struct message
 struct dlList *messTodo;	/* List of messages to process. */
 struct dlList *messDone;	/* List of messages processed. */
 
+int jobCmp(const void *va, const void *vb)
+/* Compare to sort based on size of job . */
+{
+const struct job *a = *((struct job **)va);
+const struct job *b = *((struct job **)vb);
+return b->estTime - a->estTime;
+}
+
 void addJob(struct job *job)
 /* Add job to list, with largest job first. */
 {
@@ -149,6 +157,14 @@ for (node = messTodo->head; !dlEnd(node); node = node->next)
     }
 if (!added)
     dlAddTail(messTodo, mess->node);
+}
+
+int inFileCmp(const void *va, const void *vb)
+/* Compare to sort based on size of file . */
+{
+const struct inFile *a = *((struct inFile **)va);
+const struct inFile *b = *((struct inFile **)vb);
+return b->file->size - a->file->size;
 }
 
 void dumpJob(struct job *job)
@@ -319,7 +335,7 @@ while (!dlEmpty(jobWaiting) && !dlEmpty(machFree))
      {
      machNode = dlPopHead(machFree);
      mach = machNode->val;
-     jobNode = matchJob(mach, 20);
+     jobNode = matchJob(mach, 50);
      if (jobNode == NULL)
          warn("Null job node even though %d items in jobWiaiting", dlCount(jobWaiting));
      assert(jobNode != NULL);
@@ -358,70 +374,6 @@ printf("%d run '%s' on %s\n", now, job->command, mach->name);
 addMessage(now + job->estTime, "jobDone", mach, NULL, NULL, job);
 }
 
-#ifdef OLD
-boolean findSource(struct dlList *sourceList, struct dlNode *dest,
-	struct dlNode **retSource, struct fileSize **retFile)
-/* Try and find a machine in sourceList that has a file that
- * dest needs. */
-{
-struct dlNode *source;
-struct machine *s, *d = dest->val;
-struct inFile *in;
-struct job *job = d->job;
-
-if (job->isStaged)
-    return FALSE;
-for (source = sourceList->head; !dlEnd(source); source = source->next)
-    {
-    if (source != dest)
-        {
-	s = source->val;
-	for (in = job->input; in != NULL; in = in->next)
-	    {
-	    if (!in->isStaged && hashLookup(s->files, in->file->name))
-	        {
-		*retFile = in->file;
-		*retSource = source;
-		return TRUE;
-		}
-	    }
-	}
-    }
-return FALSE;
-}
-
-boolean stageJobs()
-/* Copy data to set up runs. */
-{
-boolean staged = FALSE;
-struct dlNode *node, *next, *source;
-struct fileSize *file;
-
-/* First try to find file in other staging nodes. */
-for (node = machStaging->head; !dlEnd(node); node = next)
-    {
-    next = node->next;
-    if (findSource(machStaging, node, &source, &file))
-        {
-	if (source == next)
-	    next = next->next;
-	makeCopyJob(source, node, file);
-	staged = TRUE;
-	}
-    }
-/* Then try to find file on server. */
-for (node = machStaging->head; !dlEnd(node); node = next)
-    {
-    next = node->next;
-    if (findSource(serverFree, node, &source, &file))
-	{
-        makeCopyJob(source, node, file);
-	staged = TRUE;
-	}
-    }
-return staged;
-}
-#endif /* OLD */
 
 int fileMarketCmp(const void *va, const void *vb)
 /* Compare to sort based on size of file in market. */
@@ -587,7 +539,7 @@ if (mach != NULL)
    struct dlList *list = (mach->isServer ? serverFree : machStaging);
    struct dlNode *node = mach->node;
    dlRemove(node);
-   dlAddTail(list, node);
+   dlAddHead(list, node);
    }
 }
 
@@ -606,7 +558,7 @@ if (node != NULL)
 	printf("'%s' on %s\n", mess->job->command, mach->name);
 	mach->job = NULL;
 	dlRemove(mach->node);
-	dlAddTail(machFree, mach->node);
+	dlAddHead(machFree, mach->node);
 	}
     else if (sameString(mess->type, "copyDone"))
         {
@@ -656,6 +608,7 @@ struct job *job;
 struct machine *machine;
 struct inFile *in;
 struct slRef *fileRefList = NULL;
+struct dlNode *node;
 
 hmDim[0] = aCount;
 hmDim[1] = bCount;
@@ -731,9 +684,24 @@ for (i = 1; i <= hmDim[0]; ++i)
 	slAddHead(&jobList, job);
 	AllocVar(job->node);
 	job->node->val = job;
-	addJob(job);
+	dlAddTail(jobWaiting, job->node);
 	}
     }
+dlSort(jobWaiting, jobCmp);
+
+
+/* Swap file order in every-other job.  This mixing tends to
+ * let us get started on the binary file copy better. */
+i = 0;
+for (node = jobWaiting->head; !dlEnd(node); node = node->next)
+   {
+   if (++i & 1)
+       {
+       job = node->val;
+       slReverse(&job->input);
+       }
+   }
+
 
 /* Start message lists. */
 messTodo = newDlList();
