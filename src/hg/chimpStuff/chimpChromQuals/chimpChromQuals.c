@@ -6,8 +6,9 @@
 #include "qaSeq.h"
 #include "rle.h"
 #include "agpFrag.h"
+#include "agpGap.h"
 
-static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.2 2004/02/07 02:00:00 angie Exp $";
+static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.3 2004/07/07 02:04:51 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -82,8 +83,10 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 int wordCount;
 struct chrom *chromList = NULL, *chrom;
-struct agpFrag *frag;
-int size;
+struct agpFrag *frag = NULL;
+struct agpGap *gap = NULL;
+char *chromName;
+int chromSize = 0;
 
 for (;;)
     {
@@ -92,27 +95,40 @@ for (;;)
         break;
     if (wordCount < 8)
 	lineFileShort(lf);
+
     if (row[4][0] == 'N')
-        continue;
-    if (wordCount < 9)
-        lineFileShort(lf);
-    frag = agpFragLoad(row);
-    frag->chromStart -= 1;
-    frag->fragStart -= 1;
-    size = frag->fragEnd - frag->fragStart;
-    if (size != frag->chromEnd - frag->chromStart)
-        errAbort("chrom/scaffold size mismatch line %d of %s",
+        {
+        /* need to get chromEnd from gaps to determine chrom size
+         * if the chrom ends with a gap */
+        gap = agpGapLoad(row);
+        chromName = gap->chrom;
+        chromSize = gap->chromEnd;
+        frag = NULL;
+        }
+    else
+        {
+        if (wordCount < 9)
+            lineFileShort(lf);
+        frag = agpFragLoad(row);
+        chromName = frag->chrom;
+        chromSize = frag->chromEnd;
+        frag->chromStart -= 1;
+        frag->fragStart -= 1;
+        if (frag->fragEnd - frag->fragStart != 
+            frag->chromEnd - frag->chromStart)
+                errAbort("chrom/scaffold size mismatch line %d of %s",
                                   lf->lineIx, lf->fileName);
-    chrom = hashFindVal(chromHash, frag->chrom);
+        }
+    chrom = hashFindVal(chromHash, chromName);
     if (chrom == NULL)
         {
-	AllocVar(chrom);
-	hashAdd(chromHash, frag->chrom, chrom);
-	slAddHead(&chromList, chrom);
-	}
-    slAddHead(&chrom->list, frag);
-    if (frag->chromEnd > chrom->size)
-        chrom->size = frag->chromEnd;
+        AllocVar(chrom);
+        slAddHead(&chromList, chrom);
+        hashAdd(chromHash, chromName, chrom);
+        }
+    chrom->size = max(chromSize, chrom->size);
+    if (frag != NULL)
+        slAddHead(&chrom->list, frag);
     }
 slReverse(&chromList);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -145,10 +161,10 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     /* Set up qa to hold uncompressed quals for whole chrom. */
     qa.name = chrom->list->chrom;
+    printf("    %s size=%d\n", chrom->list->chrom, chrom->size);
     qa.size = chrom->size;
     if (qaMaxSize < qa.size)
 	{
-	freez(&qa.qa);
 	qa.qa = needHugeZeroedMem(qa.size);
 	qaMaxSize = qa.size;
 	}
