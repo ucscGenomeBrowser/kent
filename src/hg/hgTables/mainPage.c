@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.34 2004/09/11 03:29:37 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.35 2004/09/11 15:24:25 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -110,9 +110,9 @@ static struct dyString *onChangeStart()
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
+jsDropDownCarryOver(dy, hgtaTable);
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
-jsDropDownCarryOver(dy, hgtaTable);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
 jsTextCarryOver(dy, hgtaRange);
 jsDropDownCarryOver(dy, hgtaOutputType);
@@ -220,19 +220,18 @@ nameList = tablesForTrack(track);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
-selTable = cartUsualString(cart, hgtaTable, track->tableName);
+selTable = cartUsualString(cart, hgtaTable, nameList->name);
 if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
-
 /* Print out label and drop-down list. */
 hPrintf("<B>table:</B>");
 hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeGroupOrTrack());
 for (name = nameList; name != NULL; name = name->next)
     {
-    hPrintf("<OPTION");
+    hPrintf("<OPTION VALUE=%s", name->name);
     if (sameString(selTable, name->name))
         hPrintf(" SELECTED");
-    hPrintf(">%s", name->name);
+    hPrintf(">%s\n", name->name);
     }
 hPrintf("</SELECT>\n");
 return selTable;
