@@ -1,3 +1,8 @@
+# This contains stuff that may be genome-specific.
+# This particular file contains the default values,
+# which may be overridden by corresponding files in
+# the organism or assembly-specific directories. 
+
 name global
-nameSql select geneSymbol from kgXref where kgId = '%s'
-descriptionSql select description from kgXref where kgId = '%s'
+nameSql select geneSymbol from kgXref where kgID = '%s'
+descriptionSql select description from kgXref where kgID = '%s'

@@ -6,24 +6,23 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
+#include "hui.h"
 #include "dbDb.h"
 #include "hdb.h"
-#include "hui.h"
 #include "web.h"
 #include "ra.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.2 2003/10/11 00:34:00 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.3 2003/10/11 09:29:38 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 struct hash *oldCart;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
-char *geneId;		/* Symbolic ID of gene. */
-char *geneName;		/* Biological name of gene. */
+char *curGeneId;	/* Current Gene Id. */
+char *curGeneName;		/* Biological name of gene. */
 struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
-
 
 void usage()
 /* Explain usage and exit. */
@@ -44,10 +43,10 @@ errAbort(
 
 static char *rootDir = "hgGeneData";
 
-struct hash *readRa(char *rootName)
+struct hash *readRa(char *rootName, struct hash **retHashOfHash)
 /* Read in ra in root, root/org, and root/org/database. */
 {
-return hgReadRa(genome, database, rootDir, rootName);
+return hgReadRa(genome, database, rootDir, rootName, retHashOfHash);
 }
 
 char *genomeSetting(char *name)
@@ -59,7 +58,7 @@ return hashMustFindVal(genomeSettings, name);
 static void getGenomeSettings()
 /* Set up genome settings hash */
 {
-struct hash *hash = readRa("genome.ra");
+struct hash *hash = readRa("genome.ra", NULL);
 char *name;
 if (hash == NULL)
     errAbort("Can't find anything in genome.ra");
@@ -137,20 +136,159 @@ hPrintf("%s", description);
 freeMem(description);
 }
 
+char *sectionSetting(struct section *section, char *name)
+/* Return section setting value if it exists. */
+{
+return hashFindVal(section->settings, name);
+}
+
+char *sectionRequiredSetting(struct section *section, char *name)
+/* Return section setting.  Squawk and die if it doesn't exist. */
+{
+char *res = sectionSetting(section, name);
+if (res == NULL)
+    errAbort("Can't find required %s field in %s in settings.ra", 
+    	name, section->name);
+return res;
+}
+
+boolean sectionAlwaysExists(struct section *section, struct sqlConnection *conn,
+	char *geneId)
+/* Return TRUE - for sections that always exist. */
+{
+return TRUE;
+}
+
+void sectionPrintStub(struct section *section, struct sqlConnection *conn,
+	char *geneId)
+/* Print out coming soon message for section. */
+{
+hPrintf("coming soon!");
+}
+
+struct section *sectionNew(struct hash *sectionRa, char *name)
+/* Create a section loading all but methods part from the
+ * sectionRa. */
+{
+struct section *section = NULL;
+struct hash *settings = hashFindVal(sectionRa, name);
+
+if (settings != NULL)
+    {
+    char *s;
+    AllocVar(section);
+    section->settings = settings;
+    section->name = sectionSetting(section, "name");
+    section->shortLabel = sectionRequiredSetting(section, "shortLabel");
+    section->longLabel = sectionRequiredSetting(section, "longLabel");
+    section->priority = atof(sectionRequiredSetting(section, "priority"));
+    section->exists = sectionAlwaysExists;
+    section->print = sectionPrintStub;
+    }
+return section;
+}
+
+int sectionCmpPriority(const void *va, const void *vb)
+/* Compare to sort sections based on priority. */
+{
+const struct section *a = *((struct section **)va);
+const struct section *b = *((struct section **)vb);
+float dif = a->priority - b->priority;
+if (dif < 0)
+    return -1;
+else if (dif > 0)
+    return 1;
+else
+    return 0;
+}
+
+static void addGoodSection(struct section *section, 
+	struct sqlConnection *conn, struct section **pList)
+/* Add section to list if it is non-null and exists returns ok. */
+{
+if (section != NULL && section->exists(section, conn, curGeneId))
+     slAddHead(pList, section);
+}
+
+struct section *loadSectionList(struct sqlConnection *conn)
+/* Load up section list - first load up sections.ra, and then
+ * call each section loader. */
+{
+struct hash *sectionRa = NULL;
+struct section *sectionList = NULL, *section;
+
+readRa("section.ra", &sectionRa);
+addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(proteinStructureSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
+// addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
+
+slSort(&sectionList, sectionCmpPriority);
+return sectionList;
+}
+
+void printIndex(struct section *sectionList)
+/* Print index to section. */
+{
+int maxPerRow = 6, itemPos = 0;
+struct section *section;
+
+hPrintf("<BR>\n");
+hPrintf("<BR>\n");
+hPrintf("<TABLE CELLSPACING=2 CELLPADDING=2><TR>\n");
+for (section=sectionList; section != NULL; section = section->next)
+    {
+    if (++itemPos > maxPerRow)
+        {
+	hPrintf("</TR>\n<TR>");
+	itemPos = 1;
+	}
+    hPrintf("<TD BGCOLOR=\"#D9E4F8\"><A HREF=\"#%s\" class=\"toc\">%s</A></TD>", 
+    	section->name, section->shortLabel);
+    }
+hPrintf("</TR></TABLE>\n");
+}
+
+void printSections(struct section *sectionList, struct sqlConnection *conn,
+	char *geneId)
+/* Print each section in turn. */
+{
+struct section *section;
+for (section = sectionList; section != NULL; section = section->next)
+    {
+    webNewSection(section->longLabel);
+    hPrintf("<A NAME=\"%s\"></A>\n", section->name);
+    section->print(section, conn, geneId);
+    }
+}
+
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;
+struct section *sectionList = NULL;
 cart = theCart;
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
 conn = hAllocConn();
-geneId = cartString(cart, hggGene);
+curGeneId = cartString(cart, hggGene);
 getGenomeSettings();
-geneName = getGeneName(geneId, conn);
-cartWebStart(cart, "%s Gene %s Details", genome, geneName);
-printDescription(geneId, conn);
+curGeneName = getGeneName(curGeneId, conn);
+cartWebStart(cart, "%s Gene %s Details", genome, curGeneName);
+printDescription(curGeneId, conn);
+sectionList = loadSectionList(conn);
+printIndex(sectionList);
+printSections(sectionList, conn, curGeneId);
 cartWebEnd();
 }
 
@@ -160,6 +298,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
 cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldCart);
