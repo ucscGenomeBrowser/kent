@@ -4,10 +4,10 @@ exit; # don't actually run this like a script :)
 # This file describes how we made the browser database on 
 # NCBI build 34 (July 18, 2003 freeze)
 
-# HOW TO BUILD A ASSEMBLY FROM NCBI FILES
+# HOW TO BUILD A ASSEMBLY FROM NCBI FILES 
 # ---------------------------------------
 
-# 0) Make gs.17 directory, gs.17/build34 directory, and gs.17/ffa directory.
+# Make gs.17 directory, gs.17/build34 directory, and gs.17/ffa directory.
     mkdir /cluster/store4/gs.17
     mkdir /cluster/store4/gs.17/build34
     mkdir /cluster/store4/gs.17/agp
@@ -48,17 +48,23 @@ exit; # don't actually run this like a script :)
     get ref_unplaced.fa.gz # used to be in reference.fa
     get DR51.fa.gz
     get PAR.fa.gz          # new for this build - PAR regions added to chrY
+    get sequence.inf
     cat ref_placed.fa ref_unplaced.fa DR51.fa > ncbi_build34.fa
-    *** get sequence.inf ***
 
 # Download assembly related files into gs.17/build34
 
     get seq_contig.md
-    *** get contig_overlaps.agp ***
+    get contig_overlaps.agp
+
+# Download questionable join certificates file
+
+    get e-certificates.txt
+    mkdir certificates
+    mv e-certificates.txt certificates
 
 # Save a copy of the original seq_contig.md file
 
-    cp seq_contig.md se_contig.md.orig
+    cp seq_contig.md seq_contig.md.orig
 
 # For build34, edit the seq_contig.md file to remove the alternative chr7
 # sequence supplied by the Toronto group: NT_079590, NT_079591, NT_079592,
@@ -70,13 +76,11 @@ exit; # don't actually run this like a script :)
 # to 
 # 9606  6|NG_002432     1       137374  +       NG_002432       GI:28212469     CONTIG  DR51      1
 
-# Move this edited line next to other chr6_random contigs (for creating
+# Move this edited DR51 line next to other chr6_random contigs (for creating
 #	the lift file)
-
-
     
 # Sanity check
-    /cluster/bin/i386/checkYbr build33/ncbi_build34.agp ffa/ncbi_build34.fa \
+    /cluster/bin/i386/checkYbr build34/ncbi_build34.agp ffa/ncbi_build34.fa \
       build34/seq_contig.md
 
 # Convert fa files into UCSC style fa files and place in "contigs" directory
@@ -107,13 +111,13 @@ exit; # don't actually run this like a script :)
 	
     /cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_build34.agp .
 
-# Create chromsome agp files
+# Create chromsome random agp files.
 
-    /cluster/bin/scripts/createNcbiChrAgp .
+    /cluster/bin/scripts/createNcbiChrAgp -randomonly .
 
-# Check that they match the original chrN.agp files (except for gaps),
-# and then copy the originals in since they contain better gap information.
-#	Delete the comments from these.
+# Copy the original chrN.agp files from the gs.17/agp directory 
+#    into each of the chromosome directories since they contain better 
+#    gap information. Delete the comments at top from these.
 
 # Distribute contig .fa to appropriate directory (assumes all files
 # are in "contigs" directory).
@@ -122,26 +126,35 @@ exit; # don't actually run this like a script :)
     /cluster/bin/scripts/distNcbiCtgFa contigs .
     rm -r contigs
 
-# Since PAR contigs are used twice, these need to be duplicated in chrY.
-    cp -r X/NT_079581 Y/
-    cp -r X/NT_079582 Y/
-    cp -r X/NT_079583 Y/
-    cp -r X/NT_079584 Y/
-    cp -r X/NT_079585 Y/
+# Copy over jkStuff from previous build (??)
+    mkdir jkStuff
+    cp /cluster/store1/gs.16/build33/jkStuff/*.sh jkStuff
+    /build31/jkStuff/*.csh jkStuff
+    cp /cluster/store1/gs.16/build33/jkStuff/*.gsub jkStuff        
+
+# Create contig gl files
+
+    /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+
+# Create chromosome gl files
+
+     jkStuff/liftGl.sh contig.gl
+
+# Files ready for repeat-masking and trf
 
 
-# CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP
+# CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP 
+#        (DONE 2003-07-23 Terry)
 
 # Create directory structure to hold information for these tracks
         cd /projects/hg2/booch/psl/
-
 
 # Change Makefile parameters for OOVERS, GSVERS, PREVGS, PREVOO
         make new
 
 # Update all Makefiles with latest OOVERS and GSVERS, DATABASE, and locations of .fa files
 
-# Makefile in:
+# Makefiles in:
 #     /gs.16/build33/
 #     /gs.16/build33/bacends
 #     /gs.16/build33/cytobands
@@ -158,18 +171,19 @@ exit; # don't actually run this like a script :)
 # Create accession_info file *****
 	make accession_info.rdb
 
-# UPDATE STS INFORMATION
+
+# UPDATE STS INFORMATION (DONE 2003-07-23 Terry)
 # Download and unpack updated information from dbSTS:
 
     	cd /projects/hg2/booch/psl/update
 	wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
 	wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
-	#wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/
 	wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.Z
 	mv sts.Z dbSTS.FASTA.dailydump.Z
 	gunzip dbSTS.FASTA.dailydump.Z
 
-# Edit Makefile to latest sts.X version from PREV, and update STS files
+# Edit Makefile PREV variable to current sts.X version, 
+#    and update STS files
         make update
 
 # Make new directory for this info and move files there
@@ -185,22 +199,276 @@ exit; # don't actually run this like a script :)
 
 # Ask for propagation from sysadmin
 
-# Load the sequences (change sts.# to match correct location)
+# Load the sequences into the database (after database created)
 	ssh hgwdev
 	mkdir /gbdb/hg16/sts.8
 	cd /gbdb/hg16/sts.8
 	ln -s /cluster/store1/sts.8/all.STS.fa ./all.STS.fa
 	ln -s /cluster/store1/sts.8/all.primers.fa ./all.primers.fa
-	*cd /cluster/store2/tmp
-	*hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.STS.fa
-	*hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.primers.fa
+	cd /cluster/store2/tmp
+	hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.STS.fa
+	hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.primers.fa
 
-# UPDATE BACEND SEQUENCES
+# CREATE STS MARKER ALIGNMENTS (DONE 2003-08-03 Terry)
+
+# Create full sequence alignments
+        ssh kk
+        cd /cluster/home/booch/sts
+
+# Update Makefile with latest OOVERS and GSVERS and
+# run cluster jobs
+        make new
+        make jobList 
+        para create jobList
+        para push 
+	# wait until alignments done
+        make stsMarkers.psl
+
+# Copy files to final destination and remove originals
+        make copy.assembly
+        make clean
+
+# Create primer alignments
+        ssh kk
+        cd /cluster/home/booch/primers
+        
+# Update Makefile with latest OOVERS and GSVERS and
+# run cluster jobs
+        make new
+        make jobList.scratch
+        para create jobList
+        para push
+
+# Do an initial quick filter of results (takes a while, still) and create 
+# final file - best done on eieio since disks local
+	ssh eieio
+	make filter
+        make primers.psl
+
+# Copy files to final destination and remove
+        make copy.assembly
+        make clean
+        
+# Create ePCR alignments
+        ssh kk
+        cd /cluster/home/booch/epcr
+
+# Update Makefile with latest OOVERS and GSVERS
+        make new
+        make jobList
+        para create jobList
+        para push
+        make all.epcr
+
+# Copy files to final destination and remove
+        make copy.assembly
+        make clean
+        
+
+# CREATE AND LOAD STS MARKERS TRACK (DONE 2003-08-03 Terry)
+
+# Copy in current stsInfo2.bed and stsAlias.bed files
+        cd /projects/hg2/booch/psl/gs.16/build33
+        cp ../update/stsInfo2.bed .
+        cp ../update/stsAlias.bed .
+
+# Create final version of sts sequence placements
+        ssh kks00
+        cd /projects/hg2/booch/psl/gs.16/build33/sts
+        make stsMarkers.final
+
+# Create final version of primers placements
+# Make sure PRIMERS variable in Makefile is pointing to current version
+        cd /projects/hg2/booch/psl/gs.16/build33/primers
+        make primers.final
+
+# Create bed file
+        cd /projects/hg2/booch/psl/gs.16/build33
+        make stsMap.bed
+
+# Create database tables
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg16 < all_sts_primer.sql
+        hgsql hg16 < all_sts_seq.sql
+        hgsql hg16 < stsAlias.sql
+        hgsql hg16 < stsInfo2.sql
+        hgsql hg16 < stsMap.sql
+
+# Load the tables
+	cd /projects/hg2/booch/psl/gs.17/build34/sts/
+        echo 'load data local infile "stsMarkers.psl.filter.lifted" into table all_sts_seq;' | hgsql hg16
+	cd /projects/hg2/booch/psl/gs.17/build34/primers/
+        echo 'load data local infile "primers.psl.filter.lifted" into table all_sts_primer;' | hgsql hg16
+	cd /projects/hg2/booch/psl/gs.17/build34/
+        echo 'load data local infile "stsAlias.bed" into table stsAlias;' | hgsql hg16
+        echo 'load data local infile "stsInfo2.bed" into table stsInfo2;' | hgsql hg16
+	echo 'load data local infile "stsMap.bed" into table stsMap;' | hgsql hg16
+
+
+# CREATE AND LOAD RECOMBINATION RATE TRACK (DONE 2003-08-05 Terry)
+# (must be done after STS Markers track) 
+
+# Create bed file
+	cd /projects/hg2/booch/psl/gs.17/build34/recombrate
+	make recombRate.bed
+
+# Create database table
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg16 < recombRate.sql
+        
+# Load the table
+	cd /projects/hg2/booch/psl/gs.17/build34/recombrate/
+	echo 'load data local infile "recombRate.bed" into table recombRate;' | hgsql hg16
+
+
+# UPDATE BACEND SEQUENCES (DONE 2003-07-23 Terry)
 
 # **** Sequences were determined to not have changed since bacends.4 *****
-# **** No new sequences downloaded ***** 
+# **** No new sequences downloaded - See makeHg15.doc for download instructions  ***** 
 
-# UPDATE FISH CLONES INFORMATION
+# Load the sequences into the database (after database created)
+	ssh hgwdev
+	mkdir /gbdb/hg16/bacends.4
+	cd /gbdb/hg16/bacends.4
+	ln -s /cluster/store1/bacends.4/BACends.fa ./BACends.fa
+	cd /cluster/store2/tmp
+	hgLoadRna addSeq hg16 /gbdb/hg16/bacends.4/BACends.fa
+
+
+# BACEND SEQUENCE ALIGNMENTS (DONE 2003-08-01 Terry)
+# (alignments done without RepeatMasking)
+
+# Create full sequence alignments
+	ssh kk
+        cd /cluster/home/booch/bacends
+
+# Update Makefile with latest OOVERS and GSVERS and run cluster jobs
+        make new
+        make jobList
+        para create jobList
+        para push 
+
+# Compile alignments and lift the files (takes a while)
+	ssh eieio
+	make bacEnds.psl.lifted
+
+# Copy files to final destination and remove
+        make copy.assembly
+        make clean # (may want to wait until sure they're OK)
+
+# BACEND PAIRS TRACK (DONE 2003-08-01 Terry)
+
+# Add /projects/compbiousr/booch/booch/scripts to your path
+
+# Update Makefile with new location of pairs/singles 
+# files, if necessary (DONE)
+        cd /projects/hg2/booch/psl/gs.16/build33/bacends
+
+# Make initial file of alignments
+	make bacEnds.rdb
+ 
+# Try to fish out more pairs
+	make bacEndsMiss.psl
+
+# Re-make bacEnds.rdb with new info
+	make bacEnds.rdb
+ 
+# Create bacEndPairs track file
+        make bacEndPairs.bed
+
+# Create bacEndPairsBad and bacEndPairsLong files
+	make bacEndPairsBad.bed
+
+# Create psl file to load
+	make bacEnds.load.psl
+
+# Create database tables
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg16 < all_bacends.sql
+        hgsql hg16 < bacEndPairs.sql
+        hgsql hg16 < bacEndPairsBad.sql
+        hgsql hg16 < bacEndPairsLong.sql
+
+# Load the tables
+	cd /projects/hg2/booch/psl/gs.17/build34/bacends/
+        echo 'load data local infile "bacEnds.load.psl" into table all_bacends;' | hgsql hg16
+        echo 'load data local infile "bacEndPairs.bed" into table bacEndPairs;' | hgsql hg16
+        echo 'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' | hgsql hg16
+        echo 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' | hgsql hg16
+
+
+# FOSEND SEQUENCE ALIGNMENTS (DONE 2003-08-03 Terry)
+
+# Create full sequence alignments
+        ssh kk
+        cd /cluster/home/booch/fosends
+
+# Update Makefile with latest OOVERS and GSVERS and run cluster jobs
+        make new
+        make jobList
+	para create jobList
+        para push
+
+# Compile alignments and lift the files (takes a while)
+	ssh eieio
+        cd /cluster/home/booch/fosends
+	make fosEnds.psl.lifted
+
+# Copy files to final destination and remove
+        make copy.assembly
+        make clean
+
+# FOSEND PAIRS TRACK (DONE 2003-08-01 Terry)
+
+# Update Makefile with location of pairs files, if necessary
+        ssh kks00
+        cd /projects/hg2/booch/psl/gs.16/build33/fosends
+
+# Make initial file of alignments
+	make fosEnds.rdb
+
+# Try to fish out more pairs
+	make fosEndsMiss.psl
+
+# Re-make bacEnds.rdb with new info
+	make fosEnds.rdb
+ 
+# Create bacEndPairs track file
+        make fosEndPairs.bed
+
+# Create bacEndPairsBad and bacEndPairsLong files
+	make fosEndPairsBad.bed
+
+# Create psl file to load
+	make fosEnds.load.psl
+
+# Create database tables
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg16 < all_fosends.sql
+        hgsql hg16 < fosEndPairs.sql
+        hgsql hg16 < fosEndPairsBad.sql
+        hgsql hg16 < fosEndPairsLong.sql
+
+# Load the tables
+	cd /projects/hg2/booch/psl/gs.17/build34/fosends/
+        echo 'load data local infile "fosEnds.load.psl" into table all_fosends;' | hgsql hg16        
+        echo 'load data local infile "fosEndPairs.bed" into table fosEndPairs;' | hgsql hg16
+        echo 'load data local infile "fosEndPairsBad.bed" into table fosEndPairsBad;' | hgsql hg16
+        echo 'load data local infile "fosEndPairsLong.bed" into table fosEndPairsLong;' | hgsql hg16
+
+# Load the sequences (change fosends.# to match correct location) (done for hg15 early 4/9/2003)
+	mkdir /gbdb/hg15/fosends.3
+	cd /gbdb/hg15/fosends.3
+	ln -s /cluster/store1/fosends.3/fosEnds.fa ./fosEnds.fa
+	cd /cluster/store2/tmp
+	hgLoadRna addSeq hg15 /gbdb/hg15/fosends.3/fosEnds.fa
+                
+
+# UPDATE FISH CLONES INFORMATION (DONE 2003-07-23 Terry)
 
 # Download the latest info from NCBI
         # point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
@@ -218,6 +486,71 @@ exit; # don't actually run this like a script :)
 
 # Copy it to the new freeze location
         cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.17/build34/fish/
+
+# Save it as the new "gold" file
+	cp all.fish.format all.fish.format.gold
+
+# CREATE AND LOAD FISH CLONES TRACK (DONE 2003-08-08 Terry)
+# (must be done after Coverage, STS markers track and BAC end pairs track)
+
+# Extract the file with clone positions from database
+        ssh hgwdev
+        echo 'select * into outfile "/tmp/booch/clonePos.txt" from clonePos' | hgsql hg16
+        mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.17/build34/fish
+
+# Get current clone/accession information
+	ssh kks00
+        cd /projects/hg2/booch/psl/gs.17/build34/fish
+	wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
+# Create initial placement file
+	cp /projects/hg2/booch/psl/gs.16/build33/fish/extract.pl . 
+	make cyto.markers.bed
+
+# Get sequences for accessions not in genome
+	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
+	# select file "/projects/hg2/booch/psl/gs.16/build33/fish/not.found.acc
+	# change output to FASTA format
+	# download results to "/projects/hg2/booch/psl/gs.16/build33/fish/not.found.fa"
+
+# Place sequences against genome
+	make blat
+
+# Try to incorporate new placements
+	make cyto.markers.bed2
+
+# Create bed file
+        make fishClones.bed
+
+# Create database table
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg16 < fishClones.sql
+
+# Load the table
+	cd /projects/hg2/booch/psl/gs.17/build34/fish/
+        echo 'load data local infile "fishClones.bed" into table fishClones;' | hgsql hg16
+        
+
+# CREATE AND LOAD CHROMOSOME BANDS TRACK (DONE 2003-08-08 Terry)
+# (must be done after FISH Clones track) 
+
+# Create bed file
+        ssh kks00
+	cd /projects/hg2/booch/psl/gs.17/build34/cytobands/
+        make setBands.txt   # NOTE: may get errors if inserts file out-of-sync with pctSetBands file 
+        make cytobands.pct.ranges
+        make predict
+
+# Create database table
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg16 < cytoBand.sql
+        
+# Load the table
+	cd /projects/hg2/booch/psl/gs.17/build34/cytobands/
+	echo 'load data local infile "cytobands.bed" into table cytoBand;' | hgsql hg16
+
 
 # CREATING DATABASE  (DONE - 2003-07-26 - Hiram)
     ssh hgwdev
@@ -622,11 +955,6 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 # O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (DONE - 2003-07-27)
 #	Will need to be redone when chroms X, Y and 6 are fixed	-Hiram
 # Store o+o info in database.
-    # Note: for build31, Terry specially requested these files from NCBI:
-    # finished.finf
-    # draft.finf
-    # predraft.finf
-    # extras.finf
     ssh eieio
     cd /cluster/store4/gs.17/build34
     if (-f contig_overlaps.agp) then
@@ -647,6 +975,27 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     end 
     cd /cluster/store4/gs.17
     hgCtgPos hg16 build34 
+
+# CREATE NON-STANDARD JOIN CERTIFICATES WEB PAGE AND TABLE
+
+# Filter certificates file to only contain those relevant to current assembly
+
+    cd ~/hg16/certificates
+    /cluster/bin/scripts/extractCertificates.pl e-certificates.txt ~/hg16 \
+    > e-certificates.filter.txt
+
+# Create initial web page and table for loading into database
+
+    hgCert e-certificates.filter.txt > certificates.html
+
+# Donna's edits to html page
+
+# Load cert table into database
+
+    ssh hgwdev
+    cd ~/hg16/certificates
+    hgsql hg16 < kent/src/hg/lib/certificate.sql 
+    echo 'load data local infile "cert.tab" into table certificate;' | hgsql hg16
 
 # AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2003-07-30 - Hiram)
 
@@ -839,3 +1188,4 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
 #	Sorted
 #	Saving bed.tab
 #	Loading hg16
+
