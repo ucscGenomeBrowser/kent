@@ -167,6 +167,7 @@ queryFull select sp,pdb from proteins072003.pdbSP
 queryOne select pdb,pdb from proteins072003.pdbSP where sp = '%s'
 invQueryOne select sp from proteins072003.pdbSP where pdb = '%s'
 itemUrl http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s
+search exact
 
 name go
 shortLabel Gene Ontology

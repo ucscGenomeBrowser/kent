@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.110 2003/10/24 18:26:37 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.111 2003/10/25 23:27:27 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1190,6 +1190,16 @@ char *genomeOptionalSetting(char *name)
 /* Return genome setting value.  Returns NULL if not found. */
 {
 return hashFindVal(genomeSettings, name);
+}
+
+char *protToGeneId(struct sqlConnection *conn, char *protId)
+/* Convert from protein to gene ID. */
+{
+char *table = genomeSetting("geneTable");
+char query[256];
+safef(query, sizeof(query), "select name from %s where proteinId='%s'",
+	table, protId);
+return sqlQuickString(conn, query);
 }
 
 struct column *getColumns(struct sqlConnection *conn)

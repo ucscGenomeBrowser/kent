@@ -297,6 +297,9 @@ char *genomeSetting(char *name);
 char *genomeOptionalSetting(char *name);
 /* Return genome setting value.  Returns NULL if not found. */
 
+char *protToGeneId(struct sqlConnection *conn, char *protId);
+/* Convert from protein to gene ID. */
+
 /* ---- Some html helper routines. ---- */
 
 void hvPrintf(char *format, va_list args);

@@ -15,6 +15,7 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "hgNear.h"
 
 boolean associationExists(struct column *col, struct sqlConnection *conn)
@@ -344,6 +345,41 @@ advFilterAnyAllMenu(col, "logic", FALSE);
 hPrintf("terms match");
 }
 
+struct searchResult *associationSimpleSearch(struct column *col, 
+    struct sqlConnection *conn, char *search)
+/* Search lookup type column. */
+{
+struct dyString *query = dyStringNew(512);
+struct sqlResult *sr;
+char **row;
+struct searchResult *resList = NULL, *res;
+struct sqlConnection *conn2 = hAllocConn();
+
+dyStringPrintf(query, col->invQueryOne, search);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = NULL;
+    if (col->protKey)
+	name = protToGeneId(conn2, row[0]);
+    else
+	name = cloneString(row[0]);
+    if (name != NULL)
+	{
+	AllocVar(res);
+	res->gp.name = name;
+	slAddHead(&resList, res);
+	}
+    }
+
+/* Clean up and go home. */
+sqlFreeResult(&sr);
+hFreeConn(&conn2);
+dyStringFree(&query);
+slReverse(&resList);
+return resList;
+}
+
 void setupColumnAssociation(struct column *col, char *parameters)
 /* Set up a column that looks for an association table 
  * keyed by the geneId. */
@@ -361,5 +397,7 @@ col->filterControls = associationFilterControls;
 col->advFilter = associationAdvFilter;
 col->cellVal = associationCellVal;
 col->cellPrint = associationCellPrint;
+if (columnSetting(col, "search", NULL))
+    col->simpleSearch = associationSimpleSearch;
 }
 
