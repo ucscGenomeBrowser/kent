@@ -11,7 +11,6 @@
 
 int maxDiff = 3;
 int ollySize = 25;
-int ramMb = 490;
 int batchSize = 20000;
 boolean easyOut = FALSE;
 
@@ -28,15 +27,14 @@ errAbort(
   "options:\n"
   "   -maxDiff=N (default %d) Maximum variation in bases. Must be 3 or less.\n"
   "   -ollySize=N (default %d) Size of oligo.\n"
-  "   -ramMb=N (default %d) Size of RAM to use\n"
   "   -makeBatch=parasolSpec Make batch file for parasol\n"
   "       In this case just do \n"
   "         olly nibDir -makeBatch=spec.\n"
   "       Spec will be a parasol spec to do everything in nibDir\n" 
   "   -batchSize=N Default number of oligoes to query in batch\n"
-  "       For maxDiff 3, 20000 is good, for maxDiff 2 or less\n"
+  "       For maxDiff 3, 10000 is good, for maxDiff 2 or less\n"
   "       100000 is good\n"
-  , maxDiff, ollySize, ramMb
+  , maxDiff, ollySize 
   );
 }
 
@@ -81,10 +79,7 @@ char seed3[] = "11101001000111";	/* This is the shortest seed that
 					 * base seeds. */
 char *seedForMiss[4] = {seed0, seed1, seed2, seed3};
 int minOllySize[4] = {11, 19, 25, 24};
-int defaultBatchSize[4] = {100000, 100000, 100000, 20000};
-
-int maxMem;		/* Maximum amount of memory to use. */
-int bigChromSize = 240000000;
+int defaultBatchSize[4] = {100000, 100000, 100000, 10000};
 
 int seedWeight;	 /* Number of non-zeroes in seed. */
 int seedSpan;	 /* Number of bases covered by seed. */
@@ -416,8 +411,8 @@ void batchLineOut(FILE *f, char *nibDir, char *chromName,
 	int start, int end)
 /* Output one line to batch file. */
 {
-fprintf(f, "olly %s %s %d %d -ollySize=%d -maxDiff=%d -ramMb=%d",
-	nibDir, chromName, start, end, ollySize, maxDiff, ramMb);
+fprintf(f, "olly %s %s %d %d -ollySize=%d -maxDiff=%d",
+	nibDir, chromName, start, end, ollySize, maxDiff);
 if (easyOut)
     fprintf(f, " -easyOut");
 fprintf(f, " {check out line out/%s_%d.olly}\n", chromName, start);
@@ -474,8 +469,6 @@ optionHash(&argc, argv);
 dnaUtilOpen();
 ollySize = optionInt("ollySize", ollySize);
 maxDiff = optionInt("maxDiff", maxDiff);
-ramMb = optionInt("ramMb", ramMb);
-maxMem = 1024 * 1024 * ramMb;
 easyOut = optionExists("easyOut");
 
 if (maxDiff > 3)
