@@ -8,7 +8,8 @@
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
-boolean doBed = FALSE;	/* Output .bed file as well as masked file. */
+boolean doBed = FALSE;	/* Output .bed file. */
+char *tempDir = ".";	/* By default use current dir. */
 
 void usage()
 /* Explain usage and exit. */
@@ -19,10 +20,11 @@ errAbort(
   "   trfBig inFile outFile\n"
   "This will repeatedly run trf to mask tandem repeats in infile\n"
   "and put masked results in outFile.  inFile and outFile can be .fa\n"
-  "or .nib format.\n"
+  "or .nib format. Outfile can be .bed as well\n"
   "\n"
-  "options:\n"
   "   -bed creates a bed file in current dir\n"
+  "   -bedAt=path.bed - create a bed file at explicit location\n"
+  "   -tempDir=dir Where to put temp files.\n"
   "   -trf=trfExe explicitly specifies trf executable name\n");
 }
 
@@ -69,13 +71,13 @@ void removeWild(char *pat)
 {
 char dir[256], fn[128], ext[64];
 char wild[256];
-struct slName *list, *el;
+struct fileInfo *list, *el;
 
 splitPath(pat, dir, fn, ext);
 sprintf(wild, "%s%s", fn, ext);
 if (dir[0] == 0) strcpy(dir, ".");
 
-list = listDir(dir, wild);
+list = listDirX(tempDir, wild, TRUE);
 for (el = list; el != NULL; el = el->next)
     {
     remove(el->name);
@@ -94,8 +96,8 @@ void trfSysCall(char *faFile)
 /* Invoke trf program on file. */
 {
 char command[1024];
-sprintf(command, "%s %s 2 7 7 80 10 50 500 -m %s", 
-	trfExe, faFile, doBed ? "-d" : "");
+sprintf(command, "cd %s; %s %s 2 7 7 80 10 50 500 -m %s", 
+	tempDir, trfExe, faFile, doBed ? "-d" : "");
 uglyf("faFile %s, command %s\n", faFile, command);
 system(command);
 }
@@ -120,22 +122,26 @@ int maxSize = 5000000;
 int overlapSize = 10000;
 int start, end, s, e;
 int halfOverlapSize = overlapSize/2;
-char *tempFile, trfRootName[512], trfTemp[512], bedFileName[512];
-char dir[256], chrom[128], ext[64];
+char tempFile[512], trfRootName[512], trfTemp[512], bedFileName[512];
+char dir[256], seqName[128], ext[64];
 FILE *bedFile = NULL;
-struct tempName tn;
 struct dnaSeq  *maskedSeq = NULL;
 
 if (doBed)
     {
-    splitPath(output, dir, chrom, ext);
-    sprintf(bedFileName, "%s%s.bed", dir, chrom);
+    if (cgiVarExists("bedAt"))
+       strcpy(bedFileName, cgiString("bedAt"));
+    else
+	{
+	splitPath(output, dir, seqName, ext);
+	sprintf(bedFileName, "%s%s.bed", dir, seqName);
+	}
     bedFile = mustOpen(bedFileName, "w");
     }
-makeTempName(&tn, "trf", ".fa");
-tempFile = tn.forCgi;
-tempFile = "trfBigTemp.fa";
-if (endsWith(input, ".nib") && endsWith(output, ".nib"))
+splitPath(input, dir, seqName, ext);
+sprintf(tempFile, "%s/%s.tf", tempDir, seqName);
+if (endsWith(input, ".nib") && 
+	(endsWith(output, ".nib") || sameString(output, "/dev/null")))
     {
     int nibSize;
     FILE *in;
@@ -167,7 +173,7 @@ if (endsWith(input, ".nib") && endsWith(output, ".nib"))
 	if (doBed)
 	    {
 	    sprintf(trfTemp, "%s.dat", trfRootName);
-	    writeSomeDatToBed(trfTemp, bedFile, chrom, start, s, e);
+	    writeSomeDatToBed(trfTemp, bedFile, seqName, start, s, e);
 	    }
 	}
     nibStreamClose(&ns);
@@ -223,10 +229,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-doBed = cgiBoolean("bed");
-trfExe = cgiUsualString("trf", trfExe);
 if (argc != 3)
     usage();
+trfExe = cgiUsualString("trf", trfExe);
+doBed = cgiBoolean("bed") || cgiVarExists("bedAt");
+tempDir = cgiUsualString("tempDir", tempDir);
 trfBig(argv[1], argv[2]);
 return 0;
 }
