@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.115 2004/03/17 23:54:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.116 2004/03/20 00:20:06 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2946,8 +2946,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	    ! sameString(row[1], "longblob"))
 	    {
-	    snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
-	    cgiMakeButton("phase", button);
+	    if ((trackType != (char *) NULL) && sameString(trackType,"wig")
+			&& sameString(row[0],"file"))
+		{
+		snprintf(button, sizeof(button), "%s", wigglePhase);
+		cgiMakeButton("phase", button);
+		}
+	    else
+		{
+		snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
+		cgiMakeButton("phase", button);
+		}
 	    }
 	else
 	    {
@@ -4150,6 +4159,131 @@ else
     return(cloneString(name));
 }
 
+static void wigStatsCalc(unsigned count, double wigSumData,
+    double wigSumSquares, double *mean, double *variance, double *stddev)
+{
+*mean = 0.0;
+*variance = 0.0;
+*stddev = 0.0;
+if (count > 0)
+    *mean = wigSumData / count;
+if (count > 1)
+    {
+    *variance = (wigSumSquares - ((wigSumData*wigSumData)/count)) / (count-1);
+    if (*variance > 0.0)
+	*stddev = sqrt(*variance);
+    }
+}
+static void wigStatsRow(char *chrom, unsigned start, unsigned end,
+    int span, unsigned count, double wigUpperLimit, double wigLowerLimit,
+    double mean, double variance, double stddev)
+{
+printf("<TR><TH ALIGN=LEFT> %s </TH>\n", chrom);
+printf("\t<TD ALIGN=RIGHT> %u </TD>\n", start);
+printf("\t<TD ALIGN=RIGHT> %u </TD>\n", end);
+printf("\t<TD ALIGN=RIGHT> %d </TD>\n", span);
+printf("\t<TD ALIGN=RIGHT> %u </TD>\n", count);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigLowerLimit);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", wigUpperLimit - wigLowerLimit);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", mean);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", variance);
+printf("\t<TD ALIGN=RIGHT> %g </TD>\n", stddev);
+printf("<TR>\n");
+}
+
+static void wigDoStats(char *database, char *table, struct slName *chromList,
+    int winStart, int winEnd)
+{
+int spanCount = 0;
+struct wiggleData *wigData;
+struct slName *chromPtr;
+
+// For some reason BORDER=1 does not work in our web.c nested table scheme.
+// So use web.c's trick of using an enclosing table to provide a border.  
+puts("<BR><!--outer table is for border purposes-->" "\n"
+     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+
+puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+
+printf("<TR><TH COLSPAN=11> Wiggle data statistics </TH></TR>\n");
+printf("<TR><TH COLSPAN=11> Database: %s, Table: %s</TH></TR>\n", database,
+    table);
+printf("<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
+printf("<TH> Data <BR> end </TH><TH> Span </TH>");
+printf("<TH> # of Data <BR> values </TH><TH> Upper <BR> limit</TH>");
+printf("<TH> Lower <BR> limit </TH><TH> Range </TH><TH> Mean </TH>");
+printf("<TH> Variance </TH><TH> Standard <BR> Deviation </TH></TR>\n");
+
+for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
+    {
+    char *chrom = chromPtr->name;
+    wigData = wigFetchData(database, table, chrom, winStart, winEnd);
+    if (wigData)
+	{
+	unsigned span = 0;
+	double wigLowerLimit = 1.0e+300;
+	double wigUpperLimit = -1.0e+300;
+	double wigSumData = 0.0;
+	double wigSumSquares = 0.0;
+	unsigned count = 0;
+	unsigned chromStart = BIGNUM;
+	unsigned chromEnd = 0;
+	struct wiggleData *wdPtr;
+	double mean;
+	double variance;
+	double stddev;
+	for (wdPtr = wigData; wdPtr != (struct wiggleData *) NULL;
+		    wdPtr= wdPtr->next)
+	    {
+	    int i;
+	    struct wiggleDatum *wd;
+	    if (span != wdPtr->span)
+		{
+		++spanCount;
+		if (span > 0)
+		    {
+		    wigStatsCalc(count, wigSumData, wigSumSquares,
+			    &mean, &variance, &stddev);
+		    wigStatsRow(chrom, chromStart, chromEnd, span, count,
+			wigUpperLimit, wigLowerLimit, mean, variance, stddev);
+		    }
+		span = wdPtr->span;
+		wigLowerLimit = 1.0e+300;
+		wigUpperLimit = -1.0e+300;
+		wigSumData = 0.0;
+		wigSumSquares = 0.0;
+		count = 0;
+		chromStart = BIGNUM;
+		chromEnd = 0;
+		}
+	    wigSumData += wdPtr->sumData;
+	    wigSumSquares += wdPtr->sumSquares;
+	    count += wdPtr->count;
+	    if (wdPtr->lowerLimit < wigLowerLimit)
+		    wigLowerLimit = wdPtr->lowerLimit;
+	    if (wdPtr->lowerLimit+wdPtr->dataRange > wigUpperLimit)
+		    wigUpperLimit = wdPtr->lowerLimit+wdPtr->dataRange;
+	    if (wdPtr->chromStart < chromStart)
+		    chromStart = wdPtr->chromStart;
+	    if (wdPtr->chromEnd > chromEnd)
+		    chromEnd = wdPtr->chromEnd;
+	    }
+	    wigStatsCalc(count, wigSumData, wigSumSquares,
+		&mean, &variance, &stddev);
+	    wigStatsRow(chrom, chromStart, chromEnd, span, count,
+		wigUpperLimit, wigLowerLimit, mean, variance, stddev);
+	}
+    else
+	{
+	printf("<TR><TH ALIGN=LEFT> %s </TH>", chrom);
+	printf("<TH COLSPAN=10> No data </TH></TR>\n");
+	}
+    }
+printf("</TABLE>\n");
+puts("</TD></TR></TABLE>");
+}
+
 void doGetStatsPositional()
 /* Print out statistics about positional query results. */
 {
@@ -4181,9 +4315,26 @@ int **utr3Arrs;
 int **blockCountArrs;
 int **blockSizeArrs;
 int i, j;
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct trackDb *tdb;
+char *track = getTrackName();
+char *typeLine;
+char *trackType = (char *) NULL;
+int wordCount;
+char *words[128];
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
+
+
+tdb = hMaybeTrackInfo(conn, track);
+if (tdb->type)
+    {
+    typeLine = cloneString(tdb->type);
+    wordCount = chopLine(typeLine,words);
+    if (wordCount > 0)
+	trackType = words[0];
+    }
 
 if (op == NULL)
     table2 = NULL;
@@ -4261,6 +4412,13 @@ if (constraints != NULL)
     printf("<P> Constraints on %s: %s \n", table, constraints);
 else
     printf("<P> No additional constraints selected on fields of %s.\n", table);
+
+if (trackType != (char *) NULL)
+    {
+    if (sameWord(trackType,"wig"))
+	wigDoStats(database, table, chromList, winStart, winEnd);
+    }
+
 if (table2 != NULL)
     {
     char tableUse[128], table2Use[128];
@@ -4571,8 +4729,8 @@ void doGetWiggleData()
 {
 char *db = getTableDb();
 char *table = getTableName();
-struct wiggleData *wigData;
-struct wiggleData *wdPtr;
+struct wiggleData *wigData = (struct wiggleData *) NULL;
+struct wiggleData *wdPtr = (struct wiggleData *) NULL;
 struct trackDb *tdb;
 struct sqlConnection *conn = hAllocOrConnect(db);
 char *track = getTrackName();
@@ -4622,12 +4780,14 @@ saveIntersectOptionsState();
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
-wigData = fetchWigData(database, table, chrom, winStart, winEnd);
+/*
+wigData = wigFetchData(database, table, chrom, winStart, winEnd);
+*/
 if (wigData)
     {
     unsigned span = 0;
     char *chrom = (char *) NULL;
-printf("track type=wiggle_0 name=%s description=\"%s\" "
+    printf("track type=wiggle_0 name=%s description=\"%s\" "
 	"visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
 	"priority=%g\n", table, longLabel, visibilities[visibility],
 	colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
@@ -4657,6 +4817,8 @@ printf("track type=wiggle_0 name=%s description=\"%s\" "
 	    }
 	}
     }
+else
+    printf("#\tdata display currently disabled, check back later\n");
 
 webEnd();
 }
@@ -4865,6 +5027,7 @@ if (freezeName == NULL)
     freezeName = "Unknown";
 
 fullTableName[0] = 0;
+
 position = getPosition(&chrom, &winStart, &winEnd);
 allGenome = isGenome(position);
 
