@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.6 2003/11/12 19:30:30 hiram Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.7 2003/11/15 21:04:10 kent Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -424,7 +424,7 @@ char query[256], **row;
 struct sqlResult *sr;
 
 dyStringAppend(dy, 
-	"select start,end,featureClass,featureType from feature ");
+	"select start,end,featureClass,featureType,softEndBits from feature ");
 dyStringPrintf(dy, 
         "where acc = '%s'", acc);
 if (classId != 0)
@@ -439,6 +439,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     el->end = sqlUnsigned(row[1]);
     el->featureClass = sqlUnsigned(row[2]);
     el->featureType = sqlUnsigned(row[3]);
+    el->softEndBits = sqlUnsigned(row[4]);
     slAddHead(&list, el);
     }
 sqlFreeResult(&sr);
