@@ -7,6 +7,7 @@ longLabel ID of Associated Affymetrix U133 expression data
 priority 2.61
 visibility off
 type lookup knownToU133 name value
+search exact
 
 name u95Id
 shortLabel U95 ID
@@ -14,6 +15,7 @@ longLabel ID of Associated Affymetrix U95 expression data
 priority 2.62
 visibility off
 type lookup knownToU95 name value
+search exact
 
 name expDense
 shortLabel Short Expression
