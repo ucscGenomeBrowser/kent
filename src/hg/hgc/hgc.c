@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.440 2003/06/19 12:36:19 weber Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.441 2003/06/20 00:00:14 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4241,7 +4241,7 @@ void doHgCbr(struct trackDb *tdb, char *name)
 cartWebStart(cart, "Worm Alignment");
 printf("Alignment between C briggsae sequence %s (above) and C elegans chromosome %s (below)\n",
        name, skipChr(seqName));
-fetchAndShowWaba("waba_cbr", name);
+fetchAndShowWaba("wabaCbr", name);
 }
 
 void doHgRepeat(struct trackDb *tdb, char *repeat)
@@ -11754,7 +11754,7 @@ else if (sameWord(track, "tet_waba"))
     {
     doHgTet(tdb, item);
     }
-else if (sameWord(track, "cbr_waba"))
+else if (sameWord(track, "wabaCbr"))
     {
     doHgCbr(tdb, item);
     }
