@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.13 2005/03/26 17:13:59 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.14 2005/03/30 01:03:21 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -730,7 +730,7 @@ note: 394 records dropped due to repStart > repEnd
     cp -p jkStuff/liftAll.lft /panasas/store/mm6
 
 #########################################################################
-# GENBANK auto update started (WORKING - 2005-03-15 - Hiram)
+# GENBANK auto update started (DONE - 2005-03-15 - 2005-03-29 - Hiram)
     ssh eieio
     cd /cluster/data/genbank
     #	edit etc/genbank.conf, add the following section:
@@ -819,27 +819,53 @@ mm6.mgcTables.mgc = all
     screen
     nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial mm6
     #	var/build/logs/2005.03.26-09:00:22.mm6.initalign.log
-XXX - STARTED 2005-03-26 09:13
+    #	STARTED 2005-03-26 09:13
+    #	FINISHED 2005-03-28 11:53
+    #	about 50 hours run time
 
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh eieio
     screen -d -r
+# Completed: 159852 of 159852 jobs
+# CPU time in finished jobs:  110196174s 1836602.90m 30610.05h 1275.42d  3.494 y
+# IO & Wait Time:               1230416s   20506.93m   341.78h   14.24d  0.039 y
+# Average job time:                 697s      11.62m     0.19h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           41516s     691.93m    11.53h    0.48d
+# Submission to last job:        137193s    2286.55m    38.11h    1.59d
 
-    #	RUNNING - 2005-03-16 10:43
-    #	FAILED - 2005-03-20 21:00 - out of disk space on store3
-	the initial.mm6 directory it created in .../work/ was 45 Gb !
-	This job needs to be redone, but point genbank.conf at nibs
-	instead of the 2bit file.  There are still difficulties
-	processing the 2bit file.
-    #	The difficulty turned out to be a missing lift parameter in the
-    #	genbank.conf file
-    #	Mark performed some recovery surgery to this business, ready to
-    #	load:
     ssh hgwdev
     cd /cluster/data/genbank
     time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
-    #	LOADING - 2005-03-23 - 09:30
+    #	var/dbload/hgwdev/logs/2005.03.28-13:38:13.dbload.log
+    #	LOADING - 2005-03-28 - 13:35
+    #	FINISHED - 2005-03-29 - 00:43
+    #	real    665m1.596s
+    #	user    105m19.790s
+    #	sys     33m10.390s
+    #	Note, that is an 11 hour load time.
+    #	Measurements:  (these are interesting in the table browser too)
+    #	RefSeq Genes
+    featureBits mm6 refGene
+    #	41752877 bases of 2597150411 (1.608%) in intersection
+    #	MGC Genes
+    featureBits mm6 mgcGenes
+    #	27174785 bases of 2597150411 (1.046%) in intersection
+    #	Mouse mRNAs
+    featureBits mm6 all_mrna
+    #	112068807 bases of 2597150411 (4.315%) in intersection
+    #	Spliced ESTs
+    featureBits mm6 intronEst
+    #	52812872 bases of 2597150411 (2.033%) in intersection
+    #	Mouse ESTs
+    featureBits mm6 est
+    #	236687034 bases of 2597150411 (9.113%) in intersection
+    #	Non-Mouse mRNAs
+    featureBits mm6 xenoMrna
+    #	52119099 bases of 2597150411 (2.007%) in intersection
+    #	Non-Mouse ESTs
+    featureBits mm6 xenoEst
 
 #########################################################################
 # PRODUCING GENSCAN PREDICTIONS (DONE 2005-03-14 - 2005-03-17 Hiram)
@@ -1033,8 +1059,39 @@ SEQ2_LEN=$BASE/S2.len
     # STARTED - 2005-03-18 15:00
     # FINISHED 2005-03-18 16:33
 
+    #	checking the numbers for sanity:
+    ssh hgwdev
+    #	expect ~ 2m30 seconds for chain measurement
+    time featureBits mm6 chainHg17
+    #	2596946329 bases of 2597150411 (99.992%) in intersection
+    time featureBits mm5 chainHg17
+    #	2507720521 bases of 2615483787 (95.880%) in intersection
+
+
+    #	expect ~ 2m30s seconds for net measurement
+    time featureBits mm6 netHg17
+    #	2579747741 bases of 2597150411 (99.330%) in intersection
+    time featureBits mm5 netHg17
+    #	2504056038 bases of 2615483787 (95.740%) in intersection
+
+    ssh kolossus
+    #	expect ~ 20-22 minutes for the chainLink measurement
+    HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
+	featureBits mm6 chainHg17Link
+    #	966916309 bases of 2597150411 (37.230%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
+	featureBits mm5 chainHg17Link
+    #	1025750185 bases of 2615483787 (39.218%) in intersection
+
+    #	swap results to place mm6 alignments onto Hg17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
+	swap.run.out 2>&1 &
+XXX - STARTED - 2005-03-29 - 15:58
+
 #########################################################################
 # BLASTZ RAT Rn3 (FIRST TRY - 2005-03-15 - 2005-03-17 - Hiram)
+#	THESE ARE THE CORRECT PARAMETERS - the second try was not used
+#		it was too restrictive and cuts out too many alignments
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_22
     cd /cluster/data/mm6/bed/blastzRn3.2005_03_22
@@ -1140,9 +1197,68 @@ done
     chmod +x mkPslChrom.sh
     ./mkPslChrom.sh
 
+    #	After the experiment of 2005-03-22
+    #	RELOADING these chains and nets
+    ssh hgwdev
+    hgsql mm6 -e "drop table netRn3;"
+    hgsql mm6 -e "show tables;" | grep chainRn3 | while read T
+    do
+	hgsql mm6 -e "drop table ${T};"
+	echo ${T}
+    done
+    #	kksilo currently off-limits to logins due to hardware difficulties
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzRn3.2005_03_15/axtChain
+    chainSplit chain mm6.rn3.all.chain.gz
+    ssh hgwdev
+    cat << '_EOF_' > reLoad.csh
+#!/bin/csh -ef
+# Load chains:
+cd /cluster/data/mm6/bed/blastzRn3.2005_03_15/axtChain/chain
+foreach f (*.chain)
+    set c = $f:r
+    echo "hgLoadChain mm6 ${c}_chainRn3 $f"
+    hgLoadChain mm6 ${c}_chainRn3 $f
+end
+
+cd /cluster/data/mm6/bed/blastzRn3.2005_03_15/axtChain
+# Load nets:
+netFilter -minGap=10 mm6.rn3.net.gz | hgLoadNet -verbose=0 mm6 netRn3 stdin
+'_EOF_'
+    # << keep emacs coloring happy
+
+    chmod +x reLoad.csh
+    time ./reLoad.csh
+    #	~ 188m == 3 hours 8 min
+
+    #	Measurements:
+    time featureBits mm6 netRn3
+    #	expect ~ 2m 12s
+    #	2720144602 bases of 2597150411 (104.736%) in intersection
+    time featureBits mm5 netRn3
+    #	2638255333 bases of 2615483787 (100.871%) in intersection
+
+    time featureBits mm6 chainRn3
+    #	expect ~ 10m 30s to 13m 25s
+    #	2768422449 bases of 2597150411 (106.595%) in intersection
+    time featureBits mm5 chainRn3
+    #	2646682349 bases of 2615483787 (101.193%) in intersection
+
+    #	Prepare for a re-run of the swap, move the 2005_03_22 swap
+    #	results out of the way
+    ssh hgwdev
+    cd /cluster/data/rn3/bed
+    mv blastz.mm6.swap blastz.mm6.swap.2005_03_22
+
+    cd /cluster/data/mm6/bed/blastzRn3.2005_03_15
+    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
+	swap.run_1.out 2>&1 &
+XXX - STARTED - 2005-03-29 15:55
+
 
 #########################################################################
 # BLASTZ RAT REDONE 2005-03-22 
+#	THIS WAS AN EXPERIMENT - THESE RESULTS WERE DROPPED FROM THE DB
 #	 more stringent BLASTZ parameters and chain filtering
 #   COMPLETE 2005-03-23 - swap to place chainMm6 and netMm6 on rn3 browser
     ssh kksilo
@@ -1432,6 +1548,8 @@ SEQ2_LEN=$BASE/S2.len
     mkdir /cluster/data/mm6/bed/blastzTetNig1.2005_03_17
     cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17
     # use same parameters as for danRer1-mm5
+    #	NOTE: The BLASTZ_Q score matrix should have been the Tuned.gap
+    #	one which is recreated below during the re-score
     cat << '_EOF_' > DEF
 # mouse (mm6) vs Tetraodon (tetNig1)
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
@@ -1513,11 +1631,77 @@ SEQ2_LEN=$BASE/S2.len
 # Longest job:                       55s       0.92m     0.02h    0.00d
 # Submission to last job:           212s       3.53m     0.06h    0.00d
 
+    #	Measurements:
+    ssh hgwdev
+    featureBits mm6 netFr1
+    #	618904129 bases of 2597150411 (23.830%) in intersection
+    featureBits mm6 chainFr1
+    #	667593517 bases of 2597150411 (25.705%) in intersection
+    featureBits mm6 chainFr1Link
+    #	56381015 bases of 2597150411 (2.171%) in intersection
+    featureBits -enrichment mm6 refGene:cds chainFr1Link
+    # refGene:cds 0.972%, chainFr1Link 2.171%, both 0.670%, cover 68.90%,
+    #	enrich 31.74x
+    featureBits -enrichment mm6 refGene:cds netFr1
+    # refGene:cds 0.972%, netFr1 23.830%, both 0.770%, cover 79.18%,
+    #	enrich 3.32x
+    featureBits -enrichment mm6 refGene:cds chainFr1
+    # refGene:cds 0.972%, chainFr1 25.705%, both 0.783%, cover 80.52%,
+    #	enrich 3.13x
 
+    #	Re-do the chains with different scoring matrix
+    ssh kki
+    cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17/axtChain/run
 
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../Tuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    mv chain.csh chain.csh.0
+    sed -e \
+    "s#-scoreScheme=/cluster/data/blastz/HoxD55.q#-linearGap=../../Tuned.gap" \
+	chain.csh.0 > chain.csh
+    chmod +x chain.csh
+    rm batch
+    para make jobList
+    para check
+    para time
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        682s      11.37m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                   173s       2.88m     0.05h    0.00d  0.000 y
+# Average job time:                  21s       0.36m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              52s       0.87m     0.01h    0.00d
+# Submission to last job:            78s       1.30m     0.02h    0.00d
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17
+    mv mafNet mafNet.0
+    mv axtNet axtNet.0
+    cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17/axtChain
+    mv mm6.tetNig1.all.chain.gz mm6.tetNig1.all.chain.gz.0
+    mv mm6.tetNig1.over.chain.gz mm6.tetNig1.over.chain.gz.0
+    mv mm6.tetNig1.net.gz mm6.tetNig1.net.gz.0
+    chainMergeSort run/chain/*.chain | nice gzip -c >  mm6.tetNig1.all.chain.gz
+    chainSplit chain mm6.tetNig1.all.chain.gz
+    time ./netChains.csh
+    #	~ 3m17s
+    
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17/axtChain
+    time ./loadUp.csh
+    #	~ 7m40s
+    gzip mm6.tetNig1.net
+ 
 #########################################################################
 # CPGISLANDS (DONE - 2005-03-17 - Hiram)
-    ssh hgwdev
+ssh hgwdev
     mkdir -p /cluster/data/mm6/bed/cpgIsland
     cd /cluster/data/mm6/bed/cpgIsland
 
