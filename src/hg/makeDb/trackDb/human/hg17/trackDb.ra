@@ -40,6 +40,30 @@ spectrum on
 type psl xeno rn3
 otherDb rn3
 
+track blastzBestRn3
+shortLabel Rat Best
+longLabel Blastz Rat (rn3-Jun 03)/$Organism Best-in-Genome Alignments
+group compGeno
+priority 174
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track blastzTightRn3
+shortLabel Rat Tight
+longLabel Rat Blastz (rn3-Jun 03), Tight Subset of Best Alignments
+group compGeno
+priority 175
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
 track chainRn3
 shortLabel Rat Chain 
 longLabel Chained Blastz Rat (rn3-Jun 03)/$Organism Alignments
