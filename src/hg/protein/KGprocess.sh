@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.19 2004/06/11 19:13:46 fanhsu Exp $"
+#	"$Id: KGprocess.sh,v 1.20 2004/06/16 00:32:20 fanhsu Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -841,8 +841,10 @@ TablePopulated "cgapBiocDesc" ${DB} || { \
     hgsql -e "drop table cgapBiocDesc;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/hgCGAP/cgapBiocDesc.sql; \
     echo "`date` loading cgapBiocDesc"; \
+
+    cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgsql -e \
-    'LOAD DATA local INFILE "cgapBIOCARTAdesc.tab" into table cgapBiocDesc;' \
+    'LOAD DATA local INFILE "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc;' \
 	${DB}; \
 }
 
