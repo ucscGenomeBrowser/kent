@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.42 2004/06/09 01:09:00 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.43 2004/06/10 05:37:08 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -43,7 +43,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %dx1 - Make a server to quickly find where DNA occurs in genome.\n"
+  "gfServer v %d - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
   "   gfServer start host port file(s)\n"
   "   Where the files are in .nib or .2bit format\n"
