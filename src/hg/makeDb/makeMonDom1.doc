@@ -922,12 +922,14 @@ done
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.hg17/pslChrom
     hgLoadPsl -table=blastzMonDom1 -noTNameIx hg17 chrM.psl
+    bash			#	if you are normally csh
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx hg17 ${I}
         echo "done: ${I}"
     done
+    exit			#	exit bash if you are normally csh
     #	Let's see what featureBits has to say about this data
     featureBits hg17 blastzMonDom1
     #	486216407 bases of 2866216770 (16.964%) in intersection
@@ -975,18 +977,20 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     chmod +x doChain
     ./doChain
 
-    # On the cluster server weed the chains for repeats
+    # On the file server weed the chains for repeats
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
     mkdir chain
     cd chainRaw
+    bash			#	if you are normally csh
     for i in *.chain
     do
         chainAntiRepeat /cluster/data/hg17/nib \
 		/cluster/data/monDom1/monDom1.2bit $i ../chain/$i
     done
+    exit			#	exit bash if you are normally csh
 
-    # now on the cluster server, sort chains.  The chainMergeSort and chainSplit
+    # now on the file server, sort chains.  The chainMergeSort and chainSplit
     # steps both take about 10 minutes
     ssh kksilo
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
@@ -1044,7 +1048,7 @@ done
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/hg17/bed/zb.hg17/axtChain
+    cd /cluster/data/monDom1/bed/zb.hg17/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet hg17 netMonDom1 stdin
     #	4 minutes
     #	compare featureBits with some other assemblies
@@ -1091,7 +1095,7 @@ done
     hgsql monDom1 -e "analyze table chainHg17;"
     hgsql monDom1 -e "analyze table chainHg17Link;"
 
-    #	check featureBits
+    #	check featureBits  (~ 30 minute commands)
     featureBits monDom1 chainHg17Link
     #	459086956 bases of 3492108230 (13.146%) in intersection
     featureBits monDom1 chainHg17
@@ -1302,12 +1306,14 @@ done
     cd /cluster/data/monDom1/bed/zb.galGal2/pslChrom
 
     hgLoadPsl -table=blastzMonDom1 -noTNameIx galGal2 chrM.psl
+    bash			#	if you are normally csh
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx galGal2 ${I}
         echo "done: ${I}"
     done
+    exit		#	exit bash if you are normally csh
     #	7 minutes
 
     #	Let's see what featureBits has to say about this data
@@ -1355,7 +1361,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     time ./doChain
     #	42 minutes
 
-    # On the cluster server weed the chains for repeats
+    # On the file server weed the chains for repeats
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     mkdir chain
@@ -1370,7 +1376,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     #	7 minutes
     exit			# exit bash if you are normally csh
 
-    # now on the cluster server, sort chains.  The chainMergeSort and
+    # now on the file server, sort chains.  The chainMergeSort and
     # chainSplit steps each take less than a minute
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
@@ -1438,7 +1444,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/galGal2/bed/zb.galGal2/axtChain
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     netFilter -minGap=10 chicken.net |  hgLoadNet galGal2 netMonDom1 stdin
     #	4 minutes
     #	compare featureBits with some other assemblies
@@ -1670,10 +1676,9 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
 
     chmod +x doChain
     time ./doChain
-XXXX - RUNNING - 2004-12-16 14:32
-    #	42 minutes
+    #	95 minutes
 
-    # On the cluster server weed the chains for repeats
+    # On the file server weed the chains for repeats
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
     mkdir chain
@@ -1685,16 +1690,18 @@ XXXX - RUNNING - 2004-12-16 14:32
 		/cluster/data/monDom1/monDom1.2bit $i ../../chain/$i
 	echo "$i done"
     done
-    #	7 minutes
+    #	34 minutes
     exit			# exit bash if you are normally csh
 
-    # now on the cluster server, sort chains.  The chainMergeSort and
+    # now on the file server, sort chains. 
     # chainSplit steps each take less than a minute
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
     chainMergeSort chain/*.chain > all.chain
+    #	3 minutes
     mv chain chainBeforeMerge
     chainSplit chain all.chain
+    #	3 minutes
     rm run1/chain/*.chain
 
     # Load chains into database.  This takes an hour
@@ -1707,10 +1714,11 @@ XXXX - RUNNING - 2004-12-16 14:32
 	echo "loading ${c}"
 	hgLoadChain mm5 ${c}_chainMonDom1 $i
     done
-    #	4 minutes
+    #	20 minutes
     exit		#	exit bash if you are csh normally
 
     #	Compare to some other organisms
+XXXX - TBD - 2004-12-16 22:10
     featureBits mm5 chainMonDom1
     #	782212657 bases of 1054197620 (74.200%) in intersection
     featureBits mm5 chainHg17
@@ -1724,9 +1732,9 @@ XXXX - RUNNING - 2004-12-16 14:32
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
-    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
-    | netSyntenic stdin noClass.net
-    #	2 minutes
+	| chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	6 minutes
 
     # Create axt files for the net as so:
     netSplit noClass.net noClass
@@ -1740,7 +1748,7 @@ XXXX - RUNNING - 2004-12-16 14:32
 	netToAxt $i ../chain/${r}.chain /scratch/mus/mm5/softNib \
 		/cluster/data/monDom1/monDom1.2bit ../../axtNet/${r}.axt
     done
-    #	6 minutes
+    #	10 minutes
     exit		#	back to csh if you are csh normally
 
     cd ..
@@ -1750,15 +1758,16 @@ XXXX - RUNNING - 2004-12-16 14:32
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.mm5/axtChain
     netClass -noAr noClass.net mm5 monDom1 mouse.net
-    #	56 minutes
+    #	41 minutes
     rm noClass.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/mm5/bed/zb.mm5/axtChain
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
     netFilter -minGap=10 mouse.net |  hgLoadNet mm5 netMonDom1 stdin
-    #	4 minutes
+    #	3 minutes
     #	compare featureBits with some other assemblies
+XXXX - TBD - 2004-12-16 22:55
     featureBits mm5 netMonDom1
     #	771045333 bases of 1054197620 (73.140%) in intersection
     featureBits mm5 netBosTau1
@@ -1772,7 +1781,7 @@ XXXX - RUNNING - 2004-12-16 14:32
     cd /cluster/data/monDom1/bed
     mkdir -p bz.mm5/axtChain
     chainSwap zb.mm5/axtChain/all.chain bz.mm5/axtChain/all.chain
-    #	1 minute
+    #	2 minutes
 
     cd bz.mm5/axtChain
     chainPreNet all.chain ../../zb.mm5/S2.len \
@@ -1780,20 +1789,20 @@ XXXX - RUNNING - 2004-12-16 14:32
 	| chainNet stdin -minSpace=1 ../../zb.mm5/S2.len \
 		../../zb.mm5/S1.len stdout /dev/null \
 	| netSyntenic stdin noClass.net
-    #	2 minutes
+    #	6 minutes
     mkdir ../axtNet
     netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
 	/scratch/mus/mm5/softNib ../axtNet/all.axt
-    #	6 minutes
+    #	9 minutes
 
     # Classify net and load into database
     ssh hgwdev
     cd /cluster/data/monDom1/bed/bz.mm5/axtChain
     netClass -noAr noClass.net monDom1 mm5 monDom1.net
-    #	31 minutes
+    #	13 minutes
     rm noClass.net
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netMm5 stdin
-    #	4 minutes
+    #	3 minutes
 
     # Load chains into database (takes about 4 hours).
     hgLoadChain -tIndex monDom1 chainMm5 all.chain
@@ -1803,6 +1812,7 @@ XXXX - RUNNING - 2004-12-16 14:32
     hgsql monDom1 -e "analyze table chainMm5;"
     hgsql monDom1 -e "analyze table chainMm5Link;"
 
+XXX - TBD - 2004-12-17 13:40
     featureBits monDom1 chainMm5Link
     #	110933245 bases of 3492108230 (3.177%) in intersection
 
