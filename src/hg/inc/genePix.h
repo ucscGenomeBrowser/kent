@@ -20,8 +20,9 @@ char *genePixOrganism(struct sqlConnection *conn, int id);
  * FreeMem this when done. */
 
 char *genePixStage(struct sqlConnection *conn, int id, boolean doLong);
-/* Return string describing growth stage of organism 
- * FreeMem this when done. */
+/* Return string describing growth stage of organism.  The description
+ * will be 5 or 6 characters wide if doLong is false, and about
+ * 20 characters wide if it is true. FreeMem this when done. */
 
 struct slName *genePixGeneName(struct sqlConnection *conn, int id);
 /* Return list of gene names  - HUGO if possible, RefSeq/GenBank, etc if not. 
@@ -78,16 +79,19 @@ enum genePixSearchType
     gpsNone = 0,
     gpsExact = 1,
     gpsPrefix = 2,
-    gpsText = 3,
+    gpsLike = 3,
     };
    
-
 struct slInt *genePixSelectNamed(struct sqlConnection *conn,
 	char *name, enum genePixSearchType how);
 /* Return ids of images that have probes involving gene that match name. */
 
 struct slInt *genePixSelectRefSeq(struct sqlConnection *conn, char *acc);
 /* Return ids of images that have probes involving refSeq mRNA seq. */
+
+struct slInt *genePixSelectLocusLink(struct sqlConnection *conn, char *id);
+/* Return ids of images that have probes involving locusLink (entrez gene)
+ * id. */
 
 struct slInt *genePixSelectGenbank(struct sqlConnection *conn, char *acc);
 /* Return ids of images that have probes involving genbank accessioned 
