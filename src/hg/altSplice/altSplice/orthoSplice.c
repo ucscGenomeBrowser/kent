@@ -35,8 +35,11 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 #include "rbTree.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.16 2003/09/14 23:05:52 sugnet Exp $";
+
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.17 2003/11/25 07:19:01 sugnet Exp $";
+static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -49,7 +52,7 @@ struct orthoSpliceEdge
     char *chrom;                /* Chromsome. Memory not owned here.*/
     int chromStart;             /* Chrom start. */
     int chromEnd;               /* End. */
-    char *agName;               /* Name of altGraphX that edge is from. Memory not owned here. */
+    char *agName;               /* Name of altGraphX that edge is from.. Memory not owned here. */
     int conf;                   /* Confidence. Generally number of mRNA's supporting edge. */
     char strand[2];             /* Strand. */
     enum ggEdgeType type;       /* Type of edge: ggExon, ggIntron, ggSJ, ggCassette. */
@@ -89,7 +92,7 @@ static struct orthoAgReport *agReportList = NULL; /* List of reports. */
 static int trumpNum = BIGNUM; /* If we seen an edge trumpNum times, keep it even if it isn't conserved.*/
 FILE *rFile = NULL;       /* Loci report file. */
 FILE *edgeFile = NULL;    /* Edge report file. */
-
+FILE *mappingFile = NULL; /* Which loci are ortholgous to which. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -106,6 +109,7 @@ static struct optionSpec optionSpecs[] =
     {"edgeFile", OPTION_STRING},
     {"trumpNum", OPTION_INT},
     {"orthoAgxFile", OPTION_STRING},
+    {"mappingFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -125,6 +129,7 @@ static char *optionDescripts[] =
     "File name to print individual edge reports to.",
     "[optional: default infinite] Number of mRNAs required to keep edge even if not conserved.",
     "[optional] Don't use database, read in possible orthologous altGraphX records from file.",
+    "[optional] Output a file of mapping to orthologous loci",
 };
 
 void usage()
@@ -365,6 +370,33 @@ for(fill=cn->fillList; fill != NULL; fill = fill->next)
 return rbTree;
 }
 
+void addFillToBk(struct binKeeper *bk, struct cnFill *fill)
+/* Recursively add fill to binKeeper. */
+{
+struct cnFill *child = NULL;
+for(child = fill->children; child != NULL; child = child->next)
+    {
+    addFillToBk(bk, child);
+    }
+binKeeperAdd(bk, fill->tStart, fill->tStart+fill->tSize, fill);
+}
+
+struct binKeeper *binKeeperFromNetFile(char *fileName)
+/* Build an binKeeper from a net file */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct chainNet *cn = chainNetRead(lf);
+struct cnFill *fill = NULL;
+struct binKeeper *bk = binKeeperNew(0,cn->size);
+for(fill=cn->fillList; fill != NULL; fill = fill->next)
+    {
+    binKeeperAdd(bk, fill->tStart, fill->tStart+fill->tSize, fill);
+//    addFillToBk(bk, fill);
+    }
+return bk;
+}
+
+
 struct hash *allChainsHash(char *fileName)
 /** Hash all the chains in a given file by their ids. */
 {
@@ -533,6 +565,18 @@ struct slRef *refList = NULL, *ref = NULL;
 (*toFree) = NULL;
 if(differentString(workingChrom, chrom))
     return;
+/* if(netBins != NULL) */
+/*     { */
+/*     struct binElement *be=NULL, *beList = NULL; */
+/*     beList = binKeeperFind(netBins, start, end); */
+/*     for(be=beList; be!=NULL; be=be->next) */
+/* 	{ */
+/* 	slSafeAddHead(fill, ((struct slList*)be->val)); */
+/* 	} */
+/*     slReverse(fill); */
+/*     (*toFree) = NULL; */
+/*     slFreeList(&beList); */
+/*     } */
 if(netTree != NULL)
     {
     AllocVar(searchLo);
@@ -1241,6 +1285,13 @@ agRep->orthoAgName = cloneString(orthoAgList->name);
 agRep->chrom = cloneString(ag->tName);
 /* Found at least one orhtologous graph, determine mapping between edges. */
 seList = altGraphXToOSEdges(ag);
+if(mappingFile)
+    {
+    fprintf(mappingFile, "%s\t", ag->name);
+    for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
+	fprintf(mappingFile, "%s,", oAg->name);
+    fprintf(mappingFile, "\n");
+    }
 for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     {
     int oIndex = slIxFromElement(orthoAgList, oAg);
@@ -1384,6 +1435,7 @@ if(netFile != NULL)
     {
     warn("Loading net info from file %s", netFile);
     netTree = rbTreeFromNetFile(netFile);
+//    netBins = binKeeperFromNetFile(netFile);
     }
 if(orthoAgxFile != NULL)
     {
@@ -1395,7 +1447,8 @@ if(orthoAgxFile != NULL)
    load them one by one. */
 lf = lineFileOpen(altIn, TRUE);
 
-lineFileNextReal(lf, &line);
+if(!lineFileNextReal(lf, &line))
+    errAbort("No records in file: %s", altIn);
 lineFileReuse(lf);
 rowCount = countChars(line, '\t') +1;
 AllocArray(row, rowCount);
@@ -1413,14 +1466,14 @@ while(lineFileNextCharRow(lf, '\t', row, rowCount))
 	if(agOrtho != NULL)
 	    {
 	    foundOrtho++;
-	    printf("FoundOne.\n");
+//	    printf("FoundOne.\n");
 	    altGraphXTabOut(agOrtho,cFile);
 	    freeCommonAg(&agOrtho);
 	    }
 	else
 	    {
 	    noOrtho++;
-	    printf("NoOrtho\n");
+//	    printf("NoOrtho\n");
 	    }
 	}
     altGraphXFree(&ag);
@@ -1439,6 +1492,7 @@ warn("\nDone.");
 int main(int argc, char *argv[])
 {
 char *db = NULL, *orthoDb = NULL;
+char *mapping = NULL;
 if(argc == 1)
     usage();
 doHappyDots = isatty(1);  /* stdout */
@@ -1447,10 +1501,15 @@ if(optionExists("help"))
     usage();
 db = optionVal("db", NULL);
 orthoDb = optionVal("orthoDb", NULL);
+mapping = optionVal("mappingFile", NULL);
+if(mapping != NULL)
+    mappingFile = mustOpen(mapping, "w");
 if(db == NULL || orthoDb == NULL)
     errAbort("orthoSplice - Must set db and orhtoDb. Try -help for usage.");
 hSetDb(db);
 hSetDb2(orthoDb);
 orthoSplice(db, orthoDb);
+if(mappingFile != NULL)
+    carefulClose(&mappingFile);
 return 0;
 }
