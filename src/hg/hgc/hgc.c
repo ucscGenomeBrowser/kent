@@ -2824,8 +2824,8 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
-printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
-printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
+printf("<B>Fragment ID:</B> %s<BR>\n", frag.frag);
+printf("<B>Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
 printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE);
 printTrackHtml(tdb);
 
