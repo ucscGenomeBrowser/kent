@@ -92,7 +92,7 @@ else if (!oldTable)
 
 dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
-printf("Loading %s into %s\n", database, track );
+printf("Loading %s into %s\n", track, database);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
