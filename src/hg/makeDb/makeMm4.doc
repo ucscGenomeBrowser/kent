@@ -3015,6 +3015,16 @@ hgMapToGene mm4 refGene knownGene knownToRefSeq
 # Create a table that maps between known genes and 
 # the nice affy expression data.
 hgMapToGene mm4 affyU74  knownGene knownToU74
+hgMapToGene mm4 affyMOE430 knownGene knownToMOE430
+hgMapToGene mm4 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+# Format and load Rinn et al sex expression data
+mkdir /cluster/data/mm4/bed/rinnSex
+cd !$
+hgMapMicroarray rinnSex.bed hgFixed.mouseRinnSexMedianRatio \
+    ../affyMOE430/affyMOE430.psl
+hgLoadBed mm4 rinnSex rinnSex.bed
+
 
 # Format and load the GNF data
 mkdir /cluster/data/mm4/bed/affyGnf95
