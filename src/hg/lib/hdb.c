@@ -674,6 +674,22 @@ if (hasBin != NULL)
 return TRUE;
 }
 
+boolean hIsMgscHost()
+/* Return TRUE if this is running on web server only
+ * accessible to Mouse Genome Sequencing Consortium. */
+{
+static boolean gotIt = FALSE;
+static boolean priv = FALSE;
+if (!gotIt)
+    {
+    char *t = getenv("HTTP_HOST");
+    if (t != NULL && (startsWith("hgwdev-mgsc", t)))
+        priv = TRUE;
+    gotIt = TRUE;
+    }
+return priv;
+}
+
 boolean hIsPrivateHost()
 /* Return TRUE if this is running on private web-server. */
 {
