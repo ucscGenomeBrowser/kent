@@ -76,7 +76,7 @@
 #include "paraHub.h"
 #include "machSpec.h"
 
-int version = 4;	/* Version number. */
+int version = 5;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -438,6 +438,29 @@ for (el = list->head; !dlEnd(el); el = el->next)
 return NULL;
 }
 
+struct job *findWaitingJob(int id)
+/* Find job that's waiting (as opposed to running).  Return
+ * NULL if it can't be found. */
+{
+/* If it's not running look in user job queues. */
+struct user *user;
+struct job *job = NULL;
+for (user = userList; user != NULL; user = user->next)
+    {
+    struct dlNode *node;
+    for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+	{
+	struct batch *batch = node->val;
+	if ((job = jobFind(batch->jobQueue, id)) != NULL)
+	    break;
+	}
+    if (job != NULL)
+	break;
+    }
+return job;
+}
+
+
 void removeMachine(char *name)
 /* Remove machine from pool. */
 {
@@ -465,7 +488,7 @@ if (mach != NULL)
     mach->job = NULL;
 job->machine = NULL;
 dlRemove(job->node);
-dlAddHead(batch->jobQueue, job->node);
+dlAddTail(batch->jobQueue, job->node);
 batch->runningCount -= 1;
 batch->user->runningCount -= 1;
 dlRemove(batch->node);
@@ -489,13 +512,16 @@ void buryMachine(struct machine *machine)
 {
 struct job *job;
 if ((job = machine->job) != NULL)
+    {
+    machine->deadJobId = job->id;
     requeueJob(job);
+    }
 machineDown(machine);
 }
 
 void nodeDown(char *line)
 /* Deal with a node going down - move it to dead list and
- * put job back on head of job list. */
+ * put job back on job list. */
 {
 struct machine *mach;
 char *machName = nextWord(&line);
@@ -849,20 +875,86 @@ if (spokesToUse > 0)
     }
 }
 
-void nodeAlive(char *name)
-/* Deal with message from node that says it's alive.
- * Move it from dead to free list. */
+boolean sendKillJobMessage(struct machine *machine, int jobId)
+/* Send message to compute node to kill job there. */
 {
+char message[64];
+sprintf(message, "kill %d", jobId);
+logIt("hub: %s %s\n", machine->name, message);
+if (!sendViaSpoke(machine, message))
+    {
+    return FALSE;
+    }
+return TRUE;
+}
+
+
+void nodeAlive(char *line)
+/* Deal with message from node that says it's alive.
+ * Move it from dead to free list.  The major complication
+ * of this occurs if the node was running a job and it
+ * didn't really go down, we just lost communication with it.
+ * In this case we will have restarted the job elsewhere, and
+ * that other copy could be conflicting with the copy of
+ * the job the node is still running. */
+{
+char *name = nextWord(&line), *jobIdString;
+int jobId;
 struct machine *mach;
 struct dlNode *node;
 for (node = deadMachines->head; !dlEnd(node); node = node->next)
     {
     mach = node->val;
-    if (sameString(mach->name, name))
+    if (sameString(mach->name, name) && mach->isDead)
         {
 	dlRemove(node);
 	dlAddTail(freeMachines, node);
 	mach->isDead = FALSE;
+	if (mach->deadJobId != 0)
+	    {
+	    logIt("hub: node %s running %d came back.  What to do with job %d???\n", 
+	    	name, mach->deadJobId);
+	    while ((jobIdString = nextWord(&line)) != NULL)
+	        {
+		jobId = atoi(jobIdString);
+		if (jobId == mach->deadJobId)
+		    {
+		    struct job *job;
+		    logIt("hub: Looks like %s is still keeping track of %d\n", name, jobId);
+		    if ((job = findWaitingJob(jobId)) != NULL)
+			{
+			logIt("hub: Luckily rerun of job %d has not yet happened.\n", 
+				jobId);
+			dlRemove(job->node);
+			dlRemove(mach->node);
+			job->machine = mach;
+			mach->job = job;
+			mach->lastChecked = job->lastClockIn = now;
+			dlAddTail(runningJobs, job->node);
+			dlAddTail(busyMachines, mach->node);
+			}
+		    else if ((job = jobFind(runningJobs, jobId)) != NULL)
+		        {
+			/* Job is running on resurrected machine and another.
+			 * Kill it on both since the output it created could
+			 * be corrupt at this point.  Then add it back to job
+			 * queue. */
+			logIt("hub: Job %d is running on %s as well.\n", jobId,
+				job->machine->name);
+			sendKillJobMessage(mach, job->id);
+			sendKillJobMessage(job->machine, job->id);
+			requeueJob(job);
+			}
+		    else
+		        {
+			logIt("hub: Job %d has finished running, there is a conflict.  Data may be corrupted, and it will take a lot of logic to fix.\n", 
+				jobId);
+			/* @@@ Todo: fix this case */
+			}
+		    }
+		}
+	    }
+	mach->deadJobId = 0;
 	runner(1);
 	break;
 	}
@@ -1006,19 +1098,6 @@ netSendLongString(connectionHandle, "ok");
 processHeartbeat();
 }
 
-boolean sendKillJobMessage(struct machine *machine, struct job *job)
-/* Send message to compute node to kill job there. */
-{
-char message[64];
-sprintf(message, "kill %d", job->id);
-logIt("hub: %s %s\n", machine->name, message);
-if (!sendViaSpoke(machine, message))
-    {
-    return FALSE;
-    }
-return TRUE;
-}
-
 void finishJob(struct job *job)
 /* Recycle job memory and the machine it's running on. */
 {
@@ -1036,7 +1115,7 @@ boolean removeJob(struct job *job)
 /* Remove job - if it's running kill it,  remove from job list. */
 {
 if (job->machine != NULL)
-    if (!sendKillJobMessage(job->machine, job))
+    if (!sendKillJobMessage(job->machine, job->id))
         return FALSE;
 finishJob(job);
 return TRUE;
@@ -1048,20 +1127,7 @@ boolean removeJobId(int id)
 struct job *job = jobFind(runningJobs, id);
 if (job == NULL)
     {
-    /* If it's not running look in user job queues. */
-    struct user *user;
-    for (user = userList; user != NULL; user = user->next)
-        {
-	struct dlNode *node;
-	for (node = user->curBatches->head; !dlEnd(node); node = node->next)
-	    {
-	    struct batch *batch = node->val;
-	    if ((job = jobFind(batch->jobQueue, id)) != NULL)
-		break;
-	    }
-	if (job != NULL)
-	    break;
-	}
+    job = findWaitingJob(id);
     logIt("Pending job %x\n", job);
     }
 if (job != NULL)

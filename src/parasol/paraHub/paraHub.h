@@ -30,6 +30,7 @@ struct machine
     time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
+    int deadJobId;		/* Id of a job that machine was running when it died. */
     };
 
 struct batch
