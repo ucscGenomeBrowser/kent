@@ -102,14 +102,26 @@ hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToU133
 cd ~/src/hg/near/hgExpDistance
 hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToU133
 
+# Format and load the GNF data
+cd /cluster/data/$db/bed
+mkdir affyGnf95
+cd affyGnf95
+affyPslAndAtlasToBed -newType ../affyU95.psl /projects/compbio/data/microarray/affyGnfHuman/data_public_U95 affyGnfU95.tab affyGnfU95Exps.tab -shortOut
+hgsql $db < ~/src/hg/affyGnf/affyGnfU95.sql
+
 # Create table that maps between known genes and 
 # the GNF data.
-hgMapToGene $db affyRatio knownGene knownToU95
+hgMapToGene $db affyU95 knownGene knownToU95
 cd ~/src/hg/near/hgExpDistance
-hgExpDistance $db affyRatio affyExp knownGnfDistance -lookup=knownToU95
+hgExpDistance $db affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
 
 #For worm did instead
 hgExpDistance ce1 kimLifeCycleMedian kimWormLifeCycleMedian kimExpDistance
+
+#FOr mouse did instead
+hgExpDistance mm3 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
+hgExpDistance mm3 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
+hgExpDistance mm3 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
