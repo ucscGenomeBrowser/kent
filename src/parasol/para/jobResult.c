@@ -57,11 +57,21 @@ struct jobResult *jobResultLoadAll(char *fileName)
  * Dispose of this with jobResultFreeList(). */
 {
 struct jobResult *list = NULL, *el;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+struct lineFile *lf = lineFileOpen(fileName, FALSE);
+int lineSize, wordCount;
+char *row[11], *line;
 
-while (lineFileRow(lf, row))
+while (lineFileNext(lf, &line, &lineSize))
     {
+    char lastChar = line[lineSize-1];
+    if (lastChar != '\n')
+    	{
+	warn("Skipping incomplete last line of %s", fileName);
+	break;
+	}
+    line[lineSize-1] = 0;
+    wordCount = chopLine(line, row);
+    lineFileExpectWords(lf, ArraySize(row), wordCount);
     el = jobResultLoad(row);
     slAddHead(&list, el);
     }
