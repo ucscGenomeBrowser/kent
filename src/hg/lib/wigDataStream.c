@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.59 2004/10/28 18:55:22 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.60 2004/10/29 19:05:53 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1879,10 +1879,16 @@ if (wds->stats)
 	{
 	if (htmlOut)
 	    {
-	    long long chromSize = hChromSize(stats->chrom);
+	    long long chromSize = 0;
 
 	    if (wds->winEnd)
 		chromSize = wds->winEnd - wds->winStart;
+	    else
+		{
+		if (! wds->isFile)
+		    chromSize = hChromSize(stats->chrom);
+		}
+
 
 	    fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
@@ -1898,7 +1904,7 @@ if (wds->stats)
 		fprintf(fh,"&nbsp;(%.2f%%) </TD>\n",
 		    100.0*(double)(stats->count*stats->span)/(double)chromSize);
 	    else
-		fprintf(fh,"&nbsp;(100.00%%)</TD>\n");
+		fprintf(fh,"</TD>\n");
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit+stats->dataRange);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->dataRange);
