@@ -3470,3 +3470,83 @@ Submission to last job:          1817s      30.28m     0.50h    0.02d
 # in /cluster/store1/superFamily/genomes/README.ucsc.  Then
 # make sure that knownToEnsembl and ensGtp tables are created, then:
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg15 hs stdin
+
+
+# RELOAD ENSEMBL GENES to fix confusion in current track (2004-02-01 - Hiram)
+#	Turns out this wasn't necessary.  The correct data was already
+#	in Hg15, it just hadn't been pushed out to the RR.
+#	Leaving these instructions here for future reference.
+#	This is the way is should be done
+    # save current tables, just in case.
+    hgsql -e "rename table  ensGene to ensGene_old;" hg15
+    hgsql -e "rename table  ensGtp  to ensGtp_old;" hg15
+    hgsql -e "rename table  ensPep  to ensPep_old;" hg15
+
+    #	You do not want ensembl34a data for this assembly.
+    #	Ensembl does not yet make it convenient to fetch archived
+    #	assemblies.
+    mkdir /cluster/data/hg15/bed/ensembl34a
+    cd /cluster/data/hg15/bed/ensembl34a
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" tab. 
+    # Page 4) In "Select the output format:" Choose GTF as the output,
+    #	 choose gzip compression.  enter the name ensembleGene.gtf.gz
+    #	in the download file name entry, hit export.
+    # Save as ensemblGene.gtf.gz - about 7.8 Mb
+-
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+    zcat ensemblGene.gtf.gz \
+    | grep -v ^6_DR51 \
+    | grep -v ^DR51 \
+    | grep -v _NT_ \
+    | perl -wpe 's/^([0-9]|X|Y|Un)/chr$1/
+                 || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/\..\"/\"/g' \
+    > ensGene.gtf
+    ssh hgwdev
+    /cluster/bin/i386/ldHgGene hg15 ensGene \
+      /cluster/data/hg15/bed/ensembl34a/ensGene.gtf
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" tab. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg15 < ~/kent/src/hg/lib/ensGtp.sql
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql -N hg15
+    gzip ensGtp.txt
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" tab. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz - about 7.7 Mb
+    zcat ensemblPep.fa.gz | hgPepPred hg15 ensembl stdin
+
+    # compare size of old and new tables as a sanity check
+    foreach t (ensGene ensGtp ensPep)
+	echo -n "${t}: "
+	hgsql -e "select count(*) from ${t};" hg15 | tail -1
+	echo -n "${t}_old: "
+	hgsql -e "select count(*) from ${t}_old;" hg15 | tail -1
+    end
+    # if reasonable OK, can drop old tables
+    drop table ensGene_old;
+    drop table ensGtp_old;  
+    drop table ensPep_old;  
+
+XXXX wait to confirm if this is OK to do
+    # Create knownToEnsembl column and knownToSuperfamily column
+    hgMapToGene -noLoad hg15 ensGene knownGene knownToEnsembl
+    zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg15 hs stdin
+
