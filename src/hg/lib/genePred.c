@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.52 2004/07/03 23:41:23 braney Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.53 2004/07/20 18:27:18 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1161,7 +1161,7 @@ return (start < end);
 }
 
 boolean genePredCdsIntersect(struct genePred *gp, int start, int end)
-/* Check if a reage intersects the CDS */
+/* Check if a range intersects the CDS */
 {
 return (rangeIntersection(gp->cdsStart, gp->cdsEnd, start, end) > 0);
 }
