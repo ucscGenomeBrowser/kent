@@ -51,38 +51,38 @@ longLabel Distance in Base Pairs from Selected Gene
 type geneDistance
 priority 4
 
+name genomePos
+shortLabel Chromosome
+longLabel Ordered by Chromosome Position
+type genomePos
+priority 4.5
+
 name nameSimilarity
 shortLabel Name Similarity
 longLabel Number of Leading Characters in Name that Match Selected Gene Name
 type nameSimilarity kgXref kgID geneSymbol
 priority 5
 
+name abc
+shortLabel Alphabetical
+longLabel Alphabetical Order of Name
+type abc kgXref kgID geneSymbol
+priority 6
+
 #name goSimilarity
 #shortLabel GO Similarity
 #longLabel Number of Shared Gene Ontology Terms
 #type goSimilarity
-#priority 6
+#priority 7
 #goaIdColumn dbObjectSymbol
 
 name goSimilarity
 shortLabel GO Similarity
 longLabel Number of Shared Gene Ontology Terms
 type association go.goaPart
-priority 6.1
+priority 7.1
 protKey on
 queryOne select goId from go.goaPart where dbObjectSymbol='%s'
 queryAll select dbObjectSymbol,goId from go.goaPart
-
-name abc
-shortLabel Alphabetical
-longLabel Alphabetical Order of Name
-type abc kgXref kgID geneSymbol
-priority 7
-
-name genomePos
-shortLabel Chromosome
-longLabel Ordered by Chromosome Position
-type genomePos
-priority 8
 
 
