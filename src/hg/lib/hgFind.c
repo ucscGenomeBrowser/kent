@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.93 2003/07/09 22:25:37 aamp Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.94 2003/07/11 18:07:29 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3183,11 +3183,25 @@ else if (strstrNoCase(organism, "rat"))
     {
     puts("<P><H3>About the Rattus norvegicus assembly</P></H3>\n");
     puts(
-"<P>The latest rat genome assembly (UCSC version rn2) is based on version \n"
-"2.1 provided by the Rat Genome Sequencing Consortium. \n"
-"The sequence was assembled using a hybrid approach that combines the \n"
-"clone by clone and whole genome shotgun methods. The current assembly \n"
-"provides approximately 6.5-fold coverage of the rat genome.</P> \n");
+"<P>The latest rat genome assembly (UCSC version rn3) is based on version \n"
+"3.1 produced by the Atlas group at \n"
+"<A HREF=\"http://hgsc.bcm.tmc.edu/\" TARGET=_blank> \n"
+"Baylor Human Genome Sequencing Center</A> \n"
+"(HGSC) as part of the Rat Genome Sequencing Consortium. \n"
+"The rat sequence was assembled using a hybrid approach that combines the \n"
+"clone by clone and whole genome shotgun methods. \n"
+"This assembly is a minor update to the 3.0 release. Sequence changes \n"
+"affect only chromosomes 7 and X. No additional assembly releases are planned \n"
+"prior to the publication of the rat genome analysis papers. \n"
+"<P>The 3.x assemblies reflect several sequence \n"
+"additions and software improvements over the previous 2.x assemblies, \n"
+"including the sequencing of over 1100 new BACs to cover gaps, an improved \n"
+"marker set from the Medical College of Wisconsin, a new FPC map from the BC \n"
+"Genome Sciences Centre, and improved linking of bactigs. For detailed \n"
+"information and statistics about the 3.x assemblies, see the Baylor HGSC \n"
+"<A HREF=\"ftp://ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/README\" TARGET=_blank>README</A>. \n"
+"<P>These data are made available with \n"
+"<A HREF=\"http://genome.ucsc.edu/goldenPath/credits.html#rat_use\">specific conditions for use</A>.\n" );
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
 "<P>A genome position can be specified by the accession number of a "
@@ -3213,9 +3227,9 @@ else if (strstrNoCase(organism, "rat"))
 "<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
 "	<TD WIDTH=14></TD>\n"
 "	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>RNOR01065682;RNOR01078956</TD>\n"
+"<TR><TD VALIGN=Top NOWRAP>RNOR03233282;RNOR03233294</TD>\n"
 "	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region between Assembly IDs RNOR01065682 and RNOR01078956\n"
+"	<TD VALIGN=Top>Displays region between Assembly IDs RNOR03233282 and RNOR03233294 \n"
 "</TD></TR>\n"
 "\n"
 "<TR><TD VALIGN=Top><br></TD></TR>\n"
@@ -3453,7 +3467,7 @@ else if (strstrNoCase(organism, "C. briggsae"))
 "this whole genome shotgun assembly achieved 98% coverage of the genome.\n"
 "</P>" 
 "<P>"
-"This data carries <A HREF=\"../goldenPath/credits.html#cbr_use\">"
+"These data carry <A HREF=\"../goldenPath/credits.html#cbr_use\">"
 "specific conditions for use</A>.\n"
 "</P>"
 );
