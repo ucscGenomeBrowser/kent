@@ -3018,3 +3018,33 @@ chainSome $(path1)
     # back to kksilo
     rm -rf blastOut
 # End tblastn
+
+# ACCESSIONS FOR CONTIGS (WORKING 2005-03-17 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/danRer2/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+
+    grep scaffold zfish.acc | wc -l
+    # 21333
+
+    # edit hg/encode/regionAgp/contigAccession.pl to recognize zfish format
+    # and install in /cluster/bin/scripts
+    contigAccession zfish.acc > contigAcc.tab
+    wc -l contigAcc.tab
+    # 21333
+    grep Zv4 /cluster/data/danRer2/?{,?}/*.agp | wc -l
+    # 21333
+    hgsql danRer2 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql danRer2
+    hgsql danRer2 -e "SELECT COUNT(*) FROM contigAcc"
+        # 21333
