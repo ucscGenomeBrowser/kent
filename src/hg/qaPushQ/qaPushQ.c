@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.70 2005/01/11 01:28:03 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.71 2005/01/31 21:14:53 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3105,7 +3105,6 @@ betaconn = sqlConnectRemote(chost, cuser, cpassword, centraldb);
     
 
 printf(" This page contains track and table release information for the following genome assemblies:<br>\n");
-printf("<ul>\n");
 
 safef(query,sizeof(query),
     "select * from dbDb "
@@ -3137,6 +3136,7 @@ conn = sqlConnectRemote(host, user, password, database);
 if (!isEncode)
 {
 /* 10 Latest Changes */
+printf("<ul>\n");
 printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
 
 /* regular log index #links */
