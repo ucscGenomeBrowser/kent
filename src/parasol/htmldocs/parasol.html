@@ -279,7 +279,7 @@ The first thing an administrator needs to do is create a list of machines to use
 This list is a tab-separated file with one line for each machine and the following fields:
 <pre>
 
-    [host name] - Network name of host.  
+    [host name] - Network name of host.  Must match $HOST on node machine for resurrect to work.
 
     [number of cpus] - Number of CPUs to use in the machine
 
@@ -306,7 +306,8 @@ Here is a small example:
   kkr1u02.kilokluster.ucsc.edu 2 1024 /tmp /scratch 36000 r1
 
 </pre>
- 
+
+
 Each cluster machine, as well as the hub, must be set up properly for rsh (or ssh) and 
 syslog system logging. Please refer to your system documentation for information on 
 rsh and syslog configuration.  RSH or SSH or equivalent is required for paraNodeStart 
