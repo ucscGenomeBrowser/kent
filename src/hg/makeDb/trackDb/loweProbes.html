@@ -1,13 +1,12 @@
-
 <h2>Candidate Oligos for every Stanford Oligo Chip track</h2>
-
+<P>
 Oligos were chosen for every Sanger22 annotation on chr22 as
 well as about 2000 other genes. Two oligos were chosen with
 a 3' bias, two with a 5' bias, and two with no bias. For this
-purpose exons are defined to include 3' and 5' UTRs.
+purpose exons are defined to include 3' and 5' UTRs.</P>
 
 <h2> The strategy </h2>
-
+<P>
 These oligo selections are based on the following ideas:
 <ul>
 <li> Oligos should have minimum secondary structure as
@@ -19,19 +18,20 @@ These oligo selections are based on the following ideas:
 <li> Oligos should have a uniform hybridization temperature if
      possible. All oligos must be hybridized at same temperature,
      want to minimize cross hybe yet maximize signal.
-</ul>
-
+</ul></P>
+<P>
 Currently we don't have data to identify which parameters
 are more important than others. Also, some of these scores
 are overlapping (i.e. if tm is limited then high secondary
 structure is less likely). See below for histograms of these
-criteria.
+criteria. </P>
 
 <hr>
 
 <h1> The Details: </h1>
 
 <h2> The Algorithm </h2>
+<P>
 <ul>
 <li> Step through each exon at a step size proportional to the
 size of the exon examining possible oligos, excluding areas that
@@ -43,16 +43,17 @@ score for each score. </li>
 <li> Each score is then normalized by dividing by the maximum
 and then the normalized scores are combined as an average and oligos
 are sorted to find the best overall score.</li>
-<li> Oligos with the best combined normalized scores are BLATed 
-until one is found that has a BLAT score below a given 
+<li> Oligos with the best combined normalized scores are blatted
+until one is found that has a blat score below a given 
 threshold. </li>
 <li> As oligos are chosen, candidate oligos that overlap those
 already chosen are discarded. </li>
-<li> If no scores pass the BLAT score or not enough oligos have been
+<li> If no scores pass the blat score or not enough oligos have been
 chosen just pick oligos that have the best combined score. </li>
 </ul>
-
+</P>
 <h2> About the scores:</h2>
+<P>
 <ul> 
 <li><b>Tm:</b> Formulas for calculating Tm taken from: "A unified
     view of polymer, dumbbell, and oligonucleotide DNA
@@ -80,13 +81,14 @@ is as follows:
 </li>
 <li><b>3' Dist:</b> Distance from end of oligo to 3' end of target
 sequence.</li>
-<li><b>Blat Score:</b> BLAT score of second most homologous region
+<li><b>Blat Score:</b> Blat score of second most homologous region
 in the genome. If no inserts this is approximately the number of
 base pairs that match.</li>
 </ul>    
-
+</P>
 
 <h2>Histograms of Scores</h2>
+<P>
 Histograms are from the Stanford picked gene set.
 <table>
 <tr>
@@ -102,11 +104,11 @@ Histograms are from the Stanford picked gene set.
     Percentage GC, not used in algorithm but presented anyway.</center></td>
 </tr>
 </table>
-
-<p>Please note that all coordinates are relative to the '+' strand
+</P>
+<P>Please note that all coordinates are relative to the '+' strand
 while all oligo sequences are 5'->3'. This means that all sequences
 displayed are part of the sense strand. So if the oligo is represented
 in the database as being on the '-' strand and starts at 1 and ends at
 5 of 'atgcatgc' the '+' sequence of the probe would be 'tgcat' but
 that is 3'->5' on the '-' strand so the sequence in the sequence would
-be the reverse complement 'atgct'. 
+be the reverse complement 'atgct'. </P>
