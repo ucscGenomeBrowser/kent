@@ -361,33 +361,6 @@ visibility hide
 color 34,139,34
 type genePred
 
-track ncbiGeneSet
-shortLabel NCBI gene set
-longLabel NCBI $Organism 34.3 gene set
-group x
-priority 30.10
-visibility hide
-color 10,100,15
-type genePred +
-
-track ncbiGeneCDS99
-shortLabel NCBI CDS 99 set
-longLabel NCBI $Organism 34.3 CDS 99 set
-group x
-priority 30.10
-visibility hide
-color 33,66,15
-type genePred
-
-track hinxtonGeneSet
-shortLabel Hinxton gene set
-longLabel Hinxton $Organism 34 gene set
-group x
-priority 30.12
-visibility hide
-color 10,15,100,
-type genePred
-
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
