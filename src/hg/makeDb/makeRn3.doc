@@ -1678,6 +1678,7 @@ SEQ2_LEN=$BASE/S2.len
     cd ../axtTight
     mkdir -p ../pslTight
     foreach i (*.axt)
+      echo "Processing $i"
       set c = $i:r
       /cluster/bin/i386/axtToPsl $i \
                 ../S1.len ../S2.len ../pslTight/${c}_blastzTightHg15.psl
@@ -1687,7 +1688,7 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     cd /cluster/data/rn3/bed/blastz.hg15.2003-07-09
     cd pslTight
-    hgLoadPsl rn3 chr*_blastzTightHg15.psl
+    /cluster/bin/i386/hgLoadPsl rn3 chr*_blastzTightHg15.psl
 
 
 # MAKE MULTIPLE ALIGNMENT (MAF) FILES FROM BEST AXT'S (In Progress 2003-07-22 kate)
@@ -1704,8 +1705,12 @@ SEQ2_LEN=$BASE/S2.len
       /cluster/bin/i386/axtToMaf -tPrefix=rn3. -qPrefix=hg15. $i \
             /cluster/data/rn3/chrom.sizes /cluster/data/hg15/chrom.sizes  \
                 ../maf/${c}.rh.maf
+      /cluster/bin/scripts/fixMaf.pl \
+                < ../maf/${c}.rh.maf > ../maf/${c}.rh.maf.fixed
+      mv ../maf/${c}.rh.maf ../maf/${c}.rh.maf.unfixed
+      mv ../maf/${c}.rh.maf.fixed ../maf/${c}.rh.maf
     end
-    # 30 minutes ?
+    # NOTE: remove .unfixed files after checking
 
     # rat/mouse
     cd /cluster/data/rn3/bed/blastz.mm3
@@ -1717,6 +1722,10 @@ SEQ2_LEN=$BASE/S2.len
       /cluster/bin/i386/axtToMaf -tPrefix=rn3. -qPrefix=mm3. $i \
             /cluster/data/rn3/chrom.sizes /cluster/data/mm3/chrom.sizes  \
                 ../maf/${c}.rm.maf
+      /cluster/bin/scripts/fixMaf.pl \
+                < ../maf/${c}.rm.maf > ../maf/${c}.rm.maf.fixed
+      mv ../maf/${c}.rm.maf ../maf/${c}.rm.maf.unfixed
+      mv ../maf/${c}.rm.maf.fixed ../maf/${c}.rm.maf
     end
     # 30 minutes ?
 
@@ -1745,18 +1754,16 @@ cat << "EOF" > doMultiz
 
     # copy files to cluster I/O server
     mkdir -p /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf
-    cp -r cluster/data/rn3/bed/blastz.hg15.2003-07-09/maf /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09
+    cp -r /cluster/data/rn3/bed/blastz.hg15.2003-07-09/maf /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09
     mkdir -p /cluster/bluearc/hg/rn3/bed/blastz.mm3/maf
-    cp -r cluster/data/rn3/bed/blastz.mm3/maf /cluster/bluearc/hg/rn3/bed/blastz.mm3
+    cp -r /cluster/data/rn3/bed/blastz.mm3/maf /cluster/bluearc/hg/rn3/bed/blastz.mm3
 
     set multizDir = /cluster/data/rn3/bed/multiz.hg15-mm3
     cd $multizDir
     mkdir run
     cd run
 cat << "EOF" > doMultiz.kk
-#LOOP
 /cluster/bin/penn/multiz /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf/$1.rh.maf /cluster/bluearc/hg/rn3/bed/blastz.mm3/maf/$1.rm.maf - > /cluster/data/rn3/bed/multiz.hg15-mm3/maf/$1.rmh.maf
-#ENDLOOP
 "EOF"
     # << this line makes emacs coloring happy
     chmod +x doMultiz.kk
@@ -1768,9 +1775,12 @@ doMultiz.kk $(root1) {check out line+ /cluster/data/rn3/bed/multiz.hg15-mm3/maf/
 "EOF"
     # << this line makes emacs coloring happy
     cd /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf
+    # NOTE: probably want a better way to make the chrom list 
     ls *.maf | awk -F. '{print $1}' > $multizDir/run/chrom.list
     gensub2 chrom.list single gsub jobList
     ssh kkr9u01
+    set multizDir = /cluster/data/rn3/bed/multiz.hg15-mm3
+    cd $multizDir/run
     para create jobList
     para try
     para check
@@ -1785,7 +1795,8 @@ doMultiz.kk $(root1) {check out line+ /cluster/data/rn3/bed/multiz.hg15-mm3/maf/
     end
 
     # load into database
-    /cluster/bin/i386/hgLoadMaf rn3 multizHg15Mm3
+    # NOTE: use "warn" option due to presence of score=0 aligments in MAF files
+    /cluster/bin/i386/hgLoadMaf -warn rn3 multizHg15Mm3
         #Couldn't find rn3. sequence line 819945 of /gbdb/rn3/multizHg15Mm3/chrX.rmh.maf
         #Indexing and tabulating /gbdb/rn3/multizHg15Mm3/chrX_random.rmh.maf
         #Couldn't find rn3. sequence line 4341 of /gbdb/rn3/multizHg15Mm3/chrX_random.rmh.maf
