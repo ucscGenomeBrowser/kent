@@ -132,10 +132,10 @@ int getSuperfamilies(char *proteinID);
 
 void getExonInfo(char *proteinID, int *exonCount, char **chrom, char *strand);
 void printExonAA(char *proteinID, char *aa, int exonNum);
-void doPathwayLinks(char *protDisplayID, char *mrnaID);
-void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
-void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
-void doGeneSorterLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
+void doPathwayLinks(char *proteinID, char *mrnaID);
+void doGenomeBrowserLink(char *proteinID, char *mrnaID, char *hgsidStr);
+void doGeneDetailsLink(char *proteinID, char *mrnaID, char *hgsidStr);
+void doGeneSorterLink(char *proteinID, char *mrnaID, char *hgsidStr);
 void doBlatLink(char *db, char *sciName, char *commonName, char *userSeq);
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput);
