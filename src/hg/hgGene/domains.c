@@ -132,6 +132,12 @@ if (list != NULL)
     hPrintf("<TD ALIGN=CENTER>Top</TD>");
     hPrintf("<TD ALIGN=CENTER>Side</TD>");
     hPrintf("</TR></TABLE>\n");
+    hPrintf("<I>The pictures above may be empty if there is no "
+            "ModBase structure for the protein.  The ModBase structure "
+	    "frequently just covers a fragment of the protein.  You may "
+	    "be asked to log onto ModBase the first time you click on the "
+	    "pictures. It is simplest after logging in to just click on "
+	    "the picture again to get to the specific info on that model.</I>");
     }
 
 }
