@@ -1,15 +1,15 @@
 all: 
-	cd lib; make; cd ..
-	cd gensub2; make; cd ..
-	cd para; make; cd ..
-	cd paraHub; make; cd ..
-	cd paraHubStop; make; cd ..
-	cd paraNode; make; cd ..
-	cd paraNodeStart; make; cd ..
-	cd paraNodeStatus; make; cd ..
-	cd paraNodeStop; make; cd ..
-	cd paraTestJob; make; cd ..
-	cd parasol; make; cd ..
+	cd lib && ${MAKE}
+	cd gensub2 && ${MAKE}
+	cd para && ${MAKE}
+	cd paraHub && ${MAKE}
+	cd paraHubStop && ${MAKE}
+	cd paraNode && ${MAKE}
+	cd paraNodeStart && ${MAKE}
+	cd paraNodeStatus && ${MAKE}
+	cd paraNodeStop && ${MAKE}
+	cd paraTestJob && ${MAKE}
+	cd parasol && ${MAKE}
 
 install:
 	cp bin/para* bin/gensub2 $(HOME)/bin/i386
@@ -20,6 +20,6 @@ clean:
 	rm -rf bin
 
 broad:
-	cd lib; make; cd ..
-	cd broadNode; make; cd ..
-	cd broadHub; make; cd ..
+	cd lib && ${MAKE}
+	cd broadNode && ${MAKE}
+	cd broadHub && ${MAKE}

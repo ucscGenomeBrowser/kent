@@ -11,7 +11,8 @@ axtDropOverlap: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/axtDropOverlap $O ${MYLIBS} $L 
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
+
 test:	test1 test2
 %:	input/%.axt
 	${MKDIR} output

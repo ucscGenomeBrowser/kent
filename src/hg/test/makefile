@@ -11,7 +11,7 @@ test: lib ${O}
 	${CC} ${COPT} -o test $O ${MYLIBS} $L
 
 lib:
-	cd ../../lib;make
+	cd ../../lib && ${MAKE}
 
 clean::
 	rm -f test ${O}

@@ -18,7 +18,7 @@ hgLoadGap: ${LOADGAP_O}  ../../../lib/${MACHTYPE}/jkweb.a
 		${LOADGAP_O} ${MYLIBS} $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 clean::
 	rm -f hgGoldGapGl hgLoadGap ${GOLDGAP_O} ${LOADGAP_O}

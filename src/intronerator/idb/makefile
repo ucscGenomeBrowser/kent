@@ -63,7 +63,7 @@ features/genie/genes.ix: features/genie/genes.gdf $(P)/indexgl$(X)
 	indexgl features/genie/genes.gdf features/genie/genes.ix
 
 features/genie/genes.gdf: genie/I.gff
-	cd genie; make
+	cd genie && ${MAKE}
 
 features/sanger/i.pgo: features/c2g $(P)/makepgo$(X)
 	makepgo features/c2g features/sanger/ .pgo

@@ -10,7 +10,7 @@ hgCtgPos: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgCtgPos $O ${MYLIBS} $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 clean::
 	rm -f ${O}

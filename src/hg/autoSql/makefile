@@ -16,7 +16,7 @@ test:
 	cd tests && ${MAKE} test
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
 
 clean::
 	rm -f autoSql ${O}

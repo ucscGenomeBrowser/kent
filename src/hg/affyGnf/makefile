@@ -15,7 +15,7 @@ O = affyUclaMergePslData affyPslAndAtlasToBed pslAffySelect
 exe: $(O)
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
 
 clean::
 	rm -f affyPslAndAtlasToBed affyUclaMergePslData

@@ -1,3 +1,3 @@
 all:
-	cd counter; make
-	cd hitreport; make
+	cd counter && ${MAKE}
+	cd hitreport && ${MAKE}

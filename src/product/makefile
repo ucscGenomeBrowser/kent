@@ -52,11 +52,11 @@ README.mysql.setup.txt: README.mysql.setup INST_DIR
 source_tar:
 	if [ ! -d "${install_dir}/source_tree_clean" ]; then \
 		${MKDIR} "${install_dir}/source_tree_clean"; \
-		(cd "${install_dir}/source_tree_clean"; \
+		(cd "${install_dir}/source_tree_clean" && \
 		cvs co -r v${VER}_branch kent;) \
 	fi
 	rm -f ${install_dir}/source_tree_clean.tgz
-	(cd ${install_dir}/source_tree_clean; \
+	(cd ${install_dir}/source_tree_clean && \
 	tar -cvzf ../source_tree_clean.tgz  ./kent)
 	rm -fr ${install_dir}/source_tree_clean
 	touch source_tar
@@ -66,13 +66,13 @@ source_built: source_tar
 		rm -fr "${install_dir}/source_tree_built"; \
 	fi
 	${MKDIR} "${install_dir}/source_tree_built"
-	(cd "${install_dir}/source_tree_built"; \
+	(cd "${install_dir}/source_tree_built" && \
 		tar xvzf ../source_tree_clean.tgz)
-	(cd "${install_dir}/source_tree_built/kent/src"; \
-		make libs)
+	(cd "${install_dir}/source_tree_built/kent/src" && \
+		${MAKE} libs)
 	(TOP=`pwd`; cd "${install_dir}"; DD=`pwd`; \
-		cd $$TOP; cd "${install_dir}/source_tree_built/kent/src/hg"; \
-		make install DESTDIR=$$DD CGI_BIN=/built_CGI-BIN)
+		cd $$TOP; cd "${install_dir}/source_tree_built/kent/src/hg" && \
+		${MAKE} install DESTDIR=$$DD CGI_BIN=/built_CGI-BIN)
 	touch source_built
 
 example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \

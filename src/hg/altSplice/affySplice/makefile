@@ -20,4 +20,4 @@ exe: $(O)
 test: $(TESTS)
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

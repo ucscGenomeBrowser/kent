@@ -10,7 +10,7 @@ hgTomRough: $O
 	${CC} ${COPT} -o hgTomRough $O ${MYLIBS} $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 clean::
 	rm -f hgTomRough ${O}

@@ -9,4 +9,4 @@ scanIntrons.exe: $(O) lib
 	mv scanIntrons.exe ${CGI_BIN}-${USER}
 
 lib: 
-	cd ../lib;make; cd ../scanIntrons
+	cd ../lib && ${MAKE}

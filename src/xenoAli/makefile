@@ -1,4 +1,4 @@
 all: 
-	cd bwana;make
-	cd dynAlign;make
-	cd stitcher;make
+	cd bwana && ${MAKE}
+	cd dynAlign && ${MAKE}
+	cd stitcher && ${MAKE}

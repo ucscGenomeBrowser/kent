@@ -1,2 +1,2 @@
 all:
-	cd aladdin; make; cd ..
+	cd aladdin && ${MAKE}
