@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.37 2004/09/03 17:56:02 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.38 2004/09/03 21:57:45 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1939,7 +1939,7 @@ carefulClose(&fh);
 return (linesOut);
 }	/*	static void asciiOut()	*/
 
-void destroyWigDataStream(struct wiggleDataStream **wDS)
+void wiggleDataStreamFree(struct wiggleDataStream **wDS)
 /*	free all structures and zero the callers' structure pointer	*/
 {
 if (wDS)
@@ -1960,7 +1960,7 @@ if (wDS)
     }
 }
 
-struct wiggleDataStream *newWigDataStream()
+struct wiggleDataStream *wiggleDataStreamNew()
 {
 struct wiggleDataStream *wds;
 

@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.25 2004/08/18 19:07:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.26 2004/09/03 21:58:01 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -333,7 +333,7 @@ if (chromLst && chr)
     }
 
 /*	create the object here to allow constraint settings	*/
-wDS = newWigDataStream();
+wDS = wiggleDataStreamNew();
 
 if (chr)
     {
@@ -436,7 +436,7 @@ if (argc < 2)
 
 hgWiggle(wDS, argc-1, argv+1);
 
-destroyWigDataStream(&wDS);
+wiggleDataStreamFree(&wDS);
 
 return 0;
 }

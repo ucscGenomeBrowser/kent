@@ -17,7 +17,7 @@ char *chrom = cartString(cart, "c");
 char table[64];
 boolean hasBin;
 unsigned span = 0;
-struct wiggleDataStream *wDS = newWigDataStream();
+struct wiggleDataStream *wDS = wiggleDataStreamNew();
 unsigned long long valuesMatched = 0;
 struct histoResult *histoGramResult;
 float *valuesArray = NULL;
@@ -86,5 +86,5 @@ printHistoGram(histoGramResult);
 
 freeHistoGram(&histoGramResult);
 freeMem(valuesArray);
-destroyWigDataStream(&wDS);
+wiggleDataStreamFree(&wDS);
 }

@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.12 2004/09/03 17:30:09 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.13 2004/09/03 21:57:07 hiram Exp $";
 
 enum wigOutputType 
 /*	type of output requested	*/
@@ -182,7 +182,7 @@ if (isCustomTrack(table))
     isCustom = TRUE;
     }
 
-wDS = newWigDataStream();
+wDS = wiggleDataStreamNew();
 
 wDS->setMaxOutput(wDS, maxOut);
 wDS->setChromConstraint(wDS, region->chrom);
@@ -225,7 +225,7 @@ switch (wigOutType)
     };
 
 
-destroyWigDataStream(&wDS);
+wiggleDataStreamFree(&wDS);
 
 return linesOut;
 }
@@ -326,7 +326,7 @@ if (isCustomTrack(table))
     isCustom = TRUE;
     }
 
-wDS = newWigDataStream();
+wDS = wiggleDataStreamNew();
 
 if (checkWigDataFilter(database, table, &dataConstraint, &ll, &ul))
     {
@@ -429,5 +429,5 @@ numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
 hTableEnd();
 htmlClose();
-destroyWigDataStream(&wDS);
+wiggleDataStreamFree(&wDS);
 }

@@ -342,8 +342,8 @@ struct wiggleDataStream
     };
 
 /*	in lib/wigDataStream.c	*/
-struct wiggleDataStream *newWigDataStream();
-void destroyWigDataStream(struct wiggleDataStream **wDS);
+struct wiggleDataStream *wiggleDataStreamNew();
+void wiggleDataStreamFree(struct wiggleDataStream **wDS);
 
 /*	verbose level guidelines	*/
 #define	VERBOSE_ALWAYS_ON	1
