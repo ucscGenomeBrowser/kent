@@ -10107,6 +10107,7 @@ char *freezeName = NULL;
 int controlColNum=0;
 char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean showedRuler = FALSE;
 
 if (psOutput != NULL)
    {
@@ -10458,8 +10459,9 @@ if (!hideControls)
 	controlGridEndRow(cg);
 
 	/* First group gets ruler. */
-	if (group == groupList)
+	if (!showedRuler)
 	    {
+	    showedRuler = TRUE;
 	    controlGridStartCell(cg);
 	    hPrintf(" Base Position <BR>");
 	    hDropList("ruler", offOn, 2, offOn[withRuler]);
