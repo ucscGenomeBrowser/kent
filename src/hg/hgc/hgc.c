@@ -1490,13 +1490,78 @@ return(NULL);
 }
 
 
+void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
+/* Parse space separated 'ss' item. */
+{
+static char buf[512*2];
+int wordCount;
+char *words[4];
+strcpy(buf, ss);
+wordCount = chopLine(buf, words);
+
+if (wordCount < 1)
+    errAbort("Empty user cart variable ss.");
+*retPslName = words[0];
+if (retFaName != NULL)
+    {
+    if (wordCount < 2)
+	errAbort("Expecting psl filename and fa filename in cart variable ss, but only got one word: %s", ss);
+    *retFaName = words[1];
+    }
+if (retQName != NULL)
+    {
+    if (wordCount < 3)
+	errAbort("Expecting psl filename, fa filename and query name in cart variable ss, but got this: %s", ss);
+    *retQName = words[2];
+    }
+}
+
+boolean ssFilesExist(char *ss)
+/* Return TRUE if both files in ss exist. -- Copied from hgTracks! */
+{
+char *faFileName, *pslFileName;
+parseSs(ss, &pslFileName, &faFileName, NULL);
+return fileExists(pslFileName) && fileExists(faFileName);
+}
+
+struct trackDb *tdbForUserPsl()
+/* Load up user's BLAT results into trackDb. */
+{
+char *ss = cartOptionalString(cart, "ss");
+
+if ((ss != NULL) && !ssFilesExist(ss))
+    {
+    ss = NULL;
+    cartRemove(cart, "ss");
+    }
+
+if (ss == NULL)
+    return(NULL);
+else
+    {
+    struct trackDb *tdb;
+    AllocVar(tdb);
+    tdb->tableName = cloneString("hgUserPsl");
+    tdb->shortLabel = cloneString("BLAT Sequence");
+    tdb->type = cloneString("psl");
+    tdb->longLabel = cloneString("Your Sequence from BLAT Search");
+    tdb->visibility = tvFull;
+    tdb->priority = 11.0;
+    trackDbPolish(tdb);
+    return(tdb);
+    }
+}
+
+
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
+struct trackDb *utdbList = tdbForUserPsl();
 
-tdbList = slCat(ctdbList, tdbList);
+ctdbList = slCat(ctdbList, tdbList);
+tdbList = slCat(utdbList, ctdbList);
 
 cartWebStart(cart, "Extended DNA Case/Color");
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
@@ -1533,7 +1598,8 @@ printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD>
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->tableName;
-    if ((lookupCt(track) != NULL) ||
+    if (sameString("hgUserPsl", track) ||
+	(lookupCt(track) != NULL) ||
 	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
 	{
 	char *visString = cartOptionalString(cart, track);
@@ -1719,6 +1785,104 @@ if (ct->fieldCount >= 12)
 return(hti);
 }
 
+struct hTableInfo *htiForUserPsl()
+/* Create an hTableInfo for user's BLAT results. */
+{
+struct hTableInfo *hti;
+
+AllocVar(hti);
+hti->rootName = cloneString("hgUserPsl");
+hti->isPos = TRUE;
+hti->isSplit = FALSE;
+hti->hasBin = FALSE;
+hti->type = cloneString("psl");
+strncpy(hti->chromField, "tName", 32);
+strncpy(hti->startField, "tStart", 32);
+strncpy(hti->endField, "tEnd", 32);
+strncpy(hti->nameField, "qName", 32);
+// psl can be scored... but strictly speaking, does not have a score field!
+strncpy(hti->strandField, "strand", 32);
+hti->hasCDS = FALSE;
+strncpy(hti->countField, "blockCount", 32);
+strncpy(hti->startsField, "tStarts", 32);
+strncpy(hti->endsSizesField, "tSizes", 32);
+hti->hasBlocks = TRUE;
+
+return(hti);
+}
+
+struct bed *bedFromUserPsl()
+/* Load up user's BLAT results into bedList. */
+{
+struct bed *bedList = NULL;
+char *ss = cartOptionalString(cart, "ss");
+
+if ((ss != NULL) && ! ssFilesExist(ss))
+    {
+    ss = NULL;
+    cartRemove(cart, "ss");
+    }
+
+if (ss == NULL)
+    return(NULL);
+else
+    {
+    struct lineFile *f;
+    struct psl *psl;
+    enum gfType qt, tt;
+    char *faFileName, *pslFileName;
+    int i;
+
+    parseSs(ss, &pslFileName, &faFileName, NULL);
+    pslxFileOpen(pslFileName, &qt, &tt, &f);
+    while ((psl = pslNext(f)) != NULL)
+	{
+	struct bed *bed;
+	AllocVar(bed);
+	bed->chrom = cloneString(seqName);
+	bed->chromStart = psl->tStart;
+	bed->chromEnd = psl->tEnd;
+	bed->name = cloneString(psl->qName);
+	bed->score = pslScore(psl);
+	if ((psl->strand[0] == '-' && psl->strand[1] == '+') ||
+	    (psl->strand[0] == '+' && psl->strand[1] == '-'))
+	    strncpy(bed->strand, "-", 2);
+	else
+	    strncpy(bed->strand, "+", 2);
+	bed->thickStart = bed->chromStart;
+	bed->thickEnd   = bed->chromEnd;
+	bed->blockCount = psl->blockCount;
+	bed->chromStarts = needMem(bed->blockCount * sizeof(int));
+	bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
+	for (i=0;  i < bed->blockCount;  i++)
+	    {
+	    bed->chromStarts[i] = psl->tStarts[i] - bed->chromStart;
+	    bed->blockSizes[i]  = psl->blockSizes[i];
+	    }
+	if (psl->strand[1] == '-')
+	    {
+	    // psl: if target strand is '-', flip the coords.
+	    // (this is the target part of pslRcBoth from src/lib/psl.c)
+	    for (i=0;  i < bed->blockCount;  ++i)
+		{
+		bed->chromStarts[i] =
+		    psl->tSize - (bed->chromStarts[i] +
+				  bed->blockSizes[i]);
+		}
+	    reverseInts(bed->chromStarts, bed->blockCount);
+	    reverseInts(bed->blockSizes, bed->blockCount);
+	    assert(bed->chromStart == bed->chromStarts[0]);
+	    }
+	slAddHead(&bedList, bed);
+	pslFree(&psl);
+	}
+    lineFileClose(&f);
+    slReverse(&bedList);
+    return(bedList);
+    }
+}
+
+
 void addColorToRange(int r, int g, int b, struct rgbColor *colors, int start, int end)
 /* Add rgb values to colors array from start to end.  Don't let values
  * exceed 255 */
@@ -1778,11 +1942,14 @@ int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
+struct trackDb *utdbList = tdbForUserPsl();
+
 Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
 Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
 Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
 
-tdbList = slCat(ctdbList, tdbList);
+ctdbList = slCat(ctdbList, tdbList);
+tdbList = slCat(utdbList, ctdbList);
 
 cartWebStart(cart, "Extended DNA Output");
 printf("<TT><PRE>");
@@ -1800,13 +1967,28 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     char *track = tdb->tableName;
     struct featureBits *fbList = NULL, *fb;
     struct customTrack *ct = lookupCt(track);
-    if ((ct != NULL) ||
+    if (sameString("hgUserPsl", track) ||
+	(ct != NULL) ||
 	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
         {
 	char buf[256];
 	int r,g,b;
 
-	if (ct != NULL)
+	if (sameString("hgUserPsl", track))
+	    {
+	    struct hTableInfo *hti = htiForUserPsl();
+	    struct bedFilter *bf;
+	    struct bed *bedList, *bedList2;
+	    AllocVar(bf);
+	    bedList = bedFromUserPsl();
+	    bedList2 = bedFilterListInRange(bedList, bf, seqName, winStart,
+					    winEnd);
+	    fbList = fbFromBed(track, hti, bedList2, winStart, winEnd,
+			       TRUE, FALSE);
+	    bedFreeList(&bedList);
+	    bedFreeList(&bedList2);
+	    }
+	else if (ct != NULL)
 	    {
 	    struct hTableInfo *hti = ctToHti(ct);
 	    struct bedFilter *bf;
@@ -2349,21 +2531,6 @@ printf("</PRE></TT>\n");
 sqlDisconnect(&conn);
 
 printTrackHtml(tdb);
-}
-
-void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
-/* Parse space separated 'ss' item. */
-{
-static char buf[512*2];
-int wordCount;
-char *words[4];
-strcpy(buf, ss);
-wordCount = chopLine(buf, words);
-if (wordCount != 3)
-    errAbort("Expecting 3 words in ss item");
-*retPslName = words[0];
-*retFaName = words[1];
-*retQName = words[2];
 }
 
 void doUserPsl(char *track, char *item)
