@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.28 2004/08/26 18:32:00 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.29 2004/08/27 20:12:54 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -626,9 +626,7 @@ doNoOp = operations & wigFetchNoOp;
 
 /*	for timing purposes, allow the wigFetchNoOp to go through */
 if (doNoOp)
-    {
     doDataArray = doBed = doStats = doAscii = FALSE;
-    }
 
 if (! (doNoOp || doAscii || doDataArray || doBed || doStats) )
     {
@@ -943,7 +941,7 @@ for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); wiggleFree(&wiggle) )
 		    {
 		    float value = 0.0;
 		    ++valuesMatched;
-		    if (doAscii || doStats || doDataArray)
+		    if (doAscii || doStats || doDataArray || doNoOp)
 			value = BIN_TO_VALUE(*datum,
 					wiggle->lowerLimit,wiggle->dataRange);
 		    if (doAscii)
@@ -1357,6 +1355,11 @@ if (bedList && *bedList)
 	/*	now fetch all the wiggle data for this position,
 	 *	constraints have been set at the top of this loop
 	 */
+	/*	POTENTIAL GREAT SPEEDUP here, if only bed results are
+	 *	the requested result, then we should just ask for a bed
+	 *	list from getData and simply intersect that bed list
+	 *	with the given bed list filter.
+	 */
 
 	valuesFound = wDS->getData(wDS, db, table, wigFetchDataArray);
 
@@ -1366,6 +1369,10 @@ if (bedList && *bedList)
 	doBed = operations & wigFetchBed;
 	doStats = operations & wigFetchStats;
 	doNoOp = operations & wigFetchNoOp;
+
+	/*	for timing purposes, allow the wigFetchNoOp to go through */
+	if (doNoOp)
+	    doDataArray = doBed = doStats = doAscii = FALSE;
 
 	/*	if ((something found) and (something to do))	*/
 	if ((valuesFound > 0) && (doAscii || doBed || doStats || doNoOp))

@@ -8,11 +8,12 @@
 #include "wiggle.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.19 2004/08/24 23:42:45 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.20 2004/08/27 20:12:54 hiram Exp $";
 
 int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
 	int winStart, int winEnd, struct cart *cart)
-/*	determine span used during hgTracks display	*/
+/*	determine span used during hgTracks display,
+ *	winEnd == 0 means whole chrom	*/
 {
 struct sqlResult *sr;
 char query[256];
@@ -30,7 +31,22 @@ int insideX = hgDefaultGfxBorder;
 int pixWidth = atoi(cartUsualString(cart, "pix", "620" ));
 boolean withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 
-/*	We need to take this span finding business into the library */
+/*	winEnd less than 1 (i.e. == 0), we need to find this chrom size	*/
+if (winEnd < 1)
+    {
+    safef(query, ArraySize(query),
+	"SELECT size from chromInfo where chrom = '%s'", chrom);
+    sr = sqlMustGetResult(conn,query);
+    if ((row = sqlNextRow(sr)) == NULL)
+	errAbort("spanInUse: query failed: '%s'\n", query);
+    winEnd = sqlUnsigned(row[0]);
+    sqlFreeResult(&sr);
+    if (winEnd < 1)
+	errAbort("spanInUse: failed to find valid chrom size via query: '%s'\n", query);
+    }
+
+/*	This is a time expensive query,
+ *	~3 to 6 seconds on large chroms full of data	*/
 safef(query, ArraySize(query),
     "SELECT span from %s where chrom = '%s' group by span", table, chrom);
 
