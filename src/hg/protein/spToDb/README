@@ -22,7 +22,7 @@ mysqladmin -u hgcat -p$password create $db
 # Load up the table definitions from here:
 hgsql $db < spDb.sql
 
-# Load up the data from tab files
+# Load up the data from tab files.  This takes about 30 minutes.
 cd $data/tabFiles
 foreach i (*.tab)
     mysqlimport $db $i.tab
