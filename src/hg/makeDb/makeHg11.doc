@@ -57,7 +57,7 @@ Make and load GC percent table
      hgsql hg11  < ~/src/hg/lib/gcPercent.sql
      hgGcPercent hg11 ../../nib
 
-SIMPLE REPEAT TRACK (IN PROGRESS)
+SIMPLE REPEAT TRACK (DONE)
 
 o - Create cluster parasol job like so:
         ssh kk
@@ -72,7 +72,7 @@ o - Create cluster parasol job like so:
 	para try
 	para check
 	para push
-        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed TODO - Can't find liftAll.lft file
+        liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
 
 o - Load this into the database as so
         ssh hgwdev
@@ -80,7 +80,7 @@ o - Load this into the database as so
 	hgLoadBed hg11 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (IN PROGRESS)
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE)
 
 Make sure that the NT*.fa files are lower-case repeat masked.
 Do something much like the simpleRepeat track, but only
@@ -113,7 +113,7 @@ NOTE:Below is a tcsh script
 	end
 	cd ..
     end
-Then ask admins to do a binrsync. IN PROGRESS
+Then ask admins to do a binrsync. DONE
 
 
 
@@ -218,29 +218,29 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
       liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_refSeq.psl
-      cd ..
+      cd .. DONE
 
       cd mrna
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.96 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_mrna.psl
-      cd .. 
+      cd .. DONE
 
       cd est
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
-      cd .. 
+      cd .. DONE
 
-o - Load refSeq alignments into database TODO
+o - Load refSeq alignments into database DONE
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg11 -tNameIx refSeqAli.psl
 
-o - Load mRNA alignments into database. TODO
+o - Load mRNA alignments into database. DONE
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/mrna/chrom
       foreach i (*.psl)
@@ -250,7 +250,7 @@ o - Load mRNA alignments into database. TODO
       cd ..
       hgLoadPsl hg11 all_mrna.psl -nobin
 
-o - Load EST alignments into database. TODO
+o - Load EST alignments into database. DONE
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/est/chrom
       foreach i (*.psl)
@@ -260,7 +260,7 @@ o - Load EST alignments into database. TODO
       cd ..
       hgLoadPsl hg11 all_est.psl -nobin
 
-o - Create subset of ESTs with introns and load into database.
+o - Create subset of ESTs with introns and load into database. DONE
       - ssh kkstore
       cd ~/oo
       tcsh jkStuff/makeIntronEst.sh
@@ -268,10 +268,10 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/oo/bed/est/intronEst
       hgLoadPsl hg11 *.psl
 
-o - Put orientation info on ESTs into database:
+o - Put orientation info on ESTs into database: IN PROGRESS
      ssh kkstore
      cd ~/oo/bed/est
-     pslSortAcc nohead contig /cluster/fast1/temp/contig.psl
+     pslSortAcc nohead contig /cluster/fast1/temp contig.psl
      mkdir /scratch/hg/gs.12/build29/bed
      cp -r contig /scratch/hg/gs.12/build29/bed/est
      sudo /cluster/install/utilities/updateLocal
@@ -279,14 +279,15 @@ o - Put orientation info on ESTs into database:
      mkdir estOrientInfo
      cd estOrientInfo
      mkdir ei
-     ls -1 /scratch/hg/gs.12/build29/bed/est > psl.lst
-   Get onto kk and cd to ~/oo/bed/estOrientInfo.  Copy in
+     ls -1 /scratch/hg/gs.12/build29/bed/est/*.psl > psl.lst
+
+   Now ssh to kk and cd to ~/oo/bed/estOrientInfo.  Copy in
    gsub from the previous version and edit it to say where
    things are located in scratch on this version.  Then:
-     gensub2 gsub psl.lst single spec
+     gensub2 psl.lst single gsub spec
      para create spec
      para try 
-     para push 
+     para push IN PROGRESS
    check until done, or use 'para shove'
 
 o - Create rnaCluster table
@@ -306,7 +307,7 @@ o - Create rnaCluster table
    hgLoadBed hg11 rnaCluster chrom/*.bed
 
 
-PRODUCING KNOWN GENES (TODO)
+PRODUCING KNOWN GENES (DONE)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.129/refSeq. DONE
@@ -330,7 +331,7 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
        ln -s /cluster/store1/mrna.129 mrna
-       hgRefSeqMrna hg11 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc TODO
+       hgRefSeqMrna hg11 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc DONE
 o - Add Jackson labs info DONE
      cd ~/oo/bed
      mkdir jaxOrtholog
@@ -403,7 +404,6 @@ Locate motifs on all promoters with
       dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
       liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
 
-YONTAO
 
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
@@ -492,42 +492,43 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg11 *.psl
 
-MATT - PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (done for mRNA, not for EST)
+PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (for mRNA, not for EST) IN PROGRESS
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-    /cluster/store1/genbank.129 TODO
+    /cluster/store1/genbank.129 DONE
 
 o - Process these out of genbank flat files as so:
        ssh kkstore
        cd /cluster/store1/genbank.129
-       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
+       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
        cd ../mrna.129
        faSplit sequence xenoRna.fa 2 xenoRna
        ssh kks00
-       cd /projects/hg2
+       cd /scratch/hg
        mkdir mrna.129
        cp /cluster/store1/mrna.129/xenoRna*.* mrna.129
-Above set of commands is TODO.
+Request binrysnc of /scratch/hg/mrna.129 from the admins
 
-Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.8/build29/contigTrf
+Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.12/build29/contig/trf
 in RepeatMasked + trf form.  (This is probably done already in mouse alignment
 stage).  Also make sure /scratch/hg/mrna.129 is loaded with xenoRna.fa Then do:
        ssh kkstore
-       cd /cluster/store1/gs.8/build29/oo/bed
+       cd /cluster/store1/gs.12/build29/bed
        mkdir xenoMrna
        cd xenoMrna
        mkdir psl
-       ls -1S /scratch/hg/gs.12/build29/trfFa > human.lst
-       cp /projects/hg2/mrna.129/* /scratch/hg/mrna.129
+       ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
        ls -1S /scratch/hg/mrna.129/xenoRna?*.fa > mrna.lst
-       cp ~/lastOo/bed/xenoMrna/gsub .
+       cp ~kent/lastOo/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
-       jabba make hut spec
-       jabba push hut
-Do jabba check hut until the run is done, doing jabba push hut if
+       para create spec
+       para try IN PROGRESS
+       para check
+       para push
+Do para check until the run is done, doing para push if
 necessary on occassion.
 
 Sort xeno mRNA alignments as so:
@@ -613,7 +614,6 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
            mv $i ${r}_blatFish.psl
        end
        hgLoadPsl hg11 *.psl
-
 
 
 
