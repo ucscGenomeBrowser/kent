@@ -1,0 +1,154 @@
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>Human Genome Working Draft: Text Browser</TITLE>
+	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0><TR><TH COLSPAN=2 ALIGN="left">	<IMG SRC="../images/title.jpg"></TH></TR>
+
+<!--HOTLINKS BAR-->
+<TR><TD COLSPAN=2 HEIGHT=40>
+   <CENTER>
+	<TABLE BGCOLOR="2636D1" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=1 BORDERCOLOR="000000" HEIGHT="22"><TR><TD>
+		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>
+		<TD WIDTH=1></TD>
+		<TD WIDTH=75>
+			<A HREF="../index.html" onMouseOver="HOME.src='../images/hl_home.jpg'" onMouseOut="HOME.src='../images/h_home.jpg'">
+			<IMG SRC="../images/h_home.jpg" ALIGN="absmiddle" BORDER="0" NAME="HOME" ALT="Home" ></A></TD>
+		<TD WIDTH=155>
+			<A HREF="hgTracks.html" onMouseOver="BROWSER.src='../images/hl_browser.jpg'" onMouseOut="BROWSER.src='../images/h_browser.jpg'">
+			<IMG SRC="../images/h_browser.jpg" ALIGN="absmiddle" BORDER="0" NAME="BROWSER" ALT="&nbsp;&nbsp; Genome Browser"></A></TD>
+		<TD WIDTH=100>
+			<A HREF="../cgi-bin/hgBlat?command=start" onMouseOver="SEARCH.src='../images/hl_blat.jpg'" onMouseOut="SEARCH.src='../images/h_blat.jpg'">
+			<IMG SRC="../images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>
+		<TD WIDTH=100>
+			<A HREF="../FAQ.html" onMouseOver="GUIDE.src='../images/hl_faq.jpg'" onMouseOut="GUIDE.src='../images/h_faq.jpg'">
+			<IMG SRC="../images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; FAQ"></A></TD>
+		</TR></TABLE>
+	 </TR></TABLE>
+	 </CENTER>
+</TD></TR>
+
+<!--Content Tables-->  
+<TR>
+  <TD CELLPADDING=10>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
+	<TABLE BGCOLOR="ffffff" BACKGROUND="../images/hr.gif" WIDTH=100%><TR><TD>
+	<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Text Interface to Genome Browser Database </FONT>
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR><TR><TD WIDTH=10></TD><TD>
+
+	<P>This tool allows you to download portions of the database used by the human
+	genome browser in a simple tab-delimited text format.
+	Please enter a position in the genome and press the submit button:
+	(Use <A HREF="../cgi-bin/hgBlat?db=hg6">BLAT Search</A> to locate a particular sequence in the genome.)
+		
+	<P><FORM ACTION="../cgi-bin/hgText" METHOD="GET">
+	Freeze:
+	<SELECT ALIGN=CENTER NAME="db">
+    	<OPTION VALUE="hg5">Oct. 7, 2000</OPTION>
+    	<OPTION VALUE="hg6" SELECTED>Dec. 12, 2000</OPTION>
+    	<OPTION VALUE="hg7">Apr. 1, 2001</OPTION>
+	</SELECT>
+
+	Genome Position:
+	<INPUT TYPE="TEX" NAME="position" SIZE="34" VALUE="chr2:213373283-213377671">
+	<INPUT TYPE="SUBMIT" NAME="Submit" VALUE="Submit">
+	<INPUT TYPE="HIDDEN" NAME="phase" VALUE="table">
+
+	<P>A genome position can be specified by the accession number of a sequenced human genomic clone, an mRNA or EST or STS marker, or
+a cytological band, a chromosomal coordinate range, or keywords from the Genbank description of an mRNA. See the <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help.
+<P>
+<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
+	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>
+	
+<TR><TD VALIGN=Top><br></TD></TR>
+	
+<TR><TD VALIGN=Top NOWRAP>chr19</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays all of chromosome 19</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>genome</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Fetch from the whole genome</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>20p13</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>4q28</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays band q28 on chr 4, gene region determining red hair color</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps
+	(open "STS Markers" track by clicking to see this marker)</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>AA205474</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region of EST with GenBank acc. AA205474 in BRCA1 cancer gene on chr 17
+	(open "spliced ESTs" track by clicking to see this EST)</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>ctg13698</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region of the fingerprint clone contig ctg13698 from the Wash. U. map
+	(set "FPC contigs" track to "dense" and refresh to see FPC contigs)</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>AP001670</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region of clone with GenBank accession AP001670
+	(open "coverage" track by clicking to see this clone)</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>AF083811</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Offers 2 coordinate choices on chr 7 and chr 22 for this mitotic checkpoint mRNA</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>PRNP</TD>
+	<TD WIDTH=14></TD>
+	<TD>Offers coordinates choices for nested mRNAs for prion gene, chr 20p</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>valyl-tRNA</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs for valyl tRNA synthetases but not unsubmitted tRNA</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>huntington</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>zahler</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E. Evans</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+	
+<TR><TD COLSPAN="3" > Use this last format for entry authors -- even though Genbank searches require Evans JE format, GenBank entries themselves use Evans,J.E. internally.
+</TABLE>
+
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	<BR></TD></TR></TABLE>
+</FORM>
+<BR></TD></TR></TABLE>
+</BODY></HTML>
+
+
