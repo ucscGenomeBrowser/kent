@@ -12,3 +12,4 @@ hgBlat: $O $(MYLIBS)
 	strip hgBlat
 	chmod a+rx hgBlat
 	mv hgBlat /usr/local/apache/cgi-bin
+	mv hgBlat $(HGCGI)

@@ -12,7 +12,7 @@ hgc: $O ../../lib/$(MACHTYPE)/jkweb.a
 	mv a.out hgc
 	strip hgc
 	chmod a+rx hgc
-	mv hgc /usr/local/apache/cgi-bin
+	mv hgc $(HGCGI)
 
 tags: hgc.c 
 		ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
