@@ -79,6 +79,16 @@ enum pfParseType
     pptTypeName,
     pptTypeTuple,
 
+    /* Note the casts must be in this order relative to pptCastBitToBit */
+    pptCastBitToBit,	/* Never emitted. */
+    pptCastBitToByte,	
+    pptCastBitToShort,
+    pptCastBitToInt,
+    pptCastBitToLong,
+    pptCastBitToFloat,
+    pptCastBitToDouble,
+
+    pptCastByteToBit,
     pptCastByteToByte,	/* Never emitted. */
     pptCastByteToShort,
     pptCastByteToInt,
@@ -86,6 +96,7 @@ enum pfParseType
     pptCastByteToFloat,
     pptCastByteToDouble,
 
+    pptCastShortToBit,
     pptCastShortToByte,
     pptCastShortToShort,	/* NEver emitted. */
     pptCastShortToInt,
@@ -93,6 +104,7 @@ enum pfParseType
     pptCastShortToFloat,
     pptCastShortToDouble,
 
+    pptCastIntToBit,
     pptCastIntToByte,
     pptCastIntToShort,
     pptCastIntToInt,		/* Never emitted. */
@@ -100,6 +112,7 @@ enum pfParseType
     pptCastIntToFloat,
     pptCastIntToDouble,
 
+    pptCastLongToBit,
     pptCastLongToByte,
     pptCastLongToShort,
     pptCastLongToInt,
@@ -107,6 +120,7 @@ enum pfParseType
     pptCastLongToFloat,
     pptCastLongToDouble,
 
+    pptCastFloatToBit,
     pptCastFloatToByte,
     pptCastFloatToShort,
     pptCastFloatToInt,
@@ -114,6 +128,7 @@ enum pfParseType
     pptCastFloatToFloat,	/* Never emitted. */
     pptCastFloatToDouble,
 
+    pptCastDoubleToBit,
     pptCastDoubleToByte,
     pptCastDoubleToShort,
     pptCastDoubleToInt,
@@ -121,6 +136,9 @@ enum pfParseType
     pptCastDoubleToFloat,
     pptCastDoubleToDouble,	/* Never emitted. */
 
+    pptCastStringToBit,
+
+    pptConstBit,
     pptConstByte,
     pptConstShort,
     pptConstInt,

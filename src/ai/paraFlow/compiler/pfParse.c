@@ -148,6 +148,24 @@ switch (type)
 	return "pptTypeName";
     case pptTypeTuple:
 	return "pptTypeTuple";
+    case pptCastBitToBit:
+        return "pptCastBitToBit";
+    case pptCastBitToByte:
+        return "pptCastBitToByte";
+    case pptCastBitToShort:
+	return "pptCastBitToShort";
+    case pptCastBitToInt:
+	return "pptCastBitToInt";
+    case pptCastBitToLong:
+	return "pptCastBitToLong";
+    case pptCastBitToFloat:
+	return "pptCastBitToFloat";
+    case pptCastBitToDouble:
+	return "pptCastBitToDouble";
+    case pptCastByteToBit:
+        return "pptCastByteToBit";
+    case pptCastByteToByte:
+        return "pptCastByteToByte";
     case pptCastByteToShort:
 	return "pptCastByteToShort";
     case pptCastByteToInt:
@@ -158,6 +176,8 @@ switch (type)
 	return "pptCastByteToFloat";
     case pptCastByteToDouble:
 	return "pptCastByteToDouble";
+    case pptCastShortToBit:
+        return "pptCastShortToBit";
     case pptCastShortToByte:
 	return "pptCastShortToByte";
     case pptCastShortToInt:
@@ -168,6 +188,8 @@ switch (type)
 	return "pptCastShortToFloat";
     case pptCastShortToDouble:
 	return "pptCastShortToDouble";
+    case pptCastIntToBit:
+        return "pptCastIntToBit";
     case pptCastIntToByte:
 	return "pptCastIntToByte";
     case pptCastIntToShort:
@@ -178,6 +200,8 @@ switch (type)
 	return "pptCastIntToFloat";
     case pptCastIntToDouble:
 	return "pptCastIntToDouble";
+    case pptCastLongToBit:
+        return "pptCastLongToBit";
     case pptCastLongToByte:
 	return "pptCastLongToByte";
     case pptCastLongToShort:
@@ -188,6 +212,8 @@ switch (type)
 	return "pptCastLongToFloat";
     case pptCastLongToDouble:
 	return "pptCastLongToDouble";
+    case pptCastFloatToBit:
+        return "pptCastFloatToBit";
     case pptCastFloatToByte:
 	return "pptCastFloatToByte";
     case pptCastFloatToShort:
@@ -198,6 +224,8 @@ switch (type)
 	return "pptCastFloatToLong";
     case pptCastFloatToDouble:
 	return "pptCastFloatToDouble";
+    case pptCastDoubleToBit:
+        return "pptCastDoubleToBit";
     case pptCastDoubleToByte:
 	return "pptCastDoubleToByte";
     case pptCastDoubleToShort:
@@ -208,6 +236,12 @@ switch (type)
 	return "pptCastDoubleToLong";
     case pptCastDoubleToFloat:
 	return "pptCastDoubleToFloat";
+    case pptCastDoubleToDouble:
+	return "pptCastDoubleToDouble";
+    case pptCastStringToBit:
+        return "pptCastStringToBit";
+    case pptConstBit:
+	return "pptConstBit";
     case pptConstByte:
 	return "pptConstByte";
     case pptConstShort:
