@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.23 2004/02/23 06:47:30 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.24 2004/03/25 00:40:32 baertsch Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -320,6 +320,14 @@ ntCompTable['C'] = 'G';
 ntCompTable['G'] = 'C';
 ntCompTable['T'] = 'A';
 ntCompTable['N'] = 'N';
+ntCompTable['R'] = 'N';
+ntCompTable['Y'] = 'N';
+ntCompTable['S'] = 'N';
+ntCompTable['W'] = 'N';
+ntCompTable['r'] = 'N';
+ntCompTable['y'] = 'N';
+ntCompTable['s'] = 'N';
+ntCompTable['w'] = 'N';
 ntCompTable['('] = ')';
 ntCompTable[')'] = '(';
 inittedCompTable = TRUE;
@@ -333,7 +341,10 @@ int i;
 if (!inittedCompTable) initNtCompTable();
 for (i=0; i<length; ++i)
     {
-    *dna = ntCompTable[*dna];
+    char base = ntCompTable[*dna];
+    if (base == 0 && *dna != 0)
+        errAbort("%c not found in initNtCompTable at offset %d, complement failed\n",*dna,i);
+    *dna = base;
     ++dna;
     }
 }
@@ -345,6 +356,9 @@ void reverseComplement(DNA *dna, long length)
 int i;
 reverseBytes(dna, length);
 complement(dna, length);
+if (strlen(dna) < length)
+    errAbort("reverseComplement truncated string from %ld to %d. Check for invalid characters.\n",
+            length, strlen(dna));
 }
 
 /* Reverse offset - return what will be offset (0 based) to
