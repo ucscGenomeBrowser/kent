@@ -66,7 +66,7 @@ static struct optionSpec options[] = {
 
 /* ========================================================================== */
 
-#define BASE_SNP_EX_NUM 27   /* next avail number we can use */
+#define BASE_SNP_EX_NUM 21   /* next avail number we can use */
 
 enum snpExceptionType {
     snpExNotExact,
