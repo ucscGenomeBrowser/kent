@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.10 2004/03/24 21:21:11 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.10.2.1 2004/03/26 18:54:35 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -292,7 +292,7 @@ while ((el = hashNext(&cookie)) != NULL)
 		    tableId, summaryOnly, wiggleCompare );
 	    if (wigData)
 		{
-		if (summaryOnly)
+		if (1 || summaryOnly)
 		    {
 		    freeMem(wigData->data); /* and mark it gone */
 		    wigData->data = (struct wiggleDatum *)NULL;
