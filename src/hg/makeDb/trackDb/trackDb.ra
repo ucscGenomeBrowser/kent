@@ -373,6 +373,17 @@ color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
 
+track pseudoUcsc
+shortLabel Ucsc pseudo
+longLabel Processed Pseudogene Locus based on blastz chains Ucsc
+group genes
+priority 45
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 .
+
 track ucscFromMouse
 shortLabel ucsc mm3
 longLabel UCSC gene predictions from known Mouse genes mapped to Human
