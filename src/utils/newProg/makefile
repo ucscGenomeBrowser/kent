@@ -1,5 +1,5 @@
 .c.o:
-	gcc -O -ggdb -I../../inc -c $*.c
+	gcc -O -ggdb -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../../inc -c $*.c
 
 O = newProg.o 
 

@@ -40,7 +40,7 @@ fprintf(f, "  \"%s - %s\\n\"\n", name, description);
 fprintf(f, "  \"usage:\\n\"\n");
 fprintf(f, "  \"   %s XXX\\n\"\n", name);
 fprintf(f, "  \"options:\\n\"\n");
-fprintf(f, "  \"   -xxx=XXX\\n\"\n", name);
+fprintf(f, "  \"   -xxx=XXX\\n\"\n");
 fprintf(f, "  );\n");
 fprintf(f, "}\n");
 fprintf(f, "\n");
@@ -73,7 +73,7 @@ FILE *f = mustOpen(makeName, "w");
 fprintf(f, 
 
 ".c.o:\n"
-"\tgcc -ggdb -O -Wimplicit -I../inc -I../../inc -I../../../inc -c $*.c\n"
+"\tgcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type-I../inc -I../../inc -I../../../inc -c $*.c\n"
 "\n"
 "L = -lm\n"
 "MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)\n"
