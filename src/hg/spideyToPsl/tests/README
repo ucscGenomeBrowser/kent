@@ -1,0 +1,26 @@
+
+Input files, with alignments check into to avoid dependency on spidey being
+installed to run the tests.
+
+Sequences:
+  - mrnaClose.fa - two mRNAs that very closely align to the DNA.
+  - dnaClose.fa
+  - mrnaCloseRC.fa - reverse-complement of mrnaClose.fa
+  - dnaCloseRC.fa - reverse-complement of dnaClose.fa
+
+
+Alignments:
+
+  -input/close.aln
+    spidey -m input/mrnaClose.fa -i input/dnaClose.fa -o input/close.aln
+
+  - input/closeMrnaRC.aln
+    spidey -m input/mrnaCloseRC.fa -i input/dnaClose.fa -o input/closeMrnaRC.aln
+
+  - input/closeDnaRC.aln
+    spidey -m input/mrnaClose.fa -i input/dnaCloseRC.fa -o input/closeDnaRC.aln
+
+  - input/closeMrnaDnaRC.aln
+    spidey -m input/mrnaCloseRC.fa -i input/dnaCloseRC.fa -o input/closeMrnaDnaRC.aln
+
+

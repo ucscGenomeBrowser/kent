@@ -124,6 +124,7 @@ UTIL_DIRS = \
 	mrnaToGene \
 	nci60 \
 	patCount \
+	spideyToPsl \
 	pslCat \
 	pslCheck \
 	pslCoverage \
