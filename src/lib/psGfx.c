@@ -7,7 +7,7 @@
 #include "gfxPoly.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.15 2005/01/23 00:15:13 kent Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.16 2005/03/08 21:56:47 jsp Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -196,8 +196,16 @@ ps->fontHeight = size*0.8;
 void psTextAt(struct psGfx *ps, double x, double y, char *text)
 /* Output text in current font at given position. */
 {
+char c;
 psMoveTo(ps, x, y + ps->fontHeight);
-fprintf(ps->f, "(%s) show\n", text);
+fprintf(ps->f, "(");
+while ((c = *text++) != 0)
+    {
+    if (c == ')' || c == '(')
+        fprintf(ps->f, "\\");
+    fprintf(ps->f, "%c", c);
+    }
+fprintf(ps->f, ") show\n");
 }
 
 void psTextRight(struct psGfx *ps, double x, double y, 
@@ -215,9 +223,17 @@ void psTextCentered(struct psGfx *ps, double x, double y,
 	char *text)
 /* Draw a line of text centered in box defined by x/y/width/height */
 {
+char c;
 y += (height - ps->fontHeight)/2;
 psMoveTo(ps, x+width/2, y + ps->fontHeight);
-fprintf(ps->f, "(%s) showMiddle\n", text);
+fprintf(ps->f, "(");
+while ((c = *text++) != 0)
+    {
+    if (c == ')' || c == '(')
+        fprintf(ps->f, "\\");
+    fprintf(ps->f, "%c", c);
+    }
+fprintf(ps->f, ") showMiddle\n");
 }
 
 void psTextDown(struct psGfx *ps, double x, double y, char *text)

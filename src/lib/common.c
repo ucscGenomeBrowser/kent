@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.77 2005/02/15 01:12:19 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.78 2005/03/08 21:56:47 jsp Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -94,7 +94,19 @@ while (--halfLen >= 0)
     }
 }
 
-
+void reverseDoubles(double *a, int length)
+/* Reverse the order of the double array. */
+{
+int halfLen = (length>>1);
+double *end = a+length;
+double c;
+while (--halfLen >= 0)
+    {
+    c = *a;
+    *a++ = *--end;
+    *end = c;
+    }
+}
 
 /* Swap buffers a and b. */
 void swapBytes(char *a, char *b, int length)
