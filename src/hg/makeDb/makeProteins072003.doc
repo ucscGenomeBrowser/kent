@@ -83,8 +83,8 @@ o load the table first and then create indexes.
 o Build the database table for HUGO
 
         o ftp over the HUGO data file:
-
-                wget http://www.gene.ucl.ac.uk/public-files/nomen/nomeids.txt
+	    cd /cluster/store5/protein/hugo
+	    wget http://www.gene.ucl.ac.uk/public-files/nomen/nomeids.txt
 
         o remove the first line and save the file as hugo.tab
 
@@ -151,7 +151,7 @@ o Build pfamXref and pfamDesc tables
 
 	ftp.sanger.ac.uk/pub/databases/Pfam/Pfam-A.full.gz
 
-  and save it at proteins/pfam/072803
+  and save it at /cluster/store5/proteins/pfam/072803
 
   Uncompress it by
 
