@@ -175,16 +175,16 @@ REPEAT MASKING  (DONE - by Patrick G. and Terry F.)
 
 For the NCBI assembly we repeat mask on the sensitive mode setting.
 Patrick Gavin did this, and perhaps will fill in the details later.
-Overall the process was to break the NT contigs into pieces of
-1000000 bases each with
-    cd NTXXX
-    mkdir split
-    cd split
-    faSplit size ../NTXXX.fa 1000000 NTXXX -maxN=1000001 -lift=../NTXXX.lft
-and then arrange to do a cluster run that generates NTXXX_X.fa.out files
-in the split directory.   After this lift up the .out files to whole contig
-coordinates with
-    liftUp NTXXX.fa.out NTXXX.lft warn split/*.fa.out
+
+        cd ~/oo
+        /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
+        log into kk
+        cd ~/oo
+        para create RMJobs
+        para try
+        make sure jobs don't die right away
+        para push
+
 Then lift these up to chromosome coordinates with
     cd ~/oo
     tcsh jkStuff/liftOut2.sh
