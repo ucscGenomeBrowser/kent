@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.6 2003/06/10 17:28:07 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.7 2003/06/11 06:46:58 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,8 +72,8 @@ for (i=1; i<blockCount; ++i)
     {
     if (psl->strand[1] == '-')
         {
-        s = (psl->tSize - starts[i-1]);
-        e = (psl->tSize - starts[i]) + sizes[i-1];
+        s = psl->tSize - starts[i];
+        e = psl->tSize - (starts[i-1] + sizes[i-1]);
         }
     else
         {

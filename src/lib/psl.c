@@ -16,7 +16,7 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.24 2003/06/10 17:26:10 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.25 2003/06/11 06:51:24 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -731,7 +731,8 @@ int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int of
 /* Return >0 if introns make it look like alignment is on + strand,
  *        <0 if introns make it look like alignment is on - strand,
  *        0 if can't tell.  The absolute value of the return indicates
- * how many splice sites we've seen supporting the orientation. */
+ * how many splice sites we've seen supporting the orientation.
+ * Sequence should NOT be reverse complemented.  */
 {
 int intronDir = 0;
 int oneDir;
@@ -759,7 +760,8 @@ return intronDir;
 int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset)
 /* Return 1 if introns make it look like alignment is on + strand,
  *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
+ *        0 if can't tell.
+ * Sequence should NOT be reverse complemented.  */
 {
 int intronDir = pslWeightedIntronOrientation(psl, genoSeq, offset);
 if (intronDir < 0)
@@ -770,7 +772,8 @@ return intronDir;
 }
 
 boolean pslHasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset)
-/* Return TRUE if there's a probable intron. */
+/* Return TRUE if there's a probable intron. Sequence should NOT be
+ * reverse complemented.*/
 {
 int blockCount = psl->blockCount, i;
 unsigned *tStarts = psl->tStarts;
@@ -788,12 +791,12 @@ for (i=1; i<blockCount; ++i)
         {
         if (psl->strand[1] == '-')
             {
-            start = (psl->tSize-tStarts[i-1])-seqOffset;
-            end = (psl->tSize-tStarts[i])+blockSize-seqOffset;
+            start = (psl->tSize-tStarts[i])-seqOffset;
+            end = (psl->tSize-(tStarts[i-1]+blockSize))-seqOffset;
             }
         else
             {
-            start = tStarts[i-1]+blockSize-seqOffset;
+            start = (tStarts[i-1]+blockSize)-seqOffset;
             end = tStarts[i]-seqOffset;
             }
 	if (intronOrientation(dna+start, dna+end) != 0)
