@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.24 2004/02/07 19:16:56 braney Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.25 2004/02/10 01:05:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -362,10 +362,16 @@ if (doShort && (aGap >= minToAbbreviate || bGap >= minToAbbreviate))
     }
 else
     {
+#ifdef OLD
     dyStringAppendMultiC(aRes, '-', aGap);
     dyStringAppendN(bRes, bSeq, aGap);
     dyStringAppendN(aRes, aSeq, bGap);
     dyStringAppendMultiC(bRes, '-', bGap);
+#endif /* OLD */
+    dyStringAppendMultiC(aRes, '-', bGap);
+    dyStringAppendN(bRes, bSeq, bGap);
+    dyStringAppendN(aRes, aSeq, aGap);
+    dyStringAppendMultiC(bRes, '-', aGap);
     }
 }
 
