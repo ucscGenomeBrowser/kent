@@ -239,6 +239,7 @@ if(webInTextMode)
 	printf("\n\n\n          %s\n\n", title);
 
 vprintf(format, args);
+printf("<!-- HGERROR -->\n");
 printf("\n\n");
 
 webEnd();
