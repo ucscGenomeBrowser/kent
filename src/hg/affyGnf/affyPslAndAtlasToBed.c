@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.5 2003/09/27 01:34:07 kent Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.6 2003/10/04 01:44:14 kent Exp $";
 
 
 #define DEBUG 0
@@ -529,20 +529,26 @@ carefulClose(&f);
 return wordCount;
 }
 
-int intCmp(const void *va, const void *vb)
+int doubleCmp(const void *va, const void *vb)
 /* Compare two ints. */
 {
-int *a = (int *)va;
-int *b = (int *)vb;
-return *a - *b;
+double *a = (double *)va;
+double *b = (double *)vb;
+double diff = *a - *b;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
 }
 
-int findPositiveMedian(int *data, int count)
+int findPositiveMedian(double *data, int count)
 /* Find median of positive numbers in data. */
 {
-int *sorted;
+double *sorted;
 int i, realCount = 0;
-int median = -1;
+double median = -1;
 AllocArray(sorted, count);
 for (i=0; i<count; ++i)
     {
@@ -554,12 +560,7 @@ for (i=0; i<count; ++i)
     }
 if (realCount > 0)
     {
-    int halfReal = (realCount>>1);
-    qsort(sorted, realCount, sizeof(sorted[0]), intCmp);
-    if (realCount&1)
-	median = sorted[halfReal];
-    else
-        median = ((sorted[halfReal-1] + sorted[halfReal]) >> 1);
+    median = doubleMedian(realCount, sorted);
     }
 freez(&sorted);
 return median;
@@ -573,7 +574,7 @@ struct lineFile *lf = lineFileOpen(atlasFile, TRUE);
 char *line;
 int i, wordCount, expCount;
 char **row;
-int *data, median;
+double *data, median;
 double invMedian, ratio, logRatio;
 char *affyId;
 struct hash *hash = newHash(17);
@@ -611,7 +612,21 @@ while (lineFileNextReal(lf, &line))
     AllocArray(data, expCount);
     for (i=0; i<expCount; ++i)
         data[i] = atoi(row[i]);
-    hashAdd(hash, affyId, data);
+    median = findPositiveMedian(data, expCount);
+    if (median >= minExpVal)
+	{
+	invMedian = 1.0/median;
+	for (i=0; i<expCount; ++i)
+	    {
+	    double val = data[i];
+	    if (val >= minExpVal)
+		val = safeLog2(invMedian*val);
+	    else
+		val = missingVal;
+	    data[i] = val;
+	    }
+	hashAdd(hash, affyId, data);
+	}
     data = NULL;
     ++dataCount;
     }
@@ -631,22 +646,14 @@ while ((psl = pslNext(lf)) != NULL)
 	bed->expCount = expCount;
 	AllocArray(bed->expIds, expCount);
 	AllocArray(bed->expScores, expCount);
-	median = findPositiveMedian(data, expCount);
-	if (median >= minExpVal)
+	for (i=0; i<expCount; ++i)
 	    {
-	    invMedian = 1.0/median;
-	    for (i=0; i<expCount; ++i)
-		{
-		int val = data[i];
-		if (val >= minExpVal)
-		    bed->expScores[i] = safeLog2(invMedian*val);
-		else
-		    bed->expScores[i] = missingVal;
-		bed->expIds[i] = i;
-		}
-	    bedTabOutN(bed, 15, f);
-	    ++bedCount;
+	    bed->expScores[i] = data[i];
+	    bed->expIds[i] = i;
 	    }
+	bedTabOutN(bed, 15, f);
+	++bedCount;
+
 	bedFree(&bed);
 	}
     pslFree(&psl);
