@@ -18,6 +18,7 @@ update:
 	hgTrackDb human hg12 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg13 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg14 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb human hg15 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb_$(USER) ../../lib/trackDb.sql .
