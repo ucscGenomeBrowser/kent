@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.5 2004/08/19 22:08:44 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.6 2004/08/20 00:01:47 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -58,6 +58,7 @@ struct agpFrag *agpFrag;
 struct agpGap *agpGap;
 char *chrom;
 struct agp *agpList, *agp;
+struct hashEl *el;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
@@ -99,18 +100,13 @@ while (lineFileNext(lf, &line, &lineSize))
         agp->entry = agpGap;
         agp->isFrag = FALSE;
         }
-    if ((agpList = hashFindVal(chromAgpHash, chrom)) == NULL)
+    if ((el = hashLookup(chromAgpHash, chrom)) == NULL)
         {
-        /* new chrom */
-        /* add to hashes of chrom agp lists and sizes */
-        agpList = agp;
+        /* new chrom - add to hashes of chrom agp lists and sizes */
+        hashAdd(chromAgpHash, chrom, agp);
         }
     else
-        {
-        slAddHead(&agpList, agp);
-        hashRemove(chromAgpHash, chrom);
-        }
-    hashAdd(chromAgpHash, chrom, agpList);
+        slAddHead(&(el->val), agp);
     }
 /* reverse AGP lists */
 hashTraverseVals(chromAgpHash, slReverse);
