@@ -22,7 +22,7 @@ update:
 	hgTrackDb mouse mm1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb mouse mm4 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mouse/mm4/visibility.ra mouse mm4 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn3 trackDb_$(USER) ../../lib/trackDb.sql .
@@ -50,7 +50,7 @@ alpha:
 	hgTrackDb mouse mm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb ../../lib/trackDb.sql .
-	hgTrackDb mouse mm4 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mouse/mm4/visibility.ra mouse mm4 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn3 trackDb ../../lib/trackDb.sql .
