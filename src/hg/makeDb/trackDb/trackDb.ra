@@ -1649,37 +1649,6 @@ searchTable rgdGene
 searchType genePred
 searchPriority 50
 
-searchTable gbProtCode
-searchType gbProtCode
-searchPriority 60
-
-searchName tigrCmrORFsCommon
-searchTable tigrCmrORFs
-searchType bed
-searchMethod fuzzy
-xrefTable tigrCmrORFsInfo
-xrefQuery select name,tigrCommon from %s where tigrCommon like '%%%s%%'
-searchDescription Common Name of TIGR Locus
-searchPriority 61
-
-searchName tigrCmrORFsMainRole
-searchTable tigrCmrORFs
-searchType bed
-searchMethod fuzzy
-xrefTable tigrCmrORFsInfo
-xrefQuery select name,tigrMainRole from %s where tigrMainRole like '%%%s%%'
-searchDescription Main Role of TIGR Locus
-searchPriority 62
-
-searchName tigrCmrORFsSubRole
-searchTable tigrCmrORFs
-searchType bed
-searchMethod fuzzy
-xrefTable tigrCmrORFsInfo
-xrefQuery select name,tigrSubRole from %s where tigrSubRole like '%%%s%%'
-searchDescription SubRole of TIGR Locus
-searchPriority 63
-
 searchTable rnaCluster
 searchMethod exact
 searchType bed
