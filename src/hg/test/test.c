@@ -9,7 +9,7 @@
 #include "ens.h"
 #include "unfin.h"
 
-static char const rcsid[] = "$Id: test.c,v 1.4 2003/10/31 16:43:42 kent Exp $";
+static char const rcsid[] = "$Id: test.c,v 1.5 2003/11/03 16:26:04 angie Exp $";
 
 
 char *database = "ensdev";
@@ -21,7 +21,7 @@ errAbort("usage: test \n");
 }
 
 
-int test()
+void test()
 {
 return 0;
 }
