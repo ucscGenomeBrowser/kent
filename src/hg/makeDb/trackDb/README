@@ -147,3 +147,41 @@ Some settings used by various tracks:
     o itemAttrTbl - table used to color individual items in a track, selected
       by name and locations.  Currently works for genePred tracks.
 
+Tracks of the same type can be grouped in a single "composite track",
+using the "compositeTrack on" setting.  The track name for the
+composite track is a placeholder, that is referenced in entries for the
+subtracks.  The subtracks have a "subTrack" setting that references
+the composite track name.  The composite track entry contains all
+normal settings for the track type.  The subtrack track entries
+need contain only the short and long labels, they may optionally have
+a color setting.  If they do not, and if color is set on the composite
+track, the subtracks will be displayed with different colors in
+a gradient from color to altColor.
+
+Example:
+
+---------------------
+track encodeDnaRep
+compositeTrack on
+shortLabel DNA Rep
+longLabel University of Virginia DNA Replication for ENCODE
+group encode
+priority 50.1
+color 10,130,10 
+altColor 50,50,50
+visibility hide
+type bed 3
+
+track encodeDnaRep0
+subTrack encodeDnaRep
+shortLabel 0-2hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+
+track encodeDnaRep2
+subTrack encodeDnaRep
+shortLabel 2-4hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+---------------------
+
+
+
