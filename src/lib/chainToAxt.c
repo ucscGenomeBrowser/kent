@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.1 2003/06/14 07:43:39 kent Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.2 2003/08/06 20:52:59 baertsch Exp $";
 
 static struct axt *axtFromBlocks(
 	struct chain *chain,
@@ -90,10 +90,12 @@ return axt;
 
 struct axt *chainToAxt(struct chain *chain, 
 	struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset, int maxGap)
+	struct dnaSeq *tSeq, int tOffset, int maxGap, int maxChain)
 /* Convert a chain to a list of axt's.  This will break
  * where there is a double-sided gap in chain, or 
- * where there is a single-sided gap greater than maxGap. */
+ * where there is a single-sided gap greater than maxGap, or 
+ * where there is a chain longer than maxChain.
+ */
 {
 struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
 struct axt *axtList = NULL, *axt;
@@ -104,7 +106,7 @@ for (b = chain->blockList; b != NULL; b = b->next)
         {
 	int dq = b->qStart - a->qEnd;
 	int dt = b->tStart - a->tEnd;
-	if ((dq > 0 && dt > 0) || dt > maxGap || dq > maxGap)
+	if ((dq > 0 && dt > 0) || dt > maxGap || dq > maxGap || (b->tEnd - startB->tStart) > maxChain)
 	    {
 	    axt = axtFromBlocks(chain, startB, b, qSeq, qOffset, tSeq, tOffset);
 	    slAddHead(&axtList, axt);
