@@ -12,4 +12,5 @@ all:
 USE_DIRS = $(DIRS)
 
 DIRS = \
-	regionAgp
+	regionAgp \
+	ldGencodeIntron
