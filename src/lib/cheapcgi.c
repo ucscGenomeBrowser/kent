@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.55 2003/12/24 11:22:34 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.56 2004/02/02 01:37:06 markd Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -391,6 +391,14 @@ else
 
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
+
+/* Set enviroment variables CGIs to enable sql tracing and/or profiling */
+s = cgiOptionalString("JKSQL_TRACE");
+if (s != NULL)
+    setenv("JKSQL_TRACE", s, 1);
+s = cgiOptionalString("JKSQL_PROF");
+if (s != NULL)
+    setenv("JKSQL_PROF", s, 1);
 }
 
 struct cgiVar *cgiVarList() 
