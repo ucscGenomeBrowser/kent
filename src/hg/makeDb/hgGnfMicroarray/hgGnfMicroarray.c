@@ -8,7 +8,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.2 2003/12/08 07:26:56 kent Exp $";
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.3 2004/03/30 01:23:26 kent Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
@@ -65,6 +65,32 @@ struct expCounter
     int count;	/* Count of times seen. */
     };
 
+char *nextTabWord(char **pLine)
+/* Return next tab-separated word. */
+{
+char *s = *pLine;
+char *e;
+if (s == NULL || *s == '\n' || *s == 0)
+    {
+    *pLine = NULL;
+    return NULL;
+    }
+e = strchr(s, '\t');
+if (e == NULL)
+    {
+    e = strchr(s, '\n');
+    if (e != NULL)
+        *e = 0;
+    *pLine = NULL;
+    }
+else
+    {
+    *e++ = 0;
+    *pLine = e;
+    }
+return s;
+}
+
 int lineToExp(char *line, FILE *f)
 /* Convert line to an expression record file. 
  * Return number of expression records. */
@@ -76,7 +102,7 @@ struct expCounter *ec;
 char *spaced;
 char name[128];
 
-while ((word = nextWord(&line)) != NULL)
+while ((word = nextTabWord(&line)) != NULL)
     {
     if ((ec = hashFindVal(hash, word)) == NULL)
         {
@@ -144,7 +170,7 @@ int dataCount = 0, pslCount = 0, bedCount = 0;
 int minExpVal = 20;
 
 /* Open Atlas file and use first line to create experiment table. */
-if (!lineFileNext(lf, &line, NULL))
+if (!lineFileNextReal(lf, &line))
     errAbort("%s is empty", lf->fileName);
 if (startsWith("Affy", line))
     line += 4;
@@ -152,7 +178,7 @@ if (startsWith("Gene Name", line))
     line += 9;
 if (line[0] != '\t')
     errAbort("%s doesn't seem to be a new format atlas file", lf->fileName);
-expCount = lineToExpTable(line, expTable);
+expCount = lineToExpTable(line+1, expTable);
 if (expCount <= 0)
     errAbort("No experiments in %s it seems", lf->fileName);
 warn("%d experiments\n", expCount);
