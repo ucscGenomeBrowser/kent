@@ -127,7 +127,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.559 2004/02/04 06:08:20 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.560 2004/02/07 18:42:34 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6085,48 +6085,53 @@ if (sqlTableExists(conn, "knownCanonical"))
     printf("<BR><BR>");
     }
 
+#ifdef NEVER /* go database has no goObjTerm... */
 // Show GO links if any exists
 hasGO = FALSE;
 goConn = sqlMayConnect("go");
 
-goAspectChar[0] = 'F';
-goAspectChar[1] = 'P';
-goAspectChar[2] = 'C';
-
-// loop for 3 GO aspects 
-for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
-{
-sprintf(query, 
-        "select goID, termName from go.goObjTerm where dbObjectSymbol = '%s' and aspect='%c'",
-        proteinID, goAspectChar[iGoAsp]);
-sr = sqlGetResult(goConn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
+if (goConn != NULL)
     {
-    if (!hasGO)
-	{
-	printf("<B>Gene Ontology</B><UL>");
-	hasGO = TRUE;
-	}
-    if (goAspectChar[iGoAsp] == 'F') printf("<LI><B>Molecular Function:</B></LI><UL>");
-    if (goAspectChar[iGoAsp] == 'P') printf("<LI><B>Biological Process:</B></LI><UL>");
-    if (goAspectChar[iGoAsp] == 'C') printf("<LI><B>Cellular Component:</B></LI><UL>");
-    while (row != NULL)
-	{
-	goID 	   = row[0];
-	goTermName = row[1];
+    goAspectChar[0] = 'F';
+    goAspectChar[1] = 'P';
+    goAspectChar[2] = 'C';
 
-        printf("<LI><A HREF = \"");
-	printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
-	printf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+    // loop for 3 GO aspects 
+    for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
+	{
+	sprintf(query, 
+		"select goID, termName from go.goObjTerm where dbObjectSymbol = '%s' and aspect='%c'",
+		proteinID, goAspectChar[iGoAsp]);
+	sr = sqlGetResult(goConn, query);
 	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    if (!hasGO)
+		{
+		printf("<B>Gene Ontology</B><UL>");
+		hasGO = TRUE;
+		}
+	    if (goAspectChar[iGoAsp] == 'F') printf("<LI><B>Molecular Function:</B></LI><UL>");
+	    if (goAspectChar[iGoAsp] == 'P') printf("<LI><B>Biological Process:</B></LI><UL>");
+	    if (goAspectChar[iGoAsp] == 'C') printf("<LI><B>Cellular Component:</B></LI><UL>");
+	    while (row != NULL)
+		{
+		goID 	   = row[0];
+		goTermName = row[1];
+
+		printf("<LI><A HREF = \"");
+		printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+		printf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+		row = sqlNextRow(sr);
+		}
+	    printf("</UL>");
+	    sqlFreeResult(&sr);
+	    }
 	}
-    printf("</UL>");
-    sqlFreeResult(&sr);
+    fflush(stdout);
+    if (hasGO) printf("</UL>");
     }
-}
-fflush(stdout);
-if (hasGO) printf("</UL>");
+#endif /* NEVER */
 
 // Show Pathway links if any exists
 hasPathway = FALSE;
