@@ -9,34 +9,30 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.22 2004/08/30 23:53:36 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.23 2004/08/31 18:36:13 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults)
 {
-
 printf("<P><!--outer table is for border purposes-->" "\n"
 	    "<TABLE BGCOLOR=\"#" HG_COL_BORDER
-	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n");
-
-/*      And  the row to enclose the histogram table */
-puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\">\n");
+	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
 puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
-printf("<TR><TH ALIGN=CENTER COLSPAN=8> Histogram on %u values (zero count bins not shown)</TH></TR>\n",
-	histoResults->count);
+printf("<TR><TH ALIGN=CENTER COLSPAN=8> %d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
+	histoResults->binCount, histoResults->count);
 puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
 puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
 puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
 puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
-puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range </TH></TR>\n");
+puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range in bin </TH></TR>\n");
 puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
 puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
 puts ("      </TABLE>\n");
 puts ("    </TD>\n");
 puts ("    <TH ALIGN=CENTER> count </TH>\n");
-puts ("    <TH ALIGN=CENTER> p Value </TH>\n");
-puts ("    <TH ALIGN=CENTER> log2(p Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution </TH>\n");
-puts ("    <TH ALIGN=CENTER> 1.0 - CPD </TH></TR>\n");
+puts ("    <TH ALIGN=CENTER> p&nbsp;Value </TH>\n");
+puts ("    <TH ALIGN=CENTER> log2(p&nbsp;Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution <BR> (CPD) </TH>\n");
+puts ("    <TH ALIGN=CENTER> 1.0&nbsp;-&nbsp;CPD </TH></TR>\n");
 
 if (histoResults)
     {
@@ -106,7 +102,7 @@ if (valuesMatched == 0)
     {
     if ( span < (3 * (winEnd - winStart)))
 	{
-	printf("<P><B> XXX Viewpoint has too few bases to calculate statistics. </B></P>\n");
+	printf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
 	printf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
 	}
     else
@@ -121,6 +117,47 @@ else
 	100.0*(wDS->stats->count * wDS->stats->span)/(winEnd - winStart));
     }
 }
+
+int minSpan(struct sqlConnection *conn, char *table, char *chrom,
+	int winStart, int winEnd, struct cart *cart)
+/*	find minimum span in this area,
+ *	winEnd == 0 means whole chrom	*/
+{
+struct sqlResult *sr;
+char query[256];
+char **row;
+int minSpan = BIGNUM;
+int maxSpan = 0;
+int spanCount = 0;
+struct hash *spans = newHash(0);	/*	list of spans in this table */
+struct hashEl *el;
+
+/*	This is a time expensive query,
+ *	~3 to 6 seconds on large chroms full of data	*/
+safef(query, ArraySize(query),
+    "SELECT span from %s where chrom = '%s' group by span", table, chrom);
+
+sr = sqlMustGetResult(conn,query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {   
+    char spanName[128];
+    unsigned span = sqlUnsigned(row[0]);
+
+    safef(spanName, ArraySize(spanName), "%u", span);
+    el = hashLookup(spans, spanName);
+    if ( el == NULL)
+	{
+	if (span > maxSpan) maxSpan = span;
+	if (span < minSpan) minSpan = span;
+	++spanCount;
+	hashAddInt(spans, spanName, span);
+	}
+    }
+sqlFreeResult(&sr);
+
+return minSpan;
+}	/*	int minSpan()	*/
+
 
 int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
 	int winStart, int winEnd, struct cart *cart)
