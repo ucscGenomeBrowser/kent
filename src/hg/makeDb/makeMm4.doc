@@ -2434,9 +2434,12 @@ XXX  This is an unusual increase ?
     # 219652 1885501 11875772 total
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
+XXXX 2004-01-06 experiment here, something may be wrong with one of these
+XXXX arguments
     /cluster/bin/scripts/epcrToPsl -mouse \
-	epcr.not.found ../mouseP.fa \
+	../ePCR/all.epcr ../mouseP.fa \
 	accession_info.rdb /cluster/data/mm4
+    # this command takes a very long time, even on the file server
     ##### epcr.not.found.psl is empty !
     # Comparing results to Mm3:
     # Mm3 wc epcr*
@@ -2656,4 +2659,267 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307/rea
     end
     ldHgGene mm4 twinscan chr_gtf/chr*.gtf -gtf
     hgPepPred mm4 generic twinscanPep chr_ptx/chr*-fixed.fa
+
+#### LOAD ENSEMBL GENES (WORKING - 2004-01-06 - Hiram)
+#	needed for Family Browser procedure below
+#	Ensembl does not yet have their Gene predictions available
+#	for the Mouse build 32
+     mkdir /cluster/data/mm4/bed/ensembl
+     cd /cluster/data/mm4/bed/ensembl
+
+        Get the ensembl gene data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+        Page 3) Choose the "Structures" box. 
+        Page 4) Choose GTF as the ouput, choose gzip compression and then hit Export.gunzip the file and name to mm4EnsGene.gtf.gz. Unzip it.
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     grep -v ^6_DR51 ensembl.gtf | grep -v _NT_ > unrandom.gtf
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+     ~matt/bin/addchr.pl unrandom.gtf ensGene.gtf
+     ~matt/bin/fixEns.pl ensGene.gtf ensFixed.gtf 
+     ldHgGene mm4 ensGene ensGene.gtf
+
+o - Load Ensembl peptides:
+        Get the ensembl protein data from http://www.ensembl.org/
+        Go to the Martview link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Sequences" box. 
+        Page 4) Choose Transcripts/Proteins and peptide Only as the ouput, choose text/fasta and gzip compression and then hit export. Name to mm4EnsGene.pep.gz
+
+     If needed, substitute ENST for ENSP in ensPep with the program called subs
+     edit subs.in to read: ENSP|ENST
+     #subs -e mm4EnsGene.pep > /dev/null
+
+     #~matt/bin/fixPep.pl mm4EnsGene.pep ensembl.pep
+     #delete * at end of each protein
+     sed "s/\*$//" mm4EnsGene.pep > ensembl.pep
+     hgPepPred mm4 generic ensPep ensembl.pep
+
+
+### MAKE THE affyU74 TRACK - needed for the Family browser
+#                              (DONE - 2003-01-06 - Hiram)
+----------------------------------
+# Load up semi-local disk with target sequences for Affy mouse U74 chips.
+ssh kkr1u00
+mkdir -p /iscratch/i/affy
+#	This /projects filesystem is not available on kkr1u00
+#	but it is on kk
+ssh kk
+cp /projects/compbio/data/microarray/affyGnfMouse/sequences/u74*.fa /iscratch/i/affy
+ssh kkr1u00
+iSync
+
+# Run cluster job to do alignments
+ssh kk
+mkdir /cluster/data/mm4/bed/affyU74
+cd /cluster/data/mm4/bed/affyU74
+mkdir run
+cd run
+mkdir psl
+echo /scratch/mus/mm4/trfFa/*.fa | wordLine stdin > genome.lst
+ls -1 /iscratch/i/affy/u74*.fa > affy.lst
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+gensub2 genome.lst affy.lst gsub jobList
+para create jobList
+para try
+# the full job takes less than a minute:
+# Completed: 1797 of 1797 jobs
+# CPU time in finished jobs:       8190s     136.49m     2.27h    0.09d  0.000 y
+# IO & Wait Time:                  9399s     156.66m     2.61h    0.11d  0.000 y
+# Average job time:                  10s       0.16m     0.00h    0.00d
+# Longest job:                       31s       0.52m     0.01h    0.00d
+# Submission to last job:            56s       0.93m     0.02h    0.00d
+
+# Do sort, best in genome filter, and convert to chromosome coordinates
+# to create affyU74.psl.
+ssh kksilo
+cd /cluster/data/mm4/bed/affyU74/run
+pslSort dirs raw.psl tmp psl
+pslReps -minCover=0.85 -minAli=0.95 raw.psl contig.psl /dev/null
+# Processed 40118 alignments
+liftUp ../all_affyU74.psl ../../../jkStuff/liftAll.lft warn contig.psl
+
+# Sort by chromosome and load into database.
+ssh hgwdev
+cd /cluster/data/mm4/bed/affyU74
+pslSortAcc nohead chrom temp all_affyU74.psl
+cat chrom/*.psl > affyU74.psl
+hgLoadPsl mm4 affyU74.psl -tNameIx
+rm -fr chrom temp run
+
+##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-01-06 - Hiram)
+----------------------------------
+
+#This needs to be done after affyU74 is already made.
+ssh hgwdev
+mkdir -p /cluster/data/mm4/bed/affyGnf
+cd /cluster/data/mm4/bed/affyGnf
+#	may need to build this command in src/hg/affyGnf
+affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 \
+	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=MG_U74A
+affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt \
+	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=MG_U74B
+affyPslAndAtlasToBed ../affyU74/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
+	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=MG_U74C
+hgLoadBed mm4 affyGnfU74A affyGnfU74A.bed
+hgLoadBed mm4 affyGnfU74B affyGnfU74B.bed
+hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
+
+######## MAKING FAMILY BROWSER TABLES #######  (WORKING - 2004-01-06 - Hiram)
+# These are instructions for building the
+# neighborhood browser.  Don't start these until
+# there is a knownGene track. and the affy tracks
+
+
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+hgClusterGenes mm4 knownGene knownIsoforms knownCanonical
+#	You may need to build this binary in src/hg/near/hgClusterGenes
+#	Got 24849 clusters, from 40996 genes in 44 chromosomes
+#	featureBits mm4 knownCanonical
+#	829173598 bases of 2627444668 (31.558%) in intersection
+#	featureBits mm3 knownCanonical
+#	836749019 bases of 2505900260 (33.391%) in intersection
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir -p /cluster/data/mm4/bed/blastp
+cd /cluster/data/mm4/bed/blastp
+pepPredToFa mm4 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
+
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/mm4/blastp
+mkdir -p /cluster/bluearc/mm4/blastp
+cp /cluster/data/mm4/bed/blastp/known.* /cluster/bluearc/mm4/blastp
+
+# Load up cluster/bluearc with blastp and related files
+# if necessary
+if (! -e /cluster/bluearc/blast/blastall) then
+    mkdir -p /cluster/bluearc/blast
+    cp /projects/compbio/bin/i686/blastall /cluster/bluearc/blast
+    mkdir -p /cluster/bluearc/blast/data
+    cp /projects/compbio/bin/i686/data/* /cluster/bluearc/blast/data
+endif
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/mm4/bed/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory 
+ssh kk9
+mkdir -p /cluster/data/mm4/bed/blastp/self
+cd /cluster/data/mm4/bed/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data
+export BLASTMAT
+/cluster/bluearc/blast/blastall -p blastp \
+	-d /cluster/bluearc/mm4/blastp/known -i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+# This should finish in ~15 minutes if the cluster is free.
+
+# Completed: 7737 of 7737 jobs
+# CPU time in finished jobs:      49565s     826.08m    13.77h    0.57d  0.002 y
+# IO & Wait Time:                 20374s     339.57m     5.66h    0.24d  0.001 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest job:                       53s       0.88m     0.01h    0.00d
+# Submission to last job:           775s      12.92m     0.22h    0.01d
+
+# Load into database.  This takes about an hour.
+ssh hgwdev
+cd /cluster/data/mm4/bed/blastp/self/run/out
+hgLoadBlastTab mm4 knownBlastTab *.tab
+# Scanning through 7737 files
+# Loading database with 7522182 rows
+
+# Create table that maps between known genes and RefSeq
+hgMapToGene mm4 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene mm4 affyU74  knownGene knownToU74
+
+# Format and load the GNF data
+mkdir /cluster/data/mm4/bed/affyGnf95
+cd /cluster/data/mm4/bed/affyGnf95
+affyPslAndAtlasToBed -newType ../affyU95.psl \
+	/projects/compbio/data/microarray/affyGnfHuman/data_public_U95 \
+	affyGnfU95.tab affyGnfU95Exps.tab -shortOut
+
+#	this .sql load was in preceeding instructions, but this .sql file
+#	appears to not exist and it doesn't seem to be needed anyway.
+#	Everything below this seems to create tables OK.
+#  hgsql mm4 < ~/kent/src/hg/affyGnf/affyGnfU95.sql
+
+# Create table that gives distance in expression space between 
+# GNF genes.  These commands take about 15 minutes each
+#	The affyGnfU74?Exps arguments appear to be unused in hgExpDistance
+hgExpDistance mm4 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance \
+	-lookup=knownToU74
+#	Got 8900 unique elements in affyGnfU74A
+hgExpDistance mm4 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance \
+	-lookup=knownToU74
+#	Got 6850 unique elements in affyGnfU74B
+hgExpDistance mm4 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance \
+	-lookup=knownToU74
+#	Got 2145 unique elements in affyGnfU74C
+
+# Make sure that GO database is up to date.
+See README in /cluster/store1/geneOntology.
+
+# Create knownToEnsembl column
+# XXXX do not have an ensGene table yet !
+hgMapToGene mm4 ensGene knownGene knownToEnsembl
+
+# Make knownToCdsSnp column.  This is a little complicated by
+# having to merge data form the snpTsc and the snpNih tracks.
+hgMapToGene mm4 snpNih knownGene knownToCdsSnp -all -cds
 
