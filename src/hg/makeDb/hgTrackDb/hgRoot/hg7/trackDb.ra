@@ -8,6 +8,20 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
+track snpNih
+shortLabel Overlap SNPs
+longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
+priority 31
+visibility dense
+type bed 4 .
+
+track snpTsc
+shortLabel Random SNPs
+longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
+priority 32
+visibility dense
+type bed 4 .
+
 track phMouse
 shortLabel PH Mouse Ecores
 longLabel Pattern Hunter Mouse/Human Evolutionarily Conserved Regions
@@ -19,3 +33,4 @@ spectrum on
 chromosomes chr22,
 private on
 type bed 6
+
