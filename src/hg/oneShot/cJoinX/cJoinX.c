@@ -5,7 +5,7 @@
 #include "options.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: cJoinX.c,v 1.2 2004/07/16 23:26:09 kent Exp $";
+static char const rcsid[] = "$Id: cJoinX.c,v 1.3 2004/07/16 23:58:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -138,20 +138,98 @@ return jpList;
 }
 
 
+boolean allSameTable(struct joinerDtf *fieldList)
+/* Return TRUE if all joinerPairs refer to same table. */
+{
+struct joinerDtf *first = fieldList, *field;
+if (first == NULL)
+    return TRUE;
+for (field = first->next; field != NULL; field = field->next)
+    if (!sameTable(first, field))
+        return FALSE;
+return TRUE;
+}
 
-void cJoinX(char *j1, char *j2)
+boolean inRoute(struct joinerPair *routeList, struct joinerDtf *dtf)
+/* Return TRUE if table in dtf is already in route. */
+{
+struct joinerPair *jp;
+for (jp = routeList; jp != NULL; jp = jp->next)
+    {
+    if (sameTable(dtf, jp->a) || sameTable(dtf, jp->b))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void removeDupes(struct joinerPair **pRouteList)
+/* Remove duplicate entries in route list. */
+{
+struct hash *uniqHash = newHash(0);
+struct joinerPair *newList = NULL, *jp, *next;
+char buf[256];
+
+for (jp = *pRouteList; jp != NULL; jp = next)
+    {
+    next = jp->next;
+    safef(buf, sizeof(buf), "%s.%s->%s.%s", 
+    	jp->a->database, jp->a->table, 
+    	jp->b->database, jp->b->table);
+    if (hashLookup(uniqHash, buf))
+	{
+        joinerPairFree(&jp);
+	}
+    else
+        {
+	hashAdd(uniqHash, buf, NULL);
+	slAddHead(&newList, jp);
+	}
+    }
+slReverse(&newList);
+*pRouteList = newList;
+}
+
+struct joinerPair *findRouteThroughAll(struct joiner *joiner, 
+	struct joinerDtf *jpList)
+/* Return route that gets to all tables.  */
+{
+struct joinerPair *fullRoute = NULL, *pairRoute = NULL, *routeLink;
+struct joinerDtf *first = jpList, *dtf;
+
+if (first->next == NULL)
+    return NULL;
+for (dtf = first->next; dtf != NULL; dtf = dtf->next)
+    {
+    if (!inRoute(fullRoute, dtf))
+	{
+	pairRoute = findRoute(joiner, first, dtf);
+	fullRoute = slCat(fullRoute, pairRoute);
+	}
+    }
+removeDupes(&fullRoute);
+return fullRoute;
+}
+
+void cJoinX(char *j1, char *j2, char *j3)
 /* cJoinX - Experiment in C joining.. */
 {
 struct joiner *joiner = joinerRead("../../makeDb/schema/all.joiner");
 struct joinerDtf *a = joinerDtfFromDottedTriple(j1);
 struct joinerDtf *b = joinerDtfFromDottedTriple(j2);
+struct joinerDtf *c = joinerDtfFromDottedTriple(j3);
 struct joinerPair *jpList = NULL, *jp;
+struct joinerDtf *fieldList = NULL;
 struct hash *visitedHash = hashNew(0);
-if (sameTable(a,b))
+
+slAddTail(&fieldList, a);
+slAddTail(&fieldList, b);
+slAddTail(&fieldList, c);
+
+if (allSameTable(fieldList))
     printf("All in same table, easy enough!\n");
 else
     {
-    jpList = findRoute(joiner, a, b);
+    jpList = findRouteThroughAll(joiner, fieldList);
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
 	printf("%s.%s.%s -> %s.%s.%s\n", 
@@ -165,8 +243,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-cJoinX(argv[1], argv[2]);
+cJoinX(argv[1], argv[2],argv[3]);
 return 0;
 }
