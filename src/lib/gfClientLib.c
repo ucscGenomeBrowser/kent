@@ -1445,6 +1445,8 @@ if (score >= minMatch)
 	    }
 	}
     }
+#ifdef SOON
+#endif /* SOON */
 }
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
@@ -1563,7 +1565,6 @@ int maxSize = 1500;
 int preferredSize = 1200;	/* PreferredSize - overlapSize might need to be multiple of 3. */
 int overlapSize = 270;
 struct dnaSeq subQuery = *query;
-struct lm *lm = lmInit(0);
 int subOffset, subSize, nextOffset;
 DNA saveEnd, *endPos;
 struct ssBundle *oneBunList = NULL, *bigBunList = NULL, *bun;
@@ -1608,6 +1609,7 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, outData, qIsRc, stringency, minScore, outFunction);
     }
+hashFree(&bunHash);
 ssBundleFreeList(&bigBunList);
 }
 
