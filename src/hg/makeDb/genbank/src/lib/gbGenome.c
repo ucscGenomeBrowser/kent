@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.12 2004/06/10 17:26:51 hartera Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.13 2004/07/08 22:42:56 angie Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens") */
@@ -26,12 +26,13 @@ static char *panTroNames[] = {"Pan troglodytes", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *ceNames[] = {"Caenorhabditis elegans", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
+static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
+			      "Canis canis", NULL};
 
 /* species currently unique to zoo */
 static char *zooCatNames[] = {"Felis catus", "Felis sp.", NULL};
 static char *zooBaboonNames[] = {"Papio hamadryas", "Papio sp.", NULL};
 static char *zooCowNames[] = {"Bos taurus", "Bos sp.", NULL};
-static char *zooDogNames[] = {"Canis familiaris", "Canis sp.", NULL};
 static char *zooPigNames[] = {"Sus scrofa", "Sus sp.", NULL};
 static char *zooTetraNames[] = {"Tetraodon nigroviridis", NULL};
 static char *zooZebrafishNames[] = {"Danio rerio", NULL};
@@ -50,13 +51,14 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"galGal", galGalNames, NULL},
     {"ce", ceNames, NULL},
     {"danRer", danRerNames, NULL},
+    {"canFam", canFamNames, NULL},
     {"zooHuman", hgNames, NULL},
     {"zooCat", zooCatNames, NULL},
     {"zooChicken", galGalNames, NULL},
     {"zooBaboon", zooBaboonNames, NULL},
     {"zooChimp", panTroNames, "Pan troglodytes "},
     {"zooCow", zooCowNames, NULL},
-    {"zooDog", zooDogNames, NULL},
+    {"zooDog", canFamNames, NULL},
     {"zooFugu", frNames, NULL},
     {"zooMouse", mmNames, "Mus musculus "},
     {"zooPig", zooPigNames, "Sus scrofa "},
