@@ -16,13 +16,14 @@
 #include "jksql.h"
 #include "hgConfig.h"
 #include "obscure.h"
+#include "portable.h"
 
 #include "pushQ.h"
 #include "formPushQ.h"
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.25 2004/05/18 08:24:14 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.26 2004/05/18 16:58:09 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2226,6 +2227,11 @@ char gSpace[256];
 char gVal[256];
 char gc;
 char cgiPath[256];
+char pathName[256];
+char filePath[256];
+char fileName[256];
+char *found=NULL;
+struct fileInfo *fi = NULL;
 
 ZeroVar(&q);
 
@@ -2433,6 +2439,7 @@ if (!sameString(q.files,""))
 		 || (gc=='/')
 		 || (gc=='-')
 		 || (gc=='_')
+		 || (gc=='*')
 		 )
 		    {
 		    gVal[ggg]=gc;
@@ -2446,18 +2453,51 @@ if (!sameString(q.files,""))
 	
 	    if (gVal[0]!=0) 
 		{
-		safef(cgiPath,sizeof(cgiPath),"%s",gVal);
-		size=fsize(cgiPath);
-		if (size == -1)
-		    {
-		    safef(nicenumber,sizeof(nicenumber),"not found");
+
+		if (strrchr(gVal, '*') == NULL)
+		    { /* no wildcards in filename, do it the normal way */
+		    safef(pathName,sizeof(pathName),"%s",gVal);
+		    size=fsize(pathName);
+		    if (size == -1)
+			{
+			safef(nicenumber,sizeof(nicenumber),"not found");
+			}
+		    else
+			{
+			totalsize+=size;
+			sprintLongWithCommas(nicenumber, size);
+			}
+		    printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
 		    }
 		else
-		    {
-		    totalsize+=size;
-		    sprintLongWithCommas(nicenumber, size);
+		    { /* wildcards found in name, use listDirX */
+		    printf("<tr><td>expansion for %s<td/></tr>\n",gVal);
+		    found = strrchr(gVal, '/');
+		    if (found == NULL) 
+			{
+			filePath[0]=0;
+			safef(fileName,sizeof(fileName),"%s",gVal);
+			}
+		    else
+			{
+			*found = 0;
+			safef(filePath,sizeof(filePath),"%s",gVal);
+			found++;
+			safef(fileName,sizeof(fileName),"%s",found);
+			}
+		    for (fi = listDirX(filePath,fileName,FALSE);fi!=NULL;fi=fi->next)
+			{
+			if (fi->isDir)
+			    {
+			    printf("<tr><td>error: %s is a directory<td/></tr>\n",fi->name);
+			    }
+			totalsize+=fi->size;
+			sprintLongWithCommas(nicenumber, fi->size);
+			printf("<tr><td>%s<td/><td>%s</td></tr>\n",fi->name,nicenumber);
+			}
+		    printf("<tr><td>&nbsp;<td/></tr>\n"); /* spacer */
 		    }
-		printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
+		    
 		}   
 	     }
 	 }
