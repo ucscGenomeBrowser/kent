@@ -39,13 +39,13 @@
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
             <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
-                <TR><TD> <FONT SIZE="4"><b>&nbsp;   Frequently Asked Questions: Releases</b></FONT>
+                <TR><TD> <FONT SIZE="4"><b>&nbsp;   Frequently Asked Questions: Assembly Releases and Versions</b></FONT>
                 </TD></TR></TABLE>
             <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
                 <TR><TD>&nbsp;</TD><TD>
 		<UL>
-                <LI><A HREF="#release1">List of UCSC releases</A>
-                <LI><A HREF="#release2">Assembly release dates</A>
+                <LI><A HREF="#release1">List of UCSC genome releases</A>
+                <LI><A HREF="#release2">Initial assembly release dates</A>
                 <LI><A HREF="#release3">UCSC assemblies</A>
                 <LI><A HREF="#release4">Comparison of UCSC and NCBI human assemblies</A>
                 <LI><A HREF="#release12">Differences between UCSC and NCBI mouse assemblies</A>
@@ -76,7 +76,7 @@
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; List of UCSC Releases</b></FONT></TD> 
+	   	    <FONT SIZE="4"><b>&nbsp; List of UCSC genome releases</b></FONT></TD> 
 		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
@@ -171,7 +171,7 @@
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; Assembly release dates</b></FONT></TD> 
+	   	    <FONT SIZE="4"><b>&nbsp; Initial assembly release dates</b></FONT></TD> 
 		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
@@ -215,7 +215,7 @@
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; UCSC assemblies</b></FONT></TD> 
+	   	    <FONT SIZE="4"><b>&nbsp; Data sources - UCSC assemblies</b></FONT></TD> 
 		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
@@ -227,17 +227,28 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"Why doesn't UCSC produce its own human genome assemblies?" 
+			"Where does UCSC obtain the assembly and annotation data
+			 displayed in the Genome Browser?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			Prior to Dec. 2001, UCSC provided its own assembly of the human
-			genome. The Dec. 2001 release (NCBI Build 28) marked the first time that UCSC provided a
-			human genome assembly that was produced at NCBI. UCSC decided to switch to the the NCBI 
-			assembly because of steady improvements in its quality. NCBI can generate an assembly 
-			in significantly less time than UCSC can. With the human genome
-			sequencing in the end game, we felt that it would be more productive to focus 
-			worldwide annotation efforts on a single assembly rather than to continue 
-			producing competing assemblies. 
+			All the assembly data displayed in the UCSC Genome
+			Browser are obtained from external sequencing centers.
+			To determine the data source and version for a given 
+			assembly, see the assembly's description on the Genome
+			Browser <A HREF="/cgi-bin/hgGateway">Gateway</A> page or
+			the <A HREF="#release1">List of UCSC Genome Releases</A>. 
+			<P>
+			The annotations accompanying an assembly are obtained
+			from a variety of sources. The UCSC Genome Bioinformatics 
+			Group generates several of the tracks; the remainder are
+			contributed by collaborators at other sites. Each track
+			has an associated description page that credits the
+			authors of the annotation. 
+			<P>
+			For detailed information about the individuals and 
+			organizations who contributed to a specific assembly,
+			see the <A HREF="/goldenPath/credits.html">Credits</A>
+			page.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
@@ -271,7 +282,7 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"How do the UCSC and NCBI human assemblies compare?" 
+			"How do the UCSC and NCBI human assemblies differ?" 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			Recent UCSC and NCBI human assemblies (hg10 and higher) are identical.
@@ -311,11 +322,11 @@
 			"Is the UCSC mouse genome assembly the same as the one on the NCBI website?" 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			The Feb 2003 mouse genome on the UCSC Genome Browser is the same as 
-			NCBI's mouse build 30 (and MGSCv3) with one difference: the UCSC 
-			version contains 
-			only the reference strain (C57BL/6J). NCBI has made contigs from 
-			several other strains available as well in Build 30.
+			The mouse genome assemblies featured in the UCSC Genome Browser are the same as 
+			those on the NCBI web site with one difference: the UCSC 
+			versions contain
+			only the reference strain data (C57BL/6J). NCBI provides
+			data for several additional strains in their builds.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
@@ -463,16 +474,20 @@
 			corresponding UCSC database name or NCBI build number, use the <A HREF="#release1">
 			release table</A>.
 			<P>
-			UCSC database labels are of the form hg<em>n</em>, mm<em>n</em>, etc. The first two
-			letters designate the organism, e.g. <em>hg</em> for human genome or <em>mm</em> for
-			<em>Mus musculus</em>. The number denotes the UCSC assembly version for that organism.
-			For example, ce1 refers to the first UCSC assembly of the <em>C. elegans</em> genome.
+			UCSC database labels are of the form hg<em>n</em>, 
+			panTro<em>n</em>, etc. The letters designate the organism,
+			e.g. <em>hg</em> for human genome or <em>panTro</em> for
+			<em>Pan troglodytes</em>. The number denotes the UCSC 
+		   	assembly version for that organism.  For example, ce1 
+			refers to the first UCSC assembly of the 
+			<em>C. elegans</em> genome.
 			<P>
-			The coordinates of your favorite gene in one assembly may not be the 
-			same as those in the next release of the assembly unless the gene happens to lie 
-			on a completely 
-			sequenced and unrevised chromosome. For information on integrating data from 
-			one assembly into another, see the <A HREF="#release8">Converting positions between
+			The coordinates of your favorite gene in one assembly may 
+			not be the same as those in the next release of the 
+			assembly unless the gene happens to lie on a completely 
+			sequenced and unrevised chromosome. For information on 
+			integrating data from one assembly into another, see the 
+			<A HREF="#release8">Converting positions between
 			assembly versions</A> section. 
 		    </TD><TD WIDTH=15></TD>
 		</TR>
@@ -507,13 +522,13 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"I've been researching a specific area of the human genome on the current assembly, 
-			and now you've just released a new version. Is there an easy way to locate 
+			"I've been researching a specific area of the human genome
+			on the current assembly, and now you've just released a 
+			new version. Is there an easy way to locate 
 			my area of interest on the new assembly?" 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			See the information on the <A HREF="FAQdownloads#download28">Data Downloads 
-			and Releases</A> page. 
+			See the section on <A HREF="FAQdownloads#download28">converting coordinates</A> for information on assembly migration tools.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
@@ -597,10 +612,10 @@
 			Rest assured that work will continue. There will be updates to the assembly over the next 
 			several years. This has been the case for all other finished (i.e. essentially complete) genome
 			assemblies as gaps are closed. For example, the <em>C. elegans</em> genome has been 
-			&quot;finished&quot; for five years now, but small bits of sequence are still being 
+			&quot;finished&quot; for several years, but small bits of sequence are still being 
 			added and corrections are being made. NCBI will continue to coordinate the human
 			genome assemblies in collaboration with the individual chromosome coordinators, and 
-			UCSC will continue to QC the assembly in conjunction with NCBI (and, to a small extent,
+			UCSC will continue to QC the assembly in conjunction with NCBI (and, to a lesser extent,
 			Ensembl). UCSC, NCBI, Ensembl, and others will display the new releases on their
 			sites as they become available.
 		    </TD><TD WIDTH=15></TD>
