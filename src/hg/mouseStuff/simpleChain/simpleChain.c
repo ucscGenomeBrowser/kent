@@ -161,6 +161,50 @@ while(chainIn)
 return outChain;
 }
 
+void checkInChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
+{
+struct chain *nextChain, *prevChain;
+struct chain *chain;
+struct psl *psl;
+struct psl *prevPsl, *nextPsl;
+
+prevPsl = NULL;
+for(psl = *pslList; psl ;  psl = nextPsl)
+    {
+    nextPsl = psl->next;
+    int qStart = psl->qStarts[0];
+    int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+    int tStart = psl->tStarts[0];
+    int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+
+    assert(tEnd > tStart);
+    assert(qEnd > qStart);
+    prevChain = 0;
+    for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
+	{
+	nextChain = chain->next;
+	if (((tStart < chain->tEnd) && (tEnd > chain->tStart)) &&
+	     (qStart < chain->qEnd) && (qEnd > chain->qStart))
+	    {
+	    if ( addPslToChain(chain, psl, addedBases))
+		{
+		//pslTabOut(psl, outFound);
+		}
+
+	    if (prevPsl != NULL)
+		prevPsl->next = nextPsl;
+	    else
+		*pslList = nextPsl;
+		
+	    freez(&psl);
+	    break;
+	    }
+	}
+    if (chain == NULL)
+	prevPsl = psl;
+    
+    }
+}
 void simpleChain(char *psls,  char *outChainName)
 /* simpleChain - Stitch psls into chains. */
 {
@@ -211,6 +255,8 @@ for(sp = spList; sp; sp = sp->next)
     int count = 0;
     /* make sure we have a chainList */
     chainList = NULL;
+    //slReverse(&sp->psl);
+    slSort(&sp->psl,pslCmpScoreDesc);
 
     AllocVar(csp);
     slAddHead(&cspList, csp);
@@ -234,12 +280,23 @@ for(sp = spList; sp; sp = sp->next)
 	assert(tEnd > tStart);
 	assert(qEnd > qStart);
 	/* check for overlap */
+	    psl->next = 0;
+	    fakePslList = psl;
+	    if (chainList)
+		checkInChains(&fakePslList, &chainList, NULL, &addedBases);
+	    if (fakePslList == NULL)
+		{
+		//freez(&psl);
+		continue;
+		}
+	/*
 	for(chain = chainList; chain ;  chain = chain->next)
 	    {
 	    if ((((tStart < chain->tEnd) && (tEnd > chain->tStart)) &&
 		 (qStart < chain->qEnd) && (qEnd > chain->qStart)))
 		    goto out;
 	    }
+	    */
 	count++;
 
 	AllocVar(chain);
@@ -257,9 +314,10 @@ for(sp = spList; sp; sp = sp->next)
 	if (!addPslToChain(chain, psl, &addedBases))
 	    errAbort("new ");
 	slAddHead(&chainList, chain);
+	chainList = aggregateChains(chainList);
 
-out:
-	freez(&psl);
+//out:
+	//freez(&psl);
 	}
 
     for(chain = aggregateChains(chainList); chain ;  chain = chain->next)
