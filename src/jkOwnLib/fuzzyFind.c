@@ -2071,6 +2071,39 @@ if (ali != NULL)
 *pAli = NULL;
 }
 
+struct ffAli *ffTrimFlakyEnds(struct ffAli *ali, int minMatchSize, 
+	boolean freeFlakes)
+/* Trim off ends of ffAli that aren't as solid as you'd like.  
+ * If freeFlakes is true memory for flakes is freeMem'd. */
+{
+struct ffAli *left = ali;
+struct ffAli *right = ffRightmost(ali);
+int startN, endN;
+if (ffSolidMatch(&left, &right, left->nStart, minMatchSize, &startN, &endN))
+    {
+    if (freeFlakes)
+	{
+	struct ffAli *ali, *next;
+	ffFreeAli(&right->right);
+	for (ali = left->left; ali != NULL; ali = next)
+	    {
+	    next = ali->left;
+	    freeMem(ali);
+	    }
+	}
+    right->right = NULL;
+    left->left = NULL;
+    return left;
+    }
+else
+    {
+    if (freeFlakes)
+	ffFreeAli(&ali);
+    return NULL;
+    }
+}
+
+
 struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEnd,
      enum ffStringency stringency)
 /* Return an alignment of needle in haystack. */
