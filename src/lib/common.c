@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.60 2004/04/12 22:26:29 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.61 2004/06/06 03:35:36 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -936,6 +936,25 @@ while (*s++ == c)
    ++count;
 return count;
 }
+
+int countSame(char *a, char *b)
+/* Count number of characters that from start in a,b that are same. */
+{
+char c;
+int i;
+int count = 0;
+for (i=0; ; ++i)
+   {
+   c = a[i];
+   if (b[i] != c)
+       break;
+   if (c == 0)
+       break;
+   ++count;
+   }
+return count;
+}
+
 
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
