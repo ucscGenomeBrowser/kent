@@ -283,7 +283,7 @@ my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new();
 my @dbs = &getActiveDbs($hgConf);
 foreach my $db (@dbs) {
-  next if ($db !~ /^\w\w\d+$/ && $db !~ /^zoo/);
+  next if ($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ && $db !~ /^zoo/);
   my $sqlFile = "$db.tableDescriptions.sql";
   open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
   print SQL "use $db;\n";

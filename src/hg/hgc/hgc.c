@@ -128,7 +128,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.569 2004/02/20 07:44:15 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.567 2004/02/19 02:24:52 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -367,6 +367,14 @@ if (chromSize < 0)
 if (*pStart < 0) *pStart = 0;
 if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
+}
+
+int pslCmpScore(const void *va, const void *vb)
+/* Compare to sort based on query then score. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+return pslScore(b) - pslScore(a);
 }
 
 void printCappedSequence(int start, int end, int extra)
@@ -7399,7 +7407,6 @@ if (sqlTableExists(conn, tdb->tableName))
 	{
         bed = bedLoadN(row+1, 6);
         }
-    //sqlFreeResult(&sr);
     pseudoPrintPosHeader(bed);
     sprintf(query, "select * from pseudoGeneLink where name = '%s'", geneName);
     sr = sqlGetResult(conn, query);
@@ -7419,6 +7426,7 @@ printf("<p><A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   bed->chromStart, cgiEncode(bed->name), bed->chrom, bed->chromStart,
            bed->chromEnd, "+", tbl);
 printTrackHtml(tdb);
+sqlFreeResult(&sr);
 }
 
 void doSoftberryPred(struct trackDb *tdb, char *geneName)

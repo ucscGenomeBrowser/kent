@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.8 2004/02/20 07:43:54 baertsch Exp $";
+static char const rcsid[] = "$Id: coordConv.c,v 1.7 2003/05/06 07:22:21 kate Exp $";
 
 /* #define DEBUG */
 
@@ -288,6 +288,14 @@ if(!(ccr->midSeq && ccr->upSeq && ccr-> downSeq))
 ccr->midPsl = doDnaAlignment(ccr->midSeq, ccr->to->version, blatHost, port, nibDir);
 ccr->upPsl =doDnaAlignment(ccr->upSeq, ccr->to->version, blatHost, port, nibDir);
 ccr->downPsl =doDnaAlignment(ccr->downSeq, ccr->to->version, blatHost, port, nibDir);
+}
+
+int pslCmpScore(const void *va, const void *vb)
+/* Compare to sort based on query then score. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+return pslScore(b) - pslScore(a);
 }
 
 void dropNotBest(struct psl **pslList)
