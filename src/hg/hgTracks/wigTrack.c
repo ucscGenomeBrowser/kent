@@ -13,7 +13,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.64 2005/02/09 23:37:43 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.65 2005/03/04 19:26:05 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -947,7 +947,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     for (el = elList; el != NULL; el = el->next)
 	{
 	int Span;
-	Span = (int) el->val;
+	Span = ptToInt(el->val);
 	if ((Span < basesPerPixel) && (Span > usingDataSpan))
 	    usingDataSpan = Span;
 	if (Span < minimalSpan)
