@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.8 2003/10/03 21:00:31 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.9 2003/10/10 21:47:01 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -100,14 +100,15 @@ errAbort(
     if( bincount ) { \
 	chromEnd = chromStart + (bincount * dataSpan); \
 	fprintf( wigout, \
-"%s\t%llu\t%llu\t%s.%llu_%s\t%d\t%c\t%llu\t%llu\t%llu\t%s\n", \
+"%s\t%llu\t%llu\t%s.%llu_%s\t%d\t%c\t%d\t%llu\t%llu\t%llu\t%s\n", \
 	    chromName, chromStart+add_offset, chromEnd+add_offset, \
-	    featureName, rowCount, spanName, maxScore, strand, dataSpan, \
-	    bincount, fileOffsetBegin, binfile ); \
+	    featureName, rowCount, spanName, maxScore, strand, minScore, \
+	    dataSpan, bincount, fileOffsetBegin, binfile ); \
 	++rowCount; \
 	} \
 	bincount = 0;	/* to count up to binsize	*/ \
 	maxScore = 0;	/* new bin, start new max */ \
+	minScore = 1000000;	/* new bin, start new min */ \
 	chromStart = Offset + dataSpan; \
 	fileOffsetBegin = fileOffset;
 
@@ -127,6 +128,7 @@ off_t fileOffset = 0;			/* where are we in the binary data */
 off_t fileOffsetBegin = 0;		/* where this bin started in binary */
 int score = 0;				/* from data input	*/
 int maxScore = 0;			/* max score in this bin */
+int minScore = 1000000;			/* min score in this bin */
 char *binfile = (char *) NULL;	/*	file name of binary data file	*/
 char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
 FILE *binout;	/*	file handle for binary data file	*/
@@ -196,6 +198,7 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
     rowCount = 0;	/* to count rows output */
     bincount = 0;	/* to count up to binsize	*/
     maxScore = 0;	/* max score in this bin */
+    minScore = 0;	/* min score in this bin */
     fileOffset = 0;	/* current location within binary data file	*/
     fileOffsetBegin = 0;/* location in binary data file where this bin starts*/
     binout = mustOpen(binfile,"w");	/*	binary data file	*/
@@ -228,6 +231,8 @@ warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 	    }
 	if( score > maxScore )
 	    maxScore = score;
+	if( score < minScore )
+	    minScore = score;
 	/* see if this is the first time through, establish chromStart 	*/
 	if( lineCount == 1 )
 	    chromStart = Offset;
@@ -236,8 +241,10 @@ warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 	 * in its own row in order to keep positioning correct for these
 	 * data values.
 	 */
-	if( (dataSpan > 1) && (Offset != (previousOffset + dataSpan) ) )
+	if( (lineCount != 1) && (dataSpan > 1) && (Offset != (previousOffset + dataSpan) ) )
 	    {
+	    if( verbose )
+printf("data not spanning %llu bases, prev: %llu, this: %llu\n", dataSpan, previousOffset, Offset );
 	    OUTPUT_ROW;
 	    }
 	/*	Check to see if data is being skipped	*/
