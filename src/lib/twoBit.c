@@ -7,6 +7,8 @@
 #include "obscure.h"
 #include "twoBit.h"
 
+static char const rcsid[] = "$Id: twoBit.c,v 1.2 2004/02/23 09:04:00 kent Exp $";
+
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
 {
@@ -503,6 +505,8 @@ if (nBlockCount > 0)
         {
 	int s = nStarts[i];
 	int e = s + nSizes[i];
+	if (s >= fragEnd)
+	    break;
 	if (s < fragStart)
 	   s = fragStart;
 	if (e > fragEnd)
@@ -520,10 +524,12 @@ if (maskBlockCount > 0)
         {
 	int s = maskStarts[i];
 	int e = s + maskSizes[i];
+	if (s >= fragEnd)
+	    break;
 	if (s < fragStart)
-	   s = fragStart;
+	    s = fragStart;
 	if (e > fragEnd)
-	   e = fragEnd;
+	    e = fragEnd;
 	if (s < e)
 	    toLowerN(seq->dna + s - fragStart, e - s);
 	}
