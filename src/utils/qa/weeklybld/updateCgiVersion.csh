@@ -23,18 +23,21 @@ if ( "$LASTWEEK" == "" ) then
  exit 1
 endif
 
+cd $WEEKLYBLD/hiding
 
-if ( -d hiding/cgiVersion ) then
- rm -fr hiding/cgiVersion
+if ( -d cgiVersion ) then
+ rm -fr cgiVersion
 endif
 
-cvs co -d hiding/cgiVersion kent/src/hg/inc/versionInfo.h
+cvs co -d cgiVersion kent/src/hg/inc/versionInfo.h
 if ( $status ) then
  echo "cvs check-out failed for versionInfo.h on $HOST"
  exit 1
 endif
 
-cd hiding/cgiVersion
+
+
+cd cgiVersion
 
 echo "Current version:"
 cat versionInfo.h
