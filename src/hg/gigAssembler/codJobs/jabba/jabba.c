@@ -21,16 +21,6 @@ errAbort(
   "jabba make batch.hut jobList\n"
   "   This makes the job-tracking database from a text file with the\n"
   "   command line for each job on a separate line\n"
-  "jabba check batch.hut\n"
-  "   This checks on the progress of the jobs.\n"
-  "jabba stop batch.hut\n"
-  "   This stops all the jobs in the batch\n"
-  "jabba hung batch.hut\n"
-  "   List hung jobs in the batch\n"
-  "jabba crashed batch.hut\n"
-  "   List jobs that crashed or failed output checks\n"
-  "jabba failed batch.hut\n"
-  "   List jobs that crashed or hung\n"
   "jabba push batch.hut\n"
   "   This pushes forward the batch of jobs by submitting jobs to codine\n"
   "   It will try and keep the codine queue a size that is efficient for\n"
@@ -44,6 +34,18 @@ errAbort(
   "      -killTime=N Number of minutes job can run before push kills it - default 20160 (2 weeks)\n"
   "jabba try batch.hut\n"
   "      This is like jabba push, but only submits up to 10 jobs\n"
+  "jabba check batch.hut\n"
+  "   This checks on the progress of the jobs.\n"
+  "jabba stop batch.hut\n"
+  "   This stops all the jobs in the batch\n"
+  "jabba hung batch.hut\n"
+  "   List hung jobs in the batch\n"
+  "jabba crashed batch.hut\n"
+  "   List jobs that crashed or failed output checks\n"
+  "jabba failed batch.hut\n"
+  "   List jobs that crashed or hung\n"
+  "jabba time batch.hut\n"
+  "   List timing information\n"
   );
 }
 
@@ -602,7 +604,6 @@ struct dyString *cmd = newDyString(256);
 int err;
 dyStringPrintf(cmd, "%s %s", killCommand, sub->id);
 err = system(cmd->string);
-uglyf("%s\n", cmd->string);
 if (err != 0)
    warn("Couldn't kill job id %s", sub->id);
 freeDyString(&cmd);
@@ -766,7 +767,7 @@ if (queueError > 0)
 if (trackingError > 0)
    printf("tracking errors: %d\n", trackingError);
 if (inQueue > 0)
-   printf("jobs (from this batch) in queue: %d\n", inQueue);
+   printf("queued and waiting: %d\n", inQueue);
 if (crashed > 0)
    printf("crashed: %d\n", crashed);
 if (slow > 0)
@@ -838,6 +839,58 @@ for (job = db->jobList; job != NULL; job = job->next)
 writeBatch(db, batch);
 }
 
+void jabbaTimes(char *batch)
+/* Report times of run. */
+{
+struct jobDb *db = readBatch(batch);
+double totalCpu = 0, totalWall = 0;
+struct job *job;
+struct submission *sub;
+int jobCount = 0;
+int runningCount = 0;
+int timedCount = 0;
+int crashCount = 0;
+int queueCount = 0;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    ++jobCount;
+    if ((sub = job->submissionList) != NULL)
+        {
+	if (sub->running)
+	   {
+	   ++runningCount;
+	   }
+	else if (sub->inQueue)
+	   {
+	   ++queueCount;
+	   }
+	else  if (sub->crashed || sub->hung)
+	   {
+	   ++crashCount;
+	   }
+	else
+	   {
+	   char *startTime, *endTime;
+	   float cpuTime;
+	   int retVal;
+	   boolean trackingError, gotRet;
+	   parseRunJobOutput(sub->outFile, &startTime, &endTime, 
+	        &cpuTime, &retVal, &gotRet, &trackingError);
+	   if (gotRet && endTime != NULL)
+	       {
+	       ++timedCount;
+	       totalCpu += cpuTime;
+	       totalWall += dateToSeconds(endTime) - dateToSeconds(startTime);
+	       }
+	   }
+	}
+    }
+printf("Completed %d of %d jobs.  CPU %2.1fs IO %2.1fs\n",
+     timedCount, jobCount, totalCpu, totalWall-totalCpu);
+}
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -890,6 +943,10 @@ else if (sameString(command, "crashed"))
 else if (sameString(command, "failed"))
     {
     jabbaListFailed(batch, TRUE, TRUE);
+    }
+else if (sameString(command, "time"))
+    {
+    jabbaTimes(batch);
     }
 else
     {
