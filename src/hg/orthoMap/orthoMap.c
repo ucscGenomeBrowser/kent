@@ -11,10 +11,11 @@
 #include "chainNetDbLoad.h"
 #include "altGraphX.h"
 #include "psl.h"
+#include "genePred.h"
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.7 2003/08/10 22:31:38 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.8 2003/08/13 23:11:04 baertsch Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct rbTree *netTree = NULL;
 static struct optionSpec optionSpecs[] = 
@@ -26,6 +27,8 @@ static struct optionSpec optionSpecs[] =
     {"chrom", OPTION_STRING},
     {"pslFile", OPTION_STRING},
     {"pslTable", OPTION_STRING},
+    {"geneFile", OPTION_STRING},
+    {"geneTable", OPTION_STRING},
     {"altGraphXFile", OPTION_STRING},
     {"altGraphXTable", OPTION_STRING},
     {"netTable", OPTION_STRING},
@@ -45,6 +48,8 @@ static char *optionDescripts[] =
     "Chromosme in db that we are working on.",
     "File containing psl alignments.",
     "Table containing psl alignments.",
+    "File containing gene predictions.",
+    "Table containing gene predictions.",
     "File containing altGraphX records.",
     "Table containing altGraphX records.",
     "Datbase table containing net records, i.e. mouseNet.",
@@ -403,6 +408,46 @@ else
     }
 }
 
+void fillInGene(struct chain *chain, struct genePred *gene, struct genePred **pGene)
+/** Fill in syntenic gene structure with initial information for gene. */
+{
+struct genePred *synGene = NULL;
+int qs, qe;
+struct chain *subChain=NULL, *toFree=NULL;
+AllocVar(synGene);
+chainSubsetOnT(chain, gene->txStart, gene->txEnd , &subChain, &toFree);    
+if(subChain == NULL)
+    {
+    *pGene= NULL;
+    return;
+    }
+qChainRangePlusStrand(subChain, &qs, &qe);
+synGene->chrom = cloneString(subChain->qName);
+synGene->name = cloneString(gene->name);
+synGene->txStart = qs;
+synGene->txEnd = qe;
+AllocArray(synGene->exonStarts, gene->exonCount);
+AllocArray(synGene->exonEnds, gene->exonCount);
+if(chain->qStrand == '+')
+    strncpy(synGene->strand,  gene->strand, sizeof(synGene->strand));
+else
+    {
+    if(gene->strand[0] == '+')
+	strncpy(synGene->strand,  "-", sizeof(synGene->strand));
+    else if(gene->strand[0] == '-')
+	strncpy(synGene->strand,  "+", sizeof(synGene->strand));
+    else
+	errAbort("Don't recognize strand %s from gene %s", gene->strand, gene->name);
+    }
+chainFree(&toFree);
+chainSubsetOnT(chain, gene->cdsStart, gene->cdsEnd , &subChain, &toFree);    
+qChainRangePlusStrand(subChain, &qs, &qe);
+synGene->cdsStart = qs;
+synGene->cdsEnd = qe;
+chainFree(&toFree);
+*pGene = synGene;
+}
+
 void fillInBed(struct chain *chain, struct psl *psl, struct bed **pBed)
 /** Fill in a bed structure with initial information for psl. */
 {
@@ -440,6 +485,22 @@ chainFree(&toFree);
 *pBed = bed;
 }
 
+void addExonToGene(struct chain *chain, struct genePred *gene, struct genePred *synGene, int block)
+/** Converte block in genePred to block in orthologous genome for synGene using chain. */
+{
+struct chain *subChain=NULL, *toFree=NULL;
+int qs, qe;
+int end = gene->exonEnds[block];
+chainSubsetOnT(chain, gene->exonStarts[block], end , &subChain, &toFree);    
+if(subChain == NULL)
+    return;
+qChainRangePlusStrand(subChain, &qs, &qe);
+synGene->exonStarts[synGene->exonCount] = qs; //- synGene->txStart;
+synGene->exonEnds[synGene->exonCount] = qe;
+synGene->exonCount++;
+chainFree(&toFree);
+}
+
 void addExonToBed(struct chain *chain, struct psl *psl, struct bed *bed, int block)
 /** Converte block in psl to block in orthologous genome for bed using chain. */
 {
@@ -454,6 +515,60 @@ bed->chromStarts[bed->blockCount] = qs - bed->chromStart;
 bed->blockSizes[bed->blockCount] = abs(qe-qs);
 bed->blockCount++;
 chainFree(&toFree);
+}
+
+struct genePred *orthoBedFromGene(struct sqlConnection *conn, char *db, char *orthoDb,
+			    char *netTable, struct genePred *gene)
+/** Produce a genePred on the orthologous genome from the original gene. */
+{
+struct genePred *synGene= NULL;
+int i;
+unsigned *blockSizes;
+struct chain *chain = NULL;
+int diff = 0;
+
+AllocArray(blockSizes, gene->exonCount);
+for(i=0; i<gene->exonCount; i++)
+    blockSizes[i] = gene->exonEnds[i] - gene->exonStarts[i];
+
+chain = chainForBlocks(conn, db, netTable, 
+				     gene->chrom, gene->txStart, gene->txEnd,
+				     gene->exonStarts, blockSizes, gene->exonCount);
+if(chain == NULL)
+    return NULL;
+fillInGene(chain, gene, &synGene);
+if(synGene == NULL)
+    return NULL;
+if(chain->qStrand == '+')
+    {
+    for(i=0; i<gene->exonCount; i++)
+	{
+	addExonToGene(chain, gene, synGene, i);
+	}
+    }
+else
+    {
+    for(i=gene->exonCount-1; i>=0; i--)
+	{
+	addExonToGene(chain, gene, synGene, i);
+	}
+    }
+if(synGene->exonCount > 0 && synGene->exonStarts[0] != 0)
+    diff = synGene->exonStarts[0];
+return synGene;
+}
+
+void occassionalDot()
+/* Write out a dot every 20 times this is called. */
+{
+static int dotMod = 100;
+static int dot = 100;
+if (doHappyDots && (--dot <= 0))
+    {
+    putc('.', stdout);
+    fflush(stdout);
+    dot = dotMod;
+    }
 }
 
 struct bed *orthoBedFromPsl(struct sqlConnection *conn, char *db, char *orthoDb,
@@ -495,17 +610,25 @@ bed->chromEnd = bed->thickEnd = bed->chromStart+bed->chromStarts[bed->blockCount
 return bed;
 }
 
-void occassionalDot()
-/* Write out a dot every 20 times this is called. */
+struct genePred *loadGeneFromTable(struct sqlConnection *conn, char *table,
+			     char *chrom, int chromStart, int chromEnd)
+/** Load all of the genes between chromstart and chromEnd */
 {
-static int dotMod = 100;
-static int dot = 100;
-if (doHappyDots && (--dot <= 0))
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int rowOffset = -100;
+struct genePred *geneList = NULL;
+struct genePred *gene = NULL;
+int i=0;
+sr = hRangeQuery(conn, table, chrom, chromStart, chromEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    putc('.', stdout);
-    fflush(stdout);
-    dot = dotMod;
+    gene = genePredLoad(row+rowOffset);
+    slSafeAddHead(&geneList, gene);
     }
+sqlFreeResult(&sr);
+slReverse(&geneList);
+return geneList;
 }
 
 struct psl *loadPslFromTable(struct sqlConnection *conn, char *table,
@@ -580,6 +703,7 @@ if(workingChain == NULL)
 if ((chain->qStrand == '-'))
     reverse = TRUE;
 agNew = altGraphXClone(ag);
+errAbort("altGraphX not supported\n");
 freez(&agNew->tName);
 agNew->tName = cloneString(chain->qName);
 /* Map vertex positions using chain. */
@@ -728,6 +852,8 @@ void orthoMap()
 {
 char *pslTableName = NULL;
 char *pslFileName = NULL;
+char *geneTableName = NULL;
+char *geneFileName = NULL;
 char *outBedName = NULL;
 char *agxOutName = NULL;
 char *altGraphXFileName = NULL;
@@ -737,6 +863,7 @@ char *orthoDb = NULL;
 char *netTable = NULL;
 struct bed *bed = NULL;
 struct psl *psl = NULL, *pslList = NULL;
+struct genePred *gene = NULL, *geneList = NULL;
 struct sqlConnection *conn = NULL;
 FILE *bedOut = NULL;
 int foundCount=0, notFoundCount=0;
@@ -748,6 +875,8 @@ altGraphXFileName = optionVal("altGraphXFile", NULL);
 altGraphXTableName = optionVal("altGraphXTable", NULL);
 pslTableName  = optionVal("pslTable", NULL);
 pslFileName = optionVal("pslFile", NULL);
+geneTableName  = optionVal("geneTable", NULL);
+geneFileName = optionVal("geneFile", NULL);
 outBedName = optionVal("outBed", NULL);
 netTable = optionVal("netTable", NULL);
 db = optionVal("db", NULL);
@@ -756,7 +885,8 @@ chrom = optionVal("chrom", NULL);
 
 if(orthoDb == NULL || db == NULL || (netTable == NULL && netFile == NULL) || chrom == NULL || 
    (outBedName == NULL && agxOutName == NULL) ||
-   (pslTableName == NULL && pslFileName == NULL && altGraphXFileName == NULL && altGraphXTableName == NULL))
+   (geneTableName == NULL && geneFileName == NULL && pslTableName == NULL && 
+    pslFileName == NULL && altGraphXFileName == NULL && altGraphXTableName == NULL))
     usage();
 hSetDb(db);
 hSetDb2(orthoDb);
@@ -777,7 +907,7 @@ if(altGraphXFileName != NULL || altGraphXTableName != NULL)
 		     agxOut, &foundCount, &notFoundCount);
     carefulClose(&agxOut);
     }
-else 
+else  if (pslTableName != NULL || pslFileName != NULL)   
     {
 /* Load psls. */
     warn("Loading psls.");
@@ -800,6 +930,30 @@ else
 	else
 	    notFoundCount++;
 	bedFree(&bed);
+	}
+    }
+else
+    {
+    warn("Loading Gene Predictions.");
+    if(geneFileName)
+	geneList=genePredLoadAll(geneFileName);
+    else
+	geneList=loadGeneFromTable(conn, geneTableName, chrom, 0, BIGNUM);
+/* Convert genePreds. */
+    warn("Converting genes.");
+    bedOut = mustOpen(outBedName, "w");
+    for(gene = geneList; gene != NULL; gene = gene->next)
+	{
+	struct genePred *synGene = orthoBedFromGene(conn, db, orthoDb, netTable, gene);
+	occassionalDot();
+	if(synGene != NULL && synGene->exonCount > 0)
+	    {
+	    foundCount++;
+	    genePredTabOut(synGene, bedOut);
+	    }
+	else
+	    notFoundCount++;
+	genePredFree(&synGene);
 	}
     }
 warn("\n%d found %d not found when moving from genome %s to genome %s", 
