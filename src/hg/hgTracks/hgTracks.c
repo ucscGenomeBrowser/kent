@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.881 2005/02/02 22:32:48 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.882 2005/02/02 22:34:14 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10301,7 +10301,6 @@ else
     {
 
     safef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit %d", limit);
-    // sprintf(query, "select chrom,size from chromInfo order by size desc limit %d", limit);
     sr = sqlGetResult(conn, query);
     }
 
