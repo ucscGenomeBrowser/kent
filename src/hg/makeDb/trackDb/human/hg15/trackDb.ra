@@ -222,8 +222,8 @@ type chain hg15
 track selfNet
 shortLabel self Net
 longLabel Human/$Organism Alignment Net
-group compGeno
-priority 133.5
+group varRep
+priority 147
 visibility hide
 spectrum on
 type netAlign hg15 humanChain
