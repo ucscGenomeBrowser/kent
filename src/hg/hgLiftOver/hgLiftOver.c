@@ -16,7 +16,7 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.25 2004/06/16 04:55:21 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.26 2004/06/16 04:58:54 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -101,7 +101,7 @@ printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
-puts("<A>HREF=\"../cgi-bin/hgCoordConv?origDb=%s\"<A>);
+puts("<A>HREF=\"../cgi-bin/hgCoordConv?origDb=%s\"<A>");
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
