@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.12 2004/11/07 19:15:37 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.13 2004/11/08 17:13:31 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1506,12 +1506,13 @@ void htmlPageValidateOrAbort(struct htmlPage *page)
 {
 struct htmlTag *tag;
 boolean gotTitle = FALSE;
-char *contentType;
+char *contentType = NULL;
 
 if (page == NULL)
     errAbort("Can't validate NULL page");
-contentType = hashFindVal(page->header, "Content-Type:");
-if (startsWith("text/html", contentType))
+if (page->header != NULL)
+    contentType = hashFindVal(page->header, "Content-Type:");
+if (contentType == NULL || startsWith("text/html", contentType))
     {
     /* To simplify things upper case all tag names. */
     for (tag = page->tags; tag != NULL; tag = tag->next)

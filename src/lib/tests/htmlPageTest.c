@@ -29,7 +29,6 @@ page = htmlPageParseNoHead(fileName, html);
 htmlPageValidateOrAbort(page);
 for (form = page->forms; form != NULL; form = form->next)
     htmlFormPrint(form, stdout);
-
 }
 
 int main(int argc, char *argv[])
