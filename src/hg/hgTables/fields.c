@@ -224,8 +224,9 @@ hPrintf("<BR>");
 cgiMakeButton(hgtaDoSelectFieldsMore, "Allow Selection From Checked Tables");
 }
 
-void showLinkedFields(struct joiner *joiner)
-/* Put up a section with fields for each linked table. */
+struct dbTable *extraTableList()
+/* Get list of tables (other than the primary table)
+ * where we are displaying fields. */
 {
 struct hashEl *varList = NULL, *var;
 char *prefix = linkedPrefix();
@@ -252,9 +253,14 @@ for (var = varList; var != NULL; var = var->next)
 	freez(&dbTab);
 	}
     }
-hashElFreeList(&varList);
 slSort(&dtList, dbTableCmp);
+return dtList;
+}
 
+void showLinkedFields(struct joiner *joiner, struct dbTable *dtList)
+/* Put up a section with fields for each linked table. */
+{
+struct dbTable *dt;
 for (dt = dtList; dt != NULL; dt = dt->next)
     {
     /* Put it up in a new section. */
@@ -267,6 +273,7 @@ void doBigSelectPage(char *db, char *table)
 /* Put up big field selection page. Assumes html page open already*/
 {
 struct joiner *joiner = joinerRead("all.joiner");
+struct dbTable *dtList, *dt;
 
 htmlOpen("Select Fields from %s.%s", db, table);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
@@ -275,8 +282,11 @@ cgiMakeHiddenVar(hgtaDatabase, database);
 cgiMakeHiddenVar(hgtaTable, table);
 
 showTableFields(joiner, database, table);
-showLinkedFields(joiner);
-showLinkedTables(joiner, dbTableNew(database, table));
+dtList = extraTableList();
+showLinkedFields(joiner, dtList);
+dt = dbTableNew(database, table);
+slAddHead(&dtList, dt);
+showLinkedTables(joiner, dtList);
 
 /* clean up. */
 hPrintf("</FORM>");
