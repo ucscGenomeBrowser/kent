@@ -17,10 +17,31 @@
 #include "errabort.h"
 #include "memalloc.h"
 #include "genoFind.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "trans3.h"
+#include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.45 2004/08/24 17:49:24 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.46 2004/08/24 18:46:44 markd Exp $";
+
+static struct optionSpec optionSpecs[] = {
+    {"trans", OPTION_BOOLEAN},
+    {"tileSize", OPTION_INT},
+    {"stepSize", OPTION_INT},
+    {"minMatch", OPTION_INT},
+    {"repMatch", OPTION_INT},
+    {"maxDnaHits", OPTION_INT},
+    {"maxTransHits", OPTION_INT},
+    {"maxNtSize", OPTION_INT},
+    {"maxAaSize", OPTION_INT},
+    {"seqLog", OPTION_BOOLEAN},
+    {"mask", OPTION_BOOLEAN},
+    {"canStop", OPTION_BOOLEAN},
+    {"log", OPTION_STRING},
+    {"syslog", OPTION_BOOLEAN},
+    {"logFacility", OPTION_STRING},
+    {NULL, 0}
+};
+
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -34,7 +55,6 @@ int repMatch = 1024;    /* Can be overridden from command line. */
 int maxDnaHits = 100;   /* Can be overridden from command line. */
 int maxTransHits = 200; /* Can be overridden from command line. */
 int maxGap = gfMaxGap;
-FILE *logFile = NULL;
 boolean seqLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
@@ -76,8 +96,10 @@ errAbort(
   "   -trans  Translate database to protein in 6 frames.  Note: it is best\n"
   "           to run this on RepeatMasked data in this case.\n"
   "   -log=logFile keep a log file that records server requests.\n"
+  "   -seqLog    Include sequences in log file (not logged with -syslog)\n"
+  "   -syslog    Log to syslog\n"
+  "   -logFacility=facility log to the specified syslog facility - default local0.\n"
   "   -mask      Use masking from nib file.\n"
-  "   -seqLog    Include sequences in log file\n"
   "   -repMatch=N Number of occurrences of a tile (nmer) that trigger repeat masking the tile.\n"
   "               Default is %d.\n"
   "   -maxDnaHits=N Maximum number of hits for a dna query that are sent from the server.\n"
@@ -173,20 +195,6 @@ return atoi(portName);
 
 struct sockaddr_in sai;		/* Some system socket info. */
 
-void logIt(char *format, ...)
-/* Print message to log file. */
-{
-va_list args;
-if (logFile != NULL)
-    {
-    fprintf(logFile, "%lu ", clock1000());
-    va_start(args, format);
-    vfprintf(logFile, format, args);
-    va_end(args);
-    fflush(logFile);
-    }
-}
-
 /* Some variables to gather statistics on usage. */
 long baseCount = 0, blatCount = 0, aaCount = 0, pcrCount = 0;
 int warnCount = 0;
@@ -221,7 +229,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     }
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
-logIt("%d clumps, %d hits\n", clumpCount, hitCount);
+logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 void transQuery(struct genoFind *transGf[2][3], aaSeq *seq, 
@@ -271,7 +279,7 @@ if (clumpCount == 0)
     ++missCount;
 freeDyString(&dy);
 lmCleanup(&lm);
-logIt("%d clumps, %d hits\n", clumpCount, hitCount);
+logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 void transTransQuery(struct genoFind *transGf[2][3], struct dnaSeq *seq, 
@@ -328,7 +336,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 trans3Free(&t3);
 if (clumpCount == 0)
     ++missCount;
-logIt("%d clumps, %d hits\n", clumpCount, hitCount);
+logDebug("%lu %d clumps, %d hits", clock1000(), clumpCount, hitCount);
 }
 
 static void pcrQuery(struct genoFind *gf, char *fPrimer, char *rPrimer, 
@@ -364,7 +372,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     }
 gfClumpFreeList(&clumpList);
 netSendString(connectionHandle, "end");
-logIt("PCR %s %s %d clumps\n", fPrimer, rPrimer, clumpCount);
+logDebug("%lu PCR %s %s %d clumps\n", clock1000(), fPrimer, rPrimer, clumpCount);
 }
 
 
@@ -391,7 +399,7 @@ static void errorSafeCleanupMess(int connectionHandle, char *message)
 /* Clean up and report problem. */
 {
 popAbortHandler();
-logIt("Recovering from error via longjmp\n");
+logError("Recovering from error via longjmp");
 netSendString(connectionHandle, message);
 }
 
@@ -456,41 +464,40 @@ char buf[256];
 char *line, *command;
 int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
-char *logFileName = cgiOptionalString("log");
 int port = atoi(portName);
 time_t curtime;
 struct tm *loctime;
 char timestr[256];
 
 netBlockBrokenPipes();
-if (logFileName != NULL)
-    logFile = mustOpen(logFileName, "a");
 
 curtime = time (NULL);           /* Get the current time. */
 loctime = localtime (&curtime);  /* Convert it to local time representation. */
 strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* formate datetime as string */
 								
-logIt("gfServer version %d on host %s, port %s  (%s) \n", gfVersion, 
+logInfo("gfServer version %d on host %s, port %s  (%s)", gfVersion, 
 	hostName, portName, timestr);
 if (doTrans)
     {
     uglyf("starting translated server...\n");
-    logIt("setting up translated index\n");
+    logInfo("setting up translated index");
     gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
     	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 
 	doMask, stepSize);
     }
 else
     {
+    uglyf("starting untranslated server...\n");
+    logInfo("setting up untranslated index");
     gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, 
     	maxGap, tileSize, repMatch, NULL, allowOneMismatch, stepSize);
     }
-logIt("indexing complete\n");
+logInfo("indexing complete");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
 
-logIt("Server ready for queries!\n");
+logInfo("Server ready for queries!");
 printf("Server ready for queries!\n");
 for (;;)
     {
@@ -517,7 +524,7 @@ for (;;)
 	continue;
 	}
     buf[readSize] = 0;
-    logIt("%s\n", buf);
+    logDebug("%s", buf);
     if (!startsWith(gfSignature(), buf))
         {
 	++noSigCount;
@@ -531,7 +538,7 @@ for (;;)
 	if (canStop)
 	    break;
 	else
-	    logIt("Ignoring quit message\n");
+	    logError("Ignoring quit message");
 	}
     else if (sameString("status", command))
         {
@@ -634,10 +641,11 @@ for (;;)
 				aaCount += seq.size;
 			    else
 				baseCount += seq.size;
-			    if (seqLog && logFile != NULL)
+                            if (seqLog && (logGetFile() != NULL))
 				{
-				faWriteNext(logFile, "query", seq.dna, seq.size);
-				fflush(logFile);
+                                FILE *lf = logGetFile();
+                                faWriteNext(lf, "query", seq.dna, seq.size);
+				fflush(lf);
 				}
 			    errorSafeQuery(doTrans, queryIsProt, &seq, gf, 
 				    transGf, connectionHandle, buf);
@@ -858,9 +866,9 @@ int main(int argc, char *argv[])
 char *command;
 
 gfCatchPipes();
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 command = argv[1];
-if (cgiBoolean("trans"))
+if (optionExists("trans"))
     {
     doTrans = TRUE;
     tileSize = 4;
@@ -868,22 +876,27 @@ if (cgiBoolean("trans"))
     maxGap = 0;
     repMatch = gfPepMaxTileUse;
     }
-tileSize = cgiOptionalInt("tileSize", tileSize);
-stepSize = cgiOptionalInt("stepSize", stepSize);
+tileSize = optionInt("tileSize", tileSize);
+stepSize = optionInt("stepSize", stepSize);
 if (stepSize == 0)
     stepSize = tileSize;
 repMatch = round( (double)tileSize/(double)stepSize * repMatch);
-minMatch = cgiOptionalInt("minMatch", minMatch);
-repMatch = cgiOptionalInt("repMatch", repMatch);
-maxDnaHits = cgiOptionalInt("maxDnaHits", maxDnaHits);
-maxTransHits = cgiOptionalInt("maxTransHits", maxTransHits);
-maxNtSize = cgiOptionalInt("maxNtSize", maxNtSize);
-maxAaSize = cgiOptionalInt("maxAaSize", maxAaSize);
-seqLog = cgiBoolean("seqLog");
-doMask = cgiBoolean("mask");
-canStop = cgiBoolean("canStop");
+minMatch = optionInt("minMatch", minMatch);
+repMatch = optionInt("repMatch", repMatch);
+maxDnaHits = optionInt("maxDnaHits", maxDnaHits);
+maxTransHits = optionInt("maxTransHits", maxTransHits);
+maxNtSize = optionInt("maxNtSize", maxNtSize);
+maxAaSize = optionInt("maxAaSize", maxAaSize);
+seqLog = optionExists("seqLog");
+doMask = optionExists("mask");
+canStop = optionExists("canStop");
 if (argc < 2)
     usage();
+if (optionExists("log"))
+    logOpenFile(argv[0], optionVal("log", NULL));
+if (optionExists("syslog"))
+    logOpenSyslog(argv[0], optionVal("logFacility", NULL));
+
 if (sameWord(command, "direct"))
     {
     if (argc < 4)
