@@ -165,7 +165,8 @@ ALIGNING VIRAL RNA (DONE 04/16/03)
     cd ..
     hgLoadPsl sc1 all_mrna.psl -nobin
 
-    LOAD SWISS PROT CORONAVIRUS PROTEINS
+
+LOAD SWISS PROT CORONAVIRUS PROTEINS
     cd ~/sc1/bed/swissprot
     download all ORGANISM=coronavirus proteins from SRS into file viralProt.fa
     ssh kkr1u00
@@ -177,7 +178,8 @@ ALIGNING VIRAL RNA (DONE 04/16/03)
     pslReps -minAli=0.67 chr1_viralProtLoose.psl chr1_viralProt.psl    
     hgLoadPsl sc1 chr1_viralProt.psl chr1_viralProtLoose.psl
 
-    LOAD CPGISSLANDS (DONE 04/15/03)
+
+LOAD CPGISSLANDS (DONE 04/15/03)
     ssh eieio
     mkdir -p ~/sc1/bed/cpgIsland
     cd ~/sc1/bed/cpgIsland
@@ -203,6 +205,7 @@ ALIGNING VIRAL RNA (DONE 04/16/03)
     hgLoadBed sc1 cpgIsland -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
+
 LOAD SOFTBERRY GENES 
      mkdir -p ~/sc1/bed/softberry
      cd ~/sc1/bed/softberry
@@ -213,4 +216,37 @@ LOAD SOFTBERRY GENES
      ldHgGene sc1 softberryGene SARS.gff
      hgPepPred sc1 softberry *.protein
      hgSoftberryHom sc1 *.protein
+
+
+LOAD GENBANK ANNOTATED PROTEINS (DONE 04/22/03)
+    mkdir -p ~/sc1/bed/gbProtAnn
+    cd ~/sc1/bed/gbProtAnn
+    # go to http://www.ncbi.nlm.nih.gov/ -- search Protein for NP_828849
+    # Save the displayed genbank record to NP_828849.gbff
+    #
+    # Used emacs macros (and judgment about what the short names should be) 
+    # to edit the mat_peptide elements to a bed 4 + tab file like this:
+    #  chrom	start	end	name	product	note	proteinId	giId
+    # called NP_828849.pbed -- pbed because it's in protein coordinates.  
+    #
+    # Now translate the protein coordinates into genomic coords:
+    #  /coded_by="join(NC_004718.1:250..13383, NC_004718.1:13383..21470)"
+    #  /note="putative -1 frameshift"
+    # and strip the "gi:" from genbank id numbers:
+    perl -wpe '@w = split(/\t/); \
+               if ($w[1] < 4379) { \
+                 $w[1] = (($w[1] - 1) * 3) + 250 - 1; \
+                 $w[2] = (($w[2] - 1) * 3) + 250 + 2; \
+               } else { \
+                 $w[1] = (($w[1] - 4379) * 3) + 13383 - 1; \
+                 $w[2] = (($w[2] - 4379) * 3) + 13383 + 2; \
+               } \
+               $w[7] =~ s/gi://i; \
+               $_ = join("\t", @w); \
+              ' NP_828849.pbed \
+    > NP_828849.bed
+    # Make sure it looks right:
+    sdiff NP_828849.pbed NP_828849.bed
+    hgLoadBed sc1 gbProtAnn NP_828849.bed \
+      -tab -noBin -sqlTable=$HOME/src/hg/lib/gbProtAnn.sql
 
