@@ -677,7 +677,7 @@ dp2.perChromTables = no
       | hgsql -h genome-testdb hgcentraltest
 
 
-# MAKE Drosophila Proteins track
+# MAKE Drosophila Proteins track (DONE 2004-08-24 braney)
     ssh kksilo
     mkdir -p /cluster/data/dp2/blastDb
     cd /cluster/data/dp2/blastDb
@@ -745,7 +745,7 @@ exit 1
     ssh kk
     cd /cluster/data/dp2/bed/tblastn.dm1FB
     para create blastSpec
-    para shove   # jobs will need to be restarted, but they should all finish
+    para try, push
 #  Completed: 150282 of 150282 jobs
 #  CPU time in finished jobs:    2977330s   49622.16m   827.04h   34.46d  0.094 y
 #  IO & Wait Time:                999926s   16665.44m   277.76h   11.57d  0.032 y
@@ -768,11 +768,12 @@ chainSome $(path1)
     ls -1dS `pwd`/blastOut/fb?? > chain.list
     gensub2 chain.lst single chainGsub chainSpec
     para create chainSpec
-    # use my silly script to push no more than 3 jobs with no more than 10 total (20 sec check)
-    # you have to kill it manually
-    ~braney/bin/brShove 10 3 20
-    exit
 
+    # should run this on the mini-cluster or with my shove script
+    # so you can limit the number of jobs starting to 3 or 4
+    para try, push...
+
+    exit
     # back to kksilo
     cd /cluster/data/dp2/bed/tblastn.dm1FB/blastOut
     for i in fb??
@@ -782,7 +783,6 @@ chainSome $(path1)
 	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
 	echo $i
     done
-
     cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../blastDm1FB.psl
 
     ssh hgwdev
