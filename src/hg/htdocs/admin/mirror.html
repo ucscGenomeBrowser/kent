@@ -147,6 +147,7 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> 06aug2001   </TD><TD></TD><TD> hg8         </TD></TR>
 <TR><TD> 01apr2001   </TD><TD></TD><TD> hg7         </TD></TR>
 <TR><TD> 12dec2000   </TD><TD></TD><TD> hg6         </TD></TR>
 <TR><TD> 07oct2000   </TD><TD></TD><TD> hg5         </TD></TR>
@@ -155,6 +156,29 @@ assembly:
 </TABLE>
 </ul>
 <ol type="a">
+
+<li>Get August 6, 2001 full data set (5.2 GB) by doing:
+
+<p> 
+i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/06aug2001/bigZips/&nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/06aug2001/bigZips/.
+<p> 
+ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/06aug2001/chromosomes/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/06aug2001/chromosomes/.
+<p> 
+iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/06aug2001/database/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/06aug2001/database/.
+<br><br>
+
 <li>Get April 1, 2001 full data set (5.2 GB) by doing:
 
 <p> 
