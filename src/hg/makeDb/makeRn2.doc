@@ -415,6 +415,18 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE 03/06/03)
     cd /usr/local/apache/htdocs/goldenPath/rnJan2003
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
+    # Then make the upstream sequence files.
+    cd bigZips
+    featureBits rn2 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    rm upstream1000.fa
+    featureBits rn2 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    rm upstream2000.fa
+    featureBits rn2 refGene:upstream:5000 -fa=upstream5000.fa
+    zip upstream5000.zip upstream5000.fa
+    rm upstream5000.fa
+
 
 PREPARE CLUSTER FOR BLASTZ RUN (DONE 03/06/03)
     # This needs to be done after trf-masking and nib generation.
