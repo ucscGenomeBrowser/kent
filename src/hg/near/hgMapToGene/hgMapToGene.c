@@ -3,12 +3,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "bed.h"
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.3 2003/09/21 05:04:22 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.4 2003/09/24 11:27:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
