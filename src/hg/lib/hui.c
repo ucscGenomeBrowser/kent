@@ -207,7 +207,7 @@ static char *recombRateOptions[] = {
     "Marshfield Male Distances",
     "Genethon Sex Averaged Distances",
     "Genethon Female Distances",
-    "Genethon  Male Distances",
+    "Genethon Male Distances",
 };
 
 enum recombRateOptEnum rroeStringToEnum(char *string)
