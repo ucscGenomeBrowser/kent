@@ -176,6 +176,16 @@ document.location = theUrl + 'db=' + theDb;
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 
 	<P><FONT FACE="courier" SIZE=2>Sep. 12, 2002</FONT><BR>
+	We've corrected a problem with the Human June 2002 (hg12) cytoBand annotation 
+	track that affected chromosomes 16, 17, 18, 19, 20, 21, 22, X, and Y. On
+	all chromosomes except Y, this bug affected only the bands in the large gaps 
+	in the centromeric and/or short arms where there is no sequence. The
+	major problem was with chromosome Y, where clones were erroneously
+	pushed from the q-arm onto the p-arm, creating some confusion. The
+	currently available version of the cytoBand data on this website contains this 
+	correction.
+
+	<P><FONT FACE="courier" SIZE=2>Sep. 12, 2002</FONT><BR>
 	<I>Nature Genetics</I> has just published <A
 	HREF="http://www.nature.com/cgi-taf/DynaPage.taf?file=/ng/journal/v32/n1s/index.html"
 	TARGET=_blank>User's Guide to the Human Genome</A>, a
