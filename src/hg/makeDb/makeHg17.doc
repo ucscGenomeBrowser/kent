@@ -5712,8 +5712,6 @@ rm $TMP/$root.pp
 # speciesOrder chimp mouse rat dog chicken fugu zebrafish
 
 
-<<<<<<< makeHg17.doc
-=======
 # 8-WAY MULTIZ MULTIPLE ALIGNMENT (WORKING 2004-07-12 kate)
 # NOTE: this will be replaced with MM5 8-WAY, above
     ssh eieio
@@ -6048,7 +6046,6 @@ mkdir -p $3:h
     # 7-WAY mafs are now in $workingDir/panTro1mm4rn3galGal2fr1/danRer1
 
 
->>>>>>> 1.97
 # PHYLO-HMM CONSERVATION FOR 7-WAY (2004-06-25 kate)
 
     ssh eieio
