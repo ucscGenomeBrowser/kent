@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "obscure.h"
+#include "portable.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
@@ -14,10 +15,10 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.45 2003/08/26 18:51:16 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.46 2003/08/29 18:48:48 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
-	defaultConfName, hideAllConfName, 
+	defaultConfName, hideAllConfName, showAllConfName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
 	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
@@ -102,13 +103,28 @@ hPrintf("</TR></TABLE>");
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *columnSetting(struct column *column, char *name, char *defaultVal)
+char *columnSetting(struct column *col, char *name, char *defaultVal)
 /* Return value of named setting in column, or default if it doesn't exist. */
 {
-char *result = hashFindVal(column->settings, name);
+char *result = hashFindVal(col->settings, name);
 if (result == NULL)
     result = defaultVal;
 return result;
+}
+
+int columnSettingInt(struct column *col, char *name, int defaultVal)
+/* Return value of named integer setting or default if it doesn't exist. */
+{
+char *result = hashFindVal(col->settings, name);
+if (result == NULL)
+    return defaultVal;
+return atoi(result);
+}
+
+boolean columnSettingExists(struct column *col, char *name)
+/* Return TRUE if setting exists in column. */
+{
+return hashFindVal(col->settings, name) != NULL;
 }
 
 char *colVarName(struct column *col, char *prefix)
@@ -203,10 +219,37 @@ else
     }
 }
 
-void labelSimplePrint(struct column *col)
-/* This just prints cell->shortLabel. */
+static void hPrintSpaces(int count)
+/* Print count number of spaces. */
 {
-hPrintf("<TH VALIGN=BOTTOM><B>%s</B></TH>", col->shortLabel);
+while (--count >= 0)
+    hPrintf(" ");
+}
+
+void labelSimplePrint(struct column *col)
+/* This just prints cell->shortLabel.  If colWidth is
+ * set it will add spaces, center justifying it.  */
+{
+int colWidth = columnSettingInt(col, "colWidth", 0);
+
+hPrintf("<TH VALIGN=BOTTOM><B><PRE>");
+/* The <PRE> above helps Internet Explorer avoid wrapping
+ * in the label column, which helps us avoid wrapping in 
+ * the data columns below.  Wrapping in the data columns
+ * makes the expression display less effective so we try
+ * to minimize it.  -jk */
+if (colWidth == 0)
+    hPrintf("%s", col->shortLabel);
+else
+    {
+    int labelLen = strlen(col->shortLabel);
+    int diff = colWidth - labelLen;
+    if (diff < 0) diff = 0;
+    hPrintSpaces(diff/2);
+    hPrintf("%s", col->shortLabel);
+    hPrintSpaces((diff+1)/2);
+    }
+hPrintf("</PRE></B></TH>");
 }
 
 void selfAnchorSearch(struct genePos *gp)
@@ -630,7 +673,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     cgiMakeButton("submit", "Go!");
     }
 
-hPrintf("</TR>\n<TR><TD ALIGN=CENTER>");
+hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 
 /* Do genome drop down (just fake for now) */
     {
@@ -1151,7 +1194,7 @@ if (geneList == NULL)
     hPrintf("empty table");
     return;
     }
-hPrintf("<TT><PRE>");
+hPrintf("<TT>");
 /* Print labels. */
 hPrintf("#");
 for (col = colList; col != NULL; col = col->next)
@@ -1185,7 +1228,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 	}
     hPrintf("\n");
     }
-hPrintf("</PRE></TT>");
+hPrintf("</TT>");
 }
 
 void doMainDisplay(struct sqlConnection *conn, struct column *colList, 
@@ -1251,7 +1294,7 @@ void doExamples(struct sqlConnection *conn, struct column *colList)
 displayData(conn, colList, NULL);
 htmlHorizontalLine();
 hPrintf("%s",
- "<P>This program displays a list of genes that are related to "
+ "<P>This program displays a table of genes that are related to "
  "each other.  The relationship can be of several types including "
  "protein level homology, similarity of gene expression profiles, or "
  "genomic proximity.  The 'group by' drop-down controls "
@@ -1263,7 +1306,9 @@ hPrintf("%s",
  "Some examples of search terms are 'FOXA1' 'HOXA9' and 'MAP kinase.' </P>"
  "<P>After the search a table appears containing the gene and it's relatives, "
  "one gene per row.  The gene matching the search will be hilighted in light "
- "green.  Some of the columns in the table including the BLAST 'E-value' and "
+ "green.  In the case of search by genome position, the hilighted gene will "
+ "be in the middle of the table. In other cases it will be the first row. "
+ "Some of the columns in the table including the BLAST 'E-value' and "
  "'%ID' columns will be calculated relative to the hilighted gene.  You can "
  "select a different gene in the list by clicking on the gene's name. "
  "Clicking on the 'Genome Position' will open the Genome Browser on that "
@@ -1292,6 +1337,7 @@ void doMiddle(struct cart *theCart)
 char *var = NULL, *val;
 struct sqlConnection *conn;
 struct column *colList, *col;
+long startTime = clock1000();
 cart = theCart;
 #ifdef SOON
 getDbAndGenome(cart, &database, &organism);
@@ -1326,6 +1372,8 @@ else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
 else if (cartVarExists(cart, hideAllConfName))
     doConfigHideAll(conn, colList);
+else if (cartVarExists(cart, showAllConfName))
+    doConfigShowAll(conn, colList);
 else if (cartVarExists(cart, advSearchVarName))
     doAdvancedSearch(conn, colList);
 else if (cartVarExists(cart, advSearchClearVarName))
@@ -1351,6 +1399,7 @@ else if (cartNonemptyString(cart, searchVarName))
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
+uglyf("Total time %ld<BR>\n", clock1000() - startTime);
 }
 
 void usage()

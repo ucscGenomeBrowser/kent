@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.15 2003/08/21 01:57:43 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.16 2003/08/29 18:48:48 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -157,6 +157,8 @@ hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 cgiMakeButton(hideAllConfName, "Hide All");
 hPrintf(" ");
+cgiMakeButton(showAllConfName, "Show All");
+hPrintf(" ");
 cgiMakeButton(defaultConfName, "Default Configuration");
 hPrintf(" ");
 cgiMakeButton("submit", "Submit");
@@ -177,7 +179,8 @@ cartRemove(cart, colOrderVar);
 doConfigure(conn, colList, NULL);
 }
 
-void doConfigHideAll(struct sqlConnection *conn, struct column *colList)
+static void  configAllVis(struct sqlConnection *conn, struct column *colList,
+	char *how)
 /* Respond to hide all button in configuration page. */
 {
 char varName[64];
@@ -185,8 +188,21 @@ struct column *col;
 for (col = colList; col != NULL; col = col->next)
     {
     safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
-    cartSetString(cart, varName, "off");
+    cartSetString(cart, varName, how);
     }
 doConfigure(conn, colList, NULL);
 }
+
+void doConfigHideAll(struct sqlConnection *conn, struct column *colList)
+/* Respond to hide all button in configuration page. */
+{
+configAllVis(conn, colList, "off");
+}
+
+void doConfigShowAll(struct sqlConnection *conn, struct column *colList)
+/* Respond to hide all button in configuration page. */
+{
+configAllVis(conn, colList, "on");
+}
+
 

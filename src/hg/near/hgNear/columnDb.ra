@@ -98,6 +98,7 @@ type knownDetails kgXref kgID description
 search fuzzy
 noKeys on
 searchLabel Known Gene Descriptions
+colWidth 50
 
 name domains
 shortLabel Pfam Domains
@@ -106,3 +107,4 @@ priority 9
 visibility off
 type lookup kgDomain kgID domains
 search fuzzy
+colWidth 50

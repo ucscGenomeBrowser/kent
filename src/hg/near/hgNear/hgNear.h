@@ -137,6 +137,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
+#define showAllConfName "near.showAll"  /* Show all columns. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
 #define colConfigPrefix "near.col."     /* Prefix for stuff set in configuration pages. */
 #define advSearchPrefix "near.as."      /* Prefix for advanced search variables. */
@@ -195,8 +196,14 @@ struct column *findNamedColumn(struct column *colList, char *name);
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *columnSetting(struct column *column, char *name, char *defaultVal);
+char *columnSetting(struct column *col, char *name, char *defaultVal);
 /* Return value of named setting in column, or default if it doesn't exist. */
+
+int columnIntSetting(struct column *col, char *name, int defaultVal);
+/* Return value of named integer setting or default if it doesn't exist. */
+
+boolean columnSettingExists(struct column *col, char *name);
+/* Return TRUE if setting exists in column. */
 
 char *colVarName(struct column *col, char *prefix);
 /* Return variable name prefix.col->name. This is just a static
@@ -375,6 +382,9 @@ void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
 
 void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
 /* Respond to hide all button in configuration page. */
+
+void doConfigShowAll(struct sqlConnection *conn, struct column *colList);
+/* Respond to show all button in configuration page. */
 
 void doGetSeqPage(struct sqlConnection *conn, struct column *colList);
 /* Put up the get sequence page. */

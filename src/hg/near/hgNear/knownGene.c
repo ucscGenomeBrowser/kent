@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.9 2003/08/02 04:33:05 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.10 2003/08/29 18:48:48 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -187,7 +187,7 @@ if (pos == NULL)
 return pos;
 }
 
-static struct genePos *genePredAll(struct sqlConnection *conn, char *table)
+static struct genePos *allCannonical(struct sqlConnection *conn, char *table)
 /* Get all positions in genePred type table. */
 {
 char query[256];
@@ -196,7 +196,7 @@ char **row;
 struct genePos *gpList = NULL, *gp;
 
 safef(query, sizeof(query), 
-	"select name,chrom,txStart,txEnd from %s", table);
+	"select transcript,chrom,chromStart,chromEnd from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -214,7 +214,7 @@ return gpList;
 struct genePos *knownPosAll(struct sqlConnection *conn)
 /* Get all positions in knownGene table. */
 {
-return genePredAll(conn, "knownGene");
+return allCannonical(conn, "knownCannonical");
 }
 
 
