@@ -1085,6 +1085,10 @@ done
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsMonDom1
     gzip opossum.net
 
+    # index had NULL cardinality; analyze to fix (2005-01-18 - Heather)
+    hgsql hg17
+    analyze table netMonDom1
+
 # MAKE NET MAFS FOR MULTIZ (2004-12-24 kate)
     ssh kksilo
     cd /cluster/data/monDom1/bed/zb.hg17/axtNet
