@@ -78,7 +78,7 @@ struct hgPos *pos;
 AllocVar(table);
 AllocVar(pos);
 
-hgp->tableList = table;
+slAddHead(&hgp->tableList, table);
 table->posList = pos;
 table->name = cloneString(tableDescription);
 pos->chrom = chrom;
@@ -540,7 +540,7 @@ struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
 boolean ok = FALSE;
-char *alias, *temp;
+char *alias = NULL, *temp;
 struct stsMap sm;
 char *tableName;
 boolean newFormat;
@@ -1149,9 +1149,6 @@ else if (hgFindClonePos(query, &chrom, &start, &end))
 else if (findMrnaPos(query, hgp, useHgTracks))
     {
     }
-else if (findStsPos(query, hgp))
-    {
-    }
 else if (findSnpPos(query, hgp, "snpTsc"))
     {
     }
@@ -1170,6 +1167,9 @@ else if (findGenePred(query, hgp, "genieAlt"))
 else if (findGenePred(query, hgp, "softberryGene"))
     {
     }
+else if (findGenePred(query, hgp, "acembly"))
+    {
+    }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
     {
     singlePos(hgp, "STS Position", NULL, query, chrom, start, end);
@@ -1178,6 +1178,7 @@ else
     {
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
+    findStsPos(query, hgp);
     findMrnaKeys(query, hgp, useHgTracks);
     }
 

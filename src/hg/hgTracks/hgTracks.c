@@ -526,6 +526,7 @@ struct linkedFeaturesSeries
     char name[32];                         /* name for series of linked features */
     int start, end;                     /* Start/end in browser coordinates. */
     int orientation;                    /* Orientation. */
+    int grayIx;				/* Gray index (average of features) */
     struct linkedFeatures *features;    /* linked features for a series */
     };
 
@@ -560,6 +561,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     { 
     AllocVar(lfs);
     lfs->features = lf;
+    lfs->grayIx = lf->grayIx;
     slAddHead(&lfsList, lfs)
     }
 slReverse(&lfsList);
@@ -707,16 +709,16 @@ return res;
 static int cmpLfWhiteToBlack(const void *va, const void *vb)
 /* Help sort from white to black. */
 {
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return a->grayIx - b->grayIx;
 }
 
 static int cmpLfBlackToWhite(const void *va, const void *vb)
 /* Help sort from white to black. */
 {
-const struct linkedFeatures *a = *((struct linkedFeatures **)va);
-const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return b->grayIx - a->grayIx;
 }
 
@@ -830,7 +832,7 @@ static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
-/* Integerated with linkedFeaturesSeriesDraw */
+/* Integrated with linkedFeaturesSeriesDraw */
 {
 /* Convert to a linked features series object */
 linkedFeaturesToLinkedFeaturesSeries(tg);
@@ -1088,8 +1090,6 @@ struct rgbColor color5prime = tg->color;
 struct rgbColor color3prime = tg->altColor;
 shades = NULL;
 
-if (vis == tvDense)
-    sortByGray(tg, vis);
 for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
     {   
     int midY = y + midLineOff;

@@ -455,6 +455,8 @@ cgiMakeHiddenVar("g", "htcGetDna2");
 savePosInHidden();
 cgiMakeRadioButton("out1", "lcRepeats", TRUE);
 printf(" lower case repeats<BR>\n");
+cgiMakeRadioButton("out1", "nRepeats", FALSE);
+printf(" mask repeats<BR>\n");
 cgiMakeRadioButton("out1", "lc", FALSE);
 printf(" all lower case<BR>\n");
 cgiMakeRadioButton("out1", "uc", FALSE);
@@ -469,7 +471,7 @@ printf("</FORM>\n");
 webEnd();
 }
 
-void lcRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset)
+void maskRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset, boolean soft)
 /* Lower case bits corresponding to repeats. */
 {
 int rowOffset;
@@ -484,7 +486,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     rmskOutStaticLoad(row+rowOffset, &ro);
     if (ro.genoEnd > chromEnd) ro.genoEnd = chromEnd;
     if (ro.genoStart < chromStart) ro.genoStart = chromStart;
-    toLowerN(dna+ro.genoStart-offset, ro.genoEnd - ro.genoStart);
+    if (soft)
+	toLowerN(dna+ro.genoStart-offset, ro.genoEnd - ro.genoStart);
+    else
+        memset(dna+ro.genoStart-offset, 'n', ro.genoEnd - ro.genoStart);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -646,7 +651,12 @@ else
     else if (sameString(outType, "lcRepeats"))
         {
 	touppers(seq->dna);
-	lcRepeats(seqName, winStart, winEnd, seq->dna, winStart);
+	maskRepeats(seqName, winStart, winEnd, seq->dna, winStart, TRUE);
+	}
+    else if (sameString(outType, "nRepeats"))
+        {
+	touppers(seq->dna);
+	maskRepeats(seqName, winStart, winEnd, seq->dna, winStart, FALSE);
 	}
     if (isRc)
 	reverseComplement(seq->dna, seq->size);
