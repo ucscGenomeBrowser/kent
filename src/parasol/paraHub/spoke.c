@@ -1,0 +1,187 @@
+/* A spoke - a process that initiates connections with remote hosts.
+ * Parasol sends messages through spokes so as not to get bogged down
+ * waiting on a remote host.  Parasol recieves all messages through it's
+ * central socket though. */
+
+#include <signal.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include "common.h"
+#include "dlist.h"
+#include "dystring.h"
+#include "linefile.h"
+#include "paraLib.h"
+#include "net.h"
+#include "paraHub.h"
+
+int spokeLastId;	/* Id of last spoke allocated. */
+
+static void spokeSendRemote(char *socketName, char *machine, char *message)
+/* Send message to remote machine. */
+{
+uglyf("%s->%s: %s", socketName, machine, message);
+}
+
+static void spokeProcess(char *socketName)
+/* Loop around forever listening to socket and forwarding messages to machines. */
+{
+int conn, fromLen;
+char *buf, *line, *machine, sig[20];
+int sd;
+struct sockaddr_un sa;
+int sigLen = strlen(sig);
+
+/* Do some precomputation on signature. */
+assert(sigLen < sizeof(sig));
+
+/* Make your basic socket. */
+sd = socket(AF_UNIX, SOCK_STREAM, 0);
+if (sd < 0)
+    {
+    warn("Couldn't create Unix socket");
+    return;
+    }
+
+/* Bind it to file system. */
+ZeroVar(&sa);
+sa.sun_family = AF_UNIX;
+strncpy(sa.sun_path, socketName, sizeof(sa.sun_path));
+if (bind(sd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
+    {
+    warn("Couldn't bind socket to %s", socketName);
+    close(sd);
+    return;
+    }
+
+/* Listen on socket until we get killed. */
+listen(sd,2);
+for (;;)
+    {
+    conn = accept(sd, NULL, &fromLen);
+    if (!netMustReadAll(conn, sig, sigLen) || !sameString(sig, paraSig))
+	{
+	close(conn);
+        continue;
+	}
+    line = buf = netGetLongString(conn);
+    uglyf("%s: %s\n", socketName, line);
+    machine = nextWord(&line);
+    if (machine != NULL && line != NULL && line[0] != 0)
+	spokeSendRemote(socketName, machine, line);
+    close(conn);
+    freez(&buf);
+    }
+}
+
+struct spoke *spokeNew(int *closeList)
+/* Get a new spoke.  Close list is an optional, -1 terminated array of file
+ * handles to close. This will fork and create a process for spoke and a 
+ * socket for communicating with it. */
+{
+struct spoke *spoke;
+int childId;
+int sd = 0;
+char socketName[64];
+int spokeId = ++spokeLastId;
+struct sockaddr_un sa;
+
+sprintf(socketName, "spoke.%03d", spokeId);
+// remove(socketName);
+
+childId = fork();
+if (childId < 0)
+    {
+    warn("Couldn't fork in spokeNew");
+    close(sd);
+    return NULL;
+    }
+else if (childId == 0)
+    {
+    int i;
+    int fd;
+    if (closeList != NULL)
+        {
+	for (i=0; ;++i)
+	    {
+	    fd = closeList[i];
+	    if (fd < 0)
+	        break;
+	    close(fd);
+	    }
+	}
+    close(sd);
+    spokeProcess(socketName);
+    return NULL;
+    }
+else
+    {
+    AllocVar(spoke);
+    AllocVar(spoke->node);
+    spoke->node->val = spoke;
+    spoke->id = spokeLastId;
+    spoke->socketName = cloneString(socketName);
+    spoke->pid = childId;
+    spoke->lastAlive = time(NULL);
+    return spoke;
+    }
+}
+
+void spokeFree(struct spoke **pSpoke)
+/* Free spoke.  Close socket and kill process associated with it. */
+{
+struct spoke *spoke = *pSpoke;
+if (spoke != NULL)
+    {
+    if (spoke->socket != 0)
+	close(spoke->socket);
+    if (spoke->pid != 0)
+	kill(spoke->pid, SIGTERM);
+    if (spoke->socketName != NULL)
+	{
+        remove(spoke->socketName);
+	freeMem(spoke->socketName);
+	}
+    freeMem(spoke->machine);
+    freez(pSpoke);
+    }
+}
+
+void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
+/* Send a generic message to machine through spoke. */
+{
+struct dyString *dy = newDyString(1024);
+int sd = spoke->socket;
+
+/* Open up socket if it's not already. */
+if (sd == 0)
+    {
+    struct sockaddr_un sa;
+    /* Make your basic socket. */
+    sd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (sd < 0)
+	{
+        warn("couldn't open socket in spokeSendMessage");
+	return;
+	}
+
+    /* Get connection to socket process via file system. */
+    ZeroVar(&sa);
+    sa.sun_family = AF_UNIX;
+    strncpy(sa.sun_path, spoke->socketName, sizeof(sa.sun_path));
+    if (connect(sd, (struct sockaddr*) &sa, sizeof(sa)) < 0)
+        {
+	warn("couldn't connect to socket in spokeSendMessage");
+	close(sd);
+	return;
+	}
+    spoke->socket = sd;
+    }
+
+/* Send out signature, machine, and message to spoke. */
+dyStringPrintf(dy, "%s %s", machine, message);
+write(sd, paraSig, strlen(paraSig));
+netSendLongString(sd, dy->string);
+dyStringFree(&dy);
+}

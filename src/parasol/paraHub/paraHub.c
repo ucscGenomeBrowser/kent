@@ -9,6 +9,7 @@
 #include "linefile.h"
 #include "paraLib.h"
 #include "net.h"
+#include "paraHub.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -18,36 +19,15 @@ errAbort("paraHub - parasol hub server.\n"
 	 "    paraHub start\n");
 }
 
-struct machine
-/* A machine for running jobs on. */
-    {
-    struct machine *next;	/* Next in master list. */
-    struct dlNode *node;       /* List node of machine. */
-    char *name;                 /* Name.  Not alloced here. */
-    struct job *job;		/* Current job if any. */
-    int errCount;               /* Number of errors. */
-    time_t lastAlive;		/* Last time saw machine was alive in seconds past 1972 */
-    };
-struct machine *machineList; /* List of all machines. */
-struct dlList *readyList;    /* List of machines ready for jobs. */
-struct dlList *busyList;     /* List of machines running jobs. */
-struct dlList *downList;     /* List of machines that aren't running. */
+struct spoke *spokeList;	/* List of all spokes. */
+struct dlList *freeSpokes;      /* List of free spokes. */
+struct dlList *busySpokes;	/* List of busy spokes. */
 
-struct job
-/* A job .*/
-    {
-    struct dlNode *node;        /* Job's node on doubly-linked list. */
-    int id;			/* Uniq	job id. */
-    char *cmd;                  /* Executable name plus parameters. */
-    char *user;			/* User name. */
-    char *dir;			/* Starting dir. */
-    char *in;			/* Stdin. */
-    char *out;			/* Stdout. */
-    char *err;			/* Stderr. */
-    time_t submitTime;          /* Time job submitted. */
-    time_t startTime;           /* Start job run time in seconds past 1972 */
-    struct machine *machine;	/* Machine it's running on if any. */
-    };
+struct machine *machineList; /* List of all machines. */
+struct dlList *freeMachines;     /* List of machines ready for jobs. */
+struct dlList *busyMachines;     /* List of machines running jobs. */
+struct dlList *downMachines;     /* List of machines that aren't running. */
+
 struct dlList *pendingList;     /* Jobs still to do. */
 struct dlList *runningList;     /* Jobs that are running. */
 int nextJobId = 0;		/* Next free job id. */
@@ -59,11 +39,13 @@ void setupLists()
 /* Make up data structure to keep track of each machine. 
  * Try to get sockets on all of them. */
 {
-readyList = newDlList();
-busyList = newDlList();
-downList = newDlList();
+freeMachines = newDlList();
+busyMachines = newDlList();
+downMachines = newDlList();
 pendingList = newDlList();
 runningList = newDlList();
+freeSpokes = newDlList();
+busySpokes = newDlList();
 }
 
 struct machine *machineNew(char *name)
@@ -96,7 +78,7 @@ struct machine *mach;
 
 name = trimSpaces(name);
 mach = machineNew(name);
-dlAddTail(readyList, mach->node);
+dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
 }
 
@@ -203,7 +185,7 @@ void recycleMachine(struct machine *mach)
 {
 mach->job = NULL;
 dlRemove(mach->node);
-dlAddTail(readyList, mach->node);
+dlAddTail(freeMachines, mach->node);
 }
 
 void sendKillJobMessage(struct machine *mach, struct job *job)
@@ -321,10 +303,40 @@ void status(int fd)
  * followed by a blank line. */
 {
 char buf[256];
-sprintf(buf, "%d machines busy, %d free, %d jobs running, %d waiting", 
-	dlCount(busyList), dlCount(readyList), dlCount(runningList), dlCount(pendingList));
+sprintf(buf, "%d machines busy, %d free, %d jobs running, %d waiting, %d spokes busy, %d free", 
+	dlCount(busyMachines), dlCount(freeMachines), 
+	dlCount(runningList), dlCount(pendingList),
+	dlCount(busySpokes), dlCount(freeSpokes));
 netSendLongString(fd, buf);
 netSendLongString(fd, "");
+}
+
+void addSpoke(int socketHandle, int connectionHandle)
+/* Start up a new spoke and add it to free list. */
+{
+struct spoke *spoke;
+static int closeList[4];
+closeList[0] = connectionHandle;
+closeList[1] = socketHandle;
+closeList[2] = -1;
+spoke = spokeNew(closeList);
+if (spoke != NULL)
+    {
+    slAddHead(&spokeList, spoke);
+    dlAddTail(freeSpokes, spoke->node);
+    }
+}
+
+void killSpokes()
+/* Kill all spokes. */
+{
+struct spoke *spoke, *next;
+for (spoke = spokeList; spoke != NULL; spoke = next)
+    {
+    next = spoke->next;
+    dlRemove(spoke->node);
+    spokeFree(&spoke);
+    }
 }
 
 void startHub()
@@ -357,10 +369,11 @@ for (;;)
     int connectionHandle = accept(socketHandle, NULL, &fromLen);
     if (connectionHandle < 0)
         continue;
-    if (!netMustReadAll(connectionHandle, sig, sigLen))
+    if (!netMustReadAll(connectionHandle, sig, sigLen) || !sameString(sig, paraSig))
+	{
+	close(connectionHandle);
         continue;
-    if (!sameString(sig, paraSig))
-        continue;
+	}
     line = buf = netGetLongString(connectionHandle);
     uglyf("hub: %s\n", buf);
     command = nextWord(&line);
@@ -382,9 +395,13 @@ for (;;)
          listMachines(connectionHandle);
     else if (sameWord(command, "status"))
          status(connectionHandle);
+    else if (sameWord(command, "addSpoke"))
+         addSpoke(socketHandle, connectionHandle);
     close(connectionHandle);
     freez(&buf);
     }
+
+killSpokes();
 close(socketHandle);
 }
 

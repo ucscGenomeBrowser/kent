@@ -26,6 +26,7 @@ errAbort(
   "   parasol remove user name [jobPattern]\n"
   "   parasol list machines\n"
   "   parasol list jobs\n"
+  "   parasol add spoke\n"
   "   parasol status\n"
   );
 }
@@ -63,6 +64,12 @@ for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
 commandHub(dy->string);
 dyStringFree(&dy);
+}
+
+void addSpoke()
+/* Tell hub to add a spoke. */
+{
+commandHub("addSpoke");
 }
 
 void removeMachine(char *machine)
@@ -256,12 +263,22 @@ char *subType = argv[0];
 reopenHub();
 if (sameString(command, "add"))
     {
-    if (argc < 2)
+    if (argc < 1)
         usage();
     if (sameString(subType, "machine"))
-        addMachine(argv[1]);
+	{
+	if (argc != 2)
+	    usage();
+	addMachine(argv[1]);
+	}
     else if (sameString(subType, "job"))
+	{
+	if (argc < 2)
+	    usage;
         addJob(argc-1, argv+1);
+	}
+    else if (sameString(subType, "spoke"))
+        addSpoke();
     else
         usage();
     }
