@@ -92,7 +92,7 @@ enum trackVisibility hTvFromString(char *s)
  * equivalent enum. */
 {
 enum trackVisibility vis = hTvFromStringNoAbort(s);
-if (vis < 0)
+if ((int)vis < 0)
    errAbort("Unknown visibility %s", s);
 return vis;
 }
