@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.613 2003/10/14 03:39:44 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.614 2003/10/14 06:35:39 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6332,7 +6332,7 @@ if (sameString(database, "hg15")
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
 
-if (sameString(database, "hg15"))
+if (sameString(database, "hg16"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
