@@ -51,11 +51,11 @@ errAbort(
   "options:\n"
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
   "               Usually between 8 and 12\n"
-  "               Default is 11 for DNA and 4 for protein.\n"
+  "               Default is 11 for DNA and 8 for protein.\n"
   "   -oneOff     If present this allows one mismatch in tile and still\n"
-  "               triggers an alignmetns\n"
+  "               triggers an alignments.  Default is on for protein.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
-  "               Default is 2\n"
+  "               Default is 2 for nucleotide, 1 for protein.\n"
   "   -minScore=N sets minimum score.  This is twice the matches minus the mismatches\n"
   "               minus some sort of gap penalty.  Default is 30\n"
   "   -minIdentity=N Sets minimum sequence identity (in percent).  Default is 90 for\n"
@@ -682,8 +682,9 @@ if ((dIsProtLike ^ qIsProtLike) != 0)
 /* Set default tile size for protein-based comparisons. */
 if (dIsProtLike)
     {
-    tileSize = 4;
-    minMatch = 2;
+    tileSize = 8;
+    minMatch = 1;
+    oneOff = TRUE;
     maxGap = 0;
     }
 
