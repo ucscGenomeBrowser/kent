@@ -149,9 +149,9 @@ if ($max > $threshhold || $maxInHour > 1000) then
   cat $output
 endif
 
-rm -f remote_host
-rm -f xxUserCountxx
-rm -f $output
-rm -f xxLastHoursHostsxx
-rm -f xxHoursHitsxx 
+rm remote_host
+rm xxUserCountxx
+rm  $output
+rm xxLastHoursHostsxx
+rm xxHoursHitsxx 
 exit
