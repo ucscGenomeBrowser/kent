@@ -759,9 +759,9 @@ for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     }
 gf->totalSeqSize = offset;
 gfZeroOverused(gf);
-uglyAbort("All for now");
 return gf;
 #ifdef SOON
+uglyAbort("All for now");
 #endif /* SOON */
 }
 
@@ -1232,9 +1232,10 @@ return clumpList;
 }
 
 
-struct gfClump *gfFindDnaClumps(struct genoFind *gf, struct dnaSeq *seq, 
+static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
 	struct lm *lm, int *retHitCount)
-/* Find clumps associated with one sequence. */
+/* Find hits associated with one sequence. This is is special fast
+ * case for DNA that is in an unsegmented index. */
 {
 struct gfHit *hitList = NULL, *hit;
 int size = seq->size;
@@ -1246,15 +1247,8 @@ bits32 bits = 0;
 bits32 bVal;
 int listSize;
 bits32 qStart, tStart, *tList;
-int minMatch = gf->minMatch;
 int hitCount = 0;
 
-if (size < (minMatch+1) * (gf->tileSize+1))
-    {
-    minMatch = size/(gf->tileSize+1) - 1;
-    if (minMatch < 2)
-	minMatch = 2;
-    }
 for (i=0; i<tileSizeMinusOne; ++i)
     {
     bVal = ntValNoN[dna[i]];
@@ -1271,70 +1265,124 @@ for (i=tileSizeMinusOne; i<size; ++i)
     qStart = i-tileSizeMinusOne;
     tList = gf->lists[bits];
     for (j=0; j<listSize; ++j)
-        {
+	{
 	lmAllocVar(lm, hit);
 	hit->qStart = qStart;
 	hit->tStart = tList[j];
-	hit->diagonal = hit->tStart + seq->size - qStart;
+	hit->diagonal = hit->tStart + size - qStart;
 	slAddHead(&hitList, hit);
 	++hitCount;
 	}
     }
-cmpQuerySize = seq->size;
 *retHitCount = hitCount;
-return clumpHits(gf, hitList, minMatch);
+return hitList;
 }
 
-struct gfClump *gfFindPepClumps(struct genoFind *gf, aaSeq *seq, struct lm *lm,
+static struct gfHit *gfStraightFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
 	int *retHitCount)
-/* Find clumps associated with one sequence. */
+/* Find hits associated with one sequence in general case in a non-segmented
+ * index. */
 {
 struct gfHit *hitList = NULL, *hit;
 int size = seq->size;
 int tileSize = gf->tileSize;
 int lastStart = size - tileSize;
-int tileSizeMinusOne = tileSize - 1;
-int mask = gf->tileMask;
-AA *pep = seq->dna;
+char *poly = seq->dna;
 int i, j;
 int tile;
-bits32 bVal;
 int listSize;
 bits32 qStart, tStart, *tList;
-int minMatch = gf->minMatch;
 int hitCount = 0;
+int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
 for (i=0; i<=lastStart; ++i)
     {
-    tile = gfPepTile(pep+i, tileSize);
+    tile = makeTile(poly+i, tileSize);
     if (tile < 0)
-        continue;
+	continue;
     listSize = gf->listSizes[tile];
     qStart = i;
     tList = gf->lists[tile];
     for (j=0; j<listSize; ++j)
-        {
+	{
 	lmAllocVar(lm,hit);
 	hit->qStart = qStart;
 	hit->tStart = tList[j];
-	hit->diagonal = hit->tStart + seq->size - qStart;
+	hit->diagonal = hit->tStart + size - qStart;
 	slAddHead(&hitList, hit);
 	++hitCount;
 	}
     }
-cmpQuerySize = seq->size;
-// slSort(&hitList, gfHitCmpDiagonal);
 *retHitCount = hitCount;
-return clumpHits(gf, hitList, minMatch);
+return hitList;
+}
+
+static struct gfHit *gfSegmentedFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
+	int *retHitCount)
+/* Find hits associated with one sequence in general case in a segmented
+ * index. */
+{
+struct gfHit *hitList = NULL, *hit;
+int size = seq->size;
+int tileSize = gf->tileSize;
+int tileTailSize = gf->segSize;
+int tileHeadSize = gf->tileSize - tileTailSize;
+int lastStart = size - tileSize;
+char *poly = seq->dna;
+int i, j;
+int tileHead, tileTail;
+int listSize;
+bits32 qStart, tStart;
+bits16 *endList;
+int hitCount = 0;
+int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
+
+uglyf("gfSegmentedFindHits\n");
+for (i=0; i<=lastStart; ++i)
+    {
+    tileHead = makeTile(poly+i, tileHeadSize);
+    if (tileHead < 0)
+	continue;
+    tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
+    if (tileTail < 0)
+	continue;
+    listSize = gf->listSizes[tileHead];
+    qStart = i;
+    endList = gf->endLists[tileHead];
+    for (j=0; j<listSize; ++j)
+	{
+	if (endList[0] == tileTail)
+	    {
+	    lmAllocVar(lm,hit);
+	    hit->qStart = qStart;
+	    hit->tStart = (endList[1]<<16) + endList[2];
+	    hit->diagonal = hit->tStart + size - qStart;
+	    slAddHead(&hitList, hit);
+	    ++hitCount;
+	    }
+	}
+    }
+uglyf("a ok!\n");
+*retHitCount = hitCount;
+return hitList;
 }
 
 struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, int *retHitCount)
-/* Find clump whether its peptide or dna. */
+/* Find clump whether its peptide or dna.  Call fast routine if possible.*/
 {
-if (gf->isPep)
-    return gfFindPepClumps(gf, seq, lm, retHitCount);
+struct gfHit *hitList = NULL;
+
+if (gf->segSize == 0 && !gf->isPep)
+    hitList = gfFastFindDnaHits(gf, seq, lm, retHitCount);
 else
-    return gfFindDnaClumps(gf, seq, lm, retHitCount);
+    {
+    if (gf->segSize == 0)
+        hitList = gfStraightFindHits(gf, seq, lm, retHitCount);
+    else
+	hitList = gfSegmentedFindHits(gf, seq, lm, retHitCount);
+    }
+cmpQuerySize = seq->size;
+return clumpHits(gf, hitList, gf->minMatch);
 }
 
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount)
@@ -1345,7 +1393,7 @@ int oneHit;
 int hitCount = 0;
 for (frame = 0; frame < 3; ++frame)
     {
-    clumps[frame] = gfFindPepClumps(gfs[frame], seq, lm, &oneHit);
+    clumps[frame] = gfFindClumps(gfs[frame], seq, lm, &oneHit);
     hitCount += oneHit;
     }
 *retHitCount = hitCount;
