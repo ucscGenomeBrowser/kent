@@ -164,8 +164,8 @@ mv /tmp/whatever $1
 # promoter track
 
     ssh hgwdev
-    mkdir /cluster/data/pyrFur2/promoterScanPos
-    cd /cluster/data/pyrFur2/promoterScanPos    
+    mkdir -p /cluster/data/pyrFur2/wiggle/promoterScanPos
+    cd /cluster/data/pyrFur2/wiggle/promoterScanPos    
     cp plus.wig.gz .
     wigAsciiToBinary -chrom=chr -wibFile=promoterScanPos plus.wig.gz
     hgLoadWiggle -pathPrefix=/gbdb/pyrFur2/wib/promoterScanPos pyrFur2 promoterScanPos promoterScanPos.wig
@@ -178,6 +178,24 @@ mv /tmp/whatever $1
     hgLoadWiggle -pathPrefix=/gbdb/pyrFur2/wib/promoterScanNeg pyrFur2 promoterScanNeg promoterScanNeg.wig
     mkdir /gbdb/pyrFur2/wib/promoterScanNeg
     ln -s `pwd`/*.wib  /gbdb/pyrFur2/wib/promoterScanNeg/
+
+# shine DG track
+
+    cd /cluster/data/pyrFur2/wiggle
+    mkdir shineDGPos
+    mkdir shineDGNeg
+    cd shineDGPos
+    cp shine.pos.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=shineDGPos shine.pos.gz
+    hgLoadWiggle pyrFur2 shineDGPos shineDGPos.wig
+    cd ../shineDGNeg
+    cp shine.neg.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=shineDGNeg shine.neg.gz
+    hgLoadWiggle pyrFur2 shineDGNeg shineDGNeg.wig
+    cd /gbdb/pyrFur2/wib  
+    ln -s /cluster/data/pyrFur2/wiggle/shineDGPos/shineDGPos.wib shineDGPos.wib
+    ln -s /cluster/data/pyrFur2/wiggle/shineDGNeg/shineDGNeg.wib shineDGNeg.wib
+    
 
 # Rfam TRACK
 
@@ -224,3 +242,9 @@ expStep 0.5
 expTable llaPfuPrintCExps
 chip printA
 canPack off
+
+# Matt's Operons
+
+cd /cluster/data/pyrFur2/bed/llOperons
+cp matt.bed .
+hgLoadBed pyrFur2 llOperons matt.bed

@@ -267,3 +267,20 @@ mv /tmp/whatever $1
     hgsql pyrAer1 < paeNew.sql
     rm paeNew.sql
     echo 'update dbDb set defaultPos="chr:550000-580000" where name="pyrAer1"' | hgsql -h genome-testdb hgcentraltest
+
+# Pae promoter track
+
+    cd /cluster/data/pyrAer1/wiggle
+    mkdir promoterScanPos
+    mkdir promoterScanNeg
+    cd promoterScanPos
+    cp prom.neg.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=promoterScanPos prom.pos.gz
+    hgLoadWiggle pyrAer1 promoterScanPos promoterScanPos.wig
+    cd ../promoterScanNeg
+    cp prom.neg.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=promoterScanNeg prom.neg.gz
+    hgLoadWiggle pyrAer1 promoterScanNeg promoterScanNeg.wig
+    cd /gbdb/pyrAer1/wib  
+    ln -s /cluster/data/pyrAer1/wiggle/promoterScanPos/promoterScanPos.wib promoterScanPos.wib
+    ln -s /cluster/data/pyrAer1/wiggle/promoterScanNeg/promoterScanNeg.wib promoterScanNeg.wib
