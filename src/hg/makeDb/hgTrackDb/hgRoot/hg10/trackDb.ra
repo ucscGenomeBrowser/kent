@@ -1,0 +1,9 @@
+track acembly
+shortLabel Acembly Genes
+longLabel Acembly Gene Predictions With Alt-splicing
+priority 14.5
+visibility dense
+color 155,0,125
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$
+
