@@ -15,7 +15,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 19;       /* Current version number. */
+int version = 20;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
 boolean isPlaced;	/* TRUE if want to really follow map. */
 FILE *logFile;	/* File to write decision steps to. */
@@ -2263,7 +2263,7 @@ for (; !dlEnd(node); node = node->next)
 return NULL;
 }
 
-void printOverlapInfo(FILE *f, struct mmClone *a, struct mmClone *b, struct hash *ocpHash,
+int printOverlapInfo(FILE *f, struct mmClone *a, struct mmClone *b, struct hash *ocpHash,
 	int orientation)
 /* Print size of overlap between a and b, and a end info on ab overlap. */
 {
@@ -2273,7 +2273,7 @@ char as, at, temp;
 if (a == NULL || b == NULL)
     {
     fprintf(f, "%6s  - -   ", "n/a");
-    return;
+    return 0;
     }
 ocp = findHashedOcp(a->name, b->name, ocpHash);
 if (ocp->a == a)
@@ -2296,6 +2296,7 @@ if (orientation == 0 && (as != '?' || at != '?'))
     fprintf(f, "%6d (%c %c)  ", ocp->overlap, as, at);
 else
     fprintf(f, "%6d  %c %c   ", ocp->overlap, as, at);
+return ocp->overlap;
 }
 
 struct cloneRef *getLastClones(struct barge *barge, int minSize, struct hash *ocpHash)
@@ -2533,7 +2534,7 @@ for (bNode = bargeList->head; !dlEnd(bNode); bNode = bNode->next)
 			naForNull(clone->bacName), cloneDir(ce), clone->size);
 		nextUnenclosed = findNextUnenclosed(eNode->next);
 		printOverlapInfo(f, clone, lastUnenclosed, ocpHash, ce->orientation);
-		printOverlapInfo(f, clone, nextUnenclosed, ocpHash, ce->orientation);
+		nextOverlap = printOverlapInfo(f, clone, nextUnenclosed, ocpHash, ce->orientation);
 		fprintf(f, "%6s %3s %8d", naForNull(clone->seqCenter), naForNull(clone->placeInfo), 
 			clone->mapPos);
 		if (cloneCount == 1)
@@ -2554,6 +2555,10 @@ for (bNode = bargeList->head; !dlEnd(bNode); bNode = bNode->next)
 		    }
 		lastUnenclosed = clone;
 		fprintf(f, "\n");
+		if (nextOverlap == 0 && nextUnenclosed != NULL)
+		    {
+		    fprintf(f, "----- weak gap\n");
+		    }
 		}
 	    }
 	}
