@@ -3848,6 +3848,9 @@ hgsql \
         -h genome-testdb hgcentraltest
 
 #  miRNA track (DONE - 2004-03-02 - Hiram)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
     mkdir /cluster/data/mm4/bed/miRNA
     cd /cluster/data/mm4/bed/miRNA
     wget --timestamping \

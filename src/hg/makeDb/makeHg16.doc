@@ -6868,6 +6868,9 @@ LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
     unset build
 
 #  miRNA track (DONE - 2004-03-02 - Hiram)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
     mkdir /cluster/data/hg16/bed/miRNA
     cd /cluster/data/hg16/bed/miRNA
     wget --timestamping \
