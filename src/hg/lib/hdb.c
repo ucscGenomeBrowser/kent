@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.169 2004/03/30 20:22:19 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.170 2004/03/31 04:56:52 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1946,6 +1946,29 @@ freeHash(&hash);
 hFreeOrDisconnect(&conn);
 *retBinned = binned;
 return gotIt;
+}
+
+boolean hFindFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * and whether it's binned . */
+{
+char retName[32];
+char retScore[32];
+char retStrand[32];
+char retCdsStart[32];
+char retCdsEnd[32];
+char retCount[32];
+char retStarts[32];
+char retEndsSizes[32];
+char retSpan[32];
+return hFindBed12FieldsAndBinDb(hGetDb(), table,
+				retChrom, retStart, retEnd,
+				retName, retScore, retStrand,
+				retCdsStart, retCdsEnd,
+				retCount, retStarts, retEndsSizes,
+				retSpan, retBinned);
 }
 
 boolean hFindChromStartEndFields(char *table, 
