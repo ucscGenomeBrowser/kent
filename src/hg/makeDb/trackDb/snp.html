@@ -60,7 +60,7 @@
       </UL>
     </LI>
     <LI> 
-      <B>Validation Status</B>: How the variant has been validated<BR>
+      <B>Validation Status</B>: How the variant has been validated (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
         <LI><B>Unknown</B> - no validation has been reported for this refSNP
         <LI><B>Other Population</B> - at least one ss in cluster was validated by independent assay
@@ -72,7 +72,7 @@
       </UL>
     </LI>
     <LI> 
-      <B>Functional Classification</B>: Predicted functional role<BR>
+      <B>Functional Class</B>: Predicted functional role (<I>each variant may have more than one functional role</I>)<BR>
       <UL>
         <LI><B>Unknown</B> - no known functional classification
         <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
@@ -88,6 +88,15 @@
            with gap in sequence is aligned back to contig
            sequence. variations 3' of the gap have undefined
            functional inference.
+      </UL>
+    </LI>
+    <LI> 
+      <B>Location Type</B>: Defines how the variant fits in the reference assembly<BR>
+      <UL>
+        <LI><B>Unknown</B> - undefined or error
+        <LI><B>Range</B> - reference is a range of bases 
+        <LI><B>Exact</B> - reference is exatly one base
+        <LI><B>Between</B> - variant is inserted between two reference bases
       </UL>
     </LI>
   </UL>
