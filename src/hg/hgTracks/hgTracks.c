@@ -3625,27 +3625,25 @@ else
     return MG_WHITE;
 }
 
-static void bedDrawSimpleAt(struct track *tg, struct bed *item, 
-	struct vGfx *vg, int xOff, int y, int width, 
+static void bedDrawSimpleAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
+struct bed *bed = item;
 int heightPer = tg->heightPer;
-int xEnd = xOff + width;
-int x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
-if (x1 < xOff) x1 = xOff;
-if (x2 > xEnd) x2 = xEnd;
-w = x2-x1;
 if (tg->itemColor != NULL)
-    color = tg->itemColor(tg, item, vg);
+    color = tg->itemColor(tg, bed, vg);
 else
     {
     if (tg->colorShades)
-	color = tg->colorShades[grayInRange(item->score, 0, 1000)];
+	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
     }
+w = x2-x1;
 if (w < 1)
     w = 1;
 if (color)
@@ -3654,36 +3652,25 @@ if (color)
     if (tg->drawName)
 	{
 	/* Clip here so that text will tend to be more visible... */
-	char *s = tg->itemName(tg, item);
+	char *s = tg->itemName(tg, bed);
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
 	    Color textColor = contrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
-	mapBoxHc(item->chromStart, item->chromEnd, x1, y, x2 - x1, heightPer,
-		tg->mapName, tg->mapItemName(tg, item), NULL);
-	}
-    else if (vis == tvPack)
-        {
-	char *s = tg->itemName(tg, item);
-	int sWidth = mgFontStringWidth(font, s);
-	int dotWidth = tl.nWidth/2;
-	int textX = x1 - sWidth - dotWidth;
-	vgTextRight(vg, textX, y, sWidth, heightPer, color, font, s);
-	mapBoxHc(item->chromStart, item->chromEnd, textX, y, x2 - textX, heightPer,
-		tg->mapName, tg->mapItemName(tg, item), NULL);
+	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL);
 	}
     }
 if (tg->subType == lfWithBarbs)
     {
     int dir = 0;
-    if (item->strand[0] == '+')
+    if (bed->strand[0] == '+')
 	dir = 1;
-    else if(item->strand[0] == '-') 
+    else if(bed->strand[0] == '-') 
 	dir = -1;
-    w = x2-x1;
-    if (dir != 0)
+    if (dir != 0 && w > 2)
 	{
 	int midY = y + (heightPer>>1);
 	Color textColor = contrastingColor(vg, color);
@@ -3697,33 +3684,10 @@ static void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
-int y = yOff;
-int lineHeight = tg->lineHeight;
-boolean isFull = (vis == tvFull);
-double scale = scaleForPixels(width);
-int midLineOff = tg->heightPer/2;
-struct bed *item;
-
-if (vis == tvPack)
-    {
-    struct spaceSaver *ss = tg->ss;
-    struct spaceNode *sn;
-    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
-        {
-	y = yOff + lineHeight * sn->row;
-	item = sn->val;
-	bedDrawSimpleAt(tg, item, vg, xOff, y, width, scale, font, color, vis);
-	}
-    }
-else
-    {
-    for (item = tg->items; item != NULL; item = item->next)
-	{
-	bedDrawSimpleAt(tg, item, vg, xOff, y, width, scale, font, color, vis);
-	if (isFull)
-	    y += lineHeight;
-	}
-    }
+if (!tg->drawItemAt)
+    errAbort("missing drawItemAt in track %s", tg->mapName);
+genericDrawItems(tg, seqStart, seqEnd, vg, xOff, yOff, width, 
+	font, color, vis);
 }
 
 char *bedName(struct track *tg, void *item)
@@ -3755,6 +3719,7 @@ void bedMethods(struct track *tg)
 /* Fill in methods for (simple) bed tracks. */
 {
 tg->drawItems = bedDrawSimple;
+tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = bedName;
 tg->mapItemName = bedName;
 tg->totalHeight = tgFixedTotalHeight;
