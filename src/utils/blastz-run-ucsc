@@ -7,12 +7,15 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.5 2005/01/29 02:01:35 angie Exp $
+# $Id: blastz-run-ucsc,v 1.6 2005/02/03 05:03:59 angie Exp $
 
 use Getopt::Long;
 use strict;
 
 use vars qw/
+    $opt_outFormat
+    $opt_gz
+    $opt_dropSelf
     $opt_help
     /;
 
@@ -21,15 +24,24 @@ sub usage {
   my $base = $0;
   $base =~ s/^(.*\/)?//;
     print STDERR "
-usage: $base target query DEF out.lav
-    Unpacks sequence (if necessary), runs blastz 
-    and lifts (a.k.a. \"normalizes\") output (if necessary).  
+usage: $base target query DEF out
+options:
+    -outFormat (psl|axt)  Convert blastz output from lav to psl or axt.
+    -gz                   Compress output with gzip.
+    -dropSelf             When converting to psl or axt, drop alignment 
+                          blocks that cross the diagonal (trivial self-
+                          alignments).  
+    Unpacks sequence (if necessary), runs blastz and lifts/\"normalizes\" 
+    output (if necessary).  
     Target and query can be list files containing one sequence specifier 
     per line, or sequence specifiers.  A sequence specifier is a .2bit, 
     .nib or .fa(.gz) files, possibly with a sequence and range specifier 
     appended.  
     DEF is a Scott Schwartz-style bash script containing blastz parameters.  
-    out.lav is the (lifted/\"normalized\") output of blastz.  
+    out is the (lifted/\"normalized\") output of blastz (optionally converted 
+    to axt or psl, and/or gzipped).  This script does not pay attention to 
+    out's file suffixes -- it is up to you to make sure that they are 
+    consistent with output format and compression options.
 \n";
   exit $status;
 }
@@ -110,7 +122,7 @@ sub parseFileSpec {
   # split into components.
   my ($info, $dir) = @_;
   my ($fName, $seq, $start, $end);
-  if ($info =~ /^(\S+):(\w+):(\d+)-(\d+)$/) {
+  if ($info =~ /^(\S+):(\S+):(\d+)-(\d+)$/) {
     ($fName, $seq, $start, $end) = ($1, $2, $3, $4);
   } elsif ($info =~ /^(\S+):(\d+)-(\d+)$/) {
     ($fName, $seq, $start, $end) = ($1, &fileBase($info), $2, $4);
@@ -365,14 +377,46 @@ sub liftLav {
   &run("blastz-normalizeLav $tLen $qLen < $raw > $out");
 }
 
+sub convertOutput {
+  # Convert lav file to psl or axt file, optionally dropping trivial self al's.
+  my ($lav, $out) = @_;
+  my $tSeq = $defVars{'SEQ1_DIR'};
+  my $qSeq = $defVars{'SEQ2_DIR'};
+  my $tSizes = $defVars{'SEQ1_LEN'};
+  my $qSizes = $defVars{'SEQ2_LEN'};
+  if ($opt_outFormat eq 'axt') {
+    my $dropSelf = ($opt_dropSelf ? "-dropSelf " : "");
+    &run("lavToAxt $dropSelf $lav $tSeq $qSeq $out");
+  } elsif ($opt_dropSelf) {
+    # lavToPsl doesn't have lavToAxt's -dropSelf functionality, so pipe 
+    # lavToAxt -dropSelf to axtToPsl.
+    &run("lavToAxt -dropSelf $lav $tSeq $qSeq stdout " .
+	 "| axtToPsl stdin $tSizes $qSizes $out");
+  } else {
+    &run("lavToPsl $lav $out");
+  }
+}
+
 
 #########################################################################
 #
 # -- main --
 
-my $ok = GetOptions("help");
+my $ok = GetOptions("outFormat=s",
+		    "gz",
+		    "dropSelf",
+		    "help");
 &usage(1) if (!$ok);
 &usage(0) if ($opt_help);
+if ($opt_outFormat) {
+  $opt_outFormat =~ tr/A-Z/a-z/;
+  if ($opt_outFormat eq 'lav') {
+    $opt_outFormat = undef;
+  } elsif ($opt_outFormat !~ /^(psl|axt)$/) {
+    print STDERR "\nUnsupported -outFormat $opt_outFormat.\n";
+    &usage(1);
+  }
+}
 &usage(1) if (scalar(@ARGV) != 4);
 my ($target, $query, $DEF, $out) = @ARGV;
 
@@ -415,6 +459,7 @@ my $localOut = "$TMP/local.lav";
 # Local temporary files that are overwritten by each {target, query} run:
 my $littleRaw = "$TMP/little.raw";
 my $littleOut = "$TMP/little.lav";
+my $littleConv = "$TMP/little.conv";
 
 # Run blastz on each {target, query} pair;  lift and collect results.
 foreach my $tSpec (@tFileSpecs) {
@@ -436,12 +481,21 @@ foreach my $tSpec (@tFileSpecs) {
 	  &run("rm $qLocal");
       }
     }
-    &run("cat $littleOut >> $localOut");
+    if ($opt_outFormat) {
+      &convertOutput($littleOut, $littleConv);
+      &run("cat $littleConv >> $localOut");
+    } else {
+      &run("cat $littleOut >> $localOut");
+    }
   }
   if ($tLocal =~ /^$TMP/) {
       $tLocal =~ s/\[.*\]$//;
       &run("rm $tLocal");
   }
+}
+if ($opt_gz) {
+  &run("gzip $localOut");
+  $localOut .= ".gz";
 }
 # Move collected results to final location.
 &run("mv $localOut $out");
