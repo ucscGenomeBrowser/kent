@@ -51,7 +51,6 @@ if (val != NULL)
 void paraNodeStart(char *machineList)
 /* Start node servers on all machines in list. */
 {
-int i;
 char *exe = optionVal("exe", "paraNode");
 char *rsh = optionVal("rsh", "rsh");
 struct lineFile *lf = lineFileOpen(machineList, TRUE);

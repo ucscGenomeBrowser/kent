@@ -20,6 +20,7 @@
 #include "rudp.h"
 #include "paraMessage.h"
 #include "internet.h"
+#include "log.h"
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -137,7 +138,7 @@ struct hash *environToHash(char **env)
 /* Put environment into hash. */
 {
 struct hash *hash = newHash(7);
-char *name, *val, *s, *e;
+char *name, *val, *s;
 while ((s = *env++) != NULL)
     {
     name = cloneString(s);
@@ -355,7 +356,6 @@ else
      * main process. */
     int status = -1;
     int cid;
-    int sd;
     struct paraMessage pm;
     struct rudp *ru = NULL;
     struct tms tms;
@@ -548,7 +548,6 @@ else
 	    {
 	    if (busyProcs < maxProcs)
 		{
-		char *exe;
 		int childPid;
 		argCount = chopLine(rjm.command, args);
 		if (argCount >= ArraySize(args))
@@ -605,7 +604,7 @@ void doFetch(char *line)
 {
 char *user = nextWord(&line);
 char *fileName = nextWord(&line);
-if (fileName != NULL)
+if ((user == NULL) || (fileName != NULL))
     {
     FILE *f = fopen(fileName, "r");
     pmClear(&pmIn);
@@ -682,7 +681,6 @@ pmSend(&pmIn, mainRudp);
 void listJobs()
 /* Report jobs running and recently finished. */
 {
-struct paraMessage pm;
 struct job *job;
 struct dlNode *node;
 
@@ -719,7 +717,6 @@ void paraNode()
 /* paraNode - a net server. */
 {
 char *line;
-int fromLen, readSize;
 char *command;
 struct sockaddr_in sai;
 
@@ -797,7 +794,7 @@ void paraFork()
  * Set up log file if any here as well. */
 {
 /* Set up log handler. */
-logOpen("paraNode", optionVal("logFacility", NULL));
+logOpenSyslog("paraNode", optionVal("logFacility", NULL));
 
 /* Close standard file handles. */
 close(0);

@@ -185,7 +185,7 @@ void gensub2(char *list1Name, char *list2Name, char *templateName, char *conName
 {
 struct lineFile *lfT = lineFileOpen(templateName, TRUE);
 FILE *f = mustOpen(conName, "w");
-char *lineT, *path1, *path2;
+char *lineT;
 int i, j;
 struct slName *loopText = NULL, *loopEl;
 bool gotLoop = FALSE, gotEndLoop = FALSE;

@@ -35,7 +35,6 @@ void showLong(char *name, struct rudp *ru, int *pRunning, int *pRecent)
 /* Fetch and display response to listJobs message.
  * Increment running and recent counts. */
 {
-char *line;
 int running, recent, i;
 struct paraMessage pm;
 
@@ -86,11 +85,8 @@ void paraNodeStatus(char *machineList)
 {
 struct lineFile *lf = lineFileOpen(machineList, FALSE);
 boolean longFormat = optionExists("long");
-int size;
 char *row[1];
 int totalCpu = 0, totalBusy = 0, totalRecent = 0;
-struct sockaddr_in outAddress;
-bits32 hostIp;
 
 while (lineFileRow(lf, row))
     {

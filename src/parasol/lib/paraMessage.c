@@ -57,7 +57,7 @@ void pmSet(struct paraMessage *pm, char *message)
 int len = strlen(message);
 if (len >= sizeof(pm->data) - 1)
     {
-    warn("Message too long in pmSet, ignoring", message);
+    warn("Message too long in pmSet, ignoring: %.20s...", message);
     pmClear(pm);
     }
 else
@@ -130,6 +130,7 @@ boolean pmReceive(struct paraMessage *pm, struct rudp *ru)
 return pmReceiveTimeOut(pm, ru, 0);
 }
 
+#if 0 /* unused static functions */
 static char *addLongData(char *data, bits32 val)
 /* Add val to data stream, converting to network format.  Return
  * new position of data stream. */
@@ -149,5 +150,5 @@ memcpy(&val, *pData, sizeof(val));
 val = ntohl(val);
 return val;
 }
-
+#endif
 
