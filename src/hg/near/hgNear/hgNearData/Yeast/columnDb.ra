@@ -40,6 +40,16 @@ queryFull select swissAC,description from proteins092903.pfamXref,proteins092903
 queryOne select description,proteins092903.pfamDesc.pfamAC from proteins092903.pfamXref,proteins092903.pfamDesc where swissAC = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
 invQueryOne select swissAC from proteins092903.pfamXref,proteins092903.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 
+name sgdLocalization
+type association sgdLocalization
+visibility on
+shortLabel Localization
+longLabel Cellular Localization from Huh et al Nature 2003 425:686-691
+priority 9.5
+queryFull select name,value from sgdLocalization
+queryOne select value,value from sgdLocalization where name = '%s'
+invQueryOne select name from sgdLocalization where value = '%s'
+
 name go
 goaIdColumn dbObjectId
 
