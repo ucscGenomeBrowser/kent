@@ -43,6 +43,14 @@ spectrum on
 exonArrows off
 type bed 6 .
 
+track cns
+shortLabel CNS
+longLabel Conserved Non-Coding (Cons Elements Minus Predicted Coding)
+priority 109.11
+group compGeno
+visibility hide
+type bed 4
+
 track multiz7way
 shortLabel 7Way Cons
 longLabel Hu/Chimp/Mouse/Rat/Chicken/Fugu/Zfish Multiz Alignments & PhyloHMM Cons 
