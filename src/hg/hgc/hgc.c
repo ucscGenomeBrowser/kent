@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.539 2003/12/24 18:04:25 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.540 2003/12/29 06:08:11 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9981,7 +9981,7 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else errAbort("<BR>%s<BR>\n",query);
+else printf("Supporting details are not currently available for this SNP.\n");
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10022,7 +10022,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
-
 
 void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
