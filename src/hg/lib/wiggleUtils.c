@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.3 2004/03/22 22:14:04 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.4 2004/03/23 22:10:12 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -48,7 +48,8 @@ if (f != (FILE *) NULL)
 }
 
 static struct wiggleData * readWigDataRow(struct wiggle *wiggle,
-    int winStart, int winEnd, boolean summaryOnly)
+    int winStart, int winEnd, boolean summaryOnly, int tableId,
+	boolean (*wiggleCompare)(int tableId, double value))
 /*  read one row of wiggle data, return data values between winStart, winEnd */
 {
 unsigned char *readData = (unsigned char *) NULL;
@@ -107,20 +108,27 @@ else
 	    {
 	    if (chromPosition >= winStart && chromPosition < winEnd)
 		{
-		dataPtr->chromStart = chromPosition;
-		dataPtr->value =
+		double value =
 		    BIN_TO_VALUE(datum,wiggle->lowerLimit,wiggle->dataRange);
-		++validCount;
-		if (chromStart < 0)
-		    chromStart = chromPosition;
-		chromEnd = chromPosition + 1 + wiggle->span;
-		if (lowerLimit > dataPtr->value)
-		    lowerLimit = dataPtr->value;
-		if (upperLimit < dataPtr->value)
-		    upperLimit = dataPtr->value;
-		sumData += dataPtr->value;
-		sumSquares += dataPtr->value * dataPtr->value;
-		++dataPtr;
+		boolean takeIt = TRUE;
+		if (wiggleCompare)
+		    takeIt = (*wiggleCompare)(tableId, value);
+		if (takeIt)
+		    { 
+		    dataPtr->chromStart = chromPosition;
+		    dataPtr->value = value;
+		    ++validCount;
+		    if (chromStart < 0)
+			chromStart = chromPosition;
+		    chromEnd = chromPosition + 1 + wiggle->span;
+		    if (lowerLimit > dataPtr->value)
+			lowerLimit = dataPtr->value;
+		    if (upperLimit < dataPtr->value)
+			upperLimit = dataPtr->value;
+		    sumData += dataPtr->value;
+		    sumSquares += dataPtr->value * dataPtr->value;
+		    ++dataPtr;
+		    }
 		}
 	    }
 	chromPosition += wiggle->span;
@@ -178,7 +186,8 @@ wd->next = (struct wiggleData *)NULL;	/*	redundant safety	*/
 }
 
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
-    int winStart, int winEnd, boolean summaryOnly)
+    int winStart, int winEnd, boolean summaryOnly, int tableId,
+	boolean (*wiggleCompare)(int tableId, double value))
 /*  return linked list of wiggle data between winStart, winEnd */
 {
 struct wiggleData *ret = (struct wiggleData *) NULL;
@@ -241,7 +250,8 @@ while ((el = hashNext(&cookie)) != NULL)
 	{
 	++rowCount;
 	wiggle = wiggleLoad(row + rowOffset);
-	wigData = readWigDataRow(wiggle, winStart, winEnd, summaryOnly);
+	wigData = readWigDataRow(wiggle, winStart, winEnd, summaryOnly,
+		tableId, wiggleCompare );
 	if (wigData)
 	    slAddHead(&wdList,wigData);
 	}
