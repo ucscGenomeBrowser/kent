@@ -159,8 +159,9 @@ typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
 /* This is the type of a client provided function to save an alignment. */
 
-void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
-    boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData);
+void gfAlignDnaClumps(struct genoFind *gf, struct gfClump *clumpList, 
+    struct dnaSeq *seq, boolean isRc,  int minMatch, GfSaveAli outFunction, 
+    void *outData, boolean fastN);
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
  * a FILE as outData in this case.. */
@@ -186,10 +187,13 @@ char *gfSignature();
 /* Return signature that starts each command to gfServer. Helps defend 
  * server from confused clients. */
 
-void gfSendString(int sd, char *s);
+void gfCatchPipes();
+/* Set up to catch broken pipe signals. */
+
+boolean gfSendString(int sd, char *s);
 /* Send a string down a socket - length byte first. */
 
-void gfSendLongString(int sd, char *s);
+boolean gfSendLongString(int sd, char *s);
 /* Send a string down a socket - up to 64k characters. */
 
 char *gfRecieveString(int sd, char buf[256]);

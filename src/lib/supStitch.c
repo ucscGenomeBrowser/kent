@@ -520,7 +520,6 @@ else
         {
 	if (right->hStart - left->hEnd >= 10 && right->nStart - left->nEnd >= 10)
 	    {
-	    // uglyf("Searching for middle %d %d\n", right->hStart - left->hEnd, right->nStart - left->nEnd);
 	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
 	    if (newLeft != NULL)
 	        {

@@ -568,7 +568,8 @@ slReverse(&rangeList);
 return rangeList;
 }
 
-void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
+
+static void gfFfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
     boolean isRc,  int minMatch, 
     GfSaveAli outFunction, void *outData)
 /* Convert gfClumps to an actual alignment that gets saved via 
@@ -602,7 +603,7 @@ gfRangeFreeList(&rangeList);
 
 static int maxDown = 10;
 
-void extendHitRight(int qMax, int tMax,
+static void extendHitRight(int qMax, int tMax,
 	char **pEndQ, char **pEndT, int (*scoreMatch)(char a, char b))
 /* Extend endQ/endT as much to the right as possible. */
 {
@@ -630,7 +631,7 @@ for (i=0; i<last; ++i)
 *pEndT = t+maxPos+1;
 }
 
-void extendHitLeft(int qMax, int tMax,
+static void extendHitLeft(int qMax, int tMax,
 	char **pStartQ, char **pStartT, int (*scoreMatch)(char a, char b))
 /* Extend startQ/startT as much to the left as possible. */
 {
@@ -659,21 +660,22 @@ for (i=-1; i>=last; --i)
 }
 
 
-void clumpToHspRange(struct gfClump *clump, aaSeq *qSeq, int tileSize,
-	int frame, struct trans3 *t3, struct gfRange **pRangeList)
+static void clumpToHspRange(struct gfClump *clump, bioSeq *qSeq, int tileSize,
+	int frame, struct trans3 *t3, struct gfRange **pRangeList, boolean isProt)
 /* Covert clump->hitList to HSPs (high scoring local sequence pair,
  * that is longest alignment without gaps) and add resulting HSPs to
  * rangeList. */
 {
 struct gfSeqSource *target = clump->target;
 aaSeq *tSeq = target->seq;
-AA *qs, *ts, *qe, *te;
+BIOPOL *qs, *ts, *qe, *te;
 int maxScore = 0, maxPos = 0, score, pos;
 struct gfHit *hit;
 int qStart = 0, tStart = 0, qEnd = 0, tEnd = 0, newQ = 0, newT = 0;
 boolean outOfIt = TRUE;		/* Logically outside of a clump. */
 struct gfRange *range;
-AA *lastQs = NULL, *lastQe = NULL, *lastTs = NULL, *lastTe = NULL;
+BIOPOL *lastQs = NULL, *lastQe = NULL, *lastTs = NULL, *lastTe = NULL;
+int (*scoreMatch)(char a, char b) = (isProt ? aaScore2 : dnaScore2);
 
 if (tSeq == NULL)
     internalErr();
@@ -701,8 +703,8 @@ for (hit = clump->hitList; ; hit = hit->next)
 	    qe = qSeq->dna + qEnd;
 	    te = tSeq->dna + tEnd;
 	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
-		&qe, &te, aaScore2);
-	    extendHitLeft(qStart, tStart, &qs, &ts, aaScore2);
+		&qe, &te, scoreMatch);
+	    extendHitLeft(qStart, tStart, &qs, &ts, scoreMatch);
 	    if (qs != lastQs || ts != lastTs || qe != lastQe || qs !=  lastQs)
 		{
 		lastQs = qs;
@@ -743,7 +745,7 @@ for (hit = clump->hitList; ; hit = hit->next)
     }
 }
 
-struct ssFfItem *rangesToFfItem(struct gfRange *rangeList, aaSeq *qSeq)
+static struct ssFfItem *rangesToFfItem(struct gfRange *rangeList, aaSeq *qSeq)
 /* Convert ranges to ssFfItem's. */
 {
 AA *q = qSeq->dna;
@@ -768,20 +770,20 @@ ffi->ff = ffMakeRightLinks(ffList);
 return ffi;
 }
 
-void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
-    boolean isRc,  int minMatch, 
-    GfSaveAli outFunction, void *outData)
+static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList, 
+    bioSeq *seq, boolean isRc,  int minMatch, 
+    GfSaveAli outFunction, void *outData, boolean isProt, enum ffStringency stringency)
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
 {
 struct gfClump *clump;
 struct gfRange *rangeList = NULL, *range;
-aaSeq *targetSeq;
+bioSeq *targetSeq;
 struct ssBundle *bun;
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
-    clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList);
+    clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList, isProt);
     }
 slReverse(&rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
@@ -794,14 +796,81 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     bun->ffList = rangesToFfItem(range->components, seq);
-    bun->isProt = TRUE;
-    ssStitch(bun, ffTight);
+    bun->isProt = isProt;
+    ssStitch(bun, stringency);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, ffTight, minMatch, outFunction);
+	bun, outData, isRc, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 gfRangeFreeList(&rangeList);
 }
+
+void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, 
+    aaSeq *seq, boolean isRc,  int minMatch, 
+    GfSaveAli outFunction, void *outData)
+{
+gfAlignSomeClumps(gf, clumpList, seq, isRc, minMatch, outFunction, outData, TRUE, ffTight);
+}
+
+int rangeScore(struct gfRange *range, struct dnaSeq *qSeq)
+/* Return score associated with range. */
+{
+struct gfRange *comp;
+struct dnaSeq *tSeq;
+int score = 0;
+for (comp = range->components; comp != NULL; comp = comp->next)
+    {
+    tSeq = comp->tSeq;
+    score += dnaScoreMatch(tSeq->dna + range->tStart, qSeq->dna + range->qStart, 
+        range->tEnd - range->tStart);
+    if (comp->next != NULL)
+        score -= 4;
+    }
+return score;
+}
+
+static void gfFastClumps(struct genoFind *gf,  struct gfClump *clumpList, 
+    bioSeq *seq, boolean isRc,  int minMatch, FILE *f)
+/* Just quickly save clumps. */
+{
+struct gfClump *clump;
+struct gfRange *rangeList = NULL, *range;
+
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList, FALSE);
+    }
+slReverse(&rangeList);
+slSort(&rangeList, gfRangeCmpTarget);
+rangeList = gfRangesBundle(rangeList, 5);
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    int score = rangeScore(range, seq);
+    if (score >= minMatch)
+        fprintf(f, "%d\t%s\t%d\t%d\t%s\t%d\t%d\n", 
+		score, seq->name, range->qStart, range->qEnd,
+		range->tSeq->name, range->tStart, range->tEnd);
+    }
+gfRangeFreeList(&rangeList);
+}
+
+void gfAlignDnaClumps(struct genoFind *gf, struct gfClump *clumpList, 
+	struct dnaSeq *seq, boolean isRc,  int minMatch, 
+	GfSaveAli outFunction, void *outData, boolean fastN)
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. */
+{
+if (fastN)
+    {
+    struct gfSavePslxData *data = outData;
+    gfFastClumps(gf, clumpList, seq, isRc, minMatch, data->f);
+    }
+else
+    {
+    gfFfAlignDnaClumps(clumpList, seq, isRc, minMatch, outFunction, outData);
+    }
+}
+
 
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
 	int minMatch, GfSaveAli outFunction, void *outData)
@@ -824,7 +893,7 @@ for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	{
-	clumpToHspRange(clump, qSeq, tileSize, frame, NULL, &rangeList);
+	clumpToHspRange(clump, qSeq, tileSize, frame, NULL, &rangeList, TRUE);
 	}
     }
 slReverse(&rangeList);
@@ -975,7 +1044,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	    ss->seq = t3->trans[frame];
 	    ss->start = t3->start/3;
 	    ss->end = t3->end/3;
-	    clumpToHspRange(clump, seq, tileSize, frame, t3, &rangeList);
+	    clumpToHspRange(clump, seq, tileSize, frame, t3, &rangeList, TRUE);
 	    }
 	}
     slReverse(&rangeList);
@@ -1102,7 +1171,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 		ss->seq = t3->trans[tFrame];
 		ss->start = t3->start/3;
 		ss->end = t3->end/3;
-		clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, t3, &rangeSet);
+		clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, t3, &rangeSet, TRUE);
 		untranslateRangeList(rangeSet, qFrame, tFrame, NULL, t3, t3->start);
 		rangeList = slCat(rangeSet, rangeList);
 		}
@@ -1175,7 +1244,7 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfRange *rangeSet = NULL;
-	    clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, NULL, &rangeSet);
+	    clumpToHspRange(clump, qTrans->trans[qFrame], tileSize, tFrame, NULL, &rangeSet, TRUE);
 	    untranslateRangeList(rangeSet, qFrame, tFrame, t3Hash, NULL, 0);
 	    rangeList = slCat(rangeSet, rangeList);
 	    }

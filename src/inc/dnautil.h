@@ -30,6 +30,7 @@ void dnaUtilOpen(); /* Good idea to call this before using any arrays
 
 typedef char DNA;
 typedef char AA;
+typedef char BIOPOL;	/* Biological polymer. */
 
 /* A little array to help us decide if a character is a 
  * nucleotide, and if so convert it to lower case. 

@@ -44,3 +44,7 @@ boolean parseQuotedString( char *in, char *out, char **retNext);
  * Write unquoted string to out, which may be the same as in.
  * Return pointer to character past end of string in *retNext. 
  * Return FALSE if can't find end. */
+
+struct hash *hashVarLine(char *line, int lineIx);
+/* Return a symbol table from a line of form:
+ *   var1=val1 var2='quoted val2' var3="another val" */
