@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.14 2003/09/08 17:52:41 braney Exp $";
+static char const rcsid[] = "$Id: dnaseq.c,v 1.15 2004/04/05 21:16:44 kent Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -68,15 +68,16 @@ boolean seqIsDna(bioSeq *seq)
 /* Make educated guess whether sequence is DNA or protein. */
 {
 int size = seq->size, i;
+int dnaCount = 0;
 char *poly = seq->dna;
 
 dnaUtilOpen();
 for (i=0; i<size; ++i)
     {
-    if (!ntChars[poly[i]]) 
-    	return FALSE;
+    if (ntChars[poly[i]]) 
+	dnaCount += 1;
     }
-return TRUE;
+return (dnaCount >= round(0.9 * size));
 }
 
 
