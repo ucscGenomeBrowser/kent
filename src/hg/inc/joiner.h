@@ -22,6 +22,8 @@ struct joinerField
     boolean dupeOk;		/* True if duplication ok (in primary key) */
     boolean oneToOne;		/* Is 1-1 with primary key? */
     float minCheck;		/* Minimum ratio that must hit primary key */
+    char *splitPrefix;		/* Prefix for splitting tables. */
+    struct slName *exclude;	/* List of keys to exclude from verification */
     };
 
 void joinerFieldFree(struct joinerField **pJf);

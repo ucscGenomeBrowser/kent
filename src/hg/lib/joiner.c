@@ -23,6 +23,8 @@ if (jf != NULL)
     slFreeList(&jf->chopBefore);
     slFreeList(&jf->chopAfter);
     freeMem(jf->separator);
+    freeMem(jf->splitPrefix);
+    slFreeList(&jf->exclude);
     freez(pJf);
     }
 }
@@ -355,6 +357,16 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	         unspecifiedVar(lf, word);
 	     jf->minCheck = atof(e);
 	     }
+	 else if (sameString("splitPrefix", word))
+	     {
+	     jf->splitPrefix = cloneSpecified(lf, word, e);
+	     }
+	 else if (sameString("exclude", word))
+	     {
+	     if (e == NULL) 
+	     	unspecifiedVar(lf, word);
+	     slNameStore(&jf->exclude, e);
+	     }
 	 else
 	     {
 	     errAbort("Unrecognized attribute %s line %d of %s",
@@ -480,6 +492,8 @@ for (js=jsList; js != NULL; js = nextJs)
 		newJf->dupeOk = jf->dupeOk;
 		newJf->oneToOne = jf->oneToOne;
 		newJf->minCheck = jf->minCheck;
+		newJf->splitPrefix = cloneString(jf->splitPrefix);
+		newJf->exclude = slNameCloneList(jf->exclude);
 
 		/* Do substituted table field. */
 		if ((bs = strchr(jf->table, '[')) != NULL)
