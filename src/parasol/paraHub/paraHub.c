@@ -174,13 +174,16 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     batch = node->val;
     
+    /*
     uglyf("\n user %s: examining batch %s priority=%d \n", user->name, batch->name, batch->priority);
+    */
     
     if (batch->priority < user->priority)
      user->priority = batch->priority;
     }
-
+/*
 uglyf("\n user %s: new priority=%d \n", user->name, user->priority);
+*/
 
 }
 
@@ -284,8 +287,10 @@ for (node = queuedUsers->head; !dlEnd(node); node = node->next)
 	}
     }
 
+/*
 if (minUser)
 uglyf("\n lucky user %s: priority=%d \n", minUser->name, minUser->priority);
+*/
 
 return minUser;
 }
@@ -306,9 +311,10 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
 	}
     }
 
+/*
 if (minBatch)
 uglyf("\n lucky batch %s: priority=%d \n", minBatch->name, minBatch->priority);
-
+*/
 return minBatch;
 }
 

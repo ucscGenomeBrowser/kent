@@ -1357,9 +1357,6 @@ verbose(1, "Told hub to set priority %d\n",priority);
 void paraPriority(char *val)
 /* Tell hub to change priority on batch */
 {
-
-uglyf("paraPriority: val parm = %s \n", val);
-
 if (sameWord(val,"high"))
     priority = 1;
 else if (sameWord(val,"medium"))
