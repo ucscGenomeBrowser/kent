@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.13 2004/02/29 17:47:52 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.14 2004/02/29 18:08:57 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -96,31 +96,46 @@ struct htmlPage
     struct htmlForm *forms;		/* List of all forms. */
     };
 
-void tagVaWarn(struct htmlTag *tag, char *format, va_list args)
+static int findLineNumber(char *start, char *pos)
+/* Figure out line number of given position relative to start. */
+{
+char *s;
+int line = 1;
+for (s = start; s <= pos; ++s)
+    {
+    if (s[0] == '\n')
+       ++line;
+    }
+return line;
+}
+
+void tagVaWarn(struct htmlPage *page, struct htmlTag *tag, char *format, 
+	va_list args)
 /* Print warning message and some context of tag. */
 {
 char context[80];
 strncpy(context, tag->start, sizeof(context));
 context[sizeof(context)-1] = 0;
-warn("Error near: %s", context);
+warn("Error near line %d: %s", findLineNumber(page->htmlText, tag->start), 
+	context);
 vaWarn(format, args);
 }
 
-void tagWarn(struct htmlTag *tag, char *format, ...)
+void tagWarn(struct htmlPage *page, struct htmlTag *tag, char *format, ...)
 /* Print warning message and some context of tag. */
 {
 va_list args;
 va_start(args, format);
-tagVaWarn(tag, format, args);
+tagVaWarn(page, tag, format, args);
 va_end(args);
 }
 
-void tagAbort(struct htmlTag *tag, char *format, ...)
+void tagAbort(struct htmlPage *page, struct htmlTag *tag, char *format, ...)
 /* Print abort message and some context of tag. */
 {
 va_list args;
 va_start(args, format);
-tagVaWarn(tag, format, args);
+tagVaWarn(page, tag, format, args);
 va_end(args);
 noWarnAbort();
 }
@@ -201,7 +216,8 @@ return hash;
 }
 
 
-char *tagAttributeVal(struct htmlTag *tag, char *name, char *defaultVal)
+char *tagAttributeVal(struct htmlPage *page, struct htmlTag *tag, 
+	char *name, char *defaultVal)
 /* Return value of named attribute, or defaultVal if attribute doesn't exist. */
 {
 struct htmlAttribute *att;
@@ -213,14 +229,14 @@ for (att = tag->attributes; att != NULL; att = att->next)
 return defaultVal;
 }
 
-char *tagAttributeNeeded(struct htmlTag *tag, char *name)
+char *tagAttributeNeeded(struct htmlPage *page, struct htmlTag *tag, char *name)
 /* Return named tag attribute.  Complain and return "n/a" if it
  * doesn't exist. */
 {
-char *val = tagAttributeVal(tag, name, NULL);
+char *val = tagAttributeVal(page, tag, name, NULL);
 if (val == NULL)
     {
-    tagWarn(tag, "Missing %s attribute", name);
+    tagWarn(page, tag, "Missing %s attribute", name);
     val = "n/a";
     }
 return val;
@@ -376,9 +392,8 @@ slReverse(&tagList);
 return tagList;
 }
 
-static struct htmlFormVar *findOrMakeVar(char *name, 
-	struct hash *hash, struct htmlTag *tag,
-	struct htmlFormVar **pVarList)
+static struct htmlFormVar *findOrMakeVar(struct htmlPage *page, char *name, 
+	struct hash *hash, struct htmlTag *tag, struct htmlFormVar **pVarList)
 /* Find variable of existing name if it exists,  otherwise
  * make a new one and add to hash and list.  Add reference
  * to this tag to var. */
@@ -396,7 +411,7 @@ else
     {
     if (!sameWord(var->tagName, tag->name))
         {
-	tagWarn(tag, "Mixing FORM variable tag types %s and %s", 
+	tagWarn(page, tag, "Mixing FORM variable tag types %s and %s", 
 		var->tagName, tag->name);
 	var->tagName = tag->name;
 	}
@@ -405,7 +420,7 @@ refAdd(&var->tags, tag);
 return var;
 }
 
-struct htmlFormVar *formParseVars(struct htmlForm *form)
+struct htmlFormVar *formParseVars(struct htmlPage *page, struct htmlForm *form)
 /* Return a list of variables parsed out of form.  
  * A form variable is something that may appear in the name
  * side of the name=value pairs that serves as input to a CGI
@@ -419,12 +434,12 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
     {
     if (sameWord(tag->name, "INPUT"))
         {
-	char *type = tagAttributeNeeded(tag, "TYPE");
-	char *varName = tagAttributeNeeded(tag, "NAME");
-	char *value = tagAttributeVal(tag, "VALUE", NULL);
-	var = findOrMakeVar(varName, hash, tag, &varList); 
+	char *type = tagAttributeNeeded(page, tag, "TYPE");
+	char *varName = tagAttributeNeeded(page, tag, "NAME");
+	char *value = tagAttributeVal(page, tag, "VALUE", NULL);
+	var = findOrMakeVar(page, varName, hash, tag, &varList); 
 	if (var->type != NULL && !sameWord(var->type, type))
-	    tagWarn(tag, "Mixing input types %s and %s", var->type, type);
+	    tagWarn(page, tag, "Mixing input types %s and %s", var->type, type);
 	var->type = type;
 	if (sameWord(type, "TEXT") || sameWord(type, "PASSWORD") 
 		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN"))
@@ -433,7 +448,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    }
 	else if (sameWord(type, "CHECKBOX") || sameWord(type, "RADIO"))
 	    {
-	    if (tagAttributeVal(tag, "CHECKED", NULL) != NULL)
+	    if (tagAttributeVal(page, tag, "CHECKED", NULL) != NULL)
 	        var->curVal = value;
 	    }
 	else if ( sameWord(type, "RESET") || sameWord(type, "BUTTON") ||
@@ -444,23 +459,23 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    }
 	else
 	    {
-	    tagWarn(tag, "Unrecognized INPUT TYPE %s", type);
+	    tagWarn(page, tag, "Unrecognized INPUT TYPE %s", type);
 	    }
 	}
     else if (sameWord(tag->name, "SELECT"))
         {
-	char *varName = tagAttributeNeeded(tag, "NAME");
+	char *varName = tagAttributeNeeded(page, tag, "NAME");
 	struct htmlTag *subTag;
-	var = findOrMakeVar(varName, hash, tag, &varList); 
+	var = findOrMakeVar(page, varName, hash, tag, &varList); 
 	for (subTag = tag->next; subTag != form->endTag; subTag = subTag->next)
 	    {
 	    if (sameWord(subTag->name, "/SELECT"))
 	        break;
 	    else if (sameWord(subTag->name, "OPTION"))
 	        {
-		if (tagAttributeVal(subTag, "SELECTED", NULL) != NULL)
+		if (tagAttributeVal(page, subTag, "SELECTED", NULL) != NULL)
 		    {
-		    char *selVal = tagAttributeVal(subTag, "VALUE", NULL);
+		    char *selVal = tagAttributeVal(page, subTag, "VALUE", NULL);
 		    if (selVal == NULL)
 		        {
 			char *e = strchr(subTag->end, '<');
@@ -475,9 +490,9 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	}
     else if (sameWord(tag->name, "TEXTAREA"))
         {
-	char *varName = tagAttributeNeeded(tag, "NAME");
+	char *varName = tagAttributeNeeded(page, tag, "NAME");
 	char *e = strchr(tag->end, '<');
-	var = findOrMakeVar(varName, hash, tag, &varList); 
+	var = findOrMakeVar(page, varName, hash, tag, &varList); 
 	if (e != NULL)
 	    var->curVal = cloneStringZ(tag->end, e - tag->end);
 	}
@@ -488,7 +503,8 @@ for (var = varList; var != NULL; var = var->next)
 return varList;
 }
 
-struct htmlForm *htmlParseForms(struct htmlTag *startTag, struct htmlTag *endTag)
+struct htmlForm *htmlParseForms(struct htmlPage *page,
+	struct htmlTag *startTag, struct htmlTag *endTag)
 /* Parse out list of forms from tag stream. */
 {
 struct htmlForm *formList = NULL, *form = NULL;
@@ -498,18 +514,18 @@ for (tag = startTag; tag != endTag; tag = tag->next)
     if (sameWord(tag->name, "FORM"))
         {
 	if (form != NULL)
-	    tagWarn(tag, "FORM inside of FORM");
+	    tagWarn(page, tag, "FORM inside of FORM");
 	AllocVar(form);
 	form->startTag = tag;
 	slAddHead(&formList, form);
-	form->name = tagAttributeVal(tag, "name", "n/a");
-	form->action = tagAttributeNeeded(tag, "action");
-	form->method = tagAttributeVal(tag, "method", "GET");
+	form->name = tagAttributeVal(page, tag, "name", "n/a");
+	form->action = tagAttributeNeeded(page, tag, "action");
+	form->method = tagAttributeVal(page, tag, "method", "GET");
 	}
     else if (sameWord(tag->name, "/FORM"))
         {
 	if (form == NULL)
-	    tagWarn(tag, "/FORM outside of FORM");
+	    tagWarn(page, tag, "/FORM outside of FORM");
 	else
 	    {
 	    form->endTag = tag->next;
@@ -520,7 +536,7 @@ for (tag = startTag; tag != endTag; tag = tag->next)
 slReverse(&formList);
 for (form = formList; form != NULL; form = form->next)
     {
-    form->vars = formParseVars(form);
+    form->vars = formParseVars(page, form);
     }
 return formList;
 }
@@ -541,7 +557,7 @@ page->status = status;
 page->header = htmlHeaderRead(&s);
 page->htmlText = fullText + (s - dupe);
 page->tags = htmlTagScan(s);
-page->forms = htmlParseForms(page->tags, NULL);
+page->forms = htmlParseForms(page, page->tags, NULL);
 return page;
 }
 
@@ -701,7 +717,8 @@ struct htmlTable
     int rowCount;
     };
 
-void validateTables(struct htmlTag *startTag, struct htmlTag *endTag)
+void validateTables(struct htmlPage *page, 
+	struct htmlTag *startTag, struct htmlTag *endTag)
 /* Validate <TABLE><TR><TD> are all properly nested, and that there
  * are no empty rows. */
 {
@@ -716,7 +733,7 @@ for (tag = startTag; tag != endTag; tag = tag->next)
 	if (tableStack != NULL)
 	    {
 	    if (tableStack->row == NULL || !tableStack->row->inTd)
-	    tagAbort(tag, "TABLE inside of another table, but not inside of <TR><TD>\n");
+	    tagAbort(page, tag, "TABLE inside of another table, but not inside of <TR><TD>\n");
 	    }
 	AllocVar(table);
 	slAddHead(&tableStack, table);
@@ -724,45 +741,45 @@ for (tag = startTag; tag != endTag; tag = tag->next)
     else if (sameWord(tag->name, "/TABLE"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "Extra </TABLE> tag");
+	    tagAbort(page, tag, "Extra </TABLE> tag");
 	if (table->rowCount == 0)
-	    tagAbort(tag, "<TABLE> with no <TR>'s");
+	    tagAbort(page, tag, "<TABLE> with no <TR>'s");
 	if (table->row != NULL)
-	    tagAbort(tag, "</TABLE> inside of a row");
+	    tagAbort(page, tag, "</TABLE> inside of a row");
 	tableStack = table->next;
 	freez(&table);
 	}
     else if (sameWord(tag->name, "TR"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "<TR> outside of TABLE");
+	    tagAbort(page, tag, "<TR> outside of TABLE");
 	if (table->row != NULL)
-	    tagAbort(tag, "<TR>...<TR> with no </TR> in between");
+	    tagAbort(page, tag, "<TR>...<TR> with no </TR> in between");
 	AllocVar(table->row);
 	table->rowCount += 1;
 	}
     else if (sameWord(tag->name, "/TR"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "</TR> outside of TABLE");
+	    tagAbort(page, tag, "</TR> outside of TABLE");
 	if (table->row == NULL)
-	    tagAbort(tag, "</TR> with no <TR>");
+	    tagAbort(page, tag, "</TR> with no <TR>");
 	if (table->row->inTd)
 	    {
-	    tagAbort(tag, "</TR> while <TD> is open");
+	    tagAbort(page, tag, "</TR> while <TD> is open");
 	    }
 	if (table->row->tdCount == 0)
-	    tagAbort(tag, "Empty row in <TABLE>");
+	    tagAbort(page, tag, "Empty row in <TABLE>");
 	freez(&table->row);
 	}
     else if (sameWord(tag->name, "TD") || sameWord(tag->name, "TH"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "<%s> outside of <TABLE>", tag->name);
+	    tagAbort(page, tag, "<%s> outside of <TABLE>", tag->name);
 	if ((row = table->row) == NULL)
-	    tagAbort(tag, "<%s> outside of <TR>", tag->name);
+	    tagAbort(page, tag, "<%s> outside of <TR>", tag->name);
 	if (row->inTd)
-	    tagAbort(tag, "<%s>...<%s> with no </%s> in between", 
+	    tagAbort(page, tag, "<%s>...<%s> with no </%s> in between", 
 	    	tag->name, tag->name, tag->name);
 	row->inTd = TRUE;
 	row->tdCount += 1;
@@ -770,19 +787,19 @@ for (tag = startTag; tag != endTag; tag = tag->next)
     else if (sameWord(tag->name, "/TD") || sameWord(tag->name, "/TH"))
         {
 	if ((table = tableStack) == NULL)
-	    tagAbort(tag, "<%s> outside of <TABLE>", tag->name);
+	    tagAbort(page, tag, "<%s> outside of <TABLE>", tag->name);
 	if ((row = table->row) == NULL)
-	    tagAbort(tag, "<%s> outside of <TR>", tag->name);
+	    tagAbort(page, tag, "<%s> outside of <TR>", tag->name);
 	if (!row->inTd)
-	    tagAbort(tag, "<%s> with no <%s>", tag->name, tag->name+1);
+	    tagAbort(page, tag, "<%s> with no <%s>", tag->name, tag->name+1);
 	row->inTd = FALSE;
 	}
     }
 if (tableStack != NULL)
-    tagAbort(tag, "Missing </TABLE>");
+    tagAbort(page, tag, "Missing </TABLE>");
 }
 
-void checkTagIsInside(char *outsiders, char *insiders,  
+void checkTagIsInside(struct htmlPage *page, char *outsiders, char *insiders,  
 	struct htmlTag *startTag, struct htmlTag *endTag)
 /* Check that insiders are all bracketed by outsiders. */
 {
@@ -826,7 +843,7 @@ for (tag = startTag; tag != NULL; tag = tag->next)
     else if (hashLookup(inHash, type))
         {
 	if (depth <= 0)
-	    tagAbort(tag, "%s outside of any of %s", type, outsiders);
+	    tagAbort(page, tag, "%s outside of any of %s", type, outsiders);
 	}
     }
 freeHash(&inHash);
@@ -836,7 +853,8 @@ freeMem(outDupe);
 freeMem(inDupe);
 }
 
-void checkNest(char *type, struct htmlTag *startTag, struct htmlTag *endTag)
+void checkNest(struct htmlPage *page,
+	char *type, struct htmlTag *startTag, struct htmlTag *endTag)
 /* Check that <type> and </type> tags are properly nested. */
 {
 struct htmlTag *tag;
@@ -851,20 +869,21 @@ for (tag = startTag; tag != endTag; tag = tag->next)
         {
 	--depth;
 	if (depth < 0)
-	   tagAbort(tag, "<%s> without preceding <%s>", endType, type);
+	   tagAbort(page, tag, "<%s> without preceding <%s>", endType, type);
 	}
     }
 if (depth != 0)
     errAbort("Missing <%s> tag", endType);
 }
 
-void validateNestingTags(struct htmlTag *startTag, struct htmlTag *endTag,
+void validateNestingTags(struct htmlPage *page,
+	struct htmlTag *startTag, struct htmlTag *endTag,
 	char *nesters[], int nesterCount)
 /* Validate many tags that do need to nest. */
 {
 int i;
 for (i=0; i<nesterCount; ++i)
-    checkNest(nesters[i], startTag, endTag);
+    checkNest(page, nesters[i], startTag, endTag);
 }
 
 static char *bodyNesters[] = 
@@ -882,7 +901,7 @@ static char *headNesters[] =
     "TITLE",
 };
 
-struct htmlTag *validateBody(struct htmlTag *startTag)
+struct htmlTag *validateBody(struct htmlPage *page, struct htmlTag *startTag)
 /* Go through tags from current position (just past <BODY>)
  * up to and including </BODY> and check some things. */
 {
@@ -899,17 +918,17 @@ for (tag = startTag; tag != NULL; tag = tag->next)
     }
 if (endTag == NULL)
     errAbort("Missing </BODY>");
-validateTables(startTag, endTag);
-checkTagIsInside("DIR MENU OL UL", "LI", startTag, endTag);
-checkTagIsInside("DL", "DD DT", startTag, endTag);
-checkTagIsInside("COLGROUP TABLE", "COL", startTag, endTag);
-checkTagIsInside("MAP", "AREA", startTag, endTag);
-checkTagIsInside("FORM", 
+validateTables(page, startTag, endTag);
+checkTagIsInside(page, "DIR MENU OL UL", "LI", startTag, endTag);
+checkTagIsInside(page, "DL", "DD DT", startTag, endTag);
+checkTagIsInside(page, "COLGROUP TABLE", "COL", startTag, endTag);
+checkTagIsInside(page, "MAP", "AREA", startTag, endTag);
+checkTagIsInside(page, "FORM", 
 	"INPUT BUTTON /BUTTON OPTION SELECT /SELECT TEXTAREA /TEXTAREA"
 	"FIELDSET /FIELDSET"
 	, 
 	startTag, endTag);
-validateNestingTags(startTag, endTag, bodyNesters, ArraySize(bodyNesters));
+validateNestingTags(page, startTag, endTag, bodyNesters, ArraySize(bodyNesters));
 return endTag->next;
 }
 
@@ -1002,11 +1021,11 @@ for (;;)
     }
 if (!gotTitle)
     warn("No title in <HEAD>");
-validateNestingTags(page->tags, tag, headNesters, ArraySize(headNesters));
+validateNestingTags(page, page->tags, tag, headNesters, ArraySize(headNesters));
 tag = tag->next;
 if (tag == NULL || !sameWord(tag->name, "BODY"))
     errAbort("<BODY> tag does not follow <HTML> tag");
-tag = validateBody(tag->next);
+tag = validateBody(page, tag->next);
 if (tag == NULL || !sameWord(tag->name, "/HTML"))
     errAbort("Missing </HTML>");
 validateCgiUrls(page);
