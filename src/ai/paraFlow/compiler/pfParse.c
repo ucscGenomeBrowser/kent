@@ -240,10 +240,10 @@ switch (type)
 	return "pptCastDoubleToDouble";
     case pptCastStringToBit:
         return "pptCastStringToBit";
-    case pptCastTypedToUntyped:
-        return "pptCastTypedToUntyped";
-    case pptCastUntypedToTyped:
-        return "pptCastUntypedToTyped";
+    case pptCastTypedToVar:
+        return "pptCastTypedToVar";
+    case pptCastVarToTyped:
+        return "pptCastVarToTyped";
     case pptConstBit:
 	return "pptConstBit";
     case pptConstByte:
@@ -1102,6 +1102,7 @@ struct pfParse *name, *body;
 pp = pfParseNew(pptClass, tok, parent, scope);
 tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
+name->type = pptTypeName;
 body = parseCompound(pp, &tok, scope);
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, name);

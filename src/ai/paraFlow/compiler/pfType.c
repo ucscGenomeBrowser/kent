@@ -181,6 +181,24 @@ else
 	    pp->type = pptConstDouble;
 	else if (base == pfc->stringType)
 	    pp->type = pptConstString;
+	else if (base == pfc->varType)
+	    {
+	    switch (pp->tok->type)
+	        {
+		case pftInt:
+		    pp->type = pptConstInt;
+		    break;
+		case pftFloat:
+		    pp->type = pptConstDouble;
+		    break;
+		case pftString:
+		    pp->type = pptConstString;
+		    break;
+		default:
+		    internalErrAt(pp->tok);
+		    break;
+		}
+	    }
 	else
 	    internalErrAt(pp->tok);
 	if (pp->type == pptConstString)
@@ -198,25 +216,39 @@ else
 	        expectingGot("number", pp->tok);
 	    }
 	pp->ty = pfTypeNew(base);
+	if (base == pfc->varType)
+	    {
+	    struct pfType *tt = pfTypeNew(pfc->varType);
+	    insertCast(pptCastTypedToVar, tt, pPp);
+	    pp = *pPp;
+	    }
 	}
     else if (pt->base != type->base)
 	{
 	boolean ok = FALSE;
-	if (pt->base == NULL)
+	if (pt->isTuple)
 	    {
-	    if (pt->isTuple)
-	        {
-		if (pt->children == NULL)
-		    errAt(pp->tok, "using void value");
-		else
-		    errAt(pp->tok, 
-		    	"expecting single value, got %d values", slCount(pt->children));
-		}
+	    if (pt->children == NULL)
+		errAt(pp->tok, "using void value");
+	    else
+		errAt(pp->tok, 
+		    "expecting single value, got %d values", slCount(pt->children));
 	    }
 	else if (type->base == pfc->bitType && pt->base == pfc->stringType)
 	    {
-	    struct pfType *tt = pfTypeNew(pfc->bitType);
-	    insertCast(pptCastStringToBit, tt, pPp);
+	    insertCast(pptCastStringToBit, type, pPp);
+	    ok = TRUE;
+	    }
+	else if (type->base == pfc->varType)
+	    {
+	    // struct pfType *tt = pfTypeNew(pfc->varType);
+	    // insertCast(pptCastTypedToVar, tt, pPp);
+	    insertCast(pptCastTypedToVar, type, pPp);
+	    ok = TRUE;
+	    }
+	else if (pt->base == pfc->varType)
+	    {
+	    insertCast(pptCastVarToTyped, type, pPp);
 	    ok = TRUE;
 	    }
 	else
