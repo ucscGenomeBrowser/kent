@@ -686,3 +686,19 @@
       and rationalized stringency parameters.
 412 - Adding in preliminary blat mouse alignment tracks on 21 and 22.
 413 - Added in full genome blat mouse alignment track.
+414 - Fixed Solaris-only BLAT bugs.  
+415 - Fixed a couple of rare translated-blat bugs.
+416 - Made blat find smaller internal exons.  (This was seemingly
+      done in version 304 above, but somehow slipped out).
+417 - blat handles RepeatMasker .out and lower-case repeatMasking
+      now.  (Will not initiate an alignment on a repeat, but will
+      extend through repeats).
+418 - Various small fixes including fix to refSeq derived known genes
+      code which had problems with CDS regions on the minus strand.
+      Code to correlate mouse alignments with known genes.
+419 - Made -t=dnax -q=rnax do better stitching in BLAT.
+420 - Made gfClient compile again.  Some hgTracks/hgc work by
+      Krish and me.
+421 - Minor fixes.  Browser changes.
+422 - BLAT fix for proteins that have too many matches.  Start of
+      DAS server.
