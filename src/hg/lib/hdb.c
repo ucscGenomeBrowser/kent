@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.150 2003/10/22 18:57:35 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.151 2003/10/23 14:12:06 braney Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2444,7 +2444,7 @@ else
     iEnd = atoi(end);
     }
 if (retChromName != NULL)
-    *retChromName = chrom;
+    *retChromName = (haveDb)? chrom : cloneString(chrom);
 if (retWinStart != NULL)
     *retWinStart = iStart;
 if (retWinEnd != NULL)
@@ -3004,7 +3004,7 @@ char *addCommasToPos(char *position)
 static char buffer[256];
 int winStart, winEnd;
 char *chromName;
-char num1Buf[32], num2Buf[32]; /* big enough for 2^64 (and then some) */
+char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
 
 if (position == NULL)
     return NULL;
