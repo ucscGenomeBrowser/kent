@@ -1180,7 +1180,7 @@ vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");
 
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& complement");
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
 
 if (strand == '-')
     {
@@ -1407,8 +1407,8 @@ hPrintf(
 "\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
         gifTn.forCgi, pixWidth, pixHeight, mapName);
 
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
-hPrintf("Explanation of Tracks</A><br>");
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+hPrintf("Explanation of Protein Tracks</A><br>");
 
 sprintf(trackOffset, "%d", trackOrigOffset);
 cgiMakeHiddenVar("trackOffset", trackOffset);
