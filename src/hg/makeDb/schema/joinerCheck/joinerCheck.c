@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.19 2004/03/16 05:27:07 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.20 2004/03/17 02:20:35 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -17,7 +17,10 @@ char *fieldListIn;
 char *fieldListOut;
 char *identifier;
 char *database;
-boolean foreignKeys;
+boolean foreignKeys;	/* "keys" command line variable. */
+boolean checkTimes;	/* "times" command line variable. */
+boolean tableCoverage;
+boolean dbCoverage;
 
 void usage()
 /* Explain usage and exit. */
@@ -32,7 +35,10 @@ errAbort(
   "   -fieldListIn=file - Get list of fields from file rather than mysql.\n"
   "   -identifier=name - Just validate given identifier.\n"
   "   -database=name - Just validate given database.\n"
-  "   -foreignKeys - Validate (foreign) keys.  Takes about an hour.\n"
+  "   -keys - Validate (foreign) keys.  Takes about an hour.\n"
+  "   -noTableCoverage - No check that all tables are mentioned in joiner file\n"
+  "   -noDbCoverage - No check that all databases are mentioned in joiner file\n"
+  "   -noTimes - Check update times of tables are after tables they depend on\n"
   );
 }
 
@@ -42,7 +48,10 @@ static struct optionSpec options[] = {
    {"fieldListOut", OPTION_STRING},
    {"identifier", OPTION_STRING},
    {"database", OPTION_STRING},
-   {"foreignKeys", OPTION_BOOLEAN},
+   {"keys", OPTION_BOOLEAN},
+   {"noTimes", OPTION_BOOLEAN},
+   {"noTableCoverage", OPTION_BOOLEAN},
+   {"noDbCoverage", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -66,6 +75,70 @@ static char *emptyForNull(char *s)
 if (s == NULL)
     s = "";
 return s;
+}
+
+void checkOneDependency(struct joiner *joiner,
+	struct joinerDependency *dep, struct sqlConnection *conn, char *dbName)
+/* Check out one dependency in one database. */
+{
+char *tableToCheck = dep->table->table;
+if (sqlWildcardIn(tableToCheck))
+    {
+    errAbort("Can't handle wildCards in dependency tables line %d of %s",
+    	dep->lineIx, joiner->fileName);
+    }
+if (slNameInList(dep->table->dbList, dbName) 
+	&& sqlTableExists(conn, tableToCheck))
+    {
+    int tableTime = sqlTableUpdateTime(conn, tableToCheck);
+    struct joinerTable *dependsOn;
+    for (dependsOn = dep->dependsOnList; dependsOn != NULL; 
+	dependsOn = dependsOn->next)
+	{
+	if (slNameInList(dependsOn->dbList, dbName))
+	    {
+	    if (!sqlTableExists(conn, dependsOn->table))
+		{
+		warn("Error: %s.%s doesn't exist line %d of %s",
+		    dbName, dependsOn->table, 
+		    dep->lineIx, joiner->fileName);
+		}
+	    else
+		{
+		int depTime = sqlTableUpdateTime(conn, dependsOn->table);
+		if (depTime > tableTime)
+		    {
+		    warn("Error: %s.%s updated after %s.%s line %d of %s",
+			dbName, dependsOn->table, dbName, tableToCheck,
+			dep->lineIx, joiner->fileName);
+		    }
+		}
+	    }
+	}
+    }
+}
+
+void joinerCheckDependencies(struct joiner *joiner, char *specificDb)
+/* Check time stamps on dependent tables. */
+{
+struct hashEl *db, *dbList = hashElListHash(joiner->databasesChecked);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (specificDb == NULL || sameString(specificDb, db->name))
+        {
+	struct sqlConnection *conn = sqlMayConnect(db->name);
+	if (conn != NULL)	/* We've already warned on this NULL */
+	    {
+	    struct joinerDependency *dep;
+	    for (dep = joiner->dependencyList; dep != NULL; dep = dep->next)
+	        {
+		checkOneDependency(joiner, dep, conn, db->name);
+		}
+	    sqlDisconnect(&conn);
+	    }
+	}
+    }
+slFreeList(&dbList);
 }
 
 struct slName *getTablesForField(struct sqlConnection *conn, 
@@ -178,6 +251,7 @@ for (js=joiner->jsList; js != NULL; js = js->next)
 		 {
 		 if (!js->expanded)
 		     {
+		     fprintf(stderr, "Error: ");
 		     printField(jf, stderr);
 		     fprintf(stderr, " not found in %s line %d of %s\n",
 			js->name, jf->lineIx, joiner->fileName);
@@ -678,10 +752,14 @@ struct joiner *joiner = joinerRead(fileName);
 if (!parseOnly)
     {
     struct hash *fieldHash;
-    joinerCheckDbCoverage(joiner);
-    joinerCheckTableCoverage(joiner, database);
+    if (dbCoverage)
+	joinerCheckDbCoverage(joiner);
+    if (tableCoverage)
+	joinerCheckTableCoverage(joiner, database);
     fieldHash = processFieldHash(fieldListIn, fieldListOut);
     joinerValidateFields(joiner, fieldHash, identifier);
+    if (checkTimes)
+	joinerCheckDependencies(joiner, database);
     if (foreignKeys)
 	joinerValidateKeys(joiner, identifier, database);
     }
@@ -698,7 +776,10 @@ fieldListIn = optionVal("fieldListIn", NULL);
 fieldListOut = optionVal("fieldListOut", NULL);
 identifier = optionVal("identifier", NULL);
 database = optionVal("database", NULL);
-foreignKeys = optionExists("foreignKeys");
+foreignKeys = optionExists("keys");
+checkTimes = !optionExists("noTimes");
+dbCoverage = !optionExists("noDbCoverage");
+tableCoverage = !optionExists("noTableCoverage");
 joinerCheck(argv[1]);
 return 0;
 }
