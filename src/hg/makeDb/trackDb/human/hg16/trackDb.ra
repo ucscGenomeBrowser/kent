@@ -265,7 +265,7 @@ type netAlign seq chainPt0
 
 track hetChimp
 shortLabel Chimp Heterozygosity
-longLabel Chimp/Human single nucleotide mutation rate %, 10kb bins
+longLabel Chimp/Human single nucleotide mutation rate %, 10Kb bins
 group compGeno
 priority 145.8
 visibility full
