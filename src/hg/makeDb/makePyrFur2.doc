@@ -138,4 +138,25 @@ note' > pyrFur2-params-xra.txt
     echo RENAME TABLE expRecord to llaPfuPrintAExps | hgsql hgFixed
     echo LOAD DATA LOCAL INFILE \'Pfu-arrays.exps\' INTO TABLE llaPfuPrintAExps | hgsql hgFixed
 
+# CHANGE "chr1" to "chr"
 
+    ssh hgdev
+    mv /cluster/data/pyrFur2/nib/chr1.nib /cluster/data/pyrFur2/nib/chr.nib
+    rm /gbdb/pyrFur2/nib/chr1.nib
+    ln -s /cluster/data/pyrFur2/nib/chr.nib /gbdb/pyrFur2/nib/chr.nib
+    # a quick script to replace chr1 with chr
+
+#!/bin/bash
+sed 's/chr1/chr/g' $1 > /tmp/whatever
+mv /tmp/whatever $1
+
+    cd /cluster/data/pyrFur2/bed 
+    find -name '*.bed' | xargs changeCh.sh
+    # Now change the DB
+    cd /tmp
+    hgsqldump pyrFur2 | sed 's/chr1/chr/g' > pfuNew.sql
+    echo drop database pyrFur2 | hgsql
+    echo create database pyrFur2 | hgsql
+    hgsql pyrFur2 < pfuNew.sql
+    rm pfuNew.sql
+    echo 'update dbDb set defaultPos="chr:550000-580000" where name="pyrFur2"' | hgsql -h genome-testdb hgcentraltest
