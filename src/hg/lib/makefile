@@ -1,4 +1,4 @@
-OPT= -ggdb -O
+OPT= -ggdb 
 
 .c.o:
 	gcc $(OPT) -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
@@ -26,7 +26,8 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     trackDbCustom.o trackDb.o trackTable.o wabAli.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
     ancientRref.o ggMrnaAli.o \
-    glDbRep.o ggDump.o sample.o uPennClones.o
+    glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o uPennClones.o \
+
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
