@@ -306,7 +306,6 @@ for (r=0; r<grid->dim; ++r)
 	}
     considerNodes(prev, grid, &candidateList, qIxPrev, tIxPrev, r, r);
     }
-// dlSort(&candidateList, asNodeCmp);
 
 // uglyf("following %d,%d %d (of %d usual) candidates\n", prevBlock->qStart, prevBlock->tStart, dlCount(&candidateList), graph->nodeCount - nodeIx - 1);
 
@@ -425,11 +424,9 @@ for (i=1, block = blockList; i<=nodeCount; ++i, block = block->next)
     slAddHead(&g->nodeList, n);
     }
 
-/* Sort grid elements */
+/* Keep grid elements internally sorted. */
 for (i=0; i<grid->area; ++i)
-    {
-    slSort(&grid->grid[i].nodeList, asNodeCmp);
-    }
+    slReverse(&grid->grid[i].nodeList);
 
 /* Fake a node 0 at 0,0 and connect all nodes to it... */
 z = &nodes[0];
