@@ -75,6 +75,7 @@ while ((axt = axtRead(lf)) != NULL)
     {
     axtSwap(axt, hashIntVal(tHash, axt->tName), hashIntVal(qHash, axt->qName));
     axtWrite(axt, f);
+    axtFree(&axt);
     }
 }
 
