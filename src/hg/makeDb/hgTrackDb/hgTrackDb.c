@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.10 2003/08/01 23:58:25 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.11 2003/09/03 18:52:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,6 +52,12 @@ for (td = tdList; td != NULL; td = tdNext)
         {
 	hashAdd(uniqHash, td->tableName, td);
 	slAddHead(pTrackList, td);
+	}
+    }
+for (td = *pTrackList; td != NULL; td = td->next)
+    {
+    if (!hashLookup(htmlHash, td->tableName))
+	{
 	sprintf(fileName, "%s/%s.html", dirName, td->tableName);
 	if (fileExists(fileName))
 	    {
