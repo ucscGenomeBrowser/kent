@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.7 2004/06/28 22:18:12 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.8 2004/07/07 20:50:44 hiram Exp $";
 
 float minCover = 80.0;		/*	percent coverage to count hit */
 unsigned maxGap = 1000;		/*	maximum gap between pieces */
@@ -66,13 +66,17 @@ return (int)b->end - (int)a->end;
  *	coordinates and adjust the start and end of the clustered region
  *	to include the appropriate section.
  */
-static void extendLimits(struct coordEl **coordListPt, unsigned median,
+static int extendLimits(struct coordEl **coordListPt, unsigned median,
     unsigned querySize, unsigned *startExtended, unsigned *endExtended,
-    char *ctgName)
+    char *ctgName, int partsConsidered)
 {
 struct coordEl *coord;
 unsigned halfLength = querySize / 2;
 boolean firstCoordinate = TRUE;
+int partsUsed = 0;
+int partsNotUsed = 0;
+char *cloneName = (char *)NULL;
+boolean tooManyParts = FALSE;
 
 if (halfLength > median)
     *startExtended = 0;
@@ -187,6 +191,43 @@ while (coord != NULL)
     coord = coord->next;
     }
 
+/*	Let's count the number of parts included in the decided range */
+if (coordListPt) coord = *coordListPt;
+else coord = NULL;
+
+partsUsed = 0;
+partsNotUsed = 0;
+while (coord != NULL)
+{
+if ( (coord->start >= *startExtended) && (coord->end <= *endExtended))
+    ++partsUsed;
+else
+    ++partsNotUsed;
+if (coord->next == NULL)
+    cloneName = cloneString(coord->name);
+coord = coord->next;
+}
+
+if (partsUsed < 1)
+{
+verbose(1,"# ERROR %s %s - no parts found in the answer, %d considered\n",
+    ctgName, cloneName, partsNotUsed);
+} else if (partsUsed > partsConsidered)
+{
+tooManyParts = TRUE;
+verbose(1,"# ERROR %s %s too many parts used: %d > %d considered\n",
+    ctgName, cloneName, partsUsed, partsConsidered);
+} else if ((partsUsed + partsNotUsed) < 1)
+{
+verbose(1,"# ERROR %s %s - no parts found in the answer, used or unused\n",
+    ctgName, cloneName);
+} else
+{
+verbose(2,"# %s %s total parts considered %d, parts used %d, parts unused %d, fraction %% %7.2f\n",
+	ctgName, cloneName, partsUsed+partsNotUsed, partsUsed, partsNotUsed,
+	100.0 * (double) partsUsed / (double) (partsUsed+partsNotUsed) );
+}
+
 /*	If agp output, we need to do it here	*/
 if (agp)
     {
@@ -196,20 +237,34 @@ if (agp)
     int cloneCount = 0;
     while (coord != NULL)
 	{
-	if ( (coord->start >= *startExtended) &&
-		(coord->end <= *endExtended))
+	if ( (coord->start >= *startExtended) && (coord->end <= *endExtended))
 	    {
 	    ++cloneCount;
     /*	+1 to the start for 1 relative coordinates in the AGP file */
-    printf("%s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName, coord->start+1,
-	coord->end, cloneCount, coord->name,
-	coord->start - *startExtended + 1, coord->end - *startExtended + 1,
-	(coord->strand == 1) ? '+' : '-');
+    /*	The status D will be fixed later	*/
+    /*	These ones with tooManyParts need to be fixed elsewhere	*/
+    if(tooManyParts)
+	{
+	verbose(1,"#AGP %s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName,
+	    coord->start+1, coord->end, cloneCount, coord->name,
+	    coord->start - *startExtended + 1, coord->end - *startExtended,
+	    (coord->strand == 1) ? '+' : '-');
+	}
+    else
+	{
+	printf("%s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName, coord->start+1,
+	    coord->end, cloneCount, coord->name,
+	    coord->start - *startExtended + 1, coord->end - *startExtended,
+	    (coord->strand == 1) ? '+' : '-');
+	}
 	    }
 	coord = coord->next;
 	}
     }
-}	/*	static void extendLimits() */
+
+freeMem(cloneName);
+return (partsUsed);
+}	/*	static int extendLimits() */
 
 static int countBases(struct hash *coordHash, char *name)
 {
@@ -236,7 +291,7 @@ return (baseCount);
 }	/*	static int countBases()	*/
 
 static void processResult(struct hash *chrHash, struct hash *coordHash,
-	char *accName, unsigned querySize)
+	char *accName, unsigned querySize, int partsConsidered)
 {
 struct hashCookie cookie;
 struct hashEl *hashEl;
@@ -351,6 +406,7 @@ if (coordCount > 0)
     unsigned usStdDev;
     unsigned startExtended;
     unsigned endExtended;
+    int partsUsed = 0;
 
     mean = (unsigned) (sum / coordCount);
     if (coordCount > 1)
@@ -374,12 +430,15 @@ if (coordCount > 0)
 	coord = coord->next;
 	}
     median = (unsigned) doubleMedian(coordCount, midPoints);
-    extendLimits(coordListPt, median, querySize, &startExtended, &endExtended,
-	ctgName);
+    partsUsed = extendLimits(coordListPt, median, querySize,
+	&startExtended, &endExtended, ctgName, partsConsidered);
     verbose(2,
 	"# qSize: %u, Median: %u implies %u-%u %s\n#\textended to %u-%u\n",
 	querySize, median, median - (querySize/2), median+(querySize/2),
 	accName, startExtended, endExtended);
+    verbose(2,"# %s total parts %d, parts used %d, percent used %% %7.2f\n",
+	accName, partsConsidered, partsUsed,
+	100.0 * (double) partsUsed / (double) partsConsidered);
     /*	if BED output, output the line here, AGP was done in extendLimits */
     if (!agp)
 	{
@@ -390,7 +449,7 @@ if (coordCount > 0)
     }
 else
     {
-    verbose(1,"# ERROR - no coordinates found ? %s\n", ctgName);
+    verbose(1,"# ERROR %s - no coordinates found ? %s\n", accName, ctgName);
     }
 
 /*	free the chrom coordinates lists	*/
@@ -428,6 +487,7 @@ for (i=1; i < argc; ++i)
     unsigned tSize;
     char *prevAccPart = (char *)NULL;
     char *prevAccName = (char *)NULL;
+    char *prevTargetName = (char *)NULL;
     struct hashEl *el;
     struct hash *chrHash = newHash(0);
     struct hash *coordHash = newHash(0);
@@ -435,13 +495,14 @@ for (i=1; i < argc; ++i)
     struct coordEl **coordListPt = (struct coordEl **) NULL;
     unsigned querySize = 0;
     int partCount = 0;
+    int partsConsidered = 0;
 
     verbose(2,"#\tprocess: %s\n", argv[i]);
     lf=pslFileOpen(argv[i]);
     while ((struct psl *)NULL != (psl = pslNext(lf)) )
 	{
 	char *accName = (char *)NULL;
-	char *chrName = (char *)NULL;
+	char *targetName = (char *)NULL;
 	int chrCount = 0;
 	double percentCoverage;
 
@@ -450,11 +511,14 @@ for (i=1; i < argc; ++i)
 	    {
 	    prevAccPart = cloneString(psl->qName);  /* first time */
 	    querySize = psl->qSize;
+	    ++partsConsidered;
 	    }
 	chopSuffixAt(accName,'_');
 
 	if ((char *)NULL == prevAccName)
 		prevAccName = cloneString(accName);  /* first time */
+	if ((char *)NULL == prevTargetName)
+		prevTargetName = cloneString(psl->tName);  /* first time */
 
 	/*	encountered a new accession name, process the one we
  	 *	were working on
@@ -462,10 +526,11 @@ for (i=1; i < argc; ++i)
 	if (differentWord(accName, prevAccName))
 	    {
 	    if (partCount > 0)
-		processResult(chrHash, coordHash, prevAccName, querySize);
+		processResult(chrHash, coordHash, prevAccName, querySize,
+		    partsConsidered);
 	    else
-		verbose(1,"# ERROR - no coordinates found for %s\n",
-		    prevAccName);
+		verbose(1,"# ERROR %s %s - no coordinates found in %d parts considered\n",
+		    prevTargetName, prevAccName, partsConsidered);
 	    freeMem(prevAccName);
 	    prevAccName = cloneString(accName);
 	    freeHash(&chrHash);
@@ -474,31 +539,37 @@ for (i=1; i < argc; ++i)
 	    coordHash = newHash(0);
 	    querySize = 0;
 	    partCount = 0;
+	    partsConsidered = 0;
 	    }
 
 	tSize = psl->tEnd - psl->tStart;
 	percentCoverage = 100.0*((double)(tSize+1)/(psl->qSize + 1));
 	if (differentWord(psl->qName, prevAccPart))
 	    {
+	    ++partsConsidered;
 	    querySize += psl->qSize;
 	    freeMem(prevAccPart);
 	    prevAccPart = cloneString(psl->qName);
 	    }
 
-	chrName = cloneString(psl->tName);
-	/*stripString(chrName, "chr");*/
+	targetName = cloneString(psl->tName);
+	if (differentWord(targetName, prevTargetName))
+	    {
+	    freeMem(prevTargetName);
+	    prevTargetName = cloneString(targetName);
+	    }
 	/*	keep a hash of chrom names encountered	*/
-	el = hashLookup(chrHash, chrName);
+	el = hashLookup(chrHash, targetName);
 	if (el == NULL)
 	    {
 	    if (percentCoverage > minCover)
 		{
-		hashAddInt(chrHash, chrName, 1);
+		hashAddInt(chrHash, targetName, 1);
 		chrCount = 1;
 		}
 	    else
 		{
-		hashAddInt(chrHash, chrName, 0);
+		hashAddInt(chrHash, targetName, 0);
 		chrCount = 0;
 		}
 	    }
@@ -522,11 +593,11 @@ for (i=1; i < argc; ++i)
 	    ++partCount;
 	    coord->name = cloneString(psl->qName);
 	    /*	for each chrom name, accumulate a list of coordinates */
-	    el = hashLookup(coordHash, chrName);
+	    el = hashLookup(coordHash, targetName);
 	    if (el == NULL)
 		{
 		AllocVar(coordListPt);
-		hashAdd(coordHash, chrName, coordListPt);
+		hashAdd(coordHash, targetName, coordListPt);
 		}
 	    else
 		{
@@ -548,10 +619,18 @@ for (i=1; i < argc; ++i)
 
 
 	freeMem(accName);
-	freeMem(chrName);
+	freeMem(targetName);
 	pslFree(&psl);
 	}
-    processResult(chrHash, coordHash, prevAccName, querySize);
+    if (partCount > 0)
+	processResult(chrHash, coordHash, prevAccName, querySize,
+	    partsConsidered);
+    else
+	verbose(1,"# ERROR %s %s - no coordinates found\n",
+	    prevTargetName, prevAccName);
+    freeMem(prevAccName);
+    freeHash(&chrHash);
+    freeHash(&coordHash);
     lineFileClose(&lf);
     }
 }	/*	static void clusterClone()	*/
