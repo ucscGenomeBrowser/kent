@@ -157,7 +157,7 @@ otherDb hg16
 
 track affyGeno
 shortLabel Affymetrix 120K SNP
-longLabel Affymetrix 120K SNP Release 10/17/03
+longLabel Affymetrix 120K SNP Release October 2003
 group varRep
 priority 146
 visibility pack
