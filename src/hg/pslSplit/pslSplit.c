@@ -8,9 +8,10 @@
 #include "psl.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.3 2004/04/17 07:49:01 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSplit.c,v 1.4 2004/08/14 02:55:13 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
+int maxLines = 7000;	/* cut out this many unique qNames in each output file. */
 
 void usage()
 /* Explain usage and exit. */
@@ -23,7 +24,9 @@ errAbort(
    "result (one .psl file per target) will be put in outDir.\n"
    "outDir will be created if it does not already exist.  \n"
    "     The 'how' parameter should be either 'head' or 'nohead'\n"
-   "     -chunkSize=N (default %d) number of unique qNames per output file.\n", chunkSize);
+   "     -chunkSize=N (default %d) number of unique qNames per output file.\n"
+   "     -maxLines=N (default %d)  limit max number (approx.) of lines per output file.\n"
+   , chunkSize, maxLines);
 }
 
 void makeMidName(char *tempDir, int ix, char *retName)
@@ -199,6 +202,8 @@ mkdir(outDir, 0775);
  * temporary files. */
 for (i = 0; i<inFileCount; ++i)
     {
+    int linesLeft = maxLines;
+    bool breakNext = FALSE;
     inFile = inFiles[i];
     printf("Processing %s", inFile);
     fflush(stdout);
@@ -209,11 +214,17 @@ for (i = 0; i<inFileCount; ++i)
         if (!sameString(prev, psl->qName))
             {
             prev = cloneString(psl->qName);
-            if (--linesLeftInChunk <= 0)
+            if (--linesLeftInChunk <= 0 || breakNext)
                 {
                 outputChunk(&pslList, outDir, midFileCount++, noHead);
                 linesLeftInChunk = chunkSize;
+                linesLeft = maxLines;
+                breakNext = FALSE;
                 }
+            }
+        if (--linesLeft < 0)
+            {
+            breakNext = TRUE;
             }
 	if ((++totalLineCount & 0xffff) == 0)
 	    {
@@ -237,6 +248,7 @@ optionHash(&argc, argv);
 if (argc < 4)
     usage();
 chunkSize = optionInt("chunkSize", chunkSize);
+maxLines = optionInt("maxLines", maxLines);
 pslSplit(argv[1], argv[2], &argv[3], argc-3);
 return 0;
 }
