@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.51 2004/06/07 23:08:01 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.52 2004/06/07 23:15:48 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -377,13 +377,13 @@ void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList,
  * this includes only active assemblies with a database (with the
  * exception of the default assembly, which will be included even
  * if it isn't active).
+ *  param db - The default assembly (the database name) to choose as selected. 
+ *             If NULL, no default selection.
+ *  param allowInactive - if set, print all assemblies for this genome,
+ *                        even if they're inactive or have no database
+ */
 {
 
-param db - The default assembly (the database name) to choose as selected. 
-                If NULL, no default selection.
-param allowInactive - if set, print all assemblies for this genome,
-                        even if they're inactive or have no database
- */
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
@@ -425,11 +425,10 @@ void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList,
 /* Find all the assemblies from the list that are active.
  * Prints to stdout the HTML to render a dropdown list containing the list 
  * of the possible assemblies to choose from.
+ * param db - The default assembly (the database name) to choose as selected. 
+ *    If NULL, no default selection.  */
 {
 
-param db - The default assembly (the database name) to choose as selected. 
-                If NULL, no default selection.
-                */
     printAllAssemblyListHtmlParm(db, dbList, dbCgi, TRUE, javascript);
 }
  
