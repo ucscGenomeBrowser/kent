@@ -1,45 +1,90 @@
 <HTML>
 <HEAD>
-<TITLE>Cytogenetic Guide</TITLE>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>FISH Clones vs. Assembly Scatter Plots Guide</TITLE>
+	<LINK REL="STYLESHEET" HREF="http://genome.ucsc.edu/style/HGStyle.css">
 </HEAD>
-<BODY BACKGROUND="http://cc94/images/floret.jpg">
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<a name="TOP"></a>
 
-<H1>User Guide for Cytogenetic Map Comparison</H1>
-<P>We give one plot for each chromosome that shows the data from the <A
-HREF="http://fishfarm.fhcrc.org/bacresource/index.shtml">resource of
-FISH-mapped BAC clones</A> (<A
-HREF="http://www.ncbi.nlm.nih.gov/genome/cyto/">NCBI Clone Registry</A>) placed on the working draft. These plots are
-at a fixed scale, so you will have to scroll right to cover the larger
-chromosomes. Another set of plots covers the genome in fixed scale 50mb
-windows, and a third set of plots covers the genome in 10mb windows.
+<TABLE BORDER=0 WIDTH=100%>
+<TH COLSPAN=2 ALIGN="left">
+   <IMG SRC="http://genome.ucsc.edu/images/title.jpg"></TH>
+
+<!--HOTLINKS BAR-->
+<TR><TD COLSPAN=2 HEIGHT=40>
+    <CENTER> 
+	<TABLE BGCOLOR="2636D1" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDERCOLOR="000000" BORDER=1 HEIGHT="22"><TR><TD>
+		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>
+		<TD WIDTH=1></TD>
+		<TD WIDTH=75>
+			<A HREF="http://genome.ucsc.edu/index.html" onMouseOver="HOME.src='http://genome.ucsc.edu/images/hl_home.jpg'" onMouseOut="HOME.src='http://genome.ucsc.edu/images/h_home.jpg'">
+			<IMG SRC="http://genome.ucsc.edu/images/h_home.jpg" ALIGN="absmiddle" BORDER="0" NAME="HOME" ALT="Home" ></A></TD>
+
+		<TD WIDTH=155>
+			<A HREF="http://genome.ucsc.edu/goldenPath/hgTracks.html" onMouseOver="BROWSER.src='http://genome.ucsc.edu/images/hl_browser.jpg'" onMouseOut="BROWSER.src='http://genome.ucsc.edu/images/h_browser.jpg'">
+			<IMG SRC="http://genome.ucsc.edu/images/h_browser.jpg" ALIGN="absmiddle" BORDER="0" NAME="BROWSER" ALT="&nbsp;&nbsp; Genome Browser"></A></TD>
+			
+		<TD WIDTH=100>
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat?command=start" onMouseOver="SEARCH.src='http://genome.ucsc.edu/images/hl_blat.jpg'" onMouseOut="SEARCH.src='http://genome.ucsc.edu/images/h_blat.jpg'">
+			<IMG SRC="http://genome.ucsc.edu/images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>
+			
+		<TD WIDTH=100>
+			<A HREF="http://genome.ucsc.edu/FAQ.html" onMouseOver="GUIDE.src='http://genome.ucsc.edu/images/hl_faq.jpg'" onMouseOut="GUIDE.src='http://genome.ucsc.edu/images/h_faq.jpg'">
+			<IMG SRC="http://genome.ucsc.edu/images/h_faq.jpg" ALIGN="absmiddle" BORDER="0" NAME="GUIDE" ALT="&nbsp;&nbsp; Help"></A></TD>
+		</TR></TABLE>
+	</TD></TR></TABLE>
+	</CENTER>
+</TD></TR>
+
+<TR>
+ <!--Content Tables-->  
+ <td CELLPADDING=1 ROWSPAN=2>
+ <table BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><tr><td>
+ <table BGCOLOR="D9E4F8"  BACKGROUND="http://genome.ucsc.edu/images/hr.gif" WIDTH=100%><tr><td>
+ <font SIZE="4"><a NAME="TOC"></a><b>&nbsp; Users Guide for FISH Clones vs. Genomic Sequence Assembly Scatter Plots</font>
+ </td></tr></table>
+
+<!--outer table is for border purposes-->
+<table BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0 CELLSPACING=0><th HEIGHT=15></th><tr><td WIDTH=10></td><td>
+
+<P>We give one plot for each chromosome that shows the data from the
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/cyto/hbrc.shtml">resource
+of FISH-mapped BAC clones</A> (<A
+HREF="http://www.ncbi.nlm.nih.gov/genome/clone/">NCBI Clone
+Registry</A>) placed on the working draft. These plots are at a fixed
+scale, so you will need to scroll right to cover the larger
+chromosomes. Another set of plots covers the genome in fixed scale
+50mb windows, and a third set of plots covers the genome in 10mb
+windows.
 
 <P>The position along the working draft sequence for the chromosome is
-plotted along the horizontal axis. Each cytogenetic band is allocated a height on
-the vertical axis, using the standard fractional lengths of the bands. A
-horizonal line is drawn across the plot at the height corresponding to
-the start position of each major band. The predicted location of every
-sub-band is shown by a light blue horizontal line segment that is
-located at the height corresponding to the midpoint of that sub-band,
-and positioned so that it begins at the horizontal coordinate predicted to be the
-beginning of the sub-band in the working draft sequence, and ends at the horizontal
-coordinate predicted to be the end of that sub-band in the working draft
-sequence.
-These predictions are calculated by a dynamic programming method
-described in "<A
+plotted along the horizontal axis. Each cytogenetic band is allocated
+a height on the vertical axis, using the standard fractional lengths
+of the bands. A horizonal line is drawn across the plot at the height
+corresponding to the start position of each major band. The predicted
+location of every sub-band is shown by a light blue horizontal line
+segment that is located at the height corresponding to the midpoint of
+that sub-band, and positioned so that it begins at the horizontal
+coordinate predicted to be the beginning of the sub-band in the
+working draft sequence, and ends at the horizontal coordinate
+predicted to be the end of that sub-band in the working draft
+sequence.  These predictions are calculated by a dynamic programming
+method described in "<A 
 HREF="http://genome.ucsc.edu/goldenPath/mapPlots/cytoprogram.html">A
 Dynamic Programming Method to Locate Cytogenetic Bands on the Working
 Draft Sequence</A>," and will be described more fully elsewhere.
 
 <P>Each FISH-mapped clone is displayed as a point with error bars. The
-position of the point along the working draft sequence was determined by
-Wonhee Jang using information about the clone, including STSs and BAC
-ends. The vertical position of the point is the midpoint in the range of
-possible bands predicted for the clone by FISH. The error bars indicate
-the range of uncertainty for the band location for the clone. The point
-is color-coded according to the lab that FISH-mapped the clone; see the key
-in upper right corner of the plot.
-Some clone markers are FISH-mapped to different chromosomes entirely.
-These are shown at the bottom of the display.
+position of the point along the working draft sequence is determined
+using information about the clone, including STSs and BAC ends. The
+vertical position of the point is the midpoint in the range of
+possible bands predicted for the clone by FISH. The error bars
+indicate the range of uncertainty for the band location for the
+clone. The point is color-coded according to the lab that FISH-mapped
+the clone; see the key in upper right corner of the plot.  Some clone
+markers are FISH-mapped to different chromosomes entirely.  These are
+shown at the bottom of the display.
 
 <H2>Caveats:</H2>
 <UL>
@@ -56,5 +101,18 @@ These are shown at the bottom of the display.
 	telomeric regions. 
 </UL>
 
-</BODY>
-</HTML>
+    </TD>
+    </TR>
+  </TABLE>
+    <hr>
+    <address><a href="mailto:booch@cse.ucsc.edu">Terry Furey</a></address>
+<!-- Created: Fri Aug  3 15:16:48 PDT 2001 -->
+<!-- hhmts start -->
+Last modified: Fri Mar 22 13:25:52 PST 2002
+<!-- hhmts end -->
+</TD></TR></TABLE>
+	</TD></TR></TABLE>
+</TD></TR></TABLE>	
+
+</TD></TR></TABLE>
+</BODY></HTML>
