@@ -482,6 +482,15 @@ void chopSuffixAt(char *s, char c);
 /* Remove end of string from last occurrence of char c. 
  * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
 
+char *chopPrefix(char *s);
+/* This will replace the first '.' in a string with
+ * 0, and return the character after this.  If there
+ * is no '.' in the string this will just return the
+ * unchanged s passed in. */
+
+char *chopPrefixAt(char *s, char c);
+/* Like chopPrefix, but can chop on any character, not just '.' */
+
 FILE *mustOpen(char *fileName, char *mode);
 /* Open a file - or squawk and die. */
 
