@@ -5544,6 +5544,7 @@ while (<>) {
     # ctgPosFiltered.tab has 302 rows (227 fewer than ctgPos.tab)
     echo "delete from ctgPos" | hgsql mm5
     echo "load data local infile 'ctgPosFiltered.tab' into table ctgPos" | hgsql mm5
+    # echo "update ctgPos set chrom = "chrM" where chrom = "chrMT" | hgsql mm5
     # featureBits mm5 ctgPos
     # 2557064874 bases of 2615483787 (97.766%) in intersection
 
@@ -7138,5 +7139,4 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
     ln -s blastz.bosTau1.2005-02-19 /cluster/data/mm5/bed/blastz.bosTau1
     # Add chainBosTau1 and netBosTau1 to mm5/trackDb.ra
     # Add /usr/local/apache/htdocs/goldenPath/mm5/vsBosTau1/README.txt
-
 
