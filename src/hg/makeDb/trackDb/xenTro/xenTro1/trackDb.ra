@@ -37,6 +37,7 @@ visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons5
+spanList 1
 yLinOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
