@@ -9,8 +9,11 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.4 2003/08/22 01:39:18 sugnet Exp $";
-
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.5 2003/11/21 21:10:58 sugnet Exp $";
+static int alt5Flipped = 0;
+static int alt3Flipped = 0;
+static int minConfidence = 0;
+static int flankingSize = 0;
 static int alt5PrimeCount = 0;
 static int alt3PrimeCount = 0;
 static int altCassetteCount = 0;
@@ -22,6 +25,7 @@ static int totalLoci = 0;
 static int totalSplices = 0;
 static int splicedLoci = 0;
 
+FILE *bedViewOutFile = NULL;/* File for bed containing region of alt-splicing. */
 FILE *RData = NULL;         /* File for outputting summaries about alts, useful for R. */
 FILE *RDataCont = NULL;     /* File for outputting summaries about controls, useful for R. */
 FILE *upStream100 = NULL;   /* Bed file for 100bp upstream of 3' splice site. */
@@ -29,6 +33,7 @@ FILE *downStream100 = NULL; /* Bed file for 100bp downstream of 5' splice site. 
 FILE *altRegion = NULL;     /* Bed file representing an alt-spliced region. */
 FILE *constRegion = NULL;   /* Bed file representing a constituative region. */
 FILE *altGraphXOut = NULL;  /* AltgraphX exon representing alt 3', alt 5' and cassette exons. */
+FILE *altLogFile = NULL;    /* File to output names of graphs that have alt splicing. */
 static boolean doSScores = FALSE;
 
 void usage()
@@ -42,7 +47,6 @@ errAbort("altAnalysis - Analyze the altSplicing in a series of altGraphX's\n"
 void logSpliceType(enum altSpliceType type)
 /* Log the different types of splicing. */
 {
-
 switch (type) 
     {
     case alt5Prime:
@@ -67,15 +71,15 @@ switch (type)
 	
 void printSpliceTypeInfo()
 {
-fprintf(stderr, "alt 5' Count:\t%d\n", alt5PrimeCount);
-fprintf(stderr, "alt 3' Count:\t%d\n", alt3PrimeCount);
+fprintf(stderr, "alt 5' Count:\t%d (%d on '-' strand)\n", alt5PrimeCount, alt3Flipped);
+fprintf(stderr, "alt 3' Count:\t%d (%d on '-' strand)\n", alt3PrimeCount, alt5Flipped);
 fprintf(stderr, "alt Cass Count:\t%d\n", altCassetteCount);
 fprintf(stderr, "alt Ret. Int. Count:\t%d\n", altRetIntCount);
 fprintf(stderr, "alt Ident. Count:\t%d\n", altIdentityCount);
 fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
 fprintf(stderr, "alt Total Count:\t%d\n", altTotalCount);
 fprintf(stderr, "totalSplices:\t%d\n", totalSplices);
-fprintf(stderr, "%d alt spliced loci out of %d total loci with %.2f alt splices per alt spliced loci\n",
+fprintf(stderr, "%d alt spliced sites out of %d total loci with %.2f alt splices per alt spliced loci\n",
 	splicedLoci, totalLoci, (float)totalSplices/splicedLoci);
 }
 
@@ -183,9 +187,52 @@ int sum = edgesInArea(ag, em, v1,v2);
 return sum == 1;
 }
 
+int findClosestDownstreamVertex(struct altGraphX *ag, bool **em, int v)
+/* Return the closest vertex that connects from v. -1 if none connect. */ 
+{
+int i;
+int minV=-1;
+int minDist = BIGNUM;
+int *vPos = ag->vPositions;
+for(i=v+1; i<ag->vertexCount; i++)
+    {
+    if(em[v][i]) 
+	{
+	int dist = vPos[i] - vPos[v];
+	if(dist < minDist)
+	    {
+	    minDist = dist;
+	    minV = i;
+	    }
+	}
+    }
+return minV;
+}
+
+int findClosestUpstreamVertex(struct altGraphX *ag, bool **em, int v)
+/* Return the closest vertex that connects to v. -1 if none connect. */ 
+{
+int i;
+int minV=-1;
+int minDist = BIGNUM;
+int *vPos = ag->vPositions;
+for(i=0; i<v; i++)
+    {
+    if(em[i][v]) 
+	{
+	int dist = vPos[v] - vPos[i];
+	if(dist < minDist)
+	    {
+	    minDist = dist;
+	    minV = i;
+	    }
+	}
+    }
+return minV;
+}
 
 boolean isAlt3Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
-		    int *altBpStart, int *altBpEnd)
+		    int *altBpStart, int *altBpEnd, int *firstVertex, int *lastVertex)
 /* Return TRUE if we have an edge pattern of:
    he->hs----->he
      \-->hs--/
@@ -223,6 +270,8 @@ if(em[vs][ve1] && em[vs][ve2])
 		int *vPos = ag->vPositions;
 		struct bed bedUp, bedDown, bedAlt, bedConst;
                 /* Initialize some beds for reporting. */
+		*lastVertex = i;
+		*firstVertex = findClosestUpstreamVertex(ag, em, vs);
 		bedConst.chrom = bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
 		bedConst.name = bedUp.name = bedDown.name = bedAlt.name = ag->name;
 		if(sameString(ag->strand, "+"))
@@ -244,15 +293,15 @@ if(em[vs][ve1] && em[vs][ve2])
 		if(sameString(ag->strand, "+"))
 		    {
 		    bedDown.chromStart = vPos[i];
-		    bedDown.chromEnd = vPos[i]+100;
-		    bedUp.chromStart = vPos[ve1]-100;
+		    bedDown.chromEnd = vPos[i]+flankingSize;
+		    bedUp.chromStart = vPos[ve1]-flankingSize;
 		    bedUp.chromEnd = vPos[ve1];
 		    }
 		else 
 		    {
 		    bedUp.chromStart = vPos[i];
-		    bedUp.chromEnd = vPos[i]+100;
-		    bedDown.chromStart = vPos[ve1]-100;
+		    bedUp.chromEnd = vPos[i]+flankingSize;
+		    bedDown.chromStart = vPos[ve1]-flankingSize;
 		    bedDown.chromEnd = vPos[ve1];
 		    }
 		if(altRegion)
@@ -262,8 +311,8 @@ if(em[vs][ve1] && em[vs][ve2])
 		    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
 		    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
 		    }		
-		*altBpStart = ag->vPositions[ve1];
-		*altBpEnd = ag->vPositions[ve2];
+		*altBpStart = ve1;
+		*altBpEnd = ve2;
 		return TRUE;
 		}
 	    }
@@ -333,15 +382,15 @@ if(em[vs][ve1] && em[vs][ve2])
 		if(sameString(ag->strand, "+"))
 		    {
 		    bedDown.chromStart = vPos[ve2];
-		    bedDown.chromEnd = vPos[ve2]+100;
-		    bedUp.chromStart = vPos[vs]-100;
+		    bedDown.chromEnd = vPos[ve2]+flankingSize;
+		    bedUp.chromStart = vPos[vs]-flankingSize;
 		    bedUp.chromEnd = vPos[vs];
 		    }
 		else 
 		    {
 		    bedUp.chromStart = vPos[ve2];
-		    bedUp.chromEnd = vPos[ve2]+100;
-		    bedDown.chromStart = vPos[vs]-100;
+		    bedUp.chromEnd = vPos[ve2]+flankingSize;
+		    bedDown.chromStart = vPos[vs]-flankingSize;
 		    bedDown.chromEnd = vPos[vs];
 		    }
 		if(altRegion)
@@ -351,8 +400,8 @@ if(em[vs][ve1] && em[vs][ve2])
 		    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
 		    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
 		    }		
-		*altBpStart = ag->vPositions[ve1];
-		*altBpEnd = ag->vPositions[ve2];
+		*altBpStart = ve1;
+		*altBpEnd = ve2;
 		return TRUE;
 		}
 	    }
@@ -362,7 +411,7 @@ return FALSE;
 }
 
 boolean isCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
-		    int *altBpStart, int *altBpEnd)
+		    int *altBpStartV, int *altBpEndV, int *startV, int *endV)
 /* Return TRUE if SIMPLE cassette exon.
    Looking for pattern:
    he--->hs---->he---->hs
@@ -409,6 +458,8 @@ if(em[vs][ve1] && em[vs][ve2])
 		{
 		struct bed bedUp, bedDown, bedAlt;
 		/* Initialize some beds for reporting. */
+		*startV = findClosestUpstreamVertex(ag, em, vs);
+		*endV = findClosestDownstreamVertex(ag, em, ve2);
 		bedUp.chrom = bedDown.chrom = bedAlt.chrom = ag->tName;
 		bedUp.name = bedDown.name = bedAlt.name = ag->name;
 		bedUp.score = bedDown.score = bedAlt.score = altCassette;
@@ -422,17 +473,17 @@ if(em[vs][ve1] && em[vs][ve2])
 		/* Upstream/down stream */
 		if(sameString(ag->strand, "+"))
 		    {
-		    bedUp.chromStart = vPos[ve1] - 100;
+		    bedUp.chromStart = vPos[ve1] - flankingSize;
 		    bedUp.chromEnd = vPos[ve1];
 		    bedDown.chromStart = vPos[i];
-		    bedDown.chromEnd = vPos[i] + 100;
+		    bedDown.chromEnd = vPos[i] + flankingSize;
 		    }
 		else 
 		    {
-		    bedDown.chromStart = vPos[ve1] - 100;
+		    bedDown.chromStart = vPos[ve1] - flankingSize;
 		    bedDown.chromEnd = vPos[ve1];
 		    bedUp.chromStart = vPos[i];
-		    bedUp.chromEnd = vPos[i] + 100;
+		    bedUp.chromEnd = vPos[i] + flankingSize;
 		    }
 		if(altRegion != NULL)
 		    {
@@ -440,133 +491,133 @@ if(em[vs][ve1] && em[vs][ve2])
 		    bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
 		    bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
 		    }
-		*altBpStart = ag->vPositions[ve1];
-		*altBpEnd = ag->vPositions[i];
-		if(altGraphXOut != NULL)
-		    {
-		    char name[256];
-		    int hardStart = -1;
-		    int hardEnd = -1;
-		    int k;
-		    /* Find the begining and end of flanking exons. */
-		    for(k=0; k<vCount; k++)
-			{
-			if(vTypes[k] == ggHardStart && em[k][vs]) 
-			    {
-			    hardStart = k;
-			    break;
-			    }
-			}
-		    for(k=0; k<vCount; k++)
-			{
-			if(vTypes[k] == ggHardEnd && em[ve2][k]) 
-			    {
-			    hardEnd = k;
-			    break;
-			    }
-			}
-		    if(hardStart != -1 && hardEnd != -1)
-			{
-			struct evidence *ev = NULL, *agEv = NULL;
-			int evIndex;
-			safef(name, sizeof(name), "%s.cass", ag->name);
-			AllocVar(subAg);
-			subAg->tName = cloneString(ag->tName);
-			subAg->name = cloneString(name);
-			safef(subAg->strand, sizeof(subAg->strand), "%s", ag->strand);
-			subAg->tStart = vPos[hardStart];
-			subAg->tEnd = vPos[hardEnd];
-			subAg->vertexCount = 6;
-			subAg->edgeCount = 6;
-			AllocArray(subAg->vTypes, 6);
-			AllocArray(subAg->vPositions, 6);
-			AllocArray(subAg->edgeStarts, 6);
-			AllocArray(subAg->edgeEnds, 6);
-			AllocArray(subAg->edgeTypes, 6);
-			subAg->mrnaRefCount = ag->mrnaRefCount;
-			subAg->mrnaTissues = ag->mrnaTissues;
-			subAg->mrnaRefs = ag->mrnaRefs;
-			subAg->mrnaLibs = ag->mrnaLibs;
-			/* work out the positions. */
-			subAg->vPositions[0] = vPos[hardStart];
-			subAg->vPositions[1] = vPos[vs];
-			subAg->vPositions[2] = vPos[ve1];
-			subAg->vPositions[3] = vPos[i];
-			subAg->vPositions[4] = vPos[ve2];
-			subAg->vPositions[5] = vPos[hardEnd];
+		*altBpStartV = ve1;
+		*altBpEndV = i;
+/* 		if(altGraphXOut != NULL) */
+/* 		    { */
+/* 		    char name[256]; */
+/* 		    int hardStart = -1; */
+/* 		    int hardEnd = -1; */
+/* 		    int k; */
+/* 		    /\* Find the begining and end of flanking exons. *\/ */
+/* 		    for(k=0; k<vCount; k++) */
+/* 			{ */
+/* 			if(vTypes[k] == ggHardStart && em[k][vs])  */
+/* 			    { */
+/* 			    hardStart = k; */
+/* 			    break; */
+/* 			    } */
+/* 			} */
+/* 		    for(k=0; k<vCount; k++) */
+/* 			{ */
+/* 			if(vTypes[k] == ggHardEnd && em[ve2][k])  */
+/* 			    { */
+/* 			    hardEnd = k; */
+/* 			    break; */
+/* 			    } */
+/* 			} */
+/* 		    if(hardStart != -1 && hardEnd != -1) */
+/* 			{ */
+/* 			struct evidence *ev = NULL, *agEv = NULL; */
+/* 			int evIndex; */
+/* 			safef(name, sizeof(name), "%s.cass", ag->name); */
+/* 			AllocVar(subAg); */
+/* 			subAg->tName = cloneString(ag->tName); */
+/* 			subAg->name = cloneString(name); */
+/* 			safef(subAg->strand, sizeof(subAg->strand), "%s", ag->strand); */
+/* 			subAg->tStart = vPos[hardStart]; */
+/* 			subAg->tEnd = vPos[hardEnd]; */
+/* 			subAg->vertexCount = 6; */
+/* 			subAg->edgeCount = 6; */
+/* 			AllocArray(subAg->vTypes, 6); */
+/* 			AllocArray(subAg->vPositions, 6); */
+/* 			AllocArray(subAg->edgeStarts, 6); */
+/* 			AllocArray(subAg->edgeEnds, 6); */
+/* 			AllocArray(subAg->edgeTypes, 6); */
+/* 			subAg->mrnaRefCount = ag->mrnaRefCount; */
+/* 			subAg->mrnaTissues = ag->mrnaTissues; */
+/* 			subAg->mrnaRefs = ag->mrnaRefs; */
+/* 			subAg->mrnaLibs = ag->mrnaLibs; */
+/* 			/\* work out the positions. *\/ */
+/* 			subAg->vPositions[0] = vPos[hardStart]; */
+/* 			subAg->vPositions[1] = vPos[vs]; */
+/* 			subAg->vPositions[2] = vPos[ve1]; */
+/* 			subAg->vPositions[3] = vPos[i]; */
+/* 			subAg->vPositions[4] = vPos[ve2]; */
+/* 			subAg->vPositions[5] = vPos[hardEnd]; */
 
-			/* work out the types. */
-			subAg->vTypes[0] = vTypes[hardStart];
-			subAg->vTypes[1] = vTypes[vs];
-			subAg->vTypes[2] = vTypes[ve1];
-			subAg->vTypes[3] = vTypes[i];
-			subAg->vTypes[4] = vTypes[ve2];
-			subAg->vTypes[5] = vTypes[hardEnd];
+/* 			/\* work out the types. *\/ */
+/* 			subAg->vTypes[0] = vTypes[hardStart]; */
+/* 			subAg->vTypes[1] = vTypes[vs]; */
+/* 			subAg->vTypes[2] = vTypes[ve1]; */
+/* 			subAg->vTypes[3] = vTypes[i]; */
+/* 			subAg->vTypes[4] = vTypes[ve2]; */
+/* 			subAg->vTypes[5] = vTypes[hardEnd]; */
 
-			/* work out edges */
-			subAg->edgeStarts[0] = 0;
-			subAg->edgeEnds[0] = 1;
-			subAg->edgeTypes[0] = ggExon;
-			evIndex = altGraphXGetEdgeNum(ag, hardStart, vs);
-			agEv = slElementFromIx(ag->evidence, evIndex);
-			ev = CloneVar(agEv);
-			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
-			slAddHead(&subAg->evidence, ev);
+/* 			/\* work out edges *\/ */
+/* 			subAg->edgeStarts[0] = 0; */
+/* 			subAg->edgeEnds[0] = 1; */
+/* 			subAg->edgeTypes[0] = ggExon; */
+/* 			evIndex = altGraphXGetEdgeNum(ag, hardStart, vs); */
+/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
+/* 			ev = CloneVar(agEv); */
+/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
+/* 			slAddHead(&subAg->evidence, ev); */
 			
-			subAg->edgeStarts[1] = 1;
-			subAg->edgeEnds[1] = 2;
-			subAg->edgeTypes[1] = ggSJ;
-			evIndex = altGraphXGetEdgeNum(ag, vs, ve1);
-			agEv = slElementFromIx(ag->evidence, evIndex);
-			ev = CloneVar(agEv);
-			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
-			slAddHead(&subAg->evidence, ev);
+/* 			subAg->edgeStarts[1] = 1; */
+/* 			subAg->edgeEnds[1] = 2; */
+/* 			subAg->edgeTypes[1] = ggSJ; */
+/* 			evIndex = altGraphXGetEdgeNum(ag, vs, ve1); */
+/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
+/* 			ev = CloneVar(agEv); */
+/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
+/* 			slAddHead(&subAg->evidence, ev); */
 
-			subAg->edgeStarts[2] = 1;
-			subAg->edgeEnds[2] = 4;
-			subAg->edgeTypes[2] = ggSJ;
-			evIndex = altGraphXGetEdgeNum(ag, vs, ve2);
-			agEv = slElementFromIx(ag->evidence, evIndex);
-			ev = CloneVar(agEv);
-			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
-			slAddHead(&subAg->evidence, ev);
+/* 			subAg->edgeStarts[2] = 1; */
+/* 			subAg->edgeEnds[2] = 4; */
+/* 			subAg->edgeTypes[2] = ggSJ; */
+/* 			evIndex = altGraphXGetEdgeNum(ag, vs, ve2); */
+/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
+/* 			ev = CloneVar(agEv); */
+/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
+/* 			slAddHead(&subAg->evidence, ev); */
 
-			subAg->edgeStarts[3] = 2;
-			subAg->edgeEnds[3] = 3;
-			subAg->edgeTypes[3] = ggExon;
-			evIndex = altGraphXGetEdgeNum(ag, ve1, i);
-			agEv = slElementFromIx(ag->evidence, evIndex);
-			ev = CloneVar(agEv);
-			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
-			slAddHead(&subAg->evidence, ev);
+/* 			subAg->edgeStarts[3] = 2; */
+/* 			subAg->edgeEnds[3] = 3; */
+/* 			subAg->edgeTypes[3] = ggExon; */
+/* 			evIndex = altGraphXGetEdgeNum(ag, ve1, i); */
+/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
+/* 			ev = CloneVar(agEv); */
+/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
+/* 			slAddHead(&subAg->evidence, ev); */
 
-			subAg->edgeStarts[4] = 3;
-			subAg->edgeEnds[4] = 4;
-			subAg->edgeTypes[4] = ggSJ;
-			evIndex = altGraphXGetEdgeNum(ag, i, ve2);
-			agEv = slElementFromIx(ag->evidence, evIndex);
-			ev = CloneVar(agEv);
-			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
-			slAddHead(&subAg->evidence, ev);
+/* 			subAg->edgeStarts[4] = 3; */
+/* 			subAg->edgeEnds[4] = 4; */
+/* 			subAg->edgeTypes[4] = ggSJ; */
+/* 			evIndex = altGraphXGetEdgeNum(ag, i, ve2); */
+/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
+/* 			ev = CloneVar(agEv); */
+/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
+/* 			slAddHead(&subAg->evidence, ev); */
 
-			subAg->edgeStarts[5] = 4;
-			subAg->edgeEnds[5] = 5;
-			subAg->edgeTypes[5] = ggExon;
-			evIndex = altGraphXGetEdgeNum(ag, ve2, hardEnd);
-			agEv = slElementFromIx(ag->evidence, evIndex);
-			ev = CloneVar(agEv);
-			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount);
-			slAddHead(&subAg->evidence, ev);
+/* 			subAg->edgeStarts[5] = 4; */
+/* 			subAg->edgeEnds[5] = 5; */
+/* 			subAg->edgeTypes[5] = ggExon; */
+/* 			evIndex = altGraphXGetEdgeNum(ag, ve2, hardEnd); */
+/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
+/* 			ev = CloneVar(agEv); */
+/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
+/* 			slAddHead(&subAg->evidence, ev); */
 
-			slReverse(&subAg->evidence);
-			altGraphXTabOut(subAg, altGraphXOut);
-			subAg->mrnaRefCount = 0;
-			subAg->mrnaRefs = NULL;
-			subAg->mrnaTissues = NULL;
-			subAg->mrnaLibs = NULL;
-			altGraphXFree(&subAg);
-			}
-		    }
+/* 			slReverse(&subAg->evidence); */
+/* 			altGraphXTabOut(subAg, altGraphXOut); */
+/* 			subAg->mrnaRefCount = 0; */
+/* 			subAg->mrnaRefs = NULL; */
+/* 			subAg->mrnaTissues = NULL; */
+/* 			subAg->mrnaLibs = NULL; */
+/* 			altGraphXFree(&subAg); */
+/* 			} */
+/* 		    } */
 		return TRUE;
 		}
 	    }
@@ -626,14 +677,156 @@ if(em[vs][ve1] && em[vs][ve2])
 		{
 		bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
 		}
-	    *altBpStart = ag->vPositions[ve1];
-	    *altBpEnd = ag->vPositions[i];
+	    *altBpStart = ve1;
+	    *altBpEnd = i;
 	    return TRUE;
 	    }
 	}
     }
 return FALSE;
 }	    
+
+struct evidence *evidenceForEdge(struct altGraphX *ag, int v1, int v2)
+/* Return the evidence associated with this edge. */
+{
+int edgeNum = altGraphXGetEdgeNum(ag, v1, v2);
+struct evidence *ev = slElementFromIx(ag->evidence, edgeNum);
+return ev;
+}
+
+void reportCassette(struct altGraphX *ag, bool **em, int vs, int ve1, int ve2, 
+		    int altBpStart, int altBpEnd, int startV, int endV, FILE *out)
+/* Write out both an altGraphX and two bed files. For a cassette exon the
+ edges are - 
+ Name       Vertexes         Class
+ ------     ----------       -----
+ exon1:     startV->vs       constitutive (cons 0)
+ junction1: vs->ve1          alternative1 (alt1 1)
+ exon2:     ve1->altBpEnd    alternative1 (alt1 1)
+ junction2: altBpEnd->ve2    alternative1 (alt1 1)
+ exon3:     ve2->endV        constitutive (cons 0)
+ junction3: vs->ve2          alternative2 (alt2 3) why 3? What was I thinking?
+*/
+{
+struct altGraphX *agLoc = NULL;  /* Local altGraphX. */
+struct evidence *ev = NULL, *evLoc = NULL;
+int *vPos = ag->vPositions;
+unsigned char *vT = ag->vTypes;
+int *vPosLoc = NULL;    /* Vertex Positions. */
+int *eStartsLoc = NULL; /* Edge Starts. */
+int *eEndsLoc = NULL;   /* Edge ends. */
+unsigned char *vTLoc = NULL;      /* Vertex Types. */
+int *eTLoc = NULL;      /* Edge Types. */
+int vCLoc = 0;
+int eCLoc = 0;
+int i =0;
+struct dyString *dy = NULL;
+if(out == NULL)
+    return;
+AllocVar(agLoc);
+agLoc->tName = cloneString(ag->tName);
+agLoc->name = cloneString(ag->name);
+agLoc->tStart = vPos[startV];
+agLoc->tEnd = vPos[endV];
+agLoc->strand[0] = ag->strand[0];
+agLoc->vertexCount = vCLoc = 6;
+agLoc->edgeCount = eCLoc = 6;
+agLoc->id = altCassette;
+/* Allocate some arrays. */
+AllocArray(vPosLoc, vCLoc);
+AllocArray(eStartsLoc, vCLoc);
+AllocArray(eEndsLoc, vCLoc);
+AllocArray(vTLoc, vCLoc);
+AllocArray(eTLoc, vCLoc);
+
+/* Fill in the vertex positions. */
+vPosLoc[0] = vPos[startV];
+vPosLoc[1] = vPos[vs];
+vPosLoc[2] = vPos[ve1];
+vPosLoc[3] = vPos[altBpEnd];
+vPosLoc[4] = vPos[ve2];
+vPosLoc[5] = vPos[endV];
+
+/* Fill in the vertex types. */
+vTLoc[0] = vT[startV];
+vTLoc[1] = vT[vs];
+vTLoc[2] = vT[ve1];
+vTLoc[3] = vT[altBpEnd];
+vTLoc[4] = vT[ve2];
+vTLoc[5] = vT[endV];
+
+/* Fill in the edges. */
+/* Constitutive first exon. */
+eStartsLoc[0] = 0;
+eEndsLoc[0] = 1;
+eTLoc[0] = 0;
+ev = evidenceForEdge(ag, startV, vs);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+/* Exon inclusion junction. */
+eStartsLoc[1] = 1;
+eEndsLoc[1] = 2;
+eTLoc[1] = 1;
+ev = evidenceForEdge(ag, vs, ve1);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+
+/* Exon exclusion junction. */
+eStartsLoc[2] = 1;
+eEndsLoc[2] = 4;
+eTLoc[2] = 3;
+ev = evidenceForEdge(ag, vs, ve2);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+
+/* Cassette exon. */
+eStartsLoc[3] = 2;
+eEndsLoc[3] = 3;
+eTLoc[3] = 1;
+ev = evidenceForEdge(ag, ve1, altBpEnd);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+
+/* Exon inclusion junction. */
+eStartsLoc[4] = 3;
+eEndsLoc[4] = 4;
+eTLoc[4] = 1;
+ev = evidenceForEdge(ag, altBpEnd, ve2);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+
+/* Constitutive second exon. */
+eStartsLoc[5] = 4;
+eEndsLoc[5] = 5;
+eTLoc[5] = 0;
+ev = evidenceForEdge(ag, ve2, endV);
+evLoc = CloneVar(ev);
+evLoc->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+slAddHead(&agLoc->evidence, evLoc);
+
+slReverse(&agLoc->evidence);
+
+dy = newDyString(ag->mrnaRefCount*36);
+agLoc->mrnaRefCount = ag->mrnaRefCount;
+for(i=0; i<ag->mrnaRefCount; i++)
+    dyStringPrintf(dy, "%s,", ag->mrnaRefs[i]);
+sqlStringDynamicArray(dy->string, &agLoc->mrnaRefs, &i);
+dyStringFree(&dy);
+agLoc->mrnaTissues = CloneArray(ag->mrnaTissues, ag->mrnaRefCount);
+agLoc->mrnaLibs = CloneArray(ag->mrnaLibs, ag->mrnaRefCount);
+agLoc->vPositions = vPosLoc;
+agLoc->edgeStarts = eStartsLoc;
+agLoc->edgeEnds = eEndsLoc;
+agLoc->vTypes = vTLoc;
+agLoc->edgeTypes = eTLoc;
+altGraphXTabOut(agLoc, out);
+altGraphXFree(&agLoc);
+}
 
 int altSpliceType(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
 		  int *altBpStart, int *altBpEnd)
@@ -643,18 +836,22 @@ IIIIIIIIEEEEEEEEEIIIIIIIIIIEEEEEEEEEEIIIIIIIIII
 */
 {
 enum altSpliceType ast = altOther;
+int startVertex=-1, endVertex = -1;
 if(ve1 == ve2)
     {
     ast = altIdentity;
-    *altBpStart = ag->vPositions[vs];
-    *altBpEnd = ag->vPositions[ve1];
+    *altBpStart = vs;
+    *altBpEnd = ve1;
     }
-else if(isAlt3Prime(ag, em, vs, ve1, ve2, altBpStart, altBpEnd))
+else if(isAlt3Prime(ag, em, vs, ve1, ve2, altBpStart, altBpEnd, &startVertex, &endVertex))
     ast = alt3Prime;
 else if(isAlt5Prime(ag, em, vs, ve1, ve2, altBpStart, altBpEnd))
     ast = alt5Prime;
-else if(isCassette(ag, em, vs, ve1, ve2, altBpStart, altBpEnd))
+else if(isCassette(ag, em, vs, ve1, ve2, altBpStart, altBpEnd, &startVertex, &endVertex))
+    {
     ast = altCassette;
+    reportCassette(ag, em, vs, ve1, ve2, *altBpStart, *altBpEnd, startVertex, endVertex, altGraphXOut);
+    }
 else if(isRetainIntron(ag, em, vs, ve1, ve2, altBpStart, altBpEnd))
     ast = altRetInt;
 else
@@ -686,6 +883,7 @@ struct evidence *ev = NULL;
 int edgeNum = 0;
 int altBpStart=0, altBpEnd=0;
 int i=0;
+int vMax = ag->vertexCount+ag->edgeCount;
 AllocVar(as);
 as->chrom = cloneString(ag->tName);
 as->chromStart = ag->vPositions[vs];
@@ -695,36 +893,36 @@ safef(as->strand, sizeof(as->strand), "%s", ag->strand);
 as->index = vs;
 as->type = ag->vTypes[vs];
 as->altCount+=2;
-
+as->altMax = vMax;
 /* Return starts of vertices. */
-AllocArray(as->altStarts, ag->vertexCount);
+AllocArray(as->altStarts, vMax);
 as->altStarts[0] = ag->vPositions[ve1];
 as->altStarts[1] = ag->vPositions[ve2];
 
 /* Record indices of vertices. */
-AllocArray(as->vIndexes, ag->vertexCount);
+AllocArray(as->vIndexes, vMax);
 as->vIndexes[0] = ve1;
 as->vIndexes[1] = ve2;
 
 /* Record type of vertices. */
-AllocArray(as->altTypes, ag->vertexCount);
+AllocArray(as->altTypes, vMax);
 as->altTypes[0] = ag->vTypes[ve1];
 as->altTypes[1] = ag->vTypes[ve2];
 
 /* Record splice types and bases alt spliced. */
-AllocArray(as->spliceTypes, ag->vertexCount);
-AllocArray(as->altBpEnds, ag->vertexCount);
-AllocArray(as->altBpStarts, ag->vertexCount);
+AllocArray(as->spliceTypes, vMax);
+AllocArray(as->altBpEnds, vMax);
+AllocArray(as->altBpStarts, vMax);
 as->spliceTypes[0] = altSpliceType(ag, agEm, vs, ve1, ve1, &altBpStart, &altBpEnd);
-as->altBpStarts[0] = altBpStart;
-as->altBpEnds[0] = altBpEnd;
+as->altBpStarts[0] = ag->vPositions[altBpStart];
+as->altBpEnds[0] = ag->vPositions[altBpEnd];
 
 as->spliceTypes[1] = altSpliceType(ag, agEm,vs, ve1, ve2, &altBpStart, &altBpEnd);
-as->altBpStarts[1] = altBpStart;
-as->altBpEnds[1] = altBpEnd;
+as->altBpStarts[1] = ag->vPositions[altBpStart];
+as->altBpEnds[1] = ag->vPositions[altBpEnd];
 
 /* Look up the evidence. */
-AllocArray(as->support, ag->vertexCount);
+AllocArray(as->support, vMax);
 
 edgeNum = getEdgeNum(ag, vs, ve1);
 ev = slElementFromIx(ag->evidence, edgeNum);
@@ -734,10 +932,10 @@ edgeNum = getEdgeNum(ag, vs, ve2);
 ev = slElementFromIx(ag->evidence, edgeNum);
 as->support[1] = ev->evCount;
 
-AllocArray(as->altCons, ag->vertexCount);
-AllocArray(as->upStreamCons, ag->vertexCount);
-AllocArray(as->downStreamCons, ag->vertexCount);
-for(i=0; i<ag->vertexCount; i++)
+AllocArray(as->altCons, vMax);
+AllocArray(as->upStreamCons, vMax);
+AllocArray(as->downStreamCons, vMax);
+for(i=0; i<vMax; i++)
     as->altCons[i] = as->upStreamCons[i] = as->downStreamCons[i] = -1;
 
 return as;
@@ -750,13 +948,26 @@ struct evidence *ev = NULL;
 int edgeNum = 0;
 int altBpStart =0;
 int altBpEnd = 0;
+if(aSplice->altCount >= aSplice->altMax) 
+    {
+    warn("Why the hell?");
+/*     ExpandArray(aSplice->altStarts, aSplice->altMax, 2*aSplice->altMax); */
+/*     ExpandArray(aSplice->altTypes, aSplice->altMax, 2*aSplice->altMax); */
+/*     ExpandArray(aSplice->spliceTypes, aSplice->altMax, 2*aSplice->altMax); */
+/*     ExpandArray(aSplice->altBpStarts, aSplice->altMax, 2*aSplice->altMax); */
+/*     ExpandArray(aSplice->altBpEnds, aSplice->altMax, 2*aSplice->altMax); */
+/*     ExpandArray(aSplice->support, aSplice->altMax, 2*aSplice->altMax); */
+/*     ExpandArray(aSplice->vIndexes, aSplice->altMax, 2*aSplice->altMax); */
+/*     aSplice->altMax = aSplice->altMax * 2; */
+    }
 aSplice->altStarts[aSplice->altCount] = ag->vPositions[ve];
 aSplice->altTypes[aSplice->altCount] = ag->vTypes[ve];
+aSplice->vIndexes[aSplice->altCount] = ve;
 aSplice->spliceTypes[aSplice->altCount] = altSpliceType(ag, agEm, aSplice->index, 
 							aSplice->vIndexes[aSplice->altCount-1], ve,
 							&altBpStart, &altBpEnd);
-aSplice->altBpStarts[aSplice->altCount] = altBpStart;
-aSplice->altBpEnds[aSplice->altCount] = altBpEnd;
+aSplice->altBpStarts[aSplice->altCount] = ag->vPositions[altBpStart];
+aSplice->altBpEnds[aSplice->altCount] = ag->vPositions[altBpEnd];
 edgeNum = getEdgeNum(ag, (int)aSplice->index, ve);
 ev = slElementFromIx(ag->evidence, edgeNum);
 aSplice->support[aSplice->altCount] = ev->evCount;
@@ -855,7 +1066,7 @@ return ave;
 
 void fillInSscores(struct altSpliceSite *as, int edge)
 {
-int offSet = 100;
+int offSet = flankingSize;
 as->altCons[edge] = aveSScoreForRegion(as->chrom, as->altBpStarts[edge], as->altBpEnds[edge]);
 if(as->spliceTypes[edge] == alt3Prime)
     {
@@ -884,8 +1095,8 @@ else
 void occassionalDot()
 /* Write out a dot every 20 times this is called. */
 {
-static int dotMod = 20;
-static int dot = 20;
+static int dotMod = 500;
+static int dot = 500;
 if (--dot <= 0)
     {
     putc('.', stdout);
@@ -905,9 +1116,15 @@ assert(sameString(as->strand, "-"));
 for(i=0; i<as->altCount; i++)
     {
     if(as->spliceTypes[i] == alt5Prime)
+	{
 	as->spliceTypes[i] = alt3Prime;
+	alt5Flipped++;
+	}
     else if(as->spliceTypes[i] == alt3Prime)
+	{
 	as->spliceTypes[i] = alt5Prime;
+	alt3Flipped++;
+	}
     tmp = as->upStreamCons[i];
     as->upStreamCons[i] = as->downStreamCons[i];
     as->downStreamCons[i] = tmp;
@@ -940,24 +1157,32 @@ bedAlt.chromEnd = vPos[v2];
 /* Upstream/down stream */
 if(sameString(ag->strand, "+"))
     {
-    bedUp.chromStart = vPos[v1] - 100;
+    bedUp.chromStart = vPos[v1] - flankingSize;
     bedUp.chromEnd = vPos[v1];
     bedDown.chromStart = vPos[v2];
-    bedDown.chromEnd = vPos[v2] + 100;
+    bedDown.chromEnd = vPos[v2] + flankingSize;
     }
 else 
     {
-    bedDown.chromStart = vPos[v1] - 100;
+    bedDown.chromStart = vPos[v1] - flankingSize;
     bedDown.chromEnd = vPos[v1];
     bedUp.chromStart = vPos[v2];
-    bedUp.chromEnd = vPos[v2] + 100;
+    bedUp.chromEnd = vPos[v2] + flankingSize;
     }
-
 bedOutputN(&bedAlt, 6, altRegion, '\t','\n');
 bedOutputN(&bedUp, 6, upStream100, '\t', '\n');
 bedOutputN(&bedDown, 6, downStream100, '\t', '\n');
 }
 
+
+
+int agxEvCount(struct altGraphX *ag, int v1, int v2)
+/* Return the number of ESTs supporting this edge. */
+{
+int edgeNum = altGraphXGetEdgeNum(ag, v1, v2);
+struct evidence *ev = slElementFromIx(ag->evidence, edgeNum);
+return ev->evCount;
+}
 
 void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
@@ -980,11 +1205,13 @@ for(i=0; i<vCount; i++)
     struct altSpliceSite *aSplice = NULL;
     for(j=0; j<vCount; j++)
 	{
-	if(em[i][j] && areConsSplice(em, vCount, vTypes,i,j))
+	if(em[i][j] && areConsSplice(em, vCount, vTypes,i,j) && 
+	   (agxEvCount(ag, i,j) >= minConfidence)) 
 	    {
 	    for(k=j+1; k<vCount; k++)
 		{
-		if(em[i][k] && areConsSplice(em, vCount, vTypes, i, k))
+		if(em[i][k] && areConsSplice(em, vCount, vTypes, i, k) &&
+		   (agxEvCount(ag, i,k) >= minConfidence)) 
 		    {
 		    totalSplices++;
 		    if(aSplice == NULL)
@@ -992,6 +1219,7 @@ for(i=0; i<vCount; i++)
 			splicedLoci++;
 			gotOne = TRUE;
 			aSplice = initASplice(ag, em, i, j, k);
+
 			(*altSpliceSites)++;
 			}
 		    else
@@ -999,7 +1227,8 @@ for(i=0; i<vCount; i++)
 		    }
 		}
 	    }
-	/* Only want non alt-spliced exons for our controls. */
+	/* Only want non alt-spliced exons for our controls.  Some of
+	 these checks are historical and probably redundant....*/
 	if(em[i][j] && 
 	   rowSum(em[i], ag->vTypes, ag->vertexCount) == 1 &&
 	   rowSum(em[j], ag->vTypes, ag->vertexCount) == 1 &&
@@ -1017,18 +1246,21 @@ for(i=0; i<vCount; i++)
 	}
     if(aSplice != NULL) 
 	{
+	if(altLogFile)
+	    fprintf(altLogFile, "%s\n", ag->name);
 	slAddHead(aSpliceList, aSplice);
 	}
     /* If we have a simple splice classfy it and log it. */
     if(aSplice != NULL && aSplice->altCount == 2)
 	{
 	altTotalCount++;	
+	fixOtherStrand(aSplice);
 	logSpliceType(aSplice->spliceTypes[1]);
 	if(doSScores)
 	    fillInSscores(aSplice, 1);
 	if(RData != NULL)
 	    {
-	    fixOtherStrand(aSplice);
+
 	    outputForR(aSplice, 1, RData);
 	    }
 	}
@@ -1044,17 +1276,17 @@ for(i=0; i<vCount; i++)
 	}
     }
 for(notAlt = notAltList; notAlt != NULL; notAlt = notAlt->next)
-{
-if(doSScores)
-    fillInSscores(notAlt, 1);
-if(RData != NULL)
     {
-    fixOtherStrand(notAlt);
-    outputForR(notAlt, 1, RDataCont);
+    if(doSScores)
+	fillInSscores(notAlt, 1);
+    if(RData != NULL)
+	{
+	fixOtherStrand(notAlt);
+	outputForR(notAlt, 1, RDataCont);
+	}
     }
-}
 if(*altSpliceSites != altSpliceSitesOrig)
-(*altSpliceLoci)++;
+    (*altSpliceLoci)++;
 altGraphXFreeEdgeMatrix(&em, vCount);
 }
 
@@ -1067,6 +1299,28 @@ for(i=0;i<arrayCount; i++)
     maxVal = max(maxVal, array[i]);
     }
 return maxVal;
+}
+
+void bedViewOut(struct altSpliceSite *as, FILE *out)
+{
+struct bed *bed = NULL;
+AllocVar(bed);
+bed->chrom = cloneString(as->chrom);
+bed->chromStart  = as->chromStart;
+bed->chromEnd  = maxInArray(as->altStarts, as->altCount);
+AllocArray(bed->chromStarts, 2);
+AllocArray(bed->blockSizes, 2);
+bed->thickStart = as->altBpStarts[1];
+bed->thickEnd = as->altBpEnds[1];
+bed->blockCount = 2;
+bed->chromStarts[0] = 0;
+bed->chromStarts[1] = bed->chromEnd - bed->chromStart -1; 
+bed->blockSizes[0] = bed->blockSizes[1] = 1;
+bed->name = cloneString(as->agName);
+bed->score = as->spliceTypes[1];
+safef(bed->strand, sizeof(bed->strand), "%s", as->strand);
+bedTabOutN(bed, 12, out);
+bedFree(&bed);
 }
 
 void htmlLinkOut(char *db, struct altSpliceSite *as, FILE *out)
@@ -1159,6 +1413,8 @@ for(ag=agList; ag != NULL; ag=ag->next)
 	{
  	altSpliceSiteOutput(aSplice, summaryOut, '\t', '\n');
 	htmlLinkOut(db, aSplice, htmlOut);
+	if(bedViewOutFile != NULL)
+	    bedViewOut(aSplice, bedViewOutFile);
 	}
     altSpliceSiteFreeList(&aSpliceList);
     }
@@ -1180,11 +1436,22 @@ carefulClose(&summaryOut);
 int main(int argc, char *argv[])
 {
 char *altGraphXOutName = NULL;
+char *altLogFileName = NULL;
+char *bedViewOutFileName =NULL;
 if(argc < 6)
     usage();
 optionHash(&argc, argv);
 doSScores = optionExists("doSScores");
 altGraphXOutName = optionVal("altGraphXOut", NULL);
+minConfidence = optionInt("minConf", 0);
+altLogFileName = optionVal("altLogFile", NULL);
+flankingSize = optionInt("flankingSize", 100);
+bedViewOutFileName = optionVal("bedViewFile", NULL);
+warn("Flanking size is: %d", flankingSize);
+if(altLogFileName != NULL)
+    altLogFile = mustOpen(altLogFileName, "w");
+if(bedViewOutFileName != NULL)
+    bedViewOutFile = mustOpen(bedViewOutFileName, "w");
 if(altGraphXOutName)
     {
     warn("Writing alts to %s", altGraphXOutName);
@@ -1193,5 +1460,9 @@ if(altGraphXOutName)
 altSummary(argv[1], argv[2], argv[3], argv[4], argv[5]);
 if(altGraphXOut != NULL)
     carefulClose(&altGraphXOut);
+if(altLogFile != NULL)
+    carefulClose(&altLogFile);
+if(bedViewOutFile != NULL)
+    carefulClose(&bedViewOutFile);
 return 0;
 }
