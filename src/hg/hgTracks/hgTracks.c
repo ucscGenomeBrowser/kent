@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.920 2005/03/02 22:11:54 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.921 2005/03/03 07:22:15 donnak Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10414,7 +10414,7 @@ puts(
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\">\n"
 );
 
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("Submit", "submit");
 
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
@@ -10555,7 +10555,7 @@ puts("Enter a position, or click on a sequence name to view the entire "
      "sequence in the genome browser.<P>");
 puts("position ");
 hTextVar("position", addCommasToPos(position), 30);
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("Submit", "submit");
 puts("<P>");
 
 hTableStart();
