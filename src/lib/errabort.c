@@ -77,6 +77,8 @@ void noWarnAbort()
 /* Abort without message. */
 {
 abortArray[abortIx]();
+exit(-1);		/* This is just to make compiler happy. 
+                         * We have already exited or longjmped by now. */
 }
 
 void vaErrAbort(char *format, va_list args)
