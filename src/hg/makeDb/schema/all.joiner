@@ -116,9 +116,9 @@ identifier swissProtAccession external=SwissProt
      $kgDb.kgXref.spID
      $gbd.pepMwAa.accession
      $gbd.pepPi.accession
-     $ce.sangerCanonical.protein
-     $ce.sangerGene.proteinID
-     $ce.sangerLinks.protName
+     $ce.sangerCanonical.protein minCheck=0.8
+     $ce.sangerGene.proteinID minCheck=0.8
+     $ce.sangerLinks.protName minCheck=0.8
      $dm.bdgpCanonical.protein
      $dm.bdgpGene.proteinID
      $dm.bdgpSwissProt.swissProtId
@@ -255,7 +255,7 @@ identifier vegaPseudogeneName typeOf=vegaName
 
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
-    $hg.affyU95.qName dupeOk
+    $hg.affyU95.qName dupeOk minCheck=0.6
     $hg.affyRatio.name
     $hg.knownToU95.value
 
@@ -271,6 +271,12 @@ identifier affyU74
     $mm.affyGnfU74B.name
     $mm.affyGnfU74C.name
     $mm.knownToU74.value
+
+identifier kimWormGeneId
+"Identifiers for Kim-lab worm genes"
+    hgFixed.kimWormLifeAllRatio.name
+    hgFixed.kimWormLifeMedianRatio.name
+    $ce.sangerToKim.value minCheck=0.6
 
 identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
@@ -359,13 +365,11 @@ identifier kimWormLifeAllSampleId
 "Identifiers of RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeAllExps.id
      hgFixed.kimWormLifeAllRatio.expScores comma indexOf
-     ce1.kimLifeCycle.expScores comma indexOf
 
 identifier kimWormLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeMedianExps.id
      hgFixed.kimWormLifeMedianRatio.expScores comma indexOf
-     ce1.kimLifeCycleMedian.expScores comma indexOf
 
 identifier yeastChoCellCycleSampleId
 "Identifiers of RNA samples used in Cho yeast cell cycle experiments"
@@ -420,13 +424,11 @@ identifier cb1ChainId
 "Link together chain/net on ce1 for cb1"
     ce1.cb1Chain.id $split
     ce1.cb1ChainLink.chainId $split
-    ce1.cb1Net.chainId exclude=0
 
 identifier ce1ChainId 
 "Link together chain/net on cb1 for ce1"
     cb1.ce1Chain.id $split
     cb1.ce1ChainLink.chainId $split
-    cb1.ce1Net.chainId exclude=0
 
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 identifier genbankAccession external=genbank
@@ -454,8 +456,6 @@ identifier humanBacAccession typeOf=bacAccession
     hg16.certificate.accession2
     hg15.certificate.accession1 minCheck=0.98
     hg15.certificate.accession2 minCheck=0.98
-    hg13.certificate.accession1 minCheck=0.90
-    hg13.certificate.accession2 minCheck=0.90
     $hg.gl.frag chopAfter=. $split
     $hg.gold.frag chopAfter=. $split
     $hg.fishClones.accNames chopAfter=. comma minCheck=0.70
@@ -536,7 +536,7 @@ identifier refSeqId typeOf=mrnaAccession
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
     $gbd.xenoRefGene.name
-    $gbd.xenoRefSeqAli.name
+    $gbd.xenoRefSeqAli.qName
     $gbd.xenoRefFlat.name
 
 identifier knownGeneId typeOf=nativeMrnaAccession dependency
@@ -767,8 +767,6 @@ identifier wormBaseId external=WormBase dependency
     $gbd.ceBlastTab.target minCheck=0.95
     $ce.kimExpDistance.query
     $ce.kimExpDistance.target
-    $ce.kimLifeCycle.name
-    $ce.kimLifeCycleMedian.name
     $ce.orfToGene.name
     $ce.sangerBlastTab.query
     $ce.sangerBlastTab.target
@@ -779,12 +777,12 @@ identifier wormBaseId external=WormBase dependency
     $ce.sangerToKim.name
     $ce.sangerToPfam.name
     $ce.sangerToRefSeq.name
-    $ce.dmBlastTab.query
-    $ce.drBlastTab.query
-    $ce.hgBlastTab.query
-    $ce.mmBlastTab.query
-    $ce.scBlastTab.query
-    $ce.hgBlastTab.query
+    #$ce.dmBlastTab.query
+    #$ce.drBlastTab.query
+    #$ce.hgBlastTab.query
+    #$ce.mmBlastTab.query
+    #$ce.scBlastTab.query
+    #$ce.hgBlastTab.query
 
 identifier flyBaseRefId
 "FlyBase (Drosophila) Reference (Literature)"
@@ -1022,7 +1020,7 @@ identifier extFileId
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
     $gbd.gbExtFile.id
-    $gbd.gbSeq.extFile
+    $gbd.gbSeq.gbExtFile
 
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
