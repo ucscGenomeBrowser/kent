@@ -283,6 +283,7 @@ struct psl *pslList = NULL;
 int conn =0, count =0;
 struct tempName pslTn;
 FILE *f = NULL;
+static struct gfSavePslxData outForm;
 
 
 if(seq == NULL || db == NULL)
@@ -296,12 +297,14 @@ makeTempName(&pslTn,"ccR", ".psl");
 f = mustOpen(pslTn.forCgi, "w");
 pslxWriteHead(f, gftDna, gftDna);
 
+outForm.f = f;
+outForm.minGood = 920;
 conn = gfConnect(blatHost, port);
-gfAlignStrand(conn, nibDir, seq, FALSE, 20, gfSavePsl, f);
+gfAlignStrand(conn, nibDir, seq, FALSE, 20, gfSavePslx, &outForm);
 close(conn);
 reverseComplement(seq->dna, seq->size);
 conn = gfConnect(blatHost, port);
-gfAlignStrand(conn, nibDir, seq, TRUE, 20 , gfSavePsl, f);
+gfAlignStrand(conn, nibDir, seq, TRUE, 20 , gfSavePslx, &outForm);
 close(conn);
 carefulClose(&f);
 pslList = pslLoadAll(pslTn.forCgi);
