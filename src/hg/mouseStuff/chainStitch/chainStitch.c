@@ -100,10 +100,16 @@ if ((te < chain->tStart) && (qe < chain->qStart))
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
     {
     nextChainBlock = chainBlock->next;
-    if ((chainBlock->tEnd > ts) || (chainBlock->qEnd > qs))
+    //printf("chainBlock %d %d %d %d psl %d %d %d %d\n",chainBlock->tStart,chainBlock->tEnd,chainBlock->qStart,chainBlock->qEnd,ts,te,qs,qe);
+    if (((ts <= chainBlock->tEnd) && (te > chainBlock->tStart)) &&
+	 (qs <= chainBlock->qEnd) && (qe > chainBlock->qStart))
 	{
+	/*
 	if (prevChainBlock && !((prevChainBlock->tStart <= ts) && (prevChainBlock->qStart <= qs)))
+	    {
+	    printf("prevChainBlock %d %d %d %d psl %d %d %d %d\n",prevChainBlock->tStart,prevChainBlock->tEnd,prevChainBlock->qStart,prevChainBlock->qEnd,ts,te,qs,qe);
 	    errAbort("bad del\n");
+	    }
 	/*
 	while(chainBlock && ((chainBlock->tStart < te) || (chainBlock->qStart < qe)))
 	    {
@@ -117,6 +123,7 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 	    chainBlock = nextChainBlock;
 	    }
 	    */
+	    //printf("acc chainBlock %d %d %d %d psl %d %d %d %d\n",chainBlock->tStart,chainBlock->tEnd,chainBlock->qStart,chainBlock->qEnd,ts,te,qs,qe);
 
 	return TRUE;
 	}
@@ -131,10 +138,12 @@ prevChainBlock = NULL;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
     {
     nextChainBlock = chainBlock->next;
-    if ((chainBlock->tEnd > ts) || (chainBlock->qEnd > qs))
+    //if ((chainBlock->tEnd > ts) || (chainBlock->qEnd > qs))
+    if (((ts <= chainBlock->tEnd) && (te > chainBlock->tStart)) &&
+	 (qs <= chainBlock->qEnd) && (qe > chainBlock->qStart))
 	{
-	if (prevChainBlock && !((prevChainBlock->tStart <= ts) && (prevChainBlock->qStart <= qs)))
-	    errAbort("bad del\n");
+//	if (prevChainBlock && !((prevChainBlock->tStart <= ts) && (prevChainBlock->qStart <= qs)))
+//	    errAbort("bad del\n");
 	while(chainBlock && ((chainBlock->tStart < te) || (chainBlock->qStart < qe)))
 	    {
 	    nextChainBlock = chainBlock->next;
@@ -184,9 +193,18 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
     if (prevChainBlock == NULL)
 	{
 	chain->blockList = bList;
+	chain->tStart = bList->tStart;
+	chain->qStart = bList->qStart;
 	}
     else
+	{
+	if (chainBlock == NULL)
+	    {
+	    chain->tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	    chain->qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	    }
 	prevChainBlock->next = bList;
+	}
 
     for(;bList->next; bList = bList->next)
 	*addedBases += bList->tEnd - bList->tStart;
@@ -216,9 +234,11 @@ struct boxIn *block , *nextBlock = NULL, *prevBlock = NULL;
 struct psl *prevPsl, *nextPsl;
 int count;
 
+count = 0;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     assert(psl->strand[1] == '+');
+    count++;
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%c%s", psl->qName, psl->strand[0], psl->tName);
     sp = hashFindVal(pslHash, dy->string);
@@ -235,12 +255,12 @@ while ((psl = pslNext(pslLf)) != NULL)
     slAddHead(&sp->psl, psl);
     }
 lineFileClose(&pslLf);
+printf("read in  %d psls\n",count);
+
+for(sp = spList; sp; sp = sp->next)
+    slSort(&sp->psl, pslCmpTarget);
 
 count = 0;
-for(sp = spList; sp; sp = sp->next)
-    for(psl = sp->psl ; psl ; psl = psl->next)
-	count++;
-printf("added %d psls\n",count);
 while ((chain = chainRead(chainsLf)) != NULL)
     {
     dyStringClear(dy);
@@ -256,15 +276,13 @@ while ((chain = chainRead(chainsLf)) != NULL)
 	csp->qStrand = chain->qStrand;
 	}
     slAddHead(&csp->chain, chain);
+    count++;
     }
 lineFileClose(&chainsLf);
-
-/* for all strands that have psl blocks */
-count = 0;
-for(csp = cspList; csp; csp = csp->next)
-    for(chain = csp->chain ; chain ; chain = chain->next)
-	count++;
 printf("added %d chains\n",count);
+
+for(csp = cspList; csp; csp = csp->next)
+    slSort(&csp->chain, chainCmpTarget);
 
 addedBases = deletedBases = 0;
 for(sp = spList; sp; sp = sp->next)
@@ -277,44 +295,66 @@ for(sp = spList; sp; sp = sp->next)
 	continue;
 	}
 
-    for(jj = 0; jj < 2; jj++)
-    {
-    int fudge = jj * 100000;
+#define FUDGE 50000
+
+    /* first check to see if psl blocks are in any chains */
     prevPsl = NULL;
     for(psl = sp->psl; psl ;  psl = nextPsl)
 	{
 	nextPsl = psl->next;
-	int qStart = psl->qStart;
-	int qEnd = psl->qEnd;
-
-	if (psl->strand[0] == '-')
-	    {
-	    qStart = psl->qSize - psl->qEnd;
-	    qEnd = psl->qSize - psl->qStart;
-	    }
+	int qStart = psl->qStarts[0];
+	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	int tStart = psl->tStarts[0];
+	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 
 	prevChain = 0;
 	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
 	    {
 	    nextChain = chain->next;
-	    if (((psl->tStart <= chain->tEnd + fudge) && (psl->tEnd > chain->tStart - fudge)) &&
-	         (qStart <= chain->qEnd + fudge) && (qEnd > chain->qStart - fudge))
+	    if (((tStart <= chain->tEnd) && (tEnd > chain->tStart)) &&
+	         (qStart <= chain->qEnd) && (qEnd > chain->qStart))
 		{
-		//if (deleteChainRange(chain, qStart, qEnd, psl->tStart, psl->tEnd, &deletedBases))
-		if (fudge && !checkChainRange(chain, qStart, qEnd, psl->tStart, psl->tEnd))
-		    addPslToChain(chain, psl, &addedBases);
-		if (chain->blockList == NULL)
+
+	//	    deleteChainRange(chain, qStart, qEnd, tStart, tEnd, &deletedBases);
+		if (!checkChainRange(chain, qStart, qEnd, tStart, tEnd))
 		    {
-		    if (prevChain)
-			{
-			prevChain->next = nextChain;
-			}
-		    else
-			{
-			csp->chain = nextChain;
-			}
-		    freez(&chain);
+		    pslTabOut(psl, outFound);
+		    addPslToChain(chain, psl, &addedBases);
 		    }
+
+		if (prevPsl != NULL)
+		    prevPsl->next = nextPsl;
+		else
+		    sp->psl = nextPsl;
+		    
+		freez(&psl);
+		break;
+		}
+	    }
+	if (chain == NULL)
+	    prevPsl = psl;
+	
+	}
+
+    /* now extend chains to the right */
+    prevPsl = NULL;
+    for(psl = sp->psl; psl ;  psl = nextPsl)
+	{
+	nextPsl = psl->next;
+	int qStart = psl->qStarts[0];
+	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	int tStart = psl->tStarts[0];
+	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+
+	prevChain = 0;
+	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
+	    {
+	    nextChain = chain->next;
+	    if (((tStart <= chain->tEnd + FUDGE) && (tStart > chain->tEnd)) &&
+	         (qStart <= chain->qEnd + FUDGE) && (qStart > chain->qEnd))
+		{
+		addPslToChain(chain, psl, &addedBases);
+
 		if (prevPsl != NULL)
 		    prevPsl->next = nextPsl;
 		else
@@ -329,6 +369,39 @@ for(sp = spList; sp; sp = sp->next)
 	    prevPsl = psl;
 	
 	}
+    /* now extend chains to the left */
+    slReverse(&sp->psl);
+    prevPsl = NULL;
+    for(psl = sp->psl; psl ;  psl = nextPsl)
+	{
+	nextPsl = psl->next;
+	int qStart = psl->qStarts[0];
+	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	int tStart = psl->tStarts[0];
+	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+
+	prevChain = 0;
+	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
+	    {
+	    nextChain = chain->next;
+	    if (((tStart > chain->tStart - FUDGE) && (tEnd < chain->tStart)) &&
+	         (qStart > chain->qStart - FUDGE) && (qEnd < chain->qStart))
+		{
+		addPslToChain(chain, psl, &addedBases);
+
+		if (prevPsl != NULL)
+		    prevPsl->next = nextPsl;
+		else
+		    sp->psl = nextPsl;
+		    
+		pslTabOut(psl, outFound);
+		freez(&psl);
+		break;
+		}
+	    }
+	if (chain == NULL)
+	    prevPsl = psl;
+	
 	}
     }
 fclose(outFound);
