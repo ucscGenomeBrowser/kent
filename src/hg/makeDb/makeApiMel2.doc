@@ -489,7 +489,6 @@ apiMel2.perChromTables = no
     aliDir=/cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
     cp $aliDir/S1.len S2.len
     cp $aliDir/S2.len S1.len
-    # I get errors with this:
     zcat $aliDir/pslChrom/chr*.psl.gz \
       | pslSwap stdin dm2.unsorted.psl 
     sort -k 14,14 -k 16n,17n < dm2.unsorted.psl > dm2.psl
