@@ -3045,3 +3045,28 @@ done
 # md5sum *.zip > md5sum.txt
 md5sum *.gz > md5sum.txt
 # update README.txt.
+
+# ACCESSIONS FOR CONTIGS (DONE 2005-03-16 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/monDom1/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+
+    contigAccession opossum.acc > contigAcc.tab
+    wc -l contigAcc.tab
+        # 109065 contigAcc.tab
+     grep contig /cluster/data/monDom1/broad.mit.edu/assembly.agp | wc -l
+        # 109065
+    hgsql monDom1 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql monDom1
+    hgsql monDom1 -e "SELECT COUNT(*) FROM contigAcc"
+        # 109065 contigAcc.tab
