@@ -311,11 +311,20 @@ type genePred
 
 track ncbiGeneSet
 shortLabel NCBI gene set
-longLabel NCBI $Organism 34.3 gene set.
+longLabel NCBI $Organism 34.3 gene set
 group x
 priority 30.10
 visibility pack
 color 10,100,15
+type genePred
+
+track hinxtonGeneSet
+shortLabel Hinxton gene set
+longLabel Hinxton $Organism 34 gene set
+group x
+priority 30.12
+visibility pack
+color 10,15,100,
 type genePred
 
 track genieAlt
