@@ -128,6 +128,8 @@ if (text[0] == '>')
     if (s != NULL) ++s;
     name = skipLeadingSpaces(text+1);
     end = skipToSpaces(name);
+    if (end >= s || name >= s)
+        errAbort("No name in line starting with '>'");
     if (end != NULL)
         *end = 0;
     }
