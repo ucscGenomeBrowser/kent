@@ -122,7 +122,7 @@ Genome Browser home page <A HREF="../../index.html"
 TARGET=_blank>(http://genome.ucsc.edu/)</a> and click the Genome 
 Browser link in the top menu bar. On the Genome Browser Gateway page that
 displays, select the genome and assembly on which your
-annotation data is based, then click the <em>add your own tracks</em> button. Upload 
+annotation data is based, then click the <em>add your own custom tracks</em> button. Upload 
 your annotation file by entering the name of your file in the Annotation File 
 box or by pasting the contents of your file into the large edit
 box. Click the <em>submit</em> button to
@@ -130,17 +130,24 @@ display the Genome Browser track window with your annotation. If you
 encounter difficulties in displaying your annotation, read the section 
 <A HREF="#TROUBLE">Troubleshooting Annotation Display Problems</A>.</P> 
 <P>
-To upload a custom annotation track from another machine or web site, paste the
-URL of the track into the large edit box. Custom tracks can be displayed in
-conjunction with ordinary BLAT tracks.</P>
-
+To upload a custom annotation track from another machine or web 
+site, paste the URL of the track into the large edit box. Custom tracks can 
+be displayed in conjunction with ordinary BLAT tracks.</P>
+<P>
+If you wish to display more than one custom track at a time in the Genome
+Browser, load the tracks simultaneously using one of the following methods:
+<UL>
+<LI>
+Put all the tracks into the same file (rather than separate files), then
+load the file using the above steps.
+<LI>
+Place your track files in a web-accessible location on your server, then 
+load them into the Genome Browser via their URLs as described above.
+</UL></P>
 <P><B>Step 5. (Optional) Add details pages for individual track features</B><BR>
 After you've constructed your track and have successfully displayed it in the
 Genome Browser, you may wish to customize the details pages for individual track
 features.  The Genome Browser automatically creates a default details page for each
-feature in the track containing the feature's name, position information, and a
-link to the corresponding DNA sequence. To view the
-details page for a feature in your custom annotation track (in full, pack, or 
 squish display
 mode), click on the item's label in the annotation track window. 
 <P>
@@ -721,6 +728,9 @@ file to make sure that you haven't accidentally set
 the display mode for the track to <I>hide</I>. If you are using the
 Annotation File box on the Genome Browser Gateway page to 
 upload the track, check that you've
+entered the correct file name. If neither of these are the cause 
+of the problem, try resetting the Genome Browser to clear any 
+settings that may be preventing the annotation to display. To 
 entered the correct file name. If neither of these are the cause 
 of the problem, try resetting the Genome Browser to clear any 
 settings that may be preventing the annotation to display. To 
