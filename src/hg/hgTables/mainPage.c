@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.32 2004/09/03 16:57:18 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.33 2004/09/10 03:39:36 hiram Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -318,11 +318,13 @@ static char *wigTypes[] =
      {
      outWigData, 
      outWigBed, 
+     outCustomTrack ,
      };
 static char *wigLabels[] =
     {
     "data points", 
     "bed format", 
+    "custom track",
     };
 
 hPrintf("<TR><TD><B>output:</B>\n");
@@ -369,6 +371,8 @@ hPrintf("<TABLE BORDER=0>\n");
 	isPositional = htiIsPositional(hti);
 	}
     isWig = isWiggle(database, curTable);
+    if (isWig)
+	isPositional = TRUE;
     hPrintf("</TD></TR>\n");
     }
 
@@ -437,7 +441,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Intersection line. */
-if (isPositional && !isWig)
+if (isPositional)
     {
     hPrintf("<TR><TD><B>intersection:</B>\n");
     if (anyIntersection())
@@ -466,7 +470,11 @@ hPrintf("</TABLE>\n");
 	extern char *maxOutMenu[];
 	char *maxOutput = maxOutMenu[0];
 
-	name = filterFieldVarName(database, curTable, "", filterMaxOutputVar);
+	if (isCustomTrack(curTable))
+	    name = filterFieldVarName("ct", curTable, "", filterMaxOutputVar);
+	else
+	    name = filterFieldVarName(database,curTable, "",filterMaxOutputVar);
+
 	maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
 
 	hPrintf(
@@ -486,6 +494,7 @@ hPrintf("</TABLE>\n");
 	hPrintf(" ");
 	}
     cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
+
 #ifdef SOMETIMES
     hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "Test");
