@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.629 2003/11/12 17:49:02 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.630 2003/11/12 21:32:46 kuhn Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6355,7 +6355,7 @@ if (gotBlat)
     }
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
-if (sameString(database, "hg15")
+if (sameString(database, "hg16")
             || sameString(database, "mm3")
             /* Rat goes in when Ensembl rat annotations are ready ? */
             /* || sameString(database, "rn3") */
