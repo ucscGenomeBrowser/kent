@@ -8,8 +8,9 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "memalloc.h"
 
-static char const rcsid[] = "$Id: jccTest.c,v 1.1 2004/12/18 22:22:24 kent Exp $";
+static char const rcsid[] = "$Id: jccTest.c,v 1.2 2004/12/19 05:13:18 kent Exp $";
 
 #define MAXWORDSIZE 256
 
@@ -119,8 +120,6 @@ while ((c = *in++) != 0)
 *out++ = 0;
 }
 
-
-
 void rConvert(FILE *f, struct hash *hash, int maxSize, char *s)
 /* Print out all possible word representations of s.  This does
  * the job recursively, finding a word in the dictionary that
@@ -204,8 +203,10 @@ int main(int argc, char *argv[])
 {
 if (argc != 4)
     usage();
+pushCarefulMemHandler(100000000);
 initTrTable();
 initLiteral();
 jccTest(argv[1], argv[2], argv[3]);
+printf("total mem used %ld\n", carefulTotalAllocated());
 return 0;
 }
