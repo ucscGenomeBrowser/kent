@@ -4,6 +4,8 @@
 #include "htmshell.h"
 #include "web.h"
 #include "hdb.h"
+#include "cheapcgi.h"
+#include "dbDb.h"
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -226,3 +228,86 @@ webEnd();
 va_end(args);
 exit(1);
 }
+
+void printOrgListHtml(char *db, char *onChangeText)
+/*
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+organisms to choose from.
+
+param curOrganism - The organism to choose as selected. 
+If NULL, no default selection.
+
+param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
+ */
+{
+char *orgList[128];
+char *orgCgiName = "org";
+int numOrganisms = 0;
+struct dbDb *dbList = hGetIndexedDatabases();
+struct dbDb *cur = NULL;
+struct hash *hash = hashNew(7); // 2^^7 entries = 128
+char *selOrganism = hOrganism(db);
+
+for (cur = dbList; cur != NULL; cur = cur->next)
+    {
+    /* Only add mouse or human to menu */
+    if (!hashFindVal(hash, cur->organism) && 
+        (strstrNoCase(cur->organism, "mouse") || strstrNoCase(cur->organism, "human")))
+        {
+        hashAdd(hash, cur->organism, cur);
+        orgList[numOrganisms] = cur->organism;
+        numOrganisms++;
+        }
+    }
+
+cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, selOrganism, onChangeText);
+}
+
+void printAssemblyListHtml(char *db)
+{
+/* Find all the assemblies that pertain to the selected genome 
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+char *assemblyList[128];
+char *values[128];
+char *dbCgiName = "db";
+int numAssemblies = 0;
+struct dbDb *dbList = hGetIndexedDatabases();
+struct dbDb *cur = NULL;
+struct hash *hash = hashNew(7); // 2^^7 entries = 128
+char *organism = hOrganism(db);
+char *assembly = NULL;
+
+for (cur = dbList; cur != NULL; cur = cur->next)
+    {
+    /* If we are looking at a zoo database then show the zoo database list */
+    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
+        strstrNoCase(cur->description, "zoo"))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+    else if (strstrNoCase(organism, cur->organism) && 
+             !strstrNoCase(cur->description, "zoo") &&
+             (cur->active || strstrNoCase(cur->name, db)))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+
+    /* Save a pointer to the current assembly */
+    if (strstrNoCase(db, cur->name))
+       {
+       assembly = cur->description;
+       }
+    }
+
+cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
+}
+

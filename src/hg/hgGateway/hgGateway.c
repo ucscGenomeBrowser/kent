@@ -32,20 +32,11 @@ void hgGateway()
 char *oldDb = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cartUsualString(cart, "position", defaultPosition);
-char *assembly = NULL;
-char *orgList[128];
-char *assemblyList[128];
-char *values[128];
-int numOrganisms = 0;
-int numAssemblies = 0;
-struct dbDb *dbList = hGetIndexedDatabases();
-struct dbDb *cur = NULL;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
+
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
 char *onChangeText = "onchange=\"document.orgForm.org.value = document.trackForm.org.options[document.trackForm.org.selectedIndex].value; document.orgForm.submit();\"";
-
 /* 
    If we are changing databases via explicit cgi request,
    then remove custom track data which will 
@@ -90,56 +81,17 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* Only add mouse or human to menu */
-    if (!hashFindVal(hash, cur->organism) && 
-        (strstrNoCase(cur->organism, "mouse") || strstrNoCase(cur->organism, "human")))
-        {
-        hashAdd(hash, cur->organism, cur);
-        orgList[numOrganisms] = cur->organism;
-        numOrganisms++;
-        }
-    }
-cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, 
-                           organism, onChangeText);
+printOrgListHtml(db, onChangeText);
 puts("</td>\n");
+
 puts("<td align=center>\n");
-
-/* Find all the assemblies that pertain to the selected genome */
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo") &&
-             (cur->active || strstrNoCase(cur->name, db)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       assembly = cur->description;
-       }
-    }
-
-cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
+printAssemblyListHtml(db);
 puts("</td>\n");
 
 puts("<td align=center>\n");
 cgiMakeTextVar("position", position, 30);
 printf("</td>\n");
+
 freez(&defaultPosition);
 position = NULL;
 
@@ -380,10 +332,6 @@ puts("</FORM>"
 "	</TD></TR></TABLE>\n"
 "			\n"
 "</TD></TR></TABLE>\n");
-
-freeHash(&hash);
-dbDbFreeList(&dbList);
-numOrganisms = 0;
 }
 
 char *getDbForOrganism(char *organism, struct cart *cart)
