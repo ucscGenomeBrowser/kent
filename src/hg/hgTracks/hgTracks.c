@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.896 2005/02/09 16:26:55 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.897 2005/02/09 19:09:26 jill Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9719,6 +9719,7 @@ if (!hideControls)
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hWrites(" ");
 	hButton("submit", "jump");
+	hOnClickButton("document.TrackForm.position.value=''","clear");
 	hPrintf(" size %s bp. ", buf);
 #ifdef OLD
 	hWrites("&nbsp;image width: ");
