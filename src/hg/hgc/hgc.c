@@ -121,7 +121,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.533 2003/12/11 22:06:34 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.534 2003/12/12 16:51:51 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11914,85 +11914,8 @@ mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
 exprBedColorsMade = TRUE;
 }
 
-boolean isExon(char *v, int i, int j)
-/** Return TRUE if edge i-j is an exon, FALSE otherwise. */
-{
-if( (v[i] == ggHardStart || v[i] == ggSoftStart)  
-    && (v[j] == ggHardEnd || v[j] == ggSoftEnd))
-    return TRUE;
-return FALSE;
-}
-
-boolean isIntron(char *v, int i, int j)
-/** Return TRUE if edge i-j is an exon, FALSE otherwise. */
-{
-if( (v[j] == ggHardStart || v[j] == ggSoftStart)  
-    && (v[i] == ggHardEnd || v[i] == ggSoftEnd))
-    return TRUE;
-return FALSE;
-}
-
-
-void doHumanEnlargeExons(struct altGraphX *ag)
-/* Experimental, doesn't quite seem to work yet. Idea is to scale
- exons such that the smallest exon is no smaller that factor*largest
- intron.*/
-{
-bool **em = altGraphXCreateEdgeMatrix(ag);
-int i,j,k;
-int maxIntron=0;
-char *vTypes = ag->vTypes;
-int *vPos = ag->vPositions;
-int minExon =BIGNUM;
-int increment = 0;
-double multFact = 1.2;
-double minIntronFact = .1;
-int vC = ag->vertexCount;
-/* Find largest intron. */
-for(i=0; i<vC; i++)
-    {
-    for(j=0; j<vC; j++)
-	{
-	if(em[i][j])
-	    {
-	    if(isIntron(vTypes, i, j))
-		maxIntron = max(maxIntron, abs(vPos[i] - vPos[j]));
-	    if(isExon(vTypes,i,j))
-		minExon = min(minExon, abs(vPos[i] - vPos[j]));
-	    }
-	}
-    }
-
-/*minExon = minIntronFact * maxIntron;*/
-multFact = (minIntronFact*maxIntron)/minExon;
-
-/* Enlarge each exon by stretching one end. */
-for(i=0; i<vC; i++)
-    {
-    for(j=0; j<vC; j++)
-	{
-	if(em[i][j])
-	    {
-	    if(isExon(vTypes, i, j))
-		{
-		int mark = vPos[j];
-		int size = abs(vPos[i] - vPos[j]);
-		increment = multFact*size - size;
-		ag->tEnd += increment;
-		for(k=0; k<vC; k++)
-		    {
-		    if(vPos[k] >= mark)
-			vPos[k] += increment;
-		    }
-		}
-	    }
-	}
-    }
-}
-
-
 char *altGraphXMakeImage(struct trackDb *tdb, struct altGraphX *ag)
-/* create a drawing of splicing pattern */
+/* Create a drawing of splicing pattern. */
 {
 MgFont *font = mgSmallFont();
 int trackTabWidth = 11;
@@ -12055,87 +11978,16 @@ switch (t)
 return "NA";
 }
 
-void doAltGraphXDetails(struct trackDb *tdb, char *item)
-/* do details page for an altGraphX */
+void printAltGraphXEdges(struct altGraphX *ag)
+/* Print out at table showing all of the vertexes and 
+   edges of an altGraphX. */
 {
-int id = atoi(item);
-char query[256];
-int i,j;
-struct altGraphX *ag = NULL;
-struct altGraphX *orthoAg = NULL;
-char buff[128];
-struct sqlConnection *conn = hAllocConn();
-char *image = NULL;
-genericHeader(tdb, item);
-snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
-ag = altGraphXLoadByQuery(conn, query);
-//doHumanEnlargeExons(ag);
-if(ag == NULL)
-    errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
-printf("<center>\n");
-if(sameString(tdb->tableName, "altGraphXCon")) 
-    printf("Common Splicing<br>");
-image = altGraphXMakeImage(tdb,ag);
-if(sameString(tdb->tableName, "altGraphXCon")) 
-    {
-    struct sqlConnection *orthoConn = NULL;
-    struct altGraphX *origAg = NULL;
-    hSetDb2("mm3");
-    safef(query, sizeof(query), "select * from altGraphX where name='%s'", ag->name);
-    origAg = altGraphXLoadByQuery(conn, query);
-    //doHumanEnlargeExons(origAg);
-    puts("<br><center>Human</center>\n");
-    altGraphXMakeImage(tdb,origAg);
-    orthoConn = hAllocConn2();
-    safef(query, sizeof(query), "select orhtoAgName from orthoAgReport where agName='%s'", ag->name);
-    sqlQuickQuery(conn, query, buff, sizeof(buff));
-    safef(query, sizeof(query), "select * from altGraphX where name='%s'", buff);
-    orthoAg = altGraphXLoadByQuery(orthoConn, query);
-    //doHumanEnlargeExons(orthoAg);
-    if(differentString(orthoAg->strand, origAg->strand))
-	{
-	altGraphXReverseComplement(orthoAg);
-	puts("<br>Mouse (opposite strand)\n");
-	}
-    else 
-	puts("<br>Mouse\n");
-    printf("<a HREF=\"%s?db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full&%s\"",
-	   hgTracksName(), "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd, cartSidUrlString(cart));
-    printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
-    printf("<font size=-1>[%s.%s:%d-%d]</font></a><br><br>\n", "mm3", 
-	   orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
-    altGraphXMakeImage(tdb,orthoAg);
-    }
-printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
-       hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
-printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
-printf("Jump to browser for %d</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->id, ag->tName, ag->tStart, ag->tEnd);
+int i = 0, j = 0;
 printf("<table cellpadding=1 border=1>\n");
-printf("<tr><th>Cassette Exon</th><th>Tissues Found</th></tr>\n");
-for(i=0; i<ag->edgeCount; i++)
-    {
-    if(ag->edgeTypes[i] == -1)
-	{
-	char buff[512];
-	int j=0;
-	struct evidence *e =  slElementFromIx(ag->evidence, i);	
-	printf("<tr><td>%d-%d</td><td>\n", ag->edgeStarts[i], ag->edgeEnds[i]);
-	for(j=0; j<e->evCount; j++)
-	    {
-	    char *tmp = NULL;
-	    snprintf(query, sizeof(query), "select name from tissue where id = %d",e->mrnaIds[j]);
-	    tmp = sqlQuickQuery(conn, query, buff, sizeof(buff));
-	    if(tmp != NULL)
-		printf("%s,", buff);
-	    }
-	printf("</td></tr>\n");
-	}
-    }
 printf("</table>\n");
 printf("<table cellpadding=0 cellspacing=0>\n");
 printf("<tr><th><b>Vertices</b></th><th><b>Edges</b></th></tr>\n");
 printf("<tr><td valign=top>\n");
-
 printf("<table cellpadding=1 border=1>\n");
 printf("<tr><th><b>Number</b></th><th><b>Type</b></th></tr>\n");
 for(i=0; i<ag->vertexCount; i++)
@@ -12161,12 +12013,93 @@ for(i=0; i<ag->edgeCount; i++)
     printf("</td></tr>\n");
     }
 printf("</table>\n");
+}
 
-printf("</td></tr>\n");
-printf("</table>\n");
+void doAltGraphXDetails(struct trackDb *tdb, char *item)
+/* do details page for an altGraphX */
+{
+int id = atoi(item);
+char query[256];
+int i,j;
+struct altGraphX *ag = NULL;
+struct altGraphX *orthoAg = NULL;
+char buff[128];
+struct sqlConnection *conn = hAllocConn();
+char *image = NULL;
+
+/* Load the altGraphX record and start page. */
+if(id != 0) 
+    {
+    snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
+    ag = altGraphXLoadByQuery(conn, query);
+    }
+else
+    {
+    snprintf(query, sizeof(query),"select * from %s where tName like '%s' and tStart <= %d and tEnd >= %d", 
+	     tdb->tableName, seqName, winEnd, winStart);
+    ag = altGraphXLoadByQuery(conn, query);
+    }
+if(ag == NULL) 
+    errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
+genericHeader(tdb, ag->name);
+printPosOnChrom(ag->tName, ag->tStart, ag->tEnd, ag->strand, FALSE);
+
+/* Print a display of the Graph. */
+printf("<b>Plots of Alt-Splicing:</b>");
+printf("<center>\n");
+if(sameString(tdb->tableName, "altGraphXCon")) 
+    printf("Common Splicing<br>");
+printf("Alt-Splicing drawn to scale.<br>");
+image = altGraphXMakeImage(tdb,ag);
+freez(&image);
+/* Normally just print graph with exons scaled up. For conserved
+   track also display orthologous loci. */
+if(differentString(tdb->tableName, "altGraphXCon"))
+    {
+    struct altGraphX *copy = altGraphXClone(ag);
+    altGraphXEnlargeExons(copy);
+    printf("Alt-Splicing drawn with exons enlarged.<br>");
+    image = altGraphXMakeImage(tdb,copy);
+    freez(&image);
+    altGraphXFree(&copy);
+    }
+else
+    {
+    struct sqlConnection *orthoConn = NULL;
+    struct altGraphX *origAg = NULL;
+    hSetDb2("mm3");
+    safef(query, sizeof(query), "select * from altGraphX where name='%s'", ag->name);
+    origAg = altGraphXLoadByQuery(conn, query);
+    puts("<br><center>Human</center>\n");
+    altGraphXMakeImage(tdb,origAg);
+    orthoConn = hAllocConn2();
+    safef(query, sizeof(query), "select orhtoAgName from orthoAgReport where agName='%s'", ag->name);
+    sqlQuickQuery(conn, query, buff, sizeof(buff));
+    safef(query, sizeof(query), "select * from altGraphX where name='%s'", buff);
+    orthoAg = altGraphXLoadByQuery(orthoConn, query);
+    if(differentString(orthoAg->strand, origAg->strand))
+	{
+	altGraphXReverseComplement(orthoAg);
+	puts("<br>Mouse (opposite strand)\n");
+	}
+    else 
+	puts("<br>Mouse\n");
+    printf("<a HREF=\"%s?db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full&%s\"",
+	   hgTracksName(), "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd, cartSidUrlString(cart));
+    printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
+    printf("<font size=-1>[%s.%s:%d-%d]</font></a><br><br>\n", "mm3", 
+	   orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
+    altGraphXMakeImage(tdb,orthoAg);
+    }
+printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
+       hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
+printf(" ALT=\"Zoom to browser coordinates of Alt-Splice\">");
+printf("Jump to browser for %s</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->name, ag->tName, ag->tStart, ag->tEnd);
+if(cgiVarExists("agxPrintEdges"))
+    printAltGraphXEdges(ag);
 printf("</center>\n");
+printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 
@@ -13138,7 +13071,7 @@ else if( sameWord(track, "gcPercent"))
     doGcDetails(tdb, item);
     }
 else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon") 
-	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho"))
+	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho") || startsWith("altGraphX", track))
     {
     doAltGraphXDetails(tdb,item);
     }
