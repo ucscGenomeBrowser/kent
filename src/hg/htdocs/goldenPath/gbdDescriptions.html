@@ -289,16 +289,16 @@ stored in a single table rather than one table per chromosome:</P>
 <P>This section describes the format of each table field by field in AutoSql 
 format.</P>
 <H3><A name=ChromInfo></A>Chromosome Information</H3>
-<PRE>table chromInfo
+<FONT SIZE=2><PRE>table chromInfo
 "Chromosome names and sizes"
     (
     string chrom;       "Chromosome name"
     uint   size;        "Chromosome size"
     string fileName;    "Chromosome file (raw one byte per base)"
     )
-</PRE>
+</FONT></PRE>
 <H3><A name=ChromosomeBand></A>Chromosome Band Info</H3>
-<PRE>table cytoBand
+<FONT SIZE=2><PRE>table cytoBand
 "Describes the positions of cytogenetic bands within a chromosome"
    (
    string chrom;        "Human chromosome number"
@@ -307,9 +307,9 @@ format.</P>
    string name;         "Name of cytogenetic band"
    string gieStain;     "Giesma stain results"
    )
-</PRE>
+</FONT></PRE>
 <H3><A name=FragInfo></A>Clone Fragment Positions</H3>
-<PRE>table chrN_gl
+<FONT SIZE=2><PRE>table chrN_gl
 "Fragment positions in golden path"
     (
     string  frag;       "Fragment name"
@@ -317,9 +317,9 @@ format.</P>
     uint    end;        "End position in golden path"
     char[1] strand;     "+ or - for strand"
     )
-</PRE>
+</FONT></PRE>
 <H3><A name=CloneInfo></A>Clone Information</H3>
-<PRE>table clonePos
+<FONT SIZE=2><PRE>table clonePos
 "A clone's position and other info."
     (
     string  name;       "Name of clone including version"
@@ -331,9 +331,9 @@ format.</P>
     char[1] stage;      "F/D/P for finished/draft/predraft"
     string  faFile;     "File with sequence."
     )
-</PRE>
+</FONT></PRE>
 <H3><A name=ContigInfo></A>Contig Information</H3>
-<PRE>table ctgPos
+<FONT SIZE=2><PRE>table ctgPos
 "Where a contig is inside of a chromosome."
     (
     string contig;      "Name of contig"
@@ -342,11 +342,11 @@ format.</P>
     uint   chromStart;  "Start in chromosome"
     uint   chromEnd;    "End in chromosome"
     )
-</PRE>
+</FONT></PRE>
 <H3><A name="CpG Islands"></A>CpG Islands</H3>
 This table contains CpG islands of 50 bases or more which are at least 50% 
 G/C.
-<PRE>table cpgIsland
+<FONT SIZE=2><PRE>table cpgIsland
 "Describes the CpG Islands"
    (
    string chrom;        "Human chromosome or FPC contig"
@@ -359,9 +359,9 @@ G/C.
    uint   perCpg;       "Percentage of island that is CpG"
    uint   perGc;        "Percentage of island that is C or G"
    )
-</PRE>
+</FONT></PRE>
 <H3><A name=Exofish></A>Exofish Information</H3>
-<PRE>table exoFish
+<FONT SIZE=2><PRE>table exoFish
 "An evolutionarily conserved region (ecore) with Tetroadon"
    (
    string chrom;        "Human chromosome or FPC contig"
@@ -370,9 +370,9 @@ G/C.
    string name;         "Just a dummy dot"
    uint   score;        "Score from 0 to 1000"
    )
-</PRE>
+</FONT></PRE>
 <H3><A name=ExoMouse></A>Exonerate Mouse Homologies</H3>
-<PRE>table exoMouse
+<FONT SIZE=2><PRE>table exoMouse
 "A rough alignment - not detailed"
    (
    string chrom;        "Human chromosome or FPC contig"
@@ -384,9 +384,9 @@ G/C.
    uint otherStart;     "Start in other sequence"
    uint otherEnd;       "End in other sequence"
    )
-</PRE>
+</FONT></PRE>
 <H3><A name=GapInfo></A>Gap Positions</H3>
-<PRE>table chrN_gap
+<FONT SIZE=2><PRE>table chrN_gap
 "Gaps in golden path"
     (
     string chrom;       "which chromosome"
@@ -398,9 +398,9 @@ G/C.
     string type;        "contig, clone, fragment, etc."
     string bridge;      "yes, no, mrna, bacEndPair, etc."
     )
-</PRE>
+</FONT></PRE>
 <H3><A name=GCpercent></A>GC Content</H3>
-<PRE>table gcPercent
+<FONT SIZE=2><PRE>table gcPercent
 "Displays GC content in 20Kb non-overlapping blocks for genome"
    (
    string chrom;        "Human chromosome number"
@@ -409,11 +409,11 @@ G/C.
    string name;         "Constant string GC"
    uint   gcPpt;        ":Average number of G and C per 1000 bases"
    )                                                                            
-</PRE>
+</FONT></PRE>
 <H3><A name=GenePredictions></A>Gene Predictions and Known Genes</H3>
 The following definition is used for the refGene, ensGene, genieAlt and similar tables. In alternative splicing situations
 each transcript has a row in this table.
-<PRE>table genePred
+<FONT SIZE=2><PRE>table genePred
 "A gene prediction."
     (
     string  name;       "Name of gene"
@@ -427,30 +427,30 @@ each transcript has a row in this table.
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
     )
-</PRE>
+</FONT></PRE>
 
 <H3><A name=PepPredictions></A>Gene Predictions and Known Genes Amino Acid Translations</H3>
-<PRE>table pepPred
+<FONT SIZE=2><PRE>table pepPred
 "A predicted peptide - linked to a predicted gene."
     (
     string  name;       "Name of gene - same as in genePred"
     lstring seq;        "Peptide sequence"
     )
-</PRE>
+</FONT></PRE>
 
 <H3><A name=MrnaPredictions></A>mRNA sequences</H3>
-<PRE>table mrnaPred
+<FONT SIZE=2><PRE>table mrnaPred
 "A mRNA - linked to a gene."
     (
     string  name;       "Name of gene - same as in genePred"
     lstring seq;        "mRNA sequence"
     )
-</PRE>
+</FONT></PRE>
 
 
 <H3><A name=RefLink></A>Link between RefSeq mRNAs and HUGO, LocusLink etc.</H3>
 First used Dec. 2000
-<PRE>table refLink
+<FONT SIZE=2><PRE>table refLink
 "Link together a refseq mRNA and other stuff"
     (
     string name;        "Name displayed in UI"
@@ -462,12 +462,12 @@ First used Dec. 2000
     uint locusLinkId;   "Locus Link ID"
     uint omimId;        "OMIM ID"
     )
-</PRE>
+</FONT></PRE>
 
 
 <H3><A name=MoreKnown></A>Known Gene IDs in Other Databases</H3>
 Last used Oct. 2000
-<PRE>table knownMore
+<FONT SIZE=2><PRE>table knownMore
 "Lots of auxiliary info about a known gene"
     (
     string name;          "The name displayed in the browser: 
@@ -492,10 +492,10 @@ Last used Oct. 2000
     uint   locusLinkId;   "Locus link ID"
     string gdbId;         "NCBI GDB database ID"
     )                                                                              
-</PRE>
+</FONT></PRE>
 <H3><A name=OtherKnown></A>Other Known Gene Information</H3>
 Last used Oct. 2000
-<PRE>table knownInfo
+<FONT SIZE=2><PRE>table knownInfo
 "Auxiliary info about a known gene"
     (
     string name;         "connects with genieKnown-&gt;name"
@@ -507,10 +507,10 @@ Last used Oct. 2000
     string ngi;          "Genbank gi of nucleotide seq."
     string pgi;          "Genbank gi of protein seq."
     )                                                                           
-</PRE>
+</FONT></PRE>
 
 <H3><A name=GpInfo></A>Golden Path Construction</H3>
-<PRE>table chrN_gold
+<FONT SIZE=2><PRE>table chrN_gold
 "How to get through chromosome based on fragments"
     (
     string  chrom;      "which chromosome"
@@ -523,10 +523,10 @@ Last used Oct. 2000
     uint    fragEnd;    "end position in frag"
     char[1] strand;     "+ or - (orientation of fragment)"
     )
-</PRE>
+</FONT></PRE>
 
 <H3><A name=MouseSyn></A>Mouse Synteny</H3>
-<PRE>table mouseSyn
+<FONT SIZE=2><PRE>table mouseSyn
 "Synteny between mouse and human chromosomes."
     (
     string  chrom;       "Name of chromosome"
@@ -535,12 +535,12 @@ Last used Oct. 2000
     string  name;        "Name of mouse chromosome"
     int     segment;     "Number of segment"
     )
-</PRE>
+</FONT></PRE>
 
 <H3><A name=PslInfo></A>mRNA/EST/Mouse Alignments</H3>
 The following definition is used for the chrN_mrna, chrN_est, chrN_intronEst, 
 all_mrna and all_est tables.
-<PRE>table psl
+<FONT SIZE=2><PRE>table psl
 "Summary info about a patSpace alignment"
     (
     uint    matches;      "Number of bases that match that aren't repeats"
@@ -566,7 +566,7 @@ all_mrna and all_est tables.
     uint[blockCount] qStarts;     "Start of each block in query."
     uint[blockCount] tStarts;     "Start of each block in target."
     )
-</PRE>
+</FONT></PRE>
 There is a little gotcha in this table format. It has to 
 do with how coordinates are handled on the negative strand.
 In the qStart/qEnd fields the coordinates are where it
@@ -577,7 +577,7 @@ Here's an example of a 30-mer that has 2 blocks that
 align on the minus strand and 2 blocks on the plus
 strand (this sort of stuff happens in real life in
 response to assembly errors sometimes). 
-<PRE>
+<FONT SIZE=2><PRE>
 0         1         2         3 tens position in query
 0123456789012345678901234567890 ones position in query
             ++++          +++++ plus strand alignment on query
@@ -587,19 +587,19 @@ Plus strand:
      qStart 12 qEnd 31 blockSizes 4,5 qStarts 12,26
 Minus strand:
      qStart 4 qEnd 26 blockSizes 10,8 qStarts 5,19 
-</PRE>
+</FONT></PRE>
 Essentially the minus strand blockSizes and qStarts are 
 what you would get if you reverse complemented the query.
 However the qStart and qEnd are non-reversed. To get
 from one to the other:
-<PRE>
+<FONT SIZE=2><PRE>
      qStart = qSize - revQEnd
      qEnd = qSize - revQStart
-</PRE>
+</FONT></PRE>
 
 <H3><A name=RepeatInfo></A>Repeating Elements</H3>
 These tables were created from RepeatMasker .out files.
-<PRE>table chrN_rmsk
+<FONT SIZE=2><PRE>table chrN_rmsk
 "RepeatMasker .out record"
     (
     uint    swScore;    "Smith Waterman alignment score"
@@ -619,10 +619,10 @@ These tables were created from RepeatMasker .out files.
     int     repLeft;    "Size left in repeat sequence"
     char[1] id;         "'*' or ' '.  I don't know what this means"
     )
-</PRE>
+</FONT></PRE>
 
 <H3><A name=RNAgenes></A>RNA Gene Positions</H3>
-<PRE>table rnaGene
+<FONT SIZE=2><PRE>table rnaGene
 "Describes functional RNA genes."
     (
     string  chrom;        "Chromosome gene is on"
@@ -636,12 +636,12 @@ These tables were created from RepeatMasker .out files.
     float   fullScore;    "Score as in Sean Eddy's files."
     ubyte   isPsuedo;     "TRUE(1) if psuedo, FALSE(0) otherwise"
     )                                                                           
-</PRE>
+</FONT></PRE>
 
 <H3><A name=SimpleRepeats></A>Simple Repeats</H3>
 This table was generated by the trf program.  It does a more thorough job 
 of finding simple tandem repeats than RepeatMaskerdoes.
-<PRE>table simpleRepeat
+<FONT SIZE=2><PRE>table simpleRepeat
 "Describes the Simple Tandem Repeats"
    (
    string chrom;          "Human chromosome or FPC contig"
@@ -661,11 +661,11 @@ of finding simple tandem repeats than RepeatMaskerdoes.
    float  entropy;        "Entropy"
    string sequence;       "Sequence of repeat unit element"
    )
-</PRE>
+</FONT></PRE>
 
 <H3><A name=SNPsites></A>SNP Positions</H3>
 This table is used for both the snpNih and snpTsc tables.
-<PRE>table snp
+<FONT SIZE=2><PRE>table snp
 "Single nucleotide polymorphisms"
    (
    string chrom;          "Human chromosome or FPC contig"
@@ -673,10 +673,10 @@ This table is used for both the snpNih and snpTsc tables.
    uint   chromEnd;       "End position in chromosome"
    string name;           "Name of SNP"
    )                                                                           
-</PRE>
+</FONT></PRE>
 
 <H3><A name=STSsites></A>STS and FISH clone Positions</H3>
-<PRE>table stsMarker
+<FONT SIZE=2><PRE>table stsMarker
 "STS marker and its position on golden path and various maps"
    (
    string chrom;            "Chromosome or 'unknown'"
@@ -704,7 +704,7 @@ This table is used for both the snpNih and snpTsc tables.
    string endBand;          "End of range of bands on FISH map"
    string lab;              "Laboratory that placed the FISH clone"
    )                                                                                                      
-</PRE>
+</FONT></PRE>
 
 	<BR></TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -724,7 +724,7 @@ in the corresponding <TT>organism</TT> table will give the name of the organism.
 
 
 <H4>Main mRNA/EST Information Table</H4>
-<PRE>table mrna
+<FONT SIZE=2><PRE>table mrna
 "Basic information about mRNA and ESTs with links to other tables"
    (
    uint   id               "Id, same as seq ID"
@@ -746,19 +746,19 @@ in the corresponding <TT>organism</TT> table will give the name of the organism.
    uint   productName      "Ref in productName table"
    uint   author           "Ref in author table"
    )
-</PRE>
+</FONT></PRE>
 
 <H4>mRNA/EST Characteristic Tables</H4>
 This table is used for the author, cds, cell, center, cytoMap, description, development, geneName,
 keyword, library, mrnaClone, organism, productName, sex, source, and tissue tables.  Each has a 
 reference in the above mrna table.
-<PRE>table mrnaCharateristic
+<FONT SIZE=2><PRE>table mrnaCharateristic
 "Characteristics of mRNA and EST referenced in the mrna table"
    (
    int    id               "Unique id of characteristic in each table"
    string name             "Characteristic"
    )
-</PRE>
+</FONT></PRE>
 
 	<BR></TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -771,7 +771,7 @@ reference in the above mrna table.
 	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 <H4><A name=extFileInfo></A>Reference to an External File</H4>
-<PRE>table extFile 
+<FONT SIZE=2><PRE>table extFile 
 "This keeps track of external files and directories"
    (
    uint   id           "Unique ID for each file"
@@ -779,10 +779,10 @@ reference in the above mrna table.
    string path         "Full path. Ends in '/' if a dir"
    uint   size         "Size of file (checked)"
    )
-</PRE>
+</FONT></PRE>
 
 <H4><A name=seqInfo></A>Reference to an External Sequence in an FA File</H4>
-<PRE>table seq
+<FONT SIZE=2><PRE>table seq
 "This keeps track of a sequence"
   (
   uint   id           "Unique ID for each external sequence"
@@ -793,10 +793,10 @@ reference in the above mrna table.
   uint   file_offset  "Offset in file"
   uint   file_size    "Size in file."
   )
-</PRE>
+</FONT></PRE>
 
 <H4><A name=HistoryInfo></A>History Table - Tracks Modification History of mRNA Table and Linked Tables</H4>
-<PRE>table history
+<FONT SIZE=2><PRE>table history
   (
   int       ix        "Update number"
   uint      startId   "Start this session's ids"
@@ -805,7 +805,7 @@ reference in the above mrna table.
   string    what      "What they did"
   timestamp when      "When they did it"
   )
-</PRE>
+</FONT></PRE>
 
 	<BR></TD><TD WIDTH=7></TD></TR></TABLE>
 	</TD></TR></TABLE>
