@@ -27,6 +27,7 @@ enum pfParseType
     {
     pptProgram,
     pptCompound,
+    pptTuple,
     pptIf,
     pptWhile,
     pptFor,
@@ -71,6 +72,8 @@ switch (type)
     	return "pptProgram";
     case pptCompound:
     	return "pptCompound";
+    case pptTuple:
+        return "pptTuple";
     case pptIf:
     	return "pptIf";
     case pptWhile:
@@ -599,7 +602,7 @@ return pp;
 
 struct pfParse *pfParseProduct(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse expression. */
+/* Parse things separated by '*' or '/' or '%'. */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNegation(parent, &tok, scope);
@@ -630,9 +633,9 @@ while (tok->type == '*' || tok->type == '/' || tok->type == '%')
 return pp;
 }
 
-struct pfParse *pfParseExpression(struct pfParse *parent,
+struct pfParse *pfParseSum(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse expression. */
+/* Parse + and - part of expression. */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseProduct(parent, &tok, scope);
@@ -649,6 +652,36 @@ while (tok->type == '+' || tok->type == '-')
     }
 *pTokList = tok;
 return pp;
+}
+
+struct pfParse *pfParseExpression(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseSum(parent, &tok, scope);
+struct pfParse *tuple = NULL;
+uglyf("pfParseExpression\n");
+if (tok->type == ',')
+    {
+    tuple = pfParseNew(pptTuple, tok, parent);
+    tuple->children = pp;
+    pp->parent = tuple;
+    while (tok->type == ',')
+	{
+	tok = tok->next;
+	pp = pfParseSum(tuple, &tok, scope);
+	slAddHead(&tuple->children, pp);
+	}
+    }
+*pTokList = tok;
+if (tuple != NULL)
+    {
+    slReverse(&tuple->children);
+    return tuple;
+    }
+else
+    return pp;
 }
 
 static void parseAssignOrExpression(struct pfParse *parent,
