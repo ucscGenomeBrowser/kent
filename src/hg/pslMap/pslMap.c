@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.2 2003/12/07 19:27:04 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.3 2003/12/10 23:17:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -17,6 +17,9 @@ static struct optionSpec optionSpecs[] = {
 
 /* Values parsed from command line */
 static char* suffix = NULL;
+
+/* count of non-fatal errors */
+static int errCount = 0;
 
 struct block
 /* coordinates of a block */
@@ -49,6 +52,36 @@ errAbort(
   "   Useful with protein alignments, where the result is not actually\n"
   "   and alignment of the protein.\n"
   );
+}
+
+void pslProtToNA(struct psl *psl)
+/* convert a protein/NA alignment to a NA/NA alignment */
+{
+int iBlk;
+
+psl->qStart *= 3;
+psl->qEnd *= 3;
+psl->qSize *= 3;
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    {
+    psl->blockSizes[iBlk] *= 3;
+    psl->qStarts[iBlk] *= 3;
+    }
+}
+
+void pslNAToProt(struct psl *psl)
+/* undo pslProtToNA */
+{
+int iBlk;
+
+psl->qStart /= 3;
+psl->qEnd /= 3;
+psl->qSize /= 3;
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    {
+    psl->blockSizes[iBlk] /= 3;
+    psl->qStarts[iBlk] /= 3;
+    }
 }
 
 struct hash* hashPsls(char *pslFile)
@@ -248,12 +281,23 @@ struct psl* mapAlignment(struct psl *psl1, struct psl* psl2)
 int mappedPslMax = 8; /* allocated space in output psl */
 char psl1TStrand = (psl1->strand[1] == '-') ? '-' : '+';
 char psl2QStrand = psl2->strand[0];
+boolean cnv1 = (pslIsProtein(psl1) && !pslIsProtein(psl2));
+boolean cnv2 = (pslIsProtein(psl2) && !pslIsProtein(psl1));
 int iBlock;
 struct psl* mappedPsl;
 
+
 if (psl1->tSize != psl2->qSize)
-    errAbort("psl1 %s tSize (%d) != psl2 %s qSize (%d)",
-             psl1->tName, psl1->tSize, psl2->qName, psl2->qSize);
+    {
+    fprintf(stderr, "Non-fatal error: psl1 %s tSize (%d) != psl2 %s qSize (%d)\n",
+            psl1->tName, psl1->tSize, psl2->qName, psl2->qSize);
+    errCount++;
+    return NULL;
+    }
+if (cnv1)
+    pslProtToNA(psl1);
+if (cnv2)
+    pslProtToNA(psl2);
 
 /* need to ensure common sequence in same orientation */
 if (psl1TStrand != psl2QStrand)
@@ -275,6 +319,11 @@ if (psl1TStrand != psl2QStrand)
     }
 
 finishMappedPsl(mappedPsl);
+if (cnv1)
+    pslNAToProt(psl1);
+if (cnv2)
+    pslNAToProt(psl2);
+
 return mappedPsl;
 }
 
@@ -327,7 +376,13 @@ suffix = optionVal("suffix", NULL);
 
 pslMap(argv[1], argv[2], argv[3]);
 
-return 0;
+if (errCount > 0)
+    {
+    fprintf(stderr, "Error: %d non-fatal errors\n", errCount);
+    return 1;
+    }
+else
+    return 0;
 }
 /*
  * Local Variables:
