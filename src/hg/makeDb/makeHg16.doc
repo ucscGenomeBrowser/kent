@@ -2072,3 +2072,18 @@ mv ucsc100k.bed ucsc100k.bed.Rn3
 
     # Add entries for net and chain to human/hg16 trackDb
 
+# Make Known Genes Track
+
+  This task has many steps and currently it is described by two documents:
+
+ 	1. makeProteins072003.doc
+
+ 	   describes how the protein databases, biosql072003 and proteins072003,
+ 	   were built
+
+ 	2. makeKgHg16.doc
+
+	   describes how the Known Genes related database tables
+	   were built for hg16.  makeKgHg16.doc could be merged 
+ 	   with makeHg16.doc after minor editing of the format style.
+
