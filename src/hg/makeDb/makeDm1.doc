@@ -496,15 +496,15 @@ exit; # don't actually run this like a script :)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/pscreen
     cd /cluster/data/dm1/bed/pscreen
-    # Robin Hiesinger sent a table dump by email that is a subset of the 
-    # original primarycollection1 columns.  Saved attachment to 
-    # genetag_gdp.dump
-    # It doesn't have the stock number, but it looks like the bloomington 
-    # stock numbers can be associated with P insertions using this file:
+    # Robin Hiesinger emailed 2 table dumps that need to be joined on ID;
+    # saved as atbloom.dump, genetag_gdp.dump.
+    # Turns out that this file has a more complete mapping than atbloom --
+    # use it to fill in stock numbers missing from atbloom:
     wget http://flybase.bio.indiana.edu/stocks/stock-centers/bloomington/lk/bloomington.csv
+    dos2unix atbloom.dump
     # one-shot Perl script:
     chmod a+x mkPscreen.pl
-    mkPscreen.pl genetag_gdp.dump  bloomington.csv > pscreen.bed
+    mkPscreen.pl genetag_gdp.dump atbloom.dump bloomington.csv > pscreen.bed
     hgLoadBed dm1 pscreen -sqlTable=$HOME/kent/src/hg/lib/pscreen.sql -tab \
       pscreen.bed
 
