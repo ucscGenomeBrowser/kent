@@ -207,7 +207,8 @@ pushWarnHandler(htmlVaParagraph);
 #endif /* OLD */
 
 
-void showAliPlaces(char *pslName, char *faName, char *database)
+void showAliPlaces(char *pslName, char *faName, char *database, 
+	enum gfType qType, enum gfType tType)
 /* Show all the places that align. */
 {
 struct lineFile *lf = pslFileOpen(pslName);
@@ -267,7 +268,7 @@ if (pslOut)
     {
     printf("<TT><PRE>");
     if (!sameString(output, "psl no header"))
-	pslWriteHead(stdout);
+	pslxWriteHead(stdout, qType, tType);
     for (psl = pslList; psl != NULL; psl = psl->next)
 	pslTabOut(psl, stdout);
     }
@@ -372,6 +373,7 @@ boolean isTxTx = FALSE;
 boolean txTxBoth = FALSE;
 struct gfOutput *gvo;
 boolean qIsProt = FALSE;
+enum gfType qType, tType;
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
@@ -424,21 +426,26 @@ makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
 serve = findServer(genome, isTx);
+/* Write header for extended (possibly protein) psl file. */
 if (isTx)
     {
     if (isTxTx)
         {
-	pslxWriteHead(f, gftDnaX, gftDnaX);
+	qType = gftDnaX;
+	tType = gftDnaX;
 	}
     else
         {
-	pslxWriteHead(f, gftProt, gftDnaX);
+	qType = gftProt;
+	tType = gftDnaX;
 	}
     }
 else
     {
-    pslxWriteHead(f, gftDna, gftDna);
+    qType = gftDna;
+    tType = gftDna;
     }
+pslxWriteHead(f, qType, tType);
 
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -486,7 +493,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     gfOutputQuery(gvo, f);
     }
 carefulClose(&f);
-showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db);
+showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db, qType, tType);
 }
 
 void askForSeq()
