@@ -2287,12 +2287,181 @@ XXX - TBD - 2004-12-19 20:15
     hgsql monDom1 -e "analyze table chainDanRer2Link;"
 
     featureBits monDom1 chainDanRer2Link
-XXX - TBD - 2004-12-20 15:32
-    #	249594220 bases of 3492108230 (7.147%) in intersection
+    #	66821827 bases of 3492108230 (1.914%) in intersection
     featureBits monDom1 chainDanRer2
-    #	2913812625 bases of 3492108230 (83.440%) in intersection
+    #	397007345 bases of 3492108230 (11.369%) in intersection
+    featureBits monDom1 chainGalGal2Link
+    #	110933245 bases of 3492108230 (3.177%) in intersection
+    featureBits monDom1 chainGalGal2
+    #	2437546469 bases of 3492108230 (69.802%) in intersection
+    featureBits monDom1 chainMm5Link
+XXX - TBD - 2004-12-20 15:32
+
     featureBits monDom1 netMm5
     #	2889580530 bases of 3492108230 (82.746%) in intersection
 
 # BLASTZ ZEBRAFISH CLEAN UP (TBD)
     rm chain.tab link.tab
+
+# 5-WAY VAR_MULTIZ - ALIGNMENTS Hg17, Mm5, MonDom1, GalGal2, DanRer2
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir multiz
+    bash		#	if you are csh normally
+    for A in danRer2 galGal2 mm5 hg17
+    do
+      axtSort bz.${A}/axtNet/all.axt stdout | axtToMaf -tSplit stdin \
+	 -tPrefix=monDom1. /cluster/data/monDom1/chrom.sizes \
+	 -qPrefix=${A}. /cluster/data/${A}/chrom.sizes \
+	 multiz/${A}
+    done
+    #	6 minutes
+    exit		#	back to csh if you are csh normally
+
+    #	Copy MAFs to Iservers for kluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/monDom1/multiz
+    cd /iscratch/i/monDom1/multiz
+    rsync -a /cluster/data/monDom1/bed/multiz/ .
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v10 penn
+    cp -p /cluster/bin/penn/maf_project penn
+    /cluster/bin/iSync
+
+#       Progressive alignment up the tree w/o stager, 
+#       using multiz.v10 (var_multiz)
+#       Method: align internal subtrees (using 0 flag to var_multiz)
+#               Then, align these to human (using 1 flag to var_multiz)
+#       NOTE: must use maf_project after each multiz run, in order
+#       to order output.  Single-cov guaranteed by use of net MAF's,
+#       so it is not necessary to run single_cov2.
+
+    ssh eieio
+    cd /cluster/data/monDom1/bed/multiz
+
+    cat > tree.nh << 'EOF'
+(((hg17,mm5),galGal2),danRer1)
+'EOF'
+
+    # NOTE: removed zero-length MAF's (shouldn't have created them),
+    # galGal2/chr18_random.maf and fr1/chr6_hla_hap1.maf)
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/monDom1/bed/multiz
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run var_multiz on cluster
+
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/multiz5way.$c
+    set pairs = /iscratch/i/monDom1/multiz
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    # special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif
+        
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2 $flag"
+        ${pairs}/penn/multiz.v10 $f1 $f2 $flag > $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        ${pairs}/penn/maf_project $out/$c.tmp.maf hg17.$c > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << for emacs
+chmod +x oneMultiz.csh
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    # multiple alignment steps:
+    # multiz.v10 human.maf mouse.maf 1
+    # multiz.v10 chicken.maf human-mouse.maf 1
+    # multiz.v10 zfish.maf human-mouse-chicken.maf 1
+set c = $1
+./oneMultiz.csh $c hg17 mm5  1
+./oneMultiz.csh $c galGal2 hg17mm5 1
+./oneMultiz.csh $c danRer2 galGal2hg17mm5 1
+# get final alignment file
+./oneMultiz.csh $c danRer2galGal2hg17mm5 /cluster/data/monDom1/bed/multiz/maf/$c.maf
+#cleanup
+./oneMultiz.csh $c
+'EOF'
+# << for emacs
+chmod +x allMultiz.csh
+
+cat  << 'EOF' > template
+#LOOP
+allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    #	make a list of scaffolds that successfully had actual alignments
+    #	at least once somewhere.  Not every scaffold has an alignment.
+    cd /iscratch/i/monDom1/multiz
+    for D in danRer2 galGal2 hg17 mm5
+    do
+        cd $D
+        ls | sed -e "s/.maf//"
+        cd ..
+    done | sort -u >  /cluster/data/monDom1/bed/multiz/run/chrom.lst
+
+    cd /cluster/data/monDom1/bed/multiz/run
+
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try; para check
+    para push
+XXX - RUNNING - 2004-12-21
+
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/opossum_image.jpg'
+	-O opossum_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 1712x1240+560+360 -quality 80 -sharpen 0 \
+	-normalize opossum_image.jpg mmd.jpg
+    convert -geometry 300x200 -quality 80 mmd.jpg Monodelphis_domestica.jpg
+    rm -f mmd.jpg opossum_image.jpg
+
+    cp -p Monodelphis_domestica.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push
