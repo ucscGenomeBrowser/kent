@@ -858,20 +858,18 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
     #    working on kksilo, the fileserver for this data.
     #    The grep in the pipeline below is "\tGC\t" but I
     #    can't figure out what escaped character to use to represent
-    #    that.  Also, the hgGcPercent was in my home bin since I was
-    #    working on it for this process.  It will be checked in when it
-    #    works OK.  It is still being tweaked
+    #    that.
     ssh kksilo
-    mkdir /cluster/data/panTro1/bed/gc5Base
-    cd /cluster/data/panTro1/bed/gc5Base
+    mkdir /cluster/data/panTro1/bed/gc20KBase
+    cd /cluster/data/panTro1/bed/gc20KBase
     mkdir asciiData wigData dataLimits
 for n in ../../nib/*.nib
 do
     c=`basename ${n} | sed -e "s/.nib//"`
     C=`echo $c | sed -e "s/chr//"`
-    echo "working on ${c} - ${C}"
-    $HOME/bin/i386/hgGcPercent -chr=${c} -doGaps \
-	-file=stdout -win=20000 hg16 ../../nib | grep "	GC	" | \
+    echo -n "working on ${c} - ${C} ... "
+    hgGcPercent -chr=${c} -doGaps \
+	-file=stdout -win=20000 panTro1 ../../nib | grep "	GC	" | \
     awk '
 {
     bases = $3 - $2
@@ -900,6 +898,7 @@ autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
+windowingFunction Mean
 color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
