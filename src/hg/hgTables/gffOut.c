@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.1 2004/07/20 09:25:09 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.2 2004/07/21 07:26:25 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -226,7 +226,7 @@ int itemCount;
 boolean gtf2StopCodons = FALSE;
 
 textOpen();
-bedList = getFilteredBedsInRegion(conn, track);
+bedList = getAllIntersectedBeds(conn, track);
 
 safef(source, sizeof(source), "%s_%s", database, table);
 itemCount = 0;

@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.4 2004/07/21 00:30:23 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.5 2004/07/21 07:26:25 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -286,14 +286,13 @@ long long realSize = regionSize - gapTotal;
 long startTime, loadTime, calcTime;
 struct covStats *covList, *cov;
 struct hTableInfo *hti = getHti(database, track->tableName);
-int fieldCount = hTableInfoBedFieldCount(hti);
 
 
 htmlOpen("%s Summary Statistics", track->shortLabel);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
 cartSaveSession(cart);
 startTime = clock1000();
-bedList = getFilteredBedsInRegion(conn, track);
+bedList = getAllIntersectedBeds(conn, track);
 loadTime = clock1000() - startTime;
 
 
@@ -309,7 +308,7 @@ numberStatRow("average item", round((double)cov->sumBases/cov->itemCount));
 numberStatRow("biggest item", cov->maxBases);
 covStatsFreeList(&covList);
 
-if (fieldCount >= 12)
+if (hti->hasBlocks)
     {
     covList = calcBlocksOverRegions(regionList, bedList);
     cov = covStatsSum(covList);

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.3 2004/07/20 08:22:17 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.4 2004/07/21 07:26:25 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -151,7 +151,7 @@ void doGenePredNongenomic(struct sqlConnection *conn, int typeIx)
 char *dupType = cloneString(curTrack->type);
 char *typeWords[3];
 char *table;
-struct bed *bed, *bedList = getFilteredBedsInRegion(conn, curTrack);
+struct bed *bed, *bedList = getAllIntersectedBeds(conn, curTrack);
 int typeWordCount;
 
 textOpen();
@@ -221,7 +221,7 @@ htmlClose();
 void doGenomicDna(struct sqlConnection *conn)
 /* Get genomic sequence (UI has already told us how). */
 {
-struct bed *bed, *bedList = getFilteredBedsInRegion(conn, curTrack);
+struct bed *bed, *bedList = getAllIntersectedBeds(conn, curTrack);
 struct hTableInfo *hti = getHti(database, curTrack->tableName);
 textOpen();
 for (bed = bedList; bed != NULL; bed = bed->next)

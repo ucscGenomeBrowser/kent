@@ -3,14 +3,18 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "portable.h"
 #include "cheapcgi.h"
 #include "cart.h"
 #include "jksql.h"
 #include "trackDb.h"
-#include "portable.h"
+#include "bits.h"
+#include "bed.h"
+#include "hdb.h"
+#include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.4 2004/07/21 04:15:01 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.5 2004/07/21 07:26:25 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -187,4 +191,238 @@ copyCartVars(cart, nextVars, curVars, ArraySize(curVars));
 doMainPage(conn);
 }
 
+static int countBasesOverlap(struct bed *bedItem, Bits *bits, boolean hasBlocks)
+/* Return the number of bases belonging to bedItem covered by bits. */
+{
+int count = 0;
+int i, j;
+if (hasBlocks)
+    {
+    for (i=0;  i < bedItem->blockCount;  i++)
+	{
+	int start = bedItem->chromStart + bedItem->chromStarts[i];
+	int end   = start + bedItem->blockSizes[i];
+	for (j=start;  j < end;  j++)
+	    if (bitReadOne(bits, j))
+		count++;
+	}
+    }
+else
+    {
+    for (i=bedItem->chromStart;  i < bedItem->chromEnd;  i++)
+	if (bitReadOne(bits, i))
+	    count++;
+    }
+    return(count);
+}
+
+static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
+	char *chrom, int minSize, int rangeStart, int rangeEnd)
+/* Translate ranges of set bits to bed 4 items. */
+{
+struct bed *bedList = NULL, *bed;
+int i;
+boolean thisBit, lastBit;
+int start = 0;
+int end;
+int id = 0;
+char name[128];
+
+if (rangeStart < 0)
+    rangeStart = 0;
+if (rangeEnd > bitSize)
+    rangeEnd = bitSize;
+
+/* We depend on extra zero BYTE at end in case bitNot was used on bits. */
+thisBit = FALSE;
+for (i=0;  i < bitSize+8;  ++i)
+    {
+    lastBit = thisBit;
+    thisBit = bitReadOne(bits, i);
+    if (thisBit)
+	{
+	if (!lastBit)
+	    start = i;
+	}
+    else
+        {
+	end = i;
+	if (end >= bitSize)
+	    end = bitSize - 1;
+	// Lop off elements that go all the way to the beginning/end of the 
+	// chrom... unless our range actually includes the beginning/end.
+	// (That can happen with the AND/OR of two NOT's...)
+	if (lastBit &&
+	    ((end - start) >= minSize) &&
+	    ((rangeStart == 0) || (start > 0)) &&
+	    ((rangeEnd == bitSize) || (end < bitSize)))
+	    {
+	    AllocVar(bed);
+	    bed->chrom = cloneString(chrom);
+	    bed->chromStart = start;
+	    bed->chromEnd = end;
+	    snprintf(name, sizeof(name), "%s.%d", chrom, ++id);
+	    bed->name = cloneString(name);
+	    slAddHead(&bedList, bed);
+	    }
+	}
+    }
+
+slReverse(&bedList);
+return(bedList);
+}
+
+
+
+struct bed *intersectOnRegion(
+	struct sqlConnection *conn,	/* Open connection to database. */
+	struct region *region, 		/* Region to work inside */
+	struct trackDb *track1,		/* Track input list is from. */
+	struct bed *bedList1)	/* List before intersection, should be
+	                                 * all within region. */
+/* Intersect bed list, consulting CGI vars to figure out
+ * with what table and how.  Return intersected result,
+ * which is independent from input. */
+{
+/* Grab parameters for intersection from cart. */
+int moreThresh = cgiOptionalInt(hgtaMoreThreshold, 0);
+int lessThresh = cgiOptionalInt(hgtaLessThreshold, 100);
+boolean invTable = cgiBoolean(hgtaInvertTable);
+boolean invTable2 = cgiBoolean(hgtaInvertTable2);
+char *op = cartString(cart, hgtaIntersectOp);
+char *table2 = cartString(cart, hgtaIntersectTrack);
+/* Load up intersecting bedList2 (to intersect with) */
+struct hTableInfo *hti2 = getHti(database, table2);
+struct trackDb *track2 = findTrack(table2, fullTrackList);
+struct bed *bedList2 = getFilteredBeds(conn, track2, region);
+/* Set up some other local vars. */
+char *table1 = track1->tableName;
+struct hTableInfo *hti1 = getHti(database, table1);
+struct featureBits *fbList2 = NULL;
+struct bed *bed;
+Bits *bits2;
+int chromSize = hChromSize(region->chrom);
+int regionSize = region->end - region->start;
+boolean isBpWise = (sameString("and", op) || sameString("or", op));
+struct bed *intersectedBedList = NULL;
+
+/* Sanity check on intersect op. */
+if ((!sameString("any", op)) &&
+    (!sameString("none", op)) &&
+    (!sameString("more", op)) &&
+    (!sameString("less", op)) &&
+    (!sameString("and", op)) &&
+    (!sameString("or", op)))
+    {
+    errAbort("Invalid value \"%s\" of CGI variable %s", op, hgtaIntersectOp);
+    }
+
+/* Load intersecting track into a bitmap. */
+fbList2 = fbFromBed(table2, hti2, bedList2, region->start, region->end,
+		     isBpWise, FALSE);
+bits2 = bitAlloc(chromSize+8);
+fbOrBits(bits2, chromSize, fbList2, 0);
+featureBitsFreeList(&fbList2);
+
+/* Produce intersectedBedList. */
+if (isBpWise)
+    {
+    /* Base-pair-wise operation: get bitmap  for primary table too */
+    struct featureBits *fbList1 = fbFromBed(table1, hti1, bedList1, 
+    			               region->start, region->end, 
+				       isBpWise, FALSE);
+    Bits *bits1 = bitAlloc(chromSize+8);
+    fbOrBits(bits1, chromSize, fbList1, 0);
+    featureBitsFreeList(&fbList1);
+    /* invert inputs if necessary */
+    if (invTable)
+	bitNot(bits1, chromSize);
+    if (invTable2)
+	bitNot(bits2, chromSize);
+    /* do the intersection/union */
+    if (sameString("and", op))
+	bitAnd(bits1, bits2, chromSize);
+    else
+	bitOr(bits1, bits2, chromSize);
+    /* translate back to bed */
+    intersectedBedList = bitsToBed4List(bits1, chromSize, 
+    	region->chrom, 1, region->start, region->end);
+    bitFree(&bits1);
+    }
+else
+    {
+    /* Loop through primary bed list seeing if each one intersects
+     * enough to keep. */
+    for (bed = bedList1;  bed != NULL;  bed = bed->next)
+	{
+	struct bed *newBed;
+	int numBasesOverlap = countBasesOverlap(bed, bits2, hti1->hasBlocks);
+	int length = 0;
+	double pctBasesOverlap;
+	if (hti1->hasBlocks)
+	    {
+	    int i;
+	    for (i=0;  i < bed->blockCount;  i++)
+		length += bed->blockSizes[i];
+	    }
+	else
+	    length = (bed->chromEnd - bed->chromStart);
+	if (length == 0)
+	    length = 1;
+	pctBasesOverlap = ((numBasesOverlap * 100.0) / length);
+	if ((sameString("any", op) && (numBasesOverlap > 0)) ||
+	    (sameString("none", op) && (numBasesOverlap == 0)) ||
+	    (sameString("more", op) &&
+	     (pctBasesOverlap >= moreThresh)) ||
+	    (sameString("less", op) &&
+	     (pctBasesOverlap <= lessThresh)))
+	    {
+	    newBed = cloneBed(bed);		    
+	    slAddHead(&intersectedBedList, newBed);
+	    }
+	}
+    slReverse(&intersectedBedList);
+    } 
+bitFree(&bits2);
+return intersectedBedList;
+}
+
+struct bed *getIntersectedBeds(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region)
+/* Get list of beds in region that pass intersection
+ * (and filtering) */
+{
+struct bed *bedList = getFilteredBeds(conn, track, region);
+if (anyIntersection())
+    {
+    struct bed *iBedList = intersectOnRegion(conn, region, track, bedList);
+    bedFreeList(&bedList);
+    return iBedList;
+    }
+else
+    return bedList;
+}
+
+struct bed *getIntersectedBedsOnRegions(struct sqlConnection *conn, 
+	struct trackDb *track, struct region *regionList)
+/* Get list of beds in regionList that pass intersection
+ * (and filtering). */
+{
+struct bed *bedList = NULL;
+struct region *region;
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct bed *rBedList = getIntersectedBeds(conn, track, region);
+    bedList = slCat(bedList, rBedList);
+    }
+return bedList;
+}
+
+struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
+	struct trackDb *track)
+/* get list of beds in selected regions that pass intersection
+ * (and filtering). */
+{
+return getIntersectedBedsOnRegions(conn, track, getRegions());
+}
 

@@ -16,10 +16,10 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.2 2004/07/20 08:22:17 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.3 2004/07/21 07:26:25 kent Exp $";
 
-struct bed *dbGetFilteredBeds(struct sqlConnection *conn, 
-	struct trackDb *track)
+static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	struct trackDb *track, struct region *regionList)
 /* getBed - get list of beds from database in region that pass filtering. */
 {
 struct region *region;
@@ -40,14 +40,34 @@ freez(&filter);
 return bedList;
 }
 
-struct bed *getFilteredBedsInRegion(struct sqlConnection *conn, 
-	struct trackDb *track)
-/* getBed - get list of beds in region that pass filtering. */
+struct bed *getFilteredBedsOnRegions(struct sqlConnection *conn, 
+	struct trackDb *track, struct region *regionList)
+/* get list of beds in regionList that pass filtering. */
 {
 if (isCustomTrack(track->tableName))
-    return customTrackGetFilteredBeds(track->tableName, NULL, NULL);
+    return customTrackGetFilteredBeds(track->tableName, regionList, NULL, NULL);
 else
-    return dbGetFilteredBeds(conn, track);
+    return dbGetFilteredBedsOnRegions(conn, track, regionList);
+}
+
+struct bed *getFilteredBeds(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region)
+/* Get list of beds on single region that pass filtering. */
+{
+struct region *oldNext = region->next;
+struct bed *bedList;
+region->next = NULL;
+bedList = getFilteredBedsOnRegions(conn, track, region);
+region->next = oldNext;
+return bedList;
+}
+
+struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
+	struct trackDb *track)
+/* getAllFilteredBeds - get list of beds in selected regions 
+ * that pass filtering. */
+{
+return getFilteredBedsOnRegions(conn, track, getRegions());
 }
 
 /* Droplist menu for custom track visibility: */
@@ -164,7 +184,7 @@ if (!doCt)
     textOpen();
     }
 
-bedList = getFilteredBedsInRegion(conn, curTrack);
+bedList = getAllIntersectedBeds(conn, curTrack);
 
 fields = hTableInfoBedFieldCount(hti);
 

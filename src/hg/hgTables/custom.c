@@ -430,7 +430,38 @@ hashElFreeList(&varList);
 return bf;
 }
 
-struct bed *customTrackGetFilteredBeds(char *name, 
+void customTrackFilteredBedOnRegion(
+	struct region *region,	/* Region to get data from. */
+	struct customTrack *ct, /* Custom track. */
+	struct hash *idHash,	/* Hash of identifiers or NULL */
+	struct bedFilter *bf,	/* Filter or NULL */
+	struct bed **pBedList  /* Output get's appended to this list */
+	)
+/* Get the custom tracks passing filter on a single region. */
+{
+struct bed *bed;
+for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    {
+    if (idHash == NULL || hashLookup(idHash, bed->name))
+	{
+	if (sameString(bed->chrom, region->chrom))
+	    {
+	    if (region->end == 0 || 
+	       (bed->chromStart < region->end 
+	       && bed->chromEnd > region->start))
+		{
+		if (bf == NULL || bedFilterOne(bf, bed))
+		    {
+		    struct bed *copy = cloneBed(bed);
+		    slAddHead(pBedList, copy);
+		    }
+		}
+	    }
+	}
+    }
+}
+
+struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
 	boolean *retGotFilter, boolean *retGotIds)
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
@@ -452,28 +483,11 @@ bf = bedFilterForCustomTrack(name);
 if (ct->fieldCount > 3)
     idHash = identifierHash();
 
-for (region = getRegions(); region != NULL; region = region->next)
-    {
-    for (bed = ct->bedList; bed != NULL; bed = bed->next)
-	{
-	if (idHash == NULL || hashLookup(idHash, bed->name))
-	    {
-	    if (sameString(bed->chrom, region->chrom))
-		{
-		if (region->end == 0 || 
-		   (bed->chromStart < region->end 
-		   && bed->chromEnd > region->start))
-		    {
-		    if (bf == NULL || bedFilterOne(bf, bed))
-			{
-			struct bed *copy = cloneBed(bed);
-			slAddHead(&bedList, copy);
-			}
-		    }
-		}
-	    }
-	}
-    }
+/* Grab filtered beds for each region. */
+for (region = regionList; region != NULL; region = region->next)
+    customTrackFilteredBedOnRegion(region, ct, idHash, bf, &bedList);
+
+/* Set return variables and clean up. */
 if (retGotFilter != NULL)
     *retGotFilter = (bf != NULL);
 if (retGotIds != NULL)
@@ -498,7 +512,7 @@ if (fields == NULL)
 else
     chosenFields = commaSepToSlNames(fields);
 
-bedList = customTrackGetFilteredBeds(name, &gotFilter, &gotIds);
+bedList = customTrackGetFilteredBeds(name, getRegions(), &gotFilter, &gotIds);
 hPrintf("#");
 for (field = chosenFields; field != NULL; field = field->next)
     {

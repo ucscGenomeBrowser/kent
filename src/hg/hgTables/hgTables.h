@@ -170,9 +170,19 @@ void doTabOutTable(char *database, char *table,
 	struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
 
-struct bed *getFilteredBedsInRegion(struct sqlConnection *conn, 
+struct bed *getFilteredBeds(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region);
+/* Get list of beds on single region that pass filtering. */
+
+struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
 	struct trackDb *track);
-/* getBed - get list of beds in region that pass filtering. */
+/* getAllFilteredBeds - get list of beds in selected regions 
+ * that pass filtering. */
+
+struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
+	struct trackDb *track);
+/* get list of beds in selected regions that pass intersection
+ * (and filtering). */
 
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
@@ -326,7 +336,7 @@ struct customTrack *getCustomTracks();
 struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
-struct bed *customTrackGetFilteredBeds(char *name, 
+struct bed *customTrackGetFilteredBeds(char *name, struct region *regionList,
 	boolean *retGotFilter, boolean *retGotIds);
 /* Get list of beds from custom track of given name that are
  * in current regions and that pass filters.  You can bedFree
