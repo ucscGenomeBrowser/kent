@@ -4783,17 +4783,26 @@ Color getChromColor(char *name, struct memGfx *mg)
     colorNum = chromColor[chromNum];
     return colorNum;
 }
+
 Color pslItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of mouseOrtho track item. */
 {
-char chromStr[20];     
-char *chptr;
 struct linkedFeatures *lf = item;
-chptr = strstr(lf->name,"chr");
-strncpy(chromStr,(char *)(chptr+3),2);
-chromStr[2] = '\0';
-return ((Color)getChromColor(chromStr, mg));
+char *chptr = strstr(lf->name, "chr");
+
+if (chptr == NULL)
+    {
+    return(tg->ixColor);
+    }
+else
+    {
+    char chromStr[3];
+    strncpy(chromStr, (char *)(chptr+3), 2);
+    chromStr[2] = '\0';
+    return(getChromColor(chromStr, mg));
+    }
 }
+
 void loadXenoPslWithPos(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
@@ -8617,7 +8626,7 @@ if (withLeftLabels)
         {
 	struct slList *item;
 	int h;
-    double tmp;
+	double tmp;
 	lastY = y;
 	if (group->limitedVis != tvHide)
 	    {
@@ -8630,80 +8639,78 @@ if (withLeftLabels)
 		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
 	    }
 
-   if( sameString( group->mapName, "humMus" ) )
-        {
+	if( sameString( group->mapName, "humMus" ) )
+	    {
 
-        min0 = whichNum( 300.0, -7.99515, 6.54171, binNum );
-        max0 =  whichNum( 1000.0, -7.99515, 6.54171, binNum );
-        sprintf( minRangeStr, "%0.2g", min0  );
-        sprintf( maxRangeStr, "%0.2g", max0 );
-
-
-        if( group->limitedVis == tvDense )
-        {
-        printYAxisLabel( mg, y, group, "0.0", min0, max0 );
-        printYAxisLabel( mg, y, group, "2.0", min0, max0 );
-        printYAxisLabel( mg, y, group, "5.0", min0, max0 );
-        }
-
-        }
-    else if( sameString( group->mapName, "humMusL" ) ||
-             sameString( group->mapName, "musHumL" ))
-    {
-
-        minRange = 0.0;
-        maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum ); 
-        min0 = whichNum( minRange, 0.0, 8.0, binNum );
-        max0 = whichNum( maxRange, 0.0, 8.0, binNum );
+	    min0 = whichNum( 300.0, -7.99515, 6.54171, binNum );
+	    max0 =  whichNum( 1000.0, -7.99515, 6.54171, binNum );
+	    sprintf( minRangeStr, "%0.2g", min0  );
+	    sprintf( maxRangeStr, "%0.2g", max0 );
 
 
-        sprintf( minRangeStr, " "  );
-        sprintf( maxRangeStr, " " );
+	    if( group->limitedVis == tvDense )
+		{
+		printYAxisLabel( mg, y, group, "0.0", min0, max0 );
+		printYAxisLabel( mg, y, group, "2.0", min0, max0 );
+		printYAxisLabel( mg, y, group, "5.0", min0, max0 );
+		}
 
-        if( group->limitedVis == tvFull && group->heightPer >= 74  )
-        {
-        printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "3.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "4.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "5.0", min0, max0 );
-        printYAxisLabel( mg, y+5, group, "6.0", min0, max0 );
-        //printYAxisLabel( mg, y+5, group, "7.0", min0, max0 );
-        //printYAxisLabel( mg, y+5, group, "8.0", min0, max0 );
-        }
+	    }
+	else if( sameString( group->mapName, "humMusL" ) ||
+		 sameString( group->mapName, "musHumL" ))
+	    {
 
-    }
+	    minRange = 0.0;
+	    maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum ); 
+	    min0 = whichNum( minRange, 0.0, 8.0, binNum );
+	    max0 = whichNum( maxRange, 0.0, 8.0, binNum );
 
-    else if( sameString( group->mapName, "zoo" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)whichNum( 500.0, 1.0, 100.0, 1000 ));
-        sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 1.0, 100.0, 1000 ));
-        }
-    else if( sameString( group->mapName, "zooCons" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
-        sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
-        }
-         else if( sameString( group->mapName, "binomialCons2" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)0.0 );
-        sprintf( maxRangeStr, "%d", (int)300.0);
-        }
-     else if( sameString( group->mapName, "binomialCons3" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)0.0);
-        sprintf( maxRangeStr, "%d", (int)200.0);
-        }
-    else if( sameString( group->mapName, "binomialCons" ) )
-        {
-        sprintf( minRangeStr, "%d", (int)0.0);
-        sprintf( maxRangeStr, "%d", (int)500.0);
-        }
-    else
-        {
-        sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
-        sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 0.0, 100.0, 1000 ));
-        }
+
+	    sprintf( minRangeStr, " "  );
+	    sprintf( maxRangeStr, " " );
+
+	    if( group->limitedVis == tvFull && group->heightPer >= 74  )
+		{
+		printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
+		printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
+		printYAxisLabel( mg, y+5, group, "3.0", min0, max0 );
+		printYAxisLabel( mg, y+5, group, "4.0", min0, max0 );
+		printYAxisLabel( mg, y+5, group, "5.0", min0, max0 );
+		printYAxisLabel( mg, y+5, group, "6.0", min0, max0 );
+		}
+
+	    }
+
+	else if( sameString( group->mapName, "zoo" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)whichNum( 500.0, 1.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    }
+	else if( sameString( group->mapName, "zooCons" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
+	    }
+	else if( sameString( group->mapName, "binomialCons2" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)0.0 );
+	    sprintf( maxRangeStr, "%d", (int)300.0);
+	    }
+	else if( sameString( group->mapName, "binomialCons3" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)0.0);
+	    sprintf( maxRangeStr, "%d", (int)200.0);
+	    }
+	else if( sameString( group->mapName, "binomialCons" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)0.0);
+	    sprintf( maxRangeStr, "%d", (int)500.0);
+	    }
+	else
+	    {
+	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 0.0, 100.0, 1000 ));
+	    }
 
 	
 	switch (group->limitedVis)
@@ -8715,11 +8722,11 @@ if (withLeftLabels)
 		    y += fontHeight;
 		start = 1;
 
-       if( group->subType == lfSubSample && group->items == NULL )
-             y += group->height;
+		if( group->subType == lfSubSample && group->items == NULL )
+		    y += group->height;
 
 
-	for (item = group->items; item != NULL; item = item->next)
+		for (item = group->items; item != NULL; item = item->next)
 		    {
 	            char *rootName;
 		    char *name = group->itemName(group, item);
@@ -8731,37 +8738,37 @@ if (withLeftLabels)
 		    if(group->subType == lfSubSample )
 			{
 
-            if( prev == NULL )
-                newy += itemHeight;
-            else
-                newy += updateY( name, group->itemName(group, prev), itemHeight );
-                if( newy == y )
-                    continue;
+			if( prev == NULL )
+			    newy += itemHeight;
+			else
+			    newy += updateY( name, group->itemName(group, prev), itemHeight );
+			if( newy == y )
+			    continue;
 
-                if( group->heightPer > (3 * fontHeight ) )
-                {
-                    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-                    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-                    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight,
-                        group->ixAltColor, font, minRangeStr );
-                    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight,
-                        group->ixAltColor, font, maxRangeStr );
-                }
-            prev = item;
+			if( group->heightPer > (3 * fontHeight ) )
+			    {
+			    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+			    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+			    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight,
+					group->ixAltColor, font, minRangeStr );
+			    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight,
+					group->ixAltColor, font, maxRangeStr );
+			    }
+			prev = item;
 
-            rootName = cloneString( name );
-            beforeFirstPeriod( rootName );
-            if( sameString( group->mapName, "humMusL" ))
-                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
-                    group->ixColor, font, "Mouse Cons    ");
-            else if( sameString( group->mapName, "musHumL" ))
-                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
-                    group->ixColor, font, "Human Cons    ");
-            else
-                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
-                    group->ixColor, font, rootName );
+			rootName = cloneString( name );
+			beforeFirstPeriod( rootName );
+			if( sameString( group->mapName, "humMusL" ))
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+					group->ixColor, font, "Mouse Cons    ");
+			else if( sameString( group->mapName, "musHumL" ))
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+					group->ixColor, font, "Human Cons    ");
+			else
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+					group->ixColor, font, rootName );
 
-            freeMem( rootName );
+			freeMem( rootName );
 
 
 			/* Reset the clipping rectangle to its original proportions */
@@ -8772,8 +8779,8 @@ if (withLeftLabels)
 		    else
 			{
 
-		    /* Set the clipping rectangle to account for the buttons */
-		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+			/* Set the clipping rectangle to account for the buttons */
+			mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
 		    
 			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
                         /* Reset the clipping rectangle to its original proportions */
@@ -8829,40 +8836,40 @@ if (withRuler)
     mgSetClip(mg, insideX, y, insideWidth, rulerHeight);
     relNumOff = winStart;
     mgDrawRulerBumpText(mg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
-	relNumOff, winBaseCount, 0, 1);
+			relNumOff, winBaseCount, 0, 1);
 
     /* Make hit boxes that will zoom program around ruler. */
+    {
+    int boxes = 30;
+    int winWidth = winEnd - winStart;
+    int newWinWidth = winWidth/3;
+    int i, ws, we = 0, ps, pe = 0;
+    int mid, ns, ne;
+    double wScale = (double)winWidth/boxes;
+    double pScale = (double)insideWidth/boxes;
+    for (i=1; i<=boxes; ++i)
 	{
-	int boxes = 30;
-	int winWidth = winEnd - winStart;
-	int newWinWidth = winWidth/3;
-	int i, ws, we = 0, ps, pe = 0;
-	int mid, ns, ne;
-	double wScale = (double)winWidth/boxes;
-	double pScale = (double)insideWidth/boxes;
-	for (i=1; i<=boxes; ++i)
+	ps = pe;
+	ws = we;
+	pe = round(pScale*i);
+	we = round(wScale*i);
+	mid = (ws + we)/2 + winStart;
+	ns = mid-newWinWidth/2;
+	ne = ns + newWinWidth;
+	if (ns < 0)
 	    {
-	    ps = pe;
-	    ws = we;
-	    pe = round(pScale*i);
-	    we = round(wScale*i);
-	    mid = (ws + we)/2 + winStart;
-	    ns = mid-newWinWidth/2;
-	    ne = ns + newWinWidth;
-	    if (ns < 0)
-	        {
-		ns = 0;
-		ne -= ns;
-		}
-	    if (ne > seqBaseCount)
-	        {
-		ns -= (ne - seqBaseCount);
-		ne = seqBaseCount;
-		}
-	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
-		chromName, ns, ne, "3x zoom");
+	    ns = 0;
+	    ne -= ns;
 	    }
+	if (ne > seqBaseCount)
+	    {
+	    ns -= (ne - seqBaseCount);
+	    ne = seqBaseCount;
+	    }
+	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
+		     chromName, ns, ne, "3x zoom");
 	}
+    }
     }
 
 
@@ -8879,9 +8886,9 @@ if (withCenterLabels)
 	    {
 	    Color color = group->ixColor;
 	    mgTextCentered(mg, insideX, y+1, 
-	    	clWidth, insideHeight, color, font, group->longLabel);
+			   clWidth, insideHeight, color, font, group->longLabel);
 	    mapBoxToggleVis(trackPastTabX, y+1, 
-	    	trackPastTabWidth, insideHeight, group);
+			    trackPastTabWidth, insideHeight, group);
 	    y += fontHeight;
 	    y += group->height;
 	    }
@@ -8899,96 +8906,77 @@ for (group = groupList; group != NULL; group = group->next)
 	    y += fontHeight;
 	mgSetClip(mg, insideX, y, insideWidth, group->height);
 	group->drawItems(group, winStart, winEnd,
-	    mg, insideX, y, insideWidth, 
-	    font, group->ixColor, group->limitedVis);
+			 mg, insideX, y, insideWidth, 
+			 font, group->ixColor, group->limitedVis);
 	y += group->height;
 	}
     }
 
 /* Make map background. */
+{
+
+int currentX, currentXEnd, currentWidth;
+int leftSide, rightSide;
+
+y = yAfterRuler;
+for (group = groupList; group != NULL; group = group->next)
     {
+    struct slList *item;
+    switch (group->limitedVis)
+	{
+	case tvHide:
+	    break;	/* Do nothing; */
+	case tvFull:
+	    if (withCenterLabels)
+		y += fontHeight;
+	    start = 1;
+	    if( group->subType == lfSubSample && group->items == NULL )
+		y += group->lineHeight;
 
-    int currentX, currentXEnd, currentWidth;
-    int leftSide, rightSide;
-
-    y = yAfterRuler;
-    for (group = groupList; group != NULL; group = group->next)
-        {
-	struct slList *item;
-	switch (group->limitedVis)
-	    {
-	    case tvHide:
-		break;	/* Do nothing; */
-	    case tvFull:
-		if (withCenterLabels)
-		    y += fontHeight;
-		start = 1;
-	        if( group->subType == lfSubSample && group->items == NULL )
-        	     y += group->lineHeight;
-
-		for (item = group->items; item != NULL; item = item->next)
-		    {
-		    int height = group->itemHeight(group, item);
+	    for (item = group->items; item != NULL; item = item->next)
+		{
+		int height = group->itemHeight(group, item);
 
             
 
-		    /*wiggle tracks don't always increment height (y-value) here*/
-            if( group->subType == lfSubSample )
-            {
-
-                newy = y;
-
-
-                if( !start && item->next != NULL  )
-                {
-                    newy += updateY( group->itemName(group, item),
-                             group->itemName(group, item->next), height );
-                }
-                else if( item->next != NULL || start )
-                    newy += height;
-
-
-
-                /*
-                if ( newy != y && !group->mapsSelf)
-                {
+		/*wiggle tracks don't always increment height (y-value) here*/
+		if( group->subType == lfSubSample )
+		    {
+		    newy = y;
+		    if( !start && item->next != NULL  )
+			{
+			newy += updateY( group->itemName(group, item),
+					 group->itemName(group, item->next),
+					 height );
+			}
+		    else if( item->next != NULL || start )
+			newy += height;
+		    start = 0;
+		    y = newy;
+		    }
+		else
+		    {
+		    if (!group->mapsSelf)
+			{
                         mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-                         trackPastTabX,y,trackPastTabWidth, height, group->mapName,
-                         group->mapItemName(group, item),
-                         group->itemName(group, item));
-                }
-                */
-
-
-                start = 0;
-                y = newy;
-
-            }
-	    else
-	    {
-
-               if (!group->mapsSelf)
-                {
-                        mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-                         trackPastTabX,y,trackPastTabWidth,height, group->mapName,
-                         group->mapItemName(group, item),
-                         group->itemName(group, item));
-                }
-                y += height;
-            }
-            }
-        break;
-	    case tvDense:
-		if (withCenterLabels)
-		    y += fontHeight;
-		mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,group->lineHeight,group);
-		y += group->lineHeight;
+				 trackPastTabX,y,trackPastTabWidth,height, group->mapName,
+				 group->mapItemName(group, item),
+				 group->itemName(group, item));
+			}
+		    y += height;
+		    }
+		}
+	    break;
+	case tvDense:
+	    if (withCenterLabels)
+		y += fontHeight;
+	    mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,group->lineHeight,group);
+	    y += group->lineHeight;
     
-		break;
-	    }
-        }
+	    break;
+	}
     }
-
+}
 /* Finish map. */
 printf("</MAP>\n");
 
