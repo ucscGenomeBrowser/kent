@@ -3220,11 +3220,11 @@ cat << 'EOF' > gsub
     cd /cluster/data/hg17/bed/blatFr1
     liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
 
-    hgLoadPsl -table=blatFr1 hg17 all.psl
+    hgLoadPsl -tNameIx -table=blatFr1 hg17 all.psl
     #	load of blatFr1 did not go as planned: 216595 record(s),
     #	0 row(s) skipped, 3 warning(s) loading psl.tab
     #	featureBits hg17 blatFr1 refGene:CDS
-    #	13476002 bases of 2866216770 (0.470%) in intersectio
+    #	13563544 bases of 2866216770 (0.473%) in intersection
     #	featureBits hg16 blatFr1 refGene:CDS
     #	13547219 bases of 2865248791 (0.473%) in intersection
     #	featureBits hg15 blatFugu refGene:CDS
@@ -3356,7 +3356,7 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 
 # CHAIN RN3 BLASTZ (DONE - 2004-06-14 - Hiram)
 #  re-worked with no 'axtFilter -notQ_random' on the axtChain step - 2004-06-23
-    axtFilter -notQ_random $1 | axtChain stdin \
+#    used to be: axtFilter -notQ_random $1 | axtChain stdin
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
