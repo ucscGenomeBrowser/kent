@@ -22,7 +22,7 @@ struct sqlResult *sr, *sr2, *sr3;
 char **row, **row2, **row3;
 char *r1, *r2, *r3, *r4;
 
-FILE *inf;
+FILE *o1;
 char *proteinDataDate;
 char *bio_dblink_id;
 char *source_bioentry_id;
@@ -42,6 +42,7 @@ char *extAC;
 if (argc != 2) usage();
 
 proteinDataDate = argv[1];
+o1 = fopen("temp_spXref2.dat", "w");
 
 conn = hAllocConn();
 conn2= hAllocConn();
@@ -78,10 +79,8 @@ while (row2 != NULL)
 	dbname 		= row3[1];
 	extAC 		= row3[2];
 			
-	//printf("%s\t%s\t%s\t%s\t%s\n", accession, display_id, division,
-	//dbname, extAC);
-	printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\n", accession, display_id, division,
-		dbname, extAC,bioentry_id,biodatabase_id);
+	fprintf(o1, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", accession, display_id, division,
+		    dbname, extAC,bioentry_id,biodatabase_id);
 			
     	sqlFreeResult(&sr3);
 	row = sqlNextRow(sr);
@@ -89,9 +88,15 @@ while (row2 != NULL)
    sqlFreeResult(&sr);
    row2 = sqlNextRow(sr2);
    }
+
+fclose(o1);
 sqlFreeResult(&sr2);
 hFreeConn(&conn);
 hFreeConn(&conn2);
 hFreeConn(&conn3);
+
+system("cat temp_spXref2.dat | sort |uniq > spXref2.tab");
+system("rm temp_spXref2.dat");
 return(0);
 }
+
