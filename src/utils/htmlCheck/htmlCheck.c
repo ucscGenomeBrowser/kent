@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.21 2004/03/02 21:00:55 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.22 2004/03/03 02:10:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,7 @@ errAbort(
   "   ok - just check for 200 return.  Print error message and exit -1 if no 200\n"
   "   getAll - read the url (header and html) and print to stdout\n"
   "   getHeader - read the header and print to stdout\n"
+  "   getCookies - print list of cookies\n"
   "   getHtml - print the html, but not the header to stdout\n"
   "   getForms - print the form structure to stdout\n"
   "   getVars - print the form variables to stdout\n"
@@ -48,6 +49,19 @@ struct htmlStatus
     struct htmlStatus *next;	/* Next in list. */
     char *version;		/* Usually something like HTTP/1.1 */
     int status;			/* HTTP status code.  200 is good. */
+    };
+
+struct htmlCookie
+/* A cookie - stored by browser usually.  We need to echo it
+ * back when we post forms. */
+    {
+    struct htmlCookie *next;	/* Next in list. */
+    char *name;			/* Cookie name. */
+    char *value;		/* Cookie value. */
+    char *domain;		/* The set of web domains this applies to. */
+    char *path;			/* Cookie applies below this path I guess. */
+    char *expires;		/* Expiration date. */
+    boolean secure;		/* Is it a secure cookie? */
     };
 
 struct htmlAttribute
@@ -97,9 +111,10 @@ struct htmlPage
     {
     struct htmlPage *next;
     char *url;				/* Url that produced this page. */
-    struct htmlStatus *status;		/* Version and status */
-    char *fullText;			/* Full unparsed text including headers. */
+    struct htmlStatus *status;		/* Version and status. */
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
+    struct htmlCookie *cookies;		/* Associated cookies if any. */
+    char *fullText;			/* Full unparsed text including headers. */
     char *htmlText;			/* Text unparsed after header. */
     struct htmlTag *tags;		/* List of tags in this page. */
     struct htmlForm *forms;		/* List of all forms. */
@@ -364,7 +379,72 @@ else
 return s;
 }
 
-struct hash *htmlHeaderRead(char **pHtml)
+static void cookieParseNameValuePair(char *s, char **retName, char **retVal)
+/* Parse out name/value pair. Warn and return FALSE if there's a problem. */
+{
+char *val = strchr(s, '=');
+if (val == NULL)
+    {
+    val = s + strlen(s);
+    }
+*val++ = 0;
+*retName = s;
+*retVal = val;
+}
+
+
+static struct htmlCookie *parseCookie(char *s)
+/* Parse out cookie line to the right of Set-Cookie. */
+{
+char *cookiePairs = s;
+char *e, *name, *val;
+char *domain = NULL, *path = NULL, *expires = NULL;
+boolean secure = FALSE;
+struct htmlCookie *cookie;
+
+/* Grab up to semicolon, which is the cookie name/value pair. */
+e = strchr(s, ';');
+if (e == NULL)
+    {
+    warn("Missing ';' in cookie");
+    return NULL;
+    }
+*e++ = 0;
+
+/* Allocate cookie and fill out name/value pair. */
+AllocVar(cookie);
+cookieParseNameValuePair(s, &name, &val);
+cookie->name = cloneString(name);
+cookie->value = cloneString(val);
+
+/* Loop through to grab the other info - domain and so forth. */
+s = e;
+for (;;)
+    {
+    /* Find next semicolon and zero-terminate it. */
+    s = skipLeadingSpaces(s);
+    e = strchr(s, ';');
+    if (e == NULL)
+        break;
+    *e++ = 0;
+
+    /* Parse out name/value pairs and save it away if it's one we know about. */
+    cookieParseNameValuePair(s, &name, &val);
+    if (sameString(name, "domain"))
+        cookie->domain = cloneString(val);
+    else if (sameString(name, "path"))
+        cookie->path = cloneString(val);
+    else if (sameString(name, "expires"))
+        cookie->expires = cloneString(val);
+    else if (sameString(name, "secure"))
+        cookie->secure = TRUE;
+
+    s = e;
+    }
+return cookie;
+}
+
+struct hash *htmlHeaderRead(char **pHtml, struct htmlCookie **pCookies)
 /* Read in from second line through first blank line and
  * save in hash.  These lines are in the form name: value. */
 {
@@ -383,8 +463,26 @@ for (;;)
         break;
     line = skipLeadingSpaces(line);
     hashAdd(hash, word, cloneString(line));
+    if (sameString(word, "Set-Cookie:"))
+	{
+	struct htmlCookie *cookie = parseCookie(line);
+	if (cookie != NULL)
+	    slAddTail(pCookies, cookie);
+	}
     }
 return hash;
+}
+
+char *htmlAttributeFindVal(struct htmlAttribute *list, char *name)
+/* Find named attribute or return NULL. */
+{
+struct htmlAttribute *att;
+for (att = list; att != NULL; att = att->next)
+    {
+    if (sameWord(att->name, name))
+        return att->val;
+    }
+return NULL;
 }
 
 
@@ -392,13 +490,10 @@ char *tagAttributeVal(struct htmlPage *page, struct htmlTag *tag,
 	char *name, char *defaultVal)
 /* Return value of named attribute, or defaultVal if attribute doesn't exist. */
 {
-struct htmlAttribute *att;
-for (att = tag->attributes; att != NULL; att = att->next)
-    {
-    if (sameWord(att->name, name))
-        return att->val;
-    }
-return defaultVal;
+char *val = htmlAttributeFindVal(tag->attributes, name);
+if (val == NULL)
+    val = defaultVal;
+return val;
 }
 
 char *tagAttributeNeeded(struct htmlPage *page, struct htmlTag *tag, char *name)
@@ -599,6 +694,14 @@ refAdd(&var->tags, tag);
 return var;
 }
 
+boolean isMixableInputType(char *type)
+/* Return TRUE if it's a type you can mix with others ok, like
+ * button, submit, and image. */
+{
+return sameWord(type, "BUTTON") || sameWord(type, "SUBMIT") 
+	|| sameWord(type, "IMAGE");
+}
+
 struct htmlFormVar *formParseVars(struct htmlPage *page, struct htmlForm *form)
 /* Return a list of variables parsed out of form.  
  * A form variable is something that may appear in the name
@@ -628,7 +731,10 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	    }
 	var = findOrMakeVar(page, varName, hash, tag, &varList); 
 	if (var->type != NULL && !sameWord(var->type, type))
-	    tagWarn(page, tag, "Mixing input types %s and %s", var->type, type);
+	    {
+	    if (!isMixableInputType(var->type) || !isMixableInputType(type))
+		tagWarn(page, tag, "Mixing input types %s and %s", var->type, type);
+	    }
 	var->type = type;
 	if (sameWord(type, "TEXT") || sameWord(type, "PASSWORD") 
 		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN")
@@ -763,7 +869,7 @@ AllocVar(page);
 page->url = cloneString(url);
 page->fullText = fullText;
 page->status = status;
-page->header = htmlHeaderRead(&s);
+page->header = htmlHeaderRead(&s, &page->cookies);
 contentType = hashFindVal(page->header, "Content-Type:");
 if (startsWith("text/html", contentType))
     {
@@ -913,6 +1019,19 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
 	    printf("%s", att->val);
 	}
     printf("\n");
+    }
+}
+
+void getCookies(struct htmlPage *page)
+/* Print out all cookies. */
+{
+struct htmlCookie *cookie;
+for (cookie = page->cookies; cookie != NULL; cookie = cookie->next)
+    {
+    printf("%s\t%s\t%s\t%s\t%s\t%s\n",
+    	cookie->name, cookie->value, naForNull(cookie->domain), 
+	naForNull(cookie->path), naForNull(cookie->expires),
+	(cookie->secure ? "SECURE" : "UNSECURE"));
     }
 }
 
@@ -1733,6 +1852,8 @@ else /* Do everything that requires full parsing. */
         getVars(page);
     else if (sameString(command, "getTags"))
 	getTags(page);
+    else if (sameString(command, "getCookies"))
+        getCookies(page);
     else if (sameString(command, "validate"))
 	validate(page);	
     else if (sameString(command, "checkLinks"))
