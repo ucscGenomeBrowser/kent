@@ -19,7 +19,7 @@
 #include "web.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.66 2003/07/10 17:09:38 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.67 2003/09/17 17:08:51 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -39,27 +39,6 @@ char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "transla
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
-
-#ifdef UNUSED
-void getIndexedGenomeDescriptions(char ***retArray, int *retCount)
-/* Find out the list of genomes that have blat servers on them. */
-{
-struct dbDb *dbList = hGetBlatIndexedDatabases();
-struct dbDb *db = NULL;
-int i = 0;
-int count = slCount(dbList);
-char **array = NULL;
-
-if (count == 0)
-    errAbort("No active blat servers in database");
-AllocArray(array, count);
-for (i=0, db=dbList; i<count; ++i, db=db->next)
-    array[i] = cloneString(db->description);
-dbDbFreeList(&dbList);
-*retArray = array;
-*retCount = count;
-}
-#endif /* UNUSED */
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
