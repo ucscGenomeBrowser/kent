@@ -11,6 +11,9 @@
        now uses affine rather than fixed gap penalties.
      o PolyA trimming now accommodates a small amount of sequencing
        error.
+     o Fixing another way that you could get out of order exons.
+       (This came up aligning zebrafish bacEnd sequences to the
+       zebrafish genome.)
 
 31:
      o Fixed a pretty bad memory leak when doing blast type output.
