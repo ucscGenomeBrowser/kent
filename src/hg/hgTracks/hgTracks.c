@@ -1049,8 +1049,9 @@ static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int se
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
- * it could be cleaned up some but more importantly it should be integrated back 
- * into the main draw routine */
+   It is called for 'sample 9' tracks as specified in the trackDb.ra.
+   and it looks at the cart to decide whether to interpolate, fill blocks,
+   and use anti-aliasing.*/
 {
 int baseWidth = seqEnd - seqStart;
 struct linkedFeatures *lf;
@@ -1067,6 +1068,7 @@ Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
 double scale = width/(double)baseWidth;
 int prevEnd = -1;
+int prevEndSave = -1;
 double prevY = -1;
 int ybase;
 int tmp;
@@ -1082,6 +1084,7 @@ char o3[128];
 
 double hFactor;
 double minRange, maxRange;
+
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
@@ -1120,13 +1123,13 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    s = sf->start;
 	    e = sf->end;
 
-        if( (sf->start - sf->end) == 0 ) /*ignore scores of 0*/
+        /*mapping or sequencing gap*/
+        if( (sf->start - sf->end) == 0 ) 
 	        {
-            prevEnd = -1;  /*set so no interpolation where no data*/
+            prevEnd = -1; /*connect next point with gray bar too*/
             continue;
 	        }
 	
-        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 1000 );
 
         if( -(sf->start - sf->end) < minRange || -(sf->start - sf->end) > maxRange)
 	        {
@@ -1134,6 +1137,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
             continue;
 	        }
 	
+        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 1000 );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
         ybase = (int)((double)y+hFactor+(double)heightPer);
@@ -6776,6 +6780,7 @@ int scaledHeightPer;
 char minRangeStr[32];
 char maxRangeStr[32];
 
+struct slList *prev = NULL;
 int start;
 int newy;
 
@@ -6878,47 +6883,46 @@ if (withLeftLabels)
 		    /* Set the clipping rectangle to account for the buttons */
 		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
 		    
-		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. (always puts 0-100% range)*/
+		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. */
 		    if(group->loadItems == loadSampleIntoLinkedFeature)
 			{
-			if( !start && group->heightPer > (3 * fontHeight ) )
+			if( prev != NULL )
 			    {
-			    if( item->next != NULL )
-				{
-				newy += updateY( name, group->itemName(group, item->next), itemHeight );
-				if( newy == y )
-				    continue;
-				else
-				    name = group->itemName(group, item->next);
-				}
-			    
-			    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-			    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-			    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-					group->ixAltColor, font, minRangeStr );
-			    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-					group->ixAltColor, font, maxRangeStr );
-			    
-			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
-			    /* Reset the clipping rectangle to its original proportions */
-			    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
-			    
+			    newy += updateY( name, group->itemName(group, prev), itemHeight );
+			    if( newy == y )
+			        continue;
+			  
+                if( group->heightPer > (3 * fontHeight ) )
+                    {
+			        ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+			        ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+			        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+				    	group->ixAltColor, font, minRangeStr );
+			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+					    group->ixAltColor, font, maxRangeStr );
+                    }
 			    }
 			else
 			    {
 			    newy += itemHeight;
 			    
-			    ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-			    ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-			    mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-					group->ixAltColor, font, minRangeStr );
-			    mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-					group->ixAltColor, font, maxRangeStr );
+                if( group->heightPer > (3 * fontHeight ) )
+                    {
+			        ymax = y - (group->heightPer / 2) + (fontHeight / 2);
+			        ymin = y + (group->heightPer / 2) - (fontHeight / 2);
+			        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
+					    group->ixAltColor, font, minRangeStr );
+			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
+					    group->ixAltColor, font, maxRangeStr );
+                    }
 			    
-			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
-			    /* Reset the clipping rectangle to its original proportions */
-			    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			    }
+            prev = item;
+
+
+			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+			/* Reset the clipping rectangle to its original proportions */
+			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 			start = 0;
 			y = newy;
 			}
@@ -7276,11 +7280,14 @@ char *hasDense = NULL;
 char *where = NULL;
 char query[256];
 
+
+/*see if we have a summary table*/
+snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
+
 /* If we're in dense mode and have a summary table load it. */
 if(tg->visibility == tvDense)
     {
-    snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
-    hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
     if(hasDense != NULL)
 	{
 	snprintf(query, sizeof(query), " name = '%s' ", tg->shortLabel);
@@ -7302,10 +7309,16 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&lfList);
 
-/* sort to bring items with common names to the same line. */
-sortGroupList = tg; /* used to put track name at top of sorted list. */
-slSort(&lfList, lfNamePositionCmp);
-sortGroupList = NULL;
+/* sort to bring items with common names to the same line
+but only for tracks with a summary table (with name=shortLabel) in
+dense mode*/
+
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
 tg->items = lfList;
 }
 
