@@ -99,8 +99,9 @@ if (NULL != theCart)
 
     getDbAndGenome(theCart, &theDb, &theGenome);
 
-    snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%u", 
+    snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
 	     orgCgiName, theGenome,
+	     dbCgiName, theDb,
 	     cartSessionVarName(), cartSessionId(theCart));
     }
 else
@@ -125,8 +126,10 @@ printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 puts("           Genome Browser</A> &nbsp; - &nbsp;");
 printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
        uiState+1);
-puts("           Blat Search</A> &nbsp; - &nbsp;" "\n"
-     "       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
+puts("           Blat Search</A> &nbsp; - &nbsp;");
+printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
+puts("           Table Browser</A> &nbsp; - &nbsp;");
+puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
      "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
      "           User Guide</A> &nbsp;</font></TD>" "\n"
