@@ -2334,7 +2334,7 @@ int ix = 0;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
-char query[256];
+int rowOffset;
 
 if (isFull)
     {
@@ -2351,12 +2351,10 @@ if (isFull)
 	y += lineHeight;
 	hashAdd(hash, ri->class, ri);
 	}
-    sprintf(query, "select * from %s_rmsk where genoStart<%u and genoEnd>%u",
-	chromName, winEnd, winStart);
-    sr = sqlGetResult(conn, query);
+    sr = hRangeQuery(conn, "rmsk", chromName, winStart, winEnd, NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	rmskOutStaticLoad(row, &ro);
+	rmskOutStaticLoad(row+rowOffset, &ro);
 	ri = hashFindVal(hash, ro.repClass);
 	if (ri == NULL)
 	   ri = otherRepeatItem;
@@ -2383,35 +2381,36 @@ if (isFull)
 		}
 	    mapBoxHc(ro.genoStart, ro.genoEnd, x1, ri->yOffset, w, heightPer, tg->mapName,
 	    	ro.repName, statusLine);
-#ifdef OLDCRUFT
-	    printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
-	    	x1, ri->yOffset, x1+w, ri->yOffset+heightPer);
-	    printf("HREF=\"../cgi-bin/hgc?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%d\" ", 
-		tg->mapName, ro.repName, chromName, winStart, winEnd, database, 
-		ro.genoStart);
-	    printf("ALT= \"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
-#endif /* OLDCRUFT */
 	    }
 	}
     freeHash(&hash);
     }
 else
     {
-    /* Do black and white on single track. */
-    sprintf(query, "select genoStart,genoEnd from %s_rmsk where genoStart<%u and genoEnd>%u",
-	chromName, winEnd, winStart);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
+    char table[64];
+    boolean hasBin;
+    struct dyString *query = newDyString(1024);
+    /* Do black and white on single track.  Fetch less than we need from database. */
+    if (hFindSplitTable(chromName, "rmsk", table, &hasBin))
         {
-	int start = sqlUnsigned(row[0]);
-	int end = sqlUnsigned(row[1]);
-	x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
-	x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
-	w = x2-x1;
-	if (w <= 0)
-	    w = 1;
-	mgDrawBox(mg, x1, yOff, w, heightPer, MG_BLACK);
+	dyStringPrintf(query, "select genoStart,genoEnd from %s where ", table);
+	if (hasBin)
+	    hAddBinToQuery(winStart, winEnd, query);
+	dyStringPrintf(query, "genoStart<%u and genoEnd>%u", winEnd, winStart);
+	sr = sqlGetResult(conn, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int start = sqlUnsigned(row[0]);
+	    int end = sqlUnsigned(row[1]);
+	    x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
+	    x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
+	    w = x2-x1;
+	    if (w <= 0)
+		w = 1;
+	    mgDrawBox(mg, x1, yOff, w, heightPer, MG_BLACK);
+	    }
 	}
+    dyStringFree(&query);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -5472,7 +5471,7 @@ int insideWidth;
 int y;
 
 /* Coordinates of open/close/hide buttons. */
-#ifdef SOON
+#ifdef SOMEDAY
 int openCloseHideWidth = 150;
 #endif
 int openCloseHideWidth = 0;
@@ -5643,7 +5642,7 @@ if (withCenterLabels)
 	    Color color = group->ixColor;
 	    mgTextCentered(mg, xOff, y+1, clWidth, insideHeight, color, font, group->longLabel);
 	    mapBoxToggleVis(0,y+1,pixWidth,insideHeight,group);
-#ifdef SOON
+#ifdef SOMEDAY
 	    mgTextCentered(mg, ochXoff, y+1, openCloseHideWidth, insideHeight, 
 		color, font, "[open] [close] [hide]");
 #endif
