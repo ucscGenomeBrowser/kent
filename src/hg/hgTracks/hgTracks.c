@@ -357,7 +357,7 @@ snprintf( o1, 128, "%s.heightPer", tg->mapName);
 if( vis == tvDense )
         heightFromCart = 10;
 else
-        heightFromCart = atoi(cartUsualString(cart, o1, "100"));
+        heightFromCart = atoi(cartUsualString(cart, o1, "75"));
 
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
@@ -1302,8 +1302,6 @@ double minRange, maxRange;
 
 int gapPrevEnd = -1;
 
-int topXCutoff = binNum;
-
 Color lineColor = mgFindColor(mg, 220, 220, 255); /*for horizontal lines*/
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
@@ -1355,10 +1353,9 @@ if( sameString( tg->mapName, "humMus" ) )
     {
 
     minRange = 0.0;
-    maxRange = 1000.0;
-    topXCutoff = whichBin( 6.0, 0.0, 8.0 ,binNum );
+    maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum );
     min0 = whichNum( minRange, 0.0, 8.0, binNum );
-    max0 = whichNum( topXCutoff, 0.0, 8.0, binNum );
+    max0 = whichNum( maxRange, 0.0, 8.0, binNum );
 
     //errAbort( "whichBin=%g\n", maxRange );
 
@@ -1427,24 +1424,20 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
             continue;
 	        }
 	
-
-        if( -(sf->start - sf->end) < minRange || -(sf->start - sf->end) > maxRange)
+        if( -(sf->start - sf->end) > maxRange )
+            {
+            tmp = 1-binNum; 
+            }
+        else if( -(sf->start - sf->end) < minRange )
 	        {
             prevEnd = -1;  /*set so no interpolation where no data*/
             gapPrevEnd = -1;
             continue;
 	        }
-
-        //printf("%d\n", sf->end - sf->start );
-	
-        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, binNum );
-        
-        //errAbort( "tmp = %d, maxRange=%d\n", tmp, topXCutoff );
-        //errAbort( "whichBin=%g\n", maxRange );
-
-        if(  -tmp > topXCutoff )
-            tmp = 1-maxRange ;
-
+        else
+            {
+            tmp = -whichBin( sf->end - sf->start, minRange, maxRange, binNum );
+            }
         
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
         y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
@@ -8251,7 +8244,7 @@ if (withLeftLabels)
     {
 
         minRange = 0.0;
-        maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum );
+        maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum ); 
         min0 = whichNum( minRange, 0.0, 8.0, binNum );
         max0 = whichNum( maxRange, 0.0, 8.0, binNum );
 
@@ -8259,7 +8252,7 @@ if (withLeftLabels)
         sprintf( minRangeStr, " "  );
         sprintf( maxRangeStr, " " );
 
-        if( group->limitedVis == tvFull && group->heightPer >= 99  )
+        if( group->limitedVis == tvFull && group->heightPer >= 74  )
         {
         printYAxisLabel( mg, y+5, group, "1.0", min0, max0 );
         printYAxisLabel( mg, y+5, group, "2.0", min0, max0 );
