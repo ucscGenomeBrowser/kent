@@ -133,14 +133,13 @@ enum nci60OptEnum {
    nci60Cns = 3,
    nci60Colon = 4,
    nci60Leukemia = 5,
-   nci60Lung = 6,
-   nci60Melanoma = 7,
-   nci60Ovary = 8,
-   nci60Prostate = 9,
-   nci60Renal = 10,
-   nci60Nsclc = 11,
-   nci60Duplicates = 12,
-   nci60Unknown = 13
+   nci60Melanoma = 6,
+   nci60Ovary = 7,
+   nci60Prostate = 8,
+   nci60Renal = 9,
+   nci60Nsclc = 10,
+   nci60Duplicates = 11,
+   nci60Unknown = 12
 };
 
 enum nci60OptEnum nci60StringToEnum(char *string);
