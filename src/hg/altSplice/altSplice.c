@@ -1,4 +1,5 @@
-/** \page altSplice - construct alt-splicing graphs using est and mrna alignments.
+/** 
+ \page altSplice altSplice - construct alt-splicing graphs using est and mrna alignments.
 
  \brief Construct altGraphX structures for genePredictions using information in est and mrna alignments.
 
@@ -13,18 +14,18 @@
 
  <p>The basic algorithm is as follows: 
  
- -# Load refGene table from chromosome 22, or any specified bed file, 
+ - Load refGene table from chromosome 22, or any specified bed file, 
  into a genePred structure.
 
- -# Sort the genePred's by size, smallest first. This is to avoid 
+ - Sort the genePred's by size, smallest first. This is to avoid 
  doubling up on small genes that overlap or are internal to another
  gene.
 
- -# For each genePred determine alternative splicing as follows:
+ - For each genePred determine alternative splicing as follows:
  
-    -# Load all mrna and est alignments for that portion of genomic sequence.
+    - Load all mrna and est alignments for that portion of genomic sequence.
 
-    -# Throw away mrnas and ests that don't have at least their first
+    - Throw away mrnas and ests that don't have at least their first
     and last exon within the genePred txStart and txEnd. For example
     <pre>
     1) ---------------########-----#######------######----------- genePred
@@ -36,24 +37,24 @@
     consideration.  Thus the 5' and '3 UTRs can grow using est/mrna
     evidence but not the number of exons.
 
-    -# The genePred boundaries are extended to include the most upstream and
+    - The genePred boundaries are extended to include the most upstream and
     most downstream alignments.
 
-    -# Dna from genome is cut out and used to orient ests using splice 
+    - Dna from genome is cut out and used to orient ests using splice 
     sites, gt->ag, and less the common gc->ag.
 
-    -# The psl alignments are converted to ggMrnaAli structures and in the
+    - The psl alignments are converted to ggMrnaAli structures and in the
     process inserts/deletions smaller than 5bp are removed. 
 
-    -# These ggMrnaAli structures are converted to ggMrnaInput
+    - These ggMrnaAli structures are converted to ggMrnaInput
     structures and clustered together into ggMrnaCluster structures.
 
-    -# The largest ggMrnaCluster structure is used to create a geneGraph.
+    - The largest ggMrnaCluster structure is used to create a geneGraph.
     Where each splice site and/or exon boundary forms a vertex and the
     introns and exons are represented by edges. The supporting mrna/est
     evidence for each edge is remembered for use later.
 
-    -# The geneGraph is converted to an altGraphX structre for storage
+    - The geneGraph is converted to an altGraphX structre for storage
     into a database. In this process unused vertices are removed, vertices
     are sorted by genomic position, and cassette exons are flagged.
 
