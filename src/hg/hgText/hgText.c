@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.119 2004/03/23 22:11:25 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.120 2004/03/24 00:58:48 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -1412,6 +1412,8 @@ if (tdb)
     if (wordCount > 0)
 	trackType = words[0];
     }
+hFreeOrDisconnect(&conn);
+
 if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
     typeWiggle = TRUE;
 
@@ -3060,11 +3062,13 @@ char *track = getTrackName();
 int wordCount = 0;
 char *words[128];
 char *trackType = (char *) NULL;
+boolean typeWiggle = FALSE;
 
 tdb = hMaybeTrackInfo(conn, track);
 /*	for some reason on Kates wigMaf tables, it doesn't return
  *	anything ?
  */
+
 if (tdb)
     {
     if (tdb->type)
@@ -3072,6 +3076,8 @@ if (tdb)
     if (wordCount > 0)
 	trackType = words[0];
 }
+if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
+    typeWiggle = TRUE;
 
 safef(query, sizeof(query), "desc %s", fullTableName);
 sr = sqlGetResult(conn, query);
@@ -3093,8 +3099,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	    ! sameString(row[1], "longblob"))
 	    {
-	    if ((trackType != (char *) NULL) && sameString(trackType,"wig")
-			&& sameString(row[0],"file"))
+	    if (typeWiggle && sameString(row[0],"file"))
 		{
 		snprintf(button, sizeof(button), "%s", wigglePhase);
 		cgiMakeButton("phase", button);
@@ -3961,7 +3966,6 @@ char fullTableName2[256];
 char query[256];
 char name[128];
 boolean gotFirst;
-boolean typeWiggle = FALSE;
 struct sqlConnection *conn2;
 struct trackDb *tdb2;
 char *track2 = getTrack2Name();
@@ -3969,11 +3973,13 @@ char *typeLine2;
 int wordCount = 0;
 char *words[128];
 char *trackType2 = (char *) NULL;
+boolean typeWiggle2 = FALSE;
 
 if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
     {
     conn2 = hAllocOrConnect(db2);
     tdb2 = hMaybeTrackInfo(conn2, track2);
+    hFreeOrDisconnect(&conn2);
     if (tdb2->type)
 	{
 	typeLine2 = cloneString(tdb2->type);
@@ -3983,7 +3989,7 @@ if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
 	}
     }
 if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
-    typeWiggle = TRUE;
+    typeWiggle2 = TRUE;
 
 saveOutputOptionsState();
 
@@ -4067,7 +4073,7 @@ puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
 if (sameString(customTrackPseudoDb, db2))
     filterOptionsCustomTrack(table2, "2");
 else
-    filterOptionsTableDb(fullTableName2, db2, "2", typeWiggle);
+    filterOptionsTableDb(fullTableName2, db2, "2", typeWiggle2);
 cgiMakeButton("phase", outputType);
 puts("</FORM>");
 webEnd();
@@ -4080,6 +4086,7 @@ void descForm()
 {
 char *db = getTableDb();
 char button[64];
+
 
 // Not supported for custom tracks, just for database tables.
 if (sameString(customTrackPseudoDb, db))
@@ -4094,6 +4101,7 @@ preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
 //#*** Really need to save this off to a local file!
 cgiContinueHiddenVar("tbUserKeys");
+
 printf("<H4> Fields of %s: </H4>\n", getTableName());
 descTable(TRUE);
 puts("</FORM>");
@@ -4375,8 +4383,16 @@ struct sqlResult *sr = (struct sqlResult *)NULL;
 char query[256];
 char **row = (char **)NULL;
 int numChroms = slCount(chromList);
+char wigFullTableName[256];
 
-snprintf(query, sizeof(query), "show table status like '%s'", table);
+if (tableIsSplit)
+    {
+    getFullTableName(wigFullTableName, "chr1", table);
+    snprintf(query, sizeof(query), "show table status like '%s'", wigFullTableName);
+    }
+else
+    snprintf(query, sizeof(query), "show table status like '%s'", table);
+
 sr = sqlMustGetResult(conn,query);
 row = sqlNextRow(sr);
 
@@ -4401,6 +4417,7 @@ else
     }
 
 sqlFreeResult(&sr);
+hFreeOrDisconnect(&conn);
 
 printf("<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
 printf("<TH> Data <BR> end </TH>");
@@ -4412,12 +4429,21 @@ printf("<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
 for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
+    char *tbl = table;
+    char wigFullTableName[256];
+    if (tableIsSplit)
+	{
+	getFullTableName(wigFullTableName, chromPtr->name, table);
+	tbl = wigFullTableName;
+	}
+
     if (numChroms > 1)
-	wigData = wigFetchData(database, table, chrom, winStart, winEnd, TRUE,
+	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd, TRUE,
 		tableId, wiggleCompare[tableId]);
     else
-	wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE,
+	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd, FALSE,
 		tableId, wiggleCompare[tableId]);
+
     if (wigData)
 	{
 	unsigned span = 0;
@@ -4524,6 +4550,8 @@ char *typeLine;
 char *typeLine2;
 char *trackType = (char *) NULL;
 char *trackType2 = (char *) NULL;
+boolean typeWiggle = FALSE;
+boolean typeWiggle2 = FALSE;
 int wordCount;
 char *words[128];
 boolean wiggleDone = FALSE;
@@ -4539,6 +4567,10 @@ if (tdb->type)
     if (wordCount > 0)
 	trackType = words[0];
     }
+hFreeOrDisconnect(&conn);
+
+if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
+    typeWiggle = TRUE;
 
 if (op == NULL)
     table2 = NULL;
@@ -4547,6 +4579,7 @@ if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
     {
     conn2 = hAllocOrConnect(db2);
     tdb2 = hMaybeTrackInfo(conn2, track2);
+    hFreeOrDisconnect(&conn2);
     if (tdb2->type)
 	{
 	typeLine2 = cloneString(tdb2->type);
@@ -4555,6 +4588,8 @@ if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
 	    trackType2 = words[0];
 	}
     }
+if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
+    typeWiggle2 = TRUE;
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -4630,37 +4665,35 @@ if (constraints != NULL)
 else
     printf("<P> No additional constraints selected on fields of %s.\n", table);
 
-if (trackType != (char *) NULL)
+if (typeWiggle)
     {
-    if (sameWord(trackType,"wig"))
-	if (wigConstraint[0])
-	    {
-	    if (sameWord(wigConstraint[0],"in range"))
-		printf("<P> data value constraint: %s [%g , %g]\n",
-		    wigConstraint[0], wigDataConstraint[0][0],
-			wigDataConstraint[0][1]);
-	    else
-		printf("<P> data value constraint: %s %g\n",
-		    wigConstraint[0], wigDataConstraint[0][0]);
-	    }
-	wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1);
-	wiggleDone = TRUE;
+    if (wigConstraint[0])
+	{
+	if (sameWord(wigConstraint[0],"in range"))
+	    printf("<P> data value constraint: %s [%g , %g]\n",
+		wigConstraint[0], wigDataConstraint[0][0],
+		    wigDataConstraint[0][1]);
+	else
+	    printf("<P> data value constraint: %s %g\n",
+		wigConstraint[0], wigDataConstraint[0][0]);
+	}
+    wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1);
+    wiggleDone = TRUE;
     }
 
-if (trackType2 != (char *) NULL)
+if (typeWiggle2)
     {
-    if (sameWord(trackType2,"wig"))
-	if (wigConstraint[1])
-	    {
-	    if (sameWord(wigConstraint[1],"in range"))
-		printf("<P> data value constraint: %s [%g , %g]\n",
-		    wigConstraint[1], wigDataConstraint[1][0],
-			wigDataConstraint[1][1]);
-	    else
-		printf("<P> data value constraint: %s %g\n",
-		    wigConstraint[1], wigDataConstraint[1][0]);
-	    }
-	wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2);
+    if (wigConstraint[1])
+	{
+	if (sameWord(wigConstraint[1],"in range"))
+	    printf("<P> data value constraint: %s [%g , %g]\n",
+		wigConstraint[1], wigDataConstraint[1][0],
+		    wigDataConstraint[1][1]);
+	else
+	    printf("<P> data value constraint: %s %g\n",
+		wigConstraint[1], wigDataConstraint[1][0]);
+	}
+    wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2);
     }
 
 
@@ -5022,6 +5055,7 @@ else
     altColorR = altColorG = altColorB = 128;
     visibility = 2;
     }
+hFreeOrDisconnect(&conn);
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
