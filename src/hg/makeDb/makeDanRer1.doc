@@ -941,7 +941,7 @@ cat `ls -1 *.lav | sort -g` \
 # with the Blastz with L=6000.
 
 # RESCORE HG17 BLASTZ (DONE, 2004-06-21, hartera)
-# USE HG17 BLASTZ WITH L=6000 SO AS NOT TO MISS
+# USE HG17 BLASTZ WITH L=6000 SO AS NOT TO MISS TOO MUCH CDS ALIGING
     # Low scores can occur with repeats abridged and using the
     # HoxD55.q matrix. PSU's restore_rpts program rescored alignments
     # with the default matrix instead of the BLASTZ_Q matrix.
@@ -1631,6 +1631,7 @@ axtChain -minScore=10000 $1 \
     ssh hgwdev
     cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
     netFilter -minGap=10 fr1.net | hgLoadNet danRer1 netFr1 stdin
+
 # EXTRACT AXT'S AND MAF'S FROM FUGU NET (DONE, 2004-06-25, hartera)
     ssh eieio
     cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
@@ -1865,20 +1866,24 @@ table ctgPos2
     hgLoadSeq danRer1 /gbdb/danRer1/wzESTs/wzcontigs.fa
 
 # BACENDS (DONE, 2004-07-28, hartera)
-# provided by Len Zon's lab at Harvard - BAC clone sequences are from Robert
-# Geisler's lab, Max Planck Institute for Developmental Biology,
-# Tuebingen, Germany
+# Added bacEndPairsBad table (DONE, 2004-08-02, hartera)
+# provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
+# Children's Hospital. Collaborated with them on this track.
+# Anthony DiBiase:adibiase@enders.tch.harvard.edu
+# Yi Zhou:yzhou@enders.tch.harvard.edu 
+# BAC clone end sequences are from Robert Geisler's lab, 
+# Max Planck Institute for Developmental Biology, Tuebingen, Germany
     ssh kksilo
     cd /cluster/data/danRer1/bed/ZonLab
     mkdir /cluster/data/danRer1/bed/ZonLab/bacends
     cp cloneEnd.txt ./bacends/bacends.fa
     cd bacends
+    # copy BAC clone ends seqeunce file to this directory
     faSize bacends.fa
     # 486978153 bases (39070196 N's 447907957 real) in 594614 sequences in
     # 1 files Total size: mean 819.0 sd 230.3 min 0 (zKp108-H09.za)
     # max 5403 (zC259G13.zb) median 796
     # N count: mean 65.7 sd 154.7
-                                                                                
     mkdir /iscratch/i/danRer1/bacends
     faSplit sequence bacends.fa 20 /iscratch/i/danRer1/bacends/bacends
     ls -1S /iscratch/i/danRer1/bacends/*.fa > bacends.lst
@@ -1900,25 +1905,401 @@ table ctgPos2
     para try, check, push, check, ...
 # para time
 # Completed: 6200 of 6200 jobs
-# CPU time in finished jobs:    4833892s   80564.87m  1342.75h   55.95d  0.153 y# IO & Wait Time:                 31979s     532.98m     8.88h    0.37d  0.001 y# Average job time:                 785s      13.08m     0.22h    0.01d
-# Longest job:                     2300s      38.33m     0.64h    0.03d
-# Submission to last job:         14904s     248.40m     4.14h    0.17d
+# CPU time in finished jobs:   4833892s   80564.87m  1342.75h   55.95d  0.153y
+# IO & Wait Time:                31979s     532.98m     8.88h    0.37d  0.001y
+# Average job time:                785s      13.08m     0.22h    0.01d
+# Longest job:                    2300s      38.33m     0.64h    0.03d
+# Submission to last job:        14904s     248.40m     4.14h    0.17d
     # back on kksilo, filter and lift results:
     ssh kksilo
     cd /cluster/data/danRer1/bed/ZonLab/bacends
     pslCheck ./psl/*.psl >& pslCheck.log
     # No problems reported by pslCheck
     pslSort dirs raw.psl temp psl
-    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl \
+    # tried minCover=0.6 but only 55% of sequences were aligned
+    # but with minCover=0.4, 77% of seqeunces are aligned
+    # No minCover, aligns 90% of sequences but with a large number
+    # of extra alignments - noise
+    pslReps -nearTop=0.02 -minCover=0.40 -minAli=0.85 -noIntrons raw.psl \
       bacEnds.psl /dev/null
     liftUp bacEnds.lifted.psl /cluster/data/danRer1/jkStuff/liftAll.lft \
            warn bacEnds.psl
     wc -l bacEnds.lifted.psl
-    # 2955142 bacEnds.lifted.psl
-    # 3717153 bacEnds.lifted2.psl
+    # 3717153 bacEnds.lifted.psl
     rm -r temp
-# ADD REST OF BACENDs
 
+# Need to add accession information and BAC end sequence pairs
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/bacends/bacends.1
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/bacends.1
+    grep ">" ../bacends.fa > bacEnds
+    # remove '>' at beginning of each line
+    perl -pi.bak -e 's/>//' bacEnds
+    # remove ^M char from end of lines
+    perl stripEndChar.pl < bacEnds > bacEnds.names
+    rm bacEnds bacEnds.bak
+    # Kerstin Jekosch at the Sanger Centre: kj2@sanger.ac.uk
+    # provided accession data for BAC End clones - zfish_accs.txt
+    # and for BAC End pairs- BACEnd_accessions.txt - put these in bacends.1 dir
+    # write and use perl script to split BAC Ends into pairs and singles
+    # bacEndPairs.txt and bacEndSingles.txt
+    # For pslPairs, the reverse primer (T7 or .z*) should in the first column
+    # and the forward primer (SP6 or .y*) should be in the second column
+    # There are several reads for some sequences and these have similar names.
+    # Reads for the same sequencee should be in a comma separated list.
+    # Sequence read names can be translated to external clone names as found
+    # in NCBI's clone registry using the name without the suffix and the 
+    # translation of prefixes as follows after removal of dashes 
+    # and extra zeros in the name:
+    # library         external prefix         internal prefix         
+    # CHORI-211		CH211-                  zC
+    # DanioKey        	DKEY-                   zK
+    # DanioKey Pilot  	DKEYP-                  zKp
+    # RZPD-71         	RP71-                   bZ
+    # BUSM1 (PAC)      	BUSM1-                  dZ
+    # e.g. zC001-A03.za becomes CH211-1A03
+    perl getBacEndInfo.pl bacEnds.names BACEnd_accessions.txt zfish_accs.txt
+    
+    # 180280 bacEndPairs.txt  - 571985 sequences
+    # 16020  bacEndSingles.txt - 22629 sequences
+    # 47048  bacEndAccs.aliases
+    # bacEndAccs.aliases contains sequence read names and their
+    # Genbank accessions.  
+    
+    # First process BAC end alignments
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/pairs
+    set bacDir = /cluster/data/danRer1/bed/ZonLab/bacends/bacends.1
+    # these bacEnds vary in size from around 2800 bp to 626,000 bp
+    ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=2000 \
+     -max=650000 -slopval=10000 -hardMax=800000 -slop -short -long -orphan \
+     -mismatch -verbose ../bacEnds.lifted.psl $bacDir/bacEndPairs.txt \
+     all_bacends bacEnds
+     wc -l bacEnds.*
+     # 495 bacEnds.long
+     # 13046 bacEnds.mismatch
+     # 200235 bacEnds.orphan
+     # 72820 bacEnds.pairs
+     # 0 bacEnds.short
+     # 139 bacEnds.slop
+
+    # create header required by "rdb" tools
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes'\
+          > ../header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> ../header
+    # make pairs bed file
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+               | headchg -del > bacEndPairs.bed
+    # also need to process bacEndSingles.txt into a database table
+    # for singles in bacEndSingles.txt, create a dummy file where they
+    # are given zJA11B12T7 as dummy sequence pair. If the single is a forward
+    # sequence, put the dummy sequence in the second column, if the single is
+    # a reverse sequence put in first column. use a perl script to do this.
+    cd /cluster/data/danRer1/bed/ZonLab/bacends
+    set bacDir = /cluster/data/danRer1/bed/ZonLab/bacends/bacends.1
+    mkdir singles
+    cd singles
+    perl formatSingles.pl $bacDir/bacEndSingles.txt > \
+                          $bacDir/bacEndSingles.format
+    # then run pslPairs on this formatted sequence
+    ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=2000 \
+     -max=650000 -slopval=10000 -hardMax=800000 -slop -short -long -orphan \
+     -mismatch -verbose ../bacEnds.lifted.psl $bacDir/bacEndSingles.format \
+     all_bacends bacEnds
+     wc -l bacEnds*
+    # 0 bacEnds.long
+    # 0 bacEnds.mismatch
+    # 14126 bacEnds.orphan
+    # 0 bacEnds.pairs
+    # 0 bacEnds.short
+    # 0 bacEnds.slop
+    # there are 14126 orphans here and 200235 from pair analysis 
+    # so a total of 214361 orphans
+    cat bacEnds.orphan ../bacEnds.orphan > bacEnds.singles
+    wc -l bacEnds.singles
+    # 214361 bacEnds.singles
+    # make singles bed file
+    cat ../header bacEnds.singles | row score ge 300 | sorttbl chr start \
+                  | headchg -del > bacEndSingles.bed
+    cp bacEndSingles.bed ../pairs
+    cd ../pairs
+    # all slop, short, long, mismatch and orphan pairs go into bacEndPairsBad
+    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        bacEnds.orphan | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBad.bed
+    # add bacEndsSingle.bed to bacEnds.load.psl - must not add pair orphans 
+    # twice so create a bed file of bacEndPairsBadNoOrphans.bed without orphans
+ 
+    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBadNoOrphans.bed
+    extractPslLoad -noBin bacEnds.lifted.psl bacEndPairs.bed \
+                bacEndPairsBadNoOrphans.bed  bacEndSingles.bed | \
+                        sorttbl tname tstart | headchg -del > bacEnds.load.psl
+   
+    # load BAC end sequences into seq table so alignments may be viewed
+    mkdir -p /gbdb/danRer1/bacends
+    ln -s /cluster/data/danRer1/bed/ZonLab/bacends/bacends.fa \
+                                /gbdb/danRer1/bacends/BACends.fa
+    hgLoadSeq danRer1 /gbdb/danRer1/bacends/BACends.fa
+    # when loaded into danRer1, Heather found there were rows where
+    # the aligments were the same but the lfNames were different. This is 
+    # due to the presence of multiple reads for the same BAC end sequence.
+    # Sometimes they are slightly different lenghths so the alignments are 
+    # a little different. It would be good to consolidate all of these and
+    # just pick the best alignment. However, here only the identical rows
+    # were merged into one with a list of all the lfNames with that alignment.
+   
+    # load all alignments into temporary database
+    ssh hgwdev
+    echo "create database bacs_rah;" | hgsql danRer1
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/pairs
+    hgLoadBed bacs_rah bacEndPairs bacEndPairs.bed \
+                -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # Loaded 72272 elements of size 11
+    # create a bacEndSingles table like bacEndPairs
+    cp $HOME/kent/src/hg/lib/bacEndPairs.sql ./singles/bacEndSingles.sql
+    # edit to give correct table name
+    hgLoadBed bacs_rah bacEndSingles bacEndSingles.bed \
+                 -sqlTable=singles/bacEndSingles.sql
+    # Loaded 203683 elements of size 11
+    # load all_bacends later
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed bacs_rah bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 203709 elements of size 11
+    # RECREATE BED FILES AND RELOAD TABLES
+    # Need to consolidate similar rows for bacEndPairs and bacEndSingles - same
+    # name, different lfNames and same alignments.
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/bacends/duplicates
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/duplicates
+    hgsql -N -e "select chrom, chromStart, chromEnd, name, strand from \
+          bacEndPairs order by name, chrom, chromStart;" bacs_rah > pairs.txt
+    sort pairs.txt | uniq -c > pairs.txt.uniq
+    wc -l pairs*
+    # 72272 pairs.txt
+    # 53992 pairs.txt.uniq
+    # for replicate rows, find all the unique lfNames and put these
+    # in one row with the relevant lfStarts, lfSizes and correct lfCount
+    perl removeReplicates2.pl pairs.txt.uniq bacEndPairs > pairsNoReps.bed
+    # repeat for singles
+    hgsql -N -e "select chrom, chromStart, chromEnd, name, strand from \
+       bacEndSingles order by name, chrom, chromStart;" bacs_rah > singles.txt
+    sort singles.txt | uniq -c > singles.txt.uniq
+    wc -l singles*
+    # 203683 singles.txt
+    # 179170 singles.txt.uniq
+    perl removeReplicates.pl singles.txt.uniq bacEndSingles \
+                             > singlesNoReps.bed                                   hgsql -N -e "select chrom, chromStart, chromEnd, name, strand from \
+          bacEndPairsBad order by name, chrom, chromStart;" bacs_rah \
+          > badPairs.txt
+    sort badPairs.txt | uniq -c > badPairs.txt.uniq
+    wc -l badPairs*
+    # 203709 badPairs.txt
+    # 178304 badPairs.txt.uniq
+    perl removeReplicates.pl badPairs.txt.uniq bacEndPairsBad \
+         > badPairsNoReps.bed
+                                                                               
+    # reload sequences into tables in danRer1
+    # bed files are already sorted by chrom and chromStart
+    # so no need to re-sort                                                                                
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/duplicates
+    echo "drop table bacEndPairs;" | hgsql danRer1
+    echo "drop table bacEndPairsBad;" | hgsql danRer1
+    echo "drop table bacEndSingles;" | hgsql danRer1
+    echo "drop table all_bacends;" | hgsql danRer1
+                                                                              
+    hgLoadBed danRer1 bacEndPairs pairsNoReps.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # Loaded 53992 elements of size 11
+    hgLoadBed danRer1 bacEndPairsBad badPairsNoReps.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 178304 elements of size 11
+    # edit to give correct table name
+    hgLoadBed danRer1 bacEndSingles singlesNoReps.bed \
+                 -sqlTable=../singles/bacEndSingles.sql
+    # Loaded 179170 elements of size 11
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/pairs
+    hgLoadPsl danRer1 -table=all_bacends bacEnds.load.psl
+    # 2835212 record(s), 0 row(s) skipped, 706 warning(s) loading psl.tab
+    # after merging rows with the same BAC name, the scoring is now
+    # wrong in bacEndPairs, bacEndSingles and bacEndSingles.
+    # Scores should be 1000 if there is 1 row for that name, else
+    # 1500/number of rows for that sequence name - calculated by pslPairs.
+    # Correct the scores.
+    
+    ssh hgwdev
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/bacends/scores
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/scores
+    hgsql -N -e "select name from bacEndPairs;" danRer1 \
+                 | sort | uniq -c > pairs.hits
+    # download bacEndPairs table
+    hgsql -N -e "select * from bacEndPairs;" danRer1 > bacEndPairs.out
+    # use perl script to change scores from this file and write to new file
+        perl correctScores.pl bacEndPairs.out pairs.hits \
+                          > bacEndPairsGoodScores.bed
+    # same for singles
+    hgsql -N -e "select name from bacEndSingles;" danRer1 \
+                 | sort | uniq -c > singles.hits
+    # dowload bacEndSingles table
+    hgsql -N -e "select * from bacEndSingles;" danRer1 > bacEndSingles.out
+    perl correctScores.pl bacEndSingles.out singles.hits \
+                         > bacEndSinglesGoodScores.bed
+    # add bacEndPairsBad -  (hartera, 2004-08-02)
+    # this was reloaded temporarily into bacs_rah
+    hgsql -N -e "select name from bacEndPairsBad;" bacs_rah \
+                 | sort | uniq -c > badPairs.hits
+    hgsql -N -e "select * from bacEndPairsBad;" bacs_rah > bacEndPairsBad.out 
+    perl correctScores.pl bacEndPairsBad.out badPairs.hits \
+                         > bacEndPairsBadGoodScores.bed
+    # check scores are correct now
+    # reload BAC ends database tables
+    hgsql -e "drop table bacEndPairs;" danRer1
+    hgsql -e "drop table bacEndSingles;" danRer1
+    hgsql -e "drop table bacEndPairsBad;" danRer1
+    hgLoadBed danRer1 bacEndPairs bacEndPairsGoodScores.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # Loaded 53992 elements of size 11
+    hgLoadBed danRer1 bacEndSingles bacEndSinglesGoodScores.bed \
+                 -sqlTable=../singles/bacEndSingles.sql
+    # Loaded 179170 elements of size 11
+    # 179170 record(s), 0 row(s) skipped, 23 warning(s) loading bed.tab
+    # loaded bacEndPairsBad table (hartera, 2004-08-02)
+    hgLoadBed danRer1 bacEndPairsBad bacEndPairsBadGoodScores.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 178304 elements of size 11
+    # 178304 record(s), 0 row(s) skipped, 23 warning(s) loading bed.tab
+
+    # From getBacEndInfo.pl, created a bacEndsAcc.aliases file
+    # this has the format <alias> <id> <trueName>
+    # where trueName is the accession provided by Sanger in
+    # BACEnd_accessions.txt and aliases are the read names for sequences
+    # Create a bacEndAlias table.
+    cat > bacEndAlias.as << $HOME/kent/src/hg/lib
+table bacEndAlias
+"BAC ends aliases and associated identification numbers"
+    (
+    string alias;       "BAC end read name"
+    uint identNo;       "Identification number of BAC End"
+    string acc;         "GenBank accession for the BAC End"
+    )
+'_EOF_'
+    # << this line makes emacs coloring happy
+    cd $HOME/kent/src/hg/lib
+    autoSql bacEndAlias.as bacEndAlias
+    cp bacEndAlias.h ../inc
+    # edit bacEndAlias.sql to add INDEX(identNo) to indices
+    # add and commit to cvs bacEndAlias.as, .sql, .c and .h
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/bacends.1
+    echo "drop table bacEndAlias" | hgsql danRer1
+    hgsql danRer1 < $HOME/kent/src/hg/lib/bacEndAlias.sql
+    echo "load data local infile 'bacEndAccs.aliases' into table bacEndAlias"\
+         | hgsql danRer1
+   # Add a xref table to give external clone registry names, internal names
+   # and Genbank accessions
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/bacCloneXRef.as
+table bacCloneXRef
+"BAC clones external names, internal sequence names and Genbank accessions"
+    (
+    string extName;       "External name for BAC clone"
+    string intName;       "Internal sequncing name for BAC clone"
+    string acc;         "Genbank accession for the BAC End"
+    )
+'_EOF_'
+    # << this line makes emacs coloring happy
+    cd $HOME/kent/src/hg/lib
+    autoSql bacCloneXRef.as bacCloneXRef
+    cp bacCloneXRef.h ../inc
+    # edit bacCloneXRef.sql to add INDEX(extName) to indices
+    # edit bacCloneXRef.sql to add INDEX(extName) to indices
+    # add and commit to cvs bacCloneXRef.as, .sql, .c and .h
+    cd /cluster/data/danRer1/bed/ZonLab/bacends
+    # use zfish_accs.txt provided by the Sanger Centre to create a list
+    # of BAC clone names, internal names and Genbank accessions
+    perl getBACInfo.pl zfish_accs.txt > bacCloneXRef.txt
+    # there are 35 clones with different prefixes to those in our track
+    # these are in BACerror.log and are not loaded into the XRef table
+    echo "drop table bacCloneXRef" | hgsql danRer1
+    hgsql danRer1 < $HOME/kent/src/hg/lib/bacCloneXRef.sql
+    echo "load data local infile 'bacCloneXRef.txt' into table bacCloneXRef"\
+         | hgsql danRer1
+    mv bacCloneXRef.txt ./bacends.1
+    # edit doLinkedFeaturesSeries in hgc.c to use this information
+    # so that links to clone and clone end accessions can be made on the
+    # details pages.
+  
+    # ALIGNED BAC END SEQUENCES TO CHECK THAT ONES WITH SIMILAR NAMES
+    # ARE READS FROM THE SAME SEQUENCES.
+    # also the sequences ending in .z or .Z and .y or .Y were of unknown
+    # direction. Sanger thought that z may be forward but aligning the
+    # sequences suggested that z was actually reverse knowing that SP6 
+    # is a forward sequence and T7 is reverse.
+    # Anthony DiBiase wrote script : countns.pl to filter out sequences with
+    # too many Ns. threshold is 80% Ns
+    cat bacends.fa | perl countns.pl > bacends.percentNs80
+    grep '>' bacends.percentNs80 | sed -e 's/>//' > bacends.remove
+    perl removeNames.pl ./bacends.1/bacEnds.names bacends.remove \
+         > bacends.noseqswithlotsNs
+    # get these good sequences with < 80% Ns
+    $HOME/bin/i386/faSomeRecords bacends.fa \
+          bacends.noseqswithlotsNs bacends_good.fa
+    # blast
+    ssh kkr1u00
+    mkdir -p /iscratch/i/danRer1/bacends/clusterBlastdb
+    cp /cluster/data/danRer1/bed/ZonLab/bacends/bacends_good.fa \
+       /iscratch/i/danRer1/bacends/clusterBlastdb
+    cd /iscratch/i/danRer1/bacends/clusterBlastdb
+    # do all against all blast
+    /scratch/blast/formatdb -i bacends_good.fa -t bacendsgood \
+                            -n bacendsgood -p F
+    mkdir -p /iscratch/i/danRer1/bacends/clusterBlast
+    faSplit sequence /cluster/data/danRer1/bed/ZonLab/bacends/bacends_good.fa \
+            500 /iscratch/i/danRer1/bacends/clusterBlast/bacendsgood
+    iSync
+    # do kilokluster run
+    ssh kk
+    cd /cluster/data/danRer1/bed/ZonLab/bacends
+    mkdir clusterBlast
+    cd clusterBlast
+    mkdir blastout
+    ls -1S /iscratch/i/danRer1/bacends/clusterBlast/*.fa > bacs.lst
+    ls -1S /iscratch/i/danRer1/bacends/clusterBlastdb/*.nsq \
+           | sed "s/.nsq//" > bacsBlastdb.lst
+    # Make blast script
+    cat > blastSome << end
+#!/bin/csh
+setenv BLASTMAT /scratch/blast/data
+/scratch/blast/blastall -p blastn -d \$1 -i \$2 -o \$3 -e 0.0
+end
+    # << this line keeps emacs coloring happy
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > blastGsub <<end
+#LOOP
+blastSome $(path1) {check in line+ $(path2)} {check out line+ blastout/$(root1)_$(root2).out}
+#ENDLOOP
+end
+    # << this line keeps emacs coloring happy
+    gensub2 bacsBlastdb.lst bacs.lst blastGsub blastSpec
+    para create blastSpec
+    para try, check, push etc.
+    # convert to psl format
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/clusterBlast
+    mkdir psl scores
+    foreach b (blastout/*.out)
+      set t = $b:t
+      set s = $t:r
+      echo "Creating ${s}.psl"
+      /cluster/bin/i386/blastToPsl $b psl/${s}.psl -scores=scores/${s}.scores \
+                     >>& blastToPsl.log
+    end
+    pslSort dirs raw.psl tmp psl
+    mv raw.psl clusterBacEnds.psl
+    awk '{print $10, $14, $9;}' clusterBacEnds.psl > clusterBacEnds.out
+    # look at blast results for e-value threshold of 0
+    # 
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER1
 # (DONE, 2004-07-13, hartera)
@@ -1935,6 +2316,127 @@ table ctgPos2
     echo 'select * from blatServers where db="danRer1";' \
     | hgsql -h genome-testdb hgcentraltest
 
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-07-20, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1
+    #- Build the .zip files
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf zip
+mkdir zip
+# chrom AGP's
+zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
+# chrom RepeatMasker out files
+zip -j zip/chromOut.zip */chr*.fa.out
+# soft masked chrom fasta
+zip -j zip/chromFa.zip */chr*.fa
+# hard masked chrom fasta
+zip -j zip/chromFaMasked.zip */chr*.fa.masked
+# chrom TRF output files
+cd bed/simpleRepeat
+zip ../../zip/chromTrf.zip trfMask/chr*.bed
+cd ../..
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=danRer1 -native GenBank mrna \
+        /cluster/data/danRer1/zip/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=danRer1 -xeno GenBank mrna \
+        /cluster/data/danRer1/zip/xenoMrna.fa
+# get native RefSeq mRNAs
+./bin/i386/gbGetSeqs -db=danRer1 -native refseq mrna \
+/cluster/data/danRer1/zip/refMrna.fa
+# get native GenBank ESTs
+./bin/i386/gbGetSeqs -db=danRer1 -native GenBank est \
+/cluster/data/danRer1/zip/est.fa
+                                                                                
+cd /cluster/data/danRer1/zip
+# zip GenBank native and xeno mRNAs, native ESTs and RefSeq mRNAs
+zip -j mrna.zip mrna.fa
+zip -j xenoMrna.zip xenoMrna.fa
+zip -j refMrna.zip refMrna.fa
+zip -j est.zip est.fa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh ./jkStuff/zipAll.csh |& tee ./jkStuff/zipAll.log
+    cd zip
+    #- Look at zipAll.log to make sure all file lists look reasonable.
+    # Make upstream files and Copy the .zip files to
+    # hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/danRer1/zip
+    # make upstream files for zebrafish RefSeq
+    featureBits danRer1 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    featureBits danRer1 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+                                                                                
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer1
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    mkdir -p $gp/chromosomes
+    foreach f (../*/chr*.fa) 
+       zip -j $gp/chromosomes/$f:t.zip $f
+    end
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
+    cd $gp/chromosomes
+    md5sum *.zip > md5sum.txt
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+# MAKE VSHG17 DOWNLOADABLES (DONE, 2004-07-20, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChrom
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer1
+    mkdir -p $gp/vsHg17/axtChrom
+    cp -p *.axt $gp/vsHg17/axtChrom
+    cd $gp/vsHg17/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    zip -j /cluster/data/danRer1/zip/hg17.chain.zip hg17.chain
+    rm hg17.chain
+    cp humanhg17.net hg17.net
+    zip -j /cluster/data/danRer1/zip/hg17.net.zip hg17.net
+    rm hg17.net
+    cd $gp/vsHg17
+    mv /cluster/data/danRer1/zip/hg17*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+                                                                                
+# MAKE VSFR1 DOWNLOADABLES (DONE, 2004-07-26, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChrom
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer1
+    mkdir -p $gp/vsFr1/axtChrom
+    cp -p *.axt $gp/vsFr1/axtChrom
+    cd $gp/vsFr1/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+    # add the axtNet *.axt in blastz.fr1/axtNet
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtNet
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer1
+    mkdir -p $gp/vsFr1/axtNet
+    cp -p *.axt $gp/vsFr1/axtNet
+    cd $gp/vsFr1/axtNet
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+                                                                                
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
+    cp all.chain fr1.chain
+    zip -j /cluster/data/danRer1/zip/fr1.chain.zip fr1.chain
+    rm fr1.chain
+    zip -j /cluster/data/danRer1/zip/fr1.net.zip fr1.net
+    cd $gp/vsFr1
+    mv /cluster/data/danRer1/zip/fr1*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+                                                                                
 # TBLASTN HG16 KNOWN GENES TRACK (DONE, 2004-07-23, hartera)
     # Collaboration with Anthony DiBiase and Yi Zhou of Leonard Zon's lab at 
     # the Childrens Hospital, Boston - part of the Zebrafish Genome Initiative
@@ -1976,13 +2478,13 @@ table pslWQueryID
     string    queryID;         "query ID field"
     )
 '_EOF_'
-                                                                                
     cd $HOME/kent/src/hg/lib/
     autoSql pslWQueryID.as pslWQueryID
     mv pslWQueryID.h ../inc
     # edit pslWQueryID.sql to have:
     # index(tName(32),tStart,tEnd) instead of PRIMARY KEY (matches)
     # commit to CVS the .as, .sql, .h and .c files
+    
     ssh hgwdev
     cd /cluster/data/danRer1/bed/ZonLab/blast
     echo "drop table pslWQueryID" | hgsql danRer1
@@ -2014,11 +2516,9 @@ table pslWQueryID
     mkdir -p /cluster/data/danRer1/bed/ZonLab/tblastn
     cd tblastn
     # copy hg16_kg_proteinseq.fa here
-                                                                                
     mkdir /iscratch/i/danRer1/hg16kgPep
     faSplit sequence hg16_kg_proteinseq.fa 20 \
               /iscratch/i/danRer1/hg16kgPep/hg16kg
-                                                                                
     cd /iscratch/i/danRer1/
     mkdir blastdb
     cd blastdb
@@ -2028,7 +2528,6 @@ table pslWQueryID
        /scratch/blast/formatdb -i $c -t  $h -n $h -p F
     end
     iSync
-                                                                                
     ssh kk
     cd /cluster/data/danRer1/bed/ZonLab/tblastn
     mkdir blastout
@@ -2053,7 +2552,6 @@ end
     gensub2 zv3.lst hg16kg.lst blastGsub blastSpec
     para create blastSpec
     para try, check, push etc.
-                                                                                
 # para time
 # Completed: 5270 of 5270 jobs
 # CPU time in finished jobs:   10936672s  182277.86m  3037.96h  126.58d  0.347 y# IO & Wait Time:                707198s   11786.64m   196.44h    8.19d  0.022 y# Average job time:                2209s      36.82m     0.61h    0.03d
@@ -2071,7 +2569,6 @@ end
 use strict;
 my $found = "false"; # flag set when query line found
 open(QUERY, ">>queries.log") || die "Can not create error.log:$!";
-                                                                                
 while (<STDIN>) {
    if (/^(Query=\s?[A-Z]{1,2}[0-9]{4,})\|\w+/) {
       my $query = $1;
@@ -2086,9 +2583,7 @@ while (<STDIN>) {
    }
    else {
       print;
-                                                                                
    }
-                                                                                
 }
 '_EOF_'
    foreach c (blastout/*.out)
@@ -2464,4 +2959,4 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
     ssh hgwdev
     cd /cluster/data/danRer1/bed/tblastn.hg16KG/blastOut
     hgLoadPsl danRer1 blastHg16KG.psl
-#end Heman Proteins
+#end Human Proteins
