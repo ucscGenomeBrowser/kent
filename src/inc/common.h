@@ -376,6 +376,10 @@ char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
 
+struct slName *slNameAddTail(struct slName **pList, char *name);
+/* Add name to end of list (not efficient for long lists),
+ * and return it. */
+
 struct slName *slNameCloneList(struct slName *list);
 /* Return clone of list. */
 
