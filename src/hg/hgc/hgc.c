@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.821 2005/01/20 01:28:48 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.822 2005/01/21 04:08:57 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5019,6 +5019,8 @@ char *typeWords[2];
 char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
+
+hgBotDelay();	/* Prevent abuse. */
 
 /* Figure out other database. */
 if (chopLine(type, typeWords) < ArraySize(typeWords))
