@@ -360,7 +360,7 @@ puts(
      "the chances of successful conversion.\n"
      );
 
-getIndexedGenomeDescriptions(&genomeList, &genomeCount, FALSE);
+getIndexedGenomeDescriptions(&genomeList, &genomeCount, TRUE);
 
 /* choose whether to use the db supplied by cgi or our default */
 if(origDb != NULL && strstr(origDb, "hg") == NULL)
