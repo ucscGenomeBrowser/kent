@@ -1508,6 +1508,10 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	    if (pi->psl->strand[0] == '-') 
 	      {
 		int temp = leftShift;
+		prevqend += rightShift;
+		qstart += rightShift;
+		prevtend += rightShift;
+		tstart += rightShift;
 		leftShift = rightShift;
 		rightShift = temp;
 	      }
@@ -1596,6 +1600,10 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	    if (pi->psl->strand[0] == '-') 
 	      {
 		int temp = leftShift;
+		prevqend += rightShift;
+		qstart += rightShift;
+		prevtend += rightShift;
+		tstart += rightShift;
 		leftShift = rightShift;
 		rightShift = temp;
 	      }
