@@ -10,4 +10,6 @@ install:
 	cp -p --remove-destination countRows.csh           ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
+	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
+	cp -p --remove-destination compareWholeColumn.csh  ${SCRIPTS}
 

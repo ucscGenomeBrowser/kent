@@ -4,7 +4,7 @@
 
 # Script to do alignment part of build.  This is normally called by
 # genbank-build, however it can be run by hand if the alignment needs to
-# be manuall completed.  Edit this file to add new genomes and assemblies.
+# be manually completed.  Edit this file to add new genomes and assemblies.
 # 
 # -finish - Finish processing an alignment that was completed by hand.
 # -workdir dir - set the workdir, need with -finish if the date has
@@ -17,7 +17,7 @@ trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
 exec </dev/null
 
 # config
-databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1"
+databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1 ci1"
 
 # initialize
 gbRoot=/cluster/store5/genbank

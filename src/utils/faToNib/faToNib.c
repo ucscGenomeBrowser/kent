@@ -4,7 +4,7 @@
 #include "nib.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faToNib.c,v 1.6 2004/02/05 18:39:26 kent Exp $";
+static char const rcsid[] = "$Id: faToNib.c,v 1.7 2004/07/13 19:21:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,7 +15,6 @@ errAbort(
   "   faToNib [options] in.fa out.nib\n"
   "options:\n"
   "   -softMask - create nib that soft-masks lower case sequence\n"
-  "               Note gfServer/gfClient don't know about this yet\n"
   "   -hardMask - create nib that hard-masks lower case sequence\n");
 }
 

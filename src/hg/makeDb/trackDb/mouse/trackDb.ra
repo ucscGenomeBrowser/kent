@@ -24,6 +24,14 @@ priority 8
 visibility hide
 type bed 4 +
 
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track jaxQTL
 shortLabel QTL
 longLabel Quantitative Trait Loci From Jax/MGI

@@ -47,7 +47,7 @@ otherDb hg15
 
 track blastzBestHg15
 shortLabel Human Best
-longLabel Blastz Human (hg15-Apr 03)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 113
 visibility hide
@@ -59,7 +59,7 @@ otherDb hg15
 
 track blastzHg15
 shortLabel Human All
-longLabel Blastz Human (hg15-Apr 03) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 114
 visibility hide
@@ -71,7 +71,7 @@ otherDb hg15
 
 track chainHg15
 shortLabel Human Chain 
-longLabel Chained Blastz Human (hg15-Apr 03)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 115
 visibility dense
@@ -83,7 +83,7 @@ otherDb hg15
 
 track netHg15
 shortLabel Human Net
-longLabel Human (hg15-Apr 03)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 116
 visibility dense
@@ -103,17 +103,18 @@ otherDb hg15
 
 track syntenyHg15
 shortLabel Human Synteny
-longLabel $Organism/Human (hg15-Apr 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 127
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 +
+otherDb hg15
 
 track blastzMm3
 shortLabel Mm3 Blastz
-longLabel Mouse (Feb. 03) All Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
 group compGeno
 priority 214
 visibility hide
@@ -125,7 +126,7 @@ otherDb mm3
 
 track chainMm3
 shortLabel Mouse Chain 
-longLabel Mouse (Feb. 03) Chained Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 215
 visibility dense
@@ -136,7 +137,7 @@ type chain mm3
 
 track netMm3
 shortLabel Mouse Net
-longLabel Mouse (Feb. 03) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 216
 visibility dense
@@ -146,7 +147,7 @@ otherDb mm3
 
 track blastzTightMm3
 shortLabel Mm3 Tight
-longLabel Mouse (Feb. 03) Tight Subset of Best Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Tight Subset of Best Blastz Alignments
 group compGeno
 priority 212
 visibility hide
@@ -158,7 +159,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Mm3 Best
-longLabel Mouse (Feb. 03) Best-in-Genome Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Best-in-Genome Blastz Alignments
 group compGeno
 priority 213
 visibility hide
@@ -170,7 +171,7 @@ otherDb mm3
 
 track mm3SynNet
 shortLabel Mm3 Syntenic Net
-longLabel Mouse (Feb. 03) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 217
 visibility hide
@@ -180,13 +181,14 @@ otherDb mm3
 
 track syntenyMm3
 shortLabel Mouse Synteny
-longLabel Rat/Mouse Synteny Using Blastz Single Coverage (100k window)
+longLabel Rat/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 218
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 .
+otherDb mm3
 
 track multizHg15Mm3
 shortLabel Rat/Mouse/Human
@@ -206,7 +208,7 @@ type maf
 
 track blastzMm4
 shortLabel Mm4 Blastz
-longLabel Mouse (Oct 03/Mm4) All Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
 group compGeno
 priority 214.1
 visibility hide
@@ -218,7 +220,7 @@ otherDb mm4
 
 track chainMm4
 shortLabel Mm4 Chain 
-longLabel Mouse (Oct 03/Mm4) Chained Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 215.1
 visibility dense
@@ -229,7 +231,7 @@ type chain mm4
 
 track netMm4
 shortLabel Mm4 Net
-longLabel Mouse (Oct 03/Mm4) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 216.1
 visibility dense
@@ -239,7 +241,7 @@ otherDb mm4
 
 track blastzBestMm4
 shortLabel Mm4 Best
-longLabel Mouse (Oct 03/Mm4) Best-in-Genome Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 213.1
 visibility hide
@@ -251,7 +253,7 @@ otherDb mm4
 
 track blastzTightMm4
 shortLabel Mm4 Tight
-longLabel Mouse (Oct 03/Mm4) Tight Subset of Best Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 212.1
 visibility hide
@@ -263,17 +265,18 @@ otherDb mm4
 
 track syntenyMm4
 shortLabel Mm4 Synteny
-longLabel Rat/Mouse (Oct 03/Mm4) Synteny Using Blastz Single Coverage (100k window)
+longLabel Rat/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 218.1
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 .
+otherDb mm4
 
 track syntenyNetMm4
 shortLabel Mm4 Syntenic Net
-longLabel Mouse (Oct 03/Mm4) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 217.1
 visibility hide
@@ -307,7 +310,7 @@ urlLabel Exofish Ecotig Display Link:
 
 track blastzHg17
 shortLabel Hg17 Blastz
-longLabel Blastz Human (hg17-May 04) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 130
 visibility hide
@@ -319,19 +322,19 @@ otherDb hg17
 
 track blastzBestHg17
 shortLabel Hg17 Best
-longLabel Blastz Human (hg17-May 04)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 131
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno hg15
-otherDb hg15
+type psl xeno hg17
+otherDb hg17
 
 track blastzTightHg17
 shortLabel Hg17 Tight
-longLabel Human Blastz (hg17-May 04), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 132
 visibility hide
@@ -343,7 +346,7 @@ otherDb hg17
 
 track chainHg17
 shortLabel Hg17 Chain 
-longLabel Chained Blastz Human (hg17-May 04)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 133
 visibility hide
@@ -355,7 +358,7 @@ otherDb hg17
 
 track netHg17
 shortLabel Hg17 Net
-longLabel Human (hg17-May 04)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134
 visibility hide
@@ -365,17 +368,18 @@ otherDb hg17
 
 track ensRatMusHom
 shortLabel Hg17 Synteny
-longLabel $Organism/Human (hg17-May 04) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 135
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 6+
+otherDb hg17
 
 track syntenyNetHg17
 shortLabel Hg17 Syntenic Net
-longLabel Human (hg17-May 04) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 136
 visibility hide

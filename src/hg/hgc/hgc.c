@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.682 2004/07/08 02:52:44 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.690 2004/07/15 19:20:30 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -666,7 +666,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 #define PURPLE 0x9900cc
 #define BLACK 0x000000
 #define CYAN 0x00FFFF
-#define ORANGE 0xFF6600
+#define ORANGE 0xDD6600
 #define BROWN 0x663300
 #define YELLOW 0xFFFF00
 #define MAGENTA 0xFF00FF
@@ -901,11 +901,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand);
 
     qPtr = qStart;
-    qCodonPos = tCodonPos; /* put translation back in sync */
+    if (gp->exonFrames == NULL)
+        qCodonPos = tCodonPos; /* put translation back in sync */
     if (!posStrand)
         {
         qPtr = qEnd;
-        /* skip to next exon fi we are starting in the middle of a gene  - should not happen */
+        /* skip to next exon if we are starting in the middle of a gene  - should not happen */
         while ((tPtr < nextEnd) && (nextEndIndex > 0))
             {
             nextEndIndex--;
@@ -951,6 +952,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     tCoding=TRUE;
                     dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
                     addTag(dyT,exonTag);
+                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
+                        tCodonPos = gp->exonFrames[nextEndIndex]+1;
                     if (qStopCodon == FALSE) 
                         {
                         qCoding=TRUE;
@@ -973,6 +976,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 		if (qStopCodon == FALSE) 
 		    {
 		    qCoding=TRUE;
+                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
+                        tCodonPos = gp->exonFrames[nextEndIndex]+1;
 		    qCodonPos = tCodonPos; /* put translation back in sync */
 		    qFlip = tFlip;
 		    }
@@ -1003,12 +1008,14 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     nextEndIndex++;
                     nextStart = gp->exonStarts[nextEndIndex];
                     nextEnd = gp->exonEnds[nextEndIndex];
+                    if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
+                        tCodonPos = gp->exonFrames[nextEndIndex]+1;
                     }
                 }
             else
                 {
                 /* look for end of exon  negative strand */
-                if (tPtr == nextEnd)
+                if (tPtr == nextEnd && tPtr != tEnd)
                     {
                     tCoding=FALSE;
                     qCoding=FALSE;
@@ -1030,8 +1037,11 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qCoding=TRUE;
                     if (tPtr == tStart) 
                         {
-                        tCodonPos=1;
-                        qCodonPos=1;
+                        if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
+                            tCodonPos = gp->exonFrames[nextEndIndex]+1;
+                        else
+                            tCodonPos=1;
+                        qCodonPos=tCodonPos;
                         }
                     }
                 /* look for stop codon and color it red */
@@ -1052,11 +1062,14 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qClass=STARTCODON;
                     tCoding=TRUE;
                     qCoding=TRUE;
-                    if (tPtr == tStart-3) 
+                    if (tPtr == tStart) 
                         {
-                        tCodonPos=1;
-                        qCodonPos=1;
+                        if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
+                            tCodonPos = gp->exonFrames[nextEndIndex]+1;
+                        else
+                            tCodonPos=1;
                         }
+                    qCodonPos=tCodonPos;
                     }
                 /* look for stop codon and color it red - negative strand*/
                 if ((tPtr <= tEnd+3) && (tPtr >= (tEnd+1)))
@@ -1069,7 +1082,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             if (posStrand)
                 {
-                /* look for 3' utr and color it dk grey */
+                /* look for 3' utr and color it orange */
                 if (tPtr == (tEnd +3) )
                     {
                     tClass = UTR3;
@@ -1078,8 +1091,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else 
                 {
-                /* look for 3' utr and color it dk grey negative strand case*/
-                if (tPtr == (tEnd ) )
+                /* look for 3' utr and color it orange negative strand case*/
+                if (tPtr == (tEnd) )
                     {
                     tClass = UTR3;
                     qClass = UTR3;
@@ -1277,17 +1290,15 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 }
 
 struct axt *getAxtListForGene(struct genePred *gp, char *nib, char *fromDb, char *toDb,
-		       char *alignment)
+		       struct lineFile *lf)
 /* get all axts for a gene */
 {
-struct lineFile *lf ;
 struct axt *axt, *axtGap;
 struct axt *axtList = NULL;
 int prevEnd = gp->txStart;
 int prevStart = gp->txEnd;
 int tmp;
 
-lf = lineFileOpen(getAxtFileName(gp->chrom, toDb, alignment, fromDb), TRUE);
 while ((axt = axtRead(lf)) != NULL)
     {
     if (sameString(gp->chrom , axt->tName) && 
@@ -1312,7 +1323,7 @@ while ((axt = axtRead(lf)) != NULL)
                 slAddHead(&axtList, axtGap);
                 }
             }
-        else if (prevEnd < (axt->tStart)-1)
+        else if (prevEnd < (axt->tStart))
             {
             axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart),gp->strand[0]);
             slAddHead(&axtList, axtGap);
@@ -1427,26 +1438,54 @@ void showGenePos(char *name, struct trackDb *tdb)
 char *track = tdb->tableName;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct genePred *gp = NULL;
+struct genePred *gpList = NULL, *gp = NULL;
 boolean hasBin; 
-int posCount = 0;
 char table[64];
 
 hFindSplitTable(seqName, track, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s'", table, name);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+safef(query, sizeof(query), "name = \"%s\"", name);
+gpList = genePredReaderLoadQuery(conn, table, query);
+for (gp = gpList; gp != NULL; gp = gp->next)
     {
-    if (posCount > 0)
-        printf("<BR>\n");
-    ++posCount;
-    gp = genePredLoad(row + hasBin);
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
-    genePredFree(&gp);
+    if (gp->name2 != NULL)
+        {
+        printf("<b>Alternate Name:</b> %s<br>\n",gp->name2);
+        }
+    if (gp->exonFrames != NULL ) 
+        switch (gp->cdsStartStat)
+            {
+            case cdsNone:        /* "none" - No CDS (non-coding)  */
+                printf("<b>No CDS Start (non-coding)</b><br>\n");
+                break;
+            case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
+                printf("<b>CDS Start is unknown. (coding, but not known)</b><br>\n");
+                break;
+            case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
+                printf("<b>CDS Start is not complete at this end of gene. <br>\n");
+                break;
+            case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
+                printf("<b>CDS Start is complete. <br>\n");
+                break;
+            }
+    if (gp->exonFrames != NULL ) 
+        switch (gp->cdsEndStat)
+            {
+            case cdsNone:        /* "none" - No CDS (non-coding)  */
+                printf("<b>No CDS End (non-coding)</b><br>\n");
+                break;
+            case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
+                printf("<b>CDS End is unknown. (coding, but not known)</b><br>\n");
+                break;
+            case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
+                printf("<b>CDS End is not complete at this end of gene. <br>\n");
+                break;
+            case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
+                printf("<b>CDS End is complete. <br>\n");
+                break;
+            }
     }
-sqlFreeResult(&sr);
+genePredFreeList(&gpList);
 hFreeConn(&conn);
 }
 
@@ -1533,11 +1572,7 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo")
-    && !sameString(tdb->tableName, "exoniphy") 
-    /* FIXME: remove this line when htcGenePsl is fixed so that it
-       uses frame when available */
-    )
+if (hTableExists("axtInfo"))
     {
     puts("<LI>\n");
     hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
@@ -1699,6 +1734,13 @@ chain = chainHeadLoad(row + rowOffset);
 sqlFreeResult(&sr);
 chainDbAddBlocks(chain, track, conn);
 return chain;
+}
+
+void linkToOtherBrowserExtra(char *otherDb, char *chrom, int start, int end, char *extra)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&%s&position=%s%%3A%d-%d\">",
+   otherDb, extra, chrom, start+1, end);
 }
 
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
@@ -2698,6 +2740,7 @@ if (sameString(action, "Extended case/color options"))
     return;
     }
 pushWarnHandler(htmlVaWarn);
+hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
@@ -3724,7 +3767,7 @@ else if (startsWith("mrnaBlastz",track  ))
 else if (startsWith("pseudoMrna",track) || startsWith("pseudoGeneLink",track))
     {
     type = "mRNA";
-    table = "mrnaBlastz";
+    table = "pseudoMrna";
     }
 else if (startsWith("celeraMrna",track))
     {
@@ -3744,6 +3787,15 @@ printRnaSpecs(tdb, acc);
 
 /* Get alignment info. */
 pslList = getAlignments(conn, table, acc);
+if (pslList == NULL)
+    {
+    /* this was not actually a click on an aligned item -- we just
+     * want to display RNA info, so leave here */
+    hFreeConn(&conn);
+    htmlHorizontalLine();
+    printf("No alignment available for mRNA %s.", acc);
+    return;
+    }
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
 if (sameString(tdb->tableName, "mrnaBlastz"))
@@ -7370,7 +7422,7 @@ printf("<ul>");
 if (!sameString(pg->refSeq,"noRefSeq"))
     {
     printf("<LI><B>RefSeq:</B> %s \n", pg->refSeq);
-    linkToOtherBrowser(database, pg->gChrom, pg->rStart, pg->rEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->rStart, pg->rEnd, "refGene=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->rStart, pg->rEnd);
     printf("</A></LI>");
     }
@@ -7387,7 +7439,7 @@ if (!sameString(pg->kgName,"noKg"))
                 "hgg_start", pg->kStart,
                 "hgg_end", pg->kEnd);
     printf(">%s</A>  ",pg->kgName);
-    linkToOtherBrowser(database, pg->gChrom, pg->kStart, pg->kEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->kStart, pg->kEnd, "knownGene=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->kStart, pg->kEnd);
     printf("</A></LI>");
     if (hTableExists("knownGene"))
@@ -7411,14 +7463,14 @@ else
     {
     /* display mrna */
     printf("<LI><B>mRna:</B> %s \n", pg->name);
-    linkToOtherBrowser(database, pg->gChrom, pg->gStart, pg->gEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->gStart, pg->gEnd, "all_mrna=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
     printf("</A></LI>");
     }
 if (!sameString(pg->mgc,"noMgc"))
     {
     printf("<LI><B>MGC Gene:</B> %s \n", pg->mgc);
-    linkToOtherBrowser(database, pg->gChrom, pg->mStart, pg->mEnd);
+    linkToOtherBrowserExtra(database, pg->gChrom, pg->mStart, pg->mEnd, "mgcGenes=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
     printf("</A></LI>");
     }
@@ -7445,12 +7497,12 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
     sqlFreeResult(&sr);
     }
 
-if (hTableExists("mrnaBlastz"))
+if (hTableExists("all_mrna"))
     {
-    struct psl *pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
+    struct psl *pslList = loadPslRangeT("all_mrna", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
         {
-        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "mrnaBlastz", pg->name);
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "all_mrna", pg->name);
         htmlHorizontalLine();
         safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pg->chrom);
         if (hTableExists(chainTable_chrom) )
@@ -7525,7 +7577,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type;
-char table[256];
 char where[256];
 boolean hasBin;
 struct pseudoGeneLink *pg;
@@ -7551,23 +7602,6 @@ slSort(&pslList, pslCmpScoreDesc);
 
 /* print header */
 genericHeader(tdb, acc);
-if (startsWith("pseudoMrna",track ) || startsWith("pseudoGeneLink",track ))
-    {
-    type = "mRNA";
-    if (hTableExists("mrnaBlastz") )
-        safef(table, sizeof(table), "mrnaBlastz");
-    else
-        {
-        if (hTableExists("pseudoMrna") )
-            safef(table, sizeof(table), "pseudoMrna");
-        }
-    }
-else 
-    {
-    type = "mRNA";
-    safef(table, sizeof(table), "all_mrna");
-    }
-
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
@@ -8619,7 +8653,7 @@ void htcGenePsl(char *htcCommand, char *item)
 {
 struct genePred *gp = NULL;
 struct axtInfo *aiList = NULL, *ai;
-struct axt *axtList = NULL;
+struct axt *axtList = NULL, *axt , *prev = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = NULL;
 struct sqlResult *sr;
@@ -8634,9 +8668,11 @@ int left = cgiInt("l");
 int right = cgiInt("r");
 char table[64];
 char query[512];
+char where[512];
 char nibFile[512];
 char qNibFile[512];
 char chainTable[512];
+char indexFile[512];
 struct chain *chain = NULL;
 struct hash *nibHash = hashNew(0);
 struct dnaSeq *qSeq = NULL, *tSeq = NULL;
@@ -8645,25 +8681,30 @@ struct chain *subChain = NULL, *toFree = NULL;
 int qs,qe;
 boolean hasBin; 
 boolean alignmentOK;
+struct lineFile *ixF = NULL, *lf = NULL;
+off_t offset = 0;
+char *line = NULL;
+int prevOffset = 0;
 
 cartWebStart(cart, "Alignment of %s in %s to %s using %s.",
 	     name, hOrganism(database), hOrganism(db2), alignment);
 hSetDb2(db2);
 
-// get gp
+// get genePred including optional frame info
 hFindSplitTable(chrom, track, table, &hasBin);
-snprintf(query, sizeof(query),
-	 "select * from %s where name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
-	 table, name, chrom, right, left);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePredLoad(row + hasBin);
-    }
-sqlFreeResult(&sr);
+snprintf(where, sizeof(where),
+	 "name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
+	 name, chrom, right, left);
+gp = genePredReaderLoadQuery(conn, table, where);
 if (gp == NULL)
     errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
 	     database, table, name, chrom, left+1, right);
+/* if there is no reading frame, default to txStart,End, not a great solution */
+if (gp->cdsStart == 0)
+    gp->cdsStart = gp->txStart;
+if (gp->cdsEnd == 0)
+    gp->cdsEnd = gp->txEnd;
+
 
 puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
 cartSaveSession(cart);
@@ -8690,7 +8731,8 @@ printf("</td>\n");
 puts("</tr></TABLE>");
 puts("</FORM>");
 // Make sure alignment is not just a leftover from previous db2.
-aiList = hGetAxtAlignments(db2);
+if (gp->chrom != NULL)
+    aiList = hGetAxtAlignmentsChrom(db2, gp->chrom);
 if (alignment != NULL)
     {
     alignmentOK = FALSE;
@@ -8715,68 +8757,44 @@ if ((alignment == NULL) && (aiList != NULL))
     }
 if (species == NULL)
     species = aiList->species;
-printf("Some alignments may not be correct due to problems in the cross species chains.<b>");
+sprintf(query, "select fileName from chromInfo where chrom = '%s'",  gp->chrom);
+if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
+    errAbort("Sequence %s isn't in chromInfo", chrom);
 species[0] = (char)toupper(species[0]);
-safef(chainTable, sizeof(chainTable),"rBestChain%s",species);
-chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
-if (chain == NULL)
+safef(indexFile, 512, "%s.ix", aiList->fileName);
+ixF = lineFileMayOpen(indexFile, TRUE);
+if (ixF == NULL)
+    printf("<b>Warning - Axt Index File missing, page may be slow.</b><br>");
+else
     {
-    safef(chainTable, sizeof(chainTable),"bestChain%s",species);
-    chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
-    }
-if (chain == NULL)
-    {
-    safef(chainTable, sizeof(chainTable),"chain%s",species);
-    chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
-    }
-if (chain != NULL)
-    {
-    slSort(&chain, chainCmpScore);
-    chainSubsetOnT(chain, gp->txStart, gp->txEnd, &subChain, &toFree);
-    }
-if (subChain != NULL && db2 != NULL)
-    {
-    int size = subChain->qEnd - subChain->qStart;
-    qChainRangePlusStrand(subChain, &qs, &qe);
-    // get nibFile
-    sprintf(query, "select fileName from chromInfo where chrom = '%s'",  gp->chrom);
-    if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
-        errAbort("Sequence %s isn't in chromInfo", chrom);
-
-    // get nibFile for query in other species
-    conn2 = hAllocConnDb(db2);
-    sprintf(query, "select fileName from chromInfo where chrom = '%s'" ,subChain->qName);
-    if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
-        errAbort("Sequence chr1 isn't in chromInfo");
-
-
-    tSeq = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, subChain->tStart, subChain->tEnd-subChain->tStart);
-    if (subChain->qStrand == '-')
+    while (lineFileNext(ixF, &line, NULL))
         {
-        int start = qs-1;
-        int end = qe;
-//        printf("chain %s:%d-%d %s:%d-%d %c\n",
-//                subChain->tName, subChain->tStart, subChain->tEnd, 
-//                subChain->qName, start, end, subChain->qStrand);
-        qSeq = nibLoadPartMasked(NIB_MASK_MIXED, qNibFile, start, size);
-        reverseComplement(qSeq->dna, qSeq->size);
-        }
-    else
-        {
-//        printf("chain %s:%d-%d %s:%d-%d %c\n",
-//                subChain->tName, subChain->tStart, subChain->tEnd, 
-//                subChain->qName, subChain->qStart, subChain->qEnd, subChain->qStrand);
-        qSeq = nibLoadPartMasked(NIB_MASK_MIXED, qNibFile, subChain->qStart, size);
-        }
-    if (tSeq != NULL && qSeq != NULL)
-        {
-        puts("<PRE><TT>");
-        axtList = chainToAxt(subChain, qSeq, subChain->qStart, tSeq, subChain->tStart,40000,100000);
-
-        axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
-        puts("</TT></PRE>");
+        int refCount = 3;
+        char *words[3];
+        int wordCount = chopLine(line, words);
+        int start = atoi(words[0]);
+        if (wordCount != refCount)
+            lineFileExpectWords(ixF, refCount, wordCount);
+        offset = atoi(words[2]);
+        if (start > 0 && start > gp->txStart && offset > 0)
+            {
+            offset = prevOffset;
+            break;
+            }
+        else 
+            {
+            prevOffset = offset;
+            offset = 0;
+            }
         }
     }
+lineFileClose(&ixF);
+lf = lineFileOpen(aiList->fileName, TRUE);
+lineFileSeek(lf, offset, SEEK_SET);
+axtList = getAxtListForGene(gp, nibFile, hGetDb(), db2, lf);
+puts("<PRE><TT>");
+axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
+puts("</TT></PRE>");
 axtInfoFreeList(&aiList);
 hFreeConn(&conn);
 webEnd();

@@ -107,7 +107,7 @@ url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$
 
 track blatFr1
 shortLabel Fugu Blat
-longLabel Takifugu rubripes Translated Blat Alignments
+longLabel Takifugu rubripes (Aug. 2002/fr1) Translated Blat Alignments
 group compGeno
 priority 150
 visibility dense
@@ -118,7 +118,7 @@ type psl xeno
 
 track fuguPseudo
 shortLabel Fugu Pseudo
-longLabel Takifugu rubripes Translated Blat Alignments that overlap Processed Pseudogenes
+longLabel Takifugu rubripes (Aug. 2002/fr1) Translated Blat Alignments that overlap Processed Pseudogenes
 group compGeno
 priority 151
 visibility hide
@@ -129,7 +129,7 @@ type bed 12
 
 track blastzMm3
 shortLabel Mm3 Blastz
-longLabel Blastz All Mouse (mm3-Feb 03) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
 group compGeno
 priority 189.1
 visibility hide
@@ -141,7 +141,7 @@ otherDb mm3
 
 track blastzBestMm3
 shortLabel Mm3 Best
-longLabel Blastz Mouse (mm3-Feb 03)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 189.2
 visibility hide
@@ -149,10 +149,11 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno mm3
+otherDb mm3
 
 track blastzTightMm3
 shortLabel Mm3 Tight
-longLabel Blastz Mouse (mm3-Feb 03), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 189.3
 visibility hide
@@ -164,7 +165,7 @@ otherDb mm3
 
 track chainMm3
 shortLabel Mm3 Chain 
-longLabel Chained Blastz Mouse (mm3-Feb 03)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 189.4
 visibility hide
@@ -176,7 +177,7 @@ otherDb mm3
 
 track netMm3
 shortLabel Mm3 Net
-longLabel Mouse (mm3-Feb 03)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 189.5
 visibility hide
@@ -186,7 +187,7 @@ otherDb mm3
 
 track syntenyNetMm3
 shortLabel Mm3 Syntenic Net
-longLabel Mouse (mm3-Feb 03) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 189.6
 visibility hide
@@ -196,7 +197,7 @@ otherDb mm3
 
 track blastzRn3
 shortLabel Rat Blastz
-longLabel Blastz Rat (rn3-Jun 03) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 173
 visibility hide
@@ -208,7 +209,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (rn3-Jun 03)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 174
 visibility hide
@@ -220,7 +221,7 @@ otherDb rn3
 
 track blastzTightRn3
 shortLabel Rat Tight
-longLabel Rat Blastz (rn3-Jun 03), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 175
 visibility hide
@@ -232,7 +233,7 @@ otherDb rn3
 
 track chainRn3
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat (rn3-Jun 03)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 176
 visibility hide
@@ -244,7 +245,7 @@ otherDb rn3
 
 track netRn3
 shortLabel Rat Net
-longLabel Rat (rn3-Jun 03)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 177
 visibility hide 
@@ -254,17 +255,18 @@ otherDb rn3
 
 track syntenyRn3
 shortLabel Rat Synteny
-longLabel $Organism/Rat (rn3-Jun 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 178
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 +
+otherDb rn3
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
-longLabel Rat (rn3-Jun 03) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 179
 visibility hide
@@ -281,7 +283,7 @@ visibility hide
 type maf
 
 track macaca
-shortLabel macaca blastz
+shortLabel Macaca Blastz
 longLabel Human/Rhesus Blastz (panTro1 - macaca mulatta trimmed reads) Reciprocal Best
 group compGeno
 priority 191
@@ -290,7 +292,7 @@ type maf
 
 track chainPanTro1
 shortLabel Chimp Chain
-longLabel Chimp (panTro1-Nov 03) Chained Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 200
 visibility hide
@@ -302,7 +304,7 @@ otherDb panTro1
 
 track rBestChainPanTro1
 shortLabel Chimp Recip Chain 
-longLabel Chimp (panTro1-Nov 03) Reciprocal Best Chained Alignments
+longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Chained Alignments
 group compGeno
 priority 201
 visibility hide
@@ -314,7 +316,7 @@ otherDb panTro1
 
 track rBestNetPanTro1
 shortLabel Chimp Recip Net
-longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net
+longLabel Chimp (Nov. 2003/panTro1) Reciprocal Best Net
 group compGeno
 priority 202
 visibility hide
@@ -323,7 +325,7 @@ type netAlign panTro1 rBestChainPanTro1
 
 track chimpDels
 shortLabel Chimp Deletions
-longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
+longLabel Deletions in Chimp (Nov. 2003/panTro1) Relative to Human
 group compGeno
 priority 203
 visibility hide
@@ -331,7 +333,7 @@ type bed 4 .
 
 track chainPt0
 shortLabel Pt0 Chain
-longLabel Chimp (pt0-Nov 03) Scaffold Chained Alignments
+longLabel Chimp (Nov. 2003/pt0) Scaffold Chained Alignments
 group compGeno
 priority 208
 visibility hide
@@ -342,7 +344,7 @@ type chain seq
 
 track netRxBestPt0
 shortLabel Pt0 Net
-longLabel Chimp (pt0-Nov 03) Reciprocal Best Net (Colored by Scaffold)
+longLabel Chimp (Nov. 2003/pt0) Reciprocal Best Net (Colored by Scaffold)
 group compGeno
 priority 209
 visibility hide
@@ -351,7 +353,7 @@ type netAlign seq chainPt0
 
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
-longLabel Human/Mouse/Rat Humor Alignments (mm3-Feb03, rn3-Jun 03)
+longLabel Human/Mouse(mm3)/Rat(rn3) Humor Alignments 
 group compGeno
 priority 104
 visibility hide
@@ -361,7 +363,7 @@ type maf
 
 track multizMm3Rn3GalGal2
 shortLabel HMRG
-longLabel Human/Mouse/Rat/Chicken Multiz Al. (mm3-Feb03, rn3-Jun03, galGal2-Feb04)
+longLabel Human/Mouse(mm3)/Rat(rn3)/Chicken(galGal2) Multiz Alignments 
 group compGeno
 priority 102
 visibility hide
@@ -369,14 +371,14 @@ type maf
 
 track multizMm3Rn3Pt0
 shortLabel HMRP
-longLabel Human/Mouse/Rat/Chimp Multiz Alignments (mm3-Feb03, rn3-Jun03, pt0-Nov03)
+longLabel Human/Mouse(mm3)/Rat(rn3)/Chimp(pt0) Multiz Alignments 
 group compGeno
 priority 103
 visibility hide
 type maf
 
 track celeraHCM
-shortLabel celera HPM
+shortLabel Celera HPM
 longLabel Human/Chimp/Mouse Celera Alignments (Science issue 302)
 group compGeno
 priority 109
@@ -385,7 +387,7 @@ type maf
 
 track blatCi1
 shortLabel Squirt Blat
-longLabel Ciona intestinalis Translated Blat Alignments
+longLabel Ciona intestinalis (Dec. 2002/ci1) Translated Blat Alignments
 group compGeno
 priority 130
 visibility hide
@@ -416,7 +418,7 @@ altColor 85,170,225
 
 track blatChicken
 shortLabel Gg0 Blat
-longLabel Chicken Translated Blat Alignments
+longLabel Chicken (gg0) Translated Blat Alignments
 group compGeno
 priority 164
 visibility hide
@@ -427,7 +429,7 @@ type psl xeno
 
 track blastzGg0
 shortLabel Gg0 Blastz
-longLabel Blastz Chicken (Gg0-contigs, 5.2x coverage)
+longLabel Chicken (Gg0-contigs, 5.2x coverage) Blastz
 group compGeno
 priority 165
 visibility hide
@@ -438,7 +440,7 @@ type psl xeno
 
 track blastzBestGg0
 shortLabel Gg0 Best
-longLabel Blastz Chicken (Gg0-contigs, 5.2x coverage) Best in Genome
+longLabel Chicken (Gg0-contigs, 5.2x coverage) Blastz Best-in-Genome
 group compGeno
 priority 166
 visibility hide
@@ -449,7 +451,7 @@ type psl xeno
 
 track HMRConservation
 shortLabel HMRConservation
-longLabel Mouse/Human/Rat Evolutionary Conservation Score
+longLabel Human/Mouse/Rat Evolutionary Conservation Score
 group compGeno
 color 100,50,0
 altColor 175,150,128
@@ -459,7 +461,7 @@ type sample 0 .466217
 
 track ratChain
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 170
 visibility hide
@@ -471,7 +473,7 @@ otherDb rn2
 
 track ratNet
 shortLabel Rat Net
-longLabel Rat/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 171
 visibility hide
@@ -501,13 +503,14 @@ type bed 6+
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 172
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 +
+otherDb rn3
 
 track tba9MammalCFTR
 shortLabel 9 Species CFTR
@@ -575,7 +578,7 @@ type bed 4 +
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
-longLabel Blastz Self Join without Repeats Masked (tandem repeats masked)
+longLabel Blastz Self Join Without Repeats Masked (tandem repeats masked)
 group x
 priority 159
 visibility hide
@@ -609,7 +612,7 @@ type sample 0 5 0.199
 
 track gpcr
 shortLabel Gpcr
-longLabel Gpcr from softberry and Rachel Karchin's HMM
+longLabel Gpcr from Softberry and Rachel Karchin's HMM
 group x
 priority 149
 visibility hide
@@ -646,7 +649,7 @@ group x
 priority 150
 visibility hide
 type genePred
-blurb This is a the bork blurb.
+blurb This is the bork blurb.
 otherDb rn3
 
 track loweProbes
@@ -710,7 +713,7 @@ type psl .
 
 track blastzSelf
 shortLabel Self Blastz
-longLabel Merged Blastz Human Alignments
+longLabel Human Merged Blastz Alignments
 group varRep
 priority 160
 visibility hide
@@ -722,7 +725,7 @@ otherDb hg16
 
 track blastzBestSelf
 shortLabel Self Best
-longLabel Blastz Self (hg16-Jul 03)/$Organism Best-in-Genome Alignments
+longLabel $Organism Blastz Self Best-in-Genome Alignments
 group varRep
 priority 161
 visibility hide
@@ -733,7 +736,7 @@ type psl xeno hg16
 
 track blastzTightSelf
 shortLabel Tight Self
-longLabel Blastz Self (hg16-Jul 03), Tight Subset of Best Alignments
+longLabel Self Blastz Tight Subset of Best Alignments
 group varRep
 priority 162
 visibility hide
@@ -745,7 +748,7 @@ otherDb hg16
 
 track chainSelf
 shortLabel Self Chain 
-longLabel Chained Blastz Human/$Organism Alignments
+longLabel Human/$Organism Chained Blastz Alignments
 group varRep
 priority 163
 visibility hide
@@ -767,7 +770,7 @@ otherDb hg16
 
 track syntenySelf
 shortLabel Self Synteny
-longLabel Human/Human (hg16-Jul 03) Synteny Using Blastz Single Coverage (100k window)
+longLabel Human/Human Synteny Using Blastz Single Coverage (100k window)
 group varRep
 priority 165
 visibility hide
@@ -777,7 +780,7 @@ type bed 4 .
 
 track syntenyNetSelf
 shortLabel Self Syntenic Net
-longLabel Syntenic Alignment Net, Self
+longLabel Self Syntenic Alignment Net
 group varRep
 priority 166
 visibility hide
@@ -796,7 +799,7 @@ type bed 4 .
 
 track blastzMm4
 shortLabel Mm4 Blastz
-longLabel Blastz All Mouse (Oct 03/Mm4) Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
 group compGeno
 priority 182
 visibility hide
@@ -808,7 +811,7 @@ otherDb mm4
 
 track blastzBestMm4
 shortLabel Mm4 Best
-longLabel Blastz Mouse (Oct 03/Mm4)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 183
 visibility hide
@@ -816,10 +819,11 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno mm4
+otherDb mm4
 
 track blastzTightMm4
 shortLabel Mouse Tight
-longLabel Blastz Mouse (Oct 03/Mm4), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 184
 visibility hide
@@ -831,7 +835,7 @@ otherDb mm4
 
 track chainMm4
 shortLabel Mouse Chain 
-longLabel Chained Blastz Mouse (Oct 03/Mm4)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 185
 visibility hide
@@ -843,7 +847,7 @@ otherDb mm4
 
 track netMm4
 shortLabel Mouse Net
-longLabel Mouse (Oct 03/Mm4)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 186
 visibility hide
@@ -853,17 +857,18 @@ otherDb mm4
 
 track syntenyMm4
 shortLabel Mouse Synteny
-longLabel Human/Mouse (Oct 03/Mm4) Synteny Using Blastz Single Coverage (100k window)
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 187
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 .
+otherDb mm4
 
 track syntenyNetMm4
 shortLabel Mm4 Syntenic Net
-longLabel Mouse (Oct 03/Mm4) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 188
 visibility hide
@@ -871,9 +876,9 @@ spectrum on
 type netAlign mm4 chainMm4
 otherDb mm4
 
-track phyloHMMcons_CFTR
-shortLabel phyloHMMcons CFTR
-longLabel phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
+track PhyloHMMcons_CFTR
+shortLabel PhyloHMMcons CFTR
+longLabel Phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
 group compGeno
 priority 105
 visibility hide
@@ -883,8 +888,8 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 track phyloHMMcons_HMR
-shortLabel phyloHMMcons HMR
-longLabel phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
+shortLabel PhyloHMMcons HMR
+longLabel Phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
 group compGeno
 priority 106
 visibility hide
@@ -951,8 +956,8 @@ altColor 0,50,100
 type maf
 
 track phyloHMM_leptin
-shortLabel phyloHMMcons Leptin
-longLabel phylo-HMM-based conservation, Leptin
+shortLabel PhyloHMMcons Leptin
+longLabel Phylo-HMM-based conservation, Leptin
 group compGeno
 priority 113
 visibility hide
@@ -963,8 +968,8 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 track leptinHuman90
-shortLabel phyloHMMcons Leptin 90
-longLabel phylo-HMM-based conservation, Leptin, 90 percent
+shortLabel PhyloHMMcons Leptin 90
+longLabel Phylo-HMM-based conservation, Leptin, 90 percent
 group compGeno
 priority 113.1
 visibility hide
@@ -999,7 +1004,7 @@ type wig -600 2000
 
 track hetChimp
 shortLabel Chimp Heterozygosity
-longLabel Chimp/Human single nucleotide mutation rate %, 10Kb bins
+longLabel Chimp (Nov. 2003/panTro1) single nucleotide mutation rate %, 10Kb bins
 group compGeno
 priority 207
 visibility hide
@@ -1011,7 +1016,7 @@ type wig 0.0 7.3
 
 track regPotential3X
 shortLabel 3x Reg Potential
-longLabel 3-Way Regulatory Potential - Human (hg16), Mouse (mm3), Rat (rn3)
+longLabel 3-Way Regulatory Potential - Human, Mouse (Feb. 2003/mm3), Rat (June 2003/rn3)
 group regulation
 priority 91
 visibility hide
@@ -1026,7 +1031,7 @@ type wig -0.0983 0.210
 
 track regPotential2X
 shortLabel 2x Reg Potential
-longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (mm4)
+longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (Oct. 2003/mm4)
 group regulation
 priority 91.1
 visibility hide
@@ -1041,7 +1046,7 @@ type wig -0.0732 0.153
 
 track chainGalGal2
 shortLabel Chicken Chain 
-longLabel Chained (Feb. 2004 - galGal2) Chicken/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 160
 visibility hide
@@ -1053,7 +1058,7 @@ otherDb galGal2
 
 track netGalGal2
 shortLabel Chicken Net
-longLabel (Feb. 2004 - galGal2) Chicken/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 161
 visibility dense
@@ -1063,17 +1068,18 @@ otherDb galGal2
 
 track netSyntenyGalGal2
 shortLabel Chicken Synteny
-longLabel (Feb. 2004 - galGal2) Chicken/$Organism Synteny Using Chained/Netted Blastz
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 162
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type netAlign galGal2 chainGalGal2
+otherDb galGal2
 
 track blastzBestGalGal2
 shortLabel Chicken Best
-longLabel Blastz Chicken (galGal2) Best in Genome
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome
 group compGeno
 priority 163
 visibility hide
@@ -1081,10 +1087,11 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno galGal2
+otherDb galGal2
 
 track chainFr1
 shortLabel Fugu Chain 
-longLabel Chained (Aug. 2002 - fr1) Fugu/$Organism Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 150.1
 visibility hide
@@ -1096,7 +1103,7 @@ otherDb fr1
 
 track netFr1
 shortLabel Fugu Net
-longLabel (Aug. 2002 - fr1) Fugu/$Organism Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
 group compGeno
 priority 150.2
 visibility hide
@@ -1106,13 +1113,14 @@ otherDb fr1
 
 track netSyntenyFr1
 shortLabel Fugu Synteny
-longLabel (Aug. 2002 - fr1) Fugu/$Organism Synteny Using Chained/Netted Blastz
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 150.3
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type netAlign fr1 chainFr1
+otherDb fr1
 
 track pseudoUcsc
 shortLabel UCSC Pseudo
@@ -1147,7 +1155,7 @@ type maf
 
 track NISC_phyloHMM
 shortLabel NISC phyloHMMcons
-longLabel phylo-HMM-based conservation for NISC targets
+longLabel Phylo-HMM-based conservation for NISC targets
 group compGeno
 priority 107.1
 visibility hide
@@ -1175,7 +1183,7 @@ type wig 0 100
 
 track gc5Win20K
 shortLabel GC% Win20K
-longLabel GC Percent in 5 bases smoothed to 20,000 base windows
+longLabel GC Percent in 5 Bases Smoothed to 20,000 Base Windows
 group map
 priority 23.6
 visibility hide
@@ -1191,7 +1199,7 @@ type wig 0 100
 
 track gc5Win100K
 shortLabel GC% Win100K
-longLabel GC Percent in 5 bases smoothed to 100,000 base windows
+longLabel GC Percent in 5 Bases Smoothed to 100,000 Base Windows
 group map
 priority 23.7
 visibility hide
@@ -1207,7 +1215,7 @@ type wig 0 100
 
 track ecoresFr1
 shortLabel Fugu Ecores
-longLabel Human/Fugu Evolutionary Conserved Regions
+longLabel Human/Fugu (Aug. 2002/fr1) Evolutionary Conserved Regions
 group compGeno
 priority 152.1
 visibility hide
@@ -1396,7 +1404,7 @@ otherDb galGal2
 
 track tblastFr1
 shortLabel tblastFr1
-longLabel best Fr1 tblastn hit/hg16 knownGene exon
+longLabel Fugu (Aug. 2003/fr1) Best tblastn hit/hg16 knownGene Exon
 group x
 spectrum on
 priority 158
@@ -1405,12 +1413,13 @@ type psl xeno
 
 track tblastGalGal2
 shortLabel tblastGalGal2
-longLabel best galGal1 tblastn hit/hg16 knownGene exon
+longLabel $o_Organism ($o_date/$o_db) tblastn Hit/hg16 knownGene Exon
 group x
 spectrum on
 priority 158
 visibility hide
 type psl xeno
+otherDb galGal1
 
 track unAnnotated
 shortLabel unAnnotated
@@ -1420,8 +1429,6 @@ priority 161
 visibility hide
 color 20,0,50
 type bed 4
-
-
 
 searchTable HInvGeneMrna
 searchMethod exact

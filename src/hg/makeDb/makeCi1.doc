@@ -51,9 +51,55 @@ exit; # don't actually run this like a script :)
     hgsql ci1  < ~/kent/src/hg/lib/gcPercent.sql
     hgGcPercent ci1 ../../nib
 
-# Load genbank entries
-    cd /cluster/store5/genbank
-    ./bin/gbDbLoadStep -noPerChrom=ci1 -initialLoad ci1 
+### AUTO UPDATE GENBANK MRNA RUN 
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+
+    # Edit etc/genbank.conf and add these lines:
+# ci1 (ciona intestinalis)
+ci1.genome = /iscratch/i/squirt/ci1/nib/Scaffold*.nib
+ci1.lift = no
+ci1.refseq.mrna.native.load = yes
+ci1.refseq.mrna.xeno.load = yes
+ci1.refseq.mrna.xeno.pslReps = -minCover=0.25 -minAli=0.15 -nearTop=0.005
+ci1.genbank.mrna.xeno.load = yes
+ci1.genbank.est.xeno.load = no
+ci1.downloadDir = ci1
+ci1.perChromTables = no
+# ci1 
+
+    cvs ci etc/genbank.conf
+    make
+    # Install to /cluster/data/genbank:
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -clusterRootDir=/cluster/bluearc/genbank \
+      -iserver=kkr1u00 -iserver=kkr2u00 -iserver=kkr3u00 -iserver=kkr4u00 \
+      -iserver=kkr5u00 -iserver=kkr6u00 -iserver=kkr7u00 -iserver=kkr8u00 \
+      -srcDb=genbank -type=mrna -verbose=1 -initial ci1
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad ci1
+    # Clean up:
+    rm -r /cluster/bluearc/genbank/work/initial.ci1
+
+    ssh eieio
+    # -initial for ESTs (now with /cluster/store7 and iservers):
+    nice bin/gbAlignStep -clusterRootDir=/cluster/store7/genbank \
+      -iserver=kkr1u00 -iserver=kkr2u00 -iserver=kkr3u00 -iserver=kkr4u00 \
+      -iserver=kkr5u00 -iserver=kkr6u00 -iserver=kkr7u00 -iserver=kkr8u00 \
+      -srcDb=genbank -type=est -verbose=1 -initial ci1
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 ci1
+
+    # ./bin/gbDbLoadStep -noPerChrom=ci1 -initialLoad ci1 
     # ./bin/i386/gbLoadRna -drop ci1
 # drop too short indices
     foreach i (all_mrna intronEst all_est xenoMrna)
@@ -299,3 +345,31 @@ exit; # don't actually run this like a script :)
     hgLoadChain hg16 chainCi1ProtEx chainCi1S.chain
     hgLoadChain ci1 chainHg16ProtEx  chainHg16S.chain
 
+### blat CioSav1
+    ssh kk
+    mkdir /cluster/data/ci1/bed/blatCioSav1
+    cd  /cluster/data/ci1/bed/blatCioSav1
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    ls -1S /scratch/hg/ci1/nib/Scaffold_*.nib > squirt.lst
+    ls -1S /iscratch/i/squirt/ci1/Savignyi/*.fa > other.lst
+    gensub2 squirt.lst other.lst gsub spec
+    mkdir psl
+    cd psl
+    for i in `cat ../squirt.lst`
+    do
+	mkdir `basename $i .nib`
+    done
+    cd ..
+    para create spec
+    para push
+
+    ssh eieo
+    pslSort dirs blatCioSav1.psl /tmp psl/*
+
+    hgLoadPsl ci1 blatCioSav1.psl
+### end blat

@@ -577,6 +577,9 @@ char *trimSpaces(char *s);
 void spaceOut(FILE *f, int count);
 /* Put out some spaces to file. */
 
+void starOut(FILE *f, int count);
+/* Put out some asterisks to file. */
+
 boolean hasWhiteSpace(char *s);
 /* Return TRUE if there is white space in string. */
 

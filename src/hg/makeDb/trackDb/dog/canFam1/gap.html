@@ -1,0 +1,27 @@
+<H2>Description</H2>
+This track depicts gaps in the assembly.  Many of these gaps -- with the
+exception of intractable heterochromatic gaps -- may be closed during the
+finishing process. 
+</P><P>
+Gaps are represented as black boxes in this track.
+If the relative order and orientation of the contigs on either side
+of the gap is supported by read pair data, 
+it is a <em>bridged</em> gap and a white line is drawn 
+through the black box representing the gap. 
+</P>
+<P>There are two types of gaps:
+<UL>
+<LI><B>Fragment</B> - gaps between the Whole Genome Shotgun contigs of a 
+    supercontig.
+    (In this context, a contig is a set of overlapping sequence reads.  
+     A supercontig is a set of contigs ordered and oriented during the 
+     Whole Genome Shotgun process using paired-end reads.)
+    These are represented by varying numbers of N's in the assembly.  
+    Fragment gap sizes are usually taken from read pair data.  
+    </LI>
+<LI><B>Clone</B> - gaps between supercontigs linked by the physical map.  
+    In general, these are represented by 1,000 N's in the assembly.  
+    Clone gaps of 3000000 were placed at the end of chrX and at the 
+    beginning of all other chroms.  
+    </LI>
+</UL></P>

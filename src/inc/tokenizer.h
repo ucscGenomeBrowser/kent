@@ -27,6 +27,9 @@ struct tokenizer
 struct tokenizer *tokenizerNew(char *fileName);
 /* Return a new tokenizer. */
 
+struct tokenizer *tokenizerOnLineFile(struct lineFile *lf);
+/* Create a new tokenizer on open lineFile. */
+
 void tokenizerFree(struct tokenizer **pTkz);
 /* Tear down a tokenizer. */
 

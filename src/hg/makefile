@@ -157,6 +157,7 @@ UTIL_DIRS = \
 	pslCoverage \
 	pslDropOverlap \
 	pslFilter \
+	pslFilterPrimers \
 	pslGlue \
 	pslHitPercent \
 	pslIntronsOnly \
@@ -186,5 +187,6 @@ UTIL_DIRS = \
 	splitFaIntoContigs \
 	test \
 	trfBig \
-	uniqSize
+	uniqSize \
+	updateStsInfo
 

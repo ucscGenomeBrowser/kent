@@ -2604,7 +2604,7 @@ end
       echo chr$c
       perl -wpe 's/^(\>\S+)\s.*$/$1.a/' < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
     end
-    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf
+    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf -genePredExt
     hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 # RAW TWINSCAN 1.3 GENE PREDICTIONS, WITHOUT FILTERING OF PSEUDOGENES
@@ -3624,7 +3624,7 @@ o - # ssh hgwdev
     # hgLoadPsl hg16 affyU95.psl
     #	by the following:
     sed -e "s/U95Av2://" affyU95.psl | sed -e "s/;//" > affyU95shortQname.psl
-    hgLoadPsl hg16 -table=affyU95.psl affyU95shortQname.psl
+    hgLoadPsl hg16 -table=affyU95 affyU95shortQname.psl
     # Clean up
     rm -r psl tmp err affyRatio.bed affyRatio.exr bed.tab scores.tab *.debug batch.bak contig.psl raw.psl
 
@@ -8923,7 +8923,7 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
     | sed -e 's/\..\"/\"/g' \
     > ensGene.gtf
     ssh hgwdev
-    /cluster/bin/i386/ldHgGene hg16 ensGene \
+    /cluster/bin/i386/ldHgGene -gtf -genePredExt hg16 ensGene \
       /cluster/data/hg16/bed/ensembl34d/ensGene.gtf
 
     # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 

@@ -353,7 +353,7 @@ while (lineFileNext(pf, &line, &lineSize))
 int main(int argc, char *argv[])
 {
   struct lineFile *pf, *ef, *apf;
-  FILE *of, *nf, *enf;
+  FILE *of, *nf, *enf=NULL;
   char *faFile, *efName=NULL, filename[256];
   int verb = 0;
 

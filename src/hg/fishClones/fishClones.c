@@ -232,17 +232,32 @@ struct fishClone *createFishClone(char *name)
   return(ret);
 }
 
-struct map *createMap(char *mapInfo, char *center)
+struct map *createMap(char *mapInfo, char *center, char *chr)
 /* Create a map record */
 {
   struct map *ret;
-  char *bands[16];
+  char *bands[16], band[16];
   int wordCount;
 
   AllocVar(ret);
   ret->next = NULL;
 
-  wordCount = chopByChar(mapInfo, '-', bands, ArraySize(bands));
+  if (stringIn("~\0", mapInfo))
+    {
+      wordCount = chopByChar(mapInfo, '~', bands, ArraySize(bands));
+      if ((wordCount == 2) && stringIn("p\0", bands[0]))
+	{
+	  sprintf(band, "%sp%s", chr, bands[1]); 
+	  bands[1] = cloneString(band);
+	}
+      else if ((wordCount == 2) && stringIn("q\0", bands[0]))
+	{
+	  sprintf(band, "%sq%s", chr, bands[1]); 
+	  bands[1] = cloneString(band);
+	}
+    }
+  else
+    wordCount = chopByChar(mapInfo, '-', bands, ArraySize(bands));
   ret->band1 = cloneString(bands[0]);
   if (wordCount == 1) 
     ret->band2 = cloneString(bands[0]);
@@ -363,7 +378,7 @@ void readFishInfo(struct lineFile *ff)
 	  wordCount1 = chopByChar(mapInfoCen[0], ',', mapInfo, ArraySize(mapInfo));
 	  for (j = 0; j < wordCount1; j++)
 	    {
-	      m =  createMap(mapInfo[j], center);
+	      m =  createMap(mapInfo[j], center, chr);
 	      slAddHead(&fc->cyto, m);
 	      fc->numCyto++;
 	    }
@@ -962,7 +977,7 @@ int main(int argc, char *argv[])
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
-      fprintf(stderr, "USAGE: fishMarkers <database> <hbrc> <clac.out> <cl_acc_gi_len> <bacEnds.psl> <out file prefix\n  Options:\n\t-fhcrc=<file>\tSTS marker associations from FHCRC\n\t-verbose=<level>\tdisplay all messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n");
+      fprintf(stderr, "USAGE: fishClones <database> <hbrc> <clac.out> <cl_acc_gi_len> <bacEnds.psl> <out file prefix\n  Options:\n\t-fhcrc=<file>\tSTS marker associations from FHCRC\n\t-psl=<psl file>\tpsl file of clone placements\n\t-verbose=<level>\tdisplay all messages\n\t-noBin\t\tdo not include bin column in output file\n\t-noRandom\tdo not include placements on random portions\n");
       return 1;
     }
   db = argv[1];

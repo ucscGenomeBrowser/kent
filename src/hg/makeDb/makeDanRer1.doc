@@ -21,7 +21,7 @@ exit; # don't actually run this like a script :)
 
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-05-24, hartera)
 # CREATE ChrM.agp (DONE, 2004-05-27, hartera)
-
+# Add "chr" prefix to chrM.agp (DONE, 2004-07-06, hartera)
     mkdir /cluster/data/danRer1/M
     cd /cluster/data/danRer1/M
     # go to http://www.ncbi.nih.gov/ and search Nucleotide for
@@ -48,6 +48,11 @@ exit; # don't actually run this like a script :)
 M       1       16596	1       F	AC024175.3      1       16596	+
 '_EOF_'
 
+    # Add "chr" prefix to M in chrM.agp (2004-07-06)
+    perl -pi.bak -e 's/M/chrM/' ./M/chrM.agp
+    # check file then remove backup
+    rm ./M/chrM.agp.bak
+
 # SPLIT AGP FILES BY CHROMOSOME (DONE, 2004-05-26, hartera)
     ssh kksilo
     cd /cluster/data/danRer1
@@ -66,7 +71,8 @@ M       1       16596	1       F	AC024175.3      1       16596	+
         > $c/chr$c.supercontigs.agp
 
      end 
-     # From agp files, put together all ctg*, NA* and Finished* as chrUn
+     # From agp files, get supercontigs and contigs for
+     # ctg* as chrUn, NA* as chrNA and Finished* as chrFinished
      foreach t ( ctg NA Finished )
         if ($t == "ctg") then 
            set c = "Un"
@@ -111,6 +117,7 @@ M       1       16596	1       F	AC024175.3      1       16596	+
 # CREATE ChrUn, chrNA AND chrFinished FASTA, AGP, GAP AND LIFT FILES FROM 
 # ctg*, NA* AND Finished* SUPERCONTIGS 
 # (DONE, 2005-05-27, hartera)
+# ADD CORRECT FRAGMENT TYPE TO .agp FILES (DONE, 2004-07-07, hartera)
      ssh kksilo
      cd /cluster/data/danRer1
      foreach c ( Finished NA Un )
@@ -138,6 +145,22 @@ M       1       16596	1       F	AC024175.3      1       16596	+
      # chrUn
      # scaffold gap size is 1000, total scaffolds: 1842
      # chrom size is 367113659
+     # Add correct fragment type to .agp files (2004-07-07)
+     # chrUn is "W", chrFinished is "F" and chrNA is "W" for all supercontigs
+     ssh kksilo
+     cd /cluster/data/danRer1
+     foreach c (Un NA Finished)
+        if ($c == "Un" || $c == "NA") then
+           set f = "W"
+        else
+           set f = "F"
+        endif
+        perl -pi.bak -e "s/D/$f/;" $c/chr${c}.agp
+     end
+     # check .agp files and then remove backup files
+     foreach c (Un NA Finished)
+        rm ./$c/chr${c}.agp.bak
+     end
 
 # CHECK CHROM AND VIRTUAL CHROM SEQUENCES (DONE, 2004-05-27, hartera)
      # Check that the size of each chromosome .fa file is equal to the 
@@ -233,7 +256,8 @@ M       1       16596	1       F	AC024175.3      1       16596	+
     # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
     echo 'drop table grp;' | hgsql danRer1
 
-# REPEAT MASKING - Run RepeatMasker on chroms (DONE, 2004-05-28, hartera)    #- Split contigs into 500kb chunks, at gaps if possible:
+# REPEAT MASKING - Run RepeatMasker on chroms (DONE, 2004-05-28, hartera)    
+#- Split contigs into 500kb chunks, at gaps if possible:
     ssh kksilo
     cd /cluster/data/danRer1
     foreach c (`cat chrom.lst`)
@@ -495,11 +519,31 @@ while (<STDIN>) {
     ln -s /cluster/data/danRer1/danRer1.2bit /gbdb/danRer1i/nib/
 
 # MAKE GOLD AND GAP TRACKS (DONE, 2004-06-08, hartera)
+# REMAKE GOLD AND GAP TRACKS (DONE, 2004-07-07, hartera)
     ssh hgwdev
     cd /cluster/data/danRer1
+    # the gold and gap tracks are created from the chrN.agp file and this is
+    # the contigs agp so need to use chrN.supercontigs.agp to create
+    # an assembly scaffolds track as for panTro1
+   #mv chrN.agp to a "contigs" dir and rename chrN.supercontigs.agp to chrN.agp
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+               21 22 23 24 25)
+       mkdir ./$c/contigs
+       cp ./$c/chr${c}.agp ./$c/contigs/
+       mv ./$c/chr${c}.contigs.agp ./$c/contigs/
+       mv ./$c/chr${c}.supercontigs.agp ./$c/chr${c}.agp
+    end
+                                                                                
+    # check track and delete the chrN_supercontigs gap and gold tables
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+               21 22 23 24 25)
+       hgsql -e "drop table chr${c}_supercontigs_gold;" danRer1
+       hgsql -e "drop table chr${c}_supercontigs_gap;" danRer1
+    end
     hgGoldGapGl -noGl -chromLst=chrom.lst danRer1 /cluster/data/danRer1 .
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER1 (DONE, 2004-06-08, hartera)
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER1 
+# (DONE, 2004-06-08, hartera)
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -525,16 +569,38 @@ while (<STDIN>) {
     echo 'insert into defaultDb (genome, name) \
           values ("Zebrafish", "danRer1");' \ 
           | hgsql -h genome-testdb hgcentraltest
+# Move Zebrafish so it is between Chicken and Fugu in the organism list
+    echo 'update dbDb set orderKey = 38 where name = "danRer1";' \
+         | hgsql -h genome-testdb hgcentraltest
 
-# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (in progress, 2004-06-08, hartera)
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-06-30, hartera)
     ssh hgwdev
     mkdir /cluster/data/danRer1/html
     cd /cluster/data/danRer1/html
-
+    # make a symbolic link from /gbdb/danRer1/html to /cluster/data/danRer1/html    ln -s /cluster/data/danRer1/html /gbdb/danRer1/html
+    # Add a description page for zebrafish
+    cd /cluster/data/danRer1/html
+    cp /cluster/data/fr1/html/*.html .
+    # Edit this for zebrafish
+    
+    # create a description.html page here
     mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
-    # make a symbolic link from /gbdb/danRer1/html to /cluster/data/danRer1/html
-    ln -s /cluster/data/danRer1/html /gbdb/danRer1/html
-    # NEED TO ADD DESCRIPTION.HTML PAGE
+    cd ~/kent/src/hg/makeDb/trackDb/
+    cvs add zebrafish
+    cvs commit zebrafish
+    cd zebrafish
+    cvs add danRer1
+    cvs commit danRer1
+    # Add description page here too
+    cp /cluster/data/danRer1/html/description.html \
+       $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1/
+    chmod a+r \
+          $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1/description.html
+    cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1/
+    # Check it in and copy (ideally using "make alpha" in trackDb) to
+    # /gbdb/danRer1/html
+    cvs add description.html
+    cvs commit description.html
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-06-09, hartera)
     ssh kkr1u00
@@ -669,22 +735,22 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 danRer1 \
     mkdir -p /gbdb/danRer1/wib/gc5Base
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/danRer1/wib/gc5Base
 
-# BLASTZ FOR HG17 (in progress, 2004-06-00, hartera)
+# BLASTZ FOR HG17 (DONE, 2004-06-16, hartera)
     ssh kkr1u00
     # blastz requires lineage-specific repeats
     # Treat all repeats as lineage-specific.
-
+                                                                                
     mkdir /iscratch/i/danRer1/linSpecRep.notInHuman
-    foreach f (/iscratch/i/danRer1/rmsk/chr*.fa.out) 
+    foreach f (/iscratch/i/danRer1/rmsk/chr*.fa.out)
       cp -p $f /iscratch/i/danRer1/linSpecRep.notInHuman/$f:t:r:r.out.spec
     end
-
+                                                                                
     mkdir /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
-    foreach f (/iscratch/i/gs.18/build35/rmsk/chr*.fa.out) 
+    foreach f (/iscratch/i/gs.18/build35/rmsk/chr*.fa.out)
  cp -p $f /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
     end
     iSync
-
+                                                                                
     ssh kk
     mkdir -p /cluster/data/danRer1/bed/blastz.hg17.2004-06-08
     ln -s /cluster/data/danRer1/bed/blastz.hg17.2004-06-08 \
@@ -692,14 +758,14 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 danRer1 \
     cd /cluster/data/danRer1/bed/blastz.hg17
     # Set L=6000 and abridge repeats - these are the same parameters used
     # for hg16 and Fugu.
-
+                                                                                
     cat << '_EOF_' > DEF
 # zebrafish vs human (hg17)
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
-
+                                                                                
 ALIGN=blastz-run
 BLASTZ=blastz
-
+                                                                                
 # Reuse parameters from hg16-fr1.
 BLASTZ_H=2000
 BLASTZ_Y=3400
@@ -707,7 +773,7 @@ BLASTZ_L=6000
 BLASTZ_K=2200
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 BLASTZ_ABRIDGE_REPEATS=1
-
+                                                                                
 # TARGET: Zebrafish
 SEQ1_DIR=/iscratch/i/danRer1/nib/
 SEQ1_RMSK=
@@ -716,7 +782,7 @@ SEQ1_SMSK=/iscratch/i/danRer1/linSpecRep.notInHuman
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
-
+                                                                                
 # QUERY: Human (hg17)
 SEQ2_DIR=/iscratch/i/gs.18/build35/bothMaskedNibs
 SEQ2_RMSK=
@@ -725,9 +791,9 @@ SEQ2_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
-
+                                                                                
 BASE=/cluster/data/danRer1/bed/blastz.hg17
-
+                                                                                
 DEF=$BASE/DEF
 RAW=$BASE/raw
 CDBDIR=$BASE
@@ -742,7 +808,7 @@ SEQ2_LEN=$BASE/S2.len
     # edit BlastZ_run0.sh
     # replace line 22: /cluster/home/angie/schwartzbin/ with /cluster/bin/penn/
     # this is the directory for the latest version of blastz-run
-
+                                                                                
     # prepare first cluster run
     ssh kk
     cd /cluster/data/danRer1/bed/blastz.hg17
@@ -754,11 +820,334 @@ SEQ2_LEN=$BASE/S2.len
     para try, check, push, check, ....
 # para time
 # Completed: 57970 of 57970 jobs
-# CPU time in finished jobs:   20265671s  337761.18m  5629.35h  234.56d  0.643 y
-# IO & Wait Time:                570125s    9502.09m   158.37h    6.60d  0.018 y
-# Average job time:                 359s       5.99m     0.10h    0.00d
+# CPU time in finished jobs:   20265671s  337761.18m  5629.35h  234.56d  0.643 y# IO & Wait Time:                570125s    9502.09m   158.37h    6.60d  0.018 y# Average job time:                 359s       5.99m     0.10h    0.00d
 # Longest job:                    10482s     174.70m     2.91h    0.12d
 # Submission to last job:         73680s    1228.00m    20.47h    0.85d
+    # Took about 17 hours to run. Output is 6.3 Gigabytes - rather large.
+    # Try processing and check in browser before adjusting parameters
+    #   Second cluster run to convert the .out's to .lav's
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/danRer1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Completed: 170 of 170 jobs
+# CPU time in finished jobs:      16047s     267.45m     4.46h    0.19d  0.001 y# IO & Wait Time:                146162s    2436.03m    40.60h    1.69d  0.005 y# Average job time:                 954s      15.90m     0.27h    0.01d
+# Longest job:                     2179s      36.32m     0.61h    0.03d
+# Submission to last job:          2451s      40.85m     0.68h    0.03d
+                                                                                
+    #   Third cluster run to convert lav's to axt's
+    ssh kk
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    mkdir axtChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /iscratch/i/danRer1/nib \
+/iscratch/i/gs.18/build35/bothMaskedNibs stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/danRer1/bed/blastz.hg17/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 27 of 29 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:       2063s      34.38m     0.57h    0.02d  0.000 y# IO & Wait Time:                 19245s     320.75m     5.35h    0.22d  0.001 y# Average job time:                 789s      13.15m     0.22h    0.01d
+# Longest job:                     9103s     151.72m     2.53h    0.11d
+# Submission to last job:         14332s     238.87m     3.98h    0.17d
+                                                                                
+# chrNA and chrUn are the crashed jobs. These are very large and ran out of
+# memory. Re-run these separately on kolossus
+                                                                                
+     ssh kk
+     # put nibs on bluearc
+     mkdir -p /cluster/bluearc/danRer1/nib
+     mkdir -p /cluster/bluearc/hg17/bothMaskedNibs
+     cp /iscratch/i/danRer1/nib/* /cluster/bluearc/danRer1/nib
+     cp /iscratch/i/gs.18/build35/bothMaskedNibs/* \
+        /cluster/bluearc/hg17/bothMaskedNibs
+                                                                                
+     cat << '_EOF_' > do2.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /cluster/bluearc/danRer1/nib \
+/cluster/bluearc/hg17/bothMaskedNibs stdout \
+| axtSort stdin $2
+'_EOF_'
+                                                                                
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blastz.hg17/run.2
+    ./do2.csh ../lav/chrNA \
+              /cluster/data/danRer1/bed/blastz.hg17/axtChrom/chrNA.axt
+    ./do2.csh ../lav/chrUn \
+             /cluster/data/danRer1/bed/blastz.hg17/axtChrom/chrUn.axt
+                                                                                
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    mkdir -p pslChrom
+    set tbl = "blastzHg17"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+                                                                                
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.hg17/pslChrom
+                                                                                
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer1 $f
+      echo "$f Done"
+    end
+# To tune Blastz parameters: these parameters above where used but it was 
+# thought that there were probably too many pileups. So then the
+# blastz was repeated with L=10000 (as for hg16-galGal2) and with an
+# intermediate value of L=8000. L is the threshold for gapped alignments.
+# Looking at alignments in the browser it was found that L=10000 and L=8000
+# were too stringent and alignments to coding regions were being lost.
+# L=6000 (as above) seemed to be the best choice and then low scoring 
+# alignments could be filtered at the chaining step instead to reduce pileups.
+# e.g. using the browser with the non-zebrafish mRNAs track turned on
+# chr1:24,547-28,249 region lost an exon with all but blastz with L=6000
+# chr2:1,124,174-1,135,282 is worse with an entire gene being lost except
+# with the Blastz with L=6000.
+
+# RESCORE HG17 BLASTZ (DONE, 2004-06-21, hartera)
+# USE HG17 BLASTZ WITH L=6000 SO AS NOT TO MISS
+    # Low scores can occur with repeats abridged and using the
+    # HoxD55.q matrix. PSU's restore_rpts program rescored alignments
+    # with the default matrix instead of the BLASTZ_Q matrix.
+    # Rescore them here so the chainer sees the higher scores:
+                                                                                
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    mkdir axtChrom.rescore
+    foreach f (axtChrom/chr*.axt)
+        axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
+        $f axtChrom.rescore/$f:t
+    end
+    mv axtChrom axtChrom.orig
+    mv axtChrom.rescore axtChrom
+                                                                                
+#   psl files and blastz tables will be the same regardless of score so
+#   no need to reload
+                                                                                
+# CHAIN HG17 BLASTZ (DONE, 2004-06-24, hartera)
+    # Re do chains with rescored blastz Hg17
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    mv axtChain axtChain.orig
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    # create 2 input lists as need to process chrNA and chrUn separately
+    ls -1S /cluster/data/danRer1/bed/blastz.hg17/axtChrom/*.axt \
+        > input.lst
+    grep "chrNA" input.lst > inputNAandUn.lst
+    grep "chrUn" input.lst >> inputNAandUn.lst
+    # remove chrNA and chrUn from input.lst
+                                                                                
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    # Reuse gap penalties from hg16 vs chicken run.
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V
+72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V
+31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V
+16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtFilter $1 \
+| axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../chickenHumanTuned.gap \
+                      -minScore=10000 stdin \
+    /iscratch/i/danRer1/nib \
+    /iscratch/i/gs.18/build35/bothMaskedNibs $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 27 of 27 jobs
+# CPU time in finished jobs:       4572s      76.21m     1.27h    0.05d  0.000 y# IO & Wait Time:                  1252s      20.86m     0.35h    0.01d  0.000 y# Average job time:                 216s       3.60m     0.06h    0.00d
+# Longest job:                     1092s      18.20m     0.30h    0.01d
+# Submission to last job:          3242s      54.03m     0.90h    0.04d
+                                                                                
+    cat << '_EOF_' > gsub2
+#LOOP
+doChain2 {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+cat << '_EOF_' > doChain2
+#!/bin/csh
+axtFilter $1 \
+| axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../chickenHumanTuned.gap \
+                      -minScore=15000 stdin \
+    /iscratch/i/danRer1/nib \
+    /iscratch/i/gs.18/build35/bothMaskedNibs $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 inputNAandUn.lst single gsub2 jobList2
+    para create jobList2
+    para try, check, push, check...
+# para time
+# crashes (out of memory) so try again on kolossus
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain/run1
+    # use sequences on cluearc for kolossus
+    cat << '_EOF_' > doChain2
+#!/bin/csh
+axtFilter $1 \
+| axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../chickenHumanTuned.gap \
+                      -minScore=15000 stdin \
+    /cluster/bluearc/danRer1/nib \
+    /cluster/bluearc/hg17/bothMaskedNibs $2 >& $3
+'_EOF_'
+    chmod +x doChain2
+                                                                                
+    doChain2 /cluster/data/danRer1/bed/blastz.hg17/axtChrom/chrNA.axt \
+               chain/chrNA.chain out/chrNA.out
+    doChain2 /cluster/data/danRer1/bed/blastz.hg17/axtChrom/chrUn.axt \
+               chain/chrUn.chain out/chrUn.out
+                                                                                
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+# take a look at score distr's,try also with larger bin size.
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist.out
+      textHistogram -binSize=10000 /tmp/score.$f:t:r >> hist.out
+      echo ""
+    end
+                                                                                
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain danRer1 ${c}_chainHg17 $i
+        echo done $c
+    end
+# load in original chains as chainHg17NoFilt - minScore = 5000 on all chroms
+# featureBits -chrom=chr1 danRer1 chainHg17
+# 12359874 bases of 40488791 (30.527%) in intersection
+# featureBits -chrom=chr1 danRer1 refGene:cds chainHg17
+# 147375 bases of 40488791 (0.364%) in intersection
+# featureBits -chrom=chr1 danRer1 chainHg17NoFilt
+# 13518074 bases of 40488791 (33.387%) in intersection
+# featureBits -chrom=chr1 danRer1 refGene:cds chainHg17NoFilt
+#  149120 bases of 40488791 (0.368%) in intersection
+                                                                                
+# featureBits -chrom=chrNA danRer1 chainHg17
+# 79678867 bases of 335615307 (23.741%) in intersection
+# featureBits -chrom=chrNA danRer1 refGene:cds chainHg17
+# 556727 bases of 335615307 (0.166%) in intersection
+# featureBits -chrom=chrNA danRer1 chainHg17NoFilt  
+# 100579306 bases of 335615307 (29.969%) in intersection
+# featureBits -chrom=chrNA danRer1 refGene:cds chainHg17NoFilt
+# 622781 bases of 335615307 (0.186%) in intersection
+# featureBits -chrom=chrNA danRer1 refGene:cds
+# 741426 bases of 335615307 (0.221%) in intersection
+
+# Using minScore=10000 for all chroms but 15000 for chrUn and chrNA
+# reduces low scoring chains but without compromising CDS region coverage
+# too much.
+
+# NET HG17 BLASTZ (DONE, 2004-07-07, hartera)
+                                                                                
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+                                                                                
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    #  memory usage 111640576, utime 625 s/100, stime 120
+                                                                                
+# Add classification info using db tables:
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/danRer1/linSpecRep.notInHuman
+    mkdir -p /cluster/bluearc/hg17/linSpecRep.notInZebrafish
+    cp /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish/* \
+       /cluster/bluearc/hg17/linSpecRep.notInZebrafish
+    cp /iscratch/i/danRer1/linSpecRep.notInHuman/* \
+       /cluster/bluearc/danRer1/linSpecRep.notInHuman
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
+                                                                                
+    time netClass noClass.net danRer1 hg17 humanhg17.net \
+         -tNewR=/cluster/bluearc/danRer1/linSpecRep.notInHuman \
+         -qNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish -noAr
+    # 85.530u 52.020s 5:15.86 43.5%   0+0k 0+0io 2072pf+0w
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
+    netFilter -minGap=10 humanhg17.net |  hgLoadNet danRer1 netHg17 stdin
 
 
 # MAKE 10.OOC, 11.OOC FILE FOR BLAT (DONE, 2004-06-09, hartera)

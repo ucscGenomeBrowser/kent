@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.62 2004/06/30 23:03:51 angie Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.63 2004/07/14 05:46:33 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1139,6 +1139,13 @@ void spaceOut(FILE *f, int count)
 {
 while (--count >= 0)
     fputc(' ', f);
+}
+
+void starOut(FILE *f, int count)
+/* Put out some asterisks to file. */
+{
+while (--count >= 0)
+    fputc('*', f);
 }
 
 boolean hasWhiteSpace(char *s)

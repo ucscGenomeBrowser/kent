@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.24 2004/06/20 20:31:29 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.26 2004/07/13 00:23:34 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -2103,7 +2103,7 @@ int i=0;
 int numAltVerts = 4;
 
 /* Quick check. */
-if(vTypes[vs] != ggHardStart || vTypes[ve1] != ggHardEnd || vTypes[ve2] != ggHardEnd)
+if(vTypes[vs] != ggHardStart || vTypes[ve1] != ggHardEnd)
     return FALSE;
 if(em[vs][ve1] && em[vs][ve2]) 
     {
@@ -2234,4 +2234,176 @@ if(em[vs][ve1] && em[vs][ve2])
 	}
     }
 return FALSE;
+}
+
+static struct altGraphX *agxCopyIndividualComponents(struct altGraphX *agx, int *vComponents, int compCount)
+/* Take the original splicing graph and an array that describes what
+   component each vertex belongs to. In current implementation there
+   may be mrnaRefs, tissues and libs that aren't used as all of them
+   are copied for each graph. */
+{
+int vertIx = 0;
+int i = 0;
+struct altGraphX *agxNew = NULL, *agxList = NULL;
+int compIx = 0;
+int vC = agx->vertexCount;
+int eC = agx->edgeCount;
+int *eStarts = agx->edgeStarts;
+int *eEnds = agx->edgeEnds;
+
+/* For each component. */
+for(compIx = 0; compIx < compCount; compIx++)
+    {
+    char buff[256];
+    int vCNew = 0;
+    int eCNew = 0;
+    int *mapping = NULL;
+    struct evidence **evNew = NULL;
+    struct evidence *ev = NULL, *evList = NULL;
+    AllocArray(mapping, vC);
+    AllocArray(evNew, eC);
+    
+    /* Basic idea is to clone the graph and then prune out
+       the unused vertices and edges. */
+    agxNew = altGraphXClone(agx);
+    safef(buff, sizeof(buff), "%s-%d", agx->name, compCount);
+    freez(&agxNew->name);
+    agxNew->name = cloneString(buff);
+
+    /* Set tStart and tEnd to maximum and minimum values possible. */
+    agxNew->tStart = agx->tEnd;
+    agxNew->tEnd = agx->tStart;
+
+    /* Copy over the vertices. */
+    for(i = 0; i < vC; i++) 
+	{
+	if(vComponents[i] == compIx)
+	    {
+	    mapping[i] = vCNew;
+	    agxNew->vTypes[vCNew] = agx->vTypes[i];
+	    agxNew->vPositions[vCNew] = agx->vPositions[i];
+	    agxNew->tStart = min(agxNew->tStart, agxNew->vPositions[vCNew]);
+	    agxNew->tEnd = min(agxNew->tEnd, agxNew->vPositions[vCNew]);
+	    vCNew++;
+	    }
+	else
+	    mapping[i] = -1;
+	}
+
+
+    /* Set up a temp array for the evidence. */
+    for(ev = agxNew->evidence, i=0; ev != NULL; ev = ev->next, i++)
+        evNew[i] = ev;
+
+    /* Copy over the new edges. */    
+    for(i = 0; i < eC; i++)
+	{
+	if(mapping[eStarts[i]] != -1) 
+	    {
+	    agxNew->edgeStarts[eCNew] = mapping[eStarts[i]];
+	    agxNew->edgeEnds[eCNew] = mapping[eEnds[i]];
+	    agxNew->edgeTypes[eCNew] = mapping[agx->edgeTypes[i]];
+	    /* Add evidence to growing list. */
+	    slAddHead(&evList, evNew[i]);
+	    eCNew++;
+	    }
+	else
+	    {
+	    /* Don't forget to free the evidence before
+	       we lose a handle to it. */
+	    evidenceFree(&evNew[i]);
+	    }
+	}
+    agxNew->vertexCount = vCNew;
+    agxNew->edgeCount = eCNew;
+    slReverse(&evList);
+    agxNew->evidence = evList;
+    slAddHead(&agxList, agxNew);
+
+    /* Cleanup. */
+    freez(&mapping);
+    freez(&evNew);
+    }
+
+slReverse(&agxList);
+return agxList;
+}
+    
+    
+static void agxCcDfs(int **adjList, int *adjCounts, int *vColors, int *vComponents, 
+	      int vCount, int vertIx, int component)
+/* Depth first search to identify all of the vertices
+   that connect to this one. */
+{
+int nextV = 0;
+int adjVertCount = 0;
+
+/* Mark as seen. */
+vColors[vertIx] = agGray;
+vComponents[vertIx] = component;
+
+/* Recurse into each vertex connected to this
+   one that hasn't been discovered */
+while(adjVertCount < adjCounts[vertIx])
+    {
+    nextV = adjList[vertIx][adjVertCount++];
+    if(vColors[nextV] == agWhite)
+	{
+	agxCcDfs(adjList, adjCounts, vColors, vComponents, vCount,
+		 nextV, component);
+	}
+    }
+/* Mark as done. */
+vColors[vertIx] = agBlack;
+}
+
+struct altGraphX *agxConnectedComponents(struct altGraphX *agx)
+/* Find the connected components of the graph and break them up into
+   seperate graphs. Free the result with altGraphXFreeList().
+   Algorithm for connected components from: Baase & Van Gelder
+   "Computer Algorithms Introduction to Design and Analysis" 3rd
+   edition 2000. pp 340-341
+*/
+{
+int **adjList = NULL;   /* Adjacency list. */
+int *adjCounts = NULL;  /* Number of vertices in the adj list. */
+int *vColors = NULL;     /* Colors of vertices. */
+int *vComponents = NULL; /* Component each vertice is in. */
+int i = 0, vertIx = 0;
+int vC = agx->vertexCount;
+int eC = agx->edgeCount;
+int *eS = agx->edgeStarts;
+int *eE = agx->edgeEnds;
+int compCount = 0;
+struct altGraphX *agxList = NULL;
+
+/* Allocate the adj list memeory. */
+AllocArray(adjList, vC);
+AllocArray(adjCounts, vC);
+AllocArray(vColors, vC);
+AllocArray(vComponents, vC);
+for(i = 0; i < vC; i++)
+    AllocArray(adjList[i], vC);
+
+/* Fill in the adjList. Connect all edges both ways, want to connecte
+   everything possible. Wow, a lot happens in those two lines of
+   code... */
+for(i = 0; i < eC; i++)
+    {
+    adjList[eS[i]][adjCounts[eS[i]]++] = eE[i];
+    adjList[eE[i]][adjCounts[eE[i]]++] = eS[i];
+    }
+
+for(vertIx = 0; vertIx < vC; vertIx++)
+    if(vColors[vertIx] == agWhite)
+	agxCcDfs(adjList, adjCounts, vColors, vComponents, vC, vertIx, compCount++);
+
+agxList = agxCopyIndividualComponents(agx, vComponents, compCount);
+for(i = 0; i < vC; i++)
+    freez(&adjList[i]);
+freez(&adjCounts);
+freez(&vColors);
+freez(&vComponents);
+freez(&adjList);
+return agxList;
 }

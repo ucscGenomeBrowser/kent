@@ -5,11 +5,11 @@
 # dbload for hgwbeta
 #
 #   - separate script since hgwbeta is updated before rr
-#   - does weekly dump of seuqnces, which are picked up by other rr nodes
+#   - does weekly dump of sequences, which are picked up by other rr nodes
 opts="$*"
 
 # databases to update
-databases="hg16 hg17 mm3 mm4 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2"
+databases="hg16 hg17 mm3 mm4 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 ci1"
 
 # gbRoot on hgnfs1
 gbRoot=/genbank

@@ -47,7 +47,7 @@ type genePred ensMergeTierDPep
 
 track slamHuman
 shortLabel Slam Human
-longLabel Slam Gene Predictions Using Human/Mouse Homology
+longLabel Slam Gene Predictions Using Mouse/Human (Nov. 2002/hg13) Homology
 group genes
 priority 45.5
 visibility hide
@@ -56,8 +56,8 @@ altColor 175,150,128
 type genePred 
 
 track slamNonCodingHuman
-shortLabel Slam Non Coding Human
-longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
+shortLabel Slam Non-Coding Human
+longLabel Slam Predictions of Mouse/Human (Nov. 2002/hg13) Conserved Non-Coding Regions
 group compGeno
 priority 120
 visibility hide
@@ -90,7 +90,7 @@ type psl .
 
 track blastzTightRat
 shortLabel Tight Rat 
-longLabel Blastz Rat, Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -102,7 +102,7 @@ otherDb rn1
 
 track blastzBestRat
 shortLabel Best Rat
-longLabel Blastz Rat Best-in-Genome Alignments
+longLabel $o_Organism  Blastz Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -114,7 +114,7 @@ otherDb rn1
 
 track blastzRn1
 shortLabel Blastz Rat
-longLabel Merged Blastz Rat Alignments
+longLabel $o_Organism Merged Blastz Alignments
 group compGeno
 priority 142
 visibility hide
@@ -136,7 +136,7 @@ type sample 0 8
 
 track blastzBestMouse
 shortLabel Best Self 
-longLabel Blastz Self Best-in-Genome Alignments
+longLabel Self Blastz Best-in-Genome Alignments
 group varRep
 priority 156
 visibility hide
@@ -148,7 +148,7 @@ otherDb mm2
 
 track blastzMm2
 shortLabel Blastz Self
-longLabel All Blastz Self Alignments
+longLabel Self All Blastz Alignments
 group varRep
 priority 160
 visibility hide
@@ -160,7 +160,7 @@ otherDb mm2
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel Blastz Human(Jun02) Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 127
 visibility hide
@@ -172,7 +172,7 @@ otherDb hg12
 
 track blastzTightHuman
 shortLabel Tight Human
-longLabel Blastz Human (Jun. 02), Tight Subset of Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
@@ -184,7 +184,7 @@ otherDb hg12
 
 track blastzMmHg
 shortLabel Blastz Human
-longLabel Merged Blastz Human (Dec. 01) Freeze Alignments
+longLabel $o_Organism ($o_date/$o_db) Merged Blastz Freeze Alignments
 group compGeno
 priority 131
 visibility hide
@@ -196,7 +196,7 @@ otherDb hg10
 
 track blatHuman
 shortLabel Human Blat
-longLabel Human (Dec. 01) Translated Blat Alignments
+longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
 priority 122
 visibility hide

@@ -5,7 +5,7 @@
 #include "tokenizer.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.2 2004/05/19 23:53:59 angie Exp $";
+static char const rcsid[] = "$Id: asParse.c,v 1.3 2004/07/14 05:47:51 kent Exp $";
 
 struct asTypeInfo asTypes[] = {
     {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double", "Double", "%f"},
@@ -177,12 +177,28 @@ for (obj = objList; obj != NULL; obj = obj->next)
 return objList;
 }
 
+static struct asObject *asParseLineFile(struct lineFile *lf)
+/* Parse open line file.  Closes lf as a side effect. */
+{
+struct tokenizer *tkz = tokenizerOnLineFile(lf);
+struct asObject *objList = asParseTokens(tkz);
+tokenizerFree(&tkz);
+return objList;
+}
+
 struct asObject *asParseFile(char *fileName)
 /* Parse autoSql .as file. */
 {
-struct tokenizer *tkz = tokenizerNew(fileName);
-struct asObject *objList = asParseTokens(tkz);
-tokenizerFree(&tkz);
+return asParseLineFile(lineFileOpen(fileName, TRUE));
+}
+
+
+struct asObject *asParseText(char *text)
+/* Parse autoSql from text (as opposed to file). */
+{
+char *dupe = cloneString(text);
+struct lineFile *lf = lineFileOnString("text", TRUE, dupe);
+struct asObject *objList = asParseLineFile(lf);
 return objList;
 }
 

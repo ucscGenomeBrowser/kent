@@ -34,7 +34,7 @@ CREATE TABLE stsMap (
     decodeChrom varchar(255) not null,	# Chromosome (no chr) from deCODE map or 0 if none
     decodePos float not null,	# Position on deCODE map
               #Indices
-    INDEX(name),
+    INDEX(name(16)),
     INDEX(chrom(8),chromStart),
     INDEX(chrom(8),chromEnd)
 );

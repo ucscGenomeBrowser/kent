@@ -33,8 +33,9 @@
 #include "botDelay.h"
 #include "wiggle.h"
 #include "hgText.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.149 2004/06/29 17:43:31 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.151 2004/07/14 05:51:59 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -5034,6 +5035,7 @@ else
 	doOutputOptions();
     else if (existsAndEqual("phase", getOutputPhase))
 	{
+	hgBotDelay();
 	if (existsAndEqual("outputType", allFieldsPhase) ||
 	    existsAndEqual("outputType", oldAllFieldsPhase))
 	    doTabSeparated(TRUE);
@@ -5135,8 +5137,8 @@ struct cart *theCart;
 
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-// Sometimes we output HTML and sometimes plain text; let each outputter 
-// take care of headers instead of using a fixed cart*Shell().
+/* Sometimes we output HTML and sometimes plain text; let each outputter 
+ * take care of headers instead of using a fixed cart*Shell(). */
 theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
 doMiddle(theCart);
 cartCheckout(&theCart);

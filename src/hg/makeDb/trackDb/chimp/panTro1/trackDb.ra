@@ -56,7 +56,7 @@ type wig 0 100
 
 track chainHg16
 shortLabel Human Chain
-longLabel Human (hg16-Jul 03) Chained Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 145.6
 visibility hide
@@ -68,7 +68,7 @@ otherDb hg16
 
 track netHg16
 shortLabel Human Net
-longLabel Human (hg16-Jul 03) Net 
+longLabel $o_Organism ($o_date/$o_db) Net 
 group compGeno
 priority 145.7
 visibility dense
@@ -78,21 +78,23 @@ otherDb hg16
 
 track axtNetHg16
 shortLabel Human Best
-longLabel Human (hg16-Jul 03) Best Alignments from Net
+longLabel $o_Organism ($o_date/$o_db) Best Alignments from Net
 group compGeno
 priority 145.8
 visibility hide
 color 100,50,0
 altColor 100,50,0
 type axt hg16
+otherDb hg16
 
 track humanDels
 shortLabel Human Deletions
-longLabel Deletions in Human (hg16-Jul 03) Relative to Chimp
+longLabel Deletions in $o_Organism ($o_date/$o_db) Relative to Chimp
 group compGeno
 priority 147
 visibility hide
 type bed 4 .
+otherDb hg16
 
 searchTable bacEndPairs
 searchMethod exact

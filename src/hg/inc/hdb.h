@@ -470,12 +470,33 @@ struct sqlResult *hOrderedRangeQuery(struct sqlConnection *conn,
 /* Construct and make a query to tables that may be split and/or
  * binned. Forces return values to be sorted by chromosome start. */
 
+struct sqlResult *hExtendedRangeQuery(
+	struct sqlConnection *conn,  /* Open SQL connection. */
+	char *rootTable, 	     /* Table (not including any chrN_) */
+	char *chrom, int start, int end,  /* Range. */
+	char *extraWhere,            /* Extra things to add to where clause. */
+	boolean order, 	   /* If true order by start position (can be slow). */
+	char *fields,      /* If non-NULL comma separated field list. */
+	int *retRowOffset); /* Returns offset past bin field. */
+/* Range query with lots of options. */
+
 struct sqlResult *hChromQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
 	char *extraWhere, int *retRowOffset);
 /* Construct and make a query across whole chromosome to tables 
  * that may be split and/or
  * binned. */
+
+struct sqlResult *hExtendedChromQuery(
+	struct sqlConnection *conn,  /* Open SQL connection. */
+	char *rootTable, 	     /* Table (not including any chrN_) */
+	char *chrom,  		     /* Chromosome. */
+	char *extraWhere,            /* Extra things to add to where clause. */
+	boolean order, 	   /* If true order by start position (can be slow). */
+	char *fields,      /* If non-NULL comma separated field list. */
+	int *retRowOffset); /* Returns offset past bin field. */
+/* Chromosome query fields for tables that may be split and/or binned, 
+ * with lots of options. */
 
 int hOffsetPastBin(char *chrom, char *table);
 /* Return offset into a row of table that skips past bin
@@ -527,6 +548,10 @@ struct dbDb *hGetAxtInfoDbs();
 
 struct axtInfo *hGetAxtAlignments(char *db);
 /* Get list of alignments where we have axt files listed in axtInfo . 
+ * Dispose of this with axtInfoFreeList. */
+
+struct axtInfo *hGetAxtAlignmentsChrom(char *otherDb, char *chrom);
+/* Get list of alignments where we have axt files listed in axtInfo for a specified chromosome . 
  * Dispose of this with axtInfoFreeList. */
 
 struct dbDb *hGetBlatIndexedDatabases();

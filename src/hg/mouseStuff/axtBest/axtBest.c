@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.13 2003/08/20 18:39:13 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.15 2004/07/14 23:23:27 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,7 @@ errAbort(
   "   -minScore=N - Minimum score alignments to consider.  Default 1000\n"
   "   -minOutSize=N - Minimum score of piece to output. Default 10\n"
   "   -matrix=file.mat - override default scoring matrix\n"
+  "   chrom=all - read all records and group by tName (in.axt must be axtSorted)\n"
   "Alignments scoring over minScore (where each matching base counts\n"
   "about +100 in the default scoring scheme) are projected onto the\n"
   "target sequence.  The score within each overlapping 1000 base window\n"
@@ -37,6 +38,7 @@ struct optionSpec options[] = {
    {"minScore", OPTION_INT},
    {"minOutSize", OPTION_INT},
    {"matrix", OPTION_STRING},
+   {"quiet", OPTION_BOOLEAN},
    {NULL,0}
 };
 
@@ -44,13 +46,59 @@ struct optionSpec options[] = {
 int winSize = 10000;
 int minScore = 1000;
 int minOutSize = 10;
+bool quiet = FALSE;
 
 /* Variables to keep statistics on aligments. */
 int writeCount = 0;	/* Keep track of number actually written. */
 int subsetCount = 0;    /* Keep track of trimmed number written. */
 int baseOutCount = 0;   /* Keep track of target bases written. */
 int baseInCount = 0;    /* Keep track of target bases input. */
+size_t maxAlloc = 2000;    /* Keep track of target bases input. */
+char *prevTname = NULL;
+struct axt *prevAxt = NULL;
 
+struct axt *readNextTnameList(struct lineFile *lf,  struct axtScoreScheme *ss, int threshold)
+/* Read set of axt's with same tName from sorted list */
+{
+struct axt *list = prevAxt, *axt;
+while ((axt = axtRead(lf)) != NULL)
+    {
+    if (!axtCheck(axt, lf))
+	{
+	axtFree(&axt);
+	continue;
+	}
+    if (sameString(axt->tName, prevTname) || sameString(prevTname, "first"))
+	{
+        if (axt->tStrand != '+')
+	    errAbort("Can't handle minus target strand line %d of %s",
+	        lf->lineIx, lf->fileName);
+	axt->score = axtScore(axt, ss);
+	baseInCount += axt->tEnd - axt->tStart;
+	if (axt->score >= threshold)
+	    {
+	    slAddHead(&list, axt);
+            prevTname = cloneString(axt->tName);
+	    }
+	else
+            {
+	    axtFree(&axt);
+            }
+	}
+    else
+        {
+        prevAxt = axt;
+        prevTname = cloneString(axt->tName);
+        break;
+        }
+    }
+if (axt == NULL)
+    {
+    prevAxt = NULL;
+    }
+slReverse(&list);
+return list;
+}
 struct axt *readAllAxt(char *fileName, struct axtScoreScheme *ss, int threshold,
 	char *chromName)
 /* Read all axt's in a file. */
@@ -64,9 +112,9 @@ while ((axt = axtRead(lf)) != NULL)
 	axtFree(&axt);
 	continue;
 	}
-    if (sameString(chromName, axt->tName))
+    if (sameString(chromName, axt->tName) || sameString(chromName,"all"))
 	{
-	if (axt->tStrand != '+')
+        if (axt->tStrand != '+')
 	    errAbort("Can't handle minus target strand line %d of %s",
 	        lf->lineIx, lf->fileName);
 	axt->score = axtScore(axt, ss);
@@ -93,6 +141,12 @@ struct bestKeep
     int *scores;	/* Array of scores. */
     struct axt **axts;   /* Array of axts. */
     };
+
+void bestKeepFree(struct bestKeep **pEl)
+{
+struct bestKeep *el = *pEl;
+freez(pEl);
+}
 
 void bestKeepInitScores(struct bestKeep *bk)
 /* Initialize scores to all bad. */
@@ -299,33 +353,24 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 *retEnd = maxSize;
 }
 
-void axtBest(char *inName, char *chromName, char *outName)
-/* axtBest - Remove second best alignments. */
+void axtBestList(struct axt *axtList, char *inName, struct axtScoreScheme *ss, FILE *f )
 {
-FILE *f = mustOpen(outName, "w");
-char *matrixName = optionVal("matrix", NULL);
-struct axtScoreScheme *ss = NULL;
-struct axt *axtList = NULL, *axt, *nextAxt, *goodList = NULL;
-struct bestKeep *bk = NULL;
-int i;
 int chromStart, chromEnd;
 int rangeSize;
-
-if (matrixName == NULL)
-    ss = axtScoreSchemeDefault();
-else
-    ss = axtScoreSchemeRead(matrixName);
-axtList = readAllAxt(inName, ss, minScore, chromName);
+struct bestKeep *bk = NULL;
+struct axt *axt, *nextAxt, *goodList = NULL;
+int i;
 if (axtList == NULL)
     {
-    printf("Empty %s\n", inName);
+    if (!quiet)
+        printf("Empty %s\n", inName);
     return;
     }
-printf("Read %d elements from %s\n", slCount(axtList), inName);
 chromRange(axtList, &chromStart, &chromEnd);
 rangeSize = chromEnd - chromStart;
 bk = bestKeepNew(chromStart, chromEnd);
-printf("Allocated %d elements in array\n", rangeSize);
+if (!quiet)
+    printf("Allocated %d elements in array\n", rangeSize);
 
 
 /* Find local best in big soft window and get rid of
@@ -352,8 +397,8 @@ for (axt = axtList; axt != NULL; axt = nextAxt)
     }
 slReverse(&goodList);
 axtList = NULL;
-printf("%d elements in after soft filter.\n", slCount(goodList));
-
+if (!quiet)
+    printf("%d elements in after soft filter.\n", slCount(goodList));
 
 /* Find local best alignments in big hard window and
  * output them. */
@@ -362,9 +407,45 @@ bestKeepInitScores(bk);
 for (axt = goodList; axt != NULL; axt = axt->next)
     markBest(axt, bk, chromStart, rangeSize, ss, winSize, FALSE);
 outputBestRanges(bk, chromStart, rangeSize, ss, f);
-printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
-printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
-	100.0 * baseOutCount / baseInCount);
+bestKeepFree(&bk);
+}
+
+void axtBest(char *inName, char *chromName, char *outName)
+/* axtBest - Remove second best alignments. */
+{
+FILE *f = mustOpen(outName, "w");
+char *matrixName = optionVal("matrix", NULL);
+struct axtScoreScheme *ss = NULL;
+struct axt *axtList = NULL;
+prevTname = cloneString("first");
+
+if (matrixName == NULL)
+    ss = axtScoreSchemeDefault();
+else
+    ss = axtScoreSchemeRead(matrixName);
+if (sameString(chromName,"all"))
+    {
+    struct lineFile *lf = lineFileOpen(inName, TRUE);
+    while ((axtList = readNextTnameList(lf, ss, minScore)) != NULL)
+        {
+//        printf("Read %d elements from %s %s\n", slCount(axtList), inName, axtList->tName);
+        axtBestList(axtList, inName, ss, f);
+        axtFreeList(&axtList);
+        }
+    }
+else
+    {
+    axtList = readAllAxt(inName, ss, minScore, chromName);
+    if (!quiet)
+        printf("Read %d elements from %s\n", slCount(axtList), inName);
+    axtBestList(axtList, inName, ss, f);
+    }
+if (!quiet)
+    {
+    printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
+    printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
+            100.0 * baseOutCount / baseInCount);
+    }
 }
 
 
@@ -374,11 +455,13 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+quiet = optionExists("quiet");
 winSize = optionInt("winSize", winSize);
 minScore = optionInt("minScore", minScore);
 minOutSize = optionInt("minOutSize", minOutSize);
+maxAlloc = optionInt("maxAlloc", maxAlloc)*1024*1024;
 dnaUtilOpen();
-setMaxAlloc(2000000000U);
+setMaxAlloc(maxAlloc);
 axtBest(argv[1], argv[2], argv[3]);
 return 0;
 }
