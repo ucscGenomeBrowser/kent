@@ -967,7 +967,7 @@ if (maxScore > 0)
 		left = ff;
 		ff->nStart = ff->nEnd = npStart + nIx;
 		ff->hStart = ff->hEnd = hpStart + hIx;
-		uglyf("ending insert\n");
+		// uglyf("ending insert\n");
 		}
 	    ++nIx;
 	    ++hIx;
@@ -1005,7 +1005,7 @@ if (maxScore > 0)
 		left = ff;
 		ff->nStart = ff->nEnd = npEnd - nIx;
 		ff->hStart = ff->hEnd = hpEnd - hIx;
-		uglyf("ending insert 2\n");
+		// uglyf("ending insert 2\n");
 		}
 	    ++nIx;
 	    ++hIx;
