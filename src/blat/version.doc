@@ -11,6 +11,7 @@
        areas and N's separately from the sequence.  There are also
        faToTwoBit and twoBitToFa utilities to convert in and out of
        this format.
+     o Making minScore work with other alignment types than psl.
 
 27:
      o Made it so that gfClient does not abort when gfServer runs out
