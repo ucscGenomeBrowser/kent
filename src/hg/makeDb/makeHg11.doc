@@ -399,6 +399,7 @@ Locate motifs on all promoters with
       dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
       liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
 
+YONTAO
 
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
@@ -487,7 +488,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg11 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (done for mRNA, not for EST)
+MATT - PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (done for mRNA, not for EST)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
