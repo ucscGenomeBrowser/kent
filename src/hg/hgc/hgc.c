@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.626 2004/05/06 23:51:30 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.627 2004/05/08 20:05:04 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7515,16 +7515,15 @@ char **row;
 struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn();
 
-if (sameString(pg->assembly , database))
-    safef(chainTable,sizeof(chainTable), "selfChain");
-    if (!hTableExists(chainTable) )
-        safef(chainTable,sizeof(chainTable), "chainSelf");
-else
-    {
-    char *org = hOrganism(pg->assembly);
-    org[0] = tolower(org[0]);
-    safef(chainTable,sizeof(chainTable), "%sChain", org);
-    }
+safef(chainTable,sizeof(chainTable), "selfChain");
+if (!hTableExists(chainTable) )
+    safef(chainTable,sizeof(chainTable), "chainSelf");
+//else
+//    {
+//    char *org = hOrganism(pg->assembly);
+//    org[0] = tolower(org[0]);
+//    safef(chainTable,sizeof(chainTable), "%sChain", org);
+//    }
 printf("<B>PseudoGene Confidence:</B> %4.3f \n",pg->posConf);
 printf("<B>PseudoGene Score:</B> %d \n",pg->score);
 printf("<B>Syntenic with mouse:</B> %d %%\n",pg->overlapDiag);
@@ -7544,7 +7543,7 @@ printf("<H4>Annotation for Gene locus that spawned PseudoGene</H4>");
 if (!sameString(pg->refSeq,"noRefSeq"))
     {
     printf("<LI><B>RefSeq:</B> %s \n", pg->refSeq);
-    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->rStart, pg->rEnd);
+    linkToOtherBrowser(database, pg->gChrom, pg->rStart, pg->rEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->rStart, pg->rEnd);
     printf("</A></LI>");
     }
@@ -7561,7 +7560,7 @@ if (!sameString(pg->kgName,"noKg"))
                 "hgg_start", pg->kStart,
                 "hgg_end", pg->kEnd);
     printf(">%s</A>  ",pg->kgName);
-    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->kStart, pg->kEnd);
+    linkToOtherBrowser(database, pg->gChrom, pg->kStart, pg->kEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->kStart, pg->kEnd);
     printf("</A></LI>");
     if (hTableExists("knownGene"))
@@ -7584,15 +7583,15 @@ if (!sameString(pg->kgName,"noKg"))
 else
     {
     /* display mrna */
-    printf("<LI><B>mRna:</B> %s \n", pg->gene);
-    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
+    printf("<LI><B>mRna:</B> %s \n", pg->name);
+    linkToOtherBrowser(database, pg->gChrom, pg->gStart, pg->gEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->gStart, pg->gEnd);
     printf("</A></LI>");
     }
 if (!sameString(pg->mgc,"noMgc"))
     {
     printf("<LI><B>Mgc Gene:</B> %s \n", pg->mgc);
-    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->mStart, pg->mEnd);
+    linkToOtherBrowser(database, pg->gChrom, pg->mStart, pg->mEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
     printf("</A></LI>");
     }
@@ -7666,8 +7665,8 @@ if (hTableExists(chainTable_chrom) )
             }
         //if (pg->chainId == 0) pg->chainId = chainId;
         puts("<LI>\n");
-        hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
-                pg->gChrom, pg->kStart, pg->kEnd, chainId, pg->assembly);
+        hgcAnchorPseudoGene(pg->kgName, "knownGene", chrom, "startcodon", chromStart, chromEnd, 
+                pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
         printf("Annotated alignment using chainId: %d </A> \n", chainId);
         printf("score: %d \n", score);
         hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
@@ -7700,6 +7699,8 @@ char *tbl = cgiUsualString("table", cgiString("g"));
 int rowOffset = 0;
 
 /* Get alignment info. */
+if (startsWith(tbl,"pseudoGeneLink2"))
+    tbl = cloneString("pseudoMrna2");
 if (startsWith(tbl,"pseudoGeneLink"))
     tbl = cloneString("pseudoMrna");
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
