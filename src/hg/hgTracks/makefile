@@ -26,6 +26,9 @@ compile: $O
 	strip $A
 	chmod a+rx $A
 
+install:	compile
+	mv $A ${DESTDIR}/usr/local/apache/cgi-bin/$A
+
 debug: $O
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A

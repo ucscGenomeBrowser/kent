@@ -24,6 +24,9 @@ compile: $O
 	strip $A
 	chmod a+rx $A
 
+install:	compile
+	mv $A ${DESTDIR}/usr/local/apache/cgi-bin/$A
+
 lib:
 	cd ../../lib; make
 
