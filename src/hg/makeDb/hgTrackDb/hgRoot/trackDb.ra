@@ -949,7 +949,7 @@ shortLabel ZooSeq
 longLabel ZooSeq Conservation Data 
 priority 41.1
 visible hide
-chromosomes chr7,
+chromosomes chr1, chr7, chr14,
 color 0,60,120
 altColor 0,128,0
 type sample 9
