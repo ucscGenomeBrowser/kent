@@ -80,7 +80,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.682 2004/03/03 20:28:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.683 2004/03/08 23:28:12 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6279,7 +6279,14 @@ if (withLeftLabels)
 	tHeight = track->height;
 	if (withCenterLabels)
 	    tHeight += fontHeight;
-	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+	/*	Wiggle tracks depend upon clipping.  They are reporting
+ 	 *	totalHeight artifically high by 1 so this will leave a
+ 	 *	blank area one pixel high below the track.
+	 */
+	if (sameString("wig",track->tdb->type))
+	    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight-1);
+	else
+	    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
 
 	minRange = 0.0;
 	safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
