@@ -744,11 +744,19 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (todo)
+LOAD SOFTBERRY GENES (done)
+     - ln -s /cluster/store2/mm.2001.11/mm1 ~/mm
      - cd ~/mm/bed
      - mkdir softberry
      - cd softberry
-     - get ftp://www.softberry.com/pub/SC_AUG01/*
+     - get ftp://www.softberry.com/pub/SC_MOU_NOV01/softb_mou_genes_nov01.tar.gz
+     - mkdir output
+     - Run the fixFormat.pl routine in
+        ~/mm/bed/softberry like so:
+        ./fixFormat.pl output
+     - This will stick all the properly converted .gff and .pro files in
+     the directory named "output".
+     - cd output
      ldHgGene mm1 softberryGene chr*.gff
      hgPepPred mm1 softberry *.pro
      hgSoftberryHom mm1 *.pro
