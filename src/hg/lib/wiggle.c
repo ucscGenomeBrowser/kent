@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.3 2003/11/06 20:17:35 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.4 2003/11/10 16:38:43 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will
@@ -31,8 +31,8 @@ ret->File = row[10];
 ret->lowerLimit = atof(row[11]);
 ret->dataRange = atof(row[12]);
 ret->validCount = sqlUnsigned(row[13]);
-ret->average = atof(row[14]);
-ret->stddev = atof(row[15]);
+ret->sumData = atof(row[14]);
+ret->sumSquares = atof(row[15]);
 }
 
 struct wiggle *wiggleLoad(char **row)
@@ -58,8 +58,8 @@ ret->File = cloneString(row[10]);
 ret->lowerLimit = atof(row[11]);
 ret->dataRange = atof(row[12]);
 ret->validCount = sqlUnsigned(row[13]);
-ret->average = atof(row[14]);
-ret->stddev = atof(row[15]);
+ret->sumData = atof(row[14]);
+ret->sumSquares = atof(row[15]);
 return ret;
 }
 
@@ -123,8 +123,8 @@ ret->File = sqlStringComma(&s);
 ret->lowerLimit = sqlDoubleComma(&s);
 ret->dataRange = sqlDoubleComma(&s);
 ret->validCount = sqlUnsignedComma(&s);
-ret->average = sqlDoubleComma(&s);
-ret->stddev = sqlDoubleComma(&s);
+ret->sumData = sqlDoubleComma(&s);
+ret->sumSquares = sqlDoubleComma(&s);
 *pS = s;
 return ret;
 }
@@ -195,9 +195,9 @@ fprintf(f, "%f", el->dataRange);
 fputc(sep,f);
 fprintf(f, "%u", el->validCount);
 fputc(sep,f);
-fprintf(f, "%f", el->average);
+fprintf(f, "%f", el->sumData);
 fputc(sep,f);
-fprintf(f, "%f", el->stddev);
+fprintf(f, "%f", el->sumSquares);
 fputc(lastSep,f);
 }
 

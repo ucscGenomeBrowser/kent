@@ -19,8 +19,8 @@ CREATE TABLE wiggle (
     lowerLimit double not null,	# lowest data value in this block
     dataRange double not null,	# lowerLimit + dataRange = upperLimit
     validCount int unsigned not null,	# number of valid data values in this block
-    average double not null,	# average of the data valeus, we may need this later
-    stddev double not null,	# standard deviation, we may need this later
+    sumData double not null,	# sum of the data points, for average and stddev calc
+    sumSquares double not null,	# sum of data points squared, for stddev calc
               #Indices
     PRIMARY KEY(chrom)
 );
