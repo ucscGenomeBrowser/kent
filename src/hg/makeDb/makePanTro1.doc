@@ -125,6 +125,18 @@ if (-e /tmp/panTro1/$2/$2.align) /bin/cp /tmp/panTro1/$2/$2.align ./$2.align
     para try
     para push
 
+# MAKE LINEAGE-SPECIFIC REPEATS FOR HUMAN (DONE 2004-06-21 kate)
+    # Lacking input from Arian, and using blastzSelf as a model,
+    # I'm using all chimp repeats for the human/chimp blastz.
+    # Scripts expect *.out.spec filenames.
+    ssh kkr1u00
+    cd /cluster/data/panTro1
+    mkdir /iscratch/i/chimp/panTro1/linSpecRep.human
+    foreach f (?{,}/*.fa.out)
+        cp -p $f /iscratch/i/chimp/panTro1/linSpecRep.human/$f:t:r:r.out.spec
+    end
+    iSync
+
 # FILTER SIMPLE REPEATS INTO MASK (DONE 2004-01-25 kate)
     # make a filtered version # of the trf output: 
     # keep trf's with period <= 12:
@@ -706,6 +718,29 @@ zip -j zip/chromOut.zip */chr*.fa.out
     cd $gp/bigZips
     md5sum *.zip > md5sum.txt
 
+    # remake chrom quality files (bug fixed in chimpChromQuals that
+    # left out trailing zeroes for final gap)
+    # NOTE: not reloading quality track at this point
+    # (will do this later, if needed)
+    # 2004-07-06 kate
+
+    ssh kksilo
+    cd /cluster/data/panTro1
+cat > jkStuff/chromQualsRedo.csh << 'EOF'
+    foreach c (?{,?})
+        echo "chr$c quality scores"
+        if (-e $c/chr$c.agp) then
+            chimpChromQuals $c/chr$c.agp scaffolds.qac $c/chr$c.qac
+        endif
+        if (-e $c/chr${c}_random.agp) then
+            chimpChromQuals $c/chr${c}_random.agp \
+                scaffolds.qac $c/chr${c}_random.qac
+        endif
+    end
+'EOF'
+    csh jkStuff/chromQualsRedo.csh >& jkStuff/chromQualsRedo.log &
+    tail -100f jkStuff/chromQualsRedo.log
+    
     # quality scores
     ssh kksilo
     cd /cluster/data/panTro1
@@ -718,7 +753,7 @@ foreach f (?{,?}/*.qac)
 end
 rm -rf zip
 mkdir zip
-ehco "zipping zip/chromQuals.zip"
+echo "zipping zip/chromQuals.zip"
 zip -j zip/chromQuals.zip ?{,?}/chr*.qa
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -1502,8 +1537,8 @@ ldHgGene panTro1 mappedRefSeq new.gtf
     convert.pl < AllBACends.mfa > BACends.fa
     faCount BACends.fa
     ssh hgwdev
-    mkdir -p /gbdb/ncbi/bacends/chimp/bacends.chimp.1
-    cd /gbdb/ncbi/bacends/chimp/bacends.chimp.1
+    mkdir -p /gbdb/panTro1/bacends
+    cd /gbdb/panTro1/bacends
     ln -s /cluster/data/ncbi/bacends/chimp/bacends.chimp.1/BACends.fa BACends.chimp.fa
     # 123470915 bases, 158588 sequences
     # split to cluster dir -- break into 10 files for a totol
@@ -1630,7 +1665,8 @@ cat > gsub << 'EOF'
     hgLoadPsl panTro1 -table=all_bacends bacEnds.load.psl
         #load of all_bacends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
     # load BAC end sequences
-    hgLoadSeq panTro1 /gbdb/ncbi/bacends/chimp/bacends.chimp.1/BACends.chimp.fa
+    #hgLoadSeq panTro1 /gbdb/ncbi/bacends/chimp/bacends.chimp.1/BACends.chimp.fa
+    hgLoadSeq panTro1 /gbdb/panTro1/bacends/BACends.chimp.fa
         # 158588 sequences
 
     # for analysis, you might want to run:
@@ -1734,6 +1770,49 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
         echo done $c
     end
     
+# PREP AS QUERY SIDE FOR ALIGNMENTS TO HUMAN HG17 (2004-06-12 kate)
+    # split scaffold fasta file into 3K chunks
+    # NOTE: can't lift PSL's aligned to this as liftUp doesn't
+    # handle negative strand lifts for PSL's
+    ssh kksilo
+    cd /cluster/data/panTro1
+    set split = /cluster/bluearc/panTro1/blatSplit
+    mkdir -p $split/split500K.scaf
+    cd $split/split500K.scaf
+    faSplit about /cluster/data/panTro1/scaffolds.msk.fa 500000 ./
+
+    cd $split
+cat > split.csh << 'EOF'
+    set split = /cluster/bluearc/panTro1/blatSplit
+    cd $split
+    mkdir -p split3K lift3K
+    foreach f (split500K.scaf/*.fa)
+        set d = $f:t:r
+        echo $d
+        faSplit size $f 3000 split3K/${d}_ -lift=lift3K/$d.lft -oneFile 
+    end
+'EOF'
+    csh split.csh >&! split.log &
+    tail -100f split.log
+
+    ssh kksilo
+    cd /cluster/data/panTro1
+    set split = /cluster/bluearc/panTro1/blatSplit
+    mkdir -p $split/splitChrom.3K $split/liftChrom.3K
+    cd $split
+cat > split.csh << 'EOF'
+    set split = /cluster/bluearc/panTro1/blatSplit
+    cd $split
+    foreach f (/cluster/data/panTro1/?{,?}/*.fa)
+        set d = $f:t:r
+        echo $d
+        faSplit gap $f 3000 splitChrom.3K/${d}_ \
+                        -lift=liftChrom.3K/$d.lft -oneFile 
+    end
+'EOF'
+    csh split.csh >&! split.log &
+    tail -100f split.log
+
 
 # LOAD ENSEMBL GENES (DONE 6/16/04 angie)
     ssh kksilo
