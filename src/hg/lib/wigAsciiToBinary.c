@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.5 2004/05/10 23:46:04 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.6 2004/05/13 17:31:50 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -300,9 +300,9 @@ overallLowerLimit = 1.0e+300;	/* for the complete set of data */
 overallUpperLimit = -1.0e+300;	/* for the complete set of data */
 binout = mustOpen(wibFile,"w");	/*	binary data file	*/
 wigout = mustOpen(wigFile,"w");	/*	table row definition file */
-#if defined(DEBUG)
-chmod(wibFile, 0666);	/*	dbg	*/
-chmod(wigFile, 0666);	/*	dbg	*/
+#if defined(DEBUG)	/*	dbg	*/
+chmod(wibFile, 0666);
+chmod(wigFile, 0666);
 #endif
 lf = lineFileOpen(wigAscii, TRUE);	/*	input file	*/
 while (lineFileNext(lf, &line, NULL))
@@ -437,7 +437,7 @@ while (lineFileNext(lf, &line, NULL))
 	if (bedChromEnd > (bedChromStart + 10000000))
 	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
 		lineCount, bedChromEnd-bedChromStart);
-	if (bedChromStart < previousOffset)
+	if ((validLines > 0) && (bedChromStart < previousOffset))
 	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, bedChromStart+1);
 	freez(&prevChromName);
 	prevChromName = cloneString(chromName);
@@ -593,5 +593,4 @@ if (upperLimit)
     *upperLimit = overallUpperLimit;
 if (lowerLimit)
     *lowerLimit = overallLowerLimit;
-return;
 }
