@@ -6828,6 +6828,15 @@ INSERT into ensPep (name, seq) VALUES ('ENSMUST00000082407.1', 'MPQLDTSTWFITIISS
 #	/cluster/data/mm5/bed/ensembl/chrMPep.sql
 #	loaded via:
     hgsql mm5 < chrMPep.sql
+#	The following files were "touched" on the RR/MGC after the chrMT/M 
+#	change to prevent false errors with joinerCheck. J.Jackson 2005-03-01
+#	mm5.superfamily.name 
+#	mm5.ensGtp.transcript 
+#	mm5.ensPep.name 
+#	mm5.knownToEnsembl.value 
+#	mm5.sfDescription.name 
+
+
 # Load ensGtp table.
     # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
     # hgKnownToSuper.  Use ensMart to create it as above, except:
