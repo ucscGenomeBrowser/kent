@@ -7,12 +7,13 @@
 #include "jksql.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgNibSeq.c,v 1.5 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgNibSeq.c,v 1.6 2004/08/03 16:40:45 angie Exp $";
 
 boolean preMadeNib = FALSE;
 char *tableName = "chromInfo";
 char *chromPrefix = "";
 boolean appendTbl = FALSE;
+char *tableIndex = "PRIMARY KEY(chrom(16))";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,10 +26,11 @@ errAbort(
   "and store pointers to them in the database. Use full path name for nibDir.\n"
   "options:\n"
   "   -preMadeNib  don't bother generating nib files, they exist already\n"
-  "   -table=tableName - Use this table name rather than chromInfo\n"
+  "   -table=tableName - Use this table name rather than %s\n"
   "   -chromPrefix=str - prefix chrom names with this string\n"
   "   -append - append to existing table, don't delete\n"
-  );
+  "   -index=str - use str as SQL table index instead of default %s\n"
+  , tableName, tableIndex);
 }
 
 char *createSql = 
@@ -37,14 +39,14 @@ char *createSql =
     "size int unsigned not null,	# Chromosome size\n"
     "fileName varchar(255) not null,	# Chromosome file (raw one byte per base)\n"
               "#Indices\n"
-    "PRIMARY KEY(chrom(16))\n"
+    "%s\n"
     ")\n";
 
 void createTable(struct sqlConnection *conn)
 /* Make table. */
 {
 struct dyString *dy = newDyString(512);
-dyStringPrintf(dy, createSql, tableName);
+dyStringPrintf(dy, createSql, tableName, tableIndex);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
@@ -113,6 +115,7 @@ preMadeNib = optionExists("preMadeNib");
 tableName = optionVal("table", tableName);
 chromPrefix = optionVal("chromPrefix", chromPrefix);
 appendTbl = optionExists("append");
+tableIndex = optionVal("index", tableIndex);
 hgNibSeq(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
