@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.5 2003/09/24 19:29:08 kent Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.6 2004/01/06 22:09:42 angie Exp $";
 
 struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -749,7 +749,7 @@ void affyUclaDetails(struct trackDb *tdb, char *expName)
 /* print out a page for the affy data from gnf based on ratio of
  * measurements to the median of the measurements. */
 {
-genericRatioDetails(tdb, expName, "affyExpsUcla", "U133", 0.25, 1.5,
+genericRatioDetails(tdb, expName, "affyUclaExps", "U133", 0.25, 1.5,
 	printAffyUclaLinks);
 }
 
