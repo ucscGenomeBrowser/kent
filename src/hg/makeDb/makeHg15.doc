@@ -1599,17 +1599,17 @@ IN PROGRESS
     cd ~/hg15/bed/blatCi1
     mkdir /tmp/$LOGNAME
     pslSort dirs raw.psl /tmp/$LOGNAME psl/*
-    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.05
     liftUp -nohead lifted.psl ../../jkStuff/liftAll.lft warn cooked.psl
     pslSortAcc nohead chrom /tmp/$LOGNAME lifted.psl
 
     # Rename to correspond with tables as so and load into database:
     ssh hgwdev
-    cd ~/hg15/bed/blatSquirt/chrom
-    rm -f chr*_blatSquirt.psl
+    cd ~/hg15/bed/blatCi1/chrom
+    rm -f chr*_blatCi1.psl
     foreach i (chr?{,?}{,_random}.psl)
         set r = $i:r
-        mv $i ${r}_blatSquirt.psl
+        mv $i ${r}_blatCi1.psl
     end
     hgLoadPsl hg15 *.psl
 
