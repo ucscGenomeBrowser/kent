@@ -10,8 +10,9 @@
 #include "rmskOut.h"
 #include "chromInserts.h"
 #include "axt.h"
+#include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.21 2003/11/19 17:41:20 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.22 2003/11/20 17:33:15 angie Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -58,62 +59,6 @@ boolean silentDrop;	/* True if should silently drop items not in liftSpec. */
 boolean carryMissing;   /* True if should carry missing items untranslated. */
 boolean pipeOut;	/* True if main output is stdout. */
 
-struct liftSpec
-/* How to lift coordinates. */
-    {
-    struct liftSpec *next;	/* Next in list. */
-    int offset;			/* Offset to add. */
-    char *oldName;		/* Name in source file. */
-    int oldSize;                /* Size of old sequence. */
-    char *newName;		/* Name in dest file. */
-    int newSize;                   /* Size of new sequence. */
-    char strand;                /* Strand of contig relative to chromosome. */
-    };
-
-struct liftSpec *readLifts(char *fileName)
-/* Read in lift file. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int wordCount;
-char *words[16];
-struct liftSpec *list = NULL, *el;
-
-while ((wordCount = lineFileChop(lf, words)) != 0)
-    {
-    char *offs;
-    if (wordCount < 5)
-        errAbort("Need at least 5 words line %d of %s", lf->lineIx, lf->fileName);
-    offs = words[0];
-    if (!isdigit(offs[0]) && !(offs[0] == '-' && isdigit(offs[1])))
-	errAbort("Expecting number in first field line %d of %s", lf->lineIx, lf->fileName);
-    if (!isdigit(words[4][0]))
-	errAbort("Expecting number in fifth field line %d of %s", lf->lineIx, lf->fileName);
-    AllocVar(el);
-    el->offset = atoi(offs);
-    el->oldName = cloneString(words[1]);
-    el->oldSize = atoi(words[2]);
-    el->newName = cloneString(words[3]);
-    el->newSize = atoi(words[4]);
-    if (wordCount >= 6)
-        {
-	char c = words[5][0];
-	if (c == '+' || c == '-')
-	    el->strand = c;
-	else
-	    errAbort("Expecting + or - field 6, line %d of %s", lf->lineIx, lf->fileName);
-	}
-    else
-        el->strand = '+';
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-lineFileClose(&lf);
-if (!pipeOut) printf("Got %d lifts in %s\n", slCount(list), fileName);
-if (list == NULL)
-    errAbort("Empty liftSpec file %s", fileName);
-return list;
-}
-
 char *rmChromPrefix(char *s)
 /* Remove chromosome prefix if any. */
 {
@@ -132,20 +77,6 @@ for (el = list; el != NULL; el = el->next)
     {
     el->oldName = rmChromPrefix(el->oldName);
     }
-}
-
-struct hash *hashLift(struct liftSpec *list, boolean revOk)
-/* Return a hash of the lift spec. */
-{
-struct hash *hash = newHash(0);
-struct liftSpec *el;
-for (el = list; el != NULL; el = el->next)
-    {
-    if (!revOk && el->strand != '+')
-        errAbort("Can't lift from minus strand contigs (like %s) on this file type", el->oldName);
-    hashAdd(hash, el->oldName, el);
-    }
-return hash;
 }
 
 struct liftSpec *findLift(struct hash *liftHash, char *oldName, struct lineFile *lf)
@@ -925,6 +856,7 @@ else
     usage();
 pipeOut = sameString(destFile, "stdout");
 lifts = readLifts(liftFile);
+if (!pipeOut) printf("Got %d lifts in %s\n", slCount(lifts), liftFile);
 
 if (endsWith(destType, ".out"))
     {
