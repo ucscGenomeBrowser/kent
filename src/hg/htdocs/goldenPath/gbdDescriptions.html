@@ -964,6 +964,24 @@
   <LI><A 
   href="#BED">ecoresTetraodon</A> 
   - Human/Tetraodon evolutionary conserved regions (ecores) computed by Exofish</LI>
+<!--
+  <LI><A 
+  href="#WiggleTrack2">encodeAffyChIpRnapHl50PvalHr[0,2,4,32]</A> 
+  - Affymetrix ChIP/Chip enrichment of Pol2 from retinoic acid stimulated 
+  HL60 cells at 0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+  <LI><A 
+  href="#BED">encodeAffyChIpRnapHl60SitesHr[0,2,4,32]</A> 
+  - Affymetrix ChIP/Chip of Pol2 from retinoic acid stimulated HL60 cells at
+  0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+  <LI><A 
+  href="#WiggleTrack2">encodeAffyRnaHl60SigHr[0,2,4,32]</A> 
+  - Affymetrix PolyA+ RNA from retinoic acid stimulated HL60 cells at 
+  0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+  <LI><A 
+  href="#BED">encodeAffyRnaHl60SitesHr[0,2,4,32]</A> 
+  - Affymetrix PolyA+ RNA abundance from retinoic acid stimulated HL60 cells 
+  at 0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+-->
   <LI><A 
   href="#BED">encodeRegions</A> 
   - Names and positions of selected regions for the ENCODE project</LI>
@@ -1890,6 +1908,24 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
 
 <A NAME="S_GBD"></A>
   <LI><A 
+  href="#ScoredRef">sacBay_pwMaf</A> 
+  - Scored reference file for <em>S. bayanus</em> alignments
+  <LI><A 
+  href="#ScoredRef">sacCas_pwMaf</A> 
+  - Scored reference file for <em>S. castelli</em> alignments
+  <LI><A 
+  href="#ScoredRef">sacKlu_pwMaf</A> 
+  - Scored reference file for <em>S. kluyveri</em> alignments
+  <LI><A 
+  href="#ScoredRef">sacKud_pwMaf</A> 
+  - Scored reference file for <em>S. kudriavzevii</em> alignments
+  <LI><A 
+  href="#ScoredRef">sacKud_pwMik</A> 
+  - Scored reference file for <em>S. mikatae</em> alignments
+  <LI><A 
+  href="#ScoredRef">sacKud_pwPar</A> 
+  - Scored reference file for <em>S. paradoxus</em> alignments
+  <LI><A 
   href="#SageExp">sageExp</A> 
   - Data related to SAGE experiments, tissue descriptions, etc.
   <LI><A 
@@ -1955,17 +1991,47 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#SfDescription">sfDescription</A> 
   - Stores domain descriptions for the Superfamily track</LI> 
   <LI><A 
+  href="#SgdAbundance">sgdAbundance</A> 
+  - Protein abundance data from http://yeastgfp.ucsf.edu via SGD (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#BlastTab">sgdBlastTab</A> 
+  - Blastp results of SGD genes vs. one another (<em>S. cerevisiae</em>)
+  <LI><A 
   href="#KnownCanonical">sgdCanonical</A> 
   - Describes the canonical splice variant of a gene (<em>S. cerevisiae</em>)
   <LI><A 
   href="#SgdClone">sgdClone</A> 
-  - Clone information from the Saccharomyces Genome Database
+  - Clone information from the Saccharomyces Genome Database (<em>S. cerevisiae</em>)
   <LI><A 
   href="#GenePredictions">sgdGene</A> 
-  - Saccharomyces Genome Database gene predictions
+  - Saccharomyces Genome Database gene predictions (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#KnownIsoforms">sgdIsoforms</A> 
+  - Links together various transcripts of a gene into a cluster (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#KnownTo">sgdLocalization</A> 
+  - Associates known gene and SGD accession (<em>S. cerevisiae</em>)
   <LI><A 
   href="#SgdOther">sgdOther</A> 
-  - Other features from Saccharomyces Genome Database 
+  - Other features from Saccharomyces Genome Database (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#SgdOther">sgdOtherDescription</A> 
+  - More features from Saccharomyces Genome Database (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#PepPredictions">sgdPep</A> 
+  - Translations of SGD gene predictions into corresponding amino acid sequences (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#KnownTo">sgdToName</A> 
+  - Associates SGD gene name and mRNA (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#KnownTo">sgdToPfam</A> 
+  - Associates SGD ID and Pfam ID (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#KnownTo">sgdToSgd</A> 
+  - Associates SGD IDs (<em>S. cerevisiae</em>)
+  <LI><A 
+  href="#KnownTo">sgdToSwissProt</A> 
+  - Associates SGD IDs and Swiss-Prot IDs (<em>S. cerevisiae</em>)
   <LI><A 
   href="#GenePredictions">sgpGene</A> 
   - SGP gene predictions (GRIB)
@@ -2108,6 +2174,18 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#TilingPath">tilingPath</A> 
   - A tiling path of clones through a chromosome </LI>
+  <LI><A 
+  href="#TransRegCode">transRegCode</A> 
+  - Transcription factor binding sites from CHIP/CHIP experiments and conservation
+  <LI><A 
+  href="#TransRegCodeCondition">transRegCodeCondition</A> 
+  - Associates a transcription factor with a growth condition
+  <LI><A 
+  href="#TransRegCodeMotif">transRegCodeMotif</A> 
+  - Transcription factor binding motif according to Harbison Gordon et al.
+  <LI><A 
+  href="#TransRegCodeProbe">transRegCodeProbe</A> 
+  - CHIP/CHIP probe and trranscription factor binding info
   <LI><A 
   href="#GenePredictions">twinscan</A> 
   - TwinScan Gene Predictions
@@ -4458,6 +4536,16 @@ Last used Apr. 2001.
     )                                                                           
 </PRE>
 
+<H4><A name=SgdAbundance></A>Saccharomyces Genome Database Protein Abundance</H4>
+<PRE>table sgdAbundance
+"Protein abundance data from http://yeastgfp.ucsf.edu via SGD"
+    (
+    string name;        "ORF name in sgdGene table"
+    float abundance;    "Absolute abundance from 41 to 1590000"
+    string error;       "Error - either a floating point number or blank"
+    )
+</PRE>
+
 <H4><A name=SgdClone></A>Saccharomyces Genome Database Clone Information</H4>
 <PRE>table sgdClone
 "Clone info from yeast genome database"
@@ -4467,6 +4555,16 @@ Last used Apr. 2001.
     uint   chromEnd;    "End position in chromosome"
     string name;        "Washington University name"
     string atccName;    "ATCC clone name (optional)"
+    )
+</PRE>
+
+<H4><A name=SgdOther></A>Saccharomyces Genome Database Genes Description</H4>
+<PRE>table sgdDescription
+"Description of SGD Genes and Other Features"
+    (
+    string  name;        "Name in sgdGene or sgdOther table"
+    string type;         "Type of feature from gff3 file"
+    lstring description; "Description of feature"
     )
 </PRE>
 
@@ -5257,6 +5355,19 @@ are mapped to Known Genes IDs before being loaded into the table."
     )
 </PRE>
 
+<H4><A name=TransRegCodeMotif></A>Transcription Factor Binding Motif (HarbisonGordon et al.)</H4>
+<PRE>table transRegCodeMotif
+"A transcription factor binding motif according to Harbison Gordon et al"    
+    (
+    string name;                        "Motif name."
+    int columnCount;                    "Count of columns in motif."
+    float[columnCount] aProb;           "Probability of A's in each column."
+    float[columnCount] cProb;           "Probability of C's in each column."
+    float[columnCount] gProb;           "Probability of G's in each column."
+    float[columnCount] tProb;           "Probability of T's in each column."
+    )
+</PRE>
+
 <H4><A name=tfbsCons></A>Transcription Factor Binding Sites</H4>
 <PRE>table tfbsCons
 "TFBS data"
@@ -5273,12 +5384,50 @@ are mapped to Known Genes IDs before being loaded into the table."
     )
 </PRE>
 
+<H4><A name=transRegCodeProbe></A>Transcription Factor Binding Sites and CHIP/CHIP Probe Info</H4>
+<PRE>table transRegCodeProbe
+"CHIP/CHIP Probe and Transcription Factor Binding Info"    
+    (
+    string chrom;       	"Chromosome binding site is on"
+    uint chromStart;    	"Start position in chromosome"
+    uint chromEnd;      	"End position in chromosome" 
+    string name;        	"Name of probe" 
+    uint tfCount;       	"Count of bound transcription factors_conditions"
+    string[tfCount] tfList;    	"List of bound transcription factors_conditions
+"   
+    float[tfCount] bindVals;   	"E-values for factor binding (lower is better)"
+    )
+</PRE>
+
+<H4><A name=transRegCode></A>Transcription Factor Binding Sites - CHIP/CHIP Experiments</H4>
+<PRE>table transRegCode
+"Transcription factor binding sites from CHIP/CHIP experiments and conservation"
+    (
+    string chrom;       	"Chromosome binding site is on"
+    uint chromStart;    	"Start position in chromosome"
+    uint chromEnd;      	"End position in chromosome"
+    string name;        	"Name of transcription factor"
+    uint score;         	"Score from 0 to 1000"
+    string chipEvidence; 	"Evidence strength from CHIP/CHIP assay"
+    uint consSpecies;   	"Number of species conserved in"
+    )
+</PRE>
+
 <H4><A name=tfbsConsMap></A>Transcription Factor Binding Sites Conservation Map Data</H4>
 <PRE>table tfbsConsMap
 "tfbsConsMap Data"
     (
     string id;   "TRANSFAC id"
     string ac;   "gene-regulation.com AC"
+    )
+</PRE>
+
+<H4><A name=TransRegCodeCondition></A>Transcription Factor Growth Condition</H4>
+<PRE>table transRegCodeCondition
+"Growth condition associated with a transcription factor"
+    (
+    string name;  "Name of transcription factor"
+    string growthCondition; "Growth condition seen in"
     )
 </PRE>
 
