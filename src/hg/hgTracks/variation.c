@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.21 2005/02/01 04:25:17 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.22 2005/02/03 00:37:30 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -628,9 +628,7 @@ void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
 bedLoadItem(tg, tg->mapName, (ItemLoader)ldLoad);
-tg->canPack    = FALSE;
-tg->limitedVis = TRUE;
-tg->visibility = tvFull;
+tg->canPack = FALSE;
 }
 
 static void mapDiamondUi(int xl, int yl, int xr, int yr, 
@@ -640,15 +638,10 @@ static void mapDiamondUi(int xl, int yl, int xr, int yr,
 {
 hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
 	xl, yl, xt, yt, xr, yr, xb, yb);
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=ld&i=%s\"", hgTrackUiName(), cartSessionVarName(),
-                         cartSessionId(cart), chromName, name);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=ld&i=%s\"", hgTrackUiName(), 
+	cartSessionVarName(), cartSessionId(cart), chromName, name);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
-}
-
-int ldCoverage()
-{
-return min(cartUsualInt(cart, "ldCov", 100000), 500000);
 }
 
 int ldTotalHeight(struct track *tg, enum trackVisibility vis)
@@ -657,13 +650,11 @@ int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 tg->lineHeight = 0;
 tg->heightPer  = 0;
-tg->height     = min(cartUsualInt(cart, "ldHeight", 100), 400);
+if (winEnd-winStart<500000)
+    tg->height = insideWidth/2;
+else
+    tg->height = 2+(int)((insideWidth/2)*(500000.0/(winEnd-winStart)));
 return tg->height;
-}
-
-double ldSlope(int height, int width)
-{
-return height*(winEnd-winStart)/(1.0*width*insideWidth);
 }
 
 Color ldDiamondColor(struct track *tg, double score)
@@ -672,7 +663,6 @@ Color *posShades = tg->colorShades;
 Color *negShades = tg->altColorShades;
 if (abs(score)>1)
     errAbort("Score must be between -1 and 1, inclusive. (score=%.3f)",score);
-//printf("(%.1f,%d) ",score,(int)(score * LD_DATA_SHADES));
 if (score>=0)
     return posShades[(int)(score * LD_DATA_SHADES)];
 return negShades[(int)(-score * LD_DATA_SHADES)];
@@ -696,8 +686,7 @@ gfxPolyFree(&poly);
 
 void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, int xOff, int yOff, 
 		   int i, int j, int k, int l, double score, char *name, 
-		   char *shortLabel, boolean drawOutline, Color outlineColor,
-		   double scale, int height, double slope)
+		   char *shortLabel, boolean drawOutline, Color outlineColor, double scale)
 /* Draw and map a single pairwise LD box */
 {
 Color  color  = ldDiamondColor(tg, score);
@@ -705,10 +694,10 @@ int xl = round((double)(scale*((k+i)/2-winStart))) + xOff;
 int xt = round((double)(scale*((l+i)/2-winStart))) + xOff;
 int xr = round((double)(scale*((l+j)/2-winStart))) + xOff;
 int xb = round((double)(scale*((k+j)/2-winStart))) + xOff;
-int yl = round((double)(scale*slope*(k-i))) + yOff;
-int yt = round((double)(scale*slope*(l-i))) + yOff;
-int yr = round((double)(scale*slope*(l-j))) + yOff;
-int yb = round((double)(scale*slope*(k-j))) + yOff;
+int yl = round((double)(scale*(k-i)/2)) + yOff;
+int yt = round((double)(scale*(l-i)/2)) + yOff;
+int yr = round((double)(scale*(l-j)/2)) + yOff;
+int yb = round((double)(scale*(k-j)/2)) + yOff;
 
 if (yb<=0)
     yb=1;
@@ -719,33 +708,33 @@ mapDiamondUi(   xl, yl, xt, yt, xr, yr, xb, yb, name, shortLabel);
 void drawNecklace(struct track *tg, int width, int xOff, int yOff, 
 		  void *item, struct vGfx *vg, Color outlineColor,
 		  int *chromStarts, double *values, int arraySize,
-		  boolean drawOutline, double scale, int height, double slope)
+		  boolean drawOutline, double scale, boolean trim)
 /* Draw a string of diamonds that represent the pairwise LD
  * values for the current marker */
 {
 struct ld *ld             = item;
 int        n              = 0;
-int        coverage       = ldCoverage();
-boolean    trimToTriangle = cartUsualBoolean(cart, "ldTrim", TRUE);
 
-ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
-	      chromStarts[0], ld->chromStart, chromStarts[0], 
-	      values[0], ld->name, tg->shortLabel, drawOutline, outlineColor,
-	      scale, height, slope);
+if (!trim || (chromStarts[0] <= winEnd        /* clip right to triangle */
+	      && ld->chromStart >= winStart)) /* clip left to triangle */
+    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart,  chromStarts[0], 
+		  ld->chromStart, chromStarts[0], values[0], ld->name, 
+		  tg->shortLabel, drawOutline, outlineColor,scale);
 for (n=0; n < ld->ldCount-1; n++)
     {
-    if (trimToTriangle && chromStarts[n] > winEnd) /* clip to triangle */
-	return;
     if ((chromStarts[n]+ld->chromStart)/2 > winEnd) /* left is outside window */
 	return;
-    if ((chromStarts[n]-chromStarts[0]) > coverage) /* bottom is outside window */
+    if ((chromStarts[n]-chromStarts[0]) > winEnd-winStart) /* bottom is outside window */
+	return;
+    if (trim && chromStarts[n+1] > winEnd) /* trim right to triangle */
+	return;
+    if (trim && ld->chromStart < winStart) /* trim left to triangle */
 	return;
     if ((chromStarts[0]+chromStarts[n+1])/2 < winStart) /* right is outside window */
 	continue;
-    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
-		  chromStarts[0], chromStarts[n], chromStarts[n+1], 
-		  values[n], ld->name, tg->shortLabel, drawOutline, outlineColor,
-		  scale, height, slope);
+    ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0], 
+		  chromStarts[n], chromStarts[n+1], values[n], ld->name, 
+		  tg->shortLabel, drawOutline, outlineColor, scale);
     }
 }
 
@@ -753,15 +742,8 @@ void ldTransformLods(int arraySize, double *values)
 /* take an array of non-negative numbers and transform them to [0,1] */
 {
 int i;
-//printf("<BR>");
 for (i=0; i<arraySize; i++)
-//    {
-//    if (i<10)
-//	printf("[%.1f,",values[i]);
     values[i]=1-exp(-1*values[i]/3); /* need to work on this function */
-//    if (i<10)
-//	printf("%.1f]",values[i]/3);
-//    }
 }
 
 Color *ldFillColors(char *colorString)
@@ -771,7 +753,7 @@ if (sameString(colorString,"red"))
     return ldShadesOfRed;
 else if (sameString(colorString,"blue"))
     return ldShadesOfBlue;
-else if (sameString(colorString,"blue"))
+else if (sameString(colorString,"green"))
     return ldShadesOfGreen;
 else
     errAbort("LD fill color must be 'red', 'blue', or 'green'; "
@@ -801,27 +783,21 @@ void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
 		  MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
-int        arraySize      = 0;
-struct ld *el             = NULL;
-int       *chromStarts    = NULL;
-double    *values         = NULL;
-char      *valArray       = cartUsualString(cart, "ldValues", "lod");
-char      *outColor       = cartUsualString(cart, "ldOut",    "black");
-boolean    drawOutline    = differentString(outColor,"none");
-Color      outlineColor   = MG_BLACK;
-boolean    trimToTriangle = cartUsualBoolean(cart, "ldTrim", TRUE);
-boolean    isLod          = FALSE;
-boolean    isRsquared     = FALSE;
-boolean    isDprime       = FALSE;
-double     scale          = scaleForPixels(insideWidth);
-int        height         = ldTotalHeight(tg, tvFull);
-double     slope          = ldSlope(height, ldCoverage());
+int        arraySize    = 0;
+struct ld *el           = NULL;
+int       *chromStarts  = NULL;
+double    *values       = NULL;
+char      *valArray     = cartUsualString(cart, "ldValues", ldValueDefault);
+char      *outColor     = cartUsualString(cart, "ldOut",    ldOutDefault);
+boolean    drawOutline  = differentString(outColor,"none");
+Color      outlineColor = MG_BLACK;
+boolean    trim         = cartUsualBoolean(cart, "ldTrim", ldTrimDefault);
+boolean    isLod        = FALSE;
+boolean    isRsquared   = FALSE;
+boolean    isDprime     = FALSE;
+double     scale        = scaleForPixels(insideWidth);
 
 makeLdShades(vg);
-/* is this necessary here, or is it in ldColors? */
-tg->colorShades    = ldFillColors(cartUsualString(cart, "ldPos", "red"));
-tg->altColorShades = ldFillColors(cartUsualString(cart, "ldNeg", "blue"));
-
 if (drawOutline) 
     outlineColor = ldOutlineColor(outColor);
 
@@ -839,13 +815,6 @@ else
 for (el=tg->items; el!=NULL; el=el->next)
     {
     sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-    if (trimToTriangle && chromStarts[0] < winStart) /* trim to triangle */
-	continue;
-//    printf("<BR>");
-//    printf("<BR>r^2:%s",el->rsquared);
-//    printf("<BR>d':%s",el->dprime);
-//    printf("<BR>lod:%s",el->lod);
-//    printf("<BR>");
     if (isRsquared)
 	sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
     else if (isDprime)
@@ -856,8 +825,7 @@ for (el=tg->items; el!=NULL; el=el->next)
 	ldTransformLods(arraySize, values);
 	}
     drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
-		 chromStarts, values, arraySize, drawOutline,
-		 scale, height, slope);
+		 chromStarts, values, arraySize, drawOutline, scale, trim);
     }
 }
 
@@ -873,7 +841,21 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	Color color, enum trackVisibility vis)
 /* Draw Left Labels - don't do anything. */
 {
-return;
+char  label[16];
+char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
+
+if (sameString(valueString,"lod"))
+    valueString = cloneString("LOD");
+else if (sameString(valueString,"rsquared"))
+    valueString = cloneString("R^2");
+else if (sameString(valueString,"dprime"))
+    valueString = cloneString("D'");
+else
+    errAbort("%s values are not recognized", valueString);
+safef(label, sizeof(label), "LD: %s; %s", tg->mapName+2, valueString);
+toUpperN(label, sizeof(label));
+vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, tl.fontHeight, 
+	    color, font, label);
 }
 
 void ldMethods(struct track *tg)
@@ -885,5 +867,6 @@ tg->drawItems      = ldDrawItems;
 tg->freeItems      = ldFreeItems;
 tg->drawLeftLabels = ldDrawLeftLabels;
 tg->canPack        = FALSE;
-//tg->canDense       = FALSE;
+tg->colorShades    = ldFillColors(cartUsualString(cart, "ldPos", ldPosDefault));
+tg->altColorShades = ldFillColors(cartUsualString(cart, "ldNeg", ldNegDefault));
 }
