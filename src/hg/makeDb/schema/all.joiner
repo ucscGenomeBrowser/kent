@@ -906,11 +906,13 @@ identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
     $gbd.ensGene.name chopAfter=.
     $gbd.superfamily.name
-    $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.20
+    $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     mm3,hg13.ensemblXref.transcript_name chopAfter=. minCheck=0.20
     mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
-    $gbd.ensGtp.transcript chopAfter=. minCheck=0.98
-    $gbd.ensPep.name chopAfter=. minCheck=0.98
+    $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.98
+    mm4.ensGtp.transcript chopAfter=. minCheck=0.94
+    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.98
+    mm4.ensPep.name chopAfter=. minCheck=0.94
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.

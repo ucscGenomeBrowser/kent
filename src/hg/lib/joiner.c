@@ -312,6 +312,61 @@ if (val == NULL)
 return cloneString(val);
 }
 
+static struct hash *makeNotHash(struct slName *list)
+/* Return hash of elements in list if any that are 
+ * starting with '!' */
+{
+struct slName *el;
+struct hash *hash = NULL;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el->name[0] == '!')
+        {
+	if (hash == NULL)
+	    hash = hashNew(8);
+	hashAdd(hash, el->name+1, NULL);
+	}
+    }
+return hash;
+}
+
+static struct slName *parseDatabaseList(struct lineFile *lf, char *s)
+/* Parse out comma-separated list of databases, with 
+ * possible !db's. */
+{
+struct slName *list, *el;
+struct hash *notHash;
+
+/* Get comma-separated list. */
+list = slNameListFromComma(s);
+if (list == NULL)
+     errAbort("Empty database name line %d of %s", 
+	lf->lineIx, lf->fileName);
+
+/* Remove !'s */
+notHash = makeNotHash(list);
+if (notHash != NULL)
+    {
+    struct slName *newList = NULL, *next;
+    for (el = list; el != NULL; el = next)
+        {
+	next = el->next;
+	if (el->name[0] != '!' && !hashLookup(notHash, el->name))
+	    {
+	    slAddHead(&newList, el);
+	    }
+	else
+	    {
+	    freeMem(el);
+	    }
+	}
+    hashFree(&notHash);
+    slReverse(&newList);
+    list = newList;
+    }
+return list;
+}
+
 static struct joinerSet *parseIdentifierSet(struct lineFile *lf, 
 	char *line, struct hash *symHash, struct dyString *dyBuf)
 /* Parse out one joiner record - keep going until blank line or
@@ -320,7 +375,7 @@ static struct joinerSet *parseIdentifierSet(struct lineFile *lf,
 struct joinerSet *js;
 struct joinerField *jf;
 struct slName *dbName;
-char *word, *s, *e;
+char *word, *e;
 struct hash *varHash;
 char *parts[3];
 int partCount;
@@ -398,24 +453,7 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
      slAddHead(&js->fieldList, jf);
 
      /* Database may be a comma-separated list.  Parse it here. */
-     s = parts[0];
-     while (s != NULL)
-         {
-	 e = strchr(s, ',');
-	 if (e != NULL)
-	     {
-	     *e++ = 0;
-	     if (e[0] == 0)
-	         e = NULL;
-	     }
-	 if (s[0] == 0)
-	     errAbort("Empty database name line %d of %s", 
-	     	lf->lineIx, lf->fileName);
-	 dbName = slNameNew(s);
-	 slAddHead(&jf->dbList, dbName);
-	 s = e;
-	 }
-     slReverse(&jf->dbList);
+     jf->dbList = parseDatabaseList(lf, parts[0]);
 
      /* Look for other fields in subsequent space-separated words. */
      while ((word = nextWord(&line)) != NULL)
@@ -497,7 +535,7 @@ struct joinerIgnore *ig;
 struct slName *table;
 
 AllocVar(ig);
-ig->dbList = slNameListFromComma(trimSpaces(line));
+ig->dbList = parseDatabaseList(lf, trimSpaces(line));
 while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
     {
     /* Keep grabbing until we get a blank line. */
@@ -522,7 +560,7 @@ if (dotPos == NULL)
 AllocVar(table);
 *dotPos++ = 0;
 table->table = cloneString(dotPos);
-table->dbList = slNameListFromComma(spec);
+table->dbList = parseDatabaseList(lf, spec);
 if (table->dbList == NULL)
     errAbort("Need at least one database before . in table spec line %d of %s",
     	lf->lineIx, lf->fileName);
@@ -563,10 +601,10 @@ return dep;
 }
 
 
-static void addCommasToHash(struct hash *hash, char *s)
+static void addDatabasesToHash(struct hash *hash, char *s, struct lineFile *lf)
 /* Add contents of comma-separated list to hash. */
 {
-struct slName *el, *list = slNameListFromComma(trimSpaces(s));
+struct slName *el, *list = parseDatabaseList(lf, trimSpaces(s));
 for (el = list; el != NULL; el = el->next)
     hashAdd(hash, el->name, NULL);
 slFreeList(&list);
@@ -613,16 +651,16 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
 	else if (sameString("exclusiveSet", word))
 	    {
 	    struct hash *exHash = newHash(8);
-	    addCommasToHash(exHash, line);
+	    addDatabasesToHash(exHash, line, lf);
 	    slAddHead(&joiner->exclusiveSets, exHash);
 	    }
 	else if (sameString("databasesChecked", word))
 	    {
-	    addCommasToHash(joiner->databasesChecked, line);
+	    addDatabasesToHash(joiner->databasesChecked, line, lf);
 	    }
 	else if (sameString("databasesIgnored", word))
 	    {
-	    addCommasToHash(joiner->databasesIgnored, line);
+	    addDatabasesToHash(joiner->databasesIgnored, line, lf);
 	    }
 	else if (sameString("tablesIgnored", word))
 	    {

@@ -116,6 +116,7 @@ Field Line Attributes:
      value: identifier to exclude.  The empty string may be excluded with
             a exclude= (that is following the equal immediately with a space).
 
+  
 IDENTIFIER MACROS
 
 In some cases there may be multiple instances of a set of
@@ -145,6 +146,15 @@ identifier chainRn2Id
     $gbd.chainRn2.id 
     $gbd.chainRn2Link.chainId 
     $gbd.netRn2.chainId
+
+EXCLUDED DATABASES
+   The comma-separated database lists typically are set up with
+   variables, such as $gdb in the above examples.  It's possible
+   to exclude a database from such a list.  To exclude the 'mm4' database
+   but include everything else in $gbd, you'd specify:
+       $gbd,!mm4
+   It is possible to exclude more than one database this way,  and the
+   ! items can be at any position in the list.
 
 
 OTHER STATEMENTS

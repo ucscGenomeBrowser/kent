@@ -18,3 +18,6 @@ test:
 
 foo:
 	joinerCheck -fieldListIn=hgwdev.fields -identifier=swissProtId -database=hg16 ../all.joiner
+
+ensembl:
+	joinerCheck -fieldListIn=hgwbeta.fields -identifier=ensemblTranscriptId ../all.joiner -keys -noTableCoverage -noDbCoverage -noTimes -database=hg16
