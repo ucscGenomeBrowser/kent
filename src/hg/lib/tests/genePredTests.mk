@@ -131,7 +131,7 @@ knownGeneTest:
 # recursive target to read table
 # id, tbl
 doCompatTblTest: mkout
-	${GENE_PRED_TESTER} -maxRows=1000 -needRows=1000 -info=${OUT_DIR}/${id}.info readTable ${DB} ${tbl}
+	${GENE_PRED_TESTER} -maxRows=250 -needRows=250 -info=${OUT_DIR}/${id}.info readTable ${DB} ${tbl}
 	diff -u ${EXP_DIR}/${id}.info ${OUT_DIR}/${id}.info
 
 ##

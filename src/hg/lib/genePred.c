@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.35 2004/02/26 03:45:12 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.36 2004/03/01 18:13:02 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -405,13 +405,9 @@ if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
 }
 
 static boolean isCds(char *feat, boolean isGtf)
-/* determine if a feature is CDS; different criteria for GFF ane GTF */
+/* determine if a feature is CDS */
 {
-if (isGtf)
-    return sameWord(feat, "CDS");
-else
-    return (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
-            || sameWord(feat, "stop_codon"));
+return sameWord(feat, "CDS");
 }
 
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
@@ -532,6 +528,7 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
         {
         /* set frame if this is a CDS */
+        assert(i < exonCount);
         if (isdigit(gl->frame))
             eFrames[i] = (int)gl->frame - '0';
         }
@@ -677,33 +674,42 @@ static void annotateCds(struct psl *psl, struct genbankCds* cds,
                         struct genePred* gene)
 /* Convert cdsStart/End from mrna to genomic coordinates. */
 {
-if ((cds == NULL) || (cds->start < 0) || (cds->end <= 0))
+if (cds == NULL)
     {
     /* no CDS, set to end */
     gene->cdsStart = psl->tEnd;
     gene->cdsEnd = psl->tEnd;
     if (gene->optFields & genePredCdsStatFld)
         {
-        if (cds == NULL)
-            {
-            gene->cdsStartStat = cdsNone;
-            gene->cdsEndStat = cdsNone;
-            }
-        else
-            {
-            gene->cdsStartStat = cdsUnknown;
-            gene->cdsEndStat = cdsUnknown;
-            }
+        gene->cdsStartStat = cdsNone;
+        gene->cdsEndStat = cdsNone;
+        }
+    }
+else if ((cds->start < 0) || (cds->end <= 0))
+    {
+    /* unknown CDS, set to end */
+    gene->cdsStart = psl->tEnd;
+    gene->cdsEnd = psl->tEnd;
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        gene->cdsStartStat = cdsUnknown;
+        gene->cdsEndStat = cdsUnknown;
         }
     }
 else 
     {
-    /* have CDS annotation */
-    mapCdsToGenome(psl, cds, gene);
+    /* have CDS annotation, make sure it's in bounds */
+    struct genbankCds adjCds = *cds;
+    if (adjCds.end > psl->qSize)
+        {
+        adjCds.end = psl->qSize;
+        adjCds.endComplete = FALSE;
+        }
+    mapCdsToGenome(psl, &adjCds, gene);
     if (gene->optFields & genePredCdsStatFld)
         {
-        gene->cdsStartStat = (cds->startComplete) ? cdsComplete : cdsIncomplete;
-        gene->cdsEndStat = (cds->endComplete) ? cdsComplete : cdsIncomplete;;
+        gene->cdsStartStat = (adjCds.startComplete) ? cdsComplete : cdsIncomplete;
+        gene->cdsEndStat = (adjCds.endComplete) ? cdsComplete : cdsIncomplete;;
         }
     }
 }
