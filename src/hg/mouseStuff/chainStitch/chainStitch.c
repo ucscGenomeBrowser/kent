@@ -90,7 +90,40 @@ if (dif == 0)
 return dif;
 }
 
-void deleteChainRange(struct chain *chain, int qs, int qe, int ts, int te, int *deletedBases)
+boolean checkChainRange(struct chain *chain, int qs, int qe, int ts, int te)
+{
+struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+
+prevChainBlock = NULL;
+if ((te < chain->tStart) && (qe < chain->qStart))
+    return FALSE;
+for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
+    {
+    nextChainBlock = chainBlock->next;
+    if ((chainBlock->tEnd > ts) || (chainBlock->qEnd > qs))
+	{
+	if (prevChainBlock && !((prevChainBlock->tStart <= ts) && (prevChainBlock->qStart <= qs)))
+	    errAbort("bad del\n");
+	/*
+	while(chainBlock && ((chainBlock->tStart < te) || (chainBlock->qStart < qe)))
+	    {
+	    nextChainBlock = chainBlock->next;
+	    *deletedBases += chainBlock->tEnd - chainBlock->tStart;
+	    if (prevChainBlock == NULL)
+		chain->blockList = nextChainBlock;
+	    else
+		prevChainBlock->next = nextChainBlock;
+	    freez(&chainBlock);
+	    chainBlock = nextChainBlock;
+	    }
+	    */
+
+	return TRUE;
+	}
+    }
+    return FALSE;
+}
+boolean deleteChainRange(struct chain *chain, int qs, int qe, int ts, int te, int *deletedBases)
 {
 struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 
@@ -114,9 +147,10 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 	    chainBlock = nextChainBlock;
 	    }
 
-	return;
+	return TRUE;
 	}
     }
+    return FALSE;
 }
 
 void addPslToChain(struct chain *chain, struct psl *psl, int *addedBases)
@@ -148,7 +182,9 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
     addPslBlocks(&bList, psl);
 
     if (prevChainBlock == NULL)
+	{
 	chain->blockList = bList;
+	}
     else
 	prevChainBlock->next = bList;
 
@@ -161,6 +197,7 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 void chainStitch(char *psls, char *chains, char *outChainName, char *outFoundName, char *outNotFoundName)
 /* chainStitch - Stitch psls into chains. */
 {
+int jj;
 struct chain *nextChain, *prevChain;
 int deletedBases, addedBases;
 FILE *outFound = mustOpen(outFoundName, "w");
@@ -240,6 +277,9 @@ for(sp = spList; sp; sp = sp->next)
 	continue;
 	}
 
+    for(jj = 0; jj < 2; jj++)
+    {
+    int fudge = jj * 100000;
     prevPsl = NULL;
     for(psl = sp->psl; psl ;  psl = nextPsl)
 	{
@@ -257,12 +297,12 @@ for(sp = spList; sp; sp = sp->next)
 	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
 	    {
 	    nextChain = chain->next;
-#define FUDGE 0
-	    if (((psl->tStart <= chain->tEnd + FUDGE) && (psl->tEnd > chain->tStart - FUDGE)) &&
-	         (qStart <= chain->qEnd + FUDGE) && (qEnd > chain->qStart - FUDGE))
+	    if (((psl->tStart <= chain->tEnd + fudge) && (psl->tEnd > chain->tStart - fudge)) &&
+	         (qStart <= chain->qEnd + fudge) && (qEnd > chain->qStart - fudge))
 		{
-		deleteChainRange(chain, qStart, qEnd, psl->tStart, psl->tEnd, &deletedBases);
-		addPslToChain(chain, psl, &addedBases);
+		//if (deleteChainRange(chain, qStart, qEnd, psl->tStart, psl->tEnd, &deletedBases))
+		if (fudge && !checkChainRange(chain, qStart, qEnd, psl->tStart, psl->tEnd))
+		    addPslToChain(chain, psl, &addedBases);
 		if (chain->blockList == NULL)
 		    {
 		    if (prevChain)
@@ -288,6 +328,7 @@ for(sp = spList; sp; sp = sp->next)
 	if (chain == NULL)
 	    prevPsl = psl;
 	
+	}
 	}
     }
 fclose(outFound);
