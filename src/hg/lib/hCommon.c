@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.26 2004/10/29 20:35:14 angie Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.27 2004/11/07 16:42:31 kent Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
@@ -223,7 +223,7 @@ void hTableStart()
 /* For some reason BORDER=1 does not work in our web.c nested table scheme.
  * So use web.c's trick of using an enclosing table to provide a border.   */
 {
-puts("<!--outer table is for border purposes-->" "\n"
+puts("<!--hTableStart-->" "\n"
      "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
 }
@@ -232,6 +232,7 @@ void hTableEnd()
 /* Close out table started with hTableStart() */
 {
 puts("</TABLE>");
-puts("</TR></TD></TABLE>");
+puts("</TD></TR></TABLE>");
+puts("<!--hTableEnd-->");
 }
 
