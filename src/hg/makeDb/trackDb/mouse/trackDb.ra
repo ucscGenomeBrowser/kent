@@ -211,15 +211,10 @@ searchTable stsMapMouseNew
 searchType bed
 xrefTable stsAlias
 xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
 termRegex [^[:space:]]+
 searchDescription Alias of STS Marker
 searchPriority 11
-padding 100000
-
-searchTable stsMapMouseNew
-searchType bed
-termRegex [^[:space:]]+
-searchPriority 12
 padding 100000
 
 searchTable miRNA
