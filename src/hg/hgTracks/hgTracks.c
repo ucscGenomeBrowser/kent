@@ -45,6 +45,7 @@
 #include "estPair.h"
 #include "customTrack.h"
 #include "softPromoter.h"
+#include "trackDb.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -118,14 +119,6 @@ if (s != NULL && isdigit(s[0]))
     }
 tl.trackWidth = tl.picWidth - tl.leftLabelWidth;
 }
-
-enum trackVisibility 
-/* How to look at a track. */
-    {
-    tvHide=0, 		/* Hide it. */
-    tvDense=1,        /* Squish it together. */
-    tvFull=2        /* Expand it out. */
-    };  
 
 char *tvStrings[] = 
 /* User interface strings for above. */
@@ -224,9 +217,9 @@ struct trackGroup
     char *version;	/* Versioning information about table. */
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
     unsigned short useScore;	/* If True(1) use score information in table, only shades of gray color supported. */
+    int bedSize;		/* Number of fields if a bed file. */
     unsigned short isSplit;	/* True(1) if table is split over different chromosomes. i.e. chrN_est */
     int priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
-    char tableName[65];	/* Name of table in database to be queried. */
     char trackType[33];	/* Initially just 'bed' and 'psl' supported. */
     char *credit;	/* Who to credit/blame for information in table. */
     char *url;	/* Link to more information about track. */
@@ -1140,21 +1133,26 @@ struct linkedFeatures *lf = item;
 return lf->end;
 }
 
-struct trackGroup *linkedFeaturesTg()
-/* Return generic track group for linked features. */
+void linkedFeaturesMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features. */
 {
-struct trackGroup *tg = NULL;
-
-AllocVar(tg);
 tg->freeItems = freeLinkedFeaturesItems;
 tg->drawItems = linkedFeaturesDraw;
-tg->colorShades = shadesOfGray;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
+}
+
+struct trackGroup *linkedFeaturesTg()
+/* Return generic track group for linked features. */
+{
+struct trackGroup *tg = NULL;
+AllocVar(tg);
+linkedFeaturesMethods(tg);
+tg->colorShades = shadesOfGray;
 return tg;
 }
 
@@ -1279,12 +1277,6 @@ hFreeConn(&conn);
 return lfList;
 }
 
-void loadMrnaAli(struct trackGroup *tg)
-/* Load up rnas from table into trackGroup items. */
-{
-tg->items = lfFromPslsInRange("mrna", winStart, winEnd, chromName, FALSE);
-}
-
 #ifdef FUREY_CODE
 void loadBacEnds(struct trackGroup *tg)
 /* Load up bac ends from table into trackGroup items. */
@@ -1374,97 +1366,20 @@ char *getEstPairName(struct trackGroup *tg, void *item)
   return lf->cloneName;
 }
 
-struct trackGroup *estPairTg()
+void estPairMethods(struct trackGroup *tg)
 /* Make track group of est pairs. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
+linkedFeaturesMethods(tg);
 tg->freeItems = estFreePair;
-tg->mapName = "hgEstPairs";
 tg->itemName = getEstPairName;
 tg->mapItemName = getEstPairName;
-tg->visibility = tvHide;
-tg->longLabel = "5'(blue) - 3'(red) EST pairs";
-tg->shortLabel = "EST pairs";
-tg->color.r = 67;
-tg->color.g = 57;
-tg->color.b = 206;
-tg->altColor.r = 204;
-tg->altColor.g = 20;
-tg->altColor.b = 35; 
 tg->loadItems = loadEstPairAli;
 tg->drawItems = linkedFeaturesAverageDensePair;
- return tg;
 }
 
-struct linkedFeatures *lfFromPslsInRangeByChrom(char *table, char *chrom, int start, int end)
-/* Return linked features from range of table. */
-{
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct linkedFeatures *lfList = NULL, *lf;
-
-sprintf(query, "select * from %s where tName = '%s' and tStart<%u and tEnd>%u order by tStart",
-    table, chrom, winEnd, winStart);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct psl *psl = pslLoad(row);
-    lf = lfFromPsl(psl, FALSE);
-    slAddHead(&lfList, lf);
-    pslFree(&psl);
-    }
-slReverse(&lfList);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return lfList;
-}
-
-void loadMgcMrnaAli(struct trackGroup *tg)
-/* Load up rnas from table into trackGroup items. */
-{
-tg->items = lfFromPslsInRangeByChrom("mgc_mrna", chromName, winStart, winEnd);
-}
-
-struct trackGroup *fullMgcMrnaTg()
-/* Make track group of full length mRNAs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "mgc_mrna";
-tg->visibility = tvDense;
-tg->longLabel = "Full Length MGC mRNAs";
-tg->shortLabel = "Full MGC mRNAs";
-tg->loadItems = loadMgcMrnaAli;
-return tg;
-}
 #endif /* ROGIC_CODE */
 
-struct trackGroup *fullMrnaTg()
-/* Make track group of full length mRNAs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgMrna";
-tg->visibility = tvFull;
-tg->longLabel = "Full Length mRNAs";
-tg->shortLabel = "Full mRNAs";
-tg->loadItems = loadMrnaAli;
-return tg;
-}
 
-#ifdef FUREY_CODE
-struct trackGroup *bacEndsTg()
-/* Make track group of BAC end pairs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "BACends";
-tg->visibility = tvHide;
-tg->longLabel = "BAC end pairs";
-tg->shortLabel = "BAC ends";
-tg->loadItems = loadBacEnds;
-return tg;
-}
-#endif /* FUREY_CODE */
 
 char *usrPslMapName(struct trackGroup *tg, void *item)
 /* Return name of item. */
@@ -1531,174 +1446,6 @@ tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = usrPslMapName;
-return tg;
-}
-
-void loadEstAli(struct trackGroup *tg)
-/* Load up rnas from table into trackGroup items. */
-{
-tg->items = lfFromPslsInRange("est", winStart, winEnd, chromName, FALSE);
-}
-
-struct trackGroup *estTg()
-/* Make track group of full length mRNAs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgEst";
-tg->visibility = tvHide;
-tg->longLabel = "Human ESTs";
-tg->shortLabel = "Human ESTs";
-tg->loadItems = loadEstAli;
-tg->drawItems = linkedFeaturesAverageDense;
-return tg;
-}
-
-void loadIntronEstAli(struct trackGroup *tg)
-/* Load up rnas from table into trackGroup items. */
-{
-tg->items = lfFromPslsInRange("intronEst", winStart, winEnd, chromName, FALSE);
-}
-
-struct trackGroup *intronEstTg()
-/* Make track group of full length mRNAs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgIntronEst";
-tg->visibility = tvDense;
-tg->longLabel = "Human ESTs That Have Been Spliced";
-tg->shortLabel = "Spliced ESTs";
-tg->loadItems = loadIntronEstAli;
-tg->drawItems = linkedFeaturesAverageDense;
-return tg;
-}
-
-void loadMusTest1(struct trackGroup *tg)
-/* Load up mouse alignments (psl format) from table. */
-{
-tg->items = lfFromPslsInRange("musTest1", winStart, winEnd, chromName, TRUE);
-}
-
-struct trackGroup *musTest1Tg()
-/* Make track group of full length mRNAs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgMusTest1";
-tg->visibility = tvHide;
-tg->longLabel = "Mouse Translated Blat Alignments Score > 40";
-tg->shortLabel = "Mouse Test 40";
-tg->loadItems = loadMusTest1;
-return tg;
-}
-
-void loadMusTest2(struct trackGroup *tg)
-/* Load up mouse alignments (psl format) from table. */
-{
-tg->items = lfFromPslsInRange("musTest2", winStart, winEnd, chromName, TRUE);
-}
-
-struct trackGroup *musTest2Tg()
-/* Make track group of full length mRNAs. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgMusTest2";
-tg->visibility = tvHide;
-tg->longLabel = "Mouse Translated Blat Alignments Score > 6";
-tg->shortLabel = "Mouse Test 6";
-tg->loadItems = loadMusTest2;
-return tg;
-}
-
-void loadBlatMouse(struct trackGroup *tg)
-/* Load up mouse alignments (psl format) from table. */
-{
-tg->items = lfFromPslsInRange("blatMouse", winStart, winEnd, chromName, TRUE);
-}
-
-struct trackGroup *blatMouseTg()
-/* Make track group of mouse alignments. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgBlatMouse";
-tg->visibility = tvDense;
-tg->longLabel = "Mouse Translated Blat Alignments";
-tg->shortLabel = "Mouse Blat";
-tg->loadItems = loadBlatMouse;
-tg->subType = lfSubXeno;
-tg->colorShades = shadesOfBrown;
-tg->color.r = brownColor.r;
-tg->color.g = brownColor.g;
-tg->color.b = brownColor.b;
-return tg;
-}
-
-
-void loadBlatFish(struct trackGroup *tg)
-/* Load up mouse alignments (psl format) from table. */
-{
-tg->items = lfFromPslsInRange("blatFish", winStart, winEnd, chromName, TRUE);
-}
-
-struct trackGroup *blatFishTg()
-/* Make track group of fish alignments. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgBlatFish";
-tg->visibility = tvDense;
-tg->longLabel = "Tetroadon Translated Blat Alignments";
-tg->shortLabel = "Fish Blat";
-tg->loadItems = loadBlatFish;
-tg->subType = lfSubXeno;
-tg->colorShades = shadesOfSea;
-tg->color.r = darkSeaColor.r;
-tg->color.g = darkSeaColor.g;
-tg->color.b = darkSeaColor.b;
-return tg;
-}
-
-
-void loadMus7of8(struct trackGroup *tg)
-/* Load up mouse alignments (psl format) from table. */
-{
-tg->items = lfFromPslsInRange("mus7of8", winStart, winEnd, chromName, TRUE);
-}
-
-struct trackGroup *mus7of8Tg()
-/* Make track group of mouse alignments. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgMus7of8";
-tg->visibility = tvDense;
-tg->longLabel = "Clipped Mouse Translated Blat Alignments, 7 of 8 Seed";
-tg->shortLabel = "Mouse 7 of 8";
-tg->loadItems = loadMus7of8;
-tg->subType = lfSubXeno;
-tg->colorShades = shadesOfBrown;
-tg->color.r = brownColor.r;
-tg->color.g = brownColor.g;
-tg->color.b = brownColor.b;
-return tg;
-}
-
-void loadMusPairOf4(struct trackGroup *tg)
-/* Load up mouse alignments (psl format) from table. */
-{
-tg->items = lfFromPslsInRange("musPairOf4", winStart, winEnd, chromName, TRUE);
-}
-
-struct trackGroup *musPairOf4Tg()
-/* Make track group of mouse alignments. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgMusPairOf4";
-tg->visibility = tvDense;
-tg->longLabel = "Clipped Mouse Translated Blat Alignments, Pair of 4 Seed";
-tg->shortLabel = "Mouse Pair of 4";
-tg->loadItems = loadMusPairOf4;
-tg->subType = lfSubXeno;
-tg->colorShades = shadesOfBrown;
-tg->color.r = brownColor.r;
-tg->color.g = brownColor.g;
-tg->color.b = brownColor.b;
 return tg;
 }
 
@@ -1778,33 +1525,10 @@ abbr(abbrev, "Affy.");
 return abbrev;
 }
 
-char *genieMapName(struct trackGroup *tg, void *item)
-/* Return un-abbreviated genie name. */
-{
-struct linkedFeatures *lf = item;
-return lf->name;
-}
-
-
-void loadGenieAlt(struct trackGroup *tg)
-/* Load up Genie alt genes. */
-{
-tg->items = lfFromGenePredInRange("genieAlt", chromName, winStart, winEnd);
-}
-
-struct trackGroup *genieAltTg()
+void genieAltMethods(struct trackGroup *tg)
 /* Make track group of full length mRNAs. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "genieAlt";
-tg->visibility = tvDense;
-tg->longLabel = "Affymetrix Gene Predictions";
-tg->shortLabel = "Affy Genes";
-tg->loadItems = loadGenieAlt;
-setTgDarkLightColors(tg, 125, 0, 150);
 tg->itemName = genieName;
-tg->mapItemName = genieMapName;
-return tg;
 }
 
 void lookupKnownNames(struct linkedFeatures *lfList)
@@ -1886,20 +1610,12 @@ else
     }
 }
 
-struct trackGroup *genieKnownTg()
+void genieKnownMethods(struct trackGroup *tg)
 /* Make track group of known genes. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "genieKnown";
-tg->visibility = tvFull;
-tg->longLabel = "Known Genes (from full length mRNAs)";
-tg->shortLabel = "Known Genes";
 tg->loadItems = loadGenieKnown;
-setTgDarkLightColors(tg, 20, 20, 170);
 tg->itemName = genieName;
-tg->mapItemName = genieMapName;
 tg->itemColor = genieKnownColor;
-return tg;
 }
 
 char *refGeneName(struct trackGroup *tg, void *item)
@@ -1958,27 +1674,14 @@ if (tg->visibility == tvFull &&
 }
 
 
-struct trackGroup *refGeneTg()
+void refGeneMethods(struct trackGroup *tg)
 /* Make track group of known genes from refSeq. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgRefGene";
-tg->visibility = tvFull;
-tg->longLabel = "Known Genes (from RefSeq)";
-tg->shortLabel = "Known Genes";
 tg->loadItems = loadRefGene;
-setTgDarkLightColors(tg, 20, 20, 170);
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
-return tg;
 }
 
-
-void loadEnsGene(struct trackGroup *tg)
-/* Load up Ensembl genes. */
-{
-tg->items = lfFromGenePredInRange("ensGene", chromName, winStart, winEnd);
-}
 
 char *ensGeneName(struct trackGroup *tg, void *item)
 /* Return abbreviated ensemble gene name. */
@@ -1992,52 +1695,10 @@ abbr(abbrev, "SEPT20T.");
 return abbrev;
 }
 
-char *ensGeneMapName(struct trackGroup *tg, void *item)
-/* Return full ensemble gene name. */
-{
-struct linkedFeatures *lf = item;
-return lf->name;
-}
-
-struct trackGroup *ensemblGeneTg()
+void ensGeneMethods(struct trackGroup *tg)
 /* Make track group of Ensembl predictions. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgEnsGene";
-tg->visibility = tvDense;
-tg->longLabel = "Ensembl Gene Predictions";
-tg->shortLabel = "Ensembl Genes";
-tg->loadItems = loadEnsGene;
-setTgDarkLightColors(tg, 150, 0, 0);
 tg->itemName = ensGeneName;
-tg->mapItemName = ensGeneMapName;
-return tg;
-}
-
-void loadSoftberryGene(struct trackGroup *tg)
-/* Load up Softberry genes. */
-{
-tg->items = lfFromGenePredInRange("softberryGene", chromName, winStart, winEnd);
-}
-
-struct trackGroup *softberryGeneTg()
-/* Make track group of Softberry predictions. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgSoftberryGene";
-tg->visibility = tvDense;
-tg->longLabel = "Fgenesh++ Gene Predictions";
-tg->shortLabel = "Fgenesh++ Genes";
-tg->loadItems = loadSoftberryGene;
-setTgDarkLightColors(tg, 0, 100, 0);
-return tg;
-}
-
-
-void loadSanger22Gene(struct trackGroup *tg)
-/* Load up Softberry genes. */
-{
-tg->items = lfFromGenePredInRange("sanger22", chromName, winStart, winEnd);
 }
 
 char *sanger22Name(struct trackGroup *tg, void *item)
@@ -2055,18 +1716,10 @@ return abbrev;
 }
 
 
-struct trackGroup *sanger22Tg()
+void sanger22Methods(struct trackGroup *tg)
 /* Make track group of Sanger's chromosome 22 gene annotations. */
 {
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgSanger22";
-tg->visibility = tvDense;
-tg->longLabel = "Sanger Centre Chromosome 22 Annotations";
-tg->shortLabel = "Sanger 22";
-tg->loadItems = loadSanger22Gene;
 tg->itemName = sanger22Name;
-setTgDarkLightColors(tg, 0, 100, 180);
-return tg;
 }
 
 
@@ -2177,46 +1830,14 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
     }
 }
 
-int goldItemStart(struct trackGroup *tg, void *item)
-/* Return start chromosome coordinate of item. */
-{
-struct agpFrag *lf = item;
-return lf->chromStart;
-}
-
-int goldItemEnd(struct trackGroup *tg, void *item)
-/* Return end chromosome coordinate of item. */
-{
-struct agpFrag *lf = item;
-return lf->chromEnd;
-}
-
-struct trackGroup *goldTrackGroup()
+void goldMethods(struct trackGroup *tg)
 /* Make track group for golden path */
 {
-struct trackGroup *tg;
-
-AllocVar(tg);
-tg->mapName = "hgGold";
-tg->visibility = tvHide;
-tg->longLabel = "Assembly from Fragments";
-tg->shortLabel = "Assembly";
 tg->loadItems = goldLoad;
 tg->freeItems = goldFree;
 tg->drawItems = goldDraw;
-tg->color.r = 150;
-tg->color.g = 100;
-tg->color.b = 30;
-tg->altColor.r = 230;
-tg->altColor.g = 170;
-tg->altColor.b = 40;
 tg->itemName = goldName;
 tg->mapItemName = goldName;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = goldItemStart;
-tg->itemEnd = goldItemEnd;
-return tg;
 }
 
 /* Repeat items.  Since there are so many of these, to avoid 
@@ -2376,16 +1997,9 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-struct trackGroup *repeatTg()
+void repeatMethods(struct trackGroup *tg)
 /* Make track group for repeats. */
 {
-struct trackGroup *tg;
-
-AllocVar(tg);
-tg->mapName = "hgRepeat";
-tg->visibility = tvDense;
-tg->longLabel = "Repeating Elements by RepeatMasker";
-tg->shortLabel = "RepeatMasker";
 tg->loadItems = repeatLoad;
 tg->freeItems = repeatFree;
 tg->drawItems = repeatDraw;
@@ -2396,52 +2010,9 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgWeirdItemStart;
 tg->itemEnd = tgWeirdItemEnd;
-return tg;
 }
 
 typedef struct slList *(*ItemLoader)(char **row);
-
-
-#ifdef OLD 
-void bedLoadQuery(struct trackGroup *tg, char *query, ItemLoader loader)
-/* Load up bed items from a query. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct slList *itemList = NULL, *item;
-
-/* Get the frags and load into tg->items. */
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    item = loader(row);
-    slAddHead(&itemList, item);
-    }
-slReverse(&itemList);
-sqlFreeResult(&sr);
-tg->items = itemList;
-hFreeConn(&conn);
-}
-
-void bedLoadChrom(struct trackGroup *tg, char *table, ItemLoader loader)
-/* Generic tg->item loader from chromosome table. */
-{
-char query[256];
-sprintf(query, "select * from %s_%s where chromStart<%u and chromEnd>%u",
-    chromName, table, winEnd, winStart);
-bedLoadQuery(tg, query, loader);
-}
-
-void bedLoadItem(struct trackGroup *tg, char *table, ItemLoader loader)
-/* Generic tg->item loader. */
-{
-char query[256];
-sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
-    table, chromName, winEnd, winStart);
-bedLoadQuery(tg, query, loader);
-}
-#endif /* OLD */
 
 void bedLoadItem(struct trackGroup *tg, char *table, ItemLoader loader)
 /* Generic tg->item loader. */
@@ -2540,12 +2111,9 @@ return bed->chromEnd;
 }
 
 
-struct trackGroup *bedTg()
-/* Get track group loaded with generic bed values. */
+void bedMethods(struct trackGroup *tg)
+/* Fill in methods for (simple) bed tracks. */
 {
-struct trackGroup *tg;
-AllocVar(tg);
-tg->visibility = tvDense;
 tg->drawItems = bedDrawSimple;
 tg->itemName = bedName;
 tg->mapItemName = bedName;
@@ -2553,36 +2121,16 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
+}
+
+struct trackGroup *bedTg()
+/* Get track group loaded with generic bed values. */
+{
+struct trackGroup *tg;
+AllocVar(tg);
+bedMethods(tg);
 return tg;
 }
-
-void loadSoftPromoter(struct trackGroup *tg)
-/* Load up softPromoter from database table to trackGroup items. */
-{
-bedLoadItem(tg, "softPromoter", (ItemLoader)softPromoterLoad);
-}
-
-void freeSoftPromoter(struct trackGroup *tg)
-/* Free up xyz items. */
-{
-softPromoterFreeList((struct softPromoter**)&tg->items);
-}
-
-struct trackGroup *softPromoterTg()
-/* Make track group of Softberry Promoter Predictions. */
-{
-struct trackGroup *tg = bedTg();
-tg->mapName = "hgSoftPromoter";
-tg->visibility = tvDense;
-tg->longLabel = "TSSW Promoter Predictions";
-tg->shortLabel = "TSSW Promoters";
-tg->loadItems = loadSoftPromoter;
-tg->freeItems = freeSoftPromoter;
-setTgDarkLightColors(tg, 0, 100, 0);
-return tg;
-}
-
-
 
 void isochoreLoad(struct trackGroup *tg)
 /* Load up isochores from database table to trackGroup items. */
@@ -2631,35 +2179,19 @@ for (item = tg->items; item != NULL; item = item->next)
     mgDrawBox(mg, x1, y, w, heightPer, color);
     mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
 	item->name, item->name);
-#ifdef OLDCRUFT
-    printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x1, y, x1+w, y+heightPer);
-    printf("HREF=\"../cgi-bin/hgc?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%d\" ", 
-	tg->mapName, item->name, chromName, winStart, winEnd, database,
-	item->chromStart);
-    printf("ALT= \"%s\" TITLE=\"%s\">\n", item->name, item->name); 
-#endif /* OLDCRUFT */
     if (isFull)
 	y += lineHeight;
     }
 }
 
-
-
-struct trackGroup *isochoresTg()
+void isochoresMethods(struct trackGroup *tg)
 /* Make track group for isochores. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgIsochore";
-tg->visibility = tvHide;
-tg->longLabel = "GC-rich (dark) and AT-rich (light) isochores";
-tg->shortLabel = "isochores";
 tg->loadItems = isochoreLoad;
 tg->freeItems = isochoreFree;
 tg->drawItems = isochoreDraw;
 tg->colorShades = shadesOfGray;
 tg->itemName = isochoreName;
-return tg;
 }
 
 char *simpleRepeatName(struct trackGroup *tg, void *item)
@@ -2695,19 +2227,19 @@ void freeSimpleRepeats(struct trackGroup *tg)
 simpleRepeatFreeList((struct simpleRepeat**)&tg->items);
 }
 
-struct trackGroup *simpleRepeatTg()
+void simpleRepeatMethods(struct trackGroup *tg)
 /* Make track group for simple repeats. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgSimpleRepeat";
-tg->visibility = tvHide;
-tg->longLabel = "Simple Tandem Repeats";
-tg->shortLabel = "Simple Repeats";
 tg->loadItems = loadSimpleRepeats;
 tg->freeItems = freeSimpleRepeats;
 tg->itemName = simpleRepeatName;
-return tg;
+}
+
+Color cpgIslandColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of cpgIsland track item. */
+{
+struct cpgIsland *el = item;
+return (el->length < 400 ? tg->ixAltColor : tg->ixColor);
 }
 
 void loadCpgIsland(struct trackGroup *tg)
@@ -2722,61 +2254,12 @@ void freeCpgIsland(struct trackGroup *tg)
 cpgIslandFreeList((struct cpgIsland**)&tg->items);
 }
 
-Color cpgIslandColor(struct trackGroup *tg, void *item, struct memGfx *mg)
-/* Return color of cpgIsland track item. */
-{
-struct cpgIsland *el = item;
-
-return (el->length < 400 ? tg->ixAltColor : tg->ixColor);
-}
-
-struct trackGroup *cpgIslandTg()
+void cpgIslandMethods(struct trackGroup *tg)
 /* Make track group for simple repeats. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgCpgIsland";
-tg->visibility = tvHide;
-tg->longLabel = "CpG Islands. (Islands < 400 Bases Are Light Green)";
-tg->shortLabel = "CpG Islands";
 tg->loadItems = loadCpgIsland;
 tg->freeItems = freeCpgIsland;
-tg->color.r = 0;
-tg->color.g = 100;
-tg->color.b = 0;
-tg->altColor.r = 128;
-tg->altColor.g = 228;
-tg->altColor.b = 128;
 tg->itemColor = cpgIslandColor;
-return tg;
-}
-
-
-void loadCpgIsland2(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
-{
-bedLoadItem(tg, "cpgIsland2", (ItemLoader)cpgIslandLoad);
-}
-
-struct trackGroup *cpgIsland2Tg()
-/* Make track group for simple repeats. */
-{
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgCpgIsland2";
-tg->visibility = tvHide;
-tg->longLabel = "LaDeana Hillier's CpG Islands (dark if >= 400 bases long)";
-tg->shortLabel = "CpG Hillier";
-tg->loadItems = loadCpgIsland2;
-tg->freeItems = freeCpgIsland;
-tg->color.r = 0;
-tg->color.g = 100;
-tg->color.b = 0;
-tg->altColor.r = 128;
-tg->altColor.g = 228;
-tg->altColor.b = 128;
-tg->itemColor = cpgIslandColor;
-return tg;
 }
 
 char *cytoBandName(struct trackGroup *tg, void *item)
@@ -2902,23 +2385,13 @@ void freeCytoBands(struct trackGroup *tg)
 cytoBandFreeList((struct cytoBand**)&tg->items);
 }
 
-struct trackGroup *cytoBandTg()
+void cytoBandMethods(struct trackGroup *tg)
 /* Make track group for simple repeats. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgCytoBands";
-tg->visibility = tvDense;
-tg->longLabel = "Chromosome Bands Localized by FISH Mapping Clones";
-tg->shortLabel = "Chromosome Band";
 tg->loadItems = loadCytoBands;
 tg->freeItems = freeCytoBands;
 tg->drawItems = cytoBandDraw;
 tg->itemName = cytoBandName;
-tg->altColor.r = 150;
-tg->altColor.g = 50;
-tg->altColor.b = 50;
-return tg;
 }
 
 void loadGcPercent(struct trackGroup *tg)
@@ -3033,21 +2506,14 @@ else
 }
 
 
-struct trackGroup *gcPercentTg()
+void gcPercentMethods(struct trackGroup *tg)
 /* Make track group for simple repeats. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgGcPercent";
-tg->visibility = tvHide;
-tg->longLabel = "Percentage GC in 20,000 Base Windows";
-tg->shortLabel = "GC Percent";
 tg->loadItems = loadGcPercent;
 tg->freeItems = freeGcPercent;
 tg->itemName = gcPercentName;
 tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
-return tg;
 }
 
 struct genomicDups *filterOldDupes(struct genomicDups *oldList)
@@ -3105,8 +2571,6 @@ char *genomicDupsName(struct trackGroup *tg, void *item)
 struct genomicDups *gd = item;
 char *full = gd->name;
 static char abbrev[64];
-int len;
-char *e;
 
 strcpy(abbrev, skipChr(full));
 abbr(abbrev, "om");
@@ -3114,27 +2578,13 @@ return abbrev;
 }
 
 
-
-struct trackGroup *genomicDupsTg()
+void genomicDupsMethods(struct trackGroup *tg)
 /* Make track group for simple repeats. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgGenomicDups";
-tg->visibility = tvDense;
-tg->longLabel = "Duplications of >1000 bases of non-RepeatMasked Sequence";
-tg->shortLabel = "duplications";
 tg->loadItems = loadGenomicDups;
 tg->freeItems = freeGenomicDups;
 tg->itemName = genomicDupsName;
-tg->color.r = 230;
-tg->color.g = 120;
-tg->color.b = 0;
-tg->altColor.r = 220;
-tg->altColor.g = 180;
-tg->altColor.b = 0;
 tg->itemColor = genomicDupsColor;
-return tg;
 }
 
 void loadGenethon(struct trackGroup *tg)
@@ -3149,85 +2599,11 @@ void freeGenethon(struct trackGroup *tg)
 mapStsFreeList((struct mapSts**)&tg->items);
 }
 
-struct trackGroup *genethonTg()
+void genethonMethods(struct trackGroup *tg)
 /* Make track group for simple repeats. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgGenethon";
-tg->visibility = tvDense;
-tg->longLabel = "Various STS Markers";
-tg->shortLabel = "STS Markers";
 tg->loadItems = loadGenethon;
 tg->freeItems = freeGenethon;
-return tg;
-}
-
-void loadEst3(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
-{
-bedLoadItem(tg, "est3", (ItemLoader)est3Load);
-}
-
-void freeEst3Items(struct trackGroup *tg)
-/* Free up isochore items. */
-{
-est3FreeList((struct est3**)&tg->items);
-}
-
-char *est3Name(struct trackGroup *tg, void *item)
-/* Return what to display on left column of open track. */
-{
-struct est3 *e3 = item;
-static char name[64];
-
-sprintf(name, "%d %s 3' ESTs", e3->estCount, e3->strand);
-return name;
-}
-
-char *est3MapName(struct trackGroup *tg, void *item)
-/* Return what to write in client-side image map. */
-{
-return "est3";
-}
-
-
-struct trackGroup *est3Tg()
-/* Make track group for simple repeats. */
-{
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgEst3";
-tg->visibility = tvDense;
-tg->longLabel = "EST 3' Ends, Filtered and Clustered";
-tg->shortLabel = "EST 3' Ends";
-tg->loadItems = loadEst3;
-tg->freeItems = freeEst3Items;
-tg->itemName = est3Name;
-tg->mapItemName = est3MapName;
-return tg;
-}
-
-void loadExoFish(struct trackGroup *tg)
-/* Load up exoFish from database table to trackGroup items. */
-{
-bedLoadItem(tg, "exoFish", (ItemLoader)exoFishLoad);
-}
-
-void freeExoFish(struct trackGroup *tg)
-/* Free up isochore items. */
-{
-exoFishFreeList((struct exoFish**)&tg->items);
-}
-
-char *exoFishName(struct trackGroup *tg, void *item)
-/* Return what to display on left column of open track. */
-{
-struct exoFish *exo = item;
-static char name[64];
-
-sprintf(name, "ecore score %d", exo->score);
-return name;
 }
 
 Color exoFishColor(struct trackGroup *tg, void *item, struct memGfx *mg)
@@ -3241,26 +2617,10 @@ grayLevel = grayInRange(ppt, -500, 1000);
 return shadesOfSea[grayLevel];
 }
 
-
-struct trackGroup *exoFishTg()
+void exoFishMethods(struct trackGroup *tg)
 /* Make track group for exoFish. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgExoFish";
-tg->visibility = tvDense;
-tg->longLabel = "Exofish Tetraodon/Human Conserved Regions (ecores)";
-/* tg->longLabel = "Exofish Tetraodon/Human Evolutionarily Conserved Regions (ecores)"; */
-tg->shortLabel = "Exofish ecores";
-tg->loadItems = loadExoFish;
-tg->freeItems = freeExoFish;
-tg->itemName = exoFishName;
-tg->colorShades = shadesOfGray;
 tg->itemColor = exoFishColor;
-tg->color.r = darkSeaColor.r;
-tg->color.g = darkSeaColor.g;
-tg->color.b = darkSeaColor.b;
-return tg;
 }
 
 void loadExoMouse(struct trackGroup *tg)
@@ -3302,105 +2662,17 @@ return shadesOfBrown[grayLevel];
 }
 
 
-struct trackGroup *exoMouseTg()
+void exoMouseMethods(struct trackGroup *tg)
 /* Make track group for exoMouse. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgExoMouse";
 if (sameString(chromName, "chr22") && privateVersion())
     tg->visibility = tvDense;
 else
     tg->visibility = tvHide;
-tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Exonerate)";
-tg->shortLabel = "Exonerate Mouse";
 tg->loadItems = loadExoMouse;
 tg->freeItems = freeExoMouse;
 tg->itemName = exoMouseName;
-tg->colorShades = shadesOfBrown;
 tg->itemColor = exoMouseColor;
-tg->color.r = brownColor.r;
-tg->color.g = brownColor.g;
-tg->color.b = brownColor.b;
-return tg;
-}
-
-void loadFiberMouse(struct trackGroup *tg)
-/* Load up exoFish from database table to trackGroup items. */
-{
-bedLoadItem(tg, "fiberMouse", (ItemLoader)bedLoad);
-}
-
-void freeFiberMouse(struct trackGroup *tg)
-/* Free up isochore items. */
-{
-bedFreeList((struct bed**)&tg->items);
-}
-
-
-struct trackGroup *fiberMouseTg()
-/* Make track group for Dan Brown's Fiberglass mouse/human alignments. */
-{
-struct trackGroup *tg = bedTg();
-if (privateVersion())
-    tg->visibility = tvDense;
-else
-    tg->visibility = tvHide;
-tg->mapName = "hgFiberMouse";
-tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Fiberglass)";
-tg->shortLabel = "Fiberglass Mouse";
-tg->loadItems = loadFiberMouse;
-tg->freeItems = freeFiberMouse;
-tg->color.r = 130;
-tg->color.g = 80;
-tg->color.b = 30;
-return tg;
-}
-
-
-void loadSnp(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
-{
-bedLoadItem(tg, tg->customPt, (ItemLoader)snpLoad);
-}
-
-void freeSnp(struct trackGroup *tg)
-/* Free up isochore items. */
-{
-snpFreeList((struct snp**)&tg->items);
-}
-
-struct trackGroup *snpTg(char *table)
-/* Make track group for snps. */
-{
-struct trackGroup *tg = bedTg();
-
-tg->mapName = table;
-tg->visibility = tvHide;
-tg->longLabel = "SNP";
-tg->shortLabel = "Single Nucleotide Polymorphisms (SNP)";
-tg->loadItems = loadSnp;
-tg->freeItems = freeSnp;
-tg->customPt = table;
-return tg;
-}
-
-struct trackGroup *snpNihTg()
-/* Make track group for NIH. */
-{
-struct trackGroup *tg = snpTg("snpNih");
-tg->shortLabel = "Overlap SNPs";
-tg->longLabel = "Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps";
-return tg;
-}
-
-struct trackGroup *snpTscTg()
-/* Make track group for TSC. */
-{
-struct trackGroup *tg = snpTg("snpTsc");
-tg->shortLabel = "Random SNPs";
-tg->longLabel = "Single Nucleotide Polymorphisms (SNPs) from Random Reads";
-return tg;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -3440,26 +2712,13 @@ if ((e = strstr(abbrev, "-related")) != NULL)
 return abbrev;
 }
 
-struct trackGroup *rnaGeneTg()
-/* Make track group for simple repeats. */
+void rnaGeneMethods(struct trackGroup *tg)
+/* Make track group for rna genes . */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgRnaGene";
-tg->visibility = tvFull;
-tg->longLabel = "Non-coding RNA Genes (dark) and Pseudogenes (light)";
-tg->shortLabel = "RNA Genes";
 tg->loadItems = loadRnaGene;
 tg->freeItems = freeRnaGene;
 tg->itemName = rnaGeneName;
-tg->color.r = 170;
-tg->color.g = 80;
-tg->color.b = 0;
-tg->altColor.r = 230;
-tg->altColor.g = 180;
-tg->altColor.b = 130;
 tg->itemColor = rnaGeneColor;
-return tg;
 }
 
 void loadStsMarker(struct trackGroup *tg)
@@ -3501,25 +2760,12 @@ else
 }
 
 
-struct trackGroup *stsMarkerTg()
+void stsMarkerMethods(struct trackGroup *tg)
 /* Make track group for sts markers. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgStsMarker";
-tg->visibility = tvDense;
-tg->longLabel = "STS Markers on Genetic (blue), FISH (green) and Radiation Hybrid (black) Maps";
-tg->shortLabel = "STS Markers";
 tg->loadItems = loadStsMarker;
 tg->freeItems = freeStsMarker;
 tg->itemColor = stsMarkerColor;
-tg->color.r = 0;
-tg->color.g = 0;
-tg->color.b = 0;
-tg->altColor.r = 128;
-tg->altColor.g = 128;
-tg->altColor.b = 255;
-return tg;
 }
 
 void loadMouseSyn(struct trackGroup *tg)
@@ -3541,23 +2787,13 @@ struct mouseSyn *ms = item;
 return (ms->segment&1) ? tg->ixColor : tg->ixAltColor;
 }
 
-struct trackGroup *mouseSynTg()
+void mouseSynMethods(struct trackGroup *tg)
 /* Make track group for mouseSyn. */
 {
-struct trackGroup *tg = bedTg();
-
-tg->mapName = "hgMouseSyn";
-tg->visibility = tvHide;
-tg->longLabel = "Corresponding Chromosome in Mouse";
-tg->shortLabel = "Mouse Synteny";
 tg->loadItems = loadMouseSyn;
 tg->freeItems = freeMouseSyn;
-tg->color.r = 120;
-tg->color.g = 70;
-tg->color.b = 30;
 tg->itemColor = mouseSynItemColor;
 tg->drawName = TRUE;
-return tg;
 }
 
 #ifdef EXAMPLE
@@ -3769,12 +3005,10 @@ struct wabaChromHit *wch = item;
 return wch->chromEnd;
 }
 
-struct trackGroup *wabaTrackGroup()
+void wabaMethods(struct trackGroup *tg)
 /* Return track with fields shared by waba-based 
  * alignment tracks filled in. */
 {
-struct trackGroup *tg;
-AllocVar(tg);
 tg->loadItems = wabaLoad;
 tg->freeItems = wabaFree;
 tg->drawItems = wabaDraw;
@@ -3784,27 +3018,13 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = wabaItemStart;
 tg->itemEnd = wabaItemEnd;
-return tg;
 }
 
-struct trackGroup *tetTg()
+void tetWabaMethods(struct trackGroup *tg)
 /* Make track group for Tetraodon alignments. */
 {
-struct trackGroup *tg;
-
-tg = wabaTrackGroup();
-tg->mapName = "hgTet";
-tg->visibility = tvDense;
-tg->longLabel = "Tetraodon nigroviridis Homologies";
-tg->shortLabel = "Tetraodon";
-tg->color.r = 50;
-tg->color.g = 100;
-tg->color.b = 200;
-tg->altColor.r = 85;
-tg->altColor.g = 170;
-tg->altColor.b = 225;
+wabaMethods(tg);
 tg->customPt = "_tet_waba";
-return tg;
 }
 
 void contigLoad(struct trackGroup *tg)
@@ -3923,29 +3143,18 @@ struct ctgPos *ctg = item;
 return ctg->chromEnd;
 }
 
-struct trackGroup *contigTg()
+void contigMethods(struct trackGroup *tg)
 /* Make track group for contig */
 {
-struct trackGroup *tg;
-
-AllocVar(tg);
-tg->mapName = "hgContig";
-tg->visibility = tvHide;
-tg->longLabel = "Fingerprint Map Contigs";
-tg->shortLabel = "FPC Contigs";
 tg->loadItems = contigLoad;
 tg->freeItems = contigFree;
 tg->drawItems = contigDraw;
-tg->color.r = 150;
-tg->color.g = 0;
-tg->color.b = 0;
 tg->itemName = contigName;
 tg->mapItemName = contigName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = contigItemStart;
 tg->itemEnd = contigItemEnd;
-return tg;
 }
 
 struct cloneFrag
@@ -4526,29 +3735,18 @@ cloneInfoFreeList(&glCloneList);
 freeHash(&glCloneHash);
 }
 
-struct trackGroup *coverageTrackGroup()
+void coverageMethods(struct trackGroup *tg)
 /* Make track group for golden path positions of all frags. */
 {
-struct trackGroup *tg;
-
-AllocVar(tg);
-tg->mapName = "hgCover";
-tg->visibility = tvDense;
-tg->longLabel = "Clone Coverage/Fragment Position";
-tg->shortLabel = "Coverage";
 tg->loadItems = coverageLoad;
 tg->freeItems = coverageFree;
 tg->drawItems = cloneDraw;
-tg->altColor.r = 180;
-tg->altColor.g = 180;
-tg->altColor.b = 180;
 tg->itemName = cloneName;
 tg->mapItemName = cloneName;
 tg->totalHeight = cloneTotalHeight;
 tg->itemHeight = cloneItemHeight;
 tg->itemStart = cloneItemStart;
 tg->itemEnd = cloneItemEnd;
-return tg;
 }
 
 
@@ -4559,32 +3757,18 @@ bedLoadItem(tg, "gap", (ItemLoader)agpGapLoad);
 }
 
 void gapFree(struct trackGroup *tg)
-/* Free up isochore items. */
+/* Free up gap items. */
 {
 agpGapFreeList((struct agpGap**)&tg->items);
 }
 
 char *gapName(struct trackGroup *tg, void *item)
-/* Return name of gold track item. */
+/* Return name of gap track item. */
 {
 static char buf[24];
 struct agpGap *gap = item;
 sprintf(buf, "%s %s", gap->type, gap->bridge);
 return buf;
-}
-
-int gapItemStart(struct trackGroup *tg, void *item)
-/* Return start of gold track item. */
-{
-struct agpGap *gap = item;
-return gap->chromStart;
-}
-
-int gapItemEnd(struct trackGroup *tg, void *item)
-/* Return end of gold track item. */
-{
-struct agpGap *gap = item;
-return gap->chromEnd;
 }
 
 static void gapDraw(struct trackGroup *tg, int seqStart, int seqEnd,
@@ -4628,25 +3812,14 @@ for (item = tg->items; item != NULL; item = item->next)
 }
 
 
-struct trackGroup *gapTg()
-/* Make track group for golden path positions of all frags. */
+void gapMethods(struct trackGroup *tg)
+/* Make track group for positions of all gaps. */
 {
-struct trackGroup *tg;
-AllocVar(tg);
-tg->mapName = "hgGap";
-tg->visibility = tvDense;
-tg->longLabel = "Gap Locations";
-tg->shortLabel = "Gap";
 tg->loadItems = gapLoad;
 tg->freeItems = gapFree;
 tg->drawItems = gapDraw;
 tg->itemName = gapName;
 tg->mapItemName = gapName;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = gapItemStart;
-tg->itemEnd = gapItemEnd;
-return tg;
 }
 
 #ifdef CHUCK_CODE
@@ -4888,41 +4061,28 @@ exprBedFreeList((struct exprBed**)&tg->items);
 }
 
 
-struct trackGroup *rosettaPeTg()
+void rosettaPeMethods(struct trackGroup *tg)
 /* Make track group for Rosetta Track Predicted Exons. */
 {
-struct trackGroup *tg = bedTg();
-
 tg->mapsSelf = TRUE;
 tg->drawItems = exprBedDraw;
-tg->mapName = "rosettaPe";
-tg->visibility = tvDense;
 tg->itemHeight = exprBedItemHeight;
 tg->itemName = exprBedItemName;
 tg->totalHeight = exprBedTotalHeight;
-tg->longLabel = "Rosetta Predicted Exon Data";
-tg->shortLabel = "Rosetta P.E.";
 tg->loadItems = loadRosettaPeBed;
 tg->freeItems = freeExprBed;
-return tg;
 }
-struct trackGroup *rosettaTeTg()
+
+void rosettaTeMethods(struct trackGroup *tg)
 /* Make track group for Rosetta Track Predicted Exons. */
 {
-struct trackGroup *tg = bedTg();
-
 tg->mapsSelf = TRUE;
 tg->drawItems = exprBedDraw;
-tg->mapName = "rosettaTe";
-tg->visibility = tvDense;
 tg->itemHeight = exprBedItemHeight;
 tg->itemName = exprBedItemName;
 tg->totalHeight = exprBedTotalHeight;
-tg->longLabel = "Rosetta Confirmed Exon Data";
-tg->shortLabel = "Rosetta T.E.";
 tg->loadItems = loadRosettaTeBed;
 tg->freeItems = freeExprBed;
-return tg;
 }
 
 struct browserTable *checkDbForTables()
@@ -4952,13 +4112,13 @@ return tableList;
 void bedBasicLoad(struct trackGroup *tg)
 /* load up basic beds from table into trackGroupItems */
 {
-bedLoadItem(tg, tg->tableName, (ItemLoader) bedLoad);
+bedLoadItem(tg, tg->mapName, (ItemLoader) bedLoad);
 }
 
 void bedWScoresLoad(struct trackGroup *tg)
 /* load up beds and their scores from table into trackGroupItems */
 {
-bedLoadItem(tg, tg->tableName, (ItemLoader) bedLoadWScore);
+bedLoadItem(tg, tg->mapName, (ItemLoader) bedLoadWScore);
 }
 
 void bedFreeItemList(struct trackGroup *tg)
@@ -5009,7 +4169,7 @@ sprintf(buff, "%s [%s]", bt->longLabel, bt->version);
 tg->mapName = cloneString(bt->mapName);
 tg->longLabel = cloneString(buff);
 tg->shortLabel = cloneString(bt->shortLabel);
-strncpy(tg->tableName, bt->tableName, ArraySize(bt->tableName));
+tg->mapName = cloneString(bt->tableName);
 tg->visibility = bt->visibility;
 
 tg->private = bt->private;
@@ -5050,7 +4210,13 @@ return tg;
 void loadPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-tg->items = lfFromPslsInRangeByChrom(tg->tableName, chromName, winStart,winEnd);
+tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, FALSE);
+}
+
+void loadXenoPsl(struct trackGroup *tg)
+/* load up all of the psls from correct table into tg->items item list*/
+{
+tg->items = lfFromPslsInRange(tg->mapName, winStart,winEnd, chromName, TRUE);
 }
 
 struct trackGroup *createPslTg(struct browserTable *table)
@@ -5064,7 +4230,7 @@ sprintf(buff, "%s [%s]", table->longLabel, table->version);
 tg->mapName = cloneString(table->mapName);
 tg->longLabel = cloneString(buff);
 tg->shortLabel = cloneString(table->shortLabel);
-strncpy(tg->tableName,table->tableName,ArraySize(table->tableName));
+tg->mapName = cloneString(table->tableName);
 tg->visibility = table->visibility;
 
 tg->color.r = table->colorR;
@@ -5157,130 +4323,8 @@ for(table = *tableList; table != NULL; table=table->next)
 slSafeAddHead(tGroupList, tgConstructor());
 }
 
-
 #endif /*CHUCK_CODE*/
 
-/* The next two functions are being phased out as the Rosetta data
-set is split into two tracks instead of one large one. */
-#ifdef ALL_ROSETTA
-void loadExprBed(struct trackGroup *tg)
-/* Load up exprBed from database table to trackGroup items. */
-{
-bedLoadItem(tg, "exprBed", (ItemLoader)exprBedLoad);
-}
-
-struct trackGroup *exprBedTg()
-/* Make track group for exprBed. */
-{
-struct trackGroup *tg = bedTg();
-
-tg->mapsSelf = TRUE;
-tg->drawItems = exprBedDraw;
-tg->mapName = "hgExprBed";
-tg->visibility = tvHide;
-tg->itemHeight = exprBedItemHeight;
-tg->itemName = exprBedItemName;
-tg->totalHeight = exprBedTotalHeight;
-tg->longLabel = "Rosetta Data";
-tg->shortLabel = "Rosetta Data";
-tg->loadItems = loadExprBed;
-tg->freeItems = freeExprBed;
-return tg;
-}
-#endif /*ALL_ROSETTA*/
-
-
-#ifdef SOMEDAY
-/* These next three vars are used to communicate info from the
- * loadAltGraph routine to the agTransOut routine */
-struct linkedFeatures *agTempList;  /* Transcripts get added to this list. */
-int agTempOrientation;
-int agClusterIx;
-int agTranscriptIx;
-
-void agTransOut(struct ggAliInfo *da, int cStart, int cEnd)
-/* Called to convert gene graph transcript to something more permanent. */
-{
-struct linkedFeatures *lf;
-struct simpleFeature *sfList = NULL, *sf;
-struct ggVertex *vertices = da->vertices;
-int vertexCount = da->vertexCount;
-int i;
-static int tot = 0;
-int minStart = 0x3fffffff;
-int maxEnd = -minStart;
-int start,end;
-
-AllocVar(lf);
-lf->grayIx = maxShade;
-sprintf(lf->name, "cluster %d.%d", agClusterIx+1, agTranscriptIx++);
-lf->orientation = agTempOrientation;
-for (i=0; i<vertexCount; i+=2)
-    {
-    AllocVar(sf);
-    start = sf->start = vertices[i].position;
-    if (start < minStart)
-	minStart = start;
-    end = sf->end = vertices[i+1].position;
-    if (end > maxEnd)
-	maxEnd = end;
-    sf->grayIx = maxShade;
-    slAddHead(&sfList, sf);
-    }
-lf->start = minStart;
-lf->end = maxEnd;
-slReverse(&sfList);
-lf->components = sfList;
-slAddHead(&agTempList, lf);
-}
-
-void loadAltGraph(struct trackGroup *tg)
-/* Get alt splicing graphs and turn them into linked features. */
-{
-struct hgBac *bac = hgGetBac(chromName);
-char query[256];
-struct sqlConnection *conn = hgAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-boolean firstTime = TRUE;
-boolean anyIntersection = FALSE;
-HGID lastParent = 0;
-
-sprintf(query, 
-    "select * from altGraph where startBac=%u and endPos>%d and startPos<%d",
-    bac->id, winStart, winEnd);
-
-sr = sqlGetResult(conn, query);
-agTempList = NULL;
-agClusterIx = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct geneGraph *gg = ggFromRow(row);
-    agTranscriptIx = 0;
-    agTempOrientation = gg->orientation;
-    traverseGeneGraph(gg, gg->startPos, gg->endPos, agTransOut);
-    freeGeneGraph(&gg);
-    ++agClusterIx;
-    }
-slReverse(&agTempList);
-tg->items = agTempList;
-agTempList = NULL;
-sqlFreeResult(&sr);
-hgFreeConn(&conn);
-}
-
-struct trackGroup *altGraphTg()
-/* Make track group of altGraph. */
-{
-struct trackGroup *tg = linkedFeaturesTg();
-tg->mapName = "hgAltGraph";
-tg->visibility = tvFull;
-tg->longLabel = "mRNA Clusters";
-tg->shortLabel = "mRNA Clusters";
-tg->loadItems = loadAltGraph;
-return tg;
-}
-#endif /* SOMEDAY */
 
 
 void ctLoadSimpleBed(struct trackGroup *tg)
@@ -5298,7 +4342,7 @@ for (bed = ct->bedList; bed != NULL; bed = nextBed)
 	slAddHead(&list, bed);
 	}
     }
-slReverse(&list);
+slSort(&list, bedCmp);
 tg->items = list;
 }
 
@@ -5359,7 +4403,6 @@ void loadCustomTracks(struct trackGroup **pGroupList)
 /* Load up custom tracks and append to list. */
 {
 struct customTrack *ctList = NULL, *ct;
-struct browserTable *btList = NULL, *bt;
 struct trackGroup *tg;
 char *customText = cgiOptionalString("customText");
 char *fileName = cgiOptionalString("ct");
@@ -5704,6 +4747,227 @@ else
     }
 }
 
+typedef void (*TrackHandler)(struct trackGroup *tg);
+
+struct hash *handlerHash;
+
+void registerTrackHandler(char *name, TrackHandler handler)
+/* Register a track handling function. */
+{
+if (handlerHash == NULL)
+    handlerHash = newHash(6);
+if (hashLookup(handlerHash, name))
+    warn("handler duplicated for track %s", name);
+else
+    {
+    hashAdd(handlerHash, name, handler);
+    }
+}
+
+TrackHandler lookupTrackHandler(char *name)
+/* Lookup handler for track of give name.  Return NULL if
+ * none. */
+{
+if (handlerHash == NULL)
+    return NULL;
+return hashFindVal(handlerHash, name);
+}
+
+boolean colorsSame(struct rgbColor *a, struct rgbColor *b)
+/* Return true if two colors are the same. */
+{
+return a->r == b->r && a->g == b->g && a->b == b->b;
+}
+
+void loadSimpleBed(struct trackGroup *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct bed *(*loader)(char **row);
+struct bed *bed, *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+if (tg->bedSize <= 3)
+    loader = bedLoad3;
+else if (tg->bedSize == 4)
+    loader = bedLoad;
+else
+    loader = bedLoad5;
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = loader(row+rowOffset);
+    slAddHead(&list, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+tg->items = list;
+}
+
+void loadGappedBed(struct trackGroup *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoad12(row+rowOffset);
+    lf = lfFromBed(bed);
+    slAddHead(&lfList, lf);
+    bedFree(&bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+tg->items = lfList;
+}
+
+void loadGenePred(struct trackGroup *tg)
+/* Convert bed info in window to linked feature. */
+{
+tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
+}
+
+void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
+/* Fill in various function pointers in group from type field of tdb. */
+{
+char *typeLine = tdb->type, *words[8], *type;
+int wordCount;
+
+if (typeLine == NULL)
+    return;
+wordCount = chopLine(typeLine, words);
+if (wordCount <= 0)
+    return;
+type = words[0];
+if (sameWord(type, "bed"))
+    {
+    int fieldCount = 3;
+    if (wordCount > 1)
+        fieldCount = atoi(words[1]);
+    group->bedSize = fieldCount;
+    if (fieldCount < 12)
+	{
+	bedMethods(group);
+	group->loadItems = loadSimpleBed;
+	}
+    else
+	{
+	linkedFeaturesMethods(group);
+	group->loadItems = loadGappedBed;
+	}
+    }
+else if (sameWord(type, "genePred"))
+    {
+    linkedFeaturesMethods(group);
+    group->loadItems = loadGenePred;
+    group->colorShades = NULL;
+    }
+else if (sameWord(type, "psl"))
+    {
+    char *subType = ".";
+    if (wordCount >= 2)
+       subType = words[1];
+    linkedFeaturesMethods(group);
+    if (!tdb->useScore)
+        group->colorShades = NULL;
+    if (sameString(subType, "xeno"))
+	{
+	group->loadItems = loadXenoPsl;
+	group->subType = lfSubXeno;
+	}
+    else
+	group->loadItems = loadPsl;
+    if (sameString(subType, "est"))
+	group->drawItems = linkedFeaturesAverageDense;
+    }
+}
+
+struct trackGroup *trackGroupFromTrackDb(struct trackDb *tdb)
+/* Create a track group based on the tdb. */
+{
+struct trackGroup *group;
+AllocVar(group);
+group->mapName = cloneString(tdb->tableName);
+group->visibility = tdb->visibility;
+group->shortLabel = cloneString(tdb->shortLabel);
+group->longLabel = cloneString(tdb->longLabel);
+group->color.r = tdb->colorR;
+group->color.g = tdb->colorG;
+group->color.b = tdb->colorB;
+group->altColor.r = tdb->altColorR;
+group->altColor.g = tdb->altColorG;
+group->altColor.b = tdb->altColorB;
+group->lineHeight = mgFontLineHeight(tl.font)+1;
+group->heightPer = group->lineHeight - 1;
+group->private = tdb->private;
+group->useScore = tdb->useScore;
+if (group->useScore)
+    {
+    /* Todo: expand spectrum opportunities. */
+    if (colorsSame(&brownColor, &group->color))
+        group->colorShades = shadesOfBrown;
+    else if (colorsSame(&darkSeaColor, &group->color))
+        group->colorShades = shadesOfSea;
+    else
+	group->colorShades = shadesOfGray;
+    }
+fillInFromType(group, tdb);
+return group;
+}
+
+void loadFromTrackDb(struct trackGroup **pTrackList)
+/* Load tracks from database, consulting handler list. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct trackDb *tdb;
+struct trackGroup *group;
+TrackHandler handler;
+int i;
+
+sr = sqlGetResult(conn, "select * from trackDb");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    boolean chromOk = TRUE;
+    tdb = trackDbLoad(row);
+    if (tdb->restrictCount > 0)
+        {
+	chromOk = FALSE;
+	for (i=0; i<tdb->restrictCount; ++i)
+	    {
+	    if (sameString(tdb->restrictList[i], chromName))
+	        chromOk = TRUE;
+	    }
+	}
+    if (chromOk && hFindSplitTable(chromName, tdb->tableName, NULL, NULL))
+	{
+	group = trackGroupFromTrackDb(tdb);
+	handler = lookupTrackHandler(tdb->tableName);
+	if (handler != NULL)
+	    handler(group);
+	if (group->drawItems == NULL || group->loadItems == NULL)
+	    warn("No handler for %s", tdb->tableName);
+	else
+	    {
+	    slAddHead(pTrackList, group);
+	    }
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
 
 void doForm()
 /* Make the tracks display form with the zoom/scroll
@@ -5724,6 +4988,7 @@ if (userSeqString != NULL)
     eUserSeqString = cgiEncode(userSeqString);
 
 hideControls = cgiBoolean("hideControls");
+
 if (calledSelf)
     {
     char *s;
@@ -5734,68 +4999,44 @@ if (calledSelf)
     if ((s = cgiOptionalString("ruler")) != NULL)
 	withRuler = !sameWord(s, "off");
     }
+
 if(hTableExists("browserTable"))
    tableList = checkDbForTables();
-/* Make list of all track groups. */
-loadCustomTracks(&tGroupList);
-if (hTableExists("cytoBand")) slSafeAddHead(&tGroupList, cytoBandTg());
-if (hTableExists("mapGenethon")) slSafeAddHead(&tGroupList, genethonTg());
-if (hTableExists("stsMarker")) slSafeAddHead(&tGroupList, stsMarkerTg());
-if (hTableExists("mouseSyn")) slSafeAddHead(&tGroupList, mouseSynTg());
-if (hTableExists("isochores")) slSafeAddHead(&tGroupList, isochoresTg());
-if (hTableExists("gcPercent")) slSafeAddHead(&tGroupList, gcPercentTg());
-if (hTableExists("ctgPos")) slSafeAddHead(&tGroupList, contigTg());
-slSafeAddHead(&tGroupList, goldTrackGroup());
-slSafeAddHead(&tGroupList, gapTg());
-if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
-slSafeAddHead(&tGroupList, coverageTrackGroup());
-if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
-if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
-if (hTableExists("refGene")) slSafeAddHead(&tGroupList, refGeneTg());
-if (sameString(chromName, "chr22") && hTableExists("sanger22")) slSafeAddHead(&tGroupList, sanger22Tg());
-if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
-if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
-if (hTableExists("softberryGene")) slSafeAddHead(&tGroupList, softberryGeneTg());
-if (hTableExists("softPromoter")) slSafeAddHead(&tGroupList, softPromoterTg());
-if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
-if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
-if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
-if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
-if (hTableExists("estPair")) slSafeAddHead(&tGroupList, estPairTg());
-if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
-if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
-if (privateVersion())
-    {
-    if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
-    // if (hTableExists("mus7of8")) slSafeAddHead(&tGroupList, mus7of8Tg());
-    // if (hTableExists("musPairOf4")) slSafeAddHead(&tGroupList, musPairOf4Tg());
-    // if (chromTableExists("_musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
-    // if (chromTableExists("_musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
-    }
-if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
-if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
-if (sameString(chromName, "chr22") && hTableExists("fiberMouse")) slSafeAddHead(&tGroupList, fiberMouseTg());
-/* if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg()); */
-if (hTableExists("exoFish")) createAndAddTrack("exoFish", &tGroupList, &tableList, exoFishTg);
-if (chromTableExists("_blatFish")) slSafeAddHead(&tGroupList, blatFishTg());
-if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
-/* if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg()); */
-if(hTableExists("rnaGene")) createAndAddTrack("rnaGene", &tGroupList, &tableList, rnaGeneTg);
-if (hTableExists("snpNih")) slSafeAddHead(&tGroupList, snpNihTg());
-if (hTableExists("snpTsc")) slSafeAddHead(&tGroupList, snpTscTg());
-if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
-if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
-if (hTableExists("bacEnds")) slSafeAddHead(&tGroupList, bacEndsTg());
-#ifdef CHUCK_CODE
-if (sameString(chromName, "chr22") && hTableExists("rosettaTe")) slSafeAddHead(&tGroupList,rosettaTeTg());   
-if (sameString(chromName, "chr22") && hTableExists("rosettaPe")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
-#endif /*CHUCK_CODE*/
-/* This next track is being phased out as the Rosetta data is being split into
-   two data sets, keep this one around for a little while for debugging */
-#ifdef ALL_ROSETTA
-if (hTableExists("exprBed")) slSafeAddHead(&tGroupList, exprBedTg());
-#endif /* ALL_ROSETTA */
 
+/* Register tracks that include some non-standard methods. */
+registerTrackHandler("cytoBand", cytoBandMethods);
+registerTrackHandler("mapGenethon", genethonMethods);
+registerTrackHandler("stsMarker", stsMarkerMethods);
+registerTrackHandler("mouseSyn", mouseSynMethods);
+registerTrackHandler("isochores", isochoresMethods);
+registerTrackHandler("gcPercent", gcPercentMethods);
+registerTrackHandler("ctgPos", contigMethods);
+registerTrackHandler("gold", goldMethods);
+registerTrackHandler("gap", gapMethods);
+registerTrackHandler("genomicDups", genomicDupsMethods);
+registerTrackHandler("clonePos", coverageMethods);
+registerTrackHandler("genieKnown", genieKnownMethods);
+registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("sanger22", sanger22Methods);
+registerTrackHandler("genieAlt", genieAltMethods);
+registerTrackHandler("ensGene", ensGeneMethods);
+registerTrackHandler("estPair", estPairMethods);
+registerTrackHandler("cpgIsland", cpgIslandMethods);
+registerTrackHandler("exoMouse", exoMouseMethods);
+registerTrackHandler("exoFish", exoFishMethods);
+registerTrackHandler("tet_waba", tetWabaMethods);
+registerTrackHandler("rnaGene", rnaGeneMethods);
+registerTrackHandler("rmsk", repeatMethods);
+registerTrackHandler("simpleRepeat", simpleRepeatMethods);
+registerTrackHandler("rosettaTe",rosettaTeMethods);   
+registerTrackHandler("rosettaPe",rosettaPeMethods); 
+
+/* Load first track user has pasted or blatted in. */
+loadCustomTracks(&tGroupList);
+if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
+
+/* Load tracks from database. */
+loadFromTrackDb(&tGroupList);
 addTablesFromBrowserTable(&tGroupList,&tableList);
 
 
@@ -6017,48 +5258,6 @@ else if (newEnd > seqBaseCount)
 winStart += offset;
 winEnd += offset;
 }
-
-#ifdef OLD
-boolean findGenomePos(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find position in genome of spec.  Don't alter
- * return variables if some sort of error. */
-{
-boolean isUnique = TRUE;
-spec = trimSpaces(spec);
-if (hgIsChromRange(spec))
-    {
-    hgParseChromRange(spec, retChromName, retWinStart, retWinEnd);
-    return TRUE;
-    }
-else if (isContigName(spec))
-    {
-    findContigPos(spec, retChromName, retWinStart, retWinEnd);
-    return TRUE;
-    }
-else if (findCytoBand(spec, retChromName, retWinStart, retWinEnd))
-    {
-    return TRUE;
-    }
-else if (findClonePos(spec, retChromName, retWinStart, retWinEnd))
-    {
-    return TRUE;
-    }
-else if (findMrnaPos(spec, retChromName, retWinStart, retWinEnd, &isUnique))
-    return isUnique;
-else if (findStsPos(spec, retChromName, retWinStart, retWinEnd))
-    return TRUE;
-else if (findGenethonPos(spec, retChromName, retWinStart, retWinEnd))
-    return TRUE;
-else if (findMrnaKeys(spec))
-    return FALSE;
-else
-    {
-    errAbort("Sorry, couldn't locate %s in genome database\n", spec);
-    return TRUE;
-    }
-}
-#endif /* OLD */
 
 boolean findGenomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)

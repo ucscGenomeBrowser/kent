@@ -63,6 +63,8 @@ struct bed *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->blockSizes);
+freeMem(el->chromStarts);
 freez(pEl);
 }
 
@@ -237,3 +239,27 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 return ret;
 }
+struct bed *bedLoad3(char **row)
+/* Load first three fields of bed. */
+{
+struct bed *ret;
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+return ret;
+}
+
+struct bed *bedLoad5(char **row)
+/* Load first five fields of bed. */
+{
+struct bed *ret;
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+return ret;
+}
+

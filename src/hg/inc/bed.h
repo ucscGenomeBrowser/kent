@@ -31,7 +31,8 @@ void bedStaticLoad(char **row, struct bed *ret);
 
 struct bed *bedLoad(char **row);
 /* Load a bed from row fetched with select * from bed
- * from database.  Dispose of this with bedFree(). */
+ * from database.  Dispose of this with bedFree(). 
+ * This loads first four fields. */
 
 struct bed *bedCommaIn(char **pS, struct bed *ret);
 /* Create a bed out of a comma separated string. 
@@ -90,6 +91,17 @@ struct bed *bedLoadWScore(char **row);
 /* Load a bed from row fetched with select * from bed
  * from database including the score.  Dispose of this with bedFree(). */
 
+struct bed *bedLoad3(char **row);
+/* Load first three fields of bed. */
+
+struct bed *bedLoad5(char **row);
+/* Load first five fields of bed. */
+
+struct bed *bedLoad12(char **row);
+/* Load all 12 fields of bed. */
+
+void fullBedOutput(struct bed *el, FILE *f, char sep, char lastSep);
+/* Print out all 12 fields of bed.   */
 
 #endif /* BED_H */
 

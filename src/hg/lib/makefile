@@ -8,7 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = agpFrag.o agpGap.o bbRepMask.o bed.o browserTable.o \
     chromInfo.o chromInserts.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
-    est3.o estPair.o exoFish.o exprBed.o gcPercent.o geneGraph.o \
+    est3.o estPair.o exoFish.o exprBed.o fullBed.o \
+    gcPercent.o geneGraph.o \
     genePred.o genomicDups.o \
     glDbRep.o ggCluster.o ggDbIo.o ggDbRep.o ggDump.o \
     ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
@@ -16,7 +17,8 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o browserTable.o \
     jksql.o knownInfo.o knownMore.o mapSts.o mouseSyn.o \
     ooUtils.o pepPred.o qaSeq.o refLink.o rmskOut.o \
     rnaGene.o roughAli.o simpleRepeat.o snp.o softberryHom.o \
-    softPromoter.o stsAlias.o stsMarker.o traceInfo.o trackTable.o wabAli.o 
+    softPromoter.o stsAlias.o stsMarker.o traceInfo.o trackDb.o \
+    trackDbCustom.o trackTable.o wabAli.o 
     
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

@@ -228,6 +228,18 @@ sqlUpdate(sc, query);
 return TRUE;
 }
 
+boolean sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
+/* Drop table if it exists, and recreate it. */
+{
+if (sqlTableExists(sc, table))
+    {
+    char query[256];
+    sprintf(query, "drop table %s", table);
+    sqlUpdate(sc, query);
+    }
+sqlUpdate(sc, create);
+}
+
 boolean sqlTableExists(struct sqlConnection *sc, char *table)
 /* Return TRUE if a table exists. */
 {

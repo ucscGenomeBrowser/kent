@@ -400,7 +400,7 @@ hgFreeConn(&conn);
 
 #ifdef ROGIC_CODE
 
-void printEstPairInfo(char *name)
+void printEstPairInfo(char *track, char *name)
 /* print information about 5' - 3' EST pairs */
 {
 struct sqlConnection *conn = hgAllocConn();
@@ -411,7 +411,7 @@ struct estPair *ep = NULL;
 
 char *s = cgiOptionalString("pix");
 
-sprintf(query, "select * from estPair where mrnaClone='%s'", name);
+sprintf(query, "select * from %s where mrnaClone='%s'", track, name);
 sr = sqlGetResult(conn, query);
  if((row = sqlNextRow(sr)) != NULL)
    {
@@ -473,27 +473,31 @@ printf("</TT></PRE>");
 
 #ifdef ROGIC_CODE
 
-void doHgEstPair(char *name)
+void doHgEstPair(char *track, char *name)
 /* Click on EST pair */
 {
 htmlStart(name);
-printEstPairInfo(name);
+printEstPairInfo(track, name);
 }
 
 #endif /* ROGIC_CODE */
 
-void doHgRna(char *acc, boolean isEst)
+void doHgRna(char *track, char *acc)
 /* Click on an individual RNA. */
 {
 char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
-char *type = (isEst ? "est" : "mrna");
+char *type;
+boolean isEst;
 boolean hasBin;
-char table[64];
+char splitTable[64];
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
+
+isEst = (stringIn("est", track) || stringIn("Est", track));
+type = (isEst ? "est" : "mrna");
 
 /* Print non-sequence info. */
 htmlStart(acc);
@@ -501,10 +505,10 @@ htmlStart(acc);
 printRnaSpecs(acc);
 
 /* Get alignment info. */
-sprintf(table, "all_%s", type);
-hFindSplitTable(seqName, table, table, &hasBin);
+sprintf(splitTable, "all_%s", type);
+hFindSplitTable(seqName, splitTable, splitTable, &hasBin);
 
-sprintf(query, "select * from %s where qName = '%s'", table, acc);
+sprintf(query, "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -535,7 +539,7 @@ if (wordCount != 3)
 *retQName = words[2];
 }
 
-void doUserPsl(char *item)
+void doUserPsl(char *track, char *item)
 /* Process click on user-defined alignment. */
 {
 int start = cgiInt("o");
@@ -569,7 +573,7 @@ printAlignments(pslList, start, "htcUserAli", "user", encItem);
 pslFreeList(&pslList);
 }
 
-void doHgGold(char *fragName)
+void doHgGold(char *track, char *fragName)
 /* Click on a fragment of golden path. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -580,14 +584,16 @@ struct agpFrag frag;
 struct dnaSeq *seq;
 char dnaName[256];
 int start = cgiInt("o");
-int rowOffset = hOffsetPastBin(seqName, "gold");
+boolean hasBin;
+char splitTable[64];
 
 htmlStart(fragName);
-sprintf(query, "select * from %s_gold where frag = '%s' and chromStart = %d", 
-	seqName, fragName, start+1);
+hFindSplitTable(seqName, track, splitTable, &hasBin);
+sprintf(query, "select * from %s where frag = '%s' and chromStart = %d", 
+	splitTable, fragName, start+1);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-agpFragStaticLoad(row+rowOffset, &frag);
+agpFragStaticLoad(row+hasBin, &frag);
 
 printf("Fragment %s bases %d-%d strand %s makes up draft sequence of bases %d-%d of chromosome %s<BR>\n",
 	frag.frag, frag.fragStart+1, frag.fragEnd, frag.strand,
@@ -605,7 +611,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doHgGap(char *gapType)
+void doHgGap(char *table, char *gapType)
 /* Print a teeny bit of info about a gap. */
 {
 char *words[2];
@@ -638,7 +644,7 @@ if ((row = sqlNextRow(*retSr)) == NULL)
 *retRow = row + hasBin;
 }
 
-void doHgContig(char *ctgName)
+void doHgContig(char *track, char *ctgName)
 /* Click on a contig. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -649,8 +655,8 @@ struct ctgPos *ctg;
 int cloneCount;
 
 htmlStart(ctgName);
-sprintf(query, "select * from ctgPos where contig = '%s'", ctgName);
-selectOneRow(conn, "ctgPos", query, &sr, &row);
+sprintf(query, "select * from %s where contig = '%s'", track, ctgName);
+selectOneRow(conn, track, query, &sr, &row);
 ctg = ctgPosLoad(row);
 sqlFreeResult(&sr);
 sprintf(query, 
@@ -683,7 +689,7 @@ switch (stage[0])
    }
 }
 
-void doHgCover(char *cloneName)
+void doHgCover(char *track, char *cloneName)
 /* Respond to click on clone. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -694,8 +700,8 @@ struct clonePos *clone;
 int fragCount;
 
 htmlStart(cloneName);
-sprintf(query, "select * from clonePos where name = '%s'", cloneName);
-selectOneRow(conn, "clonePos", query, &sr, &row);
+sprintf(query, "select * from %s where name = '%s'", track, cloneName);
+selectOneRow(conn, track, query, &sr, &row);
 clone = clonePosLoad(row);
 sqlFreeResult(&sr);
 
@@ -723,7 +729,7 @@ void doHgClone(char *fragName)
 {
 char cloneName[128];
 fragToCloneVerName(fragName, cloneName);
-doHgCover(cloneName);
+doHgCover("clonePos", cloneName);
 }
 
 void htcCloneSeq(char *cloneName)
@@ -1187,16 +1193,16 @@ wabAliFree(&wa);
 hFreeConn(&conn);
 }
 
-void doHgTet(char *name)
+void doHgTet(char *track, char *name)
 /* Do thing with tet track. */
 {
 htmlStart("Tetraodon Alignment");
 printf("Alignment between tetraodon sequence %s (above) and human chromosome %s (below)\n",
     name, skipChr(seqName));
-fetchAndShowWaba("waba_tet", name);
+fetchAndShowWaba(track, name);
 }
 
-void doHgRepeat(char *repeat)
+void doHgRepeat(char *track, char *repeat)
 /* Do click on a repeat track. */
 {
 int offset = cgiInt("o");
@@ -1212,7 +1218,7 @@ if (offset >= 0)
     boolean hasBin;
     int start = cgiInt("o");
 
-    hFindSplitTable(seqName, "rmsk", table, &hasBin);
+    hFindSplitTable(seqName, track, table, &hasBin);
     sprintf(query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
 	    table, repeat, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -1258,7 +1264,7 @@ puts(
   "J. Jurka,  RepBase Update, <I>Trends in Genetics</I> 16:418-420, 2000");
 }
 
-void doHgIsochore(char *item)
+void doHgIsochore(char *track, char *item)
 /* do click on isochore track. */
 {
 htmlStart("Isochore Info");
@@ -1271,8 +1277,8 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cgiInt("o");
-    sprintf(query, "select * from isochores where  name = '%s' and chrom = '%s' and chromStart = %d",
-	    item, seqName, start);
+    sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	    track, item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1307,7 +1313,7 @@ puts(
     );
 }
 
-void doSimpleRepeat(char *item)
+void doSimpleRepeat(char *track, char *item)
 /* Print info on simple repeat. */
 {
 htmlStart("Simple Repeat Info");
@@ -1320,9 +1326,9 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cgiInt("o");
-    int rowOffset = hOffsetPastBin(seqName, "simpleRepeat");
-    sprintf(query, "select * from simpleRepeat where  name = '%s' and chrom = '%s' and chromStart = %d",
-	    item, seqName, start);
+    int rowOffset = hOffsetPastBin(seqName, track);
+    sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	    track, item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1361,7 +1367,7 @@ void bedPrintPos(struct bed *bed)
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL);
 }
 
-void hgSoftPromoter(char *item)
+void hgSoftPromoter(char *track, char *item)
 /* Print info on Softberry promoter. */
 {
 htmlStart("Softberry TSSW Promoter");
@@ -1375,9 +1381,9 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cgiInt("o");
-    int rowOffset = hOffsetPastBin(seqName, "softPromoter");
+    int rowOffset = hOffsetPastBin(seqName, track);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
-	    "softPromoter", item, seqName, start);
+	    track, item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1420,7 +1426,7 @@ puts("using the TSSW program. "
 "all promoters) - within -8,+2 region from true TSS.\" </P>");
 }
 
-void doCpgIsland(char *item, char *table)
+void doCpgIsland(char *table, char *item)
 /* Print info on CpG Island. */
 {
 htmlStart("CpG Island Info");
@@ -1871,7 +1877,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void doKnownGene(char *geneName)
+void doKnownGene(char *track, char *geneName)
 /* Handle click on known gene track. */
 {
 char *transName = geneName;
@@ -1948,7 +1954,7 @@ if (geneName != NULL)
 if (anyMore)
     htmlHorizontalLine();
 
-geneShowCommon(transName, "genieKnown", "genieKnownPep");
+geneShowCommon(transName, track, "genieKnownPep");
 puts(
    "<P>Known genes are derived from the "
    "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
@@ -1970,7 +1976,7 @@ puts(
    "mRNA associated with this gene in the main browser window.</P>");
 }
 
-void doRefGene(char *rnaName)
+void doRefGene(char *track, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -2016,7 +2022,7 @@ printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search
 printf("%s</A><BR>\n", rl->name);
 htmlHorizontalLine();
 
-geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, "refGene", "refPep", "htcTranslatedProtein",
+geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, track, "refPep", "htcTranslatedProtein",
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 puts(
@@ -2031,12 +2037,12 @@ puts(
    "mRNA associated with this gene in the main browser window.</P>");
 }
 
-void doGeniePred(char *geneName)
+void doGeniePred(char *track, char *geneName)
 /* Handle click on Genie prediction track. */
 {
 htmlStart("Genie Gene Prediction");
 printf("<H2>Genie Gene Prediction %s</H2>\n", geneName);
-geneShowCommon(geneName, "genieAlt", "genieAltPep");
+geneShowCommon(geneName, track, "genieAltPep");
 puts(
    "<P>Genie predictions are based on "
    "<A HREF = \"http://www.affymetrix.com\" TARGET=_blank>Affymetrix's</A> "
@@ -2047,13 +2053,13 @@ puts(
    "between versions of the draft human genome.");
 }
 
-void doEnsPred(char *geneName)
+void doEnsPred(char *track, char *geneName)
 /* HAndle click on Ensembl gene track. */
 {
 struct sqlConnection *conn = hAllocConn();
 htmlStart("Ensembl Prediction");
 printf("<H2>Ensembl Prediction %s</H2>\n", geneName);
-geneShowCommon(geneName, "ensGene", "ensPep");
+geneShowCommon(geneName, track, "ensPep");
 if (!sameString(database, "hg3"))
     {
     printf("<P>Visit <A HREF=\"http://www.ensembl.org/perl/transview?transcript=%s\" _TARGET=blank>"
@@ -2062,13 +2068,13 @@ if (!sameString(database, "hg3"))
 hFreeConn(&conn);
 }
 
-void doSanger22(char *geneName)
+void doSanger22(char *track, char *geneName)
 /* Handle click on Sanger 22 track. */
 {
 struct sqlConnection *conn = hAllocConn();
 htmlStart("Sanger Chromosome 22 Annotation");
 printf("<H2>Sanger Chromosome 22 Annotation %s</H2>\n", geneName);
-geneShowCommon(geneName, "sanger22", NULL);
+geneShowCommon(geneName, track, NULL);
 hFreeConn(&conn);
 }
 
@@ -2127,13 +2133,13 @@ if (gotAny)
 hFreeConn(&conn);
 }
 
-void doSoftberryPred(char *geneName)
+void doSoftberryPred(char *track, char *geneName)
 /* Handle click on Softberry gene track. */
 {
 htmlStart("Fgenesh++ Gene Prediction");
 printf("<H2>Fgenesh++ Gene Prediction %s</H2>\n", geneName);
 showHomologies(geneName, "softberryHom");
-geneShowCommon(geneName, "softberryGene", "softberryPep");
+geneShowCommon(geneName, track, "softberryPep");
 puts(
    "<P>Fgenesh++ predictions are based on Softberry's gene finding software. "
    "Fgenesh++ uses both HMMs and protein similarity to find genes in a "
@@ -2163,7 +2169,7 @@ s = e+1;
 *retPos = atoi(s);
 }
 
-void doGenomicDups(char *dupName)
+void doGenomicDups(char *track, char *dupName)
 /* Handle click on genomic dup track. */
 {
 struct genomicDups dup;
@@ -2181,12 +2187,12 @@ printf("<H2>Genomic Duplication</H2>\n");
 if (cgiVarExists("o"))
     {
     int start = cgiInt("o");
-    int rowOffset = hOffsetPastBin(seqName, "genomicDups");
+    int rowOffset = hOffsetPastBin(seqName, track);
     parseChromPointPos(dupName, oChrom, &oStart);
 
-    sprintf(query, "select * from genomicDups where chrom = '%s' and chromStart = %d "
+    sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
 		   "and otherChrom = '%s' and otherStart = %d",
-		   seqName, start, oChrom, oStart);
+		   track, seqName, start, oChrom, oStart);
     sr = sqlGetResult(conn, query);
     while (row = sqlNextRow(sr))
 	{
@@ -2218,7 +2224,7 @@ puts("This region was detected as a duplication within the golden path. "
 hFreeConn(&conn);
 }
 
-void doExoFish(char *itemName)
+void doExoFish(char *track, char *itemName)
 /* Handle click on exoFish track. */
 {
 struct exoFish el;
@@ -2230,16 +2236,16 @@ char query[256];
 struct browserTable *table = NULL;
 struct browserTable *tableList = checkDbForTables();
 int rowOffset;
-table = getBrowserTableFromList("hgExoFish", tableList);
+table = getBrowserTableFromList(track, tableList);
 
 htmlStart("Exofish Ecores");
 printf("<H2>Exofish ECORES</A></H2>\n");
 if(table != NULL)
     printf("<b>version:</b> %s<br>%s<br><br>\n", table->version,table->other);
 
-rowOffset = hOffsetPastBin(seqName, "exoFish");
-sprintf(query, "select * from exoFish where chrom = '%s' and chromStart = %d",
-    seqName, start);
+rowOffset = hOffsetPastBin(seqName, track);
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
+    track, seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2254,9 +2260,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>score:</B> %d<BR>\n", el.score);
     bedPrintPos((struct bed *)&el);
     htmlHorizontalLine();
-    if (!sameString(el.name, "."))
-        {
-	}
     }
 
 puts("<P>The Exofish track shows regions of homology with the "
@@ -2277,7 +2280,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doExoMouse(char *itemName)
+void doExoMouse(char *track, char *itemName)
 /* Handle click on exoMouse track. */
 {
 struct roughAli el;
@@ -2291,9 +2294,9 @@ int rowOffset;
 htmlStart("Exonerate Mouse");
 printf("<H2>Exonerate Mouse</A></H2>\n");
 
-rowOffset = hOffsetPastBin(seqName, "exoMouse");
-sprintf(query, "select * from exoMouse where chrom = '%s' and chromStart = %d and name = '%s'",
-    seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, track);
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+    track, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2324,7 +2327,7 @@ printf("</PRE></TT>");
 freeDnaSeq(&seq);
 }
 
-void doBlatMouse(char *itemName, char *tableName)
+void doBlatMouse(char *track, char *itemName)
 /* Handle click on blatMouse track. */
 {
 char query[256];
@@ -2387,7 +2390,7 @@ if (sqlTableExists(conn, "mouseTraceInfo"))
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
-hFindSplitTable(seqName, tableName, table, &hasBin);
+hFindSplitTable(seqName, track, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s'", table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2397,7 +2400,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatMouse", tableName, itemName);
+printAlignments(pslList, start, "htcBlatMouse", track, itemName);
 
 printf("<H2>Methods</H2>\n");
 puts(
@@ -2465,7 +2468,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doRnaGene(char *itemName)
+void doRnaGene(char *track, char *itemName)
 /* Handle click on EST 3' end track. */
 {
 struct rnaGene rna;
@@ -2480,12 +2483,12 @@ int rowOffset;
 table = getBrowserTableFromList("hgRnaGene", tableList);
 
 htmlStart("RNA Genes");
-rowOffset = hOffsetPastBin(seqName, "rnaGene");
+rowOffset = hOffsetPastBin(seqName, track);
 printf("<H2>RNA Gene %s</H2>\n", itemName);
 if(table != NULL)
     printf("<b>version:</b> %s<br>%s<br><br>\n", table->version,table->other);
-sprintf(query, "select * from rnaGene where chrom = '%s' and chromStart = %d and name = '%s'",
-    seqName, start, itemName);
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+    track, seqName, start, itemName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2509,7 +2512,7 @@ browserTableFreeList(&tableList);
 hFreeConn(&conn);
 }
 
-void doStsMarker(char *item)
+void doStsMarker(char *track, char *item)
 /* Respond to click on an STS marker. */
 {
 struct stsMarker el;
@@ -2530,11 +2533,11 @@ htmlStart("STS Marker");
 printf("<H2>STS Marker %s</H2>\n", item);
 
 if (sameString(item, "NONAME"))
-    sprintf(query, "select * from stsMarker where name = '%s' and chromStart = %d", item, start);
+    sprintf(query, "select * from %s where name = '%s' and chromStart = %d", track, item, start);
 else
-    sprintf(query, "select * from stsMarker where name = '%s'", item);
+    sprintf(query, "select * from %s where name = '%s'", track, item);
 
-rowOffset = hOffsetPastBin(seqName, "stsMarker");
+rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2622,7 +2625,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doMouseSyn(char *itemName)
+void doMouseSyn(char *track, char *itemName)
 /* Handle click on mouse synteny track. */
 {
 struct mouseSyn el;
@@ -2636,9 +2639,9 @@ int rowOffset;
 htmlStart("Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
-sprintf(query, "select * from mouseSyn where chrom = '%s' and chromStart = %d",
-    seqName, start);
-rowOffset = hOffsetPastBin(seqName, "mouseSyn");
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
+    track, seqName, start);
+rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2662,7 +2665,7 @@ puts("<P>This track syntenous (corresponding) regions between human "
      "http://www.ncbi.nlm.nih.gov/Homology/</A> for more details.");
 }
 
-void doCytoBands(char *itemName)
+void doCytoBands(char *track, char *itemName)
 /* Describe cytological band track. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -2676,9 +2679,9 @@ int rowOffset;
 htmlStart("Chromosome Bands");
 printf("<H2>Chromosome Bands</H2>\n");
 sprintf(query, 
-	"select * from cytoBand where chrom = '%s' and chromStart = '%d'",
-	seqName, start);
-rowOffset = hOffsetPastBin(seqName, "cytoBand");
+	"select * from %s where chrom = '%s' and chromStart = '%d'",
+	track, seqName, start);
+rowOffset = hOffsetPastBin(seqName, track);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2748,7 +2751,7 @@ hFreeConn(&conn);
 }
 #ifdef ROGIC_CODE
 
-void doMgcMrna(char *acc)
+void doMgcMrna(char *track, char *acc)
 /* Redirects to genbank record */
 {
 
@@ -3107,7 +3110,7 @@ if ((url = ct->bt->url) != NULL)
 void doMiddle()
 /* Generate body of HTML. */
 {
-char *group = cgiString("g");
+char *track = cgiString("g");
 char *item = cgiOptionalString("i");
 char title[256];
 struct browserTable *tableList = NULL;
@@ -3121,221 +3124,202 @@ seqName = cgiString("c");
 winStart = cgiInt("l");
 winEnd = cgiInt("r");
 tableList = checkDbForTables();
-if (sameWord(group, "getDna"))
+if (sameWord(track, "getDna"))
     {
     doGetDna();
     }
-else if (sameWord(group, "hgMrna") || sameWord(group, "hgMrna2"))
+else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
+	sameWord(track, "est") || sameWord(track, "intronEst"))
     {
-    doHgRna(item, FALSE);
-    }
-else if (sameWord(group, "hgEst") || sameWord(group, "hgIntronEst"))
-    {
-    doHgRna(item, TRUE);
+    doHgRna(track, item);
     }
 #ifdef ROGIC_CODE
-else if (sameWord(group, "hgEstPairs"))
+else if (sameWord(track, "estPair"))
     {
-    doHgEstPair(item);
+    doHgEstPair(track, item);
     }
 #endif /*ROGIC_CODE*/
-else if (sameWord(group, "hgContig"))
+else if (sameWord(track, "ctgPos"))
     {
-    doHgContig(item);
+    doHgContig(track, item);
     }
-else if (sameWord(group, "hgCover"))
+else if (sameWord(track, "clonePos"))
     {
-    doHgCover(item);
+    doHgCover(track, item);
     }
-else if (sameWord(group, "hgClone"))
+else if (sameWord(track, "hgClone"))
     {
     doHgClone(item);
     }
-else if (sameWord(group, "hgGold"))
+else if (sameWord(track, "gold"))
     {
-    doHgGold(item);
+    doHgGold(track, item);
     }
-else if (sameWord(group, "hgGap"))
+else if (sameWord(track, "gap"))
     {
-    doHgGap(item);
+    doHgGap(track, item);
     }
-else if (sameWord(group, "hgTet"))
+else if (sameWord(track, "tet_waba"))
     {
-    doHgTet(item);
+    doHgTet(track, item);
     }
-else if (sameWord(group, "hgRepeat"))
+else if (sameWord(track, "rmsk"))
     {
-    doHgRepeat(item);
+    doHgRepeat(track, item);
     }
-else if (sameWord(group, "hgIsochore"))
+else if (sameWord(track, "isochores"))
     {
-    doHgIsochore(item);
+    doHgIsochore(track, item);
     }
-else if (sameWord(group, "hgSimpleRepeat"))
+else if (sameWord(track, "simpleRepeat"))
     {
-    doSimpleRepeat(item);
+    doSimpleRepeat(track, item);
     }
-else if (sameWord(group, "hgCpgIsland"))
+else if (sameWord(track, "cpgIsland") || sameWord(track, "cpgIsland2"))
     {
-    doCpgIsland(item, "cpgIsland");
+    doCpgIsland(track, item);
     }
-else if (sameWord(group, "hgCpgIsland2"))
+else if (sameWord(track, "refGene"))
     {
-    doCpgIsland(item, "cpgIsland2");
+    doRefGene(track, item);
     }
-else if (sameWord(group, "hgRefGene"))
+else if (sameWord(track, "genieKnown"))
     {
-    doRefGene(item);
+    doKnownGene(track, item);
     }
-else if (sameWord(group, "genieKnown"))
+else if (sameWord(track, "sanger22"))
     {
-    doKnownGene(item);
+    doSanger22(track, item);
     }
-else if (sameWord(group, "hgSanger22"))
+else if (sameWord(track, "genieAlt"))
     {
-    doSanger22(item);
+    doGeniePred(track, item);
     }
-else if (sameWord(group, "genieAlt"))
+else if (sameWord(track, "ensGene"))
     {
-    doGeniePred(item);
+    doEnsPred(track, item);
     }
-else if (sameWord(group, "hgEnsGene"))
+else if (sameWord(track, "softberryGene"))
     {
-    doEnsPred(item);
+    doSoftberryPred(track, item);
     }
-else if (sameWord(group, "hgSoftberryGene"))
+else if (sameWord(track, "genomicDups"))
     {
-    doSoftberryPred(item);
+    doGenomicDups(track, item);
     }
-else if (sameWord(group, "hgGenomicDups"))
+else if (sameWord(track, "exoFish"))
     {
-    doGenomicDups(item);
+    doExoFish(track, item);
     }
-else if (sameWord(group, "hgExoFish"))
+else if (sameWord(track, "exoMouse"))
     {
-    doExoFish(item);
+    doExoMouse(track, item);
     }
-else if (sameWord(group, "hgExoMouse"))
+else if (sameWord(track, "blatMouse"))
     {
-    doExoMouse(item);
+    doBlatMouse(track, item);
     }
-else if (sameWord(group, "hgBlatMouse"))
+else if (sameWord(track, "rnaGene"))
     {
-    doBlatMouse(item, blatMouseTable());
+    doRnaGene(track, item);
     }
-else if (sameWord(group, "hgMus7of8"))
+else if (sameWord(track, "stsMarker"))
     {
-    doBlatMouse(item, "mus7of8");
+    doStsMarker(track, item);
     }
-else if (sameWord(group, "hgMusPairOf4"))
+else if (sameWord(track, "mouseSyn"))
     {
-    doBlatMouse(item, "musPairOf4");
+    doMouseSyn(track, item);
     }
-else if (sameWord(group, "hgEst3"))
+else if (sameWord(track, "cytoBand"))
     {
-    doEst3(item);
+    doCytoBands(track, item);
     }
-else if (sameWord(group, "hgRnaGene"))
+else if (sameWord(track, "hgUserPsl"))
     {
-    doRnaGene(item);
+    doUserPsl(track, item);
     }
-else if (sameWord(group, "hgStsMarker"))
-    {
-    doStsMarker(item);
-    }
-else if (sameWord(group, "hgMouseSyn"))
-    {
-    doMouseSyn(item);
-    }
-else if (sameWord(group, "hgCytoBands"))
-    {
-    doCytoBands(item);
-    }
-else if (sameWord(group, "hgUserPsl"))
-    {
-    doUserPsl(item);
-    }
-else if (sameWord(group, "snpTsc") || sameWord(group, "snpNih"))
-    {
-    doSnp(group, item);
-    }
-else if (sameWord(group, "htcCloneSeq"))
-    {
-    htcCloneSeq(item);
-    }
-else if (sameWord(group, "htcCdnaAli"))
+else if (sameWord(track, "softPromoter"))
    {
-   htcCdnaAli(item);
+   hgSoftPromoter(track, item);
    }
-else if (sameWord(group, "htcUserAli"))
+else if (startsWith("ct_", track))
    {
-   htcUserAli(item);
+   hgCustom(track, item);
    }
-else if (sameWord(group, "htcBlatMouse"))
-   {
-   htcBlatMouse(item, cgiString("type"));
-   }
-else if (sameWord(group, "htcExtSeq"))
-   {
-   htcExtSeq(item);
-   }
-else if (sameWord(group, "htcTranslatedProtein"))
-   {
-   htcTranslatedProtein(item);
-   }
-else if (sameWord(group, "htcGeneMrna"))
-   {
-   htcGeneMrna(item);
-   }
-else if (sameWord(group, "htcRefMrna"))
-   {
-   htcRefMrna(item);
-   }
-else if (sameWord(group, "htcGeneInGenome"))
-   {
-   htcGeneInGenome(item);
-   }
-else if (sameWord(group, "htcDnaNearGene"))
-   {
-   htcDnaNearGene(item);
-   }
-else if (sameWord(group, "hgSoftPromoter"))
-   {
-   hgSoftPromoter(item);
-   }
-else if (startsWith("ct_", group))
-   {
-   hgCustom(group, item);
-   }
+else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
+    {
+    doSnp(track, item);
+    }
 #ifdef CHUCK_CODE
-else if (sameWord(group, "hgExprBed"))
+else if (sameWord(track, "exprBed"))
     {
-    doGetExprBed("exprBed", item);
+    doGetExprBed(track, item);
     } 
-else if (sameWord(group, "rosettaPe"))
+else if (sameWord(track, "rosettaPe"))
     {
-    doGetExprBed("rosettaPe", item);
+    doGetExprBed(track, item);
     }
-else if (sameWord(group, "rosettaTe"))
+else if (sameWord(track, "rosettaTe"))
     {
-    doGetExprBed("rosettaTe", item);
+    doGetExprBed(track, item);
     }
 
 #endif /*CHUCK_CODE*/
 #ifdef ROGIC_CODE
- else if (sameWord(group, "mgc_mrna"))
+ else if (sameWord(track, "mgc_mrna"))
    {
-     doMgcMrna(item);
+     doMgcMrna(track, item);
    }
 #endif /*ROGIC_CODE*/
+else if (sameWord(track, "htcCloneSeq"))
+    {
+    htcCloneSeq(item);
+    }
+else if (sameWord(track, "htcCdnaAli"))
+   {
+   htcCdnaAli(item);
+   }
+else if (sameWord(track, "htcUserAli"))
+   {
+   htcUserAli(item);
+   }
+else if (sameWord(track, "htcBlatMouse"))
+   {
+   htcBlatMouse(item, cgiString("type"));
+   }
+else if (sameWord(track, "htcExtSeq"))
+   {
+   htcExtSeq(item);
+   }
+else if (sameWord(track, "htcTranslatedProtein"))
+   {
+   htcTranslatedProtein(item);
+   }
+else if (sameWord(track, "htcGeneMrna"))
+   {
+   htcGeneMrna(item);
+   }
+else if (sameWord(track, "htcRefMrna"))
+   {
+   htcRefMrna(item);
+   }
+else if (sameWord(track, "htcGeneInGenome"))
+   {
+   htcGeneInGenome(item);
+   }
+else if (sameWord(track, "htcDnaNearGene"))
+   {
+   htcDnaNearGene(item);
+   }
 else
    {
-   if(inBrowserTable(group,tableList))
-       doBrowserTable(group, tableList);
+   if(inBrowserTable(track,tableList))
+       doBrowserTable(track, tableList);
    else 
        {
-       htmlStart(group);
-       printf("Sorry, clicking there doesn't do anything yet (%s).", group);
+       htmlStart(track);
+       printf("Sorry, clicking there doesn't do anything yet (%s).", track);
        }
    }
 browserTableFreeList(&tableList);

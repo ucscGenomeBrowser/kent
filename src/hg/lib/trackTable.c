@@ -29,7 +29,6 @@ ret->altColorB = sqlUnsigned(row[10]);
 ret->useScore = sqlUnsigned(row[11]);
 ret->isSplit = sqlUnsigned(row[12]);
 ret->private = sqlUnsigned(row[13]);
-ret->hardCoded = sqlUnsigned(row[14]);
 }
 
 struct trackTable *trackTableLoad(char **row)
@@ -55,7 +54,6 @@ ret->altColorB = sqlUnsigned(row[10]);
 ret->useScore = sqlUnsigned(row[11]);
 ret->isSplit = sqlUnsigned(row[12]);
 ret->private = sqlUnsigned(row[13]);
-ret->hardCoded = sqlUnsigned(row[14]);
 return ret;
 }
 
@@ -101,7 +99,6 @@ ret->altColorB = sqlUnsignedComma(&s);
 ret->useScore = sqlUnsignedComma(&s);
 ret->isSplit = sqlUnsignedComma(&s);
 ret->private = sqlUnsignedComma(&s);
-ret->hardCoded = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -173,8 +170,6 @@ fprintf(f, "%u", el->isSplit);
 fputc(sep,f);
 fprintf(f, "%u", el->private);
 fputc(sep,f);
-fprintf(f, "%u", el->hardCoded);
-fputc(lastSep,f);
 }
 
 /* ---------------- End of AutoSQL generated code. ------------------ */
@@ -193,7 +188,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -207,7 +201,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -221,7 +214,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -235,7 +227,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      1,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -249,7 +240,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      1,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -263,7 +253,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      1,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -277,7 +266,6 @@ static struct trackTable builtIns[] =
      1,	/* useScore */
      1,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -291,7 +279,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      1,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -305,7 +292,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -319,7 +305,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -333,7 +318,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -347,7 +331,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -361,7 +344,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      1,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -375,7 +357,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -389,7 +370,6 @@ static struct trackTable builtIns[] =
      0,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
     {
      NULL,
@@ -403,7 +383,6 @@ static struct trackTable builtIns[] =
      1,	/* useScore */
      0,	/* isSplit */
      0,	/* private */
-     TRUE,	/* hardCoded */
     },
 };
 

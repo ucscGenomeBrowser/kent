@@ -496,11 +496,15 @@ boolean hFindSplitTable(char *chrom, char *rootName,
 struct hTableInfo *hti = hFindTableInfo(chrom, rootName);
 if (hti == NULL)
     return FALSE;
-if (hti->isSplit)
-    sprintf(retTableBuf, "%s_%s", chrom, rootName);
-else
-    strcpy(retTableBuf, rootName);
-*hasBin = hti->hasBin;
+if (retTableBuf != NULL)
+    {
+    if (hti->isSplit)
+	sprintf(retTableBuf, "%s_%s", chrom, rootName);
+    else
+	strcpy(retTableBuf, rootName);
+    }
+if (hasBin != NULL)
+    *hasBin = hti->hasBin;
 return TRUE;
 }
 
