@@ -169,6 +169,25 @@ void wiggleDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 
+
+/*** Some Stuff for the GCwiggle track ***/
+
+enum GCwiggleOptEnum {
+   GCwiggleNoInterpolation = 0,
+   GCwiggleLinearInterpolation = 1,
+};
+
+enum GCwiggleOptEnum GCwiggleStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *GCwiggleEnumToString(enum GCwiggleOptEnum x);
+/* Convert from enum to string representation. */
+
+void GCwiggleDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+
+
 /*** Some Stuff for the chimp track ***/
 
 enum chimpOptEnum {
