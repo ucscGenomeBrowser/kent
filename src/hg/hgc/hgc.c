@@ -4564,6 +4564,7 @@ boolean alignmentOK;
 
 cartWebStart(cart, "Alignment of %s in %s to %s",
 	     name, hOrganism(database), hOrganism(db2));
+hSetDb2(db2);
 
 // get nibFile
 sprintf(query, "select fileName from chromInfo where chrom = '%s'",  chrom);
