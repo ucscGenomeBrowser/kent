@@ -166,6 +166,7 @@ for (link = linkList; link != NULL; link = link->next)
     char *url = linkGetUrl(link, conn, geneId);
     if (url != NULL)
 	{
+	char *target = (link->useHgsid ? "" : " TARGET=_blank");
 	if (++itemPos > maxPerRow)
 	    {
 	    hPrintf("</TR>\n<TR>");
@@ -173,7 +174,7 @@ for (link = linkList; link != NULL; link = link->next)
 	    ++rowIx;
 	    }
 	hPrintLinkCellStart();
-	hPrintf("<A HREF=\"%s\" class=\"toc\">", url);
+	hPrintf("<A HREF=\"%s\"%s class=\"toc\">", url, target);
 	hPrintf("%s", link->shortLabel);
 	hPrintf("</A>");
 	hPrintLinkCellEnd();

@@ -111,7 +111,7 @@ for (side = 0; side < ArraySize(names); ++side)
     }
 hPrintLinkTableEnd();
 hPrintf("<BR>The RNAfold program from the ");
-hPrintf("<A HREF=\"http://www.tbi.univie.ac.at/~ivo/RNA/\">");
+hPrintf("<A HREF=\"http://www.tbi.univie.ac.at/~ivo/RNA/\" TARGET=_blank>");
 hPrintf("Vienna RNA Package</A> is used to perform the ");
 hPrintf("secondary structure predictions and folding calculations. ");
 hPrintf("The estimated folding energy is in kcal/mol.  The more ");

@@ -39,7 +39,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<A HREF=\"http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s\">",
+    hPrintf("<A HREF=\"http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s\" TARGET=_blank>",
     	row[1], row[0]);
     hPrintf("%s</A> - %s<BR>", row[1], row[2]);
     }
@@ -71,7 +71,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<A HREF=\"http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\">",
+    hPrintf("<A HREF=\"http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
     	row[0]);
     hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
     }
@@ -121,7 +121,7 @@ if (cgapId != NULL)
 	if (!hashLookup(uniqHash, name))
 	    {
 	    hashAdd(uniqHash, name, NULL);
-	    hPrintf("<A HREF=\"http://cgap.nci.nih.gov/Pathways/BioCarta/%s\">", row[0]);
+	    hPrintf("<A HREF=\"http://cgap.nci.nih.gov/Pathways/BioCarta/%s\" TARGET=_blank>", row[0]);
 	    hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	    }
 	}

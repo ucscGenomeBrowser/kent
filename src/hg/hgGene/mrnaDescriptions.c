@@ -77,7 +77,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 			"&tool=genome.ucsc.edu";
 	    hPrintf("<A HREF=\"");
 	    hPrintf(url, psl->qName);
-	    hPrintf("\">");
+	    hPrintf("\" TARGET=_blank>");
 	    hPrintf("%s</A> - ", psl->qName);
 	    hPrintf("%s<BR>", description);
 	    }

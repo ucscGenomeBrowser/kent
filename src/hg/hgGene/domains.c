@@ -38,7 +38,7 @@ if (section->pfamDomains != NULL)
 	description = sqlQuickString(conn, query);
 	if (description == NULL)
 	    description = cloneString("n/a");
-	hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\">", 
+	hPrintf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
 	    el->name);
 	hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	freez(&description);
@@ -51,7 +51,7 @@ if (section->interproDomains != NULL)
     if (section->pfamDomains != NULL)
         hPrintf("<BR>\n");
     hPrintf("<B>Interpro Domains</B> - ");
-    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\">",
+    hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure.</A><BR>");
     safef(query, sizeof(query),
@@ -62,7 +62,7 @@ if (section->interproDomains != NULL)
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\">", row[0]);
+	hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
 	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
     }

@@ -67,7 +67,7 @@ while (s != NULL && s[0] != 0)
 		mustWrite(stdout, s, e-s);
 		hPrintf("<A HREF=\"");
 		hPrintf(omimUrl, omimId);
-		hPrintf("\">");
+		hPrintf("\" TARGET=_blank>");
 		mustWrite(stdout, e, skipSize);
 		hPrintf("</A>");
 		s = e + skipSize;
