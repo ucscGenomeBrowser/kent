@@ -77,6 +77,7 @@ struct pfTokenizer
     struct pfTokenizer *next;	/* Next if any in list */
     struct lm *lm;		/* Local memory pool for tokens etc. */
     struct pfSource *source;	/* Current source file. */
+    struct pfScope *scope;	/* Outermost scope, includes reserved words. */
     char *pos;			/* Current position within source->contents. */
     char *endPos;		/* Last position within source->contents. */
     struct hash *reserved;	/* Hash of built-in reserved words. */

@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "errabort.h"
 #include "obscure.h"
+#include "pfScope.h"
 #include "pfToken.h"
 
 void pfSourcePos(struct pfSource *source, char *pos, 
@@ -129,6 +130,18 @@ readInGulp(fileName, &source->contents, &source->contentSize);
 return source;
 }
 
+static void addBuiltInTypes(struct pfScope *scope)
+/* Add built in types . */
+{
+static char *basic[] = { "var" , "string" , "bit" , "byte" , "short" , "int" , "long", "float"};
+static char *collections[] = { "array", "list", "tree", "dir" };
+int i;
+for (i=0; i<ArraySize(basic); ++i)
+    pfScopeAddType(scope, basic[i], FALSE, NULL);
+for (i=0; i<ArraySize(collections); ++i)
+    pfScopeAddType(scope, collections[i], TRUE, NULL);
+}
+
 struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords)
 /* Create tokenizing structure on file.  Reserved words is an int valued hash
  * that may be NULL. */
@@ -145,6 +158,8 @@ pfTkz->dy = dyStringNew(0);
 if (reservedWords == NULL)
     reservedWords = hashNew(1);
 pfTkz->reserved = reservedWords;
+pfTkz->scope = pfScopeNew(NULL, 8);
+addBuiltInTypes(pfTkz->scope);
 return pfTkz;
 }
 

@@ -80,4 +80,10 @@ struct pfParse
     struct pfVar *var;		/* Associated variable if any. */
     };
 
+struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz);
+/* Convert file to parse tree using tkz. */
+
+void pfParseDump(struct pfParse *pp, int level, FILE *f);
+/* Write out pp (and it's children) to file at given level of indent */
+
 #endif /* PFPARSE_H */
