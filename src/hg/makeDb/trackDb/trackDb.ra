@@ -412,7 +412,7 @@ shortLabel Ensembl EST Genes
 longLabel Ensembl EST Gene Predictions
 group genes
 priority 40.5
-visibility dense
+visibility hide
 color 150,0,0
 type genePred ensEstPep
 url http://www.ensembl.org/perl/geneview?db=estgene&transcript=$$
