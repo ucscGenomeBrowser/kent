@@ -11,6 +11,10 @@
 #include "dystring.h"
 #endif
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif 
+
 #ifndef TRACKDB_H
 #include "trackDb.h"
 #endif
