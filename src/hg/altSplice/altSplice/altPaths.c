@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.4 2004/07/15 22:26:04 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.5 2004/07/19 23:53:11 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -1034,14 +1034,6 @@ for(path = splice->paths; path != NULL; path = path->next)
     {
     splice->tStart = min(splice->tStart, path->tStart);
     splice->tEnd = max(splice->tEnd, path->tEnd);
-    /* If writing beds, create the bed and write it out. */
-    if(pathBedFile != NULL)
-	{	
-	struct bed *bed = bedForPath(path, splice, ag, source, sink, TRUE);
-	if(bed != NULL)
-	    bedTabOutN(bed, 12, pathBedFile);
-	bedFree(&bed);
-	}
     }
 freez(&altStarts);
 }
@@ -1119,6 +1111,7 @@ for(vertIx = source; vertIx <= sink; )
 	int nextVertIx = vertIx;
 	/* If we have a control splice going, finish it and push it on
 	   the list. */
+	pathAddTail(splice->paths, vertIx);
 	if(splice->paths->vCount > 1)
 	    {
 	    splice->type = altControl;
