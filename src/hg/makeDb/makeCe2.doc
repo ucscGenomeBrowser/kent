@@ -2007,12 +2007,13 @@ done
 
 # MAKE phyloHMM data
 # (redone using new phastCons, acs 9/14/04)
+# (redone using nets rather than axtBest, acs 10/10/04)
     ssh hgwdev
     mkdir /cluster/data/ce2/bed/pHMM
     cd /cluster/data/ce2/bed/pHMM
     mkdir axt
     cd axt
-    ln -s ../../blastz.cb1.2004-04-12/axtBest/*.axt .
+    ln -s /cluster/data/ce2/bed/blastz.cb1/axtNet.2004-04-29/sortedaxtNet/*.axt .
     cd ..
     mkdir maf
     #	create maf files from axtBest axt files
@@ -2583,3 +2584,15 @@ chainSome $(path1)
 #wormUtr5.bed 0.057%, ce2.mafRangesCollapsed.bed 43.839%, both 0.041%, cover 72.37%, enrich 1.65x
 
 
+# syntenic net with cb1 (acs, 11/18/04)
+
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain.2004-04-29
+    netFilter -syn cb1.net > cb1Syn.net
+    netFilter -minGap=10 cb1Syn.net | hgLoadNet ce2 syntenyNetCb1 stdin
+    # (add trackDb.ra entry)
+
+# [acs@hgwdev axtChain.2004-04-29]$ featureBits ce2 netCb1
+# 88355987 bases of 100291761 (88.099%) in intersection
+# [acs@hgwdev axtChain.2004-04-29]$ featureBits ce2 syntenyNetCb1
+# 73427463 bases of 100291761 (73.214%) in intersection
+# Hmmm -- looking in browser, seems a bit stringent for worm...
