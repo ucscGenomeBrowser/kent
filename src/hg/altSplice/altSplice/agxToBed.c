@@ -3,6 +3,7 @@
 */
 #include "common.h"
 #include "altGraphX.h"
+#include "obscure.h"
 
 void usage() 
 {
@@ -34,13 +35,23 @@ warn("Loading altGraphX records.");
 agList = altGraphXLoadAll(agxFileName);
 warn("Converting to beds.");
 bedOut = mustOpen(bedFileName, "w");
+dotForUserInit(max(slCount(agList)/15, 1));
 for(ag = agList; ag != NULL; ag = ag->next)
     {
-    occassionalDot();
-    bed = altGraphXToBed(ag);
-    if(bed->blockCount > 0)
-	bedTabOutN(bed, 12, bedOut);
-    bedFree(&bed);
+    struct altGraphX *agComp = NULL, *agCompList = NULL;
+    dotForUser();
+    agCompList = agxConnectedComponents(ag);
+    for(agComp = agCompList; agComp != NULL; agComp = agComp->next)
+	{
+	if(agComp->edgeCount > 0)
+	    {
+	    bed = altGraphXToBed(agComp);
+	    if(bed->blockCount > 0)
+		bedTabOutN(bed, 12, bedOut);
+	    bedFree(&bed);
+	    }
+	}
+    altGraphXFreeList(&agCompList);
     }
 carefulClose(&bedOut);
 warn("Done.");
