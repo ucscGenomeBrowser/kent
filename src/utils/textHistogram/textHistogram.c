@@ -53,7 +53,6 @@ if (aveCol >= 0)
 
 /* Go through each line of input file accumulating
  * data. */
-uglyf("Col %d, aveCol %d\n", col, aveCol);
 while (wordCount = lineFileChop(lf, row))
     {
     int x;
