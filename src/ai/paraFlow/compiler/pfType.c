@@ -221,7 +221,7 @@ static void coerceTuple(struct pfCompile *pfc, struct pfParse *tuple,
 {
 int tupSize = slCount(tuple->children);
 int typeSize = slCount(types->children);
-struct pfParse *pp, **pos;
+struct pfParse **pos;
 struct pfType *type;
 if (tupSize != typeSize)
     {
@@ -238,6 +238,7 @@ for (;;)
      if (type == NULL)
          break;
      }
+tuple->ty = types;
 }
 
 static void coerceCall(struct pfCompile *pfc, struct pfParse *pp)
