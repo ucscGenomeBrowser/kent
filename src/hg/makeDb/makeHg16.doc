@@ -6055,6 +6055,10 @@ EOF
 
 
 LOAD RNAGENES (DONE - 2004-03-09 - Hiram)
+    #	http://www.genetics.wustl.edu/eddy
+    #	Sean Eddy, eddy@genetics.wustl.edu
+    #	Dept. of Genetics, Washington University School of Medicine
+
     ssh hgwdev
     mkdir -p /cluster/data/hg16/bed/rnaGene
     cd /cluster/data/hg16/bed/rnaGene
