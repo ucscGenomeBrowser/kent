@@ -6193,4 +6193,24 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgsql mm5 -e 'drop table kgSpAlias';
     hgsql mm5 < ~/src/hg/lib/kgSpAlis.sql
     hgsql mm5 -e 'load data local infile "mm5.kgSpAlias.tab" into table kgSpAlias'
-	 
+	
+# ECGENE TRACK (DONE, 2004-10-29, hartera)
+    ssh kksilo
+    mkdir -p /cluster/data/mm5/bed/ECgene.2004-10-29
+    ln -s /cluster/data/mm5/bed/ECgene.2004-10-29 \
+          /cluster/data/mm5/bed/ECgene
+    cd /cluster/data/mm5/bed/ECgene
+    wget \
+"http://genome.ewha.ac.kr/ECgene/download/v1.2_ECgene/v1.2_mm5_low_gene.txt.gz"
+    wget \
+"http://genome.ewha.ac.kr/ECgene/download/v1.2_ECgene/v1.2_mm5_low_pep.txt.gz"
+    gunzip *.gz
+    # load database
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/ECgene
+    ldHgGene -predTab mm5 ECgene v1.2_mm5_low_gene.txt
+    # 343337 gene predictions
+    hgPepPred mm5 tab ECgenePep v1.2_mm5_low_pep.txt
+    rm *.tab
+    nice gzip *.txt
+
