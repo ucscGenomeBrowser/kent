@@ -70,6 +70,8 @@ The example mysql user here is: "browser" with a password of: "genome"
 	ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash
 
 	A cron job should be set to periodically clean the files in trash.
+	Please note the example at ${CDROM}/example/CleanTrash.sh
+
 	The browser creates .gif files in the trash directory.
 	The 'chmod 777' allows the Apache WEB server to write into
 	that directory.

@@ -55,3 +55,10 @@ CGI binaries will fail to operate until the new columns are added
 to your database tables.  This is especially important for any
 tables in the hgcentral database.  UCSC will keep any product sites
 informed of database changes.
+
+Please note the example perl script:
+	${CDROM}/example/cvsup.pl
+Which can perform the CVS update and format the output in
+a useful report to monitor source tree changes.  This script
+can be used as a cron job thereby sending the report as
+email each time it operates.

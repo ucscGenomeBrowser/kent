@@ -76,12 +76,14 @@ source_built: source_tar
 	touch source_built
 
 example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
-	ex.InstallExample
+	ex.InstallExample ex.CleanTrash.sh ex.cvsup.pl
 	@if [ ! -d ${install_dir}/example ]; then \
 		${MKDIR} "${install_dir}/example"; \
 	fi
 	cp -p ex.InstallExample "${install_dir}/example/InstallExample"
 	cp -p ex.hgcentral.sql "${install_dir}/example/hgcentral.sql"
+	cp -p ex.CleanTrash.sh "${install_dir}/example/CleanTrash.sh"
+	cp -p ex.cvsup.pl "${install_dir}/example/cvsup.pl"
 	cp -p ex.hg.conf "${install_dir}/example/hg.conf"
 	sed -e "s/VER/${VER}/" -e "s/DATE_STAMP/`date -I`/" \
 		ex.MySQLUserPerms.sh >"${install_dir}/example/MySQLUserPerms.sh"
