@@ -110,7 +110,7 @@ void printHtmlComment(char *comment)
 param comment _ The comment to be printed
 */
 {
-printf("\n<!--%s-->\n", comment);
+printf("\n<!-- DEBUG: %s -->\n", comment);
 //fflush(stdout); /* USED ONLY FOR DEBUGGING, IT"S SLOOOWWW - MATT */
 }
 
@@ -555,6 +555,7 @@ else if (sameWord(filterType, "exclude"))
     exclude = TRUE;
 else
     color = TRUE;
+
 for (el = tg->items; el != NULL; el = next)
     {
     next = el->next;
@@ -689,6 +690,7 @@ void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList)
 /* Free up a linked features series list. */
 {
 struct linkedFeaturesSeries *lfs;
+
 for (lfs = *pList; lfs != NULL; lfs = lfs->next)
     freeLinkedFeatures(&lfs->features);
 slFreeList(pList);
@@ -705,6 +707,7 @@ void linkedFeaturesToLinkedFeaturesSeries(struct trackGroup *tg)
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
+
 for (lf = tg->items; lf != NULL; lf = lf->next) 
     { 
     AllocVar(lfs);
@@ -725,6 +728,7 @@ void linkedFeaturesSeriesToLinkedFeatures(struct trackGroup *tg)
 {
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf;
+
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
     slAddHead(&lfList, lfs->features)
@@ -920,17 +924,22 @@ boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
 if (tg->itemColor)	/* Item color overrides spectrum processing. */
+    {
     shades = NULL;
+    }
 
 if (vis == tvDense && shades)
+    {
     slSort(&tg->items, cmpLfWhiteToBlack);
+    }
+
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {
     int midY = y + midLineOff;
     int compCount = 0;
     int w;
     int prevEnd = -1;
-    
+
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
 	if (lf->filterColor > 0)
@@ -7114,7 +7123,6 @@ if (withLeftLabels)
 			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
 					    group->ixAltColor, font, maxRangeStr );
 				}
-			    
 			    }
 			prev = item;
 			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
@@ -7760,8 +7768,8 @@ return - The first chromosome position variable found in the
  */
 {
 char *pos = NULL;
-char *customText = cloneString(cartOptionalString(cart, "hgt.customText"));
-char *fileName = cloneString(cartOptionalString(cart, "ct"));
+char *customText = cloneString(cgiOptionalString("hgt.customText"));
+char *fileName = cloneString(cgiOptionalString("ct"));
 struct slName *browserLines = NULL;
 struct slName *bl = NULL;
 struct customTrack *ctList = NULL;
@@ -7774,7 +7782,7 @@ if (NULL != customText && bogusMacEmptyChars(customText))
 
 if (NULL == customText || 0 == customText[0])
     {
-    customText = cloneString(cartOptionalString(cart, "hgt.customFile"));
+    customText = cloneString(cgiOptionalString("hgt.customFile"));
     }
 
 if (NULL != customText && 0 != customText[0])
@@ -8353,7 +8361,6 @@ void tracksDisplay()
 char newPos[256];
 
 position = getPositionFromCustomTracks();
-
 if (NULL == position) 
     {
     /* Read in input from CGI. */
@@ -8488,15 +8495,13 @@ cgiVarExcludeExcept(except);
 }
 
 
-
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
+
 cartHtmlShell("UCSC Genome Browser v11", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
-
-
