@@ -13,7 +13,7 @@
 
 #Copy this script and take out this line, which is just
 #to help make sure you do set the variables
-    echo "Read this script before executing
+    echo "Read this script before executing"
     exit
 
 #Set the human rat and mouse genome directories
@@ -59,15 +59,15 @@
 
 #create little script to run blastz.
 cat > doMultiz << endDoMultiz
-#!/bin/csh
-multiz \$1/hm.maf \$1/mr.maf > \$1/hmr.maf
+#!/bin/csh -ef
+multiz \$1 \$2 > \$3
 endDoMultiz
 chmod a+x doMultiz
 
 #create gsub file with command to run
 cat > gsub << endGsub
 #LOOP
-doMultiz \$(path1)
+doMultiz \$(path1)/hm.maf \$(path1)/mr.maf {check out line \$(path1)/hmr.maf}
 #ENDLOOP
 endGsub
  
