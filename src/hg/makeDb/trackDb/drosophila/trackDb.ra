@@ -1,0 +1,57 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
+track genscan
+shortLabel Genscan Genes
+longLabel Genscan Gene Predictions
+group genes
+priority 50
+visibility dense
+color 170,100,0
+type genePred genscanPep
+
+track xenoMrna
+shortLabel Non-$Organism mRNA
+longLabel Non-$Organism mRNAs from Genbank
+group rna
+priority 63
+visibility dense
+spectrum on
+type psl xeno
+
+track blatFugu
+shortLabel Fugu BLAT
+longLabel Fugu (fr1-Aug 02) Translated BLAT Alignments
+group compGeno
+priority 130
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno fr1
+otherDb fr1
+colorChromDefault off
+
+track bdgpGene
+shortLabel BDGP Genes
+longLabel Protein-Coding Genes from Berkeley Drosophila Genome Project
+group genes
+priority 45.5
+visibility pack
+color 0,100,180
+type genePred bdgpGenePep
+
+track bdgpNonCoding
+shortLabel BDGP Non-coding
+longLabel Non-Coding Genes from Berkeley Drosophila Genome Project
+group genes
+priority 46
+visibility dense
+color 30,130,210
+type genePred 
+
