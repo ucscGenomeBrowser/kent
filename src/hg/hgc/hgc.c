@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.667 2004/06/15 21:18:16 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.668 2004/06/16 06:19:52 jill Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8101,7 +8101,7 @@ char oChrom[64];
 int oStart;
 
 cartWebStart(cart, "Genomic Duplications");
-printf("<H2>Genomic Duplication</H2>\n");
+printf("<H2>Genomic Duplication Region</H2>\n");
 if (cgiVarExists("o"))
     {
     int start = cartInt(cart, "o");
@@ -8115,10 +8115,12 @@ if (cgiVarExists("o"))
     while (row = sqlNextRow(sr))
 	{
 	genomicDupsStaticLoad(row+rowOffset, &dup);
-	printf("<B>First Position:</B> %s:%d-%d<BR>\n",
-	       dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<B>Second Position:</B> %s:%d-%d<BR>\n",
-	       dup.otherChrom, dup.otherStart, dup.otherEnd);
+	printf("<B>Region Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	       hGetDb(), dup.chrom, dup.chromStart, dup.chromEnd);
+	printf("%s:%d-%d</A><BR>\n", dup.chrom, dup.chromStart, dup.chromEnd);
+	printf("<B>Other Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\" TARGET=_blank>",
+	       hGetDb(), dup.otherChrom, dup.otherStart, dup.otherEnd);
+	printf("%s:%d-%d</A><BR>\n", dup.otherChrom, dup.otherStart, dup.otherEnd);
 	printf("<B>Relative orientation:</B> %s<BR>\n", dup.strand);
 	printf("<B>Percent identity:</B> %3.1f%%<BR>\n", 0.1*dup.score);
 	printf("<B>Size:</B> %d<BR>\n", dup.alignB);
