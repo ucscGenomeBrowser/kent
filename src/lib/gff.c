@@ -126,7 +126,7 @@ for (;;)
    if ((type = nextWord(&s)) == NULL)
        break;
    s = skipLeadingSpaces(s);
-   if (s[0] == 0 || s == NULL)
+   if (NULL == s || s[0] == 0)
        errAbort("Unpaired type/val on end of gtf line %d of %s", lineIx, fileName);
    if (s[0] == '"' || s[0] == '\'')
        {
