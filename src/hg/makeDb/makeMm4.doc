@@ -906,7 +906,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         echo done $c
     end
 
-# NET HUMAN BLASTZ (DONE - 2003-10-28 - Hiram)
+# NET HUMAN BLASTZ (DONE - 2003-10-31 - Hiram)
 
     ssh kksilo
     cd /cluster/data/mm4/bed/blastz.hg16/axtChain
@@ -968,6 +968,118 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
     netFilter -minGap=10 humanSyn.net | hgLoadNet mm4 syntenyNetHg16 stdin
 
     # Add entries for net and chain to mouse/mm4 trackDb
+
+    # make net
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain
+    mkdir humanNet
+    time netSplit human.net humanNet
+    # real    6m13.469s
+    # user    3m22.670s
+    # sys     0m44.880s
+
+    mkdir ../axtNet
+    foreach n (humanNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt humanNet/$c.net chain/$c.chain \
+		/cluster/data/mm4/nib \
+		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> $c.axt"
+    end
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm4/bed/blastz.hg16/axtBest
+    cd /cluster/data/mm4/bed/blastz.hg16/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.hg16/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm4/vsHg16/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm4/vsHg16/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/mm4/vsHg16/axtNet
+    gzip *.axt
+    # add README.txt file to dir, if needed
+
+    #  Convert those axt files to psl
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.hg16
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestHg16.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestHg16.psl
+	echo "Done: ${c}_blastzBestHg16.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.hg16/pslBest
+    time /cluster/bin/i386/hgLoadPsl mm4 chr*_blastzBestHg16.psl
+    # real    10m47.853s
+    # user    2m48.700s
+    # sys     0m24.250s
+
+     # check results
+#  featureBits mm4 blastzBestHg16
+#  1030510540 bases of 2627444668 (39.221%) in intersection
+
+#  featureBits mm3 blastzBestHuman
+#  1019460260 bases of 2505900260 (40.682%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm4/axtBestHg16
+     cd /gbdb/mm4/axtBestHg16
+     ln -s /cluster/data/mm4/bed/blastz.hg16/axtNet/chr*.axt .
+     cd /cluster/data/mm4/bed/blastz.hg16/axtNet
+     rm -f axtInfoInserts.sql
+     foreach f (/gbdb/mm4/axtBestHg16/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('hg16','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+    hgsql mm4 < ~/kent/src/hg/lib/axtInfo.sql
+    #	table axtInfo may already exist, ignore create error.
+    hgsql mm4 < axtInfoInserts.sql
+
+# MAKING THE AXTTIGHT FROM AXTBEST (DONE - 2003-10-31 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.hg16/axtNet
+    mkdir -p ../axtTight
+    tcsh
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightHg16.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.hg16/pslTight
+    hgLoadPsl mm4 chr*_blastzTightHg16.psl
+
+    # copy to axt's to download area
+    cd /cluster/data/mm4/bed/blastz.hg16/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm4/vsHg16/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm4/vsHg16/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/mm4/vsHg16/axtTight
+    gzip *.axt
+    # add README.txt file to dir, if needed
 
 # BLASTZ Rat (DONE - 2003-10-27 - Hiram)
 
@@ -1080,7 +1192,7 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/hgLoadPsl mm4 chr*_${tbl}.psl
 
 
-# CHAIN Rn3 BLASTZ (WORKING - 2003-10-24 - Hiram)
+# CHAIN Rn3 BLASTZ (DONE - 2003-10-30 - Hiram)
 
 #	Experiment, run this on kolossus
     ssh kolossus
@@ -1142,15 +1254,14 @@ SEQ2_LEN=$BASE/S2.len
         hgLoadChain mm4 ${c}_chainRn3 $i
         echo done $c
     end
-# problem loading chr13 and chr7 - rerun this two
+# problem loading chr13 and chr7 - rerun these two
     foreach i (chr13.chain chr7.chain)
         set c = $i:r
         hgLoadChain mm4 ${c}_chainRn3 $i
         echo done $c
     end
-XXXX running 2003-10-29 14:36
 
-# NET RAT BLASTZ (TBD)
+# NET RAT BLASTZ (DONE - 2003-10-31 - Hiram)
 
     ssh kksilo
     cd /cluster/data/mm4/bed/blastz.rn3/axtChain
@@ -1206,17 +1317,145 @@ XXXX running 2003-10-29 14:36
     # If things look good do
     ssh kksilo
     cd /cluster/data/mm4/bed/blastz.rn3/axtChain
-    rm -r n1 hNoClass.net
+    rm n1 hNoClass.net
     # Make a 'syntenic' subset of these with
-    netFilter -syn human.net > humanSyn.net
+    time netFilter -syn rat.net > ratSyn.net
+    # real    5m52.054s
+    # user    3m24.820s
+    # sys     0m44.020s
 
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/mm4/bed/blastz.rn3/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet mm4 netHg16 stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet mm4 syntenyNetHg16 stdin
+    time netFilter -minGap=10 rat.net |  hgLoadNet mm4 netRn3 stdin
+    # real    17m0.651s
+    # user    4m51.440s
+    # sys     0m36.060s
+    time netFilter -minGap=10 ratSyn.net | hgLoadNet mm4 syntenyNetRn3 stdin
+    # real    14m4.567s
+    # user    4m41.660s
+    # sys     0m34.420s
 
     # Add entries for net and chain to mouse/mm4 trackDb
+
+    # make net
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.rn3/axtChain
+    mkdir ratNet
+    time netSplit rat.net ratNet
+    # real    28m29.554s
+    # user    4m48.770s
+    # sys     4m3.580s
+
+    mkdir ../axtNet
+    foreach n (ratNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt ratNet/$c.net chain/$c.chain \
+		/cluster/data/mm4/nib \
+		/cluster/data/rn3/nib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> ../axtNet/$c.axt"
+    end
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm4/bed/blastz.rn3/axtBest
+    cd /cluster/data/mm4/bed/blastz.rn3/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.rn3/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtNet
+    gzip *.axt
+    # add README.txt file to dir, if needed
+
+    #  Convert those axt files to psl
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.rn3
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.rn3/pslBest
+    time /cluster/bin/i386/hgLoadPsl mm4 chr*_blastzBestRn3.psl
+    # real    9m7.118s
+    # user    2m32.780s
+    # sys     0m25.300s
+
+     # check results
+     # the original axtBest stuff from the axtBest operation:
+#  featureBits mm4 blastzBestRn3
+#  1780774716 bases of 2627444668 (67.776%) in intersection
+
+#  featureBits mm3 blastzBestRat
+#  1577582189 bases of 2505900260 (62.955%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm4/axtBestRn3
+     cd /gbdb/mm4/axtBestRn3
+     ln -s /cluster/data/mm4/bed/blastz.rn3/axtNet/chr*.axt .
+     cd /cluster/data/mm4/bed/blastz.rn3/axtNet
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/mm4/axtBestRn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql mm4 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql mm4 < axtInfoInserts.sql
+
+
+# MAKING THE AXTTIGHT FROM AXTBEST (TBD)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.rn3/axtNet
+    mkdir ../axtTight
+    tcsh
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/blastz.rn3/pslTight
+    time hgLoadPsl mm4 chr*_blastzTightRn3.psl
+    # real    9m53.256s
+    # user    2m2.170s
+    # sys     0m17.370s
+
+
+XXXX running - 2003-10-31 - 16:00
+    # copy to axt's to download area
+    cd /cluster/data/mm4/bed/blastz.rn3/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
+    gzip *.axt
+    # add README.txt file to dir, if needed
 
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
 
@@ -1291,27 +1530,29 @@ SEQ2_LEN=$BASE/S2.len
 '_EOF_'
     # << this line keeps emacs coloring happy
     #	First cluster run
+    cd /cluster/data/mm4/bed/blastzSelf
     source DEF
     ../../jkStuff/BlastZ_run0.sh
     cd run
     para try, check, push, check, ....
-XXXX working 2003-10-27
-# Completed: 41343 of 41344 jobs
-# Jobs currently running: 1
-# CPU time in finished jobs:   20876450s  347940.84m  5799.01h  241.63d  0.662 y
-# IO & Wait Time:               2233069s   37217.81m   620.30h   25.85d  0.071 y
-# Time in running jobs:             380s       6.33m     0.11h    0.00d  0.000 y
-# Average job time:                 559s       9.32m     0.16h    0.01d
-# Longest job:                   213883s    3564.72m    59.41h    2.48d
-# Submission to last job:        359707s    5995.12m    99.92h    4.16d
+# Completed: 41344 of 41344 jobs
+# CPU time in finished jobs:   21214466s  353574.44m  5892.91h  245.54d  0.673 y
+# IO & Wait Time:               2233362s   37222.69m   620.38h   25.85d  0.071 y
+# Average job time:                 567s       9.45m     0.16h    0.01d
+# Longest job:                   338309s    5638.48m    93.97h    3.92d
+# Submission to last job:        774549s   12909.15m   215.15h    8.96d
+    # note, one of those jobs took 94 hours !
 
     #	Second cluster run to convert the .out's to .lav's
-    ssh kk
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kkr1u00
     cd /cluster/data/mm4/bed/blastzSelf
     source DEF
     ../../jkStuff/BlastZ_run1.sh
     cd run.1
     para try, check, push, etc ...
+XXXX running 2003-10-31 14:30
 
     #	Third cluster run to convert lav's to axt's
     ssh kk
@@ -1599,24 +1840,41 @@ rm -fr /tmp/${root1}_${root2}
     # real    836m25.100s	<- that is 14 hours !
     # user    522m23.850s
     # sys     63m52.100s
+    # it was a 68 Gb file !
 
-    time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl  bacEnds.psl /dev/null
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl  bacEnds.psl /dev/null
+
+# time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl  bacEnds.psl /dev/null
     # Processed 540122688 alignments
     # real    157m1.227s
     # user    113m57.480s
     # sys     17m13.940s
 
     rmdir temp
-    rm raw.psl
+    rm raw.psl		# 68 Gb !  It takes a while even to remove it.
 
     time /cluster/bin/scripts/lifter -psl -mouse /cluster/data/mm4 bacEnds.psl
-XXXX - running 2003-10-30 14:00
+    # real    28m29.554s	== 9 hours
+    # user    4m48.770s
+    # sys     4m3.580s
+
     cp -p ~booch/bacends/split.pl .
     cp -p ~booch/bacends/header .
-    ./split.pl header < bacEnds.psl.lifted
+    time ./split.pl header < bacEnds.psl.lifted
+    # real    12m14.003s
+    # user    2m38.230s
+    # sys     2m52.460s
+    # we are up to 8 Gb for these files:
+    # -rw-rw-r--    1 8476583727 Oct 30 10:49 bacEnds.psl
+    # -rw-rw-r--    1 8892639725 Oct 30 23:04 bacEnds.psl.lifted
 
-    mv bacEnds.psl.lifted bacEnds.psl.lifted.save
-    pslSort dirs bacEnds.psl.lifted temp split
+    cp -p bacEnds.psl.lifted bacEnds.psl.lifted.save
+    time pslSort dirs bacEnds.psl.lifted temp split
+    #real    72m23.363s
+    #user    58m48.260s
+    #sys     7m13.090s
+
     rmdir temp
     rm -r split
 
@@ -1626,9 +1884,25 @@ XXXX - running 2003-10-30 14:00
 
 # BACEND PAIRS TRACK (WORKING - 2003-10-28 - Hiram)
 
-    ssh kksilo
+    ssh kolossus
     cd /cluster/data/mm4/bacends
-    cp -p /projects/hg2/booch/psl/gs.16/build33/bacends/Makefile .
+
+    # two line header file for the cat:
+	cat << '_EOF_' > header
+bin     chr     start   end     clone   score   strand  all     features        starts  sizes   names   rid     rcov    lid     lcov
+10N     10      10N     10N     10      10N     10      10      10N     10      10      10      10N     10N     10N     10N
+'_EOF_'
+
+	time ${HOME}/bin/${MACHTYPE}/pslPairs -min=50000 -max=300000 \
+	-short -long -orphan -mismatch -verbose bacEnds.psl.lifted \
+	../bed/bacends/ncbi/bacEndPairs.txt bacEnds
+XXXX - running 2003-10-31 14:45
+
+        cat header ../bed/bacends/ncbi/bacEndPairs.txt | \
+	~booch/bin/row score ge 300 | \
+	~booch/bin/sorttbl chr start | \
+	~booch/bin/headchg -del > bacEndPairs.bed
+
     # edit this Makefile to add this executable path to the scripts:
     #	/projects/compbiousr/booch/booch/scripts/
 

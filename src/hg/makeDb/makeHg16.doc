@@ -3857,13 +3857,35 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/data/mm4/jkStuff/BlastZ_run2.sh
     cd run.2
     para try, check, push, etc ...
-XXXX - running 2003-10-30 14:00
-# Completed: 44 of 44 jobs
-# CPU time in finished jobs:       3981s      66.35m     1.11h    0.05d  0.000 y
-# IO & Wait Time:                 49397s     823.28m    13.72h    0.57d  0.002 y
-# Average job time:                1213s      20.22m     0.34h    0.01d
-# Longest job:                     7584s     126.40m     2.11h    0.09d
-# Submission to last job:          7597s     126.62m     2.11h    0.09d
+# Completed: 38 of 42 jobs
+# Crashed: 4 jobs
+# CPU time in finished jobs:       1826s      30.44m     0.51h    0.02d  0.000 y
+# IO & Wait Time:                  9781s     163.01m     2.72h    0.11d  0.000 y
+# Average job time:                 305s       5.09m     0.08h    0.00d
+# Longest job:                     1489s      24.82m     0.41h    0.02d
+# Submission to last job:          5125s      85.42m     1.42h    0.06d
+    # FAILED: chr1, chr19, chr19_random, chr5
+    # try these on kolossus
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.mm4/run.2
+    /cluster/data/mm4/jkStuff/x86_64-chromlav2axt \
+	/cluster/data/hg16/bed/blastz.mm4/lav/chr1 \
+	/cluster/data/hg16/bed/blastz.mm4/axtChrom/chr1.axt \
+	/cluster/data/hg16/nib /cluster/data/mm4/nib
+    /cluster/data/mm4/jkStuff/x86_64-chromlav2axt \
+	/cluster/data/hg16/bed/blastz.mm4/lav/chr19 \
+	/cluster/data/hg16/bed/blastz.mm4/axtChrom/chr19.axt \
+	/cluster/data/hg16/nib /cluster/data/mm4/nib
+    /cluster/data/mm4/jkStuff/x86_64-chromlav2axt \
+	/cluster/data/hg16/bed/blastz.mm4/lav/chr19_random \
+	/cluster/data/hg16/bed/blastz.mm4/axtChrom/chr19_random.axt \
+	/cluster/data/hg16/nib /cluster/data/mm4/nib
+    /cluster/data/mm4/jkStuff/x86_64-chromlav2axt \
+	/cluster/data/hg16/bed/blastz.mm4/lav/chr5 \
+	/cluster/data/hg16/bed/blastz.mm4/axtChrom/chr5.axt \
+	/cluster/data/hg16/nib /cluster/data/mm4/nib
+    # about 26 minutes total time for those four
+    # chr19_random.axt is still empty, remove it to avoid errors later
 
     # translate sorted axt files into psl
     ssh eieio
@@ -3876,9 +3898,11 @@ XXXX - running 2003-10-30 14:00
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
     #	That takes about 30 minutes
+
     # Load database tables
     ssh hgwdev
-    set tbl = "blastzMm4"
     cd /cluster/data/hg16/bed/blastz.mm4/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzMm4.psl
+
     # this is a 55 minute job
+XXXX running 2003-10-31 11:55
