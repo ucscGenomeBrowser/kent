@@ -50,12 +50,11 @@ altColor 255,240,200
 spectrum on
 type psl xeno hg15
 
-track humanSynNet
-shortLabel Human Synteny
-longLabel $Organism/Human Synteny Using Blastz Single Coverage (100k window)
+track hg15SynNet
+shortLabel Human Syntenic Net
+longLabel Human/Rat Syntenic Alignment Net
 group compGeno
-priority 140.5
+priority 136
 visibility hide
-color 0,100,0
-altColor 255,240,200
-type bed 4 +
+spectrum on
+type netAlign hg15
