@@ -204,7 +204,7 @@ MYSQL *conn = sc->conn;
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
     if (abort)
-	sqlAbort(sc, "Can't start query:\n");
+	sqlAbort(sc, "Can't start query:\n%s\n", query);
     return NULL;
     }
 else
