@@ -4744,6 +4744,9 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gzip *.gff *TCs
 
 # LOAD VEGA GENES AND PSEUDOGENES (DONE 2003-11-11 braney )
+    #####
+    ##### WARNING: vega procedure changed, use process later in file
+    #####
     mkdir ~/hg16/bed/vega
     cd ~/hg16/bed/vega
     
@@ -4775,6 +4778,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
       echo "update vegaGene set cdsEnd = 0 where name = '$ntname'" \
       | hgsql hg16
     end
+
+
 
 # LOAD FIRSTEF TRACK  Done 2003-07-31 braney
 # Create firstEF track from Zhang lab at CSHL
@@ -5630,3 +5635,27 @@ EOF
     	chimpSimpleDiff.sql
     hgLoadBed -sqlTable=simpleNucDiff.sql hg166 chimpSimpleDiff.bed
     
+
+# LOAD VEGA GENES AND PSEUDOGENES (reloaded 2004/01/15 markd)
+    # reloaded due to bug in creating bogus CDS
+    mv ~/hg16/bed/vega ~/hg16/bed/vega.badcds
+    mkdir ~/hg16/bed/vega
+    cd ~/hg16/bed/vega
+    
+    wget http://www.sanger.ac.uk/Users/keenan/vega_homo_sapiens_ncbi34.gtf.gz
+
+    # Load genes and Immunoglobulin/Pseudogenes into 2 separate tracks.  Just
+    # omit snoRNAs, as there are so few of them
+    zcat vega_homo_sapiens_ncbi34.gtf.gz | awk '!(/small nucleolar RNA/ || $2 == "Pseudogene" || $2 == "Ig_Pseudogene_Segment" || $2 == "Ig_Segment") {print "chr"$0}'  > vegaGene.gtf
+    zcat vega_homo_sapiens_ncbi34.gtf.gz | awk '($2 == "Pseudogene" || $2 == "Ig_Pseudogene_Segment" || $2 == "Ig_Segment") {print "chr"$0}'  > vegaPseudoGene.gtf
+
+    ldHgGene -gtf hg16 vegaGene vegaGene.gtf
+    ldHgGene -gtf hg16 vegaPseudoGene vegaPseudoGene.gtf
+
+    wget http://www.sanger.ac.uk/Users/keenan/vega_pep_dump_ncbi34.fa.gz
+    hgPepPred hg16 generic vegaPep vega_pep_dump_ncbi34.fa
+
+    vegaBuildInfo vega_homo_sapiens_core_4_0.gtf vegaInfo.tab
+    hgsql hg16 < ~/kent/src/hg/lib/vegaInfo.sql
+    hgsql -e "load data local infile 'vegaInfo.tab' into table vegaInfo" hg16
+
