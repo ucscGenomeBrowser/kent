@@ -6003,15 +6003,15 @@ hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
     # Use these the next time we run human-chicken blastz.
 
 
-# BLASTZ CHICKEN (GALGAL1) (DONE 2/3/04 angie)
+# BLASTZ CHICKEN (GALGAL1) (DONE 2/19/04 angie)
     ssh kk
     # space is awful tight on store4 -- use bluearc.  
-    mkdir /cluster/bluearc/hg16/bed/blastz.galGal1.2004-01-31
-    ln -s /cluster/bluearc/hg16/bed/blastz.galGal1.2004-01-31 \
+    mkdir /cluster/bluearc/hg16/bed/blastz.galGal1.2004-02-18
+    ln -s /cluster/bluearc/hg16/bed/blastz.galGal1.2004-02-18 \
       /cluster/data/hg16/bed/
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
-    # Originally, Webb said L=3000, but output was huge (55G axt), so 
-    # backing off to L=4000.
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
+    # repeats.
     cat << '_EOF_' > DEF
 # human vs. chicken
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
@@ -6022,16 +6022,16 @@ BLASTZ=blastz
 # Specific settings for chicken (per Webb email to Brian Raney)
 BLASTZ_H=2000
 BLASTZ_Y=3400
-BLASTZ_L=4000
+BLASTZ_L=10000
 BLASTZ_K=2200
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_ABRIDGE_REPEATS=1
 
 # TARGET: Human
 SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
 SEQ1_RMSK=
 SEQ1_FLAG=
-SEQ1_SMSK=
+SEQ1_SMSK=/cluster/bluearc/hg16/linSpecRep.Chicken
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -6040,15 +6040,15 @@ SEQ1_LAP=10000
 SEQ2_DIR=/cluster/bluearc/galGal1/nib
 SEQ2_RMSK=
 SEQ2_FLAG=
-SEQ2_SMSK=
+SEQ2_SMSK=/cluster/bluearc/galGal1/linSpecRep
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/bluearc/hg16/bed/blastz.galGal1.2004-01-31
+BASE=/cluster/bluearc/hg16/bed/blastz.galGal1.2004-02-18
 
 DEF=$BASE/DEF
-RAW=$BASE/raw.L=5000
+RAW=$BASE/raw
 CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
@@ -6058,7 +6058,7 @@ SEQ2_LEN=$BASE/S2.len
     # first cluster run: raw blastz alignments
     ssh kk
     bash # if a csh/tcsh user
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
     source DEF
     mkdir $RAW run.0
     /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
@@ -6067,20 +6067,16 @@ SEQ2_LEN=$BASE/S2.len
     sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
     para create jobList
     para try, check, push, check, ....
+    # A couple crashes had to be re-pushed in the morning, thus the long time:
 #Completed: 49155 of 49155 jobs
-#Average job time:                 457s       7.62m     0.13h    0.01d
-#Longest job:                     1951s      32.52m     0.54h    0.02d
-#Submission to last job:         23852s     397.53m     6.63h    0.28d
-    # rerun.L=4000.0:
-#Completed: 49155 of 49155 jobs
-#Average job time:                 347s       5.79m     0.10h    0.00d
-#Longest job:                     1138s      18.97m     0.32h    0.01d
-#Submission to last job:         18313s     305.22m     5.09h    0.21d
+#Average job time:                 518s       8.64m     0.14h    0.01d
+#Longest job:                     1546s      25.77m     0.43h    0.02d
+#Submission to last job:         48034s     800.57m    13.34h    0.56d
 
     # second cluster run: lift raw alignments -> lav dir
     ssh kkr1u00
     bash # if a csh/tcsh user
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
     source DEF
     mkdir run.1 lav
     /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
@@ -6089,22 +6085,17 @@ SEQ2_LEN=$BASE/S2.len
     para create jobList
     para try, check, push, etc ...
 #Completed: 339 of 339 jobs
-#Average job time:                 364s       6.06m     0.10h    0.00d
-#Longest job:                     1290s      21.50m     0.36h    0.01d
-#Submission to last job:         11071s     184.52m     3.08h    0.13d
-    # rerun.L=4000.1:
-#Completed: 339 of 339 jobs
-#Average job time:                  49s       0.82m     0.01h    0.00d
-#Longest job:                      259s       4.32m     0.07h    0.00d
-#Submission to last job:          1776s      29.60m     0.49h    0.02d
+#Average job time:                  11s       0.18m     0.00h    0.00d
+#Longest job:                       55s       0.92m     0.02h    0.00d
+#Submission to last job:           642s      10.70m     0.18h    0.01d
 
     # third run: lav -> axt
     ssh kolossus
     bash # if a csh/tcsh user
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
     source DEF
     mkdir axtChrom pslChrom
-    cd lav.L\=4000
+    cd lav
     # oops, can't see iscratch (anymore?):
     SEQ1_DIR=/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs
     for chr in chr*
@@ -6121,14 +6112,15 @@ SEQ2_LEN=$BASE/S2.len
     cd ..
 
 
-# RUN AXTBEST AND GENERATE MAF FOR MULTIZ (DONE 2/3/04 angie)
+# RUN AXTBEST AND GENERATE MAF FOR MULTIZ (DONE 2/19/04 angie)
     ssh kolossus
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
-    mkdir axtBest
-    foreach chrdir (lav.L=4000/chr*)
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    mkdir axtBest pslBest
+    foreach chrdir (lav/chr*)
       set chr=$chrdir:t
       echo axtBesting $chr
       axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/$chr.psl
     end
     mkdir mafBest
     foreach f (axtBest/chr*.axt)
@@ -6137,16 +6129,19 @@ SEQ2_LEN=$BASE/S2.len
             /cluster/data/hg16/chrom.sizes /cluster/data/galGal1/chrom.sizes \
             $maf -tPrefix=hg16. -qPrefix=galGal1.
     end
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    cat pslBest/chr*.psl | hgLoadPsl -table=blastzBestGalGal1 hg16  stdin
 
 
-# CHAIN CHICKEN BLASTZ (DONE 2/12/04 angie)
+# CHAIN CHICKEN BLASTZ (DONE 2/19/04 angie)
     # Run axtChain on little cluster
     ssh kkr1u00
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChrom/*.axt \
+    ls -1S /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChrom/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
@@ -6181,70 +6176,53 @@ axtFilter -notQ=chrUn $1 \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
-#Completed: 42 of 42 jobs
-#Average job time:                 214s       3.57m     0.06h    0.00d
-#Longest job:                      566s       9.43m     0.16h    0.01d
-#Submission to last job:          1532s      25.53m     0.43h    0.02d
+    # axtChrom/chr1{8,9}_random.axt are empty, so the {out line +} checks 
+    # failed:
+#Completed: 40 of 42 jobs
+#Crashed: 2 jobs
+#Average job time:                  99s       1.64m     0.03h    0.00d
+#Longest job:                      181s       3.02m     0.05h    0.00d
+#Submission to last job:           689s      11.48m     0.19h    0.01d
 
     # now on the cluster server, sort chains
     ssh kksilo
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
-    # trim to minScore=10000
-    mkdir chainFilt
-    foreach f (chain/*.chain)
-      chainFilter -minScore=10000 $f > chainFilt/$f:t
-    end
 
     # Load chains into database
     ssh hgwdev
-TODO
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain/chainFilt
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
+        echo loading $c
         hgLoadChain hg16 ${c}_chainGalGal1 $i
-        echo done $c
     end
 
 
-# NET HUMAN BLASTZ (DONE 2/12/04 angie)
+# NET HUMAN BLASTZ (DONE 2/19/04 angie)
     ssh kksilo
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
-    mkdir preNet
-    cd chain
-    foreach i (*.chain)
-      echo preNetting $i
-      chainPreNet $i /cluster/data/hg16/chrom.sizes \
-                        /cluster/data/galGal1/chrom.sizes ../preNet/$i
-    end
-    cd ..
-    mkdir n1 
-    cd preNet
-    foreach i (*.chain)
-      set n = $i:r.net
-      echo primary netting $i
-      chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
-                           /cluster/data/galGal1/chrom.sizes ../n1/$n /dev/null
-    end
-    cd ..
-    cat n1/*.net | netSyntenic stdin hNoClass.net
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
 
+    # Add classification info using db tables:
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
-    netClass hNoClass.net hg16 galGal1 human.net
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
+    netClass noClass.net hg16 galGal1 human.net
 
-    # If things look good do
+    # Make a 'syntenic' subset:
     ssh kksilo
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
-    rm -r n1 hNoClass.net
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
+    rm noClass.net
     # Make a 'syntenic' subset of these with
     netFilter -syn human.net > humanSyn.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet hg16 netGalGal1 stdin
     netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyGalGal1 stdin
     # Add entries for chainGalGal1, netGalGal1, syntenyGalGal1 to 
