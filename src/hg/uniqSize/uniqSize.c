@@ -146,6 +146,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	    {
 	    inContig = FALSE;
 	    addIntList(&ci->contigList, start - contigStart);
+	    if (ci->contigList->n <= 0)
+	        errAbort("Line %d of %s, contig size %d\n",  lf->lineIx, lf->fileName, start - contigStart);
 	    }
 	if (isOpen)
 	    {
@@ -193,7 +195,11 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 lineFileClose(&lf);
 if (inContig)
+    {
     addIntList(&ci->contigList, end - contigStart);
+    if (ci->contigList->n <= 0)
+	errAbort("End of %s, contig size %d\n",  fileName, end - contigStart);
+    }
 if (inScaffold)
     addIntList(&ci->scaffoldList, end - scaffoldStart);
 ci->c50 = calcN50(&ci->contigList);
