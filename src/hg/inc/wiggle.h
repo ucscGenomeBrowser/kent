@@ -209,4 +209,12 @@ extern char dbgMsg[DBGMSGSZ+1];
 extern void wigDebugPrint(char * name);
 #endif
 
+/*	in lib/wigAsciiToBinary.c	*/
+void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
+   double *upperLimit, double *lowerLimit );
+/*	given the three file names, read the wigAscii file and produce
+ *	the wigFile and wibFile outputs, return the upper and lower
+ *	limits for all the data
+ */
+
 #endif /* WIGGLE_H */
