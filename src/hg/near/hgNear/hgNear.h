@@ -197,6 +197,9 @@ void advSearchRemakeTextVar(struct column *col, char *varName, int size);
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
 
+struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
+/* Return input list with stuff not in hash removed. */
+
 struct genePos *getSearchNeighbors(struct column *colList, 
 	struct sqlConnection *conn);
 /* Get neighbors by search. */

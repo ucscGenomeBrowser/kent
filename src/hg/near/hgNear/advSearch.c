@@ -103,15 +103,19 @@ for (onOff = 1; onOff >= 0; --onOff)
 	{
 	if (onOff == FALSE)
 	    hPrintf("<H2>Search Controls for Hidden Tracks</H2>");
-	hPrintf("<TABLE>\n");
+	hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 	for (col = colList; col != NULL; col = col->next)
 	    {
 	    if (col->searchControls && col->on == onOff)
 		{
+		hPrintf("<TR><TD>");
+		hPrintf("<TABLE>\n");
 		hPrintf("<TR><TD><B>%s - %s</B></TD></TR>\n", 
 			col->shortLabel, col->longLabel);
 		hPrintf("<TR><TD>");
 		col->searchControls(col, conn);
+		hPrintf("</TD></TR>");
+		hPrintf("</TABLE>");
 		hPrintf("</TD></TR>");
 		}
 	    }

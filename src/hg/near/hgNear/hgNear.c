@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.30 2003/06/25 21:49:41 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.31 2003/06/25 22:21:59 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -256,6 +256,39 @@ slReverse(&resList);
 return resList;
 }
 
+void lookupSearchControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced search. */
+{
+hPrintf("%s search (including * and ? wildcards): ", col->shortLabel);
+advSearchRemakeTextVar(col, "wild", 18);
+}
+
+struct genePos *lookupAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on position. */
+{
+char *wild = advSearchVal(col, "wild");
+if (wild != NULL)
+    {
+    struct hash *hash = newHash(17);
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), "select %s,%s from %s",
+    	col->keyField, col->valField, col->table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (wildMatch(wild, row[1]))
+	    hashAdd(hash, row[0], NULL);
+	}
+    list = weedUnlessInHash(list, hash);
+    sqlFreeResult(&sr);
+    hashFree(&hash);
+    }
+return list;
+}
+
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val)
 /* Set up the methods for a simple lookup column. */
 {
@@ -268,6 +301,8 @@ if (columnSetting(col, "search", NULL))
     {
     col->simpleSearch = lookupTypeSimpleSearch;
     }
+col->searchControls = lookupSearchControls;
+col->advancedSearch = lookupAdvancedSearch;
 }
 
 void setupColumnLookup(struct column *col, char *parameters)
