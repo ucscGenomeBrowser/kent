@@ -114,7 +114,7 @@ listen(sd,3);
 conn = accept(sd, NULL, &fromLen);
 for (;;)
     {
-    if (!netMustReadAll(conn, sig, sigLen))
+    if (netReadAll(conn, sig, sigLen) != sigLen)
         {
 	close(conn);
 	continue;

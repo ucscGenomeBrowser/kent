@@ -1,4 +1,68 @@
-/* paraHub - parasol hub server. */
+/* paraHub - Parasol hub server.  This is the heart of the parasol system.
+ * The hub daemon spawns a heartbeat daemon and a number of spoke deamons
+ * on startup,  and then falls into a loop processing messages it recieves
+ * on it's TCP/IP socket.  The hub daemon does not do anything time consuming
+ * in this loop.   The main thing the hub daemon does is put jobs on the
+ * job list,  move machines from the busy list to the free list,  and call
+ * the 'runner' routine.
+ *
+ * The runner routine looks to see if there is a free machine, a free spoke,
+ * and a job to run.  If so it will send a message to the spoke telling
+ * it to run the job on the machine,  and then move the job from the 'pending'
+ * to the 'running' list,  the spoke from the freeSpoke to the busySpoke list, 
+ * and the machine from the freeMachine to the busyMachine list.   This
+ * indirection of starting jobs via a separate spoke process avoids the
+ * hub daemon itself having to wait to find out if a machine is really
+ * there.
+ *
+ * When a spoke is done assigning a job, the spoke sense a 'recycleSpoke'
+ * message to the hub, which puts the spoke back on the freeSpoke list.
+ * Likewise when a job is done the machine running the jobs sends a 
+ * 'job done' message to the hub, which puts the machine back on the
+ * free list,  writes the job exit code to a file, and removes the job
+ * from the system.
+ *
+ * Sometimes a spoke will find that a machine is down.  In this case it
+ * sends a 'node down' message to the hub as well as the 'spoke free'
+ * message.   The hub will then move the machine to the deadMachines list,
+ * and put the job back on the top of the pending list.
+ *
+ * The heartbeat daemon simply sits in a loop sending heartbeat messages to
+ * the hub every so often (every 30 seconds currently), and sleeping
+ * the rest of the time.   When the hub gets a heartbeat message it
+ * does a few things:
+ *     o - It calls runner to try and start some more jobs.  (Runner
+ *         is also called at the end of processing a spokeFree, 
+ *         jobDone, addJob or addMachine message.  Typically because
+ *         of this runner won't find anything new to run, but this
+ *         is put here mostly just in case of unforseen issues.)
+ *    o -  It calls graveDigger, a routine which sees if a machine
+ *         on the dead list has been checked recently.  If not it
+ *         dispatches a spoke to see if it's come back to life.
+ *    o -  It calls hangman, a routine which sees if jobs the system
+ *         thinks have been running for a long time are still 
+ *         running on the machine they have been assigned to.
+ *         If the machine has gone down it is moved to the dead list
+ *         and the job is reassigned. 
+ *
+ * This whole system depends on the hub daemon being able to finish
+ * processing messages fast enough to keep the connection queue on
+ * it's socket from overflowing.  Each job involves 3 messages to the
+ * main socket:
+ *     addJob - from a client to add the job to the system
+ *     recycleSpoke - from the spoke after it's dispatched the job
+ *     jobDone - from the compute node when the job is finished
+ * On some of the earlier Linux kernals we had trouble with the
+ * connection queue overflowing when dispatching lots of short
+ * jobs.  This seemed to be from the jobDone messages coming
+ * in faster than Linux could make connections rather than the
+ * hub daemon being slow.  On the kilokluster with a more modern
+ * kernal this has not been a problem - even with very 0.1 second
+ * jobs on 1000 CPUs.  Should overflow occur the heartbeat processing
+ * should gradually rescue the system in any case, but the throughput
+ * will be greatly reduced. */
+ 
+
 #include <time.h>
 #include "common.h"
 #include "options.h"
@@ -460,12 +524,19 @@ if (rq == NULL)
     slAddHead(&resultQueues, rq);
     rq->name = cloneString(job->results);
     rq->f = fopen(rq->name, "a");
+    if (rq->f == NULL)
+        warn("hub: couldn't open results file %s", rq->name);
     rq->lastUsed = now;
     }
 if (rq->f != NULL)
     {
+    char *machName;
+    if (job->machine != NULL)
+        machName = job->machine->name;
+    else
+        machName = "ghost";
     fprintf(rq->f, "%s %s %d %s %s %s %lu %lu %lu %s %s '%s'\n",
-        status, job->machine->name, job->id, job->exe, 
+        status, machName, job->id, job->exe, 
 	uTime, sTime, 
 	job->submitTime, job->startTime, now,
 	job->user, job->err, job->cmd);
@@ -686,7 +757,6 @@ struct machine *mach = job->machine;
 if (mach != NULL)
      recycleMachine(mach);
 recycleJob(job);
-runner(1);
 }
 
 void removeJob(struct job *job)
@@ -729,9 +799,11 @@ if (sTime != NULL)
     if (job != NULL)
 	{
 	time_t now = time(NULL);
-	job->machine->lastChecked = now;
+	if (job->machine != NULL)
+	    job->machine->lastChecked = now;
 	writeJobResults(job, now, status, uTime, sTime);
 	finishJob(job);
+	runner(1);
 	}
     }
 }
@@ -1000,6 +1072,7 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
+
 void startHub(char *machineList)
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
 {
@@ -1036,7 +1109,7 @@ for (;;)
     int connectionHandle = netAccept(socketHandle);
     if (connectionHandle < 0)
         continue;
-    if (!netMustReadAll(connectionHandle, sig, sigLen) || !sameString(sig, paraSig))
+    if (netReadAll(connectionHandle, sig, sigLen) < sigLen || !sameString(sig, paraSig))
 	{
 	close(connectionHandle);
         continue;
