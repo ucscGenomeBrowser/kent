@@ -146,7 +146,7 @@
 #include "pscreen.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.752 2004/09/13 16:01:50 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.753 2004/09/13 21:28:57 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14309,14 +14309,14 @@ if (acc != NULL)
 	}
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
-if (!isDm && (prot != NULL))
+if (!isDm && (prot != NULL) && !sameString("(null)", prot))
     {
     printf("<B>SwissProt:</B> ");
     printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
-		"TARGET=_blank>%s</A></B>\n",
+		"TARGET=_blank>%s</A></B><BR>\n",
 		prot, prot);
     }
-printf("<BR><B>Protein length:</B> %d<BR>\n",pslList->qSize);
+printf("<B>Protein length:</B> %d<BR>\n",pslList->qSize);
 
 slSort(&pslList, pslCmpMatch);
 if (slCount(pslList) > 1)
