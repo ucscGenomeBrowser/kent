@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.837 2005/02/25 00:59:55 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.838 2005/02/25 01:03:41 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6912,23 +6912,8 @@ if ((row = sqlNextRow(sr)) == NULL)
 while (row != NULL)
     {
     mrnaAcc = row[0];
-    
-    /* check if it is in current Ensembl Gene track */
-    safef(query2, sizeof(query2), "select name from ensGene where name = '%s'", mrnaAcc);
-    sr2 = sqlGetResult(conn2, query2);
-    if ((row2 = sqlNextRow(sr2)) == NULL)
-    	{
-	/* go directly to Ensembl site, if our current ensGene does not have it */
-        printf("<B>Hinxton:</B> <A HREF=\"http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s\"", mrnaAcc);
-        printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
-	}
-    else
-    	{
-        printf("<B>Hinxton:</B> <A HREF=\"../cgi-bin/hgc?g=ensGene&i=%s&db=%s\"", mrnaAcc, database);
-        printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
-    	}
-    sqlFreeResult(&sr2);
-    
+    printf("<B>Hinxton:</B> <A HREF=\"../cgi-bin/hgc?g=ensGene&i=%s&db=%s\"", mrnaAcc, database);
+    printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
     row = sqlNextRow(sr);
     }
 
