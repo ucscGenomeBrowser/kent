@@ -21,6 +21,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
 ret->identNo = sqlUnsigned(row[5]);
+ret->probeId = sqlUnsigned(row[6]);
 }
 
 struct stsMapMouse *stsMapMouseLoad(char **row)
@@ -38,6 +39,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 ret->identNo = sqlUnsigned(row[5]);
+ret->probeId = sqlUnsigned(row[6]);
 return ret;
 }
 
@@ -47,7 +49,7 @@ struct stsMapMouse *stsMapMouseLoadAll(char *fileName)
 {
 struct stsMapMouse *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -100,6 +102,7 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 ret->identNo = sqlUnsignedComma(&s);
+ret->probeId = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -148,6 +151,8 @@ fputc(sep,f);
 fprintf(f, "%u", el->score);
 fputc(sep,f);
 fprintf(f, "%u", el->identNo);
+fputc(sep,f);
+fprintf(f, "%u", el->probeId);
 fputc(lastSep,f);
 }
 
