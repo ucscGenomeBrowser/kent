@@ -11,13 +11,14 @@ void usage()
 errAbort("runSlam - runs the Slam program program given a reference chromosome\n"
 	 "and some aligned bits. Now does chdir().\n"
 	 "usage:\n\t"
-	 "runSlam <chromNibDir> <bitsNibDir> <resultsDir> <refPrefix> <alignPrefix> <chrN:1-10000.gff> <chrN:1-10000.gff> <chromPiece [chrN:1-10000]> <otherBits chrN[1-1000]....>\n");
+	 "runSlam <maxFaSize> <chromNibDir> <bitsNibDir> <resultsDir> <refPrefix> <alignPrefix> <chrN:1-10000.gff> <chrN:1-10000.gff> <chromPiece [chrN:1-10000]> <otherBits chrN[1-1000]....>\n");
 }
 char *slamBin = "/cluster/home/sugnet/slam/";
 char *repeatMaskBin = "/scratch/hg/RepeatMasker/";
 char *outputRoot = "/tmp/slam/";
 boolean runAvidFirst = TRUE; 
-int bpLimit = 125000; /* maximum nubmer of base pairs to allow in a fasta file. */
+char *slamOpts = NULL; /* Options to pass to slam.pl */
+int bpLimit = 400000; /* maximum nubmer of base pairs to allow in a fasta file. */
 
 struct genomeBit
 /* Piece of the genome */
@@ -260,9 +261,7 @@ for(gb = gbList; gb != NULL; gb = gb->next)
     nibFile = nibFileFromChrom(root, gb->chrom);
     seq = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, gb->chromStart, gb->chromEnd-gb->chromStart);
     totalBp += strlen(seq->dna);
-    if(totalBp >= bpLimit)
-	errAbort("runSlam()::createFastaFilesForBits() - trying to write %d to fasta file which is greater than limit of %d for %s\n",
-		 totalBp, bpLimit, faFile);
+
     faWriteNext(faOut, buff, seq->dna, seq->size);
     dnaSeqFree(&seq);
     freez(&nibFile);
@@ -305,16 +304,31 @@ fa2 = fileNameFromGenomeBit("", ".fa", aligns);
 gff1 = fileNameFromGenomeBit("", "", target);
 gff2 = fileNameFromGenomeBit("", "", aligns);
 
-
-
 if(runAvidFirst)
     {
+    struct dnaSeq *faMerged = NULL, *fa = NULL;
+    int bpCount = 0;
     snprintf(command, sizeof(command), "%savid -nm=both  %s %s",
 	       slamBin, fa1, fa2); 
     retVal = system(command);
-    warn("%s exited with value %d", command, retVal);
-    }
 
+    warn("%s exited with value %d", command, retVal);
+    snprintf(command, sizeof(command), "echo \"\" >> %s.merged", fa2);
+    system(command);
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%s.merged", fa2); 
+    faMerged = faReadAllDna(dy->string);
+    for(fa = faMerged; fa !=NULL; fa = fa->next)
+	bpCount += fa->size;
+    if( bpCount >= bpLimit)
+	{
+	warn("runSlam()::runSlam() - trying to write %d to fasta file which is greater than limit of %d for %s\n pair is: %s/%s.%s\t%s/%s.%s",
+		 bpCount, bpLimit, dy->string, target->chrom, refPrefix, fa1, target->chrom, alignPrefix, fa2);
+	exit(0); // Exit zero to let parasol know we did what we could....
+	}
+    dyStringClear(dy);
+//    dnaSeqFreeList(&faMerged);
+    }
 touchFile(fa1, ".out");
 touchFile(fa1, ".masked");
 touchFile(fa2, ".merged.out");
@@ -323,14 +337,14 @@ touchFile(fa2, ".merged.masked");
 if(runAvidFirst)
     {
       snprintf(command, sizeof(command),  
-  	     "%sslam.pl %s %s.merged -outDir %s -o1 %s.%s -o2 %s.%s.merged",   
-  	     slamBin, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2); 
+  	     "%sslam.pl %s %s %s.merged -outDir %s -o1 %s.%s -o2 %s.%s.merged",   
+  	     slamBin, slamOpts, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2); 
     }
 else 
     {
       snprintf(command, sizeof(command),  
-  	     "%sslam.pl %s %s -outDir %s -o1 %s.%s -o2 %s.%s",   
-  	     slamBin, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2); 
+  	     "%sslam.pl %s %s %s -outDir %s -o1 %s.%s -o2 %s.%s",   
+  	     slamBin, slamOpts, fa1, fa2, outputDir, refPrefix, gff1, alignPrefix, gff2); 
     }
 warn("Running %s", command);
 retVal = system(command);
@@ -357,6 +371,10 @@ char *cwd = NULL;
 int fileNo = 0, stderrNo = 0, stdoutNo =0;
 FILE *logFile = NULL;
 char *host = NULL;
+if(sameString(refPrefix, "mm"))
+    slamOpts = " --org1 M.musculus --org2 H.sapiens ";
+else
+    slamOpts = "";
 fa1 = fileNameFromGenomeBit("", ".fa", target);
 fa2 = fileNameFromGenomeBit("", ".fa", aligns);
 gff1 = fileNameFromGenomeBit("", "", target);
@@ -396,8 +414,9 @@ genomeBitFreeList(&aligns);
 
 int main(int argc, char *argv[])
 {
-if(argc < 5)
+if(argc < 7)
     usage();
-runSlam(argv[1], argv[2], argv[3], argv[4], argv[5], argv[8], argv+9, argc-9);
+bpLimit = atoi(argv[1]);
+runSlam(argv[2], argv[3], argv[4], argv[5], argv[6], argv[9], argv+10, argc-10);
 return 0;
 }
