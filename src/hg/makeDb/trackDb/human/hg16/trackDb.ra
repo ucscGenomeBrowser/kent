@@ -1143,3 +1143,13 @@ altColor 255,240,200
 spectrum on
 type psl xeno galGal1
 otherDb galGal1
+
+track best10GalGal1
+shortLabel best10GalGal1
+longLabel best10GalGal1
+group x
+priority 126
+visibility hide
+spectrum on
+type psl xeno galGal1
+otherDb galGal1
