@@ -8,15 +8,13 @@
 #include "jksql.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: pscreen.c,v 1.1 2004/07/29 21:49:57 angie Exp $";
+static char const rcsid[] = "$Id: pscreen.c,v 1.2 2004/08/05 21:32:49 angie Exp $";
 
 struct pscreen *pscreenLoad(char **row)
 /* Load a pscreen from row fetched with select * from pscreen
  * from database.  Dispose of this with pscreenFree(). */
 {
 struct pscreen *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneCount = sqlUnsigned(row[7]);
@@ -27,10 +25,16 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->stockNumber = sqlUnsigned(row[6]);
+{
+int sizeOne;
 sqlStringDynamicArray(row[8], &ret->geneIds, &sizeOne);
 assert(sizeOne == ret->geneCount);
+}
+{
+int sizeOne;
 sqlSignedDynamicArray(row[9], &ret->geneDeltas, &sizeOne);
 assert(sizeOne == ret->geneCount);
+}
 return ret;
 }
 
@@ -76,7 +80,6 @@ struct pscreen *pscreenCommaIn(char **pS, struct pscreen *ret)
  * return a new pscreen */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -88,6 +91,8 @@ ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->stockNumber = sqlUnsignedComma(&s);
 ret->geneCount = sqlUnsignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->geneIds, ret->geneCount);
 for (i=0; i<ret->geneCount; ++i)
@@ -96,6 +101,9 @@ for (i=0; i<ret->geneCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->geneDeltas, ret->geneCount);
 for (i=0; i<ret->geneCount; ++i)
@@ -104,6 +112,7 @@ for (i=0; i<ret->geneCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -141,7 +150,6 @@ for (el = *pList; el != NULL; el = next)
 void pscreenOutput(struct pscreen *el, FILE *f, char sep, char lastSep) 
 /* Print out pscreen.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
@@ -164,6 +172,8 @@ fprintf(f, "%u", el->stockNumber);
 fputc(sep,f);
 fprintf(f, "%u", el->geneCount);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->geneCount; ++i)
     {
@@ -173,7 +183,10 @@ for (i=0; i<el->geneCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->geneCount; ++i)
     {
@@ -181,6 +194,7 @@ for (i=0; i<el->geneCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(lastSep,f);
 }
 
