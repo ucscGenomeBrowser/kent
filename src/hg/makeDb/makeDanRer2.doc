@@ -2531,3 +2531,16 @@ Completed: 2990 of 2990 jobs
       pslCheck $p >>& pslCheck.log
     end
     # 7344 problems with overlapping exons reported by pslCheck
+
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/zebrafish_image.jpg'
+	-O zebrafish_image.jpg
+    #	no crop images for this one, make the thumbnail directly:
+    convert -geometry 300x200 -quality 80 -sharpen 0 -normalize \
+	zebrafish_image.jpg Danio_rerio.jpg
+
+    cp -p Danio_rerio.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push

@@ -2520,4 +2520,17 @@ zcat `ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS/$chr.*.pp.gz \
     featureBits -enrichment canFam1 xenoRefGene twinscan
 #xenoRefGene 1.676%, twinscan 1.384%, both 1.030%, cover 61.42%, enrich 44.39x
 
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/dog_image.jpg'
+	-O dog_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 952x1256+72+280 -quality 80 -sharpen 0 \
+	-normalize dog_image.jpg ccf.jpg
+    convert -geometry 300x200 -quality 80 ccf.jpg Canis_familiaris.jpg
 
+    cp -p Canis_familiaris.jpg /usr/local/apache/htdocs/images
+    rm -f ccf.jpg dog_image.jpg
+    #	add links to this image in the description.html page, request push

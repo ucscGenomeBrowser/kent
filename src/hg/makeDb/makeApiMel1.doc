@@ -702,7 +702,6 @@ chainSome $(path1)
     featureBits apiMel1 gap \!extractedGaps
 #0 bases of 208434669 (0.000%) in intersection
 
-
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
     cd /tmp
