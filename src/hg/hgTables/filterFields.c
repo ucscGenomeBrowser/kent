@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.25 2004/12/03 13:54:48 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.26 2005/01/03 22:36:38 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1105,6 +1105,18 @@ for (var = varList; var != NULL; var = var->next)
     memcpy(field, s, fieldNameSize);
     field[fieldNameSize] = 0;
     type += 1;
+    /*	rawLogic and rawQuery are handled below	*/
+    if (startsWith("raw",type))
+	continue;
+    /*	Any variables that are missing a name:
+     *		<varPrefix>..<type>
+     *	are illegal
+     */
+    if (fieldNameSize < 1)
+	{
+	warn("Missing name in cart variable: %s\n", var->name);
+	continue;
+	}
     if (sameString(type, filterDdVar))
         {
 	char *patVar = filterPatternVarName(db, table, field);
