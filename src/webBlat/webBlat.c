@@ -394,7 +394,7 @@ else
 if (seqList->name == NULL || seqList->name[0] == 0)
     {
     freez(seqList->name);
-    seqList->name = cloneString(type);
+    seqList->name = cloneString("query");
     }
 faWriteAll(faName, seqList);
 
