@@ -1113,6 +1113,96 @@ if (smoothed)
 return ffList;
 }
 
+int aPenalty(char *s, int size)
+/* Penalty for polyA/polyT */
+{
+int aCount = 0, tCount = 0;
+int i;
+char c;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (c == 'a') ++aCount;
+    if (c == 't') ++tCount;
+    }
+if (tCount > aCount) aCount = tCount;
+if (aCount >= size)
+    return aCount-1;
+else if (aCount >= size*0.75)
+    return aCount * 0.90;
+else
+    return 0;
+}
+
+static struct ffAli *trimFlakyEnds(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
+	struct ffAli *ffList)
+/* Get rid of small initial and terminal exons that seem to just
+ * be chance alignments.  Looks for splice sites and non-degenerate
+ * sequence to keep things. */
+{
+int orientation = ffIntronOrientation(ffList);
+struct ffAli *left, *right;
+char *iStart, *iEnd;
+int nGap;
+int blockScore, gapPenalty;
+
+/* If one or less block then don't bother. */
+if (ffAliCount(ffList) < 2)
+    return ffList;
+
+/* Trim beginnings. */
+left = ffList;
+right = ffList->right;
+while (right != NULL)
+    {
+    blockScore = ffScoreMatch(left->nStart, left->hStart, 
+    	left->nEnd-left->nStart);
+    blockScore -= aPenalty(left->nStart, left->nEnd - left->nStart);
+    iStart = left->hEnd;
+    iEnd = right->hStart;
+    gapPenalty = ffCalcCdnaGapPenalty(iEnd-iStart, 
+    	right->nStart - left->nEnd) + 4;
+    gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
+    	iEnd[-2], iEnd[-1], orientation);
+    if (gapPenalty >= blockScore)
+        {
+	freeMem(left);
+	ffList = right;
+	}
+    else
+        break;
+    left = right;
+    right = right->right;
+    }
+
+right = ffRightmost(ffList);
+if (right == ffList)
+    return ffList;
+left = right->left;
+while (left != NULL)
+    {
+    blockScore = ffScoreMatch(right->nStart, right->hStart, 
+    	right->nEnd-right->nStart);
+    blockScore -= aPenalty(right->nStart, right->nEnd - right->nStart);
+    iStart = left->hEnd;
+    iEnd = right->hStart;
+    gapPenalty = ffCalcCdnaGapPenalty(iEnd-iStart, 
+    	right->nStart - left->nEnd) + 4;
+    gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
+    	iEnd[-2], iEnd[-1], orientation);
+    if (gapPenalty >= blockScore)
+        {
+	freeMem(right);
+	left->right = NULL;
+	}
+    else
+        break;
+    right = left;
+    left = left->left;
+    }
+return ffList;
+}
+
 static void refineBundle(struct genoFind *gf, 
 	struct dnaSeq *qSeq,  Bits *qMaskBits, int qMaskOffset,
 	struct dnaSeq *tSeq, struct lm *lm, struct ssBundle *bun, boolean isRc)
@@ -1151,6 +1241,9 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
   // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = smoothSmallGaps(qSeq, tSeq, ffi->ff);
   // uglyf("after smoothSmallGaps:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+    ffi->ff = trimFlakyEnds(qSeq, tSeq, ffi->ff);
+  // uglyf("after trimFlakyEnds:\n");
   // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
   // uglyf("\n");
     }

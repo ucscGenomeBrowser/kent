@@ -151,7 +151,7 @@ aliList = ffRemoveEmptyAlis(aliList, TRUE);
 return aliList;
 }
 
-static int scoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation)
+int ffScoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation)
 /* Return a better score the closer an intron is to
  * consensus. */
 {
@@ -219,7 +219,7 @@ while (nLeft > nLeftEnd)
    intron score as you go. */
 while (nRight < nRightEnd)
     {
-    curScore = scoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1], orientation);
+    curScore = ffScoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1], orientation);
     if (curScore > bestScore)
         {
         bestScore = curScore;
