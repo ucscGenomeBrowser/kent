@@ -16,6 +16,15 @@ visibility hide
 color 155, 0, 125
 type genePred ECgenePep
 
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
+
 track multiz5way
 shortLabel Conservation
 longLabel Rat/Human/Dog/Chicken Multiz Alignments & PhyloHMM Cons
