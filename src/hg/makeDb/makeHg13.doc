@@ -2529,3 +2529,31 @@ MAKING PROMOTER FILES
     
     
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+SLAM
+
+#   Slam predictions for human originate from both mouse and rat
+
+    cd /cluster/store4/gs.14/build31/bed/slam
+
+    wget http://baboon.math.berkeley.edu/~cdewey/slam/hs_31_Nov2002_mm_3_Feb2002/gff/hsCDS.gff.gz
+    gunzip hsCDS.gff.gz
+    mv hsCDS.gff humanFromMouseCDS.gff
+    ldHgGene -exon=CDS hg13 slamMouse
+
+    wget http://baboon.math.berkeley.edu/~cdewey/slam/hs_31_Nov2002_rn_2_Nov2002/gff/hsCDS.gff.gz
+    gunzip hsCDS.gff.gz
+    mv hsCDS.gff humanFromRatCDS.gff
+    ldHgGene -exon=CDS hg13 slamRat
+
+    wget http://baboon.math.berkeley.edu/~scawley/slam/hs_31_Nov2002_mm_3_Feb2002/gff/hsCNS.bed.gz
+    gunzip hsCNS.bed.gz
+    mv hsCNS.bed humanFromMouseCNS.bed
+    expand.pl < humanFromMouseCNS.bed > humanFromMouseCNS.bed.expand
+    hgLoadBed -tab hg13 slamNonCodingMouse humanFromMouseCNS.bed.expand
+
+    wget http://baboon.math.berkeley.edu/~scawley/slam/hs_31_Nov2002_rn_2_Nov2002/gff/hsCNS.bed.gz
+    gunzip hsCNS.bed.gz
+    mv hsCNS.bed humanFromRatCNS.bed
+    expand.pl < humanFromRatCNS.bed > humanFromRatCNS.bed.expand
+    hgLoadBed -tab hg13 slamNonCodingRat humanFromRatCNS.bed.expand
