@@ -73,6 +73,14 @@ extern int exCount;
 
 extern int aaStart[], aaEnd[];
 
+extern char kgProtMapTableName[];
+
+extern int blockSize[], blockSizePositive[];
+extern int blockStart[], blockStartPositive[];
+extern int blockEnd[], blockEndPositive[];
+extern int blockGenomeStart[], blockGenomeStartPositive[];
+extern int blockGenomeEnd[], blockGenomeEndPositive[];
+
 void hPrintf(char *format, ...);
 
 char *getAA(char *pepAccession);
@@ -80,9 +88,10 @@ int chkAnomaly(double currentAvg, double avg, double stddev);
 
 void calxy(int xin, int yin, int *outxp, int *outyp);
 
-void get_exons(char *proteinID, char *mrnaID);
+void getExonInfo(char *proteinID, int *exonCount, char **chrom, char *strand);
 void printExonAA(char *proteinID, char *aa, int exonNum);
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID);
+void doGeneDetailsLink(char *protDisplayID, char *mrnaID);
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID);
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);

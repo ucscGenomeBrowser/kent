@@ -14,11 +14,12 @@
 #include "fa.h"
 #include "dystring.h"
 #include "errabort.h"
+#include "memalloc.h"
 #include "genoFind.h"
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.35 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.36 2003/12/18 04:28:53 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -285,6 +286,51 @@ if (clumpCount == 0)
 logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
+static jmp_buf gfRecover;
+static char *ripCord = NULL;	/* A little memory to give back to system
+                                 * during error recovery. */
+
+static void gfAbort()
+/* Abort query. */
+{
+freez(&ripCord);
+longjmp(gfRecover, -1);
+}
+
+static void errorSafeQuery(boolean doTrans, boolean queryIsProt, 
+	struct dnaSeq *seq, struct genoFind *gf, struct genoFind *transGf[2][3], 
+	int connectionHandle, char *buf)
+/* Wrap error handling code around index query. */
+{
+int status;
+memTrackerStart();
+pushAbortHandler(gfAbort);
+ripCord = needMem(64*1024);	/* A little memory for recovery. */
+status = setjmp(gfRecover);
+if (status == 0)    /* Always true except after long jump. */
+    {
+    if (doTrans)
+       {
+       if (queryIsProt)
+	    transQuery(transGf, seq, connectionHandle, buf);
+       else
+	    transTransQuery(transGf, seq, 
+		connectionHandle, buf);
+       }
+    else
+	dnaQuery(gf, seq, connectionHandle, buf);
+    popAbortHandler();
+    }
+else    /* They long jumped here because of an error. */
+    {
+    popAbortHandler();
+    logIt("Recovering from error via longjmp\n");
+    netSendString(connectionHandle, "Error: gfServer out of memory. Try reducing size of query.");
+    }
+freez(&ripCord);
+memTrackerEnd();
+}
+
 void startServer(char *hostName, char *portName, int nibCount, char *nibFiles[])
 /* Load up index and hang out in RAM. */
 {
@@ -459,16 +505,8 @@ for (;;)
 			    faWriteNext(logFile, "query", seq.dna, seq.size);
 			    fflush(logFile);
 			    }
-			if (doTrans)
-			   {
-			   if (queryIsProt)
-				transQuery(transGf, &seq, connectionHandle, buf);
-			   else
-				transTransQuery(transGf, &seq, 
-				    connectionHandle, buf);
-			   }
-			else
-			    dnaQuery(gf, &seq, connectionHandle, buf);
+			errorSafeQuery(doTrans, queryIsProt, &seq, gf, 
+				transGf, connectionHandle, buf);
 			}
 		    freez(&seq.dna);
 		    }
@@ -575,6 +613,11 @@ for (;;)
 	printf("%d matches\n", matchCount);
 	break;
 	}
+    else if (startsWith("Error:", buf))
+       {
+       errAbort(buf);
+       break;
+       }
     else
 	{
         printf("%s\n", buf);

@@ -976,3 +976,22 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         #Adding /cluster/data/pt0/scaffolds.msk.fa)
         #37928 sequences
 
+# CREATING SCAFFOLD LEVEL COMPRESSED QUALITY SCORES AND HI QUALITY DIFFERENCE FILES
+
+    # Create compressed scaffold quality file
+    ssh kksilo
+    cd /cluster/data/pt0
+    zcat contigs.quals.gz | qaToQac stdin stdout | \
+    	chimpSuperQuals assembly.agp stdin scaffolds.qac
+
+    # Create bed file of high quality differences
+    cd bed/blastz-blatHg16.2003-11-24
+    chimpHiQualDiffs humanBestAxt.krr /cluster/data/pt0/scaffolds.qac chimpDiffs.bed
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz-blatHg16.2003-11-24
+    sed '{s/simpleNucDiff/chimpSimpleDiff/}' $HOME/kent/src/hg/lib/simpleNucDiff.sql | hgsql hg16
+    hgLoadBed -oldTable hg16 chimpSimpleDiff chimpDiffs.bed
+
+

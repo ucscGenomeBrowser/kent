@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.123 2003/12/09 02:56:11 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.124 2003/12/17 20:02:26 braney Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3362,6 +3362,8 @@ else
     findGenePred(query, hgp, "softberryGene");
     findGenePred(query, hgp, "acembly");
     findGenePred(query, hgp, "genscan");
+    findGenePred(query, hgp, "twinscan");
+    findGenePred(query, hgp, "ECgene");
     findGenePred(query, hgp, "sangerGene");
     findGenePred(query, hgp, "tigrGeneIndex");
     findGenePredLike(query, hgp, "slamRat");

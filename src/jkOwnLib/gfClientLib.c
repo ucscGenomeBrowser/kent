@@ -15,7 +15,7 @@
 #include "nib.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.23 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.24 2003/12/18 04:28:53 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -122,6 +122,10 @@ for (;;)
 	{
 	break;
 	}
+    else if (startsWith(buf, "Error:"))
+        {
+	errAbort(buf);
+	}
     else
 	{
 	rowSize = chopLine(buf, row);
@@ -214,6 +218,10 @@ for (;;)
 	{
 	break;
 	}
+    else if (startsWith(buf, "Error:"))
+        {
+	errAbort(buf);
+	}
     rowSize = chopLine(buf, row);
     if (rowSize < 8)
 	errAbort("Expecting 8 words from server got %d", rowSize);
@@ -275,6 +283,10 @@ for (;;)
     if (sameString(buf, "end"))
 	{
 	break;
+	}
+    else if (startsWith(buf, "Error:"))
+        {
+	errAbort(buf);
 	}
     rowSize = chopLine(buf, row);
     if (rowSize < 9)

@@ -14,8 +14,8 @@ O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
     chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o columnInfo.o coordConv.o \
     cpgIsland.o ctgPos.o customTrack.o cytoBand.o dbDb.o \
-    dbSnpRS.o defaultDb.o dnaMotif.o dnaProbe.o encodeRegionInfo.o \
-    encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
+    dbSnpRS.o defaultDb.o dnaMotif.o dnaProbe.o encodeErge.o encodeErgeHssCellLines.o\
+    encodeRegionInfo.o encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
@@ -34,7 +34,7 @@ O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o \
     sanger22extra.o scopDes.o scoredRef.o sgdAbundance.o sgdClone.o \
-    sgdDescription.o sgdOther.o simpleRepeat.o snp.o \
+    sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snp.o \
     softPromoter.o softberryHom.o spDb.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \

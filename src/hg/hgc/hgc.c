@@ -115,11 +115,14 @@
 #include "bdgpGeneInfo.h"
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
+#include "affy10KDetails.h"
 #include "encodeRegionInfo.h"
+#include "encodeErge.h"
+#include "encodeErgeHssCellLines.h"
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.532 2003/12/09 19:24:06 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.537 2003/12/18 03:24:27 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2311,7 +2314,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
@@ -7051,9 +7054,9 @@ printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
             "hgg_start", pg->gStart,
             "hgg_end", pg->gEnd);
 printf(">%s</A>  ",pg->gene);
-char *description;
 if (hTableExists("knownGene"))
     {
+    char *description;
     safef(query, sizeof(query), 
             "select proteinId from knownGene where name = '%s'", pg->gene);
     description = sqlQuickString(conn, query);
@@ -7074,7 +7077,7 @@ if (hTableExists("knownToPfam") && hTableExists("proteins031112.pfamDesc"))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        description = row[0];
+        char *description = row[0];
         if (description == NULL)
             description = cloneString("n/a");
         printf("<B>Pfam Domain:</B> %s <p>", description);
@@ -7159,6 +7162,7 @@ int winEnd = cartInt(cart, "r");
 char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL, *psl = NULL;
 char *tbl = cgiUsualString("table", cgiString("g"));
+struct dyString *query = newDyString(1024);
 
 /* Get alignment info. */
 pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
@@ -7189,8 +7193,6 @@ cartWebStart(cart, acc);
 
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
-
-struct dyString *query = newDyString(1024);
 
 dyStringPrintf(query, "select * from pseudoGeneLink where ");
 hAddBinToQuery(start, start+10, query);
@@ -10036,8 +10038,8 @@ char query[256];
 int rowOffset;
 
 ncbiName += 2;
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
-printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   %s "
 	       "where  chrom = '%s' "
@@ -10172,8 +10174,8 @@ char query[256];
 int rowOffset;
 int rsId = 0;
 
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
-printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affyGeno "
 	       "where  chrom = '%s' "
@@ -10188,6 +10190,84 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed *)&snp, 3);
     }
 doAffyGenoDetails(tdb, itemName);
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doAffy10KDetails(struct trackDb *tdb, char *name)
+/* print additional SNP details */
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[1024];
+struct affy10KDetails *snp=NULL;
+
+snprintf(query, sizeof(query),
+         "select  affyId, rsId, tscId, baseA, baseB, sequenceA, sequenceB, enzyme "
+/*	 "        , minFreq, hetzyg, avHetSE "*/
+         "from    affy10KDetails "
+         "where   affyId = '%s'", name);
+snp = affy10KDetailsLoadByQuery(conn, query);
+if (snp!=NULL)
+    {
+    printf("<BR>\n");
+    printf("<B>Sample Prep Enzyme:      </B> <I>XbaI</I><BR>\n");
+/*  printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);*/
+/*  printf("<B>Heterozygosity:          </B> %.3f<BR>\n",snp->hetzyg);*/
+/*  printf("<B>Average Heterozygosity:  </B> %.3f<BR>\n",snp->avHetSE);*/
+    printf("<B>Base A:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
+    printf("<B>Base B:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
+    printf("<B>Sequence of Allele A:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
+    printf("<B>Sequence of Allele B:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+
+    printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
+    printf("%s\" TARGET=_blank>Affymetrix NetAffx Analysis Center link for %s</A></P>\n",snp->affyId, snp->affyId);
+
+    if (snp->rsId>0)
+	{
+	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n", snp->rsId, snp->rsId);
+	}
+
+    printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
+    printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",snp->tscId, snp->tscId);
+
+    doSnpLocusLink(tdb, name);
+    }
+else printf("<BR>Error in Query:\n%s<BR>\n",query);
+affy10KDetailsFree(&snp);
+sqlDisconnect(&conn);
+}
+
+void doAffy10K(struct trackDb *tdb, char *itemName)
+/* Put up info on an Affymetrix SNP. */
+{
+char *group = tdb->tableName;
+struct snp snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+int rsId = 0;
+
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+sprintf(query, "select * "
+	       "from   affy10K "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and  name = '%s'",
+               seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    }
+doAffy10KDetails(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10262,6 +10342,99 @@ if ((descr = getEncodeRegionDescr(item)) != NULL)
     plus = buf;
     }
 genericClickHandlerPlus(tdb, item, NULL, plus);
+}
+
+void doEncodeErge(struct trackDb *tdb, char *item)
+/* Print ENCODE data from dbERGE II */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[1024];
+struct encodeErge *ee=NULL;
+int start = cartInt(cart, "o");
+struct sqlResult *sr;
+char *dupe = cloneString(tdb->type);
+char *type, *words[16];
+int wordCount = chopLine(dupe, words);
+char *encodeName = item+8;
+char encodeId[8];
+
+strncpy(encodeId,item,7);
+encodeId[7]='\0';
+cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", tdb->longLabel+7, encodeName);
+genericHeader(tdb, encodeName);
+
+genericBedClick(conn, tdb, item, start, 14);
+snprintf(query, sizeof(query),
+	 "select   chrom, chromStart, chromEnd, name, score, strand, "
+	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
+	 "         chromStarts, Id, color "
+	 "from     %s "
+	 "where    name = '%s' and chromStart = %d "
+	 "order by Id ", tdb->tableName, item, start);
+for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
+    {
+    printf("<BR>\n");
+    if (ee->Id>0)
+	{
+	printf("<BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
+	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", encodeId, encodeName);
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>.\n");
+	}
+    }
+printTrackHtml(tdb);
+encodeErgeFree(&ee);
+hFreeConn(&conn);
+}
+
+void doEncodeErgeHssCellLines(struct trackDb *tdb, char *item)
+/* Print ENCODE data from dbERGE II */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[1024];
+struct encodeErgeHssCellLines *ee=NULL;
+int start = cartInt(cart, "o");
+struct sqlResult *sr;
+char *dupe, *type, *words[16];
+int wordCount=0;
+int i;
+
+cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, item);
+genericHeader(tdb, item);
+
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+genericBedClick(conn, tdb, item, start, atoi(words[1]));
+snprintf(query, sizeof(query),
+	 "select   chrom, chromStart, chromEnd, name, score, strand, "
+	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
+	 "         chromStarts, Id, color, allLines "
+	 "from     %s "
+	 "where    name = '%s' and chromStart = %d "
+	 "order by Id ", tdb->tableName, item, start);
+for (ee = encodeErgeHssCellLinesLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
+    {
+    if (ee->Id>0)
+	{
+	printf("<BR><B>Cell lines:</B> ");
+	dupe = cloneString(ee->allLines);
+	wordCount = chopCommas(dupe, words);
+	for (i=0; i<wordCount-1; i++)
+	    {
+	    printf("%s, ", words[i]);
+	    }
+	printf("%s.\n",words[wordCount-1]);
+	printf("<BR><BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
+	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", ee->Id, ee->name);
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>\n");
+	}
+    }
+printTrackHtml(tdb);
+encodeErgeHssCellLinesFree(&ee);
+hFreeConn(&conn);
 }
 
 void doGbProtAnn(struct trackDb *tdb, char *item)
@@ -11795,85 +11968,8 @@ mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
 exprBedColorsMade = TRUE;
 }
 
-boolean isExon(char *v, int i, int j)
-/** Return TRUE if edge i-j is an exon, FALSE otherwise. */
-{
-if( (v[i] == ggHardStart || v[i] == ggSoftStart)  
-    && (v[j] == ggHardEnd || v[j] == ggSoftEnd))
-    return TRUE;
-return FALSE;
-}
-
-boolean isIntron(char *v, int i, int j)
-/** Return TRUE if edge i-j is an exon, FALSE otherwise. */
-{
-if( (v[j] == ggHardStart || v[j] == ggSoftStart)  
-    && (v[i] == ggHardEnd || v[i] == ggSoftEnd))
-    return TRUE;
-return FALSE;
-}
-
-
-void doHumanEnlargeExons(struct altGraphX *ag)
-/* Experimental, doesn't quite seem to work yet. Idea is to scale
- exons such that the smallest exon is no smaller that factor*largest
- intron.*/
-{
-bool **em = altGraphXCreateEdgeMatrix(ag);
-int i,j,k;
-int maxIntron=0;
-char *vTypes = ag->vTypes;
-int *vPos = ag->vPositions;
-int minExon =BIGNUM;
-int increment = 0;
-double multFact = 1.2;
-double minIntronFact = .1;
-int vC = ag->vertexCount;
-/* Find largest intron. */
-for(i=0; i<vC; i++)
-    {
-    for(j=0; j<vC; j++)
-	{
-	if(em[i][j])
-	    {
-	    if(isIntron(vTypes, i, j))
-		maxIntron = max(maxIntron, abs(vPos[i] - vPos[j]));
-	    if(isExon(vTypes,i,j))
-		minExon = min(minExon, abs(vPos[i] - vPos[j]));
-	    }
-	}
-    }
-
-/*minExon = minIntronFact * maxIntron;*/
-multFact = (minIntronFact*maxIntron)/minExon;
-
-/* Enlarge each exon by stretching one end. */
-for(i=0; i<vC; i++)
-    {
-    for(j=0; j<vC; j++)
-	{
-	if(em[i][j])
-	    {
-	    if(isExon(vTypes, i, j))
-		{
-		int mark = vPos[j];
-		int size = abs(vPos[i] - vPos[j]);
-		increment = multFact*size - size;
-		ag->tEnd += increment;
-		for(k=0; k<vC; k++)
-		    {
-		    if(vPos[k] >= mark)
-			vPos[k] += increment;
-		    }
-		}
-	    }
-	}
-    }
-}
-
-
 char *altGraphXMakeImage(struct trackDb *tdb, struct altGraphX *ag)
-/* create a drawing of splicing pattern */
+/* Create a drawing of splicing pattern. */
 {
 MgFont *font = mgSmallFont();
 int trackTabWidth = 11;
@@ -11936,87 +12032,16 @@ switch (t)
 return "NA";
 }
 
-void doAltGraphXDetails(struct trackDb *tdb, char *item)
-/* do details page for an altGraphX */
+void printAltGraphXEdges(struct altGraphX *ag)
+/* Print out at table showing all of the vertexes and 
+   edges of an altGraphX. */
 {
-int id = atoi(item);
-char query[256];
-int i,j;
-struct altGraphX *ag = NULL;
-struct altGraphX *orthoAg = NULL;
-char buff[128];
-struct sqlConnection *conn = hAllocConn();
-char *image = NULL;
-genericHeader(tdb, item);
-snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
-ag = altGraphXLoadByQuery(conn, query);
-//doHumanEnlargeExons(ag);
-if(ag == NULL)
-    errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
-printf("<center>\n");
-if(sameString(tdb->tableName, "altGraphXCon")) 
-    printf("Common Splicing<br>");
-image = altGraphXMakeImage(tdb,ag);
-if(sameString(tdb->tableName, "altGraphXCon")) 
-    {
-    struct sqlConnection *orthoConn = NULL;
-    struct altGraphX *origAg = NULL;
-    hSetDb2("mm3");
-    safef(query, sizeof(query), "select * from altGraphX where name='%s'", ag->name);
-    origAg = altGraphXLoadByQuery(conn, query);
-    //doHumanEnlargeExons(origAg);
-    puts("<br><center>Human</center>\n");
-    altGraphXMakeImage(tdb,origAg);
-    orthoConn = hAllocConn2();
-    safef(query, sizeof(query), "select orhtoAgName from orthoAgReport where agName='%s'", ag->name);
-    sqlQuickQuery(conn, query, buff, sizeof(buff));
-    safef(query, sizeof(query), "select * from altGraphX where name='%s'", buff);
-    orthoAg = altGraphXLoadByQuery(orthoConn, query);
-    //doHumanEnlargeExons(orthoAg);
-    if(differentString(orthoAg->strand, origAg->strand))
-	{
-	altGraphXReverseComplement(orthoAg);
-	puts("<br>Mouse (opposite strand)\n");
-	}
-    else 
-	puts("<br>Mouse\n");
-    printf("<a HREF=\"%s?db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full&%s\"",
-	   hgTracksName(), "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd, cartSidUrlString(cart));
-    printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
-    printf("<font size=-1>[%s.%s:%d-%d]</font></a><br><br>\n", "mm3", 
-	   orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
-    altGraphXMakeImage(tdb,orthoAg);
-    }
-printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
-       hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
-printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
-printf("Jump to browser for %d</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->id, ag->tName, ag->tStart, ag->tEnd);
+int i = 0, j = 0;
 printf("<table cellpadding=1 border=1>\n");
-printf("<tr><th>Cassette Exon</th><th>Tissues Found</th></tr>\n");
-for(i=0; i<ag->edgeCount; i++)
-    {
-    if(ag->edgeTypes[i] == -1)
-	{
-	char buff[512];
-	int j=0;
-	struct evidence *e =  slElementFromIx(ag->evidence, i);	
-	printf("<tr><td>%d-%d</td><td>\n", ag->edgeStarts[i], ag->edgeEnds[i]);
-	for(j=0; j<e->evCount; j++)
-	    {
-	    char *tmp = NULL;
-	    snprintf(query, sizeof(query), "select name from tissue where id = %d",e->mrnaIds[j]);
-	    tmp = sqlQuickQuery(conn, query, buff, sizeof(buff));
-	    if(tmp != NULL)
-		printf("%s,", buff);
-	    }
-	printf("</td></tr>\n");
-	}
-    }
 printf("</table>\n");
 printf("<table cellpadding=0 cellspacing=0>\n");
 printf("<tr><th><b>Vertices</b></th><th><b>Edges</b></th></tr>\n");
 printf("<tr><td valign=top>\n");
-
 printf("<table cellpadding=1 border=1>\n");
 printf("<tr><th><b>Number</b></th><th><b>Type</b></th></tr>\n");
 for(i=0; i<ag->vertexCount; i++)
@@ -12042,12 +12067,93 @@ for(i=0; i<ag->edgeCount; i++)
     printf("</td></tr>\n");
     }
 printf("</table>\n");
+}
 
-printf("</td></tr>\n");
-printf("</table>\n");
+void doAltGraphXDetails(struct trackDb *tdb, char *item)
+/* do details page for an altGraphX */
+{
+int id = atoi(item);
+char query[256];
+int i,j;
+struct altGraphX *ag = NULL;
+struct altGraphX *orthoAg = NULL;
+char buff[128];
+struct sqlConnection *conn = hAllocConn();
+char *image = NULL;
+
+/* Load the altGraphX record and start page. */
+if(id != 0) 
+    {
+    snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
+    ag = altGraphXLoadByQuery(conn, query);
+    }
+else
+    {
+    snprintf(query, sizeof(query),"select * from %s where tName like '%s' and tStart <= %d and tEnd >= %d", 
+	     tdb->tableName, seqName, winEnd, winStart);
+    ag = altGraphXLoadByQuery(conn, query);
+    }
+if(ag == NULL) 
+    errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
+genericHeader(tdb, ag->name);
+printPosOnChrom(ag->tName, ag->tStart, ag->tEnd, ag->strand, FALSE);
+
+/* Print a display of the Graph. */
+printf("<b>Plots of Alt-Splicing:</b>");
+printf("<center>\n");
+if(sameString(tdb->tableName, "altGraphXCon")) 
+    printf("Common Splicing<br>");
+printf("Alt-Splicing drawn to scale.<br>");
+image = altGraphXMakeImage(tdb,ag);
+freez(&image);
+/* Normally just print graph with exons scaled up. For conserved
+   track also display orthologous loci. */
+if(differentString(tdb->tableName, "altGraphXCon"))
+    {
+    struct altGraphX *copy = altGraphXClone(ag);
+    altGraphXEnlargeExons(copy);
+    printf("Alt-Splicing drawn with exons enlarged.<br>");
+    image = altGraphXMakeImage(tdb,copy);
+    freez(&image);
+    altGraphXFree(&copy);
+    }
+else
+    {
+    struct sqlConnection *orthoConn = NULL;
+    struct altGraphX *origAg = NULL;
+    hSetDb2("mm3");
+    safef(query, sizeof(query), "select * from altGraphX where name='%s'", ag->name);
+    origAg = altGraphXLoadByQuery(conn, query);
+    puts("<br><center>Human</center>\n");
+    altGraphXMakeImage(tdb,origAg);
+    orthoConn = hAllocConn2();
+    safef(query, sizeof(query), "select orhtoAgName from orthoAgReport where agName='%s'", ag->name);
+    sqlQuickQuery(conn, query, buff, sizeof(buff));
+    safef(query, sizeof(query), "select * from altGraphX where name='%s'", buff);
+    orthoAg = altGraphXLoadByQuery(orthoConn, query);
+    if(differentString(orthoAg->strand, origAg->strand))
+	{
+	altGraphXReverseComplement(orthoAg);
+	puts("<br>Mouse (opposite strand)\n");
+	}
+    else 
+	puts("<br>Mouse\n");
+    printf("<a HREF=\"%s?db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full&%s\"",
+	   hgTracksName(), "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd, cartSidUrlString(cart));
+    printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
+    printf("<font size=-1>[%s.%s:%d-%d]</font></a><br><br>\n", "mm3", 
+	   orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
+    altGraphXMakeImage(tdb,orthoAg);
+    }
+printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
+       hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
+printf(" ALT=\"Zoom to browser coordinates of Alt-Splice\">");
+printf("Jump to browser for %s</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->name, ag->tName, ag->tStart, ag->tEnd);
+if(cgiVarExists("agxPrintEdges"))
+    printAltGraphXEdges(ag);
 printf("</center>\n");
+printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 
@@ -12768,9 +12874,11 @@ else if (sameWord(track, "hg15repeats") )
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
-else if (startsWith("blastz", track) || startsWith("blat", track) || endsWith(track, "Blastz"))
+else if (startsWith("blastz", track) || startsWith("blat", track) || startsWith("tblast", track) || endsWith(track, "Blastz"))
     {
     char *genome = "Unknown";
+    if (startsWith("tblast", track))
+        genome = &track[6];
     if (startsWith("blat", track))
         genome = &track[4];
     if (startsWith("blastz", track))
@@ -12872,6 +12980,10 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
 else if (sameWord(track, "affyGeno"))
     {
     doAffyGeno(tdb, item);
+    }
+else if (sameWord(track, "affy10K"))
+    {
+    doAffy10K(tdb, item);
     }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
@@ -13015,7 +13127,7 @@ else if( sameWord(track, "gcPercent"))
     doGcDetails(tdb, item);
     }
 else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon") 
-	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho"))
+	 || sameWord(track, "altGraphXT6Con") || sameWord(track, "altGraphXOrtho") || startsWith("altGraphX", track))
     {
     doAltGraphXDetails(tdb,item);
     }
@@ -13093,6 +13205,18 @@ else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
 else if (sameWord(track, "encodeRegions"))
     {
     doEncodeRegion(tdb, item);
+    }
+else if (sameWord(track, "encodeErgeHssCellLines"))
+    {
+    doEncodeErgeHssCellLines(tdb, item);
+    }
+else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVitroFoot")  || \
+	 sameWord(track, "encodeErgeDNAseI")  || sameWord(track, "encodeErgeMethProm")     || \
+	 sameWord(track, "encodeErgeExpProm") || sameWord(track, "encodeErgeStableTransf") || \
+	 sameWord(track, "encodeErgeBinding") || sameWord(track, "encodeErgeTransTransf")  || \
+	 sameWord(track, "encodeErgeSummary"))
+    {
+    doEncodeErge(tdb, item);
     }
 else if (sameWord(track, "sgdOther"))
     {

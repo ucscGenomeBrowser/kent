@@ -28,6 +28,16 @@ color 30,130,210
 type bed 6 +
 exonArrows on
 
+track mrna
+shortLabel $Organism RNAs
+longLabel $Organism RNAs from Genbank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+intronGap 30
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced

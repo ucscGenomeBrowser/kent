@@ -15,7 +15,7 @@ utils:
 	done
 
 # List of directories to build
-USE_DIRS = $(DIRS)
+USE_DIRS = $(UTIL_DIRS)
 
 BAD_DIRS = \
 	altGraph \
@@ -78,7 +78,7 @@ clean:
 	- find . -name \*.o -print | xargs --no-run-if-empty rm
 
 
-DIRS = \
+UTIL_DIRS = \
 	affyTransciptome \
 	agpCloneCheck \
 	agpCloneList \
@@ -90,11 +90,8 @@ DIRS = \
 	bedSort \
 	blastToPsl \
 	borfBig \
-	cartDump \
-	cartReset \
 	ctgFaToFa \
 	ctgToChromFa \
-	das \
 	fakeFinContigs \
 	fakeOut \
 	featureBits \
@@ -112,13 +109,6 @@ DIRS = \
 	gpToGtf \
 	gpcrParser \
 	gsBig \
-	hgBlat \
-	hgCoordConv \
-	hgGateway \
-	hgText \
-	hgTrackUi \
-	hgTracks \
-	hgc \
 	hgsql \
 	hgsqldump \
 	intronEnds \
@@ -158,7 +148,6 @@ DIRS = \
 	reviewSanity \
 	sage \
 	scanRa \
-	secure \
 	semiNorm \
 	sim4big \
 	splitFa \

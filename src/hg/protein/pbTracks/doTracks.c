@@ -269,6 +269,7 @@ int xx, yy;
 int h;
 int i, i0, i9, j;
 int imax;
+int interval;
    
 char scale_str[20];
 int iw = 5;
@@ -285,46 +286,47 @@ if ((len % 100) != 0) imax = imax + 100;
 calxy(0, *yOffp, &xx, &yy);
 vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, "AA Scale");
    
-calxy(-1, *yOffp, &xx, &yy);
-vgBox(g_vg, xx+pbScale/2, yy-tb, len*pbScale, 1, MG_BLACK);
-    
-for (i=-1; i<len; i++)
+calxy(1, *yOffp, &xx, &yy);
+vgBox(g_vg, xx-pbScale/2, yy-tb, (len-1)*pbScale+pbScale/2, 1, MG_BLACK);
+
+interval = 50;
+if (pbScale >= 18) interval = 10;    
+for (i=0; i<len; i++)
     {
     index = i+1;
-    if ((index % 50) == 0)
+    if ((index % interval) == 1)
 	{
-	if (((index % 100) == 0) || (index == len)) 
+	if (((index % (interval*2)) == 1) || (index == len)) 
 	    {
-	    calxy(i, *yOffp, &xx, &yy);
-	    vgBox(g_vg, xx+pbScale/2, yy-9*tb, 1, 9, MG_BLACK);
+	    calxy(index, *yOffp, &xx, &yy);
+	    vgBox(g_vg, xx-pbScale/2, yy-9*tb, 1, 9, MG_BLACK);
 	    }
 	else
 	    {
-	    calxy(i, *yOffp, &xx, &yy);
-	    vgBox(g_vg, xx+pbScale/2, yy-5*tb, 1, 5, MG_BLACK);
+	    calxy(index, *yOffp, &xx, &yy);
+	    vgBox(g_vg, xx-pbScale/2, yy-5*tb, 1, 5, MG_BLACK);
 	    }
     		
 	sprintf(scale_str, "%d", index);
-	if (index == 0)
-	    {
-	    vgTextRight(g_vg, xx+3,  yy+1-10*tb, 10, 10, MG_BLACK, g_font, scale_str);
-	    }
-	else
-	    { 
-	    vgTextRight(g_vg, xx+16, yy+1-10*tb, 10, 10, MG_BLACK, g_font, scale_str);
-	    }
-	}
-    else
-	{
-	//calxy(i, *yOffp, &xx, &yy);
-	//vgBox(g_vg, xx, yy-tb, 1*pbScale, 1, MG_BLACK);
+	vgText(g_vg, xx-pbScale/2+4, yy+4-12*tb, MG_BLACK, g_font, scale_str);
 	}
     }
 
 *yOffp = *yOffp + 12;
 }
 
-void mapBoxExon(int x, int y, int width, int height, char *mrnaID, int exonNum)
+void mapBoxExon(int x, int y, int width, int height, char *mrnaID, 
+		int exonNum, char *chrom, int exonGenomeStartPos, int exonGenomeEndPos)
+{
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
+//hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"", database, 
+hPrintf("HREF=\"http://hgwdev-markd.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full", 
+	database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3, kgProtMapTableName);
+hPrintf("&knownGene=full&mrna=full\"");
+hPrintf(" target=_blank ALT=\"Exon %d\">\n", exonNum);
+}
+
+void mapBoxExonOld(int x, int y, int width, int height, char *mrnaID, int exonNum)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"pbTracks?mrnaID=%s&exonNum=%d\"", 
@@ -332,51 +334,93 @@ hPrintf("HREF=\"pbTracks?mrnaID=%s&exonNum=%d\"",
 hPrintf(" target=_blank ALT=\"Exon %d\">\n", exonNum);
 }
 
-void do_exons_track(int exon_cnt, int *yOffp, char *mrnaID)
+void doExon(int exonCount, char *chrom, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // draw the track for exons
 {
 int xx, yy;
-int h;
-int i, ii, jj, i0, i9, j;
-char no_string[10];
+int i, j;
+char exonNumStr[10];
+int mrnaLen;
+Color color;
 
-int show_no;
-Color color, color1, color2;
-    
-color1 = MG_BLUE;
-color2 = vgFindColorIx(g_vg, 0, 180, 0);
-    
+int exonStartPos, exonEndPos;
+int exonGenomeStartPos, exonGenomeEndPos;
+int exonNumber;
+int printedExonNumber = -1;
+int exonColor[2];
+
+int defaultColor;
+defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
+
+// The imaginary mRNA length is 3 times of aaLen
+mrnaLen = aaLen * 3;
+
+exonColor[0] = MG_BLUE;
+exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
+
+exonNumber = 1;
+
+exonStartPos 	   = blockStartPositive[exonNumber-1]; 
+exonEndPos 	   = blockEndPositive[exonNumber-1];
+exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+
 currentYoffset = *yOffp;
     
 calxy(0, *yOffp, &xx, &yy);
 vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Exons");
-jj = 0;
-for (ii=0; ii<exon_cnt; ii++)
-    {
-    if (aaEnd[ii] != 0)
-	{
-	jj++;
-	sprintf(no_string, "%d", jj);
-	calxy(aaStart[ii], *yOffp, &xx, &yy);
-	
-	show_no = 0;
-	if (((aaEnd[ii] - aaStart[ii])+1)*pbScale > 12) show_no = 1;
 
-	if (ii % 2)
+for (j = 0; j < mrnaLen; j++)
+    {
+    color = defaultColor;
+    calxy(j/3, *yOffp, &xx, &yy);
+    if (j > exonEndPos)
+	{
+	if (printedExonNumber != exonNumber)
 	    {
-	    color = color2;
+            if ((exonEndPos - exonStartPos)*pbScale/3 > 12) 
+	    	{
+	    	sprintf(exonNumStr, "%d", exonNumber);
+            	vgTextRight(g_vg, xx-(exonEndPos - exonStartPos)*pbScale/3/2 - 4,
+                                  yy-9, 10, 10, MG_WHITE, g_font, exonNumStr);
+	    	}
+            mapBoxExon(xx - (exonEndPos - exonStartPos)*pbScale/3, yy-9, 
+		       	(exonEndPos - exonStartPos)*pbScale/3, 9, mrnaID, 
+		       	exonNumber, chrom, 
+		 	blockGenomeStartPositive[exonNumber-1], 
+		       	blockGenomeEndPositive[exonNumber-1]);
+	    printedExonNumber = exonNumber;
 	    }
-	else
-	    {
-	    color = color1;
+
+	if (exonNumber < exonCount)
+    	    {
+	    exonNumber++;
+	    exonStartPos       = blockStartPositive[exonNumber-1]; 
+	    exonEndPos 	       = blockEndPositive[exonNumber-1];
+	    exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+	    exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 	    }
-		
-	vgBox(g_vg, xx, yy-9, ((aaEnd[ii] - aaStart[ii])+1)*pbScale, 9, color);
-    	if (show_no) vgTextRight(g_vg, xx+(aaEnd[ii] - aaStart[ii])*pbScale/2 - 3, 
-				 yy-9, 10, 10, MG_WHITE, g_font, no_string);
-	mapBoxExon(xx, yy-9, ((aaEnd[ii] - aaStart[ii])+1)*pbScale, 9, mrnaID, jj);
+    	}
+
+    if ((j >= exonStartPos) && (j <= exonEndPos))
+	{
+	color = exonColor[(exonNumber-1) % 2];
 	}
+    vgBox(g_vg, xx, yy-9+3*(j-(j/3)*3), pbScale, 3, color);
     }
+
+if ((exonEndPos - exonStartPos)*pbScale/3 > 12)
+    {
+    sprintf(exonNumStr, "%d", exonNumber);
+    vgTextRight(g_vg, xx-(exonEndPos - exonStartPos)*pbScale/3/2 - 5,
+                      yy-9, 10, 10, MG_WHITE, g_font, exonNumStr);
+    }
+
+mapBoxExon(xx - (exonEndPos - exonStartPos)*pbScale/3, yy-9,    
+	   (exonEndPos - exonStartPos)*pbScale/3, 9, mrnaID, 
+	   exonNumber, chrom, 
+	   blockGenomeStartPositive[exonNumber-1], 
+	   blockGenomeEndPositive[exonNumber-1]);
 
 *yOffp = *yOffp + 10;
 }
@@ -407,7 +451,7 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 char *region;
 int  done;
 
-char *proteinAcc;
+//char *proteinAcc;
 char *gene_name;
 char *ensPep;
 
@@ -417,18 +461,17 @@ int  ii = 0;
 int  int_start, int_end;
     
 conn = hAllocConn();
-
+/*
 sprintf(cond_str, "displayID='%s'", proteinID);
 proteinAcc = sqlGetField(conn, "proteins", "spXref3", "accession", cond_str);
 if (proteinAcc == NULL) return(0);
-
-sprintf(cond_str, "external_name='%s' AND external_db='SWISSPROT'", proteinID);
+*/
+sprintf(cond_str, "external_name='%s' AND external_db='SWISSPROT'", protDisplayID);
 ensPep = sqlGetField(conn, "proteins", "bothEnsXref", "translation_name", cond_str);
 
 if (ensPep == NULL) 
     {
-    //hPrintf("<br>SWISSPRO is null <br>\n"); fflush(stdout);
-    sprintf(cond_str, "external_name='%s' AND external_db='SPTREMBL'", proteinID);
+    sprintf(cond_str, "external_name='%s' AND external_db='SPTREMBL'", protDisplayID);
     ensPep = sqlGetField(conn, "proteins", "bothEnsXref", "translation_name", cond_str);
 
     if (ensPep == NULL) 
@@ -439,7 +482,6 @@ if (ensPep == NULL)
 strcpy(ensPepName, ensPep);
 
 sprintf(query, "select * from supfam062903.sfAssign where seqID='%s' and evalue <= 0.02;", ensPep);
-    //hPrintf("<br>%s<br>", query); fflush(stdout);
  	
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -454,7 +496,7 @@ while (row != NULL)
    eValue   = row[4];
    sfID	    = row[5];
    sfDesc   = row[6];
-
+printf("<br>region=%s\n", region);fflush(stdout);
    // !!! check if replacement is necessary
 
 /*		l = strlen(sfDesc);
@@ -561,7 +603,7 @@ void doSuperfamily(char *pepName, int sf_cnt, int *yOffp)
 int xx, yy;
 int h;
 int i, ii, jj, i0, i9, j;
-char no_string[10];
+char exonNumStr[10];
 int len;
 int sf_len, name_len;
 int show_name;
@@ -581,7 +623,7 @@ for (ii=0; ii<sf_cnt; ii++)
     if (sfEnd[ii] != 0)
 	{
 	jj++;
-	sprintf(no_string, "%d", jj);
+	sprintf(exonNumStr, "%d", jj);
 	calxy(sfStart[ii], *yOffp, &xx, &yy);
 
 	sf_len   = sfEnd[ii] - sfStart[ii];
@@ -609,7 +651,7 @@ for (ii=0; ii<sf_cnt; ii++)
 *yOffp = *yOffp + 20;
 }
 
-void do_residues_track(char *aa, int len, int *yOffp)
+void doResidues(char *aa, int len, int *yOffp)
 // draw track for AA residue
 {
 char res;
@@ -633,12 +675,131 @@ res_str[1] = '\0';
 for (index=0; index < len; index++)
     {
     res_str[0] = aa[index];
-    calxy(index, *yOffp, &xx, &yy);
+    calxy(index+1, *yOffp, &xx, &yy);
 	
-    vgTextRight(g_vg, xx-3, yy, 10, 10, MG_BLACK, g_font, res_str);
+    //vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str);
+    if (pbScale >= 18)
+	{
+	vgTextRight(g_vg, xx-3-16, yy, 10, 10, MG_BLACK, g_font, res_str);
+    	}
+    else
+	{
+        vgTextRight(g_vg, xx-3-6, yy, 10, 10, MG_BLACK, g_font, res_str);
+    	}
+
     }
     
 *yOffp = *yOffp + 12;
+}
+
+void doDnaTrack(char *chrom, char strand, int exonCount, int len, int *yOffp)
+// draw track for AA residue
+{
+char res;
+int index;
+
+int xx, yy;
+int h;
+int i, i0, i9, j;
+int mrnaLen;
+char exonNumStr[10];
+                       
+int exonStartPos, exonEndPos;
+int exonGenomeStartPos, exonGenomeEndPos;
+int exonNumber;
+int printedExonNumber = -1;
+int exonColor[2];
+int color;
+int k;
+struct dnaSeq *dna;
+
+char res_str[2];
+char base[2];
+char baseComp[2];
+int iw = 5;
+float sum;
+int dnaLen;
+
+int defaultColor;
+defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
+
+exonColor[0] = MG_BLUE;
+exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
+
+base[1] = '\0';
+baseComp[1] = '\0';
+currentYoffset = *yOffp;
+
+calxy(0, *yOffp, &xx, &yy);
+
+// The imaginary mRNA length is 3 times of aaLen
+mrnaLen = len * 3;
+            
+exonNumber = 1;
+
+exonStartPos       = blockStartPositive[exonNumber-1];
+exonEndPos         = blockEndPositive[exonNumber-1];
+exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+dna = hChromSeq(chrom, exonGenomeStartPos, exonGenomeEndPos+1);
+dnaLen = strlen(dna->dna);
+
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "DNA Sequence");
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "& complement");
+
+k=0;
+for (j = 0; j < mrnaLen; j++)
+    {
+    if (j > exonEndPos)
+        {
+
+        if (printedExonNumber != exonNumber)
+            {
+            printedExonNumber = exonNumber;
+            }
+
+        if (exonNumber < exonCount)
+            {
+            exonNumber++;
+            exonStartPos       = blockStartPositive[exonNumber-1];
+            exonEndPos         = blockEndPositive[exonNumber-1];
+            exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+            exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+	    dna = hChromSeq(chrom, exonGenomeStartPos, exonGenomeEndPos+1);
+    	    dnaLen = strlen(dna->dna);
+            k=0;
+	    }
+        }
+
+    if ((j >= exonStartPos) && (j <= exonEndPos))
+        {
+	if (strand == '+')
+	    {
+	    base[0] = toupper(*(dna->dna + k));
+	    }
+	else
+	    {
+	    base[0]     = toupper(ntCompTable[*(dna->dna + dnaLen - k -1 )]);
+	    baseComp[0] = toupper(*(dna->dna + dnaLen - k -1 ));
+	    }
+
+	k++;
+        color = exonColor[(exonNumber-1) % 2];
+        calxy(j/3, *yOffp, &xx, &yy);
+        vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
+        if (strand == '-') vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
+        }
+    color = MG_BLUE;
+    }
+    
+if (strand == '-')
+    {
+    *yOffp = *yOffp + 20;
+    }
+else
+    {
+    *yOffp = *yOffp + 12;
+    }
 }
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp)
@@ -670,6 +831,8 @@ int hasResFreq;
 char *aap;
 double molWeight, hydroSum;
 struct pbStamp *stampDataPtr;
+char *chrom;
+char strand;
 
 Color bkgColor;
 
@@ -682,22 +845,23 @@ g_font = mgSmallFont();
 dnaUtilOpen();
 if ((exonNumStr=cgiOptionalString("exonNum")) != NULL)
     {
-    get_exons(proteinID, mrnaID);
     sscanf(exonNumStr, "%d", &exonNum);
     printExonAA(proteinID, aa, exonNum);
     }
 
 l=strlen(aa);
-
 doAAScale(l, yOffp, 1);
-if (pbScale >= 6) do_residues_track(aa, l, yOffp);
+if (mrnaID != NULL)
+    {
+    getExonInfo(proteinID, &exCount, &chrom, &strand);
+    }
+if (pbScale >= 6)  doResidues(aa, l, yOffp);
+if (pbScale >= 18) doDnaTrack(chrom, strand, exCount, l, yOffp);
 
 if (mrnaID != NULL)
     {
-    get_exons(proteinID, mrnaID);
-    do_exons_track(exCount, yOffp, mrnaID);
+    doExon(exCount, chrom, l, yOffp, proteinID, mrnaID);
     }
-
 doCharge(aa, l, yOffp);
 
 doHydrophobicity(aa, l, yOffp);
@@ -705,11 +869,12 @@ doHydrophobicity(aa, l, yOffp);
 doCysteines(aa, l, yOffp);
 
 // Temporarily disable superfamily track until suprfam data built for hg16
-sf_cnt = get_superfamilies(proteinID, ensPepName);
-if (sf_cnt > 0) doSuperfamily(ensPepName, sf_cnt, yOffp); 
+//sf_cnt = get_superfamilies(proteinID, ensPepName);
+//printf("<br>sf_cnt = %d\n", sf_cnt);fflush(stdout);
+
+//if (sf_cnt > 0) doSuperfamily(ensPepName, sf_cnt, yOffp); 
 
 if (hasResFreq) doAnomalies(aa, l, yOffp);
-
 doAAScale(l, yOffp, -1);
 }
 

@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.640 2003/12/11 16:41:59 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.645 2003/12/18 17:36:36 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5248,6 +5248,24 @@ tg->itemName = perlegenName;
 tg->colorShades = shadesOfSea;
 }
 
+char *encodeErgeName(struct track *tg, void *item)
+/* return the actual data name, in form xx/yyyy cut off xx/ return yyyy */
+{
+char * name;
+struct linkedFeatures *lf = item;
+name = strstr(lf->name, "/");
+name ++;
+if(name != NULL)
+    return name;
+return "unknown";
+}
+  
+void encodeErgeMethods(struct track *tg)
+/* setup special methods for ENCODE dbERGE II tracks */
+{
+tg->itemName = encodeErgeName;
+}
+
 struct linkedFeatures *bedFilterMinLength(struct bed *bedList, int minLength ) 
 {
 struct linkedFeatures *lf = NULL, *lfList=NULL;
@@ -6859,7 +6877,7 @@ if (psOutput != NULL)
    }
 
 /* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=GET>\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
 cartSaveSession(cart);
 
 /* See if want to include sequence search results. */
@@ -6971,6 +6989,15 @@ registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("haplotype",haplotypeMethods);
+registerTrackHandler("encodeErge5race",encodeErgeMethods);
+registerTrackHandler("encodeErgeBinding",encodeErgeMethods);
+registerTrackHandler("encodeErgeExpProm",encodeErgeMethods);
+registerTrackHandler("encodeErgeHssCellLines",encodeErgeMethods);
+registerTrackHandler("encodeErgeInVitroFoot",encodeErgeMethods);
+registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
+registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
+registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
+registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
@@ -7092,6 +7119,10 @@ if (!hideControls)
     hButton("hgt.out3", "10x");
     hWrites("<BR>\n");
 
+    hPrintf("</FORM>\n");
+    hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+    cartSaveSession(cart);
+
     /* Make line that says position. */
 	{
 	char buf[256];
@@ -7172,7 +7203,9 @@ if (!hideControls)
     // smallBreak();
     // hPrintf("<B>Track Controls:</B>");
     // hPrintf("</th></tr>\n");
-    hPrintf("<tr><td colspan='5' align='middle' nowrap>Note: "
+    hPrintf("<tr><td colspan='5' align='middle' nowrap>"
+	   "Use drop down controls below and press refresh to alter tracks "
+	   "displayed.<BR>"
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
@@ -7219,6 +7252,7 @@ if (!hideControls)
 	}
     endControlGrid(&cg);
     }
+hButton("submit", "refresh");
 hPrintf("</CENTER>\n");
 
 
@@ -7674,6 +7708,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v45", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v46", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

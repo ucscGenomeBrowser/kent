@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.10 2003/12/10 00:27:31 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.11 2003/12/12 18:22:56 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -16,6 +16,7 @@ static struct optionSpec optionSpecs[] = {
     {"col", OPTION_INT},
     {"aveCol", OPTION_INT},
     {"real", OPTION_BOOLEAN},
+    {"autoscale", OPTION_INT},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -31,6 +32,7 @@ boolean noStar = FALSE;
 int col = 0;
 int aveCol = -1;
 boolean real = FALSE;
+int autoscale = 0;
 boolean verbose = FALSE;
 
 void usage()
@@ -50,11 +52,81 @@ errAbort(
   "   -col=N - Which column to use. Default 1\n"
   "   -aveCol=N - A second column to average over. The averages\n"
   "             will be output in place of counts of primary column.\n"
+  "   -autoscale=N - autoscale to N # of bins\n"
   "   -real - Data input are real values (default is integer)\n"
+  "   -verbose - extra outputs during processing\n"
   );
 }
 
-void textHistogram(char *inFile)
+/*	Read through the file and determine min,max and thus range
+ *	set bin size and minimum value
+ */
+static void autoScale(char *inFile)
+{
+int wordCount;
+char *row[256];
+unsigned long dataCount = 0;
+double min = HUGE;
+double max = - HUGE;
+double range = 0.0;
+struct lineFile *lf = lineFileOpen(inFile, TRUE);
+
+while (wordCount = lineFileChop(lf, row))
+    {
+    double d;
+    if (wordCount <= col || wordCount <= aveCol)
+        errAbort("Not enough words line %d of %s", lf->lineIx, lf->fileName);
+    d = lineFileNeedDouble(lf, row, col);
+    if ( d < min ) min = d;
+    if ( d > max ) max = d;
+    ++dataCount;
+    }
+lineFileClose(&lf);
+
+range = max - min;
+
+if (range <= 0.0 )
+        errAbort("range of data invalid: %g = [%g:%g]", range, min, max);
+
+maxBinCount = autoscale;
+if (real)
+    {
+    minValR = min;
+    /*	need to make binSizeR slightly larger to get the last data point
+     *	in the last bin.  This is a floating point round off situation.
+     */
+    binSizeR = (range + (range/1000000.0)) / maxBinCount;
+    }
+else
+    {
+    minVal = (int) floor(min);
+    binSize = (int)ceil(range) / maxBinCount;
+    if (binSize < 1) binSize = 1;
+    fprintf(stderr, "#\tautoscale data range: (%d - %d)/%d = %d\n",
+	(int) ceil(max), minVal, maxBinCount, binSize);
+    }
+if (verbose)
+    {
+    fprintf(stderr, "#\tautoscale number of data values: %lu\n", dataCount);
+    fprintf(stderr, "#\tautoscale maxBinCount: %d\n", maxBinCount);
+    if (real)
+	{
+    fprintf(stderr, "#\tautoscale data range: %g = [%g:%g]\n",
+	range, minValR, max);
+    fprintf(stderr, "#\tautoscale minVal: %g\n", minValR);
+    fprintf(stderr, "#\tautoscale binSize: %g\n", binSizeR);
+	}
+    else
+	{
+    fprintf(stderr, "#\tautoscale data range: %g = [%d:%d]\n",
+	range, minVal, (int) ceil(max));
+    fprintf(stderr, "#\tautoscale minVal: %d\n", minVal);
+    fprintf(stderr, "#\tautoscale binSize: %d\n", binSize);
+	}
+    }
+}	/*	autoScale()	*/
+
+static void textHistogram(char *inFile)
 /* textHistogram - Make a histogram in ascii. */
 {
 double *hist = NULL;
@@ -67,6 +139,7 @@ int minData = maxBinCount, maxData = 0;
 double maxCount = 0;
 double maxCt;
 int truncation = 0;
+int begin, end;
 
 /* Allocate histogram and optionally space for
  * second column totals. */
@@ -89,7 +162,7 @@ while (wordCount = lineFileChop(lf, row))
 	if (d >= minValR)
 	    {
 	    d -= minValR;
-	    x = (int) (d / binSizeR);
+	    x = (int) floor(d / binSizeR);
 	    }
 	}
     else
@@ -101,7 +174,7 @@ while (wordCount = lineFileChop(lf, row))
 	    x /= binSize;
 	    }
 	}
-    /*	index x is calculated, accumulate it, if in range	*/
+    /*	index x is calculated, accumulate it when in range	*/
     if (x >= 0 && x < maxBinCount)
 	{
 	hist[x] += 1;
@@ -113,8 +186,14 @@ while (wordCount = lineFileChop(lf, row))
 	    }
 	}
 	else
+	    {
+	    if (verbose)
+		fprintf(stderr, "truncating index %d\n", x);
 	    truncation = (x > truncation) ? x : truncation;
+	    }
     }
+
+lineFileClose(&lf);
 
 if (truncation > 0)
     {
@@ -159,8 +238,15 @@ else
 if (doLog)
     maxCt = log(maxCt);
 
+begin = minData;
+end = maxData + 1;
+if (verbose)
+    {
+    begin = 0;
+    end = maxBinCount;
+    }
 /* Output results. */
-for (i=minData; i<=maxData; ++i)
+for (i=begin; i<end; ++i)
     {
     int count = hist[i];
     double ct;
@@ -195,8 +281,10 @@ for (i=minData; i<=maxData; ++i)
     else
 	{
 	int astCount = round(ct * 60.0 / maxCt);
+	if (verbose)
+	    printf("%2d ", i);
 	if (real)
-	    printf("%g ", binStartR);
+	    printf("%f ", binStartR);
 	else
 	    printf("%3d ", binStart);
 	for (j=0; j<astCount; ++j)
@@ -207,7 +295,7 @@ for (i=minData; i<=maxData; ++i)
 	    printf(" %d\n", count);
 	}
     }
-}
+}	/*	textHistogram()	*/
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -226,6 +314,7 @@ noStar = optionExists("noStar");
 col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
+autoscale = optionInt("autoscale", 0);
 verbose = optionExists("verbose");
 
 if (real)
@@ -235,17 +324,19 @@ if (real)
     binSizeR = strtod(val, &valEnd);
     if ((*val == '\0') || (*valEnd != '\0'))
 	errAbort("Not a valid float for -binSize=%s\n", binSizeStr);
+    if (binSizeR <= 0.0)
+	errAbort("invalid binSize, must be greater than zero: %g\n", binSizeR);
     val = minValStr;
     minValR = strtod(val, &valEnd);
     if ((*val == '\0') || (*valEnd != '\0'))
 	errAbort("Not a valid float for -minVal=%s\n", binSizeStr);
-    binSize = binSizeR;
-    minVal = minValR;
     }
 else
     {
-	binSize = atoi(binSizeStr);
-	minVal = atoi(minValStr);
+    binSize = atoi(binSizeStr);
+    if (binSize < 1)
+	errAbort("invalid binSize, must be >= one: %d\n", binSize);
+    minVal = atoi(minValStr);
     }
 
 if (verbose)
@@ -266,6 +357,23 @@ if (verbose)
     else
 	fprintf(stderr, "#\taveCol: not selected\n");
     fprintf(stderr, "#\treal valued data: %s\n", real ? "YES" : "NO" );
+    if (autoscale > 0)
+	fprintf(stderr, "#\tautoscaling to %d bins\n", autoscale);
+    else
+	fprintf(stderr, "#\tautoscale: not selected\n");
+    }
+
+/*	to autoscale stdin we would need to keep all the data read in
+ *	during the min,max scan and reuse that data for the histogram
+ *	calculation.  Not implemented yet.
+ */
+if (autoscale > 0)
+    {
+    if (startsWith("stdin", argv[1]))
+	{
+	errAbort("Sorry, can not autoscale stdin at this time.  Outstanding feature request.");
+	}
+    autoScale(argv[1]);
     }
 
 textHistogram(argv[1]);

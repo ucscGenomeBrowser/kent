@@ -4,7 +4,6 @@
 #include "portable.h"
 #include "memalloc.h"
 #include "jksql.h"
-//#include "memgfx.h"
 #include "vGfx.h"
 #include "htmshell.h"
 #include "cart.h"
@@ -230,7 +229,7 @@ void markResStdvStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictP
     ix	= stampPictPtr->xOrig;
     iy	= stampPictPtr->yOrig;
    
-    yScale = (double)(140)/8.0;
+    yScale = (double)(120)/8.0;
     calStampXY(stampPictPtr, (txmax-txmin)/2.0, tymax, &xx, &yy);
   
     yValue = (yValueIn - avg[iTarget])/stddev[iTarget];
@@ -628,8 +627,8 @@ if (answer != NULL)
     }
 
 // draw exon count stamp
-sprintf(cond_str, "proteinID='%s'", protDisplayID);
-answer = sqlGetField(NULL, database, "knownGene", "exonCount", cond_str);
+sprintf(cond_str, "qName='%s'", proteinID);
+answer = sqlGetField(NULL, database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
     {
     valStr       = strdup(answer);

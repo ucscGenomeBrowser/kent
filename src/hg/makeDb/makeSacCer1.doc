@@ -129,15 +129,16 @@ exit; # don't actually run this like a script :)
     featureBits sacCer1 simpleRepeat
     # 82600648 bases of 2627444668 (3.144%) in intersection
 
-# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (TODO)
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (done)
     ssh hgwdev
     # Write ~/kent/src/hg/makeDb/trackDb/sacCer/sacCer1/description.html 
     # with a description of the assembly and some sample position queries.  
     chmod a+r ~/kent/src/hg/makeDb/trackDb/sacCer/sacCer1/description.html
-    # Check it in and copy (perhaps via a make in trackDb??) to 
-    # /cluster/data/sacCer1/html.  
+    # Check it in 
     mkdir -p /gbdb/sacCer1/html
     ln -s /cluster/data/sacCer1/html/description.html /gbdb/sacCer1/html/
+    # Create line in trackDb/makefile that copies description.html into
+    #     /cluster/data/sacCer1/html/descriptoin.html  
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 2003-11-24 Jim)
 # AND SET UP BLAT SERVERS
@@ -228,7 +229,7 @@ static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
 # sacCer1
 sacCer1.genome = /cluster/bluearc/sacCer/sacCer1/nib/chr*.nib
 sacCer1.lift = no
-sacCer1.genbank.mrna.xeno.load = yes
+sacCer1.genbank.mrna.xeno.load = no
 sacCer1.genbank.est.xeno.load = no
 sacCer1.downloadDir = sacCer1
 

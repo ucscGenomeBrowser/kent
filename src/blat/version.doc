@@ -1,3 +1,6 @@
+26:
+     o Made it so that gfServer does not abort when it runs out
+       of memory.
 25:
      o Fixed crash when aligning translated sequences of less than 3 bases.
      o Added extendThroughN flag.

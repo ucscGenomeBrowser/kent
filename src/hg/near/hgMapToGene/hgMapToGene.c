@@ -8,8 +8,9 @@
 #include "bed.h"
 #include "binRange.h"
 #include "hdb.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.5 2003/11/09 02:26:29 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.6 2003/12/14 23:30:29 sugnet Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -156,10 +157,11 @@ if (val != NULL)
 }
 
 void oneChromStrandBedToGene(struct sqlConnection *conn, 
-	char *chrom, char strand,
-	char *genePredTable, char *otherTable,  char *otherType,
-	struct hash *dupeHash, boolean doAll, struct hash *lookupHash,
-	FILE *f)
+			     char *chrom, char strand,
+			     char *geneTable, char *geneTableType, 
+			     char *otherTable,  char *otherType,
+			     struct hash *dupeHash, boolean doAll, struct hash *lookupHash,
+			     FILE *f)
 /* Find most overlapping bed for each genePred in one
  * strand of a chromosome, and write it to file.  */
 {
@@ -170,7 +172,15 @@ char extraBuf[256], *extra = NULL, **row;
 int rowOffset;
 struct bed *bedList = NULL, *bed;
 int bedNum;	/* Number of bed fields*/
-
+boolean geneTableBed = FALSE;
+int numCols;
+if(startsWith("genePred", geneTableType)) 
+    geneTableBed = FALSE;
+else if(startsWith("bed", geneTableType))
+    geneTableBed = TRUE;
+else
+    errAbort("%s table type doesn't appear to be bed or genePred (%s instead).", geneTable, geneTableType);
+    
 /* Read data into binKeeper. */
 if (startsWith("bed", otherType))
     {
@@ -237,11 +247,22 @@ sqlFreeResult(&sr);
 
 
 /* Scan through gene preds looking for best overlap if any. */
-sr = hChromQuery(conn, genePredTable, chrom, extra, &rowOffset);
+sr = hChromQuery(conn, geneTable, chrom, extra, &rowOffset);
+numCols = sqlCountColumns(sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct genePred *gp = genePredLoad(row+rowOffset);
-    char *name = gp->name;
+    struct genePred *gp = NULL;
+    struct bed *bed = NULL;
+    char *name = NULL;
+    if(geneTableBed) 
+	{
+	bed = bedLoadN(row+rowOffset, numCols-rowOffset);
+	gp = bedToGenePred(bed);
+	bedFree(&bed);
+	}
+    else
+	gp = genePredLoad(row+rowOffset);
+    name = gp->name;
     if (!hashLookup(dupeHash, name))	/* Only take first occurrence. */
 	{
 	hashAdd(dupeHash, name, NULL);
@@ -284,10 +305,10 @@ sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
-void hgMapTableToGene(struct sqlConnection *conn, char *genePredTable, 
+void hgMapTableToGene(struct sqlConnection *conn, char *geneTable, char *geneTableType,
 	char *otherTable, char *otherType, char *outTable,
 	struct hash *lookupHash)
-/* hgMapTableToGene - Create a table that maps genePredTable to otherTable, 
+/* hgMapTableToGene - Create a table that maps geneTable to otherTable, 
  * choosing the best single item in otherTable for each genePred. */
 {
 /* Open tab file and database loop through each chromosome writing to it. */
@@ -307,9 +328,9 @@ if (!createOnly)
 	{
 	if (verbose)
 	    printf("%s\n", chrom->name);
-	oneChromStrandBedToGene(conn, chrom->name, '+', genePredTable, 
+	oneChromStrandBedToGene(conn, chrom->name, '+', geneTable, geneTableType,  
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
-	oneChromStrandBedToGene(conn, chrom->name, '-', genePredTable, 
+	oneChromStrandBedToGene(conn, chrom->name, '-', geneTable, geneTableType,
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
 	}
     hashFree(&dupeHash);
@@ -334,7 +355,10 @@ char *tdbType(struct sqlConnection *conn, char *track)
 {
 char query[512];
 char *type, typeBuf[128];
-safef(query, sizeof(query), "select type from trackDb where tableName = '%s'", track);
+char *trackDb = cfgOption("db.trackDb");
+if(trackDb == NULL)
+    trackDb = "trackDb";
+safef(query, sizeof(query), "select type from %s where tableName = '%s'", trackDb, track);
 type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
 if (type == NULL)
     errAbort("Can't find track %s in trackDb", track);
@@ -362,15 +386,16 @@ char typeBuf[128];
 char *type = optionVal("type", NULL);
 char *lookupFile = optionVal("lookup", NULL);
 struct hash *lookupHash = NULL;
-
+char *geneTableType = NULL;
 hSetDb(database);
 if (lookupFile != NULL)
     lookupHash = hashTwoColumns(lookupFile);
 if (type == NULL)
     type = tdbType(conn, track);
-if (!startsWith("genePred", tdbType(conn, geneTrack)))
-    errAbort("%s is not a genePred type track", geneTrack);
-hgMapTableToGene(conn, geneTrack, track, type, newTable, lookupHash);
+geneTableType = tdbType(conn, geneTrack);
+if (!startsWith("genePred", geneTableType) && !startsWith("bed", geneTableType))
+    errAbort("%s is neither a genePred or bed type track", geneTrack);
+hgMapTableToGene(conn, geneTrack, geneTableType, track, type, newTable, lookupHash);
 sqlDisconnect(&conn);
 }
 

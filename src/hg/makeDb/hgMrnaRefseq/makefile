@@ -15,23 +15,13 @@ A = hgMrnaRefseq
 
 O = $A.o
 
-my: compile
-	mv $A $$HOME/bin/i386/$A
-
-mgsc: compile
-	mv $A /usr/local/apache/cgi-bin-mgsc/$A
-
-alpha: compile
-	mv $A /usr/local/apache/cgi-bin/$A
-
-beta: compile
-	mv $A /usr/local/apache/cgi-bin-beta/$A
-
+all: compile
+	strip $A
+	mv $A $$HOME/bin/$(MACHTYPE)/$A
 
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A
-#	strip $A
 	chmod a+rx $A
 
 lib:

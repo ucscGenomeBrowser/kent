@@ -40,5 +40,12 @@ int carefulCountBlocksAllocated();
 void setMaxAlloc(size_t s);
 /* Set large allocation limit. */
 
+void memTrackerStart();
+/* Push memory handler that will track blocks allocated so that
+ * they can be automatically released with memTrackerEnd().  */
+
+void memTrackerEnd();
+/* Free any remaining blocks and pop tracker memory handler. */
+
 #endif /* MEMALLOC_H */
 

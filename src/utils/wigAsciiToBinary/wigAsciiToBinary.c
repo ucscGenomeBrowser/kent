@@ -9,8 +9,8 @@
  *
  *	This first pass will assume the scores are specified for
  *	a single nucleotide base.  If the offset sequence has
- *	missing data in it, the missing data will be set to the "NO_DATA"
- *	indication.  (NO_DATA == 128)
+ *	missing data in it, the missing data will be set to the
+ *	"WIG_NO_DATA" indication.  (WIG_NO_DATA == 128)
  *
  *	The binary data file is simply one unsigned char value per byte.
  *	The suffix for this binary data file is: .wib - wiggle binary
@@ -38,10 +38,10 @@
 #include	"options.h"
 #include	"linefile.h"
 
-#define	NO_DATA	128
+#define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.14 2003/11/18 18:30:45 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.16 2003/12/13 01:12:51 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -176,7 +176,7 @@ if (bincount)
 			byteOutput = 0;
 		    }
 	    } else {
-		byteOutput = NO_DATA;
+		byteOutput = WIG_NO_DATA;
 	    }
 	fputc(byteOutput,binout);	/*	output a data byte */
 	if (byteOutput > maxScore )
@@ -417,6 +417,12 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
 	{
 	output_row();
 	}
+    if (verbose)
+	printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
+	    argv[i], lineCount, rowCount, fileOffset );
+    printf("%s: data limits: [%g:%g], range: %g\n", chromName,
+	overallLowerLimit, overallUpperLimit,
+	overallUpperLimit - overallLowerLimit);
     lineFileClose(&lf);
     fclose(binout);
     fclose(wigout);
@@ -426,11 +432,6 @@ printf("completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu
     binfile = (char *) NULL;
     wigfile = (char *) NULL;
     chromName = (char *) NULL;
-    if (verbose)
-	printf("fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
-	    argv[i], lineCount, rowCount, fileOffset );
-    printf("data limits: [%g:%g], range: %g\n", overallLowerLimit,
-    		overallUpperLimit, overallUpperLimit - overallLowerLimit);
     }
 return;
 }

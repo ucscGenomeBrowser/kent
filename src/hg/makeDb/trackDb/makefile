@@ -76,6 +76,7 @@ alpha:
 	cp worm/cb1/description.html /gbdb/cb1/html
 	cp sars/sc1/description.html /gbdb/sc1/html
 	cp zoo/description.html /gbdb/zoo3/html
+	cp sacCer/sacCer1/description.html /gbdb/sacCer1/html
 
 strict:
 	hgTrackDb -strict=yes human hg13 trackDb ../../lib/trackDb.sql .

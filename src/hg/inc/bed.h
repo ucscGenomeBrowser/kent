@@ -146,6 +146,9 @@ void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 struct bed *bedFromPsl(struct psl *psl);
 /* Convert a single psl to a bed structure */
 
+struct genePred *bedToGenePred(struct bed *bed);
+/* Convert a single bed to a genePred structure. */
+
 struct bed *bedFromGenePred(struct genePred *genePred);
 /* Convert a single genePred to a bed structure */
 

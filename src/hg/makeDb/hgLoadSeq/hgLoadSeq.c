@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.5 2003/12/08 09:42:51 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.6 2003/12/15 18:21:58 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -117,8 +117,7 @@ return TRUE;
 void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab)
 /* Add sequences in a fasta file to a seq table tab file */
 {
-HGID extFileId; 
-extFileId = test ? 0 : hgAddToExtFile(faFile, conn);
+HGID extFileId = test ? 0 : hgAddToExtFile(faFile, conn);
 struct lineFile *faLf = lineFileOpen(faFile, TRUE);
 unsigned count = 0;
 

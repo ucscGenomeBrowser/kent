@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.2 2003/12/08 16:38:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.5 2003/12/16 15:14:06 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -66,6 +66,13 @@ double stddev[20];
 int exStart[500], exEnd[500];
 int exCount;
 int aaStart[500], aaEnd[500];
+
+char kgProtMapTableName[20] = {"markdKgProtMap"}; 
+int blockSize[500], blockSizePositive[500];
+int blockStart[500], blockStartPositive[500];
+int blockEnd[500],   blockEndPositive[500];
+int blockGenomeStart[500], blockGenomeStartPositive[500];
+int blockGenomeEnd[500], blockGenomeEndPositive[500];
 
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
@@ -158,7 +165,11 @@ hPrintf(" %s\n", description);
 hPrintf("</font><br><br>");
 fflush(stdout);
 
-protSeq = strdup(getAA(proteinID));
+protSeq = getAA(proteinID);
+if (protSeq == NULL)
+    {
+    errAbort("%s is not a current valid entry in SWISS-PROT/TrEMBL\n", proteinID);
+    }
 protSeqLen = strlen(protSeq);
  
 if (cgiOptionalString("pbScale") != NULL)
@@ -166,16 +177,19 @@ if (cgiOptionalString("pbScale") != NULL)
 	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
 	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
 	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
+	//if (strcmp(cgiOptionalString("pbScale"), "DNA") == 0) pbScale = 18;
+	if (strcmp(cgiOptionalString("pbScale"), "DNA") == 0) pbScale = 22;
 	}
 
 pixWidth = 160+ protSeqLen*pbScale;
 if (pixWidth < 550) pixWidth = 550;
 insideWidth = pixWidth-gfxBorder;
 
-pixHeight = 220;
+pixHeight = 230;
 
 //make room for individual residues display
-if (pbScale >=6) pixHeight = pixHeight + 20;
+if (pbScale >=6)  pixHeight = pixHeight + 20;
+if (pbScale >=18) pixHeight = pixHeight + 20;
 
 makeTempName(&gifTn, "hgt", ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
@@ -193,7 +207,6 @@ vgSetClip(vg, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
 iypos = 15;
 /* Draw tracks. */
 doTracks(proteinID, mrnaID, protSeq, vg, &iypos);
-
 /* Finish map. */
 hPrintf("</MAP>\n");
 
@@ -213,6 +226,7 @@ if (cgiOptionalString("exonNum") == NULL)
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
+    hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
     hPrintf("&nbsp&nbsp&nbsp&nbsp");
     hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
     hPrintf("Explanation of Tracks</A>");
@@ -221,7 +235,7 @@ hPrintf("<P>");
 
 if (!hTableExists("pbStamp")) goto histDone; 
 
-hPrintf("<B><font size=4>Protein Property Histograms</font></B>");
+//hPrintf("<B><font size=4>Protein Property Histograms</font></B>");
 
 pbScale = 3;
 pixWidth = 765;
@@ -254,9 +268,9 @@ hPrintf("<P>");
 
 hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
             gifTn2.forCgi, pixWidth, pixHeight, mapName);
-for (i=0; i<30; i++)hPrintf("&nbsp&nbsp&nbsp");
+//for (i=0; i<26; i++)hPrintf("&nbsp&nbsp&nbsp");
 hPrintf("<A HREF=\"../pbHelp.html\" TARGET=_blank>");
-hPrintf("Explanation of Protein Properties</A><BR>");
+hPrintf("Explanation of Protein Property Histograms</A><BR>");
 
 hPrintf("<P>");
 
@@ -264,8 +278,10 @@ histDone:
 
 domainsPrint(conn, proteinID);
 
-if (cgiOptionalString("exonNum") == NULL)printExonAA(proteinID, protSeq, -1);
+//if (cgiOptionalString("exonNum") == NULL)printExonAA(proteinID, protSeq, -1);
+hPrintf("<P>");
 doGenomeBrowserLink(protDisplayID, mrnaID);
+doGeneDetailsLink(protDisplayID, mrnaID);
 doFamilyBrowserLink(protDisplayID, mrnaID);
 }
 

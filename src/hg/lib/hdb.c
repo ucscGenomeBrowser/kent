@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.157 2003/12/04 05:05:13 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.158 2003/12/12 21:29:14 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2121,6 +2121,8 @@ if (hti == NULL)
     return FALSE;
 if (retTableBuf != NULL)
     {
+    if (chrom == NULL)
+	chrom = hDefaultChromDb(db);
     if (hti->isSplit)
 	snprintf(retTableBuf, 64, "%s_%s", chrom, rootName);
     else

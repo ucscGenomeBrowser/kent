@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.23 2003/10/02 17:15:21 angie Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.25 2003/12/16 16:43:51 angie Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -110,6 +110,7 @@ if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
 }
+
 
 int bedCmpScore(const void *va, const void *vb)
 /* Compare to sort based on score - lowest first. */
@@ -545,6 +546,42 @@ if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
 
+struct genePred *bedToGenePred(struct bed *bed)
+/* Convert a single bed to a genePred structure. */
+{
+struct genePred *gp = NULL;
+int i;
+assert(bed);
+AllocVar(gp);
+gp->name = cloneString(bed->name);
+gp->chrom = cloneString(bed->chrom);
+safef(gp->strand, sizeof(gp->strand), "%s", bed->strand);
+gp->txStart = bed->chromStart;
+gp->txEnd = bed->chromEnd;
+gp->cdsStart = bed->thickStart;
+gp->cdsEnd = bed->thickEnd;
+gp->exonCount = bed->blockCount;
+if(gp->exonCount != 0)
+    {
+    AllocArray(gp->exonStarts, gp->exonCount);
+    AllocArray(gp->exonEnds, gp->exonCount);
+    for(i=0; i<gp->exonCount; i++)
+	{
+	gp->exonStarts[i] = bed->chromStarts[i] + bed->chromStart;
+	gp->exonEnds[i] = gp->exonStarts[i] + bed->blockSizes[i];
+	}
+    }
+else 
+    {
+    gp->exonCount = 1;
+    AllocArray(gp->exonStarts, gp->exonCount);
+    AllocArray(gp->exonEnds, gp->exonCount);
+    gp->exonStarts[0] = bed->chromStart;
+    gp->exonEnds[0] = bed->chromEnd;
+    }
+return gp;
+}
+
 struct bed *bedFromGenePred(struct genePred *genePred)
 /* Convert a single genePred to a bed structure */
 {
@@ -807,29 +844,35 @@ for (bed=bedListIn;  bed != NULL;  bed=bed->next)
 	passes &= (sameString(bed->chrom, chrom) &&
 		   (bed->chromStart < winEnd) &&
 		   (bed->chromEnd   > winStart));
-    passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
-			   bf->chromInvert);
-    passes &= filterInt(bed->chromStart, bf->chromStartFilter,
-			bf->chromStartVals);
-    passes &= filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals);
-    passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
-			   bf->nameInvert);
-    passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
-    passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
-			 bf->strandInvert);
-    passes &= filterInt(bed->thickStart, bf->thickStartFilter,
-			bf->thickStartVals);
-    passes &= filterInt(bed->thickEnd, bf->thickEndFilter, bf->thickEndVals);
-    passes &= filterInt(bed->blockCount, bf->blockCountFilter,
-			bf->blockCountVals);
-    passes &= filterInt((bed->chromEnd - bed->chromStart),
-			bf->chromLengthFilter, bf->chromLengthVals);
-    passes &= filterInt((bed->thickEnd - bed->thickStart),
-			bf->thickLengthFilter, bf->thickLengthVals);
-    cmpValues[0] = cmpValues[1] = bed->thickStart;
-    passes &= filterInt(bed->chromStart, bf->compareStartsFilter, cmpValues);
-    cmpValues[0] = cmpValues[1] = bed->thickEnd;
-    passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+    if (bf != NULL)
+	{
+	passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
+			       bf->chromInvert);
+	passes &= filterInt(bed->chromStart, bf->chromStartFilter,
+			    bf->chromStartVals);
+	passes &= filterInt(bed->chromEnd, bf->chromEndFilter,
+			    bf->chromEndVals);
+	passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
+			       bf->nameInvert);
+	passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
+	passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
+			     bf->strandInvert);
+	passes &= filterInt(bed->thickStart, bf->thickStartFilter,
+			    bf->thickStartVals);
+	passes &= filterInt(bed->thickEnd, bf->thickEndFilter,
+			    bf->thickEndVals);
+	passes &= filterInt(bed->blockCount, bf->blockCountFilter,
+			    bf->blockCountVals);
+	passes &= filterInt((bed->chromEnd - bed->chromStart),
+			    bf->chromLengthFilter, bf->chromLengthVals);
+	passes &= filterInt((bed->thickEnd - bed->thickStart),
+			    bf->thickLengthFilter, bf->thickLengthVals);
+	cmpValues[0] = cmpValues[1] = bed->thickStart;
+	passes &= filterInt(bed->chromStart, bf->compareStartsFilter,
+			    cmpValues);
+	cmpValues[0] = cmpValues[1] = bed->thickEnd;
+	passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+	}
     if (passes)
 	{
 	struct bed *newBed = cloneBed(bed);

@@ -69,8 +69,16 @@ otherDb hg16
 colorChromDefault off
 
 track blastHg15KG
-shortLabel human protein blast
-longLabel human protein blast
+shortLabel hg15 protein blast
+longLabel hg15 protein blast
+group x
+priority 1101
+visibility dense
+type psl protein
+
+track blastHg16KG
+shortLabel hg16 protein blast
+longLabel hg16 protein blast
 group x
 priority 1101
 visibility dense

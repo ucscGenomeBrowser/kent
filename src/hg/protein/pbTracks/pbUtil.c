@@ -179,127 +179,143 @@ else
 return(result);
 }
 
-void get_exons(char *proteinID, char *mrnaID)
+void getExonInfo(char *proteinID, int *exonCount, char **chrom, char *strandChar)
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection  *conn;
+
+char *qNameStr;
+char *qSizeStr;
+char *qStartStr;
+char *qEndStr;
+char *tNameStr;
+char *tSizeStr;
+char *tStartStr;
+char *tEndStr;
+char *blockCountStr;
+char *blockSizesStr;
+char *qStartsStr;
+char *tStartsStr;
+
+char *chp, *chp0, *chp9;
+int exonStartPos, exonEndPos;
+int exonGenomeStartPos, exonGenomeEndPos;
+char *exonStartStr, *exonEndStr, *exonSizeStr;
+char *exonGenomeStartStr, *exonGenomeEndStr;
+char *strand;
+int exonNumber;
+int printedExonNumber = -1;
+int exonColor[2];
+int blockCount;
+int exonIndex;
+int i, isize;
+int done = 0;
+
+conn= hAllocConn();
+//!!! current query does not always return only one record back !!!
+sprintf(query,"select qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, blockCount, blockSizes, qStarts, tStarts, strand from %s.%s where qName='%s';",
+                database, kgProtMapTableName, proteinID);
+sr  = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
     {
-    char *before, *after = "", *s;
-    char startString[64], endString[64];
+    errAbort("%s does not have Exon info\n", proteinID);
+    }
 
-    char query[256], query2[256];
-    struct sqlResult *sr, *sr2;
-    char **row, **row2;
+qNameStr        = strdup(row[0]);
+qSizeStr        = strdup(row[1]);
+qStartStr       = strdup(row[2]);
+qEndStr         = strdup(row[3]);
+tNameStr        = strdup(row[4]);
+tSizeStr        = strdup(row[5]);
+tStartStr       = strdup(row[6]);
+tEndStr         = strdup(row[7]);
+blockCountStr   = strdup(row[8]);
+blockSizesStr   = strdup(row[9]);
+qStartsStr      = strdup(row[10]);
+tStartsStr      = strdup(row[11]);
 
-    char *sp, *ep;
-    
-    struct sqlConnection  *conn2;
-    char *genomeID, *seqID, *modelID, *start, *end, *eValue, *sfID, *sfDesc;
+strand          = strdup(row[12]);
 
-    char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
-         *exonCount, *exonStarts, *exonEnds;
+if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') ) 
+   errAbort("wrong strand '%s' encountered in getExon(), aborting ...", strand);
 
-    char *chp;
-    int  i,j, l;
-    int  aalen;
-    int  cdsS, cdsE;
-    int  eS, eE;
-    
-    conn2= hAllocConn();
+*strandChar = strand[0];
 
-    sprintf(query2,"select * from %s.knownGene where name='%s';", 
-    		   database, mrnaID);
+hFreeConn(&conn);
+sqlFreeResult(&sr);
 
-    sr2 = sqlMustGetResult(conn2, query2);
-    row2 = sqlNextRow(sr2);
-    while (row2 != NULL)
+blockCount = atoi(blockCountStr);
+
+exonStartStr 	   = qStartsStr;
+exonGenomeStartStr = tStartsStr;
+exonSizeStr 	   = blockSizesStr;
+exonIndex 	   = 0;
+
+while (!done)
+    {
+    // get protein side exon position
+
+    chp  = strstr(exonStartStr, ",");
+    *chp = '\0';
+    exonStartPos 	  = atoi(exonStartStr);
+    blockStart[exonIndex] = exonStartPos;
+    aaStart[exonIndex]    = exonStartPos/3;
+    chp++;
+    exonStartStr = chp;
+
+    // get Genome side exon position
+    chp  = strstr(exonGenomeStartStr, ",");
+    *chp = '\0';
+    exonGenomeStartPos 		= atoi(exonGenomeStartStr);
+    blockGenomeStart[exonIndex] = exonGenomeStartPos;
+    chp++;
+    exonGenomeStartStr = chp;
+
+    chp   = strstr(exonSizeStr, ",");
+    *chp  = '\0';
+    isize = atoi(exonSizeStr);
+    blockSize[exonIndex] = isize;
+    exonEndPos       	 = exonStartPos + isize - 1;
+    blockEnd[exonIndex]  = exonEndPos;
+    aaEnd[exonIndex]     = exonEndPos/3;
+    exonGenomeEndPos     = exonGenomeStartPos + isize - 1;
+    blockGenomeEnd[exonIndex] = exonGenomeEndPos;
+    chp++;
+    exonSizeStr = chp;
+
+    exonIndex++;
+    if (exonIndex == blockCount) done = 1;
+    }
+
+// reverse the negative strand block size sequence to positive direction 
+for (i=0; i<blockCount; i++)
+    {
+    if (strand[0] == '-')
 	{
- 	name 	= row2[0];
-	chrom 	= row2[1];
-	strand	= row2[2];
-	txStart = row2[3];
-	txEnd   = row2[4];
-	cdsStart= row2[5]; 
-	cdsEnd	= row2[6];
-	exonCount = row2[7]; 
-	exonStarts= row2[8]; 
-	exonEnds  = row2[9];	
-
-   
-	/*hPrintf("%s %s\n", name, chrom);
-	hPrintf("cdsStart=%s cdsEnd=%s\n", cdsStart, cdsEnd);
-	hPrintf("<br>exon count=%s\nexonStarts:(%s) \nexonEnds:(%s)\n\n", 
-	exonCount, exonStarts, exonEnds);
-   	*/
-	sscanf(exonCount, "%d", &exCount);
-
-	sp = exonStarts;
-	ep = exonEnds;
-	
-        sscanf(cdsStart, "%d", &cdsS);
-        sscanf(cdsEnd, "%d", &cdsE);
-	//hPrintf("cds Start = %d\n", cdsS);
-	//hPrintf("cds End = %d\n", cdsE);
-	fflush(stdout);
-
-	aalen = 0;
-	j=0;
-	for (i=0; i<exCount; i++)
-		{
-		chp = strstr(sp, ",");
-		*chp = '\0';
-		sscanf(sp, "%d", &(exStart[i]));
-	    	//hPrintf("<br>%8d %8d", i+1, exStart[i]);
-		chp++;
-		sp = chp;
-
-		chp = strstr(ep, ",");
-		*chp = '\0';
-		sscanf(ep, "%d", &(exEnd[i]));
-		//hPrintf(" %8d",  exEnd[i]);
-	
-		eS = exStart[i];
-		eE = exEnd[i];
-		
-		if (cdsS > eS)
-			{
-			eS = cdsS;
-			}
-		if (cdsE < eE)
-			{
-			eE = cdsE;
-			}
-		if (eS > eE) 
-			{
-			eS = 0;
-			eE = 0;
-			}
-	        if (eS != eE)
-			{
-			aaStart[j] = aalen;
-			aaEnd[j] = aaStart[j] + (eE- eS +1)/3 -1;
-			aalen = aalen + (eE- eS +1)/3;
-			//hPrintf(" (%6d <---> %6d) %6d %6d %6d, %5d %5d\n", 
-			//	eS, eE, eE - eS + 1, (eE - eS + 1)/3, aalen, aaStart[j],
-			//	aaEnd[j]);
-			
-			j++;
-			}
-		else
-			{
-			//hPrintf("\n");
-			//hPrintf(" (%8s   NA  %8s) %10d %8d %8d\n", 
-			//	" ", " ", 0, (eE - eS + 1)/3, aalen);
-			}
-		
-		chp++;
-		ep = chp;
-		}
-		
-	row2 = sqlNextRow(sr2);
+	blockSizePositive[i]          = blockSize[blockCount - i - 1];
+	blockStartPositive[i]         = protSeqLen*3 - blockEnd[blockCount - i - 1] - 1;
+	blockEndPositive[i]   	      = protSeqLen*3 - blockStart[blockCount - i - 1] - 1;
+    	blockGenomeStartPositive[i]   = blockGenomeStart[blockCount - i - 1];
+    	blockGenomeEndPositive[i]     = blockGenomeEnd[blockCount - i - 1];
 	}
+    else
+	{
+	blockSizePositive[i]          = blockSize[i];
+	blockStartPositive[i]         = blockStart[i];
+	blockEndPositive[i]           = blockEnd[i];
+    	blockGenomeStartPositive[i]   = blockGenomeStart[i];
+    	blockGenomeEndPositive[i]     = blockGenomeEnd[i];
+	}
+    }
 
-    hFreeConn(&conn2);
-    sqlFreeResult(&sr2);
-    } 
+*exonCount = blockCount;
+*chrom     = tNameStr;
+}
 
+//more sophisticated processing can be done using genome coordinates
 void printExonAA(char *proteinID, char *aa, int exonNum)
 {
 int i, j, k, jj;
@@ -371,7 +387,7 @@ for (i=istart; i<=iend; i++)
     if (i == aaStart[j])
 	{
 	j++;
-	if (j == 1) hPrintf("</font>");
+//	if (j == 1) hPrintf("</font>");
 	k=j%2;
 	if (k) 
 	    {
@@ -392,9 +408,12 @@ for (i=istart; i<=iend; i++)
 	il = 0;
 	}
     }
-hPrintf("</font>");
 hPrintf("</pre>");
+
+// Force black color at the end
+hPrintf("<font color = black>");
 }
+
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID)
 {
 hPrintf("\n<B>UCSC Genome Browser: </B> ");
@@ -422,5 +441,16 @@ else
     }
 hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
 }
+
+void doGeneDetailsLink(char *protDisplayID, char *mrnaID)
+{
+if (mrnaID != NULL)
+    {
+    hPrintf("\n<BR><B>UCSC Gene Details Page: </B> ");
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s\"", mrnaID);
+    hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+    }
+}
+
 
 
