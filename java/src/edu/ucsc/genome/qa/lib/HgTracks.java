@@ -645,25 +645,6 @@ public class HgTracks {
   }
 
  /**
-  * Clicks link and gets response code from server
-  *
-  * @param wc    The open web connection
-  * @param link  The link
-  * @return      The response code    
-  */
-  // link is known to be URL
-  public static int getResponseCode(WebConversation wc, WebLink link) {
-    try {
-        link.click();
-	WebResponse resp = wc.getCurrentPage();
-	return resp.getResponseCode();
-    } catch (Exception e) {
-        System.err.println(e.getMessage());
-        return 0;
-    }
-  }
-
- /**
   * Gets list of links from image in browser
   *
   * @param trackContainer  The track display properties: position coords
