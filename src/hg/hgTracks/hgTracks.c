@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.703 2004/04/03 02:21:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.704 2004/04/05 20:50:42 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2518,7 +2518,7 @@ char conditionStr[256];
 
 struct bed *sw = item;
 
-// This is necessary because Ensembl changed their xref table definition
+// This is necessary because Ensembl kept changing their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
 if (hTableExists("ensemblXref2"))
     {
@@ -2526,8 +2526,23 @@ if (hTableExists("ensemblXref2"))
     }
 else
     {
-    proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    if (hTableExists("ensemblXref"))
+    	{
+    	proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    	}
+    else
+	{
+	if (hTableExists("ensTranscript"))
+	    {
+	    proteinName = sqlGetField(conn,database,"ensTranscript","translation_name",conditionStr);
+	    }
+	else
+	    {
+	    proteinName = strdup("");
+	    }
+	}
     }
+	
 name = strdup(proteinName);
 hFreeConn(&conn);
 
@@ -2548,7 +2563,7 @@ char conditionStr[256];
 
 struct bed *sw = item;
 
-// This is necessary because Ensembl changed their xref table definition
+// This is necessary because Ensembl kept changing their xref table definition
 sprintf(conditionStr, "transcript_name='%s'", sw->name);
 if (hTableExists("ensemblXref2"))
     {
@@ -2556,8 +2571,23 @@ if (hTableExists("ensemblXref2"))
     }
 else
     {
-    proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    if (hTableExists("ensemblXref"))
+	{
+    	proteinName = sqlGetField(conn, database, "ensemblXref", "translation_name", conditionStr);
+    	}
+    else
+        {
+        if (hTableExists("ensTranscript"))
+            {
+            proteinName = sqlGetField(conn,database,"ensTranscript","translation_name",conditionStr);
+            }
+        else
+            {
+            proteinName = strdup("");
+            }
+        }
     }
+
 name = strdup(proteinName);
 hFreeConn(&conn);
 
