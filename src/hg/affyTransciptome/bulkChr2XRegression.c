@@ -1,6 +1,7 @@
 #include "common.h"
 #include "bed.h"
 #include "linefile.h"
+#include "cheapcgi.h"
 
 struct genomeBit
 /* Piece of the genome */
@@ -149,7 +150,7 @@ return fileName;
 
 void doAnalysisForBed(struct bed *bed) 
 {
-char *hgdbTestTable = "affyTrans_hg12";
+char *hgdbTestTable = cgiUsualString("hgdbTestTable","affyTrans_hg12");
 char *hgdbTestName = "sugnet";
 FILE *tmpFile = NULL;
 char commandBuffer[4096];
@@ -248,8 +249,9 @@ carefulClose(&tmpFile);
 bedFreeList(&bedList);
 }
 
-int main(char argc, char *argv[]) 
+int main(int argc, char *argv[]) 
 {
+cgiSpoof(&argc, argv);
 if(argc != 3)
     usage();
 bulkChr2XRegression(argv[1], argv[2]);
