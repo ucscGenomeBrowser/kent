@@ -649,3 +649,16 @@ chainSome $(path1)
     hgLoadPsl droAna1 blastDm1FB.psl
 
 # End tblastn
+
+
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 2/25/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/droAna1/bed/blastz.dm2.swap
+    cd /cluster/data/droAna1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droAna1/DEF \
+      >& do.log &
+    tail -f do.log
+    # Add {chain,net}Dm2 to trackDb.ra if necessary.
+    # Add /usr/local/apache/htdocs/goldenPath/droAna1/vsDm2/README.txt
+
+
