@@ -49,6 +49,7 @@
                 <LI><A HREF="#blat3">Downloading Blat source and documentation</A>
                 <LI><A HREF="#blat5">Replicating web-based Blat parameters in command-line version</A>
                 <LI><A HREF="#blat4">Percent identity score calculation</A>
+                <LI><A HREF="#blat6">Using the <em>-ooc</em> flag</A>
 		</UL>
 		<P>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -370,6 +371,67 @@ return milliBad;
 			necessary to accommodate introns), it is typically 
 			necessary to resort to logarithms like this calculation 
 			does.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+    </TD><TD WIDTH=15></TD></TR>
+    <BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="blat6"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Using the <em>-ooc</em> flag</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"What does the <em>-ooc</em> flag do?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			Using any <em>-ooc</em> option in blat, such
+			as <em>-ooc=11.ooc</em>, simply serves to speed up 
+			searches similar to repeat-masking sequence. The
+			<em>11.ooc</em> file contains sequences 
+			determined to be over-represented in the genome 
+			sequence. To speed up searches, these sequences are not 
+			used when seeding an alignment against the genome. For 
+		 	reasonably-sized sequences, this will not create a 
+			problem and will significantly reduce processing time.
+			<P>
+			By not using the <em>11.ooc</em> file, you will increase 
+			alignment time, but will also slightly increase 
+			sensitivity. This may be important if you are aligning 
+			shorter sequences or sequences of poor quality. For example,
+			if a particular sequence consists primarily of 
+			sequences in the <em>11.ooc</em> file, it will 
+			never be seeded correctly for an alignment if the 
+			<em>-ooc</em> flag is used.  
+			<P>
+			In summary,
+			if you are not finding certain sequences and can afford 
+			the extra processing time, you may want to run blat 
+			without the <em>11.ooc</em> file if your particular
+			situation warrants its use.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
