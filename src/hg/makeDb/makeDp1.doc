@@ -205,6 +205,7 @@ exit; # don't actually run this like a script :)
     # the fasta, so make a separate mask file for each scaffold.
     set rmMask=scaffolds/scaffolds.fa.out
     set trfMask=bed/simpleRepeat/scaffoldsTrfMask.bed
+    # use head to grab the RepeatMasker output header, then grep contents.
     foreach f (scaffolds/*.fa)
       head -3 $rmMask > tmpMask.out
       grep $f:t:r $rmMask >> tmpMask.out
@@ -347,6 +348,8 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     cd /cluster/data/dp1
     mkdir zips
     zip -j zips/chromOut.zip ?{,?}/chr?{,?}.fa.out
+    # use head to keep the RepeatMasker output header of the first file, 
+    # and tail to skip past it in all subsequent files.
     head -3 chunks/chunk_00.scaf.out > scaffolds.fa.out
     foreach f ( chunks/*_??.scaf.out chunks/*_???.scaf.out)
       tail +4 $f >> scaffolds.fa.out
@@ -438,8 +441,12 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     # Load it up:
     ssh hgwdev
     cd /cluster/data/dp1/bed/drosRefSeq
-    hgLoadPsl dp1 drosRefSeq.psl -tNameIx
-    hgLoadSeq dp1 drosRefSeq.fa
+    # hgc needs the track table name to start with xeno...
+    ln -s drosRefSeq.psl xenoDrosRefSeq.psl
+    hgLoadPsl dp1 xenoDrosRefSeq.psl -tNameIx
+    mkdir /gbdb/dp1/drosMrna
+    ln -s /cluster/data/dp1/bed/drosRefSeq/drosRefSeq.fa /gbdb/dp1/drosMrna/
+    hgLoadSeq dp1 /gbdb/dp1/drosMrna/drosRefSeq.fa
 
 
 # ALL-DROSOPHILA MRNA (DONE 12/2/03 angie)
@@ -485,8 +492,11 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     # Load it up:
     ssh hgwdev
     cd /cluster/data/dp1/bed/drosMrna
-    hgLoadPsl dp1 drosMrna.psl -tNameIx
-    hgLoadSeq dp1 drosMrna.fa
+    # hgc needs the track table name to start with xeno...
+    ln -s drosMrna.psl xenoDrosMrna.psl
+    hgLoadPsl dp1 xenoDrosMrna.psl -tNameIx
+    ln -s /cluster/data/dp1/bed/drosMrna/drosMrna.fa /gbdb/dp1/drosMrna/
+    hgLoadSeq dp1 /gbdb/dp1/drosMrna/drosMrna.fa
 
 
 # ALL-DROSOPHILA EST (DONE 12/2/03 angie)
@@ -535,27 +545,31 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     # Load it up:
     ssh hgwdev
     cd /cluster/data/dp1/bed/drosEst
-    hgLoadPsl dp1 drosEst.psl -tNameIx
-    hgLoadSeq dp1 drosEst.fa
+    # hgc needs the track table name to start with xeno...
+    ln -s drosEst.psl xenoDrosEst.psl
+    hgLoadPsl dp1 xenoDrosEst.psl -tNameIx
+    ln -s /cluster/data/dp1/bed/drosEst/drosEst.fa /gbdb/dp1/drosMrna/
+    hgLoadSeq dp1 /gbdb/dp1/drosMrna/drosEst.fa
 
 
-# LIFTOVER BDGP GENES (IN PROGRESS 12/3/03 angie)
+# LIFTOVER BDGP GENES (IN PROGRESS 12/9/03 angie)
     ssh hgwdev
     mkdir /cluster/data/dp1/bed/bdgpAnnotations
     cd /cluster/data/dp1/bed/bdgpAnnotations
     echo 'select * from bdgpGene' | hgsql -N dm1 > dm1.bdgpGene.tab
-    liftOver -genePred dm1.bdgpGene.tab \
+    liftOver -minMatch=0.5 -minBlocks=0.5 -fudgeThick -genePred \
+      dm1.bdgpGene.tab \
       /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ/all.chain \
-      scaffold.bdgpGene.tab scaffold.unmapped.tab
-    foreach mm (0.5)
-    liftOver -minMatch=$mm -genePred dm1.bdgpGene.tab \
+      scaffold.bdgpLiftGene.tab scaffold.unmapped.tab
+    liftOver -minMatch=0.5 -minBlocks=0.5 -fudgeThick -genePred \
+      dm1.bdgpGene.tab \
       /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom/all.chain \
-      chrUn.$mm.bdgpGene.tab chrUn.$mm.unmapped.tab
-    end
-    wc -l bdgpGene.tab chrUn.bdgpGene.tab 
-    ssh hgwdev
+      chrUn.bdgpLiftGene.tab chrUn.unmapped.tab
+    wc -l dm1.bdgpGene.tab scaffold.bdgpLiftGene.tab chrUn.bdgpLiftGene.tab 
+    grep ^# chrUn.unmapped.tab | awk '{print $1 " " $2 " " $3;}' \
+    | sort | uniq -c | sort -gr
     hgsql dp1 <<end
-CREATE TABLE bdgpGene (
+CREATE TABLE bdgpLiftGene (
     name varchar(255) not null, # Name of gene
     chrom varchar(255) not null,        # Chromosome name
     strand char(1) not null,    # + or - for strand
@@ -572,10 +586,14 @@ CREATE TABLE bdgpGene (
     INDEX(chrom(12),txEnd)
 );
 end
-    echo 'load data local infile "chrUn.0.5.bdgpGene.tab" into table bdgpGene'\
+    echo 'load data local infile "chrUn.bdgpLiftGene.tab" into table bdgpLiftGene'\
     | hgsql dp1
-    echo 'create table bdgpGenePep select * from dm1.bdgpGenePep' \
+    echo 'create table bdgpLiftGenePep select * from dm1.bdgpGenePep' \
     | hgsql dp1
+    # Make the scaffold-coords version available for download
+    zip /usr/local/apache/htdocs/goldenPath/dp1/bigZips/scaffoldAnnot.zip \
+      scaffold.bdgpLiftGene.tab
+    # Update /usr/local/apache/htdocs/goldenPath/dp1/bigZips/README.txt
 
 
 # SWAP DM1-DP1 BLASTZ (DONE 12/3/03 angie)
