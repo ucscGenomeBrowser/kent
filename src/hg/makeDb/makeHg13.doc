@@ -1,10 +1,7 @@
 This file describes how we made the browser database on 
-NCBI build 30 (July, 2002 freeze)
+NCBI build 31 (November, 2002 freeze)
 
 [For importing GTF tracks, use /projects/compbio/bin/validate_gtf.pl]
-
-(The numbered stuff was brought in from
- /cluster/store3/gs.13/build30/build.ncbi.doc)
 
 HOW TO BUILD A ASSEMBLY FROM NCBI FILES
 ---------------------------------------
@@ -182,8 +179,6 @@ done after repeat masking and distributing to cluster nodes)
         ssh kkstore
 	cd ~/oo
         /cluster/bin/scripts/cpNcbiFaScratch . /scratch/hg/gs.14/build31
-    Build 31 re-do only:
-        cd /scratch/hg/gs.14/build31/; mv contig contig.MMYY
 
 13) Create jkStuff/ncbi.lft for lifting stuff built w/NCBI assembly.
     Note: this ncbi.lift will not lift floating contigs to chr_random coords,
@@ -195,7 +190,7 @@ done after repeat masking and distributing to cluster nodes)
 CREATING DATABASE  (DONE 12/03/02 - MATT)
 
 o - ln -s /cluster/store4/gs.14/build31 ~/oo
-o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
+o - Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 o - Create the database.
      - ssh hgwdev
      - Enter mysql as the mysql root user.
@@ -216,28 +211,10 @@ o - Create the trackDb table as so
        cvs commit makefile
 
 
-LOAD REPEAT MASKS (TO DO)
+LOAD REPEAT MASKS (DONE 12/4/02)
     Load the RepeatMasker .out files into the database with:
        cd ~/oo
        hgLoadOut hg13 ?/*.fa.out ??/*.fa.out
-
-
-EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT's scripts) (TO DO)
-
-    ssh eieio
-    mkdir -p ~/hg13/bed/linSpecRep
-    cd ~/hg13/bed/linSpecRep
-    foreach f (~/hg13/*/*.out)
-        ln -sf $f .
-    end
-    /cluster/bin/scripts/primateSpecificRepeats.pl *.out
-    /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
-    /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
-    rm *.out
-    rm -rf /scratch/hg/gs.14/build31/linSpecRep
-    cd ..
-    cp -R linSpecRep /scratch/hg/gs.14/build31
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (TO DO)
@@ -252,7 +229,7 @@ Load chromosome sequence info into database and save chrom sizes
      hgsql hg13 < ~/src/hg/lib/chromInfo.sql
      cd ~/oo
      hgNibSeq -preMadeNib hg13 /cluster/store4/gs.14/build31/nib ?{,?}/chr*.fa
-     mysql -u hguser -phguserstuff -N -e "select chrom,size from chromInfo" hg13 > chrom.sizes
+     echo "select chrom,size from chromInfo" | hgsql -N hg13 > chrom.sizes
 
 Store o+o info in database.
 Note: for build30, Terry specially requested these files from NCBI:
@@ -294,7 +271,7 @@ format.
   o - Point your browser to ftp://ftp.ncbi.nih.gov/genbank and
       look at the README.genbank.  Figure out the current release number
       (which is 132).
-  o - Consider deleting one of the older genbank releases.  It's
+  o - Consider deleting one of the older genbank releases.  It''s
       good to at least keep one previous release though.
   o - Where there is space make a new genbank directory.  Create a
       symbolic link to it:
@@ -573,18 +550,19 @@ o - Create precomputed geneBands table:
 	  >mysqy quit
       rm geneBands.txt
 
-SIMPLE REPEAT TRACK (TO DO)
+SIMPLE REPEAT TRACK (IN PROGRESS)
 
-o - Create cluster parasol job like so:
+	# Create cluster parasol job like so:
         ssh kk
 	mkdir -p ~/oo/bed/simpleRepeat
 	cd ~/oo/bed/simpleRepeat
-	cp /cluster/store1/gs12.build29/bed/simpleRepeat/gsub ./gsub
+	cp ~/lastOo/bed/simpleRepeat/gsub .
 	mkdir trf
 
-Ask the admins to push /scratch/hg/gs.14/build31/ to the cluster
-	ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
-	gensub2 genome.lst single gsub spec
+	# Ask the admins to push /scratch/hg/gs.14/build31/ to the cluster
+	ls -1S /scratch/hg/gs.14/build31/contig/*.fa > genome.lst
+	echo "" > dummy.list
+	gensub2 genome.lst dummy.list gsub spec
 	para create spec
 TODO	para try
 	para check
@@ -594,7 +572,110 @@ TODO	para try
 o - Load this into the database as so
         ssh hgwdev
 	cd ~/oo/bed/simpleRepeat
-	hgLoadBed hg13 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+	hgLoadBed hg13 simpleRepeat simpleRepeat.bed \
+          -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TO DO)
+
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh eieio
+    cd ~/hg13/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd ~/hg13
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c (?{,?})
+      perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+        $c/lift/ordered.lst > $c/lift/oTrf.lst
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+      endif
+      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+        jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      if (-e $c/lift/rTrf.lst) then
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+    # Make a trfMasked version of the contigs:
+    cd ~/hg13
+    mkdir trfFa
+    foreach f (?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa)
+      set c = $f:t:r
+      maskOutFa -softAdd $f bed/simpleRepeat/trfMask/$c.bed trfFa/$c.fa.trf
+    end
+    # Then make sure there is enough space available on /scratch and do
+    ssh kkstore
+    cp -Rp ~/hg13/trfFa /scratch/hg/hg13/trfFa.1204
+    # ask for binrsync, or sudo /cluster/install/utilities/updateLocal
+
+MAKE DOWNLOADABLE SEQUENCE FILES (TODO)
+
+    # This used to be done right after RepeatMasking.  Now, we mask with 
+    # TRF as well, so do this after the "PREPARING SEQUENCE" step above.
+    ssh eieio
+    cd ~/hg13
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    ./jkStuff/makeFaTrfMasked.sh
+    #- Make hard-masked .fa.masked files as well:
+    ./jkStuff/makeHardMasked.sh
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    ./jkStuff/makeNib.sh
+    #- Rebuild the .zip files
+    ./jkStuff/zipAll.sh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd ~/hg13
+    ./jkStuff/cpToWeb.sh
+    cd /usr/local/apache/htdocs/goldenPath/14nov2002
+    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+
+PREPARE CLUSTER FOR BLASTZ RUN (TODO)
+
+    # This needs to be done after trf-masking and nib generation.
+    ssh eieio
+    # Extract lineage-specific repeats using Arian Smit's script:
+    mkdir -p ~/hg13/bed/linSpecRep
+    cd ~/hg13/bed/linSpecRep
+    foreach f (~/hg13/*/*.out)
+        ln -sf $f .
+    end
+    /cluster/bin/scripts/rodentSpecificRepeats.pl *.out
+    /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
+    /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
+    rm *.out
+    # Copy files to the kkstore:/scratch
+    ssh kkstore
+    # lineage-specific repeats:
+    cd ~/hg13/bed
+    mkdir -p /scratch/hg/gs.14/build31
+    rm -rf /scratch/hg/gs.14/build31/linSpecRep
+    cp -Rp linSpecRep /scratch/hg/gs.14/build31
+    # RepeatMasker .out:
+    cd ~/hg13
+    rm -rf /scratch/hg/gs.14/build31/rmsk
+    mkdir -p /scratch/hg/gs.14/build31/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /scratch/hg/gs.14/build31/rmsk
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /scratch/hg/gs.14/build31/chromTrfMixedNib
+    mkdir -p /scratch/hg/gs.14/build31/chromTrfMixedNib
+    cp -p mixedNib/chr*.nib /scratch/hg/gs.14/build31/chromTrfMixedNib
+    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
 PRODUCING GENSCAN PREDICTIONS (TO DO)
@@ -678,98 +759,10 @@ o - Load into the database as so:
      hgLoadBed hg13 genscanSubopt genscanSubopt.bed > /dev/null
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TO DO)
-
-Make sure that the NT*.fa files are lower-case repeat masked.
-Do something much like the simpleRepeat track, but only
-masking out stuff with a period of 12 or less as so:
-    ssh kk
-    mkdir -p ~/oo/bed/trfMask
-    cd ~/oo/bed/trfMask
-    cp ~/cluster/store1/gs.12/build29/bed/trfMask/gsub .
-    mkdir trf
-    ls -1S /scratch/hg/gs.14/build31/contig.0729/*.fa > genome.lst
-    gensub2 genome.lst single gsub spec
-    para create spec
-    para try
-    para check
-    para push
-When that is done do:
-    ssh kkstore
-    mkdir /scratch/hg/gs.14/build31/trfFa.0730
-    cd ~/oo
-NOTE:Below is a tcsh script
-    foreach i (? ??)
-        cd $i
-        foreach j (NT*)
-            maskOutFa $j/$j.fa ../bed/trfMask/trf/$j.bed -softAdd \
-              /scratch/hg/gs.14/build31/trfFa.0730/$j.fa.trf
-            echo done $i/$j
-        end
-        cd ..
-    end
-
-Then ask admins to do a binrsync.
-
-PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for mouse blastz (TO DO)
-
-    # lift trfMask output to chrom-level... this is a pain because all 
-    # trf output was put in the same dir.  maybe next time around, we 
-    # can preserve chrom dir structure...
-    ssh eieio
-    cd ~/oo
-    foreach c (?{,?})
-     if (-e $c/lift/ordered.lst) then
-       set ntlist = ()
-       foreach n (`cat $c/lift/ordered.lst`)
-         set ntlist = ($ntlist bed/trfMask/trf/$n.bed)
-       end
-       liftUp $c/chr$c.trf.bed jkStuff/liftAll.lft warn $ntlist
-     endif
-     if (-e $c/lift/random.lst) then
-       set ntlist = ()
-       foreach n (`cat $c/lift/random.lst`)
-         set ntlist = ($ntlist bed/trfMask/trf/$n.bed)
-       end
-       liftUp $c/chr${c}_random.trf.bed jkStuff/liftAll.lft warn $ntlist
-     endif
-    end
-    # make trf-masked chrom-level .fa
-    foreach c (?{,?})
-      cd $c
-      if (-e chr$c.trf.bed) then
-        echo masking $c...
-        cp chr$c.fa chr$c.trf.fa
-        maskOutFa -softAdd chr$c.trf.fa chr$c.trf.bed chr$c.trf.fa
-      endif
-      if (-e chr${c}_random.trf.bed) then
-        echo masking ${c}_random...
-        cp chr${c}_random.fa chr${c}_random.trf.fa
-        maskOutFa -softAdd chr${c}_random.trf.fa chr${c}_random.trf.bed \
-          chr${c}_random.trf.fa
-      endif
-      cd ..
-    end
-    # make nib
-    mkdir trfMixedNib
-    foreach c (?{,?})
-      if (-e $c/chr$c.trf.fa) then
-        faToNib -softMask $c/chr$c.trf.fa trfMixedNib/chr$c.nib
-      endif
-      if (-e $c/chr${c}_random.trf.fa) then
-        faToNib -softMask $c/chr${c}_random.trf.fa \
-          trfMixedNib/chr${c}_random.nib
-      endif
-    end
-    rm -rf /scratch/hg/gs.14/build31/chromTrfMixedNib
-    cp -pR trfMixedNib /scratch/hg/gs.14/build31/chromTrfMixedNib
-
-
 CREATE GOLDEN TRIANGLE (todo)
 
-Make sure that rnaCluster table is in place.   Then
-extract Affy expression info into a form suitable
-for Eisen's clustering program with:
+# Make sure that rnaCluster table is in place.   Then extract Affy 
+# expression info into a form suitable for Eisen's clustering program with:
       cd ~/oo/bed
       mkdir triangle
       cd triangle
@@ -1446,7 +1439,7 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-LOAD SNPS (Done; Daryl Thomas July 29, 2002)
+LOAD SNPS (TODO)
       ssh hgwdev
       cd ~/oo/bed
       mkdir snp
@@ -1469,35 +1462,24 @@ LOAD SNPS (Done; Daryl Thomas July 29, 2002)
       hgLoadBed hg13 snpNih snpNih.bed
      -gzip all of the big files
 
-LOAD CPGISLANDS (TO DO)
+LOAD CPGISLANDS (TODO)
      ssh eieio
      mkdir -p ~/oo/bed/cpgIsland
      cd ~/oo/bed/cpgIsland
-     - Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
-     - copy the tar file to the current directory
+     # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
+     # copy the tar file to the current directory
      tar xvf cpg_dist.tar 
      cd cpg_dist
      gcc readseq.c cpg_lh.c -o cpglh.exe
      cd ..
-     - cpglh.exe requires hard-masked (N) .fa's.  
-     - execute the following loop in tcsh to hard-mask chr*.fa and run cpglh:
-     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y \
-                Un M)
-       if (-e ../../$c/chr$c.fa) then
-         tr '[a-z]' 'N' < ../../$c/chr$c.fa | sed -e 's/^>NNN/>chr/' > chr$c.fa
-         echo masked chr$c.
-         ./cpg_dist/cpglh.exe chr$c.fa > chr$c.fa.cpg
-         echo Done with chr$c.
-       else
-         echo ../../$c/chr$c.fa does not exist.
-       endif
-       if (-e ../../$c/chr${c}_random.fa) then
-         tr '[a-z]' 'N' < ../../$c/chr${c}_random.fa | sed -e 's/^>NNN/>chr/' \
-           > chr${c}_random.fa
-         echo masked chr${c}_random.
-         ./cpg_dist/cpglh.exe chr${c}_random.fa > chr${c}_random.fa.cpg
-         echo Done with chr${c}_random.
-       endif
+     # cpglh.exe requires hard-masked (N) .fa's.  
+     # execute the following loop in tcsh to hard-mask chr*.fa and run cpglh:
+     foreach f (../../?{,?}/chr?{,?}{,_random}.fa)
+       set fout=$f:t
+       tr '[a-z]' 'N' < $f | sed -e 's/^>NNN/>chr/' > $fout
+       echo masked $fout
+       ./cpg_dist/cpglh.exe $fout > $fout.cpg
+       echo Done with $fout
      end
      rm chr*.fa
      -copy filter.awk from a previous release
@@ -1508,7 +1490,7 @@ LOAD CPGISLANDS (TO DO)
      hgLoadBed hg13 cpgIsland -tab -noBin \
        -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-LOAD ENSEMBL GENES (Done by Matt 9/20/02)
+LOAD ENSEMBL GENES (TODO)
      cd ~/oo/bed
      mkdir ensembl
      cd ensembl
@@ -1549,8 +1531,8 @@ LOAD SANGER22 GENES  TO DO
       not sure where these files were downloaded from
       grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg13 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
           | ldHgGene hg13 sanger22pseudo stdin
-  Note: this creates sanger22extras, but doesn't currently create
-  a correct sanger22 table, which are replaced in the next steps
+  # Note: this creates sanger22extras, but doesn't currently create
+  # a correct sanger22 table, which are replaced in the next steps
       sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
           | ldHgGene hg13 sanger22 stdin
       sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
@@ -1983,7 +1965,7 @@ TWINSCAN GENE PREDICTIONS (TO DO)
 
 LOAD CHIMP DATA
 
-o Load Ingo Ebersber's chimp BLAT alignments
+# Load Ingo Ebersber's chimp BLAT alignments
 cd ~/oo
 mkdir bed/chimpBlat
 cd bed/chimpBlat
@@ -2013,65 +1995,8 @@ pslCat *.psl > chimpBac.psl
 hgLoadPsl hg13 chimpBac.psl
 
 
-MAKING THE DOWNLOADABLE DATABASE FILES - TO DO
 
-ssh hgwdev
-
-mkdir /usr/local/apache/htdocs/goldenPath/28jun2002
-mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/chromosomes
-mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/database
-
-o zip up the chromosomes individually
-
-ssh eieio # (we use eieio because no NFS traffic via eieio = faster data transfer)
-cd ~/oo
-
-#In tcsh run this script
-  tcsh
-  foreach i (?{,?}/chr*.fa)
-      echo zip $i:r.zip $i
-      zip $i:r.zip $i
-  end
-
-Then do:  
-ssh hgwdev
-cd ~/oo
-mv ?{,?}/chr*.zip /usr/local/apache/htdocs/goldenPath/28jun2002/chromosomes
-
-Request that the admins push this to hgwbeta
-
-o Make the big zips
-
-ssh eieio
-cd ~/oo
-
-# Make the big zips
-zip chromAgp.zip ?{,?}/chr*.agp
-zip chromFa.zip ?{,?}/chr*.fa
-zip chromOut.zip ?{,?}/chr*.out
-zip contigAgp.zip ?{,?}/NT_??????/NT_??????.agp
-zip contigFa.zip ?{,?}/NT_??????/NT_??????.fa
-zip contigOut.zip ?{,?}/NT_??????/NT_??????.fa.out
-zip liftAll.zip jkStuff/liftAll.lft
-zip mrna.zip /cluster/store1/mrna.132/mrna.fa
-
-ssh hgwdev
-cd ~/oo
-# Move all the zips to the web server dirs
-mv chromAgp.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv chromFa.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv chromOut.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv contigAgp.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv contigFa.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv contigOut.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv liftAll.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-mv mrna.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
-Request that the admins push all this to hgwbeta.
-
-
-o Dump the database - DON'T DO THIS
+# Dump the database - DON'T DO THIS
 IT IS HERE FOR REFERENCE ONLY
 IT IS DONE AUTOMATICALLY BY A PAUL T. SCRIPT ON THE PRODUCTION MACHINES
 ssh hgwbeta
@@ -2081,11 +2006,11 @@ There is one trick here: mysqldump becomes the mysql user
 and the directory you want to dump to must have that
 user the ability to write to it.
 
-Here's what to do:
+# Here's what to do:
 
 cd /var/tmp
 mkdir hg13-dump
-chmod 777 hg13-dump      (since you aren't root this is quickest)
+chmod 777 hg13-dump      # (since you aren't root this is quickest)
 cd hg13-dump
 mysqldump --user=root --password=mysql4cc --all --tab=. hg13
 
