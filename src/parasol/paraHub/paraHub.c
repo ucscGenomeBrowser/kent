@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.4 2005/01/06 08:12:27 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.5 2005/01/06 09:01:01 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1159,7 +1159,7 @@ if ((userName = nextWord(&line)) == NULL)
     return -2;
 if ((dir = nextWord(&line)) == NULL)
     return -2;
-if ((maxNode = atoi(nextWord(&line))) < 1)
+if ((maxNode = atoi(nextWord(&line))) < -1)
     return -2;
 return setMaxNode(userName, dir, maxNode);
 }
