@@ -45,6 +45,8 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "recombRate.h"
+#include "recombRateRat.h"
+#include "recombRateMouse.h"
 #include "stsInfo.h"
 #include "stsInfo2.h"
 #include "mouseSyn.h"
@@ -116,7 +118,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.526 2003/12/05 04:28:26 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.527 2003/12/05 19:07:08 booch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9538,6 +9540,120 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doRecombRateRat(struct trackDb *tdb)
+/* Handle click on the rat Recombination Rate track */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct recombRateRat *rr;
+char sband[32], eband[32];
+int i;
+
+/* Print out non-sequence info */
+cartWebStart(cart, "Recombination Rates");
+
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM recombRateRat WHERE "
+               "chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    boolean gotS, gotB;
+    rr = recombRateRatLoad(row);
+    /* Print out general sequence positional information */
+    printf("<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
+    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    gotS = hChromBand(seqName, start, sband);
+    gotB = hChromBand(seqName, end, eband);
+    if (gotS && gotB)
+	{
+	if (sameString(sband,eband)) 
+	    {
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	    }
+	else
+	    {
+	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	    }
+	}
+    printf("<TR><TH ALIGN=left>SHRSPxBN Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->shrspAvg);
+    printf("<TR><TH ALIGN=left>FHHxACI Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->fhhAvg);
+    printf("</TABLE>\n");
+    freeMem(rr);
+    }
+webNewSection("Notes:");
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doRecombRateMouse(struct trackDb *tdb)
+/* Handle click on the mouse Recombination Rate track */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct recombRateMouse *rr;
+char sband[32], eband[32];
+int i;
+
+/* Print out non-sequence info */
+cartWebStart(cart, "Recombination Rates");
+
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM recombRateMouse WHERE "
+               "chrom = '%s' AND chromStart = %d "
+               "AND chromEnd = %d",
+	seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    boolean gotS, gotB;
+    rr = recombRateMouseLoad(row);
+    /* Print out general sequence positional information */
+    printf("<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
+    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    gotS = hChromBand(seqName, start, sband);
+    gotB = hChromBand(seqName, end, eband);
+    if (gotS && gotB)
+	{
+	if (sameString(sband,eband)) 
+	    {
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	    }
+	else
+	    {
+	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	    }
+	}
+    printf("<TR><TH ALIGN=left>WI Genetic Map Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->wiAvg);
+    printf("<TR><TH ALIGN=left>MGD Genetic Map Sex-Averaged Rate:</TH><TD>%3.1f cM/Mb</TD></TR>\n", rr->mgdAvg);
+    printf("</TABLE>\n");
+    freeMem(rr);
+    }
+webNewSection("Notes:");
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doGenMapDb(struct trackDb *tdb, char *clone)
 /* Handle click on the GenMapDb clones track */
 {
@@ -10271,6 +10387,18 @@ if (sameString("fosEndPairsLong", track))
     lfLabel = "Fosmid ends";
     table = track;
     }
+if (sameString("earlyRep", track)) 
+    {
+    sprintf(title, "Location of %s using cosmid end sequences", clone);
+    lfLabel = "Early Replciation Cosmid Ends";
+    table = track;
+    }
+if (sameString("earlyRepBad", track)) 
+    {
+    sprintf(title, "Location of %s using cosmid end sequences", clone);
+    lfLabel = "Early Replication Cosmid Ends";
+    table = track;
+    }
 
 /* Print out non-sequence info */
 cartWebStart(cart, title);
@@ -10341,7 +10469,9 @@ if (row != NULL)
 	    slAddHead(&pslList, psl);
 	    }
 	slReverse(&pslList);
-	if (!sameString("fosEndPairs", track)) 
+	if ((!sameString("fosEndPairs", track)) 
+	    && (!sameString("earlyRep", track)) 
+	    && (!sameString("earlyRepBad", track))) 
 	    {
 	    printf("<H3><A HREF=");
 	    printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
@@ -12650,6 +12780,14 @@ else if (sameWord(track, "recombRate"))
     {
     doRecombRate(tdb);
     }
+else if (sameWord(track, "recombRateRat"))
+    {
+    doRecombRateRat(tdb);
+    }
+else if (sameWord(track, "recombRateMouse"))
+    {
+    doRecombRateMouse(tdb);
+    }
 else if (sameWord(track, "genMapDb"))
     {
     doGenMapDb(tdb, item);
@@ -12707,6 +12845,10 @@ else if ((sameWord(track, "bacEndPairs")) || (sameWord(track, "bacEndPairsBad"))
     doLinkedFeaturesSeries(track, item, tdb);
     }
 else if ((sameWord(track, "fosEndPairs")) || (sameWord(track, "fosEndPairsBad")) || (sameWord(track, "fosEndPairsLong")))
+    {
+    doLinkedFeaturesSeries(track, item, tdb);
+    }
+ else if ((sameWord(track, "earlyRep")) || (sameWord(track, "earlyRepBad")))
     {
     doLinkedFeaturesSeries(track, item, tdb);
     }
