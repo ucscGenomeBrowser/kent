@@ -1921,7 +1921,9 @@ char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
      *date,*productName;
 int seqSize,fileSize;
 long fileOffset;
-char *ext_file;		    
+char *ext_file;	
+boolean hasVersion = hHasField("mrna", "version");
+char *version = NULL;
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -1933,24 +1935,36 @@ char *ext_file;
  * and these RNA fields are searched.  So it looks like
  * the code below stays.  Be really careful when you modify
  * it. */
+
+    dyStringAppend(dy,
+                   "select mrna.type,mrna.direction,"
+                   "source.name,organism.name,library.name,mrnaClone.name,"
+                   "sex.name,tissue.name,development.name,cell.name,cds.name,"
+                   "description.name,author.name,geneName.name,productName.name,"
+                   "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
+
+/* If the mrna table has a "version" column then will show it */
+if (hasVersion) 
+    {
+    dyStringAppend(dy,
+                   ", mrna.version ");    
+    } 
+
 dyStringAppend(dy,
-  "select mrna.type,mrna.direction,"
-  	 "source.name,organism.name,library.name,mrnaClone.name,"
-         "sex.name,tissue.name,development.name,cell.name,cds.name,"
-	 "description.name,author.name,geneName.name,productName.name,"
-	 "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size "
-  "from mrna,seq,source,organism,library,mrnaClone,sex,tissue,"
-        "development,cell,cds,description,author,geneName,productName ");
+               " from mrna,seq,source,organism,library,mrnaClone,sex,tissue,"
+               "development,cell,cds,description,author,geneName,productName ");
+
 dyStringPrintf(dy,
-  "where mrna.acc = '%s' and mrna.id = seq.id ", acc);
+               " where mrna.acc = '%s' and mrna.id = seq.id ", acc);
 dyStringAppend(dy,
-    "and mrna.source = source.id and mrna.organism = organism.id "
-    "and mrna.library = library.id and mrna.mrnaClone = mrnaClone.id "
-    "and mrna.sex = sex.id and mrna.tissue = tissue.id "
-    "and mrna.development = development.id and mrna.cell = cell.id "
-    "and mrna.cds = cds.id and mrna.description = description.id "
-    "and mrna.author = author.id and mrna.geneName = geneName.id "
-    "and mrna.productName = productName.id");
+               "and mrna.source = source.id and mrna.organism = organism.id "
+               "and mrna.library = library.id and mrna.mrnaClone = mrnaClone.id "
+               "and mrna.sex = sex.id and mrna.tissue = tissue.id "
+               "and mrna.development = development.id and mrna.cell = cell.id "
+               "and mrna.cds = cds.id and mrna.description = description.id "
+               "and mrna.author = author.id and mrna.geneName = geneName.id "
+               "and mrna.productName = productName.id");
+
 sr = sqlMustGetResult(conn, dy->string);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -1964,6 +1978,11 @@ if (row != NULL)
     fileOffset=sqlUnsigned(row[18]);
     fileSize=sqlUnsigned(row[19]);
 
+    if (hasVersion) 
+        {
+        version = row[20];
+        }
+        
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
