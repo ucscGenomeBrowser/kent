@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.422 2003/05/25 23:20:32 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.423 2003/06/03 20:11:49 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -273,7 +273,7 @@ else
 aiList = hGetAxtAlignments(db2);
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&alignment=%s&db2=%s&xyzzy=xyzzy#%s\">",
        hgcPathAndSettings(), "htcGenePsl", encodedItem, chrom, winStart, winEnd,
-       other, aiList->alignment, db2, tag);
+       other, cgiEncode(aiList->alignment), db2, tag);
 dbDbFreeList(&dbList);
 }
 
