@@ -808,7 +808,7 @@ while (row3 != NULL)
 
 	    /* display a protein */
 	    hPrintf(
-		"<LI><A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pbGlobal?proteinID=%s&db=%s\">",
+		"<LI><A HREF=\"http:/cgi-bin/pbGlobal?proteinID=%s&db=%s\">",
 		displayID, gDatabase);
 	    if (sameWord(spID, displayID))
 		{
