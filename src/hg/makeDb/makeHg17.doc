@@ -13100,3 +13100,322 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 
     hgsql hg17 -e 'load data local infile "hg17.kgProtAlias.tab" into table hg17.kgProtAlias'
 
+
+
+# BLASTZ HUMAN TARGET, COW QUERY (DONE, Nov. 2004 - Jan. 2005, Heather)
+  ssh kk
+  # use /cluster/data/bosTau1 because more disk space there
+  cd /cluster/data/bosTau1/bed
+  mkdir zb.hg17
+
+  # create DEF file 
+  # for now, not doing ABRIDGE_REPEATS
+  # this means I don't need to create lineage specific repeats
+  # This is because blastz-run wouldn't take advantage of these
+  # because my query is in scaffolds
+
+# human vs. cow
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+#SEQ1_DIR=/iscratch/i/hg17/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow
+SEQ2_DIR=/iscratch/i/bosTau1/splitDir
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/zb.hg17
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'_EOF_'
+  # << this line keeps emacs coloring happy
+  bash
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  source DEF
+  mkdir $RAW run.0
+  # create S2.len so make-joblist doesn't have to
+  /cluster/bin/scripts/blastz-make-joblist $DEF > $BASE/run.0/j
+  sh ./xdir.sh
+  cd run.0
+  # check how many lines in j
+  sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+  para create jobList
+  para try, para check, para push, para check....
+
+  # convert out to lav
+  ssh kki
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  # run bash shell if not running it already
+  source DEF
+  mkdir -p $BASE/run.1
+  mkdir -p $BASE/lav
+  # create a new job list to convert out files to lav
+  /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > run.1/jobList
+  cd run.1
+  # make sure the job list is OK
+  wc -l jobList
+  head jobList
+  para create jobList
+  para try
+  para check
+  para push
+
+  # lavToAxt
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  mkdir axtTemp
+  cd lav
+  foreach i (*)
+      catDir $i | lavToAxt stdin /cluster/data/hg17/nib \
+        /cluster/data/bosTau1/bosTau1.2bit ../axtTemp/$i.axt
+      echo done $i
+  end
+
+  # axtChain
+  ssh kki
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  mkdir -p axtChain/run1
+  cd axtChain/run1
+  mkdir out chainRaw
+  ls -1S /cluster/data/bosTau1/bed/zb.hg17/axtTemp/*.axt > input.lst
+
+  cat << '_EOF_' > gsub
+  #LOOP
+  doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out exists out/$(root1).out}
+  #ENDLOOP
+  '_EOF_'
+  # << this line makes emacs coloring happy
+    
+  cat << '_EOF_' > doChain
+  #!/bin/csh
+'_EOF_'
+  axtChain $1 /iscratch/i/hg17/bothMaskedNibs /iscratch/i/bosTau1/nib/bosTau1.2bit $2 > $3
+    
+  # << this line makes emacs coloring happy
+  chmod a+x doChain
+  gensub2 input.lst single gsub jobList
+  para create jobList
+  para try
+  para check
+  para push
+
+  # Completed: 46 of 46 jobs
+  # Average job time:                  83s       1.39m     0.02h    0.00d
+  # Longest job:                     1240s      20.67m     0.34h    0.01d
+  # Submission to last job:          1326s      22.10m     0.37h    0.02d
+
+  # mergesort
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  chainMergeSort run1/chainRaw/*.chain > all.chain.jan3
+
+  # chainAntiRepeat
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain/run1
+  mkdir chainAntiRepeat
+  # test with just one
+  chainAntiRepeat /cluster/store5/gs.18/build35/nib /cluster/data/bosTau1/bosTau1.2bit \
+    chainRaw/chr18.chain chainAntiRepeat/chr18.chain
+  # do them all
+  foreach f (chainRaw/*.chain)
+    set f1 = $f:t
+    echo $f1
+      chainAntiRepeat /cluster/store5/gs.18/build35/nib /cluster/data/bosTau1/bosTau1.2bit \
+        $f chainAntiRepeat/$f1
+  end
+
+  # mergesort again
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  chainMergeSort run1/chainAntiRepeat/*.chain > all.chain.jan5
+  gzip all.chain.jan3
+
+  # split
+  mkdir chain
+  chainSplit chain all.chain.jan5
+
+  # look at the distribution
+  foreach f (chain/*.chain)
+    grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+    echo $f:t:r
+    textHistogram -binSize=5000 /tmp/score.$f:t:r
+    echo ""
+  end
+  # see files histogram.out and histogram.interesting
+
+  # run chainFilter
+  chainFilter -minScore=5000 all.chain.jan5 > all.chain.jan5.filtered
+  gzip all.chain.jan5
+
+  # split
+  rm chain/*
+  chainSplit chain all.chain.jan5.filtered
+  gzip all.chain.jan5.filtered
+
+  # load
+  ssh hgwdev
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain/chain
+  foreach i (*.chain)
+    set c = $i:r
+    echo loading $c
+    hgLoadChain hg17 ${c}_chainBosTau1 $i
+  end
+
+    # featureBits -chrom=chr1 hg17 chainBosTau1Link
+    # 103272818 bases of 222827847 (46.346%) in intersection
+    # featureBits -chrom=chr2 hg17 chainBosTau1Link
+    # 105920345 bases of 237506229 (44.597%) in intersection
+    # featureBits -chrom=chr3 hg17 chainBosTau1Link
+    # 89582887 bases of 194635740 (46.026%) in intersection
+    # featureBits -chrom=chr4 hg17 chainBosTau1Link
+    # 77513949 bases of 187161218 (41.416%) in intersection
+    # featureBits -chrom=chr5 hg17 chainBosTau1Link
+    # 80428726 bases of 177702766 (45.260%) in intersection
+    # featureBits -chrom=chr6 hg17 chainBosTau1Link
+    # 71830264 bases of 167317699 (42.930%) in intersection
+    # featureBits -chrom=chr7 hg17 chainBosTau1Link
+    # 64561289 bases of 154759139 (41.717%) in intersection
+    # featureBits -chrom=chr8 hg17 chainBosTau1Link
+    # 55896735 bases of 142612826 (39.195%) in intersection
+    # featureBits -chrom=chr9 hg17 chainBosTau1Link
+    # 52068957 bases of 117781268 (44.208%) in intersection
+    # featureBits -chrom=chr10 hg17 chainBosTau1Link
+    # 57427282 bases of 131613628 (43.633%) in intersection
+    # featureBits -chrom=chr11 hg17 chainBosTau1Link
+    # 58412709 bases of 131130853 (44.545%) in intersection
+    # featureBits -chrom=chr12 hg17 chainBosTau1Link
+    # 56076163 bases of 130259811 (43.049%) in intersection
+    # featureBits -chrom=chr13 hg17 chainBosTau1Link
+    # 37951944 bases of 95559980 (39.715%) in intersection
+    # featureBits -chrom=chr14 hg17 chainBosTau1Link
+    # 39896970 bases of 88290585 (45.188%) in intersection
+    # featureBits -chrom=chr15 hg17 chainBosTau1Link
+    # 37507979 bases of 81341915 (46.112%) in intersection
+    # featureBits -chrom=chr16 hg17 chainBosTau1Link
+    # 33883573 bases of 78884754 (42.953%) in intersection
+    # featureBits -chrom=chr17 hg17 chainBosTau1Link
+    # 31871034 bases of 77800220 (40.965%) in intersection
+    # featureBits -chrom=chr18 hg17 chainBosTau1Link
+    # 30359555 bases of 74656155 (40.666%) in intersection
+
+
+
+# NET 
+# run in stages to avoid memory problems
+  ssh kolossus
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+
+  # PRE
+  /cluster/bin/x86_64/chainPreNet all.chain.jan5.filtered ../S1.len ../S2.len chainPreNet.out
+
+  # chainNet
+  /cluster/bin/x86_64/chainNet chainPreNet.out \
+    -minSpace=1 ../S1.len ../S2.len bosTau1.net.raw /dev/null
+
+  # syntenic (using revision 1.6)
+  /cluster/home/heather/bin/x86_64/netSyntenic bosTau1.net.raw bosTau1.net.syn
+  # memory usage 2757492736, utime 13404 s/100, stime 616
+
+  # backup/compress
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  gzip bosTau1.net.raw
+  cp bosTau1.net.syn bosTau1.net.syn.backup
+
+  # netClass
+  # takes about 4 hours
+  ssh hgwdev
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  netClass -noAr bosTau1.net.syn hg17 bosTau1 bosTau1.net
+
+  # backups
+  ssh kksilo
+  cp bosTau1.net bosTau1.net.backup
+  rm bosTau1.net.syn.backup
+
+  # load
+  ssh hgwdev
+  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  netFilter -minGap=10 bosTau1.net | hgLoadNet hg17 netBosTau1 stdin
+  rm bosTau1.net.backup
+
+  # index has NULL cardinality; analyze to fix
+  hgsql hg17
+  analyze table netBosTau1
+
+  # generate axts 
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  mkdir axtNet
+
+  # split first (not required?)
+  cd axtChain
+  mkdir net
+  netSplit bosTau1.net.syn net
+  cd net
+  foreach i (*.net)
+    netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/bosTau1/bosTau1.2bit ../../axtNet/$i:r.axt
+  end
+  gzip bosTau1.net.syn
+  gzip bosTau1.net
+
+  # axtSort (takes about 5 minutes)
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  mkdir axtNetSort
+  foreach f ( axtNet/*.axt )
+    set c = $f:t:r
+    echo "axtSort on $c"
+    axtSort $f axtNetSort/$c.axt
+  end
+
+  # make maf files
+  mkdir mafNet
+  foreach f (axtNetSort/*.axt)
+    set c = $f:t:r
+    echo "axtToMaf on $c"
+    axtToMaf $f /cluster/data/hg17/chrom.sizes /cluster/data/bosTau1/chrom.sizes mafNet/$c.maf -tPrefix=hg17. -qPrefix=bosTau1.
+  end
+
+# MAKE HG17 DOWNLOADABLES (DONE Feb. 15, 2005 Heather)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir vsBosTau1
+    cd vsBosTau1
+    mkdir axtNet
+    cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+    cp -p all.chain.gz  /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1/cow.chain.gz
+    cp -p bosTau1.net.gz /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1/cow.net.gz
+    cd ../axtNet
+    cp -p * /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1/axtNet
+
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1
+    # Make a README.txt which explains the files & formats.
+    md5sum *.gz > md5sum.txt
+    cd axtNet
+    md5sum *.gz > md5sum.txt
+
