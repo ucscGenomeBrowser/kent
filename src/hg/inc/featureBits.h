@@ -22,24 +22,24 @@ void featureBitsFree(struct featureBits **pBits);
 void featureBitsFreeList(struct featureBits **pList);
 /* Free up a list of featureBits */
 
-void fbSetClip(boolean val);
-/* Set the clipping behavior: TRUE if featureBits should clip features to 
- * the search range, FALSE if it should include all features that overlap 
- * any part of the search range.  Default behavior: TRUE. */
-
 struct featureBits *fbGetRange(char *trackQualifier, char *chrom,
     int chromStart, int chromEnd);
 /* Get features in range. */
 
 struct featureBits *fbGetRangeQuery(char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints);
+	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR);
 /* Get features in range that match sqlConstraints. */
 
 struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints);
+	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR);
 /* Get features in range that match sqlConstraints. */
 
 boolean fbUnderstandTrack(char *track);
+/* Return TRUE if can turn track into a set of ranges or bits. */
+
+boolean fbUnderstandTrackDb(char *db, char *track);
 /* Return TRUE if can turn track into a set of ranges or bits. */
 
 void fbOrTableBits(Bits *bits, char *trackQualifier, char *chrom, 

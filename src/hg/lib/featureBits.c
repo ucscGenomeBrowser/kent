@@ -110,32 +110,21 @@ return fetchQualifiers("utr5", qualifier, extra, retSize);
 
 
 
+boolean fbUnderstandTrackDb(char *db, char *track)
+/* Return TRUE if can turn track into a set of ranges or bits. */
+{
+struct hTableInfo *hti = hFindTableInfoDb(db, NULL, track);
+
+if (hti == NULL)
+    return FALSE;
+else
+    return hti->isPos;
+}
+
 boolean fbUnderstandTrack(char *track)
 /* Return TRUE if can turn track into a set of ranges or bits. */
 {
-struct trackDb *tdb;
-boolean understand = FALSE;
-char *type;
-
-struct sqlConnection *conn = hAllocConn();
-tdb = hMaybeTrackInfo(conn, track);
-if (tdb == NULL)
-    return FALSE;
-type = tdb->type;
-understand = (startsWith("psl ", type) || startsWith("bed ", type) ||
-	sameString("genePred", type) || startsWith("genePred ", type) ||
-	sameString("rmsk", type));
-trackDbFree(&tdb);
-hFreeConn(&conn);
-return understand;
-}
-
-void fbSetClip(boolean val)
-/* Set the clipping behavior: TRUE if featureBits should clip features to 
- * the search range, FALSE if it should include all features that overlap 
- * any part of the search range.  Default behavior: TRUE. */
-{
-clipToWin = val;
+return(fbUnderstandTrackDb(hGetDb(), track));
 }
 
 static void fbAddFeature(struct featureBits **pList, char *name,
@@ -191,372 +180,6 @@ if (strand == '-')
     return 'r';
 else
     return 'f';
-}
-
-static struct featureBits *fbPslBits(int winStart, int winEnd, 
-	struct sqlResult *sr, int rowOffset,
-	char *qualifier, char *extra)
-/* Given a sqlQuery result on a psl table - or results exon by exon into bits. */
-{
-struct psl *psl;
-char **row;
-int i, blockCount, *tStarts, *blockSizes, s, e, w;
-boolean doUp, doExon, doEnd, doScore;
-int promoSize = 0, endSize = 0, extraSize = 0, scoreThreshold = 0;
-struct featureBits *fbList = NULL, *fb;
-int chromSize;
-char *chrom;
-char nameBuf[512];
-
-if (scoreQualifier(qualifier, extra, &scoreThreshold))
-    errAbort("Can't handle score on psl tables yet, sorry");
-if (intronQualifier(qualifier, extra, &extraSize))
-    errAbort("Can't handle intron on psl tables yet, sorry");
-doUp = upstreamQualifier(qualifier, extra, &promoSize);
-doEnd = endQualifier(qualifier, extra, &endSize);
-doExon = exonQualifier(qualifier, extra, &extraSize);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    psl = pslLoad(row+rowOffset);
-    chrom = psl->tName;
-    chromSize = psl->tSize;
-    if (doUp)
-        {
-	int start;
-	char strand;
-
-	if (psl->strand[0] == '-')
-	    {
-	    start = psl->tEnd;
-	    strand = '-';
-	    }
-	else
-	    {
-	    start = psl->tStart - promoSize;
-	    strand = '+';
-	    }
-	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
-		psl->qName, promoSize, chrom, start+1, frForStrand(strand));
-	fbAddFeature(&fbList, nameBuf, chrom, start, promoSize, strand, 
-		winStart, winEnd);
-	}
-    else if (doEnd)
-        {
-	int start;
-	char strand;
-
-	if (psl->strand[0] == '-')
-	    {
-	    start = psl->tStart - endSize;
-	    strand = '-';
-	    }
-	else
-	    {
-	    start = psl->tEnd;
-	    strand = '+';
-	    }
-	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
-		psl->qName, endSize, chrom, start+1, frForStrand(strand));
-	fbAddFeature(&fbList, nameBuf, chrom, start, endSize, strand, 
-		winStart, winEnd);
-	}
-    else
-	{
-	blockCount = psl->blockCount;
-	blockSizes = psl->blockSizes;
-	tStarts = psl->tStarts;
-	if (psl->strand[1] == '-')
-	    {
-	    for (i=0; i<blockCount; ++i)
-		{
-		w = blockSizes[i];
-		s = chromSize - tStarts[i] - w;
-		e = s + w;
-            setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', extraSize, 
-				  extraSize, winStart, winEnd);
-		}
-	    }
-	else
-	    {
-	    for (i=0; i<blockCount; ++i)
-		{
-		s = tStarts[i];
-		e = s + blockSizes[i];
-            setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', extraSize, 
-				  extraSize, winStart, winEnd);
-		}
-	    }
-	}
-    pslFree(&psl);
-    }
-slReverse(&fbList);
-return fbList;
-}
-
-static struct featureBits *fbBedBits(int fields, int winStart, int winEnd, struct sqlResult *sr, 
-	int rowOffset, char *qualifier, char *extra)
-/* Given a sqlQuery result on a bed table - or results of whole thing. */
-{
-struct bed *bed;
-char **row;
-struct featureBits *fbList = NULL;
-char strand = '?';
-boolean doUp, doEnd, doExon = FALSE, doIntron = FALSE, doScore = FALSE;
-int promoSize, endSize, extraSize = 0, scoreThreshold;
-int i, count, *starts, *sizes;
-
-doScore = scoreQualifier(qualifier, extra, &scoreThreshold);
-doUp = upstreamQualifier(qualifier, extra, &promoSize);
-doEnd = endQualifier(qualifier, extra, &endSize);
-if (doExon = exonQualifier(qualifier, extra, &extraSize))
-    ;
-else if (doIntron = intronQualifier(qualifier, extra, &extraSize))
-    ;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    int s, e; 
-    bed = bedLoadN(row+rowOffset, fields);
-    if (fields >= 5)
-         strand = bed->strand[0];
-    if (doUp)
-        {
-	if (strand == '-')
-	    {
-	    s = bed->chromEnd;
-	    e = s + promoSize;
-	    }
-	else
-	    {
-	    e = bed->chromStart;
-	    s = e - promoSize;
-	    }
-	fbAddFeature(&fbList, bed->name, bed->chrom, s, e - s, strand,
-		     winStart, winEnd);
-	}
-    else if (doEnd)
-        {
-	if (strand == '-')
-	    {
-	    e = bed->chromStart;
-	    s = e - endSize;
-	    }
-	else
-	    {
-	    s = bed->chromEnd;
-	    e = s + endSize;
-	    }
-	fbAddFeature(&fbList, bed->name, bed->chrom, s, e - s, strand,
-		     winStart, winEnd);
-	}
-    else if (doIntron)
-        {
-	if (fields >= 12)
-	    {
-	    count  = bed->blockCount;
-	    starts = bed->chromStarts;
-	    sizes  = bed->blockSizes;
-	    for (i=1; i<count; ++i)
-	      {
-		s = bed->chromStart + starts[i-1] + sizes[i-1];
-		e = bed->chromStart + starts[i];
-		setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
-				  extraSize, extraSize, winStart, winEnd);
-	      }
-	    }
-	/* N/A if fields < 12.... but don't crash, just return empty. */
-	}
-    else
-        {
-	if (fields >= 12)
-	    {
-	    count  = bed->blockCount;
-	    starts = bed->chromStarts;
-	    sizes  = bed->blockSizes;
-	    for (i=0; i<count; ++i)
-	      {
-		s = bed->chromStart + starts[i];
-		e = bed->chromStart + starts[i] + sizes[i];
-        if (!doScore || (doScore && bed->score >= scoreThreshold))
-            setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
-				  extraSize, extraSize, winStart, winEnd);
-	      }
-	    }
-	else
-  	    {
-	    s = bed->chromStart;
-	    e = bed->chromEnd;
-        if (!doScore || (doScore && bed->score >= scoreThreshold))
-            setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
-			      extraSize, extraSize, winStart, winEnd);
-	    }
-	}
-    bedFree(&bed);
-    }
-slReverse(&fbList);
-return fbList;
-}
-
-static struct featureBits *fbGenePredBits(int winStart, int winEnd, 
-	struct sqlResult *sr, int rowOffset,
-	char *qualifier, char *extra)
-/* Given a sqlQuery result on a genePred table - or results of whole thing. */
-{
-struct genePred *gp;
-char **row;
-int i, count, s, e, w, *starts, *ends;
-boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE,
-	doUtr3 = FALSE, doUtr5 = FALSE, doIntron = FALSE;
-int promoSize = 0, extraSize = 0, endSize = 0;
-struct featureBits *fbList = NULL;
-char nameBuf[512];
-
-if ((doUp = upstreamQualifier(qualifier, extra, &promoSize)) != FALSE)
-    {
-    }
-else if ((doCds = cdsQualifier(qualifier, extra, &extraSize)) != FALSE)
-    {
-    }
-else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
-    {
-    }
-else if ((doIntron = intronQualifier(qualifier, extra, &extraSize)) != FALSE)
-    {
-    }
-else if ((doEnd = endQualifier(qualifier, extra, &extraSize)) != FALSE)
-    {
-    }
-else if ((doUtr3 = utr3Qualifier(qualifier, extra, &extraSize)) != FALSE)
-    {
-    }
-else if ((doUtr5 = utr5Qualifier(qualifier, extra, &extraSize)) != FALSE)
-    {
-    }
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePredLoad(row+rowOffset);
-    if (doUp)
-	{
-	if (gp->txStart != gp->cdsStart && gp->txEnd != gp->cdsEnd)
-	    {
-	    int start;
-	    char strand;
-	    if (gp->strand[0] == '-')
-		{
-		start = gp->txEnd;
-		strand = '-';
-		}
-	    else
-		{
-		start = gp->txStart - promoSize;
-		strand = '+';
-		}
-	    sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
-		    gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
-	    fbAddFeature(&fbList, nameBuf, gp->chrom, start, promoSize, strand, 
-		winStart, winEnd);
-	    }
-	}
-    else if (doEnd)
-        {
-	int start;
-	char strand;
-	if (gp->txStart != gp->cdsStart && gp->txEnd != gp->cdsEnd)
-	    {
-	    if (gp->strand[0] == '-')
-		{
-		start = gp->txStart - extraSize;
-		strand = '-';
-		}
-	    else
-		{
-		start = gp->txEnd;
-		strand = '+';
-		}
-	    sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
-		    gp->name, extraSize, gp->chrom, 
-		    start+1, frForStrand(strand));
-	    fbAddFeature(&fbList, nameBuf, gp->chrom, 
-	    	start, extraSize, strand, 
-		winStart, winEnd);
-	    }
-	}
-    else if (doIntron)
-        {
-	count = gp->exonCount;
-	starts = gp->exonStarts;
-	ends = gp->exonEnds;
-	for (i=1; i<count; ++i)
-	    {
-	    s = ends[i-1];
-	    e = starts[i];
-	    setRangePlusExtra(&fbList, gp->name, gp->chrom, s, e, gp->strand[0],
-		extraSize, extraSize, winStart, winEnd);
-	    }
-	}
-    else
-	{
-	count = gp->exonCount;
-	starts = gp->exonStarts;
-	ends = gp->exonEnds;
-	for (i=0; i<count; ++i)
-	    {
-	    s = starts[i];
-	    e = ends[i];
-	    if (doCds)
-	        {
-		if (s < gp->cdsStart) s = gp->cdsStart;
-		if (e > gp->cdsEnd) e = gp->cdsEnd;
-		}
-	    else if (doUtr5)
-	        {
-		if (gp->strand[0] == '-')
-		    {
-		    if (s < gp->cdsEnd) s = gp->cdsEnd;
-		    }
-		else
-		    {
-		    if (e > gp->cdsStart) e = gp->cdsStart;
-		    }
-		}
-	    else if (doUtr3)
-	        {
-		if (gp->strand[0] == '-')
-		    {
-		    if (e > gp->cdsStart) e = gp->cdsStart;
-		    }
-		else
-		    {
-		    if (s < gp->cdsEnd) s = gp->cdsEnd;
-		    }
-		}
-	    setRangePlusExtra(&fbList, gp->name, gp->chrom, s, e, gp->strand[0],
-			      extraSize, extraSize, winStart, winEnd);
-	    }
-	}
-    genePredFree(&gp);
-    }
-slReverse(&fbList);
-return fbList;
-}
-
-static struct featureBits *fbRmskBits(int winStart, int winEnd, 
-	struct sqlResult *sr, int rowOffset,
-	char *qualifier, char *extra)
-/* Given a sqlQuery result on a RepeatMasker table - or results of whole thing. */
-{
-struct rmskOut ro;
-char **row;
-struct featureBits *fbList = NULL;
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    rmskOutStaticLoad(row+rowOffset, &ro);
-    fbAddFeature(&fbList, NULL, ro.genoName, 
-    	ro.genoStart, ro.genoEnd - ro.genoStart, ro.strand[0],
-    	winStart, winEnd);
-    }
-slReverse(&fbList);
-return fbList;
 }
 
 static void parseTrackQualifier(char *trackQualifier, char **retTrack, 
@@ -680,57 +303,9 @@ else
 return(cloneString(qual));
 }
 
-struct featureBits *fbGetRange(char *trackQualifier, char *chrom,
-    int chromStart, int chromEnd)
-/* Get features in range. */
-{
-struct featureBits *fbList = NULL;
-struct trackDb *tdb;
-char *type;
-int rowOffset;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char *track, *qualifier, *extra;
-int chromSize = hChromSize(chrom);
-
-trackQualifier = cloneString(trackQualifier);
-parseTrackQualifier(trackQualifier, &track, &qualifier, &extra);
-tdb = hTrackInfo(conn, track);
-if (chromStart == 0 && chromEnd >= chromSize)
-    sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
-else
-    sr = hRangeQuery(conn, track, chrom, chromStart, chromEnd, NULL, &rowOffset);
-type = tdb->type;
-if (startsWith("psl ", type))
-    {
-    fbList = fbPslBits(chromStart, chromEnd, sr, rowOffset, qualifier, extra);
-    }
-else if (startsWith("bed ", type))
-    {
-    int fields = atoi(type + strlen("bed "));
-    if (fields <= 3) fields = 3;
-    fbList = fbBedBits(fields, chromStart, chromEnd, sr, rowOffset, qualifier, extra);
-    }
-else if (sameString("genePred", type) || startsWith("genePred ", type))
-    {
-    fbList = fbGenePredBits(chromStart, chromEnd, sr, rowOffset, qualifier, extra);
-    }
-else if (sameString("rmsk", type))
-    {
-    fbList = fbRmskBits(chromStart, chromEnd, sr, rowOffset, qualifier, extra);
-    }
-else
-    {
-    errAbort("Unknown table type %s", type);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-freeMem(trackQualifier);
-return fbList;
-}
-
 struct featureBits *fbGetRangeQueryDb(char *db, char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints)
+	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR)
 /* Get features in range that match sqlConstraints. */
 {
 struct hTableInfo *hti;
@@ -744,8 +319,11 @@ boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE,
 	doUtr3 = FALSE, doUtr5 = FALSE, doIntron = FALSE, doScore = FALSE;
 int promoSize = 0, extraSize = 0, endSize = 0, scoreThreshold = 0;
 boolean canDoIntrons, canDoUTR, canDoScore;
+boolean oldClipToWin = clipToWin;
 int i, count, *starts, *sizes;
 int s, e;
+
+clipToWin = clipToWindow;
 
 trackQualifier = cloneString(trackQualifier);
 parseTrackQualifier(trackQualifier, &track, &qualifier, &extra);
@@ -800,39 +378,49 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
     if (doUp)
         {
-	if (bed->strand[0] == '-')
+	if (!canDoUTR || !filterOutNoUTR ||
+	    ((bed->chromStart != bed->thickStart) &&
+	     (bed->chromEnd != bed->thickEnd)))
 	    {
-	    s = bed->chromEnd;
-	    e = s + promoSize;
+	    if (bed->strand[0] == '-')
+		{
+		s = bed->chromEnd;
+		e = s + promoSize;
+		}
+	    else
+		{
+		e = bed->chromStart;
+		s = e - promoSize;
+		}
+	    sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
+		    bed->name, promoSize, bed->chrom, s+1,
+		    frForStrand(bed->strand[0]));
+	    fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s,
+			 bed->strand[0], chromStart, chromEnd);
 	    }
-	else
-	    {
-	    e = bed->chromStart;
-	    s = e - promoSize;
-	    }
-	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
-		bed->name, promoSize, bed->chrom, s+1,
-		frForStrand(bed->strand[0]));
-	fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s, bed->strand[0],
-		     chromStart, chromEnd);
 	}
     else if (doEnd)
         {
-	if (bed->strand[0] == '-')
+	if (!canDoUTR || !filterOutNoUTR ||
+	    ((bed->chromStart != bed->thickStart) &&
+	     (bed->chromEnd != bed->thickEnd)))
 	    {
-	    e = bed->chromStart;
-	    s = e - endSize;
+	    if (bed->strand[0] == '-')
+		{
+		e = bed->chromStart;
+		s = e - endSize;
+		}
+	    else
+		{
+		s = bed->chromEnd;
+		e = s + endSize;
+		}
+	    sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
+		    bed->name, endSize, bed->chrom, s+1,
+		    frForStrand(bed->strand[0]));
+	    fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s,
+			 bed->strand[0], chromStart, chromEnd);
 	    }
-	else
-	    {
-	    s = bed->chromEnd;
-	    e = s + endSize;
-	    }
-	sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
-		bed->name, endSize, bed->chrom, s+1,
-		frForStrand(bed->strand[0]));
-	fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s, bed->strand[0],
-		     chromStart, chromEnd);
 	}
     else if (doIntron)
         {
@@ -896,7 +484,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 			if (e < bed->thickEnd) continue;
 			if (s < bed->thickEnd) s = bed->thickEnd;
 			}
-		    fName = "utr5";
+		    fName = "utr3";
 		    }
 		else
 		    {
@@ -947,7 +535,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		    s = bed->thickEnd;
 		    e = bed->chromEnd;
 		    }
-		fName = "utr5";
+		fName = "utr3";
 		}
 	    else
 		{
@@ -967,6 +555,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    }
 	}
     }
+clipToWin = oldClipToWin;
 bedFreeList(&bedList);
 freeMem(trackQualifier);
 slReverse(&fbList);
@@ -975,11 +564,22 @@ return fbList;
 
 
 struct featureBits *fbGetRangeQuery(char *trackQualifier,
-	char *chrom, int chromStart, int chromEnd, char *sqlConstraints)
+	char *chrom, int chromStart, int chromEnd, char *sqlConstraints,
+	boolean clipToWindow, boolean filterOutNoUTR)
 /* Get features in range that match sqlConstraints. */
 {
 return(fbGetRangeQueryDb(hGetDb(), trackQualifier,
-			 chrom, chromStart, chromEnd, sqlConstraints));
+			 chrom, chromStart, chromEnd, sqlConstraints,
+			 clipToWindow, filterOutNoUTR));
+}
+
+
+struct featureBits *fbGetRange(char *trackQualifier, char *chrom,
+	int chromStart, int chromEnd)
+/* Get features in range that match sqlConstraints. */
+{
+return(fbGetRangeQueryDb(hGetDb(), trackQualifier,
+			 chrom, chromStart, chromEnd, NULL, TRUE, TRUE));
 }
 
 
