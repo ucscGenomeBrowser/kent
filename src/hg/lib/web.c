@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.73 2005/02/06 04:17:34 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.74 2005/02/08 18:54:44 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -70,9 +70,13 @@ char textOutBuf[512];
 
 /* found that on x86_64, the args could only be used once in this safef
  * business.  If you tried to do this a second time, which was happening
- * in this code, it caused a SIGSEGV
+ * in this code, it caused a SIGSEGV.
+ * Also, if args==NULL, SIGSEGV on x86_64.
  */
-vasafef(textOutBuf, sizeof(textOutBuf), format, args);
+if (args == NULL)
+    safef(textOutBuf, sizeof(textOutBuf), format);
+else
+    vasafef(textOutBuf, sizeof(textOutBuf), format, args);
 
 if (theCart)
     db = cartOptionalString(theCart, "db");
