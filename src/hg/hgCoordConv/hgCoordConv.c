@@ -41,7 +41,7 @@ struct namePair
     char *version;
 };
 
-/* Information on a server. */
+/* Information on a blat server. */
 struct serverTab
    {
    char *db;		/* Database name. */
@@ -192,7 +192,6 @@ printf("<a href=\"%stype=DNA&genome=%s&sort=query,score&output=hyperlink&userSeq
 /** output a blat link and the fasta in cut and past form */
 void webOutFasta(struct dnaSeq *seq, char *db)
 {
-
 printf("<pre>\n");
 faWriteNext(stdout, seq->name, seq->dna, seq->size);
 printf("</pre>\n");
@@ -273,7 +272,7 @@ errAbort("Can't find a server for %s DNA database ", db);
 return NULL;
 }
 
-
+/* tries to convert coordinates and prints report */
 void convertCoordinates() 
 {
 struct serverTab *serve = NULL;
