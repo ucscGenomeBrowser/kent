@@ -13,10 +13,11 @@
 #include "hgColors.h"
 #include "trackDb.h"
 #include "grp.h"
+#include "asParse.h"
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.14 2004/07/14 23:32:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.15 2004/07/15 01:06:36 kent Exp $";
 
 
 void usage()
@@ -185,7 +186,6 @@ char *connectingTableForTrack(struct trackDb *track)
 /* Return table name to use with all.joiner for track. 
  * You can freeMem this when done. */
 {
-struct hTableInfo *hti = hFindTableInfo(NULL, track->tableName);
 if (sameString(track->tableName, "mrna"))
     return cloneString("all_mrna");
 else if (sameString(track->tableName, "intronEst"))
@@ -393,6 +393,51 @@ if (track == NULL)
     }
 return track;
 }
+
+struct asObject *asForTable(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. */
+{
+struct asObject *asObj = NULL;
+if (sqlTableExists(conn, "tableDescriptions"))
+    {
+    char query[256];
+    char *asText = NULL;
+
+    /* Try split table first. */
+    safef(query, sizeof(query), 
+    	"select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
+	table);
+    asText = sqlQuickString(conn, query);
+
+    /* If no result try unsplit table. */
+    if (asText == NULL)
+	{
+	safef(query, sizeof(query), 
+	    "select autoSqlDef from tableDescriptions where tableName='%s'",
+	    table);
+	asText = sqlQuickString(conn, query);
+	}
+    if (asText != NULL && asText[0] != 0)
+	asObj = asParseText(asText);
+    freez(&asText);
+    }
+return asObj;
+}
+
+struct asColumn *asColumnFind(struct asObject *asObj, char *name)
+/* Return named column. */
+{
+struct asColumn *asCol = NULL;
+if (asObj!= NULL)
+    {
+    for (asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
+        if (sameString(asCol->name, name))
+	     break;
+    }
+return asCol;
+}
+
+
 
 void doFilterPage(struct sqlConnection *conn)
 /* Respond to filter create/edit button */

@@ -3,6 +3,10 @@
 #ifndef HGTABLES_H
 #define HGTABLES_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
 #ifndef GRP_H
 #include "grp.h"
 #endif
@@ -66,6 +70,12 @@ struct trackDb *findSelectedTrack(struct trackDb *trackList,
     struct grp *group);
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
+
+struct asObject *asForTable(struct sqlConnection *conn, char *table);
+/* Get autoSQL description if any associated with table. */
+
+struct asColumn *asColumnFind(struct asObject *asObj, char *name);
+/* Return named column. */
 
 char *connectingTableForTrack(struct trackDb *track);
 /* Return table name to use with all.joiner for track. 
@@ -179,6 +189,9 @@ void doSelectedFields();
 void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */
 
+
+void printMainHelp();
+/* Put up main page help info. */
 #endif /* HGTABLES_H */
 
 

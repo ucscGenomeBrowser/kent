@@ -17,7 +17,7 @@
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.9 2004/07/14 19:02:50 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.10 2004/07/15 01:06:36 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
@@ -30,19 +30,6 @@ boolean isSqlNumType(char *type)
 /* Return TRUE if it is a numerical SQL type. */
 {
 return strstr(type, "int") || strstr(type, "float") || strstr(type, "double");
-}
-
-static struct asColumn *asColumnFind(struct asObject *asObj, char *name)
-/* Return named column. */
-{
-struct asColumn *asCol = NULL;
-if (asObj!= NULL)
-    {
-    for (asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
-        if (sameString(asCol->name, name))
-	     break;
-    }
-return asCol;
 }
 
 void describeFields(char *db, char *table, 
@@ -121,36 +108,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 hTableEnd();
 sqlFreeResult(&sr);
-}
-
-struct asObject *asForTable(struct sqlConnection *conn, char *table)
-/* Get autoSQL description if any associated with table. */
-{
-struct asObject *asObj = NULL;
-if (sqlTableExists(conn, "tableDescriptions"))
-    {
-    char query[256];
-    char *asText = NULL;
-
-    /* Try split table first. */
-    safef(query, sizeof(query), 
-    	"select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
-	table);
-    asText = sqlQuickString(conn, query);
-
-    /* If no result try unsplit table. */
-    if (asText == NULL)
-	{
-	safef(query, sizeof(query), 
-	    "select autoSqlDef from tableDescriptions where tableName='%s'",
-	    table);
-	asText = sqlQuickString(conn, query);
-	}
-    if (asText != NULL && asText[0] != 0)
-	asObj = asParseText(asText);
-    freez(&asText);
-    }
-return asObj;
 }
 
 static void explainCoordSystem()
@@ -256,8 +213,7 @@ htmlClose();
 void doTrackSchema(struct trackDb *track, struct sqlConnection *conn)
 /* Show schema around track. */
 {
-char *table = track->tableName;
-table = connectingTableForTrack(track);
+char *table = connectingTableForTrack(track);
 htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
 showSchema(database, table);
 htmlClose();
