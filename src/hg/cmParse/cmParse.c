@@ -59,7 +59,6 @@ struct cloneInfo
     int pos;
     bool inMap;
     bool inFfa;
-//    struct ntInfo *nt;
     struct cmContig *contig;	/* Back pointer to contig. May be NULL. */
     };
 
@@ -662,22 +661,21 @@ for (i=0; i<ArraySize(subDirs); ++i)
 struct ntCtgClonePos
 /* Defines a clone's position in a NT contig. */
     {
-    struct ntClonePos *next;	/* Next in list. */
-    char *cloneAcc;		/* Accession of clone.  Allocated in hash. */
+    struct ntCtgClonePos *next;	/* Next in list. */
+    char *acc;		/* Accession of clone.  Allocated in hash. */
     char *nt;			/* NT name.  Allocated here. */
     int start, end;		/* Start/end in contig. */
     char strand;		/* + or - */
     };
 
-struct hash *makeNtCloneHash(char *gsDir)
+struct ntCtgClonePos *makeNtCloneHash(char *gsDir, struct hash *ntCloneHash)
 /* Read gsDir/ffa/ctg_coords into a hash of ntClonePos keyed by
  * clone accession. */
 {
 char fileName[512];
 struct lineFile *lf;
 char *row[7];
-struct hash *ntCloneHash = newHash(0);
-struct ntCtgClonePos *nccp;
+struct ntCtgClonePos *list = NULL, *nccp;
 
 sprintf(fileName, "%s/ffa/ctg_coords", gsDir);
 lf = lineFileOpen(fileName, TRUE);
@@ -688,14 +686,16 @@ while (lineFileRow(lf, row))
         errAbort("Expecting line %d of %s to start with NT_", lf->lineIx, lf->fileName);
     chopSuffix(cloneName);
     AllocVar(nccp);
-    hashAddSaveName(ntCloneHash, cloneName, nccp, &nccp->cloneAcc);
+    slAddHead(&list, nccp);
+    hashAddSaveName(ntCloneHash, cloneName, nccp, &nccp->acc);
     nccp->nt = cloneString(row[0]);
     nccp->start = lineFileNeedNum(lf, row, 3) - 1;
     nccp->end = lineFileNeedNum(lf, row, 4);
     nccp->strand = row[5][0];
     }
 lineFileClose(&lf);
-return ntCloneHash;
+slReverse(&list);
+return list;
 }
 
 struct cloneBasicInfo
@@ -738,7 +738,7 @@ return hash;
 
 struct cmChrom *imParseOne(char *imreFile, struct hash *cloneHash, 
 	struct cloneInfo **pCloneList, struct hash *ctgHash, 
-	struct hash *basicHash, struct hash *ntCloneHash, struct hash *ntHash)
+	struct hash *basicHash)
 /* Parse a single tpf.txt file (Imre style) */
 {
 struct cmChrom *chrom = NULL;
@@ -777,7 +777,7 @@ while (lineFileNext(lf, &line, &lineSize))
     if (lineSize >= sizeof(origLine))
         errAbort("Line %d too long in %s", lf->lineIx, lf->fileName);
     strcpy(origLine, line);
-    wordCount = chopLine(line, words);
+    wordCount = chopTabs(line, words);
     if (wordCount == 0)
         continue;
     if (sameWord(words[0], "gap"))
@@ -811,37 +811,6 @@ while (lineFileNext(lf, &line, &lineSize))
 	cl->clone = ci;
 	cl->line = cName->name;
 	slAddTail(&contig->cloneList, cl);
-	if ((nccp = hashFindVal(ntCloneHash, im.accession)) != NULL)
-	    {
-	    struct ntInfo *nt = NULL;
-	    struct ntClonePos *ntPos;
-	    if (cbi == NULL)
-	    	warn("%s is in ctg_coords but not sequence.inf", im.accession);
-	    else
-		{
-		if ((nt = hashFindVal(ntHash, nccp->nt)) == NULL)
-		    {
-		    AllocVar(nt);
-		    hashAddSaveName(ntHash, nccp->nt, nt, &nt->name);
-		    nt->ctg = contig->name;
-		    slAddTail(&contig->ntList, nt);
-		    }
-	       if (nt->ctg != contig->name)
-		    {
-		    warn("Nt contig %s split between %s and %s, ignoring %s",
-			 nt->name, nt->ctg, contig->name, contig->name);
-		    }
-		else
-		    {
-		    AllocVar(ntPos);
-		    ntPos->clone = ci;
-		    ntPos->ntPos = nccp->start;
-		    ntPos->size = cbi->size;
-		    ntPos->orientation = (nccp->strand == '+' ? 1 : -1);
-		    slAddTail(&nt->cloneList, ntPos);
-		    }
-		}
-	    }
 	}
     if (sameString(im.source, "TPF"))
         clonePos += 100;
@@ -897,6 +866,205 @@ if (dupeCount > 0)
    errAbort("%d clones duplicated total, aborting", dupeCount);
 }
 
+struct ntInfo *ntInfoFromNccpList(struct ntCtgClonePos *nccpList, struct hash *ntHash,
+	struct hash *cloneHash, struct hash *basicHash)
+/* Create an ntInfo for each contig referenced in nccpList.   Add this ntInfo
+ * to hash and list and return list. */
+{
+struct ntCtgClonePos *nccp;
+struct ntInfo *ntList = NULL, *nt = NULL;
+struct ntClonePos *ncp;
+struct cloneBasicInfo *cbi;
+struct cloneInfo *ci;
+int extraNt = 0;
+
+for (nccp = nccpList; nccp != NULL; nccp = nccp->next)
+    {
+    if ((cbi = hashFindVal(basicHash, nccp->acc)) == NULL)
+	{
+	warn("%s is in ctg_coords but not sequence.inf", nccp->acc);
+	continue;
+	}
+    if ((ci = hashFindVal(cloneHash, nccp->acc)) == NULL)
+        {
+	++extraNt;
+	continue;
+	}
+    if (nt == NULL || !sameString(nt->name, nccp->nt))
+        {
+	AllocVar(nt);
+	if (hashLookup(ntHash, nccp->nt) != NULL)
+	    errAbort("Duplicate %s in ctg_coords", nccp->nt);
+	hashAddSaveName(ntHash, nccp->nt, nt, &nt->name);
+	slAddHead(&ntList, nt);
+	}
+    AllocVar(ncp);
+    ncp->clone = ci;
+    ncp->ntPos = nccp->start;
+    ncp->size = cbi->size;
+    ncp->orientation = (nccp->strand == '-' ? -1 : 1);
+    slAddTail(&nt->cloneList, ncp);
+    }
+slReverse(&ntList);
+printf("%d extra clones (in NTs but not Imre map)\n", extraNt);
+return ntList;
+}
+
+
+#ifdef UGLYF
+struct ntInfo
+/* Info about one NT contig. */
+    {
+    struct ntInfo *next;  /* Next in list. */
+    char *name;           /* Name (allocated in hash) */
+    struct ntClonePos *cloneList;  /* List of clones. */
+    char *ctg;		  /* Contig this is in. */
+    };
+
+struct ntClonePos
+/* Position of a clone in NT contig. */
+    {
+    struct ntClonePos *next;	/* Next in list. */
+    struct cloneInfo *clone;    /* Clone reference. */
+    int ntPos;                  /* Position in bases. */
+    int size;                   /* Size of clone. */
+    int orientation;            /* +1 or -1 */
+    };
+struct ntCtgClonePos
+/* Defines a clone's position in a NT contig. */
+    {
+    struct ntClonePos *next;	/* Next in list. */
+    char *acc;		/* Accession of clone.  Allocated in hash. */
+    char *nt;			/* NT name.  Allocated here. */
+    int start, end;		/* Start/end in contig. */
+    char strand;		/* + or - */
+    };
+#endif /* UGLYF */
+
+FILE *splitNtFile = NULL;	
+
+
+struct cmContig *findCtgForNt(struct ntInfo *nt, struct hash *cloneHash)
+/* Figure out which contig the majority of the clones in nt
+ * live in. */
+{
+struct contigTracker
+/* Keep track of usage of contig. */
+    {
+    struct contigTracker *next;
+    struct cmContig *contig;
+    int count;
+    };
+struct cloneInfo *ci;
+struct ntClonePos *ncp;
+struct hash *conHash = newHash(4);
+int popCount = 0;
+struct contigTracker  *ct, *popCt = NULL, *ctList = NULL;
+struct cmContig *popCtg = NULL;
+
+for (ncp = nt->cloneList; ncp != NULL; ncp = ncp->next)
+    {
+    struct cmContig *contig = ncp->clone->contig;
+    if (contig == NULL)
+        continue;
+    if ((ct = hashFindVal(conHash, contig->name)) == NULL)
+        {
+	AllocVar(ct);
+	slAddHead(&ctList, ct);
+	hashAdd(conHash, contig->name, ct);
+	ct->contig = contig;
+	}
+    ct->count += 1;
+    if (ct->count > popCount)
+        {
+	popCount = ct->count;
+	popCtg = contig;
+	}
+    }
+if (slCount(ctList) > 1)
+    {
+    for (ncp = nt->cloneList; ncp != NULL; ncp = ncp->next)
+	{
+	struct cmContig *contig = ncp->clone->contig;
+	struct cmChrom *chrom;
+	if (contig == NULL)
+	    continue;
+	chrom = contig->chrom;
+	fprintf(splitNtFile, "%s\t%s\t%s\t%s\n",
+		chrom->name, contig->name, ncp->clone->acc, nt->name);
+	}
+    fprintf(splitNtFile, "\n");
+    }
+slFreeList(&ctList);
+return popCtg;
+}
+
+void addNtsToImre(struct cmChrom *chromList, 
+	struct hash *basicHash, struct hash *cloneHash, char *gsDir)
+/* Add NT contig info to Imre-based map. */
+{
+struct hash *ntHash = newHash(0);
+struct hash *ntCloneHash = newHash(0);
+struct ntCtgClonePos *nccpList = NULL, *nccp;
+struct ntInfo *ntList, *nt, *nextNt, *leftoverNt = NULL;
+struct cmContig *contig;
+
+splitNtFile = mustOpen("splitNt.out", "w");
+fprintf(splitNtFile, "#chrom\tcontig\tcloneName\tnt\n");
+
+uglyf("starting in addNtsToImre\n");
+nccpList = makeNtCloneHash(gsDir, ntCloneHash);
+ntList = ntInfoFromNccpList(nccpList, ntHash, cloneHash, basicHash);
+uglyf("just hanging out in addNtsToImre\n");
+for (nt = ntList; nt != NULL; nt = nextNt)
+    {
+    nextNt = nt->next;
+    contig = findCtgForNt(nt, cloneHash);
+    if (contig != NULL) 
+        {
+	nt->ctg = contig->name; 
+	slAddHead(&contig->ntList, nt);
+	}
+    }
+
+#ifdef OLD
+	if ((nccp = hashFindVal(ntCloneHash, im.accession)) != NULL)
+	    {
+	    struct ntClonePos *ntPos;
+	    if (cbi == NULL)
+	    	warn("%s is in ctg_coords but not sequence.inf", im.accession);
+	    else
+		{
+		if ((nt = hashFindVal(ntHash, nccp->nt)) == NULL)
+		    {
+		    AllocVar(nt);
+		    hashAddSaveName(ntHash, nccp->nt, nt, &nt->name);
+		    nt->ctg = contig->name;
+		    slAddTail(&contig->ntList, nt);
+		    }
+	       if (nt->ctg != contig->name)
+		    {
+		    warn("Nt contig %s split between %s and %s, ignoring %s",
+			 nt->name, nt->ctg, contig->name, contig->name);
+		    }
+		else
+		    {
+		    AllocVar(ntPos);
+		    ntPos->clone = ci;
+		    ntPos->ntPos = nccp->start;
+		    ntPos->size = cbi->size;
+		    ntPos->orientation = (nccp->strand == '+' ? 1 : -1);
+		    slAddTail(&nt->cloneList, ntPos);
+		    }
+		}
+	    }
+#endif /* OLD */
+
+carefulClose(&splitNtFile);
+hashFree(&ntCloneHash);
+hashFree(&ntHash);
+}
+
 struct cmChrom *imParse(char *gsDir, char *imreDir, struct hash *cloneHash, 
 	struct cloneInfo **pCloneList, struct hash *ctgHash)
 /* Parse tpf.txt files in imreDir. */
@@ -905,8 +1073,6 @@ struct fileInfo *fiList1 = listDirX(imreDir, "*", TRUE), *fi1;
 struct fileInfo *fiList2 = NULL, *fi2;
 struct cmChrom *chromList = NULL, *chrom;
 struct hash *basicHash = makeBasicCloneHash(gsDir);
-struct hash *ntCloneHash = makeNtCloneHash(gsDir);
-struct hash *ntHash = newHash(0);
 
 for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
     {
@@ -916,7 +1082,7 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
 	for (fi2 = fiList2; fi2 != NULL; fi2 = fi2->next)
 	    {
 	    chrom = imParseOne(fi2->name, cloneHash, pCloneList, 
-	    	ctgHash, basicHash, ntCloneHash, ntHash);
+	    	ctgHash, basicHash);
 	    slAddHead(&chromList, chrom);
 	    }
 	slFreeList(&fiList2);
@@ -924,10 +1090,9 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
     }
 slFreeList(&fiList1);
 slReverse(&chromList);
-hashFree(&basicHash);
-hashFree(&ntCloneHash);
-hashFree(&ntHash);
 checkDupes(chromList);
+addNtsToImre(chromList, basicHash, cloneHash, gsDir);
+hashFree(&basicHash);
 return chromList;
 }
 
