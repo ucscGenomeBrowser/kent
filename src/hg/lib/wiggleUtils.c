@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.28 2004/09/10 17:55:54 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.29 2004/09/13 20:19:36 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults)
 {
@@ -19,7 +19,7 @@ printf("<P><!--outer table is for border purposes-->" "\n"
 
 puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
 printf("<TR><TH ALIGN=CENTER COLSPAN=8> %d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
-	histoResults->binCount, histoResults->count);
+	histoResults->binCount - 1, histoResults->count);
 puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
 puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
 puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
