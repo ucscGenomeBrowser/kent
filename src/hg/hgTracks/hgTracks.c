@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.635 2003/11/23 15:12:23 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.636 2003/12/03 00:45:33 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2901,6 +2901,30 @@ void bdgpGeneMethods(struct track *tg)
 /* Special handling for bdgpGene items. */
 {
 tg->itemName = bdgpGeneName;
+}
+
+char *sgdGeneName(struct track *tg, void *item)
+/* Return sgdGene symbol. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct linkedFeatures *lf = item;
+char *name = lf->name;
+char *symbol = NULL;
+char query[256];
+char buf[64];
+safef(query, sizeof(query),
+      "select value from sgdToName where name = '%s'", name);
+symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
+hFreeConn(&conn);
+if (symbol != NULL)
+    name = symbol;
+return(cloneString(name));
+}
+
+void sgdGeneMethods(struct track *tg)
+/* Special handling for sgdGene items. */
+{
+tg->itemName = sgdGeneName;
 }
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
@@ -6568,6 +6592,7 @@ registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
+registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("ensEst", ensGeneMethods);
