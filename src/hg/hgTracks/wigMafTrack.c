@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.16 2004/03/16 17:39:05 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.17 2004/03/17 18:26:49 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -510,12 +510,17 @@ if (suffix == NULL)
 ret = TRUE;
 if (vis == tvFull)
     {
+    double minY = 50.0;
+    double maxY = 100.0;
+
     if (wigTrack == NULL)
         return FALSE;
     /* swap colors for pairwise wiggles */
     newColor = wigTrack->ixColor;
     wigTrack->ixColor = wigTrack->ixAltColor;
     wigTrack->ixAltColor = newColor;
+    wigSetCart(wigTrack, MIN_Y, (void *)&minY);
+    wigSetCart(wigTrack, MAX_Y, (void *)&maxY);
     }
 
 /* display pairwise items */
