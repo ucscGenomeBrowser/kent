@@ -1,4 +1,4 @@
-/* colGenePred - columns having to do with genePred tables. */
+/* colKnownGene - columns having to do with knownGene and closely tables. */
 
 #include "common.h"
 #include "linefile.h"
@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colKnownGene.c,v 1.1 2003/06/18 21:05:15 kent Exp $";
+static char const rcsid[] = "$Id: colKnownGene.c,v 1.2 2003/06/18 21:05:44 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
