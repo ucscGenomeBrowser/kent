@@ -6321,6 +6321,52 @@ axtFilter -notQ=chrUn $1 \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
+# MULTIZ HUMAN/MOUSE/RAT/GALGAL2 (DONE 3/8/04 angie)
+# (galGal2 added to human/mouse/rat alignments described above [HUMOR])
+    # put the MAFs on bluearc
+    ssh eieio
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3galGal2/hmr
+    mkdir -p /cluster/bluearc/multiz.hg16mm3rn3galGal2/hg
+    cp /cluster/data/hg16/bed/humor.2003-09-08/hmr/*.maf \
+      /cluster/bluearc/multiz.hg16mm3rn3galGal2/hmr
+    cp /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafBest/*.maf \
+      /cluster/bluearc/multiz.hg16mm3rn3galGal2/hg
+
+    ssh kki
+    mkdir /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2
+    cd /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2
+    mkdir hmrg
+    # Wrapper script required because of stdout redirect:
+    cat << '_EOF_' > doMultiz
+#!/bin/csh
+/cluster/bin/penn/multiz $1 $2 - > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doMultiz
+    rm -f jobList
+    foreach file (/cluster/bluearc/multiz.hg16mm3rn3galGal2/hmr/*.maf) 
+      set root=$file:t:r:r
+      echo "doMultiz /cluster/bluearc/multiz.hg16mm3rn3galGal2/hg/${root}.hg.maf $file /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/hmrg/${root}.maf" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 41 of 41 jobs
+#Average job time:                  88s       1.47m     0.02h    0.00d
+#Longest job:                      276s       4.60m     0.08h    0.00d
+#Submission to last job:           278s       4.63m     0.08h    0.00d
+
+    # clean up bluearc (these are big files!)
+    rm -r /cluster/bluearc/multiz.hg16mm3rn3galGal2
+
+    # setup external files for database reference
+    ssh hgwdev
+    mkdir -p /gbdb/hg16/multizMm3Rn3GalGal2
+    ln -s /cluster/data/hg16/bed/multiz.hg16mm3rn3galGal2/hmrg/*.maf \
+      /gbdb/hg16/multizMm3Rn3GalGal2
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn hg16 multizMm3Rn3GalGal2
+
+
 # LOAD SOFTBERRY GENES (DONE - 2004-02-10 - Hiram)
      mkdir -p /cluster/data/hg16/bed/softberry
      cd /cluster/data/hg16/bed/softberry
