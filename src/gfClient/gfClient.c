@@ -48,13 +48,13 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	static struct gfSavePslxData data;
 	data.f = out;
 	data.reportTargetStrand = TRUE;
-	gfAlignTransTrans(conn, nibDir, &seq, FALSE, 12, gfSavePslx, &data);
+	gfAlignTransTrans(conn, nibDir, &seq, FALSE, 12, gfSavePslx, &data, qType == gftRnaX);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
 	    close(conn);
 	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(conn, nibDir, &seq, TRUE, 12, gfSavePslx, &data);
+	    gfAlignTransTrans(conn, nibDir, &seq, TRUE, 12, gfSavePslx, &data, FALSE);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
