@@ -43,6 +43,8 @@
 #include "fishClones.h"
 #include "stsMarker.h"
 #include "stsMap.h"
+#include "mouseOrtho.h"
+#include "synteny100000.h"
 #include "mouseSyn.h"
 #include "knownMore.h"
 #include "estPair.h"
@@ -63,8 +65,14 @@
 #define MAX_CONTROL_COLUMNS 5
 #define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
+#define CHROMOSOME_SHADES 4
+#define LOW 1
+#define MEDIUM 2
+#define BRIGHT 3
+#define MAXPIXELS 14000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
+int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
@@ -72,6 +80,15 @@ Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
+/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 colors allocated */
+boolean chromosomeColorsMade = FALSE; /* Have the 3 shades of 8 chromosome colors been allocated? */
+
+Color chromColor[CHROMOSOME_SHADES * 8];
+
+int z;
+int maxCount ;
+int bestColor;
+int maxChromShade = CHROMOSOME_SHADES - 1;
 int maxItemsInFullTrack = 300;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
@@ -534,6 +551,29 @@ if (w < 1)
     w = 1;
 mgDrawBox(mg, x1, y, w, height, color);
 }
+void drawScaledBoxSample(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
+	int xOff, int y, int height, Color color)
+/* Draw a box scaled from chromosome to window coordinates. */
+{
+int i;
+int x1 = round((double)(chromStart-winStart)*scale) + xOff;
+int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
+if (w < 1)
+    w = 1;
+mgDrawBox(mg, x1, y, w, height, color);
+if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
+    {
+    for (i = x1 ; i < x1+w; i++)
+        {
+        assert(i<MAXPIXELS);
+        z = colorBin[i][color] ;  /*increment color count for this pixel */
+        z++;
+        colorBin[i][color] = z;
+        }
+    }
+}
+
 
 void filterItems(struct trackGroup *tg, 
     boolean (*filter)(struct trackGroup *tg, void *item),
@@ -830,6 +870,89 @@ mgMakeColorGradient(mg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
+void makeChromosomeShades(struct memGfx *mg) 
+/* Allocate the  shades of 8 colors in 3 shades to cover 24 chromosomes  */
+{
+static struct rgbColor blk = {0, 0, 0};
+static struct rgbColor white = {255, 255, 255};
+static struct rgbColor chrom1 = {255, 0, 0};  /* red */
+static struct rgbColor chrom2 = {255, 153, 0}; /* orange */
+static struct rgbColor chrom3 = {255, 255, 0}; /* yellow */
+static struct rgbColor chrom4 = {0, 255, 0}; /* green */
+static struct rgbColor chrom5 = {0, 255, 255}; /* cyan? aka lt blue */
+static struct rgbColor chrom6 = {0, 0, 255}; /* blue */
+static struct rgbColor chrom7 = {255, 0, 255}; /* magenta aka purple */
+static struct rgbColor chrom8 = {102, 51, 0}; /* brown */
+chromColor[0] = mgFindColor(mg, 0,0, 0);
+chromColor[1] = mgFindColor(mg, 255,204, 204);  /* light red */
+chromColor[2] = mgFindColor(mg, 204,0, 0);      /* med red */
+chromColor[3] = mgFindColor(mg, 255,0, 0);      /* bright red */
+
+chromColor[4] = mgFindColor(mg, 255,102,0);     /* bright orange */
+chromColor[5] = mgFindColor(mg, 255,153,0);
+chromColor[6] = mgFindColor(mg, 255,0,204);     /* magenta */
+
+chromColor[7] = mgFindColor(mg, 255,255,204);     /* light yellow  */
+chromColor[8] = mgFindColor(mg, 255,255,153);   /* med yellow */
+chromColor[9] = mgFindColor(mg, 255,255,0);     /* bright yellow*/
+
+chromColor[10] = mgFindColor(mg, 0,255,0);      /*bt gr*/
+chromColor[11] = mgFindColor(mg, 204,255,0);    /* yellow green */
+chromColor[12] = mgFindColor(mg, 102,102,0);  /* dark  green*/
+
+chromColor[13] = mgFindColor(mg, 204,255,255);  /*lt cyan*/
+chromColor[14] = mgFindColor(mg, 153,204,204);  /* gray cyan */
+chromColor[15] = mgFindColor(mg, 0,255,255);    /*med cyan*/
+
+chromColor[16] = mgFindColor(mg, 153,204,255);  /*light med blue */
+chromColor[17] = mgFindColor(mg, 102,153,255);  /* med blue */
+chromColor[18] = mgFindColor(mg, 0,0 ,204);     /* deep blue */
+
+chromColor[19] = mgFindColor(mg, 204,153,255);  /*lt violet*/
+chromColor[20] = mgFindColor(mg, 204,051,255);  /* med violet */
+chromColor[21] = mgFindColor(mg, 153,0,204);    /* dark violet */
+
+chromColor[22] = mgFindColor(mg, 204,204,204); /* light gray */
+chromColor[23] = mgFindColor(mg, 153,153,153); /* med gray */
+chromColor[24] = mgFindColor(mg, 102,102,102);  /* med gray */
+
+chromColor[25] = mgFindColor(mg, 255,255,255); /* black */
+/*
+mgMakeColorGradient(mg, &white, &chrom1, CHROMOSOME_SHADES, shadesOfChrom1);
+mgMakeColorGradient(mg, &white, &chrom2, CHROMOSOME_SHADES, shadesOfChrom2);
+mgMakeColorGradient(mg, &white, &chrom3, CHROMOSOME_SHADES, shadesOfChrom3);
+mgMakeColorGradient(mg, &white, &chrom4, CHROMOSOME_SHADES, shadesOfChrom4);
+mgMakeColorGradient(mg, &white, &chrom5, CHROMOSOME_SHADES, shadesOfChrom5);
+mgMakeColorGradient(mg, &white, &chrom6, CHROMOSOME_SHADES, shadesOfChrom6);
+mgMakeColorGradient(mg, &white, &chrom7, CHROMOSOME_SHADES, shadesOfChrom7);
+mgMakeColorGradient(mg, &white, &chrom8, CHROMOSOME_SHADES, shadesOfChrom8);
+chromColor[0] = kshadesOfChrom1[LOW];
+chromColor[1] = shadesOfChrom1[MEDIUM];
+chromColor[2] = shadesOfChrom1[BRIGHT];
+chromColor[3] = shadesOfChrom2[LOW];
+chromColor[4] = shadesOfChrom2[MEDIUM];
+chromColor[5] = shadesOfChrom2[BRIGHT];
+chromColor[6] = shadesOfChrom3[LOW];
+chromColor[7] = shadesOfChrom3[MEDIUM];
+chromColor[8] = shadesOfChrom3[BRIGHT];
+chromColor[9] = shadesOfChrom4[LOW];
+chromColor[10] = shadesOfChrom4[MEDIUM];
+chromColor[11] = shadesOfChrom4[BRIGHT];
+chromColor[12] = shadesOfChrom5[LOW];
+chromColor[13] = shadesOfChrom5[MEDIUM];
+chromColor[14] = shadesOfChrom5[BRIGHT];
+chromColor[15] = shadesOfChrom6[LOW];
+chromColor[16] = shadesOfChrom6[MEDIUM];
+chromColor[17] = shadesOfChrom6[BRIGHT];
+chromColor[18] = shadesOfChrom7[LOW];
+chromColor[19] = shadesOfChrom7[MEDIUM];
+chromColor[20] = shadesOfChrom7[BRIGHT];
+chromColor[21] = shadesOfChrom8[LOW];
+chromColor[22] = shadesOfChrom8[MEDIUM];
+chromColor[23] = shadesOfChrom8[BRIGHT];
+*/
+chromosomeColorsMade = TRUE;
+}
 
 int grayInRange(int val, int minVal, int maxVal)
 /* Return gray shade corresponding to a number from minVal - maxVal */
@@ -923,6 +1046,8 @@ double scale = width/(double)baseWidth;
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
+memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
+
 if (tg->itemColor)	/* Item color overrides spectrum processing. */
     {
     shades = NULL;
@@ -942,85 +1067,84 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
-	if (lf->filterColor > 0)
-	    color = lf->filterColor;
-	else if (tg->itemColor)
-	    color = tg->itemColor(tg, lf, mg);
-	else if (shades) 
-	    color =  shades[lf->grayIx+isXeno];
-	tallStart = lf->tallStart;
-	tallEnd = lf->tallEnd;
+        if (lf->filterColor > 0)
+            color = lf->filterColor;
+        else if (tg->itemColor)
+            color = tg->itemColor(tg, lf, mg);
+        else if (shades) 
+            color =  shades[lf->grayIx+isXeno];
+        tallStart = lf->tallStart;
+        tallEnd = lf->tallEnd;
 
-	x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	w = x2-x1;
-	bColor = mgFindColor(mg,0,0,0);
-	if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
-	    {
-	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
-		 		     lfs->orientation, color, TRUE);
-	    }
-	if (prevEnd != -1 && !lfs->noLine) 
-	    {
-	    mgDrawBox(mg, x1, midY, w, 1, color);
-	    }
-	prevEnd = lf->end;
+        x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+        x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
+        w = x2-x1;
+        bColor = mgFindColor(mg,0,0,0);
+        if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
+              {
+              mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
+                           lfs->orientation, color, TRUE);
+              }
+        if (prevEnd != -1 && !lfs->noLine) 
+              {
+              mgDrawBox(mg, x1, midY, w, 1, color);
+              }
+        prevEnd = lf->end;
+      
+        bColor = color;
+        if (lf->components != NULL && !hideLine)
+            {
+            x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+            x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+            w = x2-x1;
+            if(tg->mapsSelf && tg->mapItem)
+            tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
+            if (isFull)
+                {
+                if (shades) bColor =  shades[(lf->grayIx>>1)];
+                mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+                         lf->orientation, bColor, FALSE);
+                }
+            mgDrawBox(mg, x1, midY, w, 1, color);
+            }
+        for (sf = lf->components; sf != NULL; sf = sf->next)
+            {
+            s = sf->start; e = sf->end;
 
-	bColor = color;
-	if (lf->components != NULL && !hideLine)
-	    {
-	    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	    w = x2-x1;
-	    if(tg->mapsSelf && tg->mapItem)
-		tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, (x1 == x2 ? 1 : x2-x1), lineHeight);
-	    if (isFull)
-	        {
-	        if (shades) bColor =  shades[(lf->grayIx>>1)];
-		mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-		 		     lf->orientation, bColor, FALSE);
-		}
-	    mgDrawBox(mg, x1, midY, w, 1, color);
-	    }
-	for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    s = sf->start;
-	    e = sf->end;
-	    if (s < tallStart)
-	        {
-		e2 = e;
-		if (e2 > tallStart) e2 = tallStart;
-		drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
-		s = e2;
-		}
-	    if (e > tallEnd)
-	        {
-		s2 = s;
-		if (s2 < tallEnd) s2 = tallEnd;
-		drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
-		e = s2;
-		}
-	    if (e > s)
-	        {
-	        drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
-		++compCount;
-		}
-	    if(hgDebug)
-		{
-		char buff[16];
-		int textWidth;
-		int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
-		int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
-		int sw = sx2 - sx1;
-		snprintf(buff, sizeof(buff), "%.2f", lf->score);
-		textWidth = mgFontStringWidth(font, buff);
-		if (textWidth <= sw )
-		    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
-		}
-	    }
-	}
-    if (isFull)
-	y += lineHeight;
+            if (s < tallStart)
+                {
+                e2 = e;
+                if (e2 > tallStart) e2 = tallStart;
+                drawScaledBoxSample(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color );
+                s = e2;
+                }
+            if (e > tallEnd)
+                {
+                s2 = s;
+                if (s2 < tallEnd) s2 = tallEnd;
+                drawScaledBoxSample(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color );
+                e = s2;
+                }
+            if (e > s)
+                {
+                drawScaledBoxSample(mg, s, e, scale, xOff, y, heightPer, color);
+                ++compCount;
+                }
+            if(hgDebug)
+                {
+                char buff[16];
+                int textWidth;
+                int sx1 = roundingScale(sf->start-winStart, width, baseWidth)+xOff;
+                int sx2 = roundingScale(sf->end-winStart, width, baseWidth)+xOff;
+                int sw = sx2 - sx1;
+                snprintf(buff, sizeof(buff), "%.2f", lf->score);
+                textWidth = mgFontStringWidth(font, buff);
+                if (textWidth <= sw )
+                    mgTextCentered(mg, sx1, y, sw, heightPer, MG_WHITE, font, buff);
+                }
+            }
+        }
+    if (isFull) y += lineHeight;
     } 
 }
 
@@ -3730,6 +3854,37 @@ tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 }
 
+Color getChromColor(char *name, struct memGfx *mg)
+{
+    int chromNum = 0;
+    Color colorNum = 0;
+    if(!chromosomeColorsMade)
+        makeChromosomeShades(mg);
+    if (atoi(name) != 0)
+        chromNum =  atoi(name);
+    else if (!strcmp(name,"X"))
+        chromNum = 23;
+    else if (!strcmp(name,"X "))
+        chromNum = 23;
+    else if (!strcmp(name,"Y"))
+        chromNum = 24;
+    else if (!strcmp(name,"Y "))
+        chromNum = 24;
+    if (chromNum > 24) chromNum = 0;
+    colorNum = chromColor[chromNum];
+    return colorNum;
+}
+Color pslItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of mouseOrtho track item. */
+{
+char chromStr[20];     
+char *chptr;
+struct linkedFeatures *lf = item;
+chptr = strstr(lf->name,"chr");
+strncpy(chromStr,(char *)(chptr+3),2);
+chromStr[2] = '\0';
+return ((Color)getChromColor(chromStr, mg));
+}
 void loadXenoPslWithPos(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
@@ -3739,8 +3894,16 @@ lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
 void longXenoPslMethods(struct trackGroup *tg)
 /* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
 {
+char option[128]; /* Option -  rainbow chromosome color */
+char *optionStr;
 tg->loadItems = loadXenoPslWithPos;
 tg->mapItemName = mapNameFromLfExtra;
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use chromosome coloring*/
+    tg->itemColor = pslItemColor;
+else
+    tg->itemColor = NULL;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -4040,12 +4203,100 @@ tg->freeItems = freeFishClones;
 tg->itemColor = fishClonesColor;
 }
 
+
+void loadSynteny100000(struct trackGroup *tg)
+{
+bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSynteny100000(struct trackGroup *tg)
+{
+synteny100000FreeList((struct synteny100000**)&tg->items);
+}
+
+void loadMouseOrtho(struct trackGroup *tg)
+{
+bedLoadItem(tg, "mouseOrtho", (ItemLoader)mouseOrthoLoad);
+slSort(&tg->items, bedCmpPlusScore);
+}
+
+void freeMouseOrtho(struct trackGroup *tg)
+{
+mouseOrthoFreeList((struct mouseOrtho**)&tg->items);
+}
+
+Color mouseOrthoItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+struct mouseOrtho *ms = item;
+if (strlen(ms->name) == 8)
+{
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+}
+else if (strlen(ms->name) == 9)
+{
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+}
+else
+    strncpy(chromStr,ms->name,2);
+return ((Color)getChromColor(chromStr, mg));
+}
+
+Color syntenyItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+struct synteny100000 *ms = item;
+if (strlen(ms->mouseChrom) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->mouseChrom+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->mouseChrom) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->mouseChrom+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    strncpy(chromStr,ms->mouseChrom+3,2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, mg));
+}
+
 void loadMouseSyn(struct trackGroup *tg)
 /* Load up mouseSyn from database table to trackGroup items. */
 {
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
+void synteny100000Methods(struct trackGroup *tg)
+{
+tg->loadItems = loadSynteny100000;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = TRUE;
+}
+void mouseOrthoMethods(struct trackGroup *tg)
+{
+char option[128];
+char *optionStr ;
+tg->loadItems = loadMouseOrtho;
+tg->freeItems = freeMouseOrtho;
+
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use anti-aliasing*/
+    tg->itemColor = mouseOrthoItemColor;
+else
+    tg->itemColor = NULL;
+tg->drawName = TRUE;
+}
 void freeMouseSyn(struct trackGroup *tg)
 /* Free up mouseSyn items. */
 {
@@ -4055,8 +4306,12 @@ mouseSynFreeList((struct mouseSyn**)&tg->items);
 Color mouseSynItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of mouseSyn track item. */
 {
+char chromStr[20];     
 struct mouseSyn *ms = item;
-return (ms->segment&1) ? tg->ixColor : tg->ixAltColor;
+/* return (ms->segment&1) ? tg->ixColor : tg->ixAltColor; old color scheme */    
+strncpy(chromStr,ms->name+6,2);
+chromStr[2] = '\0';
+return ((Color)getChromColor(chromStr, mg));
 }
 
 void mouseSynMethods(struct trackGroup *tg)
@@ -8124,6 +8379,8 @@ registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
+registerTrackHandler("synteny100000", synteny100000Methods);
+registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
 registerTrackHandler("ctgPos", contigMethods);
@@ -8150,6 +8407,7 @@ registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
+registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
@@ -8310,6 +8568,8 @@ if (!hideControls)
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly
      */
+    if( chromosomeColorsMade )
+        printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=375 HEIGHT=65 ><BR>\n");
     printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
     smallBreak();
