@@ -616,6 +616,44 @@ mgDrawRulerBumpText(mg, xOff, yOff, height, width, color, font,
     startNum, range, 0, 0);
 }
 
+void mgConnectingLine( struct memGfx *mg, int x1, int y1, int x2, int y2, Color color )
+/*Draw a line between two points, (x1,y1) to (x2,y2). Will be used
+ * with wiggle tracks to interpolate between samples, connecting the
+ * end of one block to the beginning of the next one.   */
+{
+int minY;
+int maxY;
+Color *pt1, *pt2;
+int i,j;
+int bpr = _mgBpr(mg);
+int startOffset, offset;
+int yOffset;
+
+if (x1 < mg->clipMinX)
+    x1 = mg->clipMinX;
+if (x2 > mg->clipMaxX)
+    x2 = mg->clipMaxX;
+if ((x2 - x1) <= 0)
+    return;
+
+minY = mg->clipMinY;
+maxY = mg->clipMaxY;
+pt1 = _mgPixAdr(mg,x1,y1);
+pt2 = _mgPixAdr(mg,x2,y2);
+
+/*drax x-component of line first*/
+offset = 0;
+if (minY <= y1 && y1 < maxY)
+    {
+    for (j=offset; j<(x2-x1); j += 1)
+        {
+        pt1[j] = color;
+        }
+    }
+
+}
+
+
 
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
 	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
