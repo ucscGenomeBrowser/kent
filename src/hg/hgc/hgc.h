@@ -128,3 +128,6 @@ void doAffy(struct trackDb *tdb, char *item, char *itemForUrl);
 void doScaffoldEcores(struct trackDb *tdb, char *item);
 /* Creates details page and gets the scaffold co-ordinates for unmapped */
 /* genomes for display and to use to create the correct outside link URL */
+
+struct customTrack *lookupCt(char *name);
+/* Return custom track for name, or NULL. */
