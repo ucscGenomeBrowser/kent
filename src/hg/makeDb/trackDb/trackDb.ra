@@ -695,6 +695,16 @@ color 0,100,0
 altColor 128,228,128
 type bed 4 +
 
+track cpgIslandExt
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+priority 76
+visibility hide
+color 0,100,0
+altColor 128,228,128
+type bed 4 +
+
 track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
