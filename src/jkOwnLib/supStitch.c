@@ -540,11 +540,14 @@ static enum ffStringency ssStringency;
 static boolean ssIsProt;
 
 static int ssGapCost(int dq, int dt)
-/* Return gap penalty. */
+/* Return gap penalty.  This just need be a lower bound on 
+ * the penalty actually. */
 {
+int cost;
 if (dt < 0) dt = 0;
 if (dq < 0) dq = 0;
-return ffCalcGapPenalty(dt, dq, ssStringency);
+cost = ffCalcGapPenalty(dt, dq, ssStringency);
+return cost;
 }
 
 

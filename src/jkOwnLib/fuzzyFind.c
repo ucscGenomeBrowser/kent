@@ -268,9 +268,9 @@ int ffCalcCdnaGapPenalty(int hGap, int nGap)
 /* Return gap penalty for given h and n gaps. */
 {
 int acc = 2;
-if (hGap > 100000)	/* Discourage really long introns. */
+if (hGap > 400000)	/* Discourage really long introns. */
     {
-    acc += (hGap - 100000)/3000;
+    acc += (hGap - 400000)/3000;
     if (hGap > ffIntronMax)
         acc += (hGap - ffIntronMax)/2000;
     }
@@ -289,6 +289,11 @@ acc += digitsBaseTwo(hGap)/2;
 if (nGap != 0)
     {
     acc += digitsBaseTwo(nGap);
+    }
+else
+    {
+    if (hGap > 30)
+	acc -= 1;
     }
 return acc;
 }

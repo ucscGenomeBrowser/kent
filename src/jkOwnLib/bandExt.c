@@ -306,67 +306,10 @@ if (dir < 0)
 
 /* Clean up, set return values and go home */
 lmCleanup(&lm);
-*retStartA = aBestPos;
-*retStartB = bBestPos;
+if (retStartA != NULL) *retStartA = aBestPos;
+if (retStartB != NULL) *retStartB = bBestPos;
 *retSymCount = symCount;
 return didExt;
-}
-
-static struct ffAli *symToFfAli(int symCount, char *nSym, char *hSym,
-	struct lm *lm, char *nStart, char *hStart)
-/* Convert symbol representation of alignments (letters plus '-')
- * to ffAli representation.  If lm is nonNULL, ffAli result 
- * will be lmAlloced, else it will be needMemed. This routine
- * depends on nSym/hSym being zero terminated. */
-{
-struct ffAli *ffList = NULL, *ff = NULL;
-char n, h;
-int i;
-
-for (i=0; i<=symCount; ++i)
-    {
-    boolean isGap;
-    n = nSym[i];
-    h = hSym[i];
-    isGap = (n == '-' || n == 0 || h == '-' || h == 0);
-    if (isGap)
-	{
-	if (ff != NULL)
-	    {
-	    ff->nEnd = nStart;
-	    ff->hEnd = hStart;
-	    ff->left = ffList;
-	    ffList = ff;
-	    ff = NULL;
-	    }
-	}
-    else
-	{
-	if (ff == NULL)
-	    {
-	    if (lm != NULL)
-		{
-		lmAllocVar(lm, ff);
-		}
-	    else
-		{
-		AllocVar(ff);
-		}
-	    ff->nStart = nStart;
-	    ff->hStart = hStart;
-	    }
-	}
-    if (n != '-')
-	{
-	++nStart;
-	}
-    if (h != '-')
-	{
-	++hStart;
-	}
-    }
-ffList = ffMakeRightLinks(ffList);
-return ffList;
 }
 
 struct ffAli *bandExtFf(
@@ -425,7 +368,7 @@ if (gotExt)
 	nExtStart = origFf->nStart - nExt - 1;
 	hExtStart = origFf->hStart - hExt - 1;
 	}
-    ffList = symToFfAli(symCount, nBuf, hBuf, lm,  nExtStart, hExtStart);
+    ffList = ffAliFromSym(symCount, nBuf, hBuf, lm,  nExtStart, hExtStart);
     }
 freeMem(symBuf);
 return ffList;
