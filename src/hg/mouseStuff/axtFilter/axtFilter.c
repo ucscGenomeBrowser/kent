@@ -23,6 +23,7 @@ errAbort(
   "   -qStartMax=N - restrict to those with qStart less than N\n"
   "   -tStartMin=N - restrict to those with tStart at least N\n"
   "   -tStartMax=N - restrict to those with tStart less than N\n"
+  "   -strand=?    -restrict strand (to + or -)\n"
   );
 }
 
@@ -66,6 +67,7 @@ int qStartMin = optionInt("qStartMin", -BIGNUM);
 int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
+char *strand = optionVal("strand", NULL);
 int i;
 
 for (i=0; i<inCount; ++i)
@@ -89,6 +91,8 @@ for (i=0; i<inCount; ++i)
 	if (axt->qStart < qStartMin || axt->qStart >= qStartMax)
 	    writeIt = FALSE;
 	if (axt->tStart < tStartMin || axt->tStart >= tStartMax)
+	    writeIt = FALSE;
+	if (strand != NULL && strand[0] != axt->qStrand)
 	    writeIt = FALSE;
 	if (writeIt)
 	    axtWrite(axt, stdout);
