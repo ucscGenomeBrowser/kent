@@ -2,7 +2,7 @@
 exit; # don't actually run this like a script :)
 
 # Tetraodon Nigirividis from Genoscope, version v6 (released 5/6/02)
-#   Project website:
+#    Project website:
 #    http://www.genoscope.cns.fr/externe/tetraodon/sequencing.html
 
 # DOWNLOAD SEQUENCE 
@@ -12,3 +12,417 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/store7/tetNig1 /cluster/data
     cd /cluster/data/tetNig1
     wget http://www.genoscope.cns.fr/externe/tetraodon/Data/Reads/tetraodon6.gz
+
+# DOWNLOAD SEQUENCE BY CHROMOSOME, GFF AND AGP FILES (DONE, 2004-08-13, hartera)
+    # Genoscope provided the url, username and password
+    # download agp, gff and accompanying FASTA files by chromosome
+    ssh kksilo
+    cd /cluster/data/tetNig1
+    wget --timestamp --http-user=   --http-passwd= \
+         http://www.genoscope.cns.fr/nda/tetraodon/GFF/tetraodon.all.gff.*
+    wget --timestamp --http-user=   --http-passwd=  \
+         http://www.genoscope.cns.fr/nda/tetraodon/GP/chr.agp
+    wget --timestamp --http-user=   --http-passwd=   \
+         http://www.genoscope.cns.fr/nda/tetraodon/GP/chr.agp.info
+    wget --timestamp -r -l1 --http-user=   --http-passwd=   \
+         http://www.genoscope.cns.fr/nda/tetraodon/GP/unmasked/
+    mv ./www.genoscope.cns.fr/secure-nda/tetraodon/GP/unmasked/* .
+    rm -r www.genoscope.cns.fr
+    rm index*
+    # unzip FASTA files
+    bzip2 -d chr*.bz2
+    bzip2 -d tetraodon.all.gff.bz2
+    # no complete mitochondrial sequence in Genbank
+
+# Create list of chromosomes (DONE, 2004-08-13, hartera)
+    ssh hgwdev
+    cd /cluster/data/tetNig1
+    foreach f (*.fa)
+       set chr = `echo $f:h | sed -e 's/^chr//' | sed -e 's/\.fa$//'` 
+      echo $chr >> chrom
+    end
+    sort -n chrom > chrom.lst
+    rm chrom
+
+# SPLIT AGP FILES BY CHROMOSOME (DONE, 2004-08-16, hartera)
+
+   ssh kksilo
+   cd /cluster/data/tetNig1
+   foreach c (`cat chrom.lst`)
+      mkdir $c
+      mv chr${c}.fa ./$c
+      perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+        ./chr.agp > $c/chr$c.agp
+   end
+   # agp has either gaps (N) or scaffolds (S), change S to W for WGS
+   # agp files are not standard formats so need to reformat for
+   # processing programs to run - missing field 4 which is just line number
+   # and need to reformat gap line to:
+   # chr chr_start chr_end line type length gap type linkage
+   foreach c (`cat chrom.lst`)
+      cp $c/chr${c}.agp $c/chr${c}.agp.bak
+      echo "Processing chr${c}.agp ..."
+      awk 'BEGIN {OFS="\t"} \
+         { if ($4 == "S") print $1, $2, $3, NR, "W", $5, $6, $7, $8, $9; \
+           if ($4 == "N" && $5 == "GAP_IS") \
+              print $1, $2, $3, NR, $4, $9, "fragment", "yes"; \
+           if ($4 == "N" && $5 == "GAP_UC") \
+              print $1, $2, $3, NR, $4, $9, "contig", "yes"; \
+           if ($4 == "N" && $5 == "GAP_UN") \
+              print $1, $2, $3, NR, $4, $9, "contig", "no"; \
+           if ($4 == "N" && $5 == "CENT") \
+              print $1, $2, $3, NR, $4, $9, "centromere", "no" }' \
+              $c/chr${c}.agp >> $c/chr${c}.new.agp
+      mv $c/chr${c}.new.agp $c/chr{$c}.agp
+   end
+   # check agp files and then remove backup files
+   foreach c (`cat chrom.lst`)
+      rm $c/chr${c}.agp.bak
+   end
+
+# CHECK FASTA AND AGP FILES (DONE, 2004-08-16, hartera)
+   ssh kksilo
+   cd /cluster/data/tetNig1
+   foreach c (`cat chrom.lst`)
+      foreach f ( $c/chr$c.agp) 
+         set agpLen = `tail -1 $f | awk '{print $3;}'`
+         set h = $f:r
+         set g = $h:r
+         echo "Getting size of $g.fa"
+         set faLen = `faSize $g.fa | awk '{print $1;}'`
+         if ($agpLen == $faLen) then
+           echo "   OK: $f length = $g length = $faLen"
+         else
+           echo "ERROR:  $f length = $agpLen, but $g length = $faLen"
+         endif
+      end
+   end
+   # all are OK so FASTA files sizes are in agreement with agp files
+
+# BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
+# (DONE, 2004-08-16, hartera)
+
+   ssh kksilo
+   cd /cluster/data/tetNig1
+    
+   foreach c (`cat chrom.lst`)
+      foreach agp ($c/chr$c.agp)
+        if (-e $agp) then
+          set fa = $c/chr$c.fa
+          echo splitting $agp and $fa
+          cp -p $agp $agp.bak
+          cp -p $fa $fa.bak
+          splitFaIntoContigs $agp $fa . -nSize=5000000
+        endif
+      end
+   end
+ 
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE, 2004-08-16, hartera)
+    # This used to hold scripts -- better to keep them inline here
+    # Now it should just hold lift file(s) and
+    # temporary scripts made by copy-paste from this file.
+    ssh hgwdev
+    mkdir /cluster/data/tetNig1/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/tetNig1/bed
+
+# CREATING DATABASE (DONE, 2004-08-16, hartera)
+    # Create the database.
+    # next machine
+    ssh hgwdev
+    echo 'create database tetNig1' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+    echo 'drop database tetNig1' | hgsql tetNig1
+    # Use df to ake sure there is at least 5 gig free on
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sdc1             1.8T  525G  1.2T  32% /var/lib/mysql
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2004-08-16, hartera)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #  grp in the database galGal2 to our new database ce2
+    echo "create table grp (PRIMARY KEY(NAME)) select * from galGal2.grp" \
+      | hgsql tetNig1
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+    echo 'drop table grp;' | hgsql tetNig1
+
+# REPEAT MASKING - Run RepeatMasker on chroms (DONE, 2004-08-17, hartera)
+#- Split contigs into 500kb chunks, at gaps if possible:
+    ssh kksilo
+    cd /cluster/data/tetNig1
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        ~/bin/i386/faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+        cd ../..
+      end
+    end
+
+#- Make the run directory and job list:
+    cd /cluster/data/tetNig1
+    cat << '_EOF_' > jkStuff/RMTetraodon
+#!/bin/csh -fe
+                                                                                
+cd $1
+pushd .
+/bin/mkdir -p /tmp/tetNig1/$2
+/bin/cp $2 /tmp/tetNig1/$2/
+cd /tmp/tetNig1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s $2
+popd
+/bin/cp /tmp/tetNig1/$2/$2.out ./
+if (-e /tmp/tetNig1/$2/$2.align) /bin/cp /tmp/tetNig1/$2/$2.align ./
+if (-e /tmp/tetNig1/$2/$2.tbl) /bin/cp /tmp/tetNig1/$2/$2.tbl ./
+if (-e /tmp/tetNig1/$2/$2.cat) /bin/cp /tmp/tetNig1/$2/$2.cat ./
+/bin/rm -fr /tmp/tetNig1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/tetNig1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/tetNig1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMTetraodon
+    mkdir RMRun
+    cp /dev/null RMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/tetNig1/jkStuff/RMTetraodon \
+                 /cluster/data/tetNig1/$d $f \
+               '{'check out line+ /cluster/data/tetNig1/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/tetNig1/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# para time
+# Completed: 940 of 940 jobs
+# CPU time in finished jobs:    6654614s  110910.24m  1848.50h   77.02d  0.211 y
+# IO & Wait Time:                 54843s     914.05m    15.23h    0.63d  0.002 y
+# Average job time:                7138s     118.96m     1.98h    0.08d
+# Longest job:                    11024s     183.73m     3.06h    0.13d
+# Submission to last job:         34509s     575.15m     9.59h    0.40d
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/tetNig1
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/tetNig1
+    hgLoadOut tetNig1 */chr*.fa.out
+
+# MAKE LIFTALL.LFT (DONE, 2004-08-16, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1
+    cat */lift/ordered.lft > jkStuff/liftAll.lft
+
+# SIMPLE REPEATS TRACK (DONE, 2004-08-17, hartera)
+    # TRF runs pretty quickly now... it takes a few hours total runtime,
+    # so instead of binrsyncing and para-running, just do this on the
+    # local fileserver
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/simpleRepeat
+    cd /cluster/data/tetNig1/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    foreach d (/cluster/data/tetNig1/*/chr*_?{,?})
+      set ctg = $d:t
+      foreach f ($d/${ctg}.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+      end
+    end
+
+    chmod a+x jobs.csh
+    csh -ef jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    endsInLf trf/*
+
+    liftUp simpleRepeat.bed /cluster/data/tetNig1/jkStuff/liftAll.lft warn \
+           trf/*.bed
+    
+    # Load into the database:
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/simpleRepeat
+    hgLoadBed tetNig1 simpleRepeat \
+      /cluster/data/tetNig1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE, 2004-08-17, hartera)
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/tetNig1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/tetNig1
+    mkdir bed/simpleRepeat/trfMaskChrom
+    foreach c (`cat chrom.lst`)
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF 
+# (DONE, 2004-08-17, hartera)
+    ssh kksilo
+    cd /cluster/data/tetNig1
+    # Soft-mask (lower-case) the contig and chr .fa's,
+    # then make hard-masked versions from the soft-masked.
+    set trfCtg=bed/simpleRepeat/trfMask
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    foreach f (*/chr*.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+
+    foreach c (`cat chrom.lst`)
+      echo "repeat- and trf-masking contigs of chr$c"
+      foreach d ($c/chr*_?{,?})
+        set ctg=$d:t
+        set f=$d/$ctg.fa
+        maskOutFa -soft $f $f.out $f
+        maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        maskOutFa $f hard $f.masked
+      end
+    end
+
+    # Build nib files, using the soft masking in the fa
+    mkdir nib
+    foreach f (*/chr*.fa)
+      faToNib -softMask $f nib/$f:t:r.nib
+    end
+
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-08-17, hartera)
+    # Make symbolic links from /gbdb/tetNig1/nib to the real nibs.
+    ssh hgwdev
+    cd /cluster/data/tetNig1
+    mkdir -p /gbdb/tetNig1/nib
+    foreach f (/cluster/data/tetNig1/nib/chr*.nib)
+      ln -s $f /gbdb/tetNig1/nib
+    end
+    # Load /gbdb/tetNig1/nib paths into database and save size info
+    # hgNibSeq creates chromInfo table
+    hgNibSeq -preMadeNib tetNig1 /gbdb/tetNig1/nib */chr*.fa
+    echo "select chrom,size from chromInfo" | hgsql -N tetNig1 > chrom.sizes
+    # take a look at chrom.sizes, should be 27 lines
+    wc chrom.sizes
+
+    # Make one big 2bit file as well, and make a link to it in
+    # /gbdb/tetNig1/nib because hgBlat looks there:
+    faToTwoBit */chr*.fa tetNig1.2bit
+    ln -s /cluster/data/tetNig1/tetNig1.2bit /gbdb/tetNig1/nib/
+
+# MAKE GOLD AND GAP TRACKS (DONE, 2004-08-17, hartera)
+    ssh hgwdev
+    cd /cluster/data/tetNig1
+    # the gold and gap tracks are created from the chrN.agp file 
+    hgGoldGapGl -noGl -chromLst=chrom.lst tetNig1 /cluster/data/tetNig1 .
+
+
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (in progress, 2004-08-16, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/tetNig1/html
+    cd /cluster/data/tetNig1/html
+  # make a symbolic link from /gbdb/tetNig1/html to /cluster/data/tetNig1/html
+    mkdir /gbdb/tetNig1
+    ln -s /cluster/data/tetNig1/html /gbdb/tetNig1/html
+    # Add a description page for zebrafish
+    cd /cluster/data/tetNig1/html
+    cp /cluster/data/fr1/html/*.html .
+    # Edit this for zebrafish
+
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-08-18, hartera)
+    ssh kkr1u00
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/tetNig1/nib
+    mkdir -p /iscratch/i/tetNig1/nib
+    cp -p /cluster/data/tetNig1/nib/chr*.nib /iscratch/i/tetNig1/nib
+    # Pseudo-contig fa that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/tetNig1/trfFa
+    mkdir /iscratch/i/tetNig1/trfFa
+    foreach d (/cluster/data/tetNig1/*/chr*_?{,?})
+      cp $d/$d:t.fa /iscratch/i/tetNig1/trfFa
+    end
+    rm -rf /iscratch/i/tetNig1/rmsk
+    mkdir -p /iscratch/i/tetNig1/rmsk
+    cp -p /cluster/data/tetNig1/*/chr*.fa.out /iscratch/i/tetNig1/rmsk
+    cp -p /cluster/data/tetNig1/tetNig1.2bit /iscratch/i/tetNig1/
+    iSync
+
+    # add to /cluster/bluearc too
+    ssh kksilo
+
+    # masked contigs
+    rm -fr /cluster/bluearc/scratch/tetra/tetNig1/trfFa
+    mkdir -p /cluster/bluearc/scratch/tetra/tetNig1/trfFa
+    foreach d (/cluster/data/tetNig1/*/chr*_?{,?})
+      cp $d/$d:t.fa /cluster/bluearc/scratch/tetra/tetNig1/trfFa
+    end
+
+    # masked chrom nibs
+    rm -fr /cluster/bluearc/scratch/tetra/tetNig1/nib
+    mkdir -p /cluster/bluearc/scratch/tetra/tetNig1/nib
+    cp -p /cluster/data/tetNig1/nib/chr*.nib /cluster/bluearc/scratch/tetra/tetNig1/nib
+
+    # fasta files  - CHECK FOR RANDOMS
+    cd /cluster/data/tetNig1
+    rm -fr /cluster/bluearc/scratch/tetra/tetNig1/fasta
+    mkdir -p /cluster/bluearc/scratch/tetra/tetNig1/fasta
+    cp -p */*.fa /cluster/bluearc/scratch/tetra/tetNig1/fasta
+
+    # RepeatMasker *.out files - CHECK FOR RANDOMS
+    rm -rf /cluster/bluearc/scratch/tetra/tetNig1/rmsk
+    mkdir -p /cluster/bluearc/scratch/tetra/tetNig1/rmsk
+    cp -p ./*/chr*.fa.out /cluster/bluearc/scratch/tetra/tetNig1/rmsk
+
