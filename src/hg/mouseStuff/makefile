@@ -45,7 +45,9 @@ DIRS = \
 	chainPreNet \
 	chainSort \
 	chainSplit \
+	chainStats \
 	chainSwap \
+	chainToPsl \
 	gcForBed \
 	knownVsBlat \
 	lavToAxt \
@@ -64,11 +66,13 @@ DIRS = \
 	netSyntenic \
 	netToAxt \
 	netToBed \
+	netToBedWithId \
 	orthologBySynteny \
 	phToPsl \
 	pslMrnaCover \
 	regionPicker \
 	rikenBestInCluster \
+	simpleChain \
 	splitSim \
 	subsetAxt \
 	subsetTraces \
