@@ -89,6 +89,7 @@ if (count == 0)
     sendMessage.message = 0;
     err = rudpSend(ru, hostIp, port, &sendMessage, sizeof(sendMessage));
     }
+rudpPrintStatus(ru);
 rudpFree(&ru);
 close(sd);
 printf("Bye");

@@ -140,7 +140,11 @@ for (;;)
 	{
 	readSize = recvfrom(ru->socket, &head, sizeof(head), 0, NULL, NULL);
 	if (readSize >= sizeof(head) && head.type == rudpAck && head.id == ru->lastId)
+	    {
+	    gettimeofday(&tv, NULL);
+	    rudpAddRoundTripTime(ru, timeDiff(startTv, &tv));
 	    return TRUE;
+	    }
 	}
 
     /* If we got to here then we did get a message, but it's not our
@@ -169,6 +173,7 @@ int i, err = 0, maxRetry = 3;
 /* Make buffer with header in front of message. 
  * At some point we might replace this with a scatter/gather
  * iovector. */
+ru->sendCount += 1;
 assert(size <= rudpMaxSize);
 head = (struct rudpHeader *)outBuf;
 memcpy(head+1, message, size);
@@ -197,6 +202,7 @@ for (i=0; i<maxRetry; ++i)
 	tv.tv_sec = 0;
 	tv.tv_usec = ru->timeOut;
 	select(0, NULL, NULL, NULL, &tv);
+	ru->resendCount += 1;
 	rudpTimedOut(ru);
 	continue;
 	}
@@ -205,9 +211,11 @@ for (i=0; i<maxRetry; ++i)
 	return 0;
 	}
     rudpTimedOut(ru);
+    ru->resendCount += 1;
     }
 if (err == 0)
     err = ETIMEDOUT;
+ru->failCount += 1;
 return err;
 }
 
@@ -222,6 +230,7 @@ struct rudpHeader ackHead;
 struct sockaddr_in sai;
 int readSize, err;
 assert(bufSize <= rudpMaxSize);
+ru->receiveCount += 1;
 for (;;)
     {
     int saiSize = sizeof(sai);
@@ -232,6 +241,7 @@ for (;;)
     if (readSize < 0)
 	{
 	warn("recvfrom error: %s", strerror(errno));
+	ru->failCount += 1;
 	return readSize;
 	}
     if (readSize < sizeof(*head))
@@ -262,6 +272,20 @@ for (;;)
     break;
     }
 return readSize;
+}
+
+void rudpPrintStatus(struct rudp *ru)
+/* Print out rudpStatus */
+{
+printf("rudp status:\n");
+printf("  receiveCount %d\n", ru->receiveCount);
+printf("  sendCount %d\n", ru->sendCount);
+printf("  resendCount %d\n", ru->resendCount);
+printf("  failCount %d\n", ru->failCount);
+printf("  timeOut %d\n", ru->timeOut);
+printf("  rttVary %d\n", ru->rttVary);
+printf("  rttAve %d\n", ru->rttAve);
+printf("  rttLast %d\n", ru->rttLast);
 }
 
 void rudpTest()

@@ -52,6 +52,8 @@ struct rudp
     int rttAve;		/* Approximate average of recent RTTs. */
     int rttVary;	/* Approximate variation of recent RTTs. */
     int timeOut;	/* Ideal timeout for next receive. */
+    int receiveCount;	/* Number of packets attempted to receive. */
+    int sendCount;	/* Number of packets attempted to send. */
     int resendCount;	/* Number of resends. */
     int failCount;	/* Number of failures. */
     bits32 lastId;	/* Id number of last message sent. */
@@ -96,6 +98,9 @@ int rudpSend(struct rudp *ru, rudpHost host, bits16 port, void *message, int siz
 int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize);
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. */
+
+void rudpPrintStatus(struct rudp *ru);
+/* Print out status info. */
 
 void rudpTest();
 /* Test out rudp stuff. */
