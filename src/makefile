@@ -48,6 +48,7 @@ clean:
 	cd utils && ${MAKE} clean
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
+	rm -f tags TAGS
 
 test::
 	cd lib && ${MAKE} test
@@ -55,8 +56,27 @@ test::
 	cd hg && ${MAKE} test
 	cd utils && ${MAKE} test
 
+LIB_TAGS_IN = lib/*.[hc] hg/lib/*.[hc] jkOwnLib/*.c
+
+# build tags for libraries
+.PHONY: tags
 tags:
-	ctags ${HOME}/kent/src/lib/*.c ${HOME}/kent/src/inc/*.h ${HOME}/kent/src/hg/lib/*.c ${HOME}/kent/src/hg/inc/*.h ${HOME}/kent/src/jkOwnLib/*.c
+	ctags ${LIB_TAGS_IN}
+
+# build emacs tags for libraries
+.PHONY: etags
+etags:
+	etags ${LIB_TAGS_IN}
+
+# build tags for all files
+.PHONY: tags-all
+tags-all:
+	find . -name '*.[ch]' | ctags -L -
+
+# build emacs tags for all files
+.PHONY: etags-all
+etags-all:
+	find . -name '*.[ch]' | etags -
 
 utils: libs
 	@for D in $(DIRS) x; do \
