@@ -321,7 +321,7 @@ type bed 4 +
 
 track xenoMrna
 shortLabel Nonhuman mRNA
-longLabel Non-Human mRNAs from Genbank
+longLabel Nonhuman mRNAs from Genbank
 priority 23
 visibility dense
 spectrum on
@@ -329,7 +329,7 @@ type psl xeno
 
 track xenoBestMrna
 shortLabel Other Best mRNAs
-longLabel Non-Human mRNAs from Genbank Best in Genome Alignments
+longLabel Nonhuman mRNAs from Genbank Best in Genome Alignments
 priority 23.1
 visibility hide
 spectrum on
@@ -338,7 +338,7 @@ private on
 
 track xenoEst
 shortLabel Nonhuman EST
-longLabel Non-Human ESTs from Genbank Near Best in Genome Alignments
+longLabel Nonhuman ESTs from Genbank 
 priority 23.2
 visibility hide
 spectrum on
@@ -397,13 +397,35 @@ type bed 4 .
 
 track blastzMouse
 shortLabel Blastz Mouse
-longLabel Merged Blastz Mouse Alignments from Penn State
+longLabel Merged Blastz Mouse Alignments
 priority 25.8
 visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
 type bed 5 +
+
+track avidUnique
+shortLabel Avid Mouse
+longLabel Regions Conserved in Avid Mouse/Human Alignments
+priority 25.9
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 .
+visibility dense
+
+track avidRepeat
+shortLabel Avid Rep Mouse
+longLabel Repeating Regions Conserved in Avid Mouse/Human Alignments
+priority 25.9
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 .
+visibility hide
 
 track mouseRefHCons
 shortLabel HighCon MouseRef
