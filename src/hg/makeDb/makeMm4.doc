@@ -2193,7 +2193,8 @@ while (<>) {
     hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
 	-h genome-testdb hgcentraltest
 
-# STS MARKERS TRACK (WORKING - 2003-11-25 - Hiram)
+# STS MARKERS TRACK (STARTED - 2003-11-25 - Hiram)
+    # DONE - 2004-01-07 15:14  !  - this wasn't easy ....
 
     ssh kksilo
     mkdir -p /cluster/data/mm4/bed/STSmarkers/downloads
@@ -2434,13 +2435,9 @@ XXX  This is an unusual increase ?
     # 219652 1885501 11875772 total
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
-XXXX 2004-01-06 experiment here, something may be wrong with one of these
-XXXX arguments
     /cluster/bin/scripts/epcrToPsl -mouse \
-	../ePCR/all.epcr ../mouseP.fa \
+	epcr.not.found ../mouseP.info \
 	accession_info.rdb /cluster/data/mm4
-    # this command takes a very long time, even on the file server
-    ##### epcr.not.found.psl is empty !
     # Comparing results to Mm3:
     # Mm3 wc epcr*
     # 205     820    7585 epcr.not.found
@@ -2448,11 +2445,27 @@ XXXX arguments
     # 204    4284   19817 epcr.not.found.psl
 
     # Mm4 wc epcr*
-    #  328    1312   12011 epcr.not.found
-    #  328    3936   28083 epcr.not.found.nomatch
-    #    0       0       0 epcr.not.found.psl
+    #	328    1312   12011 epcr.not.found
+    #	 57     684    5474 epcr.not.found.nomatch
+    #	271    5691   26224 epcr.not.found.psl
+    # there is a single error being propagated here from the file
+    # /cluster/store5/mouseMarker/stsInfoMouse.bed which has an error
+    # at line 53958:
+62943   D2J3    91947   D2J3                            CAACCAGCTCAC    CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
+    # The value '1825,' is incorrect.  Should be a small integer here.
+    # to work around this problem, I'm manually eliminating this problem
+    # from the epcr.not.found.psl file where it has now become two bad
+    # lines:
+# 24      0       0       0       1       1801    1       1789    +       62943        1825,   0       1825,   chr11_16        0       1115413 1117226 2       12,12,  0,1813, 1115413,1117214,
+# 24      0       0       0       1       1801    1       1789    +       62943        1825,   0       1825,   chr11_16        0       1115413 1117226 2   
+    # taking those two lines out, find another two lines:
+# 24      0       0       0       1       951     1       994     +       64793   975,    0       975,    chr5_23 0       3405277 3406295 2       12,12,  0,963,  3405277,3406283,
+# 24      0       0       0       1       951     1       994     +       64793   975,    0       975,    chr5_23 0       3405277 3406295 2       12,12,  0,963,  3405277,3406283,
+    # And one more line that had a 930BP in the wrong place, the last line
+    # in this file.
 
-    # combine them to one, since epcr.not.found.psl is empty, this is a copy
+
+    # combine them to one
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
 
     # lift those primers  (added chrM to this lifter script for mouse)
@@ -2460,20 +2473,20 @@ XXXX arguments
     /cluster/bin/scripts/lifter -mouse -psl \
 	/cluster/data/mm4 primers.psl.filter
     # wc primers.psl.filter.lifted
-    # 32729  687309 3460147 primers.psl.filter.lifted
+    # 32995  692895 3488746 primers.psl.filter.lifted
 
     # create primers.psl.filter.lifted.initial
+	PATH=/cluster/bin/scripts:$PATH \
 	/cluster/bin/scripts/extractPslInfo \
 	primers.psl.filter.lifted
     #	wc primers.psl.filter.lifted.initial
-    #	32726  196356 1746894 primers.psl.filter.lifted.initial
+    #	32983  197898 1758225 primers.psl.filter.lifted.initial
 
     # create primers.psl.filter.lifted.initial.acc
     /cluster/bin/scripts/findAccession -agp \
 	-mouse primers.psl.filter.lifted.initial /cluster/data/mm4
     # wc primers.psl.filter.lifted.initial.acc
-    # 32726  229082 2069372 primers.psl.filter.lifted.initial.acc
-
+    # 32983  230881 2083248 primers.psl.filter.lifted.initial.acc
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
@@ -2481,7 +2494,7 @@ XXXX arguments
 	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
 	> primers.initial.acc.trans
     # wc primers.initial.acc.trans
-    # 32726  229082 1757417 primers.initial.acc.trans
+    # 32983  230881 1771293 primers.initial.acc.trans
 
     sort -k 4n primers.initial.acc.trans > primers.final
     rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
@@ -2489,29 +2502,32 @@ XXXX arguments
     # Mm3 wc primers.final
     # 26292  184044 1253365 primers.final
     # wc primers.final
-    # 32726  229082 1757417 primers.final
+    # 32983  230881 1771293 primers.final
 
     cd /cluster/data/mm4/bed/STSmarkers
     # stsMarkers.final is empty for mouse
     touch stsMarkers.final dummy
+    PATH=/cluster/bin/scripts:$PATH \
     /cluster/bin/scripts/combineSeqPrimerPos \
 	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
     # Comparing results to Mm3
     # Mm3 wc stsMarkers_pos.rdb
     # 25925  181475 1413458 stsMarkers_pos.rdb
     # Mm4 wc stsMarkers_pos.rdb
-    # 31013  217091 1854806 stsMarkers_pos.rdb
+    # 31270  218890 1869417 stsMarkers_pos.rdb
 
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
     # wc stsMapMouse.bed
-    # 27815  305820 2187428 stsMapMouse.bed
+    # 27976  307388 2198948 stsMapMouse.bed
 
 #  loading STS markers tables
     ssh hgwdev
     cd /cluster/data/mm4/bed/STSmarkers
     ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
-    # 117971  353913 2822579 ucscStsAlias.tab
+     
+    # wc ucscStsAlias.tab
+    # 114257  342771 2746002 ucscStsAlias.tab
     hgsql -e "drop table stsAlias;" mm4
     hgsql mm4 < ~/kent/src/hg/lib/stsAlias.sql
     hgsql -e \
@@ -2526,18 +2542,15 @@ XXXX arguments
      'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm4
 
     hgLoadPsl -nobin -table=all_sts_primer mm4 primer/primers.psl.filter.lifted
-    #hgsql -e "drop table all_sts_primer;" mm4
-    #hgsql mm4 < /projects/hg2/booch/psl/tables/all_sts_primer.sql
-    #hgsql -e \
-    #	'load data local infile "primer/primers.psl.filter.lifted" into table all_sts_primer;' mm4
-XXXX 2002-12-23 This is missing something.  Can not click through to the
-	alignments
 
-# load primer sequences	
+    # load primer sequences	
     mkdir /gbdb/mm4/stsMarker
-    ln -s <primer.fa> /gbdb/mm4/stsMarker/<primer.fa>
-    hgLoadSeq mm4 /gbdb/mm4/stsMarker/<primer.fa>
-
+    ln -s /cluster/data/mm4/bed/STSmarkers/mouseP.fa \
+	/gbdb/mm4/stsMarker/mouseP.fa
+    hgLoadSeq mm4 /gbdb/mm4/stsMarker/mouseP.fa
+#  Adding /gbdb/mm4/stsMarker/mouseP.fa
+#  29906 sequences
+   # DONE - 2004-01-07 15:14
 
 #  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
 #	is created correctly from above, also needs the three maps files
@@ -2917,6 +2930,9 @@ See README in /cluster/store1/geneOntology.
 
 # Create knownToEnsembl column
 # XXXX do not have an ensGene table yet !
+#  XXXX TBD - to be done when they release Mouse build 32 gene data
+#	OK to leave this our for now, will leave a couple of missing
+#	columns in the family browser
 hgMapToGene mm4 ensGene knownGene knownToEnsembl
 
 # Make knownToCdsSnp column.  This is a little complicated by
