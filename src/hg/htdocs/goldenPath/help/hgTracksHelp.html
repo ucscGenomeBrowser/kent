@@ -1504,8 +1504,64 @@ the short p arm. The coordinates differ between assemblies.
 	None.</TD></TR>
 </TABLE></P>
 
+<P><B>Bactigs</B><BR>
+The rat genome assembly is pieced together from bactig assemblies rather than clone-by-clone assemblies. Bactigs are reassemblies of the reads
+from sets of overlapping skimmed BAC clones, including mapped whole shotgun
+reads. The assembly process reworks the contigs (splitting some) and
+selects them under more stringent criteria than is used for the BAC submissions.  
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Bactig positions are indicated by rectangular blocks. Bactig names are 
+	of the form <I>gaab_gnmm</I>, the internal names of the two bracketing 
+	projects. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show position information
+	and the first and last contig in the bactig.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>bactigPos</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BactigPos"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Best Human</B><BR>
+This track displays <I>Blastz</I> alignments of the Nov. 2002 human draft
+assembly to the mouse genome filtered to display only the best alignment for any
+given region of the mouse genome.  See the track's description page for more 
+details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show mouse and 
+	human position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzBestHuman</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Best Mouse</B><BR>
-This track displays <I>Blastz</I> alignments of the Feb. 2002 mouse draft
+This track displays <I>Blastz</I> alignments of the specified mouse draft
 assembly to the human genome filtered to display only the best alignment for any
 given region of the human genome.  See the track's description page for more 
 details. 
@@ -1521,10 +1577,11 @@ details.
 	mouse position information, alignment details, and link to a detailed
 	view of parts of the alignment.
 	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track filter:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
-	chromosome.
+	chromosome.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -1534,8 +1591,39 @@ details.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Best Rat</B><BR>
+This track displays <I>Blastz</I> alignments of the Nov. 2002 rat draft
+assembly to the mouse genome filtered to display only the best alignment for any
+given region of the mouse genome.  See the track's description page for more 
+details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show rat and 
+	mouse position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzBestRat</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Blastz Mouse</B><BR>
-This track displays <EM>blastz</EM> alignments of the Feb. 2002 mouse draft
+This track displays <EM>blastz</EM> alignments of the specified mouse draft
 assembly to the human genome.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -1549,10 +1637,11 @@ assembly to the human genome.
 	mouse position information, alignment details, and link to a detailed
 	view of parts of the alignment.
 	links.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track filter:</I></B> 
 	The track description page contains a filter that can be used to turn 
 	on the chromosome color track or to filter the display output by 
-	chromosome.
+	chromosome.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -1701,6 +1790,29 @@ some reason, perhaps having to do with the regulation of gene expression.
 	<I>cpgIsland</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#CpG Islands"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>DBTSS mRNA</B><BR>
+This track shows RefSeq mRNA sequences extended to the 5' end, based on sequence
+information in the <A HREF="http://dbtss.hgc.jp/home.html">DataBase of 
+Transcriptional Start Sites</A> (DBTSS). For more information on the process used
+to construct this track, refer to the track's description page. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for mRNA tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show PSL output information
+	about the item.  </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>dbtssAli</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1877,6 +1989,32 @@ Kent's BLAT program.
 	<I>fosEndPairs</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="../gbdDescriptions.html#FosEndPairs"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Fugu Blat </B><BR>
+This track displays translated BLAT alignments of Takifugu rubripes whole genome 
+shotgun reads against the currently selected genome assembly. The alignments 
+were done with BLAT in translated protein mode
+requiring 2 nearby 4-mer matches to trigger a detailed alignment. The human 
+genome was masked with RepeatMasker and Tandem Repeat Finder before running 
+BLAT. The fugu sequence used in this track is version 3.0, provided by the
+<A HREF="http://genome.jgi-psf.org/">DOE Joint Genome Institute</A> (JGI).
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for BLAT tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode brings up links to the DNA
+	sequence and the alignment. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>chrN_blatFugu</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -2451,7 +2589,7 @@ kept.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Mouse mRNA </B><BR>
+<P><B>Mouse mRNAs</B><BR>
 This track displays translated BLAT alignments of mouse mRNA 
 from Genbank against the genome. The alignments were passed through a 
 near-best-in-genome filter.
@@ -2481,7 +2619,7 @@ near-best-in-genome filter.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Mouse Synteny (hg13)</B><BR>
+<P><B>Mouse Synteny (hg13+)</B><BR>
 This track shows syntenous (corresponding) regions between human and mouse 
 chromosomes. The track was created by passing a 100k non-overlapping window over 
 the genome and using the blastz best in mouse genome alignments to look for
@@ -2651,7 +2789,7 @@ filter. Some mRNAs align to multiple places but only the near-best are retained.
 </TABLE></P>
 
 <P><B>Nonrat mRNA </B><BR>
-This track displays translated BLAT alignments of non-rat vertebrate mRNA 
+This track displays translated BLAT alignments of non-Rattus norvegicus vertebrate mRNA 
 from Genbank. The alignments were passed through a near-best-in-genome
 filter. Some mRNAs align to multiple places but only the near-best are retained. 
 
@@ -2698,6 +2836,28 @@ by the <A HREF="http://snp.cshl.org/">SNP Consortium</A>.
 	<I>snpNih</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#SNPsites"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>QTL</B><BR>
+This track shows approximate positions of quantititive trait loci (QTL) based on 
+reported peak LOD scores taken from Jackson Lab's 
+<A HREF="http://www.informatics.jax.org/"> Mouse Genome Informatics (MGI) Database</A>. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	QTL locations are indicated by thin vertical bars.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in full mode provides a link to the MGI record for the selected QTL,
+	information about the QTL, and position information.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>jaxQTL</I> positional table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#JaxQTL"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -2982,8 +3142,8 @@ specific diseases.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
-<P><B>Slam</B><BR>
-This track predicts coding exons and conserved noncoding regions in a pair of 
+<P><B>Slam Human, Slam Mouse, Slam Rat</B><BR>
+These tracks predict coding exons and conserved noncoding regions in a pair of 
 homologous DNA sequences, incorporating both statistical sequence properties and 
 the degree of conservation in making the predictions. The model is symmetric: the 
 same gene structure (with possibly different exon lengths) is predicted in both 
@@ -2996,14 +3156,35 @@ sequences.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on an entry in full display mode will show basic track
-	information, plus links to the translated protein, predicted mRNA, 
+	information, plus links to the predicted mRNA, 
 	genomic sequence, and comparative sequence.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
-	To view a text version of the data set, select the 
-	<I>slam</I> position table in the Table Browser. To view the table
+	To view a text version of the data set, select the appropriate
+	<I>slam</I> position table in the Table Browser (<I>e.g. slamHuman, 
+	slamMouse, slamRat</I>). To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>SlamHumanNonCoding, SlamMouseNonCoding, SlamRatNonCoding</B><BR>
+These tables show slam predictions of conserved noncoding regions in homologous 
+DNA sequences.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	The data in these tables are displayed as part of the Slam Human, 
+	Slam Mouse, and Slam Rat tracks. See the track descriptions for these
+	tracks for display information.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the appropriate
+	<I>slamNonCoding</I> positional table in the Table Browser (<I>e.g. slamHumanNonCoding, 
+	slamMouseNonCoding, slamRatNonCoding</I>). To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -3127,8 +3308,38 @@ significance for the gene.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Tight Human</B><BR>
+This track displays <I>Blastz</I> alignments of the Nov. 2002 human
+draft assembly to the mouse genome, filtered by <I>axtBest</I> and
+<I>subsetAxt</I> with very stringent constraints. See the track's description
+page for more details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show mouse and 
+	human position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzTightHuman</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Tight Mouse</B><BR>
-This track displays <I>Blastz</I> alignments of the Feb. 2002 mouse
+This track displays <I>Blastz</I> alignments of the specified mouse
 draft assembly to the human genome, filtered by <I>axtBest</I> and
 <I>subsetAxt</I> with very stringent constraints. See the track's description
 page for more details. 
@@ -3152,6 +3363,36 @@ page for more details.
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
 	<I>blastzTightMouse</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Tight Rat</B><BR>
+This track displays <I>Blastz</I> alignments of the Nov. 2002 rat
+draft assembly to the mouse genome, filtered by <I>axtBest</I> and
+<I>subsetAxt</I> with very stringent constraints. See the track's description
+page for more details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show mouse and 
+	rat position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzTightRat</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
@@ -3224,7 +3465,7 @@ average value to be the same for each chip.
 </TABLE></P>
 
 <P><B>UCSC Synteny (hg12)</B><BR>
-See description for Mouse Synteny (hg13).
+See description for Mouse Synteny (hg13+).
 </P>
 
 <P><B>UniGene</B><BR>
