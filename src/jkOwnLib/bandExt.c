@@ -19,7 +19,7 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.10 2005/01/12 20:13:00 kent Exp $";
+static char const rcsid[] = "$Id: bandExt.c,v 1.11 2005/01/12 20:39:58 kent Exp $";
 
 /* Definitions for traceback byte.  This is encoded as so:
  *     xxxxLUMM
@@ -331,6 +331,12 @@ if (global || bestScore > 0)
 	UBYTE parent;
 	pOffset = bPos - bOffsets[aPos] + maxInsert;
 	if (pOffset < 0) pOffset = 0;
+	// FIXME: there may be some cases near beginning where
+	// pOffset is not right.  Clamping it at 0 prevents a crash
+	// and produces correct behavior in many cases.  However
+	// I'm thinking a better fix would be to have bOffsets follow
+	// colTop rather than bandCenter somehow. Exactly how is
+	// beyond me at the moment.
 	if (pOffset >= bandSize)
 	    {
 #ifdef DEBUG
