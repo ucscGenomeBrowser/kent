@@ -1,17 +1,35 @@
-<P>CpG islands are associated with genes, particularly housekeeping genes, in vertebrates. 
-CpG islands are particularly common near transcription start sites, and may be associated 
-with promoter regions.  Normally a C followed immediately by a G (a CpG) 
-is rare in vertebrate DNA because the C's in such an arrangement tend to be 
-methylated.  This methylation helps distinguish the newly synthesized DNA 
-strand from the parent strand, which aids in the final stages of DNA 
-proofreading after duplication.  However, over evolutionary time methylated 
-C's tend to turn into T's because of spontaneous deamination.  The result 
-is that CpG's are 
-relatively rare unless there is selective pressure to keep them or a 
-region is not methylated for some reason, perhaps having to do with 
-the regulation of gene expression.  CpG islands 
-are regions where CpG's are present at significantly higher levels than 
-is typical for the genome as a whole. 
-The CpG islands displayed in this browser are all at least 200 
-bases long, and have a GC content of at least 50%.</P>
+<H2> Description </H2>
+<P>
+CpG islands are associated with genes, particularly housekeeping
+genes, in vertebrates.  CpG islands are particularly common near
+transcription start sites, and may be associated with promoter
+regions.  Normally a C followed immediately by a G (a CpG) is rare in
+vertebrate DNA because the C's in such an arrangement tend to be
+methylated.  This methylation helps distinguish the newly synthesized
+DNA strand from the parent strand, which aids in the final stages of
+DNA proofreading after duplication.  However, over evolutionary time
+methylated C's tend to turn into T's because of spontaneous
+deamination.  The result is that CpG's are relatively rare unless
+there is selective pressure to keep them or a region is not methylated
+for some reason, perhaps having to do with the regulation of gene
+expression.  CpG islands are regions where CpG's are present at
+significantly higher levels than is typical for the genome as a whole.
+</P>
+
+<H2> Method </H2>
+<P>
+CpG islands were predicted by searching the sequence one base at a
+time, scoring each dinucleotide (+17 for CG and -1 for others) and
+identifying maximally scoring segments.  Each segment was then
+evaluated to determine GC content (>=50%), length (>200), and ratio of
+observed proportion of CG dinucleotides to the expected proportion on
+the basis of the GC content of the segment (>0.6).  
+</P>
+
+<H2> Credits </H2>
+<P>
+This track was generated 
+ using a
+modification of a program developed by G. Miklem and L. Hillier.  
+</P>
 
