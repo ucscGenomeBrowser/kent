@@ -4596,6 +4596,37 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gzip *.axt
     # add README.txt file to dir, if needed
 
+# MAKING MOUSE MM4 SYNTENY (TBD)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg16/bed/syntenyMm4
+    cd /cluster/data/hg16/bed/syntenyMm4
+
+#	updating the scripts in use here from 
+#	/cluster/data/hg16/bed/syntenyMm3
+    cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
+
+#	fix the syntenicBest script to not try and work on empty
+#	results from its queries.  Also, set the db and table name
+#	in the script itself so the arguments are not needed
+
+    ./syntenicBest.pl
+#	on the order of 3 to 4 hours to complete syntenicBest
+#	almost no time, or only a few minutes at most for any of
+#	the rest
+    ../syntenyMm3/smooth.pl
+    ../syntenyMm3/joinsmallgaps.pl
+#	set db and table name in fillgap.pl
+    ./fillgap.pl
+    ../syntenyMm3/synteny2bed.pl
+    hgLoadBed hg16 syntenyMm4 ucsc100k.bed
+# featureBits hg16 syntenyMm3
+# 2651945520 bases of 2865248791 (92.556%) in intersection
+# featureBits hg16 syntenyMm4
+# 2560252977 bases of 2865248791 (89.355%) in intersection
+    # hgTracks.c needed to be updated to recognize syntenyMm4 so it
+    # would color properly.
+
 # TIGR GENE INDEX (DONE 2003-10-31 kate)
     mkdir -p /cluster/data/hg16/bed/tigr    
     cd /cluster/data/hg16/bed/tigr  
@@ -4713,3 +4744,19 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gunzip ensemblPep.fa.gz
     hgPepPred hg16 ensembl ensemblPep.fa
 
+LOAD GENOMIC DUPES (TRIED - does not work - 2003-11-11 - Hiram)
+o - Load genomic dupes
+    ssh hgwdev
+    mkdir /cluster/data/hg16/bed/genomicDups
+    cd /cluster/data/hg16/bed/genomicDups
+    # pick up Build34GenomicDups.gz from
+    #	http://humanparalogy.cwru.edu/build34/files_for_ucsc/build34_ucsc.htm
+    #	it has a user and password login.  you can use this wget command
+    #	with the user/password:
+    wget --http-user=X --http-passwd=X \
+    "http://humanparalogy.cwru.edu/build34/files_for_ucsc/Build34GenomicDups.gz"
+    gunzip *.gz
+    # awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
+    hgsql hg16 < ~/kent/src/hg/lib/genomicDups.sql
+    hgLoadBed hg16 genomicDups Build34GenomicDups
+    # load of genomicDups did not go as planned: 57702 record(s), 0 row(s) skipped, 57702 warning(s) loading bed.tab
