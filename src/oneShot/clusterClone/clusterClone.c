@@ -7,12 +7,14 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.4 2004/06/17 22:54:54 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.5 2004/06/18 20:51:36 hiram Exp $";
 
-float minCover = 50.0;		/*	percent coverage to count hit */
+float minCover = 80.0;		/*	percent coverage to count hit */
+unsigned maxGap = 1000;		/*	maximum gap between pieces */
 
 static struct optionSpec options[] = {
    {"minCover", OPTION_FLOAT},
+   {"maxGap", OPTION_INT},
    {NULL, 0},
 };
 
@@ -24,7 +26,8 @@ errAbort(
   "usage:\n"
   "   clusterClone [options] <file.psl>\n"
   "options:\n"
-  "   -minCover=P - minimum P percent coverage to count an alignment (default 50.0)\n"
+  "   -minCover=P - minimum P percent coverage to count an alignment (default 80.0)\n"
+  "   -maxGap=M - maximum M bases gap between pieces to stitch together, default 1000\n"
   "   -verbose=N - set verbose level N (3: everything, 2: important stuff)"
   );
 }
@@ -39,6 +42,143 @@ struct coordEl
     unsigned qSize;
     int strand;	/* 1 = +   0 = -	*/
     };
+
+static int startCompare(const void *va, const void *vb)
+/*	Compare to sort on start coordinates	*/
+{
+const struct coordEl *a = *((struct coordEl **)va);
+const struct coordEl *b = *((struct coordEl **)vb);
+return (int)a->start - (int)b->start;
+}
+
+static int endDescending(const void *va, const void *vb)
+/*	Compare to inverse sort on end coordinates	*/
+{
+const struct coordEl *a = *((struct coordEl **)va);
+const struct coordEl *b = *((struct coordEl **)vb);
+return (int)b->end - (int)a->end;
+}
+
+static void extendLimits(struct coordEl **coordListPt, unsigned median,
+    unsigned querySize, unsigned *startExtended, unsigned *endExtended)
+{
+struct coordEl *coord;
+unsigned halfLength = querySize / 2;
+boolean firstCoordinate = TRUE;
+
+if (halfLength > median)
+    *startExtended = 0;
+else
+    *startExtended = median - halfLength;
+
+*endExtended = median + halfLength;
+verbose(2,"# starting limits: %u - %u\n", *startExtended, *endExtended);
+
+/*	sort the list by start coordinates	*/
+slSort(coordListPt,startCompare);
+
+if (coordListPt) coord = *coordListPt;
+else coord = NULL;
+
+/*	Walk through this list extending the end.  The list is in order
+ *	by start coordinates.  Going down that list checking the
+ *	extended end with these start coordinates, eventually we reach a
+ *	point where the start coordinates are past the end leaving a
+ *	gap.  As long as the gap is within the specified maxGap limit,
+ *	then it is OK to jump to that next piece.  The new end becomes
+ *	the end of this new piece.
+ *	And secondly, even if the starts aren't past the extending end,
+ *	the piece under examination may have a new end that is longer,
+ *	in which case the extending end moves to that point.
+ */
+verbose(2,"# extending end\n");
+
+/*	The first coordinate check will ensure that the extended start
+ *	coordinate is not less than the smallest start coordinate.
+ *	Thus, only the actual part coverage will determine the maximum
+ *	limits and we won't go beyond the parts.
+ */
+firstCoordinate = TRUE;
+while (coord != NULL)
+    {
+    if (firstCoordinate)
+	{
+	if (*startExtended < coord->start)
+	    {
+	    *startExtended = coord->start;
+	    verbose(2,"# start brought in to: %u\n", *startExtended);
+	    }
+	firstCoordinate = FALSE;
+	}
+    verbose(2,"# %s %u %u - %u %u %c\n", coord->name, *endExtended, coord->start, coord->end, coord->qSize, (coord->strand == 1) ? '+' : '-');
+    if (coord->start > *endExtended)
+	{
+	unsigned gap = coord->start - *endExtended;
+
+	if (gap > maxGap)
+	    {
+	    verbose(2,"# more than max Gap encountered: %u\n", gap);
+	    break;	/*	exit this while loop	*/
+	    }
+	*endExtended = coord->end;
+	verbose(2,"# end extended to: %u\n", *endExtended);
+	}
+    else if (coord->end > *endExtended)
+	{
+	*endExtended = coord->end;
+	verbose(2,"# end extended to: %u\n", *endExtended);
+	}
+    coord = coord->next;
+    }
+
+/*	sort the list descending by end coordinates	*/
+slSort(coordListPt,endDescending);
+
+if (coordListPt) coord = *coordListPt;
+else coord = NULL;
+
+/*	Walk through this list extending the start.
+ *	Same discussion as above, although reverse the sense of start
+ *	and end.  Here the list is sorted in descending order by end
+ *	coordinate.  Those end coordinates are compared with the
+ *	extending start coordinate to move it out.
+ */
+verbose(2,"# after end sort\n");
+
+firstCoordinate = TRUE;
+while (coord != NULL)
+    {
+    if (firstCoordinate)
+	{
+	if (*endExtended > coord->end)
+	    {
+	    *endExtended = coord->end;
+	    verbose(2,"# end brought in to: %u\n", *endExtended);
+	    }
+	firstCoordinate = FALSE;
+	}
+    verbose(2,"# %s %u - %u %u %u %c\n", coord->name, coord->start, coord->end, *startExtended, coord->qSize, (coord->strand == 1) ? '+' : '-');
+    if (coord->end < *startExtended)
+	{
+	unsigned gap = *startExtended - coord->end;
+
+	if (gap > maxGap)
+	    {
+	    verbose(2,"# more than max Gap encountered: %u\n", gap);
+	    break;	/*	exit this while loop	*/
+	    }
+	*startExtended = coord->start;
+	verbose(2,"# start extended to: %u\n", *startExtended);
+	}
+    else if (coord->start < *startExtended)
+	{
+	*startExtended = coord->start;
+	verbose(2,"# start extended to: %u\n", *startExtended);
+	}
+
+    coord = coord->next;
+    }
+}	/*	static void extendLimits() */
 
 static void processResult(struct hash *chrHash, struct hash *coordHash,
 	char *accName, unsigned querySize)
@@ -91,7 +231,7 @@ verbose(2,"# chr%s %d highest count, next: %s %d\n", highName, highCount, second
 
 if (highCount == secondHighest)
     {
-verbose(2,"# ERROR TIE for high count chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
+verbose(1,"# ERROR TIE for high count chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
     }
 
 /*	for that highest count chrom, examine its coordinates, find high
@@ -130,6 +270,8 @@ stddev = 0.0;
 if (coordCount > 0)
     {
     unsigned usStdDev;
+    unsigned startExtended;
+    unsigned endExtended;
 
     mean = (unsigned) (sum / coordCount);
     if (coordCount > 1)
@@ -153,16 +295,18 @@ if (coordCount > 0)
 	coord = coord->next;
 	}
     median = (unsigned) doubleMedian(coordCount, midPoints);
-    verbose(2,"# qSize: %u, Median: %u implies %u-%u %s\n", querySize, median,
-	median - (querySize/2), median+(querySize/2), accName);
-    printf("chr%s\t%u\t%u\t%s\t%c\n", highName,
-	median - (querySize/2), median+(querySize/2), accName,
-	strandSum > (coordCount/2) ? '+' : '-');
+    extendLimits(coordListPt, median, querySize, &startExtended, &endExtended);
+    verbose(2,
+	"# qSize: %u, Median: %u implies %u-%u %s\n#\textended to%u-%u\n",
+	querySize, median, median - (querySize/2), median+(querySize/2),
+	accName, startExtended, endExtended);
+    printf("chr%s\t%u\t%u\t%s\t%c\n", highName, startExtended, endExtended,
+	accName, strandSum > (coordCount/2) ? '+' : '-');
     freeMem(midPoints);
     }
 else
     {
-    printf("# ERROR - no coordinates found ? %s\n", highName);
+    verbose(1,"# ERROR - no coordinates found ? %s\n", highName);
     }
 
 /*	free the chrom coordinates lists	*/
@@ -187,7 +331,7 @@ while ((hashEl = hashNext(&cookie)) != NULL)
 	slFreeList(coordListPt);
     }
 freeMem(highName);
-}
+}	/*	static void processResult()	*/
 
 static void clusterClone(int argc, char *argv[])
 {
@@ -236,7 +380,7 @@ for (i=1; i < argc; ++i)
 	    if (partCount > 0)
 		processResult(chrHash, coordHash, prevAccName, querySize);
 	    else
-		printf("# ERROR - no coordinates found ? %s\n", prevAccName);
+		verbose(1,"# ERROR - no coordinates found ? %s\n", prevAccName);
 	    freeMem(prevAccName);
 	    prevAccName = cloneString(accName);
 	    freeHash(&chrHash);
@@ -314,7 +458,7 @@ for (i=1; i < argc; ++i)
     processResult(chrHash, coordHash, prevAccName, querySize);
     lineFileClose(&lf);
     }
-}
+}	/*	static void clusterClone()	*/
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -324,9 +468,11 @@ optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
 
-minCover = optionFloat("minCover", 50.0);
+minCover = optionFloat("minCover", 80.0);
+maxGap = optionInt("maxGap", 1000);
 
 verbose(2,"#\tminCover: %% %g\n", minCover);
+verbose(2,"#\tmaxGap: %u\n", maxGap);
 
 clusterClone(argc, argv);
 
