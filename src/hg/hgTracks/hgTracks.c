@@ -3903,7 +3903,6 @@ Color goldColor(struct track *tg, void *item, struct vGfx *vg)
 struct agpFrag *frag = item;
 Color pink = vgFindColorIx(vg, 240, 140, 140);
 Color color = (sameString(frag->type, "A") ? pink : tg->ixColor);
-
 return color;
 }
 
@@ -10068,6 +10067,8 @@ registerTrackHandler("blastzTightRat", longXenoPslMethods);
 registerTrackHandler("blastzMm", longXenoPslMethods);
 registerTrackHandler("blastzMm2", longXenoPslMethods);
 registerTrackHandler("blastzMm3", longXenoPslMethods);
+registerTrackHandler("blastzBestMm3", longXenoPslMethods);
+registerTrackHandler("blastzTightMm3", longXenoPslMethods);
 registerTrackHandler("blastzMm2Sc", longXenoPslMethods);
 registerTrackHandler("blastzMm2Ref", longXenoPslMethods);
 registerTrackHandler("blastzRecipBest", longXenoPslMethods);
@@ -10089,7 +10090,6 @@ registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
 registerTrackHandler("blastzTightMouse", longXenoPslMethods);
-registerTrackHandler("blastzBestMm3", longXenoPslMethods);
 registerTrackHandler("blastzHg", longXenoPslMethods);
 registerTrackHandler("blastzHgRef", longXenoPslMethods);
 registerTrackHandler("blastzHgTop", longXenoPslMethods);
