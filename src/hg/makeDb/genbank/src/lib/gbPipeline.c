@@ -183,13 +183,13 @@ static void waitProc(struct gbPipeline *pipeline, struct gbProc* proc)
 {
 int status;
 if (waitpid(proc->pid, &status, 0) < 0)
-    errnoAbort("process lost for: %s in ^s", joinCmd(proc->cmd),
+    errnoAbort("process lost for: %s in %s", joinCmd(proc->cmd),
                pipeline->procName);
 if (WIFSIGNALED(status))
-    errAbort("process terminated on signal %d: %s in ",
+    errAbort("process terminated on signal %d: %s in %s",
              WTERMSIG(status), joinCmd(proc->cmd), pipeline->procName);
 if (WEXITSTATUS(status) != 0)
-    errAbort("process exited with %d: %s in ",
+    errAbort("process exited with %d: %s in %s",
              WEXITSTATUS(status), joinCmd(proc->cmd), pipeline->procName);
 proc->pid = -1;
 }

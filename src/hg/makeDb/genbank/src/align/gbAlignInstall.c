@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.6 2003/10/08 21:06:18 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.7 2003/10/12 21:26:21 genbank Exp $";
 
 /*
  * Notes:
@@ -689,7 +689,7 @@ errAbort("   gbAlignInstall relname update typeAccPrefix db\n"
          "easier to script.\n"
          "\n"
          " Options:\n"
-,         "    -workdir=dir - Use this directory as then work directory for\n"
+         "    -workdir=dir - Use this directory as then work directory for\n"
          "     building the alignments instead of the work/align\n"
          "    -sortTmp=dir - Tmp dir for sort.\n"
          "    -orgCats=native,xeno - processon the specified organism \n"

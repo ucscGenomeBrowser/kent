@@ -37,6 +37,7 @@ else
     errAbort("invalid boolean conf value for %s.%s or default.%s, "
              "expected yes, no, true, or false: %s",
              db, baseName, baseName, value);
+return FALSE;
 }
 
 static void parseOrgCatAttrs(struct gbConf* conf, char* db,

@@ -15,7 +15,7 @@
 #include "errabort.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.3 2003/10/12 21:26:21 genbank Exp $";
 
 /* FIXME: need a way to get both native and xenos that are know to align */
 
@@ -576,7 +576,7 @@ while (lineFileNext(inLf, &line, NULL))
         fputs(line, outFh);
         fputc('\n', outFh);
         if (ferror(outFh))
-            errnoAbort("write failed: %s:, faOutPath");
+            errnoAbort("write failed: %s: ", faOutPath);
         }
     }
 

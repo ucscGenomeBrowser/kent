@@ -2,7 +2,7 @@
 #OPT= -ggdb -O3
 OPT= -ggdb
 
-KENT = ${GBROOT}/../kent/src
+KENT = ${GBROOT}/../../..
 ifneq ($(wildcard ${GBROOT}/extern/lib/libmysqlclient.a),)
     # for now, we use statis executables because of the RH 7/9 and libc pains
     OPT += -static
@@ -17,7 +17,7 @@ else
 endif
 
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc -I$(MYSQLINC)
-CFLAGS = ${OPT} -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
+CFLAGS = ${OPT} -DJK_WARN -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wall -Werror ${INCL}
 
 BINDIR = ${GBROOT}/bin
 BINARCH = ${BINDIR}/${MACHTYPE}

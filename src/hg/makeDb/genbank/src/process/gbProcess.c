@@ -47,7 +47,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.3 2003/07/14 07:31:09 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.4 2003/10/12 21:26:21 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -256,7 +256,7 @@ if (s == NULL)
     }
 s = strstr(s, "preserved");
 if (s == NULL)
-    errAbort("Can't find preserved marker in %s\n%s\n", accession);
+    errAbort("Can't find preserved marker in %s\n", accession);
 for (;;)
     {
     int start, end;
