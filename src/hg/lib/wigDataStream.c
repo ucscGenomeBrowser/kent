@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.21 2004/08/17 23:28:16 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.22 2004/08/18 18:42:49 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1578,17 +1578,17 @@ if (wDS->stats)
 	if (wDS->isFile)
 	    fprintf(fh, "#\t from file, Table: %s\n", wDS->tblName);
 
-	fprintf(fh,"Chrom\tData\tData");
+	fprintf(fh,"# Chrom\tData\tData");
 	fprintf(fh,"\t# Data\tData");
 	fprintf(fh,"\tBases\tMinimum");
 	fprintf(fh,"\tMaximum\tRange\tMean");
 	fprintf(fh,"\tVariance Standard\n");
 
-	fprintf(fh,"\tstart\tend");
+	fprintf(fh,"#\tstart\tend");
 	fprintf(fh,"\tvalues\tspan");
 	fprintf(fh,"\tcovered\t");
 	fprintf(fh,"\t\t\t");
-	fprintf(fh,"\t\tdeviation\n");
+	fprintf(fh,"\t\t\tdeviation\n");
 	}
 
     for (stats = wDS->stats; stats; stats = next )
