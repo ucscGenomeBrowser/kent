@@ -15,6 +15,7 @@ errAbort(
   "   smoothWindow [-winSize=N] stdin\n"
   "options:\n"
   "   -winSize=N - use specified window size, default 20,000\n"
+  "   -verbose=N - set verbose level [1-3]\n"
   "   two column data input expected on stdin: position and value\n"
   "   only works with stdin at this time, no file arguments."
   );
@@ -69,7 +70,7 @@ while (lineFileNext(lf, &line, NULL))
 
     ++lineCount;
     chopPrefixAt(line, '#'); /* ignore any comments starting with # */
-    if (strlen(line) < 3)   /*      anything left on this line */
+    if (strlen(line) < 3)   /*      anything left on this line ? */
 	continue;           /*      no, go to next line     */
     wordCount = chopByWhite(line, words, 2);
     if (wordCount < 2)
@@ -83,10 +84,12 @@ while (lineFileNext(lf, &line, NULL))
     if (Offset < 1)
 	errAbort("Illegal offset: %llu at line %d, dataValue: %g", Offset,
 	    lineCount, dataValue);
-verbose(3, "#\tline: %llu, offset: %llu, data: %g\n", lineCount, Offset, dataValue);
+    verbose(3, "#\tline: %llu, offset: %llu, data: %g\n",
+	lineCount, Offset, dataValue);
     if (Offset > (offsetArray[lastIn] + winSize))
 	{
-verbose(2, "#\tgap at line: %llu %llu\t%g\titems: %d\n", lineCount, Offset, dataValue, itemCount);
+	verbose(2, "#\tgap at line: %llu %llu\t%g\titems: %d\n",
+		lineCount, Offset, dataValue, itemCount);
 	firstValue = TRUE;
 	if (itemCount > 0)
 	    {
@@ -113,21 +116,23 @@ verbose(2, "#\tgap at line: %llu %llu\t%g\titems: %d\n", lineCount, Offset, data
 	valueIn = 1;
 	valueOut = 0;
 	lastOut = 0;
-verbose(3, "#\tfirst data point at line: %llu %llu\t%g\n", lineCount, Offset, dataValue);
+	verbose(3, "#\tfirst data point at line: %llu %llu\t%g\n",
+	    lineCount, Offset, dataValue);
 	}
     else
 	{
 	if (Offset >= (offsetArray[lastOut] + winSize))
 	    {
-verbose(3, "#\tmoving up from %d due to offset %llu\n", lastOut, Offset);
+	verbose(3, "#\tmoving up from %d due to offset %llu\n",
+	    lastOut, Offset);
 	    if (itemCount > 0)
 		{
-		    verbose(3,"#\t%llu\t%g = %g / %d to %llu = length %llu\n",
-			offsetArray[lastOut], (rollingSum / (double)itemCount),
-			rollingSum, itemCount, offsetArray[lastIn],
-			offsetArray[lastIn] - offsetArray[lastOut] );
-		    printf("%llu\t%g\n",
-			offsetArray[lastOut], (rollingSum / (double)itemCount));
+		verbose(3,"#\t%llu\t%g = %g / %d to %llu = length %llu\n",
+		    offsetArray[lastOut], (rollingSum / (double)itemCount),
+		    rollingSum, itemCount, offsetArray[lastIn],
+		    offsetArray[lastIn] - offsetArray[lastOut] );
+		printf("%llu\t%g\n",
+		    offsetArray[lastOut], (rollingSum / (double)itemCount));
 		}
 	    while ((itemCount > 0) &&
 			(Offset >= (offsetArray[lastOut] + winSize)))
@@ -140,7 +145,8 @@ verbose(3, "#\tmoving up from %d due to offset %llu\n", lastOut, Offset);
 		lastOut = valueOut;
 		}
 	    }
-verbose(3, "#\tadding at line: %llu %llu\t%g\titems: %d\n", lineCount, Offset, dataValue, itemCount);
+	verbose(3, "#\tadding at line: %llu %llu\t%g\titems: %d\n",
+	    lineCount, Offset, dataValue, itemCount);
 	smoothArray[valueIn] = dataValue;
 	offsetArray[valueIn] = Offset;
 	lastIn = valueIn;
@@ -158,7 +164,7 @@ if (itemCount > 0)
 	offsetArray[lastIn], offsetArray[lastIn] - offsetArray[lastOut] );
     }
 lineFileClose(&lf);
-verbose(2, "#\tlines processed: %llu\n", lineCount);
+verbose(1, "#\tlines processed: %llu\n", lineCount);
 }
 
 int main(int argc, char *argv[])
@@ -166,12 +172,12 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 
-if (argc < 3)
+if (argc < 2)
 	usage();
 
 winSize = optionInt("winSize", 20000);
 
-verbose(2, "#\twindow size: %d\n", winSize);
+verbose(1, "#\twindow size: %d\n", winSize);
 
 smoothWindow();
 
