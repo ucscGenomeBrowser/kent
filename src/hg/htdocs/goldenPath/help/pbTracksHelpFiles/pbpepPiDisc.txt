@@ -7,7 +7,7 @@ of zero.
 <P>
 The pI is a useful property because it predicts solubility properties and
 so suggests the cellular environment in which a protein will be found. 
-By displaying an individual protein's pI over the histogram of genomewide
+By displaying an individual protein's pI over the histogram of genome-wide
 pI distribution, the Protein Browser calls attention to unusual values of
 pI that could be clues to function or location.
 For example, human pepsin A has a pI of 3.4, consistent with its expression in the
