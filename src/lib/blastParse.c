@@ -32,6 +32,12 @@ errAbort("%s\nLine %d of %s", message,
 	bf->lf->lineIx, bf->fileName);
 }
 
+static void bfUnexpectedEof(struct blastFile *bf)
+/* generate error on unexpected EOF */
+{
+errAbort("Unexpected end of file in %s\n", bf->fileName);
+}
+
 static void bfSyntax(struct blastFile *bf)
 /* General error message. */
 {
@@ -76,8 +82,22 @@ static char *bfNeedNextLine(struct blastFile *bf)
 {
 char *line = bfNextLine(bf);
 if (line == NULL)
-    errAbort("Unexpected end of file in %s\n", bf->fileName);
+    bfUnexpectedEof(bf);
 return line;
+}
+
+static char *bfSearchForLine(struct blastFile *bf, char *start)
+/* scan for a line starting with the specified string */
+{
+int i;
+for (;;)
+    {
+    char *line = bfNextLine(bf);
+    if (line == NULL)
+	return NULL;
+    if (startsWith(start, line))
+        return line;
+    }
 }
 
 static void bfBadHeader(struct blastFile *bf)
@@ -133,26 +153,14 @@ for (;;)
     }
 }
 
-struct blastQuery *blastFileNextQuery(struct blastFile *bf)
-/* Read all alignments associated with next query.  Return NULL at EOF. */
+static void parseQueryLines(struct blastFile *bf, char *line, struct blastQuery *bq)
+/* Parse the Query= lines */
 {
-char *line;
+char *s, *e;
 char *words[16];
 int wordCount;
-struct blastQuery *bq;
-char *s, *e;
-struct blastGappedAli *bga;
-
-if (DEBUG_TRACE)
-    fprintf(stderr, "blastFileNextQuery\n");
-for (;;)
-    {
-    line = bfNextLine(bf);
-    if (line == NULL)
-	return NULL;
-    if (startsWith("Query=", line))
-	break;
-    }
+if (bq->query != NULL)
+    bfError(bf, "already parse Query=");
 
 /* Process something like:
  *    Query= MM39H11    00630     
@@ -160,13 +168,8 @@ for (;;)
 wordCount = chopLine(line, words);
 if (wordCount < 2)
     bfError(bf, "No sequence name in query line");
-AllocVar(bq);
 bq->query = cloneString(words[1]);
 
-/* Process something like:
- *   (45,693 letters)
- 	Safeguard against query line wrap around
- */
 for (;;)
     {
     line = bfNeedNextLine(bf);
@@ -188,16 +191,21 @@ if ((e = strchr(s, ' ')) == NULL)
 *e = 0;
 decomma(s);
 bq->queryBaseCount = atoi(s);
+}
 
-/* Seek until get something like:
- * Database: celegans98
- * and process it. */
-for (;;)
-    {
-    line = bfNeedNextLine(bf);
-    if (startsWith("Database:", line))
-	break;
-    }
+static void parseDatabaseLines(struct blastFile *bf, char *line, struct blastQuery *bq)
+/* Process something like:
+ * Database: chr22.fa 
+ *        977 sequences; 95,550,797 total letters
+ */
+{
+char *words[16];
+int wordCount;
+if (bq->database != NULL)
+    bfError(bf, "already parse Database:");
+
+/* parse something like
+ * Database: celegans98 */
 wordCount = chopLine(line, words);
 if (wordCount < 2)
     bfError(bf, "Expecting database name");
@@ -214,7 +222,33 @@ decomma(words[0]);
 decomma(words[2]);
 bq->dbSeqCount = atoi(words[0]);
 bq->dbBaseCount = atoi(words[2]);
-    
+}
+
+struct blastQuery *blastFileNextQuery(struct blastFile *bf)
+/* Read all alignments associated with next query.  Return NULL at EOF. */
+{
+char *line;
+char *words[16];
+int wordCount;
+struct blastQuery *bq;
+char *s, *e;
+struct blastGappedAli *bga;
+AllocVar(bq);
+
+if (DEBUG_TRACE)
+    fprintf(stderr, "blastFileNextQuery\n");
+
+/* find and parse Query= */
+line = bfSearchForLine(bf, "Query=");
+if (line == NULL)
+    return NULL;
+parseQueryLines(bf, line, bq);
+
+/* find and parse Database: */
+line = bfSearchForLine(bf, "Database:");
+if (line == NULL)
+    bfUnexpectedEof(bf);
+parseDatabaseLines(bf, line, bq);
 
 /* Seek to beginning of first gapped alignment. */
 for (;;)

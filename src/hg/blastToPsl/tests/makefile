@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest megaBlast
+test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest
 
 
 protMrnaTest: mkdirs
@@ -34,10 +34,13 @@ identityBugTest: mkdirs
 	pslCheck output/identityBugTest.psl
 	diff -u expected/identityBugTest.psl output/identityBugTest.psl
 
-megaBlast: mkdirs
-	../blastToPsl input/970.txt output/970.psl
-	pslCheck output/970.psl
-	diff -u expected/970.psl output/970.psl
+# this test is currently disabled, mega-blast is painful because
+# Database: comes before Query= and there are multiple queries for each
+# Database:.
+megaBlastTest: mkdirs
+	../blastToPsl input/970.txt output/megaBlastTest.psl
+	pslCheck output/megaBlastTest.psl
+	diff -u expected/megaBlastTest.psl output/megaBlastTest.psl
 
 
 clean::

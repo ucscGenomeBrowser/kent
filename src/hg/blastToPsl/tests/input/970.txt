@@ -1462,7 +1462,7 @@ Query: 61  agtttacactaagaactctttgttacatcaggta 94
 Sbjct: 404 agtttacactaagaactctttgttacatcaggta 437
 
 
-Database: Macaca_Mulatta_WGS_Trace
+  Database: Macaca_Mulatta_WGS_Trace
     Posted date:  Apr 25, 2004  7:51 PM
   Number of letters in database: 1,300,593,496
   Number of sequences in database:  1,159,898

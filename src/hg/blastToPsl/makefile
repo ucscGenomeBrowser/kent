@@ -13,7 +13,7 @@ all: ${BINDIR}/blastToPsl
 ${BINDIR}/blastToPsl: blastToPsl
 	cp -f blastToPsl $(BINDIR)
 	strip $(BINDIR)/blastToPsl
-blastToPsl: ${O}
+blastToPsl: ${O} ${MYLIBS}
 	${CC} -o blastToPsl ${O} ${MYLIBS} ${L} 
 
 my: compile scoreSort blast0To8 pslUniq pslChain
