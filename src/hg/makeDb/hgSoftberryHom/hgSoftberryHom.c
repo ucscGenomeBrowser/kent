@@ -18,8 +18,8 @@ void makeTabLines(char *fileName, FILE *f)
 /* Loop through file and write out tab-separated records to f. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *s, *sharpParts[8], *protParts[128];
-int lineSize, sharpCount, protCount;
+char *line, *s, *e, *protParts[128];
+int lineSize, protCount;
 int i,j;
 char *label, *gi;
 
@@ -31,12 +31,12 @@ while (lineFileNext(lf, &line, &lineSize))
     label = nextWord(&line);
     if (label == NULL)
 	errAbort("Bad format A line %d of %s\n", lf->lineIx, lf->fileName);
-    if (strchr(line, '#') == NULL)
+    if ((s = strstr(line, "##")) == NULL)
         continue;
-    sharpCount = chopString(line, "#", sharpParts, ArraySize(sharpParts));
-    if (sharpCount != 3)
-	errAbort("Bad format B line %d of %s\n", lf->lineIx, lf->fileName);
-    s = trimSpaces(sharpParts[1]);
+    s += 2;
+    if ((e = strstr(line, "##")) != NULL)
+        *e = 0;
+    s = trimSpaces(s);
     protCount = chopString(s, "\001", protParts, ArraySize(protParts));
     if (protCount < 1)
 	errAbort("Bad format C line %d of %s\n", lf->lineIx, lf->fileName);
@@ -50,6 +50,15 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 lineFileClose(&lf);
 }
+
+/* #Protein homologies behind Softberry genes */
+char *createTable = "CREATE TABLE softberryHom (\n"
+    "name varchar(255) not null,	# Softberry gene name\n"
+    "giString varchar(255) not null,	# String with Genbank gi and accession\n"
+    "description longblob not null,	# Freeform (except for no tabs) description\n"
+              "#Indices\n"
+    "PRIMARY KEY(name)\n"
+")\n";
 
 void hgSoftberryHom(char *database, int fileCount, char *files[])
 /* hgSoftberryHom - Make table storing Softberry protein homology information. */
@@ -70,15 +79,11 @@ for (i=0; i<fileCount; ++i)
     }
 carefulClose(&f);
 
-uglyAbort("All for now");
-
-#ifdef SOON
 /* Create table if it doesn't exist, delete whatever is
  * already in it, and fill it up from tab file. */
 conn = sqlConnect(database);
 printf("Loading %s table\n", table);
 sqlMaybeMakeTable(conn, table, createTable);
-sqlUpdate(conn, 
 dyStringPrintf(ds, "DELETE from %s", table);
 sqlUpdate(conn, ds->string);
 dyStringClear(ds);
@@ -86,7 +91,6 @@ dyStringPrintf(ds, "LOAD data local infile '%s' into table %s",
     tabFileName, table);
 sqlUpdate(conn, ds->string);
 sqlDisconnect(&conn);
-#endif /* SOON */
 }
 
 int main(int argc, char *argv[])
