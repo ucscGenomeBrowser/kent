@@ -60,6 +60,7 @@ alpha:
 	hgTrackDb worm ce1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb worm cb1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
+	cp fugu/fr1/description.html /gbdb/fr1/html
 
 beta:
 	# this will fail if we are not in a beta checkout:
