@@ -951,10 +951,9 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
 
 #  GC 5 BASE WIGGLE TRACK (DONE - 2004-01-28 - Hiram)
     #    working on kksilo, the fileserver for this data.
-    # was named gc20KBase to start with, became a 5 base dataset later
     ssh kksilo
-    mkdir /cluster/data/panTro1/bed/gc20KBase
-    cd /cluster/data/panTro1/bed/gc20KBase
+    mkdir /cluster/data/panTro1/bed/gc5Base
+    cd /cluster/data/panTro1/bed/gc5Base
     mkdir wigData5 dataLimits5
 for n in ../../nib/*.nib
 do
@@ -975,13 +974,13 @@ done
 
     #	data is compete, load track on hgwdev
     ssh hgwdev
-    cd /cluster/data/panTro1/bed/gc20KBase
-    hgLoadWiggle panTro1 gc20KBase wigData5/*.wig
+    cd /cluster/data/panTro1/bed/gc5Base
+    hgLoadWiggle panTro1 gc5Base wigData5/*.wig
     #	create symlinks for .wib files
     mkdir /gbdb/panTro1/wib
     ln -s `pwd`/wigData5/*.wib /gbdb/panTro1/wib
     #	the trackDb entry
-track gc20KBase
+track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5 base windows
 group map
