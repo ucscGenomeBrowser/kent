@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.59 2005/01/07 23:38:49 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.60 2005/01/14 19:51:25 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1620,7 +1620,7 @@ int runningCount = 0;
 int timedCount = 0;
 int crashCount = 0;
 int queueCount = 0;
-double runTime = 0;
+double runTime = 0, longestRun = 0;
 int otherCount = 0;
 struct hash *resultsHash;
 long now = time(NULL);
@@ -1640,6 +1640,8 @@ for (job = db->jobList; job != NULL; job = job->next)
 	       warn("Strange start time in %s: %u", batch, sub->startTime);
 	   else
 	       runTime += oneTime;
+	   if (oneTime > longestRun)
+	     longestRun = oneTime;
 	   ++runningCount;
 	   }
 	else if (sub->inQueue)
@@ -1704,7 +1706,8 @@ if (runningCount > 0)
 if (timedCount > 0)
     {
     printTimes("Average job time:", totalWall/timedCount, FALSE);
-    printTimes("Longest job:", longestWall, FALSE);
+    printTimes("Longest running job:", longestRun, FALSE);
+    printTimes("Longest finished job:", longestWall, FALSE);
     printTimes("Submission to last job:", calcFirstToLast(db), FALSE);
     if (eta)
 	{
