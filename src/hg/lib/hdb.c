@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.205 2004/09/17 03:17:21 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.206 2004/09/25 06:00:36 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2289,7 +2289,15 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
     retSpan[0] = 0;
     }
 else
+    {
+    if (hashLookup(hash, "acc"))
+         strcpy(retName, "acc");
+    else if (hashLookup(hash, "id"))
+         strcpy(retName, "id");
+    else if (hashLookup(hash, "name"))
+         strcpy(retName, "name");
     gotIt = FALSE;
+    }
 freeHash(&hash);
 hFreeOrDisconnect(&conn);
 *retBinned = binned;
