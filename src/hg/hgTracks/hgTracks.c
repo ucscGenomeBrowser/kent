@@ -2828,7 +2828,8 @@ struct linkedFeatures *lf;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
 char *newName;
-
+char *seqType;
+char *refSeqName;
 char *proteinID;
 char *hugoID;
 char cond_str[256];
@@ -2840,36 +2841,52 @@ if (hTableExists("refLink"))
 
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-	sprintf(cond_str, "mrnaID='%s'", lf->name);
-	proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
+        sprintf(cond_str, "name='%s' and seqType='g'", lf->name);
+        seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
+
+        if (seqType != NULL)
+            {
+	    // special processing for RefSeq DNA based genes
+    	    sprintf(cond_str, "mrnaAcc = '%s'", lf->name);
+    	    refSeqName = sqlGetField(conn, database, "refLink", "name", cond_str);
+	    if (refSeqName != NULL)
+		{
+		lf->extra = cloneString(refSeqName);
+		}
+	    }
+	else
+	    {
+	    sprintf(cond_str, "mrnaID='%s'", lf->name);
+	    proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
  
-        sprintf(cond_str, "displayID = '%s'", proteinID);
-	hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
-	if (!((hugoID == NULL) || (*hugoID == '\0')) )
+            sprintf(cond_str, "displayID = '%s'", proteinID);
+	    hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
+	    if (!((hugoID == NULL) || (*hugoID == '\0')) )
 		{
 		lf->extra = cloneString(hugoID);
 		}
-	else
-	    {
-	    sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s';",  
-		    database, lf->name);
-
-	    sr = sqlGetResult(conn, query);
-	    row = sqlNextRow(sr);
-	    if (row != NULL)
-    	    	{
-    	    	sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
-    	    	sqlFreeResult(&sr);
-    	    	sr = sqlGetResult(conn, query); 
-    	    	if ((row = sqlNextRow(sr)) != NULL)
-        	    {
-		    lf->extra = cloneString(row[0]);
-		    }
-            	sqlFreeResult(&sr);
-	    	}
 	    else
-            	{
-	    	sqlFreeResult(&sr);
+	    	{
+	    	sprintf(query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
+		        database, lf->name);
+
+	    	sr = sqlGetResult(conn, query);
+	    	row = sqlNextRow(sr);
+	    	if (row != NULL)
+    	    	    {
+    	    	    sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+    	    	    sqlFreeResult(&sr);
+    	    	    sr = sqlGetResult(conn, query); 
+    	    	    if ((row = sqlNextRow(sr)) != NULL)
+        	    	{
+		    	lf->extra = cloneString(row[0]);
+		    	}
+            	    sqlFreeResult(&sr);
+	    	    }
+	    	else
+            	    {
+	    	    sqlFreeResult(&sr);
+	    	    }
 	    	}
 	    }
 	}
