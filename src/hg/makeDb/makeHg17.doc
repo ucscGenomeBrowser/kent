@@ -1355,8 +1355,10 @@ cat > gsub << 'EOF'
                         fosEnds.psl /dev/null
         # Processed 84096767 alignments
 
+    # cleanup
     rm -r temp
     rm raw.psl
+    rm -fr out /cluster/store7/kate/hg17/fosends
 
     mkdir lifted
     liftUp lifted/fosEnds.lifted.psl \
@@ -1484,7 +1486,11 @@ cat > gsub << 'EOF'
     liftUp lifted/bacEnds.lifted.psl \
                 /cluster/data/hg17/jkStuff/liftAll.lft warn bacEnds.psl
     pslSort dirs bacEnds.sorted.psl temp lifted
+
+    # cleanup
     rmdir temp
+    rm -fr out /cluster/store7/kate/hg17/bacends
+
     wc -l *.sorted.psl
         # 2497227 bacEnds.sorted.psl
 
@@ -2651,6 +2657,12 @@ cat > template << 'EOF'
         -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
 	hg17 fishClones fishClones.bed
             # Loaded 10601 elements of size 16
+
+# fixed bad table entry (2004-08-12 kate)
+# NOTE: this won't be necessary in the future, as the fishClones program
+# will now accomodate more bad input data.
+    hgsql hg17 -e "update fishClones set bandEnds='1q43,Yp' where  name='RP11-188A4' and placeCount=2"
+
 
 # CHROMOSOME BANDS TRACK (2004-07-13 Terry)
 
