@@ -53,7 +53,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.4 2003/10/29 06:35:32 kent Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.5 2004/06/23 21:15:15 angie Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -190,15 +190,6 @@ return dy;
 }
 
 
-char *naForNull(char *s)
-/* Return n/a if s is null, else return s. */
-{
-if (s == NULL)
-    return cloneString("n/a");
-else
-    return s;
-}
-
 struct ref
 /* Keep track of reference. */
     {
@@ -324,14 +315,14 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *s = row[0];
-    char *e = strchr(row[0], '-');
-    int size = e - s;
+    char *e = rStringIn("-R", s);
+    int size = e ? (e - s) : strlen(s);
     char bdgpGene[16];
     if (size >= sizeof(bdgpGene))
         errAbort("'%s' too big", s);
     memcpy(bdgpGene, s, size);
     bdgpGene[size] = 0;
-    alt = hashFindVal(bdgpHash, bdgpGene);
+    alt = hashMustFindVal(bdgpHash, bdgpGene);
     n = slNameNew(s);
     slAddTail(&alt->isoformList, n);
     }
@@ -401,7 +392,8 @@ while (lineFileNext(lf, &line, NULL))
 	freeMem(s);
 	s = naForNull(geneName);
 	geneName = ungreek(s);
-	freeMem(s);
+	if (! sameString(s, "n/a"))
+	    freeMem(s);
 	if (geneSym != NULL && !sameString(geneSym, "n/a"))
 	    slNameStore(&synList, geneSym);
 	if (geneName != NULL && !sameString(geneName, "n/a"))
