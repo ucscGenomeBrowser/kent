@@ -46,6 +46,7 @@
 #include "customTrack.h"
 #include "trackDb.h"
 #include "pslWScore.h"
+#include "lfs.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -528,6 +529,74 @@ freeLinkedFeatures((struct linkedFeatures**)(&tg->items));
 
 enum {blackShadeIx=9,whiteShadeIx=0};
 
+#ifdef FUREY_CODE
+
+struct linkedFeaturesSeries
+/* series of linked features that are comprised of multiple linked features */
+    {
+    struct linkedFeaturesSeries *next; 
+    char name[32];                         /* name for series of linked features */
+    int start, end;                     /* Start/end in browser coordinates. */
+    int orientation;                    /* Orientation. */
+    struct linkedFeatures *features;    /* linked features for a series */
+    };
+
+char *linkedFeaturesSeriesName(struct trackGroup *tg, void *item)
+/* Return name of item */
+{
+struct linkedFeaturesSeries *lfs = item;
+return lfs->name;
+}
+
+void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList)
+/* Free up a linked features series list. */
+{
+struct linkedFeaturesSeries *lfs;
+for (lfs = *pList; lfs != NULL; lfs = lfs->next)
+    freeLinkedFeatures(&lfs->features);
+slFreeList(pList);
+}
+
+void freeLinkedFeaturesSeriesItems(struct trackGroup *tg)
+/* Free up linkedFeaturesSeriesTrack items. */
+{
+freeLinkedFeaturesSeries((struct linkedFeaturesSeries**)(&tg->items));
+}
+
+void linkedFeaturesToLinkedFeaturesSeries(struct trackGroup *tg)
+/* Convert a linked features struct to a linked features series struct */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+for (lf = tg->items; lf != NULL; lf = lf->next) 
+    { 
+    AllocVar(lfs);
+    lfs->features = lf;
+    slAddHead(&lfsList, lfs)
+    }
+slReverse(&lfsList);
+for (lfs = lfsList; lfs != NULL; lfs = lfs->next) 
+    lfs->features->next = NULL;
+tg->items = lfsList;
+}
+
+void linkedFeaturesSeriesToLinkedFeatures(struct trackGroup *tg)
+/* Convert a linked features series struct to a linked features struct */
+{
+struct linkedFeaturesSeries *lfs;
+struct linkedFeatures *lfList = NULL, *lf;
+for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
+    {
+    slAddHead(&lfList, lfs->features)
+    lfs->features = NULL;
+    }
+slReverse(&lfList);
+freeLinkedFeaturesSeriesItems(tg);
+tg->items = lfList;
+}
+
+#endif /* FUREY_CODE */
+
 Color whiteIndex()
 /* Return index of white. */
 {
@@ -672,12 +741,15 @@ else
     slSort(&tg->items, cmpLfBlackToWhite);
 }
 
-static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+#ifdef FUREY_CODE
+
+static void linkedFeaturesSeriesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
 int baseWidth = seqEnd - seqStart;
+struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lf;
 struct simpleFeature *sf;
 int y = yOff;
@@ -697,58 +769,118 @@ boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
 if (vis == tvDense)
     sortByGray(tg, vis);
-for (lf = tg->items; lf != NULL; lf = lf->next)
+for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {
     int midY = y + midLineOff;
     int compCount = 0;
     int w;
-    if (tg->itemColor && shades == NULL)
-	color = tg->itemColor(tg, lf, mg);
-    tallStart = lf->tallStart;
-    tallEnd = lf->tallEnd;
-    if (lf->components != NULL && !hideLine)
-	{
-	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
-	w = x2-x1;
-	if (isFull)
-	    {
-	    if (shades) bColor =  shades[(lf->grayIx>>1)];
-	    mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
-		    lf->orientation, bColor);
-	    }
-	if (shades) color =  shades[lf->grayIx+isXeno];
-	mgDrawBox(mg, x1, midY, w, 1, color);
+    int prevEnd = -1;
+    boolean colorToggle;
+    if (lfs->orientation == 1)
+        {
+	colorToggle = FALSE;
 	}
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	if (shades) color =  shades[lf->grayIx+isXeno];
-	s = sf->start;
-	e = sf->end;
-	if (s < tallStart)
+    else 
+        {
+	colorToggle = TRUE;
+	}
+    
+    for (lf = lfs->features; lf != NULL; lf = lf->next)
+        {
+	if ((isFull) && (prevEnd != -1)) 
 	    {
-	    e2 = e;
-	    if (e2 > tallStart) e2 = tallStart;
-	    drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
-	    s = e2;
+            bColor = tg->ixAltColor;
+	    bColor = mgFindColor(mg,0,0,0);
+	    x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	    w = x2-x1;
+	    mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+		 		     lfs->orientation, bColor);
+	    mgDrawBox(mg, x1, midY, w, 1, bColor);
+	    }	
+	prevEnd = lf->end;
+
+	if (tg->itemColor && shades == NULL)
+	    {
+	    color = tg->itemColor(tg, lf, mg);
 	    }
-	if (e > tallEnd)
+        else
 	    {
-	    s2 = s;
-	    if (s2 < tallEnd) s2 = tallEnd;
-	    drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
-	    e = s2;
+ 	    if (colorToggle)
+	        {
+	        color = mgFindColor(mg,tg->altColor.r,tg->altColor.g,tg->altColor.b);
+	        bColor = color;
+	        colorToggle = FALSE;
+                }
+            else
+	        {
+	        color = mgFindColor(mg,tg->color.r,tg->color.g,tg->color.b);
+	        bColor = color;
+                colorToggle = TRUE;
+                }
 	    }
-	if (e > s)
+	tallStart = lf->tallStart;
+	tallEnd = lf->tallEnd;
+	if (lf->components != NULL && !hideLine)
 	    {
-	    drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
-	    ++compCount;
+	    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	    w = x2-x1;
+	    if (isFull)
+	        {
+	        if (shades) bColor =  shades[(lf->grayIx>>1)];
+		mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+		 		     lf->orientation, bColor);
+		}
+	    if (shades) color =  shades[lf->grayIx+isXeno];
+	    mgDrawBox(mg, x1, midY, w, 1, color);
+	    }
+	for (sf = lf->components; sf != NULL; sf = sf->next)
+	    {
+	    if (shades) color =  shades[lf->grayIx+isXeno];
+	    s = sf->start;
+	    e = sf->end;
+	    if (s < tallStart)
+	        {
+		e2 = e;
+		if (e2 > tallStart) e2 = tallStart;
+		drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
+		s = e2;
+		}
+	    if (e > tallEnd)
+	        {
+		s2 = s;
+		if (s2 < tallEnd) s2 = tallEnd;
+		drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
+		e = s2;
+		}
+	    if (e > s)
+	        {
+	        drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
+		++compCount;
+		}
 	    }
 	}
     if (isFull)
 	y += lineHeight;
-    }
+    } 
 }
+
+static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items. */
+/* Integerated with linkedFeaturesSeriesDraw */
+{
+/* Convert to a linked features series object */
+linkedFeaturesToLinkedFeaturesSeries(tg);
+/* Draw items */
+linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+/* Convert Back */
+linkedFeaturesSeriesToLinkedFeatures(tg);
+}
+
+#endif /* FUREY_CODE */
 
 void incRange(UBYTE *start, int size)
 /* Add one to range of bytes, taking care to not overflow. */
@@ -863,8 +995,9 @@ for (i=0; i<count; ++i)
     }
 }
 
+#ifdef FUREY_CODE 
 
-static void linkedFeaturesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
+static void linkedFeaturesSeriesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
@@ -875,26 +1008,30 @@ int i;
 int lineHeight = mgFontLineHeight(font);
 struct simpleFeature *sf;
 struct linkedFeatures *lf;
+struct linkedFeaturesSeries *lfs;
 int x1, x2, w;
 
 AllocArray(useCounts, width);
 memset(useCounts, 0, width * sizeof(useCounts[0]));
-for (lf = tg->items; lf != NULL; lf = lf->next)
+for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	{
-	x1 = roundingScale(sf->start-winStart, width, baseWidth);
-	if (x1 < 0)
-	   x1 = 0;
-	x2 = roundingScale(sf->end-winStart, width, baseWidth);
-	if (x2 >= width)
-	   x2 = width-1;
-	w = x2-x1;
-	if (w >= 0)
+    for (lf = lfs->features; lf != NULL; lf = lf->next)
+        {
+        for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
-	    if (w == 0)
-	        w = 1;
-	    incRange(useCounts+x1, w); 
+	    x1 = roundingScale(sf->start-winStart, width, baseWidth);
+	    if (x1 < 0)
+	      x1 = 0;
+	    x2 = roundingScale(sf->end-winStart, width, baseWidth);
+	    if (x2 >= width)
+	      x2 = width-1;
+	    w = x2-x1;
+	    if (w >= 0)
+	      {
+		if (w == 0)
+		  w = 1;
+		incRange(useCounts+x1, w); 
+	      }
 	    }
 	}
     }
@@ -904,11 +1041,25 @@ for (i=0; i<lineHeight; ++i)
 freeMem(useCounts);
 }
 
+static void linkedFeaturesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw dense clone items. */
+{
+/* Convert to a linked features series object */
+linkedFeaturesToLinkedFeaturesSeries(tg);
+/* Draw items */
+linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+/* Convert Back */
+linkedFeaturesSeriesToLinkedFeatures(tg);
+}
+
 static void linkedFeaturesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
+/* Draw items */
 if (vis == tvFull)
     {
     linkedFeaturesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
@@ -918,6 +1069,23 @@ else if (vis == tvDense)
     linkedFeaturesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
     }
 }
+
+static void linkedFeaturesSeriesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw dense linked features series items. */
+{
+if (vis == tvFull)
+    {
+    linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    }
+else if (vis == tvDense)
+    {
+    linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    }
+}
+#endif /* FUREY_CODE */
+
 
 #ifdef ROGIC_CODE
 
@@ -1157,6 +1325,35 @@ tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 }
 
+#ifdef FUREY_CODE
+int linkedFeaturesSeriesItemStart(struct trackGroup *tg, void *item)
+/* Return start chromosome coordinate of item. */
+{
+struct linkedFeaturesSeries *lfs = item;
+return lfs->start;
+}
+
+int linkedFeaturesSeriesItemEnd(struct trackGroup *tg, void *item)
+/* Return end chromosome coordinate of item. */
+{
+struct linkedFeaturesSeries *lfs = item;
+return lfs->end;
+}
+
+void linkedFeaturesSeriesMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+tg->freeItems = freeLinkedFeaturesSeriesItems;
+tg->drawItems = linkedFeaturesSeriesAverageDense;
+tg->itemName = linkedFeaturesSeriesName;
+tg->mapItemName = linkedFeaturesSeriesName;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = linkedFeaturesSeriesItemStart;
+tg->itemEnd = linkedFeaturesSeriesItemEnd;
+}
+#endif /* FUREY_CODE */
+
 struct trackGroup *linkedFeaturesTg()
 /* Return generic track group for linked features. */
 {
@@ -1264,7 +1461,6 @@ return lfFromPslx(psl, 1, isXeno);
 }
 
 
-
 struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end, char *chromName, boolean isXeno)
 /* Return linked features from range of table. */
 {
@@ -1289,11 +1485,81 @@ return lfList;
 }
 
 #ifdef FUREY_CODE
-void loadBacEnds(struct trackGroup *tg)
-/* Load up bac ends from table into trackGroup items. */
+
+struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
+/* Create linked feature series object from database bed record */ 
 {
-tg->items = lfFromPslsInRange("bacEnds", winStart, winEnd, chromName, FALSE);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row, rest[32];
+int rowOffset, i;
+struct linkedFeaturesSeries *lfs; 
+struct linkedFeatures *lfList = NULL, *lf; 
+
+AllocVar(lfs);
+strncpy(lfs->name, lfsbed->name, sizeof(lfs->name));
+lfs->start = lfsbed->chromStart;
+lfs->end = lfsbed->chromEnd;
+lfs->orientation = orientFromChar(lfsbed->strand[0]);
+
+/* Get linked features */
+for (i = 0; i < lfsbed->lfCount; i++)  
+{
+  AllocVar(lf);
+  sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
+  sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
+  if ((row = sqlNextRow(sr)) != NULL)
+  {
+    struct psl *psl = pslLoad(row);
+    lf = lfFromPsl(psl, FALSE);
+    slAddHead(&lfList, lf);
+    pslFree(&psl);
+  }
+  sqlFreeResult(&sr);
 }
+slReverse(&lfList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+lfs->features = lfList;
+return lfs;
+} 
+
+struct linkedFeaturesSeries *lfsFromBedsInRange(char *table, int start, int end, char *chromName)
+/* Return linked features from range of table. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset;
+struct linkedFeaturesSeries *lfsList = NULL, *lfs; 
+
+sr = hRangeQuery(conn, table, chromName, start, end, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct lfs *lfsbed = lfsLoad(row+rowOffset);
+    lfs = lfsFromBed(lfsbed);
+    slAddHead(&lfsList, lfs);
+    lfsFree(&lfsbed);
+    }
+slReverse(&lfsList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return lfsList;
+}
+
+void loadBacEndPairs(struct trackGroup *tg)
+/* Load up bac end pairs from table into trackGroup items. */
+{
+tg->items = lfsFromBedsInRange("bacEndPairs", winStart, winEnd, chromName);
+}
+
+void bacEndPairsMethods(struct trackGroup *tg)
+/* Fill in track group methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairs;
+}
+
 #endif /* FUREY_CODE */
 
 #ifdef ROGIC_CODE
@@ -5005,6 +5271,7 @@ if (calledSelf)
 
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
+registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
