@@ -5269,6 +5269,12 @@ bedLoadItem(tg, "syntenyMouse", (ItemLoader)synteny100000Load);
 slSort(&tg->items, bedCmp);
 }
 
+void loadSyntenyHuman(struct track *tg)
+{
+bedLoadItem(tg, "syntenyHuman", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
 void loadSynteny100000(struct track *tg)
 {
 bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
@@ -5424,6 +5430,15 @@ void loadMouseSyn(struct track *tg)
 /* Load up mouseSyn from database table to track items. */
 {
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
+}
+
+void syntenyHumanMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyHuman;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
 }
 
 void syntenyMouseMethods(struct track *tg)
@@ -10038,6 +10053,7 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
+registerTrackHandler("syntenyHuman", syntenyHumanMethods);
 registerTrackHandler("syntenyMouse", syntenyMouseMethods);
 registerTrackHandler("syntenyRat", syntenyRatMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
