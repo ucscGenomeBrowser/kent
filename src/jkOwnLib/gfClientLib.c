@@ -516,7 +516,7 @@ rangeList = gfQuerySeq(*pConn, seq);
 close(*pConn);
 *pConn = -1;
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 500000);
+rangeList = gfRangesBundle(rangeList, ffIntronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {
     splitPath(range->tName, dir, chromName, ext);
@@ -853,7 +853,7 @@ struct gfClump *clump;
 struct gfRange *rangeList = NULL, *range;
 bioSeq *targetSeq;
 struct ssBundle *bun;
-int intronMax = 500000;
+int intronMax = ffIntronMax;
 
 if (isProt)
     intronMax /= 3;
@@ -932,7 +932,7 @@ for (frame=0; frame<3; ++frame)
     }
 slReverse(&rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 500000/3);
+rangeList = gfRangesBundle(rangeList, ffIntronMax/3);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -1045,7 +1045,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
     /* Convert from amino acid to nucleotide coordinates. */
     rangeCoorTimes3(rangeList);
     slSort(&rangeList, gfRangeCmpTarget);
-    rangeList = gfRangesBundle(rangeList, 500000);
+    rangeList = gfRangesBundle(rangeList, ffIntronMax);
     loadHashT3Ranges(rangeList, nibDir, seq->size, isRc, &t3Hash, &tSeqList, &t3RefList);
 
     /* The old range list was not very precise - it was just to get
@@ -1070,7 +1070,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	}
     slReverse(&rangeList);
     slSort(&rangeList, gfRangeCmpTarget);
-    rangeList = gfRangesBundle(rangeList, 500000/3);
+    rangeList = gfRangesBundle(rangeList, ffIntronMax/3);
 
     /* Do detailed alignment of each of the clustered ranges. */
     for (range = rangeList; range != NULL; range = range->next)
@@ -1170,7 +1170,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	}
     rangeCoorTimes3(rangeList);
     slSort(&rangeList, gfRangeCmpTarget);
-    rangeList = gfRangesBundle(rangeList, 500000);
+    rangeList = gfRangesBundle(rangeList, ffIntronMax);
     loadHashT3Ranges(rangeList, nibDir, qSeq->size/3, tIsRc, &t3Hash, &tSeqList, &t3RefList);
 
     /* The old range list was not very precise - it was just to get
@@ -1200,7 +1200,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	}
     slReverse(&rangeList);
     slSort(&rangeList, gfRangeCmpTarget);
-    rangeList = gfRangesBundle(rangeList, 500000);
+    rangeList = gfRangesBundle(rangeList, ffIntronMax);
 
     for (range = rangeList; range != NULL; range = range->next)
 	{

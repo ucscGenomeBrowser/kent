@@ -271,8 +271,8 @@ int acc = 2;
 if (hGap > 100000)	/* Discourage really long introns. */
     {
     acc += (hGap - 100000)/3000;
-    if (hGap > 500000)
-        acc += (hGap - 500000)/2000;
+    if (hGap > ffIntronMax)
+        acc += (hGap - ffIntronMax)/2000;
     }
 if (hGap < 0)   /* Discourage jumping back in haystack. */
     {
