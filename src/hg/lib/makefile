@@ -2,8 +2,6 @@ XINC = -I$(MYSQLINC)
 include ../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
 O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
