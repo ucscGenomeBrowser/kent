@@ -72,7 +72,7 @@ M       1       16596	1       F	AC024175.3      1       16596	+
 
      end 
      # From agp files, get supercontigs and contigs for
-     # ctg* as chrUn, NA* as chrNA and Finished* as chrFinished
+     # ctg* as chrUn, NA* as chrNA and Finished* as chrUn
      foreach t ( ctg NA Finished )
         if ($t == "ctg") then 
            set c = "Un"
@@ -516,7 +516,7 @@ while (<STDIN>) {
     # Make one big 2bit file as well, and make a link to it in
     # /gbdb/danRer1/nib because hgBlat looks there:
     faToTwoBit */chr*.fa danRer1.2bit
-    ln -s /cluster/data/danRer1/danRer1.2bit /gbdb/danRer1i/nib/
+    ln -s /cluster/data/danRer1/danRer1.2bit /gbdb/danRer1/nib/
 
 # MAKE GOLD AND GAP TRACKS (DONE, 2004-06-08, hartera)
 # REMAKE GOLD AND GAP TRACKS (DONE, 2004-07-07, hartera)
@@ -544,6 +544,7 @@ while (<STDIN>) {
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER1 
 # (DONE, 2004-06-08, hartera)
+# CHANGE DEFAULT POSITION FOR BROWSER (DONE, 2004-07-16, hartera)
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -572,6 +573,12 @@ while (<STDIN>) {
 # Move Zebrafish so it is between Chicken and Fugu in the organism list
     echo 'update dbDb set orderKey = 38 where name = "danRer1";' \
          | hgsql -h genome-testdb hgcentraltest
+# Change default position to show "tiggy-winkle hedgehog" gene 
+# involved in signaling in development
+# (2004-07-16, hartera)
+
+    echo 'update dbDb set defaultPos = "chr2:16,330,443-16,335,196" \
+         where name = "danRer1";' | hgsql -h genome-testdb hgcentraltest
 
 # MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-06-30, hartera)
     ssh hgwdev
@@ -783,7 +790,7 @@ SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
                                                                                 
-# QUERY: Human (hg17)
+# QUERY: Human (hg17) 
 SEQ2_DIR=/iscratch/i/gs.18/build35/bothMaskedNibs
 SEQ2_RMSK=
 SEQ2_FLAG=
@@ -1038,7 +1045,7 @@ axtFilter $1 \
 # crashes (out of memory) so try again on kolossus
     ssh kolossus
     cd /cluster/data/danRer1/bed/blastz.hg17/axtChain/run1
-    # use sequences on cluearc for kolossus
+    # use sequences on bluearc for kolossus
     cat << '_EOF_' > doChain2
 #!/bin/csh
 axtFilter $1 \
@@ -1149,7 +1156,6 @@ axtFilter $1 \
     cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
     netFilter -minGap=10 humanhg17.net |  hgLoadNet danRer1 netHg17 stdin
 
-
 # MAKE 10.OOC, 11.OOC FILE FOR BLAT (DONE, 2004-06-09, hartera)
     # Use -repMatch=460 (based on size -- for human we use 1024, and
     # the zebrafish genome is ~45% of the size of the human genome
@@ -1170,7 +1176,7 @@ axtFilter $1 \
     cp -p /cluster/bluearc/danRer1/*.ooc /iscratch/i/danRer1/
     iSync
 
-# AUTO UPDATE GENBANK MRNA AND EST RUN  (in progress, 2004-06-09, hartera)
+# AUTO UPDATE GENBANK MRNA AND EST RUN  (DONE, 2004-07-01, hartera)
     ssh eieio
     cd /cluster/data/genbank
     # This is a new organism, edit the etc/genbank.conf file and add:
@@ -1178,18 +1184,60 @@ axtFilter $1 \
 danRer1.genome = /iscratch/i/danRer1/nib/chr*.nib
 danRer1.lift = /cluster/data/danRer1/jkStuff/liftAll.lft
 danRer1.downloadDir = danRer1
-     # NEED TO DO THIS STILL, WAIT FOR JIM TO CONFIRM, ALSO DO WE NEED 
-     # MAXINTRON FLAG FOR BLAT. LET MARK KNOW WHEN READY TO DO THIS.
+    # Default includes native genbank mRNAs and ESTs,
+    # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
+    # not xeno RefSeq
     cvs commit -m "Added danRer1" etc/genbank.conf
-    make
-
     # Edit src/align/gbBlat to add /iscratch/i/danRer1/11.ooc
     # Add line:  DANRER_OOC=/iscratch/i/danRer1/11.ooc
     cvs diff src/align/gbBlat
     make
     cvs commit -m "Added 11.ooc for danRer1." src/align/gbBlat
+    # Edit src/lib/gbGenome.c to add new genome
+    # ADD: static char *danRerNames[] = {"Danio rerio", NULL};
+    # ADD: {"danRer", danRerNames, NULL},
+    # to static struct dbToSpecies dbToSpeciesMap[]
+    cvs commit -m "Added zebrafish, danRer1." lib/gbGenome.c
+    # Install to /cluster/data/genbank:
+    make install-server
+                                                                                
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, RefSeq mRNA only:
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial danRer1
+    # Load results for RefSeq mRNAs:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer1
+    # To start next run, results need to be moved out the way
+    cd /cluster/data/genbank/work
+    mv initial.danRer1 initial.danRer1.refseq.mrna
+                                                                                
+    # -initial for GenBank mRNAs
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial danRer1
+                                                                                
+    # Load results for GenBank mRNAs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 danRer1
+    cd /cluster/data/genbank/work
+    mv initial.danRer1 initial.danRer1.genbank.mrna
+                                                                                
+    # -initial for ESTs
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial danRer1
+                                                                                
+    # Load results for GenBank ESTs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 danRer1
+    cd /cluster/data/genbank/work
+    mv initial.danRer1 initial.danRer1.genbank.est
 
-# ENSEMBL GENES (in progress, 2004-06-08, hartera)
+# ENSEMBL GENES (DONE, 2004-06-22, hartera)
 
    mkdir /cluster/data/danRer1/bed/ensembl
    cd /cluster/data/danRer1/bed/ensembl
@@ -1201,9 +1249,1163 @@ danRer1.downloadDir = danRer1
     # Page 3) Choose the "Structures" box.
     # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
     # Save as ensemblGene.gtf.gz
+# Need to get lift files for each chrom from supercontig to chrom level
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/ensembl/liftSupertoChrom
+    foreach c (NA Un Finished)
+       set b = "/cluster/data/danRer1"
+       awk '{print $6;}' $b/$c/chr$c.supercontigs.agp > chr$c.supercontigs.lst
+       $HOME/bin/i386/faSomeRecords $b/Zv3.supercontigs.fa \
+          ./chr$c.supercontigs.lst ./chr$c.fa
+    echo $c " done"
+    end
 
+     # check FASTA files then generate AGP and lift files 
+     # from the chromosome fastas 
+     foreach c (NA Un Finished)
+        $HOME/bin/i386/scaffoldFaToAgp ./chr$c.fa
+        sed -e "s/chrUn/${c}/;" chr$c.agp > chr$c.superToChrom.agp
+        sed -e "s/chrUn/${c}/;" chr$c.lft > chr$c.superToChrom.lft
+     end
+     cat *.superToChrom.lft > liftUnSuperToChrom.lft
+
+     # get chrUn, Finished and NA records
+     cd /cluster/data/danRer1/bed/ensembl
+     awk '$1 ~ /NA/ || $1 ~ /ctg/ || $1 ~ /Finished/' ensemblGene.gtf \
+                    > ensemblGenechrUns.gtf
+     awk '$1 !~ /NA/ && $1 !~ /ctg/ && $1 !~ /Finished/' ensemblGene.gtf \
+                    > ensemblGenechroms.gtf
+     liftUp -type=.gtf ensemblGenechrUns.lifted \
+         ./liftSupertoChrom/liftUnSuperToChrom.lft warn ensemblGenechrUns.gtf
+     # Got 113698 lifts in ./liftSupertoChrom/liftUnSuperToChrom.lft
+
+     # Process chroms and virtual chroms. Add "chr" to front of each line
+     cp ensemblGenechroms.gtf all.gtf
+     cat ensemblGenechrUns.lifted >> all.gtf
+
+     sed -e "s/^/chr/" all.gtf > ensGene.gtf
+     # load into database
+     ssh hgwdev
+     /cluster/bin/i386/ldHgGene danRer1 ensGene \
+            /cluster/data/danRer1/bed/ensembl/ensGene.gtf
+# Read 30783 transcripts in 554794 lines in 1 files
+#   30783 groups 28 seqs 1 sources 4 feature types
+# 30783 gene predictions
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql danRer1 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" \
+         | hgsql -N danRer1
+
+    # Get the ensembl peptide sequences from
+    # http://www.ensembl.org/Danio_rerio/martview
+    # Choose Danio Rerio as the organism
+    # Follow this sequence through the pages:
+    # Page 1) Choose the Ensembl Genes choice. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Sequences" tab.
+    # Page 4) Choose Transcripts/Proteins and peptide Only as the output,
+    # choose text/fasta and gzip compression,
+    # name the file ensGeneDanRer1.pep.gz and then hit export.
+
+    gunzip ensGeneDanRer1.pep.gz
+    # delete * at end of some proteins
+    cat ensGeneDanRer1.pep | sed 's/\*$//' > ensembl.pep
+    ~matt/bin/fixPep.pl ensembl.pep fixPep_ensembl.pep
+     hgPepPred danRer1 generic ensPep fixPep_ensembl.pep
+
+# BLASTZ FUGU (Fr1) (DONE, 2004-06-13, hartera)
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats but there are none
+    # available between these two fish species to make empty files
+    mkdir -p /iscratch/i/danRer1/linSpecRep.notInDanRer
+    mkdir -p /iscratch/i/fugu/linSpecRep.notInFugu
+    cd /cluster/data/danRer1
+      # for zebrafish
+    foreach c (`cat chrom.lst`)
+      cp /dev/null /iscratch/i/danRer1/linSpecRep.notInDanRer/chr${c}.out.spec
+    end
+      # for Fugu
+    cp /dev/null /iscratch/i/fugu/linSpecRep.notInFugu/chrUn.out.spec
+    iSync
+
+    ssh kk
+    mkdir -p /cluster/data/danRer1/bed/blastz.fr1.2004-06-13
+    ln -s /cluster/data/danRer1/bed/blastz.fr1.2004-06-13 \
+          /cluster/data/danRer1/bed/blastz.fr1
+    cd /cluster/data/danRer1/bed/blastz.fr1
+
+    cat << '_EOF_' > DEF
+# zebrafish (danRer1) vs. Fugu (fr1)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+#BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - zebrafish (danRer1)
+SEQ1_DIR=/iscratch/i/danRer1/nib
+SEQ1_RMSK=
+# lineage-specific repeats
+# we don't have that information for these species so these files are empty
+SEQ1_SMSK=/iscratch/i/danRer1/linSpecRep.notInDanRer
+SEQ1_FLAG=
+SEQ1_IN_CONTIGS=0
+# 10 MB chunk for target
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - Fugu (fr1)
+# soft-masked chrom nib
+SEQ2_DIR=/cluster/bluearc/fugu/fr1/chromNib
+SEQ2_RMSK=
+SEQ2_SMSK=/iscratch/i/fugu/linSpecRep.notInFugu
+SEQ2_FLAG=
+SEQ2_IN_CONTIGS=0
+# 10 Mbase for query
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer1/bed/blastz.fr1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.danRer1-fr1.2004-06-13
+
+    # setup cluster run
+    # source the DEF file
+    bash
+    . ./DEF
+    /cluster/data/danRer1/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# Completed: 5950 of 5950 jobs
+# CPU time in finished jobs:    1590351s   26505.86m   441.76h   18.41d  0.050 y
+# IO & Wait Time:                 27786s     463.09m     7.72h    0.32d  0.001 y
+# Average job time:                 272s       4.53m     0.08h    0.00d
+# Longest job:                      601s      10.02m     0.17h    0.01d
+# Submission to last job:          4298s      71.63m     1.19h    0.05d
+
+    cd /cluster/data/danRer1/bed/blastz.fr1
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/danRer1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Completed: 170 of 170 jobs
+# CPU time in finished jobs:       1722s      28.69m     0.48h    0.02d  0.000 y
+# IO & Wait Time:                 16055s     267.59m     4.46h    0.19d  0.001 y
+# Average job time:                 105s       1.74m     0.03h    0.00d
+# Longest job:                      152s       2.53m     0.04h    0.00d
+# Submission to last job:           310s       5.17m     0.09h    0.00d
+
+    #   Third cluster run to convert lav's to axt's
+    ssh kk
+    cd /cluster/data/danRer1/bed/blastz.fr1
+    mkdir axtChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /iscratch/i/danRer1/nib \
+/cluster/bluearc/fugu/fr1/chromNib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/danRer1/bed/blastz.fr1/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 29 of 29 jobs
+# CPU time in finished jobs:        600s      10.00m     0.17h    0.01d  0.000 y
+# IO & Wait Time:                  2782s      46.37m     0.77h    0.03d  0.000 y
+# Average job time:                 117s       1.94m     0.03h    0.00d
+# Longest job:                      401s       6.68m     0.11h    0.00d
+# Submission to last job:           966s      16.10m     0.27h    0.01d
+
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blastz.fr1
+    mkdir -p pslChrom
+    set tbl = "blastzFr1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.fr1/pslChrom
+
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer1 $f
+      echo "$f Done"
+    end
+
+# CHAIN FUGU (Fr1) BLASTZ (DONE, 2004-06-24, hartera)
+    # Create chains using -minScore=5000 for axtChain for chroms and
+    # -minScore = 10000 for the messy chroms - chrUn and chrNA.
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/danRer1/bed/blastz.fr1
+    mkdir -p axtChain2/run1
+    cd axtChain/run1
+    mkdir out chain
+    # create 2 input lists as need to process chrNA and chrUn separately
+    ls -1S /cluster/data/danRer1/bed/blastz.fr1/axtChrom/*.axt \
+        > input.lst
+    grep "chrNA" input.lst > inputNAandUn.lst
+    grep "chrUn" input.lst >> inputNAandUn.lst
+    # remove chrNA and chrUn from input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -minScore=5000 $1 \
+    /iscratch/i/danRer1/nib \
+    /cluster/bluearc/fugu/fr1/chromNib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 27 of 27 jobs
+# CPU time in finished jobs:        356s       5.94m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                   128s       2.13m     0.04h    0.00d  0.000 y# Average job time:                  18s       0.30m     0.00h    0.00d
+# Longest job:                       28s       0.47m     0.01h    0.00d
+# Submission to last job:           830s      13.83m     0.23h    0.01d
+
+    cat << '_EOF_' > gsub2
+#LOOP
+doChain2 {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain2
+#!/bin/csh
+axtChain -minScore=10000 $1 \
+    /iscratch/i/danRer1/nib \
+    /cluster/bluearc/fugu/fr1/chromNib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x doChain2
+    gensub2 inputNAandUn.lst single gsub2 jobList2
+    para create jobList2
+    para try, check, ...
+# para time
+# CPU time in finished jobs:        175s       2.92m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                    64s       1.06m     0.02h    0.00d  0.000 y
+# Average job time:                 120s       1.99m     0.03h    0.00d
+# Longest job:                      120s       2.00m     0.03h    0.00d
+# Submission to last job:           120s       2.00m     0.03h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain2
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.fr1/
+    # replace original axtChain with default minScore (=1000)
+    mv axtChain axtChain.orig
+    mv axtChain2 axtChain
+    # remove old chain tables from database for Filt and Filt2
+
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain danRer1 ${c}_chainFr1 $i
+        echo done $c
+    end
+
+# chain tables for fr1:
+# chainFr1: default minScore = 1000
+# chainFr1Filt1: minScore = 10000 for all chroms, except 15000 for Un and NA
+# chainFr1Filt2: minScore = 5000 for all chroms, except 10000 for Un and NA
+# (chainFr1Filt2 is now chainFr1)
+# coverage is calculated as
+#     size(refGene:CDS & Fr1) / size(refGene:CDS)
+# enrichment is
+#     (size(refGene:CDS & Fr1) / size(Fr1) ) / size(refGene:CDS)                # Chains:
+# featureBits -chrom=chr1 danRer1 chainFr1Link
+# 2170390 bases of 40488791 (5.360%) in intersection
+# featureBits -chrom=chr1 danRer1 chainFr1FiltLink
+# 1505825 bases of 40488791 (3.719%) in intersection
+# featureBits -chrom=chr1 danRer1 chainFr1Filt2Link
+# 1897128 bases of 40488791 (4.686%) in intersection
+
+# featureBits -chrom=chr1 danRer1 refGene:cds chainFr1Link
+# 149280 bases of 40488791 (0.369%) in intersection
+# featureBits -chrom=chr1 danRer1 refGene:cds chainFr1FiltLink
+# 135943 bases of 40488791 (0.336%) in intersection
+# featureBits -chrom=chr1 danRer1 refGene:cds chainFr1Filt2Link
+# 145585 bases of 40488791 (0.360%) in intersection
+
+# featureBits -chrom=chr1 danRer1 refGene:cds
+# 165468 bases of 40488791 (0.409%) in intersection
+# featureBits danRer1 refGene:cds
+# 4852787 bases of 1459132082 (0.333%) in intersection
+#                Coverage Enrichment
+# chainFr1Link:      90.2%   17.0X
+# chainFr1FiltLink:  82.2%   22.1X
+# chainFr1Filt2Link: 88.0%   18.8X
+
+# NET FUGU (Fr1) BLASTZ (DONE, 2004-06-25, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 97132544, utime 737 s/100, stime 115
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
+    # use -noAr option - don't look for ancient repeats
+    netClass -noAr noClass.net danRer1 fr1 fr1.net
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
+    netFilter -minGap=10 fr1.net | hgLoadNet danRer1 netFr1 stdin
+# EXTRACT AXT'S AND MAF'S FROM FUGU NET (DONE, 2004-06-25, hartera)
+    ssh eieio
+    cd /cluster/data/danRer1/bed/blastz.fr1/axtChain
+    netSplit fr1.net fr1Net
+    mkdir -p ../axtNet
+# make sorted axts from net 
+cat > axtNet.csh << 'EOF'
+    foreach f (fr1Net/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt fr1Net/$c.net chain/$c.chain \
+        /cluster/data/danRer1/nib /cluster/data/fr1/nib stdout \
+        | axtSort stdin ../axtNet/$c.axt
+    echo "Complete: $c.net -> $c.axt"
+    end
+'EOF'
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+
+    ssh eieio
+    cd /cluster/data/danRer1/bed/blastz.fr1
+    cd axtNet
+    mkdir ../mafNet
+
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.fr1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/danRer1/chrom.sizes /cluster/data/fr1/chrom.sizes \
+            ../mafNet/$maf -tPrefix=danRer1. -qPrefix=fr1.
+    end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+
+# AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP 
+# (DONE, 2004-07-01, hartera)
+    mkdir /projects/compbio/data/microarray/affyZebrafish
+    cd /projects/compbio/data/microarray/affyZebrafish
+  # Download Zebrafish genome array consensus sequences from Affymetrix
+  # http://www.affymetrix.com/support/technical/byproduct.affx?product=zebrafish
+    unzip Zebrafish_consensus.zip
+    sed -e 's/consensus://' Zebrafish_consensus \
+           | sed -e 's/;/ /' > Zebrafish_consensus.fa
+
+    # copy sequences to a directory visible on kkr1u00
+
+    cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+       /cluster/bluearc/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer1
+    ssh kkr1u00
+    cd /cluster/data/danRer1/bed
+    mkdir affyZebrafish.2004-06-30
+    ln -s /cluster/data/danRer1/bed/affyZebrafish.2004-06-30 \
+          /cluster/data/danRer1/bed/affyZebrafish
+    cd affyZebrafish
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affy/Zebrafish_consensus.fa /iscratch/i/affy
+    iSync
+
+    ssh kk
+    cd /cluster/data/danRer1/bed/affyZebrafish
+    ls -1 /iscratch/i/affy/Zebrafish_consensus.fa > affy.lst
+    ls -1 /iscratch/i/danRer1/trfFa/ > genome.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/danRer1/11.ooc /iscratch/i/danRer1/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try, check, push ... etc.
+# para time
+# Completed: 310 of 310 jobs
+# CPU time in finished jobs:      14931s     248.85m     4.15h    0.17d  0.000 y
+# IO & Wait Time:                  1028s      17.13m     0.29h    0.01d  0.000 y
+# Average job time:                  51s       0.86m     0.01h    0.00d
+# Longest job:                       96s       1.60m     0.03h    0.00d
+# Submission to last job:           574s       9.57m     0.16h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyZebrafish.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # do not use minCover since a lot of sequence is in Un, NA and Finished
+    # so genes may be split up so good to see all alignments
+    pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyZebrafish.psl ../../jkStuff/liftAll.lft warn contig.psl
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.bak
+    mv affyZebrafish.psl.bak affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good                                                              
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/affyZebrafish
+    hgLoadPsl danRer1 affyZebrafish.psl
+
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+       /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+       /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=Zebrafish: danRer1 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/zebrafish/danRer1
+
+# ADD CONTIGS TRACK, ctgPos2 (DONE, 2004-07-02, hartera)
+# make ctgPos2 (contig name, size, chrom, chromStart, chromEnd) from lift
+    ssh kksilo
+    cd /cluster/data/danRer1/bed
+    mkdir ctgPos2
+    cd ctgPos2
+    # make a .as file for ctgPos2 which is an extended ctgPos with
+    # a field for clone type
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/ctgPos2.as
+table ctgPos2
+"Where a contig is inside of a chromosome including contig type information."
+    (
+    string chrom;       "Chromosome name"
+    uint chromStart;    "Start in chromosome"
+    uint chromEnd;      "End in chromosome"
+    string name;        "Name of contig"
+    char[1] type;       "(W)GS contig, (F)inished, (P)redraft, (D)raft, (O)ther"    uint size;          "Size of contig"
+    )
+'_EOF_'
+    cd $HOME/kent/src/hg/lib/
+    autoSql ctgPos2.as ctgPos2
+    mv ctgPos2.h $HOME/kent/src/hg/inc
+    # do make to check it works and commit the .as, .sql, .c and .h file to CVS
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+              21 22 23 24 25)
+         awk 'BEGIN {OFS="\t"} \
+         {if ($5 != "N") print $6, $3-$2+1, $1, $2-1, $3, $5}' \
+         /cluster/data/danRer1/$c/contigs/chr${c}.agp >> ctgPos2.tab
+    end
+                                                                                
+    # need to parse with chrom, chromStart, chromEnd first for liftUp to work
+    foreach c (ctg NA Finished)
+       awk 'BEGIN {OFS="\t"} \
+         {if (($1 ~ /^'"${c}"'[0-9]+$/) && $5 != "N" ) \
+         print $1, $2-1, $3, $5, $6, $3-$2+1}' \
+         /cluster/data/danRer1/Zv3.contigs.agp >> chrUns.tmp
+    end
+                                                                                
+    # Use liftUp to change co-ordinates to those of virtual chroms
+    # make lift file from all 3 virtual chroms
+    foreach c (NA Un Finished)
+       cat /cluster/data/danRer1/$c/chr${c}.lft >> chrAllUns.lft
+    end
+                                                                                
+    liftUp -type=.bed chrUns.lifted chrAllUns.lft warn chrUns.tmp
+                                                                                
+    # once have lifted co-ordinates, need to parse to change to table format
+    awk 'BEGIN {OFS="\t"} {print $5, $6, $1, $2, $3, $4}' \
+        chrUns.lifted > chrUns.tab
+    # add this to ctgPos2.tab
+    cat chrUns.tab >> ctgPos2.tab
+                                                                                
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ctgPos2
+    echo "drop table ctgPos2" | hgsql danRer1
+    hgsql danRer1 < ~/kent/src/hg/lib/ctgPos2.sql
+    echo "load data local infile 'ctgPos2.tab' into table ctgPos2" \
+         | hgsql danRer1
+
+# WZ EST ALIGNMENTS (DONE, 2004-07-09, hartera)
+# WZ ESTs are compiled ESTs from WashU. They were provided by
+# Anthony DiBiase from Leonard Zon's lab at the Children's Hospital, Harvard
+# Contact: adibiase@enders.tch.harvard.edu
+# http://zon.tchlab.org
+     ssh hgwdev
+     mkdir -p /cluster/data/danRer1/bed/ZonLab/wzESTs
+     cd /cluster/data/danRer1/bed/ZonLab/wzESTs
+     # put WZ ESTs in this directory as wzcontigs.txt -
+     # obtained from the Zon Lab, these are unmasked.
+     # There are 42857 ESTs in this file.
+     # Translate to upper case
+     tr '[a-z]' '[A-Z]' < wzcontigs.txt > wzcontigs.fa
+     ssh kkr1u00
+     mkdir -p /iscratch/i/danRer1/wzESTs
+     cd /cluster/data/danRer1/bed/ZonLab/wzESTs
+     faSplit sequence wzcontigs.fa 20 /iscratch/i/danRer1/wzESTs/wzcontigs
+     iSync
+                                                                                
+     ssh kk
+     cd /cluster/data/danRer1/bed/ZonLab/wzESTs
+     mkdir psl
+     ls -1 /iscratch/i/danRer1/wzESTs/*.fa > est.lst
+     ls -1S /iscratch/i/danRer1/trfFa/*.fa > genome.lst
+# REdO without masking - not used for native ESTs
+     cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -ooc={check in exists /iscratch/i/danRer1/11.ooc} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+     gensub2 genome.lst est.lst gsub spec
+     para create spec
+     para try
+     para check
+# para time
+# Completed: 6200 of 6200 jobs
+# CPU time in finished jobs:      50309s     838.48m    13.97h    0.58d  0.002 y# IO & Wait Time:                 19334s     322.23m     5.37h    0.22d  0.001 y# Average job time:                  11s       0.19m     0.00h    0.00d
+# Submission to last job:           326s       5.43m     0.09h    0.00d
+                                                                                
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create wzEsts.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least
+    # 96% identity in aligned region. use parameters used by auto
+    # GenBank update for native ESTs
+    pslReps -minAli=0.96 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp wz_ests.psl /cluster/data/danRer1/jkStuff/liftAll.lft warn contig.psl                                                                                
+    # Load EST alignments into database.
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/wzESTs
+    hgLoadPsl danRer1 wz_ests.psl
+                                                                                
+    # Add WZ EST sequences
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/danRer1/wzESTs
+    ln -s \
+       /cluster/data/danRer1/bed/ZonLab/wzESTs/wzcontigs.fa \
+       /gbdb/danRer1/wzESTs
+                                                                                
+    hgLoadSeq danRer1 /gbdb/danRer1/wzESTs/wzcontigs.fa
+
+# BACENDS (DONE, 2004-07-28, hartera)
+# provided by Len Zon's lab at Harvard - BAC clone sequences are from Robert
+# Geisler's lab, Max Planck Institute for Developmental Biology,
+# Tuebingen, Germany
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/ZonLab
+    mkdir /cluster/data/danRer1/bed/ZonLab/bacends
+    cp cloneEnd.txt ./bacends/bacends.fa
+    cd bacends
+    faSize bacends.fa
+    # 486978153 bases (39070196 N's 447907957 real) in 594614 sequences in
+    # 1 files Total size: mean 819.0 sd 230.3 min 0 (zKp108-H09.za)
+    # max 5403 (zC259G13.zb) median 796
+    # N count: mean 65.7 sd 154.7
+                                                                                
+    mkdir /iscratch/i/danRer1/bacends
+    faSplit sequence bacends.fa 20 /iscratch/i/danRer1/bacends/bacends
+    ls -1S /iscratch/i/danRer1/bacends/*.fa > bacends.lst
+    ls -1S /iscratch/i/danRer1/trfFa/*.fa > genome.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -tileSize=10 -ooc=/iscratch/i/danRer1/10.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    mkdir psl
+    gensub2 genome.lst bacends.lst template jobList
+    ssh kkr1u00
+    # iSync bacends to kilokluster
+    iSync
+    ssh kk
+    cd /cluster/data/danRer1/bed/ZonLab/bacends
+    para create jobList
+    para try, check, push, check, ...
+# para time
+# Completed: 6200 of 6200 jobs
+# CPU time in finished jobs:    4833892s   80564.87m  1342.75h   55.95d  0.153 y# IO & Wait Time:                 31979s     532.98m     8.88h    0.37d  0.001 y# Average job time:                 785s      13.08m     0.22h    0.01d
+# Longest job:                     2300s      38.33m     0.64h    0.03d
+# Submission to last job:         14904s     248.40m     4.14h    0.17d
+    # back on kksilo, filter and lift results:
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/ZonLab/bacends
+    pslCheck ./psl/*.psl >& pslCheck.log
+    # No problems reported by pslCheck
+    pslSort dirs raw.psl temp psl
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl \
+      bacEnds.psl /dev/null
+    liftUp bacEnds.lifted.psl /cluster/data/danRer1/jkStuff/liftAll.lft \
+           warn bacEnds.psl
+    wc -l bacEnds.lifted.psl
+    # 2955142 bacEnds.lifted.psl
+    # 3717153 bacEnds.lifted2.psl
+    rm -r temp
+# ADD REST OF BACENDs
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER1
+# (DONE, 2004-07-13, hartera)
+                                                                                
+    ssh hgwdev
+    # DNA port is "0", trans prot port is "1"
+    echo 'insert into blatServers values("danRer1", "blat8", "17779", "0", "0"); \
+          insert into blatServers values("danRer1", "blat8", "17778", "1", "0");' \
+    | hgsql -h genome-testdb hgcentraltest
+    # if you need to delete those entries
+    echo 'delete from blatServers where db="danRer1";' \
+    | hgsql -h genome-testdb hgcentraltest
+    # to check the entries:
+    echo 'select * from blatServers where db="danRer1";' \
+    | hgsql -h genome-testdb hgcentraltest
+
+# TBLASTN HG16 KNOWN GENES TRACK (DONE, 2004-07-23, hartera)
+    # Collaboration with Anthony DiBiase and Yi Zhou of Leonard Zon's lab at 
+    # the Childrens Hospital, Boston - part of the Zebrafish Genome Initiative
+    # Protein set created by Anthony DiBiase: adibiase@enders.tch.harvard.edu
+    # tblastn of proteins from hg16 knownGenePep table as query
+    # against a database of repeatmasked Zv3 zebrafish assembly
+    # Originally received tblastn output in html format and a 
+    # blastHg16.psl file which has an extra accession column at
+    # the beginning - this was created from the html
+    # Use perl script to move accession to the end of each row
+    ssh hgwdev
+    # Create a new .as for an extended psl table with a
+    # query ID column for the accession
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/pslWQueryID.as
+table pslWQueryID
+"Summary info about a patSpace alignment with a query ID addition"
+    (
+    uint    matches;      "Number of bases that match that aren't repeats"
+    uint    misMatches;   "Number of bases that don't match"
+    uint    repMatches;   "Number of bases that match but are part of repeats"
+    uint    nCount;       "Number of 'N' bases"
+    uint    qNumInsert;   "Number of inserts in query"
+    uint     qBaseInsert;  "Number of bases inserted in query"
+    uint    tNumInsert;   "Number of inserts in target"
+    uint     tBaseInsert;  "Number of bases inserted in target"
+    char[2] strand;       "+ or - for query strand. For mouse second +/- for genomic strand"
+    string  qName;        "Query sequence name"
+    uint    qSize;        "Query sequence size"
+    uint    qStart;       "Alignment start position in query"
+    uint    qEnd;         "Alignment end position in query"
+    string  tName;        "Target sequence name"
+    uint    tSize;        "Target sequence size"
+    uint    tStart;       "Alignment start position in target"
+    uint    tEnd;         "Alignment end position in target"
+    uint    blockCount;   "Number of blocks in alignment"
+    uint[blockCount] blockSizes;  "Size of each block"
+    uint[blockCount] qStarts;     "Start of each block in query."
+    uint[blockCount] tStarts;     "Start of each block in target."
+    string    queryID;         "query ID field"
+    )
+'_EOF_'
+                                                                                
+    cd $HOME/kent/src/hg/lib/
+    autoSql pslWQueryID.as pslWQueryID
+    mv pslWQueryID.h ../inc
+    # edit pslWQueryID.sql to have:
+    # index(tName(32),tStart,tEnd) instead of PRIMARY KEY (matches)
+    # commit to CVS the .as, .sql, .h and .c files
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/blast
+    echo "drop table pslWQueryID" | hgsql danRer1
+    hgsql danRer1 < $HOME/kent/src/hg/lib/pslWQueryID.sql
+    # rename table to blastHg16KG
+    echo "alter table pslWQueryID rename blastHg16KG" | hgsql danRer1
+    # process data to add to the table
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/blast
+    cd /cluster/data/danRer1/bed/ZonLab/blast
+    # put blastHg16.psl into this directory
+    perl formatPsl.pl < blastHg16.psl > blastHg16.format.tab
+    # use pslCheck.c to check file after removing accessions
+    pslCheck blastHg16NoAcc.psl
+    # there are many errors. the psl file was not correctly formed.
+    # Easiest to re-run tblasn and get regular output and use blastToPsl
+    # to get a correctly formatted psl file.
+
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/tblastn
+    cd tblastn
+    # copy hg16_kg_proteinseq.fa here. This FASTA file was provided by
+    # Anthony DiBiase and it contains 40115 predicted protein sequences from
+    # hg16 known genes - from the knownGenePep table. There are 42026 
+    # peptide sequences in hg16 knownGenePep. The FASTA file sequences were
+    # obtained proteins by merging annotation data from the kgXref table with 
+    # the sequence and name found in the knownGenePep table.
+    
+    # split known Genes proteins into smaller files
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/tblastn
+    cd tblastn
+    # copy hg16_kg_proteinseq.fa here
+                                                                                
+    mkdir /iscratch/i/danRer1/hg16kgPep
+    faSplit sequence hg16_kg_proteinseq.fa 20 \
+              /iscratch/i/danRer1/hg16kgPep/hg16kg
+                                                                                
+    cd /iscratch/i/danRer1/
+    mkdir blastdb
+    cd blastdb
+    # make formatted database for each
+    foreach c (/iscratch/i/danRer1/trfFa/*.fa)
+       set h = $c:t
+       /scratch/blast/formatdb -i $c -t  $h -n $h -p F
+    end
+    iSync
+                                                                                
+    ssh kk
+    cd /cluster/data/danRer1/bed/ZonLab/tblastn
+    mkdir blastout
+    ls -1S /iscratch/i/danRer1/hg16kgPep/*.fa > hg16kg.lst
+    ls -1S /iscratch/i/danRer1/blastdb/*.nsq | sed "s/.nsq//" > zv3.lst
+                                                                                
+    # Make blast script
+    cat > blastSome << end
+#!/bin/csh
+setenv BLASTMAT /scratch/blast/data
+/scratch/blast/blastall -p tblastn -d \$1 -i \$2 -o \$3 -e 0.01
+end
+    # << this line keeps emacs coloring happy
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > blastGsub <<end
+#LOOP
+blastSome $(path1) {check in line+ $(path2)} {check out line+ blastout/$(root1)_\$(root2).out}
+#ENDLOOP
+end
+    # << this line keeps emacs coloring happy
+    gensub2 zv3.lst hg16kg.lst blastGsub blastSpec
+    para create blastSpec
+    para try, check, push etc.
+                                                                                
+# para time
+# Completed: 5270 of 5270 jobs
+# CPU time in finished jobs:   10936672s  182277.86m  3037.96h  126.58d  0.347 y# IO & Wait Time:                707198s   11786.64m   196.44h    8.19d  0.022 y# Average job time:                2209s      36.82m     0.61h    0.03d
+# Longest job:                    11825s     197.08m     3.28h    0.14d
+# Submission to last job:         72712s    1211.87m    20.20h    0.84d
+   ssh kksilo
+   cd /cluster/data/danRer1/bed/ZonLab/tblastn
+   # convert blast results to psl
+   mkdir psl scores
+   # some query names are too long and are on 2 separate lines so blastToPsl
+   # can not parse them properly so parse out blast results so get only the
+   # nucleotide accession name for the query
+    cat << '_EOF_' > shortenQueryName.pl
+#!/usr/bin/perl -w
+use strict;
+my $found = "false"; # flag set when query line found
+open(QUERY, ">>queries.log") || die "Can not create error.log:$!";
+                                                                                
+while (<STDIN>) {
+   if (/^(Query=\s?[A-Z]{1,2}[0-9]{4,})\|\w+/) {
+      my $query = $1;
+      print QUERY;
+      $found = "true";
+      print "$query\n";
+   }
+   elsif ($found eq "true") {
+      if (/^\s+\([0-9]+\s?letters\)/) { print; }
+      else { }
+      $found = "false";
+   }
+   else {
+      print;
+                                                                                
+   }
+                                                                                
+}
+'_EOF_'
+   foreach c (blastout/*.out)
+      set t = $c:t
+      set s = $t:r
+      echo "Processing $c"
+      perl shortenQueryName.pl < $c > blastout/${s}.format
+   end
+   foreach b (blastout/*.format)
+      set t = $b:t
+      set s = $t:r
+      echo "Creating ${s}.psl"
+      /cluster/bin/i386/blastToPsl $b psl/${s}.psl -scores=scores/${s}.scores \
+                     >>& blastToPsl.log
+   end
+    # need to filter so that only results with e-value <= 1e-100 are kept
+    # edit blastToPsl.c so can add e-value option and only get results for
+    # e-values less than or equal to that value for filtering
+    mkdir filtered/Blast
+    cd filteredBlast
+    mkdir psl scores
+                                                                                
+    foreach b (../blastout/*.format)
+      set t = $b:t
+      set s = $t:r
+      echo "Creating ${s}.psl"
+      $HOME/bin/i386/blastToPsl $b psl/${s}.psl -scores=scores/${s}.scores \
+                     >>& blastToPsl.log
+    end
+
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/blast
+        lSort dirs raw.psl tmp psl
+    liftUp -type=".psl" tblastnHg16KG.psl \
+          /cluster/data/danRer1/jkStuff/liftAll.lft warn raw.psl
+    # add protein IDs to the qName
+    $HOME/bin/i386/protDat tblastnHg16KG.psl \
+            /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl \
+            /cluster/data/hg16/bed/blat.hg16KG/kg.mapNames tblastnHg16KGPep.psl
+    pslCheck tblastnHg16KGPep.psl
+    # psl is good
+    # load psl into database
+    hgLoadPsl danRer1 tblastnHg16KGPep.psl
+    # there are 173355 rows in the table
+    # need to do further filtering
+    # rename as tblastnHg16KGEval
+    hgsql -e "alter table tblastnHg16KGPep rename tblastnHg16KGEval;" danRer1
+    mv tblastnHg16KGPep.psl tblastnHg16KGEval.psl
+    foreach s (scores/*.scores)
+      cat $s >> all.scores
+    end
+    sort -k2 all.scores > all.scores.sort
+    # filter by taking just top 5 hits so for each protein query, take all the
+    # alignments associated with its top 5 hits to the whole zebrafish genome
+    # using the scores directory created by blastToPsl after filtering at an
+    # e-value threshold of 1e-100. 
+    # Heather wrote a Java program and used database tables to do this.
+    # ScoreFilter.java is in ~kent/java/src/edu/ucsc/genome/qa/filter/
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/tblastn/filteredBlast/top5
+    hgsql -e "create database qa"; danRer1
+    cat << end > blast.sql
+CREATE TABLE blast (
+    strand char(2) not null,
+    qName varchar(255) not null,
+    qStart int unsigned not null,
+    qEnd int unsigned not null,
+    tName varchar(255) not null,
+    tStart int unsigned not null,
+    tEnd int unsigned not null,
+    tSize int unsigned not null,
+    score double not null
+);
+end
+    hgsql qa < blast.sql
+    echo "load data local infile 'all.scores' into table blast" \
+         | hgsql qa
+    cat << end > blast2.sql
+CREATE TABLE blast2 (
+    strand char(2) not null,
+    qName varchar(255) not null,
+    qStart int unsigned not null,
+    qEnd int unsigned not null,
+    tName varchar(255) not null,
+    tStart int unsigned not null,
+    tEnd int unsigned not null,
+    tSize int unsigned not null,
+    score double not null
+);
+end
+    hgsql qa < blast2.sql
+    # load data into blast2 and sort
+    echo "insert into blast2 select * from blast order by qName, score, tName" \         | hgsql qa
+    # create index
+    echo "create index qName on blast2(qName)" | hgsql qa
+    cat << end > blast3.sql
+CREATE TABLE blast3 (
+    strand char(2) not null,
+    qName varchar(255) not null,
+    qStart int unsigned not null,
+    qEnd int unsigned not null,
+    tName varchar(255) not null,
+    tStart int unsigned not null,
+    tEnd int unsigned not null,
+    tSize int unsigned not null,
+    score double not null
+);
+end
+    hgsql qa < blast3.sql
+    mkdir data
+    echo "select distinct(qName) from blast" | hgsql qa -N > data/idlist
+    wc -l data/idlist
+    # 1987 qNames
+    # then run ScoreFilter program - this reads from blast2 and
+    # writes to blast3 and takes the list of qNames as input
+    source javaenv
+    javac ScoreFilter.java
+    java ScoreFilter qNames.blast.out
+    # Test case
+    echo "select score, tName from blast2 where qName = 'AB002324' limit 12;" \
+         | hgsql qa
+    echo "select * from blast3 where qName = 'AB002324';" | hgsql qa
+    # get list of qNames and tNames from blast3 to query psl
+    echo "select qName, tName from blast3;" | hgsql qa -N \
+         > data/qNametName.blast3.out
+    wc -l data/qNametName.blast3.out
+    # 5201 data/qNametName.blast3.out
+    # create psl table in qa
+    cat << end > pslBlast.sql
+CREATE TABLE pslBlast (
+    matches int unsigned not null,
+    misMatches int unsigned not null,
+    repMatches int unsigned not null,
+    nCount int unsigned not null,
+    qNumInsert int unsigned not null,
+    qBaseInsert int not null,
+    tNumInsert int unsigned not null,
+    tBaseInsert int not null,
+    strand char(2) not null,
+    qName varchar(255) not null,
+    qSize int unsigned not null,
+    qStart int unsigned not null,
+    qEnd int unsigned not null,
+    tName varchar(255) not null,
+    tSize int unsigned not null,
+    tStart int unsigned not null,
+    tEnd int unsigned not null,
+    blockCount int unsigned not null,
+    blockSizes longblob not null,
+    qStarts longblob not null,
+    tStarts longblob not null,
+    index(tName(32),tStart,tEnd)
+);
+end
+    hgsql qa < pslBlast.sql
+    # cat together psl files
+    foreach s (../psl/*.psl)
+      cat $s >> all.blast.psl
+    end
+    wc -l all.blast.psl
+    # 181405 all.blast.psl
+    # load psl data into table
+    echo "load data local infile 'all.blast.psl' into table pslBlast" \
+         | hgsql qa
+    # check all data loaded, correct number of rows
+    # select all lines with qName and tName in data/qNametName.blast3.out
+    # from this pslBlast table
+    cat << end > getSelectedPsl.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+while(<>) {
+    chomp;
+    my @names = split(/\t/);
+    my ($qName, $tName) = @names;
+    print STDERR "Querying pslBlast for query: $qName and target:$tName ... \n";    system "hgsql -N -e 'select * from pslBlast where qName = \"$qName\" and tName = \"$tName\";' qa";
+                                                                                
+}
+end
+    chmod +x getSelectedPsl.pl
+    perl getSelectedPsl.pl < data/qNametName.blast3.out > blastTop5.psl
+    # Need to remove long names
+    cat << end > shortenNames.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                               
+while(<>) {
+   my $line = $_;
+   my @row = split(/|/);
+   # qName is the 10th field in a psl file
+   if ($row[9] =~ /\|/) {
+      my @accs = split(/\|/, $row[9]);
+      my $newAcc = $accs[0];
+      foreach (my $i = 0; $i <= $#row; $i++ ) {
+         if ($i == 9) {
+            print "$newAcc\t";
+         }
+         elsif ($i == $#row) {
+            print "$row[$i]\n";
+         }
+         else {
+            print "$row[$i]\t";
+         }
+      }
+   }
+   else {
+      print $line;
+     }
+}
+end
+   chmod +x shortenNames.pl
+   perl shortenNames.pl < blastTop5.psl > blastTop5Format.psl
+   wc -l blastTop*
+   # 29091 blastTop5.psl
+   # 29091 blastTop5Format.psl
+    mkdir psl
+    mv blastTop5Format.psl ./psl
+    pslSort dirs blastTop5Sort.psl tmp psl
+    # lift up to chrom co-ordinates
+    liftUp -type=".psl" tblastnHg16KG.psl \
+          /cluster/data/danRer1/jkStuff/liftAll.lft warn blastTop5Sort.psl
+    # add protein IDs to the qName
+    $HOME/bin/i386/protDat tblastnHg16KG.psl \
+            /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl \
+            /cluster/data/hg16/bed/blat.hg16KG/kg.mapNames tblastnHg16KGPep.psl    pslCheck tblastnHg16KGPep.psl
+    # psl is good
+    # load psl into database
+    hgLoadPsl danRer1 tblastnHg16KGPep.psl
+    # previous table of alignments filtered on 1e-100 only is tblastnHg16KGEval    # compare this to current tblastnHg16KGPep table with featureBits
+    # featureBits danRer1 tblastnHg16KGEval
+    # 2783971 bases of 1459132082 (0.191%) in intersection
+    # featureBits danRer1 tblastnHg16KGPep
+    # 2397991 bases of 1459132082 (0.164%) in intersection
+    # featureBits danRer1 refGene:cds tblastnHg16KGEval
+    # 246994 bases of 1459132082 (0.017%) in intersection
+    # featureBits danRer1 refGene:cds tblastnHg16KGPep
+    # featureBits danRer1 refGene:cds tblastnHg16KGPep
+    # 250847 bases of 1459132082 (0.017%) in intersection
+    # featureBits danRer1 tblastnHg16KGPepTop3
+    # 2223873 bases of 1459132082 (0.152%) in intersection
+    # featureBits danRer1 refGene:cds tblastnHg16KGPepTop3
+    # 236309 bases of 1459132082 (0.016%) in intersection
+
+    # load sequences into table hg16_kg_proteinseq.fa has 2833 sequences
+    # less than in knownGenePep for hg16 - load all knownGenePep sequences
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/tblastn
+    echo "select * from knownGenePep;" | hgsql -N hg16 > knownGenePepHg16.out
+    # make FASTA file and add a "p" to accessions so hgc.c does not get
+    # confused with the Genbank sequences of the same name
+    awk '{ print ">"$1"p\n"$2}' knownGenePepHg16.out > knownGenePepHg16.fa
+    grep '>' knownGenePepHg16.fa | wc
+    # 42026 sequences
+    # Copy sequences to gbdb if they are not already there
+    mkdir -p /gbdb/hgFixed/tblastnKGHg16
+    ln -s /cluster/data/danRer1/bed/ZonLab/tblastn/knownGenePepHg16.fa \
+          /gbdb/hgFixed/tblastnKGHg16
+                                                                               
+    # load sequences
+    hgLoadSeq danRer1 /gbdb/hgFixed/tblastnKGHg16/knownGenePepHg16.fa
+                                                                               
+    # try taking top 3 instead of top 5
+    ssh hgwdev
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/tblastn/filteredBlast/top3
+    cd /cluster/data/danRer1/bed/ZonLab/tblastn/filteredBlast/top3
+    mkdir data
+    cp ../top5/data/idlist data/
+    cat << '_EOF_' > getTop3.csh
+#!/bin/tcsh
+                                                                               
+set db = "qa"
+set table = "blast3"
+set acc = $1
+                                                                               
+hgsql -N -e 'select qName, tName from '$table' where qName = "'$acc'" order by
+score limit 3;' $db >> data/qNametName.blast3.out
+'_EOF_'
+    # << this line makes emacs coloring happy
+     chmod +x getTop3.csh
+     cat << '_EOF_' > gsub
+#LOOP
+./getTop3.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 data/idlist single gsub jobList.csh
+    chmod +x jobList.csh
+    jobList.csh
+
+    perl ../top5/getSelectedPsl.pl < data/qNametName.blast3.out > blastTop3.psl    perl ../top5/shortenNames.pl < blastTop3.psl > blastTop3Format.psl
+    wc -l blastTop*
+    # 19823 blastTop5.psl
+    # 19823 blastTop5Format.psl
+    mkdir psl
+    mv blastTop3Format.psl ./psl
+    pslSort dirs blastTop3Sort.psl tmp psl
+    # lift up to chrom co-ordinates
+    liftUp -type=".psl" tblastnHg16KGTop3.psl \
+          /cluster/data/danRer1/jkStuff/liftAll.lft warn blastTop3Sort.psl
+    # add protein IDs to the qName
+    $HOME/bin/i386/protDat tblastnHg16KGTop3.psl \
+            /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl \
+            /cluster/data/hg16/bed/blat.hg16KG/kg.mapNames \
+            tblastnHg16KGPepTop3.psl
+    pslCheck tblastnHg16KGPepTop3.psl
+    # psl is good
+    # load psl into database
+    hgLoadPsl danRer1 tblastnHg16KGPepTop3.psl
+    # previous table of alignments filtered on 1e-100 only is tblastnHg16KGEval
+    # featureBits danRer1 tblastnHg16KGPepTop3
+    # 2223873 bases of 1459132082 (0.152%) in intersection
+    # Decided to release the Top 5 hits with tblastnHg16KGPep
+    # This could be improved upon. Brian Raney's method below is better and
+    # finding exons and reduces noise in the alignments.
+    # At a later date, only one of these tracks should be displayed.
 
 # Human Proteins - tBLASTn of hg16 knownGene (2004-07-27, braney)
+# blastHg16KG track.
     ssh kksilo
     bash
 
@@ -1262,4 +2464,4 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
     ssh hgwdev
     cd /cluster/data/danRer1/bed/tblastn.hg16KG/blastOut
     hgLoadPsl danRer1 blastHg16KG.psl
-#end Human Proteins
+#end Heman Proteins
