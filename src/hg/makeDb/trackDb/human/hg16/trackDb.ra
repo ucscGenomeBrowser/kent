@@ -1604,7 +1604,7 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UVa_ORI_0_2
-shortLabel DNA Rep/UVA 0-2
+shortLabel DNA Rep/UVA 0-2hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 group encode
 priority 40.1
@@ -1613,7 +1613,7 @@ color 60,75,60
 type bed 3
 
 track encode_UVa_ORI_2_4
-shortLabel DNA Rep/UVA 2-4
+shortLabel DNA Rep/UVA 2-4hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCODE Regions
 group encode
 priority 40.2
