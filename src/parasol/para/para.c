@@ -1,7 +1,6 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
 #include <sys/wait.h>
 #include "common.h"
-#include "errabort.h"
 #include "linefile.h"
 #include "options.h"
 #include "hash.h"
@@ -400,86 +399,6 @@ printf("%d jobs in batch\n", db->jobCount);
 return db;
 }
 
-char *hubSingleLineQuery(char *query)
-/* Send message to hub and get single line response.
- * This should be freeMem'd when done. */
-{
-int hubFd = netConnect("localhost", paraPort);
-char *result;
-
-if (hubFd < 0)
-    return NULL;
-if (!sendWithSig(hubFd, query))
-    {
-    close(hubFd);
-    return NULL;
-    }
-result = netRecieveLongString(hubFd);
-close(hubFd);
-return result;
-}
-
-struct slRef *hubMultilineQuery(char *query)
-/* Send a command with a multiline response to hub,
- * and return response as a list of strings. */
-{
-struct slRef *list = NULL, *el;
-char *line;
-int hubFd = netConnect("localhost", paraPort);
-if (hubFd > 0)
-    {
-    if (sendWithSig(hubFd, query))
-        {
-	for (;;)
-	    {
-	    line = netRecieveLongString(hubFd);
-	    if (line == NULL || line[0] == 0)
-		break;
-	    refAdd(&list, line);
-	    }
-	}
-    close(hubFd);
-    }
-slReverse(&list);
-return list;
-}
-
-boolean batchRunning(char *batchName)
-/* Return TRUE if a batch is running. */
-{
-struct slRef *lineList = hubMultilineQuery("listBatches"), *lineEl;
-boolean ret = FALSE;
-for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
-    {
-    int wordCount;
-    char *line = lineEl->val;
-    char *row[6];
-    if (line[0] != '#')
-	{
-	char *b;
-	wordCount = chopLine(line, row);
-	b = row[5];
-	if (wordCount < 6 || b[0] != '/')
-	    errAbort("paraHub and para out of sync on listBatches");
-	if (sameString(b, batchName))
-	    ret = TRUE;
-	}
-    freez(&lineEl->val);
-    }
-slFreeList(&lineList);
-return ret;
-}
-
-boolean thisBatchRunning()
-/* Return true if this batch is running */
-{
-char batchDir[512];
-
-if (getcwd(batchDir, sizeof(batchDir)) == NULL)
-    errAbort("Couldn't get current directory");
-strcat(batchDir, "/");
-return batchRunning(batchDir);
-}
 
 void paraCreate(char *batch, char *jobList)
 /* Create a batch database from a job list. */
@@ -491,8 +410,6 @@ struct jobDb *db;
 struct job *job;
 char backup[512];
 
-if (thisBatchRunning())
-    errAbort("This batch is currently running.  Please para stop first.");
 makeDir("err");
 AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
@@ -514,6 +431,24 @@ atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
 
+char *hubSingleLineQuery(char *query)
+/* Send message to hub and get single line response.
+ * This should be freeMem'd when done. */
+{
+int hubFd = netConnect("localhost", paraPort);
+char *result;
+
+if (hubFd < 0)
+    return NULL;
+if (!sendWithSig(hubFd, query))
+    {
+    close(hubFd);
+    return NULL;
+    }
+result = netRecieveLongString(hubFd);
+close(hubFd);
+return result;
+}
 
 boolean submitJob(struct job *job, char *curDir)
 /* Attempt to submit job. */
@@ -543,6 +478,31 @@ void statusOutputChanged()
 {
 errAbort("\n%s output format changed, please update markQueuedJobs in para.c", 
 	statusCommand);
+}
+
+struct slRef *hubMultilineQuery(char *query)
+/* Send a command with a multiline response to hub,
+ * and return response as a list of strings. */
+{
+struct slRef *list = NULL, *el;
+char *line;
+int hubFd = netConnect("localhost", paraPort);
+if (hubFd > 0)
+    {
+    if (sendWithSig(hubFd, query))
+        {
+	for (;;)
+	    {
+	    line = netRecieveLongString(hubFd);
+	    if (line == NULL || line[0] == 0)
+		break;
+	    refAdd(&list, line);
+	    }
+	}
+    close(hubFd);
+    }
+slReverse(&list);
+return list;
 }
 
 int markQueuedJobs(struct jobDb *db)
@@ -764,12 +724,16 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 if (pushCount > 0)
     printf("\n");
 atomicWriteBatch(db, batch);
-printf("updated job database on disk\n");
+uglyf("(updated job database on disk)\n");
 if (pushCount > 0)
+    {
+    printf("\n");
     printf("Pushed Jobs: %d\n", pushCount);
+    }
 if (retryCount > 0)
     printf("Retried jobs: %d\n", retryCount);
 freeResults(&resultsHash);
+uglyf("(freed results)\n");
 return db;
 }
 
@@ -778,6 +742,7 @@ void paraPush(char *batch)
 {
 struct jobDb *db = paraCycle(batch);
 jobDbFree(&db);
+uglyf("(freed database)\n");
 }
 
 void paraShove(char *batch)
@@ -931,36 +896,6 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
-void fetchOpenFile(int fd, char *fileName)
-/* Read everything you can from socket and output to file. */
-{
-FILE *f = mustOpen(fileName, "w");
-char buf[4*1024];
-int size;
-
-while ((size = read(fd, buf, sizeof(buf))) > 0)
-    mustWrite(f, buf, size);
-if (size < 0)
-    errnoAbort("Couldn't read all into %s", fileName);
-
-carefulClose(&f);
-}
-
-void fetchFile(char *host, char *sourceName, char *destName)
-/* Fetch small file. */
-{
-struct dyString *dy = newDyString(1024);
-int sd = netConnect(host, paraPort);
-if (sd >= 0)
-    {
-    dyStringPrintf(dy, "fetch %s %s", cuserid(NULL), sourceName);
-    if (sendWithSig(sd, dy->string))
-	fetchOpenFile(sd, destName);
-    close(sd);
-    }
-dyStringFree(&dy);
-}
-
 void printErrFile(struct submission *sub, struct jobResult *jr)
 /* Print error file if it exists. */
 {
@@ -968,7 +903,11 @@ char localName[64];
 sprintf(localName, "err/%s", jr->jobId);
 if (!fileExists(localName))
     {
-    fetchFile(jr->host, jr->errFile, localName);
+    struct dyString *dy = newDyString(256);
+    dyStringPrintf(dy, "rcp %s:%s %s", jr->host, jr->errFile, localName);
+    if (system(dy->string) != 0)
+        warn("'%s' failed", dy->string);
+    freeDyString(&dy);
     }
 if (fileExists(localName))
     {
@@ -1379,68 +1318,68 @@ command = argv[1];
 batch = "batch";
 if (strchr(batch, '/') != NULL)
     errAbort("para needs to be run in the same directory as the batch file.");
-if (sameWord(command, "create") || sameWord(command, "creat"))
+if (sameString(command, "create"))
     {
     if (argc != 3)
         usage();
     paraCreate(batch, argv[2]);
     }
-else if (sameWord(command, "check"))
+else if (sameString(command, "check"))
     {
     paraCheck(batch);
     }
-else if (sameWord(command, "push"))
+else if (sameString(command, "push"))
     {
     paraPush(batch);
     }
-else if (sameWord(command, "shove"))
+else if (sameString(command, "shove"))
     {
     paraShove(batch);
     }
-else if (sameWord(command, "make"))
+else if (sameString(command, "make"))
     {
     if (argc != 3)
         usage();
     paraMake(batch, argv[2]);
     }
-else if (sameWord(command, "try"))
+else if (sameString(command, "try"))
     {
     maxPush = 10;
     paraPush(batch);
     }
-else if (sameWord(command, "stop"))
+else if (sameString(command, "stop"))
     {
     paraStop(batch);
     }
-else if (sameWord(command, "chill"))
+else if (sameString(command, "chill"))
     {
     paraChill(batch);
     }
-else if (sameWord(command, "hung"))
+else if (sameString(command, "hung"))
     {
     paraListState(batch, jaHung);
     }
-else if (sameWord(command, "crashed"))
+else if (sameString(command, "crashed"))
     {
     paraListState(batch, jaCrashed);
     }
-else if (sameWord(command, "failed"))
+else if (sameString(command, "failed"))
     {
     paraListFailed(batch);
     }
-else if (sameWord(command, "finished"))
+else if (sameString(command, "finished"))
     {
     paraListState(batch, jaFinished);
     }
-else if (sameWord(command, "problems") || sameWord(command, "problem"))
+else if (sameString(command, "problems") || sameString(command, "problem"))
     {
     paraProblems(batch);
     }
-else if (sameWord(command, "running"))
+else if (sameString(command, "running"))
     {
     paraRunning(batch);
     }
-else if (sameWord(command, "time") || sameWord(command, "times"))
+else if (sameString(command, "time") || sameString(command, "times"))
     {
     paraTimes(batch);
     }
