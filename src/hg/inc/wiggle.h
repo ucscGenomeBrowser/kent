@@ -255,7 +255,6 @@ enum wigDataFetchType
 struct wiggleDataStream
 /*	object definition to access wiggle data, in DB or from file	*/
     {
-    unsigned long long maxOutput;  /*	maximum items fetched (TBD)	*/
     /********************	public methods	*****************/
     void (*freeAscii)(struct wiggleDataStream *wDS);
 			/*	free the ascii list results 	*/
@@ -267,6 +266,9 @@ struct wiggleDataStream
 			/*	free the data array results 	*/
     void (*freeConstraints)(struct wiggleDataStream *wDS);
 			/*	unset all the constraints	*/
+    void (*setMaxOutput)(struct wiggleDataStream *wDS,
+	unsigned long long maxOut);
+			/*	set the maximum # of values to return */
     void (*setPositionConstraint)(struct wiggleDataStream *wDS,
 	int winStart, int winEnd);
 			/*	work only within specified position */
@@ -309,6 +311,7 @@ struct wiggleDataStream
     struct wiggleStats *stats;	/*	list of wiggle stats	*/
     struct wiggleArray *array;	/*	one big in-memory array of data	*/
 
+    unsigned long long maxOutput;  /*	maximum items fetched	*/
     boolean isFile;		/*	TRUE == it is a file, FALSE == DB */
     boolean bedConstrained;	/*	signal to output routines */
     boolean useDataConstraint;	/*	to simplify checking if it is on */
