@@ -20,8 +20,8 @@ type psl xeno
 url http://www.eva.mpg.de/genetics/annotation_track_chimp/custom_track_chimp/MPI-sg_jun02/$S/$$.html
 
 track chimpBac
-shortLabel Chimp BAC
-longLabel Pan troglodytes BAC track
+shortLabel Chimp BAC ends
+longLabel Pan troglodytes BAC ends 
 priority 28.2
 visibility hide
 color 100,50,0
