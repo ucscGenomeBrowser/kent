@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgExpDistance.c,v 1.3 2003/10/07 05:47:51 kent Exp $";
+static char const rcsid[] = "$Id: hgExpDistance.c,v 1.4 2004/07/16 22:13:32 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -260,6 +260,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 conn = sqlConnect(database);
 slReverse(&geneList);
+geneCount = slCount(geneList);
+printf("Have %d elements in %s\n", geneCount, posTable);
 
 weights = getWeights(realExpCount);
 
@@ -271,6 +273,8 @@ printf("Got %d unique elements in %s\n", geneCount, posTable);
 sqlDisconnect(&conn);	/* Disconnect because next step is slow. */
 
 
+if (geneCount < 1)
+    errAbort("ERROR: unique gene count less than one ?");
 /* Get an array for sorting. */
 AllocArray(geneArray, geneCount);
 for (gene = geneList,geneIx=0; gene != NULL; gene = gene->next, ++geneIx)
