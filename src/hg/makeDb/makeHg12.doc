@@ -31,7 +31,8 @@ into gs.XX/buildXX/ directory.
      report any errors back to Richa and Greg at NCBI.
 
 3) Convert fa files into UCSC style fa files and place in "contigs" directory
-inside the gs.XX/buildXX directory 
+   inside the gs.XX/buildXX directory 
+   Note: 7/23/02 ASH: edited chrM.fa header to ">chrM" not ">gi|17981852|ref|NC_001807.4|"
 
 	mkdir contigs
 	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_buildXX.fa contigs
@@ -204,7 +205,7 @@ o - Create the trackDb table as so
        cvs commit makefile
 
 
-LOAD REPEAT MASKS (TODO)
+LOAD REPEAT MASKS (DONE 7/22/02)
     Load the RepeatMasker .out files into the database with:
        cd ~/oo
        hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
@@ -221,7 +222,7 @@ Load chromosome sequence info into database
      ssh hgwdev
      hgsql hg12 < ~/src/hg/lib/chromInfo.sql
      cd ~/oo
-     hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib ?/chr*.fa ??/chr*.fa
+     hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib {?,?}/chr*.fa
 
 Store o+o info in database.
      cd /cluster/store1/gs.13/build30
@@ -503,7 +504,7 @@ o - Load this into the database as so
 	hgLoadBed hg12 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (TODO)
+PRODUCING GENSCAN PREDICTIONS (DONE 7/23/02)
 	mkdir -p ~/oo/bed/genscan
 	cd ~/oo/bed/genscan
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
@@ -515,13 +516,14 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 	were processed to convert all lower case bases into N and named 
 	as *.fa.masked and placed under genscan/mContigs).
 
-		mkdir -p ~/oo/bed/genscan/mContigs
-		cd ~/oo/bed/genscan/mContigs
-		foreach f (/cluster/store1/gs.13/build30/?/*/*.fa \
-			   /cluster/store1/gs.13/build30/??/*/*.fa)
-		  set m = $f:t.masked
-		  tr 'abcdghkmnrstvwy' 'NNNNNNNNNNNNNNN' < $f > $m
-		end
+                mkdir -p ~/oo/bed/genscan/mContigs
+                cd ~/oo/bed/genscan/mContigs
+                foreach f (/cluster/store3/gs.13/build30/?/*/NT_??????.fa \
+                           /cluster/store3/gs.13/build30/??/*/NT_??????.fa \
+                           /cluster/store3/gs.13/build30/M/chrM.fa)
+                  set m = $f:t.masked
+                  tr 'abcdghkmnrstvwy' 'NNNNNNNNNNNNNNN' < $f > $m
+                end
 
         Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
         cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
@@ -533,12 +535,12 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
         Generate a list file, genome.list, of all the contigs
 	*that do not have pure Ns* (due to heterochromatin, unsequencable 
         stuff) which would cause genscan to run forever.
-		rm -f genome.list
-		touch genome.list
-		foreach f (./mContigs/*.masked)
-		  egrep '[ACGT]' $f > /dev/null
-		  if ($status == 0) echo $f >> genome.list
-		end
+                rm -f genome.list
+                touch genome.list
+                foreach f (./mContigs/*.masked)
+                  egrep '[ACGT]' $f > /dev/null
+                  if ($status == 0) echo $f >> genome.list
+                end
         
 	Create template file, gsub, for gensub2.  For example (3 lines file):
                 #LOOP
@@ -558,7 +560,7 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
         If they have problems, debug and fix your program, template file,
         commands, etc. and try again.  If they are OK, then issue the following
         command, which will ask Parasol to start all the remaining jobs.  For
-	hg12, there were 2043 jobs in total.
+	hg12, there were 1396 jobs in total.
                 para push
         Issue either one of the following two commands to check the
         status of the cluster and your jobs, until they are done.
@@ -566,10 +568,14 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
                 para check
 
 o - Convert these to chromosome level files as so:     
-     cd ~/oo
-     cd bed/genscan
-     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
-     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+     cd ~/oo/bed/genscan
+     perl -wpi.bak -e 's/NNNM/chrM/g' gtf/chrM.fa.gtf subopt/chrM.fa.bed 
+     perl -wpi.bak -e 's/^>NNNM/>chrM/' pep/chrM.fa.pep
+     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/NT*.gtf
+     cat gtf/chrM.fa.gtf >> genscan.gtf
+     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/NT*.bed > \
+       /dev/null
+     cat subopt/chrM.fa.bed >> genscanSubopt.bed
      cat pep/*.pep > genscan.pep
 
 o - Load into the database as so:
@@ -577,7 +583,7 @@ o - Load into the database as so:
      cd ~/oo/bed/genscan
      ldHgGene hg12 genscan genscan.gtf
      hgPepPred hg12 generic genscanPep genscan.pep
-     hgLoadBed hg12 genscanSubopt genscanSubopt.bed
+     hgLoadBed hg12 genscanSubopt genscanSubopt.bed > /dev/null
 
 CREATE GOLDEN TRIANGLE (todo)
 
