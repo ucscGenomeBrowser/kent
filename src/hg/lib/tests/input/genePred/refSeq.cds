@@ -5,3 +5,5 @@ NM_000072.1	133..1551
 NM_000017.1	33..1271
 # regression for bug when CDS ends after length of mRNA.
 NM_001604	418..1728
+NM_177399	246..647
+NM_003101	1397..3049

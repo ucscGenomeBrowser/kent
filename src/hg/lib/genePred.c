@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.40 2004/03/13 05:35:58 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.41 2004/03/15 08:50:42 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -641,6 +641,10 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (cdsStart < 0); iBlk++)
         {
         /* in gap before block, set to start of block */
         cdsStart = psl->tStarts[iBlk];
+        if (gene->strand[0] == '+')
+            cds->startComplete = FALSE;
+        else
+            cds->endComplete = FALSE;
         }
     else if (rnaCdsStart < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
@@ -657,10 +661,17 @@ if (cdsStart < 0)
 /* find query block or gap containing end and map to target */
 for (iBlk = 0; (iBlk < psl->blockCount) && (cdsEnd < 0); iBlk++)
     {
-    if (rnaCdsEnd < psl->qStarts[iBlk])
+    if (rnaCdsEnd <= psl->qStarts[iBlk])
         {
-        /* in gap before block, set to end of gap */
-        cdsEnd = psl->tStarts[iBlk];
+        /* in gap before block, set to start of gap */
+        if (iBlk == 0)
+            cdsEnd = psl->tStarts[0] - 1;  /* end of gene */
+        else
+            cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+        if (gene->strand[0] == '+')
+            cds->endComplete = FALSE;
+        else
+            cds->startComplete = FALSE;
         }
     else if (rnaCdsEnd < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
@@ -672,14 +683,36 @@ if (cdsEnd < 0)
     {
     /* after last block, set to end of that block */
     cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    if (gene->strand[0] == '+')
+        cds->endComplete = FALSE;
+    else
+        cds->startComplete = FALSE;
     }
 
 if (psl->strand[1] == '-')
     reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
 
-assert(cdsStart <= cdsEnd);
-gene->cdsStart = cdsStart;
-gene->cdsEnd = cdsEnd;
+if (cdsStart < cdsEnd)
+    {
+    gene->cdsStart = cdsStart;
+    gene->cdsEnd = cdsEnd;
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        gene->cdsStartStat = (cds->startComplete) ? cdsComplete : cdsIncomplete;
+        gene->cdsEndStat = (cds->endComplete) ? cdsComplete : cdsIncomplete;;
+        }
+    }
+else
+    {
+    /* CDS not aligned */
+    gene->cdsStart = gene->txEnd;
+    gene->cdsEnd = gene->txEnd;
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        gene->cdsStartStat = cdsUnknown;
+        gene->cdsEndStat = cdsUnknown;
+        }
+    }
 }
 
 static void annotateCds(struct psl *psl, struct genbankCds* cds,
@@ -688,7 +721,7 @@ static void annotateCds(struct psl *psl, struct genbankCds* cds,
 {
 if (cds == NULL)
     {
-    /* no CDS, set to end */
+    /* no CDS, set to zero-length at end */
     gene->cdsStart = psl->tEnd;
     gene->cdsEnd = psl->tEnd;
     if (gene->optFields & genePredCdsStatFld)
@@ -718,11 +751,6 @@ else
         adjCds.endComplete = FALSE;
         }
     mapCdsToGenome(psl, &adjCds, gene);
-    if (gene->optFields & genePredCdsStatFld)
-        {
-        gene->cdsStartStat = (adjCds.startComplete) ? cdsComplete : cdsIncomplete;
-        gene->cdsEndStat = (adjCds.endComplete) ? cdsComplete : cdsIncomplete;;
-        }
     }
 }
 
