@@ -8,12 +8,13 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.6 2003/12/15 18:21:58 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.7 2004/01/07 07:22:16 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"abbr", OPTION_STRING},
     {"prefix", OPTION_STRING},
+    {"replace", OPTION_BOOLEAN},
     {"test", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -22,6 +23,7 @@ static struct optionSpec optionSpecs[] = {
 char *abbr = NULL;
 char *prefix = NULL;
 boolean test = FALSE;
+boolean replace = FALSE;
 
 char seqTable[] =
 /* This keeps track of a sequence. */
@@ -65,8 +67,17 @@ if (s != NULL && fluff != NULL)
     }
 }
 
-boolean loadFaSeq(
-            struct lineFile *faLf, HGID extFileId, FILE *seqTab)
+HGID seqLoaded(struct sqlConnection* conn, char* acc)
+/* determine if a sequence is already in the db, id if it is or 0 */
+{
+char accBuf[512], query[512];
+safef(query, sizeof(query), "select id from seq where acc = '%s'",
+      sqlEscapeTabFileString2(accBuf, acc));
+return sqlQuickNum(conn, query);
+}
+
+boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, FILE *seqTab,
+                  struct sqlConnection* conn)
 /* Add next sequence in fasta file to tab file */
 {
 off_t faOffset, faEndOffset;
@@ -74,8 +85,8 @@ int faSize;
 char *s, *faLine;
 int faLineSize, faNameSize;
 int dnaSize = 0;
-char faAcc[48];
-HGID seqId;
+char faAcc[256], faAccBuf[513];
+HGID seqId = 0;
 int prefixLen = 0;
 
 /* Get Next FA record. */
@@ -105,12 +116,29 @@ if (faSeekNextRecord(faLf))
 faEndOffset = faLf->bufOffsetInFile + faLf->lineStart;
 faSize = (int)(faEndOffset - faOffset); 
 
-seqId = hgNextId();
+if (replace)
+    {
+    seqId = seqLoaded(conn, faAcc);
+    if (seqId != 0)
+        {
+        char query[512];
+        safef(query, sizeof(query), "UPDATE seq SET size=%d, extFile=%d, "
+              "file_offset=%lld, file_size=%d", dnaSize, extFileId, faOffset, faSize);
+        sqlUpdate(conn, query);
+        }
+    }
 
-/* note: sqlDate column is empty */
+if (seqId == 0)
+    {
+    /* add to tab file */
+    seqId = hgNextId();
+    
+    /* note: sqlDate column is empty */
 
-fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
-        seqId, faAcc, dnaSize, extFileId, faOffset, faSize);
+    fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
+            seqId, sqlEscapeTabFileString2(faAccBuf, faAcc),
+            dnaSize, extFileId, faOffset, faSize);
+    }
 return TRUE;
 }
 
@@ -129,7 +157,7 @@ if (!faSeekNextRecord(faLf))
 lineFileReuse(faLf);
 
 /* Loop around for each record of FA */
-while (loadFaSeq(faLf, extFileId, seqTab))
+while (loadFaSeq(faLf, extFileId, seqTab, conn))
     count++;
 
 printf("%u sequences\n", count);
@@ -178,6 +206,7 @@ errAbort(
   "Options:\n"
   "  -abbr=junk - remove junk from the start of each seq accession\n"
   "  -prefix=xxx - prepend \"xxx-\" to each seq accession\n"
+  "  -replace - replace existing sequences with the same id (SLOW!!)\n"
   "  -test - do not load databse table\n"
   );
 }
@@ -190,6 +219,7 @@ if (argc < 2)
     usage();
 abbr = optionVal("abbr", NULL);
 prefix = optionVal("prefix", NULL);
+replace = optionExists("replace");
 test = optionExists("test");
 hgLoadSeq(argv[1], argc-2, argv+2);
 return 0;
