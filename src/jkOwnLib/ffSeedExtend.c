@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.20 2004/06/03 21:14:35 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.21 2004/09/27 21:49:28 angie Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1296,7 +1296,6 @@ for (range = rangeList; range != NULL; range = range->next)
     // uglyf("RANGE (%d+%d)[%d%c%d]\n", range->tStart, range->tEnd, range->qStart, (isRc ? '-' : '+'), range->qEnd);
     bun->qSeq = qSeq;
     bun->genoSeq = tSeq;
-    bun->data = range;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
