@@ -6,10 +6,11 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.8 2004/11/20 16:06:15 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.9 2005/01/26 16:05:50 kent Exp $";
 
 FILE *errLog = NULL;
 int errCode = 0;
+FILE *nonRoboLog = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +22,7 @@ errAbort(
   "options:\n"
   "   -errLog=err.log - Put errors into err.log\n"
   "   -errCode=NNN - Only write out to errLog when status code matches errCode\n"
+  "   -nonRobot=file - Write out non-robot CGI lines to file\n"
   "   -verbose=N  - Set verbosity level.  0 for silent, 1 for input data warnings, \n"
   "                 2 for status.\n"
   );
@@ -29,6 +31,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"errLog", OPTION_STRING},
    {"errCode", OPTION_INT},
+   {"nonRobot", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -239,6 +242,10 @@ else if (startsWith("Python-urllib", program))
     return TRUE;
 else if (startsWith("LWP::Simple", program))
     return TRUE;
+else if (startsWith("httpunit", program))
+    return TRUE;
+else if (startsWith("Teleport Pro", program))
+    return TRUE;
 if (roboHash == NULL)
     {
     roboHash = hashNew(0);
@@ -248,6 +255,7 @@ if (roboHash == NULL)
     hashAdd(roboHash, "pc-glass-3.ucsd.edu", NULL);
     hashAdd(roboHash, "64-170-97-98.ded.pacbell.net", NULL);
     hashAdd(roboHash, "ce.hosts.jhmi.edu", NULL);
+    hashAdd(roboHash, "technetium.hgsc.bcm.tmc.edu", NULL);
     }
 return hashLookup(roboHash, ip) != NULL;
 }
@@ -438,6 +446,8 @@ for (i=0; i<logCount; ++i)
 		char *progNameStart = ll->url + strlen("/cgi-bin/");
 		char *progNameEnd = strchr(progNameStart, '?');
 		char *progName;
+		if (!thisIsRobot && nonRoboLog != NULL)
+		   fprintf(nonRoboLog, "%s\n", line);
 		if (progNameEnd == NULL)
 		    progName = cloneString(progNameStart);
 		else
@@ -480,7 +490,7 @@ for (i=0; i<logCount; ++i)
 			/* Here we try to determine the popularity of each 
 			 * database (organism+assembly) by looking at
 			 * initial entries from hgGateway into hgTracks. */
-			if (ll->referrer != NULL && stringIn("hgGateway", ll->referrer))
+			if (ll->referrer != NULL && !thisIsRobot && stringIn("hgGateway", ll->referrer))
 			    {
 			    cv = hashFindVal(cgiHash, "db");
 			    if (cv != NULL)
@@ -727,6 +737,8 @@ optionInit(&argc, argv, options);
 if (optionExists("errLog"))
     errLog = mustOpen(optionVal("errLog", NULL), "w");
 errCode = optionInt("errCode", 0);
+if (optionExists("nonRobot"))
+    nonRoboLog = mustOpen(optionVal("nonRobot", NULL), "w");
 if (argc < 2)
     usage();
 hgAccessCrawl(argc-1, argv+1);
