@@ -679,22 +679,22 @@ dm1.downloadDir = dm1
     hgLoadSeq dm1 /gbdb/dm1/fuguSeq/fugu_v3_mask.fasta
 
 
-# BLASTZ D.PSEUDOOBSCURA (DONE 11/14/03 angie)
+# BLASTZ D.PSEUDOOBSCURA (DONE 8/3/04 angie)
     ssh kksilo
-    mkdir /cluster/data/dm1/bed/blastz.dp1.2003-11-14
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
+    mkdir /cluster/data/dm1/bed/blastz.dp2.2004-08-03
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03
+    ln -s blastz.dp2.2004-08-03 /cluster/data/dm1/bed/blastz.dp2
     cat << '_EOF_' > DEF
 # D.melanogaster vs. D.pseudoobscura
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/bin/i386
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
 
 ALIGN=blastz-run
 BLASTZ=blastz
 BLASTZ_H=2000
-#BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
 BLASTZ_ABRIDGE_REPEATS=0
 
 # TARGET - D. melanogaster
-SEQ1_DIR=/cluster/bluearc/drosophila/dm1/nib
+SEQ1_DIR=/iscratch/i/dm1/nib
 # unused: SEQ1_RMSK=
 SEQ1_SMSK=
 SEQ1_FLAG=-drosophila
@@ -703,7 +703,7 @@ SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY - D. pseudoobscura
-SEQ2_DIR=/cluster/bluearc/drosophila/dp1/trfFa
+SEQ2_DIR=/iscratch/i/dp2/nib
 # unused: SEQ2_RMSK=
 SEQ2_SMSK=
 SEQ2_FLAG=-drosophila
@@ -711,7 +711,7 @@ SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/dm1/bed/blastz.dp1.2003-11-14
+BASE=/cluster/data/dm1/bed/blastz.dp2.2004-08-03
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -719,7 +719,6 @@ CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 
-#DEBUG=1
 '_EOF_'
     # << this line keeps emacs coloring happy
     # run bash shell if you don't already:
@@ -729,185 +728,151 @@ SEQ2_LEN=$BASE/S2.len
     ~angie/hummus/make-joblist $DEF > $BASE/run/j
     sh ./xdir.sh
     cd run
-    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    sed -e 's#^#/cluster/bin/penn/#' j > j2
     wc -l j*
     head j2
     mv j2 j
     # cluster run
     ssh kk
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/run
     para create j
     para try, check, push, check, ....
 #Completed: 15939 of 15939 jobs
-#Average job time:                  16s       0.27m     0.00h    0.00d
-#Longest job:                      287s       4.78m     0.08h    0.00d
-#Submission to last job:           829s      13.82m     0.23h    0.01d
+#Average job time:                  13s       0.21m     0.00h    0.00d
+#Longest job:                      294s       4.90m     0.08h    0.00d
+#Submission to last job:          1118s      18.63m     0.31h    0.01d
 
     # back in the bash shell on kksilo...
-    mkdir /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run.1
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run.1
-    ~angie/hummus/do.out2lav $DEF > j
+    mkdir /cluster/data/dm1/bed/blastz.dp2.2004-08-03/run.1
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/run.1
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > j
     # small cluster run
-    ssh kkr1u00
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/run.1
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/run.1
     para create j
     para try, check, push, check, ....
 #Completed: 21 of 21 jobs
-#Average job time:                  44s       0.73m     0.01h    0.00d
-#Longest job:                       71s       1.18m     0.02h    0.00d
-#Submission to last job:           111s       1.85m     0.03h    0.00d
+#Average job time:                  18s       0.30m     0.01h    0.00d
+#Longest job:                       25s       0.42m     0.01h    0.00d
+#Submission to last job:            55s       0.92m     0.02h    0.00d
     cd ..
     rm -r raw
 
-    # Translate .lav to axt, with dp1 in scaffold coords for collaborators:
+    # Translate .lav to axt, with dp2 in scaffold coords for collaborators:
     ssh kksilo
-    # oops, lavToAxt relies on nib (not fa), so make dp1 scaffoldNib first:
-    mkdir /cluster/data/dp1/scaffoldsNib
-    foreach f (/cluster/data/dp1/scaffolds/*.fa)
-      faToNib -softMask $f /cluster/data/dp1/scaffoldsNib/$f:t:r.nib
-    end
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
-    mkdir axtScaffold
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03
+    mkdir axtChrom
     foreach c (lav/*)
       pushd $c
       set chr=$c:t
-      set out=axtScaffold/$chr.axt
+      set out=axtChrom/$chr.axt
       echo "Translating $chr lav to $out"
       cat `ls -1 *.lav | sort -g` \
-        | lavToAxt stdin /cluster/data/dm1/nib /cluster/data/dp1/scaffoldsNib \
-            stdout \
+        | lavToAxt stdin /cluster/data/dm1/nib /cluster/data/dp2/nib stdout \
         | axtSort stdin ../../$out
       popd
     end
-    # Lift query coords to chrom-level for browser display
-    mkdir axtChrom
-    foreach f (axtScaffold/chr*.axt)
-      liftUp -axtQ axtChrom/$f:t /cluster/data/dp1/jkStuff/liftAll.lft warn $f
-    end
 
 
-# CHAIN & NET DM1/DP1 BLASTZ ALIGNMENTS (DONE 11/24/03 angie)
-    ssh kkr1u00
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
-    mkdir -p axtChainScaffoldQ/run1
-    cd axtChainScaffoldQ/run1
-    ls -1S ../../axtScaffold/*.axt > input.lst
-    echo '#LOOP' > gsub
-    echo 'doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}' >> gsub
-    echo '#ENDLOOP' >> gsub
-    gensub2 input.lst single gsub spec
-    echo '#\!/bin/csh' > doChain
-    echo 'axtChain $1 /cluster/data/dm1/nib /cluster/data/dp1/scaffoldsNib $2 > $3' \
-    >> doChain
+# CHAIN YAKUBA BLASTZ (DONE 8/3/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -verbose=0 $1 \
+  /iscratch/i/dm1/nib \
+  /iscratch/i/dp2/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
     chmod a+x doChain
-    mkdir chain out
-    para create spec
-    para try, check, push, check, ...
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
 #Completed: 11 of 11 jobs
-#Average job time:                  27s       0.45m     0.01h    0.00d
-#Longest job:                       49s       0.82m     0.01h    0.00d
-#Submission to last job:            49s       0.82m     0.01h    0.00d
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest job:                       14s       0.23m     0.00h    0.00d
+#Submission to last job:            14s       0.23m     0.00h    0.00d
 
+    # now on the cluster server, sort chains
     ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
 
-    mkdir -p ../axtChainChrom/chain
-    foreach f (chain/chr*.chain)
-      liftUp -chainQ ../axtChainChrom/chain/$f:t \
-        /cluster/data/dp1/jkStuff/liftAll.lft warn $f
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
     end
-    liftUp -chainQ ../axtChainChrom/all.chain \
-      /cluster/data/dp1/jkStuff/liftAll.lft warn all.chain
 
+    # Load chains into database
     ssh hgwdev
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom/chain
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain/chain
     foreach i (*.chain)
-      set c = $i:r
-      hgLoadChain dm1 ${c}_chainDp1 $i
-      echo done $c
-    end
-
-    # Create the nets.  You can do this while the database is loading
-    ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
-    # Oops, need a dp1/scaffold.sizes
-    cp /dev/null /cluster/data/dp1/scaffold.sizes
-    foreach f (/cluster/data/dp1/scaffolds/*.fa)
-      set s = `faSize $f | awk '{print $1;}'`
-      echo "$f:t:r\t$s" >> /cluster/data/dp1/scaffold.sizes
-    end
-    # First do a crude filter that eliminates many chains so the
-    # real chainer has less work to do.
-    mkdir preNet
-    cd chain
-    foreach i (*.chain)
-      echo preNetting $i
-      chainPreNet $i /cluster/data/dm1/chrom.sizes \
-        /cluster/data/dp1/scaffold.sizes ../preNet/$i
-    end
-    cd ..
-    # Run the main netter, putting the results in n1.
-    mkdir n1 
-    cd preNet
-    foreach i (*.chain)
-      set n = $i:r.net
-      echo primary netting $i
-      chainNet $i -minSpace=1 /cluster/data/dm1/chrom.sizes \
-        /cluster/data/dp1/scaffold.sizes ../n1/$n /dev/null
-    end
-    cd ..
-    # Classify parts of net as syntenic, nonsyntenic etc.
-    cat n1/*.net | netSyntenic stdin noClass.net
-
-    # The final step of net creation needs the database.
-    # Best to wait for the database load to finish if it
-    # hasn't already.
-    ssh hgwdev
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
-    netClass -liftQ=/cluster/data/dp1/jkStuff/liftAll.lft -noAr \
-      noClass.net dm1 dp1 fruitfly.net
-    rm -r n1 noClass.net
-    netFilter -minGap=10 fruitfly.net > fruitflyFilt.net
-    liftUp -netQ ../axtChainChrom/fruitflyFiltChrom.net \
-      /cluster/data/dp1/jkStuff/liftAll.lft warn fruitflyFilt.net
-    hgLoadNet dm1 netDp1 ../axtChainChrom/fruitflyFiltChrom.net
-    # Move back to the file server to create axt files corresponding
-    # to the net.
-    ssh kksilo
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom
-    mkdir ../axtNetChrom
-    netSplit fruitflyFiltChrom.net fruitflyNet
-    cd fruitflyNet
-    foreach i (*.net)
         set c = $i:r
-        netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/dm1/nib \
-          /cluster/data/dp1/nib ../../axtNetChrom/$c.axt
-        echo done ../axt/$c.axt
+        echo loading $c
+        hgLoadChain dm1 ${c}_chainDp2 $i
     end
-    cd ..
-    rm -r fruitflyNet
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ
-    mkdir ../axtNetScaffoldQ
-    netSplit fruitflyFilt.net fruitflyNet
-    cd fruitflyNet
-    foreach i (*.net)
-        set c = $i:r
-        netToAxt -maxGap=300 $i ../chain/$c.chain /cluster/data/dm1/nib \
-          /cluster/data/dp1/scaffoldsNib ../../axtNetScaffoldQ/$c.axt
-        echo done ../axtNetScaffoldQ/$c.axt
-    end
-    cd ..
-    rm -r fruitflyNet
-    # Load up the axtNet (alignment score wiggle) track:
+
+
+# NET PSEUDOOBSCURA BLASTZ (DONE 8/3/04 angie)
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
     ssh hgwdev
-    mkdir /gbdb/dm1/axtNetDp1
-    foreach f (/cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtNetChrom/chr*.axt)
-      ln -s $f /gbdb/dm1/axtNetDp1
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
+    netClass -noAr noClass.net dm1 dp2 pseudoobscura.net \
+    |& g -v "table gap doesn't exist"
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
+    rm noClass.net
+    netFilter -syn pseudoobscura.net > pseudoobscuraSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain
+    netFilter -minGap=10 pseudoobscura.net |  hgLoadNet dm1 netDp2 stdin
+    netFilter -minGap=10 pseudoobscuraSyn.net \
+    | hgLoadNet dm1 netSyntenyDp2 stdin
+
+
+# MAKE VSDP2 DOWNLOADABLES (TODO 8/3/04 angie)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDp2
+    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDp2
+    gzip -c \
+      /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain/all.chain \
+      > chain.gz
+    gzip -c \
+      /cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtChain/fruitflyFilt.net \
+      > net.gz
+    mkdir axtNet
+    foreach f (/cluster/data/dm1/bed/blastz.dp2.2004-08-03/axtNet/chr*axt)
+      gzip -c $f > axtNet/$f:t.gz
     end
-    hgLoadAxt dm1 axtNetDp1
+    # Make a README.txt which explains the files & formats.
 
 
 PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
@@ -1515,23 +1480,6 @@ end
     cp -p /cluster/data/dm1/zips/*.zip bigZips
 
 
-# ADD BLASTZ/CHAIN/NET DOWNLOADABLE FILES (DONE 12/1/03 angie)
-    ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/dm1/vsDp1
-    cd /usr/local/apache/htdocs/goldenPath/dm1/vsDp1
-    gzip -c \
-      /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ/all.chain \
-      > chain.gz
-    gzip -c \
-      /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ/fruitflyFilt.net \
-      > net.gz
-    mkdir axtNet
-    foreach f (/cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtNetScaffoldQ/chr*axt)
-      gzip -c $f > axtNet/$f:t.gz
-    end
-    # Make a README.txt which explains the files & formats.
-
-
 # ANOPHELES ECORES FROM GENOSCOPE (DONE 11/10/03 angie)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/anophelesEcores
@@ -1897,33 +1845,33 @@ axtFilter -notQ=chrUn_random $1 \
     end
 
 
-# GENERATE DP1 MAF FOR MULTIZ FROM NET (DONE 5/27/04 angie)
+# GENERATE DP2 MAF FOR MULTIZ FROM NET (TODO 8/3/04 angie)
     ssh kolossus
-    cd /cluster/data/dm1/bed/blastz.dp1.2003-11-14
+    cd /cluster/data/dm1/bed/blastz.dp2.2004-08-03
     mkdir mafNet
     foreach f (axtNetChrom/chr*.axt)
       set maf = mafNet/$f:t:r.mp.maf
       axtSort $f stdout \
       | axtToMaf stdin \
-            /cluster/data/dm1/chrom.sizes /cluster/data/dp1/chrom.sizes \
-            $maf -tPrefix=dm1. -qPrefix=dp1.
+            /cluster/data/dm1/chrom.sizes /cluster/data/dp2/chrom.sizes \
+            $maf -tPrefix=dm1. -qPrefix=dp2.
     end
 
 
-# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA (DONE 5/27/04 angie)
+# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA (TODO 8/3/04 angie)
     # put the MAFs on bluearc
     ssh kksilo
     mkdir -p /cluster/bluearc/multiz.fly/my
     cp /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/mafNet/*.maf \
       /cluster/bluearc/multiz.fly/my
     mkdir -p /cluster/bluearc/multiz.fly/mp
-    cp /cluster/data/dm1/bed/blastz.dp1.2003-11-14/mafNet/*.maf \
+    cp /cluster/data/dm1/bed/blastz.dp2.2004-08-03/mafNet/*.maf \
       /cluster/bluearc/multiz.fly/mp
 
 
     ssh kki
-    mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp1
-    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp1
+    mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp2
+    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2
     mkdir myp
     # Wrapper script required because of stdout redirect:
     cat << '_EOF_' > doMultiz
@@ -1935,7 +1883,7 @@ axtFilter -notQ=chrUn_random $1 \
     rm -f jobList
     foreach file (/cluster/bluearc/multiz.fly/my/*.maf) 
       set root=$file:t:r:r
-      echo "doMultiz /cluster/bluearc/multiz.fly/mp/${root}.mp.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp/${root}.maf" >> jobList
+      echo "doMultiz /cluster/bluearc/multiz.fly/mp/${root}.mp.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp/${root}.maf" >> jobList
     end
     para create jobList
     para try, check, push, check
@@ -1948,19 +1896,19 @@ axtFilter -notQ=chrUn_random $1 \
     rm -r /cluster/bluearc/multiz.fly
 
     # zip it for download
-    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp1.zip myp/*.maf
+    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp2.zip myp/*.maf
 
     # setup external files for database reference
     ssh hgwdev
-    mkdir -p /gbdb/dm1/multizDroYak1Dp1
-    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp/*.maf \
-      /gbdb/dm1/multizDroYak1Dp1
+    mkdir -p /gbdb/dm1/multizDroYak1Dp2
+    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp/*.maf \
+      /gbdb/dm1/multizDroYak1Dp2
     # load into database
-    hgLoadMaf -warn dm1 multizDroYak1Dp1
+    hgLoadMaf -warn dm1 multizDroYak1Dp2
     # put it out for download
-    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1
-    cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1
-    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp1.zip .
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2
+    cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2
+    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp2.zip .
     md5sum *.zip > md5sum.txt
 
 
@@ -2322,19 +2270,19 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 
 
-# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (DONE 6/12/04 angie)
+# MULTIZ MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (TODO 8/3/04 angie)
     # put the MAFs on bluearc
     ssh kksilo
     mkdir -p /cluster/bluearc/multiz.flymo/myp
-    cp /cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp/*.maf \
+    cp /cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp/*.maf \
       /cluster/bluearc/multiz.flymo/myp
     mkdir -p /cluster/bluearc/multiz.flymo/ma
     cp /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/mafNet/*.maf \
       /cluster/bluearc/multiz.flymo/ma
 
     ssh kki
-    mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1
-    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1
+    mkdir /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1
+    cd /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1
     mkdir mypa
     # Wrapper script required because of stdout redirect:
     cat << '_EOF_' > doMultiz
@@ -2346,7 +2294,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     rm -f jobList
     foreach file (/cluster/bluearc/multiz.flymo/myp/*.maf) 
       set root=$file:t:r:r
-      echo "doMultiz /cluster/bluearc/multiz.flymo/ma/${root}.ma.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/${root}.maf" >> jobList
+      echo "doMultiz /cluster/bluearc/multiz.flymo/ma/${root}.ma.maf $file /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/mypa/${root}.maf" >> jobList
     end
     para create jobList
     para try, check, push, check
@@ -2361,15 +2309,15 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     rm -r /cluster/bluearc/multiz.flymo
 
     # zip it for download
-    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp1AnoGam1.zip mypa/*.maf
+    zip -j /cluster/data/dm1/zips/multizDm1DroYak1Dp2AnoGam1.zip mypa/*.maf
 
     # setup external files for database reference
     ssh hgwdev
-    mkdir /gbdb/dm1/mzDy1Dp1Ag1_phast
-    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/chr*.maf \
-      /gbdb/dm1/mzDy1Dp1Ag1_phast/
+    mkdir /gbdb/dm1/mzDy1Dp2Ag1_phast
+    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/mypa/chr*.maf \
+      /gbdb/dm1/mzDy1Dp2Ag1_phast/
     # load into database
-    hgLoadMaf -warn dm1 mzDy1Dp1Ag1_phast
+    hgLoadMaf -warn dm1 mzDy1Dp2Ag1_phast
     # load pairwise mafs for wigMaf track
     cd /gbdb/dm1
     mkdir -p d_yakuba_mypa d_pseudoobscura_mypa a_gambiae_mypa
@@ -2377,7 +2325,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     ln -s /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/mafNet/*.maf \
       /gbdb/dm1/d_yakuba_mypa
     hgLoadMaf -WARN dm1 d_yakuba_mypa
-    ln -s /cluster/data/dm1/bed/blastz.dp1.2003-11-14/mafNet/*.maf \
+    ln -s /cluster/data/dm1/bed/blastz.dp2.2004-08-03/mafNet/*.maf \
       /gbdb/dm1/d_pseudoobscura_mypa
     hgLoadMaf -WARN dm1 d_pseudoobscura_mypa
     ln -s /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/mafNet/*.maf \
@@ -2385,9 +2333,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgLoadMaf -WARN dm1 a_gambiae_mypa
 
     # put it out for download
-    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1AnoGam1
-    cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1AnoGam1
-    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp1AnoGam1.zip .
+    mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2AnoGam1
+    cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp2AnoGam1
+    mv /cluster/data/dm1/zips/multizDm1DroYak1Dp2AnoGam1.zip .
     md5sum *.zip > md5sum.txt
 
 
@@ -2411,15 +2359,15 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     ssh eieio
     mkdir /cluster/data/dm1/bed/phastCons
     cd /cluster/data/dm1/bed/phastCons
-    MAF=/cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp
+    MAF=/cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp
     # first extract chromosome by chromosome
     for file in ${MAF}/*.maf ; do \
-	msa_view $file --in-format MAF --out-format SS --order dm1,droYak1,dp1 \
+	msa_view $file --in-format MAF --out-format SS --order dm1,droYak1,dp2 \
 	    --unordered-ss  > `basename $file .maf`.ss ;\
     done
     # now aggregate for whole genome
     ls chr*.ss > fnames
-    msa_view "*fnames" -i SS --aggregate dm1,droYak1,dp1 -o SS --unordered-ss > all.ss
+    msa_view "*fnames" -i SS --aggregate dm1,droYak1,dp2 -o SS --unordered-ss > all.ss
 
     # now estimate parameters; should be very fast in this case
     phyloFit --msa all.ss --tree "((1,2),3)" --msa-format SS --subst-mod REV --nrates 10 --out-root rev-dg --output-tree
@@ -2455,7 +2403,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # SS format.
 
     # some vars used below
-    MAF=/cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp
+    MAF=/cluster/data/dm1/bed/multiz.dm1droYak1dp2/myp
     FA=/cluster/data/dm1
     WINSIZE=1000000
     WINOVERLAP=0
@@ -2465,7 +2413,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 	chr=`echo $root | sed 's/chr//'` ;\
 	echo $file $root $chr ;\
 	mkdir -p SS/$chr ;\
-	msa_split $file -i MAF -o SS -O dm1,droYak1,dp1 -M ${FA}/$chr/$root.fa \
+	msa_split $file -i MAF -o SS -O dm1,droYak1,dp2 -M ${FA}/$chr/$root.fa \
 	    -w ${WINSIZE},${WINOVERLAP} -r SS/$chr/$$root -I 1000 -d 1 -B 5000 ;\
     done
     # (this is worth doing as a little cluster job with mammalian genomes,
@@ -2621,7 +2569,7 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
     # should gzip or even delete contents of SS directory when done
 
 
-# PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (DONE 6/15/04 angie)
+# PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA/ANOPHELES (TODO 8/3/04 angie)
     # step 1: fit phylogenetic model, with rate variation (discrete
     # gamma model) first we need to extract the sufficient stats for
     # the phylogenetic model from the MAFs.  In this case, we don't
@@ -2631,15 +2579,15 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
     mkdir /cluster/data/dm1/bed/phastCons4way
     cd /cluster/data/dm1/bed/phastCons4way
     mkdir unordered
-    foreach f (/cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/chr*.maf)
+    foreach f (/cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/mypa/chr*.maf)
       /cluster/bin/phast/msa_view $f --in-format MAF --out-format SS \
-            --order dm1,droYak1,dp1,anoGam1 \
+            --order dm1,droYak1,dp2,anoGam1 \
             --unordered-ss  > unordered/$f:t:r.ss
     end
     # aggregate for whole genome
     ls unordered/chr*.ss > fnames
     /cluster/bin/phast/msa_view "*fnames" -i SS \
-      --aggregate dm1,droYak1,dp1,anoGam1 -o SS --unordered-ss \
+      --aggregate dm1,droYak1,dp2,anoGam1 -o SS --unordered-ss \
       > all.ss
     # estimate parameters; should be very fast in this case
     /cluster/bin/phast/phyloFit --msa all.ss --tree "(((1,2),3),4)" \
@@ -2685,13 +2633,13 @@ $PHAST/phastCons $file rev-dg.mod --nrates 10 --viterbi PREDICTIONS/$chrom/$root
     set WINSIZE=1000000
     set WINOVERLAP=0
     mkdir SS
-    foreach f (/cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/*.maf)
+    foreach f (/cluster/data/dm1/bed/multiz.dm1droYak1dp2anoGam1/mypa/*.maf)
       set chr=$f:t:r
       set c=`echo $chr | sed 's/chr//'`
       echo $f $chr $c
       mkdir SS/$c
       /cluster/bin/phast/msa_split $f -i MAF -o SS \
-        -O dm1,droYak1,dp1,anoGam1 -M /cluster/data/dm1/$c/$chr.fa \
+        -O dm1,droYak1,dp2,anoGam1 -M /cluster/data/dm1/$c/$chr.fa \
         -w ${WINSIZE},${WINOVERLAP} -r SS/$c/$chr -I 1000 -d 1 -B 5000
     end
 
@@ -2748,13 +2696,13 @@ rm $TMP/$root.pp
             -wibFile=wib/${chr}_phastCons4way stdin
     end
     ssh hgwdev
-    mkdir -p /gbdb/dm1/wib/mzDy1Dp1Ag1_phast
+    mkdir -p /gbdb/dm1/wib/mzDy1Dp2Ag1_phast
     cd /cluster/data/dm1/bed/phastCons4way
     chmod 775 . wib
     chmod 664 wib/*.wib
-    ln -s `pwd`/wib/*.wib /gbdb/dm1/wib/mzDy1Dp1Ag1_phast/
-    hgLoadWiggle dm1 mzDy1Dp1Ag1_phast_wig \
-      -pathPrefix=/gbdb/dm1/wib/mzDy1Dp1Ag1_phast wib/*.wig
+    ln -s `pwd`/wib/*.wib /gbdb/dm1/wib/mzDy1Dp2Ag1_phast/
+    hgLoadWiggle dm1 mzDy1Dp2Ag1_phast_wig \
+      -pathPrefix=/gbdb/dm1/wib/mzDy1Dp2Ag1_phast wib/*.wig
 
     # step 3:  predictions of conserved elements
     # (could do these at the same time as step 2, but we want to use
