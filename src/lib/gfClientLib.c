@@ -534,10 +534,9 @@ for (i=0; i<last; ++i)
          maxScore = score;
 	 maxPos = i;
 	 }
-    else
+    else if (score < maxScore - maxDown)
          {
-	 if (i - maxPos >= maxDown)
-	     break;
+	 break;
 	 }
     }
 *pEndQ = q+maxPos+1;
@@ -563,10 +562,9 @@ for (i=-1; i>=last; --i)
          maxScore = score;
 	 maxPos = i;
 	 }
-    else
+    else if (score < maxScore - maxDown)
          {
-	 if (maxPos - i>= maxDown)
-	     break;
+	 break;
 	 }
     }
 *pStartQ = q+maxPos;
@@ -582,7 +580,6 @@ void clumpToHspRange(struct gfClump *clump, aaSeq *qSeq, int tileSize,
 {
 struct gfSeqSource *target = clump->target;
 aaSeq *tSeq = target->seq;
-int maxDown = 10;
 AA *qs, *ts, *qe, *te;
 int maxScore = 0, maxPos = 0, score, pos;
 struct gfHit *hit;
@@ -734,8 +731,9 @@ aaSeq *targetSeq;
 struct ssBundle *bun;
 int tileSize = gfs[0]->tileSize;
 struct trans3 *t3;
+int hitCount;
 
-gfTransFindClumps(gfs, qSeq, clumps);
+gfTransFindClumps(gfs, qSeq, clumps, &hitCount);
 for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
@@ -942,8 +940,9 @@ struct gfRange *rangeList = NULL, *range;
 int tileSize = gfs[0]->tileSize;
 bioSeq *targetSeq;
 struct ssBundle *bun;
+int hitCount;
 
-gfTransTransFindClumps(gfs, qTrans->trans, clumps);
+gfTransTransFindClumps(gfs, qTrans->trans, clumps, &hitCount);
 for (qFrame = 0; qFrame<3; ++qFrame)
     {
     for (tFrame=0; tFrame<3; ++tFrame)

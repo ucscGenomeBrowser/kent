@@ -824,7 +824,7 @@ static struct gfClump *clumpNear(struct genoFind *gf, struct gfClump *oldClumps,
 struct gfClump *newClumps = NULL, *clump, *nextClump;
 struct gfHit *hit, *nextHit;
 int tileSize = gf->tileSize;
-int lastT;
+bits32 lastT;
 
 for (clump = oldClumps; clump != NULL; clump = nextClump)
     {
@@ -838,11 +838,10 @@ for (clump = oldClumps; clump != NULL; clump = nextClump)
     for (hit = oldHits; hit != NULL; hit = nextHit)
         {
 	nextHit = hit->next;
-	if (hit->tStart - lastT > 512)
+	if (hit->tStart > 512 + lastT)
 	     {
 	     if (clumpSize >= minMatch)
 	         {
-		 uglyf("Breaking clump hit->tStart %d, lastT %d<BR>\n", hit->tStart, lastT);
 		 slReverse(&newHits);
 		 clump->hitList = newHits;
 		 newHits = NULL;
@@ -929,7 +928,7 @@ return clumpList;
 }
 
 
-struct gfClump *gfFindDnaClumps(struct genoFind *gf, struct dnaSeq *seq)
+struct gfClump *gfFindDnaClumps(struct genoFind *gf, struct dnaSeq *seq, int *retHitCount)
 /* Find clumps associated with one sequence. */
 {
 struct gfHit *hitList = NULL, *hit;
@@ -943,6 +942,7 @@ bits32 bVal;
 int listSize;
 bits32 qStart, tStart, *tList;
 int minMatch = gf->minMatch;
+int hitCount = 0;
 
 if (size < (minMatch+1) * (gf->tileSize+1))
     {
@@ -972,14 +972,16 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	hit->tStart = tList[j];
 	hit->diagonal = hit->tStart + seq->size - qStart;
 	slAddHead(&hitList, hit);
+	++hitCount;
 	}
     }
 cmpQuerySize = seq->size;
 slSort(&hitList, gfHitCmpDiagonal);
+*retHitCount = hitCount;
 return clumpHits(gf, hitList, minMatch);
 }
 
-struct gfClump *gfFindPepClumps(struct genoFind *gf, aaSeq *seq)
+struct gfClump *gfFindPepClumps(struct genoFind *gf, aaSeq *seq, int *retHitCount)
 /* Find clumps associated with one sequence. */
 {
 struct gfHit *hitList = NULL, *hit;
@@ -995,6 +997,7 @@ bits32 bVal;
 int listSize;
 bits32 qStart, tStart, *tList;
 int minMatch = gf->minMatch;
+int hitCount = 0;
 
 for (i=0; i<=lastStart; ++i)
     {
@@ -1011,38 +1014,52 @@ for (i=0; i<=lastStart; ++i)
 	hit->tStart = tList[j];
 	hit->diagonal = hit->tStart + seq->size - qStart;
 	slAddHead(&hitList, hit);
+	++hitCount;
 	}
     }
 cmpQuerySize = seq->size;
 slSort(&hitList, gfHitCmpDiagonal);
+*retHitCount = hitCount;
 return clumpHits(gf, hitList, minMatch);
 }
 
-struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq)
+struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, int *retHitCount)
 /* Find clump whether its peptide or dna. */
 {
 if (gf->isPep)
-    return gfFindPepClumps(gf, seq);
+    return gfFindPepClumps(gf, seq, retHitCount);
 else
-    return gfFindDnaClumps(gf, seq);
+    return gfFindDnaClumps(gf, seq, retHitCount);
 }
 
-void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3])
+void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], int *retHitCount)
 /* Find clumps associated with one sequence in three translated reading frames. */
 {
 int frame;
+int oneHit;
+int hitCount = 0;
 for (frame = 0; frame < 3; ++frame)
-    clumps[frame] = gfFindPepClumps(gfs[frame], seq);
+    {
+    clumps[frame] = gfFindPepClumps(gfs[frame], seq, &oneHit);
+    hitCount += oneHit;
+    }
+*retHitCount = hitCount;
 }
 
 void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
-	struct gfClump *clumps[3][3])
+	struct gfClump *clumps[3][3], int *retHitCount)
 /* Find clumps associated with three sequences in three translated 
  * reading frames. Used for translated/translated protein comparisons. */
 {
 int qFrame;
+int oneHit;
+int hitCount = 0;
 
 for (qFrame = 0; qFrame<3; ++qFrame)
-    gfTransFindClumps(gfs, seqs[qFrame], clumps[qFrame]);
+    {
+    gfTransFindClumps(gfs, seqs[qFrame], clumps[qFrame], &oneHit);
+    hitCount += oneHit;
+    }
+*retHitCount = hitCount;
 }
 

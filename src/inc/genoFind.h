@@ -20,6 +20,10 @@
 #include "aliType.h"
 #endif
 
+#ifndef LOCALMEM_H
+#include "localmem.h"
+#endif 
+
 enum gfConstants {
     gfMinMatch = 3,
     gfMaxGap = 2,
@@ -107,17 +111,17 @@ void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNam
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
 /* Make translated (6 frame) index for all nib files. */
 
-struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
+struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
-struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq);
+struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq, int *retHitCount);
 /* Find clumps associated with one sequence. */
 
-void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3]);
+void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], int *retHitCount);
 /* Find clumps associated with one sequence in three translated reading frames. */
 
 void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3], 
-	struct gfClump *clumps[3][3]);
+	struct gfClump *clumps[3][3], int *retHitCount);
 /* Find clumps associated with three sequences in three translated 
  * reading frames. Used for translated/translated protein comparisons. */
 
