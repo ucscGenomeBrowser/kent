@@ -3,6 +3,12 @@
 #include "options.h"
 #include "htmlPage.h"
 
+static void expandUrl(char *old, char *rel)
+/* Clone rel string since it gets written to, and call
+ * expandUrl. */
+{
+}
+
 static void testHtmlExpandUrl()
 /* DO some testing of expandRelativeUrl. */
 {

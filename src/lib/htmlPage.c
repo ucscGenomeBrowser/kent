@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.8 2004/06/09 23:59:50 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.9 2004/06/15 17:49:50 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -981,17 +981,21 @@ struct dyString *dy = NULL;
 char *hostName, *pastHostName;
 
 /* some mailto: have SGML char encoding, e.g &#97; to hide from spambots */
+url = cloneString(url);	/* Clone because asciiEntityDecode may modify it. */
 asciiEntityDecode(url, url, strlen(url));
 
 /* In easiest case URL is actually absolute and begins with
  * protocol.  Just return clone of url. */
 if (startsWith("http:", url) || startsWith("https:", url))
-    return cloneString(url);
+    return url;
 
 /* If it's got a colon, but no http or https, then it's some
  * protocol we don't understand, like a mailto.  Just return NULL. */
 if (strchr(url, ':') != NULL)
+    {
+    freez(&url);
     return NULL;
+    }
 
 /* Figure out first character past host name. Load up
  * return string with protocol (if any) and host name. */
@@ -1039,6 +1043,7 @@ else
 	dyStringAppend(dy, url);
 	}
     }
+freez(&url);
 return dyStringCannibalize(&dy);
 }
 
