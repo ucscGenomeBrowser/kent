@@ -96,19 +96,22 @@ struct hash *ra, *raList = readRa(raFile, NULL);
 struct link *linkList = NULL, *link;
 for (ra = raList; ra != NULL; ra = ra->next)
     {
-    if (checkDatabases(linkOptionalField(ra, "databases")) 
-    	&& checkTables(linkOptionalField(ra, "tables"), conn))
+    if (linkOptionalField(ra, "hide") == NULL)
 	{
-	AllocVar(link);
-	link->priority = atof(linkRequiredField(ra, "priority"));
-	link->name = linkRequiredField(ra, "name");
-	link->shortLabel = linkRequiredField(ra, "shortLabel");
-	link->idSql = linkRequiredField(ra, "idSql");
-	link->nameSql = linkOptionalField(ra, "nameSql");
-	link->nameFormat = linkOptionalField(ra, "nameFormat");
-	link->url = linkRequiredField(ra, "url");
-	link->useHgsid = (linkOptionalField(ra, "hgsid") != NULL);
-	slAddHead(&linkList, link);
+	if (checkDatabases(linkOptionalField(ra, "databases")) 
+	    && checkTables(linkOptionalField(ra, "tables"), conn))
+	    {
+	    AllocVar(link);
+	    link->priority = atof(linkRequiredField(ra, "priority"));
+	    link->name = linkRequiredField(ra, "name");
+	    link->shortLabel = linkRequiredField(ra, "shortLabel");
+	    link->idSql = linkRequiredField(ra, "idSql");
+	    link->nameSql = linkOptionalField(ra, "nameSql");
+	    link->nameFormat = linkOptionalField(ra, "nameFormat");
+	    link->url = linkRequiredField(ra, "url");
+	    link->useHgsid = (linkOptionalField(ra, "hgsid") != NULL);
+	    slAddHead(&linkList, link);
+	    }
 	}
     }
 slSort(&linkList, linkCmpPriority);

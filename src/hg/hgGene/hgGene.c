@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.12 2003/10/14 07:18:03 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.13 2003/10/14 15:58:00 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -294,7 +294,8 @@ static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
-if (section != NULL && section->exists(section, conn, curGeneId))
+if (section != NULL && hashLookup(section->settings, "hide") == NULL
+   && section->exists(section, conn, curGeneId))
      slAddHead(pList, section);
 }
 
