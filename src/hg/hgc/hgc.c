@@ -4353,7 +4353,7 @@ if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
 
 if (containsStringNoCase(otherDb, "zoo"))
     {
-    printf("<P><A HREF='/cgi-bin/hgTracks?db=%s'>Go to the mini browser for the aligned %s sequence</A><BR>\n", otherDb, otherOrg);
+    printf("<P><A HREF='/cgi-bin/hgTracks?db=%s'>Go to the browser view of the %s</A><BR>\n", otherDb, otherOrg);
     }
 
 printTrackHtml(tdb);
