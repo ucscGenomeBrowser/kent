@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.14 2004/12/25 03:02:02 jill Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.15 2005/03/03 01:15:14 acs Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +34,9 @@ errAbort(
   "   -suffix=suf - append suffix to each id to avoid confusion with mRNAs\n"
   "    use to define the genes.\n"
   "   -peptides - out the translation of the CDS to a peptide sequence.\n"
+  "   -exonIndices - output indices of exon boundaries after sequence name.\n"
+  "    E.g., \"103 243 290\" says positions 1-103 are from the first exon,\n"
+  "    positions 104-243 are from the second exon, etc.\n"
 #if 0
   /* Not implemented, not sure it's worth the complexity */
   "If frame\n"
@@ -53,12 +56,13 @@ static struct optionSpec options[] = {
    {"pslOut", OPTION_STRING},
    {"suffix", OPTION_STRING},
    {"peptides", OPTION_BOOLEAN},
+   {"exonIndices", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 
 /* parsed from command line */
-boolean weird, cdsUpper, cdsOnly, peptides, keepMasking;
+boolean weird, cdsUpper, cdsOnly, peptides, keepMasking, exonIndices;
 char *cdsOut = NULL;
 char *pslOut = NULL;
 char *suffix = "";
@@ -200,15 +204,19 @@ dnaTranslateSome(cdsBuf->string, cdsBuf->string, (cdsBuf->stringSize+2)/3);
 faWriteNext(faFh, name, cdsBuf->string, strlen(cdsBuf->string));
 }
 
-void processGenePred(struct genePred *gp, struct dyString *dnaBuf, struct dyString *cdsBuf,
+void processGenePred(struct genePred *gp, struct dyString *dnaBuf, 
+                     struct dyString *cdsBuf, struct dyString *indBuf,
                      FILE* faFh, FILE* cdsFh, FILE* pslFh)
 /* output genePred DNA, check for weird splice sites if requested */
 {
 int i;
-char name[512];
+char name[1024];
+int index = 0;
 
 /* Load exons one by one into dna string. */
 dyStringClear(dnaBuf);
+if (exonIndices)
+    dyStringClear(indBuf);
 for (i=0; i<gp->exonCount; ++i)
     {
     int start = gp->exonStarts[i];
@@ -221,6 +229,11 @@ for (i=0; i<gp->exonCount; ++i)
         struct dnaSeq *seq = hDnaFromSeq(gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
         dyStringAppendN(dnaBuf, seq->dna, size);
         freeDnaSeq(&seq);
+        if (exonIndices)
+          {
+          index += size;
+          dyStringPrintf(indBuf, " %d", index);
+          }
         }
     }
 
@@ -232,7 +245,8 @@ if ((gp->cdsStart < gp->cdsEnd)
     && (cdsUpper || cdsOnly || peptides || (cdsFh != NULL)))
     processCds(gp, dnaBuf, cdsBuf, cdsFh);
 
-safef(name, sizeof(name), "%s%s", gp->name, suffix);
+safef(name, sizeof(name), "%s%s%s", gp->name, suffix, 
+      exonIndices ? indBuf->string : "");
 if (cdsOnly)
     faWriteNext(faFh, name, cdsBuf->string, cdsBuf->stringSize);
 else if (peptides)
@@ -244,7 +258,8 @@ if (pslFh != NULL)
     writePsl(gp, pslFh);
 }
 
-void getRnaForTable(char *table, char *chrom, struct dyString *dnaBuf, struct dyString *cdsBuf,
+void getRnaForTable(char *table, char *chrom, struct dyString *dnaBuf, 
+                    struct dyString *cdsBuf, struct dyString *indBuf,
                     FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for a genePred table */
 {
@@ -262,14 +277,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* Load gene prediction from database. */
     struct genePred *gp = genePredLoad(row+rowOffset);
     if ((!weird) || hasWeirdSplice(gp))
-        processGenePred(gp, dnaBuf, cdsBuf, faFh, cdsFh, pslFh);
+        processGenePred(gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void getRnaForTables(char *table, char *chrom, struct dyString *dnaBuf, struct dyString *cdsBuf,
+void getRnaForTables(char *table, char *chrom, struct dyString *dnaBuf, 
+                     struct dyString *cdsBuf, struct dyString *indBuf,
                      FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for one for possibly splite genePred table */
 {
@@ -279,10 +295,11 @@ if (sameString(chrom, "all"))
 else
     chroms = slNameNew(chrom);
 for (chr = chroms; chr != NULL; chr = chr->next)
-    getRnaForTable(table, chr->name, dnaBuf, cdsBuf, faFh, cdsFh, pslFh);
+    getRnaForTable(table, chr->name, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
 }
 
-void getRnaForFile(char *table, char *chrom, struct dyString *dnaBuf, struct dyString *cdsBuf, 
+void getRnaForFile(char *table, char *chrom, struct dyString *dnaBuf, 
+                   struct dyString *cdsBuf, struct dyString *indBuf,
                    FILE *faFh, FILE* cdsFh, FILE* pslFh)
 /* get RNA for a genePred file */
 {
@@ -293,7 +310,7 @@ while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
     {
     struct genePred *gp = genePredLoad(row);
     if (all || sameString(gp->chrom, chrom))
-        processGenePred(gp, dnaBuf, cdsBuf, faFh, cdsFh, pslFh);
+        processGenePred(gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 lineFileClose(&lf); 
@@ -304,6 +321,7 @@ void getRnaPred(char *database, char *table, char *chrom, char *faOut)
 {
 struct dyString *dnaBuf = dyStringNew(16*1024);
 struct dyString *cdsBuf = NULL;
+struct dyString *indBuf = NULL;
 FILE *faFh = mustOpen(faOut, "w");
 FILE *cdsFh = NULL;
 FILE *pslFh = NULL;
@@ -314,15 +332,18 @@ if (cdsOut != NULL)
     cdsFh = mustOpen(cdsOut, "w");
 if (pslOut != NULL)
     pslFh = mustOpen(pslOut, "w");
+if (exonIndices)
+   indBuf = dyStringNew(512);
 hSetDb(database);
 
 if (fileExists(table))
-    getRnaForFile(table, chrom, dnaBuf, cdsBuf, faFh, cdsFh, pslFh);
+    getRnaForFile(table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
 else
-    getRnaForTables(table, chrom, dnaBuf, cdsBuf, faFh, cdsFh, pslFh);
+    getRnaForTables(table, chrom, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
 
 dyStringFree(&dnaBuf);
 dyStringFree(&cdsBuf);
+dyStringFree(&indBuf);
 carefulClose(&pslFh);
 carefulClose(&cdsFh);
 carefulClose(&faFh);
@@ -343,6 +364,7 @@ keepMasking = optionExists("keepMasking");
 pslOut = optionVal("pslOut", NULL); 
 suffix = optionVal("suffix", suffix); 
 peptides = optionExists("peptides");
+exonIndices = optionExists("exonIndices");
 if (cdsOnly && peptides)
     errAbort("can't specify both -cdsOnly and -peptides");
 if (cdsUpper && keepMasking)
