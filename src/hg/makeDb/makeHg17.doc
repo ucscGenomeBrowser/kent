@@ -8543,6 +8543,21 @@ zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.
 # exonArrows off
 # type bed 6 .
 
+    # also do conserved noncoding (CNS) track
+    featureBits hg17 -bed=possibleCoding.bed -or twinscan:exon xenoMrna mrna intronEst 
+    # (add SGP, exoniphy possib. others if available)
+    # now filter out all phastCons elements that overlap
+    overlapSelect -nonOverlapping possibleCoding.bed all.bed cns.bed
+    hgLoadBed hg17 cns cns.bed
+
+# track cns
+# shortLabel CNS
+# longLabel Conserved Non-Coding (Cons Elements Minus Predicted Coding)
+# priority 109.11
+# group compGeno
+# visibility hide
+# type bed 4
+
 
 #  Load firstEF track (DONE 2004-08-18 braney)
     ssh hgwdev
