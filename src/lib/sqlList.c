@@ -10,7 +10,7 @@
 #include "sqlList.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: sqlList.c,v 1.14 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: sqlList.c,v 1.15 2003/05/27 20:31:34 sugnet Exp $";
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 
@@ -685,7 +685,15 @@ for (;;)
 
 void sqlStringDynamicArray(char *s, char ***retArray, int *retSize)
 /* Convert comma separated list of strings to an dynamically allocated
- * array, which should be freeMem()'d when done. */
+ * array, which should be freeMem()'d when done. As a speed option all
+ * of the elements in the array are needMem()'d at the same time. This 
+ * means that all the entries are free()'d by calling freeMem() on the
+ * first element. For example:
+ * sqlStringDynamicArray(s, &retArray, &retSize);
+ * DoSomeFunction(retArray, retSize);
+ * freeMem(retArray[0]);
+ * freeMem(retArray);
+ */
 {
 char **sArray, **dArray = NULL;
 int size;
