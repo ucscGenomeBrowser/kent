@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.8 2005/03/03 00:25:20 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.9 2005/03/08 00:28:15 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -11,10 +11,7 @@
 # - better logging: right now it just passes stdout and stderr,
 #   leaving redirection to a logfile up to the user
 # - reciprocal best?
-# - compress more files in the cleanup step
 # - more options: -bigClusterHub, -smallClusterHub, -buildDir ...?  
-# - make it churn out a download README.txt from template, inserting
-#   params from DEF.
 
 use Getopt::Long;
 use warnings;
@@ -34,6 +31,7 @@ my $paraRun = ("$para make jobList\n" .
 	       "$para time > run.time\n" .
 	       'cat run.time');
 my $dbHost = 'hgwdev';
+my $centralDbSql = "ssh -x $dbHost hgsql -h genome-testdb -A -N hgcentraltest";
 my $clusterData = '/cluster/data';
 my $trackBuild = 'bed';
 my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
@@ -55,6 +53,7 @@ use vars qw/
     $opt_workhorse
     $opt_debug
     $opt_verbose
+    $opt_readmeOnly
     $opt_help
     /;
 
@@ -231,6 +230,7 @@ sub checkOptions {
 		      "workhorse=s",
 		      "verbose=n",
 		      "debug",
+		      "readmeOnly",
 		      "help");
   &usage(1) if (!$ok);
   &usage(0, 1) if ($opt_help);
@@ -921,6 +921,224 @@ sub makeDownloads {
 }
 
 
+sub getAssemblyInfo {
+  # Do a quick dbDb lookup to get assembly descriptive info for README.txt.
+  my ($db) = @_;
+  my $query = "select genome,description,sourceName from dbDb " .
+              "where name = \"$db\";";
+  my $line = `echo '$query' | $centralDbSql`;
+  chomp $line;
+  my ($genome, $date, $source) = split("\t", $line);
+  return ($genome, $date, $source);
+}
+
+
+sub getBlastzParams {
+  # Return parameters in BLASTZ_Q file, or defaults, for README.txt.
+  my $matrix = 
+"           A    C    G    T
+      A   91 -114  -31 -123
+      C -114  100 -125  -31
+      G  -31 -125  100 -114
+      T -123  -31 -114   91";
+  my $o = 400;
+  my $e = 30;
+  if ($defVars{'BLASTZ_Q'}) {
+    open(Q, $defVars{'BLASTZ_Q'})
+      || die "Couldn't open BLASTZ_Q file $defVars{BLASTZ_Q}: $!\n";
+    my $line = <Q>;
+    if ($line !~ /^\s*A\s+C\s+G\s+T\s*$/) {
+      die "Can't parse first line of $defVars{BLASTZ_Q}";
+    }
+    $matrix = '        ' . $line;
+    foreach my $base ('A', 'C', 'G', 'T') {
+      $line = <Q>;
+      die "Too few lines of $defVars{BLASTZ_Q}" if (! $line);
+      if ($line !~ /^\s*-?\d+\s+-?\d+\s+-?\d+\s+-?\d+\s*$/) {
+	die "Can't parse this line of $defVars{BLASTZ_Q}:\n$line";
+      }
+      $matrix .= "      $base " . $line;
+    }
+    chomp $matrix;
+    $line = <Q>;
+    if ($line) {
+      chomp $line;
+      if ($line !~ /^\s*\w\s*=\s*\d+(\s*,\s*\w\s*=\s*\d+)*$/) {
+	die "Can't parse extra-param line of $defVars{BLASTZ_Q}:\n$line";
+      }
+      my @params = split(',', $line);
+      foreach my $p (@params) {
+	my ($var, $val) = split('=', $p);
+	if ($var eq 'O') {
+	  $o = $val;
+	} elsif ($var eq 'E') {
+	  $e = $val;
+	} else {
+	  die "Unfamiliar param setting $var=$val in $defVars{BLASTZ_Q}";
+	}
+      }
+    }
+    close(Q);
+  }
+  my $k = $defVars{'BLASTZ_K'} || 3000;
+  my $l = $defVars{'BLASTZ_L'} || 2200;
+  my $h = $defVars{'BLASTZ_H'} || 2000;
+  my $blastzOther = '';
+  foreach my $var (sort keys %defVars) {
+    if ($var =~ /^BLASTZ_(\w)$/) {
+      my $p = $1;
+      if ($p ne 'K' && $p ne 'L' && $p ne 'H' && $p ne 'Q') {
+	if ($blastzOther eq '') {
+	  $blastzOther = 'Other blastz
+parameters specifically set for this species pair:';
+	}
+	$blastzOther .= "\n    $p=$defVars{$var}";
+      }
+    }
+  }
+  return ($matrix, $o, $e, $k, $l, $h, $blastzOther);
+}
+
+
+sub describeOverlapping {
+  # Return some text describing how large sequences were split.
+  my $lap;
+  my $chunkPlusLap1 = $defVars{'SEQ1_CHUNK'} + $defVars{'SEQ1_LAP'};
+  my $chunkPlusLap2 = $defVars{'SEQ2_CHUNK'} + $defVars{'SEQ2_LAP'};
+  if ($chunkPlusLap1 == $chunkPlusLap2) {
+    $lap .= "Any sequences larger\n" .
+"than $chunkPlusLap1 bases were split into chunks of $chunkPlusLap1 bases
+overlapping by $defVars{SEQ1_LAP} bases for alignment.";
+  } else {
+    $lap .= "Any $tDb sequences larger\n" .
+"than $chunkPlusLap1 bases were split into chunks of $chunkPlusLap1 bases
+overlapping by $defVars{SEQ1_LAP} bases for alignment.  (Similarly for $qDb,
+chunks of $chunkPlusLap2 overlapping by $defVars{SEQ2_LAP}.)";
+  }
+  $lap .= "  Alignments of
+chunks had their coordinates corrected after alignment by the
+blastz-normalizeLav script written by Scott Schwartz of Penn State.";
+  return $lap;
+}
+
+
+sub dumpDownloadReadme {
+  # Write a file (README.txt) describing the download files.
+  my ($file) = @_;
+  open (R, ">$file") || die "Couldn't open $file for writing: $!\n";
+  my ($tGenome, $tDate, $tSource) = &getAssemblyInfo($tDb);
+  my ($qGenome, $qDate, $qSource) = &getAssemblyInfo($qDb);
+  my $dir = $splitRef ? 'axtNet/*.' : '';
+  my ($matrix, $o, $e, $k, $l, $h, $blastzOther) = &getBlastzParams();
+  my $defaultMatrix = $defVars{'BLASTZ_Q'} ? '' : ' the default matrix';
+  my $lap = &describeOverlapping();
+  my $abridging = $defVars{'BLASTZ_ABRIDGE_REPEATS'} ? "
+Transposons that have been inserted since the $qGenome/$tGenome split were
+removed from the assemblies before alignment.  The abbreviated genomes were
+aligned with blastz, and the transposons were then added back in." :
+"";
+  my $netMeaning = $isSelf ? "duplications /
+    rearrangements and the best-in-genome match to any other part of
+    the genome." :
+"rearrangements between 
+    the species and the best $qGenome match to any part of the
+    $tGenome genome.";
+  my $over = $isSelf ? "" : "
+  - $tDb.$qDb.over.chain.gz: chained and netted alignments in chain format.
+";
+  my $desc = $isSelf ? 
+"This directory contains alignments of $tGenome ($tDb, $tDate,
+$tSource) to itself." :
+"This directory contains alignments of the following assemblies:
+- target/reference: $tGenome ($tDb, $tDate, $tSource)
+- query: $qGenome ($qDb, $qDate, $qSource)";
+  print R "$desc
+
+Files included in this directory:
+
+  - md5sum.txt: md5sum checksums for the files in this directory
+
+  - $tDb.$qDb.all.chain.gz: chained blastz alignments. The chain format is
+    described in http://genome.ucsc.edu/goldenPath/help/chain.html .
+
+  - $tDb.$qDb.net.gz: \"net\" file that describes $netMeaning  The net format is described in
+    http://genome.ucsc.edu/goldenPath/help/net.html .
+
+  - $dir$tDb.$qDb.net.axt.gz: chained and netted alignments,
+    i.e. the best chains in the $tGenome genome, with gaps in the best
+    chains filled in by next-best chains where possible.  The axt format is
+    described in http://genome.ucsc.edu/goldenPath/help/axt.html .
+$over
+";
+  if ($opt_swap) {
+    my $TDb = ucfirst($tDb);
+    print R
+"$qDb-referenced chained blastz alignments to $tDb were translated into
+$tDb-referenced chains to $qDb by the chainSwap program.  (See the download
+directory goldenPath/$qDb/vs$TDb/README.txt for more information about the
+$qDb-referenced blastz and chaining process.)
+";
+  } else {
+    print R
+"The $tDb and $qDb assemblies were aligned by the blastz alignment
+program, which is available from Webb Miller's lab at Penn State
+University (http://www.bx.psu.edu/miller_lab/).  $lap $abridging
+
+The blastz scoring matrix (Q parameter) used was$defaultMatrix:
+
+$matrix
+
+with a gap open penalty of O=$o and a gap extension penalty of E=$e.
+The minimum score for an alignment to be kept was K=$k for the first pass
+and L=$l for the second pass, which restricted the search space to the
+regions between two alignments found in the first pass.  The minimum
+score for alignments to be interpolated between was H=$h.  $blastzOther
+
+The .lav format blastz output was translated to the .psl format with
+lavToPsl, then chained by the axtChain program.
+";
+  }
+  print R "
+Chained alignments were processed into nets by the chainNet,
+netSyntenic, and netClass programs.  Best chains (.over.chain) were
+extracted from the nets and the set of all chained alignments by the
+netChainSubset program.  Best-chain alignments in axt format were
+extracted by the netToAxt program.  All programs run after blastz were
+written by Jim Kent at UCSC.
+
+----------------------------------------------------------------
+If you plan to download a large file or multiple files from this
+directory, we recommend you use ftp rather than downloading the files
+via our website. To do so, ftp to hgdownload.cse.ucsc.edu, then go to
+the directory goldenPath/$tDb/vs$QDb/. To download multiple
+files, use the \"mget\" command:
+
+    mget <filename1> <filename2> ...
+    - or -
+    mget -a (to download all the files in the directory)
+
+All the files in this directory are freely available for public use.
+
+--------------------------------------------------------------------
+References
+
+Chiaromonte, F., Yap, V.B., and Miller, W.  Scoring pairwise genomic
+sequence alignments.  Pac Symp Biocomput 2002;115-26.
+
+Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
+Evolution's cauldron: Duplication, deletion, and rearrangement in the
+mouse and human genomes.  Proc Natl Acad Sci USA 100(20):11484-11489
+Sep 30 2003.
+
+Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R.,
+Haussler, D., and Miller, W.  Human-mouse alignments with BLASTZ</A>.
+Genome Res. 13(1):103-7 (2003).
+
+";
+  close(R);
+}
+
+
 sub installDownloads {
   # Load chains; add repeat/gap stats to net; load nets.
   my $runDir = "$buildDir/axtChain";
@@ -932,6 +1150,7 @@ sub installDownloads {
     die "installDownloads: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
+  &dumpDownloadReadme("$runDir/README.txt");
   my $axt = ($splitRef ?
 	     "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
 	     "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
@@ -956,6 +1175,7 @@ mkdir $goldenPath/$tDb/$vs
 cd $goldenPath/$tDb/$vs
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
 ln -s $runDir/$tDb.$qDb.net.gz .
+cp -p $runDir/README.txt .
 
 $axt
 
@@ -967,7 +1187,6 @@ _EOF_
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $dbHost nice $bossScript");
-  print STDERR "Reminder: make $downloadPath/README.txt.\n"
 # maybe also peek in trackDb and see if entries need to be added for chain/net
 }
 
@@ -1038,6 +1257,15 @@ open(STDIN, '/dev/null');
 
 &loadDef($DEF);
 &checkDef();
+
+# Undocumented option for quickly generating a README from DEF:
+if ($opt_readmeOnly) {
+  $splitRef = $opt_swap ? (`wc -l < $defVars{SEQ2_LEN}` < $splitThreshold) :
+    (`wc -l < $defVars{SEQ1_LEN}` < $splitThreshold);
+  &swapGlobals() if $opt_swap;
+  &dumpDownloadReadme("/tmp/README.txt");
+  exit 0;
+}
 
 my $date = `date +%Y-%m-%d`;
 chomp $date;
@@ -1122,10 +1350,11 @@ if ($startStep <= $step && $step <= $stopStep) {
   &cleanup($fileServer);
 }
 
+my $vs = $isSelf ? 'vsSelf' : "vs$QDb";
 verbose(1, "
  *** All done!
- *** Remember to add the new chain and net tracks to trackDb.ra
- *** if necessary, and make a download README.txt.
+ *** Make sure that goldenPath/$tDb/$vs/README.txt is accurate.
+ *** Add the new chain and net tracks to trackDb.ra if necessary.
 
 \n");
 
