@@ -33,6 +33,7 @@ update:
 	hgTrackDb hg10 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg11 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg12 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg13 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb rn1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
@@ -52,6 +53,7 @@ beta_update:
 	hgTrackDb hg10 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg11 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg12 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb hg13 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb rn1 trackDb ../../lib/trackDb.sql hgRoot
