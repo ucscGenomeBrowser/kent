@@ -452,7 +452,7 @@ gpFileName = cgiOptionalString("gpFile");
 bedFileName = cgiOptionalString("bedFile");
 hgdbTestDb = cgiUsualString("hgdbTestDb", "sugnet");
 hgdbTestTable = cgiString("hgdbTestTable");
-warn("Loading Records");
+//warn("Loading Records");
 cgiOutputCommandLine(argc, argv, stdout);
 if(gpFileName != NULL)
     loadGenePredSamples(gpFileName, stdout);
@@ -460,7 +460,7 @@ else if(bedFileName != NULL)
     loadBedSamples(bedFileName, stdout);
 else
     getSamples(argv[1],stdout);
-warn("Done");
+//warn("Done");
 return 0;
 }
 

@@ -129,8 +129,70 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 return retList;
 }
 
+char *getFileNameForBed(struct bed *bed) 
+{
+static char fileName[512];
+int bedNum = 0;
+while(1)
+    {
+    safef(fileName, sizeof(fileName), "%s:%d-%d-%d.bed", bed->chrom, bed->chromStart, bed->chromEnd, bedNum);
+    if(!fileExists(fileName)) 
+	{
+	safef(fileName, sizeof(fileName), "%s:%d-%d-%d", bed->chrom, bed->chromStart, bed->chromEnd, bedNum);
+	return fileName;
+	}
+    else
+	bedNum++;
+    }
+return fileName;
+}
+
 void doAnalysisForBed(struct bed *bed) 
 {
+char *hgdbTestTable = "affyTrans_hg12";
+char *hgdbTestName = "sugnet";
+FILE *tmpFile = NULL;
+char commandBuffer[4096];
+char *fileNameRoot = getFileNameForBed(bed);
+char bedFile[512];
+char dataFile[512];
+int retVal = 0;
+
+
+/* Print out bed. */
+safef(bedFile, sizeof(bedFile), "%s.bed", fileNameRoot);
+tmpFile = mustOpen(bedFile, "w");
+bedTabOutN(bed, 12, tmpFile);
+carefulClose(&tmpFile);
+
+/* Get samples for bed. */
+safef(dataFile, sizeof(dataFile), "%s.data", fileNameRoot);
+safef(commandBuffer, sizeof(commandBuffer), "samplesForCoordinates bedFile=%s hgdbTestName=%s hgdbTestTable=%s > %s", 
+      bedFile, hgdbTestName, hgdbTestTable, dataFile);
+retVal = system(commandBuffer);
+if(retVal != 0)
+    {
+    warn("%s failed running command:\n%s", fileNameRoot, commandBuffer);
+    return;
+    }
+safef(commandBuffer, sizeof(commandBuffer), "cp %s tmp.data", dataFile);
+retVal = system(commandBuffer);
+
+/* Run R analysis on data file. */
+warn("Running R for %s", fileNameRoot);
+fflush(stderr);
+safef(commandBuffer, sizeof(commandBuffer), "R --vanilla < /cluster/home/sugnet/sugnet/R/maReg/R/runAnalysis.R");
+warn("Done with R");
+fflush(stderr);
+retVal = system(commandBuffer);
+if(retVal != 0)
+    {
+    warn("%s failed running command:\n%s", fileNameRoot, commandBuffer);
+    return;
+    }
+
+
+
 bedsAnalyzed++;
 }
 
@@ -138,6 +200,7 @@ bedsAnalyzed++;
 void bulkChr2XRegression(char *spliceFile, char *spliceSelectionFile) 
 /* Top level function to load files and iterate through splices of interest. */
 {
+FILE *tmpFile = NULL;
 struct genomeBit *gpList = NULL, *gp = NULL;
 struct bed *bedList = NULL, *bed = NULL, *retList = NULL;
 warn("Loading beds from %s", spliceFile);
@@ -146,6 +209,19 @@ warn("Loading splices of interest from %s", spliceSelectionFile);
 gpList = loadGpList(spliceSelectionFile);
 warn("Loaded %d splices, and %d splices of interest.", slCount(bedList), slCount(gpList));
 warn("Analyzing splices of interest.");
+
+/* Clean out the summary files produced by R script. */
+tmpFile = mustOpen("maxScores.html", "w");
+fprintf(tmpFile, "<head><body><table>\n");
+fprintf(tmpFile, "<tr><th>Position</th><th>MaxDiff Levels</th><th>MaxDiff</th><th>Var Diff</th><th>MaxDiff/Var</th><th>Percent Diff</th><th>Cass Var/Stable Var</th><th>Plot</th></tr>\n");
+carefulClose(&tmpFile);
+
+tmpFile = mustOpen("allScores.tab", "w");
+carefulClose(&tmpFile);
+
+tmpFile = mustOpen("cassettes.sample", "w");
+carefulClose(&tmpFile);
+
 for(gp = gpList; gp != NULL; gp = gp->next) 
     {
     retList = findBedsFromGp(gp, bedList);
@@ -166,7 +242,9 @@ for(gp = gpList; gp != NULL; gp = gp->next)
 warn("");
 warn("%d genome bits had multiple beds, %d had no bed, %d analyzed", multipleBedForGp, bedsNotFound, bedsAnalyzed);
 warn("Cleaning up.");
-
+tmpFile = mustOpen("maxScores.html", "a");
+fprintf(tmpFile, "</table></body></html>\n");
+carefulClose(&tmpFile);
 bedFreeList(&bedList);
 }
 
