@@ -39,9 +39,9 @@ public class ApacheReport {
     *  @throws       Exception
     *  @return       The PrintWriter object
     */
-    static PrintWriter setOutputFile(String outputPath, int year, int month, int day) throws Exception { 
+    static PrintWriter setOutputFile(String outpath, int year, int month, int day) throws Exception { 
 
-      String filename = outputPath + year + getMonth(month) + day + ".html";
+      String filename = outpath + year + getMonth(month) + day + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       FileWriter fout = new FileWriter(filename);
       PrintWriter pw = new PrintWriter(fout);
@@ -132,7 +132,7 @@ public class ApacheReport {
       "   java ApacheReport propertiesFile [-path=pathname] [-mode=verbose]\n" +
       "where properties files may contain sourceMachine, sourceDB, sourceTable, " +
       "targetMachine, errorCodes, minutes.\n" +
-      "and where path defaults to /usr/local/apache/htdocs/qa/test-results " +
+      "and where path defaults to /usr/local/apache/htdocs/qa/test-results/apache " +
       "\n(use \"local\" for local directory).\n" +
       "   java ApacheReport default\n" +
       "This will use the default properties.\n"
@@ -142,7 +142,7 @@ public class ApacheReport {
 
   public static void main(String[] args) {
     String mode  = "";
-    String outpath = "/usr/local/apache/htdocs/qa/test-results/";
+    String outpath = "/usr/local/apache/htdocs/qa/test-results/apache/";
     boolean debug = false;
 
     /* Process command-line properties, and load them into LogTarget object. */
