@@ -178,3 +178,49 @@ mv /tmp/whatever $1
     hgLoadWiggle -pathPrefix=/gbdb/pyrFur2/wib/promoterScanNeg pyrFur2 promoterScanNeg promoterScanNeg.wig
     mkdir /gbdb/pyrFur2/wib/promoterScanNeg
     ln -s `pwd`/*.wib  /gbdb/pyrFur2/wib/promoterScanNeg/
+
+# Rfam TRACK
+
+   cd /cluster/data/pyrFur2/bed
+   mkdir Rfam
+   cd Rfam/
+   # file
+   cp pfu.rfam.bed .
+   hgLoadBed pyrFur2 Rfam pfu.rfam.bed
+   # trackDb entry:
+track Rfam
+shortLabel Rfam
+longLabel Rfam noncoding RNA
+group genes
+priority 2.3
+visibility pack
+color 43,127,60
+type bed 6 .
+
+# Heatshock array track
+
+   cd /cluster/data/pyrFur2/bed
+   mkdir llaPfuPrintC
+   cd llaPfuPrintC/
+   cp Pfu-hs.bed .
+   cp Pfu-hs.other .
+   hgLoadBed pyrFur2 llaPfuPrintC Pfu-hs.bed
+   hgsql pyrFur2 < ~/kent/src/hg/lib/expRecord.sql
+   echo 'rename table expRecord to llaPfuPrintCExps' | hgsql pyrFur2
+   hgsql hgFixed < ~/kent/src/hg/lib/expRecord.sql
+   echo 'rename table expRecord to llaPfuPrintCExps' | hgsql hgFixed
+   echo 'load data local infile "Pfu-hs.other" into table llaPfuPrintCExps' | hgsql pyrFur2
+   echo 'load data local infile "Pfu-hs.other" into table llaPfuPrintCExps' | hgsql hgFixed
+   # trackDb entry:
+track llaPfuPrintC
+shortLabel HS Microarray
+longLabel Heat Shock full-genome P. furiosus microarray experiments
+group regulation
+priority 86.0
+visibility dense
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable llaPfuPrintCExps
+chip printA
+canPack off

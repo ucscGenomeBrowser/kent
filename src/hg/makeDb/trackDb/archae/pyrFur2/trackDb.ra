@@ -41,3 +41,30 @@ expTable llaPfuPrintAExps
 chip printA
 canPack off
 
+track llaPfuPrintC
+shortLabel HS Microarray
+longLabel Heat Shock full-genome P. furiosus microarray experiments
+group regulation
+priority 86.0
+visibility dense
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable llaPfuPrintCExps
+chip printA
+canPack off
+
+track multizPyro
+shortLabel Conservation
+longLabel Pyrococcus 3-way multiz alignments
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder pyrAby1 pyrHor1
+
