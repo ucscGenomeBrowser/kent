@@ -50,6 +50,7 @@ struct ssBundle
     void *data;			/* User defined data pointer. */
     boolean isProt;		/* True if it's a protein based bundle. */
     struct trans3 *t3List;	/* Sometimes set to three translated frames. */
+    boolean avoidFuzzyFindKludge;	/* Temporary flag to avoid call to fuzzyFind. */
     };
 
 void ssBundleFree(struct ssBundle **pEl);

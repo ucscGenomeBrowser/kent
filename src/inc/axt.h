@@ -81,6 +81,11 @@ struct axtScoreScheme *axtScoreSchemeDefault();
 /* Return default scoring scheme (after blastz).  Do NOT axtScoreSchemeFree
  * this. */
 
+struct axtScoreScheme *axtScoreSchemeRnaDefault();
+/* Return default scoring scheme for RNA/DNA alignments
+ * within the same species.  Do NOT axtScoreSchemeFree
+ * this. */
+
 struct axtScoreScheme *axtScoreSchemeProteinDefault();
 /* Returns default protein scoring scheme.  This is
  * scaled to be compatible with the blastz one.  Don't
