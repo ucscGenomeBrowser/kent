@@ -5142,7 +5142,7 @@ sqlFreeResult(&sr);
 	    printf(" is not found in our database for "); 
 	    freezeName = hFreezeFromDb(database);
 	    if(freezeName == NULL) freezeName = "Unknown";
-	    printf("%s Freeze.<BR>\n",freezeName); 
+	    printf("%s %s Freeze.<BR>\n",hOrganism(database),freezeName); 
 	    fflush(stdout);
 	    }
 	else
