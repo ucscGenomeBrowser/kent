@@ -146,6 +146,10 @@ exit; # don't actually run this like a script :)
 	    echo "${chrom}/${contig}/${contig}.fa" >> contig.lst
 	end
     end
+    #   For later comparisons, this is how many contigs we have:
+    wc -l contig.lst
+    #	391
+
     #	Make a listing of all the fasta record headers, just FYI:
     cd /cluster/store5/gs.18/ffa
     zcat ffa/ncbi_build35.fa.gz | grep "^>" > ncbi.fa.headers
@@ -613,7 +617,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
       endif
     end
 
-# MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (WORKING - 2004-05-21)
+# MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE - 2004-05-25)
 #							 -Hiram
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above,
@@ -659,36 +663,47 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     #	should be no output at all, thus:
     rm chrom.sizes.masked
 
-XXXXXXX
-    # Copy the masked contig fa to /iscratch and /scratch:
+    # Copy the masked contig fa to /scratch and /iscratch
     #	And everything else we will need for blastz runs, etc ...
+    #	Best to do this sequence first to /cluster/bluearc/scratch,
+    #	which is going to be the source for the /scratch copy.
+    #	And then from there to the /iscratch
+    #	Make sure you are on the fileserver for the original source:
+    ssh eieio
+    mkdir -p /cluster/bluearc/scratch/hg/gs.18/build35
+    cd /cluster/bluearc/scratch/hg/gs.18/build35
+    #	these copies take less than 2 minutes each
+    mkdir bothMaskedNibs
+    cp -p /cluster/data/hg17/nib/*.nib ./bothMaskedNibs
+    mkdir maskedContigs
+    foreach chrom ( `cat /cluster/data/hg17/chrom.lst` )
+	cp -p /cluster/data/hg17/${chrom}/N{C,G,T}_*/N{C,G,T}_??????.fa \
+		./maskedContigs
+	echo "done ${chrom}"
+    end
+    #	make sure you have them all:
+    ls maskedContigs | wc -l
+    #	391
+    wc -l /cluster/data/hg17/contig.lst
+    #	391
+    mkdir rmsk
+    foreach chrom ( `cat /cluster/data/hg17/chrom.lst` )
+	cp -p /cluster/data/hg17/${chrom}/*.out ./rmsk
+	echo "done ${chrom}"
+    end
+
+    #	Now, go to the destination for /iscratch and copy from the
+    #	bluearc
     ssh kkr1u00
-    rm -rf /iscratch/i/gs.18/build35/trfFa
-    mkdir -p /iscratch/i/gs.18/build35/trfFa
-    cp -p /cluster/data/hg17/?{,?}/N{T,G}_*/N{T,G}_??????.fa /iscratch/i/gs.18/build35/trfFa
-    rm -rf /iscratch/i/gs.18/build35/bothMaskedNibs
-    mkdir -p /iscratch/i/gs.18/build35/bothMaskedNibs
-    cp -p /cluster/data/hg17/nib/*.nib /iscratch/i/gs.18/build35/bothMaskedNibs
-    rm -rf /iscratch/i/gs.18/build35/rmsk
-    mkdir -p /iscratch/i/gs.18/build35/rmsk
-    cp -p /cluster/data/hg17/?{,?}/*.out /iscratch/i/gs.18/build35/rmsk
-    ~kent/bin/iSync
+    mkdir -p /iscratch/i/gs.18/build35
+    cd /iscratch/i/gs.18/build35
+    #	This takes about 5 minutes
+    rsync -arlv /cluster/bluearc/scratch/hg/gs.18/build35/ .
 
-    # ssh kkstore
-    #  Since kkstore is currently /cluster/bluearc/scratch, better to do
-    #  this on eieio and copy to 
-    rm -rf /scratch/hg/gs.18/build35/trfFa
-    mkdir -p /scratch/hg/gs.18/build35/trfFa
-    cp -p /cluster/data/hg17/?{,?}/N{T,G}_*/N{T,G}_??????.fa /scratch/hg/gs.18/build35/trfFa
-    rm -rf /scratch/hg/gs.18/build35/bothMaskedNibs
-    mkdir /scratch/hg/gs.18/build35/bothMaskedNibs
-    cp -p /cluster/data/hg17/nib/*.nib /scratch/hg/gs.18/build35/bothMaskedNibs
-    rm -rf /scratch/hg/gs.18/build35/rmsk
-    mkdir -p /scratch/hg/gs.18/build35/rmsk
-    cp -p /cluster/data/hg17/?{,?}/*.out /scratch/hg/gs.18/build35/rmsk
+    time /cluster/bin/iSync
+    #	real    7m27.649s
 
-    # request rsync of kkstore /scratch
-
+    # request rsync of /cluster/bluearc/scratch to the KiloKluster /scratch
 
 # GOLD AND GAP TRACKS (DONE - 2004-05-21 - Hiram)
     ssh hgwdev
@@ -801,8 +816,7 @@ echo "done"
 done
 '_EOF_'
     chmod +x runZoom.sh
-    #	This is going to take even longer than above, certainly do this
-    #	on the fileserver
+    #	Certainly do this on the fileserver
     ssh eieio
     time ./runZoom.sh
     #	real    195m40.677s
@@ -816,3 +830,73 @@ done
     # and symlink these .wib files into /gbdb
     mkdir -p /gbdb/hg17/wib/gc5Base
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg17/wib/gc5Base
+
+# AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2004-05-25 - Hiram)
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is a new organism, edit the etc/genbank.conf file and add:
+	# hg17
+	hg17.genome = /scratch/hg/gs.18/build35/bothMaskedNibs/chr*.nib
+	hg17.lift = /cluster/store5/gs.18/build35/jkStuff/liftAll.lft
+	hg17.genbank.est.xeno.load = yes
+	hg17.mgcTables.default = full
+	hg17.mgcTables.mgc = all
+	hg17.downloadDir = hg17
+
+    #	Do the refseq's first, they are the quick ones
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial hg17
+    #	 logFile: var/build/logs/2004.05.25-13:41:07.hg17.initalign.log
+    #	checking that log, or watching the batch on kk, you can find
+    #	where the batch is running and after it is done get the time:
+    cd /cluster/store6/genbank/work/initial.hg17/align
+    para time > time
+    cat time
+Completed: 6256 of 6256 jobs
+CPU time in finished jobs:      55219s     920.31m    15.34h    0.64d  0.002 y
+IO & Wait Time:                 25704s     428.40m     7.14h    0.30d  0.001 y
+Average job time:                  13s       0.22m     0.00h    0.00d
+Longest job:                     1056s      17.60m     0.29h    0.01d
+Submission to last job:          1057s      17.62m     0.29h    0.01d
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
+
+#	To get the genbank started, the above results need to be
+#	moved out of the way.  These things can be removed if there are
+#	no problems to debug
+    ssh eieio
+    cd /cluster/data/genbank/work
+    mv initial.hg17 initial.hg17.refseq.mrna
+
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial hg17
+    #	logFile: var/build/logs/2004.05.25-14:09:01.hg17.initalign.log
+XXXX - running 2004-05-25
+# Completed: 49591 of 49591 jobs
+# CPU time in finished jobs:    3853288s   64221.47m  1070.36h   44.60d  0.122 y
+# IO & Wait Time:                246323s    4105.38m    68.42h    2.85d  0.008 y
+# Average job time:                  83s       1.38m     0.02h    0.00d
+# Longest job:                    21265s     354.42m     5.91h    0.25d
+# Submission to last job:         22930s     382.17m     6.37h    0.27d
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 hg17
+
+    # The iservers came back on-line, so use them for this run.
+    #  The batch file can be found in:
+    #	/cluster/data/genbank/work/initial.hg17/align
+
+    ssh eieio
+    cd /cluster/bluearc/genbank/work
+    mv initial.hg17 initial.hg17.refseq.mrna
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial hg17
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
