@@ -28,6 +28,9 @@ int hChromSize(char *chromName);
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA */
 
+struct dnaSeq *hExtSeq(char *acc);
+/* Return sequence for external seq. */
+
 struct dnaSeq *hRnaSeq(char *acc);
 /* Return sequence for RNA. */
 
