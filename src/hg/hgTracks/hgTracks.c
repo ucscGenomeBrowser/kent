@@ -6665,6 +6665,9 @@ int resolution = 0;
 char tableName[256];
 int zoom1 = 23924, zoom2 = 2991; /* bp per data point */
 float pixPerBase = 0;
+/* Set it up so we don't have linear interpretation.. */
+char *noLinearInterpString = wiggleEnumToString(wiggleNoInterpolation);
+cartSetString(cart, "affyTranscriptome.linear.interp", noLinearInterpString);
 
 if(tl.picWidth == 0)
     errAbort("hgTracks.c::loadAffyTranscriptome() - can't have pixel width of 0");
