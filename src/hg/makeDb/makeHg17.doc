@@ -2720,7 +2720,6 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
             /cluster/data/hg17/chrom.sizes /cluster/data/rn3/chrom.sizes \
             ../mafNet/$maf -tPrefix=hg17. -qPrefix=rn3.
     end
-XXX - running 2004-06-23 16:10
 
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
@@ -2759,7 +2758,8 @@ XXX - running 2004-06-23 16:10
 
      # check results
     # featureBits hg17 blastzBestRn3
-    #	970005525 bases of 2866216770 (33.843%) in intersection
+    #	975533772 bases of 2866216770 (34.036%) in intersection
+    # (with axtFilter) 970005525 bases of 2866216770 (33.843%) in intersection
     # featureBits hg16 blastzBestRn3
     #	976121391 bases of 2865248791 (34.068%) in intersection
 
@@ -2780,6 +2780,7 @@ XXX - running 2004-06-23 16:10
     hgsql hg17 < axtInfoInserts.sql
 
 # MAKING RAT SYNTENY (DONE - 2004-06-14 - Hiram)
+#	Re-Done after above done without the axtFilter
 
 ssh hgwdev
 mkdir /cluster/data/hg17/bed/syntenyRn3
@@ -2794,6 +2795,7 @@ cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg17 -table=blastzBestRn3
 ./synteny2bed.pl
+XXX - running 2004-06-24 09:31
 #	The five commands above
 #	real    208m6.514s
 #	user    0m23.120s
@@ -3839,6 +3841,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 '_EOF_'
     # << this line makes emacs coloring happy
 
+#  May need -minScore=5000 for all chroms if chr19 won't finish on kolossus
+
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
@@ -3852,15 +3856,15 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     para create jobList
     para try
     para push # ... etc ...
-XXXX - running 2004-06-23 10:30
 # Completed: 45 of 46 jobs
 # CPU time in finished jobs:       6575s     109.58m     1.83h    0.08d  0.000 y
 # IO & Wait Time:                  9274s     154.57m     2.58h    0.11d  0.000 y
 # Average job time:                 352s       5.87m     0.10h    0.00d
 # Longest job:                     3121s      52.02m     0.87h    0.04d
 # Submission to last job:          3121s      52.02m     0.87h    0.04d
-    #	one job didn't finish due to problems on kkr5
-    #	the chr20 job was run manually on kkr2u00
+    #	one job wouldn't finish due to memory usage
+    #	run the chr19 job on kolossus, takes an hour, gets up to 4 Gb
+    #	memory usage
 
     # now on the file server, sort chains
     ssh eieio
@@ -3887,9 +3891,9 @@ XXXX - running 2004-06-23 10:30
         hgLoadChain hg17 ${c}_chainMm4 $i
         echo done $c
     end
+XXXX - running 2004-06-24 10:44
 
     #	featureBits hg17 chainMm4
-XXX - running 2004-06-22 16:40
     #	xxx 2826192649 bases of 2866216770 (98.604%) in intersection
     #	featureBits hg16 chainMm4
     #	xxx 2830563493 bases of 2865248791 (98.789%) in intersection
@@ -3905,6 +3909,7 @@ XXX - running 2004-06-22 16:40
       /cluster/bin/i386/chainPreNet $i /cluster/data/hg17/chrom.sizes \
                         /cluster/data/mm4/chrom.sizes ../preNet/$i
     end
+XXXX - running 2004-06-24 10:45
 
     cd ..
     mkdir n1
@@ -3925,7 +3930,6 @@ XXX - running 2004-06-22 16:40
     time netClass hNoClass.net hg17 mm4 mouse.net \
 	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInMouse \
 	-qNewR=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman
-XXX - running 2004-06-22 16:50
     #	real    19m33.421s
     #	user    10m37.130s
     #	sys     1m45.630s
@@ -3980,6 +3984,19 @@ XXX - running 2004-06-22 16:50
 		/cluster/data/mm4/nib \
 		../axtNet/$c.axt
 	echo "Complete: $c.net -> axtNet/$c.axt"
+    end
+
+    #	convert axt to maf
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.mm4/axtNet
+    mkdir ../mafNet
+
+    foreach f (chr*.axt)
+      set maf = $f:t:r.fr1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/mm4/chrom.sizes \
+            ../mafNet/$maf -tPrefix=hg17. -qPrefix=mm4.
     end
 
     ssh hgwdev
