@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-static char const rcsid[] = "$Id: gbIndexTest.c,v 1.1 2003/06/03 01:27:49 markd Exp $";
+static char const rcsid[] = "$Id: gbIndexTest.c,v 1.2 2003/08/02 16:18:08 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -26,6 +26,7 @@ static struct optionSpec optionSpecs[] = {
     {"aligned", OPTION_BOOLEAN},
     {"mrna", OPTION_BOOLEAN},
     {"est", OPTION_BOOLEAN},
+    {"accPrefix", OPTION_STRING},
     {"dump", OPTION_STRING},
     {"db", OPTION_STRING},
 };
@@ -49,6 +50,7 @@ errAbort("gbIndexTest - Program to test the gbIndex objects.  This loads\n"
          "  -aligned - load aligned alidx files (requires db),\n"
          "   implies -processed\n"
          "  -db=db - database name\n"
+         "  -accPrefix=pre\n"
          "  -mrna - load mRNA files files\n"
          "  -est - load EST files files\n"
          "  -dump=file - dump index to file in human-readable form\n"
@@ -120,16 +122,23 @@ info = beginStep(select->release->index, select->release, desc);
 if (flags & DO_PROCESSED)
     gbReleaseLoadProcessed(select);
 else
+    {
+    select->orgCats = GB_NATIVE|GB_XENO;
     gbReleaseLoadAligned(select);
+    }
 endStep(select->release->index, &info);
 select->type = 0;
 }
 
-static void testLoadPrefixes(struct gbSelect* select, unsigned flags)
+static void testLoadPrefixes(struct gbSelect* select, unsigned flags,
+                             char* restrictPrefix)
 /* do load testing of part of a release */
 {
 struct slName* prefixes, *prefix;
-prefixes = gbReleaseGetAccPrefixes(select->release, GB_PROCESSED, GB_EST);
+if (restrictPrefix != NULL)
+    prefixes = slNameNew(restrictPrefix);
+else
+    prefixes = gbReleaseGetAccPrefixes(select->release, GB_PROCESSED, GB_EST);
 for (prefix = prefixes; prefix != NULL; prefix = prefix->next)
     {
     select->accPrefix = prefix->name;
@@ -142,7 +151,8 @@ select->accPrefix = NULL;
 static void testRelLoad(struct gbIndex* index,
                         struct gbRelease* release,
                         char* database,
-                        unsigned flags)
+                        unsigned flags,
+                        char* accPrefix)
 /* do load testing of a release */
 {
 struct gbSelect select;
@@ -152,11 +162,11 @@ select.release = release;
 if ((flags & DO_PROCESSED) && (flags & DO_MRNA))
     testLoad(&select, DO_PROCESSED|DO_MRNA);
 if ((flags & DO_PROCESSED) && (flags & DO_EST))
-    testLoadPrefixes(&select, DO_PROCESSED|DO_EST);
+    testLoadPrefixes(&select, DO_PROCESSED|DO_EST, accPrefix);
 if ((flags & DO_ALIGNED) && (flags & DO_MRNA))
     testLoad(&select, DO_ALIGNED|DO_MRNA);
 if ((flags & DO_ALIGNED) && (flags & DO_EST))
-    testLoadPrefixes(&select, DO_ALIGNED|DO_EST);
+    testLoadPrefixes(&select, DO_ALIGNED|DO_EST, accPrefix);
 }
 
 int main(int argc, char* argv[])
@@ -164,7 +174,7 @@ int main(int argc, char* argv[])
 int argi;
 char* dumpFile = NULL;
 unsigned flags = 0;
-char* database;
+char* database, *accPrefix;
 struct gbIndex* index;
 struct stepInfo runInfo;
 
@@ -183,6 +193,7 @@ if (optionExists("est"))
 
 dumpFile = optionVal("dump", NULL);
 database = optionVal("db", NULL);
+accPrefix = optionVal("accPrefix", NULL);
 
 if ((flags & DO_ALIGNED) && (database == NULL))
     errAbort("must specify -db with -aligned");
@@ -196,7 +207,7 @@ runInfo = beginStep(index, NULL, "loading index files");
 
 for (argi = 1; argi < argc; argi++)
     testRelLoad(index, gbIndexMustFindRelease(index, argv[argi]),
-                database, flags);
+                database, flags, accPrefix);
 
 if (dumpFile != NULL)
     {
