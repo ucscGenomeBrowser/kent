@@ -10,7 +10,7 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.13 2004/10/25 10:21:04 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.14 2005/01/10 00:34:21 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,7 +51,7 @@ errAbort(
   );
 }
 
-static void writeLink(struct boxIn *b, char *tName, int chainId, FILE *f)
+static void writeLink(struct cBlock *b, char *tName, int chainId, FILE *f)
 /* Write out a single link in tab separated format. */
 {
 if (!noBin)
@@ -202,7 +202,7 @@ static void oneChain(struct chain *chain, FILE *linkFile, FILE *chainFile)
 /* Put one chain into tab delimited chain and link files. */
 {
 int basesMatched = 0;
-struct boxIn *b;
+struct cBlock *b;
 
 for (b = chain->blockList; b != NULL; b = b->next)
     {

@@ -11,7 +11,7 @@
 #include "axt.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.19 2004/10/23 15:16:43 kent Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.20 2005/01/10 00:38:45 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -36,7 +36,7 @@ errAbort(
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
 {
-struct boxIn *a, *b;
+struct cBlock *a, *b;
 a = chain->blockList;
 for (b = a->next; b != NULL; b = b->next)
     {

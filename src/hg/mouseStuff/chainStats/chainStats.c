@@ -51,8 +51,8 @@ struct seqPair
 int boxInCmpBoth(const void *va, const void *vb)
 /* Compare to sort based on query, then target. */
 {
-const struct boxIn *a = *((struct boxIn **)va);
-const struct boxIn *b = *((struct boxIn **)vb);
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
 int dif;
 dif = a->tStart - b->tStart;
 if (dif == 0)
@@ -164,7 +164,7 @@ struct dyString *dy = newDyString(512);
 struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct chain *chain, *chainList = NULL;
-struct boxIn *block , *nextBlock = NULL, *prevBlock = NULL;
+struct cBlock *block , *nextBlock = NULL, *prevBlock = NULL;
 int count;
 
 count = 0;

@@ -254,7 +254,7 @@ double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
     int matrix[256][256], int (*gapCost)(int dt, int dq))
 /* Calculate score of chain from scratch looking at blocks. */
 {
-struct boxIn *b, *a = NULL;
+struct cBlock *b, *a = NULL;
 double score = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
@@ -274,7 +274,7 @@ void scorePair(struct seqPair *sp,
 /* Chain up blocks and output. */
 {
 struct chain  *chain, *next;
-struct boxIn *b;
+struct cBlock *b;
 
 /* Set up info for connect function. */
 scoreData.qSeq = qSeq;

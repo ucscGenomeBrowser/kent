@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.18 2004/10/07 17:32:07 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.19 2005/01/10 00:27:16 kent Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -68,7 +68,7 @@ return binKeeperFind(map->bk, start, end);
 static int chainAliSize(struct chain *chain)
 /* Return size of all blocks in chain. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int total = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     total += b->qEnd - b->qStart;
@@ -79,7 +79,7 @@ static int aliIntersectSize(struct chain *chain, int tStart, int tEnd)
 /* How many bases in chain intersect region from tStart to tEnd */
 {
 int total = 0, one;
-struct boxIn *b;
+struct cBlock *b;
 
 for (b = chain->blockList; b != NULL; b = b->next)
     {
@@ -554,7 +554,7 @@ return rangeList;
 static int chainRangeIntersection(struct chain *chain, struct range *rangeList)
 /* Return chain/rangeList intersection size. */
 {
-struct boxIn *b = chain->blockList;
+struct cBlock *b = chain->blockList;
 struct range *r = rangeList;
 int one, total = 0;
 
@@ -599,7 +599,7 @@ static void remapRangeList(struct chain *chain, struct range **pRangeList,
 /* Remap range list through chain.  Return error message on failure,
  * NULL on success. */
 {
-struct boxIn *b = chain->blockList;
+struct cBlock *b = chain->blockList;
 struct range *r = *pRangeList, *nextR, *goodList = NULL, *badList = NULL;
 int bDiff, rStart = 0;
 bool gotStart = FALSE;

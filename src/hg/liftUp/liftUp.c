@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.32 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.33 2005/01/10 00:33:28 kent Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -553,7 +553,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
 	    }
 	else
 	    {
-	    struct boxIn *b = NULL;
+	    struct cBlock *b = NULL;
 	    int offset = spec->offset;
 	    if (spec->strand == '-')
 		{

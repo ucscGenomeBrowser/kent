@@ -6,7 +6,7 @@
 #include "chainBlock.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: chainPreNet.c,v 1.6 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainPreNet.c,v 1.7 2005/01/10 00:37:52 kent Exp $";
 
 int dots = 0;  /* How often to put out a dot. */
 int pad = 1;   /* How much to pad around chain. */
@@ -87,7 +87,7 @@ boolean chainUsed(struct chain *chain,
  * chromosome on either side that is not used.  Then mark
  * newly used parts. */
 {
-struct boxIn *b;
+struct cBlock *b;
 boolean anyOpen = FALSE;
 
 for (b = chain->blockList; b != NULL; b = b->next)

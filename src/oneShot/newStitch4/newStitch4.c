@@ -26,7 +26,7 @@ struct seqPair
     {
     struct seqPair *next;
     char *name;	                /* Allocated in hash */
-    struct boxIn *blockList; /* List of alignments. */
+    struct cBlock *blockList; /* List of alignments. */
     };
 
 int defaultGapPenalty(int qSize, int tSize)
@@ -38,7 +38,7 @@ if (total <= 0)
 return 400 * pow(total, 1.0/2.5);
 }
 
-int gapCost(struct boxIn *a, struct boxIn *b)
+int gapCost(struct cBlock *a, struct cBlock *b)
 /* Return gap score from a to b */
 {
 int dq = b->qStart - a->qEnd;
@@ -53,7 +53,7 @@ void chainPair(struct seqPair *sp, FILE *f)
 {
 long startTime, dt;
 struct axt *axt;
-struct boxIn *blockList, *block;
+struct cBlock *blockList, *block;
 struct chain *chainList = NULL, *chain;
 
 uglyf("%s %d nodes\n", sp->name, slCount(sp->blockList));
@@ -67,9 +67,9 @@ uglyf("Made %d chains in %5.3f seconds\n", slCount(chainList), dt*0.001);
 /* Dump chains to file. */
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    struct boxIn *first = chain->blockList;
-    struct boxIn *last = slLastEl(first);
-    struct boxIn *block;
+    struct cBlock *first = chain->blockList;
+    struct cBlock *last = slLastEl(first);
+    struct cBlock *block;
     fprintf(f, "%s Chain %d, score %d, %d %d, %d %d:\n", 
 	sp->name, slCount(chain->blockList), chain->score,
 	first->qStart, last->qEnd, first->tStart, last->qEnd);
@@ -98,7 +98,7 @@ FILE *f = mustOpen(output, "w");
 /* Read input file and divide alignments into various parts. */
 while ((axt = axtRead(lf)) != NULL)
     {
-    struct boxIn *block;
+    struct cBlock *block;
     if (axt->score < 500)
         {
 	axtFree(&axt);

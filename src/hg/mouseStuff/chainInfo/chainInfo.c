@@ -113,7 +113,7 @@ static int id = 0;
 struct binElement *el;
 struct rmskOut *rmsk ;
 struct intronChain *iChain;
-struct boxIn *b, *nextB;
+struct cBlock *b, *nextB;
 int tGapStart = 0;
 int qGapStart = 0;
 int tGapEnd = 0;

@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.11 2004/10/13 18:05:40 braney Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.12 2005/01/10 00:39:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -345,7 +345,7 @@ boolean qIsRc = FALSE;
 int i,j;
 int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
-struct boxIn *b, *nextB;
+struct cBlock *b, *nextB;
 int qbSize = 0, tbSize = 0; /* sum of block sizes */
 int qtSize = 0, ttSize = 0; /* sum of block + gap sizes */
 boolean qInsert = FALSE, tInsert = FALSE;

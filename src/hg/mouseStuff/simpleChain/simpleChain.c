@@ -47,13 +47,13 @@ struct seqPair
     };
 
 
-void addPslBlocks(struct boxIn **pList, struct psl *psl)
+void addPslBlocks(struct cBlock **pList, struct psl *psl)
 /* Add blocks (gapless subalignments) from psl to block list. */
 {
 int i;
 for (i=0; i<psl->blockCount; ++i)
     {
-    struct boxIn *b;
+    struct cBlock *b;
     int size;
     AllocVar(b);
     size = psl->blockSizes[i];
@@ -68,8 +68,8 @@ slReverse(pList);
 
 boolean addPslToChain(struct chain *chain, struct psl *psl, int *addedBases)
 {
-struct boxIn *bList;
-struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+struct cBlock *bList;
+struct cBlock *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 int qStart = psl->qStarts[0];
 int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 int tStart = psl->tStarts[0];
@@ -240,7 +240,7 @@ void chainToPslWrite(struct chain *inChain, FILE *outFile, int tSize, int qSize)
 struct psl *totalPsl = (struct psl *)inChain->id;
 int lastTEnd=0, lastQEnd=0;
 struct psl psl;
-struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+struct cBlock *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 int qInsert, tInsert;
 int blockNum;
 static unsigned *blockSizes = NULL;
@@ -357,7 +357,7 @@ struct psl *psl;
 struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct chain *chain, *chainList = NULL;
-struct boxIn *block , *nextBlock = NULL, *prevBlock = NULL;
+struct cBlock *block , *nextBlock = NULL, *prevBlock = NULL;
 int count;
 
 count = 0;

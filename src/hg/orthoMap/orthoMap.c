@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.13 2004/03/31 17:16:40 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.14 2005/01/10 00:42:08 kent Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -297,16 +297,16 @@ int chainBlockCoverage(struct chain *chain, int start, int end,
 		       int* blockStarts, int *blockSizes, int blockCount)
 /* Calculate how many of the blocks are in a chain. */
 {
-struct boxIn *boxIn = NULL, *boxInList=NULL;
+struct cBlock *cBlock = NULL, *boxInList=NULL;
 int blocksCovered = 0;
 int i=0;
 
 /* Find the part of the chain of interest to us. */
-for(boxIn = chain->blockList; boxIn != NULL; boxIn = boxIn->next)
+for(cBlock = chain->blockList; cBlock != NULL; cBlock = cBlock->next)
     {
-    if(boxIn->tEnd >= start)
+    if(cBlock->tEnd >= start)
 	{
-	boxInList = boxIn;
+	boxInList = cBlock;
 	break;
 	}
     }
@@ -318,11 +318,11 @@ for(i=0; i<blockCount; i++)
     boolean startFound = FALSE;
     int blockStart = blockStarts[i];
     int blockEnd = blockStarts[i] + blockSizes[i];
-    for(boxIn = boxInList; boxIn != NULL && boxIn->tStart < end; boxIn = boxIn->next)
+    for(cBlock = boxInList; cBlock != NULL && cBlock->tStart < end; cBlock = cBlock->next)
 	{
-	if(boxIn->tStart < blockStart && boxIn->tEnd > blockStart)
+	if(cBlock->tStart < blockStart && cBlock->tEnd > blockStart)
 	    startFound = TRUE;
-	if(startFound && boxIn->tStart < blockEnd && boxIn->tEnd > blockEnd)
+	if(startFound && cBlock->tStart < blockEnd && cBlock->tEnd > blockEnd)
 	    {
 	    blocksCovered++;
 	    break;
@@ -703,7 +703,7 @@ agNew->tName = cloneString(chain->qName);
 /* Map vertex positions using chain. */
 for(i = 0; i < agNew->vertexCount; i++)
     {
-    struct boxIn *bi = NULL;
+    struct cBlock *bi = NULL;
     int targetPos = agNew->vPositions[i];
     struct chain *subChain=NULL, *toFree=NULL;
     agNew->vPositions[i] = -1;

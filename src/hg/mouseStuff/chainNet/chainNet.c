@@ -8,7 +8,7 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.32 2004/11/23 00:22:32 kent Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.33 2005/01/10 00:37:52 kent Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -172,13 +172,13 @@ slReverse(&chromList);
 *retList = chromList;
 }
 
-boolean innerBounds(struct boxIn *startBlock,
+boolean innerBounds(struct cBlock *startBlock,
 	boolean isQ, int inStart, int inEnd, int *retStart, int *retEnd)
 /* Return the portion of chain which is between inStart and
  * inEnd.  Only considers blocks inbetween inStart and inEnd.  
  * Return NULL if chain has no blocks between these. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int start = BIGNUM, end = -BIGNUM;
 for (b = startBlock; b != NULL; b = b->next)
     {
@@ -220,7 +220,7 @@ int clipEnd = fill->end;
 boolean isRev = (chain->qStrand == '-');
 int tMin = BIGNUM, tMax = -BIGNUM;
 int qMin = BIGNUM, qMax = -BIGNUM;
-struct boxIn *b;
+struct cBlock *b;
 
 if (isRev)
     reverseIntRange(&clipStart, &clipEnd, chain->qSize);
@@ -268,7 +268,7 @@ int clipEnd = fill->end;
 boolean isRev = (chain->qStrand == '-');
 int tMin = BIGNUM, tMax = -BIGNUM;
 int qMin = BIGNUM, qMax = -BIGNUM;
-struct boxIn *b;
+struct cBlock *b;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
     int qs, qe, ts, te;	/* Clipped bounds of block */
@@ -304,7 +304,7 @@ assert(qMin < qMax);
 
 
 struct fill *fillSpace(struct chrom *chrom, struct space *space, 
-	struct chain *chain, struct boxIn *startBlock, 
+	struct chain *chain, struct cBlock *startBlock, 
 	boolean isQ)
 /* Fill in space with chain, remove existing space from chrom,
  * and add smaller spaces on either side if big enough. */
@@ -363,10 +363,10 @@ return fsList;
 }
 
 
-void reverseBlocksQ(struct boxIn **pList, int qSize)
+void reverseBlocksQ(struct cBlock **pList, int qSize)
 /* Reverse qside of blocks. */
 {
-struct boxIn *b;
+struct cBlock *b;
 slReverse(pList);
 for (b = *pList; b != NULL; b = b->next)
     reverseIntRange(&b->qStart, &b->qEnd, qSize);
@@ -380,7 +380,7 @@ void addChainT(struct chrom *chrom, struct chrom *otherChrom, struct chain *chai
 {
 struct slRef *spaceList;
 struct slRef *ref;
-struct boxIn *startBlock, *block, *nextBlock;
+struct cBlock *startBlock, *block, *nextBlock;
 struct gap *gap;
 struct fill *fill = NULL;
 
@@ -434,7 +434,7 @@ void addChainQ(struct chrom *chrom, struct chrom *otherChrom, struct chain *chai
 {
 struct slRef *spaceList;
 struct slRef *ref;
-struct boxIn *startBlock, *block, *nextBlock;
+struct cBlock *startBlock, *block, *nextBlock;
 int gapStart, gapEnd;
 struct gap *gap;
 struct fill *fill = NULL;
@@ -585,7 +585,7 @@ for (fill = gap->fillList; fill != NULL; fill = fill->next)
 int chainBaseCount(struct chain *chain)
 /* Return number of bases in gap free alignments in chain. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int total = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     total += b->qEnd - b->qStart;
@@ -596,7 +596,7 @@ int chainBaseCountSubT(struct chain *chain, int tMin, int tMax)
 /* Return number of bases in gap free alignments in chain between 
  * tMin and tMax. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int total = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     total += positiveRangeIntersection(b->tStart, b->tEnd, tMin, tMax);
@@ -607,7 +607,7 @@ int chainBaseCountSubQ(struct chain *chain, int qMin, int qMax)
 /* Return number of bases in gap free alignments in chain between 
  * tMin and tMax. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int total = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     total += positiveRangeIntersection(b->qStart, b->qEnd, qMin, qMax);

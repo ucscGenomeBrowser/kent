@@ -9,7 +9,7 @@
 #include "nibTwo.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.2 2004/10/26 19:59:58 kent Exp $";
+static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.3 2005/01/10 00:37:00 kent Exp $";
 
 int minScore = 5000;
 int noCheckScore = 200000;
@@ -38,7 +38,7 @@ static int isLowerDna[256];
 boolean degeneracyFilter(struct dnaSeq *tSeq, struct dnaSeq *qSeq, struct chain *chain)
 /* Returns FALSE if matches seem to be degenerate mostly. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int countBuf[5], *counts = countBuf+1;
 int totalMatches = 0;
 int sum2, best2 = 0;
@@ -92,7 +92,7 @@ else
 boolean repeatFilter(struct dnaSeq *tSeq, struct dnaSeq *qSeq, struct chain *chain)
 /* Returns FALSE if matches seem to be almost entirely repeat-driven. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int repCount = 0, total=0;
 double adjustedScore;
 

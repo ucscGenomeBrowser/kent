@@ -6,7 +6,7 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.6 2004/05/24 18:30:17 kent Exp $";
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.7 2005/01/10 00:38:44 kent Exp $";
 
 char *type = NULL;
 boolean splitOnInsert = FALSE;
@@ -36,7 +36,7 @@ struct optionSpec options[] = {
 void gapWrite(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
 {
-struct boxIn *a, *b;
+struct cBlock *a, *b;
 a = chain->blockList;
 for (b = a->next; b != NULL; b = b->next)
     {

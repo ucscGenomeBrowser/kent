@@ -48,13 +48,13 @@ struct seqPair
     };
 
 
-void addPslBlocks(struct boxIn **pList, struct psl *psl)
+void addPslBlocks(struct cBlock **pList, struct psl *psl)
 /* Add blocks (gapless subalignments) from psl to block list. */
 {
 int i;
 for (i=0; i<psl->blockCount; ++i)
     {
-    struct boxIn *b;
+    struct cBlock *b;
     int size;
     AllocVar(b);
     size = psl->blockSizes[i];
@@ -70,8 +70,8 @@ slReverse(pList);
 int boxInCmpBoth(const void *va, const void *vb)
 /* Compare to sort based on query, then target. */
 {
-const struct boxIn *a = *((struct boxIn **)va);
-const struct boxIn *b = *((struct boxIn **)vb);
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
 int dif;
 dif = a->tStart - b->tStart;
 if (dif == 0)
@@ -95,7 +95,7 @@ return dif;
 
 boolean checkChainRange(struct chain *chain, int qs, int qe, int ts, int te)
 {
-struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+struct cBlock *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 
 prevChainBlock = NULL;
 //if ((te < chain->tStart) && (qe < chain->qStart))
@@ -112,7 +112,7 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 
 boolean deleteChainRange(struct chain *chain, int qs, int qe, int ts, int te, int *deletedBases)
 {
-struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+struct cBlock *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 
 prevChainBlock = NULL;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
@@ -141,8 +141,8 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 
 boolean addPslToChain(struct chain *chain, struct psl *psl, int *addedBases)
 {
-struct boxIn *bList;
-struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+struct cBlock *bList;
+struct cBlock *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 int qStart = psl->qStarts[0];
 int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 int tStart = psl->tStarts[0];
@@ -238,7 +238,7 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 
 void checkAfterChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
 {
-struct boxIn *block;
+struct cBlock *block;
 struct chain *nextChain, *prevChain;
 struct chain *chain;
 struct psl *psl;
@@ -330,7 +330,7 @@ return outChain;
 
 void checkBeforeChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
 {
-struct boxIn *block;
+struct cBlock *block;
 struct chain *nextChain, *prevChain;
 struct chain *chain;
 struct psl *psl;
@@ -390,7 +390,7 @@ struct psl *psl;
 struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct chain *chain, *chainList = NULL;
-struct boxIn *block , *nextBlock = NULL, *prevBlock = NULL;
+struct cBlock *block , *nextBlock = NULL, *prevBlock = NULL;
 int count;
 
 count = 0;

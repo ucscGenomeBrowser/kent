@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.29 2005/01/04 21:40:31 jill Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.30 2005/01/10 00:33:09 kent Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -285,7 +285,7 @@ void fbOrChain(Bits *acc, char *track, char *chrom, int chromSize)
 struct lineFile *lf;
 char fileName[512];
 struct chain *chain;
-struct boxIn *b;
+struct cBlock *b;
 
 chromFileName(track, chrom, fileName);
 if (!fileExists(fileName))

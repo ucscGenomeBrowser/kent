@@ -9,7 +9,7 @@
 #include "chain.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainDbToFile.c,v 1.1 2004/06/08 16:52:45 angie Exp $";
+static char const rcsid[] = "$Id: chainDbToFile.c,v 1.2 2005/01/10 00:37:17 kent Exp $";
 
 static struct optionSpec options[] = {
 /*   {"option", OPTION_STRING}, */
@@ -52,7 +52,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct boxIn *b = NULL;
+    struct cBlock *b = NULL;
     char key[128];
     safef(key, sizeof(key), "%s.%s", row[0], row[1]);
     /* Avoid hashLookup/Add if this row is for same chain as last row. */
@@ -76,9 +76,9 @@ return(h);
 }
 
 int sortBoxInTStart(const void *pa, const void *pb)
-/* Sort boxIn elements by tStart (ascending). */
+/* Sort cBlock elements by tStart (ascending). */
 {
-return((*(struct boxIn **)pa)->tStart - (*(struct boxIn **)pb)->tStart);
+return((*(struct cBlock **)pa)->tStart - (*(struct cBlock **)pb)->tStart);
 }
 
 void chainDbToFile(char *chainTable, char *outName)
@@ -114,7 +114,7 @@ for (chainTbl = chainTables;  chainTbl != NULL;  chainTbl = chainTbl->next)
 	slReverse(&(hel->val));
 	/* Just to be safe, sort by tStart. */
 	slSort(&(hel->val), sortBoxInTStart);
-	chain->blockList = (struct boxIn *)hel->val;
+	chain->blockList = (struct cBlock *)hel->val;
 	chainWrite(chain, f);
 	chainFree(&chain);
 	/* chainFree frees the blockList, so NULL it out in the hash. */

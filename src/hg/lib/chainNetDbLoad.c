@@ -14,7 +14,7 @@
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.7 2004/05/06 23:48:51 baertsch Exp $";
+static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.8 2005/01/10 00:27:16 kent Exp $";
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash)
 /* Convert netAlign to cnFill. Name hash is a place to store
@@ -202,7 +202,7 @@ static void chainLinkAddResult(struct sqlResult *sr, int rowOffset, struct chain
 /* Add links that we get from sr to chain. */
 {
 char **row;
-struct boxIn *list = NULL, *b;
+struct cBlock *list = NULL, *b;
 struct chainLink link;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -214,7 +214,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     b->qEnd = link.qStart + (link.tEnd - link.tStart);
     slAddHead(&list, b);
     }
-slSort(&list, boxInCmpTarget);
+slSort(&list, cBlockCmpTarget);
 chain->blockList = list;
 }
 

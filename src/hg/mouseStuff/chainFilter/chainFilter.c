@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.10 2003/11/01 05:57:37 baertsch Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.11 2005/01/10 00:37:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -101,7 +101,7 @@ int mergeCount = 0;
 void mergeAdjacentBlocks(struct chain *chain)
 /* Get rid of zero length gaps. */
 {
-struct boxIn *b, *lastB = NULL, *nextB, *bList = NULL;      /* List of blocks. */
+struct cBlock *b, *lastB = NULL, *nextB, *bList = NULL;      /* List of blocks. */
 
 for (b = chain->blockList; b != NULL; b = nextB)
     {
@@ -125,7 +125,7 @@ chain->blockList = bList;
 boolean calcMaxGapless(struct chain *chain)
 /* Calculate largest block. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int size, maxSize = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
@@ -139,7 +139,7 @@ return maxSize;
 boolean qCalcMaxGap(struct chain *chain)
 /* Calculate largest q gap. */
 {
-struct boxIn *b, *next;
+struct cBlock *b, *next;
 int size, maxSize = 0;
 for (b = chain->blockList; ; b = next)
     {
@@ -155,7 +155,7 @@ return maxSize;
 boolean tCalcMaxGap(struct chain *chain)
 /* Calculate largest t gap. */
 {
-struct boxIn *b, *next;
+struct cBlock *b, *next;
 int size, maxSize = 0;
 for (b = chain->blockList; ; b = next)
     {

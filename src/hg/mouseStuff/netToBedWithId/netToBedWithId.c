@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: netToBedWithId.c,v 1.4 2003/08/18 16:59:48 kent Exp $";
+static char const rcsid[] = "$Id: netToBedWithId.c,v 1.5 2005/01/10 00:40:26 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 5000;
@@ -46,7 +46,7 @@ static struct optionSpec options[] = {
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
 {
-struct boxIn *a, *b;
+struct cBlock *a, *b;
 a = chain->blockList;
 for (b = a->next; b != NULL; b = b->next)
     {
@@ -67,13 +67,13 @@ return count;
 
 static struct bed *bedFromBlocks(
 	struct chain *chain,
-	struct boxIn *startB, struct boxIn *endB,
+	struct cBlock *startB, struct cBlock *endB,
 	struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset, double minAli)
 /* Convert a list of blocks (guaranteed not to have inserts in both
  * strands between them) to a bed. */
 {
-struct boxIn *b, *lastB = startB;
+struct cBlock *b, *lastB = startB;
 int size;
 struct bed *bed;
 int aliBases = 0, matchingBases = 0;
@@ -107,7 +107,7 @@ struct bed *chainToBed(struct chain *chain,
 	struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset, int maxGap)
 {
-struct boxIn *startB = chain->blockList, *endB, *a = NULL, *b;
+struct cBlock *startB = chain->blockList, *endB, *a = NULL, *b;
 struct bed *bedList = NULL, *bed;
 
 for (b = chain->blockList; b != NULL; b = b->next)

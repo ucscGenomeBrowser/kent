@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslChain.c,v 1.5 2004/02/07 20:28:56 braney Exp $";
+static char const rcsid[] = "$Id: pslChain.c,v 1.6 2005/01/10 00:32:53 kent Exp $";
 
 struct score
 {
@@ -53,7 +53,7 @@ struct seqPair
     char *qName;		/* Name of query sequence. */
     char *tName;		/* Name of target sequence. */
     char qStrand;		/* Strand of query sequence. */
-    struct boxIn *blockList; /* List of alignments. */
+    struct cBlock *blockList; /* List of alignments. */
     int axtCount;		/* Count of axt's that make this up (just for stats) */
     };
 
@@ -126,8 +126,8 @@ if (!sameString(newName, *pName))
 int boxInCmpBoth(const void *va, const void *vb)
 /* Compare to sort based on query, then target. */
 {
-const struct boxIn *a = *((struct boxIn **)va);
-const struct boxIn *b = *((struct boxIn **)vb);
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
 int dif;
 dif = a->qStart - b->qStart;
 if (dif == 0)
@@ -135,9 +135,9 @@ if (dif == 0)
 return dif;
 }
 
-void removeOverlaps(struct boxIn **pBoxList)
+void removeOverlaps(struct cBlock **pBoxList)
 {
-struct boxIn *newList = NULL, *b, *next, *last = NULL;
+struct cBlock *newList = NULL, *b, *next, *last = NULL;
 slSort(pBoxList, boxInCmpBoth);
 for (b = *pBoxList; b != NULL; b = next)
     {
@@ -230,7 +230,7 @@ if (pMisMatches)
 return score;
 }
 
-static void findCrossover(struct boxIn *left, struct boxIn *right,
+static void findCrossover(struct cBlock *left, struct cBlock *right,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq,  
 	int overlap, int matrix[256][256], int *retPos, int *retScoreAdjustment)
 /* Find ideal crossover point of overlapping blocks.  That is
@@ -528,7 +528,7 @@ else
 static int connCount = 0;
 static int overlapCount = 0;
 
-int connectCost(struct boxIn *a, struct boxIn *b)
+int connectCost(struct cBlock *a, struct cBlock *b)
 /* Calculate connection cost - including gap score
  * and overlap adjustments if any. */
 {
@@ -567,7 +567,7 @@ return overlapAdjustment + gapCost(dq, dt);
 void calcChainBounds(struct chain *chain)
 /* Recalculate chain boundaries. */
 {
-struct boxIn *b = chain->blockList;
+struct cBlock *b = chain->blockList;
 if (b == NULL)
     return;
 
@@ -584,7 +584,7 @@ boolean removeNegativeBlocks(struct chain *chain)
  * removes the dried up husks of these blocks 
  * and returns TRUE if it finds any. */
 {
-struct boxIn *newList = NULL, *b, *next;
+struct cBlock *newList = NULL, *b, *next;
 boolean gotNeg = FALSE;
 for (b = chain->blockList; b != NULL; b = next)
     {
@@ -610,7 +610,7 @@ void mergeAbutting(struct chain *chain)
 /* Merge together blocks in a chain that abut each
  * other exactly. */
 {
-struct boxIn *newList = NULL, *b, *last = NULL, *next;
+struct cBlock *newList = NULL, *b, *last = NULL, *next;
 for (b = chain->blockList; b != NULL; b = next)
     {
     next = b->next;
@@ -634,7 +634,7 @@ void removePartialOverlaps(struct chain *chain,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, int matrix[256][256])
 /* If adjacent blocks overlap then find crossover points between them. */
 {
-struct boxIn *b, *nextB;
+struct cBlock *b, *nextB;
 
 do
     {
@@ -674,7 +674,7 @@ errAbort("%s tName %s, tStart %d, tEnd %d, qStrand %c, qName %s, qStart %d, qEnd
 void checkChainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq)
 /* Check that chain score is reasonable. */
 {
-struct boxIn *b;
+struct cBlock *b;
 int totalBases = 0;
 double maxPerBase = 100, maxScore;
 int gapCount = 0;
@@ -712,7 +712,7 @@ double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 {
 int totalMisMatch = 0;
 int misMatch = 0;
-struct boxIn *b, *a = NULL;
+struct cBlock *b, *a = NULL;
 double score = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
@@ -745,7 +745,7 @@ void chainPair(struct seqPair *sp,
 /* Chain up blocks and output. */
 {
 struct chain *chainList, *chain, *next;
-struct boxIn *b;
+struct cBlock *b;
 long startTime, dt;
 int misMatch;
 
@@ -846,7 +846,7 @@ struct dyString *dy = newDyString(512);
 struct psl *psl;
 struct score *score;
 char strand;
-struct boxIn *b;
+struct cBlock *b;
 
 while ((psl = pslNext(lf)) != NULL)
     {
@@ -911,7 +911,7 @@ if (!nohead)
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct psl psl;
-    struct boxIn *b, *a = NULL;
+    struct cBlock *b, *a = NULL;
     int count = 0;
     int totalSize = 0;
     if (chain->blockList == NULL)
@@ -1061,7 +1061,7 @@ for (sp = spList; sp != NULL; sp = sp->next)
     /*
     if (sp->qStrand == '-')
 	{
-	struct boxIn *b;
+	struct cBlock *b;
 	for (b = sp->blockList; b != NULL; b = b->next)
 	    {
 		b->tStart = tSeq->size - b->tStart - 1;
