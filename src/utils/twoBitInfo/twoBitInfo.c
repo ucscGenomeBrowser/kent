@@ -3,7 +3,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitInfo.c,v 1.1 2004/02/27 08:35:28 markd Exp $";
+static char const rcsid[] = "$Id: twoBitInfo.c,v 1.2 2004/07/18 19:51:37 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -13,9 +13,13 @@ errAbort(
   "usage:\n"
   "   twoBitInfo input.2bit output.tab\n"
   "options:\n"
-  ":\n"
+  "\n"
   "Output file has the columns::\n"
   "   seqName size\n"
+  "\n"
+  "In the 2bit file is in the form path:seq or path:seq:start-end:, the\n"
+  "the information is returned only on the requested sequence (start-end\n"
+  "is ignored).\n"
   );
 }
 
@@ -26,14 +30,24 @@ static struct optionSpec options[] = {
 void twoBitInfo(char *inName, char *outName)
 /* twoBitInfo - get information about sequences in a .2bit file. */
 {
-struct twoBitFile *tbf = twoBitOpen(inName);
-FILE *outFile = mustOpen(outName, "w");
-struct twoBitIndex *index;
+struct twoBitFile *tbf;
+FILE *outFile;
+char *seqName = NULL;
 
- for (index = tbf->indexList; index != NULL; index = index->next)
-     {
-     fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSize(tbf, index->name));
-     }
+twoBitParseRange(inName, &inName, &seqName, NULL, NULL);
+tbf = twoBitOpen(inName);
+outFile = mustOpen(outName, "w");
+
+if (seqName != NULL)
+    {
+    fprintf(outFile, "%s\t%d\n", seqName, twoBitSeqSize(tbf, seqName));
+    }
+else
+    {
+    struct twoBitIndex *index;
+    for (index = tbf->indexList; index != NULL; index = index->next)
+        fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSize(tbf, index->name));
+    }
 twoBitClose(&tbf);
 carefulClose(&outFile); 
 }
