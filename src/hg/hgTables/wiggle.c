@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.40 2005/02/04 18:34:26 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.41 2005/02/07 20:40:33 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -167,18 +167,139 @@ if (visibility != NULL)
 hPrintf("\n");
 }
 
+static void addBedElement(struct bed **bedList, char *chrom,
+	unsigned start, unsigned end, unsigned count, struct lm *lm)
+{
+struct bed *bed;
+char name[128];
+
+lmAllocVar(lm, bed);
+bed->chrom = lmCloneString(lm, chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+safef(name,ArraySize(name), "%s.%u", bed->chrom, count);
+bed->name = lmCloneString(lm, name);
+slAddHead(bedList, bed);
+}
+
+static struct bed *invertBedList(struct bed *bedList, struct lm *lm,
+	char *chrom, unsigned chromStart, unsigned chromEnd, unsigned chromSize)
+/*	bed list result is everything NOT in the given bedList	*/
+{
+unsigned elCount = 1;
+unsigned start = 0;				/*	start == end	*/
+unsigned end = 0;				/*	means no element yet */
+unsigned lastEnd = 0;			/*	in the bedList	*/
+struct bed *inverseBedList = NULL;		/*	new list	*/
+struct bed *el;
+
+slSort(&bedList, bedLineCmp);	/* make sure it is sorted */
+
+/*	Do not need to work on full chrom if not necessary */
+if ((chromStart != 0) || (chromEnd != 0))
+    {
+    start = chromStart;
+    end = start;
+    if (chromEnd < chromSize)
+	    chromSize = chromEnd;
+    }
+
+for (el = bedList; el != NULL; el=el->next)
+    {
+    /*	past end of chrom, bad bed list	*/
+    if (el->chromStart >= chromSize)
+	{
+	end = chromSize;
+	break;
+	}
+    if (el->chromStart > end)
+	end = el->chromStart + 1;
+    if (end > start)			/* do we have an element */
+	{
+	addBedElement(&inverseBedList, chrom, start, end, elCount++, lm);
+	start = el->chromEnd - 1;	/*	reset to no element yet */
+	end = start;
+	}
+    else if (el->chromEnd > start)
+	{
+	start = el->chromEnd - 1;	/*	reset to no element yet */
+	end = start;
+	}
+    lastEnd = el->chromEnd;
+    }
+
+/*	A last element ?	*/
+if (lastEnd < chromSize)
+    end = chromSize;
+
+if (end > start)			/* potential last element	*/
+    addBedElement(&inverseBedList, chrom, start, end, elCount++, lm);
+
+slSort(&inverseBedList, bedLineCmp);	/* make sure it is sorted */
+
+return inverseBedList;
+}
+
+static struct bed *bedTable2(struct sqlConnection *conn,
+	struct region *region, char *table2)
+/*	get a bed list, possibly complement, for table2	*/
+{
+boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
+char *op = cartString(cart, hgtaIntersectOp);
+struct bed *bedList = NULL;
+struct trackDb *track2 = findTrack(table2, fullTrackList);
+struct lm *lm1 = lmInit(64*1024);
+
+/*	fetch table 2 as a bed list	*/
+bedList = getFilteredBeds(conn, track2->tableName, region, lm1, NULL);
+
+/*	If table 2 bed list needs to be complemented (!table2), then do so */
+if (bedList && (invTable2 || sameString("none", op)))
+    {
+    unsigned chromStart = 0;		/*	start == end == 0	*/
+    unsigned chromEnd = 0;		/*	means do full chrom	*/
+    unsigned chromSize = hChromSize(region->chrom);
+    struct lm *lm2 = lmInit(64*1024);
+    struct bed *inverseBedList = NULL;		/*	new list	*/
+
+    if ((region->start != 0) || (region->end != 0))
+	{
+	chromStart = region->start;
+	chromEnd = region->end;
+	}
+
+    inverseBedList=invertBedList(bedList, lm2, region->chrom, chromStart,
+	chromEnd, chromSize);
+
+    lmCleanup(&lm1);			/*	== bedFreeList(&bedList) */
+
+    return inverseBedList;
+    }
+else
+    return bedList;
+}
+
 static unsigned long long getWigglePossibleIntersection(
-    struct wiggleDataStream *wds, char *db, char *table2,
-	struct bed **intersectBedList,
+    struct wiggleDataStream *wds, struct region *region, char *db,
+	char *table2, struct bed **intersectBedList,
 	    char splitTableOrFileName[256], int operations)
 {
 unsigned long long valuesMatched = 0;
 
-if (table2 || *intersectBedList)
+/*	Intersection is either type "any" or "none"
+ *	The "none" case is already taken care of during the loading of
+ *	table 2 since it was then inverted at that time so it is already
+ *	"none" of itself.
+ */
+if (*intersectBedList)
+    {
     valuesMatched = wds->getDataViaBed(wds, db, splitTableOrFileName,
 	operations, intersectBedList);
+    }
 else
+    {
     valuesMatched = wds->getData(wds, db, splitTableOrFileName, operations);
+    }
 
 return valuesMatched;
 }
@@ -224,17 +345,11 @@ wds->setChromConstraint(wds, region->chrom);
 wds->setPositionConstraint(wds, region->start, region->end);
 
 if (table2)
-    {
-    /* Load up intersecting bedList2 (to intersect with) */
-    struct trackDb *track2 = findTrack(table2, fullTrackList);
-    struct lm *lm2 = lmInit(64*1024);
-    intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2, NULL);
-    }
-
+    intersectBedList = bedTable2(conn, region, table2);
 
 if (isCustom)
     {
-    valuesMatched = getWigglePossibleIntersection(wds, NULL, table2,
+    valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
 	&intersectBedList, splitTableOrFileName, operations);
     }
 else
@@ -244,15 +359,15 @@ else
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	{
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
-	if (table2 || intersectBedList)
+	if (intersectBedList)
 	    {
 	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
 	    }
-	valuesMatched = getWigglePossibleIntersection(wds, database, table2,
-	    &intersectBedList, splitTableOrFileName, operations);
+	valuesMatched = getWigglePossibleIntersection(wds, region, database,
+	    table2, &intersectBedList, splitTableOrFileName, operations);
 	}
     }
 
@@ -429,17 +544,11 @@ wds->setChromConstraint(wds, region->chrom);
 wds->setPositionConstraint(wds, region->start, region->end);
 
 if (table2)
-    {
-    /* Load up intersecting bedList2 (to intersect with) */
-    struct trackDb *track2 = findTrack(table2, fullTrackList);
-    struct lm *lm2 = lmInit(64*1024);
-    intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2, NULL);
-    }
-
+    intersectBedList = bedTable2(conn, region, table2);
 
 if (isCustom)
     {
-    valuesMatched = getWigglePossibleIntersection(wds, NULL, table2,
+    valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
 	&intersectBedList, splitTableOrFileName, operations);
     }
 else
@@ -458,8 +567,8 @@ else
 	    region->start, region->end, cart, curTrack);
 	wds->setSpanConstraint(wds, span);
 
-	valuesMatched = getWigglePossibleIntersection(wds, database, table2,
-	    &intersectBedList, splitTableOrFileName, operations);
+	valuesMatched = getWigglePossibleIntersection(wds, region, database,
+	    table2, &intersectBedList, splitTableOrFileName, operations);
 	}
     }
 
@@ -567,12 +676,7 @@ for (region = regionList; region != NULL; region = region->next)
     ++regionsDone;
 
     if (table2)
-	{
-	/* Load up intersecting bedList2 (to intersect with) */
-	struct trackDb *track2 = findTrack(table2, fullTrackList);
-	struct lm *lm2 = lmInit(64*1024);
-	intersectBedList = getFilteredBeds(conn, track2->tableName, region, lm2, NULL);
-	}
+	intersectBedList = bedTable2(conn, region, table2);
 
     operations = wigFetchStats;
 #if defined(NOT)
@@ -597,8 +701,8 @@ for (region = regionList; region != NULL; region = region->next)
      */
     if (isCustom)
 	{
-	valuesMatched = getWigglePossibleIntersection(wds, NULL, table2,
-	    &intersectBedList, splitTableOrFileName, operations);
+	valuesMatched = getWigglePossibleIntersection(wds, region, NULL,
+	    table2, &intersectBedList, splitTableOrFileName, operations);
 
 	/*  XXX We need to properly get the smallest span for custom tracks */
 	/*	This is not necessarily the correct answer here	*/
@@ -614,9 +718,10 @@ for (region = regionList; region != NULL; region = region->next)
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
-	    valuesMatched = getWigglePossibleIntersection(wds, database, table2,
-		&intersectBedList, splitTableOrFileName, operations);
-	    if (table2 || intersectBedList)
+	    valuesMatched = getWigglePossibleIntersection(wds, region,
+		database, table2, &intersectBedList, splitTableOrFileName,
+		    operations);
+	    if (intersectBedList)
 		span = 1;
 	    }
 	}
