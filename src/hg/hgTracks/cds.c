@@ -321,11 +321,15 @@ char **row;
 conn = hAllocConn();
 sprintf(query, "select cds from mrna where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
-assert((row = sqlNextRow(sr)) != NULL);
+if((row = sqlNextRow(sr)) == NULL)
+    errAbort(
+    "cds.c: mushGetMrnaStartStop() - Cannot get cds for %s from table \"mrna\"\n", acc);
 sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
 sqlFreeResult(&sr);
 sr = sqlGetResult(conn, query);
-assert((row = sqlNextRow(sr)) != NULL);
+if((row = sqlNextRow(sr)) == NULL)
+    errAbort(
+    "cds.c: mushGetMrnaStartStop() - Cannot get cds for %s from table \"cds\"\n", acc);
 genbankParseCds(row[0], cdsStart, cdsEnd);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -408,15 +412,21 @@ lf->components = sfList;
 }
 
 
-int getCdsDrawOptionNum(char *mapName)
+int getCdsDrawOptionNum(struct track *tg)
     /*query the cart for the current track's CDS coloring option. See
      * cdsColors.h for return value meanings*/
 {
-    char *drawOption = NULL;
+    char *defaultDrawOption;
     char optionStr[128];
-    safef(optionStr, 128,"%s.cds.draw", mapName);
-    drawOption = cartUsualString(cart, optionStr, CDS_DRAW_DEFAULT);
-    return(cdsColorStringToEnum(drawOption));
+    if(tg == NULL) return(0);
+    if (tg->tdb != NULL)
+        defaultDrawOption = trackDbSettingOrDefault(tg->tdb, "cdsDrawDefault", 
+                                                    CDS_DRAW_DEFAULT);
+    else
+        defaultDrawOption = CDS_DRAW_DEFAULT;
+    safef(optionStr, 128,"%s.cds.draw", tg->mapName);
+    return(cdsColorStringToEnum(cartUsualString(cart, optionStr,
+                                                defaultDrawOption)));
 }
 
 
@@ -948,8 +958,8 @@ int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
  * returns drawOptionNum, mrnaSeq, psl, errorColor*/
 {
 //get coloring options
-int drawOptionNum = getCdsDrawOptionNum(tg->mapName);
-
+int drawOptionNum;
+drawOptionNum = getCdsDrawOptionNum(tg);
 if(drawOptionNum == 0) return(0);
 
 /*allocate colors for coding coloring*/

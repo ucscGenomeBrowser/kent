@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.706 2004/04/09 02:48:11 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.707 2004/04/13 15:58:51 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2054,7 +2054,7 @@ while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
-	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg->mapName);
+	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
@@ -2124,7 +2124,7 @@ struct genePred *gp = NULL;
 
 int drawOptionNum = 0; //off
 if (table != NULL)
-    drawOptionNum = getCdsDrawOptionNum(table);
+    drawOptionNum = getCdsDrawOptionNum(tg);
 
 if (tg->itemAttrTbl != NULL)
     itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
