@@ -513,6 +513,8 @@ cartErrorCatcher(doMiddle, cart);
 popWarnHandler();
 }
 
+static boolean inWeb = FALSE;
+
 void cartHtmlStart(char *title)
 /* Write HTML header and put in normal error handler. */
 {
@@ -529,15 +531,27 @@ va_start(args, format);
 pushWarnHandler(htmlVaWarn);
 webStartWrapper(format, args, FALSE, FALSE);
 va_end(args);
+inWeb = TRUE;
 }
 
+void cartWebEnd()
+/* Write out HTML footer and get rid or error handler. */
+{
+webEnd();
+popWarnHandler();
+}
 
 void cartHtmlEnd()
 /* Write out HTML footer and get rid or error handler. */
 {
-htmlEnd();
+if (inWeb)
+    webEnd();
+else
+    htmlEnd();
 popWarnHandler();
 }
+
+
 
 void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, 
 	char **exclude, struct hash *oldVars)

@@ -252,7 +252,7 @@ printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ",
 printf("<a href=\"%s\">[browser]</a></li></ul>\n", 
        makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd));
 printTroubleShooting(ccr);
-cartHtmlEnd();
+cartWebEnd();
 }
 
 void doBadReport(FILE *dummy, struct coordConvRep *ccr) 
@@ -265,7 +265,7 @@ printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n",
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
        ccr->from->date);
 printTroubleShooting(ccr);
-cartHtmlEnd();
+cartWebEnd();
 }
 
 
@@ -374,7 +374,7 @@ cgiMakeButton("Submit","submit");
 printf("</center></td></tr></table>\n");
 cgiMakeHiddenVar("calledSelf", "on");
 printf("</form>\n");
-cartHtmlEnd();
+cartWebEnd();
 }
 
 /* from here until main() is for testing */

@@ -495,7 +495,6 @@ if (wordCount > 0)
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
-webEnd();
 }
 
 void savePosInHidden()
@@ -535,7 +534,6 @@ printf(" ");
 cgiMakeButton("Submit", "Submit");
 printf("</FORM>\n");
 
-webEnd();
 }
 
 void maskRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset, boolean soft)
@@ -693,7 +691,6 @@ puts("<P>Be careful about requesting complex formatting for a very large "
  "the file size may exceed size limits that your browser, clipboard, and "
  "other software can safely display.  The tool will format 10Mbp and more though.</P>");
 trackDbFreeList(&tdbList);
-webEnd();
 }
 
 void doGetDna2()
@@ -883,7 +880,6 @@ freeDnaSeq(&seq);
 bitFree(&uBits);
 bitFree(&iBits);
 bitFree(&bBits);
-webEnd();
 }
 
 void medlineLinkedLine(char *title, char *text, char *search)
@@ -1136,7 +1132,6 @@ void doHgEstPair(char *track, char *name)
 {
 cartWebStart(name);
 printEstPairInfo(track, name);
-webEnd();
 }
 
 #endif /* ROGIC_CODE */
@@ -1200,7 +1195,6 @@ printf("<H3>%s/Genomic Alignments</H3>", type);
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
-webEnd();
 }
 
 void parseSs(char *ss, char **retPslName, char **retFaName, char **retQName)
@@ -1250,7 +1244,6 @@ slReverse(&pslList);
 lineFileClose(&lf);
 printAlignments(pslList, start, "htcUserAli", "user", encItem);
 pslFreeList(&pslList);
-webEnd();
 }
 
 void doHgGold(struct trackDb *tdb, char *fragName)
@@ -1281,7 +1274,6 @@ printTrackHtml(tdb);
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-webEnd();
 }
 
 void doHgGap(struct trackDb *tdb, char *gapType)
@@ -1314,7 +1306,6 @@ printTrackHtml(tdb);
 
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-webEnd();
 }
 
 
@@ -1362,7 +1353,6 @@ printPos(ctg->chrom, ctg->chromStart, ctg->chromEnd, NULL, TRUE);
 printTrackHtml(tdb);
 
 hFreeConn(&conn);
-webEnd();
 }
 
 char *cloneStageName(char *stage)
@@ -1416,7 +1406,6 @@ hgcAnchor("htcCloneSeq", cloneName, "");
 printf("Fasta format sequence</A><BR>\n");
 hFreeConn(&conn);
 printTrackHtml(tdb);
-webEnd();
 }
 
 void doHgClone(struct trackDb *tdb, char *fragName)
@@ -1910,7 +1899,6 @@ cartWebStart("Tetraodon Alignment");
 printf("Alignment between tetraodon sequence %s (above) and human chromosome %s (below)\n",
     name, skipChr(seqName));
 fetchAndShowWaba("waba_tet", name);
-webEnd();
 }
 
 void doHgRepeat(struct trackDb *tdb, char *repeat)
@@ -1965,7 +1953,6 @@ else
     printf("Click right on top of an individual repeat for more information on that repeat<BR>\n");
     }
 printTrackHtml(tdb);
-webEnd();
 }
 
 void doHgIsochore(struct trackDb *tdb, char *item)
@@ -2000,7 +1987,6 @@ if (cgiVarExists("o"))
     hFreeConn(&conn);
     }
 printTrackHtml(tdb);
-webEnd();
 }
 
 void doSimpleRepeat(struct trackDb *tdb, char *item)
@@ -2046,7 +2032,6 @@ else
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
     }
 printTrackHtml(tdb);
-webEnd();
 }
 
 void hgSoftPromoter(char *track, char *item)
@@ -2106,7 +2091,6 @@ puts("using the TSSW program. "
 "<P>\"For 20 experimentally verified promoters on Chromosome 22, TSSW predicted "
 "15, placed 12 of them  within (-150,+150) region from true TSS and 6 (30% of "
 "all promoters) - within -8,+2 region from true TSS.\" </P>");
-webEnd();
 }
 
 void doCpgIsland(struct trackDb *tdb, char *item)
@@ -2148,7 +2132,6 @@ else
     puts("<P>Click directly on a CpG island for specific information on that island</P>");
     }
 printTrackHtml(tdb);
-webEnd();
 }
 
 void printLines(FILE *f, char *s, int lineSize)
@@ -2406,7 +2389,6 @@ cgiMakeIntVar("hgc.gene.promoterSize", 1000, 6);
 printf("<BR>");
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
-webEnd();
 }
 
 void toUpperExons(int startOffset, struct dnaSeq *seq, struct genePred *gp)
@@ -2609,7 +2591,6 @@ if (!upgraded)
 puts(
    "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
-webEnd();
 }
 
 void doRefGene(struct trackDb *tdb, char *rnaName)
@@ -2690,7 +2671,6 @@ puts(
    "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
 hFreeConn(&conn);
-webEnd();
 }
 
 char *getGi(char *ncbiFaHead)
@@ -2755,7 +2735,6 @@ genericHeader(tdb, geneName);
 showHomologies(geneName, "softberryHom");
 geneShowCommon(geneName, tdb, "softberryPep");
 printTrackHtml(tdb);
-webEnd();
 }
 
 
@@ -2795,7 +2774,6 @@ genericHeader(tdb, geneName);
 showSangerExtra(geneName, extraTable);
 geneShowCommon(geneName, tdb, pepTable);
 printTrackHtml(tdb);
-webEnd();
 }
 
 
@@ -2859,7 +2837,6 @@ else
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 void htcExtSeq(char *item)
@@ -2952,7 +2929,6 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 printAlignments(pslList, start, "htcBlatMouse", track, itemName);
 printTrackHtml(tdb);
-webEnd();
 }
 
 void doEst3(char *itemName)
@@ -2988,7 +2964,6 @@ puts("<P>This track shows where clusters of EST 3' ends hit the "
      "at NCBI.  Additional filtering was applied by Jim Kent.</P>");
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-webEnd();
 }
 
 void doRnaGene(struct trackDb *tdb, char *itemName)
@@ -3023,7 +2998,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 puts(tdb->html);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-webEnd();
 }
 
 void doStsMarker(struct trackDb *tdb, char *marker)
@@ -3353,7 +3327,6 @@ if (row != NULL)
     }
 webNewSection("Notes:");
 puts(tdb->html);
-webEnd();
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn1);
@@ -3472,7 +3445,6 @@ if (row != NULL)
 printf("</TABLE>\n"); 
 webNewSection("Notes:");
 puts(tdb->html);
-webEnd();
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -3515,7 +3487,6 @@ puts("<P>This track syntenous (corresponding) regions between human "
      "<A HREF=\"mailto:church@ncbi.nlm.nih.gov\">Deanna Church</A> at NCBI. Please "
      "visit <A HREF=\"http://www.ncbi.nlm.nih.gov/Homology/\" TARGET = _blank>"
      "http://www.ncbi.nlm.nih.gov/Homology/</A> for more details.");
-webEnd();
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -3550,7 +3521,6 @@ printf("dbSNP link</A></P>\n");
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-webEnd();
 }
 
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
@@ -3702,7 +3672,6 @@ sqlFreeResult(&sr);
 webNewSection("Notes:");
 puts(tdb->html);
 hgFreeConn(&conn);
-webEnd();
 } 
 
 void fillCghTable(int type, char *tissue, boolean bold)
@@ -3802,7 +3771,6 @@ printf("<TR><TD>&nbsp</TD></TR>\n");
 printf("</TR>\n</TABLE>\n");
 
 hgFreeConn(&conn);
-webEnd();
 }
 
 void doMcnBreakpoints(char *track, char *name, struct trackDb *tdb)
@@ -3854,7 +3822,6 @@ while (row = sqlNextRow(sr))
      }  
 sqlFreeResult(&sr);
 hgFreeConn(&conn);
-webEnd();
 } 
 
 #endif /* FUREY_CODE */
@@ -3908,7 +3875,6 @@ printf("<h3>Genomic Details:</h3>\n");
 genericBedClick(conn, tdb, item, start, 1);
 printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 void perlegenDetails(struct trackDb *tdb, char *item)
@@ -3985,7 +3951,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 
@@ -4072,7 +4037,6 @@ while ((row = sqlNextRow(sr)) != NULL )
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
-webEnd();
 }
 
 void doGcDetails(struct trackDb *tdb, char *itemName) {
@@ -4104,7 +4068,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-webEnd();
 }
 
 void chuckHtmlStart(char *title) 
@@ -4761,7 +4724,6 @@ printf("</td></tr><tr><td align=center><br>\n");
 printf("<b>Press Here to View Detailed Plots</b><br><input type=submit name=Submit value=submit>\n");
 printf("<br><br><br><b>Clear Values</b><br><input type=reset name=Reset></form>\n");
 printf("</td></tr></table>");
-webEnd();
 }
 
 void nci60Details(struct trackDb *tdb, char *expName) 
@@ -4797,7 +4759,6 @@ else
     hashFree(&erHash);
     bedFreeList(&bedList);
     }
-webEnd();
 }
 
 void printAffyLinks(char *name)
@@ -4858,7 +4819,6 @@ else
     hashFree(&erHash);
     bedFreeList(&bedList);
     }
-webEnd();
 }
 
 void affyRatioDetails(struct trackDb *tdb, char *expName) 
@@ -4898,7 +4858,6 @@ else
     hashFree(&erHash);
     bedFreeList(&bedList);
     }
-webEnd();
 }
 
 
@@ -5033,7 +4992,6 @@ else
     hashFree(&erHash);
     bedFreeList(&bedList);
     }
-webEnd();
 }
 
 struct sageExp *loadSageExps(char *tableName, struct pslWScore  *psList)
@@ -5317,7 +5275,6 @@ if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
 printCustomUrl(ct->tdb, itemName, TRUE);
 bedPrintPos(bed);
-webEnd();
 }
 
 struct hash *makeTrackHash(char *chrom)
@@ -5620,7 +5577,6 @@ else
    {
    cartWebStart(track);
    printf("Sorry, clicking there doesn't do anything yet (%s).", track);
-   webEnd();
    }
 cartHtmlEnd();
 }

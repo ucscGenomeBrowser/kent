@@ -158,8 +158,7 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 cartWebStart("UCSC Genome Browser Gateway");
 hgGateway();
-webEnd();
-cartHtmlEnd();
+cartWebEnd();
 }
 
 char *excludeVars[] = {NULL};
