@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.31 2004/07/30 19:27:35 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.32 2004/10/25 22:30:50 angie Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -374,7 +374,18 @@ if (lineFileNext(lf, &line, NULL))
 	    warn("Strange http header on %s\n", lf->fileName);
 	    return FALSE;
 	    }
-	if (!sameString(code, "200"))
+	if (startsWith("30", code) && isdigit(code[2]) && code[3] == 0)
+	    {
+	    warn("Your URL \"%s\" resulted in a redirect message "
+		 "(HTTP status code %s %s).  <BR>\n"
+		 "Sorry, redirects are not supported.  "
+		 "Please use the new location of your URL, which you "
+		 "should be able to find by viewing it in your browser: "
+		 "<A HREF=\"%s\" TARGET=_BLANK>click here to view URL</A>.",
+		 lf->fileName, code, line, lf->fileName);
+	    return FALSE;
+	    }
+	else if (!sameString(code, "200"))
 	    {
 	    warn("%s: %s %s\n", lf->fileName, code, line);
 	    return FALSE;
