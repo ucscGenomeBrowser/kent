@@ -691,11 +691,6 @@ PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-06-27 - Hiram)
     # 2 in particular is so fast perhaps it's just as well to
     # do the inverse explicitly.
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  STOP HERE 2003-06-27
-XXXXXXXXXXXXXXXXXX  The following needs to be done with Mark's new
-XXXXXXXXXXXXXXXXXX  system of auto-update genbank data.  Will start
-XXXXXXXXXXXXXXXXXX  on this later today.
-
 AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
 
     ssh eieio
@@ -729,6 +724,7 @@ AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
     cd /cluster/store5/genbank
     ./bin/i386/gbLoadRna -drop  rn3
     nice ./bin/gbDbLoadStep -verbose=1 -initialLoad rn3
+    # This load took about 7 hours
 
 CREATE REFSEQ GENES TRACK (TO DO)
     # Load the refSeq mRNA
@@ -1264,25 +1260,28 @@ LOAD BACTIG POSITIONS (TO DO)
       -noBin -sqlTable=$HOME/kent/src/hg/lib/bactigPos.sql
 
 
-LOAD CPGISSLANDS (TO DO)
-    ssh kkstore
+LOAD CPGISSLANDS (DONE - 2003-07-08 - Hiram)
+    ssh hgwdev
     mkdir -p ~/rn3/bed/cpgIsland
     cd ~/rn3/bed/cpgIsland
     # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
     # copy the tar file to the current directory
-    cp ~/lastRn/bed/cpgIsland/cpg_dist.tar .
+    cp -p /cluster/store4/rn2/bed/cpgIsland/cpg_dist.tar .
     tar xvf cpg_dist.tar 
     cd cpg_dist
     gcc readseq.c cpg_lh.c -o cpglh.exe
-    cd ..
+    
+    ssh kkstore
+    cd ~/rn3/bed/cpgIsland
     foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
       set fout=$f:t:r:r.cpg
       echo running cpglh on $f to $fout
       ./cpg_dist/cpglh.exe $f > $fout.cpg
     end
     # copy filter.awk from a previous release
-    cp ~/lastRn/bed/cpgIsland/filter.awk .
+    cp -p /cluster/store4/rn2/bed/cpgIsland/filter.awk .
     awk -f filter.awk chr*.cpg > cpgIsland.bed
+
     # load into database:
     ssh hgwdev
     cd ~/rn3/bed/cpgIsland
@@ -1300,13 +1299,13 @@ LOAD SOFTBERRY GENES (TO DO)
      hgPepPred rn3 softberry *.protein
      hgSoftberryHom rn3 *.protein
 
-LOAD GENEID GENES (TO DO)
+LOAD GENEID GENES (DONE - 2003-07-08 - Hiram)
     mkdir -p ~/rn3/bed/geneid/download
     cd ~/rn3/bed/geneid/download
     foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/geneid_v1.1/$chr.gtf
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/geneid_v1.1/$chr.prot
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJun2003/geneid_v1.1/$chr.gtf
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJun2003/geneid_v1.1/$chr.prot
     end
     # Add missing .1 to protein id's
     foreach f (*.prot)
