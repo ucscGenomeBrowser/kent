@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.61 2005/02/24 00:52:02 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.62 2005/03/16 02:27:21 sugnet Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -495,7 +495,14 @@ boolean haveFrame = FALSE;
 int i;
 
 /* should we count on start/stop codon annotation in GFFs? */
-boolean useStartStops = isGtf || haveStartStopCodons(gff);
+boolean useStartStops = FALSE;
+
+/* Use a static variable to only look once for start/stop codons. */
+static int lookForStartStopCodons = -1;
+if(lookForStartStopCodons == -1)
+    lookForStartStopCodons = haveStartStopCodons(gff);
+
+useStartStops = isGtf || lookForStartStopCodons;
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
