@@ -13,7 +13,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.7 2004/07/13 22:40:51 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.8 2004/07/14 00:36:53 kent Exp $";
 
 
 void usage()
@@ -158,12 +158,18 @@ else
 return regionList;
 }
 
-char *tableForTrack(struct trackDb *track)
-/* Return table name (for first chromosome if split) 
- * associated with track.  You can freeMem this when done. */
+char *connectingTableForTrack(struct trackDb *track)
+/* Return table name to use with all.joiner for track. 
+ * You can freeMem this when done. */
 {
 struct hTableInfo *hti = hFindTableInfo(NULL, track->tableName);
-if (!hti->isSplit)  /* easy case. */
+if (sameString(track->tableName, "mrna"))
+    return cloneString("all_mrna");
+else if (sameString(track->tableName, "intronEst"))
+    return cloneString("all_est");
+else if (sameString(track->tableName, "est"))
+    return cloneString("all_est");
+else if (!hti->isSplit)  /* easy case. */
     return cloneString(track->tableName);
 else
     {
@@ -742,7 +748,7 @@ if (track == NULL)
 if (sameString(output, outPrimaryTable))
     doOutPrimaryTable(track, conn);
 else if (sameString(output, outSchema))
-    doOutSchema(track, conn);
+    doTrackSchema(cart, track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -777,6 +783,12 @@ else if (cartVarExists(cart, hgtaDoUploadIdentifiers))
     doUploadIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoFilterPage))
     doFilterPage(conn);
+else if (cartVarExists(cart, hgtaDoSchema))
+    {
+    doTableSchema(cart, 
+    	cartString(cart, hgtaDoSchemaDb), 
+    	cartString(cart, hgtaDoSchema), conn);
+    }
 else	/* Default - put up initial page. */
     beginPage(conn);
 cartRemovePrefix(cart, hgtaDo);

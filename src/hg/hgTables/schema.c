@@ -10,36 +10,99 @@
 #include "trackDb.h"
 #include "grp.h"
 #include "joiner.h"
+#include "tableDescriptions.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.1 2004/07/13 22:40:51 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.2 2004/07/14 00:36:53 kent Exp $";
 
-void doOutSchema(struct trackDb *track, struct sqlConnection *conn)
-/* Show page that describes schema. */
+boolean showTableDescriptions(struct sqlConnection *conn, char *table)
+/* Display autoSql definition and gbdDescriptions link for table, 
+ * if available. */
+{
+boolean gotInfo = FALSE;
+static char *asTableName = "tableDescriptions";
+
+if (sqlTableExists(conn, asTableName))
+    {
+    struct sqlResult *sr = NULL;
+    struct tableDescriptions *asi = NULL;
+    char query[512];
+    char **row = NULL;
+    safef(query, sizeof(query), "select * from %s where tableName = '%s'",
+	  asTableName, table);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	asi = tableDescriptionsLoad(row);
+	gotInfo = TRUE;
+	if (asi->autoSqlDef != NULL && asi->autoSqlDef[0] != 0)
+	    {
+	    hPrintf("<BR>\n");
+	    hPrintf("<B><A HREF=\"http://www.linuxjournal.com/article.php?sid=5949\" TARGET=_BLANK>");
+	    hPrintf("AutoSql</A> field definition:</B>");
+	    hPrintf("<PRE><TT>");
+	    hPrintf(asi->autoSqlDef);
+	    hPrintf("</TT></PRE>");
+	    }
+	if (asi->gbdAnchor != NULL && asi->gbdAnchor[0] != 0)
+	    {
+	    hPrintf("<A HREF=\"/goldenPath/gbdDescriptions.html#%s\" TARGET=_BLANK>",
+		   asi->gbdAnchor);
+	    hPrintf("Genome Browser Database Description for %s</A>", table);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+return(gotInfo);
+}
+
+static void showSchema(struct cart *cart,
+	char *db, char *table, struct sqlConnection *conn)
+/* Show schema to open html page. */
 {
 struct joiner *joiner = joinerRead("all.joiner");
-struct hTableInfo *hti = hFindTableInfo(NULL, track->tableName);
-char *table = tableForTrack(track);
+struct hTableInfo *hti = hFindTableInfo(NULL, table);
 struct joinerPair *jpList, *jp;
-htmlOpen("Schema %s - %s", track->shortLabel, track->longLabel);
-hPrintf("<B>Primary Table:</B> %s\n", track->tableName);
-if (hti != NULL && hti->isSplit)
-    {
-    hPrintf(" (split across chromosomes)");
-    }
-hPrintf("<BR>\n");
-jpList = joinerRelate(joiner, database, table);
+hPrintf("<B>Database:</B> %s ", db);
+hPrintf("<B>Primary Table:</B> %s<BR>", table);
+showTableDescriptions(conn, table);
+
+jpList = joinerRelate(joiner, db, table);
 if (jpList != NULL)
     {
-    hPrintf("<B>Connected Tables and Joining Fields:</B><BR>\n");
+    webNewSection("Connected Tables and Joining Fields");
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
 	hPrintSpaces(6);
-	hPrintf("%s.<B>%s</B>.%s (via %s.%s.<B>%s</B> field)<BR>\n", 
-	    jp->b->database, jp->b->table, jp->b->field,
-	    jp->a->database, jp->a->table, jp->a->field);
+	hPrintf("<A HREF=\"../cgi-bin/hgTables?");
+	hPrintf("%s&", cartSidUrlString(cart));
+	hPrintf("%s=%s&", hgtaDoSchemaDb, jp->b->database);
+	hPrintf("%s=%s", hgtaDoSchema, jp->b->table);
+	hPrintf("\">");
+	hPrintf("%s.%s", jp->b->database, jp->b->table);
+	hPrintf("</A>");
+	hPrintf(".%s (via %s.%s.<B>%s</B> field)<BR>\n", 
+	    jp->b->field, jp->a->database, jp->a->table, jp->a->field);
 	}
     }
+}
+
+void doTableSchema(struct cart *cart,
+	char *db, char *table, struct sqlConnection *conn)
+/* Show schema around table. */
+{
+htmlOpen("Schema for %s", table);
+showSchema(cart, db, table, conn);
+htmlClose();
+}
+
+void doTrackSchema(struct cart *cart,
+	struct trackDb *track, struct sqlConnection *conn)
+/* Show schema around track. */
+{
+char *table = connectingTableForTrack(track);
+htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
+showSchema(cart, database, table, conn);
 htmlClose();
 }
 
