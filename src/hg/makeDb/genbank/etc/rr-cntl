@@ -7,7 +7,7 @@ by adding or removing the approriate crontabs.
 cmd is start or stop
 "
 
-rrhosts="hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8"
+rrhosts="hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc"
 
 if [ $# != 1 ] ; then
     echo "wrong # args: $usage" >&2
