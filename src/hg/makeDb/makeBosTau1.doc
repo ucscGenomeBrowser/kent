@@ -87,7 +87,7 @@ exit; # don't actually run this like a script :)
   cd /cluster/data/bosTau1/linearScaffolds
   /cluster/bin/i386/faToTwoBit Btau20040927-freeze-assembly.fa bosTau1.2bit
   /cluster/bin/i386/twoBitToFa bosTau1.2bit check.fa
-  mv bosTau1.2bit ../..
+  mv bosTau1.2bit ..
   diff -q Btau20040927-freeze-assembly.fa check.fa
   # could also use cmp
   # note: size match
@@ -249,7 +249,7 @@ exit; # don't actually run this like a script :)
   /bin/tcsh concatTRF.csh
 
   # load
-  /cluster/bin/i386/hgLoadBed bosTau1 simpleRepeat trf.all \
+  /cluster/bin/i386/hgLoadBed bosTau1 simpleRepeat trf.bed \
     -sqlTable = /cluster/home/heather/kent/src/hg/lib/simpleRepeat.sql
 
   # Reading trf.all
@@ -258,4 +258,87 @@ exit; # don't actually run this like a script :)
   # Saving bed.tab
   # Loading bosTau1
 
+# CREATE MASKED FA USING REPEATMASKER AND FILTERED TRF FILES (DONE Oct. 10, 2004, Heather) 
 
+  ssh kksilo
+  cd /cluster/data/bosTau1
+  /cluster/bin/i386/maskOutFa -soft downloads/linearScaffolds/Btau20040927-freeze-assembly.fa repeats/repeat.out bosTau1.softmask.fa
+  # 71 warnings about negative rEnd
+  # matches select count(*) from rmsk where repEnd < 0;
+
+  /cluster/bin/i386/maskOutFa -softAdd bosTau1.softmask.fa bed/simpleRepeat/trf.bed bosTau1.softmask2.fa
+
+  # hard masking (Ns instead of lower case) for download files
+
+# REGENERATE 2BIT NIB (DONE, Oct. 10, 2004, Heather)
+  ssh kksilo
+  cd /cluster/data/bosTau1
+  /cluster/bin/i386/faToTwoBit bosTau1.softmask2.fa bosTau1.softmask.2bit
+  /cluster/bin/i386/twoBitToFa bosTau1.softmask.2bit check.softmask.fa
+  diff -q bosTau1.softmask2.fa check.softmask.fa
+  mv bosTau1.2bit bosTau1.2bit.unmasked
+  mv bosTau1.softmask.2bit bosTau1.2bit
+  # note: size match
+
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, Oct. 10, 2004, Heather)
+  ssh kkr1u00
+  mkdir -p /iscratch/i/bosTau1/nib
+  cp -p /cluster/data/bosTau1/bosTau1.2bit /iscratch/i/bosTau1/nib
+  iSync
+
+  ssh kksilo
+  mkdir -p /cluster/bluearc/bosTau1/nib
+  cp -p /cluster/data/bosTau1/nib/bosTau1.2bit /cluster/bluearc/bosTau1/nib
+
+# MAKE 11.OOC FILE FOR BLAT (DONE, Oct. 10, 2004, Heather)
+  ssh kkr1u00
+  mkdir /cluster/data/bosTau1/bed/ooc
+  cd /cluster/data/bosTau1/bed/ooc
+  ls -1 /cluster/data/bosTau1/bosTau1.2bit > nib.lst
+  /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
+    -makeOoc=/cluster/bluearc/bosTau1/11.ooc -repMatch=100
+  # Wrote 1327650 overused 11-mers to /cluster/bluearc/bosTau1/11.ooc
+  cp -p /cluster/bluearc/bosTau1/11.ooc /iscratch/i/bosTau1/
+  iSync
+
+# CREATE FAKE LIFT FILE 
+  ssh hgwdev
+  cd /cluster/home/heather/jdbc
+  source javaenv
+  java -Xms128m -Xmx256m makeFakeLift > bosTau1.lft
+  mv bosTau1.lft /cluster/data/bosTau1
+
+# GENBANK
+  ssh hgwdev
+  cd /cluster/home/heather/kent/src/hg/makeDb/genbank
+  # check for missing commits
+  diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
+  # edit etc/genbank.conf and add these lines, starting with the comment:
+  # bosTau1 (B. taurus)
+  bosTau1.genome = /iscratch/i/bosTau1/nib/bosTau1.2bit
+  bosTau1.lift = /cluster/data/bosTau1/bosTau1.lft
+  bosTau1.refseq.mrna.native.load = no
+  # bosTau1.genbank.mrna.xeno.load = yes
+  bosTau1.genbank.mrna.xeno.load = no
+  bosTau1.genbank.est.xeno.load = no
+  bosTau1.downloadDir= bosTau1
+  cvs commit -m "added cow" etc/genbank.conf
+  #revision 1.56
+
+  # edit src/lib/gbGenome.c
+  make
+  cvs commit -m "added cow" src/lib/gbGenome.c
+  # revision 1.19
+
+  # edit src/align/gbBlat
+  make
+  cvs commit -m "added cow" src/align/gbBlat
+  # revision 1.29
+
+  make install-server
+
+  ssh eieio
+  cd /cluster/data/genbank
+  nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial -verbose=3 bosTau1 &
+  # logged to /cluster/data/genbank/var/builds/log/*.bosTau1.initalign.log
+  # 959261 mrna sequences will be align
