@@ -50,6 +50,8 @@ clean:
 	cd hg && ${MAKE} clean
 	cd jkOwnLib && ${MAKE} clean
 	cd utils && ${MAKE} clean
+	touch non-empty-rm.o
+	- find . -name \*.o -print | xargs rm
 
 test::
 	cd lib && ${MAKE} test
