@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.895 2005/02/09 08:23:35 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.896 2005/02/09 16:26:55 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1249,7 +1249,8 @@ struct linkedFeatures *lf = item;
 struct simpleFeature *sf;
 int heightPer = tg->heightPer;
 int x1,x2;
-int shortOff = 2, shortHeight = heightPer-4;
+int shortOff = heightPer/4;
+int shortHeight = heightPer - 2*shortOff;
 int tallStart, tallEnd, s, e, e2, s2;
 Color bColor;
 int intronGap = 0;
@@ -4848,7 +4849,8 @@ struct chr18deletions *cds;
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-int shortOff = 2, shortHeight = heightPer-4;
+int shortOff = heightPer/4;
+int shortHeight = heightPer - 2*shortOff;
 int tallStart, tallEnd, shortStart, shortEnd;
 boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
