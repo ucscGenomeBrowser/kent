@@ -46,8 +46,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 	start = gp->exonStarts[i];
 	end = gp->exonEnds[i];
 	size = end - start;
-	seq = hDnaFromSeq(chrom, start, end, dnaLower);
-	dyStringAppendN(dna, seq->dna, size);
+	if (size < 0)
+	    warn("%d sized exon in %s\n", gp->name);
+	else
+	    {
+	    seq = hDnaFromSeq(chrom, start, end, dnaLower);
+	    dyStringAppendN(dna, seq->dna, size);
+	    }
 	freeDnaSeq(&seq);
 	}
 
