@@ -758,6 +758,14 @@ end
     cd /cluster/data/sacCer1/bed/blastp/hg16/run/out
     hgLoadBlastTab sacCer1 hgBlastTab -maxPer=1 *.tab
 
+# LOADING ERAN SEGAL'S REGULATORY MODULE STUFF
+    cd /cluster/data/sacCer1/bed
+    mkdir eranSegal
+    cd eranSegal
+    # Copy module_assignments.tab, motif_attributes.tab, motif_modules.tab
+    # from email from <eran@cs.stanford.edu> into this directory.
+    hgLoadEranModules sacCer1 module_assignments.tab motif_attributes.tab motif_modules.tab
+
 #CREATING DOWNLOADS DIRECTORY
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath
