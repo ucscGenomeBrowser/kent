@@ -400,6 +400,58 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+static void findSuperfamily(char *spec, struct hgPositions *hgp)
+/* Look up superfamily entry using sfDescription table. */
+{
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr  = NULL;
+struct sqlResult *sr2 = NULL;
+struct dyString *ds = newDyString(512);
+char **row, **row2;
+boolean gotOne = FALSE;
+struct hgPosTable *table = NULL;
+struct hgPos *pos;
+struct bed *bed;
+
+char *tname;
+char *desc;
+
+AllocVar(table);
+slAddHead(&hgp->tableList, table);
+table->description = cloneString("Superfamily Associated Search Results");
+table->name = cloneString("superfamily");
+
+dyStringClear(ds);
+dyStringPrintf(ds, "select name, description from sfDescription where description like'%c%s%c';", '%',spec,'%');
+sr2 = sqlGetResult(conn2, ds->string);
+
+while ((row2 = sqlNextRow(sr2)) != NULL)
+    {
+    dyStringClear(ds);
+    dyStringPrintf(ds, "select * from superfamily where name = '%s';", row2[0]);
+    sr = sqlGetResult(conn, ds->string);
+        
+    while ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	bed = bedLoad3(row+1);
+ 
+    	AllocVar(pos);
+    	slAddHead(&table->posList, pos);
+
+    	pos->description = cloneString(row2[1]);
+    	pos->name	 = cloneString(row2[0]);
+    	
+	pos->chrom 	= hgOfficialChromName(bed->chrom);
+    	pos->chromStart = bed->chromStart - (bed->chromEnd - bed->chromStart)/100*200;
+    	pos->chromEnd   = bed->chromEnd + (bed->chromEnd - bed->chromStart)/100*10;
+    	}
+    sqlFreeResult(&sr);
+    }
+sqlFreeResult(&sr2);
+freeDyString(&ds);
+hFreeConn(&conn);
+}
 
 boolean findContigPos(char *contig, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
@@ -2139,6 +2191,8 @@ else
     {
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
+    findKnownGene(query, hgp, "knownGene");
+    if (hTableExists("superfamily")) findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
     findFosEndPairs(query, hgp);
