@@ -333,6 +333,16 @@ Then ask admins to do a binrsync.
 
 
 
+TWINSCAN GENE PREDICTIONS (done 06/03/02 - pep todo)
+
+    mkdir -p ~/oo/bed/twinscan
+    cd ~/oo/bed/twinscan
+    wget http://genes.cs.wustl.edu/gp12/AllChrs.tgz
+    gunzip -c AllChrs.tgz | tar xvf -
+    ldHgGene hg10 twinscan *.gtf -exon=CDS
+    ??? hgPepPred hg10 generic twinscanPep *.prot
+
+
 CREATE GOLDEN TRIANGLE (todo)
 
 Make sure that rnaCluster table is in place.   Then
