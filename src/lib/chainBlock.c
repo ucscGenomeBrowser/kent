@@ -438,13 +438,38 @@ lmCleanup(&lm);
 return chainList;
 }
 
+static int nextId = 1;
+
+void chainIdSet(int id)
+/* Set next chain id. */
+{
+nextId = id;
+}
+
+void chainIdReset()
+/* Reset chain id. */
+{
+chainIdSet(1);
+}
+
+void chainIdNext(struct chain *chain)
+/* Add an id to a chain if it doesn't have one already */
+{
+chain->id = nextId++;
+}
+
 void chainWrite(struct chain *chain, FILE *f)
 /* Write out chain to file. */
 {
 struct boxIn *b, *nextB;
-fprintf(f, "chain %1.0f %s %d + %d %d %s %d %c %d %d\n", chain->score,
+static int id = 1;
+
+if (chain->id == 0)
+    chainIdNext(chain);
+fprintf(f, "chain %1.0f %s %d + %d %d %s %d %c %d %d %d\n", chain->score,
     chain->tName, chain->tSize, chain->tStart, chain->tEnd,
-    chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd);
+    chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd,
+    chain->id);
 for (b = chain->blockList; b != NULL; b = nextB)
     {
     nextB = b->next;
@@ -462,18 +487,29 @@ struct chain *chainRead(struct lineFile *lf)
  * Note that chain block scores are not filled in by
  * this. */
 {
-char *row[12];
+char *row[13];
+int wordCount;
 struct chain *chain;
 int q,t;
+static int id = 0;
 
-if (!lineFileRow(lf, row))
+
+wordCount = lineFileChop(lf, row);
+if (wordCount == 0)
     return NULL;
+if (wordCount < 12)
+    errAbort("Expecting at least 12 words line %d of %s", 
+    	lf->lineIx, lf->fileName);
 if (!sameString(row[0], "chain"))
     errAbort("Expecting 'chain' line %d of %s", lf->lineIx, lf->fileName);
 AllocVar(chain);
 chain->score = atof(row[1]);
 chain->tName = cloneString(row[2]);
 chain->tSize = lineFileNeedNum(lf, row, 3);
+if (wordCount >= 13)
+    chain->id = lineFileNeedNum(lf, row, 12);
+else
+    chainIdNext(chain);
 
 /* skip tStrand for now, always implicitly + */
 chain->tStart = lineFileNeedNum(lf, row, 5);

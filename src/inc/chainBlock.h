@@ -23,6 +23,7 @@ struct chain
     char *tName;		  /* target name, allocated here. */
     int tSize;			  /* Overall size of target. */
     int tStart,tEnd;		  /* Range covered in query. */
+    int id;			  /* ID of chain in file. */
     };
 
 typedef int (*GapCost)(int dq, int dt);
@@ -61,5 +62,11 @@ struct chain *chainRead(struct lineFile *lf);
 /* Read next chain from file.  Return NULL at EOF. 
  * Note that chain block scores are not filled in by
  * this. */
+
+void chainIdReset();
+/* Reset chain id. */
+
+void chainIdNext(struct chain *chain);
+/* Add id to chain. */
 
 #endif /* CHAINBLOCK_H */
