@@ -31,6 +31,7 @@ update:
 	hgTrackDb drosophila dp1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb archae pae trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb chimp panTro1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
 old_update:
@@ -61,6 +62,7 @@ alpha:
 	hgTrackDb drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb chimp panTro1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
 	cp human/hg13/description.html /gbdb/hg13/html
 	cp human/hg15/description.html /gbdb/hg15/html
@@ -78,6 +80,7 @@ alpha:
 	cp zoo/description.html /gbdb/zoo3/html
 	cp sacCer/sacCer1/description.html /gbdb/sacCer1/html
 	cp archae/pae/description.html /gbdb/pae/html
+	cp chimp/panTro1/description.html /gbdb/panTro1/html
 
 strict:
 	hgTrackDb -strict=yes human hg13 trackDb ../../lib/trackDb.sql .
@@ -95,6 +98,7 @@ strict:
 	hgTrackDb -strict=yes drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes chimp panTro1 trackDb ../../lib/trackDb.sql .
 
 beta:
 	# this will fail if we are not in a beta checkout:
@@ -116,6 +120,7 @@ beta:
 	hgTrackDb drosophila dm1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb chimp panTro1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make beta; cd ..
 
 old_alpha:
