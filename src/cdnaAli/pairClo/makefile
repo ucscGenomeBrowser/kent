@@ -1,9 +1,0 @@
-include ../../inc/common.mk
-
-
-O =  pairClo.o 
-
-$(HOME)/bin/$(MACHTYPE)/pairClo: $(O)  
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pairClo $O ../../lib/$(MACHTYPE)/jkweb.a
-
-
