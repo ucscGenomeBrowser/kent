@@ -665,7 +665,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     cd /cluster/bluearc/monDom1
     rm -fr hardChunks hardMaskedScaffolds.fa
 
-# BLAT SERVER SETUP
+# BLAT SERVER SETUP (DONE - 2004-12-07 - Hiram)
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
 	VALUES("monDom1", "blat14", 17786, 1, 0);' \
@@ -676,7 +676,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 
     # Make trackDb table so browser knows what tracks to expect (DONE - Hiram)
 
-# AUTO UPDATE GENBANK MRNA RUN  (TBD)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE - 2004-12-15 - Hiram)
     ssh hgwdev
     #	In the source tree, since this is a new organism, go to:
     #	kent/src/hg/makeDb/genbank/src/lib
@@ -713,7 +713,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 
     #	We were having some trouble with eieio, running these on kksilo
     #	this time.  This is best done on eieio.
-    #	perform the genbank mrna run, this does both native and xeno mRNA's
+    #	perform the genbank mrna run, this does only native and xeno mRNA's
     ssh kksilo
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial monDom1
     #	This run had non-linear behavior, in the early stages it
@@ -748,12 +748,11 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial monDom1
-    # logFile: var/build/logs/2004.12.14-14:16:18.monDom1.initalign.log
+    # logFile: var/build/logs/2004.12.15-13:16:59.monDom1.initalign.log
     #	It said there was nothing to align, must be no native est's for
     #	the Opossum, add this line to the genbank.conf file:
     #	monDom1.genbank.est.native.load = no
-    #	and add this so it will do the xeno's:
-    #	monDom1.genbank.est.xeno.load = yes
+    #	not useful to do xeno ESTs, they are off by default
 
 # GC5BASE (DONE - 2004-12-08 - Hiram)
     ssh eieio
@@ -802,6 +801,10 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgsql monDom1 -e "create index bin on quality (chrom(14), bin);"
 
 # ALIGN TO HUMAN (DONE - 2004-12-12 - Hiram)
+#	NAMING CONVENTION: the zb.hg17 directory will be the Opossum
+#	aligned to the Human blastz result.
+#	The bz.hg17 directory will the swapped result, Human aligned
+#	to Opossum 
   ssh kk
   mkdir -p /cluster/data/monDom1/bed/zb.hg17
   cd /cluster/data/monDom1/bed/zb.hg17
@@ -959,7 +962,7 @@ done
     # << this line keeps emacs coloring happy
 
     # Reuse gap penalties from chicken run.
-    cat << '_EOF_' > temp.gap
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../opossumHumanTuned.gap
 tablesize	11
 smallSize	111
 position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
@@ -968,8 +971,6 @@ tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
 bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
 '_EOF_'
     # << this line keeps emacs coloring happy
-    sed 's/  */\t/g' temp.gap > ../../opossumHumanTuned.gap
-    rm -f temp.gap
 
     chmod +x doChain
     ./doChain
@@ -1008,7 +1009,7 @@ done
     featureBits hg17 chainMonDom1Link
     #	456069062 bases of 2866216770 (15.912%) in intersection
 
-# NET OPOSSUM BLASTZ (DONE - 2004-12-13 - Hiram)
+# NET OPOSSUM TO HUMAN BLASTZ (DONE - 2004-12-13 - Hiram)
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.hg17/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -1055,6 +1056,7 @@ done
     #	2817656275 bases of 2866216770 (98.306%) in intersection
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
+#	Create HUMAN TO OPOSSUM chain, net
     ssh eieio
     cd /cluster/data/monDom1/bed
     mkdir -p bz.hg17/axtChain
@@ -1094,9 +1096,17 @@ done
     featureBits monDom1 netHg17
     #	3223616544 bases of 3492108230 (92.311%) in intersection
 
-
-# BLASTZ HUMAN CLEAN UP
+# BLASTZ HUMAN CLEAN UP (TBD)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb
+    rm run1/chain/*.chain
+    rm -r noClass
     rm chain.tab link.tab
+    rm noClass.net
+    nice rm -rf raw &
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/hNoClass.net &
+    nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
 
 # LOAD CPGISSLANDS (DONE - 2004-12-13 - Hiram)
     ssh hgwdev
@@ -1165,7 +1175,11 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     featureBits fr1 cpgIsland
     #	25518433 bases of 315518167 (8.088%) in intersection
 
-# ALIGN TO CHICKEN (WORKING - 2004-12-13 - Hiram)
+# ALIGN TO CHICKEN (DONE - 2004-12-14 - Hiram)
+#	NAMING CONVENTION: the zb.galGal2 directory will be the Opossum
+#	aligned to the Chicken blastz result.
+#	The bz.galGal2 directory will the swapped result, Chicken aligned
+#	to Opossum 
   ssh kk
   mkdir -p /cluster/data/monDom1/bed/zb.galGal2
   cd /cluster/data/monDom1/bed/zb.galGal2
@@ -1291,12 +1305,198 @@ done
 		-noTNameIx galGal2 ${I}
         echo "done: ${I}"
     done
-    
+    #	7 minutes
+
     #	Let's see what featureBits has to say about this data
     featureBits galGal2 blastzMonDom1
-    # 486216407 bases of 2866216770 (16.964%) in intersection
+    102241492 bases of 1054197620 (9.699%) in intersection
+    featureBits galGal2 blastzBestHg16
+    97272784 bases of 1054197620 (9.227%) in intersection
+
+
+# CHAIN CHICKEN BLASTZ  (DONE - 2004-12-12 - Hiram)
+    # Run axtChain on file server, job is mostly I/O, cluster does not help
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.galGal2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+
+    ls -1S /cluster/data/monDom1/bed/zb.galGal2/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > doChain.sh
+#!/bin/sh
+for chrAxtFile in `cat input.lst`
+do
+    chr=`basename ${chrAxtFile}`
+    axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+	-linearGap=../../opossumChickenTuned.gap \
+	-minScore=5000 ${chrAxtFile} \
+	/cluster/data/galGal2/nib \
+	/cluster/data/monDom1/monDom1.2bit chainRaw/${chr}.chain > out/${chr}.out
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../opossumChickenTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x doChain
+    time ./doChain
+    #	42 minutes
+
+    # On the cluster server weed the chains for repeats
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
+    mkdir chain
+    cd run1/chainRaw
+    bash			# if you are normally csh
+    for i in *.chain
+    do
+        chainAntiRepeat /cluster/data/galGal2/nib \
+		/cluster/data/monDom1/monDom1.2bit $i ../../chain/$i
+	echo "$i done"
+    done
+    #	7 minutes
+    exit			# exit bash if you are normally csh
+
+    # now on the cluster server, sort chains.  The chainMergeSort and
+    # chainSplit steps each take less than a minute
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
+    chainMergeSort chain/*.chain > all.chain
+    mv chain chainBeforeMerge
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain/chain
+    bash		#	if you are csh normally
+    for i in *.chain
+    do
+	c=${i/.chain/}
+	echo "loading ${c}"
+	hgLoadChain galGal2 ${c}_chainMonDom1 $i
+    done
+    #	4 minutes
+    exit		#	exit bash if you are csh normally
+
+    #	Compare to some other organisms
+    featureBits galGal2 chainMonDom1
+    #	782212657 bases of 1054197620 (74.200%) in intersection
+    featureBits galGal2 chainHg17
+    #	921410328 bases of 1054197620 (87.404%) in intersection
+    featureBits galGal2 chainXenTro1
+    #	691628520 bases of 1054197620 (65.607%) in intersection
+    featureBits galGal2 chainMm5
+    #	846905330 bases of 1054197620 (80.336%) in intersection
+
+
+# NET OPOSSUM TO CHICKEN BLASTZ (DONE - 2004-12-13 - Hiram)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    #	2 minutes
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    #	1 minute
+    cd noClass
+    mkdir ../../axtNet
+    bash		#	if you are csh normally
+    for i in *.net
+    do
+	r=${i/.net/}
+	netToAxt $i ../chain/${r}.chain /cluster/data/galGal2/nib \
+		/cluster/data/monDom1/monDom1.2bit ../../axtNet/${r}.axt
+    done
+    #	6 minutes
+    exit		#	back to csh if you are csh normally
+
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
+    netClass -noAr noClass.net galGal2 monDom1 chicken.net
+XXXX - RUNNING - 2004-12-15 15:57
+    #	41 minutes
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/zb.galGal2/axtChain
+    netFilter -minGap=10 chicken.net |  hgLoadNet galGal2 netMonDom1 stdin
+    #	4 minutes
+    #	compare featureBits with some other assemblies
+    featureBits galGal2 netMonDom1
+    #	2595812636 bases of 2866216770 (90.566%) in intersection
+    featureBits galGal2 netBosTau1
+    #	2261085097 bases of 2866216770 (78.887%) in intersection
+    featureBits galGal2 netRn3
+    #	2817656275 bases of 2866216770 (98.306%) in intersection
+
+# SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
+#	Create CHICKEN TO OPOSSUM chain, net
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir -p bz.galGal2/axtChain
+    chainSwap zb.galGal2/axtChain/all.chain bz.galGal2/axtChain/all.chain
+    #	4 minutes
+
+    cd bz.galGal2/axtChain
+    chainPreNet all.chain ../../zb.galGal2/S2.len ../../zb.galGal2/S1.len stdout \
+	| chainNet stdin -minSpace=1 ../../zb.galGal2/S2.len \
+		../../zb.galGal2/S1.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	10 minutes
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
+	/cluster/data/galGal2/nib ../axtNet/all.axt
+    #	23 minutes
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/bz.galGal2/axtChain
+    netClass -noAr noClass.net monDom1 galGal2 monDom1.net
+    #	16 minutes
+    rm noClass.net
+    netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netGalGal2 stdin
+    #	6 minutes
+
+    # Load chains into database (takes about 4 hours).
+    hgLoadChain -tIndex monDom1 chainGalGal2 all.chain
+    #	nearly 4 hours
+    #	I wonder if this would go better if loaded without an index,
+    #	then create the index after ?
+    #	Examining the index, it doesn't look too good.
+    featureBits monDom1 chainGalGal2Link
+    #	459086956 bases of 3492108230 (13.146%) in intersection
+    featureBits monDom1 chainGalGal2
+    #	3246158618 bases of 3492108230 (92.957%) in intersection
+    featureBits monDom1 netGalGal2
+    #	3223616544 bases of 3492108230 (92.311%) in intersection
+
+
+# BLASTZ CHICKEN CLEAN UP (TBD)
+    rm chain.tab link.tab
 
 # ALIGN TO MOUSE (WORKING - 2004-12-14 - Hiram)
+#	NAMING CONVENTION: the zb.mm5 directory will be the Opossum
+#	aligned to the Mouse blastz result.
+#	The bz.mm5 directory will the swapped result, Mouse aligned
+#	to Opossum 
   ssh kk
   mkdir -p /cluster/data/monDom1/bed/zb.mm5
   cd /cluster/data/monDom1/bed/zb.mm5
