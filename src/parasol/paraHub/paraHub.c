@@ -76,7 +76,7 @@
 #include "paraHub.h"
 #include "machSpec.h"
 
-int version = 2;	/* Version number. */
+int version = 3;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -86,6 +86,7 @@ int assumeDeadPeriod = 120;     /* If haven't heard from job in this long assume
 int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char subnet[4] = {255,255,255,255};   /* Subnet to check. */
 int nextJobId = 0;		/* Next free job id. */
+time_t startupTime;		/* Clock tick of paraHub startup. */
 
 unsigned char localHost[4] = {127,0,0,1};	   /* Address for local host */
 
@@ -1443,6 +1444,9 @@ sprintf(buf, "Active users: %d", countActiveUsers());
 netSendLongString(fd, buf);
 sprintf(buf, "Total users: %d", slCount(userList));
 netSendLongString(fd, buf);
+sprintf(buf, "Days up: %f", (now - startupTime)/(3600.0 * 24.0));
+netSendLongString(fd, buf);
+sprintf(buf, "Version: %d", version);
 netSendLongString(fd, "");
 }
 
@@ -1892,6 +1896,10 @@ int socketHandle = 0, connectionHandle = 0;
 char sig[20], *line, *command;
 int sigLen = strlen(paraSig);
 char *buf = NULL;
+
+/* Note startup time. */
+findNow();
+startupTime = now;
 
 /* Find name and IP address of our machine. */
 hubHost = getMachine();
