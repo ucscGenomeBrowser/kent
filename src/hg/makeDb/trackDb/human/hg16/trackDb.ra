@@ -1638,181 +1638,139 @@ type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
 
-track encode_Affy_ChIP_RNAP_RA_HL60_0
-shortLabel ChIP/Affy Pol2 0hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 0hrs) in ENCODE Regions
+track encodeAffyChIpRnapHl60Pval
+compositeTrack on
+shortLabel ChIp/Affy Pol2 Pval
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60) PValue in ENCODE Regions
 group encode
-priority 45.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 60,60,75
-type bed 3
-
-track encode_Affy_ChIP_RNAP_RA_HL60_2
-shortLabel ChIP/Affy Pol2 2hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 2hrs) in ENCODE Regions
-group encode
-priority 45.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 30,30,90
-type bed 3
-
-track encode_Affy_ChIP_RNAP_RA_HL60_8
-shortLabel ChIP/Affy Pol2 8hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 8hrs) in ENCODE Regions
-group encode
-priority 45.3
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 20,20,110
-type bed 3
-
-track encode_Affy_ChIP_RNAP_RA_HL60_32
-shortLabel ChIP/Affy Pol2 32hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 32hrs) in ENCODE Regions
-group encode
-priority 45.4
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
 color 10,10,130
-type bed 3
-
-track encode_Affy_RNA_RA_HL60_0
-shortLabel RNA/Affy HL60 0hr
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 0hrs) in ENCODE Regions
-group encode
-priority 46.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 75,60,60
-type bed 3
-
-track encode_Affy_RNA_RA_HL60_2
-shortLabel RNA/Affy HL60 2hr
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 2hrs) in ENCODE Regions
-group encode
-priority 46.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 90,30,30
-type bed 3
-
-track encode_Affy_RNA_RA_HL60_8
-shortLabel RNA/Affy HL60 8hr
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 8hrs) in ENCODE Regions
-group encode
-priority 46.3
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 110,20,20
-type bed 3
-
-track encode_Affy_RNA_RA_HL60_32
-shortLabel RNA/Affy HL60 32hr
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 32hrs) in ENCODE Regions
-group encode
-priority 46.4
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 130,10,10
-type bed 3
-
-track encode_Affy_ChIP_RNAP_RA_HL60_0_wig
-shortLabel ChIP/Affy PVal 0hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 0hrs) PValue in ENCODE Regions
-group encode
+altColor 50,50,50
 priority 47.1
-color 60,60,75
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -3.4 750
 maxHeightPixels 128:16:16
 autoScaleDefault Off
+defaultViewLimits 0:80
 
-track encode_Affy_ChIP_RNAP_RA_HL60_2_wig
-shortLabel ChIP/Affy PVal 2hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 2hrs) PValue in ENCODE Regions
+track encodeAffyChIpRnapHl60PvalHr0
+subTrack encodeAffyChIpRnapHl60Pval
+shortLabel Pol2 0hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 0hrs) PValue in ENCODE Regions
+
+track encodeAffyChIpRnapHl60PvalHr2
+subTrack encodeAffyChIpRnapHl60Pval
+shortLabel Pol2 2hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 2hrs) PValue in ENCODE Regions
+
+track encodeAffyChIpRnapHl60PvalHr8
+subTrack encodeAffyChIpRnapHl60Pval
+shortLabel Pol2 8hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 8hrs) PValue in ENCODE Regions
+
+track encodeAffyChIpRnapHl60PvalHr32
+subTrack encodeAffyChIpRnapHl60Pval
+shortLabel Pol2 32hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 32hrs) PValue in ENCODE Regions
+
+track encodeAffyChIpRnapHl60Sites
+compositeTrack on
+shortLabel ChIp/Affy Pol2 Sites
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60) Sites in ENCODE Regions
 group encode
 priority 47.2
-color 30,30,90
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type wig -3.4 750
-maxHeightPixels 128:16:16
-autoScaleDefault Off
-
-track encode_Affy_ChIP_RNAP_RA_HL60_8_wig
-shortLabel ChIP/Affy PVal 8hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 8hrs) PValue in ENCODE Regions
-group encode
-priority 47.3
-color 20,20,110
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -3.4 750
-maxHeightPixels 128:16:16
-autoScaleDefault Off
-
-track encode_Affy_ChIP_RNAP_RA_HL60_32_wig
-shortLabel ChIP/Affy PVal 32hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stimulated HL60, 32hrs) PValue in ENCODE Regions
-group encode
-priority 47.4
 color 10,10,130
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+altColor 50,50,50
+type bed 3
+
+track encodeAffyChIpRnapHl60SitesHr0
+subTrack encodeAffyChIpRnapHl60Sites
+shortLabel Pol2 0hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 0hrs) Sites in ENCODE Regions
+
+track encodeAffyChIpRnapHl60SitesHr2
+subTrack encodeAffyChIpRnapHl60Sites
+shortLabel Pol2 2hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 2hrs) Sites in ENCODE Regions
+
+track encodeAffyChIpRnapHl60SitesHr8
+subTrack encodeAffyChIpRnapHl60Sites
+shortLabel Pol2 8hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 8hrs) Sites in ENCODE Regions
+
+track encodeAffyChIpRnapHl60SitesHr32
+subTrack encodeAffyChIpRnapHl60Sites
+shortLabel Pol2 32hr
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 32hrs) Sites in ENCODE Regions
+
+track encodeAffyRnaHl60Sig
+compositeTrack on
+shortLabel RNA/Affy Signal
+longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60) Signal in ENCODE Regions
+group encode
+color 10,10,130
+altColor 50,50,50
+priority 48.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -3.4 750
 maxHeightPixels 128:16:16
 autoScaleDefault Off
+defaultViewLimits 0:50
 
-track encode_Affy_RNA_RA_HL60_0_wig
-shortLabel RNA/Affy 0hrs PVal
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 0hrs) in ENCODE Regions
-group encode
-priority 48.1
-color 75,60,60
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -1330 1900
-maxHeightPixels 128:16:16
-autoScaleDefault Off
+track encodeAffyRnaHl60SigHr0
+subTrack encodeAffyRnaHl60Sig
+shortLabel RNA 0hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Signal in ENCODE Regions
 
-track encode_Affy_RNA_RA_HL60_2_wig
-shortLabel RNA/Affy 2hrs PVal
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 2hrs) in ENCODE Regions
+track encodeAffyRnaHl60SigHr2
+subTrack encodeAffyRnaHl60Sig
+shortLabel RNA 2hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Signal in ENCODE Regions
+
+track encodeAffyRnaHl60SigHr8
+subTrack encodeAffyRnaHl60Sig
+shortLabel RNA 8hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Signal in ENCODE Regions
+
+track encodeAffyRnaHl60SigHr32
+subTrack encodeAffyRnaHl60Sig
+shortLabel RNA 32hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Signal in ENCODE Regions
+
+track encodeAffyRnaHl60Sites
+compositeTrack on
+shortLabel RNA/Affy Sites
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60 cells) Sites in ENCODE Regions
 group encode
 priority 48.2
-color 90,30,30
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type wig -1330 1900
-maxHeightPixels 128:16:16
-autoScaleDefault Off
-
-track encode_Affy_RNA_RA_HL60_8_wig
-shortLabel RNA/Affy 2hrs PVal
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 8hrs) in ENCODE Regions
-group encode
-priority 48.3
-color 110,20,20
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -1330 1900
-maxHeightPixels 128:16:16
-autoScaleDefault Off
-
-track encode_Affy_RNA_RA_HL60_32_wig
-shortLabel RNA/Affy 32hrs PVal
-longLabel Affymetrix PolyA+ RNA (RA-stimulated HL60, 32hrs) in ENCODE Regions
-group encode
-priority 48.4
 color 130,10,10
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -1330 1900
-maxHeightPixels 128:16:16
-autoScaleDefault Off
+altColor 50,50,50
+type bed 3
+
+track encodeAffyRnaHl60SitesHr0
+subTrack encodeAffyRnaHl60Sites
+shortLabel RNA 0hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Sites in ENCODE Regions
+
+track encodeAffyRnaHl60SitesHr2
+subTrack encodeAffyRnaHl60Sites
+shortLabel RNA 2hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Sites in ENCODE Regions
+
+track encodeAffyRnaHl60SitesHr8
+subTrack encodeAffyRnaHl60Sites
+shortLabel RNA 8hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Sites in ENCODE Regions
+
+track encodeAffyRnaHl60SitesHr32
+subTrack encodeAffyRnaHl60Sites
+shortLabel RNA 32hr
+longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
 
 track encode_UVA_DNARep_0_2
 shortLabel DNA Rep/UVA 0-2hr
@@ -1875,3 +1833,4 @@ searchType bed
 termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
 searchMethod exact
 searchPriority 50.2
+
