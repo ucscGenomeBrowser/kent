@@ -928,22 +928,22 @@ hgLoadRna addSeq hg11 /projects/hg3/fish/tet6/tet*.fa
 DONE
 
 
-TIGR GENE INDEX (todo)
-
-  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
-      ~/oo.29/bed/tgi and then execute the following commands:
-          cd ~/oo.29/bed/tgi
-	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
-	  foreach i (mouse cow human pig rat)
-	      mkdir $i
-	      cd $i
-	      gtar -zxf ../${i}*.tgz
-	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
-	      cd ..
-	  end
-	  mv human.gff human.bak
-	  sed s/THCs/TCs/ human.bak > human.gff
-	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
+TIGR GENE INDEX (done 7/1/02)
+    mkdir -p ~/hg11/bed/tigr
+    cd ~/hg11/bed/tigr
+    wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build29.tgz
+    gunzip -c TGI_track_HumanGenome_build29.tgz | tar xvf -
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (mouse cow human pig rat)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC hg11 tigrGeneIndex *.gff
 
 
 LOAD STS MAP (todo) DONE BY TERRY I BELIEVE - HE WILL UPDATE THIS
@@ -1028,35 +1028,19 @@ LOAD CPGISLANDS (todo) NEW RELEASE NOT YET AVAILABLE
      - At mysql> prompt type in:
           load data local infile 'cpgIsland.bed' into table cpgIsland
 
-LOAD ENSEMBL GENES (todo)
-     cd ~/oo/bed
-     mkdir ensembl
-     cd ensembl
-     Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
-     predictions) here. (e.g.
-     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz)
-     gunzip xxx.gtf.gz
-DONE TO HERE
-     Starting from Hg10, ensembl seems to have done their own lifting,
-     so just collect all chromosome .gtf files.
-     cat ?.gtf ??.gtf >all.gtf
-
-     Add "chr" to front of each line to make it compatible with ldHgGene 
-     addchr all.gtf > ensembl.gtf
-     rm all.gtf
-     ldHgGene hg11 ensGene ensembl.gtf
-o - Load Ensembl peptides:
-     (poke around ensembl to get their peptide files as ensembl.pep)
-     
-     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/*s.pep.fa.gz
-
-     gunzip Homo_sapiens.pep.fa.gz
-     
-     Substitute ENST for ENSP in ensemble.pep with subs
-     edit subs.in to read: ENSP|ENST
-
-     subs -e Homo_sapiens.pep.fa >/dev/null
-
+LOAD ENSEMBL GENES (done 7/9/02)
+     mkdir -p ~/hg11/bed/ensembl
+     cd ~/hg11/bed/ensembl
+     # wget complains about a Redirection loop, but GET handles it (?):
+     GET http://www.ebi.ac.uk/~stabenau/human_29_gtf.gz > human_29_gtf.gtf.gz
+     # add "chr" to the chrom ids:
+     gunzip -c human_29_gtf.gtf.gz | \
+       perl -w -p -e 's/^(\w)/chr$1/' > human_29_gtf-fixed.gtf
+     ldHgGene hg11 ensGene human_29_gtf-fixed.gtf
+     # Load Ensembl peptides, replace ">ENSP" with ">ENST":
+     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/Homo_sapiens.pep.all.fa.gz
+     gunzip -c Homo_sapiens.pep.all.fa.gz | sed -e 's/^>ENSP/>ENST/' \
+	> ensembl.pep
      hgPepPred hg11 generic ensPep ensembl.pep
 
 LOAD SANGER22 GENES 
