@@ -1096,10 +1096,35 @@ altColor 0,160,0
 visibility hide
 type sample 9
 
+track parsPValues
+shortLabel parsPValues
+longlabel PValues of parsimony scores
+priority 41.0031
+altColor 0,160,0
+visibility hide
+type sample 9
+
+track transfac
+shortLabel Transfac Hits
+longLabel Transfac Hits
+priority 41.0033
+visibility full
+color 12,12,120
+type genePred refPep refMrna
+
+track transfacRatios
+shortLabel Transfac Likelihood Ratios
+longLabel Transfac Likelihood Ratios
+priority 41.0034
+visibility full
+color 12,12,120
+type genePred refPep refMrna
+
+
 track footPrinterHMR
 shortLabel FootPrinterHMR
 longlabel FootPrinter Conservation Score, Human/Mouse/Rat
-priority 41.0031
+priority 41.0032
 altColor 0,160,0
 visibility hide
 type sample 9
@@ -1108,7 +1133,7 @@ type sample 9
 track zoo
 shortLabel ZooSeq
 longLabel ZooSeq Conservation Data 
-priority 41.004
+priority 41.005
 visible hide
 chromosomes target1,chr7,
 color 0,60,120
