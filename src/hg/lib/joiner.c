@@ -20,8 +20,8 @@ if (jf != NULL)
     slFreeList(&jf->dbList);
     freeMem(jf->table);
     freeMem(jf->field);
-    freeMem(jf->chopBefore);
-    freeMem(jf->chopAfter);
+    slFreeList(&jf->chopBefore);
+    slFreeList(&jf->chopAfter);
     freeMem(jf->separator);
     freez(pJf);
     }
@@ -327,11 +327,15 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	     }
 	 else if (sameString("chopBefore", word))
 	     {
-	     jf->chopBefore = cloneSpecified(lf, word, e);
+	     if (e == NULL) 
+	     	unspecifiedVar(lf, word);
+	     slNameStore(&jf->chopBefore, e);
 	     }
 	 else if (sameString("chopAfter", word))
 	     {
-	     jf->chopAfter = cloneSpecified(lf, word, e);
+	     if (e == NULL) 
+	     	unspecifiedVar(lf, word);
+	     slNameStore(&jf->chopAfter, e);
 	     }
 	 else if (sameString("indexOf", word))
 	     {
@@ -360,6 +364,10 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
      if (jf->indexOf && jf->separator == NULL)
          errAbort("indexOf without comma or separator line %d of %s",
 	 	lf->lineIx, lf->fileName);
+     if (jf->isPrimary && jf->separator != NULL)
+         errAbort("Error line %d of %s\n"
+	          "Primary key can't be a list (comma or separator)." 
+		  , lf->lineIx, lf->fileName);
      }
 slReverse(&js->fieldList);
 return js;
@@ -464,8 +472,8 @@ for (js=jsList; js != NULL; js = nextJs)
 		AllocVar(newJf);
 		newJf->dbList = slNameCloneList(jf->dbList);
 		newJf->field = cloneString(jf->field);
-		newJf->chopBefore = cloneString(jf->chopBefore);
-		newJf->chopAfter = cloneString(jf->chopAfter);
+		newJf->chopBefore = slNameCloneList(jf->chopBefore);
+		newJf->chopAfter = slNameCloneList(jf->chopBefore);
 		newJf->separator = cloneString(jf->separator);
 		newJf->indexOf = jf->indexOf;
 		newJf->isPrimary = jf->isPrimary;

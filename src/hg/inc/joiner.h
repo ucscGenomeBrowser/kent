@@ -14,8 +14,8 @@ struct joinerField
     struct slName *dbList;	/* List of possible databases. */
     char *table;		/* Associated table. */
     char *field;		/* Associated field. */
-    char *chopBefore;		/* Chop before string */
-    char *chopAfter;		/* Chop after string */
+    struct slName *chopBefore;	/* Chop before strings */
+    struct slName *chopAfter;	/* Chop after strings */
     char *separator;		/* Separators for lists or NULL if not list. */
     boolean indexOf;		/* True if id is index in this list. */
     boolean isPrimary;		/* True if is primary key. */
