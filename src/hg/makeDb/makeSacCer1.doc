@@ -138,7 +138,9 @@ exit; # don't actually run this like a script :)
     mkdir -p /gbdb/sacCer1/html
     ln -s /cluster/data/sacCer1/html/description.html /gbdb/sacCer1/html/
     # Create line in trackDb/makefile that copies description.html into
-    #     /cluster/data/sacCer1/html/descriptoin.html  
+    #     /cluster/data/sacCer1/html/description.html  
+    # Note, you definitely want to make the symbolic link in /gbdb/sacCer/html
+    # before doing this.
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 2003-11-24 Jim)
 # AND SET UP BLAT SERVERS
