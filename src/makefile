@@ -56,7 +56,7 @@ test::
 	cd hg && ${MAKE} test
 	cd utils && ${MAKE} test
 
-LIB_TAGS_IN = lib/*.[hc] hg/lib/*.[hc] jkOwnLib/*.c
+LIB_TAGS_IN = lib/*.[hc] hg/lib/*.[hc] jkOwnLib/*.c inc/*.h hg/inc/*.h
 
 # build tags for libraries
 .PHONY: tags
