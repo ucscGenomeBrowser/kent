@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.19 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.20 2005/03/21 05:45:54 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -583,7 +583,11 @@ void gbLoadRna(char* reloadList)
 struct gbIndex* index = gbIndexNew(gDatabase, NULL);
 struct gbSelect* selectList, *select;
 struct sqlConnection* conn;
-boolean forceLoad = (reloadList != NULL) || gReload;
+
+/* must go through all tables if any reload is selected or
+ * extFile update is requested */
+boolean forceLoad = (reloadList != NULL) || gReload
+    || ((gOptions.flags & DBLOAD_EXT_FILE_UPDATE) != 0);
 
 if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
