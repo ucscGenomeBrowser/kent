@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.1 2003/11/20 19:37:44 hiram Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.2 2004/01/23 23:58:36 hiram Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
@@ -32,7 +32,7 @@ fi
 
 DATE=`date "+%y%m%d"`
 PDB="proteins${DATE}"
-SPDB="${DATE}"
+SPDB=sp"${DATE}"
 
 echo "Creating Db: ${PDB}"
 
@@ -59,8 +59,8 @@ echo "hgsql ${PDB} < proteins.sql"
 hgsql ${PDB} < proteins.sql
 
 #	Create and load tables in proteins
-echo spToProteins ${SPDB}
-spToProteins ${SPDB}
+echo spToProteins ${DATE}
+spToProteins ${DATE}
 cd ${TOP}/${DATE}
 hgsql -e 'LOAD DATA local INFILE "spXref2.tab" into table spXref2;' ${PDB}
 hgsql -e 'create index i1 on spXref2(accession);' ${PDB}
