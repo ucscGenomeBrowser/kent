@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.22 2004/10/20 23:13:29 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.23 2004/10/28 00:17:52 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -463,8 +463,11 @@ for (region = regionList; region != NULL; region = region->next)
 	for (asciiData = wigData; asciiData; asciiData = next)
 	    {
 	    next = asciiData->next;
-	    slAddHead(&wigDataList, asciiData);
-	    ++count;
+	    if (asciiData->count)
+		{
+		slAddHead(&wigDataList, asciiData);
+		++count;
+		}
 	    }
 	slReverse(&wigDataList);
 	}
