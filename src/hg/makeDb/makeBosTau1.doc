@@ -76,6 +76,9 @@ exit; # don't actually run this like a script :)
   mv 3 scaffolds
   mv 4 scaffolds
   etc.
+  # generate list
+  find scaffolds -print > scaffolds.list.0
+  grep fa scaffolds.list.0 > scaffolds.list
 
 # MAKE 2BIT NIB FILE (DONE Oct.1, 2004, Heather)
 
@@ -84,8 +87,8 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/faToTwoBit Btau20040927-freeze-assembly.fa bosTau1.2bit
   /cluster/bin/i386/twoBitToFa bosTau1.2bit check.fa
   mv bosTau1.2bit ../..
-  # TO DO: split up so diff will work
-  # diff Btau20040927-freeze-assembly.fa check.fa
+  # TO DO: 
+  # bdiff Btau20040927-freeze-assembly.fa check.fa
   # note: size match
   ssh hgwdev
   mkdir /gbdb/bosTau1
@@ -114,7 +117,7 @@ exit; # don't actually run this like a script :)
   load data local infile 'fragment.txt' into table gap
   # create trackDb/cow/bosTau1/gap.html
 
-# CREATE CHROMINFO TABLE
+# CREATE CHROMINFO TABLE (DONE Oct. 5, 2004, Heather)
 # an improvement here would be to have getMaxCoord output the 2bit file name
   ssh hgwdev
   cd /cluster/data/bosTau1
@@ -129,3 +132,45 @@ exit; # don't actually run this like a script :)
   hgsql bosTau1 < chromInfo.sql
   load data local infile 'getMaxCoord.bosTau1' into table chromInfo
   update chromInfo set fileName = "/gbdb/bosTau1/nib/bosTau1.2bit"
+
+# REPEATMASKER
+# using the split scaffold fa files generated earlier
+# do a trial run
+  ssh hgwdev
+  cd /cluster/data/bosTau1/scaffolds/0/0/0
+  /cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -spec bos SCAFFOLD1000.fa
+# configure
+  cd /cluster/data/bosTau1
+  mkdir jkStuff
+  cp /cluster/data/anoGam1/jkStuff/RMAnopheles jkStuff/RMBosTaurus
+  # change references anoGam1 --> bosTau1
+  mkdir RMRun
+
+# /bin/csh makeJoblist.csh
+
+  cd scaffolds
+  foreach i (0 1 2 3 4 5 6 7 8 9)
+    cd $i
+    foreach j (0 1 2 3 4 5 6 7 8 9)
+      cd $j
+      foreach k (0 1 2 3 4 5 6 7 8 9)
+        cd $k
+        foreach f (*.fa)
+          echo /cluster/data/bosTau1/jkStuff/RMBosTaurus \
+	       /cluster/data/bosTau1/scaffolds/$i/$j/$k $f \
+	      '{'check out line+ /cluster/data/bosTau1/$i/$j/$k/$f.out'}' \
+	  >> /cluster/data/bosTau1/RMRun/RMJobs
+	end
+      cd ..
+      end
+    cd ..
+    end
+  cd ..
+  end
+
+  # do the run
+  ssh kk
+  cd /cluster/data/bosTau1/RMRun
+  para create RMJobs
+  para try
+
