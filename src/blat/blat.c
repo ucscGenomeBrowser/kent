@@ -299,9 +299,7 @@ for (i=0; i<fileCount; ++i)
     if (isNib(fileName))
         {
 	char root[128];
-	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
-	splitPath(fileName, NULL, root, NULL);
-	seq->name = cloneString(root);
+	seq = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
 	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
 	totalSize += seq->size;
