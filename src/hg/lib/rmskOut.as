@@ -16,5 +16,5 @@ table rmskOut
     int repStart;       "Start in repeat sequence"
     uint repEnd;        "End in repeat sequence"
     int repLeft;        "Size left in repeat sequence"
-    char[1] id;         "'*' or ' '.  I don't know what this means"
+    char[1] id;         "First digit of id field in RepeatMasker .out file. Best ignored."
     )
