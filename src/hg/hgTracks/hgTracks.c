@@ -1345,7 +1345,7 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     else if( sameString( tg->mapName, "zooCons" ) )
     {
-    minRange = 1.0;
+    minRange = 0.0;
     maxRange = 1000.0;
 
     min0 = whichNum( 1.0, 0.0, 5.0, 1000 );
@@ -1354,7 +1354,7 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     else if( sameString( tg->mapName, "binomialCons" ) )
     {
-    minRange = 1.0;
+    minRange = 0.0;
     maxRange = 500.0;
 
     min0 = whichNum( minRange, 0.0, 500.0, 1000 );
@@ -1363,10 +1363,10 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     else if( sameString( tg->mapName, "binomialCons2" ) )
     {
-    minRange = 1.0;
-    maxRange = 30.0;
+    minRange = 0.0;
+    maxRange = 10.0;
 
-    tmp = -whichBin( 16.5, minRange, maxRange, 999 );
+    tmp = -whichBin( 6.5, minRange, maxRange, 999 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
     
@@ -8154,21 +8154,21 @@ if (withLeftLabels)
 	    }
     else if( sameString( group->mapName, "zooCons" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 5.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
 	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
 	    }
      else if( sameString( group->mapName, "binomialCons" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 500.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 500.0, 1000 ));
 	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 500.0, 1000 ));
 	    }
         else if( sameString( group->mapName, "binomialCons2" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 30.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 30.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 10.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 10.0, 1000 ));
 
         if( group->limitedVis == tvFull && group->heightPer >= 25  )
-           printYAxisLabel( mg, y-5, group, "16.5", 0.0, 30.0 ); 
+           printYAxisLabel( mg, y-5, group, "6.5", 0.0, 10.0 ); 
 
 	    }
 	
