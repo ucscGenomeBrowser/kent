@@ -222,6 +222,7 @@ while ((psl = pslNext(lf)) != NULL)
     slAddHead(&pslList, psl);
     }
 slReverse(&pslList);
+lineFileClose(&lf);
 return pslList;
 }
 
