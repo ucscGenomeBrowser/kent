@@ -1,6 +1,6 @@
 track gold
-shortLabel Assembly
-longLabel Whole Genome Shotgun Assembly
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
 group map
 priority 10
 visibility pack
