@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.3 2003/09/24 01:32:02 kuhn Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.4 2003/09/24 17:41:11 kuhn Exp $";
 
 struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -638,7 +638,7 @@ char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
-    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\" TARGET=\"_blank\">netaffx.com</a> website. [Registration at Affymetrix is required to activate the following links]\n"); 
+    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\" TARGET=\"_blank\">netaffx.com</a> website.<BR>[Registration at Affymetrix is required to activate the following links]\n"); 
     printf("<ul>\n");
     printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\" TARGET=\"_blank\">available there</a></li>\n",
 	   netaffx, chip, name);
