@@ -1737,14 +1737,12 @@ useScore 1
 showTopScorers 200
 type bed 5 .
 
-
 track encodeRegionsLiftOver
 shortLabel liftOver Regions
 longLabel liftOver ENCODE Region Orthologs (Freeze 3)
 group encode
 priority 170.1
-color 0,0,200
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+color 0,200,0
 visibility hide
 type bed 4 .
 
@@ -1754,19 +1752,26 @@ longLabel Mercator ENCODE Region Orthologs (Freeze 3)
 group encode
 priority 170.2
 color 0,0,200
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
 
-#track encodeRegionConsensus
-#shortLabel ENCODE Region Consensus 2
-#longLabel Consensus Orthology of ENCODE Regions from liftOver and Mercator (Freeze 3)
-#group encode
-#priority 170.4
-#color 150,100,30
-#chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-#visibility hide
-#type bed 4 .
+track encodeRegionsMercatorMerged
+shortLabel Mercator Regions
+longLabel Merged Mercator ENCODE Region Orthologs (Freeze 3)
+group encode
+priority 170.3
+color 0,0,200
+visibility hide
+type bed 4 .
+
+track encodeRegionsConsensus
+shortLabel ENCODE Region Consensus
+longLabel Consensus Orthology of ENCODE Regions from liftOver and Mercator (Freeze 3)
+group encode
+priority 170.4
+color 150,100,30
+visibility hide
+type bed 4 .
 
 
 track phastConsTopPaper
@@ -1837,6 +1842,13 @@ termRegex [a-z][a-z0-9][0-9]+
 searchPriority 10
 
 searchTable encodeRegions
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex EN[rm][0-9]+(_[0-9]+)?
+searchPriority 11
+
+searchTable encodeRegionsConsensus
 searchMethod prefix
 searchType bed
 shortCircuit 1
