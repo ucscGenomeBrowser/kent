@@ -504,7 +504,7 @@ o - Load cpgIslands
      - hg7 < ~kent/src/hg/lib/cpgIsland.sql
      - wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/cpg_dec12.oo27.tar
      - tar -xf cpg*.tar
-     - awk -f filter.awk */ctg*/*.cpg > contig.bed
+     - awk -f filter.awk */ctg*/*.cpg.out > contig.bed
      - liftUp cpgIsland.bed ../../jkStuff/liftAll.lft warn contig.bed
      - Enter database with "hg7" command.
      - At mysql> prompt type in:

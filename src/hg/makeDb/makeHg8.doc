@@ -30,12 +30,9 @@ o - Lift up the repeat masker coordinates as so:
       - edit jkStuff/liftOut.sh and update ooGreedy version number
       - source jkStuff/liftOut.sh
 
-o - Copy over RepeatMasking for chromosomes 21 and 22:
-      - cp /projects/cc/hg/gs.4/oo.18/21/chr21.fa.out ~/gs/oo.31/21
-
 o - Load RepeatMasker output into database:
-      - cd /projects/hg3/gs.8/oo.31
-      - hgLoadOut hg8 ?/*.fa.out ??/*.fa.out
+      cd /projects/hg3/gs.8/oo.31
+      hgLoadOut hg8 ?/*.fa.out ??/*.fa.out
         (Ignore the "Strange perc. field warnings.  Maybe mention them
 	 to Arian someday.)
 
@@ -70,9 +67,9 @@ o - Load RepeatMasker output into database again:
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
 
 o - Create packed chromosome sequence files and put in database
-     - mysql -A -u hgcat -pbigsecret hg8  < ~/src/hg/lib/chromInfo.sql
-     - cd /projects/hg3/gs.8/oo.31
-     - hgNibSeq hg8 /projects/hg3/gs.8/oo.31/nib ?/chr*.fa ??/chr*.fa
+     mysql -A -u hgcat -pbigsecret hg8  < ~/src/hg/lib/chromInfo.sql
+     cd /projects/hg3/gs.8/oo.31
+     hgNibSeq hg8 /projects/hg3/gs.8/oo.31/nib ?/chr*.fa ??/chr*.fa
 
 
 o - Store o+o info in database.
@@ -88,11 +85,11 @@ o - Store o+o info in database.
 
 o - Make and load GC percent table
      - login to cc94
-     - cd /projects/hg3/gs.8/oo.31/bed
-     - mkdir gcPercent
-     - cd gcPercent
-     - mysql -A -u hgcat -pbigsecret hg8  < ~/src/hg/lib/gcPercent.sql
-     - hgGcPercent hg8 ../../nib
+     cd /projects/hg3/gs.8/oo.31/bed
+     mkdir gcPercent
+     cd gcPercent
+     mysql -A -u hgcat -pbigsecret hg8  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent hg8 ../../nib
 
 
 
@@ -123,7 +120,7 @@ o - Load mRNA alignments into database.
       end
       hgLoadPsl hg8 *.psl
       cd ..
-      hgLoadPsl hg8 all_mrna.psl
+      hgLoadPsl hg8 all_mrna.psl -nobin
 
 o - Load EST alignments into database.
       ssh cc94
@@ -133,7 +130,7 @@ o - Load EST alignments into database.
       end
       hgLoadPsl hg8 *.psl
       cd ..
-      hgLoadPsl hg8 all_est.psl
+      hgLoadPsl hg8 all_est.psl -nobin
 
 o - Create subset of ESTs with introns and load into database.
       - ssh kks00
@@ -143,7 +140,7 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/oo/psl/intronEst
       hgLoadPsl hg8 *.psl
 
-PRODUCING KNOWN GENES (RefSeq) (done)
+PRODUCING KNOWN GENES (RefSeq)
 
 o - Go to the Entrez browser at http://www.ncbi.nlm.nih.gov/Entrez/
     and select Nucleotide in the search box.  Go to Limits and select
