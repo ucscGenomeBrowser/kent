@@ -327,7 +327,7 @@ exit; # don't actually run this like a script :)
     make alpha
     cvs commit makefile
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 04/08/03)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 04/12/03 -jk)
     ssh hgwdev
     # Substitute BBB with the correct number for the hostname:
     echo 'insert into blatServers values("hg15", "blat2", "17778", "1"); \
@@ -416,7 +416,7 @@ exit; # don't actually run this like a script :)
     # After the database has been created, go to "LOAD REFGENE" below...
 
 
-# PROCESS SIMPLE REPEATS INTO MASK (DONE 041103)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 041103 ms&jk)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
@@ -444,7 +444,7 @@ exit; # don't actually run this like a script :)
     end
 
 
-# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
+# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (done 4/11/03 jk)
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
     ssh eieio
@@ -459,10 +459,8 @@ exit; # don't actually run this like a script :)
     #- Rebuild the nib, mixedNib, maskedNib files:
     tcsh jkStuff/makeNib.sh
 
-DONE TO HERE
-
     # Copy the masked contig fa to /iscratch and /scratch:
-    ssk kkr1u00
+    ssh kkr1u00
     rm -rf /iscratch/i/gs.16/build33/trfFa
     mkdir -p /iscratch/i/gs.16/build33/trfFa
     cp -p ~/hg15/?{,?}/NT_*/NT_??????.fa /iscratch/i/gs.16/build33/trfFa
@@ -538,7 +536,6 @@ DONE TO HERE
         endif
       endif
     end
-DONE TO HERE
     # Make unmasked nibs -- necessary for building chromInfo.
     mkdir nib
     foreach f (?{,?}/chr?{,?}{,_random}.fa)
