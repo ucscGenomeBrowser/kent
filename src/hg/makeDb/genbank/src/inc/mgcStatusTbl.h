@@ -14,12 +14,18 @@ struct mgcStatusType
     boolean isError;  /* does this represent an error? */
 };
 
-/* Detailed status of clone in pipeline. */
+/* 
+ * Clone detailed status values.
+ *
+ * IMPORTANT: changes here must be reflected in the parser in mgcImport.c
+ * and in browser hgc.c mgcStatusDesc table.
+ */
 extern struct mgcStatusType MGC_UNPICKED;
 extern struct mgcStatusType MGC_PICKED;
 extern struct mgcStatusType MGC_NOT_BACK;
 extern struct mgcStatusType MGC_NO_DECISION;
 extern struct mgcStatusType MGC_FULL_LENGTH;
+extern struct mgcStatusType MGC_FULL_LENGTH_SHORT;
 extern struct mgcStatusType MGC_INCOMPLETE;
 extern struct mgcStatusType MGC_CHIMERIC;
 extern struct mgcStatusType MGC_FRAME_SHIFTED;

@@ -3,8 +3,21 @@
 #include "localmem.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.2 2003/06/17 03:10:57 markd Exp $";
 
+/* 
+ * Clone detailed status values.
+ *
+ * IMPORTANT: changes here must be reflected in the parser in mgcImport.c,
+ * mgcDbLoad, and in browser hgc.c mgcStatusDesc table.
+ *
+ * IMPORTANT: order of constant must match create table below.
+ *
+ * NOTE: mgcDbLoad makes comparisons based on the numeric values.  These may
+ * need to adjust. Although it's ok to reorder values since the table is
+ * completely rebuilt by the load process and the browser access this
+ * symbolicly.
+ */
 struct mgcStatusType MGC_UNPICKED = {
     "unpicked", 1, "not picked", FALSE};
 struct mgcStatusType MGC_PICKED = {
@@ -15,24 +28,26 @@ struct mgcStatusType MGC_NO_DECISION = {
     "noDecision", 4, "no decision yet", FALSE};
 struct mgcStatusType MGC_FULL_LENGTH = {
     "fullLength", 5, "full length", FALSE};
+struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
+    "cantSequence", 6, "full length (short isoform)", TRUE};
 struct mgcStatusType MGC_INCOMPLETE = {
-    "incomplete", 6, "incomplete", TRUE};
+    "incomplete", 7, "incomplete", TRUE};
 struct mgcStatusType MGC_CHIMERIC = {
-    "chimeric", 7, "chimeric", TRUE};
+    "chimeric", 8, "chimeric", TRUE};
 struct mgcStatusType MGC_FRAME_SHIFTED = {
-    "frameShift", 8, "frame shifted", TRUE};
+    "frameShift", 9, "frame shifted", TRUE};
 struct mgcStatusType MGC_CONTAMINATED = {
-    "contaminated", 9, "contaminated", TRUE};
+    "contaminated", 10, "contaminated", TRUE};
 struct mgcStatusType MGC_RETAINED_INTRON = {
-    "retainedIntron", 10, "retained intron", TRUE};
+    "retainedIntron", 11, "retained intron", TRUE};
 struct mgcStatusType MGC_MIXED_WELLS = {
-    "mixedWells", 11, "mixed wells", TRUE};
+    "mixedWells", 12, "mixed wells", TRUE};
 struct mgcStatusType MGC_NO_GROWTH = {
-    "noGrowth", 12, "no growth", TRUE};
+    "noGrowth", 13, "no growth", TRUE};
 struct mgcStatusType MGC_NO_INSERT = {
-    "noInsert", 13, "no insert", TRUE};
+    "noInsert", 14, "no insert", TRUE};
 struct mgcStatusType MGC_NO_5_EST_MATCH = {
-    "no5est", 14, "no 5' EST match", TRUE};
+    "no5est", 15, "no 5' EST match", TRUE};
 struct mgcStatusType MGC_MICRODELETION = {
     "microDel", 16, "no cloning site / microdeletion", TRUE};
 struct mgcStatusType MGC_LIBRARY_ARTIFACTS = {
@@ -66,13 +81,27 @@ static char *organismNameMap[][2] =
  */
 char *mgcStatusCreateSql =
 "CREATE TABLE %s ("
-"   imageId INT UNSIGNED NOT NULL,"  /* IMAGE id for clone */
-"   status ENUM("                    /* MGC status code */
-"        'unpicked', 'picked', 'notBack', 'noDecision',"
-"        'fullLength', 'incomplete', 'chimeric', 'frameShift',"
-"        'contaminated', 'retainedIntron', 'mixedWells', 'noGrowth',"
-"        'noInsert', 'no5est', 'microDel', 'artifact', 'noPolyATail',"
-"        'cantSequence'"
+"    imageId INT UNSIGNED NOT NULL,"  /* IMAGE id for clone */
+"    status ENUM("                    /* MGC status code */
+"       'unpicked',"
+"       'picked',"
+"       'notBack',"
+"       'noDecision',"
+"       'fullLength',"
+"       'incomplete',"
+"       'chimeric',"
+"       'frameShift',"
+"       'contaminated',"
+"       'retainedIntron',"
+"       'mixedWells',"
+"       'noGrowth',"
+"       'noInsert',"
+"       'no5est',"
+"       'microDel',"
+"       'artifact',"
+"       'noPolyATail',"
+"       'cantSequence',"
+"       'fullLengthShort'"
 "   ) NOT NULL,"
 "   acc CHAR(12) NOT NULL,"       /* genbank accession */
 "   organism CHAR(2) NOT NULL,"   /* two letter MGC organism */
@@ -130,6 +159,7 @@ addStatus(&MGC_MICRODELETION);
 addStatus(&MGC_LIBRARY_ARTIFACTS);
 addStatus(&MGC_NO_POLYA_TAIL);
 addStatus(&MGC_CANT_SEQUENCE);
+addStatus(&MGC_FULL_LENGTH_SHORT);
 }
 
 static struct mgcStatusType *lookupStatus(char *statusName)

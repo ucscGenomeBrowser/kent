@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: mgcImport.c,v 1.2 2003/06/17 03:10:57 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -59,6 +59,8 @@ switch (fullength->full_length)
         return &MGC_CONTAMINATED;
     case 6:
         return &MGC_RETAINED_INTRON;
+    case 8:
+        return &MGC_FULL_LENGTH_SHORT;
     case 100 :
         return &MGC_MIXED_WELLS;
     case 101 :

@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.2 2003/06/17 03:10:57 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -228,9 +228,9 @@ safef(sql, sizeof(sql),
       "INSERT INTO %s"
       "  SELECT all_mrna.* FROM all_mrna, %s"
       "    WHERE (all_mrna.qName = %s.acc)"
-      "      AND (%s.status = %d)",
+      "      AND (%s.status > %d)",
       MGC_FULL_MRNA_TMP, statusTbl, statusTbl, statusTbl,
-      MGC_FULL_LENGTH.dbIndex);
+      MGC_FULL_LENGTH_SHORT.dbIndex);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_FULL_MRNA_TMP);
 }
@@ -305,7 +305,7 @@ safef(sql, sizeof(sql),
       "  SELECT all_mrna.* FROM all_mrna, mgcStatus_tmp"
       "    WHERE (all_mrna.qName =  mgcStatus_tmp.acc)"
       "      AND (mgcStatus_tmp.status > %d)",
-      MGC_INCOMPLETE_MRNA_TMP, MGC_FULL_LENGTH.dbIndex);
+      MGC_INCOMPLETE_MRNA_TMP, MGC_FULL_LENGTH_SHORT.dbIndex);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_INCOMPLETE_MRNA_TMP);
 }
@@ -331,7 +331,8 @@ safef(sql, sizeof(sql),
       "      AND (mgcStatus_tmp.acc = '')"
       "      AND (mgcStatus_tmp.status > %d) "
       "      AND (mgcStatus_tmp.status < %d)",
-      MGC_PICKED_EST_TMP, MGC_UNPICKED.dbIndex, MGC_FULL_LENGTH.dbIndex);
+      MGC_PICKED_EST_TMP, MGC_UNPICKED.dbIndex,
+      MGC_FULL_LENGTH.dbIndex);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_PICKED_EST_TMP);
 }
