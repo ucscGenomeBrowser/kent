@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.934 2005/03/24 21:46:05 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.935 2005/03/28 20:56:38 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10305,8 +10305,10 @@ if (NULL == position)
     }
 
 /* default if not set at all, as would happen if it came from a URL with no
- * position. Otherwise tell them to go back to the gateway */
-if ((position == NULL) && (defaultPosition != NULL))
+ * position. Otherwise tell them to go back to the gateway. Also recognize
+ * "default" as specifying the default position. */
+if (((position == NULL) || sameString(position, "default"))
+    && (defaultPosition != NULL))
     position = cloneString(defaultPosition);
 if (sameString(position, ""))
     {
