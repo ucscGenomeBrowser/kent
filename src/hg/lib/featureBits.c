@@ -50,6 +50,13 @@ else
     return FALSE;
 }
 
+static boolean scoreQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a score qualifier. */
+{
+return fetchQualifiers("score", qualifier, extra, retSize);
+}
+
+
 static boolean upstreamQualifier(char *qualifier, char *extra, int *retSize)
 /* Return TRUE if it's a upstream qualifier. */
 {
@@ -209,13 +216,15 @@ static struct featureBits *fbPslBits(int winStart, int winEnd,
 struct psl *psl;
 char **row;
 int i, blockCount, *tStarts, *blockSizes, s, e, w;
-boolean doUp, doExon, doEnd;
-int promoSize = 0, endSize = 0, extraSize = 0;
+boolean doUp, doExon, doEnd, doScore;
+int promoSize = 0, endSize = 0, extraSize = 0, scoreThreshold = 0;
 struct featureBits *fbList = NULL, *fb;
 int chromSize;
 char *chrom;
 char nameBuf[512];
 
+if (scoreQualifier(qualifier, extra, &scoreThreshold))
+    errAbort("Can't handle score on psl tables yet, sorry");
 if (intronQualifier(qualifier, extra, &extraSize))
     errAbort("Can't handle intron on psl tables yet, sorry");
 doUp = upstreamQualifier(qualifier, extra, &promoSize);
@@ -278,7 +287,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		w = blockSizes[i];
 		s = chromSize - tStarts[i] - w;
 		e = s + w;
-		setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', extraSize, 
+            setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', extraSize, 
 				  extraSize, winStart, winEnd);
 		}
 	    }
@@ -288,7 +297,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		s = tStarts[i];
 		e = s + blockSizes[i];
-		setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', extraSize, 
+            setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', extraSize, 
 				  extraSize, winStart, winEnd);
 		}
 	    }
@@ -336,10 +345,11 @@ struct bed *bed;
 char **row;
 struct featureBits *fbList = NULL;
 char strand = '?';
-boolean doUp, doEnd, doExon = FALSE, doIntron = FALSE;
-int promoSize, endSize, extraSize;
+boolean doUp, doEnd, doExon = FALSE, doIntron = FALSE, doScore = FALSE;
+int promoSize, endSize, extraSize, scoreThreshold;
 int i, count, *starts, *sizes;
 
+doScore = scoreQualifier(qualifier, extra, &scoreThreshold);
 doUp = upstreamQualifier(qualifier, extra, &promoSize);
 doEnd = endQualifier(qualifier, extra, &endSize);
 if (doExon = exonQualifier(qualifier, extra, &extraSize))
@@ -410,7 +420,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	      {
 		s = bed->chromStart + starts[i];
 		e = bed->chromStart + starts[i] + sizes[i];
-		setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+        if (!doScore || (doScore && bed->score >= scoreThreshold))
+            setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
 				  extraSize, extraSize, winStart, winEnd);
 	      }
 	    }
@@ -418,7 +429,8 @@ while ((row = sqlNextRow(sr)) != NULL)
   	    {
 	    s = bed->chromStart;
 	    e = bed->chromEnd;
-	    setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
+        if (!doScore || (doScore && bed->score >= scoreThreshold))
+            setRangePlusExtra(&fbList, bed->name, bed->chrom, s, e, strand,
 			      extraSize, extraSize, winStart, winEnd);
 	    }
 	}

@@ -36,6 +36,7 @@ errAbort(
   "    :intron:N Break into introns, remove N from each end\n"
   "    :upstream:N  Consider the region of N bases before region\n"
   "    :end:N  Consider the region of N bases after region\n"
+  "    :score:N Consider records with score >= N \n"
   );
 }
 
