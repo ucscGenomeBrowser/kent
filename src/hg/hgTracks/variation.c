@@ -50,8 +50,8 @@ struct slList *newList = NULL, *el, *next;
 
 for (el = tg->items; el != NULL; el = next)
     {
-    next = el->next;
     struct snp *s = (struct snp *)el;
+    next = el->next;
     if (filter(tg, el))
  	slAddHead(&newList, el);
     }
