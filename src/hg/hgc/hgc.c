@@ -8736,7 +8736,7 @@ else if (containsStringNoCase(track, "blastzStrictChain")
 //    uglyf("DBNAME: %s, ORGNAME: %s, ITEM: %s\n", dbName, orgName, item);
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
-else if (sameWord(track, "chimpBlat"))
+else if (sameWord(track, "blatChimp"))
     {
     longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
     }
