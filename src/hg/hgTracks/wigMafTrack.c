@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.24 2004/04/21 22:24:07 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.25 2004/05/05 22:30:51 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -276,7 +276,6 @@ if (suffix != NULL)
             mi->height = tl.fontHeight;
         slAddHead(&miList, mi);
         }
-    freez(&suffix);
     }
 slReverse(&miList);
 return miList;
@@ -618,7 +617,6 @@ for (mi = miList; mi != NULL; mi = mi->next)
         }
     yOff += mi->height;
     }
-freez(&suffix);
 return ret;
 }
 
