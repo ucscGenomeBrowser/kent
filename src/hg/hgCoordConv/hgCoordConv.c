@@ -26,7 +26,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.22 2003/05/17 02:01:56 sugnet Exp $";
+static char const rcsid[] = "$Id: hgCoordConv.c,v 1.23 2003/05/17 02:49:01 sugnet Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */
@@ -248,9 +248,11 @@ char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
 if (database != NULL)
-    dyStringPrintf(dy, "select description from dbDb where name = '%s' and genome like '%s'", database, org);
+    dyStringPrintf(dy, "select description from dbDb where name = '%s' and (genome like '%s' or genome like 'Zoo')", 
+		   database, org);
 else if (freeze != NULL)
-    dyStringPrintf(dy, "select name from dbDb where description = '%s' and genome like '%s'", freeze, org);
+    dyStringPrintf(dy, "select name from dbDb where description = '%s' and (genome like '%s' or genome like 'Zoo')", 
+		   freeze, org);
 else
     internalErr();
 sr = sqlGetResult(conn, dy->string);
