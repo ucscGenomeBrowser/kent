@@ -703,7 +703,7 @@ return(0);
 int shiftIndel(char *indel, int size, int dir, int start, int end, struct dnaSeq *seq)
 {
 /* Determine how far insertion in seq can be shifted with changing an alignment */
-  int ret = 0, offset = 0;
+  int ret = 0, offset = 0, i = 0;
   char *test;
 
   test = needMem(size+1);
@@ -726,6 +726,12 @@ int shiftIndel(char *indel, int size, int dir, int start, int end, struct dnaSeq
       test[0] = '\0';
     /* printf("Testing %s vs %s\n", test, indel); */
   }
+  /* Check for pathological cases */
+  for (i = 0; i < size; i++) 
+    if (test[i] == indel[i]) 
+      ret++;
+    else
+      i = size;
   freez(&test);
   /* printf("Shifting %d in direction %d\n", ret, dir); */
   return(ret);
@@ -941,7 +947,7 @@ else if ((sameString(gseq->dna, dna)) || (((type == INDEL) || (type == UNALIGNED
 /* If it agrees with the mrna sequence */
 else if ((sameString(mdna, dna)) || 
 	 (((type == INDEL) || (type == UNALIGNED)) && 
-	  ((strlen(dna) == strlen(mdna)) || (sameString(mdna, dnaStart)) || (sameString(mdna, dnaEnd)))))
+	  ((strlen(dna) == strlen(mdna)) || (sameString(dna, dnaStart)) || (sameString(dna, dnaEnd)))))
   {
     if (sameString(table, "mrna"))
         {
