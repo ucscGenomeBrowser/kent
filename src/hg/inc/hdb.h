@@ -436,7 +436,13 @@ int hOffsetPastBin(char *chrom, char *table);
 
 boolean hgParseChromRange(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd);
-/* Parse something of form chrom:start-end into pieces. */
+/* Parse something of form chrom:start-end into pieces. 
+ * assumes a current database */
+
+boolean hgParseChromRangeDb(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, boolean haveDb);
+/* Parse something of form chrom:start-end into pieces. 
+ * if haveDb then check with chromInfo for names */
 
 boolean hgIsChromRange(char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
@@ -555,5 +561,8 @@ struct hash *hgReadRa(char *genome, char *database, char *rootDir,
  * a hash of hashes keyed by the name field in each
  * ra sub-hash. */
 
+char *addCommasToPos(char *position);
+/* add commas to the numbers in a position 
+ * returns pointer to static */
 
 #endif /* HDB_H */
