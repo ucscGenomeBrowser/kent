@@ -1330,7 +1330,7 @@ if (s != NULL)
 }
 
 char *genieName(struct trackGroup *tg, void *item)
-/* Return full genie name. */
+/* Return abbreviated genie name. */
 {
 struct linkedFeatures *lf = item;
 char *full = lf->name;
@@ -1346,7 +1346,7 @@ return abbrev;
 }
 
 char *genieMapName(struct trackGroup *tg, void *item)
-/* Return abbreviated genie name. */
+/* Return un-abbreviated genie name. */
 {
 struct linkedFeatures *lf = item;
 return lf->name;
@@ -1468,6 +1468,78 @@ tg->mapItemName = genieMapName;
 tg->itemColor = genieKnownColor;
 return tg;
 }
+
+char *refGeneName(struct trackGroup *tg, void *item)
+/* Return abbreviated genie name. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL) return lf->extra;
+else return lf->name;
+}
+
+char *refGeneMapName(struct trackGroup *tg, void *item)
+/* Return un-abbreviated genie name. */
+{
+struct linkedFeatures *lf = item;
+return lf->name;
+}
+
+void lookupRefNames(struct linkedFeatures *lfList)
+/* This converts the refSeq accession to a gene name where possible. */
+{
+struct linkedFeatures *lf;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+char *newName;
+
+if (hTableExists("refLink"))
+    {
+    struct knownMore *km;
+    struct sqlResult *sr;
+    char **row;
+
+    for (lf = lfList; lf != NULL; lf = lf->next)
+	{
+	sprintf(query, "select name from refLink where mrnaAcc = '%s'", lf->name);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    lf->extra = cloneString(row[0]);
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+hFreeConn(&conn);
+}
+
+
+void loadRefGene(struct trackGroup *tg)
+/* Load up RefSeq known genes. */
+{
+tg->items = lfFromGenePredInRange("refGene", chromName, winStart, winEnd);
+if (tg->visibility == tvFull && 
+	slCount(tg->items) <= maxItemsInFullTrack)
+    {
+    lookupRefNames(tg->items);
+    }
+}
+
+
+struct trackGroup *refGeneTg()
+/* Make track group of known genes from refSeq. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgRefGene";
+tg->visibility = tvFull;
+tg->longLabel = "Known Genes (from RefSeq)";
+tg->shortLabel = "Known Genes";
+tg->loadItems = loadRefGene;
+setTgDarkLightColors(tg, 20, 20, 170);
+tg->itemName = refGeneName;
+tg->mapItemName = refGeneMapName;
+return tg;
+}
+
 
 void loadEnsGene(struct trackGroup *tg)
 /* Load up Ensembl genes. */
@@ -4814,6 +4886,7 @@ if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
 slSafeAddHead(&tGroupList, coverageTrackGroup());
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
+if (hTableExists("refGene")) slSafeAddHead(&tGroupList, refGeneTg());
 if (sameString(chromName, "chr22") && hTableExists("sanger22")) slSafeAddHead(&tGroupList, sanger22Tg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());

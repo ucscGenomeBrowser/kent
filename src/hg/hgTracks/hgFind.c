@@ -18,6 +18,7 @@
 #include "stsMarker.h"
 #include "knownInfo.h"
 #include "hgFind.h"
+#include "refLink.h"
 
 void hgPositionsFree(struct hgPositions **pEl)
 /* Free up hgPositions. */
@@ -853,6 +854,75 @@ freeDyString(&query);
 hFreeConn(&conn);
 }
 
+static void findRefGenes(char *spec, struct hgPositions *hgp)
+/* Look up refSeq genes in table. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+char **row;
+boolean gotOne = FALSE;
+struct hgPosTable *table = NULL;
+struct hgPos *pos;
+struct genePred *gp;
+struct refLink *rlList = NULL, *rl;
+
+if ((startsWith("NM_", spec) || startsWith("XM_", spec)) && sqlTableExists(conn, "refLink"))
+    {
+    dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", spec);
+    sr = sqlGetResult(conn, ds->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	rl = refLinkLoad(row);
+	slAddHead(&rlList, rl);
+	}
+    sqlFreeResult(&sr);
+    }
+else if (sqlTableExists(conn, "refLink"))
+    {
+    dyStringPrintf(ds, "select * from refLink where name like '%s%%'", spec);
+    sr = sqlGetResult(conn, ds->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	rl = refLinkLoad(row);
+	slAddHead(&rlList, rl);
+	}
+    sqlFreeResult(&sr);
+    }
+if (rlList != NULL)
+    {
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->name = cloneString("Known Genes");
+    for (rl = rlList; rl != NULL; rl = rl->next)
+        {
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from refGene where name = '%s'", rl->mrnaAcc);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    gp = genePredLoad(row);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(rl->name);
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "(%s) %s", rl->mrnaAcc, rl->product);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(gp->chrom);
+	    pos->chromStart = gp->txStart;
+	    pos->chromEnd = gp->txEnd;
+	    genePredFree(&gp);
+	    }
+	sqlFreeResult(&sr);
+	}
+#ifdef SOON
+#endif /* SOON */
+    refLinkFreeList(&rlList);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+}
+
 
 struct hgPositions *hgPositionsFind(char *query, char *extraCgi)
 /* Return table of positions that match query or NULL if none such. */
@@ -902,6 +972,7 @@ else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
 else 
     {
     findKnownGenes(query, hgp);
+    findRefGenes(query, hgp);
     findMrnaKeys(query, hgp);
     }
 slReverse(&hgp->tableList);
