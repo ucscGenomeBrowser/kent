@@ -20,5 +20,4 @@ ${PROG2}: ${PROG2}.o $(MYLIBS)
 clean::
 	rm -f ${PROG1}.o ${PROG2}.o $B
 
-include tests/endcommon.mk
 
