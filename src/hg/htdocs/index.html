@@ -22,13 +22,15 @@
         <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR="2636D1" HEIGHT="24">
     	    <TR><TD VALIGN="middle"><FONT color="#89A1DE">&nbsp; 
  	    <A HREF="/cgi-bin/hgGateway" class="topbar">
-			Genome Browser</a> &nbsp; - &nbsp; 
+			Genomes</a> &nbsp; - &nbsp; 
  	    <A HREF="/cgi-bin/hgNear" class="topbar">
 			Gene Sorter</A> &nbsp; - &nbsp; 
 	    <A HREF="/cgi-bin/hgBlat" class="topbar">
 			Blat</a> &nbsp; - &nbsp; 
+	    <A HREF="/cgi-bin/hgPcr" class="topbar">
+			PCR</a> &nbsp; - &nbsp; 
 	    <A HREF="/cgi-bin/hgText" class="topbar">
-			Table Browser</a> &nbsp; - &nbsp; 
+			Tables</a> &nbsp; - &nbsp; 
 	    <A HREF="/FAQ/" class="topbar">
 			FAQ</a> &nbsp; - &nbsp; 
 	    <A HREF="goldenPath/help/hgTracksHelp.html" class="topbar">
@@ -55,8 +57,10 @@
 			Gene Sorter</A><HR>
 	        <A CLASS="leftbar" HREF="/cgi-bin/hgBlat">
 			Blat</A><HR>
+	        <A CLASS="leftbar" HREF="/cgi-bin/hgPcr">
+			In Silico PCR</A><HR>
 	        <A CLASS="leftbar" HREF="/cgi-bin/hgText">
-			Tables</A><HR>
+			Table Browser</A><HR>
 	        <A CLASS="leftbar" HREF="util.html">
 			Utilities</A><HR>
 	        <A CLASS="leftbar" HREF="http://hgdownload.cse.ucsc.edu/downloads.html">
@@ -146,37 +150,7 @@
                     <TR><TH HEIGHT=3></TH></TR>
                     <TR><TD WIDTH=10></TD>
                     <TD>
-    		    <FONT FACE="courier" SIZE=3><B>23 June 2004  - NCBI Human Build 35 released on Genome Browser</B></FONT><BR>
-		    <P>
-		    The latest human genome reference sequence (NCBI Build 35, 
-		    May 2004) is now available as database hg17 in the UCSC 
-		    Genome Browser and Blat server. This sequence was obtained
-		    from NCBI and was produced by the International Human
-		    Genome Sequencing Consortium.
-<!--
-		    There are ?? finished 
-		    sequenced bases in the ordered and oriented portion of the
-		    assembly, which is an increase of X percent, or approximately 
-		    ? Mb, over the Build 34 assembly. 
--->
-		    <P>
-		    Bulk downloads of the data are available via FTP at 
-		    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17">ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17</A> 
-		    or through the Downloads link on this page. We recommend 
-		    that you use FTP rather than HTML for the download of large 
-		    or multiple files. 
-		    <P>
-		    We'd like to thank NCBI and the International Human Genome 
-		    Sequencing Consortium for furnishing the data, and the UCSC 
-		    team members who contributed to this release: Hiram Clawson, 
-		    Terry Furey, Heather Trumbower, Robert Kuhn, Donna Karolchik, 
-		    Kate Rosenbloom, Angie Hinrichs, Rachel Harte, Jim Kent and 
-		    our sysadmin team Patrick Gavin, Jorge Garcia, 
-		    and Paul Tatarsky. 
-		    <P>
-		    <HR>
-<!--
-		    <FONT FACE="courier" SIZE=3><B>22 July 2004  - Zv3 Zebrafish Genome Browser Available</B></FONT><BR>
+		    <FONT FACE="courier" SIZE=3><B>26 July 2004  - Zv3 Zebrafish Genome Browser Available</B></FONT><BR>
 		    <P>
 		    The Zv3 Zebrafish genome assembly (UCSC version danRer1) is 
 		    now available on the
@@ -221,9 +195,30 @@
 		    Genome Browser team is Rachel Harte, Heather Trumbower, and
 		    Donna Karolchik.
 		    <P>
--->
-		    <FONT FACE="courier" SIZE=3><B>23 July 2004  - <em>Drosophila yakuba</em> Genome Browser Released</B></FONT><BR>
+		    <HR>
+    		    <FONT FACE="courier" SIZE=3><B>23 July 2004  - NCBI Human Build 35 released on Genome Browser</B></FONT><BR>
+		    The latest human genome reference sequence (NCBI Build 35, 
+		    May 2004) is now available as database hg17 in the UCSC 
+		    Genome Browser and Blat server. This sequence was obtained
+		    from NCBI and was produced by the International Human
+		    Genome Sequencing Consortium.
 		    <P>
+		    Bulk downloads of the data are available via FTP at 
+		    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17">ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17</A> 
+		    or through the Downloads link on this page. We recommend 
+		    that you use FTP rather than HTML for the download of large 
+		    or multiple files. 
+		    <P>
+		    We'd like to thank NCBI and the International Human Genome 
+		    Sequencing Consortium for furnishing the data, and the UCSC 
+		    team members who contributed to this release: Hiram Clawson, 
+		    Terry Furey, Heather Trumbower, Robert Kuhn, Donna Karolchik, 
+		    Kate Rosenbloom, Angie Hinrichs, Rachel Harte, Jim Kent and 
+		    our sysadmin team Patrick Gavin, Jorge Garcia, 
+		    and Paul Tatarsky. 
+		    <P>
+		    <HR>
+		    <FONT FACE="courier" SIZE=3><B>23 July 2004  - <em>Drosophila yakuba</em> Genome Browser Released</B></FONT><BR>
 		    The UCSC Genome Bioinformatics Group has released a Genome
 		    Browser and Blat server on a second species of fruitfly,
 		    <em>D. yakuba</em>. The April 2004 Release 1.0 of this genome
@@ -261,7 +256,6 @@
 		    who contributed to the success of this release.
 		    <P>
 		    <HR>
-		    <P>
 		    <FONT FACE="courier" SIZE=3><B>16 July 2004  - Genome Browser for Build 33 Mouse Assembly:</B></FONT>
 		    The latest mouse assembly -- Build 33 from NCBI (UCSC version
 		    mm5) -- is now available via the UCSC Genome Browser and 
