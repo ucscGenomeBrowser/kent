@@ -399,8 +399,8 @@ exit; # don't actually run this like a script :)
     # Edit the file to make it do blat.x -band -q=rna -trimHardA
     gensub2 genome.lst mrna.lst gsub spec
     
-    # Run this on the small cluster
-    ssh kkr1u00
+    # Run this on the small cluster if needed
+    ssh kkr1u00 
     para create spec
     para try, para check, para push, para check....
     para time > time
