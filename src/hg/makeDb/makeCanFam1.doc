@@ -894,6 +894,11 @@ axtChain $1 \
         set c = $i:r
         hgLoadChain canFam1 ${c}_chainHg17 $i
     end
+    # Wow, very high coverage!
+    featureBits -chrom=chr1 canFam1 chainHg17Link
+#Out of memory needMem - request size 75 bytes
+    featureBits -chrom=chr2 canFam1 chainHg17Link
+#55072794 bases of 83844569 (65.684%) in intersection
 
 
 # NET HUMAN BLASTZ (DONE 7/10/04 angie)
@@ -920,10 +925,31 @@ axtChain $1 \
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet canFam1 netHg17 stdin
     netFilter -minGap=10 humanSyn.net | hgLoadNet canFam1 netSyntenyHg17 stdin
-    # Add entries for chaing16, netHg17, syntenyHg17 to dog/canFam1 trackDb
+    # Add entries for chainHg17, netHg17, syntenyHg17 to dog/canFam1 trackDb
 
 
-# MAKE VSHG17 DOWNLOADABLES (TODO 7/9/04 angie)
+# GENERATE HG17 MAF FOR MULTIZ FROM NET (DONE 7/19/04 angie)
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
+    netSplit human.net net
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/canFam1/nib \
+        /cluster/data/hg17/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/canFam1/chrom.sizes /cluster/data/hg17/chrom.sizes \
+            $maf -tPrefix=canFam1. -qPrefix=hg17.
+    end
+
+
+# MAKE VSHG17 DOWNLOADABLES (TODO 7/19/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
     cp all.chain human.chain
@@ -938,6 +964,477 @@ axtChain $1 \
     mv /cluster/data/canFam1/zip/human*.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
+# SWAP BLASTZ MOUSE-DOG TO DOG-MOUSE (MM5) (DONE 7/19/04 angie)
+    ssh kolossus
+    mkdir /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
+    set aliDir = /cluster/data/mm5/bed/blastz.canFam1.2004-07-15
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    rm -r unsorted
+
+
+# CHAIN MOUSE BLASTZ (DONE 7/19/04 angie)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 \
+  /iscratch/i/canFam1/nib \
+  /iscratch/i/mus/mm5/softNib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 41 of 41 jobs
+#Average job time:                 211s       3.52m     0.06h    0.00d
+#Longest job:                      488s       8.13m     0.14h    0.01d
+#Submission to last job:           579s       9.65m     0.16h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=5000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Lots of chaff with scores in the 3000's.  Many very-high-scoring 
+    # chains.  So filter the chain down somewhat...
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    rm chain/*
+    chainSplit chain all.chain
+    gzip all.chain.unfiltered
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain canFam1 ${c}_chainMm5 $i
+    end
+    # Similar to human-mouse coverage -- not nearly as high as dog-human.
+    featureBits -chrom=chr1 canFam1 chainMm5Link
+#40430697 bases of 120715446 (33.493%) in intersection
+    featureBits -chrom=chr2 canFam1 chainMm5Link
+#31744742 bases of 83844569 (37.861%) in intersection
+
+
+# NET MOUSE BLASTZ (DONE 7/19/04 angie)
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    netClass -noAr noClass.net canFam1 mm5 mouse.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    rm noClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet canFam1 netMm5 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet canFam1 netSyntenyMm5 stdin
+    # Add entries for chainMm5, netMm5, syntenyMm5 to dog/canFam1 trackDb
+
+
+# GENERATE MM5 MAF FOR MULTIZ FROM NET (DONE 7/19/04 angie)
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    netSplit mouse.net net
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/canFam1/nib \
+        /cluster/data/mm5/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/canFam1/chrom.sizes /cluster/data/mm5/chrom.sizes \
+            $maf -tPrefix=canFam1. -qPrefix=mm5.
+    end
+
+
+# MAKE VSMM5 DOWNLOADABLES (TODO 7/19/04 angie)
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    ln all.chain mouse.chain
+    zip /cluster/data/canFam1/zip/mouse.chain.zip mouse.chain
+    rm mouse.chain
+    zip /cluster/data/canFam1/zip/mouse.net.zip mouse.net
+    zip /cluster/data/canFam1/zip/mouseSyn.net.zip mouseSyn.net
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsMm5
+    cd /usr/local/apache/htdocs/goldenPath/canFam1/vsMm5
+    mv /cluster/data/canFam1/zip/mouse*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
+# MULTIZ DOG/HUMAN/MOUSE (DONE 7/19/04 angie)
+    # put the MAFs on bluearc
+    ssh kksilo
+    mkdir -p /cluster/bluearc/multiz.dog/ch
+    cp /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/mafNet/*.maf \
+      /cluster/bluearc/multiz.dog/ch
+    mkdir -p /cluster/bluearc/multiz.dog/cm
+    cp /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/mafNet/*.maf \
+      /cluster/bluearc/multiz.dog/cm
+
+    ssh kki
+    mkdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5
+    mkdir chm
+    # Wrapper script required because of stdout redirect:
+    cat << '_EOF_' > doMultiz
+#!/bin/csh
+/cluster/bin/penn/multiz $1 $2 - > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doMultiz
+    rm -f jobList
+    foreach file (/cluster/bluearc/multiz.dog/ch/*.maf) 
+      set root=$file:t:r:r
+      echo "doMultiz {check in line+ /cluster/bluearc/multiz.dog/cm/${root}.maf} {check in line+ $file} {check out line+ /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/chm/${root}.maf}" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 41 of 41 jobs
+#Average job time:                 165s       2.75m     0.05h    0.00d
+#Longest job:                      343s       5.72m     0.10h    0.00d
+#Submission to last job:           569s       9.48m     0.16h    0.01d
+
+    # clean up bluearc (these are big files!)
+    rm -r /cluster/bluearc/multiz.dog
+
+    # setup external files for database reference
+    ssh hgwdev
+    mkdir -p /gbdb/canFam1/mzHg17Mm5_phast
+    ln -s /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/chm/*.maf \
+      /gbdb/canFam1/mzHg17Mm5_phast
+    # load into database
+    hgLoadMaf -warn canFam1 mzHg17Mm5_phast
+    # load pairwise mafs for wigMaf track
+    cd /gbdb/canFam1
+    mkdir -p human_chm mouse_chm
+    cd /tmp
+    ln -s /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/mafNet/*.maf \
+      /gbdb/canFam1/human_chm
+    hgLoadMaf -WARN canFam1 human_chm
+    ln -s /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/mafNet/*.maf \
+      /gbdb/canFam1/mouse_chm
+    hgLoadMaf -WARN canFam1 mouse_chm
+
+
+# PHASTCONS DOG/HUMAN/MOUSE (DONE 7/21/04 angie)
+    # step 1: fit phylogenetic model, with rate variation (discrete
+    # gamma model) first we need to extract the sufficient stats for
+    # the phylogenetic model from the MAFs.  In this case, we don't
+    # care about the order of the tuples (allows for much more compact
+    # representation)
+    ssh kksilo
+    mkdir /cluster/data/canFam1/bed/phastCons
+    cd /cluster/data/canFam1/bed/phastCons
+    mkdir unordered
+    foreach f (/cluster/data/canFam1/bed/multiz.canFam1hg17mm5/chm/chr*.maf)
+      /cluster/bin/phast/msa_view $f --in-format MAF --out-format SS \
+            --order canFam1,hg17,mm5 \
+            --unordered-ss  > unordered/$f:t:r.ss
+    end
+    # aggregate for whole genome
+    ls unordered/chr*.ss > fnames
+    /cluster/bin/phast/msa_view "*fnames" -i SS \
+      --aggregate canFam1,hg17,mm5 -o SS --unordered-ss \
+      > all.ss
+    # estimate parameters; should be very fast in this case
+    /cluster/bin/phast/phyloFit --msa all.ss --tree "((1,2),3)" \
+      --msa-format SS --subst-mod REV --nrates 40 --out-root rev-dg \
+      --output-tree
+    # make sure model looks reasonable
+    cat rev-dg.mod
+#ALPHABET: A C G T 
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 40
+#ALPHA: 4.506486
+#TRAINING_LNL: -4356689945.768768
+#BACKGROUND: 0.297650 0.202241 0.202273 0.297836 
+#RATE_MAT:
+#  -0.856784    0.157834    0.554732    0.144219 
+#   0.232292   -1.211122    0.162600    0.816230 
+#   0.816302    0.162574   -1.211329    0.232452 
+#   0.144128    0.554249    0.157868   -0.856245 
+#TREE: ((1:0.176986,2:0.142776):0.170935,3:0.170935);
+
+    # beware of zero branch lengths (indicates bad topology) or very
+    # large branch lengths (much greater than one; indicates
+    # convergence problems).  Can try without --nrates or with
+    # --subst-mod HKY85 to double check (parameter estimates should be
+    # in the same ballpark, REV + dG likelihood should be a bit
+    # better).  Also can write a log file to monitor convergence
+    # (--log).  Also watch out for alpha much less than one.
+    # Sometimes it's helpful to produce a rendering of the tree using
+    # draw_tree (run on the *.nh file)
+
+    # Partition the alignments into bite-sized chunks for cluster phastCons 
+    # run.  This time we need the ordered version of the SS format.
+    set WINSIZE=1000000
+    set WINOVERLAP=0
+    mkdir SS
+    foreach f (/cluster/data/canFam1/bed/multiz.canFam1hg17mm5/chm/*.maf)
+      set chr=$f:t:r
+      set c=`echo $chr | sed 's/chr//'`
+      echo $f $chr $c
+      mkdir SS/$c
+      /cluster/bin/phast/msa_split $f -i MAF -o SS \
+        -O canFam1,hg17,mm5 -M /cluster/data/canFam1/$c/$chr.fa \
+        -w ${WINSIZE},${WINOVERLAP} -r SS/$c/$chr -I 1000 -d 1 -B 5000
+    end
+    # save some space and I/O time:
+    gzip SS/*/*.ss
+
+    # step 2: run phastCons.  
+    # Since we haven't run with these particular organisms before, 
+    # do a whole-genome run without --transitions so that phastCons does a
+    # max likelihood estimate of the parameters.  Some jobs may have trouble 
+    # converging [not this time] ==> monitor log files of stragglers:
+    # Warning signs include likelihoods not decreasing monotonically, 
+    # very fast convergence (e.g., only 3 or 4 iterations), 
+    # wildly different estimates from different windows.
+    ssh kk
+    cd /cluster/data/canFam1/bed/phastCons
+    cat << '_EOF_' > doMLE
+#!/bin/csh -fe
+
+set PHAST=/cluster/bin/phast
+set TMP=/scratch/phastCons/chm
+
+set file=$1
+set root = $file:t:r:r
+set chrom = $root:r
+
+mkdir -p $TMP
+cp $file $TMP/$root.ss.gz
+gunzip $TMP/$root.ss.gz
+$PHAST/phastCons $TMP/$root.ss rev-dg.mod --nrates 40 \
+  --suppress-missing --quiet --log ${TMP}/$root.log --no-post-probs --quiet
+mkdir -p MLE/$chrom
+set lc = `wc -l < $TMP/$root.log`
+set pq = `tail -1 $TMP/$root.log | awk '{print $3 " " $4;}'`
+echo "$pq $lc" > MLE/$chrom/$root.pqi
+rm $TMP/$root.log
+rm $TMP/$root.ss
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod 775 doMLE
+    rm -f jobs.lst
+    foreach f (`ls -1S SS/*/*.ss.gz`)
+      echo './doMLE {check in exists+ '$f'}' \
+      >> jobs.lst
+    end
+    para create jobs.lst 
+    para try ; para push ; etc....
+#Completed: 2427 of 2427 jobs
+#Average job time:                 190s       3.17m     0.05h    0.00d
+#Longest job:                     1256s      20.93m     0.35h    0.01d
+#Submission to last job:          1995s      33.25m     0.55h    0.02d
+
+    # back on kksilo:
+    cat MLE/*/*.pqi > all.pqi
+    # Look for ones that converged too fast (one of Adam's warning signs):
+    awk '{print $3;}' all.pqi | sort -n | head -1
+#5
+    awk '{print $3;}' all.pqi | sort -n \
+    | textHistogram stdin -binSize=5 -maxBinCount=30
+    # Find median p and q (2427 chunks / 2 = 1213th value):
+    set nChunks = `wc -l < all.pqi`
+    set n50 = `expr \( $nChunks / 2 \) + 1`
+    awk '{print $1;}' all.pqi | sort -n | tail +$n50 | head -1
+#0.016533
+    awk '{print $2;}' all.pqi | sort -n | tail +$n50 | head -1
+#0.000991
+    # Eyeball the histogram of p values: should peak close to the median:
+    awk '{print $1 * 1000;}' all.pqi | textHistogram stdin -maxBinCount=100
+
+    # Now run phastCons again to calcluate postprobs and conserved 
+    # elements using the calculated p and q in --transitions.
+    # Note -- with the MLE calc'd p and q, the wiggle looked "oversmoothed" 
+    # so now we're rerunning with the same p & q used for human 8-way:
+    ssh kk
+    cd /cluster/data/canFam1/bed/phastCons
+    cat << '_EOF_' > doPostProbsEls
+#!/bin/csh -fe
+
+set PHAST=/cluster/bin/phast
+set TMP=/scratch/phastCons/chm
+
+set file=$1
+set root = $file:t:r:r
+set chrom = $root:r
+
+mkdir -p $TMP
+cp $file $TMP/$root.ss.gz
+gunzip $TMP/$root.ss.gz
+mkdir -p PREDICTIONS/$chrom
+$PHAST/phastCons $TMP/$root.ss rev-dg.mod --nrates 40 \
+  --suppress-missing --quiet --viterbi PREDICTIONS/$chrom/$root.bed --score \
+  --transitions 0.08,0.008 > $TMP/$root.pp
+mkdir -p POSTPROBS/$chrom
+gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
+rm $TMP/$root.pp
+rm $TMP/$root.ss
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod 775 doPostProbsEls
+    rm -f jobs.lst
+    foreach f (`ls -1S SS/*/*.ss.gz`)
+      echo './doPostProbsEls {check in exists+ '$f'}' \
+      >> jobs.lst
+    end
+    para create jobs.lst 
+    para try ; para push ; etc....
+    # for p=0.080 run... cluster was really hammering kksilo (usually faster):
+#Completed: 2427 of 2427 jobs
+#Average job time:                 414s       6.90m     0.11h    0.00d
+#Longest job:                     2436s      40.60m     0.68h    0.03d
+#Submission to last job:          2724s      45.40m     0.76h    0.03d
+
+    # now create wiggle track
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/phastCons
+    mkdir wib
+    foreach dir (POSTPROBS/*)
+        echo $dir
+        set chr=$dir:t
+        zcat `ls -1 $dir/*.pp.gz | sort -t\. -k2,2n` | \
+            wigAsciiToBinary -chrom=$chr \
+            -wibFile=wib/${chr}_phastCons stdin
+    end
+    ssh hgwdev
+    mkdir -p /gbdb/canFam1/wib/mzHg17Mm5_phast
+    cd /cluster/data/canFam1/bed/phastCons
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+    ln -s `pwd`/wib/*.wib /gbdb/canFam1/wib/mzHg17Mm5_phast/
+    hgLoadWiggle canFam1 mzHg17Mm5_phast_wig \
+      -pathPrefix=/gbdb/canFam1/wib/mzHg17Mm5_phast wib/*.wig
+
+    # Create bed track; we want to tweak the scores and the names.
+    # Scores are transformed as follows, for a reasonable-looking 
+    # bed 0-1000 "spectrum".  Let x_max be the maximum (believable) score 
+    # (here x_max  = 2297) and let x_med be the median score (here x_med =
+    # 31).  The  scores are transformed via the function f(x) = a *
+    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
+    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
+    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
+    # 272.914, b = -1112.18 (see below).
+    # better done on kksilo:
+    # get max:
+    cat PREDICTIONS/*/*.bed > raw.bed
+    set max = `awk '{print $5;}' raw.bed | sort -n | tail -1`
+#2297
+    # get median:
+    set lineCount = `wc -l < raw.bed`
+    set medOffset = `expr '(' $lineCount / 2 ')' + 1`
+    set med = `awk '{print $5;}' raw.bed | sort -n \
+      | tail +$medOffset | head -1`
+#31
+    # b and a:
+    set b = `awk 'BEGIN {print ((300 * log('$max')) - (1000 * log('$med')));}'`
+#-1112.18
+    set a = `awk 'BEGIN {print (1000 - '$b') / log('$max');}'`
+#272.914
+    awk '{printf "%s\t%s\t%s\tlod=%d\t%d\n", \
+            $1, $2, $3, $5, '$a' * log($5) + '$b';}' raw.bed > all.bed
+    hgLoadBed canFam1 phastConsElements all.bed
+    # make top-5000 list and launcher on Adam's home page:
+    sort -k5,5nr raw.bed | head -5000 > top5000.bed
+    /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
+      /cse/grads/acs/public_html/cf-top5000 \
+      "top 5000 conserved elements" canFam1
+
+    # clean up -- even gzipped, this is large, and we still have the wib...
+    rm -r POSTPROBS
+
+
+# MAKE DOWNLOADABLE FILES FOR MULTIZ (IN PROGRESS 7/21/04 angie)
+    # make compressed copies of mafs (don't compress originals -- need them 
+    # for the browser)
+    ssh kksilo
+    cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5
+    mkdir gzMaf
+    foreach f (chm/*.maf)
+      gzip -c $f > gzMaf/$f:t.gz
+    end
+    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
+    mkdir gzMaf
+    foreach f (mafNet/*.maf)
+      gzip -c $f > gzMaf/$f:t.gz
+    end
+#TODO
+    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
+    mkdir gzMaf
+    foreach f (mafNet/*.maf)
+      gzip -c $f > gzMaf/$f:t.gz
+    end
+    # put multi and pairwise mafs out for download
+    mkdir /usr/local/apache/htdocs/goldenPath/canFam1/multizHg17Mm5
+    cd /usr/local/apache/htdocs/goldenPath/canFam1/multizHg17Mm5
+    mv /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/gzMaf/* .
+    rmdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/gzMaf
+    mv /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/gzMaf hg17
+    mv /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/gzMaf mm5
+    md5sum *.gz */*.gz > md5sum.txt
+    # make a README.txt file
 
 
 # BLASTZ SELF (TODO 7/9/04 angie)
@@ -1225,13 +1722,12 @@ axtFilter -notQ=chrUn $1 \
     hgLoadBed canFam1 genscanSubopt genscanSubopt.bed
 
 
-# PRODUCING FUGU BLAT ALIGNMENTS (TODO 7/9/04)
+# PRODUCING FUGU BLAT ALIGNMENTS (DONE 7/15/04 angie)
     ssh kk
     mkdir /cluster/data/canFam1/bed/blatFr1
     cd /cluster/data/canFam1/bed/blatFr1
-    # Note: might need to do a better job of partitioning here...
-    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
-    ls -1S /iscratch/i/canFam1/nib/*.nib > dog.lst
+    ls -1S /cluster/bluearc/fugu/fr1/trfFa/*.fa > fugu.lst
+    ls -1S /iscratch/i/canFam1/maskedContigs/*.fa > dog.lst
     cat << '_EOF_' > gsub
 #LOOP
 blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
@@ -1242,12 +1738,17 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     gensub2 dog.lst fugu.lst gsub spec
     para create spec
     para try, check, push, check, ...
-    # for future reference, the fugu trfFa on bluearc seem better partitioned...
+#Completed: 3479 of 3479 jobs
+#Average job time:                1336s      22.26m     0.37h    0.02d
+#Longest job:                     4142s      69.03m     1.15h    0.05d
+#Submission to last job:         14450s     240.83m     4.01h    0.17d
 
     # Sort alignments:
     ssh kksilo
     cd /cluster/data/canFam1/bed/blatFr1
-    pslCat -dir psl | pslSortAcc nohead chrom /cluster/store2/temp stdin
+    pslCat -dir psl \
+    | liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn stdin \
+    | pslSortAcc nohead chrom /tmp stdin
 
     # load seq & psl into database:
     ssh hgwdev
@@ -1257,9 +1758,13 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     hgLoadSeq canFam1 /gbdb/canFam1/fuguSeq/fugu_v3.masked.fa
     cd /cluster/data/canFam1/bed/blatFr1/chrom
     cat *.psl | hgLoadPsl -fastLoad -table=blatFr1 canFam1 stdin
+    featureBits canFam1 blatFr1
+#24508362 bases of 2359845093 (1.039%) in intersection
+    featureBits hg17 blatFr1
+#21977081 bases of 2866216770 (0.767%) in intersection
 
 
-# LOAD CPGISSLANDS (TODO 3/23/04 angie)
+# LOAD CPGISSLANDS (DONE 7/15/04 angie)
     ssh hgwdev
     mkdir -p /cluster/data/canFam1/bed/cpgIsland
     cd /cluster/data/canFam1/bed/cpgIsland
@@ -1300,6 +1805,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /cluster/data/canFam1/bed/cpgIsland
     hgLoadBed canFam1 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    wc -l cpgIsland.bed 
+#  48070 cpgIsland.bed
+    featureBits canFam1 cpgIslandExt
+#38799035 bases of 2359845093 (1.644%) in intersection
 
 
 # BUILD BLAST DATABASES
