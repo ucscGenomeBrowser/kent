@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.816 2005/01/14 01:33:06 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.817 2005/01/14 10:50:10 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4195,6 +4195,11 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
     type = temp;
+    table = track;
+    }
+else if ( sameWord("blatzHg17KG", track) )
+    {
+    type = "Human mRNA";
     table = track;
     }
 else if (stringIn("est", track) || stringIn("Est", track) ||
@@ -15096,6 +15101,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
+	 sameWord(track, "blatzHg17KG") ||
          sameWord(track, "mgcIncompleteMrna") ||
          sameWord(track, "mgcFailedEst") ||
          sameWord(track, "mgcPickedEst") ||
