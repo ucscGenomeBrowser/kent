@@ -54,6 +54,15 @@ color 30,130,210
 type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Mouse/Human Homology
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
+
 track blatFr1
 shortLabel Fugu Blat
 longLabel Takifugu rubripes Translated Blat Alignments
