@@ -2901,8 +2901,8 @@ hFreeConn(&conn);
 void doHgTet(struct trackDb *tdb, char *name)
 /* Do thing with tet track. */
 {
-cartWebStart(cart, "Tetraodon Alignment");
-printf("Alignment between tetraodon sequence %s (above) and human chromosome %s (below)\n",
+cartWebStart(cart, "Fish Alignment");
+printf("Alignment between fish sequence %s (above) and human chromosome %s (below)\n",
     name, skipChr(seqName));
 fetchAndShowWaba("waba_tet", name);
 }
@@ -4689,7 +4689,7 @@ hFreeConn(&conn);
 }
 
 void doBlatFish(struct trackDb *tdb, char *itemName)
-/* Handle click on blatMouse track. */
+/* Handle click on blatFish track. */
 {
 char *track = tdb->tableName;
 char query[256];
@@ -4703,7 +4703,7 @@ boolean hasBin;
 char table[64];
 
 cartWebStart(cart, itemName);
-printf("<H1>Information on Tetraodon Sequence %s</H1>", itemName);
+printf("<H1>Information on Fish Sequence %s</H1>", itemName);
 
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
