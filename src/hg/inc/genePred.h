@@ -26,6 +26,8 @@ struct genePred
     unsigned *exonEnds;	/* Exon end positions */
     };
 
+#define GENEPRED_NUM_COLS 10  /* number of columns in a genePred */
+
 struct genePred *genePredLoad(char **row);
 /* Load a genePred from row fetched with select * from genePred
  * from database.  Dispose of this with genePredFree(). */
