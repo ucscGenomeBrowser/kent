@@ -124,6 +124,8 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
 #define YLINEMARK "yLineMark"
 
 #if defined(DEBUG)
+extern void wigProfileEnter();
+extern long wigProfileLeave();
 #define DBGMSGSZ	1023
 extern char dbgMsg[DBGMSGSZ+1];
 extern void wigDebugPrint(char * name);
