@@ -353,7 +353,7 @@ int start, lines;
 int heightFromCart;
 char o1[128];
 
-sprintf( o1, "%s.heightPer", tg->mapName);
+snprintf( o1, 128, "%s.heightPer", tg->mapName);
 heightFromCart = atoi(cartUsualString(cart, o1, "100"));
 
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
@@ -363,24 +363,20 @@ switch (vis)
     case tvFull:
 
     lines = 1;
-    start = 0;
     for (item = tg->items; item != NULL; item = item->next)
 	{
-        if( !start && item->next != NULL )
+        if( item->next != NULL )
             if( updateY( tg->itemName(tg, item), tg->itemName(tg, item->next), 1 ))
                 lines++;
-        start = 0;
-     }
-
-
+    }
 	tg->height = lines * tg->lineHeight;
-	//tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
 	break;
+
     case tvDense:
 	tg->height = tg->lineHeight;
 	break;
-    }
 
+    }
 return tg->height;
 }
 
@@ -1250,7 +1246,6 @@ shades = tg->colorShades;
 
 lf=tg->items;    
 if(lf==NULL) return;
-
 
 //take care of cart options
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
@@ -8494,6 +8489,7 @@ tg->items = lfList;
 void loadSampleIntoLinkedFeature(struct trackGroup *tg)
 /* Convert sample info in window to linked feature. */
 {
+int maxWiggleTrackHeight = 2500;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -8503,6 +8499,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 char *hasDense = NULL;
 char *where = NULL;
 char query[256];
+
 
 
 /*see if we have a summary table*/
@@ -8545,6 +8542,18 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
+
+/*turn off full mode if there are too many rows or each row is too
+ * large. A total of maxWiggleTrackHeight is allowed for number of
+ * rows times the rowHeight*/
+if( tg->visibility == tvFull 
+    && tgUserDefinedTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+    {
+    tg->limitedVisSet = TRUE;
+    tg->limitedVis = tvDense;
+    }
+
+
 }
 
 
