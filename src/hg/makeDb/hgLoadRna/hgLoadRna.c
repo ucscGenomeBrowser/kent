@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.27 2003/06/30 20:41:33 kate Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.28 2004/01/29 21:34:03 hartera Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -45,7 +45,8 @@ char historyTable[] =
   "endId int unsigned not null,"                /* First id for next session. */
   "who varchar(255) not null,"         /* User who updated. */
   "what varchar(255) not null,"        /* What they did. */
-  "modTime timestamp not null)";        /* Modification time. */
+  "modTime timestamp not null,"        /* Modification time. */
+  "errata varchar(255) )";            /* Deleted data */
 
 char extFileTable[] =
 /* This keeps track of external files and directories. */
@@ -323,7 +324,7 @@ else
     ex->name = hel->name;
     ex->path = cloneString(path);
     ex->size = size;
-    sprintf(query, "INSERT into extFile VALUES(%u,'%s','%s',%lld)",
+    sprintf(query, "INSERT into extFile (id, name, path, size) VALUES(%u,'%s','%s',%lld)",
 	id, name, path, size);
     sqlUpdate(conn,query);
     return id;
@@ -758,7 +759,7 @@ char *table;
 checkForGenBankIncr(database, "Use the GenBank incremental load tools or hgLoadSeq.");
 
 sqlUpdate(conn, historyTable);
-sqlUpdate(conn, "INSERT into history VALUES(NULL,0,10,USER(),'New',NOW())");
+sqlUpdate(conn, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,10,USER(),'New',NOW(), NULL)");
 sqlUpdate(conn, extFileTable);
 sqlUpdate(conn, seqTable);
 sqlUpdate(conn, mrnaTable);
