@@ -2677,7 +2677,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row, **row1;
 char *type = NULL, *lfLabel = NULL;
-char *table = NULL, *pslTable;
+char *table = NULL;
 int start = cgiInt("o");
 int end = cgiInt("t");
 int i;
@@ -2689,7 +2689,6 @@ struct psl *pslList = NULL, *psl;
 if (sameString("bacEndPairs", track)) 
     {
     type = "BAC End Pairs";
-    pslTable = "bacends";
     lfLabel = "BAC ends";
     table = track;
     }
