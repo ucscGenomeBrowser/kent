@@ -7,7 +7,7 @@ O = gbIgnoreDelete.o gbBuildState.o gbMDParse.o gbMetaData.o gbAlignData.o dbLoa
 
 all: ${PROGS}
 
-$(BINARCH)/gbLoadRna: ${O}
+$(BINARCH)/gbLoadRna: ${O} ${LIBGENBANK}
 
 clean:
 	rm -f $(PROGS) ${O}

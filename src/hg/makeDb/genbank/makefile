@@ -9,7 +9,12 @@ clean: ${SUBDIRS:%=%.subclean}
 %.subclean:
 	${MAKE} -C $* clean
 
-#
+install-server:
+	${MAKE} install PREFIX=/cluster/data/genbank
+
+install-rr:
+	${MAKE} install PREFIX=/genbank
+
 # Install built files.  The etc directory is maintained using CVS, so
 # any changes must be committed (and this is checked).
 install: check-etc all

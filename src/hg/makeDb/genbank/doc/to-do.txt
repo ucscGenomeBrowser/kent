@@ -629,8 +629,9 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 
 - rawPsl files don't get migrated.
 
-- hg16 got this message , looks like species is reversed are reversed:
-  entry AF283900 2003-10-12 organism previously specified as "Rattus norvegicus" (native), is specfied as "Homo sapiens" (xeno) in /cluster/data/genbank/data/processed/genbank.138.0/daily.1113/mrna.gbidx, add one to ignored.idx
+- gbGetSeqs of psl missed NM_012335, others.
+
+- take over creation of mrnaRefseq table.
 
 - gbGetSeqs of psl missed NM_012335, others.
 
@@ -641,3 +642,4 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
  
 - mm4 NM_009980 was suppressed on Oct 5th.  It should have been removed from
   the ~Oct 25th release of genbank 138
+

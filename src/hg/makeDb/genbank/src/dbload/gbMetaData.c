@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.17 2003/11/21 16:09:24 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.18 2003/12/27 18:35:10 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -582,6 +582,7 @@ void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
 if (srcDb == GB_REFSEQ)
     {
     sqlDeleterDel(deleter, conn, "refSeqStatus", "mrnaAcc");
+    sqlDeleterDel(deleter, conn, "refSeqSummary", "mrnaAcc");
     sqlDeleterDel(deleter, conn, "refLink", "mrnaAcc");
     }
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
