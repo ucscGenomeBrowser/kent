@@ -572,6 +572,13 @@ priority 39
 visibility hide
 type bed 15 +
 
+track affyRatio
+shortLabel GNF Ratio
+longLabel GNF Gene Expression Atlas Ratios using Affymetrix GeneChips
+priority 39.1
+visibility hide
+type bed 15 +
+
 track cghNci60
 shortLabel CGH NCI60
 longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
