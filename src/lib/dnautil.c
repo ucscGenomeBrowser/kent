@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.21 2003/12/31 01:48:15 weber Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.22 2004/02/22 01:09:47 jill Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -234,7 +234,8 @@ return codonTable[val].codon;
 }
 
 void dnaTranslateSome(DNA *dna, char *out, int outSize)
-/* Translate up to outSize bases of DNA.  Output will be zero terminated. */
+/* Translate DNA upto a stop codon or until outSize-1 amino acids, 
+ * whichever comes first. Output will be zero terminated. */
 {
 int i;
 int dnaSize;

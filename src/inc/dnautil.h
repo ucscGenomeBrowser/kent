@@ -107,7 +107,8 @@ DNA *valToCodon(int val);
 /* Return  codon corresponding to val (0-63) */
 
 void dnaTranslateSome(DNA *dna, char *out, int outSize);
-/* Translate up to outSize bases of DNA.  Output will be zero terminated. */
+/* Translate DNA upto a stop codon or until outSize-1 amino acids, 
+ * whichever comes first. Output will be zero terminated. */
 
 char *skipIgnoringDash(char *a, int size, bool skipTrailingDash);
 /* Count size number of characters, and any 
