@@ -178,7 +178,9 @@ struct snp
     int chromStart;             /* start */
     int chromEnd;               /* end   */
     char *name;		        /* name  */
-    char *strand;		/* strand*/
+    char *strand;		/* strand */
+    char *observed;		/* observed variants (usually slash-separated list) */
+    char *locType;		/* location Type */
     };
 
 struct snp *snpLoad(char **row)
@@ -193,6 +195,8 @@ ret->chromStart =        atoi(row[1]);
 ret->chromEnd   =        atoi(row[2]);
 ret->name       = cloneString(row[3]);
 ret->strand     = cloneString(row[4]);
+ret->observed   = cloneString(row[5]);
+ret->locType    = cloneString(row[6]);
 return ret;
 }
 
@@ -206,6 +210,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->strand);
+freeMem(el->observed);
+freeMem(el->locType);
 freez(pEl);
 }
 
@@ -231,7 +237,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand "
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, observed, locType "
 "from snp where chrom='%s' order by name", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -375,6 +381,8 @@ int gapExtendPenalty = 5; /* was 50, reducing for new snp version. */
 int noDna = 0;
 int snpRows = 0;
 
+int goodExact = 0;
+int badExact = 0;
 
 if (!hDbIsActive(db))
     {
@@ -459,6 +467,52 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    }
 	/* continue; */
 
+	/* add check for Heather for specific case locType=exact and size=1 */
+	if (sameString(snp->locType,"exact") && (snp->chromEnd == (snp->chromStart + 1)))
+	    {
+	    char *obs=cloneString(snp->observed);
+            int  n = chopString(obs, "/", NULL, 0); 
+            char **obsvd = needMem(n*sizeof(char*)); 
+	    char *exactDna = checkAndFetchNib(chromSeq, snp, 0, 1);
+	    int i=0;
+	    boolean found = FALSE;
+	    chopString(obs, "/", obsvd, n);
+	    if (exactDna==NULL) 
+		{
+		printf("exactDna=NULL for %s %s %u %u (%s) %s \n",
+		    snp->name,
+		    snp->chrom,
+		    snp->chromStart,
+		    snp->chromEnd,
+		    snp->observed,
+		    snp->locType
+		    );
+		}
+		
+	    uglyf("%s: exactDna=%s obs=%s \n",snp->name,exactDna,snp->observed);
+	    
+	    for(i=0; i<n; i++)
+		{
+		if (strlen(obsvd[i]) > 1)
+		    {
+		    printf("%s: incorrect length of observed %s <> 1 \n",
+			snp->name, obsvd[i]
+			);
+		    }
+		if (sameWord(obsvd[i],exactDna))
+		    {
+		    found = TRUE;
+		    }
+		}
+	    if (found) { goodExact++; }
+	    else { badExact++; 
+	      uglyf("id: %s exact %s not found in observed %s \n",snp->name,exactDna,snp->observed); 
+	      }
+	    freez(&obsvd);
+	    freez(&obs);
+	    freez(&exactDna);
+	    }
+	
 	
         while (cmp < 0)
 	    {
@@ -515,9 +569,9 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		rf = maxFlank;
 		flank->rightFlank[rf]=0;
 		}
-	    /* at Daryl's request, upper case */
-	    toUpperN(flank->leftFlank , lf);
-	    toUpperN(flank->rightFlank, rf);
+	    /* at Daryl's request, try to make them same case */
+	    toLowerN(flank->leftFlank , lf);
+	    toLowerN(flank->rightFlank, rf);
 	    
 	    flankSize = lf+1+rf;
 	    seq = needMem(flankSize+1);
@@ -757,6 +811,9 @@ printf("         nib in gap : %u \n",totalGapNib);
 
 printf("\n          Total rows in snp: %u \n ",snpRows);
 printf("\n        # no dna found for : %u \n ",noDna);
+
+printf("\n          Total goodExact: %u \n ",goodExact);
+printf("\n          Total  badExact: %u \n ",badExact);
 
 printf("\n\n=========================================\n");
 
