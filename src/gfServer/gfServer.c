@@ -25,6 +25,7 @@ boolean allowOneMismatch = FALSE;
 int repMatch = 1024;
 int maxGap = gfMaxGap;
 FILE *logFile = NULL;
+boolean seqLog = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -56,7 +57,8 @@ errAbort(
   "               Default is 2 for nucleotides, 0 for protiens.\n"
   "   -trans  Translate database to protein in 6 frames.  Note: it is best\n"
   "           to run this on RepeatMasked data in this case.\n"
-  "   -log=logFile keep a log file that records server requests."
+  "   -log=logFile keep a log file that records server requests.\n"
+  "   -seqLog    Include sequences in log file\n"
   );
 
 }
@@ -287,6 +289,7 @@ int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
 char *logFileName = cgiOptionalString("log");
 
+signal(SIGPIPE, SIG_IGN);	/* Block broken pipe signals. */
 if (logFileName != NULL)
     logFile = mustOpen(logFileName, "a");
 logIt("gfServer version %d on host %s, port %s\n", version, hostName, portName);
@@ -422,9 +425,7 @@ for (;;)
 		        aaCount += seq.size;
 		    else
 			baseCount += seq.size;
-#ifdef DEBUG
-#endif /* DEBUG */
-		    if (logFile != NULL)
+		    if (seqLog && logFile != NULL)
 			{
 			faWriteNext(logFile, "query", seq.dna, seq.size);
 			fflush(logFile);
@@ -627,6 +628,7 @@ if (cgiBoolean("trans"))
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
 repMatch = cgiOptionalInt("repMatch", repMatch);
+seqLog = cgiBoolean("seqLog");
 if (argc < 2)
     usage();
 if (sameWord(command, "direct"))
