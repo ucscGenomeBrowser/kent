@@ -3,7 +3,7 @@
 #
 
 SHELL=/bin/sh
-MAILTO=markd@cse.ucsc.edu
+MAILTO=genbank@cse.ucsc.edu
 
 # build genbank 5 minutes after midnight
 5 0 * * *	/cluster/store5/genbank/etc/build-genbank

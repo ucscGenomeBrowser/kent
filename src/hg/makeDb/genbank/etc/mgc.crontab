@@ -3,10 +3,10 @@
 #
 
 SHELL=/bin/sh
-MAILTO=markd@cse.ucsc.edu
+MAILTO=genbank@cse.ucsc.edu
 
 # poll every hour at half-past
-30 0-23 * * *	/genbank/etc/genbank-mgc-load
+30 0-23 * * *	/genbank/etc/mgc-dbload
 
 
 
