@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.668 2004/06/16 06:19:52 jill Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.669 2004/06/16 23:43:24 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7329,8 +7329,11 @@ printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->
 printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
 printf("(%d&nbsp;%% of gene)<p>\n",pg->coverage);
-printf("<H4>RetroGene/Gene Alignment</H4>");
-printAlignments(pseudoList, start, "htcCdnaAli", alignTable, acc);
+if (pseudoList != NULL)
+    {
+    printf("<H4>RetroGene/Gene Alignment</H4>");
+    printAlignments(pseudoList, start, "htcCdnaAli", alignTable, acc);
+    }
 printf("<H4>Annotation for Gene locus that spawned RetroGene</H4>");
 
 
@@ -7417,65 +7420,67 @@ if (hTableExists(alignTable))
     {
     struct psl *pslList = loadPslRangeT(alignTable, pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
+        {
         printAlignments(pslList, pslList->tStart, "htcCdnaAli", alignTable, pg->name);
-    }
-htmlHorizontalLine();
-safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pseudoList->tName);
-if (hTableExists(chainTable_chrom) )
-    {
-        /* lookup chain */
-    dyStringPrintf(dy,
-        "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
-        pseudoList->tName, chainTable);
-    hAddBinToQuery(pseudoList->tStart, pseudoList->tEnd, dy);
-    if (sameString(pg->gStrand,pg->strand))
-        dyStringPrintf(dy,
-            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '+' ",
-            pseudoList->tStart, pseudoList->tEnd, pg->gChrom, pg->gStart, pg->gEnd);
-    else
-        {
-        dyStringPrintf(dy,
-            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
-            pseudoList->tStart, pseudoList->tEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
-            hChromSize(pg->gChrom)-(pg->gStart));
-        }
-    dyStringAppend(dy, " order by qStart");
-    sr = sqlGetResult(conn, dy->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        int chainId, score;
-        unsigned int qStart, qEnd, qSize;
-        char qStrand;
-        if (first == 0)
+        htmlHorizontalLine();
+        safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pseudoList->tName);
+        if (hTableExists(chainTable_chrom) )
             {
-            printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>\n");
-            printf("Shows removed introns, frameshifts and in frame stops.\n");
-            first = 1;
+                /* lookup chain */
+            dyStringPrintf(dy,
+                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
+                pseudoList->tName, chainTable);
+            hAddBinToQuery(pseudoList->tStart, pseudoList->tEnd, dy);
+            if (sameString(pg->gStrand,pg->strand))
+                dyStringPrintf(dy,
+                    "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '+' ",
+                    pseudoList->tStart, pseudoList->tEnd, pg->gChrom, pg->gStart, pg->gEnd);
+            else
+                {
+                dyStringPrintf(dy,
+                    "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
+                    pseudoList->tStart, pseudoList->tEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+                    hChromSize(pg->gChrom)-(pg->gStart));
+                }
+            dyStringAppend(dy, " order by qStart");
+            sr = sqlGetResult(conn, dy->string);
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                int chainId, score;
+                unsigned int qStart, qEnd, qSize;
+                char qStrand;
+                if (first == 0)
+                    {
+                    printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>\n");
+                    printf("Shows removed introns, frameshifts and in frame stops.\n");
+                    first = 1;
+                    }
+                chainId = sqlUnsigned(row[0]);
+                score = sqlUnsigned(row[1]);
+                qStart = sqlUnsigned(row[2]);
+                qEnd = sqlUnsigned(row[3]);
+                qStrand =row[4][0];
+                qSize = sqlUnsigned(row[5]);
+                if (qStrand == '-')
+                    {
+                    unsigned int tmp = qSize - qEnd;
+                    qEnd = qSize - qStart;
+                    qStart = tmp;
+                    }
+                //if (pg->chainId == 0) pg->chainId = chainId;
+                puts("<ul><LI>\n");
+                hgcAnchorPseudoGene(pg->kgName, "knownGene", pseudoList->tName, "startcodon", pseudoList->tStart, pseudoList->tEnd, 
+                        pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
+                printf("Annotated alignment</a> using self chain.\n");
+                printf("Score: %d \n", score);
+                puts("</LI>\n");
+                printf("<ul>Raw alignment: ");
+                hgcAnchorTranslatedChain(chainId, chainTable, pseudoList->tName, pg->gStart, pg->gEnd);
+                printf("%s:%d-%d </A></ul> </ul>\n", pg->gChrom,qStart,qEnd);
+                }
+            sqlFreeResult(&sr);
             }
-        chainId = sqlUnsigned(row[0]);
-        score = sqlUnsigned(row[1]);
-        qStart = sqlUnsigned(row[2]);
-        qEnd = sqlUnsigned(row[3]);
-        qStrand =row[4][0];
-        qSize = sqlUnsigned(row[5]);
-        if (qStrand == '-')
-            {
-            unsigned int tmp = qSize - qEnd;
-            qEnd = qSize - qStart;
-            qStart = tmp;
-            }
-        //if (pg->chainId == 0) pg->chainId = chainId;
-        puts("<ul><LI>\n");
-        hgcAnchorPseudoGene(pg->kgName, "knownGene", pseudoList->tName, "startcodon", pseudoList->tStart, pseudoList->tEnd, 
-                pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
-        printf("Annotated alignment</a> using self chain.\n");
-        printf("Score: %d \n", score);
-        puts("</LI>\n");
-        printf("<ul>Raw alignment: ");
-        hgcAnchorTranslatedChain(chainId, chainTable, pseudoList->tName, pg->gStart, pg->gEnd);
-        printf("%s:%d-%d </A></ul> </ul>\n", pg->gChrom,qStart,qEnd);
         }
-    sqlFreeResult(&sr);
     }
 printf("<p>RetroGene&nbsp;Score:&nbsp;%d \n",pg->axtScore);
 printf("Alignment&nbsp;Score:&nbsp;%d&nbsp;<br>\n",pg->score);
@@ -7543,7 +7548,7 @@ sr = hRangeQuery(conn, "pseudoGeneLink", chrom, start, end, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     pg = pseudoGeneLinkLoad(row+rowOffset);
-    if (hTableExists("axtInfo") && pslList != NULL)
+    if (hTableExists("axtInfo") )
         {
         pseudoPrintPos(pslList, pg, alignTable, start, acc);
         }
