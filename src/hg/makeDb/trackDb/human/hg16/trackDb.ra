@@ -137,7 +137,7 @@ shortLabel Mouse Net
 longLabel Mouse (mm3-Feb 03)/$Organism Alignment Net
 group compGeno
 priority 129
-visibility dense
+visibility hide
 spectrum on
 type netAlign mm3 chainMm3
 otherDb mm3
