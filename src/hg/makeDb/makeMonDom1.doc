@@ -2894,15 +2894,53 @@ doPhast $(file1) $(root1)
     # Create merged posterier probability file and wiggle track data files
     ssh eieio
     cd /cluster/bluearc/monDom1/cons/consRun1
-    find ./ppRaw -type f | xargs cat | \
-	wigEncode stdin phastCons5.wig phastCons5.wib
+    # interesting sort here on scaffold number and position.
+    # first convert the names to have a consistent field separator
+    # of . then do the sort on fields 6 and 7 (both numerically)
+    # then convert those . field separators back to what they were
+    find ./ppRaw -type f | \
+	sed -e "s#/scaffold_#.scaffold.#g; s#-#._.#" | \
+	    sort -t\. -k6,6n -k7,7n | \
+		sed -e "s#.scaffold.#/scaffold_#g; s#\._\.#-#" | xargs cat | \
+		    wigEncode stdin phastCons5.wig phastCons5.wib
+    # 30 minutes for above
     cp -p phastCons5.wi? /cluster/data/monDom1/bed/multiz/cons
+    # 1 minute copy
     
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/monDom1/bed/multiz/cons
     ln -s `pwd`/phastCons5.wib /gbdb/monDom1/wib/phastCons5.wib
     hgLoadWiggle monDom1 phastCons5 phastCons5.wig
+    #  2 minute load
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/multiz/cons
+    time hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=monDom1 phastCons5 > histogram.data 2>&1
+    #	about 15 minutes scan all data
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 xff0000 xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Opossum Histogram phastCons5 track"
+set xlabel " phastCons5 score"
+set ylabel "p-Value"
+set y2label "Cumulative Probability Distribution"
+set y2range [0:1]
+set y2tics
+
+plot "histogram.data" using 2:5 title " pValue" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CPD" with lines
+'_EOF_'
+
+    display histo.png &
 
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
