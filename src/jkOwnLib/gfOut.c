@@ -231,6 +231,8 @@ for (;;)
     nGap = rt->nStart - ff->nEnd;
     if (hGap != 0 && nGap != 0)
         break;
+    if (hGap < 0 || nGap < 0)
+        break;
     if (hGap > maxInsert || nGap > maxInsert)
         break;
     ff = rt;
