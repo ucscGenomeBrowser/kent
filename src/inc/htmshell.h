@@ -14,38 +14,46 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-/* create a cookie with the given stats */
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
+/* create a cookie with the given stats */
 
-/* Print a line in it's own paragraph. */
 void htmlParagraph(char *line, ...);
+/* Print a line in it's own paragraph. */
 
 void htmlVaParagraph(char *line, va_list args);
 /* Print a line in it's own paragraph. */
 
-/* Center a line in it's own paragraph. */
 void htmlCenterParagraph(char *line, ...);
+/* Center a line in it's own paragraph. */
 
-/* Print a horizontal line. */
 void htmlHorizontalLine();
-
 /* Print a horizontal line. */
+
 void htmHorizontalLine(FILE *f);
+/* Print a horizontal line. */
 
-/* Complain about lack of memory and abort.  */
 void htmlMemDeath();
+/* Complain about lack of memory and abort.  */
 
-/* Write the start of a cgi-generated html file */
 void htmlStart(char *title);
+/* Write the start of a cgi-generated html file */
 
-/* Write the start of a stand alone .html file. */
 void htmStart(FILE *f, char *title);
+/* Write the start of a stand alone .html file. */
 
-/* Write the end of a cgi-generated html file */
 void htmlEnd();
+/* Write the end of a cgi-generated html file */
 
-/* Write the end of a stand-alone html file */
 void htmEnd(FILE *f);
+/* Write the end of a stand-alone html file */
+
+extern char *htmlStyleUndecoratedLink;
+/* Style that gets rid of underline of links. */
+
+void htmlSetStyle(char *style);
+/* Set document wide style. A favorite style to
+ * use for many purposes is htmlStyleUndecoratedLink
+ * which will remove underlines from links. */
 
 void htmlSetBackground(char *imageFile);
 /* Set background image - needs to be called before htmlStart
@@ -55,14 +63,14 @@ void htmlSetBgColor(int *color);
 /* Set background color - needs to be called before htmlStart
  * or htmShell. */
 
-/* Echo the input string to the output. */
 void htmlEchoInput();
+/* Echo the input string to the output. */
 
-/* Complain about input variables. */
 void htmlBadVar(char *varName); 
+/* Complain about input variables. */
 
-/* Display centered image file. */
 void htmlImage(char *fileName, int width, int height); 
+/* Display centered image file. */
 
 jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
 

@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.17 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.18 2003/09/12 22:08:52 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -85,6 +85,24 @@ void htmlMemDeath()
 errAbort("Out of memory.");
 }
 
+static char *htmlStyle = NULL;
+
+char *htmlStyleUndecoratedLink =
+/* Style that gets rid of underline of links. */
+   "<STYLE TYPE=\"text/css\"> "
+   "<!-- "
+   "A {text-decoration: none} "
+   "-->"
+   "</STYLE>\n";
+
+void htmlSetStyle(char *style)
+/* Set document wide style. A favorite style to
+ * use for many purposes is htmlStyleUndecoratedLink
+ * which will remove underlines from links. */
+{
+htmlStyle = style;
+}
+
 static char *htmlBackground = NULL;
 
 void htmlSetBackground(char *imageFile)
@@ -102,6 +120,7 @@ void htmlSetBgColor(int *color)
 {
 htmlBgColor = color;
 }
+
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure)
 /* create a cookie with the given stats */
 {
@@ -117,16 +136,16 @@ if(path != NULL)
 printf("Set-Cookie: %s=%s; ", encoded_name, encoded_value);
 
 if(expires != NULL)
-	printf("expires=%s; ", expires);
+    printf("expires=%s; ", expires);
 
 if(path != NULL)
-	printf("path=%s; ", encoded_path);
+    printf("path=%s; ", encoded_path);
 
 if(domain != NULL)
-	printf("domain=%s; ", domain);
+    printf("domain=%s; ", domain);
 
 if(isSecure == TRUE)
-	printf("secure");
+    printf("secure");
 
 printf("\n");
 }
@@ -137,9 +156,8 @@ void _htmStart(FILE *f, char *title)
 {
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n", title);
-#ifdef ROBERTS_EXPERIMENT
-fprintf(f,"<script language=\"javascript\" src=\"/js/popUp.js\"></script>");
-#endif /* ROBERTS_EXPERIMENT */
+if (htmlStyle != NULL)
+    fputs(htmlStyle, f);
 fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
 if (htmlBackground != NULL )
@@ -147,9 +165,6 @@ if (htmlBackground != NULL )
 if (htmlBgColor != NULL)
     fprintf(f, " BGCOLOR=\"%X\"", *htmlBgColor);
 fputs(">\n",f);
-#ifdef ROBERTS_EXPERIMENT
-fprintf(f,"<div id=\"jstooldiv\" style=\"position: absolute;visibility: hidden;\"></div>");
-#endif /* ROBERTS_EXPERIMENT */
 }
 
 void htmlStart(char *title)
