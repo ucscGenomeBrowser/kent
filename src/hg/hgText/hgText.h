@@ -1,6 +1,6 @@
 /* hgText.h generic item to be shared between source files in this dir
  *
- *	$Id: hgText.h,v 1.5 2004/04/14 21:58:43 hiram Exp $
+ *	$Id: hgText.h,v 1.6 2004/04/28 22:07:12 hiram Exp $
  */
 
 #ifndef HGTEXT_H
@@ -30,8 +30,8 @@
 #define getCtPhase          "Get Custom Track"
 #define getCtBedPhase       "Get Custom Track File"
 #define getWigglePhase      "Get data"
-#define getWiggleBedPhase   "Get data as BED file"
-#define getCtWigglePhase    "Get Custom Track Data File"
+#define getCtWiggleTrackPhase	"Get Custom Data Track"
+#define getCtWiggleFilePhase	"Get Custom Data Track File"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
 #define descTablePhase      "Describe table"
@@ -78,6 +78,9 @@ extern char *getTableVar();
 extern void checkTableExists(char *table);
 extern boolean existsAndEqual(char *var, char *value);
 extern struct hTableInfo *getOutputHti();
+extern struct customTrack *getCustomTracks();
+extern struct customTrack *newCT(char *ctName, char *ctDesc, int visNum,
+    char *ctUrl, int fields);
 extern void saveOutputOptionsState();
 extern void saveIntersectOptionsState();
 extern char *constrainFields(char *tableId);
@@ -97,7 +100,7 @@ extern void wigMakeBedList(char *db, char *table, char *chrom,
 extern void wigDoStats(char *database, char *table, struct slName *chromList,
     int tableId, char *constraints);
 extern void wiggleConstraints(char *cmp, char *pat, int tableIndex);
-extern void doGetWiggleData(boolean doCt, boolean wigBED);
+extern void doGetWiggleData(boolean doCt);
 extern void doWiggleCtOptions(boolean doCt);
 
 #endif	/*	HGTEXT_H	*/
