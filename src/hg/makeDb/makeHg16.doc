@@ -9956,3 +9956,50 @@ axtChain $1 \
     netFilter -minGap=10 dogSyn.net | hgLoadNet hg16 syntenyNetCanFam1 stdin
     # Add entries for chainCanFam1, netCanFam1 to human/hg16 trackDb
 
+# LOAD ENSEMBL ESTS (DONE 2004-09-07 braney)
+     cd /cluster/data/hg16/bed
+     mkdir ensEst
+     cd ensEst
+
+#        Get the ensembl EST data from http://www.ensembl.org/
+#        Go to the Martview link
+#        Choose Homo sapiens as the organism
+#        Follow this sequence through the pages:
+#        Page 1) Choose the Ensembl ESTs choice. Hit next.
+#        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+#        Page 3) Choose the "Structures" box. 
+#        Page 4) Choose GTF as the ouput, choose gzip compression and then hit Export.
+#	        Name file ensEst.gff.gz
+
+# Ensembl handles random chromosomes differently than us.  They give the
+# contig name.  We can lift these up to our chrN_random chromosomes
+    gunzip ensEst.gff.gz
+    grep "^[0-9XY]_" ensEst.gff | sed "s/[0-9XY]_//" > random.gff
+    liftUp -type=".gff" liftRandom.gff /cluster/data/hg16/jkStuff/liftAll.lft warn random.gff
+    grep -v "^[0-9XY]_" *.gff | grep -v "Un_NT" | sed "s/^/chr/" > unrandom.gff
+    cat liftRandom.gff unrandom.gff > fixed.gff
+    ldHgGene hg16 ensESTGene fixed.gff
+
+#        Get the ensembl protein data from http://www.ensembl.org/
+#        Go to the Martview link
+#        Choose Homo sapien as the organism
+#        Follow this sequence through the pages:
+#        Page 1) Choose the Ensembl ESTs choice. Hit next.
+#        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+#        Page 3) Choose the "Sequences" box. 
+#        Page 4) Choose Transcripts/Proteins and Gene sequence Only as the ouput, 
+#	    choose text/fasta and gzip compression and then hit export. Name to ensEstPep.fasta
+
+    gunzip ensEstPep.fasta.gz
+    sed "s/|.*//" ensEstPep.fasta > fixedPep.fa
+    hgPepPred hg16 generic ensESTPep fixedPep.fa
+
+    # ensGtp associates geneId/transcriptId/proteinId for name searches
+    # Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.
+    # Save file as ensGtp.tsv.gz
+    gunzip ensGtp.tsv.gz
+    sed "s/ensGtp/ensESTGtp/"  ~/kent/src/hg/lib/ensGtp.sql | hgsql hg16
+    echo "load data local infile 'ensESTGtp.tsv' into table ensESTGtp ignore 1 lines" | hgsql hg16
