@@ -160,7 +160,7 @@ while ((q = hashNextVal(&hc)) != NULL)
 void pslHisto(char *what, char *inPsl, char *outHisto)
 /* collect counts on PSL alignments for making histograms */
 {
-struct pslTbl *pslTbl = pslTblNew(inPsl);
+struct pslTbl *pslTbl = pslTblNew(inPsl, NULL);
 FILE *outFh = mustOpen(outHisto, "w");
 if (sameString(what, "alignsPerQuery"))
     alignsPerQuery(pslTbl, outFh);

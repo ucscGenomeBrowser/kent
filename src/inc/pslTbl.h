@@ -16,11 +16,14 @@ struct pslQuery
 struct pslTbl
 /* table of psl alignments */
 {
+    char *setName;                     /* name identifying the set of psl.
+                                        * maybe file name, or  other name */
     struct hash *queryHash;            /* hash of pslQuery objects */
 };
 
-struct pslTbl *pslTblNew(char *pslFile);
-/* construct a new object, loading the psl file */
+struct pslTbl *pslTblNew(char *pslFile, char *setName);
+/* construct a new object, loading the psl file.  If setName is NULL, the file
+* name is saved as the set name. */
 
 void pslTblFree(struct pslTbl **pslTblPtr);
 /* free object */

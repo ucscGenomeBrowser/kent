@@ -39,12 +39,14 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
 lineFileClose(&lf);
 }
 
-
-struct pslTbl *pslTblNew(char *pslFile)
-/* construct a new object, opening the psl file */
+struct pslTbl *pslTblNew(char *pslFile, char *setName)
+/* construct a new object, loading the psl file.  If setName is NULL, the file
+* name is saved as the set name. */
 {
 struct pslTbl *pslTbl;
 AllocVar(pslTbl);
+pslTbl->setName = (setName == NULL) ? cloneString(pslFile)
+    : cloneString(setName);
 pslTbl->queryHash = hashNew(22);
 loadPsls(pslTbl, pslFile);
 return pslTbl;
@@ -56,6 +58,8 @@ void pslTblFree(struct pslTbl **pslTblPtr)
 struct pslTbl *pslTbl = *pslTblPtr;
 if (pslTbl != NULL)
     {
+    /* pslQuery and psl objects are in local mem */
+    freeMem(pslTbl->setName);
     hashFree(&pslTbl->queryHash);
     freeMem(pslTbl);
     }
