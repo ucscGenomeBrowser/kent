@@ -98,7 +98,7 @@ visibility off
 type expMax knownToU95 gnfHumanU95Median
 
 name gnfU95Distance
-shortLabel GNF Atlas1 Atlas1 Delta
+shortLabel GNF Atlas1 Delta
 longLabel Normalized Difference in GNF Atlas1 Expression from Selected Gene
 priority 3.2
 visibility off
