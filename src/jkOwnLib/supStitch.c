@@ -825,7 +825,7 @@ cdna = cSeq->dna;
 
 for (bun = bundleList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, stringency, 20, 3);
+    ssStitch(bun, stringency, 20, 16);
     }
 return bundleList;
 }

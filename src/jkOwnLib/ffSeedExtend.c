@@ -51,7 +51,7 @@ static void extendGaplessRight(int qMax, int tMax, int maxDrop, char **pEndQ, ch
 int last = min(qMax, tMax);
 int i;
 char *q = *pEndQ, *t = *pEndT;
-int score = 0, bestScore = 0, bestPos = -1;
+int score = 0, bestScore = -1, bestPos = -1;
 
 for (i=0; i<last; ++i)
     {
@@ -80,7 +80,7 @@ static void extendGaplessLeft(int qMax, int tMax, int maxDrop, char **pStartQ, c
 /* Extend startQ/startT as much to the left as possible allowing mismatches
  * but not gaps. */
 {
-int score = 0, bestScore = 0, bestPos = 0;
+int score = 0, bestScore = -1, bestPos = 0;
 int last = -min(qMax, tMax);
 int i;
 char *q = *pStartQ, *t = *pStartT;
@@ -494,12 +494,18 @@ return ffList;
 
 
 static struct ffAli *expandGapless(struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct ffAli *ffList)
-/* Do banded extension where there is missing sequence. */
+/* Do non-banded extension sequence.  Since this is quick
+ * we'll let it overlap with existing sequence. */
 {
 struct ffAli *ff = ffList, *lastFf = NULL;
+char *nStart = qSeq->dna;
+char *nEnd = qSeq->dna + qSeq->size;
+char *hStart = tSeq->dna;
+char *hEnd = tSeq->dna + tSeq->size;
 
 /* Look for initial gap. */
-extendGaplessLeft(ff->nStart - qSeq->dna, ff->hStart - tSeq->dna, 9, &ff->nStart, &ff->hStart);
+extendGaplessLeft(ff->nStart - nStart, ff->hStart - hStart, 
+	9, &ff->nStart, &ff->hStart);
 
 /* Look for middle gaps. */
 for (;;)
@@ -508,13 +514,13 @@ for (;;)
     ff = ff->right;
     if (ff == NULL)
 	break;
-    extendGaplessRight(ff->nStart - lastFf->nEnd, ff->hStart - lastFf->hEnd, 9, 
+    extendGaplessRight(nEnd - lastFf->nEnd, hEnd - lastFf->hEnd, 9, 
 	&lastFf->nEnd, &lastFf->hEnd);
-    extendGaplessLeft(ff->nStart - lastFf->nEnd, ff->hStart - lastFf->hEnd, 9, 
+    extendGaplessLeft(ff->nStart - nStart, ff->hStart - hStart, 9, 
 	&ff->nStart, &ff->hStart);
     }
-extendGaplessRight(qSeq->dna + qSeq->size - lastFf->nEnd,
-	tSeq->dna + tSeq->size - lastFf->hEnd, 9,
+extendGaplessRight(nEnd - lastFf->nEnd,
+	hEnd - lastFf->hEnd, 9,
 	&lastFf->nEnd, &lastFf->hEnd);
 return ffList;
 }
@@ -1115,33 +1121,38 @@ static void refineBundle(struct genoFind *gf,
 struct ssFfItem *ffi;
 int seedSize;
 struct gfSeqSource *target = gfFindNamedSource(gf, tSeq->name);
-/* Find target of given name.  Return NULL if none. */
+
+/* First do gapless expansions and restitch. */
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
- // uglyf("Refine bundle start:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = expandGapless(qSeq, tSeq, ffi->ff);
- // uglyf("after expandGapless:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+    }
+ssStitch(bun, ffCdna, 16, 16);
+
+for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
+    {
+  // uglyf("Refine bundle start:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanIndexForSmallExons(gf, target, qSeq, qMaskBits, qMaskOffset, 
 	tSeq, lm, ffi->ff);
- // uglyf("after scanIndexForSmallExons:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("after scanIndexForSmallExons:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = bandedExtend(qSeq, tSeq, ffi->ff);
- // uglyf("after bandedExtend:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("after bandedExtend:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanForSmallerExons(gf->tileSize, qSeq, tSeq, isRc, ffi->ff);
- // uglyf("after scanForSmallerExons:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("after scanForSmallerExons:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = refineSpliceSites(qSeq, tSeq, ffi->ff);
- // uglyf("after refineSpliceSites:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("after refineSpliceSites:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanForTinyInternal(qSeq, tSeq, isRc, ffi->ff);
- // uglyf("after scanForTinyInternal:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("after scanForTinyInternal:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = smoothSmallGaps(qSeq, tSeq, ffi->ff);
- // uglyf("after smoothSmallGaps:\n");
- // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("after smoothSmallGaps:\n");
+  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+  // uglyf("\n");
     }
 }
 
@@ -1167,13 +1178,14 @@ for (range = rangeList; range != NULL; range = range->next)
     range->qEnd += qOffset;
     tSeq = range->tSeq;
     AllocVar(bun);
+    // uglyf("RANGE (%d+%d)[%d%c%d]\n", range->tStart, range->tEnd, range->qStart, (isRc ? '-' : '+'), range->qEnd);
     bun->qSeq = qSeq;
     bun->genoSeq = tSeq;
     bun->data = range;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
-    aliCount = ssStitch(bun, ffCdna, 16, 8);
+    aliCount = ssStitch(bun, ffCdna, 16, 10);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     slAddHead(&bunList, bun);
     }
