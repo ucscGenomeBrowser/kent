@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.524 2003/06/04 23:18:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.525 2003/06/04 23:52:18 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -5772,7 +5772,6 @@ tg->customPt = "_tet_waba";
 void cbrWabaMethods(struct track *tg)
 /* Make track for C briggsae alignments. */
 {
-char *getPositionFromCustomTracks(void);
 wabaMethods(tg);
 tg->customPt = "_cbr_waba";
 cartSetInt(cart, "cbrWaba.start", winStart);
