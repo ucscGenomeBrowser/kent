@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.677 2004/02/28 01:27:20 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.678 2004/02/28 11:48:19 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7690,16 +7690,16 @@ if (!hideControls)
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
-    hPrintf("<TD COLSPAN=15>");
+    hPrintf("</TD><TD COLSPAN=15>");
     hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
 	  "Click on left mini-buttons for track-specific options" );
-    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
-    hPrintf("<TR></TABLE>\n");
+    hPrintf("</TD></TR></TABLE>\n");
     smallBreak();
 
     /* Display bottom control panel. */
@@ -7737,6 +7737,7 @@ if (!hideControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+    hPrintf("<TR>");
     for (group = groupList; group != NULL; group = group->next)
         {
 	struct trackRef *tr;
@@ -7776,7 +7777,8 @@ if (!hideControls)
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */
-	controlGridEndRow(cg);
+	if (group->next != NULL)
+	    controlGridEndRow(cg);
 	}
     endControlGrid(&cg);
     }
