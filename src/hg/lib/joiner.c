@@ -1180,7 +1180,7 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 			    if (tableExists(db->name, jf->table))
 				{
 				jp = joinerToField(database, jfBase, 
-					db->name, jf, js);
+					db->name, jf, jsChain); 
 				slAddHead(&jpList, jp);
 				}
 			    }
