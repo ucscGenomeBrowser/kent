@@ -8391,8 +8391,14 @@ if (withLeftLabels)
 
             rootName = cloneString( name );
             beforeFirstPeriod( rootName );
-			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+            //gigi
+            if( sameString( group->mapName, "humMusL" ))
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
                     group->ixColor, font, "Mouse Cons    ");
+            else
+                mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+                    group->ixColor, font, rootName );
+            
             freeMem( rootName );
 
 			/* Reset the clipping rectangle to its original proportions */
