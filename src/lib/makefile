@@ -3,7 +3,8 @@
 
 O = aliType.o axt.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \
-    cda.o chainBlock.o cheapcgi.o codebias.o colHash.o common.o \
+    cda.o chain.o chainBlock.o chainToPsl.o cheapcgi.o \
+    codebias.o colHash.o common.o \
     dgRange.o diGraph.o dlist.o dnaMarkov.o \
     dnaseq.o dnautil.o dystring.o emblParse.o errabort.o \
     fa.o ffAli.o fixColor.o flydna.o fof.o \
