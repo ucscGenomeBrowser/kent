@@ -98,6 +98,20 @@ struct trackLayout
     int picWidth;		/* Width of entire picture. */
     } tl;
 
+void setPicWidth(char *s)
+/* Set pixel width from ascii string. */
+{
+if (s != NULL && isdigit(s[0]))
+    {
+    tl.picWidth = atoi(s);
+    if (tl.picWidth > 5000)
+        tl.picWidth = 5000;
+    if (tl.picWidth < 320)
+        tl.picWidth = 320;
+    }
+tl.trackWidth = tl.picWidth - tl.leftLabelWidth;
+}
+
 void initTl()
 /* Initialize layout around small font and a picture about 600 pixels
  * wide. */
@@ -108,16 +122,7 @@ char *s;
 font = tl.font = mgSmallFont();
 tl.leftLabelWidth = 100;
 tl.picWidth = 610;
-s = cgiOptionalString("pix");
-if (s != NULL && isdigit(s[0]))
-    {
-    tl.picWidth = atoi(s);
-    if (tl.picWidth > 5000)
-        tl.picWidth = 5000;
-    if (tl.picWidth < 320)
-        tl.picWidth = 320;
-    }
-tl.trackWidth = tl.picWidth - tl.leftLabelWidth;
+setPicWidth(cgiOptionalString("pix"));
 }
 
 char *tvStrings[] = 
@@ -4943,6 +4948,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2]))
 	        errAbort("browser position needs to be in chrN:123-456 format");
 	    hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
+	    }
+	else if (sameString(command, "pix"))
+	    {
+	    int width;
+	    if (wordCount != 3)
+	        errAbort("Expecting 3 words in pix line");
+	    setPicWidth(words[2]);
 	    }
 	}
     }
