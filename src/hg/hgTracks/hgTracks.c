@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.750 2004/06/03 20:46:09 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.751 2004/06/03 21:07:07 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7386,6 +7386,7 @@ struct track *trackFromTrackDb(struct trackDb *tdb)
 {
 struct track *track = trackNew();
 char *iatName = NULL;
+char *exonArrows;
 
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
@@ -7414,10 +7415,16 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
-if (sameString(trackDbSettingOrDefault(tdb, "exonArrows", "on"), "on"))
-    track->exonArrows = TRUE;
-else
-    track->exonArrows = FALSE;
+
+exonArrows = trackDbSetting(tdb, "exonArrows");
+/* default exonArrows to on, except for tracks in regulation/expression group */
+if (exonArrows == NULL)
+    if (sameString(tdb->grp, "regulation"))
+       exonArrows = "off";
+    else
+       exonArrows = "on";
+track->exonArrows = sameString(exonArrows, "on");
+
 iatName = trackDbSetting(tdb, "itemAttrIdTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
