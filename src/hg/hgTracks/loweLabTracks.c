@@ -167,50 +167,6 @@ tg->loadItems = loadBed6;
 tg->itemColor = tigrGeneColor;
 }
 
-Color llArrayColor(struct track *tg, void *item, struct vGfx *vg)
-/* Does the score->color conversion for various microarray tracks */
-{
-return expressionColor(tg, item, vg, 1.0, 3.0);
-}
-
-void lfsFromllArrayBed(struct track *tg)
-/* filters the bedList stored at tg->items
-into a linkedFeaturesSeries as determined by
-filter type */
-{
-struct linkedFeaturesSeries *lfsList = NULL, *lfs;
-struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL;
-char *llArrayExp = NULL;
-int i=0;
-bedList = tg->items;
-llArrayExp = cloneStringZ(tg->mapName, strlen(tg->mapName)+5);
-llArrayExp[strlen(tg->mapName)] = 0;
-llArrayExp = strcat(llArrayExp, "Exps");
-if(tg->limitedVis == tvDense)
-    {
-    tg->items = lfsFromMsBedSimple(bedList, "llArray");
-    }
-else
-    {
-    tg->items = msBedGroupByIndex(bedList, database, llArrayExp, 0, NULL, -1);
-    slSort(&tg->items,lfsSortByName);
-    }
-bedFreeList(&bedList);
-freeMem(llArrayExp);
-}
-
-void llArrayMethods(struct track *tg)
-/* This is kind of like Chuck's microarray ones. */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->itemColor = llArrayColor;
-tg->loadItems = loadMaScoresBed;
-tg->trackFilter = lfsFromllArrayBed;
-tg->mapItem = lfsMapItemName;
-tg->mapsSelf = TRUE;
-}
-
 char *llBlastPName(struct track *tg, void *item)
 {
 struct bed *bed = item;

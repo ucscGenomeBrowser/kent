@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.813 2004/10/12 00:54:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.814 2004/10/12 01:57:26 aamp Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8689,8 +8689,6 @@ registerTrackHandler("leptin", mafMethods );
 /* Lowe lab related */
 registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
-registerTrackHandler("llaPfuPrintA",llArrayMethods);
-registerTrackHandler("llaPaePrintA",llArrayMethods);
 registerTrackHandler("BlastPEuk",llBlastPMethods);
 registerTrackHandler("BlastPBac",llBlastPMethods);
 registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
