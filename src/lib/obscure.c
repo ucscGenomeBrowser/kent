@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.20 2003/09/13 04:14:38 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.21 2003/09/30 00:23:10 kent Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -244,7 +244,8 @@ for (;;)
        }
    }
 *out = 0;
-*retNext = s;
+if (retNext != NULL)
+    *retNext = s;
 return TRUE;
 }
 
