@@ -981,26 +981,32 @@ track binomialCons
 shortLabel Binomial
 longlabel Binomial Conservation Scores
 priority 41.002
-color 100,100,100
 altColor 160,0,0
 visibility hide
 type sample 9
 
 track binomialCons2
-shortLabel Binomial2
-longlabel Binomial2 Conservation Scores
+shortLabel Binomial_25
+longlabel Binomial_25 Conservation Scores
 priority 41.0021
-color 100,100,100
-altColor 0,160,0
+altColor 160,0,0
 visibility hide
 type sample 9
+
+track binomialCons3
+shortLabel Binomial_10
+longlabel Binomial_10 Conservation Scores
+priority 41.0022
+altColor 160,0,0
+visibility hide
+type sample 9
+
 
 track footPrinter
 shortLabel FootPrinter
 longlabel FootPrinter Conservation Score
-priority 41.0022
-color 100,100,100
-altColor 0,0,160
+priority 41.003
+altColor 0,160,0
 visibility hide
 type sample 9
 
@@ -1008,7 +1014,7 @@ type sample 9
 track zoo
 shortLabel ZooSeq
 longLabel ZooSeq Conservation Data 
-priority 41.003
+priority 41.004
 visible hide
 chromosomes chr1,chr7,chr14,
 color 0,60,120
