@@ -17,7 +17,8 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
     ggCluster.o altGraph.o ggDbIo.o \
     ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
-    hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o jaxQTL.o\
+    hgGene.o hgSeq.o hgRelate.o hui.o humanParalog.o isochores.o \
+    jaxOrtholog.o jaxQTL.o jksql.o \
     knownInfo.o knownMore.o lfs.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseSynWhd.o mouseOrtho.o \
     ensPhusionBlast.o netAlign.o \
@@ -36,7 +37,7 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     dbSnpRS.o synMap.o refSeqStatus.o web.o affyPairs.o affyOffset.o columnInfo.o \
     imageClone.o stanMad.o bactigPos.o 
 
-../../lib/$(MACHTYPE)/jkhgap.a: $(O) jksql.o
+../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
 clean:
