@@ -11,24 +11,18 @@
 struct cart *cart;
 struct hash *oldVars = NULL;
 
-char *defaultPosition()
-/*
-Function to return the default position for the database
-return - The default position for this database
- */
-{
-return NULL;
-}
-
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
 char *db = cartUsualString(cart, "db", hGetDb());
 char *oldDb = hashFindVal(oldVars, "db");
-char *position = cartUsualString(cart, "position", defaultPosition());
+char *defaultPosition = hDefaultPos(db);
+char *position = cartUsualString(cart, "position", defaultPosition);
 
 if (oldDb != NULL && !sameString(db, oldDb))
-    position = defaultPosition();
+    {
+    position = defaultPosition;
+    }
 
 puts(
 "<FORM ACTION=\"../cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
@@ -49,6 +43,8 @@ printf("</P><CENTER>");
 printf("position ");
 cartSaveSession(cart);
 cgiMakeTextVar("position", position, 30);
+freez(&defaultPosition);
+position = NULL;
 printf(" pixel width ");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
 printf(" ");
@@ -108,7 +104,8 @@ puts(
 "	(set \"Map contigs\" track to \"dense\" and refresh to see contigs)</TD></TR> -->\n"
 "<TR><TD VALIGN=Top NOWRAP>AC008101</TD>\n"
 "	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of clone with GenBank accession AP001670\n"
+"	<TD VALIGN=Top>Displays region of clone with GenBank accession
+AC008101\n"
 "	(open \"coverage\" track by clicking to see this clone)</TD></TR>\n"
 "\n"
 "<TR><TD VALIGN=Top><br></TD></TR>\n"
