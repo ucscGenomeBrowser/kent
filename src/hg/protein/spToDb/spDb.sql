@@ -215,6 +215,7 @@ CREATE TABLE reference (
     cite longtext not null,	# Enough info to find journal/patent/etc.
     pubMed varchar(10) not null,	# Pubmed cross-reference
     medline varchar(12) not null,	# Medline cross-reference
+    doi varchar(255) not null,	# DOI cross-reference
               #Indices
     PRIMARY KEY(id),
     INDEX(pubMed(10))
