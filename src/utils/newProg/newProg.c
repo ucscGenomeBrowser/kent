@@ -40,7 +40,8 @@ fprintf(f, "  \"%s - %s\\n\"\n", name, description);
 fprintf(f, "  \"usage:\\n\"\n");
 fprintf(f, "  \"   %s XXX\\n\"\n", name);
 fprintf(f, "  \"options:\\n\"\n");
-fprintf(f, "  \"   -xxx=XXX\\n\");\n", name);
+fprintf(f, "  \"   -xxx=XXX\\n\"\n", name);
+fprintf(f, "  \");\\n\"\n");
 fprintf(f, "}\n");
 fprintf(f, "\n");
 
