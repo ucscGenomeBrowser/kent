@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.734 2004/05/19 16:38:31 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.735 2004/05/19 19:02:38 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -544,16 +544,21 @@ hPutc('"');
 va_end(args);
 }
 
-void mapBoxTrackUi(int x, int y, int width, int height, struct track *tg)
+static void mapBoxUi(int x, int y, int width, int height,
+                                char *name, char *shortLabel)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
-char *track = tg->mapName;
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
-	    cartSessionVarName(), cartSessionId(cart),
-	    chromName, tg->mapName);
-mapStatusMessage("%s controls", tg->shortLabel);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), cartSessionVarName(),
+                         cartSessionId(cart), chromName, name);
+mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
+}
+
+void mapBoxTrackUi(int x, int y, int width, int height, struct track *tg)
+/* Print out image map rectangle that invokes hgTrackUi for track. */
+{
+mapBoxUi(x, y, width, height, tg->mapName, tg->shortLabel);
 }
 
 static void mapBoxToggleComplement(int x, int y, int width, int height, 
@@ -6185,9 +6190,14 @@ if (withLeftLabels && psOutput == NULL)
     y = gfxBorder;
     if (rulerMode != RULER_MODE_OFF)
         {
-        y += basePositionHeight;
+        /* draw button for Base Position pseudo-track */
+        int height = basePositionHeight;
         if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
-            y += rulerTranslationHeight;
+            height += rulerTranslationHeight;
+        drawGrayButtonBox(vg, trackTabX, y, trackTabWidth, height, TRUE);
+        mapBoxUi(trackTabX, y, trackTabWidth, height, RULER_TRACK_NAME, 
+                                                      RULER_TRACK_LABEL);
+        y += height + 1;
         }
     for (track = trackList; track != NULL; track = track->next)
         {
@@ -6230,7 +6240,7 @@ if (withLeftLabels)
     if (rulerMode != RULER_MODE_OFF)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
-		    MG_BLACK, font, "Base Position");
+		    MG_BLACK, font, RULER_TRACK_LABEL);
 	if(zoomedToBaseLevel)
 	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
 				leftLabelWidth-1, baseHeight, font);
@@ -8025,9 +8035,14 @@ if (!hideControls)
 	    {
 	    showedRuler = TRUE;
 	    controlGridStartCell(cg);
-	    hPrintf(" Base Position <BR>");
+            hPrintf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+		    cartSessionVarName(), cartSessionId(cart),
+		    chromName, RULER_TRACK_NAME);
+	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
+            hPrintf("</A>");
+            // TODO: perhaps replace with standard vis menu, below */
 	    hDropList("ruler", rulerMenu, sizeof(rulerMenu)/sizeof(char *), 
-                                                rulerMenu[rulerMode]);
+                                                        rulerMenu[rulerMode]);
 	    controlGridEndCell(cg);
 	    }
 
@@ -8042,7 +8057,9 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
-	    hTvDropDownClass(track->mapName, track->visibility, track->canPack, (track->visibility == tvHide)? "hiddenText" : "normalText" );
+	    hTvDropDownClass(track->mapName, track->visibility, track->canPack,
+                                 (track->visibility == tvHide) ? 
+                                        "hiddenText" : "normalText" );
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */
