@@ -1029,13 +1029,15 @@ type wig 0 50
 #!/bin/sh
 for c in ? ??
 do
-    echo "chr${c} quality 1K zoom"
-    qacToWig $c/chr${c}.qac -name=chr${c} stdout |
-        wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
-        -chrom=chr${c} -wibFile=bed/qual/wigData1K/qc1K_${c} \
-        -name=${c} stdin > bed/qual/dataLimits1K/chr${c}
-    echo "chr${c}_random quality 1K zoom"
+    if [ -f $c/chr${c}.qac ]; then
+	echo "chr${c} quality 1K zoom"
+	qacToWig $c/chr${c}.qac -name=chr${c} stdout |
+	    wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
+	    -chrom=chr${c} -wibFile=bed/qual/wigData1K/qc1K_${c} \
+	    -name=${c} stdin > bed/qual/dataLimits1K/chr${c}
+    fi
     if [ -f $c/chr${c}_random.qac ]; then
+	echo "chr${c}_random quality 1K zoom"
 	qacToWig $c/chr${c}_random.qac -name=chr${c}_random stdout |
 	    wigZoom stdin | wigAsciiToBinary -dataSpan=1024 \
 	    -chrom=chr${c}_random -wibFile=bed/qual/wigData1K/qc1K_${c}r \
@@ -1045,11 +1047,15 @@ done
 '_EOF_'
     chmod +x ./jkStuff/qualZoom1K.sh
     time ./jkStuff/qualZoom1K.sh
+    # real    227m8.064s
+    # user    165m8.720s
+    # sys     3m58.780s
+
 
     ssh hgwdev
     cd bed/qual/wigData1K
     #	Do not need these for chrom M
-    rm -f qc1K_M.wig qc1K_Mr.wig
+    rm -f qc1K_M.wig qc1K_M.wib qc1K_Mr.wig qc1K_Mr.wib
     hgLoadWiggle -oldTable panTro1 quality *.wig
     #	create symlinks for .wib files
     ln -s `pwd`/*.wib /gbdb/panTro1/wib
