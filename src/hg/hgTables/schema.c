@@ -14,11 +14,10 @@
 #include "grp.h"
 #include "joiner.h"
 #include "tableDescriptions.h"
-#include "hgColors.h"
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.6 2004/07/14 06:33:26 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.7 2004/07/14 07:20:30 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
@@ -61,11 +60,7 @@ char query[256];
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 
-/* For some reason BORDER=1 does not work in our web.c nested table scheme.
- * So use web.c's trick of using an enclosing table to provide a border.   */
-puts("<!--outer table is for border purposes-->" "\n"
-     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+hTableStart();
 hPrintf("<TR> <TH>field</TH> <TH>SQL type</TH> ");
 if (!tooBig)
     hPrintf("<TH>info</TH> ");
@@ -114,13 +109,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (asCol != NULL)
 	    hPrintf("%s", asCol->comment);
 	else
-	    hPrintf("&nbsp;");
+	    {
+	    if (sameString("bin", row[0]))
+	       hPrintf("Indexing field to speed chromosome range queries.");
+	    else
+		hPrintf("&nbsp;");
+	    }
 	hPrintf("</TD>");
 	}
     puts("</TR>");
     }
-puts("</TABLE>");
-puts("</TR></TD></TABLE>");
+hTableEnd();
 sqlFreeResult(&sr);
 }
 
@@ -154,6 +153,45 @@ if (sqlTableExists(conn, "tableDescriptions"))
 return asObj;
 }
 
+static void printSampleRows(int sampleCount, struct sqlConnection *conn, char *table)
+/* Put up sample values. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int i, columnCount = 0;
+
+hPrintf("<I>Note: sample rows are not necessarily in selected region.</I><BR>");
+
+/* Make table with header row containing name of fields. */
+safef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+hTableStart();
+hPrintf("<TR>");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hPrintf("<TH>%s</TH>", row[0]);
+    ++columnCount;
+    }
+hPrintf("</TR>");
+sqlFreeResult(&sr);
+
+/* Get some sample fields. */
+safef(query, sizeof(query), "select * from %s limit %d", table, sampleCount);
+sr = sqlGetResult(conn, query);
+int sqlCountColumns(struct sqlResult *sr);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hPrintf("<TR>");
+    for (i=0; i<columnCount; ++i)
+        hPrintf("<TD>%s</TD>", row[i]);
+    hPrintf("</TR>\n");
+    }
+sqlFreeResult(&sr);
+hTableEnd();
+}
+
+
 static void showSchema(char *db, char *table)
 /* Show schema to open html page. */
 {
@@ -164,7 +202,10 @@ struct asObject *asObj = asForTable(conn, table);
 char *splitTable = chromTable(conn, table);
 
 hPrintf("<B>Database:</B> %s ", db);
-hPrintf("<B>Primary Table:</B> %s<BR>", table);
+hPrintf("<B>Primary Table:</B> %s", table);
+if (!sameString(splitTable, table))
+    hPrintf(" (%s)", splitTable);
+hPrintf("<BR>");
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
@@ -186,6 +227,9 @@ if (jpList != NULL)
 	    jp->b->field, jp->a->field);
 	}
     }
+
+webNewSection("Sample Rows");
+printSampleRows(10, conn, splitTable);
 }
 
 void doTableSchema(char *db, char *table, struct sqlConnection *conn)

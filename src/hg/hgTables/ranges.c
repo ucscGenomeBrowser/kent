@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: ranges.c,v 1.1 2004/07/14 06:33:26 kent Exp $";
+static char const rcsid[] = "$Id: ranges.c,v 1.2 2004/07/14 07:20:30 kent Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */
@@ -26,18 +26,31 @@ safef(query, sizeof(query),
    "select %s, count(*) as count from %s group by %s order by count desc",
    field, table, field);
 sr = sqlGetResult(conn, query);
-hPrintf("<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>\n");
+hTableStart();
+hPrintf("<TR>");
+hPrintf("<TH>value</TH>");
+hPrintf("<TH>count</TH>");
+hPrintf("<TH>graph</TH>");
+hPrintf("</TR>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
     int count = atoi(row[1]);
+    int starCount;
     if (scale < 0)
 	scale = (maxHist)/count;
-    hPrintf("<TR><TD>%s</TD><TD>", name);
-    starOut(stdout, scale*count);
+    hPrintf("<TR><TD>%s</TD>", name);
+    hPrintf("<TD ALIGN=RIGHT>%d</TD>", count);
+    hPrintf("<TD>");
+    starCount = round(scale*count);
+    if (starCount > 0)
+	starOut(stdout, starCount);
+    else
+        hPrintf("&nbsp;");
     hPrintf("</TD></TR>\n");
     }
-hPrintf("</TABLE>");
+// hPrintf("</TABLE>");
+hTableEnd();
 sqlDisconnect(&conn);
 }
 
@@ -83,5 +96,4 @@ htmlOpen("Value range for %s.%s.%s", db, table, field);
 printValueRange(db, table, field);
 htmlClose();
 }
-
 
