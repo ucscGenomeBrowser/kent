@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.15 2004/10/28 18:58:25 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.16 2004/11/17 05:12:45 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -322,6 +322,11 @@ Bits *bits2;
 int chromSize = hChromSize(region->chrom);
 boolean isBpWise = (sameString("and", op) || sameString("or", op));
 struct bed *intersectedBedList = NULL;
+int end = region->end;
+
+
+if (region->start == region->end)
+     end = chromSize;
 
 /* Sanity check on intersect op. */
 if ((!sameString("any", op)) &&
@@ -336,7 +341,7 @@ if ((!sameString("any", op)) &&
 
 
 /* Load intersecting track into a bitmap. */
-fbList2 = fbFromBed(table2, hti2, bedList2, region->start, region->end,
+fbList2 = fbFromBed(table2, hti2, bedList2, region->start, end,
 		     isBpWise, FALSE);
 bits2 = bitAlloc(chromSize+8);
 fbOrBits(bits2, chromSize, fbList2, 0);
@@ -347,7 +352,7 @@ if (isBpWise)
     {
     /* Base-pair-wise operation: get bitmap  for primary table too */
     struct featureBits *fbList1 = fbFromBed(table1, hti1, bedList1, 
-    			               region->start, region->end, 
+    			               region->start, end, 
 				       isBpWise, FALSE);
     Bits *bits1 = bitAlloc(chromSize+8);
     fbOrBits(bits1, chromSize, fbList1, 0);
@@ -364,7 +369,7 @@ if (isBpWise)
 	bitOr(bits1, bits2, chromSize);
     /* translate back to bed */
     intersectedBedList = bitsToBed4List(bits1, chromSize, 
-    	region->chrom, 1, region->start, region->end, lm);
+    	region->chrom, 1, region->start, end, lm);
     bitFree(&bits1);
     }
 else
