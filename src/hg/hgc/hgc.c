@@ -2469,6 +2469,15 @@ puts("<br><br><font size=-2><i>If you have comments and/or suggestions please em
      "<a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a>.\n");
 }
 
+void makeCheckBox(char *name, boolean isChecked)
+/* Create a checkbox with the given name in the given state. */
+{
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
+    (isChecked ? " CHECKED" : "") );
+
+}
+
+
 struct rgbColor getColorForExprBed(float val, float max, boolean RG_COLOR_SCHEME)
 /* Return the correct color for a given score */
 {
@@ -2531,6 +2540,17 @@ if (s != NULL)
    }
 }
 
+char *abbrevExprBedName(char *name)
+{
+static char abbrev[32];
+char *ret;
+strncpy(abbrev, name, sizeof(abbrev));
+abbr(abbrev, "LINK_Em:");
+ret = strstr(abbrev, "_");
+ret++;
+return ret;
+}
+
 void printTableHeaderName(char *name, char *clickName) 
 /* creates a table to display a name vertically,
  * basically creates a column of letters 
@@ -2538,8 +2558,8 @@ void printTableHeaderName(char *name, char *clickName)
 {
 int i, length;
 char *header = cloneString(name);
-abbr(header, "LINK_");
-subChar(header, '_', ' ');
+header = cloneString(abbrevExprBedName(header));
+subChar(header,'_',' ');
 length = strlen(header);
 
 printf("<table border=0 cellspacing=0 cellpadding=0>\n");
@@ -2580,6 +2600,12 @@ puts(
      "relative position in the genome, and the contig name. The probes presented here correspond to those contained "
      "in window range seen on the Genome Browser, the exon probe selected is highlighted "
      "in blue.</p><br></br>"
+     "<p>This display below is an average of many data points to see the detailed data "
+     "select the checkboxes for the experiments of interest and hit the submit value below. "
+     "It is possible to view both the browser and the expression summary and detailed plots "
+     "at the same time by clicking the <b>Show Browser in different Frame</b> check box. This "
+     "will create two frames which are aware of eachother, one displaying the browser and the other "
+     "the detailed expression data.<br><br>\n"
      "</td></tr></table>\n"
      );
 }
@@ -2589,6 +2615,7 @@ void exprBedPrintTable(struct exprBed *expList, char *itemName)
 {
 int i,featureCount=0, currentRow=0,square=10;
 struct exprBed *exp = NULL;
+char buff[32];
 if(expList == NULL) 
     errAbort("No exprBeds were selected.\n");
 
@@ -2608,16 +2635,19 @@ for(exp = expList; exp != NULL; exp = exp->next)
     printf("</td>");
     }
 printf("</tr>\n");
-
 /* for each experiment write out the name and then all of the values */
 for(i = 0; i < expList->numExp; i++) 
     {
+    zeroBytes(buff,32);
+    sprintf(buff,"e%d",i);
     printf("<tr>\n");
-    printf("<td align=left>%s</td>\n",expList->hybes[i]);
+    printf("<td align=left>");
+    makeCheckBox(buff,FALSE);
+    printf(" %s</td>\n",expList->hybes[i]);
     for(exp = expList;exp != NULL; exp = exp->next)
 	{
 	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 0.7, TRUE);
+	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 1.0, TRUE);
 	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
 	}
     printf("</tr>\n");
@@ -2655,11 +2685,48 @@ void doGetExprBed(char *tableName, char *itemName)
 /* Print out a colored table of the expression band track. */
 {
 struct exprBed *expList=NULL;
+char buff[64];
+char *type;
+char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
+char *thisFrame = cgiOptionalString("tf");
+char *otherFrame = cgiOptionalString("of");
+type = abbrevExprBedName(itemName);
+type = strstr(type, "_");
+type++;
+
 chuckHtmlStart("Rosetta Expression Data Requested");
-printf("<h2>Rosetta Expression Data Requested</h2>\n");
+printf("<h2>Rosetta Expression Data For: %s %d-%d</h2>\n", seqName, winStart, winEnd);
 printRosettaReference();
 expList = selectExprBedFromDB(tableName, seqName, winStart, winEnd);
+puts("<table width=\"100%\" cellpadding=0 cellspacing=0><tr><td>\n");
+printf("<form action=\"../cgi-bin/rosChr22VisCGI\" method=get>\n");
 exprBedPrintTable(expList, itemName);
+printf("</td></tr><tr><td><br>\n");
+
+puts("<table width=\"100%\" cellpadding=0 cellspacing=0>\n"
+     "<tr><th align=left><h3>Plot Options:</h3></th></tr><tr><td><p><br>");
+makeCheckBox("f", FALSE);
+printf(" Show browser in different Frame<br>\n");
+
+zeroBytes(buff,64);
+sprintf(buff,"%d",winStart);
+cgiMakeHiddenVar("winStart", buff);
+zeroBytes(buff,64);
+sprintf(buff,"%d",winEnd);
+cgiMakeHiddenVar("t",type);
+cgiMakeHiddenVar("winEnd", buff);
+cgiMakeHiddenVar("db",database); 
+if(thisFrame != NULL)
+    cgiMakeHiddenVar("of",thisFrame);
+if(otherFrame != NULL)
+    cgiMakeHiddenVar("tf",otherFrame);
+printf("<br>\n");
+cgiMakeDropList("mi",maxIntensity, 9, "20");
+printf(" Maximum Itensity value to allow.\n");
+printf("</td></tr><tr><td align=center><br>\n");
+printf("<b>Press Here to View Detailed Plots</b><br><input type=submit name=Submit value=submit>\n");
+printf("<br><br><br><b>Clear Values</b><br><input type=reset name=Reset></form>\n");
+printf("</td></tr></table></td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
