@@ -146,8 +146,8 @@ spectrum on
 colorLo 0,0,0
 colorMid 255,255,0
 colorHigh 255,0,0
-scoreMid 1.93
-scoreHigh 2.47
+scoreMid 10.93
+scoreHigh 20.47
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
