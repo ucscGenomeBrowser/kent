@@ -401,7 +401,7 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     # Good, 35-40% seems typical for mammals...
 
 
-# COMPARE OUR REPEATMASKER .OUT'S TO BROAD'S (IN PROGRESS 7/9/04 angie)
+# COMPARE OUR REPEATMASKER .OUT'S TO BROAD'S (DONE 7/23/04 angie)
     ssh kksilo
     cd /cluster/data/canFam1/broad
     ftp ftp.broad.mit.edu
@@ -436,12 +436,22 @@ if (-e /tmp/canFam1/$2/$2.cat) /bin/cp /tmp/canFam1/$2/$2.cat ./
     featureBits canFam1 broadRmskBed4.bed \!rmsk \!simpleRepeat \
       -bed=notInRmskTRF.bed
 #6906446 bases of 2359845093 (0.293%) in intersection
+    # Load theirs up as "rmskNew" since hgTracks has a registered handler 
+    # for that... easier visual comparison.  
+    hgLoadOut -table=rmskNew canFam1 dog1.0_repeatinfo/chr*.fa.out
 
     # back on kksilo
     wc -l notInRmsk.bed 
 # 256372 notInRmsk.bed
-    awk '$3-$2 >= 40 {print;}' notInRmsk.bed > notInRmskOver40.bed
+    awk '$3-$2 >= 40 {printf "%s\t%d\t%d\t%s\t%d\n", $1, $2, $3, $4, $3-$2;}' \
+      notInRmsk.bed > notInRmskOver40.bed
+    awk '$3-$2 >= 40 {printf "%s\t%d\t%d\t%s\t%d\n", $1, $2, $3, $4, $3-$2;}' \
+      notInBroad.bed > notInBroadOver40.bed
     # Take a look at some of those positions in the browser.
+    # Here's one we just miss:    chr1:4,524,717-4,524,907
+    # Here's one they just miss:  chr1:3,503,297-3,503,495
+    # Broad folks agreed the diffs are very small (sometimes due to the fact 
+    # that they ran on contigs while we ran on ~500k chunks).
 
 
 # SIMPLE REPEATS (TRF) (DONE 7/7/04 angie)
@@ -828,6 +838,7 @@ zip -j mrna.zip mrna.fa
 # SWAP BLASTZ HUMAN-DOG TO DOG-HUMAN (HG17) (DONE 7/9/04 angie)
     ssh kolossus
     mkdir /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
+    ln -s blastz.hg17.swap.2004-07-08 /cluster/data/canFam1/bed/blastz.hg17
     cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08
     set aliDir = /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
     cp $aliDir/S1.len S2.len
@@ -963,26 +974,40 @@ axtChain $1 \
     end
 
 
-# MAKE VSHG17 DOWNLOADABLES (TODO 7/19/04 angie)
+# MAKE VSHG17 DOWNLOADABLES (DONE 7/27/04 angie)
     ssh kksilo
-    cd /cluster/data/canFam1/bed/blastz.hg17.swap.2004-07-08/axtChain
-    cp all.chain human.chain
-    zip /cluster/data/canFam1/zip/human.chain.zip human.chain
+    cd /cluster/data/canFam1/bed/blastz.hg17/axtChain
+    ln all.chain human.chain
+    foreach f (human.chain human.net)
+      gzip -c $f > $f.gz
+    end
     rm human.chain
-    zip /cluster/data/canFam1/zip/human.net.zip human.net
-    zip /cluster/data/canFam1/zip/humanSyn.net.zip humanSyn.net
+    # Make chain-format of raw alignments 
+    cd /cluster/data/canFam1/bed/blastz.hg17
+    mkdir blastzECF
+    foreach f (axtChrom/chr*.axt.gz)
+      set chr = $f:t:r:r
+      gunzip -c $f \
+      | axtToChain stdin S1.len S2.len stdout \
+      | gzip -c - > blastzECF/$chr.ecf.gz
+    end
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsHg17
     cd /usr/local/apache/htdocs/goldenPath/canFam1/vsHg17
-    mv /cluster/data/canFam1/zip/human*.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/canFam1/bed/blastz.hg17/axtChain/human*.gz .
+    md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+    # Not for pushing -- handle separately.
+    mv /cluster/data/canFam1/bed/blastz.hg17/blastzECF .
+    cd blastzECF
+    md5sum *.gz > md5sum.txt
 
 
 # SWAP BLASTZ MOUSE-DOG TO DOG-MOUSE (MM5) (DONE 7/19/04 angie)
     ssh kolossus
     mkdir /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
+    ln -s blastz.mm5.swap.2004-07-15 /cluster/data/canFam1/bed/blastz.mm5
     cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15
     set aliDir = /cluster/data/mm5/bed/blastz.canFam1.2004-07-15
     cp $aliDir/S1.len S2.len
@@ -1117,21 +1142,33 @@ axtChain $1 \
     end
 
 
-# MAKE VSMM5 DOWNLOADABLES (TODO 7/19/04 angie)
+# MAKE VSMM5 DOWNLOADABLES (DONE 7/28/04 angie)
     ssh kksilo
-    cd /cluster/data/canFam1/bed/blastz.mm5.swap.2004-07-15/axtChain
+    cd /cluster/data/canFam1/bed/blastz.mm5/axtChain
     ln all.chain mouse.chain
-    zip /cluster/data/canFam1/zip/mouse.chain.zip mouse.chain
+    foreach f (mouse.chain mouse.net)
+      gzip -c $f > $f.gz
+    end
     rm mouse.chain
-    zip /cluster/data/canFam1/zip/mouse.net.zip mouse.net
-    zip /cluster/data/canFam1/zip/mouseSyn.net.zip mouseSyn.net
+    # Make chain-format of raw alignments 
+    cd /cluster/data/canFam1/bed/blastz.mm5
+    mkdir blastzECF
+    foreach f (axtChrom/chr*.axt)
+      set chr = $f:t:r
+      axtToChain $f S1.len S2.len stdout \
+      | gzip -c - > blastzECF/$chr.ecf.gz
+    end
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/canFam1/vsMm5
     cd /usr/local/apache/htdocs/goldenPath/canFam1/vsMm5
-    mv /cluster/data/canFam1/zip/mouse*.zip .
-    md5sum *.zip > md5sum.txt
+    mv /cluster/data/canFam1/bed/blastz.mm5/axtChain/mouse*.gz .
+    md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+    # Not for pushing -- handle separately.
+    mv /cluster/data/canFam1/bed/blastz.mm5/blastzECF .
+    cd blastzECF
+    md5sum *.gz > md5sum.txt
 
 
 # MULTIZ DOG/HUMAN/MOUSE (DONE 7/19/04 angie)
@@ -1757,16 +1794,15 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     cd /cluster/data/canFam1/bed/blatFr1
     pslCat -dir psl \
     | liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn stdin \
+    | liftUp -type=.psl -pslQ stdout /cluster/data/fr1/jkStuff/liftAll.lft \
+      warn stdin \
     | pslSortAcc nohead chrom /tmp stdin
 
-    # load seq & psl into database:
+    # load psl into database:
     ssh hgwdev
-    mkdir /gbdb/canFam1/fuguSeq
-    ln -s /cluster/data/fr1/fugu_v3.masked.fa /gbdb/canFam1/fuguSeq/
-    cd /cluster/data/canFam1/bed/blatFr1
-    hgLoadSeq canFam1 /gbdb/canFam1/fuguSeq/fugu_v3.masked.fa
     cd /cluster/data/canFam1/bed/blatFr1/chrom
-    cat *.psl | hgLoadPsl -fastLoad -table=blatFr1 canFam1 stdin
+    # Special case: fr1 has only chrUn, so no need to index tName!
+    cat *.psl | hgLoadPsl -noTNameIx -fastLoad -table=blatFr1 canFam1 stdin
     featureBits canFam1 blatFr1
 #24508362 bases of 2359845093 (1.039%) in intersection
     featureBits hg17 blatFr1
@@ -2150,6 +2186,13 @@ set chr = "chr$c"
       -sqlTable=cpgIslandGgfAndyTJ.sql cpgIslandGgfAndyTJ.bed
     featureBits canFam1 cpgIslandGgfAndyTJ
 #80070786 bases of 2359845093 (3.393%) in intersection
+    # Try featureBits -enrichment:
+    featureBits -enrichment canFam1 xenoRefGene:upstream:5000 cpgIslandExt
+#xenoRefGene:upstream:5000 3.047%, cpgIslandExt 1.644%, both 0.249%, cover 8.16%, enrich 4.96x
+    featureBits -enrichment canFam1 xenoRefGene:upstream:5000 cpgIslandGgfAndyMasked
+#xenoRefGene:upstream:5000 3.047%, cpgIslandGgfAndyMasked 4.275%, both 0.508%, cover 16.66%, enrich 3.90x
+    featureBits -enrichment canFam1 xenoRefGene:upstream:5000 cpgIslandGgfAndyTJ
+#xenoRefGene:upstream:5000 3.047%, cpgIslandGgfAndyTJ 3.393%, both 0.570%, cover 18.72%, enrich 5.52x
 
 
 # RELOAD ENSEMBL GENES (TODO 9/1/04 angie)
