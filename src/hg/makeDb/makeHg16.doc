@@ -5738,3 +5738,115 @@ EOF
     hgsql hg16 < ~/kent/src/hg/lib/vegaInfo.sql
     hgsql -e "load data local infile 'vegaInfo.tab' into table vegaInfo" hg16
 
+#  KNOWN GENES UPDATE (DONE - 2004-01-29 - Hiram)
+    # update swissProt and proteins databases
+    # You want to run these two scripts on the same day to keep the
+    #	the date stamp consistent.  In this case the data stamp is 040115
+    ssh eieio
+    cd /cluster/data/swissprot
+    ~kent/src/hg/protein/mkSwissProtDB.sh
+    # that obtains the data and unpacks it, second step is on hgwdev
+    # to create the database
+    ssh hgwdev
+    cd /cluster/data/swissprot
+    ~/kent/src/hg/protein/mkSwissProtDB.sh
+    # Now the proteins database can be created from that.  Must be on
+    # hgwdev
+    ssh hgwdev
+    cd /cluster/data/proteins
+    ~/kent/src/hg/protein/mkProteinsDb.sh 040115
+
+    # prepare all the tables in a temporary database, then move
+    #	into Hg16.  Leave a link in hg16/bed so it can be found
+    mkdir /cluster/data/kgDB/bed/hg16
+    ln -s /cluster/data/kgDB/bed/hg16 \
+	/cluster/data/hg16/bed/knownGenes.2004-01-29
+    cd /cluster/data/kgDB/bed/hg16
+    ~/kent/src/hg/protein/KGprocess.sh kgDB hg16 040115
+    # That runs to a point that prepares a cluster job, continuing on kk
+    ssh kk
+    cd /cluster/data/kgDB/bed/hg16/kgBestMrna
+    para create jobList
+    para try
+    para push 
+    ... etc ...
+    # on a busy cluster, takes almost an hour:
+# Completed: 46583 of 46583 jobs
+# CPU time in finished jobs:     127351s    2122.51m    35.38h    1.47d  0.004 y
+# IO & Wait Time:                119182s    1986.37m    33.11h    1.38d  0.004 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest job:                       14s       0.23m     0.00h    0.00d
+# Submission to last job:          3513s      58.55m     0.98h    0.04d
+
+     # Continuing back on hgwdev, run the same script again
+    ssh hgwdev
+    cd /cluster/data/kgDB/bed/hg16
+    ~/kent/src/hg/protein/KGprocess.sh kgDB hg16 040115
+    # should continue to completion, all tables are in kgDB and can be
+    # moved if they check out to be similar to existing tables in hg16
+    # You can verify table sizes with the script:
+    ~kent/src/hg/protein/checkTbls.pl kgDB
+    ~kent/src/hg/protein/checkTbls.pl hg16 kg
+    # should have similar row counts in each of these outputs
+    #	This rename can be done more simply with the 'rename' command
+    #	instead of the 'alter table' used here.
+    cat << '_EOF_' > renameTables.sh
+#!/bin/sh
+
+SOURCE=kgDB
+TARGET=hg16
+
+for T in cgapAlias cgapBiocDesc cgapBiocPathway dupSpMrna \
+        keggMapDesc keggPathway kgAlias kgProtAlias kgXref \
+        knownGene knownGeneLink knownGeneMrna knownGenePep mrnaRefseq spMrna
+do
+    hgsql -e "drop table ${T};" ${TARGET}
+    hgsql -e "alter table ${SOURCE}.${T} rename ${TARGET}.${T}" mysql
+    echo "done $T"
+done
+'_EOF_'
+    chmod +x renameTables.sh
+    ./renameTables.sh
+
+    # the following extra process will be included in the next version
+    # of KGprocess.sh to create the kgProtMap table:
+    mkdir /cluster/data/kgDB/bed/hg16/kgProtMap
+    cd /cluster/data/kgDB/bed/hg16/kgProtMap
+    awk '{print ">" $1;print $2}' ../refMrna.tab > kgMrna.fa
+    /scratch/blast/formatdb -i kgMrna.fa -p F
+    echo "`date` creating kgPep.fa"
+hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
+        | awk '{print ">" $1;print $2}' >kgPep.fa
+    rm -fr kgPep
+    rm -f jobList
+    mkdir kgPep
+    faSplit sequence kgPep.fa 5000 kgPep/kgPep
+    for f in kgPep/*.fa
+    do
+      echo ./kgProtBlast.csh $f >> jobList
+    done
+    awk '{printf "%s\t%s\n", $3,$2}' ../kgXref.tab > kgProtMrna.pairs
+    # run a cluster job
+    ssh kk9
+    cd /cluster/data/kgDB/bed/hg16/kgProtMap
+    para create jobList
+    para try
+    para push ... etc
+# Completed: 4949 of 4949 jobs
+# CPU time in finished jobs:    1061454s   17690.90m   294.85h   12.29d  0.034 y
+# IO & Wait Time:                 13400s     223.33m     3.72h    0.16d  0.000 y
+# Average job time:                 217s       3.62m     0.06h    0.00d
+# Longest job:                      996s      16.60m     0.28h    0.01d
+# Submission to last job:         12152s     202.53m     3.38h    0.14d
+
+    # back to hgwdev
+    ssh hgwdev
+    cd /cluster/data/kgDB/bed/hg16/kgProtMap
+    find ./psl.tmp -name '*.psl.gz' | xargs zcat | \
+        pslReps -nohead stdin psl.tmp/kgProtMrna.psl /dev/null
+    cd psl.tmp
+    (pslMap kgProtMrna.psl ../../tight_mrna.psl stdout | \
+        sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl) > kgProtMap.out 2>&1
+    # this table data is ready to load, verify it by comparison with
+    # existing kgProtMap data, then load:
+    hgLoadPsl -tNameIx hg16 kgProtMap.psl
