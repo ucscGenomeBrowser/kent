@@ -45,7 +45,8 @@ assert(start >= 0);
 assert(size >= 0);
 end = start+size;
 if (end > seqSize)
-    errAbort("nibLoadPart past end of file (%d %d)", end, seqSize);
+    errAbort("nibLoadPart past end of file (%d %d) in file: %s", 
+	     end, seqSize, (fileName != NULL ? fileName : "(NULL)"));
 
 AllocVar(seq);
 seq->size = size;
