@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.99 2003/10/08 07:29:10 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.100 2003/10/08 18:37:48 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -126,6 +126,31 @@ if (orLogic)
 else
    return wildMatchAll(word, wildList);
 }
+
+boolean anyRealInCart(struct cart *cart, char *wild)
+/* Return TRUE if variables are set matching wildcard. */
+{
+struct hashEl *varList = NULL, *var;
+boolean ret = FALSE;
+
+varList = cartFindLike(cart, wild);
+for (var = varList; var != NULL; var = var->next)
+    {
+    char *s = var->val;
+    if (s != NULL)
+	{
+	s = trimSpaces(s);
+	if (s[0] != 0)
+	    {
+	    ret = TRUE;
+	    break;
+	    }
+	}
+    }
+hashElFreeList(&varList);
+return ret;
+}
+
 
 /* ---- Some html helper routines. ---- */
 

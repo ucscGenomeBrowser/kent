@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.16 2003/09/27 02:24:52 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.17 2003/10/08 18:37:48 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -34,44 +34,11 @@ if (gotAdvFilter())
 return list;
 }
 
-static boolean anyRealInCart(struct cart *cart, char *wild)
-/* Return TRUE if variables are set matching wildcard. */
-{
-struct hashEl *varList = NULL, *var;
-boolean ret = FALSE;
-
-varList = cartFindLike(cart, wild);
-for (var = varList; var != NULL; var = var->next)
-    {
-    char *s = var->val;
-    if (s != NULL)
-	{
-	s = trimSpaces(s);
-	if (s[0] != 0)
-	    {
-	    ret = TRUE;
-	    break;
-	    }
-	}
-    }
-hashElFreeList(&varList);
-return ret;
-}
-
 boolean gotAdvFilter()
 /* Return TRUE if advanced filter variables are set. */
 {
 char wild[64];
 safef(wild, sizeof(wild), "%s*", advFilterPrefix);
-return anyRealInCart(cart, wild);
-}
-
-boolean advFilterColAnySet(struct column *col)
-/* Return TRUE if any of the advanced filter variables
- * for this col are set. */
-{
-char wild[128];
-safef(wild, sizeof(wild), "%s%s*", advFilterPrefix, col->name);
 return anyRealInCart(cart, wild);
 }
 

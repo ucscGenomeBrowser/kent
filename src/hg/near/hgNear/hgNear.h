@@ -281,6 +281,9 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
 
+boolean anyRealInCart(struct cart *cart, char *wild);
+/* Return TRUE if variables are set matching wildcard. */
+
 struct hash *readRas(char *rootName);
 /* Read in ra in root, root/org, and root/org/database. */
 
@@ -432,10 +435,6 @@ boolean advFilterOrLogic(struct column *col, char *varName,
 
 boolean gotAdvFilter();
 /* Return TRUE if advanced filter variables are set. */
-
-boolean advFilterColAnySet(struct column *col);
-/* Return TRUE if any of the advanced filter variables
- * for this col are set. */
 
 void advFilterKeyUploadButton(struct column *col);
 /* Make a button for uploading keywords. */

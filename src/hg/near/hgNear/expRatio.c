@@ -12,7 +12,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.21 2003/10/08 07:29:10 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.22 2003/10/08 18:37:48 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *lookupConn,
@@ -385,31 +385,30 @@ expBrightnessControl(col);
 hPrintf("</TD>");
 }
 
-void expRatioFilterControls(struct column *col, struct sqlConnection *conn)
+void expFilterControls(struct column *col, char *subName,
+	char *experimentTable, int representativeCount, int *representatives)
 /* Print out controls for advanced filter. */
 {
-char lVarName[16];
-int i, numExpts = col->representativeCount;
+char lVarName[64];
+int i;
 int skipName = atoi(columnSetting(col, "skipName", "0"));
-char **experiments = getExperimentNames("hgFixed", col->experimentTable, numExpts,
-	col->representatives, skipName);
+char **experiments = getExperimentNames("hgFixed", experimentTable, 
+	representativeCount, representatives, skipName);
 
-hPrintf("Note: expression ratio values are scaled from -1 to 1");
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TH>Tissue</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n");
-
-for (i=0; i<numExpts; ++i)
+for (i=0; i<representativeCount; ++i)
     {
-    int ix = col->representatives[i];
+    int ix = representatives[i];
     hPrintf("<TR>");
     if (ix != -1)
         {
 	hPrintf("<TD>%s</TD>", experiments[i]);
-	safef(lVarName, sizeof(lVarName), "min%d", ix);
+	safef(lVarName, sizeof(lVarName), "%smin%d", subName, ix);
 	hPrintf("<TD>");
 	advFilterRemakeTextVar(col, lVarName, 8);
 	hPrintf("</TD>");
-	safef(lVarName, sizeof(lVarName), "max%d", ix);
+	safef(lVarName, sizeof(lVarName), "%smax%d", subName, ix);
 	hPrintf("<TD>");
 	advFilterRemakeTextVar(col, lVarName, 8);
 	hPrintf("</TD>");
@@ -420,6 +419,23 @@ hPrintf("</TABLE>\n");
 hPrintf("Include if ");
 advFilterAnyAllMenu(col, "logic", FALSE);
 hPrintf(" tissues meet minimum/maximum criteria.");
+}
+
+static void explainLogTwoRatio(char *maxVal)
+/* Put up note on log base 2 expression values. */
+{
+hPrintf("Note: the values here range from about -%s to %s.<BR>\n",
+	maxVal, maxVal);
+hPrintf("These are calculated as logBase2(tissue/reference).<BR>\n");
+}
+
+void expRatioFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
+{
+char *maxVal = columnSetting(col, "max", "3.0");
+explainLogTwoRatio(maxVal);
+expFilterControls(col, "", col->experimentTable, 
+	col->representativeCount, col->representatives);
 }
 
 static struct hash *expValHash(struct sqlConnection *conn, char *table)
@@ -469,25 +485,39 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-static char *expLimitString(struct column *col, int repIx, boolean isMax)
+static char *expLimitString(struct column *col, char *subName, 
+	int *representatives, int repIx, boolean isMax)
 /* Return string value of min/max variable for a given expression
  * experiment. */
 {
-char varName[16];
+char varName[64];
 static char *varType[2] = {"min", "max"};
-safef(varName, sizeof(varName), "%s%d", varType[isMax], col->representatives[repIx]);
+safef(varName, sizeof(varName), "%s%s%d", subName,
+	varType[isMax], representatives[repIx]);
 return advFilterVal(col, varName);
 }
 
-struct genePos *expRatioAdvFilter(struct column *col, 
-	struct sqlConnection *conn, struct genePos *list)
+static boolean expAdvFilterUsed(struct column *col, char *subName)
+/* Return TRUE if any of the advanced filter variables
+ * for this col are set. */
+{
+char wild[128];
+safef(wild, sizeof(wild), "%s%s.%s*", advFilterPrefix, col->name, subName);
+return anyRealInCart(cart, wild);
+}
+
+struct genePos *expAdvFilter(struct column *col, char *subName,
+	struct sqlConnection *lookupConn, char *lookupTable,
+	struct sqlConnection *dataConn, char *dataTable,
+	int representativeCount, int *representatives, struct genePos *list)
 /* Do advanced filter on position. */
 {
-if (advFilterColAnySet(col))
+if (expAdvFilterUsed(col, subName))
     {
-    struct hash *expHash = expValHash(conn, col->posTable);
-    struct hash *nameExpHash = getNameExpHash(conn, col->table, "name", "value", expHash);
-    int i, numExpts = col->representativeCount;
+    struct hash *expHash = expValHash(dataConn, dataTable);
+    struct hash *nameExpHash = getNameExpHash(lookupConn, lookupTable, 
+    	"name", "value", expHash);
+    int i;
     boolean orLogic = advFilterOrLogic(col, "logic", FALSE);
     int isMax;
     int repIx;
@@ -499,13 +529,16 @@ if (advFilterColAnySet(col))
     /* Fetch all limit variables. */
     for (isMax=0; isMax<2; ++isMax)
 	{
-	AllocArray(mms[isMax], numExpts);
-	AllocArray(mmv[isMax], numExpts);
-	for (repIx=0; repIx < numExpts; ++repIx)
+	AllocArray(mms[isMax], representativeCount);
+	AllocArray(mmv[isMax], representativeCount);
+	for (repIx=0; repIx < representativeCount; ++repIx)
 	    {
-	    varValString = mms[isMax][repIx] = expLimitString(col, repIx, isMax);
+	    varValString = mms[isMax][repIx] = 
+	    		expLimitString(col, subName, representatives, repIx, isMax);
 	    if (varValString != NULL)
-		mmv[isMax][repIx] = atof(varValString)/col->expScale;
+		{
+		mmv[isMax][repIx] = atof(varValString);
+		}
 	    }
 	}
 
@@ -517,11 +550,11 @@ if (advFilterColAnySet(col))
 	if ((vals = hashFindVal(nameExpHash, gp->name)) != NULL)
 	    {
 	    boolean passes = !orLogic;
-	    for (repIx=0; repIx<numExpts; ++repIx)
+	    for (repIx=0; repIx<representativeCount; ++repIx)
 		{
 		boolean anyLimit = FALSE;
 		boolean passesOne = TRUE;
-		float val = vals[col->representatives[repIx]];
+		float val = vals[representatives[repIx]];
 		for (isMax=0; isMax<2; ++isMax)
 		    {
 		    if (mms[isMax][repIx] != NULL)
@@ -573,6 +606,14 @@ if (advFilterColAnySet(col))
 return list;
 }
 
+struct genePos *expRatioAdvFilter(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced filter on position. */
+{
+return expAdvFilter(col, "", conn, col->table, conn, col->posTable,
+	col->representativeCount, col->representatives, list);
+}
+
 int expRatioTableColumns(struct column *col)
 /* Return number of html columns this uses. */
 {
@@ -591,8 +632,8 @@ void setupColumnExpRatio(struct column *col, char *parameters)
 /* Set up expression ratio type column. */
 {
 /* Hash up name value pairs and extract some we care about. */
-char *repList = hashFindVal(col->settings, "representatives");
-char *expMax = hashFindVal(col->settings, "max");
+char *repList = columnSetting(col, "representatives", NULL);
+char *expMax = columnSetting(col, "max", "3.0");
 
 col->table = cloneString(nextWord(&parameters));
 col->posTable = cloneString(nextWord(&parameters));
@@ -614,10 +655,6 @@ else
     errAbort("Missing required representatives list in %s", col->name);
     }
 
-if (expMax != NULL)
-    col->expScale = 1.0/atof(expMax);
-else
-    col->expScale = 1.0/3.0;
 
 /* Figure out color scheme. */
     {
@@ -627,10 +664,10 @@ else
 /* Figure out scale. */
     {
     char *varName = configVarName(col, "scale");
-    char *val = cartUsualString(cart, varName, "1 x");
+    char *val = cartUsualString(cart, varName, "1");
     double fVal = atof(val);
     if (fVal == 0) fVal = 1.0;
-    col->expScale *= fVal;
+    col->expScale = fVal/atof(expMax);
     }
 
 col->exists = expRatioExists;
@@ -804,6 +841,64 @@ hPrintf("</TD></TR></TABLE>");
 hPrintf("</TD>");
 }
 
+static void expMultiFilterPrefix(struct column *col, int maxPrefixSize, char *retPrefix )
+/* Fill in prefix to use for filter variables in this multi configuration. */
+{
+char *absRel = (col->expShowAbs ? "abs" : "rel");
+safef(retPrefix, maxPrefixSize, "%s.%s.", absRel, col->emd->name);
+}
+
+static void explainAbsolute(char *maxVal)
+/* Explain a little about absolutes. */
+{
+hPrintf("Note: the values here range up to %s.<BR>\n", maxVal);
+hPrintf("Values of 20 or less indicate unmeasurable expression.<BR>\n");
+}
+
+static void expMultiFilterControls(struct column *col, 
+	struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
+{
+char *dataTable;
+char emfPrefix[64];
+struct expMultiData *emd = col->emd;
+if (col->expShowAbs)
+    {
+    char *absoluteMax = columnSetting(col, "absoluteMax", "30000");
+    explainAbsolute(absoluteMax);
+    dataTable = emd->absoluteTable;
+    }
+else
+    {
+    char *ratioMax = columnSetting(col, "ratioMax", "3.0");
+    explainLogTwoRatio(ratioMax);
+    dataTable = emd->ratioTable;
+    }
+expMultiFilterPrefix(col, sizeof(emfPrefix), emfPrefix);
+expFilterControls(col, emfPrefix, emd->experimentTable, 
+	emd->representativeCount, emd->representatives);
+hPrintf("<BR>Other filter controls for this %s column will be<BR>", col->shortLabel);
+hPrintf("displayed if the column is configured differently.  Only<BR>");
+hPrintf("the displayed controls are active.");
+}
+
+struct genePos *expMultiAdvFilter(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced filter on position. */
+{
+char *dataTable;
+char emfPrefix[64];
+struct expMultiData *emd = col->emd;
+if (col->expShowAbs)
+    dataTable = emd->absoluteTable;
+else
+    dataTable = emd->ratioTable;
+expMultiFilterPrefix(col, sizeof(emfPrefix), emfPrefix);
+return expAdvFilter(col, emfPrefix, conn, col->table, hgFixedConn(), dataTable,
+	emd->representativeCount, emd->representatives, list);
+}
+
+
 void setupColumnExpMulti(struct column *col, char *parameters)
 /* Set up expression type column that can be ratio or absolute,
  * short or long. */
@@ -813,8 +908,8 @@ struct expMultiData *allEmd = makeEmd(col, "all", "all experiments", &emdList);
 struct expMultiData *medianEmd = makeEmd(col, "median", "median of replicas", &emdList);
 struct expMultiData *selectedEmd = makeEmd(col, "selected", "selected", &emdList);
 struct expMultiData *curEmd = NULL;
-char *ratioMax = hashFindVal(col->settings, "ratioMax");
-char *absoluteMax = hashFindVal(col->settings, "absoluteMax");
+char *ratioMax = columnSetting(col, "ratioMax", "3.0");
+char *absoluteMax = columnSetting(col, "absoluteMax", "30000");
 char *emdVal = configVarVal(col, "emd");
 
 col->table = cloneString(nextWord(&parameters));
@@ -838,16 +933,6 @@ col->emd = curEmd;
     col->expShowAbs = sameString(val, "absolute");
     }
 
-if (ratioMax != NULL)
-    col->expRatioScale = 1.0/atof(ratioMax);
-else
-    col->expRatioScale = 1.0/3.0;
-
-if (absoluteMax != NULL)
-    col->expAbsScale = 1.0/log(atof(absoluteMax));
-else
-    col->expAbsScale = 1.0/log(30000);
-
 /* Figure out color scheme. */
     {
     col->expRatioUseBlue = expRatioUseBlue();
@@ -856,23 +941,20 @@ else
 /* Figure out scale. */
     {
     char *varName = configVarName(col, "scale");
-    char *val = cartUsualString(cart, varName, "1 x");
+    char *val = cartUsualString(cart, varName, "1");
     double fVal = atof(val);
     if (fVal == 0) fVal = 1.0;
-    col->expRatioScale *= fVal;
-    col->expAbsScale *= fVal;
+    col->expRatioScale = fVal/atof(ratioMax);
+    col->expAbsScale = fVal/log(atof(absoluteMax));
     }
-
-#ifdef SOON
-col->filterControls = expRatioFilterControls;
-col->advFilter = expRatioAdvFilter;
-#endif /* SOON */
 
 col->exists = expMultiExists;
 col->configControls = expMultiConfigControls;
 col->cellVal = expMultiCellVal;
 col->cellPrint = expMultiCellPrint;
 col->labelPrint = expMultiLabelPrint;
+col->filterControls = expMultiFilterControls;
+col->advFilter = expMultiAdvFilter;
 }
 
 /* --------- expMax stuff to show maximum expression value -------- */
