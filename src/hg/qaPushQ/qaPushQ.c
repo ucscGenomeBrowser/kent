@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.59 2004/08/19 00:38:16 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.60 2004/08/23 20:33:36 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1022,25 +1022,25 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     if (ki->priority[0] != lastP) 
 	{
     lastP = ki->priority[0];
-	printf("<tr>");
 	safef(comment,sizeof(comment),"%s","");
 	switch (ki->priority[0])
 	    {
 	    case 'A': 
-		safef(comment,sizeof(comment),"%s"," active ");
+		safef(comment,sizeof(comment),"%s","active");
 		break;
 	    case 'B': 
-		safef(comment,sizeof(comment),"%s"," on short hold ");
+		safef(comment,sizeof(comment),"%s","short hold");
 		break;
 	    case 'C': 
-		safef(comment,sizeof(comment),"%s"," on long hold ");
+		safef(comment,sizeof(comment),"%s","long hold");
 		break;
 	    case 'L': 
-		safef(comment,sizeof(comment),"%s"," log ");
+		safef(comment,sizeof(comment),"%s","log");
 		break;
 	    
 	    }
-	printf("<td><h1>%s</h1></td><td><h1>%s<h1></td>\n", ki->priority, comment);
+	printf("<tr>");
+	printf("<td><h1>%s</h1></td><td><b>%s</b></td>\n", ki->priority, comment);
 	printf("</tr>");
     
     }
