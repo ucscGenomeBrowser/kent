@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track clonePos
 priority 14
 shortLabel Coverage
@@ -5,6 +13,24 @@ longLabel Clone Coverage
 group map
 visibility hide
 altColor 180,180,180 
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+type psl est
+
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+type psl est
 
 track blastzBestMm3
 shortLabel Mouse Best
