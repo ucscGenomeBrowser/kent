@@ -82,6 +82,11 @@ struct vGfx
     void (*triRight)(void *v, int x1, int y1, int y2, int color);
     /* Draw a triangle pointing right with straight edge along x from y1 
      * to y2 */
+
+    void (*drawPoly)(void *v, struct gfxPoly *poly, Color color, 
+    	boolean filled);
+    /* Draw polygon, possibly filled in color. */
+
     };
 
 struct vGfx *vgOpenGif(int width, int height, char *fileName);
@@ -158,4 +163,8 @@ void vgClose(struct vGfx **pVg);
     /* Draw a triangle pointing right with straight edge along x from y1 
      * to y2 */
 
+#define vgDrawPoly(v,poly,color,filled) \
+	v->drawPoly(v->data,poly,color,filled)
+    /* Draw a triangle pointing right with straight edge along x from y1 
+     * to y2 */
 #endif /* VGFX_H */

@@ -209,6 +209,8 @@ void gfxPolyFree(struct gfxPoly **pPoly);
 void gfxPolyAddPoint(struct gfxPoly *poly, int x, int y);
 /* Add point to polygon. */
 
+struct gfxPoly;	/* Keep gcc from complaining about anonymous structure. */
+
 void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 	boolean filled);
 /* Draw polygon, possibly filled in color. */

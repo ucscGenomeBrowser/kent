@@ -4,9 +4,10 @@
  * does is convert 0,0 from being at the bottom left to
  * being at the top left. */
 #include "common.h"
+#include "gfxPoly.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.13 2004/06/08 16:43:05 angie Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.14 2005/01/21 05:45:03 kent Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -328,5 +329,26 @@ psLineTo(ps, x1+half, y1+half);
 psLineTo(ps, x1,      y2);
 fprintf(f, "closepath\n");
 fprintf(f, "fill\n");
+}
+
+void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled)
+/* Draw a possibly filled polygon */
+{
+FILE *f = ps->f;
+struct gfxPoint *p = poly->ptList;
+fprintf(f, "newpath\n");
+psMoveTo(ps, p->x, p->y);
+for (;;)
+    {
+    p = p->next;
+    psLineTo(ps, p->x, p->y);
+    if (p == poly->ptList)
+	break;
+    }
+fprintf(f, "closepath\n");
+if (filled)
+    fprintf(f, "fill\n");
+else
+    fprintf(f, "stroke\n");
 }
 

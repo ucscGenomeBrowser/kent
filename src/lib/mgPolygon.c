@@ -10,63 +10,7 @@
 #include "common.h"
 #include "bits.h"
 #include "memgfx.h"
-
-struct gfxPoint
-/* A two-dimensional point, typically in pixel coordinates. */
-    {
-    struct gfxPoint *next;
-    int x, y;		/* Position */
-    };
-
-struct gfxPoly
-/* A two-dimensional polygon */
-    {
-    struct gfxPoly *next;
-    int ptCount;		/* Number of points. */
-    struct gfxPoint *ptList;	/* First point in list, which is circular. */
-    struct gfxPoint *lastPoint;	/* Last point in list. */
-    };
-
-struct gfxPoly *gfxPolyNew()
-/* Create new (empty) polygon */
-{
-struct gfxPoly *poly;
-AllocVar(poly);
-return poly;
-}
-
-void gfxPolyFree(struct gfxPoly **pPoly)
-/* Free up resources associated with polygon */
-{
-struct gfxPoly *poly = *pPoly;
-if (poly != NULL)
-    {
-    poly->lastPoint->next = NULL;
-    slFreeList(&poly->ptList);
-    freez(pPoly);
-    }
-}
-
-void gfxPolyAddPoint(struct gfxPoly *poly, int x, int y)
-/* Add point to polygon. */
-{
-struct gfxPoint *pt;
-poly->ptCount += 1;
-AllocVar(pt);
-pt->x = x;
-pt->y = y;
-if (poly->ptList == NULL)
-    {
-    poly->ptList = poly->lastPoint = pt;
-    pt->next = pt;
-    }
-else
-    {
-    poly->lastPoint->next = pt;
-    pt->next = poly->ptList;
-    poly->lastPoint = pt;
-    }
-}
+#include "gfxPoly.h"
 
 void mgDrawPolyOutline(struct memGfx *mg, struct gfxPoly *poly, Color color)
 /* Draw a singe pixel line around polygon. */

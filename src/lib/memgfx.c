@@ -1,7 +1,6 @@
 /* memgfx - routines for drawing on bitmaps in memory.
  * Currently limited to 256 color bitmaps. 
  *
- *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
@@ -13,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.38 2005/01/21 05:36:27 kent Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.39 2005/01/21 05:45:02 kent Exp $";
 
 void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -1010,5 +1009,6 @@ vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->triLeft = (vg_triLeft)mgTriLeft;
 vg->triRight = (vg_triRight)mgTriRight;
+vg->drawPoly = (vg_drawPoly)mgDrawPoly;
 }
 

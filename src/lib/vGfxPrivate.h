@@ -38,4 +38,5 @@ typedef void (*vg_fillUnder)(void *v, int x1, int y1,
 	int x2, int y2, int bottom, Color color);
 typedef void (*vg_triLeft)(void *v, int x1, int y1, int y2, int color);
 typedef void (*vg_triRight)(void *v, int x1, int y1, int y2, int color);
+typedef void (*vg_drawPoly)(void *v, struct gfxPoly *poly, Color color, boolean filled);
 

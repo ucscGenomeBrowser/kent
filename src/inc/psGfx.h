@@ -108,6 +108,8 @@ void psTriLeft(struct psGfx *ps, int x1, int y1, int y2);
 void psTriRight(struct psGfx *ps, int x1, int y1, int y2);
 /* Draw a triangle pointing right with straight edge along x from y1 to y2 */
 
+void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled);
+/* Draw a possibly filled polygon */
 
 #endif /* PSGFX_H */
 

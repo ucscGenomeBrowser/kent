@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "memgfx.h"
+#include "gfxPoly.h"
 #include "colHash.h"
 #include "psGfx.h"
 #include "pscmGfx.h"
@@ -13,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.9 2004/06/08 16:43:04 angie Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.10 2005/01/21 05:45:03 kent Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -285,6 +286,14 @@ psTriRight(pscm->ps, x1, y1, y2);
 boxPscm = NULL;
 }
 
+void pscmDrawPoly(struct pscmGfx *pscm, struct gfxPoly *poly, Color color, 
+	boolean filled)
+/* Draw a polygon, possibly filled, in color. */
+{
+pscmSetColor(pscm, color);
+psDrawPoly(pscm->ps, poly, filled);
+}
+
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
 {
@@ -305,6 +314,7 @@ vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->triLeft = (vg_triLeft)pscmTriLeft;
 vg->triRight = (vg_triRight)pscmTriRight;
+vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 return vg;
 }
 
