@@ -47,6 +47,8 @@ errAbort(
   "   List jobs that crashed or hung\n"
   "jabba problems batch.hut\n"
   "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
+  "jabba running batch.hut\n"
+  "   Print info on currently running jobs\n"
   "jabba time batch.hut\n"
   "   List timing information\n"
   );
@@ -68,6 +70,37 @@ char *statusCommand = "/cluster/gridware/bin/glinux/qstat";
 char *killCommand = "/cluster/gridware/bin/glinux/qdel";
 char *runJobCommand = "/cluster/bin/scripts/runJob";
 
+#ifdef SOON
+enum jaState 
+/* A job is in one of these states. */
+ {
+ jaUnsubmitted,
+ jaQueued,
+ jaRunning,
+ jaHung,
+ jaCrashed,
+ jaFinished,
+ };
+
+enum jaState figureState(struct job *job)
+/* Figure out state of job. */
+{
+struct submission *sub;
+if ((sub = job->submissionList) == NULL)
+    return jaUnsubmitted;
+if (sub->inQueue)
+    return jaQueued;
+if (sub->running)
+    return jaRunning;
+if (sub->hung)
+    return jaHung;
+if (sub->ranOk)
+    return jaFinished;
+else
+    return jaCrashed;
+}
+#endif /* SOON */
+
 /* Places that can be checked. */
 char *checkWhens[] = {"in", "out"};
 
@@ -84,8 +117,8 @@ s = ctime(&timer);
 return trimSpaces(s);
 }
 
-char *replaceNullString(char *s)
-/* Return s if non-NULL.  If s is NULL, return clone of "". */
+char *cloneEvenNull(char *s)
+/* Clone string.  Replace NULL with clone of "". */
 {
 if (s == NULL)
    return cloneString("");
@@ -323,6 +356,7 @@ char *line;
 int jobCount = 0;
 struct jobDb *db;
 struct job *job;
+char backup[512];
 
 AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
@@ -339,6 +373,8 @@ slReverse(&db->jobList);
 
 doChecks(db, "in");
 writeBatch(db, batch);
+sprintf(backup, "%s.bak", batch);
+writeBatch(db, backup);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
 
@@ -500,13 +536,13 @@ long result;
 /* Parse string into various integer variables. */
 wordCount = chopLine(dupe, words);
 if (wordCount < 5)
-    errAbort("Badly formated date '%s'", date);
+    errAbort("Badly formatted(1) date '%s'", date);
 if (wordCount == 5)
     yearString = words[4];
 else
     yearString = words[5];
 if (!isdigit(yearString[0]))
-    errAbort("Badly formated date '%s'", date);
+    errAbort("Badly formatted(2) date '%s'", date);
 year = atoi(yearString);
 if ((month = stringIx(words[1], months)) < 0)
     errAbort("Unrecognized month '%s'", date);
@@ -573,7 +609,7 @@ ZeroVar(&ret);
 lf = lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     {
-    ret.trackingError = TRUE;
+    ret.trackingError = 1;
     return &ret;
     }
 while (lineFileNext(lf, &line, NULL))
@@ -618,7 +654,7 @@ while (lineFileNext(lf, &line, NULL))
     }
 if (!gotStart)
     {
-    ret.trackingError = TRUE;
+    ret.trackingError = 2;
     }
 if (gotEnd)
     {
@@ -663,8 +699,8 @@ for (job=db->jobList; job != NULL; job = job->next)
 	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->hung && !sub->ranOk)
 	    {
 	    struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-	    sub->startTime = replaceNullString(rjo->startTime);
-	    sub->endTime = replaceNullString(rjo->endTime);
+	    sub->startTime = cloneEvenNull(rjo->startTime);
+	    sub->endTime = cloneEvenNull(rjo->endTime);
 	    if (rjo->trackingError)
 	        {
 		long subTime, curTime;
@@ -672,7 +708,7 @@ for (job=db->jobList; job != NULL; job = job->next)
 		curTime = nowInSeconds();
 		duration = curTime - subTime;
 		if (duration > 60*20)	/* Give it up to 20 minutes to show up. */
-		    sub->trackingError = TRUE;
+		    sub->trackingError = 3;
 		else
 		    sub->inQueue = TRUE;
 		}
@@ -690,14 +726,22 @@ for (job=db->jobList; job != NULL; job = job->next)
 		    }
 		else
 		    {
-		    duration = nowInSeconds() - dateToSeconds(sub->startTime);
-		    if (duration >= killSeconds)
+		    if (sub->running)
 			{
-			sub->hung = TRUE;
-			killSubmission(sub);
+			duration = nowInSeconds() - dateToSeconds(sub->startTime);
+			if (duration >= killSeconds)
+			    {
+			    sub->hung = TRUE;
+			    killSubmission(sub);
+			    }
+			else if (duration >= warnSeconds)
+			    sub->slow = TRUE;
 			}
-		    else if (duration >= warnSeconds)
-			sub->slow = TRUE;
+		    else
+		        {
+			warn("Codine seems to have lost track of %s.  It's not running but hasn't returned", sub->id);
+			sub->trackingError = 4;
+			}
 		    }
 		}
 	    }
@@ -853,23 +897,9 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
-void problemReport(struct job *job, struct submission *sub, char *type)
-/* Print report on one problem. */
+void printErrFile(struct submission *sub)
+/* Print error file if it exists. */
 {
-struct check *check;
-struct hash *hash = newHash(0);
-struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
-
-printf("job: %s\n", job->command);
-printf("failure type: %s\n", type);
-printf("host: %s\n", rjo->host);
-printf("start time: %s\n", rjo->startTime);
-if (rjo->gotRet)
-    printf("return: %d\n", rjo->retVal);
-for (check = job->checkList; check != NULL; check = check->next)
-    {
-    doOneCheck(check, hash, stdout);
-    }
 if (fileExists(sub->errFile))
     {
     char *buf;
@@ -883,6 +913,31 @@ else
     {
     printf("stderr file doesn't exist\n");
     }
+}
+
+void problemReport(struct job *job, struct submission *sub, char *type)
+/* Print report on one problem. */
+{
+struct check *check;
+struct hash *hash = newHash(0);
+struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
+
+printf("job: %s\n", job->command);
+printf("host: %s\n", rjo->host);
+printf("failure type: %s\n", type);
+if (sub->trackingError)
+     printf("tracking error: %d\n", sub->trackingError);
+if (rjo->startTime)
+    printf("start time: %s\n", rjo->startTime);
+if (rjo->gotRet)
+    {
+    printf("return: %d\n", rjo->retVal);
+    for (check = job->checkList; check != NULL; check = check->next)
+	{
+	doOneCheck(check, hash, stdout);
+	}
+    }
+printErrFile(sub);
 printf("\n");
 hashFree(&hash);
 }
@@ -904,11 +959,54 @@ for (job = db->jobList; job != NULL; job = job->next)
 	    problemReport(job, sub, "hung");
 	else if (sub->slow)
 	    problemReport(job, sub, "slow");
+	else if (sub->trackingError)
+	    problemReport(job, sub, "tracking error");
 	else if (needsRerun(sub))
 	    problemReport(job, sub, "crash");
 	}
     }
 }
+
+void runningReport(struct job *job, struct submission *sub)
+/* Print report on one problem. */
+{
+struct check *check;
+struct hash *hash = newHash(0);
+struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
+int duration = nowInSeconds() - dateToSeconds(rjo->startTime);
+
+printf("command: %s\n", job->command);
+printf("jobId: %s\n", sub->id);
+printf("host: %s\n", rjo->host);
+printf("start time: %s\n", rjo->startTime);
+printf("run time so far: %d sec,  %4.2f hours,  %4.2f days\n", 
+	duration, duration/3600.0,  duration/(3600.0*24.0));
+printErrFile(sub);
+printf("\n");
+hashFree(&hash);
+}
+
+void jabbaRunning(char *batch)
+/*  List jobs that are running.  Includes host and time info */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+struct submission *sub;
+int runCount = 0;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    if ((sub = job->submissionList) != NULL && sub->running)
+	{
+	runningReport(job, sub);
+	++runCount;
+	}
+    }
+printf("total jobs running: %d\n", runCount);
+}
+
 
 
 void jabbaStop(char *batch)
@@ -931,6 +1029,65 @@ for (job = db->jobList; job != NULL; job = job->next)
 writeBatch(db, batch);
 }
 
+void printTimes(double seconds,  boolean showYears)
+/* Print out times in seconds, hours, days, maybe years. */
+{
+printf("%d s %4.2f h %4.2f d", 
+   round(seconds), seconds/3600, seconds/(3600*24));
+if (showYears)
+     printf(" %5.3f y", seconds/(3600*24*365));
+printf("\n");
+}
+
+long calcFirstToLast(struct jobDb *db)
+/* Calculate time between first submission and last job finish. */
+{
+long subTime, firstSub = BIGNUM, endTime, lastEnd = 0;
+boolean first = TRUE;
+struct job *job;
+struct submission *sub;
+char *firstString = NULL, *endString = NULL;
+long now = nowInSeconds();
+
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    if ((sub = job->submissionList) != NULL)
+        {
+	subTime = dateToSeconds(sub->submitTime);
+	if (subTime < now)	/* Protect against wacked out clocks. */
+	    {
+	    if (first)
+		{
+		firstString = sub->submitTime;
+		firstSub = subTime;
+		first = FALSE;
+		}
+	    else
+		{
+		if (subTime < firstSub) 
+		    {
+		    firstString = sub->submitTime;
+		    firstSub = subTime;
+		    }
+		}
+	    }
+	if (sub->endTime != NULL && sub->endTime[0] != 0)
+	    {
+	    endTime = dateToSeconds(sub->endTime);
+	    if (endTime < now)	/* Protect against wacked out clocks. */
+		{
+		if (endTime > lastEnd) 
+		    {
+		    endString = sub->endTime;
+		    lastEnd = endTime;
+		    }
+		}
+	    }
+	}
+    }
+return lastEnd - firstSub;
+}
+
 void jabbaTimes(char *batch)
 /* Report times of run. */
 {
@@ -944,6 +1101,8 @@ int runningCount = 0;
 int timedCount = 0;
 int crashCount = 0;
 int queueCount = 0;
+int runTime = 0;
+int otherCount = 0;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
@@ -954,6 +1113,8 @@ for (job = db->jobList; job != NULL; job = job->next)
         {
 	if (sub->running)
 	   {
+	   struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
+	   runTime += nowInSeconds() - dateToSeconds(rjo->startTime);
 	   ++runningCount;
 	   }
 	else if (sub->inQueue)
@@ -972,14 +1133,69 @@ for (job = db->jobList; job != NULL; job = job->next)
 	       ++timedCount;
 	       totalCpu += rjo->cpuTime;
 	       oneWall = dateToSeconds(rjo->endTime) - dateToSeconds(rjo->startTime);
+	       if (oneWall < 0)	/* Protect against clock reset. */
+		   {
+		   warn("End before start job %s host %s", sub->id, rjo->host);
+		   warn("Start %s,  End %s", rjo->startTime, rjo->endTime);
+	           oneWall = totalCpu;	
+		   }
 	       totalWall += oneWall;
 	       if (oneWall > longestWall) longestWall = oneWall;
+	       }
+	   else
+	       {
+	       ++otherCount;
 	       }
 	   }
 	}
     }
-printf("Completed %d of %d jobs. CPU %2.1f IO %2.1f ave %2.1f longest %2.1f\n",
-     timedCount, jobCount, totalCpu, totalWall-totalCpu, totalWall/timedCount, longestWall);
+printf("Completed: %d of %d jobs\n", timedCount, jobCount);
+if (runningCount > 0)
+    printf("Jobs currently running: %d\n", runningCount);
+if (crashCount > 0)
+    printf("Crashed: %d jobs\n", crashCount);
+if (otherCount > 0)
+    printf("Other count: %d jobs\n", otherCount);
+if (queueCount > 0)
+    printf("In queue waiting: %d jobs\n", queueCount);
+printf("CPU time in finished jobs: ");
+printTimes(totalCpu, TRUE);
+printf("IO & Wait Time: ");
+printTimes(totalWall-totalCpu, TRUE);
+if (runningCount > 0)
+    {
+    printf("Time so far in running jobs: ");
+    printTimes(runTime, TRUE);
+    }
+if (timedCount > 0)
+    {
+    printf("Average job time: ");
+    printTimes(totalWall/timedCount, FALSE);
+    printf("Longest job time: ");
+    printTimes(longestWall, FALSE);
+    printf("Time from first submission to last job: ");
+    printTimes(calcFirstToLast(db), FALSE);
+    }
+}
+
+void jabbaFix(char *batch)
+/* Fix a batch somehow. */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+struct submission *sub;
+
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    for (sub = job->submissionList; sub != NULL; sub = sub->next)
+        {
+	if (sub->trackingError)
+	    sub->crashed = FALSE;
+	}
+    }
+
+
+writeBatch(db, batch);
 }
 
 int main(int argc, char *argv[])
@@ -1034,13 +1250,21 @@ else if (sameString(command, "failed"))
     {
     jabbaListFailed(batch, TRUE, TRUE);
     }
-else if (sameString(command, "problems"))
+else if (sameString(command, "problems") || sameString(command, "problem"))
     {
     jabbaProblems(batch);
     }
-else if (sameString(command, "time"))
+else if (sameString(command, "running"))
+    {
+    jabbaRunning(batch);
+    }
+else if (sameString(command, "time") || sameString(command, "times"))
     {
     jabbaTimes(batch);
+    }
+else if (sameString(command, "fix"))
+    {
+    jabbaFix(batch);
     }
 else
     {
