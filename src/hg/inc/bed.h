@@ -9,6 +9,10 @@
 #include "psl.h"
 #endif
 
+#ifndef GENEPRED_H
+#include "genePred.h"
+#endif
+
 #ifndef HASH_H
 #include "hash.h"
 #endif
@@ -133,6 +137,9 @@ void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
 
 struct bed *bedFromPsl(struct psl *psl);
 /* Convert a single psl to a bed structure */
+
+struct bed *bedFromGenePred(struct genePred *genePred);
+/* Convert a single genePred to a bed structure */
 
 struct bed *cloneBed(struct bed *bed);
 /* Make an all-newly-allocated copy of a single bed record. */
