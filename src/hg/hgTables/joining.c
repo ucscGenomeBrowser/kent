@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.32 2004/10/27 22:05:14 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.33 2004/10/27 22:58:25 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -735,6 +735,10 @@ tableDtfs = tableFirstFieldList(tjList);
 routeList = joinerFindRouteThroughAll(joiner, tableDtfs);
 addOutKeys(tableHash, routeList, &tjList);
 
+/* If first table is non-positional then it will lead to a lot
+ * of n/a's in later fields unless we treat the genome-wide. */
+if (!isPositional(tjList->database, tjList->table))
+    regionList = getRegionsFullGenome();
 /* Count up total fields and keys. */
 for (tj = tjList; tj != NULL; tj = tj->next)
     {

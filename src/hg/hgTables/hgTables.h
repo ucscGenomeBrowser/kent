@@ -139,6 +139,9 @@ void initGroupsTracksTables(struct sqlConnection *conn);
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
+struct region *getRegionsFullGenome();
+/* Get a region list that covers all of each chromosome. */
+
 char *getRegionName();
 /* Get a name for selected region.  Don't free this. */
 

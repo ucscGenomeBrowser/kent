@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.82 2004/10/20 23:13:29 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.83 2004/10/27 22:58:25 kent Exp $";
 
 
 void usage()
@@ -223,7 +223,7 @@ if (dif == 0)
 return dif;
 }
 
-static struct region *getRegionsFullGenome()
+struct region *getRegionsFullGenome()
 /* Get a region list that covers all of each chromosome. */
 {
 struct slName *chrom, *chromList = hAllChromNames();
