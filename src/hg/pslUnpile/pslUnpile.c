@@ -70,6 +70,14 @@ for (;;)
 		    pslTabOut(el, f);
 		    }
 		}
+	    else
+	        {
+		for (el = list; el != NULL; el = el->next)
+		    {
+		    if (psl->tEnd - psl->tStart > 4000)
+			pslTabOut(el, f);
+		    }
+		}
 	    pslFreeList(&list);
 	    }
 	}
