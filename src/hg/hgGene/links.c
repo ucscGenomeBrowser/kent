@@ -135,13 +135,29 @@ sqlFreeResult(&sr);
 return name;
 }
 
+static boolean linksExists(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Return TRUE if GO database exists and has something
+ * on this one. */
+{
+struct link *link, *linkList;
+linkList = section->items = getLinkList(conn, section->raFile);
+for (link = linkList; link != NULL; link = link->next)
+    {
+    if (linkGetUrl(link, conn, geneId))
+        return TRUE;
+    }
+return FALSE;
+}
+
+
 static void linksPrint(struct section *section, struct sqlConnection *conn,
 	char *geneId)
 /* Print the links section. */
 {
 int maxPerRow = 6, itemPos = 0;
 int rowIx = 0;
-struct link *link, *linkList = getLinkList(conn, section->raFile);
+struct link *link, *linkList = section->items;
 
 hPrintLinkTableStart();
 for (link = linkList; link != NULL; link = link->next)
@@ -173,6 +189,7 @@ struct section *linksSection(struct sqlConnection *conn,
 /* Create links section. */
 {
 struct section *section = sectionNew(sectionRa, "links");
+section->exists = linksExists;
 section->print = linksPrint;
 section->raFile = "links.ra";
 return section;
@@ -183,6 +200,7 @@ struct section *otherOrgsSection(struct sqlConnection *conn,
 /* Create links section. */
 {
 struct section *section = sectionNew(sectionRa, "otherOrgs");
+section->exists = linksExists;
 section->print = linksPrint;
 section->raFile = "otherOrgs.ra";
 return section;
