@@ -2787,7 +2787,7 @@ for (same = 1; same >= 0; same -= 1)
 	    {
 	    sprintf(otherString, "%d&aliTrack=%s", psl->tStart, typeName);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
-	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
+	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %20s %5d %5d %5d</A>",
 		psl->match + psl->misMatch + psl->repMatch,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
@@ -10479,12 +10479,10 @@ else if (containsStringNoCase(track, "blastzStrictChain")
     strcpy(&dbName[3 + len], "3");
     longXenoPsl1(tdb, item, orgName, "chromInfo", dbName);
     }
-else if (sameWord(track, "blatChimp"))
-    {
-    longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
-    }
-else if (sameWord(track, "chimpBac"))
-    {
+else if (sameWord(track, "blatChimp") ||
+         sameWord(track, "chimpBac") ||
+         sameWord(track, "bacChimp"))
+    { 
     longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
     }
 else if (sameWord(track, "htcLongXenoPsl2"))
