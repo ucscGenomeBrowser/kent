@@ -114,8 +114,11 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue);
 
 /*	in lib/wiggleUtils.c	*/
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
-    int winStart, int winEnd);
-/*  return linked list of wiggle data between winStart, winEnd */
+    int winStart, int winEnd, boolean summaryOnly);
+/*  return linked list of wiggle data between winStart, winEnd
+ *	summaryOnly TRUE will not look at all the data, just the
+ *	summaries in the table rows
+ */
 
 /*	in lib/wiggleCart.c	*/
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
