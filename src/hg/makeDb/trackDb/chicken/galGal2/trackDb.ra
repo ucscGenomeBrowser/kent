@@ -6,7 +6,7 @@ priority 40
 visibility pack
 color 150,0,0
 type genePred ensPep
-url http://pre.ensembl.org/Gallus_gallus/geneview?transcript=$$
+url http://www.ensembl.org/Gallus_gallus/geneview?transcript=$$
 urlLabel Ensembl Gene Link: 
 
 track gold
