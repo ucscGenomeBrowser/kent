@@ -11,7 +11,7 @@
 #include "esMotif.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.6 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.7 2004/03/30 06:50:26 kent Exp $";
 
 
 void usage()
@@ -462,6 +462,9 @@ for (motif = motifs->esmMotif; motif != NULL; motif = motif->next)
     for (pos = weights->esmPosition; pos != NULL; pos = pos->next)
         {
 	char *row[5];
+	double odds[4], sumOdds = 0;
+	int i;
+
 	int ix = pos->Num;
 	int rowSize = chopString(pos->Weights, ";", row, ArraySize(row));
 	if (rowSize != 4)
@@ -469,10 +472,15 @@ for (motif = motifs->esmMotif; motif != NULL; motif = motif->next)
                pos->Num, motif->Name);
 	if (ix >= posCount)
 	    errAbort("Num %d out of range in Motif %s", ix, motif->Name);
-	dm->aProb[ix] = atof(row[0]);
-	dm->cProb[ix] = atof(row[1]);
-	dm->gProb[ix] = atof(row[2]);
-	dm->tProb[ix] = atof(row[3]);
+	for (i=0; i<4; ++i)
+	    {
+	    odds[i] = exp(atof(row[0]));
+	    sumOdds += odds[i];
+	    }
+	dm->aProb[ix] = odds[0]/sumOdds;
+	dm->cProb[ix] = odds[1]/sumOdds;
+	dm->gProb[ix] = odds[2]/sumOdds;
+	dm->tProb[ix] = odds[3]/sumOdds;
 	}
     dnaMotifTabOut(dm, f);
     hashAdd(hash, dm->name, dm);
@@ -628,6 +636,60 @@ struct hash *motifHash = loadMotifWeights(conn, motifWeights, "esRegMotif");
 loadGeneToMotif(conn, motifPositions, "esRegGeneToMotif", geneToModuleHash, moduleAndMotifHash, motifHash, positionsHash, "esRegUpstreamRegion");
 crossCheck(conn, "esRegMotif", "esRegGeneToModule", "esRegGeneToMotif", "esRegModuleToMotif");
 }
+
+
+#ifdef TESTING
+void convert(double logOdds[4])
+{
+int i;
+double sum = 0;
+for (i=0; i<4; ++i)
+    {
+    double odds = exp(logOdds[i]);
+    sum += odds;
+    }
+uglyf("sum %f\n", sum);
+for (i=0; i<4; ++i)
+    {
+    double odds = exp(logOdds[i]);
+    printf("%4.3f\t %4.3f\t%4.3f\n", logOdds[i], odds, odds/sum);
+    }
+printf("\n");
+}
+
+void test()
+{
+int i;
+static double w[][4] = 
+{
+      {0.11,0.24,-0.79,0.18},
+      {-0.17,0.91,-0.45,-0.67},
+      {0.93,-5.75,-0.45,0.12},
+      {-0.75,0.18,-0.45,0.63},
+      {1.13,-5.75,0.70,-6.03},
+      {-6.10,-5.75,-2.34,1.83},
+      {-2.65,2.11,-5.80,-6.03},
+      {1.40,-5.75,-0.13,-2.57},
+      {-6.10,0.91,-5.80,1.11},
+      {-2.65,-0.79,-0.45,1.31},
+      {0.69,-0.39,-0.85,-0.09},
+      {-0.75,-0.39,-2.34,1.21},
+      {0.93,-1.35,-0.45,-0.35},
+      {-0.17,-0.07,-0.13,0.31},
+      {1.81,-5.75,-5.80,-6.03},
+      {-6.10,2.17,-5.80,-6.03},
+      {-6.10,-5.75,2.11,-6.03},
+      {0.55,-5.75,0.13,0.31},
+      {0.81,-0.79,-0.13,-0.67},
+      {0.46,-0.01,-0.79,-0.03},
+      {-0.11,0.46,0.19,-0.61},
+      {0.11,-0.33,-1.35,0.69},
+
+};
+for (i=0; i<=21; ++i)
+    convert(w[i]);
+}
+#endif /* TESTING */
 
 int main(int argc, char *argv[])
 /* Process command line. */
