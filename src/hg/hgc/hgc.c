@@ -42,6 +42,7 @@
 #include "exprBed.h"
 
 #define CHUCK_CODE 1
+#define ROGIC_CODE 1
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -2210,7 +2211,18 @@ puts("<P>This track shows locations of Single Nucleotide Polymorphisms. "
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+#ifdef ROGIC_CODE
 
+void doMgcMrna(char *acc)
+/* Redirects to genbank record */
+{
+
+  printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
+  printf("location.replace('http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=%s');\n",acc); 
+  printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <b><a href=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=%s\">continue</a></b> for the requested GenBank report. </NOSCRIPT>\n",acc); 
+}
+
+#endif /* ROGIC_CODE */
 #ifdef CHUCK_CODE
 
 void chuckHtmlStart(char *title) 
@@ -2597,6 +2609,12 @@ else if (sameWord(group, "rosettaTe"))
     }
 
 #endif /*CHUCK_CODE*/
+#ifdef ROGIC_CODE
+ else if (sameWord(group, "mgc_mrna"))
+   {
+     doMgcMrna(item);
+   }
+#endif /*ROGIC_CODE*/
 else
    {
    htmlStart(group);
