@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.784 2004/08/25 18:15:08 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.785 2004/08/26 11:29:30 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -436,6 +436,14 @@ tg->height = rows * tg->lineHeight;
 return tg->height;
 }
 
+char *dnaInWindow()
+/* This returns the DNA in the window, all in lower case. */
+{
+static struct dnaSeq *seq = NULL;
+if (seq == NULL)
+    seq = hDnaFromSeq(chromName, winStart, winEnd, dnaLower);
+return seq->dna;
+}
 
 int orientFromChar(char c)
 /* Return 1 or -1 in place of + or - */
@@ -3668,6 +3676,135 @@ tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
 tg->freeItems = freeSimpleBed;
 }
+
+char *oligoMatchSeq()
+/* Return sequence for oligo matching. */
+{
+char *s = cartUsualString(cart, oligoMatchVar, cloneString(oligoMatchDefault));
+tolowers(s);
+return s;
+}
+
+char *oligoMatchName(struct track *tg, void *item)
+/* Return name for oligo, which is just the base position. */
+{
+struct bed *bed = item;
+static char buf[22];
+buf[0] = bed->strand[0];
+sprintLongWithCommas(buf+1, bed->chromStart);
+return buf;
+}
+
+void oligoMatchLoad(struct track *tg)
+/* Create track of perfect matches to oligo on either strand. */
+{
+char *dna = dnaInWindow();
+char *fOligo = oligoMatchSeq();
+int oligoSize = strlen(fOligo);
+char *rOligo = cloneString(fOligo);
+char *rMatch, *fMatch;
+struct bed *bedList = NULL, *bed;
+char strand;
+
+if (oligoSize >= 2)
+    {
+    reverseComplement(rOligo, oligoSize);
+    rMatch = stringIn(rOligo, dna);
+    fMatch = stringIn(fOligo, dna);
+    for (;;)
+        {
+	char *oneMatch = NULL;
+	if (rMatch == NULL)
+	    {
+	    if (fMatch == NULL)
+	        break;
+	    else
+		{
+	        oneMatch = fMatch;
+		fMatch = stringIn(fOligo, fMatch+1);
+		strand = '+';
+		}
+	    }
+	else if (fMatch == NULL)
+	    {
+	    oneMatch = rMatch;
+	    rMatch = stringIn(rOligo, rMatch+1);
+	    strand = '-';
+	    }
+	else if (rMatch < fMatch)
+	    {
+	    oneMatch = rMatch;
+	    rMatch = stringIn(rOligo, rMatch+1);
+	    strand = '-';
+	    }
+	else
+	    {
+	    oneMatch = fMatch;
+	    fMatch = stringIn(fOligo, fMatch+1);
+	    strand = '+';
+	    }
+	AllocVar(bed);
+	bed->chromStart = winStart + (oneMatch - dna);
+	bed->chromEnd = bed->chromStart + oligoSize;
+	bed->strand[0] = strand;
+	slAddHead(&bedList, bed);
+	}
+    slReverse(&bedList);
+    tg->items = bedList;
+    }
+}
+
+struct track *oligoMatchTg()
+/* Make track of perfect matches to oligomer. */
+{
+struct track *tg = trackNew();
+char *oligo = oligoMatchSeq();
+int oligoSize = strlen(oligo);
+char *shortOligo = cloneString(oligo);
+char *medOligo = cloneString(oligo);
+static char shortLabel[16];
+static char longLabel[80];
+struct trackDb *tdb;
+
+/* Generate abbreviated strings. */
+if (oligoSize >= 15)
+    {
+    memset(shortOligo + 15-3, '.', 3);
+    shortOligo[15] = 0;
+    }
+touppers(shortOligo);
+if (oligoSize >= 30)
+    {
+    memset(medOligo + 30-3, '.', 3);
+    medOligo[30] = 0;
+    }
+touppers(medOligo);
+
+bedMethods(tg);
+AllocVar(tdb);
+tg->mapName = "oligoMatch";
+tg->canPack = TRUE;
+tg->visibility = tvHide;
+tg->hasUi = TRUE;
+safef(shortLabel, sizeof(shortLabel), "%ss", shortOligo);
+tg->shortLabel = shortLabel;
+safef(longLabel, sizeof(longLabel), 
+	"Perfect Matches to Short Sequence (%s)", medOligo);
+tg->longLabel = longLabel;
+tg->loadItems = oligoMatchLoad;
+tg->itemName = oligoMatchName;
+tg->mapItemName = oligoMatchName;
+tg->priority = 99;
+tg->groupName = "map";
+tdb->tableName = tg->mapName;
+tdb->shortLabel = tg->shortLabel;
+tdb->longLabel = tg->longLabel;
+trackDbPolish(tdb);
+tg->tdb = tdb;
+return tg;
+}
+
+
 
 void loadTfbsCons(struct track *tg)
 {
@@ -8347,7 +8484,9 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
+slSafeAddHead(&trackList, oligoMatchTg());
 loadCustomTracks(&trackList);
+
 
 groupTracks(&trackList, &groupList);
 
@@ -8458,9 +8597,6 @@ if (!hideControls)
 	hWrites("position ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
-#ifdef SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES
-	hOnClickButton("document.TrackForm.position.value=''","clear");
-#endif /* SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES */
 	hPrintf(" size %s ", buf);
 	hWrites(" bp. &nbsp;image width: ");
 	hIntVar("pix", tl.picWidth, 4);

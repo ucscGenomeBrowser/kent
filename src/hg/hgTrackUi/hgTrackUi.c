@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.132 2004/08/25 18:15:54 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.133 2004/08/26 11:29:31 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -680,6 +680,14 @@ cgiMakeTextVar("hgt.motifs", motifString, 20);
 puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
 }
 
+void oligoMatchUi(struct trackDb *tdb)
+/* UI for oligo match track */
+{
+char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
+puts("<P><B>short (2-30 base) sequence</B>");
+cgiMakeTextVar(oligoMatchVar, oligo, 20);
+}
+
 void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
@@ -993,6 +1001,8 @@ else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
 else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
+else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
+    oligoMatchUi(tdb);
 else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
 else if (tdb->type != NULL)
@@ -1045,9 +1055,9 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }
 
-struct trackDb *trackDbForRuler()
-/* Create a trackDb entry for the base position ruler.
-   It is not (yet?) a real track, so doesn't appear in trackDb */
+struct trackDb *trackDbForPseudoTrack(char *tableName, char *shortLabel, 
+	char *longLabel, int defaultVis, boolean canPack)
+/* Create trackDb for a track without a corresponding table. */
 {
 struct trackDb *tdb;
 char htmlFile[256];
@@ -1055,19 +1065,34 @@ char *buf;
 size_t size;
 
 AllocVar(tdb);
-tdb->tableName = RULER_TRACK_NAME;
-tdb->shortLabel = RULER_TRACK_LABEL;
-tdb->longLabel = RULER_TRACK_LONGLABEL;
-tdb->visibility = tvDense;
+tdb->tableName = tableName;
+tdb->shortLabel = shortLabel;
+tdb->longLabel = longLabel;
+tdb->visibility = defaultVis;
 tdb->priority = 1.0;
 safef(htmlFile, 256, "/usr/local/apache/htdocs/goldenPath/help/%s.html", 
-                                RULER_TRACK_NAME);
+                                tableName);
 readInGulp(htmlFile, &buf, &size);
 tdb->html = buf;
 tdb->type = "none";
 tdb->grp = "map";
-tdb->canPack = FALSE;
+tdb->canPack = canPack;
 return tdb;
+}
+
+struct trackDb *trackDbForRuler()
+/* Create a trackDb entry for the base position ruler.
+   It is not (yet?) a real track, so doesn't appear in trackDb */
+{
+return trackDbForPseudoTrack(RULER_TRACK_NAME,
+	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvPack, FALSE);
+}
+
+struct trackDb *trackDbForOligoMatch()
+/* Create a trackDb entry for the oligo matcher pseudo-track. */
+{
+return trackDbForPseudoTrack(OLIGO_MATCH_TRACK_NAME,
+	OLIGO_MATCH_TRACK_LABEL, OLIGO_MATCH_TRACK_LONGLABEL, tvHide, TRUE);
 }
 
 void doMiddle(struct cart *theCart)
@@ -1083,6 +1108,8 @@ chromosome = cartUsualString(cart, "c", hDefaultChrom());
 if (sameWord(track, RULER_TRACK_NAME))
     /* special handling -- it's not a full-fledged track */
     tdb = trackDbForRuler();
+else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
+    tdb = trackDbForOligoMatch();
 else
     tdb = hTrackDbForTrack(track);
 if (tdb == NULL)

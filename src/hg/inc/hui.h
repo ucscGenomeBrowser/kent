@@ -17,6 +17,13 @@ char *wrapWhiteFont(char *s);
 #define RULER_TRACK_LABEL       "Base Position"
 #define RULER_TRACK_LONGLABEL   "Genome Base Position"
 
+/* Definition for oligo match track. */
+#define oligoMatchVar "hgt.oligoMatch" 
+#define oligoMatchDefault "aaaaa"
+#define OLIGO_MATCH_TRACK_NAME "oligoMatch"
+#define OLIGO_MATCH_TRACK_LABEL "Short Match"
+#define OLIGO_MATCH_TRACK_LONGLABEL "Perfect Match to Short Sequence"
+
 /* Display of bases on the ruler, and multiple alignments.
  * If present, indicates reverse strand */
 #define COMPLEMENT_BASES_VAR    "complement"

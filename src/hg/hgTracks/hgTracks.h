@@ -679,5 +679,8 @@ void linkedFeaturesDrawAt(struct track *tg, void *item,
 				 MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single simple bed item at position. */
 
+char *dnaInWindow();
+/* This returns the DNA in the window, all in lower case. */
+
 #endif /* HGTRACKS_H */
 

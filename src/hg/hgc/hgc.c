@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.727 2004/08/26 00:12:24 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.728 2004/08/26 11:29:31 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14287,6 +14287,18 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+static void doOligoMatch(char *item)
+/* Print info about oligo match. */
+{
+char *oligo = cartUsualString(cart, 
+	oligoMatchVar, cloneString(oligoMatchDefault));
+touppers(oligo);
+cartWebStart(cart, "Perfect Matches to Short Sequence");
+printf("<B>Sequence:</B> %s<BR>\n", oligo);
+printf("<B>Chromosome:</B> %s<BR>\n", seqName);
+printf("<B>Start:</B> %s<BR>\n", item+1);
+printf("<B>Strand:</B> %c<BR>\n", item[0]);
+}
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -14348,6 +14360,8 @@ else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(t
     {
     doAffy(tdb, item, NULL);
     }
+else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
+    doOligoMatch(item);
 else if (sameWord(track, "refFullAli"))
     {
     doTSS(tdb, item);
