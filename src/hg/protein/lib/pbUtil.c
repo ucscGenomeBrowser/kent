@@ -160,14 +160,14 @@ conn= hAllocConn();
        
 */
 
-protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
-if (sameWord(protDbDate, ""))
+if (strstr(protDbName, "proteins") == NULL) 
     {
     safef(query, sizeof(query), "select val from %s.protein where acc='%s';", 
     	  UNIPROT_DB_NAME, pepAccession);
     }
 else
     {
+    protDbDate = strstr(protDbName, "proteins") + strlen("proteins");
     safef(query, sizeof(query), 
     "select val from sp%s.protein where acc='%s';", protDbDate, pepAccession);
     }
