@@ -17,5 +17,7 @@ CREATE TABLE genePredName (
     exonStarts longblob not null,	# Exon start positions
     exonEnds longblob not null,	# Exon end positions
               #Indices
-    PRIMARY KEY(geneName)
+    PRIMARY KEY(geneName(16)),
+    INDEX(chrom(12),txStart),
+    INDEX(chrom(12),txEnd)
 );
