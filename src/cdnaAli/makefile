@@ -11,3 +11,4 @@ all:
 	cd refineAli;make
 	cd stitchea;make
 	cd sortFilt;make
+	cd aliGlue;make
