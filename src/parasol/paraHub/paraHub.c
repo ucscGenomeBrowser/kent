@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.84 2005/02/23 18:49:26 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.85 2005/02/25 21:31:52 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -552,7 +552,7 @@ void removeMachine(char *name)
 {
 struct machine *mach;
 name = trimSpaces(name);
-if ((mach = findMachine(name)) != NULL)
+while ((mach = findMachine(name)) != NULL)
     {
     if (mach->job != NULL)
 	requeueJob(mach->job);
