@@ -1886,7 +1886,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
 # GC 5 BASE WIGGLE TRACK (DONE 7/7/04 angie)
     # put unmasked nibs in /iscratch for small cluster run.
-    ssk kkr1u00
+    ssh kkr1u00
     mkdir /iscratch/i/canFam1/
     cp -pR /cluster/data/canFam1/nib /iscratch/i/canFam1/
     iSync
@@ -2096,21 +2096,6 @@ set chr = "chr$c"
     #     unknownSplice - Number of introns with unknown splicing patterns 
     #          (considers the three most common splicing patterns as valid)
     #     causes - list of symbolic names summarizing the failures 
-
-
-# TWINSCAN FROM BRENT LAB (TODO 8/1/04 angie)
-    ssh hgwdev
-    mkdir /cluster/data/canFam1/bed/twinscan
-    cd /cluster/data/canFam1/bed/twinscan
-    wget http://www.cs.wustl.edu/????
-    tar xvzf ????
-    ldHgGene -gtf -frame -id -geneName canFam1 twinscan chr*.gtf
-    runGeneCheck .
-    wget http://www.cs.wustl.edu/????
-    tar xvzf ????
-    perl -wpe 's/^>(\S+)/>$1.a/' chr*.prot.fa > twinscanPep.fa
-    hgPepPred canFam1 generic twinscanPep twinscanPep.fa
-
 
 
 # ANDY LAW CPGISSLANDS (DONE 7/22/04 angie)
@@ -2460,7 +2445,7 @@ rm $tmpfile
     hgLoadBed canFam1 phastConsElements all.bed
 
     # Create wiggle on the small cluster
-    ssk kki
+    ssh kki
     mkdir /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.wib
     cd /cluster/data/canFam1/bed/multiz.canFam1hg17mm5/phastCons/run.wib
     rm -rf /cluster/bluearc/canFam1/phastCons/wib
@@ -2516,5 +2501,23 @@ zcat `ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS/$chr.*.pp.gz \
     # and clean up bluearc.
     rm -r /cluster/bluearc/canFam1/phastCons
     rm -r /cluster/bluearc/canFam1/chrom
+
+
+# TWINSCAN (DONE 11/9/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/canFam1/bed/twinscan
+    cd /cluster/data/canFam1/bed/twinscan
+    wget http://genes.cs.wustl.edu/predictions/dog/canFam1/canFam1_TS13_pseudomasked.tar.gz
+    tar xvzf canFam1_TS13_pseudomasked.tar.gz
+    # Add '.a' to end of protein fasta id's, to match gtf transcript_id's:
+    cp /dev/null twinscanPep.fa
+    perl -wpe 's/^(>\S+).*/$1.a/' chr_ptx/*.ptx > twinscanPep.fa
+    # load.
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/twinscan
+    ldHgGene -gtf -genePredExt canFam1 twinscan chr_gtf/chr*.gtf
+    hgPepPred canFam1 generic twinscanPep twinscanPep.fa
+    featureBits -enrichment canFam1 xenoRefGene twinscan
+#xenoRefGene 1.676%, twinscan 1.384%, both 1.030%, cover 61.42%, enrich 44.39x
 
 
