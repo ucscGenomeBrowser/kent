@@ -15,7 +15,7 @@
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.8 2003/08/13 23:11:04 baertsch Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.9 2003/08/14 00:10:34 baertsch Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct rbTree *netTree = NULL;
 static struct optionSpec optionSpecs[] = 
@@ -703,7 +703,6 @@ if(workingChain == NULL)
 if ((chain->qStrand == '-'))
     reverse = TRUE;
 agNew = altGraphXClone(ag);
-errAbort("altGraphX not supported\n");
 freez(&agNew->tName);
 agNew->tName = cloneString(chain->qName);
 /* Map vertex positions using chain. */
