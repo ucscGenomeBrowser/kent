@@ -32,7 +32,7 @@
 #include "tableDescriptions.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.110 2004/02/18 00:03:31 donnak Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.111 2004/02/28 18:31:32 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -665,11 +665,10 @@ puts("<P>This tool allows you to download portions of the Genome Browser \n"
 puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "User Guide</A> for more information.<P>\n");
 
-cgiMakeHiddenVar("org", organism);
-
 puts("<center>");
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\"\">\n",
        hgTextName(), httpFormMethod);
+cgiMakeHiddenVar("org", organism);
 puts(
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
@@ -688,6 +687,7 @@ puts(
 "<table><tr>\n"
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
+"</tr>"
 );
 
 puts("<tr><td align=center>\n");
@@ -856,23 +856,43 @@ void pasteForm()
 webStart(cart, "Table Browser: Paste in Names/Accessions for Batch Query");
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#PasteNames\">"
      "<B>Help</B></A>");
-puts("<P> Please paste in a list of names/accessions to match.  These may include "
-       "* and ? wildcard characters.");
+if (tableIsPositional)
+    {
+    puts("<P> Please paste in a list of names/accessions to match.  "
+	 "These may include * and ? wildcard characters.");
+    puts("<BR>Note: name/accession matching is not supported for "
+	 "non-positional tables.");
+    }
+else
+    {
+    puts("<P>Sorry, pasting in names/accessions is not supported for "
+	 "non-positional tables.  (You can paste values into the "
+	 "filter box of the field you would like to filter on the "
+	 "Advanced Query page.)");
+    }
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\">", hgTextName(), httpFormMethod);
 cgiContinueHiddenVar("org");
 cgiContinueHiddenVar("db");
 cgiMakeHiddenVar("position", "genome");
 cgiMakeHiddenVar("table", getTableVar());
 cgiMakeHiddenVar("phase", chooseTablePhase);
-cgiMakeHiddenVar("tbPosOrKeys", "keys");
+if (tableIsPositional)
+    cgiMakeHiddenVar("tbPosOrKeys", "keys");
 cgiContinueHiddenVar("tbTrack");
 cgiContinueHiddenVar("tbCustomTrack");
 cgiContinueHiddenVar("table0");
 cgiContinueHiddenVar("table1");
-puts("<TEXTAREA NAME=tbUserKeys ROWS=10 COLS=80></TEXTAREA><BR>\n");
-puts("<CENTER>");
-puts(" <INPUT TYPE=SUBMIT Name=tbShowPasteResults VALUE=\"Submit\"><P>\n");
-puts("</CENTER>");
+if (tableIsPositional)
+    {
+    puts("<TEXTAREA NAME=tbUserKeys ROWS=10 COLS=80></TEXTAREA><BR>\n");
+    puts("<CENTER>");
+    puts(" <INPUT TYPE=SUBMIT Name=tbShowPasteResults VALUE=\"Submit\"><P>\n");
+    puts("</CENTER>");
+    }
+else
+    {
+    puts("<P><INPUT TYPE=SUBMIT Name=submit VALUE=\"Back\"><P>\n");
+    }
 cartSaveSession(cart);
 printf("</FORM>\n");
 webEnd();
@@ -891,16 +911,30 @@ cgiContinueHiddenVar("db");
 cgiMakeHiddenVar("position", "genome");
 cgiMakeHiddenVar("table", getTableVar());
 cgiMakeHiddenVar("phase", chooseTablePhase);
-cgiMakeHiddenVar("tbPosOrKeys", "keys");
+if (tableIsPositional)
+    cgiMakeHiddenVar("tbPosOrKeys", "keys");
 cgiContinueHiddenVar("tbTrack");
 cgiContinueHiddenVar("tbCustomTrack");
 cgiContinueHiddenVar("table0");
 cgiContinueHiddenVar("table1");
-puts("Please enter the name of a file in your computer containing a space, tab, or ");
-puts("line separated list of the accessions/names you want to look up in the database.");
-puts("Unlike in the paste option, wildcards don't work in this list.<BR>");
-puts("Upload sequence: <INPUT TYPE=FILE NAME=\"tbUserKeys\">");
-puts("<INPUT TYPE=SUBMIT Name=tbShowUploadResults VALUE=\"Submit File\"><P>\n");
+if (tableIsPositional)
+    {
+    puts("Please enter the name of a file in your computer containing a space, tab, or ");
+    puts("line separated list of the accessions/names you want to look up in the database.");
+    puts("Unlike in the paste option, wildcards don't work in this list.");
+    puts("<BR>Note: name/accession matching is not supported for non-positional "
+	 "tables.");
+    puts("<P>Upload sequence: <INPUT TYPE=FILE NAME=\"tbUserKeys\">");
+    puts("<INPUT TYPE=SUBMIT Name=tbShowUploadResults VALUE=\"Submit File\"><P>\n");
+    }
+else
+    {
+    puts("<P>Sorry, uploading names/accessions is not supported for "
+	 "non-positional tables.  (You can paste values into the "
+	 "filter box of the field you would like to filter on the "
+	 "Advanced Query page.)");
+    puts("<P><INPUT TYPE=SUBMIT Name=submit VALUE=\"Back\"><P>\n");
+    }
 cartSaveSession(cart);
 puts("</FORM>\n");
 webEnd();
@@ -1113,6 +1147,8 @@ if (keyStr != NULL)
     printFirstNWords(keyStr, 3, " ");
     puts("</TT>");
     }
+puts("<BR>Note: position and item name/accession lists are not applied "
+     "to non-positional tables.");
 
 puts("<P> Choose an action: <BR>");
 cgiMakeButton("phase", oldAllFieldsPhase);
