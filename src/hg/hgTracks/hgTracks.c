@@ -10642,7 +10642,7 @@ if (!hideControls)
     if( chromosomeColorsMade )
         {
         hPrintf("<B>Chromosome Color Key:</B><BR> ");
-        hPrintf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=610 HEIGHT=19 ><BR>\n");
+        hPrintf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=551 HEIGHT=18 ><BR>\n");
         }
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     hPrintf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
