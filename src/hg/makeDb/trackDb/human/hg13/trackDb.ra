@@ -21,7 +21,7 @@ type genePred
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
 track slamMouse
-shortLabel Slam Mouse
+shortLabel SLAM Mouse
 longLabel SLAM gene predictions using human/mouse homology
 group genes
 priority 45.5
@@ -31,7 +31,7 @@ altColor 175,150,128
 type genePred 
 
 track slamRat
-shortLabel Slam Rat
+shortLabel SLAM Rat
 longLabel SLAM gene predictions using human/rat homology
 group genes
 priority 45.6
@@ -50,7 +50,7 @@ color 0,90,100
 type genePred sgpPep
 
 track slamNonCodingMouse
-shortLabel Slam Non Coding Mouse
+shortLabel SLAM Non Coding Mouse
 longLabel SLAM predictions of human/mouse conserved non-coding regions
 group compGeno
 priority 120
@@ -61,7 +61,7 @@ spectrum on
 type bed 5 
 
 track slamNonCodingRat
-shortLabel Slam Non Coding Rat
+shortLabel SLAM Non Coding Rat
 longLabel SLAM predictions of human/rat conserved non-coding regions
 group compGeno
 priority 121
@@ -71,9 +71,19 @@ altColor 200,220,255
 spectrum on
 type bed 5
 
+track humMusL
+shortLabel Mouse Cons
+longLabel Human/Mouse Evolutionary Conservation Score (std units)
+group compGeno
+color 175,150,128
+altColor 175,150,128
+priority 125.5
+visibility full
+type sample 0 8
+
 track syntenyMouse
 shortLabel Mouse Synteny
-longLabel Human/Mouse Synteny using blastz single coverage (100k window)
+longLabel Human/Mouse Synteny using BLASTZ single coverage (100k window)
 group compGeno
 priority 138
 visibility hide
@@ -83,7 +93,7 @@ type bed 4 .
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny using blastz single coverage (100k window)
+longLabel $Organism/Rat Synteny using BLASTZ single coverage (100k window)
 group compGeno
 priority 140.5
 visibility hide
@@ -92,8 +102,8 @@ altColor 255,240,200
 type bed 4 +
 
 track blastzMm
-shortLabel Blastz Mouse
-longLabel All Blastz Mouse(Feb03) Alignments
+shortLabel BLASTZ Mouse
+longLabel All BLASTZ Mouse (Feb. 03) Alignments
 group compGeno
 priority 130
 visibility hide
@@ -104,7 +114,7 @@ type psl xeno mm3
 
 track axtBestMm3
 shortLabel Human/Mouse
-longLabel Blastz Score Based Mouse/Human Wiggle Track
+longLabel BLASTZ Score Based Mouse/Human Wiggle Track
 group compGeno
 priority 125.99
 visibility full
@@ -114,7 +124,7 @@ type axt mm3
 
 track blastzBestMouse
 shortLabel Best Mouse
-longLabel Blastz Mouse(Feb03) Best in Genome Alignments
+longLabel BLASTZ Mouse (Feb. 03) Best in Genome Alignments
 group compGeno
 priority 126
 visibility hide
@@ -125,7 +135,7 @@ type psl xeno mm3
 
 track blastzTightMouse
 shortLabel Tight Mouse
-longLabel Blastz Mouse(Feb03), Tight Subset of Best Alignments
+longLabel BLASTZ Mouse (Feb. 03), Tight Subset of Best Alignments
 group compGeno
 priority 123
 visibility hide
@@ -136,7 +146,7 @@ type psl xeno mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel Chained Blastz Mouse/$Organism Alignments
+longLabel Chained BLASTZ Mouse/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -155,8 +165,8 @@ spectrum on
 type netAlign mm3 mouseChain
 
 track blastzRn1
-shortLabel Blastz Rat
-longLabel Merged Blastz Rat(Nov02) Alignments
+shortLabel BLASTZ Rat
+longLabel Merged BLASTZ Rat (Nov. 02) Alignments
 group compGeno
 priority 142
 visibility hide
@@ -167,7 +177,7 @@ type psl xeno rn1
 
 track blastzBestRat
 shortLabel Best Rat 
-longLabel Blastz Rat(Nov02) Best in Genome Alignments
+longLabel BLASTZ Rat (Nov. 02) Best in Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -178,7 +188,7 @@ type psl xeno rn1
 
 track blastzTightRat
 shortLabel Tight Rat 
-longLabel Blastz Rat(Nov02), Tight Subset of Best Alignments
+longLabel BLASTZ Rat (Nov. 02), Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -189,7 +199,7 @@ type psl xeno rn1
 
 track humanChain
 shortLabel Human Chain 
-longLabel Chained Blastz Human/Human Alignments
+longLabel Chained BLASTZ Human/Human Alignments
 group varRep
 priority 145.1
 visibility hide
@@ -200,7 +210,7 @@ type chain hg13
 
 track humanChainNew
 shortLabel Human Chain 2
-longLabel Chained Blastz Human/Human Alignments new self alignment
+longLabel Chained BLASTZ Human/Human Alignments new self alignment
 group varRep
 priority 145.11
 visibility hide
@@ -210,8 +220,8 @@ spectrum on
 type chain hg13
 
 track blastzHuman
-shortLabel Blastz Human
-longLabel Merged Blastz Human(Self) Alignments
+shortLabel BLASTZ Human
+longLabel Merged BLASTZ Human(Self) Alignments
 group varRep
 priority 145.2
 visibility hide
@@ -222,7 +232,7 @@ type psl xeno hg13
 
 track blastzBestHuman_old
 shortLabel Best Human old
-longLabel old Blastz Human(Self) Best in Genome Alignments
+longLabel Old BLASTZ Human(Self) Best in Genome Alignments
 group varRep
 priority 145.31
 visibility hide
@@ -233,7 +243,7 @@ type psl xeno hg13
 
 track blastzBestHuman
 shortLabel Best Human 
-longLabel Blastz Human(Self) Best in Genome Alignments
+longLabel BLASTZ Human(Self) Best in Genome Alignments
 group varRep
 priority 145.32
 visibility hide
@@ -244,7 +254,7 @@ type psl xeno hg13
 
 track blastzTightHuman
 shortLabel Tight Human 
-longLabel Blastz Human(Self), Tight Subset of Best Alignments
+longLabel BLASTZ Human(Self), Tight Subset of Best Alignments
 group varRep
 priority 145.4
 visibility hide
@@ -255,7 +265,7 @@ type psl xeno hg13
 
 track aarMm2
 shortLabel Ancient Repeats
-longLabel Aligned Human/Mouse(Feb02) Ancient Repeats
+longLabel Aligned Human/Mouse (Feb. 02) Ancient Repeats
 group x
 priority 159
 visibility hide
@@ -274,8 +284,8 @@ spectrum on
 type bed 12 
 
 track blatChimp
-shortLabel Chimp Blat
-longLabel Pan troglodytes Blat Alignments
+shortLabel Chimp BLAT
+longLabel Pan troglodytes BLAT Alignments
 group compGeno
 priority 141.3
 visibility hide
@@ -299,7 +309,7 @@ url http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/gp_F14Nov0
 
 track humanChain
 shortLabel Human Chain 
-longLabel Chained Blastz Human/$Organism Alignments
+longLabel Chained BLASTZ Human/$Organism Alignments
 group varRep
 priority 146
 visibility hide
