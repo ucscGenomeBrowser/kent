@@ -132,10 +132,10 @@ row[11] = "";
 row[12] = "";
 }
 
-boolean isChromName(char *word)
+static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word);
+return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word);
 }
 
 static boolean checkChromName(char *word, int lineIx)
@@ -455,6 +455,40 @@ for (group = gff->groupList; group != NULL; group = group->next)
 return bedList;
 }
 
+boolean customTrackNeedsLift(struct customTrack *trackList)
+/* Return TRUE if any track in list needs a lift. */
+{
+struct customTrack *track;
+for (track = trackList; track != NULL; track = track->next)
+    if (track->needsLift)
+        return TRUE;
+return FALSE;
+}
+
+void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash)
+/* Lift tracks based on hash of ctgPos. */
+{
+struct hash *chromHash = newHash(8);
+struct customTrack *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    struct bed *bed;
+    for (bed = track->bedList; bed != NULL; bed = bed->next)
+        {
+	struct ctgPos *ctg = hashFindVal(ctgPosHash, bed->chrom);
+	if (ctg != NULL)
+	    {
+	    bed->chrom = hashStoreName(chromHash, ctg->chrom);
+	    bed->chromStart += ctg->chromStart;
+	    bed->chromEnd += ctg->chromStart;
+	    }
+	}
+    track->needsLift = FALSE;
+    }
+}
+
+
+
 struct customTrack *customTracksParse(char *text, boolean isFile,
 	struct slName **retBrowserLines)
 /* Parse text into a custom set of tracks.  Text parameter is a
@@ -609,39 +643,6 @@ if (retBrowserLines != NULL)
     slReverse(retBrowserLines);
 return trackList;
 }
-
-boolean customTrackNeedsLift(struct customTrack *trackList)
-/* Return TRUE if any track in list needs a lift. */
-{
-struct customTrack *track;
-for (track = trackList; track != NULL; track = track->next)
-    if (track->needsLift)
-        return TRUE;
-return FALSE;
-}
-
-void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash)
-/* Lift tracks based on hash of ctgPos. */
-{
-struct hash *chromHash = newHash(8);
-struct customTrack *track;
-for (track = trackList; track != NULL; track = track->next)
-    {
-    struct bed *bed;
-    for (bed = track->bedList; bed != NULL; bed = bed->next)
-        {
-	struct ctgPos *ctg = hashFindVal(ctgPosHash, bed->chrom);
-	if (ctg != NULL)
-	    {
-	    bed->chrom = hashStoreName(chromHash, ctg->chrom);
-	    bed->chromStart += ctg->chromStart;
-	    bed->chromEnd += ctg->chromStart;
-	    }
-	}
-    track->needsLift = FALSE;
-    }
-}
-
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */
 {
