@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.69 2003/12/08 18:32:52 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.70 2004/02/17 23:59:53 donnak Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -68,22 +68,8 @@ puts(
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD><FONT SIZE=\"2\">\n"
 "<CENTER>\n"
-"UCSC Genome Browser created by\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~kent\">Jim Kent</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~baertsch\">Robert Baertsch</A>,\n"
-"<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
-"<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
-"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
-"<A HREF=\"mailto:hiram@soe.ucsc.edu\">Hiram Clawson</A>,\n"
-"<A HREF=\"mailto:kate@soe.ucsc.edu\">Kate Rosenbloom</A>,\n"
-"<A HREF=\"mailto:braney@soe.ucsc.edu\">Brian Raney</A>,\n"
-"<A HREF=\"mailto:kuhn@soe.ucsc.edu\">Robert Kuhn</A>,\n"
-"<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
-"<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
-"and the\n" 
-"Genome Bioinformatics Group of UC Santa Cruz.\n"
+"The UCSC Genome Browser was created by the \n"
+"<A HREF=\"/staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
 "<BR>"
 "Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
