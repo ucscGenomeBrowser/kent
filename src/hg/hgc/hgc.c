@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.681 2004/07/08 01:58:49 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.682 2004/07/08 02:52:44 acs Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1533,7 +1533,11 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo"))
+if (hTableExists("axtInfo")
+    && !sameString(tdb->tableName, "exoniphy") 
+    /* FIXME: remove this line when htcGenePsl is fixed so that it
+       uses frame when available */
+    )
     {
     puts("<LI>\n");
     hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
