@@ -30,8 +30,8 @@ O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     lfs.o liftUp.o llaInfo.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
-    recombRate.o refLink.o refSeqStatus.o riken.o rikenBest.o \
-    rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
+    recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
+    riken.o rikenBest.o rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o \
     sanger22extra.o scopDes.o scoredRef.o sgdAbundance.o sgdClone.o \
     sgdDescription.o sgdOther.o simpleRepeat.o snp.o \
