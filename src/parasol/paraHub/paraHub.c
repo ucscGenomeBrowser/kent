@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.79 2004/09/30 01:40:34 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.1 2005/01/06 02:49:14 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -170,6 +170,24 @@ unqueuedUsers = newDlList();
 userHash = newHash(6);
 }
 
+void updateUserMaxNode(struct user *user)
+/* Update user maxNode. >=0 only if all batches have >=0 maxNode values */
+{
+struct dlNode *node;
+struct batch *batch;
+boolean unlimited = FALSE;
+user->maxNode = 0;
+for (node = user->curBatches->head; !dlEnd(node); node = node->next)
+    {
+    batch = node->val;
+    if (batch->maxNode >= 0)
+	user->maxNode += batch->maxNode;
+    else
+	unlimited = TRUE;
+    }
+if (unlimited) user->maxNode = -1;    
+}
+
 void updateUserPriority(struct user *user)
 /* Update user priority. Equals minimum of current batch priorities */
 {
@@ -210,6 +228,7 @@ batch->name = nameString;
 batch->user = user;
 batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
+batch->maxNode = -1;
 return batch;
 }
 
@@ -232,6 +251,7 @@ if (batch == NULL)
     else
 	dlAddTail(user->curBatches, batch->node);
     updateUserPriority(user);
+    updateUserMaxNode (user);
     }
 return batch;
 }
@@ -281,10 +301,13 @@ struct dlNode *node;
 for (node = queuedUsers->head; !dlEnd(node); node = node->next)
     {
     struct user *user = node->val;
-    if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
-        {
-	minCount = user->runningCount * user->priority;
-	minUser = user;
+    if ((user->maxNode==-1) || (user->runningCount<user->maxNode))
+	{
+	if (!dlEmpty(user->curBatches) && ((user->runningCount+1) * user->priority) < minCount)
+	    {
+	    minCount = user->runningCount * user->priority;
+	    minUser = user;
+	    }
 	}
     }
 return minUser;
@@ -299,10 +322,13 @@ struct dlNode *node;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     struct batch *batch = node->val;
-    if (((batch->runningCount+1) * batch->priority) < minCount)
-        {
-	minCount = batch->runningCount * batch->priority;
-	minBatch = batch;
+    if ((batch->maxNode==-1) || (batch->runningCount<batch->maxNode))
+	{
+	if (((batch->runningCount+1) * batch->priority) < minCount)
+	    {
+	    minCount = batch->runningCount * batch->priority;
+	    minBatch = batch;
+	    }
 	}
     }
 return minBatch;
@@ -319,6 +345,7 @@ if (dlEmpty(batch->jobQueue))
     dlRemove(batch->node);
     dlAddTail(user->oldBatches, batch->node);
     updateUserPriority(batch->user);
+    updateUserMaxNode (batch->user);
     /* Check if it's last user batch and if so take them off queue */
     if (dlEmpty(user->curBatches))
 	{
@@ -517,6 +544,7 @@ dlAddHead(user->curBatches, batch->node);
 dlRemove(user->node);
 dlAddHead(queuedUsers, user->node);
 updateUserPriority(user);
+updateUserMaxNode (user);
 }
 
 void removeMachine(char *name)
@@ -1106,6 +1134,49 @@ pmSend(pm, rudpOut);
 runner(1);
 }
 
+int setMaxNode(char *userName, char *dir, int maxNode)
+/* Set new maxNode for batch */
+{
+struct user *user = findUser(userName);
+struct batch *batch = findBatch(user, dir, TRUE);
+if (user == NULL) return 0;
+if (batch == NULL) return 0;
+batch->maxNode = maxNode;
+updateUserMaxNode(user);
+if (maxNode>=-1)
+    logInfo("paraHub: User %s set maxNode=%d for batch %s", userName, maxNode, dir);
+return maxNode;
+}
+
+
+int setMaxNodeFromMessage(char *line)
+/* Parse out setMaxNode message and set new maxNode for batch, update user-maxNode. */
+{
+char *userName, *dir;
+int maxNode;
+
+if ((userName = nextWord(&line)) == NULL)
+    return 0;
+if ((dir = nextWord(&line)) == NULL)
+    return 0;
+if ((maxNode = atoi(nextWord(&line))) < 1)
+    return 0;
+return setMaxNode(userName, dir, maxNode);
+}
+
+
+void setMaxNodeAcknowledge(char *line, struct paraMessage *pm)
+/* Set batch maxNode.  Line format is <user> <dir> <maxNode>
+* Returns new maxNode or 0 if a problem.  Send new maxNode back to client. */
+{
+int id = setMaxNodeFromMessage(line);
+pmClear(pm);
+pmPrintf(pm, "%d", id);
+pmSend(pm, rudpOut);
+}
+
+
+
 int setPriority(char *userName, char *dir, int priority)
 /* Set new priority for batch */
 {
@@ -1254,6 +1325,7 @@ if (batchName != NULL)
 	    dlRemove(batch->node);
 	    dlAddTail(user->oldBatches, batch->node);
 	    updateUserPriority(user);
+	    updateUserMaxNode (user);
 	    }
 	res = "ok";
 	}
@@ -1345,9 +1417,10 @@ for (user = userList; user != NULL; user = user->next)
     pmPrintf(pm, "%s ", user->name);
     pmPrintf(pm, 
     	"%d jobs running, %d waiting, %d finished, %d of %d batches active"
-    	", priority=%d", 
+    	", priority=%d"
+    	", maxNode=%d", 
 	user->runningCount,  userQueuedCount(user), user->doneCount,
-	countUserActiveBatches(user), totalBatch, user->priority);
+	countUserActiveBatches(user), totalBatch, user->priority, user->maxNode);
     pmSend(pm, rudpOut);
     }
 pmSendString(pm, rudpOut, "");
@@ -1359,10 +1432,10 @@ void writeOneBatchInfo(struct paraMessage *pm, struct user *user, struct batch *
 char shortBatchName[512];
 splitPath(batch->name, shortBatchName, NULL, NULL);
 pmClear(pm);
-pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %s",
+pmPrintf(pm, "%-8s %4d %6d %6d %5d %3d %3d %s",
 	user->name, batch->runningCount, 
 	dlCount(batch->jobQueue), batch->doneCount,
-	batch->crashCount, batch->priority, shortBatchName);
+	batch->crashCount, batch->priority, batch->maxNode, shortBatchName);
 pmSend(pm, rudpOut);
 }
 
@@ -2052,6 +2125,8 @@ for (;;)
 	 processHeartbeat();
     else if (sameWord(command, "setPriority"))
 	 setPriorityAcknowledge(line, pm);
+    else if (sameWord(command, "setMaxNode"))
+	 setMaxNodeAcknowledge(line, pm);
     else if (sameWord(command, "addJob"))
 	 addJobAcknowledge(line, pm);
     else if (sameWord(command, "nodeDown"))
