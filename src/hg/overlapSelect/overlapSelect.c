@@ -302,7 +302,7 @@ ioFiles.outFh = mustOpen(outFile, "w");
 if (dropFile != NULL)
     ioFiles.dropFh = mustOpen(dropFile, "w");
 if (statsOutput)
-    fputs("#selectId\t" "inId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
+    fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
 
 switch (inFmt)
     {

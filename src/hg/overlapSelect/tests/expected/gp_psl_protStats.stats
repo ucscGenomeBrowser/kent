@@ -1,4 +1,4 @@
-#selectId	inId	inOverlap	selectOverlap
+#inId	selectId	inOverlap	selectOverlap
 O60289	NM_001007467	0.991	0.965
 O60289	NM_014775	0.991	0.99
 Q5W1B5	NM_001007467	0.992	0.965

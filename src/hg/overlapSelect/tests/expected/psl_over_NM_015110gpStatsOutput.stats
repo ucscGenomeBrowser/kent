@@ -1,4 +1,4 @@
-#selectId	inId	inOverlap	selectOverlap
+#inId	selectId	inOverlap	selectOverlap
 BC038225	NM_015110	1	1
 BC017666	NM_015110	1	0.829
 AB011166	NM_015110	0.584	0.991
