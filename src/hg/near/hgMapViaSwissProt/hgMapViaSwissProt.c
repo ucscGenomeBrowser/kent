@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.2 2004/04/16 06:39:45 kent Exp $";
+static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.3 2005/02/15 17:56:09 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,7 +56,7 @@ void hgMapViaSwissProt(char *database, char *inTable,
  * via SwissProt. */
 {
 struct sqlConnection *dbConn = sqlConnect(database);
-struct sqlConnection *spConn = sqlConnect("swissProt");
+struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
 char geneQuery[256], query[256];
 struct sqlResult *geneSr, *sr;
 char **geneRow, **row;
