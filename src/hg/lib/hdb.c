@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.133 2003/08/28 04:53:22 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.134 2003/09/03 21:57:10 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1403,6 +1403,14 @@ char *hScientificName(char *database)
 /* NOTE: must free returned string after use */
 {
 return hDbDbOptionalField(database, "scientificName");
+}
+
+char *hHtmlPath(char *database)
+/* Return /gbdb path name to html description for this database */
+/* Return NULL if unknown database */
+/* NOTE: must free returned string after use */
+{
+return hDbDbOptionalField(database, "htmlPath");
 }
 
 char *hFreezeDate(char *database)

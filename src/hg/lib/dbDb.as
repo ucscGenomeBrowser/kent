@@ -10,4 +10,5 @@ table dbDb
     int orderKey;     "Int used to control display order within a genome"
     string genome;    "Unifying genome collection to which an assembly belongs"
     string scientificName;  "Genus and species of the organism; e.g. Homo sapiens"
+    string htmlPath;  "path in /gbdb for assembly description"
     )
