@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.51 2003/09/20 01:37:04 braney Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.52 2003/09/25 03:01:03 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -596,6 +596,16 @@ void cgiMakeButton(char *name, char *value)
 {
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
 }
+
+void cgiMakeOptionalButton(char *name, char *value, boolean disabled)
+/* Make 'submit' type button that can be disabled. */
+{
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", name, value);
+if (disabled)
+    printf(" DISABLED");
+printf(">"); 
+}
+
 
 void cgiMakeRadioButton(char *name, char *value, boolean checked)
 /* Make radio type button.  A group of radio buttons should have the
