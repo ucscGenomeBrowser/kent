@@ -156,14 +156,23 @@ void wiggleUi(struct trackDb *tdb)
 {
 int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
 char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "anti.alias", "on");
+char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
+char *fill = cartUsualString(cart, "wiggle.fill", "0");
+
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("linear.interp", interpolate );
 printf(" ");
 printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("anti.alias", "on", sameString(aa, "on"));
+cgiMakeRadioButton("wiggle.anti.alias", "on", sameString(aa, "on"));
 printf(" on ");
-cgiMakeRadioButton("anti.alias", "off", sameString(aa, "off"));
+cgiMakeRadioButton("wiggle.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("wiggle.fill", "1", sameString(fill, "1"));
+printf(" on ");
+cgiMakeRadioButton("wiggle.fill", "0", sameString(fill, "0"));
 printf(" off ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
