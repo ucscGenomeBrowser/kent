@@ -13,6 +13,7 @@
 
 #include "common.h"
 #include "dystring.h"
+#include "cheapcgi.h"
 #include "cart.h"
 #include "hgTables.h"
 
@@ -90,6 +91,7 @@ void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal)
 /* Make a check box filling in with existing value and
  * putting a javascript tracking variable on it. */
 {
+char buf[256];
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
 hPrintf("<SCRIPT>var %s=%d;</SCRIPT>\n", jsVar, oldVal);
 hPrintf("<INPUT TYPE=CHECKBOX NAME=%s VALUE=1", cgiVar);
@@ -97,6 +99,8 @@ if (oldVal)
     hPrintf(" CHECKED");
 hPrintf(" onClick=\"%s=%d;\"", jsVar, !oldVal);
 hPrintf(">");
+sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), cgiVar);
+cgiMakeHiddenVar(buf, "1");
 }
 
 void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar)

@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.18 2004/11/19 20:59:49 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.19 2004/11/21 17:44:53 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -188,6 +188,8 @@ for (i=0; i<count; ++i)
 void doIntersectPage(struct sqlConnection *conn)
 /* Respond to intersect create/edit button */
 {
+if (ArraySize(curVars) != ArraySize(nextVars))
+    internalErr();
 copyCartVars(cart, curVars, nextVars, ArraySize(curVars));
 doIntersectMore(conn);
 }
@@ -195,7 +197,7 @@ doIntersectMore(conn);
 void doClearIntersect(struct sqlConnection *conn)
 /* Respond to click on clear intersection. */
 {
-removeCartVars(cart, curVars, ArraySize(nextVars));
+removeCartVars(cart, curVars, ArraySize(curVars));
 doMainPage(conn);
 }
 
