@@ -4350,12 +4350,20 @@ if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
     printf("View details of parts of alignment within browser window.</A><BR>\n");
     }
+
+if (containsStringNoCase(otherDb, "zoo"))
+    {
+    printf("<P><A HREF='/cgi-bin/hgTracks?db=%s'>Go to the mini browser for the aligned %s sequence</A><BR>\n", otherDb, otherOrg);
+    }
+
 printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
 /* 
  Multipurpose function to show alignments in details pages where applicable
+Show the URL from trackDb as well. 
+Only used for the Chimp tracks right now.
  */
 void longXenoPsl1Chimp(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable, char *otherDb)
