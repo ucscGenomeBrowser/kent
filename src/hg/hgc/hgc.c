@@ -147,8 +147,9 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 #include "pscreen.h"
+#include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.764 2004/10/08 00:07:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.765 2004/10/08 17:18:09 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -338,6 +339,15 @@ if (dbList != NULL)
 	   winEnd, other, cgiEncode(aiList->alignment), db2, tag);
     dbDbFreeList(&dbList);
     }
+}
+
+void hgcAnchorJalview(char *item, char *fa)
+/* Generate an anchor to htcGenePsl. */
+{
+struct dyString *dy = cgiUrlString();
+    printf("<A HREF=\"%s?%s&jalview=YES\">",
+	    hgcPath(), dy->string);
+    dyStringFree(&dy);
 }
 
 void hgcAnchorTranslatedChain(int item, char *other, char *chrom, int cdsStart, int cdsEnd)
@@ -1096,8 +1106,16 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 /* look for start codon and color it green*/
                 if ((tPtr >= (tStart)) && (tPtr <=(tStart+2)))
                     {
-                    tClass=STARTCODON;
-                    qClass=STARTCODON;
+                    if (gp->exonFrames != NULL && gp->cdsStartStat == cdsComplete)
+                        {
+                        tClass=STARTCODON;
+                        qClass=STARTCODON;
+                        }
+                    else if(tClass != CODINGB)
+                        {
+                        tClass=CODINGA;
+                        qClass=CODINGA;
+                        }
                     tCoding=TRUE;
                     qCoding=TRUE;
                     if (tPtr == tStart) 
@@ -1112,8 +1130,11 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 /* look for stop codon and color it red */
                 if ((tPtr >= tEnd) && (tPtr <= (tEnd+2)))
                     {
-                    tClass=STOPCODON;
-                    qClass=STOPCODON;
+                    if (gp->exonFrames != NULL && gp->cdsEndStat == cdsComplete)
+                        {
+                        tClass=STOPCODON;
+                        qClass=STOPCODON;
+                        }
                     tCoding=FALSE;
                     qCoding=FALSE;
                     }
@@ -1123,8 +1144,16 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 /* look for start codon and color it green negative strand case*/
                 if ((tPtr <= (tStart)) && (tPtr >=(tStart-2)))
                     {
-                    tClass=STARTCODON;
-                    qClass=STARTCODON;
+                    if (gp->exonFrames != NULL && gp->cdsStartStat == cdsComplete)
+                        {
+                        tClass=STARTCODON;
+                        qClass=STARTCODON;
+                        }
+                    else if (tClass!=CODINGB)
+                        {
+                        tClass=CODINGA;
+                        qClass=CODINGA;
+                        }
                     tCoding=TRUE;
                     qCoding=TRUE;
                     if (tPtr == tStart) 
@@ -1139,8 +1168,11 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 /* look for stop codon and color it red - negative strand*/
                 if ((tPtr <= tEnd+3) && (tPtr >= (tEnd+1)))
                     {
-                    tClass=STOPCODON;
-                    qClass=STOPCODON;
+                    if (gp->exonFrames != NULL && gp->cdsEndStat == cdsComplete)
+                        {
+                        tClass=STOPCODON;
+                        qClass=STOPCODON;
+                        }
                     tCoding=FALSE;
                     qCoding=FALSE;
                     }
@@ -1317,13 +1349,13 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         dyStringAppendC(dyTprot,'\n');
 
         // debug version
-        /*   if (posStrand)
+           if (posStrand)
            printf(" %d nextExon=%d-%d xon %d t %d prevEnd %d diffs %d %d<br>",qPtr, nextStart+1,nextEnd,nextEndIndex+1, tPtr,prevEnd, tPtr-nextStart-70, tPtr-(prevEnd+70));
            else
            printf(" %d nextExon=%d-%d xon %d t %d prevEnd %d diffs %d %d<br>",qPtr, nextStart+1,nextEnd,nextEndIndex, tPtr, prevEnd, tPtr-nextStart-70, tPtr-(prevEnd+70));
-           */
+           
         /* write out alignment, unless we are deep inside an intron */
-        if (tClass != INTRON || (tClass == INTRON && tPtr < nextStart-LINESIZE && tPtr< (prevEnd + LINESIZE)))
+        if (tClass != INTRON || (tClass == INTRON && tPtr < nextStart-LINESIZE && tPtr< (prevEnd + posStrand ? LINESIZE : -LINESIZE)))
             {
             intronTruncated = 0;
             fputs(dyTprot->string,f);
@@ -3900,6 +3932,42 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 hFreeConn(&conn);
 return pslList;
+}
+
+void getSequenceInRange(struct dnaSeq **seqList, struct hash *hash, char *table, char *type, char *tName, int tStart, int tEnd)
+/* Load a list of fasta sequences given tName tStart tEnd */
+{
+struct sqlResult *sr = NULL;
+char **row;
+struct psl *psl = NULL, *pslList = NULL;
+boolean hasBin;
+char splitTable[64];
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq = NULL;
+
+hFindSplitTable(seqName, table, splitTable, &hasBin);
+safef(query, sizeof(query), "select qName from %s where tName = '%s' and tEnd > %d and tStart < %d", splitTable, tName, tStart, tEnd);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *acc = cloneString(row[0]);
+    struct dnaSeq *seq = hGenBankGetMrna(acc, NULL);
+    verbose(9,"%s %s %d<br>\n",acc, tName, tStart);
+    if (seq != NULL)
+        {
+        if (hashLookup(hash, acc) == NULL)
+            {
+            int len = strlen(seq->name);
+            seq->name [len-1] = type[0];
+            hashAdd(hash, acc, NULL);
+            slAddHead(seqList, seq);
+            }
+        }
+    }
+sqlFreeResult(&sr);
+slReverse(seqList);
+hFreeConn(&conn);
 }
 
 void doHgRna(struct trackDb *tdb, char *acc)
@@ -7618,6 +7686,7 @@ struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = hAllocConn();
 int first = 0;
+char *jal = cgiOptionalString("jalview");
 
 safef(chainTable,sizeof(chainTable), "selfChain");
 if (!hTableExists(chainTable) )
@@ -7741,11 +7810,43 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
 if (hTableExists("all_mrna"))
     {
     struct psl *pslList = loadPslRangeT("all_mrna", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
+    struct dnaSeq *seqList = NULL, *seq;
+    struct tempName faTn, alnTn;
+    char clustal[512];
+    int ret ;
+    struct hash *faHash = hashNew(0);
+    char inPath[512];
+
+    /* create fasta file for multiple alignment and viewing with jalview */
+    makeTempName(&faTn, "fasta", ".fa");
+    makeTempName(&alnTn, "clustal", ".aln");
+    getSequenceInRange(&seqList , faHash, "all_mrna", "Retro", \
+            pg->chrom, pg->chromStart, pg->chromEnd);
+    getSequenceInRange(&seqList , faHash, "all_mrna", "Parent", \
+            pg->gChrom, pg->gStart, pg->gEnd);
+    faWriteAll(faTn.forCgi, seqList);
+    /* either display a link to jalview or call it */
+    if (jal != NULL && sameString(jal, "YES"))
+        {
+        safef(inPath,sizeof(inPath), \
+            "cgi-bin/cgiClustalw?fa=%s&db=%s",\
+            faTn.forCgi, hGetDb());
+        printf("Please wait while sequences are aligned with clustalw.");
+        displayJalView(inPath, "CLUSTAL", NULL);
+        }
+    else
+        {
+        hgcAnchorJalview(pg->name,  faTn.forCgi);
+        printf("JalView alignment of parent gene to retroGene</a>\n");
+        }
+
     if (pslList != NULL)
         {
-        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "all_mrna", pg->name);
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "all_mrna", \
+                pg->name);
         htmlHorizontalLine();
-        safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pg->chrom);
+        safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",\
+                pg->chrom);
         if (hTableExists(chainTable_chrom) )
             {
                 /* lookup chain */
