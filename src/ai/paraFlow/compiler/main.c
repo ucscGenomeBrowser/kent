@@ -31,10 +31,12 @@ enum pfParseType
     pptIf,
     pptWhile,
     pptFor,
+    pptOf,
     pptForeach,
     pptClass,
     pptVarDec,
-    pptVarUse,
+    pptNameUse,
+    pptVarType,
     pptConstUse,
     pptToDec,
     pptFlowDec,
@@ -80,14 +82,16 @@ switch (type)
     	return "pptWhile";
     case pptFor:
 	return "pptFor";
+    case pptOf:
+        return "pptOf";
     case pptForeach:
 	return "pptForeach";
     case pptClass:
 	return "pptClass";
     case pptVarDec:
 	return "pptVarDec";
-    case pptVarUse:
-	return "pptVarUse";
+    case pptNameUse:
+	return "pptNameUse";
     case pptConstUse:
 	return "pptConstUse";
     case pptToDec:
@@ -402,27 +406,15 @@ compoundToChildren(pp, pTokList, scope);
 }
 
 
-struct pfParse *varUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+struct pfParse *parseNameUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
  * based on it. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptVarUse, tok, parent);
+struct pfParse *pp = pfParseNew(pptNameUse, tok, parent);
 if (tok->type != pftName)
     errAt(tok, "Expecting variable.");
 pp->var = pfScopeFindOrCreateVar(scope, tok->val.s);
-*pTokList = tok->next;
-return pp;
-}
-
-static struct pfParse *varDeclareOne(struct pfParse *parent,
-	struct pfCollectedType *type, struct pfToken **pTokList, struct pfScope *scope)
-{
-struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
-if (tok->type != pftName)
-    expectingGot("variable name", tok);
-pp->var = pfScopeAddVar(scope, tok->val.s, type);
 *pTokList = tok->next;
 return pp;
 }
@@ -458,30 +450,54 @@ slReverse(&ctList);
 return ctList;
 }
 
+struct pfParse *parseOfs(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse of separated expression. */
+{
+struct pfParse *pp = parseNameUse(parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
+struct pfParse *ofs = NULL;
+if (tok->type == pftName && sameString(tok->val.s, "of"))
+    {
+    ofs = pfParseNew(pptOf, tok, parent);
+    ofs->children = pp;
+    pp->parent = ofs;
+    while (tok->type == pftName && sameString(tok->val.s, "of"))
+	{
+	tok = tok->next;
+	pp = parseNameUse(ofs, &tok, scope);
+	slAddHead(&ofs->children, pp);
+	}
+    }
+*pTokList = tok;
+if (ofs != NULL)
+    {
+    slReverse(&ofs->children);
+    return ofs;
+    }
+else
+    return pp;
+}
+
+
 struct pfParse *varUseOrDeclare(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
  * based on it. */
 {
+struct pfParse *pp = parseOfs(parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
-struct pfBaseType *baseType = pfScopeFindType(scope, tok->val.s);
-
-if (baseType != NULL)
+if (tok->type == pftName)
     {
-    struct pfCollectedType *ct = parseType(baseType, &tok, scope);
-    if (tok->type == pftName)
-        {
-	struct pfParse *pp;
-	pp = varDeclareOne(parent, ct, &tok, scope);
-	*pTokList = tok;
-	return pp;
-	}
-    else
-        {
-	if (ct->next != NULL)
-	    expectingGot("variable name", tok);
-	}
+    struct pfParse *type = pp;
+    struct pfParse *name;
+    pp = pfParseNew(pptVarDec, tok, parent);
+    type->parent = pp;
+    name = parseNameUse(pp, &tok, scope);
+    pp->children = type;
+    type->next = name;
+    *pTokList = tok;
     }
-return varUse(parent, pTokList, scope);
+return pp;
 }
 
 
@@ -506,9 +522,9 @@ struct pfParse *collection;
 struct pfParse *statement;
 
 tok = tok->next;	/* Skip over 'foreach' */
-element = varUse(pp, &tok, scope);
+element = parseNameUse(pp, &tok, scope);
 skipRequiredName("in", &tok);
-collection = varUse(pp, &tok, scope);
+collection = parseNameUse(pp, &tok, scope);
 /* Make sure next token matches name, and then skip it. */
 pfParseStatement(pp, &tok, scope);
 slAddHead(&pp->children, collection);
@@ -544,7 +560,19 @@ pp->children = pfParseExpression(pp, &tok, scope);
 slAddHead(&parent->children, pp);
 *pTokList = tok;
 }
-#endif /* OLD */
+
+
+static struct pfParse *varDeclareOne(struct pfParse *parent,
+	struct pfCollectedType *type, struct pfToken **pTokList, struct pfScope *scope)
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
+if (tok->type != pftName)
+    expectingGot("variable name", tok);
+pp->var = pfScopeAddVar(scope, tok->val.s, type);
+*pTokList = tok->next;
+return pp;
+}
 
 
 static void parseVarDeclaration(struct pfParse *parent, 
@@ -571,6 +599,7 @@ for (;;)
     }
 *pTokList = tok;
 }
+#endif /* OLD */
 
 static struct pfParse *parseAtom(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -707,9 +736,9 @@ while (tok->type == '+' || tok->type == '-')
 return pp;
 }
 
-struct pfParse *pfParseExpression(struct pfParse *parent,
+struct pfParse *parseTuple(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse expression. */
+/* Parse , separated expression. */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseSum(parent, &tok, scope);
@@ -734,6 +763,13 @@ if (tuple != NULL)
     }
 else
     return pp;
+}
+
+struct pfParse *pfParseExpression(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression. */
+{
+return parseTuple(parent, pTokList, scope);
 }
 
 static void parseAssignOrExpression(struct pfParse *parent,
@@ -778,10 +814,6 @@ else if (tok->type == pftName)
         parseForeach(parent, pTokList, scope);
     else if (sameString(s, "class"))
         parseClass(parent, pTokList, scope);
-#ifdef OLD
-    else if (baseType != NULL)
-        parseVarDeclaration(parent, baseType, pTokList, scope);
-#endif /* OLD */
     else
         parseAssignOrExpression(parent, pTokList, scope);
 #ifdef SOON
