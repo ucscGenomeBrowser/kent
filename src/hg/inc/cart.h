@@ -65,6 +65,9 @@ void cartRemoveExcept(struct cart *cart, char **except);
 char *cartRemoveLike(struct cart *cart, char *wildCard);
 /* Remove all variable from cart that match wildCard. */
 
+boolean cartVarExists(struct cart *cart, char *var);
+/* Return TRUE if variable is in cart. */
+
 char *cartString(struct cart *cart, char *var);
 /* Return string valued cart variable. */
 

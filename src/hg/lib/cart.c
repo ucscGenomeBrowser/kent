@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.21 2003/06/21 16:48:25 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.22 2003/06/24 22:23:12 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
@@ -310,6 +310,11 @@ hashElFreeList(&el);
 return val;
 }
 
+boolean cartVarExists(struct cart *cart, char *var)
+/* Return TRUE if variable is in cart. */
+{
+return hashFindVal(cart->hash, var) != NULL;
+}
 
 char *cartString(struct cart *cart, char *var)
 /* Return string valued cart variable. */
