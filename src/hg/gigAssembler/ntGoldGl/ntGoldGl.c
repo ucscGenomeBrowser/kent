@@ -397,16 +397,15 @@ while (lineFileRow(lf, row))
 		    {
 		    int start, end;
 
+		    clone = ref->ref;
 		    start = startOffset + clone->ntStart;
 		    if (clone->ntOrientation > 0)
 		        start -= clone->goldStart;
 		    else
 		        start -= clone->size - clone->goldEnd;
 		    end = start + clone->size;
-		    clone = ref->ref;
 		    fprintf(f, "%s %d %d %c\n",
-		        clone->fragName, startOffset + clone->ntStart, 
-			startOffset + clone->ntStart + clone->size, 
+		        clone->fragName, start, end, 
 			(clone->ntOrientation < 1 ? '-' : '+'));
 		    }
 		}
@@ -453,7 +452,6 @@ for (i=0; i<ctgCount; ++i)
     sprintf(oldName, "%s/ooGreedy.%s.gl.noNt", contig, oogVersion);
     sprintf(newName, "%s/ooGreedy.%s.gl", contig, oogVersion);
     patchOneGl(oldName, ntHash, newName);
-    uglyf("Patched %s to %s\n", oldName, newName);
     }
 }
 
