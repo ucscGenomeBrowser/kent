@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.12 2004/11/16 22:09:21 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.13 2004/11/18 03:08:53 kent Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "   bin smallint unsigned not null,     # bin index field for range queries\n"
@@ -212,10 +212,12 @@ if (tabFile == NULL)
 	}
     else
         {
-	dyStringAppend(query, 
-	   "INDEX(genoName(16),bin),\n"
-	   "INDEX(genoName(16),genoStart), \n"
-	   "INDEX(genoName(16),genoEnd))\n");
+	int indexLen = hGetMinIndexLength();
+	dyStringPrintf(query, 
+	   "INDEX(genoName(%d),bin),\n"
+	   "INDEX(genoName(%d),genoStart), \n"
+	   "INDEX(genoName(%d),genoEnd))\n"
+	   , indexLen, indexLen, indexLen);
 	}
 
     sqlUpdate(conn, query->string);
