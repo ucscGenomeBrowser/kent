@@ -1568,7 +1568,7 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     cat *.psl | hgLoadPsl -fastLoad -table=blatFr1 galGal2 stdin
 
 
-# LOAD CPGISSLANDS (DONE 2/25/04 angie)
+# LOAD CPGISSLANDS (DONE 3/23/04 angie)
     ssh hgwdev
     mkdir -p /cluster/data/galGal2/bed/cpgIsland
     cd /cluster/data/galGal2/bed/cpgIsland
@@ -1587,13 +1587,19 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     end
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
-/* chr1\t1325\t3865\t754\tCpG: 183\t64.9\t0.7 */
-/* Transforms to:  (tab separated columns above, spaces below) */
-/* chr1  1325    3865    CpG: 183  754  183 489  64.9  0.7 */
+/* Input columns: */
+/* chrom, start, end, len, CpG: cpgNum, perGc, cpg:gpc, observed:expected */
+/* chr1\t 41776\t 42129\t 259\t CpG: 34\t 65.8\t 0.92\t 0.94 */
+/* Output columns: */
+/* chrom, start, end, name, length, cpgNum, gcNum, perCpg, perGc, obsExp */
+/* chr1\t41775\t42129\tCpG: 34\t354\t34\t233\t19.2\t65.8\to0.94 */
 {
-width = $3-$2;
-printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
-  $1,$2,$3,$5,$6,width,$6,width*$7*0.01,100.0*2*$6/($3-$2),$7);}
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
 '_EOF_'
     # << this line makes emacs coloring happy
     awk -f filter.awk chr*.cpg > cpgIsland.bed
@@ -1601,8 +1607,8 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
     # load into database:
     ssh hgwdev
     cd /cluster/data/galGal2/bed/cpgIsland
-    hgLoadBed galGal2 cpgIsland -tab -noBin \
-      -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
+    hgLoadBed galGal2 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
 
 
 # LOAD GENEID GENES (DONE 3/4/04 angie)
