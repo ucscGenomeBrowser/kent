@@ -16,8 +16,9 @@
 #include "customTrack.h"
 #include "joiner.h"
 #include "hgTables.h"
+#include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.21 2004/11/23 19:49:12 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.22 2004/11/23 23:25:52 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -75,7 +76,7 @@ if (diff == 0)
 return diff;
 }
 
-
+#if defined(NOT_USED)
 static void dbTableFree(struct dbTable **pDt)
 /* Free up dbTable struct. */
 {
@@ -87,6 +88,7 @@ if (dt != NULL)
     freez(pDt);
     }
 }
+#endif
 
 static struct dbTable *extraTableList(char *prefix)
 /* Get list of tables (other than the primary table)
@@ -261,6 +263,10 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct asObject *asObj = asForTable(conn, rootTable);
+boolean showItemRgb = FALSE;
+
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
@@ -276,7 +282,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     cgiMakeCheckBox(var, varOn(var));
     hPrintf("</TD>");
     hPrintf("<TD>");
-    hPrintf("%s", field);
+    if (showItemRgb && sameWord(field,"reserved"))
+	hPrintf("itemRgb");
+    else
+	hPrintf("%s", field);
     hPrintf("</TD>");
     if (asObj != NULL)
 	{
@@ -469,7 +478,6 @@ return filterFieldVarName(db, table, field, filterPatternVar);
 boolean anyFilter()
 /* Return TRUE if any filter set. */
 {
-char dbTableBuf[256];
 char *filterTable = cartOptionalString(cart, hgtaFilterTable);
 return (filterTable != NULL && sameString(filterTable, curTable));
 }
@@ -813,7 +821,6 @@ void doFilterPage(struct sqlConnection *conn)
 {
 char *table = connectingTableForTrack(curTable);
 char *db = database;
-char buf[256];
 doBigFilterPage(conn, db, table);
 }
 

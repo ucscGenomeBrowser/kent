@@ -21,8 +21,9 @@
 #include "hgFind.h"
 #include "hgTables.h"
 #include "joiner.h"
+#include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.89 2004/11/19 20:59:49 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.90 2004/11/23 23:25:52 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -296,7 +297,6 @@ boolean lookupPosition()
 /* Look up position (aka range) if need be.  Return FALSE if it puts
  * up multiple positions. */
 {
-char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 char *range = cartUsualString(cart, hgtaRange, "");
 boolean isSingle = TRUE;
 range = trimSpaces(range);
@@ -601,8 +601,6 @@ struct grp *makeGroupList(struct sqlConnection *conn,
 	struct trackDb *trackList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
-struct sqlResult *sr;
-char **row;
 struct grp *groupsAll, *groupList = NULL, *group;
 struct hash *groupsInTrackList = newHash(0);
 struct hash *groupsInDatabase = newHash(0);
@@ -824,6 +822,63 @@ freez(&splitTable);
 return count;
 }
 
+static void itemRgbDataOut(char **row, int lastCol, int itemRgbCol)
+/*	display bed data, show "reserved" column as r,g,b	*/
+{
+int colIx;
+int rgb;
+
+/*	Print up to itemRgbCol	*/
+for (colIx = 0; (colIx < itemRgbCol) && (colIx < lastCol); ++colIx)
+    hPrintf("%s\t", row[colIx]);
+
+/*	Print out the itemRgbCol column	*/
+rgb = atoi(row[itemRgbCol]);
+hPrintf("%d,%d,%d", (rgb & 0xff0000) >> 16,
+	(rgb & 0xff00) >> 8, (rgb & 0xff));
+
+/*	Print the rest if there are any	*/
+if (itemRgbCol < lastCol)
+    {
+    hPrintf("\t");
+    for (colIx = itemRgbCol+1; colIx < lastCol; ++colIx)
+	hPrintf("%s\t", row[colIx]);
+    hPrintf("%s\n", row[lastCol]);
+    }
+else
+    hPrintf("\n");	/*	itemRgbCol was the last column	*/
+}
+
+static int itemRgbHeader(struct sqlResult *sr, int lastCol)
+/*	print out bed header, recognize "reserved" column, return which
+ *	column it is, or -1 if not found
+ */
+{
+int colIx;
+int ret = -1;
+char *field = sqlFieldName(sr);
+for (colIx = 0; colIx < lastCol; ++colIx)
+    {
+    if (sameWord("reserved",field))
+	{
+	hPrintf("itemRgb\t");
+	ret = colIx;
+	}
+    else
+	hPrintf("%s\t", field);
+    field = sqlFieldName(sr);
+    }
+if (sameWord("reserved",field))
+    {
+    hPrintf("itemRgb\n");
+    ret = lastCol;
+    }
+else
+    hPrintf("%s\n", field);
+
+return(ret);
+}
+
 static void doTabOutDb( char *db, char *table, 
 	struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
@@ -839,9 +894,13 @@ boolean doIntersection;
 int fieldCount;
 int bedFieldsOffset, bedFieldCount;
 char *idField;
+boolean showItemRgb = FALSE;
+int itemRgbCol = -1;	/*	-1 means not found	*/
 
 hti = getHti(db, table);
 idField = getIdField(db, curTrack, table, hti);
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 /* If they didn't pass in a field list assume they want all fields. */
 if (fields != NULL)
@@ -901,17 +960,31 @@ for (region = regionList; region != NULL; region = region->next)
 	if (filter != NULL)
 	    hPrintf("#filter: %s\n", filter);
 	hPrintf("#");
-	for (colIx = 0; colIx < lastCol; ++colIx)
-	    hPrintf("%s\t", sqlFieldName(sr));
-	hPrintf("%s\n", sqlFieldName(sr));
+	if (showItemRgb)
+	    {
+	    itemRgbCol = itemRgbHeader(sr, lastCol);
+	    if (itemRgbCol == -1)
+		showItemRgb = FALSE;	/*  did not find "reserved" */
+	    }
+	else
+	    {
+	    for (colIx = 0; colIx < lastCol; ++colIx)
+		hPrintf("%s\t", sqlFieldName(sr));
+	    hPrintf("%s\n", sqlFieldName(sr));
+	    }
 	}
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	if (idHash == NULL || hashLookup(idHash, row[fieldCount]))
 	    {
-	    for (colIx = 0; colIx < lastCol; ++colIx)
-		hPrintf("%s\t", row[colIx]);
-	    hPrintf("%s\n", row[lastCol]);
+	    if (showItemRgb)
+		itemRgbDataOut(row, lastCol, itemRgbCol);
+	    else
+		{
+		for (colIx = 0; colIx < lastCol; ++colIx)
+		    hPrintf("%s\t", row[colIx]);
+		hPrintf("%s\n", row[lastCol]);
+		}
 	    ++outCount;
 	    }
 	}

@@ -8,15 +8,15 @@
 #include "cart.h"
 #include "jksql.h"
 #include "hgTables.h"
+#include "bedCart.h"
 
-static char const rcsid[] = "$Id: rangeHistogram.c,v 1.2 2004/08/28 23:42:15 kent Exp $";
+static char const rcsid[] = "$Id: rangeHistogram.c,v 1.3 2004/11/23 23:25:52 hiram Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */
 {
 double maxHist = 60;
 double scale = -1.0;
-boolean firstTime = TRUE;
 struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
@@ -67,9 +67,6 @@ htmlClose();
 static void printValueRange(char *db, char *table, char *field)
 /* Print min/max/mean. */
 {
-double maxHist = 60;
-double scale = -1.0;
-boolean firstTime = TRUE;
 struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
@@ -92,7 +89,15 @@ void doValueRange(char *field)
 {
 char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaHistoTable);
-htmlOpen("Value range for %s.%s.%s", db, table, field);
+boolean showItemRgb = FALSE;
+
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
+
+if (showItemRgb && sameWord(field, "reserved"))
+    htmlOpen("Value range for %s.%s.itemRgb", db, table);
+else
+    htmlOpen("Value range for %s.%s.%s", db, table, field);
 printValueRange(db, table, field);
 htmlClose();
 }

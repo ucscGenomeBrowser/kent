@@ -203,7 +203,11 @@ for (field = fieldList; field != NULL; field = field->next)
     else if (sameString(type, "thickEnd"))
         hPrintf("%u", bed->thickEnd);
     else if (sameString(type, "itemRgb"))
-        hPrintf("%u", bed->itemRgb);
+	{
+	int rgb = bed->itemRgb;
+	hPrintf("%d,%d,%d", (rgb & 0xff0000) >> 16,
+		(rgb & 0xff00) >> 8, (rgb & 0xff));
+	}
     else if (sameString(type, "blockCount"))
         hPrintf("%u", bed->blockCount);
     else if (sameString(type, "blockSizes"))

@@ -16,9 +16,10 @@
 #include "tableDescriptions.h"
 #include "asParse.h"
 #include "customTrack.h"
+#include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.26 2004/11/07 05:26:53 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.27 2004/11/23 23:25:52 hiram Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -75,9 +76,12 @@ struct sqlResult *sr;
 char **row;
 #define TOO_BIG_FOR_HISTO 500000
 boolean tooBig = (sqlTableSize(conn, table) > TOO_BIG_FOR_HISTO);
-char button[64];
 char query[256];
 struct slName *exampleList, *example;
+boolean showItemRgb = FALSE;
+
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 safef(query, sizeof(query), "select * from %s limit 1", table);
 exampleList = storeRow(conn, query);
@@ -97,7 +101,10 @@ puts("</TR>\n");
 example = exampleList;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<TR><TD><TT>%s</TT></TD> ", row[0]);
+    if (showItemRgb && (sameWord(row[0],"reserved")))
+	hPrintf("<TR><TD><TT>itemRgb</TT></TD> ");
+    else
+	hPrintf("<TR><TD><TT>%s</TT></TD> ", row[0]);
     if (exampleList != NULL)
         {
 	hPrintf("<TD>");
@@ -181,6 +188,11 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 int i, columnCount = 0;
+int itemRgbCol = -1;
+boolean showItemRgb = FALSE;
+
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 /* Make table with header row containing name of fields. */
 safef(query, sizeof(query), "describe %s", table);
@@ -189,7 +201,13 @@ hTableStart();
 hPrintf("<TR>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<TH>%s</TH>", row[0]);
+    if (showItemRgb && sameWord(row[0],"reserved"))
+	{
+	hPrintf("<TH>itemRgb</TH>");
+	itemRgbCol = columnCount;
+	}
+    else
+	hPrintf("<TH>%s</TH>", row[0]);
     ++columnCount;
     }
 hPrintf("</TR>");
@@ -202,7 +220,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<TR>");
     for (i=0; i<columnCount; ++i)
-        hPrintf("<TD>%s</TD>", row[i]);
+	{
+	if (showItemRgb && (i == itemRgbCol))
+	    {
+	    int rgb = atoi(row[i]);
+	    hPrintf("<TD>%d,%d,%d</TD>", (rgb & 0xff0000) >> 16,
+		(rgb & 0xff00) >> 8, (rgb & 0xff));
+	    }
+	else
+	    hPrintf("<TD>%s</TD>", row[i]);
+	}
     hPrintf("</TR>\n");
     }
 sqlFreeResult(&sr);
