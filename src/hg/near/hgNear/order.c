@@ -315,7 +315,7 @@ struct order *orderGetAll(struct sqlConnection *conn)
 /* Return list of row orders available. */
 {
 char *raName = "orderDb.ra";
-struct hash *ra, *raList = readRas(raName);
+struct hash *ra, *raList = readRa(raName);
 struct order *ord, *ordList = NULL;
 
 for (ra = raList; ra != NULL; ra = ra->next)

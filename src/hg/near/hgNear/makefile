@@ -5,7 +5,7 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = hgNear
 
-O = $A.o advFilter.o association.o configure.o details.o \
+O = $A.o advFilter.o association.o configure.o \
 	examples.o expRatio.o getSeq.o \
 	go.o gifLabel.o knownGene.o order.o pfam.o search.o userSettings.o
 

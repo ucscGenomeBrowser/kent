@@ -284,11 +284,11 @@ boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 boolean anyRealInCart(struct cart *cart, char *wild);
 /* Return TRUE if variables are set matching wildcard. */
 
-struct hash *readRas(char *rootName);
-/* Read in ra in root, root/org, and root/org/database. */
-
 char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name);
 /* Look up in ra hash or die trying. */
+
+struct hash *readRa(char *rootName);
+/* Read in ra in root, root/org, and root/org/database. */
 
 char *genomeSetting(char *name);
 /* Return genome setting value.   Aborts if setting not found. */
@@ -588,9 +588,6 @@ void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
 /* Configuration page. */
-
-void doDetails(struct sqlConnection *conn, struct column *colList,  char *gene);
-/* Put up details page on gene. */
 
 void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
 /* Do configuration starting with defaults. */

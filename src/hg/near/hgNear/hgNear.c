@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.101 2003/10/09 00:02:43 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.102 2003/10/11 09:28:43 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -161,12 +161,15 @@ vprintf(format, args);
 }
 
 void hPrintf(char *format, ...)
-/* Print out some html. */
+/* Print out some html.  Check for write error so we can
+ * terminate if http connection breaks. */
 {
 va_list(args);
 va_start(args, format);
 hvPrintf(format, args);
 va_end(args);
+if (ferror(stdout))
+    noWarnAbort();
 }
 
 void hPrintNonBreak(char *s)
@@ -537,8 +540,8 @@ void debugCellPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn)
 /* Print value including favorite hyperlink in debug column. */
 {
-hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
-	cartSidUrlString(cart), detailsVarName, gp->name);
+hPrintf("<TD><A HREF=\"../cgi-bin/hgGene?%s&%s=%s\">", 
+	cartSidUrlString(cart), "hgg_gene", gp->name);
 hPrintf("%f", gp->distance);
 hPrintf("</A></TD>");
 }
@@ -1145,115 +1148,18 @@ else
 freez(&dupe);
 }
 
-static boolean foldInOne(struct lineFile *lf, struct hash *hashOfHash)
-/* Fold in one record from ra file into hashOfHash. */
-{
-char *word, *line, *name;
-struct hash *ra;
-struct hashEl *hel;
-
-/* Get first nonempty non-comment line and make sure
- * it contains name. */
-if (!lineFileNextReal(lf, &line))
-    return FALSE;
-word = nextWord(&line);
-if (!sameString(word, "name"))
-    errAbort("Expecting 'name' line %d of %s, got %s", 
-    	lf->lineIx, lf->fileName, word);
-name = nextWord(&line);
-if (name == NULL)
-    errAbort("Short name field line %d of %s", lf->lineIx, lf->fileName);
-
-/* Find ra hash associated with name, making up a new
- * one if need be. */
-if ((ra = hashFindVal(hashOfHash, name)) == NULL)
-    {
-    ra = newHash(7);
-    hashAdd(hashOfHash, name, ra);
-    hashAdd(ra, "name", lmCloneString(ra->lm, name));
-    }
-
-/* Fill in fields of ra hash with data up to next
- * blank line or end of file. */
-for (;;)
-    {
-    if (!lineFileNext(lf, &line, NULL))
-        break;
-    line = skipLeadingSpaces(line);
-    if (line[0] == 0)
-        break;
-    if (line[0] == '#')
-        continue;
-    word = nextWord(&line);
-    line = skipLeadingSpaces(line);
-    if (line == NULL)
-        line = "";
-    hel = hashLookup(ra, word);
-    if (hel == NULL)
-        hel = hashAdd(ra, word, lmCloneString(ra->lm, line));
-    else
-        hel->val = lmCloneString(ra->lm, line);
-    }
-return TRUE;
-}
-
-static void foldInRa(char *fileName, struct hash *hashOfHash)
-/* Read ra's in file name and fold them into hashOfHash. */
-{
-struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
-if (lf != NULL)
-    {
-    while (foldInOne(lf, hashOfHash))
-        ;
-    lineFileClose(&lf);
-    }
-}
-
 static char *rootDir = "hgNearData";
 
-char *dirForOrg(char *org)
-/* Make directory name from organism name. */
-{
-org = cloneString(org);
-stripChar(org, '.');
-subChar(org, ' ', '_');
-return org;
-}
-
-struct hash *readRas(char *rootName)
+struct hash *readRa(char *rootName)
 /* Read in ra in root, root/org, and root/org/database. */
 {
-struct hash *hashOfHash = newHash(10);
-char *org = dirForOrg(genome);
-char fileName[512];
-struct hashEl *helList, *hel;
-struct hash *raList = NULL, *ra;
-
-/* Create hash of hash. */
-safef(fileName, sizeof(fileName), "%s/%s", rootDir, rootName);
-foldInRa(fileName, hashOfHash);
-safef(fileName, sizeof(fileName), "%s/%s/%s", rootDir, org, rootName);
-foldInRa(fileName, hashOfHash);
-safef(fileName, sizeof(fileName), "%s/%s/%s/%s", rootDir, org, database, rootName);
-foldInRa(fileName, hashOfHash);
-freez(&org);
-
-/* Create list of hashes. */
-helList = hashElListHash(hashOfHash);
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    ra = hel->val;
-    slAddHead(&raList, ra);
-    }
-slFreeList(&helList);
-hashFree(&hashOfHash);
-return raList;
+return hgReadRa(genome, database, rootDir, rootName, NULL);
 }
 
 static void getGenomeSettings()
 /* Set up genome settings hash */
 {
-struct hash *hash = readRas("genome.ra");
+struct hash *hash = readRa("genome.ra");
 char *name;
 if (hash == NULL)
     errAbort("Can't find anything in genome.ra");
@@ -1275,7 +1181,7 @@ struct column *getColumns(struct sqlConnection *conn)
 {
 char *raName = "columnDb.ra";
 struct column *col, *colList = NULL;
-struct hash *raList = readRas(raName), *raHash;
+struct hash *raList = readRa(raName), *raHash;
 char *selfLink;
 
 if (raList == NULL)
@@ -1555,7 +1461,7 @@ static char *colHtmlFileName(struct column *col)
  * freeMem this when done. */
 {
 char name[PATH_LEN];
-char *org = dirForOrg(genome);
+char *org = hgDirForOrg(genome);
 safef(name, sizeof(name), "%s/%s/%s/%s.html", rootDir, org, database, col->name);
 if (!fileExists(name))
     {
@@ -1674,8 +1580,6 @@ else
 colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
-else if (cartVarExists(cart, detailsVarName))
-    doDetails(conn, colList, cartString(cart, detailsVarName));
 else if (cartVarExists(cart, colInfoVarName))
     doColInfo(conn, colList, cartString(cart, colInfoVarName));
 else if ((var = cartFindFirstLike(cart, "near.do.up.*")) != NULL)
