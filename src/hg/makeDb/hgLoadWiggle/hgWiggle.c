@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.27 2004/09/03 22:08:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.28 2004/09/11 16:16:03 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -214,7 +214,7 @@ for (i=0; i<trackCount; ++i)
 	     *	no need to print stats until all done.
 	     */
 	    if (doStats && (!chromPtr) && (trackCount == 1))
-		wds->statsOut(wds, "stdout", TRUE, statsHTML);
+		wds->statsOut(wds, "stdout", TRUE, statsHTML, TRUE, FALSE);
 	    if (doBed)
 		wds->bedOut(wds, "stdout", TRUE);
 	    if (!noAscii)
@@ -254,7 +254,7 @@ for (i=0; i<trackCount; ++i)
 /* when working through a chrom list, or track list, stats only at the end */
 if (doStats && (chromList || (trackCount > 1)))
     {
-    wds->statsOut(wds, "stdout", TRUE, statsHTML);
+    wds->statsOut(wds, "stdout", TRUE, statsHTML, TRUE, FALSE);
     wds->freeStats(wds);
     }
 endClock = clock1000();
