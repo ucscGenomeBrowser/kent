@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.9 2004/07/18 18:41:10 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.10 2004/07/18 21:52:28 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -314,9 +314,9 @@ hPrintf("<TABLE BORDER=0>\n");
     cgiMakeButton(hgtaDoTopSubmit, "Submit");
     hPrintf(" ");
     cgiMakeButton(hgtaDoIntersect, "(Intersect)");
-#ifdef SOMETIMES
     hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "Test");
+#ifdef SOMETIMES
 #endif /* SOMETIMES */
     hPrintf("</TD></TR>\n");
     }

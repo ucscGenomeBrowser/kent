@@ -124,6 +124,10 @@ void tabOutSelectedFields(
 boolean anyFilter();
 /* Return TRUE if any filter set. */
 
+char *filterClause(char *db, char *table);
+/* Get filter clause (something to put after 'where')
+ * for table */
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from

@@ -5,6 +5,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "cheapcgi.h"
+#include "jksql.h"
 #include "htmshell.h"
 #include "cart.h"
 #include "web.h"
@@ -402,14 +403,23 @@ doSelectFieldsMore();
 
 #define filterLinkedTablePrefix hgtaFilterPrefix "linked."
 #define filterVarPrefix hgtaFilterPrefix "v."
-#define filterDdPrefix filterVarPrefix "dd."
-#define filterCmpPrefix filterVarPrefix "cmp."
-#define filterPatternPrefix filterVarPrefix "pat."
+#define filterDdVar "dd"
+#define filterCmpVar "cmp"
+#define filterPatternVar "pat"
+
+static char *filterFieldVarName(char *db, char *table, char *field, char *type)
+/* Return variable name for filter page. */
+{
+static char buf[256];
+safef(buf, sizeof(buf), "%s%s.%s.%s.%s",
+	filterVarPrefix, db, table, field, type);
+return buf;
+}
 
 static char *filterPatternVarName(char *db, char *table, char *field)
 /* Return variable name for a filter page text box. */
 {
-return dbTableFieldVar(filterPatternPrefix, db, table, field);
+return filterFieldVarName(db, table, field, filterPatternVar);
 }
 
 boolean anyFilter()
@@ -460,7 +470,7 @@ void stringFilterOption(char *db, char *table, char *field, char *logOp)
 char *name;
 
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
-name = dbTableFieldVar(filterDdPrefix, db, table, field);
+name = filterFieldVarName(db, table, field, filterDdVar);
 cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
 		cartUsualString(cart, name, ddOpMenu[0]));
 puts(" match </TD><TD>");
@@ -479,7 +489,7 @@ char *name;
 
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", label);
 puts(" is ");
-name = dbTableFieldVar(filterCmpPrefix, db, table, field);
+name = filterFieldVarName(db, table, field, filterCmpVar);
 cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
 		cartUsualString(cart, name, cmpOpMenu[0]));
 puts("</TD><TD>\n");
@@ -499,7 +509,7 @@ char *name;
 
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
 puts(" is ");
-name = dbTableFieldVar(filterCmpPrefix, db, table, field);
+name = filterFieldVarName(db, table, field, filterCmpVar);
 cgiMakeDropList(name, eqOpMenu, eqOpMenuSize,
 		cgiUsualString(name, eqOpMenu[0]));
 /* make a dummy pat_ CGI var for consistency with other filter options */
@@ -625,5 +635,137 @@ void doClearFilter(struct sqlConnection *conn)
 cartRemovePrefix(cart, hgtaFilterPrefix);
 cartSetBoolean(cart, hgtaFilterOn, FALSE);
 doMainPage(conn);
+}
+
+char *filterClause(char *db, char *table)
+/* Get filter clause (something to put after 'where')
+ * for table */
+{
+char varPrefix[128];
+int varPrefixSize, fieldNameSize;
+struct hashEl *varList, *var;
+struct dyString *dy = NULL;
+boolean needAnd = FALSE;
+
+/* Get list of filter variables for this table.  Return
+ * NULL if no filter on us. */
+uglyf("filterClause %s %s\n", db, table);
+if (!anyFilter())
+    return NULL;
+safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", filterVarPrefix, db, table);
+uglyf("varPrefix %s\n", varPrefix);
+varPrefixSize = strlen(varPrefix);
+varList = cartFindPrefix(cart, varPrefix);
+if (varList == NULL)
+    return NULL;
+
+/* Create filter clause string, stepping through vars. */
+dy = dyStringNew(0);
+for (var = varList; var != NULL; var = var->next)
+    {
+    /* Parse variable name into field and type. */
+    char field[64], *s, *type;
+    s = var->name + varPrefixSize;
+    type = strchr(s, '.');
+    if (type == NULL)
+        internalErr();
+    fieldNameSize = type - s;
+    if (fieldNameSize >= sizeof(field))
+        internalErr();
+    memcpy(field, s, fieldNameSize);
+    field[fieldNameSize] = 0;
+    type += 1;
+    if (sameString(type, filterDdVar))
+        {
+	char *patVar = filterPatternVarName(db, table, field);
+	char *pat = trimSpaces(cartOptionalString(cart, patVar));
+	if (pat != NULL && pat[0] != 0 && !sameString(pat, "*"))
+	    {
+	    char *sqlPat = sqlLikeFromWild(pat);
+	    char *ddVal = cartString(cart, var->name);
+	    boolean neg = sameString(ddVal, ddOpMenu[1]);
+	    if (needAnd) dyStringAppend(dy, " and ");
+	    needAnd = TRUE;
+	    dyStringPrintf(dy, "%s.%s.%s ", db, table, field);
+	    if (sqlWildcardIn(sqlPat))
+	        {
+		if (neg)
+		    dyStringAppend(dy, "not ");
+		dyStringAppend(dy, "like ");
+		}
+	    else
+	        {
+		if (neg)
+		    dyStringAppend(dy, "!= ");
+		else
+		    dyStringAppend(dy, "= ");
+		}
+	    dyStringAppendC(dy, '\'');
+	    dyStringAppend(dy, sqlPat);
+	    dyStringAppendC(dy, '\'');
+	    freez(&sqlPat);
+	    }
+	}
+    else if (sameString(type, filterCmpVar))
+        {
+	char *patVar = filterPatternVarName(db, table, field);
+	char *pat = trimSpaces(cartOptionalString(cart, patVar));
+	char *cmpVal = cartString(cart, var->name);
+	if (pat != NULL && pat[0] != 0 && !sameString(cmpVal, cmpOpMenu[0]))
+	    {
+	    if (needAnd) dyStringAppend(dy, " and ");
+	    needAnd = TRUE;
+	    if (sameString(cmpVal, "in range"))
+	        {
+		char *words[2];
+		int wordCount;
+		char *dupe = cloneString(pat);
+
+		wordCount = chopString(dupe, ", \t\n", words, ArraySize(words));
+		if (wordCount < 2)	/* Fake short input */
+		    words[1] = "2000000000";
+		if (strchr(pat, '.')) /* Assume floating point */
+		    {
+		    double a = atof(words[0]), b = atof(words[1]);
+		    dyStringPrintf(dy, "%s.%s.%s >= %f && %s.%s.%s < %f",
+		    	db, table, field, a, db, table, field, b);
+		    }
+		else
+		    {
+		    int a = atoi(words[0]), b = atoi(words[1]);
+		    dyStringPrintf(dy, "%s.%s.%s >= %d && %s.%s.%s < %d",
+		    	db, table, field, a, db, table, field, b);
+		    }
+		freez(&dupe);
+		}
+	    else
+	        {
+		dyStringPrintf(dy, "%s.%s.%s %s ", db, table, field, cmpVal);
+		if (strchr(pat, '.'))	/* Assume floating point. */
+		    dyStringPrintf(dy, "%f", atof(pat));
+		else
+		    dyStringPrintf(dy, "%d", atoi(pat));
+		}
+	    }
+	}
+    uglyf("%s %s\n", field, type);
+    }
+
+/* Clean up and return */
+hashElFreeList(&varList);
+return dyStringCannibalize(&dy);
+}
+
+void doTest(struct sqlConnection *conn)
+/* Put up a page to see what happens. */
+{
+char *s = NULL;
+textOpen();
+uglyf("Doing test!\n");
+s = filterClause("hg16", "knownGene");
+if (s != NULL)
+    uglyf("%s\n", s);
+else
+    uglyf("%p\n", s);
 }
 

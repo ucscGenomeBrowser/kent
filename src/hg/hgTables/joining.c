@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.18 2004/07/18 04:15:13 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.19 2004/07/18 21:52:28 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -708,39 +708,6 @@ else
     joinedTablesFree(&joined);
     }
 joinerDtfFreeList(&dtfList);
-}
-
-void doTest(struct sqlConnection *conn)
-/* Put up a page to see what happens. */
-{
-struct slName *fieldList = NULL, *field;
-
-#ifdef OLD
-field = slNameNew("hg16.ensGene.name");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.kgXref.description");
-slAddTail(&fieldList, field);
-textOpen();
-tabOutSelectedFields("hg16", "ensGene", fieldList);
-#endif /* OLD */
-
-field = slNameNew("hg16.knownGene.name");
-slAddTail(&fieldList, field);
-field = slNameNew("hg16.knownGene.proteinID");
-slAddTail(&fieldList, field);
-field = slNameNew("swissProt.displayId.acc");
-slAddTail(&fieldList, field);
-field = slNameNew("swissProt.geneLogic.val");
-slAddTail(&fieldList, field);
-
-textOpen();
-hPrintf("doTest on ");
-for (field = fieldList; field != NULL; field = field->next)
-    hPrintf(" %s", field->name);
-hPrintf("\n");
-tabOutSelectedFields("hg16", "knownGene", fieldList);
-
-
 }
 
 
