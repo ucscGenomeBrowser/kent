@@ -49,6 +49,8 @@ char *position; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 boolean seqReverse;		/* Look at reverse strand. */
+char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
+char *eUserSeqString = NULL;    /* CGI encoded user seq. string. */
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
@@ -263,6 +265,9 @@ if (chrom == NULL)
     }
 printf("HREF=\"%s?seqName=%s&db=%s&old=%s&winStart=%d&winEnd=%d&pix=%d", 
 	hgTracksName(), chrom, database, chrom, start, end, tl.picWidth);
+if (eUserSeqString != NULL)
+    printf("&ss=%s", eUserSeqString);
+ 
 if (withLeftLabels)
     printf("&leftLabels=on");
 if (withCenterLabels)
@@ -4181,7 +4186,11 @@ void doForm()
  * buttons and the active image. */
 {
 struct trackGroup *group;
-char *ss = cgiOptionalString("ss");
+
+/* See if want to include sequence search results. */
+userSeqString = cgiOptionalString("ss");
+if (userSeqString != NULL)
+    eUserSeqString = cgiEncode(userSeqString);
 
 if (calledSelf)
     {
@@ -4206,7 +4215,7 @@ slSafeAddHead(&tGroupList, goldTrackGroup());
 slSafeAddHead(&tGroupList, gapTg());
 if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
 slSafeAddHead(&tGroupList, coverageTrackGroup());
-if (ss != NULL) slSafeAddHead(&tGroupList, userPslTg());
+if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
