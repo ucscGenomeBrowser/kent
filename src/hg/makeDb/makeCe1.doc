@@ -1029,6 +1029,10 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
     # accessions in hs.faa once the suffix of .1 and .2 were removed
     # A search in GenBank showed that NP_002900.1 has been replaced 
     # by NP_002900.2 so removed the former from hs.faa
+    # (2004-17-05, hartera) Deleted contents of refPep table since
+    # hs.faa contains only human sequences. No C. elegans peptide sequences
+    # available from this NCBI Build 134 so added protein translation of genomic DNA 
+    # on the RefSeq genes details pages. 
     hgRefSeqMrna ce1 /gbdb/ce1/mrna.134/refSeq.fa \
  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra \
       all_refSeq.psl \
