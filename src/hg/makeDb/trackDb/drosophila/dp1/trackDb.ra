@@ -48,7 +48,7 @@ type genePred bdgpLiftGenePep
 
 track chainDm1
 shortLabel D. mel. Chain
-longLabel Chained Blastz D. melanogaster/D. pseudoobscura Alignments
+longLabel D. melanogaster (Jan. 2003/dm1) Chained Blastz Alignments
 group compGeno
 priority 133
 visibility hide
@@ -60,7 +60,7 @@ otherDb dm1
 
 track netDm1
 shortLabel D. mel. Net
-longLabel D. melanogaster/D. pseudoobscura Alignment Net
+longLabel D. melanogaster (Jan. 2003/dm1) Alignment Net
 group compGeno
 priority 134
 visibility hide
@@ -70,7 +70,7 @@ otherDb dm1
 
 track axtNetDm1
 shortLabel D. mel. Aligns
-longLabel D. melanogaster/D. pseudoobscura Blastz Alignments from Net
+longLabel D. melanogaster (Jan. 2003/dm1) Blastz Alignments from Net
 group compGeno
 priority 135
 visibility dense

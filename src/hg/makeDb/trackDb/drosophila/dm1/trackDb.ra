@@ -40,7 +40,7 @@ type maf
 
 track chainDp1
 shortLabel D. pseud. Chain
-longLabel Chained Blastz D. pseudoobscura/D. melanogaster Alignments
+longLabel D. pseudoobscura (Aug. 2003/dp1) Chained Blastz Alignments
 group compGeno
 priority 133
 visibility hide
@@ -52,7 +52,7 @@ otherDb dp1
 
 track netDp1
 shortLabel D. pseud. Net
-longLabel D. pseudoobscura/D. melanogaster Alignment Net
+longLabel D. pseudoobscura (Aug. 2003/dp1) Alignment Net
 group compGeno
 priority 134
 visibility hide
@@ -62,7 +62,7 @@ otherDb dp1
 
 track axtNetDp1
 shortLabel D. pseud. Aligns
-longLabel D. pseudoobscura/D. melanogaster Blastz Alignments from Net
+longLabel D. pseudoobscura (Aug. 2003/dp1) Blastz Alignments from Net
 group compGeno
 priority 135
 visibility hide
@@ -72,7 +72,7 @@ type axt dp1
 
 track chainDroYak1
 shortLabel D. yakuba Chain
-longLabel Chained Blastz D. yakuba/D. melanogaster Alignments
+longLabel D. yakuba (Apr. 2004/droYak1) Chained Blastz Alignments
 group compGeno
 priority 135
 visibility hide
@@ -84,7 +84,7 @@ otherDb droYak1
 
 track netDroYak1
 shortLabel D. yakuba Net
-longLabel D. yakuba/D. melanogaster Alignment Net
+longLabel D. yakuba (Apr. 2004/droYak1) Alignment Net
 group compGeno
 priority 136
 visibility hide
@@ -94,7 +94,7 @@ otherDb droYak1
 
 track chainAnoGam1
 shortLabel Anopheles Chain
-longLabel Chained Blastz Anopheles/D. melanogaster Alignments
+longLabel Anopheles (Apr. 2004/anoGam1) Chained Blastz Alignments
 group compGeno
 priority 132.1
 visibility hide
@@ -106,7 +106,7 @@ otherDb anoGam1
 
 track netAnoGam1
 shortLabel Anopheles Net
-longLabel Anopheles/D. melanogaster Alignment Net
+longLabel Anopheles (Apr. 2004/anoGam1) Alignment Net
 group compGeno
 priority 132.2
 visibility hide
