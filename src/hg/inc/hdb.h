@@ -284,6 +284,10 @@ struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
  * Dispose of this with dbDbFreeList. */
 
+struct axtInfo *hGetAxtAlignments(char *db);
+/* Get list of alignments where we have axt files listed in axtInfo . 
+ * Dispose of this with axtInfoFreeList. */
+
 struct dbDb *hGetBlatIndexedDatabases();
 /* Get list of databases for which there is a BLAT index. 
  * Dispose of this with dbDbFreeList. */
