@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.118 2004/03/23 00:16:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.119 2004/03/23 22:11:25 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -228,18 +228,24 @@ char *ctVisMenu[] =
 };
 int ctVisMenuSize = 5;
 
+/*	wiggle constraints, two for two possible tables */
 char *wigConstraint[2] = {
 	(char *)NULL,
 	(char *)NULL,
 };
-double wigDataConstraint[2] = {
-	0.0,
-	0.0,
+/*	wiggle data value constraints, two possible tables, and two
+ *	values for a possible range
+ */
+double wigDataConstraint[2][2] = {
+	{0.0, 0.0},
+	{0.0, 0.0},
 };
-int wigDataCompare[2] = {
-	0,
-	0,
-};
+
+/*	to select one of the two tables	*/
+#define WIG_TABLE_1	0
+#define WIG_TABLE_2	1
+
+boolean (*wiggleCompare[2])(int tableId, double value);
 
 void storeStringIfSet(char *var)
 /* If var is in CGI, store it in cart. */
@@ -1761,6 +1767,88 @@ if (numLeftParen != numRightParen)
 slFreeList(&tokList);
 }
 
+static boolean wigInRange(int tableId, double value)
+{
+return (value >= wigDataConstraint[tableId][0] &&
+		value <= wigDataConstraint[tableId][1]);
+}
+static boolean wigLessThan(int tableId, double value)
+{
+return (value < wigDataConstraint[tableId][0]);
+}
+static boolean wigLessEqual(int tableId, double value)
+{
+return (value <= wigDataConstraint[tableId][0]);
+}
+static boolean wigEqual(int tableId, double value)
+{
+return (value == wigDataConstraint[tableId][0]);
+}
+static boolean wigNotEqual(int tableId, double value)
+{
+return (value != wigDataConstraint[tableId][0]);
+}
+static boolean wigGreaterEqual(int tableId, double value)
+{
+return (value >= wigDataConstraint[tableId][0]);
+}
+static boolean wigGreaterThan(int tableId, double value)
+{
+return (value > wigDataConstraint[tableId][0]);
+}
+
+void wiggleConstraints(char *cmp, char *pat, int tableIndex)
+{
+wigConstraint[tableIndex] = cmp;
+wiggleCompare[tableIndex] = NULL;
+if (strlen(pat)>0)
+    {
+    if (sameWord(cmp,"in range"))
+	{
+	char *rangeValues[2];
+	char *clone = cloneString(pat);
+	int records = 0;
+	char *comma = strchr(pat,',');
+
+	if (comma == (char *)NULL)
+	    records = chopByWhite(clone,rangeValues,2);
+	else
+	    records = chopByChar(clone,',',rangeValues,2);
+
+	if (records == 2)
+	    {
+	    trimSpaces(rangeValues[0]);
+	    trimSpaces(rangeValues[1]);
+	    wigDataConstraint[tableIndex][0] = sqlDouble(rangeValues[0]);
+	    wigDataConstraint[tableIndex][1] = sqlDouble(rangeValues[1]);
+	    if (wigDataConstraint[tableIndex][0] >
+		    wigDataConstraint[tableIndex][1])
+		{
+		double d = wigDataConstraint[tableIndex][1];
+		wigDataConstraint[tableIndex][1] =
+		    wigDataConstraint[tableIndex][0];
+		wigDataConstraint[tableIndex][0] = d;
+		}
+            wiggleCompare[tableIndex] = wigInRange;
+	    }
+	freeMem(clone);
+	if (wigDataConstraint[tableIndex][1] ==
+		wigDataConstraint[tableIndex][0])
+	    errAbort("For \"in range\" constraint, you must give two numbers separated by whitespace or comma.");
+	}
+    else
+	{
+	wigDataConstraint[tableIndex][0] = sqlDouble(pat);
+	if (sameWord(cmp,"<")) wiggleCompare[tableIndex] = wigLessThan;
+	else if (sameWord(cmp,"<=")) wiggleCompare[tableIndex] = wigLessEqual;
+	else if (sameWord(cmp,"=")) wiggleCompare[tableIndex] = wigEqual;
+	else if (sameWord(cmp,"!=")) wiggleCompare[tableIndex] = wigNotEqual;
+	else if (sameWord(cmp,">=")) wiggleCompare[tableIndex]=wigGreaterEqual;
+	else if (sameWord(cmp,">")) wiggleCompare[tableIndex] = wigGreaterThan;
+	}
+    }
+}
+
 char *constrainFields(char *tableId)
 /* If the user specified constraints, append SQL conditions (suitable
  * for a WHERE clause) to q. */
@@ -1800,13 +1888,13 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
 	dd = cgiOptionalString(varName);
 	snprintf(varName, sizeof(varName), "cmp%s_%s", tableId, fieldName);
 	cmp = cgiOptionalString(varName);
+
 	if (sameString(fieldName,"wigDataValue"))
 	    {
-	    if (cmp)
-		wigConstraint[tableIndex] = cmp;
-	    if (pat)
-		wigDataConstraint[tableIndex] = sqlDouble(pat);
+	    if (strlen(cmp)>0 && differentWord(cmp,"ignored"))
+		wiggleConstraints(cmp, pat, tableIndex);
 	    }
+
 	/* If it's a null constraint, skip it. */
 	if ( (dd != NULL &&
 	      (pat == NULL || pat[0] == 0 ||
@@ -4276,7 +4364,7 @@ printf("<TR>\n");
 }
 
 static void wigDoStats(char *database, char *table, struct slName *chromList,
-    int winStart, int winEnd)
+    int winStart, int winEnd, int tableId)
 {
 int spanCount = 0;
 struct wiggleData *wigData;
@@ -4325,9 +4413,11 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
     {
     char *chrom = chromPtr->name;
     if (numChroms > 1)
-	wigData = wigFetchData(database, table, chrom, winStart, winEnd, TRUE);
+	wigData = wigFetchData(database, table, chrom, winStart, winEnd, TRUE,
+		tableId, wiggleCompare[tableId]);
     else
-	wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE);
+	wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE,
+		tableId, wiggleCompare[tableId]);
     if (wigData)
 	{
 	unsigned span = 0;
@@ -4545,10 +4635,15 @@ if (trackType != (char *) NULL)
     if (sameWord(trackType,"wig"))
 	if (wigConstraint[0])
 	    {
-	    printf("<P> wiggle data value constraint: %s %g\n",
-		wigConstraint[0], wigDataConstraint[0]);
+	    if (sameWord(wigConstraint[0],"in range"))
+		printf("<P> data value constraint: %s [%g , %g]\n",
+		    wigConstraint[0], wigDataConstraint[0][0],
+			wigDataConstraint[0][1]);
+	    else
+		printf("<P> data value constraint: %s %g\n",
+		    wigConstraint[0], wigDataConstraint[0][0]);
 	    }
-	wigDoStats(database, table, chromList, winStart, winEnd);
+	wigDoStats(database, table, chromList, winStart, winEnd, WIG_TABLE_1);
 	wiggleDone = TRUE;
     }
 
@@ -4557,10 +4652,15 @@ if (trackType2 != (char *) NULL)
     if (sameWord(trackType2,"wig"))
 	if (wigConstraint[1])
 	    {
-	    printf("<P> wiggle data value constraint: %s %g\n",
-		wigConstraint[1], wigDataConstraint[1]);
+	    if (sameWord(wigConstraint[1],"in range"))
+		printf("<P> data value constraint: %s [%g , %g]\n",
+		    wigConstraint[1], wigDataConstraint[1][0],
+			wigDataConstraint[1][1]);
+	    else
+		printf("<P> data value constraint: %s %g\n",
+		    wigConstraint[1], wigDataConstraint[1][0]);
 	    }
-	wigDoStats(db2, table2, chromList, winStart, winEnd);
+	wigDoStats(db2, table2, chromList, winStart, winEnd, WIG_TABLE_2);
     }
 
 
@@ -4930,7 +5030,8 @@ printf("Content-Type: text/plain\n\n");
 webStartText();
 
 if (! allGenome)
-    wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE);
+    wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE,
+	WIG_TABLE_1, wiggleCompare[WIG_TABLE_1]);
 
 if (wigData)
     {
