@@ -4,13 +4,15 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* Some stuff that you'll likely need in any program that works with
- * DNA.  
+ * DNA.  Includes stuff for amino acids as well. 
  *
  * Assumes that DNA is stored as a character.
  * The DNA it generates will include the bases 
  * as lowercase tcag.  It will generally accept
  * uppercase as well, and also 'n' or 'N' or '-'
- * for unknown bases. */
+ * for unknown bases. 
+ *
+ * Amino acids are stored as single character upper case. */
 
 #ifndef DNAUTIL_H
 #define DNAUTIL_H
@@ -27,16 +29,19 @@ void dnaUtilOpen(); /* Good idea to call this before using any arrays
 #define N_BASE_VAL 4   /* Used in 1/2 byte representation. */
 
 typedef char DNA;
+typedef char AA;
 
 /* A little array to help us decide if a character is a 
  * nucleotide, and if so convert it to lower case. 
  * Contains zeroes for characters that aren't used
  * in DNA sequence. */
 extern DNA ntChars[256];
+extern AA aaChars[256];
 
 /* An array that converts alphabetical DNA representation
  * to numerical one: X_BASE_VAL as above. */
 extern int ntVal[256];
+extern int aaVal[256];
 
 /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent nucleotides. */
 extern int ntValNoN[256];     
@@ -78,8 +83,9 @@ void toRna(DNA *dna);
 
 typedef char Codon; /* Our codon type. */
 
+
 /* Return single letter code (upper case) for protein */
-char lookupCodon(DNA *dna); 
+AA lookupCodon(DNA *dna); 
 
 /* Return value from 0-63 of codon starting at start. 
  * Returns -1 if not a codon. */

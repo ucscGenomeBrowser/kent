@@ -384,7 +384,7 @@ boolean goodOverlap = FALSE, okOverlap = FALSE;
 boolean oneOk = FALSE, oneGood = FALSE;
 boolean bothOnePiece = (sameString(a->firstFrag, a->lastFrag) && sameString(b->firstFrag, b->lastFrag));
 
-//uglyf(" Check end overlap with %s, side %c, %d psls\n", fragName, side, slCount(pslList));
+
 if (fragName == NULL)
     return '?';
 if (side == '?')
@@ -411,7 +411,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	}
     if (size > 0)
         {
-	//uglyf("  psl: %s %s, start %d, end %d, size %d\n", psl->qName, psl->tName, start, end, size);
+	//uglyf(" psl: %s %s, start %d, end %d, size %d\n", psl->qName, psl->tName, start, end, size);
 	if (endSize > (size>>1))
 	    endSize = (size>>1);
 	if (side == 'L')
@@ -429,7 +429,6 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	    w = e-s;
 	    s -= beginOfEnd;
 	    }
-	//uglyf("  s %d, e %d, w %d\n", s, e, w);
 	if (w > 0)
 	    {
 	    bitSetRange(endBits, s, w);
@@ -463,13 +462,21 @@ if (bothOnePiece && (side == 'L' || side == 'R'))
     bitCount = bitCountRange(endBits, s, e-s);
     bitFree(&endBits);
     if (!goodOverlap)
-        return '?';
-    if (bitCount >= 90 || (bitCount >= 32 && uniqHits >= 20))
-        return 'Y';
-    else if (bitCount <= 0)
+	{
         return 'N';
+	}
+    if (bitCount >= 90 || (bitCount >= 32 && uniqHits >= 20))
+	{
+        return 'Y';
+	}
+    else if (bitCount <= 0)
+	{
+        return 'N';
+	}
     else
+	{
         return '?';
+	}
     }
 bitFree(&endBits);
 
@@ -484,7 +491,9 @@ if (bitCount >= 35)
 	if (a->phase == 3 && b->phase == 3 && (bitCount >= 90 || uniqHits >= 20))
 	    answer = 'Y';
 	else
+	    {
 	    answer = '?';
+	    }
 	}
     }
 return answer;

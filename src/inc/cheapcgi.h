@@ -49,6 +49,16 @@ char *cgiEncode(char *inString);
  * and all other characters translated to %hexVal. 
  * You can free return value with freeMem(). */
 
+void cgiMakeButton(char *name, char *value);
+/* Make 'submit' type button. */
+
+void cgiMakeTextVar(char *varName, char *initialVal, int charSize);
+/* Make a text control filled with initial value.  If charSize
+ * is zero it's calculated from initialVal size. */
+
+void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
+/* Make a text control filled with initial value.  */
+
 void cgiMakeHiddenVar(char *varName, char *string);
 /* Store string in hidden input for next time around. */
 

@@ -4,7 +4,7 @@
 O = bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
     dgRange.o diGraph.o dlist.o dnaseq.o dnautil.o dystring.o errabort.o \
     fa.o ffAli.o flydna.o fof.o fuzzyFind.o fuzzyShow.o gdf.o \
-    gemfont.o gff.o \
+    gemfont.o genoFind.o gfClientLib.o gff.o \
     gifcomp.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o \
     keys.o largefnt.o linefile.o localmem.o \
@@ -13,6 +13,7 @@ O = bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
     portimpl.o rle.o sailfnt.o seqOut.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
+    sqlNum.o sqlList.o \
     supStitch.o wildcmp.o wormdna.o xa.o xenbig.o xenshow.o xensmall.o
 
 

@@ -10,7 +10,12 @@
 #include "dystring.h"
 #include "errabort.h"
 #include "genoFind.h"
+#include "cheapcgi.h"
 
+int version = 3;
+int maxSeqSize = 20000;
+int minMatch = gfMinMatch;	/* Can be overridden from command line. */
+int tileSize = gfTileSize;	/* Can be overridden from command line. */
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +30,8 @@ errAbort(
   "   gfServer query host port probe.fa\n"
   "To process one probe fa file against a .nib format genome (not starting server):\n"
   "   gfServer direct probe.fa file(s).nib\n"
+  "To figure out usage level\n"
+  "   gfServer status host port\n"
   "To get input file list\n"
   "   gfServer files host port\n");
 }
@@ -32,7 +39,7 @@ errAbort(
 void genoFindDirect(char *probeName, int nibCount, char *nibFiles[])
 /* Don't set up server - just directly look for matches. */
 {
-struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, gfMaxTileUse);
 struct lineFile *lf = lineFileOpen(probeName, TRUE);
 struct dnaSeq seq;
 
@@ -77,34 +84,35 @@ memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr
 return socket(AF_INET, SOCK_STREAM, 0);
 }
 
-int readLarge(int sd, void *vBuf, size_t size)
-/* Read in until all is read or there is an error. */
-{
-char *buf = vBuf;
-size_t totalRead = 0;
-size_t oneRead;
 
-while (totalRead < size)
-    {
-    oneRead = read(sd, buf + totalRead, size - totalRead);
-    if (oneRead < 0)
-        {
-	perror("Couldn't finish large read");
-	break;
-	}
-    totalRead += oneRead;
-    }
-return totalRead;
+void logIt(FILE *logFile, char *format, ...)
+/* Print message to log file. */
+{
+va_list args;
+va_start(args, format);
+vfprintf(logFile, format, args);
+va_end(args);
+fflush(logFile);
 }
 
 void startServer(char *hostName, char *portName, int nibCount, char *nibFiles[])
 /* Load up index and hang out in RAM. */
 {
-struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+struct genoFind *gf;
 char buf[256];
 char *line, *command;
 int fromLen, readSize;
 int socketHandle = 0, connectionHandle = 0;
+long baseCount = 0, queryCount = 0;
+int warnCount = 0;
+int noSigCount = 0;
+int missCount = 0;
+int trimCount = 0;
+FILE *logFile = mustOpen("gfServer.log", "w");
+
+logIt(logFile, "gfServer version %d on host %s, port %s\n", version, hostName, portName);
+gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+logIt(logFile, "indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = setupSocket(portName, hostName);
@@ -112,15 +120,17 @@ if (bind(socketHandle, &sai, sizeof(sai)) == -1)
      errAbort("Couldn't bind to %s port %s", hostName, portName);
 listen(socketHandle, 100);
 
+logIt(logFile, "Server ready for queries!\n");
 printf("Server ready for queries!\n");
 for (;;)
     {
     connectionHandle = accept(socketHandle, &sai, &fromLen);
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
     buf[readSize] = 0;
+    logIt(logFile, "%s\n", buf);
     if (!startsWith(gfSignature(), buf))
         {
-	warn("Connection without gfSignature\n%s", buf);
+	++noSigCount;
 	continue;
 	}
     line = buf + strlen(gfSignature());
@@ -130,6 +140,24 @@ for (;;)
 	printf("Quitting genoFind server\n");
 	break;
 	}
+    else if (sameString("status", command))
+        {
+	sprintf(buf, "version %d", version);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "requests %ld", queryCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "bases %ld", baseCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "misses %ld", missCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "noSig %d", noSigCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "trimmed %ld", trimCount);
+	gfSendString(connectionHandle, buf);
+	sprintf(buf, "warnings %d", warnCount);
+	gfSendString(connectionHandle, buf);
+	gfSendString(connectionHandle, "end");
+	}
     else if (sameString("query", command))
         {
 	int querySize;
@@ -137,38 +165,59 @@ for (;;)
 	if (s == NULL || !isdigit(s[0]))
 	    {
 	    warn("Expecting query size after query command");
+	    ++warnCount;
 	    }
 	else
 	    {
 	    struct dnaSeq seq;
 
 	    seq.size = atoi(s);
-	    seq.name = NULL;
-	    seq.dna = needLargeMem(seq.size);
 	    buf[0] = 'Y';
 	    write(connectionHandle, buf, 1);
-	    if (readLarge(connectionHandle, seq.dna, seq.size) != seq.size)
-	        {
-		warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
-		}
-	    else
-	        {
-		struct gfClump *clumpList = gfFindClumps(gf, &seq), *clump;
-		int limit = 100;
-
-		for (clump = clumpList; clump != NULL; clump = clump->next)
+	    seq.name = NULL;
+	    if (seq.size > 0)
+		{
+		++queryCount;
+		seq.dna = needLargeMem(seq.size);
+		if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
 		    {
-		    struct gfSeqSource *ss = clump->target;
-		    sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
-			clump->qStart, clump->qEnd, ss->fileName,
-			clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
-		    gfSendString(connectionHandle, buf);
-		    if (--limit < 0)
-		        break;
+		    warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
+		    ++warnCount;
 		    }
-		gfSendString(connectionHandle, "end");
-		gfClumpFreeList(&clumpList);
+		else
+		    {
+		    struct gfClump *clumpList = NULL, *clump;
+		    int limit = 100;
+
+		    if (seq.size > maxSeqSize)
+		        {
+			++trimCount;
+			seq.size = maxSeqSize;
+			seq.dna[maxSeqSize] = 0;
+			}
+		    baseCount += seq.size;
+#ifdef DEBUG
+#endif /* DEBUG */
+		    faWriteNext(logFile, "query", seq.dna, seq.size);
+		    clumpList = gfFindClumps(gf, &seq);
+		    logIt(logFile, "%d hits\n", slCount(clumpList));
+		    if (clumpList == NULL)
+		        ++missCount;
+		    for (clump = clumpList; clump != NULL; clump = clump->next)
+			{
+			struct gfSeqSource *ss = clump->target;
+			sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
+			    clump->qStart, clump->qEnd, ss->fileName,
+			    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
+			gfSendString(connectionHandle, buf);
+			if (--limit < 0)
+			    break;
+			}
+		    gfClumpFreeList(&clumpList);
+		    }
+		freez(&seq.dna);
 		}
+	    gfSendString(connectionHandle, "end");
 	    }
 	}
     else if (sameString("files", command))
@@ -187,6 +236,7 @@ for (;;)
     else
         {
 	warn("Unknown command %s", command);
+	++warnCount;
 	}
     close(connectionHandle);
     connectionHandle = 0;
@@ -195,7 +245,7 @@ close(socketHandle);
 }
 
 void stopServer(char *hostName, char *portName)
-/* Load up index and hang out in RAM. */
+/* Send stop message to server. */
 {
 char buf[256];
 int sd = 0;
@@ -214,8 +264,39 @@ close(sd);
 printf("sent stop message to server\n");
 }
 
+void statusServer(char *hostName, char *portName)
+/* Send status message to server arnd report result. */
+{
+char buf[256];
+char *line, *command;
+int fromLen, readSize;
+int sd = 0;
+int fileCount;
+int i;
+
+/* Set up socket.  Get ready to listen to it. */
+sd = setupSocket(portName, hostName);
+if (connect(sd, &sai, sizeof(sai)) == -1)
+     errAbort("Couldn't connect to %s port %s", hostName, portName);
+
+/* Put together command. */
+sprintf(buf, "%sstatus", gfSignature());
+write(sd, buf, strlen(buf));
+
+for (;;)
+    {
+    if (gfGetString(sd, buf) == NULL)
+        break;
+    if (sameString(buf, "end"))
+        break;
+    else
+        printf("%s\n", buf);
+    }
+close(sd);
+}
+
 void queryServer(char *hostName, char *portName, char *faName)
-/* Load up index and hang out in RAM. */
+/* Send simple query to server and report results. */
 {
 char buf[256];
 char *line, *command;
@@ -240,7 +321,8 @@ write(sd, seq->dna, seq->size);
 
 for (;;)
     {
-    gfRecieveString(sd, buf);
+    if (gfGetString(sd, buf) == NULL)
+        break;
     if (sameString(buf, "end"))
 	{
 	printf("%d matches\n", matchCount);
@@ -273,13 +355,14 @@ sprintf(buf, "%sfiles", gfSignature());
 write(sd, buf, strlen(buf));
 
 /* Get count of files, and then each file name. */
-gfRecieveString(sd, buf);
-fileCount = atoi(buf);
-for (i=0; i<fileCount; ++i)
+if (gfGetString(sd, buf) != NULL)
     {
-    printf("%s\n", gfRecieveString(sd, buf));
+    fileCount = atoi(buf);
+    for (i=0; i<fileCount; ++i)
+	{
+	printf("%s\n", gfRecieveString(sd, buf));
+	}
     }
-
 close(sd);
 }
 
@@ -288,9 +371,15 @@ int main(int argc, char *argv[])
 {
 char *command;
 
+cgiSpoof(&argc, argv);
+command = argv[1];
+if (cgiVarExists("tileSize"))
+    tileSize = cgiInt("tileSize");
+if (cgiVarExists("minMatch"))
+    minMatch = cgiInt("minMatch");
+uglyf("tileSize %d, minMatch %d\n", tileSize, minMatch);
 if (argc < 2)
     usage();
-command = argv[1];
 if (sameWord(command, "direct"))
     {
     if (argc < 4)
@@ -314,6 +403,12 @@ else if (sameWord(command, "query"))
     if (argc != 5)
 	usage();
     queryServer(argv[2], argv[3], argv[4]);
+    }
+else if (sameWord(command, "status"))
+    {
+    if (argc != 4)
+	usage();
+    statusServer(argv[2], argv[3]);
     }
 else if (sameWord(command, "files"))
     {

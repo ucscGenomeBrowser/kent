@@ -14,7 +14,7 @@ struct bed
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
     /* The following items are not loaded by   the bedLoad routines. */
-    uint score; /* Score - 0-1000 */
+    int score; /* Score - 0-1000 */
     char strand[2];  /* + or - */
     };
 
@@ -51,6 +51,9 @@ void bedOutput(struct bed *el, FILE *f, char sep, char lastSep);
 
 int bedCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
+
+int bedCmpScore(const void *va, const void *vb);
+/* Compare to sort based on score - lowest first. */
 
 struct bedLine
 /* A line in a bed file with chromosome, start position parsed out. */

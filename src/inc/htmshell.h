@@ -44,6 +44,10 @@ void htmlEnd();
 /* Write the end of a stand-alone html file */
 void htmEnd(FILE *f);
 
+void htmlSetBackground(char *imageFile);
+/* Set background - needs to be called before htmlStart
+ * or htmShell. */
+
 /* Echo the input string to the output. */
 void htmlEchoInput();
 

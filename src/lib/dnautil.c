@@ -6,96 +6,98 @@
 #include "common.h"
 #include "dnautil.h"
 
+struct codonTable
 /* The dread codon table. */
-struct _cdntbl
     {
-    DNA *codon;	/* Lower case. */
-    char protCode;	/* Lower case. */
+    DNA *codon;		/* Lower case. */
+    AA protCode;	/* Upper case. */
     };
-static struct _cdntbl _codonTable [64] = 
+
+struct codonTable codonTable [64] = 
+/* The master codon/protein table. */
 {
-    {"ttt", 'f',},
-    {"ttc", 'f',},
-    {"tta", 'l',},
-    {"ttg", 'l',},
+    {"ttt", 'F',},
+    {"ttc", 'F',},
+    {"tta", 'L',},
+    {"ttg", 'L',},
 
-    {"tct", 's',},
-    {"tcc", 's',},
-    {"tca", 's',},
-    {"tcg", 's',},
+    {"tct", 'S',},
+    {"tcc", 'S',},
+    {"tca", 'S',},
+    {"tcg", 'S',},
 
-    {"tat", 'y',},
-    {"tac", 'y',},
+    {"tat", 'Y',},
+    {"tac", 'Y',},
     {"taa", 0,},
     {"tag", 0,},
 
-    {"tgt", 'c',},
-    {"tgc", 'c',},
+    {"tgt", 'C',},
+    {"tgc", 'C',},
     {"tga", 0,},
-    {"tgg", 'w',},
+    {"tgg", 'W',},
 
 
-    {"ctt", 'l',},
-    {"ctc", 'l',},
-    {"cta", 'l',},
-    {"ctg", 'l',},
+    {"ctt", 'L',},
+    {"ctc", 'L',},
+    {"cta", 'L',},
+    {"ctg", 'L',},
 
-    {"cct", 'p',},
-    {"ccc", 'p',},
-    {"cca", 'p',},
-    {"ccg", 'p',},
+    {"cct", 'P',},
+    {"ccc", 'P',},
+    {"cca", 'P',},
+    {"ccg", 'P',},
 
-    {"cat", 'h',},
-    {"cac", 'h',},
-    {"caa", 'q',},
-    {"cag", 'q',},
+    {"cat", 'H',},
+    {"cac", 'H',},
+    {"caa", 'Q',},
+    {"cag", 'Q',},
 
-    {"cgt", 'r',},
-    {"cgc", 'r',},
-    {"cga", 'r',},
-    {"cgg", 'r',},
-
-
-    {"att", 'i',},
-    {"atc", 'i',},
-    {"ata", 'i',},
-    {"atg", 'm',},
-
-    {"act", 't',},
-    {"acc", 't',},
-    {"aca", 't',},
-    {"acg", 't',},
-
-    {"aat", 'n',},
-    {"aac", 'n',},
-    {"aaa", 'k',},
-    {"aag", 'k',},
-
-    {"agt", 's',},
-    {"agc", 's',},
-    {"aga", 'r',},
-    {"agg", 'r',},
+    {"cgt", 'R',},
+    {"cgc", 'R',},
+    {"cga", 'R',},
+    {"cgg", 'R',},
 
 
-    {"gtt", 'v',},
-    {"gtc", 'v',},
-    {"gta", 'v',},
-    {"gtg", 'v',},
+    {"att", 'I',},
+    {"atc", 'I',},
+    {"ata", 'I',},
+    {"atg", 'M',},
 
-    {"gct", 'a',},
-    {"gcc", 'a',},
-    {"gca", 'a',},
-    {"gcg", 'a',},
+    {"act", 'T',},
+    {"acc", 'T',},
+    {"aca", 'T',},
+    {"acg", 'T',},
 
-    {"gat", 'd',},
-    {"gac", 'd',},
-    {"gaa", 'e',},
-    {"gag", 'e',},
+    {"aat", 'N',},
+    {"aac", 'N',},
+    {"aaa", 'K',},
+    {"aag", 'K',},
 
-    {"ggt", 'g',},
-    {"ggc", 'g',},
-    {"gga", 'g',},
-    {"ggg", 'g',},
+    {"agt", 'S',},
+    {"agc", 'S',},
+    {"aga", 'R',},
+    {"agg", 'R',},
+
+
+    {"gtt", 'V',},
+    {"gtc", 'V',},
+    {"gta", 'V',},
+    {"gtg", 'V',},
+
+    {"gct", 'A',},
+    {"gcc", 'A',},
+    {"gca", 'A',},
+    {"gcg", 'A',},
+
+    {"gat", 'D',},
+    {"gac", 'D',},
+    {"gaa", 'E',},
+    {"gag", 'E',},
+
+    {"ggt", 'G',},
+    {"ggc", 'G',},
+    {"gga", 'G',},
+    {"ggg", 'G',},
 };
 
 /* A table that gives values 0 for t
@@ -162,7 +164,7 @@ for (i=0; i<3; ++i)
 	return 'X';
     ix = (ix<<2) + bv;
     }
-c = _codonTable[ix].protCode;
+c = codonTable[ix].protCode;
 c = toupper(c);
 return c;
 }
@@ -186,7 +188,7 @@ DNA *valToCodon(int val)
 /* Return  codon corresponding to val (0-63) */
 {
 assert(val >= 0 && val < 64);
-return _codonTable[val].codon;
+return codonTable[val].codon;
 }
 
 void dnaTranslateSome(DNA *dna, char *out, int outSize)
@@ -497,6 +499,63 @@ else
     return 0;
 }
 
+/* Tables to convert from 0-20 to ascii single letter representation
+ * of proteins. */
+int aaVal[256];
+AA valToAa[20];
+
+AA aaChars[256];	/* 0 except for value aa characters.  Converts to upper case rest. */
+
+struct aminoAcidTable
+/* A little info about each amino acid. */
+    {
+    int ix;
+    char letter;
+    char abbreviation[3];
+    char *name;
+    };
+
+struct aminoAcidTable aminoAcidTable[] = 
+{
+    {0, 'A', "ala", "alanine"},
+    {1, 'C', "cys", "cysteine"},
+    {2, 'D', "asp",  "aspartic acid"},
+    {3, 'E', "glu",  "glutamic acid"},
+    {4, 'F', "phe",  "phenylalanine"},
+    {5, 'G', "gly",  "glycine"},
+    {6, 'H', "his",  "histidine"},
+    {7, 'I', "ile",  "isoleucine"},
+    {8, 'K', "lys",  "lysine"},
+    {9, 'L', "leu",  "leucine"},
+    {10, 'M',  "met", "methionine"},
+    {11, 'N',  "asn", "asparagine"},
+    {12, 'P',  "pro", "proline"},
+    {13, 'Q',  "gln", "glutamine"},
+    {14, 'R',  "arg", "arginine"},
+    {15, 'S',  "ser", "serine"},
+    {16, 'T',  "thr", "threonine"},
+    {17, 'V',  "val", "valine"},
+    {18, 'W',  "try", "tryptophan"},
+    {19, 'Y',  "tyr", "tyrosine"},
+};
+
+static void initAaVal()
+/* Initialize aaVal and valToAa tables. */
+{
+int i;
+char c, lowc;
+
+for (i=0; i<ArraySize(aaVal); ++i)
+    aaVal[i] = -1;
+for (i=0; i<ArraySize(aminoAcidTable); ++i)
+    {
+    c = aminoAcidTable[i].letter;
+    lowc = tolower(c);
+    aaVal[c] = aaVal[lowc] = i;
+    aaChars[c] = aaChars[lowc] = c;
+    valToAa[i] = c;
+    }
+}
 
 void dnaUtilOpen()
 /* Initialize stuff herein. */

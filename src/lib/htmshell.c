@@ -84,18 +84,30 @@ void htmlMemDeath()
 errAbort("Out of memory.");
 }
 
+static char *htmlBackground = NULL;
+
+void htmlSetBackground(char *imageFile)
+/* Set background - needs to be called before htmlStart
+ * or htmShell. */
+{
+htmlBackground = imageFile;
+}
+
 void _htmStart(FILE *f, char *title)
 /* Write out bits of header that both stand-alone .htmls
  * and CGI returned .htmls need. */
 {
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n</HEAD>\n\n", title);
-fputs("<BODY>\n",f);
+if (htmlBackground == NULL)
+    fputs("<BODY>\n",f);
+else
+    fprintf(f, "<BODY BACKGROUND=\"%s\">\n", htmlBackground);
 }
 
 /* Write the start of an html from CGI */
 void htmlStart(char *title)
-{
+    {
 puts("Content-Type:text/html\n");
 _htmStart(stdout, title);
 }

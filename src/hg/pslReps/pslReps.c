@@ -25,9 +25,12 @@ int calcMilliScore(struct psl *psl)
 {
 int milliScore = psl->match + psl->repMatch - psl->misMatch - 
 	2*psl->qNumInsert - 4*psl->tNumInsert;
+int denominator = psl->qEnd - psl->qStart - psl->nCount;
 
+if (denominator <= 0)
+    return 500;
 milliScore *= 1000;
-milliScore /= (psl->qEnd - psl->qStart);
+milliScore /= (psl->qEnd - psl->qStart - psl->nCount);
 return milliScore;
 }
 

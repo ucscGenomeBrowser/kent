@@ -464,6 +464,8 @@ int newAliCount = 0;
 int totalFfCount = 0;
 int trimCount = mrnaSeq->size/200 + 1000;
 
+if (bundle->ffList == NULL)
+    return;
 
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
     totalFfCount += ffAliCount(ffl->ff);
@@ -475,7 +477,8 @@ if (trimCount > 8000)	/* This is all the memory we can spare, sorry. */
     trimCount = 8000;
 if (totalFfCount > trimCount)
     {
-    warn("In %s vs. %s trimming from %d to %d blocks", mrnaSeq->name, genoSeq->name, totalFfCount, trimCount);
+    if (totalFfCount > 6*trimCount)
+	warn("In %s vs. %s trimming from %d to %d blocks", mrnaSeq->name, genoSeq->name, totalFfCount, trimCount);
     trimBundle(bundle, trimCount, stringency);
     }
 

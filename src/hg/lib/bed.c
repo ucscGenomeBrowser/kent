@@ -111,6 +111,14 @@ if (dif == 0)
 return dif;
 }
 
+int bedCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score - lowest first. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+return a->score - b->score;
+}
+
 struct bedLine *bedLineNew(char *line)
 /* Create a new bedLine based on tab-separated string s. */
 {

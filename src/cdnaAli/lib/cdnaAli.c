@@ -167,10 +167,6 @@ while (fgets(lineBuf, sizeof(lineBuf), f) != NULL)
         ali->strand = words[5][0];
         ali->direction = words[6][0];
         ali->gene = cloneString(words[8]);
-        if (wormIsChromRange(words[8]))
-            {
-            uglyf("Too weird %s\n", words[8]);
-            }
         slAddHead(&cdna->aliList, ali);
         }
     else if (strcmp(words[7], "goodEnds") == 0)

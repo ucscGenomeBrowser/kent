@@ -38,7 +38,6 @@ struct dgEdge
     void *val;		/* Value of edge. */
     struct dgNode *a;   /* Node on incoming side. */
     struct dgNode *b;   /* Node on outgoing side. */
-    bool unflippable;	/* True if can't flip this edge (specialized ooGreedy thing really) */
     };
 
 struct dgConnection
@@ -97,10 +96,6 @@ struct dgEdge *dgConnect(struct diGraph *dg, struct dgNode *a, struct dgNode *b)
 struct dgEdge *dgConnectWithVal(struct diGraph *dg, struct dgNode *a, struct dgNode *b, void *val);
 /* Connect node a to node b and put val on edge. */
 
-struct dgEdge *dgConnectUnflippable(struct diGraph *dg, struct dgNode *a, struct dgNode *b,
-    void *val);
-/* Connect a to b with an edge than can't be flipped. */
-
 void dgDisconnect(struct diGraph *dg, struct dgNode *a, struct dgNode *b);
 /* Disconnect nodes a and b. */
 
@@ -121,10 +116,9 @@ struct dgNodeRef *dgFindNewConnected(struct diGraph *dg, struct dgNode *a);
 /* Find a connected component guaranteed not to be covered before 
  * that includes a. */
 
-struct dgNodeRef *dgFindNewFlippableConnected(struct diGraph *dg, struct dgNode *a);
+struct dgNodeRef *dgFindNewConnectedWithVals(struct diGraph *dg, struct dgNode *a);
 /* Find a connected component guaranteed not to be covered before 
- * that includes a.  Connected components must be connected by flippable
- * edges. */
+ * that includes a.  Connected components must have values*/
 
 struct dgNodeRef *dgFindNextConnected(struct diGraph *dg);
 /* Return list of nodes that make up next connected component,
@@ -134,18 +128,18 @@ struct dgNodeRef *dgFindNextConnected(struct diGraph *dg);
  * and this as they use the same flag variables to keep track of
  * what vertices are used. */
 
-struct dgNodeRef *dgFindNextFlippableConnected(struct diGraph *dg);
+struct dgNodeRef *dgFindNextConnectedWithVals(struct diGraph *dg);
 /* Like dgFindConnected, but only considers graph nodes that
- * are conencted by a flippable edge. */
+ * have a val attatched. */
 
 int dgConnectedComponents(struct diGraph *dg);
 /* Count number of connected components and set component field
  * of each node to reflect which component it is in. */
 
-int dgConnectedFlippableComponents(struct diGraph *dg);
+int dgConnectedComponentsWithVals(struct diGraph *dg);
 /* Count number of connected components and set component field
  * of each node to reflect which component it is in. Only
- * consider components connected by flippable edges. */
+ * consider components with values. */
 
 void dgTopoSort(struct diGraph *dg);
 /* Fill in topological order of nodes. */
@@ -174,10 +168,8 @@ boolean dgAddedRangeConsistent(struct diGraph *rangeGraph,
  * with each edge would be internally consistent if add edge from a to b
  * with given min/max values. */
 
-struct dgEdgeRef *dgFindSubEdges(struct diGraph *dg, struct dgNodeRef *subGraph,
-	boolean onlyFlippable);
-/* Return list of edges in graph that connected together nodes in subGraph. 
- * Optionally return only flippable edges. */
+struct dgEdgeRef *dgFindSubEdges(struct diGraph *dg, struct dgNodeRef *subGraph);
+/* Return list of edges in graph that connected together nodes in subGraph. */
 
 void dgSwapEdges(struct diGraph *dg, struct dgEdgeRef *erList);
 /* Swap polarity of all edges in erList.  (Assumes you don't have

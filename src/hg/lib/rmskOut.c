@@ -235,9 +235,9 @@ char *class, *family;
 
 if ((wordCount = lineFileChop(lf, words)) == 0)
     return NULL;
-if (wordCount < 14 || wordCount > 15)
-    errAbort("Expecting 14 words line %d of %s", lf->lineIx, lf->fileName);
-if (wordCount == 15)
+if (wordCount < 14 )
+    errAbort("Expecting at least 14 words line %d of %s", lf->lineIx, lf->fileName);
+if (wordCount >= 15)
     id = words[14][0];
 else
     id = 0;

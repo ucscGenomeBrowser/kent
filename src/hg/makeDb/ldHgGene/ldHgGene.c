@@ -36,7 +36,7 @@ errAbort(
     "     ldHgGene database table file(s).gff");
 }
 
-struct genePred *makeGenePred(struct gffFile *gff, struct gffGroup *group)
+struct genePred *makeGenePred(struct gffFile *gff, struct gffGroup *group, char *name)
 /* Convert gff->groupList to genePred list. */
 {
 struct genePred *gp;
@@ -71,7 +71,7 @@ if (exonCount == 0)
 
 /* Allocate genePred and fill in values. */
 AllocVar(gp);
-gp->name = cloneString(group->name);
+gp->name = cloneString(name);
 gp->chrom = cloneString(group->seq);
 gp->strand[0] = group->strand;
 gp->txStart = group->start;
@@ -126,6 +126,18 @@ sqlDisconnect(&conn);
 freeDyString(&ds);
 }
 
+char *convertSoftberryName(char *name)
+/* Convert softberry name to simple form that is same as in
+ * softberryPep table. */
+{
+static char *head = "gene_id S.";
+char *s = strrchr(name, '.');
+
+if (strstr(name, head) == NULL)
+    errAbort("Unrecognized Softberry name %s, no %s", name, head);
+return s+1;
+}
+
 void ldHgGene(char *database, char *table, int gtfCount, char *gtfNames[])
 /* Load up database from a bunch of GTF files. */
 {
@@ -137,6 +149,8 @@ int lineCount;
 struct genePred *gpList = NULL, *gp;
 char *tabName = "genePred.tab";
 FILE *f;
+boolean isSoftberry = sameWord("softberryGene", table);
+boolean isEnsembl = sameWord("ensGene", table);
 
 for (i=0; i<gtfCount; ++i)
     {
@@ -156,7 +170,12 @@ printf("  %d ungrouped lines\n", slCount(gff->groupList));
 /* Convert from gffGroup to genePred representation. */
 for (group = gff->groupList; group != NULL; group = group->next)
     {
-    gp = makeGenePred(gff, group);
+    char *name = group->name;
+    if (isSoftberry)
+        {
+	name = convertSoftberryName(name);
+	}
+    gp = makeGenePred(gff, group, name);
     if (gp != NULL)
 	slAddHead(&gpList, gp);
     }

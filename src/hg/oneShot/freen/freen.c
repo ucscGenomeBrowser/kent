@@ -28,6 +28,7 @@ while (lineFileNext(lf, &line, &lineSize))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+errAbort("Aborting %s", argv[0]);
 if (argc != 2)
     usage();
 freen(argv[1]);

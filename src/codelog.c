@@ -633,3 +633,29 @@
 387 - Up to ooGreedy 97 and then back down to 96.  (See ooGreedy/version.doc
       for details).
 388 - Trying to set things up for CVS.
+389 - Seems to be under CVS.  I'm still saving sequentially numbered
+      .zip files.  Hopefully I'll get into the habit of adding everything
+      to the CVS archive that needs adding as a make it.  
+         Also working on unpacking the NT contigs in .gl and gold files.
+390 - Adding DNA sequence info to page that comes up in browser when
+      you click on a known gene.
+391 - Starting on 'genoFind' program which will ultimately sit on
+      kks00 with an index of the human genome in RAM, servicing
+      requests for alignments quickly.
+392 - Modularized and improved genoFind.  Server is 'gfServer' now.
+393 - Made 'gfClient' which produces a (headless) .psl file.
+394 - Fairly well hacked fast sequence searching into genome browser.
+395 - Renamed fast sequence searcher 'BLAT' in UI, and generally
+      polished it in UI.
+396 - Fixed various small BLAT bugs.  Starting on translated protein
+      version.
+397 - Made cgiSpoof capable of handling normal as well as cgi-style
+      command options for the most part.  Added -cvs option to
+      newProg, which will cause it to add the new program to
+      the cvs repository.  Small changes to exonAli and waba.
+398 - Added exoMouse track to browser.
+399 - Fixed BLAT memory leak and added status command.  Work associated
+      with Intronerator update.
+400 - gfServer takes tileSize and minMatch command line parameters.  Various
+      other Intronerator update stuff.  Made hgBlat produce big input
+      box.

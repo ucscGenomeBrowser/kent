@@ -319,6 +319,33 @@ errAbort("Unknown key %s for variable %s\n", key, varName);
 return val;
 }
 
+void cgiMakeButton(char *name, char *value)
+/* Make 'submit' type button. */
+{
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
+}
+
+void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
+/* Make a text control filled with initial value.  If charSize
+ * is zero it's calculated from initialVal size. */
+{
+if (charSize == 0) charSize = strlen(initialVal);
+if (charSize == 0) charSize = 8;
+
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\">", varName, 
+	charSize, initialVal);
+}
+
+void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
+/* Make a text control filled with initial value.  */
+{
+if (maxDigits == 0) maxDigits = 4;
+
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName, 
+	maxDigits, initialVal);
+}
+
+
 void cgiMakeHiddenVar(char *varName, char *string)
 /* Store string in hidden input for next time around. */
 {
@@ -339,31 +366,40 @@ boolean cgiSpoof(int *pArgc, char *argv[])
  *        cgiScript nonCgiArg1 var1=value1 var2=value2 var3=value3 nonCgiArg2
  * or like
  *        cgiScript nonCgiArg1 var1=value1&var2=value2&var3=value3 nonCgiArg2
+ * or even like
+ *        cgiScript nonCgiArg1 -x -y=bogus z=really
  * (The non-cgi arguments can occur anywhere.  The cgi arguments (all containing
- * the character '=') are erased from argc/argv.  Normally you call this
- *        cgiSpoof(&argc, argv);
+ * the character '=' or starting with '-') are erased from argc/argv.  Normally 
+ * you call this cgiSpoof(&argc, argv);
  */
 {
 int argc = *pArgc;
 int i;
 int argcLeft = argc;
 char *name;
-static char queryString[2046];
+static char queryString[4096];
 char *q = queryString;
-boolean needAnd = FALSE;
+boolean needAnd = TRUE;
 boolean gotAny = FALSE;
+boolean startDash;
+boolean gotEq;
 
-q += sprintf(q, "%s", "QUERY_STRING=");
+q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
     {
     name = argv[i];
-    if (strchr(name,'=') != NULL)
+    if (startDash = (name[0] == '-'))
+       ++name;
+    gotEq = (strchr(name, '=') != NULL);
+    if (gotEq || startDash)
         {
         if (needAnd)
             *q++ = '&';
         q += sprintf(q, "%s", name);
-        if (strchr(name, '&') == NULL)
+        if (!gotEq || strchr(name, '&') == NULL)
             needAnd = TRUE;
+	if (!gotEq)
+	    q += sprintf(q, "=on");
         memcpy(&argv[i], &argv[i+1], sizeof(argv[i]) * (argcLeft-i-1));
         argcLeft -= 1;
         gotAny = TRUE;

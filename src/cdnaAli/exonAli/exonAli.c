@@ -15,6 +15,19 @@
 
 long clock1000();
 
+void usage()
+/* Describe how to use program and abort. */
+{
+errAbort("This program aligns cDNA with genomic sequence. "
+         "Usage:\n"
+         "    exonAli named output cdnaName(s)\n"
+         "    exonAli in output listFile\n"
+         "    exonAli all output faFile ntDir\n"
+         "    exonAli starting output faFile ntDir startingIx [count]\n"
+         "    exonAli resume output faFile ntDir\n");
+}
+
+
 FILE *reportFile = NULL;
 boolean isHtml = FALSE;
 
@@ -697,18 +710,6 @@ freeMem(crudeGenes);
 }
 
 
-void usageErr()
-/* Describe how to use program and abort. */
-{
-errAbort("This program aligns cDNA with genomic sequence. "
-         "Usage:\n"
-         "    exonAli named cdnaName(s)\n"
-         "    exonAli in listFile\n"
-         "    exonAli all faFile ntDir\n"
-         "    exonAli starting faFile ntDir startingIx [count]\n"
-         "    exonAli resume faFile ntDir\n");
-}
-
 char *lastCdnaReported(char *reportFileName)
 /* Open report file and scan for last cDNA blasted. */
 {
@@ -831,10 +832,10 @@ struct nt4Seq **nt4s;
 int nt4Count;
 long baseCount = 0;
 int i;
-char *reportFileName = "exonAli.out";
+char *reportFileName;
 
-if (argc < 2)
-    usageErr();
+if (argc < 3)
+    usage();
 
 dnaUtilOpen();
 
@@ -843,13 +844,14 @@ pushWarnHandler(reportWarning);
 
 
 command = argv[1];
+reportFileName = argv[2];
 
 /* Simple "named" command doesn't get appended to report file. */
 if (!differentWord(command, "named"))
     {
     int i;
     nt4Count = loadNt4s(wormChromDir(), &nt4s);
-    for (i=2; i<argc; ++i)
+    for (i=3; i<argc; ++i)
         {
         char *cdnaName = argv[i];
         if (!wormCdnaSeq(cdnaName, &cdna, NULL))
@@ -866,7 +868,7 @@ else if (!differentWord(command, "in"))
     {
     nt4Count = loadNt4s(wormChromDir(), &nt4s);
     reportFile = mustOpen(reportFileName, "a");
-    doInFile(argv[2], nt4s, nt4Count);
+    doInFile(argv[3], nt4s, nt4Count);
     }
 /* All others do.  Most use an iterator. */
 else
@@ -880,27 +882,27 @@ else
     int dbIx = 0;
     char *ntDir;
 
-    if (argc < 4)
-        usageErr();
-    faFileName = argv[2];
-    ntDir = argv[3];
+    if (argc < 5)
+        usage();
+    faFileName = argv[3];
+    ntDir = argv[4];
 
     reportFile = mustOpen(reportFileName, "a");
 
     if (!differentWord(command, "starting"))
         {
         char *numStr;
-        if (argc != 5 && argc != 6)
-            usageErr();
-        numStr = argv[4];
+        if (argc != 6 && argc != 7)
+            usage();
+        numStr = argv[5];
         if (!isdigit(numStr[0]))
-            usageErr();
+            usage();
         seekUntilIx = atoi(numStr)-1;
-        if (argc == 6)
+        if (argc == 7)
             {
-            numStr = argv[5];
+            numStr = argv[6];
             if (!isdigit(numStr[0]))
-                usageErr();
+                usage();
             endIx = seekUntilIx + atoi(numStr);
             }
         warn("Starting at %d\n\n", seekUntilIx+1);
@@ -915,7 +917,7 @@ else
         }
     else
         {
-        usageErr();
+        usage();
         }
     
     nt4Count = loadNt4s(ntDir, &nt4s);

@@ -1,6 +1,7 @@
 /* hgTracks - Human Genome browser main cgi script. */
 #include "common.h"
 #include "hCommon.h"
+#include "linefile.h"
 #include "portable.h"
 #include "memalloc.h"
 #include "obscure.h"
@@ -32,11 +33,23 @@
 #include "mapSts.h"
 #include "est3.h"
 #include "exoFish.h"
+#include "roughAli.h"
 #include "snp.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "mouseSyn.h"
 #include "knownMore.h"
+#include "exprBed.h"
+
+/* begin Chuck code */
+#define EXPR_DATA_SHADES 16
+
+/* Declare our color gradients and the the number of colors in them */
+Color shadesOfGreen[EXPR_DATA_SHADES];
+Color shadesOfRed[EXPR_DATA_SHADES];
+Color shadesOfBlue[EXPR_DATA_SHADES];
+int maxRGBShade = EXPR_DATA_SHADES - 1;
+/* end Chuck code */
 
 int maxItemsInFullTrack = 300;
 
@@ -48,6 +61,8 @@ char *position; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 boolean seqReverse;		/* Look at reverse strand. */
+char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
+char *eUserSeqString = NULL;    /* CGI encoded user seq. string. */
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
@@ -208,6 +223,8 @@ switch (vis)
 return tg->height;
 }
 
+
+
 int tgWeirdItemStart(struct trackGroup *tg, void *item)
 /* Space filler function for tracks without regular items. */
 {
@@ -241,6 +258,7 @@ putchar('\n');
 makeHiddenVar("old", chromName);    /* Variable set when calling ourselves. */
 makeHiddenBoolean("seqReverse", seqReverse);
 makeHiddenVar("db", database);
+cgiContinueHiddenVar("ss");
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -261,6 +279,9 @@ if (chrom == NULL)
     }
 printf("HREF=\"%s?seqName=%s&db=%s&old=%s&winStart=%d&winEnd=%d&pix=%d", 
 	hgTracksName(), chrom, database, chrom, start, end, tl.picWidth);
+if (eUserSeqString != NULL)
+    printf("&ss=%s", eUserSeqString);
+ 
 if (withLeftLabels)
     printf("&leftLabels=on");
 if (withCenterLabels)
@@ -838,6 +859,36 @@ else
     return '+';
 }
 
+struct linkedFeatures *lfFromPsl(struct psl *psl)
+/* Create a linked feature item from psl. */
+{
+unsigned *starts = psl->tStarts;
+unsigned *sizes = psl->blockSizes;
+int i, blockCount = psl->blockCount;
+int grayIx = mrnaGrayIx(psl->qStart, 
+	psl->qEnd, psl->match - psl->misMatch + psl->repMatch - psl->qNumInsert);
+struct simpleFeature *sfList = NULL, *sf;
+struct linkedFeatures *lf;
+
+AllocVar(lf);
+lf->grayIx = grayIx;
+strncpy(lf->name, psl->qName, sizeof(lf->name));
+lf->orientation = orientFromChar(psl->strand[0]);
+for (i=0; i<blockCount; ++i)
+    {
+    AllocVar(sf);
+    sf->start = sf->end = starts[i];
+    sf->end += sizes[i];
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+finishLf(lf);
+return lf;
+}
+
+
 struct linkedFeatures *lfFromPslsInRange(char *table, int start, int end)
 /* Return linked features from range of table. */
 {
@@ -852,28 +903,8 @@ sprintf(query, "select * from %s where tStart<%u and tEnd>%u",
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct simpleFeature *sfList = NULL, *sf;
     struct psl *psl = pslLoad(row);
-    unsigned *starts = psl->tStarts;
-    unsigned *sizes = psl->blockSizes;
-    int i, blockCount = psl->blockCount;
-    int grayIx = mrnaGrayIx(psl->qStart, psl->qEnd, psl->match - psl->misMatch + psl->repMatch - psl->qNumInsert);
-
-    AllocVar(lf);
-    lf->grayIx = grayIx;
-    strncpy(lf->name, psl->qName, sizeof(lf->name));
-    lf->orientation = orientFromChar(psl->strand[0]);
-    for (i=0; i<blockCount; ++i)
-	{
-	AllocVar(sf);
-	sf->start = sf->end = starts[i];
-	sf->end += sizes[i];
-	sf->grayIx = grayIx;
-	slAddHead(&sfList, sf);
-	}
-    slReverse(&sfList);
-    lf->components = sfList;
-    finishLf(lf);
+    lf = lfFromPsl(psl);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }
@@ -900,6 +931,63 @@ tg->visibility = tvFull;
 tg->longLabel = "Full Length mRNAs";
 tg->shortLabel = "Full mRNAs";
 tg->loadItems = loadMrnaAli;
+return tg;
+}
+
+char *usrPslMapName(struct trackGroup *tg, void *item)
+/* Return name of item. */
+{
+struct linkedFeatures *lf = item;
+return lf->extra;
+}
+
+void loadUserPsl(struct trackGroup *tg)
+/* Load up rnas from table into trackGroup items. */
+{
+char *ss = cgiString("ss");
+char buf[1024];
+char *ssWords[2];
+int wordCount;
+char *faFileName, *pslFileName;
+struct lineFile *f;
+struct psl *psl;
+struct linkedFeatures *lfList = NULL, *lf;
+
+strcpy(buf, ss);
+wordCount = chopLine(buf, ssWords);
+if (wordCount < 2)
+    errAbort("Badly formated ss variable");
+pslFileName = ssWords[0];
+faFileName = ssWords[1];
+
+f = lineFileOpen(pslFileName, TRUE);
+tg->itemName = linkedFeaturesName;
+while ((psl = pslNext(f)) != NULL)
+    {
+    if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
+	{
+	lf = lfFromPsl(psl);
+	lf->extra = ss;
+	slAddHead(&lfList, lf);
+	}
+    pslFree(&psl);
+    }
+slReverse(&lfList);
+lineFileClose(&f);
+tg->items = lfList;
+}
+
+
+struct trackGroup *userPslTg()
+/* Make track group of user pasted sequence. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgUserPsl";
+tg->visibility = tvFull;
+tg->longLabel = "Your Sequence from BLAT Search";
+tg->shortLabel = "BLAT Sequence";
+tg->loadItems = loadUserPsl;
+tg->mapItemName = usrPslMapName;
 return tg;
 }
 
@@ -1039,7 +1127,7 @@ struct trackGroup *genieAltTg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "genieAlt";
-tg->visibility = tvFull;
+tg->visibility = tvDense;
 tg->longLabel = "Affymetrix Gene Predictions (excluding known genes)";
 tg->shortLabel = "Affy Genes";
 tg->loadItems = loadGenieAlt;
@@ -1182,11 +1270,11 @@ return lf->name;
 }
 
 struct trackGroup *ensemblGeneTg()
-/* Make track group of genie predictions. */
+/* Make track group of Ensembl predictions. */
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgEnsGene";
-tg->visibility = tvHide;
+tg->visibility = tvDense;
 tg->longLabel = "Ensembl Gene Predictions";
 tg->shortLabel = "Ensembl Genes";
 tg->loadItems = loadEnsGene;
@@ -1202,6 +1290,30 @@ tg->mapItemName = ensGeneMapName;
 return tg;
 }
 
+void loadSoftberryGene(struct trackGroup *tg)
+/* Load up Softberry genes. */
+{
+tg->items = lfFromGenePredInRange("softberryGene", chromName, winStart, winEnd);
+}
+
+struct trackGroup *softberryGeneTg()
+/* Make track group of Softberry predictions. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgSoftberryGene";
+tg->visibility = tvDense;
+tg->longLabel = "Fgenesh++ Gene Predictions";
+tg->shortLabel = "Fgenesh++ Genes";
+tg->loadItems = loadSoftberryGene;
+tg->ignoresColor = FALSE;
+tg->color.r = 0;
+tg->color.g = 100;
+tg->color.b = 0;
+tg->altColor.r = (tg->color.r+255)/2;
+tg->altColor.g = (tg->color.g+255)/2;
+tg->altColor.b = (tg->color.b+255)/2;
+return tg;
+}
 
 void goldLoad(struct trackGroup *tg)
 /* Load up golden path from database table to trackGroup items. */
@@ -2297,7 +2409,7 @@ return tg;
 }
 
 void loadExoFish(struct trackGroup *tg)
-/* Load up simpleRepeats from database table to trackGroup items. */
+/* Load up exoFish from database table to trackGroup items. */
 {
 bedLoadItem(tg, "exoFish", (ItemLoader)exoFishLoad);
 }
@@ -2331,7 +2443,7 @@ return shadesOfGray[grayLevel];
 
 
 struct trackGroup *exoFishTg()
-/* Make track group for simple repeats. */
+/* Make track group for exoFish. */
 {
 struct trackGroup *tg = bedTg();
 
@@ -2346,6 +2458,63 @@ tg->ignoresColor = TRUE;
 tg->itemColor = exoFishColor;
 return tg;
 }
+
+void loadExoMouse(struct trackGroup *tg)
+/* Load up exoMouse from database table to trackGroup items. */
+{
+bedLoadItem(tg, "exoMouse", (ItemLoader)roughAliLoad);
+if (tg->visibility == tvDense && slCount(tg->items) < 1000)
+    {
+    slSort(&tg->items, bedCmpScore);
+    }
+}
+
+void freeExoMouse(struct trackGroup *tg)
+/* Free up isochore items. */
+{
+roughAliFreeList((struct roughAli**)&tg->items);
+}
+
+char *exoMouseName(struct trackGroup *tg, void *item)
+/* Return what to display on left column of open track. */
+{
+struct roughAli *exo = item;
+static char name[17];
+
+strncpy(name, exo->name, sizeof(name)-1);
+return name;
+}
+
+
+Color exoMouseColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of exoMouse track item. */
+{
+struct roughAli *el = item;
+int ppt = el->score;
+int grayLevel;
+
+grayLevel = grayInRange(ppt, -100, 1000);
+return shadesOfGray[grayLevel];
+}
+
+
+struct trackGroup *exoMouseTg()
+/* Make track group for exoMouse. */
+{
+struct trackGroup *tg = bedTg();
+
+tg->mapName = "hgExoMouse";
+tg->visibility = tvDense;
+tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Exonerate)";
+tg->shortLabel = "Exonerate Mouse";
+tg->loadItems = loadExoMouse;
+tg->freeItems = freeExoMouse;
+tg->itemName = exoMouseName;
+tg->ignoresColor = TRUE;
+tg->itemColor = exoMouseColor;
+return tg;
+}
+
 
 void loadSnp(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
@@ -3668,6 +3837,194 @@ tg->itemEnd = gapItemEnd;
 return tg;
 }
 
+/* begin Chuck code */
+
+static int exprBedItemHeight(struct trackGroup *tg, void *item)
+/* Return item height for fixed height track. */
+{
+struct exprBed *exp = item;
+int minHeight = mgFontLineHeight(tl.font)+1;
+int height = 2*exp->numExp+1;
+if(height<minHeight) 
+    return minHeight;
+else
+    return height;
+}
+
+static int exprBedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height they use. */
+{
+if (tg->items == NULL)
+    return 0;
+tg->lineHeight = tg->itemHeight(tg, tg->items);
+tg->heightPer = tg->lineHeight - 1;
+switch (vis)
+    {
+    case tvFull:
+	tg->height = slCount(tg->items) * tg->lineHeight;
+	break;
+    case tvDense:
+	tg->height = tg->lineHeight;
+	break;
+    }
+return tg->height;
+}
+
+void makeRedGreenShades(struct memGfx *mg) {
+/* Allocate the  shades of Red, Green and Blue */
+  int i;
+  int maxShade = ArraySize(shadesOfGreen) -1;
+  for(i=0; i<=maxShade; i++) {
+    struct rgbColor rgbGreen, rgbRed, rgbBlue;
+    int level = (255*i/(maxShade));
+    if(level<0) level = 0;
+    shadesOfRed[i] = mgFindColor(mg, level, 0, 0);
+    shadesOfGreen[i] = mgFindColor(mg, 0, level, 0);
+    shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
+  }
+}
+
+/** Returns the appropriate Color from the shadesOfGreen and shadesOfRed arrays
+ * @param float val - acutual data to be represented
+ * @param float maxDeviation - maximum (and implicitly minimum) values represented
+ * @param boolean RG_COLOR_SCHEME - are we red/green(TRUE) or red/blue(FALSE) ?
+ */
+
+Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
+{
+  float absVal = fabs(val);
+
+  int colorIndex = 0;
+
+  if(absVal > 100) 
+     return lightGrayIndex(); 
+
+  /* cap the value to be less than or equal to maxDeviation */
+  /*    uglyf("abs is %f<BR>\n",absVal); */
+  if(absVal > maxDeviation)
+    absVal = maxDeviation;
+
+  /* project the value into the number of colors we have.  
+   *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
+   * 1 * 15 /2.0 = 7.5 = 7
+   */
+  if(maxDeviation == 0) 
+    errAbort("ERROR: hgTracksExample::getExprDataColor() maxDeviation can't be zero"); 
+
+  colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
+  
+  /* Return the correct color depending on color scheme and shades */
+  if(RG_COLOR_SCHEME) 
+    {
+    if(val > 0) 
+      return shadesOfRed[colorIndex];
+    else 
+      return shadesOfGreen[colorIndex];
+    }
+  else 
+    {
+    if(val > 0) 
+      return shadesOfRed[colorIndex];
+    else 
+      return shadesOfBlue[colorIndex];
+    }
+}
+
+static void mgExprBedBox(struct memGfx *mg, int xOff, int yOff, int width, int height, struct exprBed *exp)
+{
+int y1, y2;
+int strips = exp->numExp;
+int i;
+int color = 1;
+
+y2 = 0;
+for (i=0; i<strips; ++i)
+    {
+      Color color = getExprDataColor(exp->scores[i],2.0,TRUE);
+      /*      uglyf("<PRE>item %d color is %d for score %f<BR></PRE>\n", i,color,exp->scores[i]);*/
+    y1 = y2;
+    y2 = (i+1)*height/strips;
+    mgDrawBox(mg, xOff, yOff+y1, width, y2-y1, color);
+    }
+}
+
+/**
+ * Draw the box for a ExprBed.h
+ */
+static void exprBedDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+			struct memGfx *mg, int xOff, int yOff, int width,
+			MgFont *font, Color color, enum trackVisibility vis) 
+{
+  
+  int baseWidth = seqEnd - seqStart;
+  struct exprBed *item;
+  int y = yOff;
+  int heightPer = tg->heightPer;
+  int lineHeight = tg->lineHeight;
+  int x1,x2,w;
+  boolean isFull = (vis == tvFull);
+  double scale = width/(double)baseWidth;
+  makeRedGreenShades(mg);
+  for (item = tg->items; item != NULL; item = item->next)
+    {
+      x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+      x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+      w = x2-x1;
+      if (tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, mg);
+      if (w < 1)
+	w = 1;
+      mgExprBedBox(mg, x1, y, w, heightPer, item);
+      if (isFull)
+	y += lineHeight;
+    }
+}
+
+void loadExprBed(struct trackGroup *tg)
+/* Load up exprBed from database table to trackGroup items. */
+{
+bedLoadItem(tg, "exprBed", (ItemLoader)exprBedLoad);
+}
+
+void freeExprBed(struct trackGroup *tg)
+/* Free up exprBed items. */
+{
+exprBedFreeList((struct exprBed**)&tg->items);
+}
+
+char *exprBedName(struct trackGroup *tg, void *item)
+/* Return full genie name. */
+{
+struct exprBed *exp = item;
+char *full = exp->name;
+static char abbrev[32];
+
+strncpy(abbrev, full, sizeof(abbrev));
+abbr(abbrev, "LINK_");
+return abbrev;
+}
+
+
+struct trackGroup *exprBedTg()
+/* Make track group for exprBed. */
+{
+struct trackGroup *tg = bedTg();
+
+tg->drawItems = exprBedDraw;
+tg->mapName = "hgExprBed";
+tg->visibility = tvHide;
+tg->itemHeight = exprBedItemHeight;
+tg->itemName = exprBedName;
+tg->totalHeight = exprBedTotalHeight;
+tg->longLabel = "exprBed";
+tg->shortLabel = "exprBed";
+tg->loadItems = loadExprBed;
+tg->freeItems = freeExprBed;
+return tg;
+}
+
+/* end chuck */
+
 
 #ifdef SOMEDAY
 /* These next three vars are used to communicate info from the
@@ -3956,7 +4313,6 @@ if (withCenterLabels)
 	    mgTextCentered(mg, xOff, y+1, clWidth, insideHeight, color, font, group->longLabel);
 	    mapBoxToggleVis(0,y+1,pixWidth,insideHeight,group);
 #ifdef SOON
-	    uglyf("ochXoff = %d, ochWidth = %d, pixWidth = %d", ochXoff, openCloseHideWidth, pixWidth);
 	    mgTextCentered(mg, ochXoff, y+1, openCloseHideWidth, insideHeight, 
 		color, font, "[open] [close] [hide]");
 #endif
@@ -4032,24 +4388,6 @@ mgFree(&mg);
 }
 
 
-void makeNumText(char *name, int num, int digits)
-/* Make a text control filled with a number. */
-{
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", name, digits, num);
-}
-
-void makeText(char *name, char *initialVal, int chars)
-/* Make a text control filled with initial value. */
-{
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%s>", name, chars, initialVal);
-}
-
-void makeSubmitButton(char *name, char *value)
-/* Make a submit button. */
-{
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
-}
-
 void makeDropList(char *name, char *menu[], int menuSize, char *checked)
 /* Make a drop-down list. */
 {
@@ -4075,11 +4413,43 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
     (isChecked ? " CHECKED" : "") );
 }
 
+void printEnsemblAnchor()
+/* Print anchor to Ensembl display on same window. */
+{
+int bigStart, bigEnd, smallStart, smallEnd;
+int ucscSize;
+
+ucscSize = winEnd - winStart;
+bigStart = smallStart = winStart;
+bigEnd = smallEnd = winEnd;
+if (ucscSize < 1000000)
+    {
+    bigStart -= 500000;
+    if (bigStart < 0) bigStart = 0;
+    bigEnd += 500000;
+    if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
+    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>",
+	    chromName, bigStart, bigEnd, smallStart, smallEnd);
+    }
+else
+    {
+    printf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+	   "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>",
+	    chromName, bigStart, bigEnd);
+    }
+}
+
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
 {
 struct trackGroup *group;
+
+/* See if want to include sequence search results. */
+userSeqString = cgiOptionalString("ss");
+if (userSeqString != NULL)
+    eUserSeqString = cgiEncode(userSeqString);
 
 if (calledSelf)
     {
@@ -4103,17 +4473,20 @@ if (hTableExists("ctgPos")) slSafeAddHead(&tGroupList, contigTg());
 slSafeAddHead(&tGroupList, goldTrackGroup());
 slSafeAddHead(&tGroupList, gapTg());
 if (hTableExists("genomicDups")) slSafeAddHead(&tGroupList, genomicDupsTg());
-if (!sameString(database, "hg5"))  /* ~~~ Big Bad Bandaide. */
 slSafeAddHead(&tGroupList, coverageTrackGroup());
+if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
+if (hTableExists("softberryGene")) slSafeAddHead(&tGroupList, softberryGeneTg());
 if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
 if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
+if (hTableExists("exprBed")) slSafeAddHead(&tGroupList, exprBedTg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
+if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
 if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg());
@@ -4158,30 +4531,30 @@ printf("<H2>Chromosome %s, Bases %d-%d, Size %d</H2>", skipChr(chromName),
 
 /* Put up scroll and zoom controls. */
 fputs("move ", stdout);
-makeSubmitButton("left3", "<<<");
-makeSubmitButton("left2", " <<");
-makeSubmitButton("left1", " < ");
-makeSubmitButton("right1", " > ");
-makeSubmitButton("right2", ">> ");
-makeSubmitButton("right3", ">>>");
+cgiMakeButton("left3", "<<<");
+cgiMakeButton("left2", " <<");
+cgiMakeButton("left1", " < ");
+cgiMakeButton("right1", " > ");
+cgiMakeButton("right2", ">> ");
+cgiMakeButton("right3", ">>>");
 fputs(" zoom in ", stdout);
-makeSubmitButton("in1", "1.5x");
-makeSubmitButton("in2", " 3x ");
-makeSubmitButton("in3", "10x");
+cgiMakeButton("in1", "1.5x");
+cgiMakeButton("in2", " 3x ");
+cgiMakeButton("in3", "10x");
 fputs(" zoom out ", stdout);
-makeSubmitButton("out1", "1.5x");
-makeSubmitButton("out2", " 3x ");
-makeSubmitButton("out3", "10x");
+cgiMakeButton("out1", "1.5x");
+cgiMakeButton("out2", " 3x ");
+cgiMakeButton("out3", "10x");
 fputs("<BR>\n", stdout);
 
 /* Make line that says position. */
     {
     fputs("position ", stdout);
-    makeText("position", position, 30);
+    cgiMakeTextVar("position", position, 30);
     fputs(" pixel width ", stdout);
-    makeNumText("pix", tl.picWidth, 4);
+    cgiMakeIntVar("pix", tl.picWidth, 4);
     fputs(" ", stdout);
-    makeSubmitButton("submit", "jump");
+    cgiMakeButton("submit", "jump");
     printf(" <A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A>");
     fputs("<BR>\n", stdout);
     }
@@ -4193,48 +4566,28 @@ fputs("Click on an item in a track to view more information on that item. "
       "Click center label to toggle between full and dense display of "
       "that track.  Tracks with more than 300 items are always displayed "
       "densely.  Click on base position to zoom in by 3x around where you "
-      "clicked.<BR><HR>",
+      "clicked.<BR>",
       stdout);
-printf("Click <A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
-      "here to view DNA.</A><BR>",  hgcName(),
+fputs("<TABLE BORDER=\"1\" WIDTH=\"100%\"><TR><TD><P ALIGN=CENTER>", stdout);
+printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
+      "View DNA</A></TD>",  hgcName(),
       winStart, chromName, winStart, winEnd, database);
 if (sameString(database, "hg5"))
     {
-    int bigStart, bigEnd, smallStart, smallEnd;
-    int ucscSize;
-
-    ucscSize = winEnd - winStart;
-    bigStart = smallStart = winStart;
-    bigEnd = smallEnd = winEnd;
-    if (ucscSize < 1000000)
-	{
-	bigStart -= 500000;
-	if (bigStart < 0) bigStart = 0;
-	bigEnd += 500000;
-	if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
-	printf("Click <A HREF=\"http://www.ensembl.org/perl/contigview"
-	       "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>"
-	       "here to open Ensembl window</A>.<BR>",  
-		chromName, bigStart, bigEnd, smallStart, smallEnd);
-	}
-    else
-        {
-	printf("Click <A HREF=\"http://www.ensembl.org/perl/contigview"
-	       "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>"
-	       "here to open Ensembl window</A>.<BR>",  
-		chromName, bigStart, bigEnd);
-	}
-
+    fputs("<TD><P ALIGN=CENTER>", stdout);
+    printEnsemblAnchor();
+    fputs("Visit Ensembl</A></TD>", stdout);
     }
-fputs("<HR><CENTER>", stdout);
+fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD></TR>", database);
+fputs("</TABLE><CENTER>\n", stdout);
 
 /* Display bottom control panel. */
 fputs("Chromosome ", stdout);
 makeDropList("seqName", hgChromNames, 24, chromName);
 fputs(" bases ",stdout);
-makeNumText("winStart", winStart, 12);
+cgiMakeIntVar("winStart", winStart, 12);
 fputs(" - ", stdout);
-makeNumText("winEnd", winEnd, 12);
+cgiMakeIntVar("winEnd", winEnd, 12);
 printf(" Guidelines ");
 makeCheckBox("guidelines", withGuidelines);
 printf(" <B>Labels:</B> ");
@@ -4243,7 +4596,7 @@ makeCheckBox("leftLabels", withLeftLabels);
 printf("center ");
 makeCheckBox("centerLabels", withCenterLabels);
 printf(" ");
-makeSubmitButton("submit", "refresh");
+cgiMakeButton("submit", "refresh");
 printf("<BR>\n");
 
 
@@ -4498,6 +4851,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 
 int main(int argc, char *argv[])
 {
-htmShell("Draft Genome Browser v3", doMiddle, NULL);
+htmlSetBackground("../images/floret.jpg");
+htmShell("Draft Genome Browser v4", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 }

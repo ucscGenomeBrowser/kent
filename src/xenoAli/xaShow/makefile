@@ -8,5 +8,5 @@ xaShow.exe: $(O)
 	mv a.out xaShow.exe
 	chmod a+rx xaShow.exe
 	chmod g-w xaShow.exe
-	mv xaShow.exe ../../cgi-bin
+	mv xaShow.exe $(HOME)/.html/cgi-bin
 

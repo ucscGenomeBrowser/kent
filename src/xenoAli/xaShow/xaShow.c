@@ -25,8 +25,9 @@ snof = snofMustOpen(ixFileName);
 if (!snofFindOffset(snof, xaName, &offset))
     errAbort("Couldn't find %s", xaName);
 snofClose(&snof);
-
+uglyf("offset is %ld<BR>\n", offset);
 f = xaOpenVerify(dataFileName);
+uglyf("xa %s file offset %ld<BR>\n", xaName, offset);
 fseek(f, offset, SEEK_SET);
 xa = xaReadNext(f, FALSE);
 fclose(f);
@@ -170,29 +171,41 @@ strcpy(cbCosmidName, query);
 if ((s = strrchr(cbCosmidName, '.')) != NULL)
     *s = 0;
 
+
 /* Get xaAli. */
 xa = getOneXaAli(qOrganism, query);
 
 printf("<H2>Alignment of <I>C. briggsae</I> %s:%d-%d and <I>C. elegans</I> %s</H2>\n",
     cbCosmidName, xa->qStart, xa->qEnd, target);
 
+uglyf("qOrganism %s, tOrganism %s, query %s, target %s, strand %c<BR>\n",
+	qOrganism, tOrganism, query, target, strand);
+
 htmlParagraph("<I>C. briggsae</I> appears on top. Coding regions in <I>C. elegans</I> are in upper case.");
 
+
+uglyf("Ok1<BR>\n");
 /* Get display window. */
 if (!wormParseChromRange(target, &chrom, &tStart, &tEnd))
     errAbort("Target %s isn't formatted correctly", target);
 
 /* Figure out intersection of display window and xeno-alignment */
+uglyf("Ok2<BR>\n");
 bothStart = max(xa->tStart, tStart);
 bothEnd = min(xa->tEnd, tEnd);
+uglyf("xa->tStart %d, xa->tEnd %d, tStart %d, tEnd %d, bothStart %d, bothEnd %d<BR>\n",
+	xa->tStart, xa->tEnd, tStart, tEnd, bothStart, bothEnd);
 
 /* Get upper-cased-exon target DNA. */
 targetDna = wormChromPartExonsUpper(chrom, bothStart, bothEnd - bothStart);
+uglyf("Ok3<BR>\n");
 upcCorresponding(targetDna, bothEnd - bothStart, xa->tSym, bothStart - xa->tStart);
+uglyf("Ok4<BR>\n");
 
 
 printf("<TT><PRE>");
 showTargetRange(xa, bothStart - xa->tStart, bothEnd-bothStart, strand, showSym);
+uglyf("Ok5<BR>\n");
 printf("</TT></PRE>");
 }
 
