@@ -301,6 +301,13 @@ loadSelectTable(selectFile);
 ioFiles.outFh = mustOpen(outFile, "w");
 if (dropFile != NULL)
     ioFiles.dropFh = mustOpen(dropFile, "w");
+if (idOutput)
+    {
+    if (useAggregate)
+        fputs("#inId\n", ioFiles.outFh);
+    else
+        fputs("#inId\t" "selectId\n", ioFiles.outFh);
+    }
 if (statsOutput)
     fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
 
