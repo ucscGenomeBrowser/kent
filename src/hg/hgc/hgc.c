@@ -1573,6 +1573,7 @@ printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
+puts("Position ");
 savePosInTextBox(seqName, winStart+1, winEnd);
 hgSeqOptionsHti(hti);
 puts("<P>");
