@@ -5,11 +5,12 @@
 #include "dnaseq.h"
 #include "hash.h"
 #include "keys.h"
+#include "gbDefs.h"
 #include "gbParse.h"
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.4 2003/07/14 19:53:25 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.5 2003/10/15 19:06:46 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -34,6 +35,13 @@ struct gbField *gbGeneDbxField;
 struct gbField *gbCdsDbxField;
 struct gbField *gbProteinIdField;
 struct gbField *gbTranslationField;
+
+/* RefSeq specific data */
+struct gbField *gbRefSeqRoot = NULL;
+struct gbField *gbRefSeqStatusField = NULL;
+struct gbField *gbRefSeqSummaryField = NULL;
+struct gbField *gbRefSeqCompletenessField = NULL;
+
 
 /* State flag, indicates end-of-record reached on current entry; needed to
  * detect entries that don't have sequences */
@@ -274,6 +282,14 @@ gbPrtField = c2;
 c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 128); 
 slAddTail(&c1->children, c2);
 gbCdsDbxField = c2;
+
+/* for refseq, we parse data stuff into comment. */
+gbRefSeqStatusField = newField("refSeqStatus", "rss", GBF_NONE, 128);
+gbRefSeqRoot = gbRefSeqStatusField;
+gbRefSeqSummaryField = newField("refSeqSummary", "rsu", GBF_NONE, 1024);
+slAddTail(&gbRefSeqRoot, gbRefSeqSummaryField);
+gbRefSeqCompletenessField = newField("refSeqCompleteness", "rsc", GBF_NONE, 128);
+slAddTail(&gbRefSeqRoot, gbRefSeqCompletenessField);
 }
 
 void gbfClearVals(struct gbField *gbf)
@@ -448,12 +464,150 @@ while (lineFileNext(lf, &line, &lineSize))
 return FALSE;
 }
 
+static char* findNextInList(char* start, char** list)
+/* find the first occurance of one of the strings in the list. */
+{
+char* first = NULL;
+int i;
+
+for (i = 0; list[i] != NULL; i++)
+    {
+    char* next = strstr(start, list[i]);
+    if ((first == NULL) || (next < first))
+        first = next;
+    }
+return first;
+}
+
+static char* nextRefSeqCommentField(char** startPtr, char** valuePtr)
+/* Parse next field value out of comment.  Return null terminated
+ * field name with null terminated value.  Advance start for next
+ * call.  Return null if no more. */
+{
+static char* FIELD_NAMES[] = {
+    "Summary:", "COMPLETENESS:", "Transcript Variant:", NULL
+};
+char *value, *next;
+char* name;
+if (*startPtr == NULL)
+    return NULL;
+
+name = findNextInList(*startPtr, FIELD_NAMES);
+
+if (name == NULL)
+    {
+    /* no more, advance startPtr to end of string */
+    *startPtr += strlen(*startPtr);
+    return NULL;
+    }
+/* find : at end on name */
+value = strchr(name, ':');
+*value = '\0';
+value++;
+
+/* find either next field or end of string */
+next = findNextInList(value, FIELD_NAMES);
+if (next == NULL)
+    *startPtr += strlen(value);  /* set to end of string */
+else
+    {
+    next[-1] = '\0';
+    *startPtr = next;
+    }
+*valuePtr = trimSpaces(value);
+return name;
+}
+
+static boolean parseRefSeqStatus()
+/* Parse refseq status out of comment field */
+{
+char *stat = NULL;
+if (gbCommentField->val != NULL)
+    {
+    if (startsWith("REVIEWED REFSEQ:", gbCommentField->val->string))
+        stat = "rev";
+    else if (startsWith("VALIDATED REFSEQ:", gbCommentField->val->string))
+        stat = "val";
+    else if (startsWith("PROVISIONAL REFSEQ:", gbCommentField->val->string))
+        stat = "pro";
+    else if (startsWith("PREDICTED REFSEQ:", gbCommentField->val->string))
+        stat = "pre";
+    else if (startsWith("INFERRED REFSEQ:", gbCommentField->val->string))
+        stat = "inf";
+    }
+if (stat == NULL)
+    {
+    stat = "unk";
+    warn("refseq %s has unknown status in \"%s\"", 
+         gbAccessionField->val->string, gbCommentField->val->string);
+    }
+dyStringAppend(gbRefSeqStatusField->val, stat);
+return !sameString(stat, "unk");
+}
+
+static void parseRefSeqCompleteness(char* completeness)
+/* Parse the refseq completeness value. The following values were observed
+ * in the refseq data files:
+ *     complete on the 5' end.
+ *     complete on the 3' end.
+ *     full length.
+ *     incomplete on both ends.
+ *     incomplete on the 5' end.
+ *     incomplete on the 3' end.
+ *     not full length.
+ */
+{
+char* cmpl;
+/* strstr is used to allow for stray spaces, etc */
+if (strstr(completeness, "complete on the 5' end") != NULL)
+    cmpl = "cmpl5";
+else if (strstr(completeness, "complete on the 3' end") != NULL)
+    cmpl = "cmpl3";
+else if (strstr(completeness, "full length") != NULL)
+    cmpl = "full";
+else if (strstr(completeness, "incomplete on both ends") != NULL)
+    cmpl = "incmpl";
+else if (strstr(completeness, "incomplete on the 5' end") != NULL)
+    cmpl = "incmpl5";
+else if (strstr(completeness, "incomplete on the 3' end") != NULL)
+    cmpl = "incmpl3";
+else if (strstr(completeness, "not full length") != NULL)
+    cmpl = "part";
+else
+    cmpl = "unk";
+dyStringAppend(gbRefSeqCompletenessField->val, cmpl);
+}
+
+static void refSeqParse()
+/* do special parsing of RefSeq data that was stuck in a comment */
+{
+if (parseRefSeqStatus())
+    {
+    char *next, *name, *value;
+    
+    /* start searching for fields past the end of the status */
+    next = gbCommentField->val->string;
+    while ((name = nextRefSeqCommentField(&next, &value)) != NULL)
+        {
+        if (sameString(name, "Summary"))
+            dyStringAppend(gbRefSeqSummaryField->val, value);
+        else if (sameString(name, "COMPLETENESS"))
+            parseRefSeqCompleteness(value);
+        }
+    }
+}
+
 boolean gbfReadFields(struct lineFile *lf)
 /* Read in a single Gb record up to the ORIGIN. */
 {
+boolean gotRecord;
 gbfClearVals(gbStruct);
+gbfClearVals(gbRefSeqRoot);
 gReachedEOR = FALSE;
-return recurseReadFields(lf, gbStruct, -1);
+gotRecord = recurseReadFields(lf, gbStruct, -1);
+if (gotRecord)
+    refSeqParse();
+return gotRecord;
 }
 
 DNA* gbfReadSequence(struct lineFile *lf, int *retSize)
@@ -544,11 +698,12 @@ for (; gbf != NULL; gbf = gbf->next)
     flattenField(gbf, kvt);
 }
 
-void gbfFlatten(struct gbField *gbf, struct kvt *kvt)
-/* Flatten out gbf into keyVal array. */
+void gbfFlatten(struct kvt *kvt)
+/* Flatten out parsed genebank data into keyVal array. */
 {
 kvtClear(kvt);
-recurseFlatten(gbf, kvt);
+recurseFlatten(gbStruct, kvt);
+recurseFlatten(gbRefSeqRoot, kvt);
 }
 
 

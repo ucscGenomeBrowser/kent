@@ -59,6 +59,10 @@ extern struct gbField *gbCdsDbxField;
 extern struct gbField *gbProteinIdField;
 extern struct gbField *gbTranslationField;
 
+/* RefSeq specific data */
+extern struct gbField *gbRefSeqStatusField;
+extern struct gbField *gbRefSeqSummaryField;
+extern struct gbField *gbRefSeqCompletenessField;
 
 char *skipLeadingNonSpaces(char *s);
 /* Return first non-white space or NULL. */
@@ -88,8 +92,8 @@ DNA* gbfReadSequence(struct lineFile *lf, int *retSize);
 void gbfSkipSequence(struct lineFile *lf);
 /* Skip to '//' if sequence not read */
 
-void gbfFlatten(struct gbField *gbf, struct kvt *kvt);
-/* Flatten out gbf into keyVal array. */
+void gbfFlatten(struct kvt *kvt);
+/* Flatten out parsed genebank data into keyVal array. */
 
 #endif
 

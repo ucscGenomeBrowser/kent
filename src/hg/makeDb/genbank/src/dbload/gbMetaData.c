@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.13 2003/10/14 06:03:52 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.14 2003/10/15 19:06:46 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -100,6 +100,19 @@ static char* refLinkCreate =
 "    index(geneName)\n"
 ")";
 
+/*
+ * Summary table is sparse, only created for refSeqs that have Summary:
+ * or COMPLETENESS: in comment.
+ * Mapping of COMPLETENESS:
+ *    Complete5End       = complete on the 5' end.
+ *    Complete3End       = complete on the 3' end.
+ *    FullLength         = full length.
+ *    IncompleteBothEnds = incomplete on both ends.
+ *    Incomplete5End     = incomplete on the 5' end.
+ *    Incomplete3End     = incomplete on the 3' end.
+ *    Partial            = not full length.
+ *    Unknown            = unknown
+ */
 static char* refSeqSummaryCreate = 
 "CREATE TABLE refSeqSummary ("
 "  mrnaAcc varchar(255) not null,"
@@ -640,21 +653,35 @@ else if (status->stateChg & GB_META_CHG)
                      raRefSeqStatus, raAcc);
 }
 
-static void refSeqSummaryUpdate(struct gbStatus* status)
+static void refSeqSummaryUpdate(struct sqlConnection *conn, struct gbStatus* status)
 /* Update the refSeqSummary table for the current entry */
 {
 /* only add to table if we actually have something */
-if ((raRefSeqSummary->stringSize > 0) || (raRefSeqCompleteness != NULL))
+if (((raRefSeqSummary->stringSize > 0) || (raRefSeqCompleteness != NULL))
+    && (status->stateChg & (GB_NEW|GB_META_CHG)))
     {
+    char query[256];
+    unsigned sumNew;
     char* summary = sqlEscapeString2(alloca(2*raRefSeqSummary->stringSize+1), 
                                      raRefSeqSummary->string);
     if (raRefSeqCompleteness == NULL)
         raRefSeqCompleteness = "Unknown";
     
+    /* If sequence may not be new, but summary could be.  This table is
+     * sparse, so must check it */
     if (status->stateChg & GB_NEW)
+        sumNew = TRUE;
+    else
+        {
+        safef(query, sizeof(query), "SELECT count(*) from refSeqSummary "
+              "WHERE mrnaAcc = '%s'", raAcc);
+        sumNew = (sqlQuickNum(conn, query) == 0);
+        }
+
+    if (sumNew)
         sqlUpdaterAddRow(refSeqSummaryUpd, "%s\t%s\t%s", raAcc, raRefSeqCompleteness,
                          summary);
-    else if (status->stateChg & GB_META_CHG)
+    else
         sqlUpdaterModRow(refSeqSummaryUpd, 1, "completeness='%s', summary='%s'"
                          " WHERE mrnaAcc='%s'", raRefSeqCompleteness,
                          summary, raAcc);
@@ -726,7 +753,7 @@ imageCloneUpdate(status, conn);
 if (gSrcDb == GB_REFSEQ)
     {
     refSeqStatusUpdate(status);
-    refSeqSummaryUpdate(status);
+    refSeqSummaryUpdate(conn, status);
     refLinkUpdate(conn, status);
     refSeqPepUpdate(conn, pepFaId);
     }

@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.5 2003/10/14 06:03:52 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.6 2003/10/15 19:06:46 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -70,7 +70,6 @@ static struct kvt *kvt;
  * of kvt memory is in tables in gbParse. (all yuk) */
 static struct dyString *dbXrefBuf = NULL;
 static struct dyString *omimIdBuf = NULL;
-static struct dyString *summaryBuf = NULL;
 static char locusLinkId[64];
 static char faOffStr[128], faSizeStr[64];
 static char pepSizeStr[64], pepFaOffStr[128], pepFaSizeStr[64];
@@ -911,107 +910,6 @@ while (xref != NULL)
 slFreeList(&head);
 }
 
-void parseRefSeqStatus()
-/* Check the comment field to see if it contains the RefSeq status.
- * It's annoying this isn't just a field. */
-{
-char *stat = NULL;
-if (gbCommentField->val != NULL)
-    {
-    if (startsWith("REVIEWED REFSEQ:", gbCommentField->val->string))
-        stat = "rev";
-    else if (startsWith("VALIDATED REFSEQ:", gbCommentField->val->string))
-        stat = "val";
-    else if (startsWith("PROVISIONAL REFSEQ:", gbCommentField->val->string))
-        stat = "pro";
-    else if (startsWith("PREDICTED REFSEQ:", gbCommentField->val->string))
-        stat = "pre";
-    else if (startsWith("INFERRED REFSEQ:", gbCommentField->val->string))
-        stat = "inf";
-    }
-if ((stat == NULL)
-    && (gbGuessSrcDb(gbAccessionField->val->string) == GB_REFSEQ))
-    {
-    stat = "unk";
-    warn("refseq %s has unknown status in \"%s\"", 
-         gbAccessionField->val->string, gbCommentField->val->string);
-    }
-if (stat != NULL)
-    kvtAdd(kvt, "rss", stat);
-}
-
-void parseRefSeqSummary()
-/* Extact the refseq summary from the comment field if present. */
-{
-if (gbCommentField->val != NULL)
-    {
-    char *summary = strstr(gbCommentField->val->string, "Summary:");
-    if (summary != NULL)
-        {
-        char* completeness = NULL;
-        summary += 8;
-        if (summaryBuf == NULL)
-            summaryBuf = dyStringNew(1024);
-        dyStringClear(summaryBuf);
-        dyStringAppend(summaryBuf, summary);
-        /* remove COMPLETENESS: section if it's next */
-        completeness = strstr(summaryBuf->string, "COMPLETENESS:");
-        if (completeness != NULL)
-            completeness[-1] = '\0';
-        kvtAdd(kvt, "rsu", trimSpaces(summaryBuf->string));
-        }
-    }
-}
-
-void parseRefSeqCompleteness()
-/* Extact the refseq completeness information from the comment.
- * The following values were observed in the refseq data files
- *     complete on the 5' end.
- *     complete on the 3' end.
- *     full length.
- *     incomplete on both ends.
- *     incomplete on the 5' end.
- *     incomplete on the 3' end.
- *     not full length.
- */
-{
-if (gbCommentField->val != NULL)
-    {
-    char *completeness = strstr(gbCommentField->val->string, "COMPLETENESS:");
-    if (completeness != NULL)
-        {
-        char* cmpl;
-        completeness += 14;
-        /* strstr is used to allow for stray spaces, etc */
-        if (strstr(completeness, "complete on the 5' end") != NULL)
-            cmpl = "cmpl5";
-        else if (strstr(completeness, "complete on the 3' end") != NULL)
-            cmpl = "cmpl3";
-        else if (strstr(completeness, "full length") != NULL)
-            cmpl = "full";
-        else if (strstr(completeness, "incomplete on both ends") != NULL)
-            cmpl = "incmpl";
-        else if (strstr(completeness, "incomplete on the 5' end") != NULL)
-            cmpl = "incmpl5";
-        else if (strstr(completeness, "incomplete on the 3' end") != NULL)
-            cmpl = "incmpl3";
-        else if (strstr(completeness, "not full length") != NULL)
-            cmpl = "part";
-        else
-            cmpl = "unk";
-        kvtAdd(kvt, "rsc", cmpl);
-        }
-    }
-}
-
-void parseRefSeq()
-/* Parse refSeq specific data */
-{
-parseRefSeqStatus();
-parseRefSeqSummary();
-parseRefSeqCompleteness();
-}
-
 void writePepSeq()
 /* If information is available, write the peptide sequence and
  * save offset and size in kvt */
@@ -1090,7 +988,7 @@ if (verChar != NULL)
         gi = parts[1]+3;
     }
 
-gbfFlatten(gbStruct, kvt);
+gbfFlatten(kvt);
                 
 /* Get additional keys. */
 if (com != NULL)
@@ -1150,7 +1048,6 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
 
 /* Handle some other fields handling */
 parseDbXrefs();
-parseRefSeq();
 
 if ((filter->keyExp == NULL) || keyExpEval(filter->keyExp, kvt))
     {

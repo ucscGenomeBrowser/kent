@@ -622,3 +622,4 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 
 - all_mrna, all_est don't need bin index if per chrom tables are being built.
 
+- add verification of refSeqSummary to gbSanity
