@@ -4,9 +4,11 @@
 #include "hash.h"
 #include "options.h"
 #include "localmem.h"
+#include "featureBits.h"
 #include "hdb.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: testIntersect.c,v 1.1 2004/11/19 17:04:52 kent Exp $";
+static char const rcsid[] = "$Id: testIntersect.c,v 1.2 2004/11/19 23:50:49 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -262,24 +264,213 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void intersectOnChrom(char *db, struct sqlConnection *conn, char *chrom, char *track1, char *track2)
+struct featureBits *fbList(char *db, char *chrom, char *table, 
+	struct bed *bedList, int chromSize)
+/* Get feature bits list from bed list. */
+{
+struct hTableInfo *hti;
+hti = hFindTableInfoDb(db, chrom, table);
+return fbFromBed(table, hti, bedList, 0, chromSize, FALSE, FALSE);
+}
+
+static struct bed *bitsToBed4List(Bits *bits, int bitSize, 
+	char *chrom, int minSize, int rangeStart, int rangeEnd,
+	struct lm *lm)
+/* Translate ranges of set bits to bed 4 items. */
+{
+struct bed *bedList = NULL, *bed;
+boolean thisBit, lastBit;
+int start = 0;
+int end = 0;
+int id = 0;
+char name[128];
+
+if (rangeStart < 0)
+    rangeStart = 0;
+if (rangeEnd > bitSize)
+    rangeEnd = bitSize;
+end = rangeStart;
+
+/* We depend on extra zero BYTE at end in case bitNot was used on bits. */
+for (;;)
+    {
+    start = bitFindSet(bits, end, rangeEnd);
+    if (start >= rangeEnd)
+        break;
+    end = bitFindClear(bits, start, rangeEnd);
+    if (end - start >= minSize)
+	{
+	lmAllocVar(lm, bed);
+	bed->chrom = chrom;
+	bed->chromStart = start;
+	bed->chromEnd = end;
+	snprintf(name, sizeof(name), "%s.%d", chrom, ++id);
+	bed->name = lmCloneString(lm, name);
+	slAddHead(&bedList, bed);
+	}
+    }
+slReverse(&bedList);
+return(bedList);
+}
+
+static int bitCountBasesOverlap(struct bed *bedItem, Bits *bits, boolean hasBlocks)
+/* Return the number of bases belonging to bedItem covered by bits. */
+{
+int count = 0;
+int i, j;
+if (hasBlocks)
+    {
+    for (i=0;  i < bedItem->blockCount;  i++)
+	{
+	int start = bedItem->chromStart + bedItem->chromStarts[i];
+	int end   = start + bedItem->blockSizes[i];
+	for (j=start;  j < end;  j++)
+	    if (bitReadOne(bits, j))
+		count++;
+	}
+    }
+else
+    {
+    for (i=bedItem->chromStart;  i < bedItem->chromEnd;  i++)
+	if (bitReadOne(bits, i))
+	    count++;
+    }
+    return(count);
+}
+
+int bitCountAllOverlaps(struct bed *bedList, Bits *bits, int fieldCount)
+/* Count all overlapping. */
+{
+struct bed *bed;
+int total = 0, one;
+boolean hasBlocks = (fieldCount >= 12);
+
+for (bed = bedList;  bed != NULL; bed = bed->next)
+     {
+     one = bitCountBasesOverlap(bed, bits, hasBlocks);
+     total += one;
+     }
+return total;
+}
+
+struct binKeeper *fbToBinKeeper(struct featureBits *fbList, int chromSize)
+/* Make a binKeeper filled with fbList. */
+{
+struct binKeeper *bk = binKeeperNew(0, chromSize);
+struct featureBits *fb;
+for (fb = fbList; fb != NULL; fb = fb->next)
+    binKeeperAdd(bk, fb->start, fb->end, fb);
+return bk;
+}
+
+int bkCountOverlappingRange(struct binKeeper *bk, int start, int end)
+/* Return biggest overlap of anything in binKeeper with given range. */
+{
+struct binElement *el, *list = binKeeperFind(bk, start, end);
+int overlap, bestOverlap = 0;
+
+for (el = list; el != NULL; el = el->next)
+    {
+    overlap = rangeIntersection(el->start, el->end, start, end);
+    if (overlap > bestOverlap)
+        bestOverlap = overlap;
+    }
+return bestOverlap;
+}
+
+static int bkCountBasesOverlap(struct bed *bedItem, struct binKeeper *bk, boolean hasBlocks)
+/* Return the number of bases belonging to bedItem covered by bits. */
+{
+int count = 0;
+int i;
+if (hasBlocks)
+    {
+    for (i=0;  i < bedItem->blockCount;  i++)
+	{
+	int start = bedItem->chromStart + bedItem->chromStarts[i];
+	int end   = start + bedItem->blockSizes[i];
+	count += bkCountOverlappingRange(bk, start, end);
+	}
+    }
+else
+    {
+    count += bkCountOverlappingRange(bk, bedItem->chromStart, bedItem->chromEnd);
+    }
+return(count);
+}
+
+int bkCountAllOverlaps(struct bed *bedList, struct binKeeper *bk, int fieldCount)
+/* Count all overlapping. */
+{
+struct bed *bed;
+int total = 0, one;
+boolean hasBlocks = (fieldCount >= 12);
+
+for (bed = bedList;  bed != NULL; bed = bed->next)
+     {
+     one = bkCountBasesOverlap(bed, bk, hasBlocks);
+     total += one;
+     }
+return total;
+}
+
+
+void intersectOnChrom(char *db, struct sqlConnection *conn, char *chrom, 
+	char *track1, char *track2)
 /* Do intersection on one chromosome. */
 {
+int chromSize = hChromSize(chrom);
 struct lm *lm = lmInit(0);
-struct bed *bedList1, *bedList2;
+struct bed *bedList1, *bedList2, *andBed;
+struct featureBits *fb1, *fb2;
+Bits *bit1, *bit2;
 int fieldCount1, fieldCount2;
+struct binKeeper *bk2;
+
 uglyTime(NULL);
 scanChromTable(conn, chrom, track1);
-uglyTime("Scan track 1");
 scanChromTable(conn, chrom, track2);
-uglyTime("Scan track 2");
+uglyTime("Scan tracks");
 bedList1 = getChromAsBed(conn, db, track1, chrom, lm, &fieldCount1);
-uglyTime("Track1 as bed");
 bedList2 = getChromAsBed(conn, db, track2, chrom, lm, &fieldCount2);
-uglyTime("Track2 as bed");
-uglyf("%d items with %d fields in %s\n", slCount(bedList1), fieldCount1, track1);
+uglyTime("Tracks as bed");
+uglyf("%d items with %d fields in %s, ", slCount(bedList1), fieldCount1, track1);
 uglyf("%d items with %d fields in %s\n", slCount(bedList2), fieldCount2, track2);
-uglyTime("Print time");
+bit1 = bitAlloc(chromSize+8);
+bit2 = bitAlloc(chromSize+8);
+uglyTime("bitAlloc");
+
+fb1 = fbList(db, chrom, track1,  bedList1, chromSize);
+fb2 = fbList(db, chrom, track1,  bedList1, chromSize);
+uglyTime("bed to featureBits list");
+
+fbOrBits(bit1, chromSize, fb1, 0);
+fbOrBits(bit2, chromSize, fb2, 0);
+uglyTime("or into bits");
+
+bitAnd(bit1, bit2, chromSize);
+uglyTime("Anding bitfields");
+
+andBed = bitsToBed4List(bit1, chromSize, chrom, 0, 0, chromSize, lm);
+uglyTime("Converting bitfield to bed 4");
+
+bitCountAllOverlaps(bedList1, bit2, fieldCount2);
+uglyTime("Counting overlaps in track1 with bitfield of track2");
+
+bk2 = fbToBinKeeper(fb2, chromSize);
+uglyTime("Adding featureBits list from track 2 into binKeeper.");
+
+bkCountAllOverlaps(bedList1, bk2, fieldCount2);
+uglyTime("Count overlaps in track1 with binKeeper of track2");
+
+featureBitsFreeList(&fb1);
+featureBitsFreeList(&fb2);
+uglyTime("free featureBits");
+
+
+bitFree(&bit1);
+bitFree(&bit2);
+uglyTime("bitFree");
 }
 
 void testIntersect(char *db, char *track1, char *track2)
