@@ -51,7 +51,8 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
     tableDescriptions.o tfbsConsMap.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackTable.o transRegCode.o vegaInfo.o wabAli.o web.o \
+    trackDbCustom.o trackTable.o transRegCode.o transRegCodeProbe.o \
+    vegaInfo.o wabAli.o web.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
     vntr.o zdobnovSynt.o
 
