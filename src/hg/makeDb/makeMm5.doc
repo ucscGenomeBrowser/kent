@@ -6725,6 +6725,27 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     gzip *.tab
     gzip *.pep
 
+#### RE-BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-11-17 - Fan)
+
+# PLEASE NOTE THAT THE ENSEMBLXREF3 TABLE IS RE-BUILT USING ENSMART DATA OF MOUSE BUILD 33.
+# THIS TABLE IS NEEDED TO SUPPORT SUPERFAMILY TRACK OF THE PROTEOME BROWSER.
+    # Get the ensembl gene/protein cross-reference data from
+    # http://www.ensembl.org/Multi/martview?species=Mus_musculus
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Mus musculus choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Feature" box, select Ensembl gene, transcript, and peptid IDs,
+	      SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC 
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref
+
+    zcat ensXref.tsv.gz|sed -e 's/\./\t/g' > ensemblXref3.tab
+
+    hgsql mm5 -e "drop table ensemblXref3"
+    hgsql mm5 < ~/src/hg/lib/ensemblXref3.sql
+
+    hgsql mm5 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
+
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChrom
