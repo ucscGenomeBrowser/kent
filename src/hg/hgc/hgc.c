@@ -112,8 +112,9 @@
 #include "bdgpGeneInfo.h"
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
+#include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.499 2003/10/13 23:55:02 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.500 2003/10/14 07:16:11 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1893,8 +1894,9 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
-void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
-/* Put up generic track info. */
+void genericClickHandlerPlus(
+        struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
+/* Put up generic track info, with additional text appended after item. */
 {
 char *dupe, *type, *words[16];
 char title[256];
@@ -1908,7 +1910,10 @@ dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
-
+if (plus != NULL)
+    {
+    printf(plus);
+    }
 
 if (wordCount > 0)
     {
@@ -1970,6 +1975,12 @@ if (wordCount > 0)
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
+}
+
+void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up generic track info */
+{
+genericClickHandlerPlus(tdb, item, itemForUrl, NULL);
 }
 
 void savePosInTextBox(char *chrom, int start, int end)
@@ -9972,6 +9983,20 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doEncodeRegion(struct trackDb *tdb, char *item)
+/* Print region desription, along with generic info */
+{
+char *descr;
+char *plus = NULL;
+char buf[128];
+if ((descr = getEncodeRegionDescr(item)) != NULL)
+    {
+    safef(buf, sizeof(buf), "<B>Description:</B> %s<BR>\n", descr);
+    plus = buf;
+    }
+genericClickHandlerPlus(tdb, item, NULL, plus);
+}
+
 void doGbProtAnn(struct trackDb *tdb, char *item)
 /* Show extra info for GenBank Protein Annotations track. */
 {
@@ -12749,6 +12774,10 @@ else if (sameWord(track, "gbProtAnn"))
 else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
     {
     doBDGPGene(tdb, item);
+    }
+else if (sameWord(track, "encodeRegions"))
+    {
+    doEncodeRegion(tdb, item);
     }
 else if (tdb != NULL)
     {
