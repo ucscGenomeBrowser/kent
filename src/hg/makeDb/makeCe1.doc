@@ -1228,11 +1228,11 @@ http://genes.cs.wustl.edu/predictions/worm/C_elegans/WS100/12-15-2003/Celegans_W
 		chr_gtf/chr${c}-fixed.gtf
     end
 
-    # pare down protein FASTA header to id and add missing .a:
+    # pare down protein FASTA header to id and add missing .1:
     foreach c (I II III IV V X)
 	set f = chr_ptx/CHROMOSOME_${c}.ptx
 	echo ${f}
-	perl -wpe 's/^\>CHROMOSOME_(\S+).*$/\>chr$1.a/;' < \
+	perl -wpe 's/^\>CHROMOSOME_(\S+).*$/\>chr$1.1/;' < \
 		${f} > chr_ptx/chr${c}-fixed.fa
     end
     ldHgGene ce1 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
