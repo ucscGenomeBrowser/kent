@@ -1517,6 +1517,10 @@ cat > gsub << 'EOF'
     # NOTE: truncates file to 0 if -nobin is used
     hgLoadPsl hg17 -table=all_bacends bacEnds.load.psl
         #load of all_bacends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
+    # Reloaded table, 2004-07-21, and got more rows:
+    # load of all_bacends did not go as planned: 1698790 record(s), 
+    # 0 row(s) skipped, 63 warning(s) loading psl.tab
+
     # load BAC end sequences
 
     mkdir -p /gbdb/hg17/bacends
@@ -7046,7 +7050,7 @@ cat > makeMaf.csh << '_EOF_'
 # SWAP BLASTZ ZEBRAFISH-HUMAN (danRer1-hg17) to HUMAN-ZEBRAFISH (hg17-danRer1)
 # USE RESCORED ALIGNMENTS (see makeDanRer1.doc)
 # (DONE, 2004-06-22, hartera)
-
+# CONVERT AXTs TO PSL AND LOAD INTO DATABASE (DONE, 2004-07-08, hartera)
     ssh kolossus
     mkdir /cluster/data/hg17/bed/blastz.danRer1.swap
     cd /cluster/data/hg17/bed/blastz.danRer1.swap
@@ -7066,8 +7070,24 @@ cat > makeMaf.csh << '_EOF_'
     du -sh $aliDir/axtChrom unsorted axtChrom
 # 19G     /cluster/data/danRer1/bed/blastz.hg17/axtChrom
 # 19G     unsorted
-
     rm -r unsorted
+   # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.danRer1.swap
+    mkdir -p pslChrom
+    set tbl = "blastzDanRer1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer1.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl hg17 $f
+      echo "$f Done"
+    end
 
 # CHAIN ZEBRAFISH (danRer1) BLASTZ (DONE, 2004-06-23, hartera)
     # Run axtChain on little cluster
@@ -7267,6 +7287,14 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
+# BLASTZ ZEBRAFISH (danRer1) CLEAN UP (DONE, 2004-07-19, hartera)
+
+     ssh eieio
+     cd /cluster/data/hg17/bed/blastz.danRer1.swap
+     nice rm axtChain/run1/chain/* &
+     nice rm -fr axtChain/n1 axtChain/hNoClass.net &
+     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+ 
 # MAKING MOUSE SYNTENY (DONE - 2004-07-03 - Hiram)
 
 ssh hgwdev
