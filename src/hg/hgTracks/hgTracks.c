@@ -76,7 +76,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.661 2004/01/29 17:22:30 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.662 2004/01/30 19:09:54 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7978,6 +7978,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v48", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v49", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
