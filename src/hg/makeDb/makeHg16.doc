@@ -3374,3 +3374,46 @@ hgLoadBed hg16 syntenySelf ucsc100k.bed
 #  featureBits hg15 sgpGene
 #  40395614 bases of 2866466359 (1.409%) in intersection
 
+LOAD AFFYRATIO [GNF done jk Sept 18, 2003] 
+
+    # Set up cluster job to align targets to hg16
+    ssh kkr1u00
+    cd /cluster/data/hg16/bed
+    rm -rf affyGnf/
+    mkdir affyGnf
+    cd affyGnf/
+    mkdir -p /iscratch/i/affy
+    cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_target /iscratch/i/affy
+    iSync
+
+    ssh kk
+    cd /cluster/data/hg16/bed/affyGnf
+    ls -1 /iscratch/i/affy/HG-U95Av2_target > affy.lst
+    ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+
+    # Actually do the job with usual para try/check/push/time etc.
+#Completed: 491 of 491 jobs
+#CPU time in finished jobs:       2268s      37.81m     0.63h    0.03d  0.000 y
+#IO & Wait Time:                  1437s      23.94m     0.40h    0.02d  0.000 y
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest job:                       81s       1.35m     0.02h    0.00d
+#Submission to last job:           272s       4.53m     0.08h    0.00d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU95.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.85 -minAli=0.95 raw.psl contig.psl /dev/null
+    liftUp affyU95.psl ../../jkStuff/liftAll.lft warn contig.psl
+
+    # Merge with spot data and load into database.
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/affyGnf
+    /cse/grads/sugnet/bin/i386/affyPslAndAtlasToBed affyU95.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
+    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg16 affyRatio affyRatio.bed
+    
+    # Clean up
+    rm -r psl tmp err affyRatio.bed affyRatio.exr bed.tab scores.tab *.debug batch.bak contig.psl raw.psl
