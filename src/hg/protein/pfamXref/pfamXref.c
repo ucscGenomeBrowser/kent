@@ -35,10 +35,10 @@ char *outputFileName, *outputFileName2;
 char *desc;
 char *id;
 char *chp0, *chp1, *chp2, *chp;
-char *pfamID;
+char *pfamID, *pfamAC;
 char *swissAC, *swissDisplayID;
 char emptyString[10] = {""};
-int done, gsDone, gsFound, acFound;
+int done, gsDone, gsFound, idFound;
 
 if (argc != 5) usage();
    
@@ -50,7 +50,7 @@ outputFileName2  = cloneString(argv[4]);
 conn = hAllocConn();
 	
 o1 = fopen(outputFileName, "w");
-o2 = fopen(outputFileName2, "w");
+o2 = fopen("jj.dat", "w");
     
 if ((inf = fopen(proteinFileName, "r")) == NULL)
     {		
@@ -62,22 +62,30 @@ done = 0;
 while (!done)
     {
     // get to the beginning of a Pfam record
-    acFound = 0;
+    idFound = 0;
     while (fgets(line, 1000, inf) != NULL)
     	{
-    	chp = strstr(line, "GF AC");
+    	chp = strstr(line, "GF ID");
     	if (chp != NULL)
 		{
-		acFound = 1;
+		idFound = 1;
 		break;
 		}
 	}
-    if (!acFound) break;
+    if (!idFound) break;
     
     chp = chp + 8;
     *(chp + strlen(chp) - 1) = '\0'; // remove LF
     pfamID = strdup(chp);
     
+    // Get Pfam AC
+
+    fgets(line, 1000, inf);
+    chp = strstr(line, "GF AC   ");
+    chp = chp + 8;
+    *(chp + strlen(chp) - 1) = '\0'; // remove LF
+    pfamAC = strdup(chp);
+
     // Get Pfam description
     // Please note, Pfam-B does not have this field.
 
@@ -86,7 +94,8 @@ while (!done)
     chp = chp + 8;
     *(chp + strlen(chp) - 1) = '\0'; // remove LF
     desc = chp;
-    fprintf(o1, "%s\t%s\n", pfamID, desc);
+
+    fprintf(o1, "%s\t%s\t%s\n", pfamAC, pfamID, desc);
     fflush(o1); 
 
     // work on "#=GS ... AC ... " lines to get SWISS-PROT accession number
@@ -129,7 +138,7 @@ while (!done)
 		    	swissDisplayID = emptyString;
 			}
 		    }
-	    	fprintf(o2, "%s\t%s\t%s\n", pfamID, swissAC, swissDisplayID);
+	    	fprintf(o2, "%s\t%s\t%s\n", pfamAC, swissAC, swissDisplayID);
 		}
 	    }
     	else
@@ -143,5 +152,11 @@ while (!done)
     }
 fclose(o1);
 fclose(o2);
+
+sprintf(cond_str, "cat jj.dat | sort | uniq >%s",outputFileName2);
+system(cond_str);
+system("rm jj.dat");
+
 return(0);
 }
+
