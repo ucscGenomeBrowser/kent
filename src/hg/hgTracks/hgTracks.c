@@ -732,8 +732,6 @@ return a->start - b->start;
 }
 
 
-#ifdef FUREY_CODE
-
 static void linkedFeaturesSeriesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -757,6 +755,9 @@ Color bColor = tg->ixAltColor;
 double scale = width/(double)baseWidth;
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+
+if (tg->itemColor)	/* Item color overrides spectrum processing. */
+    shades = NULL;
 
 if (vis == tvDense)
     slSort(&tg->items, cmpLfWhiteToBlack);
@@ -784,7 +785,7 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    }	
 	prevEnd = lf->end;
 
-	if (tg->itemColor && shades == NULL)
+	if (tg->itemColor)
 	    color = tg->itemColor(tg, lf, mg);
 	tallStart = lf->tallStart;
 	tallEnd = lf->tallEnd;
@@ -846,8 +847,6 @@ linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, colo
 /* Convert Back */
 linkedFeaturesSeriesToLinkedFeatures(tg);
 }
-
-#endif /* FUREY_CODE */
 
 void incRange(UBYTE *start, int size)
 /* Add one to range of bytes, taking care to not overflow. */
@@ -1953,6 +1952,43 @@ void ensGeneMethods(struct trackGroup *tg)
 /* Make track group of Ensembl predictions. */
 {
 tg->itemName = ensGeneName;
+}
+
+Color estColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color to draw est in. */
+{
+struct linkedFeatures *lf = item;
+static int startIx = 0, endIx = 0;
+char query[512];
+char buf[64], *s;
+struct sqlConnection *conn = hAllocConn();
+int col = MG_BLACK;
+
+if (startIx == 0)
+    {
+    startIx = mgFindColor(mg, 0, 0, 180);
+    endIx = mgFindColor(mg, 160, 0, 0);
+    }
+sprintf(query, "select direction from mrna where acc='%s'", lf->name);
+if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
+    {
+    if (s[0] == '5')
+        col = startIx;
+    else if (s[0] == '3')
+	{
+        col = endIx;
+	lf->orientation = -lf->orientation;	/* Not the best place for this but... */
+	}
+    }
+hFreeConn(&conn);
+return col;
+}
+
+
+void estMethods(struct trackGroup *tg)
+/* Make track group of EST methods - overrides color handler. */
+{
+tg->itemColor = estColor;
 }
 
 char *sanger22Name(struct trackGroup *tg, void *item)
@@ -5577,6 +5613,8 @@ registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
+registerTrackHandler("intronEst", estMethods);
+registerTrackHandler("est", estMethods);
 registerTrackHandler("estPair", estPairMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
