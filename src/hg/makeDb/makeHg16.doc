@@ -7982,6 +7982,30 @@ end
     #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
     #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
 
+    #Copy files to download area
+    cd /gbdb/hg16
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/mzPt1Mm3Rn3Gg2
+    mkdir $dir
+    ln -s $dir multiz
+    cp -p /gbdb/hg16/mzPt1Mm3Rn3Gg2_pHMM/*.maf $dir
+    cd $dir
+    gzip *
+
+    # edit downloads page to add links
+    # add pairwise mafs to downloads page 
+    mkdir $dir/{rn3,mm3,pt1,gg2}
+    cd /cluster/data/hg16/bed/humor/maf
+    cp *.mm3.maf $dir/mm3
+    cp *.rn3.maf $dir/rn3
+    gzip $dir/mm3/*
+    gzip $dir/rn3/*
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafBest
+    cp *.maf $dir/gg2
+    gzip $dir/gg2/*
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/
+    cp *.maf $dir/pt1
+    gzip $dir/pt1/*
+
 # EXONIPHY HMR
 # (started, acs, 2004-03-23)
 
