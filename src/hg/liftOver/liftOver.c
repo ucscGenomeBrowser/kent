@@ -866,7 +866,7 @@ if (sampleCount == 0)
 chromStart = rangeList->start;
 chromEnd = rangeList->end;
 for (range = rangeList->next; range != NULL; range = range->next)
-    chromEnd = rangeList->end;
+    chromEnd = range->end;
 
 AllocVar(sample);
 sample->chrom = cloneString(chrom);
