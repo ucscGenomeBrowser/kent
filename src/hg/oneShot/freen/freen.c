@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "mysqlTableStatus.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.43 2004/03/17 02:19:52 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.44 2004/06/03 22:56:12 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -18,19 +18,11 @@ errAbort("usage: freen something");
 void freen(char *in)
 /* Test some hair-brained thing. */
 {
-struct sqlConnection *conn = sqlConnect(in);
-struct sqlConnection *conn2 = sqlConnect(in);
-struct sqlResult *sr;
-char query[256], **row;
-sr = sqlGetResult(conn, "show table status");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct mysqlTableStatus mst;
-    mysqlTableStatusStaticLoad(row, &mst);
-    printf("%s\t%d\t%s\t%d\t%d\n", mst.name, mst.rowCount, 
-    	mst.updateTime, sqlDateToUnixTime(mst.updateTime),
-	sqlTableUpdateTime(conn2, mst.name) );
-    }
+char *pt = needMem(1025);
+char *buf = NULL;
+free(pt);
+free(pt);
+free(buf + 1024);
 }
 
 
