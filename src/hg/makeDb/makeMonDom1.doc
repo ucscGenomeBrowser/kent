@@ -186,6 +186,7 @@ BEGIN { name="" }
     #	generate chrom.sizes list in order by size, biggest first
     #	This listing is going to be used in a variety of procedures below
     twoBitInfo monDom1.2bit stdout | sort -rn +1 > chrom.sizes
+    hgsql monDom1 -N -e 'select chrom from chromInfo' > chrom.lst
 
     # Enter monDom1 into dbDb and defaultDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
