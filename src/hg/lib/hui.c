@@ -9,9 +9,9 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hCommon.h"
-#include "chainDb.h"
+#include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.44 2004/07/19 22:45:54 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.45 2004/07/19 22:55:57 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
