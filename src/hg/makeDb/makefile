@@ -21,6 +21,7 @@ DIRS = \
 	hgExonerate \
 	hgFiberglass \
 	hgFindSpec \
+	hgFlyBase \
 	hgGcPercent \
 	hgGeneBands \
 	hgGoldGapGl \
