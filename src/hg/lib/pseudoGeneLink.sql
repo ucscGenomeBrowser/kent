@@ -37,9 +37,9 @@ CREATE TABLE pseudoGeneLink (
     qEnd int unsigned not null,	# end of cdna alignment
     tReps int unsigned not null,	# repeats in gene
     qReps int unsigned not null,	# repeats in pseudogene
-    overlapDiag int unsigned not null,	# bases on the diagonal to mouse
-    coverage int unsigned not null,	# bases on the diagonal to mouse
-    label int not null,	# 1=pseudogene,-1 not pseudogene
+    overlapDiag int unsigned not null,	# bases syntenic to mouse
+    coverage int unsigned not null,	# % of bases that align to gene
+    label int not null,	# 1=pseudogene,-1 not pseudogene,-2 expressed retroGene
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome
     oldScore int unsigned not null,	# another heuristic
     oldIntronCount int not null,	# old simple intron count

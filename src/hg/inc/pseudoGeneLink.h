@@ -42,9 +42,9 @@ struct pseudoGeneLink
     unsigned qEnd;	/* end of cdna alignment */
     unsigned tReps;	/* repeats in gene */
     unsigned qReps;	/* repeats in pseudogene */
-    unsigned overlapDiag;	/* bases on the diagonal to mouse */
-    unsigned coverage;	/* bases on the diagonal to mouse */
-    int label;	/* 1=pseudogene,-1 not pseudogene */
+    unsigned overlapDiag;	/* bases syntenic with mouse */
+    unsigned coverage;	/* % of bases that align to gene */
+    int label;	/* 1=pseudogene,-1 not pseudogene -2 expressed retroGene*/
     unsigned milliBad;	/* milliBad score, pseudogene aligned to genome */
     unsigned oldScore;	/* another heuristic */
     int oldIntronCount;	/* old simple intron count */
