@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.41 2005/02/11 22:43:09 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.42 2005/02/18 17:46:39 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -260,8 +260,9 @@ return name;
 static void printOurMrnaUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
-fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&l=%d&r=%d&db=%s",
-    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneEnd, database);
+fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
+    cartSidUrlString(cart),  accession, curGeneChrom, curGeneStart, curGeneStart,
+    curGeneEnd, database);
 }
 
 boolean idInAllMrna(char *id, struct sqlConnection *conn)
