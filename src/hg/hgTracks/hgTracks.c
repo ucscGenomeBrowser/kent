@@ -4894,6 +4894,7 @@ char **row;
 char **gapRow;
 int rowOffset, gapRowOffset, textColor;
 char levelWhere[64];
+struct dyString *bubble;
 
 if (isFull)
     {
@@ -4905,7 +4906,7 @@ if (isFull)
     char statusLine[128];
     char levelName[10];
     char where[128];
-    int midY, dir;
+    int midY, dir = 0;
 
     for (ni = tg->items; ni != NULL; ni = ni->next)
         {
@@ -4941,8 +4942,24 @@ if (isFull)
         while ((row = sqlNextRow(sr)) != NULL)
             {
             netAlignStaticLoad(row+rowOffset, &na);
-            sprintf(statusLine, "%s %dk %s score %d qFar %d qOver %d tR %d",
-            np.qName, np.qStart/1000,np.strand,np.score, np.qFar, np.qOver, np.tR);
+            bubble = newDyString(1024);
+            dyStringPrintf(bubble, "%s %dk %s ", np.qName, np.qStart/1000,np.strand);
+            if (np.tR > 0 || np.qR > 0)
+                dyStringPrintf(bubble, " RM Repeats %d/%d",np.tR,np.qR);
+            if (np.tOldR > 0 || np.qOldR > 0)
+                dyStringPrintf(bubble, " ancient Rep %d/%d",np.tOldR,np.qOldR);
+            if (np.tNewR > 0 || np.qNewR > 0)
+                dyStringPrintf(bubble, " new Rep %d/%d",np.tNewR,np.qNewR);
+            if (np.tTrf > 0 || np.qTrf > 0)
+                dyStringPrintf(bubble, " Trf Rep %d/%d",np.tTrf,np.qTrf);
+            if (np.tN > 0 || np.qN > 0)
+                dyStringPrintf(bubble, " N's %d/%d",np.tN,np.qN);
+            if (np.qFar > 0)
+                dyStringPrintf(bubble, " Far %d",np.qFar);
+            if (np.qOver > 0)
+                dyStringPrintf(bubble, " Over %d",np.qOver);
+            if (np.qDup > 0)
+                dyStringPrintf(bubble, " Dup %d",np.qDup);
             textColor = contrastingColor(mg, col);
             dir = 0;
             if(sameString(np.strand , "+")) 
@@ -4964,7 +4981,7 @@ if (isFull)
                     {
                     sprintf(levelName,"%d", na.level);
                     mapBoxHc(boxStart, boxEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
-                        levelName, statusLine);
+                        levelName, bubble->string);
                     }
                     boxStart = na.tEnd;
                     g1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
@@ -4982,7 +4999,7 @@ if (isFull)
                     {
                     sprintf(levelName,"%d", na.level);
                     mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
-                        levelName, statusLine);
+                        levelName, bubble->string);
                     }
                 col = netItemColor(&na, mg);
                 x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
@@ -4994,7 +5011,12 @@ if (isFull)
                     w = 1;
                 }
             netAlignStaticLoad(row+rowOffset, &np);
+            dyStringFree(&bubble);
             }
+            mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
+            textColor = contrastingColor(mg, col);
+            if (w > 3)
+                mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, textColor, TRUE);
         }
     freeHash(&hash);
     }
