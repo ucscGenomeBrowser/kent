@@ -19,21 +19,23 @@ the cause of the gap or, for lower level chains, the genomic
 rearrangement.<BR>
 
 <H2>Methods</H2>
-First, chains are derived from blastz alignments as
+First, chains are derived from 
+<A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" TARGET=_blank>BLASTZ</A> 
+alignments as
 described in the details pages of the chain tracks
 and sorted so that the highest scoring chain in the
-genome is first. The program chainNet then places
+genome is first. The program <em>chainNet</em> then places
 chains one at a time, trimming them as necessary to
 fit into section that is not already covered by 
 a higher scoring chain.  During this process, a
 natural hierarchy emerges where chains that fill gaps
 in a previous chain are considered underneath the
-previous chain.   The program netSyntenic fills in
+previous chain.   The program <em>netSyntenic</em> fills in
 information about the relationship between upper
 and lower level chains, including whether a lower level
 chain is syntenic with the higher level chain,  whether
 it is inverted with respect to the higher level chain,
-and so forth.  The program netClass then fills in 
+and so forth.  The program <em>netClass</em> then fills in 
 how much of the gaps and chains are filled with N's
 (sequencing gaps) in one or both species,  how much
 is filled with transposons inserted before and after
