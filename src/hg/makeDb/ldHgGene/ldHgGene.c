@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.20 2004/02/14 20:52:25 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.21 2004/02/15 02:22:27 baertsch Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -67,7 +67,7 @@ if (!appendTbl)
 sqlLoadTabFile(conn, tabName, table, SQL_TAB_FILE_WARN_ON_WARN);
 
 /* add a comment to the history table and finish up connection */
-hgHistoryComment(conn, "Add gene predictions to %s table", table);
+hgHistoryComment(conn, "Add gene predictions to %s table %s frame info.", table, gFrame ? "with" : "w/o");
 sqlDisconnect(&conn);
 }
 
@@ -156,7 +156,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
     if (isGtf)
         gp = genePredFromGroupedGtf(gff, group, name);
     else
-        gp = genePredFromGroupedGff(gff, group, name, exonType);
+        gp = genePredFromGroupedGff(gff, group, name, exonType, gFrame);
     if (gp != NULL)
 	{
 	if (nonCoding)
