@@ -13,10 +13,11 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.19 2003/12/24 12:14:16 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.20 2004/01/07 00:23:50 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
+boolean verbose = FALSE;	/* For debugging. */
 
 void usage()
 /* Explain usage and exit. */
@@ -63,7 +64,7 @@ void dasAbout()
 dasHead(200);
 dasHelp("UCSC DAS Server.\n"
     "See http://www.biodas.org for more info on DAS.\n"
-    "Try http://genome.ucsc.edu/cgi-bin/das/dns for a list of databases.\n"
+    "Try http://genome.ucsc.edu/cgi-bin/das/dsn for a list of databases.\n"
     "Note that DAS is an inefficient protocol which does not support\n"
     "all types of annotation in our database.  We recommend you\n"
     "access the UCSC database by downloading the tab-separated files in\n"
@@ -153,6 +154,15 @@ return((!hasLogicalChromName(seqName)) &&
 	sameString("M", seqName)  ));
 }
 
+boolean dasableTrack(char *name)
+/* Return TRUE if track can be put into DAS format. */
+{
+if (startsWith("chain", name) || startsWith("net", name))
+    return FALSE;
+return TRUE;
+}
+
+
 struct tableDef *getTables()
 /* Get all tables. */
 {
@@ -187,7 +197,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	isSplit = tableIsSplit(table);
 	if (isSplit)
 	    root = skipOverChrom(table);
-	if (hashLookup(skipHash, root) == NULL && !startsWith("chain", root))
+	if (hashLookup(skipHash, root) == NULL && dasableTrack(root))
 	    {
 	    if ((td = hashFindVal(hash, root)) == NULL)
 		{
@@ -569,15 +579,18 @@ for (segment = segmentList;;)
 	    segment->seqName, segment->start+1, segment->end, version);
     for (td = tdList; td != NULL; td = td->next)
 	{
-	if (catTypeFilter(category, td->category, type, td->name) )
+	if (dasableTrack(td->name))
 	    {
-	    int count = countFeatures(td, segment);
-	    printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
-	    if (td->method != NULL)
-		printf("method=\"%s\" ", td->method);
-	    printf(">");
-	    printf("%d", count);
-	    printf("</TYPE>\n");
+	    if (catTypeFilter(category, td->category, type, td->name) )
+		{
+		int count = countFeatures(td, segment);
+		printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
+		if (td->method != NULL)
+		    printf("method=\"%s\" ", td->method);
+		printf(">");
+		printf("%d", count);
+		printf("</TYPE>\n");
+		}
 	    }
 	}
     printf("</SEGMENT>\n");
@@ -760,6 +773,8 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	    boolean hasBin;
 	    char table[64];
 
+	    if (verbose)
+	        warn("track %s", td->name);
 	    hFindSplitTable(seq, td->name, table, &hasBin);
 	    tt = hashFindVal(trackHash, td->name);
 	    sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
@@ -939,7 +954,10 @@ int main(int argc, char *argv[])
 {
 char *path = getenv("PATH_INFO");
 
+if (path == NULL)
+    path = cloneString("hg16/features");
 cgiSpoof(&argc, argv);
+verbose = cgiVarExists("verbose");
 if (argc == 2)
     path = argv[1];
 das(path);
