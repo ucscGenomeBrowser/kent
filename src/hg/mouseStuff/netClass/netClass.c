@@ -11,7 +11,7 @@
 #include "simpleRepeat.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.12 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.13 2003/07/30 17:15:40 kate Exp $";
 
 char *tNewR = NULL;
 char *qNewR = NULL;
@@ -179,20 +179,26 @@ sqlDisconnect(&conn);
 
 struct rbTree *getNewRepeats(char *dirName, char *chrom)
 /* Read in repeatMasker .out line format file into a tree of ranges. */
+/* Handles lineage-specific files that preserve header */
 {
 struct rbTree *tree = rbTreeNew(rangeCmp);
 struct range *range;
 char fileName[512];
 struct lineFile *lf;
 char *row[7];
+boolean headerDone = FALSE;
 
 sprintf(fileName, "%s/%s.out.spec", dirName, chrom);
 lf = lineFileOpen(fileName, TRUE);
 while (lineFileRow(lf, row))
     {
+    /* skip header lines (don't contain numeric first field) */
+    if (!headerDone && atoi(row[0]) == 0)
+        continue;
     if (!sameString(chrom, row[4]))
         errAbort("Expecting %s word 5, line %d of %s\n", 
 		chrom, lf->lineIx, lf->fileName);
+    headerDone = TRUE;
     lmAllocVar(tree->lm, range);
     range->start = lineFileNeedNum(lf, row, 5) - 1;
     range->end = lineFileNeedNum(lf, row, 6);
