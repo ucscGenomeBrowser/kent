@@ -1780,7 +1780,7 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
 	    }
 	bafFlushLine(&baf);
 	}
-    fprintf( f, "<I>*Aligned Blocks <= 5 bases are merged for this display</I>\n");
+    fprintf( f, "<I>*Aligned Blocks with gaps <= 5 bases are merged for this display</I>\n");
     }
 fprintf(f, "</TT></PRE>");
 if (qIsRc)
