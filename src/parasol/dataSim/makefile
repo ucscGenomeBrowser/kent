@@ -9,4 +9,4 @@ O = dataSim.o
 
 dataSim: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/dataSim $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/dataSim
+#	strip $(HOME)/bin/$(MACHTYPE)/dataSim
