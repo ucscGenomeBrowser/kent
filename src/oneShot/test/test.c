@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "net.h"
+#include "rudp.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +21,7 @@ errAbort(
 void test(char *XXX)
 /* test - Test something. */
 {
+rudpTest();
 }
 
 int main(int argc, char *argv[])

@@ -7,6 +7,7 @@
 #include "hash.h"
 #include "options.h"
 #include "net.h"
+#include "rudp.h"
 #include "portable.h"
 
 int burstPort = 12354;
@@ -50,11 +51,6 @@ pthread_cond_t ready = PTHREAD_COND_INITIALIZER;
 struct timeval startTime;
 
 
-struct socketSuckerInput
-/* Input structure for socket sucker. */
-     {
-     int socket;
-     };
 
 void mutexLock(pthread_mutex_t *mutex)
 /* Lock a mutex or die trying. */
@@ -91,7 +87,7 @@ if (err != 0)
 void *suckSocket(void *vptr)
 /* Suck down stuff from socket and add it to message list. */
 {
-struct socketSuckerInput *ssi = vptr;
+struct rudp *ru = vptr;
 int err;
 int i;
 struct sockaddr_in sai;
@@ -102,8 +98,7 @@ for (i=0; i<ArraySize(messages); ++i)
     {
     int saiSize = sizeof(sai);
     messages[i];
-    err = recvfrom(ssi->socket, &messages[i], sizeof(messages[i]), 
-    	0, (struct sockaddr *)&sai, &saiSize);
+    err = rudpReceive(ru, &messages[i], sizeof(messages[i]));
     if (err < 0)
 	{
         warn("couldn't receive %s", strerror(errno));
@@ -130,22 +125,23 @@ void burstServer(char *command)
 pthread_t socketSucker;
 int err;
 struct sockaddr_in sai;
-struct socketSuckerInput *ssi;
+struct rudp *ru;
+int ear;
 int outIx = 0;
 
 /* Initialize socket etc. */
-AllocVar(ssi);
 ZeroVar(&sai);
 sai.sin_family = AF_INET;
 sai.sin_port = htons(burstPort);
 sai.sin_addr.s_addr = INADDR_ANY;
-ssi->socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-if (bind(ssi->socket, (struct sockaddr *)&sai, sizeof(sai)) < 0)
+ear = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+if (bind(ear, (struct sockaddr *)&sai, sizeof(sai)) < 0)
     errAbort("Couldn't bind ear");
+ru = rudpNew(ear);
 gettimeofday(&startTime, NULL);
 
 /* Start thread to suck stuff out of socket. */
-err = pthread_create(&socketSucker, NULL, suckSocket, ssi);
+err = pthread_create(&socketSucker, NULL, suckSocket, ru);
 
 /* Go into loop that prints things out 50 per second max. */
 for (;;)
@@ -160,6 +156,8 @@ for (;;)
         {
 	printf("#%d sent at %f seconds. Payload '%s'\n", 
 	    messages[outIx].count, 0.000001 * messages[outIx].time, messages[outIx].payload);
+	if (messages[outIx].message == 0)
+	    break;
 	++outIx;
 	}
     }

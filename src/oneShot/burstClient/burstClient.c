@@ -8,6 +8,8 @@
 #include "hash.h"
 #include "options.h"
 #include "net.h"
+#include "portable.h"
+#include "rudp.h"
 
 
 int burstPort = 12354;
@@ -54,11 +56,15 @@ int sd, err;
 struct countMessage sendMessage, receiveMessage;
 struct timeval startTime, tv;
 struct sockaddr_in outAddress, inAddress;
+bits32 hostIp;
+struct rudp *ru;
 
 uglyf("udpCountClient %s %d %s\n", host, port, countString);
 if (!internetFillInAddress(host, port, &outAddress))
     errAbort("sorry, bye");
+hostIp = ntohl(outAddress.sin_addr.s_addr);
 sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+ru = rudpNew(sd);
 gettimeofday(&startTime, NULL);
 strcpy(sendMessage.payload, "G-day matey ho!");
 for (i=0; i<count; ++i)
@@ -69,11 +75,9 @@ for (i=0; i<count; ++i)
     sendMessage.echoTime = 0;
     sendMessage.count = i;
     sendMessage.message = 1;
-    err = sendto(sd, &sendMessage, sizeof(sendMessage), 0, &outAddress, 
-    	sizeof(outAddress));
+    err = rudpSend(ru, hostIp, port, &sendMessage, sizeof(sendMessage));
     if (err < 0)
         errnoAbort("Couldn't sendto");
-    sleep1000(1);
     }
 if (count == 0)
     {
@@ -83,9 +87,9 @@ if (count == 0)
     sendMessage.echoTime = 0;
     sendMessage.count = i;
     sendMessage.message = 0;
-    sendto(sd, &sendMessage, sizeof(sendMessage), 0, &outAddress, 
-	sizeof(outAddress));
+    err = rudpSend(ru, hostIp, port, &sendMessage, sizeof(sendMessage));
     }
+rudpFree(&ru);
 close(sd);
 printf("Bye");
 }
