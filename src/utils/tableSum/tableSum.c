@@ -7,6 +7,7 @@
 
 char *colDiv;
 char *rowDiv;
+double scale = 1.0;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +26,7 @@ errAbort(
   "                     next 60 columns to second column in output,\n"
   "                     and next 10 columns to third column in output.\n"
   "   -rowDiv=30,60,10  Similar to colDiv, but for rows,  may be combined\n"
+  "   -scale=X          Multiply everything by X\n"
   "   -average          Compute average instead of sum\n"
   );
 }
@@ -181,6 +183,7 @@ for (yCutIx = 0; yCutIx < yOutDim; ++yCutIx)
 	int xStart = x;
 	for (; x<xEnd; ++x)
 	    sum += rowSum[x];
+	sum *= scale;
 	if (doAverage)
 	    {
 	    int dx = yEnd - yStart;
@@ -199,6 +202,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+scale = optionFloat("scale", scale);
 if (argc != 2)
     usage();
 tableSum(argv[1]);
