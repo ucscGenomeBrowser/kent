@@ -5064,25 +5064,25 @@ if (isFull)
                 vgBox(vg, g1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
                     clippedBarbs(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
-                if (baseWidth <= 10000000)
+                if (w > 1)
                     {
                     sprintf(levelName,"%d", na.level);
                     mapBoxHc(boxStart, boxEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
                         levelName, bubble->string);
                     }
-                    boxStart = na.tEnd;
-                    g1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-                    w = x2-g1;
-                    if (w <= 0)
-                        w = 1;
-                    x1 = g1;
+		boxStart = na.tEnd;
+		g1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+		w = x2-g1;
+		if (w <= 0)
+		    w = 1;
+		x1 = g1;
                 }
             else 
                 {
                 vgBox(vg, x1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
                     clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
-                if (baseWidth <= 10000000)
+                if (w > 1)
                     {
                     sprintf(levelName,"%d", na.level);
                     mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
