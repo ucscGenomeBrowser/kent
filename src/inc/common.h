@@ -480,6 +480,9 @@ int roundingScale(int a, int p, int q);
 int intAbs(int a);
 /* Return integer absolute value */
 
+#define logBase2(x)(log(x)/log(2))
+/* return log base two of number */
+
 #define round(a) ((int)((a)+0.5))
 /* Round floating point val to nearest integer. */
 
