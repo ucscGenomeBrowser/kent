@@ -1,0 +1,9 @@
+#submitId fileName gene locusLink probeColor age
+1	e13sox15	sox15	12345	green	13
+1	e13sox15	actin	1923	red	13
+2	e13sox12	sox12	12345	green	13
+2	e13sox12	actin	1923	red	13
+3	e18sox15	sox15	12345	green	18
+3	e18sox15	actin	1923	red	18
+4	e18sox12	sox12	12345	green	18
+4	e18sox12	actin	1923	red	18

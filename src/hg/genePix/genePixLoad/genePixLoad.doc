@@ -31,7 +31,7 @@ age - days since birth (or since fertilization for embryo)
 bodyPart - Name of part of body depicted in image.  Use "whole" for whole 
     mounts.  
 sliceType - whole mount, sagittal, transverse, etc.
-probeType - antibody or RNA
+probeColor - color of probe
 
 OPTIONAL FIELDS (WITH DEFAULT VALUES IF ANY IN BRACKETS)
 

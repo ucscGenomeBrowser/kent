@@ -11,6 +11,7 @@
 /* Variables you can override from command line. */
 char *database = "genePix";
 boolean replace = FALSE;
+boolean multicolor = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +24,8 @@ errAbort(
   "Options:\n"
   "   -database=%s - Specifically set database\n"
   "   -replace - Replace image rather than complaining if it exists\n"
+  "   -multicolor - More than one probe of different color on image\n"
+  "                 (Use with care, disables some error checking)\n"
   , database
   );
 }
@@ -30,6 +33,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"database", OPTION_STRING,},
    {"replace", OPTION_BOOLEAN,},
+   {"multicolor", OPTION_BOOLEAN,},
    {NULL, 0},
 };
 
@@ -130,24 +134,29 @@ return id;
 int doJournal(struct sqlConnection *conn, char *name, char *url)
 /* Update journal table if need be.  Return journal ID. */
 {
-struct dyString *dy = dyStringNew(0);
-int id = 0;
-
-dyStringPrintf(dy, "select id from journal where name = '%s'", name);
-id = sqlQuickNum(conn, dy->string);
-if (id == 0)
+if (name[0] == 0)
+    return 0;
+else
     {
-    dyStringClear(dy);
-    dyStringPrintf(dy, "insert into journal set");
-    dyStringPrintf(dy, " id=default,\n");
-    dyStringPrintf(dy, " name=\"%s\",\n", name);
-    dyStringPrintf(dy, " url=\"%s\"\n", url);
-    uglyf("%s\n", dy->string);
-    sqlUpdate(conn, dy->string);
-    id = sqlLastAutoId(conn);
+    struct dyString *dy = dyStringNew(0);
+    int id = 0;
+
+    dyStringPrintf(dy, "select id from journal where name = '%s'", name);
+    id = sqlQuickNum(conn, dy->string);
+    if (id == 0)
+	{
+	dyStringClear(dy);
+	dyStringPrintf(dy, "insert into journal set");
+	dyStringPrintf(dy, " id=default,\n");
+	dyStringPrintf(dy, " name=\"%s\",\n", name);
+	dyStringPrintf(dy, " url=\"%s\"\n", url);
+	uglyf("%s\n", dy->string);
+	sqlUpdate(conn, dy->string);
+	id = sqlLastAutoId(conn);
+	}
+    dyStringFree(&dy);
+    return id;
     }
-dyStringFree(&dy);
-return id;
 }
 
 int createSubmissionId(struct sqlConnection *conn,
@@ -550,7 +559,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	else
 	    continue;
 	}
-    if (gotPrimers && fPrimerOne[0] != 0 && rPrimerOne != 0)
+    else
+        {
+	if (antibodyOne != 0)
+	    continue;
+	}
+    if (gotPrimers && fPrimerOne[0] != 0 && rPrimerOne[0] != 0)
         {
 	if (sameString(fPrimerOne, fPrimer) && 
 	    sameString(rPrimerOne, rPrimer))
@@ -595,6 +609,7 @@ else
 	{
 	dyStringClear(dy);
 	dyStringPrintf(dy, "update probe set antibody=%d", antibodyId);
+	dyStringPrintf(dy, " where id=%d", probeId);
 	uglyf("%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
@@ -604,6 +619,7 @@ else
 	dyStringAppend(dy, "update probe set ");
 	dyStringPrintf(dy, "fPrimer = '%s', ", fPrimer);
 	dyStringPrintf(dy, "rPrimer = '%s'", rPrimer);
+	dyStringPrintf(dy, " where id=%d", probeId);
 	uglyf("%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
@@ -613,6 +629,7 @@ else
 	dyStringAppend(dy, "update probe set seq = '");
 	dyStringAppend(dy, seq);
 	dyStringAppend(dy, "'");
+	dyStringPrintf(dy, " where id=%d", probeId);
 	uglyf("%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
@@ -644,6 +661,7 @@ if (imageFileId == 0)
     dyStringPrintf(dy, " fullLocation = %d,\n", fullDir);
     dyStringPrintf(dy, " screenLocation = %d,\n", screenDir);
     dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
+    dyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
     dyStringPrintf(dy, " submitId = '%s'\n", submitId);
     uglyf("%s\n", dy->string);
     sqlUpdate(conn, dy->string);
@@ -661,8 +679,8 @@ struct dyString *dy = dyStringNew(0);
 boolean needUpdate = TRUE;
 if (replace)
     {
-    dyStringAppend(dy, "select count(*) form imageProbe where ");
-    dyStringPrintf(dy, "image=%d and probe=%d and color=%d",
+    dyStringAppend(dy, "select count(*) from imageProbe where ");
+    dyStringPrintf(dy, "image=%d and probe=%d and probeColor=%d",
     	imageId, probeId, probeColor);
     if (sqlQuickNum(conn, dy->string) != 0)
 	needUpdate = FALSE;
@@ -808,7 +826,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     dyStringPrintf(dy, "imageFile = %d and imagePos = %s", 
     	imageFileId, imagePos);
     imageId = sqlQuickNum(conn, dy->string);
-    if (imageId != 0 && !replace)
+    if (imageId != 0 && !(replace || multicolor))
         errAbort("Image %s in file %s already in database, aborting",
 		imagePos, fileName);
     
@@ -852,6 +870,7 @@ if (argc != 3)
     usage();
 database = optionVal("database", database);
 replace = optionExists("replace");
+multicolor = optionExists("multicolor");
 genePixLoad(argv[1], argv[2]);
 return 0;
 }
