@@ -453,7 +453,6 @@ identifier chain[${chainDest}]Id
     $gbd.chain[].id $split
     $gbd.chain[]Link.chainId $split full
     $gbd.net[].chainId exclude=0
-    $gbd.allChain[].id full unique
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0
     $gbd.netSynteny[].chainId exclude=0
