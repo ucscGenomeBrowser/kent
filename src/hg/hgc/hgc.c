@@ -1370,9 +1370,9 @@ if (cgiVarExists("o"))
 	}
     hFreeConn(&conn);
     }
-printf("<P>This track was kindly provided by Victor Solovyev at ");
+printf("<P>This track was kindly provided by Victor Solovyev (EOS Biotechnology Inc.) on behalf of ");
 printf("<A HREF=\"http://www.softberry.com\" TARGET=_blank>Softberry Inc.</A> ");
-puts("using the TSSW program."
+puts("using the TSSW program. "
    "Commercial use of these predictions is restricted to viewing in "
    "this browser.  Please contact Softberry Inc. to make arrangements "
    "for further commercial access.  Further information from Softberry on"
