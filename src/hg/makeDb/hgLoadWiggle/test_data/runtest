@@ -1,5 +1,9 @@
 #!/bin/sh
 
+#	Set this to -verbose to see wigAsciiToBinary at work
+#
+VERBOSE="-verbose"
+
 TEST_PL=~/kent/src/utils/wigAsciiToBinary/test_data
 export TEST_PL
 
@@ -12,3 +16,22 @@ ${TEST_PL}/testData.pl 16570 4 > chrM.ascii
 wigAsciiToBinary ${VERBOSE} chrM.ascii
 
 hgLoadWiggle -verbose -tab wiggleTest chrM chrM.wig
+
+#	Create a chr1 data set.  Length of hg16 chr1 is
+#	246127941 bases
+#	With a middle run of 1024 data points each representing
+#	240359 bases that accounts for 246127616 bases leaving
+#	325 bases.  Divide the 325 bases into two smaller parts for
+#	a begin and end run of 162 and 163 bases respectively and
+#	we thus have enough data points to cover the whole thing.
+#
+${TEST_PL}/testData.pl 162 > chr1_begin.ascii
+${TEST_PL}/testData.pl 163 > chr1_end.ascii
+${TEST_PL}/testData.pl 1024 16 240359 > chr1_middle.ascii
+
+wigAsciiToBinary ${VERBOSE} -chrom=chr1_0 chr1_begin.ascii
+wigAsciiToBinary ${VERBOSE} -chrom=chr1_2 -offset=246127778 chr1_end.ascii
+wigAsciiToBinary ${VERBOSE} -chrom=chr1_1 -offset=162 -binsize=1 \
+	-dataSpan=240359 chr1_middle.ascii
+hgLoadWiggle -verbose -tab wiggleTest chr1 chr1_0.wig chr1_1.wig \
+	chr1_2.wig
