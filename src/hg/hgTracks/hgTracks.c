@@ -10314,8 +10314,9 @@ if (!hideControls)
 	    continue;
 
 	/* Print group label on left. */
-	hPrintf("<th colspan=%d>", MAX_CONTROL_COLUMNS);
-	hPrintf("<B>%s:</B>", group->label);
+	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
+		MAX_CONTROL_COLUMNS);
+	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	hPrintf("</th>\n", MAX_CONTROL_COLUMNS);
 	controlGridEndRow(cg);
 
