@@ -79,7 +79,7 @@ else
       | sed "/$table/,/^tablesIgnored/\!d" | \
       grep "^tablesIgnored"
     rm -f xxIDxx
-    rm -r xxJoinDirxx 
+    rm -fr xxJoinDirxx 
     echo
     exit 1
   endif
@@ -104,4 +104,4 @@ foreach identifier (`cat xxIDxx`)
 end
 
 rm -f xxIDxx
-rm -r xxJoinDirxx 
+rm -fr xxJoinDirxx 
