@@ -14,7 +14,7 @@ exit; # don't actually run this like a script :)
     wget http://www.genoscope.cns.fr/externe/tetraodon/Data/Reads/tetraodon6.gz
 
 # DOWNLOAD SEQUENCE BY CHROMOSOME, GFF AND AGP FILES (DONE, 2004-08-13, hartera)
-    # Genoscope provided the url, username and password
+    # Genoscope provided the url, username and password  - this is V7
     # download agp, gff and accompanying FASTA files by chromosome
     ssh kksilo
     cd /cluster/data/tetNig1
@@ -643,7 +643,6 @@ tetNig1.downloadDir = tetNig1
     make
     cvs update src/lib/gbGenome.c
     cvs commit -m "Added Tetraodon, tetNig." src/lib/gbGenome.c
-    # UP TO HERE
     # Install to /cluster/data/genbank:
     make install-server
 
@@ -2276,4 +2275,31 @@ axtChain $1 \
     netFilter -minGap=10 self.net |  hgLoadNet tetNig1 netSelf stdin
     # featureBits tetNig1 netSelf
     # 184618536 bases of 342403326 (53.918%) in intersection
+
+# GENOSCOPE HUMAN (hg17) ECORES (DONE, 2005-02-07, hartera)
+    ssh kksilo
+    mkdir -p /cluster/data/tetNig1/bed/Genocscope/ecoresHg17
+    cd /cluster/data/tetNig1/bed/Genoscope/ecoresHg17
+    
+    wget --timestamp \
+         http://www.genoscope.cns.fr/externe//4ucsc/ExofishTnig1Hs35
+    # this is in gff format 
+    # remove "Ecotig" from name field 
+    sed -e 's/Ecotig EG/EG/g' ExofishTnig1Hs35 > ExofishTnig1Hs35.gff
+    # need to have tabs between fields not a space to load file into table
+    sed -e 's/ /\t/g' ExofishTnig1Hs35.gff > Tnig1Hs35format.gff
+    # if "ecore" is changed to "CDS" and "ecotig" to "transcript" this loads
+    # correctly into the table.
+    sed -e 's/ecore/CDS/' | sed -e 's/ecotig/transcript/' Tnig1Hs35format.gff \
+           > tetNig1vsHg17.gff
+  
+    ssh hgwdev
+    cd /cluster/data/tetNig1/bed/Genoscope/ecoresHg17
+    nice ldHgGene -exon=ecore tetNig1 ecoresHg17 tetNig1vsHg17.gff
+    # Read 36417 transcripts in 184981 lines in 1 files
+    # 36417 groups 27 seqs 1 sources 2 feature types
+    # 36417 gene predictions
+# added ecoresHg17 entry to trackDb.ra in trackDb/tetraodon
+# and created ecoresHg17.html.  Genoscope will not be maintaining this
+# newest data in their Exofish comparative browser display.
 
