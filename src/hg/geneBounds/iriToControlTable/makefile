@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
 L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../../../src/lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = iriToControlTable.o ../lib/improbRunInfo.o
