@@ -424,7 +424,7 @@ o - Load into the database as so:
      cd ~/mm/bed/genscan
      ldHgGene hg11 genscan genscan.gtf
      hgPepPred hg11 generic genscanPep genscan.pep
-
+     hgLoadBed hg11 genscanSubopt genscanSubopt.bed
 
 CREATE GOLDEN TRIANGLE (todo)
 
