@@ -725,9 +725,14 @@ cat > jkStuff/zipChroms.csh << 'EOF'
 #	Saving bed.tab
 #	Loading panTro1
 
-#  GC 5 BASE WIGGLE TRACK (DONE - 2004-01-27 - Hiram)
-    #    working kksilo, the fileserver for this data
-    #    ssh kksilo 
+#  GC 20K BASE WIGGLE TRACK (DONE - 2004-01-28 - Hiram)
+    #    working on kksilo, the fileserver for this data.
+    #    The grep in the pipeline below is "\tGC\t" but I
+    #    can't figure out what escaped character to use to represent
+    #    that.  Also, the hgGcPercent was in my home bin since I was
+    #    working on it for this process.  It will be checked in when it
+    #    works OK.  It is still being tweaked
+    ssh kksilo
     mkdir /cluster/data/panTro1/bed/gc5Base
     cd /cluster/data/panTro1/bed/gc5Base
     mkdir asciiData wigData dataLimits
@@ -737,37 +742,28 @@ do
     C=`echo $c | sed -e "s/chr//"`
     echo "working on ${c} - ${C}"
     $HOME/bin/i386/hgGcPercent -chr=${c} -doGaps \
-	-file=stdout -win=5 hg16 ../../nib | \
+	-file=stdout -win=20000 hg16 ../../nib | grep "	GC	" | \
     awk '
 {
-        if ($4 == "GC") {
-                bases = $3 - $2
-                count = bases * ($5/1000)
-                printf "%d\t%d\n", $2+1, count-2
-        }
-}' | gzip -c > asciiData/$c.gz
-#       I don't know, it wouldn't work piping the output
-#       of gzip directly into wigAsciiToBinary.  And instead of the if
-#       statement in the awk, that could have been a grep "\tGC\t" into
-#       awk
-zcat asciiData/$c.gz | $HOME/bin/i386//wigAsciiToBinary \
-        -dataSpan=5 -chrom=${c} -wibFile=wigData/gc5Base_${C} \
-        -name=${C} stdin > dataLimits/${c}
-rm -f asciiData/$c.gz
+    bases = $3 - $2
+    perCent = $5/10.0
+    printf "%d\t%.1f\n", $2+1, perCent
+}' | wigAsciiToBinary -dataSpan=20000 -chrom=${c} \
+	-wibFile=wigData/gc20KBase_${C} -name=${C} stdin > dataLimits/${c}
 echo "done ${c}"
 done
 
     #	data is compete, load track on hgwdev
     ssh hgwdev
-    cd /cluster/data/panTro1/bed/gc5Base
-    hgLoadWiggle panTro1 gc5Base wigData/*.wig
+    cd /cluster/data/panTro1/bed/gc20KBase
+    hgLoadWiggle panTro1 gc20KBase wigData/*.wig
     #	create symlinks for .wib files
     mkdir /gbdb/panTro1/wib
     ln -s `pwd`/wigData/*.wib /gbdb/panTro1/wib
     #	the trackDb entry
-track gc5Base
+track gc20KBase
 shortLabel GC Counts
-longLabel 5 base GC Counts
+longLabel GC Percent in 20,000 base windows
 group map
 priority 23.5
 visibility hide
@@ -777,4 +773,5 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-type wig -2 3
+defaultViewLimits 30:70
+type wig 0 100 
