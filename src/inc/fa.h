@@ -35,6 +35,9 @@ struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna);
 struct dnaSeq *faReadAllMixed(char *fileName);
 /* Read in mixed case fasta file, preserving case. */
 
+struct dnaSeq *faReadAllMixedInLf(struct lineFile *lf);
+/* Read in mixed case sequence from open fasta file. */
+
 struct dnaSeq *faReadOneDnaSeq(FILE *f, char *name, boolean mustStartWithSign);
 /* Read one sequence from FA file. Assumes positioned at or before
  * the '>' at start of sequence. */  
@@ -111,4 +114,5 @@ void faWriteNext(FILE *f, char *startLine, DNA *dna, int dnaSize);
 
 void faWriteAll(char *fileName, bioSeq *seqList);
 /* Write out all sequences in list to file. */
+
 #endif /* FA_H */

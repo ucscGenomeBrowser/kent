@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.30 2004/07/23 23:59:32 braney Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.31 2005/01/10 00:20:10 kent Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -516,12 +516,12 @@ boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **
 return faSomeSpeedReadNext(lf, retDna, retSize, retName, TRUE);
 }
 
-struct dnaSeq *faReadAllSeqMixable(char *fileName, boolean isDna, boolean mixed)
-/* Return list of all sequences in FA file. 
+static struct dnaSeq *faReadAllMixableInLf(struct lineFile *lf, 
+	boolean isDna, boolean mixed)
+/* Return list of all sequences from open fa file. 
  * Mixed case parameter overrides isDna.  If mixed is false then
  * will return DNA in lower case and non-DNA in upper case. */
 {
-struct lineFile *lf = lineFileOpen(fileName, FALSE);
 struct dnaSeq *seqList = NULL, *seq;
 DNA *dna;
 char *name;
@@ -542,9 +542,19 @@ for (;;)
     seq->dna = cloneMem(dna, size+1);
     slAddHead(&seqList, seq);
     }
-lineFileClose(&lf);
 slReverse(&seqList);
 faFreeFastBuf();
+return seqList;
+}
+
+static struct dnaSeq *faReadAllSeqMixable(char *fileName, boolean isDna, boolean mixed)
+/* Return list of all sequences in FA file. 
+ * Mixed case parameter overrides isDna.  If mixed is false then
+ * will return DNA in lower case and non-DNA in upper case. */
+{
+struct lineFile *lf = lineFileOpen(fileName, FALSE);
+struct dnaSeq *seqList = faReadAllMixableInLf(lf, isDna, mixed);
+lineFileClose(&lf);
 return seqList;
 }
 
@@ -570,4 +580,10 @@ struct dnaSeq *faReadAllMixed(char *fileName)
 /* Read in mixed case fasta file, preserving case. */
 {
 return faReadAllSeqMixable(fileName, FALSE, TRUE);
+}
+
+struct dnaSeq *faReadAllMixedInLf(struct lineFile *lf)
+/* Read in mixed case sequence from open fasta file. */
+{
+return faReadAllMixableInLf(lf, FALSE, TRUE);
 }
