@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.14 2004/04/19 20:34:26 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.15 2004/04/19 23:11:52 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -331,6 +331,30 @@ if (createBedList && wdPtr->data)
 
 }	/*	static void accumStats()	*/
 
+/*
+ *	there are a variety of conditions that affect how FetchData is
+ *	going to work.  This is an attempt to allow it to do as much
+ *	as possible, but not get overloaded.
+ *	summaryOnly is done when whole chrom summaries are requested
+ *	for statistic purposes.  In those cases we do not need to go all
+ *	the way to the data to get the averages, the SQL rows are good
+ *	enough.  Although even on this level there is quite a bit of
+ *	work to do on tracks such as Quality that have 180,000 rows on
+ *	just chr1.
+ *	a wiggleStats wsList is given when doing statistics, if it is
+ *	purely a data fetch operation, there is no need to do
+ *	wiggleStats and it will be a NULL pointer.
+ *	a bedList pointer is given when a returned bed list is desired.
+ *	In the case of processing a bedList, we honor the return limit
+ *	of number of bed elements via the maxBedElements.
+ *	If we are not returning a bedList and we are not doing a stats
+ *	summary, then we have an honest data fetch operation, and in
+ *	this case we honor the stated line limit of maxBedElements.
+ *	When the caller is doing this data fetch operation and states
+ *	that maxBedElements is zero, then we do all data that can be found.
+ *	This would be the case for a stats operation when only one chrom
+ *	is being worked on.
+ */
 struct wiggleData *wigFetchData(char *db, char *table, char *chromName,
     int winStart, int winEnd, boolean summaryOnly, boolean freeData,
 	int tableId, boolean (*wiggleCompare)(int tableId, double value,
@@ -364,13 +388,6 @@ unsigned dataLimit = 0;
 unsigned dataDone = 0;
 boolean reachedDataLimit = FALSE;
 
-/*	if we are not doing a summary (== return all data) and
- *	we are not creating a bed list, then obey the limit requested
- *	It will be zero if they really want everything.
- */
-if (!summaryOnly && !createBedList)
-    dataLimit = maxBedElements;
-
 /*	make sure table exists before we try to talk to it
  *	If it does not exist, we return a null result
  */
@@ -383,9 +400,17 @@ if (! sqlTableExists(conn, table))
 if ((struct bed **)NULL != bedList)
     createBedList = TRUE;
 
+/*	if we are not doing a summary (== return all data) and
+ *	we are not creating a bed list, then obey the limit requested
+ *	It will be zero if they really want everything.
+ */
+if (!summaryOnly && !createBedList)
+    dataLimit = maxBedElements;
+
 spans = newHash(0);	/*	a listing of all spans found here	*/
 
 resetStats(&wigStatsAcc);	/*	zero everything	*/
+
 
 /*	Are the constraints going to interfere with our span search ? */
 if (constraints)
