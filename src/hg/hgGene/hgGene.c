@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.43 2005/02/25 00:20:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.47 2005/03/07 19:16:36 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -312,7 +312,7 @@ void printAlias(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
 char query[256];
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 char **row;
 int totalCount;
 int cnt = 0;
@@ -336,8 +336,8 @@ if (totalCount > 0)
     	row = sqlNextRow(sr);
     	}
     hPrintf("<BR>");   
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 }
 
 void printDescription(char *id, struct sqlConnection *conn)
@@ -348,6 +348,7 @@ char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
 boolean gotRnaAli = idInAllMrna(id, conn);
+char *oldDisplayId;
 
 if (sameWord(curGeneType, "ccdsGene"))
     {
@@ -365,8 +366,11 @@ if (description != NULL)
 else
     hPrintf("%s<BR>", "No description available");
 freez(&description);
-printAlias(id, conn);
-
+if (sqlTablesExist(conn, "kgAlias"))
+    {
+    printAlias(id, conn);
+    }
+    
 if (gotRnaAli)
     {
     hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
@@ -387,11 +391,15 @@ if (protAcc != NULL)
 	{
 	hPrintf(" (aka %s", spDisplayId);
 	/* show once if the new and old displayId are the same */
-	if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
-	    {
-	    hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+ 	oldDisplayId = oldSpDisplayId(spDisplayId);
+	if (oldDisplayId != NULL)
+ 	    {
+            if (!sameWord(spDisplayId, oldDisplayId))
+	    	{
+	    	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	    	}
 	    }
-	hPrintf(")\n", oldSpDisplayId(spDisplayId));
+	hPrintf(")\n");
 	}
     }
 
