@@ -1,0 +1,8 @@
+<!------------Description---------->
+This track shows the location of cysteines -- denoted by blue blocks -- along 
+the peptide chain.
+<P>
+Refer to the <A HREF="pbcCnt.shtml">Number of Cysteines histogram</A> to see how 
+this protein's cysteine count compares to a genome-wide statistical distribution 
+of cysteine abundance in all proteins found in the Known Genes data set for
+this genome.

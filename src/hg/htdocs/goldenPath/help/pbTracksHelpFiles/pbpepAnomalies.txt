@@ -1,0 +1,10 @@
+<!------------Description---------->
+This histogram displays the extent to which certain amino acids within the protein 
+sequence differ in abundance from their average occurrence genome-wide. 
+Amino acids present in excess are represented by a red vertical bar extending
+above the middle line, and deficient residues are depicted by a blue bar extending
+downward. The height of the bar indicates the degree of departure 
+of the amino acid frequency from the expected value genome-wide.
+<P>
+See the <A HREF="pbpepRes.shtml">Amino Acid Frequencies histogram</A> to view amino 
+acid abundances in the June '02 human genome assembly, based on 1,759,768 amino acids. 
