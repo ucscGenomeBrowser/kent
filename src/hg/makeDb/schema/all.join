@@ -1,0 +1,114 @@
+join ECgeneName
+    gbd.ECgene.name
+    gbd.ECgenePep.name
+
+join affyU95
+    human.affyRatio.name
+    human affyRatioNew.name
+    human.affyU95.qName
+
+join affyU133
+    human.affyU133.qName
+
+join chainPt0Id
+    hg16.allChainPt0.id
+    hg16.chainPt0.id
+    ht16.chainPt0Link.chainId
+
+join bacEndAccession external genbank
+    gbd.all_bacends.qName
+    gbd.seq.name subset
+    gbd.mrna.acc subset
+    lfNames comma
+
+join estAccession external genbank
+    gbd.all_est.qName
+    gbd.seq.name subset
+    gbd.mrna.acc subset
+    gbd.est.qName
+    gbd.intronEst.qName
+
+join mrnaAccession external genbank
+    gbd.all_mrna.qName
+    gbd.seq.name subset
+    gbd.mrna.acc subset
+    gbd.chr*_mrna.qName
+
+join humanFosmidId
+    human.all_fosend.qName
+
+join dbStsId external dbSts
+    gbd.all_sts_primer.qName prepend=dbSTS_
+    gbd.all_sts_seq.qName
+
+join hugoName external hugo
+    human.atlastOncoGene.locasSymbol
+
+join genBankAuthor
+    gbd.mrna.author
+    gbd.author.id
+
+join genBankCds
+    gbd.mrna.cds
+    gbd.cds.id
+
+join genBankCell
+    gbd.mrna.cell
+    gbd.cell.id
+
+join genBankDevelopment
+    gbd.mrna.development
+    gbd.development.id
+
+join genBankDescription
+    gbd.mrna.description
+    gbd.description.id
+    
+join bioCycMapId external bioCyc
+    gbd.bioCycMapDesc.mapID
+    gbd.bioCycPathway.mapID
+
+join refSeqId external genbank
+    gbd.bioCycPathway.geneId
+    cgapAlias.alias
+
+join knownGeneId external genbank
+    gbd.bioCycPathway.kgID
+    human&mouse.ceBlastTab.query
+
+join wormBaseId
+    gbd.ceBlastTab.target
+
+join humanBacAccession
+    human.certificate.accession1
+    human.certificate.accession2
+    human.gl.frag chop=.
+    human.gold.frag chop=.
+    human.clonePos.name chop=.
+
+join humanBacAccessionVersion
+    human.gl.frag chop=_
+    human.gold.frag
+    human.clonePos.name
+
+join cgapId
+    gbd.cgapAlias.cgapID
+    gbd.cgapBiocPathway.cgapID
+
+join cgapMapId
+    gbd.cgapBioDesc.mapID
+    gbd.cgapBiocPathway.mapID
+
+join chainMm4Id
+    gbd.chainMm4.id
+    gbd.chainMm4.chainId
+
+join chainRn3
+    gbd.chainRn3.id
+    gbd.chainRn3Link.chainId
+
+join chainSelf
+    gbd.chainSelf.id
+    gbd.chainSelfLink.chainId
+
+
