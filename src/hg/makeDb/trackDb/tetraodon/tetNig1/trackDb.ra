@@ -45,10 +45,17 @@ type genePred
 
 track cytokines
 shortLabel Cytokine Genes
-longLabel Cytokine Genes Annotatiosns (Human Curated)
+longLabel Cytokine Genes Annotations (Human Curated)
 group genes
 priority 52
 visibility hide
 color 170,100,0
 type genePred
+
+searchTable gaze
+searchType genePred
+searchMethod exact
+searchPriority 50
+termRegex GSTENT[0-9]{11}
+shortCircuit 1
 
