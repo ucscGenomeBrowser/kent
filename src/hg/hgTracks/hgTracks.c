@@ -4793,7 +4793,8 @@ boolean bogusMacEmptyChars(char *s)
 /* Return TRUE if it looks like this is just a buggy
  * Mac browser putting in bogus chars into empty text box. */
 {
-return (s[0] == 45);
+char c = *s;
+return c != '_' && !isalnum(c);
 }
 
 void loadCustomTracks(struct trackGroup **pGroupList)
