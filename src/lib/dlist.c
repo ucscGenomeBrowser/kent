@@ -5,6 +5,13 @@
 #include "common.h"
 #include "dlist.h"
 
+void dlListInit(struct dlList *dl)
+/* Initialize list to be empty */
+{
+dl->head = (struct dlNode *)(&dl->nullMiddle);
+dl->nullMiddle = NULL;
+dl->tail = (struct dlNode *)(&dl->head);
+}
 
 struct dlList *newDlList()
 /* Return a new doubly linked list. */

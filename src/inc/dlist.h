@@ -43,6 +43,9 @@ struct dlList
 struct dlList *newDlList();
 /* Return a new doubly linked list. */
 
+void dlListInit(struct dlList *dl);
+/* Initialize list to be empty */
+
 void freeDlList(struct dlList **pList);
 /* Free up a doubly linked list and it's nodes (but not the node values). */
 
