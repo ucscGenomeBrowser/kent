@@ -40,7 +40,7 @@ void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString. */
 
 void dyStringPrintf(struct dyString *ds, char *format, ...);
-/*  Printf to end of dyString.  Don't do more than 1000 characters this way... */
+/*  Printf to end of dyString.  Don't do more than 4000 characters this way... */
 
 #define dyStringClear(ds) (ds->string[0] = ds->stringSize = 0)
 /* Clear string. */

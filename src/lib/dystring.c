@@ -82,7 +82,7 @@ dyStringAppendN(ds, string, size);
 }
 
 void dyStringPrintf(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString.  Don't do more than 1000 characters this way... */
+/*  Printf to end of dyString.  Don't do more than 4000 characters this way... */
 {
 va_list args;
 va_start(args, format);
