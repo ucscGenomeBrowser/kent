@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.691 2004/03/24 20:29:49 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.692 2004/03/24 20:57:06 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7941,7 +7941,7 @@ if (NULL == position)
     }
 
 if((position == NULL) || sameString(position, ""))
-    errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
+    resetVars(NULL);
 
 chromName = NULL;
 winStart = 0;
@@ -8086,10 +8086,9 @@ puts(
 }
 
 
-void resetVars()
-/* Reset vars except for position and database. */
+void resetVars(char **except)
+/* Reset vars except for vars in 'char *except[]' array. */
 {
-static char *except[] = {"db", "position", NULL};
 char *cookieName = hUserCookie();
 int sessionId = cgiUsualInt(cartSessionVarName(), 0);
 char *hguidString = findCookieData(cookieName);
@@ -8181,6 +8180,8 @@ exit(0);
 
 int main(int argc, char *argv[])
 {
+/* 'except' is for resetting the cart without affecting the db and position */
+static char *except[] = {"db", "position", NULL};
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
@@ -8188,7 +8189,7 @@ pushWarnHandler(veryEarlyWarningHandler);
 pushAbortHandler(veryEarlyAbortHandler);
 cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
-    resetVars();
+    resetVars(except);
 htmlSetBackground("../images/floret.jpg");
 cartHtmlShell("UCSC Genome Browser v56", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
