@@ -3986,7 +3986,8 @@ genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, item, seqName, start);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
+        table, item, seqName );
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -4032,7 +4033,7 @@ while ((row = sqlNextRow(sr)) != NULL )
     printf("<B>Class:</B> %s<BR>\n", ar->class);
     printf("<B>Family:</B> %s<BR>\n", ar->family);
 
-    /*print the aligned sequences in html on multiple rows*/
+    //print the aligned sequences in html on multiple rows
     htmlHorizontalLine();
     printf("<i>human sequence on top, mouse on bottom</i><br><br>" );
     htmlPrintJointAlignment( ar->hseq, ar->mseq, 80,
