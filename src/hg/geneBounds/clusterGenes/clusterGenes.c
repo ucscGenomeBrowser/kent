@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.2 2003/12/17 20:32:04 kent Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.3 2003/12/21 06:34:36 kent Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -302,6 +302,8 @@ struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
 for (tableIx = 0; tableIx < tableCount; ++tableIx)
     {
     char *table = tables[tableIx];
+    if (!hTableExists(table))
+        errAbort("Table %s doesn't exist in %s", table, hGetDb());
     if (verbose >= 1)
 	printf("%s %s %c\n", table, chrom, strand);
     safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
