@@ -10,8 +10,8 @@ O = pslSelect.o
 pslSelect: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslSelect $O $(MYLIBS) $L
 test:
-        cd tests && ${MAKE} test
+	cd tests && ${MAKE} test
 
 clean:
-        rm -f $O 
-        cd tests && ${MAKE} clean
+	rm -f $O 
+	cd tests && ${MAKE} clean
