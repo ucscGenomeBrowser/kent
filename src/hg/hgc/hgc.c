@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.506 2003/10/29 16:36:00 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.507 2003/10/29 19:03:59 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -295,14 +295,14 @@ struct axtInfo *aiList = NULL;
 char *db2;
 char *encodedItem = cgiEncode(item);
 if (dbList != NULL)
+    {
     db2 = dbList->name;
-else
-    db2 = mousedb;
-aiList = hGetAxtAlignments(db2);
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&alignment=%s&db2=%s&xyzzy=xyzzy#%s\">",
-       hgcPathAndSettings(), "htcGenePsl", encodedItem, chrom, winStart, winEnd,
-       other, cgiEncode(aiList->alignment), db2, tag);
-dbDbFreeList(&dbList);
+    aiList = hGetAxtAlignments(db2);
+    printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&alignment=%s&db2=%s&xyzzy=xyzzy#%s\">",
+	   hgcPathAndSettings(), "htcGenePsl", encodedItem, chrom, winStart,
+	   winEnd, other, cgiEncode(aiList->alignment), db2, tag);
+    dbDbFreeList(&dbList);
+    }
 }
 
 void hgcAnchorTranslatedChain(int item, char *other, char *chrom, int cdsStart, int cdsEnd)
