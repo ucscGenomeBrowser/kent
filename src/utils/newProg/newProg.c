@@ -2,6 +2,7 @@
 #include "common.h"
 #include "portable.h"
 #include "dystring.h"
+#include "cheapcgi.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -11,7 +12,12 @@ errAbort(
   "usage:\n"
   "   newProg progName description words\n"
   "This will make a directory 'progName' and a file in it 'progName.c'\n"
-  "with a standard skeleton\n");
+  "with a standard skeleton\n"
+  "\n"
+  "Options:\n"
+  "   -cvs\n"
+  "This will also check it into CVS.  'progName' should include full path\n"
+  "in source repository\n");
 }
 
 void makeC(char *name, char *description, char *progPath)
@@ -76,18 +82,50 @@ fprintf(f,
 fclose(f);
 }
 
-void newProg(char *name, char *description)
+void newProg(char *module, char *description)
 /* newProg - make a new C source skeleton. */
 {
 char fileName[512];
+char dirName[512];
+char fileOnly[128];
+char command[512];
+boolean doCvs = cgiBoolean("cvs");
 
-makeDir(name);
-sprintf(fileName, "%s/%s.c", name, name);
-makeC(name, description, fileName);
+if (doCvs)
+    {
+    char *homeDir = getenv("HOME");
+    if (homeDir == NULL)
+        errAbort("Can't find environment variable 'HOME'");
+    if (!startsWith("kent", module))
+        errAbort("Need to include full module name with cvs option, not just relative path");
+    sprintf(dirName, "%s%s", homeDir, module+strlen("kent"));
+    }
+else
+    sprintf(dirName, "%s", module);
+makeDir(dirName);
+splitPath(dirName, NULL, fileOnly, NULL);
+sprintf(fileName, "%s/%s.c", dirName, fileOnly);
+makeC(fileOnly, description, fileName);
 
-sprintf(fileName, "%s/makefile", name);
-makeMakefile(name, fileName);
-printf("Don't forget to add %s to CVS\n", name);
+sprintf(fileName, "%s/makefile", dirName);
+makeMakefile(fileOnly, fileName);
+
+if (doCvs)
+    {
+
+    /* Set current directory.  Return FALSE if it fails. */
+    printf("Adding %s to CVS\n", module);
+    if (!setCurrentDir(dirName))
+        errAbort("Couldn't change dir to %s", dirName);
+    sprintf(command, "cvs import -m \"%s\" %s kent start", description, module);
+    if (system(command) != 0)
+        errAbort("system call '%s' returned non-zero", command);
+    if (!setCurrentDir(".."))
+        errAbort("Couldn't change dir to ..");
+    sprintf(command, "cvs checkout -d %s %s", fileOnly, module);
+    if (system(command) != 0)
+        errAbort("system call '%s' returned non-zero", command);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -95,7 +133,9 @@ int main(int argc, char *argv[])
 {
 struct dyString *ds = newDyString(1024);
 int i;
+boolean doCvs = FALSE;
 
+cgiSpoof(&argc, argv);
 if (argc < 3)
      usage();
 for (i=2; i<argc; ++i)
