@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.98 2005/02/14 19:16:07 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.99 2005/02/14 22:59:43 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1348,12 +1348,22 @@ curTable = findSelectedTable(conn, curTrack, hgtaTable);
 }
 
 
+/* Remove any custom track data from the cart. (Copied from hgGateway!) */
+void removeCustomTrackData()
+{
+cartRemove(cart, "hgt.customText");
+cartRemove(cart, "hgt.customFile");
+cartRemove(cart, "ct");
+}
+
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks. 
  * Here we set up cart and some global variables, dispatch the command,
  * and put away the cart when it is done. */
 {
 struct sqlConnection *conn = NULL;
+char *oldDb = NULL, *oldGenome = NULL, *oldClade = NULL;
+char *clade = NULL;
 
 oldVars = hashNew(10);
 
@@ -1363,10 +1373,21 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");
-getDbAndGenome(cart, &database, &genome);
+getDbGenomeClade(cart, &database, &genome, &clade);
 freezeName = hFreezeFromDb(database);
 hSetDb(database);
 conn = hAllocConn();
+
+/* If user has changed db/org/clade, remove *all* custom tracks: */
+oldDb = hashFindVal(oldVars, "db");
+oldGenome = hashFindVal(oldVars, "org");
+oldClade = hashFindVal(oldVars, "clade");
+if ((oldDb     && differentWord(oldDb, database)) ||
+    (oldGenome && differentWord(oldGenome, genome)) ||
+    (oldClade  && differentWord(oldClade, clade)))
+    {
+    removeCustomTrackData();
+    }
 
 if (lookupPosition())
     {
