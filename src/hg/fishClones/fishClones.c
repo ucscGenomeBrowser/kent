@@ -30,12 +30,14 @@ static struct optionSpec optionSpecs[] = {
   {"verbose", OPTION_STRING},
   {"noRandom", OPTION_BOOLEAN},
   {"noBin", OPTION_BOOLEAN},
+  {"endInfo", OPTION_BOOLEAN},
   {NULL, 0}
 };
 
 int verb = 0;
 boolean NORANDOM = FALSE;
 boolean NOBIN = FALSE;
+boolean ENDINFO = FALSE;
 
 struct position
 {
@@ -44,6 +46,7 @@ struct position
   char *chrom;
   int start;
   int end;
+  char orien;
   char *type;
   int phase;
 };
@@ -71,6 +74,8 @@ struct place
   int numBacEnd;
   struct name *bacEnd;
   int score;
+  int startBE;
+  int endBE;
 };
 
 struct map
@@ -292,7 +297,7 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
   return(ret);
 }
 
-struct position *createPosition(char *name, char *type)
+struct position *createPosition(char *name, char *type, char orien)
 /* Create a position record */
 {
   struct position *ret;
@@ -304,6 +309,7 @@ struct position *createPosition(char *name, char *type)
   ret->chrom = NULL;
   ret->start = 0;
   ret->end = 0;
+  ret->orien = orien;
   ret->type = type;
   ret->phase = 0;
 
@@ -345,6 +351,8 @@ struct place *createPlace(struct position *pos)
   ret->bePair = NULL;
   ret->numBacEnd = 0;
   ret->bacEnd = NULL;
+  ret->startBE = -1;
+  ret->endBE = -1;
   if (sameString(ret->type, "Accession"))
     {
       ret->numAcc++;
@@ -359,7 +367,8 @@ struct place *createPlace(struct position *pos)
       n = createName(words[1]);
       slAddHead(&ret->bePair, n);
       ret->numBacEndPair++;
-
+      ret->startBE = 0;
+      ret->endBE = 0;
     } 
   if (sameString(ret->type, "STS Marker"))
     {
@@ -368,6 +377,12 @@ struct place *createPlace(struct position *pos)
     } 
   if (sameString(ret->type, "BAC End"))
     {
+      if (pos->orien == '+') 
+	ret->startBE = 0;
+      else if (pos->orien == '-') 
+	ret->endBE = 0;
+      else 
+	errAbort("BAC end without orientation, %s\n", pos->name);
       ret->numBacEnd++;
       ret->bacEnd = createName(pos->name);
     } 
@@ -479,7 +494,7 @@ void readFishInfo(struct lineFile *ff)
 	  if (p != NULL)
 	    *p = '\0';
 	  verbose(4, "\tprocessing acc info for %s\n", accs[i]);
-	  pos = createPosition(accs[i], "Accession");
+	  pos = createPosition(accs[i], "Accession", ' ');
 	  if (!hashLookup(positions, accs[i]))
 	      hashAdd(positions, accs[i], pos);
 	  if (!inPosList(pos, fc->acc))
@@ -499,7 +514,7 @@ void readFishInfo(struct lineFile *ff)
 	  wordCount1 = chopByWhite(stss[i], stsName, ArraySize(stsName));
 	  verbose(4, "\tprocessing sts info for %s\n", stsName[0]);
 	  safef(name, sizeof(name), "%s_%s", clone, stsName[0]);
-	  pos = createPosition(stsName[0], "STS Marker");
+	  pos = createPosition(stsName[0], "STS Marker", ' ');
 	  if (!hashLookup(positions, name))
 	      hashAdd(positions, name, pos);
 	  if (!inPosList(pos, fc->sts))
@@ -519,7 +534,7 @@ void readFishInfo(struct lineFile *ff)
 	  p = strrchr(bacEnds[i], '.');
 	  *p = '\0';
 	  verbose(4, "\tprocessing bacEnd info for %s\n", bacEnds[i]);
-	  pos = createPosition(bacEnds[i], "BAC End");
+	  pos = createPosition(bacEnds[i], "BAC End", ' ');
 	  if (!hashLookup(positions, bacEnds[i]))
 	      hashAdd(positions, bacEnds[i], pos);
 	  if (!inPosList(pos, fc->end))
@@ -553,7 +568,7 @@ void readCloneAcc(struct lineFile *cf)
       if (hashLookup(fishClones, clone)) 
 	{
 	  fc = hashMustFindVal(fishClones, clone);
-	  pos = createPosition(acc, "Accession");
+	  pos = createPosition(acc, "Accession", ' ');
 	  if (!hashLookup(positions, acc))
 	      hashAdd(positions, acc, pos);
 	  if (!inPosList(pos, fc->acc))
@@ -583,7 +598,7 @@ void readBacEnds(struct lineFile *bef)
       if (hashLookup(fishClones, clone))
 	{
 	  fc = hashMustFindVal(fishClones, clone);
-	  pos = createPosition(be, "BAC End");
+	  pos = createPosition(be, "BAC End", ' ');
 	  if (!hashLookup(positions, be))
 	      hashAdd(positions, be, pos);
 	  if (!inPosList(pos, fc->end))
@@ -614,7 +629,7 @@ void readStsMarkers(struct lineFile *sf)
       if (hashLookup(fishClones, clone)) 
 	{
 	  fc = hashMustFindVal(fishClones, clone);
-	  pos = createPosition(sts, "STS Marker");
+	  pos = createPosition(sts, "STS Marker", ' ');
 	  /* Make sure it isn't an accession or end sequence */
 	  if (!hashLookup(positions, sts))
 	    {
@@ -649,7 +664,7 @@ void readBacEndsPsl(struct lineFile *bpf)
     psl = pslLoad(words);
     if (hashLookup(positions, psl->qName))
       {
-	pos = createPosition(psl->qName, "BAC End");
+	pos = createPosition(psl->qName, "BAC End", psl->strand[0]);
 	pos->chrom = cloneString(psl->tName);
 	pos->start = psl->tStart;
 	pos->end = psl->tEnd;
@@ -684,7 +699,7 @@ void readClonePsl(struct lineFile *cpf)
     *p = '\0';    
     if (hashLookup(positions, acc))
       {
-	pos = createPosition(acc, "Accession");
+	pos = createPosition(acc, "Accession", psl->strand[0]);
 	pos->chrom = cloneString(psl->tName);
 	pos->start = psl->tStart;
 	pos->end = psl->tEnd;
@@ -725,7 +740,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
       while ((row = sqlNextRow(sr)) != NULL) 
 	{
 	  cp = clonePosLoad(row);
-	  newPos = createPosition(cp->name, "Accession");
+	  newPos = createPosition(cp->name, "Accession", ' ');
 	  newPos->chrom = cloneString(cp->chrom);
 	  newPos->start = cp->chromStart;
 	  newPos->end = cp->chromEnd;
@@ -785,7 +800,7 @@ void findStsPosition(struct sqlConnection *conn, struct position *pos, struct fi
       stsMapFree(&s);
       while ((row = sqlNextRow(sr)) != NULL) 
 	{
-	  newPos = createPosition(pos->name, "STS Marker");
+	  newPos = createPosition(pos->name, "STS Marker", ' ');
 	  s = stsMapLoad(row);
 	  newPos->chrom = cloneString(s->chrom);
 	  newPos->start = s->chromStart;
@@ -807,13 +822,13 @@ void findBacEndPairPosition(struct sqlConnection *conn, struct fishClone *fc)
   struct lfs *be;
   struct position *newPos;
 
-  safef(query, sizeof(query), "select * from bacEndPairs where name = '%s'", fc->cloneName);
+  safef(query, sizeof(query), "select * from bacEndPairs where name = '%s' order by (chromEnd - chromStart)", fc->cloneName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
       be = lfsLoad(row+1);
       safef(names, sizeof(names), "%s,%s", be->lfNames[0], be->lfNames[1]);
-      newPos = createPosition(names, "BAC End Pair");
+      newPos = createPosition(names, "BAC End Pair", ' ');
       newPos->chrom = cloneString(be->chrom);
       newPos->start = be->chromStart;
       newPos->end = be->chromEnd;
@@ -832,15 +847,77 @@ int combinePos(struct place *p, struct position *pos)
   struct name *n;
   char *words[2], *names;
   int wordCount;
+  struct name *pos2;
+  boolean badBE = FALSE, sameEnd = FALSE;
 
-  if ((sameString(p->chrom, pos->chrom)) && 
+  /* Check if BAC end and facing the wrong way */
+  n = createName(pos->name);
+  if ((!inNameList(n, p->bacEnd)) &&
+      (!inNameList(n, p->bePair)))    
+    if ((sameString(pos->type, "BAC End")) &&
+	((pos->orien == '+') && ((pos->start - p->start) > 25000)) || 
+	((pos->orien == '-') && ((p->end - pos->end) > 25000))) 
+      badBE = TRUE;
+    else if (((p->startBE != -1) && ((p->start - pos->start) > 25000)) || 
+	     ((p->endBE != -1) && ((pos->end - p->end) > 25000)) &&
+	     (((!sameString(pos->type, "BAC End Pair")) || (p->bePair == NULL)) && (p->acc == NULL)))
+      badBE = TRUE;
+  nameFree(&n);
+
+  /* Check if BAC end and all positions in placement are same accession */
+  if ((sameString(pos->type, "BAC End")) && (p->acc == NULL) &&
+      (p->bePair == NULL) && (p->sts == NULL) && (p->bacEnd !=NULL))
+    {
+      sameEnd = TRUE;
+      for (pos2 = p->bacEnd; pos2 != NULL; pos2 = pos2->next)
+	if (!sameString(pos->name, pos2->name)) 
+	  sameEnd = FALSE;
+    }
+
+  if ((sameString(p->chrom, pos->chrom)) && (!badBE) && 
       ((d1 < 200000) || ((pos->start >= p->start) && (pos->start <= p->end))) && 
       ((d2 < 200000) || ((pos->end >= p->start) && (pos->end <= p->end))))
     {
       if (pos->start < p->start)
-	p->start = pos->start;
+	{
+	  if (sameEnd) 
+	    p->end = pos->end;
+	  p->start = pos->start;
+	  if ((sameString(pos->type, "BAC End Pair")) || 
+	      ((sameString(pos->type, "BAC End")) && (pos->orien == '+')))
+	      p->startBE = 0;
+	  else 
+	    {
+	      if ((p->start - pos->start) > 25000)
+		p->startBE = -1;
+	    }
+	}
+      else if ((sameString(pos->type, "BAC End Pair")) || 
+	       ((sameString(pos->type, "BAC End")) && (pos->orien == '+')) &&
+	       ((pos->start - p->start) <= 25000) && 
+	       ((p->startBE < 0) || ((pos->start - p->start) <= p->startBE)))
+	p->startBE = pos->start - p->start;
+
       if (pos->end > p->end)
-	p->end = pos->end;
+	{
+	  if (sameEnd) 
+	    p->start = pos->start;
+	  p->end = pos->end;
+	  if ((sameString(pos->type, "BAC End Pair")) || 
+	      ((sameString(pos->type, "BAC End")) && (pos->orien == '-')))
+	    p->endBE = 0;
+	  else 
+	    {
+	      if ((pos->end - p->end) > 25000)
+		p->endBE = -1;
+	    }
+	}
+      else if ((sameString(pos->type, "BAC End Pair")) || 
+	       ((sameString(pos->type, "BAC End")) && (pos->orien == '-')) &&
+	       ((p->end - pos->end) <= 25000) && 
+	       ((p->endBE < 0) || ((p->end - pos->end) < p->endBE)))
+	p->endBE = p->end - pos->end;
+
       if (sameString(pos->type, "Accession"))
 	{
 	  p->numAcc++;
@@ -1163,6 +1240,9 @@ void writeOut(FILE *of, FILE *af)
 	      for (n = p->bacEnd->next; n != NULL; n=n->next)
 		fprintf(of, ",%s", n->name);
 	    }
+	  if (ENDINFO) {
+	    fprintf(of, "\t%d\t%d", p->startBE, p->endBE);
+	  }
 	  fprintf(of, "\n");
 	}
     }
@@ -1193,12 +1273,13 @@ int main(int argc, char *argv[])
       fprintf(stderr, "\t-verbose=<level>\tdisplay all messages\n");
       fprintf(stderr, "\t-noBin\t\tdo not include bin column in output file\n");
       fprintf(stderr, "\t-noRandom\tdo not include placements on random portions\n");
+      fprintf(stderr, "\t-endInfo\tprint out whether start/end determined by BAC end\n");
       return 1;
     }
   db = argv[1];
   hSetDb(db);
   if (getenv("HGDB_HOST") == NULL)
-   hSetDbConnect("hgwdev.cse.ucsc.edu", db, user, password);
+   hSetDbConnect("localhost", db, user, password);
 
   ff = lineFileOpen(argv[2], FALSE);
   cf = lineFileOpen(argv[3], FALSE);
@@ -1213,6 +1294,7 @@ int main(int argc, char *argv[])
   verboseSetLevel(verb);
   NORANDOM = optionExists("noRandom");
   NOBIN = optionExists("noBin");
+  ENDINFO = optionExists("endInfo");
   stsName = optionVal("fhcrc", NULL);
   if (stsName) 
     sf = lineFileOpen(stsName, FALSE);
