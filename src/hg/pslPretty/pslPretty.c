@@ -18,7 +18,7 @@ errAbort(
   "   pslPretty in.psl target.lst query.lst pretty.out\n"
   "options:\n"
   "   -axt - save in Scott Schwartz's axt format\n"
-  "   -dot=N Put out a dot every N records\n"
+  "   -dot=N Put out a dot every N records (default 10,000)\n"
   "It's a really good idea if the psl file is sorted by target\n"
   "if it contains multiple targets.  Otherwise this will be\n"
   "very very slow.   The target and query lists can either be\n"
@@ -277,7 +277,9 @@ int blockIx, diff;
 int qs, ts;
 int lastQ = 0, lastT = 0, size;
 int qOffset = 0;
+int tOffset = 0;
 boolean qIsNib = FALSE;
+boolean tIsNib = FALSE;
 
 if (qName == NULL || !sameString(qName, psl->qName))
     {
@@ -287,25 +289,27 @@ if (qName == NULL || !sameString(qName, psl->qName))
     readCachedSeqPart(qName, psl->qStart, psl->qEnd-psl->qStart, 
     	qHash, fileCache, &qSeq, &qOffset, &qIsNib);
     if (qIsNib && psl->strand[0] == '-')
-	qOffset = psl->qSize - psl->qEnd;
+	    qOffset = psl->qSize - psl->qEnd;
     }
-if (tName == NULL || !sameString(tName, psl->tName))
-    {
+/* if (tName == NULL) || !sameString(tName, psl->tName))
+    {*/
     freeDnaSeq(&tSeq);
     freez(&tName);
     tName = cloneString(psl->tName);
-    tSeq = readCachedSeq(tName, tHash, fileCache);
-    }
-
+    //tSeq = readCachedSeq(tName, tHash, fileCache);
+    readCachedSeqPart(tName, psl->tStart, psl->tEnd-psl->tStart, 
+    	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
+    if (tIsNib && psl->strand[1] == '-')
+	    tOffset = psl->tSize - psl->tEnd;
+/*    }*/
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
     reverseComplement(tSeq->dna, tSeq->size);
-
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     {
     qs = psl->qStarts[blockIx] - qOffset;
-    ts = psl->tStarts[blockIx];
+    ts = psl->tStarts[blockIx] - tOffset;
 
     /* Output gaps except in first case. */
     if (blockIx != 0)
@@ -379,6 +383,7 @@ while ((psl = pslNext(lf)) != NULL)
 	if (--dotMod <= 0)
 	   {
 	   printf(".");
+       fflush(stdout);
 	   dotMod = dot;
 	   }
 	}
@@ -392,10 +397,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 static boolean axt;
-
 optionHash(&argc, argv);
 axt = optionExists("axt");
-dot = optionInt("dot", dot);
+dot = 10000; /* default value */
+dot = optionInt("dot", 10000);
 if (argc != 5)
     usage();
 pslPretty(argv[1], argv[2], argv[3], argv[4], axt);
