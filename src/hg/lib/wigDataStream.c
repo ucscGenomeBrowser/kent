@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.22 2004/08/18 18:42:49 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.23 2004/08/18 19:08:42 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -79,9 +79,14 @@ static void setCompareByte(struct wiggleDataStream *wDS,
 {
 if (wDS->limit_0 < lower)
     wDS->ucLowerLimit = 0;
+else if (wDS->limit_0 > (lower+range))
+    wDS->ucLowerLimit = MAX_WIG_VALUE;
 else
     wDS->ucLowerLimit = MAX_WIG_VALUE * ((wDS->limit_0 - lower)/range);
-if (wDS->limit_1 > (lower+range))
+
+if (wDS->limit_1 < lower)
+    wDS->ucUpperLimit = 0;
+else if (wDS->limit_1 > (lower+range))
     wDS->ucUpperLimit = MAX_WIG_VALUE;
 else
     wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
@@ -1588,7 +1593,7 @@ if (wDS->stats)
 	fprintf(fh,"\tvalues\tspan");
 	fprintf(fh,"\tcovered\t");
 	fprintf(fh,"\t\t\t");
-	fprintf(fh,"\t\t\tdeviation\n");
+	fprintf(fh,"\t\tdeviation\n");
 	}
 
     for (stats = wDS->stats; stats; stats = next )
