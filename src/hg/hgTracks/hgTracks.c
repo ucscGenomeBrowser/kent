@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.835 2004/11/09 18:10:08 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.836 2004/11/19 17:43:35 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1305,7 +1305,7 @@ if (vis == tvDense && trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
 
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
-if (tallStart == 0 && tallEnd == 0)
+if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->mapName, "jaxQTL3"))
     {
     // sometimes a bed <8 will get passed off as a bed 8, tsk tsk
     tallStart = lf->start;
