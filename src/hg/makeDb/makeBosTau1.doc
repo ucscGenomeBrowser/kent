@@ -579,6 +579,13 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/bosTau1/bosTau1.2bit ../../axtNet/$i:r.axt
   end
 
+  cd ..
+  mkdir axtNetSort
+  foreach f (axtNet/*.axt)
+    set c = $f:t:r
+    echo "axtSort on $c"
+    /cluster/bin/i386/axtSort/$f axtNetSort/$c.axt
+  end
 
 
 
