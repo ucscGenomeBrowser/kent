@@ -46,7 +46,7 @@ struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 char *assembly = NULL;
 
-webStart(NULL, "Genome Table Browser");
+webStart(cart, "Genome Table Browser");
 
 puts(
      "<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0>\n"
@@ -243,7 +243,7 @@ if ((pos = hgp->singlePos) != NULL)
     }
 else
     {
-    webStart(NULL,  "Genome Table Browser");
+    webStart(cart,  "Genome Table Browser");
     hgPositionsHtml(hgp, stdout, FALSE, NULL);
     hgPositionsFree(&hgp);
     webEnd();
@@ -1630,7 +1630,7 @@ if(table == NULL || existsAndEqual("phase", "table"))
 	    webAbort("Missing table selection", "Please choose a table and try again.");
 	else
 	    {
-		webStart(NULL, "Genome Table Browser on %s Freeze", freezeName);
+		webStart(cart, "Genome Table Browser on %s Freeze", freezeName);
 		getTable();
 		webEnd();
 	    }
@@ -1639,7 +1639,7 @@ else
 	{
 	if(table != 0 && existsAndEqual("phase", "Choose fields"))
 		{
-		webStart(NULL, "Genome Table Browser on %s Freeze: Select Fields", freezeName);
+		webStart(cart, "Genome Table Browser on %s Freeze: Select Fields", freezeName);
 		getChoosenFields();
 		webEnd();
 		}
