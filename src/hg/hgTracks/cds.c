@@ -17,23 +17,6 @@
 #include "hgTracks.h"
 
 
-
-
-int computeScaledBoxPosition( int *retX1, int *retX2, int chromStart,
-        int chromEnd, double scale, int xOff, int winStart)
-/*returns the width of a box in window coordinates are also returns
- * the start and end positions of the box as the first and second 
-   arguments. It relies on the global variable 'winStart'*/
-{
-*retX1 = round((double)(chromStart-winStart)*scale) + xOff;
-*retX2 = round((double)(chromEnd-winStart)*scale) + xOff;
-int w = retX2-retX1;
-if (w < 1)
-    w = 1;
-return(w);
-}
-
-
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
 	int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score, MgFont *font, char *text,
@@ -41,24 +24,31 @@ static void drawScaledBoxSampleWithText(struct vGfx *vg,
 /* Draw a box scaled from chromosome to window coordinates. */
 {
 
+drawScaledBoxSample(vg, chromStart, chromEnd, scale, xOff, y, height, color, score);
+
 /*draw text in box if space, and align properly for codons or DNA*/
 if(zoomed)
     {
     int i;
-    int x1, x2;
-    int w = computeScaledBoxPosition(&x1, &x2, chromStart, chromEnd, scale, xOff, winStart);
+    int x1, x2, w;
+    x1 = round((double)(chromStart-winStart)*scale) + xOff;
+    x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (w < 1)
+        w = 1;
     if (x2 >= maxPixels)
-    {
         x2 = maxPixels - 1;
-        w = x2-x1;
-        if (w < 1)
-            w = 1;
-    }
+    w = x2-x1;
+    if (w < 1)
+        w = 1;
+
 
     if(chromEnd - chromStart < 3)
         spreadString(vg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,text,strlen(text));
     else if(chromEnd - chromStart == 3)
-        spreadString(vg,1,y,w,height,textColor,font,text,strlen(text));
+    {
+        spreadString(vg,x1,y,w,height,textColor,font,text,strlen(text));
+    }
     else
         {
         int thisX,thisX2;
@@ -74,7 +64,6 @@ if(zoomed)
     }
 
 //now draw the box itself
-drawScaledBoxSample(vg, chromStart, chromEnd, scale, xOff, y, height, color, score);
 }
 
 int convertCoordUsingPsl( int s, struct psl *psl )
@@ -876,7 +865,8 @@ void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, int grayIx,
         Color *cdsColor, struct vGfx *vg, int xOff, int y, double scale, 
 	    MgFont *font, int s, int e, int heightPer, boolean zoomedToCodonLevel, 
         struct dnaSeq *mrnaSeq, struct psl *psl, int drawOptionNum,
-        boolean errorColor, boolean *foundStart, int maxPixels)
+        boolean errorColor, boolean *foundStart, int maxPixels,
+        int winStart)
 {
         char codon[2] = " ";
         Color color = colorFromGrayIx(codon, grayIx, cdsColor);
