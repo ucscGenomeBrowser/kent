@@ -3556,7 +3556,7 @@ cat > makeMaf.csh << 'EOF'
     tail -100f makeMaf.log
 
 
-# FUGU FR1 DOWNLOADS (WORKING 2004-09-17 kate)
+# FUGU FR1 DOWNLOADS (DONE 2004-09-17 kate)
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.fr1/axtChain
     ln -s all.chain fugu.chain
@@ -5766,8 +5766,14 @@ exit $status
     # Add entries for chainPanTro1, netPanTro1 to
     # human/hg17 trackDb
 
+    # save chimp net to downloads area
+    ssh eieio
+    cd /cluster/data/hg17/blastz.panTro1/axtChain
+    nice gzip chimp.net
+    cp
 
-# RECIPROCAL BEST CHAINS FOR ENSEMBL GENE BUILD (WORKING 2004-10-11 kate)
+
+# RECIPROCAL BEST CHAINS FOR ENSEMBL GENE BUILD (DONE 2004-10-11 kate)
 
     # Starting with the chimp-reference net, which contains the best human
     # alignments to chimp, extract the subset of chains in the net.
@@ -5830,6 +5836,11 @@ exit $status
         /usr/local/apache/htdocs/kate/ensembl/hg17-panTro1.rbest.chain.gz
     cd /usr/local/apache/htdocs/kate/ensembl
     md5sum *.gz > md5sum.txt
+    mv hg17-panTro1.rbest.chain.gz /usr/local/apache/htdocs/hg17/vsPanTro1/hg17.panTro1.rbest.chain.gz
+
+    # save as reciprocal best liftover chain (2005-02-22 kate)
+    gunzip -c  human.rbest.chain.gz > \
+        /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.rbest.chain
 
     # cleanup (TODO -- after QA)
     ssh hgwdev
@@ -9286,7 +9297,7 @@ hgLoadPsl hg17 pseudoMrna.psl
 ## end of retroGene track
 
 
-# 3-WAY MULTIZ MULTIPLE ALIGNMENT (MM5, RN3) (WORKING 2004-08-27 kate)
+# 3-WAY MULTIZ MULTIPLE ALIGNMENT (MM5, RN3) (DONE 2004-08-27 kate)
 #       HMR Maf's needed for regulatory potential track
     ssh eieio
     set multizDir = multiz.2004-08-27
@@ -12582,7 +12593,7 @@ cat > makeMaf.csh << 'EOF'
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
 
 
-# 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (WORKING 2004-12-22 kate)
+# 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (DONE 2004-12-22 kate)
 #       Use older multiz (not v10) till bugs fixed
 
     ssh eieio
@@ -12605,6 +12616,7 @@ cat > makeMaf.csh << 'EOF'
     ln -s multiz.2004-12-22 multiz10way
     # reuse pairwise MAF's on bluearc
     mv multiz10way.v10/{canFam1,danRer1,fr1,galGal2,mm5,panTro1,rn3,tetNig1,xenTro1} multiz10way
+    # NOTE: pairwise mafs were moved to /cluster/bluearc/hg17/mafNet
 
     # make output dir and run dir
     ssh kk9
@@ -12724,7 +12736,7 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     # load alignments into tables
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz10way.v8
-    set mafDir = /gbdb/hg17/multiz10way/maf
+    set mafDir = /gbdb/hg17/mafNet
     mkdir -p $mafDir
 
     # new pairwise (frog & tetra)
@@ -12734,7 +12746,7 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     ln -s `pwd`/*.maf $mafDir/$table
     hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
 
-    set table = tetNig1_netBlastz
+set table = tetNig1_netBlastz
     mkdir -p $mafDir/$table
     cd /cluster/data/hg17/bed/blastz.tetNig1/mafNet
     ln -s `pwd`/*.maf $mafDir/$table
@@ -12744,9 +12756,10 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     foreach db (panTro1 mm5 rn3 canFam1 galGal2 fr1 danRer1)
         set table = ${db}_netBlastz
         mkdir -p $mafDir/$table
-        cd /cluster/data/hg17/bed/blastz.$dir/mafNet
-        ln -s `pwd`/*.maf $mafDir/$table
+        cd /cluster/data/hg17/bed/blastz.$db/mafNet
+        ln -s /cluster/data/hg17/bed/blastz.$db/mafNet/*.maf $mafDir/$table
         hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
+        rm *.tab
     end
 
     # multiple alignment
@@ -12756,8 +12769,14 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     ln -s `pwd`/*.maf $mafDir/multiz10way
     hgLoadMaf hg17 -warn multiz10way -pathPrefix=$mafDir/multiz10way
 
+    # load summary table to replace pairwise
+    cd /cluster/data/hg17/bed/multiz10way.v8/mafGlued/
+    time cat chr*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 hg17 multiz10waySummaryNew stdin
+    # Processed 27314693 components in 9081437 mafs from stdin
+    # 30 minutes
 
-# CONSERVATION SCORING WITH PHASTCONS (WORKING 2005-01-06 kate)
+
+# CONSERVATION SCORING WITH PHASTCONS (DONE 2005-01-14 kate)
 # 1. Partition multiple alignment into windows, using "msa_split"
 # 2. Create starting tree model, with branch lengths
 #       use "phyloFit" on alignments
@@ -12906,7 +12925,7 @@ zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.424 --nrates 1
 # Average job time:                1055s      17.58m     0.29h    0.01d
 # Longest job:                     3647s      60.78m     1.01h    0.04d
 
-    # NOTE: should have ave.noncons.mod to improve parameter estimation
+    # NOTE: should have used ave.noncons.mod to improve parameter estimation
     # cp nave.noncons.mod starting-tree.mod
 
     ls TREES/*.cons.mod > cons.txt
@@ -12964,6 +12983,8 @@ rm $tmpfile
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz10way.v8/cons/run.elements
     hgLoadBed hg17 phastConsElements10way all.bed
+    sort -rn -k 5 all.bed | sed -n '1,100000p' > top100K.bed
+    hgLoadBed hg17 phastConsElements10wayTop100K top100K.bed
 
     # check coverage -- reran estimation and conservation steps with new parameters till
     # coverage close to 5% and expected-length parameter is close to consEntropy recommended length
@@ -13025,7 +13046,7 @@ rm $tmpfile
         /cluster/bin/phast/draw_tree -b -s species.nh > species10.ps
         # photoshop to enhance, then save as gif/jpg
         cp /cluster/data/hg17/bed/multiz10way.v8/species10.jpg \
-        /usr/local/apache/htdocs/images/phylo
+            /usr/local/apache/htdocs/images/phylo/10way.jpg
 
     # get stats on the track
     ssh hgwdev
@@ -13103,6 +13124,44 @@ rm $tmpfile
 #refGene:cds 1.308%, tetNig1.chr1.mafRanges.bed 1.384%, both 0.805%, cover 61.57%, enrich 44.50x
 #refGene:cds 1.308%, danRer1.chr1.mafRanges.bed 2.716%, both 0.847%, cover 64.81%, enrich 23.86x
 
+
+# DOWNLOADS FOR 10-WAY MULTIZ (2005-01-24 kate)
+#   Use "glued" mafs
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p multiz10way
+    cd multiz10way
+    foreach f (/cluster/data/hg17/bed/multiz10way.v8/mafGlued/*.maf)
+        set c = $f:r:t
+        echo $c
+        nice gzip -c $f > $c.maf.gz
+    end
+    # copy README and edit
+
+    # Create upstream files for download 
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    echo hg17 panTro1 mm5 rn3 canFam1 galGal2 xenTro1 fr1 tetNig1 danRer1 > org.txt
+    # mafFrags takes a while
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits hg17 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags hg17 multiz10way up.bed upstream$i.maf -orgs=org.txt
+        rm up.bed
+    end
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    nice gzip upstream{1000,2000,5000}.maf
+        # 6 mins.
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mv /cluster/data/hg17/bed/multiz10way.v8/upstream*.maf.gz multiz10way
+    cd multiz10way
+    md5sum *.gz > md5sum.txt
+
     #	Create histogram of this phastCons data  (Hiram - 2005-02-07)
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz.2004-12-22/cons
@@ -13131,6 +13190,7 @@ plot "histogram.data" using 2:5 title " pValue" with impulses, \
     
     gnuplot histo.gp > histo.png
     display histo.png &
+
 
 # BLASTZ BOREOEUTHERIAN (BOREUT1) (DONE 1/29/05 braney)
     ssh kk
@@ -13730,5 +13790,4 @@ SEQ2_LEN=$BASE/S2.len
     hgsql hg17 -e 'load data local infile "refSeqKg.tab" into table refSeqKg'
 
    rm fraction.out
-
 
