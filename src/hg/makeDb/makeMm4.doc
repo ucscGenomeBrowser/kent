@@ -2212,22 +2212,103 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     #	173294 Jun 27  2002 10090.WI_Mouse_Genetic.txt
     #	240637 Jun 27  2002 10090.WI_Mouse_YAC.txt
     #	390088 Jun 27  2002 10090.Whitehead-MRC_RH.txt
+    # If these files have not been changing, then no need to worry about
+    #	them.  We are just picking them up to see if they have changed
+    #	since the last time we worked on this.
 
-    # these reports appear to be changing daily too
+    # these reports from jax.org appear to be changing daily
     wget --timestamping \
 	ftp://ftp.informatics.jax.org/pub/reports/MRK_Dump2.rpt
     wget --timestamping \
 	ftp://ftp.informatics.jax.org/pub/reports/MRK_Sequence.rpt
     wget --timestamping \
 	ftp://ftp.informatics.jax.org/pub/reports/PRB_PrimerSeq.rpt
-XXXX - 2003-12-16 16:50
 
-    ssh kk9
+    # compare them with previous versions.  Before this these were
+    #	in /cluster/store5/mouseMarker/orig
+    # these newly picked up files:
+    sum -r 10090*
+# 48882   338 10090.MGD.txt
+# 24176   381 10090.Whitehead-MRC_RH.txt
+# 62367   170 10090.WI_Mouse_Genetic.txt
+# 50616   235 10090.WI_Mouse_YAC.txt
+    sum -r *.rpt
+# 21097  4161 MRK_Dump2.rpt
+# 15420  3139 MRK_Sequence.rpt
+# 41562  2233 PRB_PrimerSeq.rpt
+    sum -r UniSTS*
+# 11981  8850 UniSTS.aliases
+# 42464  2291 UniSTS_mouse.sts
+
+    # the previous copies
+    cd /cluster/store5/mouseMarker/orig
+    sum -r 10090*
+# 48882   338 10090.MGD.txt
+# 24176   381 10090.Whitehead-MRC_RH.txt
+# 62367   170 10090.WI_Mouse_Genetic.txt
+# 50616   235 10090.WI_Mouse_YAC.txt
+    sum -r *.rpt
+# 36880  4160 MRK_Dump2.rpt
+# 02447  3132 MRK_Sequence.rpt
+# 57914  2220 PRB_PrimerSeq.rpt
+    sum -r UniSTS*
+# 36201  8843 UniSTS.aliases
+# 58524   970 UniSTS_mouse.alias
+# 42464  2291 UniSTS_mouse.sts
+
+    # back to our work area, update the bed file
+    #	to do this we need a new UniSTS_mouse.alias file
+    # it is created by a combination of information from several
+    # of the above files ! AND ! the previous stsInfoMouse.bed file
+    #
+    #	This process has been captured in the script:
+    #	/cluster/data/mm4/bed/STSmarkers/downloads/fetchAllAliases.sh
+    # which uses a couple of perl scripts in that same directory.
+    # briefly it is:
+    cd /cluster/data/mm4/bed/STSmarkers/downloads
+    ./UniSTSParse.pl UniSTS_mouse.sts UniSTS.aliases > UniSTS_mouse_alias.0
+    grep MGI: UniSTS.aliases > MGI.aliases
+    ./stsInfoMouseParse.pl /cluster/store5/mouseMarker/stsInfoMouse.bed > \
+	stsInfoAliases.txt
+    ./UniSTSParse.pl stsInfoAliases.txt UniSTS.aliases > stsInfo.aliases
+    cat UniSTS_mouse_alias.0 MGI.aliases stsInfo.aliases | sort -u \
+        | sort -n > UniSTS_mouse.alias
+
+
+    # with that, we can create a new stsInfoMouse.bed file:
+    cd /cluster/data/mm4/bed/STSmarkers
+    /cluster/store5/mouseMarker/code/updateBed.pl \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
+	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
+	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
+    cp -p newbedfile stsMouseinfo.bed
+
+    # and from that, create new primer fa, epcr, etc:
+    /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
+	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
+    # the mouseC.fa file will be empty
+#	-rw-rw-r--    1        0 Dec 18 12:06 mouseC.fa
+#	-rw-rw-r--    1  1949198 Dec 18 12:06 mouseP.info
+#	-rw-rw-r--    1  6054456 Dec 18 12:06 mouseP.fa
+    wc mouse?.*
+#	     0       0       0 mouseC.fa
+#	268733  268671 6054456 mouseP.fa
+#	 30876  154398 1949198 mouseP.info
+
+    #	copy the primers over to the bluearc for the kluster run
+    cp -p mouseP.fa /cluster/bluearc/scratch/mus/mm4
+    cp -p mouseP.info /cluster/bluearc/scratch/mus/mm4
+
+
+#  CLUSTER RUN FOR THE STS PRIMERS
+
+    ssh kk
     mkdir -p /cluster/data/mm4/bed/STSmarkers/primer
     mkdir -p /cluster/data/mm4/bed/STSmarkers/ePCR
     cd /cluster/data/mm4/bed/STSmarkers/primer
-    # we need to document where musPrimer.fa comes from
-    echo "/cluster/bluearc/scratch/mus/mm4/musPrimer.fa" > primers.lst
+    # the mouseP.fa comes from above
+    echo "/cluster/bluearc/scratch/mus/mm4/mouseP.fa" > primers.lst
     cat << '_EOF_' > template
 #LOOP
 /cluster/bin/i386/blat.2 $(path1) $(path2) -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
@@ -2243,12 +2324,15 @@ XXXX - 2003-12-16 16:50
     para push
     ... etc ...
 # Completed: 599 of 599 jobs
-# CPU time in finished jobs:     184360s    3072.66m    51.21h    2.13d  0.006 y
-# IO & Wait Time:                  1734s      28.90m     0.48h    0.02d  0.000 y
-# Average job time:                 311s       5.18m     0.09h    0.00d
-# Longest job:                      417s       6.95m     0.12h    0.00d
-# Submission to last job:          2132s      35.53m     0.59h    0.02d
+# CPU time in finished jobs:     324009s    5400.15m    90.00h    3.75d  0.010 y
+# IO & Wait Time:                 54296s     904.93m    15.08h    0.63d  0.002 y
+# Average job time:                 632s      10.53m     0.18h    0.01d
+# Longest job:                      748s      12.47m     0.21h    0.01d
+# Submission to last job:           811s      13.52m     0.23h    0.01d
 
+    # on the file server
+    ssh kksilo
+    cd /cluster/data/mm4/bed/STSmarkers/primer
     /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
     rmdir temp
     # comparing results to mm3:
@@ -2256,8 +2340,10 @@ XXXX - 2003-12-16 16:50
     # Mm3 wc primers.psl
     # 4263983 89543582 440456942 primers.psl
     # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
-    # 4805773 100921172 496200670 primers.psl
+    # 5933518 124603817 610451872 primers.psl
 
+    # another kluster run
+    ssh kk
     cd /cluster/data/mm4/bed/STSmarkers/ePCR
     ls -1S /cluster/bluearc/scratch/mus/mm4/trfFa > contig.lst
     mkdir epcr.out
@@ -2266,8 +2352,8 @@ XXXX - 2003-12-16 16:50
 /cluster/bin/scripts/luRunEpcr $(path1) $(path2) epcr.out/$(num2).epcr
 #ENDLOOP
 '_EOF_'
-    # we need to document where mmPrimer.info comes from
-    echo "/cluster/bluearc/scratch/mus/mm4/mmPrimer.info" > epcr.lst
+    # the mouseP.info was created above
+    echo "/cluster/bluearc/scratch/mus/mm4/mouseP.info" > epcr.lst
     gensub2 epcr.lst contig.lst template jobList
     para create jobList
     para try
@@ -2275,11 +2361,11 @@ XXXX - 2003-12-16 16:50
     para push
     ... etc ...
 # Completed: 599 of 599 jobs
-# CPU time in finished jobs:      65528s    1092.14m    18.20h    0.76d  0.002 y
-# IO & Wait Time:                  1841s      30.68m     0.51h    0.02d  0.000 y
-# Average job time:                 112s       1.87m     0.03h    0.00d
-# Longest job:                      159s       2.65m     0.04h    0.00d
-# Submission to last job:           791s      13.18m     0.22h    0.01d
+# CPU time in finished jobs:     139338s    2322.30m    38.70h    1.61d  0.004 y
+# IO & Wait Time:                 41320s     688.67m    11.48h    0.48d  0.001 y
+# Average job time:                 302s       5.03m     0.08h    0.00d
+# Longest job:                      366s       6.10m     0.10h    0.00d
+# Submission to last job:           388s       6.47m     0.11h    0.00d
 
     ssh hgwdev
     # all those results become all.epcr
@@ -2289,29 +2375,39 @@ XXXX - 2003-12-16 16:50
     # Mm3 wc all.epcr
     #  24627   98508 1329559 all.epcr
     # Mm4 wc all.epcr	/cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
-    #  65121  260484 3485112 ../ePCR/all.epcr
+    #  75381  301524 4005978 all.epcr
 
     cd /cluster/data/mm4/bed/STSmarkers/primer
 
     # create primers.psl.filter.blat and epcr.not.found
-    /projects/compbio/usr/booch/booch/scripts/filterPrimers -mouse \
-	/cluster/store5/mouseMarker/stsInfoMouse.bed primers.psl \
-	/cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
-	../ePCR/all.epcr > primers.psl.filter.blat
+    # must use -rat here, not the -mouse
+    /projects/compbio/usr/booch/booch/scripts/filterPrimers -rat \
+	../stsInfoMouse.bed primers.psl ../mouseP.fa \
+	../ePCR/all.epcr > primers.psl.filter.blat 2> filterPrimers.err
+    #  The filterPrimers.err file should show an increasing count:
+    #	Reading name info
+    #	Reading primer info
+    #	Processing file
+    #	100000
+    #	200000
+    #	300000
+    #	...
+    #	5800000
+    #	5900000
+    #	Determining ePCR not found
     #
-    # comparing results to Mm3:
-    # Mm3: wc primers.psl.filter.blat
-    #  26088  547848 2612720 primers.psl.filter.blat
     # Mm4:  wc primers.psl.filter.blat
-    #  24056  505176 2385675 primers.psl.filter.blat
+    # 1505909 31624089 158065611 primers.psl.filter.blat
 
     # create accession_info.rdb  (chrM added to Terry's script for mouse)
     touch empty_sequence.inf
     /projects/compbio/usr/booch/booch/scripts/compileAccInfo -mouse \
 	/cluster/data/mm4 empty_sequence.inf
-    mv accession_info.rdb temp
-    ~booch/bin/sorttbl Chr Ord Start < temp > accession_info.rdb
-    rm temp
+    # works with one seemingly error:
+    # cat: /cluster/data/mm4/M/chrM_random.agp: No such file or directory
+    mv accession_info.rdb accession_info.rdb.tmp
+    ~booch/bin/sorttbl Chr Ord Start < accession_info.rdb.tmp > accession_info.rdb
+    rm accession_info.rdb.tmp
     # comparing results to Mm3:
     #  Mm3 wc accession_info.rdb
     # 173948 1913432 12738822 accession_info.rdb
@@ -2326,7 +2422,7 @@ XXXX - 2003-12-16 16:50
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
     /projects/compbio/usr/booch/booch/scripts/epcrToPsl -mouse \
-	epcr.not.found /cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
+	epcr.not.found ../mouseP.fa \
 	accession_info.rdb /cluster/data/mm4
     ##### epcr.not.found.psl is empty !
     # Comparing results to Mm3:
@@ -2337,10 +2433,10 @@ XXXX - 2003-12-16 16:50
     # 410    5116   27497 total
 
     # Mm4 wc epcr*
-    #  132     528    5154 epcr.not.found
-    #  132    1584   11622 epcr.not.found.nomatch
-    #    0       0       0 epcr.not.found.psl
-    #  264    2112   16776 total
+    # 222     888    8489 epcr.not.found
+    # 222    2664   19367 epcr.not.found.nomatch
+    #   0       0       0 epcr.not.found.psl
+    # 444    3552   27856 total
 
     # combine them to one, since epcr.not.found.psl is empty, this is a copy
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
@@ -2349,28 +2445,38 @@ XXXX - 2003-12-16 16:50
     # creates primers.psl.filter.lifted
     /projects/compbio/usr/booch/booch/scripts/lifter -mouse -psl \
 	/cluster/data/mm4 primers.psl.filter
+    # wc primers.psl.filter.lifted
+    # 1505909 31624089 164589663 primers.psl.filter.lifted
 
-    # create primers.initial
+    # create primers.psl.filter.lifted.initial
     PATH=/cluster/home/booch/bin:$PATH \
 	/projects/compbio/usr/booch/booch/scripts/extractPslInfo \
 	primers.psl.filter.lifted
-    # create primers.initial.acc
+    #	wc primers.psl.filter.lifted.initial
+    #	1505726 9034356 80151134 primers.psl.filter.lifted.initial
+
+XXXX
+    # create primers.psl.filter.lifted.initial.acc
     /projects/compbio/usr/booch/booch/scripts/findAccession -agp \
-	-mouse primers.initial /cluster/data/mm4
+	-mouse primers.psl.filter.lifted.initial /cluster/data/mm4
+    # wc primers.psl.filter.lifted.initial.acc
+    # 1505726 10540082 95018744 primers.psl.filter.lifted.initial.acc
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
     /projects/compbio/usr/booch/booch/scripts/getStsId -rat \
-	/cluster/store5/mouseMarker/stsInfoMouse.bed \
-	primers.initial.acc > primers.initial.acc.trans
+	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
+	> primers.initial.acc.trans
+    # wc primers.initial.acc.trans
+    # 1505726 10540082 80634404 primers.initial.acc.trans
 
     sort -k 4n primers.initial.acc.trans > primers.final
-    rm primers.initial.acc primers.initial.acc.trans
+    rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
     # comparing results to Mm3:
     # Mm3 wc primers.final
     # 26292  184044 1253365 primers.final
-    # Mm4 wc primers.final
-    # 24056  168392 1289371 primers.final
+    # wc primers.final
+    # 1505726 10540082 80634404 primers.final
 
     cd /cluster/data/mm4/bed/STSmarkers
     # stsMarkers.final is empty for mouse
@@ -2382,24 +2488,50 @@ XXXX - 2003-12-16 16:50
     # Mm3 wc stsMarkers_pos.rdb
     # 25925  181475 1413458 stsMarkers_pos.rdb
     # Mm4 wc stsMarkers_pos.rdb
-    # 24058  168406 1133400 stsMarkers_pos.rdb
+    # 437134 3059938 164481733 stsMarkers_pos.rdb
 
     /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
-	-rat /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	-rat stsInfoMouse.bed \
 	dummy primer/primers.final > stsMarkers_pos_all.rdb
+
     # can not find this result for Mm3
     # Mm4 wc stsMarkers_pos_all.rdb
-    # 22107   46165  293258 stsMarkers_pos_all.rdb
+    # 28159 1533887 12176792 stsMarkers_pos_all.rdb
 
-XXXX this createSTSbed is only for Human, does not work here
-XXXX  Need something that converts stsMarkers_pos.rdb to stsMapMouse.bed
-    /projects/compbio/usr/booch/booch/scripts/createSTSbed \
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
-	/cluster/store5/mouseMarker/stsInfoMouse.bed \
-	stsMarkers_pos.rdb 500 > stsMapMouse.bed
+	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
+    # wc stsMapMouse.bed
+    # 477    4309   33977 stsMapMouse.bed
+XXXX This is a failure here.  Something is wrong.  Almost all the scores
+XXXX computed in createStsBed are zero.  Also this command fails on
+XXXX the 2 Gb machines.  It needs to be run on kolossus.
+
+#  loading STS markers tables
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/STSmarkers
+    ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
+    hgsql -e "drop table stsAlias;" mm4
+    hgsql mm4 < ~/kent/src/hg/lib/stsAlias.sql
+    hgsql -e \
+	'load data local infile "ucscStsAlias.tab" into table stsAlias;' mm4
+    hgsql -e "drop table stsMap;" mm4
+    hgsql mm4 < ~/kent/src/hg/lib/stsMap.sql
+    hgsql -e \
+	'load data local infile "stsMapMouse.bed" into table stsMap;' mm4
+    hgsql -e "drop table stsInfoMouseNew;" mm4
+    hgsql mm4 < ~/kent/src/hg/lib/stsInfoMouseNew.sql
+    hgsql -e \
+     'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm4
+    hgsql -e "drop table all_sts_primer;" mm4
+    hgsql mm4 < /projects/hg2/booch/psl/tables/all_sts_primer.sql
+    hgsql -e \
+	'load data local infile "primer/primers.psl.filter.lifted" into table all_sts_primer;' mm4
+
+XXXX 2003-12-18
 
 #  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
 #	is created correctly from above, also needs the three maps files
+###  XXXXX These are obsolete, not necessary
     mkdir /cluster/data/mm4/bed/STSmarkers/html
     cd /cluster/data/mm4/bed/STSmarkers/html
     mkdir maps plots sts
