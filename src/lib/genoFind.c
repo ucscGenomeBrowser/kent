@@ -210,7 +210,7 @@ fclose(f);
 }
 
 
-int gfPepTile(DNA *dna, int n)
+int gfTransPepTile(DNA *dna, int n)
 /* Make up packed representation of translated protein. */
 {
 int tile = 0;
@@ -227,10 +227,27 @@ while (--n >= 0)
 return tile;
 }
 
+int gfPepTile(AA *pep, int n)
+/* Make up packed representation of translated protein. */
+{
+int tile = 0;
+int aa;
+while (--n >= 0)
+    {
+    tile *= 20;
+    aa = aaVal[*pep++];
+    if (aa < 0)
+        return -1;
+    tile += aa;
+    }
+return tile;
+}
+
+
 void gfPepCountTile(struct genoFind *gf, DNA *dna)
 /* Add peptide N-mer to count. */
 {
-int tile = gfPepTile(dna, gf->tileSize);
+int tile = gfTransPepTile(dna, gf->tileSize);
 
 if (tile >= 0 && gf->listSizes[tile] < gf->maxPat)
     ++gf->listSizes[tile];
@@ -276,8 +293,8 @@ for (frame = 0; frame < 3; ++frame)
 	gfPepCountSeq(gf, seq);
 	freeDnaSeq(&seq);
 	}
-    fclose(f);
     }
+fclose(f);
 }
 
 
@@ -339,7 +356,7 @@ if (gf->listSizes[tile] < gf->maxPat)
 void gfPepAddTile(struct genoFind *gf, DNA *dna, int offset)
 /* Add peptide N-mer to tile index. */
 {
-int tile = gfPepTile(dna, gf->tileSize);
+int tile = gfTransPepTile(dna, gf->tileSize);
 if (tile >= 0)
     {
     if (gf->listSizes[tile] < gf->maxPat)
@@ -426,8 +443,8 @@ for (frame = 0; frame < 3; ++frame)
 	gfPepAddSeq(gf, seq, i+offset);
 	freeDnaSeq(&seq);
 	}
-    fclose(f);
     }
+fclose(f);
 printf("Done adding\n");
 return nibSize;
 }
@@ -837,7 +854,46 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	slAddHead(&hitList, hit);
 	}
     }
-// uglyf("Got %d hits\n", slCount(hitList));
+cmpQuerySize = seq->size;
+slSort(&hitList, gfHitCmpDiagonal);
+return clumpHits(gf, hitList, minMatch);
+}
+
+struct gfClump *gfPepFindClumps(struct genoFind *gf, struct dnaSeq *seq)
+/* Find clumps associated with one sequence. */
+{
+struct gfHit *hitList = NULL, *hit;
+int size = seq->size;
+int tileSize = gf->tileSize;
+int lastStart = size - tileSize;
+int tileSizeMinusOne = tileSize - 1;
+int mask = gf->tileMask;
+AA *aa = seq->dna;
+int i, j;
+int tile;
+bits32 bVal;
+int listSize;
+bits32 qStart, tStart, *tList;
+int minMatch = gf->minMatch;
+
+for (i=0; i<=lastStart; ++i)
+    {
+    tile = gfPepTile(aa+i, tileSize);
+    if (tile < 0)
+        continue;
+    listSize = gf->listSizes[tile];
+    qStart = i*3;
+    tList = gf->lists[tile];
+    for (j=0; j<listSize; ++j)
+        {
+	AllocVar(hit);
+	// uglyf("hit %c%c%c%c %d %d\n", aa[i], aa[i+1], aa[i+2], aa[i+3], i, tList[j]);
+	hit->qStart = qStart;
+	hit->tStart = tList[j];
+	hit->diagonal = hit->tStart + seq->size - qStart;
+	slAddHead(&hitList, hit);
+	}
+    }
 cmpQuerySize = seq->size;
 slSort(&hitList, gfHitCmpDiagonal);
 return clumpHits(gf, hitList, minMatch);

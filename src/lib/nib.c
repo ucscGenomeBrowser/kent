@@ -59,7 +59,9 @@ if (start & 1)
     {
     bVal = getc(f);
     if (bVal < 0)
-	errAbort("Read error in %s", fileName);
+	{
+	errAbort("Read error 1 in %s", fileName);
+	}
     *d++ = valToNt[(bVal&0xf)];
     // *d++ = valToNt[(bVal>>4)];
     size -= 1;
@@ -69,7 +71,7 @@ while (--byteSize >= 0)
     {
     bVal = getc(f);
     if (bVal < 0)
-	errAbort("Read error in %s", fileName);
+	errAbort("Read error 2 in %s", fileName);
     d[0] = valToNt[(bVal>>4)];
     d[1] = valToNt[(bVal&0xf)];
     d += 2;
@@ -78,7 +80,7 @@ if (size&1)
     {
     bVal = getc(f);
     if (bVal < 0)
-	errAbort("Read error in %s", fileName);
+	errAbort("Read error 3 in %s", fileName);
     *d++ = valToNt[(bVal>>4)];
     }
 *d = 0;

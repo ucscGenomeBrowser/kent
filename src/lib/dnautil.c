@@ -565,6 +565,7 @@ if (!opened)
     {
     checkSizeTypes();
     initNtVal();
+    initAaVal();
     initNtChars();
     initNtCompTable();
     opened = TRUE;

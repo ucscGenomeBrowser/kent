@@ -293,11 +293,8 @@ faWriteNext(f, startLine, dna, dnaSize);
 fclose(f);
 }
 
-boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
-/* Read in next FA entry as fast as we can. Faster than that old,
- * pokey faFastReadNext. Return FALSE at EOF. 
- * The returned DNA and name will be overwritten by the next call
- * to this function. */
+boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna)
+/* Read in DNA or Peptide FA record. */
 {
 int c;
 int bufIx = 0;
@@ -306,6 +303,7 @@ int nameIx = 0;
 boolean gotSpace = FALSE;
 int lineSize, i;
 char *line;
+char *checkChars = (isDna ? ntChars : aaChars);
 
 dnaUtilOpen();
 
@@ -346,8 +344,11 @@ for (;;)
 	c = line[i];
 	if (isalpha(c) || c == '-')
 	    {
-	    c = ntChars[c];
-	    if (c == 0) c = 'n';
+	    c = checkChars[c];
+	    if (c == 0) 
+		{
+	    	c = (isDna ? 'n' : 'X');
+		}
 	    faFastBuf[bufIx++] = c;
 	    }
 	}
@@ -359,6 +360,21 @@ faFastBuf[bufIx] = 0;
 *retSize = bufIx;
 *retName = name;
 return TRUE;
+}
+
+boolean faPepSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
+/* Read in next peptide FA entry as fast as we can.  */
+{
+return faSomeSpeedReadNext(lf, retDna, retSize, retName, FALSE);
+}
+
+boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
+/* Read in next FA entry as fast as we can. Faster than that old,
+ * pokey faFastReadNext. Return FALSE at EOF. 
+ * The returned DNA and name will be overwritten by the next call
+ * to this function. */
+{
+return faSomeSpeedReadNext(lf, retDna, retSize, retName, TRUE);
 }
 
 struct dnaSeq *faReadAllDna(char *fileName)
