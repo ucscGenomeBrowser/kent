@@ -315,3 +315,22 @@ hgLoadRna add -type=mRNA sc1 /gbdb/sc1/mrnaViral/viralany.fa viralany.ra
 hgLoadRna addSeq -abbr=prot sc1 /gbdb/sc1/swissprot/viralProt.fa
 hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
 
+MRNA ALIGNMENT USING BLASTZ and CHAINING (done 5/16/03)
+ 
+cd ~/sars/mrna.blastz.all
+gensub2 query.lst single gsub spec
+cd run.1
+mkdir raw
+mkdir raw/chr1
+para create spec
+para push
+mkdir lav
+mkdir lav/chr1
+/cluster/home/angie/schwartzbin/xout2lav chr1 29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/raw/chr1/1.29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/lav/chr1/1.29736.lav /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/DEF
+
+axtChain axt/xeno.axt /cluster/store5/SARS_Coronavirus_TOR2/nib/ /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/nib chain/xeno.chain
+
+chainToPsl chain/filter.chain S1.len S2.len ../../nib/chr1.nib query.lst psl/xenoBlastzMrna.psl
+cd psl
+hgLoadPsl sc1 xenoBlastzMrna.psl
+
