@@ -350,7 +350,7 @@ printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 printf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
-printf(" ALT= \"%s controls\">\n", tg->shortLabel);
+printf(" ALT=\"%s controls\">\n", tg->shortLabel);
 }
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -375,10 +375,10 @@ printf("&%s\"", ui->string);
 freeDyString(&ui);
 
 if (toggleGroup)
-    printf(" ALT= \"Change between dense and full view of %s track\">\n", 
+    printf(" ALT=\"Change between dense and full view of %s track\">\n", 
            toggleGroup->shortLabel);
 else
-    printf(" ALT= \"jump to %s\">\n", message);
+    printf(" ALT=\"jump to %s\">\n", message);
 }
 
 
@@ -421,7 +421,7 @@ printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
-printf("ALT= \"%s\">\n", statusLine); 
+printf("ALT=\"%s\">\n", statusLine); 
 freeMem(encodedItem);
 }
 
@@ -5190,7 +5190,7 @@ if(target)
     {
     printf(" target=\"%s\" ", otherFrame);
     } 
-printf("ALT= \"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
+printf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
 freeMem(encodedItem);
 }
 
@@ -6309,6 +6309,7 @@ if (!hideControls)
 	cgiMakeIntVar("pix", tl.picWidth, 4);
 	fputs(" ", stdout);
 	cgiMakeButton("submit", "jump");
+	fputc('\n', stdout);
 	}
     }
 
