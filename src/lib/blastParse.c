@@ -5,8 +5,6 @@
 #include "linefile.h"
 #include "blastParse.h"
 
-static char const rcsid[] = "$Id: blastParse.c,v 1.5 2003/05/06 07:33:41 kate Exp $";
-
 struct blastFile *blastFileReadAll(char *fileName)
 /* Read all blast alignment in file. */
 {
@@ -129,12 +127,13 @@ bq->query = cloneString(words[1]);
 
 /* Process something like:
  *   (45,693 letters)
+ 	Safeguard against query line wrap around
  */
 for (;;)
     {
     bfNeedNextLine(bf, &line, &lineSize);
     s = skipLeadingSpaces(line);
-    if (s[0] == '(')
+	if (startsWith("        (",line))
 	break;
     }
 if (!isdigit(s[1]))
@@ -151,7 +150,10 @@ if ((e = strchr(s, ' ')) == NULL)
 *e = 0;
 decomma(s);
 bq->queryBaseCount = atoi(s);
+/* I commented this out because I couldn't find a better solution
+	- George Shackelford
 uglyf("Query %s has %d bases\n", bq->query, bq->queryBaseCount);
+*/
 
 
 /* Seek until get something like:
@@ -227,10 +229,17 @@ bga->targetName = cloneString(line+1);
 
 /* Process something like:
  *      Length = 100000
+ 	Safeguard against wrapped lines!
  */
-bfNeedNextLine(bf, &line, &lineSize);
-wordCount = chopLine(line, words);
-if (wordCount < 3 || !isdigit(words[2][0]))
+int lenSearch;
+for (lenSearch=0; lenSearch<3; lenSearch++)
+	{
+	bfNeedNextLine(bf, &line, &lineSize);
+	wordCount = chopLine(line, words);
+	if (wordCount >= 3 && isdigit(words[2][0]))
+		break;
+	}
+if (lenSearch>=3)
     bfError(bf, "Expecting length");
 decomma(words[2]);
 bga->targetSize = atoi(words[2]);
@@ -354,15 +363,22 @@ if (wordCount >= 7 && sameWord("Gaps", words[4]))
 
 /* Process something like:
  *     Strand = Plus / Plus
+ 	But not if it's BLASTp
  */
-bfNeedNextLine(bf, &line, &lineSize);
-wordCount = chopLine(line, words);
-if (wordCount < 5 || !sameWord("Strand", words[0]))
-    bfError(bf, "Expecting Strand info");
-bb->qStrand = getStrand(bf, words[2]);
-bb->tStrand = getStrand(bf, words[4]);
-
-
+if (!sameWord("BLASTP",bf->program))
+	{
+	bfNeedNextLine(bf, &line, &lineSize);
+	wordCount = chopLine(line, words);
+	if (wordCount < 5 || !sameWord("Strand", words[0]))
+	    bfError(bf, "Expecting Strand info");
+	bb->qStrand = getStrand(bf, words[2]);
+	bb->tStrand = getStrand(bf, words[4]);
+	}
+else
+    {
+	bb->qStrand = '+';
+	bb->tStrand = '+';
+	}
 /* Process alignment lines.  They come in groups of three
  * separated by a blank line - something like:
  * Query: 26429 taccttgacattcctcagtgtgtcatcatcgttctctcctccaaacggcgagagtccgga 26488
@@ -534,4 +550,11 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
+
+/*
+2003/05/14 George Shackelford
+	- Ignore reading "Strand" line for BLASTP output
+	- Two fixes to handle case where seq description lines wrap around
+	- Commented out a call to "uglyf"
+*/
 
