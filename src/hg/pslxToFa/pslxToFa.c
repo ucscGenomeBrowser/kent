@@ -13,27 +13,48 @@ errAbort(
   "usage:\n"
   "   pslxToFa XXX\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -liftOut=liftFile.lft\n"
   );
 }
 
 static struct optionSpec options[] = {
+    {"liftFile", OPTION_STRING},
    {NULL, 0},
 };
 
-void pslxToFa(char *pslName, char *faName)
+void pslxToFa(char *pslName, char *faName, char *liftName)
 /* pslxToFa - convert pslx to fasta file. */
 {
+FILE *lift = NULL;
 struct lineFile *in = pslFileOpen(pslName);
 FILE *out = mustOpen(faName, "w");
 struct psl *psl;
 
+if (liftName != NULL)
+    lift = mustOpen(liftName, "w");
+
 while ((psl = pslNext(in)) != NULL)
     {
     int ii=0;
-    fprintf(out,">%s_%d_%d\t%d\t%d\n%s\n",psl->qName, 0, psl->blockCount,psl->blockSizes[0]*3, psl->tBaseInsert, psl->qSequence[0]);
+    int sum = 0;
+    if (lift != NULL)
+	{
+	fprintf(lift,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\n",
+		0, "1", psl->qName,0,psl->blockCount, strlen(psl->qSequence[0]), psl->qName, psl->qSize);
+	sum += strlen(psl->qSequence[0]);
+	}
+    fprintf(out,">%s_%d_%d\n%s\n",psl->qName, 0, psl->blockCount, psl->qSequence[0]);
+
     for(ii=1; ii < psl->blockCount; ii++)
-	fprintf(out,">%s_%d_%d\t%d\t%d\n%s\n",psl->qName, ii, psl->blockCount,psl->blockSizes[ii]*3, psl->tStarts[ii] - (psl->tStarts[ii -1] + 3*psl->blockSizes[ii-1]), psl->qSequence[ii]);
+	{
+	if (lift != NULL)
+	    {
+	    fprintf(lift,"%d\t%s/%s_%d_%d\t%d\t%s\t%d\n",
+		sum, "1", psl->qName,ii,psl->blockCount, strlen(psl->qSequence[ii]), psl->qName, psl->qSize);
+	    sum += strlen(psl->qSequence[ii]);
+	    }
+	fprintf(out,">%s_%d_%d\n%s\n",psl->qName, ii, psl->blockCount,  psl->qSequence[ii]);
+	}
     pslFree(&psl);
     }
 }
@@ -41,9 +62,12 @@ while ((psl = pslNext(in)) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *liftFile;
+
 optionInit(&argc, argv, options);
+liftFile = optionVal("liftFile", NULL);
 if (argc != 3)
     usage();
-pslxToFa(argv[1], argv[2]);
+pslxToFa(argv[1], argv[2], liftFile);
 return 0;
 }
