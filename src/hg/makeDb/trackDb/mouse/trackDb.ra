@@ -206,6 +206,22 @@ shortCircuit 1
 termRegex (AC|CAAA)[0-9]+(\.[0-9]+)?
 searchPriority 8
 
+searchName stsMapAlias
+searchTable stsMapMouseNew
+searchType bed
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+termRegex [^[:space:]]+
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
+searchTable stsMapMouseNew
+searchType bed
+termRegex [^[:space:]]+
+searchPriority 12
+padding 100000
+
 searchTable miRNA
 searchMethod exact
 searchType bed
