@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.179 2005/02/10 20:56:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.180 2005/02/14 22:45:46 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -517,7 +517,7 @@ printf("Human Gene ");
 cgiMakeCheckBox(accName, useAcc);
 printf("Human mRNA ");
 cgiMakeCheckBox(sprotName, useSprot);
-printf("SwissProt ID ");
+printf("UniProt(Swiss-Prot/TrEMBL) ID ");
 cgiMakeCheckBox(posName, usePos);
 printf("Human Position");
 
