@@ -978,6 +978,28 @@ Color *shadesFromBaseColor( struct rgbColor *rgb )
         return( shadesOfGray );
 }
 
+int whichBin( double tmp, double thisMin, double thisMax, int n )
+{
+    int i;
+    double inc = (thisMax - thisMin)/(double)n;
+    double val = thisMin + inc;
+    for( i=0; i<n; i++ )
+    {
+        if( tmp >= (val - inc) && tmp < val )
+            return(i+1);
+        val += inc;
+        
+        if( i == n - 1 )
+            return(n);
+    }
+    return(n);
+}
+
+/*gets range nums. from bin values*/
+double whichNum( double tmp, double min0, double max0, int n )
+{
+    return( (max0 - min0)/(double)n * tmp + min0 );
+}
 
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -1003,15 +1025,10 @@ boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
 double scale = width/(double)baseWidth;
-boolean isXeno = tg->subType == lfSubXeno;
-boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
-int midY = y + midLineOff;
-int compCount = 0;
-int w;
 int prevEnd = -1;
 double prevY = -1;
 int ybase;
-
+int tmp;
 
 /*process cart options*/
 
@@ -1023,6 +1040,9 @@ int fill;
 char o1[128];
 char o2[128];
 char o3[128];
+
+double hFactor;
+double minRange, maxRange;
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
@@ -1038,28 +1058,58 @@ wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
 
+//this information should be moved to the trackDb.ra
+if( sameString( tg->mapName, "humMus" ) )
+    {
+    minRange = 500.0;
+    maxRange = 1000.0;
+    }
+    else
+    {
+    minRange = 1.0;
+    maxRange = 1000.0;
+    }
 
+
+heightPer = tg->heightPer+1;
+hFactor = (double)heightPer/1000.0;
 //errAbort( "(%s)", lf->name );
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
-	    heightPer = tg->heightPer+1;
+
 	    s = sf->start;
 	    e = sf->end;
 
-        if( s - e == 0 ) /*ignore scores of 0*/
+        if( (sf->start - sf->end) == 0 ) /*ignore scores of 0*/
         {
             prevEnd = -1;  /*set so no interpolation where no data*/
             continue;
         }
 
+        tmp = -whichBin( sf->end - sf->start, minRange, maxRange, 1000 );
+
+        if( -(sf->start - sf->end) < minRange || -(sf->start - sf->end) > maxRange)
+        {
+
+            prevEnd = -1;  /*set so no interpolation where no data*/
+            continue;
+        }
+
+        /*
+        if( tmp != -(sf->end - sf->start) )
+        {
+            errAbort( "binning error:  s-e = %d, tmp=%d\n",
+                        sf->end - sf->start, tmp );
+        }
+        */  
+        
         //errAbort( "heightPer = %d\n", heightPer );
         x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)(s-e))*(double)heightPer/1000.0+(double)heightPer);
-
-        ybase = (int)((double)y+(double)heightPer/1000.0+(double)heightPer);
+        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+        ybase = (int)((double)y+hFactor+(double)heightPer);
 
         if (prevEnd > 0)
 	        {
@@ -1070,16 +1120,14 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
                 {
                 if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
                     {
+
+
                     if( sameString( aa, "on" )) /*use anti-aliasing*/
                         mgConnectingLine( mg, x1, y1, x2, y2,
                             shades, ybase, 1, fill );
                     else
                         mgConnectingLine( mg, x1, y1, x2, y2,
                             shades, ybase, 0, fill );
-                    }
-                else if( wiggleType == wiggleNoInterpolation )
-                    {
-                        /*do nothing*/
                     }
                 }
 
@@ -6706,6 +6754,8 @@ int i;
 
 int ymin, ymax;
 int scaledHeightPer;
+char minRangeStr[32];
+char maxRangeStr[32];
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
@@ -6775,6 +6825,19 @@ if (withLeftLabels)
 	    if (group->hasUi)
 		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
 	    }
+
+
+    if( sameString( group->mapName, "humMus" ) )
+    {
+        sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
+        sprintf( maxRangeStr, "%g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+    }
+    else
+    {
+        sprintf( minRangeStr, "%g", whichNum( 1.0, 1.0, 100.0, 1000 ));
+        sprintf( maxRangeStr, "%g", whichNum( 1000.0, 1.0, 100.0, 1000 ));
+    }
+
 	switch (group->limitedVis)
 	    {
 	    case tvHide:
@@ -6793,12 +6856,13 @@ if (withLeftLabels)
             if( group->loadItems == loadSampleIntoLinkedFeature &&
                 group->heightPer > (3 * fontHeight ) )
                 {
+
                 ymax = y - (group->heightPer / 2) + (fontHeight / 2);
                 ymin = y + (group->heightPer / 2) - (fontHeight / 2);
 		        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-			        group->ixAltColor, font, "0%");
+			        group->ixAltColor, font, minRangeStr );
 		        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-			        group->ixAltColor, font, "100%");
+			        group->ixAltColor, font, maxRangeStr );
                 }
 		    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
                     /* Reset the clipping rectangle to its original proportions */
@@ -6815,12 +6879,13 @@ if (withLeftLabels)
         if( group->loadItems == loadSampleIntoLinkedFeature &&
             group->heightPer > (3 * fontHeight ) )
             {
+
             ymax = y - (group->heightPer / 2) + (fontHeight / 2);
             ymin = y + (group->heightPer / 2) - (fontHeight / 2);
 		    mgTextRight(mg, gfxBorder, ymin, inWid-1, group->lineHeight, 
-			    group->ixAltColor, font, "0%");
+			    group->ixAltColor, font, minRangeStr );
 		    mgTextRight(mg, gfxBorder, ymax, inWid-1, group->lineHeight, 
-			    group->ixAltColor, font, "100%");
+			    group->ixAltColor, font, maxRangeStr );
             }
 		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, 
 			group->ixColor, font, group->shortLabel);
