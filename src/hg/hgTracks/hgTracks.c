@@ -1335,6 +1335,15 @@ if( sameString( tg->mapName, "humMus" ) )
     max0 = whichNum( 1000.0, 0.0, 5.0, 1000 );
     
     }
+    else if( sameString( tg->mapName, "binomialCons" ) )
+    {
+    minRange = 1.0;
+    maxRange = 250.0;
+
+    min0 = whichNum( minRange, 0.0, 100.0, 1000 );
+    max0 = whichNum( maxRange, 0.0, 100.0, 1000 );
+    
+    }
     else
     {
     minRange = 1.0;
@@ -8093,10 +8102,15 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 5.0, 1000 ));
 	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
 	    }
+     else if( sameString( group->mapName, "binomialCons" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 250.0, 0.0, 100.0, 1000 ));
+	    }
 	else
 	    {
-	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 1.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 0.0, 100.0, 1000 ));
 	    }
 	
 	switch (group->limitedVis)
