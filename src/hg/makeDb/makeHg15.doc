@@ -1788,7 +1788,7 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (4/25/03 KRR)
+# LOAD SOFTBERRY GENES (4/25/03 KRR)
      mkdir -p ~/hg15/bed/softberry
      cd ~/hg15/bed/softberry
      set file = Softb_fgenesh_models_apr03.tar.gz
@@ -1798,17 +1798,19 @@ LOAD SOFTBERRY GENES (4/25/03 KRR)
      hgPepPred hg15 softberry *.protein
      hgSoftberryHom hg15 *.protein
 
-LOAD GENEID GENES (TODO)
+# LOAD GENEID GENES (4/30/03 KRR)
     mkdir ~/hg15/bed/geneid
     cd ~/hg15/bed/geneid
     mkdir download
     cd download
     # Now download *.gtf and *.prot from 
-    wget -r http://www1.imim.es/genepredictions/H.sapiens/golden_path_20021114/geneid_v1.1/
-    # oops, due to links in the index.html, it tries to get too much.  
-    # ctrl-c it when it starts to download other directories.
-    mv www1.imim.es/genepredictions/H.sapiens/golden_path_20021114/geneid_v1.1/*.{gtf,prot} .
-    rm -r www1.imim.es/
+    set dir = www1.imim.es/genepredictions/H.sapiens/golden_path_20030410/geneid_v1.1/
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un)
+      wget http://$dir/chr$c.gtf
+      wget http://$dir/chr${c}_random.gtf
+      wget http://$dir/chr$c.prot
+      wget http://$dir/chr${c}_random.prot
+    end
     # Add missing .1 to protein id's
     foreach f (*.prot)
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
