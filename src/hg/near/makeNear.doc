@@ -88,7 +88,7 @@ hgLoadBlastTab $db knownBlastTab *.tab
 
 # Create a table that maps between known genes and 
 # the nice affyUcla expression data.
-hgMapToGene "-type=bed 12" $db knownGene affyUcla knownToAffyUcla
+hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToAffyUcla
 
 # Create expression distance table.  This will take about an hour.
 cd ~/src/hg/near/hgExpDistance
@@ -102,3 +102,7 @@ wget ftp://ftp.genetics.wustl.edu/pub/Pfam/swisspfam.gz
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
+
+# Create knownToEnsembl column
+hgMapToGene $db ensGene knownToEnsembl
+
