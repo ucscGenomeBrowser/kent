@@ -27,6 +27,8 @@ char *hgsid;
 char hgsidStr[50];
 
 boolean proteinInSupportedGenome;  /* The protein is in supported genome DB */
+int protCntInSupportedGenomeDb; /* The protein count in supported genome DBs */
+int protCntInSwissByGene;	/* The protein count from gene search in Swiss-Prot */
 
 int gfxBorder = 1;		/* Width of graphics border. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
@@ -398,7 +400,6 @@ char *chromStr, *cdsStartStr, *cdsEndStr, posStr[255];
 /* Initialize layout and database. */
 cart = theCart;
 
-int  protienCntInSupportedGenomeDb = {0};
 char *supportedGenomeDatabase;
 char *org = NULL;
 char *spID, *displayID, *desc;
@@ -408,7 +409,6 @@ char query3[256];
 struct sqlResult *sr3;
 char **row3;
 char *answer;
-int  proteinCnt;
 char *queryID;
 
 /* Uncomment this to see parameters for debugging. */
@@ -430,12 +430,13 @@ if (cgiVarExists("db"))
     }
 else 
     {
+    protCntInSwissByGene = searchProteinsInSwissProtByGene(queryID);
     /* no CGI 'db' variable means it did not come in from GB but from pbGateway */
     /* search existing GB databases to see if this protein can be found */
-    protienCntInSupportedGenomeDb = 
+    protCntInSupportedGenomeDb = 
     	searchProteinsInSupportedGenomes(queryID, &supportedGenomeDatabase);
    
-    if (protienCntInSupportedGenomeDb > 1) 
+    if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene > 1)
     	{
 	/* more than 1 proteins match the query ID, present selection web page */
 	presentProteinSelections(queryID);
@@ -443,7 +444,7 @@ else
 	}
     else
         {
-	if (protienCntInSupportedGenomeDb == 1)
+	if (protCntInSupportedGenomeDb == 1)
 	    {
 	    /* one and only one protein found in a genome DB that support KG and PB */
 	    proteinInSupportedGenome = TRUE;
@@ -466,8 +467,9 @@ else
                 answer = sqlGetField(spConn, "proteins", "spXref3", "accession", cond_str);
 	        if (answer == NULL)
 		    {
-	            errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID.", 
-		    	    queryID);
+	            errAbort(
+		    "'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or a gene symbol."
+		    , queryID);
 	    	    }
 		}
 	    proteinInSupportedGenome = FALSE;
