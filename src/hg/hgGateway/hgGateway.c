@@ -86,7 +86,7 @@ puts(
 "<td>\n"
 "<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"trackForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
 "<table><tr>\n"
-"<td align=center valign=baseline>genome\n"
+"<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
 "<td align=center valign=baseline>position</td>\n"
 "<td align=center valign=baseline>image width</td>\n"
