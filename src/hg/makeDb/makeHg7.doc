@@ -184,63 +184,96 @@ o - Execute the following (which will take about
 PRODUCING MOUSE ALIGNMENTS
 
 o - Make sure that contig/ctg*.fa.masked files exist already.
+    (May need to go to ~/oo and unzip contigFaMasked.zip.
 o - Mask simple repeats in addition to normal repeats with:
         mkdir ~/oo/jkStuff/trfCon
 	cd ~/oo/allctgs
 	/bin/ls -1 | grep -v '\.' > ~/oo/jkStuff/trfCon/ctg.lst
         cd ~/oo/jkStuff/trfCon
-	mkdir err
-	mkdir log
-	mkdir out
+	mkdir err log out
     edit ~/oo/jkStuff/trf.gsub to update gs and oo version
 	gensub ctg.lst ~/oo/jkStuff/trf.gsub
 	mv gensub.out trf.con
 	condor_submit trf.con
-    wait for this to finish.
+    wait for this to finish.  Check as so
+        cd ~/oo
+	source jkStuff/checkTrf.sh
+    there should be no output.
 o - Load up the cluster with masked copies of the genome.
        ssh kks00
        cd ~/oo/allctgs
        zip -j -1 ../ctgFaTrf.zip */ctg*.fa.trf
        ssh cc01
-       cd ~/oo
-       ccCp ctgFaTrf.zip  /var/tmp/hg/gs.7/oo.29/ctgFaTrf.zip
     Do the following to unpack
        cd ~/cluster
     edit parOne to read
-       cd /var/tmp/hg/gs.7/oo.29
-       mkdir tanMaskNib
-       cd tanMaskNib
-       unzip ../ctgFaTrf.zip
+       mkdir /var/tmp/hg/gs.7/oo.29
+       mkdir /var/tmp/hg/gs.7/oo.29/tanMaskNib
+    and then
+       parAll
+    unpack as so:
+       cd ~/oo
+       ccCp ctgFaTrf.zip  /var/tmp/hg/gs.7/oo.29/ctgFaTrf.zip
+    edit parOne to read
+       cd /var/tmp/hg/gs.7/oo.29/tanMaskNib
+       unzip ../ctgFaTrf.zip >/dev/null
     and then
        parAll
     Double check that all data is in place.
 o - Do mouse/human alignments.
        ssh cc01
-       cd ~/mouse/bigCon
-       mkdir err
-       mkdir out
-       mkdir log
-       mkdir psl
+       cd ~/mouse/vsOo29
+       mkdir err out log psl
        ls -1S /var/tmp/hg/gs.7/oo.29/tanMaskNib/*.fa.trf > human.lst
-       ls -1S /projects/hg3/mouse/ncbiTrace/fasta.mus_* > mouse.lst
-       gensub2 mouse.lst human.lst aliMouse.gsub aliMouse.con
-     break aliMouse.con into ten files and submit a couple a day.
+       ls -1S /projects/hg3/mouse/ncbiTrimmed/Mm*.fa > mouse.lst
+     Copy over aliMouse.gsub from previous version and edit paths to
+     point to current assembly.
+       gensub2 mouse.lst human.lst aliMouse.gsub allCon
+     Break into many files by moving the header part of allCon to a file
+     called headCon and then
+       splitFile allCon 21000 m -head=headCon
+       foreach i (m??)
+           mv $i $i.con
+	end
+     Submit a couple of the resulting mNN.con files  a day - trying to 
+     keep condor queue size between 1000 and 10000.  There's 3000 jobs
+     in each file.
+     [This part went well.  As far as I can tell all 50,000 jobs finished
+     the first time without a glitch.]
 o - Check alignments as so:
        ssh kks00
-       cd ~/mouse/bigCon
+       cd ~/mouse/vsOo29
        gensub2 mouse.lst human.lst fixMouse.gsub fixMouse.sh
        chmod a+x fixMouse.sh
        fixMouse.sh | tee fixMouse.out
 o - If any output in fixMouse.out then resubmit jobs as so:
        ssh cc01
-       cd ~/mouse/bigCon
+       cd ~/mouse/vsOo29
        mv log log.old; mkdir log
        mv err err.old; mkdir err
        mv out out.old; mkdir out
        condor_submit fix.con
-o - Sort alignments as so and get rid of pile-ups due to contamination:
-       cd ~/mouse/bigCon
+o - Sort alignments as so 
+       cd ~/mouse/vsOo29
        pslCat -dir -check psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+       [This did not go well, though for oo.27 it was a breeze.  This
+       time I got errors at fairly random lines.  One run it would
+       report an error at line 200,000 and the next at error 2,000,000.
+       I didn't see a bug anywhere.  I resorted to:
+           ssh kk002
+	   cd /cluster/work/mouse/vsOo29
+	   pslCat -out=rawCtg.psl -dir -check ~/mouse/vsOo29/psl
+	   pslSortAcc nohead ctg /projects/hg2/temp rawCtg.psl
+	   cd ctg
+	   foreach i (*.psl)
+	       echo $i
+	       mv $i xxx
+	       pslUnpile -maxPile=150 xxx $i
+	   rm xxx
+	   cd ..
+	   liftUp chrom.psl ~/oo/jkStuff/liftAll.lft warn ctg/*.psl
+	   end
+       which went ...]
 o - Get rid of big pile-ups due to contamination as so:
        cd chrom
        foreach i (*.psl)
@@ -260,11 +293,11 @@ o - Remove long redundant bits from read names by making a file
     called subs.in with the following line:
         gnl|ti^ti
     and running the commands
-        cd ~/mouse/bigCon
+        cd ~/mouse/vsOo29
 	subs -e -c ^ blatMouse.psl > /dev/null
 o - load into database as so:
 	ssh cc94
-	cd ~/mouse/bigCon/chrom
+	cd ~/mouse/vsOo29/chrom
 	hgLoadPsl -tNameIx hg7 blatMouse.psl
 	hgLoadRna addSeq '-abbr=gnl|' hg7 /projects/hg3/mouse/ncbiTrace/fasta.mus*
     These last two will take quite some time.  Perhaps an hour each.

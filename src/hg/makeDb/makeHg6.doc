@@ -128,7 +128,7 @@ o - Process EST and mRNA alignments into near best in genome.
    Since some of the EST files are over 2 gig, you need to do some of
    this on an Alpha.  However since some of the files are too large
    for the per-process memory on an Alpha, you'll have to do some on
-m  kks00 as well.  To do this run the following script
+   kks00 as well.  To do this run the following script
       - ssh kks00 
       - cd ~/oo
       - source jkStuff/postEst.sh
