@@ -304,11 +304,8 @@ struct wiggleDataStream
     void (*bedOut)(struct wiggleDataStream *wDS, char *fileName);
     void (*statsOut)(struct wiggleDataStream *wDS, char *fileName);
     void (*asciiOut)(struct wiggleDataStream *wDS, char *fileName);
-    void (*getData)(struct wiggleDataStream *wDS, int operations);
-    void (*closeWigConn)(struct wiggleDataStream *wDS);
-				/*	close a connection, leaves data here */
-    void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
-				/*	start a connection	*/
+    void (*getData)(struct wiggleDataStream *wDS, char *db, char *table,
+	int operations);
     };
 
 /*	in lib/wigDataStream.c	*/
