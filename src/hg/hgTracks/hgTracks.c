@@ -10010,7 +10010,14 @@ void zoomAroundCenter(double amount)
 /* Set ends so as to zoom around center by scaling amount. */
 {
 int center = (winStart + winEnd)/2;
-int newCount = (int)(winBaseCount*amount + 0.5);
+double newCountDbl = (winBaseCount*amount + 0.5);
+int newCount;
+if (newCountDbl > seqBaseCount)
+    newCount = seqBaseCount;
+else if (newCountDbl < 0)
+    newCount = 0;
+else
+    newCount = (int)newCountDbl;
 if (newCount < 30) newCount = 30;
 if (newCount > seqBaseCount)
     newCount = seqBaseCount;
