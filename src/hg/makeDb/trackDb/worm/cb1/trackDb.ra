@@ -2,7 +2,7 @@ track blastzCe1
 shortLabel Ce1 Blastz
 longLabel Blastz C. elegans (Ce1)
 group compGeno
-priority 156
+priority 156.2
 visibility dense
 color 0,0,0
 altColor 50,128,50
@@ -14,7 +14,7 @@ track ce1Chain
 shortLabel Ce1 Chain 
 longLabel Chained elegans(Ce1)/briggsae Alignments
 group compGeno
-priority 125
+priority 156.1
 visibility dense
 color 100,50,0
 altColor 255,240,200
@@ -71,7 +71,7 @@ track blastzCe2
 shortLabel Elegans Blastz
 longLabel Blastz C. elegans
 group compGeno
-priority 159
+priority 155.2
 visibility dense
 color 0,0,0
 altColor 50,128,50
@@ -83,7 +83,7 @@ track chainCe2
 shortLabel Elegans Chain 
 longLabel Chained elegans/briggsae Alignments
 group compGeno
-priority 158
+priority 155.1
 visibility dense
 color 100,50,0
 altColor 255,240,200
