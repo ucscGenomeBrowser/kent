@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.5 2003/10/15 19:06:46 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.6 2003/10/15 23:06:57 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -473,7 +473,7 @@ int i;
 for (i = 0; list[i] != NULL; i++)
     {
     char* next = strstr(start, list[i]);
-    if ((first == NULL) || (next < first))
+    if ((next != NULL) && ((first == NULL) || (next < first)))
         first = next;
     }
 return first;
@@ -518,7 +518,7 @@ else
 return name;
 }
 
-static boolean parseRefSeqStatus()
+static void parseRefSeqStatus()
 /* Parse refseq status out of comment field */
 {
 char *stat = NULL;
@@ -542,7 +542,6 @@ if (stat == NULL)
          gbAccessionField->val->string, gbCommentField->val->string);
     }
 dyStringAppend(gbRefSeqStatusField->val, stat);
-return !sameString(stat, "unk");
 }
 
 static void parseRefSeqCompleteness(char* completeness)
@@ -581,19 +580,17 @@ dyStringAppend(gbRefSeqCompletenessField->val, cmpl);
 static void refSeqParse()
 /* do special parsing of RefSeq data that was stuck in a comment */
 {
-if (parseRefSeqStatus())
-    {
-    char *next, *name, *value;
+char *next, *name, *value;
+parseRefSeqStatus();
     
-    /* start searching for fields past the end of the status */
-    next = gbCommentField->val->string;
-    while ((name = nextRefSeqCommentField(&next, &value)) != NULL)
-        {
-        if (sameString(name, "Summary"))
-            dyStringAppend(gbRefSeqSummaryField->val, value);
-        else if (sameString(name, "COMPLETENESS"))
-            parseRefSeqCompleteness(value);
-        }
+/* start searching for fields past the end of the status */
+next = gbCommentField->val->string;
+while ((name = nextRefSeqCommentField(&next, &value)) != NULL)
+    {
+    if (sameString(name, "Summary"))
+        dyStringAppend(gbRefSeqSummaryField->val, value);
+    else if (sameString(name, "COMPLETENESS"))
+        parseRefSeqCompleteness(value);
     }
 }
 
@@ -605,7 +602,7 @@ gbfClearVals(gbStruct);
 gbfClearVals(gbRefSeqRoot);
 gReachedEOR = FALSE;
 gotRecord = recurseReadFields(lf, gbStruct, -1);
-if (gotRecord)
+if (gotRecord && (gbGuessSrcDb(gbAccessionField->val->string) == GB_REFSEQ))
     refSeqParse();
 return gotRecord;
 }
