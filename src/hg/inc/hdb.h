@@ -154,4 +154,7 @@ boolean hgIsChromRange(char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
  * chromosome chrom and some N and M. */
 
+struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
+/* Look up track in database. */
+
 #endif /* HDB_H */

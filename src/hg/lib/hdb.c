@@ -752,3 +752,20 @@ boolean hgIsChromRange(char *spec)
 return hgParseChromRange(spec, NULL, NULL, NULL);
 }
 
+struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
+/* Look up track in database. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct trackDb *tdb;
+
+sprintf(query, "select * from trackDb where tableName = '%s'", trackName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Track %s not found", trackName);
+tdb = trackDbLoad(row);
+sqlFreeResult(&sr);
+return tdb;
+}
+
