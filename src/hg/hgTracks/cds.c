@@ -983,7 +983,7 @@ char codon[2] = " ";
 Color color = colorFromGrayIx(vg, codon, grayIx, cdsColor,
         tg->colorShades, lf->grayIx, originalColor);
 
-if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS || sameString(tg->groupName,"genes"))
+if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
     /*any track in the genes category, with the genomic
      * coloring turned on in the options menu*/
     drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
