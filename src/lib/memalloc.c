@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.15 2004/07/16 22:24:36 hiram Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.16 2004/08/27 20:01:13 hiram Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -451,7 +451,6 @@ memTracker = mt;
 void memTrackerEnd()
 /* Free any remaining blocks and pop tracker memory handler. */
 {
-struct dlNode *node, *prev;
 struct memTracker *mt = memTracker;
 if (mt == NULL)
     errAbort("memTrackerEnd without memTrackerStart");
