@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.49 2004/02/13 09:33:32 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.50 2004/03/01 04:53:18 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1162,54 +1162,6 @@ buf[len] = 0;
 return TRUE;
 } 
 
-
-void splitPath(char *path, char dir[256], char name[128], char extension[64])
-/* Split a full path into components.  The dir component will include the
- * trailing / if any.  The extension component will include the starting
- * . if any.   Pass in NULL for dir, name, or extension if you don't care about
- * that part. */
-{
-char *dirStart, *nameStart, *extStart, *extEnd;
-int dirSize, nameSize, extSize;
-
-dirStart = path;
-nameStart = strrchr(path,'/');
-if (nameStart == NULL)	/* Do a little coping with MS-DOS style paths. */
-    {
-    nameStart = strrchr(path, '\\');
-    if (nameStart != NULL)
-	subChar(path, '\\', '/');
-    }
-if (nameStart == NULL)
-    nameStart = path;
-else
-    nameStart += 1;
-extStart = strrchr(nameStart, '.');
-if (extStart == NULL)
-    extStart = nameStart + strlen(nameStart);
-extEnd = extStart + strlen(extStart);
-if ((dirSize = (nameStart - dirStart)) >= 256)
-    errAbort("Directory too long in %s", path);
-if ((nameSize = (extStart - nameStart)) >= 128)
-    errAbort("Name too long in %s", path);
-if ((extSize = (extEnd - extStart)) >= 64)
-    errAbort("Extension too long in %s", path);
-if (dir != NULL)
-    {
-    memcpy(dir, dirStart, dirSize);
-    dir[dirSize] = 0;
-    }
-if (name != NULL)
-    {
-    memcpy(name, nameStart, nameSize);
-    name[nameSize] = 0;
-    }
-if (extension != NULL)
-    {
-    memcpy(extension, extStart, extSize);
-    extension[extSize] = 0;
-    }
-}
 
 char *addSuffix(char *head, char *suffix)
 /* Return a needMem'd string containing "headsuffix". Should be free'd
