@@ -3350,7 +3350,7 @@ tg->mapItemName = goldName;
 
 
 struct netItem
-/* A repeat track item. */
+/* A net track item. */
     {
     struct netItem *next;
     int level;
