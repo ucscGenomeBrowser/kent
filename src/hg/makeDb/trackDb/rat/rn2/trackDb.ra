@@ -1,0 +1,9 @@
+track rgdGene
+shortLabel RGD Genes
+longLabel RGD Curated Genes
+group genes
+priority 50
+visibility dense
+color 0,100,100
+type genePred
+url http://rgd.mcw.edu/tools/query/query.cgi?id=$$
