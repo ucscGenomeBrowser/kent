@@ -4407,6 +4407,7 @@ struct trackGroup *tg;
 char *customText = cgiOptionalString("customText");
 char *fileName = cgiOptionalString("ct");
 
+customText = skipLeadingSpaces(customText);
 if (customText == NULL || customText[0] == 0)
     customText = cgiOptionalString("customFile");
 customText = skipLeadingSpaces(customText);
@@ -4940,18 +4941,8 @@ int i;
 sr = sqlGetResult(conn, "select * from trackDb");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    boolean chromOk = TRUE;
     tdb = trackDbLoad(row);
-    if (tdb->restrictCount > 0)
-        {
-	chromOk = FALSE;
-	for (i=0; i<tdb->restrictCount; ++i)
-	    {
-	    if (sameString(tdb->restrictList[i], chromName))
-	        chromOk = TRUE;
-	    }
-	}
-    if (chromOk && hFindSplitTable(chromName, tdb->tableName, NULL, NULL))
+    if (hTrackOnChrom(tdb, chromName))
 	{
 	group = trackGroupFromTrackDb(tdb);
 	handler = lookupTrackHandler(tdb->tableName);
