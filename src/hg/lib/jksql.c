@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.51 2004/03/15 18:39:25 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.52 2004/03/15 21:21:22 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1207,6 +1207,18 @@ char *connGetDatabase(struct sqlConnCache *conn)
 /* return database for a connection cache */
 {
 return conn->database;
+}
+
+boolean sqlWildcardIn(char *s)
+/* Return TRUE if there is a sql wildcard char in string. */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (c == '_' || c == '%')
+        return TRUE;
+    }
+return FALSE;
 }
 
 char *sqlLikeFromWild(char *wild)
