@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.15 2004/01/14 21:42:57 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.16 2004/01/22 03:15:11 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -439,9 +439,9 @@ if (!sameString(qName,tName))
     return blockList;
 for (block = blockList; block != NULL; block = block->next)
     {
+    int qStart = (block == NULL) ? -1 : block->qStart;
+    int qEnd   = (block == NULL) ? -1 : block->qEnd;
     assert (block!= NULL);
-    int qStart = block->qStart;
-    int qEnd = block->qEnd;
     if (isRc)
         reverseIntRange(&qStart, &qEnd, qSize);
     if (rangeIntersection(block->tStart, block->tEnd,  qStart, qEnd)> 0)
