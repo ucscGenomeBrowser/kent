@@ -38,13 +38,20 @@ expTable llaPaePrintAExps
 chip printA
 canPack off
 
-track blastpPfu
-shortLabel blastpPfu
-longLabel George Shackelford's initial blastp to P. furiousus
+track BlastPpyrFur2
+shortLabel BLASTP Pfu
+longLabel  BLASTP of P. furiosus Proteins
 group compGeno
 priority 4.1
 visibility pack
-color 100,50,0
-altColor 255,240,200
 spectrum on
-type psl xeno
+type bed 6 .
+
+track BlastPEuk
+shortLabel BLASTP Euk
+longLabel  BLASTP of Eukaryotic Proteins
+group compGeno
+priority 4.2
+visibility pack
+spectrum on
+type bed 6 .
