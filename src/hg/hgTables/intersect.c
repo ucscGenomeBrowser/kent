@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.3 2004/07/21 03:43:05 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.4 2004/07/21 04:15:01 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -120,11 +120,9 @@ printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
 makeOpButton("or", op);
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        name, iName);
-jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", 
-	varOn(hgtaInvertTable));
+jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", FALSE);
 printf("Complement %s before intersection/union <BR>\n", name);
-jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", 
-	varOn(hgtaInvertTable2));
+jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", FALSE);
 printf("Complement %s before intersection/union <P>\n", iName);
 
 cgiMakeButton(hgtaDoIntersectSubmit, "Submit");

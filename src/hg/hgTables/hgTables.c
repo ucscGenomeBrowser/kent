@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.42 2004/07/21 03:28:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.43 2004/07/21 04:15:01 kent Exp $";
 
 
 void usage()
@@ -645,7 +645,7 @@ else
 }
 
 void dispatch(struct sqlConnection *conn)
-/* Scan for 'Do' variables and dispatch to appropriate page-generator.
+/* Scan for 'do' variables and dispatch to appropriate page-generator.
  * By default head to the main page. */
 {
 struct hashEl *varList;
@@ -714,7 +714,9 @@ cartRemovePrefix(cart, hgtaDo);
 char *excludeVars[] = {"Submit", "submit", NULL};
 
 void hgTables()
-/* hgTables - Get table data associated with tracks and intersect tracks. */
+/* hgTables - Get table data associated with tracks and intersect tracks. 
+ * Here we set up cart and some global variables, dispatch the command,
+ * and put away the cart when it is done. */
 {
 struct sqlConnection *conn = NULL;
 oldVars = hashNew(10);

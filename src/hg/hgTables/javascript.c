@@ -67,7 +67,7 @@ void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal)
 {
 boolean oldVal = cartUsualBoolean(cart, cgiVar, usualVal);
 hPrintf("<SCRIPT>var %s=%d;</SCRIPT>\n", jsVar, oldVal);
-hPrintf("<INPUT TYPE=CHECKBOX NAME=%s VALUE=on", cgiVar);
+hPrintf("<INPUT TYPE=CHECKBOX NAME=%s VALUE=1", cgiVar);
 if (oldVal)
     hPrintf(" CHECKED");
 hPrintf(" onClick=\"%s=%d;\"", jsVar, !oldVal);
