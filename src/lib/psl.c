@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.49 2004/08/15 00:07:54 braney Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.50 2004/09/01 05:14:46 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1142,20 +1142,36 @@ pslRecalcBounds(newPsl);
 return newPsl;
 }
 
-char* pslGetCreateSql(char* table, unsigned options)
+char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen)
 /* Get SQL required to create PSL table.  Options is a bit set consisting
- * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT */
+ * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT.  tNameIdxLen is
+ * the number of characters in target name to index.  If greater than
+ * zero, must specify PSL_TNAMEIX.  If zero and PSL_TNAMEIX is specified,
+ * to will default to 8. */
 {
 struct dyString *sqlCmd = newDyString(2048);
 char *sqlCmdStr;
-char *extraIx = ((options & PSL_TNAMEIX) ? "tName(8)," : "" );
-char *binIxString = "";
+char extraIx[32];
+char binIx[32];
+
+extraIx[0] = '\0';
+binIx[0] = '\0';
+
+/* check and default tNameIdxLen */
+if ((tNameIdxLen > 0) && !(options & PSL_TNAMEIX))
+    errAbort("pslGetCreateSql: must specify PSL_TNAMEIX with tNameIdxLen > 0");
+if ((options & PSL_TNAMEIX) && (tNameIdxLen == 0))
+    tNameIdxLen = 8;
+
+/* setup tName and bin index fields */
+if (options & PSL_TNAMEIX)
+    safef(extraIx, sizeof(extraIx), "tName(%d),", tNameIdxLen);
 if (options & PSL_WITH_BIN)
     {
     if (options & PSL_TNAMEIX)
-	binIxString = "INDEX(tName(8),bin),\n";
+	safef(binIx, sizeof(binIx), "INDEX(tName(%d),bin),\n", tNameIdxLen);
     else
-        binIxString = "INDEX(bin),\n";
+	safef(binIx, sizeof(binIx), "INDEX(bin),\n");
     }
 dyStringPrintf(sqlCmd, createString, table, 
     ((options & PSL_WITH_BIN) ? "bin smallint unsigned not null,\n" : ""));
@@ -1164,7 +1180,7 @@ if (options & PSL_XA_FORMAT)
     dyStringPrintf(sqlCmd, "qSeq longblob not null,\n");
     dyStringPrintf(sqlCmd, "tSeq longblob not null,\n");
     }
-dyStringPrintf(sqlCmd, indexString, binIxString, extraIx, extraIx);
+dyStringPrintf(sqlCmd, indexString, binIx, extraIx, extraIx);
 sqlCmdStr = cloneString(sqlCmd->string);
 dyStringFree(&sqlCmd);
 return sqlCmdStr;

@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.9 2004/07/16 06:37:11 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.10 2004/09/01 05:14:46 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -174,7 +174,7 @@ void remakePslTable(struct sqlConnection *conn, char *table, char *insertTable)
  * is done so insert from the other table works. */
 boolean useBin = (sqlFieldIndex(conn, insertTable, "bin") >= 0);
 unsigned options = PSL_TNAMEIX | ((useBin ? PSL_WITH_BIN : 0));
-char *sqlCmd = pslGetCreateSql(table, options);
+char *sqlCmd = pslGetCreateSql(table, options, 0);
 sqlRemakeTable(conn, table, sqlCmd);
 freez(&sqlCmd);
 }

@@ -213,9 +213,12 @@ struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax);
 /* Return psl trimmed to fit inside tMin/tMax.  Note this does not
  * update the match/misMatch and related fields. */
 
-char* pslGetCreateSql(char* table, unsigned options);
+char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen);
 /* Get SQL required to create PSL table.  Options is a bit set consisting
- * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT */
+ * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT.  tNameIdxLen is
+ * the number of characters in target name to index.  If greater than
+ * zero, must specify PSL_TNAMEIX.  If zero and PSL_TNAMEIX is specified,
+ * to will default to 8. */
 
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
 /* Validate a PSL for consistency.  pslDesc is printed the error messages

@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.13 2004/07/07 00:36:41 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.14 2004/09/01 05:14:46 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -120,7 +120,7 @@ if (*tabFileVar == NULL)
     if (!sqlTableExists(conn, table))
         {
         /* create with tName index and bin */
-        char *sqlCmd = pslGetCreateSql(table, (PSL_TNAMEIX|PSL_WITH_BIN));
+        char *sqlCmd = pslGetCreateSql(table, (PSL_TNAMEIX|PSL_WITH_BIN), 0);
         sqlRemakeTable(conn, table, sqlCmd);
         freez(&sqlCmd);
         }
@@ -141,7 +141,7 @@ for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
     if (!sqlTableExists(conn, table))
         {
         /* create with bin */
-        char *sqlCmd = pslGetCreateSql(table, PSL_WITH_BIN);
+        char *sqlCmd = pslGetCreateSql(table, PSL_WITH_BIN, 0);
         sqlRemakeTable(conn, table, sqlCmd);
         freez(&sqlCmd);
         }
