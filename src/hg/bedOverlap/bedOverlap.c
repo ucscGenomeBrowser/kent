@@ -7,11 +7,16 @@
 #include "bed.h"
 #include "hdb.h"
 #include "binRange.h"
-#include "cheapcgi.h"
+//#include "cheapcgi.h"
+#include "verbose.h"
 
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean noBin = FALSE;		/* Suppress bin field. */
+int call;                   /* depth of stack */
+int outCall;                   /* calls to outList */
+struct bedStub *outList;        /* global output list */
+float overlapPercent = 0.02;    /* minimum overlap to be removed */
 
 struct bedStub
 /* A line in a bed file with chromosome, start, end position parsed out. */
@@ -32,9 +37,9 @@ errAbort(
   "usage:\n"
   "   bedOverlap infile.bed output.bed\n"
   "options:\n"
-  "   -hasBin   Input bed file starts with a bin field.\n"
-  "   -noBin   suppress bin field\n"
-  "Note: infile.bed must be sorted by chrom, chromStart"
+  "   -hasBin         Input bed file starts with a bin field.\n"
+  "   -noBin          Suppress bin field\n"
+  "Note: infile.bed must have at least 5 columns and be sorted by chrom, chromStart"
   );
 }
 
@@ -94,7 +99,10 @@ while (lineFileNext(lf, &line, NULL))
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
     bed->score = lineFileNeedNum(lf, words, 4);
     bed->line = dupe;
-    slAddHead(pList, bed);
+    if (bed->score > 0)
+        slAddHead(pList, bed);
+    else
+        verbose(1, "Skipping record %s:%d-%d with score %d\n",bed->chrom,bed->chromStart,bed->chromEnd,bed->score);
     }
 lineFileClose(&lf);
 slReverse(pList);
@@ -150,26 +158,28 @@ for (bed = *bedList; bed != NULL; bed = bed->next)
     int start = bed->chromStart;
     int end = bed->chromEnd;
     int score = bed->score;
-    if (sameString(name, match->chrom) && rangeIntersection(start, end, match->chromStart, match->chromEnd) > 0)
-        {
+    int overlap = rangeIntersection(start, end, match->chromStart, match->chromEnd);
+    if (sameString(name, match->chrom) && (overlap > 0))
+            {
         slRemoveEl(bedList, bed);
         }
     }
-if (*bedList != NULL)
-    slReverse(*bedList);
 }
 
-void removeOverlap(int bedSize , struct bedStub *bedList, struct bedStub **outList)
+void removeOverlap(int bedSize , struct bedStub *bedList)
 /* pick highest scoring record from each overlapping cluster 
  * then remove all overlapping records and call recusively 
  * return list of best scoring records in each cluster */
 {
-struct bedStub *bed, *bestMatch = NULL;
+struct bedStub *bed, *bestMatch = NULL, *bedList2 = NULL, *prevBed = NULL;
 int i;
 bool first = TRUE;
-char *prevChrom = cloneString("chr1");
+//char *prevChrom = cloneString("chr1");
 int prevStart = 0, prevEnd = 0;
 int bestScore = 0, bestCount = 0;
+
+if (bedList == NULL)
+    return;
 
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
@@ -178,11 +188,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     int end = bed->chromEnd;
     int score = bed->score;
 
-    if (first || (sameString(name,prevChrom) && start <= prevEnd))
+    if (first || start <= prevEnd ) //&&(sameString(name,prevChrom) && ))
         {
         if (first)
             {
-            prevChrom = cloneString(name);
+//            prevChrom = cloneString(name);
             prevStart = start;
             prevEnd = end;
             first = FALSE;
@@ -193,22 +203,36 @@ for (bed = bedList; bed != NULL; bed = bed->next)
             bestScore = score;
             }
         prevEnd = max(prevEnd, end);
+        prevBed = bed;
         }
+    else
+        break;
+    }
+/* split list in two to save time*/
+if (bed != NULL)
+    {
+    bedList2 = bed;
+    if (prevBed != NULL)
+        prevBed->next = NULL;
+    else
+        errAbort("list not split %s:%d-%d\n",bed->chrom,bed->chromStart,bed->chromEnd);
     }
 if (bestMatch != NULL)
     {
+    struct bedStub *lastEl = NULL;
     slRemoveEl(&bedList, bestMatch);
-    slAddHead(outList, bestMatch);
+    slAddHead(&outList, bestMatch);
+    verbose(2, "add to outList %d count %d\n",slCount(outList), outCall++);
     pareList(&bedList, bestMatch);
     }
-if (bedList != NULL)
-    removeOverlap(bedSize , bedList, outList);
+removeOverlap(bedSize , bedList);
+removeOverlap(bedSize , bedList2);
 }
 
 void bedOverlap(char *aFile, char *outFile)
 /* load all beds and pick highest scoring record from each overlapping cluster */
 {
-struct bedStub *bedList = NULL, *bed, *outList = NULL;
+struct bedStub *bedList = NULL, *bed;
 int i, wordCount;
 struct binElement *hitList = NULL, *hit;
 struct binKeeper *bk;
@@ -221,7 +245,7 @@ if (bedSize < 5)
     errAbort("%s must have a score\n", aFile);
 loadOneBed(aFile, bedSize, &bedList);
 verbose(1, "Loaded %d elements of size %d\n", slCount(bedList), bedSize);
-removeOverlap(bedSize, bedList, &outList);
+removeOverlap(bedSize, bedList);
 verbose(1, "Saving %d records to %s\n", slCount(outList), outFile);
 if (outList != NULL)
     slReverse(&outList);
@@ -230,11 +254,12 @@ writeBedTab(outFile, outList, bedSize);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-if (argc != 3)
-    usage();
-hasBin = cgiBoolean("hasBin");
-noBin = cgiBoolean("noBin") || cgiBoolean("nobin");
+optionHash(&argc, argv);
+verboseSetLogFile("stdout");
+hasBin = optionExists("hasBin");
+overlapPercent = optionFloat("minOverlap", overlapPercent);
+noBin = optionExists("noBin") || optionExists("nobin");
+outList = NULL;
 bedOverlap(argv[1], argv[2]);
 return 0;
 }
