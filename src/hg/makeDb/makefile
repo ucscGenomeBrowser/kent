@@ -68,7 +68,6 @@ DIRS = \
 	ldHgGene \
 	sanger22gtf \
 	tailLines \
-	toBb \
 	vegaBuildInfo \
 	hgBioCyc \
 	hgKegg \
