@@ -20,6 +20,9 @@ void bitFree(Bits **pB);
 void bitSetOne(Bits *b, int bitIx);
 /* Set a single bit. */
 
+void bitClearOne(Bits *b, int bitIx);
+/* Clear a single bit. */
+
 void bitSetRange(Bits *b, int startIx, int bitCount);
 /* Set a range of bits. */
 
