@@ -110,6 +110,9 @@ int ffCalcCdnaGapPenalty(int hGap, int nGap);
 int ffGapPenalty(struct ffAli *ali, struct ffAli *right, enum ffStringency stringency);
 /* Calculate gap penaltly for alignment. */
 
+#define ffIntronMax 750000	/* Maximum intron size that stitches and avoids
+                                 * long intron penalty. */
+
 int ffCdnaGapPenalty(struct ffAli *ali, struct ffAli *right);
 /* Calculate gap penaltly for cdna alignment. */
 
