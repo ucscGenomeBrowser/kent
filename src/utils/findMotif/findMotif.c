@@ -5,10 +5,10 @@
 #include "options.h"
 #include "dnautil.h"
 #include "dnaseq.h"
-#include "nib.h"
+#include "dnaLoad.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.7 2004/04/12 22:49:46 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.8 2005/02/24 01:18:45 aamp Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -25,13 +25,14 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "findMotif - find specified motif in nib files\n"
+  "findMotif - find specified motif in sequence\n"
   "usage:\n"
-  "   findMotif [options] -motif=<acgt...> nibDir\n"
+  "   findMotif [options] -motif=<acgt...> sequence\n"
+  "where:\n"
+  "   sequence is a .fa , .nib or .2bit file or a file which is a list of sequence files.\n"
   "options:\n"
-  "   nibDir - path to nib directory, relative or absolute path OK\n"
   "   -motif=<acgt...> - search for this specified motif (case ignored, [acgt] only)\n"
-  "   -chr=<chrN> - process only this one chrN from the nibDir\n"
+  "   -chr=<chrN> - process only this one chrN from the sequence\n"
   "   -strand=<+|-> - limit to only one strand.  Default is both.\n"
   "   -bedOutput - output bed format (this is the default)\n"
   "   -wigOutput - output wiggle data format instead of bed file\n"
@@ -50,15 +51,11 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-static void scanNib(char *nibFile, char *chrom)
+static void scanSeq(struct dnaSeq *seq)
 {
-int chromSize, start, end, blockSize;
 int i, val;
-int winSize=131072;
 FILE *nf = NULL;
-struct dnaSeq *seq = NULL;
 DNA *dna;
-int blockCount = 0;
 unsigned long long mask;
 unsigned long long chromPosition = 0;
 register unsigned long long incomingVal = 0;
@@ -72,88 +69,80 @@ register unsigned long long negNeedle = complementVal;
 unsigned long long enterGap = 1;
 unsigned long long gapCount = 0;
 
-nibOpenVerify(nibFile, &nf, &chromSize);
 mask = 3;
 for (i=1; i < motifLen; ++i )
 	mask = (mask << 2) | 3;
-verbose(2, "#\tnib: %s size: %d, motifMask: %#lx\n", nibFile, chromSize, mask);
+verbose(2, "#\tsequence: %s size: %d, motifMask: %#lx\n", seq->name, seq->size, mask);
 verbose(2, "#\tmotif numerical value: %llu (%#lx)\n", posNeedle, posNeedle);
-for (start=0; start<chromSize; start = end)
+
+/* Need "chrom" */
+
+dna = seq->dna;
+for (i=0; i < seq->size; ++i)
     {
-    end = start + winSize;
-    if (end > chromSize)
-	end = chromSize;
-    blockSize = end - start;
-    seq = nibLdPart(nibFile, nf, chromSize, start, blockSize);
-    dna = seq->dna;
-    for (i=0; i < blockSize; ++i)
+    ++chromPosition;
+    val = ntVal[dna[i]];
+    switch (val)
 	{
-        ++chromPosition;
-	val = ntVal[dna[i]];
-	switch (val)
-	    {
-	    case T_BASE_VAL:
-	    case C_BASE_VAL:
-	    case A_BASE_VAL:
-	    case G_BASE_VAL:
-    		incomingVal = mask & ((incomingVal << 2) | val);
-		if (! incomingLength)
+	case T_BASE_VAL:
+	case C_BASE_VAL:
+	case A_BASE_VAL:
+	case G_BASE_VAL:
+	    incomingVal = mask & ((incomingVal << 2) | val);
+	    if (! incomingLength)
+		{
+		if ((chromPosition - enterGap) > 0)
 		    {
-		    if ((chromPosition - enterGap) > 0)
-			{
-			++gapCount;
-			verbose(3,
+		    ++gapCount;
+		    verbose(3,
 			    "#\treturn from gap at %llu, gap length: %llu\n",
 			    chromPosition, chromPosition - enterGap);
-			verbose(4, "#GAP %s\t%llu\t%llu\t%llu\t%llu\t%s\n",
-			    chrom, enterGap-1, chromPosition-1, gapCount,
+		    verbose(4, "#GAP %s\t%llu\t%llu\t%llu\t%llu\t%s\n",
+			    seq->name, enterGap-1, chromPosition-1, gapCount,
 			    chromPosition - enterGap, "+");
-			}
 		    }
-		++incomingLength;
+		}
+	    ++incomingLength;
+	    
+	    if (doPlusStrand && (incomingLength >= motifLen)
+		&& (incomingVal == posNeedle))
+		{
+		++posFound;
+		if (wigOutput)
+		    printf("%llu 1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,posNeedle);
+		else
+		    printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", seq->name, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "+");
+		
+		if ((posPreviousPosition + motifLen) > chromPosition)
+		    verbose(2, "#\toverlapping + at: %s:%llu-%llu\n", seq->name, posPreviousPosition, chromPosition);
+		posPreviousPosition = chromPosition;
+		}
 
-		if (doPlusStrand && (incomingLength >= motifLen)
-			&& (incomingVal == posNeedle))
-		    {
-		    ++posFound;
-		    if (wigOutput)
-		printf("%llu 1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,posNeedle);
-		    else
-		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "+");
-
-		    if ((posPreviousPosition + motifLen) > chromPosition)
-verbose(2, "#\toverlapping + at: %s:%llu-%llu\n", chrom, posPreviousPosition, chromPosition);
-		    posPreviousPosition = chromPosition;
-		    }
-
-		if (doMinusStrand && (incomingLength >= motifLen)
-			&& (incomingVal == negNeedle))
-		    {
-		    ++negFound;
-		    if (wigOutput)
-		printf("%llu -1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,negNeedle);
-		    else
-		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "-");
-
-		    if ((negPreviousPosition + motifLen) > chromPosition)
-verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", chrom, negPreviousPosition, chromPosition);
-		    negPreviousPosition = chromPosition;
-		    }
-		break;
-
-	    default:
-		if (incomingLength)
-		    {
-		    verbose(3, "#\tenter gap at %llu\n", chromPosition);
-		    enterGap = chromPosition;
-		    }
-    		incomingVal = 0;
-    		incomingLength = 0;
-		break;
-	    }
+	    if (doMinusStrand && (incomingLength >= motifLen)
+		&& (incomingVal == negNeedle))
+		{
+		++negFound;
+		if (wigOutput)
+		    printf("%llu -1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,negNeedle);
+		else
+		    printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", seq->name, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "-");
+		
+		if ((negPreviousPosition + motifLen) > chromPosition)
+		    verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", seq->name, negPreviousPosition, chromPosition);
+		negPreviousPosition = chromPosition;
+		}
+	    break;
+	    
+	default:
+	    if (incomingLength)
+		{
+		verbose(3, "#\tenter gap at %llu\n", chromPosition);
+		enterGap = chromPosition;
+		}
+	    incomingVal = 0;
+	    incomingLength = 0;
+	    break;
 	}
-    freeDnaSeq(&seq);
-    ++blockCount;
     }
 
 verbose(2, "#\tfound: %llu times + strand, %llu times - strand\n",
@@ -165,31 +154,17 @@ verbose(2, "#\t%% of chromosome: %g %% + strand %g %% - strand\n",
 carefulClose(&nf);
 }
 
-static void findMotif(char *nibDir)
-/* findMotif - find specified motif in nib files. */
+static void findMotif(char *input)
+/* findMotif - find specified motif in sequence file. */
 {
 char dir[256], chrom[128], ext[64];
-struct fileInfo *nibList = listDirX(nibDir, "*.nib", TRUE), *nibEl;
+struct dnaLoad *dl = dnaLoadOpen(input);
+struct dnaSeq *seq; 
 
-for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
+while ((seq = dnaLoadNext(dl)) != NULL)
     {
-    splitPath(nibEl->name, dir, chrom, ext);
-    if (chr)
-	{
-	char chrNib[256];
-	safef(chrNib, ArraySize(chrNib), "%s/%s.nib", nibDir, chr);
-	verbose(3, "#\tchecking name: %s =? %s\n", chrNib, nibEl->name);
-	if (sameString(chrNib,nibEl->name))
-	    {
-	    verbose(2, "#\tprocessing: %s\n", nibEl->name);
-	    scanNib(nibEl->name, chrom);
-	    }
-	}
-    else
-	{
-	verbose(2, "#\tprocessing: %s\n", nibEl->name);
-	scanNib(nibEl->name, chrom);
-	}
+    verbose(2, "#\tprocessing: %s\n", seq->name);
+    scanSeq(seq);
     }
 }
 
@@ -229,7 +204,7 @@ else {
     usage();
 }
 verbose(2, "#\ttype output: %s\n", wigOutput ? "bed format" : "wiggle data");
-verbose(2, "#\tspecified nibDir: %s\n", argv[1]);
+verbose(2, "#\tspecified sequence: %s\n", argv[1]);
 verbose(2, "#\tsizeof(motifVal): %d\n", sizeof(motifVal));
 if (strand)
     {
