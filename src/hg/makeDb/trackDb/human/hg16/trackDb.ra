@@ -1012,3 +1012,27 @@ priority 145.98
 visibility hide
 type psl xeno
 
+track transcriptomeJurkat
+shortLabel Jurkat
+longLabel Expression in the Jurkat Cell Line
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+type wig -600 2000
+
+track transcriptomePC3
+shortLabel PC3
+longLabel Expression in the PC3 Cell Line
+group regulation
+priority 92
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+type wig -600 2000
+
