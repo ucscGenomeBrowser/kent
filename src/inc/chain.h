@@ -65,4 +65,13 @@ void chainIdNext(struct chain *chain);
 void chainSwap(struct chain *chain);
 /* Swap target and query side of chain. */
 
+void chainSubsetOnT(struct chain *chain, int subStart, int subEnd, 
+    struct chain **retSubChain,  struct chain **retChainToFree);
+/* Get subchain of chain bounded by subStart-subEnd on 
+ * target side.  Return result in *retSubChain.  In some
+ * cases this may be the original chain, in which case
+ * *retChainToFree is NULL.  When done call chainFree on
+ * *retChainToFree.  The score and id fields are not really
+ * properly filled in. */
+
 #endif /* CHAIN_H */

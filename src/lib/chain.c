@@ -243,3 +243,75 @@ if (chain->qStrand == '-')
     }
 }
 
+void chainSubsetOnT(struct chain *chain, int subStart, int subEnd, 
+    struct chain **retSubChain,  struct chain **retChainToFree)
+/* Get subchain of chain bounded by subStart-subEnd on 
+ * target side.  Return result in *retSubChain.  In some
+ * cases this may be the original chain, in which case
+ * *retChainToFree is NULL.  When done call chainFree on
+ * *retChainToFree.  The score and id fields are not really
+ * properly filled in. */
+{
+struct chain *sub = NULL;
+struct boxIn *oldB, *b, *bList = NULL;
+int qStart = BIGNUM, qEnd = -BIGNUM;
+int tStart = BIGNUM, tEnd = -BIGNUM;
+
+/* Check for easy case. */
+if (subStart <= chain->tStart && subEnd >= chain->tEnd)
+    {
+    *retSubChain = chain;
+    *retChainToFree = NULL;
+    return;
+    }
+
+/* Build new block list and calculate bounds. */
+for (oldB = chain->blockList; oldB != NULL; oldB = oldB->next)
+    {
+    if (oldB->tEnd <= subStart)
+        continue;
+    if (oldB->tStart >= subEnd)
+        break;
+    b = CloneVar(oldB);
+    if (b->tStart < subStart)
+        {
+	b->qStart += subStart - b->tStart;
+	b->tStart = subStart;
+	}
+    if (b->tEnd > subEnd)
+        {
+	b->qEnd -= b->tEnd - subEnd;
+	b->tEnd = subEnd;
+	}
+    slAddHead(&bList, b);
+    if (qStart > b->qStart)
+        qStart = b->qStart;
+    if (qEnd < b->qEnd)
+        qEnd = b->qEnd;
+    if (tStart > b->tStart)
+        tStart = b->tStart;
+    if (tEnd < b->tEnd)
+        tEnd = b->tEnd;
+    }
+slReverse(&bList);
+
+/* Make new chain based on old. */
+if (bList != NULL)
+    {
+    AllocVar(sub);
+    sub->blockList = bList;
+    sub->qName = cloneString(chain->qName);
+    sub->qSize = chain->qSize;
+    sub->qStrand = chain->qStrand;
+    sub->qStart = qStart;
+    sub->qEnd = qEnd;
+    sub->tName = cloneString(chain->tName);
+    sub->tSize = chain->tSize;
+    sub->tStart = tStart;
+    sub->tEnd = tEnd;
+    sub->id = chain->id;
+    }
+*retSubChain = *retChainToFree = sub;
+}
+
+
