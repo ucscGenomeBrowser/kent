@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.3 2003/10/11 09:29:38 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.4 2003/10/11 09:39:02 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -244,7 +244,8 @@ struct section *section;
 
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
-hPrintf("<TABLE CELLSPACING=2 CELLPADDING=2><TR>\n");
+hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
 for (section=sectionList; section != NULL; section = section->next)
     {
     if (++itemPos > maxPerRow)
@@ -252,10 +253,11 @@ for (section=sectionList; section != NULL; section = section->next)
 	hPrintf("</TR>\n<TR>");
 	itemPos = 1;
 	}
-    hPrintf("<TD BGCOLOR=\"#D9E4F8\"><A HREF=\"#%s\" class=\"toc\">%s</A></TD>", 
+    hPrintf("<TD BGCOLOR=\"#D9F8E8\"><A HREF=\"#%s\" class=\"toc\">%s</A></TD>", 
     	section->name, section->shortLabel);
     }
 hPrintf("</TR></TABLE>\n");
+hPrintf("</TD></TR></TABLE>\n");
 }
 
 void printSections(struct section *sectionList, struct sqlConnection *conn,

@@ -213,7 +213,8 @@ static void linksPrint(struct section *section, struct sqlConnection *conn,
 int maxPerRow = 6, itemPos = 0;
 struct link *link, *linkList = getLinkList(conn);
 
-hPrintf("<TABLE CELLSPACING=2 CELLPADDING=2><TR>\n");
+hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
+hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
 for (link = linkList; link != NULL; link = link->next)
     {
     char query[256];
@@ -224,7 +225,7 @@ for (link = linkList; link != NULL; link = link->next)
 	hPrintf("</TR>\n<TR>");
 	itemPos = 1;
 	}
-    hPrintf("<TD BGCOLOR=\"#D9E4F8\">");
+    hPrintf("<TD BGCOLOR=\"#D9F8E4\">");
     if (url != NULL && name != NULL)
 	{
 	hPrintf("<A HREF=\"%s\" class=\"toc\">", url);
@@ -238,6 +239,7 @@ for (link = linkList; link != NULL; link = link->next)
     freez(&name);
     }
 hPrintf("</TR></TABLE>\n");
+hPrintf("</TD></TR></TABLE>\n");
 }
 
 struct section *linksSection(struct sqlConnection *conn,
