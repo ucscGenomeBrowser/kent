@@ -8,14 +8,15 @@
 #include "nib.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.4 2004/02/27 21:22:43 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.5 2004/03/02 23:20:52 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
 unsigned motifLen = 0;		/*	length of motif	*/
 unsigned long long motifVal;	/*	motif converted to a number	*/
 unsigned long long complementVal;	/*	- strand complement	*/
-boolean bedOutput;		/*	output bed file instead of wiggle */
+boolean bedOutput = TRUE;	/*	output bed file (default) */
+boolean wigOutput = FALSE;	/*  output wiggle format instead of bed file */
 char *strand = (char *)NULL;
 boolean doPlusStrand = TRUE;	/*	output bed file instead of wiggle */
 boolean doMinusStrand = TRUE;	/*	output bed file instead of wiggle */
@@ -26,13 +27,14 @@ void usage()
 errAbort(
   "findMotif - find specified motif in nib files\n"
   "usage:\n"
-  "   findMotif [options] -motif=acgt nibDir\n"
+  "   findMotif [options] -motif=<acgt...> nibDir\n"
   "options:\n"
   "   nibDir - path to nib directory, relative or absolute path OK\n"
-  "   -motif=acgt - search for this specified motif (case ignored, acgt only)\n"
+  "   -motif=<acgt...> - search for this specified motif (case ignored, [acgt] only)\n"
   "   -chr=<chrN> - process only this one chrN from the nibDir\n"
   "   -strand=<+|-> - limit to only one strand.  Default is both.\n"
-  "   -bedOutput - output bed format instead of the default wiggle\n"
+  "   -bedOutput - output bed format (this is the default)\n"
+  "   -wigOutput - output wiggle data format instead of bed file\n"
   "   NOTE: motif must be longer than 4 characters, less than 17"
   );
 }
@@ -42,6 +44,7 @@ static struct optionSpec options[] = {
    {"strand", OPTION_STRING},
    {"motif", OPTION_STRING},
    {"bedOutput", OPTION_BOOLEAN},
+   {"wigOutput", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -90,33 +93,42 @@ for (start=0; start<chromSize; start = end)
 	    case A_BASE_VAL:
 	    case G_BASE_VAL:
     		incomingVal = mask & ((incomingVal << 2) | val);
+		if (! incomingLength)
+		    verbose(3, "#\treturn from gap at %llu\n", chromPosition);
 		++incomingLength;
+
 		if (doPlusStrand && (incomingLength >= motifLen)
 			&& (incomingVal == posNeedle))
 		    {
-			++posFound;
-		    if (bedOutput)
-		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "+");
-		    else
+		    ++posFound;
+		    if (wigOutput)
 		printf("%llu 1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,posNeedle);
+		    else
+		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "+");
+
 		    if ((posPreviousPosition + motifLen) > chromPosition)
 verbose(2, "#\toverlapping + at: %s:%llu-%llu\n", chrom, posPreviousPosition, chromPosition);
 		    posPreviousPosition = chromPosition;
 		    }
+
 		if (doMinusStrand && (incomingLength >= motifLen)
 			&& (incomingVal == negNeedle))
 		    {
-			++negFound;
-		    if (bedOutput)
-		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "-");
-		    else
+		    ++negFound;
+		    if (wigOutput)
 		printf("%llu -1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,negNeedle);
+		    else
+		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "-");
+
 		    if ((negPreviousPosition + motifLen) > chromPosition)
 verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", chrom, negPreviousPosition, chromPosition);
 		    negPreviousPosition = chromPosition;
 		    }
 		break;
+
 	    default:
+		if (incomingLength)
+		    verbose(3, "#\tenter gap at %llu\n", chromPosition);
     		incomingVal = 0;
     		incomingLength = 0;
 		break;
@@ -126,8 +138,12 @@ verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", chrom, negPreviousPosition, ch
     ++blockCount;
     }
 
-verbose(2, "#\tfound: %llu times + strand, %llu times - strand\n", posFound, negFound );
-verbose(2, "#\t%% of chromosome: %g %% + strand %g %% - strand\n", (double)(posFound*motifLen)/(double)chromPosition,(double)(negFound*motifLen)/(double)chromPosition);
+verbose(2, "#\tfound: %llu times + strand, %llu times - strand\n",
+    posFound, negFound );
+verbose(2, "#\t%% of chromosome: %g %% + strand %g %% - strand\n",
+    (double)(posFound*motifLen)/(double)chromPosition,
+    (double)(negFound*motifLen)/(double)chromPosition);
+
 carefulClose(&nf);
 }
 
@@ -177,6 +193,12 @@ motif = optionVal("motif", NULL);
 chr = optionVal("chr", NULL);
 strand = optionVal("strand", NULL);
 bedOutput = optionExists("bedOutput");
+wigOutput = optionExists("wigOutput");
+
+if (wigOutput)
+    bedOutput = FALSE;
+else
+    bedOutput = TRUE;
 
 if (chr)
     verbose(2, "#\tprocessing chr: %s\n", chr);
@@ -188,7 +210,7 @@ else {
     warn("ERROR: -motif string empty, please specify a motif\n");
     usage();
 }
-verbose(2, "#\ttype output: %s\n", bedOutput ? "bed format" : "wiggle data");
+verbose(2, "#\ttype output: %s\n", wigOutput ? "bed format" : "wiggle data");
 verbose(2, "#\tspecified nibDir: %s\n", argv[1]);
 verbose(2, "#\tsizeof(motifVal): %d\n", sizeof(motifVal));
 if (strand)
