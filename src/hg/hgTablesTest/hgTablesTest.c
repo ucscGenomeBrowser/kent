@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.16 2004/11/08 20:45:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.17 2004/11/08 20:55:52 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -699,7 +699,7 @@ char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt";
 int expectedCount = tableSize("swissProt", "taxon");
 
 allPage = quickSubmit(rootPage, org, db, group, "swissProt", 
-	"swissProt.taxon", "swissProtTables", NULL, NULL);
+	"swissProt.taxon", "taxonJoin1", NULL, NULL);
 if (allPage != NULL)
     {
     int count = testAllFields(allPage, allPage->forms, org, db,
@@ -710,15 +710,15 @@ if (allPage != NULL)
 		expectedCount);
     htmlPageSetVar(allPage, NULL, hgtaOutputType, "selectedFields");
     page = quickSubmit(allPage, org, db, group, track, 
-    	"swissProt.taxon", "taxonFields", hgtaDoTopSubmit, "submit");
+    	"swissProt.taxon", "taxonJoin2", hgtaDoTopSubmit, "submit");
     htmlPageSetVar(page, NULL, "hgta_fs.linked.swissProt.commonName", "on");
-    serialSubmit(&page, org, db, group, track, NULL, "taxonLinks",
+    serialSubmit(&page, org, db, group, track, NULL, "taxonJoin3",
 	hgtaDoSelectFieldsMore, "submit");
     if (page != NULL)
 	{
 	htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
 	htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
-	serialSubmit(&page, org, db, group, track, NULL, "taxonJoined",
+	serialSubmit(&page, org, db, group, track, NULL, "taxonJoin4",
 	    hgtaDoPrintSelectedFields, "submit");
 	if (page != NULL)
 	    {
@@ -799,6 +799,7 @@ if (page != NULL)
 	    }
 	}
     }
+verbose(1, "Tested filter on swissProt.taxon\n");
 }
 
 void testIdentifier(struct htmlPage *rootPage)
@@ -840,6 +841,7 @@ if (page != NULL)
 	    }
 	}
     }
+verbose(1, "Tested identifier on swissProt.taxon\n");
 }
 
 void statsOnSubsets(struct tablesTest *list, int subIx, FILE *f)
