@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.5 2004/03/03 21:17:10 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.6 2004/03/04 07:58:53 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1014,7 +1014,7 @@ dyStringAppend(dy, enc);
 freez(&enc);
 }
 
-static char *cgiVarsFromForm(struct htmlPage *page, struct htmlForm *form, 
+char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form, 
 	char *buttonName, char *buttonVal)
 /* Return cgi vars in name=val format from use having pressed
  * submit button of given name and value. */
@@ -1022,6 +1022,8 @@ static char *cgiVarsFromForm(struct htmlPage *page, struct htmlForm *form,
 struct dyString *dy = newDyString(0);
 struct htmlFormVar *var;
 
+if (form == NULL)
+    form = page->forms;
 if (buttonName != NULL)
     appendCgiVar(dy, buttonName, buttonVal);
 for (var = form->vars; var != NULL; var = var->next)
@@ -1082,7 +1084,7 @@ dyStringAppend(dyUrl, url);
 cookieOutput(dyHeader, origPage->cookies);
 if (sameWord(form->method, "GET"))
     {
-    cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
+    cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal);
     dyStringAppend(dyUrl, cgiVars);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringAppend(dyHeader, "\r\n");
@@ -1090,7 +1092,7 @@ if (sameWord(form->method, "GET"))
     }
 else if (sameWord(form->method, "POST"))
     {
-    cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
+    cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal);
     contentLength = strlen(cgiVars);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
@@ -1389,6 +1391,7 @@ okChars['/'] = 1;
 okChars['%'] = 1;
 okChars['.'] = 1;
 okChars[';'] = 1;
+okChars[':'] = 1;
 okChars['_'] = 1;
 okChars['&'] = 1;
 okChars['+'] = 1;
@@ -1438,6 +1441,8 @@ void htmlPageValidateOrAbort(struct htmlPage *page)
 struct htmlTag *tag;
 boolean gotTitle = FALSE;
 
+if (page == NULL)
+    errAbort("Can't validate NULL page");
 /* To simplify things upper case all tag names. */
 for (tag = page->tags; tag != NULL; tag = tag->next)
     touppers(tag->name);

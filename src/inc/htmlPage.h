@@ -144,6 +144,11 @@ void htmlFormFreeList(struct htmlForm **pList);
 void htmlFormPrint(struct htmlForm *form, FILE *f);
 /* Print out form structure. */
 
+char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form, 
+	char *buttonName, char *buttonVal);
+/* Return cgi vars in name=val format from use having pressed
+ * submit button of given name and value. */
+
 struct htmlForm *htmlFormGet(struct htmlPage *page, char *name);
 /* Get named form. */
 
