@@ -119,7 +119,7 @@ if ((winEnd - winStart) < 1000001)
     }
 else
     {
-    printf("<P>(viewing windows of less than 1,000,000 bases will also"
+    printf("<P>(viewing windows of fewer than 1,000,000 bases will also"
 	" display a histogram)</P>\n");
     }
 
