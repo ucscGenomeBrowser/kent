@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.82 2004/01/29 00:53:30 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.83 2004/01/31 08:04:47 daryl Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -70,6 +70,53 @@ char *stsMapRatMap = cartUsualString(cart, "stsMapRat.type", smroeEnumToString(0
 filterButtons("stsMapRat.filter", stsMapRatFilter, TRUE);
 printf(" ");
 smroeDropDown("stsMapRat.type", stsMapRatMap);
+}
+
+void snpSourceFilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+radioButton(filterTypeVar, filterTypeVal, "red");
+radioButton(filterTypeVar, filterTypeVal, "green");
+radioButton(filterTypeVar, filterTypeVal, "blue");
+radioButton(filterTypeVar, filterTypeVal, "black");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+}
+
+void snpTypeFilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+radioButton(filterTypeVar, filterTypeVal, "include");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+}
+
+void snpUi(struct trackDb *tdb)
+/* Put up UI snpMarkers. */
+{
+char *snpSourceCart[snpSourceCount];
+char *snpTypeCart[snpTypeCount];
+int   snpSource = 0;
+int   snpType = 0;
+
+printf("<BR><B>Variant Sources:</B><BR>\n");
+for (snpSource=0; snpSource<snpSourceCount; snpSource++)
+    {
+    snpSourceCart[snpSource] = 
+	cartUsualString(cart, snpSourceEnumToString((enum snpSourceEnum)snpSource),
+			snpSourceColorEnumToString((enum snpSourceEnum)snpSource) );
+    snpSourceFilterButtons(snpSourceEnumToString((enum snpSourceEnum)snpSource), 
+			   snpSourceCart[snpSource]);
+    printf(" - <B>%s</B><BR>\n",snpSourceLabelEnumToString((enum snpSourceEnum)snpSource));
+    }
+printf("<BR><B>Variant Types:</B><BR>\n");
+for (snpType=0; snpType<snpTypeCount; snpType++)
+    {
+    snpTypeCart[snpType] = 
+	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType), 
+			snpTypeStateEnumToString((enum snpTypeEnum)snpType));
+    snpTypeFilterButtons(snpTypeEnumToString((enum snpTypeEnum)snpType), 
+			 snpTypeCart[snpType]);
+    printf(" - <B>%s</B><BR>\n",snpTypeLabelEnumToString((enum snpTypeEnum)snpType));
+    }
 }
 
 void cbrWabaUi(struct trackDb *tdb)
@@ -573,6 +620,8 @@ else if (sameString(track, "stsMapMouseNew"))
         stsMapMouseUi(tdb);
 else if (sameString(track, "stsMapRat"))
         stsMapRatUi(tdb);
+else if (sameString(track, "snpMap"))
+        snpUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);
 else if (sameString(track, "fishClones"))
