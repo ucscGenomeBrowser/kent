@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.786 2004/08/26 16:56:10 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.787 2004/08/27 04:47:18 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3765,7 +3765,7 @@ char *oligo = oligoMatchSeq();
 int oligoSize = strlen(oligo);
 char *shortOligo = cloneString(oligo);
 char *medOligo = cloneString(oligo);
-static char shortLabel[16];
+static char shortLabel[17];
 static char longLabel[80];
 struct trackDb *tdb;
 
