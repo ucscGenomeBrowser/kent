@@ -621,19 +621,29 @@ exit; # don't actually run this like a script :)
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
     # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
     ssh kk
-    cd ~/hg14/bed
-    foreach i (mrna est)
-      mkdir -p $i
-      cd $i
-      ls -1S /scratch/hg/gs.15/build32/trfFa/* > genome.lst
-      ls -1 /iscratch/i/mrna.134/Homo_sapiens/$i*.fa > mrna.lst
-      cp ~/hg13/bed/$i/gsub .
-      mkdir psl
-      gensub2 genome.lst mrna.lst gsub spec
-      para create spec
-      cd ..
-    end 
-    # In each dir: para try, para check, para push, para check....
+    mkdir -p ~/hg14/bed/{mrna,est}/psl
+    cd ~/hg14/bed/mrna
+    ls -1S /scratch/hg/gs.15/build32/trfFa/* > genome.lst
+    ls -1S /iscratch/i/mrna.134/Homo_sapiens/mrna.fa > mrna.lst
+    cp ~/hg13/bed/mrna/gsub .
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    cd ~/hg14/bed/est
+    ls -1S /scratch/hg/gs.15/build32/trfFa/* > genome.lst
+    ls -1S /iscratch/i/mrna.134/Homo_sapiens/est*.fa > mrna.lst
+    # Using split est fa -- so create separate output dirs and special gsub:
+    foreach f (`cat mrna.lst`)
+      mkdir psl/$f:t:r
+    end
+    echo '#LOOP \
+/cluster/home/kent/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -ooc={check in exists /scratch/hg/h/11.ooc} {check out line+ psl/$(root2)/$(root1)_$(root2).psl} \
+#ENDLOOP' > gsub
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    # In each dir (~/hg14/bed/mrna, ~/hg14/bed/est):
+    para check, para push, para check....
     # para time > time
       
     # Process mRNA and EST alignments into near best in genome.
@@ -645,7 +655,7 @@ exit; # don't actually run this like a script :)
     pslSortAcc nohead chrom /tmp all_mrna.psl
 
     cd ~/hg14/bed/est
-    pslSort dirs raw.psl /cluster/store3/tmp psl
+    pslSort dirs raw.psl /cluster/store2/tmp psl/est*
     pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
       /dev/null
     liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
@@ -1233,7 +1243,13 @@ o - Update the index.html to include links to these new plots, and delete oldest
     mkdir psl
     ls -1S /scratch/hg/gs.15/build32/trfFa/*.fa.trf > human.lst
     ls -1S /iscratch/i/mrna.134/Homo_sapiens/xenoRna*.fa > mrna.lst
-    cp ~/hg13/bed/xenoMrna/gsub .
+    # Using split fa -- so create separate output dirs and special gsub:
+    foreach f (`cat mrna.lst`)
+      mkdir psl/$f:t:r
+    end
+    echo '#LOOP \
+/cluster/home/kent/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -q=rnax -t=dnax -mask=lower {check out line+ psl/$(root2)/$(root1)_$(root2).psl} \
+#ENDLOOP' > gsub
     gensub2 human.lst mrna.lst gsub spec
     para create spec
     ssh kk
@@ -1245,7 +1261,7 @@ o - Update the index.html to include links to these new plots, and delete oldest
     # Sort xeno mRNA alignments as so:
     ssh eieio
     cd ~/hg14/bed/xenoMrna
-    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslSort dirs raw.psl /cluster/store2/temp psl/xenoRna*
     pslReps raw.psl cooked.psl /dev/null -minAli=0.25
     liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
     pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
@@ -1273,7 +1289,13 @@ o - Update the index.html to include links to these new plots, and delete oldest
     mkdir psl
     ls -1S /scratch/hg/gs.15/build32/trfFa/*.fa.trf > human.lst
     ls -1S /iscratch/i/mrna.134/Homo_sapiens/xenoEst*.fa > mrna.lst
-    cp ~/hg13/bed/xenoEst/gsub .
+    # Using split fa -- so create separate output dirs and special gsub:
+    foreach f (`cat mrna.lst`)
+      mkdir psl/$f:t:r
+    end
+    echo '#LOOP \
+/cluster/home/kent/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -q=dnax -t=dnax -mask=lower {check out line+ psl/$(root2)/$(root1)_$(root2).psl} \
+#ENDLOOP' > gsub
     gensub2 human.lst mrna.lst gsub spec
     ssh kk
     cd ~/hg14/bed/xenoEst
@@ -1282,7 +1304,7 @@ o - Update the index.html to include links to these new plots, and delete oldest
     # Sort xenoEst alignments:
     ssh eieio
     cd ~/hg14/bed/xenoEst
-    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslSort dirs raw.psl /cluster/store2/temp psl/xenoEst*
     pslReps raw.psl cooked.psl /dev/null -minAli=0.10
     liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
     pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
