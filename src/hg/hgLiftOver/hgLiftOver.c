@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.36 2005/02/02 19:23:44 aamp Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.37 2005/02/23 00:41:16 aamp Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -437,30 +437,12 @@ previousDb = hPreviousAssembly(db);
 
 chainList = liftOverChainList();
 choice = defaultChoices(chainList);
-minSizeQ = cgiOptionalInt(HGLFT_MINSIZEQ,choice->minSizeQ);
-minSizeT = cgiOptionalInt(HGLFT_MINSIZET,choice->minSizeT);
-minBlocks = cgiOptionalDouble(HGLFT_MINBLOCKS,choice->minBlocks);
-minMatch = cgiOptionalDouble(HGLFT_MINMATCH,choice->minMatch);
-if (cgiBooleanDefined(HGLFT_FUDGETHICK))
-    {
-    char buf[256];
-    int val;
-    sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), HGLFT_FUDGETHICK);
-    val = cgiInt(buf);
-    fudgeThick = (val==1) ? TRUE : FALSE;
-    }
-else 
-    fudgeThick = (choice->fudgeThick[0]=='Y') ? TRUE : FALSE;
-if (cgiBooleanDefined(HGLFT_MULTIPLE))
-    {
-    char buf[256];
-    int val;
-    sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), HGLFT_MULTIPLE);
-    val = cgiInt(buf);
-    multiple = (val==1) ? TRUE : FALSE;
-    }
-else 
-    multiple = (choice->multiple[0]=='Y') ? TRUE : FALSE;
+minSizeQ = cartCgiUsualInt(cart, HGLFT_MINSIZEQ, choice->minSizeQ);
+minSizeT = cartCgiUsualInt(cart, HGLFT_MINSIZET, choice->minSizeT);
+minBlocks = cartCgiUsualDouble(cart, HGLFT_MINBLOCKS, choice->minBlocks);
+minMatch = cartCgiUsualDouble(cart, HGLFT_MINMATCH, choice->minMatch);
+fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=='Y') ? TRUE : FALSE);
+multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
 
 webMain(choice, dataFormat);
 liftOverChainFreeList(&chainList);
