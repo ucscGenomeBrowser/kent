@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.66 2004/10/11 19:03:32 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.67 2004/10/12 14:19:21 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -985,7 +985,7 @@ int sqlNeedQuickNum(struct sqlConnection *conn, char *query)
 {
 char buf[32];
 sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
-if (!(buf[0] == '-' && isdigit(buf[1])) || isdigit(buf[0]))
+if (!((buf[0] == '-' && isdigit(buf[1])) || isdigit(buf[0])))
     errAbort("Expecting numerical result to query '%s' got '%s'",
     	query, buf);
 return sqlSigned(buf);
