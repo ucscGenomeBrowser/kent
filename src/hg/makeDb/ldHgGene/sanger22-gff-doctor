@@ -1,0 +1,30 @@
+#!/usr/bin/awk -f
+#
+# Program to modify the sanger 22 GFF files to match what is expected
+# by ldHgGene.  This makes the following changes:
+#   o change SUPER_LINK_C22 -> chr22
+#   o convert the group field to have only the gene id.
+#   o remove .mRNA suffix from ids in gene.gff files so the match
+#     the cds.gff files.
+#
+# usage:
+#    sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
+#       | ./ldHgGene hg8 sanger22 stdin
+#
+BEGIN {
+    FS="\t"
+    OFS="\t"
+}
+/^SUPER_LINK_C/ {
+    # change `SUPER_LINK_C22' -> `chr22'
+    gsub("^SUPER_LINK_C", "chr", $1)
+
+    # Change `Sequence Em:D87022.C22.11 ; Type...' -> `Em:D87022.C22.11'
+    gsub("^Sequence ", "", $9)
+    gsub(" ;.*$", "", $9)
+
+    # Remove training .mRNA
+    gsub("\\.mRNA$", "", $9)
+}
+
+{print $0}
