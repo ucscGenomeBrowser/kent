@@ -24,6 +24,14 @@ color 40,40,160
 altColor 255,0,0
 type bed 6 .
 
+track tigrOperons
+shortLabel TIGR operons
+longLabel Operon predictions by TIGR
+group genes
+priority 2.12
+visibility pack
+type bed 15 .
+
 track tigrCmrORFs
 shortLabel TIGR ORFs
 longLabel ORF annotation from TIGR

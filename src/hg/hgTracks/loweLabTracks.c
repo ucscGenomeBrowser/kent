@@ -117,4 +117,44 @@ tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
 
+void loadOperon(struct track *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct linkedFeatures *lfList = NULL, *lf;
+struct bed *bed, *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 15);
+    slAddHead(&list, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+
+for (bed = list; bed != NULL; bed = bed->next)
+    {
+    struct simpleFeature *sf;
+    int i;
+    lf = lfFromBed(bed);
+    for (sf = lf->components, i = 0; sf != NULL, i < bed->expCount; sf = sf->next, i++)
+	sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
+    slAddHead(&lfList,lf);
+    }
+tg->items = lfList;
+}
+
+void tigrOperonMethods(struct track *tg)
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadOperon;
+tg->exonArrows = FALSE;
+}
+
 /**** End of Lowe lab additions ****/
