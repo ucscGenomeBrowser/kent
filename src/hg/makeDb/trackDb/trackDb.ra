@@ -119,8 +119,8 @@ visibility hide
 type bed 6 +
 
 track bacEndPairsBad
-shortLabel Orphan BAC End Pairs
-longLabel Orphan and Incorrectly Oriented BAC End Pairs
+shortLabel Incorrect BAC End Pairs
+longLabel Orphan, Short and Incorrectly Oriented BAC End Pairs
 group map
 priority 16
 visibility hide
@@ -143,8 +143,8 @@ visibility hide
 type bed 6 +
 
 track fosEndPairsBad
-shortLabel Orphan Fosmid End Pairs
-longLabel Orphan and Incorrectly Oriented Fosmid End Pairs
+shortLabel Bad Fosmid End Pairs
+longLabel Orphan, Short and Incorrectly Oriented Fosmid End Pairs
 group map
 priority 19
 visibility hide
