@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.13 2003/09/26 07:36:33 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.14 2003/09/27 01:35:06 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -271,10 +271,6 @@ hPrintf("</TD><TD>");
 cgiMakeOptionalButton(filUseSavedVarName, "Load Filter", 
 	!userSettingsAnySaved(filUserSettings()));
 hPrintf("</TD></TR></TABLE>");
-hPrintf("Submit will take you back to the main page "
- "with the current filter.<BR>To quickly get a list of gene "
- "names that pass the filter push ");
-cgiMakeButton(advFilterListVarName, "List Names");
 }
 
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
@@ -292,9 +288,12 @@ cartSaveSession(cart);
 
 hPrintf("<BR>");
 hPrintf("With this page you can restrict which genes appear in the main<BR>");
-hPrintf("table based on the values in any column.<BR>");
-/* Put up little table with clear all/submit */
+hPrintf("table based on the values in any column. Submit will take you<BR>");
+hPrintf("back to the main page withthe current filter.");
 bigButtons();
+hPrintf("To quickly get a list of gene "
+ "names that pass the filter push ");
+cgiMakeButton(advFilterListVarName, "List Names");
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
