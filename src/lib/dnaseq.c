@@ -44,3 +44,39 @@ for (seq = *pSeqList; seq != NULL; seq = next)
     }
 *pSeqList = NULL;
 }
+
+aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop)
+/* Return a translated sequence.  Offset is position of first base to
+ * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
+ * represent stop codons as 'Z'). */
+{
+aaSeq *seq;
+DNA *dna = inSeq->dna;
+AA *pep, aa;
+int inSize = inSeq->size;
+int i, lastCodon = inSize - 3;
+int txSize = (inSize-offset)/3;
+int actualSize = 0;
+char buf[256];
+
+AllocVar(seq);
+seq->dna = pep = needLargeMem(txSize+1);
+for (i=offset; i <= lastCodon; i += 3)
+    {
+    aa = lookupCodon(dna+i);
+    if (aa == 0)
+	{
+        if (stop)
+	    break;
+	else
+	    aa = 'Z';
+	}
+    *pep++ = aa;
+    ++actualSize;
+    }
+*pep = 0;
+seq->size = actualSize;
+seq->name = cloneString(inSeq->name);
+return seq;
+}
+
