@@ -437,7 +437,7 @@ struct dbObject *obType;
 
 fprintf(f, "struct %s\n", dbObj->name);
 fprintf(f, "/* %s */\n", dbObj->comment);
-fprintf(f, "    {\n", dbObj->name);
+fprintf(f, "    {\n");
 if (!dbObj->isSimple)
     fprintf(f, "    struct %s *next;  /* Next in singly linked list. */\n", dbObj->name);
 for (col = dbObj->columnList; col != NULL; col = col->next)
@@ -614,7 +614,7 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct column *ls;
 		fprintf(f, "sql%s%sArray(row[%d], &ret->%s, &sizeOne);\n",
-			   lName, staDyn, colIx, col->name, col->fixedSize); 
+			   lName, staDyn, colIx, col->name); 
 		if ((ls = col->linkedSize) != NULL)
 		    fprintf(f, "assert(sizeOne == ret->%s);\n", ls->name);
 		}
@@ -989,7 +989,7 @@ for (col = table->columnList; col != NULL; col = col->next)
     enum lowTypes type = lt->type;
     struct dbObject *obType = col->obType;
     char *lineEnd = (col->next != NULL ? "sep" : "lastSep");
-    char outChar;
+    char outChar = 0;
     boolean mightNeedQuotes = FALSE;
 
     switch(type)
@@ -1084,7 +1084,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
 	    fprintf(f, "fprintf(f, \"%%%c\", el->%s);\n", outChar, 
-		colName, lineEnd);
+		colName);
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
 	    fprintf(f, "fputc(%s,f);\n", lineEnd);
