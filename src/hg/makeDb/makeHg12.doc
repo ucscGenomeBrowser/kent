@@ -1345,6 +1345,94 @@ o - Rename to correspond with tables as so and
 Now load the fish seqeuence data
        hgLoadRna addSeq hg12 /cluster/store3/tetFish/tet*.fa
 
+PRODUCING FISH ALIGNMENTS (DONE 08/05/02)
+o - Do fish/human alignments.
+       ssh kk
+       cd ~/oo/bed
+       mkdir blatFish
+       cd blatFish
+       mkdir psl
+       ls -1S /scratch/hg/fish/*.fa > fish.lst
+       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
+       # Copy over gsub from previous version.
+       gensub2 human.lst fish.lst gsub spec
+       para create spec 
+       para try
+     Make sure jobs are going ok with para check.  Then
+       para push
+     wait about 2 hours and do another
+       para push
+     do para checks and if necessary para pushes until done
+     or use para shove.
+o - Sort alignments as so 
+       pslCat -dir psl | \
+         liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | \
+         pslSortAcc nohead chrom temp stdin
+o - Rename to correspond with tables as so and 
+    load into database:
+       ssh hgwdev
+       cd ~/oo/bed/blatFish/chrom
+       rm -f chr*_blatFish.psl
+       foreach i (*.psl)
+           set r = $i:r
+           mv $i ${r}_blatFish.psl
+       end
+       hgLoadPsl hg12 *.psl
+
+Now load the fish seqeuence data
+       hgLoadRna addSeq hg12 /cluster/store3/tetFish/tet*.fa
+
+
+PRODUCING FUGU ALIGNMENTS (DONE 12/09/02)
+o - Do fugu/human alignments.
+       ssh kk
+       cd ~/oo/bed
+       mkdir blatFugu
+       cd blatFugu
+       mkdir psl
+       foreach f (~/hg12/?{,?}/NT_??????/NT_??????.fa)
+         set c=$f:t
+         mkdir -p psl/$c
+       end
+       ls -1S /scratch/hg/fugu/split500/*.fa > fugu.lst
+       ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
+       # Copy over gsub from previous version.
+       gensub2 human.lst fugu.lst gsub spec
+
+       para create spec 
+       para try
+     Make sure jobs are going ok with para check.  Then
+       para push -maxJobs=10000
+     wait about 2 hours and do another
+       para push
+     do para checks and if necessary para pushes until done
+     or use para shove.
+
+o - Sort alignments as so 
+    ssh eieio
+    cd ~/oo/bed/blatFugu
+       pslCat -dir psl/NT_??????.fa | \
+         liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | \
+         pslSortAcc nohead chrom temp stdin
+
+o - Rename to correspond with tables as so and 
+    load into database:
+       ssh hgwdev
+       cd ~/oo/bed/blatFugu/chrom
+       rm -f chr*_blatFugu.psl
+       foreach i (chr?{,?}{,_random}.psl)
+           set r = $i:r
+           mv $i ${r}_blatFugu.psl
+       end
+       hgLoadPsl hg12 *.psl
+
+Make fugu symlink
+cd /gbdb/hg12
+mkdir fugu
+cd fugu
+ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta /gbdb/hg12/fugu/fugu_v3_mask.fasta
+Now load the Fugu sequence data
+       hgLoadRna addSeq hg12 /gbdb/hg12/fugu/fugu_v3_mask.fasta
 
 TIGR GENE INDEX (todo)
 
