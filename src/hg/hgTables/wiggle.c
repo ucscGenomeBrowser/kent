@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.3 2004/07/22 02:10:23 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.4 2004/08/27 23:10:47 hiram Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -121,7 +121,6 @@ else
 void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
 /* Save as wiggle data. */
 {
-struct wiggleData *wdList, *wd;
 struct region *regionList = getRegions(), *region;
 int maxOut = 100000, oneOut, curOut = 0;
 textOpen();
@@ -145,61 +144,108 @@ void doSummaryStatsWiggle(struct sqlConnection *conn)
 struct trackDb *track = curTrack;
 char *table = track->tableName;
 struct region *region, *regionList = getRegionsWithChromEnds();
+char *regionName = getRegionName();
 long long regionSize = basesInRegion(regionList);
 long long gapTotal = gapsInRegion(conn, regionList);
-long long realSize = regionSize - gapTotal;
 long startTime, wigFetchTime;
-char *regionName = getRegionName();
-struct wiggleData *wdList, *wd;
-struct wiggleStats *wsList = NULL, *ws;
-int wdCount = 0;
-double sum = 0, minData = 0, maxData = 0;
-boolean gotAny = FALSE;
-long long dataCount = 0;
-int span = 0;
+char splitTableOrFileName[256];
+struct customTrack *ct;
+boolean isCustom = FALSE;
+struct wiggleDataStream *wDS = NULL;
+unsigned long long valuesMatched = 0;
+char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
+
+wDS = newWigDataStream();
 
 htmlOpen("%s (%s) Wiggle Summary Statistics", track->shortLabel, table);
+
+if (isCustomTrack(table))
+    {
+    ct = lookupCt(table);
+    if (! ct->wiggle)
+	{
+	warn("doSummaryStatsWiggle: called to do wiggle stats on a custom track that isn't wiggle data ?");
+	htmlClose();
+	destroyWigDataStream(&wDS);
+	return;
+	}
+
+    safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s",
+		ct->wigFile);
+    isCustom = TRUE;
+    }
 
 startTime = clock1000();
 for (region = regionList; region != NULL; region = region->next)
     {
-    wdList = wigFetchData(database, table, 
-	region->chrom, region->start, region->end,
-	WIG_ALL_DATA, WIG_DATA_NOT_RETURNED, 
-	0, NULL, 0, NULL, 100000, &wsList);
-    for (ws = wsList; ws != NULL; ws = ws->next)
+    unsigned span = 0;
+    boolean hasBin;
+
+    sprintLongWithCommas(num1Buf, region->start + 1);
+    sprintLongWithCommas(num2Buf, region->end);
+    hPrintf("<P><B> Position: </B> %s:%s-%s</P>\n", region->chrom,
+	    num1Buf, num2Buf );
+    sprintLongWithCommas(num1Buf, region->end - region->start);
+    hPrintf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
+
+    wDS->setChromConstraint(wDS, region->chrom);
+    wDS->setPositionConstraint(wDS, region->start, region->end);
+    /* depending on what is coming in on regionList, we may need to be
+     * smart about how often we call getData for these custom tracks
+     * since that is potentially a large file read each time.
+     */
+    if (isCustom)
 	{
-	double maxOne = ws->lowerLimit + ws->dataRange;
-	if (dataCount)
+	valuesMatched = wDS->getData(wDS, NULL,
+		splitTableOrFileName, wigFetchStats);
+	}
+    else
+	{
+	if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	    {
-	    if (ws->lowerLimit < minData) minData = ws->lowerLimit;
-	    if (maxOne > maxData) maxData = maxOne;
+	    span = spanInUse(conn, splitTableOrFileName, region->chrom,
+		region->start, region->end, cart);
+	    wDS->setSpanConstraint(wDS, span);
+	    valuesMatched = wDS->getData(wDS, database,
+		splitTableOrFileName, wigFetchStats);
+	    }
+	}
+
+    /*	This printout is becoming common to what is already in
+     *	hgc/wiggleClick.c, need to put this in one of the library files.
+     */
+    if (valuesMatched == 0)
+	{
+	if ( span < (3 * (region->end - region->end)))
+	    {
+	    hPrintf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
+	    hPrintf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
 	    }
 	else
-	    {
-	    minData = ws->lowerLimit;
-	    maxData = maxOne;
-	    span = ws->span;
-	    }
-	dataCount += ws->count;
-        sum += ws->mean * ws->count;
+	    hPrintf("<P><B> No data found in this region. </B></P>\n");
 	}
-    /* How to free wsList? */
-    wiggleDataFreeList(&wdList);
-    wsList = NULL;
+    else
+	{
+	sprintLongWithCommas(num1Buf, wDS->stats->count * wDS->stats->span);
+	hPrintf("<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
+	    num1Buf, 100.0*(wDS->stats->count * wDS->stats->span)/(region->end - region->start));
+	}
+
+    hTableStart();
+    hPrintf("<TR><TD>");
+
+    /* first TRUE == sort results, second TRUE == html table output */
+    wDS->statsOut(wDS, "stdout", TRUE, TRUE);
+
+    hPrintf("</TD></TR>");
+
+    /*	TBD: histogram printout here (lib call)	*/
+
+    hTableEnd();
+    wDS->freeStats(wDS);
+    wDS->freeConstraints(wDS);
     }
 wigFetchTime = clock1000() - startTime;
-
-hTableStart();
-numberStatRow("# of data values", dataCount);
-if (dataCount > 0)
-    {
-    floatStatRow("minimum value" , minData);
-    floatStatRow("average value" , sum/dataCount);
-    floatStatRow("maximum value" , maxData);
-    numberStatRow("bases per value", span);
-    }
-hTableEnd();
 
 webNewSection("Region and Timing Statistics");
 hTableStart();
@@ -209,5 +255,5 @@ numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
 hTableEnd();
 htmlClose();
+destroyWigDataStream(&wDS);
 }
-
