@@ -2,7 +2,7 @@ all: cgi
 
 alpha: clean cgi-alpha blat
 
-beta: clean cgi-beta
+beta: check-beta clean cgi-beta
 
 libs:
 	cd lib; make; cd ..
@@ -15,8 +15,12 @@ cgi: libs
 cgi-alpha: libs
 	cd hg; make alpha; cd ..
 
-cgi-beta: libs
+cgi-beta: check-beta libs
 	cd hg; make beta; cd ..
+
+check-beta:
+	# this will fail if we are not in a beta checkout:
+	cvs status makefile | egrep 'v[0-9]+_branch' > /dev/null	
 
 blat: libs
 	cd blat; make; make test; cd ..
