@@ -621,7 +621,7 @@ identifier wgsContigAccession typeOf=genbankAccession
 identifier wgsContigName
 "Sequencing project name for whole-genome shotgun contigs." 
     $wgs.contigAcc.contig
-    $wgs.gold.frag $split
+    $wgs.gold.frag $split full
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
