@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.705 2004/04/08 00:02:40 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.706 2004/04/09 02:48:11 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7959,7 +7959,6 @@ char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char *chrom;
 int start, end;
-static char *except[] = {"db", "position", NULL};
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
@@ -7968,7 +7967,7 @@ if (NULL == position)
 
 if((position == NULL) || sameString(position, ""))
     {
-    resetVars(except);
+    errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
     }
 
 chromName = NULL;
@@ -8114,9 +8113,10 @@ puts(
 }
 
 
-void resetVars(char **except)
-/* Reset vars except for vars in 'char *except[]' array. */
+void resetVars()
+/* Reset vars except for position and database. */
 {
+static char *except[] = {"db", "position", NULL};
 char *cookieName = hUserCookie();
 int sessionId = cgiUsualInt(cartSessionVarName(), 0);
 char *hguidString = findCookieData(cookieName);
@@ -8217,7 +8217,7 @@ pushWarnHandler(veryEarlyWarningHandler);
 pushAbortHandler(veryEarlyAbortHandler);
 cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
-    resetVars(except);
+    resetVars();
 htmlSetBackground("../images/floret.jpg");
 cartHtmlShell("UCSC Genome Browser v59", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
