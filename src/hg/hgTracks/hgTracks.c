@@ -6422,7 +6422,7 @@ if (realiCloneList == NULL)
 
 
 struct hash *glCloneHash;
-struct cloneInfo *glCloneList;
+struct cloneInfo *glCloneList = NULL;
 
 void glLoadInWindow()
 /* Load up glCloneHash and glCloneList with the clones in the window. */
