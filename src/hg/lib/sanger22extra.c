@@ -129,3 +129,16 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+/* ---------------- End of AutoSQL generated code. ----------------------- */
+
+char *sanger22extraCreate = 
+"CREATE TABLE %s (\n"
+"    name varchar(255) not null,	# Transcript name\n"
+"    locus varchar(255) not null,	# Possibly biological short name\n"
+"    description longblob not null,	# Description from Sanger gene GFFs\n"
+"    geneType varchar(255) not null,	# Type field from Sanger gene GFFs\n"
+"    cdsType varchar(255) not null,	# Type field from Sanger CDS GFFs\n"
+"              #Indices\n"
+"    PRIMARY KEY(name)\n"
+")\n";
+

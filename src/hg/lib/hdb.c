@@ -33,7 +33,7 @@ static struct dbConv dbTable[] = {
 };
 
 static char *hdbHost;
-static char *hdbName = "hg7";
+static char *hdbName = "hg8";
 static char *hdbUser;
 static char *hdbPassword;
 
