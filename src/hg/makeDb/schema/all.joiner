@@ -5,7 +5,7 @@
 # panTro1,galGal2,fr1,cb1,hgFixed,go, and swissProt databases
 
 # Define databases used for various organisms
-set hg hg13,hg15,hg16
+set hg hg13,hg15,hg16,hg17
 set mm mm3,mm4
 set rn rn2,rn3
 set fr fr1
