@@ -454,7 +454,8 @@ hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
 # requires rankprop code from Bill Noble <noble@gs.washington.edu>
 # which includes scripts to build these tables on the cluster.
 
-# run psiblast
+    # run psiblast
+
       ssh hgwdev
       mkdir /cluster/bluearc/markd/rankprop
       cd  /cluster/bluearc/markd/rankprop
@@ -479,6 +480,7 @@ hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
       cd ..
       ../bin/cluster-blast-finishup hs.sw+tr
 
+  # run rankprop
 
       # rankprop run, on rack9 due to memory sies of kk9
       ssh kk9  

@@ -9,7 +9,7 @@
 #include "hgRelate.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.4 2004/12/08 06:51:03 markd Exp $";
+static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.5 2004/12/23 18:37:53 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,11 +51,11 @@ errAbort(
 
 char createString[] =
     "CREATE TABLE %s (\n"
-    "    qKgId varchar(255) not null,	# known genes id of query protein\n"
-    "    tKgId varchar(255) not null,	# known genes id of target protein\n"
+    "    query varchar(255) not null,	# known genes id of query protein\n"
+    "    target varchar(255) not null,	# known genes id of target protein\n"
     "    score float not null,	# rankp score\n"
     "              #Indices\n"
-    "    INDEX(qKgId(12))\n"
+    "    INDEX(query(12))\n"
     ");\n";
 
 enum rowStat
@@ -78,10 +78,10 @@ outRec.score = inRec->score;
 
 for (qKg = qKgList; qKg != NULL; qKg = qKg->next)
     {
-    outRec.qKgId = qKg->name;
+    outRec.query = qKg->name;
     for (tKg = tKgList; tKg != NULL; tKg = tKg->next)
         {
-        outRec.tKgId = tKg->name;
+        outRec.target = tKg->name;
         rankPropTabOut(&outRec, tabFh);
         }
     }
@@ -92,7 +92,6 @@ enum rowStat processRow(char **row, FILE *tabFh)
  * ids. Only output if score is greater than zero or there is an e-value */
 {
 struct rankPropProt inRec;
-struct rankProp outRec;
 struct slName *qKgList, *tKgList;
 rankPropProtStaticLoad(row, &inRec);
 

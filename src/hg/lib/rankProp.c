@@ -8,18 +8,16 @@
 #include "jksql.h"
 #include "rankProp.h"
 
-static char const rcsid[] = "$Id: rankProp.c,v 1.3 2004/10/05 08:04:27 markd Exp $";
+static char const rcsid[] = "$Id: rankProp.c,v 1.4 2004/12/23 18:37:53 markd Exp $";
 
 void rankPropStaticLoad(char **row, struct rankProp *ret)
 /* Load a row from rankProp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->qKgId = row[0];
-ret->tKgId = row[1];
+ret->query = row[0];
+ret->target = row[1];
 ret->score = atof(row[2]);
-ret->qtEVal = atof(row[3]);
-ret->tqEVal = atof(row[4]);
 }
 
 struct rankProp *rankPropLoad(char **row)
@@ -29,11 +27,9 @@ struct rankProp *rankPropLoad(char **row)
 struct rankProp *ret;
 
 AllocVar(ret);
-ret->qKgId = cloneString(row[0]);
-ret->tKgId = cloneString(row[1]);
+ret->query = cloneString(row[0]);
+ret->target = cloneString(row[1]);
 ret->score = atof(row[2]);
-ret->qtEVal = atof(row[3]);
-ret->tqEVal = atof(row[4]);
 return ret;
 }
 
@@ -43,7 +39,7 @@ struct rankProp *rankPropLoadAll(char *fileName)
 {
 struct rankProp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +57,7 @@ struct rankProp *rankPropLoadAllByChar(char *fileName, char chopper)
 {
 struct rankProp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -82,11 +78,9 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->qKgId = sqlStringComma(&s);
-ret->tKgId = sqlStringComma(&s);
+ret->query = sqlStringComma(&s);
+ret->target = sqlStringComma(&s);
 ret->score = sqlFloatComma(&s);
-ret->qtEVal = sqlDoubleComma(&s);
-ret->tqEVal = sqlDoubleComma(&s);
 *pS = s;
 return ret;
 }
@@ -98,8 +92,8 @@ void rankPropFree(struct rankProp **pEl)
 struct rankProp *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->qKgId);
-freeMem(el->tKgId);
+freeMem(el->query);
+freeMem(el->target);
 freez(pEl);
 }
 
@@ -120,18 +114,14 @@ void rankPropOutput(struct rankProp *el, FILE *f, char sep, char lastSep)
 /* Print out rankProp.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->qKgId);
+fprintf(f, "%s", el->query);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tKgId);
+fprintf(f, "%s", el->target);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->score);
-fputc(sep,f);
-fprintf(f, "%g", el->qtEVal);
-fputc(sep,f);
-fprintf(f, "%g", el->tqEVal);
 fputc(lastSep,f);
 }
 

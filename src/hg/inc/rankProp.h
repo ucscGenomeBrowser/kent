@@ -5,17 +5,15 @@
 #ifndef RANKPROP_H
 #define RANKPROP_H
 
-#define RANKPROP_NUM_COLS 5
+#define RANKPROP_NUM_COLS 3
 
 struct rankProp
 /* RankProp protein ranking for a pair of proteins */
     {
     struct rankProp *next;  /* Next in singly linked list. */
-    char *qKgId;	/* known genes id of query protein */
-    char *tKgId;	/* known genes id of target protein */
+    char *query;	/* known genes id of query protein */
+    char *target;	/* known genes id of target protein */
     float score;	/* rankp score */
-    double qtEVal;	/* query to target psi-blast E-value */
-    double tqEVal;	/* target to query psi-blast E-value */
     };
 
 void rankPropStaticLoad(char **row, struct rankProp *ret);
