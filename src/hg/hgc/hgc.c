@@ -1342,7 +1342,7 @@ cgiContinueHiddenVar("db");
 void doGetDna1()
 /* Do first get DNA dialog. */
 {
-char *tbl = cartString(cart, "table");
+char *tbl = cartUsualString(cart, "table", "");
 cartWebStart(cart, "Get DNA in Window");
 printf("<H2>Get DNA for %s:%d-%d</H2>\n", seqName, winStart+1, winEnd);
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
@@ -1541,10 +1541,17 @@ trackDbFreeList(&tdbList);
 void doGetDna2()
 /* Do second DNA dialog (or just fetch DNA) */
 {
-char *tbl = cartString(cart, "table");
+char *tbl = cartUsualString(cart, "table", "");
 int itemCount;
 
 puts("<PRE>");
+if (tbl[0] == 0)
+    {
+    itemCount = 1;
+    hgSeqRange(seqName, cartInt(cart, "o"), cartInt(cart, "t"),
+	       '?', "dna");
+    }
+else
 itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
 			      cartInt(cart, "t"), NULL);
 if (itemCount == 0)
