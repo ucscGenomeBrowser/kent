@@ -6082,6 +6082,7 @@ LOAD RNAGENES (DONE - 2004-03-09 - Hiram)
     hgLoadBed -sqlTable=simpleNucDiff.sql hg16 chimpSimpleDiff.bed
     
 #  gc5Base wiggle TRACK (DONE - 2004-03-12 - Hiram)
+#	reloaded wib files 2005-05-17 to place them in /gbdb/hg16/wib/gc5Base
     # a demonstration wiggle track.  Perform a gc count with a 5 base
     # window.  Also compute a "zoomed" view for display efficiency.
     mkdir /cluster/data/hg16/bed/gc5Base
@@ -6125,10 +6126,10 @@ done
     # load the .wig files back on hgwdev:
     ssh hgwdev
     cd /cluster/data/hg16/bed/gc5Base
-    hgLoadWiggle hg16 gc5Base wigData5/*.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/wib/gc5Base hg16 gc5Base wigData5/*.wig
     # and symlink the .wib files into /gbdb
-    mkdir /gbdb/hg16/wib
-    ln -s `pwd`/wigData5/*.wib /gbdb/hg16/wib
+    mkdir /gbdb/hg16/wib/gc5Base
+    ln -s `pwd`/wigData5/*.wib /gbdb/hg16/wib/gc5Base
 
     # to speed up display for whole chromosome views, compute a "zoomed"
     # view and load that on top of the existing table.  The savings
@@ -6179,10 +6180,11 @@ user    302m37.050s
 sys     16m13.770s
     #	Then load these .wig files into the same database as above
     ssh hgwdev
-    hgLoadWiggle -oldTable hg16 gc5Base wigData5_1K/*.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/wib/gc5Base -oldTable hg16 gc5Base \
+	wigData5_1K/*.wig
     # and symlink these .wib files into /gbdb
-    mkdir /gbdb/hg16/wib
-    ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg16/wib
+    mkdir -p /gbdb/hg16/wib/gc5Base
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg16/wib/gc5Base
 
 # KNOWN GENES TRACK (STARTED - 2004-01-15 - with Family browser complete
 #				1004-02-17 Hiram)
@@ -8375,6 +8377,56 @@ find ./POSTPROBS -type f | grep -v chr13_random | sort -t\. -k2,2n | \
     cd  /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
     time /tmp/allpHMMdata.sh
 
+#  Create top 5 % set of data for phyloHMMcons.hg16mm3rn3.2003-11-11
+#	(DONE - 2004-05-15 - Hiram)
+    cd  /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+    cat << '_EOF_' > top5.sh
+#!/bin/sh
+#
+#       Do not work on chr13_random, it has no data
+#	this for loop should have been:
+#	ls POSTPROBS/chr* | sort -t\. -k2,2n | while read i
+#	to get the data in properly sorted order.  With this as is,
+#	we will need to sort the coords later to make any wiggle
+#	track out of this data
+#
+mkdir top5_data
+for i in POSTPROBS/chr*
+do
+        c=${i/POSTPROBS\//}
+        echo $i $c
+        if [ "$c" != "chr13_random" ]; then
+            if [ ! -f top5_data/$c.ascii.gz ]; then
+                find ${i} -type f | sort -t\. -k2,2n | while read FN
+                do
+                    zcat ${FN}
+                done | awk '{if ($2 > 0.450) print}' > top5_data/$c.ascii
+                rm -f top5_data/$c.ascii.gz
+                gzip top5_data/$c.ascii &
+            else
+                ls -og top5_data/$c.ascii.gz
+            fi
+        fi
+done
+'_EOF_'
+    chmod +x top5_data
+    #	running this script takes several hours, make sure you do it
+    #	on the file server
+    ssh eieio
+    cd  /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11
+    #	Then, to make the histogram data:
+    cd /cluster/data/hg16/bed/phyloHMMcons.hg16mm3rn3.2003-11-11/top5_data
+    cat << '_EOF' > mkHisto.sh
+#!/bin/sh
+
+for f in chr*.ascii.gz
+do
+    zcat $f
+done | textHistogram -real -col=2 -binSize=0.001 -maxBinCount=1000 stdin
+'_EOF_'
+    chmod +x mkHisto.sh
+    ./mkHisto.sh > histoGram.data
+    
 # BLASTZ FUGU (FR1) (DONE 4/19/04 angie)
     ssh kk
     # space is awful tight on store4 -- use store7.  
