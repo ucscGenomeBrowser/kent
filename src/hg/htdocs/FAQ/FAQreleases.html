@@ -549,9 +549,16 @@ End comment-->
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			You can migrate data from one assembly to another by using the 
 			<A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">blat</A> alignment tool 
-			or by
-			<A HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv">converting the coordinates</A>. 
-			The coordinate conversion tool may be used only on human assembly coordinates.
+			or by converting assembly coordinates</A>.  There are 2 coordinate conversion 
+			tools available on the Genome Browser web site.
+			The <A HREF="http://genome.ucsc.edu/cgi-bin/hgLiftOver">hgLiftOver</A> utility,
+			accessed via the Utilities link on the Genome Browser home page, 
+			may be used to do forward conversions of the data from one assembly to a later
+			assembly. It also handles batch conversions. The 
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv">Convert</A> tool, which
+			is accessed from the menu on the Genome Browser annotation tracks page, supports
+			both forward and reverse conversions, but does not accept batch input. At the
+			current time, these tools may be used only on the human genome assembly.
 			<P>If you have the need to update a large number of coordinates	
 			to a different assembly and have access to a Linux platform, 
 			you may find it useful to try our <TT>liftOver</TT> tool. 
