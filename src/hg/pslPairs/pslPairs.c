@@ -401,21 +401,23 @@ void printOrphan(FILE *out, struct pslAli *paList, struct clone *clone, char *ps
 
       if (count != 1)
 	score = 1500/count;
-      if (((hashLookup(leftNames,pa->psl->qName)) && (pa->psl->strand[0] == '+')) ||
-	  ((hashLookup(rightNames,pa->psl->qName)) && (pa->psl->strand[0] == '-')))
+      if (hashLookup(leftNames,pa->psl->qName)) 
 	{
-	strand = "+";
 	genStart = pa->psl->tStart;
 	genEnd = pa->psl->tEnd+(MIN/2);
 	}
-      else 
+      else
 	{
-	strand = "-";
 	genStart = pa->psl->tStart-(MIN/2);
 	if (genStart < 0)
 	  genStart = 0;
 	genEnd = pa->psl->tEnd;
 	}
+      if (((hashLookup(leftNames,pa->psl->qName)) && (pa->psl->strand[0] == '+')) ||
+	  ((hashLookup(rightNames,pa->psl->qName)) && (pa->psl->strand[0] == '-')))
+	strand = "+";
+      else 
+	strand = "-";
       d1 = pa->psl->tEnd - pa->psl->tStart;
 
       if (!NOBIN) 
