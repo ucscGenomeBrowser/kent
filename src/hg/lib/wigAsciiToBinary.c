@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.2 2004/05/05 23:49:33 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.3 2004/05/06 00:05:46 hiram Exp $";
 
 static unsigned long lineCount = 0;	/* counting all input lines	*/
 static long long add_offset = 0;	/* to allow "lifting" of the data */
@@ -386,6 +386,9 @@ while (lineFileNext(lf, &line, NULL))
 	if (bedChromStart > bedChromEnd)
 	    errAbort("Found chromStart > chromEnd at line %lu (%llu > %llu)",
 		lineCount, bedChromStart, bedChromEnd);
+	if (bedChromEnd > (bedChromStart + 10000000))
+	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
+		lineCount, bedChromEnd-bedChromStart);
 	}
 
     if (variableStep && (wordCount != 2))
