@@ -8,6 +8,7 @@ struct job
     int id;			/* Uniq	job id. */
     char *exe;			/* Executable name - no path or parameters. */
     char *cmd;                  /* Executable name plus parameters. */
+//     struct user *user;		/* User who submitted job. */
     struct batch *batch;	/* Batch this job is in. */
     char *dir;			/* Starting dir. */
     char *in;			/* Stdin. */
@@ -52,8 +53,8 @@ struct user
     char *name;			/* User name. Not allocated here. */
     struct dlList *curBatches;	/* Current active batches. */
     struct dlList *oldBatches;	/* Inactive batches. */
+    // struct dlList *jobQueue;	/* List of jobs not including running ones. */
     int runningCount;		/* Count of jobs currently running. */
-    int doneCount;		/* Count of jobs finished. */
     };
 
 struct spoke

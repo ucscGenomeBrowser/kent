@@ -456,6 +456,8 @@ void doRun(char *line)
 /* Execute command. */
 {
 static char *args[1024];
+char *managingHost, *jobIdString, *reserved, *user, *dir, *in, 
+	*out, *err, *cmd;
 int argCount;
 nextRandom();
 if (line == NULL)
@@ -465,15 +467,19 @@ else if (busyProcs < maxProcs)
     char *exe;
     int childPid;
     char *jobMessage = cloneString(line);
-    struct runJobMessage rjm;
 
-    if (!parseRunJobMessage(line, &rjm))
-	{
-	freez(&jobMessage);
-	return;
-	}
-    argCount = chopLine(rjm.command, args);
-    if (argCount >= ArraySize(args))
+    managingHost = nextWord(&line);
+    jobIdString = nextWord(&line);
+    reserved = nextWord(&line);
+    user = nextWord(&line);
+    dir = nextWord(&line);
+    in = nextWord(&line);
+    out = nextWord(&line);
+    err = nextWord(&line);
+
+    if (line == NULL || (argCount = chopLine(line, args)) < 1)
+	warn("Not enough parameters to run");
+    else if (argCount >= ArraySize(args))
 	warn("Too many arguments to run");
     else
 	{
@@ -481,23 +487,23 @@ else if (busyProcs < maxProcs)
 	if ((childPid = fork()) == 0)
 	    {
 	    /* Do JOB_ID substitutions */
-	    struct subText *st = subTextNew("$JOB_ID", rjm.jobIdString);
+	    struct subText *st = subTextNew("$JOB_ID", jobIdString);
 	    int i;
-	    rjm.in = subTextString(st, rjm.in);
-	    rjm.out = subTextString(st, rjm.out);
-	    rjm.err = subTextString(st, rjm.err);
+	    in = subTextString(st, in);
+	    out = subTextString(st, out);
+	    err = subTextString(st, err);
 	    for (i=0; i<argCount; ++i)
 	        args[i] = subTextString(st, args[i]);
 
-	    execProc(rjm.managingHost, rjm.jobIdString, rjm.reserved,
-		rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, args[0], args);
+	    execProc(managingHost, jobIdString, reserved,
+		user, dir, in, out, err, args[0], args);
 	    exit(0);
 	    }
 	else
 	    {
 	    struct job *job;
 	    AllocVar(job);
-	    job->jobId = atoi(rjm.jobIdString);
+	    job->jobId = atoi(jobIdString);
 	    job->pid = childPid;
 	    job->startMessage = jobMessage;
 	    job->node = dlAddValTail(jobsRunning, job);
@@ -508,31 +514,6 @@ else if (busyProcs < maxProcs)
 else
     {
     warn("Trying to run when busy.");
-    }
-}
-
-void doFetch(char *line)
-/* Fetch a file. */
-{
-char *user = nextWord(&line);
-char *fileName = nextWord(&line);
-if (fileName != NULL)
-    {
-    if (fork() == 0)
-        {
-	FILE *f = fopen(fileName, "r");
-	if (f == NULL)
-	    warn("Couldn't open %s", fileName);
-	else
-	    {
-	    char buf[4*1024];
-	    int size;
-	    while ((size = fread(buf, 1, sizeof(buf), f)) > 0)
-		write(connectionHandle, buf, size);
-	    fclose(f);
-	    }
-	exit(0);
-	}
     }
 }
 
@@ -667,8 +648,6 @@ for (;;)
 				doResurrect(line);
 			    else if (sameString("listJobs", command))
 			        listJobs();
-			    else if (sameString("fetch", command))
-			        doFetch(line);
 			    }
 			freez(&buf);
 			}

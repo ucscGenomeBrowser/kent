@@ -264,7 +264,6 @@ if (sd > 0)
 dyStringFree(&dy);
 }
 
-
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
 /* Tell spoke to start up a job. */
 {
@@ -275,7 +274,7 @@ char *reserved = "0";	/* An extra parameter to fill in some day */
 if (sd > 0)
     {
     char err[512];
-    fillInErrFile(err, job->id, machine->tempDir);
+    sprintf(err, "%s/para%d.err", machine->tempDir, job->id);
     freez(&job->err);
     job->err = cloneString(err);
     freez(&spoke->machine);
