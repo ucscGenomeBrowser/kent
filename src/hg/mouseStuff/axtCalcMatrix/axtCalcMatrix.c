@@ -61,33 +61,74 @@ for (i=0; i<=symCount; ++i)
     }
 }
 
+void addPerfect(int *hist, int histSize, 
+	char *qSym, char *tSym, int symCount)
+/* Add counts of perfect runs to histogram */
+{
+boolean match, lastMatch = FALSE;
+int startMatch = 0;
+int i, insSize;
+
+for (i=0; i<=symCount; ++i)
+    {
+    if (i == symCount)
+        match = FALSE;
+    else
+	match = (qSym[i] == tSym[i]);
+    if (match && !lastMatch)
+        {
+	startMatch = i;
+	lastMatch = match;
+	}
+    else if (!match && lastMatch)
+        {
+	insSize = i - startMatch;
+	if (insSize >= histSize)
+	     insSize = histSize - 1;
+	hist[insSize] += 1;
+	lastMatch = match;
+	}
+    }
+}
+
+void printLabeledPercent(char *label, int num, int total)
+/* Print a label, absolute number, and number as percent of total. */
+{
+printf("%s %7.3f%% (%d)\n", label, 100.0*num/total, num);
+}
 
 void axtCalcMatrix(int fileCount, char *files[])
 /* axtCalcMatrix - Calculate substitution matrix and make indel histogram. */
 {
-int *histIns, *histDel;
+int *histIns, *histDel, *histPerfect, *histGapless, *histT, *histQ;
 int maxInDel = optionInt("maxInsert", 1001);
 static int matrix[4][4];
-int i,j,total = 0;
+int i,j,both,total = 0;
 double scale;
 int fileIx;
 struct axt *axt;
 static int trans[4] = {A_BASE_VAL, C_BASE_VAL, G_BASE_VAL, T_BASE_VAL};
 static char *bases[4] = {"A", "C", "G", "T"};
-int totalMatch = 0, totalMismatch = 0, 
-	totalGapStart = 0, totalGapExt=0;
+int totalT = 0, totalMatch = 0, totalMismatch = 0, 
+	tGapStart = 0, tGapExt=0, qGapStart = 0, qGapExt = 0;
 
 AllocArray(histIns, maxInDel);
 AllocArray(histDel, maxInDel);
+AllocArray(histPerfect, maxInDel);
+AllocArray(histGapless, maxInDel);
+AllocArray(histT, maxInDel);
+AllocArray(histQ, maxInDel);
 for (fileIx = 0; fileIx < fileCount; ++fileIx)
     {
     char *fileName = files[fileIx];
     struct lineFile *lf = lineFileOpen(fileName, TRUE);
     while ((axt = axtRead(lf)) != NULL)
         {
+	totalT += axt->tEnd - axt->tStart;
 	addMatrix(matrix, axt->tSym, axt->qSym, axt->symCount);
 	addInsert(histIns, maxInDel, axt->tSym, axt->symCount);
 	addInsert(histDel, maxInDel, axt->qSym, axt->symCount);
+	addPerfect(histPerfect, maxInDel, axt->qSym, axt->tSym, axt->symCount);
 	axtFree(&axt);
 	}
     lineFileClose(&lf);
@@ -130,41 +171,55 @@ for (i=0; i<4; ++i)
 printf("\n");
 
 for (i=1; i<10; ++i)
-    printf("%2d  %6d %6d\n", i, histIns[i], histDel[i]);
+    printf("%2d  %6.4f%% %6.4f%% %6d %7d\n", i, 100.0*histIns[i]/totalT, 
+    	100.0*histDel[i]/totalT, histPerfect[i], histPerfect[i]*i);
 for (i=0; i<100; i += 10)
     {
-    int delSum = 0, insSum=0;
+    int delSum = 0, insSum=0, perfectSum = 0, perfectBaseSum = 0;
     for (j=0; j<10; ++j)
         {
-	insSum += histIns[i+j];
-	delSum += histDel[i+j];
+	int ix = i+j;
+	insSum += histIns[ix];
+	delSum += histDel[ix];
+	perfectSum += histPerfect[ix];
+	perfectBaseSum += histPerfect[ix] * ix;
 	}
-    printf("%2d to %2d:  %6d %6d\n", i, i+9, insSum, delSum);
+    printf("%2d to %2d:  %6.4f%% %6.4f%% %6d %7d\n", i, i+9, 
+    	100.0*insSum/totalT, 100.0*delSum/totalT, perfectSum, perfectBaseSum);
     }
 for (i=0; i<1000; i += 100)
     {
-    int delSum = 0, insSum=0;
+    int delSum = 0, insSum=0, perfectSum = 0, perfectBaseSum = 0;
     for (j=0; j<100; ++j)
         {
 	int ix = i+j;
 	int ins = histIns[ix];
 	int del = histDel[ix];
-	int both = ins + del;
+	both = ins + del;
 	insSum += ins;
 	delSum += del;
-	totalGapStart += both;
-	totalGapExt += both * (ix-1);
+	tGapStart += ins;
+	qGapStart += del;
+	tGapExt += ins*(ix-1);
+	qGapExt += del*(ix-1);
+	perfectSum += histPerfect[ix];
+	perfectBaseSum += histPerfect[ix] * ix;
 	}
-    printf("%3d to %3d:  %6d %6d\n", i, i+99, insSum, delSum);
+    printf("%3d to %3d:  %6.4f%% %6.4f%% %6d %7d\n", i, i+99, 
+    	100.0*insSum/totalT, 100.0*delSum/totalT, perfectSum, perfectBaseSum);
     }
-printf(">1000  %6d %6d\n", histIns[1000], histDel[1000]);
-totalGapStart += histIns[1000] + histDel[1000];
+printf(">1000  %6.4f%% %6.4f%% %6d %7d\n", 
+	100.0*histIns[1000]/totalT, 100.0*histDel[1000]/totalT, histPerfect[1000],
+	histPerfect[1000]*1000);
+both = histIns[1000] + histDel[1000];
 printf("\n");
-printf("%d matches, %d mismatches (%4.2f%%), %d gapStarts (%4.2f%%), %d gap extensions (%4.2f%%)\n", 
-    totalMatch, 
-    totalMismatch, 100.0 * totalMismatch/totalMatch, 
-    totalGapStart, 100.0 * totalGapStart/totalMatch,
-    totalGapExt, 100.0 * totalGapExt/totalMatch);
+printLabeledPercent("totalT:    ", totalT, totalT);
+printLabeledPercent("matches:   ", totalMatch, totalT);
+printLabeledPercent("mismatches:", totalMismatch, totalT);
+printLabeledPercent("tGapStart: ", tGapStart, totalT);
+printLabeledPercent("qGapStart: ", qGapStart, totalT);
+printLabeledPercent("tGapExt:   ", tGapExt, totalT);
+printLabeledPercent("qGapExt:   ", qGapExt, totalT);
 }
 
 int main(int argc, char *argv[])
