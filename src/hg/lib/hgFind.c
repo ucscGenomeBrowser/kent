@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.147 2004/07/19 19:45:40 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.148 2004/08/05 00:20:31 braney Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2119,7 +2119,7 @@ char *paddingStr = hgFindSpecSetting(hfs, "padding");
 int padding = isEmpty(paddingStr) ? 0 : atoi(paddingStr);
 boolean found = FALSE;
 char *description = NULL;
-char buf[512];
+char buf[2048];
 
 if (isNotEmpty(termPrefix) && startsWith(termPrefix, term))
     term += strlen(termPrefix);
