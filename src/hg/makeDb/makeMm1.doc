@@ -256,7 +256,40 @@ o - Load this into the database as so
 PRODUCING GENSCAN PREDICTIONS (done)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
-    (Fan - please fill this in)
+
+	First make sure you have appropriate set up, permissions, etc. and you have 
+     	tried using Parasol to submit and finished a set of jobs successfully.
+     	
+	Log into kk
+	     	cd ~/mm
+     		cd bed/genscan
+	Make 3 subdirectories for genscan to put their output files in
+		mkdir gtf pep subopt
+	Generate a list file, genome.list, of all the contigs
+		ls /scratch/hg/mm1/contigs/*.fa >genome.list	
+	Create a dummy file, single, containing just 1 single line of any text.	
+	Create template file, gsub, for gensub2.  For example (3 lines file):
+		#LOOP
+		/cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+		#ENDLOOP
+	Generate job list file, jobList, for Parasol
+		gensub2 genome.list single gsub jobList
+	First issue the following Parasol command:
+		para create jobList
+	Run the following command, which will try first 10 jobs from jobList
+		para try
+	Check if these 10 jobs run OK by
+		para check
+	If they have problems, debug and fix your program, template file, 
+	commands, etc. and try again.  If they are OK, then issue the following 
+	command, which will ask Parasol to start all the jobs (around 3000 jobs).
+		para push
+	Issue either one of the following two commands to check the 
+	status of the cluster and your jobs, until they are done.
+		parasol status
+		para check
+	If any job fails to complete, study the problem and ask Jim to help
+	if necessary.
 
 o - Convert these to chromosome level files as so:
      cd ~/mm
