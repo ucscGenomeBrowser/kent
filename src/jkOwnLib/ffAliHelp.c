@@ -6,7 +6,7 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.4 2004/06/03 21:14:35 kent Exp $";
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.5 2005/01/10 00:29:49 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list
@@ -164,18 +164,18 @@ int revScore = 0;
 
 if (orientation >= 0)
     {
-    if (a == 'g') ++score;
-    if (b == 't') ++score;
-    if (y == 'a') ++score;
-    if (z == 'g') ++score;
+    if (a == 'g' || a == 'G') ++score;
+    if (b == 't' || b == 'T') ++score;
+    if (y == 'a' || y == 'A') ++score;
+    if (z == 'g' || z == 'G') ++score;
     }
 
 if (orientation <= 0)
     {
-    if (a == 'c') ++revScore;
-    if (b == 't') ++revScore;
-    if (y == 'a') ++revScore;
-    if (z == 'c') ++revScore;
+    if (a == 'c' || a == 'C') ++revScore;
+    if (b == 't' || b == 'T') ++revScore;
+    if (y == 'a' || y == 'A') ++revScore;
+    if (z == 'c' || z == 'C') ++revScore;
     }
 
 return score > revScore ? score : revScore;
