@@ -11,8 +11,9 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "sample.h"
+#include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.69 2003/09/22 15:05:31 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.70 2003/09/24 15:55:52 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -293,6 +294,63 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
+void wigUi(struct trackDb *tdb)
+/* UI for the wiggle track */
+{
+char *typeLine = NULL;	/*	to clone the tdb->type string	*/
+char *words[8];		/*	chopping the typeLine	*/
+int wordCount = 0;	/*	number of words found in typeLine */
+char options[7][256];	/*	our option strings here	*/
+char *heightPer;	/*	string from cart	*/
+char *minY_str;	/*	string from cart	*/
+char *maxY_str;	/*	string from cart	*/
+double minYc;	/*	from cart */
+double maxYc;	/*	from cart */
+double minY;	/*	from the typeLine	*/
+double maxY;	/*	from the typeLine	*/
+int thisHeightPer = DEFAULT_HEIGHT_PER;	/*	pixels per item	*/
+
+minY = DEFAULT_MIN_Yv;
+maxY = DEFAULT_MAX_Yv;
+
+/*	Our min/max values are in the type field of the tdb */
+/*	We need to pick those out from there just to be safe	*/
+typeLine = cloneString(tdb->type);
+wordCount = chopLine(typeLine, words);
+/*	Possibly fetch values from the trackDb.ra file	*/
+if( wordCount > 1 )
+	minY = atof(words[1]);
+if( wordCount > 2 )
+	maxY = atof(words[2]);
+
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
+snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
+snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
+minY_str = cartOptionalString(cart, &options[4][0]);
+maxY_str = cartOptionalString(cart, &options[5][0]);
+
+heightPer = cartOptionalString(cart, &options[0][0]);
+if( heightPer ) thisHeightPer = min( atoi(heightPer), DEFAULT_HEIGHT_PER );
+if( thisHeightPer < MIN_HEIGHT_PER ) thisHeightPer = MIN_HEIGHT_PER;
+
+if( minY_str ) minYc = max( minY, atof(minY_str));
+else minYc = minY;
+if( maxY_str ) maxYc = min( maxY, atof(maxY_str));
+else maxYc = maxY;
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
+printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)", MIN_HEIGHT_PER, DEFAULT_HEIGHT_PER);
+
+printf("<p><b>Vertical Range</b>:&nbsp;&nbsp;\nmin:");
+cgiMakeDoubleVar(&options[4][0], minYc, 6 );
+printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
+cgiMakeDoubleVar(&options[5][0], maxYc, 6 );
+printf("&nbsp;(range:&nbsp;%.1f-%.1f)", minY, maxY);
+
+freeMem(typeLine);
+}
+
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
 /* put up UI for any standard wiggle track (a.k.a. sample track)*/
 {
@@ -477,6 +535,8 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
+else if (startsWith("wig", tdb->type))
+        wigUi(tdb);
 else if (sameString(track, "affyRatio"))
         affyUi(tdb);
 else if (sameString(track, "ancientR"))
