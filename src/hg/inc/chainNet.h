@@ -27,6 +27,10 @@ struct cnFill
 	/* Optional fields. */
     int chainId;   /* Chain id.  0 for a gap. */
     double score;  /* Score of associated chain. 0 if undefined. */
+    int qOver;     /* Overlap with parent in query if syntenic or inverted. */
+    int qFar;      /* How far away is parent in query if syntenic or inverted. */
+    int qDup;	   /* Number of bases that are duplicated. */
+    char *type;    /* top/syn/inv/nonSyn */
     int tN;	   /* Count of N's in target chromosome or -1 */
     int qN;	   /* Count of N's in query chromosome or -1 */
     int tR;	   /* Count of repeats in target chromosome or -1 */
@@ -37,19 +41,18 @@ struct cnFill
     int qOldR;	   /* Count of ancient repeats (pre-split) in query */
     int qTrf;	   /* Count of simple repeats, period 12 or less. */
     int tTrf;	   /* Count of simple repeats, period 12 or less. */
-    char *type;    /* One word description.  Not allocated here. */
     };
 
-void chromNetFree(struct chainNet **pNet);
+void chainNetFree(struct chainNet **pNet);
 /* Free up a chromosome net. */
 
-void chromNetFreeList(struct chainNet **pList);
+void chainNetFreeList(struct chainNet **pList);
 /* Free up a list of chainNet. */
 
-void chromNetWrite(struct chainNet *net, FILE *f);
+void chainNetWrite(struct chainNet *net, FILE *f);
 /* Write out chain net. */
 
-struct chainNet *chromNetRead(struct lineFile *lf);
+struct chainNet *chainNetRead(struct lineFile *lf);
 /* Read next net from file. Return NULL at end of file.*/
 
 

@@ -12,8 +12,9 @@ struct cnFill *cnFillNew()
 struct cnFill *fill;
 AllocVar(fill);
 fill->tN = fill->qN = fill->tR = fill->qR = 
-	fill->tNewR = fill->qNewR = fill->tOldR = fill->tNewR = 
-	fill->qTrf = fill->tTrf = -1;
+	fill->tNewR = fill->qNewR = fill->tOldR = fill->qOldR = 
+	fill->qTrf = fill->tTrf = 
+	fill->qOver = fill->qFar = fill->qDup = -1;
 return fill;
 }
 
@@ -44,7 +45,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void chromNetFree(struct chainNet **pNet)
+void chainNetFree(struct chainNet **pNet)
 /* Free up a chromosome net. */
 {
 struct chainNet *net = *pNet;
@@ -57,7 +58,7 @@ if (net != NULL)
     }
 }
 
-void chromNetFreeList(struct chainNet **pList)
+void chainNetFreeList(struct chainNet **pList)
 /* Free up a list of chainNet. */
 {
 struct chainNet *el, *next;
@@ -65,7 +66,7 @@ struct chainNet *el, *next;
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    chromNetFree(&el);
+    chainNetFree(&el);
     }
 *pList = NULL;
 }
@@ -145,6 +146,12 @@ for (;;)
 		    fill->tTrf = iVal;
 		else if (sameString(name, "qTrf"))
 		    fill->qTrf = iVal;
+		else if (sameString(name, "qOver"))
+		    fill->qOver = iVal;
+		else if (sameString(name, "qFar"))
+		    fill->qFar = iVal;
+		else if (sameString(name, "qDup"))
+		    fill->qDup = iVal;
 		}
 	    }
 	}
@@ -167,6 +174,14 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fprintf(f, " id %d", fill->chainId);
     if (fill->score > 0)
         fprintf(f, " score %1.0f", fill->score);
+    if (fill->qOver >= 0)
+        fprintf(f, " qOver %d", fill->qOver);
+    if (fill->qFar >= 0)
+        fprintf(f, " qFar %d", fill->qFar);
+    if (fill->qDup >= 0)
+        fprintf(f, " qDup %d", fill->qDup);
+    if (fill->type != NULL)
+        fprintf(f, " type %s", fill->type);
     if (fill->tN >= 0)
         fprintf(f, " tN %d", fill->tN);
     if (fill->qN >= 0)
@@ -187,22 +202,20 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fprintf(f, " tTrf %d", fill->tTrf);
     if (fill->qTrf >= 0)
         fprintf(f, " qTrf %d", fill->qTrf);
-    if (fill->type != NULL)
-        fprintf(f, " type %s", fill->type);
     fputc('\n', f);
     if (fill->children)
         cnFillWrite(fill->children, f, depth+1);
     }
 }
 
-void chromNetWrite(struct chainNet *net, FILE *f)
+void chainNetWrite(struct chainNet *net, FILE *f)
 /* Write out chain net. */
 {
 fprintf(f, "net %s %d\n", net->name, net->size);
 cnFillWrite(net->fillList, f, 1);
 }
 
-struct chainNet *chromNetRead(struct lineFile *lf)
+struct chainNet *chainNetRead(struct lineFile *lf)
 /* Read next net from file. Return NULL at end of file.*/
 {
 char *line, *words[3];
