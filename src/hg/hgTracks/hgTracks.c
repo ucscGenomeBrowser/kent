@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.5 2003/08/15 17:54:50 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.6 2003/08/15 20:38:13 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10274,7 +10274,7 @@ if (!hideControls)
  */
 	    hPrintf("UCSC Genome Browser on %s June 2002 Freeze %s target1", organism, freezeName); 
 	} else {
-	    hPrintf("UCSC Genome Browser on %s %s %s Freeze", database, organism, freezeName); 
+	    hPrintf("UCSC Genome Browser on %s %s Freeze", organism, freezeName); 
 	}
     }
     hPrintf("</B></FONT><BR>\n");
