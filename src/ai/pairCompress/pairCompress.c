@@ -37,6 +37,7 @@ struct compSym
     char *text;				/* Output text. */
     int size;				/* Size of text. */
     int useCount;			/* Number of times used. */
+    int indirectUseCount;		/* Number of times used by descendents. */
     struct compSym *mom, *dad;		/* Ancestors. */
     };
 
@@ -47,8 +48,6 @@ const struct compSym *a = *((struct compSym **)va);
 const struct compSym *b = *((struct compSym **)vb);
 return b->useCount - a->useCount;
 }
-
-
 
 void outSymString(FILE *f, char *s, int size)
 /* Write out symbol in ascii of given size. */
@@ -78,106 +77,6 @@ if (sym != NULL)
     {
     outSymString(f, sym->text, sym->size);
     }
-}
-
-struct nHashEl
-/* An element in a nHash list. */
-    {
-    struct nHashEl *next;
-    char *name;			/* Name (not zero terminated) */
-    int size;			/* Size of name. */
-    void *val;			/* Value. */
-    };
-
-struct nHash
-/* nHash - exactly the same as struct hash, but with nHashEl elements
- * instead of hashEl's. */
-    {
-    struct nHash *next;	/* Next in list. */
-    bits32 mask;	/* Mask hashCrc with this to get it to fit table. */
-    struct nHashEl **table;	/* Hash buckets. */
-    int powerOfTwoSize;		/* Size of table as a power of two. */
-    int size;			/* Size of table. */
-    struct lm *lm;	/* Local memory pool. */
-    int elCount;		/* Count of elements. */
-    };
-
-
-bits32 nHashFunc(char *string, int size)
-/* Returns integer value on string likely to be relatively unique . */
-{
-unsigned char *us = (unsigned char *)string;
-bits32 c;
-bits32 shiftAcc = 0;
-bits32 addAcc = 0;
-int i;
-
-for (i=0; i<size; ++i)
-    {
-    c = us[i];
-    shiftAcc <<= 2;
-    shiftAcc += c;
-    addAcc += c;
-    }
-return (shiftAcc + addAcc);
-}
-
-struct nHash *nHashNew(int powerOfTwoSize)
-/* Returns new hash table. */
-{
-assert(sizeof(struct hash) == sizeof(struct nHash));
-return (struct nHash *)hashNew(powerOfTwoSize);
-}
-
-struct nHashEl *nHashAdd(struct nHash *hash, char *string, int size,  void *val,
-	char **retSavedString)
-/* Add element to hash table */
-{
-struct lm *lm = hash->lm;
-struct nHashEl *el, **pList;
-lmAllocVar(lm, el);
-el->name = lmCloneMem(lm, string, size);
-el->size = size;
-el->val = val;
-pList = hash->table + (nHashFunc(string, size) & hash->mask);
-hash->elCount += 1;
-slAddHead(pList, el);
-if (retSavedString != NULL)
-    *retSavedString = el->name;
-return el;
-}
-
-void *nHashFindVal(struct nHash *hash, char *string, int size)
-/* Looks for name in hash table. Returns associated element,
- * if found, or NULL if not. */
-{
-struct nHashEl *el;
-for (el = hash->table[nHashFunc(string,size)&hash->mask]; el != NULL; el = el->next)
-    {
-    if (el->size == size && memcmp(string, el->name, size) == 0)
-        return el->val;
-    }
-return NULL;
-}
-
-struct nHash *newCompSymHash(struct compSym **pList)
-/* Return new nHash initialized with all one letter symbols. */
-{
-struct nHash *hash = nHashNew(16);
-struct lm *lm = hash->lm;
-int i;
-for (i=0; i<256; ++i)
-    {
-    char text[0];
-    struct compSym *sym;
-    lmAllocVar(lm, sym);
-    sym->id = i;
-    text[0] = i;
-    sym->size = 1;
-    nHashAdd(hash, text, 1, sym, &sym->text);
-    slAddHead(pList, sym);
-    }
-return hash;
 }
 
 struct compSym *rLongest(int level, struct compSym *initialSym, char *string, int size)
@@ -217,7 +116,6 @@ struct compresser
     int symCount;			/* Number of symbols we've used. */
     };
 
-
 struct compresser *compresserNew(struct compSym **pSymList)
 /* Create and return a new compresser. */
 {
@@ -240,11 +138,26 @@ for (i=0; i<256; ++i)
 return comp;
 }
 
+void rMarkIndirectUse(struct compSym *sym)
+/* Mark indirect usage */
+{
+if (sym != NULL)
+    {
+    sym->indirectUseCount += 1;
+    rMarkIndirectUse(sym->mom);
+    rMarkIndirectUse(sym->dad);
+    }
+}
+
 struct compSym *longestMatching(struct compresser *comp, 
-	char *string, int size)
+	unsigned char *string, int size)
 /* Return longest element in hash that is same as start of string. */
 {
-return rLongest(0, comp->letters[string[0]], string+1, size-1);
+struct compSym *sym;
+sym = rLongest(0, comp->letters[string[0]], string+1, size-1);
+rMarkIndirectUse(sym);
+sym->useCount += 1;
+return sym;
 }
 
 static int maxSym = 0x200;
@@ -311,8 +224,6 @@ outFinalBits();
 errAbort("All for now");
 }
 
-
-
 void output(FILE *f, struct compSym *cur, struct compSym *baby)
 /* Output to compression stream. */
 {
@@ -337,8 +248,7 @@ FILE *f =  mustOpen(streamOut, "w");
 
 while (inPos < inSize)
     {
-    cur = longestMatching(comp, inText+inPos, inSize - inPos);
-    cur->useCount += 1;
+    cur = longestMatching(comp, (unsigned char *)inText+inPos, inSize - inPos);
     inPos += cur->size;
     if (prev != NULL)
         {
@@ -367,7 +277,7 @@ for (sym = symList; sym != NULL; sym = sym->next)
     {
     if (sym->useCount == 0)
         break;
-    fprintf(f, "%d\t", sym->useCount);
+    fprintf(f, "%d\t%d\t%d\t", sym->useCount, sym->indirectUseCount, sym->size);
     outSym(f, sym);
     fprintf(f, "\n");
     }
@@ -377,6 +287,7 @@ if (binaryFile)
     outFinalBits();
     carefulClose(&binaryFile);
     }
+uglyf("Total symCount = %d\n", comp->symCount);
 }
 
 void readAndCompress(char *inFile, char *outStream, char *outSym)
