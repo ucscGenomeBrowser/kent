@@ -247,9 +247,15 @@ cgiMakeDropList(var, nci60Options, ArraySize(nci60Options),
 
 static char *rosettaOptions[] = {
     "All Experiments",
-    "Common Pool and Other",
-    "Common Pool",
+    "Common Reference and Other",
+    "Common Reference",
     "Other Exps"
+};
+
+static char *rosettaExonOptions[] = {
+    "Confirmed Only",
+    "Predicted Only",
+    "All",
 };
 
 enum rosettaOptEnum rosettaStringToEnum(char *string)
@@ -272,6 +278,27 @@ void rosettaDropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, rosettaOptions, ArraySize(rosettaOptions), 
 	curVal);
+}
+
+enum rosettaExonOptEnum rosettaStringToExonEnum(char *string)
+/* Convert from string to enum representation of exon types. */
+{
+int x = stringIx(string, rosettaExonOptions);
+if (x < 0)
+   errAbort("hui::rosettaStringToExonEnum() - Unknown option %s", string);
+return x;
+}
+
+char *rosettaExonEnumToString(enum rosettaExonOptEnum x) 
+/* Convert from enum to string representation of exon types. */
+{
+return rosettaExonOptions[x];
+}
+
+void rosettaExonDropDown(char *var, char *curVal)
+/* Make drop down of exon type options. */
+{
+cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
 }
 
 

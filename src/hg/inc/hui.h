@@ -161,6 +161,12 @@ enum rosettaOptEnum {
     rosettaOther=3
 };
 
+enum rosettaExonOptEnum {
+    rosettaConfEx,
+    rosettaPredEx,
+    rosettaAllEx
+};
+
 enum rosettaOptEnum rosettaStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
@@ -169,6 +175,16 @@ char *rosettaEnumToString(enum rosettaOptEnum x);
 
 void rosettaDropDown(char *var, char *curVal);
 /* Make drop down of options. */
+
+enum rosettaExonOptEnum rosettaStringToExonEnum(char *string);
+/* Convert from string to enum representation of exon types. */
+
+char *rosettaExonEnumToString(enum rosettaExonOptEnum x);
+/* Convert from enum to string representation of exon types. */
+
+void rosettaExonDropDown(char *var, char *curVal);
+/* Make drop down of exon type options. */
+
 
 /****** Some stuff for mRNA and EST related controls *******/
 
