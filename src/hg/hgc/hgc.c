@@ -125,7 +125,7 @@
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.554 2004/01/31 01:16:06 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.555 2004/01/31 01:18:36 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1946,7 +1946,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Factor:</B> %s<BR>\n", tfbs.factor);
     printf("<B>Species:</B> %s<BR>\n", tfbs.species);
     printf("<B>SwissProt ID:</B> %s<BR>\n", tfbs.id);
-    printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser ID:</B> </A>",  tfbs.id);
     }
 printTrackHtml(tdb);
 freez(&dupe);
