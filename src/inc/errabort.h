@@ -75,4 +75,7 @@ void pushWarnHandler(WarnHandler handler);
 void popWarnHandler();
 /* Revert to old warn handler. */
 
+void pushWarnAbort();
+/* Push handler that will abort on warnings. */
+
 #endif /* ERRABORT_H */

@@ -15,7 +15,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.12 2004/01/11 07:49:18 markd Exp $";
+static char const rcsid[] = "$Id: errabort.c,v 1.13 2004/11/10 00:10:50 markd Exp $";
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
@@ -150,4 +150,17 @@ void pushDebugAbort()
 /* Push abort handler that will invoke debugger. */
 {
 pushAbortHandler(debugAbort);
+}
+
+static void warnAbortHandler(char *format, va_list args)
+/* warn handler that also aborts. */
+{
+defaultVaWarn(format, args);
+noWarnAbort();
+}
+
+void pushWarnAbort()
+/* Push handler that will abort on warnings. */
+{
+pushWarnHandler(warnAbortHandler);
 }
