@@ -3521,3 +3521,22 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     
     # Clean up
     rm -r psl tmp err affyUcla.bed affyUcla.expRecords bed.tab *.debug batch.bak contig.psl raw.psl
+
+# GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
+    # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)
+    cd /cluster/store4/gs.17/build34/
+    # Create a list of accessions that come from RAGE libraries and need to
+    # be excluded. (added by Chuck Wed Nov 27 13:09:07 PST 2002)
+    ~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg16 \
+      rage.libs
+    mkdir -p bed/rnaCluster/chrom
+    # Exclude accesions in the RAGE file
+    foreach f (?{,?}/chr*.fa)
+      set c = $f:t:r
+      set out = bed/rnaCluster/chrom/$c.bed
+      echo clusterRna -mrnaExclude=hg16.rage.libs hg16 /dev/null $out -chrom=$c
+      clusterRna -mrnaExclude=hg16.rage.libs hg16 /dev/null $out -chrom=$c
+    end
+
+    cd bed/rnaCluster
+    hgLoadBed hg16 rnaCluster chrom/*.bed > /dev/null
