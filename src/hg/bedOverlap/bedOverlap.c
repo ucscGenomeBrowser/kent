@@ -72,7 +72,7 @@ hSetDb(db);
                             {
                             biggest  = bed->chromEnd - bed->chromStart;
                             bestMatch = cloneBed(bed);
-                            assert(bestMatch->strand[0] == '+' || bestMatch->strand[0] == '-');
+                            assert(bestMatch->strand[0] == '+' || bestMatch->strand[0] == '-' || bestMatch->strand[0] == '0');
                             }
                     }
                     if (bestMatch != NULL)
