@@ -785,3 +785,11 @@ searchMethod exact
 searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
+
+track indelible
+shortLabel Indelible Inserts
+longLabel Insertions into the human genome found by indelible
+priority 11
+group X
+visibility dense
+type bed 3 +
