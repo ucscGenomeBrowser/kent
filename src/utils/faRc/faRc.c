@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faRc.c,v 1.5 2004/12/07 09:52:01 jill Exp $";
+static char const rcsid[] = "$Id: faRc.c,v 1.6 2004/12/10 01:28:04 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,6 +17,8 @@ void usage()
 		   "In.fa and out.fa may be the same file.\n"
 		   "options:\n"
 		   "   -keepName - keep name identical (don't prepend RC)\n"
+		   "   -keepCase - works well for ACGTUN in either case. bizarre for other letters.\n"
+		   "               without it bases are turned to lower, all else to n's\n"
 		   "   -justReverse - prepends R unless asked to keep name\n"
 		   "   -justComplement - prepends C unless asked to keep name\n"
 		   "                     (cannot appear together with -justReverse)\n"
@@ -31,7 +33,10 @@ void faRc(char *in, char *out, boolean revOnly, boolean compOnly)
   char buf[512];
   char *prefix = (cgiBoolean("keepName") ? "" : (revOnly ? "R_" : (compOnly ? "C_" : "RC_")));
 
-  seqList = faReadAllDna(in);
+  if (cgiBoolean("keepCase"))
+	seqList = faReadAllMixed(in);
+  else
+	seqList = faReadAllDna(in);
   f = mustOpen(out, "w");
   for (seq = seqList; seq != NULL; seq = seq->next)
     {
