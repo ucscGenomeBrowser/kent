@@ -11,7 +11,7 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.17 2003/06/27 06:01:19 kate Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.18 2003/07/29 17:55:46 braney Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -23,7 +23,7 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf \n"
- ".gdup .axt or .bed files to parent coordinate system. \n"
+ ".tab .gdup .axt or .bed files to parent coordinate system. \n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
  "The optional -type parameter tells what type of files to lift\n"
@@ -819,6 +819,12 @@ void liftGdup(char *destFile, struct hash *liftHash, int sourceCount, char *sour
 liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, TRUE, 6, 7, 8, 1, -1);
 }
 
+void liftBlast(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+/* Lift up coordinates of a .gdup. */
+{
+liftTabbed(destFile, liftHash, sourceCount, sources, 1, 8, 9, FALSE, 0, 0, 0, 1, -1);
+}
+
 
 char *contigInDir(char *name, char dirBuf[256])
 /* Figure out which contig we're in by the file name. It should be the directory
@@ -952,6 +958,12 @@ else if (endsWith(destType, ".bed"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
+    }
+else if (endsWith(destType, ".tab"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, TRUE);
+    liftBlast(destFile, liftHash, sourceCount, sources);
     }
 else if (strstr(destType, "gold"))
     {
