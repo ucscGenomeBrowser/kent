@@ -98,6 +98,7 @@
 #include "axtInfo.h"
 #include "jaxQTL.h"
 #include "jaxQTL3.h"
+#include "wgRna.h"
 #include "gbProtAnn.h"
 #include "hgSeq.h"
 #include "chain.h"
@@ -153,7 +154,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.797 2004/12/07 18:16:44 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.798 2004/12/13 16:25:41 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -642,6 +643,55 @@ if (url != NULL && url[0] != 0)
     outs[0] = eItem;
     eUrl = subMulti(url, ArraySize(ins), ins, outs);
     printf("<B>%s </B>", trackDbSettingOrDefault(tdb, "urlLabel", "Outside Link:"));
+    printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
+    
+    if (sameWord(tdb->tableName, "npredGene"))
+    	{
+   	printf("%s (%s)</A><BR>\n", itemName, "NCBI MapView");
+	}
+    else
+    	{
+    	printf("%s</A><BR>\n", uUrl->string);
+	}
+    freeMem(eItem);
+    freeDyString(&uUrl);
+    freeDyString(&eUrl);
+    }
+}
+
+void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, 
+			     char *urlLabel, char *url, boolean encode)
+/* Print custom URL with specific URL label. */
+{
+if (url != NULL && url[0] != 0)
+    {
+    struct dyString *uUrl = NULL;
+    struct dyString *eUrl = NULL;
+    char startString[64], endString[64];
+    char *ins[7], *outs[7];
+    char *eItem = (encode ? cgiEncode(itemName) : cloneString(itemName));
+
+    sprintf(startString, "%d", winStart);
+    sprintf(endString, "%d", winEnd);
+    ins[0] = "$$";
+    outs[0] = itemName;
+    ins[1] = "$T";
+    outs[1] = tdb->tableName;
+    ins[2] = "$S";
+    outs[2] = seqName;
+    ins[3] = "$[";
+    outs[3] = startString;
+    ins[4] = "$]";
+    outs[4] = endString;
+    ins[5] = "$s";
+    outs[5] = skipChr(seqName);
+    ins[6] = "$D";
+    outs[6] = database;
+    uUrl = subMulti(url, ArraySize(ins), ins, outs);
+    outs[0] = eItem;
+    eUrl = subMulti(url, ArraySize(ins), ins, outs);
+    
+    printf("<B>%s </B>", urlLabel);
     printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
     
     if (sameWord(tdb->tableName, "npredGene"))
@@ -11413,6 +11463,58 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doWgRna(struct trackDb *tdb, char *item)
+/* Handle click in wgRna track. */
+{
+struct wgRna *wgRna;
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = hAllocConn();
+int bedSize;
+
+genericHeader(tdb, item);
+bedSize = 8;
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s'", table, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    wgRna = wgRnaLoad(row);
+
+    /* disply appropriate RNA type and URL */
+    if (sameWord(wgRna->type, "HAcaBox"))
+    	{
+	printCustomUrlWithLabel(tdb, item, 
+			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
+			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
+    	printf("<B>RNA Type:</B> H/ACA Box snoRNA\n");
+	}
+    if (sameWord(wgRna->type, "CDBox"))
+    	{
+	printCustomUrlWithLabel(tdb, item, 
+			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
+			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
+    	printf("<B>RNA Type:</B> CD Box snoRNA\n");
+	}
+    if (sameWord(wgRna->type, "miRna"))
+    	{
+	printCustomUrlWithLabel(tdb, item, 
+			"The miRNA Registry: ", 
+			"http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$", TRUE);
+    	printf("<B>RNA Type:</B> microRNA\n");
+	}
+    printf("<BR>");
+    bed = bedLoadN(row+hasBin, bedSize);
+    bedPrintPos(bed, bedSize);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+}
+
 void doJaxQTL3(struct trackDb *tdb, char *item)
 /* Put up info on Quantitative Trait Locus from Jackson Labs. */
 {
@@ -15370,6 +15472,10 @@ else if (sameWord(track, "jaxQTL"))
 else if (sameWord(track, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
+    }
+else if (sameWord(track, "wgRna"))
+    {
+    doWgRna(tdb, item);
     }
 else if (sameWord(track, "gbProtAnn"))
     {
