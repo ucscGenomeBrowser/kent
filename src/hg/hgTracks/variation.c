@@ -3,6 +3,8 @@
 
 #include "variation.h"
 
+static char const rcsid[] = "$Id: variation.c,v 1.19 2005/01/31 21:31:22 kate Exp $";
+
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
 /* Filter out items from track->itemList. */
