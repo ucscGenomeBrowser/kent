@@ -18,6 +18,7 @@
 #include "nib.h"
 #include "web.h"
 #include "dbDb.h"
+#include "kxTok.h"
 
 /* Variables used by getFeatDna code */
 char *database = NULL;		/* Which database? */
@@ -46,7 +47,7 @@ struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 char *assembly = NULL;
 
-webStart(cart, "Genome Table Browser");
+webStart(cart, "Table Browser");
 
 puts(
      "<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0>\n"
@@ -243,7 +244,7 @@ if ((pos = hgp->singlePos) != NULL)
     }
 else
     {
-    webStart(cart,  "Genome Table Browser");
+    webStart(cart,  "Table Browser");
     hgPositionsHtml(hgp, stdout, FALSE, NULL);
     hgPositionsFree(&hgp);
     webEnd();
@@ -433,7 +434,7 @@ puts("</TD></TR>");
 puts("<TR><TD>");
 puts("Choose an action: ");
 puts("</TD><TD>");
-puts("<INPUT TYPE=\"submit\" VALUE=\"Choose fields\" NAME=\"phase\">");
+puts("<INPUT TYPE=\"submit\" VALUE=\"Filter fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get all fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get DNA\" NAME=\"phase\">");
 puts("</TD></TR>");
@@ -458,7 +459,7 @@ puts(
 	"<P>" "\n"
 	/*"The non-positional tables display all entries associated with the selected assembly -- there is no way to restrict them to chromosomes.  However there is a provision in the text box to add a single word restriction.  Thus, to see which species of macaque monkeys have contributed sequence data, selected the organism table, view all fields, and restrict the text box to the genus Macaca." "\n"
 	"<P>" "\n"*/
-	"For either type of table, a user not familiar with what the table offers should select \"Choose fields\".   Some tables offer many columns of data of which only a few might be relevent. The fewer fields selected, the simpler the next stage of data return.  If all the fields are wanted, shortcut this step by selecting \"Get all fields\".  If a chromosome and range are in the text box, \"Get DNA\" will retrieve genomic sequences in fasta format without any table attributes other than chromosome, freeze date, and start-stop genomic coordinates." "\n"
+	"For either type of table, a user not familiar with what the table offers should select \"Filter fields\".   Some tables offer many columns of data of which only a few might be relevent. The fewer fields selected, the simpler the next stage of data return.  If all the fields are wanted, shortcut this step by selecting \"Get all fields\".  If a chromosome and range are in the text box, \"Get DNA\" will retrieve genomic sequences in fasta format without any table attributes other than chromosome, freeze date, and start-stop genomic coordinates." "\n"
 );
 }
 
@@ -591,6 +592,33 @@ do
 while((row = sqlNextRow(sr)) != NULL);
 }
 
+/* Droplist menus for filtering on fields: */
+char *ddOpMenu[] =
+    {
+	"does",
+	"doesn't"
+    };
+int ddOpMenuSize = 2;
+
+char *logOpMenu[] =
+    {
+	"AND",
+	"OR"
+    };
+int logOpMenuSize = 2;
+
+char *cmpOpMenu[] =
+    {
+	"ignored",
+	"in range",
+	"<",
+	"<=",
+	"=",
+	"!=",
+	">=",
+	">"
+    };
+int cmpOpMenuSize = 8;
 
 void getChoosenFields()
 /* output a form that allows the user to choose what fields they want to download */
@@ -615,6 +643,10 @@ char *chromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
+char *oldVal;
+char *newVal;
+boolean checkAll;
+boolean clearAll;
 
 boolean allGenome = FALSE;	/* this flag is true if we are fetching the whole genome
 							   not just chrom by chrom */
@@ -679,7 +711,7 @@ else
 	cgiMakeHiddenVar("position", position);
 	}
 cgiMakeHiddenVar("db", database);
-cgiMakeHiddenVar("phase", "Choose fields");
+cgiMakeHiddenVar("phase", "Filter fields");
 
 /* print the name of the selected table */
 printf("<H3>Track: %s</H3>\n", getTableVar());
@@ -689,25 +721,294 @@ snprintf(query, 256, "DESCRIBE %s", table);
 sr = sqlGetResult(conn, query);
 
 printf("<INPUT TYPE=\"hidden\" NAME=\"table\" VALUE=\"%s\">\n", getTableVar());
-puts("<TABLE><TR><TD>");
+puts("<TABLE><TR><TD>\n");
+cgiMakeButton("submit", "Check All");
+cgiMakeButton("submit", "Clear All");
+puts("</TD></TR><TR><TD><TABLE>\n");
+checkAll = existsAndEqual("submit", "Check All") ? TRUE : FALSE;
+clearAll = existsAndEqual("submit", "Clear All") ? TRUE : FALSE;
 while((row = sqlNextRow(sr)) != NULL)
 	{
 	char name[126];
+	puts("<TR><TD> ");
 	snprintf(name, 126, "field_%s", row[0]);
-	if(existsAndEqual(name, "on"))
-		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s<BR>\n", name, row[0]);
+	if (checkAll || (existsAndEqual(name, "on") && !clearAll))
+		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s\n", name, row[0]);
 	else
-		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s<BR>\n", name, row[0]);
+		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s\n", name, row[0]);
+	/* Provide a filter interface */
+	puts("</TD><TD>");
+	if (! strstr(row[1], "blob"))
+  	    {
+	    if (strstr(row[1], "char"))
+	        {
+			snprintf(name, sizeof(name), "dd_%s", row[0]);
+			oldVal = cgiOptionalString(name);
+			newVal = ((oldVal != NULL) && !clearAll) ? oldVal :
+			  ddOpMenu[0];
+			cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, newVal);
+			puts(" match </TD><TD>\n");
+			newVal = "*";
+	        }
+	    else
+	        {
+			puts(" is \n");
+			snprintf(name, sizeof(name), "cmp_%s", row[0]);
+			oldVal = cgiOptionalString(name);
+			newVal = ((oldVal != NULL) && !clearAll) ? oldVal :
+			  cmpOpMenu[0];
+			cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, newVal);
+			puts("</TD><TD>\n");
+			newVal = "";
+	        }
+	    snprintf(name, sizeof(name), "pat_%s", row[0]);
+	    oldVal = cgiOptionalString(name);
+	    newVal = ((oldVal != NULL) && !clearAll) ? oldVal : newVal;
+	    cgiMakeTextVar(name, newVal, 20);
+	    snprintf(name, sizeof(name), "log_%s", row[0]);
+	    oldVal = cgiOptionalString(name);
+	    newVal = ((oldVal != NULL) && !clearAll) ? oldVal :
+		  logOpMenu[0];
+	    cgiMakeDropList(name, logOpMenu, logOpMenuSize, newVal);
+	    }
+	else
+	    puts("</TD><TD>\n");
+	puts("</TD></TR>\n");
 	}
-
+puts("</TABLE>\n");
 	
 puts("<INPUT TYPE=\"submit\" NAME=\"phase\" VALUE=\"Get these fields\">");
+
+puts(
+"<P>\n"
+"By default, all lines in the specified position range will be returned. \n"
+"To restrict the number of lines that are returned, you may enter \n"
+"patterns with wildcards for each text field, and/or enter range \n"
+"restrictions for numeric fields. \n"
+"</P><P>\n"
+"Wildcards are \"*\" (to match \n"
+"0 or more characters) and \"?\" (to match a single character).  \n"
+"Each word in a text field box will be treated as a pattern to match \n"
+"against that field (implicit OR).  If any pattern matches, that field \n"
+"matches. \n"
+"</P><P>\n"
+"For numeric fields, enter a single number for operators such as &lt;, \n"
+"&gt;, != etc.  Enter two numbers (start and end) separated by a \"-\" or \n"
+"\",\" for \"in range\". \n"
+"</P><P>\n"
+"Different fields' match criteria can be combined by selecting AND/OR \n"
+"from the boxes. OR's have precedence: if <em>any</em> field marked OR \n"
+"matches, then the line matches.  Otherwise, if <em>all</em> fields marked \n"
+"AND match, the line matches. \n"
+"</P>\n"
+);
 
 puts("</TD></TR></TABLE>");
 puts("</FORM>");
 sqlDisconnect(&conn);
 
 webEnd();
+}
+
+
+void parseNum(char *fieldName, struct kxTok **tok, struct dyString *q)
+{
+if (*tok == NULL)
+    webAbort("Error", "Parse error when reading number for field %s.",
+			 fieldName);
+
+if ((*tok)->type == kxtString)
+    {
+	if (! isdigit((*tok)->string[0]))
+	    webAbort("Error", "Parse error when reading number for field %s.",
+				 fieldName);
+	dyStringAppend(q, (*tok)->string);
+	*tok = (*tok)->next;
+	if (*tok != NULL && (*tok)->type == kxtDot &&
+		(*tok)->next != NULL && (*tok)->next->type == kxtString)
+	    {
+		dyStringAppend(q, (*tok)->string);
+		*tok = (*tok)->next;
+		if (! isdigit((*tok)->string[0]))
+		    webAbort("Error", "Parse error when reading number for field %s.",
+					 fieldName);
+		dyStringAppend(q, (*tok)->string);
+		*tok = (*tok)->next;
+		}
+	}
+else
+    {
+	webAbort("Error", "Parse error when reading number for field %s: Incorrect token type %d for token \"%s\"",
+			 fieldName, (*tok)->type, (*tok)->string);
+	}
+}
+
+void constrainNumber(char *fieldName, char *op, char *pat, char *log,
+					 struct dyString *clause)
+{
+struct kxTok *tokList, *tokPtr;
+
+if (fieldName == NULL || op == NULL || pat == NULL || log == NULL)
+	webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* tokenize (don't expect wildcards) */
+tokPtr = tokList = kxTokenize(pat, FALSE);
+
+if (clause->stringSize > 0)
+	dyStringPrintf(clause, " %s ", log);
+else
+	dyStringAppend(clause, "(");
+dyStringPrintf(clause, "(%s %s ", fieldName, op);
+parseNum(fieldName, &tokPtr, clause);
+dyStringAppend(clause, ")");
+
+slFreeList(&tokList);
+}
+
+void constrainRange(char *fieldName, char *pat, char *log,
+					struct dyString *clause)
+{
+struct kxTok *tokList, *tokPtr;
+
+if (fieldName == NULL || pat == NULL || log == NULL)
+	webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* tokenize (don't expect wildcards) */
+tokPtr = tokList = kxTokenize(pat, FALSE);
+
+if (clause->stringSize > 0)
+    dyStringPrintf(clause, " %s ", log);
+else
+	dyStringAppend(clause, "(");
+dyStringPrintf(clause, "((%s >= ", fieldName);
+parseNum(fieldName, &tokPtr, clause);
+dyStringPrintf(clause, ") && (%s <= ", fieldName);
+while (tokPtr != NULL && (tokPtr->type == kxtSub ||
+						  tokPtr->type == kxtPunct))
+tokPtr = tokPtr->next;
+parseNum(fieldName, &tokPtr, clause);
+dyStringAppend(clause, "))");
+
+slFreeList(&tokList);
+}
+
+void constrainPattern(char *fieldName, char *dd, char *pat, char *log,
+					  struct dyString *clause)
+{
+struct kxTok *tokList, *tokPtr;
+boolean needOr = FALSE;
+char *cmp, *or, *ptr;
+
+if (fieldName == NULL || dd == NULL || pat == NULL || log == NULL)
+	webAbort("Error", "CGI var error: not all required vars were defined for field %s.", fieldName);
+
+/* tokenize (do allow wildcards) */
+tokList = kxTokenize(pat, TRUE);
+
+/* The subterms are joined by OR if dd="does", AND if dd="doesn't" */
+or  = sameString(dd, "does") ? " OR " : " AND ";
+cmp = sameString(dd, "does") ? "LIKE"   : "NOT LIKE";
+
+if (clause->stringSize > 0)
+    dyStringPrintf(clause, " %s ", log);
+else
+	dyStringAppend(clause, "(");
+dyStringAppend(clause, "(");
+for (tokPtr = tokList;  tokPtr != NULL;  tokPtr = tokPtr->next)
+    {
+	if (tokPtr->type == kxtWildString || tokPtr->type == kxtString ||
+		/* Allow these types for strand matches too: */
+		tokPtr->type == kxtSub || tokPtr->type == kxtAdd)
+	    {
+		if (needOr)
+			dyStringAppend(clause, or);
+		/* Replace normal wildcard characters with SQL: */
+		while ((ptr = strchr(tokPtr->string, '?')) != NULL)
+			*ptr = '_';
+		while ((ptr = strchr(tokPtr->string, '*')) != NULL)
+			*ptr = '%';
+		dyStringPrintf(clause, "(%s %s \"%s\")",
+					   fieldName, cmp, tokPtr->string);
+		needOr = TRUE;
+		}
+	else if (tokPtr->type == kxtEnd)
+	    break;
+	else
+	    {
+		webAbort("Error", "Match pattern parse error for field %s: bad token type (%d) for this word: \"%s\".",
+				 fieldName, tokPtr->type, tokPtr->string);
+		}
+	}
+dyStringAppend(clause, ")");
+
+slFreeList(&tokList);
+}
+
+char *constrainFields()
+/* If the user specified constraints, append SQL conditions (suitable
+ * for a WHERE clause) to q. */
+{
+struct cgiVar *current;
+struct dyString *orClause = newDyString(512);
+struct dyString *andClause = newDyString(512);
+struct dyString *clause;
+char *fieldName;
+char *dd, *cmp, *pat;
+char varName[128];
+char *ret;
+
+/* Lump everything with a logical operator of "OR" into an OR clause 
+ * that will take precedence over the AND clause.... */
+dyStringClear(orClause);
+dyStringClear(andClause);
+for (current = cgiVarList();  current != NULL;  current = current->next)
+    {
+	/* Look for logical operators (AND/OR) associated with each field. */
+	if (startsWith("log_", current->name))
+	    {	
+		fieldName = current->name + strlen("log_");
+		if (! allLetters(fieldName))
+		    webAbort("Error", "Malformatted field name.");
+		snprintf(varName, sizeof(varName), "dd_%s", fieldName);
+		dd = cgiOptionalString(varName);
+		snprintf(varName, sizeof(varName), "cmp_%s", fieldName);
+		cmp = cgiOptionalString(varName);
+		snprintf(varName, sizeof(varName), "pat_%s", fieldName);
+		pat = cgiOptionalString(varName);
+		/* If it's a null constraint, skip it. */
+		if ( (dd != NULL &&
+			  (pat == NULL || pat[0] == 0 ||
+			   sameString(trimSpaces(pat), "*"))) ||
+			 (cmp != NULL && sameString(cmp, "ignored")) )
+  		    continue;
+		/* Otherwise, expect it to be a well-formed constraint and tack 
+		 * it on to the appropriate clause. */
+		clause = sameString(current->val, "OR") ? orClause : andClause;
+		if (cmp != NULL && sameString(cmp, "in range"))
+		    constrainRange(fieldName, pat, current->val, clause);
+		else if (cmp != NULL)
+		    constrainNumber(fieldName, cmp, pat, current->val, clause);
+		else
+		    constrainPattern(fieldName, dd, pat, current->val, clause);
+		}
+	}
+ if (andClause->stringSize > 0)
+     dyStringAppend(andClause, ")");
+ if (orClause->stringSize > 0 && andClause->stringSize > 0)
+     dyStringAppend(orClause, " OR ");
+ if (orClause->stringSize > 0)
+    {
+	dyStringAppend(orClause, andClause->string);
+	dyStringAppend(orClause, ")");
+    }
+ else
+    {
+	dyStringAppend(orClause, andClause->string);
+	}
+ret = cloneString(orClause->string);
+freeDyString(&orClause);
+freeDyString(&andClause);
+return ret;
 }
 
 
@@ -732,6 +1033,7 @@ char *choosenChromName;        /* Name of chromosome sequence . */
 int winStart;           /* Start of window in sequence. */
 int winEnd;         /* End of window in sequence. */
 char* position;
+char *constraints = NULL;
 
 /* if the position information is not given, get it */
 position = cgiOptionalString("position");
@@ -808,6 +1110,8 @@ while(current != 0)
 
 sprintf(query, "%s FROM %s", query, table);
 
+constraints = constrainFields();
+
 /* get the name of the start and end fields */
 if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 	{
@@ -818,8 +1122,16 @@ if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
         else
             sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
                             query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+		/* Add constraints (if any) that the user specified. */
+		if (constraints != NULL && constraints[0] != 0)
+			sprintf(query, "%s AND %s", query, constraints);
 	}
-	
+else
+    {
+		/* Add constraints (if any) that the user specified. */
+		if (constraints != NULL && constraints[0] != 0)
+			sprintf(query, "%s WHERE %s", query, constraints);
+    }	
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);
 numberColumns = sqlCountColumns(sr);
@@ -830,7 +1142,7 @@ if(row == 0)
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
-//puts(query);
+// printf("# query: %s\n", query);
 /* print the field names */
 printf("#");
 while((field = sqlFieldName(sr)) != 0)
@@ -855,7 +1167,7 @@ void getGenomeWideNonSplit()
 /* output the info. for a non-split table (i.e. not chrN_* tables) */
 {
 struct cgiVar* current = cgiVarList();
-char query[256];
+char query[4096];
 int i;
 int numberColumns;
 struct sqlConnection *conn;
@@ -863,6 +1175,7 @@ struct sqlResult *sr;
 char **row;
 char* field;
 char* database;
+char *constraints;
 
 char* table = getTableVar();
 
@@ -918,6 +1231,11 @@ while(current != 0)
 
 /* build the rest of the query */
 sprintf(query, "%s FROM %s", query, table);
+
+/* Add constraints (if any) that the user specified. */
+constraints = constrainFields();
+if (constraints != NULL && constraints[0] != 0)
+	sprintf(query, "%s WHERE %s", query, constraints);
 
 conn = hAllocConn();
 //puts(query);
@@ -996,7 +1314,7 @@ void getGenomeWideSplit()
 {
 struct cgiVar* current;
 char fields[256] = "";	/* the fields part of the query */
-char query[256];
+char query[4096];
 int i;
 int c;
 int numberColumns;
@@ -1005,6 +1323,7 @@ struct sqlResult *sr;
 char **row;
 char* field;
 char* database;
+char *constraints;
 
 char* table = getTableVar();
 char parsedTableName[256];
@@ -1064,50 +1383,76 @@ table = strstr(table, "_");
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
+constraints = constrainFields();
+
 snprintf(parsedTableName, 256, "chr%d%s", 1, table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+   snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, TRUE);
 
 snprintf(parsedTableName, 256, "chr%d_random%s", 1, table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 for(c  = 2; c <= 22; c++)
 	{
 	snprintf(parsedTableName, 256, "chr%d%s", c, table); 
-	snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName); 
+	snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName); 
+	if (constraints != NULL && constraints[0] != 0)
+	    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 	outputTabData(query, parsedTableName, conn, FALSE);
 	snprintf(parsedTableName, 256, "chr%d_random%s", c, table); 
-	snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName); 
+	snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName); 
+	if (constraints != NULL && constraints[0] != 0)
+	    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 	outputTabData(query, parsedTableName, conn, FALSE);
 	}
 
 snprintf(parsedTableName, 256, "chr%s%s", "X", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "X", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 snprintf(parsedTableName, 256, "chr%s%s", "Y", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "Y", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 snprintf(parsedTableName, 256, "chr%s%s", "NA", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "NA", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 
 snprintf(parsedTableName, 256, "chr%s%s", "UL", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 snprintf(parsedTableName, 256, "chr%s_random%s", "UL", table);
-snprintf(query, 256, "SELECT%s FROM %s", fields, parsedTableName);
+snprintf(query, sizeof(query), "SELECT%s FROM %s", fields, parsedTableName);
+if (constraints != NULL && constraints[0] != 0)
+    snprintf(query, sizeof(query), "%s WHERE %s", query, constraints);
 outputTabData(query, parsedTableName, conn, FALSE);
 }
 
@@ -1630,16 +1975,16 @@ if(table == NULL || existsAndEqual("phase", "table"))
 	    webAbort("Missing table selection", "Please choose a table and try again.");
 	else
 	    {
-		webStart(cart, "Genome Table Browser on %s Freeze", freezeName);
+		webStart(cart, "Table Browser on %s Freeze", freezeName);
 		getTable();
 		webEnd();
 	    }
 	}
 else
 	{
-	if(table != 0 && existsAndEqual("phase", "Choose fields"))
+	if(table != 0 && existsAndEqual("phase", "Filter fields"))
 		{
-		webStart(cart , "Genome Table Browser on %s Freeze: Select Fields", freezeName);
+		webStart(cart , "Table Browser on %s Freeze: Select Fields", freezeName);
 		getChoosenFields();
 		webEnd();
 		}
