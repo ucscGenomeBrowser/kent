@@ -23,12 +23,15 @@
  * From this we want to extract the following field types:
  *   z - flybase ID
  *   a - gene symbol
+ *   d - biological role of gene product
  *   e - gene name
+ *   f - cellular compartment of which gene product is a component
  *   i - synonyms (just for genes, not for alleles)
  *   r - wild-type biological role
  *   p - phenotypes of genes
  *   A - allele with subfields
  *   E - reference with subfields
+ *   F - function of gene product
  *   
  * We'll make this into the following tables:
  *    fbGene <flybase ID><gene symbol><gene name>
@@ -40,6 +43,7 @@
  *           the annotation belongs the gene as a whole or flybase
  *           respectively.
  *    fbPhenotype <flybase ID><allele ID><reference ID><text>
+ *    fbGo <flybase ID><go ID><go aspect>
  * Note that we are ignoring the GO terms since we'll get them
  * from SwissProt, where the data is in a somewhat more regular
  * format. */
@@ -53,7 +57,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.5 2004/06/23 21:15:15 angie Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.6 2004/06/29 17:37:44 angie Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -272,6 +276,17 @@ sqlRemakeTable(conn, "fbPhenotype",
 "              #Indices\n"
 "    INDEX(geneId(11))\n"
 ")\n");
+
+sqlRemakeTable(conn, "fbGo", 
+"#Links FlyBase gene IDs and GO IDs/aspects\n"
+"CREATE TABLE fbGo (\n"
+"    geneId varchar(255) not null,	# FlyBase ID\n"
+"    goId varchar(255) not null,	# GO ID\n"
+"    aspect varchar(255) not null,      # P (process), F (function) or C (cellular component)"
+"              #Indices\n"
+"    INDEX(geneId(11)),\n"
+"    INDEX(goId(10))\n"
+")\n");
 }
 
 struct geneAlt
@@ -349,6 +364,7 @@ char *tRef = "fbRef";
 char *tRole = "fbRole";
 char *tPhenotype = "fbPhenotype";
 char *tTranscript = "fbTranscript";
+char *tGo = "fbGo";
 FILE *fGene = hgCreateTabFile(tabDir, tGene);
 FILE *fSynonym = hgCreateTabFile(tabDir, tSynonym);
 FILE *fAllele = hgCreateTabFile(tabDir, tAllele);
@@ -356,6 +372,7 @@ FILE *fRef = hgCreateTabFile(tabDir, tRef);
 FILE *fRole = hgCreateTabFile(tabDir, tRole);
 FILE *fPhenotype = hgCreateTabFile(tabDir, tPhenotype);
 FILE *fTranscript = hgCreateTabFile(tabDir, tTranscript);
+FILE *fGo = hgCreateTabFile(tabDir, tGo);
 struct lineFile *lf = lineFileOpen(genesFile, TRUE);
 struct hash *refHash = newHash(19);
 int nextRefId = 0;
@@ -367,6 +384,7 @@ struct slName *synList = NULL, *syn;
 int curAllele = 0, curRef = 0;
 struct ref *ref = NULL;
 struct sqlConnection *conn;
+struct hash *goUniqHash = newHash(18);
 
 /* Make table from flybase genes to BGDP transcripts. */
 getAllSplices(database, fTranscript);
@@ -479,6 +497,24 @@ while (lineFileNext(lf, &line, NULL))
 	fprintf(f, "%s\t%d\t%d\t%s\n", geneId, curAllele, curRef, dy->string);
 	dyStringFree(&dy);
 	}
+    else if (type == 'd' || type == 'f' || type == 'F')
+	{
+	FILE *f = fGo;
+	char aspect = (type == 'd') ? 'P' : (type == 'f') ? 'C' : 'F';
+	char *goId = rest;
+	char *p = strstr(goId, " ; ");
+	char assoc[128];
+	if (p == NULL)
+	    continue;
+	else
+	    goId = firstWordInLine(p + 3);
+	safef(assoc, sizeof(assoc), "%s.%s", geneId, goId);
+	if (hashLookup(goUniqHash, assoc) == NULL)
+	    {
+	    hashAddInt(goUniqHash, assoc, 1);
+	    fprintf(f, "%s\t%s\t%c\n", geneId, goId, aspect);
+	    }
+	}
     }
 printf("Processed %d records in %d lines\n", recordCount, lf->lineIx);
 lineFileClose(&lf);
@@ -502,6 +538,8 @@ if (doLoad)
     hgLoadTabFile(conn, tabDir, tRole, &fRole);
     printf("Loading %s\n", tPhenotype);
     hgLoadTabFile(conn, tabDir, tPhenotype, &fPhenotype);
+    printf("Loading %s\n", tGo);
+    hgLoadTabFile(conn, tabDir, tGo, &fGo);
     hgRemoveTabFile(tabDir, tGene);
     hgRemoveTabFile(tabDir, tTranscript);
     hgRemoveTabFile(tabDir, tSynonym);
@@ -509,6 +547,7 @@ if (doLoad)
     hgRemoveTabFile(tabDir, tRef);
     hgRemoveTabFile(tabDir, tRole);
     hgRemoveTabFile(tabDir, tPhenotype);
+    hgRemoveTabFile(tabDir, tGo);
     }
 }
 
