@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.58.4.4 2005/01/06 08:38:04 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.58.4.5 2005/01/07 22:22:31 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -601,13 +601,13 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     int wordCount;
     char *line = lineEl->val;
-    char *row[7];
+    char *row[8];
     if (line[0] != '#')
 	{
 	char *b;
 	wordCount = chopLine(line, row);
-	b = row[6];
-	if (wordCount < 7 || b[0] != '/')
+	b = row[7];
+	if (wordCount < 8 || b[0] != '/')
 	    errAbort("paraHub and para out of sync on listBatches");
 	if (sameString(b, batchName))
 	    ret = TRUE;
