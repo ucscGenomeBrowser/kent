@@ -53,7 +53,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.78 2005/02/23 06:28:23 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.79 2005/02/23 21:57:35 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -301,6 +301,13 @@ int newStdin, newStdout, newStderr;
 
 close(mainRudp->socket);
 
+/* do stderr first */
+newStderr = open(err, O_WRONLY | O_CREAT, 0666);
+if (newStderr < 0)
+    errnoAbort("can't open job stderr file %s", err);
+if (dup2(newStderr, STDERR_FILENO) < 0)
+    errnoAbort("can't dup2 stderr");
+
 newStdin = open(in, O_RDONLY);
 if (newStdin < 0)
     errnoAbort("can't open job stdin file %s", in);
@@ -312,12 +319,6 @@ if (newStdout < 0)
     errnoAbort("can't open job stdout file %s", out);
 if (dup2(newStdout, STDOUT_FILENO) < 0)
     errnoAbort("can't dup2 stdout");
-
-newStderr = open(err, O_WRONLY | O_CREAT, 0666);
-if (newStderr < 0)
-    errnoAbort("can't open job stderr file %s", err);
-if (dup2(newStderr, STDERR_FILENO) < 0)
-    errnoAbort("can't dup2 stderr");
 }
 
 void execProc(char *managingHost, char *jobIdString, char *reserved,
