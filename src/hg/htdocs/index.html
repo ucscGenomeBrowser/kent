@@ -107,7 +107,9 @@ document.location = theUrl + 'org=' + theDb;
 						<OPTION VALUE="human">Human
 						<OPTION VALUE="mouse">Mouse 
 						<OPTION VALUE="rat">Rat 
+<!---Not released yet
 						<OPTION VALUE="SARS+coronavirus+TOR2">SARS 
+-->
 					</SELECT>
 			</td></tr></table><hr>
 			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
@@ -156,8 +158,8 @@ document.location = theUrl + 'org=' + theDb;
 	<P>This site contains the reference sequence for the human
 	genome and the working drafts for the mouse and rat genomes. 
 	<P>
-	The human reference sequence - produced by the International Human
-	Genome Sequencing Consortium - covers about 99 percent of 
+	<B>Homo sapiens</B> - The human reference sequence (UCSC version hg15) is based on NCBI Build 33 and was produced by the International Human
+	Genome Sequencing Consortium. The sequence covers about 99 percent of 
 	the gene-containing regions in the genome, and has been sequenced to an accuracy of 
 	99.99 percent. The missing portions are essentially contained in approximately 
 	400 defined gaps in the euchromatic region representing DNA regions with unusual structures 
@@ -169,8 +171,12 @@ document.location = theUrl + 'org=' + theDb;
 	technology). Future work on the reference sequence will focus on improving
 	accuracy and reducing gaps in the sequence. 
 
-	<P>The mouse genome (Mus musculus) was produced by the Mouse Genome Sequencing Consortium and is
-	largely the result of a full genome shotgun assembly. The current assembly
+	<P><B>Mus musculus</B> - The current mouse genome assembly (UCSC version mm3) 
+	is based on NCBI Build 30, a composite assembly of MGCSv3 produced by 
+	the Mouse Genome Sequencing Consortium and finished BAC sequence. There 
+	is a slight difference between the UCSC and NCBI versions: the NCBI assembly includes contigs from several strains, but the UCSC 
+	version  contains only the reference strain (C57BL/6J). The current 
+	assembly
 	includes 705 megabases of finished sequence. While there are 
 	many gaps in the sequence, the order and orientation of the contigs on 
 	either side of a gap are known in almost all cases. We estimate
@@ -178,7 +184,7 @@ document.location = theUrl + 'org=' + theDb;
 	assembly. 
 
 	<P>
-	The rat genome (Rattus norvegicus) has been provided by the Rat Genome Sequencing Consortium.
+	<B>Rattus norvegicus</B> - The latest rat genome assembly (UCSC version rn2) is based on version 2.1 provided by the Rat Genome Sequencing Consortium.
 	The sequence was assembled using a hybrid approach that combines the 
 	clone by clone and whole genome shotgun methods. The current assembly
 	provides approximately 6.5-fold coverage of the rat genome.
