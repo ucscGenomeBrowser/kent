@@ -5,6 +5,8 @@
 scaffoldFaToAgp test.fa  > /dev/null
 
 diff test.agp test.agp.gold > /dev/null
-if ($status) then
+set status1 = $status
+diff test.lft test.lft.gold > /dev/null
+if ($status || $status1) then
     echo '*** FAIL ***'
 endif

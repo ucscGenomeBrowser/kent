@@ -7,7 +7,7 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.1 2003/05/31 04:31:17 kate Exp $";
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.2 2003/05/31 05:06:04 kate Exp $";
 
 #define GAP_SIZE 1000
 /* TODO: optionize this */
@@ -18,7 +18,7 @@ static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.1 2003/05/31 04:31:17 ka
 void usage()
 /* Print usage instructions and exit. */
 {
-errAbort("scaffoldFaToAgp - generate an AGP file from a scaffold FA file.\n"
+errAbort("scaffoldFaToAgp - generate an AGP file and lift file from a scaffold FA file.\n"
 	 "usage:\n"
 	 "    scaffoldFaToAgp source.fa\n"
 	 "The resulting file will be source.agp\n"
@@ -26,26 +26,52 @@ errAbort("scaffoldFaToAgp - generate an AGP file from a scaffold FA file.\n"
 }
 
 void scaffoldFaToAgp(char *scaffoldFile)
-/* scaffoldFaToAgp - create AGP file from scaffold FA file */
+/* scaffoldFaToAgp - create AGP file and lift file from scaffold FA file */
 {
-struct dnaSeq scaffold;
+struct dnaSeq scaffold, *scaffoldList, *pScaffold;
+DNA *dna;
+char *name;
+int size;
 struct agpFrag frag, *pFrag = &frag;
 struct agpGap gap, *pGap = &gap;
 int gapSize = GAP_SIZE;
 struct lineFile *lf = lineFileOpen(scaffoldFile, TRUE);
 char outDir[256], outFile[128], ext[64], outPath[512];
-FILE *f = NULL;
+FILE *agpFile = NULL;
+FILE *liftFile = NULL;
 
 int fileNumber = 1;
 int start = 0;
-int end;
+int end = 0;
+int chromSize = 0;
+int scaffoldCount = 0;
 
+/* Read in scaffold info */
+while (faMixedSpeedReadNext(lf, &dna, &size, &name))
+    {
+    AllocVar(pScaffold);
+    pScaffold->name = cloneString(name);
+    pScaffold->size = size;
+    printf("%s size=%d\n", pScaffold->name, pScaffold->size);
+    slAddTail(&scaffoldList, pScaffold);
+    chromSize += pScaffold->size;
+    chromSize += GAP_SIZE;
+    scaffoldCount++;
+    }
+printf("gap size is %d, total gaps: %d\n", GAP_SIZE, scaffoldCount);
+printf("chrom size is %d\n", chromSize);
+
+/* Munge file paths */
 splitPath(scaffoldFile, outDir, outFile, ext);
+
 sprintf(outPath, "%s%s.agp", outDir, outFile);
-f = mustOpen(outPath, "w");
+agpFile = mustOpen(outPath, "w");
 printf("writing %s\n", outPath);
 
-ZeroVar(&scaffold);
+sprintf(outPath, "%s%s.lft", outDir, outFile);
+liftFile = mustOpen(outPath, "w");
+printf("writing %s\n", outPath);
+
 ZeroVar(pFrag);
 ZeroVar(pGap);
 
@@ -62,18 +88,23 @@ pFrag->type[0] = 'D';   /* draft */
 pFrag->fragStart = 0;   /* always start at beginning of scaffold */
 pFrag->strand[0] = '+';
 
-while (faMixedSpeedReadNext(lf, &scaffold.dna, &scaffold.size, &scaffold.name))
+/* Generate AGP and lift files */
+for (pScaffold = scaffoldList; 
+                pScaffold != NULL; pScaffold = pScaffold->next) 
     {
-    printf("%s\n", scaffold.name);
-    end = start + scaffold.size;
+    end = start + pScaffold->size;
 
     /* Create AGP fragment for the scaffold */
-    pFrag->frag = scaffold.name;
+    pFrag->frag = pScaffold->name;
     pFrag->ix = fileNumber++;
     pFrag->chromStart = start;
     pFrag->chromEnd = end;
-    pFrag->fragEnd = scaffold.size;
-    agpFragOutput(pFrag, f, '\t', '\n');
+    pFrag->fragEnd = pScaffold->size;
+    agpFragOutput(pFrag, agpFile, '\t', '\n');
+
+    /* Write lift file for this fragment */
+    fprintf(liftFile, "%d\t%s\t%d\t%s\t%d\n",
+            start, pScaffold->name, pScaffold->size, CHROM_NAME, chromSize);
 
     /* Create AGP gap to separate scaffolds */
     /* Note: may want to suppress final gap -- not needed as separator */
@@ -83,11 +114,16 @@ while (faMixedSpeedReadNext(lf, &scaffold.dna, &scaffold.size, &scaffold.name))
     pGap->ix = fileNumber++;
     pGap->chromStart = start;
     pGap->chromEnd = end;
-    agpGapOutput(pGap, f, '\t', '\n');
+    agpGapOutput(pGap, agpFile, '\t', '\n');
+
+    /* Write lift file for this gap */
+    fprintf(liftFile, "%d\t%s\t%d\t%s\t%d\n",
+            start-1, "gap", GAP_SIZE, CHROM_NAME, chromSize);
 
     start = end;
     }
-carefulClose(&f);
+carefulClose(&agpFile);
+carefulClose(&liftFile);
 lineFileClose(&lf);
 }
 
