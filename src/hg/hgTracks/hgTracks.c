@@ -8879,7 +8879,7 @@ if (withLeftLabels)
 			rootName = cloneString( name );
 			beforeFirstPeriod( rootName );
 			if( sameString( track->mapName, "humMusL" ))
-			    vgTextRight(vg, leftLabelX-30, y, leftLabelWidth - 1, itemHeight,
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Mouse Cons");
 			else if( sameString( track->mapName, "musHumL" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
@@ -10123,7 +10123,7 @@ registerTrackHandler("blastzStrictChainPig", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainRat", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainTetra", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainZebrafish", longXenoPslMethods);
-registerTrackHandler("blatChimp", longXenoPslMethods);
+//registerTrackHandler("blatChimp", longXenoPslMethods);
 registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
 registerTrackHandler("blastzBestMouse", longXenoPslMethods);
