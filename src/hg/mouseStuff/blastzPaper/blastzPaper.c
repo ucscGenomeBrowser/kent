@@ -4,22 +4,22 @@ schwartz, kent, smit, zhang, baertsch, hardison, haussler, miller
 Introduction:
 
 One of the goals set by the Mouse Genome Analysis Consortium (cite Nature paper)
-was to study mutation and selection, the main forces shaping the mouse and
+is to study mutation and selection, the main forces shaping the mouse and
 human genomes.  Specific aims included
 (1) estimating the fraction of the human genome that is under selection
 (cite Krish et al.),
 (2) determining the degree to which genome comparisons can pinpoint the
 regions under selection (cite Elnitski et al.) and
 (3) measuring regional variation in the rate and pattern of
-neutral evolution (Hardison et al.).  Attaining these goals required an
-alignment program with higher sensitivity than needed for other Consortium
-goals, such as predicting novel protein-coding segments or identifying large
+neutral evolution (Hardison et al.).  Attaining these goals requires an
+alignment program with higher sensitivity than is needed for other purposes
+such as predicting novel protein-coding segments or identifying large
 genomic intervals where gene order is conserved.
 
 Ideally, our alignment program would identify orthologous regions
 of the human and mouse genomes, whether or not they are under selection.
-That is, it would determine correspondences between genomic
-positions that are descended from the same position in the ancestral genome,
+It would determine correspondences between genomic positions that are 
+descended from the same position in the ancestral genome,
 allowing nucleotide substitutions.
 In practice, success in reaching that goal is measured by the program's
 sensitivity (fraction of orthologous positions that it aligns) and
@@ -29,20 +29,21 @@ evolving regions with a modest degree of sensitivity.  For instance,
 regional variations (aim 3) could be assessed from a relatively small sample,
 (say, 1 out of 10 orthologous regions), provided that there were no critical
 biases in the sampling process.  Demands on specificity were higher,
-but it was acceptable for, say, 5-10% of the aligned positions to be
+but it was acceptable for perhaps 5-10% of the aligned positions to be
 non-orthologous.
 
-To meet out needs, we enhanced the Blastz alignment program (cite PipMaker).
-Here we describe the alignment program, the hardware environment, and several
-validation studies.
-Our results indicate that we have correctly determined the majority of what can
-be aligned between the human and mouse genomes.
+To meet out needs, we enhanced the Blastz alignment program (cite PipMaker),
+and developed a new program, axtBest to separate paralogous from orthologous
+alignment.  Here we describe the programs, the hardware environment, and 
+several validation studies.  Our results indicate that we have correctly 
+aligned the majority of what can be aligned between the human and mouse 
+genomes.
 
 Results:
 
- Software Design Issues
+Software Design Issues
 
-Our goal was to align an appreciable fraction of the neutrally evolving DNA in
+Our goal is to align an appreciable fraction of the neutrally evolving DNA in
 the human and mouse genomes.  This sensitivity requirement
 disqualified several existing programs (cite SSAHA, BLAT)
 that sacrifice sensitivity to attain very short running times.
@@ -56,12 +57,12 @@ ungapped match that exceeds a certain threshold by a dynamic programming
 procedure that permits gaps.
 
 Two differences between Blastz and Gapped Blast were exploited in our
-whole-genome alignments.
-First, Blastz has an option to require that the matching regions that it
-reports must occur in the same order and orientation in both sequences.
-To enforce this restiction, it uses a method described by Zhang et al. 1994.
-Second, Blastz uses an alignment scoring scheme derived and evaluated by
-Chiaromonte et al. 2002.  Nucleotide substitutions are scored by the matrix
+whole-genome alignments.  First, Blastz has an option to require that 
+the matching regions that it reports must occur in the same order and 
+orientation in both sequences.  To enforce this restiction, it uses a 
+method described by Zhang et al. 1994.  Second, Blastz uses an alignment 
+scoring scheme derived and evaluated by Chiaromonte et al. 2002.  Nucleotide 
+substitutions are scored by the matrix
 
      A    C    G    T
 A   91 -114  -31 -123
@@ -78,14 +79,13 @@ This makes it harder for a region of extremely biased nucleotide content to
 trigger a gapped alignment.
 
 Two changes to Blastz significantly improved its execution speed for
-aligning entire genomes.
-First, when the program realizes that many regions of the mouse genome align
-to the same human segment, that segment is dynamically masked, i.e., marked so
-that it will be ignored in later steps of the alignment process.
+aligning entire genomes.  First, when the program realizes that many 
+regions of the mouse genome align to the same human segment, that 
+segment is dynamically masked, i.e., marked so that it will be 
+ignored in later steps of the alignment process.
 Second, we adapted a very clever idea of Wu el al. 2002 for determining the
-initial short match that may seed an alignment.
-Formerly, Blastz looked for identical runs of 8 consecutive nucleotides in
-each sequence. 
+initial short match that may seed an alignment.  Formerly, Blastz looked for 
+identical runs of 8 consecutive nucleotides in each sequence. 
 Wu et al. propose looking for runs of 19 consecutive nucleotides in each
 sequence, within which the 12 positions indicated by a "1" in the string
 1110100110010101111
@@ -129,11 +129,40 @@ alignment coverage from 33% of the human genome to 40%. [Scott, check numbers.]
 
 The modified Blastz was used to compare all the human sequence with all of the
 mouse, i.e., to produce a complete catalog of matching regions.
-This allows us, for example, to estimate the number of mouse paralogs for a
-given human gene.
-However, for many purposes one wants at most a single match for each human
-region.  We wrote a program called AxtBest to perform an appropriate winnowing.
-// [Jim's words ...]
+more than one region of the mouse sequence aligned to the same
+region of the human sequence.  This is a natural consequence of
+duplications in the mouse genome and the human/mouse common ancestor.
+These duplications include paralogous genes, processed and unprocessed
+psuedogenes, tandem repeats, simple repeats, etc.  For many purposes 
+one wants the single best, orthologous, match for each human region .  
+Typically when looking at a region spanning several thousand bases it is 
+clear which alignment is the ortholog and which are the paralogs.  The 
+orthologous alignment usually is longer,  and overall has a greater 
+sequence identity.  On the other hand over a small regions by chance a 
+paralog may have greater sequence identity than a paralog.  
+
+We wrote a program, axtBest, which automatically picks out an alignment
+likely to be the orthologous alignment.  The program works in two passes.
+A window of 5000 bases on either side of a human base is used to score
+that base.  The score is the blastz score at the end of the window minus
+the blastz score at the beginning of the window.  Bases less than 5000
+bases from the start or end of the alignment have to be handled specially,
+and the details of this differ between the first and the second pass.
+In the first pass the window is truncated to only cover the alignment
+itself.  This tends to make bases on the edge of an alignment or bases in
+a short alignment score less than bases in the middle of a long alignment.
+Unless an alignment is the best scoring alignment over at least one
+human base in the first pass, it is thrown out.   In the second pass
+bases on the edges of an alignment are given the same score as the base
+5000 bases into the alignment.  The portions of each alignment remaining
+after the first pass that are the best scoring over at least 10 bases of
+the human genome are then written out.  This two pass scheme with the
+first pass being done on softer-edged windows and the second pass on 
+harder-edged windows in most cases yields the same result one would
+obtain with a simpler one pass scheme.  However when applied to regions
+with multiple paralogs it results in less fragmented 'best' alignments
+than the single pass schemes we have tried.
+
 
  Software Implementation [Scott]
 
