@@ -1,6 +1,0 @@
-f	GET	/search
-	hl	INPUT	hidden	en
-	ie	INPUT	hidden	ISO-8859-1
-	q	INPUT	TEXT	
-	btnG	INPUT	submit	n/a
-	btnI	INPUT	submit	n/a

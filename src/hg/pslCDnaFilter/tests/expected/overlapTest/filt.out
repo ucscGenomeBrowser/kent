@@ -1,6 +1,0 @@
-query/alignment counts:
-             total:	4	13
-              kept:	4	9
-        drop weird:	2	7
-      drop overlap:	2	3
-    drop idNearTop:	1	1

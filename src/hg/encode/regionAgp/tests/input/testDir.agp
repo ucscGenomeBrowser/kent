@@ -1,9 +1,0 @@
-chr6	1	10	1	N	10	fragment	yes
-chr6	11	30	2	W	CA1.1	1	20	+
-chr6	31	40	3	N	10	fragment	yes
-chr6	41	55	4	W	CA2.1	1	15	+
-chr6	56	65	5	N	10	fragment	yes
-chr6	66	105	6	W	CA3.1	1	40	+
-chr6	106	115	7	N	10	fragment	yes
-chr1	1	100	1	W	CA4.1	1	100	+
-chr3	1	200	1	W	CA5.1	1	200	+
