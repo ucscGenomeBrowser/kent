@@ -868,7 +868,7 @@ if (queueError > 0)
 if (trackingError > 0)
    {
    if (!fileExists(resultsName))
-       printf("para.results: file not found.  paraHub can't write to this dir?");
+       printf("para.results: file not found.  paraHub can't write to this dir?\n");
    else
        printf("tracking errors: %d\n", trackingError);
    }
@@ -1352,7 +1352,7 @@ if (otherCount > 0)
     if (!fileExists(resultsName))
 	printf("Other count: %d jobs\n", otherCount);
     else
-        printf("para.results: file not found.  paraHub can't write to this dir?");
+        printf("para.results: file not found.  paraHub can't write to this dir?\n");
     }
 if (queueCount > 0)
     printf("In queue waiting: %d jobs\n", queueCount);
