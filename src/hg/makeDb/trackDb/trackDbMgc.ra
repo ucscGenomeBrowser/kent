@@ -7,6 +7,7 @@ visibility pack
 color 34,139,34
 type genePred
 exonArrows on
+cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
 
 track mgcIncompleteMrna
@@ -18,6 +19,7 @@ visibility pack
 color 120,12,12
 type psl .
 exonArrows on
+cdsDrawOptions enabled
 cdsDrawDefault off
 
 track mgcPickedEst
