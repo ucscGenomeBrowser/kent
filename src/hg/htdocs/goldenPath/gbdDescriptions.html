@@ -427,6 +427,12 @@
   href="#ChainLink">chrN_chainMm5Link</A> 
   - Alignment block in mouse (mm5 assembly) chain </LI>
   <LI><A 
+  href="#Chain">chrN_chainMonDom1</A> 
+  - Summary info about chain of opossum (monDom1 assembly) alignments</LI>
+  <LI><A 
+  href="#ChainLink">chrN_chainMonDom1Link</A> 
+  - Summary info about chain of opossum (monDom1 assembly) alignments</LI>
+  <LI><A 
   href="#Chain">chrN_chainPanTro1</A> 
   - Summary info about chain of chimp (panTro1 assembly) alignments</LI>
   <LI><A 
@@ -438,7 +444,7 @@
   <LI><A 
   href="#ChainLink">chrN_chainPt0Link</A> 
   - Alignment block in chimp (13 Nov 2003 assembly) chain </LI>
-  <LI><A 
+  monDommonDom1><A 
   href="#Chain">chrN_chainRn3</A> 
   - Summary info about chain of rat (rn3 assembly) alignments</LI>
   <LI><A 
@@ -791,10 +797,10 @@
   href="#PepPred">blastHg17KG</A> 
   - tBLASTn alignment of peptides from hg17 knownGene predicted and known genes
   <LI><A 
-  href="#PslInfo">blastKGPep00</A> 
+  href="#PslInfo">blastKGPep0*</A> 
   - tBLASTn alignments peptide sequences
   <LI><A 
-  href="#BlastRef">blastKGRef00</A> 
+  href="#BlastRef">blastKGRef0*</A> 
   - Associates a known gene ID with a gene name, position, and SwissProt name
   for tBLASTn protein tracks
   <LI><A 
@@ -964,32 +970,75 @@
   <LI><A 
   href="#BED">ecoresTetraodon</A> 
   - Human/Tetraodon evolutionary conserved regions (ecores) computed by Exofish</LI>
-<!--
   <LI><A 
-  href="#WiggleTrack2">encodeAffyChIpRnapHl50PvalHr[0,2,4,32]</A> 
+  href="#WiggleTrack2">encodeAffyChIpRnapHl50PvalHr[00,02,08,32]</A> 
   - Affymetrix ChIP/Chip enrichment of Pol2 from retinoic acid stimulated 
-  HL60 cells at 0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+  HL60 cells at 0, 2, 8, or 32 hours, in ENCODE regions (4 different tracks)
   <LI><A 
-  href="#BED">encodeAffyChIpRnapHl60SitesHr[0,2,4,32]</A> 
+  href="#BED">encodeAffyChIpRnapHl60SitesHr[00,02,08,32]</A> 
   - Affymetrix ChIP/Chip of Pol2 from retinoic acid stimulated HL60 cells at
-  0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+  0, 2, 8, or 32 hours, in ENCODE regions (4 different tracks)
   <LI><A 
-  href="#WiggleTrack2">encodeAffyRnaHl60SigHr[0,2,4,32]</A> 
+  href="#WiggleTrack2">encodeAffyRnaHl60SigHr[00,02,08,32]</A> 
   - Affymetrix PolyA+ RNA from retinoic acid stimulated HL60 cells at 
-  0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
+  0, 2, 8, or 32 hours, in ENCODE regions (4 different tracks)
   <LI><A 
-  href="#BED">encodeAffyRnaHl60SitesHr[0,2,4,32]</A> 
+  href="#BED">encodeAffyRnaHl60SitesHr[00,02,08,32]</A> 
   - Affymetrix PolyA+ RNA abundance from retinoic acid stimulated HL60 cells 
-  at 0, 2, 4, or 32 hours, in ENCODE regions (4 different tracks)
--->
-  <LI><A 
-  href="#BED">encodeRegions</A> 
-  - Names and positions of selected regions for the ENCODE project</LI>
+  at 0, 2, 8, or 32 hours, in ENCODE regions (4 different tracks)
   <LI><A 
   href="#EncodeRegionInfo">encodeRegionInfo</A> 
   - Descriptive, assembly-independent information about ENCODE regions</LI>
   <LI><A 
-  href="#EnsemblXref">ensemblXref</A> 
+  href="#BED">encodeRegions</A> 
+  - Names and positions of selected regions for the ENCODE project</LI>
+  <LI><A 
+  href="#BED">encode_NHGRI_DNAseHS</A> 
+  - DNaseI-hypersensitive sites in ENCODE regions</LI>
+  <LI><A 
+  href="#BED">encode_Stanford_Promoters</A> 
+  - Activity levels of predicted promoters in ENCODE regions (Stanford)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_RNAP_HCT116</A> 
+  - ChIP/Chip (Pol II HCT116) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_RNAP_HELA</A> 
+  - ChIP/Chip (Pol II HeLa) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_RNAP_IMR90</A> 
+  - ChIP/Chip (Pol II IMR90) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_RNAP_THP1</A> 
+  - ChIP/Chip (Pol II THP1) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_TAF250_HCT116</A> 
+  - ChIP/Chip (TAF1 HCT116) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_TAF250_HELA</A> 
+  - ChIP/Chip (TAF1 HeLa) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_TAF250_IMR90</A> 
+  - ChIP/Chip (TAF1 IMR90) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#WiggleTrack2">encode_UCSD_ChIP_TAF250_THP1</A> 
+  - ChIP/Chip (TAF1 THP1) in ENCODE regions (UCSD)</LI>
+  <LI><A 
+  href="#BED">encode_UVA_DNARep_0_2</A> 
+  - Temporal profiling of DNA replication (0-2 hrs) in ENCODE regions (U. VA)</LI>
+  <LI><A 
+  href="#BED">encode_UVA_DNARep_2_4</A> 
+  - Temporal profiling of DNA replication (2-4 hrs) in ENCODE regions (U. VA)</LI>
+  <LI><A 
+  href="#BED">encode_UVA_DNARep_4_6</A> 
+  - Temporal profiling of DNA replication (4-6 hrs) in ENCODE regions (U. VA)</LI>
+  <LI><A 
+  href="#BED">encode_UVA_DNARep_6_8</A> 
+  - Temporal profiling of DNA replication (6-8 hrs) in ENCODE regions (U. VA)</LI>
+  <LI><A 
+  href="#BED">encode_UVA_DNARep_8_10</A> 
+  - Temporal profiling of DNA replication (8-10 hrs) in ENCODE regions (U. VA)</LI>
+  <LI><A 
+  href="#GenePredictions">ensEstGene</A> 
   - Cross-reference info between transcript entries and translation entries of Ensembl genes</LI>
   <LI><A 
   href="#EnsemblXref2">ensemblXref2</A> 
@@ -1000,6 +1049,12 @@
   <LI><A 
   href="#GenePredictions">ensEst</A> 
   - Ensembl gene predictions based on ESTs</LI>
+  <LI><A 
+  href="#GenePredictions">ensEstGene</A> 
+  - Ensembl gene predictions based on ESTS</LI>
+  <LI><A 
+  href="#EnsGtp">ensEstGtp</A> 
+  - Associates Ensembl gene, transcript, and protein IDs</LI>
   <LI><A 
   href="#PepPredictions">ensEstPep</A> 
   - Translations of Ensembl EST-based gene predictions into corresponding amino acid sequences </LI>
@@ -1025,15 +1080,15 @@
   href="#OrientInfo">estOrientInfo</A> 
   - Extra information on ESTs calculated by polyInfo program
   <LI><A 
-  href="#GenePredExt">exoniphy</A> 
-  - Evolutionarily conserved protein-coding exons in multiple, aligned sequences 
-  identified by the ExoniPhy program
-  <LI><A 
   href="#Exofish">exoFish</A> 
   - Genescope Exofish Tetraodon evolutionarily conserved regions (Last used Aug. 2001)
   <LI><A 
   href="#ExoMouse">exoMouse</A> 
   - Exonerate mouse/human evolutionarily conserved regions (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#GenePredExt">exoniphy</A> 
+  - Evolutionarily conserved protein-coding exons in multiple, aligned sequences 
+  identified by the ExoniPhy program
 
 <A NAME="F_GBD"></A>
   <LI><A 
@@ -1678,6 +1733,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#NetAlign">netMm5</A> 
   - Database representation of a net of alignments with mouse assembly mm5 </LI>
   <LI><A 
+  href="#NetAlign">netMonDom1</A> 
+  - Database representation of a net of alignments with opossum assembly monDom1 </LI>
+  <LI><A 
   href="#NetAlign">netPanTro1</A> 
   - Database representation of a net of alignments with chimp assembly panTro1 </LI>
   <LI><A 
@@ -2241,6 +2299,9 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   href="#WabaFullCreate">wabaCbr</A> 
   - <em>C. briggsae</em> WABA alignments - full description
   <LI><A 
+  href="#WgRna">wgRna</A> 
+  - CD and H/ACA Box snoRNAs and microRNAs from Weber and Griffiths-Jones
+  <LI><A 
   href="#PslInfo">wz_ests</A> 
   - Alignments of WZ ESTs from WUSTL to the zebrafish assembly 
 
@@ -2272,11 +2333,11 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#ExpData">yeastChoCellCycleRatio</A> 
   - Expression data </LI>
+
+<A NAME="Z_GBD"></A>
   <LI><A 
   href="#ScoredRef">zebrafish_netBlastz</A> 
   - Scored reference file for zebrafish alignments
-
-<A NAME="Z_GBD"></A>
   <LI><A 
   href="#WiggleTrack">zoo</A> 
   - Zoo conservation scores for each zoo species based on blastz pair-wise alignments </LI>
@@ -4541,7 +4602,23 @@ Last used Apr. 2001.
     string  type;         "Type - snRNA, rRNA, tRNA, etc."
     float   fullScore;    "Score as in Sean Eddy's files."
     ubyte   isPsuedo;     "TRUE(1) if psuedo, FALSE(0) otherwise"
-    )                                                                           
+    )
+</PRE>
+
+<H4><A name=WgRna></A>RNA - Weber and Griffiths-Jones</H4>
+<PRE>table wgRna
+"CD and H/ACA Box snoRNAs and microRNAs from Weber and Griffiths-Jones"
+    (
+    string  chrom;        "Chromosome"
+    uint    chromStart;   "Start position in chromosome"
+    uint    chromEnd;     "End position in chromosome"
+    string  name;         "Name of item"
+    uint    score;        "Score from 0 to 1000 (bed6 compat.)"
+    char[1] strand;       "+ or - (bed6 compat.)"
+    uint    thickStart;   "Start of thick region"
+    uint    thickEnd;     "End of thick region"
+    string  type;         "RNA type"
+    }
 </PRE>
 
 <H4><A name=RosettaExps></A>Rosetta Information </H4>
@@ -4556,7 +4633,7 @@ Last used Apr. 2001.
     longblob  credit;  
     uint      numExtras;
     longblob  extra;   
-    )                                                                           
+    )                                                                         
 </PRE>
 
 <H4><A name=SgdAbundance></A>Saccharomyces Genome Database Protein Abundance</H4>
