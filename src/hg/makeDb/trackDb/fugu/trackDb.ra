@@ -125,9 +125,16 @@ altColor 200,220,255
 type bed 12 .
 url http://www.genoscope.cns.fr/comparative?premier=Takifugu&deuxieme=Human&position=$$
 
-searchTable gold
+searchTable ctgPos
 searchMethod exact
-searchType gold
 shortCircuit 1
 termRegex scaffold_[0-9]+
-searchPriority 8
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex SINFRUT[0-9]+
+searchPriority 50
+

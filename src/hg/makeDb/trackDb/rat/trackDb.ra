@@ -145,6 +145,6 @@ searchTable bactigPos
 searchMethod exact
 searchType bed
 shortCircuit 1
-termRegex [gkt][a-z]{3}(_[gkt][a-z]{3})?(_[0-9])?
+termRegex [gkt][a-z]{3}(_[gkt][a-z]{3})?(_[0-9]+)?
 searchPriority 15
 

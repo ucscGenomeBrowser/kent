@@ -179,3 +179,11 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
+
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex ENSMUST[0-9]+(\.[0-9]+)?
+searchPriority 50
+

@@ -79,11 +79,11 @@ altColor 128,120,100
 type axt dm1
 
 
-searchTable gold
+searchTable ctgPos
 searchMethod exact
-searchType gold
 shortCircuit 1
-termRegex Contig[0-9]+(_Contig[0-9]+)?
+termRegex Contig[0-9]+(_Contig[0-9]+)?A?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 8
 
 searchTable bdgpLiftGene

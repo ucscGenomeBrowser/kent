@@ -1173,7 +1173,7 @@ autoScaleDefault Off
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
-termRegex (ctg|NT_)[0-9]+
+termRegex (ctg|NT_|NG_|NC_)[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
@@ -1189,7 +1189,7 @@ searchTable clonePos
 searchMethod exact
 searchType bed
 shortCircuit 1
-termRegex [a-z].{4}.?.?.?.?[0-9]
+termRegex [a-z][a-z0-9]_?[0-9]+\.[0-9]+
 searchPriority 7
 
 searchTable gold
