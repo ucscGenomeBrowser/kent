@@ -13,7 +13,7 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.4 2004/04/06 07:04:33 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.5 2004/04/09 03:22:38 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -152,6 +152,7 @@ static char *queryFormatRegex =
     "select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ from %s "
     "where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
 static char *exactTermFormatRegex = "['\"]?%s[^%]*['\"]?$";
+static char *prefixTermFormatRegex = "['\"]?%s.*%%['\"]?$";
 
 static void checkQueryFormat(struct hgFindSpec *hfs)
 /* Make sure query looks right and jives with searchMethod. */
@@ -180,7 +181,7 @@ if (isNotEmpty(hfs->query))
 		     "needs to end with %s.",
 		     hfs->searchName, fuzzyTermFormat);
 	else if (sameString(hfs->searchMethod, "prefix") &&
-		 !endsWith(hfs->query, prefixTermFormat))
+		 !matchRegex(hfs->query, prefixTermFormatRegex))
 	    errAbort("hfsPolish: search %s: searchMethod is prefix so query "
 		     "needs to end with %s.",
 		     hfs->searchName, prefixTermFormat);
@@ -214,7 +215,7 @@ if (isNotEmpty(hfs->xrefQuery))
 		 "needs to end with %s.",
 		 hfs->searchName, fuzzyTermFormat);
     else if (sameString(hfs->searchMethod, "prefix") &&
-	     !endsWith(hfs->xrefQuery, prefixTermFormat))
+	     !matchRegex(hfs->xrefQuery, prefixTermFormatRegex))
 	errAbort("hfsPolish: search %s: searchMethod is prefix so xrefQuery "
 		 "needs to end with %s.",
 		 hfs->searchName, prefixTermFormat);
