@@ -36,9 +36,6 @@ struct section
     char *raFile;	/* Ra file to load additional info from. */
     void *items;	/* Some list of items. */
 
-    /* Domain specific stuff. */
-    struct slName *pfamDomains;
-    struct slName *interproDomains;
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
