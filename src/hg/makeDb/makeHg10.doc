@@ -715,7 +715,7 @@ LOAD SOFTBERRY GENES (todo)
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
-     - get ftp://www.softberry.com/pub/SC_AUG01/*
+     - get ftp://www.softberry.com/pub/SC_DEC01/*
      ldHgGene hg10 softberryGene chr*.gff
      hgPepPred hg10 softberry *.pro
      hgSoftberryHom hg10 *.pro
