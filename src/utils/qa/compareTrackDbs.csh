@@ -19,41 +19,28 @@ set machine1 = $argv[1]
 set machine2 = $argv[2]
 set db = $argv[3]
 
-set allMachines=" hgwdev hgwbeta hgw1 hgw2 hgw3 hgw4 hgw5 hgw6 hgw7 hgw8 mgc "
-
-set mach1Ok=`echo $allMachines | grep -w "$machine1"`
-if ($status) then
-  echo "\n $machine1 is not a valid machine.\n"
-  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
-  exit 1
-endif
-
-set mach2Ok=`echo $allMachines | grep -w "$machine2"`
-if ($status) then
-  echo "\n $machine2 is not a valid machine.\n"
-  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
-  exit 1
-endif
-
-
-set dbOk=`hgsql -t -e "SHOW databases" | grep " $db " | wc -l`
-if ($dbOk == 0) then
-  echo
-  echo " $db is not a valid database on hgwdev."
+checkMachineName.csh $machine1
+if ( $status ) then
   echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
   echo
   exit 1
 endif
 
+checkMachineName.csh $machine2
+if ( $status ) then
+  echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
+  echo
+  exit 1
+endif
 
 set table = "trackDb"
 set field = "tableName"
 
-if ($#argv == 4) then
+if ( $#argv == 4 ) then
   # check if valid field -- checks on dev"
   set field = $argv[4]
-  set fieldOk=`hgsql -t -e "DESC $table" $db | grep " $field " | wc -l`
-  if ($fieldOk == 0) then
+  hgsql -t -e "DESC $table" $db | grep -w $field | wc -l > /dev/null
+  if ( $status ) then
     echo
     echo " $field is not a valid field for $table"
     echo "    usage: machine1 machine2 database [field] (defaults to tableName)"
@@ -93,14 +80,14 @@ set mach1Count=`wc -l $machine1.$db.$table | gawk '{print $1}'`
 set mach2Count=`wc -l $machine2.$db.$table | gawk '{print $1}'`
 
 if ($mach1Count == 0 | $mach2Count == 0) then
-  echo "\n At least one of these machines does not have the database $db.\n"
+  echo "\n  At least one of these machines does not have the database $db.\n"
   exit 1
 endif
 
-"diff" $machine1.$db.$table $machine2.$db.$table
+diff $machine1.$db.$table $machine2.$db.$table
 if ( $status ) then
- echo "The differences above are found in $table.$field"
- echo "between $machine1 and $machine2\n"
+  echo "\nThe differences above are found in $table.$field"
+  echo "between $machine1 and $machine2\n"
 else
   echo "\n  No differences in $db.$table.$field \n  between $machine1 and $machine2 "
   echo
