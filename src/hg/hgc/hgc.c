@@ -4385,17 +4385,36 @@ void longXenoPsl1Given(struct trackDb *tdb, char *item,
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file, AND psl record is given. */
 {
+
+int hgsid = cartSessionId(cart);
 struct psl *trimmedPsl = NULL;
 char otherString[256];
 char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, tdb->longLabel);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart+1, psl->qEnd);
+
+
+if( sameString( otherOrg, "Mouse" ) )
+{
+    //marie
+    printf("<B>%s position:</B> <a
+        href=\"http:/cgi-bin/hgTracks?db=mm2&position=%s%%3A%d-%d&hgsid=%d\"&
+        target=\"_blank\">%s:%d-%d</a><BR>\n",
+        otherOrg, psl->qName, psl->qStart+1, psl->qEnd, hgsid,
+	    psl->qName, psl->qStart+1, psl->qEnd);
+}
+else
+{
+    printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+	    psl->qName, psl->qStart+1, psl->qEnd);
+}
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
+
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart+1, psl->tEnd);
+   psl->tName, psl->tStart+1, psl->tEnd);
+
+
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
 	psl->tEnd - psl->tStart);
 printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
