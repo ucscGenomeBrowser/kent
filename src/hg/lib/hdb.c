@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.210 2004/10/13 23:45:36 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.211 2004/10/14 00:00:18 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -230,7 +230,8 @@ void hDefaultConnect()
 hdbHost 	= getCfgValue("HGDB_HOST", "db.host");
 hdbUser 	= getCfgValue("HGDB_USER", "db.user");
 hdbPassword	= getCfgValue("HGDB_PASSWORD", "db.password");
-hdbTrackDb      = getCfgValue("HGDB_TRACKDB", "db.trackDb");
+if (hdbTrackDb == NULL)
+    hdbTrackDb      = getCfgValue("HGDB_TRACKDB", "db.trackDb");
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
     errAbort("cannot read in connection setting from configuration file.");
 }
