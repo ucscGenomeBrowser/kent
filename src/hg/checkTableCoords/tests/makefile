@@ -10,8 +10,7 @@ test: run
 clean:
 	rm -fr output
 	rm -f *.tab
-	@hgsql test -e 'drop table chromInfo;'
-
+	-hgsql test -e 'drop table chromInfo;'
 
 load: clean
 	hgsql test < input/fakeChromInfo.sql
