@@ -1,4 +1,5 @@
 19: 
+     o  Bumping max size of intron that gets stitched to 750kb from 500kb.
      o  Handle a rare case that could lead to zero sized exons.
      o  Handled a rare case that could lead to backtracking.
      o  Switched blat from cgiSpoof to optionHash so that it can
