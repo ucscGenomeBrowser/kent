@@ -3658,6 +3658,67 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
     hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
+# Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
+# final freeze of data set.
+    mkdir ~sugnet/store1/
+    cd hg16
+    mkdir affyUcla
+    cd affyUcla/
+    ssh kk
+    cd /cluster/store1/sugnet/hg16/affyUcla
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all ./
+    ls -1 /scratch/hg/gs.17/build34/trfFa/* > allctg.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo "HG-U133AB_all" > affy.lst
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+       Checking input files
+       491 jobs written to batch
+       updated job database on disk
+    para push
+    # Wait until jobs run...
+    exit
+    pslSort dirs hg16.affyU133AB_all.psl tmp psl
+    # Lots of messages
+       writing hg16.affyU133AB_all.psl
+       Cleaning up temp files
+    wc hg16.affyU133AB_all.psl 
+         60962 1280141 13677509 hg16.affyU133AB_all.psl
+    ls /cluster/data/hg16/jkStuff/liftAll.lft
+       /cluster/data/hg16/jkStuff/liftAll.lft
+    liftUp hg16.affyU133AB_all.lifted.psl  /cluster/data/hg16/jkStuff/liftAll.lft warn hg16.affyU133AB_all.psl 
+       Got 491 lifts in /cluster/data/hg16/jkStuff/liftAll.lft
+       Lifting hg16.affyU133AB_all.psl
+    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 -nearTop=0.005  hg16.affyU133AB_all.lifted.psl hg16.affyU133AB_all.lifted.pslReps.psl out.psr
+       Processing hg16.affyU133AB_all.lifted.psl to hg16.affyU133AB_all.lifted.pslReps.psl and out.psr
+       Processed 60957 alignments
+    affyUclaMergePslData -pslFile=hg16.affyU133AB_all.lifted.pslReps.psl -affyFile=/projects/compbio/data/microarray/affyUcla/data/feature_biomaterial_chip_logratios_formatForTrack.txt -bedOut=hg16.affyUcla.bed -expRecordOut=hg16.affyUcla.expRecords -expFile=/projects/compbio/data/microarray/affyUcla/data/expNames.sorted.txt
+       Reading psls from: hg16.affyU133AB_all.lifted.pslReps.psl
+       Outputing beds:
+       ............................................
+       Freeing Memory.
+       Done.
+    addUclaAnnotations.pl hg16.affyUcla.expRecords  /projects/compbio/data/microarray/affyUcla/data/normal_tissue_database_annotations2.txt > hg16.affyUcla.annotations.expRecords
+       
+    # Load the databases
+    cp ~/jk/hg/lib/affyRatio.sql ./
+    sed -e 's/affyRatio/affyUclaNorm/' < affyRatio.sql > affyUclaNorm.sql
+    # Just use the hgLoadBed program specifying sqlFile
+    hgLoadBed hg16 affyUclaNorm hg16.affyUcla.bed -sqlTable=affyUclaNorm.sql
+       Reading hg16.affyUcla.bed
+       Loaded 44446 elements of size 15
+       Sorted
+       Saving bed.tab
+       Loading hg16
+    cp ~/jk/hg/lib/expRecord.sql ./
+    sed -e 's/expRecord/affyUclaNormExps/' < expRecord.sql > affyUclaNormExps.sql
+    hgFixedS -A < affyUclaNormExps.sql 
+    echo "load data local infile 'hg16.affyUcla.annotations.expRecords' into table affyUclaNormExps" | hgFixedS -A
+    
+    # Cleanup
+    rm HG-U133AB_all 
+
 # GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
     # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)
     cd /cluster/store4/gs.17/build34/
