@@ -1,26 +1,32 @@
 #!/bin/csh -efx
-echo "Please make a copy of this script, modifying the "
-echo "set's to point to the right directory and deleting "
-echo "these echos and the exit"
-exit -1
 
 # This script will create chains and nets on a blastz
 # cross species alignment run and load them into the
 # browser database.  
 
 # some variable you need to set before running this script
-set tDbName = hg13
+set tDbName = hg15
 set qDbName = mm3
 set tOrg = human
 set qOrg = mouse
-set aliDir = /cluster/store4/gs.14/build31/bed/blastz.mm3.JK
-set chainDir = $aliDir/axtChain
-set tSeqDir = /cluster/store4/gs.14/build31
+set tSeqDir = /cluster/store5/gs.16/build33
 set qSeqDir = /cluster/store2/mm.2003.02/mm3
+set aliDir = $tSeqDir/bed/blastz.mm3.2003-04-12-03-MS
+set chainDir = $aliDir/axtChain
 set fileServer = eieio
 set dbServer = hgwdev
 set parasolServer = kkr1u00
 set subShellDir = chainNet.$tDbName.$qDbName.tmp
+
+if ! -d $chainDir then
+    echo $chainDir doesnt exist
+endif
+if ! -d $tSeqDir/nib then
+    echo $tSeqDir/nib doesn't exist
+endif
+if ! -d $qSeqDir/nib then
+    echo $qSeqDir/nib doesnt exist
+endif
 
 mkdir -p $subShellDir
 cd $subShellDir
@@ -35,14 +41,14 @@ cat >chainRun.csh <<endCat
     mkdir -p run1
     cd run1
     mkdir -p chain out
-    ls -1S ../../axtChrom/*.axt.gz > input.lst
+    ls -1S ../../axtChrom/*.axt > input.lst
     echo '#LOOP' > gsub
     echo 'doChain {check in exists \$(path1)} {check out line+ chain/\$(root1).chain} {check out line+ out/\$(root1).out}' >> gsub
     echo '#ENDLOOP' >> gsub
     gensub2 input.lst single gsub spec
     para create spec
     echo '#\!/bin/csh -ef' > doChain
-    echo 'gunzip -c \$1 | axtChain stdin  $tSeqDir/mixedNib $qSeqDir/mixedNib \$2 > \$3' >> doChain
+    echo 'axtChain \$1  $tSeqDir/nib $qSeqDir/nib \$2 > \$3' >> doChain
     chmod a+x doChain
     para shove
 endCat
@@ -126,7 +132,7 @@ cat > makeAxtNet.csh <<endCat
     cd ${tOrg}Net
     foreach i (*.net)
         set c = \$i:r
-	netToAxt \$i ../chain/\$c.chain $tSeqDir/mixedNib $qSeqDir/mixedNib ../../axtNet/\$c.axt
+	netToAxt \$i ../chain/\$c.chain $tSeqDir/nib $qSeqDir/nib ../../axtNet/\$c.axt
     end
     cd ..
     rm -r ${tOrg}Net
