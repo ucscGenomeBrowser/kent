@@ -26,4 +26,14 @@ struct pfCollectedType
 void pfCollectedTypeDump(struct pfCollectedType *ct, FILE *f);
 /* Write out info on ct to file. */
 
+struct pfType
+/* A type tree. */
+    {
+    struct pfType *next;	/* Next sibling. */
+    struct pfType *children;	/* Children. */
+    struct pfCollectedType *ct;	/* Collected type of this node in type tree. */
+    char *fieldName;		/* Field name associated with this node. */
+    struct pfParse *init;	/* Initialization if any. */
+    };
+
 #endif /* PFTYPE_H */

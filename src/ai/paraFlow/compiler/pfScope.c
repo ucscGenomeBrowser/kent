@@ -26,16 +26,17 @@ scope->parent = parent;
 return scope;
 }
 
-void pfScopeAddType(struct pfScope *scope, char *name, boolean isCollection,
-	struct pfBaseType *parentType)
-/* Add type to scope. */
+struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
+	boolean isCollection, struct pfBaseType *parentType)
+/* Add new base type to scope. */
 {
-struct pfBaseType *type;
-AllocVar(type);
-type->scope = scope;
-type->parentType = parentType;
-type->isCollection = isCollection;
-hashAddSaveName(scope->types, name, type, &type->name);
+struct pfBaseType *bt;
+AllocVar(bt);
+bt->scope = scope;
+bt->parentType = parentType;
+bt->isCollection = isCollection;
+hashAddSaveName(scope->types, name, bt, &bt->name);
+return bt;
 }
 
 struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfCollectedType *ct)

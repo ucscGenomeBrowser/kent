@@ -895,6 +895,7 @@ scope = pfScopeNew(scope, 0);
 pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
+pp->name = name->name;
 
 if (tok->type != '(')
     expectingGot("(", tok);
