@@ -261,7 +261,7 @@ o - If any output in fixMouse.out then resubmit jobs as so:
        condor_submit fix.con
 o - Sort alignments as so 
        cd ~/mouse/vsOo29
-       pslCat -dir -check psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+       pslCat -dir -check psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead blatMouse temp stdin
        [This did not go well, though for oo.27 it was a breeze.  This
        time I got errors at fairly random lines.  One run it would
        report an error at line 200,000 and the next at error 2,000,000.
@@ -281,7 +281,7 @@ o - Sort alignments as so
 	   end
        which went ...]
 o - Get rid of big pile-ups due to contamination as so:
-       cd chrom
+       cd blatMouse
        foreach i (*.psl)
            echo $i
            mv $i xxx
@@ -292,11 +292,11 @@ o - Remove long redundant bits from read names by making a file
     called subs.in with the following line:
         gnl|ti^ti
     and running the commands
-        cd ~/mouse/vsOo29/chrom
+        cd ~/mouse/vsOo29/blatMouse
 	subs -e -c ^ *.psl > /dev/null
 o - Rename to correspond with tables as so and load into database:
        ssh cc94
-       cd ~/mouse/vsOo29/chrom
+       cd ~/mouse/vsOo29/blatMouse
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatMouse.psl
@@ -306,6 +306,80 @@ o - load sequence into database as so:
 	ssh cc94
 	hgLoadRna addSeq '-abbr=gnl|' hg7 /projects/hg3/mouse/ncbiTrimmed/fasta.*.fa
     This will take quite some time.  Perhaps an hour .
+o - Produce 'best in genome' filtered version:
+        ssh kks00
+	cd ~/mouse/vsOo29
+	pslSort dirs blatMouseAll.psl temp blatMouse
+	pslReps blatMouseAll.psl bestMouseAll.psl /dev/null -singleHit -minCover=0.3
+	pslSortAcc nohead bestMouse temp bestMouseAll.psl
+	cd bestMouse
+        foreach i (*.psl)
+	   set r = $i:r
+           mv $i ${r}_bestMouse.psl
+        end
+o - Load best in genome into database as so:
+	ssh cc94
+	cd ~/mouse/vsOo29/bestMouse
+        hgLoadPsl hg7 *.psl
+
+PRODUCING VERTEBRATE mRNA ALIGMENTS
+
+Here you align vertebrate mRNAs against the masked genome on the
+cluster you set up during the previous step.
+
+o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
+    /projects/hg2/genbank.125
+o - Process these out of genbank flat files as so:
+       ssh kks00
+       cd /projects/hg2/genbank.125
+       gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbver*.gz | gbToFaRa ~/hg/h/xenoRna.fil ../mrna.125/xenoRna.fa ../mrna.125/xenoRna.ra ../mrna.125/xenoRna.ta stdin
+       cd ../mrna.125
+       compress -c xenoRna.fa > xenoRna.fa.Z
+o - Copy onto the cluster as so:
+       ssh cc01
+       ccCp /projects/hg2/mrna.125/xenoRna.fa.Z /var/tmp/hg/h/xenoRna.fa.Z
+       cd ~/cluster
+    edit parOne to read
+       uncompress /var/tmp/hg/h/xenoRna.fa.Z
+    and then execute
+       parAll
+    Double check by editing serOne to read
+       ls -l /var/tmp/hg/h/xenoRna.fa
+    and do
+       serAll | tee foo
+    and inspect result for consistency.
+o - Start the cluster run as so:
+       ssh cc01
+       cd ~/oo/jkStuff
+       mkdir post.xenoRna
+       cd post.xenoRna
+       mkdir err log out psl
+    Copy over all.gsub from previous version and then
+       ls -1 /var/tmp/hg/h/xenoRna.fa > xeno.lst
+       ls -1 /var/tmp/hg/gs.7/oo.29/tanMaskNib/*.fa.trf > homo.lst
+       gensub2 xeno.lst homo.lst all.gsub all.con
+       condor_submit all.con
+    Wait for this to finish (take just a little over 24 hours) and
+    check results, restarting jobs as needed.
+o - Sort alignments as so:
+       ssh kks00
+       cd ~/oo/jkStuff/post.xenoRna
+       pslSort dirs raw.psl /projects/hg2/temp psl
+       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+       liftUp contig.psl ../liftAll.lft warn cooked.psl
+       pslSortAcc nohead chrom /projects/hg2/temp contig.psl
+       pslCat -dir chrom > xenoMrna.psl
+       rm -r chrom raw.psl cooked.psl contig.psl
+o - Load into database as so:
+       ssh cc94
+       cd ~/oo/jkStuff/post.xenoRna
+       hgLoadPsl hg7 xenoMrna.psl -tNameIx
+       cd /projects/hg2/mrna.125
+       hgLoadRna add hg7 /projects/hg2/mrna.125/xenoRna.fa xenoRna.ra
+
+
+
+
 
 PRODUCING FISH ALIGNMENTS
 
@@ -440,16 +514,19 @@ o - Load cpgIslands
 o - Load Ensembl genes:
      cd ~/oo/bed
      mkdir ensembl
-     wget ftp://ftp.ebi.ac.uk/pub/software/ensembl/ensembl110.gtf.gz
-     gunzip *.gz
-   edit *.gtf to remove garbage in front of gff-version lines.
-   Note other problems.  Punt back to Elia....
-     grep -v start_codon chromRaw.gtf | grep -v stop_codon > chrom.gtf
-     ldHgGene hg7 ensGene chrom.gtf
+     cd ensembl
+     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz
+     gunzip all*.gz
+     liftUp ensembl110.gtf ~/oo/jkStuff/liftAll.lft warn all*.gtf
+     ldHgGene hg7 ensGene en*.gtf
 o - Load Ensembl peptides:
      (poke around ensembl to get their peptide files as ensembl.pep)
      (substitute ENST for ENSP in ensemble.pep with subs)
-     hgPepPred hg7 ensPep ensembl.pep
+     wget ftp://ftp.ensembl.org/pub/current/data/fasta/pep/ensembl.pep.gz
+     gunzip ensembl.pep.gz
+   edit subs.in to read: ENSP|ENST
+     subs -e ensembl.pep
+     hgPepPred hg7 generic ensPep ensembl.pep
 
 o - Load Sanger22 genes:
       cd ~/oo/bed
