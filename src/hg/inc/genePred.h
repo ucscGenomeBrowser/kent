@@ -70,6 +70,12 @@ struct genePred
                                    * available. */
 };
 
+/* Standard value to use for insertMergeSize when creating genePred.
+ * Set to 8 due to microdeletions.
+ */
+#define genePredStdInsertMergeSize 8
+
+
 #define GENEPRED_NUM_COLS 10  /* number of columns in a genePred */
 #define GENEPREDX_NUM_COLS 15  /* max number of columns in extended genePred */
 
@@ -156,18 +162,19 @@ struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more than
  * insertMergeSize, will be dropped and the blocks merged. A negative
- * insertMergeSize disables merging of blocks. optFields is a set from
- * genePredFields, indicated what fields to create.  Zero-length CDS, or null
- * cds, creates without CDS annotation.  If cds is null, it will set status
- * fields to cdsNone.  */
+ * insertMergeSize disables merging of blocks.  Use genePredStdInsertMergeSize
+ * if you don't know better.  optfields is a set from genePredFields,
+ * indicated what fields to create.  Zero-length CDS, or null cds, creates
+ * without CDS annotation.  If cds is null, it will set status fields to
+ * cdsNone.  */
 
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);
 /* Compatibility function, genePredFromPsl2 is prefered. Convert a PSL of an
  * RNA alignment to a genePred, converting a genbank CDS specification string
  * to genomic coordinates. Small inserts, no more than insertMergeSize, will
- * be dropped and the blocks merged.  CDS start or end of -1 creates without
- * CDS annotation*/
+ * be dropped and the blocks merged.  Use genePredStdInsertMergeSize if you
+ * don't know better.  CDS start or end of -1 creates without CDS annotation*/
 
 char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options);
 /* Get SQL required to create a genePred table. extFields is a bit set

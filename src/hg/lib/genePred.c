@@ -14,7 +14,7 @@
 /* FIXME: remove when bugs fixes */
 #define WARN_BLAT_BUGS 1
 
-static char const rcsid[] = "$Id: genePred.c,v 1.54 2004/09/03 04:08:26 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.55 2004/09/05 18:19:52 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -942,10 +942,11 @@ struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more than
  * insertMergeSize, will be dropped and the blocks merged. A negative
- * insertMergeSize disables merging of blocks. optFields is a set from
- * genePredFields, indicated what fields to create.  Zero-length CDS, or null
- * cds, creates without CDS annotation.  If cds is null, it will set status
- * fields to cdsNone.  */
+ * insertMergeSize disables merging of blocks.  Use genePredStdInsertMergeSize
+ * if you don't know better.  optfields is a set from genePredFields,
+ * indicated what fields to create.  Zero-length CDS, or null cds, creates
+ * without CDS annotation.  If cds is null, it will set status fields to
+ * cdsNone.  */
 {
 struct genePred *gene;
 AllocVar(gene);
@@ -977,17 +978,15 @@ struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
 /* Compatibility function, genePredFromPsl2 is prefered. Convert a PSL of an
  * RNA alignment to a genePred, converting a genbank CDS specification string
  * to genomic coordinates. Small inserts, no more than insertMergeSize, will
- * be dropped and the blocks merged.  CDS start or end of -1 creates without
- * CDS annotation*/
+ * be dropped and the blocks merged.  Use genePredStdInsertMergeSize if you
+ * don't know better.  CDS start or end of -1 creates without CDS annotation*/
 {
 struct genbankCds cds;
 ZeroVar(&cds);
 cds.start = cdsStart;
 cds.end = cdsEnd;
 return genePredFromPsl2(psl, 0, &cds, insertMergeSize);
-
 }
-
 
 char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options)
 /* Get SQL required to create a genePred table. optFields is a bit set
@@ -1044,7 +1043,7 @@ if (*list == NULL)
         else
             {
             psl = pslLoad(row);
-            el = genePredFromPsl2(psl, 0, NULL, 10);
+            el = genePredFromPsl2(psl, 0, NULL, genePredStdInsertMergeSize);
             }
         slAddHead(list, el);
         }
