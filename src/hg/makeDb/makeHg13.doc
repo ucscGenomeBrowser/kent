@@ -537,7 +537,7 @@ Get the human proteins:
         /cluster/store1/refSeqCum/112602/mim2loc
 # Don't worry about the "No gene name" errors
 o - Add RefSeq status info
-    hgRefSeqStatus hg13 /cluster/store1/refSeqCum/112602/loc2ref
+    hgRefSeqStatus -human hg13 /cluster/store1/refSeqCum/112602/loc2ref
 
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneNam\
