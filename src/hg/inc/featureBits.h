@@ -5,6 +5,9 @@
 #ifndef BITS_H
 #include "bits.h"
 #endif
+#include "hdb.h"
+#include "cart.h"
+#include "bed.h"
 
 struct featureBits
 /* A part of a sequence. */
@@ -62,7 +65,12 @@ void fbOptionsDb(char *db, char *track);
 /* Print out an HTML table with radio buttons for featureBits options. */
 
 void fbOptionsHti(struct hTableInfo *hti);
-/* Print out an HTML table with radio buttons for featureBits options. */
+/* Print out an HTML table with radio buttons for featureBits options.
+ * Use defaults from CGI. */
+
+void fbOptionsHtiCart(struct hTableInfo *hti, struct cart *cart);
+/* Print out an HTML table with radio buttons for featureBits options. 
+ * Use defaults from CGI and cart. */
 
 char *fbOptionsToQualifier();
 /* Translate CGI variable created by fbOptions() to a featureBits qualifier. */

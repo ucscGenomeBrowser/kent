@@ -3,6 +3,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "bits.h"
+#include "cart.h"
 #include "cheapcgi.h"
 #include "trackDb.h"
 #include "bed.h"
@@ -213,10 +214,12 @@ if (wordCount < 1)
 *retExtra = words[2];
 }
 
-void fbOptionsHti(struct hTableInfo *hti)
-/* Print out an HTML table with radio buttons for featureBits options. */
+void fbOptionsHtiCart(struct hTableInfo *hti, struct cart *cart)
+/* Print out an HTML table with radio buttons for featureBits options. 
+ * Use defaults from CGI and cart. */
 {
 boolean isGene;
+char *setting, *fbQual;
 
 if (sameString("psl", hti->type))
     isGene = FALSE;
@@ -224,61 +227,73 @@ else
     isGene = TRUE;
 
 puts("<TABLE><TR><TD>\n");
-cgiMakeRadioButton("fbQual", "whole", TRUE);
+fbQual = cartCgiUsualString(cart, "fbQual", "whole");
+cgiMakeRadioButton("fbQual", "whole", sameString(fbQual, "whole"));
 if (isGene)
     puts(" Whole Gene </TD><TD> ");
 else
     puts(" Whole Alignment </TD><TD> ");
 puts(" </TD></TR><TR><TD>\n");
-cgiMakeRadioButton("fbQual", "upstreamAll", FALSE);
+cgiMakeRadioButton("fbQual", "upstreamAll", sameString(fbQual, "upstreamAll"));
 puts(" Upstream by </TD><TD> ");
-cgiMakeTextVar("fbUpBases", "200", 8);
+setting = cartCgiUsualString(cart, "fbUpBases", "200");
+cgiMakeTextVar("fbUpBases", setting, 8);
 puts(" bases </TD></TR><TR><TD>\n");
 if (hti->hasBlocks)
     {
-    cgiMakeRadioButton("fbQual", "exon", FALSE);
+    cgiMakeRadioButton("fbQual", "exon", sameString(fbQual, "exon"));
     if (isGene)
 	puts(" Exons plus </TD><TD> ");
     else
 	puts(" Blocks plus </TD><TD> ");
-    cgiMakeTextVar("fbExonBases", "0", 8);
+    setting = cartCgiUsualString(cart, "fbExonBases", "0");
+    cgiMakeTextVar("fbExonBases", setting, 8);
     puts(" bases at each end </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "intron", FALSE);
+    cgiMakeRadioButton("fbQual", "intron", sameString(fbQual, "intron"));
     if (isGene)
 	puts(" Introns plus </TD><TD> ");
     else
 	puts(" Regions between blocks plus </TD><TD> ");
-    cgiMakeTextVar("fbIntronBases", "0", 8);
+    setting = cartCgiUsualString(cart, "fbIntronBases", "0");
+    cgiMakeTextVar("fbIntronBases", setting, 8);
     puts(" bases at each end </TD></TR><TR><TD>\n");
     }
 if (hti->hasBlocks && hti->hasCDS)
     {
-    cgiMakeRadioButton("fbQual", "utr5", FALSE);
+    cgiMakeRadioButton("fbQual", "utr5", sameString(fbQual, "utr5"));
     puts(" 5' UTR Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "cds", FALSE);
+    cgiMakeRadioButton("fbQual", "cds", sameString(fbQual, "cds"));
     puts(" Coding Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "utr3", FALSE);
+    cgiMakeRadioButton("fbQual", "utr3", sameString(fbQual, "utr3"));
     puts(" 3' UTR Exons </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     }
 else if (hti->hasCDS)
     {
-    cgiMakeRadioButton("fbQual", "utr5", FALSE);
+    cgiMakeRadioButton("fbQual", "utr5", sameString(fbQual, "utr5"));
     puts(" 5' UTR  </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "cds", FALSE);
+    cgiMakeRadioButton("fbQual", "cds", sameString(fbQual, "cds"));
     puts(" CDS </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "utr3", FALSE);
+    cgiMakeRadioButton("fbQual", "utr3", sameString(fbQual, "utr3"));
     puts(" 3' UTR </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     }
-cgiMakeRadioButton("fbQual", "endAll", FALSE);
+cgiMakeRadioButton("fbQual", "endAll", sameString(fbQual, "endAll"));
 puts(" Downstream by </TD><TD> ");
-cgiMakeTextVar("fbDownBases", "200", 8);
+setting = cartCgiUsualString(cart, "fbDownBases", "200");
+cgiMakeTextVar("fbDownBases", setting, 8);
 puts(" bases </TD></TR></TABLE>");
+}
+
+void fbOptionsHti(struct hTableInfo *hti)
+/* Print out an HTML table with radio buttons for featureBits options.
+ * Use defaults from CGI. */
+{
+fbOptionsHtiCart(hti, NULL);
 }
 
 void fbOptionsDb(char *db, char *track)
