@@ -38,7 +38,7 @@
 #include "findKGProtAlias.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.89 2003/06/25 22:32:27 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.90 2003/06/26 21:21:31 kent Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -136,7 +136,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dyStringClear(query);
 	dyStringPrintf(query, "%s Gene Predictions", tableName);
 	table->description = cloneString("Known Genes");
-	table->name = cloneString(query->string);
+	table->name = cloneString("knownGene");
 	slAddHead(&hgp->tableList, table);
 	}
     AllocVar(pos);
@@ -188,7 +188,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dyStringClear(query);
 	table->description = cloneString("Known Genes");
 	dyStringPrintf(query, "%s", tableName);
-	table->name = cloneString(query->string);
+	table->name = cloneString("knownGene");
 	slAddHead(&hgp->tableList, table);
 	}
 
@@ -2627,8 +2627,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		    hgAppName, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&%s=full\">%s at %s</A>",
-		    extraCgi, table->name, pos->name, range);
+		fprintf(f, "%s&%s=%s\">%s at %s</A>",
+		    extraCgi, table->name, hTrackOpenVis(table->name), pos->name, range);
 		desc = pos->description;
 		if (desc)
 		    fprintf(f, " - %s", desc);

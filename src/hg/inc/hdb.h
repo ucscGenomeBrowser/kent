@@ -396,6 +396,12 @@ struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName);
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database, errAbort if it's not there. */
 
+boolean hTrackCanPack(char *trackName);
+/* Return TRUE if this track can be packed. */
+
+char *hTrackOpenVis(char *trackName);
+/* Return "pack" if track is packable, otherwise "full". */
+
 struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
  * Dispose of this with dbDbFreeList. */

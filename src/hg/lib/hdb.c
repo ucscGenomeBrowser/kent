@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.116 2003/06/25 20:48:14 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.117 2003/06/26 21:21:31 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2266,6 +2266,28 @@ tdb = hMaybeTrackInfo(conn, trackName);
 if (tdb == NULL)
     errAbort("Track %s not found", trackName);
 return tdb;
+}
+
+
+boolean hTrackCanPack(char *trackName)
+/* Return TRUE if this track can be packed. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdb = hMaybeTrackInfo(conn, trackName);
+boolean ret = FALSE;
+if (tdb != NULL)
+    {
+    ret = tdb->canPack;
+    trackDbFree(&tdb);
+    }
+hFreeConn(&conn);
+return ret;
+}
+
+char *hTrackOpenVis(char *trackName)
+/* Return "pack" if track is packable, otherwise "full". */
+{
+return hTrackCanPack(trackName) ? "pack" : "full";
 }
 
 struct dbDb *hGetIndexedDatabases()

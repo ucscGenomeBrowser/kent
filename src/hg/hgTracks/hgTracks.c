@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.542 2003/06/26 16:33:37 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.543 2003/06/26 21:21:31 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2626,7 +2626,7 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 tg->mapName = "hgUserPsl";
-tg->visibility = tvFull;
+tg->visibility = tvPack;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
@@ -10442,7 +10442,8 @@ hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
-    cartSetString(cart, hgp->tableList->name, "full");
+    char *trackName = hgp->tableList->name;
+    cartSetString(cart, trackName, hTrackOpenVis(trackName));
     }
 
 /* This means that no single result was found 
