@@ -343,6 +343,7 @@ longLabel $Organism ESTs From Ensembl
 group genes
 priority 42
 visibility dense
+color 175,20,125
 type genePred ensEstPep
 
 track ncbiGenes
