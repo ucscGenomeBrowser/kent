@@ -373,16 +373,13 @@ slReverse(&chromList);
 void addTn(struct chainNet *net, struct fill *fillList, struct rbTree *tnTree)
 /* Add tN's to all gaps underneath fillList. */
 {
-struct fill *fill, *gap;
+struct fill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    for (gap = fill->children; gap != NULL; gap = gap->next)
-        {
-	int s = gap->tStart;
-	gap->tN = intersectionSize(tnTree, s, s + gap->tSize);
-	if (gap->children)
-	    addTn(net, gap->children, tnTree);
-	}
+    int s = fill->tStart;
+    fill->tN = intersectionSize(tnTree, s, s + fill->tSize);
+    if (fill->children)
+	addTn(net, fill->children, tnTree);
     }
 }
 
@@ -394,13 +391,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
     struct rbTree *qnTree = qChrom->nGaps;
-    for (gap = fill->children; gap != NULL; gap = gap->next)
-        {
-	int s = gap->qStart;
-	gap->qN = intersectionSize(qnTree, s, s + gap->qSize);
-	if (gap->children)
-	    addQn(net, gap->children, qChromHash);
-	}
+    int s = fill->qStart;
+    fill->qN = intersectionSize(qnTree, s, s + fill->qSize);
+    if (fill->children)
+	addQn(net, fill->children, qChromHash);
     }
 }
 
