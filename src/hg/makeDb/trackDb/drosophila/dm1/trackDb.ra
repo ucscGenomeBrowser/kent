@@ -122,3 +122,19 @@ color 0,10,100
 exonArrows off
 type bed 12 .
 
+track b100i100
+shortLabel b100i100
+longLabel Gill's Fly Ultras 100%id dm1-dy1-dp1 >= 100bp 
+priority 106
+group compGeno
+visibility dense
+type bed 3 +
+
+track spellmanRanges
+shortLabel Spellman Domains
+longLabel Spellman Rubin Similarly Expressed Domains from Microarray
+priority 107
+group compGeno
+visibility dense
+type bed 4 +
+
