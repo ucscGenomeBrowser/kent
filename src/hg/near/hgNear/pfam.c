@@ -32,6 +32,7 @@ advFilterAnyAllMenu(col, "logic", FALSE);
 hPrintf("terms match");
 }
 
+
 static struct genePos *pfamAdvFilter(struct column *col, 
 	struct sqlConnection *defaultConn, struct genePos *list)
 /* Do advanced filter on for pfam. */

@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.20 2004/03/01 21:31:59 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.21 2004/03/24 16:45:12 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -56,7 +56,11 @@ char *advFilterVal(struct column *col, char *varName)
  * doesn't exist or if it is "" */
 {
 char *name = advFilterName(col, varName);
-return cartNonemptyString(cart, name);
+char *s;
+s = cartNonemptyString(cart, name);
+if (s != NULL)
+    fixSafariSpaceInQuotes(s);
+return s;
 }
 
 char *advFilterNameI(struct column *col, char *varName)

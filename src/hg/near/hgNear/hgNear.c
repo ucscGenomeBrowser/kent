@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.137 2004/03/18 00:05:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.138 2004/03/24 16:45:12 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -152,6 +152,19 @@ hashElFreeList(&varList);
 return ret;
 }
 
+void fixSafariSpaceInQuotes(char *s)
+/* Safari on the Mac changes a space (ascii 32) to a
+ * ascii 160 if it's inside of a single-quote in a
+ * text input box!?  This tuns it back to a 32. */
+{
+unsigned char c;
+while ((c = *s) != 0)
+    {
+    if (c == 160)
+        *s = 32;
+    ++s;
+    }
+}
 
 /* ---- Some html helper routines. ---- */
 

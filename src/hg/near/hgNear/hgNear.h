@@ -301,6 +301,11 @@ boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 boolean anyRealInCart(struct cart *cart, char *wild);
 /* Return TRUE if variables are set matching wildcard. */
 
+void fixSafariSpaceInQuotes(char *s);
+/* Safari on the Mac changes a space (ascii 32) to a
+ * ascii 160 if it's inside of a single-quote in a
+ * text input box!?  This tuns it back to a 32. */
+
 char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name);
 /* Look up in ra hash or die trying. */
 
