@@ -220,107 +220,78 @@ o - Mask simple repeats in addition to normal repeats with:
         cd ~/oo
 	source jkStuff/checkTrf.sh
     there should be no output.
-o - Load up the cluster with masked copies of the genome.
-       ssh kks00
-       cd ~/oo/allctgs
-       zip -j -1 ../ctgFaTrf.zip */ctg*.fa.trf
-       ssh cc01
-    Do the following to unpack
-       cd ~/cluster
-    edit parOne to read
-       mkdir /var/tmp/hg/gs.8/oo.33
-       mkdir /var/tmp/hg/gs.8/oo.33/tanMaskNib
-    and then
-       parAll
-    unpack as so:
-       cd ~/oo
-       ccCp ctgFaTrf.zip  /var/tmp/hg/gs.8/oo.33/ctgFaTrf.zip
-    edit parOne to read
-       cd /var/tmp/hg/gs.8/oo.33/tanMaskNib
-       unzip ../ctgFaTrf.zip >/dev/null
-    and then
-       parAll
-    Double check that all data is in place.
-o - Do mouse/human alignments.
-       ssh cc01
-       cd ~/mouse/vsOo33
-       mkdir err out log psl
-       ls -1S /var/tmp/hg/gs.8/oo.33/tanMaskNib/*.fa.trf > human.lst
-       ls -1S /projects/hg3/mouse/ncbiTrimmed/Mm*.fa > mouse.lst
-     Copy over aliMouse.gsub from previous version and edit paths to
-     point to current assembly.
-       gensub2 mouse.lst human.lst aliMouse.gsub allCon
-     Break into many files by moving the header part of allCon to a file
-     called headCon and then
-       splitFile allCon 21000 m -head=headCon
-       foreach i (m??)
-           mv $i $i.con
-	end
-     Submit a couple of the resulting mNN.con files  a day - trying to 
-     keep condor queue size between 1000 and 10000.  There's 3000 jobs
-     in each file.
-     [This part went well.  As far as I can tell all 50,000 jobs finished
-     the first time without a glitch.]
-o - Check alignments as so:
-       ssh kks00
-       cd ~/mouse/vsOo33
-       gensub2 mouse.lst human.lst fixMouse.gsub fixMouse.sh
-       chmod a+x fixMouse.sh
-       fixMouse.sh | tee fixMouse.out
-o - If any output in fixMouse.out then resubmit jobs as so:
-       ssh cc01
-       cd ~/mouse/vsOo33
-       mv log log.old; mkdir log
-       mv err err.old; mkdir err
-       mv out out.old; mkdir out
-       condor_submit fix.con
+o - Copy the RepeatMasked and trf masked genome to
+    kkstore:/scratch/hg/gs.8/oo.33/contigTrf, and ask
+    Jorge and all to binrsync to propagate the data
+    across the new cluster.
+o - Download the assembled mouse genome in lower-case
+    masked form to /cluster/store1/arachne.3/whole.  
+    Execute the script splitAndCopy.csh to chop it
+    into roughly 50M pieces in arachne.3/parts
+o - Set up the jabba job to do the alignment as so:
+       ssh kkstore
+       cd /cluster/store1/gs.8/oo.33
+       mkdir blatMouse
+       cd blatMouse
+       ls -1S /scratch/hg/gs.3/oo.33/contigTrf/* > human.lst
+       ls -1 /cluster/store1/arachne.3/parts/* > mouse.lst
+    Make a file 'gsub' with the following three lines in it
+#LOOP
+/cluster/home/kent/bin/i386/blat -q=dnax -t=dnax {check in line+ $(path2)} {check in line+ $(path1)}  {check out line+ psl/$(root2)_$(root1).psl} -minScore=20 -minIdentity=20 -tileSize=4 -minMatch=2 -oneOff=0 -ooc={check in exists /scratch/hg/h/4.pooc} -qMask=lower -mask=lower
+#ENDLOOP
+    Process this into a jabba file and launch the first set
+    of jobs (10,000 out of 70,000) as so:
+        gensub2 mouse.lst human.lst gsub spec
+	jabba make hut spec
+	jabba push hut
+    Do a 'jabba check hut' after about 20 minutes and make sure
+    everything is right.  After that make a little script that
+    does a "jabba push hut" followed by a "sleep 30" about 50
+    times.  Interrupt script when you see jabba push say it's
+    not pushing anything.
+
 o - Sort alignments as so 
-       cd ~/mouse/vsOo33
-       pslCat -dir -check psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead blatMouse temp stdin
-       [This did not go well, though for oo.27 it was a breeze.  This
-       time I got errors at fairly random lines.  One run it would
-       report an error at line 200,000 and the next at error 2,000,000.
-       I didn't see a bug anywhere.  I resorted to:
-           ssh kk002
-	   cd /cluster/work/mouse/vsOo33
-	   pslCat -out=rawCtg.psl -dir -check ~/mouse/vsOo33/psl
-	   pslSortAcc nohead ctg /projects/hg2/temp rawCtg.psl
-	   cd ctg
-	   foreach i (*.psl)
-	       echo $i
-	       mv $i xxx
-	       pslUnpile -maxPile=150 xxx $i
-	   rm xxx
-	   cd ..
-	   liftUp chrom.psl ~/oo/jkStuff/liftAll.lft warn ctg/*.psl
-	   end
-       which went ...]
+       ssh kkstore
+       cd /cluster/store1/gs.8/oo.33/blatMouse
+       pslCat -dir -check psl | liftUp -type=.psl stdout ../liftAll.lft warn stdin | pslSortAcc nohead chrom /cluster/store2/temp stdin
 o - Get rid of big pile-ups due to contamination as so:
        cd blatMouse
        foreach i (*.psl)
            echo $i
            mv $i xxx
-           pslUnpile -maxPile=150 xxx $i
+           pslUnpile -maxPile=175 xxx $i
        rm xxx
        end
 o - Remove long redundant bits from read names by making a file
     called subs.in with the following line:
         gnl|ti^ti
+        contig_^tig_
     and running the commands
-        cd ~/mouse/vsOo33/blatMouse
+        cd ~/mouse/vsOo33/blatMouse/chrom
 	subs -e -c ^ *.psl > /dev/null
+o - Copy over to network where database is:
+        ssh kks00
+	cd ~/oo/bed
+	mkdir blatMouse
+	mkdir blatMouse/chrom
+	cd !$
+        cp /cluster/store1/gs.8/oo.33/blatMouse/chrom/*.psl .
 o - Rename to correspond with tables as so and load into database:
        ssh cc94
-       cd ~/mouse/vsOo33/blatMouse
+       cd ~/oo/bed/blatMouse/chrom
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatMouse.psl
        end
        hgLoadPsl hg8 *.psl
 o - load sequence into database as so:
+	ssh kks00
+	faSplit about /projects/hg3/mouse/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/mouse/arachne.3/whole/unplaced
 	ssh cc94
-	hgLoadRna addSeq '-abbr=gnl|' hg8 /projects/hg3/mouse/ncbiTrimmed/fasta.*.fa
+	hgLoadRna addSeq '-abbr=gnl|' hg8 /projects/hg3/mouse/arachne.3/whole/unpla*.fa
+	hgLoadRna addSeq '-abbr=con' hg8 /projects/hg3/mouse/arachne.3/whole/SET*.mfa
     This will take quite some time.  Perhaps an hour .
+
 o - Produce 'best in genome' filtered version:
         ssh kks00
 	cd ~/mouse/vsOo33
@@ -375,10 +346,10 @@ o - Sort alignments as so:
        cd /cluster/store1/gs.8/oo.33/xenoRna
        pslSort dirs raw.psl /cluster/store2/temp psl
        pslReps raw.psl cooked.psl /dev/null -minAli=0.25
-       liftUp contig.psl ../liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp contig.psl
+       liftUp chrom.psl ../liftAll.lft warn cooked.psl
+       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoMrna.psl
-       rm -r chrom raw.psl cooked.psl contig.psl
+       rm -r chrom raw.psl cooked.psl chrom.psl
 
 o - Load into database as so:
        ssh cc94
@@ -399,37 +370,29 @@ o - Download sequence from ... and put it in
 	cd ~/fish/seq15jun2001
         faSplit sequence bq* 100 fish
 	compress bq*
+	copy over to kkstore:/cluster/store2/fish/seq15jun2001
 o - Do fish/human alignments.
-       ssh cc01
-       cd ~/fish
+       ssh kkstore
+       cd /cluster/store2/fish
        mkdir vsOo33
        cd vsOo33
-       mkdir err out log psl
+       mkdir psl
        ls -1S /var/tmp/hg/gs.8/oo.33/tanMaskNib/*.fa.trf > human.lst
        ls -1S /projects/hg3/fish/seq15jun2001/*.fa > fish.lst
-     Copy over aliFish.gsub from previous version and edit paths to
+     Copy over gsub from previous version and edit paths to
      point to current assembly.
-       gensub2 fish.lst human.lst aliFish.gsub allCon
-     Break into many files by moving the header part of allCon to a file
-     called headCon and then
-       splitFile allCon 21000 m -head=headCon
-       foreach i (m??)
-           mv $i $i.con
-	end
-     Submit a several of the resulting mNN.con files  a day - trying to 
-     keep condor queue size between 1000 and 10000.  There's 3000 jobs
-     in each file.
-o - Check alignments as so:
-       ssh kks00
-       cd ~/fish/vsOo33
-       edit fixFish.sh as necessary to update versions.
-       gensub2 fish.lst human.lst fixFish.gsub fixFish.sh
-       chmod a+x fixFish.sh
-       fixFish.sh | tee fixFish.out
+       gensub2 fish.lst human.lst gsub spec
+       jabba make hut spec
+       jabba try hut
+     Make sure jobs are going ok.  Then
+       jabba push hut
+     wait about 2 hours and do another
+       jabba push hut
+     do a jabba check hut, and if necessary another push hut.
 o - Sort alignments as so 
-       cd ~/fish/vsOo33
-       pslCat -dir -check psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
-o - Rename to correspond with tables as so and load into database:
+       pslCat -dir psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+o - Copy to cc94:/scratch.  Rename to correspond with tables as so and 
+    load into database:
        ssh cc94
        cd ~/fish/vsOo33/chrom
        foreach i (*.psl)
@@ -571,16 +534,9 @@ o - Load exoFish table
      - cd exoFish
      - hg8 < ~kent/src/hg/lib/exoFish.sql
      - Put email attatchment from Olivier Jaillon (ojaaillon@genoscope.cns.fr)
-       into /projects/hg3/gs.8/oo.33/bed/exoFish/oo27.ecore1.4jimkent
-     - cp oo27.ecore1.4jimkent foo
-     - Substitute "chr" for "CHR" in that file by
-          subs -e foo >/dev/null
-     - Copy in filter.awk from previous version's bed/exoFish dir.
-     - Add dummy name column and convert to tab separated with
-       awk -f filter.awk foo > exoFish.bed
-     - Enter database with "hg8" command.
-     - At mysql> prompt type in:
-          load data local infile 'exoFish.bed' into table exoFish
+       into /projects/hg3/gs.8/oo.33/bed/exoFish/all_maping_ecore
+     - awk -f filter.awk all_maping_ecore > exoFish.bed
+     - hgLoadBed hg8 exoFish exoFish.bed
 
 o - Mouse synteny track
      - login to cc94.
@@ -627,6 +583,17 @@ o - Load Acembly (done)
     - Load into database as so:
         ldHgGene hg8 acembly acembly.gff
         hgPepPred hg8 generic acemblyPep acembly.pep
+
+o - Load genomic dupes
+    ssh cc94
+    cd ~/oo/bed
+    mkdir genomicDups
+    cd genomicDups
+    wget http://codon/jab/web/takeoff/oo33_dups_for_kent.zip
+    unzip *.zip
+    awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
+    mysql -u hgcat -pbigSECRET hg8 < ~/src/hg/lib/genomicDups.sql
+    hdLoadBed hg8 -oldTable genomicDups genomicDupes.bed
 
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
