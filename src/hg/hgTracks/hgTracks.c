@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.530 2003/06/16 22:28:16 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.531 2003/06/17 00:34:29 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -4182,9 +4182,11 @@ char *genomicSuperDupsName(struct track *tg, void *item)
 struct genomicSuperDups *gd = item;
 char *full = gd->name;
 static char abbrev[64];
-
-strcpy(abbrev, skipChr(full));
-abbr(abbrev, "om");
+char *s = strchr(full, '.');
+if (s != NULL)
+    full = s+1;
+safef(abbrev, sizeof(abbrev), "%s", full);
+abbr(abbrev, "chrom");
 return abbrev;
 }
 
