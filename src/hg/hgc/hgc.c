@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.669 2004/06/16 23:43:24 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.670 2004/06/17 02:06:38 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7328,7 +7328,15 @@ printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d&nbsp;bp \n",pg->polyA);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
-printf("(%d&nbsp;%% of gene)<p>\n",pg->coverage);
+printf("(%d&nbsp;%% of gene)<br>\n",pg->coverage);
+if (sameString(pg->type, "expressed"))
+    {
+    printf("<b>Type of RetroGene:&nbsp;</b>%s<p>\n",pg->type);
+    }
+else
+    {
+    printf("<b>Type of Parent:&nbsp;</b>%s<p>\n",pg->type);
+    }
 if (pseudoList != NULL)
     {
     printf("<H4>RetroGene/Gene Alignment</H4>");
