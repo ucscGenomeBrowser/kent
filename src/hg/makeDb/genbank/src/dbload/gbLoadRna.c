@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.11 2003/08/24 21:30:22 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.12 2003/08/25 03:32:59 genbank Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -153,7 +153,7 @@ gbAlignDataDeleteOutdated(conn, select, statusTbl, tmpDir);
 
 /* now drop metadata entries */
 gbVerbMsg(1, "delete outdated metadata");
-gbMetaDataDeleteOutdated(conn, select, statusTbl, tmpDir);
+gbMetaDataDeleteOutdated(conn, select, statusTbl, &gOptions, tmpDir);
 
 /* Now it's safe to drop deleted entries from the database status table. */
 gbVerbMsg(1, "delete outdated gbStatus");

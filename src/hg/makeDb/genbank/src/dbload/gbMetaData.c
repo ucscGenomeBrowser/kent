@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.10 2003/08/24 21:30:22 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.11 2003/08/25 03:32:59 genbank Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -834,7 +834,7 @@ struct sqlDeleter* deleter = sqlDeleterNew(gTmpDir, (verbose >= 2));
 
 /* Use a join to get list of acc, which proved reasonable fastly because
 * the the list is small */
-safef(query, sizeof(query), "SELECT acc FROM gbSeq left JOIN refLink ON (refLink.protAcc = gbSeq.acc) "
+safef(query, sizeof(query), "SELECT acc FROM gbSeq LEFT JOIN refLink ON (refLink.protAcc = gbSeq.acc) "
       "WHERE (acc LIKE 'NP_%%') AND (refLink.protAcc IS NULL)");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -848,12 +848,14 @@ sqlDeleterFree(&deleter);
 void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbSelect* select,
                               struct gbStatusTbl* statusTbl,
+                              struct dbLoadOptions* options,
                               char *tmpDir)
 /* delete outdated metadata */
 {
 struct sqlDeleter* deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
 struct gbStatus* status;
 gSrcDb = select->release->srcDb;
+gOptions = options;
 strcpy(gTmpDir, tmpDir);
 
 /* Delete any meta modified from id tables */

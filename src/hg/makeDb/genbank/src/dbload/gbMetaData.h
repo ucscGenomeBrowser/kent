@@ -40,6 +40,7 @@ void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
 void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbSelect* select,
                               struct gbStatusTbl* statusTbl,
+                              struct dbLoadOptions* options,
                               char *tmpDir);
 /* delete outdated metadata */
 
