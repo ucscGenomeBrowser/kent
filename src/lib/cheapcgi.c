@@ -48,6 +48,7 @@ static void getQueryInput()
 inputString = getenv("QUERY_STRING");
 if (inputString == NULL)
     errAbort("No QUERY_STRING in environment.");
+inputString = cloneString(inputString);
 }
 
 static void getPostInput()

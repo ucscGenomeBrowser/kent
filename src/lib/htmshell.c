@@ -153,10 +153,10 @@ fprintf(f,"<div id=\"jstooldiv\" style=\"position: absolute;visibility: hidden;\
 void htmlStart(char *title)
 /* Write the start of an html from CGI */
 {
-puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 puts("Content-Type:text/html");
 puts("\n");
 
+puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 _htmStart(stdout, title);
 }
 
