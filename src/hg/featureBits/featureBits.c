@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.23 2004/04/09 02:11:51 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.24 2004/04/28 22:48:55 angie Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -39,7 +39,7 @@ errAbort(
   "   -chrom=chrN       Restrict to one chromosome\n"
   "   -or               Or tables together instead of anding them\n"
   "   -countGaps        Count gaps in denominator\n"
-  "   -noRandom         Don't include _random chromosomes\n"
+  "   -noRandom         Don't include _random (or Un) chromosomes\n"
   "   -minFeatureSize   Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
   "                     alignment gaps and introns.\n"
@@ -482,7 +482,8 @@ if (!faIndependent)
     double totalBases = 0, totalBits = 0;
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
-	if (!noRandom || !endsWith(chrom->name, "_random"))
+	if (! (noRandom && (endsWith(chrom->name, "_random") ||
+			    startsWith("chrUn", chrom->name))))
 	    {
 	    int chromSize, chromBitSize;
 	    chromFeatureBits(conn, chrom->name, tableCount, tables,
