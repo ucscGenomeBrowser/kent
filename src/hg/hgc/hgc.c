@@ -44,6 +44,7 @@
 #include "browserTable.h"
 #include "hgConfig.h"
 #include "estPair.h"
+#include "softPromoter.h"
 
 #define CHUCK_CODE 0
 #define ROGIC_CODE 1
@@ -1332,6 +1333,64 @@ void bedPrintPos(struct bed *bed)
  * standard format. */
 {
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL);
+}
+
+void hgSoftPromoter(char *item)
+/* Print info on Softberry promoter. */
+{
+htmlStart("Softberry TSSW Promoter");
+printf("<H2>Softberry TSSW Promoter Prediction %s</H2>", item);
+
+if (cgiVarExists("o"))
+    {
+    struct softPromoter *pro;
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char query[256];
+    int start = cgiInt("o");
+    sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
+	    "softPromoter", item, seqName, start);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	pro = softPromoterLoad(row);
+	bedPrintPos((struct bed *)pro);
+	printf("<B>Short Name:</B> %s<BR>\n", pro->name);
+	printf("<B>Full Name:</B> %s<BR>\n", pro->origName);
+	printf("<B>Type:</B> %s<BR>\n", pro->type);
+	printf("<B>Score:</B> %f<BR>\n", pro->origScore);
+	printf("<B>Block Info:</B> %s<BR>\n", pro->blockString);
+	printf("<BR>\n");
+	htmlHorizontalLine();
+	printCappedSequence(pro->chromStart, pro->chromEnd, 100);
+	softPromoterFree(&pro);
+	htmlHorizontalLine();
+	}
+    hFreeConn(&conn);
+    }
+printf("<P>This track was kindly provided by Victor Solovyev at ");
+printf("<A HREF=\"http://www.softberry.com\" TARGET=_blank>Softberry Inc.</A> ");
+puts("using the TSSW program."
+   "Commercial use of these predictions is restricted to viewing in "
+   "this browser.  Please contact Softberry Inc. to make arrangements "
+   "for further commercial access.  Further information from Softberry on"
+   "this track appears below.</P>"
+
+"<P>\"Promoters were predicted by Softberry promoter prediction program TSSW in "
+"regions up to 3000 from known starts of coding regions (ATG codon) or known "
+"mapped 5'-mRNA ends. We found that limiting promoter search to  such regions "
+"drastically reduces false positive predictions. Also, we have very strong "
+"thresholds for prediction of TATA-less promoters to minimize false positive "
+"predictions. </P>"
+" "
+"<P>\"Our promoter prediction software accurately predicts about 50% promoters "
+"accurately with a small average deviation from true start site. Such accuracy "
+"makes possible experimental work with found promoter candidates. </P>"
+" "
+"<P>\"For 20 experimentally verified promoters on Chromosome 22, TSSW predicted "
+"15, placed 12 of them  within (-150,+150) region from true TSS and 6 (30% of "
+"all promoters) - within -8,+2 region from true TSS.\" </P>");
 }
 
 void doCpgIsland(char *item, char *table)
@@ -3129,6 +3188,10 @@ else if (sameWord(group, "htcGeneInGenome"))
 else if (sameWord(group, "htcDnaNearGene"))
    {
    htcDnaNearGene(item);
+   }
+else if (sameWord(group, "hgSoftPromoter"))
+   {
+   hgSoftPromoter(item);
    }
 #ifdef CHUCK_CODE
 else if (sameWord(group, "hgExprBed"))
