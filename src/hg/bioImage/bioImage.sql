@@ -49,16 +49,16 @@ CREATE TABLE imageType (
 # Info on contributor
 CREATE TABLE contributer (
     id int auto_increment not null,   # ID of contributer
-    name varchar(255) not null,	# Name in format like Kend W.J."
+    name varchar(255) not null,	# Name in format like Kent W.J.
          #Indices
     PRIMARY KEY(id),
     INDEX(name(32))
 );
 
-#Info on a batch of images submitted at once
+# Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set
-    contributers longblob not null;	# Comma separated list of contributers in format Kent W.J., Wu F.Y.
+    contributers longblob not null,	# Comma separated list of contributers in format Kent W.J., Wu F.Y.
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     setUrl longblob not null,	# URL for whole set
@@ -79,7 +79,6 @@ CREATE TABLE submissionContributer (
 #Info on a bunch of sections through same sample
 CREATE TABLE sectionSet (
     id int auto_increment not null,	# Section id
-    count int not null,	# Count of sections
               #Indices
     PRIMARY KEY(id)
 );
@@ -98,7 +97,7 @@ CREATE TABLE image (
     locusLink varchar(255) not null,	# Locus link ID or blank if none
     refSeq varchar(255) not null,	# RefSeq ID or blank if none
     genbank varchar(255) not null,	# Genbank accession or blank if none
-    defaultImage tinyint not null,	# Set to 1 if this is default for gene
+    isDefault tinyint not null,	# Set to 1 if this is default for gene
     taxon int not null,	# NCBI taxon ID of organism
     isEmbryo tinyint not null,	# TRUE if embryonic.  Age will be relative to conception
     age float not null,	# Age in days since birth or conception depending on isEmbryo

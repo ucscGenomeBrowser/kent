@@ -62,7 +62,6 @@ table sectionSet
 "Info on a bunch of sections through same sample"
     (
     int id;	"Section id"
-    int count;	"Count of sections"
     )
 
 table image
@@ -80,7 +79,7 @@ table image
     string locusLink;	"Locus link ID or blank if none"
     string refSeq;	"RefSeq ID or blank if none"
     string genbank;	"Genbank accession or blank if none"
-    byte defaultImage;	"Set to 1 if this is default for gene"
+    byte isDefault;	"Set to 1 if this is default for gene"
     int taxon;		"NCBI taxon ID of organism"
     byte isEmbryo;	"TRUE if embryonic.  Age will be relative to conception"
     float age;		"Age in days since birth or conception depending on isEmbryo"
