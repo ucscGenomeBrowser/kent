@@ -190,9 +190,11 @@ char *ctVisMenu[] =
 {
     "hide",
     "dense",
+    "squish",
+    "pack",
     "full",
 };
-int ctVisMenuSize = 3;
+int ctVisMenuSize = 5;
 
 
 void storeStringIfSet(char *var)
@@ -2977,7 +2979,7 @@ snprintf(buf, sizeof(buf), "table browser query on %s%s%s",
 setting = cgiUsualString("hgt.ctDesc", buf);
 cgiMakeTextVar("hgt.ctDesc", setting, 50);
 puts("</TD></TR><TR><TD></TD><TD>visibility=");
-setting = cartCgiUsualString(cart, "hgt.ctVis", ctVisMenu[1]);
+setting = cartCgiUsualString(cart, "hgt.ctVis", ctVisMenu[3]);
 cgiMakeDropList("hgt.ctVis", ctVisMenu, ctVisMenuSize, setting);
 puts("</TD></TR><TR><TD></TD><TD>url=");
 setting = cartCgiUsualString(cart, "hgt.ctUrl", "");
@@ -3061,8 +3063,11 @@ else
 
 if (doCT && (bedList != NULL))
     {
-    int visNum = (sameString("hide", ctVis) ? 0 :
-		  sameString("full", ctVis) ? 2 : 1);
+    int visNum = (sameString("hide", ctVis)   ? 0 :
+		  sameString("dense", ctVis)  ? 1 :
+		  sameString("squish", ctVis) ? 2 : 
+		  sameString("pack", ctVis)   ? 3 : 
+		  sameString("full", ctVis)   ? 4 : 3);
     if (loadCT)
 	ctNew = newCT(ctName, ctDesc, visNum, ctUrl, fields);
     printf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
