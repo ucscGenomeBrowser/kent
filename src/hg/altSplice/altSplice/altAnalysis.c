@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.11 2004/03/08 01:37:13 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.12 2004/04/04 22:19:21 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -185,7 +185,26 @@ boolean areConstitutive(struct altGraphX *ag, bool **em, int v1, int v2)
   60000000
 */
 {
-int sum = edgesInArea(ag, em, v1,v2);
+int sum = 0;
+boolean isConst = TRUE;
+int i = 0, j = 0;
+int vC = ag->vertexCount;
+for(i = 0; i < vC; i++)
+    {
+    if(em[i][v1])
+	{
+	sum = edgesInArea(ag, em, i, v1);
+	if(sum != 1)
+	    return FALSE;
+	}
+    if(em[v2][i])
+	{
+	sum = edgesInArea(ag, em, v2, i);
+	if(sum != 1)
+	    return FALSE;
+	}
+    }
+sum = edgesInArea(ag, em, v1, v2);
 return sum == 1;
 }
 
@@ -1509,6 +1528,7 @@ if(alt3bpRegion)
     fprintf(alt3bpRegion, "%s\t%d\t%d\t%s\t%d\t%s\n", as->chrom, as->altBpStarts[1] - 10, as->altBpEnds[1] + 10,
 	    as->agName, as->altTypes[1], as->strand);
 }
+
 void lookForAltSplicing(struct altGraphX *ag, struct altSpliceSite **aSpliceList, 
 			int *altSpliceSites, int *altSpliceLoci, int *totalSpliceSites)
 /* Walk throught the altGraphX graph and look for evidence of altSplicing. */
