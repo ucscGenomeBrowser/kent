@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgExpDistance.c,v 1.1 2003/06/24 03:52:16 kent Exp $";
+static char const rcsid[] = "$Id: hgExpDistance.c,v 1.2 2003/06/24 07:08:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -59,7 +59,7 @@ static char *createString = "CREATE TABLE %s (\n"
 "    query varchar(255) not null,	# Name of query sequence\n"
 "    target varchar(255) not null,	# Name of target sequence\n"
 "    distance float not null	# Distance in expression space\n"
-");\n";
+")\n";
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
