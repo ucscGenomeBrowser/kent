@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.30 2004/05/19 22:57:57 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.31 2004/05/20 17:30:55 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1051,6 +1051,7 @@ if (sameString(q.lockUser,""))
     { /* not already locked */
 
     strftime (q.pushdate, sizeof(q.pushdate), "%Y-%m-%d", loctime); /* today's date */
+    strftime (q.qadate  , sizeof(q.qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
     safef(query, sizeof(query), 
 	"update %s set rank = 0, priority ='L', pushedYN='Y', pushdate='%s' where qid = '%s' ", 
