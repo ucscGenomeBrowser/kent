@@ -33,7 +33,7 @@ above it.
 <H2>Methods</H2>
 These alignments were generated using <A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" 
 TARGET=_blank>blastz</A> and blat alignments of chimpanzee
-genomic sequence from the 13 Nov. 2003 ARACHNE chimpanzee draft assembly.
+genomic sequence from the 13 Nov. 2003 Arachne chimpanzee draft assembly.
 The initial alignments were generated using blastz on 
 repeatmasked sequence using the following chimp/human scoring matrix:
 <PRE>
@@ -46,7 +46,7 @@ T  -300 -150 -300  100
 K = 4500, L = 3000,  Y=3400, H=2000
 </PRE>
 </P>
-
+<P>
 The resulting alignments were processed by the axtChain program.
 AxtChain organizes all the alignments between a single chimp scaffold
 and a single $organism chromosome into a group and makes a kd-tree out
@@ -58,10 +58,10 @@ threshold were discarded.
 To place additional chimp scaffolds that weren't initially aligned by blastz,
 a DNA blat of the unmasked sequence was performed. The resulting
 blat alignments were also chained, and then merged with the
-blastz-based chains produced in the previous step, to produce "all chains".
+blastz-based chains produced in the previous step to produce "all chains".
 <P>
 These chains were sorted such that the highest scoring chain in the
-genome is first. The program chainNet was then used to place
+genome was first. The program chainNet was then used to place
 each chain one at a time, trimming it as necessary to
 fit into a section not already covered by 
 a higher-scoring chain. During this process, a
@@ -78,10 +78,10 @@ Due to the draft nature of this initial genome assembly,
 this net track (and the companion chain track) was generated using
 a "reciprocal best" strategy.  This strategy attempts to minimize
 paralog fill-in for missing orthologous chimp sequence by filtering
-out of the human net all sequences not in the chimp side of the
+from the human net all sequences not found in the chimp side of the
 net.  
 After generating the human alignment net, 
-the subset of chains in the chimp-reference net were extracted,
+the subset of chains in the chimp-reference net was extracted
 and used for an additional netting step, which was then filtered
 for non-syntenic sequences smaller than 50 bases.
 
