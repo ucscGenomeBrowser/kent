@@ -9,7 +9,7 @@ struct metaDataTbls;
 struct gbSelect;
 
 void chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
-                    struct metaDataTbls* metaDataTbls, boolean noPerChrom);
+                    struct metaDataTbls* metaDataTbls, boolean checkPerChrom);
 /* Verify all of the alignment-related tables. */
 
 #endif

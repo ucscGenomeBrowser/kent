@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.5 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.6 2004/09/01 08:31:32 genbank Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -421,10 +421,10 @@ if (select->orgCats & GB_XENO)
 }
 
 void chkAlignTables(struct gbSelect* select, struct sqlConnection* conn,
-                    struct metaDataTbls* metaDataTbls, boolean noPerChrom)
+                    struct metaDataTbls* metaDataTbls, boolean checkPerChrom)
 /* Verify all of the alignment-related. */
 {
-gCheckPerChrom = !noPerChrom;
+gCheckPerChrom = checkPerChrom;
 if (gChromSizes == NULL)
     buildChromSizes();
 gbVerbEnter(1, "validating alignment tables: %s", gbSelectDesc(select));

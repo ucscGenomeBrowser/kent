@@ -38,7 +38,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.8 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.9 2004/09/01 08:31:32 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -280,7 +280,6 @@ errAbort(
   "     -srcDb=src - refseq or genebank)\n"
   "     -type=type - only validate this type.\n"
   "     -accPrefix=aa - only validate this acc prefix.\n"
-  "     -noPerChrom - don't check the per-chromosome tables.\n"
   "     -checkExtSeqRecs - Check the seq and extTables with the contents\n"
   "      of the fasta files. (This is slow!)\n"
   );
