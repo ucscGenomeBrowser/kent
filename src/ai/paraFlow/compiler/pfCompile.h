@@ -32,6 +32,7 @@ struct pfCompile
 
     /* Some called out types parser needs to know about. */
     struct pfBaseType *varType;		/* Base tyhpe for all variables/functions */
+    struct pfBaseType *keyValType;	/* Used for tree/dir initializations */
     struct pfBaseType *streamType;	/* Ancestor for string, maybe file */
     struct pfBaseType *numType;		/* Ancestor for float/int etc. */
     struct pfBaseType *collectionType;	/* Ancestor for tree, list etc. */
@@ -50,6 +51,11 @@ struct pfCompile
     struct pfBaseType *floatType;
     struct pfBaseType *doubleType;
     struct pfBaseType *stringType;
+
+    struct pfBaseType *arrayType;
+    struct pfBaseType *listType;
+    struct pfBaseType *treeType;
+    struct pfBaseType *dirType;
     };
 
 struct pfCompile *pfCompileNew(char *fileName);

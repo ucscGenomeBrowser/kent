@@ -85,6 +85,11 @@ else
         {
 	fprintf(f, " of ");
 	pfTypeDump(ty, f);
+	for (ty = ty->next; ty != NULL; ty = ty->next)
+	    {
+	    fprintf(f, ",");
+	    pfTypeDump(ty, f);
+	    }
 	}
     }
 }
@@ -148,14 +153,14 @@ castType += baseTypeLogicalSize(pfc, newBase);
 insertCast(castType, newType, pPp);
 }
 
-void pfTypeOnTuple(struct pfCompile *pfc, struct pfParse *pp)
-/* Create tuple type and link in types of all children. */
+static struct pfType *typeFromChildren(struct pfCompile *pfc, struct pfParse *pp,
+     struct pfBaseType *base)
+/* Create a type that is just a wrapper around children's type. */
 {
-pp->ty = pfTypeNew(pfc->tupleType);
-pp->ty->isTuple = TRUE;
+struct pfType *ty = pfTypeNew(base);
 if (pp->children != NULL)
     {
-    pp->ty->children = pp->children->ty;
+    ty->children = pp->children->ty;
     pp = pp->children;
     while (pp->next != NULL)
 	{
@@ -165,8 +170,15 @@ if (pp->children != NULL)
 	pp = pp->next;
 	}
     }
+return ty;
 }
 
+void pfTypeOnTuple(struct pfCompile *pfc, struct pfParse *pp)
+/* Create tuple type and link in types of all children. */
+{
+pp->ty = typeFromChildren(pfc, pp, pfc->tupleType);
+pp->ty->isTuple = TRUE;
+}
 
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type);
@@ -242,10 +254,21 @@ static void coerceTupleToCollection(struct pfCompile *pfc,
 struct pfParse *tuple = *pPp;
 struct pfType *elType  = type->children;
 struct pfParse **pos;
-struct pfType *ty = CloneVar(type);
 uglyf("coerceTupleToCollection of %s\n", elType->base->name);
+if (type->base->isKeyed)
+     {
+     uglyf("isKeyed\n");
+     struct pfType *ty = pfTypeNew(pfc->keyValType);
+     struct pfType *key = pfTypeNew(pfc->floatType);	// FIXME
+     struct pfType *val = CloneVar(elType);
+     ty->children = key;
+     key->next = val;
+     elType = ty;
+     }
 for (pos = &tuple->children; *pos != NULL; pos = &(*pos)->next)
+     {
      coerceOne(pfc, pos, elType);
+     }
 pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
 }
@@ -377,6 +400,10 @@ else
 	    {
 	    typeMismatch(pp);
 	    }
+	}
+    else if (type->base == pfc->keyValType)
+	{
+	uglyf("Theoretically corecing keyVal pair");
 	}
     else if (type->isTuple)
         {
@@ -595,6 +622,9 @@ switch (pp->type)
     case pptTuple:
 	pfTypeOnTuple(pfc, pp);
 	break;
+    case pptKeyVal:
+         pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
+	 break;
     case pptConstUse:
         typeConstant(pfc, pp);
 	break;

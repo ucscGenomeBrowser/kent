@@ -131,6 +131,7 @@ struct pfScope *scope = pfc->scope;
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
 pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL);
+pfc->keyValType = pfScopeAddType(scope, "(keyVal)", FALSE, pfc->varType);
 pfc->streamType = pfScopeAddType(scope, "(stream)", FALSE, pfc->varType);
 pfc->numType = pfScopeAddType(scope, "(number)", FALSE, pfc->varType);
 pfc->collectionType = pfScopeAddType(scope, "(collection)", TRUE, pfc->varType);
@@ -151,10 +152,12 @@ pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType);
 pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType);
 pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType);
 
-pfScopeAddType(scope, "array", TRUE, pfc->collectionType);
-pfScopeAddType(scope, "list", TRUE, pfc->collectionType);
-pfScopeAddType(scope, "tree", TRUE, pfc->collectionType);
-pfScopeAddType(scope, "dir", TRUE, pfc->collectionType);
+pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType);
+pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType);
+pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType);
+pfc->treeType->isKeyed = TRUE;
+pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType);
+pfc->dirType->isKeyed = TRUE;
 }
 
 struct pfCompile *pfCompileNew(char *fileName)

@@ -18,6 +18,7 @@ struct pfBaseType
     char *name;			/* Type name.  Allocated in hash. */
     struct pfScope *scope;	/* The scope this class lives in */
     bool isCollection;		/* TRUE if it's a collection type */
+    bool isKeyed;		/* TRUE if it's a keyed collection type. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
