@@ -113,7 +113,7 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.495 2003/10/10 17:17:03 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.496 2003/10/10 20:24:57 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9806,8 +9806,8 @@ if (snp!=NULL)
     {
     printf("<BR>\n");
     printf("<B>Sample Prep Enzyme:</B> <I>%s</I><BR>\n",snp->enzyme);
-    printf("<B>Minimum Allele Frequency:</B> %f.3<BR>\n",snp->minFreq);
-    printf("<B>Heterozygosity:</B> %f.3<BR>\n",snp->hetzyg);
+    printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);
+    printf("<B>Heterozygosity:</B> %.3f<BR>\n",snp->hetzyg);
     printf("<B>Base A:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
     printf("<B>Base B:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
     printf("<B>Sequence of Allele A:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
