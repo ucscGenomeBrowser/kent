@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.4 2005/03/15 17:34:22 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.5 2005/03/15 19:54:41 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -109,9 +109,6 @@
     gunzip seq_contig.md.gz allrefcontig.chr.ordered.agp.gz
     ./jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
                         ncbi/contig.idmap .
-    #	XXXX - there are problems with the chrY_random specifications
-    #   XXXX - it appears they are not specified in the contig.idmap file
-    #   XXXX - and they don't have fasta sequence in contigfasta/chrY.fa.gz
     #  The chrUn_random.agp created by this is too large with the 5000
     #  gaps.  it will work with 1000 gaps, so fixup the chrUn_random
     #  agp:
@@ -583,6 +580,7 @@ note: 394 records dropped due to repStart > repEnd
     time cp -p */*.fa */*.fa.masked /cluster/panasas/home/store/mm6/fasta
 
 # PREPARE "bigZips" files for public release
+#		(DONE through mrna.fa - 2005-03-15 - Hiram)
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/mm6/bigZips
     cd /usr/local/apache/htdocs/goldenPath/mm6/bigZips
@@ -594,6 +592,21 @@ note: 394 records dropped due to repStart > repEnd
 	?/chr*.agp ??/chr*.agp
     tar cvzf /usr/local/apache/htdocs/goldenPath/mm6/bigZips/chromFa.tar.gz \
 	?/chr*.fa ??/chr*.fa
+    tar cvzf /usr/local/apache/htdocs/goldenPath/mm6/bigZips/chromFaMasked.tar.gz \
+	?/chr*.fa.masked ??/chr*.fa.masked
+    tar cvzf /usr/local/apache/htdocs/goldenPath/mm6/bigZips/chromOut.tar.gz \
+	?/chr*.fa.out ??/chr*.fa.out
+    cd /cluster/data/mm6/bed/simpleRepeat
+    tar cvzf /usr/local/apache/htdocs/goldenPath/mm6/bigZips/chromTrf.tar.gz \
+	./trfMask
+    # get GenBank native mRNAs
+    cd /cluster/data/genbank
+    ./bin/i386/gbGetSeqs -db=mm6 -native GenBank mrna \
+	/usr/local/apache/htdocs/goldenPath/mm6/bigZips/mrna.fa
+    cd /usr/local/apache/htdocs/goldenPath/mm6/bigZips
+    gzip mrna.fa
+    
+    md5sum *.gz > md5sum.txt
 
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2005-03-14 - Hiram)
 
@@ -659,16 +672,25 @@ note: 394 records dropped due to repStart > repEnd
     gensub2 genome.list single gsub jobList
     para create jobList
     para try, check, push, check, ...
-XXX - RUNNING - 2005-03-14 13:09
-# Completed: 638 of 639 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:     386282s    6438.03m   107.30h    4.47d  0.012 y
-# IO & Wait Time:                  3735s      62.25m     1.04h    0.04d  0.000 y
-# Average job time:                 611s      10.19m     0.17h    0.01d
-# Longest job:                    22687s     378.12m     6.30h    0.26d
-# Submission to last job:         33710s     561.83m     9.36h    0.39d
+    #	Had two jobs crash:
+# Completed: 38 of 40 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:     343416s    5723.60m    95.39h    3.97d  0.011 y
+# IO & Wait Time:                  3443s      57.38m     0.96h    0.04d  0.000 y
+# Average job time:                9128s     152.13m     2.54h    0.11d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           27423s     457.05m     7.62h    0.32d
+# Submission to last job:         34524s     575.40m     9.59h    0.40d
+
 
     # If there are crashes, diagnose with "para problems".  
+    para problems > problems.0
+    ssh kolossus
+    cd /cluster/data/mm6/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/panasas/home/store/mm6/fasta/chr2.fa.masked gtf/chr2.fa.gtf -trans=pep/chr2.fa.pep -subopt=subopt/chr2.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+    /cluster/bin/x86_64/gsBig /cluster/panasas/home/store/mm6/fasta/chr14.fa.masked gtf/chr14.fa.gtf -trans=pep/chr14.fa.pep -subopt=subopt/chr14.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+XXX - RUNNING - 2005-03-15 09:48
+
     # If a job crashes due to genscan running out of memory, re-run it 
     # manually with "-window=1200000" instead of "-window=2400000".
 /cluster/bin/i386/gsBig /cluster/data/mm6/19/chr19_1/chr19_1.fa.masked 
@@ -744,6 +766,7 @@ SEQ2_LEN=$BASE/S2.len
     sort -rn +1 /cluster/data/hg17/chrom.sizes > S2.len
     /cluster/bin/scripts/doBlastzChainNet.pl -debug `pwd`/DEF
 
+#########################################################################
 # GENBANK auto update started (WORKING - 2005-03-15 - Hiram)
     ssh eieio
     cd /cluster/data/genbank
@@ -758,3 +781,29 @@ mm6.mgcTables.mgc = all
 
     #	Do the refseq's first, they are the quick ones
     nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial mm6
+# Completed: 200 of 200 jobs
+# CPU time in finished jobs:      31586s     526.43m     8.77h    0.37d  0.001 y
+# IO & Wait Time:                  6911s     115.18m     1.92h    0.08d  0.000 y
+# Average job time:                 192s       3.21m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2239s      37.32m     0.62h    0.03d
+# Submission to last job:          2239s      37.32m     0.62h    0.03d
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
+    #	check the RefSeq Genes track shows up in the browser
+    #	table browser query on RefSeq Genes whole genome, summary stats
+    #	indicates 18,305 items covering 716,635,654 (%27.59) bases
+
+    #	To get the genbank started, the above results need to be
+    #	moved out of the way.  These things can be removed if there are
+    #	no problems to debug
+    ssh eieio
+    cd /cluster/data/genbank/work
+    mv initial.mm6 initial.mm6.refseq.mrna
+
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial mm6
+    #	logFile: var/build/logs/2004.06.04-10:47:21.hg17.initalign.log
