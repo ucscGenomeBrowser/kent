@@ -459,7 +459,7 @@ if (strcmp(pbStampPtr->stampName, "pepRes") == 0)
 }
 
 void drawPbStampB(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
-/* draw the stamp */
+/* draw the stamp, especially for the AA Anomaly */
 {
 int ix, iy, iw, ih;
 char *stampTable, *stampTitle, *stampDesc;
@@ -487,10 +487,11 @@ xScale = (double)(iw)/(txmax - txmin);
 yScale = (double)(ih)/(tymax - tymin);
  
 calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
-vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomaly");
+vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomalies");
     
 titleLen = strlen("Amino Acid Anomoly");
-mapBoxStampTitle(xx-5-titleLen*6/2-6, yy-14, titleLen*6+12, 14,  "Amino Acid Anomoly", "pepRes");
+mapBoxStampTitle(xx-5-titleLen*6/2-6, yy-14, titleLen*6+12, 14,  
+	         "Amino Acid Anomolies", "pepAnomalies");
     
 calStampXY(stampPictPtr, txmax-(txmax-txmin)*.25, tymin+(tymax-tymin)/4.0*3.0, &xx, &yy);
 vgTextCentered(g_vg, xx, yy-10, 10, 10, MG_BLACK, g_font, "+2 stddev");
@@ -802,5 +803,4 @@ for (i=strlen(vertLabel)-1; i>=0; i--)
     vgTextCentered(g_vg, 3, 45+i*10, 10, 10, MG_BLACK, g_font, vertLabel+i);
     vgTextCentered(g_vg, 3, 215+i*10, 10, 10, MG_BLACK, g_font, vertLabel+i);
     }
-
 }
