@@ -3,13 +3,13 @@
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>UCSC Genome Browser: User's Guide</TITLE>
-	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
 
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
 
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/help.topbar.html"--></TD></TR>
 
@@ -19,7 +19,7 @@
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 		<FONT SIZE="4"><b>&nbsp;Genome Browser User's Guide </B></FONT> 
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -61,7 +61,7 @@
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; What does
 			the Genome Browser do?  </b></FONT>
 		</TD></TR></TABLE>
@@ -114,7 +114,7 @@ or <A HREF="http://www.ncbi.nlm.nih.gov/mapview/" TARGET=_blank>NCBI Map
 Viewer</A> annotation.
 <P>
 The browser data represents an immense 
-<A HREF="http://genome.ucsc.edu/goldenPath/credits.html">collaborative effort</A> 
+<A HREF="../goldenPath/credits.html">collaborative effort</A> 
 involving thousands of people from the international biomedical research community. 
 The UCSC Bioinformatics Group itself does no sequencing. Although it creates 
 the majority of the annotation tracks in-house, the annotations are based on
@@ -130,19 +130,19 @@ to <A HREF="#Download">download</A>.
 In addition to the Genome Browser, the UCSC Genome Bioinformatics group provides 
 several other tools for viewing and interpreting genome data: 
 <UL>
-<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT<A> - a 
+<LI><A HREF="../../cgi-bin/hgBlat?command=start">BLAT<A> - a 
 fast sequence-alignment tool similar to BLAST. <A HREF="#BLATAlign">Read more</A>.
-<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A> - 
+<LI><A HREF="../../cgi-bin/hgTables">Table Browser</A> - 
 convenient text-based access to the database underlying the Genome Browser. 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/hgTablesHelp.html">Read
+<A HREF="hgTablesHelp.html">Read
 more</A>.
-<LI><A HREF="http://genome.ucsc.edu/cgi-bin/hgNear">Gene Sorter</A> - 
+<LI><A HREF="../../cgi-bin/hgNear">Gene Sorter</A> - 
 expression, homology, and other information on groups of genes that can
 be related in many ways. 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/hgNearHelp.html">Read more</A>.
+<A HREF="hgNearHelp.html">Read more</A>.
 <LI>Proteome Browser (accessible from Known Genes details pages) - 
 protein property data and links to a wealth of related information. 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml">Read more</A>.
+<A HREF="pbTracksHelpFiles/pbTracksHelp.shtml">Read more</A>.
 </UL>
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -153,14 +153,14 @@ protein property data and links to a wealth of related information.
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 		<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Getting Started: 
 		Genome Browser gateways</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>
-The UCSC Genome Bioinformatics <A HREF="http://genome.ucsc.edu" 
+The UCSC Genome Bioinformatics <A HREF="../../index.html" 
 TARGET=_blank>home page</A>
 provides access to Genome Browsers on several different genome assemblies. 
 To get started, click the Browser link on the blue sidebar. This will take 
@@ -218,7 +218,7 @@ descriptive words associated with the gene.
 <P>
 <B>Finding a genome location using BLAT</B><BR>
 If you have genomic, mRNA, or protein sequence, but don't know the name or
-the location to which it maps in the genome, the <A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">
+the location to which it maps in the genome, the <A HREF="../../cgi-bin/hgBlat">
 BLAT</A> tool will rapidly locate the position by homology alignment, provided that the 
 region has been sequenced. This search will find close members of the gene
 family, as well as assembly duplication artifacts. An entire set of query sequences can 
@@ -275,7 +275,7 @@ TARGET=_blank>Troubleshooting Annotation Display Problems</A>.
 <P>
 <B>Viewing genome data as text</B><BR> 
 The 
-<A HREF="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table Browser</A>,
+<A HREF="../../cgi-bin/hgTables" TARGET=_blank>Table Browser</A>,
 a portal to the underlying open source <A
 HREF="http://www.MySQL.com" TARGET=_blank>MySQL</A> relational database driving the Genome
 Browser, displays genomic data as columns of text rather than as
@@ -311,7 +311,7 @@ see the section <A HREF="#Convert">Converting data between assemblies</A>.
 <P>
 To ensure uninterrupted browser services for your research during UCSC server 
 maintenance and power outages, bookmark a
-<A HREF="http://genome.ucsc.edu/mirror.html" TARGET=_blank>mirror</A> site that 
+<A HREF="../../mirror.html" TARGET=_blank>mirror</A> site that 
 replicates the UCSC genome browser. 
 <P>
 Bear in mind that the Genome Browser cannot outperform the underlying quality of 
@@ -329,7 +329,7 @@ misleading matches in genome coordinates found by alignment.
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 		<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Interpreting and fine-tuning the
 		Genome Browser display</b></FONT>
 	</TD></TR></TABLE>
@@ -692,7 +692,7 @@ To print or save the image to a file:
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><b>&nbsp; Using BLAT alignments </b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -748,7 +748,7 @@ Some common uses of BLAT include:
 To locate a nucleotide or protein within a genome using BLAT: 
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
-	Open the <A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat?command=start" 
+	Open the <A HREF="../../cgi-bin/hgBlat?command=start" 
 	TARGET=_blank>BLAT Search Genome page</A> by clicking the BLAT link on the top 
 	blue menu bar of any of the Genome Browser pages.</TD></TR> 
 
@@ -824,7 +824,7 @@ start coordinate, paste in the highest chromosome end coordinate from the list o
 matches, then click the <I>jump</I> button. 
 <P><B>Creating a custom annotation track from BLAT output</B><BR>
 To make a custom track directly from BLAT, select the 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#PSL">PSL format</A>
+<A HREF="customTrack.html#PSL">PSL format</A>
 output option. The resulting PSL track can be uploaded into the Genome Browser by 
 pasting it into the <I>Add Your Own Tracks</I> text box, accessed from the Browser 
 Gateway page.
@@ -843,9 +843,9 @@ Non-exclusive commercial licenses are available from the
 BLAT</A> website. 
 <P><B>BLAT documentation</B><BR>
 For more information on the BLAT suite of programs, see the 
-<A HREF="http://genome.ucsc.edu/goldenPath/help/blatSpec.html">BLAT
+<A HREF="blatSpec.html">BLAT
 Program Specifications</A> and the 
-<A HREF="http://genome.ucsc.edu/FAQ/FAQblat">Blat section</A> of the Genome 
+<A HREF="../FAQ/FAQblat">Blat section</A> of the Genome 
 Browser FAQ.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -856,13 +856,13 @@ Browser FAQ.
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><b>&nbsp; Getting started on the Table Browser  </b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 			<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>
-The <A HREF="http://genome.ucsc.edu/cgi-bin/hgTables" TARGET=_blank>Table
+The <A HREF="../../cgi-bin/hgTables" TARGET=_blank>Table
 Browser</A> provides text-based access to the genome assemblies and annotation
 data stored in the Genome Browser database. As a flexible alternative to the 
 graphical-based Genome Browser, this tool offers an enhanced level of 
@@ -887,7 +887,7 @@ For information on using the Table Browser features, refer to the <A HREF="hgTab
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><b>&nbsp; DNA text formatting</b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -937,7 +937,7 @@ formatted by the tool is approximately 10 Mbp.
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><b>&nbsp; Converting data between assemblies</b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -1007,7 +1007,7 @@ request to the <A HREF="mailto:genome@cse.ucsc.edu">genome mailing list</A>.
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><b>&nbsp; Downloading genome data</b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -1181,7 +1181,7 @@ table is represented by 2 files:
 	</TD></TR>
 </TABLE> 
 <P>
-The <A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html"
+The <A HREF="../goldenPath/gbdDescriptions.html"
 TARGET=_blank>Description of the annotation database</A> link on the Downloads page 
 points to a document containing a full
 description of all the tables in the annotation database.
@@ -1201,7 +1201,7 @@ READMEs in these directories and the description of the
 <!--outer table is for border purposes-->
 <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-		<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 			<FONT SIZE="4"><b>&nbsp; Creating custom annotation tracks </b></FONT>
 		</TD></TR></TABLE>
 		<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -1314,7 +1314,7 @@ chr22 2000 6000 cloneB 200 - 2000 6000 0 2 433,399, 0,5601
 
 <P><B>Step 4. View your annotation track in the Genome Browser</B><BR>
 To view your annotation data in the Genome Browser, open up the UCSC Genome
-Bioinformatics home page <A HREF="http://genome.ucsc.edu/"
+Bioinformatics home page <A HREF="../../index.html"
 TARGET=_blank>(http://genome.ucsc.edu/)</a> and click on the Genome 
 Browser link in the top menu bar. On the Genome Browser Gateway page that
 displays, select the genome and assembly on which your
@@ -1349,7 +1349,7 @@ that correspond to the feature names in your web page.
 
 <P><B><I>Example:</I></B><BR>
 Here is an example of a file in which the <I>url</I> attribute has been set to
-point to the file <A HREF="http://genome.ucsc.edu/goldenPath/help/clones.html"
+point to the file <A HREF="clones.html"
 TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/clones.html</A>. The '#$$'
 appended to the end of the file name in the example points to the HTML NAME tag within the file that 
 matches the name of the feature (cloneA, cloneB, etc.). 
@@ -1398,7 +1398,7 @@ coordinates. Examples of this include: position=chr22, position=chr22:15916196-3
 of the form <tt>hgt.customText=URL</tt>, where
 <I>URL</I> points to the annotation file on your website. An example of an
 annotation file URL is <font color="000099"><A
-HREF="http://genome.ucsc.edu/goldenPath/help/test.bed"
+HREF="test.bed"
 TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.  
 </UL>
 
@@ -1413,8 +1413,7 @@ The following URL will open up the Genome Browser window to display chr 22 of th
 human genome (hg11), and will display the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 
-<font color="000099"><A HREF="
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
+<font color="000099"><A HREF="../../cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
 TARGET=_blank><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg11&amp;position=chr22&amp;<br>hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
 
 <P>If you'd like to share your annotation track with a broader audience, send the URL for your track - along with a description of 
@@ -1432,7 +1431,7 @@ the format, methods, and data used - to the UCSC Genome mailing list
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 		<FONT SIZE="4"><b>&nbsp; Annotation track descriptions</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -1472,7 +1471,7 @@ and using the tracks displayed in the Genome Browser track window, see the secti
 	Track data can be viewed equivalently in columns as text tables using
 	the <A HREF="#TableBrowser">Table Browser</A>. </TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<A HREF="http://genome.ucsc.edu/goldenPath/credits.html" TARGET=_blank>Credit</A>
+	<A HREF="../goldenPath/credits.html" TARGET=_blank>Credit</A>
 	goes to many individuals and institutions for generously contributing
 	the tracks. For specific information about the contributors to a given track,
 	look at the track's description page.</TD></TR>  
@@ -1520,7 +1519,7 @@ short alignment patterns between regulatory elements and neutral DNA.
 	To view a text version of the data set, select the 
 	<I>regPotential2X</I> positional table in the Table Browser. To view the table
 	definition, click 
-	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WiggleTrack2"
+	<A HREF="../goldenPath/gbdDescriptions.html#WiggleTrack2"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE>
 
@@ -1539,7 +1538,7 @@ short alignment patterns between regulatory elements and neutral DNA.
 	To view a text version of the data set, select the 
 	<I>regPotential3X</I> positional table in the Table Browser. To view the table
 	definition, click 
-	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WiggleTrack2"
+	<A HREF="../goldenPath/gbdDescriptions.html#WiggleTrack2"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE>
 
@@ -1568,7 +1567,7 @@ displayed.
 	To view a text version of the data set, select the 
 	<I>acembly</I> positional table in the Table Browser. To view the table
 	definition, click 
-	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	<A HREF="../goldenPath/gbdDescriptions.html#GenePredictions"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE>
 
@@ -1592,7 +1591,7 @@ on Affymetrix GNF1H chips.
 	To view a text version of the data set, select the 
 	<I>affyGnf1h</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	HREF="../goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1616,7 +1615,7 @@ on Affymetrix GNF1M chips.
 	To view a text version of the data set, select the 
 	<I>affyGnf1m</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	HREF="../goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1640,7 +1639,7 @@ on Affymetrix GNF1M chips.
 	To view a text version of the data set, select the 
 	<I>affyGnf1m</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	HREF="../goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1662,7 +1661,7 @@ the selection of probes on the Affymetrix Mouse MOE430 set of chips (A and B).
 	To view a text version of the data set, select the 
 	<I>affyMOE430</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	HREF="../goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1686,7 +1685,7 @@ on Affymetrix RAE230 chips.
 	To view a text version of the data set, select the 
 	<I>affyRAE230</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	HREF="../goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -1710,7 +1709,7 @@ on Affymetrix RG-U34A chips.
 	To view a text version of the data set, select the 
 	<I>affyU34A</I> positional table in the Table Browser. To view the table
 	definition, click <A
-	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	HREF="/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 

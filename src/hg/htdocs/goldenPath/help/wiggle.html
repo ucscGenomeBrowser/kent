@@ -3,13 +3,13 @@
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>UCSC Genome Browser: Wiggle Track Format (WIG)</TITLE>
-	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
 
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
 
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
 <!--Content Tables------------------------------------------------------->
@@ -17,7 +17,7 @@
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
 		<FONT SIZE="4"><b>&nbsp;  Wiggle Track Format (WIG)</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -30,7 +30,7 @@
 
 		    <P><B>General Structure</B><P> The .wig format is
 		    line-oriented.  <!-- The first section begins with <A
-		    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#BROWSER">browser
+		    HREF="customTrack.html#BROWSER">browser
 		    lines</A> that configure the overall display of
 		    the Genome Browser window when your annotation
 		    file is uploaded. Each line defines one display
@@ -39,7 +39,7 @@
 		    <P> The browser lines are followed by a <A
 		    <P> The browser lines are followed -->
 		    Wiggle data is preceeded by a <A
-		    HREF="http://genome.ucsc.edu/goldenPath/help/customTrack.html#TRACK">
+		    HREF="customTrack.html#TRACK">
 		    track definition line</A>, which
 		    adds a number of options for
 		    controlling the default display of this track.
@@ -100,7 +100,7 @@
 
 		    A functional description of these options can be
 		    seen in the <A target=_blank
-		    HREF="http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html">Wiggle 
+		    HREF="hgWiggleTrackHelp.html">Wiggle 
 		   track configuration<A> description. (Custom tracks do not 
 		   have interactive configuration options).
 
@@ -138,7 +138,7 @@
 		    beginning at the specified position.
 <P>
 		    <LI>The <B>fixedStep</B> format takes a single
-		    column data, and is used when there is a regular 
+		    column data, and is used when there is a regular
 		    interval between new data values.  This is used for
 		    data values that apply to a constant size run of bases.  The fixedStep
 		    single column data format begins with the
