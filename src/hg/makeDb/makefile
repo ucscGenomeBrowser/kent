@@ -30,6 +30,7 @@ DIRS = \
 	hgLoadOut \
 	hgLoadPsl \
 	hgLoadRna \
+	hgLoadSeq \
 	hgLoadSample \
 	hgNibSeq \
 	hgPepPred \
