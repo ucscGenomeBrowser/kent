@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.20 2004/05/25 22:46:23 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.21 2004/07/09 21:26:13 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -33,7 +33,7 @@ errAbort(
   "   then specific track are modified using the track and visibility fields\n"
   "   in this file.\n"
   "  -hideFirst - Before applying vis.ra, set all visibilities to hide.\n"
-  "\n"
+  "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
   );
