@@ -477,8 +477,6 @@ TIGR GENE INDEX (todo)
 	  sed s/THCs/TCs/ human.bak > human.gff
 	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
 
-
-      
 LOAD STS MAP (todo)
      - login to hgwdev
       cd ~/mm/bed
@@ -490,8 +488,20 @@ LOAD STS MAP (todo)
       - At mysql> prompt type in:
           load data local infile 'stsMap.bed' into table stsMap;
       - At mysql> prompt type
-          quit
 
+LOAD MGI IDs (done)
+      - The Locuslink ID to MGI IDs converstion data file,
+        LL2MGI.txt, from Jackson Lab should be found under
+	~/mm/bed/refSeq
+      - login to hgwdev
+      
+      cd ~/mm/bed/refSeq
+      mm2 < ~/src/hg/lib/mgiID.sql
+      - Enter database with "mm2" command.
+      - At mysql> prompt type in:
+          load data local infile 'LL2MGI.txt' into table MGIid;
+      - At mysql> prompt type
+          quit
 
 LOAD CHROMOSOME BANDS (todo)
       - login to hgwdev
