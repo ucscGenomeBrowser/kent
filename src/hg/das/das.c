@@ -118,9 +118,12 @@ boolean isChromId(char *seqName)
 {
 return((! startsWith("chr", seqName)) &&
        (isdigit(seqName[0]) ||
-	sameString("NA", seqName) || sameString("UL", seqName) ||
-	sameString("Un", seqName) ||
-	sameString("X", seqName)  || sameString("Y", seqName) ||
+	sameString("X", seqName)  || sameString("X_random", seqName)  ||
+	sameString("Y", seqName)  || sameString("Y_random", seqName)  ||
+	sameString("Un", seqName) || sameString("Un_random", seqName) ||
+	sameString("UL", seqName) || sameString("UL_random", seqName) ||
+	sameString("NA", seqName) || sameString("NA_random", seqName) ||
+	sameString("NA_unmapped", seqName) || 
 	sameString("M", seqName)  ));
 }
 
