@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.65 2004/12/08 01:23:24 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.66 2004/12/14 01:10:45 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3054,6 +3054,7 @@ char tempName[256];
 char now[256];
 
 int m=0,d=0;
+int topCount=0;
 
 ZeroVar(&dbDbTemp);
 
@@ -3119,7 +3120,6 @@ conn = sqlConnectRemote(host, user, password, database);
 /* 10 Latest Changes */
 //printf("<li><a CLASS=\"toc\" HREF=\"#recent\" style=\"color:red\"> 10 Latest Changes (all assemblies) </a></li>");
 printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
-//printf("<li><a CLASS=\"leftbar\" HREF=\"#recent\" > 10 Latest Changes (all assemblies) </a></li>");
 
 /*
 printf("<li><a HREF=\"#recent\" " 
@@ -3163,19 +3163,62 @@ safef(query,sizeof(query),
     "select releaseLog, dbs, qadate from pushQ "
     "where priority='L' and releaseLog != '' and dbs != '' "
     "order by qadate desc, qid desc " 
-    "limit 10 " 
+    //"limit 10 " 
     );
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sscanf(cloneStringZ(&row[2][5],2),"%d",&m);
     sscanf(cloneStringZ(&row[2][8],2),"%d",&d);
-    printf("<TR valign=top><TD align=left>\n"
-	"%s</td>\n"
-	"<td>%s</td>\n"
-	"<td>%02d %s %s</td>\n"
-	"</tr>\n",
-	row[0], row[1], d, numberToMonth[m-1], cloneStringZ(row[2],4) );
+	{  /* parse dblist and make sure it's kosher and active=1 good */
+	char* dbs = cloneString(row[1]);
+	char dbsComma[1024];
+	char dbsSpace[1024];
+	struct dyString* dbList = newDyString(1024);
+	int j = 0, jj = 0;
+	char* sep = "";
+	boolean found = FALSE;
+	cutParens(dbs);
+	whiteSpace(dbs);
+	for(j=0;parseList(dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
+	    {
+	    if (dbsComma[0]==0)
+		{ continue; }
+	    for(jj=0;parseList(dbsComma, ' ' ,jj,dbsSpace,sizeof(dbsSpace));jj++)
+		{
+		if (dbsSpace[0]==0)
+		    { continue; }
+		for (ki = kiList; ki != NULL; ki = ki->next)
+		    {
+		    if (sameWord(ki->name,dbsSpace))
+			{
+			found = TRUE;
+			dyStringPrintf(dbList,"%s%s",sep,dbsSpace);
+			sep=",";
+			}
+		    }
+		}
+	    }
+
+	if (found)
+	    {
+	    topCount++;
+	    printf("<TR valign=top><TD align=left>\n"
+		"%s</td>\n"
+		"<td>%s</td>\n"
+		"<td>%02d %s %s</td>\n"
+		"</tr>\n",
+		row[0], row[1], d, numberToMonth[m-1], cloneStringZ(row[2],4) );
+	    }
+
+	freez(&dbs);
+	freeDyString(&dbList);
+
+	if (topCount>=10)
+	    {break;}
+
+	}
+	
     }
 sqlFreeResult(&sr);
 printf("</table>\n");
