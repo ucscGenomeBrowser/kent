@@ -24,7 +24,7 @@ beta: compile
 compile: $O 
 	gcc $O ${F64} $(MYLIBS) $(L) 
 	mv a.out $A
-	strip $A
+#strip $A
 	chmod a+rx $A
 
 debug: $O

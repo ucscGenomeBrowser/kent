@@ -107,7 +107,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.412 2003/05/13 09:54:15 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.413 2003/05/15 09:02:51 baertsch Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -748,7 +748,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 }
             else{
-	    if ((tClass==INTRON) && (tPtr <= nextStart-1) && (tPtr <= tStart) && (tPtr > tEnd))
+	    if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
 		{ /*start of exon on neg strand */
 		tCoding=TRUE;
 		dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
@@ -789,7 +789,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
-                if (tPtr == nextEnd-1)
+                if (tPtr == nextEnd)
                     {
                     tCoding=FALSE;
                     qCoding=FALSE;
@@ -824,7 +824,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
-                if ((tPtr <= (tStart)) && (tPtr >=(tStart-2)))
+                if ((tPtr <= (tStart)+1) && (tPtr >=(tStart-1)))
                     {
                     tClass=STARTCODON;
                     qClass=STARTCODON;
@@ -836,10 +836,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                         qCodonPos=1;
                         }
                     }
-                if ((tPtr <= tEnd+1) && (tPtr >= (tEnd-1)))
+                if ((tPtr <= tEnd+3) && (tPtr >= (tEnd+1)))
                     {
                     tClass=STOPCODON;
+                    qClass=STOPCODON;
                     tCoding=FALSE;
+                    qCoding=FALSE;
                     }
                 }
             if (posStrand)
@@ -852,7 +854,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else 
                 {
-                if (tPtr == (tEnd -2) )
+                if (tPtr == (tEnd ) )
                     {
                     tClass = UTR3;
                     qClass = UTR3;
@@ -1136,7 +1138,7 @@ while ((axt = axtRead(lf)) != NULL)
         {
         if (prevEnd < axt->tStart )
             {
-            axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd+1,(axt->tStart)-1,gp->strand[0]);
             if (gp->strand[0] == '-')
                 {
                 reverseComplement(axtGap->qSym, axtGap->symCount);
@@ -3023,7 +3025,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track))
     {
     char *organism = hOrganism(database);
     char temp[256];
@@ -4981,9 +4983,7 @@ struct psl *pslList = NULL;
 
 cartWebStart(cart, "Viral Gene");
 printf("<H2>Viral Gene %s</H2>\n", geneName);
-printf("<A test HREF=");
-printSwissProtProteinUrl(stdout, geneName);
-printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+printCustomUrl(tdb, geneName, TRUE);
 
 pslList = getAlignments(conn, "chr1_viralProt", geneName);
 htmlHorizontalLine();
@@ -11350,7 +11350,7 @@ else if (sameWord(track, "htcGetDnaExtended1"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-         sameWord(track, "xenoBlastzMrna") ||
+         sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
          sameWord(track, "mgcIncompleteMrna") ||
