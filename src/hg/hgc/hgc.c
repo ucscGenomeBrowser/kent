@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.831 2005/02/08 21:22:57 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.832 2005/02/09 23:38:31 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -749,39 +749,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
-void showBedTopScorers(struct bed *bedList, char *item, int start, int max)
-/* Show a list of track items sorted by descending score,
- *  with current item highlighted.
- *  max is upper bound on how many items will be displayed. */
-{
-int i;
-struct bed *bed;
-
-//slSort(&bedList, bedCmpScore);
-//slReverse(&bedList);
-puts("<B>Top-scoring elements in window:</B><BR>");
-for (i=0, bed=bedList;  bed != NULL && i < max;  bed=bed->next, i++)
-    {
-    if (sameWord(item, bed->name) && bed->chromStart == start)
-        printf("&nbsp;&nbsp;&nbsp;<B>%s</B> ", bed->name);
-    else
-        printf("&nbsp;&nbsp;&nbsp;%s ", bed->name);
-    printf("(%s:%d-%d) %d<BR>\n",
-               bed->chrom, bed->chromStart+1, bed->chromEnd, bed->score);
-
-    }
-if (bed != NULL)
-    printf("(list truncated -- more than %d elements)<BR>\n", max);
-}
-
 void showBedTopScorersInWindow(struct sqlConnection *conn,
 			       struct trackDb *tdb, char *item, int start,
-			       int maxScorers, char *filterTable, int filterCt)
+			       int maxScorers)
 /* Show a list of track items in the current browser window, ordered by 
  * score.  Track must be BED 5 or greater.  maxScorers is upper bound on 
- * how many items will be displayed.  If filterTable is not NULL and exists,
- * it contains the 100K top-scorers in the entire track, and filterCt 
- * is the threshold for how many are candidates for display  */
+ * how many items will be displayed. */
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -789,41 +762,36 @@ struct bed *bedList = NULL, *bed = NULL;
 char table[64];
 boolean hasBin = FALSE;
 char query[512];
+int i=0;
 
-if (filterTable)
-    {
-    /* Track display only shows top-scoring N elements -- restrict
-     * the list to these.  Get them from the filter table */
-    hasBin = hOffsetPastBin(hDefaultChrom(), filterTable);
-    safef(query, sizeof(query), "select * from %s order by score desc limit %d",
-            filterTable, filterCt);
-    }
-else
-    {
-    hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-    safef(query, sizeof(query),
-          "select * from %s where chrom = '%s' and chromEnd > %d and "
-          "chromStart < %d order by score desc",
-          table, seqName, winStart, winEnd);
-    }
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromEnd > %d and "
+      "chromStart < %d",
+      table, seqName, winStart, winEnd);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+hasBin, 5);
-    if (!filterTable ||
-            (sameString(bed->chrom, seqName) && 
-                bed->chromStart < winEnd && bed->chromEnd > winStart))
-        {
-        slAddHead(&bedList, bed);
-        }
-    else
-        bedFree(&bed);
+    slAddHead(&bedList, bed);
     }
 sqlFreeResult(&sr);
 if (bedList == NULL)
     return;
+slSort(&bedList, bedCmpScore);
 slReverse(&bedList);
-showBedTopScorers(bedList, item, start, maxScorers);
+puts("<B>Top-scoring elements in window:</B><BR>");
+for (i=0, bed=bedList;  bed != NULL && i < maxScorers;  bed=bed->next, i++)
+    {
+    if (sameWord(item, bed->name) && bed->chromStart == start)
+	printf("&nbsp;&nbsp;&nbsp;<B>%s</B> ", bed->name);
+    else
+	printf("&nbsp;&nbsp;&nbsp;%s ", bed->name);
+    printf("(%s:%d-%d) %d<BR>\n",
+	   bed->chrom, bed->chromStart+1, bed->chromEnd, bed->score);
+    }
+if (bed != NULL)
+    printf("(list truncated -- more than %d elements)<BR>\n", maxScorers);
 }
 
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -838,11 +806,6 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
-char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
-boolean doFilterTopScorers = FALSE;
-char *words[3];
-int filterTopScoreCt = 0;
-char *filterTopScoreTable = NULL;
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 if (bedSize <= 3)
@@ -861,32 +824,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos(bed, bedSize);
     }
 sqlFreeResult(&sr);
-safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
-if (filterTopScorers != NULL)
-    {
-    if (chopLine(cloneString(filterTopScorers), words) == 3)
-        {
-        doFilterTopScorers = sameString(words[0], "on");
-        filterTopScoreCt = atoi(words[1]);
-        filterTopScoreTable = words[2];
-        }
-    }
 if (bedSize >= 5 && showTopScorers != NULL)
     {
-    /* list top-scoring elements in window */
     int maxScorers = sqlUnsigned(showTopScorers);
-    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
-    if (doFilterTopScorers && hTableExists(filterTopScoreTable))
-        {
-        /* limit to those in the top N, from table */
-        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
-        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
-        }
-    else
-        /* show all */
-        filterTopScoreTable = NULL;
-    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers,
-                                filterTopScoreTable, filterTopScoreCt);
+    showBedTopScorersInWindow(conn, tdb, item, start, maxScorers);
     }
 }
 
