@@ -279,6 +279,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 
 
 # Make and load GC percent table	(DONE - 2004-06-27 - Fan)
+#	NOT REQUIRED, been replaced by gc5Base procedure below
      ssh hgwdev
      mkdir -p /cluster/data/mm5/bed/gcPercent
      cd /cluster/data/mm5/bed/gcPercent
@@ -535,7 +536,7 @@ Edited ./jkStuff/makeNib.csh to comment out "if ..." and "endif" as below:
 
 mkdir -p nib mixedNib maskedNib
 foreach i (?{,?})
-   cd $I
+   cd $i
 #   foreach j (chr$i{,_random}.fa)
    foreach j (*.fa)
 #       if (-e "${j}")
@@ -658,3 +659,205 @@ done
 
     # Request rsync /cluster/bluearc/scratch/mus/mm5 to the KiloKluster
 
+#  GC5BASE WIGGLE TRACK (DONE - 2004-06-24 - Hiram)
+    #	This previously was a script that ran through each nib.
+    #	Recently transformed into a mini cluster run.
+    ssh kki
+    mkdir /cluster/data/mm5/bed/gc5Base
+    cd /cluster/data/mm5/bed/gc5Base
+
+    mkdir wigData5 dataLimits5 wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRun.sh
+#!/bin/sh
+NIB=$1
+
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 mm5 \
+        /cluster/data/mm5/mixedNib | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigAsciiToBinary -dataSpan=5 -chrom=${chr} \
+        -wibFile=wigData5/gc5Base_${chrom} \
+            -name=${chrom} stdin 2> dataLimits5/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x kkRun.sh
+
+    ls /cluster/data/mm5/mixedNib > nibList
+    cat << '_EOF_' > gsub
+#LOOP
+./kkRun.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsub jobList
+    para create jobList
+    para try, check, ... etc
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       4969s      82.81m     1.38h    0.06d  0.000 y
+# IO & Wait Time:                   611s      10.19m     0.17h    0.01d  0.000 y
+# Average job time:                 130s       2.16m     0.04h    0.00d
+# Longest job:                      370s       6.17m     0.10h    0.00d
+# Submission to last job:           598s       9.97m     0.17h    0.01d
+
+    # load the .wig files back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/mm5/wib/gc5Base mm5 gc5Base wigData5/*.wig
+    # and symlink the .wib files into /gbdb
+    mkdir /gbdb/mm5/wib/gc5Base
+    ln -s `pwd`/wigData5/*.wib /gbdb/mm5/wib/gc5Base
+
+    #	And then the zoomed data view
+    ssh kki
+    cd /cluster/data/mm5/bed/gc5Base
+    mkdir wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRunZoom.sh
+#!/bin/sh
+NIB=$1
+
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 mm5 \
+        /cluster/data/mm5/mixedNib | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigZoom -dataSpan=1000 stdin | wigAsciiToBinary -dataSpan=1000 \
+	-chrom=${chr} -wibFile=wigData5_1K/gc5Base_${chrom}_1K \
+            -name=${chrom} stdin 2> dataLimits5_1K/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x kkRunZoom.sh
+
+    cat << '_EOF_' > gsubZoom
+#LOOP
+./kkRunZoom.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsubZoom jobListZoom
+    para create jobListZoom
+    para try ... check ... etc ...
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       4878s      81.29m     1.35h    0.06d  0.000 y
+# IO & Wait Time:                   488s       8.14m     0.14h    0.01d  0.000 y
+# Average job time:                 125s       2.08m     0.03h    0.00d
+# Longest job:                      378s       6.30m     0.10h    0.00d
+# Submission to last job:           665s      11.08m     0.18h    0.01d
+
+    #	Then load these .wig files into the same database as above
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/mm5/wib/gc5Base \
+	-oldTable mm5 gc5Base wigData5_1K/*.wig
+    # and symlink these .wib files into /gbdb
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/mm5/wib/gc5Base
+
+#  GC5BASE WIGGLE TRACK (DONE - 2004-07-01 - Hiram)
+    #	This previously was a script that ran through each nib.
+    #	Recently transformed into a mini cluster run.
+    ssh kki
+    mkdir /cluster/data/mm5/bed/gc5Base
+    cd /cluster/data/mm5/bed/gc5Base
+
+    mkdir wigData5 dataLimits5 wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRun.sh
+#!/bin/sh
+NIB=$1
+
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 mm5 \
+        /cluster/data/mm5/mixedNib | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigAsciiToBinary -dataSpan=5 -chrom=${chr} \
+        -wibFile=wigData5/gc5Base_${chrom} \
+            -name=${chrom} stdin 2> dataLimits5/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x kkRun.sh
+
+    ls /cluster/data/mm5/mixedNib > nibList
+    cat << '_EOF_' > gsub
+#LOOP
+./kkRun.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsub jobList
+    para create jobList
+    para try, check, ... etc
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       4857s      80.94m     1.35h    0.06d  0.000 y
+# IO & Wait Time:                   121s       2.02m     0.03h    0.00d  0.000 y
+# Average job time:                 116s       1.93m     0.03h    0.00d
+# Longest job:                      335s       5.58m     0.09h    0.00d
+# Submission to last job:           516s       8.60m     0.14h    0.01d
+
+    # load the .wig files back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/mm5/wib/gc5Base mm5 gc5Base wigData5/*.wig
+    # and symlink the .wib files into /gbdb
+    mkdir /gbdb/mm5/wib
+    mkdir /gbdb/mm5/wib/gc5Base
+    ln -s `pwd`/wigData5/*.wib /gbdb/mm5/wib/gc5Base
+
+    #	And then the zoomed data view
+    ssh kki
+    cd /cluster/data/mm5/bed/gc5Base
+    mkdir wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRunZoom.sh
+#!/bin/sh
+NIB=$1
+
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 mm5 \
+        /cluster/data/mm5/mixedNib | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigZoom -dataSpan=1000 stdin | wigAsciiToBinary -dataSpan=1000 \
+	-chrom=${chr} -wibFile=wigData5_1K/gc5Base_${chrom}_1K \
+            -name=${chrom} stdin 2> dataLimits5_1K/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x kkRunZoom.sh
+
+    cat << '_EOF_' > gsubZoom
+#LOOP
+./kkRunZoom.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsubZoom jobListZoom
+    para create jobListZoom
+    para try ... check ... etc ...
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       4819s      80.31m     1.34h    0.06d  0.000 y
+# IO & Wait Time:                    82s       1.37m     0.02h    0.00d  0.000 y
+# Average job time:                 114s       1.90m     0.03h    0.00d
+# Longest job:                      336s       5.60m     0.09h    0.00d
+# Submission to last job:           500s       8.33m     0.14h    0.01d
+
+    #	Then load these .wig files into the same database as above
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/mm5/wib/gc5Base \
+	-oldTable mm5 gc5Base wigData5_1K/*.wig
+    # and symlink these .wib files into /gbdb
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/mm5/wib/gc5Base
