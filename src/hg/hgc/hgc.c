@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.463 2003/08/01 19:01:51 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.464 2003/08/06 20:58:00 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -282,6 +282,15 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&alignment=%s&db2=%s&xyzzy=xyz
 dbDbFreeList(&dbList);
 }
 
+void hgcAnchorTranslatedChain(int item, char *other, char *chrom, int cdsStart, int cdsEnd)
+/* Generate an anchor that calls click processing program with item 
+ * and other parameters. */
+{
+char *tbl = cgiUsualString("table", cgiString("g"));
+printf("<A HREF=\"%s&g=%s&i=%d&c=%s&l=%d&r=%d&o=%s&table=%s&qs=%d&qe=%d\">",
+       hgcPathAndSettings(), "htcChainTransAli", item, chrom, winStart, winEnd, other,
+       tbl, cdsStart, cdsEnd);
+}
 void hgcAnchorPseudoGene(char *item, char *other, char *chrom, char *tag, int start, int end, char *qChrom, int qStart, int qEnd, int chainId, char *db2)
 /* Generate an anchor to htcPseudoGene. */
 {
@@ -737,7 +746,7 @@ else if (gp->strand[0] == '-')
     nextEndIndex = (gp->exonCount)-1;
     nextStart = (gp->exonEnds[nextEndIndex]);
     nextEnd = (gp->exonStarts[nextEndIndex]);
-    tStart =  gp->cdsEnd-1 ;
+    tStart =  gp->cdsEnd ;
     tEnd = gp->cdsStart ;
     posStrand=FALSE;
     if (axtList != NULL)
@@ -769,6 +778,7 @@ else
     if (axtList->tEnd < tStart)
         {
         struct axt *axtGap = createAxtGap(nibFile,gp->chrom,axtList->tEnd, tStart+1,gp->strand[0]);
+        axtListReverse(&axtGap, database);
         slAddHead(&axtList, axtGap);
         tPtr = axtList->tEnd;
         }
@@ -931,7 +941,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             else
                 {
                 /* look for start codon and color it green negative strand case*/
-                if ((tPtr <= (tStart)+1) && (tPtr >=(tStart-1)))
+                if ((tPtr <= (tStart)) && (tPtr >=(tStart-2)))
                     {
                     tClass=STARTCODON;
                     qClass=STARTCODON;
@@ -1129,7 +1139,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         dyStringAppendC(dyTprot,'\n');
 
         /* skip regions with no alignment and no colored coding regions */
-        if ( numberOfGaps(q,oneSize) < oneSize || isBlue(dyT->string)) 
+        //if ( numberOfGaps(q,oneSize) < oneSize /*|| isBlue(dyT->string)*/) 
             {
             fputs(dyTprot->string,f);
             fputs(dyT->string,f);
@@ -3181,6 +3191,31 @@ slReverse(&pslList);
 return pslList;
 }
 
+struct psl *loadPslRangeT(char *table, char *qName, char *tName, int tStart, int tEnd)
+/* Load a list of psls given qName tName tStart tEnd */
+{
+struct sqlResult *sr = NULL;
+char **row;
+struct psl *psl = NULL, *pslList = NULL;
+boolean hasBin;
+char splitTable[64];
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+
+hFindSplitTable(seqName, table, splitTable, &hasBin);
+safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s' and tEnd > %d and tStart < %d", splitTable, qName, tName, tStart, tEnd);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+hFreeConn(&conn);
+return pslList;
+}
+
 void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
 {
@@ -3194,7 +3229,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) )
     {
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
@@ -3217,7 +3252,12 @@ else if (sameWord("xenoBlastzMrna", track) )
     type = "Blastz to foreign mRNA";
     table = "xenoBlastzMrna";
     }
-else if (sameWord("mrnaBlastz", track))
+else if (startsWith(track, "mrnaBlastz" ))
+    {
+    type = "mRNA";
+    table = track;
+    }
+else if (startsWith(track,"pseudoMrna"))
     {
     type = "mRNA";
     table = "mrnaBlastz";
@@ -4397,6 +4437,63 @@ printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n",
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
+void htcChainTransAli(char *item)
+/* Draw detailed alignment representation of a chain with translated protein */
+{
+struct chain *chain;
+struct psl *fatPsl, *psl = NULL;
+int id = atoi(item);
+char *track = cartString(cart, "o");
+char *type = trackTypeInfo(track);
+char *typeWords[2];
+char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
+struct dnaSeq *qSeq = NULL;
+char name[128];
+int cdsStart = cgiInt("qs");
+int cdsEnd = cgiInt("qe");
+
+/* Figure out other database. */
+if (chopLine(type, typeWords) < ArraySize(typeWords))
+    errAbort("type line for %s is short in trackDb", track);
+otherDb = typeWords[1];
+if (! sameWord(otherDb, "seq"))
+    {
+    otherOrg = hOrganism(otherDb);
+    }
+org = hOrganism(database);
+
+/* Load up subset of chain and convert it to part of psl
+ * that just fits inside of window. */
+chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, id);
+if (chain->blockList == NULL)
+    {
+    printf("None of chain is actually in the window");
+    return;
+    }
+fatPsl = chainToPsl(chain);
+
+chainFree(&chain);
+
+psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
+pslFree(&fatPsl);
+
+if (sameWord(otherDb, "seq"))
+    {
+    qSeq = hExtSeq(psl->qName);
+    sprintf(name, "%s", psl->qName);
+    }
+else
+    {
+    qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
+    sprintf(name, "%s.%s", otherOrg, psl->qName);
+    }
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
+       (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
+//showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
+showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, cdsStart, cdsEnd);
+}
 
 void htcUserAli(char *fileNames)
 /* Show alignment for accession. */
@@ -6398,32 +6495,153 @@ void pseudoPrintPosHeader(struct bed *bed)
 char *tbl = cgiUsualString("table", cgiString("g"));
 
 printf("<p>");
-printf("<B>%s PseudoGene:</B> %s:%d-%d<BR>\n", hOrganism(database),  bed->chrom, bed->chromStart, bed->chromEnd);
+printf("<B>%s PseudoGene:</B> %s:%d-%d   %d bp<BR>\n", hOrganism(database),  bed->chrom, bed->chromStart, bed->chromEnd, bed->chromEnd-bed->chromStart);
 printf("Strand: %c",bed->strand[0]);
 printf("<p>");
 }
-void pseudoPrintPos(struct bed *bed, struct pseudoGeneLink *pg)
+void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGeneLink *pg)
 /*    print details of pseudogene record */ 
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
+char chainStr[32];
+char query[256];
+char chainTable[64];
+struct sqlResult *sr;
+char **row;
+struct psl *pslList ;
+struct sqlConnection *conn = hAllocConn();
 
+if (sameString(pg->assembly , database))
+    safef(chainTable,sizeof(chainTable), "selfChain");
+else
+    {
+    char *org = hOrganism(pg->assembly);
+    org[0] = tolower(org[0]);
+    safef(chainTable,sizeof(chainTable), "%sChain", org);
+    }
 printf("<p>");
-printf("<B>%s Gene:</B> %s %s in %s \n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
+printf("<B>%s Gene:</B> %s %s in %s <p>\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
 printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
-printf("<B>Chain:</B> %d  <BR>\n",pg->chainId);
-printf("<p>");
-puts("<LI>\n");
-hgcAnchorPseudoGene(pg->gene, pg->geneTable, bed->chrom, "startcodon", bed->chromStart, bed->chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
-printf("Show %s gene aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly));
-puts("</LI>\n");
+
+pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->chrom, pg->gStart, pg->gEnd);
+if (pslList != NULL)
+    printAlignments(pslList, chromStart, "htcCdnaAli", "mrnaBlastz", pg->name);
+htmlHorizontalLine();
+/* lookup chain if not stored */
+if (pg->chainId == 0 && pg->strand != NULL)
+    {
+    if (sameString(pg->strand,"+"))
+        safef(query,sizeof(query),
+            "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+            chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
+    else
+        {
+        safef(query,sizeof(query),
+            "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+            chrom, chainTable,chromStart,chromEnd, pg->chrom, hChromSize(pg->chrom)-(pg->gEnd), hChromSize(pg->chrom)-(pg->gStart));
+        }
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+        int chainId, score;
+        chainId = sqlUnsigned(row[0]);
+        score = sqlUnsigned(row[1]);
+        if (pg->chainId == 0) pg->chainId = chainId;
+        puts("<LI>\n");
+        printf("<B>Chain:</B> %d  \n",chainId);
+        hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+        printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->chrom,pg->gStart,pg->gEnd);
+        puts("</LI>\n");
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    puts("<LI>\n");
+    printf("<B>Chain:</B> %d  \n",pg->chainId);
+    hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+    printf("View details of parts of chain within browser window</A>.<BR>\n");
+    puts("</LI>\n");
+    }
+//printf("<p>");
+if (pg->chainId > 0)
+    {
+    puts("<LI>\n");
+    hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->chrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
+    printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
+    puts("</LI>\n");
+    }
 puts("<LI>\n");
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("Open %s browser</A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly) );
 puts("</LI>\n");
 }
+
+void doPseudoPsl(struct trackDb *tdb, char *acc)
+/* Click on an pseudogene based on mrna alignment. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char *type;
+char *table = NULL;
+boolean hasBin;
+struct pseudoGeneLink *pg;
+int start = cartInt(cart, "o");
+int winStart = cartInt(cart, "l");
+int winEnd = cartInt(cart, "r");
+char *chrom = cartString(cart, "c");
+struct psl *pslList = NULL, *psl = NULL;
+char *tbl = cgiUsualString("table", cgiString("g"));
+
+/* Get alignment info. */
+pslList = loadPslRangeT(tbl, acc, chrom, winStart, winEnd);
+
+/* print header */
+genericHeader(tdb, acc);
+//printf("<B>%s PseudoGene:</B> %s:%d-%d   %d bp<BR>\n", hOrganism(database),  psl->tName, psl->tStart, psl->tEnd, psl->tEnd-psl->tStart);
+//printf("Strand: %c",psl->strand[0]);
+if (startsWith(track,"pseudoMrna"))
+    {
+    type = "mRNA";
+    table = "mrnaBlastz";
+    }
+else 
+    {
+    type = "mRNA";
+    table = "all_mrna";
+    }
+
+/* Print non-sequence info. */
+cartWebStart(cart, acc);
+
+printf("<H4>PseudoGene/Genomic Alignment</H4>");
+printAlignments(pslList, start, "htcCdnaAli", table, acc);
+
+sprintf(query, "select * from pseudoGeneLink where name = '%s'", acc);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    pg = pseudoGeneLinkLoad(row);
+    if (hTableExists("axtInfo") && pslList != NULL)
+        {
+        htmlHorizontalLine();
+        pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg);
+        }
+    }
+//htmlHorizontalLine();
+//printf("<p><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+//        "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+//	psl->tStart, psl->tName, psl->tStart, psl->tEnd, "+", tbl);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 
 void doPseudoGene(struct trackDb *tdb, char *geneName)
 /* Handle click on ucsc pseudogene gene track. */
@@ -6437,11 +6655,11 @@ struct bed *bed = NULL;
 struct pseudoGeneLink pg;
 struct sqlConnection *conn = hAllocConn();
 char *tbl = cgiUsualString("table", cgiString("g"));
-
+char *start = cartString(cart, "o");
 genericHeader(tdb, geneName);
 if (sqlTableExists(conn, tdb->tableName))
     {
-    sprintf(query, "select * from %s where name = '%s'", tbl, geneName);
+    sprintf(query, "select * from %s where name = '%s' and chromStart = '%s'", tbl, geneName,start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -6456,7 +6674,7 @@ if (sqlTableExists(conn, tdb->tableName))
         pseudoGeneLinkStaticLoad(row, &pg);
         if (hTableExists("axtInfo") && bed != NULL)
             {
-            pseudoPrintPos(bed, &pg);
+            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg);
             }
         }
     }
@@ -7244,22 +7462,41 @@ if (sqlQuickQuery(conn2, query, qNibFile, sizeof(qNibFile)) == NULL)
     errAbort("Sequence chr1 isn't in chromInfo");
 // get gp
 //hFindSplitTable(chrom, track, table, &hasBin);
-hFindSplitTableDb(db2, chrom, track, table, &hasBin);
-safef(query, sizeof(query),
-	 "select * from %s where name = '%s' and chrom = '%s' ",
-         //and txStart < %d and txEnd > %d",
-	 table, name, qChrom
-         //, qEnd, qStart
-         );
-sr = sqlGetResult(conn2, query);
-if ((row = sqlNextRow(sr)) != NULL)
+hFindSplitTableDb(db2, qChrom, track, table, &hasBin);
+if (sameString(track, "mrna"))
     {
-    gp = genePredLoad(row + hasBin);
+    struct psl *psl = NULL ;
+    safef(query, sizeof(query),
+             "select * from %s where qName = '%s' and tName = '%s' and tStart = %d ",
+             table, name, qChrom, qStart
+             );
+    sr = sqlGetResult(conn2, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        psl = pslLoad(row+hasBin);
+        if (psl != NULL)
+            gp = genePredFromPsl(psl, psl->tStart, psl->tEnd, 10);
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+else
+    {
+    safef(query, sizeof(query),
+             "select * from %s where name = '%s' and chrom = '%s' ",
+             //and txStart < %d and txEnd > %d",
+             table, name, qChrom
+             //, qEnd, qStart
+             );
+    sr = sqlGetResult(conn2, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        gp = genePredLoad(row + hasBin);
+        }
+    sqlFreeResult(&sr);
+    }
 if (gp == NULL)
-    errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d) %s",
-	     db2, table, name, qChrom, qStart+1, qEnd, query);
+    errAbort("htcPseudoGene: Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d) %s",
+             db2, table, name, qChrom, qStart+1, qEnd, query);
 
 /* extract nib directory from nibfile */
 if (strrchr(nibFile,'/') != NULL)
@@ -7284,47 +7521,53 @@ if (tChrom->size != net->size)
 
 
 /* load chain */
-sprintf(track, "%sChain",hOrganism(db2));
+if (sameString(database,db2))
+    strcpy(track, "selfChain");
+else
+    sprintf(track, "%sChain",hOrganism(db2));
 track[0] = tolower(track[0]);
-chain = chainDbLoad(conn, database, track, chrom, chainId);
+if (chainId > 0)
+    {
+    chain = chainDbLoad(conn, database, track, chrom, chainId);
 
-/* get list of axts for a chain */
-AllocVar(fill);
-fill->qName = cloneString(qChrom);
-fill->tSize = tEnd-tStart;
-fill->tStart = tStart;
-fill->chainId = chainId;
-fill->qSize = gp->txEnd - gp->txStart;
-fill->qStart = qStart;
-fill->children = NULL;
-fill->next = NULL;
-fill->qStrand = chain->qStrand;
+    /* get list of axts for a chain */
+    AllocVar(fill);
+    fill->qName = cloneString(qChrom);
+    fill->tSize = tEnd-tStart;
+    fill->tStart = tStart;
+    fill->chainId = chainId;
+    fill->qSize = gp->txEnd - gp->txStart;
+    fill->qStart = max(qStart, gp->txStart);
+    fill->children = NULL;
+    fill->next = NULL;
+    fill->qStrand = chain->qStrand;
 
-tChrom = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, 
-    	fill->tStart, fill->tSize);
-axtList = netFillToAxt(fill, tChrom, hChromSize(chrom), qChromHash, qNibDir, chain, TRUE);
-/*
-if (subChain == NULL)
-    subChain = chain;
-axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 200);
-*/
+    tChrom = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, 
+            fill->tStart, fill->tSize);
+    axtList = netFillToAxt(fill, tChrom, hChromSize(chrom), qChromHash, qNibDir, chain, TRUE);
+    /*
+    if (subChain == NULL)
+        subChain = chain;
+    axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 200);
+    */
 
-/* fill in gaps between axt blocks */
-/* allows display of aligned coding regions */
-axtFillGap(&axtList,qNibDir);
+    /* fill in gaps between axt blocks */
+    /* allows display of aligned coding regions */
+    axtFillGap(&axtList,qNibDir);
 
-if (gp->strand[0] == '-')
-    axtListReverse(&axtList, database);
-if (axtList != NULL) 
-    if (axtList->next != NULL)
-        if ((axtList->next->tStart < axtList->tStart && gp->strand[0] == '+') ||
-            (axtList->next->tStart > axtList->tStart && (gp->strand[0] == '-')))
-            slReverse(&axtList);
+    if (gp->strand[0] == '-')
+        axtListReverse(&axtList, database);
+    if (axtList != NULL) 
+        if (axtList->next != NULL)
+            if ((axtList->next->tStart < axtList->tStart && gp->strand[0] == '+') ||
+                (axtList->next->tStart > axtList->tStart && (gp->strand[0] == '-')))
+                slReverse(&axtList);
 
-/* output fancy formatted alignment */
-puts("<PRE><TT>");
-axtOneGeneOut(axtList, LINESIZE, stdout , gp, qNibDir);
-puts("</TT></PRE>");
+    /* output fancy formatted alignment */
+    puts("<PRE><TT>");
+    axtOneGeneOut(axtList, LINESIZE, stdout , gp, qNibDir);
+    puts("</TT></PRE>");
+    }
 
 axtInfoFreeList(&aiList);
 webEnd();
@@ -12198,15 +12441,14 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
 	 sameWord(track, "all_mrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-         sameWord(track, "mrnaBlastz") || 
+         startsWith(track, "mrnaBlastz") || 
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
          sameWord(track, "mgcIncompleteMrna") ||
          sameWord(track, "mgcFailedEst") ||
          sameWord(track, "mgcPickedEst") ||
-         sameWord(track, "mgcUnpickedEst") ||
-         sameWord(track, "pseudoMrna")
+         sameWord(track, "mgcUnpickedEst") 
          )
     {
     doHgRna(tdb, item);
@@ -12307,6 +12549,10 @@ else if (sameWord("otherSARS", track))
 else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
+    }
+else if (startsWith(track, "pseudoMrna"))
+    {
+    doPseudoPsl(tdb, item);
     }
 else if (sameWord(track, "pseudoUcsc") || sameWord(track, "pseudoUcscSelf"))
     {
@@ -12524,6 +12770,10 @@ else if (sameWord(track, "mcnBreakpoints"))
 else if (sameWord(track, "htcChainAli"))
     {
     htcChainAli(item);
+    }
+else if (sameWord(track, "htcChainTransAli"))
+    {
+    htcChainTransAli(item);
     }
 else if (sameWord(track, "htcCdnaAli"))
     {
