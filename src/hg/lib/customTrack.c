@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.36 2003/08/26 05:13:47 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.37 2004/02/15 20:01:01 baertsch Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -532,7 +532,7 @@ gffGroupLines(gff);
 for (group = gff->groupList; group != NULL; group = group->next)
     {
     /* First convert to gene-predictions since this is almost what we want. */
-    gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), exonSelectWord);
+    gp = genePredFromGroupedGff(gff, group, niceGeneName(group->name), exonSelectWord, FALSE);
     if (gp != NULL)
         {
 	/* Make a bed out of the gp. */
