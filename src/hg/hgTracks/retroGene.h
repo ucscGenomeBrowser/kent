@@ -12,6 +12,7 @@
 #include "gfxPoly.h"
 #include "memgfx.h"
 #include "vGfx.h"
+#include "chromColors.h"
 #include "browserGfx.h"
 #include "htmshell.h"
 #include "cart.h"

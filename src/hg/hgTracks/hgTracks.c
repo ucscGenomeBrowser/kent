@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.933 2005/03/24 21:15:27 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.934 2005/03/24 21:46:05 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -158,8 +158,6 @@ int leftLabelWidth;		/* Width of area to draw left labels on. */
 boolean zoomedToBaseLevel; 	/* TRUE if zoomed so we can draw bases. */
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
-
-char *protDbName;               /* Name of proteome database for this genome. */
 
 /* These variables are set by getPositionFromCustomTracks() at the very 
  * beginning of tracksDisplay(), and then used by loadCustomTracks(). */

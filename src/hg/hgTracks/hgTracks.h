@@ -17,6 +17,8 @@
 #endif
 struct itemAttr;
 struct itemAttrTbl;
+char *protDbName;               /* Name of proteome database for this genome. */
+
 
 /* trackDb setting for expRatio tracks */
 #define EXP_COLOR_DENSE "expColorDense"
@@ -708,6 +710,9 @@ char *refGeneName(struct track *tg, void *item);
 
 char *refGeneMapName(struct track *tg, void *item);
 /* Return un-abbreviated genie name. */
+
+void lookupKnownGeneNames(struct linkedFeatures *lfList);
+/* This converts the known gene name to a gene name where possible via refLink. */
 
 #define uglyh printHtmlComment
 /* Debugging aid. */
