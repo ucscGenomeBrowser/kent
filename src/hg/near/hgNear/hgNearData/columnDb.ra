@@ -1,3 +1,5 @@
+#This file contains definitions of columns common to all genomes.
+#
 name debug
 shortLabel debug
 longLabel debugging column on hgwdev

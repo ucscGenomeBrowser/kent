@@ -268,8 +268,11 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
 
-char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name);
+char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name);
 /* Look up in ra hash or die trying. */
+
+char *genomeSetting(char *name);
+/* Return genome setting value.   Aborts if setting not found. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -598,6 +601,10 @@ void doGetSeq(struct sqlConnection *conn, struct column *colList,
 void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 	struct genePos *geneList);
 /* Retrieve genomic sequence sequence according to options. */
+
+void doExamples(struct sqlConnection *conn, struct column *colList);
+/* Put up controls and then some helpful text and examples.
+ * Called when search box is empty. */
 
 /* ---- User settings stuff - soon to be moved to library I hope. */
 

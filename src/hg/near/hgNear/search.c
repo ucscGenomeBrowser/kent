@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.9 2003/09/17 01:58:53 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.10 2003/09/24 04:11:52 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -162,7 +162,7 @@ static struct genePos *findKnownAccessions(struct sqlConnection *conn,
 	char *search)
 /* Return list of known accessions. */
 {
-return findGenePredPos(conn, "knownGene", search);
+return findGenePredPos(conn, genomeSetting("geneTable"), search);
 }
 
 void doSearch(struct sqlConnection *conn, struct column *colList)

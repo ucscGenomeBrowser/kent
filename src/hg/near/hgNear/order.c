@@ -307,10 +307,10 @@ struct hash *raHash;
 while ((raHash = raNextRecord(lf)) != NULL)
     {
     AllocVar(ord);
-    ord->name = mustFindInRaHash(lf, raHash, "name");
-    ord->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
-    ord->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
-    ord->type = mustFindInRaHash(lf, raHash, "type");
+    ord->name = mustFindInRaHash(raName, raHash, "name");
+    ord->shortLabel = mustFindInRaHash(raName, raHash, "shortLabel");
+    ord->longLabel = mustFindInRaHash(raName, raHash, "longLabel");
+    ord->type = mustFindInRaHash(raName, raHash, "type");
     ord->settings = raHash;
     orderSetMethods(ord);
     if (ord->exists(ord, conn))

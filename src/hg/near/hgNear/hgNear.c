@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.83 2003/09/21 06:50:59 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.84 2003/09/24 04:11:52 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -35,11 +35,12 @@ char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
-char *organism;		/* Name of organism - mouse, human, etc. */
+char *genome;		/* Name of genome - mouse, human, etc. */
 char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 char *displayCountString; /* Ascii version of display count, including 'all'. */
 struct hash *oldCart;	/* Old cart hash. */
+struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
 
@@ -768,32 +769,32 @@ static void makeGenomeAssemblyControls()
 /* Query database to figure out which ones
  * support neighborhood browser. */
 {
-/* Make up a list of organisms that have a family
+/* Make up a list of genome that have a family
  * browser, and a list of assemblies that have a
- * family browser for the current organism. */
+ * family browser for the current genome. */
 struct slRef *as, *asList = NULL;
 struct slRef *org, *orgList = NULL;
 struct dbDb *db, *dbList = hGetIndexedDatabases();
-char *ourOrg = hOrganism(database);
+char *ourOrg = hGenome(database);
 struct hash *orgHash = newHash(8);
 for (db = dbList; db != NULL; db = db->next)
     {
     if (db->hgNearOk)
 	{
-	if (!hashLookup(orgHash, db->organism))
+	if (!hashLookup(orgHash, db->genome))
 	    {
-	    hashAdd(orgHash, db->organism, db);
+	    hashAdd(orgHash, db->genome, db);
 	    refAdd(&orgList, db);
 	    }
-	if (sameString(ourOrg, db->organism))
+	if (sameString(ourOrg, db->genome))
 	    refAdd(&asList, db);
         }
     }
 slReverse(&asList);
 slReverse(&orgList);
 
-/* Make organism drop-down. */
-hPrintf("organism: ");
+/* Make genome drop-down. */
+hPrintf("genome: ");
 hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
 hPrintf("onchange=\"%s\"",
   "document.orgForm.org.value=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
@@ -804,11 +805,11 @@ hPrintf(">\n");
 for (org = orgList; org != NULL; org = org->next)
     {
     struct dbDb *db = org->val;
-    char *organism = db->organism;
-    hPrintf("<OPTION VALUE=\"%s\"", organism);
-    if (sameString(ourOrg, organism))
+    char *genome = db->genome;
+    hPrintf("<OPTION VALUE=\"%s\"", genome);
+    if (sameString(ourOrg, genome))
 	hPrintf(" SELECTED");
-    hPrintf(">%s\n", organism);
+    hPrintf(">%s\n", genome);
     }
 hPrintf("</SELECT>");
 
@@ -883,21 +884,6 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 
 makeGenomeAssemblyControls();
-#ifdef OLD
-/* Do genome drop down (just fake for now) */
-    {
-    static char *menu[] = {"Human"};
-    hPrintf("genome: ");
-    cgiMakeDropList("near.genome", menu, ArraySize(menu), menu[0]);
-    }
-
-/* Do assembly drop down (again just fake) */
-    {
-    static char *menu[] = {"April 2003"};
-    hPrintf(" assembly: ");
-    cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
-    }
-#endif /* OLD */
 
 /* Make getDna, getText, advFilter, configure buttons */
     {
@@ -1021,13 +1007,12 @@ for (col = colList; col != NULL; col = col->next)
     }
 }
 
-char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name)
+char *mustFindInRaHash(char *fileName, struct hash *raHash, char *name)
 /* Look up in ra hash or die trying. */
 {
 char *val = hashFindVal(raHash, name);
 if (val == NULL)
-    errAbort("Missing required %s field in record ending line %d of %s",
-    	name, lf->lineIx, lf->fileName);
+    errAbort("Missing required %s field in %s", name, fileName);
 return val;
 }
 
@@ -1134,17 +1119,19 @@ if (lf != NULL)
     }
 }
 
+static char *rootDir = "hgNearData";
+
 static struct hash *readRas(char *rootName)
 /* Read in ra in root, root/org, and root/org/database. */
 {
-char *rootDir = "hgNearData";
 struct hash *hashOfHash = newHash(10);
-char *org = cloneString(organism);
+char *org = cloneString(genome);
 char fileName[512];
 struct hashEl *helList, *hel;
 struct hash *raList = NULL, *ra;
 
 /* Create hash of hash. */
+stripChar(org, '.');
 subChar(org, ' ', '_');
 safef(fileName, sizeof(fileName), "%s/%s", rootDir, rootName);
 foldInRa(fileName, hashOfHash);
@@ -1166,25 +1153,44 @@ hashFree(&hashOfHash);
 return raList;
 }
 
+static void getGenomeSettings()
+/* Set up genome settings hash */
+{
+struct hash *hash = readRas("genome.ra");
+char *name;
+if (hash == NULL)
+    errAbort("Can't find anything in genome.ra");
+name = hashMustFindVal(hash, "name");
+if (!sameString(name, "global"))
+    errAbort("Can't find global ra record in genome.ra");
+genomeSettings = hash;
+}
+
+
+char *genomeSetting(char *name)
+/* Return genome setting value.   Aborts if setting not found. */
+{
+return hashMustFindVal(genomeSettings, name);
+}
+
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
-char *raName = "hgNearData/columnDb.ra";
-struct lineFile *lf = lineFileOpen(raName, TRUE);
+char *raName = "columnDb.ra";
 struct column *col, *colList = NULL;
-struct hash *raList = readRas("columnDb.ra"), *raHash;
+struct hash *raList = readRas(raName), *raHash;
 
 if (raList == NULL)
-    errAbort("Couldn't find anything from columnDb.ra");
+    errAbort("Couldn't find anything from %s", raName);
 for (raHash = raList; raHash != NULL; raHash = raHash->next)
     {
     AllocVar(col);
-    col->name = mustFindInRaHash(lf, raHash, "name");
-    col->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
-    col->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
-    col->priority = atof(mustFindInRaHash(lf, raHash, "priority"));
-    col->on = col->defaultOn = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
-    col->type = mustFindInRaHash(lf, raHash, "type");
+    col->name = mustFindInRaHash(raName, raHash, "name");
+    col->shortLabel = mustFindInRaHash(raName, raHash, "shortLabel");
+    col->longLabel = mustFindInRaHash(raName, raHash, "longLabel");
+    col->priority = atof(mustFindInRaHash(raName, raHash, "priority"));
+    col->on = col->defaultOn = sameString(mustFindInRaHash(raName, raHash, "visibility"), "on");
+    col->type = mustFindInRaHash(raName, raHash, "type");
     col->itemUrl = hashFindVal(raHash, "itemUrl");
     col->settings = raHash;
     columnDefaultMethods(col);
@@ -1192,7 +1198,6 @@ for (raHash = raList; raHash != NULL; raHash = raHash->next)
     if (col->exists(col, conn))
 	slAddHead(&colList, col);
     }
-lineFileClose(&lf);
 refinePriorities(colList);
 refineVisibility(colList);
 slSort(&colList, columnCmpPriority);
@@ -1353,7 +1358,7 @@ void doMainDisplay(struct sqlConnection *conn,
  * a big table. */
 {
 char buf[128];
-safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
+safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", genome);
 makeTitle(buf, "hgNear.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
@@ -1363,7 +1368,7 @@ if (geneList != NULL)
 hPrintf("</FORM>\n");
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
-hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
 	cartUsualString(cart, searchVarName, ""));
@@ -1394,7 +1399,8 @@ static char *lookupProtein(struct sqlConnection *conn, char *mrnaName)
 char query[256];
 char buf[64];
 safef(query, sizeof(query), 
-	"select protein from knownCannonical where transcript='%s'", mrnaName);
+	"select protein from %s where transcript='%s'", 
+	genomeSetting("cannonicalTable"), mrnaName);
 if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
     return NULL;
 return cloneString(buf);
@@ -1443,49 +1449,6 @@ void doFixedId(struct sqlConnection *conn, struct column *colList)
 displayData(conn, colList, curGenePos());
 }
 
-
-void doExamples(struct sqlConnection *conn, struct column *colList)
-/* Put up controls and then some helpful text and examples.
- * Called when search box is empty. */
-{
-displayData(conn, colList, NULL);
-htmlHorizontalLine();
-hPrintf("%s",
- "<P>This program displays a table of genes that are related to "
- "each other.  The relationship can be of several types including "
- "protein-level homology, similarity of gene expression profiles, or "
- "genomic proximity.  The 'group by' drop-down controls "
- "which type of relationship is used.</P>"
- "<P>To use this tool please type something into the search column and "
- "hit the 'Go' button. You can search for many types of things including "
- "the gene name, the SwissProt protein name, a word or phrase "
- "that occurs in the description of a gene, or a GenBank mRNA accession. "
- "Some examples of search terms are 'FOXA1' 'HOXA9' and 'MAP kinase.' </P>"
- "<P>After the search a table appears containing the gene and it's relatives, "
- "one gene per row.  The gene matching the search will be hilighted in light "
- "green.  In the case of search by genome position, the hilighted gene will "
- "be in the middle of the table. In other cases it will be the first row. "
- "Some of the columns in the table including the BLAST 'E-value' and "
- "'%ID' columns will be calculated relative to the hilighted gene.  You can "
- "select a different gene in the list by clicking on the gene's name. "
- "Clicking on the 'Genome Position' will open the Genome Browser on that "
- "gene.  Clicking on the 'Description' will open a details page on the "
- "gene.</P>"
- "<P>To control which columns are displayed in the table use the 'configure' "
- "button. To control the number of rows displayed use the 'display' drop "
- "down. The 'as sequence' button will fetch protein, mRNA, promoter, or "
- "genomic sequence associated with the genes in the table.  The 'as text' "
- "button fetches the table in a simple tab-delimited format suitable for "
- "import into a spreadsheet or relational database. The advanced filter "
- "button allows you to select which genes are displayed in the table "
- "in a very detailed and flexible fashion.</P>"
- "<P>The UCSC Gene Family Browser was designed and implemented by Jim Kent, "
- "Fan Hsu, David Haussler, and the UCSC Genome Bioinformatics Group. This "
- "work is supported by a grant from the National Human Genome Research "
- "Institute and by the Howard Hughes Medical Institute.</P>"
- );
-}
-
 static char *colHtmlFileName(struct column *col)
 /* Return html file associated with column.  You can
  * freeMem this when done. */
@@ -1523,16 +1486,16 @@ else
 freeMem(htmlFileName);
 }
 
-static char *defaultHgNearDb(char *organism)
+static char *defaultHgNearDb(char *genome)
 /* Return default database for hgNear for given
- * organism (or NULL for default organism.) 
+ * genome (or NULL for default genome.) 
  * You can freeMem the returned value when done. */
 {
 char *dbName = NULL;
 
-if (organism != NULL)
+if (genome != NULL)
     {
-    hDefaultDbForGenome(organism);
+    hDefaultDbForGenome(genome);
     if (dbName != NULL && hgNearOk(dbName))
 	 return dbName;
     }
@@ -1566,12 +1529,12 @@ if (hgNearOk(database))
     return;
 else
     {
-    database = defaultHgNearDb(organism);
+    database = defaultHgNearDb(genome);
     if (database == NULL)
 	errAbort("No databases are supporting hgNear.");
-    organism = hOrganism(database);
+    genome = hGenome(database);
     cartSetString(cart, dbVarName, database);
-    cartSetString(cart, orgVarName, organism);
+    cartSetString(cart, orgVarName, genome);
     }
 }
 
@@ -1585,9 +1548,10 @@ struct sqlConnection *conn;
 struct column *colList, *col;
 cart = theCart;
 
-getDbAndGenome(cart, &database, &organism);
+getDbAndGenome(cart, &database, &genome);
 makeSureDbHasHgNear();
 hSetDb(database);
+getGenomeSettings();
 conn = hAllocConn();
 
 /* Get groupOn.  Revert to default if no advanced filter. */
@@ -1642,12 +1606,6 @@ else if (cartVarExists(cart, advFilterBrowseVarName))
     doAdvFilterBrowse(conn, colList);
 else if (cartVarExists(cart, advFilterListVarName))
     doAdvFilterList(conn, colList);
-#ifdef OLD
-else if (cartVarExists(cart, advFilterListProtVarName))
-    doAdvFilterListProt(conn, colList);
-else if (cartVarExists(cart, advFilterListAccVarName))
-    doAdvFilterListAcc(conn, colList);
-#endif /* OLD */
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))
