@@ -12,6 +12,7 @@
 #include "hgConfig.h"
 #include "ctgPos.h"
 #include "trackDb.h"
+#include "hCommon.h"
 
 static struct sqlConnCache *hdbCc = NULL;
 
@@ -690,5 +691,64 @@ boolean chromOk = TRUE;
 if (tdb->restrictCount > 0)
     chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
 return (chromOk && hFindSplitTable(chrom, tdb->tableName, NULL, NULL));
+}
+
+boolean hgParseChromRange(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Parse something of form chrom:start-end into pieces. */
+{
+char *chrom, *start, *end;
+char buf[256];
+int iStart, iEnd;
+
+strncpy(buf, spec, sizeof(buf));
+chrom = buf;
+start = strchr(chrom, ':');
+if (start == NULL)
+    {
+    /* If just chromosome name cover all of it. */
+    if ((chrom = hgOfficialChromName(chrom)) == NULL)
+	return FALSE;
+    else
+       {
+       chrom;
+       iStart = 0;
+       iEnd = hChromSize(chrom);
+       }
+    }
+else 
+    {
+    *start++ = 0;
+    end = strchr(start, '-');
+    if (end == NULL)
+	return FALSE;
+    else
+    *end++ = 0;
+    chrom = trimSpaces(chrom);
+    start = trimSpaces(start);
+    end = trimSpaces(end);
+    if (!isdigit(start[0]))
+	return FALSE;
+    if (!isdigit(end[0]))
+	return FALSE;
+    if ((chrom = hgOfficialChromName(chrom)) == NULL)
+	return FALSE;
+    iStart = atoi(start)-1;
+    iEnd = atoi(end);
+    }
+if (retChromName != NULL)
+    *retChromName = chrom;
+if (retWinStart != NULL)
+    *retWinStart = iStart;
+if (retWinEnd != NULL)
+    *retWinEnd = iEnd;
+return TRUE;
+}
+
+boolean hgIsChromRange(char *spec)
+/* Returns TRUE if spec is chrom:N-M for some human
+ * chromosome chrom and some N and M. */
+{
+return hgParseChromRange(spec, NULL, NULL, NULL);
 }
 

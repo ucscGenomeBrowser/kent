@@ -366,6 +366,7 @@ strncpy(buf, name, sizeof(buf));
 if ((e = strchr(buf, ';')) != NULL)
     *e = 0;
 eraseWhiteSpace(buf);
+stripChar(buf, '%');
 stripChar(buf, '\'');
 stripChar(buf, '"');
 return buf;
