@@ -33,6 +33,7 @@ alpha:
 	hgTrackDb zoo zooHuman3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooMouse3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooPig3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooRat3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
 
