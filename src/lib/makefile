@@ -1,5 +1,5 @@
 .c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -I../inc -c $*.c
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -I../inc -c $*.c
 
 O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
     dgRange.o diGraph.o dlist.o dnaseq.o dnautil.o dystring.o errabort.o \

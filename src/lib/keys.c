@@ -349,7 +349,7 @@ static struct kxTok *tokenize(char *text)
 {
 struct kxTok *tokList = NULL, *tok;
 char c, *s, *start = NULL, *end = NULL;
-enum kxTokType type;
+enum kxTokType type = 0;
 
 s = text;
 for (;;)

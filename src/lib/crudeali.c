@@ -74,7 +74,7 @@ for (i=0; i<hitCount; ++i)
 for (;;)
     {
     boolean startedExon = FALSE;
-    int diagDiff;
+    int diagDiff = 0;
     int tOff, pOff;
     int thisDiff;
     for (; firstNonLumped < hitCount; ++firstNonLumped)
@@ -156,10 +156,10 @@ for (i=0; i<exonCount; ++i)
 for (;;)
     {
     boolean startedGene = FALSE;
-    int lastDiff;
+    int lastDiff = 0;
     int tOff, pOff;
     int thisDiff;
-    int exonsInThis;
+    int exonsInThis = 0;
 
     for ( ; firstNonLumped < exonCount; ++firstNonLumped)
         {

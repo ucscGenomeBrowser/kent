@@ -329,8 +329,8 @@ struct cdaBlock *block = cda->blocks;
 int count = cda->blockCount;
 int blockIx;
 int scaledHeight = roundingScale(height, dnaSize, width);
-MgFont *font;
-int repeatCharWidth;
+MgFont *font = NULL;
+int repeatCharWidth = 0;
 
 if (repeatChar)
     {

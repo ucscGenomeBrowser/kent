@@ -670,7 +670,7 @@ aaSeq *tSeq = target->seq;
 AA *qs, *ts, *qe, *te;
 int maxScore = 0, maxPos = 0, score, pos;
 struct gfHit *hit;
-int qStart, tStart, qEnd, tEnd, newQ, newT;
+int qStart = 0, tStart = 0, qEnd = 0, tEnd = 0, newQ = 0, newT = 0;
 boolean outOfIt = TRUE;		/* Logically outside of a clump. */
 struct gfRange *range;
 AA *lastQs = NULL, *lastQe = NULL, *lastTs = NULL, *lastTe = NULL;

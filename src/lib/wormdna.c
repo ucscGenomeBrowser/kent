@@ -1127,7 +1127,7 @@ struct gdfGene *wormGdfGenesInRange(char *chrom, int start, int end,
     struct wormGdfCache *geneFinder)
 /* Get list of genes in range according to given gene finder. */
 {
-char *dir;
+char *dir = NULL;
 struct gdfGene *gdfList = NULL, *gdf;
 struct wormFeature *nameList, *name;
 
