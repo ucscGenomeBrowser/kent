@@ -2,7 +2,7 @@ This file describes how we made the browser database on
 NCBI build 28 (Dec 22, 2001 freeze)
 
 
-CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARRY INFO 
+CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARRY INFO  (done)
 
 o - ln -s /cluster/store1/gs.11/build28 ~/oo
 o - Create the database.
@@ -22,7 +22,7 @@ o - Store the mRNA (non-alignment) info in database.
     The last line will take quite some time to complete.  It will count up to
     about 3,800,000 before it is done.
 
-REPEAT MASKING 
+REPEAT MASKING  (done)
 
 For the NCBI assembly we repeat mask on the sensitive mode setting.
 Patrick Gavin did this, and perhaps will fill in the details later.
@@ -44,7 +44,7 @@ Then load the .out files into the database with:
     cd ~/oo
     hgLoadOut hg10 ?/*.fa.out ??/*.fa.out
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (done)
 
 o - Create packed chromosome sequence files and put in database
      mysql -A -u hgcat -pbigsecret hg10  < ~/src/hg/lib/chromInfo.sql
@@ -71,7 +71,7 @@ o - Make and load GC percent table
 
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS
+MAKING AND STORING mRNA AND EST ALIGNMENTS (done)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
@@ -146,7 +146,7 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/oo/bed/est/intronEst
       hgLoadPsl hg10 *.psl
 
-PRODUCING KNOWN GENES (RefSeq)
+PRODUCING KNOWN GENES (done)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.127/refSeq.
@@ -180,10 +180,8 @@ o - Add Jackson labs info
     and at the mysql> prompt
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
-    
 
-
-SIMPLE REPEAT TRACK
+SIMPLE REPEAT TRACK (done)
 
 o - Create cluster jabba job like so:
         ssh kkstore
@@ -210,7 +208,7 @@ o - Load this into the database as so
 	hgLoadBed hg10 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS
+PRODUCING GENSCAN PREDICTIONS (todo)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
      ssh roar
@@ -235,7 +233,7 @@ o - Load into the database as so:
      hgLoadBed hg10 genscanSubopt genscanSubopt.bed
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (done)
 
 Make sure that the NT*.fa files are lower-case repeat masked, and that
 the simpleRepeat track is made.  Then put doubly (simple & interspersed)
@@ -255,7 +253,7 @@ repeat mask files onto /cluster local drive as so.
 Then ask admins to do a binrsync.
 
 
-DOING HUMAN/MOUSE ALIGMENTS
+DOING HUMAN/MOUSE ALIGMENTS (todo)
 
 o - Download the lower-case-masked assembly and put it in
     kkstore:/cluster/store1/a2ms.
@@ -362,7 +360,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg10 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (in progress)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -399,6 +397,24 @@ stage).  Also make sure /scratch/hg/mrna.127 is loaded with xenoRna.fa Then do:
 Do jabba check hut until the run is done, doing jabba push hut if
 necessary on occassion.
 
+Sort xeno mRNA alignments as so:
+       ssh kkstore
+       cd ~/oo/bed/xenoMrna
+       pslSort dirs raw.psl /cluster/store2/temp psl
+       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
+       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+       pslCat -dir chrom > xenoMrna.psl
+       rm -r chrom raw.psl cooked.psl chrom.psl
+
+Load into database as so:
+       ssh hgwdev
+       cd ~/oo/bed/xenoMrna
+       hgLoadPsl hg10 xenoMrna.psl -tNameIx
+       cd /cluster/store1/mrna.127
+       hgLoadRna add hg10 /cluster/store1/mrna.127/xenoRna.fa xenoRna.ra
+
+
 Similarly do xenoEst aligments:
        ssh kkstore
        cd /cluster/store1/gs.8/build28/oo/bed
@@ -410,29 +426,20 @@ Similarly do xenoEst aligments:
        cp ~/lastOo/bed/xenoEst/gsub .
        gensub2 human.lst mrna.lst gsub spec
        jabba make hut spec
-       jabba push hut
-Do jabba check hut until the run is done, doing jabba push hut if
-necessary on occassion.
+       jabba shove hut
 
-o - Sort alignments as so:
+Sort xenoEst alignments:
        ssh kkstore
-       cd ~/oo/bed/xenoRna
+       cd ~/oo/bed/xenoEst
        pslSort dirs raw.psl /cluster/store2/temp psl
-       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+       pslReps raw.psl cooked.psl /dev/null -minAli=0.10
        liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
        pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
-       pslCat -dir chrom > xenoMrna.psl
+       pslCat -dir chrom > xenoEst.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
 
-o - Load into database as so:
-       ssh hgwdev
-       cd ~/oo/bed/xenoMrna
-       hgLoadPsl hg10 xenoMrna.psl -tNameIx
-       cd /cluster/store1/mrna.127
-       hgLoadRna add hg10 /cluster/store1/mrna.127/xenoRna.fa xenoRna.ra
 
-
-PRODUCING FISH ALIGNMENTS
+PRODUCING FISH ALIGNMENTS (todo)
 
 o - Download sequence from ... and put it in 
 	ssh kks00
@@ -476,7 +483,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
 
 
 
-TIGR GENE INDEX
+TIGR GENE INDEX (todo)
 
   o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
       ~/oo.29/bed/tgi and then execute the following commands:
@@ -495,9 +502,7 @@ TIGR GENE INDEX
 
 
       
-LOADING IN EXTERNAL FILES
-
-o - Load STSs (done)
+LOAD STS MAP (done)
      - login to hgwdev
       cd ~/oo/bed
       hg10 < ~/src/hg/lib/stsMap.sql
@@ -511,7 +516,7 @@ o - Load STSs (done)
           quit
 
 
-o - Load chromosome bands: 
+LOAD CHROMOSOME BANDS (done)
       - login to hgwdev
       cd /cluster/store1/gs.11/build28/bed
       mkdir cytoBands
@@ -523,13 +528,13 @@ o - Load chromosome bands:
       - At mysql> prompt type
           quit
 
-o  - Load mouseRef track.  
+LOAD MOUSEREF TRACK (todo)
     First copy in data from kkstore to ~/oo/bed/mouseRef.  
     Then substitute 'genome' for the appropriate chromosome 
     in each of the alignment files.  Finally do:
        hgRefAlign webb hg10 mouseRef *.alignments
 
-o - Load Avid Mouse tracks
+LOAD AVID MOUSE TRACK (todo)
       ssh cc98
       cd ~/oo/bed
       mkdir avidMouse
@@ -539,24 +544,8 @@ o - Load Avid Mouse tracks
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-o - Load in Exonerate alignments 
-      ssh hgwdev
-      cd ~/oo/bed
-      mkdir exonerate
-      cd exonerate
-      wget ftp.ebi.ac.uk/pub/software/ensembl/mouse_vs_ens110.tar.gz
-      tar -zxvf mouse*.gz
-      cat mouse_gff/*.gff | hgExonerate -elia hg10 exoMouse stdin
-       
-o - Load in Fiberglass alignments 
-      ssh hgwdev
-      cd ~/oo/bed
-      mkdir fiberglass
-      cd fiberglass
-      wget http://waldo.wi.mit.edu/~danb/Chr22/all_hits
-      hgFiberglass hg10 all_hits
 
-o - Load SNPs into database.
+LOAD SNPS (todo)
       - ssh hgwdev
       - cd ~/oo/bed
       - mkdir snp
@@ -574,7 +563,7 @@ o - Load SNPs into database.
 	hgLoadBed hg10 snpTsc snpTsc.bed
 	hgLoadBed hg10 snpNih snpNih.bed
 
-o - Load cpgIslands (done)
+LOAD CPGISSLANDS (todo)
      - login to hgwdev
      - cd /cluster/store1/gs.11/build28/bed
      - mkdir cpgIsland
@@ -588,7 +577,7 @@ o - Load cpgIslands (done)
      - At mysql> prompt type in:
           load data local infile 'cpgIsland.bed' into table cpgIsland
 
-o - Load Ensembl genes:
+LOAD ENSEMBLE GENES (todo)
      cd ~/oo/bed
      mkdir ensembl
      cd ensembl
@@ -605,7 +594,7 @@ o - Load Ensembl peptides:
      subs -e ensembl.pep
      hgPepPred hg10 generic ensPep ensembl.pep
 
-o - Load Sanger22 genes:
+LOAD SANGER22 GENES (todo)
       - cd ~/oo/bed
       - mkdir sanger22
       - cd sanger22
@@ -621,14 +610,14 @@ o - Load Sanger22 genes:
 
       - hgPepPred hg10 generic sanger22pep *.pep
 
-o - Load Sanger20 genes:
+LOAD SANGER 20 GENES (todo)
      First download files from James Gilbert's email to ~/oo/bed/sanger20 and
      go to that directory while logged onto hgwdev.  Then:
         grep -v Pseudogene chr_20*.gtf | ldHgGene hg10 sanger20 stdin
 	hgSanger20 hg10 *.gtf *.info
 
 
-o - Load rnaGene table
+LOAD RNAGENES (todo)
       - login to hgwdev
       - cd ~kent/src/hg/lib
       - hg10 < rnaGene.sql
@@ -640,7 +629,7 @@ o - Load rnaGene table
       - liftUp chrom.gff ../../jkStuff/liftAll.lft carry ncrna-oo27.gff
       - hgRnaGenes hg10 chrom.gff
 
-o - Load exoFish table
+LOAD EXOFISH (todo)
      - login to hgwdev
      - cd /cluster/store1/gs.11/build28/bed
      - mkdir exoFish
@@ -651,7 +640,7 @@ o - Load exoFish table
      - awk -f filter.awk all_maping_ecore > exoFish.bed
      - hgLoadBed hg10 exoFish exoFish.bed
 
-o - Mouse synteny track
+LOAD MOUSE SYNTENY (todo)
      - login to hgwdev.
      - cd ~/kent/src/hg/lib
      - hg10 < mouseSyn.sql
@@ -666,7 +655,7 @@ o - Mouse synteny track
           load data local infile 'mouseSyn.bed' into table mouseSyn
 
 
-o - Load Genie predicted genes and associated peptides.
+LOAD GENIE (todo)
      - cat */ctg*/ctg*.affymetrix.gtf > predContigs.gtf
      - liftUp predChrom.gtf ../../jkStuff/liftAll.lft warn predContigs.gtf
      - ldHgGene hg10 genieAlt predChrom.gtf
@@ -678,7 +667,7 @@ o - Load Genie predicted genes and associated peptides.
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-o - Load Softberry genes and associated peptides (done)
+LOAD SOFTBERRY GENES (todo)
      - cd ~/oo/bed
      - mkdir softberry
      - cd softberry
@@ -687,7 +676,7 @@ o - Load Softberry genes and associated peptides (done)
      hgPepPred hg10 softberry *.pro
      hgSoftberryHom hg10 *.pro
 
-o - Load Acembly (done)
+LOAD ACEMBLY (todo)
     - Get acembly.gff from Jean and Michelle Thierry-Miegs and
       place in ~/oo/bed/acembly
     - Replace c_chr with chr in acembly.gff
@@ -697,6 +686,7 @@ o - Load Acembly (done)
         ldHgGene hg10 acembly acembly.gff
         hgPepPred hg10 generic acemblyPep acembly.pep
 
+LOAD GENOMIC DUPES (todo)
 o - Load genomic dupes
     ssh hgwdev
     cd ~/oo/bed
