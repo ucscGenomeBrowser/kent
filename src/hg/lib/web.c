@@ -40,7 +40,7 @@ pushAbortHandler(softAbort);
 void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
-char *db = NULL;
+char uiState[256];
 
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
@@ -78,7 +78,14 @@ if (withLogo)
 
 if (NULL != theCart)
     {
-    db = cartUsualString(theCart, "db", hGetDb());
+    snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%u", 
+	     dbCgiName, cartUsualString(theCart, dbCgiName, hGetDb()),
+	     cartSessionVarName(), cartSessionId(theCart));
+    }
+else
+    {
+    uiState[0] = 0;
+    uiState[1] = 0;
     }
 
 puts(
@@ -90,20 +97,14 @@ puts(
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
        );
 
-if (NULL != db)
-    {
-    printf("&nbsp;<A HREF=\"/index.html?db=%s\" class=\"topbar\">" "\n", db);
-    }
-else
-    {
-    puts("&nbsp;<A HREF=\"/index.html\" class=\"topbar\">" "\n");
-    }
-puts(
-     "           Home</A> &nbsp; - &nbsp;" "\n"
-     "       <A HREF=\"/cgi-bin/hgGateway\" class=\"topbar\">" "\n"
-     "           Genome Browser</A> &nbsp; - &nbsp;" "\n"
-     "       <A HREF=\"/cgi-bin/hgBlat?command=start\" class=\"topbar\">" "\n"
-     "           Blat Search</A> &nbsp; - &nbsp;" "\n" 
+printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
+puts("           Home</A> &nbsp; - &nbsp;");
+printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+       uiState);
+puts("           Genome Browser</A> &nbsp; - &nbsp;");
+printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
+       uiState+1);
+puts("           Blat Search</A> &nbsp; - &nbsp;" "\n"
      "       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
      "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
