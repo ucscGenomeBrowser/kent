@@ -115,10 +115,13 @@ format description of their fields.</P>
     (June 2002)
   <LI><A 
   href="#PslInfo">chrN_blatFish</A> 
-  - Translated BLAT alignments of Tetraodon nigrovirisi against the human or mouse draft genome</LI>
+  - Translated BLAT alignments of <em>Tetraodon nigrovirisi</em> against the current genome</LI>
+  <LI><A 
+  href="#PslInfo">chrN_blatFr1</A> 
+  - Translated BLAT alignments of <em>Takifugu rubripes</em> assembly fr1 against the current genome</LI>
   <LI><A 
   href="#PslInfo">chrN_blatFugu</A> 
-  - Translated BLAT alignments of Takifugu rubripes against the human or mouse draft genome</LI>
+  - Translated BLAT alignments of <em>Takifugu rubripes</em> against the human or mouse draft genome</LI>
   <LI><A 
   href="#PslInfo">chrN_blatHuman</A> 
   - Translated BLAT alignments of human genome vs. mouse genome</LI>
@@ -132,19 +135,31 @@ format description of their fields.</P>
   href="#Chain">chrN_cb1Chain</A> 
   - Summary info about chain of C. briggsae alignments </LI>
   <LI><A 
-  href="#ChainLink">chrN_cb1ChainLink</A> 
+  href="#ChainGap">chrN_cb1ChainLink</A> 
   - Alignment block in C. briggsae chain </LI>
   <LI><A 
   href="#Chain">chrN_ce1Chain</A> 
   - Summary info about chain of C. elegans alignments </LI>
   <LI><A 
-  href="#ChainLink">chrN_ce1ChainLink</A> 
+  href="#ChainGap">chrN_ce1ChainLink</A> 
   - Alignment block in C. elegans chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainMm3</A> 
+  - Summary info about chain of mouse (mm3 assembly) alignments</LI>
+  <LI><A 
+  href="#ChainGap">chrN_chainMm3Link</A> 
+  - Alignment block in mouse (mm3 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainRn3</A> 
+  - Summary info about chain of rat (rn3 assembly) alignments</LI>
+  <LI><A 
+  href="#ChainGap">chrN_chainRn3Link</A> 
+  - Alignment block in Rat (rn3 assembly) chain </LI>
   <LI><A 
   href="#Chain">chrN_chainSelf</A> 
   - Summary info about chain of self alignments </LI>
   <LI><A 
-  href="#ChainLink">chrN_chainSelfLink</A> 
+  href="#ChainGap">chrN_chainSelfLink</A> 
   - Alignment block in self alignment chain </LI>
   <LI><A 
   href="#PslInfo">chrN_est</A> 
@@ -239,6 +254,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PslInfo">blatChimp</A> 
   - Blat alignments of Pan troglodytes against the draft human genome
   <LI><A 
+  href="#BlastTab">ceBlastTab</A> 
+  - Tab-delimited blast output file for <em>C. elegans</em>
+  <LI><A 
   href="#ChainLink">chainLink</A> 
   - Alignment block in chain </LI>
   <LI><A 
@@ -274,6 +292,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#BED">dhs</A> 
   - DNase I hypersensitive sites (DHS) mapped to the human genome sequence (Zoo)</LI>
+  <LI><A 
+  href="#BlastTab">dmBlastTab</A> 
+  - Tab-delimited blast output file for <em>Drosophila melanogastor</em>
+  <LI><A 
+  href="#BlastTab">drBlastTab</A> 
+  - Tab-delimited blast output file for <em>Danio rerio</em>
   <LI><A 
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
@@ -316,6 +340,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#FishClones">fishClones</A> 
   - Clones placed on Cytogenetic Map using FISH </LI>
+  <LI><A 
+  href="#RnaFold">foldUtr3</A> 
+  - Info about folding of RNA into secondary structure
+  <LI><A 
+  href="#RnaFold">foldUtr5</A> 
+  - Info about folding of RNA into secondary structure
   <LI><A 
   href="#FosEndPairs">fosEndPairs</A> 
   - Positions of end pairs for fosmids
@@ -373,6 +403,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#NetAlign">humanNet</A> 
   - Database representation of a net of alignments with human </LI>
   <LI><A 
+  href="#ScoredRef">humorMm3Rn3</A> 
+  - Human, Mouse, and Rat multiz alignments for hg16, mm3, and rn3 (human only) </LI>
+  <LI><A 
   href="#ImageClone">imageClone</A> 
   - Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing"</LI>
   <LI><A 
@@ -388,12 +421,27 @@ stored in a single table rather than one table per chromosome:</P>
   href="#JaxQTL">jaxQTL</A> 
   - Jackson Labs Mouse Quantitative Trait Loci </LI>
   <LI><A 
+  href="#KgAlias">kgAlias</A> 
+  - Links together a Known Gene ID and a gene alias
+  <LI><A 
+  href="#KgProtAlias">kgProtAlias</A> 
+  - Links together a Known Gene ID and a protein alias
+  <LI><A 
+  href="#KgXref">kgXref</A> 
+  - Links together a Known Gene ID and mRNA, SwissProt, RefSeq, and NCBI accessions/IDs
+  <LI><A 
+  href="#KnownCanonical">knownCanonical</A> 
+  - Describes the canonical splice variant of a gene
+  <LI><A 
   href="#KnownGene">knownGene</A> 
   - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
 TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownGeneLink">knownGeneLink</A> 
   - Stores the seqType info for Known Genes track entries.
+  <LI><A 
+  href="#KnownToSuper">knownToSuper</A> 
+  - Maps protein superfamilies to known genes
   <LI><A 
   href="#MrnaPredictions">knownGeneMrna</A> 
   - Known Genes mRNA
@@ -426,6 +474,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#MGIid">MGI ID</A> 
   - Links MGI ID to Locus Link ID (Mouse)
   <LI><A 
+  href="#BlastTab">mmBlastTab</A> 
+  - Tab-delimited blast output file for mouse
+  <LI><A 
   href="#Chain">mouseChain</A> 
   - Summary info about chain of mouse alignments </LI>
   <LI><A 
@@ -453,6 +504,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BED">nci60</A> 
   - Microarray Experiments for NCI 60 Cell Lines </LI>
+  <LI><A 
+  href="#NetAlign">netMm3</A> 
+  - Database representation of a net of alignments with mouse assembly Mm3 </LI>
+  <LI><A 
+  href="#NetAlign">netRn3</A> 
+  - Database representation of a net of alignments with rat assembly Rn3 </LI>
   <LI><A 
   href="#BED">perlegen</A> 
   - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
@@ -551,6 +608,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#Seq">seq</A> 
   - Locations of database table sequences referenced in external fasta files </LI>
+  <LI><A 
+  href="#BlastTab">scBlastTab</A> 
+  - Tab-delimited blast output file for SARS
   <LI><A 
   href="#SfDescription">sfDescription</A> 
   - Stores domain descriptions for the Superfamily track</LI> 
@@ -808,6 +868,28 @@ autoSql format.
     )
 </PRE>
 
+<H4><A name=BlastTab></A>Blast Output</H4>
+The following definition is used for several tables that contain blast 
+for various organisms.
+
+<PRE>table blastTab
+"Tab-delimited blast output file"
+    (
+    string query;	"Name of query sequence"
+    string target;	"Name of target sequence"
+    float identity;	"Percent identity"
+    uint aliLength;	"Length of alignment"
+    uint mismatch;	"Number of mismatches"
+    uint gapOpen;	"Number of gap openings"
+    uint qStart;	"Start in query (0 based)"
+    uint qEnd;		"End in query (non-inclusive)"
+    uint tStart;	"Start in target (0 based)"
+    uint tEnd;		"End in target (non-inclusive)"
+    double eValue;	"Expectation value"
+    double bitScore;	"Bit score"
+    )
+</PRE>
+
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
 - affyRatio -all 15 fields <BR>
@@ -866,6 +948,18 @@ The following definition is used for several tables as follows:<BR>
    uint qEnd; 		"Alignment end position in query"
    uint id; 		"Chain ID"
    }
+</PRE>
+
+<H4><A name=ChainGap></A>Chain Gap</H4>
+<PRE>table chainGap
+"Alignment block in chain"
+   (
+   string tName; 	"Target sequence name"
+   uint tStart; 	"Alignment start position in target"
+   uint tEnd; 		"Alignment end position in target"
+   uint qStart; 	"Start in query"
+   uint chainId; 	"Chain ID in chain table"
+   )
 </PRE>
 
 <H4><A name=ChainLink></A>Chain Link</H4>
@@ -1315,6 +1409,19 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
+<H4><A name=KnownCanonical></A>Known Canonical</H4>
+<PRE>table knownCanonical
+"Describes the canonical splice variant of a gene"
+     (
+     string chom;        "Chromosome"
+     int chromStart;     "Start position (0 based). Corresponds to txStart"
+     int chromEnd;       "End position (non-inclusive). Corresponds to txEnd"
+     int clusterId;      "Which cluster of transcripts this belongs to in knownIsoforms"
+     string transcript;  "Corresponds to knownGene name field"
+     string protein;     "SwissProt ID of associated protein"
+     )
+</PRE>
+
 <H4><A name=KnownGene></A>Known Genes</H4>
 <PRE>table knownGene
 "Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
@@ -1336,6 +1443,30 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     )
 </PRE>
 
+<H4><A name=KgAlias></A>Known Genes Alias</H4>
+<PRE>table kgAlias
+"Links together a Known Gene ID and a gene alias"
+    (
+    string kgID;        "Known Gene ID"
+    string alias;	"A gene alias"
+    )
+</PRE>
+
+<H4><A name=KgXref></A>Known Genes Cross Reference</H4>
+<PRE>table kgXref
+"Links a Known Gene ID with mRNA, SwissProt, RefSeq, and NCBI accessions/IDs"
+    (
+    string kgID;        "Known Gene ID"
+    string mRNA;        "mRNA ID"
+    string spID;        "SWISS-PROT protein Accession number"
+    string spDisplayID; "SWISS-PROT display ID"
+    string geneSymbol;  "Gene Symbol"
+    string refseq;      "RefSeq ID"
+    string protAcc;     "NCBI protein Accession number"
+    string description; "Description"
+    )
+</PRE>
+
 <H4><A name=KnownGeneLink></A>Known Genes Link</H4>
 <PRE>table knownGeneLink
 "Stores the seqType info for Known Genes track entries." 
@@ -1343,6 +1474,28 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     string  name;       "Known Genes ID"
     char[1] seqType;    "Known Genes sequence type - mRNA-base genes=m, DNA-based genes=g"
     string  proteinID;  "Corresponding protein ID"
+    )
+</PRE>
+
+<H4><A name=KgProtAlias></A>Known Genes Protein Alias</H4>
+<PRE>table kgProtAlias
+"Links together a Known Gene ID and a protein alias"
+    (
+    string kgID;        "Known Gene ID"
+    string displayID;	"protein display ID"
+    string alias;	"A protein alias"
+    )
+</PRE>
+
+<H4><A name=KnownToSuper></A>Known Genes Superfamily Link</H4>
+<PRE>table knownToSuper
+"Maps protein superfamilies to known genes"
+    (
+    string gene;	"Known gene ID"
+    int superfamily;	"Superfamily ID"
+    int start;		"Start of superfamily domain in protein (0 based)"
+    int end;		"End (noninclusive) of superfamily domain"
+    float eVal;		"E value of superfamily assignment"
     )
 </PRE>
 
@@ -1791,6 +1944,17 @@ These tables were created from RepeatMasker .out files.
     )
 </PRE>
 
+<H4><A name=RnaFold></A>RNA Folding Info</H4>
+<PRE>table rnaFold
+"Info about folding of RNA into secondary structure"
+    (
+    string name;	"mRNA accession"
+    lstring seq;	"mRNA sequence (U's instead of T's)"
+    lstring fold;	"Parenthesis and .'s that describe folding"
+    float energy;	"Estimated free energy of folding (negative)"
+    )
+</PRE>
+
 <H4><A name=RNAgenes></A>RNA Gene Positions</H4>
 Last used Apr. 2001.
 <PRE>table rnaGene
@@ -1883,6 +2047,21 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
     string geneType;	  "Type field from Sanger gene GFFs"
     string cdsType;	  "Type field from Sanger CDS GFFs"
     )
+</PRE>
+
+<H4><A name=ScoredRef></A>Scored Ref</H4>
+The following table is used for humor alignments.
+
+<PRE>table scoredRef
+"A score, a range of positions in the genome and a extFile offset"
+   (
+   string chrom;      	"Chromosome (this species)"
+   uint   chromStart; 	"Start position in chromosome (forward strand)"
+   uint   chromEnd;   	"End position in chromosome"
+   uint   extFile;	"Pointer to associated external file"
+   bigint offset;	"Offset in external file"
+   float score;		"Overall score"
+   )
 </PRE>
 
 <H4><A name=GenomicSuperDups></A>Segmental Duplications</H4>
@@ -2553,6 +2732,7 @@ reference in the above mrna table.
   string alignment; "Name of alignment"
   string chrom;     "Chromosome name"
   string fileName;  "Axt file name"
+  int sort;	    "Sort order"
   )
 </PRE>
 
