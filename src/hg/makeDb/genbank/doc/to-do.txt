@@ -746,3 +746,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   so one index of tName,tStart,tEnd maybe all that is needed
 
 - add smarter poly-As triming
+
+- refseq protein version can be different than mrna version; not sure
+  we track this.

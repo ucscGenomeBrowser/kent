@@ -16,7 +16,7 @@ struct metaData
 
     /* Fields indicating the tables were we found the accession.  Data
      * below, booleans are together to pack. */
-    boolean inMrna;
+    boolean inGbCdnaInfo;
     boolean inSeq;
     boolean inExtFile;
     boolean inRefSeqStatus;
@@ -32,11 +32,11 @@ struct metaData
      * not usually loaded into the DB. */
     boolean excluded;
 
-    /* fields from the mrna table */
-    HGID mrnaId;
-    unsigned mrnaVersion;  /* stripped ACC */
-    time_t mrnaModdate;
-    unsigned mrnaType;
+    /* fields from the gbCdnaInfo table */
+    HGID gbCdnaInfoId;
+    unsigned gbCdnaInfoVersion;  /* stripped ACC */
+    time_t gbCdnaInfoModdate;
+    unsigned gbCdnaInfoType;
     boolean haveDesc;
 
     /* fields from the seq table */

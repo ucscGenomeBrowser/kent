@@ -17,7 +17,7 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.6 2004/02/23 07:38:56 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.7 2004/09/15 16:31:50 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -72,9 +72,9 @@ if ((*stop != '\0') || (stop == str))
 return num;
 }
 
-static void loadMrnaRow(struct metaDataTbls* metaDataTbls,
-                        struct sqlConnection* conn, char** row)
-/* load one row from the mrna table */
+static void loadGbCdnaInfoRow(struct metaDataTbls* metaDataTbls,
+                              struct sqlConnection* conn, char** row)
+/* load one row from the gbCdnaInfo table */
 {
 struct metaData* md;
 int len, numNonZero, iRow = 0;
@@ -84,33 +84,33 @@ boolean gotError, isOk;
 /* columns: acc,id,moddate,version,moddate,type */
 acc = row[iRow++];
 md = metaDataTblsGet(metaDataTbls, acc);
-if (md->inMrna)
+if (md->inGbCdnaInfo)
     {
     gbError("%s: acc occurs multiple times in the mrna table", acc);
     return;
     }
-md->inMrna = TRUE;
-md->mrnaId = strToUnsigned(row[iRow++], acc, "mrna.id", NULL);
+md->inGbCdnaInfo = TRUE;
+md->gbCdnaInfoId = strToUnsigned(row[iRow++], acc, "gbCdnaInfo.id", NULL);
 len = strlen(acc);
-md->mrnaVersion = strToUnsigned(row[iRow++], "mrna.version", acc, &gotError);
-if (!gotError && (md->mrnaVersion <= 0))
-     gbError("%s: mrna.version invalid: \"%d\"", acc, md->mrnaVersion);
+md->gbCdnaInfoVersion = strToUnsigned(row[iRow++], "gbCdnaInfo.version", acc, &gotError);
+if (!gotError && (md->gbCdnaInfoVersion <= 0))
+     gbError("%s: gbCdnaInfo.version invalid: \"%d\"", acc, md->gbCdnaInfoVersion);
 isOk = TRUE;
-md->mrnaModdate = gbParseChkDate(row[iRow++], &isOk);
+md->gbCdnaInfoModdate = gbParseChkDate(row[iRow++], &isOk);
 if (!isOk)
-    gbError("%s: invalid mrna.moddate value: \"%s\"", acc, row[iRow-1]);
-md->mrnaType = gbParseType(row[iRow++]);
-md->typeFlags |= md->mrnaType;
+    gbError("%s: invalid gbCdnaInfo.moddate value: \"%s\"", acc, row[iRow-1]);
+md->gbCdnaInfoType = gbParseType(row[iRow++]);
+md->typeFlags |= md->gbCdnaInfoType;
 
 dir = row[iRow++];
 if ((strlen(dir) > 1) || (strchr("053", *dir) == NULL))
-    gbError("%s: invalid mrna.direction value: \"%s\"", acc, dir);
+    gbError("%s: invalid gbCdnaInfo.direction value: \"%s\"", acc, dir);
 
 /* Make sure that at least a few of the id fields have data  */
 numNonZero = 0;
 while (iRow < 20)
     {
-    int id = strToUnsigned(row[iRow++], md->acc, "mrna.?", NULL);
+    int id = strToUnsigned(row[iRow++], md->acc, "gbCdnaInfo.?", NULL);
     if (id > 0)
         numNonZero++;
     /* remember if we have a description */
@@ -118,22 +118,22 @@ while (iRow < 20)
         md->haveDesc = (id != 0);
     }
 if (numNonZero == 0)
-    gbError("%s: none of mrna string ids have non-zero values", dir);
+    gbError("%s: none of gbCdnaInfo string ids have non-zero values", dir);
 else if (numNonZero < 4)
-    gbError("%s: only %d of mrna string ids have non-zero values",
+    gbError("%s: only %d of gbCdnaInfo string ids have non-zero values",
             dir, numNonZero);
 }
 
-static void loadMrnaData(struct metaDataTbls* metaDataTbls,
-                         struct gbSelect* select, struct sqlConnection* conn)
-/* load the mrna table */
+static void loadGbCdnaInfoData(struct metaDataTbls* metaDataTbls,
+                               struct gbSelect* select, struct sqlConnection* conn)
+/* load the gbCdnaInfo table */
 {
 char accWhere[64];
 char query[512];
 struct sqlResult* result;
 char** row;
 
-gbVerbMsg(2, "load mrna table data");
+gbVerbMsg(2, "load gbCdnaInfo table data");
 accWhere[0] = '\0';
 if (select->accPrefix != NULL)
     safef(accWhere, sizeof(accWhere), " AND (acc LIKE '%s%%')",
@@ -145,14 +145,14 @@ safef(query, sizeof(query),
       /*    6        7       8         9  10     11          12   13  14 */
       "keyword,description,geneName,productName,author "
       /*    15          16       17          18     19 */
-      "FROM mrna WHERE (type='%s')%s",
+      "FROM gbCdnaInfo WHERE (type='%s')%s",
       ((select->type == GB_MRNA) ? "mRNA" : "EST"), accWhere);
 /* mrna doesn't have a srcDb, so we guess from acc */
 result = sqlGetResult(conn, query);
 while ((row = sqlNextRow(result)) != NULL)
     {
     if (gbGuessSrcDb(row[0]) == select->release->srcDb)
-        loadMrnaRow(metaDataTbls, conn, row);
+        loadGbCdnaInfoRow(metaDataTbls, conn, row);
     }
 sqlFreeResult(&result);
 }
@@ -209,7 +209,7 @@ if (faBuf[0] != '>')
     return;
     }
 dnaSeq = faFromMemText(faBuf);
-safef(accVer, sizeof(accVer), "%s.%d", md->acc, md->mrnaVersion);
+safef(accVer, sizeof(accVer), "%s.%d", md->acc, md->gbCdnaInfoVersion);
 
 if (!sameString(dnaSeq->name, accVer))
     gbError("%s: name in fasta header \"%s\" doesn't matche expected \"%s\": %s",
@@ -228,7 +228,9 @@ static void verifySeqExtFile(struct metaData* md,
                              off_t seqFile_size)
 /* verify a seq table entry with it's extFile entry.   */
 {
+#if 0 /* FIXME: for disabled code below */
 int mapLen = (gbdbMapToCurrent != NULL) ? strlen(gbdbMapToCurrent) : 0;
+#endif
 char* extPath;
 boolean badSeq = FALSE;
 struct extFile* extFile = getExtFile(md, extFileTbl, seqExtFile);
@@ -245,9 +247,11 @@ if ((seqFile_offset+seqFile_size) > extFile->size)
 
 /* map path to local directory if requested */
 extPath = extFile->path;
+#if 0 /* FIXME: load stores full path when redirected */
 if ((gbdbMapToCurrent != NULL) && startsWith(gbdbMapToCurrent, extPath)
     && (extPath[mapLen] == '/'))
     extPath += mapLen+1;
+#endif
 
 /* check readability and size of file. if found unreadable before, don't repeat
  * message or rest of tests. */
@@ -306,15 +310,15 @@ seqFile_size = strToOffset(row[iRow++], md->acc, "gbSeq.file_size");
 type = gbParseType(row[iRow++]);
 srcDb = gbParseSrcDb(row[iRow++]);
 
-if (md->inMrna)
+if (md->inGbCdnaInfo)
     {
-    if (id != md->mrnaId)
-        gbError("%s: gbSeq.id (%d) not same mrna.id (%d)", acc, id, md->mrnaId);
-    if (type != md->mrnaType)
-        gbError("%s: gbSeq.type (%s) not same as mrna.type (%s)", acc,
-                gbFmtSelect(type), gbFmtSelect(md->mrnaType));
+    if (id != md->gbCdnaInfoId)
+        gbError("%s: gbSeq.id (%d) not same gbCdnaInfo.id (%d)", acc, id, md->gbCdnaInfoId);
+    if (type != md->gbCdnaInfoType)
+        gbError("%s: gbSeq.type (%s) not same as gbCdnaInfo.type (%s)", acc,
+                gbFmtSelect(type), gbFmtSelect(md->gbCdnaInfoType));
     if ((srcDb & md->typeFlags) == 0)
-        gbError("%s: gbSeq.srcDb (%s) not same mrna.srcDb (%s)", acc,
+        gbError("%s: gbSeq.srcDb (%s) not same gbCdnaInfo.srcDb (%s)", acc,
                 gbFmtSelect(srcDb), gbFmtSelect(md->typeFlags));
     if (md->seqSize >= seqFile_size)
         gbError("%s: gbSeq.size >= gbSeq.file_size", md->acc);
@@ -327,7 +331,7 @@ verifySeqExtFile(md, extFileTbl, checkExtSeqRecs, gbdbMapToCurrent, seqExtFile,
 static void loadSeqData(struct metaDataTbls* metaDataTbls,
                         struct gbSelect* select, struct sqlConnection* conn,
                         boolean checkExtSeqRecs, char* gbdbMapToCurrent)
-/* load seq table data, mrna table should be loaded. */
+/* load seq table data, gbCdnaInfo table should be loaded. */
 {
 char accWhere[64];
 char query[512];
@@ -469,31 +473,31 @@ md->gbsNumAligns = strToUnsigned(row[iRow++], md->acc, "gbStatus.numAligns",
 
 md->typeFlags |= md->gbsType;
 
-if (md->inMrna)
+if (md->inGbCdnaInfo)
     {
-    if (seqId != md->mrnaId)
-        gbError("%s: gbStatus.gbSeq (%d) not same mrna.id (%d)", md->acc, seqId,
-                md->mrnaId);
-    if (md->gbsType != md->mrnaType)
-        gbError("%s: gbStatus.type (%s) not same as mrna.type (%s)", md->acc,
-                gbFmtSelect(md->gbsType), gbFmtSelect(md->mrnaType));
+    if (seqId != md->gbCdnaInfoId)
+        gbError("%s: gbStatus.gbSeq (%d) not same gbCdnaInfo.id (%d)", md->acc, seqId,
+                md->gbCdnaInfoId);
+    if (md->gbsType != md->gbCdnaInfoType)
+        gbError("%s: gbStatus.type (%s) not same as gbCdnaInfo.type (%s)", md->acc,
+                gbFmtSelect(md->gbsType), gbFmtSelect(md->gbCdnaInfoType));
     if (md->gbsSrcDb != (md->typeFlags & GB_SRC_DB_MASK))
-        gbError("%s: gbStatus.srcDb (%s) not same mrna.srcDb (%s)", md->acc,
+        gbError("%s: gbStatus.srcDb (%s) not same gbCdnaInfo.srcDb (%s)", md->acc,
                 gbFmtSelect(md->gbsSrcDb), gbFmtSelect(md->typeFlags));
-    if ((md->gbsModDate != md->mrnaModdate))
-        gbError("%s: gbStatus.modDate (%s) not same mrna.moddate (%s)", md->acc,
-                gbFormatDate(md->gbsModDate), gbFormatDate(md->mrnaModdate));
+    if ((md->gbsModDate != md->gbCdnaInfoModdate))
+        gbError("%s: gbStatus.modDate (%s) not same gbCdnaInfo.moddate (%s)", md->acc,
+                gbFormatDate(md->gbsModDate), gbFormatDate(md->gbCdnaInfoModdate));
     /* verify either have or don't have a description */
     if (descOrgCats & md->gbsOrgCat)
         {
         if (!md->haveDesc)
-            gbError("%s: should have mrna.description: %s", md->acc,
+            gbError("%s: should have gbCdnaInfo.description: %s", md->acc,
                     gbFmtSelect(md->gbsType|md->gbsOrgCat|md->gbsSrcDb));
         }
     else
         {
         if (md->haveDesc)
-            gbError("%s: should not have mrna.description: %s", md->acc,
+            gbError("%s: should not have gbCdnaInfo.description: %s", md->acc,
                     gbFmtSelect(md->gbsType|md->gbsOrgCat|md->gbsSrcDb));
         }
     }
@@ -582,7 +586,7 @@ static char* getTablesDesc(struct metaData* md)
 {
 static char tbls[256];
 tbls[0] = '\0';
-if (md->inMrna)
+if (md->inGbCdnaInfo)
     strcat(tbls, ",mrna");
 if (md->inSeq)
     strcat(tbls, ",seq");
@@ -602,7 +606,7 @@ static void checkXRef(struct metaData* md)
 {
 if (!md->inGbAlign)
     return;  /* can't check anything else */
-if (!md->inMrna)
+if (!md->inGbCdnaInfo)
     gbError("%s: not in mrna table, referenced in %s", md->acc,
             getTablesDesc(md));
 if (!md->inSeq)
@@ -654,7 +658,7 @@ gbVerbEnter(1, "load and check metadata tables: %s", gbSelectDesc(select));
 metaDataTbls = metaDataTblsNew();
 
 /* order is important here to allow checking between tables */
-loadMrnaData(metaDataTbls, select, conn);
+loadGbCdnaInfoData(metaDataTbls, select, conn);
 loadSeqData(metaDataTbls, select, conn, checkExtSeqRecs, gbdbMapToCurrent);
 if (select->release->srcDb == GB_REFSEQ)
     {

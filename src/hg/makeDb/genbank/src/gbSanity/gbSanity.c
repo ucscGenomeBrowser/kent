@@ -6,7 +6,7 @@
  *     - aligned version matches latest version in release
  *     - moddate matches latest moddate for version in release
  *     - number of alignments for acc match
- *   - all mrna table entries are in seq table
+ *   - all gbCdnaInfo table entries are in seq table
  *   - seq table sizes seem sane for mRNAs/ESTs
  *   - mRNAs/ESTs have extFFiile entries an seq offset and size makes sense
  *     with extFile size.
@@ -38,7 +38,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.9 2004/09/01 08:31:32 genbank Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.10 2004/09/15 16:31:50 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -60,7 +60,7 @@ static char* gGbdbMapToCurrent = NULL;  /* map this gbdb root to current */
 static boolean gCheckExtSeqRecs = FALSE;
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
-void checkMrnaStrKeys(struct sqlConnection* conn)
+void checkGbCdnaInfoStrKeys(struct sqlConnection* conn)
 /* Verify that the ids appear valid for all of the unique string tables
  * referenced by the mrna table.  This does a join of the mrna with
  * all of the other tables.  If the number of results don't match
@@ -69,21 +69,21 @@ void checkMrnaStrKeys(struct sqlConnection* conn)
 {
 static char *joinSql =
     "SELECT count(*) FROM "
-    "mrna,author,cds,cell,description,development,geneName,"
+    "gbCdnaInfo,author,cds,cell,description,development,geneName,"
     "keyword,library,mrnaClone,organism,productName,sex,"
     "source,tissue "
-    "WHERE mrna.author=author.id AND mrna.cds=cds.id "
-    "AND mrna.cell=cell.id AND mrna.description=description.id "
-    "AND mrna.development=development.id AND mrna.geneName=geneName.id "
-    "AND mrna.keyword=keyword.id AND mrna.library=library.id "
-    "AND mrna.mrnaClone=mrnaClone.id AND mrna.organism=organism.id "
-    "AND mrna.productName=productName.id AND mrna.sex=sex.id "
-    "AND mrna.source=source.id AND mrna.tissue=tissue.id";
+    "WHERE gbCdnaInfo.author=author.id AND gbCdnaInfo.cds=cds.id "
+    "AND gbCdnaInfo.cell=cell.id AND gbCdnaInfo.description=description.id "
+    "AND gbCdnaInfo.development=development.id AND gbCdnaInfo.geneName=geneName.id "
+    "AND gbCdnaInfo.keyword=keyword.id AND gbCdnaInfo.library=library.id "
+    "AND gbCdnaInfo.mrnaClone=mrnaClone.id AND gbCdnaInfo.organism=organism.id "
+    "AND gbCdnaInfo.productName=productName.id AND gbCdnaInfo.sex=sex.id "
+    "AND gbCdnaInfo.source=source.id AND gbCdnaInfo.tissue=tissue.id";
 unsigned numJoinRows = sqlQuickNum(conn, joinSql);
-unsigned numTotalRows = sqlQuickNum(conn, "SELECT count(*) FROM mrna");
+unsigned numTotalRows = sqlQuickNum(conn, "SELECT count(*) FROM gbCdnaInfo");
 
 if (numJoinRows != numTotalRows)
-    gbError("number of rows in mrna join with string tables does (%u) "
+    gbError("number of rows in gbCdnaInfo join with string tables does (%u) "
             "does not match total in table (%u), something is wrong",
             numJoinRows, numTotalRows);
 }
@@ -254,7 +254,7 @@ gbIndexFree(&index);
 
 /* check of uniqueStr ids */
 conn = hAllocConn();
-checkMrnaStrKeys(conn);
+checkGbCdnaInfoStrKeys(conn);
 hFreeConn(&conn);
 }
 

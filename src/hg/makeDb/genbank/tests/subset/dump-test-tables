@@ -88,7 +88,7 @@ foreach my $type ("mrna", "est") {
 
 # get contents of mrna tables, joining the values in the unique name table
 my $mrnaSel =
-    "SELECT mrna.acc, mrna.version, mrna.moddate, mrna.type, mrna.direction,"
+    "SELECT gbCdnaInfo.acc, gbCdnaInfo.version, gbCdnaInfo.moddate, gbCdnaInfo.type, gbCdnaInfo.direction,"
     . "        author.name AS author, cds.name AS cds, cell.name AS cell,"
     . "        description.name AS description, "
     . "        development.name AS development, geneName.name AS geneName,"
@@ -96,18 +96,18 @@ my $mrnaSel =
     . "        mrnaClone.name as mrnaClone, organism.name AS organism,"
     . "        productName.name AS productName, sex.name AS sex, "
     . "        source.name AS source, tissue.name AS tissue "
-    . " FROM mrna,author,cds,cell,description,development,geneName,keyword,"
+    . " FROM gbCdnaInfo,author,cds,cell,description,development,geneName,keyword,"
     . "      library,mrnaClone,organism,productName,sex,source,tissue"
-    . " WHERE mrna.author=author.id AND mrna.cds=cds.id"
-    . "       AND mrna.cell=cell.id AND mrna.description=description.id"
-    . "       AND mrna.development=development.id AND mrna.geneName=geneName.id"
-    . "       AND mrna.keyword=keyword.id AND mrna.library=library.id"
-    . "       AND mrna.mrnaClone=mrnaClone.id AND mrna.organism=organism.id"
-    . "       AND mrna.productName=productName.id AND mrna.sex=sex.id"
-    . "       AND mrna.source=source.id AND mrna.tissue=tissue.id"
+    . " WHERE gbCdnaInfo.author=author.id AND gbCdnaInfo.cds=cds.id"
+    . "       AND gbCdnaInfo.cell=cell.id AND gbCdnaInfo.description=description.id"
+    . "       AND gbCdnaInfo.development=development.id AND gbCdnaInfo.geneName=geneName.id"
+    . "       AND gbCdnaInfo.keyword=keyword.id AND gbCdnaInfo.library=library.id"
+    . "       AND gbCdnaInfo.mrnaClone=mrnaClone.id AND gbCdnaInfo.organism=organism.id"
+    . "       AND gbCdnaInfo.productName=productName.id AND gbCdnaInfo.sex=sex.id"
+    . "       AND gbCdnaInfo.source=source.id AND gbCdnaInfo.tissue=tissue.id"
     . "       ORDER BY acc";
 
-runMySql("$tbldir/mrna.tbl", $mrnaSel);
+runMySql("$tbldir/gbCdnaInfo.tbl", $mrnaSel);
 
 # seq dropping any file specific info (which might be differed)
 runMySql("$tbldir/gbSeq.tbl",

@@ -31,13 +31,13 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.22 2004/07/15 02:00:03 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.23 2004/09/15 16:31:49 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
-static char* mrnaCreate =
+static char* gbCdnaInfoCreate =
 /* This keeps track of mRNA. */
-"create table mrna ("
+"create table gbCdnaInfo ("
   "id int unsigned not null primary key,"         /* Id, same as seq ID. */
   "acc char(12) not null,"                        /* Genbank accession. */
   "version smallint unsigned not null,"           /* Genbank version. */
@@ -142,7 +142,7 @@ static char gGbdbGenBank[PATH_LEN];  /* root dir to store in database */
 static struct seqTbl* seqTbl = NULL;
 static struct imageCloneTbl* imageCloneTbl = NULL;
 static struct sqlUpdater* allUpdaters = NULL; /* list of tab files */
-static struct sqlUpdater* mrnaUpd = NULL;
+static struct sqlUpdater* gbCdnaInfoUpd = NULL;
 static struct sqlUpdater* refSeqStatusUpd = NULL;
 static struct sqlUpdater* refSeqSummaryUpd = NULL;
 static struct sqlUpdater* refLinkUpd = NULL;
@@ -186,10 +186,10 @@ if (seqTbl == NULL)
 if (imageCloneTbl == NULL)
     imageCloneTbl = imageCloneTblNew(conn, gTmpDir, (gbVerbose >= 2));
 
-if (!sqlTableExists(conn, "mrna"))
-    sqlUpdate(conn, mrnaCreate);
-if (mrnaUpd == NULL)
-    mrnaUpd = sqlUpdaterNew("mrna", gTmpDir, (gbVerbose >= 2), &allUpdaters);
+if (!sqlTableExists(conn, "gbCdnaInfo"))
+    sqlUpdate(conn, gbCdnaInfoCreate);
+if (gbCdnaInfoUpd == NULL)
+    gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 2), &allUpdaters);
 
 if (gSrcDb == GB_REFSEQ)
     {
@@ -256,12 +256,12 @@ else if (status->stateChg & (GB_SEQ_CHG|GB_EXT_CHG))
     }
 }
 
-static void mrnaUpdate(struct gbStatus* status, struct sqlConnection *conn)
+static void gbCdnaInfoUpdate(struct gbStatus* status, struct sqlConnection *conn)
 /* Update the mrna table for the current entry */
 {
 if (status->stateChg & GB_NEW)
     {
-    sqlUpdaterAddRow(mrnaUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
+    sqlUpdaterAddRow(gbCdnaInfoUpd, "%u\t%s\t%u\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u",
                      status->gbSeqId, raAcc, raVersion, gbFormatDate(raModDate),
                      ((status->type == GB_MRNA) ? "mRNA" : "EST"), raDir,
                      raFieldCurId("src"), raFieldCurId("org"),
@@ -274,7 +274,7 @@ if (status->stateChg & GB_NEW)
     }
 else if (status->stateChg & GB_META_CHG)
     {
-    sqlUpdaterModRow(mrnaUpd, 1, "version='%u', moddate='%s', direction='%c', "
+    sqlUpdaterModRow(gbCdnaInfoUpd, 1, "version='%u', moddate='%s', direction='%c', "
                      "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
                      "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
                      "description=%u, geneName=%u, productName=%u, author=%u "
@@ -421,7 +421,7 @@ if (!keepDesc(status))
     raFieldClear("def");
 
 seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
-mrnaUpdate(status, conn);
+gbCdnaInfoUpdate(status, conn);
 imageCloneUpdate(status, conn);
 
 if (gSrcDb == GB_REFSEQ)
@@ -552,7 +552,7 @@ while ((nextUpd = slPopHead(&allUpdaters)) != NULL)
     sqlUpdaterCommit(nextUpd, conn);
     sqlUpdaterFree(&nextUpd);
     }
-mrnaUpd = NULL;
+gbCdnaInfoUpd = NULL;
 refSeqStatusUpd = NULL;
 refLinkUpd = NULL;
 /* cache unique string tables in goFaster mode */
@@ -586,7 +586,7 @@ if (srcDb == GB_REFSEQ)
     sqlDeleterDel(deleter, conn, "refLink", "mrnaAcc");
     }
 sqlDeleterDel(deleter, conn, IMAGE_CLONE_TBL, "acc");
-sqlDeleterDel(deleter, conn, "mrna", "acc");
+sqlDeleterDel(deleter, conn, "gbCdnaInfo", "acc");
 /* seq must be last */
 sqlDeleterDel(deleter, conn, SEQ_TBL, "acc");
 }
@@ -675,7 +675,7 @@ struct slName* gbMetaDataListTables(struct sqlConnection *conn)
 /* Get a list of metadata tables that exist in the database */
 {
 static char* TABLE_NAMES[] = {
-    "gbSeq", "gbExtFile", "mrna", "refSeqStatus", "refSeqSummary", "refLink",
+    "gbSeq", "gbExtFile", "gbCdnaInfo", "refSeqStatus", "refSeqSummary", "refLink",
     "imageClone", NULL
 };
 struct slName* tables = NULL;
