@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.10 2003/05/12 19:25:15 hiram Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.11 2003/06/04 13:59:50 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +34,7 @@ errAbort(
   "This breaks up input.fa into 2000 base chunks\n"
   "   faSplit about est.fa 20000 outRoot\n"
   "This will break up est.fa into files of about 20000 bytes each.\n"
-  "   faSplit byname scaffolds.fa \n"
+  "   faSplit byname scaffolds.fa outRoot \n"
   "This breaks up scaffolds.fa using sequence names as file names.\n"
   "\n"
   "Options:\n"
