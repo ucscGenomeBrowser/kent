@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.72 2005/02/25 23:45:25 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.73 2005/03/22 22:15:07 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -1471,6 +1471,7 @@ if (bedList && *bedList)
 	unsigned long winEnd = 0;
 	unsigned long winExtent = 0;
 	unsigned long bedMarked = 0;
+	unsigned long asciiDataSizeLimit = 0;
 	unsigned long chromPosition = 0;
 	unsigned long bedElStart = 0;
 	unsigned long bedElEnd = 0;
@@ -1611,6 +1612,8 @@ if (bedList && *bedList)
 		bedExtent, bedEnd, bedStart, bedArraySize);
 	verbose(VERBOSE_CHR_LEVEL, "#\tbed marked %u bases, winSize %u\n",
 		bedMarked, winExtent);
+	/*	worst case ascii limit: bedMarked */
+	asciiDataSizeLimit = bedMarked;
 
 	/*set window position constraint, this eliminates the 0,0 possibility*/
 	if (winEnd)
@@ -1663,6 +1666,9 @@ if (bedList && *bedList)
 		/* to address data[] in wigAsciiData */
 
 	    dataArraySize = wds->array->winEnd - wds->array->winStart;
+	    /*	no bed constraint, then worst case ascii limit: dataArraySize */
+	    if (0 == asciiDataSizeLimit)
+		asciiDataSizeLimit = dataArraySize;
 
 	    if (verboseLevel() > VERBOSE_PER_VALUE_LEVEL)
 		dataArrayOut(wds, "stdout", FALSE, TRUE);
@@ -1686,10 +1692,10 @@ if (bedList && *bedList)
                  */
 		verbose(VERBOSE_CHR_LEVEL,
 		    "#\tworst case ascii array needLargeMem (%u * %u = %u)\n",
-			sizeof(struct asciiDatum), dataArraySize,
-			    (sizeof(struct asciiDatum) * dataArraySize));
+			sizeof(struct asciiDatum), asciiDataSizeLimit,
+			    (sizeof(struct asciiDatum) * asciiDataSizeLimit));
 		wigAscii->data = (struct asciiDatum *) needLargeMem((size_t)
-		    (sizeof(struct asciiDatum) * dataArraySize));
+		    (sizeof(struct asciiDatum) * asciiDataSizeLimit));
 			/*	maximum area needed, may use less 	*/
 		asciiOut = wigAscii->data;	/* ptr to data area	*/
 		slAddHead(&wds->ascii,wigAscii);
@@ -1752,8 +1758,13 @@ if (bedList && *bedList)
 			    }
 			asciiOut->value = value;
 			asciiOut->chromStart = chromPosition;
-			++asciiOut;
-			++wigAscii->count;
+			if (wigAscii->count < asciiDataSizeLimit)
+			    {
+			    ++asciiOut;
+			    ++wigAscii->count;
+			    }
+			else
+			    maxReached = TRUE;
 			}
 		    if (doBed)
 			{
@@ -1807,7 +1818,7 @@ if (bedList && *bedList)
 	     *	winEnd-winStart data array and we probably did not use
 	     *	all of that.
 	     */
-	    if (doAscii && ((dataArraySize - wigAscii->count) > 100000))
+	    if (doAscii && ((asciiDataSizeLimit - wigAscii->count) > 100000))
 		{
 		struct asciiDatum *smallerDataArea;
 		size_t newSize;
