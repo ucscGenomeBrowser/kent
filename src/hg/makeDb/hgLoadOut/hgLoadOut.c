@@ -33,6 +33,8 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 ")\n";
 
 boolean noBin = FALSE;
+char *tabFileName = NULL;
+FILE *tabFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -44,7 +46,8 @@ errAbort(
   "For each table chrN.out this will create the table\n"
   "chrN_rmsk in the database\n"
   "options:\n"
-  "   -nobin - don't introduce bin fields");
+  "   -nobin - don't introduce bin fields\n"
+  "   -tabFile=text.tab - don't actually load database, just create tab file");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -93,8 +96,13 @@ struct dyString *query = newDyString(1024);
 printf("Processing %s\n", rmskFile);
 
 /* Make temporary tab delimited file. */
-tmpnam(tempName);
-f = mustOpen(tempName, "w");
+if (tabFile != NULL)
+    f = tabFile;
+else
+    {
+    tmpnam(tempName);
+    f = mustOpen(tempName, "w");
+    }
 
 /* Open .out file and process header. */
 lf = lineFileOpen(rmskFile, TRUE);
@@ -142,39 +150,44 @@ while (lineFileNext(lf, &line, &lineSize))
        fprintf(f, "%u\t", hFindBin(r.genoStart, r.genoEnd));
     rmskOutTabOut(&r, f);
     }
-fclose(f);
 
 /* Create database table. */
-splitPath(rmskFile, dir, base, extension);
-chopSuffix(base);
-sprintf(tableName, "%s_rmsk", base);
-printf("Loading up table %s\n", tableName);
-if (sqlTableExists(conn, tableName))
+if (tabFile == NULL)
     {
-    dyStringPrintf(query, "DROP table %s", tableName);
+    carefulClose(&f);
+    splitPath(rmskFile, dir, base, extension);
+    chopSuffix(base);
+    sprintf(tableName, "%s_rmsk", base);
+    printf("Loading up table %s\n", tableName);
+    if (sqlTableExists(conn, tableName))
+	{
+	dyStringPrintf(query, "DROP table %s", tableName);
+	sqlUpdate(conn, query->string);
+	}
+    dyStringClear(query);
+    dyStringPrintf(query, createRmskOut, tableName,
+       (noBin ? "" : "  bin smallint unsigned not null,\n"),
+       (noBin ? "" : "   INDEX(bin),\n") );
     sqlUpdate(conn, query->string);
-    }
-dyStringClear(query);
-dyStringPrintf(query, createRmskOut, tableName,
-   (noBin ? "" : "  bin smallint unsigned not null,\n"),
-   (noBin ? "" : "   INDEX(bin),\n") );
-sqlUpdate(conn, query->string);
 
-/* Load database from tab-file. */
-dyStringClear(query);
-dyStringPrintf(query, 
-    "LOAD data local infile '%s' into table %s", tempName, tableName);
-sqlUpdate(conn, query->string);
-remove(tempName);
+    /* Load database from tab-file. */
+    dyStringClear(query);
+    dyStringPrintf(query, 
+	"LOAD data local infile '%s' into table %s", tempName, tableName);
+    sqlUpdate(conn, query->string);
+    remove(tempName);
+    }
 }
 
 
 void hgLoadOut(char *database, int rmskCount, char *rmskFileNames[])
 /* hgLoadOut - load RepeatMasker .out files into database. */
 {
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = NULL;
 int i;
 
+if (tabFile == NULL)
+    conn = sqlConnect(database);
 for (i=0; i<rmskCount; ++i)
     {
     loadOneOut(conn, rmskFileNames[i]);
@@ -189,6 +202,10 @@ cgiSpoof(&argc, argv);
 if (argc < 3)
     usage();
 noBin = (cgiBoolean("nobin") || cgiBoolean("noBin"));
+tabFileName = cgiOptionalString("tabFile");
+if (tabFileName == NULL) tabFileName = cgiOptionalString("tabfile");
+if (tabFileName != NULL)
+    tabFile = mustOpen(tabFileName, "w");
 hgLoadOut(argv[1], argc-2, argv+2);
 return 0;
 }

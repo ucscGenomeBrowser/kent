@@ -93,8 +93,14 @@ void affyUi(struct trackDb *tdb)
 /* put up UI for the affy track from stanford track */
 {
 char *affyMap = cartUsualString(cart, "affy.type", affyEnumToString(affyTissue));
+char *col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Experiment Display: </b> ");
 affyDropDown("affy.type", affyMap);
+printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
+printf(" red/green ");
+cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
+printf(" red/blue ");
 }
 
 void rosettaUi(struct trackDb *tdb)
@@ -151,19 +157,66 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
+
+void chimpUi(struct trackDb *tdb)
+/* put up UI for the chimp track (a sample track)*/
+{
+int chimpHeightPer = atoi(cartUsualString(cart, "chimp.heightPer", "10"));
+char *interpolate = cartUsualString(cart, "chimp.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "chimp.anti.alias", "on");
+char *fill = cartUsualString(cart, "chimp.fill", "0");
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("chimp.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("chimp.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("chimp.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("chimp.fill", "1", sameString(fill, "1"));
+printf(" on ");
+cgiMakeRadioButton("chimp.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("chimp.heightPer", chimpHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
+
 void wiggleUi(struct trackDb *tdb)
 /* put up UI for the wiggle track for representing curves inside * tracks */
 {
-char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "anti.alias", "on");
+int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
+char *interpolate = cartUsualString(cart, "wiggle.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
+char *fill = cartUsualString(cart, "wiggle.fill", "0");
+
 printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("linear.interp", interpolate );
+wiggleDropDown("wiggle.linear.interp", interpolate );
 printf(" ");
 printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("anti.alias", "on", sameString(aa, "on"));
+cgiMakeRadioButton("wiggle.anti.alias", "on", sameString(aa, "on"));
 printf(" on ");
-cgiMakeRadioButton("anti.alias", "off", sameString(aa, "off"));
+cgiMakeRadioButton("wiggle.anti.alias", "off", sameString(aa, "off"));
 printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("wiggle.fill", "1", sameString(fill, "1"));
+printf(" on ");
+cgiMakeRadioButton("wiggle.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("wiggle.heightPer", wiggleHeightPer, 5 );
+printf("&nbsp;pixels");
+
 }
 
 
@@ -195,6 +248,10 @@ else if (sameString(track, "mrna"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "est"))
     mrnaUi(tdb, FALSE);
+else if (sameString(track, "tightMrna"))
+    mrnaUi(tdb, FALSE);
+else if (sameString(track, "tightEst"))
+    mrnaUi(tdb, FALSE);
 else if (sameString(track, "intronEst"))
     mrnaUi(tdb, FALSE);
 else if (sameString(track, "xenoMrna"))
@@ -205,10 +262,12 @@ else if (sameString(track, "xenoEst"))
     mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
-else if (sameString(track, "affy"))
+else if (sameString(track, "affyRatio"))
     affyUi(tdb);
 else if (sameString(track, "wiggle"))
     wiggleUi(tdb);
+else if (sameString(track, "chimp"))
+    chimpUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 }
@@ -249,6 +308,7 @@ chromosome = cartString(cart, "c");
 conn = hAllocConn();
 sprintf(where, "tableName = '%s'", track);
 tdb = trackDbLoadWhere(conn, "trackDb", where);
+hLookupStringsInTdb(tdb, database);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
@@ -264,6 +324,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("Track Settings", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("Track Settings", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

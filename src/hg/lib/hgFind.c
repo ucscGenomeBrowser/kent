@@ -388,7 +388,7 @@ boolean hgFindClonePos(char *spec, char **retChromName,
 	int *retWinStart, int *retWinEnd)
 /* Return clone position. */
 {
-if (!isAccForm(spec))
+if (!isAccForm(spec) || !hTableExists("clonePos"))
     return FALSE;
 else
     {

@@ -5,10 +5,27 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = cartDump.o
+A = cartDump
 
-cartDump: $O $(MYLIBS)
-	gcc -ggdb -o cartDump $O $(MYLIBS) $L
-	strip cartDump
-	chmod a+rx cartDump
-	mv cartDump $(HGCGI)
+O = $A.o
+
+my: compile
+	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
+
+alpha: compile
+	mv $A /usr/local/apache/cgi-bin/$A
+
+beta: compile
+	mv $A /usr/local/apache/cgi-bin-beta/$A
+
+compile: $O 
+	gcc $O $(MYLIBS) $(L) 
+	mv a.out $A
+	strip $A
+	chmod a+rx $A
+
+lib:
+	cd ../../lib; make
+
+tags: 
+	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h

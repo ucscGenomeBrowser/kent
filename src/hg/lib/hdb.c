@@ -2,6 +2,7 @@
 #include "common.h"
 #include "portable.h"
 #include "hash.h"
+#include "binRange.h"
 #include "jksql.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -15,6 +16,7 @@
 #include "hCommon.h"
 #include "hgFind.h"
 #include "dbDb.h"
+#include "subText.h"
 #include "blatServers.h"
 
 static struct sqlConnCache *hdbCc = NULL;
@@ -268,7 +270,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     lsf->path = path = cloneString(row[0]);
     size = sqlUnsigned(row[1]);
     if (fileSize(path) != size)
-        errAbort("External file %s has changed, need to resync database", path);
+        errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
     lsf->id = extId;
     if ((lsf->fd = open(path, O_RDONLY)) < 0)
         errAbort("Couldn't open external file %s", path);
@@ -382,6 +384,63 @@ char *hDbFromFreeze(char *freeze)
 {
 return hFreezeDbConversion(NULL, freeze);
 }
+
+char *hOrganism(char *database)
+/* Return organism associated with database.   use freeMem on
+ * this when done. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+char *res = NULL;
+sprintf(query, "select organism from dbDb where name = '%s'", database);
+if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    res = cloneString(buf);
+else
+    errAbort("Can't find organism for %s", database);
+hDisconnectCentral(&conn);
+return res;
+}
+
+char *hLookupStringVars(char *in, char *database)
+/* Expand $ORGANISM and other variables in input. */
+{
+static struct subText *subList = NULL;
+static char *oldDatabase = NULL;
+
+if (oldDatabase != NULL && !sameString(database, oldDatabase))
+    {
+    subTextFreeList(&subList);
+    freez(&oldDatabase);
+    oldDatabase = cloneString(database);
+    }
+if (subList == NULL)
+    {
+    struct subText *sub;
+    char *organism = hOrganism(database);
+    sub = subTextNew("$ORGANISM", organism);
+    slAddHead(&subList, sub);
+    freez(&organism);
+    }
+return subTextString(subList, in);
+}
+
+static void subOut(char **pString, char *database)
+/* Substitute one string. */
+{
+char *old = *pString;
+*pString = hLookupStringVars(old, database);
+freeMem(old);
+}
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database)
+/* Lookup strings in track database. */
+{
+subOut(&tdb->shortLabel, database);
+subOut(&tdb->longLabel, database);
+subOut(&tdb->html, database);
+}
+
 
 struct dbDb *hDbDbList()
 /* Return list of databases that are actually online. 
@@ -563,15 +622,15 @@ boolean hIsPrivateHost()
 /* Return TRUE if this is running on private web-server. */
 {
 static boolean gotIt = FALSE;
-static boolean private = FALSE;
+static boolean priv = FALSE;
 if (!gotIt)
     {
     char *t = getenv("HTTP_HOST");
     if (t != NULL && startsWith("genome-test", t))
-        private = TRUE;
+        priv = TRUE;
     gotIt = TRUE;
     }
-return private;
+return priv;
 }
 
 
@@ -594,29 +653,6 @@ return hti->hasBin;
  * of bins with the chromosome itself being the final bin.
  * Features are put in the finest bin they'll fit in. */
 
-static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
-#define binFirstShift 17
-#define binNextShift 3
-
-
-int hBinLevels()
-/* Return number of levels to bins. */
-{
-return ArraySize(binOffsets);
-}
-
-int hBinFirstShift()
-/* Return amount to shift a number to get to finest bin. */
-{
-return binFirstShift;
-}
-
-int hBinNextShift()
-/* Return amount to shift a numbe to get to next coarser bin. */
-{
-return binNextShift;
-}
-
 int hFindBin(int start, int end)
 /* Given start,end in chromosome coordinates assign it
  * a bin.   There's a bin for each 128k segment, for each
@@ -624,38 +660,29 @@ int hFindBin(int start, int end)
  * and for each chromosome (which is assumed to be less than
  * 512M.)  A range goes into the smallest bin it will fit in. */
 {
-int startBin = start, endBin = end-1, i;
-startBin >>= binFirstShift;
-endBin >>= binFirstShift;
-for (i=0; i<ArraySize(binOffsets); ++i)
-    {
-    if (startBin == endBin)
-        return binOffsets[i] + startBin;
-    startBin >>= binNextShift;
-    endBin >>= binNextShift;
-    }
-errAbort("start %d, end %d out of range in findBin (max is 512M)", start, end);
-return 0;
+return binFromRange(start, end);
 }
 
 void hAddBinToQuery(int start, int end, struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
-int startBin = (start>>binFirstShift), endBin = ((end-1)>>binFirstShift);
-int i;
+int bFirstShift = binFirstShift(), bNextShift = binNextShift();
+int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
+int i, levels = binLevels();
 
 dyStringAppend(query, "(");
-for (i=0; i<ArraySize(binOffsets); ++i)
+for (i=0; i<levels; ++i)
     {
+    int offset = binOffset(i);
     if (i != 0)
         dyStringAppend(query, " or ");
     if (startBin == endBin)
-        dyStringPrintf(query, "bin=%u", startBin + binOffsets[i]);
+        dyStringPrintf(query, "bin=%u", startBin + offset);
     else
         dyStringPrintf(query, "bin>=%u and bin<=%u", 
-		startBin + binOffsets[i], endBin + binOffsets[i]);
-    startBin >>= 3;
-    endBin >>= 3;
+		startBin + offset, endBin + offset);
+    startBin >>= bNextShift;
+    endBin >>= bNextShift;
     }
 dyStringAppend(query, ")");
 dyStringAppend(query, " and ");
@@ -794,12 +821,14 @@ struct trackDb *tdbList = NULL, *tdb;
 boolean privateToo = hIsPrivateHost();
 struct sqlResult *sr;
 char **row;
+char *database = hGetDb();
 
 sr = sqlGetResult(conn, "select * from trackDb");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     boolean keeper = FALSE;
     tdb = trackDbLoad(row);
+    hLookupStringsInTdb(tdb, database);
     if (!tdb->private || privateToo)
 	{
 	if (hTrackOnChrom(tdb, chrom))
@@ -953,9 +982,33 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Track %s not found", trackName);
 tdb = trackDbLoad(row);
+hLookupStringsInTdb(tdb, hGetDb());
 sqlFreeResult(&sr);
 return tdb;
 }
+
+struct dbDb *hGetIndexedDatabases()
+/* Get list of databases for which there is a nib dir. 
+ * Dispose of this with dbDbFreeList. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = NULL;
+char **row;
+struct dbDb *dbList = NULL, *db;
+
+/* Scan through dbDb table, loading into list */
+sr = sqlGetResult(conn, "select * from dbDb");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = dbDbLoad(row);
+    slAddHead(&dbList, db);
+    }
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+slReverse(&dbList);
+return dbList;
+}
+
 
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 
@@ -1004,4 +1057,48 @@ sprintf(query, "select name from dbDb where name = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;
+}
+
+struct blatServerTable *hFindBlatServer(char *db, boolean isTrans)
+/* Return server for given database.  Db can either be
+ * database name or description. Ponter returned is owned
+ * by this function and shouldn't be modified */
+{
+static struct blatServerTable st;
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char dbActualName[32];
+
+/* If necessary convert database description to name. */
+sprintf(query, "select name from dbDb where name = '%s'", db);
+if (!sqlExists(conn, query))
+    {
+    sprintf(query, "select name from dbDb where description = '%s'", db);
+    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
+        db = dbActualName;
+    }
+
+/* Do a little join to get data to fit into the blatServerTable. */
+sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
+               ",blatServers.host,blatServers.port,dbDb.nibPath "
+	       "from dbDb,blatServers where blatServers.isTrans = %d and "
+	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
+	       isTrans, db);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    {
+    errAbort("Can't find a server for %s database %s\n",
+	    (isTrans ? "translated" : "DNA"), db);
+    }
+st.db = cloneString(row[0]);
+st.genome = cloneString(row[1]);
+st.isTrans = atoi(row[2]);
+st.host = cloneString(row[3]);
+st.port = cloneString(row[4]);
+st.nibDir = cloneString(row[5]);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return &st;
 }

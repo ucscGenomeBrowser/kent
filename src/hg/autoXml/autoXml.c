@@ -36,7 +36,7 @@ struct element
     {
     struct element *next;	/* Next in list. */
     char *name;			/* Element Name. */
-    char *mixedCaseName;	/* Name converted from EL_NAME to elName. */
+    char *mixedCaseName;	/* Name converted from EL_NAME or el-name to elName. */
     struct elChild *children;	/* Child elements. */
     struct attribute *attributes; /* Attributes. */
     int lineIx;			/* Line where element occurs. */
@@ -78,7 +78,8 @@ return word;
 }
 
 char *mixedCaseName(char *orig)
-/* Convert var_like_this or VAR_LIKE_THIS to varLikeThis. */
+/* Convert var_like_this or VAR_LIKE_THIS or even
+ * var-like-this to varLikeThis. */
 {
 char *mixed;
 char *d, *s = orig;
@@ -96,7 +97,7 @@ nextUpper = (prefixLen > 0);
 for (;;)
    {
    c = *s++;
-   if (c == '_')
+   if (c == '_' || c == '-')
        nextUpper = TRUE;
    else
        {
@@ -252,6 +253,24 @@ for (el = elList; el != NULL; el = el->next)
     }
 }
 
+char *eatComment(struct lineFile *lf, char *line)
+/* Eat possibly multi-line comment.  Return line past end of comment */
+{
+char *s;
+for (;;)
+    {
+    if ((s = stringIn("-->", line)) != NULL)
+        {
+	line = skipLeadingSpaces(s+3);
+	if (line[0] == 0)
+	    line = NULL;
+	return line;
+	}
+    if (!lineFileNext(lf, &line, NULL))
+        return NULL;
+    }
+}
+
 void parseDtdx(char *fileName, struct element **retList, struct hash **retHash)
 /* Parse out a dtdx file into element list/hash. */
 {
@@ -265,6 +284,12 @@ while (lineFileNext(lf, &line, NULL))
     line = trimSpaces(line);
     if (line == NULL || line[0] == 0 || line[0] == '#')
         continue;
+    if (startsWith("<!--", line))
+	{
+        line = eatComment(lf, line);
+	if (line == NULL)
+	    continue;
+	}
     if (!startsWith("<!", line))
         syntaxError(lf);
     line += 2;
@@ -389,7 +414,14 @@ for (el = elList; el != NULL; el = el->next)
     fprintf(f, "    {\n");
     fprintf(f, "    struct %s *next;\n", el->mixedCaseName);
     if (el->textType != NULL)
-         fprintf(f, "    char *%s;\n", textField);
+	 {
+	 if (sameString(el->textType, "#INT"))
+	     fprintf(f, "    int %s;\n", textField);
+	 else if (sameString(el->textType, "#FLOAT"))
+	     fprintf(f, "    float %s;\n", textField);
+	 else
+	     fprintf(f, "    char *%s;\n", textField);
+	 }
     for (att = el->attributes; att != NULL; att = att->next)
 	{
 	fprintf(f, "    %s%s;", cAttType(att->type), att->name);
@@ -512,7 +544,12 @@ else
     }
 if (el->textType != NULL)
     {
-    fprintf(f, "fprintf(f, \"%%s\", obj->%s);\n", textField);
+    if (sameString(el->textType, "#INT"))
+	fprintf(f, "fprintf(f, \"%%d\", obj->%s);\n", textField);
+    else if (sameString(el->textType, "#FLOAT"))
+	fprintf(f, "fprintf(f, \"%%f\", obj->%s);\n", textField);
+    else
+	fprintf(f, "fprintf(f, \"%%s\", obj->%s);\n", textField);
     }
 if (isAtom)
     {
@@ -772,7 +809,12 @@ for (el = elList; el != NULL; el = el->next)
 	    }
 	if (el->textType)
 	    {
-	    fprintf(f, "    obj->%s = cloneString(stack->%s->string);\n", textField, textField);
+	    if (sameString(el->textType, "#INT"))
+		fprintf(f, "    obj->%s = atoi(stack->%s->string));\n", textField, textField);
+	    else if (sameString(el->textType, "#FLOAT"))
+		fprintf(f, "    obj->%s = atof(stack->%s->string));\n", textField, textField);
+	    else
+		fprintf(f, "    obj->%s = cloneString(stack->%s->string);\n", textField, textField);
 	    }
 	fprintf(f, "    }\n");
 	first = FALSE;

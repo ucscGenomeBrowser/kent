@@ -8,6 +8,7 @@ CREATE TABLE dbDb (
     name varchar(255) not null,	# Short name of database.  'hg8' or the like
     description varchar(255) not null,	# Short description - 'Aug. 8, 2001' or the like
     nibPath longblob not null,	# Path to packed sequence files
+    organism varchar(255) not null,	# Common name of organism - first letter capitalized
               #Indices
     PRIMARY KEY(name)
 );

@@ -3,15 +3,18 @@
 #include "errabort.h"
 #include "hash.h"
 #include "cheapcgi.h"
-#include "jksql.h"
 #include "cartDb.h"
 #include "htmshell.h"
 #include "hgConfig.h"
 #include "cart.h"
 #include "web.h"
 #include "hdb.h"
+#include "jksql.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
+
+DbConnector cartDefaultConnector = hConnectCentral;
+DbDisconnect cartDefaultDisconnector = hDisconnectCentral;
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -93,13 +96,14 @@ void cartExclude(struct cart *cart, char *var)
 hashAdd(cart->exclude, var, NULL);
 }
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude)
+struct cart *cartNew(unsigned int userId, unsigned int sessionId, 
+	char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
 struct cgiVar *cv, *cvList = cgiVarList();
 struct cart *cart;
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
 char *booShadow = cgiBooleanShadowPrefix();
 int booSize = strlen(booShadow);
@@ -120,6 +124,12 @@ for (cv = cvList; cv != NULL; cv = cv->next)
         {
 	char *booVar = cv->name + booSize;
 	char *val = (cgiVarExists(booVar) ? "1" : "0");
+	if (oldVars != NULL)
+	    {
+	    char *s = hashFindVal(cart->hash, booVar);
+	    if (s != NULL)
+	        hashAdd(oldVars, booVar, cloneString(s));
+	    }
 	cartSetString(cart, booVar, val);
 	hashAdd(booHash, booVar, NULL);
 	}
@@ -129,7 +139,15 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     {
     if (!startsWith(booShadow, cv->name) && !hashLookup(booHash, cv->name))
+	{
+	if (oldVars != NULL)
+	    {
+	    char *s = hashFindVal(cart->hash, cv->name);
+	    if (s != NULL)
+	        hashAdd(oldVars, cv->name, cloneString(s));
+	    }
 	cartSetString(cart, cv->name, cv->val);
+	}
     }
 
 if (exclude != NULL)
@@ -160,7 +178,7 @@ dyStringFree(&dy);
 static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
 {
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = cartDefaultConnector();
 struct dyString *encoded = newDyString(4096);
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
@@ -188,7 +206,7 @@ updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
-hDisconnectCentral(&conn);
+cartDefaultDisconnector(&conn);
 hashElFreeList(&elList);
 dyStringFree(&encoded);
 }
@@ -436,20 +454,20 @@ void cartResetInDb(char *cookieName)
 {
 int hguid = getCookieId(cookieName);
 int hgsid = getSessionId();
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn = cartDefaultConnector();
 clearDbContents(conn, "userDb", hguid);
 clearDbContents(conn, "sessionDb", hgsid);
-hDisconnectCentral(&conn);
+cartDefaultDisconnector(&conn);
 }
 
-struct cart *cartAndCookie(char *cookieName, char **exclude)
+struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
  * HTTP preamble to web page.  Don't write any HTML though. */
 {
 /* Get the current cart from cookie and cgi session variable. */
 int hguid = getCookieId(cookieName);
 int hgsid = getSessionId();
-struct cart *cart = cartNew(hguid, hgsid, exclude);
+struct cart *cart = cartNew(hguid, hgsid, exclude, oldVars);
 
 /* Remove some internal variables from cart permanent storage. */
 cartExclude(cart, sessionVar);
@@ -475,7 +493,7 @@ if (status == 0)
 popAbortHandler();
 }
 
-static void cartEarlyWarningHandler(char *format, va_list args)
+void cartEarlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
@@ -487,7 +505,7 @@ if (!initted)
 htmlVaParagraph(format,args);
 }
 
-static void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
+void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
 /* Wrap error and warning handlers around doMiddl. */
 {
 pushWarnHandler(warner);
@@ -521,23 +539,27 @@ htmlEnd();
 popWarnHandler();
 }
 
-void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
+void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, 
+	char **exclude, struct hash *oldVars)
 /* Get cart and cookies and set up error handling, but don't start writing any
  * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
- * cartHtmlEnd(), as well as writing the body of the HTML. */
+ * cartHtmlEnd(), as well as writing the body of the HTML. 
+ * oldVars - those in cart that are overlayed by cgi-vars are
+ * put in optional hash oldVars. */
 {
-struct cart *cart = cartAndCookie(cookieName, exclude);
+struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
 
-void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
+void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, 
+	char **exclude, struct hash *oldVars)
 /* Load cart from cookie and session cgi variable.  Write web-page preamble, call doMiddle
  * with cart, and write end of web-page.   Exclude may be NULL.  If it exists it's a
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 {
-struct cart *cart = cartAndCookie(cookieName, exclude);
+struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 int status;
 
 htmStart(stdout, title);
@@ -546,3 +568,18 @@ cartCheckout(&cart);
 htmlEnd();
 }
 
+void cartSetDbConnector(DbConnector connector) 
+/* Set the connector that will be used by the cart to connect
+ * to the database. Due to the module's legacy the default connector
+ * is hConnectCentral */
+{
+cartDefaultConnector = connector;
+}
+
+void cartSetDbDisconnector(DbDisconnect disconnector) 
+/* Set the connector that will be used by the cart to disconnect
+ * from the database. Due to the module's legacy the default connector
+ * is hDisconnectCentral */
+{
+cartDefaultDisconnector = disconnector;
+}

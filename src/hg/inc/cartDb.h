@@ -5,6 +5,10 @@
 #ifndef CARTDB_H
 #define CARTDB_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif
+
 struct cartDb
 /* A simple id/contents pair for persistent storing of cart variables */
     {

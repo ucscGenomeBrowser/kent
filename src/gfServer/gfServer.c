@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include "portable.h"
+#include "net.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
@@ -106,22 +107,6 @@ return atoi(portName);
 
 struct sockaddr_in sai;		/* Some system socket info. */
 
-int setupSocket(char *portName, char *hostName)
-/* Set up our socket. */
-{
-int port = getPortIx(portName);
-struct hostent *hostent;
-hostent = gethostbyname(hostName);
-if (hostent == NULL)
-    {
-    errAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
-    }
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
-return socket(AF_INET, SOCK_STREAM, 0);
-}
-
 void logIt(char *format, ...)
 /* Print message to log file. */
 {
@@ -161,7 +146,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     sprintf(buf, "%d\t%d\t%s\t%d\t%d\t%d", 
 	clump->qStart, clump->qEnd, ss->fileName,
 	clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount);
-    gfSendString(connectionHandle, buf);
+    netSendString(connectionHandle, buf);
     ++clumpCount;
     if (--limit < 0)
 	break;
@@ -184,7 +169,7 @@ int clumpCount = 0, hitCount = 0, oneHit;
 struct lm *lm = lmInit(0);
 
 sprintf(buf, "tileSize %d", tileSize);
-gfSendString(connectionHandle, buf);
+netSendString(connectionHandle, buf);
 for (frame = 0; frame < 3; ++frame)
     clumps[frame] = NULL;
 for (isRc = 0; isRc <= 1; ++isRc)
@@ -202,11 +187,11 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		clump->qStart, clump->qEnd, ss->fileName,
 		clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		strand, frame);
-	    gfSendString(connectionHandle, buf);
+	    netSendString(connectionHandle, buf);
 	    dyStringClear(dy);
 	    for (hit = clump->hitList; hit != NULL; hit = hit->next)
 	        dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
-	    gfSendLongString(connectionHandle, dy->string);
+	    netSendLongString(connectionHandle, dy->string);
 	    ++clumpCount;
 	    if (--limit < 0)
 		break;
@@ -234,7 +219,7 @@ struct gfHit *hit;
 int clumpCount = 0, hitCount = 0, oneCount;
 
 sprintf(buf, "tileSize %d", tileSize);
-gfSendString(connectionHandle, buf);
+netSendString(connectionHandle, buf);
 for (qFrame = 0; qFrame<3; ++qFrame)
     for (tFrame=0; tFrame<3; ++tFrame)
 	clumps[qFrame][tFrame] = NULL;
@@ -256,13 +241,13 @@ for (isRc = 0; isRc <= 1; ++isRc)
 		    clump->qStart, clump->qEnd, ss->fileName,
 		    clump->tStart-ss->start, clump->tEnd-ss->start, clump->hitCount,
 		    strand, qFrame, tFrame);
-		gfSendString(connectionHandle, buf);
+		netSendString(connectionHandle, buf);
 		dyStringClear(dy);
 		for (hit = clump->hitList; hit != NULL; hit = hit->next)
 		    {
 		    dyStringPrintf(dy, " %d %d", hit->qStart, hit->tStart - ss->start);
 		    }
-		gfSendLongString(connectionHandle, dy->string);
+		netSendLongString(connectionHandle, dy->string);
 		++clumpCount;
 		if (--limit < 0)
 		    break;
@@ -288,8 +273,9 @@ char *line, *command;
 int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
 char *logFileName = cgiOptionalString("log");
+int port = atoi(portName);
 
-signal(SIGPIPE, SIG_IGN);	/* Block broken pipe signals. */
+netBlockBrokenPipes();
 if (logFileName != NULL)
     logFile = mustOpen(logFileName, "a");
 logIt("gfServer version %d on host %s, port %s\n", version, hostName, portName);
@@ -307,10 +293,7 @@ else
 logIt("indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
-socketHandle = setupSocket(portName, hostName);
-if (bind(socketHandle, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't bind to %s port %s", hostName, portName);
-res = listen(socketHandle, 100);
+socketHandle = netAcceptingSocket(port, 100);
 
 logIt("Server ready for queries!\n");
 printf("Server ready for queries!\n");
@@ -335,35 +318,35 @@ for (;;)
     else if (sameString("status", command))
         {
 	sprintf(buf, "version %d", version);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "type %s", (doTrans ? "translated" : "nucleotide"));
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "host %s", hostName);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "port %s", portName);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "tileSize %d", tileSize);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "minMatch %d", minMatch);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "requests %ld", queryCount);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "bases %ld", baseCount);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	if (doTrans)
 	    {
 	    sprintf(buf, "aa %ld", aaCount);
-	    gfSendString(connectionHandle, buf);
+	    netSendString(connectionHandle, buf);
 	    }
 	sprintf(buf, "misses %d", missCount);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "noSig %d", noSigCount);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "trimmed %d", trimCount);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "warnings %d", warnCount);
-	gfSendString(connectionHandle, buf);
-	gfSendString(connectionHandle, "end");
+	netSendString(connectionHandle, buf);
+	netSendString(connectionHandle, "end");
 	}
     else if (sameString("query", command) || 
     	sameString("protQuery", command) || sameString("transQuery", command))
@@ -444,7 +427,7 @@ for (;;)
 			}
 		    freez(&seq.dna);
 		    }
-		gfSendString(connectionHandle, "end");
+		netSendString(connectionHandle, "end");
 		}
 	    }
 	}
@@ -453,11 +436,11 @@ for (;;)
 	struct gfSeqSource *ss;
 	int i;
 	sprintf(buf, "%d", nibCount);
-	gfSendString(connectionHandle, buf);
+	netSendString(connectionHandle, buf);
 	for (i=0; i<nibCount; ++i)
 	    {
 	    sprintf(buf, "%s", nibFiles[i]);
-	    gfSendString(connectionHandle, buf);
+	    netSendString(connectionHandle, buf);
 	    }
 	}
     else
@@ -477,16 +460,9 @@ void stopServer(char *hostName, char *portName)
 char buf[256];
 int sd = 0;
 
-
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
-/* Put together quit command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%squit", gfSignature());
 write(sd, buf, strlen(buf));
-
 close(sd);
 printf("sent stop message to server\n");
 }
@@ -501,18 +477,14 @@ int sd = 0;
 int fileCount;
 int i;
 
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
 /* Put together command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%sstatus", gfSignature());
 write(sd, buf, strlen(buf));
 
 for (;;)
     {
-    if (gfGetString(sd, buf) == NULL)
+    if (netGetString(sd, buf) == NULL)
         break;
     if (sameString(buf, "end"))
         break;
@@ -533,13 +505,8 @@ int sd = 0;
 bioSeq *seq = faReadSeq(faName, !isProt);
 int matchCount = 0;
 
-
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
 /* Put together query command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%s%s %d", gfSignature(), type, seq->size);
 write(sd, buf, strlen(buf));
 
@@ -550,13 +517,13 @@ write(sd, seq->dna, seq->size);
 
 if (complex)
     {
-    char *s = gfRecieveString(sd, buf);
+    char *s = netRecieveString(sd, buf);
     printf("%s\n", s);
     }
 
 for (;;)
     {
-    if (gfGetString(sd, buf) == NULL)
+    if (netGetString(sd, buf) == NULL)
         break;
     if (sameString(buf, "end"))
 	{
@@ -568,7 +535,7 @@ for (;;)
         printf("%s\n", buf);
 	if (complex)
 	    {
-	    char *s = gfGetLongString(sd);
+	    char *s = netGetLongString(sd);
 	    if (s == NULL)
 	        break;
 	    printf("%s\n", s);
@@ -590,22 +557,18 @@ int sd = 0;
 int fileCount;
 int i;
 
-/* Set up socket.  Get ready to listen to it. */
-sd = setupSocket(portName, hostName);
-if (connect(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
-     errAbort("Couldn't connect to %s port %s", hostName, portName);
-
 /* Put together command. */
+sd = netMustConnectTo(hostName, portName);
 sprintf(buf, "%sfiles", gfSignature());
 write(sd, buf, strlen(buf));
 
 /* Get count of files, and then each file name. */
-if (gfGetString(sd, buf) != NULL)
+if (netGetString(sd, buf) != NULL)
     {
     fileCount = atoi(buf);
     for (i=0; i<fileCount; ++i)
 	{
-	printf("%s\n", gfRecieveString(sd, buf));
+	printf("%s\n", netRecieveString(sd, buf));
 	}
     }
 close(sd);

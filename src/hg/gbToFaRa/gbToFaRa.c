@@ -988,6 +988,45 @@ else
 fclose(f);
 }
 
+boolean isThreePrime(char *s)
+/* Return TRUE if s looks to have words three prime in it. */
+{
+if (s == NULL)
+    return FALSE;
+return stringIn("3'", s) || stringIn("Three prime", s) 
+	|| stringIn("three prime", s) || stringIn("3 prime", s);
+}
+
+boolean isFivePrime(char *s)
+/* Return TRUE if s looks to have words five prime in it. */
+{
+if (s == NULL)
+    return FALSE;
+return stringIn("5'", s) || stringIn("Five prime", s) 
+	|| stringIn("five prime", s) || stringIn("5 prime", s);
+}
+
+char *getEstDir(char *def, char *com)
+/* Return EST direction as deduced from definition and comment lines. */
+{
+char *three = "3'";
+char *five = "5'";
+char *dir = NULL;
+boolean gotThreePrime, gotFivePrime;
+
+gotThreePrime = isThreePrime(def);
+gotFivePrime = isFivePrime(def);
+if (gotThreePrime ^ gotFivePrime)
+    dir = (gotThreePrime ? three : five);
+if (dir == NULL)
+    {
+    gotThreePrime = isThreePrime(com);
+    gotFivePrime = isFivePrime(com);
+    dir = (gotThreePrime ? three : five);
+    }
+return dir;
+}
+
 void procOneGbFile(char *inName, FILE *faFile, char *faDir, FILE *raFile, 
     struct hash *uniqueNameHash, struct hash *estAuthorHash, struct filter *filter)
 /* Process one genBank file into fa and ra files. */
@@ -1113,19 +1152,9 @@ while (readGbInfo(lf))
 	    wordCount >= 6 && sameString(words[5], "EST"))
             {
             /* Try and figure out if it's a 3' or 5' EST */
-            char *def = definitionField->val;
-            char *threePrime = "3'";
-            char *fivePrime = "5'";
-            boolean gotThreePrime;
-            boolean gotFivePrime;
-            gotThreePrime =  ( (def != NULL && strstr(def, threePrime) ) ||
-                 (com != NULL && strstr(com, threePrime) ) );
-            gotFivePrime = ( (def != NULL && strstr(def, fivePrime) ) ||
-                 (com != NULL && strstr(com, fivePrime) ) );
-            if (gotThreePrime ^ gotFivePrime)
-                {
-                kvtAdd(kvt, "dir", (gotThreePrime ? threePrime : fivePrime));
-                }
+	    char *dir = getEstDir(definitionField->val, com);
+	    if (dir != NULL)
+                kvtAdd(kvt, "dir", dir);
             isEst = TRUE;
             }
 

@@ -1,6 +1,36 @@
 This file describes how we made the browser database on 
 NCBI build 28 (Dec 22, 2001 freeze)
 
+GETTING FRESH mRNA AND EST SEQUENCE FROM GENBANK.
+
+This will create a genbank.127 directory containing compressed
+GenBank flat files and a mrna.127 containing unpacked sequence
+info and auxiliarry info in a relatively easy to parse (.ra) 
+format.
+
+  o - Point your browser to ftp://ncbi.nlm.nih.gov/genbank and
+      look at the README.  Figure out the current release number
+      (which is 127).
+  o - Consider deleting one of the older genbank releases.  It's
+      good to at least keep one previous release though.
+  o - Where there is space make a new genbank directory.  Create a
+      symbolic link to it:
+	  mkdir /whereverYouPutIt/genbank.127
+          ln -s /whereverYouPutIt/genbank.127 ~/genbank
+  o - cd ~/genbank
+  o - ftp ncbi.nlm.nih.gov  (do anonymous log-in).  Then do the
+      following commands inside ftp:
+      	   cd genbank
+           prompt
+	   mget gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv*
+      This will take at least 2 hours.
+  o - Log onto server and change to your genbank directory.
+  o - cd /cluster/store1
+  o - mkdir mrna.127
+  o - cd genbank.127
+  o - gunzip -c gbpri*.gz | gbToFaRa ~/hg/h/mrna.fil ../mrna.127/mrna.fa ../mrna.127/mrna.ra ../mrna.127/mrna.ta stdin
+  o - gunzip -c gbest*.gz | gbToFaRa ~/hg/h/mrna.fil ../mrna.127/est.fa ../mrna.127/est.ra ../mrna.127/est.ta stdin
+
 
 CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARRY INFO  (done)
 
@@ -164,7 +194,7 @@ o - Align refSeq.fa to genome as described under mRNA/EST alignments above.
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2acc 
+       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref 
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc
 o - Similarly download refSeq proteins in fasta format to refSeq.pep
 o - Align these by processes described under mRNA/EST alignments above.
@@ -172,7 +202,7 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
        ln -s /cluster/store1/mrna.127 mrna
-       hgRefSeqMrna hg10 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2acc mrna/refSeq/hs.faa mim2loc
+       hgRefSeqMrna hg10 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc
 o - Add Jackson labs info
      cd ~/oo/bed
      mkdir jaxOrtholog
@@ -213,7 +243,7 @@ o - Load this into the database as so
 	hgLoadBed hg10 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (todo)
+PRODUCING GENSCAN PREDICTIONS (done)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
      ssh roar

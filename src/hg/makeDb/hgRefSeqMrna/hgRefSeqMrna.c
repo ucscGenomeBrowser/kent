@@ -343,8 +343,8 @@ struct lineFile *lf;
 struct hash *raHash, *rsiHash = newHash(0);
 struct hash *loc2mimHash = newHash(0);
 struct refSeqInfo *rsiList = NULL, *rsi;
-char *s, *row[5];
-int i, dotMod = 0;
+char *s, *line, *row[5];
+int i, wordCount, dotMod = 0;
 int noLocCount = 0;
 int rsiCount = 0;
 int noProtCount = 0;
@@ -430,10 +430,22 @@ if (clDots) printf("\n");
 /* Scan through loc2ref filling in some gaps in rsi. */
 printf("Scanning %s\n", loc2refFile);
 lf = lineFileOpen(loc2refFile, TRUE);
-while (lineFileRow(lf, row))
+while (lineFileNext(lf, &line, NULL))
     {
     int mimVal;
-    if ((rsi = hashFindVal(rsiHash, row[1])) != NULL)
+    char *mrnaAcc;
+
+    if (line[0] == '#')
+        continue;
+    wordCount = chopTabs(line, row);
+    if (wordCount < 5)
+        errAbort("Expecting at least 5 tab-separated words line %d of %s",
+		lf->lineIx, lf->fileName);
+    mrnaAcc = row[1];
+    if (mrnaAcc[2] != '_')
+        warn("%s is and odd name %d of %s", 
+		mrnaAcc, lf->lineIx, lf->fileName);
+    if ((rsi = hashFindVal(rsiHash, mrnaAcc)) != NULL)
         {
 	void *v;
 	rsi->locusLinkId = lineFileNeedNum(lf, row, 0);

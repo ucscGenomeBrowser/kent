@@ -9,11 +9,19 @@
 #include "hdb.h"
 
 struct cart *cart;
+struct hash *oldVars = NULL;
 
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
 char *db = cartUsualString(cart, "db", hGetDb());
+char *oldDb = hashFindVal(oldVars, "db");
+char *defaultPosition = "USP18";
+char *position = cartUsualString(cart, "position", defaultPosition);
+
+if (oldDb != NULL && !sameString(db, oldDb))
+    position = defaultPosition;
+
 puts(
 "<FORM ACTION=\"../cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
 "<CENTER>"
@@ -31,7 +39,8 @@ puts("<A HREF=\"../cgi-bin/cartReset\">Select here to reset</A> the "
      "browser user interface settings to their defaults.");
 printf("</P><CENTER>");
 printf("position ");
-cgiMakeTextVar("position", cartUsualString(cart, "position", "SFRS4"), 30);
+cartSaveSession(cart);
+cgiMakeTextVar("position", position, 30);
 printf(" pixel width ");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
 printf(" ");
@@ -147,7 +156,7 @@ void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
 cart = theCart;
-cartWebStart("Human Genome Browser Gateway");
+cartWebStart("UCSC Genome Browser Gateway");
 hgGateway();
 webEnd();
 cartHtmlEnd();
@@ -158,7 +167,8 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-cartEmptyShell(doMiddle, "hguid", excludeVars);
+cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
 return 0;
 }
