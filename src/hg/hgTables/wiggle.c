@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.6 2004/08/31 00:07:55 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.7 2004/08/31 22:09:31 hiram Exp $";
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -57,72 +57,78 @@ if (visibility != NULL)
 hPrintf("\n");
 }
 
-int wigOutDataRegionDb(char *table, struct sqlConnection *conn,
-	struct region *region, int maxOut)
-/* Write out wig data in region.  Write up to maxOut elements. 
- * Returns number of elements written. */
-{
-struct wiggleData *wdList, *wd;
-int tableId = 0;
-char *constraints = NULL;
-int outCount = 0;
-boolean span = -1;
-
-wdList = wigFetchData(database, table, 
-	region->chrom, region->start, region->end,
-	WIG_ALL_DATA, WIG_RETURN_DATA, 
-	tableId, NULL, constraints, NULL, maxOut, NULL);
-if (wdList == NULL)
-    return 0;
-for (wd = wdList; wd != NULL; wd = wd->next)
-    {
-    int i, count = wd->count;
-    struct wiggleDatum *data = wd->data;
-    if (wd->span != span)
-	{
-	span = wd->span;
-	hPrintf("variableStep");
-	hPrintf(" chrom=%s", region->chrom);
-	hPrintf(" span=%u\n", span);
-	}
-    for (i=0; i<count; ++i)
-        {
-	unsigned start = data->chromStart;
-	if (start >= region->start && start < region->end)
-	    hPrintf("%u\t%g\n", start+1, data->value);
-	++data;
-	++outCount;
-	}
-    }
-wiggleDataFreeList(&wdList);
-return outCount;
-}
-
-int wigOutDataRegionCt(char *table, struct sqlConnection *conn,
-	struct region *region, int maxOut)
-/* Write out wig data from custom track in region.  Write up 
- * to maxOut elements.  Returns number of elements written. */
-{
-uglyAbort("Don't known how to get data points for custom wiggle tracks. "
-         "Please ask Hiram Clawsom to implement me...."); return 0;
-}
-
 int wigOutDataRegion(char *table, struct sqlConnection *conn,
 	struct region *region, int maxOut)
 /* Write out wig data in region.  Write up to maxOut elements. 
  * Returns number of elements written. */
 {
+char splitTableOrFileName[256];
+struct customTrack *ct;
+boolean isCustom = FALSE;
+struct wiggleDataStream *wDS = NULL;
+unsigned span = 0;
+unsigned long long valuesMatched = 0;
+int operations = wigFetchAscii;
+
 if (isCustomTrack(table))
-    return wigOutDataRegionCt(table, conn, region, maxOut);
+    {
+    ct = lookupCt(table);
+    if (! ct->wiggle)
+	{
+	warn("doSummaryStatsWiggle: called to do wiggle stats on a custom track that isn't wiggle data ?");
+	htmlClose();
+	return 0;
+	}
+
+    safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s",
+		ct->wigFile);
+    isCustom = TRUE;
+    }
+
+wDS = newWigDataStream();
+
+wDS->setMaxOutput(wDS, maxOut);
+wDS->setChromConstraint(wDS, region->chrom);
+wDS->setPositionConstraint(wDS, region->start, region->end);
+
+if (isCustom)
+    {
+    valuesMatched = wDS->getData(wDS, NULL,
+	    splitTableOrFileName, operations);
+    /*  XXX We need to properly get the smallest span for custom tracks */
+    /*	This is not necessarily the correct answer here	*/
+    if (wDS->stats)
+	span = wDS->stats->span;
+    else
+	span = 1;
+    }
 else
-    return wigOutDataRegionDb(table, conn, region, maxOut);
+    {
+    boolean hasBin;
+
+    if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
+	{
+	span = minSpan(conn, splitTableOrFileName, region->chrom,
+	    region->start, region->end, cart);
+	wDS->setSpanConstraint(wDS, span);
+	valuesMatched = wDS->getData(wDS, database,
+	    splitTableOrFileName, operations);
+	}
+    }
+
+wDS->asciiOut(wDS, "stdout", TRUE, FALSE);
+
+destroyWigDataStream(&wDS);
+
+return valuesMatched;
 }
 
 void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
 /* Save as wiggle data. */
 {
 struct region *regionList = getRegions(), *region;
-int maxOut = 100000, oneOut, curOut = 0;
+/*int maxOut = 100000, oneOut, curOut = 0;*/
+int maxOut = 100, oneOut, curOut = 0;
 textOpen();
 
 wigDataHeader(track->shortLabel, track->longLabel, NULL);
@@ -154,6 +160,7 @@ boolean isCustom = FALSE;
 struct wiggleDataStream *wDS = NULL;
 unsigned long long valuesMatched = 0;
 int regionCount = 0;
+unsigned span = 0;
 
 /*	Count the regions, when only one, we can do a histogram	*/
 for (region = regionList; region != NULL; region = region->next)
@@ -181,25 +188,23 @@ wDS = newWigDataStream();
 startTime = clock1000();
 for (region = regionList; region != NULL; region = region->next)
     {
-    unsigned span = 0;
     boolean hasBin;
     int operations;
 
-/*
-    sprintLongWithCommas(num1Buf, region->start + 1);
-    sprintLongWithCommas(num2Buf, region->end);
-    hPrintf("<P><B> Position: </B> %s:%s-%s</P>\n", region->chrom,
-	    num1Buf, num2Buf );
-    sprintLongWithCommas(num1Buf, region->end - region->start);
-    hPrintf ("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
-*/
-
     operations = wigFetchStats;
+#if defined(NOT)
+    /*	can't do the histogram now, that operation times out	*/
     if (1 == regionCount)
-	operations |= wigFetchDataArray;
+	operations |= wigFetchAscii;
+#endif
 
     wDS->setChromConstraint(wDS, region->chrom);
-    wDS->setPositionConstraint(wDS, region->start, region->end);
+
+    if (fullGenomeRegion())
+	wDS->setPositionConstraint(wDS, 0, 0);
+    else
+	wDS->setPositionConstraint(wDS, region->start, region->end);
+
     /* depending on what is coming in on regionList, we may need to be
      * smart about how often we call getData for these custom tracks
      * since that is potentially a large file read each time.
@@ -208,6 +213,8 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	valuesMatched = wDS->getData(wDS, NULL,
 		splitTableOrFileName, operations);
+	/*  XXX We need to properly get the smallest span for custom tracks */
+	/*	This is not necessarily the correct answer here	*/
 	if (wDS->stats)
 	    span = wDS->stats->span;
 	else
@@ -217,7 +224,7 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	    {
-	    span = spanInUse(conn, splitTableOrFileName, region->chrom,
+	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart);
 	    wDS->setSpanConstraint(wDS, span);
 	    valuesMatched = wDS->getData(wDS, database,
@@ -225,49 +232,45 @@ for (region = regionList; region != NULL; region = region->next)
 	    }
 	}
 
-/*
-    statsPreamble(wDS, region->chrom, region->start, region->end,
-	valuesMatched, span);
-*/
-    /*	This printout is becoming common to what is already in
-     *	hgc/wiggleClick.c, need to put this in one of the library files.
-     */
-/*
-    if (valuesMatched == 0)
-	{
-	if ( span < (3 * (region->end - region->end)))
-	    {
-	    hPrintf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
-	    hPrintf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
-	    }
-	else
-	    hPrintf("<P><B> No data found in this region. </B></P>\n");
-	}
-    else
-	{
-	sprintLongWithCommas(num1Buf, wDS->stats->count * wDS->stats->span);
-	hPrintf("<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
-	    num1Buf, 100.0*(wDS->stats->count * wDS->stats->span)/(region->end - region->start));
-	}
-*/
-
     wDS->freeConstraints(wDS);
     }
 wigFetchTime = clock1000() - startTime;
 
-hTableStart();
-hPrintf("<TR><TD>");
+if (1 == regionCount)
+    statsPreamble(wDS, regionList->chrom, regionList->start, regionList->end,
+	span, valuesMatched);
 
 /* first TRUE == sort results, second TRUE == html table output */
 wDS->statsOut(wDS, "stdout", TRUE, TRUE);
 
-hPrintf("</TD></TR>");
-hTableEnd();
-wDS->freeStats(wDS);
+#if defined(NOT)
+/*	can't do the histogram now, that operation times out	*/
+/*	Single region, we can do the histogram	*/
+if ((valuesMatched > 1) && (1 == regionCount))
+    {
+    float *valuesArray = NULL;
+    size_t valueCount = 0;
+    struct histoResult *histoGramResult;
 
-    /*	TBD: histogram printout here when only one region (lib call)	*/
-if (1 == regionCount)
+    /*	convert the ascii data listings to one giant float array 	*/
+    valuesArray = wDS->asciiToDataArray(wDS, valuesMatched, &valueCount);
+
+    /*	histoGram() may return NULL if it doesn't work	*/
+
+    histoGramResult = histoGram(valuesArray, valueCount,
+	    NAN, (unsigned) 0, NAN, (float) wDS->stats->lowerLimit,
+		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange),
+		(struct histoResult *)NULL);
+
+    printHistoGram(histoGramResult);
+
+    freeHistoGram(&histoGramResult);
+    wDS->freeAscii(wDS);
     wDS->freeArray(wDS);
+    }
+#endif
+
+wDS->freeStats(wDS);
 
 webNewSection("Region and Timing Statistics");
 hTableStart();
