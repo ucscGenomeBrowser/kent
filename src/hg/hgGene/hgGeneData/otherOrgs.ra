@@ -28,7 +28,7 @@ name drosophila
 shortLabel Drosophila
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
-url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
+url http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
 priority 40
 
 name cElegans
