@@ -6,8 +6,9 @@
 #include "wiggle.h"
 #include "portable.h"
 #include "hgColors.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.56 2004/10/20 17:41:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.57 2004/10/26 18:15:04 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1853,13 +1854,26 @@ if (wds->stats)
 	{
 	if (htmlOut)
 	    {
+	    long long chromSize = hChromSize(stats->chrom);
+
+	    if (wds->winEnd)
+		chromSize = wds->winEnd - wds->winStart;
+
 	    fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
 						    /* display closed coords */
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromEnd);
-	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> ");
+	    printLongWithCommas(fh, (long long)stats->count);
+	    fprintf(fh,"</TD>\n");
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %d </TD>\n", stats->span);
-	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->count*stats->span);
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> ");
+	    printLongWithCommas(fh, (long long) stats->count*stats->span);
+	    if (chromSize > 0)
+		fprintf(fh,"&nbsp;(%.2f%%) </TD>\n",
+		    100.0*(double)(stats->count*stats->span)/(double)chromSize);
+	    else
+		fprintf(fh,"&nbsp;(100.00%%)</TD>\n");
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit+stats->dataRange);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->dataRange);
