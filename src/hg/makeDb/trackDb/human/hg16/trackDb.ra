@@ -250,6 +250,14 @@ visibility dense
 spectrum on
 type netAlign seq chainPt0
 
+track chimpDels
+shortLabel Chimp Deletions
+longLabel Deletions in Chimp (pt0) Relative to Human
+group compGeno
+priority 147.4
+visibility hide
+type bed
+
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
 longLabel Human/Mouse/Rat Humor Alignments (mm3-Feb03, rn3-Jun 03)
