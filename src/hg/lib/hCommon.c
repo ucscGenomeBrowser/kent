@@ -89,7 +89,7 @@ if (start == NULL)
        {
        chrom;
        iStart = 0;
-       iEnd = BIGNUM;
+       iEnd = hChromSize(chrom);
        }
     }
 else 
