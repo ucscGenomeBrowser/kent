@@ -62,7 +62,7 @@ type psl xeno
 
 track blastzBestMouse
 shortLabel Best Mouse
-longLabel BLASTZ Mouse (Feb. 03) Best in Genome Alignments
+longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
 group varRep
 priority 132
 visibility hide
