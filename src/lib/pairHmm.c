@@ -8,7 +8,7 @@
 #include "axt.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: pairHmm.c,v 1.3 2004/07/02 06:23:16 kent Exp $";
+static char const rcsid[] = "$Id: pairHmm.c,v 1.4 2004/08/26 21:21:27 markd Exp $";
 
 UBYTE phmmNullMommy = 0; /* mommy value for orphans.... */
 
@@ -318,8 +318,8 @@ if ((pair = pairList) == NULL)
 /* Allocate memory for axt. */
 AllocVar(axt);
 axt->symCount = slCount(pairList);
-axt->qSym = AllocArray(qSym, axt->symCount);
-axt->tSym = AllocArray(tSym, axt->symCount);
+axt->qSym = AllocArray(qSym, axt->symCount+1);
+axt->tSym = AllocArray(tSym, axt->symCount+1);
 
 /* Fill in basic fields. */
 axt->qName = cloneString(qName);
