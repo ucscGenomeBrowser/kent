@@ -30,7 +30,7 @@ url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
 
 track slamHuman
 shortLabel Slam Human
-longLabel SLAM gene predictions using human/mouse homology
+longLabel SLAM Gene Predictions Using Human/Mouse Homology
 group genes
 priority 45.5
 visibility hide
@@ -39,8 +39,8 @@ altColor 175,150,128
 type genePred 
 
 track blatFish
-shortLabel Tetraodon Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+shortLabel Tetraodon BLAT
+longLabel Tetraodon nigriviridis Translated BLAT Alignments
 group compGeno
 priority 112
 visibility dense
@@ -50,8 +50,8 @@ spectrum on
 type psl xeno
 
 track blatFugu
-shortLabel Fugu Blat
-longLabel Takifugu rubripes Translated Blat Alignments
+shortLabel Fugu BLAT
+longLabel Takifugu rubripes Translated BLAT Alignments
 group compGeno
 priority 113
 visibility dense
@@ -62,7 +62,7 @@ type psl xeno
 
 track blastzBestMouse
 shortLabel Best Mouse
-longLabel Blastz Mouse(Feb03) Best in Genome Alignments
+longLabel BLASTZ Mouse (Feb. 03) Best in Genome Alignments
 group varRep
 priority 132
 visibility hide
