@@ -28,6 +28,8 @@ my $debug         = 0;
 my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
 		      "hg/lib/ggDbRep.as" => "",
 		      "hg/lib/rmskOut.as" => "",
+		      "hg/makeDb/schema/joinerGraph/all.as" => "",
+		      "hg/makeDb/schema/joinerGraph/swissProt.as" => "",
 		      "lib/pslWScore.as" => "",
 		    );
 
@@ -256,6 +258,7 @@ use vars qw/
     $opt_kentSrc
     $opt_gbdDPath
     $opt_noLoad
+    $opt_db
     $opt_help
     $opt_verbose
     /;
@@ -263,6 +266,7 @@ use vars qw/
 my $ok = GetOptions("kentSrc=s",
 		    "gbdDPath=s",
 		    "noLoad",
+		    "db=s",
 		    "help",
 		    "verbose");
 &usage(1) if (! $ok);
@@ -281,7 +285,7 @@ my %tableAutoSql = slurpAutoSql($kentSrc);
 my %fieldsAutoSql = indexAutoSqlByFields(\%tableAutoSql);
 my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new();
-my @dbs = &getActiveDbs($hgConf);
+my @dbs = (defined $opt_db) ? split(',', $opt_db) : &getActiveDbs($hgConf);
 foreach my $db (@dbs) {
   next if ($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ && $db !~ /^zoo/);
   my $sqlFile = "$db.tableDescriptions.sql";
