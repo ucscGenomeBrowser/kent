@@ -418,9 +418,6 @@ if (url != NULL && url[0] != 0)
     }
 }
 
-
-
-
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int smpSize)
 /* Handle click in generic sample (wiggle) track. */

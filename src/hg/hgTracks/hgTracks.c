@@ -10160,7 +10160,7 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
-getDbAndOrganism(cart, &database, &organism);
+getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 
 debugTmp = cartUsualString(cart, "hgDebug", "off");
