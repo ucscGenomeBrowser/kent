@@ -21,7 +21,8 @@ errAbort(
   "usage:\n"
   "   clusterRna database mrnaOut.bed estOut.bed\n"
   "options:\n"
-  "   -MGC=mgc.out\n"
+  "   -MGC=mgc.out - output MGC ESTs to sequence fully\n"
+  "   -chrom=chrN - work on chrN (default chr22)\n"
   );
 }
 
@@ -399,7 +400,6 @@ for (el = list; el != NULL; el = el->next)
     if (score < 3)
 	{
 	struct ggMrnaCluster *cluster = el->val;
-	uglyf("Weeding %s at %d-%d score %d\n" ,  cluster->refList->ma->qName, el->start, el->end, score);
         binKeeperRemove(bins, el->start, el->end, cluster);
 	}
     }
@@ -660,7 +660,7 @@ void clusterRna(char *database, char *rnaOut, char *estOut)
 struct sqlConnection *conn;
 hSetDb(database);
 conn = hAllocConn();
-clusterChromRna(conn, "chr22", rnaOut, estOut);
+clusterChromRna(conn, cgiUsualString("chrom", "chr22"), rnaOut, estOut);
 hFreeConn(&conn);
 }
 
