@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.50 2004/03/01 04:53:18 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.51 2004/03/03 07:23:51 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -533,6 +533,81 @@ if (refOnList(*pRefList, val) == NULL)
     {
     refAdd(pRefList, val);
     }
+}
+
+struct slPair *slPairNew(char *name, void *val)
+/* Allocate new name/value pair. */
+{
+struct slPair *el;
+AllocVar(el);
+el->name = cloneString(name);
+el->val = val;
+return el;
+}
+
+void slPairAdd(struct slPair **pList, char *name, void *val)
+/* Add new slPair to head of list. */
+{
+struct slPair *el = slPairNew(name, val);
+slAddHead(pList, el);
+}
+
+void slPairFree(struct slPair **pEl)
+/* Free up struct and name.  (Don't free up values.) */
+{
+struct slPair *el = *pEl;
+if (el != NULL)
+    {
+    freeMem(el->name);
+    freez(pEl);
+    }
+}
+
+void slPairFreeList(struct slPair **pList)
+/* Free up list.  (Don't free up values.) */
+{
+struct slPair *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    slPairFree(&el);
+    }
+*pList = NULL;
+}
+
+void slPairFreeVals(struct slPair *list)
+/* Free up all values on list. */
+{
+struct slPair *el;
+for (el = list; el != NULL; el = el->next)
+    freez(&el->val);
+}
+
+void slPairFreeValsAndList(struct slPair **pList)
+/* Free up all values on list and list itself */
+{
+slPairFreeVals(*pList);
+slPairFreeList(pList);
+}
+
+struct slPair *slPairFind(struct slPair *list, char *name)
+/* Return list element of given name, or NULL if not found. */
+{
+struct slPair *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameString(name, el->name))
+        break;
+return el;
+}
+
+void *slPairFindVal(struct slPair *list, char *name)
+/* Return value associated with name in list, or NULL if not found. */
+{
+struct slPair *el = slPairFind(list, name);
+if (el == NULL)
+    return NULL;
+return el->val;
 }
 
 
