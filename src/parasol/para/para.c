@@ -24,6 +24,8 @@ static struct optionSpec optionSpecs[] = {
     {"warnTime", OPTION_INT},
     {"killTime", OPTION_INT},
     {"delayTime", OPTION_INT},
+    {"pri", OPTION_STRING},
+    {"priority", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -50,11 +52,13 @@ errAbort(
   "   options:\n"
   "      -retries=N   Number of retries per job - default 4.\n"
   "      -maxQueue=N  Number of jobs to allow on parasol queue - default 1000000\n"
-  "      -minPush=N  Minimum number of jobs to queue - default 1.  Overrides maxQueue\n"
-  "      -maxPush=N  Maximum number of jobs to queue - default 100000\n"
-  "      -warnTime=N Number of minutes job runs before hang warning - default 4320 (3 days)\n"
-  "      -killTime=N Number of minutes job runs before push kills it - default 20160 (2 weeks)\n"
+  "      -minPush=N   Minimum number of jobs to queue - default 1.  Overrides maxQueue\n"
+  "      -maxPush=N   Maximum number of jobs to queue - default 100000\n"
+  "      -warnTime=N  Number of minutes job runs before hang warning - default 4320 (3 days)\n"
+  "      -killTime=N  Number of minutes job runs before push kills it - default 20160 (2 weeks)\n"
   "      -delayTime=N Number of seconds to delay before submitting next job to minimize i/o load at startup - default 0 \n"
+  "      -priority=x  Set batch priority to high, medium, or low - default medium (use high only with approval)\n"
+  "      -pri=N       Set batch priority to specific value - default %d \n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs\n"
   "para shove\n"
@@ -91,11 +95,13 @@ errAbort(
   "   the `check out' tests fail.\n"
   "para priority 999\n"
   "   Set batch priority.\n"
-  "   1 is highest priority, %d is normal, %d for bottomfeeders.\n"
+  "   1 is emergency high priority, %d is normal medium, %d is low for bottomfeeders.\n"
+  "   Alternatively, specify high, medium, or low.\n"
   "   Setting priority to 1-%d will be logged.\n"
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n",
+  NORMAL_PRIORITY,
   NORMAL_PRIORITY,
   NORMAL_PRIORITY * NORMAL_PRIORITY,
   NORMAL_PRIORITY-1
@@ -112,12 +118,15 @@ int warnTime = 3*24*60;
 int killTime = 14*24*60;
 int sleepTime = 5*60;
 int delayTime = 0;
+int priority = NORMAL_PRIORITY;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
 char *resultsName = "para.results"; /* Name of results file. */
 char *statusCommand = "parasol pstat";
 char *killCommand = "parasol remove job";
+
+void checkPrioritySetting(); /* fwd reference */
 
 void beginHappy()
 /* Call before a loop where happy dots maybe written */
@@ -617,6 +626,8 @@ slReverse(&db->jobList);
 return db;
 }
 
+
+
 void paraCreate(char *batch, char *jobList)
 /* Create a batch database from a job list. */
 {
@@ -633,6 +644,7 @@ sprintf(backup, "%s.bak", batch);
 atomicWriteBatch(db, backup);
 atomicWriteBatch(db, batch);
 verbose(1, "%d jobs written to %s\n", db->jobCount, batch);
+checkPrioritySetting();
 }
 
 void paraRecover(char *batch, char *jobList, char *newJobList)
@@ -1322,13 +1334,12 @@ freez(&result);
 verbose(1, "Told hub to chill out\n");
 }
 
-void sendSetPriorityMessage(char *val)
+void sendSetPriorityMessage(int priority)
 /* Tell hub to change priority on batch */
 {
 struct dyString *dy = newDyString(1024);
 char curDir[512];
 char *result;
-int priority = atoi(val);
 if ((priority < 1) || (priority > MAX_PRIORITY))
     errAbort("Priority %d out of range, should be 1 to %d",priority,MAX_PRIORITY);
 if (getcwd(curDir, sizeof(curDir)) == NULL)
@@ -1342,6 +1353,31 @@ freez(&result);
 verbose(1, "Told hub to set priority %d\n",priority);
 }
 
+void paraPriority(char *val)
+/* Tell hub to change priority on batch */
+{
+
+uglyf("paraPriority: val parm = %s \n", val);
+
+if (sameWord(val,"high"))
+    priority = 1;
+else if (sameWord(val,"medium"))
+    priority = NORMAL_PRIORITY;
+else if (sameWord(val,"low"))
+    priority = NORMAL_PRIORITY * NORMAL_PRIORITY;
+else
+    priority = atoi(val);
+sendSetPriorityMessage(priority);
+}
+
+void checkPrioritySetting()
+/* see if we can and need to set the priority */
+{
+if (optionVal("pri",NULL)!=NULL)
+    paraPriority(optionVal("pri","medium"));
+if (optionVal("priority",NULL)!=NULL)
+    paraPriority(optionVal("priority","medium"));
+}   
 
 int cleanTrackingErrors(struct jobDb *db)
 /* Remove submissions with tracking errors. 
@@ -1625,6 +1661,8 @@ maxPush = optionInt("maxPush",  maxPush);
 warnTime = optionInt("warnTime", warnTime);
 killTime = optionInt("killTime", killTime);
 delayTime = optionInt("delayTime", delayTime);
+if (thisBatchRunning())
+    checkPrioritySetting();
 command = argv[1];
 batch = "batch";
 
@@ -1711,7 +1749,7 @@ else if (sameWord(command, "priority"))
     {
     if (argc != 3)
         usage();
-    sendSetPriorityMessage(argv[2]);
+    paraPriority(argv[2]);
     }
 else
     {
