@@ -803,6 +803,8 @@ void saveJobId()
 rewind(jobIdFile);
 writeOne(jobIdFile, nextJobId);
 fflush(jobIdFile);
+if (ferror(jobIdFile))
+    errnoAbort("can't write job id file %s", jobIdFileName);
 }
 
 void openJobId()

@@ -184,13 +184,15 @@ void changeUid(char *name, char **retDir)
 /* Try and change process user (and group) id to that of name. */
 {
 struct passwd *pw = getpwnam(name);
-if (pw != NULL)
-    {
-    setgid(pw->pw_gid);
-    setuid(pw->pw_uid);
-    if (retDir != NULL)
-       *retDir = pw->pw_dir;
-    }
+if (pw == NULL)
+    errnoAbort("can't obtain user passwd entry for user %s", name);
+
+if (setgid(pw->pw_gid) < 0)
+    errnoAbort("setgid failed");
+if (setuid(pw->pw_uid) < 0)
+    errnoAbort("setuid failed");
+if (retDir != NULL)
+    *retDir = pw->pw_dir;
 }
 
 static int grandChildId = 0;
@@ -284,12 +286,13 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
 {
 if ((grandChildId = forkOrDie()) == 0)
     {
-    int newStdin, newStdout, newStderr, execErr;
+    int newStdin, newStdout, newStderr;
     char *homeDir = "";
 
     /* Change to given user and dir. */
     changeUid(user, &homeDir);
-    chdir(dir);
+    if (chdir(dir) < 0)
+        errnoAbort("can't chdir to %s", dir);
     setsid();
     // setpgid(0,0);
     umask(umaskVal); 
@@ -307,29 +310,33 @@ if ((grandChildId = forkOrDie()) == 0)
 	freeHashAndVals(&hash);
 	}
 
-    /* Redirect standard io.  There has to  be a less
-     * cryptic way to do this. Close all open files, then
-     * open in/out/err in order so they have descriptors
-     * 0,1,2. */
+    /* Redirect standard io. */
     logClose();
     close(mainRudp->socket);
-    close(0);
-    close(1);
-    close(2);
-    open(in, O_RDONLY);
-    open(out, O_WRONLY | O_CREAT, 0666);
-    open(err, O_WRONLY | O_CREAT, 0666);
 
+    newStdin = open(in, O_RDONLY);
+    if (newStdin < 0)
+        errnoAbort("can't open job stdin file %s", in);
+    if (dup2(newStdin, STDIN_FILENO) < 0)
+        errnoAbort("can't dup2 stdin");
+
+    newStdout = open(out, O_WRONLY | O_CREAT, 0666);
+    if (newStdout < 0)
+        errnoAbort("can't open job stdout file %s", out);
+    if (dup2(newStdout, STDOUT_FILENO) < 0)
+        errnoAbort("can't dup2 stdout");
+
+    newStderr = open(err, O_WRONLY | O_CREAT, 0666);
+    if (newStderr < 0)
+        errnoAbort("can't open job stderr file %s", err);
+    if (dup2(newStderr, STDERR_FILENO) < 0)
+        errnoAbort("can't dup2 stderr");
     
     randomSleep();	/* Sleep a random bit before executing this thing
                          * to help spread out i/o when a big batch of jobs
 			 * hit idle cluster */
-    if ((execErr = execvp(exe, params)) < 0)
-	{
-	perror("execvp");
-	warn("Error execvp'ing %s %s", exe, params);
-	}
-    exit(execErr);
+    execvp(exe, params);
+    errnoAbort("execvp'ing %s", exe);
     }
 else
     {
@@ -349,6 +356,8 @@ else
 	{
 	signal(SIGTERM, termHandler);
 	cid = waitpid(grandChildId, &status, 0);
+        if (cid < 0)
+            errnoAbort("wait on grandchild failed");
 	times(&tms);
 	uTime = ticksToHundreths*tms.tms_cutime;
 	sTime = ticksToHundreths*tms.tms_cstime;

@@ -44,10 +44,7 @@ char *getUser()
 uid_t uid = geteuid();
 struct passwd *pw = getpwuid(uid);
 if (pw == NULL)
-    {
-    warn("Can't getUser");
-    return "nobody";
-    }
+    errnoAbort("can't get user name for uid %d", uid);
 return pw->pw_name;
 }
 
