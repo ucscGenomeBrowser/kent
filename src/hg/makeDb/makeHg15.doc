@@ -1865,7 +1865,7 @@ o - Load genomic dupes
     mysql -u hgcat -pbigSECRET hg15 < ~/src/hg/lib/genomicDups.sql
     hgLoadBed hg15 -oldTable genomicDups genomicDupes.bed
 
-LOAD NCI60 (TODO)
+LOAD NCI60 (DONE: sugnet - Wed Apr 30 10:25:02 PDT 2003 )
 o - # ssh hgwdev
     cd /projects/cc/hg/mapplots/data/NCI60/dross_arrays_nci60/
     mkdir hg15
