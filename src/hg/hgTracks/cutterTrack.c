@@ -106,7 +106,7 @@ void cuttersLoad(struct track *tg)
 struct sqlConnection *conn;
 struct cutter *cutters;
 struct dnaSeq *windowDna = NULL;
-struct bed *plus = NULL, *minus = NULL, *bedList = NULL;
+struct bed *bedList = NULL;
 int winSize = winEnd - winStart;
 
 hSetDb2("hgFixed");
@@ -119,7 +119,7 @@ windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
 if (winSize < 200000)
     {
     if (zoomedToBaseLevel)
-	cullCutters(cutters, TRUE, NULL, NULL, 0);
+	cullCutters(cutters, FALSE, NULL, NULL, 0);
     else if (winSize >= 20000 && winSize < 200000)
 	cullCutters(cutters, FALSE, NULL, NULL, 7);
     else
