@@ -16,6 +16,15 @@ visibility dense
 altColor 200,150,150
 type bed 4 +
 
+track flyreg
+shortLabel FlyReg
+longLabel FlyReg: Drosophila DNase I Footprint Database
+group regulation
+priority 80
+visibility hide
+color 100,50,0
+type bed 4 +
+
 track multiz8way
 shortLabel Conservation
 longLabel 6 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
