@@ -27,3 +27,16 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+
+track stsMapRat
+shortLabel STS Markers
+longLabel STS Markers on STS Maps
+group map
+priority 5
+visibility dense
+altColor 128,128,255
+type bed 5 +
+
+
+
+
