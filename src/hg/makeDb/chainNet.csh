@@ -20,8 +20,9 @@ set qSeqDir = /cluster/store2/mm.2003.02/mm3
 set fileServer = eieio
 set dbServer = hgwdev
 set parasolServer = kkr1u00
+set subShellDir = chainNet.$tDbName.$qDbName.tmp
 
-mkdir -p chainNet.$tDbName.$qDbName.tmp
+mkdir -p $subShellDir
 cd chainNet.$tDbName.$qDbName.tmp
 cat >chainRun.csh <<endCat
 #!/bin/csh -efx
@@ -137,10 +138,13 @@ endCat
 chmod a+x *.csh
 ssh $parasolServer $cwd/chainRun.csh
 ssh $fileServer $cwd/sortChains.csh
-ssh $dbServer $cwd/loadChains.csh
+#Do the next two in parallel.
+ssh $dbServer $cwd/loadChains.csh &
 ssh $fileServer $cwd/makeNet.csh
+wait
 ssh $dbServer $cwd/finishLoadNet.csh
 ssh $fileServer $cwd/makeAxtNet.csh
+# rm -f $subShellDir
 
 cd ..
 
