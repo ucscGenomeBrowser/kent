@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.845 2005/03/04 21:13:24 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.846 2005/03/07 20:47:33 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10524,7 +10524,7 @@ if (strncmp(rsId,"rs",2)) /* is not a valid rsId, so it must be an affyId */
 	    return 0;
 	}
     /* not all affy snps have valid rsIds, so return if it is invalid */
-    if (strncmp(rsId,"rs",2) || strlen(rsId)<4 || !strcmp(rsId,"rs0")) /* not a valid rsId */
+    if (strncmp(rsId,"rs",2) || strlen(rsId)<4 || sameString(rsId,"rs0")) /* not a valid rsId */
 	return 0;
     }
 else
@@ -10550,7 +10550,7 @@ char  *dbOrg = cloneStringZ(database,2);
 toUpperN(dbOrg,1); /* capitalize first letter */
 if (rsId) /* a valid rsId exists */
     {
-    if (!strcmp(rsId, "valid"))
+    if (sameString(rsId, "valid"))
 	safef(query, sizeof(query),
 	      "select * "
 	      "from   dbSnpRs%s "
@@ -10592,7 +10592,7 @@ if (rsId) /* a valid rsId exists */
     dbSnpRsFree(&snp);
     }
 sqlDisconnect(&hgFixed);
-if (!strcmp(dbOrg,"Hg"))
+if (sameString(dbOrg,"Hg"))
     {
     safef(query, sizeof(query),
 	  "select source, type from snpMap where  name = '%s'", name);
@@ -10621,9 +10621,7 @@ int rowOffset;
 safef(query, sizeof(query),
       "select distinct        "
       "       rl.locusLinkID, "
-      "       rl.name,        "
-      "       kg.name,        "
-      "       kg.proteinID    "
+      "       rl.name         "
       "from   knownGene  kg,  "
       "       refLink    rl,  "
       "       %s         snp, "
@@ -10638,9 +10636,9 @@ rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     printf("geneId=%s\" TARGET=_blank>Entrez Gene for ", row[0]);
-    printf("%s (%s; %s)</A></P>\n", row[1], row[2], row[3]);
+    printf("%s</A>\n", row[1]);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10671,31 +10669,31 @@ sprintf(query,
         group, seqName, start, itemName);
 rowOffset = hOffsetPastBin(seqName, group);
 sr = sqlGetResult(conn, query);
-if (strcmp(group,"snpMap")) /* snpNih and snpTsc */
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	snpStaticLoad(row+rowOffset, &snp);
-	bedPrintPos((struct bed *)&snp, 3);
-	}
-else /* snpMap */
+if (sameString(group,"snpMap"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	snpMapStaticLoad(row+rowOffset, &snpMap);
 	bedPrintPos((struct bed *)&snpMap, 3);
 	}
+else
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	snpStaticLoad(row+rowOffset, &snp);
+	bedPrintPos((struct bed *)&snp, 3);
+	}
 /* write dbSnpRs details if found. */
 printId = doDbSnpRs(itemName);
 if (printId)
     {
-    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    if (!strcmp(printId, "valid"))
+    printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    if (sameString(printId, "valid"))
 	{	
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A>\n", itemName);
 	doSnpEntrezGeneLink(tdb, itemName);
 	}
     else
 	{
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A></P>\n", printId, printId);
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A>\n", printId, printId);
 	doSnpEntrezGeneLink(tdb, printId);
 	}
     }
@@ -10770,7 +10768,7 @@ if (multiplePositions)
 void printSnpInfo(struct snp snp)
 /* print info on a snp */
 {
-if (strcmp(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
+if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
 printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
 printf("<BR><B><A HREF=\"#Source\">Source</A>: </B>%s\n",           snp.source);
 printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
@@ -10780,17 +10778,130 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-/*
-if (stringIn("nonsynon",snp.func)!=NULL)
+printf("<BR>\n");
+}
+
+void printLsSnpLinks(struct snp snp)
+/* print links to ModBase and LS-SNP at UCSF */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+char   baseUrl[] = "http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?idvalue=";
+char   options[] = "&RequestType=QueryById&idtype=rsID&PropertySelect=";
+
+if (!stringIn("nonsynon",snp.func) || !hTableExists("hgFixed.modBaseLsSnp"))
+    return;
+safef(query, sizeof(query), "select distinct uniProtId, dbSnpRsIdStruct, dbSnpRsIdFunc from hgFixed.modBaseLsSnp "
+      "where dbSnpRsIdStruct='%s' order by uniProtId, dbSnpRsId", snp.name);
+sr = sqlGetResult(conn, query);
+while ( (row = sqlNextRow(sr)) != NULL)
     {
-    printf("<P><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
-    printf("PropertySelect=Functional&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Function</A>\n", snp.name);
-    printf("<BR><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
-    printf("PropertySelect=Protein_structure&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Structure</A>\n", snp.name);
-    printf("<BR><a href=\"#LSSNP\" >LS-SNP description</A></P>\n");
+    printf("<BR>Protein <A HREF=\"%s%s%sProtein_structure\" TARGET=_blank>Structure</A>", baseUrl, row[1], options);
+    if (startsWith("rs",row[2]))
+	printf(" and <A HREF=\"%s%s%sFunctional\" TARGET=_blank>Function</A>", baseUrl, row[2], options);
+    printf(" by <A href=\"#LSSNP\">LS-SNP</A> for UniProt accession %s.\n", row[0]);
     }
-*/
-printf("<P>\n");
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void printSnpAlignment(struct snp snp)
+/* Fetch flanking sequences from dbSnp html page and from nib file; align and print */
+{
+char                  url[128];
+char                 *line;
+char                  query[256];
+char                **row;
+char                 *strand;
+char                 *nibFile;
+struct htmlPage      *page         = NULL;
+struct lineFile      *lf           = NULL;
+struct sqlResult     *sr           = NULL;
+struct dyString      *seqDbSnp5    = newDyString(512);
+struct dyString      *seqDbSnpO    = newDyString(64);
+struct dyString      *seqDbSnp3    = newDyString(512);
+struct dyString      *seqDbSnpTemp = newDyString(512);
+struct dnaSeq        *seqDbSnp     = NULL;
+struct dnaSeq        *seqNib       = NULL;
+struct sqlConnection *conn         = hAllocConn();
+int                   seqDbSnp5len = 0;
+int                   seqDbSnp3len = 0;
+int                   start;
+int                   end;
+boolean               haveSeq      = FALSE;
+boolean               haveObserved = FALSE;
+
+/* get details page for snp from NCBI/dbSnp */
+safef(url, sizeof(url), "http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?rs=%s",snp.name);
+page = htmlPageGet(url);
+lf = lineFileOnString("web page", TRUE, page->htmlText);
+
+/*  process page to extract flanks */
+while (lineFileNext(lf,&line,NULL) && !haveSeq)
+    if ((line=stringIn("allelePos",line))!=NULL && 
+	(line=stringIn("totalLen", line))!=NULL && 
+	(line=stringIn("courier",  line))!=NULL)
+	{
+	dyStringAppend(seqDbSnp5,line+10);
+	while (!haveObserved && lineFileNext(lf,&line,NULL))
+	    if(!startsWith("</",line)) /* get 5' flank */
+		dyStringAppend(seqDbSnp5,line);
+	    else
+		{ /* get observed */
+		line=stringIn("green",line)+7;
+		while(!startsWith("</",line))
+		    dyStringAppendN(seqDbSnpO,line++,1);
+		haveObserved=TRUE;
+		}
+	while (lineFileNext(lf,&line,NULL) && !haveSeq)
+	    {
+	    if(startsWith("<FONT",line)) /* get 5' flank; first line */
+		{
+		line=stringIn("courier",line)+10;
+		dyStringAppend(seqDbSnp3,line);
+		}
+	    if(!startsWith("</FONT",line)) /* get 5' flank; additional lines */
+		dyStringAppend(seqDbSnp3,line);
+	    else
+		haveSeq=TRUE;
+	    }
+	}
+
+/* strip strings; get sizes, and concatenate */
+stripChar(seqDbSnp5->string,' ');
+stripChar(seqDbSnpO->string,' ');
+stripChar(seqDbSnp3->string,' ');
+seqDbSnp5len=strlen(seqDbSnp5->string);/* spaces made the string size incorrect */
+seqDbSnp3len=strlen(seqDbSnp3->string);
+dyStringAppend(seqDbSnpTemp,seqDbSnp5->string);
+dyStringAppend(seqDbSnpTemp,seqDbSnpO->string);
+dyStringAppend(seqDbSnpTemp,seqDbSnp3->string);
+freeDyString(&seqDbSnp5);
+freeDyString(&seqDbSnpO);
+freeDyString(&seqDbSnp3);
+seqDbSnp = newDnaSeq(seqDbSnpTemp->string,strlen(seqDbSnpTemp->string),"dbSnp seq");
+if (seqDbSnp==NULL)
+    return;
+seqDbSnp->size=strlen(seqDbSnp->dna);
+
+/* get nib sequence */
+safef(query, sizeof(query), "select * from chromInfo where chrom='%s'", snp.chrom);
+sr      = sqlGetResult(conn, query);
+row     = sqlNextRow(sr);
+nibFile = cloneString(row[2]);
+start   = snp.chromStart - seqDbSnp5len;
+end     = snp.chromEnd   + seqDbSnp3len;
+seqNib  = nibLoadPartMasked(0, nibFile, start, end-start);
+strand  = cloneString(snp.strand);
+if (sameString(strand,"-"))
+    reverseComplement(seqNib->dna, seqNib->size);
+printf("<font face=courier><BR><B>dbSnp:&nbsp;</B>%s    </font>", seqDbSnp->dna);
+printf("<font face=courier><BR><B>nib:&nbsp;&nbsp;&nbsp;</B>%s</font>", seqNib->dna);
+
+// This is a good place to do the alignment and print it!
+// showDnaAlignment(psl, seqDbSnp, body, cdsS, cdsE);
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -10823,14 +10934,18 @@ while ((row = sqlNextRow(sr))!=NULL)
 	chrom = cloneString(snp.chrom);
 	chromStart = snp.chromStart;
 	bedPrintPos((struct bed *)&snp, 3);
+	printSnpAlignment(snp);
 	printf("<BR>\n");
 	firstOne=0;
 	}
+    printf("<BR>\n");
     printSnpInfo(snp);
     }
-printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
+printf("<BR>\n");
+printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A>\n", itemName);
 doSnpEntrezGeneLink(tdb, itemName);
+printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
@@ -10874,8 +10989,8 @@ if (snp!=NULL)
     printf("%s</font><BR>\n",snp->sequenceB);
     if (snp->rsId>0)
 	{
-	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n",
+	printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A><BR>\n",
 	       snp->rsId, snp->rsId);
 	}
     doSnpEntrezGeneLink(tdb, snp->rsId);
@@ -11017,8 +11132,8 @@ if (snp!=NULL)
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for rs%s</A></P>\n", 
 	       snp->rsId, snp->rsId);
 	}
-    printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
-    printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
+    printf("<BR><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
+    printf("%s\" TARGET=_blank>TSC link for %s</A>\n",
 	   snp->tscId, snp->tscId);
     doSnpEntrezGeneLink(tdb, snp->rsId);
     }
@@ -11144,21 +11259,21 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (sameWord(wgRna->type, "HAcaBox"))
     	{
 	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie MolÈculaire Eucaryote: ", 
+			"Laboratoire de Biologie MolÅÈculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> H/ACA Box snoRNA\n");
 	}
     if (sameWord(wgRna->type, "CDBox"))
     	{
 	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie MolÈculaire Eucaryote: ", 
+			"Laboratoire de Biologie MolÅÈculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> CD Box snoRNA\n");
 	}
     if (sameWord(wgRna->type, "scaRna"))
     	{
 	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie MolÈculaire Eucaryote: ", 
+			"Laboratoire de Biologie MolÅÈculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> small Cajal body-specific RNA\n");
 	}
