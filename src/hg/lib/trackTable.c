@@ -349,8 +349,8 @@ static struct trackTable builtIns[] =
      NULL,
      "hgRefGene",	/* mapName */
      "refGene",	/* tableName */
-     "Known Genes",	/* shortLabel */
-     "Known Genes (from RefSeq)",	/* longLabel */
+     "RefSeq Genes",	/* shortLabel */
+     "GenBank RefSeq Genes",	/* longLabel */
      2,	/* visibility */
      20,20,170,	/* color */
      137,137,212,	/* altColor */

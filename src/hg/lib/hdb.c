@@ -26,8 +26,8 @@ static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connect
 static struct sqlConnCache *centralCc = NULL;
 
 static char *hdbHost;
-static char *hdbName = "hg12";
-static char *hdbName2 = "mm2";
+static char *hdbName = "hg8";
+static char *hdbName2 = "mm1";
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
@@ -1801,7 +1801,7 @@ char *result = hGetDb();
 
 if (strstrNoCase(organism, "mouse"))
     {
-    result = "mm2";
+    result = hdbName2;
     }
 else if (strstrNoCase(organism, "zoo"))
     {
@@ -1809,7 +1809,7 @@ else if (strstrNoCase(organism, "zoo"))
     }
 else if (strstrNoCase(organism, "human"))
     {
-    result = "hg12";
+    result = hdbName;
     }
 
 return result;

@@ -1179,7 +1179,7 @@ if (kiTable != NULL)
 	    gotOne = TRUE;
 	    AllocVar(table);
 	    slAddHead(&hgp->tableList, table);
-	    table->name = cloneString("Known Genes");
+	    table->name = cloneString("RefSeq Genes");
 	    }
 	knownInfo = knownInfoLoad(row);
 	AllocVar(pos);
@@ -1289,7 +1289,7 @@ if (rlList != NULL)
     struct hash *hash = newHash(8);
     AllocVar(table);
     slAddHead(&hgp->tableList, table);
-    table->name = cloneString("Known Genes");
+    table->name = cloneString("RefSeq Genes");
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
         /* Don't return duplicate mrna accessions */
