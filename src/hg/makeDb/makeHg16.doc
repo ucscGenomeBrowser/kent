@@ -560,10 +560,6 @@ exit; # don't actually run this like a script :)
 #	/dev/sda1             472G  416G   31G  93% /var/lib/mysql
     # Create the database.
     echo 'create database hg16' | hgsql hg15
-    # make a semi-permanent read-only alias (add this to your .cshrc/.bashrc):
-    #	(I have not seen a use for this in any procedures ? -Hiram)
-    #		alias hg16 mysql -u hguser -phguserstuff -A hg16
-    #	(use 'hgsql hg16' instead)
     # Initialize the relational-mrna and external sequence info tables:
     hgLoadRna new hg16
     # Copy over grp table (for track grouping) from another database:
@@ -7433,9 +7429,24 @@ color 255,64,64
 type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
     #	Note the useScore item.  This colors plus strand items in black
-    #	and minus strand items in gray.  A rarely used option.
+    #	and minus strand items in gray (because of the assignment of
+    #	score to these two different items).  A rarely used option.
     #	This same track is in Mm4 and Ce1 too.  Added
     #	findBedPos(query, hgp, "miRNA");
     #	to lib/hgFind.c to allow searching for these items.
 
 
+LOAD RNAGENES (WORKING - 2004-03-09 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/hg16/bed/rnaGene
+    cd /cluster/data/hg16/bed/rnaGene
+    wget --timestamping \
+	ftp://ftp.genetics.wustl.edu/pub/eddy/annotation/human-hg16/*
+
+    grep -v '^#' ncrna-hg16-mito.gff | sed -e "s/^NT_999999/chrM/" > mito.gff
+    grep -v '^#' ncrna-hg16-chrom.gff > chrom.gff
+    cat chrom.gff mito.gff > all.gff
+
+    echo 'drop table hgRnaGene;' | hgsql hg16
+    hgsql hg16 < ~/kent/src/hg/lib/rnaGene.sql
+    hgRnaGenes hg16 all.gff
