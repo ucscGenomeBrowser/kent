@@ -13,7 +13,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.6 2004/07/13 11:51:22 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.7 2004/07/13 22:40:51 kent Exp $";
 
 
 void usage()
@@ -56,6 +56,14 @@ hvPrintf(format, args);
 va_end(args);
 }
 
+void hPrintSpaces(int count)
+/* Print a number of non-breaking spaces. */
+{
+int i;
+for (i=0; i<count; ++i)
+    hPrintf("&nbsp;");
+}
+
 static void vaHtmlOpen(char *format, va_list args)
 /* Start up a page that will be in html format. */
 {
@@ -63,7 +71,7 @@ puts("Content-Type:text/html\n");
 cartVaWebStart(cart, format, args);
 }
 
-static void htmlOpen(char *format, ...)
+void htmlOpen(char *format, ...)
 /* Start up a page that will be in html format. */
 {
 va_list args;
@@ -71,7 +79,7 @@ va_start(args, format);
 vaHtmlOpen(format, args);
 }
 
-static void htmlClose()
+void htmlClose()
 /* Close down html format page. */
 {
 cartWebEnd();
@@ -99,7 +107,7 @@ static void textAbortHandler()
 exit(-1);
 }
 
-static void textOpen()
+void textOpen()
 /* Start up page in text format. (No need to close this). */
 {
 printf("Content-Type: text/plain\n\n");
@@ -109,7 +117,7 @@ pushAbortHandler(textAbortHandler);
 
 /* --------- Utility functions --------------------- */
 
-struct region *getRegionsFullGenome()
+static struct region *getRegionsFullGenome()
 /* Get a region list that covers all of each chromosome. */
 {
 struct slName *chrom, *chromList = hAllChromNames();
@@ -126,7 +134,7 @@ return regionList;
 }
 
 struct region *getRegions(struct sqlConnection *conn)
-/* Get list of regions. */
+/* Consult cart to get list of regions to work on. */
 {
 char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 struct region *regionList = NULL, *region;
@@ -148,6 +156,26 @@ else if (sameString(regionType, "range"))
 else
     errAbort("Sorry, don't understand %s type region yet", regionType);
 return regionList;
+}
+
+char *tableForTrack(struct trackDb *track)
+/* Return table name (for first chromosome if split) 
+ * associated with track.  You can freeMem this when done. */
+{
+struct hTableInfo *hti = hFindTableInfo(NULL, track->tableName);
+if (!hti->isSplit)  /* easy case. */
+    return cloneString(track->tableName);
+else
+    {
+    char *chrom;
+    char buf[256];
+    if (track->restrictCount > 0)
+        chrom = track->restrictList[0];
+    else
+        chrom = hDefaultChrom();
+    safef(buf, sizeof(buf), "%s_%s", chrom, track->tableName);
+    return cloneString(buf);
+    }
 }
 
 
@@ -664,11 +692,9 @@ void doOutPrimaryTable(struct trackDb *track,
 	struct sqlConnection *conn)
 /* Dump out primary table. */
 {
-struct hTableInfo *hti;
 struct region *region, *regionList = NULL;
 textOpen();
 regionList = getRegions(conn);
-hti = hFindTableInfo(NULL, track->tableName);
 
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -702,14 +728,6 @@ for (region = regionList; region != NULL; region = region->next)
 	hPrintf("%s\n", row[lastCol]);
 	}
     }
-}
-
-void doOutSchema(struct trackDb *track, struct sqlConnection *conn)
-/* Dump schema. */
-{
-htmlOpen("Local Schema for %s", track->shortLabel);
-uglyf("Not much here yet");
-htmlClose();
 }
 
 void doTopSubmit(struct sqlConnection *conn)
@@ -769,7 +787,7 @@ char *excludeVars[] = {"Submit", "submit", NULL};
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks. */
 {
-oldVars = hashNew(8);
+oldVars = hashNew(10);
 
 /* Sometimes we output HTML and sometimes plain text; let each outputter 
  * take care of headers instead of using a fixed cart*Shell(). */
