@@ -9,31 +9,31 @@ rat Jun. 2003 (rn3), and human Jul. 2003 (hg16) assemblies.</P>
     <P>A phylo-HMM is a generative probabilistic model that describes both
     the process of DNA substitution along the branches of a phylogeny at
     each site in an alignment, and changes in the mode of this process from
-    one site to the next (Felsenstein and Churchill, 1996; Yang, 1995;
-    Siepel and Haussler, 2003; Siepel and Haussler, submitted).  Each of
+    one site to the next (Felsenstein and Churchill [1996], Yang [1995],
+    Siepel and Haussler [2003], Siepel and Haussler [submitted]).  Each of
     the states of a phylo-HMM may be associated with a different
-    phylogenetic model, describing both a set of overall <em>rates</em> of
-    substitution along the branches of the phylogeny, and a particular
+    phylogenetic model, describing both the overall <em>rates</em> of
+    substitution along the branches of the phylogeny, and the 
     <em>pattern</em> of substitution (relative rates for all pairs of
     nucleotides).</P>
 
     <P> In this case, the pattern of substitution is assumed to be the same
-    for all states, but the overall rates are allowed to differ.  The model is
+    for all states, but the rates are allowed to differ.  The model is
     similar to the one proposed by Felsenstein and Churchill (1996).  There
     are <em>k</em> states corresponding to <em>k</em> "rate categories,"
     each of which is defined by a scaling constant that is applied
-      uniformly to all branches of the tree.  The transition
+      uniformly to the branches of the tree.  The transition
     probabilities between states allow for autocorrelation of substitution
     rates---i.e., for adjacent sites to tend to exhibit similar overall
     substitution rates.  A single parameter lambda describes the degree of
     autocorrelation and defines all transition probabilities.
     Here, we have estimated the rate constants from the data, similarly to
-    Yang (1995) (see also Siepel and Haussler, 2003), but have allowed
+    Yang (1995) (see Siepel and Haussler [2003]), but have allowed
     lambda to be treated as a tuning parameter. </P>
 
     <P> A phylogenetic model was fitted by maximum likelihood to the
     human/mouse/rat alignments using the REV substitution model and the
-    discrete gamma model for rate variation (Yang, 1994; <em>k</em>=10 rate
+    discrete gamma model for rate variation (Yang [1994]; <em>k</em>=10 rate
     categories were used).  All sites in the alignments were included in
     the analysis and alignment gaps were treated as missing data.  Branch
     lengths were estimated as follows, in units of expected substitutions
@@ -47,8 +47,7 @@ rat Jun. 2003 (rn3), and human Jul. 2003 (hg16) assemblies.</P>
       value 4.4. Next, a 10-state phylo-HMM was derived from the estimated
       phylogenetic model (with lambda = 0.9), and used to compute the
       posterior probability that each site was "generated" by the state
-      having the smallest rate constant (see Siepel and Haussler [2003] and
-      Siepel and Haussler [submitted] for details).  It is these posterior
+      having the smallest rate constant.  It is these posterior
       probabilities that are plotted for the track.  Because of the way the
       rate categories are defined, the plotted values can be thought of as
       representing the posterior probability that each site is among the
