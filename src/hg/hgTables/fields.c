@@ -267,8 +267,8 @@ cgiMakeHiddenVar(hgtaDatabase, database);
 cgiMakeHiddenVar(hgtaTable, table);
 
 showTableFields(joiner, database, table);
-showLinkedTables(joiner, dbTableNew(database, table));
 showLinkedFields(joiner);
+showLinkedTables(joiner, dbTableNew(database, table));
 
 /* clean up. */
 hPrintf("</FORM>");
@@ -281,7 +281,7 @@ void doSelectFieldsMore()
 {
 char *db = cartString(cart, hgtaDatabase);
 char *table = cartString(cart, hgtaTable);
-doBigSelectPage(database, table);
+doBigSelectPage(db, table);
 }
 
 void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn)

@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.3 2004/07/15 01:06:36 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.4 2004/07/16 16:18:59 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -299,8 +299,8 @@ hPrintf("<TABLE BORDER=0>\n");
         {outPrimaryTable, outSequence, outSelectedFields, outSchema,
 	 outStats, outBed, outGtf, outCustomTrack };
     static char *labels[] =
-        {"primary table", "sequence", "selected fields", "schema",
-	 "statistics", "BED", "GTF", "custom track"};
+        {"all fields from primary table", "sequence", "selected fields from related tables", "schema (database organization)",
+	 "statistics", "BED - Browser Extensible Data", "GTF - Gene Transfer Format", "custom track"};
     hPrintf("<TR><TD><B>output:</B>\n");
     cgiMakeDropListFull(hgtaOutputType, labels, symbols, 
     	ArraySize(symbols), outputType, NULL);
@@ -313,6 +313,8 @@ hPrintf("<TABLE BORDER=0>\n");
     cgiMakeButton(hgtaDoTopSubmit, "Submit");
     hPrintf(" ");
     cgiMakeButton(hgtaDoIntersect, "Intersect");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoTest, "Test");
     hPrintf("</TD></TR>\n");
     }
 

@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.17 2004/07/15 05:15:06 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.18 2004/07/16 16:18:59 kent Exp $";
 
 
 void usage()
@@ -117,10 +117,10 @@ char *hLine =
 "---------------------------------------------------------------------------\n";
 if (format != NULL) {
     fflush(stdout);
-    fprintf(stderr, "%s", hLine);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
-    fprintf(stderr, "%s", hLine);
+    fprintf(stdout, "%s", hLine);
+    vfprintf(stdout, format, args);
+    fprintf(stdout, "\n");
+    fprintf(stdout, "%s", hLine);
     }
 }
 
@@ -339,14 +339,6 @@ if (hti == NULL)
 return(hti);
 }
 
-void doTest(struct sqlConnection *conn)
-/* Put up a page to see what happens. */
-{
-textOpen();
-hPrintf("%s\n", cartUsualString(cart, "test", "n/a"));
-hPrintf("All for now\n");
-}
-
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
     struct grp *group)
 /* Find named track that is in group (NULL for any group).
@@ -513,10 +505,49 @@ for (region = regionList; region != NULL; region = region->next)
     if (!hti->chromField[0])
         break;	/* No need to iterate across regions in this case. */
     }
+// TODO: - remind them when they got zero it could be from region being
+// small as well.
 if (outCount == 0 && idHash != NULL)
     hPrintf("No items in table matched identifier list.\n");
 hashFree(&idHash);
 }
+
+struct keyedRow *fetchKeyedFields(char *table, struct sqlConnection *conn,
+	char *fields, char *keyIn, struct hash *keyInHash, 
+	struct slName *keyOutList)
+/* This returns a list of keyedRows filtering out those that
+ * don't match on keyIn.  */
+{
+int outKeyCount = slCount(keyOutList);
+uglyf("fetchKeyFields from %s,  fields %s, keyIn %s, outKeyCount %d<BR>\n",
+	table, fields, keyIn, outKeyCount);
+return NULL;
+}
+
+void doTest(struct sqlConnection *conn)
+/* Put up a page to see what happens. */
+{
+struct slName *keysOut = NULL, *key;
+struct hash *keyInHash = NULL;
+textOpen();
+
+/* Put together output key list. */
+key = slNameNew("name");
+slAddHead(&keysOut, key);
+key = slNameNew("id");
+slAddHead(&keysOut, key);
+
+/* Put together input key hash. */
+keyInHash = hashNew(0);
+hashAdd(keyInHash, "5263", NULL);
+hashAdd(keyInHash, "5264", NULL);
+hashAdd(keyInHash, "5265", NULL);
+hashAdd(keyInHash, "5266", NULL);
+
+fetchKeyedFields("ensGene", conn, "name,chrom,id,strand", 
+	"id", keyInHash, keysOut);
+}
+
 
 void doOutPrimaryTable(struct trackDb *track, 
 	struct sqlConnection *conn)

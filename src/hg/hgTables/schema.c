@@ -17,13 +17,14 @@
 #include "asParse.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.10 2004/07/15 01:06:36 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.11 2004/07/16 16:18:59 kent Exp $";
 
 
 boolean isSqlStringType(char *type)
 /* Return TRUE if it a a stringish SQL type. */
 {
-return strstr(type, "char") || strstr(type, "text") || strstr(type, "blob") ;
+return strstr(type, "char") || strstr(type, "text") 
+	|| strstr(type, "blob") || startsWith("enum", type);
 }
 
 boolean isSqlNumType(char *type)
@@ -60,8 +61,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!tooBig)
 	{
 	hPrintf(" <TD>");
-	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
-	    ! sameString(row[1], "longblob"))
+	if (isSqlStringType(row[1]) && !sameString(row[1], "longblob"))
 	    {
 	    hPrintf("<A HREF=\"../cgi-bin/hgTables");
 	    hPrintf("?%s", cartSidUrlString(cart));
@@ -146,7 +146,6 @@ sqlFreeResult(&sr);
 /* Get some sample fields. */
 safef(query, sizeof(query), "select * from %s limit %d", table, sampleCount);
 sr = sqlGetResult(conn, query);
-int sqlCountColumns(struct sqlResult *sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<TR>");
