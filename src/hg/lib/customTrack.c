@@ -168,8 +168,8 @@ if (wordCount > 4)
 if (wordCount > 5)
      {
      strncpy(bed->strand, row[5], sizeof(bed->strand));
-     if (bed->strand[0] != '+' && bed->strand[0] != '-')
-	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
+     if (bed->strand[0] != '+' && bed->strand[0] != '-' && bed->strand[0] != '.')
+	  errAbort("line %d of custom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
      bed->thickStart = needNum(row[6], lineIx);
