@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.67 2004/12/23 22:43:20 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.68 2005/01/03 19:36:07 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -115,6 +115,7 @@ puts(
     "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
 
 if (withLogo)
+    {
     puts("<TR><TH COLSPAN=1 ALIGN=\"left\">");
     if (isEncode)
 	{
@@ -127,10 +128,9 @@ if (withLogo)
 	{
 	puts("<IMG SRC=\"/images/title.jpg\">");
 	}
-	
     puts("</TH></TR>" "\n"
-    	"" "\n"
-    );
+    	 "" "\n" );
+    }
 
 if (NULL != theCart)
     {
