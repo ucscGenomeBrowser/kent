@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.701 2004/07/26 17:59:53 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.702 2004/07/26 19:02:55 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1847,7 +1847,8 @@ if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
 	 "select normScore from %s where id = '%s'", foundTable, item);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-	printf("<B>Normalized Score:</B> %1.0f<BR>\n", atof(row[0]));
+	printf("<B>Normalized Score:</B> %1.0f (bases matched: %d)<BR>\n",
+	    atof(row[0]), (int) (chain->score/atof(row[0])));
     sqlFreeResult(&sr);
     freeMem(foundTable);
     }
