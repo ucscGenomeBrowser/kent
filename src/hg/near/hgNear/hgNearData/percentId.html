@@ -4,9 +4,9 @@ between each gene and the selected gene.
 
 <H3>Method</H3>
 All known splice variants of all known $organism genes are
-put into a Blast protein database using the Formatdb program.
+put into a <tt>blast</tt> protein database using the <tt>formatdb</tt> program.
 This database is then searched with each known gene using
-version 2.2.5 of the NCBI Blastall program with the following
+version 2.2.5 of the NCBI <tt>blastall</tt> program with the following
 flags:
 <PRE>
  -p blastp -e 0.01 -m 8 -b 1000

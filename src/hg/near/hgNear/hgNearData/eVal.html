@@ -1,5 +1,5 @@
 <H3>Description</H3>
-This column shows the Blastp e-value (expectation value) between each gene 
+This column shows the <tt>blastp</tt> e-value (expectation value) between each gene 
 and the selected gene. The greater the similarity of two proteins, the lower 
 the e-value is.  Identical long proteins have an e-value of 0.
 <P>
@@ -10,9 +10,9 @@ this good would occur merely by chance.
 
 <H3>Method</H3>
 All known splice variants of all known $organism genes are
-put into a Blast protein database using the Formatdb program.
+put into a <tt>blast</tt> protein database using the <tt>formatdb</tt> program.
 This database is then searched with each known gene using
-version 2.2.5 of the NCBI Blastall program with the following
+version 2.2.5 of the NCBI <tt>blastall</tt> program with the following
 flags:
 <PRE>
  -p blastp -e 0.01 -m 8 -b 1000
