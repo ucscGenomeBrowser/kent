@@ -17,7 +17,7 @@
 #include "sig.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: wormdna.c,v 1.8 2003/11/15 21:14:09 kent Exp $";
+static char const rcsid[] = "$Id: wormdna.c,v 1.9 2004/05/19 23:14:23 hiram Exp $";
 
 static char *jkwebDir = NULL;
 
@@ -551,7 +551,7 @@ tolowers(name);
 /* Open synonym file and loop through each line of it */
 sprintf(synFileName, "%ssyn", wormFeaturesDir());
 if ((synFile = fopen(synFileName, "r")) == NULL)
-    errAbort("Can't find synonym file %s.\n", synFileName);
+    errAbort("Can't find synonym file '%s'. (errno: %d)\n", synFileName, errno);
 while (fgets(lineBuf, ArraySize(lineBuf), synFile))
     {
     /* If first part of line matches chop up line. */
