@@ -12,6 +12,7 @@ struct memHandler
     struct memHandler *next;
     void * (*alloc)(size_t size);
     void (*free)(void *vpt);
+    void * (*realloc)(void* vpt, size_t size);
     };
 
 struct memHandler *pushMemHandler(struct memHandler *newHandler);
@@ -24,7 +25,7 @@ struct memHandler *popMemHandler();
 void setDefaultMemHandler();
 /* Sets memHandler to the default. */
 
-void pushCarefulMemHandler(long maxAlloc);
+void pushCarefulMemHandler(size_t maxAlloc);
 /* Push the careful (paranoid, conservative, checks everything)
  * memory handler  top of the memHandler stack and use it. */
 
