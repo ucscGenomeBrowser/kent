@@ -33,22 +33,23 @@ struct chainNet
     struct chainNet *next;
     char *name;			/* Chromosome name. */
     int size;			/* Chromosome size. */
-    struct fill *fillList;	/* Top level fills. */
+    struct cnFill *fillList;	/* Top level fills. */
     struct hash *nameHash; 	/* Hash of all fill->qName names. */
     };
 
-struct fill
+struct cnFill
 /* Filling sequence or a gap. */
     {
 	/* Required fields */
-    struct fill *next;	   /* Next in list. */
+    struct cnFill *next;	   /* Next in list. */
     int tStart, tSize;	   /* Range in target chromosome. */
     char *qName;	   /* Other chromosome (not allocated here) */
     char qStrand;	   /* Orientation + or - in other chrom. */
     int qStart,	qSize;	   /* Range in query chromosome. */
-    struct fill *children; /* List of child gaps. */
+    struct cnFill *children; /* List of child gaps. */
 	/* Optional fields. */
     int chainId;	   /* Chain id.  0 for a gap. */
+    double score;  /* Score of associated chain. */
     int tN;	   /* Count of N's in target chromosome or -1 */
     int qN;	   /* Count of N's in query chromosome or -1 */
     int tR;	   /* Count of repeats in target chromosome or -1 */
@@ -61,10 +62,10 @@ struct fill
     int tTrf;	   /* Count of simple repeats, period 12 or less. */
     };
 
-struct fill *fillNew()
+struct cnFill *cnFillNew()
 /* Return fill structure with some basic stuff filled in */
 {
-struct fill *fill;
+struct cnFill *fill;
 AllocVar(fill);
 fill->tN = fill->qN = fill->tR = fill->qR = 
 	fill->tNewR = fill->qNewR = fill->tOldR = fill->tNewR = 
@@ -72,29 +73,29 @@ fill->tN = fill->qN = fill->tR = fill->qR =
 return fill;
 }
 
-void fillFreeList(struct fill **pList);
+void cnFillFreeList(struct cnFill **pList);
 
-void fillFree(struct fill **pFill)
+void cnFillFree(struct cnFill **pFill)
 /* Free up a fill structure and all of it's children. */
 {
-struct fill *fill = *pFill;
+struct cnFill *fill = *pFill;
 if (fill != NULL)
     {
     if (fill->children != NULL)
-        fillFreeList(&fill->children);
+        cnFillFreeList(&fill->children);
     freez(pFill);
     }
 }
 
-void fillFreeList(struct fill **pList)
+void cnFillFreeList(struct cnFill **pList)
 /* Free up a list of fills. */
 {
-struct fill *el, *next;
+struct cnFill *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    fillFree(&el);
+    cnFillFree(&el);
     }
 *pList = NULL;
 }
@@ -106,7 +107,7 @@ struct chainNet *net = *pNet;
 if (net != NULL)
     {
     freeMem(net->name);
-    fillFreeList(&net->fillList);
+    cnFillFreeList(&net->fillList);
     hashFree(&net->nameHash);
     freez(pNet);
     }
@@ -126,15 +127,15 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct fill *rNetRead(struct chainNet *net, struct lineFile *lf)
+struct cnFill *cnFillRead(struct chainNet *net, struct lineFile *lf)
 /* Recursively read in file. */
 {
 static char *words[64];
 int i, wordCount;
 char *line;
 int d, depth = 0;
-struct fill *fillList = NULL;
-struct fill *fill = NULL;
+struct cnFill *fillList = NULL;
+struct cnFill *fill = NULL;
 enum {basicFields = 7};
 
 for (;;)
@@ -152,13 +153,13 @@ for (;;)
     if (d > depth)
         {
 	lineFileReuse(lf);
-	fill->children = rNetRead(net, lf);
+	fill->children = cnFillRead(net, lf);
 	}
     else
         {
 	wordCount = chopLine(line, words);
 	lineFileExpectAtLeast(lf, basicFields, wordCount);
-	fill = fillNew();
+	fill = cnFillNew();
 	slAddHead(&fillList, fill);
 	fill->tStart = lineFileNeedNum(lf, words, 1);
 	fill->tSize = lineFileNeedNum(lf, words, 2);
@@ -169,29 +170,36 @@ for (;;)
 	for (i=basicFields; i<wordCount; i += 2)
 	    {
 	    char *name = words[i];
-	    int val = lineFileNeedNum(lf, words, i+1);
-	    if (sameString(name, "id"))
-	        fill->chainId = val;
-	    else if (sameString(name, "tN"))
-	        fill->tN = val;
-	    else if (sameString(name, "qN"))
-	        fill->qN = val;
-	    else if (sameString(name, "tR"))
-	        fill->tR = val;
-	    else if (sameString(name, "qR"))
-	        fill->qR = val;
-	    else if (sameString(name, "tNewR"))
-	        fill->tNewR = val;
-	    else if (sameString(name, "qNewR"))
-	        fill->qNewR = val;
-	    else if (sameString(name, "tOldR"))
-	        fill->tOldR = val;
-	    else if (sameString(name, "qOldR"))
-	        fill->qOldR = val;
-	    else if (sameString(name, "tTrf"))
-	        fill->tTrf = val;
-	    else if (sameString(name, "qTrf"))
-	        fill->qTrf = val;
+
+	    if (sameString(name, "score"))
+	        fill->score = atof(words[i+1]);
+	    else
+		{
+		/* Cope with integer values. */
+		int iVal = lineFileNeedNum(lf, words, i+1);
+		if (sameString(name, "id"))
+		    fill->chainId = iVal;
+		else if (sameString(name, "tN"))
+		    fill->tN = iVal;
+		else if (sameString(name, "qN"))
+		    fill->qN = iVal;
+		else if (sameString(name, "tR"))
+		    fill->tR = iVal;
+		else if (sameString(name, "qR"))
+		    fill->qR = iVal;
+		else if (sameString(name, "tNewR"))
+		    fill->tNewR = iVal;
+		else if (sameString(name, "qNewR"))
+		    fill->qNewR = iVal;
+		else if (sameString(name, "tOldR"))
+		    fill->tOldR = iVal;
+		else if (sameString(name, "qOldR"))
+		    fill->qOldR = iVal;
+		else if (sameString(name, "tTrf"))
+		    fill->tTrf = iVal;
+		else if (sameString(name, "qTrf"))
+		    fill->qTrf = iVal;
+		}
 	    }
 	}
     }
@@ -199,10 +207,10 @@ slReverse(&fillList);
 return fillList;
 }
 
-static void rChromNetWrite(struct fill *fillList, FILE *f, int depth)
+void cnFillWrite(struct cnFill *fillList, FILE *f, int depth)
 /* Recursively write out fill list. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     char *type = (fill->chainId ? "fill" : "gap");
@@ -211,6 +219,8 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     	fill->qName, fill->qStrand, fill->qStart, fill->qSize);
     if (fill->chainId)
         fprintf(f, " id %d", fill->chainId);
+    if (fill->score > 0)
+        fprintf(f, " score %1.0f", fill->score);
     if (fill->tN >= 0)
         fprintf(f, " tN %d", fill->tN);
     if (fill->qN >= 0)
@@ -233,7 +243,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fprintf(f, " qTrf %d", fill->qTrf);
     fputc('\n', f);
     if (fill->children)
-        rChromNetWrite(fill->children, f, depth+1);
+        cnFillWrite(fill->children, f, depth+1);
     }
 }
 
@@ -241,21 +251,7 @@ void chromNetWrite(struct chainNet *net, FILE *f)
 /* Write out chain net. */
 {
 fprintf(f, "net %s %d\n", net->name, net->size);
-rChromNetWrite(net->fillList, f, 1);
-}
-
-int fillForestSize(struct fill *fillList)
-/* Count elements in fill forest (list of fills) */
-{
-struct fill *fill;
-int count = 0;
-for (fill = fillList; fill != NULL; fill = fill->next)
-    {
-    ++count;
-    if (fill->children != NULL)
-        count += fillForestSize(fill->children);
-    }
-return count;
+cnFillWrite(net->fillList, f, 1);
 }
 
 struct chainNet *chromNetRead(struct lineFile *lf)
@@ -276,7 +272,7 @@ lineFileExpectAtLeast(lf, 3, wordCount);
 net->name = cloneString(words[1]);
 net->size = lineFileNeedNum(lf, words, 2);
 net->nameHash = hashNew(6);
-net->fillList = rNetRead(net, lf);
+net->fillList = cnFillRead(net, lf);
 return net;
 }
 
@@ -511,10 +507,10 @@ slReverse(&chromList);
 *retList = chromList;
 }
 
-void tAddN(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddN(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 /* Add tN's to all gaps underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     int s = fill->tStart;
@@ -524,10 +520,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void qAddN(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddN(struct chainNet *net, struct cnFill *fillList, struct hash *qChromHash)
 /* Add qN's to all gaps underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
@@ -539,10 +535,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void tAddR(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddR(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 /* Add t repeats's to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     int s = fill->tStart;
@@ -552,10 +548,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void qAddR(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddR(struct chainNet *net, struct cnFill *fillList, struct hash *qChromHash)
 /* Add q repeats to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
@@ -566,10 +562,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void tAddNewR(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddNewR(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 /* Add t new repeats's to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     int s = fill->tStart;
@@ -579,10 +575,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void qAddNewR(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddNewR(struct chainNet *net, struct cnFill *fillList, struct hash *qChromHash)
 /* Add q new repeats to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
@@ -593,10 +589,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void tAddOldR(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddOldR(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 /* Add t new repeats's to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     int s = fill->tStart;
@@ -606,10 +602,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void qAddOldR(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddOldR(struct chainNet *net, struct cnFill *fillList, struct hash *qChromHash)
 /* Add q new repeats to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
@@ -620,10 +616,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void tAddTrf(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddTrf(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 /* Add t simple repeats's to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     int s = fill->tStart;
@@ -633,10 +629,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void qAddTrf(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddTrf(struct chainNet *net, struct cnFill *fillList, struct hash *qChromHash)
 /* Add q new repeats to all things underneath fillList. */
 {
-struct fill *fill;
+struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
