@@ -410,7 +410,7 @@ exit; # don't actually run this like a script :)
     pslSort dirs raw.psl /tmp psl
     pslReps -minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.001 raw.psl \
       contig.psl /dev/null
-    liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
+    liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft warn contig.psl
     pslSortAcc nohead chrom /tmp all_refSeq.psl
     pslCat -dir chrom > refSeqAli.psl
     # After the database has been created, go to "LOAD REFGENE" below...
@@ -559,8 +559,8 @@ exit; # don't actually run this like a script :)
     cd ~/hg15
     #- Build the .zip files
     ./jkStuff/zipAll.sh |& tee zipAll.log
->>>DONE TO HERE -JK
     #- Look at zipAll.log to make sure all file lists look reasonable.  
+>>>DONE TO HERE -JK
     #- Check zip file integrity:
     mkdir zip
     mv *.zip* zip
@@ -671,7 +671,7 @@ exit; # don't actually run this like a script :)
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
-# MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 4/12/2002 MS&JK)
     # Make sure that /scratch/hg/gs.16/build33/trfFa is loaded with NT_*.fa 
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
     # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
@@ -701,10 +701,9 @@ mrna is done against unmasked 041203
     # Process mRNA and EST alignments into near best in genome.
     cd ~/hg15/bed/mrna
     pslSort dirs raw.psl /tmp psl
->>> DONE TO HERE (left sorting overnight) -jk
     pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
       /dev/null
-    liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
+    liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft warn contig.psl
     pslSortAcc nohead chrom /tmp all_mrna.psl
 
     ssh eieio
@@ -712,7 +711,7 @@ mrna is done against unmasked 041203
     pslSort dirs raw.psl /tmp/psl psl
     pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
       /dev/null
-    liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
+    liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft warn contig.psl
     pslSortAcc nohead chrom /cluster/store3/tmp all_est.psl
 
     # Load mRNA alignments into database. 
@@ -739,7 +738,7 @@ mrna is done against unmasked 041203
     # Sequence info should have already been loaded into database (PRELOAD)
 
 
-# SPLICED ESTS (INTRONEST) (TO DO)
+# SPLICED ESTS (INTRONEST) (IN PROGRESS)
     # Create subset of ESTs with introns and load into database.
     ssh eieio
     cd ~/hg15
@@ -747,6 +746,7 @@ mrna is done against unmasked 041203
     ssh hgwdev
     cd ~/hg15/bed/est/intronEst
     hgLoadPsl hg15 *.psl
+>>> DONE TO HERE (waiting for all EST load to finish) -jk
 
 
 # ESTORIENTINFO, MRNAORIENTINFO, GENE BOUNDS (RNACLUSTER) (TO DO)
@@ -2441,7 +2441,7 @@ o - Process refFull alignments into near best in genome.
       cd refFull
       pslSort dirs raw.psl /tmp psl/*
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
-      liftUp -nohead all_refFull.psl ../../jkStuff/liftAll.lft carry contig.psl
+      liftUp -nohead all_refFull.psl ../../jkStuff/liftAll.lft warn contig.psl
       pslSortAcc nohead chrom /tmp all_refFull.psl
 
 o - Load refFull alignments into database
