@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.18 2004/09/11 03:29:37 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.19 2004/09/13 16:25:41 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -656,6 +656,7 @@ if ((valuesMatched > 1) && (1 == regionCount))
 #endif
 
 wds->freeStats(wds);
+wiggleDataStreamFree(&wds);
 
 wigFetchTime = clock1000() - startTime;
 webNewSection("Region and Timing Statistics");
@@ -666,5 +667,4 @@ numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
 hTableEnd();
 htmlClose();
-wiggleDataStreamFree(&wds);
 }	/*	void doSummaryStatsWiggle(struct sqlConnection *conn)	*/
