@@ -137,8 +137,9 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 #include "HInv.h"
+#include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.642 2004/05/25 18:50:18 donnak Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.643 2004/05/26 22:37:47 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14111,6 +14112,44 @@ printTrackHtml(tdb);
 }
 
 
+void doBed6FloatScore(struct trackDb *tdb, char *item)
+/* Handle click in BED 4+ track that's like BED 6 but with floating pt score */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char table[64];
+boolean hasBin;
+struct bed6FloatScore *b6;
+struct dyString *query = newDyString(512);
+char **row;
+boolean firstTime = TRUE;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       table, seqName);
+hAddBinToQuery(winStart, winEnd, query);
+dyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    b6 = bed6FloatScoreLoad(row+hasBin);
+    bedPrintPos((struct bed *)b6, 4);
+    printf("<B>Score:</B> %f<BR>\n", b6->score);
+    printf("<B>Strand:</B> %s<BR>\n", b6->strand);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -14809,6 +14848,10 @@ else if (startsWith("zdobnov", track))
 else if (startsWith("deweySynt", track))
     {
     doDeweySynt(tdb, item);
+    }
+else if (startsWith("eponine", track))
+    {
+    doBed6FloatScore(tdb, item);
     }
 else if (tdb != NULL)
     {
