@@ -13,7 +13,7 @@ import org.xml.sax.*;
  * Utilities for getting genome database info 
  *
  */
-public class QAWebLibrary {
+public class HgTracks {
 
  /**
   * Zooms out (for now only out) and submits
@@ -136,7 +136,7 @@ public class QAWebLibrary {
    * @param table    the table to check
    * @param track    the track to check (same as table)
    */
-   public static void hggene(DBInfo dbinfo, String machine, String assembly,
+   public static void hggene(HGDBInfo dbinfo, String machine, String assembly,
                             String track, String table) {
 
     WebConversation wc = new WebConversation();
@@ -185,7 +185,7 @@ public class QAWebLibrary {
    * @param assembly the genome to check
    * @param table    the table to check
    */
-   public static void hggene(DBInfo dbinfo, String machine, String assembly,                            String table) {
+   public static void hggene(HGDBInfo dbinfo, String machine, String assembly,                            String table) {
 
     WebConversation wc = new WebConversation();
 
@@ -270,7 +270,7 @@ public class QAWebLibrary {
    * @param assembly The genome to check
    * @param table    The table to check
    */
-   public static void pbgene(DBInfo dbinfo, String machine, String assembly,                            String table) {
+   public static void pbgene(HGDBInfo dbinfo, String machine, String assembly,                            String table) {
 
     WebConversation wc = new WebConversation();
 
@@ -449,15 +449,15 @@ public class QAWebLibrary {
       // display mode
       // That is, it returns, throwing an exception
       form.setParameter(track, displayMode);
-      QAWebLibrary.refreshHGTracks(page);
+      HgTracks.refreshHGTracks(page);
       page = wc.getCurrentPage();
       ArrayList links1 = 
-        QAWebLibrary.getMatchingLinks(page, "hgc", "DNA");
-      QAWebLibrary.checkLinks(wc, links1);
+        HgTracks.getMatchingLinks(page, "hgc", "DNA");
+      HgTracks.checkLinks(wc, links1);
       
       // zoom out 10x
       System.out.println("Calling zoom");
-      QAWebLibrary.zoom(page, 3);
+      HgTracks.zoom(page, 3);
       // System.out.println("Get page after zoom");
       page = wc.getCurrentPage();
       // String text = page.getText();
@@ -469,20 +469,20 @@ public class QAWebLibrary {
 
       // get and check the links that have hgc in them, but not DNA
       ArrayList links2 = 
-        QAWebLibrary.getMatchingLinks(page, "hgc", "DNA");
+        HgTracks.getMatchingLinks(page, "hgc", "DNA");
       // System.out.println("Checking links");
-      QAWebLibrary.checkLinks(wc, links2);
+      HgTracks.checkLinks(wc, links2);
 
       // zoom out 10x again
       System.out.println("Calling zoom again");
-      QAWebLibrary.zoom(page, 3);
+      HgTracks.zoom(page, 3);
       // System.out.println("Get page after zoom");
       page = wc.getCurrentPage();
       // System.out.println("Reading for matching links");
       ArrayList links3 = 
-        QAWebLibrary.getMatchingLinks(page, "hgc", "DNA");
+        HgTracks.getMatchingLinks(page, "hgc", "DNA");
       // System.out.println("Checking links");
-      QAWebLibrary.checkLinks(wc, links3);
+      HgTracks.checkLinks(wc, links3);
     }
   }
 
@@ -749,14 +749,14 @@ public class QAWebLibrary {
       // page = wc.getResponse(req);
 
       // switch to "hide all" mode
-      // QAWebLibrary.hideAllHGTracks(page);
+      // HgTracks.hideAllHGTracks(page);
     
       // get the page again
       // page = wc.getCurrentPage();
 
       // turn off base position track control 
-      QAWebLibrary.turnOffBasePositionHGTracks(page);
-      QAWebLibrary.refreshHGTracks(page);
+      HgTracks.turnOffBasePositionHGTracks(page);
+      HgTracks.refreshHGTracks(page);
 
       // get the page again
       page = wc.getCurrentPage();
@@ -769,7 +769,7 @@ public class QAWebLibrary {
       for (int i = 0; i < paramarray.length; i++) {
         if(paramarray[i].equals(trackContainer.trackcontrol)) {
           form.setParameter(trackContainer.trackcontrol, "full");
-          QAWebLibrary.refreshHGTracks(page);
+          HgTracks.refreshHGTracks(page);
           // get the page again
           page = wc.getCurrentPage();
           // get the links

@@ -13,7 +13,7 @@ public class QADBLibrary {
   * 
   *  @return   Database URL with machine, database, user, password
   */
-  public static String jdbcURL(DBInfo dbinfo) {
+  public static String jdbcURL(HGDBInfo dbinfo) {
     String dbURL = "jdbc:mysql://" + dbinfo.machine;
     dbURL = dbURL + "/" + dbinfo.metadatabase;
     dbURL = dbURL + "?user=" + dbinfo.user;
@@ -36,7 +36,7 @@ public class QADBLibrary {
   *  @return   Number of rows that match the condition.
   *  @throws  SQLException
   */
-  public static int rowcount(DBInfo dbinfo, String tablename, String condition) 
+  public static int rowcount(HGDBInfo dbinfo, String tablename, String condition) 
     throws Exception {
 
     String dbURL = jdbcURL(dbinfo);
@@ -67,7 +67,7 @@ public class QADBLibrary {
   *  @return  The field to get 
   *  @throws  New Exception. "No results for query"
   */
-  public static String quickQuery(DBInfo dbinfo, String query) throws Exception {
+  public static String quickQuery(HGDBInfo dbinfo, String query) throws Exception {
 
     String dbURL = jdbcURL(dbinfo);
     Connection con = DriverManager.getConnection(dbURL);
@@ -92,7 +92,7 @@ public class QADBLibrary {
   *  @return  The default position for the database.
   *  @throws  SQLException
   */
-  public static String getDefaultPosition(DBInfo dbinfo, String assembly) 
+  public static String getDefaultPosition(HGDBInfo dbinfo, String assembly) 
                                  throws Exception {
 
      String query = "SELECT defaultPos FROM dbDb WHERE name = "
@@ -112,7 +112,7 @@ public class QADBLibrary {
   *  @return  The trackDb row for the table
   */
   public static TrackDb getTrackDb(String extension,
-                            DBInfo dbinfo, String tablename) {
+                            HGDBInfo dbinfo, String tablename) {
  
     TrackDb td = new TrackDb(tablename);
 
@@ -181,7 +181,7 @@ public class QADBLibrary {
   *
   *  @throws  SQLException
   */
-  public static void insertTrackDb(String extension, DBInfo dbinfo, 
+  public static void insertTrackDb(String extension, HGDBInfo dbinfo, 
                                   TrackDb newtrack) 
                         throws Exception {
 
@@ -267,7 +267,7 @@ public class QADBLibrary {
   *
   *  @return list of ChromInfo objects containing chrom and size fields.
   */
-  public static ArrayList getChromInfo(DBInfo dbinfo) {
+  public static ArrayList getChromInfo(HGDBInfo dbinfo) {
 
     ArrayList chromlist = new ArrayList();
     String dbURL = jdbcURL(dbinfo);
@@ -304,7 +304,7 @@ public class QADBLibrary {
   *
   *  @return       List of all Proteome Gene qName entries.
   */
-  public static ArrayList getPBGenes(DBInfo dbinfo, String table) {
+  public static ArrayList getPBGenes(HGDBInfo dbinfo, String table) {
 
     ArrayList pbList = new ArrayList();
     String    dbURL  = jdbcURL(dbinfo);
@@ -338,7 +338,7 @@ public class QADBLibrary {
   *
   *  @return       List of all Known Genes.  Includes proteinID if pb is true.
   */
-  public static ArrayList getGenes(DBInfo dbinfo, String table, boolean pb) {
+  public static ArrayList getGenes(HGDBInfo dbinfo, String table, boolean pb) {
 
     ArrayList kgList = new ArrayList();
     String    dbURL  = jdbcURL(dbinfo);
@@ -384,7 +384,7 @@ public class QADBLibrary {
 
   /*
   Replaced by method above.  Left here for the moment. -- kuhn
-  public static ArrayList getGenes(DBInfo dbinfo, String table) {
+  public static ArrayList getGenes(HGDBInfo dbinfo, String table) {
 
     ArrayList kgList = new ArrayList();
     String dbURL = jdbcURL(dbinfo);
@@ -424,7 +424,7 @@ public class QADBLibrary {
   *
   *  @return       List of all elemetns fo the column.
   */
-  public static ArrayList getColumn(DBInfo dbinfo, String table, 
+  public static ArrayList getColumn(HGDBInfo dbinfo, String table, 
                              String column, boolean debug) {
 
     String id;

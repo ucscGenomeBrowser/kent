@@ -17,7 +17,7 @@ import java.util.Properties;
  *  Doesn't click into any links.
  *  Doesn't check for HGERROR.  
  *  Prints to .ok, .error, .msg files 
- *                  via QAWebLibrary.hggene.
+ *                  via HgTracks.hggene.
  */
 public class KGGeneCheck {
 
@@ -48,12 +48,12 @@ public class KGGeneCheck {
     String userRead = dbloginread.getProperty("login");
     String passwordRead = dbloginread.getProperty("password");
 
-    DBInfo metadbinfo = 
-      new DBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
+    HGDBInfo metadbinfo = 
+      new HGDBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
 
     if (!metadbinfo.validate()) return;
 
-    DBInfo dbinfo = new DBInfo("localhost", assembly, userRead, passwordRead);
+    HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
     if (!dbinfo.validate()) {
       System.out.println("Cannot connect to database for " + assembly);
       return;
@@ -65,7 +65,7 @@ public class KGGeneCheck {
       hgtracksURL = hgtracksURL + assembly;
       String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
       ArrayList trackList = 
-        QAWebLibrary.getTrackControls(hgtracksURL, defaultPos, debug);
+        HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
       if (debug) {
         int count2 = trackList.size();
         System.out.println("Count of tracks found = " + count2);
@@ -75,7 +75,7 @@ public class KGGeneCheck {
       while (trackIter.hasNext()) {
         String track = (String) trackIter.next();
         if (!track.equals(table)) continue;
-        QAWebLibrary.hggene(dbinfo, machine, assembly, table);
+        HgTracks.hggene(dbinfo, machine, assembly, table);
         System.out.println();
       }
     } catch (Exception e) {

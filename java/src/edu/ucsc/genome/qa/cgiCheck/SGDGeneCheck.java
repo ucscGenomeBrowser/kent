@@ -41,12 +41,12 @@ public class SGDGeneCheck {
     String userRead = dbloginread.getProperty("login");
     String passwordRead = dbloginread.getProperty("password");
 
-    DBInfo metadbinfo = 
-      new DBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
+    HGDBInfo metadbinfo = 
+      new HGDBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
 
     if (!metadbinfo.validate()) return;
 
-    DBInfo dbinfo = new DBInfo("localhost", assembly, userRead, passwordRead);
+    HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
     if (!dbinfo.validate()) {
       System.out.println("Cannot connect to database for " + assembly);
       return;
@@ -58,7 +58,7 @@ public class SGDGeneCheck {
       hgtracksURL = hgtracksURL + assembly;
       String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
       ArrayList trackList = 
-        QAWebLibrary.getTrackControls(hgtracksURL, defaultPos, debug);
+        HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
       if (debug) {
         int count2 = trackList.size();
         System.out.println("Count of tracks found = " + count2);
@@ -68,7 +68,7 @@ public class SGDGeneCheck {
       while (trackIter.hasNext()) {
         String track = (String) trackIter.next();
         if (!track.equals(table)) continue;
-        QAWebLibrary.hggene(dbinfo, machine, assembly, track, table);
+        HgTracks.hggene(dbinfo, machine, assembly, track, table);
         System.out.println();
       }
     } catch (Exception e) {

@@ -1,10 +1,10 @@
 include ../java.mk
 
-CLASS = CartSettings.class ChromInfo.class ChromLibrary.class DBInfo.class \
-DBInfoUtil.class KnownGene.class \
+CLASS = CartSettings.class ChromInfo.class ChromLibrary.class HGDBInfo.class \
+HGDBInfoTest.class KnownGene.class \
 Position.class PositionIterator.class TrackContainer.class \
 TrackControl.class TrackDb.class \
-QADBLibrary.class QAWebLibrary.class QALibrary.class
+QADBLibrary.class HgTracks.class QALibrary.class
 
 all: ${CLASS}
 	@echo done lib

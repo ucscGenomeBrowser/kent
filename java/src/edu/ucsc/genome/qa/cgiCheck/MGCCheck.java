@@ -39,8 +39,8 @@ public class MGCCheck {
     
     // get list of assemblies
 
-    DBInfo metadbinfo = 
-      new DBInfo("genome-testdb", "hgcentralbeta", user, password);
+    HGDBInfo metadbinfo = 
+      new HGDBInfo("genome-testdb", "hgcentralbeta", user, password);
 
     if (!metadbinfo.validate()) return;
 
@@ -63,8 +63,8 @@ public class MGCCheck {
       String startDateString = dateFormat.format(startDate);
       System.out.println("Start time = " + startDateString);
 
-      // create DBInfo for this assembly
-      DBInfo dbinfo = new DBInfo("localhost", assembly, user, password);
+      // create HGDBInfo for this assembly
+      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, user, password);
       if (!dbinfo.validate()) {
         System.out.println("Cannot connect to database for " + assembly);
         continue;
@@ -94,7 +94,7 @@ public class MGCCheck {
         String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
         hgtracksURL = hgtracksURL + assembly;
         ArrayList trackList = 
-          QAWebLibrary.getTrackControls(hgtracksURL, defaultPos, debug);
+          HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
         if (debug) {
           int count2 = trackList.size();
           System.out.println("Count of tracks found = " + count2);
@@ -106,7 +106,7 @@ public class MGCCheck {
           System.out.println(track);
           String mode = "default";
           // String mode = "all";
-          QAWebLibrary.exerciseTrack(machine, assembly, chroms, 
+          HgTracks.exerciseTrack(machine, assembly, chroms, 
                                      track, mode, defaultPos, "full");
           System.out.println();
         }

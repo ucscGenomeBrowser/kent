@@ -3,7 +3,7 @@ import java.sql.*;
 /**
  *  This container holds all database properties 
  */
-public class DBInfo {
+public class HGDBInfo {
 
   // data
   String machine;
@@ -21,7 +21,7 @@ public class DBInfo {
   * @param userVar         The username
   * @param passwordVar     The password
   */
-  public DBInfo(String machineVar, String metadatabaseVar, 
+  public HGDBInfo(String machineVar, String metadatabaseVar, 
          String userVar, String passwordVar) {
 
     machine = machineVar;

@@ -15,6 +15,21 @@ import java.util.Properties;
  */
 public class HGGeneCheck {
 
+ /**
+  * Print usage info and exit
+  */
+ static void usage() {
+    System.out.println(
+      "HGGeneCheck - do some basic automatic tests on hgGene cgi\n" +
+      "usage:\n" +
+      "   java HGGeneCheck propertiesFile\n" +
+      "where properties files may contain database, table." +
+      "   java HGGeneCheck default\n" +
+      "This will use the default properties\n"
+      );
+    System.exit(0);
+ }
+
  /** 
   *  Runs the program to check all Known Genes,
   *  looping over all assemblies, looking for non-200 return code.
@@ -23,8 +38,19 @@ public class HGGeneCheck {
 
     boolean debug = false;
 
-    String machine = "hgwbeta.cse.ucsc.edu";
-    String table = "knownGene";
+    /* Process command line properties, and load them
+     * into machine and table. */
+    if (args.length != 1)
+        usage();
+    Properties mainProps;
+    if (!args[0].equals("default"))
+         mainProps = QALibrary.readProps(args[0]); 
+    else
+         mainProps = new Properties();
+    String machine;
+    machine = mainProps.getProperty("machine", "hgwbeta.cse.ucsc.edu");
+    String table;
+    table = mainProps.getProperty("table", "knownGene");
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -42,8 +68,8 @@ public class HGGeneCheck {
 
     // get list of assemblies
 
-    DBInfo metadbinfo = 
-      new DBInfo("genome-testdb", "hgcentralbeta", userRead, passwordRead);
+    HGDBInfo metadbinfo = 
+      new HGDBInfo("genome-testdb", "hgcentralbeta", userRead, passwordRead);
 
     if (!metadbinfo.validate()) return;
 
@@ -57,8 +83,8 @@ public class HGGeneCheck {
       String assembly = (String) assemblyIter.next();
       if (!assembly.equals("mm4")) continue;
       // System.out.println("Assembly = " + assembly);
-      // create DBInfo for this assembly
-      DBInfo dbinfo = new DBInfo("localhost", assembly, userRead, passwordRead);
+      // create HGDBInfo for this assembly
+      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
       if (!dbinfo.validate()) {
         System.out.println("Cannot connect to database for " + assembly);
         continue;
@@ -73,7 +99,7 @@ public class HGGeneCheck {
         hgtracksURL = hgtracksURL + assembly;
         String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
         ArrayList trackList = 
-          QAWebLibrary.getTrackControls(hgtracksURL, defaultPos, debug);
+          HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
         if (debug) {
           int count2 = trackList.size();
           System.out.println("Count of tracks found = " + count2);
@@ -84,7 +110,7 @@ public class HGGeneCheck {
           String track = (String) trackIter.next();
           if (!track.equals(table)) continue;
           System.out.println(track);
-          QAWebLibrary.hggene(dbinfo, machine, assembly, track, table);
+          HgTracks.hggene(dbinfo, machine, assembly, track, table);
           System.out.println();
         }
       } catch (Exception e) {

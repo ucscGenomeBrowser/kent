@@ -6,7 +6,7 @@ import java.util.Properties;
 /**
  *  Checks for validity of database connection and metadatabase info.
  */
-public class DBInfoUtil {
+public class HGDBInfoTest {
 
  /**
   *  Runs program to check for database validity.
@@ -27,13 +27,13 @@ public class DBInfoUtil {
     String userRead = dbloginread.getProperty("login");
     String passwordRead = dbloginread.getProperty("password");
 
-    DBInfo metadbinfo = 
-       new DBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
+    HGDBInfo metadbinfo = 
+       new HGDBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
 
     if (!metadbinfo.validate()) return;
 
-  /*  incomplete ?  no DBInfo objects with this signature
-    DBInfo dbinfo = new DBInfo("localhost", assembly, userRead, passwordRead);
+  /*  incomplete ?  no HGDBInfo objects with this signature
+    HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
     if (!dbinfo.validate()) {
       System.out.println("Cannot connect to database for " + assembly);
       continue;

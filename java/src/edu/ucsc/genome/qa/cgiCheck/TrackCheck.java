@@ -45,8 +45,8 @@ public class TrackCheck {
 
     // get list of assemblies
 
-    DBInfo metadbinfo = 
-       new DBInfo("hgwbeta", "hgcentralbeta", userRead, passwordRead);
+    HGDBInfo metadbinfo = 
+       new HGDBInfo("hgwbeta", "hgcentralbeta", userRead, passwordRead);
 
     if (!metadbinfo.validate()) return;
 
@@ -60,8 +60,8 @@ public class TrackCheck {
       String assembly = (String) assemblyIter.next();
       if(!assembly.equals("panTro1")) continue;
       System.out.println("Assembly = " + assembly);
-      // create DBInfo for this assembly
-      DBInfo dbinfo = new DBInfo("localhost", assembly, userRead, passwordRead);
+      // create HGDBInfo for this assembly
+      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
       if (!dbinfo.validate()) {
         System.out.println("Cannot connect to database for " + assembly);
         continue;
@@ -91,7 +91,7 @@ public class TrackCheck {
         String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
         hgtracksURL = hgtracksURL + assembly;
         ArrayList trackList = 
-          QAWebLibrary.getTrackControls(hgtracksURL, defaultPos, debug);
+          HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
         if (debug) {
           int count2 = trackList.size();
           System.out.println("Count of tracks found = " + count2);
@@ -103,13 +103,13 @@ public class TrackCheck {
           System.out.println(track);
           String mode = "default";
           // String mode = "all";
-          QAWebLibrary.exerciseTrack(machine, assembly, chroms, 
+          HgTracks.exerciseTrack(machine, assembly, chroms, 
                                      track, mode, defaultPos, "full");
-          // QAWebLibrary.exerciseTrack(machine, assembly, chroms, 
+          // HgTracks.exerciseTrack(machine, assembly, chroms, 
                                      // track, mode, defaultPos, "dense");
-          // QAWebLibrary.exerciseTrack(machine, assembly, chroms, 
+          // HgTracks.exerciseTrack(machine, assembly, chroms, 
                                      // track, mode, defaultPos, "pack");
-          // QAWebLibrary.exerciseTrack(machine, assembly, chroms, 
+          // HgTracks.exerciseTrack(machine, assembly, chroms, 
                                      // track, mode, defaultPos, "squish");
           System.out.println();
         }
