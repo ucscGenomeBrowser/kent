@@ -391,7 +391,7 @@ public class HgTracks {
   public static void exerciseTrack(String machine, String assembly,
                             ArrayList chroms, String track, 
                             String mode, String defaultPos,
-                            String displayMode) throws Exception {
+                            String displayMode, int zoomCount) throws Exception {
 
     String url1, url2, url3;
     PositionIterator mypi;
@@ -453,39 +453,16 @@ public class HgTracks {
       // That is, it returns, throwing an exception
       form.setParameter(track, displayMode);
       HgTracks.refreshHGTracks(page);
-      page = wc.getCurrentPage();
-      ArrayList links1 = 
-        HgTracks.getMatchingLinks(page, "hgc", "DNA");
-      HgTracks.checkLinks(wc, links1);
-      
-      // zoom out 10x
-      System.out.println("Calling zoom");
-      HgTracks.zoom(page, 3);
-      // System.out.println("Get page after zoom");
-      page = wc.getCurrentPage();
-      // String text = page.getText();
-      // int index1 = text.indexOf("size");
-      // int index2 = text.indexOf("bp");
-      // String size = text.substring(index1, index2);
-      // System.out.println(size);
-      // System.out.println("Reading for matching links");
 
-      // get and check the links that have hgc in them, but not DNA
-      ArrayList links2 = 
-        HgTracks.getMatchingLinks(page, "hgc", "DNA");
-      // System.out.println("Checking links");
-      HgTracks.checkLinks(wc, links2);
-
-      // zoom out 10x again
-      System.out.println("Calling zoom again");
-      HgTracks.zoom(page, 3);
-      // System.out.println("Get page after zoom");
-      page = wc.getCurrentPage();
-      // System.out.println("Reading for matching links");
-      ArrayList links3 = 
-        HgTracks.getMatchingLinks(page, "hgc", "DNA");
-      // System.out.println("Checking links");
-      HgTracks.checkLinks(wc, links3);
+      for (int zooms = 1; zooms <= zoomCount; zooms++) {
+        page = wc.getCurrentPage();
+        ArrayList links1 = 
+          HgTracks.getMatchingLinks(page, "hgc", "DNA");
+        HgTracks.checkLinks(wc, links1);
+        
+        if (zooms == zoomCount) break;
+        HgTracks.zoom(page, 3);
+      }
     }
   }
 
@@ -611,6 +588,20 @@ public class HgTracks {
       System.out.println(e.getMessage());
     }
     return (paramlist);
+  }
+
+  
+  /**
+   * If 'track' is all, then get list of all tracks from
+   * calling and parsing myURL.  Otherwise just return track.
+   */    
+  public static ArrayList getTrackControlOrAll(String myURL, String defaultPos, 
+                                          String track, boolean debug) {
+    if (track.equals("all"))
+        return getTrackControls(myURL, defaultPos, debug);
+    ArrayList a = new ArrayList();
+    a.add(track);
+    return a;
   }
 
  /**

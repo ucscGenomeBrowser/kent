@@ -99,6 +99,26 @@ public class QADBLibrary {
 		+ "'" + assembly + "'";
      return quickQuery(dbinfo, query);
   }
+
+ /**
+  * Get all genome databases.
+  */
+  public static ArrayList getGenomeDatabases(HGDBInfo metadbinfo) {
+     return getColumn(metadbinfo, "dbDb", "name", false);
+  }
+ 
+ /**
+  * Return ArrayList with all databases if db parameter is "all",
+  * else just the one. 
+  */
+  public static ArrayList getDatabaseOrAll(HGDBInfo metadbinfo, String db) {
+     if (db.equals("all"))
+         return getGenomeDatabases(metadbinfo);
+     ArrayList dbList = new ArrayList();
+     dbList.add(db);
+     return dbList;
+  }
+
       
   // get a row in the trackDb table that matches tablename
   // only expecting one row to match

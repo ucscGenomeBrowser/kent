@@ -1,2 +1,4 @@
 machine hgwdev.cse.ucsc.edu
 quick on
+table refGene
+zoomCount 1

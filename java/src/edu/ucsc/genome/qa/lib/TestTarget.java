@@ -11,6 +11,7 @@ public class TestTarget {
   String dbSpec;
   String table;
   boolean quickOn;
+  int zoomCount;
 
   // constructors
 
@@ -32,6 +33,9 @@ public class TestTarget {
     table = properties.getProperty("table", table);
     String quick = properties.getProperty("quick", "false");
     quickOn = quick.equals("true");
+    String zoomString = String.valueOf(zoomCount);
+    zoomString = properties.getProperty("zoomCount", zoomString);
+    zoomCount = Integer.parseInt(zoomString);
   }
     
   public void setDefaults() {
@@ -39,6 +43,7 @@ public class TestTarget {
     dbSpec = "hg16";
     table = "knownGene";
     quickOn = false;
+    zoomCount = 1;
  }
 
 }

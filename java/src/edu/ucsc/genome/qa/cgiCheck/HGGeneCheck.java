@@ -67,8 +67,8 @@ public class HGGeneCheck {
       String assembly = (String) assemblyIter.next();
       if (!assembly.equals("mm4")) continue;
       // System.out.println("Assembly = " + assembly);
-      // create HGDBInfo for this assembly
 
+      // create HGDBInfo for this assembly
       try {
 	HGDBInfo dbinfo = new HGDBInfo("localhost", assembly);
 	if (!dbinfo.validate()) {

@@ -64,15 +64,13 @@ public class TrackCheck {
     }
     if (!metadbinfo.validate()) return;
 
-    ArrayList assemblyList = 
-      QADBLibrary.getColumn(metadbinfo, "dbDb", "name", debug);
+    ArrayList assemblyList = QADBLibrary.getDatabaseOrAll(metadbinfo, target.dbSpec);
 
     // iterate over assembly list
     System.out.println("iterate over assembly list");
     Iterator assemblyIter = assemblyList.iterator();
     while (assemblyIter.hasNext()) {
       String assembly = (String) assemblyIter.next();
-      if(!assembly.equals("panTro1")) continue;
       System.out.println("Assembly = " + assembly);
 
       // find default pos for this assembly
@@ -106,7 +104,8 @@ public class TrackCheck {
         String hgtracksURL = "http://" + target.machine + "/cgi-bin/hgTracks?db=";
         hgtracksURL = hgtracksURL + assembly;
         ArrayList trackList = 
-          HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
+          // HgTracks.getTrackControls(hgtracksURL, defaultPos, debug);
+          HgTracks.getTrackControlOrAll(hgtracksURL, defaultPos, target.table, debug);
         if (debug) {
           int count2 = trackList.size();
           System.out.println("Count of tracks found = " + count2);
@@ -119,7 +118,7 @@ public class TrackCheck {
           String mode = "default";
           // String mode = "all";
           HgTracks.exerciseTrack(target.machine, assembly, chroms, 
-                                     track, mode, defaultPos, "full");
+                                     track, mode, defaultPos, "full", target.zoomCount);
           // HgTracks.exerciseTrack(target.machine, assembly, chroms, 
                                      // track, mode, defaultPos, "dense");
           // HgTracks.exerciseTrack(target.machine, assembly, chroms, 

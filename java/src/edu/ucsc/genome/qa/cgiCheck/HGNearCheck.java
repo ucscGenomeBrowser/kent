@@ -66,6 +66,7 @@ public class HGNearCheck {
     Iterator assemblyIter = assemblyList.iterator();
     while (assemblyIter.hasNext()) {
       String assembly = (String) assemblyIter.next();
+      if(!assembly.equals("hg16")) continue;
 
       try {
 	// create HGDBInfo for this assembly
@@ -85,15 +86,16 @@ public class HGNearCheck {
         // get column list for this assembly
         String hgNearConfig = hgNearURL + "&near.do.configure=configure";
         Robot configRobot = new Robot(hgNearConfig);
+        // TO DO: hide all
         ArrayList cols = HgNear.getColumns(configRobot);
         // iterate through columns
-        // Iterator colIter = col.iterator();
-        // while (colIter.hasNext()) {
-          // String column = (String) colIter.next();
-          // System.out.println(column);
-          // HgNear.setColumn(hgNearURL);
+        Iterator colIter = col.iterator();
+        while (colIter.hasNext()) {
+          String column = (String) colIter.next();
+          System.out.println(column);
+          HgNear.setColumn(configRobot);
           // iterate over gene searches
-        // }
+        }
         // PART 2
         // set column
         // iterate through sort modes
