@@ -1,4 +1,4 @@
-track dpseudoChain
+track chainDp1
 shortLabel D. pseud. Chain
 longLabel Chained Blastz D. pseudoobscura/D. melanogaster Alignments
 group compGeno
@@ -10,7 +10,7 @@ spectrum on
 type chain dp1
 otherDb dp1
 
-track dpseudoNet
+track netDp1
 shortLabel D. pseud. Net
 longLabel D. pseudoobscura/D. melanogaster Alignment Net
 group compGeno
