@@ -14,15 +14,10 @@ errAbort(
   "with a standard skeleton\n");
 }
 
-void newProg(char *name, char *description)
-/* newProg - make a new C source skeleton. */
+void makeC(char *name, char *description, char *progPath)
+/* makeC - make a new C source skeleton. */
 {
-char progPath[512];
-FILE *f;
-
-makeDir(name);
-sprintf(progPath, "%s/%s.c", name, name);
-f = mustOpen(progPath, "w");
+FILE *f = mustOpen(progPath, "w");
 
 /* Make the usage routine. */
 fprintf(f, "/* %s - %s. */\n", name, description);
@@ -54,6 +49,44 @@ fprintf(f, "    usage();\n");
 fprintf(f, "%s(argv[1]);\n", name);
 fprintf(f, "return 0;\n");
 fprintf(f, "}\n");
+fclose(f);
+}
+
+void makeMakefile(char *progName, char *makeName)
+/* Make makefile. */
+{
+FILE *f = mustOpen(makeName, "w");
+
+fprintf(f, 
+
+".c.o:\n"
+"\tgcc -ggdb -O -Wimplicit -I../inc -I../../inc -I../../../inc -c $*.c\n"
+"\n"
+"L = -lm\n"
+"MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)\n"
+"MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a\n"
+"\n"
+"O = %s.o\n"
+"\n"
+"%s: $O $(MYLIBS)\n"
+"\tgcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/%s $O $(MYLIBS) $L\n",
+	progName, progName, progName);
+
+
+fclose(f);
+}
+
+void newProg(char *name, char *description)
+/* newProg - make a new C source skeleton. */
+{
+char fileName[512];
+
+makeDir(name);
+sprintf(fileName, "%s/%s.c", name, name);
+makeC(name, description, fileName);
+
+sprintf(fileName, "%s/makefile", name);
+makeMakefile(name, fileName);
 }
 
 int main(int argc, char *argv[])
