@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.788 2004/08/27 04:50:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.789 2004/08/27 04:58:07 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3680,8 +3680,18 @@ tg->freeItems = freeSimpleBed;
 char *oligoMatchSeq()
 /* Return sequence for oligo matching. */
 {
-char *s = cartUsualString(cart, oligoMatchVar, cloneString(oligoMatchDefault));
-tolowers(s);
+char *s = cartOptionalString(cart, oligoMatchVar);
+if (s != NULL)
+    {
+    int len;
+    tolowers(s);
+    dnaFilter(s, s);
+    len = strlen(s);
+    if (len < 2)
+       s = NULL;
+    }
+if (s == NULL)
+    s = cloneString(oligoMatchDefault);
 return s;
 }
 
