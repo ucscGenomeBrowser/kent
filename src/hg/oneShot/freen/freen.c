@@ -1,33 +1,43 @@
 /* freen - My Pet Freen. */
 #include "common.h"
 #include "linefile.h"
-#include "axt.h"
+#include "obscure.h"
 
 void usage()
 /* Print usage and exit. */
 {
-errAbort("usage: freen in.axt out.axt");
+errAbort("usage: freen count");
 }
 
-void freen(char *in, char *out)
+struct numList
+/* A list of numbers. */
+    {
+    struct numList *next;
+    int num;
+    };
+
+void freen(char *countString)
 /* Print status code. */
 {
-struct axt *axt;
-struct lineFile *lf = lineFileOpen(in, TRUE);
-FILE *f = mustOpen(out, "w");
-char buf[256];
+int count = atoi(countString);
+int i;
+struct numList *list = NULL, *num;
 
-while ((axt = axtRead(lf)) != NULL)
+for (i=0; i<count; ++i)
     {
-    if (!sameString(axt->qName, "chr2"))
-       axtWrite(axt, f);
+    AllocVar(num);
+    num->num = i;
+    slAddHead(&list, num);
     }
+shuffleList(&list);
+for (num=list; num != NULL; num = num->next)
+    printf("%d\n", num->num);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 2)
    usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 }

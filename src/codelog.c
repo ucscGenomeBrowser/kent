@@ -754,3 +754,6 @@
 446 - Blat v. 15 - saving in blast, axt, maf format.  Start of
       stuff for three way alignments rat/mouse/human.  hgText is
       improved.
+447 - Blat v. 16 - misc fixes.  Ranlib removed from makefiles for
+      SGI compatibility.  Mouse wiggle track now in production 
+      (actually probably was back in 446).
