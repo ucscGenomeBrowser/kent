@@ -77,6 +77,7 @@ if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
+    int column = 0, maxColumn=4, rowCount=0;
     hPrintf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
     safef(query, sizeof(query),
     	"select extAcc1,extAcc2 from extDbRef,extDb"
@@ -84,11 +85,28 @@ if (list != NULL)
 	" and extDb.val = 'PDB' and extDb.id = extDbRef.extDb"
 	, swissProtAcc);
     sr = sqlGetResult(spConn, query);
+    hPrintf("<TABLE><TR>\n");
     while ((row = sqlNextRow(sr)) != NULL)
         {
+	if (++column > maxColumn)
+	    {
+	    hPrintf("</TR><TR>");
+	    column = 1;
+	    if (rowCount == 0)
+	        {
+		hPrintf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth only images from the first %d structures are shown.</I>", maxColumn);
+		hPrintf("</TR><TR>");
+		}
+	    ++rowCount;
+	    }
+	hPrintf("<TD>");
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
+	if (rowCount < 1)
+	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/cgi/pdbImage.cgi/%sx150.jpg\"><BR>", row[0]);
 	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+	hPrintf("</TD>");
 	}
+    hPrintf("</TR></TABLE>\n");
     hPrintf("<BR>\n");
     slFreeList(&list);
     }
@@ -109,7 +127,11 @@ if (list != NULL)
     hPrintf("<TD>");
     modBaseAnchor(swissProtAcc);
     hPrintf("<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", swissProtAcc);
-    hPrintf("</TR></TABLE>");
+    hPrintf("</TR><TR>\n");
+    hPrintf("<TD ALIGN=CENTER>Front</TD>");
+    hPrintf("<TD ALIGN=CENTER>Top</TD>");
+    hPrintf("<TD ALIGN=CENTER>Side</TD>");
+    hPrintf("</TR></TABLE>\n");
     }
 
 }
