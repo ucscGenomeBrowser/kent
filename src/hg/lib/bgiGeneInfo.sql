@@ -10,5 +10,5 @@ CREATE TABLE bgiGeneInfo (
     go longblob not null,	# comma-sep list of GO numeric IDs
     ipr longblob not null,	# semicolon-sep list of IPR numeric IDs and comments
               #Indices
-    PRIMARY KEY(name(20))
+    INDEX(name(20))
 );
