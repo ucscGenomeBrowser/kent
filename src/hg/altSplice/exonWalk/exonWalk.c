@@ -47,13 +47,20 @@ int i,j;
 for(i=0;i<sg->nodeCount; i++)
     {
     struct exonNode *sn = sg->nodes[i];
+    if(sn->next != NULL && sn->id == sn->next->id)
+	errAbort("exonWalk::nodeSanityCheck() -Node %u-%u next is  %u-%u but they are the same node.\n",  
+		 sn->id, sn->tStart, sn->next->id, sn->next->tStart);
     for(j=0;j<sn->edgeOutCount;j++)
 	{
+	struct exonNode *target = sg->nodes[sn->edgesOut[j]];
 	if(sn->edgesOut[j] >= sg->nodeCount)
 	    errAbort("exonWalk::nodeSanityCheck() - node with id %d when max is %d\n", sn->edgesOut[j], sg->nodeCount);
-	if(sn->tStart > sg->nodes[sn->edgesOut[j]]->tStart && sg->nodes[sn->edgesOut[j]]->class != BIGNUM )
+	if(sn->tStart > target->tStart && target->class != BIGNUM && target->class != sn->class )
 	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but that is the wrong direction.\n",  
-		     sn->id, sn->tStart, sg->nodes[sn->edgesOut[j]]->id, sg->nodes[sn->edgesOut[j]]->tStart);
+		     sn->id, sn->tStart, target->id, target->tStart);
+	if(sn->id == target->id)
+	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but they are the same node.\n",  
+		     sn->id, sn->tStart, target->id, target->tStart);
 	}
     }
 }
@@ -123,13 +130,17 @@ if(sameExonDifferentEnds(tail, en)) /* If this is a duplicate type, change tail 
     if(en->tEnd < tail->tEnd)
 	warn("exonWalk::addNodeToPath() - How can node at %s:%u-%u be greater than node at %s:%u-%u?", 
 	     tail->tName, tail->tStart, tail->tEnd, en->tName, en->tStart, en->tEnd);
-    tail->tEnd = en->tEnd;
-    addExonNodeEnd(tail, en->tEnd);
-    tail->class = BIGNUM;
-    tail->endClass = BIGNUM;
+    if(en->endType == ggHardEnd || (en->endType == tail->endType))
+	{
+	tail->tEnd = en->tEnd;
+	tail->ends[0] = en->tEnd;
+	end = en->tEnd;
+	}
+    //addExonNodeEnd(tail, en->tEnd);
+/*     tail->class = BIGNUM; */
+/*     tail->endClass = BIGNUM; */
     assert(tail->tEnd >= tail->tStart);
     end = en->tEnd;
-
     exonNodeFree(&en);
     }
 else if(sameExonDifferentStarts(tail,en))
@@ -138,9 +149,14 @@ else if(sameExonDifferentStarts(tail,en))
     if(en->tStart < tail->tStart)
 	warn("exonWalk::addNodeToPath() - How can node at %s:%u-%u be greater than node at %s:%u-%u?", 
 	     tail->tName, tail->tStart, tail->tStart, en->tName, en->tStart, en->tStart);
-    addExonNodeStart(tail, en->tStart);
-    tail->class = BIGNUM;
-    tail->startClass = BIGNUM;
+    if(en->startType == ggHardStart || (en->startType == tail->startType))
+	{
+	tail->tStart = en->tStart;
+	tail->starts[0] = en->tStart;
+	}
+/*     addExonNodeStart(tail, en->tStart); */
+/*     tail->class = BIGNUM; */
+/*     tail->startClass = BIGNUM; */
     assert(tail->tEnd >= tail->tStart);
     exonNodeFree(&en);
     }
@@ -453,7 +469,7 @@ if(en->edgeInCount != 0)
     enCopy->edgesIn = CloneArray(en->edgesIn, en->edgeInCount);
 enCopy->starts = CloneArray(en->starts, en->startCount);
 enCopy->ends = CloneArray(en->ends, en->endCount);
-
+enCopy->paths = NULL;
 return enCopy;
 }
 
@@ -477,10 +493,10 @@ ep->path = cloneString(orig->path);
 ep->nodes = NULL;
 for(en=orig->nodes; en != NULL; en = enNext)
     {
-    if(en->edgeOutCount != 0)
-	enNext = eg->nodes[en->edgesOut[0]];
-    else
-	enNext = NULL;
+    enNext = en->next;
+/*     if(en->edgeOutCount != 0) */
+/* 	enNext = eg->nodes[en->edgesOut[0]]; */
+/*     else */ /* 	enNext = NULL; */
     enCopy = exonNodeCopy(en);
     if(enCopy->tEnd > ep->tEnd)
 	ep->tEnd = enCopy->tEnd;
@@ -540,40 +556,84 @@ for(i=0; i<h->count; i++)
 return FALSE;
 }
 
-void exonGraphBfs(struct exonGraph *eg, struct exonNode *en, int nodeIndex, 
-		  struct exonPath **maximalPaths, struct heap *queue )
+boolean checkForCurrentNode(struct exonPath *ep, struct exonNode *en)
+/* Check to see if current node is on the path of the exonPath. */
+{
+if(ep->nodes->class != en->class)
+    {
+    warn("ExonPath doesn't contain exonNode of class %d, last node is class %d", en->class, ep->nodes->class);
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean doSanityCheck(struct exonGraph *eg)
+{
+struct exonPath *ep = NULL;
+struct exonNode *en = NULL;
+int i;
+for(i=0; i< eg->nodeCount; i++) 
+    {
+    en = eg->nodes[i];
+    for(ep = en->paths; ep != NULL; ep = ep->next)
+	if(ep->nodes->class != en->class)
+	    {
+	    warn("exonWalk.c::doSanityCheck() - Can't have a path to a node that doesn't include that node. Problem at %s:%d-%d", en->tName, en->tStart, en->tEnd);
+	    return FALSE;
+	    }
+    }
+return TRUE;
+}
+
+void exonGraphBfs(struct exonGraph *eg, struct exonPath **maximalPaths, struct heap *queue )
 /** A modified breadth first search of the graph. Nodes are investigated not
 only in the order of distance in nodes but also in order of distance from
 transcription start. All paths to nodes are kept track of as search is made. */
 {
+int globalCount = 0;
 assert(queue);
 while(!heapEmpty(queue))
     {
     int i =0;
     struct exonNode *en = heapExtractMin(queue);
+    struct exonPath *ep = NULL;
+    struct exonPath *epCopy = NULL;
+    struct exonNode *enCopy = NULL;
+    globalCount++;
     for(i=0; i<en->edgeOutCount; i++)
 	{
-	/* Pass our path on to all of our connections... */
-	struct exonPath *ep = NULL;
-	struct exonPath *epCopy = NULL;
-	struct exonNode *enCopy = NULL;
+	struct exonNode *target = eg->nodes[en->edgesOut[i]];
 	for(ep = en->paths; ep != NULL; ep = ep->next)
 	    {
-	    epCopy = exonPathCopy(eg,ep);
-	    /* If we're making a move to another exon then include this exon in the path... */
-	    if(eg->nodes[i]->class != en->class && en->class != BIGNUM)
+	    if(debug) { nodeSanityCheck(eg); }
+	    epCopy = exonPathCopy(eg, ep);
+	    /* If we're making a move to another exon then include that exon in the path... */
+
+	    if(target->class != en->class && en->class != BIGNUM)
 		{
-		enCopy = exonNodeCopy(en);
-		slAddHead(&ep->nodes, en);
+		enCopy = exonNodeCopy(target);
+		slAddHead(&epCopy->nodes, enCopy);
+		epCopy->nodeCount++;
 		}
-	    slAddHead(&eg->nodes[i]->paths, ep);
+	    if(target->paths != NULL && epCopy->nodes == target->paths->nodes)
+		    warn("How can I have two paths with the same nodes?");
+	    slAddHead(&target->paths, epCopy);
+	    if(debug) { nodeSanityCheck(eg); }
+	    if(debug && !checkForCurrentNode(target->paths, target))
+		warn("Why didn't this work at %s:%d-%d", target->tName, target->tStart, target->tEnd);
+	    for(epCopy = target->paths; epCopy->next != NULL; epCopy = epCopy->next)
+		{
+		if(epCopy->nodes == epCopy->next->nodes)
+		    warn("How can I have two paths with the same nodes?");
+		}
 	    }
+	
 	/* If the haven't been seen yet, queue them up... */
-	if(eg->nodes[i]->color == enWhite) 
+	if(target->color == enWhite) 
 	    {
-	    eg->nodes[i]->color = enGray;
-	    if(!heapContainsNode(queue, eg->nodes[i]))
-	       heapMinInsert(queue, eg->nodes[i]);
+	    target->color = enGray;
+	    if(!heapContainsNode(queue, target))
+	       heapMinInsert(queue, target);
 	    }
 	}
     if(en->endType == ggSoftEnd && en->class != BIGNUM) /* It is a terminal node...*/
@@ -644,6 +704,31 @@ const struct exonNode *b = *((struct exonNode **)vb);
 return a->tStart - b->tStart;
 }
 
+int nodeStartHeapCmp(const void *va, const void *vb)
+/** Compart to sort based on tStart of node. */
+{
+const struct exonNode *a = va;
+const struct exonNode *b = vb;
+return a->tStart - b->tStart;
+}
+
+struct exonPath *newExonPath(struct exonNode *en)
+/* Construct a path with only one node. */
+{
+struct exonPath *ep = NULL;
+struct exonNode *enCopy = exonNodeCopy(en);
+AllocVar(ep);
+ep->tName = cloneString(en->tName);
+snprintf(ep->strand, sizeof(ep->strand), "%s", en->strand);
+ep->qName = NULL;
+ep->tStart = BIGNUM;
+ep->tEnd = 0;
+ep->path = NULL;
+
+slAddHead(&ep->nodes, enCopy);
+return ep;
+}
+
 struct exonPath *exonGraphBreadthFirstMaxPaths(struct exonGraph *eg)
 /** Construct maximal paths through the exonGraph. Maximal paths
    are those which are not subpaths of any other path. Based on breadth
@@ -652,16 +737,24 @@ struct exonPath *exonGraphBreadthFirstMaxPaths(struct exonGraph *eg)
 {
 int i =0;
 int index = 0;
-struct heap *queue = newHeap(8, nodeStartCmp);
+struct heap *queue = newHeap(8, nodeStartHeapCmp);
 struct exonPath *maximalPaths = NULL, *ep = NULL;
 struct exonNode **orderedNodes = CloneArray(eg->nodes, eg->nodeCount);
 qsort(orderedNodes, eg->nodeCount, sizeof(struct exonNode *), nodeStartCmp);
+if(debug) { nodeSanityCheck(eg); }
 for(i=0; i<eg->nodeCount; i++)
     {
     if(orderedNodes[i]->edgeInCount == 0)
+	{
+	struct exonPath *ep = newExonPath(orderedNodes[i]);
+	ep->nodeCount++;
+	slAddHead(&orderedNodes[i]->paths, ep);
 	heapMinInsert(queue, orderedNodes[i]);
+	}
     }
-exonGraphBfs(eg, orderedNodes[0], 0, &maximalPaths, queue);
+if(debug) { nodeSanityCheck(eg); }
+exonGraphBfs(eg, &maximalPaths, queue);
+heapFree(&queue);
 freez(&orderedNodes);
 return maximalPaths;
 }
@@ -897,7 +990,8 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	    exonPathBedOut(ep,cleanEsts);
     exonGraphConnectEquivalentNodes(eg);
     if(debug) { nodeSanityCheck(eg); }
-    epList = exonGraphMaximalPaths(eg);
+    epList = exonGraphBreadthFirstMaxPaths(eg);
+//    epList = exonGraphMaximalPaths(eg);
     for(ep = epList; ep != NULL; ep = ep->next)
 	{
 	char buff[256];

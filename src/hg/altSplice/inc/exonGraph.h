@@ -10,30 +10,32 @@ enum nodeColor {
     enGray,
     enBlack
 };
-
 struct exonNode
 /* A Single exon site node in a splicing graph */
-    {
+{
     struct exonNode *next;  /* Next in singly linked list. */
     char *tName;	/* name of target sequence, often a chrom. */
     int tStart;	/* start in tName. 3' splice site */
     int tEnd;	/* end in tName. 5' splice site */
     char strand[3];	/* + or - strand. */
     unsigned id;	/* Unique ID. */
-    unsigned startClass;	/* Class of start */
-    unsigned endClass;	/* Class of end */
+    unsigned startClass;	/* Class of start, splice site number */
+    unsigned endClass;	/* Class of end, splice site number */
     unsigned startType;	/* Type of starting splice site, ggVertexType. */
     unsigned endType;	/* Type of ending splice site, ggVertexType. */
     unsigned type;	/* Type of exon, see enum ggEdgeType. */
-    unsigned class;	/* Number of node in graph, different than ID. */
+    int class;	/* Number of node in graph, different than ID. */
     unsigned color;	/* Used for algorithm classification. */
     unsigned startCount;	/* If wildcard starts number of starts that can match */
     unsigned *starts;	/* location of starting positions that match. */
     unsigned endCount;	/* If wildcard end, number of starts that can match */
     unsigned *ends;	/* location of ending positions that match. */
-    unsigned edgeCount;	/* Number of edges leaving from this graph. */
-    unsigned *edges;	/* Ids of exonNodes that this edge connects to. */
+    unsigned edgeInCount;	/* Number of edges inputting into this node. */
+    unsigned *edgesIn;	/* Ids of nodes that connect to this node. */
+    unsigned edgeOutCount;	/* Number of edges leaving from this graph. */
+    unsigned *edgesOut;	/* Ids of exonNodes that this node connects to, by convention edgesOut[0] = next node in path */
     struct exonPath *ep; /* Path that this node is part of. */
+    struct exonPath *paths; /* Paths that lead to this node. */
 };
 
 struct exonNode *exonNodeLoad(char **row);

@@ -22,7 +22,8 @@ char *s;
 AllocVar(ret);
 ret->startCount = sqlUnsigned(row[12]);
 ret->endCount = sqlUnsigned(row[14]);
-ret->edgeCount = sqlUnsigned(row[16]);
+ret->edgeInCount = sqlUnsigned(row[16]);
+ret->edgeOutCount = sqlUnsigned(row[18]);
 ret->tName = cloneString(row[0]);
 ret->tStart = sqlSigned(row[1]);
 ret->tEnd = sqlSigned(row[2]);
@@ -33,16 +34,16 @@ ret->endClass = sqlUnsigned(row[6]);
 ret->startType = sqlUnsigned(row[7]);
 ret->endType = sqlUnsigned(row[8]);
 ret->type = sqlUnsigned(row[9]);
-ret->class = sqlUnsigned(row[10]);
+ret->class = sqlSigned(row[10]);
 ret->color = sqlUnsigned(row[11]);
 sqlUnsignedDynamicArray(row[13], &ret->starts, &sizeOne);
 assert(sizeOne == ret->startCount);
 sqlUnsignedDynamicArray(row[15], &ret->ends, &sizeOne);
 assert(sizeOne == ret->endCount);
-sqlUnsignedDynamicArray(row[17], &ret->edges, &sizeOne);
-assert(sizeOne == ret->edgeCount);
-/* If we're loading this as part of a spliceGraph, register our nodes
-   with the graph. */
+sqlUnsignedDynamicArray(row[17], &ret->edgesIn, &sizeOne);
+assert(sizeOne == ret->edgeInCount);
+sqlUnsignedDynamicArray(row[19], &ret->edgesOut, &sizeOne);
+assert(sizeOne == ret->edgeOutCount);
 if(_egTmpLoadingArray != NULL)
     {
     assert(_egTmpLoadingArraySize < ret->id);
@@ -57,7 +58,7 @@ struct exonNode *exonNodeLoadAll(char *fileName)
 {
 struct exonNode *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[20];
 
 while (lineFileRow(lf, row))
     {
@@ -89,7 +90,7 @@ ret->endClass = sqlUnsignedComma(&s);
 ret->startType = sqlUnsignedComma(&s);
 ret->endType = sqlUnsignedComma(&s);
 ret->type = sqlUnsignedComma(&s);
-ret->class = sqlUnsignedComma(&s);
+ret->class = sqlSignedComma(&s);
 ret->color = sqlUnsignedComma(&s);
 ret->startCount = sqlUnsignedComma(&s);
 s = sqlEatChar(s, '{');
@@ -109,12 +110,21 @@ for (i=0; i<ret->endCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
-ret->edgeCount = sqlUnsignedComma(&s);
+ret->edgeInCount = sqlUnsignedComma(&s);
 s = sqlEatChar(s, '{');
-AllocArray(ret->edges, ret->edgeCount);
-for (i=0; i<ret->edgeCount; ++i)
+AllocArray(ret->edgesIn, ret->edgeInCount);
+for (i=0; i<ret->edgeInCount; ++i)
     {
-    ret->edges[i] = sqlUnsignedComma(&s);
+    ret->edgesIn[i] = sqlUnsignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+ret->edgeOutCount = sqlUnsignedComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->edgesOut, ret->edgeOutCount);
+for (i=0; i<ret->edgeOutCount; ++i)
+    {
+    ret->edgesOut[i] = sqlUnsignedComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -132,7 +142,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->tName);
 freeMem(el->starts);
 freeMem(el->ends);
-freeMem(el->edges);
+freeMem(el->edgesIn);
+freeMem(el->edgesOut);
 freez(pEl);
 }
 
@@ -177,7 +188,7 @@ fprintf(f, "%u", el->endType);
 fputc(sep,f);
 fprintf(f, "%u", el->type);
 fputc(sep,f);
-fprintf(f, "%u", el->class);
+fprintf(f, "%d", el->class);
 fputc(sep,f);
 fprintf(f, "%u", el->color);
 fputc(sep,f);
@@ -201,17 +212,28 @@ for (i=0; i<el->endCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
-fprintf(f, "%u", el->edgeCount);
+fprintf(f, "%u", el->edgeInCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-for (i=0; i<el->edgeCount; ++i)
+for (i=0; i<el->edgeInCount; ++i)
     {
-    fprintf(f, "%u", el->edges[i]);
+    fprintf(f, "%u", el->edgesIn[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+fprintf(f, "%u", el->edgeOutCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->edgeOutCount; ++i)
+    {
+    fprintf(f, "%u", el->edgesOut[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
+
 
 struct exonPath *exonPathLoad(char **row)
 /* Load a exonPath from row fetched with select * from exonPath
@@ -607,13 +629,16 @@ eg->nodeCount++;
 }
 
 void exonNodeConnect(struct exonNode *en1, struct exonNode *en2)
-/* Create a directed edge from en1 to en2. */
+/* Create a directed edge from en1 to en2. And register e1 as connecting to e2. */
 {
 assert(en1);
 assert(en2);
-ExpandArray(en1->edges, en1->edgeCount, en1->edgeCount+1);
-en1->edges[en1->edgeCount] = en2->id;
-en1->edgeCount++;
+ExpandArray(en1->edgesOut, en1->edgeOutCount, en1->edgeOutCount+1);
+en1->edgesOut[en1->edgeOutCount] = en2->id;
+en1->edgeOutCount++;
+ExpandArray(en2->edgesIn, en2->edgeInCount, en2->edgeInCount+1);
+en2->edgesIn[en2->edgeInCount] = en1->id;
+en2->edgeInCount++;
 }
 
 void addExonNodeEnd(struct exonNode *en, unsigned int end)
