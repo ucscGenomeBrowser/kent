@@ -1071,7 +1071,7 @@ struct sqlResult *sr;
 char **row;
 struct trackDb *tdb;
 
-sprintf(query, "select * from trackDb where tableName = '%s'", trackName);
+sprintf(query, "select * from %s where tableName = '%s'", trackName, hTrackDbName());
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Track %s not found", trackName);
