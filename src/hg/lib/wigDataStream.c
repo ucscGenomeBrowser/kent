@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.69 2005/01/18 16:20:54 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.70 2005/01/19 00:28:24 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -229,6 +229,7 @@ else
     if (wds->wibFH == -1)
 	errAbort("openWibFile: failed to open %s", wds->wibFile);
     }
+verbose(VERBOSE_HIGHEST, "#\topened wib file: %s\n", wds->wibFile);
 }
 
 static void setCompareByte(struct wiggleDataStream *wds,
@@ -464,8 +465,8 @@ if (resolution > 0.0)
 	"loss in resolution.\n" );
     fprintf (fh, "#\t(Worst case: %g)  The original source data \n",
 	resolution);
-    fprintf (fh, "#\t(before querying and compression) is available at "
-	"http://hgdownload.cse.ucsc.edu/downloads.html\n");
+    fprintf (fh, "#\t(before querying and compression) is available at \n"
+	"#\t\thttp://hgdownload.cse.ucsc.edu/downloads.html\n");
 }
 
 static void showConstraints(struct wiggleDataStream *wds, FILE *fh)
@@ -1086,14 +1087,23 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 	int j;	/*	loop counter through readData	*/
 	unsigned char *datum;    /* to walk through readData bytes */
 	unsigned char *readData;    /* the bytes read in from the file */
+	size_t bytesToRead;	/* to check read validity */
+	size_t bytesRead;	/* to check read validity */
 
 	openWibFile(wds, wiggle->file);
 		    /* possibly open a new wib file */
 	readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
 	wds->bytesRead += wiggle->count;
 	lseek(wds->wibFH, wiggle->offset, SEEK_SET);
-	read(wds->wibFH, readData,
-	    (size_t) wiggle->count * (size_t) sizeof(unsigned char));
+	bytesToRead = (size_t) wiggle->count * (size_t) sizeof(unsigned char);
+
+	bytesRead = read(wds->wibFH, readData, bytesToRead);
+
+	if (bytesToRead != bytesRead)
+	    {
+	    errAbort("wig_getData: failed to read %u bytes from %s\n",
+		bytesToRead, wiggle->file);
+	    }
 
 	verbose(VERBOSE_PER_VALUE_LEVEL,
 		"#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
