@@ -1725,42 +1725,41 @@ LOAD GENEID GENES (DONE 01/28/03)
     ldHgGene hg13 geneid download/*.gtf -exon=CDS
     hgPepPred hg13 generic geneidPep download/*-fixed.prot
 
-LOAD ACEMBLY (TO DO)
+LOAD ACEMBLY (DONE 02/14/03)
     mkdir -p ~/oo/bed/acembly
     cd ~/oo/bed/acembly
-    
-    - Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
-    wget ftp://ftp.ncbi.nlm.nih.gov/repository/acedb/ncbi_30.human.genes/acembly.ncbi_30.genes.gff.tar.gz
-    wget ftp://ftp.ncbi.nlm.nih.gov/repository/acedb/ncbi_30.human.genes/acembly.ncbi_30.genes.proteins.fasta.tar.gz 
-    gunzip -c acembly.ncbi_30.genes.gff.tar.gz | tar xvf -
-    gunzip -c acembly.ncbi_30.genes.proteins.fasta.tar.gz | tar xvf -
-    cd acembly.ncbi_30.genes.gff
-    #- Strip out floating-contig features (lines with *|NT_?????? as the chr ID),
-    #  and add 'chr' prefix to all chr nums:
+    # Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
+    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_31.human.genes/acembly.ncbi_31.genes.proteins.fasta.tar.gz
+    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_31.human.genes/acembly.ncbi_31.genes.gff.tar.gz
+    gunzip -c acembly.ncbi_31.genes.gff.tar.gz | tar xvf -
+    gunzip -c acembly.ncbi_31.genes.proteins.fasta.tar.gz | tar xvf -
+    cd acembly.ncbi_31.genes.gff
+    # Save just the floating-contig features to different files for lifting 
+    # and lift up the floating-contig features to chr*_random coords:
     foreach f (acemblygenes.*.gff)
-      egrep -v '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
-        perl -wpe 's/^(\w)/chr$1/' > $f:r-fixed.gff
-    end
-    #- Save just the floating-contig features to different files for lifting 
-    #- and lift up the floating-contig features to chr*_random coords:
-    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un M)
-      egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' acemblygenes.$c.gff | \
-        perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > $c-random-ctg.gff
-    if (-e ../../../$c/lift/random.lft) then
-         liftUp $c-random-lifted.gff ../../../$c/lift/random.lft warn $c-random-ctg.gff
-    endif
+      set c=$f:r:e
+      egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
+        perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
+      if (-e ../../../$c/lift/random.lft) then
+        liftUp chr${c}_random.gff ../../../$c/lift/random.lft warn \
+          ctg-chr${c}_random.gff
+      endif
+      # Strip out _random or floating contig lines from the normal chrom gff,
+      # and add the "chr" prefix:
+      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' > chr$c.gff
     end
 
-    cd ../acembly.ncbi_30.genes.proteins.fasta
+    cd ../acembly.ncbi_31.genes.proteins.fasta
     #- Remove G_t*_ prefixes from acemblyproteins.*.fasta:
     foreach f (acemblyproteins.*.fasta)
-      perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > $f:r-fixed.fasta
+      perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > chr$f:r:e.fa
     end
 
-    #- Load into database as so:
+    #- Load into database:
     cd ..
-    ldHgGene hg13 acembly acembly.ncbi_30.genes.gff/*-fixed.gff acembly.ncbi_30.genes.gff/*-lifted.gff
-    hgPepPred hg13 generic acemblyPep acembly.ncbi_30.genes.proteins.fasta/*-fixed.fasta
+    ldHgGene hg13 acembly acembly.ncbi_31.genes.gff/chr*.gff
+    hgPepPred hg13 generic acemblyPep \
+      acembly.ncbi_31.genes.proteins.fasta/chr*.fa
 
 LOAD GENOMIC DUPES (todo)
 o - Load genomic dupes
@@ -1816,7 +1815,10 @@ o - # ssh hgwdev
     mkdir /cluster/store4/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-LOAD SAGE DATA (IN PROGRESS)
+LOAD SAGE DATA (DONE 02/14/03)
+    ssh hgwdev
+    cd ~/kent/src/hg/sage
+    make
     cd /projects/cc/hg/sugnet/sage
     mkdir sage.XXX # XXX = current uniGene build
     cd sage.XXX
@@ -1842,24 +1844,120 @@ LOAD SAGE DATA (IN PROGRESS)
       < SAGEmap_tag_ug-rel | sort | sed -e 's/ /_/g' \
       > SAGEmap_ug_tag-rel_Hs
     cd -
-    /cluster/home/sugnet/sugnet/c/src/sage/createSageSummary \
-      ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
+    createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
       tagExpArrays.tab sageSummary.sage
     # Create the uniGene alignments 
     # ~/hg13/uniGene/hg13.uniGene.lifted.pslReps.psl
     # -- see "MAKE UNIGENE ALIGNMENTS" below
-TODO    addAveMedScoreToPsls /cluster/store1/sugnet/gs.14/build31/uniGene/hg13.uniGene.lifted.pslReps.psl sageSummary.sage  uniGene.pslWScores.psl
-    /cluster/home/kent/bin/i386/hgLoadBed hg13 uniGene_2 uniGene.wscores.bed 
-    hg13S -A < ~/kk/jk/hg/lib/sage.sql 
-    echo "load data local infile 'sageSummary.sage' into table sage" | hg13S -A
+    cd /projects/cc/hg/sugnet/sage/sage.XXX/extr
+    addAveMedScoreToPsls ~/hg13/bed/uniGene/hg13.uniGene.lifted.pslReps.psl \
+      sageSummary.sage  uniGene.wscores.bed
+    hgLoadBed hg13 uniGene_2 uniGene.wscores.bed
+    hgsql hg13 < ~kent/src/hg/lib/sage.sql 
+    echo "load data local infile 'sageSummary.sage' into table sage" \
+        | hgsql hg13
     cd ../info
     ../../scripts/parseRecords.pl ../extr/expList.tab  > sageExp.tab
-    hg13S -A < ~/kk/jk/hg/lib/sageExp.sql 
-    echo "load data local infile 'sageExp.tab' into table sageExp" | hg13S -A
-    update kent/src/hg/makeDb/hgTrackDb/hgRoot/uniGene_2.html with current uniGene date.	
+    hgsql hg13 < ~/kent/src/hg/lib/sageExp.sql 
+    echo "load data local infile 'sageExp.tab' into table sageExp" | hgsql hg13
+    # update ~/kent/src/hg/makeDb/trackDb/human/hg13/uniGene_2.html 
+    # with current uniGene date. 
 
     
-MAKE UNIGENE ALIGNMENTS (DONE 01/24/03)
+RECONSTRUCT PREVIOUS VERSION OF UNIGENE (DONE 02/14/02)
+    # Hopefully we will not have to do this again!  The most recent SAGEmap 
+    # was built on UniGene 157, which is no longer available (just 158).  
+    # The SAGEmap folks do not plan to build with UniGene 158 until the 
+    # next human genome assembly is out... ouch.  So, using the Hs.retired.lst 
+    # file which maps current UniGene ID's to the previous version, we're 
+    # going to reconstruct the previous version and hopefully it'll jive 
+    # with SAGEmap.  
+    cd /projects/cc/hgs/ugnet/uniGene
+    ncftp ftp.ncbi.nih.gov
+      cd repository/UniGene/
+      mget Hs.info Hs.seq.uniq.gz Hs.data.gz Hs.retired.lst.gz
+      quit
+    set version = `perl -e '$t=<>;$t=~/\#(\d+)/;print "$1\n";' < Hs.info`
+    set prev = `expr $version - 1`
+    mkdir uniGene.$prev
+    mv Hs.* uniGene.$prev
+    cd uniGene.$prev
+    gunzip Hs.*.gz 
+    foreach h (Hs.*)
+      mv $h $h.$version
+    end
+    perl -we  'open(MAP, "Hs.retired.lst.'$version'") || die; \
+               %map = (); \
+               print STDERR "Reading Hs.retired.lst....\n"; \
+               while (<MAP>) { \
+                 if (/^(Hs.\w+)\s+Hs.\w+\s+(Hs#\w+)\s+\w+\s*$/) { \
+                   die "dupl map: $2->$map{$2}, $2->$1" \
+                     if ((defined $map{$2}) && ($map{$2} ne $1)); \
+                   $map{$2} = $1; \
+                   $prevs{$1} = $2; \
+                 } \
+               } \
+               close(MAP); \
+               print STDERR "Done with Hs.retired.lst, processing input.\n"; \
+               open(DUPL, ">dupls") || die; \
+               %prevs = (); \
+               while (<>) { \
+                 if (/^>gnl\|UG\|(Hs#\w+)/) { \
+                   $id = $1;  $prevID = $map{$id}; \
+                   print DUPL "$prevID: $prevs{$prevID} $id\n" \
+                     if ((defined $prevs{$prevID}) && \
+                         ($prevs{$prevID} ne $id)); \
+                   die "cant map $id" if (! defined $prevID); \
+                   s/\/ug=Hs.\w+/\/ug=$prevID/; \
+                   $prevs{$prevID} = $id; \
+                 } \
+                 print; \
+               } \
+               close(DUPL); \
+               ' < Hs.seq.uniq.$version \
+      > Hs.seq.uniq
+    # Make sure it looks reasonable:
+    diff Hs.seq.uniq.$version Hs.seq.uniq | less
+
+    # Remove duplicate FASTA records from sequences which were from the same 
+    # cluster in 157 but were in different clusters in 158... since we don't 
+    # know which sequence was *the* sequence in 157, remove all instances!
+    awk -F: '{print $1;}' dupls | sort | uniq > duplIDs
+    perl -we  'open(DUPL, "duplIDs") || die; \
+               %dupls = (); \
+               while (<DUPL>) { \
+                 chop; $dupls{$_} = 1; \
+               } \
+               close(DUPL); \
+               $hdr = undef; \
+               $seq = ""; \
+               while (<>) { \
+                 if (/^>gnl.* \/ug=(Hs.\w+)/) { \
+                   print "$hdr$seq" if (defined $hdr); \
+                   if ($dupls{$1}) { \
+                     $hdr = undef; \
+                   } else { \
+                     $hdr = $_; \
+                   } \
+                   $seq = ""; \
+                 } else { \
+                   $seq = $seq . $_; \
+                 } \
+               } \
+               print "$hdr$seq" if (defined $hdr); \
+              ' Hs.seq.uniq \
+      > Hs.seq.uniq2
+    # make sure it looks reasonable:
+    diff Hs.seq.uniq Hs.seq.uniq2 | less
+    mv Hs.seq.uniq2 Hs.seq.uniq
+    # Do the parseUnigene.pl as if we had just done the usual download:
+    ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
+    set version = $prev
+    # Go to the "ssh kkstore" comment below, and pretend we're really 
+    # using the $prev version of UniGene.  
+
+
+MAKE UNIGENE ALIGNMENTS (DONE 02/14/03)
     cd /projects/cc/hg/sugnet/uniGene
     ncftp ftp.ncbi.nih.gov
       cd repository/UniGene/
@@ -1877,12 +1975,13 @@ MAKE UNIGENE ALIGNMENTS (DONE 01/24/03)
     # ssh kkstore
     mkdir -p /scratch/hg/gs.14/build31/uniGene
     set version = XXX # same as above
-    cp /projects/cc/hg/sugnet/uniGene/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
+    cp -p \
+  /projects/cc/hg/sugnet/uniGene/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
       /scratch/hg/gs.14/build31/uniGene
     # email cluster-admin to push /scratch/hg/gs.14/build31/uniGene to cluster
     mkdir -p ~/hg13/bed/uniGene
     cd ~/hg13/bed/uniGene
-    ls -1 /cluster/store4/gs.14/build31/trfFa/ > allctg.lst
+    ls -1S /cluster/store4/gs.14/build31/trfFa/ > allctg.lst
     echo "/scratch/hg/gs.14/build31/uniGene/Hs.seq.uniq.simpleHeader.fa" \
       > uniGene.lst
     echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store4/gs.14/build31/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
