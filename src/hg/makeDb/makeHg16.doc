@@ -3968,7 +3968,7 @@ while (<>) {
     # update ~/kent/src/hg/makeDb/trackDb/human/hg16/uniGene_2.html 
     # with current uniGene date. 
 
-# MAKING FOLDUTR TABLES (DONE - jk - 2003-10-14)
+# MAKING FOLDUTR TABLES (DONE - jk - 2003-10-14, REDONE jk 2004-04-07)
 # First set up directory structure and extract UTR sequence on hgwdev
     ssh hgwdev
     mkdir -p /cluster/data/hg16/bed/rnaStruct
@@ -4002,6 +4002,14 @@ end
 #Average job time:                  32s       0.53m     0.01h    0.00d
 #Longest job:                     3318s      55.30m     0.92h    0.04d
 #Submission to last job:          4282s      71.37m     1.19h    0.05d
+#
+#Completed: 37250 of 37250 jobs
+#CPU time in finished jobs:    1028594s   17143.24m   285.72h   11.91d  0.033 y
+#IO & Wait Time:                125807s    2096.78m    34.95h    1.46d  0.004 y
+#Average job time:                  31s       0.52m     0.01h    0.00d
+#Longest job:                     3396s      56.60m     0.94h    0.04d
+#Submission to last job:          4422s      73.70m     1.23h    0.05d
+
 
 # Do cluster run for 5' UTRs 
     cd ../utr5
@@ -4015,6 +4023,14 @@ end
 #Average job time:                   6s       0.11m     0.00h    0.00d
 #Longest job:                     1044s      17.40m     0.29h    0.01d
 #Submission to last job:          1164s      19.40m     0.32h    0.01d
+#
+#Completed: 29770 of 29770 jobs
+#CPU time in finished jobs:     100407s    1673.45m    27.89h    1.16d  0.003 y
+#IO & Wait Time:                 93019s    1550.32m    25.84h    1.08d  0.003 y
+#Average job time:                   6s       0.11m     0.00h    0.00d
+#Longest job:                     2209s      36.82m     0.61h    0.03d
+#Submission to last job:          2596s      43.27m     0.72h    0.03d
+
 
 
 # Load database
@@ -4026,7 +4042,7 @@ end
 
 # Clean up
     rm -r split fold err batch.bak
-    cd ../utr3
+    cd ../utr5
     rm -r split fold err batch.bak
 
 
