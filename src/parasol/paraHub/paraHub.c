@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.82 2005/01/13 20:51:35 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.83 2005/02/22 19:59:05 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -712,6 +712,7 @@ for (i=0; i<spokesToUse; ++i)
     mNode = dlPopHead(machList);
     dlAddTail(machList, mNode);
     sendViaSpoke(machine, message);
+    logDebug("hub: sending resurrect mesage to %s",machine->name);
     }
 }
 
