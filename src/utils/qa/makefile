@@ -29,3 +29,4 @@ install:
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
+	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
