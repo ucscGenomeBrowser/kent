@@ -1318,7 +1318,6 @@ char *org = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
 int tSize, qSize;
 
-uglyf("GenericNetClick %s %s %d<BR>\n", tdb->tableName, item, start);
 hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
 snprintf(query, sizeof(query), 
 	"select * from %s where tName = '%s' and tStart <= %d and tEnd > %d and level = %s",
