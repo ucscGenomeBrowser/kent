@@ -190,7 +190,7 @@ int pixWidth, pixHeight;
 
 char *answer;
 char cond_str[255];
-struct sqlConnection *conn; 
+struct sqlConnection *conn;
 struct sqlConnection *connCentral;
 char query[256];
 struct sqlResult *sr;
@@ -201,18 +201,31 @@ int  ii = 0;
 int  iypos;
 char *blatGbDb;
 char *sciName, *commonName;
+char *spDisplayId;
 
+conn = sqlConnect(UNIPROT_DB_NAME);
 hPrintf("<br><font size=4>Protein ");
 
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
-if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
+
+spDisplayId = spAccToId(conn, proteinID);
+if (strstr(spDisplayId, proteinID) == NULL)
+    {
+    hPrintf(" (aka %s", spDisplayId);
+    /* show once if the new and old displayId are the same */
+    if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
+    	{
+	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	}
+									            
+    hPrintf(")\n", oldSpDisplayId(spDisplayId));
+    }											    
 
 hPrintf(" %s\n", description);
 hPrintf("</font><br>");
 
 hPrintf("Organism: ");
-conn = sqlConnect("swissProt");
 /* get scientific and Genbank common name of this organism */
     
 sciName    = NULL;
@@ -220,7 +233,7 @@ commonName = NULL;
 /* NOTE: on rare occasions, acc to taxon id is not a one to one relationship, 
    but we will just use the first valid one */
 safef(cond_str, sizeof(cond_str),"accToTaxon.acc='%s' and accToTaxon.taxon=taxon.id", proteinID);
-answer = sqlGetField(conn, "swissProt", "accToTaxon, taxon", "taxon.id", cond_str);
+answer = sqlGetField(conn, UNIPROT_DB_NAME, "accToTaxon, taxon", "taxon.id", cond_str);
     
 if (answer != NULL)
     {
@@ -344,8 +357,8 @@ if (proteinInSupportedGenome || (blatGbDb != NULL))
     /* Show GB links only if the protein belongs to a supported genome */
     if (proteinInSupportedGenome)
     	{
-    	doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
-    	doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+    	doGenomeBrowserLink(proteinID, mrnaID, hgsidStr);
+    	doGeneDetailsLink(proteinID, mrnaID, hgsidStr);
     	}
 
     /* Show Gene Sorter link only if it is valid for this genome */
@@ -364,7 +377,7 @@ if (proteinInSupportedGenome || (blatGbDb != NULL))
     }
 
 /* This section shows various types of  domains */
-conn = sqlConnect("swissProt");
+conn = sqlConnect(UNIPROT_DB_NAME);
 domainsPrint(conn, proteinID);
 
 hPrintf("<P>");
@@ -372,7 +385,7 @@ hPrintf("<P>");
 /* Do Pathway section only if the protein belongs to a supported genome */
 if (proteinInSupportedGenome);
     {
-    doPathwayLinks(protDisplayID, mrnaID); 
+    doPathwayLinks(proteinID, mrnaID); 
     }
     
 printFASTA(proteinID, protSeq);
@@ -575,7 +588,6 @@ else
     	cartSetString(cart, "organism", organism);
 	}
     }
-
 /* print out key variables for debugging */
 /* printf("<br>before enter main section: <br>proteinInSupportedGenome=%d<br>proteinID=%s <br>database=%s <br>organism=%s <br>protDbName=%s\n",
 proteinInSupportedGenome, proteinID, database, organism, protDbName);fflush(stdout);

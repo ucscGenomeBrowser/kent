@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.32 2004/10/15 21:17:50 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.33 2005/02/08 18:37:15 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -275,8 +275,8 @@ histDone:
 hPrintf("\n<B>UCSC Links:</B><BR>\n ");
 hPrintf("<UL>\n");
 
-doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
-doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+doGenomeBrowserLink(proteinID, mrnaID, hgsidStr);
+doGeneDetailsLink(proteinID, mrnaID, hgsidStr);
 
 /* show Gene Sorter link only if it is valid for this genome */
 if (hgNearOk(database))
@@ -286,7 +286,7 @@ if (hgNearOk(database))
 
 hPrintf("</UL><P>");
 
-conn = sqlConnect("swissProt");
+conn = sqlConnect(UNIPROT_DB_NAME);
 domainsPrint(conn, proteinID);
 
 hPrintf("<P>");
@@ -393,7 +393,7 @@ getDbAndGenome(cart, &database, &organism);
 
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
-spConn = sqlConnect("swissProt");
+spConn = sqlConnect(UNIPROT_DB_NAME);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
