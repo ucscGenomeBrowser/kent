@@ -1,3 +1,8 @@
+32:
+     o Dealing with out of order exons in a more sophisticated way
+       so as to fix another problem introduced by last change
+       in v29.
+
 31:
      o Fixed a pretty bad memory leak when doing blast type output.
        Also fixed a more subtle one that occured in some cases usually
