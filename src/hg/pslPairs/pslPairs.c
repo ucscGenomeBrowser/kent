@@ -448,7 +448,7 @@ int main(int argc, char *argv[])
   optionInit(&argc, argv, optionSpecs);
   if (argc < 2)
     {
-      fprintf(stderr, "USAGE: pslPairs [-max=N] [-min=N] [-slopval=N] [-nearTop=N] [-tInsert=N] [-hardMax=N] -verbose -slop -short -long -mismatch -orphan <psl file> <pair file> <out file prefix>\n");
+      fprintf(stderr, "USAGE: pslPairs <psl file> <pair file> <out file prefix>\n  Options:\n\t-max=N\t\tmaximum length of clone sequence (default=50000)\n\t-min=N\t\tminimum length of clone sequence (default=30000)\n\t-slopval=N\tdeviation from max/min clone lengths allowed for slop report (default=5000)\n\t-nearTop=N\tmaximium deviation from best match allowed (default=0.001)\n\t-tInsert=N\tmaximum insert bases allowed in sequence alignment (default=500)\n\t-hardMax=N\tabsolute maximum clone length for long report (default=75000)\n\t-verbose\tdisplay all informational messages\n\t-slop\t\tcreate file of pairs that fall within slop length\n\t-short\t\tcreate file of pairs shorter than min size\n\t-long\t\tcreate file of pairs longer than max size, but less than hardMax size\n\t-mismatch\tcreate file of pairs with bad orientation of ends\n\t-orphan\t\tcreate file of unmatched end sequences\n");
       return 1;
     }
   VERBOSE = optionExists("verbose");
