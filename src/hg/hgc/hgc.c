@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.456 2003/07/20 04:56:19 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.457 2003/07/23 02:24:49 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5116,7 +5116,8 @@ hFreeConn(&conn);
 void doSPGene(struct trackDb *tdb, char *mrnaName)
 /* Process click on a known gene. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn  = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -5134,7 +5135,7 @@ struct refLink *rl;
 char *seqType;
 boolean dnaBased;
 char *proteinAC;
-
+char *pfamAC, *pfamID, *pfamDesc;
 cartWebStart(cart, "Known Gene");
 
 dnaBased = FALSE;
@@ -5188,6 +5189,7 @@ if (proteinID == NULL)
     {
     errAbort("Couldn't find corresponding protein for mRNA %s.", mrnaName);
     }
+
 sprintf(cond_str, "displayID='%s'", proteinID);
 proteinDesc = sqlGetField(conn, protDbName, "spXref3", "description", cond_str);
 if (proteinDesc != NULL) printf("%s\n", proteinDesc);
@@ -5231,6 +5233,36 @@ while (row != NULL)
     }
 sqlFreeResult(&sr);
 printf("<BR>");
+
+if (hTableExistsDb(protDbName, "pfamXref"))
+    {
+    sprintf(cond_str, "swissDisplayID='%s'", proteinID);
+    pfamAC = sqlGetField(conn, protDbName, "pfamXref", "pfamAC", cond_str);
+
+    if (pfamAC != NULL)
+    	{
+        printf("<LI><B>Pfam-A Domains: </B><BR>");
+    	sprintf(query, "select pfamAC from %s.pfamXref where swissDisplayID = '%s'", 
+		protDbName, proteinID);
+    	sr = sqlGetResult(conn, query);
+    	while ((row = sqlNextRow(sr)) != NULL)
+    	    {
+    	    pfamAC  = row[0];
+            sprintf(cond_str, "pfamAC='%s'", pfamAC);
+            pfamID = sqlGetField(conn2, protDbName, "pfamDesc", "pfamID", cond_str);
+	    printf("&nbsp&nbsp&nbsp");
+	    printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/swisspfamget.pl?name=%s\"", 
+		   proteinID);
+	    printf("TARGET=_blank>%s</A>", pfamAC);
+	    printf("(%s) ", pfamID);
+    	    sprintf(cond_str, "pfamAC='%s'", pfamAC);
+            pfamDesc= sqlGetField(conn2, protDbName, "pfamDesc", "description", cond_str);
+	    printf(" %s<BR>\n", pfamDesc);
+    	    }
+    	printf("<BR>");
+    	sqlFreeResult(&sr);
+    	}
+    }
 
 //The following is disabled until UCSC Proteome Browser relased to public
 /*
@@ -5412,6 +5444,7 @@ sqlFreeResult(&sr);
 
     printTrackHtml(tdb);
     hFreeConn(&conn);
+    hFreeConn(&conn2);
 }
 
 void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
