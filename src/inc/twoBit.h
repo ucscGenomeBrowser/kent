@@ -11,11 +11,11 @@ struct twoBit
     struct twoBit *next;	/* Next sequence in list */
     char *name;			/* Name of sequence. */
     UBYTE *data;		/* DNA at two bits per base. */
-    bits32 size;			/* Size of this sequence. */
+    bits32 size;		/* Size of this sequence. */
     bits32 nBlockCount;		/* Count of blocks of Ns. */
     bits32 *nStarts;		/* Starts of blocks of Ns. */
     bits32 *nSizes;		/* Sizes of blocks of Ns. */
-    bits32 maskBlockCount;		/* Count of masked blocks. */
+    bits32 maskBlockCount;	/* Count of masked blocks. */
     bits32 *maskStarts;		/* Starts of masked regions. */
     bits32 *maskSizes;		/* Sizes of masked regions. */
     bits32 reserved;		/* Reserved for future expansion. */
