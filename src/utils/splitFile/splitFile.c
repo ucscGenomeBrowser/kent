@@ -1,79 +1,67 @@
-/* splitFile - Split a file into pieces. */
+/* splitFile - Split up a file. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
-#include "obscure.h"
-
-char *suffix = "";
-int startNum=1;
-int digits = 2;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "splitFile - Split a file into pieces\n"
+  "splitFile - Split up a file\n"
   "usage:\n"
-  "   splitFile inFile outRoot count\n"
-  "Splits files into pieces of count lines each\n"
+  "   splitFile source linesPerFile outBaseName\n"
   "options:\n"
-  "   -head=fileName   Prepend header taken from file to each output file\n"
-  "   -tail=fileName   Add tail to each output file\n"
-  "   -suffix=.xxx     Suffix to add to each output file name\n"
-  "   -startNum=NNN    Starting number for output file names\n"
-  "   -digits=N        Number of digits in number part of output file name\n"
-  );
+  "   -head=file - put head in front of each output\n"
+  "   -tail=file - put tail at end of each output");
 }
 
-void writeLines(FILE *f, struct slName *list)
-/* Write list to file. */
+void appendFile(char *fileName, FILE *f)
+/* Append file to f. */
 {
-struct slName *el;
-for (el = list; el != NULL; el = el->next)
-    fprintf(f, "%s\n", el->name);
-}
-
-void splitFile(char *inFile, char *outRoot, int count)
-/* splitFile - Split a file into pieces. */
-{
-struct lineFile *lf = lineFileOpen(inFile, FALSE);
+struct lineFile *lf;
+int lineSize;
 char *line;
-int lineSize, fileIx = startNum;
-char outName[512];
-int i;
-FILE *f = NULL;
-struct slName *headList = NULL, *tailList = NULL;
-char *name;
-boolean going = TRUE;
-
-if (count <= 0)
-    usage();
-if ((name = cgiOptionalString("head")) != NULL)
-    headList = readAllLines(name);
-if ((name = cgiOptionalString("tail")) != NULL)
-    tailList = readAllLines(name);
-while (going)
+if (fileName != NULL)
     {
-    for (i=0; i<count; ++i)
+    lf = lineFileOpen(fileName, FALSE);
+    while (lineFileNext(lf, &line, &lineSize))
+	mustWrite(f, line, lineSize);
+    lineFileClose(&lf);
+    }
+}
+
+void splitFile(char *source, int linesPerFile, char *outBaseName,
+	char *head, char *tail)
+/* splitFile - Split up a file. */
+{
+char outName[512];
+int fileIx, i;
+struct lineFile *lf = lineFileOpen(source, FALSE);
+FILE *f = NULL;
+int lineSize;
+char *line;
+boolean done = FALSE;
+
+for (fileIx=1; ; ++fileIx)
+    {
+    sprintf(outName, "%s%02d", outBaseName, fileIx);
+    f = mustOpen(outName, "w");
+    appendFile(head, f);
+    for (i=0; i<linesPerFile; ++i)
         {
 	if (!lineFileNext(lf, &line, &lineSize))
 	    {
-	    going = FALSE;
+	    done = TRUE;
 	    break;
-	    }
-	if (f == NULL)
-	    {
-	    sprintf(outName, "%s%0*d%s", outRoot, digits, fileIx++, suffix);
-	    printf("Writing %s\n", outName);
-	    f = mustOpen(outName, "w");
-	    writeLines(f, headList);
 	    }
 	mustWrite(f, line, lineSize);
 	}
-    if (f != NULL)
-	writeLines(f, tailList);        
+    appendFile(tail, f);
+    printf("wrote %d lines to %s\n", i, outName);
     carefulClose(&f);
+    if (done)
+        break;
     }
 }
 
@@ -81,11 +69,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-suffix = cgiUsualString("suffix", suffix);
-startNum = cgiUsualInt("startNum", startNum);
-digits = cgiUsualInt("digits", digits);
 if (argc != 4)
     usage();
-splitFile(argv[1], argv[2], atoi(argv[3]));
+if (!isdigit(argv[2][0]))
+    usage();
+splitFile(argv[1], atoi(argv[2]), argv[3], cgiOptionalString("head"), cgiOptionalString("tail"));
 return 0;
 }
