@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.89 2005/02/18 05:28:01 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.90 2005/02/22 21:18:07 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -631,7 +631,7 @@ printf("</TR>\n<TR>\n");
 printf("<TD COLSPAN=5 ALIGN=CENTER>\n");
 printf("<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n");
 printf("<INPUT TYPE=SUBMIT NAME=Lucky VALUE=\"I'm Feeling Lucky\">\n");
-printf("<INPUT TYPE=RESET NAME=Reset VALUE=Reset>\n");
+printf("<INPUT TYPE=RESET NAME=Reset VALUE=Clear>\n");
 printf("</TD>\n");
 printf("</TR>\n<TR>\n"); 
 puts("<TD COLSPAN=5 WIDTH=\"100%\">\n" 
