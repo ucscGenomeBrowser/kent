@@ -2,7 +2,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: medfnt.c,v 1.4 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: medfnt.c,v 1.5 2005/02/02 07:09:24 kent Exp $";
 
 static UBYTE font_data[] = {
 0x0,0x18,0xd8,0x0,0x3,0x80,0x1f,0xf,
@@ -317,7 +317,9 @@ static struct font_hdr font_font = {
 2, 2, 0x5555, 0x5555,
 0x4, NULL, font_ch_ofst, font_data,
 128, 18,
-NULL,};
+NULL,
+0, 1, /* x/y offset */
+};
 
 
 MgFont *mgMediumFont() { return &font_font; }

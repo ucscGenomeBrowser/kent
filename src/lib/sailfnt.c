@@ -2,7 +2,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: sailfnt.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: sailfnt.c,v 1.5 2005/02/02 07:09:24 kent Exp $";
 
 char sail_name[] = "SAIL.FNT";
 
@@ -100,6 +100,7 @@ struct font_hdr sail_font =
 	sail_data,
 	72, 7,	/* frm_wdt,frm_hgt */
 	NULL,	/* next font */
+	0, -1,	/* x/y offset */
 	};
 
 MgFont *mgSmallFont()

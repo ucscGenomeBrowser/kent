@@ -40,6 +40,8 @@ UBYTE	*fnt_dta;	/* On disk byte offset to beginning of bitmap. */
 WORD	frm_wdt;	/* Byte width of bitmap. */
 WORD	frm_hgt;	/* Pixel height of bitmap. */
 struct font_hdr	*nxt_fnt; /* Set to 0 */
+WORD    xOff;		/* X offset to add. */
+WORD    yOff;		/* Y offset to add. */
 }; 
 
 #define STPROP 0

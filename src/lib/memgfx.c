@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.41 2005/01/23 00:15:13 kent Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.42 2005/02/02 07:09:24 kent Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -524,7 +524,7 @@ void mgText(struct memGfx *mg, int x, int y, Color color,
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-gfText(mg, font, text, x, y-1, color, mgTextBlit, MG_WHITE);
+gfText(mg, font, text, x, y, color, mgTextBlit, MG_WHITE);
 }
 
 void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height, 

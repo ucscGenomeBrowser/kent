@@ -6,7 +6,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: gemfont.c,v 1.6 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: gemfont.c,v 1.7 2005/02/02 07:09:24 kent Exp $";
 
 typedef union
     {
@@ -28,6 +28,8 @@ int missChar;
 int font_type;
 int extraWidth = f->lft_ofst + f->rgt_ofst;
 
+x += f->xOff;
+y += f->yOff;
 x += f->lft_ofst;
 lo = f->ADE_lo;
 hi = f->ADE_hi;
