@@ -47,7 +47,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <errno.h>
-#include "errAbort.h"
+#include "errabort.h"
 #include "rudp.h"
 
 static int rudpCalcTimeOut(struct rudp *ru)
