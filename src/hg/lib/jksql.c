@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.32 2003/08/24 17:09:25 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.33 2003/08/25 01:02:13 markd Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -357,12 +357,18 @@ int numScan, numRecs, numSkipped, numWarnings;
 char *localOpt, *concurrentOpt;
 const char *info;
 struct sqlResult *sr;
+/* at least mysql 4.0 */
+boolean isMySql4 = (conn->conn->server_version[0] > '3');
+
 
 /* Ocassionally mysql_info() from return NULL on long loads.  It was
  * believed that this was due to the connection timing out during load.
  * So set an really long time out (12 hrs). */
-safef(query, sizeof(query), "SET SESSION wait_timeout=%d", 12*60*60);
-sqlUpdate(conn, query);
+if (isMySql4)
+    {
+    safef(query, sizeof(query), "SET SESSION wait_timeout=%d", 12*60*60);
+    sqlUpdate(conn, query);
+    }
 
 /* determine if tab file can be accessed directly by the database, or send
  * over the network */
@@ -388,7 +394,13 @@ else
 if (options & SQL_TAB_FILE_CONCURRENT)
     concurrentOpt = "CONCURRENT";
 else
+    {
     concurrentOpt = "";
+    /* disable update of indexes during load. Inompatible with concurrent,
+     * since enable keys locks other's out. */
+    safef(query, sizeof(query), "ALTER TABLE %s DISABLE KEYS", table);
+    sqlUpdate(conn, query);
+    }
 
 safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' INTO TABLE %s",
       localOpt, concurrentOpt, tabPath, table);
@@ -419,6 +431,12 @@ if ((numSkipped > 0) || (numWarnings > 0))
         warn("Warning: load of %s did not go as planned: %d record(s), "
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
+    }
+if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && isMySql4)
+    {
+    /* reenable update of indexes */
+    safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
+    sqlUpdate(conn, query);
     }
 }
 
