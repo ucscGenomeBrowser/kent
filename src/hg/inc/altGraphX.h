@@ -140,7 +140,7 @@ bool **altGraphXCreateEdgeMatrix(struct altGraphX *ag);
 void altGraphXFreeEdgeMatrix(bool ***pEm, int vertCount);
 /* Free an edge matrix. */
 
-float altGraphConfidenceForEdge(struct altGraphX *ag, int eIx, float prior);
+float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior);
 /* Return the score for this cassette exon. Want to have cassette exons
 that are present in multiple transcripts and that are not present in multiple
 exons. We want to see both forms of the cassette exon, we don't want to have

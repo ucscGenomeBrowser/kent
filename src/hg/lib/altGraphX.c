@@ -812,7 +812,7 @@ freez(&topo);
 }
 
 
-boolean altGraphXEdgeSeen(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
+boolean altGraphXEdgeObserved(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
 /* is the mrnaIx already in seen? */
 {
 int i=0;
@@ -845,7 +845,7 @@ AllocArray(seen, ag->edgeCount);
 for(i=0; i<ag->edgeCount; i++)
     seen[i] = -1;
 for(i=0; i<ev->evCount; i++)
-    if(!altGraphXEdgeSeen(ag, seen, &seenCount, ev->mrnaIds[i]))
+    if(!altGraphXEdgeObserved(ag, seen, &seenCount, ev->mrnaIds[i]))
 	conf++;
 freez(&seen);
 return conf;
@@ -921,7 +921,7 @@ freez(&intEndEdges);
 return conf;
 }
 
-float altGraphConfidenceForEdge(struct altGraphX *ag, int eIx, float prior)
+float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior)
 /* Return the score for this cassette exon. Want to have cassette exons
 that are present in multiple transcripts and that are not present in multiple
 exons. We want to see both forms of the cassette exon, we don't want to have
