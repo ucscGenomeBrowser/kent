@@ -27,6 +27,20 @@ type genePred knownGenePep knownGeneMrna
 hgGene on
 cdsDrawDefault genomic\ codons
 
+track acembly
+shortLabel Acembly Genes
+longLabel AceView Gene Models With Alt-Splicing
+group genes
+priority 41
+visibility dense
+color 220,0,100
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+itemClassTbl acemblyClass
+geneClasses main putative
+gClass_main 200,0,0
+gClass_putative 0,0,200
+
 track ECgene
 shortLabel ECgene Genes
 longLabel ECgene v1.2 Gene Predictions with Alt-Splicing
