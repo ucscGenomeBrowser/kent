@@ -66,6 +66,7 @@
 #include "dnaProbe.h"
 #include "ancientRref.h"
 #include "jointalign.h"
+#include "gcPercent.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -4041,6 +4042,38 @@ hFreeConn(&conn);
 webEnd();
 }
 
+void doGcDetails(struct trackDb *tdb, char *itemName) {
+/* Show details for gc percent */
+char *group = tdb->tableName;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct gcPercent *gc;
+boolean hasBin; 
+char table[64];
+
+cartWebStart("Percentage GC in 20,000 Base Windows (GC)");
+
+hFindSplitTable(seqName, group, table, &hasBin);
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+    table, seqName, start, itemName);
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gc = gcPercentLoad(row + hasBin);
+    printPos(gc->chrom, gc->chromStart, gc->chromEnd, NULL, FALSE);
+    printf("<B>GC Percentage:</B> %3.1f%%<BR>\n", ((float)gc->gcPpt)/10);
+    gcPercentFree(&gc);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+webEnd();
+}
+
 void chuckHtmlStart(char *title) 
 /* Prints the header appropriate for the title
  * passed in. Links html to chucks stylesheet for 
@@ -5317,6 +5350,10 @@ else if(sameWord(track, "loweProbes"))
 else if( sameWord(track, "ancientR"))
     {
     ancientRDetails(tdb, item);
+    }
+else if( sameWord(track, "gcPercent"))
+    {
+    doGcDetails(tdb, item);
     }
 else if (tdb != NULL)
    {
