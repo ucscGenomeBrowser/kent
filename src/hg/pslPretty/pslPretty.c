@@ -424,12 +424,12 @@ if (psl->qStart > tinySize)
     {
     if (psl->qStart <= smallSize)
 	{
-	++missSmallStart;
+	missSmallStart = psl->qStart;
 	++totalProblems;
 	}
     else
 	{
-	++missLargeStart;
+	missLargeStart = psl->qStart;
 	++totalProblems;
 	}
     }
@@ -438,12 +438,12 @@ if (diff > tinySize)
     {
     if (diff <= smallSize)
 	{
-	++missSmallEnd;
+	missSmallEnd = diff;
 	++totalProblems;
 	}
     else
 	{
-	++missLargeEnd;
+	missLargeEnd = diff;
 	++totalProblems;
 	}
     }
@@ -493,9 +493,9 @@ for (i=0; i<psl->blockCount-1; ++i)
 	}
     }
 fprintf(f, "%2d %9s %s ", totalProblems, psl->qName, psl->strand);
-fprintf(f, "%2dS ", missLargeStart);
+fprintf(f, "%4dS ", missLargeStart);
 fprintf(f, "%2ds ", missSmallStart);
-fprintf(f, "%2dE ", missLargeEnd);
+fprintf(f, "%4dE ", missLargeEnd);
 fprintf(f, "%2de ", missSmallEnd);
 fprintf(f, "%2dM ", missLargeMiddle);
 fprintf(f, "%2dm ", missSmallMiddle);
