@@ -1095,24 +1095,23 @@ axtChain $1 /iscratch/i/mus/mm5/softNib \
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-XXX running 2004-07-08 14:49
     #	memory usage 2546110464, utime 16327 s/100, stime 3546
 
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
-    time netClass hNoClass.net hg17 mm5 mouse.net \
-	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInMouse \
-	-qNewR=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInHuman
-    #	real    16m38.098s
-    #	user    11m38.490s
-    #	sys     1m48.470s
+    time netClass hNoClass.net mm5 hg17 human.net \
+	-tNewR=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInHuman \
+	-qNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInMouse
+    #	real    9m45.271s
+    #	user    6m47.170s
+    #	sys     1m20.440s
 
     # If things look good do
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
-    time netFilter -syn mouse.net > mouseSyn.net
+    time netFilter -syn human.net > humanSyn.net
     #	real    12m3.701s
     #	user    8m44.180s
     #	sys     1m1.610s
@@ -1120,35 +1119,30 @@ XXX running 2004-07-08 14:49
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
-    netFilter -minGap=10 mouse.net |  hgLoadNet hg17 netMm5 stdin
-    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg17 syntenyNetMm5 stdin
+    netFilter -minGap=10 human.net |  hgLoadNet mm5 netHg17 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet mm5 syntenyNetHg17 stdin
 
     # check results
-    #	featureBits hg17 netMm5
-    #	2830625630 bases of 2866216770 (98.758%) in intersection
+    # featureBits mm5 netHg17
+    #	2504056038 bases of 2615483787 (95.740%) in intersection
+    # featureBits mm4 netHg16
+    #	2553137690 bases of 2627444668 (97.172%) in intersection
 
-    #	featureBits hg17 netMm4
-    #	2824272033 bases of 2866216770 (98.537%) in intersection
-    # featureBits hg16 netMm5
-    #	2823565051 bases of 2865248791 (98.545%) in intersection
-
-    # featureBits hg17 syntenyNetMm5
-    #	2799194300 bases of 2866216770 (97.662%) in intersection
-    # featureBits hg17 syntenyNetMm4
-    #	2785830955 bases of 2866216770 (97.195%) in intersection
-    # featureBits hg16 syntenyNetMm5
-    #	2786960572 bases of 2865248791 (97.268%) in intersection
+    # featureBits mm5 syntenyNetHg17
+    #	2460442823 bases of 2615483787 (94.072%) in intersection
+    # featureBits mm4 syntenyNetHg16
+    #	2495783103 bases of 2627444668 (94.989%) in intersection
 
     # Add entries for net and chain to mouse/hg17 trackDb
 
     # make net
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtChain
-    mkdir mouseNet
-    time netSplit mouse.net mouseNet
-    #	real    11m45.243s
-    #	user    8m48.490s
-    #	sys     1m13.490s
+    mkdir humanNet
+    time netSplit human.net humanNet
+    #	real    4m46.190s
+    #	user    3m27.740s
+    #	sys     0m38.900s
 
     #	extract axt's from net, and convert to maf's
     ssh kksilo
@@ -1156,22 +1150,25 @@ XXX running 2004-07-08 14:49
     mkdir ../axtNet ../mafNet
 cat > makeMaf.csh << '_EOF_'
 #!/bin/csh -ef
-    foreach f (mouseNet/chr*.net)
+    foreach f (humanNet/chr*.net)
         set c = $f:t:r
         echo "netToAxt: $c.net -> $c.axt"
         rm -f ../axtNet/$c.axt
-        netToAxt mouseNet/$c.net chain/$c.chain \
-	    /cluster/data/hg17/nib /cluster/data/mm5/nib stdout | \
+        netToAxt humanNet/$c.net chain/$c.chain \
+	    /cluster/data/mm5/nib /cluster/data/hg17/nib stdout | \
 	    axtSort stdin ../axtNet/$c.axt
         axtToMaf ../axtNet/$c.axt \
-            /cluster/data/hg17/chrom.sizes /cluster/data/mm5/chrom.sizes \
-            ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=mm5.
+            /cluster/data/mm5/chrom.sizes /cluster/data/hg17/chrom.sizes \
+            ../mafNet/$c.maf -tPrefix=mm5. -qPrefix=hg17.
 	echo "Complete: $c.net -> axtNet/$c.axt -> mafNet/$c.maf"
     end
 '_EOF_'
 # << for emacs
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+    #	real    39m53.316s
+    #	user    20m2.530s
+    #	sys     4m40.120s
 
 
     ssh hgwdev
@@ -1182,10 +1179,11 @@ cat > makeMaf.csh << '_EOF_'
     # copy net axt's to download area
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/axtNet
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtNet
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtNet
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/axtNet
     gzip *.axt
+XXX - running 2004-07-13 14;18
     # add README.txt file to dir (use previous assembly's copy as template)
     #	32 minute gzip
 
@@ -1195,89 +1193,88 @@ cat > makeMaf.csh << '_EOF_'
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
-	echo -n "processing $c.axt -> ${c}_blastzBestMm5.psl ..."
+	echo -n "processing $c.axt -> ${c}_blastzBesthg17.psl ..."
     /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
-	S1.len S2.len pslBest/${c}_blastzBestMm5.psl
+	S1.len S2.len pslBest/${c}_blastzBestHg17.psl
 	echo "Done"
     end
 
     # Load tables
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/pslBest
-    for I in chr*BestMm5.psl
+    for I in chr*BestHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl mm5 ${I}
 	echo "done ${I}"
     done
 
      # check results
-    # featureBits hg17 blastzBestMm5
-    #	1013348528 bases of 2866216770 (35.355%) in intersection
-    # featureBits hg17 blastzBestMm4
-    #	1017319919 bases of 2866216770 (35.493%) in intersection
-    # featureBits hg16 blastzBestMm5
-    #	996722004 bases of 2865248791 (34.787%) in intersection
+    # featureBits mm5 blastzBestHg17
+    #	1020692679 bases of 2615483787 (39.025%) in intersection
+    # featureBits mm4 blastzBestHg16
+    #	1030510540 bases of 2627444668 (39.221%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg17/axtBest/Mm5
-     cd /gbdb/hg17/axtBest/Mm5
+     mkdir -p /gbdb/mm5/axtBest/Hg17
+     cd /gbdb/mm5/axtBest/Hg17
      ln -s /cluster/data/mm5/bed/blastz.hg17/axtNet/chr*.axt .
      cd /cluster/data/mm5/bed/blastz.hg17/axtNet
      rm -f axtInfoInserts.sql
-     foreach f (/gbdb/hg17/axtBest/Mm5/chr*.axt)
+     foreach f (/gbdb/mm5/axtBest/Hg17/chr*.axt)
        set chr=$f:t:r
        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
-                VALUES ('mm5','Blastz Best in Genome','$chr','$f');" \
+                VALUES ('hg17','Blastz Best in Genome','$chr','$f');" \
          >>! axtInfoInserts.sql
      end
-    hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
+    hgsql mm5 < ~/kent/src/hg/lib/axtInfo.sql
     #	table axtInfo may already exist, ignore create error.
-    hgsql hg17 < axtInfoInserts.sql
+    hgsql mm5 < axtInfoInserts.sql
 
-# MAKING MOUSE SYNTENY (DONE - 2004-07-03 - Hiram)
+# MAKING HUMAN SYNTENY (DONE - 2004-07-13 - Hiram)
 
 ssh hgwdev
-mkdir /cluster/data/mm5/bed/syntenyMm5
-cd /cluster/data/mm5/bed/syntenyMm5
+mkdir /cluster/data/mm5/bed/syntenyHg17
+cd /cluster/data/mm5/bed/syntenyHg17
 
-# Copy all the needed scripts from /cluster/data/hg16/bed/syntenyMm3
-cp -p /cluster/data/mm5/bed/syntenyRn3/*.pl .
+# Copy all the needed scripts from /cluster/data/hg16/bed/syntenyRn3
+cp -p /cluster/data/hg17/bed/syntenyRn3/*.pl .
 
-./syntenicBest.pl -db=hg17 -table=blastzBestMm5
-./smooth.pl
-./joinsmallgaps.pl
-./fillgap.pl -db=hg17 -table=blastzBestMm5
-./synteny2bed.pl
+./syntenicBest.pl -db=mm5 -table=blastzBestHg17 > synBest.out 2>&1
+./smooth.pl > smooth.out 2>&1
+./joinsmallgaps.pl > joingaps.out 2>&1
+./fillgap.pl -db=mm5 -table=blastzBestHg17 > fillgap.out 2>&1
+./synteny2bed.pl > syn2bed.out 2>&1
+
     #	The five commands above
-    #	real    209m28.161s
-    #	user    0m21.040s
-    #	sys     0m4.100s
+    #	real    168m43.627s
+    #	user    0m18.680s
+    #	sys     0m4.990s
 
-#	Used to load this in syntenyMm5, but that type is misleading to
+#	Used to load this in syntenyHg17, but that type is misleading to
 #	the table browser and fails the checkTableCoords check.
 #	Better to use this ensRatMusHom type:
-#	Need a new name here for the Mm5 to not conflict with Rn3
-sed -e 's/ensPhusionBlast/ensRatMm5Hom/g' \
+#	Need a new name here for the Hg17 to not conflict with the
+#	others
+sed -e 's/ensPhusionBlast/ensRatMusHg17/g' \
       $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
-      > ensRatMm5Hom.sql
-hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
-    #	featureBits hg17 ensRatMm5Hom
-    #	2649530748 bases of 2866216770 (92.440%) in intersection
-    #	featureBits hg17 ensRatMm4Hom
-    #	2549307611 bases of 2866216770 (88.943%) in intersection
-    #	featureBits hg16 syntenyMm5
-    #	2560252977 bases of 2865248791 (89.355%) in intersection
+      > ensRatMusHg17.sql
+hgLoadBed mm5 ensRatMusHg17 ucsc100k.bed -sqlTable=ensRatMusHg17.sql
 
-# MAKING MOUSE AXTTIGHT FROM AXTBEST (DONE - 2004-07-02 - Hiram)
+    # featureBits mm5 ensRatMusHg17
+    #	2366463967 bases of 2615483787 (90.479%) in intersection
+    # featureBits mm4 syntenyHg16
+    #	2299774191 bases of 2627444668 (87.529%) in intersection
+
+# MAKING MOUSE AXTTIGHT FROM AXTBEST (DONE - 2004-07-13 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.hg17/axtNet
     mkdir -p ../axtTight
     bash	#	for tcsh users
-    for i in *.axt
+    for I in *.axt
     do
-      echo $i
-      subsetAxt  $i ../axtTight/$i \
+      echo "axtNet/$I -> ../axtTight/$I"
+      subsetAxt  $I ../axtTight/$I \
 	~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
     done
     # exit bash if you are tcsh
@@ -1287,37 +1284,35 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     cd ../axtTight
     mkdir ../pslTight
     bash	#	for tcsh users
-    for i in *.axt
+    for I in *.axt
     do
-      c=${i/.axt/}
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm5.psl
-      echo "Done: $i -> ${c}_blastzTightMm5.psl"
+      C=${I/.axt/}
+      axtToPsl $I ../S1.len ../S2.len ../pslTight/${C}_blastzTightHg17.psl
+      echo "Done: $I -> ${C}_blastzTightHg17.psl"
     done
     # exit bash if you are tcsh
 
     # Load tables into database
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/pslTight
-    for I in chr*TightMm5.psl
+    for I in chr*TightHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	/cluster/bin/i386/hgLoadPsl mm5 ${I}
 	echo "done ${I}"
     done
 
     #	Compare results with previous assembly:
-    #	featureBits hg17 blastzTightMm5
-    #	165862935 bases of 2866216770 (5.787%) in intersection
-    #	featureBits hg17 blastzTightMm4
-    #	166569246 bases of 2866216770 (5.811%) in intersection
-    #	featureBits hg16 blastzTightMm5
-    #	162641577 bases of 2865248791 (5.676%) in intersection
+    #	featureBits mm5 blastzTightHg17
+    #	168148800 bases of 2615483787 (6.429%) in intersection
+    #	featureBits mm4 blastzTightHg16
+    #	170163839 bases of 2627444668 (6.476%) in intersection
 
     # copy  axt's to download area
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.hg17/axtTight
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtTight
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtTight
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/axtTight
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
     #	4 minute gzip
@@ -1474,4 +1469,3 @@ done
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
     # mrna zips -- auto dump process takes care of this
-
