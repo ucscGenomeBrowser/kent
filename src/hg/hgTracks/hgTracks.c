@@ -4531,6 +4531,12 @@ else
     return tvDense;
 }
 
+void smallBreak()
+/* Draw small horizontal break */
+{
+printf("<FONT SIZE=1><BR></FONT>\n");
+}
+
 void makeActiveImage(struct trackGroup *groupList)
 /* Make image and image map. */
 {
@@ -4788,8 +4794,10 @@ printf("</MAP>\n");
 /* Save out picture and tell html file about it. */
 makeTempName(&gifTn, "hgt", ".gif");
 mgSaveGif(mg, gifTn.forCgi);
+smallBreak();
+smallBreak();
 printf(
-    "<P><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
+    "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>\n",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
 
 mgFree(&mg);
@@ -5221,6 +5229,47 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 
 }
 
+char *wrapWhiteFont(char *s)
+/* Write white font around s */
+{
+static char buf[256];
+sprintf(buf, "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
+return buf;
+}
+
+void hotLinks()
+/* Put up the hot links bar. */
+{
+boolean gotBlat = sameString(database, "hg6") || 
+	sameString(database, "hg7") || sameString(database, "hg8");
+printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+printf("<TD><P ALIGN=CENTER><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+if (gotBlat)
+    {
+    struct dyString *uiVars = uiStateUrlPart(NULL);
+    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    }
+printf("<TD><P ALIGN=CENTER><A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
+      " %s </A></TD>",  hgcName(),
+      winStart, chromName, winStart, winEnd, database, wrapWhiteFont(" DNA "));
+printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Tables"));
+
+if (gotBlat)
+    {
+    printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Convert"));
+    }
+if (sameString(database, "hg7"))
+    {
+    fputs("<TD><P ALIGN=CENTER>", stdout);
+    printEnsemblAnchor();
+    printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    }
+printf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Help"));
+fputs("</TR></TABLE>", stdout);
+fputs("</TD></TR></TABLE>\n", stdout);
+}
+
 
 void doForm()
 /* Make the tracks display form with the zoom/scroll
@@ -5320,11 +5369,12 @@ printf("<CENTER>\n");
 
 if (!hideControls)
     {
+    hotLinks();
     /* Show title . */
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
 	freezeName = "Unknown";
-    printf("<H2>UCSC Genome Browser on %s Freeze</H2>\n",freezeName); 
+    printf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
 
     /* Put up scroll and zoom controls. */
     fputs("move ", stdout);
@@ -5370,29 +5420,7 @@ if (!hideControls)
 	  "densely.  Click on base position to zoom in by 3x around where you "
 	  "clicked.<BR>",
 	  stdout);
-
-    /* Add the table with links to Ensembl, */ 
-    printf("<TABLE BORDER=\"1\" WIDTH=\"100%%\"><TR><TD><P ALIGN=CENTER>");
-    printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
-	  "View DNA</A></TD>",  hgcName(),
-	  winStart, chromName, winStart, winEnd, database);
-    if (sameString(database, "hg7"))
-	{
-	fputs("<TD><P ALIGN=CENTER>", stdout);
-	printEnsemblAnchor();
-	fputs("Visit Ensembl</A></TD>", stdout);
-	}
-    if (sameString(database, "hg6") || sameString(database, "hg7") || sameString(database, "hg8"))
-	{
-	struct dyString *uiVars = uiStateUrlPart(NULL);
-	fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">BLAT Search</A></TD>", uiVars->string);
-	}
-    printf("<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
-    printf("<td align=center><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A></td>\n");
-    fputs("</TR>", stdout);
-    fputs("</TABLE>\n", stdout);
-
-
+    smallBreak();
 
     /* Display bottom control panel. */
     fputs("Chromosome ", stdout);
@@ -5401,6 +5429,7 @@ if (!hideControls)
     cgiMakeIntVar("winStart", winStart, 12);
     fputs(" - ", stdout);
     cgiMakeIntVar("winEnd", winEnd, 12);
+    fputs("<BR>\n", stdout);
     printf(" Guidelines ");
     makeCheckBox("guidelines", withGuidelines);
     printf(" <B>Labels:</B> ");
@@ -5419,7 +5448,8 @@ if (!hideControls)
      */
     printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
-    printf("<BR><B>Track Controls:</B><BR> ");
+    smallBreak();
+    printf("<B>Track Controls:</B><BR> ");
     printf("</th></tr>\n");
     printf("<tr><td align=left>\n");
     printf(" Base Position <BR>");
