@@ -3575,7 +3575,8 @@ cartWebStart(cart, "Repeat");
 if (offset >= 0)
     {
     struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
+ 
+   struct sqlResult *sr;
     char **row;
     struct rmskOut *ro;
     char query[256];
@@ -3687,6 +3688,7 @@ if (cgiVarExists("o"))
 	printf("<B>Score:</B> %d<BR>\n", rep->score);
 	printf("<B>Entropy:</B> %4.3f<BR>\n", rep->entropy);
 	printf("<B>Sequence:</B> %s<BR>\n", rep->sequence);
+	printPos(seqName, rep->chromStart, rep->chromEnd, NULL, TRUE);
 	printf("<BR>\n");
 	simpleRepeatFree(&rep);
 	}
@@ -4201,6 +4203,7 @@ cgiContinueHiddenVar("i");
 printf("\n");
 cgiContinueHiddenVar("db");
 printf("\n");
+
 cgiContinueHiddenVar("c");
 printf("\n");
 cgiContinueHiddenVar("l");
@@ -4209,6 +4212,12 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
+
+//puts("position: ");
+//cgiMakeTextVar("c", cartString(cart, "c"), 0);
+//cgiMakeTextVar("l", cartString(cart, "l"), 0);
+//cgiMakeTextVar("r", cartString(cart, "r"),  0);
+
 hgSeqOptions(cgiString("o"));
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
