@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.682 2004/07/08 02:52:44 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.683 2004/07/09 19:53:18 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2698,6 +2698,7 @@ if (sameString(action, "Extended case/color options"))
     return;
     }
 pushWarnHandler(htmlVaWarn);
+hgBotDelay();
 puts("<PRE>");
 if (tbl[0] == 0)
     {
