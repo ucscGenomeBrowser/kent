@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.24 2004/01/15 18:57:46 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.25 2004/01/16 01:37:45 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -244,8 +244,9 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     }
 if (cdsStart > cdsEnd)
     {
-    cdsStart = group->start;
-    cdsEnd = group->end;
+    /* no cds annotated */
+    cdsStart = 0;
+    cdsEnd = 0;
     }
 if (exonCount == 0)
     return NULL;
@@ -359,9 +360,10 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             }
         else
             {
-            /* overlap, extend exon */
+            /* overlap, extend exon, picking the largest of ends */
             assert(gl->start >= eStarts[i-1]);
-            eEnds[i-1] = gl->end;
+            if (gl->end > eEnds[i-1])
+                eEnds[i-1] = gl->end;
             }
         /* extend exon for stop codon if needed */
         if ((group->strand == '+') && (eEnds[i-1] == stopCodonStart))
