@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.18 2004/07/16 16:18:59 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.19 2004/07/16 18:21:43 kent Exp $";
 
 
 void usage()
@@ -180,6 +180,36 @@ else
     errAbort("Sorry, don't understand %s type region yet", regionType);
 return regionList;
 }
+
+struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
+	char *fields, struct region *region, boolean isPositional)
+/* Construct and execute query for table on region. */
+{
+struct sqlResult *sr;
+if (isPositional)
+    {
+    if (region->end == 0) /* Full chromosome. */
+	{
+	sr = hExtendedChromQuery(conn, table, region->chrom, 
+		NULL, FALSE, fields, NULL);
+	}
+    else
+	{
+	sr = hExtendedRangeQuery(conn, table, region->chrom, 
+		region->start, region->end, NULL, 
+		FALSE, fields, NULL);
+	}
+    }
+else
+    {
+    char query[256];
+    safef(query, sizeof(query), 
+	    "select %s from %s", fields, table);
+    sr = sqlGetResult(conn, query);
+    }
+return sr;
+}
+
 
 char *connectingTableForTrack(struct trackDb *track)
 /* Return table name to use with all.joiner for track. 
@@ -416,6 +446,7 @@ boolean htiIsPositional(struct hTableInfo *hti)
 return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 }
 
+
 void doTabOutTable(char *table, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on table. */
 {
@@ -424,6 +455,7 @@ struct hTableInfo *hti = NULL;
 struct dyString *fieldSpec = newDyString(256);
 struct hash *idHash = NULL;
 int outCount = 0;
+boolean isPositional;
 
 regionList = getRegions(conn);
 checkTableExists(conn, table);
@@ -447,6 +479,7 @@ if (hti->nameField[0] != 0)
 	dyStringAppend(fieldSpec, hti->nameField);
 	}
     }
+isPositional = htiIsPositional(hti);
 
 /* Loop through each region. */
 for (region = regionList; region != NULL; region = region->next)
@@ -457,27 +490,7 @@ for (region = regionList; region != NULL; region = region->next)
     char chromTable[256];
     boolean gotWhere = FALSE;
 
-    if (htiIsPositional(hti))
-	{
-	if (region->end == 0) /* Full chromosome. */
-	    {
-	    sr = hExtendedChromQuery(conn, table, region->chrom, 
-		    NULL, FALSE, fieldSpec->string, NULL);
-	    }
-	else
-	    {
-	    sr = hExtendedRangeQuery(conn, table, region->chrom, 
-		    region->start, region->end, NULL, 
-		    FALSE, fieldSpec->string, NULL);
-	    }
-	}
-    else
-        {
-	char query[256];
-	safef(query, sizeof(query), 
-		"select %s from %s", fieldSpec->string, table);
-	sr = sqlGetResult(conn, query);
-	}
+    sr = regionQuery(conn, table, fieldSpec->string, region, isPositional);
     colCount = sqlCountColumns(sr);
     if (idHash != NULL)
         colCount -= 1;
@@ -505,47 +518,24 @@ for (region = regionList; region != NULL; region = region->next)
     if (!hti->chromField[0])
         break;	/* No need to iterate across regions in this case. */
     }
-// TODO: - remind them when they got zero it could be from region being
-// small as well.
-if (outCount == 0 && idHash != NULL)
-    hPrintf("No items in table matched identifier list.\n");
+
+/* Do some error diagnostics for user. */
+if (outCount == 0)
+    {
+    int regionCount = slCount(regionList);
+    if (idHash != NULL)
+	{
+	if (regionCount <= 1)
+	    hPrintf("No items in selected region matched identifier list.\n");
+	else
+	    hPrintf("No items matched identifier list");
+	}
+    else if (regionCount <= 1)
+        {
+	hPrintf("No items in selected region");
+	}
+    }
 hashFree(&idHash);
-}
-
-struct keyedRow *fetchKeyedFields(char *table, struct sqlConnection *conn,
-	char *fields, char *keyIn, struct hash *keyInHash, 
-	struct slName *keyOutList)
-/* This returns a list of keyedRows filtering out those that
- * don't match on keyIn.  */
-{
-int outKeyCount = slCount(keyOutList);
-uglyf("fetchKeyFields from %s,  fields %s, keyIn %s, outKeyCount %d<BR>\n",
-	table, fields, keyIn, outKeyCount);
-return NULL;
-}
-
-void doTest(struct sqlConnection *conn)
-/* Put up a page to see what happens. */
-{
-struct slName *keysOut = NULL, *key;
-struct hash *keyInHash = NULL;
-textOpen();
-
-/* Put together output key list. */
-key = slNameNew("name");
-slAddHead(&keysOut, key);
-key = slNameNew("id");
-slAddHead(&keysOut, key);
-
-/* Put together input key hash. */
-keyInHash = hashNew(0);
-hashAdd(keyInHash, "5263", NULL);
-hashAdd(keyInHash, "5264", NULL);
-hashAdd(keyInHash, "5265", NULL);
-hashAdd(keyInHash, "5266", NULL);
-
-fetchKeyedFields("ensGene", conn, "name,chrom,id,strand", 
-	"id", keyInHash, keysOut);
 }
 
 

@@ -58,6 +58,10 @@ void hTableEnd();
 struct region *getRegions(struct sqlConnection *conn);
 /* Consult cart to get list of regions to work on. */
 
+struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
+	char *fields, struct region *region, boolean isPositional);
+/* Construct and execute query for table on region. */
+
 struct trackDb *findTrack(char *name, struct trackDb *trackList);
 /* Find track, or return NULL if can't find it. */
 
@@ -159,6 +163,9 @@ void doMainPage(struct sqlConnection *conn);
 void mainPageAfterOpen(struct sqlConnection *conn);
 /* Put up main page assuming htmlOpen()/htmlClose()
  * will happen in calling routine. */
+
+void doTest(struct sqlConnection *conn);
+/* Put up a page to see what happens. */
 
 void doTableSchema(char *db, char *table, struct sqlConnection *conn);
 /* Show schema around table. */
