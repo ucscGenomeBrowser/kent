@@ -78,9 +78,11 @@ char* genePredGetCreateSql(char* table, unsigned options);
 /* Get SQL required to create a genePred table.  No options defined yet,
  * specify 0. */
 
-struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd);
+struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, int *retOverlap);
 /* read all genes from a table find the gene with the biggest overlap. 
    Cache the list of genes to so we only read it once */
 
+int genePredBases(struct genePred *gp);
+/* count coding and utr bases in a gene prediction */
 #endif /* GENEPRED_H */
 

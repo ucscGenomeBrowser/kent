@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.14 2003/05/25 16:12:25 baertsch Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.15 2003/06/06 13:08:40 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -404,7 +404,7 @@ safef(sqlCmd, sizeof(sqlCmd), createSql, table);
 
 return cloneString(sqlCmd);
 }
-struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd)
+struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd, int *retOverlap)
 {
 /* read all genes from a table find the gene with the biggest overlap. 
    Cache the list of genes to so we only read it once */
@@ -416,7 +416,7 @@ struct sqlResult *sr;
 boolean hasBin = 0;
 char **row;
 struct genePred *el = NULL, *bestMatch = NULL, *gp = NULL;
-int overlap = 0, i;
+int overlap = 0 , bestOverlap = 0, i;
 struct psl *psl;
 
 
@@ -447,11 +447,22 @@ if (*list == NULL)
 for (el = *list; el != NULL; el = el->next)
     {
     if (chrom != NULL)
-        if (i = rangeIntersection(cStart,cEnd, el->txStart, el->txEnd) > overlap && sameString(chrom, el->chrom))
+        {
+        overlap = 0;
+        if ( sameString(chrom, el->chrom))
             {
-            overlap = i;
-            bestMatch = el;
+            for (i = 0 ; i<(el->exonCount); i++)
+                {
+                overlap += positiveRangeIntersection(cStart,cEnd, el->exonStarts[i], el->exonEnds[i]) ;
+                }
+            if (overlap > bestOverlap)
+                {
+                bestMatch = el;
+                bestOverlap = overlap;
+                *retOverlap = bestOverlap;
+                }
             }
+        }
     }
 if (bestMatch != NULL)
     {
@@ -475,4 +486,17 @@ if (bestMatch != NULL)
         }
     }
 return gp;
+}
+int genePredBases(struct genePred *gp)
+/* count coding and utr bases in a gene prediction */
+{
+int count = 0, i;
+
+if (gp == NULL) return 0;
+
+for (i=0; i<gp->exonCount; i++)
+    {
+    count += gp->exonEnds[i] - gp->exonStarts[i] ;
+    }
+return count;
 }
