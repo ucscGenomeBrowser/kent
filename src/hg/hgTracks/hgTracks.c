@@ -1221,6 +1221,19 @@ else
 }
             
 
+int gfxBorder = 1;
+
+int trackOffsetX()
+/* Return x offset where track display proper begins. */
+{
+int x = gfxBorder;
+if (withLeftLabels)
+    x += tl.leftLabelWidth + gfxBorder;
+return x;
+}
+
+
+
 
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -1251,7 +1264,14 @@ int ybase;
 int tmp;
 
 int currentX, currentXEnd, currentWidth;
+
 int leftSide, rightSide;
+
+
+int insideX = trackOffsetX();
+int trackTabWidth = 11;
+int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+int trackPastTabWidth = tl.picWidth - trackPastTabX;
 
 int noZoom = 0;
 enum wiggleOptEnum wiggleType;
@@ -1453,9 +1473,14 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     leftSide = max( tg->itemStart(tg,lf), winStart );
     rightSide = min(  tg->itemEnd(tg,lf), winEnd );
 
+//gigi
     currentX =  round((double)((int)leftSide-winStart)*scale) + xOff;
     currentXEnd =  round((double)((int)rightSide-winStart)*scale) + xOff;
     currentWidth = currentXEnd - currentX;
+
+    //errAbort( "(%d,%d)\n", leftSide, rightSide );
+
+    //errAbort( "iX = %d, currentWidth = %d\n", insideX, currentWidth );
 
     if( noZoom && isFull )
     {
@@ -2040,6 +2065,7 @@ AllocVar(lf);
 lf->grayIx = grayIx;
 strncpy(lf->name, sample->name, sizeof(lf->name));
 lf->orientation = orientFromChar(sample->strand[0]);
+
 for (i=0; i<sampleCount; ++i)
     {
     AllocVar(sf);
@@ -2060,6 +2086,7 @@ for (i=0; i<sampleCount; ++i)
 slReverse(&sfList);
 lf->components = sfList;
 finishLf(lf);
+lf->end = sample->chromEnd;
 return lf;
 }
 
@@ -8105,17 +8132,6 @@ void smallBreak()
 printf("<FONT SIZE=1><BR></FONT>\n");
 }
 
-int gfxBorder = 1;
-
-int trackOffsetX()
-/* Return x offset where track display proper begins. */
-{
-int x = gfxBorder;
-if (withLeftLabels)
-    x += tl.leftLabelWidth + gfxBorder;
-return x;
-}
-
 void drawButtonBox(struct memGfx *mg, int x, int y, int w, int h, int enabled)
 /* Draw a min-raised looking button. */
 {
@@ -8548,7 +8564,6 @@ for (group = groupList; group != NULL; group = group->next)
 		    int height = group->itemHeight(group, item);
 
 
-            //gigi            
 
 		    /*wiggle tracks don't always increment height (y-value) here*/
             if( group->subType == lfSubSample )
