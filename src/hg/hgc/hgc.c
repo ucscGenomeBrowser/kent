@@ -111,6 +111,7 @@
 #include "scoredRef.h"
 #include "minGeneInfo.h"
 #include "tigrCmrGene.h"
+#include "tigrOperon.h"
 #include "llaInfo.h"
 #include "loweTrnaGene.h"
 #include "blastTab.h"
@@ -141,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.723 2004/08/24 20:46:45 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.724 2004/08/25 12:05:00 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12980,6 +12981,70 @@ printTrackHtml(tdb);
 loweTrnaGeneFree(&trna);
 }
 
+void doTigrOperons(struct trackDb *tdb, char *opName)
+/* track handler for the TIGR operon predictions */
+{
+char *track = tdb->tableName;
+struct tigrOperon *op;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *dupe, *type, *words[16];
+char **row;
+int wordCount;
+int start = cartInt(cart, "o"), num = 0;
+
+genericHeader(tdb,opName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+genericBedClick(conn, tdb, opName, start, num);
+sprintf(query, "select * from %sInfo where name = '%s'", track, opName);
+sr = sqlGetResult(conn, query);
+/* Make the operon table like on the TIGR web page. */
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    int i,j;
+    char *infos[30];
+    op = tigrOperonLoad(row);
+    chopCommas(op->info,infos);
+    printf("<P>\n<TABLE BORDER=1 ALIGN=\"CENTER\">\n");
+    for (i = 0; i <= op->size; i++)
+	{
+	printf("  <TR ALIGN=\"CENTER\">");
+	for (j = 0; j <= op->size; j++)
+	    {
+	    printf("<TD>");
+	    if ((i == 0 || j == 0) && !(i == 0 && j == 0))
+		(i > j) ? printf("%s",op->genes[i-1]) : printf("%s",op->genes[j-1]);
+	    else if (i + j > 0)
+		{
+		char *data = infos[((i-1)*op->size)+(j-1)];
+		if (!sameString(data,"---"))
+		    {
+		    char *n, *conf;
+		    n = chopPrefixAt(data,'|');
+		    conf = data;
+		    printf("confidence = %.2f, n = %d",atof(conf),atoi(n));
+		    }
+		else
+		    printf("%s",data);
+		}
+	    printf("</TD>");
+	    }
+	printf("</TR>\n");
+	}
+    printf("</TABLE>\n</P>\n");
+    }
+printTrackHtml(tdb);
+/* clean up */
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tigrOperonFree(&op);
+}
+
 void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
 /* Handle the TIRG CMR gene track. */
 {
@@ -13030,88 +13095,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 printTrackHtml(tdb);
 tigrCmrGeneFree(&tigr);
-}
-
-void doCrudeBlastP(struct trackDb *tdb, char *itemName, char *trackName)
-/* For the P.furiosus/P.aerophilum BLASTP tracks. */
-{
-struct sqlConnection *conn = hAllocConn(), *conn2;
-struct sqlResult *sr = NULL;
-struct minGeneInfo *mgi = NULL;
-struct blastTab *bt = NULL;
-char *queryDb = replaceChars(trackName,"BlastP",""), *thisDb = hGetDbName();
-char *bothNames = cloneString(itemName), *qname = chopPrefix(itemName);
-char **row;
-char *queryGenome = cloneString(trackName);
-char query[512];
-int hit = 1;
-
-genericHeader(tdb,bothNames);
-
-/* Print Target information */
-
-printf("<B>Target protein: </B>%s<br>\n",itemName);
-sprintf(query,"select * from gbProtCodeXra where name='%s'",itemName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    mgi = minGeneInfoLoad(row);
-    if (mgi != NULL)
-	{
-	printf("<B>Target note: </B>%s<br>\n",mgi->note);
-	printf("<B>Target product: </B>%s<br>\n",mgi->product);
-	}
-    }
-sqlFreeResult(&sr);
-minGeneInfoFree(&mgi);
-hFreeConn(&conn);
-
-/* Print Query information */
-
-conn2 = hAllocOrConnect(queryDb);
-printf("<B>Query protein: </B>%s<br>\n",qname);
-sprintf(query,"select * from gbProtCodeXra where name='%s'",qname);
-sr = sqlGetResult(conn2, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    mgi = minGeneInfoLoad(row);
-    if (mgi != NULL)
-	{
-	printf("<B>Target note: </B>%s<br>\n",mgi->note);
-	printf("<B>Target product: </B>%s<br>\n",mgi->product);
-	}
-    }
-sqlFreeResult(&sr);
-minGeneInfoFree(&mgi);
-hFreeConn(&conn2);
-hSetDb(thisDb);
-
-/* Print all the BLASTP info */
-
-conn = hAllocConn();
-sprintf(query,"select * from %sStuff where target='%s' and query='%s'",trackName, itemName,qname);
-printf("<br><hr>\n");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bt = blastTabLoad(row);
-    printf("<u><h3>Hit #%d</h3></u>",hit++);
-    printf("<B>Percent Identity: </B>%.2f<BR>\n",bt->identity);
-    printf("<B>E-value: </B>%.2E<BR>\n",bt->eValue);
-    printf("<B>Bit score: </B>%.2f<BR>\n",bt->bitScore);
-    printf("<B>Length of alignment: </B>%d<BR>\n",bt->aliLength);
-    printf("<B>Number of mismatches: </B>%d<BR>\n",bt->mismatch);
-    printf("<B>Number of gap openings: </B>%d<BR>\n",bt->gapOpen);
-    printf("<B>Query Start: </B>%d<BR>\n",bt->qStart+1);
-    printf("<B>Query End: </B>%d<BR>\n",bt->qEnd);
-    printf("<B>Target Start: </B>%d<BR>\n",bt->tStart+1);
-    printf("<B>Target End: </B>%d<BR>\n",bt->tEnd);
-    blastTabFree(&bt);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-freeMem(queryDb);
-freeMem(bothNames);
 }
 
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
@@ -14830,13 +14813,13 @@ else if (sameWord(track, "tigrCmrORFs"))
     {
     doTigrCmrGene(tdb,item);
     }
+else if (sameWord(track, "tigrOperons"))
+    {
+    doTigrOperons(tdb,item);
+    }
 else if (sameWord(track, "loweTrnaGene"))
     {
     doLoweTrnaGene(tdb,item);
-    }
-else if (startsWith("BlastP", track))
-    {
-    doCrudeBlastP(tdb,item,track);
     }
 /* else if (startsWith("lla", track))  */
 /*     { */
