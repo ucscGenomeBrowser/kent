@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.48 2004/06/04 22:15:53 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.49 2004/06/07 08:07:01 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2975,7 +2975,7 @@ char *cpassword   = NULL;
 
 struct sqlConnection *betaconn = NULL;
 
-struct dbDb *ki, *kiList = NULL, dbDbTemp;
+struct dbDb *ki=NULL, *kiList=NULL, *dbDbTemp=NULL;
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -3027,12 +3027,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-dbDbTemp.name        = cloneString("zoo1");
-dbDbTemp.description = cloneString("Jun. 2002");
-dbDbTemp.organism    = cloneString("NISC (Zoo)");
-dbDbTemp.genome      = cloneString("NISC (Zoo)");
-dbDbTemp.sourceName  = cloneString("Comparative Sequencing Program Target 1");
-slAddHead(&kiList, &dbDbTemp);
+AllocVar(dbDbTemp);
+dbDbTemp->name        = cloneString("zoo1");
+dbDbTemp->description = cloneString("Jun. 2002");
+dbDbTemp->organism    = cloneString("NISC (Zoo)");
+dbDbTemp->genome      = cloneString("NISC (Zoo)");
+dbDbTemp->sourceName  = cloneString("Comparative Sequencing Program Target 1");
+slAddHead(&kiList, dbDbTemp);
 
 slReverse(&kiList);
 sqlDisconnect(&betaconn);
@@ -3096,8 +3097,6 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     printf("</table>\n");
 
     }
-sqlFreeResult(&sr);
-
 
 dbDbFreeList(&kiList);
 
