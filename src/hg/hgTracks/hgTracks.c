@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.749 2004/06/02 23:45:10 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.755 2004/06/13 20:55:23 baertsch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1188,7 +1188,7 @@ lfColors(tg, item, vg, &col, &barbCol);
 return col;
 }
 
-static void linkedFeaturesDrawAt(struct track *tg, void *item,
+void linkedFeaturesDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
@@ -2993,6 +2993,33 @@ vis = limitVisibility(tg);
 }
 
 
+Color blastColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw protein in. */
+{
+struct linkedFeatures *lf = item;
+int col = tg->ixColor;
+struct rgbColor *normal = &(tg->color);
+struct rgbColor lighter, lightest;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+if (hTableExists("hg16KG"))
+    {
+    sprintf(query, "select tName from hg16KG where qName = '%s'",
+	    lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	col = getChromColor(&row[0][3], vg);
+    sqlFreeResult(&sr);
+    }
+    
+hFreeConn(&conn);
+tg->ixAltColor = col;
+return(col);
+}
+
 Color refGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw refseq gene in. */
 {
@@ -3466,6 +3493,12 @@ struct bed *bed = item;
 return bed->chromEnd;
 }
 
+void freeSimpleBed(struct track *tg)
+/* Free the beds in a track group that has
+   beds as its items. */
+{
+bedFreeList(((struct bed **)(&tg->items)));
+}
 
 void bedMethods(struct track *tg)
 /* Fill in methods for (simple) bed tracks. */
@@ -3478,6 +3511,7 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
+tg->freeItems = freeSimpleBed;
 }
 
 void loadTfbsCons(struct track *tg)
@@ -6249,8 +6283,11 @@ if (rulerMode != RULER_MODE_OFF)
         pixHeight += rulerTranslationHeight;
         }
     }
+
+trackHash = newHash(8);
 for (track = trackList; track != NULL; track = track->next)
     {
+    hashAddUnique(trackHash, track->mapName, track);
     if (track->visibility != tvHide)
 	{
 	int h;
@@ -6893,6 +6930,7 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     }
 }
+hashFree(&trackHash);
 /* Finish map. */
 hPrintf("</MAP>\n");
 
@@ -6982,6 +7020,9 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
+char extraWhere[128] ;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -6991,7 +7032,17 @@ else if (tg->bedSize == 5)
     loader = bedLoad5;
 else
     loader = bedLoad6;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
@@ -7002,6 +7053,8 @@ hFreeConn(&conn);
 slReverse(&list);
 tg->items = list;
 }
+
+
 
 void bed8To12(struct bed *bed)
 /* Turn a bed 8 into a bed 12 by defining one block. */
@@ -7220,8 +7273,21 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
+char extraWhere[128] ;
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);
@@ -7252,13 +7318,55 @@ if (vis != tvDense)
 vis = limitVisibility(tg);
 }
 
+Color blastNameColor(struct track *tg, void *item, struct vGfx *vg)
+{
+return 1;
+}
+
 void blastMethods(struct track *tg)
 /* blast protein track methods */
 {
 tg->loadItems = loadBlast;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
-tg->itemColor = refGeneColor;
+tg->itemColor = blastColor;
+tg->itemNameColor = blastNameColor;
+}
+
+
+static void triangleDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a right- or left-pointing triangle at position. 
+ * If item has width > 1 or block/cds structure, those will be ignored -- 
+ * this only draws a triangle (direction depending on strand). */
+{
+struct bed *bed = item; 
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int y2 = y + tg->heightPer;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    }
+
+if (bed->strand[0] == '-')
+    vgTriLeft(vg, x1, y, y2, color);
+else
+    vgTriRight(vg, x1, y, y2, color);
+}
+
+void simpleBedTriangleMethods(struct track *tg)
+/* Load up simple bed features methods, but use triangleDrawAt. */
+{
+bedMethods(tg);
+tg->drawItemAt = triangleDrawAt;
 }
 
 
@@ -7386,6 +7494,7 @@ struct track *trackFromTrackDb(struct trackDb *tdb)
 {
 struct track *track = trackNew();
 char *iatName = NULL;
+char *exonArrows;
 
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
@@ -7414,10 +7523,16 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
-if (sameString(trackDbSettingOrDefault(tdb, "exonArrows", "on"), "on"))
-    track->exonArrows = TRUE;
-else
-    track->exonArrows = FALSE;
+
+exonArrows = trackDbSetting(tdb, "exonArrows");
+/* default exonArrows to on, except for tracks in regulation/expression group */
+if (exonArrows == NULL)
+    if (sameString(tdb->grp, "regulation"))
+       exonArrows = "off";
+    else
+       exonArrows = "on";
+track->exonArrows = sameString(exonArrows, "on");
+
 iatName = trackDbSetting(tdb, "itemAttrIdTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
@@ -8060,6 +8175,7 @@ registerTrackHandler("altGraphXPsb2004", altGraphXMethods );
 /* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
+registerTrackHandler("pscreen", simpleBedTriangleMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -8591,10 +8707,12 @@ withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
-s = cartCgiUsualString(cart, "ruler", "dense");
-if (sameWord(s, "full"))
+if (cgiVarExists("hgt.hideAll"))
+    cartSetString(cart, RULER_TRACK_NAME, "dense");
+s = cartUsualString(cart, RULER_TRACK_NAME, "full");
+if (sameWord(s, "full") || sameWord(s, "on"))
     rulerMode = RULER_MODE_FULL;
-else if (sameWord(s, "dense") || sameWord(s, "on"))
+else if (sameWord(s, "dense"))
     rulerMode = RULER_MODE_ON;
 else
     rulerMode = RULER_MODE_OFF;

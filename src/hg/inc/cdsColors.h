@@ -17,9 +17,9 @@
 #define	CDS_EVEN_B	0xdc
 
 #define CDS_START   3
-#define	CDS_START_R	0x2f
-#define	CDS_START_G	0xc9
-#define	CDS_START_B	0x2f
+#define	CDS_START_R	0x00
+#define	CDS_START_G	0xf0
+#define	CDS_START_B	0x00
 
 #define CDS_STOP    4
 #define	CDS_STOP_R	0xe1

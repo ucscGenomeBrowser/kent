@@ -6,15 +6,15 @@ beta: check-beta clean cgi-beta
 
 libs:
 	@if test "$$MACHTYPE x" = " x" ; then \
-		echo "missing MACHTYPE definition in environment" ; \
-		echo "it should be one of: i386 i686 sparc alpha x86_64 ppc" ; \
+		echo "ERROR: missing MACHTYPE definition in environment" ; \
+		echo "it should be something simple: i386 i686 sparc alpha x86_64 ppc, etc..." ; \
 		exit 255 ; \
 	else \
-		echo $$MACHTYPE | grep -q -e- ; \
+		echo $$MACHTYPE | grep -l "\-" > /dev/null 2>/dev/null ; \
 		if test "$$?" = "0" ; then \
-		echo "can not use a MACHTYPE with - character" ; \
-		echo "MACHTYPE: $$MACHTYPE" ; \
-		echo "it should be one of: i386 i686 sparc alpha x86_64 ppc" ; \
+		echo "ERROR: can not use a MACHTYPE with - character" ; \
+		echo "MACHTYPE is: '$$MACHTYPE'" ; \
+		echo "it should be something simple: i386 i686 sparc alpha x86_64 ppc, etc..." ; \
 		exit 255 ; \
 		fi ; \
 	fi ;
@@ -44,12 +44,15 @@ blatSuite: libs
 	cd hg/pslSort && ${MAKE}
 	cd utils/nibFrag && ${MAKE}
 	cd utils/faToNib && ${MAKE}
+	cd isPcr && ${MAKE}
 
 clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
 	cd jkOwnLib && ${MAKE} clean
 	cd utils && ${MAKE} clean
+	touch non-empty-rm.o
+	- find . -name \*.o -print | xargs rm
 
 test::
 	cd lib && ${MAKE} test

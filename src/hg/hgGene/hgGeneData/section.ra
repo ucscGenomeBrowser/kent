@@ -59,7 +59,7 @@ longLabel Biochemical and Signalling Pathways
 priority 130
 
 name method
-shortLabel Method
+shortLabel Methods
 longLabel UCSC Known Genes Methods, Credits, and Data Use Restrictions
 priority 140
 

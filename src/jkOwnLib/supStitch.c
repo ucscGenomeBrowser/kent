@@ -14,7 +14,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.20 2004/02/01 12:50:51 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.22 2004/06/03 21:14:35 kent Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -81,8 +81,8 @@ void dumpFf(struct ffAli *left, DNA *needle, DNA *hay)
 struct ffAli *ff;
 for (ff = left; ff != NULL; ff = ff->right)
     {
-    printf("(%d - %d)[%d-%d] ", ff->hStart-hay, ff->hEnd-hay,
-	ff->nStart - needle, ff->nEnd - needle);
+    printf("(%ld - %ld)[%ld-%ld] ", (long)(ff->hStart-hay), (long)(ff->hEnd-hay),
+	(long)(ff->nStart - needle), (long)(ff->nEnd - needle));
     }
 printf("\n");
 }
@@ -184,6 +184,30 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
+static void forceMonotonic(struct ffAli *left)
+/* Remove any blocks that violate strictly increasing order in both coordinates. 
+ * This is not optimal, but it turns out to be very rarely used. */
+{
+struct ffAli *right;
+
+while ((right = left->right) != NULL)
+    {
+    if (left->nEnd <= right->nStart && left->hEnd <= right->hStart)
+        {
+	left = right;
+	}
+    else
+        {
+	struct ffAli *nextRight = right->right;
+	verbose(2, "forcing monotonic\n");
+	left->right = nextRight;
+	if (nextRight != NULL)
+	    nextRight->left = left;
+	freez(&right);
+	}
+    }
+}
+
 struct ffAli *smallMiddleExons(struct ffAli *aliList, 
 	struct ssBundle *bundle, 
 	enum ffStringency stringency)
@@ -205,6 +229,7 @@ else
 	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
 	    if (newLeft != NULL)
 	        {
+		forceMonotonic(newLeft);
 		newRight = ffRightmost(newLeft);
                 if (left != NULL)
                     {
@@ -487,6 +512,7 @@ static void ssFindBestSmall(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 {
 struct ssGraph *graph = ssGraphMake(ffList, qSeq, stringency, isProt, t3List);
 ssGraphFindBest(graph, retBestAli, retScore, retLeftovers);
+forceMonotonic(*retBestAli);
 ssGraphFree(&graph);
 }
 
@@ -720,6 +746,7 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
+
     if (firstTime && stringency == ffCdna && bundle->avoidFuzzyFindKludge == FALSE)
 	{
 	/* Only look for middle exons the first time.  Next times

@@ -5,6 +5,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "fa.h"
 #include "net.h"
 #include "genoFind.h"
@@ -12,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.1 2004/06/01 16:49:03 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.4 2004/06/16 08:25:51 kent Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -145,7 +146,7 @@ for (i=0; i<size; ++i)
     }
 }
 
-static void outputFa(struct gfPcrOutput *out, FILE *f)
+static void outputFa(struct gfPcrOutput *out, FILE *f, char *url)
 /* Output match in fasta format. */
 {
 int fPrimerSize = strlen(out->fPrimer);
@@ -154,16 +155,25 @@ int productSize = out->rPos - out->fPos;
 char *dna = cloneStringZ(out->dna, productSize);
 char *rrPrimer = cloneString(out->rPrimer);
 char *ffPrimer = cloneString(out->fPrimer);
-char faLabel[PATH_LEN+25];
+struct dyString *faLabel = newDyString(0);
 char *name = out->name;
 
-/* Create fasta header with position, possibly empty name, and upper cased primers. */
+/* Create fasta header with position, possibly empty name, and upper cased primers with position optionally hyperlinked. */
 if (name == NULL)
     name = "";
 touppers(rrPrimer);
 touppers(ffPrimer);
-safef(faLabel, sizeof(faLabel),
-	"%s:%d%c%d %s %s %s", out->seqName, out->fPos+1, out->strand, out->rPos,
+if (url != NULL)
+    {
+    dyStringAppend(faLabel, "<A HREF=\"");
+    dyStringPrintf(faLabel, url, out->seqName, out->fPos+1, out->rPos);
+    dyStringAppend(faLabel, "\">");
+    }
+dyStringPrintf(faLabel, "%s:%d%c%d", 
+	out->seqName, out->fPos+1, out->strand, out->rPos);
+if (url != NULL)
+    dyStringAppend(faLabel, "</A>");
+dyStringPrintf(faLabel, " %s %s %s",
 	name, ffPrimer, rrPrimer);
 
 /* Flip reverse primer to be in same direction and case as sequence. */
@@ -173,12 +183,13 @@ tolowers(rrPrimer);
 /* Capitalize where sequence and primer match, and write out sequence. */
 upperMatch(dna, out->fPrimer, fPrimerSize);
 upperMatch(dna + productSize - rPrimerSize, rrPrimer, rPrimerSize);
-faWriteNext(f, faLabel, dna, productSize);
+faWriteNext(f, faLabel->string, dna, productSize);
 
 /* Clean up. */
 freez(&dna);
 freez(&rrPrimer);
 freez(&ffPrimer);
+dyStringFree(&faLabel)
 }
 
 static int countMatch(char *a, char *b, int size)
@@ -191,8 +202,8 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-static void outputBed(struct gfPcrOutput *out, FILE *f)
-/* Output match in fasta format. */
+static void outputBed(struct gfPcrOutput *out, FILE *f, char *url)
+/* Output match in BED format. */
 {
 int match;
 int size = out->rPos - out->fPos;
@@ -211,32 +222,75 @@ fprintf(f, "%d\t", round(1000.0 * match / (double)(fPrimerSize + rPrimerSize) ))
 fprintf(f, "%c\n", out->strand);
 }
 
-void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *format, FILE *f)
-/* Write list of outputs in specified format (either "fa" or "bed") to file */
+static void outputPsl(struct gfPcrOutput *out, FILE *f, char *url)
+/* Output match in PSL format. */
 {
-struct gfPcrOutput *out;
-void (*output)(struct gfPcrOutput *out, FILE *f) = NULL;
-if (sameString(format, "fa"))
-    output = outputFa;
-else if (sameString(format, "bed"))
-    output = outputBed;
-else
-    errAbort("Unrecognized pcr output type %s", format);
-for (out = outList; out != NULL; out = out->next)
-    output(out, f);
+int match;
+int size = out->rPos - out->fPos;
+int fPrimerSize = strlen(out->fPrimer);
+int rPrimerSize = strlen(out->rPrimer);
+int bothSize = fPrimerSize + rPrimerSize;
+int gapSize = size - bothSize;
+char *name = out->name;
+if (name == NULL) name = "n/a";
+match = countMatch(out->dna, out->fPrimer, fPrimerSize);
+reverseComplement(out->rPrimer, rPrimerSize);
+assert(size > 0);
+match += countMatch(out->dna + size - rPrimerSize, out->rPrimer, rPrimerSize);
+reverseComplement(out->rPrimer, rPrimerSize);
+
+fprintf(f, "%d\t", match);
+fprintf(f, "%d\t", bothSize - match);
+fprintf(f, "0\t0\t");	/* repMatch, nCount. */
+fprintf(f, "1\t%d\t", gapSize);   /* qNumInsert, qBaseInsert */
+fprintf(f, "1\t%d\t", gapSize);   /* tNumInsert, tBaseInsert */
+fprintf(f, "%c\t", out->strand);
+fprintf(f, "%s\t", name);
+fprintf(f, "%d\t", size);
+fprintf(f, "0\t%d\t", size);	/* qStart, qEnd */
+fprintf(f, "%s\t%d\t", out->seqName, out->seqSize);
+fprintf(f, "%d\t%d\t", out->fPos, out->rPos);
+fprintf(f, "2\t");
+fprintf(f, "%d,%d,\t", fPrimerSize, rPrimerSize);
+fprintf(f, "%d,%d,\t", 0,size - rPrimerSize);
+fprintf(f, "%d,%d,\n", out->fPos, out->rPos - rPrimerSize);
 }
 
-void gfPcrOutputWriteAll(struct gfPcrOutput *outList, char *format, char *fileName)
-/* Create file and write list of outputs in specified format (either "fa" or "bed"). */
+
+void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
+	char *url, FILE *f)
+/* Write list of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
+{
+struct gfPcrOutput *out;
+void (*output)(struct gfPcrOutput *out, FILE *f, char *url) = NULL;
+if (sameWord(outType, "fa"))
+    output = outputFa;
+else if (sameWord(outType, "bed"))
+    output = outputBed;
+else if (sameWord(outType, "psl"))
+    output = outputPsl;
+else
+    errAbort("Unrecognized pcr output type %s", outType);
+for (out = outList; out != NULL; out = out->next)
+    output(out, f, url);
+}
+
+void gfPcrOutputWriteAll(struct gfPcrOutput *outList, 
+	char *outType, char *url, char *fileName)
+/* Create file of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
 {
 FILE *f = mustOpen(fileName, "w");
-gfPcrOutputWriteList(outList, format, f);
+gfPcrOutputWriteList(outList, outType, url, f);
 carefulClose(&f);
 }
 
 
 static void pcrLocalStrand(char *pcrName, 
-	struct dnaSeq *seq,  int seqOffset, char *seqName, 
+	struct dnaSeq *seq,  int seqOffset, char *seqName, int seqSize,
 	int maxSize, char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
 	int minPerfect, int minGood,
 	char strand, struct gfPcrOutput **pOutList)
@@ -283,6 +337,7 @@ for (;;)
 		out->rPrimer = cloneString(rPrimer);
 		reverseComplement(out->rPrimer, rPrimerSize);
 		out->seqName = cloneString(seqName);
+		out->seqSize = seqSize;
 		out->fPos = fPos + seqOffset;
 		out->rPos = rPos + seqOffset;
 		out->strand = strand;
@@ -309,7 +364,7 @@ reverseComplement(rPrimer, rPrimerSize);
 }
 
 void gfPcrLocal(char *pcrName, 
-	struct dnaSeq *seq, int seqOffset, char *seqName, 
+	struct dnaSeq *seq, int seqOffset, char *seqName, int seqSize,
 	int maxSize, char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
 	int minPerfect, int minGood, char strand, struct gfPcrOutput **pOutList)
 /* Do detailed PCR scan on DNA already loaded into memory and put results
@@ -318,11 +373,11 @@ void gfPcrLocal(char *pcrName,
 /* For PCR primers reversing search strand just means switching
  * order of primers. */
 if (strand == '-')
-    pcrLocalStrand(pcrName, seq, seqOffset, seqName, maxSize, 
+    pcrLocalStrand(pcrName, seq, seqOffset, seqName, seqSize, maxSize, 
 	rPrimer, rPrimerSize, fPrimer, fPrimerSize, 
 	minPerfect, minGood, strand, pOutList);
 else
-    pcrLocalStrand(pcrName, seq, seqOffset, seqName, maxSize, 
+    pcrLocalStrand(pcrName, seq, seqOffset, seqName, seqSize, maxSize, 
 	fPrimer, fPrimerSize, rPrimer, rPrimerSize, 
 	minPerfect, minGood, strand, pOutList);
 }
@@ -399,8 +454,8 @@ for (range = rangeList; range != NULL; range = range->next)
     char seqName[PATH_LEN];
     struct dnaSeq *seq = gfiExpandAndLoadCached(range,
 	tFileCache, seqDir,  0, &tSeqSize, FALSE, FALSE, maxPrimerSize);
-    gfiGetSeqName(range->tName, seqName);
-    gfPcrLocal(pcrName, seq, range->tStart, seqName, maxSize, 
+    gfiGetSeqName(range->tName, seqName, NULL);
+    gfPcrLocal(pcrName, seq, range->tStart, seqName, tSeqSize, maxSize, 
 	    fPrimer, fPrimerSize, rPrimer, rPrimerSize, 
 	    minPerfect, minGood, range->tStrand, pOutList);
     dnaSeqFree(&seq);
@@ -427,5 +482,19 @@ for (in = inList; in != NULL; in = in->next)
 gfFileCacheFree(&tFileCache);
 slReverse(&outList);
 return outList;
+}
+
+char *gfPcrMakePrimer(char *s)
+/* Make primer (lowercased DNA) out of text.  Complain if
+ * it is too short or too long. */
+{
+int size = dnaFilteredSize(s);
+int realSize;
+char *primer = needMem(size+1);
+dnaFilter(s, primer);
+realSize = size - countChars(primer, 'n');
+if (realSize < 10 || realSize < size/2)
+   errAbort("%s does not seem to be a good primer", s);
+return primer;
 }
 

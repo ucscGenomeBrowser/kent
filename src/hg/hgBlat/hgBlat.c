@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.74 2004/04/05 18:40:19 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.77 2004/06/09 01:03:55 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -91,45 +91,15 @@ errAbort(
   "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
 }
 
-int pslCmpScore(const void *va, const void *vb)
-/* Compare to sort based on query then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-return pslScore(b) - pslScore(a);
-}
-
-
-int pslCmpQueryScore(const void *va, const void *vb)
-/* Compare to sort based on query then score. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = strcmp(a->qName, b->qName);
-if (diff == 0)
-    diff = pslScore(b) - pslScore(a);
-return diff;
-}
-
-int pslCmpQueryStart(const void *va, const void *vb)
-/* Compare to sort based on query start. */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-int diff = strcmp(a->qName, b->qName);
-if (diff == 0)
-    diff = a->qStart - b->qStart;
-return diff;
-}
-
 int cmpChrom(char *a, char *b)
 /* Compare two chromosomes. */
 {
 char cA, cB;
+int cSame = countSame(a, b);
 int diff;
 
-if (startsWith("chr", a)) a += 3;
-if (startsWith("chr", b)) b += 3;
+a += cSame;
+b += cSame;
 cA = *a;
 cB = *b;
 if (isdigit(cA))
@@ -144,6 +114,7 @@ else if (isdigit(cB))
 else
     return strcmp(a, b);
 }
+
 
 int pslCmpTargetScore(const void *va, const void *vb)
 /* Compare to sort based on target then score. */
@@ -202,7 +173,7 @@ if (pslList == NULL)
 
 if (sameString(sort, "query,start"))
     {
-    slSort(&pslList, pslCmpQueryStart);
+    slSort(&pslList, pslCmpQuery);
     }
 else if (sameString(sort, "query,score"))
     {
@@ -330,6 +301,7 @@ FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
 int maxSingleSize, maxTotalSize, maxSeqCount;
+int minSingleSize = 18;
 char *genome = cgiString("db");
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
@@ -435,6 +407,11 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	warn("Sequence %s is %d letters long (max is %d), skipping",
 	    seq->name, seq->size, maxSingleSize);
 	continue;
+	}
+    if (oneSize < 18)
+        {
+	warn("Sequence %s is %d letters long (min is %d), skipping", 
+		seq->name, seq->size, minSingleSize);
 	}
     totalSize += oneSize;
     if (totalSize > maxTotalSize)
@@ -600,18 +577,19 @@ printf("%s",
 "\n"
 "</FORM>\n");
 
-printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
-       "<input type=\"hidden\" name=\"db\" value=\"%s\">\n"
-       "<input type=\"hidden\" name=\"org\" value=\"%s\">\n"
+printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
+       "<input type=\"hidden\" name=\"db\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"org\" value=\"\">\n"
        "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
        "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
-       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n", db, organism);
+       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n");
 cartSaveSession(cart);
 cartSetString(cart, "db", db);
 puts("</FORM>");
 }
 
 void doMiddle(struct cart *theCart)
+/* Write header and body of html page. */
 {
 char *userSeq;
 char *db, *organism;
@@ -644,7 +622,7 @@ cartWebEnd();
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", "showPage", NULL};
+char *excludeVars[] = {"Submit", "submit", "type", "userSeq", "seqFile", "showPage", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

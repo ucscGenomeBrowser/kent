@@ -9,7 +9,7 @@
 #include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.29 2004/02/25 21:51:10 kent Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.30 2004/06/10 05:37:08 kent Exp $";
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
@@ -23,7 +23,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "gfClient v. %dx1 - A client for the genomic finding program that produces a .psl file\n"
+  "gfClient v. %d - A client for the genomic finding program that produces a .psl file\n"
   "usage:\n"
   "   gfClient host port seqDir in.fa out.psl\n"
   "where\n"

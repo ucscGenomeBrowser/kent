@@ -69,6 +69,7 @@ int qStart = psl->qStarts[0];
 int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 int tStart = psl->tStarts[0];
 int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+struct psl *totalPsl = (struct psl *)chain->id;
 
 prevChainBlock = NULL;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
@@ -85,6 +86,17 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 	}
     }
 
+    if (outPsl)
+	{
+	totalPsl->match += psl->match;
+	totalPsl->misMatch += psl->misMatch;
+	totalPsl->repMatch += psl->repMatch;
+	totalPsl->nCount += psl->nCount;	
+	totalPsl->qNumInsert += psl->qNumInsert;
+	totalPsl->qBaseInsert += psl->qBaseInsert;
+	totalPsl->tNumInsert += psl->tNumInsert;
+	totalPsl->tBaseInsert += psl->tBaseInsert;
+	}
     bList = NULL;
     addPslBlocks(&bList, psl);
 
@@ -116,6 +128,8 @@ struct chain *aggregateChains( struct chain *chainIn)
 {
 struct chain *outChain = NULL;
 struct chain *chain1=NULL, *chain2, *chain2Next, *prevChain2;
+struct psl *totalPsl1;
+struct psl *totalPsl2;
 
 slSort(&chainIn, chainCmpTarget);
 
@@ -138,6 +152,21 @@ while(chainIn)
 		assert(chain1->tEnd <= chain2->tStart);
 		chain1->tEnd =  chain2->tEnd;
 		chain1->qEnd =  chain2->qEnd;
+
+		if (outPsl)
+		    {
+		    totalPsl1 = (struct psl *)chain1->id;
+		    totalPsl2 = (struct psl *)chain2->id;
+		    totalPsl1->match += totalPsl2->match;
+		    totalPsl1->misMatch += totalPsl2->misMatch;
+		    totalPsl1->repMatch += totalPsl2->repMatch;
+		    totalPsl1->nCount += totalPsl2->nCount;	
+		    totalPsl1->qNumInsert += totalPsl2->qNumInsert;
+		    totalPsl1->qBaseInsert += totalPsl2->qBaseInsert;
+		    totalPsl1->tNumInsert += totalPsl2->tNumInsert;
+		    totalPsl1->tBaseInsert += totalPsl2->tBaseInsert;
+		    }
+	
 		chain1->blockList = slCat(chain1->blockList,chain2->blockList);
 		chain2->blockList = NULL;
 		if (prevChain2)
@@ -203,6 +232,7 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 void chainToPslWrite(struct chain *inChain, FILE *outFile, int tSize, int qSize)
 /* write out a chain in psl format */
 {
+struct psl *totalPsl = (struct psl *)inChain->id;
 int lastTEnd=0, lastQEnd=0;
 struct psl psl;
 struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
@@ -241,9 +271,9 @@ for(chainBlock = inChain->blockList; chainBlock; chainBlock = chainBlock->next)
 if (psl.blockCount > maxCount)
     {
     maxCount = psl.blockCount + 100;
-    blockSizes = realloc(blockSizes, maxCount);
-    qStarts = realloc(qStarts, maxCount);
-    tStarts = realloc(tStarts, maxCount);
+    blockSizes = realloc(blockSizes, maxCount * sizeof(int));
+    qStarts = realloc(qStarts, maxCount * sizeof(int));
+    tStarts = realloc(tStarts, maxCount * sizeof(int));
     }
 psl.blockSizes = blockSizes;
 psl.qStarts = qStarts;
@@ -276,17 +306,33 @@ for(chainBlock = inChain->blockList; chainBlock; prevChainBlock = chainBlock, ch
     lastQEnd = chainBlock->qEnd;
     blockSizes[blockNum] = chainBlock->tEnd - chainBlock->tStart;
     psl.match += blockSizes[blockNum];
-    tStarts[blockNum] = chainBlock->tStart;
     qStarts[blockNum] = chainBlock->qStart;
+    tStarts[blockNum] = chainBlock->tStart;
     blockNum++;
     }
 
+psl.match = totalPsl->match;
+psl.misMatch = totalPsl->misMatch;
+psl.repMatch = totalPsl->repMatch;
+psl.nCount = totalPsl->nCount;	
+psl.qNumInsert = totalPsl->qNumInsert;
+psl.qBaseInsert = totalPsl->qBaseInsert;
+psl.tNumInsert = totalPsl->tNumInsert;
+psl.tBaseInsert = totalPsl->tBaseInsert;
+psl.strand[0] = totalPsl->strand[0];
+psl.strand[1] = totalPsl->strand[1];
+if (totalPsl->strand[1] == '-')
+    {
+    psl.tEnd = psl.tSize - psl.tStarts[0];
+    psl.tStart = psl.tSize - (psl.tStarts[blockNum - 1] + 3*psl.blockSizes[blockNum - 1]);
+    }
 pslTabOut(&psl, outFile);
 }
 
 void simpleChain(char *psls,  char *outChainName)
 /* simpleChain - Stitch psls into chains. */
 {
+struct psl *newPsl = 0;
 int lastChainId = -1;
 int superCount = 0;
 struct psl *prevPsl, *nextPsl;
@@ -307,10 +353,10 @@ int count;
 count = 0;
 while ((psl = pslNext(pslLf)) != NULL)
     {
-    assert((psl->strand[1] == 0) || (psl->strand[1] == '+'));
+    //assert((psl->strand[1] == 0) || (psl->strand[1] == '+'));
     count++;
     dyStringClear(dy);
-    dyStringPrintf(dy, "%s%c%s", psl->qName, psl->strand[0], psl->tName);
+    dyStringPrintf(dy, "%s%s%s", psl->qName, psl->strand, psl->tName);
     sp = hashFindVal(pslHash, dy->string);
     if (sp == NULL)
         {
@@ -391,7 +437,16 @@ for(sp = spList; sp; sp = sp->next)
 	chain->qName = cloneString(psl->qName);
 	chain->tName = cloneString(psl->tName);
 	chain->qStrand = psl->strand[0];
-	chain->id = ++lastChainId;
+	if (outPsl)
+	    {
+	    AllocVar(newPsl);
+	    chain->id = (int)newPsl;
+	    newPsl->strand[0] = psl->strand[0];
+	    newPsl->strand[1] = psl->strand[1];
+	    newPsl = 0;
+	    }
+    	else
+	    chain->id = ++lastChainId;
 
 	if (!addPslToChain(chain, psl, &addedBases))
 	    errAbort("new ");

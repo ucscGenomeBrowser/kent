@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.19 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.20 2004/06/03 21:14:35 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -925,11 +925,11 @@ if (maxScore > 0)
     /* Peel back surrounding ffAli's */
     if (left->nStart > npStart || right->nEnd < npEnd)
 	{
-	warn("Unable to peel in hardRefineSplice");
 	/* It would take a lot of code to handle this case. 
 	 * I believe it is rare enough that it's not worth
-	 * it.  This warning will help keep track of how
+	 * it.  This verbosity will help keep track of how
 	 * often it comes up. */
+	verbose(2, "Unable to peel in hardRefineSplice\n");
 	return ffList;
 	}
     diff = left->nEnd - npStart;

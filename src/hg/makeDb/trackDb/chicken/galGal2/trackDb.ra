@@ -1,14 +1,3 @@
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl Gene Predictions
-group genes
-priority 40
-visibility pack
-color 150,0,0
-type genePred ensPep
-url http://pre.ensembl.org/Gallus_gallus/geneview?transcript=$$
-urlLabel Ensembl Gene Link: 
-
 track gold
 shortLabel Assembly 
 longLabel Assembly from Fragments 
@@ -372,6 +361,35 @@ searchPriority 1
 searchTable ensGene
 searchType genePred
 shortCircuit 1
+termRegex ENSGALT[0-9]+\.[0-9]+
+searchPriority 50
+
+searchName ensGeneNoSuffix
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
 termRegex ENSGALT[0-9]+
+dontCheck ENSGALT[0-9]+\.[0-9]+
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex ENSGALG[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex ENSGALP[0-9]+(\.[0-9]+)?
 searchPriority 50
 

@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.13 2004/05/17 16:24:19 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.14 2004/06/13 06:20:38 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -213,6 +213,46 @@ for(i=0; i<v; i++)
 	}
     }
 return minV;
+}
+
+boolean areConstitutive(struct altGraphX *ag, bool **em, int v1, int v2)
+/* Return TRUE if there is no edge that goes around v1->v2, FALSE
+   otherwise. 
+   Idea is that if there is no edge around then there 
+   should be a blank area in the edge matrix from defined
+   by the area {0,v2}, {v1,v2}, {v1,vMax}, {0,vMax}
+   seseses
+   0123456
+  00101000 // 0->1 or 0->3
+  10010000
+  20001000
+  30000100
+  40000010
+  50000001
+  60000000
+*/
+{
+int sum = 0;
+boolean isConst = TRUE;
+int i = 0, j = 0;
+int vC = ag->vertexCount;
+for(i = 0; i < vC; i++)
+    {
+    if(em[i][v1])
+	{
+	sum = edgesInArea(ag, em, i, v1);
+	if(sum != 1)
+	    return FALSE;
+	}
+    if(em[v2][i])
+	{
+	sum = edgesInArea(ag, em, v2, i);
+	if(sum != 1)
+	    return FALSE;
+	}
+    }
+sum = edgesInArea(ag, em, v1, v2);
+return sum == 1;
 }
 
 boolean isAlt3Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,

@@ -1,5 +1,5 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
-/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2004 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.95 2004/06/01 16:49:02 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.98 2004/06/10 05:37:08 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -59,7 +59,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "blat - Standalone BLAT v. %dx1 fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %d fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
@@ -666,7 +666,6 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = optionInt("tileSize", tileSize);
 stepSize = optionInt("stepSize", stepSize);
-uglyf("stepSize in commandLine = %d\n", stepSize);
 minMatch = optionInt("minMatch", minMatch);
 oneOff = optionExists("oneOff");
 fastMap = optionExists("fastMap");

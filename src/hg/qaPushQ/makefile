@@ -1,21 +1,26 @@
 
-# ~galt/kent/src/hg/qaPushQ
-
 include ../../inc/common.mk
 
-JKSRCDIR = ../..
-JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
+#make COPT= alpha  
+#(to disable gcc optimization which is messing up RL right now)
 
-EXE = qaPushQ
-
-#.c.o:
-#	gcc -ggdb -Wimplicit -pedantic -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
+A = qaPushQ
 
 L = $(MYSQLLIBS) -lm -lcrypt
-MYLIBS = $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a 
-#$(JKLIBDIR)/jkOwnLib.a
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-all: $(EXE)
+O = $A.o
+
+include ../../inc/cgi_build_rules.mk
+
+mgsc: compile
+	mv $A ${CGI_BIN}/$A
+
+compile: $O pushQ.o
+	${CC} $O pushQ.o ${MYLIBS} ${L}
+	mv a.out $A
+	chmod a+rx $A
 
 pushQ.c pushQ.h: pushQ.as
 	autoSql pushQ.as pushQ -dbLink
@@ -28,19 +33,10 @@ formPushQ.h: formPushQ.html
 	echo ";" >> formPushQ.h
 	
 
-$(EXE).o: formPushQ.h ../inc/versionInfo.h
-
-O = $(EXE).o
-
-$(EXE): pushQ.o $O 
-	gcc $O pushQ.o $(MYLIBS) $L
-	mv a.out $(EXE)
-	strip $(EXE)
-	chmod a+rx $(EXE)
-	cp $(EXE) /usr/local/apache/cgi-bin
+$(A).o: formPushQ.h ../inc/versionInfo.h
 
 backup: clean
-	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(EXE)%s.zip *\n",$$1);}' > tempX
+	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(A)%s.zip *\n",$$1);}' > tempX
 	chmod 755 tempX
 	./tempX
 	rm tempX 
@@ -48,10 +44,9 @@ backup: clean
 	rm *.zip
 
 push:
-	scp qaPushQ hgwbeta:$(APACHE)/cgi-bin/
+	scp $(APACHE)/cgi-bin/$(A) hgwbeta:$(APACHE)/cgi-bin/
 
-clean:
-	rm -f *.o
-	rm -f formPushQ.h
-	rm -f $(EXE)
+clean::
+	rm -f formPushQ.h $(A)
+	rm -f pushQ.o
 

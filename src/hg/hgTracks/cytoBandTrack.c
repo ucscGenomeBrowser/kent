@@ -9,6 +9,8 @@
 #include "hCommon.h"
 #include "cytoBand.h"
 
+#define IS_DMEL (startsWith("dm", hGetDb()))
+
 static char *abbreviatedBandName(struct track *tg, struct cytoBand *band, 
 	MgFont *font, int width)
 /* Return a string abbreviated enough to fit into space. */
@@ -17,7 +19,7 @@ int textWidth;
 static char string[32];
 
 /* If have enough space, return original chromosome/band. */
-sprintf(string, "%s%s", skipChr(band->chrom), band->name);
+sprintf(string, "%s%s", (IS_DMEL ? "" : skipChr(band->chrom)), band->name);
 textWidth = mgFontStringWidth(font, string);
 if (textWidth <= width)
     return string;
@@ -44,13 +46,13 @@ struct cytoBand *band = item;
 static char buf[32];
 int len;
 
-sprintf(buf, "%s%s", skipChr(band->chrom), band->name);
+sprintf(buf, "%s%s", (IS_DMEL ? "" : skipChr(band->chrom)), band->name);
 return buf;
 }
 
 
-static Color cytoBandColor(struct track *tg, void *item, struct vGfx *vg)
-/* Figure out color of band. */
+static Color cytoBandColorGiemsa(struct track *tg, void *item, struct vGfx *vg)
+/* Figure out color of band based on gieStain field. */
 {
 struct cytoBand *band = item;
 char *stain = band->gieStain;
@@ -74,6 +76,34 @@ else
     {
     return tg->ixAltColor;
     }
+}
+
+static Color cytoBandColorDmel(struct track *tg, void *item, struct vGfx *vg)
+/* Figure out color of band based on D. melanogaster band name: just toggle 
+ * color based on subband letter before the number at end of name (number 
+ * at end of name gives too much resolution!).  There must be a better way 
+ * but the only online refs I've been able to get for these bands are books 
+ * and too-old-for-online journal articles... */
+{
+struct cytoBand *band = item;
+char *lastAlpha = band->name + strlen(band->name) - 1;
+int parity = 0;
+while (isdigit(*lastAlpha) && lastAlpha > band->name)
+    lastAlpha--;
+parity = ((*lastAlpha) - 'A') & 0x1;
+if (parity)
+    return tg->ixColor;
+else 
+    return tg->ixAltColor;
+}
+
+static Color cytoBandColor(struct track *tg, void *item, struct vGfx *vg)
+/* Figure out color of band. */
+{
+if (IS_DMEL)
+    return cytoBandColorDmel(tg, item, vg);
+else
+    return cytoBandColorGiemsa(tg, item, vg);
 }
 
 int cytoBandStart(struct track *tg, void *item)

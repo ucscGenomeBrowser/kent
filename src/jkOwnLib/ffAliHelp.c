@@ -6,7 +6,7 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.3 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.4 2004/06/03 21:14:35 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list
@@ -153,6 +153,7 @@ for (mid = aliList->right; mid != NULL; mid = mid->right)
 aliList = ffRemoveEmptyAlis(aliList, TRUE);
 return aliList;
 }
+
 
 int ffScoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation)
 /* Return a better score the closer an intron is to

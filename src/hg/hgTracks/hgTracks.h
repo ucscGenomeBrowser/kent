@@ -58,7 +58,7 @@ struct track
     int lineHeight;            /* Height per track including border. */
     int heightPer;             /* Height per track minus border. */
 
-    int (*itemHeight)(struct track *tg, void *item);
+    int (*itemHeight)(struct track *xtg, void *item);
     /* Return height of one item. */
 
     void (*drawItems)(struct track *tg, int seqStart, int seqEnd,
@@ -221,6 +221,7 @@ struct trackLayout
 extern struct trackLayout tl;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
+struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
@@ -666,6 +667,11 @@ int spreadStringCharWidth(int width, int count);
 
 Color alignInsertsColor();
 /* Return color used for insert indicators in multiple alignments */
+
+void linkedFeaturesDrawAt(struct track *tg, void *item,
+				 struct vGfx *vg, int xOff, int y, double scale, 
+				 MgFont *font, Color color, enum trackVisibility vis);
+/* Draw a single simple bed item at position. */
 
 #endif /* HGTRACKS_H */
 

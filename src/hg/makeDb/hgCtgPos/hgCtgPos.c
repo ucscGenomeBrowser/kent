@@ -4,12 +4,13 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
+#include "options.h"
 #include "hCommon.h"
 #include "jksql.h"
 #include "liftSpec.h"
 #include "ctgPos.h"
 
-static char const rcsid[] = "$Id: hgCtgPos.c,v 1.4 2003/06/10 16:57:19 kent Exp $";
+static char const rcsid[] = "$Id: hgCtgPos.c,v 1.5 2004/06/08 22:00:40 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +18,12 @@ void usage()
 errAbort(
   "hgCtgPos - Store contig positions ( from lift files ) in database.\n"
   "usage:\n"
-  "   hgCtgPos database ooDir\n");
+  "   hgCtgPos <options> database ooDir\n"
+  "options:\n"
+  "   -chromLst=chrom.lst - chromosomes subdirs are named in chrom.lst (1, 2, ...)\n"
+  "example:\n"
+  "   cd /cluster/data/hg17\n"
+  "   hgCtgPos -chromLst=chrom.lst hg17 .\n");
 }
 
 int cmpCtgPos(const void *va, const void *vb)
@@ -117,17 +123,30 @@ sqlDisconnect(&conn);
 void hgCtgPos(char *database, char *ooDir)
 /* hgCtgPos - Store contig positions ( from lift files ) in database.. */
 {
-struct ctgPos *ctgList = NULL, *ctg;
+struct ctgPos *ctgList = NULL;
 char liftFileName[512];
 struct fileInfo *fiList, *fi;
 static char *liftNames[2] = {"lift/ordered.lft", "lift/random.lft"};
-static char *chromSuffixes[2] = {"", "_random"};
 int i;
+struct hash *chromDirHash = newHash(4);
+char *chromLst = optionVal("chromLst", NULL);
+
+if (chromLst != NULL)
+    {
+    struct lineFile *clf = lineFileOpen(chromLst, TRUE);
+    char *row[1];
+    while (lineFileRow(clf, row))
+        {
+        hashAdd(chromDirHash, row[0], NULL);
+        }
+    lineFileClose(&clf);
+    }
 
 fiList = listDirX(ooDir, "*", FALSE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
-    if (fi->isDir && (strlen(fi->name) <= 2) || startsWith("NA_", fi->name))
+    if (fi->isDir && ((strlen(fi->name) <= 2) || startsWith("NA_", fi->name)
+		|| hashLookup(chromDirHash, fi->name) ))
         {
 	for (i=0; i<ArraySize(liftNames); ++i)
 	    {
@@ -147,6 +166,7 @@ saveCtgPos(ctgList, database);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc != 3)
     usage();
 hgCtgPos(argv[1], argv[2]);

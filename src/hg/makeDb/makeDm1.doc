@@ -2011,4 +2011,221 @@ axtFilter -notQ=chrUn_random $1 \
     mv /cluster/data/dm1/zips/multizDm1DroYak1Dp1.zip .
     md5sum *.zip > md5sum.txt
 
+# PHASTCONS MELANOGASTER/YAKUBA/PSEUDOOBSCURA (first cut 6/1/04 acs)
 
+    # make sure /cluster/bin/phast is in your path
+    # commands below use bash shell
+    # watch for typos -- copying from a Makefile and editing a bit
+
+    # there are three steps to go through: fitting a phylogenetic
+    # model to the data set with phyloFit, then running phastCons for
+    # conservation scores, then running phastCons for predictions of
+    # conserved elements.
+
+    # step 1: fit phylogenetic model, with rate variation (discrete
+    # gamma model) first we need to extract the sufficient stats for
+    # the phylogenetic model from the MAFs.  In this case, we don't
+    # care about the order of the tuples (allows for much more compact
+    # representation)
+
+    ssh eieio
+    mkdir /cluster/data/dm1/bed/phastCons
+    cd /cluster/data/dm1/bed/phastCons
+    MAF=/cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp
+    # first extract chromosome by chromosome
+    for file in ${MAF}/*.maf ; do \
+	msa_view $file --in-format MAF --out-format SS --order dm1,droYak1,dp1 \
+	    --unordered-ss  > `basename $file .maf`.ss ;\
+    done
+    # now aggregate for whole genome
+    ls chr*.ss > fnames
+    msa_view "*fnames" -i SS --aggregate dm1,droYak1,dp1 -o SS --unordered-ss > all.ss
+
+    # now estimate parameters; should be very fast in this case
+    phyloFit --msa all.ss --tree "((1,2),3)" --msa-format SS --subst-mod REV --nrates 10 --out-root rev-dg --output-tree
+
+    # make sure model looks reasonable
+    cat rev-dg.mod
+#ALPHABET: A C G T
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 10
+#ALPHA: 1.273963
+#TRAINING_LNL: -290963642.026431
+#BACKGROUND: 0.279634 0.220483 0.220439 0.279444
+#RATE_MAT:
+#  -0.929128    0.196259    0.495954    0.236916
+#   0.248910   -1.089402    0.212511    0.627981
+#   0.629134    0.212554   -1.090600    0.248913
+#   0.237077    0.495481    0.196354   -0.928911
+#TREE: ((1:0.057640,2:0.073631):0.166542,3:0.166542);
+
+    # beware of zero branch lengths (indicates bad topology) or very
+    # large branch lengths (much greater than one; indicates
+    # convergence problems).  Can try without --nrates or with
+    # --subst-mod HKY85 to double check (parameter estimates should be
+    # in the same ballpark, REV + dG likelihood should be a bit
+    # better).  Also can write a log file to monitor convergence
+    # (--log).  Also watch out for alpha much less than one.
+    # Sometimes it's helpful to produce a rendering of the tree using
+    # draw_tree (run on the *.nh file)
+
+    # step 2: run phastCons.  First partition the alignments into
+    # bite-sized chunks.  This time we need the ordered version of the
+    # SS format.
+
+    # some vars used below
+    MAF=/cluster/data/dm1/bed/multiz.dm1droYak1dp1/myp
+    FA=/cluster/data/dm1
+    WINSIZE=1000000
+    WINOVERLAP=0
+
+    for file in ${MAF}/*.maf ; do \
+	root=`basename $file .maf` ;\
+	chr=`echo $root | sed 's/chr//'` ;\
+	echo $file $root $chr ;\
+	mkdir -p SS/$chr ;\
+	msa_split $file -i MAF -o SS -O dm1,droYak1,dp1 -M ${FA}/$chr/$root.fa \
+	    -w ${WINSIZE},${WINOVERLAP} -r SS/$chr/$$root -I 1000 -d 1 -B 5000 ;\
+    done
+    # (this is worth doing as a little cluster job with mammalian genomes,
+    # but it's pretty fast with fly)
+
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/phastCons
+
+    # now set up cluster job.  Make a little wrapper for phastCons
+    cat << '_EOF_' > doPostProbs
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+TMP=/scratch/phastCons
+
+file=$1
+root=`basename $file .ss`
+chrom=`echo $root | awk -F\. '{print $1}'`
+
+mkdir -p $TMP
+$PHAST/phastCons $file rev-dg.mod --rates-cut 2 --nrates 10 --suppress-missing --cut-params 0.030,0.015 --quiet > ${TMP}/$root.pp
+mkdir -p POSTPROBS/$chrom
+gzip -c $TMP/$root.pp > POSTPROBS/$chrom/$root.pp.gz
+rm $TMP/$root.pp
+'_EOF_'
+    chmod 775 doPostProbs
+
+    # Note: the --cut-params arguments above are approximate
+    # likelihood estimates obtained by running phastCons *without* the
+    # --cut-params argument on four or five different windows (all
+    # gave similar results).  They may need to change for different
+    # data sets.  Careful, though: the parameter estimation procedure
+    # is a little unstable.  Be sure to create a log file and monitor
+    # for convergence.
+
+    # set up a jobs list
+    rm -f jobs.lst
+    for file in `find SS -name "*.ss"` ; do echo doPostProbs $file >> jobs.lst ; done
+
+    # run cluster job
+    ssh kk
+    cd /cluster/data/dm1/bed/phastCons
+    para create jobs.lst ; para try ; para push ; etc....
+#Completed: 134 of 134 jobs
+#CPU time in finished jobs:       2584s      43.07m     0.72h    0.03d  0.000 y
+#IO & Wait Time:                  2090s      34.83m     0.58h    0.02d  0.000 y
+#Average job time:                  35s       0.58m     0.01h    0.00d
+#Longest job:                       46s       0.77m     0.01h    0.00d
+#Submission to last job:            62s       1.03m     0.02h    0.00d
+    logout
+
+    # now create wiggle track
+    # NOTE: might want to integrate with the multiz track instead of
+    # keeping separate
+    mkdir -p wib
+    for dir in POSTPROBS/* ; do \
+	echo $dir ;\
+	chr=`basename $dir` ;\
+	zcat `ls $dir/*.pp.gz | sort -t\. -k2,2n` | \
+	    wigAsciiToBinary -chrom=$chr \
+	    -wibFile=wib/${chr}_phastCons stdin ;\
+    done
+    hgLoadWiggle dm1 phastCons wib/chr*_phastCons.wig
+    mkdir -p /gbdb/dm1/wib
+    rm -f /gbdb/dm1/wib/*phastCons.wib
+    ln -s `pwd`/wib/*.wib /gbdb/dm1/wib
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+
+    # trackDb.ra entry
+#track phastCons
+#shortLabel phastCons 
+#longLabel phastCons Conservation Score, melanogaster/yakuba/pseudoobscura
+#group compGeno
+#priority 103
+#visibility hide
+#color 0,10,100
+#maxHeightPixels 40
+#type wig 0.0 1.0
+#autoScaleDefault off
+
+    # step 3:  predictions of conserved elements
+    # (could do these at the same time as step 2, but we want to use
+    # different --rates-cut params)
+    cat << '_EOF_' > doViterbi
+#!/bin/sh
+
+PHAST=/cluster/home/acs/phast/bin
+TMP=/scratch/phastCons
+
+file=$1
+root=`basename $file .ss`
+chrom=`echo $root | awk -F\. '{print $1}'`
+
+mkdir -p PREDICTIONS/$chrom
+$PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTIONS/$chrom/$root.bed --score --no-post-probs --cut-params 0.030,0.015 --quiet --seqname $chrom
+'_EOF_'
+    chmod 775 doViterbi
+
+    rm -f jobs.viterbi.lst
+    for file in `find SS -name "*.ss"` ; do echo doViterbi $file >> jobs.viterbi.lst ; done
+    logout
+
+    ssh kk
+    cd /cluster/data/dm1/bed/phastCons
+    para create jobs.viterbi.lst ; para try ; para push ; etc....
+#CPU time in finished jobs:        320s       5.34m     0.09h    0.00d  0.000 y
+#IO & Wait Time:                   427s       7.11m     0.12h    0.00d  0.000 y
+#Average job time:                   6s       0.09m     0.00h    0.00d
+#Longest job:                       10s       0.17m     0.00h    0.00d
+#Submission to last job:            52s       0.87m     0.01h    0.00d
+    logout
+
+    # create track; we want to tweak the scores and the names
+    sed 's/id //' PREDICTIONS/*/*.bed | \
+	awk '{printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
+	    $1, $2, $3, $5, 221.65 * log($5) - 352.64, $6, $7, $8, $9, \
+	    $10, $11, $12}' > all.bed
+    hgLoadBed dm1 phastConsElements all.bed
+
+    # Scores are transformed as follows, for a reasonable-looking 
+    # "spectrum".  Let x_max be the maximum (believable) score (here
+    # x_max  = 447) and let x_med be the median score (here x_med =
+    # 19).  The  scores are transformed via the function f(x) = a *
+    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
+    # for a and b, you obtain  b = (300 log x_max - 1000 log x_med) /
+    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
+    # 221.65, b = -352.64.
+
+    # trackDb.ra file
+#track phastConsElements
+#shortLabel phastConsElements
+#longLabel phastCons Conserved Elements, melanogaster/yakuba/pseudoobscura
+#group compGeno
+#priority 105
+#visibility hide
+#spectrum on
+#color 0,60,120
+#altColor 200,220,255
+#exonArrows off
+#type bed 12 .
+
+    # should gzip or even delete contents of SS directory when done

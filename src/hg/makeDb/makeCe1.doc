@@ -962,6 +962,9 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
 
 # MAKING AND STORING refSeq ALIGNMENTS (WORKING 2003-06-02 - Hiram)
 # MAKING AND STORING refSeq ALIGNMENTS - hgRefSeqMrna load REDONE (2004-05-18, hartera)
+# hgRefSeqStatus - refSeqStatus table rebuilt with updated loc2ref
+# (2004-06-16, hartera)
+
     # next machine
     ssh kkr1u00
     mkdir -p /iscratch/i/worms/Celegans/refSeq
@@ -1042,8 +1045,12 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
       /cluster/store5/mrna.134/refSeq/051204/mim2loc
     # Missing locusLinkIds for 184 of 20661
     # Missing protein accessions for 184 of 20661 
-    # Add RefSeq status info
-    hgRefSeqStatus ce1 /cluster/store5/mrna.134/refSeq/041003/loc2ref
+    # Add RefSeq status info (updated 2004-06-16 as mrnaAcc values not found
+    # in refLink.mrnaAcc column). Only load in those for C. elegans (Taxonomy
+    # ID is 6239)
+    cd /cluster/data/ce1/bed/refSeq
+    hgRefSeqStatus -taxId=6239 ce1 \
+         /cluster/store5/mrna.134/refSeq/051204/loc2ref
 
     # Create precomputed join of refFlat and refGene:
     echo 'CREATE TABLE refFlat \

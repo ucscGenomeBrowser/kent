@@ -40,6 +40,7 @@ struct gfPcrOutput
     char *fPrimer;	/* Forward primer - 15-30 bases */
     char *rPrimer;	/* Reverse primer - after fPrimer and on opposite strand */
     char *seqName;	/* Name of sequence (chromosome maybe) that gets amplified. */
+    int seqSize;	/* Size of sequence (chromosome maybe) */
     int fPos;		/* Position of forward primer in seq. */
     int rPos;		/* Position of reverse primer in seq. */
     char strand;	/* Strand of amplified sequence. */
@@ -59,7 +60,7 @@ void gfPcrOutputFreeList(struct gfPcrOutput **pList);
 
 
 void gfPcrLocal(char *pcrName, 
-	struct dnaSeq *seq, int seqOffset, char *seqName, 
+	struct dnaSeq *seq, int seqOffset, char *seqName, int seqSize,
 	int maxSize, char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
 	int minPerfect, int minGood, char strand, struct gfPcrOutput **pOutList);
 /* Do detailed PCR scan on DNA already loaded into memory and put results
@@ -74,10 +75,20 @@ struct gfPcrOutput *gfPcrViaNet(char *host, char *port, char *seqDir,
 	int maxSize, int minPerfect, int minGood);
 /* Do PCRs using gfServer index, returning list of results. */
 
-void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *format, FILE *f);
-/* Write list of outputs in specified format (either "fa" or "bed") to file */
+void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
+	char *url, FILE *f);
+/* Write list of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
 
-void gfPcrOutputWriteAll(struct gfPcrOutput *outList, char *format, char *fileName);
-/* Write list of outputs in specified format (either "fa" or "bed") to file */
+void gfPcrOutputWriteAll(struct gfPcrOutput *outList, 
+	char *outType, char *url, char *fileName);
+/* Create file of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
+
+char *gfPcrMakePrimer(char *s);
+/* Make primer (lowercased DNA) out of text.  Complain if
+ * it is too short or too long. */
 
 #endif /* GFPCRLIB_H */

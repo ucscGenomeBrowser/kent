@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.183 2004/05/29 23:24:26 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.188 2004/06/15 23:44:14 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -650,11 +650,11 @@ if (startsWith("chr", table))
 	if ((ptr = strstr(chrom, "_random")) != NULL)
 	    *(ptr+strlen("_random")) = 0;
 	}
-    else if ((ptr = strchr(table, '_')) != NULL)
+    else if ((ptr = strrchr(table, '_')) != NULL)
 	{
 	strncpy(trackName, ptr+1, 128);
 	strncpy(chrom, table, 32);
-	if ((ptr = strchr(chrom, '_')) != NULL)
+	if ((ptr = strrchr(chrom, '_')) != NULL)
 	    *ptr = 0;
 	}
     }
@@ -764,6 +764,7 @@ char query[256];
 char buf[64];
 char *s;
 boolean ok = TRUE;
+boolean isDmel = startsWith("dm", hGetDb());
 
 sprintf(query, 
 	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
@@ -775,7 +776,7 @@ if (s == NULL)
    s = "";
    ok = FALSE;
    }
-sprintf(retBand, "%s%s", skipChr(chrom), buf);
+sprintf(retBand, "%s%s", (isDmel ? "" : skipChr(chrom)), buf);
 return ok;
 }
 
@@ -1816,6 +1817,29 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct dbDb *archiveDbDbLoad(char **row)
+/* Load a archive dbDb from row fetched with select * from dbDb
+         from database.  Dispose of this with dbDbFree().
+  NOTE: this table schema is now detached from the
+  main production dbDb, so we are not using the autoSql functions */
+{
+    struct dbDb *ret;
+
+    AllocVar(ret);
+    ret->name = cloneString(row[0]);
+    ret->description = cloneString(row[1]);
+    ret->nibPath = cloneString(row[2]);
+    ret->organism = cloneString(row[3]);
+    ret->defaultPos = cloneString(row[4]);
+    ret->active = sqlSigned(row[5]);
+    ret->orderKey = sqlSigned(row[6]);
+    ret->genome = cloneString(row[7]);
+    ret->scientificName = cloneString(row[8]);
+    ret->htmlPath = cloneString(row[9]);
+    ret->hgNearOk = sqlSigned(row[10]);
+    return ret;
+}
+
 struct dbDb *hArchiveDbDbList()
 /* Return list of databases in archive central dbDb.
  * Free this with dbDbFree. */
@@ -1834,7 +1858,7 @@ if (conn)
     sr = sqlGetResult(conn, "select * from dbDb order by orderKey desc,name desc");
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        db = dbDbLoad(row);
+        db = archiveDbDbLoad(row);
         /* strip organism out of assembly description if it's there
          * (true in hg6-hg11 entries) */
         next = assembly = cloneString(db->description);
@@ -1875,7 +1899,7 @@ char *hPreviousAssembly(char *database)
  * Must free returned string */
 
 {
-struct dbDb *dbList = NULL, *db, *prevDb, *lastDb;
+struct dbDb *dbList = NULL, *db, *prevDb;
 char *prev = NULL;
 
 /* NOTE: relies on this list being ordered descendingly */
@@ -1956,32 +1980,8 @@ return binned;
 int hFieldIndex(char *table, char *field)
 /* Return index of field in table or -1 if it doesn't exist. */
 {
-char query[256];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int result = -1;
-int index = 0;
-int cols = 0;
-
-/* Read table description into hash. */
-sprintf(query, "describe %s", table);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    cols = sqlCountColumns(sr);
-    while (index < cols)
-        {
-        if (sameString(row[index], field))
-            {
-            result = index;
-            break;
-            }
-        index++;
-        }
-    }
-
-sqlFreeResult(&sr);
+int result = sqlFieldIndex(conn, table, field);
 hFreeConn(&conn);
 return result;
 }

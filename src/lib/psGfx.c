@@ -6,7 +6,7 @@
 #include "common.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.12 2003/11/15 21:14:09 kent Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.13 2004/06/08 16:43:05 angie Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -299,5 +299,34 @@ ps->clipStack = clip->next;
 assert(ps->clipStack != NULL);
 freeMem(clip);
 fprintf(ps->f, "grestore %%unclip\n");
+}
+
+void psTriLeft(struct psGfx *ps, int x1, int y1, int y2)
+/* Draw a triangle pointing left with straight edge along x+((y2-y1)/2) 
+ * from y1 to y2 (point at x1). */
+{
+FILE *f = ps->f;
+double half = (y2 - y1) / 2.0;
+assert(y2 > y1);
+fprintf(f, "newpath\n");
+psMoveTo(ps, x1,      y1+half);
+psLineTo(ps, x1+half, y1);
+psLineTo(ps, x1+half, y2);
+fprintf(f, "closepath\n");
+fprintf(f, "fill\n");
+}
+
+void psTriRight(struct psGfx *ps, int x1, int y1, int y2)
+/* Draw a triangle pointing right with straight edge along x from y1 to y2 */
+{
+FILE *f = ps->f;
+double half = (y2 - y1) / 2.0;
+assert(y2 > y1);
+fprintf(f, "newpath\n");
+psMoveTo(ps, x1,      y1);
+psLineTo(ps, x1+half, y1+half);
+psLineTo(ps, x1,      y2);
+fprintf(f, "closepath\n");
+fprintf(f, "fill\n");
 }
 

@@ -90,7 +90,7 @@ type genePred
 
 track pseudoGeneLink
 shortLabel Retroposed Genes 
-longLabel Functional and Nonfunctional (pseudogenes) Retroposed Genes Based on mrna alignments
+longLabel Retroposed (Pseudo)genes, Including Nonfunctional, Based on mRNA Alignments.
 group genes
 priority 52.5
 visibility hide
@@ -228,7 +228,7 @@ chromosomes chr22,chr21
 type sample
 
 track affyU133
-shortLabel Affymetrix U133
+shortLabel Affy U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
 group regulation
 priority 89
@@ -236,7 +236,7 @@ visibility hide
 type psl .
 
 track affyGnf1h
-shortLabel Affymetrix GNF1H
+shortLabel Affy GNF1H
 longLabel Alignments of Probes from Affymetrix GNF1H Chip
 group regulation
 priority 89.1
@@ -244,7 +244,7 @@ visibility hide
 type psl .
 
 track affyU95
-shortLabel Affymetrix U95
+shortLabel Affy U95
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U95
 group regulation
 priority 89.2
@@ -464,4 +464,33 @@ searchTable uniGene_2
 searchType bed
 termRegex Hs\.[0-9]+
 searchPriority 20
+
+track affyTranscription
+shortLabel Transcription
+longLabel Affy. SK-N-AS Transcript Abundance
+group x
+priority 164
+visibility hide
+autoScaleDefault Off
+color 175,150,128
+altColor 255,128,0
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
+defaultViewLimits -10:500
+type wig -2504.86 4396.07
+
+track affyTransfrags
+shortLabel Transfrags
+longLabel Affy. SK-N-AS Transfrags
+group x
+priority 165
+visibility hide
+color 35,35,175
+altColor 255,128,0
+chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
+type bed 4 +
+
+
 

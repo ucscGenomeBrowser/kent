@@ -5,6 +5,14 @@
        rather than the chromosome nib/2bit file name and subsequence.
      o Adding -stepSize to gfServer and blat, so that can have
        tiles overlap.
+     o Adding PCR handling to gfServer.  (Still need a separate
+       pcr client.)
+     o Put in some code to remove out of order exons that were generated
+       in some rare situations.  This was a side effect of the second change
+       in version 26.
+     o Created webBlat, a CGI script that blats and nicely displays the
+       results without requiring the whole UCSC browser and database to
+       work.
 
 28:
      o Blat, gfClient, and gfServer now work with .2bit files.

@@ -527,6 +527,9 @@ int countCharsN(char *s, char c, int size);
 int countLeadingChars(char *s, char c);
 /* Count number of characters c at start of string. */
 
+int countSame(char *a, char *b);
+/* Count number of characters that from start in a,b that are same. */
+
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)

@@ -272,6 +272,22 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
+track multizPanTro1Rm1
+shortLabel 3 Primate
+longLabel Human/Chimp/Rhesus Multiz Al. (panTro1 - macaca mulatta trimmed reads) Reciprocal Best
+group compGeno
+priority 190
+visibility hide
+type maf
+
+track macaca
+shortLabel macaca blastz
+longLabel Human/Rhesus Blastz (panTro1 - macaca mulatta trimmed reads) Reciprocal Best
+group compGeno
+priority 191
+visibility hide
+type maf
+
 track chainPanTro1
 shortLabel Chimp Chain
 longLabel Chimp (panTro1-Nov 03) Chained Alignments
@@ -1387,6 +1403,16 @@ spectrum on
 priority 158
 visibility hide
 type psl xeno
+
+track unAnnotated
+shortLabel unAnnotated
+longLabel Regions not annotated as genes/mRNAs/ESTs/CpG/repeats/gaps
+group x
+priority 161
+visibility hide
+color 20,0,50
+type bed 4
+
 
 
 searchTable HInvGeneMrna

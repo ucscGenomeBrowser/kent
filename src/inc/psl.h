@@ -139,11 +139,20 @@ int pslCmpQuery(const void *va, const void *vb);
 int pslCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target. */
 
+int pslCmpScore(const void *va, const void *vb);
+/* Compare to sort based on score (descending). */
+
+int pslCmpQueryScore(const void *va, const void *vb);
+/* Compare to sort based on query then score (descending). */
+
 int pslCalcMilliBad(struct psl *psl, boolean isMrna);
 /* Calculate badness in parts per thousand. */
 
 int pslCmpScoreDesc(const void *va, const void *vb);
 /* Compare to sort based on score descending. */
+
+int pslCmpMatch(const void *va, const void *vb);
+/* Compare to sort based on match. */
 
 int pslScore(const struct psl *psl);
 /* Return score for psl. */
@@ -228,6 +237,11 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
 /* Create a PSL from an alignment.  Options PSL_IS_SOFTMASK if lower case
  * bases indicate repeat masking.  Returns NULL if alignment is empty after
  * triming leading and trailing indels.*/
+
+int pslShowAlignment(struct psl *psl, boolean isProt,
+	char *qName, bioSeq *qSeq, int qStart, int qEnd,
+	char *tName, bioSeq *tSeq, int tStart, int tEnd, FILE *f);
+/* Show protein/DNA alignment or translated DNA alignment in HTML format. */
 
 #endif /* PSL_H */
 

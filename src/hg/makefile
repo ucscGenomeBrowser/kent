@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgText hgTracks \
+BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgPcr hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear protein/pbTracks hgLiftOver
 
 all::    cgi utils
@@ -113,6 +113,7 @@ UTIL_DIRS = \
 	fakeOut \
 	featureBits \
 	ffaToFa \
+	fishClones \
 	fqToQa \
 	fqToQac \
 	fragPart \
@@ -155,6 +156,7 @@ UTIL_DIRS = \
 	pslHitPercent \
 	pslIntronsOnly \
 	pslMap \
+	pslPairs \
 	pslPretty \
 	pslReps \
 	pslSelect \

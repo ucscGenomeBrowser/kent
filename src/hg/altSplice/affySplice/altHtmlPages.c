@@ -75,6 +75,14 @@ struct resultM
     double **matrix;         /* The actual data for the resultM. */
 };
 
+struct altCounts
+{
+    char *gene; /*Name of gene. */
+    int count; /* Number of alternative sites possible. */
+    int jsExpressed; /* Number of alternative sites where one isoform expressed. */
+    int jsAltExpressed; /* Number of alternative sites that are alternatively expressed. */
+};
+
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -103,6 +111,9 @@ static struct optionSpec optionSpecs[] =
     {"tissueSpecific", OPTION_STRING},
     {"outputDna", OPTION_STRING},
     {"cassetteBed", OPTION_STRING},
+    {"geneStats", OPTION_STRING},
+    {"tissueExpThresh", OPTION_INT},
+    {"geneJsStats", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -133,8 +144,13 @@ static char *optionDescripts[] =
     "[optional] Output tissues specific isoforms to file specified.",
     "[optional] Output dna associated with a junction to this file.",
     "[optional] Output splice sites for cassette exons.",
+    "[optional] Output stats about genes, junctions expressed, junctions alt to file name.",
+    "[optional] Number of tissues that must express a probe set before considred expressed.",
+    "[optional] Print out junction sets per gene stats."
 };
 
+
+int tissueExpThresh = 0;   /* Number of tissues that must express probe set. */
 double presThresh = 0;     /* Probability above which we consider
 			    * something expressed. */
 double absThresh = 0;      /* Probability below which we consider
@@ -143,6 +159,7 @@ double disagreeThresh = 0; /* Probability below which we consider
 			    * something to disagree. */
 FILE *exonPsStats = NULL;  /* File to output exon probe set 
 			      confirmation stats into. */
+FILE *geneCounts = NULL;   /* Print out the gene junction counts. */
 boolean doJunctionTypes = FALSE;  /* Should we try to determine what type of splice type is out there? */ 
 FILE *bedJunctTypeOut =   NULL;   /* File to write out bed types to. */
 struct hash *junctBedHash = NULL;
@@ -164,6 +181,15 @@ int alt5ExpCount = 0;
 int alt5SoftExpCount = 0;
 int altCassetteExpCount = 0;
 int otherExpCount = 0;
+
+/* Counts of different alternative splicing 
+   events that are expressed. */
+int alt3ExpAltCount = 0;
+int alt3SoftExpAltCount = 0;
+int alt5ExpAltCount = 0;
+int alt5SoftExpAltCount = 0;
+int altCassetteExpAltCount = 0;
+int otherExpAltCount = 0;
 
 int noDna = 0;
 int withDna = 0;
@@ -542,6 +568,19 @@ else
 return skipIx;
 }
 
+boolean geneExpressed(struct junctSet *js, int colIx)
+/* Is the gene at junctIx expressed above the 
+   threshold in colIx? */
+{
+int i = 0;
+for(i = 0; i < js->genePSetCount; i++)
+    {
+    if(js->geneProbs[i][colIx] >= presThresh)
+	return TRUE;
+    }
+return FALSE;
+}
+
 boolean junctionExpressed(struct junctSet *js, int colIx, int junctIx)
 /* Is the junction at junctIx expressed above the 
    threshold in colIx? */
@@ -549,11 +588,7 @@ boolean junctionExpressed(struct junctSet *js, int colIx, int junctIx)
 boolean geneExp = FALSE;
 boolean junctExp = FALSE;
 int i = 0;
-for(i = 0; i < js->genePSetCount; i++)
-    {
-    if(js->geneProbs[i][colIx] >= presThresh)
-	geneExp = TRUE;
-    }
+geneExp = geneExpressed(js, colIx);
 if(geneExp && js->junctProbs[junctIx][colIx] >= presThresh)
     junctExp = TRUE;
 return junctExp;
@@ -733,6 +768,73 @@ switch(type)
     }
 }
 
+void countExpAltSpliceType(int type)
+/* Record the counts of different alt-splice types. */
+{
+switch(type)
+    {
+    case alt3Prime:
+	alt3ExpAltCount++;
+	break;
+    case alt5Prime:
+	alt5ExpAltCount++;
+	break;
+    case alt3PrimeSoft:
+	alt3SoftExpAltCount++;
+	break;
+    case alt5PrimeSoft:
+	alt5SoftExpAltCount++;
+	break;
+    case altCassette:
+	altCassetteExpAltCount++;
+	break;
+    default:
+	otherExpAltCount++;
+    }
+}
+
+void logOneJunctSet(struct hash *geneHash, struct junctSet *js)
+/* Log that a gene is expressed. */
+{
+struct altCounts *ac = NULL;
+ac = hashFindVal(geneHash, js->genePSets[0]);
+if(ac == NULL)
+    {
+    AllocVar(ac);
+    ac->gene = js->genePSets[0];
+    ac->count++;
+    hashAdd(geneHash, js->genePSets[0], ac);
+    }
+else
+    ac->count++;
+}
+
+
+void logOneExpressed(struct hash *geneHash, struct junctSet *js)
+/* Log an expressed event. */
+{
+struct altCounts *ac = NULL;
+ac = hashMustFindVal(geneHash, js->genePSets[0]);
+ac->jsExpressed++;
+}
+
+void logOneAltExpressed(struct hash *geneHash, struct junctSet *js)
+/* Log an AltExpressed event. */
+{
+struct altCounts *ac = NULL;
+ac = hashMustFindVal(geneHash, js->genePSets[0]);
+ac->jsAltExpressed++;
+}
+
+void printAltCounts(void *val)
+/* Print out the junction sets. */
+{
+struct altCounts *ac = (struct altCounts *)val;
+if(geneCounts != NULL)
+    fprintf(geneCounts, "%s\t%d\t%d\t%d\n", ac->gene, ac->count,
+	    ac->jsExpressed, ac->jsAltExpressed);
+}
+
 int calcExpressed(struct junctSet *jsList, struct resultM *probMat)
 /* Loop through and calculate expression and score where score is correlation. */
 {
@@ -740,6 +842,10 @@ struct junctSet *js = NULL;
 int i = 0, j = 0, k = 0;
 double minCor = 2; /* Correlation is always between -1 and 1, 2 is
 		    * good max. */
+struct hash *geneHash = newHash(10);
+char *geneJsOutName = optionVal("geneJsStats", NULL);
+char *geneOutName = optionVal("geneStats", NULL);
+FILE *geneOut = NULL;
 double *X = NULL;
 double *Y = NULL;
 int elementCount;
@@ -748,42 +854,64 @@ int rowCount = probMat->rowCount;
 int colIx = 0, junctIx = 0;           /* Column and Junction indexes. */
 int junctOneExp = 0, junctTwoExp = 0; /* What are the counts of
 				       * expressed and alts. */
-
+tissueExpThresh = optionInt("tissueExpThresh",1);
+if(geneOutName != NULL)
+    geneOut = mustOpen(geneOutName, "w");
+if(geneJsOutName != NULL)
+    geneCounts = mustOpen(geneJsOutName, "w");
 for(js = jsList; js != NULL; js = js->next)
     {
     int *expressed = NULL;
     int totalTissues = 0;
     int junctExpressed = 0;
+    int geneExpCount = 0;
+    int altExpTissues = 0;
+    int jsExpCount = 0;
     AllocArray(expressed, js->junctUsedCount);
-
+    
     /* Loop through and see how many junctions
        are actually expressed and in how many tissues. */
     for(colIx = 0; colIx < colCount; colIx++)
 	{
-	boolean anyExpressed = FALSE;
+	int anyExpressed = 0;
+	int jsExpressed = 0;
+	if(geneExpressed(js, colIx))
+	    geneExpCount++;
 	for(junctIx = 0; junctIx < js->junctUsedCount; junctIx++)
 	    {
 	    if(junctionExpressed(js, colIx, junctIx) == TRUE)
 		{
 		expressed[junctIx]++;
-		anyExpressed = TRUE;
+		if(expressed[junctIx] >= tissueExpThresh)
+		    anyExpressed++;
 		}
+	    if(js->junctProbs[junctIx][colIx] >= presThresh)
+		jsExpressed++;
 	    }
-	if(anyExpressed)
+	if(anyExpressed > 0)
 	    totalTissues++;
+	if(jsExpressed >= tissueExpThresh)
+	    jsExpCount++;
+
+	if(jsExpressed >= tissueExpThresh * 2)
+	    altExpTissues++;
 	}
     
     /* Set number expressed. */
     for(i = 0; i < js->junctUsedCount; i++)
 	{
-	if(expressed[i] > 0)
+	if(expressed[i] >= tissueExpThresh)
 	    junctExpressed++;
 	}
+    
+    /* Record that there is a junction set for this gene. */
+    logOneJunctSet(geneHash, js);
 
     /* If one tissue expressed set is expressed. */
     if(junctExpressed >= 1)
 	{
 	js->expressed = TRUE;
+	logOneExpressed(geneHash, js);
 	junctOneExp++;
 	}
     
@@ -791,9 +919,9 @@ for(js = jsList; js != NULL; js = js->next)
     if(junctExpressed >= 2)
 	{
 	js->altExpressed = TRUE;
+	logOneAltExpressed(geneHash, js);
 	junctTwoExp++;
 	}
-
     if(js->altExpressed == TRUE)
 	{
 	js->score = calcMinCorrelation(js, expressed, totalTissues, colCount);
@@ -801,14 +929,24 @@ for(js = jsList; js != NULL; js = js->next)
 	}
     else
 	js->score = BIGNUM;
+    if(geneOut) 
+	{
+	char *tmpName = cloneString(js->junctUsed[0]);
+	char *tmp = NULL;
+	tmp = strchr(tmpName, '@');
+	assert(tmp);
+	*tmp = '\0';
+	fprintf(geneOut, "%s\t%s\t%d\t%d\t%d\n", js->name, tmpName, geneExpCount, jsExpCount, altExpTissues);
+	freez(&tmpName);
+	}
     freez(&expressed);
     }
-
+carefulClose(&geneOut);
+hashTraverseVals(geneHash, printAltCounts);
+freeHashAndVals(&geneHash);
+carefulClose(&geneCounts);
 warn("%d junctions expressed above p-val %.2f, %d alternative (%.2f%%)",
      junctOneExp, presThresh, junctTwoExp, 100*((double)junctTwoExp/junctOneExp));
-/* warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other of expressed", */
-/* 	 altCassetteExpCount, alt3ExpCount, alt5SoftExpCount,  */
-/* 	 alt5ExpCount, alt3SoftExpCount, otherExpCount); */
 }
 
 int junctSetScoreCmp(const void *va, const void *vb)
@@ -862,19 +1000,6 @@ dyStringPrintf(buff, "<a target=\"plots\" href=\"./noAltTranStartJunctSet/altPlo
 	       js->chrom, js->chromStart, js->chromEnd, js->hName);
 dyStringPrintf(buff, "<a target=\"plots\" href=\"./noAltTranStartJunctSet/altPlot.median/%s.%d-%d.%s.png\">[median]</a> ",
 	       js->chrom, js->chromStart, js->chromEnd, js->hName);
-}
-
-boolean geneExpressed(struct junctSet *js, int colIx)
-/* Are any of the gene sets expressed in this sample? */
-{
-int i = 0;
-boolean expressed = FALSE;
-for(i = 0; i < js->genePSetCount; i++)
-    {
-    if(js->geneProbs[i][colIx] >= presThresh)
-	expressed = TRUE;
-    }
-return expressed;
 }
 
 void makeJunctMdbGenericLink(struct junctSet *js, struct dyString *buff, char *name, struct resultM *probM, char *suffix)
@@ -1806,6 +1931,19 @@ if(doJunctionTypes)
     warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other",
 	 altCassetteCount, alt3Count, alt5SoftCount, 
 	 alt5Count, alt3SoftCount, otherCount);
+    for(js = jsList; js != NULL; js = js->next)
+	{
+	if(js->expressed)
+	    countExpSpliceType(js->spliceType);
+	if(js->altExpressed)
+	    countExpAltSpliceType(js->spliceType);
+	}
+    warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other expressed",
+	 altCassetteExpCount, alt3ExpCount, alt5SoftExpCount, 
+	 alt5ExpCount, alt3SoftExpCount, otherExpCount);
+    warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other expressed alternatively",
+	 altCassetteExpAltCount, alt3ExpAltCount, alt5SoftExpAltCount, 
+	 alt5ExpAltCount, alt3SoftExpAltCount, otherExpAltCount);
     }
 calcExonCorrelation(jsList, bedHash, intenM, probM);
 warn("Calculating expression");

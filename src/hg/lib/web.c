@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.50 2004/05/25 18:50:42 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.56 2004/06/15 20:29:43 baertsch Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -62,7 +62,10 @@ void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
+char *scriptName = cgiScriptName();
 
+if (scriptName == NULL)
+    scriptName = cloneString("");
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
     return;
@@ -134,7 +137,14 @@ printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
 puts("           Home</A> &nbsp; - &nbsp;");
 printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
        uiState);
-puts("           Genome Browser</A> &nbsp; - &nbsp;");
+puts("           Genomes</A> &nbsp; - &nbsp;");
+if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
+    endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
+    {
+    printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
+	   uiState);
+    puts("           Genome Browser</A> &nbsp; - &nbsp;");
+    }
 printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
        uiState);
 puts("           Gene Sorter</A> &nbsp; - &nbsp;");
@@ -145,8 +155,18 @@ printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
 puts("           Table Browser</A> &nbsp; - &nbsp;");
 puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
-     "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
-     "           Help</A> &nbsp;</font></TD>" "\n"
+     );
+if (endsWith(scriptName, "hgBlat"))
+    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
+else if (endsWith(scriptName, "hgText"))
+    puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
+else if (endsWith(scriptName, "hgNear"))
+    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+else
+    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
+puts("       class=\"topbar\">");
+
+puts("           Help</A> &nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
      "</TD></TR>	" "\n"	
@@ -372,18 +392,18 @@ printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
 
 void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                             char *dbCgi, bool allowInactive, char *javascript)
-{
 /* Prints to stdout the HTML to render a dropdown list containing the list 
-of assemblies for the current genome to choose from.  By default,
- this includes only active assemblies with a database (with the
- exception of the default assembly, which will be included even
- if it isn't active).
-
-param db - The default assembly (the database name) to choose as selected. 
-                If NULL, no default selection.
-param allowInactive - if set, print all assemblies for this genome,
-                        even if they're inactive or have no database
+ * of assemblies for the current genome to choose from.  By default,
+ * this includes only active assemblies with a database (with the
+ * exception of the default assembly, which will be included even
+ * if it isn't active).
+ *  param db - The default assembly (the database name) to choose as selected. 
+ *             If NULL, no default selection.
+ *  param allowInactive - if set, print all assemblies for this genome,
+ *                        even if they're inactive or have no database
  */
+{
+
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
@@ -422,24 +442,23 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies,
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                                         char *dbCgi, char *javascript)
-{
 /* Find all the assemblies from the list that are active.
-Prints to stdout the HTML to render a dropdown list containing the list 
-of the possible assemblies to choose from.
+ * Prints to stdout the HTML to render a dropdown list containing the list 
+ * of the possible assemblies to choose from.
+ * param db - The default assembly (the database name) to choose as selected. 
+ *    If NULL, no default selection.  */
+{
 
-param db - The default assembly (the database name) to choose as selected. 
-                If NULL, no default selection.
-                */
     printAllAssemblyListHtmlParm(db, dbList, dbCgi, TRUE, javascript);
 }
  
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
-{
-printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
-}
 /* Find all assemblies from the list that are active, and print
  * HTML to render dropdown list 
  * param db - default assembly.  If NULL, no default selection */
+{
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
+}
 
 void printAssemblyListHtml(char *db, char *javascript)
 /* Find all the assemblies that pertain to the selected genome 

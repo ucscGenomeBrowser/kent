@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: patCount.c,v 1.3 2003/05/06 07:22:33 kate Exp $";
+static char const rcsid[] = "$Id: patCount.c,v 1.4 2004/06/03 21:03:06 galt Exp $";
 
 void usage()
 {
@@ -174,7 +174,7 @@ if (overFactor < 1.1)
  * each oligomer. */
 patSpaceSize = powerOfFour(oligoSize);
 patSpaceByteSize = patSpaceSize * sizeof(patCounts[0]);
-uglyf("Allocating pattern space of %u bytes\n", patSpaceByteSize);
+uglyf("Allocating pattern space of %zu bytes\n", patSpaceByteSize);
 patCounts = needLargeMem(patSpaceByteSize);
 memset(patCounts, 0, patSpaceByteSize);
 
@@ -234,7 +234,7 @@ thresh = round(threshold);
     }
 
 /* Write statistics to console. */
-printf("Statistic for oligos of size %d (patSpaceSize %d)\n", oligoSize, patSpaceSize);
+printf("Statistic for oligos of size %d (patSpaceSize %zu)\n", oligoSize, patSpaceSize);
 printf("Total oligos %d\n", totalCount);
 printf("Distinct oligos %d\n", distinctCount);
 printf("Maximum occurences of single oligo %d\n", maxCount);

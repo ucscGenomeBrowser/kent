@@ -12,7 +12,7 @@
 #include "htmshell.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.19 2004/06/02 23:07:30 braney Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.22 2004/06/10 17:14:01 braney Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -239,11 +239,14 @@ for (i=0; i<count; ++i)
 	    tolowers(codon);
 	    c  = lookupCodon(codon);
 	    cfmPushFormat(&cfm);
-	    if (toupper(n) == lookupCodon(codon))
+	    if (toupper(n) == c)
 		cfmOut(&cfm, '|', seqOutColorLookup[0]);
 	    else
 		{
 		int color;
+
+		if (c == 0) 
+		    c = 'X';
 		if (ss->matrix[toupper(n)][c] > 0)
 		    color = 5;
 		else
@@ -306,7 +309,9 @@ if (++(baf->cix) >= baf->lineSize)
 void bafFlushLine(struct baf *baf)
 /* Write out alignment line if it has any characters in it. */
 {
-bafWriteLine(baf);
+if (baf->cix > 0)
+    bafWriteLine(baf);
+fflush(baf->out);
 fprintf(baf->out, "<HR ALIGN=\"CENTER\">");
 baf->cix = 0;
 }

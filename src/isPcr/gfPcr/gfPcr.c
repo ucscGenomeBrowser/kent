@@ -7,7 +7,7 @@
 #include "genoFind.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcr.c,v 1.1 2004/06/01 16:37:27 kent Exp $";
+static char const rcsid[] = "$Id: gfPcr.c,v 1.4 2004/06/16 08:25:50 kent Exp $";
 
 /* Command line overridable variables. */
 int maxSize = 4000; /* corresponds to maxSize= parameter. */
@@ -41,6 +41,7 @@ errAbort(
   "   -out=XXX - Output format.  Either\n"
   "      fa - fasta with position, primers in header (default)\n"
   "      bed - tab delimited format. Fields: chrom/start/end/name/score/strand\n"
+  "      psl - blat format.\n"
   "   -name=XXX - Name to use in bed output.\n"
   , maxSize, minPerfect, minGood
   );
@@ -89,7 +90,8 @@ host = argv[1];
 port = argv[2];
 seqDir = argv[3];
 outList = gfPcrViaNet(host, port, seqDir, inList, maxSize, minPerfect, minGood);
-gfPcrOutputWriteAll(outList, clOut, outFile);
+gfPcrOutputWriteAll(outList, clOut, NULL, outFile);
 gfPcrOutputFreeList(&outList);
+gfPcrInputFreeList(&inList);
 return 0;
 }

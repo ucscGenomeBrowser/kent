@@ -167,6 +167,7 @@ struct gfOutput
     boolean qIsProt;		/* Query is peptide. */
     boolean tIsProt;		/* Target is peptide. */
     int queryIx;		/* Index of query */
+    boolean includeTargetFile;	/* Prefix file: to target sequence name. */
     };
 
 struct gfOutput *gfOutputAny(char *format, 
@@ -362,7 +363,7 @@ struct gfClump *gfPcrClumps(struct genoFind *gf,
 	int minDistance, int maxDistance);
 /* Find possible PCR hits.  The fPrimer and rPrimer are on opposite strands. */
 
-#define gfVersion 28	/* Current BLAT version number */
+#define gfVersion 29	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

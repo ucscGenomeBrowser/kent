@@ -125,7 +125,7 @@ spectrum on
 type psl xeno 
 
 track affyRAE230
-shortLabel Affymetrix RAE230
+shortLabel Affy RAE230
 longLabel Alignments of Affymetrix Consensus Sequences from RAE230
 group regulation
 priority 82
@@ -133,7 +133,7 @@ visibility hide
 type psl .
 
 track affyU34A
-shortLabel Affymetrix RG-U34A
+shortLabel Affy RG-U34A
 longLabel Alignments of Affymetrix Exemplar Sequences from RG-U34A
 group regulation
 priority 80.1

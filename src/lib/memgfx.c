@@ -13,7 +13,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.35 2003/10/13 19:27:48 kent Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.36 2004/06/08 16:41:27 angie Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -606,6 +606,61 @@ return out;
 }
 
 
+void mgTriLeft(struct memGfx *mg, int x1, int y1, int y2, int color)
+/* Draw a triangle pointing left with straight edge along x1+((y2-y1)/2) 
+ * from y1 to y2 (point at x1). */
+{
+int height = y2 - y1;
+int halfHeight = height >> 1;
+int odd = height & 1;
+int x2=x1+halfHeight+odd, x3=x2, y=y1;
+
+assert(y2 > y1);
+
+for (; y < y1 + halfHeight; y++)
+    {
+    mgDrawLine(mg, --x2, y, x3, y, color);
+    }
+--x2;
+if (odd)
+    {
+    mgDrawLine(mg, x2, y, x3, y, color);
+    y++;
+    }
+for (; y < y2; y++)
+    {
+    mgDrawLine(mg, ++x2, y, x3, y, color);
+    }
+}
+
+
+void mgTriRight(struct memGfx *mg, int x1, int y1, int y2, int color)
+/* Draw a triangle pointing right with straight edge along x1 from y1 to y2 */
+{
+int height = y2 - y1;
+int halfHeight = height >> 1;
+int odd = height & 1;
+int x2=x1, y=y1;
+
+assert(y2 > y1);
+
+for (; y < y1 + halfHeight; y++)
+    {
+    mgDrawLine(mg, x1, y, ++x2, y, color);
+    }
+++x2;
+if (odd)
+    {
+    mgDrawLine(mg, x1, y, x2, y, color);
+    y++;
+    }
+for (; y < y2; y++)
+    {
+    mgDrawLine(mg, x1, y, --x2, y, color);
+    }
+}
+
+
 void vgMgMethods(struct vGfx *vg)
 /* Fill in virtual graphics methods for memory based drawing. */
 {
@@ -623,5 +678,7 @@ vg->setClip = (vg_setClip)mgSetClip;
 vg->unclip = (vg_unclip)mgUnclip;
 vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
+vg->triLeft = (vg_triLeft)mgTriLeft;
+vg->triRight = (vg_triRight)mgTriRight;
 }
 

@@ -15,7 +15,7 @@ CREATING SEQUENCE DATABASES
 You create databases with the program faToTwoBit. Typically you'll create
 a separate database for each genome you are indexing.  Each database can
 contain up to four billion bases of sequence in an unlimited number of
-records.  
+records.  The databases for webPcr and webBlat are identical.
 
 The input to faToTwoBit is one or more fasta format files each of which
 can contain multiple records.  If the sequence contains repeat sequences,
@@ -78,7 +78,8 @@ EDITING THE WEBPCR.CFG FILE
 The webPcr.cfg file tells the webPcr program where to look for gfServers and
 for sequence.  The basic format of the .cfg file is line oriented with the
 first word of the line being a command.  Blank lines and lines starting with #
-are ignored.  The commands are:
+are ignored.  The webBlat.cfg and webPcr.cfg files are similar. The webBlat.cfg
+commands are:
    gfServer  -  defines host and port a gfServer is running on, the associated
                 sequence directory, and the name of the database to display in
                 the webPcr web page.
@@ -90,10 +91,10 @@ might find at a typical installation:
 
 company Awesome Research Amalgamated
 background /images/dnaPaper.jpg
-gfServer bigRamMachine 17779 /data/genomes/2bit/hg16.2bit
-gfServer bigRamMachine 17781 /data/genomes/2bit/mm4.2bit
+gfServer bigRamMachine 17779 /data/genomes/2bit/hg16.2bit Human Genome
+gfServer bigRamMachine 17781 /data/genomes/2bit/mm4.2bit Mouse Genome
 # The bacto group in Jersey is ok with us using their server too
-gfServer bactoGfServer.awesomeresearch.com 17779 /bacto/genomes/2bit/bacteria.2bit
+gfServer bactoGfServer.awesomeresearch.com 17779 /bacto/genomes/2bit/bacteria.2bit Bacteria
 
 
 PUTTING WEBPCR WHERE THE WEB SERVER CAN EXECUTE IT

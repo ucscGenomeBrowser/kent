@@ -88,6 +88,10 @@ char *htmlWarnEndPattern();
 void htmlAbort();
 /* Terminate HTML file.  Exposed for cart's use. */
 
+void htmlPushEarlyHandlers();
+/* Push stuff to close out web page to make sensible error
+ * message during initialization. */
+
 /* Wrap error recovery around call to doMiddle. */
 void htmErrOnlyShell(void (*doMiddle)());
 

@@ -38,5 +38,5 @@ name jaxOrtholog
 shortLabel Jackson Labs
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.informatics.jax.org/javawi/servlet/SearchTool?query=%s&selectedQuery=Genes+and+Markers
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s&selectedQuery=Genes+and+Markers
 priority 111

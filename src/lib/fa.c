@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.27 2004/02/13 09:33:00 kent Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.28 2004/06/06 03:23:37 kent Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -147,6 +147,7 @@ char *text = *pText;
 
 if (text == NULL)
     return NULL;
+text = skipLeadingSpaces(text);
 dnaUtilOpen();
 if (text[0] == '>')
     {
@@ -162,7 +163,7 @@ if (text[0] == '>')
     }
 else
     {
-    s = skipLeadingSpaces(text);
+    s = text; 
     if (s == NULL || s[0] == 0)
         return NULL;
     }

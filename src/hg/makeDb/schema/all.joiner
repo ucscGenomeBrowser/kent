@@ -266,7 +266,7 @@ identifier pseudoGeneName
 
 identifier mrnaBlastzName
 "Link together mrnaBlastz and pseudoMrna"
-    hg16.mrnaBlastz.qName
+    hg16.mrnaBlastz.qName dupeOk
     hg16.pseudoMrna.qName
 
 # Microarray stuff.
@@ -496,6 +496,18 @@ identifier sageExpId
 "Sage experiment (tissue type etc) ID"
     $gbd.sageExp.num 
     $gbd.sage.exps comma full
+
+identifier rinnSexSampleId
+"Identifiers of RNA samples used in Rinn Sex Experiments on mouse Affy MOE430 Chip"
+     hgFixed.mouseRinnSexExps.id
+     hgFixed.mouseRinnSex.expScores comma indexOf full
+     hgFixed.mouseRinnSexRatio.expScores comma indexOf full
+
+identifier rinnSexMedianSampleId
+"Identifiers of median RNA samples used in Rinn Sex Experiments on mouse Affy MOE430 Chip"
+     hgFixed.mouseRinnSexMedianExps.id
+     hgFixed.mouseRinnSexMedian.expScores comma indexOf full
+     hgFixed.mouseRinnSexMedianRatio.expScores comma indexOf full
 
 
 # Stuff to link together alignment chains and nets
@@ -1075,6 +1087,15 @@ identifier ensemblTranscriptId3 external=Ensembl dependency
     $gbd.superfamily.name
     $gbd.sfDescription.name chopAfter=.
 
+
+# H-Invitational Database Identifiers
+
+identifier hinvTranscriptId external=H-INV dependency
+"H-Invitational Transcript ID"
+    $hg.HInv.geneId
+    $hg.knownToHInv.value
+    $hg.HInvGeneMrna.qName
+
 # Protein Family Identifiers
 
 identifier pfamId external=Pfam fuzzy
@@ -1262,6 +1283,7 @@ type pepPred
 type psl
     $hg.affyU95
     $hg.affyU133
+    $hg.HInvGeneMrna
     $mm.affyU74
     $gbd.all_bacends
     $gbd.all_fosends
@@ -1370,6 +1392,7 @@ type knownTo
     $gbd.knownToRefSeq
     $hg.knownToU95
     $hg.knownToU133
+    $hg.knownToHInv
     $mm.knownToU74
     $ce.sangerToKim
     $ce.sangerToPfam

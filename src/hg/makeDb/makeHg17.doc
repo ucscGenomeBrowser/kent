@@ -39,7 +39,7 @@ exit; # don't actually run this like a script :)
 
     # FYI: agp file format documented at:
     #	http://www.ncbi.nlm.nih.gov/Genbank/WGS.agpformat.html
-    # fixup a couple of names
+    # fixup a couple of names for our own purposes here
     cd /cluster/store5/gs.18/agp
     ln -s ../ncbi/chr*.agp ../ncbi/chr*.fa.gz .
     sed -e "s#MT/NC_001807.4#NC_001807#" ../ncbi/chrMT.agp > chrM.agp
@@ -84,6 +84,11 @@ exit; # don't actually run this like a script :)
     #	user    37m3.490s
     #	sys     0m31.430s
 
+    #	Make a listing of all the fasta record headers, just FYI:
+    cd /cluster/store5/gs.18/ffa
+    zcat ffa/ncbi_build35.fa.gz | grep "^>" > ncbi.fa.headers
+
+
     #	New to this build is the sequence: NC_001807 which is the
     #	mitochondria sequence.  This prefix NC_ is new to the process
     #	and will have to be accounted for below.  The other two special
@@ -113,7 +118,15 @@ exit; # don't actually run this like a script :)
     #	does not work correctly if the randoms are not grouped together
     #	by chromosome
     grep -v "|" temp_contig.md  > seq_contig.md
-    grep "|" temp_contig.md | sort +1 >> seq_contig.md
+    #	This pulls out all the randoms and groups them within the
+    #	same chrom but leaving them in the same order as they orginally
+    #	were  (warning this is BASH code ...)
+    grep "|" temp_contig.md | awk -F"|" '{print $1}' | \
+        awk '{print $2}' | sort -n -u | while read CHR
+do
+        grep "[^0-9]${CHR}|" temp_contig.md
+done >> seq_contig.md
+
 
     # Sanity check, checkYbr was updated to handle the NC_ identifier
     time zcat ../ffa/ncbi_build35.fa.gz | $HOME/bin/i386/checkYbr \
@@ -121,6 +134,12 @@ exit; # don't actually run this like a script :)
     #	real    2m34.143s
     #	user    2m24.970s
     #	sys     0m8.900s
+    #	result should be clean:
+    cat check.seq_contig
+    #	Read 380 contigs from ncbi_build35.agp
+    #	Verifying sequence sizes in stdin
+    #	0 problems detected
+
 
     # Convert fa files into UCSC style fa files and place in "contigs"
     # directory inside the gs.18/build35 directory 
@@ -131,28 +150,15 @@ exit; # don't actually run this like a script :)
     #	faNcbiToUcsc was fixed to handle the NC_ identifier
 
     cd /cluster/store5/gs.18/build35
-    rm -fr contigs
+    #	We've been through this often
+    mv contigs contigs.0
     time zcat ../ffa/ncbi_build35.fa.gz | $HOME/bin/i386/faNcbiToUcsc \
 	-split -ntLast stdin contigs
     #	real    5m10.938s
     #	user    2m20.070s
     #	sys     0m51.020s
-    #	Make a list of the contigs for use later
-    rm contig.lst
-    touch contig.lst
-    foreach chrom ( `cat chrom.lst` )
-	foreach c ( $chrom/N{C,G,T}_?????? )
-	    set contig = $c:t
-	    echo "${chrom}/${contig}/${contig}.fa" >> contig.lst
-	end
-    end
-    #   For later comparisons, this is how many contigs we have:
-    wc -l contig.lst
-    #	391
-
-    #	Make a listing of all the fasta record headers, just FYI:
-    cd /cluster/store5/gs.18/ffa
-    zcat ffa/ncbi_build35.fa.gz | grep "^>" > ncbi.fa.headers
+    #	If you want to compare anything to previous work, check now, then:
+    rm -fr contigs.0
 
     # Determine the chromosome sizes from agps
     #	Watch carefully how chrY gets constructed.  I'm not sure
@@ -186,6 +192,8 @@ exit; # don't actually run this like a script :)
     foreach c ( `cat chrom.lst` )
 	sed -e "/^#.*/d" ../agp/chr${c}.agp > ./${c}/chr${c}.agp
     end
+    #	chrM needs a name fixup
+    sed -e "s#NC_001807#chrM#" ../agp/chrM.agp > M/chrM.agp
 
     # Distribute contig .fa to appropriate directory (assumes all files
     # are in "contigs" directory).
@@ -195,16 +203,25 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/store5/gs.18/build35 /cluster/data/hg17
     cd /cluster/data/hg17
     /cluster/bin/scripts/distNcbiCtgFa contigs .
-    #	This outputs a warning message for each chrom directory without
-    #	any randoms, this is OK:
-    #	readline() on closed filehandle FILE at
-    #	/cluster/bin/scripts/distNcbiCtgFa line 53.
-
     #	Verify that everything was moved properly, the contigs directory
     #	should be empty:
     ls contigs
     #	Nothing there, then remove it
     rmdir  contigs
+
+    #	Make a list of the contigs for use later
+    rm contig.lst
+    touch contig.lst
+    foreach chrom ( `cat chrom.lst` )
+	foreach c ( $chrom/N{C,G,T}_?????? )
+	    set contig = $c:t
+	    echo "${chrom}/${contig}/${contig}.fa" >> contig.lst
+	end
+    end
+    #   For later comparisons, this is how many contigs we have:
+    wc -l contig.lst
+    #	380
+
 
     # FILES ARE NOW READY FOR REPEAT MASKING - start that process as
     #	other steps here can proceed in parallel.
@@ -221,14 +238,16 @@ exit; # don't actually run this like a script :)
     # contig_overlaps.agp
     XXXX /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
     # Create chromosome gl files
-    XXXX jkStuff/liftGl.sh contig.gl
+    XXXX jkStuff/liftGl.csh contig.gl
 
 # CREATING DATABASE  (DONE - 2004-05-20 - Hiram)
+    #	RE-DONE for new NIBS - 2004-06-03
     ssh hgwdev
     # Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     df -h /var/lib/mysql
 #	Filesystem            Size  Used Avail Use% Mounted on
-#	/dev/sdc1             1.8T  292G  1.4T  18% /var/lib/mysql
+#	/dev/sdc1             1.8T  303G  1.4T  19% /var/lib/mysql
+
     # Create the database.
     hgsql -e 'create database hg17' mysql
     # Copy over grp table (for track grouping) from another database:
@@ -236,6 +255,7 @@ exit; # don't actually run this like a script :)
 
 # MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS
 #	(DONE - 2004-05-21 - Hiram)
+    #	RE-DONE with new NIBS - 2004-06-03
     # Make nib/, unmasked until RepeatMasker and TRF steps are done.
     # Do this now so that the chromInfo table will exist and thus the
     #	trackDb tables can be built in the next step.
@@ -275,9 +295,20 @@ exit; # don't actually run this like a script :)
     sort chrom_sizes > s0
     sort chrom.sizes | grep -v random > s1
     diff s0 s1
+    rm s0 s1
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2004-05-21 - Hiram)
+    #	dbDb orderKey updated 2004-06-08 - Hiram
     ssh hgwdev
+    #	reset dbDb orderKey - these have never been ordered properly
+    #	before, this will get them on the program.
+    hgsql -e 'update dbDb set orderKey=11 where name = "hg16";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=12 where name = "hg15";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=13 where name = "hg13";' \
+	-h genome-testdb hgcentraltest
+
     # Enter hg17 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
 	defaultPos, active, orderKey, genome, scientificName, \
@@ -295,6 +326,7 @@ exit; # don't actually run this like a script :)
     cvs commit makefile
 
 # MAKE LIFTALL.LFT, NCBI.LFT (DONE - 2004-05-21 - Hiram)
+    #	Re-DONE with new randoms - 2004-06-03 - Hiram)
     cd /cluster/data/hg17
     mkdir -p jkStuff
     cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
@@ -306,6 +338,9 @@ exit; # don't actually run this like a script :)
     #	XXXX - appears to be unused, not done - Hiram
 
 # REPEAT MASKING (DONE - 2004-05-24 - Hiram)
+    #	The randoms were rearranged after this was first done,
+    #	they are re-made below 2004-06-02)
+
     # Split contigs, run RepeatMasker, lift results
 
     #	This split takes about 8 minutes
@@ -402,13 +437,15 @@ if (-e /tmp/hg17/$2/$2.tbl) /bin/cp /tmp/hg17/$2/$2.tbl ./
 	mkdir -p ${T}
         cd ${d}
         set contig = $d:t
-        cp -p ${contig}_?{,?,??}.fa.out \
-		${T}
+        cp -p ${contig}_?{,?,??}.fa.out ${T}
         cd ../..
 	echo "${d} done"
      end
     end
     #	Make sure we got them all:
+    #	(this doesn't work later since there are more *.fa.out files
+    #	after the lifting.  More explicitly to find just these:
+    #		find . -name "N?_*_*.fa.out" -print | wc -l
     find . -name "*.fa.out" -print | wc -l
     #	5970
     find /cluster/bluearc/hg17/RMOutput -type f | wc -l
@@ -431,13 +468,13 @@ end
 '_EOF_'
     chmod +x jkStuff/liftRM.csh
     mkdir scriptsOutput
-    time jkStuff/liftRM.csh > scriptsOutput/liftRM 2>&1
+    time jkStuff/liftRM.csh > scriptsOutput/liftRM.1 2>&1
     #	real    4m37.572s
     #	user    1m19.130s
     #	sys     0m32.950s
     #	Check that they all were done:
-    grep "fa.out" scriptsOutput/liftRM | wc -l
-    #	5970
+    grep "fa.out" scriptsOutput/liftRM.1 | wc -l
+    #	5959
     #	same count as above
 
     #- Lift up RepeatMask .out files to chromosome coordinates via
@@ -454,23 +491,20 @@ end
     cd /cluster/data/hg17
     time hgLoadOut hg17 ?/*.fa.out ??/*.fa.out 6_hla_hap?/*.fa.out > \
 	scriptsOutput/hgLoadOut 2>&1
-    #	real    9m2.258s
-    #	user    1m53.710s
-    #	sys     0m23.240s
+    #	real    5m59.137s
+    #	user    1m47.550s
+    #	sys     0m15.410s
 
     # errors during this load:  (there are always a couple of these)
-Processing 2/chr2.fa.out
-Strange perc. field -6.1 line 243543 of 2/chr2.fa.out
-Strange perc. field -5.6 line 243543 of 2/chr2.fa.out
-Strange perc. field -6.1 line 243545 of 2/chr2.fa.out
-Strange perc. field -5.6 line 243545 of 2/chr2.fa.out
-Processing 17/chr17.fa.out
-Strange perc. field -0.2 line 30322 of 17/chr17.fa.out
-Strange perc. field -0.2 line 30324 of 17/chr17.fa.out
-Strange perc. field -0.2 line 30326 of 17/chr17.fa.out
-Strange perc. field -0.2 line 30328 of 17/chr17.fa.out
-Processing 19/chr19.fa.out
-Strange perc. field -18.6 line 77034 of 19/chr19.fa.out
+    #	Strange perc. field -6.1 line 243543 of 2/chr2.fa.out
+    #	Strange perc. field -5.6 line 243543 of 2/chr2.fa.out
+    #	Strange perc. field -6.1 line 243545 of 2/chr2.fa.out
+    #	Strange perc. field -5.6 line 243545 of 2/chr2.fa.out
+    #	Strange perc. field -0.2 line 30322 of 17/chr17.fa.out
+    #	Strange perc. field -0.2 line 30324 of 17/chr17.fa.out
+    #	Strange perc. field -0.2 line 30326 of 17/chr17.fa.out
+    #	Strange perc. field -0.2 line 30328 of 17/chr17.fa.out
+    #	Strange perc. field -18.6 line 77034 of 19/chr19.fa.out
 
     #	Verify we have similar results to previous assembly:
     #	featureBits hg17 rmsk
@@ -480,7 +514,110 @@ Strange perc. field -18.6 line 77034 of 19/chr19.fa.out
     #	Now proceed to MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
     #	following the SIMPLE REPEAT sections below
 
+# Re-Running REPEAT_MASKER on the new Randoms (DONE - 2004-06-02 - Hiram)
+    ssh eieio
+    cd /cluster/data/hg17
+    grep "|" seq_contig.md | awk '{print $2}' | sed -e "s#|#/#" > randoms.lst
+
+    mkdir /cluster/data/hg17/RMRandoms
+    foreach r ( `cat randoms.lst` )
+	set d = $r:h
+	set contig = $r:t
+	foreach c ( ${r}/N{C,G,T}_*_*.fa )
+	    set f = $c:t
+	    echo /cluster/store5/gs.18/build35/jkStuff/RMHuman \
+   		/cluster/store5/gs.18/build35/${d}/${contig} $f \
+   '{'check out line+ /cluster/store5/gs.18/build35/${d}/${contig}/$f.out'}' \
+          >> RMRandoms/RMJobs
+	end
+    end
+
+    ssh kk
+    cd /cluster/data/hg17/RMRandoms
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# Completed: 94 of 94 jobs
+# CPU time in finished jobs:     221454s    3690.91m    61.52h    2.56d  0.007 y
+# IO & Wait Time:                   866s      14.43m     0.24h    0.01d  0.000 y
+# Average job time:                2365s      39.42m     0.66h    0.03d
+# Longest job:                     9062s     151.03m     2.52h    0.10d
+# Submission to last job:          9106s     151.77m     2.53h    0.11d
+
+    #	Continuing with the paranoia theme, let's backup all the RM output
+    #
+    ssh eieio
+
+    cd /cluster/data/hg17
+    mkdir /cluster/bluearc/hg17/RMRandoms
+    foreach c ( `cat chrom.lst` )
+     foreach d ( ${c}/N{C,G,T}_* )
+	set T = /cluster/bluearc/hg17/RMRandoms/${d}
+	mkdir -p ${T}
+        cd ${d}
+        set contig = $d:t
+        cp -p ${contig}_?{,?,??}.fa.out ${T}
+        cd ../..
+	echo "${d} done"
+     end
+    end
+    #	Make sure we got them all:
+    find . -name "N?_*_*.fa.out" -print | wc -l
+    #	5959
+    find /cluster/bluearc/hg17/RMRandoms -type f | wc -l
+    #	5959
+    #	same count
+
+
+    time jkStuff/liftRM.csh > scriptsOutput/liftRM2.1 2>&1
+    #	real    4m46.302s
+    #	user    1m18.260s
+    #	sys     0m18.000s
+    #	Check that they all were done:
+    grep "fa.out" scriptsOutput/liftRM2.1 | wc -l
+    #	5959
+    #	same count as above
+
+    #- Lift up RepeatMask .out files to chromosome coordinates via
+    # picked up jkStuff/liftOut2.sh from the hg16 build.  Renamed to
+    # liftOut2.csh, changed the line that does the chrom listing
+
+    time ./jkStuff/liftOut2.csh > scriptsOutput/liftOut2.1 2>&1
+    #	real    2m46.347s
+    #	user    1m18.650s
+    #	sys     0m15.990s
+
+    #- By this point, the database should have been created (above):
+    ssh hgwdev
+    cd /cluster/data/hg17
+    time hgLoadOut hg17 ?/*.fa.out ??/*.fa.out 6_hla_hap?/*.fa.out > \
+	scriptsOutput/hgLoadOut 2>&1
+    #	real    5m59.137s
+    #	user    1m47.550s
+    #	sys     0m15.410s
+
+    # errors during this load:  (there are always a couple of these)
+    #	Strange perc. field -6.1 line 243543 of 2/chr2.fa.out
+    #	Strange perc. field -5.6 line 243543 of 2/chr2.fa.out
+    #	Strange perc. field -6.1 line 243545 of 2/chr2.fa.out
+    #	Strange perc. field -5.6 line 243545 of 2/chr2.fa.out
+    #	Strange perc. field -0.2 line 30322 of 17/chr17.fa.out
+    #	Strange perc. field -0.2 line 30324 of 17/chr17.fa.out
+    #	Strange perc. field -0.2 line 30326 of 17/chr17.fa.out
+    #	Strange perc. field -0.2 line 30328 of 17/chr17.fa.out
+    #	Strange perc. field -18.6 line 77034 of 19/chr19.fa.out
+
+    #	Verify we have similar results to previous assembly:
+    #	featureBits hg17 rmsk
+    #	1390952984 bases of 2866216770 (48.529%) in intersection
+    #	featureBits hg17 rmsk  #with previous randoms:
+    #	1391378842 bases of 2867328468 (48.525%) in intersection
+    #	featureBits hg16 rmsk
+    #	1388770568 bases of 2865248791 (48.469%) in intersection
+    #	Now proceed to MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+    #	following the SIMPLE REPEAT sections below
+
 # SIMPLE REPEAT [TRF] TRACK (DONE - 2004-05-21 - Hiram)
+    #	Re-done with new randoms, 2004-06-02 - Hiram
     #	Copy the contigs, first to the bluearc, then to /iscratch/i
     ssh eieio
     mkdir /cluster/bluearc/hg17
@@ -498,19 +635,14 @@ Strange perc. field -18.6 line 77034 of 19/chr19.fa.out
 
     # Distribute contigs to /iscratch/i
     ssh kkr1u00
-    mkdir /iscratch/i/hg17
-    mkdir /iscratch/i/hg17/contigs
-    cd /cluster/data/hg17
-    foreach ctg ( `cat contig.lst` )
-	set c = $ctg:t
- 	echo "/cluster/bluearc/hg17/contigs/$c -> /iscratch/i/hg17/contigs"
-	cp -p /cluster/bluearc/hg17/contigs/$c /iscratch/i/hg17/contigs
-    end
+    mkdir /iscratch/i/gs.18/build35/unmaskedContigs
+    cd /iscratch/i/gs.18/build35/unmaskedContigs
+    cp -p /cluster/bluearc/hg17/contigs/* .
 
     # Verify same amount made it there:
-    #	du -hsc /iscratch/i/hg17/contigs
-    #	2.8G    /iscratch/i/hg17/contigs
-
+    #	du -hsc /iscratch/i/gs.18/build35/unmaskedContigs
+    #	2.8G    /iscratch/i/gs.18/build35/unmaskedContigs
+    #	Then send them to the other 7 Iservers
     /cluster/bin/iSync
 
     #	Go to the small cluster for this business:
@@ -547,20 +679,19 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 '_EOF_'
     # << this line makes emacs coloring happy
 
-    ls -1S /iscratch/i/hg17/contigs/*.fa > genome.lst
+    ls -1S /iscratch/i/gs.18/build35/unmaskedContigs/*.fa > genome.lst
     gensub2 genome.lst single gsub jobList
     para create jobList
     para try
     para check
     para push
     para check
-# Completed: 391 of 391 jobs
-# CPU time in finished jobs:      13213s     220.22m     3.67h    0.15d  0.000 y
-# IO & Wait Time:                  1567s      26.11m     0.44h    0.02d  0.000 y
-# Average job time:                  38s       0.63m     0.01h    0.00d
-# Longest job:                     1554s      25.90m     0.43h    0.02d
-# Submission to last job:          2315s      38.58m     0.64h    0.03d
-
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      13230s     220.49m     3.67h    0.15d  0.000 y
+# IO & Wait Time:                  2078s      34.64m     0.58h    0.02d  0.000 y
+# Average job time:                  40s       0.67m     0.01h    0.00d
+# Longest job:                     1590s      26.50m     0.44h    0.02d
+# Submission to last job:          2504s      41.73m     0.70h    0.03d
 
     liftUp simpleRepeat.bed /cluster/data/hg17/jkStuff/liftAll.lft \
 	warn trf/*.bed  > lu.out 2>&1
@@ -570,8 +701,12 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     cd /cluster/data/hg17/bed/simpleRepeat
     /cluster/bin/i386/hgLoadBed hg17 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-    #	Loaded 629571 elements of size 16
+    #	Loaded 629076 elements of size 16
     #	Compare with previous assembly
+    featureBits hg17 simpleRepeat
+    #	54952425 bases of 2866216770 (1.917%) in intersection
+
+    #	with previous randoms
     featureBits hg17 simpleRepeat
     #	54964044 bases of 3096628158 (1.775%) in intersection
     featureBits hg16 simpleRepeat
@@ -584,6 +719,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-05-21 - Hiram)
+    #	re-done with new randoms - 2004-06-03 - Hiram
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
@@ -619,26 +755,34 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 
 # MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE - 2004-05-25)
 #							 -Hiram
+    #	re-done with new randoms - 2004-06-03 - Hiram
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above,
     #	and after Repeat Masker is complete.
     ssh eieio
     cd /cluster/data/hg17
 
-    # copied these three scripts from hg16 - reset the lines that make
+    # copied these scripts from hg16 - reset the lines that make
     # the chrom list to work on, reset the wild cards that find all the
     # contig .fa's
 
+    # Make chr*.fa from contig .fa
+    #  Copied chrFa.sh from hg16/jkStuff, renamed it to chrFa.csh
+    time ./jkStuff/chrFa.csh > scriptsOutput/chrFa.out 2>&1 &
+    #	real    13m18.512s
+    #	user    9m1.670s
+    #	sys     1m7.290s
+
     #- Soft-mask (lower-case) the contig and chr .fa's
     time ./jkStuff/makeFaMasked.csh > scriptsOutput/maFaMasked.out 2>&1
-    #	real    46m0.950s
-    #	user    13m57.310s
-    #	sys     20m45.400s
+    #	real    29m31.623s
+    #	user    13m49.700s
+    #	sys     5m58.750s
     #- Make hard-masked .fa.masked files as well:
-    time ./jkStuff/makeHardMasked.csh > maHardMasked.out 2>&1
+    time ./jkStuff/makeHardMasked.csh > scriptsOutput/maHardMasked.out 2>&1
 
     #- Create the bothMasksNib/ directory
-    time ./jkStuff/makeNib.sh > maNib.out 2>&1
+    time ./jkStuff/makeNib.csh > scriptsOutput/maNib.out 2>&1
     #	real    14m41.694s
     #	user    6m28.000s
     #	sys     1m42.500s
@@ -672,6 +816,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     ssh eieio
     mkdir -p /cluster/bluearc/scratch/hg/gs.18/build35
     cd /cluster/bluearc/scratch/hg/gs.18/build35
+
     #	these copies take less than 2 minutes each
     mkdir bothMaskedNibs
     cp -p /cluster/data/hg17/nib/*.nib ./bothMaskedNibs
@@ -683,9 +828,9 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     end
     #	make sure you have them all:
     ls maskedContigs | wc -l
-    #	391
+    #	380
     wc -l /cluster/data/hg17/contig.lst
-    #	391
+    #	380
     mkdir rmsk
     foreach chrom ( `cat /cluster/data/hg17/chrom.lst` )
 	cp -p /cluster/data/hg17/${chrom}/*.out ./rmsk
@@ -706,28 +851,17 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     # request rsync of /cluster/bluearc/scratch to the KiloKluster /scratch
 
 # GOLD AND GAP TRACKS (DONE - 2004-05-21 - Hiram)
+    #	RE-DONE with new randoms - 2004-06-03 - Hiram
     ssh hgwdev
     cd /cluster/data/hg17
     hgGoldGapGl -noGl -chromLst=chrom.lst hg17 /cluster/data/hg17 .
-    #	EXPERIMENT with a single table structure instead of all the
-    #	split tables (reworked hgGoldGapGl)
+    #	Disappointing to see this create so many tables ...
+    #	_gap and _gold for each chrom
+
+# LOAD ctgPos table - Contig position track (DONE - 2004-06-08 - Hiram)
+    #	After fixing up hgCtgPos to accept the -chromLst argument, simply:
     cd /cluster/data/hg17
-    hgsql -e "drop table gap;" hg17
-    hgsql -e "drop table gold;" hg17
-    $HOME/bin/i386/hgGoldGapGl -noGl -oldTable -noSplit \
-	-chromLst=chrom.lst hg17 /cluster/store5/gs.18 build35
-    #	single table structure:
-    #	featureBits hg17 gap
-    #	161117923 bases of 2935510235 (5.489%) in intersection
-    #	featureBits hg17 gold
-    #	2860314851 bases of 2935510235 (97.438%) in intersection
-    #	split table structure:
-    #	featureBits hg17 gold
-    #	2867022268 bases of 2867328468 (99.989%) in intersection
-    #	featureBits hg17 gap
-    #	229299690 bases of 2867328468 (7.997%) in intersection
-    #	The single table version loses some of the entries because
-    #	the table structure has chromStart as the primary key.
+    hgCtgPos -chromLst=chrom.lst hg17 .
 
 XXX - Come back to this after contig_overlaps.agp has been created
 # O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (WAIT - 2004-05-21)
@@ -756,36 +890,50 @@ XXX - Come back to this after contig_overlaps.agp has been created
     hgCtgPos hg17 build35 
 
 #  gc5Base wiggle TRACK (DONE - 2004-05-22 - Hiram)
-    #	This is going to take hours to run.  It is a lot of
-    #	data.  make sure you do it on the fileserver:
-    ssh eieio
+    #	This previously was a script that ran through each nib
+    #	Recently transformed into a mini cluster run.
+    #	Re-DONE with the new randoms - 2004-06-04
+    ssh kki
     mkdir /cluster/data/hg17/bed/gc5Base
     cd /cluster/data/hg17/bed/gc5Base
 
-    cat << '_EOF_' > runGcPercent.sh
+    mkdir wigData5 dataLimits5 wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRun.sh
 #!/bin/sh
-mkdir -p wigData5
-mkdir -p dataLimits5
-for n in ../../nib/*.nib
-do
-	c=`basename ${n} | sed -e "s/.nib//"`
-	C=`echo $c | sed -e "s/chr//"`
-	echo -n "working on ${c} - ${C} ... "
-	hgGcPercent -chr=${c} -doGaps \
-		-file=stdout -win=5 hg17 ../../nib | grep -w GC | \
-		awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
-	wigAsciiToBinary \
-	-dataSpan=5 -chrom=${c} -wibFile=wigData5/gc5Base_${C} \
-	-name=${C} stdin 2> dataLimits5/${c}
-echo "done"
-done
+NIB=$1
+
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
+        /iscratch/i/gs.18/build35/bothMaskedNibs | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigAsciiToBinary -dataSpan=5 -chrom=${chr} \
+        -wibFile=wigData5/gc5Base_${chrom} \
+            -name=${chrom} stdin 2> dataLimits5/${chr}
 '_EOF_'
-    chmod +x runGcPercent.sh
-    cd /cluster/data/hg17/bed/gc5Base
-    time ./runGcPercent.sh
-    #	real    198m12.800s
-    #	user    255m43.460s
-    #	sys     9m58.390s
+    # << this line makes emacs coloring happy
+    chmod +x kkRun.sh
+
+    ls /iscratch/i/gs.18/build35/bothMaskedNibs > nibList
+    cat << '_EOF_' > gsub
+#LOOP
+./kkRun.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsub jobList
+    para create jobList
+    para try, check, ... etc
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       5251s      87.51m     1.46h    0.06d  0.000 y
+# IO & Wait Time:                   130s       2.17m     0.04h    0.00d  0.000 y
+# Average job time:                 117s       1.95m     0.03h    0.00d
+# Longest job:                      413s       6.88m     0.11h    0.00d
+# Submission to last job:           475s       7.92m     0.13h    0.01d
 
     # load the .wig files back on hgwdev:
     ssh hgwdev
@@ -795,43 +943,55 @@ done
     mkdir /gbdb/hg17/wib/gc5Base
     ln -s `pwd`/wigData5/*.wib /gbdb/hg17/wib/gc5Base
 
-    cat << '_EOF_' > runZoom.sh
+    #	And then the zoomed data view
+    ssh kki
+    cd /cluster/data/hg17/bed/gc5Base
+    mkdir wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRunZoom.sh
 #!/bin/sh
+NIB=$1
 
-mkdir -p wigData5_1K
-mkdir -p dataLimits5_1K
+chr=${NIB/.nib/}
+chrom=${chr#chr}
 
-for n in ../../nib/*.nib
-do
-        c=`basename ${n} | sed -e "s/.nib//"`
-        C=`echo $c | sed -e "s/chr//"`
-        echo -n "working on ${c} - ${C} ... "
-        hgGcPercent -chr=${c} -doGaps \
-                -file=stdout -win=5 hg17 ../../nib | grep -w GC | \
-                awk '{printf "%d\t%.1f\n", $2+1, $5/10.0}' | \
-	wigZoom -dataSpan=1000 stdin | wigAsciiToBinary \
-        -dataSpan=1000 -chrom=${c} -wibFile=wigData5_1K/gc5Base_${C}_1K \
-        -name=${C} stdin 2> dataLimits5_1K/${c}
-echo "done"
-done
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
+        /iscratch/i/gs.18/build35/bothMaskedNibs | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigZoom -dataSpan=1000 stdin | wigAsciiToBinary -dataSpan=1000 \
+	-chrom=${chr} -wibFile=wigData5_1K/gc5Base_${chrom}_1K \
+            -name=${chrom} stdin 2> dataLimits5_1K/${chr}
 '_EOF_'
-    chmod +x runZoom.sh
-    #	Certainly do this on the fileserver
-    ssh eieio
-    time ./runZoom.sh
-    #	real    195m40.677s
-    #	user    251m8.760s
-    #	sys     9m20.740s
+    # << this line makes emacs coloring happy
+    chmod +x kkRunZoom.sh
+
+    cat << '_EOF_' > gsubZoom
+#LOOP
+./kkRunZoom.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsubZoom jobListZoom
+    para create jobListZoom
+    para try ... check ... etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       5216s      86.93m     1.45h    0.06d  0.000 y
+# IO & Wait Time:                    34s       0.57m     0.01h    0.00d  0.000 y
+# Average job time:                 114s       1.90m     0.03h    0.00d
+# Longest job:                      415s       6.92m     0.12h    0.00d
+# Submission to last job:           469s       7.82m     0.13h    0.01d
 
     #	Then load these .wig files into the same database as above
     ssh hgwdev
-    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base -oldTable hg17 gc5Base \
-	wigData5_1K/*.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base \
+	-oldTable hg17 gc5Base wigData5_1K/*.wig
     # and symlink these .wib files into /gbdb
     mkdir -p /gbdb/hg17/wib/gc5Base
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg17/wib/gc5Base
 
-# AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2004-05-25 - Hiram)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE - 2004-06-08 - Hiram)
     ssh eieio
     cd /cluster/data/genbank
     # This is a new organism, edit the etc/genbank.conf file and add:
@@ -853,12 +1013,12 @@ done
     cd /cluster/store6/genbank/work/initial.hg17/align
     para time > time
     cat time
-Completed: 6256 of 6256 jobs
-CPU time in finished jobs:      55219s     920.31m    15.34h    0.64d  0.002 y
-IO & Wait Time:                 25704s     428.40m     7.14h    0.30d  0.001 y
-Average job time:                  13s       0.22m     0.00h    0.00d
-Longest job:                     1056s      17.60m     0.29h    0.01d
-Submission to last job:          1057s      17.62m     0.29h    0.01d
+# Completed: 9500 of 9500 jobs
+# CPU time in finished jobs:      62241s    1037.35m    17.29h    0.72d  0.002 y
+# IO & Wait Time:                 33719s     561.98m     9.37h    0.39d  0.001 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest job:                     1062s      17.70m     0.29h    0.01d
+# Submission to last job:          1063s      17.72m     0.30h    0.01d
 
     # Load the results from the above
     ssh hgwdev
@@ -874,32 +1034,48 @@ Submission to last job:          1057s      17.62m     0.29h    0.01d
 
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial hg17
-    #	logFile: var/build/logs/2004.05.25-14:09:01.hg17.initalign.log
-# Completed: 29325 of 29325 jobs
-# CPU time in finished jobs:    5095155s   84919.26m  1415.32h   58.97d  0.162 y
-# IO & Wait Time:                136863s    2281.04m    38.02h    1.58d  0.004 y
-# Average job time:                 178s       2.97m     0.05h    0.00d
-# Longest job:                    17279s     287.98m     4.80h    0.20d
-# Submission to last job:         18142s     302.37m     5.04h    0.21d
+    #	logFile: var/build/logs/2004.06.04-10:47:21.hg17.initalign.log
+    #	One job was hung up, after killing it on its node, the batch
+    #	finished in a few minutes.
+# Completed: 35720 of 35720 jobs
+# CPU time in finished jobs:    5161424s   86023.74m  1433.73h   59.74d  0.164 y
+# IO & Wait Time:                144149s    2402.48m    40.04h    1.67d  0.005 y
+# Average job time:                 149s       2.48m     0.04h    0.00d
+# Longest job:                    18306s     305.10m     5.08h    0.21d
+# Submission to last job:         35061s     584.35m     9.74h    0.41d
 
     ssh hgwdev
     cd /cluster/data/genbank
     #	some kind of error happened here, had to remove a lock file to
-    #	get this to proceed
+    #	get this to proceed  (this same thing happened again the second
+    #	time around)
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
 
     ssh eieio
     cd /cluster/data/genbank/work
-    mv initial.hg17 initial.hg17.refseq.mrna
+    mv initial.hg17 initial.hg17.genbank.mrna
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial hg17
-XXXX - running - 2004-05-25
+# Completed: 189240 of 189240 jobs
+# CPU time in finished jobs:   97172120s 1619535.33m 26992.26h 1124.68d  3.081 y
+# IO & Wait Time:               1507789s   25129.82m   418.83h   17.45d  0.048 y
+# Average job time:                 521s       8.69m     0.14h    0.01d
+# Longest job:                    33165s     552.75m     9.21h    0.38d
+# Submission to last job:        126988s    2116.47m    35.27h    1.47d
 
     ssh hgwdev
     cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
+    time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
+    #	real    440m42.750s
+    #	user    69m7.810s
+    #	sys     23m18.640s
+    #	This is ~7.5 hours
+
+    #	If the above is all OK, ask Mark to put this assembly on
+    #	the daily updates.
 
 # CPGISLANDS (DONE - 2004-05-25 - Hiram)
+    #	Re-DONE with new randoms - 2004-06-04 - Hiram
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/cpgIsland
     cd /cluster/data/hg17/bed/cpgIsland
@@ -926,6 +1102,9 @@ XXXX - running - 2004-05-25
     # Bad char 0x4d = 'M' at line 1216113, base 60805573, sequence chr3
     # Bad char 0x52 = 'R' at line 1216118, base 60805801, sequence chr3
     # Bad char 0x52 = 'R' at line 1216118, base 60805801, sequence chr3
+    #	real    21m47.823s
+    #	user    18m30.810s
+    #	sys     1m13.420s
 
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
@@ -951,7 +1130,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgLoadBed hg17 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
     #	Reading cpgIsland.bed
-    #	Loaded 27893 elements of size 10
+    #	Loaded 27801 elements of size 10
     #	Sorted
     #	Saving bed.tab
     #	Loading hg17
@@ -964,69 +1143,2292 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 	VALUES("hg17", "blat12", "17779", "0");' \
 	-h genome-testdb hgcentraltest
 
-# PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-08-05 - Hiram)
+# PREPARE CLUSTER FOR BLASTZ RUNS (DONE - 2004-05-26 - Hiram)
+    #	Re-DONE with new randoms - 2004-06-03 - Hiram
 
     ssh eieio
     mkdir /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
     cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
     ln -s ../rmsk/*.out .
+    #	This takes 40 minutes run as a script, to hurry it up it has
+    #	been converted to a mini cluster run
     cat << '_EOF_' > runArian.sh
 #!/bin/sh
 for FN in *.out
 do
-    echo ${FN}
-    /cluster/bluearc/RepeatMasker030619/DateRepsinRMoutput.pl \
+    echo /cluster/bluearc/RepeatMasker030619/DateRepsinRMoutput.pl \
 	${FN} -query human -comp rat -comp mouse
 done
 '_EOF_'
     chmod +x runArian.sh
-    time ./runArian.sh
-    #	real    41m0.374s
+    ssh kki
+    cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
+    ./runArian.sh > jobList
+    para create jobList
+    para try, ... check ... push ... etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:        668s      11.14m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                   514s       8.56m     0.14h    0.01d  0.000 y
+# Average job time:                  26s       0.43m     0.01h    0.00d
+# Longest job:                       86s       1.43m     0.02h    0.00d
+# Submission to last job:           108s       1.80m     0.03h    0.00d
 
     #	Now extract each one, 1 = Rat, 2 = Mouse
+    ssh eieio
     cd /cluster/bluearc/scratch/hg/gs.18/build35
+
     mkdir linSpecRep.notInRat linSpecRep.notInMouse
     foreach f (rmsk.spec/*.out_rat_mus)
         set base = $f:t:r:r
         echo "$f -> $base.out.spec"
-    end
-
         /cluster/bin/scripts/extractLinSpecReps 1 $f > \
                         linSpecRep.notInRat/$base.out.spec
         /cluster/bin/scripts/extractLinSpecReps 2 $f > \
                         linSpecRep.notInMouse/$base.out.spec
-    #  That produced no difference at all between those two targets.
-    #  Have requested confirmation from Arian
-
-# PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-10-21 - Hiram)
-
-    cd /cluster/bluearc/mm4
-    mkdir linSpecRep.notInHuman
-    mkdir linSpecRep.notInRat
-    foreach f (rmsk.spec/*.out_hum_rat)
-        set base = $f:t:r:r
-        echo $base.out.spec
-        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
-                        linSpecRep.notInHuman/$base.out.spec
     end
-    foreach f (rmsk.spec/*.out_hum_rat)
-        set base = $f:t:r:r
-        echo $base.out.spec
-        /cluster/bin/scripts/extractLinSpecReps 2 $f > \
-                        linSpecRep.notInRat/$base.out.spec
-    end
+    #	There is actually no difference at all between these two results.
+    #	copy to iscratch
+    ssh kkr1u00
+    cd /iscratch/i/gs.18/build35
+    rsync -arlv /cluster/bluearc/scratch/hg/gs.18/build35/ .
+    /cluster/bin/iSync
+    # request rsync of /cluster/bluearc/scratch to the KiloKluster /scratch
 
-    cp -Rp /cluster/bluearc/mm4/linSpecRep.notInHuman /cluster/bluearc/scratch/mus/mm4
-    cp -Rp /cluster/bluearc/mm4/linSpecRep.notInRat /cluster/bluearc/scratch/mus/mm4
-    #	Request rsync of /scratch to the KiloKluster
-
-# COPY DATA TO GOLDEN PATH LOCATIONS (WORKING - 2004-05-25 - Hiram)
+# COPY DATA TO GOLDEN PATH LOCATIONS (DONE - 2004-06-04 - Hiram)
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
     cd /cluster/data/hg17
+    #	Beware, this backgrounding of the gzips can be hard on hgwdev.
+    #	You could wait until after the copy then run one gzip to do them all
     foreach chrom ( `cat chrom.lst` )
 	cp -p ${chrom}/*.fa /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
+	gzip \
+	/usr/local/apache/htdocs/goldenPath/hg17/chromosomes/chr${chrom}*.fa &
 	echo "done ${chrom}"
     end
     cd /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
     gzip *.fa
+
+
+# FOSMID END PAIRS TRACK (WORKING - 2004-06-09 kate)
+
+    # Use latest fosmid ends data prepared by Terry Furey.
+    # He says there is no on-going work on fosmid ends, so this
+    # should suffice indefinitely ?  Move/link this stuff into
+    # central data area.
+    ssh eieio
+    cd /cluster/data/ncbi
+    mkdir -p fosends/human
+    ln -s /cluster/store1/fosends.3 fosends/human
+    cd fosends/human/fosends.3
+    faSize fosEnds.fa
+       # 579735181 bases (369769 N's 579365412 real) in 1087670 sequences 
+       # 580M bases in 1M sequences
+    # create link in /gbdb/ncbi/fosends/human ?
+
+    # use pre-split fosend files, and associated list for cluster run
+    # Sequences are in /cluster/bluearc/hg/fosEnds
+    cp /cluster/bluearc/booch/fosends/fosEnds.lst /cluster/bluearc/hg/fosEnds
+    
+    # run on rack9 since kilokluster is busy
+    ssh kk9
+    cd /cluster/data/hg17
+    mkdir -p bed/fosends
+    cd bed/fosends
+    mkdir -p run
+    cd run
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa \
+                > contigs.lst
+    cp /cluster/bluearc/hg/fosEnds/fosEnds.lst fosEnds.lst
+        # 380 contigs vs 97 fosEnd files -> 40K jobs
+    # send output to kksilo, as it can better handle the NFS load
+    mkdir -p /cluster/store7/kate/hg17/fosends/out
+    ln -s /cluster/store7/kate/hg17/fosends/out ../out
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/fosends/out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst fosEnds.lst gsub jobList
+    foreach f (`cat fosEnds.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir -p /cluster/data/hg17/bed/fosends/out/$d
+    end
+
+    para create jobList
+        # 36860 jobs
+    para try
+    para check
+    para push
+# CPU time in finished jobs:    1655943s   27599.05m   459.98h   19.17d  0.053 y
+# IO & Wait Time:                101145s    1685.75m    28.10h    1.17d  0.003 y
+# Average job time:                  48s       0.79m     0.01h    0.00d
+# Longest job:                     1294s      21.57m     0.36h    0.01d
+# Submission to last job:         19269s     321.15m     5.35h    0.22d
+
+    # sort, filter, and lift alignments
+    ssh eieio
+    cd /cluster/data/hg17/bed/fosends
+    pslSort dirs raw.psl temp out/fosEnds*
+    pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons raw.psl \
+                        fosEnds.psl /dev/null
+        # Processed 84096767 alignments
+
+    rm -r temp
+    rm raw.psl
+
+    mkdir lifted
+    liftUp lifted/fosEnds.lifted.psl \
+                /cluster/data/hg17/jkStuff/liftAll.lft warn fosEnds.psl
+    pslSort dirs fosEnds.sorted.psl temp lifted
+    rmdir temp
+    wc -l *.sorted.psl
+        # 1693693 fosEnds.sorted.psl
+ 
+    set ncbiDir = /cluster/data/ncbi/fosends/human/fosends.3
+    ~/bin/i386/pslPairs -tInsert=5000 -minId=0.94 -noBin -min=30000 -max=500000 -slop -short -long -orphan -mismatch -verbose fosEnds.sorted.psl $ncbiDir/fosEnds.pairs all_fosends fosEnds
+
+    # create header required by "rdb" tools
+    # TODO: replace w/ awk & sort
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header fosEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > fosEndPairs.bed
+    cat header fosEnds.slop fosEnds.short fosEnds.long fosEnds.mismatch \
+         fosEnds.orphan \
+    | row score ge 300 | sorttbl chr start | headchg -del > fosEndPairsBad.bed
+
+    extractPslLoad -noBin fosEnds.sorted.psl fosEndPairs.bed \
+                fosEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > fosEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/fosends
+    hgLoadBed hg17 fosEndPairs fosEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/fosEndPairs.sql 
+        # Loaded 387542 elements
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed hg17 fosEndPairsBad fosEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/fosEndPairsBad.sql
+        # Loaded  27919 elements
+    #hgLoadPsl hg17 -nobin -table=all_fosends fosEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg17 -table=all_fosends fosEnds.load.psl
+        #load of all_fosends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
+    # load sequences
+
+    mkdir -p /gbdb/hg17/fosends
+    ln -s /cluster/data/ncbi/fosends/human/fosends.3/fosEnds.fa \
+                                /gbdb/hg17/fosends/fosEnds.fa
+    hgLoadSeq hg17 /gbdb/hg17/fosends/fosEnds.fa
+        # 1087670 sequences
+       # NOTE: extFile ID is 832625 (shouldn't be so large ??) 
+       # may want to reset this.
+
+
+# BAC END PAIRS TRACK (DONE - 2004-06-09 kate)
+
+    # Use latest BAC ends data from NCBI
+    # Checked  ftp.ncbi.nih.gov/genomes/BACENDS/homo_sapiens,
+    #  and files were unchanged from Terry's last download
+    #  (to /cluster/store1/bacends.4)
+    # Link this stuff into central data area.
+    ssh eieio
+    cd /cluster/data/ncbi
+    mkdir -p bacends/human
+    ln -s /cluster/store1/bacends.4 bacends/human
+    cd bacends/human/bacends.4
+    faSize BACends.fa
+        # 400230494 bases (2743171 N's 397487323 real) in 832614 sequences
+        # 400M bases in 800K sequences
+
+    # use pre-split bacends files, and associated list for cluster run
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/bacends
+    cd bed/bacends
+    mkdir run
+    cd run
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/hg/bacEnds/hs/*.fa > bacends.lst
+        # 380 contigs vs 98 bacends files -> 40K jobs
+
+    # send output to kksilo, as it can better handle the NFS load
+    # (these are quick jobs)
+    mkdir -p /cluster/store7/kate/hg17/bacends/out
+    ln -s /cluster/store7/kate/hg17/bacends/out ../out
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/bacends/out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst bacends.lst gsub jobList
+    foreach f (`cat bacends.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir -p /cluster/data/hg17/bed/bacends/out/$d
+    end
+
+    para create jobList
+        # 37240 jobs written to batch
+    para try
+    para check
+    para push
+# CPU time in finished jobs:    1573932s   26232.19m   437.20h   18.22d  0.050 y
+# IO & Wait Time:                122751s    2045.86m    34.10h    1.42d  0.004 y
+# Average job time:                  46s       0.76m     0.01h    0.00d
+# Longest job:                     3312s      55.20m     0.92h    0.04d
+# Submission to last job:          7148s     119.13m     1.99h    0.08d
+
+    cd ../out/BACends000
+    pslCheck *.psl
+#Error: invalid PSL: AZ519021:1-575 NT_004559:1306426-1608347 - NT_004559.BACends000.psl:1101
+#AZ519021 query block 3 start 283 < previous block end 575
+    # NOTE: inquired with JK regarding these results
+
+    # lift alignments
+    ssh eieio
+    cd /cluster/data/hg17/bed/bacends
+    pslSort dirs raw.psl temp out/BACends*
+    # takes hours ?
+
+        # 37240 files in 98 dirs
+        # Got 37240 files 193 files per mid file
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds.psl /dev/null
+        # Processed 52291246 alignments
+    mkdir lifted
+    liftUp lifted/bacEnds.lifted.psl \
+                /cluster/data/hg17/jkStuff/liftAll.lft warn bacEnds.psl
+    pslSort dirs bacEnds.sorted.psl temp lifted
+    rmdir temp
+    wc -l *.sorted.psl
+        # 2497227 bacEnds.sorted.psl
+
+    set ncbiDir = /cluster/data/ncbi/bacends/human/bacends.4
+    ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose bacEnds.sorted.psl $ncbiDir/bacEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+    # TODO: replace w/ awk & sort
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > bacEndPairs.bed
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del > bacEndPairsBad.bed
+
+    extractPslLoad -noBin bacEnds.sorted.psl bacEndPairs.bed \
+                bacEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > bacEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/bacends
+    hgLoadBed hg17 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairs.sql 
+        # Loaded 201380  
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed hg17 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairsBad.sql
+        # Loaded 81773
+    #hgLoadPsl hg17 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg17 -table=all_bacends bacEnds.load.psl
+        #load of all_bacends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
+    # load BAC end sequences
+
+    mkdir -p /gbdb/hg17/bacends
+    ln -s /cluster/data/ncbi/bacends/human/bacends.4/BACends.fa \
+                                /gbdb/hg17/bacends/BACends.fa
+    hgLoadSeq hg17 /gbdb/hg17/bacends/BACends.fa
+        # 158588 sequences
+
+
+# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (WORKING - 2004-06-04 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/contig_overlaps
+    cd /cluster/data/hg17/bed/contig_overlaps
+    #	find all the clones that were used in the assembly
+    sed -e "/^#.*/d" /cluster/data/hg17/ncbi_build35.agp | \
+        awk '{if (!match($5,"N")) {print $6}}' | \
+        sort -u > placed_in_assembly.list
+    wc -l placed_in_assembly.list
+    #	26872 placed_in_assembly.list
+    #	These may be available from the phases files at:
+    #	ftp://ftp.ncbi.nih.gov/genbank/genomes/H_sapiens
+    #	Which are easily fetched with wget.  However I took a look
+    #	at those and could not find all the clones in them.  There may
+    #	be a versioning problem because these phases files are often
+    #	updated.
+    #	Fetch them from Genbank with the following three PERL scripts:
+    #	[hiram@hgwdev /cluster/data/hg17/bed/contig_overlaps] ls -og *.pl
+    #	-rwxrwxr-x    1     3047 May 24 18:43 bioPerlFetch.pl
+    #	-rwxrwxr-x    1     2370 Jun  4 15:21 fetchGenbank.pl
+    #	-rwxrwxr-x    1      700 May 24 21:47 foldEm.pl
+
+    #	Which takes about 4 days ...
+    #	Example, 
+    cat << '_EOF_' > terrys.list
+AC011841.7
+AC018692.9
+AC018743.27
+AC037482.14
+AL163540.11
+'_EOF_'
+    # << this line makes emacs coloring happy
+    #	only works on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/contig_overlaps
+    mkdir fasta
+    time ./fetchGenbank.pl terrys.list > fetchResult.out 2>&1
+
+    #	There is a bit of behind the scenes hocus pocus going on here.
+    #	This is a tedious task of comparing various lists with each
+    #	other and making sure everything matches.  Manual fixups are
+    #	done for the newly named 6_hla_hap* items, copies of the PAR
+    #	business were duplicated so that X and Y both have the same set
+    #	of clones for that.  The end result should be a directory hierarchy
+    #	here with a directory for each chrom, each random, the 6_hla_hap?
+    #	items and each directory contains the clones that belong to that
+    #	chromosome.  The leftovers are the unplaced clones which end up
+    #	in the directory called: unPlaced.  The instructions here are
+    #	merely a guideline of possibilities.  Care should be taken to
+    #	make sure all listings are correct and everything gets in the
+    #	right place.
+    ssh eieio
+    #	And then make a list of all clones considered for assembly:
+    sed -e "/^#.*/d" /cluster/store5/gs.18/ncbi/sequence.inf | \
+	grep for_assembly | awk '{print $1}' | sort -u > sequence.list
+    wc -l sequence.list
+    #	46733 sequence.list
+    #	Verify overlaps are correct:
+    comm -12 placed_in_assembly.list sequence.list > inBoth
+    comm -23 placed_in_assembly.list sequence.list > inAssemblyNotSequence
+    comm -13 placed_in_assembly.list sequence.list > inSequenceNotAssembly
+    wc in*
+    #	    1       1      12 inAssemblyNotSequence
+    #	26871   26871  301709 inBoth
+    #	19862   19862  219050 inSequenceNotAssembly
+    #	46734   46734  520771 total
+    #	This stray one is from Terry's five additions in the final fixup
+    #	phase with Greg:
+    cat inAssemblyNotSequence
+    #	AC018743.27
+    #	Terry added: AC011841.7 AC018692.9 AC018743.27 AC037482.14 AL163540.11
+    #
+    #	Generate a listing that relates clones to their contigs
+    sed -e "/^#.*/d" /cluster/store5/gs.18/build35/ncbi_build35.agp | \
+	./contigAcc.pl > disburseEm.list
+    #
+    #	Using that list, sort the downloaded clones into their
+    #	respective chrom directories:
+    ./disburse.sh
+
+    #	Check the number of sequences obtained:
+    find ./? ./?? ./*_random ./6_hla* -type f | wc -l
+    #	26872
+    #	So, why is this number one more than the inBoth list ?
+    #	Because, the official NCBI sequence.inf file is missing one of
+    #	the clones that Terry added: AC018743.27
+    #	And it shows up in our check list above as inAssemblyNotSequence
+    #	It isn't exactly missing, it just isn't marked "for_assembly"
+
+    #	OK, with everything in place, we are ready to try and find
+    #	all these items in the assembly.  To run a Kluster job on one of
+    #	the chroms, matching the items that are supposed to be included
+    #	in that chrom.  We need to get things set up on the Iservers,
+    #	psLayout is heavy into disk I/O and it brings everything down if
+    #	allowed to work on any NFS filesystems for input.
+
+    #	It appears that psLayout wants an ooc file of tile size 10
+    #	I tried making one for the whole assembly but it seemed to
+    #	include too much for some contigs and it caused a lot of
+    #	alignments to be missed.  Thus, create an ooc file for each
+    #	contig
+
+    ssh eieio
+    mkdir /cluster/bluearc/scratch/hg/gs.18/build35/contigOoc10
+    cd /cluster/bluearc/scratch/hg/gs.18/build35/contigOoc10
+    ls ../maskedContigs | sed -e "s/.fa//" | while read CONTIG
+    do
+	blat -repMatch=256 -makeOoc=${CONTIG}.10.ooc -tileSize=10 \
+	    ../maskedContigs/${CONTIG}.fa \
+	    ../maskedContigs/${CONTIG}.fa /dev/null
+	echo "done: ${CONTIG}"
+    done
+
+    #	Copy that result to the Iservers:
+    ssh kkr1u00
+    mkdir /iscratch/i/gs.18/build35/contigOoc10
+    cd /iscratch/i/gs.18/build35/contigOoc10
+    rsync -arlv /cluster/bluearc/scratch/hg/gs.18/build35/contigOoc10/ .
+    #	And, copy the clone sequences:
+    mkdir /iscratch/i/gs.18/build35/clones
+    cd /cluster/store5/gs.18/build35/bed/contig_overlaps
+    for D in ? ?? *_random 6_hla_hap?
+    do
+	rsync -arlv `pwd`/${D} /iscratch/i/gs.18/build35/clones
+    done
+    
+    /cluster/bin/iSync
+
+    ssh kk
+    cd /cluster/data/hg17/bed/contig_overlaps
+    mkdir psl
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#       kkiPsLayout.sh <chrom> <clone> <contig>
+#       where <chrom> is the chrom this contig is on
+#       <clone> is one of the .fa.gz files in
+#               /cluster/data/hg17/bed/contig_overlaps/*/<clone>.fa.gz
+#               without the .fa.gz extension
+#               This stuff has been mirrored to:
+#               /iscratch/i/gs.18/clones/*/<clone>.fa.gz
+#       <contig> is one of the contigs found in:
+#               /cluster/store5/gs.18/build35/<chrom>/<contig>/<contig>.fa
+#
+CHROM=$1
+CLONE=$2
+CONTIG=$3
+TARGET=/iscratch/i/gs.18/build35/maskedContigs/${CONTIG}.fa
+FAZ=/iscratch/i/gs.18/build35/clones/${CHROM}/${CLONE}.fa.gz
+OOC=/iscratch/i/gs.18/build35/contigOoc10/${CONTIG}.10.ooc
+mkdir -p psl/${CONTIG}
+if [ ! -s ${FAZ} ]; then
+        echo "Can not find: ${FAZ}"
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}"
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}"
+        exit 255
+fi
+zcat ${FAZ} > /tmp/${CLONE}.fa
+$HOME/bin/i386/psLayout ${TARGET} \
+        /tmp/${CLONE}.fa genomic ${OOC} psl/${CONTIG}/${CLONE}.psl
+RET=$?
+rm -f /tmp/${CLONE}.fa
+exit ${RET}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runPsLayout.sh
+
+    #	make up a listing of chrom, clone, contig from:
+    grep -v "^#" disburseEm.list | sed -e "s/.fa.gz//" > chr.clone.contig.list
+    wc -l chr.clone.contig.list
+    #	26872 chr.clone.contig.list
+    awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
+        $1, $2, $3, $3, $2
+}' chr.clone.contig.list > jobList
+    # << this line makes emacs coloring happy
+    #	To do a quick test, run just chr22:
+    grep -v "^22" chr.clone.contig.list | awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
+        $1, $2, $3, $3, $2
+}' > jobList
+    para create jobList
+    para try ... check ... etc ...
+    #	One run on chr22 took:
+# Completed: 561 of 561 jobs
+# CPU time in finished jobs:     927068s   15451.14m   257.52h   10.73d  0.029 y
+# IO & Wait Time:                  6295s     104.91m     1.75h    0.07d  0.000 y
+# Average job time:                1664s      27.73m     0.46h    0.02d
+# Longest job:                    69745s    1162.42m    19.37h    0.81d
+# Submission to last job:         69780s    1163.00m    19.38h    0.81d
+
+
+    #	put the results together, filter, lift and load:
+    cd /cluster/data/hg17/bed/contig_overlaps/psl
+    pslSort dirs raw.psl tmp N*
+    pslReps -singleHit raw.psl repsSingle.psl /dev/null
+    liftUp chr22.psl /cluster/data/hg17/jkStuff/liftAll.lft \
+	warn repsSingle.psl
+    hgLoadPsl -table=cloneTest hg17 chr22.psl
+
+    #	There are a number of clones listed in the sequence.inf file
+    #	as status W with names beginning AACC AADB AADC AADD
+    #	These are the Whole shotgun assemblies for the Celera genome.
+    #	A few of them were used in the assembly of the NCBI genome, namely:
+./11/AADB01066164.1.fa.gz
+./11/AADC01095577.1.fa.gz
+./11/AADD01116830.1.fa.gz
+./11/AADD01118406.1.fa.gz
+./11/AADD01116787.1.fa.gz
+./11/AADD01112371.1.fa.gz
+./11/AADD01116788.1.fa.gz
+./11/AADD01115518.1.fa.gz
+./11/AADD01118410.1.fa.gz
+./11/AADD01117999.1.fa.gz
+./21/AADD01172789.1.fa.gz
+./21/AADD01172788.1.fa.gz
+./21/AADD01209098.1.fa.gz
+./21/AADD01172902.1.fa.gz
+    #	And these have been distributed properly in their corresponding
+    #	chromosome.  The rest of them, 26, all with names starting AACC are in
+    #	the directory here: celeraOnly
+
+    #	To run the unPlaced alignments.
+    #	Prepare scratch and iscratch
+    ssh eieio
+    mkdir /cluster/bluearc/scratch/hg/gs.18/build35/clones/unPlaced
+    rsync -arlv /cluster/data/hg17/bed/contig_overlaps/unPlaced/ \
+	/cluster/bluearc/scratch/hg/gs.18/build35/clones/unPlaced
+    #	request scratch sync to cluster admins
+
+    ssh kkr1u00
+    mkdir /iscratch/i/gs.18/build35/clones/unPlaced
+    rsync -arlv /cluster/data/hg17/bed/contig_overlaps/unPlaced/ \
+	/iscratch/i/gs.18/build35/clones/unPlaced
+    /cluster/bin/iSync
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    #	There are too many to try them all, obtain guildelines from hg16
+    #	of clone to contig mapping:
+    hgsql -N -e "select name,chrom from clonePos;" hg16 > hg16.clone.chrom
+    hgsql -N -e "select contig,chrom from ctgPos;" hg16 > hg16.contig.chrom
+
+    ssh kk
+    mkdir /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    ls ../unPlaced | sed -e "s/.fa.gz//" > unPlaced.clone.list
+    wc -l unPlaced.clone.list
+    #	19836 unPlaced.clone.list
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs > contig.list
+    wc -l contig.list
+    #	380 contig.list
+
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#       kkiPsLayout.sh <clone> <contig>
+#       <clone> is one of the .fa.gz files in
+#               /scratch/hg/gs.18/build35/clones/unPlaced
+#               without the .fa.gz extension
+#       <contig> is one of the contigs found in:
+#               /iscratch/i/gs.18/build35/maskedContigs
+#
+CLONE=$1
+CONTIG=$2
+TARGET=/iscratch/i/gs.18/build35/maskedContigs/${CONTIG}.fa
+FAZ=/scratch/hg/gs.18/build35/clones/unPlaced/${CLONE}.fa.gz
+OOC=/iscratch/i/gs.18/build35/contigOoc10/${CONTIG}.10.ooc
+mkdir -p psl/${CONTIG}
+if [ ! -s ${FAZ} ]; then
+        echo "Can not find: ${FAZ}"
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}"
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}"
+        exit 255
+fi
+zcat ${FAZ} > /tmp/${CLONE}.fa
+$HOME/bin/i386/psLayout ${TARGET} \
+        /tmp/${CLONE}.fa genomic ${OOC} psl/${CONTIG}/${CLONE}.psl
+RET=$?
+rm -f /tmp/${CLONE}.fa
+exit ${RET}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runPsLayout.sh
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runPsLayout.sh $(path1) $(path2) {check out line+ psl/$(path2)/$(path1).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+-
+    gensub2 unPlaced.clone.list contig.list gsub jobList
+
+
+# BUILD KNOWN GENES TABLES (DONE 6/8/04 Fan)
+
+  Build sp040515 and proteins040515 DBs first.
+  
+  hgsql hg17 -e "create database kgHg17"
+  
+  cd /cluster/store6/kgDB/bed
+  mkdir kgHg17
+  cd /cluster/store6/kgDB/bed/kgHg17
+
+  ~/src/hg/protein/KGprocess.sh kgHg17 hg17 040515
+  
+  The script was run successfully with the last message:
+
+  	Tue Jun  8 15:36:52 PDT 2004 DONE =========================
+
+  After initial inspection of tables in kgHg17, do the following
+  from mySql prompt:
+
+  alter table kgHg17.cgapAlias rename as hg17.cgapAlias;
+  alter table kgHg17.cgapBiocDesc rename as hg17.cgapBiocDesc;
+  alter table kgHg17.cgapBiocPathway rename as hg17.cgapBiocPathway;
+  alter table kgHg17.dupSpMrna rename as hg17.dupSpMrna;
+  alter table kgHg17.keggMapDesc rename as hg17.keggMapDesc;
+  alter table kgHg17.keggPathway rename as hg17.keggPathway;
+  alter table kgHg17.kgAlias rename as hg17.kgAlias;
+  alter table kgHg17.kgProtAlias rename as hg17.kgProtAlias;
+  alter table kgHg17.kgXref rename as hg17.kgXref;
+  alter table kgHg17.knownGene rename as hg17.knownGene;
+  alter table kgHg17.knownGeneLink rename as hg17.knownGeneLink;
+  alter table kgHg17.knownGeneMrna rename as hg17.knownGeneMrna;
+  alter table kgHg17.knownGenePep rename as hg17.knownGenePep;
+  alter table kgHg17.mrnaRefseq rename as hg17.mrnaRefseq;
+  alter table kgHg17.spMrna rename as hg17.spMrna;
+
+  hg17.knownGene has 43,401 entries and hg16.knownGene has 43,232 entries.
+  and running featireBits shows:
+  
+   	featureBits hg17 knownGene
+   	63983072 bases of 2866216770 (2.232%) in intersection
+   
+   	featureBits hg16 knownGene
+   	63781799 bases of 2865248791 (2.226%) in intersection
+  
+  Connect to genome-testdb and use hgcentraltest DB.
+  Add a new entry in gdbPdb table:
+ 
+        insert into gdbPdb values('hg17', 'proteins040515');
+
+
+# CREATE LINEAGE-SPECIFIC REPEATS FOR BLASTZ WITH ZEBRAFISH
+# (DONE, 2004-06-08, hartera)
+    # Treat all repeats as lineage-specific
+    mkdir /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
+    foreach f (/iscratch/i/gs.18/build35/rmsk/chr*.fa.out)
+ cp -p $f /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+    iSync
+  
+
+# PREP FOR LIFTOVER CHAINS TO THIS ASSEMBLY (2004-06-10 kate)
+
+    # split into 3K chunks
+    ssh eieio
+    set tempDir = /cluster/data/hg17/bed/liftOver/liftSplit
+    mkdir -p $tempDir
+    cd $tempDir
+cat > split.csh << 'EOF'
+    set split = /iscratch/i/hg17/liftOver/split
+    mkdir -p $split
+    set tempDir = /cluster/data/hg17/bed/liftOver/liftSplit
+    foreach i (`cat /cluster/data/hg17/chrom.lst`)
+        echo chr$i
+        faSplit -lift=$tempDir/chr$i.lft size /cluster/data/hg17/$i/chr$i.fa -oneFile 3000 $split/chr$i
+    end
+'EOF'
+    csh split.csh >&! split.log &
+    tail -100f split.log
+
+    ssh kkr1u00
+    iSync
+
+
+# STS MARKERS (2004-06-09 kate)
+
+   # update from NCBI
+    ssh eieio
+   ln -s /cluster/store5/sts.2004-06 /cluster/data/ncbi
+   cd /cluster/data/ncbi/sts.2004-06
+    ln -s /cluster/data/ncbi/sts.2004-06 sts.9
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+    wget ftp://ftp.ncbi.nih.gov/blast/db/sts.tar.gz
+    mv sts.tar.gz dbSTS.FASTA.dailydump.Z
+    gunzip dbSTS.FASTA.dailydump.Z
+
+    # incremental update from previous build
+    # NOTE: could mysql dump this, unless hand-updated (like hg16)
+    # First - copy from Terry's dir
+    ssh eieio
+    ln -s /cluster/store1/sts.8 /cluster/data/ncbi
+    cd /cluster/data/ncbi/sts.9
+
+    # this time, snag from Terry's dir
+    cp ~booch/tracks/update/all.STS.fa.new /cluster/data/sts.8/all.STS.fa
+    cp ~booch/tracks/update/stsInfo2.bed .
+
+    # NOTE: checkStsIds modifies stsInfo2.bed and all.STS.fa
+    # It creates all.primers, all.primers.fa, stsAlias.bed
+    cp /cluster/data/ncbi/sts.8/all.STS.fa all.STS.fa
+    checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
+                        dbSTS.FASTA.dailydump all.STS.fa
+
+    mkdir -p /cluster/bluearc/sts.9/sts
+    faSplit sequence all.STS.fa 10 /cluster/bluearc/sts.9/sts/sts
+
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/sts
+    cd bed/sts
+    mkdir run
+    cd run
+    cp /cluster/data/ncbi/sts.9/all.STS.fa /cluster/bluearc/sts.9
+    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/sts/sts*.fa > sts.lst
+    mkdir -p /cluster/bluearc/hg17/sts/sts/out
+cat > template << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/bluearc/hg17/sts/sts/out/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst sts.lst template jobList
+    para create jobList
+        # 3420 jobs
+    para try
+    para check
+    para push
+# CPU time in finished jobs:      36148s     602.47m    10.04h    0.42d  0.001 y
+# IO & Wait Time:                 22211s     370.18m     6.17h    0.26d  0.001 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest job:                      154s       2.57m     0.04h    0.00d
+# Submission to last job:           362s       6.03m     0.10h    0.00d
+
+    # NOTE: this went really fast -- probably not even necessary
+    #   to split the all.STS.fa file
+
+    # primers
+    ssh eieio
+    cd /cluster/data/ncbi/sts.9
+    mkdir -p /cluster/bluearc/sts.9/primers
+    faSplit about all.primers.fa 50000 /cluster/bluearc/sts.9/primers/primers
+
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/sts/primers
+    cd bed/sts/primers
+    mkdir run
+    cd run
+    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/primers/primers*.fa > primers.lst
+    mkdir -p /cluster/bluearc/hg17/sts/primers/out
+    foreach c (`cat contigs.lst`)
+        set d = $c:t:r
+        echo $d
+        mkdir -p /cluster/bluearc/hg17/sts/primers/out/$d
+    end
+cat > template << 'EOF'
+#LOOP
+# special blat version needed for primer alignment
+/cluster/bin/i386/blat.2 -tileSize=10 -oneOff -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=0 -minIdentity=80 $(path1) $(path2) {check out line+ /cluster/bluearc/hg17/sts/primers/out/$(root1)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst primers.lst template jobList
+    para create jobList
+        # 215840 jobs
+    para try
+    para check
+    para push
+
+    # GOT HERE
+    
+    # run full sequence alignment
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/sts
+    cd bed/sts
+    mkdir run
+    cd run
+    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/all.STS.fa > sts.lst
+
+    mkdir -p /cluster/store7/kate/hg17/sts/out
+    ln -s /cluster/store7/kate/hg17/sts/out ../out
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/sts/out/(root1).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst sts.lst gsub jobList
+    foreach f (`cat sts.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir -p /cluster/data/hg17/bed/sts/out/$d
+    end
+
+# LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
+#	Copied from Hg16 doc
+    # Set up cluster job to align consenesus/exemplars to hg17
+    ssh eieio
+    mkdir /cluster/bluearc/hg17/affyGnf
+    cp -p /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa /cluster/bluearc/hg17/affyGnf
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/affyGnf
+    cp -p /cluster/bluearc/hg17/affyGnf/* /iscratch/i/affyGnf
+    /cluster/bin/iSync
+
+    ssh kki
+    mkdir /cluster/data/hg17/bed/affyGnf.2004-06-09
+    cd /cluster/data/hg17/bed/affyGnf.2004-06-09
+    ls -1 /iscratch/i/affyGnf/* > affy.lst
+    ls -1 /iscratch/i/gs.18/build35/maskedContigs/* > allctg.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/gs.18/build35/hg17.11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 allctg.lst affy.lst template.sub jobList
+    mkdir psl
+    para create jobList
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:       2922s      48.70m     0.81h    0.03d  0.000 y
+# IO & Wait Time:                  1146s      19.10m     0.32h    0.01d  0.000 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest job:                       80s       1.33m     0.02h    0.00d
+# Submission to last job:           333s       5.55m     0.09h    0.00d
+
+XXXX - pause here while going to fishClone mapping
+
+Also do:
+# Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
+# final freeze of data set.
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all ./
+and
+# GNF ATLAS 2  [Done jk 3/29/2004]
+    # Align probes from GNF1H chip.
+
+######	 A second attempt at clone alignment###
+    #	Split the clones into 3K pieces into about 1000 fa files
+
+    #	Example:
+zcat Z99916.1.fa.gz Z99774.1.fa.gz Z99756.7.fa.gz | faSplit size stdin 3000 /tmp/name.fa -lift=/tmp/name.lft -oneFile
+
+    #	Trying this idea in unPlacedBatch
+    ssh kk0
+    mkdir /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs > nibList
+    ls -1S /cluster/data/hg17/bed/contig_overlaps/blatClones > cloneList
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fastMap -ooc=/scratch/hg/h/11.ooc -q=dna -t=dna {check in exists /scratch/hg/gs.18/build35/bothMaskedNibs/$(path1)} {check in exists+ /cluster/data/hg17/bed/contig_overlaps/blatClones/$(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    mkdir psl
+    cat nibList | sed -e "s/.nib//" | while read D
+do
+mkdir psl/$D
+done
+
+    gensub2 nibList cloneList gsub jobList
+    para create jobList
+
+# MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN & FUGU (DONE 2004-06-10 kate)
+    # In an email 2/13/04 to Angie, Arian said we could treat all 
+    # human repeats as 
+    # lineage-specific for human-chicken blastz.  
+    # and Angie did the same for fugu.
+    # Scripts expect *.out.spec filenames.
+    ssh kkr1u00
+    cd /cluster/data/hg17
+    mkdir /iscratch/i/hg17/linSpecRep.chicken
+    foreach f (/iscratch/i/hg17/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/hg17/linSpecRep.chicken/$f:t:r:r.out.spec
+    end
+    ln -s /iscratch/i/hg17/linSpecRep.chicken \
+          /iscratch/i/hg17/linSpecRep.fugu
+    iSync
+
+
+# BLASTZ FUGU (FR1) (WORKING 2004-06-10 kate)
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastz.fr1.2004-06-10
+    ln -s /cluster/data/hg17/bed/blastz.fr1.2004-06-10 \
+            /cluster/data/hg17/bed/blastz.fr1
+    cd /cluster/data/hg17/bed/blastz.fr1
+    # Set L=6000 (more relaxed than chicken) and abridge repeats.
+    # Treat all repeats as lineage-specific (reuse linSpecRep.Chicken).
+    cat << '_EOF_' > DEF
+# human vs. fugu
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from human-chicken.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/iscratch/i/hg17/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/hg17/linSpecRep.fugu
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu
+SEQ2_DIR=/iscratch/i/fr1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/fr1/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.fr1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    bash # if a csh/tcsh user
+    source DEF
+    mkdir $RAW run.0
+    /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+    # GOT HERE
+    sh ./xdir.sh
+    cd run.0
+    sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+    para create jobList
+        # 11935 jobs
+    para try
+    para check
+    para push
+# Completed: 11935 of 11935 jobs
+# CPU time in finished jobs:    4673316s   77888.60m  1298.14h   54.09d  0.148 y
+# IO & Wait Time:                329249s    5487.48m    91.46h    3.81d  0.010 y
+# Average job time:                 419s       6.99m     0.12h    0.00d
+# Longest job:                      714s      11.90m     0.20h    0.01d
+# Submission to last job:          5575s      92.92m     1.55h    0.06d
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.fr1
+    bash # if a csh/tcsh user
+    source DEF
+    mkdir run.1 lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+    cd run.1
+    wc -l jobList
+    para create jobList
+        # 341 jobs
+    para try
+    para check 
+    para push
+# CPU time in finished jobs:        315s       5.26m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                  4451s      74.18m     1.24h    0.05d  0.000 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest job:                      107s       1.78m     0.03h    0.00d
+# Submission to last job:           368s       6.13m     0.10h    0.00d
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.fr1
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << 'EOF' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin \
+        /iscratch/i/hg17/bothMaskedNibs /iscratch/i/fr1/nib stdout \
+| axtSort stdin ../../axtChrom/$chr.axt 
+axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+        ../../pslChrom/$chr.psl
+'EOF'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+        # 41 jobs
+    para try
+    para check
+    para push
+
+
+# CHAIN FUGU BLASTZ (2004-06-11 kate)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.fr1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg17/bed/blastz.fr1/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../fuguHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../fuguHumanTuned.gap \
+                      -minScore=5000 $1 \
+    /iscratch/i/hg17/bothMaskedNibs \
+    /iscratch/i/fr1/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+        # 46 jobs
+    para try
+    para check
+    para push
+        # 1 crashed job -- chr6_hla_hap1.chain is empty
+# CPU time in finished jobs:        610s      10.16m     0.17h    0.01d  0.000 y
+# IO & Wait Time:                  1644s      27.40m     0.46h    0.02d  0.000 y
+# Average job time:                  50s       0.83m     0.01h    0.00d
+# Longest job:                      233s       3.88m     0.06h    0.00d
+# Submission to last job:           339s       5.65m     0.09h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain hg17 ${c}_chainFr1 $i
+    end
+    featureBits hg16 chainFr1Link
+        # 50709290 bases of 2865248791 (1.770%) in intersection
+
+
+# ANCIENT REPEAT TABLE (2004-06-11 kate)
+
+    # The netClass operations requires an "ancientRepeat" table in one 
+    # of the databases.
+    # This is a hand curated table obtained from Arian.
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/ancientRepeat
+    cd /cluster/data/hg17/bed/ancientRepeat
+    # mysqldump needs write permission to this directory
+    chmod 777 .
+    hgsqldump --all --tab=. hg15 ancientRepeat
+    chmod 775 .
+    hgsql hg17 < ancientRepeat.sql
+    echo "LOAD DATA LOCAL INFILE 'ancientRepeat.txt' into table ancientRepeat"\
+                | hgsql hg17
+
+
+# NET FUGU BLASTZ (2004-06-11 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    netClass noClass.net hg17 fr1 human.net
+
+    # Make a 'syntenic' subset:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    rm noClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn human.net > humanSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg17 netFr1 stdin
+    #netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 netSyntenyFr1 stdin
+
+
+# EXTRACT AXT'S AND MAF'S FROM THE NET
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    netSplit human.net humanNet
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (humanNet/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt -maxGap=300 humanNet/$c.net chain/$c.chain /cluster/data/hg17/nib /cluster/data/fr1/nib ../axtNet/$c.axt
+    end
+'EOF'
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+    # 10 minutes or so
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1
+    cd axtNet
+    mkdir ../mafNet
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.fr1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/fr1/chrom.sizes \
+            ../mafNet/$maf -tPrefix=hg17. -qPrefix=fr1.
+    end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+
+#  BLASTZ RAT RN3 (DONE - 2004-06-14 - Hiram)
+
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastz.rn3.2004-06-11
+    cd /cluster/data/hg17/bed
+    ln -s  blastz.rn3.2004-06-11 blastz.rn3
+    cd blastz.rn3
+
+    cat << '_EOF_' > DEF
+# rat vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Human
+SEQ1_DIR=/iscratch/i/gs.18/build35/bothMaskedNibs
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInRat
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Rat
+SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/store5/gs.18/build35/bed/blastz.rn3
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/hg17/bed/blastz.rn3
+    source DEF
+    # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run0.sh
+    #	it is a generic script and works for any assembly
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+Completed: 41943 of 41943 jobs
+CPU time in finished jobs:   15330421s  255507.02m  4258.45h  177.44d  0.486 y
+IO & Wait Time:                673809s   11230.15m   187.17h    7.80d  0.021 y
+Average job time:                 382s       6.36m     0.11h    0.00d
+Longest job:                     4651s      77.52m     1.29h    0.05d
+Submission to last job:        169197s    2819.95m    47.00h    1.96d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.rn3
+    source DEF
+    # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
+    #	fixup machine check, should be kki, not kk
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       1894s      31.56m     0.53h    0.02d  0.000 y
+# IO & Wait Time:                  6271s     104.52m     1.74h    0.07d  0.000 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest job:                      131s       2.18m     0.04h    0.00d
+# Submission to last job:           590s       9.83m     0.16h    0.01d
+
+    #	Third cluster run to convert lav's to axt's
+    source DEF
+    cd /cluster/data/hg17/bed/blastz.rn3
+    #	The copy of this in mm4 was broken, fixed here
+    /cluster/data/hg17/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:        426s       7.09m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                  7283s     121.39m     2.02h    0.08d  0.000 y
+# Average job time:                 168s       2.79m     0.05h    0.00d
+# Longest job:                      642s      10.70m     0.18h    0.01d
+# Submission to last job:           642s      10.70m     0.18h    0.01d
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3
+    mkdir pslChrom
+    set tbl = "blastzRn3"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 30 minutes
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/pslChrom
+    for I in *.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done: ${I}"
+    done
+    # this is a 55 minute job
+    #	Check results
+    #	featureBits hg16 blastzRn3
+    #	1013603401 bases of 2865248791 (35.376%) in intersection
+    #	featureBits hg17 blastzRn3
+    #	1013003285 bases of 2866216770 (35.343%) in intersection
+
+# CHAIN RN3 BLASTZ (DONE - 2004-06-14 - Hiram)
+
+# The axtChain is best run on the small kluster, or the kk9 kluster
+    ssh kki
+    mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtChain/run1
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/hg17/bed/blastz.rn3/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(root1).out
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ_random $1 | axtChain stdin \
+	/iscratch/i/gs.18/build35/bothMaskedNibs \
+	/iscratch/i/rn3/bothMaskedNibs $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+
+    # 46 jobs
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para push # ... etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       4675s      77.91m     1.30h    0.05d  0.000 y
+# IO & Wait Time:                  5429s      90.49m     1.51h    0.06d  0.000 y
+# Average job time:                 220s       3.66m     0.06h    0.00d
+# Longest job:                      989s      16.48m     0.27h    0.01d
+# Submission to last job:           989s      16.48m     0.27h    0.01d
+
+    # now on the file server, sort chains
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain
+    #	real    6m7.931s
+    #	user    4m50.430s
+    #	sys     0m52.590s
+
+    time chainSplit chain all.chain
+    #	real    5m39.214s
+    #	user    4m42.800s
+    #	sys     0m19.550s
+
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg17 ${c}_chainRn3 $i
+        echo done $c
+    end
+    #	featureBits hg17 chainRn3
+    #	2826192649 bases of 2866216770 (98.604%) in intersection
+    #	featureBits hg16 chainRn3
+    #	2830563493 bases of 2865248791 (98.789%) in intersection
+
+# NET RN3 (DONE - 2004-06-15 - Hiram)
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/hg17/chrom.sizes \
+                        /cluster/data/rn3/chrom.sizes ../preNet/$i
+    end
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg17/chrom.sizes \
+                            /cluster/data/rn3/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    #	memory usage 2494730240, utime 19278 s/100, stime 4508
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    time netClass hNoClass.net hg17 rn3 rat.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInRat \
+	-qNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman
+    #	real    19m33.421s
+    #	user    10m37.130s
+    #	sys     1m45.630s
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    time netFilter -syn rat.net > ratSyn.net
+    #	real    13m24.885s
+    #	user    7m37.100s
+    #	sys     1m5.760s
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    netFilter -minGap=10 rat.net |  hgLoadNet hg17 netRn3 stdin
+    netFilter -minGap=10 ratSyn.net | hgLoadNet hg17 syntenyNetRn3 stdin
+#   real    12m53.070s
+#   user    6m6.540s
+#   sys     0m50.580s
+    # check results
+    # featureBits hg17 netRn3
+    # 2816623107 bases of 2866216770 (98.270%) in intersection
+    # featureBits hg16 netRn3
+    # 2820958389 bases of 2865248791 (98.454%) in intersection
+
+    # featureBits hg17 syntenyNetRn3
+    # 2780883450 bases of 2866216770 (97.023%) in intersection
+    # featureBits hg16 syntenyNetRn3
+    # 2784011730 bases of 2865248791 (97.165%) in intersection
+
+    # Add entries for net and chain to rat/hg17 trackDb
+
+    # make net
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtChain
+    mkdir ratNet
+    time netSplit rat.net ratNet
+    #	real    12m1.478s
+    #	user    8m35.050s
+    #	sys     1m7.230s
+
+    mkdir ../axtNet
+    foreach n (ratNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt ratNet/$c.net chain/$c.chain \
+		/cluster/data/hg17/nib \
+		/cluster/data/rn3/nib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> axtNet/$c.axt"
+    end
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
+    cd /cluster/data/hg17/bed/blastz.rn3/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
+
+    #  Convert those axt files to psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/pslBest
+    for I in chr*BestRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
+
+     # check results
+    # featureBits hg17 blastzBestRn3
+    #	970005525 bases of 2866216770 (33.843%) in intersection
+    # featureBits hg16 blastzBestRn3
+    #	976121391 bases of 2865248791 (34.068%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg17/axtBest/Rn3
+     cd /gbdb/hg17/axtBest/Rn3
+     ln -s /cluster/data/hg17/bed/blastz.rn3/axtNet/chr*.axt .
+     cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+     rm -f axtInfoInserts.sql
+     foreach f (/gbdb/hg17/axtBest/Rn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+    hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
+    #	table axtInfo may already exist, ignore create error.
+    hgsql hg17 < axtInfoInserts.sql
+
+# MAKING RAT SYNTENY (DONE - 2004-06-14 - Hiram)
+
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/syntenyRn3
+cd /cluster/data/hg17/bed/syntenyRn3
+
+# Copy all the needed scripts from /cluster/data/hg16/bed/syntenyMm3
+cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
+cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
+
+./syntenicBest.pl -db=hg17 -table=blastzBestRn3
+./smooth.pl
+./joinsmallgaps.pl
+./fillgap.pl -db=hg17 -table=blastzBestRn3
+./synteny2bed.pl
+#	The five commands above
+#	real    208m6.514s
+#	user    0m23.120s
+#	sys     0m5.010s
+
+hgLoadBed hg17 syntenyRn3 ucsc100k.bed
+
+
+# MAKING RAT AXTTIGHT FROM AXTBEST (DONE - 2004-06-15 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/pslTight
+    for I in chr*TightRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
+
+    # copy  axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
+
+# BLASTZ CHICKEN (GALGAL2) (WORKING - 2004-06-14 - Fan)
+
+    ssh kk
+    mkdir /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
+    cd /cluster/data/hg17/bed
+    ln -s /cluster/data/hg17/bed/blastz.galGal2.2004-06-14 blastz.galGal2
+    cd blastz.galGal2
+    # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
+    # repeats.
+    cat << '_EOF_' > DEF
+# human vs. chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/iscratch/i/hg17/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.chicken
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken
+SEQ2_DIR=/iscratch/i/galGal2/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/store5/gs.18/build35/bed/blastz.galGal2
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/hg17/bed/blastz.galGal2
+    bash
+    source DEF
+    # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run0.sh
+    #	it is a generic script and works for any assembly
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+Completed: 41943 of 41943 jobs
+CPU time in finished jobs:   15330421s  255507.02m  4258.45h  177.44d  0.486 y
+IO & Wait Time:                673809s   11230.15m   187.17h    7.80d  0.021 y
+Average job time:                 382s       6.36m     0.11h    0.00d
+Longest job:                     4651s      77.52m     1.29h    0.05d
+Submission to last job:        169197s    2819.95m    47.00h    1.96d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.galGal2
+    bash
+    source DEF
+    # script copied over from /cluster/data/mm4/jkStuff/BlastZ_run1.sh
+    #	fixup machine check, should be kki, not kk
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       1894s      31.56m     0.53h    0.02d  0.000 y
+# IO & Wait Time:                  6271s     104.52m     1.74h    0.07d  0.000 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest job:                      131s       2.18m     0.04h    0.00d
+# Submission to last job:           590s       9.83m     0.16h    0.01d
+
+    #	Third cluster run to convert lav's to axt's
+    bash
+    source DEF
+    cd /cluster/data/hg17/bed/blastz.galGal2
+    #	The copy of this in mm4 was broken, fixed here
+    /cluster/data/hg17/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:        426s       7.09m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                  7283s     121.39m     2.02h    0.08d  0.000 y
+# Average job time:                 168s       2.79m     0.05h    0.00d
+# Longest job:                      642s      10.70m     0.18h    0.01d
+# Submission to last job:           642s      10.70m     0.18h    0.01d
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.galGal2
+    mkdir pslChrom
+    set tbl = "blastzGalGal2"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    #	That takes about 30 minutes
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.galGal2/pslChrom
+    for I in *.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done: ${I}"
+    done
+
+# LOAD AffyUclaRatio (WORKING - 2004-06-15 - Hiram)
+#LOAD AffyUclaRatio and AFFY U133A and U133B sequences[DONE hartera Feb 3, 2004]
+# Used consensus/exemplar sequences instead of target sequences
+    # Set up cluster job to align consensus/exemplars to hg17
+    ssh kkr1u00
+    cd /cluster/data/hg17/bed
+    rm -rf affyUcla.2004-02-04/
+    mkdir affyUcla.2004-02-04
+    cd affyUcla.2004-02-04/
+    mkdir -p /iscratch/i/affy
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa /iscratch/i/affy
+    iSync
+
+    ssh kk
+    cd /cluster/data/hg17/bed/affyUcla.2004-02-04/
+    ls -1 /iscratch/i/affy/HG-U133AB_all.fa > affy.lst
+    ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+
+    # Actually do the job with usual para try/check/push/time etc.
+# on 2/4/04:
+#Completed: 491 of 491 jobs
+#CPU time in finished jobs:      23137s     385.61m     6.43h    0.27d  0.001 y
+#IO & Wait Time:                 23057s     384.29m     6.40h    0.27d  0.001 y
+#Average job time:                  94s       1.57m     0.03h    0.00d
+#Longest job:                      617s      10.28m     0.17h    0.01d
+#Submission to last job:           747s      12.45m     0.21h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU133.psl.
+    pslSort dirs raw.psl tmp psl
+    
+    # change filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned region. 
+    # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyU133.psl ../../jkStuff/liftAll.lft warn contig.psl
+
+    # Merge with spot data and load into database.
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/affyUcla.2004-01-28/
+    # added to hashPsls to process shorter Affy probe set names
+    # assumes that names has 2 colons but when shortened to fit in the seq 
+    # database, there is only 1.
+    # e.g. full name: "consensus:HG-U133A:212933_x_at;" short name: "HG-U133A:212933_x_at;"
+    affyUclaMergePslData affyUclaMergePslData -pslFile=affyU133.psl -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt -bedOut=affyUcla.bed -expRecordOut=affyUcla.expRecords -expFile=/projects/compbio/data/microarray/affyUcla/data/expNames -toDiffFile=toDiff.txt
+    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyUcla.sql hg17 affyUcla affyUcla.bed
+    hgLoadPsl hg17 affyU133.psl
+    
+    # Clean up
+    rm -r psl tmp err affyUcla.bed affyUcla.expRecords bed.tab *.debug batch.bak contig.psl raw.psl
+    
+    # Add in sequence data for affyU95 and affyU133 tracks.
+    # Copy probe sequence to /gbdb if it isn't already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa .
+    ln -s /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
+    
+    # use perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # in HG-U95Av2_all.fa seque
+    # reload sequences with "U95Av2" prefix removed so acc matches name used 
+    # in other dependent tables for affyU95Av2 only
+    hgLoadSeq -abbr=U95Av2: hg17 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    hgLoadSeq hg17 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
+
+# GNF ATLAS 2 (WORKING - 2004-06-15 - Hiram
+    # Align probes from GNF1H chip.
+    ssh kk
+    cd /cluster/data/hg17/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    #	This bluearc/geneAtlas2 directory already exists
+    # mkdir -p /cluster/bluearc/geneAtlas2
+    # cp /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa /cluster/bluearc/geneAtlas2
+    ls -1 /scratch/hg/gs.18/build35/maskedContigs > genome.lst
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1h.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      10599s     176.65m     2.94h    0.12d  0.000 y
+# IO & Wait Time:                  3893s      64.88m     1.08h    0.05d  0.000 y
+# Average job time:                  38s       0.64m     0.01h    0.00d
+# Longest job:                      649s      10.82m     0.18h    0.01d
+# Submission to last job:           663s      11.05m     0.18h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl \
+	contig.psl /dev/null
+    #	Processed 80818 alignments
+    liftUp ../affyGnf1h.psl ../../../jkStuff/liftAll.lft warn contig.psl
+    rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/geneAtlas2
+    #	Already symlinked
+    # ln -s /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa \
+    #	/gbdb/hgFixed/affyProbes
+    hgLoadPsl hg17 affyGnf1h.psl
+    hgLoadSeq hg17 /gbdb/hgFixed/affyProbes/gnf1h.fa
+
+XXXX - need affyUcla 2004-06-15
+
+    grep -v U133B ../affyUcla.2004-02-04/affyU133.psl | sed 's/exemplar://' \
+	| sed 's/consensus://' \
+        | sed 's/HG-U133A://' | sed 's/;//' > affyU133A.psl
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfHumanAtlas2MedianRatio \
+    	affyU133A.psl  /cluster/data/hg17/bed/geneAtlas2/affyGnf1h.psl
+    # Note that the unmapped 11000 records are from all-N sequences.
+    hgLoadBed hg17 gnfAtlas2 gnfAtlas2.bed
+
+# GENE SORTER (AKA: FAMILY BROWSER) (WORKING - 2004-06-15 - Hiram)
+#	to be done after knownGene tables are complete from known gene
+#	process.
+#
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/geneSorter.2004-06-15
+ln -s /cluster/data/hg17/bed/geneSorter.2004-06-15 \
+	/cluster/data/hg17/bed/geneSorter
+cd /cluster/data/hg17/bed/geneSorter
+hgClusterGenes hg17 knownGene knownIsoforms knownCanonical
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/hg17/bed/geneSorter/blastp
+cd /cluster/data/hg17/bed/geneSorter/blastp
+pepPredToFa hg17 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/scratch/blast/formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
+
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/hg17/blastp
+mkdir -p /cluster/bluearc/hg17/blastp
+cp -p /cluster/data/hg17/bed/geneSorter/blastp/known.* \
+	/cluster/bluearc/hg17/blastp
+
+#	Had to pick up a new blastall binary (2004-06-15)
+#	Our old one would no longer run on our systems that have
+#	updated Linux versions
+mkdir /cluster/bluearc/blast229
+cd /cluster/bluearc/blast229
+wget --timestamping \
+    ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/2.2.9/blast-2.2.9-ia32-linux.tar.gz
+wget --timestamping \
+    ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/2.2.9/ChangeLog.txt
+wget --timestamping \
+    ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/2.2.9/ReleaseNotes.txt
+tar xvzf blast-2.2.9-ia32-linux.tar.gz
+
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/hg17/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory  (this does not work on kk, need an older
+#				Linux version)
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/self
+cd /cluster/data/hg17/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+/cluster/bluearc/blast229/blastall -p blastp \
+	-d /cluster/bluearc/hg17/blastp/known -i $1 -o $2 \
+	-e 0.01 -m 8 -b 1000
+'_EOF_'
+chmod +x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+# This should finish in ~15 minutes if the cluster is free.
+Completed: 7749 of 7749 jobs
+CPU time in finished jobs:     182148s    3035.81m    50.60h    2.11d  0.006 y
+IO & Wait Time:                 22954s     382.56m     6.38h    0.27d  0.001 y
+Average job time:                  26s       0.44m     0.01h    0.00d
+Longest job:                      372s       6.20m     0.10h    0.00d
+Submission to last job:           871s      14.52m     0.24h    0.01d
+
+# Load into database.  This takes about 30 minutes
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/self/run/out
+time hgLoadBlastTab hg17 knownBlastTab *.tab
+# Scanning through 7749 files
+# Loading database with 11799667 rows
+#	Hg16 was:       11376875 rows
+# real    30m10.761s
+# user    5m25.490s
+# sys     1m0.630s
+
+cd /cluster/data/hg17/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene hg17 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+#	hgsql -e "select count(*) from knownToRefSeq;" hg17
+#	row count changed from 36078 in Hg16 to 36082
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg17 \
+	> refToLl.txt
+hgMapToGene hg17 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#	hgsql -e "select count(*) from knownToLocusLink;" hg17
+#	row count went from 36078 in Hg16 to 36082
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
+#	hgsql -e "select count(*) from knownToPfam;" hg17
+#	row count dropped from 30467 in Hg16 to 29725
+
+XXXX - 2004-06-15 - gnfAtlas2 table does not exist
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene hg17 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
+# Create expression distance table - takes about an hour
+# (Regenerated April 16, 2004 in response to knownToGnfAtlas2 update)
+    hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+    	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene "-type=bed 12" hg17 affyUcla knownGene knownToU133
+#	row count went from 34148 to 36818
+
+# Create expression distance table.  This will take about an hour.
+cd ~/kent/src/hg/near/hgExpDistance
+time hgExpDistance hg17 affyUcla affyUclaExp knownExpDistance \
+	-weights=affyUcla.weight -lookup=knownToU133
+# 42 genes, 42 weights, 26.500000 total wieght
+# Got 36818 unique elements in affyUcla
+# Made knownExpDistance.tab
+# Loaded knownExpDistance
+# Made query index
+# real    80m50.113s
+# user    62m33.290s
+# sys     2m15.200s
+
+#	This command should be done elsewhere, /tmp or something like that
+#	It makes a temporary .tab file of almost 1 Gb
+#	row count went from 34148000 to 36818000
+
+# Create table that maps between known genes and 
+# the GNF data.
+hgMapToGene hg17 affyU95 knownGene knownToU95
+cd /tmp
+#	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
+hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+#	row count went from 11718000 to 17330000
+#  original makeNear.doc had this as:
+# hgExpDistance hg17 affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
+
+# Make sure that GO database is up to date.
+See README in /cluster/store1/geneOntology.
+#	I update this GO database very carefully, checking that all
+#	structures in it remain the same from release to release and
+#	backing up the current go DB in a backup database.  In this case
+#	the backup is go040107 - when it was loaded for Mm4, and the new
+#	go database is based on data from Dec 17th 2003 and Feb 2004 according
+#	to the time stamp on the fetched data.  This build was done in
+#	/cluster/store1/geneOntology/20040217
+
+cd /cluster/data/hg17/bed/geneSorter
+
+# Create knownToEnsembl column
+hgMapToGene hg17 ensGene knownGene knownToEnsembl
+#	table row count went from previous version: 36068 to 38251
+
+# Make knownToCdsSnp column.  This is a little complicated by
+# having to merge data form the snpTsc and the snpNih tracks.
+hgMapToGene hg17 snpTsc knownGene knownToCdsSnp -createOnly -all -cds
+hgMapToGene hg17 snpTsc knownGene snp1 -noLoad -all -cds
+hgMapToGene hg17 snpNih knownGene snp2 -noLoad -all -cds
+sort snp1.tab snp2.tab > knownToCdsSnp.tab
+rm snp1.tab snp2.tab
+hgsql \
+    -e 'load data local infile "knownToCdsSnp.tab" into table knownToCdsSnp;' \
+	hg17
+#	row count went from 87273 to 106199
+
+# Make C. elegans ortholog column using blastp on wormpep.
+# First make C. elegans protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/ce1/blastp should have data
+
+# Create the ceBlastTab  (the blastall binary only works on kk9 for now ...)
+ssh kk9
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/ce1
+cd /cluster/data/hg17/bed/geneSorter/blastp/ce1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/ce1/blastp/wormPep \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# This should finish in ~10 minutes if the cluster is free.
+# Here's the para time results
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      28869s     481.16m     8.02h    0.33d  0.001 y
+# IO & Wait Time:                 20454s     340.89m     5.68h    0.24d  0.001 y
+# Average job time:                   6s       0.11m     0.00h    0.00d
+# Longest job:                       52s       0.87m     0.01h    0.00d
+# Submission to last job:           584s       9.73m     0.16h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/ce1/run/out
+hgLoadBlastTab hg17 ceBlastTab -maxPer=1 *.tab
+#	row count went from 25599 to 26958
+
+# Make mouse ortholog column using blastp on mouse known genes.
+# First make mouse protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This already exists.  See makeMm4.doc for procedure
+#	the directory: /cluster/bluearc/mm4/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/mm4
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm4
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/mm4/blastp/known \
+	-i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+# (wordLine wouldn't run on kk9:
+#	wordLine: /lib/i686/libc.so.6: version `GLIBC_2.3' not found
+#	run this echo statement on hgwdev
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+#	takes about 15 minutes:
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      54179s     902.98m    15.05h    0.63d  0.002 y
+# IO & Wait Time:                 20428s     340.47m     5.67h    0.24d  0.001 y
+# Average job time:                  10s       0.16m     0.00h    0.00d
+# Longest job:                       76s       1.27m     0.02h    0.00d
+# Submission to last job:          2031s      33.85m     0.56h    0.02d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm4/run/out
+hgLoadBlastTab hg17 mmBlastTab -maxPer=1 *.tab
+# Scanning through 7748 files
+# Loading database with 35611 rows
+#	row count went from 33191 to 35611
+
+# Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/dr1/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/dr1
+cd /cluster/data/hg17/bed/geneSorter/blastp/dr1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/dr1/blastp/ensembl \
+	-i $1 -o $2 -e 0.005 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      40575s     676.24m    11.27h    0.47d  0.001 y
+# IO & Wait Time:                 19781s     329.69m     5.49h    0.23d  0.001 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest job:                       95s       1.58m     0.03h    0.00d
+# Submission to last job:          2036s      33.93m     0.57h    0.02d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/dr1/run/out
+hgLoadBlastTab hg17 drBlastTab -maxPer=1 *.tab
+# Scanning through 7748 files
+# Loading database with 32204 rows
+#	row count went from 30339 to 32204
+
+# Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on RefSeq.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/sc1/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/sc1
+cd /cluster/data/hg17/bed/geneSorter/blastp/sc1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/sc1/blastp/sgd \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:       8577s     142.96m     2.38h    0.10d  0.000 y
+# IO & Wait Time:                 19756s     329.26m     5.49h    0.23d  0.001 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest job:                       15s       0.25m     0.00h    0.00d
+# Submission to last job:          1172s      19.53m     0.33h    0.01d
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/sc1/run/out
+hgLoadBlastTab hg17 scBlastTab -maxPer=1 *.tab
+#	row count went from 17089 to 17886
+
+# Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+# First make SwissProt protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/dm1/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm1
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/dm1/blastp/flyBase \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      33371s     556.18m     9.27h    0.39d  0.001 y
+# IO & Wait Time:                 19546s     325.77m     5.43h    0.23d  0.001 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest job:                       53s       0.88m     0.01h    0.00d
+# Submission to last job:          1657s      27.62m     0.46h    0.02d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
+hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
+# Scanning through 7748 files
+# Loading database with 28645 rows
+#	row count went from 27173 to 28645
+

@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.109 2004/06/03 00:02:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.114 2004/06/13 21:52:19 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -392,6 +392,23 @@ filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
+void scoreUi(struct trackDb *tdb)
+/* Put up UI for filtering bed track based on a score threshold */
+{
+char scoreVar[256];
+int scoreSetting;
+int scoreVal = 0;
+char tempScore[256];
+/* initial value of score theshold is 0, unless
+ * overridden by the scoreDefault setting in the track */
+char *scoreDefault = trackDbSettingOrDefault(tdb, "scoreDefault", "0");
+printf("<p><b>Only Show items that score above </b>: ");
+snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
+scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
+safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
+cgiMakeTextVar( scoreVar, tempScore, 4);
+}
+
 void zooWiggleUi(struct trackDb *tdb )
 /* put up UI for zoo track with one species on each line
  * and checkboxes to toggle each of them on/off*/
@@ -560,7 +577,7 @@ void rulerUi(struct trackDb *tdb)
 {
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
-puts("<P><B>Zoom:&nbsp;</B>");
+puts("<P><B>Zoom in:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 }
 
@@ -588,30 +605,25 @@ for (i = 0; i < speciesCt; i++)
     }
 puts("</TR></TABLE><BR>");
 
-safef(option, sizeof(option), "%s.%s", tdb->tableName, "mafCodon");
 
-#ifdef CODON_HIGHLIGHT
 puts("<p><b>Base-level codon highlighting:</b></p>" );
-currentCodonMode = cartCgiUsualString(cart, option, "Gene");
 
-/* Dissable codon highlighting */
-puts("&nbsp; &nbsp; None &nbsp;");
-cgiMakeRadioButton(option, "0", sameString("0", currentCodonMode));
+//#define CODON_HIGHLIGHT
+#ifdef CODON_HIGHLIGHT
 
-/* User-specified frames 1-3 */
-puts("&nbsp; &nbsp; Frame 1 &nbsp;");
-cgiMakeRadioButton(option, "1", sameString("1", currentCodonMode));
-puts("&nbsp; &nbsp; Frame 2 &nbsp;");
-cgiMakeRadioButton(option, "2", sameString("2", currentCodonMode));
-puts("&nbsp; &nbsp; Frame 3 &nbsp;");
-cgiMakeRadioButton(option, "3", sameString("3", currentCodonMode));
-puts("<br>");
+safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
+currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
+
+/* Disable codon highlighting */
+cgiMakeRadioButton(option, MAF_FRAME_NONE, 
+                sameString(MAF_FRAME_NONE, currentCodonMode));
+puts("None &nbsp;");
 
 /* Use gene pred */
-puts("&nbsp; &nbsp; CDS-annotated frame &nbsp;");
-cgiMakeRadioButton(option, "Gene", sameString("Gene", currentCodonMode));
-puts("&nbsp; &nbsp; based on &nbsp;");
-safef(option, sizeof(option), "%s.%s", tdb->tableName, "mafGenePred");
+cgiMakeRadioButton(option, MAF_FRAME_GENE, 
+                        sameString(MAF_FRAME_GENE, currentCodonMode));
+puts("CDS-annotated frame based on");
+safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
 genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
 
 #else
@@ -853,7 +865,7 @@ else if (sameString(track, "humMusL") ||
  * For crossSpeciesUi, the
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
-else if (startsWith("selfChain", track))
+else if (endsWith("chainSelf", track))
     crossSpeciesUi(tdb);
 else if (sameString(track, "orthoTop4"))
     /* still used ?? */
@@ -870,13 +882,19 @@ else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
 else 
     {
-    /* handle all tracks with type "psl xeno <otherDb>" */
+    /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
     if (tdb->type != NULL)
         typeLine = cloneString(tdb->type);
     wordCount = chopLine(typeLine, words);
     
     if (sameWord(words[0], "genePred"))
 	        cdsColorOptions(tdb, 2);
+    /* if bed has score then show optional filter based on score */
+    if (sameWord(words[0], "bed") && wordCount == 3)
+                {
+                if (atoi(words[1]) > 4)
+                    scoreUi(tdb);
+                }
     else if (sameWord(words[0], "psl"))
                 {
                 if (wordCount == 3)

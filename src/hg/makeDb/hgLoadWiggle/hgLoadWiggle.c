@@ -7,16 +7,19 @@
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "dystring.h"
+#include "chromInfo.h"
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.9 2004/03/30 00:47:06 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.11 2004/06/08 20:33:36 galt Exp $";
 
 /* Command line switches. */
-boolean noBin = FALSE;		/* Suppress bin field. */
-boolean strictTab = FALSE;	/* Separate on tabs. */
-boolean oldTable = FALSE;	/* Don't redo table. */
-char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
+static boolean noBin = FALSE;		/* Suppress bin field. */
+static boolean strictTab = FALSE;	/* Separate on tabs. */
+static boolean oldTable = FALSE;	/* Don't redo table. */
+static char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
+
+static struct hash *chromHash = NULL;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -43,7 +46,41 @@ errAbort(
   );
 }
 
-int findWiggleSize(char *fileName)
+static struct hash *loadAllChromInfo(char *database)
+/* Load up all chromosome infos. */
+{
+struct chromInfo *el;
+struct sqlConnection *conn = sqlConnect(database);
+struct sqlResult *sr = NULL;
+struct hash *ret;
+char **row;
+
+ret = newHash(0);
+
+sr = sqlGetResult(conn, "select * from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = chromInfoLoad(row);
+    verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
+    hashAdd(ret, el->chrom, (void *)(& el->size));
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return ret;
+}
+
+static unsigned chromosomeSize(char *chromosome)
+/* Return full extents of chromosome.  Warn and fill in if none. */
+{
+struct hashEl *el = hashLookup(chromHash,chromosome);
+
+if (el == NULL)
+    errAbort("Couldn't find size of chromosome %s", chromosome);
+return *(unsigned *)el->val;
+}
+
+
+static int findWiggleSize(char *fileName)
 /* Read first line of file and figure out how many words in it. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -95,6 +132,10 @@ int lineCount = 0;
 
 while (lineFileNext(lf, &line, NULL))
     {
+    char *chrName;
+    int chrStart;
+    int chrEnd;
+
     ++lineCount;
     dupe = cloneString(line);
     if (strictTab)
@@ -102,10 +143,13 @@ while (lineFileNext(lf, &line, NULL))
     else
 	wordCount = chopLine(line, words);
     lineFileExpectWords(lf, wiggleSize, wordCount);
+    chrName = cloneString(words[0]);
+    chrStart = lineFileNeedNum(lf, words, 1);
+    chrEnd = lineFileNeedNum(lf, words, 2);
     AllocVar(wiggle);
-    wiggle->chrom = cloneString(words[0]);
-    wiggle->chromStart = lineFileNeedNum(lf, words, 1);
-    wiggle->chromEnd = lineFileNeedNum(lf, words, 2);
+    wiggle->chrom = chrName;
+    wiggle->chromStart = chrStart;
+    wiggle->chromEnd = chrEnd;
     wiggle->line = dupe;
     slAddHead(pList, wiggle);
     }
@@ -121,32 +165,93 @@ struct wiggleStub *wiggle;
 FILE *f = mustOpen(fileName, "w");
 char *words[64];
 int i, wordCount;
-unsigned int wiggleCount;
 
 for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
     {
-    if (!noBin)
-        fprintf(f, "%u\t", hFindBin(wiggle->chromStart, wiggle->chromEnd));
+    static char *chrom = NULL;
+    static unsigned size = 0;
+    unsigned start;
+    unsigned end;
+    unsigned span;
+    unsigned count;
+    unsigned validCount;
+    boolean valid = TRUE;
     if (strictTab)
 	wordCount = chopTabs(wiggle->line, words);
     else
 	wordCount = chopLine(wiggle->line, words);
-    for (i=0; i<wordCount; ++i)
-        {
-	if (i==7)
-	    {
-	    if (pathPrefix )
-		fprintf(f,"%s/", pathPrefix );
-	    else
-		fprintf(f,"/gbdb/%s/wib/", database );
-	    }
-	fputs(words[i], f);
-	if (i == wordCount-1)
-	    fputc('\n', f);
-	else
-	    fputc('\t', f);
+    start = sqlUnsigned(words[1]);
+    end = sqlUnsigned(words[2]);
+    span = sqlUnsigned(words[4]);
+    count = sqlUnsigned(words[5]);
+    validCount = sqlUnsigned(words[10]);
+    if (chrom && differentWord(chrom, words[0]))
+	{
+	chrom = words[0];
+	size = chromosomeSize(chrom);
+verbose(3, "chrom: %s size: %u\n", chrom, size);
 	}
-    	(void) sscanf(words[7], "%d", &wiggleCount);
+    else if (!chrom)
+	{
+	chrom = words[0];
+	size = chromosomeSize(chrom);
+verbose(3, "chrom: %s size: %u\n", chrom, size);
+	}
+    valid = TRUE;
+    if (end > size)
+	{
+	unsigned overrun = 0;
+	unsigned dropCount = 0;
+	overrun = end - size;
+	dropCount = 1 + (overrun / span);
+	warn("WARNING: Exceeded %s size %u > %u. dropping %u data point(s)", chrom, end, size, dropCount);
+	if (dropCount >= count)
+	    valid = FALSE;
+	else
+	    {
+	    count -= dropCount;
+	    if (validCount > count)
+		validCount = count;
+	    if ((end-(dropCount*span)) > start)
+		end -= dropCount*span;
+	    else
+		valid = FALSE;
+	    }
+	}
+    if (valid)
+	{
+	if (!noBin)
+	    fprintf(f, "%u\t", hFindBin(wiggle->chromStart, wiggle->chromEnd));
+	for (i=0; i<wordCount; ++i)
+	    {
+	    switch(i)
+		{
+		case 2:
+		    fprintf(f,"%u", end);
+		    break;
+		case 5:
+		    fprintf(f,"%u", count);
+		    break;
+		case 7:
+		    if (pathPrefix )
+			fprintf(f,"%s/", pathPrefix );
+		    else
+			fprintf(f,"/gbdb/%s/wib/", database );
+		    fputs(words[i], f);
+		    break;
+		case 10:
+		    fprintf(f,"%u", validCount);
+		    break;
+		default:
+		    fputs(words[i], f);
+		    break;
+		}
+	    if (i == wordCount-1)
+		fputc('\n', f);
+	    else
+		fputc('\t', f);
+	    }
+	}
     }
 fclose(f);
 }
@@ -209,6 +314,25 @@ void hgLoadWiggle(char *database, char *track, int wiggleCount, char *wiggleFile
 int wiggleSize = findWiggleSize(wiggleFiles[0]);
 struct wiggleStub *wiggleList = NULL;
 int i;
+
+chromHash = loadAllChromInfo(database);
+
+if (verboseLevel() > 2)
+    {
+    /*struct chromInfo *ci;*/
+    struct hashCookie cookie;
+    struct hashEl *el;
+
+    cookie = hashFirst(chromHash);
+
+    verbose(3,"chrom\tsize\n");
+    while ((el = hashNext(&cookie)) != NULL)
+	{
+	unsigned size;
+	size = chromosomeSize(el->name);
+	verbose(3,"%s\t%u\n", el->name, size);
+	}
+    }
 
 for (i=0; i<wiggleCount; ++i)
     loadOneWiggle(wiggleFiles[i], wiggleSize, &wiggleList);

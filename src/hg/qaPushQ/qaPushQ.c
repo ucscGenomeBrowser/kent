@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.46 2004/06/01 23:17:37 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.53 2004/06/14 20:54:03 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -164,7 +164,7 @@ char *colHdr[] = {
 "Parent Queue ID",
 "Priority",
 "Rank",
-"&nbsp;&nbsp;Submission&nbsp;&nbsp; Date",
+"&nbsp;&nbsp;&nbsp;&nbsp;Date&nbsp;&nbsp;&nbsp;&nbsp;",
 "New?",
 "Track",
 "Databases",
@@ -758,21 +758,27 @@ switch(col)
 	
 	
     case e_priority:
-	printf("<td>%s", ki->priority);
-	if (ki->priority[0] != 'L')
-	{
-	printf("&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>", 
-	    ki->qid, newRandState, 
-	    ki->qid, newRandState, 
-	    ki->qid, newRandState, 
-	    ki->qid, newRandState
-	    );
-	}
-	printf("</td>\n");
+	if (ki->priority[0] == 'L')
+	    {
+	    printf("<td>%s</td>", ki->priority);
+	    }
+	else
+	    {
+	    printf(
+		"<td><table><tr><td>%s</td><td>"
+		"<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
+		"<A href=\"/cgi-bin/qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
+		"</td></tr><tr><td>&nbsp</td><td>"
+		"<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
+		"<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>"
+		"</td></tr></table></td>\n", 
+		ki->priority,
+		ki->qid, newRandState, 
+		ki->qid, newRandState, 
+		ki->qid, newRandState, 
+		ki->qid, newRandState
+		);
+	    }
 	break;
 	
     case e_rank:
@@ -2822,7 +2828,9 @@ printf("< - click to move the column to the left.<br>\n");
 printf("> - click to move the column to the right.<br>\n");
 printf("<br>\n");
 printf("^ - click to raise the priority of the record higher within the priority-class.<br>\n");
-printf("v - click to lower the  priority.<br>\n");
+printf("v - click to lower the priority.<br>\n");
+printf("T - click to raise to top priority.<br>\n");
+printf("B - click to lower to bottom priority.<br>\n");
 printf("<br>\n");
 printf("Queue Id - click to edit or see the details page for the record.<br>\n");
 printf("<br>\n");
@@ -2967,7 +2975,7 @@ char *cpassword   = NULL;
 
 struct sqlConnection *betaconn = NULL;
 
-struct dbDb *ki, *kiList = NULL, dbDbTemp;
+struct dbDb *ki=NULL, *kiList=NULL, *dbDbTemp=NULL;
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -2978,8 +2986,9 @@ int m=0,d=0;
 
 ZeroVar(&dbDbTemp);
 
-centraldb = "hgcentralbeta";
+centraldb = "hgcentral";
 
+/*
 chost     = cfgOption("db.host"    );
 cuser     = cfgOption("db.user"    );
 cpassword = cfgOption("db.password");
@@ -2990,7 +2999,10 @@ if (sameString(utsName.nodename,"hgwdev"))
     cuser     = cfgOption("central.user"    );
     cpassword = cfgOption("central.password");
     }
-
+*/
+chost     = cfgOption("archivecentral.host"    );
+cuser     = cfgOption("archivecentral.user"    );
+cpassword = cfgOption("archivecentral.password");
 
 webStart(NULL, "Track and Table Releases");
 
@@ -3019,12 +3031,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-dbDbTemp.name        = cloneString("zoo1");
-dbDbTemp.description = cloneString("Jun. 2002");
-dbDbTemp.organism    = cloneString("NISC (Zoo)");
-dbDbTemp.genome      = cloneString("NISC (Zoo)");
-dbDbTemp.sourceName  = cloneString("Comparative Sequencing Program Target 1");
-slAddHead(&kiList, &dbDbTemp);
+AllocVar(dbDbTemp);
+dbDbTemp->name        = cloneString("zoo1");
+dbDbTemp->description = cloneString("Jun. 2002");
+dbDbTemp->organism    = cloneString("NISC (Zoo)");
+dbDbTemp->genome      = cloneString("NISC (Zoo)");
+dbDbTemp->sourceName  = cloneString("Comparative Sequencing Program Target 1");
+slAddHead(&kiList, dbDbTemp);
 
 slReverse(&kiList);
 sqlDisconnect(&betaconn);
@@ -3032,6 +3045,22 @@ sqlDisconnect(&betaconn);
 // is this necessary? are we really only allowed one remoteconn at a time?
 conn = sqlConnectRemote(host, user, password, database);
 
+/* 10 Latest Changes */
+//printf("<li><a CLASS=\"toc\" HREF=\"#recent\" style=\"color:red\"> 10 Latest Changes (all assemblies) </a></li>");
+printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
+//printf("<li><a CLASS=\"leftbar\" HREF=\"#recent\" > 10 Latest Changes (all assemblies) </a></li>");
+
+/*
+printf("<li><a HREF=\"#recent\" " 
+"style=\""
+".link {color: #FF0000} "
+".visited {color: #00FF00} "
+".hover {color: #FF00FF} "
+".active {color: #0000FF} "
+"\"> 10 Most Recent Changes (all assemblies) </a></li>\n");
+*/
+
+/* regular log index #links */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
     safef(tempName,sizeof(tempName),ki->organism);
@@ -3039,7 +3068,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	{
 	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
 	}
-    printf("<li><a CLASS=\"toc\" HREF=\"#%s\">%s %s (%s)</a></li>",
+    printf("<li><a CLASS=\"toc\" HREF=\"#%s\">%s %s (%s)</a></li>\n",
 	ki->name,tempName,ki->description,ki->name);
     }
 
@@ -3050,6 +3079,37 @@ printf(" For more information about the tracks and tables listed on this page, r
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
 printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
 
+/* 10 LATEST CHANGES */
+webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
+printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
+    "<TR>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Assembly</B></FONT></TD>\n"
+    "<TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT></TD>\n"
+    "</TR>\n"
+    );
+safef(query,sizeof(query),
+    "select releaseLog, dbs, qadate from pushQ "
+    "where priority='L' and releaseLog != '' and dbs != '' "
+    "order by qadate desc, qid desc " 
+    "limit 10 " 
+    );
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sscanf(cloneStringZ(&row[2][5],2),"%d",&m);
+    sscanf(cloneStringZ(&row[2][8],2),"%d",&d);
+    printf("<TR valign=top><TD align=left>\n"
+	"%s</td>\n"
+	"<td>%s</td>\n"
+	"<td>%02d %s %s</td>\n"
+	"</tr>\n",
+	row[0], row[1], d, numberToMonth[m-1], cloneStringZ(row[2],4) );
+    }
+sqlFreeResult(&sr);
+printf("</table>\n");
+
+/* REGULAR LOG */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
     safef(tempName,sizeof(tempName),ki->organism);
@@ -3088,8 +3148,6 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     printf("</table>\n");
 
     }
-sqlFreeResult(&sr);
-
 
 dbDbFreeList(&kiList);
 

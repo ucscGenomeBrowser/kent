@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.39 2004/06/01 16:49:02 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.43 2004/06/10 05:37:08 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -43,7 +43,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %dx1 - Make a server to quickly find where DNA occurs in genome.\n"
+  "gfServer v %d - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
   "   gfServer start host port file(s)\n"
   "   Where the files are in .nib or .2bit format\n"
@@ -68,6 +68,7 @@ errAbort(
   "Options:\n"
   "   -tileSize=N size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
   "               proteins (or translated nucleotides).\n"
+  "   -stepSize=N spacing between tiles. Default is tileSize.\n"
   "   -minMatch=N Number of n-mer matches that trigger detailed alignment\n"
   "               Default is 2 for nucleotides, 3 for protiens.\n"
   "   -maxGap=N   Number of insertions or deletions allowed between n-mers.\n"
@@ -198,11 +199,11 @@ void dnaQuery(struct genoFind *gf, struct dnaSeq *seq,
 /* Handle a query for DNA/DNA match. */
 {
 struct gfClump *clumpList = NULL, *clump;
-int limit = 3000;
+int limit = 1000;
 int clumpCount = 0, hitCount = -1;
 struct lm *lm = lmInit(0);
 
-if (seq->size > 3*gf->tileSize)
+if (seq->size > gf->tileSize + gf->stepSize + gf->stepSize)
      limit = maxDnaHits;
 clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 if (clumpList == NULL)
@@ -465,6 +466,7 @@ logIt("gfServer version %d on host %s, port %s\n", gfVersion,
 	hostName, portName);
 if (doTrans)
     {
+    uglyf("starting translated server...\n");
     logIt("setting up translated index\n");
     gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
     	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 

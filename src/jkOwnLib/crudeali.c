@@ -14,7 +14,7 @@
 #include "dnaseq.h"
 #include "crudeali.h"
 
-static char const rcsid[] = "$Id: crudeali.c,v 1.2 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: crudeali.c,v 1.3 2004/06/03 20:50:45 galt Exp $";
 
 #define maxTileSize 16
 
@@ -384,7 +384,7 @@ static int makeHits16(struct fastProber *fp, struct nt4Seq *target, struct crude
 {
 bits32 *bases = target->bases;
 struct probeTile **hash = fp->hash;
-bits32 acc;
+unsigned long acc;
 int hitCount = 0;
 int i;
 int baseWordCount = (target->baseCount/caTileSize);
@@ -395,14 +395,14 @@ int baseOffset = 0;
 
 for (i=0; i<chunkCount; ++i)
     {
-    acc = ((bits32)(hash[tileHashFunc(bases[0])])
-        | (bits32)(hash[tileHashFunc(bases[1])])
-        | (bits32)(hash[tileHashFunc(bases[2])])
-        | (bits32)(hash[tileHashFunc(bases[3])])
-        | (bits32)(hash[tileHashFunc(bases[4])])
-        | (bits32)(hash[tileHashFunc(bases[5])])
-        | (bits32)(hash[tileHashFunc(bases[6])])
-        | (bits32)(hash[tileHashFunc(bases[7])]));
+    acc = ((unsigned long)(hash[tileHashFunc(bases[0])])
+        |  (unsigned long)(hash[tileHashFunc(bases[1])])
+        |  (unsigned long)(hash[tileHashFunc(bases[2])])
+        |  (unsigned long)(hash[tileHashFunc(bases[3])])
+        |  (unsigned long)(hash[tileHashFunc(bases[4])])
+        |  (unsigned long)(hash[tileHashFunc(bases[5])])
+        |  (unsigned long)(hash[tileHashFunc(bases[6])])
+        |  (unsigned long)(hash[tileHashFunc(bases[7])]));
     if (acc)
         {
         hitCount = makeIndividualHits16(hash, bases, baseOffset, chunkSize, hits, maxHitCount, hitCount);

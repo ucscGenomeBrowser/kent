@@ -9,7 +9,7 @@ opts="$*"
 databases="mm4 mm3 rn3 hg16 fr1 dm1 sacCer1 panTro1 galGal2"
 
 # other options to include
-otherOpts="-updateDownloadSeqs"
+otherOpts=""
 
 # gbRoot on hgnfs1
 gbRoot=/genbank

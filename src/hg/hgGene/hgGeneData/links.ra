@@ -41,6 +41,14 @@ idSql select refLink.locusLinkId from kgXref,refLink where kgID = '%s' and kgXre
 url http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%s
 priority 45
 
+name entrezGene
+shortLabel Entrez Gene
+tables kgXref refLink
+idSql select refLink.locusLinkId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
+priority 45.1
+
+
 #name genBank
 #shortLabel GenBank
 #tables kgXref

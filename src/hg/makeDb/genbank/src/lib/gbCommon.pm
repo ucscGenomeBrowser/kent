@@ -22,7 +22,7 @@ BEGIN {
                            makeFileDir removeDir renameFile getFileSize getFileModTime
                            runProg runProgNoAbort callProg runPipe md5Files
                            gbChmod getReleases getLastRelease getUpdates
-                           parseOptEq inList getTmpDir readFile makeAbs
+                           parseOptEq inList inListRef getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
                            findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
@@ -541,6 +541,17 @@ sub inList($@) {
     return 0;
 }
 
+# check if string contained in a list by reference
+sub inListRef($$) {
+    my($str, $list) = @_;
+    foreach my $el (@{$list}) {
+        if ($el eq $str) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 # get a temporary directory for this process, either in /var/tmp or
 # a specified in the TMPDIR env
 sub getTmpDir($) {
@@ -802,7 +813,9 @@ sub runMysqlDump($) {
     my($args) = @_;
 
     my($user, $pass) = getMysqlUser();
-    runProg("mysqldump -u$user -p$pass $args");
+    # still not super secure, since ps can see env.
+    $main::ENV{MYSQL_PWD} = $pass;
+    runProg("mysqldump -u$user $args");
 }
 
 # execute a mysql with genome user/password
@@ -810,7 +823,9 @@ sub runMysql($) {
     my($args) = @_;
 
     my($user, $pass) = getMysqlUser();
-    runProg("mysql -u$user -p$pass $args");
+    # still not super secure, since ps can see env.
+    $main::ENV{MYSQL_PWD} = $pass;
+    runProg("mysql -u$user $args");
 }
 
 # get download time file for a db

@@ -328,7 +328,7 @@ if (-e /tmp/danRer1/$2/$2.cat) /bin/cp /tmp/danRer1/$2/$2.cat ./
     cd /cluster/data/danRer1
     cat */lift/ordered.lft > jkStuff/liftAll.lft
 
-# SIMPLE REPEAT [TRF] TRACK  (in progress, 2004-05-28, hartera)
+# SIMPLE REPEAT [TRF] TRACK  (DONE, 2004-06-07, hartera)
     # TRF runs pretty quickly now... it takes a few hours total runtime, 
     # so instead of binrsyncing and para-running, just do this on the
     # local fileserver
@@ -354,4 +354,463 @@ if (-e /tmp/danRer1/$2/$2.cat) /bin/cp /tmp/danRer1/$2/$2.cat ./
     wc -l jobs.csh
     ls -1 trf | wc -l
     endsInLf trf/*
+# trf crashes with chr10_5 so remove from job list for now and run the rest 
+# of the jobs.  use jobs1.csh
+# contacted authors of trf - they are going to send a new binary. In the
+# meantime, they ran chr10_5.fa through the fixed version of trf
+# Need to change filenames from chr10_5.fa.* to chr10_5.tf.*
+    mkdir /cluster/data/danRer1/bed/simpleRepeat/test
+    cd /cluster/data/danRer1/bed/simpleRepeat/test
+    mkdir trf
+
+    # Download and unzip results.zip file in this directory
+cat << '_EOF_' > changefileName.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+while (<STDIN>) {
+    chomp;
+    my $a = $_;
+    if ($a =~ /^chr10_5/) {
+       print "cp $a ";
+       $a =~ s/chr10_5.fa/chr10_5.tf/;
+       print "$a\n";
+    }
+}
+'_EOF_'
+
+    # change filenames and copy to /tmp/ directory
+    ls > fileList
+    perl changeFilename.pl < fileList > newFiles
+    cp chr10_5.tf* /tmp/
+
+    # Edit ~/kent/src/hg/trfBig/trfBig.c to remove calls to trfSysCall 
+    # so trf is not used but output files are post processed
+    # make and run trfBig
+    /cluster/home/hartera/bin/i386/trfBig -trf=/cluster/bin/i386/trf \
+            /cluster/data/danRer1/10/chr10_5/chr10_5.fa /dev/null \
+            -bedAt=trf/chr10_5.bed -tempDir=/tmp
+
+    # copy bed file output to directory of bed files for the other sequences
+    cp /cluster/data/danRer1/bed/simpleRepeat/test/trf/chr10_5.bed \
+       /cluster/data/danRer1/bed/simpleRepeat/trf
+
+    liftUp simpleRepeat.bed /cluster/data/danRer1/jkStuff/liftAll.lft warn \
+      trf/*.bed
+
+    # Load into the database:
+    ssh hgwdev
+    hgLoadBed danRer1 simpleRepeat \
+      /cluster/data/danRer1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE, 2004-06-07, hartera)
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/danRer1
+    mkdir bed/simpleRepeat/trfMaskChrom
+    foreach c (`cat chrom.lst`)
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF 
+# (DONE, 2004-06-07, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1
+    # Soft-mask (lower-case) the contig and chr .fa's,
+    # then make hard-masked versions from the soft-masked.
+    set trfCtg=bed/simpleRepeat/trfMask
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    foreach f (*/chr*.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+# This warning is extremely rare -- if it indicates a problem, it's only
+# with the repeat annotation and doesn't affect the masking.
+# WARNING: negative rEnd: -54 chr5:3971603-3971634 (TCTG)n
+# WARNING: negative rEnd: -31 chrNA:145096456-145096484 (TTTG)n
+# WARNING: negative rEnd: -29 chrNA:206929524-206929579 (TCCA)n
+
+    foreach c (`cat chrom.lst`)
+      echo "repeat- and trf-masking contigs of chr$c"
+      foreach d ($c/chr*_?{,?})
+        set ctg=$d:t
+        set f=$d/$ctg.fa
+        maskOutFa -soft $f $f.out $f
+        maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        maskOutFa $f hard $f.masked
+      end
+    end
+# same warning here too. 
+# WARNING: negative rEnd: -31 chrNA_29:4620077-4620105 (TTTG)n
+# WARNING: negative rEnd: -29 chrNA_42:1194625-1194680 (TCCA)n
+# WARNING: negative rEnd: -54 chr5_1:3971603-3971634 (TCTG)n
+# sent these to Arian 
+    # Build nib files, using the soft masking in the fa
+    mkdir nib
+    foreach f (*/chr*.fa)
+      faToNib -softMask $f nib/$f:t:r.nib
+    end
+
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-06-08 - hartera)
+    # Make symbolic links from /gbdb/galGal2/nib to the real nibs.
+    ssh hgwdev
+    cd /cluster/data/danRer1
+    mkdir -p /gbdb/danRer1/nib
+    foreach f (/cluster/data/danRer1/nib/chr*.nib)
+      ln -s $f /gbdb/danRer1/nib
+    end
+    # Load /gbdb/ce2/nib paths into database and save size info
+    # hgNibSeq creates chromInfo table
+    hgNibSeq -preMadeNib danRer1 /gbdb/danRer1/nib */chr*.fa
+    echo "select chrom,size from chromInfo" | hgsql -N danRer1 > chrom.sizes
+    # take a look at chrom.sizes, should be 29 lines
+    wc chrom.sizes
+    
+    # Make one big 2bit file as well, and make a link to it in
+    # /gbdb/danRer1/nib because hgBlat looks there:
+    faToTwoBit */chr*.fa danRer1.2bit
+    ln -s /cluster/data/danRer1/danRer1.2bit /gbdb/danRer1i/nib/
+
+# MAKE GOLD AND GAP TRACKS (DONE, 2004-06-08, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer1
+    hgGoldGapGl -noGl -chromLst=chrom.lst danRer1 /cluster/data/danRer1 .
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER1 (DONE, 2004-06-08, hartera)
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
+
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add danRer1 in all the right places and do
+    make update
+    make alpha
+    cvs commit -m "Added danRer1." makefile
+
+    # Add dbDb and defaultDb entries:
+    echo 'insert into dbDb (name, description, nibPath, organism,  \
+          defaultPos, active, orderKey, genome, scientificName,  \
+          htmlPath, hgNearOk, hgPbOk, sourceName)  \
+          values("danRer1", "Nov. 2003", \
+          "/gbdb/danRer1/nib", "Zebrafish", "chr1:1000-4000", 1, \
+          41, "Zebrafish", "Danio Rerio", \
+          "/gbdb/danRer1/html/description.html", 0, 0, \
+          "Sanger Centre, Danio rerio Sequencing Project Zv3");' \
+    | hgsql -h genome-testdb hgcentraltest
+    echo 'insert into defaultDb (genome, name) \
+          values ("Zebrafish", "danRer1");' \ 
+          | hgsql -h genome-testdb hgcentraltest
+
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (in progress, 2004-06-08, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/danRer1/html
+    cd /cluster/data/danRer1/html
+
+    mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
+    # make a symbolic link from /gbdb/danRer1/html to /cluster/data/danRer1/html
+    ln -s /cluster/data/danRer1/html /gbdb/danRer1/html
+    # NEED TO ADD DESCRIPTION.HTML PAGE
+
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-06-09, hartera)
+    ssh kkr1u00
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/danRer1/nib
+    mkdir -p /iscratch/i/danRer1/nib
+    cp -p /cluster/data/danRer1/nib/chr*.nib /iscratch/i/danRer1/nib
+    # Pseudo-contig fa that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/danRer1/trfFa
+    mkdir /iscratch/i/danRer1/trfFa
+    foreach d (/cluster/data/danRer1/*/chr*_?{,?})
+      cp $d/$d:t.fa /iscratch/i/danRer1/trfFa
+    end
+    rm -rf /iscratch/i/danRer1/rmsk
+    mkdir -p /iscratch/i/danRer1/rmsk
+    cp -p /cluster/data/danRer1/*/chr*.fa.out /iscratch/i/danRer1/rmsk
+    cp -p /cluster/data/danRer1/danRer1.2bit /iscratch/i/danRer1/
+    iSync
+
+# CREATE gc5Base wiggle TRACK (DONE, 2004-06-09, hartera)
+    ssh kki
+    mkdir /cluster/data/danRer1/bed/gc5Base
+    cd /cluster/data/danRer1/bed/gc5Base
+    #   in the script below, the 'grep -w GC' selects the lines of
+    #   output from hgGcPercent that are real data and not just some
+    #   information from hgGcPercent.  The awk computes the number
+    #   of bases that hgGcPercent claimed it measured, which is not
+    #   necessarily always 5 if it ran into gaps, and then the division
+    #   by 10.0 scales down the numbers from hgGcPercent to the range
+    #   [0-100].  Two columns come out of the awk print statement:
+    #   <position> and <value> which are fed into wigAsciiToBinary through
+    #   the pipe.  It is set at a dataSpan of 5 because each value
+    #   represents the measurement over five bases beginning with
+    #   <position>.  The result files end up in ./wigData5.
+    #   A new script is used (from makeHg17.doc) which gets around the
+    #   problem that wigAsciiToBinary was calculating chromEnd to be 
+    #   beyond the real chromosome end 
+
+    mkdir wigData5 dataLimits5
+    cat << '_EOF_' > kkRun.sh
+#!/bin/sh
+NIB=$1
+                                                                                
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+                                                                                
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 danRer1 \
+        /iscratch/i/danRer1/nib | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigAsciiToBinary -dataSpan=5 -chrom=${chr} \
+        -wibFile=wigData5/gc5Base_${chrom} \
+            -name=${chrom} stdin 2> dataLimits5/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x kkRun.sh
+
+    ls /iscratch/i/danRer1/nib  > nibList
+    cat << '_EOF_' > gsub
+#LOOP
+./kkRun.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 nibList single gsub jobList
+    para create jobList
+    para try, check, push ... etc
+# para time
+# Completed: 29 of 29 jobs
+# CPU time in finished jobs:       2450s      40.84m     0.68h    0.03d  0.000 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                  80s       1.33m     0.02h    0.00d
+# Longest job:                      506s       8.43m     0.14h    0.01d
+# Submission to last job:           650s      10.83m     0.18h    0.01d
+
+    # load the .wig files back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/danRer1/wib/gc5Base \
+                 danRer1 gc5Base wigData5/*.wig
+    # and symlink the .wib files into /gbdb
+    mkdir /gbdb/danRer1/wib/gc5Base
+    ln -s `pwd`/wigData5/*.wib /gbdb/danRer1/wib/gc5Base
+
+    # And then the zoomed data view
+    ssh kki
+    cd /cluster/data/danRer1/bed/gc5Base
+    mkdir wigData5_1K dataLimits5_1K
+
+    cat << '_EOF_' > kkRunZoom.sh
+#!/bin/sh
+NIB=$1
+                                                                                
+chr=${NIB/.nib/}
+chrom=${chr#chr}
+                                                                                
+hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 danRer1 \
+        /iscratch/i/danRer1/nib | \
+    grep -w GC | \
+    awk '{if (($3-$2) >= 5) {printf "%d\t%.1f\n", $2+1, $5/10.0} }' | \
+    wigZoom -dataSpan=1000 stdin | wigAsciiToBinary -dataSpan=1000 \
+        -chrom=${chr} -wibFile=wigData5_1K/gc5Base_${chrom}_1K \
+            -name=${chrom} stdin 2> dataLimits5_1K/${chr}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x kkRunZoom.sh
+
+    cat << '_EOF_' > gsubZoom
+#LOOP
+./kkRunZoom.sh $(path1)
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 nibList single gsubZoom jobListZoom
+    para create jobListZoom
+    para try, check, push, ... etc.
+# para time
+# Completed: 29 of 29 jobs
+# CPU time in finished jobs:       2433s      40.55m     0.68h    0.03d  0.000 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                  81s       1.36m     0.02h    0.00d
+# Longest job:                      522s       8.70m     0.14h    0.01d
+# Submission to last job:          2503s      41.72m     0.70h    0.03d
+                                                                                
+    #   Then load these .wig files into the same database as above
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/danRer1/wib/gc5Base \
+        -oldTable danRer1 gc5Base wigData5_1K/*.wig
+    # and symlink these .wib files into /gbdb
+    mkdir -p /gbdb/danRer1/wib/gc5Base
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/danRer1/wib/gc5Base
+
+# BLASTZ FOR HG17 (in progress, 2004-06-00, hartera)
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific.
+
+    mkdir /iscratch/i/danRer1/linSpecRep.notInHuman
+    foreach f (/iscratch/i/danRer1/rmsk/chr*.fa.out) 
+      cp -p $f /iscratch/i/danRer1/linSpecRep.notInHuman/$f:t:r:r.out.spec
+    end
+
+    mkdir /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
+    foreach f (/iscratch/i/gs.18/build35/rmsk/chr*.fa.out) 
+ cp -p $f /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+    iSync
+
+    ssh kk
+    mkdir -p /cluster/data/danRer1/bed/blastz.hg17.2004-06-08
+    ln -s /cluster/data/danRer1/bed/blastz.hg17.2004-06-08 \
+          /cluster/data/danRer1/bed/blastz.hg17
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    # Set L=6000 and abridge repeats - these are the same parameters used
+    # for hg16 and Fugu.
+
+    cat << '_EOF_' > DEF
+# zebrafish vs human (hg17)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Zebrafish
+SEQ1_DIR=/iscratch/i/danRer1/nib/
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/danRer1/linSpecRep.notInHuman
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Human (hg17)
+SEQ2_DIR=/iscratch/i/gs.18/build35/bothMaskedNibs
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer1/bed/blastz.hg17
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.danRer1-hg17.2004-06-08
+    # Need shell scripts from mm4 to do cluster runs
+    mv /cluster/data/mm4/jkStuff/BlastZ*.sh /cluster/data/danRer1/jkStuff/
+    # edit BlastZ_run0.sh
+    # replace line 22: /cluster/home/angie/schwartzbin/ with /cluster/bin/penn/
+    # this is the directory for the latest version of blastz-run
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/danRer1/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# para time
+# Completed: 57970 of 57970 jobs
+# CPU time in finished jobs:   20265671s  337761.18m  5629.35h  234.56d  0.643 y
+# IO & Wait Time:                570125s    9502.09m   158.37h    6.60d  0.018 y
+# Average job time:                 359s       5.99m     0.10h    0.00d
+# Longest job:                    10482s     174.70m     2.91h    0.12d
+# Submission to last job:         73680s    1228.00m    20.47h    0.85d
+
+
+# MAKE 10.OOC, 11.OOC FILE FOR BLAT (DONE, 2004-06-09, hartera)
+    # Use -repMatch=460 (based on size -- for human we use 1024, and
+    # the zebrafish genome is ~45% of the size of the human genome
+    ssh kkr1u00
+    mkdir /cluster/data/danRer1/bed/ooc
+    cd /cluster/data/danRer1/bed/ooc
+    mkdir -p /cluster/bluearc/danRer1
+    ls -1 /cluster/data/danRer1/nib/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/danRer1/11.ooc -repMatch=460
+    # Wrote 44155 overused 11-mers to /cluster/bluearc/danRer1/11.ooc
+    # For 10.ooc, repMatch = 4096 for human, so use 1840
+        blat nib.lst /dev/null /dev/null -tileSize=10 \
+      -makeOoc=/cluster/bluearc/danRer1/10.ooc -repMatch=1840
+    # Wrote 10767 overused 10-mers to /cluster/bluearc/danRer1/10.ooc
+    # keep copies of ooc files in this directory and copy to iscratch
+    cp /cluster/bluearc/danRer1/*.ooc .
+    cp -p /cluster/bluearc/danRer1/*.ooc /iscratch/i/danRer1/
+    iSync
+
+# AUTO UPDATE GENBANK MRNA AND EST RUN  (in progress, 2004-06-09, hartera)
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is a new organism, edit the etc/genbank.conf file and add:
+# danRer1 (zebrafish)
+danRer1.genome = /iscratch/i/danRer1/nib/chr*.nib
+danRer1.lift = /cluster/data/danRer1/jkStuff/liftAll.lft
+danRer1.downloadDir = danRer1
+     # NEED TO DO THIS STILL, WAIT FOR JIM TO CONFIRM, ALSO DO WE NEED 
+     # MAXINTRON FLAG FOR BLAT. LET MARK KNOW WHEN READY TO DO THIS.
+    cvs commit -m "Added danRer1" etc/genbank.conf
+    make
+
+    # Edit src/align/gbBlat to add /iscratch/i/danRer1/11.ooc
+    # Add line:  DANRER_OOC=/iscratch/i/danRer1/11.ooc
+    cvs diff src/align/gbBlat
+    make
+    cvs commit -m "Added 11.ooc for danRer1." src/align/gbBlat
+
+# ENSEMBL GENES (in progress, 2004-06-08, hartera)
+
+   mkdir /cluster/data/danRer1/bed/ensembl
+   cd /cluster/data/danRer1/bed/ensembl
+    # Get the ensembl protein data from
+    # http://www.ensembl.org/Danio_rerio/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Danio_rerio choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box.
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
 

@@ -6,9 +6,9 @@
 #include "common.h"
 #include "rle.h"
 
-static char const rcsid[] = "$Id: rle.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: rle.c,v 1.5 2004/06/07 18:23:10 kent Exp $";
 
-static int countSame(signed char *s, int max)
+static int countSameAsStart(signed char *s, int max)
 /* Count number of signed chars that are the same as first. */
 {
 signed char v = *s;
@@ -34,7 +34,7 @@ int sizeLeft;
 
 while ((sizeLeft = (endIn - s)) != 0)
     {
-    sameCount = countSame(s, sizeLeft);
+    sameCount = countSameAsStart(s, sizeLeft);
     uncSize = s - uncStart;
     if (sameCount >= 3)
         {

@@ -1,13 +1,17 @@
 /* webPcr - Web CGI Program For Fast In-Silico PCR Using gfServer. */
+/* Copyright 2004 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "errAbort.h"
+#include "errabort.h"
 #include "errCatch.h"
 #include "htmshell.h"
 #include "dnautil.h"
-#include "cheapCgi.h"
+#include "dnaseq.h"
+#include "cheapcgi.h"
 #include "gfPcrLib.h"
+#include "gfWebLib.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -18,90 +22,13 @@ errAbort(
   );
 }
 
-struct gfServer
-/* A gfServer with an in-memory index. */
-    {
-    struct gfServer *next;
-    char *host;		/* IP Address of machine running server. */
-    char *port;		/* IP Port on host. */
-    char *seqDir;	/* Where associated sequence lives. */
-    char *name;		/* Name user sees. */
-    };
-
-char *company = "World Famous";
-char *background = NULL;
-struct gfServer *serverList;
-
-struct gfServer *findServer()
-/* Find active server */
-{
-struct gfServer *server = serverList;
-if (cgiVarExists("wp_db"))
-     {
-     char *db = cgiString("wp_db");
-     for (server = serverList; server != NULL; server = server->next)
-          {
-	  if (sameString(db, server->name))
-	      break;
-	  }
-     if (server == NULL)
-          errAbort("wp_db %s not found", db);
-     }
-return server;
-}
-
-void readConfig(char *fileName)
-/* Read configuration file into globals. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *word;
-struct hash *uniqHash = newHash(0);
-
-while (lineFileNextReal(lf, &line))
-    {
-    word = nextWord(&line);
-    if (sameWord("company", word))
-        {
-	company = cloneString(trimSpaces(line));
-	}
-    else if (sameWord("gfServer", word))
-        {
-	struct gfServer *server;
-	char *dupe = cloneString(line);
-	AllocVar(server);
-	server->host = nextWord(&dupe);
-	server->port = nextWord(&dupe);
-	server->seqDir = nextWord(&dupe);
-	server->name = trimSpaces(dupe);
-	if (server->name == NULL || server->name[0] == 0)
-	    errAbort("Badly formed gfServer command line %d of %s:\n%s",
-	    	lf->lineIx, fileName, line);
-	if (hashLookup(uniqHash, server->name))
-	    errAbort("Duplicate gfServer name %s line %d of %s",
-	    	server->name, lf->lineIx, fileName);
-	hashAdd(uniqHash, server->name, NULL);
-	slAddTail(&serverList, server);
-	}
-    else if (sameWord("background", word))
-        {
-	background = cloneString(trimSpaces(line));
-	}
-    else
-        {
-	errAbort("Unrecognized command %s line %d of  %s", word, lf->lineIx, fileName);
-	}
-    }
-
-if (serverList == NULL)
-    errAbort("no gfServer's specified in %s", fileName);
-freeHash(&uniqHash);
-}
+struct gfWebConfig *cfg;	/* Our configuration. */
 
 void doGetPrimers(char *fPrimer, char *rPrimer, int maxSize, int minPerfect, int minGood)
 /* Put up form to get primers. */
 {
-struct gfServer *server;
-printf("<H1>%s In Silico PCR</H1>", company);
+struct gfServerAt *server;
+printf("<H1>%s In Silico PCR</H1>", cfg->company);
 printf("<FORM ACTION=\"../cgi-bin/webPcr\" METHOD=\"GET\">\n");
 printf("Forward Primer: ");
 cgiMakeTextVar("wp_f", fPrimer, 22);
@@ -117,8 +44,8 @@ cgiMakeIntVar("wp_good", minGood, 2);
 printf("<BR>");
 printf("Database: ");
 printf("<SELECT NAME=\"wp_db\">\n");
-printf("  <OPTION SELECTED>%s</OPTION>\n", serverList->name);
-for (server = serverList->next; server != NULL; server = server->next)
+printf("  <OPTION SELECTED>%s</OPTION>\n", cfg->serverList->name);
+for (server = cfg->serverList->next; server != NULL; server = server->next)
     printf("  <OPTION>%s</OPTION>\n", server->name);
 printf("</SELECT>\n");
 printf(" <A HREF=\"../cgi-bin/webPcr?wp_help=on\" TARGET=\"_blank\">User Guide</A> \n");
@@ -136,7 +63,7 @@ if (errCatchStart(errCatch))
     {
     struct gfPcrInput *gpi;
     struct gfPcrOutput *gpoList;
-    struct gfServer *server = findServer();
+    struct gfServerAt *server = gfWebFindServer(cfg->serverList, "wp_db");
 
     AllocVar(gpi);
     gpi->fPrimer = fPrimer;
@@ -146,7 +73,7 @@ if (errCatchStart(errCatch))
     if (gpoList != NULL)
 	{
 	printf("<TT><PRE>");
-	gfPcrOutputWriteAll(gpoList, "fa", "stdout");
+	gfPcrOutputWriteAll(gpoList, "fa", NULL, "stdout");
 	printf("</PRE></TT>");
         ok = TRUE;
 	}
@@ -160,20 +87,6 @@ if (errCatch->gotError)
      }
 errCatchFree(&errCatch); 
 return ok;
-}
-
-char *makePrimer(char *s)
-/* Make primer (lowercased DNA) out of text.  Complain if
- * it is too short or too long. */
-{
-int size = dnaFilteredSize(s);
-int realSize;
-char *primer = needMem(size+1);
-dnaFilter(s, primer);
-realSize = size - countChars(primer, 'n');
-if (realSize < 10 || realSize < size/2)
-   errAbort("%s does not seem to be a good primer", s);
-return primer;
 }
 
 void doHelp()
@@ -217,8 +130,7 @@ puts(
 }
 
 void doMiddle()
-/* Decide which page to put up. */
-/* Put up web page etc. */
+/* Parse out CGI variables and decide which page to put up. */
 {
 int maxSize = 4000;
 int minPerfect = 15;
@@ -244,49 +156,26 @@ if (cgiVarExists("wp_help"))
     }
 else if (cgiVarExists("wp_f") && cgiVarExists("wp_r"))
     {
-    fPrimer = makePrimer(cgiString("wp_f"));
-    rPrimer = makePrimer(cgiString("wp_r"));
+    fPrimer = gfPcrMakePrimer(cgiString("wp_f"));
+    rPrimer = gfPcrMakePrimer(cgiString("wp_r"));
     if (doPcr(fPrimer, rPrimer, maxSize, minPerfect, minGood))
          return;
     }
 doGetPrimers(fPrimer, rPrimer, maxSize, minPerfect, minGood);
 }
 
-static void earlyWarningHandler(char *format, va_list args)
-/* Write an error message so user can see it before page is really started. */
-{
-static boolean initted = FALSE;
-if (!initted)
-    {
-    htmlStart("Very Early Error");
-    initted = TRUE;
-    }
-printf("%s", htmlWarnStartPattern());
-htmlVaParagraph(format,args);
-printf("%s", htmlWarnEndPattern());
-}
-
-void earlyAbortHandler()
-/* Exit close web page during early abort. */
-{
-printf("</BODY></HTML>");
-exit(0);
-}
-
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 boolean isFromWeb = cgiIsOnWeb();
-pushWarnHandler(earlyWarningHandler);
-pushAbortHandler(earlyAbortHandler);
+htmlPushEarlyHandlers();
 dnaUtilOpen();
-readConfig("webPcr.cfg");
+cfg = gfWebConfigRead("webPcr.cfg");
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
-if (background != NULL)
+if (cfg->background != NULL)
     {
-    htmlSetBackground(background);
+    htmlSetBackground(cfg->background);
     }
 htmShell("In-Silico PCR", doMiddle, NULL);
 return 0;

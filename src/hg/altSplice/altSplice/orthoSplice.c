@@ -39,7 +39,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.23 2004/05/12 05:30:36 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.24 2004/06/13 06:20:38 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -49,6 +49,7 @@ static struct binKeeper *possibleExons = NULL; /* List of possible exons common 
 static char *chainTable = NULL;        /* Table that contains chains, i.e. chainMm3. */
 static struct hash *mRnaHash = NULL;   /* Hash for mRNA accesions if we are weigthing them more. */
 static int mRnaWeight = 1;                    /* Weight of mRNAs if we are treating them preferentially. */
+static struct binKeeper *chainKeeper = NULL; /* Bin keeper for easy coordinate access of chains. */
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -183,15 +184,25 @@ errAbort("\nusage:\n   "
 void initPossibleExons(char *fileName)
 /* Load all of the beds from fileName into possibleExons. */
 {
-struct bed *bed = NULL, *bedList = NULL;
+struct bed *bed = NULL, *bedList = NULL, *bedNext = NULL;
 chromSize = optionInt("chromSize", 0);
 if(chromSize == 0)
     errAbort("If specifying exonFile must specify chromSize (or maxSize)");
 bedList = bedLoadAll(fileName);
 assert(possibleExons == NULL);
 possibleExons = binKeeperNew(0, chromSize);
-for(bed = bedList; bed != NULL; bed = bed->next)
-    binKeeperAdd(possibleExons, bed->chromStart, bed->chromEnd, bed);
+for(bed = bedList; bed != NULL; bed = bedNext)
+    {
+    bedNext = bed->next;
+    if(sameString(workingChrom, bed->chrom))
+	{
+	binKeeperAdd(possibleExons, bed->chromStart, bed->chromEnd, bed);
+	}
+    else 
+	{
+	bedFree(&bed);
+	}
+    }
 }
 
 
@@ -311,17 +322,39 @@ else
     return ggIntron;
 }
 
-boolean isPossibleExon(struct altGraphX *ag, int v1, int v2)
+boolean isPossibleExon(struct altGraphX *ag, int v1, int v2, boolean strict)
 /* Return TRUE if this edge is supported by a possible exon from
    the possibleExon track. */
 {
 struct binElement *be = NULL, *beList = NULL;
+int *vPos = ag->vPositions;
+struct bed *bed = NULL;
 if(getEdgeType(ag, v1, v2) != ggExon) 
     return FALSE;
 beList = binKeeperFind(possibleExons, ag->vPositions[v1], ag->vPositions[v2]);
 if(beList != NULL)
-    return TRUE;
+    {
+    bed = beList->val;
+    if(!strict)
+	return TRUE;
+    if(bed->chromStart == vPos[v1] && bed->chromEnd == vPos[v2])
+	return TRUE;
+    }
 return FALSE;
+}
+
+boolean isExactPossibleExon(struct altGraphX *ag, int v1, int v2)
+/* Return TRUE if this edge is supported by a possible exon from
+   the possibleExon track. */
+{
+return isPossibleExon(ag, v1,v2,TRUE);
+}
+
+boolean overlapsPossibleExon(struct altGraphX *ag, int v1, int v2)
+/* Return TRUE if this edge is supported by a possible exon from
+   the possibleExon track. */
+{
+return isPossibleExon(ag, v1,v2, FALSE);
 }
 
 struct orthoSpliceEdge *altGraphXToOSEdges(struct altGraphX *ag)
@@ -509,14 +542,20 @@ struct hash *allChainsHash(char *fileName)
 struct hash *hash = newHash(0);
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct chain *chain;
+struct chain *chainList = NULL;
 char chainId[128];
-
 while ((chain = chainRead(lf)) != NULL)
     {
     safef(chainId, sizeof(chainId), "%d", chain->id);
     hashAddUnique(hash, chainId, chain);
+    slAddHead(&chainList, chain);
     }
 lineFileClose(&lf);
+chainKeeper = binKeeperNew(0, chainList->tSize);
+for(chain = chainList; chain != NULL; chain = chain->next)
+    {
+    binKeeperAdd(chainKeeper, chain->tStart, chain->tEnd, chain);
+    }
 return hash;
 }
 
@@ -1485,6 +1524,51 @@ for(i = 0; i < ev->evCount; i++)
 return value;
 }
 
+boolean chainOverlapsBlock(struct chain *chain, int blockStart, int blockEnd)
+/* Return TRUE if there is a block in the chain that overlaps blockStart->blockEnd
+   else return FALSE. */
+{
+struct boxIn *b, *bList = NULL;
+assert(chain);
+bList = chain->blockList;
+for(b = bList; b != NULL; b = b->next)
+    if(rangeIntersection(b->tStart, b->tEnd, blockStart, blockEnd) > 0)
+	return TRUE;
+return FALSE;
+}
+
+boolean notInChain(struct altGraphX *ag, int v1, int v2, struct chain *chain)
+/** Return TRUE if edge from v1->v2 is not in the chains. */
+{
+int *vPos = ag->vPositions;
+boolean inChain = FALSE;
+struct binElement *be = NULL, *beList = NULL;
+
+/* First look in the given chain to see if we 
+   can find the exon. */
+if(chain != NULL)
+    {
+    inChain = chainOverlapsBlock(chain, vPos[v1], vPos[v2]);
+    }
+/* If we didn't find it, try all chains. */
+if(inChain == FALSE)
+    {
+    if(chainKeeper == NULL)
+	errAbort("chainKeeper wasn't initialized. can't use database for this function yet.");
+    beList = binKeeperFind(chainKeeper, vPos[v1], vPos[v2]);
+    for(be = beList; be != NULL; be = be->next)
+	{
+	if(chainOverlapsBlock((struct chain *)be->val, vPos[v1], vPos[v2]))
+	    {
+	    inChain = TRUE;
+	    break;
+	    }
+	}
+    }
+slFreeList(&beList);
+return !inChain;
+}
+
 struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 /** For each edge in ag see if there is a similar edge in the
     orthologus altGraphX structure and output it if there. */
@@ -1589,18 +1673,23 @@ for(i=0;i<vCount; i++)
 	       for conserved splicing or species-specific splicing. */
 	    if(speciesSpecific) 
 		{
-		match = !match;
-		if(speciesSpecific && oldEv->evCount <= minEdgeNum)
+		if(trumpValue(oldEv, ag) >= trumpNum &&
+		   getEdgeType(ag, i, j) == ggExon &&
+		   notInChain(ag, i, j, chain))
+		    match = TRUE;
+		else
 		    match = FALSE;
-		if(match == TRUE) 
-		    match = !overlappingExon(orthoAgList, orthoEmP, vertexOrthoPos[i], vertexOrthoPos[j]);
-		if(match == TRUE && possibleExons != NULL)
-		    match = (!isPossibleExon(ag, i, j));
+/* 		if(speciesSpecific && oldEv->evCount <= minEdgeNum) */
+/* 		    match = FALSE; */
+/* 		if(match == TRUE)  */
+/* 		    match = !overlappingExon(orthoAgList, orthoEmP, vertexOrthoPos[i], vertexOrthoPos[j]); */
+/* 		if(match == TRUE && possibleExons != NULL) */
+/* 		    match = (!overlapsPossibleExon(ag, i, j)); */
 		}
 	    else if(trumpValue(oldEv, ag) >= trumpNum)
 		match = TRUE;
 	    else if(possibleExons != NULL)
-		match |= isPossibleExon(ag, i, j);
+		match |= isExactPossibleExon(ag, i, j);
 
 	    if(speciesSpecific && match == FALSE)
 		orthologFound = TRUE;
@@ -1733,6 +1822,8 @@ if(edgeFileName == NULL)
     errAbort("orthoSplice - must specify edgeFile.");
 if(chrom == NULL)
     errAbort("Must specify -chrom");
+workingChrom = chrom;
+
 if((minEdgeNum = optionInt("minEdgeNum", 0)) > 0) 
     warn("minEdgeNum is: %d", minEdgeNum);
 if(speciesSpecific = optionExists("speciesSpecific")) 
@@ -1744,7 +1835,7 @@ if(speciesSpecific = optionExists("speciesSpecific"))
 if(optionExists("exonFile"))
     initPossibleExons(optionVal("exonFile", NULL));
 
-workingChrom = chrom;
+
 if(netFile != NULL)
     {
     warn("Loading net info from file %s", netFile);

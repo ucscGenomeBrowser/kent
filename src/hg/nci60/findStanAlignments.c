@@ -7,7 +7,7 @@
 #include "imageClone.h"
 #include "stanMad.h"
 
-static char const rcsid[] = "$Id: findStanAlignments.c,v 1.4 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: findStanAlignments.c,v 1.5 2004/06/08 00:32:59 kate Exp $";
 
 void usage() 
 {
@@ -90,13 +90,6 @@ sqlFreeResult(&sr);
 return list;
 }
 
-/* Compare to sort based on query then score. */
-int pslCmpScore(const void *va, const void *vb)
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-return pslScore(b) - pslScore(a);
-}
 
 /* create object on the heap, copy values from psl and return, don't forget to free */
 struct psl *copyPsl(struct psl *psl)

@@ -13,7 +13,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.8 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.9 2004/06/08 16:43:04 angie Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -268,6 +268,23 @@ psFillUnder(pscm->ps, x1, y1, x2, y2, bottom);
 boxPscm = NULL;
 }
 
+void pscmTriLeft(struct pscmGfx *pscm, int x1, int y1, int y2, Color color)
+/* Draw a triangle pointing left with straight edge along x1+((y1-y2)/2) 
+ * from y1 to y2 (point at x1). */
+{
+pscmSetColor(pscm, color);
+psTriLeft(pscm->ps, x1, y1, y2);
+boxPscm = NULL;
+}
+
+void pscmTriRight(struct pscmGfx *pscm, int x1, int y1, int y2, Color color)
+/* Draw a triangle pointing right with straight edge along x1 from y1 to y2 */
+{
+pscmSetColor(pscm, color);
+psTriRight(pscm->ps, x1, y1, y2);
+boxPscm = NULL;
+}
+
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */
 {
@@ -286,6 +303,8 @@ vg->setClip = (vg_setClip)pscmSetClip;
 vg->unclip = (vg_unclip)pscmUnclip;
 vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
+vg->triLeft = (vg_triLeft)pscmTriLeft;
+vg->triRight = (vg_triRight)pscmTriRight;
 return vg;
 }
 
