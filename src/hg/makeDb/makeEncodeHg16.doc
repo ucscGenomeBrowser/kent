@@ -244,8 +244,8 @@ cat > load.csh << 'EOF'
     # filenames: EC_HL60_RA_RNA_00hr_AS.hs.NCBIv34.{bed,wig}
     #            EC_HL60_RA_RNApol2_00hr_AS_b.hs.NCBIv34.{bed,wig}
     # Use these to construct 16 tracks:
-    # track encodeAffyRnaHl60Hr{0,2,8,32}
-    # track encodeAffyChIpRnapHl60Hr{0,2,8,32}
+    # track encodeAffyRnaHl60Hr{00,02,08,32}
+    # track encodeAffyChIpRnapHl60Hr{00,02,08,32}
     # RNA/Affy HL60 0hr
     # ChIP/Affy Pol2 0hr
 
@@ -257,6 +257,9 @@ cat > load.csh << 'EOF'
     bunzip2 ucsc_formats.tar.bz2
         # trailing garbage after EOF ignored
     tar xvf ucsc_formats.tar
+    # NOTE: the script below creates $hrs as 0,2,8,32
+    # and tables were renamed to 00,02,08,32, so change script
+    # next time it's loaded.
     cd ucsc_formats
 cat > load.csh << 'EOF'
     foreach f (bed/*.bed)
@@ -300,8 +303,6 @@ cat > load.csh << 'EOF'
     cp EC_HL60_RA_RNA_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyRnaHl60Sig.html
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyChIpRnapHl60Sites.html
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyChIpRnapHl60Pval.html
-
-
 
 
 # TODO: Remove Nov08 data
