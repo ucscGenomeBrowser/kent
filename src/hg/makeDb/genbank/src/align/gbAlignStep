@@ -7,6 +7,7 @@
 #      -workdir=work/initial.$db/align
 #    Doesn't create a semaphone file and will log to 
 #       var/build/logs/2003.05.23-21:51:12.$db.initalign.log
+#    Will not migrate alignments from previous releases.
 #
 #   -workdir=work/align - work directory where alignment is built.
 #    This directory must have at least two levels (for use with rsync) for
@@ -54,7 +55,7 @@
 #    checking results.
 #  - gbAlignFinish - Process PSL files and install in data directory
 #
-# $Id: gbAlignStep,v 1.9 2003/07/29 04:44:49 markd Exp $
+# $Id: gbAlignStep,v 1.10 2003/10/08 21:06:18 markd Exp $
 #
 use strict;
 use warnings;
@@ -208,6 +209,9 @@ if ($initialBuild) {
 # setup
 if (inList("setup", @tasks)) {
     my $cmd = "gbAlignSetup $workDirArg $verbArg";
+    if ($initialBuild) {
+        $cmd .= " -noMigrate";
+    }
     if (defined($clusterRootDir)) {
         $cmd .= " -clusterWorkDir=$clusterWorkDir";
     }
@@ -265,6 +269,9 @@ if (defined($continueTask) && ($continueTask eq "finish")) {
 if (inList("finish", @tasks) && !-e $alignNone) {
     # finish, lift and installing alignments
     my $cmd = "gbAlignFinish $workDirArg $verbArg";
+    if ($initialBuild) {
+        $cmd .= " -noMigrate";
+    }
     foreach my $db (@databases) {
         $cmd .= " $db";
     }

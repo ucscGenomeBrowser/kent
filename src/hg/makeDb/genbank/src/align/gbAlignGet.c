@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.5 2003/10/06 05:01:35 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.6 2003/10/08 21:06:18 markd Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
@@ -29,10 +29,12 @@ static char const rcsid[] = "$Id: gbAlignGet.c,v 1.5 2003/10/06 05:01:35 markd E
 #define MIN_SEQ_SIZE 6
 
 /* command line option specifications */
-static struct optionSpec optionSpecs[] = {
+static struct optionSpec optionSpecs[] =
+{
     {"fasize", OPTION_INT},
     {"workdir", OPTION_STRING},
     {"orgCats", OPTION_STRING},
+    {"noMigrate", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
@@ -273,6 +275,7 @@ errAbort("   gbAlignGet [options] relname update typeAccPrefix db\n"
          "     bytes. Fasta files are split for cluster partitioning. \n"
          "    -orgCats=native,xeno - processon the specified organism \n"
          "     categories\n"
+         "    -noMigrate - don't migrate existing alignments\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
          "\n"
@@ -292,6 +295,7 @@ struct gbIndex* index;
 struct gbSelect select;
 struct gbSelect* prevSelect = NULL;
 struct gbAlignInfo alignInfo;
+boolean noMigrate;
 ZeroVar(&select);
 
 optionInit(&argc, argv, optionSpecs);
@@ -299,6 +303,7 @@ if (argc != 5)
     usage();
 maxFaSize = optionInt("fasize", -1);
 workDir = optionVal("workdir", "work/align");
+noMigrate = optionExists("noMigrate");
 gbVerbInit(optionInt("verbose", 0));
 relName = argv[1];
 updateName = argv[2];
@@ -325,7 +330,8 @@ gbVerbMsg(0, "gbAlignGet: %s/%s/%s/%s", select.release->name,
           typeAccPrefix);
 
 /* Get the release to migrate, if applicable */
-prevSelect = gbAlignGetMigrateRel(&select);
+if (!noMigrate)
+    prevSelect = gbAlignGetMigrateRel(&select);
 
 alignInfo = gbAlignGet(&select, prevSelect);
 

@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.5 2003/10/06 05:01:35 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.6 2003/10/08 21:06:18 markd Exp $";
 
 /*
  * Notes:
@@ -65,6 +65,7 @@ static char *OI_SORT_SPEC[] = {
 static struct optionSpec optionSpecs[] = {
     {"workdir", OPTION_STRING},
     {"orgCats", OPTION_STRING},
+    {"noMigrate", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
@@ -693,6 +694,7 @@ errAbort("   gbAlignInstall relname update typeAccPrefix db\n"
          "    -sortTmp=dir - Tmp dir for sort.\n"
          "    -orgCats=native,xeno - processon the specified organism \n"
          "     categories\n"
+         "    -noMigrate - don't migrate existing alignments\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
          "\n"
@@ -711,6 +713,7 @@ char *relName, *updateName, *typeAccPrefix, *database, *sep;
 struct gbIndex* index;
 struct gbSelect select;
 struct gbSelect* prevSelect = NULL;
+boolean noMigrate;
 ZeroVar(&select);
 
 optionInit(&argc, argv, optionSpecs);
@@ -718,6 +721,7 @@ if (argc != 5)
     usage();
 gWorkDir = optionVal("workdir", "work/align");
 gSortTmp = optionVal("sortTmp", NULL);
+noMigrate = optionExists("noMigrate");
 gbVerbInit(optionInt("verbose", 0));
 relName = argv[1];
 updateName = argv[2];
@@ -745,7 +749,8 @@ gbVerbMsg(0, "gbAlignInstall: %s/%s/%s/%s", select.release->name,
           typeAccPrefix);
 
 /* Get the release to migrate, if applicable */
-prevSelect = gbAlignGetMigrateRel(&select);
+if (!noMigrate)
+    prevSelect = gbAlignGetMigrateRel(&select);
 
 gbAlignInstall(&select, prevSelect);
 

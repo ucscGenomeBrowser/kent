@@ -20,7 +20,8 @@
 #   -orgCat=name - Restrict tyep type of sequences to  processed native or xeon
 #    If not speicifed, categories that are to be loaded are used from
 #    genbank.conf.  Maybe repeated.
-#    
+#
+#   -noMigrate - Don't migrate alignments.
 #
 # Arguments:
 #   - database - databases to align
@@ -46,7 +47,7 @@
 #    the failed jobs is the way to recover.
 #  - create a list of all expected PSL files.
 #
-# $Id: gbAlignSetup,v 1.7 2003/10/06 05:01:35 markd Exp $
+# $Id: gbAlignSetup,v 1.8 2003/10/08 21:06:18 markd Exp $
 #
 use strict;
 use warnings;
@@ -63,14 +64,16 @@ my $maxFaSize = 64*1024*1024; # 64mb
 my %gOutPsls;
 
 # other globals
-my $workDir;
+my $workDir = "work/align";
 my $clusterWorkDir;
 my $gbBlatPath;
 my $srcDbs;
-my $cwd;
+my $cwd = `pwd`;
+chomp($cwd);
 my @srcDbs;
 my @types;
 my @orgCats;
+my $noMigrate = 0;
 
 
 # split unaligned string into it's component names
@@ -161,6 +164,9 @@ sub extractMRnaFastas($) {
     }
     if ($gbCommon::verbose) {
         $cmd .= " -verbose=$gbCommon::verbose";
+    }
+    if ($noMigrate) {
+        $cmd .= " -noMigrate";
     }
     $cmd .= " -workdir=$workDir -orgCats=" . join(",", @orgCats)
         . " $release $update $typeAccPrefix $db";
@@ -378,12 +384,6 @@ sub genAlignJobs($$$$$@) {
 setTaskName("gbAlignSetup");
 
 # parse into globals used in program
-$cwd = `pwd`;
-chomp($cwd);
-$workDir = "work/align";
-@srcDbs = ();
-@types = ();
-@orgCats = ();
 while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
     my $opt = $ARGV[0];
     shift @ARGV;
@@ -391,6 +391,8 @@ while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
         $workDir = parseOptEq($opt);
     } elsif ($opt =~ /^-clusterWorkDir($|=)/) {
         $clusterWorkDir = parseOptEq($opt);
+    } elsif ($opt eq "-noMigrate") {
+        $noMigrate = 1;
     } elsif ($opt eq "-verbose") {
         $gbCommon::verbose = 1;
     } elsif ($opt =~ /^-verbose=/) {
