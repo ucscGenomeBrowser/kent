@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define DBSNPRS_NUM_COLS 8
+#define DBSNPRS_NUM_COLS 9
 
 struct dbSnpRs
 /* Information from dbSNP at the reference SNP level */
@@ -23,6 +23,7 @@ struct dbSnpRs
     char *allele2;	/* the sequence of the second allele */
     char *assembly;	/* the sequence in the assembly */
     char *alternate;	/* the sequence of the alternate allele */
+    char *func;	/* the functional category of the SNP, if any */
     };
 
 void dbSnpRsStaticLoad(char **row, struct dbSnpRs *ret);

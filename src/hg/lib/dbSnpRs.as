@@ -8,4 +8,5 @@ table dbSnpRs "Information from dbSNP at the reference SNP level"
         string  allele2;   	"the sequence of the second allele"
         string  assembly; 	"the sequence in the assembly"
         string  alternate; 	"the sequence of the alternate allele"
+        string  func; 		"the functional category of the SNP, if any"
     )

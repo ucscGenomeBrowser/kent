@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "dbSnpRs.h"
 
-static char const rcsid[] = "$Id: dbSnpRs.c,v 1.1 2004/02/19 01:32:17 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnpRs.c,v 1.2 2004/03/10 16:07:30 daryl Exp $";
 
 void dbSnpRsStaticLoad(char **row, struct dbSnpRs *ret)
 /* Load a row from dbSnpRs table into ret.  The contents of ret will
@@ -25,6 +25,7 @@ ret->allele1 = row[4];
 ret->allele2 = row[5];
 ret->assembly = row[6];
 ret->alternate = row[7];
+ret->func = row[8];
 }
 
 struct dbSnpRs *dbSnpRsLoad(char **row)
@@ -44,6 +45,7 @@ ret->allele1 = cloneString(row[4]);
 ret->allele2 = cloneString(row[5]);
 ret->assembly = cloneString(row[6]);
 ret->alternate = cloneString(row[7]);
+ret->func = cloneString(row[8]);
 return ret;
 }
 
@@ -53,7 +55,7 @@ struct dbSnpRs *dbSnpRsLoadAll(char *fileName)
 {
 struct dbSnpRs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +73,7 @@ struct dbSnpRs *dbSnpRsLoadAllByChar(char *fileName, char chopper)
 {
 struct dbSnpRs *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -115,8 +117,8 @@ void dbSnpRsSaveToDb(struct sqlConnection *conn, struct dbSnpRs *el, char *table
  * If worried about this use dbSnpRsSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s')", 
-	tableName,  el->rsId,  el->avHet,  el->avHetSE,  el->valid,  el->allele1,  el->allele2,  el->assembly,  el->alternate);
+dyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->rsId,  el->avHet,  el->avHetSE,  el->valid,  el->allele1,  el->allele2,  el->assembly,  el->alternate,  el->func);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -131,16 +133,17 @@ void dbSnpRsSaveToDbEscaped(struct sqlConnection *conn, struct dbSnpRs *el, char
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *rsId, *valid, *allele1, *allele2, *assembly, *alternate;
+char  *rsId, *valid, *allele1, *allele2, *assembly, *alternate, *func;
 rsId = sqlEscapeString(el->rsId);
 valid = sqlEscapeString(el->valid);
 allele1 = sqlEscapeString(el->allele1);
 allele2 = sqlEscapeString(el->allele2);
 assembly = sqlEscapeString(el->assembly);
 alternate = sqlEscapeString(el->alternate);
+func = sqlEscapeString(el->func);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s')", 
-	tableName,  rsId, el->avHet , el->avHetSE ,  valid,  allele1,  allele2,  assembly,  alternate);
+dyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s','%s')", 
+	tableName,  rsId, el->avHet , el->avHetSE ,  valid,  allele1,  allele2,  assembly,  alternate,  func);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&rsId);
@@ -149,6 +152,7 @@ freez(&allele1);
 freez(&allele2);
 freez(&assembly);
 freez(&alternate);
+freez(&func);
 }
 
 struct dbSnpRs *dbSnpRsCommaIn(char **pS, struct dbSnpRs *ret)
@@ -169,6 +173,7 @@ ret->allele1 = sqlStringComma(&s);
 ret->allele2 = sqlStringComma(&s);
 ret->assembly = sqlStringComma(&s);
 ret->alternate = sqlStringComma(&s);
+ret->func = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -186,6 +191,7 @@ freeMem(el->allele1);
 freeMem(el->allele2);
 freeMem(el->assembly);
 freeMem(el->alternate);
+freeMem(el->func);
 freez(pEl);
 }
 
@@ -232,6 +238,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->alternate);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->func);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
