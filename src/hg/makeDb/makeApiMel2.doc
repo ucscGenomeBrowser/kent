@@ -164,10 +164,9 @@ _EOF_
 # LOAD GAP & GOLD TABLES FROM AGP (DONE 2/3/2005 Andy)
     ssh hgwdev
     cd /cluster/data/apiMel2/downloads/contigs
-    for agp in *.agp; do
-      chr=${agp%.agp}
-      hgGoldGapGl -noGl -chrom=$chr apiMel2 $agp
-    done
+    cat Group?{,?}.agp >> all.agp
+    hgGoldGapGl -noGl apiMel2 all.agp
+    rm all.agp
     # For some reason, the indices did not get built correctly --
     # "show index from gap/gold" shows NULL cardinalities for chrom.  
     # Rebuild indices with "analyze table".
@@ -550,16 +549,5 @@ apiMel2.perChromTables = no
     cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/melanogasterNet.axt.gz .
     # Make a README.txt which explains the files & formats.
     md5sum *.gz > md5sum.txt
-
-# MAKE GC5BASE WIGGLE TRACK (DONE 2/17/2005 Andy)
-    ssh hgwdev 
-    mkdir /cluster/data/apiMel2/bed/gc5Base
-    cp /cluster/data/apiMel2/bed/gc5Base
-    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=2 apiMel2 \
-       /cluster/data/apiMel2 | wigEncode stdin gc5Base.wig gc5Base.wib
-    mkdir /gbdb/apiMel2/wib
-    ln -s `pwd`/gc5Base.wib /gbdb/apiMel2/wib
-    hgLoadWiggle -pathPrefix=/gbdb/apiMel2/wib apiMel2 gc5Base gc5Base.wig
- 
 
 # MAKE MELANOGASTER PROTEINS TRACK (TODO)
