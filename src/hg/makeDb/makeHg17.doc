@@ -1878,6 +1878,10 @@ cat > split.csh << 'EOF'
     cp /cluster/data/ncbi/sts.8/all.STS.fa all.STS.fa
     checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
                         dbSTS.FASTA.dailydump all.STS.fa
+    # Copy stsInfo2.bed and stsAlias.bed to data directory becuase
+    # these will be loaded into the database later
+    cp stsInfo2.bed /cluster/data/hg17/bed/sts/
+    cp stsAlias.bed /cluster/data/hg17/bed/sts/
 
     mkdir -p /cluster/bluearc/sts.9/sts
     faSplit sequence all.STS.fa 10 /cluster/bluearc/sts.9/sts/sts
@@ -1952,7 +1956,7 @@ cat > template << 'EOF'
     # Note: got error that -4 is invalid number -- must remove all
     # these before liftUp
     ls | xargs sed '/-[1-9]/d' > all.psl.unlifted
-    liftUp /cluster/data/hg17/bed/sts/primers/all.psl /cluster/data/hg17/jkStuff/liftAll.lft warn all.psl.unlifted
+    # Do the lift later after epcr alignments added
 
     # Alternative to above paragrapgh
     # Filter output file quickly based on simple parameters
@@ -1961,13 +1965,13 @@ cat > template << 'EOF'
     mkdir filter
     pslQuickFilter -minMatch=26 -maxTinsert=5000 -verbose out/ filter/
     pslSort dirs all.psl.unlifted temp filter
-    liftUp /cluster/data/hg17/bed/sts/primers/all.psl /cluster/data/hg17/jkStuff/liftAll.lft warn all.psl.unlifted
+    # Do the lift later after epcr alignments added
 
     # filter primer alignments (booch)
     cd /cluster/data/hg17/bed/sts/primers
     touch all.epcr
-    /cluster/bin/scripts/filterPrimers /cluster/data/ncbi/sts.9/stsInfo2.bed \
-        all.psl  /cluster/data/ncbi/sts.9/all.primers all.epcr > all.filter.psl
+    /cluster/bin/scripts/filterPrimers /cluster/data/hg17/bed/sts/stsInfo2.bed \
+        all.psl.unlifted  /cluster/data/ncbi/sts.9/all.primers all.epcr > all.filter.psl
     cut -f 1 /cluster/data/ncbi/sts.9 |  sort -n > all.primer.list
     cut -f 10 all.filter.psl | cut -f 2 -d "_" | sort -n | \
                 uniq > placed.primers.list
@@ -2041,9 +2045,21 @@ cat > template << 'EOF'
         awk '{printf "%s\t%s\t%s\tdbSTS_%s\n", $1, $2, $3, $4}' \
                 > all.epcr.initial
 
-    # convert to PSL
-    # lift results from contigs to chrom coordinates
+    # use all.epcr file to re-filter alignemnts and determine which
+    # ePCR records to keep
+    cp all.epcr /cluster/data/hg17/bed/primers
+    /cluster/bin/scripts/filterPrimers /cluster/data/hg17/bed/sts/stsInfo2.bed \
+        all.filter.psl  /cluster/data/ncbi/sts.9/all.primers all.epcr > all.filter.epcr.psl
+    
+    # convert to PSL and combine with other psl file
+    /cluster/bin/scripts/epcrToHgPsl epcr.not.found /cluster/data/ncbi/sts.9/all.primers /cluster/data/hg17
+    cat all.filter.epcr.psl epcr.not.found.psl > primers.psl.unlifted
 
+    # lift results from contigs to chrom coordinates, and create final file
+    liftUp /cluster/data/hg17/bed/sts/primers/primers.psl /cluster/data/hg17/jkStuff/liftAll.lft warn primers.psl.unlifted
+    extractPslInfo primers.filter
+    # need to do more stuff
+    
 
     # GOT HERE
     
