@@ -1,8 +1,8 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 
 L = $(MYSQLLIBS) -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = foldGfx.o
@@ -11,5 +11,8 @@ foldGfx: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o foldGfx $O $(MYLIBS) $L
 
 lib:
-	cd ../lib; make
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
+	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} foldGfx
