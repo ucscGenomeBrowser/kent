@@ -343,7 +343,7 @@ for (item = tg->items; item != NULL; item = item->next)
     int baseStart = tg->itemStart(tg, item);
     int baseEnd = tg->itemEnd(tg, item);
     start = round((double)(baseStart - winStart)*scale);
-    if (!tg->drawName)
+    if (!tg->drawName && withLeftLabels)
 	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
     end = round((baseEnd - winStart)*scale);
     if (start < insideWidth && end > 0)
@@ -1306,21 +1306,27 @@ if (vis == tvPack)
 	int e = tg->itemEnd(tg, item);
 	int x1 = round((s - winStart)*scale) + xOff;
 	int x2 = round((e - winStart)*scale) + xOff;
+	int textX = x1;
 	char *name = tg->itemName(tg, item);
-	int nameWidth = mgFontStringWidth(font, name);
-	int dotWidth = tl.nWidth/2;
-	int textX = x1 - nameWidth - dotWidth;
+	
 
 	y = yOff + lineHeight * sn->row;
 	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+	if (withLeftLabels)
+	    {
+	    int nameWidth = mgFontStringWidth(font, name);
+	    int dotWidth = tl.nWidth/2;
+	    textX -= nameWidth + dotWidth;
+	    vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+	    name = NULL;
+	    }
 	if (!tg->mapsSelf)
 	    {
 	    int w = x2-textX;
 	    if (w > 0)
 		{
 		mapBoxHc(s, e, textX, y, w, heightPer, tg->mapName, 
-			tg->mapItemName(tg, item), NULL);
+			tg->mapItemName(tg, item), name);
 		}
 	    }
 	}
@@ -2308,7 +2314,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
-if (limitVisibility(tg, lfList) == tvFull)
+if (limitVisibility(tg, lfList) != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
@@ -3698,7 +3704,6 @@ if (bed->name == NULL)
     return "";
 return bed->name;
 }
-
 
 int bedItemStart(struct track *tg, void *item)
 /* Return start position of item. */
@@ -9125,23 +9130,27 @@ if (withCenterLabels)
 
 
 /* Draw tracks. */
-y = yAfterRuler;
-for (track = trackList; track != NULL; track = track->next)
     {
-    if (track->limitedVis != tvHide)
+    y = yAfterRuler;
+    for (track = trackList; track != NULL; track = track->next)
 	{
-	if (withCenterLabels)
-	    y += fontHeight;
-	if (track->limitedVis == tvPack)
-	    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
-	    	pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
-	else
-	    vgSetClip(vg, insideX, y, insideWidth, track->height);
-	track->drawItems(track, winStart, winEnd,
-			 vg, insideX, y, insideWidth, 
-			 font, track->ixColor, track->limitedVis);
-	vgUnclip(vg);
-	y += track->height;
+	if (track->limitedVis != tvHide)
+	    {
+	    if (withCenterLabels)
+		y += fontHeight;
+	    if (track->limitedVis == tvPack && withLeftLabels)
+		{
+		vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+		}
+	    else
+		vgSetClip(vg, insideX, y, insideWidth, track->height);
+	    track->drawItems(track, winStart, winEnd,
+			     vg, insideX, y, insideWidth, 
+			     font, track->ixColor, track->limitedVis);
+	    vgUnclip(vg);
+	    y += track->height;
+	    }
 	}
     }
 
