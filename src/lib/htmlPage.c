@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.11 2004/10/14 18:22:07 giardine Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.12 2004/11/07 19:15:37 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -804,9 +804,15 @@ page->fullText = fullText;
 page->status = status;
 page->header = htmlHeaderRead(&s, &page->cookies);
 contentType = hashFindVal(page->header, "Content-Type:");
+if (contentType == NULL)	
+    {
+    warn("No contentType, assuming text/html");
+    contentType = cloneString("text/html");
+    hashAdd(page->header, "Content-Type:", contentType);
+    }
+page->htmlText = fullText + (s - dupe);
 if (startsWith("text/html", contentType))
     {
-    page->htmlText = fullText + (s - dupe);
     page->tags = htmlTagScan(page->htmlText, s);
     page->forms = htmlParseForms(page, page->tags, NULL);
     }
@@ -1500,40 +1506,45 @@ void htmlPageValidateOrAbort(struct htmlPage *page)
 {
 struct htmlTag *tag;
 boolean gotTitle = FALSE;
+char *contentType;
 
 if (page == NULL)
     errAbort("Can't validate NULL page");
-/* To simplify things upper case all tag names. */
-for (tag = page->tags; tag != NULL; tag = tag->next)
-    touppers(tag->name);
-
-/* Validate header, and make a suggestion or two */
-if ((tag = page->tags) == NULL)
-    errAbort("No tags");
-if (!sameWord(tag->name, "HTML"))
-    errAbort("Doesn't start with <HTML> tag");
-tag = tag->next;
-if (tag == NULL || !sameWord(tag->name, "HEAD"))
-    errAbort("<HEAD> tag does not follow <HTML> tag");
-for (;;)
+contentType = hashFindVal(page->header, "Content-Type:");
+if (startsWith("text/html", contentType))
     {
+    /* To simplify things upper case all tag names. */
+    for (tag = page->tags; tag != NULL; tag = tag->next)
+	touppers(tag->name);
+
+    /* Validate header, and make a suggestion or two */
+    if ((tag = page->tags) == NULL)
+	errAbort("No tags");
+    if (!sameWord(tag->name, "HTML"))
+	errAbort("Doesn't start with <HTML> tag");
     tag = tag->next;
-    if (tag == NULL)
-        errAbort("Missing </HEAD>");
-    if (sameWord(tag->name, "TITLE"))
-        gotTitle = TRUE;
-    if (sameWord(tag->name, "/HEAD"))
-        break;
+    if (tag == NULL || !sameWord(tag->name, "HEAD"))
+	errAbort("<HEAD> tag does not follow <HTML> tag");
+    for (;;)
+	{
+	tag = tag->next;
+	if (tag == NULL)
+	    errAbort("Missing </HEAD>");
+	if (sameWord(tag->name, "TITLE"))
+	    gotTitle = TRUE;
+	if (sameWord(tag->name, "/HEAD"))
+	    break;
+	}
+    if (!gotTitle)
+	warn("No title in <HEAD>");
+    validateNestingTags(page, page->tags, tag, headNesters, ArraySize(headNesters));
+    tag = tag->next;
+    if (tag == NULL || !sameWord(tag->name, "BODY"))
+	errAbort("<BODY> tag does not follow <HTML> tag");
+    tag = validateBody(page, tag->next);
+    if (tag == NULL || !sameWord(tag->name, "/HTML"))
+	errAbort("Missing </HTML>");
+    validateCgiUrls(page);
     }
-if (!gotTitle)
-    warn("No title in <HEAD>");
-validateNestingTags(page, page->tags, tag, headNesters, ArraySize(headNesters));
-tag = tag->next;
-if (tag == NULL || !sameWord(tag->name, "BODY"))
-    errAbort("<BODY> tag does not follow <HTML> tag");
-tag = validateBody(page, tag->next);
-if (tag == NULL || !sameWord(tag->name, "/HTML"))
-    errAbort("Missing </HTML>");
-validateCgiUrls(page);
 }
 
