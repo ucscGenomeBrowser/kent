@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.819 2004/10/19 20:20:47 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.820 2004/10/20 02:47:44 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -102,7 +102,7 @@ Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 Color orangeColor = 0;
-Color magentaColor = 0;
+Color brickColor = 0;
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
@@ -1078,9 +1078,9 @@ Color  makeOrangeColor(struct vGfx *vg)
 return vgFindColorIx(vg, 230, 130, 0);
 }
 
-Color  makeMagentaColor(struct vGfx *vg)
+Color  makeBrickColor(struct vGfx *vg)
 {
-return vgFindColorIx(vg, 230, 0, 130);
+return vgFindColorIx(vg, 230, 50, 110);
 }
 
 /*	See inc/chromColors.h for color defines	*/
@@ -6476,7 +6476,7 @@ Color alignInsertsColor()
 Color alignBreakColor()
 /* Return color used for alignment break indicators in multiple alignments */
 {
-    return magentaColor;
+    return brickColor;
 }
 
 int spreadStringCharWidth(int width, int count)
@@ -6798,7 +6798,7 @@ makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
-magentaColor = makeMagentaColor(vg);
+brickColor = makeBrickColor(vg);
 
 if (rulerMode == RULER_MODE_FULL &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
