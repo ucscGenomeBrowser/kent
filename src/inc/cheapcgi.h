@@ -98,6 +98,9 @@ void cgiContinueHiddenVar(char *varName);
 /* Write CGI var back to hidden input for next time around. 
  * (if it exists). */
 
+void cgiContinueAllVars();
+/* Write back all CGI vars as hidden input for next time around. */
+
 void cgiVarExclude(char *varName);
 /* If varName exists, remove it. */
 
