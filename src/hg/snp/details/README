@@ -1,0 +1,18 @@
+
+January 21, 2002
+
+TODO: modify getObsHet to process mutations other than single nucleotide polymorphisms
+
+fixed getObsHet to reflect changes in the ncbi dbSnp DTD structure
+
+download the XML files (ftp ftp.ncbi.nih.gov/snp/human/XML/*) ( about 80 minutes )
+edit runall.csh to update filenames (should be command-line parameters)
+make directories (done; chN.observed; supplemental)
+make links to previous build for human and mouse
+nohup nice time ./runall.csh >& log &  ( about 90 minutes )
+mysql> delete from dbSnpRS;
+mysql> load data local infile "dbSnpOutput13" into table dbSnpRS; 
+gzip dbSnpOutputHg13 
+
+remember to re-load the mouse AND human details
+

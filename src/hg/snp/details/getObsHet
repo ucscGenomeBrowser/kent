@@ -1,0 +1,60 @@
+#!/usr/bin/perl -w
+
+# Daryl Thomas
+# May, 2002
+
+# This is a quick hack to parse useful infomation out of 
+#   the dbSNP XML files.  The DTD was rather complicated, and
+#   I didn't have the skill to revise autoXML, so I introduced this
+#   step to jump the first hurdle.
+# This takes the dbSNPXML file as STDIN and writes the relevant info 
+#   to STDOUT, for further processing by dbSnp, an executable written in C.
+# ~daryl/kent/src/hg/snp/getObsHet is this perl script
+# ~daryl/kent/src/hg/snp/dbSnp.c   is the C source
+
+$rs=$b1=$b2=$seq5=$seq3=$valid=$seq5rc=$seq3rc="";
+$het=$hetSE=0;
+
+sub seqRevComp($)
+{
+  my ($seq) = @_;
+  $newSeq = "";
+  @bases = split //, $seq;
+  foreach $b ( @bases )
+    {
+      $b =~ tr/ACGTNacgtn/TGCANtgcan/;
+      $newSeq = $b . $newSeq ;
+    }
+  return $newSeq;
+}
+
+while (<>) 
+  {
+    if (/<NSE-rs>/) 
+      {
+      RS: while (<>) 
+	  {
+	    if (/<\/NSE-rs>/) 
+	      {
+		# output only SINGLE nucleotide polymorphisms for the moment
+		if (1==length($b1) && 1==length($b2) && \
+		    "-" ne $b1 && "-" ne $b2)
+		  {
+		    print "$rs\t$het\t$hetSE\t$valid\t";
+		    print "$b1\t$b2\t".substr($seq5,-20)."\t".\
+		      substr($seq3,0,20)."\n";
+		  }
+		$rs=$b1=$b2=$seq5=$seq3=$valid=$seq5rc=$seq3rc=""; #reinitialize
+		$het=$hetSE=0.0;
+		last RS;    # jump up one level
+	      } # end  if (/\<NSE-rs>/)
+	    if (/<(NSE-rs_refsnp-id)>(\S+)<\/\1>/)      { $rs=$2;         }
+	    if (/<(NSE-rs_observed)>(\S+)\/(\S+)<\/\1>/){ $b1=$2; $b2=$3; }
+	    if (/<(NSE-rs_seq-5_E)>(\S+)<\/\1>/)        { $seq5 .= $2;    }
+	    if (/<(NSE-rs_seq-3_E)>(\S+)<\/\1>/)        { $seq3 .= $2;    }
+	    if (/<(NSE-rs_het)>(\S+)<\/\1>/)            { $het+=$2;       }
+	    if (/<(NSE-rs_het-SE)>(\S+)<\/\1>/)         { $hetSE+=$2;     }
+	    if (/<NSE-rs_validated value=\"(\S+)\"\/>/) { $valid=$1;      }
+	  } # end RS: while (<>)
+      } # end if (/<NSE-rs>/)
+  } # end while
