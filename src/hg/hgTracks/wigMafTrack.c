@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.19 2004/04/03 02:21:37 kent Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.20 2004/04/15 07:29:14 kent Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -701,7 +701,7 @@ y += mi->height;
 /* draw base-level alignments */
 alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
 	tl.mWidth, winBaseCount, 4,
-	MG_WHITE, shadesOfSea[1]);
+	MG_WHITE, shadesOfSea[0]);
 
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
