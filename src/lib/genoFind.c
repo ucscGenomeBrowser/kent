@@ -1223,6 +1223,7 @@ freez(&buckets);
 return clumpList;
 }
 
+#ifdef OLD
 struct gfClump *clumpsOfOne(struct genoFind *gf, struct gfHit *hitList)
 /* Turn each hit into a clump with just one hit. */
 {
@@ -1247,6 +1248,7 @@ for (hit = hitList; hit != NULL; hit = nextHit)
 slReverse(&clumpList);
 return clumpList;
 }
+#endif /* OLD */
 
 
 static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
@@ -1353,19 +1355,22 @@ int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
 int alphabetSize;
 char oldChar, zeroChar, badChar;
-int posMul;
+int *seqValLookup;
+int posMul, avoid;
 
 if (gf->isPep)
     {
     makeTile = gfPepTile;
     alphabetSize = 20;
     zeroChar = 'A';
+    seqValLookup = aaVal;
     }
 else
     {
     makeTile = gfDnaTile;
     alphabetSize = 4;
     zeroChar = 't';
+    seqValLookup = ntVal;
     }
 
 for (i=0; i<=lastStart; ++i)
@@ -1378,22 +1383,32 @@ for (i=0; i<=lastStart; ++i)
 	poly[i+varPos] = zeroChar;
 	tile = makeTile(poly+i, tileSize);
 	poly[i+varPos] = oldChar;
+
+	/* Avoid checking the unmodified tile multiple times. */
+	if (varPos == 0)
+	    avoid = -1;
+	else
+	    avoid = seqValLookup[oldChar];
+
 	if (tile >= 0)
 	    {
 	    /* Look up all possible values of variable position. */
 	    for (varVal=0; varVal<alphabetSize; ++varVal)
 		{
-		listSize = gf->listSizes[tile];
-		qStart = i;
-		tList = gf->lists[tile];
-		for (j=0; j<listSize; ++j)
+		if (varVal != avoid)
 		    {
-		    lmAllocVar(lm,hit);
-		    hit->qStart = qStart;
-		    hit->tStart = tList[j];
-		    hit->diagonal = hit->tStart + size - qStart;
-		    slAddHead(&hitList, hit);
-		    ++hitCount;
+		    listSize = gf->listSizes[tile];
+		    qStart = i;
+		    tList = gf->lists[tile];
+		    for (j=0; j<listSize; ++j)
+			{
+			lmAllocVar(lm,hit);
+			hit->qStart = qStart;
+			hit->tStart = tList[j];
+			hit->diagonal = hit->tStart + size - qStart;
+			slAddHead(&hitList, hit);
+			++hitCount;
+			}
 		    }
 		tile += posMul;
 		}
@@ -1476,20 +1491,23 @@ int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
 int alphabetSize;
 char oldChar, zeroChar, badChar;
-int headPosMul, tailPosMul;
+int headPosMul, tailPosMul, avoid;
 boolean modTail;
+int *seqValLookup;
 
 if (gf->isPep)
     {
     makeTile = gfPepTile;
     alphabetSize = 20;
     zeroChar = 'A';
+    seqValLookup = aaVal;
     }
 else
     {
     makeTile = gfDnaTile;
     alphabetSize = 4;
     zeroChar = 't';
+    seqValLookup = ntVal;
     }
 
 for (i=0; i<=lastStart; ++i)
@@ -1505,23 +1523,32 @@ for (i=0; i<=lastStart; ++i)
 	tileTail = makeTile(poly+i+tileHeadSize, tileTailSize);
 	poly[i+varPos] = oldChar;
 
+	/* Avoid checking the unmodified tile multiple times. */
+	if (varPos == 0)
+	    avoid = -1;
+	else
+	    avoid = seqValLookup[oldChar];
+
 	if (tileHead >= 0 && tileTail >= 0)
 	    {
 	    for (varVal=0; varVal<alphabetSize; ++varVal)
 		{
-		listSize = gf->listSizes[tileHead];
-		qStart = i;
-		endList = gf->endLists[tileHead];
-		for (j=0; j<listSize; ++j)
+		if (varVal != avoid)
 		    {
-		    if (endList[0] == tileTail)
+		    listSize = gf->listSizes[tileHead];
+		    qStart = i;
+		    endList = gf->endLists[tileHead];
+		    for (j=0; j<listSize; ++j)
 			{
-			lmAllocVar(lm,hit);
-			hit->qStart = qStart;
-			hit->tStart = (endList[1]<<16) + endList[2];
-			hit->diagonal = hit->tStart + size - qStart;
-			slAddHead(&hitList, hit);
-			++hitCount;
+			if (endList[0] == tileTail)
+			    {
+			    lmAllocVar(lm,hit);
+			    hit->qStart = qStart;
+			    hit->tStart = (endList[1]<<16) + endList[2];
+			    hit->diagonal = hit->tStart + size - qStart;
+			    slAddHead(&hitList, hit);
+			    ++hitCount;
+			    }
 			}
 		    }
 		if (modTail)
@@ -1545,6 +1572,7 @@ struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, in
 /* Find clump whether its peptide or dna.  Call fast routine if possible.*/
 {
 struct gfHit *hitList = NULL;
+struct gfClump *clumpList = NULL;
 
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
     hitList = gfFastFindDnaHits(gf, seq, lm, retHitCount);
@@ -1566,10 +1594,14 @@ else
 	}
     }
 cmpQuerySize = seq->size;
+#ifdef OLD
 if (gf->minMatch == 1)
     return clumpsOfOne(gf, hitList);
 else
-    return clumpHits(gf, hitList, gf->minMatch);
+#endif /* OLD */
+clumpList = clumpHits(gf, hitList, gf->minMatch);
+//uglyf("hitCount = %d, clumpCount = %d\n", *retHitCount, slCount(clumpList));
+return clumpList;
 }
 
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount)
