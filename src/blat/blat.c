@@ -40,6 +40,7 @@ boolean noHead = FALSE;
 boolean trimA = FALSE;
 boolean trimHardA = FALSE;
 boolean trimT = FALSE;
+boolean fastMap = FALSE;
 char *makeOoc = NULL;
 char *ooc = NULL;
 enum gfType qType = gftDna;
@@ -65,11 +66,6 @@ printf(
   "               and external file.  This will increase the speed\n"
   "               by a factor of 40 in many cases, but is not required\n"
   "   output.psl is where to put the output.\n"
-  "   Subranges of nib files may specified using the syntax:\n"
-  "      /path/file.nib:seqid:start-end\n"
-  "   or\n"
-  "      /path/file.nib:start-end\n"
-  "   With the second form, a sequence id of file:start-end will be used.\n"
   "options:\n"
   "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
@@ -90,7 +86,7 @@ printf(
   "               Usually between 8 and 12\n"
   "               Default is 11 for DNA and 5 for protein.\n"
   "   -oneOff=N   If set to 1 this allows one mismatch in tile and still\n"
-  "               triggers an alignments.\n"
+  "               triggers an alignments.  Default is 0.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2 for nucleotide, 1 for protein.\n"
   "   -minScore=N sets minimum score.  This is twice the matches minus the \n"
@@ -122,6 +118,7 @@ printf(
   "   -trimT      Trim leading poly-T\n"
   "   -noTrimA    Don't trim trailing poly-A\n"
   "   -trimHardA  Remove poly-A tail from qSize as well as alignments in psl output\n"
+  "   -fastMap    Run for fast DNA/DNA remapping - not allowing introns, requiring high %%ID\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
@@ -296,7 +293,10 @@ for (i=0; i<fileCount; ++i)
     fileName = files[i];
     if (isNib(fileName))
         {
-	seq = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
+	char root[128];
+	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+	splitPath(fileName, NULL, root, NULL);
+	seq->name = cloneString(root);
 	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
 	totalSize += seq->size;
@@ -350,7 +350,7 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl,
 	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
-gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo);
+gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo, fastMap);
 }
 
 
@@ -470,6 +470,8 @@ for (i=0; i<fileCount; ++i)
 	if (isProt)
 	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
 	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+	freez(&seq->name);
+	seq->name = cloneString(fileName);
 	if (maskQuery)
 	    {
 	    toggleCase(seq->dna, seq->size);
@@ -825,6 +827,7 @@ if (dIsProtLike)
 tileSize = optionInt("tileSize", tileSize);
 minMatch = optionInt("minMatch", minMatch);
 oneOff = optionExists("oneOff");
+fastMap = optionExists("fastMap");
 minScore = optionInt("minScore", minScore);
 maxGap = optionInt("maxGap", maxGap);
 minRepDivergence = optionFloat("minRepDivergence", minRepDivergence);

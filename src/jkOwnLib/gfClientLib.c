@@ -593,8 +593,7 @@ for (range = rangeList; range != NULL; range = range->next)
 #endif /* DEBUG */
 
 static struct ssBundle *gfClumpsToBundles(struct gfClump *clumpList, 
-    struct dnaSeq *seq, boolean isRc, int minScore, 
-    struct gfRange **retRangeList)
+    struct dnaSeq *seq, boolean isRc, int minScore,  struct gfRange **retRangeList)
 /* Convert gfClumps to an actual alignments (ssBundles) */ 
 {
 struct ssBundle *bun, *bunList = NULL;
@@ -794,6 +793,36 @@ for (range = rangeList; range != NULL; range = range->next)
 AllocVar(ffi);
 ffi->ff = ffMakeRightLinks(ffList);
 return ffi;
+}
+
+static struct ssBundle *fastMapClumpsToBundles(struct genoFind *gf,  struct gfClump *clumpList, bioSeq *qSeq, int qSeqOffset)
+/* Convert gfClumps ffAlis. */
+{
+struct gfClump *clump;
+struct gfRange *rangeList = NULL, *range;
+bioSeq *targetSeq;
+struct ssBundle *bunList = NULL, *bun;
+
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    clumpToHspRange(clump, qSeq, gf->tileSize, 0, NULL, &rangeList, FALSE);
+slReverse(&rangeList);
+slSort(&rangeList, gfRangeCmpTarget);
+rangeList = gfRangesBundle(rangeList, 256);
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    range->qStart += qSeqOffset;
+    range->qEnd += qSeqOffset;
+    targetSeq = range->tSeq;
+    AllocVar(bun);
+    bun->qSeq = qSeq;
+    bun->genoSeq = targetSeq;
+    bun->data = range;
+    bun->ffList = rangesToFfItem(range->components, qSeq);
+    bun->isProt = FALSE;
+    slAddHead(&bunList, bun);
+    }
+gfRangeFreeList(&rangeList);
+return bunList;
 }
 
 static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList, 
@@ -1365,9 +1394,13 @@ for (fi = bun->ffList; fi != NULL; fi = fi->next)
     }
 }
 
+static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList, 
+    bioSeq *seq, boolean isRc,  int minMatch, 
+    struct gfOutput *out, boolean isProt, enum ffStringency stringency);
+
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
    boolean isRc, int minScore, Bits *qMaskBits, 
-   struct gfOutput *out)
+   struct gfOutput *out, boolean fastMap)
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 {
@@ -1385,7 +1418,7 @@ struct hash *bunHash = newHash(8);
 for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     {
     struct gfClump *clumpList;
-    struct gfRange *rangeList;
+    struct gfRange *rangeList = NULL;
 
     /* Figure out size of this piece.  If query is
      * maxSize or less do it all.   Otherwise just
@@ -1419,11 +1452,17 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 	    gfClumpDump(gf, clump, uglyOut);
 	}
 #endif /* DEBUG */
-    oneBunList = gfClumpsToBundles(clumpList, &subQuery, isRc, minScore, 
-    	&rangeList);
+    if (fastMap)
+	{
+	oneBunList = fastMapClumpsToBundles(gf, clumpList, query, subOffset);
+	}
+    else
+	{
+	oneBunList = gfClumpsToBundles(clumpList, &subQuery, isRc, minScore, &rangeList);
+	gfRangeFreeList(&rangeList);
+	}
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     gfClumpFreeList(&clumpList);
-    gfRangeFreeList(&rangeList);
     *endPos = saveEnd;
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
