@@ -38,6 +38,20 @@ struct genePred *genePredReaderAll(struct genePredReader* gpr);
 void genePredReaderFree(struct genePredReader** gprPtr);
 /* Free the genePredRead object. */
 
+struct genePred *genePredReaderDoQuery(struct sqlConnection* conn,
+                                       char* table, char* where);
+/* Function that encapsulates doing a query and loading the results */
+
+struct genePred *genePredReaderDoRangeQuery(struct sqlConnection* conn,
+                                            char* table, char* chrom,
+                                            int start, int end, 
+                                            char* extraWhere);
+/* Function that encapsulates doing a range query and loading the results */
+
+struct genePred *genePredReaderDoFile(char* gpFile, unsigned optFields,
+                                      char* chrom);
+/* Function that encapsulates reading a genePred file */
+
 
 #endif
  
