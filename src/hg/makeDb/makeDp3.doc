@@ -742,6 +742,13 @@ chainSome $(path1)
     # so you can limit the number of jobs starting to 3 or 4
     para try, push...
 
+# Completed: 347 of 347 jobs
+# CPU time in finished jobs:      11953s     199.21m     3.32h    0.14d  0.000 y
+# IO & Wait Time:                  4385s      73.09m     1.22h    0.05d  0.000 y
+# Average job time:                  47s       0.78m     0.01h    0.00d
+# Longest job:                     1500s      25.00m     0.42h    0.02d
+# Submission to last job:          2224s      37.07m     0.62h    0.03d
+
     exit
     # back to kksilo
     cd /cluster/data/dp3/bed/tblastn.dm1FB/blastOut
