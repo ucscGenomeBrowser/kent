@@ -26,7 +26,12 @@
 #include "portable.h"
 #include "customTrack.h"
 
+/* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
+static char *customTrackPseudoDb = "customTrack";
+
+/* lookupCt, getCustomTrackNames, and doGetBed initialize this if NULL: */
+struct customTrack *ctList = NULL;
 
 /* doMiddle() sets these: */
 struct cart *cart = NULL;
@@ -119,6 +124,13 @@ int ctVisMenuSize = 3;
 void positionLookup(char *phase)
 /* print the location and a jump button */
 {
+char pos[64];
+
+if (! sameString(position, "genome"))
+    {
+    snprintf(pos, sizeof(pos), "%s:%d-%d", chrom, winStart+1, winEnd);
+    position = cloneString(pos);
+    }
 cgiMakeTextVar("position", position, 30);
 cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
@@ -305,6 +317,8 @@ char *getTableDb()
 char *val, *ptr;
 	
 val = cloneString(getTableVar());
+if (val == NULL)
+    return NULL;
 if ((ptr = strchr(val, '.')) != NULL)
     *ptr = 0;
 return(val);
@@ -359,22 +373,44 @@ if ((trackName != NULL) && startsWith("chrN_", trackName))
 return trackName;
 }
 
-boolean tableExists(char *table)
+struct customTrack *lookupCt(char *name)
 {
-return ((sameString(database, getTableDb()) && hTableExists(table)) ||
-	(sameString(hGetDb2(), getTableDb()) && hTableExists2(table)));
+struct customTrack *ct;
+if (ctList == NULL)
+    ctList = customTracksParseCart(cart, NULL, NULL);
+for (ct=ctList;  ct != NULL;  ct=ct->next)
+    {
+    if (sameString(ct->tdb->tableName, name))
+	return ct;
+    }
+return NULL;
+}
+
+boolean tableExists(char *table, char *db)
+{
+if (sameString(customTrackPseudoDb, db))
+    return (lookupCt(table) != NULL);
+if (sameString(database, db))
+    return hTableExists(table);
+if (sameString(hGetDb2(), db))
+    return hTableExists2(table);
+else
+    {
+    errAbort("Unrecognized database name: %s", db);
+    return FALSE;
+    }
 }
 
 void checkTableExists(char *table)
 {
-if (! tableExists(table))
+if (! tableExists(table, getTableDb()))
     webAbort("No data", "Table %s (%s) does not exist in database %s.",
 	     getTableName(), table, getTableDb());
 }
 
 void checkTable2Exists(char *table)
 {
-if (! tableExists(table))
+if (! tableExists(table, getTable2Db()))
     webAbort("No data", "Table %s (%s) does not exist in database %s.",
 	     getTable2Name(), table, getTable2Db());
 }
@@ -389,20 +425,25 @@ else
 }
 
 
-static void printSelectOptions(struct hashEl *optList, char *name,
-			       char *valPrefix)
-/* this function is used to iterates over a hash el list and prints out
- * the name in a select input form */
+static void printSelectOptions(struct hashEl *optList, char *name)
+/* Print out an HTML select option for each element in a hashEl list.
+ * Mark as selected if it's the same as name; strip prefix for display. */
 {
 struct hashEl *cur;
+char *noPrefix;
+
 for (cur = optList;  cur != NULL;  cur = cur->next)
     {
-    if (existsAndEqual(name, cur->name))
-	printf("<OPTION SELECTED VALUE=\"%s.%s\">%s</OPTION>\n",
-	       valPrefix, cur->name, cur->name);
+    if ((noPrefix = strchr(cur->name, '.')) != NULL)
+	noPrefix++;
     else
-	printf("<OPTION VALUE=\"%s.%s\">%s</OPTION>\n",
-	       valPrefix, cur->name, cur->name);
+	noPrefix = cur->name;
+    if (existsAndEqual(name, cur->name))
+	printf("<OPTION SELECTED VALUE=\"%s\">%s</OPTION>\n",
+	       cur->name, noPrefix);
+    else
+	printf("<OPTION VALUE=\"%s\">%s</OPTION>\n",
+	       cur->name, noPrefix);
     }
 }
 
@@ -416,16 +457,23 @@ struct hashEl* b = *((struct hashEl **)elem2);
 return strcmp(a->name, b->name);
 }
 
-void getTableNames(char *dbName, struct sqlConnection *conn,
-		   struct hash *posTableHash, struct hash *nonposTableHash)
-/* iterate through all the tables and store the positional ones in a list */
+void getTableNames(char *db, struct sqlConnection *conn,
+		   struct hashEl **retPosTableList,
+		   struct hashEl **retNonposTableList)
+/* separate tables in db into positional and nonpositional lists, 
+ * with db added as a prefix to each name. */
 {
+struct hash *posTableHash = newHash(7);
+struct hashEl *posTableList;
+struct hash *nonposTableHash = newHash(7);
+struct hashEl *nonposTableList;
 struct sqlResult *sr;
 char **row;
 char query[256];
 char name[128];
 char chrom[32];
 char post[64];
+char fullName[128];
 
 strcpy(query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
@@ -449,12 +497,42 @@ while((row = sqlNextRow(sr)) != NULL)
 	strncpy(name, row[0], sizeof(name));
 	}
 
-    if (hFindChromStartEndFieldsDb(dbName, row[0], query, query, query))
-	hashStoreName(posTableHash, cloneString(name));
+    snprintf(fullName, sizeof(fullName), "%s.%s", db, name);
+    if (hFindChromStartEndFieldsDb(db, row[0], query, query, query))
+	hashStoreName(posTableHash, cloneString(fullName));
     else
-	hashStoreName(nonposTableHash, cloneString(name));
+	hashStoreName(nonposTableHash, cloneString(fullName));
     }
 sqlFreeResult(&sr);
+posTableList = hashElListHash(posTableHash);
+slSort(&posTableList, compareTable);
+nonposTableList = hashElListHash(nonposTableHash);
+slSort(&nonposTableList, compareTable);
+if (retPosTableList != NULL)
+    *retPosTableList = posTableList;
+if (retNonposTableList != NULL)
+    *retNonposTableList = nonposTableList;
+}
+
+struct hashEl *getCustomTrackNames()
+/* store custom track names in a hash (custom tracks are always positional) */
+{
+struct hash *ctTableHash = newHash(7);
+struct hashEl *ctTableList;
+struct customTrack *ct;
+char fullName[128];
+
+if (ctList == NULL)
+    ctList = customTracksParseCart(cart, NULL, NULL);
+for (ct=ctList;  ct != NULL;  ct=ct->next)
+    {
+    snprintf(fullName, sizeof(fullName), "%s.%s",
+	     customTrackPseudoDb, ct->tdb->tableName);
+    hashStoreName(ctTableHash, cloneString(fullName));
+    }
+ctTableList = hashElListHash(ctTableHash);
+slSort(&ctTableList, compareTable);
+return(ctTableList);
 }
 
 void categorizeTables(struct hashEl **retPosTableList,
@@ -463,34 +541,25 @@ void categorizeTables(struct hashEl **retPosTableList,
  * from the current database and hgFixed. */
 {
 struct sqlConnection *conn;
-struct hash *posTableHash = newHash(7);
-struct hashEl *posTableList;
-struct hash *nonposTableHash = newHash(7);
-struct hashEl *nonposTableList;
-struct hash *fixedPosTableHash = newHash(7);
-struct hashEl *fixedPosTableList;
-struct hash *fixedNonposTableHash = newHash(7);
-struct hashEl *fixedNonposTableList;
+struct hashEl *posTableList = NULL;
+struct hashEl *nonposTableList = NULL;
+struct hashEl *fixedPosTableList = NULL;
+struct hashEl *fixedNonposTableList = NULL;
+struct hashEl *ctPosTableList = NULL;
 
 /* get table names from the database */
 conn = hAllocConn();
-getTableNames(database, conn, posTableHash, nonposTableHash);
+getTableNames(database, conn, &posTableList, &nonposTableList);
 hFreeConn(&conn);
 /* get table names from hgFixed too */
 conn = sqlConnect(hgFixed);
-getTableNames(hgFixed, conn, fixedPosTableHash, fixedNonposTableHash);
+getTableNames(hgFixed, conn, &fixedPosTableList, &fixedNonposTableList);
 sqlDisconnect(&conn);
-/* get lists of names from the hashes and sort them */
-posTableList = hashElListHash(posTableHash);
-slSort(&posTableList, compareTable);
-nonposTableList = hashElListHash(nonposTableHash);
-slSort(&nonposTableList, compareTable);
-fixedPosTableList = hashElListHash(fixedPosTableHash);
-slSort(&fixedPosTableList, compareTable);
-fixedNonposTableList = hashElListHash(fixedNonposTableHash);
-slSort(&fixedNonposTableList, compareTable);
-/* append hgFixed db lists onto default db lists and return */
-*retPosTableList = slCat(posTableList, fixedPosTableList);
+/* get custom track names */
+ctPosTableList = getCustomTrackNames();
+/* prepend ct, append hgFixed db lists onto default db lists and return */
+posTableList = slCat(posTableList, fixedPosTableList);
+*retPosTableList = slCat(ctPosTableList, posTableList);
 *retNonposTableList = slCat(nonposTableList, fixedNonposTableList);
 }
 
@@ -499,13 +568,6 @@ void doChooseTable()
 {
 struct hashEl *posTableList;
 struct hashEl *nonposTableList;
-char buf[256];
-
-if (! sameString(position, "genome"))
-    {
-    sprintf(buf, "%s:%d-%d", chrom, winStart+1, winEnd);
-    position = cloneString(buf);
-    }
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
@@ -525,12 +587,12 @@ puts("Choose a table:");
 puts("</TD><TD>");
 puts("<SELECT NAME=table0 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
-printSelectOptions(posTableList, "table0", database);
+printSelectOptions(posTableList, "table0");
 puts("</SELECT>");
 
 puts("<SELECT NAME=table1 SIZE=1>");
 printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
-printSelectOptions(nonposTableList, "table1", database);
+printSelectOptions(nonposTableList, "table1");
 puts("</SELECT>");
 
 puts("</TD></TR>");
@@ -626,20 +688,85 @@ else
 checkIsAlpha("table name", dest);
 }
 
+void filterOptionsCustomTrack(char *table, char *tableId)
+/* Print out an HTML table with form inputs for constraints on custom track */
+{
+puts("[Sorry, constraints on custom track fields are not supported "
+     "<i>yet</i>.]\n"
+     "<P>");
+}
+
+void filterOptionsTableDb(char *fullTblName, char *db, char *tableId)
+/* Print out an HTML table with form inputs for constraints on table fields */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+boolean gotFirst;
+char query[256];
+char name[128];
+char *newVal;
+
+snprintf(query, sizeof(query), "DESCRIBE %s", fullTblName);
+if (sameString(database, db))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
+sr = sqlGetResult(conn, query);
+
+puts("<TABLE><TR><TD>\n");
+puts("<TABLE>\n");
+gotFirst = FALSE;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (! strstr(row[1], "blob"))
+	{
+	if (! gotFirst)
+	    gotFirst = TRUE;
+	else
+	    puts(" AND </TD></TR>\n");
+	printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", row[0]);
+	if (strstr(row[1], "char"))
+	    {
+	    snprintf(name, sizeof(name), "dd%s_%s", tableId, row[0]);
+	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, ddOpMenu[0]);
+	    puts(" match </TD><TD>\n");
+	    newVal = "*";
+	    }
+	else
+	    {
+	    puts(" is \n");
+	    snprintf(name, sizeof(name), "cmp%s_%s", tableId, row[0]);
+	    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, cmpOpMenu[0]);
+	    puts("</TD><TD>\n");
+	    newVal = "";
+	    }
+	snprintf(name, sizeof(name), "pat%s_%s", tableId, row[0]);
+	cgiMakeTextVar(name, newVal, 20);
+	}
+    }
+sqlFreeResult(&sr);
+if (sameString(database, db))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+puts("</TD></TR></TABLE>\n");
+puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
+snprintf(name, sizeof(name), "log_rawQuery%s", tableId);
+cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
+puts("Free-form query: ");
+snprintf(name, sizeof(name), "rawQuery%s", tableId);
+cgiMakeTextVar(name, "", 50);
+puts("</TD></TR></TABLE>");
+}
 
 void doOutputOptions()
 /* print out a form with output table format & filtering options */
 {
-struct sqlConnection *conn;
-struct sqlResult *sr;
 struct hashEl *posTableList;
 struct hashEl *nonposTableList;
-char **row;
 char *table = getTableName();
-char query[256];
-char name[128];
-char *newVal;
-boolean gotFirst;
+char *db = getTableDb();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
@@ -660,57 +787,10 @@ cgiMakeButton("phase", getOutputPhase);
 
 printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
        table);
-
-snprintf(query, 256, "DESCRIBE %s", fullTableName);
-if (sameString(database, getTableDb()))
-    conn = hAllocConn();
+if (sameString(customTrackPseudoDb, db))
+    filterOptionsCustomTrack(table, "");
 else
-    conn = hAllocConn2();
-sr = sqlGetResult(conn, query);
-
-puts("<TABLE><TR><TD>\n");
-puts("<TABLE>\n");
-gotFirst = FALSE;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (! strstr(row[1], "blob"))
-	{
-	if (! gotFirst)
-	    gotFirst = TRUE;
-	else
-	    puts(" AND </TD></TR>\n");
-	printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", row[0]);
-	if (strstr(row[1], "char"))
-	    {
-	    snprintf(name, sizeof(name), "dd_%s", row[0]);
-	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, ddOpMenu[0]);
-	    puts(" match </TD><TD>\n");
-	    newVal = "*";
-	    }
-	else
-	    {
-	    puts(" is \n");
-	    snprintf(name, sizeof(name), "cmp_%s", row[0]);
-	    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, cmpOpMenu[0]);
-	    puts("</TD><TD>\n");
-	    newVal = "";
-	    }
-	snprintf(name, sizeof(name), "pat_%s", row[0]);
-	cgiMakeTextVar(name, newVal, 20);
-	}
-    }
-sqlFreeResult(&sr);
-if (sameString(database, getTableDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
-puts("</TD></TR></TABLE>\n");
-puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
-strncpy(name, "log_rawQuery", sizeof(name));
-cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
-puts("Free-form query: ");
-cgiMakeTextVar("rawQuery", "", 50);
-puts("</TD></TR></TABLE>");
+    filterOptionsTableDb(fullTableName, db, "");
 cgiMakeButton("phase", getOutputPhase);
 
 if (tableIsPositional)
@@ -722,7 +802,7 @@ if (tableIsPositional)
     puts("Choose a positional table:");
     puts("<SELECT NAME=table2 SIZE=1>");
     printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
-    printSelectOptions(posTableList, "table2", database);
+    printSelectOptions(posTableList, "table2");
     puts("</SELECT>");
     hashElFreeList(&posTableList);
     hashElFreeList(&nonposTableList);
@@ -1190,7 +1270,8 @@ struct dyString *query = newDyString(512);
 char *constraints = constrainFields(tableId);
 char varName[128];
 
-if ((constraints != NULL) && (constraints[0] != 0))
+if ((constraints != NULL) && (constraints[0] != 0) &&
+    (! sameString(customTrackPseudoDb, db)))
     {
     // Null query will cause errAbort if there's a syntax error, no-op if OK.
     dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
@@ -1251,16 +1332,73 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
     }
 }
 
+struct hTableInfo *ctToHti(struct customTrack *ct)
+/* Create an hTableInfo from a customTrack. */
+{
+struct hTableInfo *hti;
+
+AllocVar(hti);
+hti->rootName = cloneString(ct->tdb->tableName);
+hti->isPos = TRUE;
+hti->isSplit = FALSE;
+hti->hasBin = FALSE;
+hti->type = cloneString(ct->tdb->type);
+if (ct->fieldCount >= 3)
+    {
+    strncpy(hti->chromField, "chrom", 32);
+    strncpy(hti->startField, "chromStart", 32);
+    strncpy(hti->endField, "chromEnd", 32);
+    }
+if (ct->fieldCount >= 4)
+    {
+    strncpy(hti->nameField, "name", 32);
+    }
+if (ct->fieldCount >= 5)
+    {
+    strncpy(hti->scoreField, "score", 32);
+    }
+if (ct->fieldCount >= 6)
+    {
+    strncpy(hti->strandField, "strand", 32);
+    }
+if (ct->fieldCount >= 8)
+    {
+    strncpy(hti->cdsStartField, "thickStart", 32);
+    strncpy(hti->cdsEndField, "thickEnd", 32);
+    hti->hasCDS = TRUE;
+    }
+if (ct->fieldCount >= 12)
+    {
+    strncpy(hti->countField, "blockCount", 32);
+    strncpy(hti->startsField, "chromStarts", 32);
+    strncpy(hti->endsSizesField, "blockSizes", 32);
+    hti->hasBlocks = TRUE;
+    }
+
+return(hti);
+}
+
 struct hTableInfo *getHti()
 /* Return primary table info. */
 {
 char *db = getTableDb();
-char *track = getTrackName();
-struct hTableInfo *hti = hFindTableInfoDb(db, chrom, track);
+char *table = getTableName();
+struct hTableInfo *hti;
+
+if (sameString(customTrackPseudoDb, db))
+    {
+    struct customTrack *ct = lookupCt(table);
+    hti = ctToHti(ct);
+    }
+else
+    {
+    char *track = getTrackName();
+    hti = hFindTableInfoDb(db, chrom, track);
+    }
 
 if (hti == NULL)
     webAbort("Error", "Could not find table info for table %s",
-	     track);
+	     table);
 return(hti);
 }
 
@@ -1421,6 +1559,29 @@ return(newBed);
 }
 
 
+struct bed *bedInRange(struct bed *bedListIn, char *chrom, int winStart,
+		       int winEnd, char *constraints)
+{
+struct bed *bedListOut = NULL, *bed;
+
+if ((constraints != NULL) && (constraints[0] != 0))
+    errAbort("Hey, how did constraints=%s get in here?", constraints);
+
+for (bed=bedListIn;  bed != NULL;  bed=bed->next)
+    {
+    if (sameString(bed->chrom, chrom) &&
+	(bed->chromStart < winEnd) &&
+	(bed->chromEnd   > winStart))
+	{
+	struct bed *newBed = cloneBed(bed);
+	slAddHead(&bedListOut, newBed);
+	}
+    }
+
+slReverse(&bedListOut);
+return(bedListOut);
+}
+
 struct bed *getBedList()
 /* For any positional table output: get the features selected by the user 
  * and return them as a bed list.  This is where table intersection happens. */
@@ -1449,8 +1610,15 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     bedListChrom = NULL;
     getFullTableName(fullTableName, chromPtr->name, table);
-    bedListT1 =  hGetBedRangeDb(db, fullTableName, chrom, winStart,
-				winEnd, constraints);
+    if (sameString(customTrackPseudoDb, db))
+	{
+	struct customTrack *ct = lookupCt(table);
+	bedListT1 = bedInRange(ct->bedList, chrom, winStart, winEnd,
+			       constraints);
+	}
+    else
+	bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
+				   winEnd, constraints);
     /* If 2 tables are named, get their intersection. */
     if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 	{
@@ -1477,8 +1645,19 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    }
 	getFullTableName(fullTableName2, chromPtr->name, table2);
 	checkTable2Exists(fullTableName2);
-	fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart, winEnd,
-				     constraints2, FALSE, FALSE);
+	if (sameString(customTrackPseudoDb, db2))
+	    {
+	    struct customTrack *ct2 = lookupCt(table2);
+	    struct bed *bedListT2 = bedInRange(ct2->bedList, chrom, winStart,
+					       winEnd, constraints2);
+	    struct hTableInfo *hti2 = ctToHti(ct2);
+	    fbListT2 = fbFromBed(track2, hti2, bedListT2, winStart, winEnd,
+				 FALSE, FALSE);
+	    bedFreeList(&bedListT2);
+	    }
+	else
+	    fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart, winEnd,
+					 constraints2, FALSE, FALSE);
 	bitsT2 = bitAlloc(chromSize+8);
 	fbOrBits(bitsT2, chromSize, fbListT2, 0);
 	if (sameString("and", op) || sameString("or", op))
@@ -1486,8 +1665,8 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    // Base-pair-wise operation: get featureBits for primary table too
 	    struct featureBits *fbListT1;
 	    Bits *bitsT1;
-	    fbListT1 = fbGetRangeQueryDb(db, track, chrom, winStart, winEnd,
-					 constraints, FALSE, FALSE);
+	    fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
+				 FALSE, FALSE);
 	    bitsT1 = bitAlloc(chromSize+8);
 	    fbOrBits(bitsT1, chromSize, fbListT1, 0);
 	    // invert inputs if necessary
@@ -1551,6 +1730,119 @@ return(bedList);
 }
 
 
+struct slName *getAllFields()
+/* Return a list of all field names in the primary table. */
+{
+struct slName *fieldList = NULL, *field;
+char *db = getTableDb();
+
+if (sameString(customTrackPseudoDb, db))
+    {
+    char *table = getTableName();
+    struct customTrack *ct = lookupCt(table);
+    if (ct->fieldCount >= 3)
+	{
+	field = newSlName("chrom");
+	slAddHead(&fieldList, field);
+	field = newSlName("chromStart");
+	slAddHead(&fieldList, field);
+	field = newSlName("chromEnd");
+	slAddHead(&fieldList, field);
+	}
+    if (ct->fieldCount >= 4)
+	{
+	field = newSlName("name");
+	slAddHead(&fieldList, field);
+	}
+    if (ct->fieldCount >= 5)
+	{
+	field = newSlName("score");
+	slAddHead(&fieldList, field);
+	}
+    if (ct->fieldCount >= 6)
+	{
+	field = newSlName("strand");
+	slAddHead(&fieldList, field);
+	}
+    if (ct->fieldCount >= 8)
+	{
+	field = newSlName("thickStart");
+	slAddHead(&fieldList, field);
+	field = newSlName("thickEnd");
+	slAddHead(&fieldList, field);
+	}
+    if (ct->fieldCount >= 12)
+	{
+	field = newSlName("reserved");
+	slAddHead(&fieldList, field);
+	field = newSlName("blockCount");
+	slAddHead(&fieldList, field);
+	field = newSlName("blockSizes");
+	slAddHead(&fieldList, field);
+	field = newSlName("chromStarts");
+	slAddHead(&fieldList, field);
+	}
+    }
+else
+    {
+    struct sqlConnection *conn;
+    struct sqlResult *sr;
+    char **row;
+    char query[256];
+    if (sameString(database, db))
+	conn = hAllocConn();
+    else
+	conn = hAllocConn2();
+    snprintf(query, sizeof(query), "DESCRIBE %s", fullTableName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	field = newSlName(row[0]);
+	slAddHead(&fieldList, field);
+	}
+    sqlFreeResult(&sr);
+    if (sameString(database, getTableDb()))
+	hFreeConn(&conn);
+    else
+	hFreeConn2(&conn);
+    }
+slReverse(&fieldList);
+return(fieldList);
+}
+
+struct slName *getChosenFields(boolean allFields)
+/* Return a list of chosen field names. */
+{
+struct slName *tableFields = getAllFields();
+if (allFields)
+    {
+    return(tableFields);
+    }
+else
+    {
+    struct slName *fieldList = NULL, *field;
+    struct cgiVar* varPtr;
+    for (varPtr = cgiVarList();  varPtr != NULL;  varPtr = varPtr->next)
+	{
+	if (startsWith("field_", varPtr->name) &&
+	    sameString("on", varPtr->val))
+	    {	
+	    char *fieldStr = varPtr->name + strlen("field_");
+	    checkIsAlpha("field name", fieldStr);
+	    /* check that the field is there in the current table (and not 
+	     * just a stale CGI var) */
+	    if (slNameInList(tableFields, fieldStr))
+		{
+		field = newSlName(fieldStr);
+		slAddHead(&fieldList, field);
+		}
+	    }
+	}
+    slReverse(&fieldList);
+    return(fieldList);
+    }
+}
+
 boolean printTabbedResults(struct sqlResult *sr, boolean initialized)
 {
 char **row;
@@ -1583,6 +1875,120 @@ while((row = sqlNextRow(sr)) != NULL);
 return(initialized);
 }
 
+boolean printTabbedBed(struct bed *bedList, struct slName *chosenFields,
+		       boolean initialized)
+/* Print out the chosen fields of a bedList. */
+{
+struct bed *bed;
+struct slName *field;
+
+if (bedList == NULL)
+    return(initialized);
+
+if (! initialized)
+    {
+    boolean gotFirst = FALSE;
+    initialized = TRUE;
+    printf("#");
+    for (field=chosenFields;  field != NULL;  field=field->next)
+	{
+	if (! gotFirst)
+	    gotFirst = TRUE;
+	else
+	    printf("\t");
+	printf("%s", field->name);
+	}
+    printf("\n");
+    }
+
+for (bed=bedList;  bed != NULL;  bed=bed->next)
+    {
+    boolean gotFirst = FALSE;
+    for (field=chosenFields;  field != NULL;  field=field->next)
+	{
+	if (! gotFirst)
+	    gotFirst = TRUE;
+	else
+	    printf("\t");
+	if (sameString(field->name, "chrom"))
+	    printf("%s", bed->chrom);
+	else if (sameString(field->name, "chromStart"))
+	    printf("%d", bed->chromStart);
+	else if (sameString(field->name, "chromEnd"))
+	    printf("%d", bed->chromEnd);
+	else if (sameString(field->name, "name"))
+	    printf("%s", bed->name);
+	else if (sameString(field->name, "score"))
+	    printf("%d", bed->score);
+	else if (sameString(field->name, "strand"))
+	    printf("%s", bed->strand);
+	else if (sameString(field->name, "thickStart"))
+	    printf("%d", bed->thickStart);
+	else if (sameString(field->name, "thickEnd"))
+	    printf("%d", bed->thickEnd);
+	else if (sameString(field->name, "reserved"))
+	    printf("%d", bed->reserved);
+	else if (sameString(field->name, "blockCount"))
+	    printf("%d", bed->blockCount);
+	else if (sameString(field->name, "blockSizes"))
+	    {
+	    int i;
+	    for (i=0;  i < bed->blockCount;  i++)
+		printf("%d,", bed->blockSizes[i]);
+	    }
+	else if (sameString(field->name, "chromStarts"))
+	    {
+	    int i;
+	    for (i=0;  i < bed->blockCount;  i++)
+		printf("%d,", bed->chromStarts[i]);
+	    }
+	else
+	    errAbort("\nUnrecognized bed field name \"%s\"", field->name);
+	}
+    printf("\n");
+    }
+return(initialized);
+}
+
+void doTabSeparatedCT(boolean allFields)
+{
+struct slName *chromList, *chromPtr;
+struct bed *bedList, *bed;
+char *table = getTableName();
+struct customTrack *ct = lookupCt(table);
+struct slName *chosenFields;
+char *constraints;
+boolean gotResults;
+
+printf("Content-Type: text/plain\n\n");
+webStartText();
+checkTableExists(fullTableName);
+constraints = constrainFields(NULL);
+
+if (allGenome)
+    chromList = hAllChromNames();
+else
+    chromList = newSlName(chrom);
+
+chosenFields = getChosenFields(allFields);
+if (chosenFields == NULL)
+    {
+    printf("\n# Error: at least one field must be selected.\n\n");
+    return;
+    }
+
+gotResults = FALSE;
+for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
+    {
+    getFullTableName(fullTableName, chromPtr->name, table);
+    bedList = bedInRange(ct->bedList, chrom, winStart, winEnd, constraints);
+    gotResults = printTabbedBed(bedList, chosenFields, gotResults);
+    bedFreeList(&bedList);
+    }
+
+if (! gotResults)
+    printf("\n# No results returned from query.\n\n");
+}
 
 void doTabSeparated(boolean allFields)
 {
@@ -1591,56 +1997,59 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 struct dyString *query = newDyString(512);
 struct dyString *fieldSpec = newDyString(256);
-struct cgiVar* varPtr;
 char *table = getTableName();
+char *db = getTableDb();
 char chromField[32];
 char startField[32];
 char endField[32];
 char *constraints;
 boolean gotResults;
-boolean gotFirst = FALSE;
 
-if (allGenome)
-    chromList = hAllChromNames();
-else
-    chromList = newSlName(chrom);
-
-if (sameString(database, getTableDb()))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
+if (sameString(customTrackPseudoDb, db))
+    {
+    doTabSeparatedCT(allFields);
+    return;
+    }
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
 checkTableExists(fullTableName);
 constraints = constrainFields(NULL);
 
+if (allGenome)
+    chromList = hAllChromNames();
+else
+    chromList = newSlName(chrom);
+
+if (sameString(database, db))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
+
 dyStringClear(fieldSpec);
 if (allFields)
     dyStringAppend(fieldSpec, "*");
 else
-    for (varPtr = cgiVarList();  varPtr != NULL;  varPtr = varPtr->next)
-	{
-	if ((strstr(varPtr->name, "field_") == varPtr->name) &&
-	    sameString("on", varPtr->val))
-	    {	
-	    checkIsAlpha("field name", varPtr->name + strlen("field_"));
-	    if (! gotFirst)
-		gotFirst = TRUE;
-	    else
-		dyStringAppend(fieldSpec, ",");
-	    dyStringAppend(fieldSpec, varPtr->name + strlen("field_"));
-	    }
-	}
-
-if (strlen(fieldSpec->string) < 1)
     {
-    printf("\n# Error: at least one field must be selected.\n\n");
-    return;
+    struct slName *chosenFields = getChosenFields(allFields);
+    struct slName *field;
+    boolean gotFirst = FALSE;
+    if (chosenFields == NULL)
+	{
+	printf("\n# Error: at least one field must be selected.\n\n");
+	return;
+	}
+    for (field=chosenFields;  field != NULL;  field=field->next)
+	{
+	if (! gotFirst)
+	    gotFirst = TRUE;
+	else
+	    dyStringAppend(fieldSpec, ",");
+	dyStringAppend(fieldSpec, field->name);
+	}
     }
 
-hFindChromStartEndFieldsDb(getTableDb(), fullTableName, chromField,
-			   startField, endField);
+hFindChromStartEndFieldsDb(db, fullTableName, chromField, startField, endField);
 gotResults = FALSE;
 if (tableIsSplit)
     {
@@ -1689,32 +2098,24 @@ if (! gotResults)
     printf("\n# No results returned from query.\n\n");
 
 dyStringFree(&query);
-if (sameString(database, getTableDb()))
+if (sameString(database, db))
     hFreeConn(&conn);
 else
     hFreeConn2(&conn);
 }
 
-
 void doChooseFields()
 {
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
+struct slName *allFields = getAllFields();
+struct slName *field;
+char *table = getTableName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
-char query[256];
 char name[128];
-char *newVal;
 boolean checkAll;
 boolean clearAll;
 
-if (sameString(database, db))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
-
-webStart(cart, "Table Browser: %s: Choose Fields", freezeName);
+webStart(cart, "Table Browser: %s: Choose Fields of %s", freezeName, table);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
@@ -1725,34 +2126,27 @@ positionLookupSamePhase();
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 
-snprintf(query, sizeof(query), "DESCRIBE %s", fullTableName);
-sr = sqlGetResult(conn, query);
-
 printf("<H3> Select Fields of Table %s: </H3>\n", getTableName());
 cgiMakeHiddenVar("origPhase", cgiString("phase"));
 cgiMakeButton("submit", "Check All");
 cgiMakeButton("submit", "Clear All");
 
-puts("<TABLE><TR><TD>");
 checkAll = existsAndEqual("submit", "Check All") ? TRUE : FALSE;
 clearAll = existsAndEqual("submit", "Clear All") ? TRUE : FALSE;
-while((row = sqlNextRow(sr)) != NULL)
+puts("<TABLE>");
+for (field=allFields;  field != NULL;  field=field->next)
     {
-    snprintf(name, sizeof(name), "field_%s", row[0]);
+    puts("<TR><TD>");
+    snprintf(name, sizeof(name), "field_%s", field->name);
     if (checkAll || (existsAndEqual(name, "on") && !clearAll))
 	printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s\n",
-	       name, row[0]);
+	       name, field->name);
     else
-	printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s\n", name, row[0]);
-    puts("</TD></TR><TR><TD>");
+	printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s\n",
+	       name, field->name);
+puts("</TD></TR>");
     }
 puts("</TABLE>\n");
-sqlFreeResult(&sr);
-if (sameString(database, getTableDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
-	
 cgiMakeButton("phase", getSomeFieldsPhase);
 puts("</FORM>");
 
@@ -1787,13 +2181,12 @@ void doGetSequence()
 {
 struct hTableInfo *hti = getOutputHti();
 struct bed *bedList = getBedList();
-char *db = getTableDb();
 int itemCount;
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
-itemCount = hgSeqBedDb(db, hti, bedList);
+itemCount = hgSeqBedDb(database, hti, bedList);
 bedFreeList(&bedList);
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
@@ -1985,7 +2378,10 @@ int itemCount;
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
-snprintf(source, sizeof(source), "%s_%s", db, track);
+if (sameString(customTrackPseudoDb, db))
+    snprintf(source, sizeof(source), "%s", track);
+else
+    snprintf(source, sizeof(source), "%s_%s", db, track);
 itemCount = 0;
 gffList = bedToGffLines(bedList, hti, source);
 bedFreeList(&bedList);
@@ -2088,11 +2484,10 @@ struct hTableInfo *hti = getOutputHti();
 struct bed *bedList = getBedList();
 struct bed *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
-struct customTrack *ctList = NULL, *ctNew = NULL;
+struct customTrack *ctNew = NULL;
 struct tempName tn;
 char *table = getTableName();
 char *track = getTrackName();
-char *db = getTableDb();
 boolean doCT = cgiBoolean("hgt.doCustomTrack");
 char *ctName = cgiUsualString("hgt.ctName", table);
 char *ctDesc = cgiUsualString("hgt.ctDesc", table);
@@ -2164,7 +2559,8 @@ else
 if ((ctNew != NULL) && (ctNew->bedList != NULL))
     {
     /* Load existing custom tracks and add this new one: */
-    ctList = customTracksParseCart(cart, NULL, NULL);
+    if (ctList == NULL)
+	ctList = customTracksParseCart(cart, NULL, NULL);
     slAddHead(&ctList, ctNew);
     /* Save the custom tracks out to file (overwrite the old file): */
     ctFileName = cartOptionalString(cart, "ct");
@@ -2234,7 +2630,6 @@ char *table2 = getTable2Name();
 char *track = getTrackName();
 char *db = getTableDb();
 char *db2 = getTable2Db();
-char *newVal;
 char fullTableName2[256];
 char query[256];
 char name[128];
@@ -2305,56 +2700,10 @@ cgiMakeButton("phase", outputType);
 
 printf("<P><HR><H3> (Optional) Filter Table %s Records by Field Values </H3>\n",
        table2);
-if (sameString(database, getTable2Db()))
-    conn = hAllocConn();
+if (sameString(customTrackPseudoDb, db))
+    filterOptionsCustomTrack(table, "2");
 else
-    conn = hAllocConn2();
-snprintf(query, sizeof(query), "DESCRIBE %s", fullTableName2);
-sr = sqlGetResult(conn, query);
-
-puts("<TABLE><TR><TD>\n");
-puts("<TABLE>\n");
-gotFirst = FALSE;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (! strstr(row[1], "blob"))
-	{
-	if (! gotFirst)
-	    gotFirst = TRUE;
-	else
-	    puts(" AND </TD></TR>\n");
-	printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", row[0]);
-	if (strstr(row[1], "char"))
-	    {
-	    snprintf(name, sizeof(name), "dd2_%s", row[0]);
-	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, ddOpMenu[0]);
-	    puts(" match </TD><TD>\n");
-	    newVal = "*";
-	    }
-	else
-	    {
-	    puts(" is \n");
-	    snprintf(name, sizeof(name), "cmp2_%s", row[0]);
-	    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, cmpOpMenu[0]);
-	    puts("</TD><TD>\n");
-	    newVal = "";
-	    }
-	snprintf(name, sizeof(name), "pat2_%s", row[0]);
-	cgiMakeTextVar(name, newVal, 20);
-	}
-    }
-sqlFreeResult(&sr);
-if (sameString(database, getTable2Db()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
-puts("</TD></TR></TABLE>\n");
-puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
-strncpy(name, "log_rawQuery2", sizeof(name));
-cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
-puts("Free-form query: ");
-cgiMakeTextVar("rawQuery2", "", 50);
-puts("</TD></TR></TABLE>");
+    filterOptionsTableDb(fullTableName, db, "2");
 cgiMakeButton("phase", outputType);
 puts("</FORM>");
 webEnd();
@@ -2366,6 +2715,7 @@ void doMiddle(struct cart *theCart)
 {
 char *table = getTableName();
 char trash[32];
+char *db = getTableDb();
 
 cart = theCart;
 database = cartUsualString(cart, "db", hGetDb());
@@ -2411,9 +2761,9 @@ if (table == NULL || existsAndEqual("phase", chooseTablePhase))
     }
 else
     {
-    if ((! sameString(database, getTableDb())) &&
-	(! sameString(hGetDb2(), getTableDb())))
-	hSetDb2(getTableDb());
+    if ((! sameString(database, db)) && (! sameString(hGetDb2(), db)) &&
+	(! sameString(customTrackPseudoDb, db)))
+	hSetDb2(db);
 
     if (existsAndEqual("table0", "Choose table") &&
 	existsAndEqual("table1", "Choose table"))
@@ -2424,9 +2774,11 @@ else
     else
 	getFullTableName(fullTableName, chrom, table);
 
-    tableIsPositional = hFindChromStartEndFieldsDb(getTableDb(),
-						   fullTableName,
-						   trash, trash, trash);
+    if (sameString(customTrackPseudoDb, db))
+	tableIsPositional = TRUE;
+    else
+	tableIsPositional = hFindChromStartEndFieldsDb(db, fullTableName,
+						       trash, trash, trash);
     if (strstr(table, "chrN_") == table)
 	tableIsSplit = TRUE;
 
