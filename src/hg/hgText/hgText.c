@@ -27,7 +27,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.96 2003/10/02 15:50:34 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.97 2003/10/02 17:23:57 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2698,7 +2698,7 @@ if (chosenFields == NULL)
     }
 
 if (allGenome)
-    bedList = ct->bedList;
+    bedList = cloneBedList(ct->bedList);
 else
     bedList = bedFilterListInRange(ct->bedList, bf, chrom, winStart, winEnd);
 bedFilterBatch(&bedList);
