@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.3 2003/08/14 20:41:38 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.4 2003/08/15 17:43:12 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1604,6 +1604,7 @@ char o4[128]; /* Option 4 - minimum vertical range cutoff of plot */
 char o5[128]; /* Option 5 - maximum vertical range cutoff of plot */
 char o6[128]; /* Option 6 - max gap where interpolation is still done */
 char cartStr[64];
+char *fillStr;
 
 double hFactor, hFactor2;
 double minRange, maxRange;
@@ -1632,12 +1633,18 @@ antiAlias = sameString(aa, "on");
 //don't fill gcPercent track by default (but fill others)
 if(sameString( tg->mapName, "pGC") && sameString(database,"zooHuman3"))
 {
-        fill = atoi(cartUsualString(cart, o3, "0"));
+        fillStr = cartUsualString(cart, o3, "0");
 }
 else
 {
-        fill = atoi(cartUsualString(cart, o3, "1"));
+        fillStr = cartUsualString(cart, o3, "1");
 }
+fill = atoi(fillStr);
+/*	There is something wierd going on here.  After going to
+ *	hgTrackUi to set the fill value, this call to cartSetString
+ *	causes the string in fillStr to go bad.  Therein lurks a bug.
+ */
+cartSetString(cart, o3, fillStr );
 
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
 //display range.
