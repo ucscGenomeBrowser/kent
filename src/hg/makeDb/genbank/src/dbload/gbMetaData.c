@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.25 2005/02/13 07:40:27 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.26 2005/02/15 17:01:16 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -385,10 +385,8 @@ char *pro = emptyForNull(raFieldCurVal("pro"));
 gen = sqlEscapeString2(alloca(2*strlen(gen)+1), gen);
 pro = sqlEscapeString2(alloca(2*strlen(pro)+1), pro);
 
-/* can either have locus id (old locus link db) or gene id, or both, in
- * which case they must be the same */
-if ((raLocusLinkId > 0) && (raGeneId > 0) && (raLocusLinkId != raGeneId))
-    errAbort("%s: have both LocusID and GeneID, however values are different", raAcc);
+/* can either have locus id (old locus link db) or gene id, or both,
+ * in which case the geneId is used */
 geneId = (raGeneId != 0) ? raGeneId : raLocusLinkId;
 
 if (status->stateChg & GB_NEW)
