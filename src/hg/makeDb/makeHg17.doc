@@ -8578,3 +8578,23 @@ s/chr24/chrY/g
     gzip *.bed
 #done firstEF
 
+#  miRNA track (DONE 2004-08-24 - Hiram)
+    #	The source data for this was received via email from Sam
+    #	Griffiths-Jones to Donna 16 August 2004.  In other email Michel
+    #	Weber asked to add one more data line to that file.
+
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    cd /cluster/data/hg17/bed
+    mkdir miRNA
+    cd miRNA
+    egrep -v "^track |^browser " miRNA_hg17_1.bed | sed -e "s/ /\t/g" > hg17.bed
+    hgLoadBed hg17 miRNA hg17.bed
+    #	compare with previous results, should be relatively similar
+    #	featureBits hg16 miRNA
+    #	16923 bases of 2865248791 (0.001%) in intersection
+    #	featureBits hg17 miRNA
+    #	18052 bases of 2866216770 (0.001%) in intersection
+
+    # entry is already in trackDb/trackDb.ra
