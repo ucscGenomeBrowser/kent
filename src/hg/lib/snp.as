@@ -1,8 +1,17 @@
 table snp
-"Single nucleotide polymorphisms"
+"SNP positions from various sources"
     (
-    string chrom;      "Human chromosome or FPC contig"
-    uint   chromStart; "Start position in chromosome"
-    uint   chromEnd;   "End position in chromosome"
-    string name;       "Name of SNP"
+    string  chrom;	"Chromosome or 'unknown'"
+    uint    chromStart; "Start position in chrom"
+    uint    chromEnd;	"End position in chrom"
+    string  name;	"Name of SNP - rsId or Affy name"
+    float   score;      "certainty of variation"
+    char[1] strand;     "+ or -"
+    string  alleles;   	"the sequence of the observed alleles"
+    string  source;	"BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K"
+    string  class;      "SNP | INDEL | SEGMENTAL"
+    string  func; 	"the functional category of the SNP, if any"
+    string  valid;   	"the validation status of the SNP"
+    float   avHet;   	"the average heterozygosity from all observations"
+    float   avHetSE; 	"the Standard Error for the average heterozygosity"
     )
