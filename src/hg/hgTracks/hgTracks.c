@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.941 2005/04/06 21:36:52 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.942 2005/04/06 21:44:51 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8678,7 +8678,7 @@ Color colorGencodeIntron(struct track *tg, void *item, struct vGfx *vg)
 struct gencodeIntron *intron = (struct gencodeIntron *)item;
 
 if (sameString(intron->status, "not_tested"))
-    return vgFindColorIx(vg, 186,191,183);       /* light grey */
+    return vgFindColorIx(vg, 214,214,216);       /* light grey */
 if (sameString(intron->status, "RT_negative"))
     return vgFindColorIx(vg, 145,51,56);       /* red */
 if (sameString(intron->status, "RT_positive"))
@@ -8687,7 +8687,7 @@ if (sameString(intron->status, "RT_wrong_junction"))
     return makeOrangeColor(vg);                 /* orange */
 if (sameString(intron->status, "RT_submitted"))
     return vgFindColorIx(vg, 102,109,112);       /* grey */
-return vgFindColorIx(vg, 186,191,183);       /* light grey */
+return vgFindColorIx(vg, 214,214,216);       /* light grey */
 }
 
 static void loadGencodeIntron(struct track *tg)
