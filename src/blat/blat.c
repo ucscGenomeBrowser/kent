@@ -12,6 +12,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
+enum {qSizeMax = 20000};
 
 /* Variables that can be set from command line. */
 int tileSize = 10;
@@ -184,7 +185,7 @@ gfClumpFreeList(&clumpList);
 void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
 /* Search for seq on either strand in index. */
 {
-uglyf("Searching for hits to %s\n", seq->name);
+// uglyf("Searching for hits to %s\n", seq->name);
 if (isProt)
     {
     searchOneProt(seq, gf, psl);
@@ -237,6 +238,12 @@ for (i=0; i<fileCount; ++i)
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isProt))
 	    {
+	    if (seq.size > qSizeMax)
+	        {
+		warn("Truncating %s first %d bases", seq.name, qSizeMax);
+		seq.size = qSizeMax;
+		seq.dna[qSizeMax] = 0;
+		}
 	    searchOne(&seq, gf, psl, isProt);
 	    totalSize += seq.size;
 	    count += 1;
@@ -325,7 +332,7 @@ if (!noHead)
 
 for (isRc = FALSE; isRc <= 1; ++isRc)
     {
-    uglyf("Searching %c strand of database\n", (isRc ? '-' : '+'));
+    // uglyf("Searching %c strand of database\n", (isRc ? '-' : '+'));
 
     /* Initialize local pointer arrays to NULL to prevent surprises. */
     for (frame = 0; frame < 3; ++frame)
@@ -347,7 +354,13 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	lf = lineFileOpen(queryFiles[i], TRUE);
 	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
 	    {
-	    uglyf("Searching %s of %d letters\n", qSeq.name, qSeq.size);
+	    // uglyf("Searching %s of %d letters\n", qSeq.name, qSeq.size);
+	    if (qSeq.size > qSizeMax)
+	        {
+		warn("Truncating %s first qSizeMax bases", qSeq.name);
+		qSeq.size = qSizeMax;
+		qSeq.dna[qSizeMax] = 0;
+		}
 	    if (transQuery)
 	        transTripleSearch(&qSeq, gfs, t3Hash, isRc, rcQueryToo, pslOut);
 	    else

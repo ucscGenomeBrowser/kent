@@ -6,23 +6,31 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
-void gfClient(char *hostName, char *portName, char *nibDir, char *inName, char *outName)
+void gfClient(char *hostName, char *portName, char *nibDir, char *inName, char *outName, boolean tx)
 /* gfClient - A client for the genomic finding program that produces a .psl file. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
-static struct dnaSeq seq;
+static bioSeq seq;
 struct ssBundle *bundleList;
 enum ffStringency stringency = ffCdna;
 FILE *out = mustOpen(outName, "w");
 
 if (!cgiVarExists("nohead"))
     pslWriteHead(out);
-while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !tx))
     {
     printf("Processing %s\n", seq.name);
-    gfAlignStrand(hostName, portName, nibDir, &seq, FALSE, stringency, 36, gfSavePsl, out);
-    reverseComplement(seq.dna, seq.size);
-    gfAlignStrand(hostName, portName, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
+    if (tx)
+        {
+	uglyf("got tx\n");
+	gfAlignTrans(hostName, portName, nibDir, &seq, 12, gfSavePsl, NULL);
+	}
+    else
+	{
+	gfAlignStrand(hostName, portName, nibDir, &seq, FALSE, stringency, 36, gfSavePsl, out);
+	reverseComplement(seq.dna, seq.size);
+	gfAlignStrand(hostName, portName, nibDir, &seq, TRUE,  stringency, 36, gfSavePsl, out);
+	}
     }
 printf("Output is in %s\n", outName);
 }
@@ -42,6 +50,7 @@ errAbort(
   "   in.fa a fasta format file.  May contain multiple records\n"
   "   out.psl where to put the output\n"
   "options:\n"
+  "   -tx   Compare protein query to translated database\n"
   "   -nohead   Suppresses psl five line header");
 }
 
@@ -51,6 +60,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (argc != 6)
     usage();
-gfClient(argv[1], argv[2], argv[3], argv[4], argv[5]);
+gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], cgiVarExists("tx"));
 return 0;
 }
