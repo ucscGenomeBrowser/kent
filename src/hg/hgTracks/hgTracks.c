@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.932 2005/03/24 05:31:11 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.933 2005/03/24 21:15:27 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9831,7 +9831,7 @@ if (!hideControls)
 	else
 	    {
 	    if (sameString(clade, "ancestor"))
-                hPrintf("UCSC Genome Browser on %s Ancestor %s Assembly", organism, freezeName);
+                hPrintf("UCSC Genome Browser on %s Common Ancestor (%s)", organism, freezeName);
 	    else if (sameString(organism, "Archaea"))
                 hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
 	    else
