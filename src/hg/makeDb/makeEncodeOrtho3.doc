@@ -313,6 +313,8 @@ hgsql hg17 < updateDatabase.sql
 #  coordinates in bed files in the "consensus" directory
 ## based on makeAgp2.doc
 
+rm -f *.contig.tab */*.packing.list >& /dev/null
+
 # TODO: contigAcc files should go in $outDir (neater this way)
 
 set orthoDir     = /cluster/data/encode/ortho3
@@ -388,39 +390,97 @@ endif
 'EOF'
 # << this line makes emacs coloring happy
 
-rm -f *.contig.tab */*.packing.list >& /dev/null
+########################################################################
+# create test scripts
+
+cd /cluster/data/encode/ortho3/agp/tests
+cat > getSeqFromAcc.pl <<EOF
+#!/usr/bin/perl -W
+# download contig sequences from Genbank to $db.contig.fa directory
+$URL = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&id=";
+$db=shift;
+$dir = "/cluster/data/encode/ortho3/agp/tests/$db.contig.fa";
+system("mkdir -p $dir");
+while (<>)
+{
+    chomp();
+    system("wget -O $dir/$_ \"$URL$_\"");
+}
+EOF
+#
+chmod ug+x getSeqFromAcc.pl
+
+cd /cluster/data/encode/ortho3/agp/tests
+cat > testFa.csh << 'EOF'
+set db = $1
+set org = $2
+foreach f (../$db/*.agp)
+    set seq = $f:t:r
+    set region = `echo $seq | sed "s/${org}_//"`
+    set coords = `awk -v REGION=$region '$4 == REGION {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho3/consensus/$db.bed`
+    set chr = $coords:r:r
+    nibFrag /cluster/data/$db/nib/${chr}.nib \
+        $coords:r:e $coords:e + $db.nibTest/$db.$region.fa
+    faCmp $db.nibTest/$db.$region.fa $db.test/${org}_$region.fa
+end
+'EOF'
+# << for emacs
 
 ########################################################################
-# MOUSE AGP'S (WORKING 2005-03-16 kate)
+
+# MOUSE AGP'S (DONE 2005-03-17 kate)
 #!/bin/csh -fe
 
 cd /cluster/data/encode/ortho3/agp
 set db  = mm5
 set org = mouse
-set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
-set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
 
-#create consensus list
+#create consensus list from database, verify it's the same as consensus dir
 mkdir $db
 hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+sort $db/$db.encodeRegionsConsensus.bed5 > temp
+sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
+# should be empty
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+# 56
 
 # Create AGP's
 csh genomeAgps.csh $db $org $db
 
+# Test 
+cd tests
+rm -fr $db.test $db.nibTest 
+mkdir $db.test $db.nibTest
+# note: tab required in grep (retype when pasting)
+# watch out for hard-coded freeze names in scripts
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+# download contigs -- not needed if already run
+# NOTE: preferable to extract these from build dir
+./getSeqFromAcc.pl $db < $db.accessions >& $db.log
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa 
+faSplit byname $db.fa $db.test/
+csh testFa.csh $db $org ortho3 >&! testFa.$org.log &
+head testFa.$org.log
+# verify that all regions are the same
+grep -v same testFa.$org.log
+cd ..
+
 # Create packing list
-$encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org "Mus musculus" 10090  C57BL/6J MAY-2004 $db "NCBI Build 33" > $db/$db.packing.list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org \
+    "Mus musculus" 10090  C57BL/6J MAY-2004 $db "NCBI Build 33" > $db/$db.packing.list
+grep Region $db/$db.packing.list | wc -l
+# 56
 
 # Copy  to downloads area
+set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
 cp -f $db/$db.packing.list $downloadDir
 tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
 chmod o+r $downloadDir/$db.*
-
-hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
-grep Region $downloadDir/$db.packing.list | wc -l
 # 56
-
-# NOTE: the consensus bed file and table differ
 
 ######################################################################a
 # RAT AGP'S (DONE 2005-03-16 kate)
@@ -441,6 +501,27 @@ hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 # Create AGP's
 csh genomeAgps.csh $db $org $db
 
+# Test
+cd tests
+mkdir -p $db.test $db.nibTest
+# note: tab required in grep (retype when pasting)
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+head $db.accessions
+# download contig sequences to $db.contig.fa directory
+# note: this doesn't handle errors well -- better to extract from 
+#  build dir contig fasta files
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
+# verify all contigs were transferred
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+#./accHeader.pl $db.contig.fa $db >>& $db.log
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+grep -v same testFa.$org.log
+cd ..
+
 # Create packing list
 $encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org "Rattus norvegicus" 10116 BN/SsNHsdMCW JUN-2003 $db "Baylor HGSC v3.1" > $db/$db.packing.list
 
@@ -455,17 +536,20 @@ grep Region $downloadDir/$db.packing.list | wc -l
 
 
 ########################################################################
-# CHICKEN AGP'S (WORKING 2005-03-16 kate)
+# CHICKEN AGP'S (DONE 2005-03-16 kate)
 
 cd /cluster/data/encode/ortho3/agp
 set db  = galGal2
 set org = chicken
-set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
-set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
 
-#create consensus list
+#create consensus list from database, verify it's the same as consensus dir
 mkdir $db
 hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+sort $db/$db.encodeRegionsConsensus.bed5 > temp
+sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
+# should be empty
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+# 92
 
 # Get contig to accession mapping (documented in makeGalGal2.doc) 
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
@@ -475,19 +559,37 @@ hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 # but there are no ENCODE orthologous sequences on these chicken chromosomes
 csh genomeAgps.csh $db $org $db
 
+# Test 
+cd tests
+rm -fr $db.test $db.nibTest
+mkdir -p $db.test $db.nibTest
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+head $db.accessions 
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log &
+head testFa.$org.log
+grep -v same testFa.$org.log
+# no output -> passed test
+cd ..
+
 # Create packing list
-$encodeRegionPackingList /cluster/data/encode/ortho3/agp/$db/$db.encodeRegionsConsensus.bed5 $db $org "Gallus gallus" 9031 N/A FEB-2004 $db "CGSC Feb. 2004" > ${db}/$db.packing.list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $db/$db.encodeRegionsConsensus.bed5 $db $org \
+    "Gallus gallus" 9031 N/A FEB-2004 $db "CGSC Feb. 2004" > $db/$db.packing.list
+grep Region $db/$db.packing.list | wc -l
+# 92
 
 # Copy  to downloads area
+set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
 cp -f $db/$db.packing.list $downloadDir
 tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
-
-hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
-grep Region $downloadDir/$db.packing.list | wc -l
 # 92 
-
-# NOTE: the consensus bed file and table differ 
 
 ########################################################################
 #  DOG AGP'S (DONE 2006-03-16 kate)
@@ -506,6 +608,27 @@ hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 # Create AGP's
 csh genomeAgps.csh $db $org $db
 # ignore error messages for random chrom's and chrM (not in dog assembly)
+
+# Tests
+cd tests
+mkdir -p $db.test $db.nibTest
+# type the literal tab in
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+head $db.accessions
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log &
+# verify download worked
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+wc -l $db.redo.acc
+# download if any left
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+head testFa.$org.log
+grep -v same testFa.$org.log
+# no output -> passed test
+cd ..
 
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
@@ -549,7 +672,26 @@ regionAgp -contigFile=$org.contig.tab -namePrefix=${org}_ \
     $db  $org "Pan troglodytes" 9598 N/A NOV-2003 $db \
     "NCBI Build 1 v1" > $db/$db.packing.list
 
-# TEST (see below)
+# Test
+cd tests
+mkdir -p $db.test $db.nibTest
+# type the literal tab in
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+head $db.accessions
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log &
+# verify download worked
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+wc -l $db.redo.acc
+# download if any left
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+head testFa.$org.log
+grep -v same testFa.$org.log
+# no output -> passed test
+cd ..
 
 # Copy  to downloads area
 cp -f $db/$db.packing.list $downloadDir
@@ -562,262 +704,33 @@ grep Region $downloadDir/$db.packing.list | wc -l
 # 81
 
 ########################################################################
-# OPOSSUM AGP'S (WORKING 2005-03-16 kate)
+# OPOSSUM AGP'S (DONE 2005-03-17 kate)
 set db  = monDom1
 set org = opossum
 
 cd /cluster/data/encode/ortho3/agp
-set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
-set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
 
-# create consensus list
+#create consensus list from database, verify it's the same as consensus dir
 mkdir $db
 hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+sort $db/$db.encodeRegionsConsensus.bed5 > temp
+sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
+# should be empty
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+# 146
+
+# get contig to accession mapping
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
 # Create AGP's
+gunzip -c /cluster/data/monDom1/broad.mit.edu/assembly.agp.gz > $db.assembly.agp
 regionAgp -contigFile=$org.contig.tab -namePrefix=${org}_ \
-    $db/$db.encodeRegionsConsensus.bed5 /cluster/data/monDom1/broad.mit.edu/assembly.agp -dir $db
+        $db/$db.encodeRegionsConsensus.bed5 $db.assembly.agp -dir $db
+rm $db.assembly.agp
 
-# Create packing list
-$encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 \
-    $db  $org "Monodelphis domestica" 13616 N/A OCT-2004 $db \
-    "Broad Institute" > $db/$db.packing.list
-
-# TEST (see below)
-hgsql -e "select count(*) from $db.encodeRegionsConsensus"
-grep Region $db/$db.packing.list | wc -l
-# 146
-
-# Copy  to downloads area
-set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
-cp -f $db/$db.packing.list $downloadDir
-tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
-tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
-#  146
-
-# NOTE: the consensus bed file and the table differ for this
-
-
-########################################################################
-# TETRA AGP'S (WORKING 2005-03-16 kate)
-set db  = tetNig1
-set org = tetra
-
-cd /cluster/data/encode/ortho3/agp
-set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
-set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
-
-# create consensus list
-mkdir $db
-hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
-hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
-
-# Create AGP's
-regionAgp -contigFile=$org.contig.tab -namePrefix=${org}_ \
-    $db/$db.encodeRegionsConsensus.bed5 /cluster/data/monDom1/broad.mit.edu/assembly.agp -dir $db
-
-# Create packing list
-$encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 \
-    $db  $org "Tetraodon nigroviridis" 99883 N/A FEB-2004 $db \
-    "Genoscope V7" > $db/$db.packing.list
-
-# TEST (see below)
-hgsql -e "select count(*) from $db.encodeRegionsConsensus"
-grep Region $db/$db.packing.list | wc -l
-# 146
-
-# Copy  to downloads area
-set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
-cp -f $db/$db.packing.list $downloadDir
-tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
-tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
-#  146
-
-# NOTE: the consensus bed file and the table differ for this
-
-########################################################################
-# cleanup
-
-chmod -R o+r $downloadDir/* >& /dev/null
-exit
-
-########################################################################
-# TESTS 
-
-########################################################################
-# create test scripts
-
-cd /cluster/data/encode/ortho3/agp/tests
-cat > getSeqFromAcc.pl <<EOF
-#!/usr/bin/perl -W
-# download contig sequences from Genbank to $db.contig.fa directory
-$URL = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&id=";
-$db=shift;
-$dir = "/cluster/data/encode/ortho3/agp/tests/$db.contig.fa";
-system("mkdir -p $dir");
-while (<>)
-{
-    chomp();
-    system("wget -O $dir/$_ \"$URL$_\"");
-}
-EOF
-#
-chmod ug+x getSeqFromAcc.pl
-
-# UNUSED ?
-cat > accHeader.pl <<EOF
-#!/usr/bin/perl -W
-# create $db.contigAccs.fa file, containing contig sequences
-$dir=shift;
-$db=shift;
-opendir(DIR,$dir) or die "Can't open $dir";
-open (OUT, ">$db.contigAccs.fa");
-@files = readdir(DIR);
-foreach $file (@files)
-{
-    open (IN,  "<$dir/$file");
-    while (<IN>)
-    {
-        if (/^>/)
-        {
-            @f=split /\|/;
-            print OUT ">$f[3]\n";
-        }
-        else
-        {
-            print OUT;
-        }
-    }
-    close(IN);
-}
-close(OUT);
-EOF
-#
-chmod ug+x accHeader.pl
-
-cd /cluster/data/encode/ortho3/agp/tests
-cat > testFa.csh << 'EOF'
-set db = $1
-set org = $2
-foreach f (../$db/*.agp)
-    set seq = $f:t:r
-    set region = `echo $seq | sed "s/${org}_//"`
-    set coords = `awk -v REGION=$region '$4 == REGION {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho3/consensus/$db.bed`
-    set chr = $coords:r:r
-    nibFrag /cluster/data/$db/nib/${chr}.nib \
-        $coords:r:e $coords:e + $db.nibTest/$db.$region.fa
-    faCmp $db.nibTest/$db.$region.fa $db.test/${org}_$region.fa
-end
-'EOF'
-# << for emacs
-
-# TEST MOUSE (WORKING 2005-03-15 kate)
-cd /cluster/data/encode/ortho3/agp/tests
-set db  = mm5
-set org = mouse
-mkdir -p $db.test $db.nibTest
-# note: tab required in grep (retype when pasting)
-# watch out for hard-coded freeze names in scripts
-cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
-# download contigs -- not needed if already run
-# NOTE: preferable to extract these from build dir
-./getSeqFromAcc.pl $db < $db.accessions >& $db.log
-./accHeader.pl $db.contig.fa $db >>& $db.log
-awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
-cat ../$db/*.agp > $db.contig.agp
-agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa 
-faSplit byname $db.fa $db.test/
-csh testFa.csh $db $org ortho3 >&! testFa.$org.log &
-
-# TEST RAT (DONE 2005-03-16 kate)
-cd /cluster/data/encode/ortho3/agp/tests
-set db  = rn3
-set org = rat
-mkdir -p $db.test $db.nibTest
-# note: tab required in grep (retype when pasting)
-cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
-head $db.accessions
-# download contig sequences to $db.contig.fa directory
-# note: this doesn't handle errors well -- better to extract from 
-#  build dir contig fasta files
-./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
-# verify all contigs were transferred
-ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
-#./accHeader.pl $db.contig.fa $db >>& $db.log
-awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
-cat ../$db/*.agp > $db.contig.agp
-agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
-faSplit byname $db.fa $db.test/
-csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
-grep -v same testFa.$org.log
-
-# TEST CHICKEN (WORKING 2005-03-16 kate)
-cd /cluster/data/encode/ortho3/agp/tests
-set db = galGal2
-set org = chicken
-mkdir -p $db.test $db.nibTest
-cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
-head $db.accessions 
-./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log
-ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
-awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
-cat ../$db/*.agp > $db.contig.agp
-agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
-faSplit byname $db.fa $db.test/
-csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
-head testFa.$org.log
-grep -v same testFa.$org.log
-# no output -> passed test
-
-# TEST DOG (DONE 2005-03-16 kate)
-cd /cluster/data/encode/ortho3/agp/tests
-set db = canFam1
-set org = dog
-mkdir -p $db.test $db.nibTest
-# type the literal tab in
-cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
-head $db.accessions
-./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log &
-# verify download worked
-ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
-wc -l $db.redo.acc
-# download if any left
-awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
-cat ../$db/*.agp > $db.contig.agp
-agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
-faSplit byname $db.fa $db.test/
-csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
-head testFa.$org.log
-grep -v same testFa.$org.log
-# no output -> passed test
-
-# TEST CHIMP (DONE 2005-03-16 kate)
-cd /cluster/data/encode/ortho3/agp/tests
-set db = panTro1
-set org = chimp
-mkdir -p $db.test $db.nibTest
-# type the literal tab in
-cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
-head $db.accessions
-./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log &
-# verify download worked
-ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
-wc -l $db.redo.acc
-# download if any left
-awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
-cat ../$db/*.agp > $db.contig.agp
-agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
-faSplit byname $db.fa $db.test/
-csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
-head testFa.$org.log
-grep -v same testFa.$org.log
-# no output -> passed test
-
-# TEST OPOSSUM (WORKING 2005-03-16 kate)
-cd /cluster/data/encode/ortho3/agp/tests
-set db = monDom1
-set org = opossum
+# Test
+cd tests
+rm -fr $db.test $db.nibTest
 mkdir -p $db.test $db.nibTest
 # type the literal tab in
 cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
@@ -852,5 +765,160 @@ csh testScaffoldFa.csh  $db $org ortho3 >&! testFa.$org.log
 head testFa.$org.log
 grep -v same testFa.$org.log
 # no output -> passed test
+cd ..
 
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $db/$db.encodeRegionsConsensus.bed5 $db $org "Monodelphis domestica" 13616 N/A \
+    OCT-2004 $db "Broad Institute" > $db/$db.packing.list
+grep Region $db/$db.packing.list | wc -l
+# 146
+
+# Copy  to downloads area
+set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+#  146
+
+
+########################################################################
+# TETRA AGP'S (DONE 2005-03-17 kate)
+set db  = tetNig1
+set org = tetra
+
+cd /cluster/data/encode/ortho3/agp
+
+#create consensus list from database, verify it's the same as consensus dir
+mkdir $db
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+sort $db/$db.encodeRegionsConsensus.bed5 > temp
+sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
+# should be empty
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+# 185
+
+# get contig to accession mapping
+hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
+
+# Create AGP's
+csh genomeAgps.csh $db $org $db
+
+# Test
+cd tests
+rm -fr $db.test $db.nibTest
+mkdir -p $db.test $db.nibTest
+# type the literal tab in
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+head $db.accessions
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log &
+# verify download worked
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+wc -l $db.redo.acc
+# download if any left
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+head testFa.$org.log
+grep -v same testFa.$org.log
+# no output -> passed test
+cd ..
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $db/$db.encodeRegionsConsensus.bed5 $db $org "Tetraodon nigroviridis" 99883 N/A \
+    FEB-2004 $db "Genoscope V7" > $db/$db.packing.list
+grep Region $db/$db.packing.list | wc -l
+# 185
+
+# Copy  to downloads area
+set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+
+########################################################################
+# ZEBRAFISH AGP'S (DONE 2005-03-17 kate)
+set db  = danRer2
+set org = zebrafish
+
+cd /cluster/data/encode/ortho3/agp
+
+#create consensus list from database, verify it's the same as consensus dir
+mkdir $db
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+sort $db/$db.encodeRegionsConsensus.bed5 > temp
+sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
+# should be empty
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+# 247
+
+# get contig to accession mapping
+hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
+
+# Create AGP's
+csh genomeAgps.csh $db $org $db
+
+# Test
+cd tests
+rm -fr $db.test $db.nibTest
+mkdir -p $db.test $db.nibTest
+# type the literal tab in
+cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
+head $db.accessions
+./getSeqFromAcc.pl $db ortho3 < $db.accessions >& $db.log &
+# verify download worked
+ls -l $db.contig.fa | grep ' 0 ' | awk '{print $9}' > $db.redo.acc
+wc -l $db.redo.acc
+# download if any left
+awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
+cat ../$db/*.agp > $db.contig.agp
+agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa
+faSplit byname $db.fa $db.test/
+csh  testFa.csh $db $org ortho3 >&! testFa.$org.log
+head testFa.$org.log
+grep -v same testFa.$org.log
+# no output -> passed test
+cd ..
+
+# Create packing list
+/cluster/data/encode/bin/scripts/encodeRegionPackingList \
+    $db/$db.encodeRegionsConsensus.bed5 $db $org "Danio rerio" 7955 N/A \
+    JUN-2004 $db "Sanger Zv4" > $db/$db.packing.list
+grep Region $db/$db.packing.list | wc -l
+# 247
+
+# Copy  to downloads area
+set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+# 247
+
+
+########################################################################
+# cleanup
+
+chmod -R o+r $downloadDir/* >& /dev/null
+exit
+
+########################################################################
+
+# print summary stats
+
+cat > stats.csh << 'EOF'
+hgsql hg16 -N -e "select name from encodeRegions" | sort > allRegions
+foreach f ($1/*.list)
+    set db = $f:t:r:r
+    set agps = `grep AgpFile $f | wc -l`
+    set len = `awk '/SeqLength/ {len += $2} END {print len}' $f`
+    set missing = `grep AgpFile $f | sed 's/.*\(EN.*\)_.*/\1/' | sort|uniq | diff - allRegions`
+    printf "%-8s %5s %10s %s\n" $db $agps $len $missing
+end 
+rm allRegions
+'EOF'
+
+csh stats.csh $downloadDir
 
