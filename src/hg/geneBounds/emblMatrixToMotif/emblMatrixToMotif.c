@@ -94,7 +94,7 @@ if (organism == NULL)
 bf = hashFindVal(hash, "BF");
 if (bf == NULL)
     return FALSE;
-return stringIn(organism, bf);
+return stringIn(organism, bf) != NULL;
 }
 
 void emblMatrixToMotif(char *inName, char *outName)
@@ -109,7 +109,7 @@ struct dnaMotif *motif;
 while ((hash = emblRecord(lf)) != NULL)
     {
     char *ac = hashFindVal(hash, "AC");
-    char *po = hashFindVal(hash, "PO");
+    char *po = hashFindVal(hash, "P0");
     if (ac != NULL && po != NULL && orgFits(hash))
         {
 	motif = emblToMotif(ac, hash);
