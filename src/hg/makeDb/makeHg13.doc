@@ -1564,14 +1564,24 @@ LOAD ENSEMBL GENES (TODO)
         (The above may only be a temproary location)
 
         Get the ensembl protein data from http://www.ensembl.org/Homo_sapiens/martview
+        Follow this sequence through the pages:
+        Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Structures" box. 
+        Page 4) Choose Transcripts/Proteins and GTF as the ouput, choose gzip compression and then hit export.
+
+        gunzip the file and name to ensembl.gtf
 
      Add "chr" to front of each line in the gene data gtf file to make it compatible with ldHgGene 
 
-     ~matt/bin/addchr.pl ensGene.gtf ensembl.gtf
-     ldHgGene hg13 ensGene ensembl.gtf
+     ~matt/bin/addchr.pl ensembl.gtf ensGene.gtf
+     ./fixEns.pl ensGene.gtf ensFixed.gtf 
+     ldHgGene hg13 ensGene ensGene.gtf
 
 o - Load Ensembl peptides:
-     Get them from ensembl as above in the gene section
+     Get them from ensembl as above in the gene section except for
+     Page 3) Choose the "Sequences" box. 
+     Page 4) Choose GTF as the ouput, choose gzip compression and then hit export.
 
      Substitute ENST for ENSP in ensPep with the program called subs
      edit subs.in to read: ENSP|ENST
