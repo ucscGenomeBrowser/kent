@@ -1,3 +1,21 @@
+track cytoBandIdeo
+shortLabel ChromosomeBand
+longLabel Chromosome Bands
+group map
+priority .1
+visibility dense
+altColor 150,50,50
+type bed 4 +
+
+track cytoBand
+shortLabel ChromosomeBand
+longLabel Chromosome Bands
+group map
+priority .1
+visibility dense
+altColor 150,50,50
+type bed 4 +
+
 track multizDroYak1Dp1AnoGam1
 shortLabel 3-Fly+A.g. Multiz
 longLabel D.melanogaster/yakuba/pseudoobscura/A.gambiae Multiz (droYak1, dp1, anoGam1)
