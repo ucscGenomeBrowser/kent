@@ -41,6 +41,16 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm3
 
+track axtBestMm3
+shortLabel Human/Mouse
+longLabel Blastz Score Based Mouse/Human Wiggle Track
+group compGeno
+priority 125.99
+visibility full
+color 100,50,0
+altColor 255,240,200
+type axt mm3
+
 track blastzBestMouse
 shortLabel Best Mouse
 longLabel Blastz Mouse(Feb03) Best in Genome Alignments
