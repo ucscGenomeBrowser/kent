@@ -802,7 +802,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	continue;
 
     // currently no flanks for chrM 
-    if (sameWord(chr,"chrM"))
+    if (sameWord(cn->name,"chrM"))
 	continue;
 
     uglyf("beginning chrom %s \n",cn->name);
