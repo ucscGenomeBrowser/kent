@@ -2899,6 +2899,24 @@ score limit 3;' $db >> data/qNametName.blast3.out
     # finding exons and reduces noise in the alignments.
     # At a later date, only one of these tracks should be displayed.
 
+    # small changes -- sort by chrom, chromStart, chromEnd; add tName index
+    mkdir /cluster/data/danRer1/bed/ZonLab/tblastn/aug12
+    cd /cluster/data/danRer1/bed/ZonLab/tblastn/aug12
+    hgsqldump danRer1 tblastnHg16KGPep --no-data > tblastnHg16KGPepSorted.sql
+    # edit the tablename to be tblastnHg16KGPepSorted.sql
+    # also don't need the indices in tblastnHg16KGPepSorted.sql
+    hgsql danRer1 < tblastnHg16KGPepSorted.sql
+    hgsql danRer1
+    insert into tblastnHg16KGPepSorted select * from tblastnHg16KGPep order by tName, tStart, tEnd;
+    rename table tblastnHg16KGPep to tblastnHg16KGPepNotSorted;
+    rename table tblastnHg16KGPepSorted to tblastnHg16KGPep;
+    # would prefer dual indices, but convention is single
+    create index bin on tblastnHg16KGPep(bin);
+    create index tStart on tblastnHg16KGPep(tStart);
+    create index qName on tblastnHg16KGPep(qName);
+    create index tEnd on tblastnHg16KGPep(tEnd);
+    create index tName on tblastnHg16KGPep(tName);
+
 # Human Proteins - tBLASTn of hg16 knownGene (2004-07-27, braney)
 # blastHg16KG track.
     ssh kksilo
