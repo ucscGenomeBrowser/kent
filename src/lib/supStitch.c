@@ -514,7 +514,7 @@ else
     left = aliList;
     for (right = aliList->right; right != NULL; right = right->right)
         {
-	if (right->hStart - left->hEnd >= 10 && right->nStart - left->nEnd >= 10)
+	if (right->hStart - left->hEnd >= 3 && right->nStart - left->nEnd >= 3)
 	    {
 	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
 	    if (newLeft != NULL)
@@ -599,7 +599,7 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    if (firstTime)
+    if (firstTime && stringency == ffCdna)
 	{
 	/* Only look for middle exons the first time.  Next times
 	 * this might regenerate most of the first alignment... */

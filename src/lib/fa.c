@@ -376,6 +376,7 @@ boolean gotSpace = FALSE;
 int lineSize, i;
 char *line;
 
+dnaUtilOpen();
 
 /* Read first line, make sure it starts wiht '>', and read first word
  * as name of sequence. */
@@ -463,7 +464,6 @@ boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, cha
 char *poly;
 int size;
 
-dnaUtilOpen();
 if (!faMixedSpeedReadNext(lf, retDna, retSize, retName))
     return FALSE;
 size = *retSize;
