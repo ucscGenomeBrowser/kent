@@ -271,7 +271,7 @@ void makeRedGreenShades(struct vGfx *vg);
 /* Allocate the  shades of Red, Green and Blue */
 
 /* used in MAF display */
-#define UNALIGNED_SEQ '^'
+#define UNALIGNED_SEQ 'o'
 
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
