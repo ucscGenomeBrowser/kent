@@ -347,6 +347,9 @@ void stripChar(char *s, char c);
 int countChars(char *s, char c);
 /* Return number of characters c in string s. */
 
+int countLeadingChars(char *s, char c);
+/* Count number of characters c at start of string. */
+
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)

@@ -630,6 +630,14 @@ while ((a = *s++) != 0)
 return count;
 }
 
+int countLeadingChars(char *s, char c)
+/* Count number of characters c at start of string. */
+{
+int count = 0;
+while (*s++ == c)
+   ++count;
+return count;
+}
 
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
