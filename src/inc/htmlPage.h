@@ -11,7 +11,7 @@
  */
 
 #ifndef HTMLPAGE_H
-#define HTMLPAGE
+#define HTMLPAGE_H
 
 struct htmlStatus
 /* HTTP version and status code. */
