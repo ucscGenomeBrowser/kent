@@ -1361,6 +1361,26 @@ spectrum on
 type chain dm1
 otherDb dm1
 
+track blastzBestMm3X
+shortLabel Mm3X Best
+longLabel Mm3X Blastz Best-in-Genome Alignments
+group x
+priority 200.8
+visibility hide
+spectrum on
+type psl xeno mm3X
+otherDb mm3X
+
+track blastzBestMm2X
+shortLabel Mm2X Best
+longLabel Mm2X Blastz Best-in-Genome Alignments
+group x
+priority 201.8
+visibility hide
+spectrum on
+type psl xeno mm2X
+otherDb mm2X
+
 track phastConsElements
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements
@@ -1425,7 +1445,6 @@ priority 170.4
 color 150,100,30
 visibility hide
 type bed 4 .
-
 
 searchTable ctgPos
 searchMethod exact
