@@ -24,9 +24,10 @@ table pushQ
     char [50] extSource;  "External Source"
     lstring   openIssues; "Open issues"
     lstring   notes;      "Notes"
-    char [10] reqdate;    "Push-request Date"
-    char [1]  pushedYN;   "Push done?"
-    char [10] initdate;    "Initial Submission Date"
+    char [10] pushdate;   "Push-done Date"
+    char [1]  pushedYN;   "Push requested?"
+    char [10] initdate;   "Initial Submission Date"
+    uint      bounces;    "Bounce-count (num times bounced back to developer)"
     )
 
 table users

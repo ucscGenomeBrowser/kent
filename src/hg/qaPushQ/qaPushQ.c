@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.23 2004/05/14 20:49:13 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.24 2004/05/18 07:47:54 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -59,11 +59,14 @@ char *showColumns = NULL;
 
 char *defaultColumns =
     "pqid,qid,priority,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
+
+char *newRandState = NULL;    
+char *oldRandState = NULL;    
     
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
-"reqdate,pushYN,initdate";
+"pushdate,pushYN,initdate,bounces";
 */
 
 /* structural improvements suggested by MarkD:
@@ -108,9 +111,10 @@ static char const *colName[] = {
  "extSource" ,
  "openIssues",
  "notes"     ,
- "reqdate"   ,
+ "pushdate"  ,
  "pushYN"    ,
- "initdate"    
+ "initdate"  ,  
+ "bounces"    
 };
 
 
@@ -138,9 +142,10 @@ e_reviewer  ,
 e_extSource ,
 e_openIssues,
 e_notes     ,
-e_reqdate   ,
+e_pushdate  ,
 e_pushedYN  ,
-e_initdate
+e_initdate  ,
+e_bounces
 };
 
 char *colHdr[] = {
@@ -167,9 +172,10 @@ char *colHdr[] = {
 "External Source or Collaborator",
 "Open Issues",
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-"Req&nbsp;Date",
+"&nbsp;Date&nbsp;Pushed&nbsp;",
 "Pushed?",
-"Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date"
+"Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date",
+"Bounce Count"
 };
 
 char pushQtbl[256] = "pushQ";   /* default */
@@ -178,6 +184,25 @@ char month[256] = "";
 
 enum colEnum colOrder[MAXCOLS];
 int numColumns = 0;
+
+int randInt(int N)
+/* generate random number from 0 to N-1 */
+{
+return (int) N * (rand() / (RAND_MAX + 1.0));
+}
+
+char *randDigits(int length)
+/* generate string of random digits 0-9. String will need to be free'd later. */
+{
+int i = 0;
+char *s = needMem(length+1);
+for(i=0;i<length;i++)
+    {
+    s[i]='0'+randInt(10);
+    }
+s[length]=0;    
+return s;
+}
 
 
 bool isDateValid(char *s)
@@ -333,7 +358,7 @@ void replaceInStr(char *s, int ssize, char *t, char *r)
 char *temp = replaceChars(s,t,r);
 if (strlen(temp) >= ssize)
     {
-    errAbort("html page buf size exceeded. strlen(temp)=%s, size of html= %s",strlen(temp),ssize);
+    errAbort("buf size exceeded. strlen(temp)=%s, size of buf= %s",strlen(temp),ssize);
     }
 safef(s,ssize,"%s",temp);
 freez(&temp);
@@ -479,11 +504,14 @@ replaceInStr(html, sizeof(html) , "<!openIssues>"  , ki->openIssues);
 replaceInStr(html, sizeof(html) , "<!notes>"       , ki->notes     );
 replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  ); 
 
+replaceInStr(html, sizeof(html) , "<!cb>"          , newRandState  ); 
+
 if (isNew)
     {
     replaceInStr(html, sizeof(html), "<!delbutton>", ""); 
     replaceInStr(html, sizeof(html), "<!pushbutton>", ""); 
     replaceInStr(html, sizeof(html), "<!clonebutton>", ""); 
+    replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
     }
 else
     {
@@ -495,18 +523,31 @@ else
     if (ki->priority[0]!='L')
 	{
 	replaceInStr(html, sizeof(html), 
-	"<!pushbutton>", 
-	"<input TYPE=SUBMIT NAME=\"pushbutton\" VALUE=\"push requested\">"
-	); 
+	    "<!pushbutton>", 
+    	    "<input TYPE=SUBMIT NAME=\"pushbutton\" VALUE=\"push requested\">"
+    	    ); 
 	}
 	
     if (ki->priority[0]!='L')
 	{
 	replaceInStr(html, sizeof(html), 
-	"<!clonebutton>", 
-	"<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">"
-	); 
+    	    "<!clonebutton>", 
+    	    "<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">"
+    	    ); 
 	}
+	
+    if (ki->priority[0]=='A')
+	{
+	replaceInStr(html, sizeof(html), 
+    	    "<!bouncebutton>", 
+    	    "<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"bounce\">"
+    	    ); 
+	}
+    else
+	{
+	replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
+	}
+	
     }   
     
 printf("%s",html);
@@ -571,6 +612,12 @@ s[l-3]='.';
 s[l-4]=' ';
 }
 
+char *fixLineBreaks(char *s)
+/* insert <br> before \n to have an effect inside html */
+{
+return replaceChars(s,"\n","<br>\n");
+}
+
 
 void drawDisplayLine(enum colEnum col, struct pushQ *ki)
 {
@@ -580,12 +627,12 @@ char url[256];
 switch(col)
     {
     case e_qid:
-	printf("<td><A href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">%s</A>",
-	    ki->qid, ki->qid);
-	if ((!sameString(ki->reqdate,"")) && (ki->pushedYN[0]=='N'))
+	printf("<td><A href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">%s</A>",
+	    ki->qid, newRandState, ki->qid);
+	if ((sameString(ki->pushdate,"")) && (ki->pushedYN[0]=='Y'))
 	    {
-	    printf("<BR><A href=\"/cgi-bin/qaPushQ?action=pushDone&qid=%s\">Done!</A>",
-		ki->qid );
+	    printf("<BR><A href=\"/cgi-bin/qaPushQ?action=pushDone&qid=%s&cb=%s\">Done!</A>",
+		ki->qid, newRandState );
 	    }
 	printf("</td>\n");
 	break;
@@ -600,9 +647,9 @@ switch(col)
 	if (ki->priority[0] != 'L')
 	{
 	printf("&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s\">^</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s\" >v</A>", 
-	    ki->qid, ki->qid);
+	    "<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
+	    "<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\" >v</A>", 
+	    ki->qid, newRandState, ki->qid, newRandState);
 	}
 	printf("</td>\n");
 	break;
@@ -641,7 +688,7 @@ switch(col)
 	
     case e_files:
 	dotdotdot(ki->files,MAXBLOBSHOW);  /* chr(255) */
-	printf("<td>%s</td>\n", ki->files     );
+	printf("<td>%s</td>\n", fixLineBreaks(ki->files)  );
 	break;
 	
     case e_sizeMB:
@@ -695,23 +742,20 @@ switch(col)
 	printf("<td>%s</td>\n", ki->notes     );
 	break;
 	
-    case e_reqdate:
-	printf("<td>%s</td>\n", ki->reqdate   );
+    case e_pushdate:
+	printf("<td>%s</td>\n", ki->pushdate   );
 	break;
 	
     case e_pushedYN:
-	safef(url, sizeof(url), ki->pushedYN); 
-	if ((!sameString(ki->reqdate,"")) && (ki->pushedYN[0]=='N'))
-	    {
-	    safef(url, sizeof(url), 
-		"<A href=\"/cgi-bin/qaPushQ?action=pushDone&qid=%s\">%s</A>", 
-		ki->qid, ki->pushedYN );
-	    }
-	printf("<td>%s</td>\n", url);
+	printf("<td>%s</td>\n", ki->pushedYN);
 	break;
 
     case e_initdate:
 	printf("<td>%s</td>\n", ki->initdate  );
+	break;
+	
+    case e_bounces:
+	printf("<td>%u</td>\n", ki->bounces   );
 	break;
 	
     default:
@@ -773,19 +817,21 @@ if (sameString(utsName.nodename,"hgwdev"))
 
 if (sameString(month,""))
     {
-    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=add>ADD</A>\n");
+    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=add&cb=%s>ADD</A>\n",newRandState);
     }
 else
     {
-    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=display&month=current>Current</A>\n");
+    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=display&month=current&cb=%s>Current</A>\n",newRandState);
     }
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=reset>Logout</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol>All Columns</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDefaultCol>Default Columns</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths>Log by Month</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway>Gateway</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp>Help</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ>Refresh</A>\n");
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=reset&cb=%s>Logout</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol&cb=%s>All Columns</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDefaultCol&cb=%s>Default Columns</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths&cb=%s>Log by Month</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway&cb=%s>Gateway</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp&cb=%s target=\"_blank\">Help</A>\n",newRandState);
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
+//printf("&nbsp;newRandState=%s\n",newRandState);
+//printf("&nbsp;oldRandState=%s\n",oldRandState);
 
 /* draw table header */
 
@@ -804,13 +850,13 @@ printf("  <TR>\n");
 for (c=0; c<numColumns; c++)
     {
     printf("    <TH>"
-	"<a href=qaPushQ?action=promoteColumn&col=%s>&lt;</a>&nbsp;"
-	"<a href=qaPushQ?action=hideColumn&col=%s>!</a>&nbsp;"
-	"<a href=qaPushQ?action=demoteColumn&col=%s>&gt;</a>"
+	"<a href=qaPushQ?action=promoteColumn&col=%s&cb=%s>&lt;</a>&nbsp;"
+	"<a href=qaPushQ?action=hideColumn&col=%s&cb=%s>!</a>&nbsp;"
+	"<a href=qaPushQ?action=demoteColumn&col=%s&cb=%s>&gt;</a>"
 	"<br></TH>\n",
-	colName[colOrder[c]], 
-	colName[colOrder[c]], 
-	colName[colOrder[c]] 
+	colName[colOrder[c]], newRandState,
+	colName[colOrder[c]], newRandState,
+	colName[colOrder[c]], newRandState
 	);
     }
 printf("  <TR>\n");
@@ -898,10 +944,11 @@ char query[256];
 safef(q.qid, sizeof(q.qid), cgiString("qid"));
 
 loadPushQ(q.qid, &q, FALSE);
+strftime (q.pushdate, sizeof(q.pushdate), "%Y-%m-%d", loctime); /* today's date */
 
 safef(query, sizeof(query), 
-    "update %s set rank = 0, priority ='L', pushedYN='Y' where qid = '%s' ", 
-    pushQtbl, q.qid);
+    "update %s set rank = 0, priority ='L', pushedYN='Y', pushdate='%s' where qid = '%s' ", 
+    pushQtbl, q.pushdate, q.qid);
 sqlUpdate(conn, query);
 
 
@@ -1032,7 +1079,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *reqdate, *pushedYN, *initdate;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushdate, *pushedYN, *initdate;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1054,7 +1101,7 @@ reviewer = sqlEscapeString(el->reviewer);
 extSource = sqlEscapeString(el->extSource);
 openIssues = sqlEscapeString(el->openIssues);
 notes = sqlEscapeString(el->notes);
-reqdate = sqlEscapeString(el->reqdate);
+pushdate = sqlEscapeString(el->pushdate);
 pushedYN = sqlEscapeString(el->pushedYN);
 initdate = sqlEscapeString(el->initdate);
 
@@ -1064,14 +1111,14 @@ dyStringPrintf(update,
 "track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
 "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
 "sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',reqdate='%s',pushedYN='%s',initdate='%s' "
+"openIssues='%s',notes='%s',pushdate='%s',pushedYN='%s',initdate='%s',bounces='%u' "
 "where qid='%s'", 
 	tableName,  
 	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
 	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
 	onlineHelp,  ndxYN,  joinerYN,  stat,  
 	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  reqdate,  pushedYN, initdate,
+	openIssues,  notes,  pushdate,  pushedYN, initdate, el->bounces, 
 	qid
 	);
 
@@ -1098,7 +1145,7 @@ freez(&reviewer);
 freez(&extSource);
 freez(&openIssues);
 freez(&notes);
-freez(&reqdate);
+freez(&pushdate);
 freez(&pushedYN);
 }
 
@@ -1149,10 +1196,11 @@ int updateSize = 2456;
 int newqid = 0;
 
 char query[256];
-char *delbutton   = cgiUsualString("delbutton"  ,"");
-char *pushbutton  = cgiUsualString("pushbutton" ,"");
-char *clonebutton = cgiUsualString("clonebutton","");
-char *showSizes   = cgiUsualString("showSizes"  ,"");
+char *delbutton    = cgiUsualString("delbutton"   ,"");
+char *pushbutton   = cgiUsualString("pushbutton"  ,"");
+char *clonebutton  = cgiUsualString("clonebutton" ,"");
+char *bouncebutton = cgiUsualString("bouncebutton","");
+char *showSizes    = cgiUsualString("showSizes"   ,"");
 
 char **row;
 struct sqlResult *sr;
@@ -1214,36 +1262,11 @@ if (isNew)
     {
     newqid = getNextAvailQid();
     safef(q.pqid, sizeof(q.pqid), "");
-    strcpy(q.reqdate   ,"" ); 
+    strcpy(q.pushdate  ,"" ); 
     strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
     }
 
     
-/* check if priority class has changed, or deleted, then close ranks */
-if ( (!sameString(newPriority,q.priority)) || (sameString(delbutton,"delete")) )
-    {
-    /* first close the hole where it was */
-    safef(query, sizeof(query), 
-    "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
-    pushQtbl, q.priority, q.rank);
-    sqlUpdate(conn, query);
-    }
-
-/* if not deleted, then if new or priority class change, then take last rank */
-if (!sameString(delbutton,"delete")) 
-    {
-    if ((!sameString(newPriority,q.priority)) || (sameString(newQid,"")))
-	{
-	q.rank = getNextAvailRank(newPriority);
-	safef(q.priority, sizeof(q.priority), newPriority);
-	}
-    }
-
-if (q.priority[0]=='L') 
-    {
-    q.rank = 0;
-    }
-
 /* dates */
 getCgiData(&isOK, FALSE, q.qadate    , sizeof(q.qadate    ), "qadate"    );
 getCgiData(&isOK, FALSE, q.initdate  , sizeof(q.initdate  ), "initdate"  );
@@ -1364,6 +1387,12 @@ if ((sameString(clonebutton,"clone"))&&(sameString(q.priority,"L")))
     isRedo = TRUE;
     }
 
+if ((sameString(bouncebutton,"bounce"))&&(!sameString(q.priority,"A")))
+    {
+    safef(msg,sizeof(msg),"Only priority A records should be bounced. <br>\n");
+    isRedo = TRUE;
+    }
+
 
 if (isRedo)
     {
@@ -1372,12 +1401,45 @@ if (isRedo)
     }
 
 
+if (sameString(bouncebutton,"bounce")) 
+    {
+    safef(q.priority,sizeof(q.priority),"B");
+    strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
+    q.bounces++;
+    }
+
+
+/* check if priority class has changed, or deleted, then close ranks */
+if ( (!sameString(newPriority,q.priority)) || (sameString(delbutton,"delete")) )
+    {
+    /* first close the hole where it was */
+    safef(query, sizeof(query), 
+    "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
+    pushQtbl, q.priority, q.rank);
+    sqlUpdate(conn, query);
+    }
+
+/* if not deleted, then if new or priority class change, then take last rank */
+if (!sameString(delbutton,"delete")) 
+    {
+    if ((!sameString(newPriority,q.priority)) || (sameString(newQid,"")))
+	{
+	q.rank = getNextAvailRank(newPriority);
+	safef(q.priority, sizeof(q.priority), newPriority);
+	}
+    }
+
+if (q.priority[0]=='L') 
+    {
+    q.rank = 0;
+    }
+
+
 if (sameString(pushbutton,"push requested")) 
     {
-    /* set to today's date */
-    strftime (q.reqdate, sizeof(q.reqdate), "%Y-%m-%d", loctime); 
     /* reset pushedYN in case was prev. a log already */
-    safef(q.pushedYN,sizeof(q.pushedYN),"N");
+    strcpy(q.pushdate  ,"" ); 
+    safef(q.pushedYN,sizeof(q.pushedYN),"Y");
     }
 
 if (sameString(delbutton,"delete")) 
@@ -1410,7 +1472,7 @@ if (sameString(clonebutton,"clone"))
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
     q.rank = getNextAvailRank(q.priority);
-    strcpy(q.reqdate   ,"" ); 
+    strcpy(q.pushdate  ,"" ); 
     strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
     pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
     }
@@ -1605,11 +1667,16 @@ while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
 	safef(month,sizeof(month),tempVal);
 	}
 
+    if (sameString(tempVarName,"oldRandState"))
+	{
+	oldRandState = cloneString(tempVal);
+	}
+
     i++;
     }
 }
 
-
+void saveMyUser();  /* forward declaration */
 
 void doPostLogin()
 /* process Login post */
@@ -1680,6 +1747,10 @@ else
 if (loginOK)
     {
     htmlSetCookie("qapushq", u.user, NULL, NULL, NULL, FALSE);
+    qaUser=u.user;
+    readMyUser();
+    oldRandState="";
+    saveMyUser();
     safef(msg, sizeof(msg),"Login successful.");
     htmShellWithHead(TITLE, meta, doMsg ,NULL);  /* this is now the only redirect */
     }
@@ -1704,11 +1775,11 @@ if ((qaUser == NULL) || (sameString(qaUser,"")))
     return;
     }
 dyStringPrintf(query,  
-    "update %s set contents = '?showColumns=%s?org=%s?month=%s' where user = '%s'",
-    tbl, showColumns, pushQtbl, month, myUser.user);
+    "update %s set contents = '?showColumns=%s?org=%s?month=%s?oldRandState=%s' where user = '%s'",
+    tbl, showColumns, pushQtbl, month, oldRandState, myUser.user);
 sqlUpdate(conn, query->string);
 freeDyString(&query);
-readMyUser();  /* refresh myUser */
+//probably not needed anymore:  readMyUser();  /* refresh myUser */
 }
 
 
@@ -1814,13 +1885,13 @@ for (c=0; c<MAXCOLS; c++)
     {
     if (strstr(showColumns,colName[c])==NULL)
 	{
-	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s\">%s</a><br><br>", 
-	    colName[c], colName[c]);
+	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s&cb=%s\">%s</a><br><br>", 
+	    colName[c], newRandState, colName[c]);
 	}
     }
 
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ\">RETURN</a><br>"); 
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState); 
 }
 
 
@@ -1868,14 +1939,14 @@ char query[256];
 
 printf("<h4>Logs for Month</h4>\n");
 printf("<br>\n");
-printf("<A href=qaPushQ?action=display&month=current>Current</A><br>\n");
+printf("<A href=qaPushQ?action=display&month=current&cb=%s>Current</A><br>\n", newRandState);
 printf("<br>\n");
 
 safef(query, sizeof(query), "select distinct substring(qadate,1,7) from %s where priority='L' order by qadate desc",pushQtbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    printf("<A href=qaPushQ?action=display&month=%s>%s</A><br>\n",row[0],row[0]);
+    printf("<A href=qaPushQ?action=display&month=%s&cb=%s>%s</A><br>\n",row[0],newRandState,row[0]);
     }
 sqlFreeResult(&sr);
 }
@@ -2152,8 +2223,8 @@ printf("<H2>Show File Sizes </H2>\n");
 
 loadPushQ(newQid, &q, FALSE); 
 
-printf("<a href=\"/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s\">HELP</a> \n",q.qid);
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> \n",newQid);
+printf("<a href=\"/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s&cb=%s\" target=\"_blank\">HELP</a> \n",q.qid,newRandState);
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
 printf(" <br>\n");
 printf("Location: %s <br>\n",q.currLoc);
 printf("Database: %s <br>\n",q.dbs    );
@@ -2395,9 +2466,9 @@ sprintLongWithCommas(nicenumber, sizeMB );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%d\">"
-       "Set Size as %s MB</a> <br>\n",newQid,sizeMB,nicenumber);
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",newQid);
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&sizeMB=%d&cb=%s\">"
+       "Set Size as %s MB</a> <br>\n",newQid,sizeMB,newRandState,nicenumber);
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
 }
 
 
@@ -2428,7 +2499,7 @@ printf("v - click to lower the  priority.<br>\n");
 printf("<br>\n");
 printf("Queue Id - click to edit or see the details page for the record.<br>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ\">RETURN</a> <br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ\" onClick=\"window.close();\" >CLOSE</a> <br>\n");
 }
 
 
@@ -2447,7 +2518,7 @@ printf("<br>\n");
 printf("Initial submission - displays date automatically generated when push queue record is created.<br>\n");
 printf("Date Opened - date QA (re)opened. (YYYY-MM-DD) Defaults originally to current date to save typing.<br>\n");
 printf("New track? - choose Y if this is a new track.<br>\n");
-printf("Track - enter the track name as it will appear in the genome browser.<br>\n");
+printf("Track - enter the track name as it will appear in the genome browser (use the ShortLabel).<br>\n");
 printf("Databases - enter db name. May be comma-separated list if more than one organism, etc.<br>\n");
 printf("Tables - enter as comma-separated list all tables that apply. They must exist in the database specified. Wildcard * supported. (Put comments in parentheses).<br>\n");
 printf("CGIs - enter names of any new cgis that are applicable. Must be found on hgwbeta.<br>\n");
@@ -2471,7 +2542,7 @@ printf("delete button - delete this push queue record and return to main display
 printf("push requested button - press only if you are QA staff and about to submit the push-request. It will try to verify that required entries are present.<br>\n");
 printf("clone button - press if you wish to split the original push queue record into multiple parts. Saves typing, used rarely.<br>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\">RETURN</a> <br>\n",q.qid);
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s\"  onClick=\"window.close();\">CLOSE</a> <br>\n",q.qid);
 }
 
 
@@ -2497,7 +2568,7 @@ printf("RETURN - click to return to the details/edit page.<br>\n");
 printf("Set Size As - click to set size to that found, and return to the details/edit page. Saves typing. Be sure to press submit to save changes.<br>\n");
 printf("<br>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=showSizes&qid=%s\">RETURN</a> <br>\n",q.qid);
+printf("<a href=\"/cgi-bin/qaPushQ?action=showSizes&qid=%s\" onClick=\"window.close();\">CLOSE</a> <br>\n",q.qid);
 }
 
 
@@ -2512,7 +2583,7 @@ char query[256];
 
 printf("<h4>Gateway</h4>\n");
 printf("<br>\n");
-printf("<A href=qaPushQ?org=pushQ>Main Push Queue</A><br>\n");
+printf("<A href=qaPushQ?org=pushQ&cb=%s>Main Push Queue</A><br>\n",newRandState);
 printf("<br>\n");
 
 safef(query, sizeof(query), "show tables");
@@ -2521,12 +2592,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if ((!sameString(row[0],"pushQ") && (!sameString(row[0],"users"))))
 	{
-	printf("<A href=qaPushQ?org=%s>%s</A><br>\n",row[0],row[0]);
+	printf("<A href=qaPushQ?org=%s&cb=%s>%s</A><br>\n",row[0],newRandState,row[0]);
 	}
     }
 sqlFreeResult(&sr);
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ\">RETURN</a> <br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a> <br>\n",newRandState);
 }
 
 
@@ -2542,6 +2613,7 @@ void doMiddle()
 char *org = NULL;      /* changes pushQtbl */
 char *newmonth = NULL; /* changes month */
 char *temp = NULL;
+char *reqRandState = NULL;
 
 /* debug *
 safef(msg,sizeof(msg),"db='%s', host='%s', user='%s', password='%s' <br>\n",database,host,user,password);
@@ -2549,22 +2621,17 @@ htmShell("Push Queue debug", doMsg, NULL);
 exit(0);
 */
 
+newRandState = randDigits(20);
+
 conn = sqlConnectRemote(host, user, password, database);
 
 setLock();
-
-qaUser = findCookieData("qapushq");  /* will also cause internal structures to load cookie data */
 
 /* default columns */
 showColumns = needMem(2048);
 safef(showColumns, 2048, defaultColumns);
     
 readMyUser();
-
-if ((qaUser == NULL) || (sameString(qaUser,"")))
-    {
-    action = cloneString("login");
-    }
 
 org = cgiUsualString("org","");  /* get org, defaults to display of main push queue */
 if (!sameString(org,""))
@@ -2590,16 +2657,18 @@ if (!sameString(newmonth,""))
 	}
     }
 
+reqRandState = cgiUsualString("cb","");  /* get cb (cache-buster), ignores request, defaults to main display page */
+if (!sameString(reqRandState,oldRandState))
+    {
+    printf("req != old. \n\n req=%s,  old=%s \n\n",reqRandState,oldRandState);
+    action = cloneString("display");
+    }
+
 
 
 /* ---- Push Queue  ----- */
 
-if (sameString(action,"login"))
-    {
-    doLogin();
-    }
-
-else if (sameString(action,"display")) 
+if (sameString(action,"display")) 
     {
     doDisplay();
     }
@@ -2674,21 +2743,6 @@ else if (sameString(action,"showSizes" ))
     doShowSizes();
     }
 
-else if (sameString(action,"showDisplayHelp" )) 
-    {
-    doShowDisplayHelp();
-    }
-
-else if (sameString(action,"showEditHelp" )) 
-    {
-    doShowEditHelp();
-    }
-
-else if (sameString(action,"showSizesHelp" )) 
-    {
-    doShowSizesHelp();
-    }
-
 else if (sameString(action,"showGateway" )) 
     {
     doShowGateway();
@@ -2699,6 +2753,8 @@ else
     safef(msg,sizeof(msg),"action='%s' is invalid! <br>\n",action);
     doMsg();
     }
+
+oldRandState=newRandState;
 
 saveMyUser();
 releaseLock();
@@ -2722,6 +2778,8 @@ saveEnv = env;
 curtime = time (NULL);           /* Get the current time. */
 loctime = localtime (&curtime);  /* Convert it to local time representation. */
 
+srand( (unsigned)time( NULL ) );  /* Set seed (initial seed) off clock (not the best quality random input ;) */
+
 uname(&utsName);
 
 ZeroVar(&myUser);
@@ -2735,7 +2793,19 @@ action = cgiUsualString("action","display");  /* get action, defaults to display
 /* initCgiInput() is not exported in cheapcgi.h, but it should get called by cgiUsualString
 So it will find all input regardless of Get/Put/Post/etc and make available as cgivars */
 
-if (sameString(action,"postLogin")) 
+qaUser = findCookieData("qapushq");  /* will also cause internal structures to load cookie data */
+if ((qaUser == NULL) || (sameString(qaUser,"")))
+    {
+    if (!sameString(action,"postLogin"))
+    	action = cloneString("login");
+    }
+
+if (sameString(action,"login"))
+    {
+    htmShell(TITLE, doLogin, NULL);
+    }
+
+else if (sameString(action,"postLogin")) 
     {
     doPostLogin();        /* cant start htmShell until cookie is set */
     }
@@ -2743,6 +2813,20 @@ else if (sameString(action,"reset"))
     {
     doCookieReset();      /* cant start htmShell until cookie is re-set */
     }
+
+else if (sameString(action,"showDisplayHelp" )) /* The help screens open in a separate window and don't hurt anything. Only displays text. Ignore cb. */
+    {
+    htmShell(TITLE, doShowDisplayHelp, NULL);
+    }
+else if (sameString(action,"showEditHelp" )) 
+    {
+    htmShell(TITLE, doShowEditHelp, NULL);
+    }
+else if (sameString(action,"showSizesHelp" )) 
+    {
+    htmShell(TITLE, doShowSizesHelp, NULL);
+    }
+
 else
     {
     htmShell(TITLE, doMiddle, NULL);

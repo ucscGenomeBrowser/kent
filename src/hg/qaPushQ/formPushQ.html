@@ -9,6 +9,7 @@
 <input TYPE=\"hidden\" NAME=\"action\"   VALUE=\"post\"  >
 <input TYPE=\"hidden\" NAME=\"qid\"      VALUE=\"<!qid>\">
 <input TYPE=\"hidden\" NAME=\"initdate\" VALUE=\"<!initdate>\">
+<input TYPE=\"hidden\" NAME=\"cb\"       VALUE=\"<!cb>\">
 
 <table cellpadding=6>
 
@@ -28,10 +29,13 @@
 <!clonebutton>
 &nbsp;
 &nbsp;
-<a href=\"/cgi-bin/qaPushQ\">CANCEL</a>
+<!bouncebutton>
 &nbsp;
 &nbsp;
-<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>
+<a href=\"/cgi-bin/qaPushQ?cb=<!cb>\">CANCEL</a>
+&nbsp;
+&nbsp;
+<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>&cb=<!cb>\" target=\"_blank\">HELP</a>
 </td></tr>
 
 <tr><td align=\"right\">
@@ -70,42 +74,42 @@ New track?:
 Track:
 </td>
 <td>
-<TEXTAREA NAME=\"track\", ROWS=\"4\", COLS=\"40\"><!track></TEXTAREA>
+<TEXTAREA NAME=\"track\", ROWS=\"4\", COLS=\"60\"><!track></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Databases:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"dbs\" SIZE=\"40\" VALUE=\"<!dbs>\">
+<input TYPE=\"text\" NAME=\"dbs\" SIZE=\"60\" VALUE=\"<!dbs>\">
 </td></tr>
 
 <tr><td align=\"right\">
 Tables:
 </td>
 <td>
-<TEXTAREA NAME=\"tbls\", ROWS=\"5\", COLS=\"40\"><!tbls></TEXTAREA>
+<TEXTAREA NAME=\"tbls\", ROWS=\"5\", COLS=\"60\"><!tbls></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 CGIs:
 </td>
 <td>
-<TEXTAREA NAME=\"cgis\", ROWS=\"5\", COLS=\"40\"><!cgis></TEXTAREA>
+<TEXTAREA NAME=\"cgis\", ROWS=\"5\", COLS=\"60\"><!cgis></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Files:
 </td>
 <td>
-<TEXTAREA NAME=\"files\", ROWS=\"5\", COLS=\"40\"><!files></TEXTAREA>
+<TEXTAREA NAME=\"files\", ROWS=\"5\", COLS=\"60\"><!files></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Size(MB):
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"40\" VALUE=\"<!sizeMB>\">
+<input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"60\" VALUE=\"<!sizeMB>\">
 &nbsp;
 &nbsp;
 &nbsp;
@@ -137,7 +141,7 @@ Makedoc verified?: </td>
 Online Help:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"onlineHelp\" SIZE=\"40\" VALUE=\"<!onlineHelp>\">
+<input TYPE=\"text\" NAME=\"onlineHelp\" SIZE=\"60\" VALUE=\"<!onlineHelp>\">
 </select>
 
 </td></tr>
@@ -164,42 +168,42 @@ All.Joiner verified?: </td>
 Status:  
 </td>
 <td>
-<TEXTAREA NAME=\"stat\", ROWS=\"5\", COLS=\"40\"><!stat></TEXTAREA>
+<TEXTAREA NAME=\"stat\", ROWS=\"5\", COLS=\"60\"><!stat></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Sponsor (local):
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"sponsor\" SIZE=\"40\" VALUE=\"<!sponsor>\">
+<input TYPE=\"text\" NAME=\"sponsor\" SIZE=\"60\" VALUE=\"<!sponsor>\">
 </td></tr>
 
 <tr><td align=\"right\">
 Reviewer:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"reviewer\" SIZE=\"40\" VALUE=\"<!reviewer>\">
+<input TYPE=\"text\" NAME=\"reviewer\" SIZE=\"60\" VALUE=\"<!reviewer>\">
 </td></tr>
 
 <tr><td align=\"right\">
 External Source <br>or Collaborator:
 </td>
 <td>
-<input TYPE=\"text\" NAME=\"extSource\" SIZE=\"40\" VALUE=\"<!extSource>\">
+<input TYPE=\"text\" NAME=\"extSource\" SIZE=\"60\" VALUE=\"<!extSource>\">
 </td></tr>
 
 <tr><td align=\"right\">
 Open Issues:
 </td>
 <td>
-<TEXTAREA NAME=\"openIssues\", ROWS=\"5\", COLS=\"40\"><!openIssues></TEXTAREA>
+<TEXTAREA NAME=\"openIssues\", ROWS=\"5\", COLS=\"60\"><!openIssues></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
 Notes:
 </td>
 <td>
-<TEXTAREA NAME=\"notes\", ROWS=\"5\", COLS=\"40\"><!notes></TEXTAREA>
+<TEXTAREA NAME=\"notes\", ROWS=\"5\", COLS=\"60\"><!notes></TEXTAREA>
 </td></tr>
 
 <tr><td align=\"right\">
@@ -218,10 +222,13 @@ Notes:
 <!clonebutton>
 &nbsp;
 &nbsp;
-<a href=\"/cgi-bin/qaPushQ\">CANCEL</a>
+<!bouncebutton>
 &nbsp;
 &nbsp;
-<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>
+<a href=\"/cgi-bin/qaPushQ?cb=<!cb>\">CANCEL</a>
+&nbsp;
+&nbsp;
+<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>&cb=<!cb>\" target=\"_blank\">HELP</a>
 </td></tr>
 
 </table>

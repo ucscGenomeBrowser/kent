@@ -28,9 +28,10 @@ CREATE TABLE pushQ (
     extSource char(50) not null,	# External Source
     openIssues longblob not null,	# Open issues
     notes longblob not null,	# Notes
-    reqdate char(10) not null,	# Push-request Date
-    pushedYN char(1) not null,	# Push done?
+    pushdate char(10) not null,	# Push-done Date
+    pushedYN char(1) not null,	# Push requested?
     initdate char(10) not null,	# Initial Submission Date
+    bounces int unsigned not null,	# Bounce-count (num times bounced back to developer)
               #Indices
     PRIMARY KEY(qid)
 );

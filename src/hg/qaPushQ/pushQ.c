@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pushQ.h"
 
-static char const rcsid[] = "$Id: pushQ.c,v 1.2 2004/05/06 08:21:31 galt Exp $";
+static char const rcsid[] = "$Id: pushQ.c,v 1.3 2004/05/18 07:47:54 galt Exp $";
 
 void pushQStaticLoad(char **row, struct pushQ *ret)
 /* Load a row from pushQ table into ret.  The contents of ret will
@@ -40,9 +40,10 @@ strcpy(ret->reviewer, row[19]);
 strcpy(ret->extSource, row[20]);
 ret->openIssues = row[21];
 ret->notes = row[22];
-strcpy(ret->reqdate, row[23]);
+strcpy(ret->pushdate, row[23]);
 strcpy(ret->pushedYN, row[24]);
 strcpy(ret->initdate, row[25]);
+ret->bounces = sqlUnsigned(row[26]);
 }
 
 struct pushQ *pushQLoad(char **row)
@@ -77,9 +78,10 @@ strcpy(ret->reviewer, row[19]);
 strcpy(ret->extSource, row[20]);
 ret->openIssues = cloneString(row[21]);
 ret->notes = cloneString(row[22]);
-strcpy(ret->reqdate, row[23]);
+strcpy(ret->pushdate, row[23]);
 strcpy(ret->pushedYN, row[24]);
 strcpy(ret->initdate, row[25]);
+ret->bounces = sqlUnsigned(row[26]);
 return ret;
 }
 
@@ -89,7 +91,7 @@ struct pushQ *pushQLoadAll(char *fileName)
 {
 struct pushQ *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[26];
+char *row[27];
 
 while (lineFileRow(lf, row))
     {
@@ -107,7 +109,7 @@ struct pushQ *pushQLoadAllByChar(char *fileName, char chopper)
 {
 struct pushQ *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[26];
+char *row[27];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -151,8 +153,8 @@ void pushQSaveToDb(struct sqlConnection *conn, struct pushQ *el, char *tableName
  * If worried about this use pushQSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s','%s')", 
-	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->reqdate,  el->pushedYN,  el->initdate);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s','%s',%u)", 
+	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->pushdate,  el->pushedYN,  el->initdate,  el->bounces);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -167,7 +169,7 @@ void pushQSaveToDbEscaped(struct sqlConnection *conn, struct pushQ *el, char *ta
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *reqdate, *pushedYN, *initdate;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushdate, *pushedYN, *initdate;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -189,12 +191,12 @@ reviewer = sqlEscapeString(el->reviewer);
 extSource = sqlEscapeString(el->extSource);
 openIssues = sqlEscapeString(el->openIssues);
 notes = sqlEscapeString(el->notes);
-reqdate = sqlEscapeString(el->reqdate);
+pushdate = sqlEscapeString(el->pushdate);
 pushedYN = sqlEscapeString(el->pushedYN);
 initdate = sqlEscapeString(el->initdate);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')", 
-	tableName,  qid,  pqid,  priority, el->rank ,  qadate,  newYN,  track,  dbs,  tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  onlineHelp,  ndxYN,  joinerYN,  stat,  sponsor,  reviewer,  extSource,  openIssues,  notes,  reqdate,  pushedYN,  initdate);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%u)", 
+	tableName,  qid,  pqid,  priority, el->rank ,  qadate,  newYN,  track,  dbs,  tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  onlineHelp,  ndxYN,  joinerYN,  stat,  sponsor,  reviewer,  extSource,  openIssues,  notes,  pushdate,  pushedYN,  initdate, el->bounces );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&qid);
@@ -218,7 +220,7 @@ freez(&reviewer);
 freez(&extSource);
 freez(&openIssues);
 freez(&notes);
-freez(&reqdate);
+freez(&pushdate);
 freez(&pushedYN);
 freez(&initdate);
 }
@@ -256,9 +258,10 @@ sqlFixedStringComma(&s, ret->reviewer, sizeof(ret->reviewer));
 sqlFixedStringComma(&s, ret->extSource, sizeof(ret->extSource));
 ret->openIssues = sqlStringComma(&s);
 ret->notes = sqlStringComma(&s);
-sqlFixedStringComma(&s, ret->reqdate, sizeof(ret->reqdate));
+sqlFixedStringComma(&s, ret->pushdate, sizeof(ret->pushdate));
 sqlFixedStringComma(&s, ret->pushedYN, sizeof(ret->pushedYN));
 sqlFixedStringComma(&s, ret->initdate, sizeof(ret->initdate));
+ret->bounces = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -387,7 +390,7 @@ fprintf(f, "%s", el->notes);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->reqdate);
+fprintf(f, "%s", el->pushdate);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -397,6 +400,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->initdate);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->bounces);
 fputc(lastSep,f);
 }
 
