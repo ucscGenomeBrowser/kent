@@ -801,6 +801,8 @@ int combinePos(struct place *p, struct position *pos)
 	} 
       if (sameString(pos->type, "STS Marker"))
 	{
+	  /* Check if used for STS Marker */
+	  n = createName(pos->name);
 	  if (!inNameList(n, p->sts))
 	    {
 	      p->numSts++;
