@@ -135,7 +135,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.609 2004/04/13 07:01:36 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.610 2004/04/13 17:47:50 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7476,6 +7476,9 @@ printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
 printf("<B>Coverage:</B> %d %%\n",pg->coverage);
 printf("<B>Bases matching:</B> %d \n", pg->matches);
 printf("<p><B>Axt Score:</B> %d \n",pg->axtScore);
+printf("<B>old Score:</B> %d \n",pg->oldScore);
+printf("<B>intron Count:</B> %d / %d\n",pg->intronCount, pg->oldIntronCount);
+printf("<B>intron scores:</B> %s \n",pg->intronScores);
 htmlHorizontalLine();
 printf("<H4>Annotation for Gene locus that spawned PseudoGene</H4>");
 
@@ -7568,67 +7571,52 @@ printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks i
 safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
 if (hTableExists(chainTable_chrom) )
     {
-    /* lookup chain if not stored */
-    if (pg->chainId == 0 && pg->gStrand != NULL)
-        {
+    /* lookup chain */
+    dyStringPrintf(dy,
+        "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
+        chrom, chainTable);
+    hAddBinToQuery(chromStart, chromEnd, dy);
+    if (sameString(pg->gStrand,pg->strand))
         dyStringPrintf(dy,
-            "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
-            chrom, chainTable);
-        hAddBinToQuery(chromStart, chromEnd, dy);
-        if (sameString(pg->gStrand,pg->strand))
-            dyStringPrintf(dy,
-                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
-                chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
-        else
-            {
-            dyStringPrintf(dy,
-                "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
-                chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
-                hChromSize(pg->gChrom)-(pg->gStart));
-            }
-        dyStringAppend(dy, " order by qStart");
-        sr = sqlGetResult(conn, dy->string);
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            int chainId, score;
-            unsigned int qStart, qEnd, qSize;
-            char qStrand;
-            chainId = sqlUnsigned(row[0]);
-            score = sqlUnsigned(row[1]);
-            qStart = sqlUnsigned(row[2]);
-            qEnd = sqlUnsigned(row[3]);
-            qStrand =row[4][0];
-            qSize = sqlUnsigned(row[5]);
-            if (qStrand == '-')
-                {
-                unsigned int tmp = qSize - qEnd;
-                qEnd = qSize - qStart;
-                qStart = tmp;
-                }
-            if (pg->chainId == 0) pg->chainId = chainId;
-            puts("<LI>\n");
-            hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
-                    pg->gChrom, pg->kStart, pg->kEnd, chainId, pg->assembly);
-            printf("Annotated alignment using chainId: %d </A> \n", chainId);
-            printf("score: %d \n", score);
-            hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-            printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
-            puts("</LI>\n");
-            }
-        sqlFreeResult(&sr);
-        }
+            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+            chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
     else
         {
-        puts("<LI>\n");
-        hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-        printf("Raw alignment %s:%d-%d</A> \n", pg->gChrom,pg->gStart,pg->gEnd);
-        puts("</LI>\n<b>");
+        dyStringPrintf(dy,
+            "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d ",
+            chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+            hChromSize(pg->gChrom)-(pg->gStart));
+        }
+    dyStringAppend(dy, " order by qStart");
+    sr = sqlGetResult(conn, dy->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        int chainId, score;
+        unsigned int qStart, qEnd, qSize;
+        char qStrand;
+        chainId = sqlUnsigned(row[0]);
+        score = sqlUnsigned(row[1]);
+        qStart = sqlUnsigned(row[2]);
+        qEnd = sqlUnsigned(row[3]);
+        qStrand =row[4][0];
+        qSize = sqlUnsigned(row[5]);
+        if (qStrand == '-')
+            {
+            unsigned int tmp = qSize - qEnd;
+            qEnd = qSize - qStart;
+            qStart = tmp;
+            }
+        //if (pg->chainId == 0) pg->chainId = chainId;
         puts("<LI>\n");
         hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
-                pg->gChrom, pg->kStart, pg->kEnd, pg->chainId, pg->assembly);
-        printf("Annotated alignment %s %s to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
+                pg->gChrom, pg->kStart, pg->kEnd, chainId, pg->assembly);
+        printf("Annotated alignment using chainId: %d </A> \n", chainId);
+        printf("score: %d \n", score);
+        hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+        printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
         puts("</LI>\n");
         }
+    sqlFreeResult(&sr);
     }
 }
 
