@@ -21,6 +21,7 @@ DIRS = \
 	dnaMotifFind \
 	eisenInput \
 	emblMatrixToMotif \
+	estLibStats \
 	expToRna \
 	iriToControlTable \
 	iriToDnaMotif \
@@ -40,6 +41,3 @@ DIRS = \
 	twinOrfStats \
 	twinOrfStats2 \
 	twinOrfStats3 
-
-BADDIRS = \
-	estLibStats \
