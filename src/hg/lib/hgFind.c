@@ -700,7 +700,7 @@ if (hTableExists("bacEndPairs"))
 	    slAddHead(&hgp->tableList, table);
 	    }
 	AllocVar(be);
-	be = lfsLoad(row);
+	be = lfsLoad(row+1);
 	if ((chrom = hgOfficialChromName(be->chrom)) == NULL)
 	    errAbort("Internal Database error: Odd chromosome name '%s' in bacEndPairs", be->chrom); 
 	AllocVar(pos);
