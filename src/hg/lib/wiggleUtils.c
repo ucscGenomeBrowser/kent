@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.32 2004/10/05 23:04:10 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.33 2004/10/06 21:57:50 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -165,7 +165,7 @@ else
     {
     if (valuesMatched == 0)
 	{
-	if ( (span * 3) < (winEnd - winStart))
+	if ( (span * 3) > (winEnd - winStart))
 	    {
 	    printf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
 	    printf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
