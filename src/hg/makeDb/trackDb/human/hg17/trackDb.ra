@@ -511,3 +511,11 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
+track clonePos
+priority 14
+shortLabel Coverage
+longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180 
+
