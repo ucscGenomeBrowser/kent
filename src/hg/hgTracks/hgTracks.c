@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.708 2004/04/13 17:11:53 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.709 2004/04/14 18:50:52 aamp Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7474,6 +7474,8 @@ registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
 registerTrackHandler("llaPfuPrintA",llArrayMethods);
 registerTrackHandler("llaPaePrintA",llArrayMethods);
 registerTrackHandler("BlastPEuk",llBlastPMethods);
+registerTrackHandler("BlastPBac",llBlastPMethods);
+registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
