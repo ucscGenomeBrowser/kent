@@ -1247,8 +1247,8 @@ track blastDm1FB
 shortLabel Drosophila Proteins
 longLabel Drosophila Proteins
 group compGeno
-priority 142
-visibility pack
+priority 112
+visibility hide
 colorChromDefault off
 type psl protein
 
