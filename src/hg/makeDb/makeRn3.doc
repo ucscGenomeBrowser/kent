@@ -2668,6 +2668,13 @@ SEQ2_LEN=$BASE/S2.len
     # real    162m7.520s
     # user    32m40.530s
     # sys     5m31.500s
+    # check results, need to run this on kolossus to avoid an
+    # out-of-memory problem:
+# featureBits rn3 blastzMm4
+# 1804072721 bases of 2571104688 (70.167%) in intersection
+# featureBits rn3 blastzMm3
+# 1669090687 bases of 2571104688 (64.917%) in intersection
+
 
 
 # CHAIN Mm4 BLASTZ (WORKING - 2003-11-03 - Hiram)
