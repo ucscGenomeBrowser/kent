@@ -429,7 +429,7 @@ type bed 12 .
 
 track chainSelf
 shortLabel Self Chain 
-longLabel Chained Self Alignments
+longLabel Chained Self-Alignments
 group varRep
 priority 148
 visibility hide
