@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.24 2004/06/01 18:03:47 galt Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.25 2004/06/16 05:55:33 kent Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -555,6 +555,18 @@ if (conn != NULL)
     }
 }
 
+boolean dbInAnyField(struct joinerField *fieldList, char *db)
+/* Return TRUE if database is used in any field. */
+{
+struct joinerField *field;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    if (slNameInList(field->dbList, db))
+        return TRUE;
+    }
+return FALSE;
+}
+
 void jsValidateKeysOnDb(struct joiner *joiner, struct joinerSet *js,
 	char *db, struct hash *keyHash, struct keyHitInfo *khiList)
 /* Validate keys pertaining to this database. */
@@ -574,6 +586,10 @@ if (keyHash == NULL)
     if (slNameInList(keyField->dbList, db))
 	{
 	keyDb = db;
+	}
+    else if (!dbInAnyField(js->fieldList->next, db))
+        {
+	return;
 	}
     else
 	{
