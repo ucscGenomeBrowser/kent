@@ -18,6 +18,7 @@
 #include "hgRelate.h"
 #include "psl.h"
 #include "bed.h"
+#include "cgh.h"
 #include "agpFrag.h"
 #include "ctgPos.h"
 #include "clonePos.h"
@@ -2721,7 +2722,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
     printf("</TABLE>\n");
-    printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
     if (lfs->score == 1000)
         {
 	printf("<H4>This is the only location found for %s</H4>\n",clone);
@@ -2730,7 +2731,7 @@ if (row != NULL)
         {
 	printOtherLFS(clone, table, start, end);
 	}
-    printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
     printf("<H3>Genomic alignments of %s:</H3>\n", lfLabel);
     
     for (i = 0; i < lfs->lfCount; i++) 
@@ -2762,6 +2763,106 @@ puts(tdb->html);
 
 hgFreeConn(&conn);
 } 
+
+void fillCghTable(int type, char *tissue, boolean bold)
+/* Get the requested records from the database and print out HTML table */
+{
+char query[256];
+char currName[64];
+int rowOffset;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct cgh *cghRow;
+
+if (tissue)
+     {
+     sprintf(query, "type = %d AND tissue = '%s' ORDER BY name, chromStart", type, tissue);
+     }
+else 
+     {
+     sprintf(query, "type = %d ORDER BY name, chromStart", type);
+     }
+     
+sr = hRangeQuery(conn, "cgh", seqName, winStart, winEnd, query, &rowOffset);
+while (row = sqlNextRow(sr)) 
+     {
+     cghRow = cghLoad(row);
+     if (strcmp(currName,cghRow->name))
+         {
+	 if (bold) 
+	      {    
+	      printf("</TR>\n<TR>\n<TH>%s</TH>\n",cghRow->name);
+              } 
+         else
+	      {    
+	      printf("</TR>\n<TR>\n<TD>%s</TD>\n",cghRow->name);
+              } 
+      	 strcpy(currName,cghRow->name);
+	 }
+     if (bold)
+          {
+          printf("<TH ALIGN=right>%.6f</TH>\n",cghRow->score);
+	  }
+     else
+          {
+          printf("<TD ALIGN=right>%.6f</TD>\n",cghRow->score);
+	  }
+     }
+sqlFreeResult(&sr);
+}
+
+void doCgh(char *track, char *tissue, struct trackDb *tdb)
+/* Create detail page for comparative genomic hybridization track */ 
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+
+/* Print out non-sequence info */
+hgcStart(tissue);
+
+/* Print general range info */
+printf("<H2>UCSF Comparative Genomic Hybridizations - %s</H2>\n", tissue);
+printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
+printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",winStart);
+printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",winEnd);
+printf("</TABLE>\n");
+printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+
+/* Find the names of all of the clones in this range */
+printf("<TABLE>\n");
+printf("<TR><TH>Cell Line</TH>");
+sprintf(query, "SELECT spot from cgh where chrom = '%s' AND
+                chromStart <= '%d' AND chromEnd >= '%d' AND
+                tissue = '%s' AND type = 3 GROUP BY spot ORDER BY chromStart",
+	        seqName, winEnd, winStart, tissue);
+sr = sqlMustGetResult(conn, query);
+while (row = sqlNextRow(sr)) {
+  printf("<TH>Spot %s</TH>",row[0]);
+}  
+printf("</TR>\n");
+sqlFreeResult(&sr);
+
+/* Find the relevant tissues type records in the range */ 
+fillCghTable(3, tissue, FALSE);
+printf("<TR><TD>&nbsp</TD></TR>\n");
+
+/* Find the relevant tissue average records in the range */
+fillCghTable(2, tissue, TRUE);
+printf("<TR><TD>&nbsp</TD></TR>\n");
+
+/* Find the all tissue average records in the range */
+fillCghTable(1, NULL, TRUE);
+printf("<TR><TD>&nbsp</TD></TR>\n");
+
+printf("</TR>\n</TABLE>\n");
+
+hgFreeConn(&conn);
+} 
+
 #endif /* FUREY_CODE */
 
 
@@ -3528,6 +3629,10 @@ else if (sameWord(track, "uniGene"))
  else if (sameWord(track, "bacEndPairs"))
    {
      doLinkedFeaturesSeries(track, item, tdb);
+   }
+ else if (sameWord(track, "cgh"))
+   {
+     doCgh(track, item, tdb);
    }
 #endif /*FUREY_CODE*/
 else if (sameWord(track, "htcCloneSeq"))

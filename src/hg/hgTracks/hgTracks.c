@@ -4527,12 +4527,15 @@ tg->freeItems = freeExprBed;
  * the Comparative Genomic Hybridization track */
 
 static struct repeatItem *otherCghItem = NULL;
-static char *cghClassNames[] = {
+/*static char *cghClassNames[] = {
   "Breast", "CNS", "Colon", "Leukemia", "Lung", "Melanoma", "Ovary", "Prostate", "Renal",
-};
+  };*/
 static char *cghClasses[] = {
   "BREAST", "CNS", "COLON", "LEUKEMIA", "LUNG", "MELANOMA", "OVARY", "PROSTATE", "RENAL",
-};
+  };
+/* static char *cghClasses[] = {
+  "BT549(D439b)", "HS578T(D268a)", "MCF7(D820b)", "MCF7ADR(D212a)", "MDA-231(D213b)", "MDA-435(D266a)", "MDA-N(D266b)", "T47D(D212b)", 
+  }; */
 
 struct repeatItem *makeCghItems()
 /* Make the stereotypical CGH tracks */
@@ -4544,7 +4547,7 @@ for (i=0; i<numClasses; ++i)
     {
     AllocVar(ri);
     ri->class = cghClasses[i];
-    ri->className = cghClassNames[i];
+    ri->className = cghClasses[i];
     slAddHead(&riList, ri);
     }
 otherCghItem = riList;
@@ -4594,13 +4597,15 @@ if (isFull)
 	hashAdd(hash, cghi->class, cghi);
 	}
     sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 2", &rowOffset);
+    /* sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 3", &rowOffset); */
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	cghStaticLoad(row+rowOffset, &cghRecord);
-	cghi = hashFindVal(hash, cghRecord.tissue);
+	cghi = hashFindVal(hash, cghRecord.tissue); 
+	/* cghi = hashFindVal(hash, cghRecord.name); */
 	if (cghi == NULL)
 	   cghi = otherCghItem;
-	col = getExprDataColor((cghRecord.score * -1), 1.0, TRUE);
+	col = getExprDataColor((cghRecord.score * -1), 0.8, TRUE);
 	x1 = roundingScale(cghRecord.chromStart-winStart, width, baseWidth)+xOff;
 	x2 = roundingScale(cghRecord.chromEnd-winStart, width, baseWidth)+xOff;
 	w = x2-x1;
@@ -4616,7 +4621,7 @@ else
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	cghStaticLoad(row+rowOffset, &cghRecord);
-	col = getExprDataColor((cghRecord.score * -1), 1.0, TRUE);
+	col = getExprDataColor((cghRecord.score * -1), 0.8, TRUE);
 	x1 = roundingScale(cghRecord.chromStart-winStart, width, baseWidth)+xOff;
 	x2 = roundingScale(cghRecord.chromEnd-winStart, width, baseWidth)+xOff;
 	w = x2-x1;
