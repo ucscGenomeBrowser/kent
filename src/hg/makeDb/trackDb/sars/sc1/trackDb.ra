@@ -1,6 +1,6 @@
 track softberryGene
-shortLabel Fgenesh++ Genes
-longLabel Fgenesh++ Gene Predictions
+shortLabel Fgenesv+ Genes
+longLabel Fgenesv+ Gene Predictions
 group genes
 priority 48
 visibility pack
@@ -31,4 +31,13 @@ group compGeno
 priority 134
 visibility hide
 type psl .
+
+track gbProtAnn
+shortLabel GenBank Protein Annotations
+longLabel Proteins Annotated in GenBank NP_828849
+group genes
+priority 35
+color 12,12,120
+visibility pack
+type bed 4 +
 
