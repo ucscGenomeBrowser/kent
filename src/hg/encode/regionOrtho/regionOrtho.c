@@ -29,7 +29,7 @@ if (fileExists(regionSource))
 	sl->chrom      = cloneString(row[0]);
 	sl->chromStart = atoi(row[1]);
 	sl->chromEnd   = atoi(row[2]);
-	sl->name       = cloneString(row[3]);
+	sl->name       = strndup(row[3],6);
 	sl->size       = atoi(row[2])-atoi(row[1]);
 	slAddHead(&list, sl);
 	}
@@ -50,11 +50,13 @@ else
 	{
 	if (sameString(row[0], "chrom"))
 	    continue;
+	if (excludeRandoms && endsWith(row[0], "random"))
+	    continue;
 	AllocVar(sl);
 	sl->chrom      = cloneString(row[0]);
 	sl->chromStart = atoi(row[1]);
 	sl->chromEnd   = atoi(row[2]);
-	sl->name       = cloneString(row[3]);
+	sl->name       = strndup(row[3],6);
 	sl->size       = atoi(row[2])-atoi(row[1]);
 	slAddHead(&list, sl);
 	}
