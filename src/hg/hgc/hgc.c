@@ -21,6 +21,7 @@
 #include "fuzzyFind.h"
 #include "seqOut.h"
 #include "hdb.h"
+#include "spDb.h"
 #include "hui.h"
 #include "hgRelate.h"
 #include "htmlPage.h"
@@ -126,6 +127,7 @@
 #include "easyGene.h"
 #include "llaInfo.h"
 #include "blastTab.h"
+#include "hdb.h"
 #include "hgc.h"
 #include "genbank.h"
 #include "pseudoGeneLink.h"
@@ -157,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.828 2005/01/31 00:19:00 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.829 2005/02/05 22:32:19 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -169,6 +171,8 @@ char *organism;		/* Colloquial name of organism. */
 char *scientificName;	/* Scientific name of organism. */
 
 char *protDbName;	/* Name of proteome database */
+struct sqlConnection *protDbConn; /* connection to proteins database */
+struct sqlConnection *swissProtConn; /* connection to proteins database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 void printLines(FILE *f, char *s, int lineSize);
@@ -251,9 +255,12 @@ fprintf(f, entrezFormat, "OMIM", buf, "Detailed");
 }
 
 static void printSwissProtProteinUrl(FILE *f, char *accession)
-/* Print URL for SwissProt browser on a protein. */
+/* Print URL for Swissi-Prot NiceProt on a protein. */
 {
-fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
+char *spAcc;
+/* make sure accession number is used (not display ID) when linking to Swiss-Prot */
+spAcc = spFindAcc(swissProtConn, accession);
+fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", spAcc);
 }
 
 static void printEntrezUniSTSUrl(FILE *f, char *name)
@@ -10666,16 +10673,16 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+/*
 if (stringIn("nonsynon",snp.func)!=NULL)
     {
-    printf("<BR><BR><a href=\"#LSSNP\">LS-SNP description</A> &nbsp;--&nbsp;\n");
-    printf("<A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
-    printf("RequestType=QueryById&PropertySelect=Functional&idtype=rsID&idvalue=");
-    printf("%s\" TARGET=_blank>Protein Function</A>&nbsp;&nbsp;\n", snp.name);
-    printf("<A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
-    printf("RequestType=QueryById&PropertySelect=Protein_structure&idtype=rsID&idvalue=");
-    printf("%s\" TARGET=_blank>Protein Structure</A><BR>\n", snp.name);
+    printf("<P><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
+    printf("PropertySelect=Functional&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Function</A>\n", snp.name);
+    printf("<BR><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
+    printf("PropertySelect=Protein_structure&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Structure</A>\n", snp.name);
+    printf("<BR><a href=\"#LSSNP\" >LS-SNP description</A></P>\n");
     }
+*/
 printf("<P>\n");
 }
 
@@ -13858,10 +13865,10 @@ if (acc != NULL)
     }
 if (!isDm && (prot != NULL) && !sameString("(null)", prot))
     {
-    printf("<B>SwissProt:</B> ");
-    printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
-		"TARGET=_blank>%s</A></B><BR>\n",
-		prot, prot);
+    printf("<B>UniProt:</B> ");
+    printf("<A HREF=");
+    printSwissProtProteinUrl(stdout, prot);
+    printf(" TARGET=_blank>%s</A></B><BR>\n", spFindAcc(swissProtConn, prot));
     }
 printf("<B>Protein length:</B> %d<BR>\n",pslList->qSize);
 
@@ -14316,6 +14323,8 @@ hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
 
 protDbName = hPdbFromGdb(database);
+protDbConn = sqlConnect(protDbName);
+swissProtConn = sqlConnect("swissProt");
 
 seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
