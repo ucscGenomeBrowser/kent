@@ -48,7 +48,7 @@ for (i=0; i<fileCount; ++i)
 while (!dlEmpty(list))
     {
     struct dlNode *bestNode = NULL;
-    int bestScore = -BIGNUM;
+    double bestScore = -BIGNUM;
     for (node = list->head; !dlEnd(node); node = node->next)
         {
 	cf = node->val;
