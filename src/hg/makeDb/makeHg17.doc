@@ -202,7 +202,8 @@ exit; # don't actually run this like a script :)
     #	Nothing there, then remove it
     rmdir  contigs
 
-    # FILES ARE NOW READY FOR REPEAT MASKING
+    # FILES ARE NOW READY FOR REPEAT MASKING - start that process as
+    #	other steps here can proceed in parallel.
 
     #	Previous practice used to copy everything over for jkStuff from a
     #	previous build.  Rather than do that, pick up whatever is needed
@@ -228,6 +229,47 @@ exit; # don't actually run this like a script :)
     hgsql -e 'create database hg17' mysql
     # Copy over grp table (for track grouping) from another database:
     hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" hg17
+
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 2/24/04 angie)
+    # Make nib/, unmasked until RepeatMasker and TRF steps are done.
+    # Do this now so that the chromInfo table will exist and thus the
+    #	trackDb tables can be built in the next step.
+    #	These unmasked nibs will be replaced by the masked nibs after
+    #	repeat mask and trf are done.
+    ssh eieio
+    cd /cluster/data/hg17
+    # Make chr*.fa from contig .fa
+    #  Copied chrFa.sh from hg16/jkStuff, renamed it to chrFa.csh
+    time ./jkStuff/chrFa.csh
+    #	real    13m24.710s
+    #	user    9m0.360s
+    #	sys     1m15.820s
+
+    mkdir nib
+    foreach c (`cat chrom.lst`)
+      foreach f ($c/chr${c}{,_random}.fa)
+        if (-e $f) then
+          echo "nibbing $f"
+          /cluster/bin/i386/faToNib $f nib/$f:t:r.nib
+        endif
+      end
+    end
+
+    # Make symbolic links from /gbdb/hg17/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/hg17/nib
+    ln -s /cluster/data/hg17/nib/chr*.nib /gbdb/hg17/nib
+    # Load /gbdb/hg17/nib paths into database and save size info.
+    cd /cluster/data/hg17
+    hgsql hg17  < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgNibSeq -preMadeNib hg17 /gbdb/hg17/nib */chr*.fa
+    hgsql -N -e "select chrom,size from chromInfo order by chrom" hg17 \
+	> chrom.sizes
+    # You can compare this chrom.sizes with the previously created
+    # chrom_sizes.  Should be no difference
+    sort chrom_sizes > s0
+    sort chrom.sizes | grep -v random > s1
+    diff s0 s1
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (
     ssh hgwdev
@@ -374,7 +416,7 @@ Strange perc. field -0.3 line 4339 of 5/chr5.fa.out
 Processing 19/chr19.fa.out
 Strange perc. field -18.6 line 77032 of 19/chr19.fa.out
 
-# SIMPLE REPEAT [TRF] TRACK (WORKING - 2004-05-21 - Hiram)
+# SIMPLE REPEAT [TRF] TRACK (DONE - 2004-05-21 - Hiram)
     #	Copy the contigs, first to the bluearc, then to /iscratch/i
     ssh eieio
     mkdir /cluster/bluearc/hg17
@@ -448,18 +490,13 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     para check
     para push
     para check
-XXX - running 2004-05-21 12:58
-#  Completed: 472 of 472 jobs
-# CPU time in finished jobs:      36177s     602.95m    10.05h    0.42d  0.001 y
-# IO & Wait Time:                  2038s      33.97m     0.57h    0.02d  0.000 y
-# Average job time:                  81s       1.35m     0.02h    0.00d
-# Longest job:                     6992s     116.53m     1.94h    0.08d
-# Submission to last job:         10703s     178.38m     2.97h    0.12d
-    # When cluster run is done, a couple of extra files not caught in
-    # the above sequence
-    ./runTrf /cluster/store5/gs.18/build35/M/NT_999999/NT_999999.fa trf/NT_999999.bed
-    # That produces an empty .bed file, mark it so:
-    echo "# trf run produces nothing for this one" >> trf/NT_999999.bed
+# Completed: 391 of 391 jobs
+# CPU time in finished jobs:      13213s     220.22m     3.67h    0.15d  0.000 y
+# IO & Wait Time:                  1567s      26.11m     0.44h    0.02d  0.000 y
+# Average job time:                  38s       0.63m     0.01h    0.00d
+# Longest job:                     1554s      25.90m     0.43h    0.02d
+# Submission to last job:          2315s      38.58m     0.64h    0.03d
+
 
     liftUp simpleRepeat.bed /cluster/data/hg17/jkStuff/liftAll.lft \
 	warn trf/*.bed  > lu.out 2>&1
@@ -469,9 +506,210 @@ XXX - running 2004-05-21 12:58
     cd /cluster/data/hg17/bed/simpleRepeat
     /cluster/bin/i386/hgLoadBed hg17 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-#	stringTab = 0
-#	Reading simpleRepeat.bed
-#	Loaded 627883 elements
-#	Sorted
-#	Saving bed.tab
-#	Loading hg17
+    #	Loaded 629571 elements of size 16
+    #	Compare with previous assembly
+    featureBits hg17 simpleRepeat
+    #	54964044 bases of 3096628158 (1.775%) in intersection
+    featureBits hg16 simpleRepeat
+    #	54320136 bases of 2865248791 (1.896%) in intersection
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-05-21 - Hiram)
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh eieio
+    cd /cluster/data/hg17/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+      awk '{if ($5 <= 9) print;}' $f > trfMask/$f:t
+    end
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    #	EXPERIMENT, at a filter of <= 12, we have coverage:
+    #	20904399 bases of 2867328468 (0.729%) in intersection
+    #	at a filter of <= 9, we have coverage:
+    #	19271270 bases of 2867328468 (0.672%) in intersection
+
+
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/hg17
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c ( `cat chrom.lst` )
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+    #	Tried an experiment with this business.  at a filter of 12
+    #	we have coverage:
+    featureBits hg17 trfMask/*.bed
+
+# MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (WORKING - 2004-05-21)
+#							 -Hiram
+    # This used to be done right after RepeatMasking.  Now, we mask with 
+    # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above,
+    #	and after Repeat Masker is complete.
+    ssh eieio
+    cd /cluster/data/hg17
+XXXXXXX
+
+    # copied these three scripts from hg15 - fixup path names to
+    # reference /cluster/bin instead of ~kent/bin
+
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    tcsh ./jkStuff/makeFaMasked.sh > maFaMasked.out 2>&1
+    #- Make hard-masked .fa.masked files as well:
+    tcsh ./jkStuff/makeHardMasked.sh > maHardMasked.out 2>&1
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    tcsh ./jkStuff/makeNib.sh > maNib.out 2>&1
+
+    # Make symbolic links from /gbdb/hg17/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/hg17/nib
+    foreach f (/cluster/store5/gs.18/build35/nib/chr*.nib)
+      ln -s $f /gbdb/hg17/nib
+    end
+    # Load /gbdb/hg17/nib paths into database and save size info.
+    hgsql hg17  < ~/kent/src/hg/lib/chromInfo.sql
+    cd /cluster/data/hg17
+    hgNibSeq -preMadeNib hg17 /gbdb/hg17/nib ?{,?}/chr?{,?}{,_random}.fa
+    echo "select chrom,size from chromInfo" | hgsql -N hg17 > chrom.sizes
+
+    # Copy the masked contig fa to /iscratch and /scratch:
+    #	And everything else we will need for blastz runs, etc ...
+    ssh kkr1u00
+    rm -rf /iscratch/i/gs.18/build35/trfFa
+    mkdir -p /iscratch/i/gs.18/build35/trfFa
+    cp -p /cluster/data/hg17/?{,?}/N{T,G}_*/N{T,G}_??????.fa /iscratch/i/gs.18/build35/trfFa
+    rm -rf /iscratch/i/gs.18/build35/bothMaskedNibs
+    mkdir -p /iscratch/i/gs.18/build35/bothMaskedNibs
+    cp -p /cluster/data/hg17/nib/*.nib /iscratch/i/gs.18/build35/bothMaskedNibs
+    rm -rf /iscratch/i/gs.18/build35/rmsk
+    mkdir -p /iscratch/i/gs.18/build35/rmsk
+    cp -p /cluster/data/hg17/?{,?}/*.out /iscratch/i/gs.18/build35/rmsk
+    ~kent/bin/iSync
+
+    # ssh kkstore
+    #  Since kkstore is currently /cluster/bluearc/scratch, better to do
+    #  this on eieio and copy to 
+    rm -rf /scratch/hg/gs.18/build35/trfFa
+    mkdir -p /scratch/hg/gs.18/build35/trfFa
+    cp -p /cluster/data/hg17/?{,?}/N{T,G}_*/N{T,G}_??????.fa /scratch/hg/gs.18/build35/trfFa
+    rm -rf /scratch/hg/gs.18/build35/bothMaskedNibs
+    mkdir /scratch/hg/gs.18/build35/bothMaskedNibs
+    cp -p /cluster/data/hg17/nib/*.nib /scratch/hg/gs.18/build35/bothMaskedNibs
+    rm -rf /scratch/hg/gs.18/build35/rmsk
+    mkdir -p /scratch/hg/gs.18/build35/rmsk
+    cp -p /cluster/data/hg17/?{,?}/*.out /scratch/hg/gs.18/build35/rmsk
+
+    # request rsync of kkstore /scratch
+
+
+# GOLD AND GAP TRACKS (DONE - 2004-05-21 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/hg17
+    hgGoldGapGl -noGl -chromLst=chrom.lst hg17 /cluster/data/hg17 .
+
+XXX - Come back to this after contig_overlaps.agp has been created
+# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (WAIT - 2004-05-21)
+# Store o+o info in database.
+    ssh eieio
+    cd /cluster/data/hg17
+    if (-f contig_overlaps.agp) then
+      jkStuff/liftGl.sh contig.gl
+    else
+      ssh hgwdev
+      hgGoldGapGl -noGl hg17 /cluster/store5/gs.18 build35 
+      echo ""
+      echo "*** Note from makeHg15.doc:"
+      echo "Come back to this step later when we have contig_overlaps.agp\!"
+    endif
+    ssh hgwdev
+    cd /cluster/store5/gs.18/build35
+    if (-f contig_overlaps.agp) then
+      hgGoldGapGl hg17 /cluster/store5/gs.18 build35 
+      cd /cluster/store5/gs.18
+      /cluster/bin/i386/hgClonePos hg17 build35 ffa/sequence.inf /cluster/store5/gs.18 -maxErr=3
+    end 
+    cd /cluster/store5/gs.18
+    # (2/27/04 angie) re-loaded -- chr{1,4,8,15}_random lift files changed
+    # 7/30/04.
+    hgCtgPos hg17 build35 
+
+#  gc5Base wiggle TRACK (WORKING - 2004-05-21 - Hiram)
+    #	This is going to take hours to run.  It is a lot of
+    #	data.  make sure you do it on the fileserver:
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/gc5Base
+    cd /cluster/data/hg17/bed/gc5Base
+
+    cat << '_EOF_' > runGcPercent.sh
+#!/bin/sh
+mkdir -p wigData5
+mkdir -p dataLimits5
+for n in ../../nib/*.nib
+do
+	c=`basename ${n} | sed -e "s/.nib//"`
+	C=`echo $c | sed -e "s/chr//"`
+	echo -n "working on ${c} - ${C} ... "
+	hgGcPercent -chr=${c} -doGaps \
+		-file=stdout -win=5 hg17 ../../nib | grep -w GC | \
+		awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
+	wigAsciiToBinary \
+	-dataSpan=5 -chrom=${c} -wibFile=wigData5/gc5Base_${C} \
+	-name=${C} stdin 2> dataLimits5/${c}
+echo "done"
+done
+'_EOF_'
+    chmod +x runGcPercent.sh
+    cd /cluster/data/hg17/bed/gc5Base
+    time ./runGcPercent.sh
+    # load the .wig files back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base hg17 gc5Base wigData5/*.wig
+    # and symlink the .wib files into /gbdb
+    mkdir /gbdb/hg17/wib/gc5Base
+    ln -s `pwd`/wigData5/*.wib /gbdb/hg17/wib/gc5Base
+
+    cat << '_EOF_' > runZoom.sh
+#!/bin/sh
+
+mkdir -p wigData5_1K
+mkdir -p dataLimits5_1K
+
+for n in ../../nib/*.nib
+do
+        c=`basename ${n} | sed -e "s/.nib//"`
+        C=`echo $c | sed -e "s/chr//"`
+        echo -n "working on ${c} - ${C} ... "
+        hgGcPercent -chr=${c} -doGaps \
+                -file=stdout -win=5 hg17 ../../nib | grep -w GC | \
+                awk '{printf "%d\t%.1f\n", $2+1, $5/10.0}' | \
+	wigZoom -dataSpan=1000 stdin | wigAsciiToBinary \
+        -dataSpan=1000 -chrom=${c} -wibFile=wigData5_1K/gc5Base_${C}_1K \
+        -name=${C} stdin 2> dataLimits5_1K/${c}
+echo "done"
+done
+'_EOF_'
+    chmod +x runZoom.sh
+    #	This is going to take even longer than above, certainly do this
+    #	on the fileserver
+    ssh eieio
+    time ./runZoom.sh
+real    232m3.265s
+user    302m37.050s
+sys     16m13.770s
+    #	Then load these .wig files into the same database as above
+    ssh hgwdev
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/gc5Base -oldTable hg17 gc5Base \
+	wigData5_1K/*.wig
+    # and symlink these .wib files into /gbdb
+    mkdir -p /gbdb/hg17/wib/gc5Base
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg17/wib/gc5Base
