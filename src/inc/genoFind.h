@@ -176,7 +176,7 @@ void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Has
  * via outFunction/outData. */
 
 void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, int minMatch,  GfSaveAli outFunction, void *outData);
+	boolean isRc, int minMatch,  GfSaveAli outFunction, void *outData, boolean isRna);
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
 

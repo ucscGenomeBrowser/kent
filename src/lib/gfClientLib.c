@@ -1151,7 +1151,7 @@ lmCleanup(&lm);
 }
 
 void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, int minMatch, GfSaveAli outFunction, void *outData)
+	boolean isRc, int minMatch, GfSaveAli outFunction, void *outData, boolean isRna)
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
 {
@@ -1164,6 +1164,7 @@ bioSeq *targetSeq;
 struct ssBundle *bun;
 int hitCount;
 struct lm *lm = lmInit(0);
+enum ffStringency stringency = (isRna ? ffCdna : ffTight);
 
 gfTransTransFindClumps(gfs, qTrans->trans, clumps, lm, &hitCount);
 for (qFrame = 0; qFrame<3; ++qFrame)
@@ -1191,7 +1192,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = rangesToFfItem(range->components, qSeq);
     ssStitch(bun, ffTight);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, ffTight, minMatch, outFunction);
+	bun, outData, isRc, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
     }
 for (qFrame = 0; qFrame<3; ++qFrame)
