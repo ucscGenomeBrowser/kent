@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.4 2005/03/09 17:37:34 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.5 2005/03/14 23:37:07 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -36,11 +36,12 @@ errAbort(
   "usage:\n"
   "   hgLoadMafSummary database table file.maf\n"
   "options:\n"
-    "   -mergeGap=N   max size of gap to merge regions (default 10)\n"
-    "   -minSize=N         merge blocks smaller than N (default 1000)\n"
-    "   -maxSize=N         break up blocks larger than N (default 1500)\n"
+    "   -mergeGap=N   max size of gap to merge regions (default %d)\n"
+    "   -minSize=N         merge blocks smaller than N (default %d)\n"
+    "   -maxSize=N         break up blocks larger than N (default %d)\n"
     "   -test         suppress loading the database. Just create .tab file(s)\n"
-    "                     in current dir.\n" 
+    "                     in current dir.\n",
+                                mergeGap, minSize, maxSize 
   );
 }
 
@@ -111,16 +112,18 @@ return mcMaster;
 
 int processMaf(struct mafAli *maf, struct hash *componentHash, 
             struct mafSummary **summaryList, struct mafFile *mf, char *fileName)
-/* Compute scores for each cmoponent in the maf and output to .tab file */
+/* Compute scores for each pairwise component in the maf and output to .tab file */
 {
 struct mafComp *mc = NULL, *nextMc = NULL;
 struct mafSummary *ms, *msPending;
 struct mafAli pairMaf;
 long componentCount = 0;
 struct mafComp *mcMaster = mafMaster(maf, mf, fileName);
+struct mafComp *oldMasterNext = mcMaster->next; 
 
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
+    struct mafComp *oldMcNext = mc->next; 
     nextMc = mc->next;
     if (sameString(mcMaster->src, mc->src))
         continue;
@@ -169,8 +172,10 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
         slAddHead(summaryList, ms);
     else
         hashAdd(componentHash, ms->src, ms);
+    mc->next = oldMcNext; 
     componentCount++;
     }
+mcMaster->next = oldMasterNext; 
 return componentCount;
 }
 
