@@ -12,8 +12,9 @@ struct machSpec
     char *name;	/* Network name */
     int cpus;	/* Number of CPUs we can use */
     int ramSize;	/* Megabytes of memory */
-    char *scratchDir;	/* Location of (local) scratch dir */
-    int scratchSize;	/* Megabytes of local disk */
+    char *tempDir;	/* Location of (local) temp dir */
+    char *localDir;	/* Location of local data dir */
+    int localSize;	/* Megabytes of local disk */
     char *switchName;	/* Name of switch this is on */
     };
 
