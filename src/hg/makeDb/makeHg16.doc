@@ -93,7 +93,7 @@ exit; # don't actually run this like a script :)
    
 # Copy over chrM contig from previous version
     cd ~/oo
-    cp -r gs.16/build33/M .
+    cp -r gs.17/build33/M .
 
 # Determine the chromosome sizes from agps
 
@@ -128,9 +128,9 @@ exit; # don't actually run this like a script :)
 
 # Copy over jkStuff from previous build (??)
     mkdir jkStuff
-    cp /cluster/store1/gs.16/build33/jkStuff/*.sh jkStuff
+    cp /cluster/store1/gs.17/build33/jkStuff/*.sh jkStuff
     /build31/jkStuff/*.csh jkStuff
-    cp /cluster/store1/gs.16/build33/jkStuff/*.gsub jkStuff        
+    cp /cluster/store1/gs.17/build33/jkStuff/*.gsub jkStuff        
 
 # Create contig gl files
 
@@ -155,18 +155,18 @@ exit; # don't actually run this like a script :)
 # Update all Makefiles with latest OOVERS and GSVERS, DATABASE, and locations of .fa files
 
 # Makefiles in:
-#     /gs.16/build33/
-#     /gs.16/build33/bacends
-#     /gs.16/build33/cytobands
-#     /gs.16/build33/cytoPlots
-#     /gs.16/build33/fish
-#     /gs.16/build33/fosends
-#     /gs.16/build33/g2g
-#     /gs.16/build33/geneticPlots
-#     /gs.16/build33/primers
-#     /gs.16/build33/recombrate
-#     /gs.16/build33/sts
-#     /gs.16/build33/stsPlots
+#     /gs.17/build33/
+#     /gs.17/build33/bacends
+#     /gs.17/build33/cytobands
+#     /gs.17/build33/cytoPlots
+#     /gs.17/build33/fish
+#     /gs.17/build33/fosends
+#     /gs.17/build33/g2g
+#     /gs.17/build33/geneticPlots
+#     /gs.17/build33/primers
+#     /gs.17/build33/recombrate
+#     /gs.17/build33/sts
+#     /gs.17/build33/stsPlots
 
 # Create accession_info file *****
 	make accession_info.rdb
@@ -268,22 +268,22 @@ exit; # don't actually run this like a script :)
 # CREATE AND LOAD STS MARKERS TRACK (DONE 2003-08-03 Terry)
 
 # Copy in current stsInfo2.bed and stsAlias.bed files
-        cd /projects/hg2/booch/psl/gs.16/build33
+        cd /projects/hg2/booch/psl/gs.17/build33
         cp ../update/stsInfo2.bed .
         cp ../update/stsAlias.bed .
 
 # Create final version of sts sequence placements
         ssh kks00
-        cd /projects/hg2/booch/psl/gs.16/build33/sts
+        cd /projects/hg2/booch/psl/gs.17/build33/sts
         make stsMarkers.final
 
 # Create final version of primers placements
 # Make sure PRIMERS variable in Makefile is pointing to current version
-        cd /projects/hg2/booch/psl/gs.16/build33/primers
+        cd /projects/hg2/booch/psl/gs.17/build33/primers
         make primers.final
 
 # Create bed file
-        cd /projects/hg2/booch/psl/gs.16/build33
+        cd /projects/hg2/booch/psl/gs.17/build33
         make stsMap.bed
 
 # Create database tables
@@ -364,7 +364,7 @@ exit; # don't actually run this like a script :)
 
 # Update Makefile with new location of pairs/singles 
 # files, if necessary (DONE)
-        cd /projects/hg2/booch/psl/gs.16/build33/bacends
+        cd /projects/hg2/booch/psl/gs.17/build33/bacends
 
 # Make initial file of alignments
 	make bacEnds.rdb
@@ -425,7 +425,7 @@ exit; # don't actually run this like a script :)
 
 # Update Makefile with location of pairs files, if necessary
         ssh kks00
-        cd /projects/hg2/booch/psl/gs.16/build33/fosends
+        cd /projects/hg2/booch/psl/gs.17/build33/fosends
 
 # Make initial file of alignments
 	make fosEnds.rdb
@@ -504,14 +504,14 @@ exit; # don't actually run this like a script :)
 	wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
 
 # Create initial placement file
-	cp /projects/hg2/booch/psl/gs.16/build33/fish/extract.pl . 
+	cp /projects/hg2/booch/psl/gs.17/build33/fish/extract.pl . 
 	make cyto.markers.bed
 
 # Get sequences for accessions not in genome
 	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
-	# select file "/projects/hg2/booch/psl/gs.16/build33/fish/not.found.acc
+	# select file "/projects/hg2/booch/psl/gs.17/build33/fish/not.found.acc
 	# change output to FASTA format
-	# download results to "/projects/hg2/booch/psl/gs.16/build33/fish/not.found.fa"
+	# download results to "/projects/hg2/booch/psl/gs.17/build33/fish/not.found.fa"
 
 # Place sequences against genome
 	make blat
@@ -2120,6 +2120,7 @@ mv ucsc100k.bed ucsc100k.bed.Rn3
 
     # Add entries for net and chain to human/hg16 trackDb
 
+
 # Make Known Genes Track
 
   This task has many steps and currently it is described by two documents:
@@ -2175,6 +2176,9 @@ foreach chr (?{,?})
   echo removing symbolic links for chr$chr NT .fa.align files
   rm $chr/NT_??????.fa.align
 end
+<<<<<<< makeHg16.doc
+>>>>>>> 1.22
+=======
 
 #  BLASTZ SELF (Working - 2003-08-08 - Hiram)
 
@@ -2403,6 +2407,38 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 
     # remake trackDb tables
+
+
+# PRODUCE FUGU BLAT ALIGNMENT (IN PROGRESS 2003-08-22 kate)
+
+    # Use masked scaffolds from fr1 assembly (same sequence as
+    # previous BlatFugu, however it's repeat and TRF-masked).
+
+    # NOTE: can't access /iscratch/i from fileserver
+    ssh kk
+    mkdir /cluster/data/hg16/bed/blatFugu
+    cd /cluster/data/hg16/bed/blatFugu
+    mkdir psl 
+    foreach f (/cluster/data/hg16/?{,?}/NT_??????/NT_??????.fa)
+      set c=$f:t:r
+      echo $c
+      mkdir -p psl/$c
+    end
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /scratch/hg/gs.17/build34/trfFa/*.fa > human.lst
+cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 human.lst fugu.lst gsub spec
+    para create spec
+       # 283798 jobs  
+    para try
+    para check
+    para push
+    para check
+
 
 # MAKE BLASTZ BEST SELF (TBD)
 
