@@ -54,6 +54,7 @@ struct gap
     {
     struct gap *next;	    /* Next gap in list. */
     int start,end;	    /* Range covered in chromosome. */
+    int oStart, oEnd;	    /* Range covered in other chromosome. */
     struct fill *fillList;  /* List of gap fillers. */
     bool oGap;	    	    /* True if gap corresponds to sequence gap in other
                              * sequence. */
@@ -163,21 +164,15 @@ space->end = gap->end;
 rbTreeAdd(chrom->spaces, space);
 }
 
-struct gap *gapNew(int start, int end)
+struct gap *gapNew(int start, int end, int oStart, int oEnd)
 /* Create a new gap. */
 {
 struct gap *gap;
 AllocVar(gap);
 gap->start = start;
 gap->end = end;
-return gap;
-}
-
-struct gap *addGap(struct chrom *chrom, int start, int end)
-/* Create a new gap and add it to chromosome space tree. */
-{
-struct gap *gap = gapNew(start, end);
-addSpaceForGap(chrom, gap);
+gap->oStart = oStart;
+gap->oEnd = oEnd;
 return gap;
 }
 
@@ -261,7 +256,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAddSaveName(hash, name, chrom, &chrom->name);
     chrom->size = sqlUnsigned(row[1]);
     chrom->spaces = rbTreeNew(spaceCmp);
-    chrom->root = addGap(chrom, 0, chrom->size);
+    chrom->root = gapNew(0, chrom->size, 0, 0);
+    addSpaceForGap(chrom, chrom->root);
     chrom->seqGaps = getSeqGaps(db, chrom->name);
     }
 sqlFreeResult(&sr);
@@ -556,9 +552,9 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	    gapEnd = nextBlock->tStart;
 	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
-		gap = gapNew(gapStart, gapEnd);
-		if (oSeqPlugged(otherChrom, block->qEnd, 
-			nextBlock->qStart, gapStart, gapEnd))
+		gap = gapNew(gapStart, gapEnd, block->qEnd, nextBlock->qStart);
+		if (oSeqPlugged(otherChrom, block->qEnd, nextBlock->qStart, 
+			gapStart, gapEnd))
 		    gap->oGap = TRUE;
 		else
 		    addSpaceForGap(chrom, gap);
@@ -619,7 +615,7 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	    gapEnd = nextBlock->qStart;
 	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
-		gap = gapNew(gapStart, gapEnd);
+		gap = gapNew(gapStart, gapEnd, block->tEnd, nextBlock->tStart);
 		if (oSeqPlugged(otherChrom, block->tEnd, nextBlock->tStart, 
 			gapStart, gapEnd))
 		    gap->oGap = TRUE;
