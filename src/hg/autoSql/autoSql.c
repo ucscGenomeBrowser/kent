@@ -528,7 +528,8 @@ if (obType != NULL)
     if (lt->type == t_object)
 	{
 	fprintf(f, "%ss = sqlEatChar(s, '{');\n", indent);
-	fprintf(f, "%sslSafeAddHead(&ret->%s, %sCommaIn(&s,NULL));\n", indent,
+	fprintf(f, "%sif(*(s+1) != '}')",indent);
+	fprintf(f, "%s    slSafeAddHead(&ret->%s, %sCommaIn(&s,NULL));\n", indent,
 	     col->name, obType->name);
 	fprintf(f, "%ss = sqlEatChar(s, '}');\n", indent);
 	fprintf(f, "%ss = sqlEatChar(s, ',');\n", indent);
@@ -536,7 +537,8 @@ if (obType != NULL)
     else if (lt->type == t_simple)
 	{
 	fprintf(f, "%ss = sqlEatChar(s, '{');\n", indent);
-	fprintf(f, "%s%sCommaIn(&s, &ret->%s%s);\n", indent,
+	fprintf(f, "%sif(*(s+1) != '}')",indent);
+	fprintf(f, "%s    %sCommaIn(&s, &ret->%s%s);\n", indent,
 	    obType->name, col->name, arrayRef);
 	fprintf(f, "%ss = sqlEatChar(s, '}');\n", indent);
 	fprintf(f, "%ss = sqlEatChar(s, ',');\n", indent);
@@ -997,14 +999,18 @@ for (col = table->columnList; col != NULL; col = col->next)
 	case t_char:
 	    outString = (col->fixedSize > 0) ? "'%s'" : "'%c'";
 	    break;
+	case t_string:
+	    outString = "'%s'";
+	    break;
 	default:
 	    outString = lt->outFormat;
 	    break;
 	}
+
     sprintf(colInsertBuff, " el->%s", colName);
 
     /* it gets pretty ugly here as we have to handle arrays of objects.. */
-    if(col->isArray || col->isList)
+    if(col->isArray || col->isList || type == t_object || type == t_simple)
 	{
 	/* if we have a basic array type convert it to a string representation and insert into db */
 	if(type != t_object && type != t_simple )
@@ -1018,17 +1024,21 @@ for (col = table->columnList; col != NULL; col = col->next)
 		dyStringPrintf(stringDeclarations, " *%sArray,", colName);
 	    /* set up call to convert array to char * */
 	    if(col->fixedSize)
-		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, %d);\n", colName, lt->listyName, colName, col->fixedSize);
+		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, %d);\n", 
+			       colName, lt->listyName, colName, col->fixedSize);
 	    else
-		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, el->%s);\n", colName, lt->listyName, colName, col->linkedSizeName);
+		dyStringPrintf(stringArrays, "%sArray = sql%sArrayToString(el->%s, el->%s);\n", 
+			       colName, lt->listyName, colName, col->linkedSizeName);
 	    /* code to free allocated strings */
 	    dyStringPrintf(stringFrees, "freez(&%sArray);\n", colName);
 	    sprintf(colInsertBuff, " %sArray ", colName);
 	    }
-	/* if we have an object, or simple data type just insert NULL, don't wrap the whole thing up into one string.*/
+	/* if we have an object, or simple data type just insert NULL,
+	 * don't wrap the whole thing up into one string.*/
 	else
 	    {
-	    warn("The user defined type \"%s\" in table \"%s\" will be saved to the database as NULL.", col->obType->name, tableName);
+	    warn("The user defined type \"%s\" in table \"%s\" will be saved to the database as NULL.", 
+		 col->obType->name, tableName);
 	    outString = " NULL ";
 	    colInsertFlag = FALSE;
 	    }
@@ -1159,7 +1169,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    sprintf(colInsertBuff, "el->%s ", colName);
 	    break;
 	}
-    if(col->isArray || col->isList)
+    if(col->isArray || col->isList || type == t_object || type == t_simple)
 	{
 	/* if we have a basic array type convert it to a string representation and insert into db */
 	if(type != t_object && type != t_simple )
@@ -1417,7 +1427,8 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    {
 	    struct dbObject *obj = col->obType;
 	    fprintf(f, "if (sep == ',') fputc('{',f);\n");
-	    fprintf(f, "%sCommaOut(el->%s,f);\n", obj->name, col->name);
+	    fprintf(f, "if(el->%s != NULL)", colName);
+	    fprintf(f, "    %sCommaOut(el->%s,f);\n", obj->name, col->name);
 	    fprintf(f, "if (sep == ',') fputc('}',f);\n");
 	    fprintf(f, "fputc(%s,f);\n", lineEnd);
 	    }
@@ -1425,7 +1436,8 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    {
 	    struct dbObject *obj = col->obType;
 	    fprintf(f, "if (sep == ',') fputc('{',f);\n");
-	    fprintf(f, "%sCommaOut(&el->%s,f);\n", obj->name, col->name);
+	    fprintf(f, "if(el->%s != NULL)", colName);
+	    fprintf(f, "    %sCommaOut(&el->%s,f);\n", obj->name, col->name);
 	    fprintf(f, "if (sep == ',') fputc('}',f);\n");
 	    fprintf(f, "fputc(%s,f);\n", lineEnd);
 	    }
