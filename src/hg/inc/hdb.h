@@ -7,6 +7,10 @@
 #include "dnautil.h"
 #endif
 
+#ifndef DNASEQ_H
+#include "dnaseq.h"
+#endif
+
 #ifndef DYSTRING_H
 #include "dystring.h"
 #endif
@@ -175,6 +179,9 @@ struct dnaSeq *hExtSeq(char *acc);
 
 struct dnaSeq *hRnaSeq(char *acc);
 /* Return sequence for RNA. */
+
+aaSeq *hPepSeq(char *acc);
+/* Return sequence for a peptide. */
 
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);

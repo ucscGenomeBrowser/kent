@@ -553,8 +553,9 @@ sqlFreeResult(&sr);
 //hFreeConn(&conn);
 return(0);
 }
-void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
-/* Return sequence for RNA and it's database ID. */
+
+static char* getSeqAndId(char *acc, HGID *retId)
+/* Return sequence as a fasta record in a string and it's database ID. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -575,17 +576,24 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("No sequence for %s in database", acc);
-*retId = sqlUnsigned(row[0]);
+if (retId != NULL)
+    *retId = sqlUnsigned(row[0]);
 extId = sqlUnsigned(row[1]);
 offset = sqlUnsigned(row[2]);
 size = sqlUnsigned(row[3]);
 lsf = largeFileHandle(extId);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
-*retSeq = seq = faFromMemText(buf);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+return buf; 
 }
 
+void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
+/* Return sequence for RNA and it's database ID. */
+{
+char *buf = getSeqAndId(acc, retId);
+*retSeq = faFromMemText(buf);
+}
 
 struct dnaSeq *hExtSeq(char *acc)
 /* Return sequence for external sequence. */
@@ -600,6 +608,13 @@ struct dnaSeq *hRnaSeq(char *acc)
 /* Return sequence for RNA. */
 {
 return hExtSeq(acc);
+}
+
+aaSeq *hPepSeq(char *acc)
+/* Return sequence for a peptide. */
+{
+char *buf = getSeqAndId(acc, NULL);
+return faSeqFromMemText(buf, FALSE);
 }
 
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
