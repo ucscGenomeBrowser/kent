@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.22 2004/05/14 00:39:36 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.23 2004/05/14 20:49:13 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -166,7 +166,7 @@ char *colHdr[] = {
 "Reviewer",
 "External Source or Collaborator",
 "Open Issues",
-"Notes",
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
 "Req&nbsp;Date",
 "Pushed?",
 "Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date"
@@ -2159,15 +2159,18 @@ printf("Location: %s <br>\n",q.currLoc);
 printf("Database: %s <br>\n",q.dbs    );
 printf("  Tables: %s <br>\n",q.tbls   );
 printf("    CGIs: %s <br>\n",q.cgis   );
+printf("   Files: %s <br>\n",q.files  );
 printf(" <br>\n");
 
 cutParens(q.dbs);
 cutParens(q.tbls);
 cutParens(q.cgis);
+cutParens(q.files);
 
 whiteSpace(q.dbs);
 whiteSpace(q.tbls);
 whiteSpace(q.cgis);
+whiteSpace(q.files);
 
 for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
     {
@@ -2300,6 +2303,67 @@ if (!sameString(q.cgis,""))
 	    if (gVal[0]!=0) 
 		{
 		safef(cgiPath,sizeof(cgiPath),"%s%s","./",gVal);
+		size=fsize(cgiPath);
+		if (size == -1)
+		    {
+		    safef(nicenumber,sizeof(nicenumber),"not found");
+		    }
+		else
+		    {
+		    totalsize+=size;
+		    sprintLongWithCommas(nicenumber, size);
+		    }
+		printf("<tr><td>%s<td/><td>%s</td></tr>\n",gVal,nicenumber);
+		}   
+	     }
+	 }
+    printf("</table>");
+    }
+
+if (!sameString(q.files,""))
+    {
+    printf(" <br>\n");
+    printf("<h4>Files on %s:</h4>\n",utsName.nodename);
+    printf("<table cellpadding=5 >");
+    printf("<th>file</th><th># bytes</th>");
+    for(g=0;parseList(q.files, ',' ,g,gComma,sizeof(gComma));g++)
+	{
+	if (gComma[0]==0) 
+	    {
+	    continue;
+	    }
+	for(gg=0;parseList(gComma, ' ' ,gg,gSpace,sizeof(gSpace));gg++)
+	    {
+	    if (gSpace[0]==0) 
+		{
+		continue;
+		}
+	    gVal[0]=0;
+	    for (ggg=0;ggg<=strlen(gSpace);ggg++)
+		{
+		gc = gSpace[ggg];
+		if (
+		    ((gc>='A')&&(gc<='Z'))
+		 || ((gc>='a')&&(gc<='z'))
+		 || ((gc>='0')&&(gc<='9'))
+		 || (gc=='.')
+		 || (gc=='/')
+		 || (gc=='-')
+		 || (gc=='_')
+		 )
+		    {
+		    gVal[ggg]=gc;
+		    }
+		else
+		    {
+		    gVal[ggg]=0;
+		    break;
+		    }
+		}
+	
+	    if (gVal[0]!=0) 
+		{
+		safef(cgiPath,sizeof(cgiPath),"%s",gVal);
 		size=fsize(cgiPath);
 		if (size == -1)
 		    {
