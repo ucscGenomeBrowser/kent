@@ -50,7 +50,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     {
     double bestScore = 0;
     struct chain *chainList;
-    if (bzp->unmask)
+    if (bzp->unmask || bzp->rna)
         toUpperN(query->dna, query->size);
     if (bzp->rna)
         maskTailPolyA(query->dna, query->size);

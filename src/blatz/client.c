@@ -81,7 +81,7 @@ while ((seq = dnaLoadNext(dl)) != NULL)
         sendOption(sd, options[i].name);
 
     /* Send sequence. */
-    if (optionExists("unmask"))
+    if (optionExists("rna") || optionExists("unmask"))
         toUpperN(seq->dna, seq->size);
     else
 	{
