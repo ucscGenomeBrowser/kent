@@ -243,8 +243,9 @@ int firstCloseMessage;
 bits32 ip;
 char *fileDataArea = m->data + 3 * sizeof(bits32);
 int readSize;
-int sectionIx, blockIx, blockCount, lastBlockSize;
-int fd, err;
+int sectionIx, subIx, blockIx, blockCount, lastBlockSize;
+int err;
+FILE *f;
 boolean allDone;
 int statBlocks = 0, statResent = 0;
 int totalTimeOuts = 0;
@@ -254,8 +255,9 @@ long t1,t2, openTime =0, closeTime = 0, sendTime = 0,
 	primaryTime = 0, checkTime = 0;
 
 /* Open up file. */
-fd = open(fileName, O_RDONLY);
-if (fd < 0)
+f = mustOpen(fileName, "rb");
+// if (fd < 0)
+if (f == NULL)
     errnoAbort("Can't open %s", fileName);
 
 /* Tell nodes things are coming twice by broadcast and then one at a time. */
@@ -336,7 +338,8 @@ else
 	{
 	/* Seek to section start (error recovery might have moved us) */
 	off_t offset = bdBlockOffset(sectionIx, 0);
-	if (lseek(fd, offset, SEEK_SET) == -1)
+	// if (lseek(fd, offset, SEEK_SET) == -1)
+	if (fseek(f, offset, SEEK_SET) == -1)
 	    errnoAbort("Couldn't seek in %s", fileName);
 
 	/* Do primary broadcast for section. */
@@ -348,7 +351,8 @@ else
 	    machine = nextLivingMachine(machineList, deadList);
 	    if (machine == NULL)
 	       errAbort("All machines seem to be dead now.");
-	    readSize = netReadAll(fd, fileDataArea, bdBlockSize);
+	    // readSize = netReadAll(fd, fileDataArea, bdBlockSize);
+	    readSize = fread(fileDataArea, 1, bdBlockSize, f);
 	    ++statBlocks;
 	    if (readSize < 0)
 		errAbort("Read error on %s", fileName);
@@ -425,9 +429,11 @@ else
 				{
 				bits32 blockIx = missingList[i];
 				off_t offset = bdBlockOffset(sectionIx, blockIx);
-				if (lseek(fd, offset, SEEK_SET) == -1)
+				// if (lseek(fd, offset, SEEK_SET) == -1)
+				if (fseek(f, offset, SEEK_SET) == -1)
 				    errnoAbort("Couldn't seek in %s", fileName);
-				readSize = netReadAll(fd, dataArea2, bdBlockSize);
+				//readSize = netReadAll(fd, dataArea2, bdBlockSize);
+				readSize = fread(dataArea2, 1, bdBlockSize, f);
 				bdMakeBlockMessage(m2, ip, ++messageIx, fileIx, sectionIx, 
 					blockIx, readSize, dataArea2);
 				broadcast(outSd, m2);
@@ -540,57 +546,105 @@ while (microTime() < destTime)
     ;
 }
 
-void test(char *machineFile, char *transferFile)
+void test2(char *machineFile, char *transferFile)
 /* do a little testing. */
 {
 int i;
-int timeCount = 3;
+int timeCount = 100000;
 struct timeval tv;
 long t1,t2;
-int inSd, outSd, err;
+int inSd, outSd, err = 0;
 int messageIx = 0;
 bits32 ip;
 struct bdMessage *m = NULL;
 struct dlList *machineList = getMachines(machineFile);
 struct dlList *deadList = newDlList();
 struct machine *machine;
-int *times;
+int *bTimes, *rTimes, *fTimes;
 int errCount = 0;
-char *text = "This is a test of some text.  it's not really super long text, but "
-             "it is still some text, enough text to perhaps effect the timing "
-	     "noticeably.  Or maybe not.";
-int textSize = strlen(text)+1;
+char buf[1444];
+int readSize = sizeof(buf);
+int blockCount = 0;
+FILE *f = mustOpen(transferFile, "rb");
 
 inSd = openHubInSocket(hubInPort, 500000);
 outSd = openBroadcastSocket(nodeInPort);
-AllocArray(times, timeCount);
+AllocArray(bTimes, timeCount);
+AllocArray(rTimes, timeCount);
+AllocArray(fTimes, timeCount);
 AllocVar(m);
 machine = nextLivingMachine(machineList, deadList);
 for (i=0; i<timeCount; ++i)
     {
-    machine = nextLivingMachine(machineList, deadList);
-    bdInitMessage(m, machine->ip, ++messageIx, bdmPing, 0);
-    strcpy(m->data, text);
-    bdSendTo(outSd, m, machine->ip, nodeInPort);
     t1 = microTime();
-    broadcast(outSd, m);
+    readSize = fread(m->data, 1, sizeof(buf), f);
     t2 = microTime();
-    uglyf("broadcasting %d to %x\n", m->id, machine->ip);
-    while ((err = bdReceive(inSd, m, &ip)) >= 0)
-	uglyf("err %d, ip %x, m->ip %x, type %d, id %d\n", err, ip, m->machine, m->type, m->id);
-    if (err < 0)
-       ++errCount;
-    times[i] = t2-t1;
-    busyWait(100000);
+    fTimes[i] = t2-t1;
+    if (readSize > 0)
+	{
+	machine = nextLivingMachine(machineList, deadList);
+	bdInitMessage(m, machine->ip, ++messageIx, bdmPing, sizeof(buf));
+	t1 = microTime();
+	broadcast(outSd, m);
+	t2 = microTime();
+	bTimes[i] = t2-t1;
+	t1 = t2;
+//	err = bdReceive(inSd, m, &ip);
+	t2 = microTime();
+	rTimes[i] = t2-t1;
+	if (err < 0)
+	   ++errCount;
+	++blockCount;
+	}
+    if (readSize < sizeof(buf))
+	{
+	uglyf("read size %d\n", readSize);
+        break;
+	}
     }
+#ifdef SOON
 for (i=0; i<timeCount; ++i)
     {
-    printf("%d\n", times[i]);
+    printf("%d\t%d\t%d\t%d\n", bTimes[i] + rTimes[i] + fTimes[i], bTimes[i], rTimes[i], fTimes[i]);
     }
+#endif /* SOON */
 fprintf(stderr, "%d errors in %d\n", errCount, timeCount);
-bdInitMessage(m, 0, -1, bdmQuit, 0);	/* Send quit for the moment. */
-broadcast(outSd, m);
-broadcast(outSd, m);
+}
+
+void test(char *machineFile, char *transferFile)
+/* do a little testing. */
+{
+int i,j;
+long t1,t2;
+int inSd, outSd, err = 0;
+int messageIx = 0;
+bits32 ip;
+struct bdMessage *m = NULL;
+struct dlList *machineList = getMachines(machineFile);
+struct dlList *deadList = newDlList();
+struct machine *machine;
+int errCount = 0;
+
+inSd = openHubInSocket(hubInPort, 100000);
+outSd = openBroadcastSocket(nodeInPort);
+AllocVar(m);
+for (j=0; j<510; ++j)
+    {
+    for (i=0; i<64; ++i)
+	{
+	machine = nextLivingMachine(machineList, deadList);
+	bdInitMessage(m, machine->ip, ++messageIx, bdmPing, 1000);
+	broadcast(outSd, m);
+	}
+    for (i=0; i<64; ++i)
+	{
+	err = bdReceive(inSd, m, &ip);
+	if (err < 0)
+	   ++errCount;
+	}
+    }
+uglyf("ErrCount %d\n", errCount);
+uglyf("bdBlockSize %d, bdSectionBytes %d\n", bdBlockSize, bdSectionBytes);
 }
 
 void broadHub(char *machineFile, char *transferFile)
