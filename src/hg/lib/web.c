@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.66 2004/12/22 20:39:16 galt Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.67 2004/12/23 22:43:20 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -66,6 +66,13 @@ char uiState[256];
 char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
+char textOutBuf[512];
+
+/* found that on x86_64, the args could only be used once in this safef
+ * business.  If you tried to do this a second time, which was happening
+ * in this code, it caused a SIGSEGV
+ */
+vasafef(textOutBuf, sizeof(textOutBuf), format, args);
 
 if (theCart)
     db = cartOptionalString(theCart, "db");
@@ -96,11 +103,7 @@ puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1
      "\t<TITLE>"
      );
 
-{
-char buf[512];
-vasafef(buf, sizeof(buf), format, args);
-htmlTextOut(buf);
-}
+htmlTextOut(textOutBuf);
 
 puts(
     "	</TITLE>" "\n"
@@ -231,7 +234,7 @@ if(!skipSectionHeader)
 	 "	<TABLE BGCOLOR=\""HG_COL_HEADER"\" BACKGROUND=\"/images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
 	 "		<FONT SIZE=\"4\"><b>&nbsp;"
 	 );
-    vprintf(format, args);
+    htmlTextOut(textOutBuf);
 
     puts(
 	 "</b></FONT></TD></TR></TABLE>" "\n"
