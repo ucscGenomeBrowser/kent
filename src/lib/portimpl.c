@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.10 2004/02/13 09:33:32 kent Exp $";
+static char const rcsid[] = "$Id: portimpl.c,v 1.11 2004/09/03 22:01:19 markd Exp $";
 
 static struct webServerSpecific *wss = NULL;
 
@@ -65,3 +65,11 @@ setupWss();
 return wss->speed();
 }
 
+void envUpdate(char *name, char *value)
+/* Update an environment string */
+{
+int size = strlen(name) + strlen(value) + 2;
+char *s = needMem(size);
+safef(s, size, "%s=%s", name, value);
+putenv(s);
+}

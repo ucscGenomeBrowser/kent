@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.65 2004/06/08 15:39:56 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.66 2004/09/03 22:01:19 markd Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -375,15 +375,6 @@ popAbortHandler();
 return ok;
 }
 
-static void updateEnv(char *name, char *value)
-/* Update environment string */
-{
-int size = strlen(name) + strlen(value) + 2;
-char *s = needMem(size);
-safef(s, size, "%s=%s", name, value);
-putenv(s);
-}
-
 static void initCgiInput() 
 /* Initialize CGI input stuff.  After this CGI vars are
  * stored in an internal hash/list regardless of how they
@@ -410,10 +401,10 @@ parseCookies(&cookieHash, &cookieList);
 /* Set enviroment variables CGIs to enable sql tracing and/or profiling */
 s = cgiOptionalString("JKSQL_TRACE");
 if (s != NULL)
-    updateEnv("JKSQL_TRACE", s);
+    envUpdate("JKSQL_TRACE", s);
 s = cgiOptionalString("JKSQL_PROF");
 if (s != NULL)
-    updateEnv("JKSQL_PROF", s);
+    envUpdate("JKSQL_PROF", s);
 }
 
 struct cgiVar *cgiVarList() 
