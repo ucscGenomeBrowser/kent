@@ -17,8 +17,9 @@ char *s;
 
 AllocVar(ret);
 ret->placeCount = sqlUnsigned(row[5]);
-ret->stsCount = sqlUnsigned(row[10]);
-ret->beCount = sqlUnsigned(row[12]);
+ret->accCount = sqlUnsigned(row[10]);
+ret->stsCount = sqlUnsigned(row[12]);
+ret->beCount = sqlUnsigned(row[14]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -30,10 +31,12 @@ sqlStringDynamicArray(row[7], &ret->bandEnds, &sizeOne);
 assert(sizeOne == ret->placeCount);
 sqlStringDynamicArray(row[8], &ret->labs, &sizeOne);
 assert(sizeOne == ret->placeCount);
-ret->accession = cloneString(row[9]);
-sqlStringDynamicArray(row[11], &ret->stsNames, &sizeOne);
+ret->placeType = cloneString(row[9]);
+sqlStringDynamicArray(row[11], &ret->accNames, &sizeOne);
+assert(sizeOne == ret->accCount);
+sqlStringDynamicArray(row[13], &ret->stsNames, &sizeOne);
 assert(sizeOne == ret->stsCount);
-sqlStringDynamicArray(row[13], &ret->beNames, &sizeOne);
+sqlStringDynamicArray(row[15], &ret->beNames, &sizeOne);
 assert(sizeOne == ret->beCount);
 return ret;
 }
@@ -44,7 +47,7 @@ struct fishClones *fishClonesLoadAll(char *fileName)
 {
 struct fishClones *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -96,7 +99,16 @@ for (i=0; i<ret->placeCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
-ret->accession = sqlStringComma(&s);
+ret->placeType = sqlStringComma(&s);
+ret->accCount = sqlUnsignedComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->accNames, ret->accCount);
+for (i=0; i<ret->accCount; ++i)
+    {
+    ret->accNames[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
 ret->stsCount = sqlUnsignedComma(&s);
 s = sqlEatChar(s, '{');
 AllocArray(ret->stsNames, ret->stsCount);
@@ -140,7 +152,11 @@ freeMem(el->bandEnds);
 if (el->labs != NULL)
     freeMem(el->labs[0]);
 freeMem(el->labs);
-freeMem(el->accession);
+freeMem(el->placeType);
+/* All strings in accNames are allocated at once, so only need to free first. */
+if (el->accNames != NULL)
+    freeMem(el->accNames[0]);
+freeMem(el->accNames);
 /* All strings in stsNames are allocated at once, so only need to free first. */
 if (el->stsNames != NULL)
     freeMem(el->stsNames[0]);
@@ -216,8 +232,20 @@ for (i=0; i<el->placeCount; ++i)
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->accession);
+fprintf(f, "%s", el->placeType);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->accCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->accCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->accNames[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
 fputc(sep,f);
 fprintf(f, "%u", el->stsCount);
 fputc(sep,f);

@@ -18,7 +18,9 @@ struct fishClones
     char **bandStarts;	/* Start FISH band */
     char **bandEnds;	/* End FISH band */
     char **labs;	/* Lab where clone FISH'd */
-    char *accession;	/* Accession associated with clone */
+    char *placeType;	/* How clone was placed on the sequence assembly */
+    unsigned accCount;	/* Number of accessions associated with the clone */
+    char **accNames;	/* Accession associated with clone */
     unsigned stsCount;	/* Number of STS markers associated with this clone */
     char **stsNames;	/* Names of STS  markers */
     unsigned beCount;	/* Number of BAC end sequences associated with this clone */

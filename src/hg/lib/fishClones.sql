@@ -5,16 +5,18 @@
 
 #Describes the positions of fishClones in the assembly
 CREATE TABLE fishClones (
-    chrom varchar(25) not null,		# Human chromosome number
+    chrom varchar(255) not null,	# Human chromosome number
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
-    name varchar(25) not null,	# Name of clone
+    name varchar(255) not null,	# Name of clone
     score int unsigned not null,	# Always 1000
     placeCount int unsigned not null,	# Number of times FISH'd
     bandStarts longblob not null,	# Start FISH band
     bandEnds longblob not null,	# End FISH band
     labs longblob not null,	# Lab where clone FISH'd
-    accession varchar(255) not null,	# Accession associated with clone
+    placeType varchar(255) not null,	# How clone was placed on the sequence assembly
+    accCount int unsigned not null,	# Number of accessions associated with the clone
+    accNames longblob not null,	# Accession associated with clone
     stsCount int unsigned not null,	# Number of STS markers associated with this clone
     stsNames longblob not null,	# Names of STS  markers
     beCount int unsigned not null,	# Number of BAC end sequences associated with this clone
