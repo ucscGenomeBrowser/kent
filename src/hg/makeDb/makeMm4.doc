@@ -1790,6 +1790,8 @@ done
     # Get file from NCBI - might be Mouse400.dat.gz for future
     wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.32/ideogram.gz
     gunzip ideogram
+    # Had to modify chr16 coordinates because chrom size too big. Simply
+    # scaled sizes down to fit in correct chrom size.
     # Create bed file
     /cluster/bin/scripts/createNcbiCytoBand ideogram
     # Load the bed file
