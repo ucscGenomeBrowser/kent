@@ -66,21 +66,29 @@ else
 endif
 
 echo `date` Loading snpMap.bed
-hgLoadBed $database snpMap snpMap.bed \
-    -sqlTable=$HOME/kent/src/hg/lib/snpMap.sql -tab
+hgLoadBed $database snpMapTemp snpMap.bed \
+    -sqlTable=$HOME/kent/src/hg/lib/snpMapTemp.sql
+
+echo insert into snpMapTemp select bin, chrom, chromStart, chromEnd, name, \
+	\'Affy10K\' as source,  \'SNP\' as type from affy10K  | hgsql $database
+echo insert into snpMapTemp select bin, chrom, chromStart, chromEnd, name, \
+	\'Affy120K\' as source, \'SNP\' as type from affy120K | hgsql $database
+echo delete from snpMap | hgsql $database
+echo insert into snpMap select \* from snpMapTemp order by chrom, chromStart \
+	| hgsql $database
 
 # useful data checks:
 foreach table ( $tables )
     echo "=================================="
     echo $database $organism $table
     echo wc -l $table.bed
-    echo select count\(\*\) from $table  | hgsql $database
+    echo select count\(\*\) from $table | hgsql $database
     echo
-    echo desc $table                   | hgsql $database
+    echo desc $table                    | hgsql $database
     echo
-    echo show indexes from $table     | hgsql $database
+    echo show indexes from $table       | hgsql $database
     echo
-    echo select \* from $table limit 5 | hgsql $database
+    echo select \* from $table limit 5  | hgsql $database
     echo
 end
 
