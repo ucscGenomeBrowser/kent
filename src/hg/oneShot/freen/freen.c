@@ -24,6 +24,9 @@ vgBox(vg, 100, 100, 300, smallHeight, blueIx);
 vgText(vg, 100, 100, MG_BLACK, smallFont, "Help Small World");
 vgBox(vg, 100, 300, 300, bigHeight, blueIx);
 vgText(vg, 100, 300, MG_BLACK, bigFont, "Help BIG World");
+vgBox(vg, 25, 25, 50, 50, grayIx);
+vgLine(vg, 25, 25, 75, 75, MG_RED);
+vgLine(vg, 25, 75, 75, 25, MG_RED);
 vgClose(&vg);
 }
 
