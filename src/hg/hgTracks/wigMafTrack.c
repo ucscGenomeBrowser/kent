@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.2 2004/02/27 22:23:25 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.3 2004/03/01 18:26:42 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -72,6 +72,12 @@ if (len >= retDbSize)
 memcpy(retDb, name, len);
 retDb[len] = 0;
 return TRUE;
+}
+
+static int wigHeight(struct track *wigTrack, enum trackVisibility vis)
+/* Pad wiggle height by one (remove if Hiram adds buffer at end of wiggle */
+{
+return wigTotalHeight(wigTrack, vis) + 1;
 }
 
 static struct wigMafItem *scoreItem(scoreHeight)
@@ -133,6 +139,12 @@ slAddHead(&miList, mi);
 	}
     hashFree(&hash);
     }
+/* Add item for score wiggle after base alignment */
+if (track->subtracks != NULL)
+    {
+    mi = scoreItem(wigHeight(track->subtracks, track->visibility));
+    slAddHead(&miList, mi);
+    }
 slReverse(&miList);
 return miList;
 }
@@ -146,6 +158,11 @@ struct mafAli *maf;
 char buf[64];
 char *otherOrganism;
 
+if (track->subtracks != NULL)
+    {
+    mi = scoreItem(wigHeight(track->subtracks, track->visibility));
+    slAddHead(&miList, mi);
+    }
 if (trackDbSetting(track->tdb, "pairwise") != NULL)
 
 /* Make up items for other organisms by scanning through
@@ -248,15 +265,14 @@ if (wigTrack != NULL)
     }
 }
 
-static int wigMafTotalHeight(struct track *track, 
-	enum trackVisibility vis)
+static int wigMafTotalHeight(struct track *track, enum trackVisibility vis)
 /* Return total height of maf track.  */
 {
 struct wigMafItem *mi;
 int total = 0;
 for (mi = track->items; mi != NULL; mi = mi->next)
     total += mi->height;
-total += wigTotalHeight(track->subtracks, vis);
+//total += wigHeight(track->subtracks, vis);
 track->height =  total;
 return track->height;
 }
@@ -419,7 +435,7 @@ struct mafAli *mafList = track->customPt, *maf, *sub;
 int lineCount = slCount(miList);
 char **lines = NULL, *selfLine, *insertLine;
 int *ixMafAli;   /* per base alignment index */
-int i, y = yOff;
+int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 char dbChrom[64];
@@ -493,27 +509,21 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	}
     mafAliFree(&sub);
     }
-
-/* Draw lines with letters */
+/* draw inserts line */
 charifyInserts(insertLine, winBaseCount);
-/* Convert insert line from counts to characters. */
-for (mi = miList, i=0; mi != NULL; mi = mi->next, ++i)
+mi = miList;
+x -= (width/winBaseCount)/2;
+spreadString(vg, x, y, width, mi->height-1, color,
+                font, insertLine, winBaseCount);
+y += mi->height;
+
+/* draw base-level alignments */
+for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
     char *line = lines[i];
-    int x = xOff;
-    if (line == insertLine)
-        {
-	int x1, x2;
-	x -= (width/winBaseCount)/2;
-        spreadString(vg, x, y, width, mi->height-1, color,
-                        font, line, winBaseCount);
-	}
-    else
-        {
-        // draw letters
-        spreadAlignString(vg, x, y, width, mi->height-1, color,
-    	                        font, line, selfLine, winBaseCount);
-        }
+    // draw sequence letters for alignment
+    spreadAlignString(vg, x, y, width, mi->height-1, color,
+                            font, line, selfLine, winBaseCount);
     y += mi->height;
     }
 
@@ -539,7 +549,7 @@ if (wigTrack != NULL)
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, vis);
-    y = wigTotalHeight(wigTrack, vis);
+    y = wigHeight(wigTrack, vis);
     }
 return yOff + y;
 }
@@ -624,7 +634,7 @@ track->itemHeight = wigMafItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
-track->drawLeftLabels = wigMafLeftLabels;
+//track->drawLeftLabels = wigMafLeftLabels;
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
     if (hTableExists(wigTable))
