@@ -66,7 +66,7 @@ wds->setPositionConstraint(wds, winStart, winEnd);
 valuesMatched = wds->getData(wds, database, table,
 			wigFetchStats | wigFetchAscii );
 
-statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched);
+statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
 
 /*	output statistics table	*/
 wds->statsOut(wds, "stdout", TRUE, TRUE);
