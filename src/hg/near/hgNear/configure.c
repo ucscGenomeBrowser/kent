@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.30 2003/09/25 01:06:04 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.31 2003/09/25 08:29:35 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -31,11 +31,11 @@ hPrintf("<TABLE BORDER=1>\n");
 
 /* Write out first row - labels. */
 hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
-hPrintf("<TH>Name</TH>");
-hPrintf("<TH>On</TH>");
-hPrintf("<TH>Position</TH>");
-hPrintf("<TH>Description</TH>");
-hPrintf("<TH>Configuration</TH>");
+hPrintf("<TH ALIGN=left>Name</TH>");
+hPrintf("<TH ALIGN=left>On</TH>");
+hPrintf("<TH ALIGN=left>Position</TH>");
+hPrintf("<TH ALIGN=left>Description</TH>");
+hPrintf("<TH ALIGN=left>Configuration</TH>");
 
 /* Print out configuration controls. */
 hPrintf("</TR>");
@@ -177,7 +177,7 @@ return !sameString(val, colorSchemeVals[0]);
 }
 
 boolean showOnlyCanonical()
-/* Return TRUE if we only show canonical splicing varients. */
+/* Return TRUE if we only show canonical splicing variants. */
 {
 return !cartUsualBoolean(cart, showAllSpliceVarName, FALSE);
 }
@@ -205,34 +205,32 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
-hPrintf("Show all splicing varients: ");
-cgiMakeCheckBox(showAllSpliceVarName, 
-	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
-cgiMakeButton("submit", "Submit");
-hPrintf("</TD></TR><TR><TD>");
 hPrintf("Expression ratio colors: ");
 colorSchemeDropDown();
+hPrintf("Show all splicing variants: ");
+cgiMakeCheckBox(showAllSpliceVarName, 
+	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
+hPrintf(" ");
+cgiMakeButton("submit", "Submit");
+// hPrintf("</TD></TR><TR><TD>");
 hPrintf("</TD></TR></TABLE>");
 
-hPrintf("<HR>");
-hPrintf("<H2>Column Configuration</H2>\n");
+// hPrintf("<HR>");
+// hPrintf("<H2>Column Configuration</H2>\n");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
+hPrintf("Columns: ");
 cgiMakeButton(hideAllConfName, "Hide All");
-hPrintf("</TD><TD>");
+hPrintf(" ");
 cgiMakeButton(showAllConfName, "Show All");
+hPrintf(" ");
+cgiMakeButton(defaultConfName, "Default");
 hPrintf("</TD><TD>");
-hPrintf("&nbsp;");
+hPrintf("Settings: ");
+cgiMakeButton(saveCurrentConfName, "Save");
+hPrintf(" ");
+cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
 hPrintf("</TD><TD>");
-cgiMakeButton(saveCurrentConfName, "Save Settings");
-cgiMakeOptionalButton(useSavedConfName, "Load Settings", !userSettingsAnySaved(us));
-hPrintf("</TD><TD>");
-hPrintf("&nbsp;");
-hPrintf("</TD><TD>");
-cgiMakeButton(defaultConfName, "Default Settings");
-hPrintf("</TD><TD>");
-cgiMakeButton("submit", "Submit");
-hPrintf("</TD></TR></TABLE>");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");
