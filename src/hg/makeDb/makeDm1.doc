@@ -1297,3 +1297,26 @@ end
 #############################################################################
 
 
+# reload refseqs to pickup a change that uses locus_tag if gene name isn't
+# available.  2003/10/16 markd
+
+# First remove refseqs from databases:
+    drop table refSeqStatus;
+    drop table refLink;
+    drop table refSeqSummary;
+    drop table refGene;
+    drop table refSeqAli;
+    drop table refFlat;
+
+    delete from gbSeq where srcDb = 'RefSeq';
+    delete from gbStatus where srcDb = 'RefSeq';
+    delete from gbExtFile where path like '%/refseq%';
+    delete from gbLoaded where srcDb = 'RefSeq';
+    delete from mrna where acc like 'NM\_%';
+    delete from imageClone where acc like 'NM\_%';
+    delete from mrna where acc like 'NR\_%';
+    delete from imageClone where acc like 'NR\_%';
+
+# now reload:
+    cd /cluster/data/genbank
+    ./bin/gbDbLoadStep -type=mrna dm1

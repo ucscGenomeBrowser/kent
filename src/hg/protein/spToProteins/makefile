@@ -8,7 +8,7 @@
 	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = spToProteins
@@ -35,8 +35,8 @@ compile: $O
 	chmod a+rx $A
 
 lib:
-	cd ../../lib; make
+	cd ../../../lib; make
 
 tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
+	ctags *.h *.c ../../lib/*.c ../inc/*.h ../../../lib/*.c ../../../inc/*.h
 

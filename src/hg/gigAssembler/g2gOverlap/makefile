@@ -1,8 +1,8 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 
 L = $(MYSQLLIBS) -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 
@@ -13,4 +13,4 @@ g2gOverlap: $O $(MYLIBS)
 	strip $(HOME)/bin/$(MACHTYPE)/g2gOverlap
 
 lib:
-	cd ../../lib; make
+	cd ../../../lib; make

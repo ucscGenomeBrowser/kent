@@ -38,4 +38,6 @@ DIRS = \
 	spXref3 \
 	spm3 \
 	spm6 \
-	spm7
+	spm7 \
+	spToProteins
+
