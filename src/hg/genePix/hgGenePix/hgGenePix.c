@@ -9,7 +9,7 @@
 #include "hui.h"
 #include "hdb.h"
 #include "hgColors.h"
-#include "bioImage.h"
+#include "genePix.h"
 #include "hgGenePix.h"
 
 /* Globals */
@@ -37,7 +37,7 @@ return "hgGenePix";
 char *genomeDbForImage(struct sqlConnection *conn, int imageId)
 /* Return the genome database to associate with image or NULL if none. */
 {
-char *scientificName = bioImageOrganism(conn, imageId);
+char *scientificName = genePixOrganism(conn, imageId);
 struct sqlConnection *cConn = hConnectCentral();
 char query[256];
 char *db;
@@ -58,15 +58,16 @@ void doThumbnails(struct sqlConnection *conn)
 {
 char *sidUrl = cartSidUrlString(cart);
 int imageId = cartInt(cart, hgpId);
-struct slInt *imageList = bioImageOnSameGene(conn, imageId);
+struct slInt *imageList = genePixOnSameGene(conn, imageId);
 struct slInt *image;
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "do image");
 printf("<TABLE>\n");
 for (image = imageList; image != NULL; image = image->next)
     {
+    struct slName *nameList, *name;
     int id = image->val;
-    char *imageFile = bioImageThumbSizePath(conn, image->val);
+    char *imageFile = genePixThumbSizePath(conn, image->val);
     printf("<TR>");
     if (id == imageId)
 	printf("<TD BGCOLOR=\"#FFE0E0\">");
@@ -75,10 +76,17 @@ for (image = imageList; image != NULL; image = image->next)
     printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_PARENT>", hgGenePixCgiName(), sidUrl, hgpId, image->val);
     printf("<IMG SRC=\"/%s\"></A><BR>\n", imageFile);
     
-    printf("%s %s %s<BR>\n",
-	bioImageGeneName(conn, id),
-	bioImageOrganism(conn, id),
-	bioImageStage(conn, id, FALSE) );
+    nameList = genePixGeneName(conn, id);
+    for (name = nameList; name != NULL; name = name->next)
+        {
+	printf("%s", name->name);
+	if (name->next != NULL)
+	    printf(",");
+	}
+    slFreeList(&nameList);
+    printf("%s %s<BR>\n",
+	genePixOrganism(conn, id),
+	genePixStage(conn, id, FALSE) );
     printf("</TD>");
     printf("</TR>");
     }
@@ -86,7 +94,22 @@ printf("</TABLE>\n");
 htmlEnd();
 }
 
-void printCaption(struct sqlConnection *conn, int id, char *geneName)
+void printLabeledList(char *label, struct slName *list)
+/* Print label and list by it. */
+{
+struct slName *el;
+printf("<B>%s:</B> ", label);
+if (list == NULL)
+    printf("n/a");
+for (el = list; el != NULL; el = el->next)
+    {
+    printf("%s", el->name);
+    if (el->next != NULL)
+        printf(", ");
+    }
+}
+
+void printCaption(struct sqlConnection *conn, int id, struct slName *geneList)
 /* Print information about image. */
 {
 char query[256];
@@ -94,20 +117,19 @@ char **row;
 char *treatment, *publication;
 char *setUrl, *itemUrl;
 
-printf("<B>gene:</B> %s ", naForNull(geneName));
-printf("<B>accession:</B> %s ", naForNull(bioImageAccession(conn,id)));
-printf("<B>type:</B> %s<BR>\n", naForNull(bioImageType(conn,id)));
-printf("<B>organism:</B> %s  ", bioImageOrganism(conn, id));
-printf("<B>stage:</B> %s<BR>\n", bioImageStage(conn, id, TRUE));
-printf("<B>body part:</B> %s ", naForNull(bioImageBodyPart(conn,id)));
-printf("<B>section type:</B> %s<BR>\n", naForNull(bioImageSliceType(conn,id)));
-treatment = bioImageTreatment(conn,id);
+printLabeledList("gene", geneList);
+printLabeledList("genbank", genePixGenbank(conn, id));
+printf("<B>organism:</B> %s  ", genePixOrganism(conn, id));
+printf("<B>stage:</B> %s<BR>\n", genePixStage(conn, id, TRUE));
+printf("<B>body part:</B> %s ", naForNull(genePixBodyPart(conn,id)));
+printf("<B>section type:</B> %s<BR>\n", naForNull(genePixSliceType(conn,id)));
+treatment = genePixTreatment(conn,id);
 if (treatment != NULL)
     printf("<B>treatment:</B> %s<BR>\n", treatment);
-publication = bioImagePublication(conn,id);
+publication = genePixPublication(conn,id);
 if (publication != NULL)
     {
-    char *pubUrl = bioImagePubUrl(conn,id);
+    char *pubUrl = genePixPubUrl(conn,id);
     printf("<B>reference:</B> ");
     if (pubUrl != NULL)
         printf("<A HREF=\"%s\" target=_blank>%s</A>", pubUrl, publication);
@@ -115,9 +137,9 @@ if (publication != NULL)
         printf("%s", publication);
     printf("<BR>\n");
     }
-printf("<B>contributors:</B> %s<BR>\n", naForNull(bioImageContributors(conn,id)));
-setUrl = bioImageSetUrl(conn, id);
-itemUrl = bioImageItemUrl(conn, id);
+printf("<B>contributors:</B> %s<BR>\n", naForNull(genePixContributors(conn,id)));
+setUrl = genePixSetUrl(conn, id);
+itemUrl = genePixItemUrl(conn, id);
 if (setUrl != NULL || itemUrl != NULL)
     {
     printf("<B>contributor links:</B> ");
@@ -126,7 +148,7 @@ if (setUrl != NULL || itemUrl != NULL)
     if (itemUrl != NULL)
 	{
         printf("<A HREF=\"");
-	printf(itemUrl, bioImageSubmitId(conn, id));
+	printf(itemUrl, genePixSubmitId(conn, id));
 	printf("\" target=_blank>this image</A>");
 	}
     printf("<BR>\n");
@@ -136,15 +158,15 @@ if (setUrl != NULL || itemUrl != NULL)
 void doImage(struct sqlConnection *conn)
 {
 int imageId = cartInt(cart, hgpId);
-char *geneName = bioImageGeneName(conn, imageId);
+struct slName *geneList = genePixGeneName(conn, imageId);
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 printf("<A HREF=\"");
 printf("../cgi-bin/%s?%s=%d&%s=on", hgGenePixCgiName(), hgpId, imageId, hgpDoFullSized);
 printf("\">");
-printf("<IMG SRC=\"/%s\"></A><BR>\n", bioImageScreenSizePath(conn, imageId));
+printf("<IMG SRC=\"/%s\"></A><BR>\n", genePixScreenSizePath(conn, imageId));
 printf("\n");
-printCaption(conn, imageId, geneName);
+printCaption(conn, imageId, geneList);
 htmlEnd();
 }
 
@@ -172,16 +194,24 @@ void doFrame(struct sqlConnection *conn)
 {
 int imageId = cartUsualInt(cart, hgpId, 1);
 char *sidUrl = cartSidUrlString(cart);
+struct slName *geneList, *gene;
 cartSetInt(cart, hgpId, imageId);
 puts("\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");
-printf("%s %s %s %s",  hgGenePixShortName(),  
-	bioImageGeneName(conn, imageId),
-	bioImageStage(conn, imageId, FALSE),
-	bioImageOrganism(conn, imageId) );
+printf("%s ", hgGenePixShortName());
+geneList = genePixGeneName(conn, imageId);
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    printf("%s", gene->name);
+    if (gene->next != NULL)
+        printf(",");
+    }
+printf(" %s %s",
+	genePixStage(conn, imageId, FALSE),
+	genePixOrganism(conn, imageId) );
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
@@ -209,7 +239,7 @@ void dispatch()
 /* Set up a connection to database and dispatch control
  * based on hgpDo type var. */
 {
-struct sqlConnection *conn = sqlConnect("bioImage");
+struct sqlConnection *conn = sqlConnect("genePix");
 if (cartVarExists(cart, hgpDoThumbnails))
     doThumbnails(conn);
 else if (cartVarExists(cart, hgpDoImage))
