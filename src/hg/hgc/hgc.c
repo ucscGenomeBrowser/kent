@@ -1809,7 +1809,7 @@ if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName,
 showSomeAlignment(psl, oSeq, qt);
 }
 
-void htcBlatMouse(char *readName, char *table)
+void htcBlatXeno(char *readName, char *table)
 /* Show alignment for accession. */
 {
 char *pslName, *faName, *qName;
@@ -1827,7 +1827,7 @@ char fullTable[64];
 boolean hasBin;
 
 /* Print start of HTML. */
-printf("<HEAD>\n<TITLE>Mouse Read %s</TITLE>\n</HEAD>\n\n", readName);
+printf("<HEAD>\n<TITLE>Sequence %s</TITLE>\n</HEAD>\n\n", readName);
 puts("<HTML>");
 
 start = cartInt(cart, "o");
@@ -2927,9 +2927,49 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatMouse", track, itemName);
+printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
 }
+
+void doBlatFish(struct trackDb *tdb, char *itemName)
+/* Handle click on blatMouse track. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL, *psl;
+struct dnaSeq *seq;
+boolean hasBin;
+char table[64];
+
+cartWebStart(itemName);
+printf("<H1>Information on Tetraodon Sequence %s</H1>", itemName);
+
+printf("Get ");
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+      hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("Fish DNA</A><BR>\n");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
+hFindSplitTable(seqName, track, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printTrackHtml(tdb);
+}
+
+
 
 void doEst3(char *itemName)
 /* Handle click on EST 3' end track. */
@@ -5417,6 +5457,10 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMouse(tdb, item);
     }
+else if (sameWord(track, "blatFish"))
+    {
+    doBlatFish(tdb, item);
+    }
 else if (sameWord(track, "rnaGene"))
     {
     doRnaGene(tdb, item);
@@ -5499,9 +5543,9 @@ else if (sameWord(track, "htcUserAli"))
    {
    htcUserAli(item);
    }
-else if (sameWord(track, "htcBlatMouse"))
+else if (sameWord(track, "htcBlatXeno"))
    {
-   htcBlatMouse(item, cartString(cart, "aliTrack"));
+   htcBlatXeno(item, cartString(cart, "aliTrack"));
    }
 else if (sameWord(track, "htcExtSeq"))
    {
