@@ -624,6 +624,7 @@ for (i=0; i<ArraySize(aminoAcidTable); ++i)
     aaChars[c] = aaChars[lowc] = c;
     valToAa[i] = c;
     }
+aaChars['x'] = aaChars['X'] = 'X';
 }
 
 void dnaUtilOpen()
