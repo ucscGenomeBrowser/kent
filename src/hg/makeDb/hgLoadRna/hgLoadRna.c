@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.31 2004/09/17 03:17:22 kent Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.32 2005/03/04 20:09:43 galt Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -287,7 +287,7 @@ if (extFilesHash == NULL)
 	    {
             if(ignore) 
                 {
-                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %lld, got size %lld\n", ex->path, ex->size, gotSize);
+                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %lld, got size %lld\n", ex->path, (unsigned long long)ex->size, (unsigned long long)gotSize);
                 }
             else 
                 {
@@ -568,7 +568,7 @@ for (;;)
     id = hgNextId();
 
     fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lld\t%d\n",
-	id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
+	id, faAcc, dnaSize, sqlDate, extFileId, (unsigned long long)faOffset, faSize);
     fprintf(mrnaTab, "%u\t%s\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\n",
             id, faAcc, version, mrnaType, dir,
             uniSrc->curId, uniOrg->curId, uniLib->curId, uniClo->curId,
@@ -735,7 +735,7 @@ for (i=0; i<fileCount; ++i)
 	id = hgNextId();
 
 	fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lld\t%d\n",
-	    id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
+	    id, faAcc, dnaSize, sqlDate, extFileId, (unsigned long long)faOffset, faSize);
 	}
     verbose(1, "%d\n", count);
     lineFileClose(&faLf);

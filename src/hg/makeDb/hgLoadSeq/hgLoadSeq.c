@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.11 2004/05/22 19:43:10 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadSeq.c,v 1.12 2005/03/04 20:09:43 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -113,7 +113,7 @@ seqId = hgNextId();
 /* note: sqlDate column is empty */
 fprintf(seqTab, "%u\t%s\t%d\t\t%u\t%lld\t%d\n",
         seqId, sqlEscapeTabFileString2(faAccBuf, faAcc),
-        dnaSize, extFileId, faOffset, faSize);
+        dnaSize, extFileId, (unsigned long long)faOffset, faSize);
 return TRUE;
 }
 

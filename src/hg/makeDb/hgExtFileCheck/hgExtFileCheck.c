@@ -5,7 +5,7 @@
 #include "sqlNum.h"
 #include "sys/stat.h"
 
-static char const rcsid[] = "$Id: hgExtFileCheck.c,v 1.1 2004/09/28 22:25:25 markd Exp $";
+static char const rcsid[] = "$Id: hgExtFileCheck.c,v 1.2 2005/03/04 20:09:43 galt Exp $";
 
 /* global count of errors */
 int errCount = 0;
@@ -57,7 +57,7 @@ else
     if (gotSize != size)
         {
         fprintf(stderr, "Error: %s.%s: expect size of %lld, got %lld: %s\n", db, table,
-                size, gotSize, path);
+                (unsigned long long)size, (unsigned long long)gotSize, path);
         errCount++;
         }
     }

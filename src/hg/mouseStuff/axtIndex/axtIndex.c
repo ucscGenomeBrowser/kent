@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtIndex.c,v 1.4 2004/06/16 08:24:56 kent Exp $";
+static char const rcsid[] = "$Id: axtIndex.c,v 1.5 2005/03/04 20:09:33 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,7 +32,7 @@ for (;;)
     axt = axtRead(lf);
     if (axt == NULL)
         break;
-    fprintf(f, "%d %d %lld\n", axt->tStart, axt->tEnd - axt->tStart, pos); 
+    fprintf(f, "%d %d %lld\n", axt->tStart, axt->tEnd - axt->tStart, (unsigned long long) pos); 
     axtFree(&axt);
     }
 carefulClose(&f);
