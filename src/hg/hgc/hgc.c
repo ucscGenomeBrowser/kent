@@ -1357,7 +1357,12 @@ cgiContinueHiddenVar("db");
 void doGetDna1()
 /* Do first get DNA dialog. */
 {
+struct hTableInfo *hti;
 char *tbl = cgiUsualString("table", "");
+char rootName[256];
+char parsedChrom[32];
+hParseTableName(tbl, rootName, parsedChrom);
+hti = hFindTableInfo(seqName, rootName);
 cartWebStart(cart, "Get DNA in Window");
 printf("<H2>Get DNA for %s:%d-%d</H2>\n", seqName, winStart+1, winEnd);
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
@@ -1365,7 +1370,7 @@ cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
 savePosInHidden();
-hgSeqOptions(tbl);
+hgSeqOptionsHti(hti);
 puts("<P>");
 cgiMakeButton("Submit", "Submit");
 puts("</FORM><P>");
@@ -1567,8 +1572,22 @@ if (tbl[0] == 0)
 	       '?', "dna");
     }
 else
-    itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
-				  cartInt(cart, "t"), NULL);
+    {
+    char rootName[256];
+    char parsedChrom[32];
+    /* Table might be a custom track; if it's not in the database, 
+     * just get DNA as if no table were given. */
+    hParseTableName(tbl, rootName, parsedChrom);
+    if (hFindTableInfo(seqName, rootName) == NULL)
+	{
+	itemCount = 1;
+	hgSeqRange(seqName, cartInt(cart, "o"), cartInt(cart, "t"),
+		   '?', tbl);
+	}
+    else
+	itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
+				      cartInt(cart, "t"), NULL);
+    }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
