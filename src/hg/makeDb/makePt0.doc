@@ -916,32 +916,57 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     ssh kksilo
     cd /cluster/data/pt0
     cd bed/blastz-blatHg16
-    netChainSubset humanGap10.net all.swap.chain humanGap10.chain
-    chainSort humanGap10.chain humanGap10Sorted.chain
+    netChainSubset humanGap10.net all.swap.chain humanGap10.jk2.chain
+    chainSort humanGap10.jk2.chain humanGap10Sorted.jk2.chain
     # note: jim ran these, and switched conventions
     chainNet humanGap10Sorted.chain /cluster/data/pt0/scaffold.sizes \
-        /cluster/data/hg16/chrom.sizes chimp.jk.net human.jk.net \
+        /cluster/data/hg16/chrom.sizes chimp.jk2.net human.jk2.net \
                  -minScore=0 -minSpace=1
+    ##netFilter -minGap=10 chimp.net |  hgLoadNet hg16 netPt0 stdin
+    #/cluster/bin/i386/netSyntenic human.jk.net human.best.net
+    #~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.best.net
+    mv human.best.net human.best.net.old
+    /cluster/bin/i386/netSyntenic human.jk2.net human.best.net
+    ~/bin/i386/netFilter -chimpSyn human.best.net > human.best.filtered.net
+    mv chimp.best.net chimp.best.net.old
+    /cluster/bin/i386/netSyntenic chimp.jk2.net chimp.best.net
+    ~/bin/i386/netFilter -chimpSyn chimp.best.net > chimp.best.filtered.net
+    #~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.best.net
+    ln -s human.best.filtered.net human.net
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz-blatHg16
+    ~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.net
 
-    netStats chimp.jk.stats chimp.jk.net
-    netStats human.jk.stats human.jk.net
-    netChainSubset chimp.jk.net all.swap.chain chimp.jk.chain
-    netChainSubset human.jk.net all.chain human.jk.chain
+    #netStats chimp.jk.stats chimp.jk.net
+    #netStats human.jk.stats human.jk.net
+    #netChainSubset chimp.jk.net all.swap.chain chimp.jk.chain
+    #netChainSubset human.jk.net all.chain human.jk.chain
         # read 9254050 of 9254050 chains in all.chain
     # NOTE: post both chains for download by chimp-analysis group
-    #featureBits hg16 human.jk.chain > coverage.human.txt
-    #featureBits hg16 chimp.jk.chain > coverage.chimp.txt
+    #netChainSubset chimp.jk2.net all.swap.chain chimp.jk2.chain
+    #netChainSubset human.jk2.net all.chain human.jk2.chain
+    netChainSubset human.best.filtered.net all.chain human.best.filtered.chain
+    ln -s human.best.filtered.chain human.chain
+    netChainSubset chimp.best.filtered.net all.swap.chain \
+        chimp.best.filtered.chain
+    rm -f chimp.chain
+    ln -s chimp.best.filtered.chain chimp.chain
 
     ssh hgwdev
     cd /cluster/data/pt0
     cd bed/blastz-blatHg16
     hgLoadChain hg16 chainAllPt0 all.chain
-    chainSwap humanGap10Sorted.chain humanGap10Sorted.swap.chain
-    hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
-    #netFilter -minGap=10 chimp.net |  hgLoadNet hg16 netPt0 stdin
-    /cluster/bin/i386/netSyntenic human.jk.net human.best.net
-    ~/bin/i386/hgLoadNet -warn hg16 netRxBestPt0 human.best.net
+    #chainSwap humanGap10Sorted.chain humanGap10Sorted.swap.chain
+    #hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
+    #chainSwap humanGap10Sorted.jk2.chain humanGap10Sorted.jk2.swap.chain
+    #hgLoadChain hg16 chainRxBestPt0 humanGap10Sorted.swap.chain
+    chainSwap humanGap10Sorted.jk2.chain stdout | \
+        hgLoadChain hg16 chainRxBestPt0 stdin
+            #Loading 100160 chains into hg16.chainRxBestPt0
 
     # NOTE: need to remake scaffolds.msk.fa for Nov13 assembly
     # and reload seq table
-    #hgLoadSeq hg16 /cluster/data/pt0/scaffolds.msk.fa
+    hgLoadSeq hg16 /cluster/data/pt0/scaffolds.msk.fa
+        #Adding /cluster/data/pt0/scaffolds.msk.fa)
+        #37928 sequences
+
