@@ -1,6 +1,6 @@
 include ../inc/common.mk
 
-L = -lm
+L = -lm $(SOCKETLIB)
 MYLIBDIR = ../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
 
