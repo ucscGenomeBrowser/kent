@@ -284,6 +284,14 @@ chromosomes chr22,
 color 30,130,210
 type genePred
 
+track psuReg
+shortLabel Known Regulatory 
+longLabel Functional Regulatory Elements compiled by Penn State 
+priority 13.4
+visibility dense
+color 30,130,210
+type bed 4 .
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
