@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.4 2004/11/07 19:04:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.5 2004/11/07 20:08:26 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -288,6 +288,50 @@ outPage = quickSubmit(tablePage, org, db, group, track, table,
     "outGff", hgtaDoTopSubmit, "submit");
 htmlPageFree(&outPage);
 }
+
+int countTagsBetween(struct htmlPage *page, char *start, char *end, char *type)
+/* Count number of tags of given type (which should be upper case)
+ * between start and end. If start is NULL it will start from
+ * beginning of page.  If end is NULL it will end at end of page. */
+{
+int count = 0;
+struct htmlTag *tag;
+if (start == NULL)
+    start = page->htmlText;
+if (end == NULL)
+    end = start + strlen(start);
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    if (tag->start >= start && tag->start < end && sameString(tag->name, type))
+	{
+        ++count;
+	}
+    }
+return count;
+}
+
+void testOutHyperlink(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table, 
+     int expectedRows)
+/* Get as hyperlink and make sure count agrees with expected. */
+{
+struct htmlPage *outPage;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "hyperlinks");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "outHyperlinks", hgtaDoTopSubmit, "submit");
+if (outPage != NULL)
+    {
+    char *s = stringIn("<!--Content", outPage->htmlText);
+    int rowCount;
+    if (s == NULL) errAbort("Can't find <!-Content");
+    rowCount = countTagsBetween(outPage, s, NULL, "A");
+    if (rowCount != expectedRows)
+	qaStatusSoftError(tablesTestList->status, 
+		"Got %d rows, expected %d", rowCount, expectedRows);
+    }
+htmlPageFree(&outPage);
+}
 	
 	
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
@@ -310,6 +354,7 @@ if (outTypeAvailable(mainForm, "primaryTable"))
     if (outTypeAvailable(mainForm, "bed"))
         {
 	testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+	testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutGff(tablePage, mainForm, org, db, group, track, table);
 	}
     }
