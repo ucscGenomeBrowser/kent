@@ -88,6 +88,7 @@ xap->endStack = xap->stack = xap->stackBuf + ArraySize(xap->stackBuf);
 xap->startHandler = startHandler;
 xap->endHandler = endHandler;
 xap->xp = xpNew(xap, xapStartTag, xapEndTag, xapRead, fileName);
+xap->fileName = cloneString(fileName);
 return xap;
 }
 
