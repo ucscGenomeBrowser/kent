@@ -7,8 +7,13 @@
 #include "cart.h"
 #endif
 
-boolean handleTwoSites(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
+boolean handleTwoSites(char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
 /* Handle queries of the form site1,site2. */
+
+boolean findGenomePos(char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
+/* Search for positions in genome that match user query.   
+Return TRUE if the query results in a unique position.  
+Otherwise display list of positions and return FALSE. */
 
 boolean hgFindCytoBand(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
 /* Return position associated with cytological band if spec looks to be in that form. */
