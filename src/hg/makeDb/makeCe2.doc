@@ -2616,3 +2616,23 @@ chainSome $(path1)
     nice gzip axtChrom/* pslChrom/* axtChain.2004-04-30/all.chain axtChain.2004-04-30/chainFilt/* axtChain.2004-04-30/chain/* &
     nice rm -rf raw &
     nice rm -rf lav &
+
+
+# LOAD GENEID PREDICTIONS (DONE 3/15/05)
+    ssh eieio
+    mkdir /cluster/data/ce2/bed/geneid
+    cd /cluster/data/ce2/bed/geneid
+    foreach chr (chrI chrII chrIII chrIV chrM chrV chrX)
+      wget \
+  http://genome.imim.es/genepredictions/C.elegans/Ce200403/geneid_v1.2/$chr.gtf
+      wget \
+  http://genome.imim.es/genepredictions/C.elegans/Ce200403/geneid_v1.2/$chr.prot
+    end
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    perl -wpe 's/^(>\S+)/$1.1/' *.prot > geneid.fa
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/geneid
+    ldHgGene -gtf -genePredExt ce2 geneid *.gtf 
+    hgPepPred ce2 generic geneidPep geneid.fa
+
+
