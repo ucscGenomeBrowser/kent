@@ -16,6 +16,15 @@ color 170,80,0
 altColor 230,180,130
 type bed 6 +
 
+track pseudoExpressed
+shortLabel Expressed Retro
+longLabel Expressed retroGenes with orf 
+group genes
+priority 52.9
+visibility pack
+color 120,120,170
+type genePred
+
 track RfamSeed
 shortLabel Rfam seed ncRNAs
 longLabel ncRNAs from Rfam seed
