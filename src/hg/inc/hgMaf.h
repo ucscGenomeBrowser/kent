@@ -6,6 +6,7 @@
 #define SPECIES_GROUP_VAR       "speciesGroups"
 #define SPECIES_GROUP_PREFIX    "sGroup_"
 #define PAIRWISE_VAR            "pairwise"
+#define SUMMARY_VAR             "summary"
 #define BASE_COLORS_VAR         "baseColors"
 #define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"
 
