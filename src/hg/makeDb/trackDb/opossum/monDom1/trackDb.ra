@@ -17,6 +17,15 @@ spectrum on
 type psl .
 cdsDrawOptions enabled
 
+track ultra
+shortLabel ultra
+longLabel 100%id >=200bp to hg17 (inc. contam, uncorrelated names)
+group compGeno
+priority 141
+visibility pack
+color 100,255,0
+type bed 4 .
+  
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
