@@ -346,6 +346,7 @@
       2:57 chr1 + chr21 vs mouse rna
          match 192351 mismatch 48776 repMatch 4425
      Kolossus -weight=13
+      chr1 + chr21 vs mouse rna
 
     
 time blat chr21.nib humanPlusRna.fa blatHuman.psl -ooc=$HOME/src/blat/11.ooc -q=rna
