@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.481 2003/09/25 12:50:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.482 2003/09/25 16:25:46 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5802,10 +5802,13 @@ skipPB:
 printf("</UL>");
 
 // Display Gene Family Browser link
-printf("<B>UCSC Gene Family Browser:</B> ");
-printf("<A HREF=\"http:/cgi-bin/hgNear?near.id=%s\"", mrnaName);
-printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
-printf("<BR><BR>");
+if (sqlTableExists(conn, "knownCanonical"))
+    {
+    printf("<B>UCSC Gene Family Browser:</B> ");
+    printf("<A HREF=\"http:/cgi-bin/hgNear?near.id=%s\"", mrnaName);
+    printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
+    printf("<BR><BR>");
+    }
 
 // Show Pathway links if any exists
 hasPathway = FALSE;
