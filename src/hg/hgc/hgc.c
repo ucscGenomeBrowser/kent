@@ -693,6 +693,11 @@ else if (stringIn("est", track) || stringIn("Est", track))
     type = "EST";
     table = "all_est";
     }
+else if (startsWith("psu", track))
+    {
+    type = "Pseudo & Real Genes";
+    table = "psu";
+    }
 else 
     {
     type = "mRNA";
@@ -711,6 +716,7 @@ sprintf(query, "select * from %s where qName = '%s'", table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    uglyf("Got row %s %s %s<BR>\n", row[0], row[1], row[2]);
     psl = pslLoad(row+hasBin);
     slAddHead(&pslList, psl);
     }
@@ -3389,7 +3395,8 @@ if (sameWord(track, "getDna"))
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
-	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna"))
+	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
+	sameWord(track, "psu"))
     {
     doHgRna(tdb, item);
     }
