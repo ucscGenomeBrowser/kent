@@ -214,6 +214,7 @@ char *words[16];
 int wordCount;
 struct blastGappedAli *bga;
 struct blastBlock *bb;
+int lenSearch;
 
 AllocVar(bga);
 bga->query = bq;
@@ -231,7 +232,6 @@ bga->targetName = cloneString(line+1);
  *      Length = 100000
  	Safeguard against wrapped lines!
  */
-int lenSearch;
 for (lenSearch=0; lenSearch<3; lenSearch++)
 	{
 	bfNeedNextLine(bf, &line, &lineSize);
