@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.19 2003/06/23 00:12:29 markd Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.20 2003/06/24 07:06:08 kent Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -175,6 +175,7 @@ if (startsWith("chr", s))
     s += 3;
 return s;
 }
+
 boolean hIsMgcServer()
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
