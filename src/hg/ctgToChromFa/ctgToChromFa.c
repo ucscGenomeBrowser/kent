@@ -5,6 +5,7 @@
 #include "portable.h"
 #include "hash.h"
 #include "chromInserts.h"
+#include "errabort.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -16,6 +17,7 @@ errAbort(
   "options:\n"
   "   spacing=number  - set spacing between contigs to number (default 200000)\n"
   "   lift=file.lft - set spacing between contigs from lift file. \n"
+  "   -missOk - Warns rather than aborts on missing sequence\n"
   );
 }
 
@@ -144,6 +146,12 @@ while (lineFileNextRow(lf, words, 1))
     if (fileExists(ctgFaName))
         {
 	actualChromSize += addFa(f, ctgFaName);
+	}
+    else
+        {
+	warn("%s does not exist\n", ctgFaName);
+	if (!cgiVarExists("missOk"))
+	    noWarnAbort();
 	}
     }
 lineFileClose(&lf);
