@@ -55,7 +55,7 @@ disk partitions and sizes:
 <ul>
 <li>MySQL Table spaces: ~ 50GB
 <li>Apache web pages area: ~ 40GB
-<li>"/gbdb" area for the browser: ~ 60GB
+<li>"/gbdb" area for the browser: ~ 98GB
 </ul>
 
 <H3>WARNING! This is a major change from the previous /cluster and
@@ -167,18 +167,33 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
 <TR><TD> rnNov2002   </TD><TD></TD><TD> rn1         </TD></TR>
+<TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
 <TR><TD> mmFeb2002   </TD><TD></TD><TD> mm2         </TD></TR>
-<TR><TD> mmNov2001   </TD><TD></TD><TD> mm1         </TD></TR>
+<TR><TD> 10april2003 </TD><TD></TD><TD> hg15         </TD></TR>
 <TR><TD> 14nov2002   </TD><TD></TD><TD> hg13         </TD></TR>
 <TR><TD> 28jun2002   </TD><TD></TD><TD> hg12         </TD></TR>
 <TR><TD> 05apr2002   </TD><TD></TD><TD> hg11         </TD></TR>
-<TR><TD> 22dec2001   </TD><TD></TD><TD> hg10         </TD></TR>
 </TABLE>
 </ul>
 <ol type="a">
 
-<li>Get Rat Novemeber, 2002 full data set (4.8 GB) by doing:
+<li>Get Rat January, 2003 full data set (3.5 GB) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJan2003/bigZips/ \
+  $WEBROOT/goldenPath/rnJan2003/bigZips/
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJan2003/chromosomes/ \
+  $WEBROOT/goldenPath/rnJan2003/chromosomes/
+rsync --progress -avz  \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJan2003/database/ \
+  $WEBROOT/goldenPath/rnJan2003/database/
+</PRE>
+
+<li>Get Rat Novemeber, 2002 full data set (3.7 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -192,7 +207,21 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/rnNov2002/database/
 </PRE>
 
-<li>Get Mouse February, 2002 full data set (4.8 GB) by doing:
+<li>Get Mouse February, 2003 full data set (3.6 GB) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2003/bigZips/ \
+  $WEBROOT/goldenPath/mmFeb2003/bigZips/
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2003/chromosomes/ \
+  $WEBROOT/goldenPath/mmFeb2003/chromosomes/
+rsync --progress -avz  \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2003/database/ \
+  $WEBROOT/goldenPath/mmFeb2003/database/
+</PRE>
+
+<li>Get Mouse February, 2002 full data set (5.5 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -206,21 +235,22 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/mmFeb2002/database/
 </PRE>
 
-<li>Get Mouse November, 2001 full data set (2.7 GB) by doing:
+
+<li>Get Human April 10, 2003 full data set (4.3 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/bigZips/ \
-  $WEBROOT/goldenPath/mmNov2001/bigZips/
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/10april2003/bigZips/ \
+  $WEBROOT/goldenPath/10april2003/bigZips/
 rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/chromosomes/ \
-  $WEBROOT/goldenPath/mmNov2001/chromosomes/
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/10april2003/chromosomes/ \
+  $WEBROOT/goldenPath/10april2003/chromosomes/
 rsync --progress -avz  \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/database/ \
-  $WEBROOT/goldenPath/mmNov2001/database/
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/10april2003/database/ \
+  $WEBROOT/goldenPath/10april2003/database/
 </PRE>
 
-<li>Get Human November 14, 2002 full data set (6.2 GB) by doing:
+<li>Get Human November 14, 2002 full data set (8.0 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -234,7 +264,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/14nov2002/database/
 </PRE>
 
-<li>Get Human June 28, 2002 full data set (6.2 GB) by doing:
+<li>Get Human June 28, 2002 full data set (7.4 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -248,7 +278,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/28jun2002/database/
 </PRE>
 
-<li>Get Human April 5, 2002 full data set (6.5 GB) by doing:
+<li>Get Human April 5, 2002 full data set (4.1 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -261,20 +291,6 @@ rsync --progress -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/database/ \
   $WEBROOT/goldenPath/05apr2002/database/
 </PRE>
-<li>Get Human December 22, 2001 full data set (5.5 GB) by doing:
-<p> 
-<PRE>
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/bigZips/ \
-  $WEBROOT/goldenPath/22dec2001/bigZips/
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/chromosomes/ \
-  $WEBROOT/goldenPath/22dec2001/chromosomes/
-rsync --progress -avz  \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/database/ \
-  $WEBROOT/goldenPath/22dec2001/database/
-</PRE>
-</ol>
 
 <h4><a NAME="step4"></a>4. Set up database</h4>
 <B>Existing Mirror Sites. There are numerous changes to tables
@@ -325,7 +341,7 @@ database is restricted to read-only.
 
 <h4><a NAME="step5"></a>5. Obtain the /gbdb data file area</h4>
 
-<li>You will need the portions of /gbdb used by the browser (60 GB):
+<li>You will need the portions of /gbdb used by the browser (98 GB):
 <br>
 <PRE>
 rsync --progress -avz \
@@ -430,7 +446,7 @@ mysql> create database hgFixed
 <li>Import the data in a similar fashion as listed above.</li>
 </ol>
 <p>
-<h4><a NAME="step10"></a>10. Create the three protein databases</h4>
+<h4><a NAME="step10"></a>10. Create the five protein databases</h4>
 <ol type="a"> 
 <li>Download a copy of the dumped protein tables.
 <PRE>
@@ -443,19 +459,25 @@ $WEBROOT/goldenPath/proteins0111/database/
 rsync --progress -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins1129/ \
 $WEBROOT/goldenPath/proteins1129/database/
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0305/ \
+$WEBROOT/goldenPath/proteins0305/database/
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0405/ \
+$WEBROOT/goldenPath/proteins0405/database/
 </PRE>
 <li>Create the protein databases
 <PRE>
 mysql> create database proteins
 mysql> create database proteins0111
 mysql> create database proteins1129
+mysql> create database proteins0305
+mysql> create database proteins0405
 </PRE>
 <li>Import the data in a similar fashion as listed above.
 </ol>
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
 <a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>.
-<br><i>Last Modified: Feb 10, 2003</i>
+<br><i>Last Modified: May 2, 2003</i>
 <br>
 	
 	</TD><TD WIDTH=15></TD></TR></TABLE>
