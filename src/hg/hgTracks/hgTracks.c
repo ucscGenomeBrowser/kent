@@ -10103,6 +10103,7 @@ registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("blastzTightHuman", longXenoPslMethods);
 registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
+registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
