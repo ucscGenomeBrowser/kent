@@ -280,6 +280,14 @@ priority 147
 visibility hide
 type maf
 
+track celeraHCM
+shortLabel celera HPM
+longLabel Human/Chimp/Mouse Celera Alignments (Science issue 302)
+group compGeno
+priority 147.2
+visibility hide
+type maf
+
 track blatCi1
 shortLabel Squirt Blat
 longLabel Ciona intestinalis Translated Blat Alignments
