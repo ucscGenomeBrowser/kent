@@ -4,11 +4,9 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "fa.h"
-#include "jksql.h"
-#include "mysqlTableStatus.h"
+#include "pipeline.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.47 2004/07/20 20:50:20 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.48 2004/09/24 15:20:32 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -16,64 +14,45 @@ void usage()
 errAbort("usage: freen something");
 }
 
-int countSameNonDigit(char *a, char *b)
-/* Return count of characters in a,b that are the same
- * up until first digit in either one. */
+struct pipeline *gzipPipe = NULL;
+
+void gzipPipeOpen()
+/* Redirect stdout to go through a pipe to gzip. */
 {
-char cA, cB;
-int same = 0;
-for (;;)
-   {
-   cA = *a++;
-   cB = *b++;
-   if (cA != cB)
-       break;
-   if (isdigit(cA) || isdigit(cB))
-       break;
-   ++same;
-   }
-return same;
+static char *gzip[] = {"gzip", "-c", "-f", NULL};
+gzipPipe = pipelineCreateWrite1(gzip, pipelineInheritFd, NULL);
+if (dup2(pipelineFd(gzipPipe), 1) < 0)
+   errnoAbort("dup2 to stdout failed");
 }
 
-boolean allDigits(char *s)
-/* Return TRUE if s is all digits */
+
+void gzipPipeClose()
+/* Finish up gzip pipeline. */
 {
-char c;
-while ((c = *s++) != 0)
-    if (!isdigit(c))
-        return FALSE;
-return TRUE;
+if (gzipPipe != NULL)
+    {
+    fclose(stdout);  /* must close first or pipe will hang */
+    pipelineWait(&gzipPipe);
+    }
 }
 
-int cmpChrom(char *a, char *b)
-/* Compare two chromosomes. */
-{
-int cSame = countSameNonDigit(a, b);
-int diff;
+   
 
-a += cSame;
-b += cSame;
-uglyf("cSame %d, a %s, b %s\n", cSame, a, b);
-if (allDigits(a) && allDigits(b))
-    return atoi(a) - atoi(b);
-else
-    return strcmp(a,b);
-}
-
-void freen(char *a, char *b)
+void freen(char *a)
 /* Test some hair-brained thing. */
 {
-int diff = cmpChrom(a,b);
-uglyf( "diff = % d \n", diff);
+gzipPipeOpen();
+uglyf("This is a message from the world famous freen program!\n");
+uglyf("Will it compress, who knows?\n");
+gzipPipeClose();
 }
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-pushCarefulMemHandler(1000000);
-if (argc != 3)
+if (argc != 2)
    usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 return 0;
 }
