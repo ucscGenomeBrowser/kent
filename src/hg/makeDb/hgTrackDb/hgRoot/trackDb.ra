@@ -188,8 +188,8 @@ type bed 6 +
 
 
 track genMapDb
-shortLabel GenMapDb Clones
-longLabel GenMapDb BAC Clones 
+shortLabel GenMapDB Clones
+longLabel GenMapDB BAC Clones 
 priority 10.1
 visibility hide
 type bed 6 +
