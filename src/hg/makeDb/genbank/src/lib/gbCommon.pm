@@ -24,7 +24,7 @@ BEGIN {
                            gbChmod getReleases getLastRelease getUpdates
                            parseOptEq inList getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
-                           getConf getConfNo getDbConf getDbConfNo splitSpaceList);
+                           findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -621,7 +621,7 @@ sub loadConf() {
 # get a configuration value, or undef if not defined.
 sub findConf($) {
     my($name) = @_;
-    if (!defined($gbCommon::conf)) {
+    if (!defined(%gbCommon::conf)) {
         loadConf();
     }
     return $gbCommon::conf{$name};

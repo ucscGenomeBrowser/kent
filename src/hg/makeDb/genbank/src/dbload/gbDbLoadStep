@@ -35,18 +35,18 @@ sub getMgcConf($) {
     chomp($host);
     
     # try to find a 
-    my $conf = getConf("$db.mgcTable.$host");
+    my $conf = findConf("$db.mgcTables.$host");
     if (!defined($conf)) {
-        $conf = getConf("$db.mgcTable.default");
+        $conf = findConf("$db.mgcTables.default");
     }
-    if (defined($conf )) {
+    if (defined($conf)) {
         if ($conf eq "no") {
             $conf = undef;
         } elsif (!(($conf eq "full") || ($conf eq "all"))) {
             gbError("invalid value for $db.mgcTable \"$conf\", expected full, all, or no");
         }
     }
-return $conf;
+    return $conf;
 }
 
 # load MGC tables (note uses several globals)
@@ -72,7 +72,7 @@ sub loadMgc($$) {
                     . " -allMgcTables $db $mgcDir/mgcStatus.tab.gz");
     } elsif ($conf eq "full") {
         runProg("mgcDbLoad " . join(" ", @mgcArgs)
-                . "$db $mgcDir/mgcFullStatus.tab.gz");
+                . " $db $mgcDir/mgcFullStatus.tab.gz");
     }
 }
 
@@ -90,7 +90,6 @@ my $hostName = `hostname`;
 chomp($hostName);
 my $drop = 0;
 my $keep = 0;
-my $haveMgc = 0;
 my $initialLoad = 0;
 my $allowLargeDeletes = 0;
 while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
@@ -108,14 +107,6 @@ while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
         $gbCommon::verbose = 1;
     } elsif ($opt eq "-initialLoad") {
         $initialLoad = 1;
-    } elsif ($opt =~ /^-buildFullMgc($|=)/) {
-        my $mgcDb = parseOptEq($opt);
-        $buildFullMgc{$mgcDb} = 1;
-        $haveMgc = 1;
-    } elsif ($opt =~ /^-buildAllMgc($|=)/) {
-        my $mgcDb = parseOptEq($opt);
-        $buildAllMgc{$mgcDb} = 1;
-        $haveMgc = 1;
     } elsif ($opt eq "-allowLargeDeletes") {
         $allowLargeDeletes = 1;
     } elsif ($opt eq "-keep") {
@@ -159,7 +150,7 @@ foreach my $db (@databases) {
 # process MGC build requests
 foreach my $db (@databases) {
     my $conf = getMgcConf($db);
-    if (defined($db)) {
+    if (defined($conf)) {
         loadMgc($db, $conf);
     }
 }
