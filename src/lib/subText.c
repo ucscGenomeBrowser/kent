@@ -6,7 +6,7 @@
 #include "common.h"
 #include "subText.h"
 
-static char const rcsid[] = "$Id: subText.c,v 1.8 2004/02/04 15:46:05 braney Exp $";
+static char const rcsid[] = "$Id: subText.c,v 1.9 2004/02/05 05:09:34 braney Exp $";
 
 struct subText *subTextNew(char *in, char *out)
 /* Make new substitution structure. */
@@ -69,7 +69,7 @@ char *cmp;
 
 for(; text; text = text->next)
     {
-    start = l->in;
+    start = text->in;
     end = &start[l->inSize];
     cmp = name;
     for(;(start < end) && (*start == *cmp); start++, cmp++)
