@@ -1,7 +1,7 @@
 .c.o:
-	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
+	gcc -pg -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
 
-L = $(MYSQLLIBS) -lm
+L = $(MYSQLLIBS) -lm -pg
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
@@ -21,7 +21,7 @@ beta: compile
 compile: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out $A
-	strip $A
+#	strip $A
 	chmod a+rx $A
 
 lib:
