@@ -215,6 +215,8 @@ struct slName *chosenFields, *field;
 struct bedFilter *bf = NULL;
 struct region *region;
 boolean gotResults = FALSE;
+struct hash *idHash = NULL;
+
 
 #ifdef SOON
 bf = constrainBedFields(NULL);
@@ -224,6 +226,8 @@ if (fields == NULL)
     chosenFields = getBedFields(ct->fieldCount);
 else
     chosenFields = commaSepToSlNames(fields);
+if (ct->fieldCount > 3)
+    idHash = identifierHash();
 hPrintf("#");
 for (field = chosenFields; field != NULL; field = field->next)
     {
@@ -237,10 +241,13 @@ if (fullGenomeRegion())
     {
     for (bed = ct->bedList; bed != NULL; bed = bed->next)
         {
-	if (bf == NULL)  // or passes filter
+	if (idHash == NULL || hashLookup(idHash, bed->name))
 	    {
-	    tabBedRow(bed, chosenFields);
-	    gotResults = TRUE;
+	    if (bf == NULL)  // or passes filter
+		{
+		tabBedRow(bed, chosenFields);
+		gotResults = TRUE;
+		}
 	    }
 	}
     }
@@ -250,15 +257,18 @@ else
 	{
 	for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	    {
-	    if (sameString(bed->chrom, region->chrom))
+	    if (idHash == NULL || hashLookup(idHash, bed->name))
 		{
-		if (region->end == 0 || 
-		   (bed->chromStart < region->end && bed->chromEnd > region->start))
+		if (sameString(bed->chrom, region->chrom))
 		    {
-		    if (bf == NULL)  // or passes filter
+		    if (region->end == 0 || 
+		       (bed->chromStart < region->end && bed->chromEnd > region->start))
 			{
-			tabBedRow(bed, chosenFields);
-			gotResults = TRUE;
+			if (bf == NULL)  // or passes filter
+			    {
+			    tabBedRow(bed, chosenFields);
+			    gotResults = TRUE;
+			    }
 			}
 		    }
 		}
@@ -266,6 +276,11 @@ else
 	}
     }
 if (!gotResults)
-    hPrintf("# No results returned from query.\n");
+    {
+    hPrintf("# No results");
+    if (idHash != NULL)
+	hPrintf(" matching identifier list");
+    hPrintf(".");
+    }
 }
 
