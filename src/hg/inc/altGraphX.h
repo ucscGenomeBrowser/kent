@@ -158,6 +158,9 @@ struct spliceEdge *altGraphXToEdges(struct altGraphX *ag);
 void altGraphXoffset(struct altGraphX *ag, int offset);
 /* Add offset to all coordinates of altGraphX. */
 
+struct altGraphX *altGraphXClone(struct altGraphX *ag);
+/* Make a clone of a current altGraphX structure. Free with altGraphXFree() */
+
 int altGraphXNumAltSplices(struct altGraphX *ag);
 /* Count number of times that exons have more than one edge through them, i.e. 
  * number of possible splices seen. */
@@ -176,6 +179,8 @@ bool **altGraphXCreateEdgeMatrix(struct altGraphX *ag);
 
 void altGraphXFreeEdgeMatrix(bool ***pEm, int vertCount);
 /* Free an edge matrix. */
+
+
 
 float altGraphCassetteConfForEdge(struct altGraphX *ag, int eIx, float prior);
 /* Return the score for this cassette exon. Want to have cassette exons
@@ -213,6 +218,9 @@ void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList,
 /** Draw a splicing graph for each altGraphX in the agList where the
     exons don't overlap as they have been laid out in the spaceSaver
     list. */
+
+enum ggEdgeType altGraphXEdgeVertexType(struct altGraphX *ag, int v1, int v2);
+/* Return edge type. */
 
 enum ggEdgeType getSpliceEdgeType(struct altGraphX *ag, int edge);
 /* Return edge type. */

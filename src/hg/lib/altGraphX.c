@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.13 2003/06/22 23:12:20 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.14 2003/08/13 23:14:45 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -441,7 +441,7 @@ fputc(sep,f);
     {
     struct evidence *it = el->evidence;
     if (sep == ',') fputc('{',f);
-    for (i=0; i<el->edgeCount && el->evidence != NULL; ++i)
+    for (i=0; i<el->edgeCount && it != NULL; ++i)
         {
         fputc('{',f);
         evidenceCommaOut(it,f);
@@ -500,6 +500,41 @@ ag->tStart += offset;
 ag->tEnd += offset;
 for(i=0; i<ag->vertexCount; i++)
     ag->vPositions[i] += offset;    
+}
+
+struct altGraphX *altGraphXClone(struct altGraphX *ag)
+/* Make a clone of a current altGraphX structure. Free with altGraphXFree() */
+{
+struct altGraphX *agNew = NULL;
+struct dyString *names = NULL;
+struct evidence *ev = NULL, *evNew = NULL;
+int i;
+assert(ag);
+names = newDyString(256);
+agNew = CloneVar(ag);
+agNew->tName = cloneString(ag->tName);
+agNew->name = cloneString(ag->name);
+agNew->vTypes = CloneArray(ag->vTypes, ag->vertexCount);
+agNew->vPositions = CloneArray(ag->vPositions, ag->vertexCount);
+agNew->edgeStarts = CloneArray(ag->edgeStarts, ag->edgeCount);
+agNew->edgeEnds = CloneArray(ag->edgeEnds, ag->edgeCount);
+agNew->edgeTypes = CloneArray(ag->edgeTypes, ag->edgeCount);
+for(i=0; i<ag->mrnaRefCount; i++)
+    dyStringPrintf(names, "%s,", ag->mrnaRefs[i]);
+sqlStringDynamicArray(names->string, &agNew->mrnaRefs, &agNew->mrnaRefCount);
+assert(ag->mrnaRefCount == agNew->mrnaRefCount);
+dyStringFree(&names);
+agNew->mrnaTissues = CloneArray(ag->mrnaTissues, ag->mrnaRefCount);
+agNew->mrnaLibs = CloneArray(ag->mrnaLibs, ag->mrnaRefCount);
+agNew->evidence = NULL;
+for(ev = ag->evidence; ev != NULL; ev = ev->next)
+    {
+    evNew = CloneVar(ev);
+    evNew->mrnaIds = CloneArray(ev->mrnaIds, ev->evCount);
+    slAddHead(&agNew->evidence, evNew);
+    }
+slReverse(&agNew->evidence);
+return agNew;
 }
 
 boolean isEndXVertice(bool **em, int vertexCount, int vertice, char *vTypes)
@@ -990,7 +1025,7 @@ bed->expIds[2] = tpEdge;
 return bed;
 }
 
-static enum ggEdgeType altGraphXEdgeVertexType(struct altGraphX *ag, int v1, int v2)
+enum ggEdgeType altGraphXEdgeVertexType(struct altGraphX *ag, int v1, int v2)
 /* Return edge type. */
 {
 if( (ag->vTypes[v1] == ggHardStart || ag->vTypes[v1] == ggSoftStart)  
@@ -1031,7 +1066,7 @@ AllocArray(bases, baseCount);
 for(i=0; i<ag->edgeCount; i++)
     {
     eType = altGraphXEdgeType(ag, i);
-    if(eType == ggExon || eType == ggCassette)
+    if(eType == ggExon)
 	{
 	width = vPos[ag->edgeEnds[i]] - vPos[ag->edgeStarts[i]];
 	start = vPos[ag->edgeStarts[i]]-offSet;
@@ -1328,6 +1363,7 @@ void drawExonAt(struct spliceEdge *se, int heightPer, int regionStart, int regio
 int x1 = round((double)((int)se->start-regionStart)*scale) + xOff;
 int x2 = round((double)((int)se->end-regionStart)*scale) + xOff;
 int w=0, textWidth=0;
+boolean drawLabel = FALSE;
 Color exonColor;
 char buff[256];
 int conf = 0;
@@ -1340,12 +1376,16 @@ else
 w = x2-x1;
 if (w < 1)
     w = 1;
-exonColor = shades[conf];
+//exonColor = shades[conf];
+exonColor = MG_BLACK;
 vgBox(vg, x1, y, w, heightPer/2, exonColor);
-safef(buff, sizeof(buff), "%d-%d-%d", se->v1, se->v2, (int)se->conf);
-textWidth = mgFontStringWidth(font, buff);
-if(textWidth <= w)
-    vgTextCentered(vg, x1, y, w, heightPer/2, MG_WHITE, font, buff);
+if(drawLabel)
+    {
+    safef(buff, sizeof(buff), "%d-%d-%d", se->v1, se->v2, (int)se->conf);
+    textWidth = mgFontStringWidth(font, buff);
+    if(textWidth <= w)
+	vgTextCentered(vg, x1, y, w, heightPer/2, MG_WHITE, font, buff);
+    }
 }
 
 struct spliceEdge *createFakeExon(int vertex, int position, int confidence)
@@ -1391,9 +1431,8 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	{
 	egNext = eg->next;
 	eg->itemNumber = agCount;
-	if(eg->type != ggExon && eg->type != ggCassette)
+	if(eg->type != ggExon)
 	    {
-
 	    if(vSeen[eg->v1] && vSeen[eg->v2])
 		continue;
 	    /* If we don't have an exon for a splice site we have to do a little futzing.
@@ -1569,6 +1608,12 @@ for(i=0; i<ag->vertexCount; i++)
     else if(ag->vTypes[i] == ggSoftStart)
 	ag->vTypes[i] = ggSoftEnd;
     }
+if(sameString(ag->strand, "+"))
+    snprintf(ag->strand, sizeof(ag->strand), "%s", "-");
+else if(sameString(ag->strand, "-"))
+    snprintf(ag->strand, sizeof(ag->strand), "%s", "+");
+else
+    errAbort("altGraphX::altGraphXReverseComplement() - Don't recognize strand: %s", ag->strand);
 tmp = ag->edgeEnds;
 ag->edgeEnds = ag->edgeStarts;
 ag->edgeStarts = tmp;
