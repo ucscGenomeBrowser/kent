@@ -44,6 +44,8 @@ utils: libs
 	# cd hg && ${MAKE};
 
 DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
-       getgene idbQuery index primeMate protDust reformat \
+       idbQuery index primeMate protDust reformat \
        scanIntrons tracks weblet wormAli xenoAli
+
+BAD_DIRS = getgene
 
