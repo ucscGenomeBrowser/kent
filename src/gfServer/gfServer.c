@@ -18,7 +18,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-int version = 14;
+int version = 15;
 int maxSeqSize = 40000;
 int maxAaSize = 8000;
 
@@ -137,10 +137,12 @@ void dnaQuery(struct genoFind *gf, struct dnaSeq *seq,
 /* Handle a query for DNA/DNA match. */
 {
 struct gfClump *clumpList = NULL, *clump;
-int limit = 100;
+int limit = 3000;
 int clumpCount = 0, hitCount = -1;
 struct lm *lm = lmInit(0);
 
+if (seq->size > 3*gf->tileSize)
+     limit = 100;
 clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 if (clumpList == NULL)
     ++missCount;
