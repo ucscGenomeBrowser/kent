@@ -1,6 +1,9 @@
 #
 # TrackDb: interface to the trackDb database.
 #
+# Currently, all this does is return a list of trackName values.
+# Note the hardcoded default database, username & password.
+#
 package TrackDb;
 
 use strict;
@@ -22,7 +25,9 @@ my $username  = 'hguser';
 my $password  = 'hguserstuff';
 
 #
-# new
+# new: create a TrackDb object.
+# Mandatory argument: <none>
+# Optional arguments: $dbName (name of database to use instead of default)
 #
 sub new {
     my $class = shift;
@@ -39,8 +44,8 @@ sub new {
 
 
 #
-# DESTROY -- perl is supposed to call this destructor when the last 
-# ref goes away.
+# DESTROY: perl is supposed to call this destructor when the last 
+# ref to an object goes away.
 #
 sub DESTROY {
     my $this = shift;
@@ -50,6 +55,7 @@ sub DESTROY {
 
 #
 # getTrackNames
+# Mandatory argument: <none>
 #
 sub getTrackNames {
     my $this = shift;
