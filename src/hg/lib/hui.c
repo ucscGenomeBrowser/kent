@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.32 2004/02/02 19:52:25 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.33 2004/02/02 23:13:06 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -820,6 +820,35 @@ void wiggleSmoothingDropDown(char *var, char *curVal)
 /* Make drop down of options. */
 {
 cgiMakeDropList(var, wiggleSmoothingOptions, ArraySize(wiggleSmoothingOptions), 
+	curVal);
+}
+
+/****** Options for the wiggle track y Line Mark On/Off *******/
+
+static char *wiggleYLineMarkOptions[] = {
+    "OFF",
+    "ON"
+    };
+
+enum wiggleYLineMarkEnum wiggleYLineMarkStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleYLineMarkOptions);
+if (x < 0)
+   errAbort("hui::wiggleYLineMarkStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *wiggleYLineMarkEnumToString(enum wiggleYLineMarkEnum x)
+/* Convert from enum to string representation. */
+{
+return wiggleYLineMarkOptions[x];
+}
+
+void wiggleYLineMarkDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleYLineMarkOptions, ArraySize(wiggleYLineMarkOptions), 
 	curVal);
 }
 
