@@ -4,11 +4,11 @@
 #include "hash.h"
 #include "dystring.h"
 #include "dlist.h"
+#include "portable.h"
 #include "options.h"
 #include "localmem.h"
 #include "dlist.h"
 #include "fuzzyFind.h"
-#include "portable.h"
 #include "axt.h"
 
 void usage()
@@ -44,15 +44,16 @@ struct asChain
 struct asNode
 /* Node of aliStitch graph. */
     {
-    struct dlList waysIn;	/* Edges leading into this node. */
+    struct asEdge *waysIn;	/* Edges leading into this node. */
     struct asBlock *block;	/* Input node. */
-    struct asEdge *bestWayIn;    /* Dynamic programming best edge in. */
+    struct asEdge *bestWayIn;   /* Dynamic programming best edge in. */
     int cumScore;               /* Dynamic programming score of edge. */
     };
 
 struct asEdge
 /* Edge of aliStitch graph. */
     {
+    struct asEdge *next;         /* Next edge in waysIn list. */
     struct asNode *nodeIn;       /* The node that leads to this edge. */
     int score;                   /* Score you get taking this edge. */
     };
@@ -79,12 +80,11 @@ for (i=1; i<=graph->nodeCount; ++i)
     {
     struct asNode *node = graph->nodes + i;
     struct asBlock *block = node->block;
-    struct dlNode *el;
+    struct asEdge *e;
     fprintf(f, "  %d@(%d,%d)$%d:", i, block->qStart, block->tStart, 
     	block->score);
-    for (el = node->waysIn.head; !dlEnd(el); el = el->next)
+    for (e = node->waysIn; e != NULL; e = e->next)
 	{
-	struct asEdge *e = el->val;
 	fprintf(f, " %d($%d)", e->nodeIn - graph->nodes, e->score);
 	}
     fprintf(f, "\n");
@@ -101,15 +101,6 @@ if (total <= 0)
 return 400 * pow(total, 1.0/3.3);
 }
 
-struct dlNode *dlLmAddValTail(struct dlList *list, struct lm *lm, void *val)
-/* Create a node containing val in local memory and add to tail of list. */
-{
-struct dlNode *node;
-lmAllocVar(lm, node);
-node->val = val;
-dlAddTail(list, node);
-return node;
-}
 
 
 void addFollowingNodes(struct asGraph *graph, int nodeIx,
@@ -161,7 +152,7 @@ while ((dlHead = dlPopHead(&scratchList)) != NULL)
 	/* Add edge between node passed in and this one. */
 	lmAllocVar(graph->lm, e);
 	e->nodeIn = prev;
-	dlLmAddValTail(&cur->waysIn, graph->lm, e);
+	slAddHead(&cur->waysIn, e);
 	graph->edgeCount += 1;
 	if (dq < 0) dq = 0;
 	if (dt < 0) dt = 0;
@@ -214,16 +205,14 @@ for (i=1, block = blockList; i<=nodeCount; ++i, block = block->next)
 
 /* Fake a node 0 at 0,0 and connect all nodes to it... */
 z = &nodes[0];
-dlListInit(&z->waysIn);
 lmAllocVar(graph->lm, z->block);
 for (i=1; i<=nodeCount; ++i)
     {
     n = &nodes[i];
-    dlListInit(&n->waysIn);
     lmAllocVar(graph->lm, e);
     e->nodeIn = z;
     e->score = n->block->score;
-    dlLmAddValTail(&n->waysIn, graph->lm, e);
+    slAddHead(&n->waysIn, e);
     graph->edgeCount += 1;
     }
 
@@ -276,11 +265,10 @@ for (nodeIx = 1; nodeIx <= graph->nodeCount; ++nodeIx)
     struct asEdge *bestEdge = NULL;
     struct asNode *curNode = &graph->nodes[nodeIx];
     struct asNode *prevNode;
-    struct dlNode *el;
+    struct asEdge *edge;
 
-    for (el = curNode->waysIn.head; !dlEnd(el); el = el->next)
+    for (edge = curNode->waysIn; edge != NULL; edge = edge->next)
 	{
-	struct asEdge *edge = el->val;
 	score = edge->score + edge->nodeIn->cumScore;
 	if (score > bestScore)
 	    {
@@ -304,7 +292,7 @@ void chainPair(struct seqPair *sp, FILE *f)
 /* Make chains for all alignments in sp. */
 {
 struct asGraph *graph = NULL;
-time_t startTime, dt;
+long startTime, dt;
 int fullSize; 
 struct asNode *n, *nList = NULL;
 struct axt *axt, *first, *last;
@@ -344,7 +332,7 @@ while (!dlEmpty(axtList))
     graph = asGraphMake(blockList, defaultGapPenalty);
     dt = clock1000() - startTime;
     fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
-    uglyf("%d edges (%d in full graph) %4.1f%% of full in %5.3f seconds (%d)\n",
+    uglyf("%d edges (%d in full graph) %4.1f%% of full in %5.3f seconds (%ld)\n",
 	graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, 0.001*dt, startTime);
     fprintf(f, 
 	"%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
