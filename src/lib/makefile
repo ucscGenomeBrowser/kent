@@ -34,6 +34,7 @@ test:
 
 clean:
 	rm -f ${O} $(MACHTYPE)/jkweb.a
+	cd tests && ${MAKE} clean
 
 tags:
 	etags ../inc/*.h ../lib/*.h ../lib/*.c  ../hg/inc/*.h ../hg/lib/*.h ../hg/lib/*.c ../hg/hgTracks/hgTracks.c ../hg/hgc/hgc.c ../hg/hgTrackUi/hgTrackUi.c
