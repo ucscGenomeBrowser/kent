@@ -2867,6 +2867,206 @@ axtChain -psl -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Make a README.txt which explains the files & formats.
 
 
+# BLASTZ A.MELLIFERA 2.0 (DONE 2/8/05 Andy)
+    # Use human-fugu sensitivity settings, as with mosquito.
+    ssh kk
+    mkdir /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
+    ln -s blastz.apiMel2.2005-01-28 /cluster/data/dm2/bed/blastz.apiMel2
+    cat << "_EOF_" > DEF
+# D.melanogaster vs. A.mellifera
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - A. mellifera
+SEQ2_DIR=/iscratch/i/apiMel2/nib
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+_EOF_
+    # << this line keeps emacs coloring happy
+
+    # Partition chroms into 10MB (+10k overlap) chunks and generate parasol 
+    # job list.
+    cp /cluster/data/dm2/chrom.sizes S1.len
+    cp /cluster/data/apiMel2/chrom.sizes S2.len
+    mkdir run
+    cd run
+    partitionSequence.pl 10000000 10000 /iscratch/i/dm2/nib ../S1.len \
+      -xdir xdir.sh -rawDir ../lav \
+      > dm2.lst
+    sh xdir.sh
+    mkdir parts
+    partitionSequence.pl 5000000 10000 /iscratch/i/apiMel2/nib \
+      ../S2.len -xdir xdir.sh -rawDir parts \
+      > apiMel2.lst
+    cat << "_EOF_" > gsub
+#LOOP
+/cluster/bin/scripts/blastz-run-ucsc $(path1) $(path2) ../DEF {check out exists ../lav/$(file1)/$(file1)_$(file2).lav }
+#ENDLOOP
+_EOF_
+    # << this line keeps emacs coloring happy
+    gensub2 dm2.lst apiMel2.lst gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 2484 of 2484 jobs
+#CPU time in finished jobs:     300981s    5016.34m    83.61h    3.48d  0.010 y
+#IO & Wait Time:                 15859s     264.32m     4.41h    0.18d  0.001 y
+#Average job time:                 128s       2.13m     0.04h    0.00d
+#Longest job:                      839s      13.98m     0.23h    0.01d
+#Submission to last job:         26649s     444.15m     7.40h    0.31d
+
+    # Translate .lav to psl:
+    ssh kolossus
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
+    mkdir pslChrom
+    for chr in `cut -f1 /cluster/data/dm2/chrom.sizes`; do
+      echo $chr
+      cat lav/${chr}.*/*.lav | lavToPsl stdin stdout \
+        | sort -k 14,14 -k 16n,17n \
+        | gzip -c > pslChrom/$chr.psl.gz
+    done
+
+# CHAIN MELLIFERA 2.0 BLASTZ (DONE 2/9/05 Andy)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir chain
+    ls -1S /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/pslChrom/*.psl.gz \
+      > input.lst
+    cat << "_EOF_" > gsub
+#LOOP
+/cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain/run1/doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+_EOF_
+    # << this line makes emacs coloring happy
+
+    cat << "_EOF_" > doChain
+#!/bin/bash
+axtChain -psl -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
+         -verbose=0 $1 \
+  /iscratch/i/dm2/nib \
+  /iscratch/i/apiMel2/nib stdout \
+| chainAntiRepeat /iscratch/i/dm2/nib /iscratch/i/apiMel2/nib \
+    stdin $2
+_EOF_
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 13 of 13 jobs
+#CPU time in finished jobs:        312s       5.21m     0.09h    0.00d  0.000 y
+#IO & Wait Time:                    96s       1.59m     0.03h    0.00d  0.000 y
+#Average job time:                  31s       0.52m     0.01h    0.00d
+#Longest job:                       61s       1.02m     0.02h    0.00d
+#Submission to last job:            61s       1.02m     0.02h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's (Need to do this later)
+    #foreach f (chain/*.chain)
+    #  grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+    #  echo $f:t:r
+    #  textHistogram -binSize=10000 /tmp/score.$f:t:r
+    #  echo ""
+    #end
+    
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/blastz.apiMel1.2005-01-28/axtChain/chain
+    for chain in *.chain; do
+        c=${chain%.chain}
+        echo loading $c
+        hgLoadChain dm2 ${c}_chainApiMel2 $chain
+    done
+
+# NET MELLIFERA 2.0 BLASTZ (DONE 2/9/05 Andy)
+    ssh kksilo
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain
+    netClass -noAr noClass.net dm2 apiMel2 mellifera.net
+    rm noClass.net
+    # Load the nets into database 
+    netFilter -minGap=10 mellifera.net |  hgLoadNet dm2 netApiMel2 stdin
+
+# GENERATE APIMEL2 AXTNET AND MAF FOR MULTIZ (DONE 2/9/05 Andy)
+    ssh kksilo
+    cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain
+    netSplit mellifera.net net
+    cd ..
+    mkdir axtNet
+    for net in axtChain/net/chr*.net; do
+       chrom=${net##*\/}; chrom=${chrom%.net}
+       netToAxt $net axtChain/chain/${chrom}.chain \
+         /cluster/data/dm2/nib /cluster/data/apiMel2/nib stdout \
+      | axtSort stdin axtNet/${chrom}.axt
+    done
+    mkdir mafNet
+    for axt in axtNet/chr*.axt; do
+      maf=${axt##*\/}; maf=mafNet/${maf%.axt}.maf
+      axtToMaf $axt /cluster/data/dm2/chrom.sizes \
+         /cluster/data/apiMel2/chrom.sizes $maf -tPrefix=dm2. -qPrefix=apiMel2.
+    done
+
+# MAKE VSAPIMEL2 DOWNLOADABLES (DONE 2/9/2005 Andy)
+    ssh kksilo
+    gzip -c \
+      /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain/all.chain \
+      > /cluster/data/dm2/zips/mellifera.chain.gz
+    gzip -c \
+      /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtChain/mellifera.net \
+      > /cluster/data/dm2/zips/mellifera.net.gz
+    mkdir -p /cluster/data/dm2/zips/axtNet
+    for axt in /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08/axtNet/chr*axt; do
+      zip=${axt##*\/}.gz
+      gzip -c $axt > /cluster/data/dm2/zips/axtNet/$zip
+    done
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm2/vsApiMel2
+    cd /usr/local/apache/htdocs/goldenPath/dm2/vsApiMel2
+    mv /cluster/data/dm2/zips/mel*gz .
+    mv /cluster/data/dm2/zips/axtNet .
+    md5sum *.gz */*.gz > md5sum.txt
+    # Make a README.txt which explains the files & formats.
+
 # MULTIZ.V10 8WAY (6 FLIES, MOSQUITO, HONEYBEE) (DONE 2/1/05 angie)
     # Tree (8-way):
     # ((((((dm2 droYak1) droAna1) dp2) (droVir1 droMoj1)) anoGam1) apiMel1)
