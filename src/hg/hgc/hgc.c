@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.574 2004/02/27 18:33:10 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.575 2004/02/29 23:39:17 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1692,6 +1692,7 @@ char *thisOrg = hOrganism(database);
 char *otherOrg = NULL;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
+double subSetScore = 0.0;
 int qs, qe;
 
 if (! sameWord(otherDb, "seq"))
@@ -1705,6 +1706,9 @@ if (otherOrg == NULL)
     }
 
 chain = chainDbLoad(conn, database, track, seqName, atoi(item));
+chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
+subSetScore = subChain->score;
+chainFree(&toFree);
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
@@ -1721,7 +1725,8 @@ else
 	   qs, qe, chain->qEnd - chain->qStart);
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
-printf("<B>Score:</B> %1.0f<BR>\n", chain->score);
+printf("<B>Score:</B> %1.0f\n", chain->score);
+printf("<B>Score within browser window:</B> %1.0f<BR>\n", subSetScore);
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
