@@ -15,7 +15,7 @@ to printWordLots(string word, int count)
 // Declaration with a couple of parameters, no return value.
     {
     for i in [1,count]
-       print(" ")
+       print(word + " ")
     }
 
 
@@ -23,7 +23,7 @@ to factorial(int n) into (float result)
 // Declaration with an integer parameter that returns floating point result
     {
     result = 1
-    for i in [1,n]
+    for i in [2,n]
 	result *= i    
     }
 
@@ -49,7 +49,7 @@ flow reverseRange(oldStart,oldEnd,seqSize) into (newStart,newEnd)
 // The rule is that there can only be one assignment to each variable
 // (and no assignments to the input parameters).  Possibly this can
 // exclude access to global variables too.  Functions can be called,
-// but only if they are also flow functions.
+// but only if they are also flow functions.  No loops.
     {
     newStart = seqSize - oldEnd
     newEnd = seqSize - oldStart
@@ -158,7 +158,7 @@ object hash implements collection
        {
        val = find(name)
        if (!val)
-           throw errNotFound
+           throw errNotFound(name)
        }
   
    object hashIterator implements iterator
