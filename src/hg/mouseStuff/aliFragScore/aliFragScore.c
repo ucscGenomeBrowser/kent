@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
-#include "dnaSeq.h"
+#include "dnaseq.h"
 #include "dnaLoad.h"
 #include "axt.h"
 
