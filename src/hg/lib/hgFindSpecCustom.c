@@ -13,7 +13,7 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.8 2005/02/02 20:27:52 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.9 2005/03/29 01:05:53 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -208,7 +208,7 @@ if (isNotEmpty(hfs->query))
 }
 
 static char *xrefQueryFormatRegex =
-    "select [[:alnum:]]+, ?[[:alnum:]]+ from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
+    "select [[:alnum:]]+, ?[[:alnum:]]+(\\([^)]+\\))? from %s where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
 
 static void checkXrefQueryFormat(struct hgFindSpec *hfs)
 /* Make sure xrefQuery looks right and jives with searchMethod. */
