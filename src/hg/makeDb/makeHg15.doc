@@ -30,6 +30,8 @@ exit; # don't actually run this like a script :)
 # 1) Download seq_contig.md, ncbi_build33.agp, contig_overlaps.agp 
 # and contig fa file into gs.16/build33 directory. 
 
+# Download certificates.txt in gs.16/build33 directory (first time in build33)
+
 # Download all finished agp's and fa's into gs.16/agp
 
 # Download sequence.inf and ncbi_build33.fa files into gs.16/ffa, and unzip
@@ -80,6 +82,9 @@ exit; # don't actually run this like a script :)
 # 6) Create chromsome agp files
 
     /cluster/bin/scripts/createNcbiChrAgp .
+
+# Since we received final agp's, these were substituted in for the chr agp's
+# with all completely commented lines removed.
 
 # 6.1) Copy over jkStuff from previous build
     mkdir jkStuff
@@ -410,7 +415,7 @@ exit; # don't actually run this like a script :)
     ssh eieio
     cd ~/hg15/bed/refSeq
     pslSort dirs raw.psl /tmp psl
-    pslReps -minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.001 raw.psl \
+    pslReps -minCover=0.10 -sizeMatters -minAli=0.96 -nearTop=0.001 raw.psl \
       contig.psl /dev/null
     liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft warn contig.psl
     pslSortAcc nohead chrom /tmp all_refSeq.psl
@@ -1033,7 +1038,7 @@ Locate motifs on all promoters with
 	hgLoadRna addSeq hg15 /gbdb/hg15/sts.7/all.primers.fa
 
 
-# CREATE STS MARKER ALIGNMENTS (TO DO)
+# CREATE STS MARKER ALIGNMENTS (DONE TSF 4/12/2003)
 
 # Create full sequence alignments
         ssh kk
@@ -1089,7 +1094,7 @@ Locate motifs on all promoters with
         make clean
         
 
-# CREATE AND LOAD STS MARKERS TRACK (TO DO)
+# CREATE AND LOAD STS MARKERS TRACK (DONE TSF 4/12/2003)
 
 # Copy in current stsInfo2.bed and stsAlias.bed files
         cd /projects/hg2/booch/psl/gs.16/build33
@@ -1121,11 +1126,9 @@ Locate motifs on all promoters with
 
 # Load the tables
 	cd /projects/hg2/booch/psl/gs.16/build33/sts/
-        echo 'load data local infile "stsMarkers.psl.filter.lifted" into table all_sts_seq;' \
-	| hgsql hg15
+        echo 'load data local infile "stsMarkers.psl.filter.lifted" into table all_sts_seq;' | hgsql hg15
 	cd /projects/hg2/booch/psl/gs.16/build33/primers/
-        echo 'load data local infile "primers.psl.filter.lifted" into table all_sts_primer;' \
-	| hgsql hg15
+        echo 'load data local infile "primers.psl.filter.lifted" into table all_sts_primer;' | hgsql hg15
 	cd /projects/hg2/booch/psl/gs.16/build33/
         echo 'load data local infile "stsAlias.bed" into table stsAlias;' | hgsql hg15
         echo 'load data local infile "stsInfo2.bed" into table stsInfo2;' | hgsql hg15
@@ -1174,6 +1177,7 @@ Locate motifs on all promoters with
 # Create full sequence alignments
 	ssh kk
         cd /cluster/home/booch/bacends
+
 # Update Makefile with latest OOVERS and GSVERS and run cluster jobs
         make new
         make jobList
@@ -1186,13 +1190,15 @@ Locate motifs on all promoters with
 
 # Copy files to final destination and remove
         make copy.assembly
-        make clean # (may want to wait until sure they're OK)
+        make clean # DONT'T DO THIS (may want to wait until sure they're OK)
 
 
 # BACEND PAIRS TRACK (TO DO)
 
+# Add /projects/compbiousr/booch/booch/scripts to your path
+
 # Update Makefile with new location of pairs/singles 
-# files, if necessary
+# files, if necessary (DONE)
         cd /projects/hg2/booch/psl/gs.16/build33/bacends
 
 # Make initial file of alignments
@@ -1342,8 +1348,8 @@ Locate motifs on all promoters with
 
 # Create bed file
         ssh hgwdev
-        make setBands.txt   # NOTE: may get errors if inserts file out-of-sync with pctSetBands file 
-        make cytobands.pct.ranges
+        # DONE - DON'T Do AGAIN! make setBands.txt   # NOTE: may get errors if inserts file out-of-sync with pctSetBands file 
+        #make cytobands.pct.ranges DONE - DON'T DO AGAIN!
         make predict
 
 # Create database table
