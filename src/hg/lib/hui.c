@@ -8,13 +8,17 @@
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
+#include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.22 2003/06/18 03:26:03 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.23 2003/06/23 00:13:55 markd Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
 {
-return "hguid";
+if (hIsMgcServer())
+    return "mgcuid";
+else    
+    return "hguid";
 }
 
 char *wrapWhiteFont(char *s)

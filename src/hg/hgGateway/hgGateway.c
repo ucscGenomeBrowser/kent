@@ -10,9 +10,10 @@
 #include "dbDb.h"
 #include "web.h"
 #include "hgFind.h"
+#include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.54 2003/06/22 03:07:20 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.55 2003/06/23 00:13:55 markd Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -201,6 +202,6 @@ int main(int argc, char *argv[])
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 
-cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

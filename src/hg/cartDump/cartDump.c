@@ -4,8 +4,9 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.5 2003/06/20 18:37:01 kent Exp $";
+static char const rcsid[] = "$Id: cartDump.c,v 1.6 2003/06/23 00:13:55 markd Exp $";
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
@@ -45,6 +46,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-cartHtmlShell("Cart Dump", doMiddle, "hguid", excludeVars, NULL);
+cartHtmlShell("Cart Dump", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

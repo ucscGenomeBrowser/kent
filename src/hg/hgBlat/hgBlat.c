@@ -19,7 +19,7 @@
 #include "web.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.63 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.64 2003/06/23 00:13:55 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -654,7 +654,7 @@ int main(int argc, char *argv[])
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
 

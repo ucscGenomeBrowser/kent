@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: secure.c,v 1.3 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: secure.c,v 1.4 2003/06/23 00:13:55 markd Exp $";
 
 
 /* GLOBAL DECLARATIONS */
@@ -119,6 +119,6 @@ int main(int argc, char *argv[])
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 
-cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
+cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
