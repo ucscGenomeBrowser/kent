@@ -11,8 +11,9 @@
 #include "axt.h"
 #include "axtInfo.h"
 #include "gff.h"
+#include "genbank.h"
 
-static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.7 2003/07/14 19:14:48 baertsch Exp $";
+static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.8 2003/08/12 20:38:04 weber Exp $";
 
 #define INTRON 10 
 #define CODINGA 11 
@@ -27,6 +28,8 @@ static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.7 2003/07/14 19:14:48 
 #define INTERGENIC 20
 #define REGULATORY 21
 #define LABEL 22
+
+#define INSERT_MERGE_SIZE 50
 
 
 char *db ; /* from database */
@@ -668,6 +671,27 @@ char *tFieldName = optionVal("tName", "name");
     return(NULL);
 }
 
+void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, unsigned *cdsEnd )
+{
+	char query[256];
+	struct sqlConnection *conn;
+	struct sqlResult *sr;
+	char **row;
+
+	/* Get cds start and stop, if available */
+	conn = hAllocConn();
+	sprintf(query, "select cds from mrna where acc = '%s'", acc);
+	sr = sqlGetResult(conn, query);
+	assert((row = sqlNextRow(sr)) != NULL);
+       	sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+    	sqlFreeResult(&sr);
+       	sr = sqlGetResult(conn, query);
+    	assert((row = sqlNextRow(sr)) != NULL);
+        genbankParseCds(row[0], cdsStart, cdsEnd);
+	sqlFreeResult(&sr);
+    hFreeConn(&conn);
+}
+
 void subsetChain(char *geneTable, char *netTable, char *chrom, struct hash *chainHash, struct axt *axtList)
 /* Return subset ofchain at syntenic location. */
 {
@@ -683,6 +707,7 @@ struct sqlConnection *conn2 = hAllocConn2();
 struct sqlResult *sr;
 char **row;
 int i = 0;
+int j = 0;
 char query[512];
 char prevName[255] = "x";
 char *ortholog = NULL;
@@ -694,7 +719,7 @@ filter = optionInt("filter",2000000);
 
                 verifyAlist(axtList);
 if (psl)
-    sprintf(query, "select g.qName, g.tName, g.strand, g.tStart, g.tEnd, g.qStart, g.qEnd, g.blockCount, g.tStarts, g.blockSizes, g.%s,n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s n where n.tName = '%s' and n.tStart <= g.tEnd and n.tEnd >=  g.tStart and g.tName = '%s' and type <> 'gap' order by g.%s, g.tStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
+    sprintf(query, "select g.qName, g.tName, g.strand, g.tStart, g.tEnd, g.qStart, g.qEnd, g.blockCount, g.tStarts, g.blockSizes, g.%s,n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd, g.qSize, g.qStarts, g.tSize from %s g, %s n where n.tName = '%s' and n.tStart <= g.tEnd and n.tEnd >=  g.tStart and g.tName = '%s' and type <> 'gap' order by g.%s, g.tStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
 else
     sprintf(query, "select g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds,  g.%s, n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s n where n.tName = '%s' and n.tStart <= g.txEnd and n.tEnd >=  g.txStart and chrom = '%s' and n.type <> 'gap' order by g.%s, g.txStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
 //fprintf(stderr,"query\n%s\n",query);
@@ -710,24 +735,60 @@ while ((row = sqlNextRow(sr)) != NULL)
     int level = sqlUnsigned(row[13]);
     int sizeOne;
     char chainIdStr[128];
+    unsigned int temp;
+    unsigned int cdsStart, cdsEnd;
 
+    struct psl *p = NULL;
 
     verifyAlist(axtList);
     safef(chainIdStr,sizeof(chainIdStr),"%d",chainId);
     /*gp = genePredLoad(row + hasBin);*/
     AllocVar(gp);
-    gp->exonCount = sqlUnsigned(row[7]);
-    gp->name = cloneString(row[0]);
-    gp->chrom = cloneString(row[1]);
-    strcpy(gp->strand, row[2]);
-    gp->txStart = sqlUnsigned(row[3]);
-    gp->txEnd = sqlUnsigned(row[4]);
-    gp->cdsStart = sqlUnsigned(row[5]);
-    gp->cdsEnd = sqlUnsigned(row[6]);
-    sqlUnsignedDynamicArray(row[8], &gp->exonStarts, &sizeOne);
-    assert(sizeOne == gp->exonCount);
-    sqlUnsignedDynamicArray(row[9], &gp->exonEnds, &sizeOne);
-    assert(sizeOne == gp->exonCount);
+    AllocVar(p);
+
+    if(psl)
+    {
+        p->qName = cloneString(row[0]);
+	    p->tName = cloneString(row[1]);
+	    strcpy(p->strand, cloneString(row[2]));
+	    p->tStart = sqlUnsigned(row[3]);
+	    p->tEnd = sqlUnsigned(row[4]);
+	    p->qStart = sqlUnsigned(row[5]);
+	    p->qEnd = sqlUnsigned(row[6]);
+    	p->blockCount = sqlUnsigned(row[7]);
+	    sqlUnsignedDynamicArray(row[8], &p->tStarts, &sizeOne );
+	    assert( sizeOne == p->blockCount );
+	    sqlUnsignedDynamicArray(row[9], &p->blockSizes, &sizeOne );
+	    assert( sizeOne == p->blockCount );
+	    sqlUnsignedDynamicArray(row[18], &p->qStarts, &sizeOne );
+	    assert( sizeOne == p->blockCount );
+        p->qSize = sqlUnsigned(row[17]);
+        p->tSize = sqlUnsigned(row[19]);
+
+	    //get mRNA start and stop positions and fail otherwise.
+	    fprintf(stderr,"\n### %s\t", p->qName);
+	    mustGetMrnaStartStop(p->qName, &cdsStart, &cdsEnd);
+	    fprintf(stderr, "%d\t%d ###\n", cdsStart, cdsEnd);
+
+	    //convert to genePred
+	    gp = genePredFromPsl( p, cdsStart, cdsEnd, INSERT_MERGE_SIZE );
+    }
+    else //input gene table is a gff not a psl
+    {
+    	gp->exonCount = sqlUnsigned(row[7]);
+    	gp->name = cloneString(row[0]);
+    	gp->chrom = cloneString(row[1]);
+    	strcpy(gp->strand, row[2]);
+    	gp->txStart = sqlUnsigned(row[3]);
+    	gp->txEnd = sqlUnsigned(row[4]);
+    	gp->cdsStart = sqlUnsigned(row[5]);
+    	gp->cdsEnd = sqlUnsigned(row[6]);
+    	sqlUnsignedDynamicArray(row[8], &gp->exonStarts, &sizeOne);
+    	assert(sizeOne == gp->exonCount);
+    	sqlUnsignedDynamicArray(row[9], &gp->exonEnds, &sizeOne);
+    	assert(sizeOne == gp->exonCount);
+    }
+
     verifyAlist(axtList);
 
     if ((atoi(row[11]) != 0) && strcmp(prevName,name))
