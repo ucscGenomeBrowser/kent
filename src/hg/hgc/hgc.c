@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.655 2004/06/02 22:05:29 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.656 2004/06/03 23:12:26 jill Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -417,14 +417,11 @@ void printPosOnChrom(char *chrom, int start, int end, char *strand,
 {
 char band[64];
 
-printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+printf("<B>Position:</B> <A HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
 	   hGetDb(), chrom, start+1, end);
 printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
-printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
 if (hChromBand(chrom, (start + end)/2, band))
     printf("<B>Band:</B> %s<BR>\n", band);
-printf("<B>Begin in Chromosome:</B> %d<BR>\n", start+1);
-printf("<B>End in Chromosome:</B> %d<BR>\n", end);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
 if (strand != NULL)
     printf("<B>Strand:</B> %s<BR>\n", strand);
