@@ -175,7 +175,7 @@ visibility pack
 type psl
 color 10,100,150
 exonArrows on
-pslSequenceBases all
+#pslSequenceBases all
 
 track mgcWUPcrFail
 shortLabel RT-PCR Fail
@@ -186,7 +186,7 @@ visibility pack
 type psl
 color 10,150,100
 exonArrows on
-pslSequenceBases all
+#pslSequenceBases all
 
 track mgcWUPcrInProgress
 shortLabel RT-PCR Pending
@@ -197,7 +197,7 @@ visibility pack
 type psl
 color 10,100,150
 exonArrows on
-pslSequenceBases all
+#pslSequenceBases all
 
 track refGene
 shortLabel RefSeq Genes
@@ -229,3 +229,21 @@ visibility hide
 spectrum on
 type psl est
 cdsDrawOptions enabled
+
+searchName mgcWUPcrHit
+searchTable mgcWUPcrHit
+searchMethod exact
+searchType psl
+searchPriority 10
+
+searchName mgcWUPcrInProgress
+searchTable mgcWUPcrInProgress
+searchMethod exact
+searchType psl
+searchPriority 10
+
+searchName mgcWUPcrFail
+searchTable mgcWUPcrFail
+searchMethod exact
+searchType psl
+searchPriority 10
