@@ -29,7 +29,7 @@ errAbort(
 }
 
 void dotOut()
-/* Put out a dot every now and then if user want's to. */
+/* Put out a dot every now and then if user wants to. */
 {
 static int mod = 1;
 if (dotEvery > 0)
@@ -67,6 +67,7 @@ struct blatStats
     struct stat middleCds;	/* Middle coding exons. */
     struct stat onlyCds;	/* Case where only one CDS exon. */
     struct stat middleIntron;	/* Middle introns. */
+    struct stat onlyIntron;	/* Case where only single intron. */
     struct stat endCds;		/* Coding part of last coding exon. */
     struct stat endIntron;	/* Last intron. */
     struct stat splice5;	/* First 10 bases of intron. */
@@ -86,32 +87,52 @@ return 100.0 * a / b;
 void reportStat(FILE *f, char *name, struct stat *stat)
 /* Print out one set of stats. */
 {
-fprintf(f, "%s\t%d/%d (%4.2f%%)\t%d/%d (%4.2f%%)\t%4.2f%%\n",
-	name,  stat->hits, stat->features, divAsPercent(stat->hits, stat->features),
-	stat->basesPainted, stat->basesTotal, 
+char buf[64];
+fprintf(f, "%-15s ", name);
+sprintf(buf, "%4.1f%% (%d/%d)", 
 	divAsPercent(stat->basesPainted, stat->basesTotal),
+	stat->basesPainted, stat->basesTotal);
+fprintf(f, "%-24s ", buf);
+sprintf(buf, "%4.1f%% (%d/%d)", 
+	divAsPercent(stat->hits, stat->features),
+	stat->hits, stat->features);
+fprintf(f, "%-20s ", buf);
+fprintf(f, "%4.1f%%\n", divAsPercent(stat->cumIdRatio, stat->basesPainted));
+#ifdef OLD
+fprintf(f, "%s\t%4.2f%% (%d/%d)\t%4.2f%% (%d/%d)\t%4.2f%%\n",
+	name,  
+	divAsPercent(stat->basesPainted, stat->basesTotal),
+	stat->basesPainted, stat->basesTotal, 
+	divAsPercent(stat->hits, stat->features),
+	stat->hits, stat->features, 
 	divAsPercent(stat->cumIdRatio, stat->basesPainted));
+#endif /* OLD */
 }
 
-void reportStats(FILE *f, struct blatStats *stats)
+void reportStats(FILE *f, struct blatStats *stats, char *name)
 /* Print out stats. */
 {
-reportStat(f, "upstream100", &stats->upstream100);
-reportStat(f, "upstream200", &stats->upstream200);
-reportStat(f, "upstream400", &stats->upstream400);
-reportStat(f, "upstream800", &stats->upstream800);
-reportStat(f, "utr5", &stats->utr5);
-reportStat(f, "firstCds", &stats->firstCds);
-reportStat(f, "firstIntron", &stats->firstIntron);
-reportStat(f, "middleCds", &stats->middleCds);
-reportStat(f, "onlyCds", &stats->onlyCds);
-reportStat(f, "middleIntron", &stats->middleIntron);
-reportStat(f, "endCds", &stats->endCds);
-reportStat(f, "endIntron", &stats->endIntron);
-reportStat(f, "splice5", &stats->splice5);
-reportStat(f, "splice3", &stats->splice3);
-reportStat(f, "utr3", &stats->utr3);
-reportStat(f, "downstream200", &stats->downstream200);
+fprintf(f, "%s stats:\n", name);
+fprintf(f, "region         bases hit            features hit   percent identity\n");
+fprintf(f, "-------------------------------------------------------------------\n");
+reportStat(f, "upstream 100", &stats->upstream100);
+reportStat(f, "upstream 200", &stats->upstream200);
+reportStat(f, "upstream 400", &stats->upstream400);
+reportStat(f, "upstream 800", &stats->upstream800);
+reportStat(f, "downstream 200", &stats->downstream200);
+reportStat(f, "5' UTR", &stats->utr5);
+reportStat(f, "3' UTR", &stats->utr3);
+reportStat(f, "first CDS", &stats->firstCds);
+reportStat(f, "middle CDS", &stats->middleCds);
+reportStat(f, "end CDS", &stats->endCds);
+reportStat(f, "only CDS", &stats->onlyCds);
+reportStat(f, "5' splice", &stats->splice5);
+reportStat(f, "3' splice", &stats->splice3);
+reportStat(f, "first intron", &stats->firstIntron);
+reportStat(f, "middle intron", &stats->middleIntron);
+reportStat(f, "end intron", &stats->endIntron);
+reportStat(f, "only intron", &stats->onlyIntron);
+fprintf(f, "\n");
 }
 
 void addStat(struct stat *a, struct stat *acc)
@@ -137,6 +158,7 @@ addStat(&a->firstIntron, &acc->firstIntron);
 addStat(&a->middleCds, &acc->middleCds);
 addStat(&a->onlyCds, &acc->onlyCds);
 addStat(&a->middleIntron, &acc->middleIntron);
+addStat(&a->onlyIntron, &acc->onlyIntron);
 addStat(&a->endCds, &acc->endCds);
 addStat(&a->endIntron, &acc->endIntron);
 addStat(&a->utr3, &acc->utr3);
@@ -169,16 +191,18 @@ int tOffset;
 int regionSize = geno->size;
 boolean tIsRc = (psl->strand[1] == '-');
 
+/* Reverse complement coordinates and sequence if necessary. */
 if (tIsRc)
     {
     int gs = genoStart, ge = genoEnd, sz = psl->tSize;
-    return;	/* uglyf */
-    genoStart = sz-genoEnd;
-    genoEnd = sz-genoStart;
+    genoStart = sz-ge;
+    genoEnd = sz-gs;
     reverseComplement(geno->dna, regionSize);
     }
 if (psl->strand[0] == '-')
     reverseComplement(query->dna, query->size);
+
+/* Loop through each block.... */
 for (i=0; i<blockCount; ++i)
     {
     /* Get coordinates of block. */
@@ -196,13 +220,18 @@ for (i=0; i<blockCount; ++i)
 	}
     clipOut = (tStart + blockSize) - genoEnd;
     if (clipOut > 0)
+	{
 	blockSize -= clipOut;
+	}
 
-    /* If any unclipped calc identity in parts per thousand and
+    /* Calc identity in parts per thousand and
      * update milliMatches. */
     if (blockSize > 0)
 	{
 	tOffset = tStart - genoStart;
+	assert(qStart >= 0 && tOffset >= 0);
+	assert(qStart + blockSize <= query->size);
+	assert(tOffset + blockSize <= geno->size);
 	q = query->dna + qStart;
 	t = geno->dna + tOffset;
 	same = 0;
@@ -216,6 +245,8 @@ for (i=0; i<blockCount; ++i)
 	    milliPt = milliMatches + regionSize - tOffset - blockSize;
 	else
 	    milliPt = milliMatches + tOffset;
+	assert(milliPt >= milliMatches);
+	assert(milliPt + blockSize <= milliMatches + geno->size);
 	for (j=0; j<blockSize; ++j)
 	    if (milli > milliPt[j]) milliPt[j] = milli;
 	}
@@ -266,7 +297,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char query[256], **row;
 char *traceName;
-int uglyLook = 0, uglyUse = 0, uglyTrace = 0;
 int *milliMatches;
 int exonCount = gp->exonCount, exonIx, exonStart, exonEnd;
 
@@ -276,14 +306,11 @@ AllocArray(milliMatches, geno->size);
 /* Load traces for all blat psls that intersect window. */
 for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
     {
-    ++uglyLook;
     if (psl->tStart < genoEnd && psl->tEnd > genoStart)
 	{
-	++uglyUse;
 	traceName = psl->qName;
 	if ((trace = hashFindVal(traceHash, traceName)) == NULL)
 	    {
-	    ++uglyTrace;
 	    trace = hExtSeq(traceName);
 	    slAddHead(&traceList, trace);
 	    hashAdd(traceHash, traceName, trace);
@@ -291,34 +318,45 @@ for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
 	addBestMilli(psl, milliMatches, geno, genoStart, genoEnd, trace);
 	}
     }
-uglyf("%d of %d psl's used.  %d traces loaded\n", uglyUse, uglyLook, uglyTrace);
 
 /* Gather stats on various regions. */
 if (gp->strand[0] == '+')
     {
-    addToStats(&stats->upstream100, gp->txStart - 100, gp->txStart, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->upstream200, gp->txStart - 200, gp->txStart, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->upstream400, gp->txStart - 400, gp->txStart, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->upstream800, gp->txStart - 800, gp->txStart, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->downstream200, gp->txEnd, gp->txEnd + 200,
-    	genoStart, genoEnd, milliMatches);
+    if (gp->txStart != gp->cdsStart)
+	{
+	addToStats(&stats->upstream100, gp->txStart - 100, gp->txStart, 
+	    genoStart, genoEnd, milliMatches);
+	addToStats(&stats->upstream200, gp->txStart - 200, gp->txStart, 
+	    genoStart, genoEnd, milliMatches);
+	addToStats(&stats->upstream400, gp->txStart - 400, gp->txStart, 
+	    genoStart, genoEnd, milliMatches);
+	addToStats(&stats->upstream800, gp->txStart - 800, gp->txStart, 
+	    genoStart, genoEnd, milliMatches);
+	}
+    if (gp->txEnd != gp->cdsEnd)
+	{
+	addToStats(&stats->downstream200, gp->txEnd, gp->txEnd + 200,
+	    genoStart, genoEnd, milliMatches);
+	}
     }
 else
     {
-    addToStats(&stats->upstream100, gp->txEnd, gp->txEnd + 100, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->upstream200, gp->txEnd, gp->txEnd + 200, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->upstream400, gp->txEnd, gp->txEnd + 400, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->upstream800, gp->txEnd, gp->txEnd + 800, 
-    	genoStart, genoEnd, milliMatches);
-    addToStats(&stats->downstream200, gp->txStart-200, gp->txStart,
-    	genoStart, genoEnd, milliMatches);
+    if (gp->txEnd != gp->cdsEnd)
+	{
+	addToStats(&stats->upstream100, gp->txEnd, gp->txEnd + 100, 
+	    genoStart, genoEnd, milliMatches);
+	addToStats(&stats->upstream200, gp->txEnd, gp->txEnd + 200, 
+	    genoStart, genoEnd, milliMatches);
+	addToStats(&stats->upstream400, gp->txEnd, gp->txEnd + 400, 
+	    genoStart, genoEnd, milliMatches);
+	addToStats(&stats->upstream800, gp->txEnd, gp->txEnd + 800, 
+	    genoStart, genoEnd, milliMatches);
+	}
+    if (gp->txStart != gp->cdsStart)
+	{
+	addToStats(&stats->downstream200, gp->txStart-200, gp->txStart,
+	    genoStart, genoEnd, milliMatches);
+	}
     }
 
 for (exonIx = 0; exonIx < exonCount; ++exonIx)
@@ -357,16 +395,40 @@ for (exonIx = 0; exonIx < exonCount; ++exonIx)
 	addToStats(&stats->middleCds, exonStart, exonEnd, genoStart, genoEnd, milliMatches);
 	}
     }
-#ifdef SOON
-#endif /* SOON */
-
-#ifdef SOON
-    struct stat firstIntron;	/* First intron. */
-    struct stat middleIntron;	/* Middle introns. */
-    struct stat endIntron;	/* Last intron. */
-    struct stat splice5;	/* First 10 bases of intron. */
-    struct stat splice3;	/* Last 10 bases of intron. */
-#endif /* SOON */
+for (exonIx = 1; exonIx < exonCount; ++exonIx)
+    {
+    int intronStart = gp->exonEnds[exonIx-1];
+    int intronEnd = gp->exonStarts[exonIx];
+    int spliceSize = 10;
+    struct stat *stat;
+    if (intronEnd - intronStart > 2*spliceSize)
+        {
+	if (gp->strand[0] == '+')
+	    {
+	    addToStats(&stats->splice5, intronStart, intronStart+spliceSize, 
+	    	genoStart, genoEnd, milliMatches);
+	    addToStats(&stats->splice3, intronEnd-spliceSize, intronEnd, 
+	    	genoStart, genoEnd, milliMatches);
+	    }
+	else
+	    {
+	    addToStats(&stats->splice3, intronStart, intronStart+spliceSize, 
+	    	genoStart, genoEnd, milliMatches);
+	    addToStats(&stats->splice5, intronEnd-spliceSize, intronEnd, 
+	    	genoStart, genoEnd, milliMatches);
+	    }
+	if (exonCount == 2)
+	    stat = &stats->onlyIntron;
+	else if (exonIx == 1)
+	    stat = (gp->strand[0] == '+' ? &stats->firstIntron : &stats->endIntron);
+	else if (exonIx == exonCount-1)
+	    stat = (gp->strand[0] == '-' ? &stats->firstIntron : &stats->endIntron);
+	else
+	    stat = &stats->middleIntron;
+	addToStats(stat, intronStart+spliceSize, intronEnd-spliceSize, 
+	    genoStart, genoEnd, milliMatches);
+	}
+    }
 
 
 hFreeConn(&conn);
@@ -457,8 +519,7 @@ hFreeConn(&conn);
 	    maxIsoGene = gi->name;
 	    }
 	}
-    uglyf("Maximum isoforms on %s is %d on %s (of %d genes)\n", chrom, maxIsoforms, maxIsoGene,
-    	slCount(giList));
+    printf("%d known genes on %s\n", slCount(giList), chrom);
     }
 slReverse(&giList);
 return giList;
@@ -522,7 +583,6 @@ int extraBefore = 800;
 int extraAfter = 200;
 int startRegion, endRegion;
 int sizeRegion;
-int uglySkipCount;
 
 hNibForChrom(chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);
@@ -548,11 +608,6 @@ for (gi = giList; gi != NULL; gi = gi->next)
     if (endRegion > chromSize)
 	endRegion = chromSize;
     sizeRegion = endRegion - startRegion;
-
-    uglySkipCount = 0;
-    for ( ;psl != NULL && psl->tEnd < startRegion; psl = psl->next)
-	++uglySkipCount;
-    uglyf("Skipping %d for %s\n", uglySkipCount, gi->name);
 
     geno = nibLdPart(nibName, nibFile, chromSize, startRegion, sizeRegion);
     gStats = geneStats(chrom, geno, startRegion, endRegion, psl, gp);
@@ -588,12 +643,13 @@ hFreeConn(&conn);
 return hash;
 }
 
-void knownVsBlat(char *database)
+void knownVsBlat(char *database, char *output)
 /* knownVsBlat - Categorize BLAT mouse hits to known genes. */
 {
 struct slName *allChroms, *chrom;
 struct blatStats *statsList = NULL, *stats, *sumStats;
 struct hash *nmToGeneHash;
+FILE *f = mustOpen(output, "w");
 
 hSetDb(database);
 nmToGeneHash = makeNmToGeneHash();
@@ -604,14 +660,18 @@ else
 for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
     {
     stats = chromStats(chrom->name, nmToGeneHash);
+    reportStats(f, stats, chrom->name);
+    fprintf(f, "\n");
     slAddHead(&statsList, stats);
     }
 slReverse(statsList);
 sumStats = sumStatsList(statsList);
-reportStats(stdout, sumStats);
-#ifdef SOON
-#endif /* SOON */
+if (sameWord(clChrom, "all"))
+    {
+    reportStats(f, sumStats, "total");
+    }
 freeHashAndVals(&nmToGeneHash);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
@@ -621,8 +681,8 @@ pushCarefulMemHandler(20000000);
 cgiSpoof(&argc, argv);
 dotEvery = cgiUsualInt("dots", dotEvery);
 clChrom = cgiUsualString("chrom", clChrom);
-if (argc != 2)
+if (argc != 3)
     usage();
-knownVsBlat(argv[1]);
+knownVsBlat(argv[1], argv[2]);
 return 0;
 }
