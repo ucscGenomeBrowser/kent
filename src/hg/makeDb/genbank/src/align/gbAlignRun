@@ -6,13 +6,12 @@
 #
 # Options:
 #   -workdir=work/align - Must be the same as specified for gbAlignSetup.
-#   -parahost=kk - Run parasol on this host. Must be able to rsh
-#    to the host with .rhost auth.  If localhost is specified, the rsh will
-#    not be used.
+#   -parahost=kk - Run parasol on this host. Must be able to ssh
+#    to the host without a key prompt.
 #  -verbose=n - print details.
 #
-# FIXME: rsh does not return the exit code of the remove process, it would
-# be nice to use ssh, but that means enabling .rhosts auth
+# Note: rsh does not return the exit code of the remove process, thus
+# ssh is used.
 #
 use strict;
 use warnings;
@@ -25,6 +24,8 @@ use gbCommon;
 # amount.  This will cause para shove to exit sooner if the jobs are
 # failing.
 my $PARA_MAX_PUSH = 20000;
+
+set $RSH = "ssh";
 
 # Entry
 setTaskName("gbAlignRun");
@@ -73,7 +74,7 @@ if ($main::workDir =~ /^\//) {
 }
 my $rshCmd = "";
 if ($main::paraHost ne "localhost") {
-    $rshCmd = "rsh $main::paraHost cd $absWorkDir\\;";
+    $rshCmd = "$RSH $main::paraHost cd $absWorkDir\\;";
 }
 
 # cd to work dir, need for local runs, but alway done to simplify

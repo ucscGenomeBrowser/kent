@@ -9,7 +9,7 @@
 # has not changed.
 #
 # Options:
-#   -rsyncPort=port - rsync port to use, or `rsh' to use rsh protocol.
+#   -rsyncPort=port - rsync port to use, or `rsh' or `ssh'.
 #   -gbdb=dir - Use this directory for /gbdb (useful in debugging).
 #   -verbose
 # Arguments:`

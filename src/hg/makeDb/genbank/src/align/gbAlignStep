@@ -35,6 +35,7 @@
 #    of this script.   Values for subtask are:
 #        - copy - continue with coping to the iserver, this skips
 #          extracting the sequences to align.
+#        - run - continue with parasol blat run.
 #        - finish - finish processing the alignments.
 #    Continue the blat portion by using parasol directly.
 #    

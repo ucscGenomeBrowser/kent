@@ -6,6 +6,8 @@
 # hostname to each line, so it's obvious which host a message came
 # from if multiple are being run at the same time.  This will result
 # in a directory with basename workdir in iserverdir.
+#
+# requires ssh being configured to use authorization without a password
 # 
 set -e
 
@@ -31,9 +33,11 @@ destdir="$iserverdir/$work2"
 # prevent rsh problems with reading stdin
 exec </dev/null
 
+RSH=ssh
+
 (
-  rsh $iserver mkdir -p $destdir 2>&1 &&\
-  rsync --rsh=rsh --delete --recursive --checksum \
+  $RSH $iserver mkdir -p $destdir 2>&1 &&\
+  rsync --rsh=$RSH --delete --recursive --checksum \
       --exclude=align.jobs --exclude=align.expected \
       $workdir ${iserver}:$destdir  2>&1
 ) | awk -v host=$iserver '{print host ": " $0}'

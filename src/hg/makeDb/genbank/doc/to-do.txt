@@ -208,13 +208,6 @@
 - PENDING TASKS
    - deployment doc
 
-- deployment:
-  - download / process / alignSetup on th file servr
-  - rsh to kkr1u00 to align
-  - align finsih
-
-- mytop reports: Query LOAD data local infile 'load/genbank.132.0/hg13/est/estOrien
-
 - should refseq pep sequences be in gbStatus?
 
 - double .tmp: ls processed/genbank.132.0/full/
@@ -458,4 +451,4 @@
 - add mgc gene name to mgcStatus.
    - need to handle MGC being select multiple times
 
-- cpio directory permissions
+- change nib glob to nib directory.
