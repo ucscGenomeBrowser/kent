@@ -5,8 +5,9 @@
 #include "options.h"
 #include "localmem.h"
 #include "dystring.h"
+#include "hgRelate.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.1 2003/09/29 09:04:34 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.2 2003/09/29 13:30:06 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +49,21 @@ while (lineFileNext(lf, &line, NULL))
     }
 }
 
+void stripLastPeriod(char *s)
+/* Remove last period if any. */
+{
+int end = strlen(s)-1;
+if (s[end] == '.')
+    s[end] = 0;
+}
+
+void stripLastChar(char *s)
+/* Remove last character from string */
+{
+int end = strlen(s)-1;
+s[end] = 0;
+}
+
 struct spRecord
 /* A swissProt record. */
     {
@@ -61,7 +77,7 @@ struct spRecord
     char *description;  /* Description - may be a couple of lines. */
     char *genes;	/* Associated genes (not yet parsed) */
     char *orgSciName;	/* Organism scientific name. */
-    char *orgCommonName;/* Organism common name. */
+    struct slName *commonNames;	/* Common name(s). */
     char *taxonToGenus;	/* Taxonomy up to genus. */
     struct spTaxon *taxonList;	/* NCBI Taxonomy ID. */
     char *organelle;	/* Organelle. */
@@ -125,7 +141,7 @@ static void spParseComment(struct lineFile *lf, char *line,
 /* Parse comment into records and hang them on spr. */
 {
 struct spComment *com = NULL;
-char *word;
+char *type, word;
 for (;;)
     {
     /* Process current line. */
@@ -137,18 +153,17 @@ for (;;)
 	    com->text = lmCloneString(lm, dy->string);
 	    com = NULL;
 	    }
-	word = nextWord(&line);	/* Skip -!- */
-	word = nextWord(&line);
-	if (word != NULL)
-	    {
-	    int len = strlen(word);
-	    word[len-1] = 0;	/* Strip ':' */
-	    lmAllocVar(lm, com);
-	    com->type = lmCloneString(lm, word);
-	    slAddHead(&spr->commentList, com);
-	    dyStringClear(dy);
-	    dyStringAppend(dy, skipLeadingSpaces(line));
-	    }
+	line += 4;	/* Skip '-!- '*/
+	type = line;
+	line = strchr(line, ':');
+	if (line == NULL)
+	    errAbort("expecting ':' line %d of %s", lf->lineIx, lf->fileName);
+	*line++ = 0;
+	lmAllocVar(lm, com);
+	com->type = lmCloneString(lm, type);
+	slAddHead(&spr->commentList, com);
+	dyStringClear(dy);
+	dyStringAppend(dy, skipLeadingSpaces(line));
 	}
     else if (startsWith("---", line))
         {
@@ -166,7 +181,7 @@ for (;;)
 	if (com != NULL)
 	    {
 	    dyStringAppendC(dy, ' ');
-	    dyStringAppend(dy, line);
+	    dyStringAppend(dy, line+4);
 	    }
 	}
 
@@ -329,11 +344,7 @@ if (type != NULL)
 	line = skipLeadingSpaces(line+strlen(sig));
 	dyStringAppend(dy, line);
 	}
-    if (dy->string[dy->stringSize-1] == '.')
-        {
-	dy->string[dy->stringSize-1] = 0;
-	dy->stringSize -= 1;
-	}
+    stripLastPeriod(dy->string);
     feat->type = lmCloneString(lm, dy->string);
     }
 slAddHead(&spr->featureList, feat);
@@ -380,14 +391,20 @@ for (;;)
 	word = nextWord(&line);
 	if (word == NULL)
 	    errAbort("Short DR line %d of %s", lf->lineIx, lf->fileName);
+	stripLastChar(word);
 	lmAllocVar(lm, dr);
 	dr->db = lmCloneString(lm, word);
 	while ((word = nextWord(&line)) != NULL)
 	    {
-	    int len = strlen(word);
-	    word[len-1] = 0;	/* Strip off ; or . */
-	    n = lmSlName(lm, word);
-	    slAddHead(&dr->idList, n);
+	    stripLastChar(word);
+	    if (!sameString(word, "-"))
+		{
+		if (dr->idList == NULL || !sameString(dr->idList->name, word))
+		    {
+		    n = lmSlName(lm, word);
+		    slAddHead(&dr->idList, n);
+		    }
+		}
 	    }
 	slReverse(&dr->idList);
 	slAddHead(&spr->dbRefList, dr);
@@ -403,7 +420,7 @@ for (;;)
 	else if (endsWith(line, "Last sequence update)"))
 	    spr->seqDate = lmCloneString(lm, date);
 	else if (endsWith(line, "Last annotation update)"))
-	    spr->seqDate = lmCloneString(lm, date);
+	    spr->annDate = lmCloneString(lm, date);
 	else
 	    {
 	    errAbort("Unrecognized date type '%s' line %d of %s", 
@@ -416,9 +433,7 @@ for (;;)
         {
 	while ((word = nextWord(&line)) != NULL)
 	    {
-	    int len = strlen(word);
-	    /* Cut off '.' or ';' */
-	    word[len-1] = 0;
+	    stripLastChar(word);	/* Cut of '.' or ';' */
 	    n = lmSlName(lm, word);
 	    slAddHead(&spr->accList, n);
 	    }
@@ -430,26 +445,26 @@ for (;;)
 	}
     else if (startsWith("OS", type))
         {
-	char *common;
+	char *common, *end, *s;
 	char *latin;
-	char *end;
 	groupLine(lf, type, line, dy);
 	latin = dy->string;
-	common = strchr(latin, '(');
-	if (common == NULL)
+	stripLastPeriod(latin);
+	s = latin;
+	while ((common = strchr(s, '(')) != NULL)
 	    {
-	    common = latin;
-	    end = strchr(latin, '.');
-	    }
-	else
-	    {
+	    char *end = strchr(common, ')');
 	    *common++ = 0;
-	    end = strchr(common, ')');
+	    if (end != NULL)
+	        *end++ = 0;
+	    else
+	        break;
+	    n = lmSlName(lm, common);
+	    slAddHead(&spr->commonNames, n);
+	    s = end;
 	    }
-	if (end != NULL)
-	    *end = 0;
+	eraseTrailingSpaces(latin);
 	spr->orgSciName = lmCloneString(lm, latin);
-	spr->orgCommonName = lmCloneString(lm, common);
 	}
     else if (startsWith("OC", type))
         {
@@ -490,12 +505,17 @@ for (;;)
 	}
     else if (startsWith("KW", type))
         {
-	while ((word = nextWord(&line)) != NULL)
+	char *end;
+	stripLastPeriod(line);
+	while (line != NULL)
 	    {
-	    int len = strlen(word);
-	    word[len-1] = 0;	/* Get rid of ';' or '.' */
-	    n = lmSlName(lm, word);
+	    end = strchr(line, ';');
+	    if (end != NULL)
+	       *end++ = 0;
+	    line = trimSpaces(line);
+	    n = lmSlName(lm, line);
 	    slAddHead(&spr->keyWordList, n);
+	    line = end;
 	    }
 	}
     else if (startsWith("SQ", type))
@@ -524,6 +544,7 @@ for (;;)
     }
 slReverse(&spr->accList);
 slReverse(&spr->taxonList);
+slReverse(&spr->commonNames);
 slReverse(&spr->literatureList);
 slReverse(&spr->commentList);
 slReverse(&spr->dbRefList);
@@ -532,25 +553,269 @@ slReverse(&spr->featureList);
 return spr;
 }
 
+/* ------------- Start main program ------------------  */
+
+struct uniquer
+/* Help manage a table that is simply unique. */
+    {
+    struct uniquer *next;
+    struct hash *hash;
+    int curId;
+    FILE *f;
+    };
+
+struct uniquer *uniquerNew(FILE *f, int hashSize)
+/* Make new uniquer structure. */
+{
+struct uniquer *uni;
+AllocVar(uni);
+uni->f = f;
+uni->hash = newHash(hashSize);
+return uni;
+}
+   
+static char *nullPt = NULL;
+
+int uniqueStore(struct uniquer *uni, char *name)
+/* Store name in unique table.  Return id associated with name. */
+{
+if (name == NULL)
+    return 0;
+else
+    {
+    struct hash *hash = uni->hash;
+    struct hashEl *hel = hashLookup(hash, name);
+
+    if (hel != NULL)
+	{
+	return (char *)(hel->val) - nullPt;
+	}
+    else
+	{
+	uni->curId += 1;
+	hashAdd(hash, name, nullPt + uni->curId);
+	fprintf(uni->f, "%u\t%s\n", uni->curId, name);
+	return uni->curId;
+	}
+    }
+}
+
+void toSqlDate(FILE *f, char *spDate)
+/* Write out SwissProt data in MySQL format. 
+ * SwissProt:  01-NOV-1990
+ * MySQL:      1990-11-01 */
+{
+static char *months[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                          "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+char dup[13];
+int monthIx;
+char *day, *month, *year;
+if (spDate == NULL)
+    return;
+strncpy(dup, spDate, sizeof(dup));
+day = dup;
+month = dup+3;
+year = dup+7;
+dup[2] = dup[6] = 0;
+monthIx = stringIx(month, months);
+if (monthIx < 0)
+   errAbort("Strange month %s", month);
+fprintf(f, "%s-%02d-%s", year, monthIx+1, day);
+}
+
 void spToDb(char *database, char *datFile)
 /* spToDb - Create a relational database out of SwissProt/trEMBL flat files. */
 {
 struct lineFile *lf = lineFileOpen(datFile, TRUE);
-struct hash *wordHash = newHash(16);	/* Small words. */
 struct spRecord *spr;
 struct dyString *dy = newDyString(4096);
 
+/* We have 25 tables to make this fully relational and not
+ * lose any info. Better start opening files. */
+FILE *displayId = hgCreateTabFile(".", "displayId");
+FILE *otherAcc = hgCreateTabFile(".", "otherAcc");
+FILE *organelle = hgCreateTabFile(".", "organelle");
+FILE *singles = hgCreateTabFile(".", "singles");
+FILE *description = hgCreateTabFile(".", "description");
+FILE *geneLogic = hgCreateTabFile(".", "geneLogic");
+FILE *gene = hgCreateTabFile(".", "gene");
+FILE *taxon = hgCreateTabFile(".", "taxon");
+FILE *accToTaxon = hgCreateTabFile(".", "accToTaxon");
+FILE *commonName = hgCreateTabFile(".", "commonName");
+FILE *keyword = hgCreateTabFile(".", "keyword");
+FILE *accToKeyword = hgCreateTabFile(".", "accToKeyword");
+FILE *commentType = hgCreateTabFile(".", "commentType");
+FILE *commentVal = hgCreateTabFile(".", "commentVal");
+FILE *comment = hgCreateTabFile(".", "comment");
+FILE *protein = hgCreateTabFile(".", "protein");
+FILE *extDb = hgCreateTabFile(".", "extDb");
+FILE *extDbRef = hgCreateTabFile(".", "extDbRef");
+FILE *featureClass = hgCreateTabFile(".", "featureClass");
+FILE *featureType = hgCreateTabFile(".", "featureType");
+FILE *feature = hgCreateTabFile(".", "feature");
+FILE *author = hgCreateTabFile(".", "author");
+FILE *reference = hgCreateTabFile(".", "reference");
+FILE *referenceAuthors = hgCreateTabFile(".", "referenceAuthors");
+FILE *citation = hgCreateTabFile(".", "citation");
+FILE *rcType = hgCreateTabFile(".", "rcType");
+FILE *rcVal = hgCreateTabFile(".", "rcVal");
+FILE *citationRc = hgCreateTabFile(".", "citationRc");
+
+/* Some of the tables require unique IDs */
+struct uniquer *organelleUni = uniquerNew(organelle, 14);
+struct uniquer *keywordUni = uniquerNew(keyword, 14);
+struct uniquer *commentTypeUni = uniquerNew(commentType, 10);
+struct uniquer *commentValUni = uniquerNew(commentVal, 18);
+struct uniquer *extDbUni = uniquerNew(extDb, 8);
+struct uniquer *featureClassUni = uniquerNew(featureClass, 10);
+struct uniquer *featureTypeUni = uniquerNew(featureType, 14);
+struct uniquer *authorUni = uniquerNew(author, 18);
+struct uniquer *referenceUni = uniquerNew(reference, 18);
+struct uniquer *citationUni = uniquerNew(citation, 19);
+struct uniquer *rcTypeUni = uniquerNew(rcType, 14);
+struct uniquer *rcValUni = uniquerNew(rcVal, 18);
+
+/* Other unique helpers. */
+struct hash *taxonHash = newHash(18);
+
 for (;;)
     {
-    struct lm *lm = lmInit(4096);
+    struct lm *lm = lmInit(8*1024);
+    char *acc;
+    struct slName *n;
+    int organelleId;
+
     spr = spRecordNext(lf, lm, dy);
     if (spr == NULL)
         break;
-    uglyf("%s %d %s %s %s\n", spr->id, spr->isCurated, spr->accList->name,
-       spr->orgSciName, spr->orgCommonName);
+    acc = spr->accList->name;
+
+    /* displayId */
+    fprintf(displayId, "%s\t%s\n", acc, spr->id);
+
+    /* otherAcc */
+    for (n = spr->accList->next; n != NULL; n = n->next)
+        fprintf(otherAcc, "%s\t%s\n", acc, n->name);
+
+    /* organelle */
+    organelleId = uniqueStore(organelleUni, spr->organelle);
+
+    /* singles */
+    fprintf(singles, "%s\t%d\t%d\t%d\t", 
+    	acc, spr->isCurated, spr->aaSize, spr->molWeight);
+    toSqlDate(singles, spr->createDate);
+    fputc('\t', singles);
+    toSqlDate(singles, spr->seqDate);
+    fputc('\t', singles);
+    toSqlDate(singles, spr->annDate);
+    fputc('\t', singles);
+    fprintf(singles, "%d\n", organelleId);
+
+    /* description */
+    if (spr->description != NULL)
+	{
+	subChar(spr->description, '\t', ' ');
+	fprintf(description, "%s\t%s\n", acc, spr->description);
+	}
+
+    /* gene logic  and gene */
+    if (spr->genes != NULL)
+        {
+	char *s = spr->genes, *word;
+	stripLastPeriod(s);
+	fprintf(geneLogic, "%s\t%s\n", acc, s);
+	stripChar(s, '(');
+	stripChar(s, ')');
+	word = nextWord(&s);
+	fprintf(gene, "%s\t%s\n", acc, word);
+	for (;;)
+	    {
+	    word = nextWord(&s);
+	    if (word == NULL)
+	         break;
+	    if (!sameString(word, "OR") && !sameString(word, "AND"))
+		errAbort("Expecting AND/OR in between genes in %s", acc);
+	    word = nextWord(&s);
+	    if (word == NULL)
+	        errAbort("Expecting gene after AND/OR in %s", acc);
+	    fprintf(gene, "%s\t%s\n", acc, word);
+	    }
+	}
+
+    /* taxon, commonName, accToTaxon */
+    if (spr->taxonList != NULL)
+        {
+	struct spTaxon *tax;
+	if (slCount(spr->taxonList) == 1)
+	    {
+	    /* Swiss prot only has full info on the first taxa when it
+	     * contains multiple taxons, so we have to rely on NCBI here... */
+	    int ncbiId = spr->taxonList->id;
+	    if (!hashLookup(taxonHash, spr->orgSciName))
+	        {
+		hashAdd(taxonHash, spr->orgSciName, NULL);
+		fprintf(taxon, "%d\t%s\t%s\n",
+			ncbiId, spr->orgSciName, spr->taxonToGenus);
+		for (n = spr->commonNames; n != NULL; n = n->next)
+		    fprintf(commonName, "%d\t%s\n", ncbiId, n->name);
+		}
+	    }
+	for (tax = spr->taxonList; tax != NULL; tax = tax->next)
+	    fprintf(accToTaxon, "%s\t%d\n", acc, tax->id);
+	}
+
+    /* keyword and accToKeyword */
+    for (n = spr->keyWordList; n != NULL; n = n->next)
+        {
+	int id = uniqueStore(keywordUni, n->name);
+	fprintf(accToKeyword, "%s\t%d\n", acc, id);
+	}
+    
+    /* commentType, commenVal, and comment. */
+        {
+	struct spComment *spCom;
+	for (spCom = spr->commentList; spCom != NULL; spCom = spCom->next)
+	    {
+	    int commentType = uniqueStore(commentTypeUni, spCom->type);
+	    int commentVal = uniqueStore(commentValUni, spCom->text);
+	    fprintf(comment, "%s\t%d\t%d\n", acc, commentType, commentVal);
+	    }
+	}
+
+    /* protein */
+    fprintf(protein, "%s\t%s\n", acc, spr->seq);
+
+    /* extDb and extDbRef */
+        {
+	struct spDbRef *ref;
+	for (ref = spr->dbRefList; ref != NULL; ref = ref->next)
+	    {
+	    int extDb = uniqueStore(extDbUni, ref->db);
+	    int rank = 0;
+	    for (n = ref->idList; n != NULL; n = n->next)
+	        {
+		fprintf(extDbRef, "%s\t%d\t%s\t%d\n", acc, extDb, n->name, ++rank);
+		}
+	    }
+	}
+
+    /* featureClass, featureType, and feature */
+        {
+	struct spFeature *feat;
+	for (feat = spr->featureList; feat != NULL; feat = feat->next)
+	    {
+	    int class = uniqueStore(featureClassUni, feat->class);
+	    int type = uniqueStore(featureTypeUni, feat->type);
+	    fprintf(feature, "%s\t%d\t%d\t%d\t%d\n",
+	    	acc, feat->start, feat->end, class, type);
+	    }
+	}
+
     lmCleanup(&lm);
     }
 dyStringFree(&dy);
+
+
 }
 
 int main(int argc, char *argv[])
