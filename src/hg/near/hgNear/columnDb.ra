@@ -89,3 +89,11 @@ visibility on
 type lookup kgXref kgID description
 search fuzzy
 searchLabel Known Gene Descriptions
+
+name domains
+shortLabel PFAM Domains
+longLabel PFAM Domains 
+priority 9
+visibility on
+type lookup kgDomain kgID domains
+search fuzzy
