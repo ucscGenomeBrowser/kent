@@ -20,7 +20,7 @@
 #    refseq data, not just what is being loaded.
 #  -gbdbGenBank=dir - Use dir instead of /gbdb/genbank, for testing.
 #
-# $Id: gbDbLoadStep,v 1.13 2003/07/29 04:44:32 markd Exp $
+# $Id: gbDbLoadStep,v 1.14 2003/08/08 23:00:25 genbank Exp $
 #
 use strict;
 use warnings;
@@ -138,7 +138,7 @@ sub makeMrnaZip($) {
 
     # get native mrnas
     my $fa = "$downloadTmpDir/mrna.fa";
-    runProg("gbGetSeqs -get=seq -db=$db -native refseq mrna $fa");
+    runProg("gbGetSeqs -get=seq -db=$db -native genbank mrna $fa");
 
     # zip without directory path and move into place
     my $tmpZip =  "$downloadTmpDir/mrna.zip";
