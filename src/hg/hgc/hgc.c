@@ -55,6 +55,7 @@
 #include "cytoBand.h"
 #include "knownMore.h"
 #include "snp.h"
+#include "snpMap.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
@@ -126,7 +127,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.558 2004/02/02 04:52:00 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.559 2004/02/04 06:08:20 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10127,7 +10128,7 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else printf("Supporting details are not currently available for this SNP.\n");
+else printf("<BR>Supporting details are currently unavailable for this SNP.\n");
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10415,6 +10416,44 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed *)&snp, 3);
     }
 doAffy10KDetails(tdb, itemName);
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doSnpMap(struct trackDb *tdb, char *itemName)
+/* Put up info on a SNP. */
+{
+char *group = tdb->tableName;
+char *ncbiName = itemName;
+struct snpMap snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+
+ncbiName += 2;
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s </H2>\n", itemName);
+sprintf(query, "select * "
+	       "from   %s "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and name = '%s'",
+        group, seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpMapStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    }
+doDbSnpRS(ncbiName);
+printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
+doSnpLocusLink(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -13216,6 +13255,10 @@ else if (startsWith("ct_", track))
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
+    }
+else if (sameWord(track, "snpMap"))
+    {
+    doSnpMap(tdb, item);
     }
 else if (sameWord(track, "affyGeno"))
     {
