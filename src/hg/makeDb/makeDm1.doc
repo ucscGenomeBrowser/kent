@@ -3048,7 +3048,9 @@ zcat `ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS/$chr.*.pp.gz \
       -pathPrefix=/gbdb/dm1/wib/mzDy1Dp2Ag1_phast wib/*.wig
 
     # make top-5000 list and launcher on Adam's home page:
-    sort -k5,5nr raw.bed | head -5000 > top5000.bed
+    sed -e 's/lod=//' all.bed | sort -k4,4nr | head -5000 \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%d\n", $1, $2, $3, $4, $4}' \
+    > top5000.bed
     /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
       /cse/grads/acs/public_html/dm-top5000-4way \
       "top 5000 conserved elements (4way)" dm1

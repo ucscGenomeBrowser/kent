@@ -2475,9 +2475,10 @@ zcat `ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS/$chr.*.pp.gz \
     hgLoadWiggle canFam1 mzHg17Mm5_phast2_wig \
       -pathPrefix=/gbdb/canFam1/wib/mzHg17Mm5_phast2 wib/*.wig
 
-#TODO
     # make top-5000 list and launcher on Adam's home page:
-    sort -k5,5nr raw.bed | head -5000 > top5000.bed
+    sed -e 's/lod=//' all.bed | sort -k4,4nr | head -5000 \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%d\n", $1, $2, $3, $4, $4}' \
+    > top5000.bed
     /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
       /cse/grads/acs/public_html/cf-top5000 \
       "top 5000 conserved elements" canFam1
