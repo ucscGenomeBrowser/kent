@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.34 2003/05/23 03:51:09 baertsch Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.35 2003/06/17 23:02:59 braney Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -390,12 +390,12 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
 }
 
-void printSomeAssemblyListHtml(char *db, struct dbDb *dbList)
+void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
 {
-printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, NULL);
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
 }
 
-void printAssemblyListHtml(char *db)
+void printAssemblyListHtml(char *db, char *javascript)
 /* Find all the assemblies that pertain to the selected genome 
  * Prints to stdout the HTML to render a dropdown list containing 
  * a list of the possible assemblies to choose from.
@@ -403,7 +403,7 @@ void printAssemblyListHtml(char *db)
  * If NULL, no default selection.  */
 {
 struct dbDb *dbList = hGetIndexedDatabases();
-printSomeAssemblyListHtml(db, dbList);
+printSomeAssemblyListHtml(db, dbList, javascript);
 }
 
 void printAssemblyListHtmlExtra(char *db, char *javascript)
@@ -429,7 +429,7 @@ param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 struct dbDb *dbList = hGetBlatIndexedDatabases();
-printSomeAssemblyListHtml(db, dbList);
+printSomeAssemblyListHtml(db, dbList, NULL);
 }
 
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
@@ -551,12 +551,8 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 
 // Was the database passed in as a cgi param?
 // If so, it takes precedence and determines the genome.
-if (*retDb)
+if (*retDb && hDbExists(*retDb))
     {
-    if (!hDbExists(*retDb))
-        {
-        *retDb = hDefaultDb();
-        }
     *retGenome = hGenome(*retDb);
     }
 // If no db was passed in as a cgi param then was the organism (a.k.a. genome)
@@ -589,7 +585,7 @@ else
         // If no organism in the session then get the default db and organism.
         else
             {
-            *retDb = hGetDb();
+            *retDb = hDefaultDb();
             *retGenome = hGenome(*retDb);
             }
         }
