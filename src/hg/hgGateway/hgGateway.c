@@ -177,24 +177,6 @@ puts(
 "</TD></TR></TABLE>\n");
 }
 
-void doMiddle(struct cart *theCart)
-/* Set up pretty web display and save cart in global. */
-{
-cart = theCart;
-
-/* If we are changing databases, then remove custom track data which will 
-   be irrelevant in this new database */
-
-if (!sameString(cgiUsualString("db", "XXX"), cartUsualString(cart, "database", "YYY")))
-    {
-    removeCustomTrackData();
-    }
-
-cartWebStart("UCSC Genome Browser Gateway");
-hgGateway();
-cartWebEnd();
-}
-
 void removeCustomTrackData()
 /*
   Remove any custom track data from the cart.
@@ -205,6 +187,23 @@ cartRemove(cart, "hgt.customFile");
 cartRemove(cart, "ct");
 }
 
+void doMiddle(struct cart *theCart)
+/* Set up pretty web display and save cart in global. */
+{
+cart = theCart;
+
+/* If we are changing databases, then remove custom track data which will 
+   be irrelevant in this new database */
+
+if (!sameString(cgiUsualString("db", "XXX"), cartUsualString(cart, "db", "YYY")))
+    {
+    removeCustomTrackData();
+    }
+
+cartWebStart("UCSC Genome Browser Gateway");
+hgGateway();
+cartWebEnd();
+}
 
 char *excludeVars[] = {NULL};
 
