@@ -301,13 +301,6 @@ exit; # don't actually run this like a script :)
   cp -p /cluster/bluearc/bosTau1/11.ooc /iscratch/i/bosTau1/
   iSync
 
-# CREATE FAKE LIFT FILE 
-  ssh hgwdev
-  cd /cluster/home/heather/jdbc
-  source javaenv
-  java -Xms128m -Xmx256m makeFakeLift > bosTau1.lft
-  mv bosTau1.lft /cluster/data/bosTau1
-
 # GENBANK
   ssh hgwdev
   cd /cluster/home/heather/kent/src/hg/makeDb/genbank
@@ -316,7 +309,7 @@ exit; # don't actually run this like a script :)
   # edit etc/genbank.conf and add these lines, starting with the comment:
   # bosTau1 (B. taurus)
   bosTau1.genome = /iscratch/i/bosTau1/nib/bosTau1.2bit
-  bosTau1.lift = /cluster/data/bosTau1/bosTau1.lft
+  bosTau1.lift = no
   bosTau1.refseq.mrna.native.load = no
   # bosTau1.genbank.mrna.xeno.load = yes
   bosTau1.genbank.mrna.xeno.load = no
