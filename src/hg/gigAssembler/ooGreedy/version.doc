@@ -227,3 +227,11 @@ This log tracks changes from one version of ooGreedy to another
      some troubles with noisy input data.  I'm backing
      up to version 96.  To recover you'll need to get
      diGraph.c.97 and diGraph.h.97 as well.
+98 - Made output of gold.NN and gl.NN change to gold.NN.noNt and 
+     gl.NN.noNt to facilitate swapping individual clones for NT contigs.
+99 - Reverting to v 95 type clone end constraints.
+100 - Getting flip tendency of individual clones from map file. 
+101 - Reduced max intron size to 500k.
+102 - If clones are geno.lst but not info.mm, it's ok now.
+      (Change to accomodate mendMap weeding some redundant draft
+      clones).

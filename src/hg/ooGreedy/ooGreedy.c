@@ -18,7 +18,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 96;       /* Current version number. */
+int version = 102;       /* Current version number. */
 
 int minFragSize = 1;            /* Minimum size of fragments we'll accept. */
 int maxMapDeviation = 600000;   /* No map deviations further than this allowed. */
@@ -77,6 +77,7 @@ struct oogClone
     struct oogClone *next;     /* Next in clone list. */
     char *name;                /* Name of clone. */
     int mapPos;                /* Relative position in contig according to map. */
+    int flipTendency;	       /* Tendency of clone to flip according to map. */
     enum htgPhase phase;       /* HTG phase. */
     int size;                  /* Size in bases. */
     struct dlList *fragList;   /* List of frags in clone. */
@@ -85,6 +86,8 @@ struct oogClone
     int orientation;	       /* Orientation from ends: +1, -1 or 0 for unknown. */
     struct barge *barge;       /* Barge this is part of. */
     struct bargeEl *bel;       /* Point back to barge el to get position... */
+    struct dgNode *startNode;  /* Start node in raft graph. */
+    struct dgNode *endNode;    /* End node in raft graph. */
     bool hitFlag;              /* Used by ordCountStarts. */
     int maxShare;              /* Max amount of sequence shared */
     struct oogClone *maxShareClone;  /* Clone that shares max sequence. */
@@ -103,7 +106,6 @@ struct oogFrag
     struct raft *raft;		/* Raft fragment is in. */
     int clonePos;               /* Position within clone. (Assuming frags back to back.) */
     int defaultPos;             /* Default position in contig. */
-    bool isNtOrigFrag;          /* True if frag part of original NT clone (not psuedo clone). */
     };
 
 struct oogEdge
@@ -142,9 +144,6 @@ struct raft
     struct connectedComponent *cc;   /* Other rafts connected by mrna data. */
     short orientation;           /* Relative orientation of graph.  1, -1 or 0 for unknown. */
     bool fixedOrientation;       /* True if raft has fixed orientation. */
-    bool inCloneA;		 /* Temporarily used building clone order based constraints. */
-    bool inCloneB;		 /* Temporarily used building clone order based constraints. */
-    bool mapConflict;	 	 /* True if is has map conflicts... . */
     int defaultPos;		 /* Default Middle position of raft in contig coordinates. */
     int flipTendency;            /* Which orientation map says raft should have. */
     struct edgeRef *refList;     /* Edges used to make this raft. */
@@ -235,7 +234,6 @@ enum cableType
    ctCloneEnds, /* (dummy) start/end of clone. */
    ctChain,	     /* Chain in clone from sequencing center submission. */
    ctBigRaft,	     /* Big raft with orientation info from map. */
-   ctCloneOrder,     /* Relative position of clones in map. */
    };
 
 char *cableTypeName(int cableType)
@@ -243,7 +241,7 @@ char *cableTypeName(int cableType)
 {
 static char *names[] = 
    {"readPair", "mRNA", "EST", "estPair", "bacEndPair", "cloneEnds", 
-   	"chain", "bigRaft", "cloneOrder"};
+   	"chain", "bigRaft"};
 assert(cableType >= 0 && cableType < ArraySize(names));
 return names[cableType];
 }
@@ -717,7 +715,7 @@ return b->score - a->score;
 
 void addCable(struct diGraph *graph, struct dgNode *aNode, char *aName, int aOrientation,
 	struct dgNode *bNode, char *bName, int bOrientation, enum cableType type,
-	int minDistance, int maxDistance, boolean unflippable)
+	int minDistance, int maxDistance)
 /* Add cable to graph.  Allocate edge and bridge if necessary.  This
  * does *not* check that cable is consistent. */
 {
@@ -740,7 +738,6 @@ if (edge == NULL)
     bridge->maxDistance = maxDistance;
     bridge->cableList = cable;
     edge = dgConnectWithVal(graph, aNode, bNode, bridge);
-    edge->unflippable = unflippable;
     }
 else
     {
@@ -754,15 +751,12 @@ else
     }
 }
 
-#ifdef OLD
-void addDummyCable(struct diGraph *graph, struct dgNode *aNode, struct dgNode *bNode,
-	enum cableType type)
-/* Add unflippable cable that contains no info other than aNode follows bNode. */
+void addDummyCable(struct diGraph *graph, struct dgNode *aNode, struct dgNode *bNode)
+/* Add cable that contains no info other than aNode follows bNode. */
 {
 addCable(graph, aNode, aNode->name, 
-    1, bNode, bNode->name, 1, type, 0, BIGNUM/10, TRUE);
+    1, bNode, bNode->name, 1, ctCloneEnds, 0, BIGNUM/10);
 }
-#endif /* OLD */
 
 void dumpEdge(struct oogEdge *edge, FILE *out)
 /* Print out an edge. */
@@ -951,19 +945,9 @@ return raft;
 }
 
 struct oogFrag *fragForName(struct hash *fragHash, char *name)
-/* Return names fragment. */
+/* Return named fragment. */
 {
-struct oogFrag *frag;
-struct hashEl *hel;
-
-hel = hashLookup(fragHash, name);
-if (hel == NULL)
-    {
-    errAbort("Conflict between psl file and clone fragments. "
-	     "Can't find %s", name);
-    }
-frag = hel->val;
-return frag;
+return hashFindVal(fragHash, name);
 }
 
 int pslCenterInRaft(struct psl *psl, struct raftFrag *rf)
@@ -1001,19 +985,22 @@ fprintf(logFile, "oneRnaLine (preCleaned):\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     pslOrient = pslOrientation(psl);
-    AllocVar(mc);
     frag = fragForName(fragHash, psl->tName);
-    raft = frag->raft;
-    rf = findRaftFrag(raft, frag);
-    mc->raft = raft;
-    mc->orientation = pslOrient * rf->orientation;
-    mc->position = pslCenterInRaft(psl, rf);
-    mc->score = scoreMrnaPsl(psl);
-    mc->name = mrnaName;
-    fprintf(logFile, " %d %c %d %s\n", raft->id,
-    	(mc->orientation > 0 ? '+' : '-'),
-	mc->score, psl->tName);
-    slAddHead(&mcList, mc);
+    if (frag != NULL)
+	{
+	AllocVar(mc);
+	raft = frag->raft;
+	rf = findRaftFrag(raft, frag);
+	mc->raft = raft;
+	mc->orientation = pslOrient * rf->orientation;
+	mc->position = pslCenterInRaft(psl, rf);
+	mc->score = scoreMrnaPsl(psl);
+	mc->name = mrnaName;
+	fprintf(logFile, " %d %c %d %s\n", raft->id,
+	    (mc->orientation > 0 ? '+' : '-'),
+	    mc->score, psl->tName);
+	slAddHead(&mcList, mc);
+	}
     }
 slReverse(&mcList);
 fprintf(logFile, "%s got %d initial connections\n", mrnaName, slCount(mcList));
@@ -1031,7 +1018,7 @@ if (mcList->next == NULL)
 AllocVar(ml);
 ml->cableType = cableType;
 ml->minDistance = 0;
-ml->maxDistance = 1000000;	/* Longest intron I've seen is less than half this. */
+ml->maxDistance = 500000;	/* Longest intron I've seen is about 600k.  Over 300k very rare. */
 
 /* Figure out composite score - average of average and min scores. */
 for (mc = mcList; mc != NULL; mc = mc->next)
@@ -1072,6 +1059,8 @@ boolean pslTargetFragFilter(struct psl *psl, struct hash *fragHash)
 /* See if target fragment passes filter. */
 {
 struct oogFrag *frag = fragForName(fragHash, psl->tName);
+if (frag == NULL)
+    return FALSE;
 return filterFrag(frag);
 }
 
@@ -1079,8 +1068,10 @@ boolean pslFragFilter(struct psl *psl, struct hash *fragHash)
 /* See if both sides of psl pass filter. */
 {
 struct oogFrag *frag = fragForName(fragHash, psl->tName);
+if (frag == NULL) return FALSE;
 if (!filterFrag(frag)) return FALSE;
 frag = fragForName(fragHash, psl->qName);
+if (frag == NULL) return FALSE;
 return filterFrag(frag);
 }
 
@@ -1243,13 +1234,6 @@ raft = frag->raft;
 return raft;
 }
 
-struct oogFrag *fragInHash(struct hash *fragHash, char *fragName)
-/* Find frag in hash. */
-{
-struct hashEl *hel = hashLookup(fragHash, fragName);
-return hel->val;
-}
-
 struct lineGraph *makeFragChains(char *fileName, struct hash *fragHash)
 /* Create a lineGraphs out of fragChains file */
 {
@@ -1272,38 +1256,41 @@ if ((lf = lineFileMayOpen(fileName, TRUE)) == NULL)
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     lineFileExpectWords(lf, 6, wordCount);
-    fragToCloneName(words[0], cloneName);
-    aFrag = fragInHash(fragHash, words[0]);
-    bFrag = fragInHash(fragHash, words[2]);
-    aRaft = aFrag->raft;
-    bRaft = bFrag->raft;
-    if (aRaft != bRaft)
-        {
-	AllocVar(ml);
-	slAddTail(&mlList, ml);
-	ml->cableType = ctChain;
-	ml->minDistance = lineFileNeedNum(lf, words, 3);
-	ml->maxDistance = lineFileNeedNum(lf, words, 4);
-	ml->score = lineFileNeedNum(lf, words, 5);
-	orientation = ((words[1][0] == '-') ? -1 : 1);
+    aFrag = fragForName(fragHash, words[0]);
+    bFrag = fragForName(fragHash, words[2]);
+    if (aFrag != NULL && bFrag != NULL)
+	{
+	fragToCloneName(words[0], cloneName);
+	aRaft = aFrag->raft;
+	bRaft = bFrag->raft;
+	if (aRaft != bRaft)
+	    {
+	    AllocVar(ml);
+	    slAddTail(&mlList, ml);
+	    ml->cableType = ctChain;
+	    ml->minDistance = lineFileNeedNum(lf, words, 3);
+	    ml->maxDistance = lineFileNeedNum(lf, words, 4);
+	    ml->score = lineFileNeedNum(lf, words, 5);
+	    orientation = ((words[1][0] == '-') ? -1 : 1);
 
-	AllocVar(mc);
-	mc->name = aFrag->name;
-	mc->raft = aRaft;
-	aRf = findRaftFrag(aRaft, aFrag);
-	mc->orientation = aRf->orientation;
-	mc->position = aRf->raftOffset + aFrag->size/2;
-	mc->score = ml->score;
-	slAddTail(&ml->mcList, mc);
+	    AllocVar(mc);
+	    mc->name = aFrag->name;
+	    mc->raft = aRaft;
+	    aRf = findRaftFrag(aRaft, aFrag);
+	    mc->orientation = aRf->orientation;
+	    mc->position = aRf->raftOffset + aFrag->size/2;
+	    mc->score = ml->score;
+	    slAddTail(&ml->mcList, mc);
 
-	AllocVar(mc);
-	mc->name = bFrag->name;
-	mc->raft = bRaft;
-	bRf = findRaftFrag(bRaft, bFrag);
-	mc->orientation = orientation * bRf->orientation;
-	mc->position = bRf->raftOffset + bFrag->size/2;
-	mc->score = ml->score;
-	slAddTail(&ml->mcList, mc);
+	    AllocVar(mc);
+	    mc->name = bFrag->name;
+	    mc->raft = bRaft;
+	    bRf = findRaftFrag(bRaft, bFrag);
+	    mc->orientation = orientation * bRf->orientation;
+	    mc->position = bRf->raftOffset + bFrag->size/2;
+	    mc->score = ml->score;
+	    slAddTail(&ml->mcList, mc);
+	    }
 	}
     }
 lineFileClose(&lf);
@@ -1314,7 +1301,7 @@ return mlList;
 struct lineGraph *mlAntiFlip(struct raft *fixedRaft, 
 	struct raft *raft, int flipAbs, int flipDir)
 /* Make a line graph that encourages raft stay in "flipDir"
- * orientation with score proportional to flipAbs. */
+ * orientation with score proportional to flipAbs. ~~~ */
 {
 struct lineGraph *ml;
 struct lineConnection *mc;
@@ -2647,20 +2634,26 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct overlappingClonePair *ocpList = NULL, *ocp;
 char *row[11];
 int overlap;
+struct oogClone *a, *b;
 
 while (lineFileRow(lf, row))
     {
-    AllocVar(ocp);
-    slAddHead(&ocpList, ocp);
-    ocp->a = hashMustFindVal(cloneHash, row[0]);
-    ocp->b = hashMustFindVal(cloneHash, row[4]);
-    hashAddUnique(ocpHash, ocpHashName(ocp->a->name, ocp->b->name), ocp);
+    a = hashFindVal(cloneHash, row[0]);
+    b = hashFindVal(cloneHash, row[4]);
+    if (a && b)
+	{
+	AllocVar(ocp);
+	slAddHead(&ocpList, ocp);
+	ocp->a = a;
+	ocp->b = b;
+	hashAddUnique(ocpHash, ocpHashName(a->name, b->name), ocp);
 
-    /* Use strict overlap unless it is empty. */
-    overlap = lineFileNeedNum(lf, row, 8);
-    if (overlap == 0)
-	overlap = lineFileNeedNum(lf, row, 9);
-    ocp->overlap = overlap;
+	/* Use strict overlap unless it is empty. */
+	overlap = lineFileNeedNum(lf, row, 8);
+	if (overlap == 0)
+	    overlap = lineFileNeedNum(lf, row, 9);
+	ocp->overlap = overlap;
+	}
     }
 lineFileClose(&lf);
 slReverse(&ocpList);
@@ -2740,7 +2733,8 @@ struct oogClone *clone;
 for (raft = raftList; raft != NULL; raft = raft->next)
     {
     clone = raft->fragList->frag->clone;
-    assert(clone->barge != NULL);
+    if (clone->barge == NULL)
+	errAbort("Clone %s never assigned a barge", clone->name);
     raft->barge = clone->barge;
     }
 }
@@ -2939,7 +2933,7 @@ for (barge = bargeList; barge != NULL; barge = barge->next)
 	    }
 	}
     }
-uglyf("Got %d map overlaps\n", mapOverlapCount);
+printf("Got %d map overlaps\n", mapOverlapCount);
 }
 
 void figureMapEnclosures(struct barge *bargeList)
@@ -2997,7 +2991,7 @@ for (barge = bargeList; barge != NULL; barge = barge->next)
 	    }
 	}
     }
-uglyf("Found %d enclosed clones\n", enclosedCount);
+printf("Found %d enclosed clones\n", enclosedCount);
 freeMem(openClones);
 }
 
@@ -3053,6 +3047,11 @@ for (barge = bargeList; barge != NULL; barge = barge->next)
 	{
 	clone = bel->clone;
 	clone->defaultPos = barge->offset + bel->offset;
+	if (bargeGraph != NULL)
+	    {
+	    clone->startNode->priority = clone->defaultPos;
+	    clone->endNode->priority = clone->defaultPos + clone->size;
+	    }
 	calcFragDefaultPositions(clone, clone->defaultPos);
 	}
     }
@@ -3131,7 +3130,7 @@ for (ref = raftList; ref != NULL; ref = ref->next)
 logIt("\n", raft->id);
 
 /* See if the fixed raft is part of this component, if so
- * refuse to flip.  */
+ * refuser to flip. ~~~ */
 for (ref = raftList; ref != NULL; ref = ref->next)
     {
     raft = ref->node->val;
@@ -3143,7 +3142,7 @@ for (ref = raftList; ref != NULL; ref = ref->next)
     }
     
 
-erList = dgFindSubEdges(raftGraph, raftList, TRUE);
+erList = dgFindSubEdges(raftGraph, raftList);
 dgSwapEdges(raftGraph, erList);
 ok = !dgHasCycles(raftGraph);
 if (ok)
@@ -3365,7 +3364,7 @@ for (a = ml->mcList; (b = a->next) != NULL; a = b)
     assert(minDistance <= maxDistance);
     addCable(graph, a->raft->node, a->name, a->orientation, 
          b->raft->node, b->name, b->orientation, 
-         ml->cableType, minDistance, maxDistance, FALSE);
+         ml->cableType, minDistance, maxDistance);
     }
 }
 
@@ -3395,7 +3394,7 @@ for (mc = ml->mcList; mc != NULL; mc = mc->next)
 	{
 	struct dgNodeRef *nr;
 	AllocVar(cc);
-	subGraph = dgFindNewFlippableConnected(graph, mc->raft->node);
+	subGraph = dgFindNewConnectedWithVals(graph, mc->raft->node);
 	cc->subGraph = subGraph;
 	for (nr = cc->subGraph; nr != NULL; nr = nr->next)
 	    {
@@ -3506,7 +3505,6 @@ const struct cloneEndPos *b = *((struct cloneEndPos **)vb);
 return (a->pos - b->pos);
 }
 
-#ifdef OLD
 void addBargeToRaftGraph(struct diGraph *raftGraph, struct barge *barge,
 	struct oogClone **pLastClone)
 /* Add a barge to the raft graph. */
@@ -3552,7 +3550,7 @@ for (cep = cepList; cep != NULL; cep = cep->next)
 	}
     if (lastNode != NULL)
 	{
-	addDummyCable(raftGraph, lastNode, node, ctCloneEnds);
+	addDummyCable(raftGraph, lastNode, node);
 	}
     lastNode = node;
     }
@@ -3561,7 +3559,7 @@ for (cep = cepList; cep != NULL; cep = cep->next)
 if (lastClone != NULL)
     {
     clone = cepList->clone;
-    addDummyCable(raftGraph, lastClone->endNode, clone->startNode, ctCloneEnds);
+    addDummyCable(raftGraph, lastClone->endNode, clone->startNode);
     }
 
 slFreeList(&cepList);
@@ -3635,7 +3633,10 @@ for (bel = barge->cloneList; bel != NULL; bel = bel->next)
 	    start = clone;
 	endPos = clone->defaultPos + clone->size;
 	if (endPos > maxEndPos)
+	    {
 	    end = clone;
+	    maxEndPos = endPos;
+	    }
 	}
     }
 assert(start != NULL);
@@ -3651,16 +3652,17 @@ void addRaftToRaftGraph(struct diGraph *raftGraph, struct raft *raft)
 struct oogClone *clone, *startClone, *endClone;
 struct dgNode *raftNode;
 
+
 raft->node = raftNode = dgAddNumberedNode(raftGraph, raft->id, raft);
 if ((clone = singleCloneForRaft(raft)) != NULL)
     {
-    addDummyCable(raftGraph, clone->startNode, raftNode, ctCloneEnds);
-    addDummyCable(raftGraph, raftNode, clone->endNode, ctCloneEnds);
+    addDummyCable(raftGraph, clone->startNode, raftNode);
+    addDummyCable(raftGraph, raftNode, clone->endNode);
     }
 else if (cloneBoundsInBarge(raft, &startClone, &endClone))
     {
-    addDummyCable(raftGraph, startClone->startNode, raftNode, ctCloneEnds);
-    addDummyCable(raftGraph, raftNode, endClone->endNode, ctCloneEnds);
+    addDummyCable(raftGraph, startClone->startNode, raftNode);
+    addDummyCable(raftGraph, raftNode, endClone->endNode);
     }
 else
     {
@@ -3684,179 +3686,6 @@ fixedRaft->node = dgAddNode(raftGraph, "fixed", fixedRaft);
 for (raft = raftList; raft != NULL; raft = raft->next)
     addRaftToRaftGraph(raftGraph, raft);
 slReverse(&raftGraph->nodeList);
-}
-#endif /* OLD */
-
-void markRaftsInAb(struct raft *raftList, struct oogClone *a, struct oogClone *b)
-/* Set inCloneA/inCloneB values for all rafts in list. */
-{
-struct raft *raft;
-struct raftFrag *rf;
-
-for (raft = raftList; raft != NULL; raft = raft->next)
-    {
-    raft->inCloneA = raft->inCloneB = FALSE;
-    for (rf = raft->fragList; rf != NULL; rf = rf->next)
-        {
-	if (rf->frag->clone == a)
-	    raft->inCloneA = TRUE;
-	else if (rf->frag->clone == b)
-	    raft->inCloneB = TRUE;
-	}
-    }
-}
-
-struct cloneOrderRaftRestraint
-/* Store info on a pair of rafts positioned relative to
- * each other by clone order constraints. */
-    {
-    struct cloneOrderRaftRestraint *next;	/* Next in list. */
-    struct raft *before, *after;                /* Two rafts in order. */
-    struct oogClone *cloneBefore,*cloneAfter;   /* Two clones that define order. */
-    double score;				/* Score - based largely on raft size. */
-    };
-
-int cloneOrderRaftRestraintCmp(const void *va, const void *vb)
-/* Compare two cloneOrderRaftRestraint to sort by offset . */
-{
-const struct cloneOrderRaftRestraint *a = *((struct cloneOrderRaftRestraint **)va);
-const struct cloneOrderRaftRestraint *b = *((struct cloneOrderRaftRestraint **)vb);
-double diff = b->score - a->score;
-if (diff > 0.0)
-    return 1;
-else if (diff < 0.0)
-    return -1;
-else
-    return 0;
-}
-
-void constrainAbRafts(struct cloneOrderRaftRestraint **pList, struct raft *raftList,
-	struct oogClone *a, struct oogClone *b,
-	boolean aBefore, boolean bBefore, boolean aAfter, boolean bAfter)
-/* Add constraints that force rafts with inCloneA/inCloneB values matching
- * aBefore/bBefore to come before rafts with values matchin aAfter/bAfter. */
-{
-struct raft *before, *after;
-struct cloneOrderRaftRestraint *corr;
-int size1, size2, small, big;
-
-uglyf("ConstrainAbRafts(%s %s %d %d %d %d)\n", a->name, b->name,
-	aBefore, bBefore, aAfter, bAfter);
-
-for (before = raftList; before != NULL; before = before->next)
-    {
-    if (before->inCloneA == aBefore && before->inCloneB == bBefore)
-        {
-	for (after = raftList; after != NULL; after = after->next)
-	    {
-	    if (after->inCloneA == aAfter && after->inCloneB == bAfter)
-	        {
-		uglyf("   Constraining %d < %d\n", before->id, after->id);
-		AllocVar(corr);
-		corr->before = before;
-		corr->after = after;
-		corr->cloneBefore = a;
-		corr->cloneAfter = b;
-		size1 = before->end - before->start;
-		size2 = after->end - after->start;
-		if (size1 < size2)
-		    {
-		    big = size2;
-		    small = size1;
-		    }
-		else
-		    {
-		    big = size1;
-		    small = size2;
-		    }
-		corr->score = (double)small * 500000 + (double)big;
-		slAddHead(pList, corr);
-		}
-	    }
-	}
-    }
-}
-
-void addCloneOrderConstraints(struct cloneEnd *endList, struct diGraph *raftGraph,
-	struct raft *raftList)
-/* Add constraints that for all overlapping clones A and B such that A comes
- * before B in map, force rafts containing A only to come before rafts
- * containing A and B which in turn come before rafts containing B only. */
-{
-struct cloneEnd *aCe, *bCe;
-struct oogClone *aClone, *bClone;
-struct dgNode *after, *before;
-struct cloneOrderRaftRestraint *corrList = NULL, *corr;
-boolean canAdd;
-struct raft *raft;
-
-uglyf("addCloneOrderRestraints\n");
-for (aCe = endList; aCe != NULL; aCe = aCe->next)
-    {
-    if (!aCe->isStart)
-        continue;
-    aClone = aCe->clone;
-    for (bCe = aCe->next; bCe->clone != aClone; bCe = bCe->next)
-        {
-	if (!bCe->isStart)
-	    continue;
-	bClone = bCe->clone;
-	markRaftsInAb(raftList, aClone, bClone);
-	constrainAbRafts(&corrList, raftList, aClone, bClone, TRUE, FALSE, TRUE, TRUE);
-	constrainAbRafts(&corrList, raftList, aClone, bClone, TRUE, TRUE, FALSE, TRUE);
-	}
-    }
-slSort(&corrList, cloneOrderRaftRestraintCmp);
-
-for (corr = corrList; corr != NULL; corr = corr->next)
-    {
-    before = corr->before->node;
-    after = corr->after->node;
-    canAdd = FALSE;
-    if (dgDirectlyFollows(raftGraph, before, after))
-        canAdd = TRUE;
-    else
-        {
-	dgConnect(raftGraph, before, after);
-	canAdd = !dgHasCycles(raftGraph);
-	dgDisconnect(raftGraph, before, after);
-	if (!canAdd)
-	    {
-	    logIt("Missed clone order constraint raft %d (size %d) raft %d (size %d)\n", 
-	        corr->before->id, corr->before->end - corr->before->start,
-		corr->after->id, corr->after->end - corr->after->start);
-	    }
-	}
-    if (canAdd)
-	{
-	addCable(raftGraph, before, corr->cloneBefore->name, 
-	    1, after, corr->cloneAfter->name, 1, ctCloneOrder, 0, BIGNUM/10, TRUE);
-	}
-    }
-slFreeList(&corrList);
-}
-
-void makeRaftGraphSkeleton(struct diGraph *raftGraph, struct barge *bargeList, 
-	struct raft *raftList, struct raft *fixedRaft)
-/* Make skeleton of raftGraph. A 'fixed' node to prevent inappropriate
- * flipping and real nodes for each raft. */
-{
-struct raft *raft;
-struct barge *barge;
-
-uglyf("start makeRaftGraphSkeleton\n");
-fixedRaft->node = dgAddNode(raftGraph, "fixed", fixedRaft);
-for (raft = raftList; raft != NULL; raft = raft->next)
-    {
-    raft->node = dgAddNumberedNode(raftGraph, raft->id, raft);
-    }
-slReverse(&raftGraph->nodeList);
-
-for (barge = bargeList; barge != NULL; barge = barge->next)
-    {
-    addCloneOrderConstraints(barge->endList, raftGraph, raftList);
-    }
-uglyf("done makeRaftGraphSkeleton\n");
 }
 
 void reverseMl(struct lineGraph *ml)
@@ -3891,13 +3720,12 @@ fprintf(logFile, "\nmakeGraphs\n");
 
 /* Add skeleton of clones to raftGraph. */
 makeRaftGraphSkeleton(raftGraph, bargeList, raftList, fixedRaft);
-if (dgHasCycles(raftGraph))
-    errAbort("Cycles after makeRaftGraphSkeleton!\n");
 
 /* Add all barges to barge graph. */
 for (barge = bargeList; barge != NULL; barge = barge->next)
     barge->node = node = dgAddNumberedNode(bargeGraph, barge->id, barge);
 slReverse(&bargeGraph->nodeList);
+
 
 /* Add in non-conflicting mrna lines one at a time. */
 for (ml = mrnaLineList; ml != NULL; ml = ml->next)
@@ -4000,52 +3828,18 @@ void loadAllClones(char *infoName, char *genoList,
 struct lineFile *lf;
 char *line;
 int lineSize;
-char *words[3];
+char *words[4];
 int wordCount;
 char **genoFiles;
 int genoCount;
 char *faFile;
 char *acc;
 int offset;
-struct hashEl *hel;
 struct oogClone *clone;
 struct oogFrag *frag;
 char *gBuf;
 int i;
 char dir[256], name[128],extension[64];
-struct slName *miaList = NULL, *mia;
-
-/* Process geno.lst file. */
-readAllWords(genoList, &genoFiles, &genoCount, &gBuf);
-if (genoCount <= 0)
-    errAbort("%s is empty\n", genoList);
-for (i=0; i<genoCount; ++i)
-    {
-    faFile = genoFiles[i];
-    splitPath(faFile, dir, name, extension);
-    acc = name;
-    if (fileExists(faFile))
-	{
-	if ((hel = hashLookup(cloneHash, acc)) != NULL)
-	    {
-	    warn("Duplicate %s in geno.lst, ignoring all but first", acc);
-	    }
-	else
-	    {
-	    AllocVar(clone);
-	    hel = hashAdd(cloneHash, acc, clone);
-	    clone->name = hel->name;
-	    loadClone(faFile, clone, fragHash, pFragList);
-	    slAddHead(pCloneList, clone);
-	    }
-	}
-    else
-	{
-	warn("No sequence for %s", acc);
-	mia = newSlName(acc);
-	slAddHead(&miaList, mia);
-	}
-    }
 
 /* Process info file. */
 lf = lineFileOpen(infoName, TRUE);
@@ -4058,31 +3852,59 @@ if (!sameWord("PLACED", words[1]))
 *retCtgName = cloneString(words[0]);
 while (lineFileNext(lf, &line, &lineSize))
     {
-    if ((wordCount = chopLine(line, words)) < 2)
-	errAbort("Bad info file format line %d of %s\n", lf->lineIx, lf->fileName);
-    if (!words[1][0] == '-' && !isdigit(words[1][0]))
+    if ((wordCount = chopLine(line, words)) < 4)
 	errAbort("Bad info file format line %d of %s\n", lf->lineIx, lf->fileName);
     acc = words[0];
-    if ((hel = hashLookup(cloneHash, acc)) == NULL)
+    if ((clone = hashFindVal(cloneHash, acc)) != NULL)
 	{
-	if (!slNameInList(miaList, acc))
-	    {
-	    logIt("Clone %s is in info but not geno.lst\n", acc);
-	    }
+	warn("Duplicate %s in %s, ignoring all but first", acc, lf->fileName);
 	}
     else
 	{
-	clone = hel->val;
-	clone->mapPos = atoi(words[1]) * 1000;
-	if (wordCount >= 3)
-	    clone->phase = atoi(words[2]);
-	calcFragDefaultPositions(clone, clone->mapPos);
+	int phase = lineFileNeedNum(lf, words, 2);
+	if (phase > 0)
+	    {
+	    AllocVar(clone);
+	    slAddHead(pCloneList, clone);
+	    hashAddSaveName(cloneHash, acc, clone, &clone->name);
+	    clone->mapPos = lineFileNeedNum(lf, words, 1) * 1000;
+	    clone->phase = phase;
+	    clone->flipTendency = lineFileNeedNum(lf, words, 3);
+	    }
 	}
     }
 lineFileClose(&lf);
 
+/* Process geno.lst file. */
+readAllWords(genoList, &genoFiles, &genoCount, &gBuf);
+if (genoCount <= 0)
+    errAbort("%s is empty\n", genoList);
+for (i=0; i<genoCount; ++i)
+    {
+    faFile = genoFiles[i];
+    splitPath(faFile, dir, name, extension);
+    acc = name;
+    if (fileExists(faFile))
+	{
+	clone = hashFindVal(cloneHash, acc);
+	if (clone != NULL)
+	    {
+	    if (clone->fragList != NULL)
+		warn("Duplicate %s in geno.lst, ignoring all but first", acc);
+	    else
+		{
+		loadClone(faFile, clone, fragHash, pFragList);
+		calcFragDefaultPositions(clone, clone->mapPos);
+		}
+	    }
+	}
+    else
+	{
+	errAbort("No sequence for %s", acc);
+	}
+    }
+
 freeMem(gBuf);
-slFreeList(&miaList);
 slReverse(pFragList);
 }
 
@@ -4164,26 +3986,58 @@ int calcRaftFlipTendency(struct raft *raft)
 int diffTotal = 0;
 int diffOne;
 struct raftFrag *rf, *rfNext;
+struct oogFrag *frag;
+int diffInMap;
+
+for (rf = raft->fragList; rf != NULL; rf = rf->next)
+    {
+    frag = rf->frag;
+    diffTotal += frag->clone->flipTendency * rf->orientation;
+    if ((rfNext = rf->next) != NULL)
+	{
+	diffInMap = rfNext->frag->defaultPos - frag->defaultPos;
+	if (diffInMap > frag->size)
+	    diffInMap = frag->size;
+	else if (diffInMap < -frag->size)
+	    diffInMap = -frag->size;
+	diffTotal += diffInMap;
+	}
+    }
+return diffTotal;
+}
+
+#ifdef OLD
+int calcRaftFlipTendency(struct raft *raft)
+/* Return how badly raft would like to fit to better
+ * accomodate default coordinates. */
+{
+/* raft->fragList is sorted already, and needs to be for
+ * this to work. */
+int diffTotal = 0;
+int diffOne;
+struct raftFrag *rf, *rfNext;
 struct oogFrag *aFrag, *bFrag;
 int diffInMap;
 
 for (rf = raft->fragList; rf != NULL; rf = rf->next)
     {
     if ((rfNext = rf->next) != NULL)
-	{
-	diffInMap = rfNext->frag->defaultPos - rf->frag->defaultPos;
-	if (intAbs(diffInMap) < maxMapDeviation)
-	    {
-	    diffTotal += diffInMap;
-	    }
-	else
-	    {
-	    logIt("  Unreasonable distance in map %d\n", diffInMap /* uglyf */);
-	    }
-	}
+        {
+        diffInMap = rfNext->frag->defaultPos - rf->frag->defaultPos;
+        if (intAbs(diffInMap) < maxMapDeviation - rf->frag->size)
+            {
+            diffTotal += diffInMap;
+            }
+        else
+            {
+            logIt("  Unreasonable distance in map %d\n", diffInMap /* uglyf */);
+            }
+        }
     }
 return diffTotal;
 }
+#endif /* OLD */
+
 
 void setRaftFlipTendencies(struct raft *raftList)
 /* Set flipTendencies for all rafts. */
@@ -4205,7 +4059,7 @@ struct dgNodeRef *ccList, *cc, *ccNext;
 struct raft *raft, *nextRaft;
 
 dgClearConnFlags(graph);
-while ((ccList = dgFindNextFlippableConnected(graph)) != NULL)
+while ((ccList = dgFindNextConnectedWithVals(graph)) != NULL)
     {
     int flipTendency = 0;
     int oneFlipTendency;
@@ -5132,11 +4986,9 @@ boolean realConnection(struct dgConnection *conList)
  * a dummy link to clone ends). */
 {
 struct dgConnection *con;
-struct dgEdge *edge;
 for (con = conList; con != NULL; con = con->next)
     {
-    edge = con->edgeOnList->val;
-    if (edge != NULL && !edge->unflippable)
+    if (con->node->val != NULL)
 	return TRUE;
     }
 return FALSE;
@@ -5379,11 +5231,11 @@ sprintf(ocpFileName, "%s/cloneOverlap", inDir, version);
 sprintf(bargeOutName, "%s/barge.%d", inDir, version);
 sprintf(raftOutName, "%s/raft.%d", inDir, version);
 sprintf(graphOutName, "%s/graph.%d", inDir, version);
-sprintf(glName, "%s/ooGreedy.%d.gl", inDir, version);
+sprintf(glName, "%s/ooGreedy.%d.gl.noNt", inDir, version);
 sprintf(layoutName, "%s/gl.%d", inDir, version);
 sprintf(raftPslName, "%s/raft.psl", inDir);
 sprintf(contaminatedName, "%s/contaminated.%d", inDir, version);
-sprintf(goldName, "%s/gold.%d", inDir, version);
+sprintf(goldName, "%s/gold.%d.noNt", inDir, version);
 
 /* Open log file file. */
 logFile = mustOpen(oogLogName, "w");
@@ -5454,6 +5306,14 @@ setRaftDefaultPositions(raftList);
 
 setRaftFlipTendencies(raftList);
 
+/* Dump rafts to log file for EZ debugging. */
+for (raft = raftList; raft != NULL; raft = raft->next)
+    {
+    dumpRaft(raft, logFile);
+    logIt("\n");
+    }
+
+
 /* Read in rna, est, paired reads and bac end pair lists and
  * merge them into one big list sorted by score. */  
     {
@@ -5510,14 +5370,6 @@ setRaftFlipTendencies(raftList);
 	mCount, pCount, fCount, eCount, bCount);
     }
 
-{ /* uglyf */
-for (raft = raftList; raft != NULL; raft = raft->next)
-    {
-    normalizeRaft(raft);
-    dumpRaft(raft, raftOut);
-    fprintf(raftOut, "\n");
-    }
-}
 
 fprintf(logFile, "\nList of lineGraphs:\n");
 for (ml = mlList; ml != NULL; ml = ml->next)
@@ -5541,7 +5393,7 @@ status("Updated default positions\n");
 flipNearDefaults(raftGraph);
 graphOut = mustOpen(graphOutName, "w");
 fprintf(graphOut, "mRNA/BAC ends graph by ooGreedy version %d\n\n", version); 
-dgConnectedFlippableComponents(raftGraph);
+dgConnectedComponentsWithVals(raftGraph);
 ooDumpGraph(raftGraph, graphOut);
 carefulClose(&graphOut);
 status("Flipped and saved graphs.\n");

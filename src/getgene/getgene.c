@@ -282,6 +282,8 @@ else if (getWormGeneDna(seqName, &dna, TRUE))
                 }
 #endif /* NEVER */
             }
+	printf("<A HREF=\"http://www.wormbase.org/db/seq/sequence?name=%s;class=Sequence\">", seqName);
+	printf("WormBase link on:</A> %s<BR>\n", seqName);
         printf("<A HREF=\"http://www.proteome.com/databases/WormPD/reports/%s.html\">", nameBuf);
         printf("Proteome link on:</A> %s<BR>\n<BR>\n", nameBuf);
 

@@ -6,96 +6,98 @@
 #include "common.h"
 #include "dnautil.h"
 
+struct codonTable
 /* The dread codon table. */
-struct _cdntbl
     {
-    DNA *codon;	/* Lower case. */
-    char protCode;	/* Lower case. */
+    DNA *codon;		/* Lower case. */
+    AA protCode;	/* Upper case. */
     };
-static struct _cdntbl _codonTable [64] = 
+
+struct codonTable codonTable [64] = 
+/* The master codon/protein table. */
 {
-    {"ttt", 'f',},
-    {"ttc", 'f',},
-    {"tta", 'l',},
-    {"ttg", 'l',},
+    {"ttt", 'F',},
+    {"ttc", 'F',},
+    {"tta", 'L',},
+    {"ttg", 'L',},
 
-    {"tct", 's',},
-    {"tcc", 's',},
-    {"tca", 's',},
-    {"tcg", 's',},
+    {"tct", 'S',},
+    {"tcc", 'S',},
+    {"tca", 'S',},
+    {"tcg", 'S',},
 
-    {"tat", 'y',},
-    {"tac", 'y',},
+    {"tat", 'Y',},
+    {"tac", 'Y',},
     {"taa", 0,},
     {"tag", 0,},
 
-    {"tgt", 'c',},
-    {"tgc", 'c',},
+    {"tgt", 'C',},
+    {"tgc", 'C',},
     {"tga", 0,},
-    {"tgg", 'w',},
+    {"tgg", 'W',},
 
 
-    {"ctt", 'l',},
-    {"ctc", 'l',},
-    {"cta", 'l',},
-    {"ctg", 'l',},
+    {"ctt", 'L',},
+    {"ctc", 'L',},
+    {"cta", 'L',},
+    {"ctg", 'L',},
 
-    {"cct", 'p',},
-    {"ccc", 'p',},
-    {"cca", 'p',},
-    {"ccg", 'p',},
+    {"cct", 'P',},
+    {"ccc", 'P',},
+    {"cca", 'P',},
+    {"ccg", 'P',},
 
-    {"cat", 'h',},
-    {"cac", 'h',},
-    {"caa", 'q',},
-    {"cag", 'q',},
+    {"cat", 'H',},
+    {"cac", 'H',},
+    {"caa", 'Q',},
+    {"cag", 'Q',},
 
-    {"cgt", 'r',},
-    {"cgc", 'r',},
-    {"cga", 'r',},
-    {"cgg", 'r',},
-
-
-    {"att", 'i',},
-    {"atc", 'i',},
-    {"ata", 'i',},
-    {"atg", 'm',},
-
-    {"act", 't',},
-    {"acc", 't',},
-    {"aca", 't',},
-    {"acg", 't',},
-
-    {"aat", 'n',},
-    {"aac", 'n',},
-    {"aaa", 'k',},
-    {"aag", 'k',},
-
-    {"agt", 's',},
-    {"agc", 's',},
-    {"aga", 'r',},
-    {"agg", 'r',},
+    {"cgt", 'R',},
+    {"cgc", 'R',},
+    {"cga", 'R',},
+    {"cgg", 'R',},
 
 
-    {"gtt", 'v',},
-    {"gtc", 'v',},
-    {"gta", 'v',},
-    {"gtg", 'v',},
+    {"att", 'I',},
+    {"atc", 'I',},
+    {"ata", 'I',},
+    {"atg", 'M',},
 
-    {"gct", 'a',},
-    {"gcc", 'a',},
-    {"gca", 'a',},
-    {"gcg", 'a',},
+    {"act", 'T',},
+    {"acc", 'T',},
+    {"aca", 'T',},
+    {"acg", 'T',},
 
-    {"gat", 'd',},
-    {"gac", 'd',},
-    {"gaa", 'e',},
-    {"gag", 'e',},
+    {"aat", 'N',},
+    {"aac", 'N',},
+    {"aaa", 'K',},
+    {"aag", 'K',},
 
-    {"ggt", 'g',},
-    {"ggc", 'g',},
-    {"gga", 'g',},
-    {"ggg", 'g',},
+    {"agt", 'S',},
+    {"agc", 'S',},
+    {"aga", 'R',},
+    {"agg", 'R',},
+
+
+    {"gtt", 'V',},
+    {"gtc", 'V',},
+    {"gta", 'V',},
+    {"gtg", 'V',},
+
+    {"gct", 'A',},
+    {"gcc", 'A',},
+    {"gca", 'A',},
+    {"gcg", 'A',},
+
+    {"gat", 'D',},
+    {"gac", 'D',},
+    {"gaa", 'E',},
+    {"gag", 'E',},
+
+    {"ggt", 'G',},
+    {"ggc", 'G',},
+    {"gga", 'G',},
+    {"ggg", 'G',},
 };
 
 /* A table that gives values 0 for t
@@ -105,6 +107,7 @@ static struct _cdntbl _codonTable [64] =
  * (which is order aa's are in biochemistry codon tables)
  * and gives -1 for all others. */
 int ntVal[256];
+int ntValLower[256];	/* NT values only for lower case. */
 int ntVal5[256];
 int ntValNoN[256]; /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent ones. */
 DNA valToNt[5];
@@ -120,18 +123,18 @@ if (!inittedNtVal)
     int i;
     for (i=0; i<ArraySize(ntVal); i++)
         {
-	ntVal[i] = -1;
+	ntValLower[i] = ntVal[i] = -1;
         ntValNoN[i] = T_BASE_VAL;
 	if (isspace(i) || isdigit(i))
 	    ntVal5[i] = -1;
 	else
 	    ntVal5[i] = N_BASE_VAL;
         }
-    ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = T_BASE_VAL;
-    ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = U_BASE_VAL;
-    ntVal5['c'] = ntVal5['C'] = ntValNoN['c'] = ntValNoN['C'] = ntVal['c'] = ntVal['C'] = C_BASE_VAL;
-    ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = A_BASE_VAL;
-    ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = G_BASE_VAL;
+    ntVal5['t'] = ntVal5['T'] = ntValNoN['t'] = ntValNoN['T'] = ntVal['t'] = ntVal['T'] = ntValLower['t'] = T_BASE_VAL;
+    ntVal5['u'] = ntVal5['U'] = ntValNoN['u'] = ntValNoN['U'] = ntVal['u'] = ntVal['U'] = ntValLower['u'] = U_BASE_VAL;
+    ntVal5['c'] = ntVal5['C'] = ntValNoN['c'] = ntValNoN['C'] = ntVal['c'] = ntVal['C'] = ntValLower['c'] = C_BASE_VAL;
+    ntVal5['a'] = ntVal5['A'] = ntValNoN['a'] = ntValNoN['A'] = ntVal['a'] = ntVal['A'] = ntValLower['a'] = A_BASE_VAL;
+    ntVal5['g'] = ntVal5['G'] = ntValNoN['g'] = ntValNoN['G'] = ntVal['g'] = ntVal['G'] = ntValLower['g'] = G_BASE_VAL;
 
     valToNt[T_BASE_VAL] = 't';
     valToNt[C_BASE_VAL] = 'c';
@@ -162,7 +165,7 @@ for (i=0; i<3; ++i)
 	return 'X';
     ix = (ix<<2) + bv;
     }
-c = _codonTable[ix].protCode;
+c = codonTable[ix].protCode;
 c = toupper(c);
 return c;
 }
@@ -186,7 +189,7 @@ DNA *valToCodon(int val)
 /* Return  codon corresponding to val (0-63) */
 {
 assert(val >= 0 && val < 64);
-return _codonTable[val].codon;
+return codonTable[val].codon;
 }
 
 void dnaTranslateSome(DNA *dna, char *out, int outSize)
@@ -353,30 +356,41 @@ while (x > 4)
 return count;
 }
 
-
+long dnaOrAaFilteredSize(char *raw, char filter[256])
 /* Return how long DNA will be after non-DNA is filtered out. */
-long dnaFilteredSize(char *rawDna)
 {
-DNA c;
+char c;
 long count = 0;
-initNtChars();
-while ((c = *rawDna++) != 0)
+dnaUtilOpen();
+while ((c = *raw++) != 0)
     {
-    if (ntChars[c]) ++count;
+    if (filter[c]) ++count;
     }
 return count;
 }
 
-/* Filter out non-DNA characters and change to lower case. */
-void dnaFilter(char *in, DNA *out)
+void dnaOrAaFilter(char *in, char *out, char filter[256])
+/* Run chars through filter. */
 {
-DNA c;
-initNtChars();
+char c;
+dnaUtilOpen();
 while ((c = *in++) != 0)
     {
-    if ((c = ntChars[c]) != 0) *out++ = c;
+    if ((c = filter[c]) != 0) *out++ = c;
     }
 *out++ = 0;
+}
+
+long dnaFilteredSize(char *rawDna)
+/* Return how long DNA will be after non-DNA is filtered out. */
+{
+return dnaOrAaFilteredSize(rawDna, ntChars);
+}
+
+void dnaFilter(char *in, DNA *out)
+/* Filter out non-DNA characters and change to lower case. */
+{
+dnaOrAaFilter(in, out, ntChars);
 }
 
 void dnaFilterToN(char *in, DNA *out)
@@ -392,17 +406,24 @@ while ((c = *in++) != 0)
 *out++ = 0;
 }
 
-/* Filter out non-DNA characters but leave case intact. */
 void dnaMixedCaseFilter(char *in, DNA *out)
+/* Filter out non-DNA characters but leave case intact. */
 {
-DNA c;
-initNtMixedCaseChars();
-while ((c = *in++) != 0)
-    {
-    if ((c = ntMixedCaseChars[c]) != 0) *out++ = c;
-    }
-*out++ = 0;
+dnaOrAaFilter(in, out, ntMixedCaseChars);
 }
+
+long aaFilteredSize(char *raw)
+/* Return how long aa will be after non-aa chars is filtered out. */
+{
+return dnaOrAaFilteredSize(raw, aaChars);
+}
+
+void aaFilter(char *in, DNA *out)
+/* Filter out non-aa characters and change to upper case. */
+{
+dnaOrAaFilter(in, out, aaChars);
+}
+
 
 void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4])
 /* Count up frequency of occurance of each base and store 
@@ -497,6 +518,115 @@ else
     return 0;
 }
 
+int dnaScore2(DNA a, DNA b)
+/* Score match between two bases (relatively crudely). */
+{
+if (a == 'n' || b == 'n') return 0;
+if (a == b) return 1;
+else return -1;
+}
+
+int  dnaOrAaScoreMatch(char *a, char *b, int size, int matchScore, int mismatchScore, 
+	char ignore)
+/* Compare two sequences (without inserts or deletions) and score. */
+{
+int i;
+int score = 0;
+for (i=0; i<size; ++i)
+    {
+    char aa = a[i];
+    char bb = b[i];
+    if (aa == ignore || bb == ignore)
+        continue;
+    if (aa == bb)
+        score += matchScore;
+    else
+        score += mismatchScore;
+    }
+return score;
+}
+
+int dnaScoreMatch(DNA *a, DNA *b, int size)
+/* Compare two pieces of DNA base by base. Total mismatches are
+ * subtracted from total matches and returned as score. 'N's 
+ * neither hurt nor help score. */
+{
+return dnaOrAaScoreMatch(a, b, size, 1, -1, 'n');
+}
+
+int aaScore2(AA a, AA b)
+/* Score match between two amino acids (relatively crudely). */
+{
+if (a == 'X' || b == 'X') return 0;
+if (a == b) return 2;
+else return -1;
+}
+
+int aaScoreMatch(AA *a, AA *b, int size)
+/* Compare two peptides aa by aa. */
+{
+return dnaOrAaScoreMatch(a, b, size, 2, -1, 'X');
+}
+
+
+/* Tables to convert from 0-20 to ascii single letter representation
+ * of proteins. */
+int aaVal[256];
+AA valToAa[20];
+
+AA aaChars[256];	/* 0 except for value aa characters.  Converts to upper case rest. */
+
+struct aminoAcidTable
+/* A little info about each amino acid. */
+    {
+    int ix;
+    char letter;
+    char abbreviation[3];
+    char *name;
+    };
+
+struct aminoAcidTable aminoAcidTable[] = 
+{
+    {0, 'A', "ala", "alanine"},
+    {1, 'C', "cys", "cysteine"},
+    {2, 'D', "asp",  "aspartic acid"},
+    {3, 'E', "glu",  "glutamic acid"},
+    {4, 'F', "phe",  "phenylalanine"},
+    {5, 'G', "gly",  "glycine"},
+    {6, 'H', "his",  "histidine"},
+    {7, 'I', "ile",  "isoleucine"},
+    {8, 'K', "lys",  "lysine"},
+    {9, 'L', "leu",  "leucine"},
+    {10, 'M',  "met", "methionine"},
+    {11, 'N',  "asn", "asparagine"},
+    {12, 'P',  "pro", "proline"},
+    {13, 'Q',  "gln", "glutamine"},
+    {14, 'R',  "arg", "arginine"},
+    {15, 'S',  "ser", "serine"},
+    {16, 'T',  "thr", "threonine"},
+    {17, 'V',  "val", "valine"},
+    {18, 'W',  "try", "tryptophan"},
+    {19, 'Y',  "tyr", "tyrosine"},
+};
+
+static void initAaVal()
+/* Initialize aaVal and valToAa tables. */
+{
+int i;
+char c, lowc;
+
+for (i=0; i<ArraySize(aaVal); ++i)
+    aaVal[i] = -1;
+for (i=0; i<ArraySize(aminoAcidTable); ++i)
+    {
+    c = aminoAcidTable[i].letter;
+    lowc = tolower(c);
+    aaVal[c] = aaVal[lowc] = i;
+    aaChars[c] = aaChars[lowc] = c;
+    valToAa[i] = c;
+    }
+aaChars['x'] = aaChars['X'] = 'X';
+}
 
 void dnaUtilOpen()
 /* Initialize stuff herein. */
@@ -506,7 +636,9 @@ if (!opened)
     {
     checkSizeTypes();
     initNtVal();
+    initAaVal();
     initNtChars();
+    initNtMixedCaseChars();
     initNtCompTable();
     opened = TRUE;
     }

@@ -281,7 +281,7 @@ fprintf(out, "DNA %s (%ld bases)\n",
 fprintf(out, "%d genes\n", slCount(gff->genes));
 for (gene = gff->genes; gene != NULL; gene = gene->next)
     {
-    fprintf(out, "gene %s has %d bases, %d exons, %d introns\n",
+    fprintf(out, "gene %s has %ld bases, %d exons, %d introns\n",
 	gene->name, gene->end - gene->start + 1,
 	slCount(gene->exons), slCount(gene->introns));
     }

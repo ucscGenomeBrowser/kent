@@ -38,7 +38,7 @@ void zeroBytes(void *vpt, int count)
 {
 char *pt = (char*)vpt;
 while (--count>=0)
-	*pt++=0;
+    *pt++=0;
 }
 
 /* Reverse the order of the bytes. */
@@ -407,6 +407,17 @@ for (el = list; el != NULL; el = el->next)
 return FALSE;
 }
 
+void *slNameFind(void *list, char *string)
+/* Return first element of slName list (or any other list starting
+ * with next/name fields) that matches string. */
+{
+struct slName *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameWord(string, el->name))
+        return el;
+return NULL;
+}
+
 char *slNameStore(struct slName **pList, char *string)
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
@@ -429,6 +440,7 @@ struct slRef *ref;
 for (ref = refList; ref != NULL; ref = ref->next)
     if (ref->val == val)
         return ref;
+return NULL;
 }
 
 void refAdd(struct slRef **pRefList, void *val)
@@ -591,6 +603,18 @@ for (;;)
     }
 }
 
+int countChars(char *s, char c)
+/* Return number of characters c in string s. */
+{
+char a;
+int count = 0;
+while ((a = *s++) != 0)
+    if (a == c)
+        ++count;
+return count;
+}
+
+
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)
  * into an array of zero terminated strings in
@@ -690,8 +714,8 @@ char crLfChopper[] = "\n\r";
 char whiteSpaceChopper[] = " \t\n\r";
 
 
-/* Return first non-white space. */
 char *skipLeadingSpaces(char *s)
+/* Return first non-white space. */
 {
 char c;
 if (s == NULL) return NULL;
@@ -708,6 +732,8 @@ for (;;)
 char *skipToSpaces(char *s)
 {
 char c;
+if (s == NULL)
+    return NULL;
 for (;;)
     {
     c = *s;
@@ -721,8 +747,8 @@ for (;;)
 
 
 
-/* Replace trailing white space with zeroes. */
 void eraseTrailingSpaces(char *s)
+/* Replace trailing white space with zeroes. */
 {
 int len = strlen(s);
 int i;
@@ -759,10 +785,12 @@ for (;;)
 char *trimSpaces(char *s)
 /* Remove leading and trailing white space. */
 {
+if (s != NULL)
+    {
     s = skipLeadingSpaces(s);
     eraseTrailingSpaces(s);
-    if (s[0] == 0) return NULL;
-    return s;
+    }
+return s;
 }
 
 char *firstWordInLine(char *line)
@@ -774,6 +802,28 @@ line = skipLeadingSpaces(line);
 if ((e = skipToSpaces(line)) != NULL)
     *e = 0;
 return line;
+}
+
+char *lastWordInLine(char *line)
+/* Returns last word in line if any (white space separated).
+ * Returns NULL if string is empty.  Removes any terminating white space
+ * from line. */
+{
+char *s = line;
+char *word = NULL, *wordEnd = NULL;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+	break;
+    word = s;
+    s = wordEnd = skipToSpaces(s);
+    if (s == NULL)
+        break;
+    }
+if (wordEnd != NULL)
+    *wordEnd = 0;
+return word;
 }
 
 char *nextWord(char **pLine)
@@ -805,12 +855,30 @@ for (i=0; i<arraySize; ++i)
 return -1;
 }
 
+int ptArrayIx(void *pt, void *array, int arraySize)
+/* Return index of pt in array or -1 if not there. */
+{
+int i;
+void **a = array;
+for (i=0; i<arraySize; ++i)
+    {
+    if (pt == a[i])
+        return i;
+    }
+return -1;
+}
+
+
 
 FILE *mustOpen(char *fileName, char *mode)
 /* Open a file - or squawk and die. */
 {
 FILE *f;
 
+if (sameString(fileName, "stdin"))
+    return stdin;
+if (sameString(fileName, "stdout"))
+    return stdout;
 if ((f = fopen(fileName, mode)) == NULL)
     {
     char *modeName = "";
@@ -961,6 +1029,15 @@ if (e != NULL)
     *e = 0;
 }
     
+void chopSuffixAt(char *s, char c)
+/* Remove end of string from first occurrence of char c. 
+ * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
+{
+char *e = strrchr(s, c);
+if (e != NULL)
+    *e = 0;
+}
+    
 
 void carefulClose(FILE **pFile)
 /* Close file if open and null out handle to it. */
@@ -968,7 +1045,8 @@ void carefulClose(FILE **pFile)
 FILE *f;
 if ((f = *pFile) != NULL)
     {
-    fclose(f);
+    if (f != stdin && f != stdout)
+	fclose(f);
     *pFile = NULL;
     }
 }
@@ -1023,3 +1101,115 @@ v.bytes[3] = u.bytes[0];
 return v.whole;
 }
 
+void removeReturns(char *dest, char *src) 
+/* Removes the '\r' character from a string.
+ * The source and destination strings can be the same, if there are 
+ * no other threads */
+{
+int i = 0;
+int j = 0;
+
+// until the end of the string
+for (;;)
+    {
+    // skip the returns
+    while(src[j] == '\r')
+	j++;
+
+    // copy the characters
+    dest[i] = src[j];
+
+    // check to see if done
+    if(src[j] == '\0')
+	break;
+
+    // advance the counters
+    i++;
+    j++;
+    }
+}
+
+char* readLine(FILE* fh)
+/* Read a line of any size into dynamic memory, return null on EOF */
+{
+int bufCapacity = 256;
+int bufSize = 0;
+char* buf = needMem(bufCapacity);
+int ch;
+
+/* loop until EOF of EOLN */
+while (((ch = getc(fh)) != EOF) && (ch != '\n'))
+    {
+    /* expand if almost full, always keep one extra char for
+     * zero termination */
+    if (bufSize >= bufCapacity-2)
+        {
+        bufCapacity *= 2;
+        buf = realloc(buf, bufCapacity);
+        if (buf == NULL)
+            {
+            errAbort("Out of memory - request size %d bytes", bufCapacity);
+            }
+        }
+    buf[bufSize++] = ch;
+    }
+
+/* only return EOF if no data was read */
+if ((ch == EOF) && (bufSize == 0))
+    {
+    freeMem(buf);
+    return NULL;
+    }
+buf[bufSize] = '\0';
+return buf;
+}
+
+boolean fileExists(char *fileName)
+/* Return TRUE if file exists (may replace this with non-
+ * portable faster way some day). */
+{
+int fd;
+/* To make piping easier stdin and stdout always exist. */
+if (sameString(fileName, "stdin")) return TRUE;
+if (sameString(fileName, "stdout")) return TRUE;
+
+/* Otherwise open file and close it to find out... */
+if ((fd = open(fileName, O_RDONLY)) < 0)
+    return FALSE;
+close(fd);
+return TRUE;
+}
+
+char *strstrNoCase(char *haystack, char *needle)
+/*
+  A case-insensitive strstr function
+
+param haystack - The string to be searched
+param needle - The string to llok for in the haystack string
+
+return - A pointer to the first occurence of the desired substring
+ */
+{
+char *haystackCopy = NULL;
+char *needleCopy = NULL;
+int index = 0;
+int haystackLen = strlen(haystack);
+int needleLen = strlen(needle);
+
+haystackCopy = (char*) needMem(haystackLen + 1);
+needleCopy = (char*) needMem(needleLen + 1);
+
+for(index = 0; index < haystackLen;  index++)
+    {
+    haystackCopy[index] = tolower(haystack[index]);
+    }
+haystackCopy[haystackLen] = 0; /* Null terminate */
+
+for(index = 0; index < needleLen;  index++)
+    {
+    needleCopy[index] = tolower(needle[index]);
+    }
+needleCopy[needleLen] = 0; /* Null terminate */
+
+return strstr(haystackCopy, needleCopy);
+}

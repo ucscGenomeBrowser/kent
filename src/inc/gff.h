@@ -86,6 +86,8 @@ struct gffFile
     struct gffFeature *featureList; /* List of all types in file. */
     struct gffGroup *groupList; /* A list of groups. */
     struct gffGeneId *geneIdList;  /* List of all gene ID's. */
+    bool isGtf;			/* Is this a GTF file? */
+    bool typeKnown;		/* Is 'isGtf' known? */
     };
 
 void gffGroupFree(struct gffGroup **pGroup);
@@ -105,13 +107,18 @@ struct gffFile *gffFileNew(char *fileName);
 /* Create a new gffFile structure. */
 
 void gffFileAdd(struct gffFile *gff, char *fileName, int baseOffset);
-/* Create a gffFile structure from a GFF file. */
+/* Add file to gffFile. */
+
+void gffFileAddRow(struct gffFile *gff, int baseOffset, char *words[], int wordCount, 
+		char *fileName, int lineIx);
+/* Process one row of GFF file (a non-comment line parsed by tabs normally). */
 
 void gffFileFree(struct gffFile **pGff);
 /* Free up a gff file. */
 
 int gffLineCmp(const void *va, const void *vb);
 /* Compare two gffLines (for use in slSort, etc.) . */
+
 
 #endif /* GFF_H */
 

@@ -87,6 +87,31 @@ memset(v, 0, size);
 return v;
 }
 
+void *needHugeMem(size_t size)
+/* No checking on size.  Memory not initted. */
+{
+void *pt;
+if (size == 0)
+    {
+    warn("Program error: trying to allocate 0 bytes in needHugeMem");
+    assert(FALSE);
+    }
+if ((pt = mhStack->alloc(size)) == NULL)
+    errAbort("Out of memory - request size %d bytes\n", size);
+return pt;
+}
+
+
+void *needHugeZeroedMem(long size)
+/* Request a large block of memory and zero it. */
+{
+void *v;
+v = needHugeMem(size);
+memset(v, 0, size);
+return v;
+}
+
+
 void *needMem(size_t size)
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
@@ -107,7 +132,10 @@ void *needMoreMem(void *old, size_t copySize, size_t newSize)
 /* Allocate a new buffer, copy old buffer to it, free old buffer. */
 {
 void *newBuf = needLargeMem(newSize);
+if (copySize > newSize)
+    internalErr();
 memcpy(newBuf, old, copySize);
+memset(newBuf+copySize, 0, newSize - copySize);
 freeMem(old);
 return newBuf;
 }

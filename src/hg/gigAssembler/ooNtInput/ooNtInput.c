@@ -23,8 +23,10 @@ struct clone
     char *name;		/* Allocated in hash. */
     char *faFile;	/* File with sequence in it. */
     struct ntContig *nt;  /* Associated NT contig if any. */
+    char *contig;	/* Contig this is in. */
     int mapPos;         /* Map position of clone. */
     int phase;          /* HTG Phase. */
+    int ntPos;		/* Start position in NT contig. */
     };
 
 struct ntContig
@@ -34,11 +36,31 @@ struct ntContig
     char *name;			/* Name of contig. */
     struct dlList *cloneList;   /* References to clones used. */
     int cloneCount;             /* Number of clones. */
+    char *majorityContig;		/* Contig with majority of clones. */
     bool usedSeq;		/* Set to true if saved out seq	already. */
     bool usedPos;               /* Set to true if saved out position already. */
     };
 
-struct clone *readInfo(char *fileName, char *retHeader, struct hash *cloneHash)
+struct ctg
+/* Information about a contig. */
+    {
+    struct ctg *next;	/* Next in list. */
+    char *name;		/* Name (allocated in contigHash) */
+    char *dir;		/* Directory this is in. */
+    char *chrom;	/* Chromosome this is in. */
+    struct clone *cloneList;	/* List of clones. */
+    char infoHeader[128];	/* First line of info file. */
+    };
+
+int cloneCmpNtPos(const void *va, const void *vb)
+/* Compare to sort based on query. */
+{
+const struct clone *a = *((struct clone **)va);
+const struct clone *b = *((struct clone **)vb);
+return a->ntPos - b->ntPos;
+}
+
+struct clone *readInfo(char *fileName, char *retHeader, struct hash *cloneHash, char *contig)
 /* Read in info file and put in hash/list/header. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -55,6 +77,7 @@ while (lineFileRow(lf, words))
     hashAddSaveName(cloneHash, words[0], clone, &clone->name);
     clone->mapPos = lineFileNeedNum(lf, words, 1);
     clone->phase = lineFileNeedNum(lf, words, 2);
+    clone->contig = contig;
     }
 lineFileClose(&lf);
 slReverse(&cloneList);
@@ -74,7 +97,9 @@ struct clone *clone;
 while (lineFileRow(lf, words))
     {
     splitPath(words[0], dir, base, ext);
-    clone = hashMustFindVal(cloneHash, base);
+    clone = hashFindVal(cloneHash, base);
+    if (clone == NULL)
+        errAbort("%s is in %s but not hash\n", base, fileName);
     clone->faFile = cloneString(words[0]);
     }
 lineFileClose(&lf);
@@ -90,88 +115,200 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
     }
 }
 
-struct ntContig *readNt(char *fileName, struct hash *cloneHash, struct hash *ntHash)
-/* Read NT contig file and fill in appropriate data structures. */
+void readNt(char *fileName, struct hash *cloneHash, struct hash *ntHash)
+/* Read NT contig file and fill in appropriate data structures in ntHash. */
 {
-struct ntContig *ntList = NULL, *nt = NULL;
+struct ntContig *nt = NULL;
 struct clone  *clone;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[5];
-char lastNtName[128], *ntName;
+char *ntName;
 
-strcpy(lastNtName, "");
 while (lineFileRow(lf, words))
     {
     ntName = words[0];
-    if (!sameString(lastNtName, ntName))
+    if ((nt = hashFindVal(ntHash, ntName)) == NULL)
         {
-	strcpy(lastNtName, ntName);
 	AllocVar(nt);
-	slAddHead(&ntList, nt);
 	hashAddSaveName(ntHash, ntName, nt, &nt->name);
 	nt->cloneList = newDlList();
 	}
-    clone = hashMustFindVal(cloneHash, words[1]);
-    clone->nt = nt;
-    dlAddValTail(nt->cloneList, clone);
-    nt->cloneCount += 1;
+    if ((clone = hashFindVal(cloneHash, words[1])) != NULL)
+	{
+	clone->nt = nt;
+	if (!dlValInList(nt->cloneList, clone))
+	    {
+	    dlAddValTail(nt->cloneList, clone);
+	    nt->cloneCount += 1;
+	    clone->ntPos = lineFileNeedNum(lf, words, 2);
+	    }
+	}
     }
 lineFileClose(&lf);
-slReverse(&ntList);
-return ntList;
 }
 
 char *ntDirName;
+struct hash *ntHash;
+
+struct hash *contigHash;	/* Hash of contigs - values are ctgs. */
+struct ctg *ctgList = NULL;
+struct hash *cloneHash;
+
+
 
 void doContig(char *dir, char *chrom, char *contig)
-/* Make nt, info, and geno.lst files from their predecessors. */
+/* Read in pre-NT versions of info, geno.lst, and also nt.noNt
+ * and save in contig. */
 {
-struct hash *cloneHash = newHash(10);
 struct clone *cloneList = NULL, *clone;
-struct hash *ntHash = newHash(8);
-struct ntContig *ntList = NULL, *nt;
+struct ntContig *nt;
 char fileName[512];
-char infoHeader[128];
+struct ctg *ctg;
 FILE *f = NULL;
+
+/* Make sure contig is uniq, and save it in list/hash */
+if (hashLookup(contigHash, contig))
+    errAbort("Contig %s duplicated", contig);
+AllocVar(ctg);
+slAddHead(&ctgList, ctg);
+hashAddSaveName(contigHash, contig, ctg, &ctg->name);
+ctg->dir = cloneString(dir);
+ctg->chrom = cloneString(chrom);
 
 /* Read in input three files. */
 sprintf(fileName, "%s/info.noNt", dir);
-cloneList = readInfo(fileName, infoHeader, cloneHash);
+ctg->cloneList = cloneList = readInfo(fileName, ctg->infoHeader, cloneHash, ctg->name);
 sprintf(fileName, "%s/geno.lst.noNt", dir);
 findCloneSeqFiles(fileName, cloneList, cloneHash);
 sprintf(fileName, "%s/nt.noNt", dir);
 if (fileExists(fileName))
-    ntList = readNt(fileName, cloneHash, ntHash);
+    readNt(fileName, cloneHash, ntHash);
+}
+
+
+void voteOnNt(struct ntContig *nt)
+/* Assign nt->majority on one NT. */
+{
+struct ctgCounter
+    {
+    struct ctgCounter *next;	/* Next in list. */
+    char *name;			/* Name (not allocated here). */
+    int count;			/* Usage count. */
+    } *ccList = NULL, *cc;
+struct hash *ccHash = newHash(8);	
+struct dlNode *node;
+struct clone *clone;
+char *bestContig = NULL;
+int bestCount = 0;
+
+/* Count up how many times each contig is used. */
+for (node = nt->cloneList->head; !dlEnd(node); node = node->next)
+    {
+    clone = node->val;
+    if ((cc = hashFindVal(ccHash, clone->contig)) == NULL)
+        {
+	AllocVar(cc);
+	cc->name = clone->contig;
+	slAddHead(&ccList, cc);
+	hashAdd(ccHash, cc->name, cc);
+	}
+    cc->count += 1;
+    }
+
+/* Find most popular contig and assign it to majority. */
+for (cc = ccList; cc != NULL; cc = cc->next)
+    {
+    if (cc->count > bestCount)
+        {
+	bestCount = cc->count;
+	bestContig = cc->name;
+	}
+    }
+nt->majorityContig = bestContig;
+
+if (slCount(ccList) != 1) 
+    {
+    printf("%d contigs claim part of %s, winner is %s\n", slCount(ccList), nt->name, nt->majorityContig);
+    for (cc = ccList; cc != NULL; cc = cc->next)
+        printf("  %s %d\n", cc->name, cc->count);
+    }
+freeHash(&ccHash);
+slFreeList(&ccList);
+}
+
+void sortAndVote()
+/* Sort cloneLists by ntPos and Assign nt->majorityContig to all NTs. */
+{
+struct hashEl *ntList = hashElListHash(ntHash), *hel;
+
+for (hel = ntList; hel != NULL; hel = hel->next)
+    {
+    struct ntContig *nt = hel->val;
+    voteOnNt(nt);
+    dlSort(nt->cloneList, cloneCmpNtPos);
+    }
+}
+
+int ntFlipTendency(struct ntContig *nt)
+/* Return tendency of NT to flip.   This is made from map position
+ * differences of clones. */
+{
+struct dlNode *node;
+struct clone *clone, *lastClone = NULL;
+int acc = 0;
+
+for (node = nt->cloneList->head; !dlEnd(node); node = node->next)
+    {
+    clone = node->val;
+    if (sameString(clone->contig, nt->majorityContig))
+        {
+	if (lastClone != NULL)
+	    {
+	    acc += clone->mapPos - lastClone->mapPos;
+	    }
+	lastClone = clone;
+	}
+    }
+return acc;
+}
+
+void updateContig(struct ctg *ctg)
+/* Update files in contig. */
+{
+char fileName[512];
+FILE *f;
+struct ntContig *nt;
+struct clone *clone;
 
 /* Write out info file. */
-sprintf(fileName, "%s/info", dir);
+sprintf(fileName, "%s/info", ctg->dir);
 f = mustOpen(fileName, "w");
-fprintf(f, "%s\n", infoHeader);
-for (clone = cloneList; clone != NULL; clone = clone->next)
+fprintf(f, "%s\n", ctg->infoHeader);
+for (clone = ctg->cloneList; clone != NULL; clone = clone->next)
     {
     if ((nt = clone->nt) != NULL && nt->cloneCount > 1)
         {
-	if (!nt->usedPos)
+	if (sameString(clone->contig, nt->majorityContig) && !nt->usedPos)
 	    {
 	    nt->usedPos = TRUE;
-	    fprintf(f, "%s %d 3\n", nt->name, clone->mapPos);
+	    fprintf(f, "%s %d 3 %d\n", nt->name, clone->mapPos, ntFlipTendency(nt));
 	    }
 	}
     else
         {
-	fprintf(f, "%s %d %d\n", clone->name, clone->mapPos, clone->phase);
+	fprintf(f, "%s %d %d 0\n", clone->name, clone->mapPos, clone->phase);
 	}
     }
 carefulClose(&f);
 
 /* Write out geno.lst file. */
-sprintf(fileName, "%s/geno.lst", dir);
+sprintf(fileName, "%s/geno.lst", ctg->dir);
 f = mustOpen(fileName, "w");
-for (clone = cloneList; clone != NULL; clone = clone->next)
+for (clone = ctg->cloneList; clone != NULL; clone = clone->next)
     {
     if ((nt = clone->nt) != NULL && nt->cloneCount > 1)
         {
-	if (!nt->usedSeq)
+	if (sameString(clone->contig, nt->majorityContig) && !nt->usedSeq)
 	    {
 	    nt->usedSeq = TRUE;
 	    sprintf(fileName, "%s/%s.fa", ntDirName, nt->name);
@@ -187,25 +324,24 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
 	}
     }
 carefulClose(&f);
-freeHash(&cloneHash);
-freeHash(&ntHash);
-for (nt = ntList; nt != NULL; nt = nt->next)
-    {
-    freeDlList(&nt->cloneList);
-    }
-for (clone = cloneList; clone != NULL; clone = clone->next)
-    freez(&clone->faFile);
-slFreeList(&ntList);
-slFreeList(&cloneList);
 }
 
 void ooNtInput(char *ooDir, char *ntDir)
 /* ooNtInput - Arrange source of finished sequence in FPC contig dirs to come from NT 
  * contigs where possible. */
 {
+struct ctg *ctg;
 ntDirName = ntDir;
+ntHash = newHash(0);
+contigHash = newHash(9);
+cloneHash = newHash(15);
+printf("Reading contigs from %s\n", ooDir);
 ooToAllContigs(ooDir, doContig);
-// doContig("/projects/hg/gs.5/oo.21/18/ctg25191", "18", "ctg25191");
+sortAndVote();
+uglyf("Writing NT modified files\n");
+slReverse(ctgList);
+for (ctg = ctgList; ctg != NULL; ctg = ctg->next)
+    updateContig(ctg);
 }
 
 int main(int argc, char *argv[])

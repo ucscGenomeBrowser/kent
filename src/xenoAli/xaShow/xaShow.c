@@ -25,7 +25,6 @@ snof = snofMustOpen(ixFileName);
 if (!snofFindOffset(snof, xaName, &offset))
     errAbort("Couldn't find %s", xaName);
 snofClose(&snof);
-
 f = xaOpenVerify(dataFileName);
 fseek(f, offset, SEEK_SET);
 xa = xaReadNext(f, FALSE);
@@ -170,13 +169,16 @@ strcpy(cbCosmidName, query);
 if ((s = strrchr(cbCosmidName, '.')) != NULL)
     *s = 0;
 
+
 /* Get xaAli. */
 xa = getOneXaAli(qOrganism, query);
 
 printf("<H2>Alignment of <I>C. briggsae</I> %s:%d-%d and <I>C. elegans</I> %s</H2>\n",
     cbCosmidName, xa->qStart, xa->qEnd, target);
 
+
 htmlParagraph("<I>C. briggsae</I> appears on top. Coding regions in <I>C. elegans</I> are in upper case.");
+
 
 /* Get display window. */
 if (!wormParseChromRange(target, &chrom, &tStart, &tEnd))

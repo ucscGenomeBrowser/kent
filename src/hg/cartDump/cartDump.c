@@ -3,30 +3,19 @@
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "cart.h"
 
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "cartDump - Dump contents of cart\n"
-  "usage:\n"
-  "   cartDump XXX\n"
-  "options:\n"
-  "   -xxx=XXX\n"
-  );
-}
-
-void cartDump(char *XXX)
+void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
 {
+printf("<TT><PRE>");
+cartDump(cart);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 2)
-    usage();
-cartDump(argv[1]);
+cartHtmlShell("Cart Dump", doMiddle, "hguid", NULL, NULL);
 return 0;
 }

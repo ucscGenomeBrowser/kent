@@ -10,9 +10,10 @@ errAbort(
   "   foo2 XXX\n");
 }
 
-void foo2(char *XXX)
+void foo2(char *command)
 /* foo2 - Testing cvs option in newProg. */
 {
+printf("I don't know how to %s", command);
 }
 
 int main(int argc, char *argv[])

@@ -5,7 +5,9 @@
  *****************************************************************************/
 #include "common.h"
 #include "portable.h"
+#include "hash.h"
 #include "obscure.h"
+#include "linefile.h"
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -62,13 +64,15 @@ return digCount;
 void readInGulp(char *fileName, char **retBuf, size_t *retSize)
 /* Read whole file in one big gulp. */
 {
-size_t size = *retSize = (size_t)fileSize(fileName);
+size_t size = (size_t)fileSize(fileName);
 char *buf;
 FILE *f = mustOpen(fileName, "rb");
 *retBuf = buf = needLargeMem(size+1);
 mustRead(f, buf, size);
 buf[size] = 0;      /* Just in case it needs zero termination. */
 fclose(f);
+if (retSize != NULL)
+    *retSize = size;
 }
 
 void readAllWords(char *fileName, char ***retWords, int *retWordCount, char **retBuf)
@@ -90,6 +94,22 @@ if (wordCount != 0)
 *retWords = words;
 *retWordCount = wordCount;
 *retBuf = buf;
+}
+
+struct slName *readAllLines(char *fileName)
+/* Read all lines of file into a list.  (Removes trailing carriage return.) */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct slName *list = NULL, *el;
+char *line;
+
+while (lineFileNext(lf, &line, NULL))
+     {
+     el = newSlName(line);
+     slAddHead(&list, el);
+     }
+slReverse(&list);
+return list;
 }
 
 void copyFile(char *source, char *dest)
@@ -119,6 +139,21 @@ close(d);
 freeMem(buf);
 }
 
+void cpFile(int s, int d)
+/* Copy from source file to dest until reach end of file. */
+{
+int bufSize = 64*1024, readSize;
+char *buf = needMem(bufSize);
+
+for (;;)
+    {
+    readSize = read(s, buf, bufSize);
+    if (readSize > 0)
+        write(d, buf, readSize);
+    if (readSize <= 0)
+        break;
+    }
+}
 
 void *intToPt(int i)
 /* Convert integer to pointer. Use when really want to store an
@@ -178,5 +213,41 @@ for (;;)
 *out = 0;
 *retNext = s;
 return TRUE;
+}
+
+struct hash *hashVarLine(char *line, int lineIx)
+/* Return a symbol table from a line of form:
+ *   var1=val1 var2='quoted val2' var3="another val" */
+{
+char *s = line, c;
+char *var, *val;
+struct hash *hash = newHash(8);
+
+for (;;)
+    {
+    if ((var = skipLeadingSpaces(s)) == NULL)
+        break;
+    if ((c = *var) == 0)
+        break;
+    if (!isalpha(c))
+	errAbort("line %d of custom input: variable needs to start with letter", lineIx);
+    val = strchr(var, '=');
+    if (val == NULL)
+        errAbort("line %d of custom input: missing = in var/val pair", lineIx);
+    *val++ = 0;
+    c = *val;
+    if (c == '\'' || c == '"')
+        {
+	if (!parseQuotedString(val, val, &s))
+	    errAbort("line %d of custom input: missing closing %c", lineIx, c);
+	}
+    else
+	{
+	s = skipToSpaces(val);
+	if (s != NULL) *s++ = 0;
+	}
+    hashAdd(hash, var, cloneString(val));
+    }
+return hash;
 }
 

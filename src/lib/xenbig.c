@@ -358,8 +358,8 @@ static void findMaxOverlap(char *a1, char *a2, int aSize,
 {
 int i;
 int maxOverlap = -1;
-int maxAstart;
-int maxBstart;
+int maxAstart = 0;
+int maxBstart = 0;
 int overlap;
 int minSize = min(aSize, bSize);
 int goodEnough = minSize-1;
@@ -860,7 +860,7 @@ char *firstWord;
 char *queryName = "";
 char *queryFile = "";
 struct hash *queryFileHash = newHash(0);
-struct contig *contig;
+struct contig *contig = NULL;
 struct dlList *contigList = newDlList();
 int lineState = 0;   /* Keeps track of groups of four lines. */
 struct slName *queryNameList = NULL;
@@ -869,7 +869,7 @@ char *qSymBuf = needMem(maxSymCount+1);
 char *tSymBuf = needMem(maxSymCount+1);
 char *hSymBuf = needMem(maxSymCount+1);
 int symCount = 0;
-int qSymLen, tSymLen, hSymLen;
+int qSymLen = 0, tSymLen = 0, hSymLen = 0;
 
 in = mustOpen(inName, "r");
 while (fgets(line, sizeof(line), in))

@@ -472,14 +472,22 @@ sqlFreeResult(&sr);
 hgFreeConn(&conn);
 }
 
-struct dnaSeq *hgRnaSeq(char *acc)
-/* Return sequence for RNA. */
+struct dnaSeq *hgExtSeq(char *acc)
+/* Return externally stored sequence. */
 {
 struct dnaSeq *seq;
 HGID id;
 hgRnaSeqAndId(acc, &seq, &id);
 return seq;
 }
+
+struct dnaSeq *hgRnaSeq(char *acc)
+/* Return sequence for RNA. */
+{
+return hgExtSeq(acc);
+}
+
+
 
 static struct dnaSeq *getBacContigSeqList(struct sqlConnection *conn, char *acc)
 /* Get list of contig DNA for bac. */
@@ -583,7 +591,6 @@ for (contig = bac->contigs; contig != NULL; contig = contig->next)
     if (contig->next == NULL)
 	totalSize = contig->submitOffset + contig->size;
     }
-uglyf("Total size of %s is %d in %d contigs\n", acc, totalSize, slCount(bac->contigs));
 AllocVar(res);
 res->name = cloneString(acc);
 res->size = totalSize;

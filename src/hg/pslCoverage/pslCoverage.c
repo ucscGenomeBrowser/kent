@@ -12,7 +12,7 @@ void usage()
 errAbort(
     "pslCoverage - estimate coverage from alignments."
     "usage:\n"
-    "    pslCoverage in.lst in.psl minPercentId endTrim out.cov misAsm.out");
+    "    pslCoverage in.sizes in.psl minPercentId endTrim out.cov misAsm.out");
 }
 
 struct probe

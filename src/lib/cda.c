@@ -329,8 +329,8 @@ struct cdaBlock *block = cda->blocks;
 int count = cda->blockCount;
 int blockIx;
 int scaledHeight = roundingScale(height, dnaSize, width);
-MgFont *font;
-int repeatCharWidth;
+MgFont *font = NULL;
+int repeatCharWidth = 0;
 
 if (repeatChar)
     {
@@ -464,7 +464,7 @@ for (fa = aliList; fa != NULL; fa = fa->right)
     blocks->startGood = leftGood(fa);
     blocks->endGood = rightGood(fa);
     bases = fa->nEnd - fa->nStart;
-    score = ffScoreMatch(fa->nStart, fa->hStart, bases);
+    score = dnaScoreMatch(fa->nStart, fa->hStart, bases);
     blocks->midScore = roundingScale(255, score, bases);
     ++blocks;
     }

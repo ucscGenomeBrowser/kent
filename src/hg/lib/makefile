@@ -1,21 +1,48 @@
+OPT= -ggdb 
+
 .c.o:
-	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
+	gcc -O -Wformat -Wimplicit -Wuninitialized -I../inc -I../../inc -I$(MYSQLINC) -c $*.c
 
-L = 
+L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = agpFrag.o agpGap.o bed.o chromInfo.o chromInserts.o \
-    clonePos.o cpgIsland.o ctgPos.o cytoBand.o \
-    est3.o exoFish.o gcPercent.o geneGraph.o genePred.o genomicDups.o \
-    glDbRep.o ggCluster.o ggDbIo.o ggDbRep.o ggDump.o \
-    ggGraph.o hCommon.o hdb.o hgGene.o hgRelate.o isochores.o \
-    jksql.o knownInfo.o knownMore.o mapSts.o mouseSyn.o \
-    ooUtils.o pepPred.o psl.o qaSeq.o rmskOut.o \
-    rnaGene.o simpleRepeat.o snp.o sqlList.o sqlNum.o \
-    stsAlias.o stsMarker.o wabAli.o
+O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
+    cart.o cartDb.o chromInfo.o chromInserts.o cgh.o \
+    clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
+    dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
+    featureBits.o fishClones.o gcPercent.o geneGraph.o \
+    genePred.o genomicDups.o \
+    ggCluster.o altGraph.o ggDbIo.o \
+    ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
+    hgGene.o hgRelate.o hui.o isochores.o jaxOrtholog.o \
+    jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
+    mapSts.o mcnBreakpoints.o mouseSyn.o \
+    ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o riken.o rmskOut.o \
+    rnaGene.o roughAli.o sage.o sageExp.o sanger22extra.o \
+    simpleRepeat.o snp.o softberryHom.o \
+    softPromoter.o stsAlias.o stsInfo.o stsMarker.o stsInfoMouse.o\
+    tilingPath.o traceInfo.o trackDb.o \
+    trackDbCustom.o trackDb.o trackTable.o wabAli.o \
+    sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
+    ancientRref.o ggMrnaAli.o \
+    glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o uPennClones.o \
+
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 	ranlib ../../lib/$(MACHTYPE)/jkhgap.a
 
+clean:
+	rm -f $(O);
+	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
+
+ctags:
+	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+
+tags:
+	etags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
+
+tests: 	
+#	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_ggMrnaAli test_ggMrnaAli.c  $(MYLIBS) $L
+	gcc -Wimplicit -ggdb   -I../../inc -I../inc  -o test_geneGraph test_geneGraph.c  $(MYLIBS) $L

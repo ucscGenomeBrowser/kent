@@ -5,12 +5,21 @@ object submission
     string id;	"Submission ID from scheduler"
     lstring errFile;	"Error file associated with submission"
     lstring outFile;	"Output file associated with submission"
-    byte submitError;	"An error occurred submitting it"
-    byte inQueue;	"Currently in queuing system"
-    byte queueError;	"In error stat in queue"
-    byte running;	"Currently running"
-    byte crashed;	"Looks like it ran but crashed"
-    byte ranOk;		"Looks like it ran and finished ok"
+    float cpuTime;	"CPU time in seconds"
+    string submitTime;	"Time submitted"
+    string startTime;	"Start time of job"
+    string endTime;	"End time of job"
+    int retVal;		"Return value of job"
+    ubyte gotRetVal;	"True if got return value"
+    ubyte submitError;	"An error occurred submitting it"
+    ubyte inQueue;	"Currently in queuing system"
+    ubyte queueError;	"In error stat in queue"
+    ubyte trackingError; "Have lost track of this somehow - no output, not on queue"
+    ubyte running;	"Currently running"
+    ubyte crashed;	"Looks like it ran but crashed"
+    ubyte slow;		"Run so long we warn user"
+    ubyte hung;		"Run so long we kill it"
+    ubyte ranOk;	"Looks like it ran and finished ok"
     )
 
 object check
@@ -24,11 +33,12 @@ object check
 object job
 "Keeps track of a job"
     (
-    lstring  command;	"Command line for job"
+    lstring command;	"Command line for job"
     int checkCount;	"Count of checks"
     object check[checkCount] checkList;	"Ways to check success of job."
     int submissionCount;	"The number of times submitted"
     object submission[submissionCount] submissionList; "List of submissions"
+    lstring spec;	"Specification for job"
     )
 
 object jobDb

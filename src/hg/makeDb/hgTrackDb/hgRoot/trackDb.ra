@@ -1,5 +1,5 @@
 track cytoBand
-shortLabel Chromosome Bands
+shortLabel Chromosome Band
 longLabel Chromosome Bands Localized by FISH Mapping Clones
 priority 1
 visibility dense
@@ -13,9 +13,33 @@ priority 2
 visibility dense
 type bed 5 +
 
+track fishClones
+shortLabel FISH Clones
+longLabel Clones placed on Cytogenetic Map using FISH
+priority 2.5
+visibility hide
+color 0,150,0,
+type bed 5 +
+
 track stsMarker
 shortLabel STS Markers
-longLabel STS Markers on Genetic (blue), FISH (green) and Radiation Hybrid (black) Maps
+longLabel STS Markers on Genetic (blue), FISH (green) and RH (black) Maps
+priority 3
+visibility dense
+altColor 128,128,255,
+type bed 5 +
+
+track stsMap
+shortLabel STS Markers
+longLabel STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps
+priority 3
+visibility dense
+altColor 128,128,255,
+type bed 5 +
+
+track stsMapMouse
+shortLabel STS Markers
+longLabel STS Markers on Genetic Maps
 priority 3
 visibility dense
 altColor 128,128,255,
@@ -24,7 +48,7 @@ type bed 5 +
 track mouseSyn
 shortLabel Mouse Synteny
 longLabel Corresponding Chromosome in Mouse
-priority 4 .
+priority 4 
 visibility hide
 color 120,70,30
 altColor 0,0,0
@@ -46,9 +70,17 @@ visibility hide
 spectrum on
 type bed 4 +
 
+track GCwiggle
+shortLabel GC Samples 
+longLabel GC Percent Sample Track (every 20,000 bases)
+priority 6.1
+visible hide
+chromosomes chr22,
+type sample 9
+
 track ctgPos
-shortLabel FPC Contigs
-longLabel Fingerprint Map Contigs
+shortLabel Map Contigs
+longLabel Physical Map Contigs
 priority 7
 visibility hide
 color 150,0,0
@@ -69,27 +101,61 @@ longLabel Gap Locations
 visibility dense
 type bed 3 +
 
-track genomicDups
-priority 10
-shortLabel Duplications
-longLabel Duplications of >1000 Bases of non-RepeatMasked Sequence
-visibility dense
-color 230,120,0
-altColor 220,180,0
-type bed 6 +
-
 track clonePos
-priority 10.5
+priority 9.5
 shortLabel Coverage
 longLabel Clone Coverage/Fragment Position
 visibility dense
 altColor 180,180,180 
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+priority 10
+visibility hide
+
+track uPennClones
+shortLabel U Penn Clones
+longLabel Univ of Penn Clones
+priority 10.1
+visibility hide
+type bed 6 +
+
+track genomicDups
+priority 10.5
+shortLabel Duplications
+longLabel Duplications of >1000 Bases Sequence
+visibility hide
+type bed 6 +
+color 170,0,0
+altColor 160,150,0
+
+track dupes
+priority 11
+shortLabel Duplications
+longLabel Duplications of >98% Identity >1kb
+visibility dense
+type bed 6 .
+
+track cgh
+shortLabel UCSF CGH
+longLabel UCSF Comparative Genomic Hybridizations
+priority 11.5
+visibility hide
+type bed 4 +
+
+track mcnBreakpoints
+shortLabel MCN Breakpoints
+longLabel MCN breakpoints
+priority 11.7
+visibility hide
+type bed 4 +
+
 track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
-priority 11
-visibility full
+priority 12
+visibility hide
 color 20,20,170
 type genePred
 
@@ -101,13 +167,48 @@ visibility full
 color 20,20,170
 type genePred refPep refMrna
 
+track sanger20
+shortLabel Sanger 20
+longLabel Sanger Institute Chromosome 20 Genes
+priority 13
+visibility full
+chromosomes chr20,
+color 0,100,180
+type genePred
+
 track sanger22
 shortLabel Sanger 22
-longLabel Sanger Center Chromosome 22 Annotations
+longLabel Sanger Institute Chromosome 22 Genes
 priority 13
 visibility full
 chromosomes chr22,
 color 0,100,180
+type genePred
+
+track loweProbes
+shortLabel Lowe's Probes
+longLabel 3 Olidogs selected per exon on Chr22
+priority 12.99
+visibility hide
+chromosomes chr22,
+type bed 6
+
+track freen
+shortLabel Pet Freen 
+longLabel Jims Pet Freen
+priority 13.01
+visibility hide
+chromosomes chr22,
+color 100,0,100
+type psl .
+
+track sanger22pseudo
+shortLabel Sanger 22 Pseudo
+longLabel Sanger Center Chromosome 22 Pseudogenes
+priority 13.1
+visibility hide
+chromosomes chr22,
+color 30,130,210
 type genePred
 
 track genieAlt
@@ -118,6 +219,24 @@ visibility dense
 color 125,0,150
 type genePred geniePep
 
+track acembly
+shortLabel Acembly Genes
+longLabel Acembly Gene Predictions With Alt-splicing
+priority 14.5
+visibility dense
+color 155,0,125
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$
+
+track aceTest
+shortLabel Acembly Test
+longLabel Acembly Test Predictions
+priority 14.51
+visibility full
+color 195,50,165
+type genePred
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GP&l=$$
+
 track ensGene
 shortLabel Ensembl Genes
 longLabel Ensembl Gene Predictions
@@ -125,6 +244,7 @@ priority 15
 visibility dense
 color 150,0,0
 type genePred ensPep
+url http://www.ensembl.org/perl/transview?transcript=$$
 
 track softberryGene
 shortLabel Fgenesh++ Genes
@@ -142,25 +262,77 @@ visibility dense
 color 0,100,0
 type bed 5 +
 
+track geneid
+shortLabel Geneid Genes
+longLabel Geneid Gene Predictions
+priority 17.1
+visibility hide
+color 0,90,100
+type genePred geneidPep
+
+track genscanExtra
+shortLabel Genscan Extra
+longLabel Genscan Extra (Suboptimal) Exon Predictions 
+priority 17.6
+visibility hide
+color 180,90,0
+type bed 6
+chromosomes chr22,
+
 track mrna
-shortLabel Human mRNAs
-longLabel Human mRNAs from Genbank
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank 
 priority 18
 visibility full
+spectrum on
 type psl .
+
+track tightMrna
+shortLabel Tight mRNAS
+longLabel Tightly Filtered $Organism mRNAs from Genbank
+priority 18.1
+visibility hide
+spectrum on
+type psl .
+
+track rnaCluster
+shortLabel Gene Bounds 
+longLabel Gene Boundaries as Defined by RNA and Spliced EST Clusters
+priority 18.2
+visibility hide
+color 200,0,50
+type bed 12
+
+track triangle
+shortLabel Golden Triangle
+longLabel Golden Triangle Possible Transcription Factor Binding Sites
+priority 18.3
+visibility dense
+spectrum on
+type bed 6
 
 track intronEst
 shortLabel Spliced ESTs
-longLabel Human ESTs That Have Been Spliced
+longLabel $Organism ESTs That Have Been Spliced
 priority 18.5
 visibility dense
+spectrum on
 type psl est
 
 track est
-shortLabel Human ESTs
-longLabel Human ESTs Including Unspliced
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
 priority 19
 visibility hide
+spectrum on
+type psl est
+
+track tightEst
+shortLabel Tight ESTs
+longLabel Tightly Filtered $Organism ESTs Including Unspliced
+priority 19.1
+visibility hide
+spectrum on
 type psl est
 
 track estPair
@@ -168,30 +340,112 @@ shortLabel EST Pairs
 longLabel 5'(blue) and 3'(red) EST Pairs
 priority 20
 visibility hide
-color 67,57,206
-altColor 204,20,35
+color 0,0,180
+altColor 170,0,0
+
+track tigrGeneIndex
+shortLabel TIGR Gene Index
+longLabel Alignment of TIGR Gene Index TCs Against the $Organism Genome
+priority 20.2
+visibility dense
+color 100,0,0
+type genePred
+url http://www.tigr.org/tigr-scripts/nhgi_scripts/tc_report.pl?$$
+
+track uniGene
+shortLabel UniGene
+longLabel UniGene Alignments and SAGE Info
+priority 20.5
+visibility dense
+type psl .
 
 track mgc_mrna
 shortLabel MGC mRNAs
 longLabel Mammalian Gene Collection mRNAs
 priority 21
 visibility hide
+spectrum on
 type psl .
 
 track cpgIsland
 shortLabel CpG Islands
-longLabel CpG Islands. (Islands < 400 Bases are Light Green)
+longLabel CpG Islands (Islands < 400 Bases are Light Green)
 priority 22
 visibility hide
 color 0,100,0
 altColor 128,228,128
 type bed 4 +
 
-track blatMouse
+track xenoMrna
+shortLabel Non$organism mRNA
+longLabel Non$organism mRNAs from Genbank
+priority 23
+visibility dense
+spectrum on
+type psl xeno
+
+track xenoBestMrna
+shortLabel Other Best mRNAs
+longLabel Non$organism mRNAs from Genbank Best in Genome Alignments
+priority 23.1
+visibility hide
+spectrum on
+type psl xeno
+
+track xenoEst
+shortLabel Non$organism EST
+longLabel Non$organism ESTs from Genbank 
+priority 23.2
+visibility hide
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+
+track blatHuman
+shortLabel Human Blat
+longLabel Human Translated Blat Alignments
+priority 23.9
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blatMus
 shortLabel Mouse Blat
 longLabel Mouse Translated Blat Alignments
 priority 24
 visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blatMusRef
+shortLabel Mouse Blat Ref
+longLabel Mouse Translated Blat Reference Alignment
+priority 24
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blatMouse
+shortLabel Mouse Blat
+longLabel Mouse Translated Blat Alignments
+priority 24.01
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track bestMouse
+shortLabel Mouse Best Blat
+longLabel Mouse Best Translated Blat Alignments
+priority 24.1
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -207,23 +461,111 @@ altColor 255,240,200
 spectrum on
 type bed 6 +
 
+track phMouse
+shortLabel PH Mouse Ecores
+longLabel Pattern Hunter Mouse/Human Evolutionarily Conserved Regions
+priority 25.5
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 6
+
 track fiberMouse
 shortLabel Fiberglass Mouse
 longLabel Mouse/Human Evolutionarily Conserved Regions (Fiberglass)
-priority 26
+priority 25.6
 visibility hide
 color 100,50,0
 type bed 4 .
 
+track blastzMouse
+shortLabel Blastz Mouse
+longLabel Merged Blastz Mouse Alignments
+priority 25.8
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 +
+
+track blastzMousePsl
+shortLabel Blastz Mouse
+longLabel Merged Blastz Mouse Alignments
+priority 25.8
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl .
+
+
+track avidUnique
+shortLabel AVID Mouse
+longLabel Regions Conserved in AVID Mouse/Human Alignments
+priority 25.9
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 .
+visibility dense
+url http://pipeline.lbl.gov/cgi-bin/zBrowser.pl?chrom=$s&from=$[&to=$]&hg=$D&dGenome=dGenome2
+
+track avidRepeat
+shortLabel AVID Rep Mouse
+longLabel Repeating Regions Conserved in AVID Mouse/Human Alignments
+priority 25.9
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type bed 5 .
+visibility hide
+
+track mouseRefHCons
+shortLabel HighCon MouseRef
+longLabel Highly Conserved Reference Mouse Alignments
+priority 25.81
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+chromosomes chr22,
+type bed 5 +
+
+track mouseRefMDup
+shortLabel ModDup MouseRef
+longLabel Moderately Duplicated Reference Mouse Alignments
+priority 25.82
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+chromosomes chr22,
+type bed 5 +
+
+track phMouseAli
+shortLabel PH Mouse Align
+longLabel Pattern Hunter Human/Mouse Alignments
+priority 25.3
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+chromosomes chr22,
+type bed 5 +
+
 track exoFish
 shortLabel Exofish Ecores
-longLabel Exofish Tetraodon/Human Conserved Regions (ecores)
+longLabel Exofish Tetraodon/Human Evolutionarily Conserved Regions
 priority 27
 visibility dense
 color 0,60,120
 altColor 200,220,255
 spectrum on
 type bed 5 .
+url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
 shortLabel Fish Blat
@@ -247,7 +589,7 @@ track rnaGene
 shortLabel RNA Genes
 longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
 priority 30
-visibility dense
+visibility hide
 color 170,80,0
 altColor 230,180,130
 type bed 6 +
@@ -256,56 +598,186 @@ track snpNih
 shortLabel Overlap SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
 priority 31
-visibility hide
+visibility dense
 type bed 4 .
 
 track snpTsc
 shortLabel Random SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
 priority 32
-visibility hide
+visibility dense
 type bed 4 .
+
+track perlegen
+shortLabel Haplotype Blocks
+longLabel Perlegen Common High-Resolution Haplotype Blocks.  
+priority 33
+visibility dense
+chromosomes chr21,
+color 0,0,0
+altColor 0,0,0
+spectrum on
+type bed 12
+url http://www.perlegen.com/haplotype/blk/$$.html
+
+track ancientR
+shortLabel Ancient Repeats
+longLabel Human/Mouse Ancient Repeats
+priority 33.5
+visibility hide
+spectrum on
+type bed 12
+
+track humMus
+shortLabel Mouse Evolution
+longLabel Human/Mouse Evolutionary Mutual Information
+altColor 10,50,100
+priority 33.6
+visibility hide
+type sample 9 
 
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
-priority 33
+priority 34
 visibility dense
 spectrum on
+type rmsk
 
 track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
-priority 34
-visibility hide
-type bed 4 +
-
-track bacEnds
-shortLabel BAC Ends
-longLabel BAC End Pairs
 priority 35
 visibility hide
-type psl .
-
-track rosettaTe
-shortLabel Rosetta T. E.
-longLabel Rosetta Confirmed Exon Data
-priority 36
-visibility dense
-chromosomes chr22,
 type bed 4 +
 
-track rosettaPe
-shortLabel Rosetta P. E.
-longLabel Rosetta Predicted Exon Data
-priority 37
-visibility dense
-chromosomes chr22,
-type bed 4 +
-
-track uniGene
-shortLabel UniGene
-longLabel UniGene Alignments and SAGE Info
+track nci60
+shortLabel NCI60
+longLabel Microarray Experiments for NCI 60 Cell Lines
 priority 38
 visibility dense
+type bed 15 +
+
+track affy
+shortLabel GNF
+longLabel GNF Gene Expression Atlas using Affymetrix GeneChips
+priority 39
+visibility hide
+type bed 15 +
+
+track affyRatio
+shortLabel GNF Ratio
+longLabel GNF Gene Expression Atlas Ratios using Affymetrix GeneChips
+priority 39.1
+visibility hide
+type bed 15 +
+
+track cghNci60
+shortLabel CGH NCI60
+longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
+priority 40
+visibility hide
+type bed 15 +
+
+track rosetta
+shortLabel Rosetta
+longLabel Rosetta Experimental Confirmation of Chr22 Exons
+priority 41
+visibility dense
+chromosomes chr22,
+type bed 15 +
+
+track wiggle
+shortLabel Wiggle
+longLabel Wiggle Test Track
+priority 41
+visibility hide
+chromosomes chr21,
+type sample 9
+
+track chimp
+shortLabel Chimp
+longLabel Chimp Sample Track
+priority 41.1
+visible hide
+chromosomes chr7,
+color 100,50,0
+altColor 0,0,255
+type sample 9
+
+track zoo
+shortLabel ZooSeq
+longLabel ZooSeq Conservation Data 
+priority 41.1
+visible hide
+chromosomes chr7,
+color 0,60,120
+altColor 0,128,0
+type sample 9
+
+track altGraph
+shortLabel altGraph
+longLabel altGraph
+priority 42
+visibility hide
+type psl
+
+track altGraphX
+shortLabel altGraphX
+longLabel altGraphX
+priority 42.1
+visibility hide
+type bed 3
+
+track mgcNcbiPicks
+shortLabel NCBI MGC Picks
+longLabel NCBI Clone Picks for the Mammalian Gene Collection
+priority 45
+visibility hide
+spectrum on
+private 1
+type psl est
+
+track mgcNcbiSplicedPicks
+shortLabel NCBI Spliced Picks
+longLabel NCBI Clone Picks for the Mammalian Gene Collection That Have Been Spliced
+priority 45.2
+visibility hide
+spectrum on
+private 1
+type psl est
+
+track mgcUcscPicks
+shortLabel UCSC MGC Picks
+longLabel UCSC Clone Picks for the Mammalian Gene Collection
+priority 45.3
+visibility hide
+spectrum on
+private 1
+type psl est
+
+track blatMus0202
+shortLabel blatMus0202
+longLabel Blat alignment of mm.2002.02/arachne for contamination checking
+priority 50.0
+visibility hide
+spectrum on
+private 1
+type psl .
+
+track blatMus0202sm
+shortLabel blatMus0202sm
+longLabel Blat soft-masked alignment of mm.2002.02/arachne for contamination checking
+priority 50.1
+visibility hide
+spectrum on
+private 1
+type psl .
+
+track blatMus0202Contam
+shortLabel blatMus0202Contam
+longLabel Known contamination of blatMus0202
+priority 50.2
+visibility hide
+private 1
 type psl .

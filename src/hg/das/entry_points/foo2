@@ -1,5 +1,0 @@
-"<ENTRY_POINTS href=\"url\" version=\"X.XX\" id=\"id\">\n"
-"<SEGMENT id=\"id1\" start=\"start1\" stop=\"stop1\" orientation=\"+\" subparts=\"yes\">descriptive text</SEGMENT>\n"
-"<SEGMENT id=\"id2\" start=\"start2\" stop=\"stop2 orientation=\"+\" subparts=\"yes\"\">descriptive text</SEGMENT>\n"
-"<SEGMENT id=\"id3\" start=\"start3\" stop=\"stop3 orientation=\"-\">descriptive text</SEGMENT>\n"
-"</ENTRY_POINTS>\n"

@@ -11,11 +11,19 @@
 #ifndef COMMON_H	/* Wrapper to avoid including this twice. */
 #define COMMON_H
 
+/* Some stuff to support large files in Linux. */
+#define _LARGEFILE_SOURCE 1
+
+#ifndef _FILE_OFFSET_BITS
+#define _FILE_OFFSET_BITS 64
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
+#include <sys/types.h>
 #include <fcntl.h>
 #include <assert.h>
 #include <setjmp.h>
@@ -40,6 +48,9 @@
 
 #define BIGNUM 0x3fffffff	/* A really big number */
 
+/* Default size of directory path string buffers */
+#define PATH_LEN 512
+
 /* How big is this array? */
 #define ArraySize(a) (sizeof(a)/sizeof((a)[0]))
 
@@ -56,6 +67,12 @@ void *needLargeMem(size_t size);
  * not initialized to zero. */
 
 void *needLargeZeroedMem(long size);
+/* Request a large block of memory and zero it. */
+
+void *needHugeMem(size_t size);
+/* No checking on size.  Memory not initted to 0. */
+
+void *needHugeZeroedMem(long size);
 /* Request a large block of memory and zero it. */
 
 void *needMoreMem(void *old, size_t copySize, size_t newSize);
@@ -76,7 +93,10 @@ void freeMem(void *pt);
 
 void freez(void *ppt);
 /* Pass address of pointer.  Will free pointer and set it 
- * to NULL. */
+ * to NULL. Typical use:
+ *     s = needMem(1024);
+ *          ...
+ *     freez(&s); */
 
 #define AllocVar(pt) (pt = needMem(sizeof(*pt)))
 /* Shortcut to allocating a single variable on the heap and
@@ -87,7 +107,7 @@ void freez(void *ppt);
 #define AllocA(type) needMem(sizeof(type))
 /* Shortcut to allocating a variable on heap of a specific type. */
 
-#define AllocN(type,count) ((type*)needMem(sizeof(type) * (count)))
+#define AllocN(type,count) ((type*)needLargeZeroedMem(sizeof(type) * (count)))
 /* Shortcut to allocating an array on the heap of a specific type. */
 
 #define ExpandArray(array, oldCount, newCount) \
@@ -111,6 +131,8 @@ void warn(char *format, ...);
 
 void zeroBytes(void *vpt, int count);     
 /* fill a specified area of memory with zeroes */
+
+#define ZeroVar(v) zeroBytes(v, sizeof(*v))
 
 void reverseBytes(char *bytes, long length);
 /* Reverse the order of the bytes. */
@@ -144,11 +166,17 @@ int slIxFromElement(void *list, void *el);
 void slSafeAddHead(void *listPt, void *node); 
 /* Add new node to start of list.
  * Usage:
- *    slAddHead(&list, node);
+ *    slSafeAddHead(&list, node);
  * where list and nodes are both pointers to structure
  * that begin with a next pointer. 
  */
 
+/* The macro below is faster.  For some reason under
+ * GNU C the braces below are ignored.  This leads
+ * to problems if slAddHead is a single statement
+ * after an if/for/while.  Either use slSafeAddHead
+ * or enclose the slAddHead line in braces in these
+ * situations. */
 #define slAddHead(listPt, node) \
     { \
     (node)->next = *(listPt); \
@@ -160,7 +188,9 @@ void slAddTail(void *listPt, void *node);
  * Usage:
  *    slAddTail(&list, node);
  * where list and nodes are both pointers to structure
- * that begin with a next pointer. 
+ * that begin with a next pointer. This is sometimes
+ * convenient but relatively slow.  For longer lists
+ * it's better to slAddHead, and slReverse when done. 
  */
 
 void *slPopHead(void *listPt);
@@ -198,7 +228,7 @@ void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem
  * pointer to dispose of duplicate element, and can be NULL. */
 
 void slRemoveEl(void *pList, void *el);
-/* Remove element from doubly linked list.  Usage:
+/* Remove element from singly linked list.  Usage:
  *    slRemove(&list, el);  */
 
 void slFreeList(void *listPt);
@@ -227,6 +257,10 @@ void slNameSort(struct slName **pList);
 boolean slNameInList(struct slName *list, char *string);
 /* Return true if string is in name list */
 
+void *slNameFind(void *list, char *string);
+/* Return first element of slName list (or any other list starting
+ * with next/name fields) that matches string. */
+
 char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
@@ -248,7 +282,8 @@ void refAddUnique(struct slRef **pRefList, void *val);
 /* Add reference to list if not already on list. */
 
 void gentleFree(void *pt);
-/* check pointer for NULL before freeing. */
+/* check pointer for NULL before freeing. 
+ * (Actually plain old freeMem does that these days.) */
 
 /*******  Some stuff for processing strings. *******/
 
@@ -274,6 +309,10 @@ int differentWord(char *s1, char *s2);
 
 boolean startsWith(char *start,char *string);
 /* Returns TRUE if string begins with start. */
+
+#define stringIn(needle, haystack) strstr(haystack, needle)
+/* Returns position of needle in haystack or NULL if it's not there. */
+/*        char *stringIn(char *needle, char *haystack);      */
 
 boolean endsWith(char *string, char *end);
 /* Returns TRUE if string ends with end. */
@@ -308,6 +347,9 @@ void subChar(char *s, char oldChar, char newChar);
 
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
+
+int countChars(char *s, char c);
+/* Return number of characters c in string s. */
 
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
@@ -357,16 +399,22 @@ char *firstWordInLine(char *line);
 /* Returns first word in line if any (white space separated).
  * Puts 0 in place of white space after word. */
 
+char *lastWordInLine(char *line);
+/* Returns last word in line if any (white space separated).
+ * Returns NULL if string is empty.  Removes any terminating white space
+ * from line. */
+
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
- * word. */
+ * word. Returns NULL when no more words. */
 
 int stringArrayIx(char *string, char *array[], int arraySize);
 /* Return index of string in array or -1 if not there. */
 
+int ptArrayIx(void *pt, void *array, int arraySize);
+/* Return index of pt in array or -1 if not there. */
+
 #define stringIx(string, array) stringArrayIx( (string), (array), ArraySize(array))
-
-
 
 /* Some stuff that is left out of GNU .h files!? */
 #ifndef SEEK_SET
@@ -389,6 +437,10 @@ void splitPath(char *path, char dir[256], char name[128], char extension[64]);
 
 void chopSuffix(char *s);
 /* Remove suffix (last . in string and beyond) if any. */
+
+void chopSuffixAt(char *s, char c);
+/* Remove end of string from last occurrence of char c. 
+ * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
 
 FILE *mustOpen(char *fileName, char *mode);
 /* Open a file - or squawk and die. */
@@ -439,6 +491,9 @@ int roundingScale(int a, int p, int q);
 int intAbs(int a);
 /* Return integer absolute value */
 
+#define logBase2(x)(log(x)/log(2))
+/* return log base two of number */
+
 #define round(a) ((int)((a)+0.5))
 /* Round floating point val to nearest integer. */
 
@@ -458,5 +513,26 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
 
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
+
+void removeReturns(char* dest, char* src);
+/* Removes the '\r' character from a string.
+ * the source and destination strings can be the same, 
+ * if there are no threads */
+		
+int intExp(char *text);
+/* Convert text to integer expression and evaluate. 
+ * Throws if it finds a non-number. */
+
+char* readLine(FILE* fh);
+/* Read a line of any size into dynamic memory, return null on EOF */
+
+long fileSize(char *fileName);
+/* The size of a file. */
+
+boolean fileExists(char *fileName);
+/* Does a file exist? */
+
+char *strstrNoCase(char *haystack, char *needle);
+/* A case-insensitive strstr */
 
 #endif /* COMMON_H */

@@ -1,5 +1,5 @@
 .c.o:
-	gcc -Wimplicit -O -ggdb -I../../inc -c $*.c
+	gcc -Wformat -Wimplicit -Wuninitialized -O -ggdb -I../../inc -c $*.c
 
 O = catUncomment.o 
 

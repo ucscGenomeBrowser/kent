@@ -9,6 +9,7 @@ O = hgLoadOut.o
 
 hgLoadOut: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadOut $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/hgLoadOut
 
 lib:
 	cd ../../../lib; make

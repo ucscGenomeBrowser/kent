@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "hCommon.h"
 
-char *finfFiles[] = {"predraft.finf", "draft.finf", "finished.finf"};
+char *finfFiles[] = {"predraft.finf", "draft.finf", "finished.finf", "extras.finf"};
 char *infoFile = "sequence.inf";
 
 struct clone
@@ -68,6 +68,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 return NULL;
 }
 
+
 struct finf *finfReadNext(struct lineFile *lf)
 /* Read in next finf from file, or NULL at EOF. */
 {
@@ -98,6 +99,7 @@ strncpy(finf->endInfo, words[6], sizeof(finf->endInfo));
 return finf;
 }
 
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -113,12 +115,11 @@ struct clone *readCloneList(char *fileName, struct hash *cloneHash)
 struct clone *cloneList = NULL, *clone;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
-char *words[16];
+char *words[8];
 struct hashEl *hel;
 
-while ((wordCount = lineFileChop(lf, words)) != 0)
+while (lineFileRow(lf, words))
     {
-    lineFileExpectWords(lf, 8, wordCount);
     AllocVar(clone);
     chopSuffix(words[0]);
     hel = hashAddUnique(cloneHash, words[0], clone);

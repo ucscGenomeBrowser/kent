@@ -88,7 +88,9 @@ while (lineFileRow(lf, row))
 	}
     else
         {
-	clone = hashMustFindVal(hash, cloneName);
+	clone = hashFindVal(hash, cloneName);
+	if (clone == NULL)
+	    errAbort("Couldn't find %s in hash of sequence.inf", cloneName);
 	}
     clone->size = lineFileNeedNum(lf, row, 1);
     clone->startFrag = cloneString(row[2]);

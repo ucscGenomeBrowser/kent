@@ -9,3 +9,4 @@ O = stringify.o
 
 stringify: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/stringify $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/stringify

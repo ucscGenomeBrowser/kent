@@ -87,21 +87,19 @@ static short max_code;
 static short free_code;
 
 
-static void init_table(min_code_size)
-    short min_code_size;
-    {
-    code_size = min_code_size + 1;
-    clear_code = 1 << min_code_size;
-    eof_code = clear_code + 1;
-    free_code = clear_code + 2;
-    max_code = 1 << code_size;
+static void init_table(short min_code_size)
+{
+code_size = min_code_size + 1;
+clear_code = 1 << min_code_size;
+eof_code = clear_code + 1;
+free_code = clear_code + 2;
+max_code = 1 << code_size;
 
-    zeroBytes(code_ids, TABLE_SIZE*sizeof(code_ids[0]));
-    }
+zeroBytes(code_ids, TABLE_SIZE*sizeof(code_ids[0]));
+}
 
 
-static void flush(n)
-size_t n;
+static void flush(size_t n)
 {
 if (fputc(n,gif_file) < 0)
     {
@@ -114,8 +112,7 @@ if (fwrite(gif_byte_buff, 1, n, gif_file) < n)
 }
 
 
-static void write_code(code)
-    short code;
+static void write_code(short code)
 {
 long temp;
 register short byte_offset; 
@@ -164,108 +161,107 @@ bit_offset += code_size;
  *	-3	bad "min_code_size"
  *	< -3	error status from either the get_byte or put_byte routine
  */
-static short compress_data(min_code_size)
-int min_code_size;
+static short compress_data(int min_code_size)
+{
+short status;
+short prefix_code;
+short d;
+register int hx;
+register short suffix_char;
+
+status = setjmp(recover);
+
+if (status != 0)
     {
-    short status;
-	short prefix_code;
-	short d;
-	register int hx;
-	register short suffix_char;
+    return status;
+    }
 
+bit_offset = 0;
+init_table(min_code_size);
+write_code(clear_code);
+suffix_char = *gif_wpt++;
+    gif_wcount -= 1;
 
+    prefix_code = suffix_char;
 
-    if (min_code_size < 2 || min_code_size > 9)
-	if (min_code_size == 1)
-	    min_code_size = 2;
-	else
-	    return -3;
-
-
-    status = setjmp(recover);
-
-    if (status != 0)
+    while (--gif_wcount >= 0)
 	{
-	return status;
-	}
+	    suffix_char = *gif_wpt++;
+	    hx = prefix_code ^ suffix_char << 5;
+	d = 1;
 
-    bit_offset = 0;
-    init_table(min_code_size);
-    write_code(clear_code);
-    suffix_char = *gif_wpt++;
-	gif_wcount -= 1;
-
-	prefix_code = suffix_char;
-
-	while (--gif_wcount >= 0)
+	for (;;)
 	    {
-		suffix_char = *gif_wpt++;
-		hx = prefix_code ^ suffix_char << 5;
-	    d = 1;
-
-	    for (;;)
+	    if (code_ids[hx] == 0)
 		{
-		if (code_ids[hx] == 0)
+		write_code(prefix_code);
+
+		d = free_code;
+
+		if (free_code <= LARGEST_CODE)
 		    {
-		    write_code(prefix_code);
+		    prior_codes[hx] = prefix_code;
+		    added_chars[hx] = (UBYTE)suffix_char;
+		    code_ids[hx] = free_code;
+		    free_code++;
+		    }
 
-		    d = free_code;
-
-		    if (free_code <= LARGEST_CODE)
+		if (d == max_code)
+		    if (code_size < 12)
 			{
-			prior_codes[hx] = prefix_code;
-			added_chars[hx] = (UBYTE)suffix_char;
-			code_ids[hx] = free_code;
-			free_code++;
+			code_size++;
+			max_code <<= 1;
+			}
+		    else
+			{
+			write_code(clear_code);
+			init_table(min_code_size);
 			}
 
-		    if (d == max_code)
-			if (code_size < 12)
-			    {
-			    code_size++;
-			    max_code <<= 1;
-			    }
-			else
-			    {
-			    write_code(clear_code);
-			    init_table(min_code_size);
-			    }
-
-		    prefix_code = suffix_char;
-		    break;
-		    }
-
-		if (prior_codes[hx] == prefix_code &&
-			added_chars[hx] == suffix_char)
-		    {
-			prefix_code = code_ids[hx];
-		    break;
-		    }
-
-		hx += d;
-		d += 2;
-		if (hx >= TABLE_SIZE)
-		    hx -= TABLE_SIZE;
+		prefix_code = suffix_char;
+		break;
 		}
+
+	    if (prior_codes[hx] == prefix_code &&
+		    added_chars[hx] == suffix_char)
+		{
+		    prefix_code = code_ids[hx];
+		break;
+		}
+
+	    hx += d;
+	    d += 2;
+	    if (hx >= TABLE_SIZE)
+		hx -= TABLE_SIZE;
 	    }
+	}
 
-	write_code(prefix_code);
+    write_code(prefix_code);
 
-    write_code(eof_code);
+write_code(eof_code);
 
 
-    /* Make sure the code buffer is flushed */
+/* Make sure the code buffer is flushed */
 
-    if (bit_offset > 0)
-	flush((bit_offset + 7)/8);
+if (bit_offset > 0)
+    flush((bit_offset + 7)/8);
 
-    flush(0);				/* end-of-data */
-    return 0;
-    }
+flush(0);				/* end-of-data */
+return 0;
+}
 
 short gif_compress_data(int min_code_size, unsigned char *pt, long size, FILE *out)
 {
 int ret;
+
+/* Make sure min_code_size is reasonable. */
+if (min_code_size < 2 || min_code_size > 9)
+    {
+    if (min_code_size == 1)
+	min_code_size = 2;
+    else
+	return -3;
+    }
 
 /* Store input parameters where rest of routines can use. */
 gif_file = out;

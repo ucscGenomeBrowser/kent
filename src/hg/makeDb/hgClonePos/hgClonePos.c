@@ -130,8 +130,8 @@ return cloneList;
 void addStageInfo(char *gsDir, struct hash *cloneHash)
 /* Add info about which file and what stage clone is in. */
 {
-static char *subDirs[] = {"fin/fa", "draft/fa", "predraft/fa"};
-static char stages[] = "FDP";
+static char *subDirs[] = {"fin/fa", "draft/fa", "predraft/fa", "extras/fa"};
+static char stages[] = "FDPD";
 int numStages = strlen(stages);
 int i;
 char pathName[512];
@@ -187,7 +187,7 @@ while (lineFileNext(lf, &line, &lineSize))
     wordCount = chopLine(line, words);
     if (wordCount == 0)
         continue;
-    if (wordCount != 8)
+    if (wordCount < 8)
         errAbort("Expecting 8 words line %d of %s", lf->lineIx, lf->fileName);
     gsSeqInfoStaticLoad(words, &gs);
     if (gs.phase != 0)

@@ -1,13 +1,17 @@
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "linefile.h"
 #include "portable.h"
 #include "hash.h"
 #include "psl.h"
+#include "xAli.h"
 #include "rmskOut.h"
 #include "chromInserts.h"
 
+boolean nohead = FALSE;	/* No header for psl files? */
+int dots=0;	/* Put out I'm alive dot now and then? */
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +20,10 @@ errAbort(
  "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf .gdup or .bed files\n"
  "to parent coordinate system. \n"
  "usage:\n"
- "   liftUp destFile liftSpec how sourceFile(s)\n"
+ "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
+ "The optional -type parameter tells what type of files to lift\n"
+ "If omitted the type is inferred from the suffix of destFile\n"
+ "Type is one of the suffixes described above.\n"
  "DestFile will contain the merged and lifted source files,\n"
  "with the coordinates translated as per liftSpec.  LiftSpec\n"
  "is tab-delimited with each line of the form:\n"
@@ -31,11 +38,17 @@ errAbort(
  "   liftUp dest.agp liftSpec how inserts sourceFile(s)\n"
  "This file describes where large inserts due to heterochromitin\n"
  "should be added.\n"
+ "\n"
+ "options:\n"
+ "   -nohead  No header written for .psl files\n"
+ "   -dots=N Output a dot every N lines processed\n"
+ "   -pslQ  Lift query (rather than target) side of psl\n"
  );
 }
 
 boolean silentDrop;	/* True if should silently drop items not in liftSpec. */
 boolean carryMissing;   /* True if should carry missing items untranslated. */
+boolean pipeOut;	/* True if main output is stdout. */
 
 struct liftSpec
 /* How to lift coordinates. */
@@ -73,7 +86,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     }
 slReverse(&list);
 lineFileClose(&lf);
-printf("Got %d lifts in %s\n", slCount(list), fileName);
+if (!pipeOut) printf("Got %d lifts in %s\n", slCount(list), fileName);
 if (list == NULL)
     errAbort("Empty liftSpec file %s", fileName);
 return list;
@@ -184,7 +197,7 @@ rmskOutWriteHead(dest);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     if (!fileExists(source))
 	{
 	warn("%s does not exist\n", source);
@@ -206,9 +219,9 @@ for (i=0; i<sourceCount; ++i)
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	wordCount = chopLine(line, words);
-	if (wordCount < 14 || wordCount > 15)
+	if (wordCount < 14 || wordCount > 16)
 	    errAbort("Expecting 14 words line %d of %s", lf->lineIx, lf->fileName);
-	if (wordCount == 15)
+	if (wordCount >= 15)
 	    id = words[14];
 	else
 	    id = "";
@@ -244,7 +257,20 @@ for (i=0; i<sourceCount; ++i)
 fclose(dest);
 }
 
-void liftPsl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+void freePslOrXa(struct psl *psl, boolean isXa)
+/* Free a psl that may be extended. */
+{
+if (isXa)
+    {
+    struct xAli *xa = (struct xAli *)psl;
+    xAliFree(&xa);
+    }
+else
+    pslFree(&psl);
+}
+
+void liftPsl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[],
+	boolean querySide, boolean isExtended)
 /* Lift up coordinates in .psl file. */
 {
 FILE *dest = mustOpen(destFile, "w");
@@ -254,13 +280,18 @@ struct lineFile *lf;
 int lineSize, wordCount;
 char *line, *words[32];
 struct psl *psl;
-unsigned *tStarts;
+struct xAli *xa;
+unsigned *starts;
 struct liftSpec *spec;
 int offset;
 int blockCount;
-char *tName;
+char *seqName;
+int dotMod = dots;
+int seqSize;
+int strandChar = (querySide ? 0 : 1);
 
-pslWriteHead(dest);
+if (!nohead)
+    pslWriteHead(dest);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
@@ -269,35 +300,97 @@ for (i=0; i<sourceCount; ++i)
 	warn("%s doesn't exist!", source);
 	continue;
 	}
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     lf = pslFileOpen(source);
-    while ((psl = pslNext(lf)) != NULL)
-	{
-	tName = psl->tName;
-	spec = findLift(liftHash, tName, lf);
+    for (;;)
+        {
+	if (isExtended)
+	    {
+	    xa = xAliNext(lf);
+	    psl = (struct psl *)xa;
+	    }
+	else
+	    psl = pslNext(lf);
+	if (psl == NULL)
+	    break;
+	if (dots > 0)
+	    {
+	    if (--dotMod <= 0)
+	        {
+		fputc('.', stdout);
+		fflush(stdout);
+		dotMod = dots;
+		}
+	    }
+	if (querySide)
+	    seqName = psl->qName;
+	else
+	    seqName = psl->tName;
+	spec = findLift(liftHash, seqName, lf);
 	if (spec == NULL)
 	    {
 	    if (!carryMissing)
 	        {
-		pslFree(&psl);
+		freePslOrXa(psl, isExtended);
 		continue;
 		}
 	    }
 	else
 	    {
 	    offset = spec->offset;
-	    psl->tStart += offset;
-	    psl->tEnd += offset;
-	    psl->tSize = spec->size;
+	    if (querySide)
+	        {
+		psl->qStart += offset;
+		psl->qEnd += offset;
+		starts = psl->qStarts;
+		seqSize = psl->qSize;
+		}
+	    else
+	        {
+		psl->tStart += offset;
+		psl->tEnd += offset;
+		starts = psl->tStarts;
+		seqSize = psl->tSize;
+		}
 	    blockCount = psl->blockCount;
-	    tStarts = psl->tStarts;
-	    for (j=0; j<blockCount; ++j)
-		tStarts[j] += offset;
-	    psl->tName = spec->newName;
+	    if (psl->strand[strandChar] == '-')
+	        {
+		for (j=0; j<blockCount; ++j)
+		    {
+		    int tr = seqSize - starts[j];
+		    tr += offset;
+		    starts[j] = spec->size - tr;
+		    }
+		}
+	    else
+	        {
+		for (j=0; j<blockCount; ++j)
+		    starts[j] += offset;
+		}
+	    if (querySide)
+	        {
+		psl->qSize = spec->size;
+		psl->qName = spec->newName;
+		}
+	    else
+	        {
+		psl->tSize = spec->size;
+		psl->tName = spec->newName;
+		}
 	    }
-	pslTabOut(psl, dest);
-	psl->tName = tName;
-	pslFree(&psl);
+	if (isExtended)
+	    {
+	    xAliTabOut(xa, dest);
+	    }
+	else
+	    {
+	    pslTabOut(psl, dest);
+	    }
+	if (querySide)
+	    psl->qName = seqName;
+	else
+	    psl->tName = seqName;
+	freePslOrXa(psl, isExtended);
 	}
     lineFileClose(&lf);
     }
@@ -349,7 +442,7 @@ strcpy(lastContig, "");
 for (i=1; i<sourceCount; ++i)
     {
     source = sources[i];
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     lf = lineFileMayOpen(source, TRUE);
     if (lf != NULL)
 	{
@@ -470,14 +563,12 @@ if (doubleLift)
    {
    int min2 = max3(ctgWord2, startWord2, endWord2);
    minFieldCount = max(minFieldCount, min2);
-   uglyf("doubleLift\n");
    }
-uglyf("MinFieldCount = %d\n", minFieldCount);
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
     lf = lineFileOpen(source, TRUE);
-    printf("Lifting %s\n", source);
+    if (!pipeOut) printf("Lifting %s\n", source);
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	if (line[0] == '#')
@@ -634,9 +725,9 @@ if (carryMissing)
 for (i=0; i<sourceCount; ++i)
     {
     source = sources[i];
-    printf("Processing %s\n", source);
+    if (!pipeOut) printf("Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
-    if (!startsWith("ctg", contig))
+    if (!startsWith("ctg", contig) && !startsWith("NT_", contig))
         {
 	sprintf(chromName, "chr%s", contig);
 	contig = chromName;
@@ -668,9 +759,10 @@ void liftUp(char *destFile, char *liftFile, char *how, int sourceCount, char *so
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 {
-struct liftSpec *lifts = readLifts(liftFile);
+struct liftSpec *lifts;
 struct hash *liftHash;
 char *source = sources[0];
+char *destType = cgiUsualString("type", destFile);
 
 if (sameWord(how, "carry"))
     carryMissing = TRUE;
@@ -680,49 +772,52 @@ else if (sameWord(how, "drop"))
     silentDrop = TRUE;
 else
     usage();
+pipeOut = sameString(destFile, "stdout");
+lifts = readLifts(liftFile);
 
-if (endsWith(destFile, ".out"))
+if (endsWith(destType, ".out"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftOut(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".psl"))
+else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(destType, ".psl"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
-    liftPsl(destFile, liftHash, sourceCount, sources);
+    liftPsl(destFile, liftHash, sourceCount, sources, 
+    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl"));
     }
-else if (endsWith(destFile, ".agp"))
+else if (endsWith(destType, ".agp"))
     {
     liftHash = hashLift(lifts);
     liftAgp(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".gl"))
+else if (endsWith(destType, ".gl"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftGl(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".gff") || endsWith(destFile, ".gtf"))
+else if (endsWith(destType, ".gff") || endsWith(destType, ".gtf"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftGff(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".gdup"))
+else if (endsWith(destType, ".gdup"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftGdup(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destFile, ".bed"))
+else if (endsWith(destType, ".bed"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
     liftBed(destFile, liftHash, sourceCount, sources);
     }
-else if (strstr(destFile, "gold"))
+else if (strstr(destType, "gold"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
@@ -730,13 +825,16 @@ else if (strstr(destFile, "gold"))
     }
 else 
     {
-    errAbort("Unknown file type in %s\n", destFile);
+    errAbort("Unknown file suffix for %s\n", destType);
     }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
+nohead = cgiBoolean("nohead");
+dots = cgiUsualInt("dots", dots);
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);

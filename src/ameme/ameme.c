@@ -14,36 +14,14 @@
 #include "memgfx.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
+#include "slog.h"
+#include "dnaMarkov.h"
 #include "ameme.h"
 #include "fragFind.h"
 
 boolean isFromWeb;          /* True if run as CGI. */
 boolean isMotifMatcher;     /* True if run from motifMatcher.html. */
-
-int scaleShift = 13;
-int slogScale = 8192;
-double fSlogScale = 8192.0;
-double invSlogScale = 0.0001220703125;
-
-int slog(double val)
-/* Return scaled log. */
-{
-return (round(fSlogScale*log(val)));
-}
-
-int carefulSlog(double val)
-/* Returns scaled log that makes sure there's no int overflow. */
-{
-if (val < 0.0000001)
-    val = 0.0000001;
-return slog(val);
-}
-
-double sexp(int scaledLog)
-/* Inverse of slog. */
-{
-return exp(scaledLog*invSlogScale);
-}
+FILE *htmlOut;		    /* Where to send output. */
 
 static void vaProgress(char *format, va_list args)
 /* Print message to indicate progress - to web page if in 
@@ -66,6 +44,11 @@ vaProgress(format, args);
 va_end(args);
 }
 
+void horizontalLine()
+/* Make horizontal line across html. */
+{
+fprintf(htmlOut, "<P><HR ALIGN=\"CENTER\"></P>");
+}
 
 char *amemeDir()
 /* Return directory name ameme files are in. */
@@ -78,7 +61,7 @@ if (!initted)
     initted = TRUE;
     if ((jkwebDir = getenv("JKWEB")) == NULL)
         jkwebDir = "";
-    sprintf(dir, "%sameme.dir", jkwebDir);
+    snprintf(dir, sizeof(dir), "%sameme.dir", jkwebDir);
     firstWordInFile(dir, dir, sizeof(dir));
     }
 return dir;
@@ -137,7 +120,7 @@ double factorial(int x)
 /* Return x factorial. */
 {
 double acc = 1;
-for (; x > 2; x -= 1)
+for (; x > 1; x -= 1)
     acc *= x;
 return acc;
 }
@@ -216,14 +199,14 @@ return time;
 
 /* Frequency tables for the null model (background). */
 
-double freqBase[5] = {1.0, 0.25, 0.25, 0.25, 0.25};
+double mark0[5] = {1.0, 0.25, 0.25, 0.25, 0.25};
 /* The probability of finding a base in sequence. */
                     /* N     T     C     A     G */
-double *freq = &freqBase[1];
+double *freq = &mark0[1];
 /* Frequency table that allows -1 indices for N's */
 
-int slogFreqBase[5];
-int *slogFreq = &slogFreqBase[1];
+int slogMark0[5];
+int *slogFreq = &slogMark0[1];
 /* Log of frequency. */
 
 double mark1[5][5];
@@ -233,7 +216,7 @@ int slogMark1[5][5];
 
 double mark2[5][5][5];
 int slogMark2[5][5][5];
-/* Second order Markove model - probability that a nucleotide follows two previous. */
+/* Second order Markov model - probability that a nucleotide follows two previous. */
 #define slogMark2Prob(v1,v2,v3) (slogMark2[(v1)+1][(v2)+1][(v3)+1])
 
 double codingMark2[3][5][5][5];
@@ -276,6 +259,21 @@ fclose(f);
 return seqList;
 }
 
+struct dnaSeq *seqsInList(struct seqList *seqList)
+/* Return dnaSeq's in seqList threaded into a singly
+ * linked list. */
+{
+struct seqList *seqEl;
+struct dnaSeq *list = NULL, *el;
+for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
+    {
+    el = seqEl->seq;
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+return list;
+}
+
 struct seqList *readSeqMaybeMakeFrame(char *faFileName, int nullModel)
 /* Load in an FA file.  If nullModel is coding figure out frame for each
  * sequence. */
@@ -288,7 +286,7 @@ if (nullModel == nmCoding)
     {
     char codFileName[512];
     struct codonBias *cb;
-    sprintf(codFileName, "%s%s", amemeDir(), "ce.cod");
+    snprintf(codFileName, sizeof(codFileName), "%s%s", amemeDir(), "ce.cod");
     cb = codonLoadBias(codFileName);
     for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
         {
@@ -479,7 +477,7 @@ int slog10Percent;
 void statUtilOpen()
 /* Initialize statistical utilities. */
 {
-static initted = FALSE;
+static boolean initted = FALSE;
 
 if (!initted)
     {
@@ -806,148 +804,40 @@ return profList;
 void makeFreqTable(struct seqList *seqList)
 /* Figure out frequency of bases in input. */
 {
-struct dnaSeq *seq;
-int histo[4];
-int oneHisto[4];
-double total;
-int i;
-
-zeroBytes(histo, sizeof(histo));
-for (;seqList != NULL; seqList = seqList->next)
-    {
-    seq = seqList->seq;
-    dnaBaseHistogram(seq->dna, seq->size, oneHisto);
-    for (i=0; i<4; ++i)
-        histo[i] += oneHisto[i];
-    }
-total = histo[0] + histo[1] + histo[2] + histo[3];
-freq[-1] = 1.0;
-for (i=0; i<4; ++i)
-    freq[i] = (double)histo[i] / total;
-slogFreq[-1] = 0;
-for (i=0; i<4; ++i)
-    slogFreq[i] = slog(freq[i]);
+struct dnaSeq *list = seqsInList(seqList);
+dnaMark0(list, mark0, slogMark0);
 }
 
-
-
-void makeMark1(struct seqList *seqList, double mark1[5][5], int slogMark1[5][5])
+void makeMark1(struct seqList *seqList, double mark0[5], int slogMark0[5], 
+	double mark1[5][5], int slogMark1[5][5])
 /* Make up 1st order Markov model - probability that one nucleotide
  * will follow another. */
 {
-struct dnaSeq *seq;
-DNA *dna, *endDna;
-int i,j;
-int histo[5][5];
-int hist1[5];
-
-zeroBytes(histo, sizeof(histo));
-zeroBytes(hist1, sizeof(hist1));
-for (;seqList != NULL; seqList = seqList->next)
-    {
-    seq = seqList->seq;
-    dna = seq->dna;
-    endDna = dna + seq->size-1;
-    for (;dna < endDna; ++dna)
-        {
-        i = ntVal[dna[0]];
-        j = ntVal[dna[1]];
-        hist1[i+1] += 1;
-        histo[i+1][j+1] += 1;
-        }
-    }
-for (i=0; i<5; ++i)
-    {
-    for (j=0; j<5; ++j)
-        {
-        double mark1Val;
-        int matVal = histo[i][j] + 1;
-        mark1Val = ((double)matVal)/(hist1[i]+5);
-        mark1[i][j] = mark1Val;
-        slogMark1[i][j] = slog(mark1Val);
-        }
-    }
-for (i=0; i<5; ++i)
-    {
-    mark1[i][0] = freqBase[i];
-    mark1[0][i] = 1;
-    slogMark1[i][0] = slogFreqBase[i];
-    slogMark1[0][i] = 0;
-    }
+struct dnaSeq *list = seqsInList(seqList);
+dnaMark1(list, mark0, slogMark0, mark1, slogMark1);
 }
 
-void makeTripleTable(struct seqList *seqList, double mark2[5][5][5], int slogMark2[5][5][5],
-    int offset, int advance, int earlyEnd)
-/* Make up a table of how the probability of a nucleotide depends on the previous two.
- * Depending on offset and advance parameters this could either be a straight 2nd order
- * Markov model, or a model for a particular coding frame. */
+void makeTripleTable(struct seqList *seqList, 
+	double mark0[5], int slogMark0[5],
+	double mark1[5][5], int slogMark1[5][5],
+	double mark2[5][5][5], int slogMark2[5][5][5],
+	int offset, int advance, int earlyEnd)
+/* Convert seqList to dnaSeqs and call the real routine. */
 {
-struct dnaSeq *seq;
-DNA *dna, *endDna;
-int i,j,k;
-int histo[5][5][5];
-int hist2[5][5];
-int total = 0;
-zeroBytes(histo, sizeof(histo));
-zeroBytes(hist2, sizeof(hist2));
-for (;seqList != NULL; seqList = seqList->next)
-    {
-    seq = seqList->seq;
-    dna = seq->dna;
-    endDna = dna + seq->size - earlyEnd - 2;
-    dna += offset;
-    for (;dna < endDna; dna += advance)
-        {
-        i = ntVal[dna[0]];
-        j = ntVal[dna[1]];
-        k = ntVal[dna[2]];
-        hist2[i+1][j+1] += 1;
-        histo[i+1][j+1][k+1] += 1;
-        total += 1;
-        }
-    }
-for (i=0; i<5; ++i)
-    {
-    for (j=0; j<5; ++j)
-        {
-        for (k=0; k<5; ++k)
-            {
-            double markVal;
-            int matVal = histo[i][j][k]+1;
-            if (i == 0 || j == 0 || k == 0)
-                {
-                if (k == 0)
-                    {
-                    mark2[i][j][k] = 1;
-                    slogMark2[i][j][k] = 0;
-                    }
-                else if (j == 0)
-                    {
-                    mark2[i][j][k] = freqBase[k];
-                    slogMark2[i][j][k] = slogFreqBase[k];
-                    }
-                else if (i == 0)
-                    {
-                    mark2[i][j][k] = mark1[j][k];
-                    slogMark2[i][j][k] = slogMark1[j][k];
-                    }
-                }
-            else
-                {
-                markVal = ((double)matVal)/(hist2[i][j]+5);
-                mark2[i][j][k] = markVal;
-                slogMark2[i][j][k] = slog(markVal);
-                }
-            }
-        }
-    }
+struct dnaSeq *list = seqsInList(seqList);
+dnaMarkTriple(list, mark0, slogMark0, mark1, slogMark1, 
+	mark2, slogMark2, offset, advance, earlyEnd);
 }
 
-void makeMark2(struct seqList *seqList, double mark2[5][5][5], int slogMark2[5][5][5])
+void makeMark2(struct seqList *seqList, 
+	double mark0[5], int slogMark0[5],
+	double mark1[5][5], int slogMark1[5][5],
+	double mark2[5][5][5], int slogMark2[5][5][5])
 /* Make up 1st order Markov model - probability that one nucleotide
  * will follow the previous two. */
 {
-makeTripleTable(seqList, mark2, slogMark2, 0, 1, 0);
+makeTripleTable(seqList, mark0, slogMark0, mark1, slogMark1, 
+	mark2, slogMark2, 0, 1, 0);
 }
 
 int mark0PatSlogProb(DNA *pat, int patSize)
@@ -1067,6 +957,9 @@ switch (nullModel)
     case nmEven:
         return slogOneFourth*patSize;
         break;
+    default:
+        errAbort("Unknown null model");
+	return 0;
     }
 }
 
@@ -1162,7 +1055,8 @@ diff = b->score - a->score;
 return diff;
 }
 
-void matchAtBaseIx(struct seqList *seqEl, struct profileColumn *col, struct profileColumn *rcCol, 
+void matchAtBaseIx(struct seqList *seqEl, struct profileColumn *col, 
+    struct profileColumn *rcCol, 
     int columnCount, int baseIx, int slogInvPos,
     int *retScore, boolean *retIsRc)
 /* Return the score and reverse complement status of profile and rcProfile at position. 
@@ -1178,17 +1072,26 @@ int patScore, rcPatScore, nonPatScore, score;
 nonPatScore = -nullPatSlogProb(seq, baseIx, columnCount, seqEl->frame);
 if (useLocation)
     nonPatScore += slogLocProb[baseIx] - slogInvPos;
-patScore = profilePatSlogProb(dna, softMask+baseIx, col, columnCount);
+patScore = profilePatSlogProb(dna, softMask+baseIx, col, columnCount) + nonPatScore;
 if (rcCol)
     {
-    rcPatScore = profilePatSlogProb(dna, softMask+baseIx, rcCol, columnCount);
+    int rcNonPatScore;
+    reverseComplement(seq+baseIx, columnCount);
+    	// Todo - adjust frame for minus strand here.
+    rcNonPatScore = -nullPatSlogProb(seq, baseIx, columnCount, seqEl->frame);
+    if (useLocation)
+	rcNonPatScore += slogLocProb[baseIx] - slogInvPos;
+    reverseComplement(seq+baseIx, columnCount);
+
+    rcPatScore = profilePatSlogProb(dna, softMask+baseIx, rcCol, columnCount)
+       + rcNonPatScore;
     if (rcPatScore > patScore)
         {
         patScore = rcPatScore;
         isRc = TRUE;
         }
     }
-score = patScore + nonPatScore;
+score = patScore;
 *retScore = score;
 *retIsRc = isRc;
 }
@@ -1462,7 +1365,7 @@ struct position *pos;
 for (pos = posList; pos != NULL; pos = pos->next)
     {
     oneScore = pos->score;
-    weight = 1.0/(1.0 + sexp(-oneScore));
+    weight = 1.0/(1.0 + invSlog(-oneScore));
     pos->weight = weight;
     accWeight += weight;
     if (maxWeight < weight)
@@ -1480,16 +1383,18 @@ return maxWeight;
 
 int iterateProfile(struct profile *prof, struct profile *rcProf, 
     struct seqList *seqList, int seqElSize,
-    struct profile **retProfile, struct profile **retRcProfile, boolean erase)
+    struct profile **retProfile, struct profile **retRcProfile, boolean erase,
+    FILE *hitOut, int profileId)
 /* Run a profile over sequence list and return the score.  Possibly update
- * the profile or erase where the profile hits from the sequences. */
+ * the profile or erase where the profile hits from the sequences. 
+ * If hitOut is non-NULL store info on hit there.*/
 {
 int profScore = 0;
 int onePos;
 int seqCount = slCount(seqList);
 struct seqList *seqEl;
 double weight;
-double maxWeight;
+double maxWeight = 0;
 double mean = 0;
 boolean saveWeight = (retProfile != NULL || erase);
 struct position *posList = NULL, *pos, *newPosList;
@@ -1504,6 +1409,12 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
     for (pos = newPosList; pos != NULL; pos = pos->next)
         {
         profScore += pos->score; 
+	if (hitOut != NULL && pos->score > 0)
+	    {
+	    fprintf(hitOut, "%d\t%2.3f\t%s\t%d\n", 
+	    	profileId, invSlogScale*pos->score, 
+	    	seqEl->seq->name, pos->pos);
+	    }
         }
     posList = slCat(newPosList, posList);
     }
@@ -1736,7 +1647,7 @@ void maskProfileFromSeqList(struct profile *profile, struct profile *rcProfile, 
 /* Skew the soft mask of the seqList so that things the profile matches will
  * become unlikely to be matched by something else. */
 {
-iterateProfile(profile, rcProfile, seqList, seqElSize, NULL, NULL, TRUE);
+iterateProfile(profile, rcProfile, seqList, seqElSize, NULL, NULL, TRUE, NULL, 0);
 }
 
 struct profile *scanStartProfiles(struct seqList *goodSeq, int scanLimit, boolean considerRc)
@@ -1766,7 +1677,8 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
 	    {
             if (considerRc)
                 rcProfile =  rcProfileCopy(profile);
-	    profile->score = iterateProfile(profile, rcProfile, goodSeq, goodSeqElSize, NULL, NULL, FALSE);
+	    profile->score = iterateProfile(profile, rcProfile, goodSeq, 
+	    	goodSeqElSize, NULL, NULL, FALSE, NULL, 0);
 	    freeProfile(&rcProfile);
             slAddHead(&profileList, profile);
 	    if (++progTime >= 50)
@@ -1779,7 +1691,7 @@ for (seqEl = goodSeq; seqEl != NULL; seqEl = seqEl->next)
     }
 progress("\n");
 slSort(&profileList, cmpProfiles);
-htmlHorizontalLine();
+horizontalLine();
 return profileList;
 }
 
@@ -1869,7 +1781,7 @@ for (i = 0; i<4; ++i)
     fprintf(f, "\t%c  ", valToNt[baseVal]);
     for (col = prof->columns; col != NULL; col = col->next)
         {
-        fprintf(f, "%4.3f ", sexp(col->slogProb[baseVal]) );
+        fprintf(f, "%4.3f ", invSlog(col->slogProb[baseVal]) );
         }
     fprintf(f, "\n");
     }
@@ -1883,12 +1795,13 @@ static DNA *stopCodons[3]  = {"tag", "tga", "taa"};
 int i;
 
 makeFreqTable(bgSeq);
-makeMark1(bgSeq, mark1, slogMark1);
-makeMark2(bgSeq, mark2, slogMark2);
+makeMark1(bgSeq, mark0, slogMark0, mark1, slogMark1);
+makeMark2(bgSeq, mark0, slogMark0, mark1, slogMark1, mark2, slogMark2);
 for (frame=0; frame<3; frame += 1)
     {
     int readFrame = (frame+2)%3;
-    makeTripleTable(bgSeq, codingMark2[readFrame], slogCodingMark2[readFrame], frame, 3, 3);
+    makeTripleTable(bgSeq, mark0, slogMark0, mark1, slogMark1,
+    	codingMark2[readFrame], slogCodingMark2[readFrame], frame, 3, 3);
     }
 /* Usually there's a little noise in our data that makes stop codons appear at a small
  * frequency in coding regions.  We won't eliminate this completely, but reduce it
@@ -1924,8 +1837,8 @@ if ((f = fopen(bgName, "rb")) == NULL)
     f = mustOpen(bgName, "wb");
     sig = lm2Signature;
     writeOne(f, sig);
-    mustWrite(f, freqBase, sizeof(freqBase));
-    mustWrite(f, slogFreqBase, sizeof(slogFreqBase));
+    mustWrite(f, mark0, sizeof(mark0));
+    mustWrite(f, slogMark0, sizeof(slogMark0));
     mustWrite(f, mark1, sizeof(mark1));
     mustWrite(f, slogMark1, sizeof(slogMark1));
     mustWrite(f, mark2, sizeof(mark2));
@@ -1938,8 +1851,8 @@ else
     mustReadOne(f, sig);
     if (sig != lm2Signature)
         errAbort("Bad signature on %s", bgName);
-    mustRead(f, freqBase, sizeof(freqBase));
-    mustRead(f, slogFreqBase, sizeof(slogFreqBase));
+    mustRead(f, mark0, sizeof(mark0));
+    mustRead(f, slogMark0, sizeof(slogMark0));
     mustRead(f, mark1, sizeof(mark1));
     mustRead(f, slogMark1, sizeof(slogMark1));
     mustRead(f, mark2, sizeof(mark2));
@@ -1957,33 +1870,33 @@ void dumpMark2Table(double mark2Table[5][5][5], int slogMark2Table[5][5][5], cha
 {
 int i,j,k;
 
-printf("<PRE><TT>\n%s\n", name);
+fprintf(htmlOut, "<PRE><TT>\n%s\n", name);
 for (i=1; i<5; ++i)
     {
     for (j=1; j<5; ++j)
         {
         for (k=1; k<5; ++k)
             {
-            printf("%1.3f ", mark2Table[i][j][k]);
+            fprintf(htmlOut, "%1.3f ", mark2Table[i][j][k]);
             }
-        printf("   ");
+        fprintf(htmlOut, "   ");
         }
-    printf("\n");
+    fprintf(htmlOut, "\n");
     }
-printf("\n");
+fprintf(htmlOut, "\n");
 for (i=1; i<5; ++i)
     {
     for (j=1; j<5; ++j)
         {
         for (k=1; k<5; ++k)
             {
-            printf("%6d ", slogMark2Table[i][j][k]);
+            fprintf(htmlOut, "%6d ", slogMark2Table[i][j][k]);
             }
-        printf("   ");
+        fprintf(htmlOut, "   ");
         }
-    printf("\n");
+    fprintf(htmlOut, "\n");
     }
-printf("\n");
+fprintf(htmlOut, "\n");
 }
 #endif /* JUSTDEBUG */
 
@@ -2056,7 +1969,7 @@ for (el = seqList; el != NULL; el = el->next)
             bestScore = score;
         }
     freePositionList(&posList);
-    printf("%5.2f %-*s %s\n", invSlogScale*totalScore, nameSize, seq->name, uppered);
+    fprintf(htmlOut, "%5.2f %-*s %s\n", invSlogScale*totalScore, nameSize, seq->name, uppered);
     }
 freeMem(uppered);
 *retBestScore = bestScore;
@@ -2104,7 +2017,8 @@ for (i=0; i<maxIterations; ++i)
     {
     lastScore = score;
     lastHash = profHash;
-    score = iterateProfile(prof, rcProf, goodSeq,  goodSeqElSize, &newProf, &rcNewProf, FALSE);
+    score = iterateProfile(prof, rcProf, goodSeq,  goodSeqElSize, 
+    	&newProf, &rcNewProf, FALSE, NULL, 0);
     if (prof != initProf)
         freeProfile(&prof);
     freeProfile(&rcProf);
@@ -2146,15 +2060,15 @@ for (repIx = 0; repIx < repCount; ++repIx)
     progress("\n");
     slSort(&newList, cmpProfiles);
     bestProf = newList;
-    printProfile(stdout,bestProf);
+    printProfile(htmlOut,bestProf);
     if (logFile)
         printProfile(logFile, bestProf);
-    htmlHorizontalLine();
+    horizontalLine();
     if (considerRc)
         rcProf = rcProfileCopy(bestProf);
     showProfHits(bestProf, rcProf, goodSeq, goodSeqElSize, goodSeqNameSize, &bestProf->bestIndividualScore);
     writeProfile(f, bestProf);
-    htmlHorizontalLine();
+    horizontalLine();
     maskProfileFromSeqList(bestProf, rcProf, goodSeq, goodSeqElSize);
     freeProfile(&rcProf);
     freeProfileList(&profList);
@@ -2179,7 +2093,7 @@ int lineIx = 0;
 char *goodName = NULL;
 int seqCount = 0;
 int longestLen = 0;
-int oneLen;
+int oneLen = 0;
 
 *retFileName = NULL;
 *retSeqCount = 0;
@@ -2291,8 +2205,8 @@ if (color.r != lastColor.r || color.b != lastColor.b || color.g != lastColor.g)
     if (firstTextColorSwitch)
         firstTextColorSwitch = FALSE;
     else
-        printf("</FONT>");
-    printf("<FONT COLOR=#%02X%02X%02X>",color.r, color.g, color.b);
+        fprintf(htmlOut, "</FONT>");
+    fprintf(htmlOut, "<FONT COLOR=#%02X%02X%02X>",color.r, color.g, color.b);
     lastColor = color;
     }
 }
@@ -2308,10 +2222,11 @@ void colorTextOut(char c, struct rgbColor color)
 /* Print out one character in color to html file. */
 {
 setFontColor(color);
-fputc(c, stdout);
+fputc(c, htmlOut);
 }
 
-void colorProfiles(struct profile *profList, struct seqList *seqList, int seqSize, boolean considerRc)
+void colorProfiles(struct profile *profList, struct seqList *seqList, 
+	int seqSize, boolean considerRc)
 /* Display profiles in color on sequences. */
 {
 int profCount = slCount(profList);
@@ -2342,6 +2257,7 @@ int coff;
 Color mappedCol;
 int x1, x2;
 struct tempName gifTn;
+char *gifName = cgiOptionalString("gif");
 struct position ***posMatrix;
 struct position *pos, *posList;
 int nameSize = maxSeqNameSize(seqList);
@@ -2376,18 +2292,18 @@ for (i=0,prof=profList; prof != NULL; ++i,prof=prof->next)
     freeProfile(&rcProf);
     }
 
-printf("<H3>Color Coding for Profiles</H3>\n");
+fprintf(htmlOut, "<H3>Color Coding for Profiles</H3>\n");
 for (colorIx = 0, prof = profList; prof != NULL; prof = prof->next)
     {
     setFontColor(distinctColors[colorIx]);
-    printProfile(stdout, prof);
+    printProfile(htmlOut, prof);
     colorIx = (colorIx+1)%ArraySize(distinctColors);
     };
 blackText();
-htmlHorizontalLine();
+horizontalLine();
 
-printf("<H3>Colored Text View of Profiles</H3>\n");
-printf("Different colors represent different profiles. Darker colors\n"
+fprintf(htmlOut, "<H3>Colored Text View of Profiles</H3>\n");
+fprintf(htmlOut, "Different colors represent different profiles. Darker colors\n"
        "represent stronger matches to profile.\n\n");
 
 /* Want to draw most significant last. */
@@ -2448,7 +2364,7 @@ for (seqEl=seqList,i=0; seqEl != NULL; seqEl=seqEl->next,i+=1)
             }
         }
     blackText();
-    printf("%-*s ", nameSize, seq->name);
+    fprintf(htmlOut, "%-*s ", nameSize, seq->name);
     for (j=0; j<seqSize; ++j)
         {
         DNA base = dna[j];
@@ -2457,21 +2373,25 @@ for (seqEl=seqList,i=0; seqEl != NULL; seqEl=seqEl->next,i+=1)
         colorTextOut(base, colors[j]);
         }
     yoff += barHeight + border;
-    printf("\n");
+    fprintf(htmlOut, "\n");
     }
 
 /* Tell .html where the gif is. */
-htmlHorizontalLine();
+horizontalLine();
 blackText();
-printf("<H3>Graphical Summary of Profile Hits</H3>\n");
-printf("Colors represent different profiles. Darker colors represent\n"
+fprintf(htmlOut, "<H3>Graphical Summary of Profile Hits</H3>\n");
+fprintf(htmlOut, "Colors represent different profiles. Darker colors represent\n"
        "stronger matches to profile.\n");
-makeTempName(&gifTn, "imp", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
-chmod(gifTn.forCgi, 0666);
+if (gifName == NULL)
+    {
+    makeTempName(&gifTn, "imp", ".gif");
+    gifName = gifTn.forCgi;
+    }
+mgSaveGif(mg, gifName);
+chmod(gifName, 0666);
 mgFree(&mg);
-printf("<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",
-    gifTn.forCgi, pixWidth, pixHeight);
+fprintf(htmlOut, "<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",
+    gifName, pixWidth, pixHeight);
 
 freeMem(colors);
 
@@ -2511,8 +2431,16 @@ return rand() * randScale;
 void initRandom()
 /* Initialize random number generator */
 {
-/* Set up random number generator. */
-srand( (unsigned)time( NULL ) );
+/* Set up random number generator with seed depending on time and host. */
+unsigned seed = (unsigned)time(NULL);
+char *host = getenv("HOST");
+if (host == NULL)
+    host = getenv("JOB_ID");
+uglyf("host = %s\n", host); /* uglyf */
+fprintf(htmlOut, "host = %p\n", host); /* uglyf */
+if (host != NULL)
+    seed += hashCrc(host);
+srand(seed);
 randScale = 1.0/RAND_MAX;
 }
 
@@ -2554,7 +2482,7 @@ switch (nullModel)
     {
     case nmCoding:
         {
-        int dnaVal, lastDnaVal, lastLastDnaVal;
+        int dnaVal = -1, lastDnaVal = -1, lastLastDnaVal = -1;
         if (seqLen > 0)
             {
             lastDnaVal = randomNucleotide(mark0);
@@ -2578,7 +2506,7 @@ switch (nullModel)
         }
     case nmMark2:
         {
-        int dnaVal, lastDnaVal, lastLastDnaVal;
+        int dnaVal = -1, lastDnaVal = -1, lastLastDnaVal = -1;
         if (seqLen > 0)
             {
             lastDnaVal = randomNucleotide(mark0);
@@ -2635,7 +2563,7 @@ int i;
 
 for (i=0; i<numSeq; ++i)
     {
-    generateOneSeq(f, i, lenSeq, evenProb, freqBase, mark1, mark2, codingMark2, rand()%3, nullModel);
+    generateOneSeq(f, i, lenSeq, evenProb, mark0, mark1, mark2, codingMark2, rand()%3, nullModel);
     }
 fclose(f);
 }
@@ -2656,7 +2584,7 @@ f = mustOpen(tn.forCgi, "w");
 for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
     {
     generateOneSeq(f, ++num, seqEl->seq->size, 
-        evenProb, freqBase, mark1, mark2, codingMark2, seqEl->frame, nullModel);
+        evenProb, mark0, mark1, mark2, codingMark2, seqEl->frame, nullModel);
     }
 fclose(f);
 freeSeqList(&seqList);
@@ -2677,33 +2605,34 @@ goodSeqNameSize = maxSeqNameSize(goodSeq);
 
 makeTempName(&tn, "imp", ".pfl");
 
-printf("<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n", 
+fprintf(htmlOut, "<P>Looking for %d motifs in %d sequences. Longest sequence is %d bases.</P>\n", 
     numMotifs, goodSeqListSize, goodSeqElSize);
-printf("<P>Settings are %s location; %sinclude reverse complement; %d occurrences per sequence; %s align; ", 
+fprintf(htmlOut, "<P>Settings are %s location; %sinclude reverse complement; %d occurrences per sequence; %s align; ", 
     (useLocation ? "use" : "ignore"), 
     (considerRc ? "" : "don't "), maxOcc,
     (leftAlign ? "left" : "right") );
-printf("restrain expansionist tendencies %f;  number of sequences in initial scan %d; ",
+fprintf(htmlOut, "restrain expansionist tendencies %f;  number of sequences in initial scan %d; ",
     constrainer, startScanLimit);
 backgroundName = bgSource;
 if (backgroundName == NULL)
     backgroundName = badName;
 if (backgroundName == NULL)
     backgroundName = "same as foreground";
-printf("background model %s; background data %s;</P>", 
+fprintf(htmlOut, "background model %s; background data %s;</P>", 
     (nullModelCgiName == NULL ? "Markov 0" : nullModelCgiName),
     backgroundName);
     
 approxTime = calcApproximateTime(considerRc);
 progress("This run would take about %2.2f minutes on a lightly loaded vintage 1999 web server.",
     approxTime);
-printf("<TT><PRE>\n");
-htmlHorizontalLine();
+fprintf(htmlOut, "<TT><PRE>\n");
+horizontalLine();
 
 doTopTiles(numMotifs, tn.forCgi, logFile, considerRc);
 
 loadAndColorProfiles(tn.forCgi, goodSeq, goodSeqElSize, considerRc);
-printf("</TT></PRE>\n");
+remove(tn.forCgi);
+fprintf(htmlOut, "</TT></PRE>\n");
 
 freeSeqList(&goodSeq);
 }
@@ -2719,7 +2648,7 @@ int i;
 
 makeTempName(&randTn, "rand", ".fa");
 
-printf("<TT><PRE>\n");
+fprintf(htmlOut, "<TT><PRE>\n");
 for (seqLen = 100; seqLen <= 500; seqLen += 100)
     for (seqCount = 100; seqCount <= 100; seqCount += 10)
         {
@@ -2751,7 +2680,7 @@ FILE *motifOutFile = NULL;
 char *motifOutName;
 
 startTime = clock1000();
-printf("<H2>Improbizer Results</H2>\n");
+fprintf(htmlOut, "<H2>Improbizer Results</H2>\n");
 leftAlign = cgiBoolean("leftAlign");
 if (cgiVarExists(nullModelCgi))
     {
@@ -2838,8 +2767,8 @@ if (isControlRun)
     goodName = randomSpoof(goodName);
 if (isRandomTest )
     {
-    puts("<P>Random test mode - this will take a good long time.  Be sure to kill "
-         "the process if you get impatient.</P>\n");
+    fprintf(htmlOut, "<P>Random test mode - this will take a good long time.  Be sure to kill "
+         "the process if you get impatient.</P>\n\n");
     doRandomTest(premade, considerRc);
     }
 else
@@ -2864,7 +2793,7 @@ else
                numMotifs, startScanLimit
                );
         }
-    puts("<P>Improbizer will display the results in parts.  First it will "
+    fprintf(htmlOut, "<P>Improbizer will display the results in parts.  First it will "
          "display the profiles (consensus sequences with the probability of "
          "each base at each position) individually as they are calculated. The "
          "position of a profile in a sequence is indicated by upper case. The "
@@ -2875,12 +2804,14 @@ else
          "has it's own color and the stronger the profile matches the darker "
          "it will appear in the sequence. Finally there will be a graphic "
          "summary of all the profiles at the end, using the same color "
-         "conventions.</P>");
+         "conventions.</P>\n");
     oneSearchSet(premade, motifOutFile, considerRc);
     endTime = clock1000();
-    htmlHorizontalLine();
-    printf("Calculation time was %4.3f minutes\n", 0.001*(endTime-startTime)/60);
+    horizontalLine();
+    fprintf(htmlOut, "Calculation time was %4.3f minutes\n", 0.001*(endTime-startTime)/60);
     }
+if (isControlRun)
+    remove(goodName);
 }
 
 void explainMotif()
@@ -2957,11 +2888,11 @@ for (;;)
     double oneProb;
     char *word;
     int baseVal;
-    boolean gotLocation;
+    boolean gotLocation = FALSE;
     boolean gotNt[4];
     int wordCount;
     int profLen = 0;
-    int i,j;
+    int i=0,j=0;
     struct profile *prof;
     struct profileColumn *col;
 
@@ -3078,11 +3009,14 @@ boolean considerRc = cgiBoolean("rcToo");
 char *motifOutName;
 FILE *motifOutFile = NULL;
 char *motifInName;
-char *seqFileName;
+char *seqFileName, *backFileName;
+char *hitFileName = cgiOptionalString("hits");
+FILE *hitFile = NULL;
+int profIx = 0;
 
 if ((motifOutName = cgiOptionalString("motifOutput")) != NULL)
     motifOutFile = mustOpen(motifOutName, "w"); 
-printf("<TT><PRE>");
+fprintf(htmlOut, "<TT><PRE>");
 
 /* Get some CGI variables. */
 if (cgiVarExists("maxOcc"))
@@ -3090,27 +3024,33 @@ if (cgiVarExists("maxOcc"))
 useLocation = !cgiBoolean("ignoreLocation");
 
 
-/* Copy the input sequences to an fa file and then load it
- * back as a sequence list. (My how indirect!) */
-if ((seqFileName = cgiOptionalString("seqFile")) != NULL)
-    {
-    seqList = readSeqList(seqFileName);
-    }
-else
+/* Get input sequence from file.  If necessary copy pasted
+ * in sequence to file first. */
+seqFileName = cgiOptionalString("seqFile");
+if (seqFileName == NULL)
+    seqFileName = cgiOptionalString("good");
+if (seqFileName == NULL)
     {
     pasteToFa("seq", &faName, &seqCount, &seqElSize);
-    seqList = readSeqList(faName);
+    seqFileName = faName;
     }
+seqList = readSeqList(seqFileName);
 nameSize = maxSeqNameSize(seqList);
 
-/* Set up background model as simple Markov 0. */
-makeFreqTable(seqList);
+/* Set up background model. */
+backFileName = cgiOptionalString("bad");
+if (backFileName == NULL)
+    backFileName = seqFileName;
 nullModel = nmMark0;
+if (cgiVarExists("background"))
+    nullModel = cgiOneChoice("background", nullModelChoices, ArraySize(nullModelChoices));
+getNullModel(seqFileName, backFileName, FALSE);
 
 /* Make all sequences the same size and fill in
  * soft mask table. */
 seqElSize = uniformSeqSize(seqList, TRUE, nullModel);
 
+/* Read in motifs. */
 if ((motifInName = cgiOptionalString("motifs")) != NULL)
     {
     char *buf;
@@ -3125,7 +3065,7 @@ else
     /* Collect the motifs that are actually present into an array. */
     for (i=1; i<=ArraySize(rawMotifs); ++i)
         {
-        sprintf(motifVarName, "motif%d", i);
+        snprintf(motifVarName, sizeof(motifVarName), "motif%d", i);
         rawMotifs[motifCount] = rm = cgiString(motifVarName);
         if ((prof = parseMotifs(rm, useLocation)) != NULL)
             {
@@ -3138,6 +3078,10 @@ motifCount = slCount(profList);
 if (motifCount == 0)
     errAbort("No motifs entered.");
 
+/* Possibly open hit file. */
+if (hitFileName != NULL)
+    hitFile = mustOpen(hitFileName, "w");
+
 /* Run the motifs once to figure out where they land and
  * what the score is. */
 for (prof = profList; prof != NULL; prof = prof->next)
@@ -3145,15 +3089,16 @@ for (prof = profList; prof != NULL; prof = prof->next)
     struct profile *rcProf = NULL;
     if (considerRc)
         rcProf = rcProfileCopy(prof);
-    prof->score = iterateProfile(prof, rcProf, seqList, seqElSize, NULL, NULL, FALSE);  
-    htmlHorizontalLine();
-    printProfile(stdout, prof);
+    prof->score = iterateProfile(prof, rcProf, seqList, seqElSize, 
+    	NULL, NULL, FALSE, hitFile, ++profIx);  
+    horizontalLine();
+    printProfile(htmlOut, prof);
     if (motifOutFile)
         printProfile(motifOutFile, prof);
     showProfHits(prof, rcProf, seqList, seqElSize, nameSize, &prof->bestIndividualScore);
     freeProfile(&rcProf);
     }
-htmlHorizontalLine();
+horizontalLine();
 colorProfiles(profList, seqList, seqElSize, considerRc);
 }
 
@@ -3173,17 +3118,18 @@ char *programName;
 
 //pushCarefulMemHandler();
 
+
 initProfileMemory();
 dnaUtilOpen();
 statUtilOpen();
-initRandom();
 
 isFromWeb = cgiIsOnWeb();
+
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     {
     errAbort("ameme - find common patterns in DNA\n"
              "usage\n"
-             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName]\n"
+             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName] [html=output.html] [gif=output.gif]\n"
              "where goodIn.fa is a multi-sequence fa file containing instances\n"
 	     "of the motif you want to find, badIn.fa is a file containing similar\n"
 	     "sequences but lacking the motif, numMotifs is the number of motifs\n"
@@ -3192,6 +3138,17 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
 	     "expect to find in a single sequence and motifOutput is the name of a"
              "file to store just the motifs in.\n");
     }
+
+/* Figure out where to put html output. */
+if (cgiVarExists("html"))
+    {
+    char *fileName = cgiString("html");
+    htmlOut = mustOpen(fileName, "w");
+    }
+else
+    htmlOut = stdout;
+    
+initRandom(); /* This one needs to be after htmlOut set up. */
 
 /* Figure out if we're going to find a pattern in sequences, or just display
  * where a pre-computed pattern occurs in sequences. */
@@ -3202,16 +3159,20 @@ else
     programName = "Improbizer";
 
 /* Print out html header.  Make background color brilliant white. */
-puts("Content-Type:text/html\n");
-printf("<HEAD>\n<TITLE>%s Results</TITLE>\n</HEAD>\n\n", programName);
-puts("<BODY BGCOLOR=#FFFFFF>\n");
+if (isFromWeb)
+    puts("Content-Type:text/html\n");
+fprintf(htmlOut, "<HEAD>\n<TITLE>%s Results</TITLE>\n</HEAD>\n\n", programName);
+fprintf(htmlOut, "<BODY BGCOLOR=#FFFFFF>\n\n");
 
 /* Wrap error handling et. around doMiddle. */
-htmEmptyShell(doMiddle, NULL);
+if (isFromWeb)
+    htmEmptyShell(doMiddle, NULL);
+else
+   doMiddle();
 
 //carefulCheckHeap();
 
 /* Write end of html. */
-htmlEnd();
+htmEnd(htmlOut);
 return 0;
 }

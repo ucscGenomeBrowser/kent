@@ -1,51 +1,69 @@
 /* freen - My Pet Freen. */
 #include "common.h"
-#include "hash.h"
+#include "linefile.h"
 #include "jksql.h"
-#include "portable.h"
-#include "hdb.h"
-#include "trackTable.h"
-
+#include "genePred.h"
+#include "xAli.h"
 
 void usage()
-/* Explain usage and exit. */
+/* Print usage and exit. */
 {
-errAbort(
-  "freen - My pet freen\n"
-  "usage:\n"
-  "   freen hgN\n");
+errAbort("usage: freen in out");
 }
 
-void freen(char *text)
+void genePredOffset(struct genePred *gp, int offset)
+/* Add offset to gene prediction. */
 {
-int x, y;
-printf("%d\n", 139221 - 82402 + 1);
-x = 118260 - 82402 + 1;
-y = 19629 - 1 + 1;
-printf("%d\n", x + y + 1332);
+int i;
+gp->txStart += offset;
+gp->txEnd += offset;
+gp->cdsStart += offset;
+gp->cdsEnd += offset;
+for (i=0; i<gp->exonCount; ++i)
+    {
+    gp->exonStarts[i] += offset;
+    gp->exonEnds[i] += offset;
+    }
+}
 
-printf("%d\n", 38640124 + x - 1);
-printf("%d\n", 38696944 - y + 1);
-printf(">>>\n");
-printf("%d\n", 38675982 - 38640124 + 1);
-printf("%d\n", 118260 - 82402 + 1);
-printf("%d\n", 38677314 - 38675983 + 1);
-printf("%d\n", 1332);
-printf("%d\n", 38696943 - 38677315+ 1);
-printf("%d\n", 19629 - 1 + 1); 
-printf("<<<\n");
-printf("%d vs %d\n", 139221 - 82402 + 1, 38696943 - 38640124 + 1);
+void oldFreen(char *input, char *output)
+{
+FILE *f = mustOpen(output, "w");
+struct lineFile *lf = NULL;
+char *row[50];
+struct genePred *gp;
 
-printf("%d vs %d\n",
-	118260 - 82402 + 1  + 1332 + 19629 - 1 + 1,
-	38675982 - 38640124 + 1 + 38677314 - 38675983 + 1 + 38696943 - 38677315 + 1);
+lf = lineFileOpen(input, TRUE);
+while (lineFileChop(lf, row))
+    {
+    gp = genePredLoad(row);
+    genePredOffset(gp, 100000);
+    genePredTabOut(gp, f);
+    }
+}
+
+void freen(char *root)
+{
+char buf[256];
+char *hello = "hello";
+int fd;
+struct xAli *xa = NULL;
+
+snprintf(buf, sizeof(buf), "%sXXXXXX", root);
+mkstemp(buf);
+fd = mkstemp(buf);
+printf("%d\n", fd);
+if (fd > 0)
+   write(fd, hello, strlen(hello));
+else
+   perror("mkstemp error");
+xAliFree(&xa);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2 )
-    usage();
+if (argc != 2)
+   usage();
 freen(argv[1]);
-return 0;
 }

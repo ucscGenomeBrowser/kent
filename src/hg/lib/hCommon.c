@@ -2,7 +2,6 @@
 
 #include "common.h"
 #include "hCommon.h"
-#include "hdb.h"
 #include "chromInfo.h"
 
 char *hgChromNames[] =
@@ -39,6 +38,7 @@ char *hgChromNames[] =
     "chr6_random",
     "chr7_random",
     "chr8_random",
+    "chr9_random",
     "chr10_random",
     "chr11_random",
     "chr12_random",
@@ -50,10 +50,12 @@ char *hgChromNames[] =
     "chr18_random",
     "chr19_random",
     "chr20_random",
-    "chr21_random",
-    "chr22_random",
     "chrX_random",
+    "chrY_random",
     "chrNA_random",
+    "chrNA_unmapped",
+    "chrUL_random",
+    "chrUn_random",
     };
 int hgChromCount = ArraySize(hgChromNames);
 
@@ -69,69 +71,15 @@ for (i=0; i<hgChromCount; ++i)
 return NULL;
 }
 
-boolean hgParseChromRange(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Parse something of form chrom:start-end into pieces. */
-{
-char *chrom, *start, *end;
-char buf[256];
-int iStart, iEnd;
-
-strncpy(buf, spec, sizeof(buf));
-chrom = buf;
-start = strchr(chrom, ':');
-if (start == NULL)
-    {
-    /* If just chromosome name cover all of it. */
-    if ((chrom = hgOfficialChromName(chrom)) == NULL)
-	return FALSE;
-    else
-       {
-       chrom;
-       iStart = 0;
-       iEnd = BIGNUM;
-       }
-    }
-else 
-    {
-    *start++ = 0;
-    end = strchr(start, '-');
-    if (end == NULL)
-	return FALSE;
-    else
-    *end++ = 0;
-    chrom = trimSpaces(chrom);
-    start = trimSpaces(start);
-    end = trimSpaces(end);
-    if (!isdigit(start[0]))
-	return FALSE;
-    if (!isdigit(end[0]))
-	return FALSE;
-    if ((chrom = hgOfficialChromName(chrom)) == NULL)
-	return FALSE;
-    iStart = atoi(start)-1;
-    iEnd = atoi(end);
-    }
-if (retChromName != NULL)
-    *retChromName = chrom;
-if (retWinStart != NULL)
-    *retWinStart = iStart;
-if (retWinEnd != NULL)
-    *retWinEnd = iEnd;
-return TRUE;
-}
-
-boolean hgIsChromRange(char *spec)
-/* Returns TRUE if spec is chrom:N-M for some human
- * chromosome chrom and some N and M. */
-{
-return hgParseChromRange(spec, NULL, NULL, NULL);
-}
-
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
+static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui program. */
 static char *_hgcFullName = "http://genome.ucsc.edu/cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksFullName = "http://genome.ucsc.edu/cgi-bin/hgTracks"; /* Path back to self. */
+static char *_hgTrackUiFullName = "http://genome.ucsc.edu/cgi-bin/hgTrackUi"; /* Path back to extended ui program. */
+
+static char *_hgTextName = "/cgi-bin/hgText"; /* Path back to the text browser. */
+static char *_hgTextFullName = "http://genome.ucsc.edu/cgi-bin/hgText"; /* Path back to the text browser. */
 
 char *hgcName()
 /* Relative URL to click processing program. */
@@ -143,6 +91,12 @@ char *hgTracksName()
 /* Relative URL to browser. */
 {
 return _hgTracksName;
+}
+
+char *hgTrackUiName()
+/* Relative URL to extended track UI. */
+{
+return _hgTrackUiName;
 }
 
 char *hgcFullName()
@@ -157,6 +111,17 @@ char *hgTracksFullName()
 return _hgTracksFullName;
 }
 
+char *hgTextName()
+/* Text broswer relative URL to browser. */
+{
+return _hgTextName;
+}
+
+char *hgTextFullName()
+/* Absolute URL to browser. */
+{
+return _hgTextFullName;
+}
 
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
 /* Finish conversion from frag to clone or clone.ver name. */
@@ -272,6 +237,14 @@ char *skipChr(char *s)
 if (startsWith("chr", s))
     s += 3;
 return s;
+}
+
+boolean hIsFin(char *chrom)
+/* Return TRUE if this is a finished chromosome. */
+{
+chrom = skipChr(chrom);
+return sameString(chrom, "20") || sameString(chrom, "21")
+   || sameString(chrom, "22");
 }
 
 

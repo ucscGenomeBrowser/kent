@@ -13,11 +13,11 @@ The applications are scattered in other directories.
 Many of them are web based.  A few of them expect
 the MySQL database to be around.
 
-INSTALLING
+GENERAL INSTALL INSTRUCTIONS
 
 1. Create a directory named "jksrc" and go to it.
 2. Unzip jksrcXXX.zip, where XXX is the latest version,
-   currently 304.
+   currently 417.
 3. Check that the environment variable MACHTYPE
    exists on your system.  It should on Unix.  
    (And making this on non-Unix systems is beyond
@@ -29,22 +29,13 @@ INSTALLING
 4. Make the directory ~/bin/$MACHTYPE which is
    where the (non-web) executables will go.
    Add this directory to your path.
-5. Go to the jksrc/lib directory.
-6. If you have mySQL installed make the
-   environment variable MYSQLINC point to
-   where it's include files are.  (On my
-   system they are at /usr/include/mysql.)
-   While you're at it set the MYSQLLIBS
-   variable to point to something like
-   /usr/lib/mysql/libmysqlclient.a
-7. If you don't have mysql installed, edit
-   the makefile to remove 'jksql.o' and
-   -I$(MYSQLINC).
-8. Type make.  On Alphas there will be 
+5. Go to the jksrc/lib directory.  If it doesn't
+   already exist do a mkdir $MACHTYPE.
+6. Type make.  On Alphas there will be 
    some warning messages about "crudeAli.c"
    otherwise it should compile cleanly.
    It's using gcc.
-9. Go to the application you want to make and type 
+7. Go to the application you want to make and type 
    make.  (If you're not sure, as a simple test
    go to jksrc/utils/fixcr and type make,
    then 'rehash' if necessary so your shell
@@ -54,6 +45,32 @@ INSTALLING
    <LF> terminations.  Look at the "gotCr.c"
    file in the fixCr directory, and then
    do a "fixcr gotCr.c" on it.
+
+INSTALL INSTRUCTIONS FOR BLAT
+
+1. Follow the general install instructions above.
+2. If you're on a non-Linux system do a:
+     setenv SOCKETLIB -lxnet
+3. Execute make in each of the following directories:
+     jksrc/gfServer
+     jksrc/gfClient
+     jksrc/blat
+     jksrc/utils/faToNib
+
+INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
+(and other code in the jkSrc/hg subdirectory)
+
+1. Follow the general install instructions above.
+2. Make the environment variable MYSQLINC point to
+   where MySQL's include files are.  (On my
+   system they are at /usr/include/mysql.)
+   While you're at it set the MYSQLLIBS
+   variable to point to something like
+   /usr/lib/mysql/libmysqlclient.a
+3. Execute make in jksrc/hg/lib
+4. Execute make in the directory containing the
+   application you wish to build.
+
 
 CODE CONVENTIONS
 

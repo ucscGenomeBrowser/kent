@@ -33,6 +33,7 @@ errAbort(
  "   waba 1 small.lst big.lst output.1\n"
  "Runs first pass alignment between all the fasta files in small.lst\n"
  "vs. all the fasta files in big.lst writing output to output.1\n"
+ "You can have .fa files instead of .lst files for small and big.\n"
  "   waba 2 input.1 output.2\n"
  "Runs second pass alignment taking results from first pass (in \n"
  "input.1 and using them to create output.2\n"
@@ -96,6 +97,30 @@ for (i = 0; i<lastQsection || i == 0; i += qMaxSize/2)
     }
 }
 
+void readAllWordsOrFa(char *fileName, char ***retFiles, int *retFileCount, 
+   char **retBuf)
+/* Open a file and check if it is .fa.  If so return just that
+ * file in a list of one.  Otherwise read all file and treat file
+ * as a list of filenames.  */
+{
+FILE *f = mustOpen(fileName, "r");
+char c = fgetc(f);
+
+fclose(f);
+if (c == '>')
+    {
+    char **files;
+    *retFiles = AllocArray(files, 1);
+    *retBuf = files[0] = cloneString(fileName);
+    *retFileCount = 1;
+    return;
+    }
+else
+    {
+    readAllWords(fileName, retFiles, retFileCount, retBuf);
+    }
+}
+
 void firstPass(char *aList, char *bList, char *outName)
 /* Do first pass - find areas of homology between a and b,
  * save to outName. */
@@ -109,8 +134,8 @@ int i;
 FILE *out = mustOpen(outName, "w");
 
 /* Read in fa file lists . */
-readAllWords(aList, &aNames, &aCount, &aNameBuf);
-readAllWords(bList, &bNames, &bCount, &bNameBuf);
+readAllWordsOrFa(aList, &aNames, &aCount, &aNameBuf);
+readAllWordsOrFa(bList, &bNames, &bCount, &bNameBuf);
 
 /* Convert second list to nt4 (packed) format in memory. */
 printf("Loading and packing dna in %s\n", bList);

@@ -3,7 +3,8 @@
  * for personal, academic, and non-profit purposes.  Commercial use          *
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
-/* HGAP - Human Genome Annotation Project database. */
+/* HGAP - Human Genome Annotation Project database.   This is mostly
+ * obsolete.  Please use hdb.h instead. */
 #ifndef HGAP_H
 #define HGAP_H
 
@@ -116,6 +117,9 @@ struct hgContig *hgGetContig(char *acc, int contigIx);
 
 struct dnaSeq *hgContigSeq(struct hgContig *contig);
 /* Return DNA associated with contig. */
+
+struct dnaSeq *hgExtSeq(char *acc);
+/* Return externally stored sequence. */
 
 struct dnaSeq *hgRnaSeq(char *acc);
 /* Return sequence for RNA. */

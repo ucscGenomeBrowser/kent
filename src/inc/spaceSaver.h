@@ -35,7 +35,7 @@ struct spaceRowTracker
 struct spaceSaver *spaceSaverNew(int winStart, int winEnd);
 /* Create a new space saver around the given window.   */
 
-struct spaceSaver *spaceSaverFree(struct spaceSaver **pSs);
+void spaceSaverFree(struct spaceSaver **pSs);
 /* Free up a space saver. */
 
 struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, int start, int end, void *val);

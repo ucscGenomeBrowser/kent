@@ -35,6 +35,7 @@ struct lineFile *lineFileOpen(char *fileName, bool zTerm);
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd);
 /* Wrap a line file around an open'd file. */
+#define lineFileAttach lineFileAttatch  /* I'm a bad speller, oops. */
 
 struct lineFile *lineFileStdin(bool zTerm);
 /* Wrap a line file around stdin. */

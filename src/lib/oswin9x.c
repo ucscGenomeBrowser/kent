@@ -31,6 +31,12 @@ long clock1000()
 return clock() /* 1000/CLOCKS_PER_SEC */;   /* CLOCKS_PER_SEC == 1000 for windows */
 }
 
+long clock1()
+/* Second clock. */
+{
+return clock()/CLOCKS_PER_SEC;
+}
+
 void uglyfBreak()
 /* Go into debugger. */
 {
@@ -80,6 +86,8 @@ else
     otherDir = TRUE;
     }
 
+if (pattern == NULL)
+    pattern = *;
 if( (hFile = _findfirst( pattern, &fileInfo)) == -1L )
     return NULL;
 

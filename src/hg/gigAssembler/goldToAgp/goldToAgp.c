@@ -156,6 +156,7 @@ char chromRoot[128], chromSuperDir[256], chromExt[64];
 hashTrans(gsDir, "fin", "F", seqHash);
 hashTrans(gsDir, "draft", "D", seqHash);
 hashTrans(gsDir, "predraft", "P", seqHash);
+hashTrans(gsDir, "extras", "D", seqHash);
 // hashTrans(gsDir, "missing", "O", seqHash);
 for (i=0; i<chromCount; ++i)
     {

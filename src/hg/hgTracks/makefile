@@ -1,19 +1,31 @@
 .c.o:
-	gcc -ggdb -I../inc -Wimplicit -I../../inc -c $*.c
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
 
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = hgTracks.o hgFind.o
+A = hgTracks
 
-hgTracks: $O 
-	gcc $O ../../lib/$(MACHTYPE)/jkweb.a $(MYLIBS) $L
-	mv a.out hgTracks
-	strip hgTracks
-	chmod a+rx hgTracks
-	chmod g-w hgTracks
-	mv hgTracks /usr/local/apache/cgi-bin
+O = $A.o
+
+my: compile
+	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
+
+alpha: compile
+	mv $A /usr/local/apache/cgi-bin/$A
+
+beta: compile
+	mv $A /usr/local/apache/cgi-bin-beta/$A
+
+compile: $O 
+	gcc $O $(MYLIBS) $(L) 
+	mv a.out $A
+#	strip $A
+	chmod a+rx $A
 
 lib:
 	cd ../../lib; make
+
+tags: 
+	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h

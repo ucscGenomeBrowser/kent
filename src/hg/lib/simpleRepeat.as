@@ -13,8 +13,8 @@ table simpleRepeat
    uint   score; 	"Score between  and .  Best is ."
    uint   A;  	"Number of A's in repeat unit"
    uint   C;  	"Number of C's in repeat unit"
-   uint   T;  	"Number of T's in repeat unit"
    uint   G;  	"Number of G's in repeat unit"
+   uint   T;  	"Number of T's in repeat unit"
    float   entropy;  	"Entropy"
    lstring sequence;    	"Sequence of repeat unit element"
    )

@@ -5,8 +5,8 @@ L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = parasol.o
+O = parasol.o 
 
 parasol: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/parasol $O $(MYLIBS) $L
+	gcc -o $(HOME)/bin/$(MACHTYPE)/parasol $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip $(HOME)/bin/$(MACHTYPE)/parasol

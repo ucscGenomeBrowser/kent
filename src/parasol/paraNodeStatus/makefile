@@ -8,5 +8,9 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = paraNodeStatus.o
 
 paraNodeStatus: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/paraNodeStatus $O $(MYLIBS) $L
+	gcc -o $(HOME)/bin/$(MACHTYPE)/paraNodeStatus $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	strip $(HOME)/bin/$(MACHTYPE)/paraNodeStatus
+
+paraStat: paraStat.o
+	gcc -o $(HOME)/bin/$(MACHTYPE)/paraStat paraStat.o ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	strip $(HOME)/bin/$(MACHTYPE)/paraStat
