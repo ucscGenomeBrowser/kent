@@ -1339,7 +1339,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadRna addSeq mm3 /gbdb/mm3/fish_seq15jun2001/*.fa
 
 
-PRODUCING FUGU FISH ALIGNMENTS (TODO - REDO)
+PRODUCING FUGU FISH ALIGNMENTS (DONE 03/13/03)
 
     # sequence was previously downloaded to /cluster/store3/fuguSeq/ from
     #   ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_mask.fasta.Z
@@ -1347,16 +1347,17 @@ PRODUCING FUGU FISH ALIGNMENTS (TODO - REDO)
     # Load it up on /mnt/scratch:
     ssh kkstore
     mkdir -p /mnt/scratch/hg/fugu
+# Next time, use /cluster/store3/fuguSeq/split2.5Mb !!!
     cp -p /cluster/store3/fuguSeq/split/*.fa /mnt/scratch/hg/fugu/
 
     ssh kk
     mkdir ~/mm/bed/blatFugu
     cd ~/mm/bed/blatFugu
     ls -1S /mnt/scratch/hg/fugu/* > fugu.lst
-    ls -1S /mnt/scratch/hg/mm3/trfFa/* > mouse.lst
+    ls -1S /scratch/hg/mm3/trfFa/* > mouse.lst
     # Create dir structure for run
     mkdir psl
-    foreach ctg (`ls -1 /mnt/scratch/hg/mm3/trfFa/`)
+    foreach ctg (`ls -1 /scratch/hg/mm3/trfFa/`)
       mkdir psl/$ctg:t:r
     end
     cp ~/lastMm/bed/blatFugu/gsub .
@@ -1623,16 +1624,14 @@ LOAD GENIE CLONE BOUNDS (TODO)
      hgLoadBed mm3 genieBounds *-fixed.bed
 
 LOAD JACKSON LABS QTL (TODO)
-     Carol Bult at Jackson Labs sent us tab-separated QTL info -- 
-     See RT289.  
-     - Reformat QTL info into bed 6 + (really bed 5, no strand).
-       There will be some complaints about lines that are missing 
-       chromStart, chromEnd (they're on MIT Markers that we don't have 
-       in our stsMapMouse table...?)
-     cd ~/mm3/bed/qtl
-     ./fixit.pl mgi_qtl.rpt > mgi_qtl.bed
-     hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL.sql \
-       mm3 jaxQTL mgi_qtl.bed
+    ssh hgwdev
+    mkdir ~/mm3/bed/jaxQTL2
+    # Save the email attachment from Sridhar Ramachandran at Jackson Labs
+    # (bed 8+, jaxQTL2 format).
+    # Strip the column headers and load into the database.  
+    tail +2 QTLBedFormat.txt > jaxQTL2.bed
+    hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/jaxQTL2.sql \
+      mm3 jaxQTL2 jaxQTL2.bed
 
 LOAD SOFTBERRY GENES (TODO)
      - ln -s /cluster/store2/mm.2003.02/mm3 ~/mm
