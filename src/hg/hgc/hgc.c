@@ -93,6 +93,41 @@ if (*pEnd > chromSize) *pEnd = chromSize;
 return *pStart < *pEnd;
 }
 
+char *chromBand(char *chrom, int pos)
+/* Return text string that says what bend pos is on. */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+char buf[64];
+static char band[64];
+
+sprintf(query, 
+	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
+	chrom, pos, pos);
+buf[0] = 0;
+sqlQuickQuery(conn, query, buf, sizeof(buf));
+sprintf(band, "%s%s", skipChr(chrom), buf);
+hFreeConn(&conn);
+return band;
+}
+
+
+void printPos(char *chrom, int start, int end, char *strand)
+/* Print position lines.  'strand' argument may be null. */
+{
+printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
+printf("<B>Band:</B> %s<BR>\n", chromBand(chrom, (start + end)/2));
+printf("<B>Begin in chromosome:</B> %d<BR>\n", start+1);
+printf("<B>End in chromosome:</B> %d<BR>\n", end);
+if (strand != NULL)
+    printf("<B>Strand:</B> %s<BR>\n", strand);
+else
+    strand = "?";
+printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s\">"
+      "View DNA for this feature</A><BR>\n",  hgcPath(),
+      start, chrom, start, end, strand, database);
+}
+
 void printCappedSequence(int start, int end, int extra)
 /* Print DNA from start to end including extra at either end.
  * Capitalize bits from start to end. */
@@ -126,9 +161,15 @@ void doGetDna()
 {
 struct dnaSeq *seq;
 char name[256];
-sprintf(name, "%s:%d-%d", seqName, winStart+1, winEnd);
+char *strand = cgiOptionalString("strand");
+
+if (strand == NULL || strand[0] == '?')
+    strand = "";
+sprintf(name, "%s:%d-%d %s", seqName, winStart+1, winEnd, strand);
 htmlStart(name);
 seq = hDnaFromSeq(seqName, winStart, winEnd, dnaMixed);
+if (strand[0] == '-')
+    reverseComplement(seq->dna, seq->size);
 printf("<TT><PRE>");
 faWriteNext(stdout, name, seq->dna, seq->size);
 printf("</TT></PRE>");
@@ -447,7 +488,9 @@ char *words[2];
 int wordCount;
 
 htmlStart("Gap in Sequence");
-chopByChar(gapType, '_', words, ArraySize(words));
+wordCount = chopByChar(gapType, '_', words, ArraySize(words));
+if (wordCount == 1)
+    wordCount = chopByChar(gapType, ' ', words, ArraySize(words));
 printf("This is a gap between %ss.<BR>", words[0]);
 if (sameString(words[1], "no"))
     printf("This gap is not bridged by an mRNA, EST or BAC end pair.\n"); 
@@ -1047,8 +1090,8 @@ if (offset >= 0)
 	printf("<B>Chromosome:</B> %s<BR>\n", skipChr(ro->genoName));
 	printf("<B>Begin in chromosome:</B> %d<BR>\n", ro->genoStart);
 	printf("<B>End in chromosome:</B> %d<BR>\n", ro->genoEnd);
-	printf("<B>Strand:</B> %s<BR>\n", ro->strand);
-	printf("<BR>\n");
+	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand);
+	htmlHorizontalLine();
 	}
     hFreeConn(&conn);
     }
@@ -1063,8 +1106,8 @@ else
     else
         printf("This track contains the %s class of repeats<BR>\n", repeat);
     printf("Click right on top of an individual repeat for more information on that repeat<BR>\n");
+    htmlHorizontalLine();
     }
-htmlHorizontalLine();
 puts(
   "This track was created by Arian Smit's RepeatMasker program "
   "which uses the RepBase library of repeats from the Genetic "
@@ -1167,41 +1210,11 @@ puts("<P>The Simple Tandem Repeats were located with the program "
      "by G. Benson</P>");
 }
 
-char *chromBand(char *chrom, int pos)
-/* Return text string that says what bend pos is on. */
-{
-struct sqlConnection *conn = hAllocConn();
-char query[256];
-char buf[64];
-static char band[64];
-
-sprintf(query, 
-	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
-	chrom, pos, pos);
-buf[0] = 0;
-sqlQuickQuery(conn, query, buf, sizeof(buf));
-sprintf(band, "%s%s", skipChr(chrom), buf);
-hFreeConn(&conn);
-return band;
-}
-
-void printPos(char *chrom, int start, int end)
-/* Print position lines. */
-{
-printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
-printf("<B>Band:</B> %s<BR>\n", chromBand(chrom, (start + end)/2));
-printf("<B>Begin in chromosome:</B> %d<BR>\n", start+1);
-printf("<B>End in chromosome:</B> %d<BR>\n", end);
-printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
-      "View DNA for this feature</A><BR>\n",  hgcPath(),
-      start, chrom, start, end, database);
-}
-
 void bedPrintPos(struct bed *bed)
 /* Print first three fields of a bed type structure in
  * standard format. */
 {
-printPos(bed->chrom, bed->chromStart, bed->chromEnd);
+printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL);
 }
 
 void doCpgIsland(char *item, char *table)
@@ -1329,7 +1342,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row);
-    printPos(gp->chrom, gp->txStart, gp->txEnd);
+    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
