@@ -96,7 +96,6 @@ while (lineFileNext(lf, &line, NULL))
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
     bed->line = dupe;
     slAddHead(pList, bed);
-    printf("chr=%s\n",bed->chrom);
     }
 lineFileClose(&lf);
 }
