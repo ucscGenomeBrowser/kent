@@ -16,7 +16,7 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.29 2004/10/06 23:03:14 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.30 2004/10/12 00:42:34 fanhsu Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -161,7 +161,7 @@ cgiTableEnd();
 puts("</FORM>\n");
 
 /* Hidden form to support menu pulldown behavior */
-printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
+printf("<FORM ACTION=\"../cgi-bin/hgLiftOver\""
        " METHOD=\"GET\" NAME=\"dbForm\">"
        "<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
                         HGLFT_FROMDB_VAR, fromDb);
@@ -317,7 +317,7 @@ if (userData != NULL && userData[0] != '\0')
             }
         puts("</PRE>\n");
         puts("</BLOCKQUOTE>\n");
-        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Failure Messages</A>\n", HGLFT_ERRORHELP_VAR);
+        printf("<A HREF=\"../cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Failure Messages</A>\n", HGLFT_ERRORHELP_VAR);
         }
     }
 webDataFormats();
