@@ -194,12 +194,12 @@ visibility full
 type sample 9
 
 track transfac
-shortLabel Transfac Hits
-longLabel Transfac Hits
+shortLabel Transfac PValues
+longLabel Transfac PValues
 priority 440
 visibility hide
 color 12,12,120
-type genePred refPep refMrna
+type bed 6
 
 track transfacRatios
 shortLabel Transfac LikeRatios
