@@ -44,9 +44,7 @@ cp -f $copyTime $lastCopyTimeTmp
 
 # update databases
 gbDbLoadStep $verb -workdir=$workdir \
-    -buildAllMgc=hg15 \
-    -buildAllMgc=mm3 \
-     hg15 mm3
+     hg15 mm3 rn2
 
 # on success, save time load completely and build time we started with
 mv -f $lastCopyTimeTmp $lastCopyTime
