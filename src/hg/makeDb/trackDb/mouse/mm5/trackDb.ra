@@ -19,7 +19,7 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
-speciesOrder rat human dog chicken
+speciesOrder rn3 hg17 canFam1 galGal2
 
 track phastConsElements
 shortLabel Most Conserved
