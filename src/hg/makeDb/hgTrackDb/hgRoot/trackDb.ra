@@ -187,9 +187,9 @@ visibility hide
 type bed 6 +
 
 
-track uPennClones
-shortLabel U Penn Clones
-longLabel Univ of Penn Clones
+track genMapDb
+shortLabel GenMapDb Clones
+longLabel GenMapDb BAC Clones 
 priority 10.1
 visibility hide
 type bed 6 +
