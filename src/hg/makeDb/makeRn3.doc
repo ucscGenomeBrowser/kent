@@ -1704,7 +1704,8 @@ SEQ2_LEN=$BASE/S2.len
     /cluster/bin/i386/hgLoadPsl -noTNameIx rn3 chr*_blastzTightHg15.psl
 
 
-# MAKE MULTIPLE ALIGNMENT (MAF) FILES FROM BEST AXT'S (In Progress 2003-07-22 kate)
+# MAKE MULTIPLE ALIGNMENT (MAF) FILES FROM BEST AXT'S (DONE 2003-07-22 kate)
+#  Reran multiz and reloaded table on 8/27, as some chroms were truncated (2003-08-27 kate)
 
     ssh kkstore
 
@@ -1962,7 +1963,7 @@ PRODUCING GENSCAN PREDICTIONS (DONE - 2003-07-09 - Hiram)
     hgLoadBed rn3 genscanSubopt genscanSubopt.bed
 
 
-TWINSCAN GENE PREDICTIONS (TO DO)
+TWINSCAN GENE PREDICTIONS (reloaded -gtf 2004-04-01 kate)
 
     mkdir -p ~/rn3/bed/twinscan
     cd ~/rn3/bed/twinscan
@@ -1980,8 +1981,14 @@ TWINSCAN GENE PREDICTIONS (TO DO)
       perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1.a/;' < \
         chr_ptx/$chr.ptx > chr_ptx/$chr-fixed.fa
     end
-    ldHgGene rn3 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
+    ldHgGene rn3 twinscan chr_gtf/chr*-fixed.gtf -gtf
     hgPepPred rn3 generic twinscanPep chr_ptx/chr*-fixed.fa
+    /cluster/bin/scripts/runGeneCheck /cluster/data/rn3/bed/twinscan
+    # 526 badFrame
+    # 452 gap
+    # 320 noStart
+    # 305 noStop
+    # 9 inFrameStop
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TO DO)
@@ -2177,7 +2184,7 @@ LOAD SOFTBERRY GENES (DONE - 2003-07-17 - Hiram)
      hgPepPred rn3 softberry *.protein
      hgSoftberryHom rn3 *.protein
 
-LOAD GENEID GENES (DONE - 2003-07-08 - Hiram)
+LOAD GENEID GENES (DONE - 2003-07-08 - Hiram RELOADED -gtf 2004-04-02 kate)
     mkdir -p ~/rn3/bed/geneid/download
     cd ~/rn3/bed/geneid/download
     foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
@@ -2190,7 +2197,8 @@ LOAD GENEID GENES (DONE - 2003-07-08 - Hiram)
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
-    ldHgGene rn3 geneid download/*.gtf -exon=CDS
+    ldHgGene rn3 geneid download/*.gtf -gtf
+        # 37571 gene predictions
     hgPepPred rn3 generic geneidPep download/*-fixed.prot
 
 SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
@@ -2210,24 +2218,43 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     hgPepPred rn3 generic sgpPep download/*-fixed.prot
 
 
+# TIGR GENE INDEX (IN PROGRESS 2003-11-10 kate)
+# TIGR GENE INDEX (RE-DONE 2004-05018 Fan)
 # TIGR GENE INDEX (DONE 2004-05020 Fan)
+
     mkdir -p /cluster/data/rn3/bed/tigr
     cd /cluster/data/rn3/bed/tigr
+<<<<<<< makeRn3.doc
+    wget ftp://ftp.tigr.org/pub/data/tgi/Rattus_norvegicus/TGI_track_RatGenome_Jun2003.zip
+    tar xvfz TGI_track_RatGenome_Jun2003.tgz
+=======
     wget ftp://ftp.tigr.org/pub/data/tgi/Rattus_norvegicus/TGI_track_RatGenome_rn3_05-2004.tgz
     tar xvzf TGI*.tgz
     
+>>>>>>> 1.55
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
     end
+<<<<<<< makeRn3.doc
+    foreach o (mouse cow human pig rat)
+      echo $o
+=======
 
     foreach o (mouse cow human pig rat)
       echo $o
+>>>>>>> 1.55
       setenv O $o
       foreach f (chr*_$o*s)
         tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
       end
     end
+<<<<<<< makeRn3.doc
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/tigr
+    ldHgGene -exon=TC rn3 tigrGeneIndex *.gff
+       # Read 166956 transcripts in 696363 lines in 88 files
+    gzip *TCs *.gff
 
     ssh hgwdev
     cd /cluster/data/rn3/bed/tigr
@@ -5176,3 +5203,29 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" rn3 \
         > refToLl.txt
 hgMapToGene rn3 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 #       row count is 6084
+
+
+# MAP ENCODE ORTHOLOG REGIONS (2004-07-09 kate)
+    ssh eieio
+    cd /cluster/data/rn3/bed
+    mkdir encodeRegions
+    cd encodeRegions
+    # Of 44 regions:
+    # -minMatch=.20 -> 36 mapped
+    liftOver -minMatch=.20 \
+        /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
+        /cluster/data/hg16/bed/liftOver/hg16Torn3.chain \
+        encodeRegions.bed encodeRegions.unmapped
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/encodeRegions
+    hgLoadBed rn3 encodeRegions encodeRegions.bed -noBin
+
+    ssh eieio
+    liftOver -minMatch=.20 \
+        /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
+        /cluster/data/hg16/bed/liftOver/hg16Torn3.chain \
+        encodeRegions.bed encodeRegions.unmapped
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/encodeRegions
+    hgLoadBed rn3 encodeRegions encodeRegions.bed -noBin
+
