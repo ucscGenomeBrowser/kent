@@ -1,4 +1,4 @@
-/* draw various stamps for Proteome Browser */
+/* doStamps.c draw various stamps for Proteome Browser */
 #include "common.h"
 #include "hCommon.h"
 #include "portable.h"
