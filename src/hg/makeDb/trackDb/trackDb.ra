@@ -1214,3 +1214,23 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
 
+track encode_tba
+shortLabel ENCODE TBA
+longLabel TBA Alignments of ENCODE Regions
+group encode
+priority 108.0
+visibility hide
+color 100,0,0
+altColor 100,0,0
+type maf
+
+track encode_phyloHMM
+shortLabel ENCODE phyloHMM
+longLabel phylo-HMM-based conservation for ENCODE targets
+group encode
+priority 108.1
+visibility hide
+color 175,150,128
+altColor 255,128,0
+type wig 0.0 1.0
+autoScaleDefault Off
