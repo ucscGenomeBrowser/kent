@@ -864,20 +864,20 @@ visibility hide
 type bed 4 .
 
 track mapMm2X
-shortLabel Mapped 2X 
-longLabel  Mapped 2X through Mm5
+shortLabel Scored mm2X 
+longLabel  Scored mm2X  (gray=no net, red=net w/o mapped alignment, black=mapped alignment)
 group x
 priority 203
 visibility hide
-type bed 4 .
+type bed 13 .
 
 track mapMm3X
-shortLabel Mapped 3X 
-longLabel  Mapped 3X through Mm5
+shortLabel Scored mm3X 
+longLabel  Scored mm3X (gray=no net, red=net w/o mapped alignment, black=mapped alignment)
 group x
 priority 203
 visibility hide
-type bed 4 .
+type bed 13 .
 
 searchTable uc16
 searchMethod exact
