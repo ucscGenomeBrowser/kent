@@ -95,3 +95,20 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track blastHg16KG
+shortLabel hg16 protein blast
+longLabel hg16 protein blast
+group x
+priority 1101
+visibility hide
+type psl protein
+
+track tblastHg16
+shortLabel Human Best Exon
+longLabel  Human Best Exon (Hg16 Known Genes tblastn galGal1)
+group compGeno
+spectrum on
+priority 158
+visibility hide
+type psl xeno
+
