@@ -10,21 +10,55 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 
-/* Some variables that say where sequence is.  These are default
- * values that can be overriden by CGI command. */
-char *hostName = "kks00.cse.ucsc.edu";
-char *hostPort = "17777";
-char *nibDir = "/projects/cc/hg/oo.23/nib";
-char *database = "hg5";
-boolean tx = FALSE;
+char *defaultDatabase = "hg5";	/* Default database. */
+
+struct serverTable
+/* Information on a server. */
+   {
+   char *db;		/* Database name. */
+   char *genome;	/* Genome name. */
+   boolean isTrans;	/* Is tranlated to protein? */
+   char *host;		/* Name of machine hosting server. */
+   char *port;		/* Port that hosts server. */
+   char *nibDir;	/* Directory of sequence files. */
+   };
+
+char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000"};
+char *typeList[] = {"auto", "DNA", "protein"};
+
+struct serverTable serverTable[] =  {
+{"hg5", "Oct. 7, 2000", TRUE, "kks00.cse.ucsc.edu", "17776", "/projects/cc/hg/oo.23/nib"},
+{"hg5", "Oct. 7, 2000", FALSE, "kks00.cse.ucsc.edu", "17777", "/projects/cc/hg/oo.23/nib"},
+{"hg6", "Dec. 12, 2000", TRUE,  "cc.cse.ucsc.edu", "17778", "/projects/hg2/gs.6/oo.27/nib"},
+{"hg6", "Dec. 12, 2000", FALSE, "cc.cse.ucsc.edu", "17779", "/projects/hg2/gs.6/oo.27/nib"},
+};
+
+struct serverTable *findServer(char *db, boolean isTrans)
+/* Return server for given database. */
+{
+int i;
+struct serverTable *serve;
+
+if (db == NULL)
+    db = defaultDatabase;
+for (i=0; i<ArraySize(serverTable); ++i)
+    {
+    serve = &serverTable[i];
+    if (sameWord(serve->db, db) && serve->isTrans == isTrans)
+        return serve;
+    if (sameWord(serve->genome, db) && serve->isTrans == isTrans)
+        return serve;
+    }
+errAbort("Can't find a server for %s database %s\n",
+	(isTrans ? "translated" : "DNA"), db);
+return NULL;
+}
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n"
-  "usage:\n"
-  "   hgBlat XXX\n");
+  "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
 }
 
 int pslCmpMatches(const void *va, const void *vb)
@@ -37,7 +71,7 @@ int bScore = b->match - (b->repMatch>>1) - b->misMatch - b->qNumInsert;
 return bScore - aScore;
 }
 
-void showAliPlaces(char *pslName, char *faName)
+void showAliPlaces(char *pslName, char *faName, char *database)
 /* Show all the places that align. */
 {
 struct lineFile *lf = pslFileOpen(pslName);
@@ -78,92 +112,76 @@ void blatSeq(char *userSeq)
 FILE *f;
 static struct dnaSeq *seq;
 struct tempName pslTn, faTn;
-int maxSize = 20000;
-char *port = cgiOptionalString("port");
-char *host = cgiOptionalString("host");
-char *nib = cgiOptionalString("nib");
-char *db = cgiOptionalString("db");
+int maxSize;
+char *genome = cgiString("genome");
+char *type = cgiString("type");
+char *seqLetters = cloneString(userSeq);
+struct serverTable *serve;
 int conn;
+boolean isTx;
 
-tx = cgiBoolean("tx");
-if (tx)
+/* Load user sequence and figure out if it is DNA or protein. */
+if (sameWord(type, "DNA"))
     {
-    hostPort = "17778";
-    hostName = "cc.cse.ucsc.edu";
-    nibDir = "/projects/hg2/gs.6/oo.27/nib";
-    database = "hg6";
+    seq = faSeqFromMemText(seqLetters, TRUE);
+    isTx = FALSE;
     }
-if (port != NULL)
-    hostPort = port;
-if (host != NULL)
-    hostName = host;
-if (nib != NULL)
-    nibDir = nib;
-if (db != NULL)
-    database = db;
+else if (sameWord(type, "protein"))
+    {
+    seq = faSeqFromMemText(seqLetters, FALSE);
+    isTx = TRUE;
+    }
+else 
+    {
+    seq = faSeqFromMemText(seqLetters, FALSE);
+    isTx = !seqIsDna(seq);
+    if (!isTx)
+        toLowerN(seq->dna, seq->size);
+    }
 
-/* Load up sequence from CGI. */
-seq = faSeqFromMemText(cloneString(userSeq), !tx);
-if (seq->name[0] == 0)
-    seq->name = "YourSeq";
-
+/* Truncate sequence if necessary and name it. */
+maxSize = (isTx ? 4000 : 20000);
 if (seq->size > maxSize)
-   {
-   printf("Warning: only the first %d of %d bases used.<BR>\n",
-   	maxSize, seq->size);
-   seq->size = maxSize;
-   seq->dna[maxSize] = 0;
-   }
+    {
+    warn("Sequence is %d letters long, truncating to %d",
+        seq->size, maxSize);
+    seq->size = maxSize;
+    seq->dna[maxSize] = 0;
+    }
+if (seq->name[0] == 0)
+    seq->name = cloneString("YourSeq");
 
+
+/* Create temporary file to store sequence. */
 makeTempName(&faTn, "hgSs", ".fa");
 faWrite(faTn.forCgi, seq->name, seq->dna, seq->size);
 
+/* Create a temporary .psl file with the alignments against genome. */
+serve = findServer(genome, isTx);
 makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
-
-
-/* Create a temporary .psl file with the alignments against genome. */
-conn = gfConnect(hostName, hostPort);
-if (tx)
+conn = gfConnect(serve->host, serve->port);
+if (isTx)
     {
     static struct gfSavePslxData data;
     data.f = f;
     data.reportTargetStrand = TRUE;
     pslxWriteHead(f, gftProt, gftDnaX);
-    gfAlignTrans(conn, nibDir, seq, 12, gfSavePslx, &data);
+    gfAlignTrans(conn, serve->nibDir, seq, 12, gfSavePslx, &data);
     }
 else
     {
     pslxWriteHead(f, gftDna, gftDna);
-    gfAlignStrand(conn, nibDir, seq, FALSE, ffCdna, 36, gfSavePsl, f);
+    gfAlignStrand(conn, serve->nibDir, seq, FALSE, ffCdna, 36, gfSavePsl, f);
     close(conn);
     reverseComplement(seq->dna, seq->size);
-    conn = gfConnect(hostName, hostPort);
-    gfAlignStrand(conn, nibDir, seq, TRUE,  ffCdna, 36, gfSavePsl, f);
+    conn = gfConnect(serve->host, serve->port);
+    gfAlignStrand(conn, serve->nibDir, seq, TRUE,  ffCdna, 36, gfSavePsl, f);
     }
 close(conn);
 carefulClose(&f);
 
-showAliPlaces(pslTn.forCgi, faTn.forCgi);
-}
-
-char *defaultOrDb(char *db)
-/* Return default database if db is null, else db. */
-{
-if (db == NULL)
-    db = database;
-return db;
-}
-
-char *dateForDb(char *db)
-/* Return date associated with database. */
-{
-if (db == NULL)
-   db = database;
-if (sameString(db, "hg6"))
-    return "12 Dec. 2000";
-else
-    return "7 Oct. 2000";
+showAliPlaces(pslTn.forCgi, faTn.forCgi, serve->db);
 }
 
 void askForSeq()
@@ -171,7 +189,7 @@ void askForSeq()
  * Call self.... */
 {
 char *db = cgiOptionalString("db");
-char *port, *host, *nib;
+struct serverTable *serve = findServer(db, FALSE);
 
 printf("%s", 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=POST>\n"
@@ -179,11 +197,18 @@ printf("%s",
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"94%\">\n"
 "<TR>\n"
-"<TD WIDTH=\"85%\">Please paste in a DNA sequence to see where it is located in the ");
-printf("%s ", dateForDb(db));
+"<TD WIDTH=\"74%\">Please paste in a sequence to see where it is located in the ");
 printf("%s", "UCSC assembly\n"
-"of the human genome.</TD>\n"
-"<TD WIDTH=\"15%\">\n"
+"of the human genome.</TD>\n");
+
+printf("%s", "<TD WIDTH=\"15%\"<CENTER>\n");
+cgiMakeDropList("genome", genomeList, ArraySize(genomeList), serve->genome);
+printf("<BR><B>type:</B>\n");
+cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
+printf("%s", "</TD>\n");
+
+printf("%s",
+"<TD WIDTH=\"11%\">\n"
 "<CENTER>\n"
 "<P><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n"
 "</CENTER>\n"
@@ -193,62 +218,29 @@ printf("%s", "UCSC assembly\n"
 "<TEXTAREA NAME=userSeq ROWS=14 COLS=72></TEXTAREA>\n");
 
 
-cgiContinueHiddenVar("tx");
-if (db != NULL)
-    {
-    if (sameString(db, "hg5"))
-        {
-	port = "17777";
-	nib = "/projects/cc/hg/oo.23/nib";
-	host = "kks00.cse.ucsc.edu";
-	}
-    else if (sameString(db, "hg6"))
-        {
-	if (cgiVarExists("tx"))
-	    {
-	    port = "17778";
-	    nib = "/projects/hg2/gs.6/oo.27/nib";
-	    host = "cc.cse.ucsc.edu";
-	    }
-	else
-	    {
-	    port = "17779";
-	    nib = "/projects/hg2/gs.6/oo.27/nib";
-	    host = "kks00.cse.ucsc.edu";
-	    }
-	}
-   else 
-	{
-        errAbort("Unknown database %s", db);
-	}
-    cgiMakeHiddenVar("port", port);
-    cgiMakeHiddenVar("host", host);
-    cgiMakeHiddenVar("nib", nib);
-    cgiMakeHiddenVar("db", db);
-    }
-else
-    {
-    db = database;
-    cgiContinueHiddenVar("port");
-    cgiContinueHiddenVar("host");
-    cgiContinueHiddenVar("nib");
-    cgiContinueHiddenVar("db");
-    }
+cgiMakeHiddenVar("db", serve->db);
+
 printf("%s", 
-"<P>Only the first 20,000 bases of a sequence will be used.  BLAT is designed to\n"
+"<P>Only the first 20,000 bases of DNA sequence and the first 4000 bases of\n"
+"a protein sequence will be used.  BLAT on DNA is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
-"perfect sequence matches of 36 bases, and sometimes find them down to 24 bases.</P>\n"
-"<P>BLAT is not BLAST.  BLAT works by keeping an index of the entire genome\n"
+"perfect sequence matches of 36 bases, and sometimes find them down to 24 bases.\n"
+"BLAT on proteins finds sequences of 80% and greater similarity of length 20 amino\n"
+"acids or more.  In practice DNA BLAT works well on primates, and protein\n"
+"blat on land vertebrates\n</P>"
+"<P>BLAT is not BLAST.  Nucleotide BLAT works by keeping an index of the entire genome\n"
 "in memory.  The index consists of all non-overlapping 12-mers except for\n"
 "those heavily involved in repeats.  The index takes up a bit less than\n"
 "a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
 "BLAT to deliver high performance on a reasonably priced Linux box.\n"
 "The index is used to find areas of probable homology, which are then\n"
-"loaded into memory for a detailed alignment.</P>\n"
+"loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
+"manner, except with 4-mers rather than 12-mers.  The protein index takes a little\n"
+"more than 2 gigabytes</P>\n"
 "<P>BLAT was written by <A HREF=\"mailto:jim_kent@pacbell.net\">Jim Kent</A>.\n"
-"Like most of Jim's software use on this web server is free to all.\n"
-"Sources and executables to run on your server are available free\n"
+"Like most of Jim's software interactive use on this web server is free to all.\n"
+"Sources and executables to run batch jobs on your own server are available free\n"
 "for academic, personal, and non-profit purposes.  Non-exclusive commercial\n"
 "licenses are also available.  Contact Jim for details.</P>\n"
 "\n"
@@ -269,6 +261,7 @@ else
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 dnaUtilOpen();
 htmlSetBackground("../images/floret.jpg");
 htmShell("BLAT Search", doMiddle, NULL);
