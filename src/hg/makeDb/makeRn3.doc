@@ -267,8 +267,10 @@ cd /tmp/$2
 popd
 /bin/cp /tmp/$2/$2.out ./
 if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
-# /bin/cp /tmp/$2*.masked ../masked/
-/bin/rm -r /tmp/$2
+if (-e /tmp/$2/$2.tbl) /bin/cp /tmp/$2/$2.tbl ./
+if (-e /tmp/$2/$2.cat) /bin/cp /tmp/$2/$2.cat ./
+/bin/rm -fr /tmp/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/$2
 '_EOF_'
     chmod +x jkStuff/RMRat
     mkdir RMRun
@@ -328,7 +330,7 @@ if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
         cd ~/rn3
         hgLoadOut rn3 ?{,?}/*.fa.out
 
-MAKE LIFTALL.LFT (DONE - 2003-06-26 - Hiram)
+MAKE LIFTALL.LFT (DONE - 2003-07-01 - Hiram)
 
     ssh kkstore
     cd ~/rn3
@@ -666,11 +668,26 @@ XXXXXXXXXXXXXXXXXX  on this later today.
 AUTO UPDATE GENBANK MRNA RUN
 
     ssh eieio
+    cd /cluster/store5/genbank
     set db = rn3
     set nibGlob = '/cluster/bluearc/rat/rn3/softNib/chr*.nib'
     set liftFile = /cluster/bluearc/rat/rn3/liftAll.lft
     nice bin/gbAlignStep -verbose=1 -initial -srcDb=genbank -type=mrna \
 	$db "$nibGlob" $liftFile &
+    # To watch the progress of your cluster job, go to machine kk and
+    # cd /cluster/store5/genbank/work/initial.rn3/align
+    # where the batch file is.  You can now do normal parasol checking
+    # operations.  Beware of "para check" it can take quite a bit of time
+    # if your batch job is very large.  'parasol list batches' or
+    # 'parasol list users' may be quicker to take a look at status.
+    #  On this particular run, some jobs got stuck, seemed to be hung
+    #  on I/O.  To recover, simply do a 'para stop' in this directory,
+    #  the jobs will be restarted automatically by the controlling
+    #  gbAlignRun which is running all of this business.
+
+    #  After that is finished successfully, load the mRNAs:
+    nice bin/gbDbLoadStep -verbose=1 -initialLoad rn3
+
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (TO DO)
 
