@@ -271,19 +271,27 @@ if (!fi->reported)
 return 0;
 }
 
+
 int checkOneJob(struct job *job, char *when, struct hash *hash)
 /* Perform checks on one job if checks not already in hash. 
  * Returns number of errors. */
 {
 int errCount = 0;
 struct check *check;
+static int dotMod = 10;
+static int dot = 10;
 
 for (check = job->checkList; check != NULL; check = check->next)
     {
     if (sameWord(when, check->when))
 	{
 	errCount += doOneCheck(check, hash, stderr);
-	putc('.', stdout);
+	if (--dot <= 0)
+	    {
+	    putc('.', stdout);
+	    fflush(stdout);
+	    dot = dotMod;
+	    }
 	}
     }
 return errCount;
@@ -420,7 +428,7 @@ close(hubFd);
 return jobIdString;
 }
 
-void submitJob(struct job *job, char *curDir)
+boolean submitJob(struct job *job, char *curDir)
 /* Attempt to submit job. */
 {
 struct dyString *cmd = dyStringNew(1024);
@@ -429,22 +437,18 @@ char *jobId = NULL;
 
 dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", cuserid(NULL), curDir, curDir, job->command);
 jobId = submitJobToHub(cmd->string);
-AllocVar(sub);
-slAddHead(&job->submissionList, sub);
-job->submissionCount += 1;
-sub->submitTime = time(NULL);
-sub->host = cloneString("n/a");
-if (jobId == NULL)
+if (jobId != NULL)
     {
-    sub->submitError = TRUE;
-    sub->id = cloneString("n/a");
-    }
-else
-    {
+    AllocVar(sub);
+    slAddHead(&job->submissionList, sub);
+    job->submissionCount += 1;
+    sub->submitTime = time(NULL);
+    sub->host = cloneString("n/a");
     sub->id = jobId;
     sub->inQueue = TRUE;
     }
 dyStringFree(&cmd);
+return jobId != NULL;
 }
 
 void statusOutputChanged()
@@ -690,7 +694,11 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	if (job->submissionCount < tryCount && 
 	   (job->submissionList == NULL || needsRerun(job->submissionList)))
 	    {
-	    submitJob(job, curDir);    
+	    if (!submitJob(job, curDir))
+		{
+		finished = TRUE;
+	        break;
+		}
 	    printf(".");
 	    fflush(stdout);
 	    ++pushCount;
@@ -710,6 +718,7 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	}
     }
 atomicWriteBatch(db, batch);
+uglyf("(updated job database on disk)\n");
 if (pushCount > 0)
     {
     printf("\n");
@@ -718,6 +727,7 @@ if (pushCount > 0)
 if (retryCount > 0)
     printf("Retried jobs: %d\n", retryCount);
 freeResults(&resultsHash);
+uglyf("(freed results)\n");
 return db;
 }
 
@@ -726,6 +736,7 @@ void paraPush(char *batch)
 {
 struct jobDb *db = paraCycle(batch);
 jobDbFree(&db);
+uglyf("(freed database)\n");
 }
 
 void paraShove(char *batch)
