@@ -35,7 +35,7 @@ type genePred sgpPep
 
 track mouseChain
 shortLabel Self Chain 
-longLabel Mouse/Mouse Chained Blastz Alignments
+longLabel $Organism Chained Blastz Self Alignments
 group varRep
 priority 132
 visibility hide
