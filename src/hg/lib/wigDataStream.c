@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.11 2004/08/10 23:25:09 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.12 2004/08/11 18:55:40 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -149,15 +149,118 @@ bed->name = cloneString(name);
 return bed;
 }
 
-/*	PUBLIC	METHODS   **************************************************/
+static void closeWibFile(struct wiggleDataStream *wDS)
+/*	if there is a Wib file open, close it	*/
+{
+if (wDS->wibFH > 0)
+    close(wDS->wibFH);
+wDS->wibFH = -1;
+freez(&wDS->wibFile);
+}
 
+static void closeWigConn(struct wiggleDataStream *wDS)
+{
+lineFileClose(&wDS->lf);
+closeWibFile(wDS);	/*	closes only if it is open	*/
+if (wDS->conn)
+    {
+    sqlFreeResult(&wDS->sr);
+    sqlDisconnect(&wDS->conn);
+    }
+freez(&wDS->sqlConstraint);	/*	always reconstructed at open time */
+}
+
+static void openWigConn(struct wiggleDataStream *wDS)
+/*	open connection to db or to a file, prepare SQL result for db */
+{
+if (!wDS->tblName)
+  errAbort("openWigConn: table name missing.  setDbTable before open.");
+
+if (wDS->isFile)
+    {
+    struct dyString *fileName = dyStringNew(256);
+    lineFileClose(&wDS->lf);	/*	possibly a previous file */
+    dyStringPrintf(fileName, "%s.wig", wDS->tblName);
+    wDS->lf = lineFileOpen(fileName->string, TRUE);
+    dyStringFree(&fileName);
+    }
+else
+    {
+    struct dyString *query = dyStringNew(256);
+    dyStringPrintf(query, "select * from %s", wDS->tblName);
+    if (wDS->chrName)
+	addConstraint(wDS, "chrom =", wDS->chrName);
+    if (wDS->winEnd)
+	{
+	char limits[256];
+	safef(limits, ArraySize(limits), "%d", wDS->winEnd );
+	addConstraint(wDS, "chromStart <", limits);
+	safef(limits, ArraySize(limits), "%d", wDS->winStart );
+	addConstraint(wDS, "chromEnd >", limits);
+	}
+    if (wDS->spanLimit)
+	{
+	struct dyString *dyTmp = dyStringNew(256);
+	dyStringPrintf(dyTmp, "%u", wDS->spanLimit);
+	addConstraint(wDS, "span =", dyTmp->string);
+	dyStringFree(&dyTmp);
+	}
+    if (wDS->sqlConstraint)
+	dyStringPrintf(query, " where (%s)",
+	    wDS->sqlConstraint);
+    dyStringPrintf(query, " order by ");
+    if (!wDS->chrName)
+	dyStringPrintf(query, " chrom ASC,");
+    if (!wDS->spanLimit)
+	dyStringPrintf(query, " span ASC,");
+    dyStringPrintf(query, " chromStart ASC");
+    verbose(2, "#\t%s\n", query->string);
+    if (!wDS->conn)
+	wDS->conn = sqlConnect(wDS->db);
+    wDS->sr = sqlGetResult(wDS->conn,query->string);
+    }
+}
+
+
+static void setDbTable(struct wiggleDataStream *wDS, char * db, char *table)
+/*	sets the DB and table name, determines if table is a file or not */
+{
+struct dyString *fileName = dyStringNew(256);
+
+if (!table)
+    errAbort("setDbTable: table specification missing");
+
+/*	Check to see if there is a .wig file	*/
+dyStringPrintf(fileName, "%s.wig", table);
+
+/*	file present ignores db specification	*/
+if (fileExists(fileName->string))
+    wDS->isFile = TRUE;
+else
+    {
+    if (db)			/*	db can be NULL	*/
+	wDS->isFile = FALSE;	/*	assume it will be in the db */
+    else
+	errAbort("setDbTable: db is NULL and can not find file %s",
+	    fileName->string);
+    }
+dyStringFree(&fileName);
+
+freeMem(wDS->db);		/*	potentially previously existing	*/
+if (!wDS->isFile && db)
+	wDS->db = cloneString(db);
+freeMem(wDS->tblName);		/*	potentially previously existing */
+wDS->tblName = cloneString(table);
+}
+
+/*	PUBLIC	METHODS   **************************************************/
 static void setPositionConstraint(struct wiggleDataStream *wDS,
 	int winStart, int winEnd)
 /*	both 0 means no constraint	*/
 {
 if ((!wDS->isFile) && wDS->conn)
     {
-    errAbort("setPositionConstraint: need to openWigConn() before setting winStart, winEnd");
+    errAbort("setPositionConstraint: not allowed after openWigConn()");
     }
 /*	keep them in proper order	*/
 if (winStart > winEnd)
@@ -319,11 +422,12 @@ wigSetCompareFunctions(wDS);
 wDS->useDataConstraint = TRUE;
 }
 
-static void getData(struct wiggleDataStream *wDS, int operations)
+static void getData(struct wiggleDataStream *wDS, char *db, char *table,
+	 int operations)
 /* getData - read and return wiggle data	*/
 {
 char *row[WIGGLE_NUM_COLS];
-unsigned long rowCount = 0;
+unsigned long long rowCount = 0;
 unsigned long long validData = 0;
 unsigned long long valuesMatched = 0;
 unsigned long long noDataBytes = 0;
@@ -363,6 +467,9 @@ if (! (doNoOp || doAscii || doBed || doStats) )
 	return;	/*	NOTHING ASKED FOR ?	*/
     }
 
+setDbTable(wDS, db, table);
+openWigConn(wDS);
+
 if (doAscii)
     summaryOnly = FALSE;
 if (doBed)
@@ -395,11 +502,11 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 		continue;	/*	next SQL row	*/
 		}
 	if (wDS->winEnd)	/* non-zero means a range is in effect */
-	    if ( (wiggle->chromStart > wDS->winEnd) ||
+	    if ( (wiggle->chromStart >= wDS->winEnd) ||
 		(wiggle->chromEnd < wDS->winStart) )
-		{
+		{		/* entire block is out of range */
 		wiggleFree(&wiggle);
-		continue;	/* entire block is out of range */
+		continue;	/*	next SQL row	*/
 		}
 	}
 
@@ -525,7 +632,7 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 	    upperLimit = wiggle->lowerLimit+wiggle->dataRange;
 	sumData += wiggle->sumData;
 	sumSquares += wiggle->sumSquares;
-	/*	positions are being seen in reverse 	*/
+	/*	record maximum extents	*/
 	if ((chromStart < 0)||(chromStart > wiggle->chromStart))
 	    chromStart = wiggle->chromStart;
 	if (chromEnd < wiggle->chromEnd)
@@ -558,11 +665,11 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 		boolean takeIt = FALSE;
 
 		if (wDS->winEnd)  /* non-zero means a range is in effect */
-		    {
+		    {	/*	do not allow item (+span) to run over winEnd */
 		    if ( (chromPosition < wDS->winStart) ||
-			(chromPosition >= wDS->winEnd) )
+			((chromPosition+wiggle->span) > wDS->winEnd) )
 			{
-			++datum;
+			++datum;	/*	out of range	*/
 			chromPosition += wiggle->span;
 			continue;	/*	next *datum	*/
 			}
@@ -614,16 +721,21 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 			++asciiOut;
 			++wigAscii->count;
 			}
-		    /*	beware, coords are coming in backwards */
-		    /*	this is not going to work with them backwards	*/
+		    /*	beware, coords must come in sequence for this to
+		     *	work.  The original SQL query should be ordering
+		     *	things properly.  We only do the first span
+		     *	encountered, it should be the lowest due to the
+		     *	SQL query.
+		     */
 		    if (!firstSpanDone && doBed)
 			{
+			/*	as long as they are continuous, keep
+			 *	extending the end
+			 */
 			if (chromPosition == bedElEnd)
 			    bedElEnd += wiggle->span;
-			else if (chromPosition < bedElStart)
-				;
 			else
-			    {
+			    {	/*	if one was collected, output it */
 			    if (bedElEnd > bedElStart)
 				{
 				struct bed *bedEl;
@@ -631,6 +743,7 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 					bedElStart, bedElEnd, ++bedElCount);
 				slAddHead(&wDS->bed, bedEl);
 				}
+			    /*	start a new element here	*/
 			    bedElStart = chromPosition;
 			    bedElEnd = bedElStart + wiggle->span;
 			    }
@@ -643,8 +756,8 @@ verbose(2, "#\tnew chrom, span: %s, %u\n", wDS->currentChrom, wDS->currentSpan )
 			    upperLimit = value;
 			sumData += value;
 			sumSquares += value * value;
-			/*	positions are being seen in reverse 	*/
-			if ((chromStart < 0)||(chromStart > chromPosition))
+			/*	record maximum extents	*/
+			if ((chromStart < 0)||(chromStart > wiggle->chromStart))
 			    chromStart = chromPosition;
 			if (chromEnd < (chromPosition + wiggle->span))
 			    chromEnd = chromPosition + wiggle->span;
@@ -703,6 +816,7 @@ wDS->valuesMatched += valuesMatched;
 wDS->noDataPoints += noDataBytes;
 wDS->bytesSkipped += bytesSkipped;
 
+closeWigConn(wDS);
 }	/*	void getData()	*/
 
 static void bedOut(struct wiggleDataStream *wDS, char *fileName)
@@ -775,7 +889,7 @@ else
     fprintf(fh, "#\tno data points found\n");
     }
 carefulClose(&fh);
-}
+}	/*	static void statsOut()	*/
 
 static void asciiOut(struct wiggleDataStream *wDS, char *fileName)
 /*	print to fileName the ascii data values	*/
@@ -793,106 +907,50 @@ if (wDS->ascii)
 	unsigned i;
 	struct asciiDatum *data;
 
-	/*	will be true the first time for both reasons	*/
-	if ( (span != asciiData->span) ||
-	    (chrom && differentString(asciiData->chrom, chrom)) )
+	if (asciiData->count)
 	    {
-	    freeMem(chrom);
-	    chrom = cloneString(asciiData->chrom);
-	    span = asciiData->span;
-	    if (wDS->useDataConstraint)
+	    /*	will be true the first time for both reasons	*/
+	    if ( (span != asciiData->span) ||
+		(chrom && differentString(asciiData->chrom, chrom)) )
 		{
-		if ((wDS->dataConstraint) &&
-		    sameWord(wDS->dataConstraint,"in range"))
-			fprintf (fh, "#\tdata values in range [%g : %g]\n",
-				wDS->limit_0, wDS->limit_1);
-		else
-			fprintf (fh, "#\tdata values %s %g\n",
-				wDS->dataConstraint, wDS->limit_0);
+		freeMem(chrom);
+		chrom = cloneString(asciiData->chrom);
+		span = asciiData->span;
+		if (wDS->winEnd)
+		    fprintf (fh, "#\tposition specified: %d-%d\n",
+			wDS->winStart+1, wDS->winEnd);
+		if (wDS->spanLimit)
+		    fprintf (fh, "#\tspan specified: %u\n", wDS->spanLimit);
+		if (wDS->useDataConstraint)
+		    {
+		    if ((wDS->dataConstraint) &&
+			sameWord(wDS->dataConstraint,"in range"))
+			    fprintf (fh, "#\tdata values in range [%g : %g]\n",
+				    wDS->limit_0, wDS->limit_1);
+		    else
+			    fprintf (fh, "#\tdata values %s %g\n",
+				    wDS->dataConstraint, wDS->limit_0);
+		    }
+		fprintf (fh, "variableStep chrom=%s span=%u\n",
+		    chrom, span);
 		}
-	    fprintf (fh, "variableStep chrom=%s span=%u\n",
-		chrom, span);
-	    }
-	data = asciiData->data;
-	for (i = 0; i < asciiData->count; ++i)
-	    {
-	    /*	user visible coordinates are 1 relative	*/
-	    fprintf (fh, "%u\t%g\n", data->chromStart + 1, data->value);
-	    ++data;
+	    data = asciiData->data;
+	    for (i = 0; i < asciiData->count; ++i)
+		{
+		/*	user visible coordinates are 1 relative	*/
+		fprintf (fh, "%u\t%g\n", data->chromStart + 1, data->value);
+		++data;
+		}
 	    }
 	next = asciiData->next;
 	}
-
     }
 else
     {
     fprintf(fh, "#\tno data points found\n");
     }
 carefulClose(&fh);
-}
-
-static void closeWibFile(struct wiggleDataStream *wDS)
-/*	if there is a Wib file open, close it	*/
-{
-if (wDS->wibFH > 0)
-    close(wDS->wibFH);
-wDS->wibFH = -1;
-freez(&wDS->wibFile);
-}
-
-static void closeWigConn(struct wiggleDataStream *wDS)
-{
-lineFileClose(&wDS->lf);
-closeWibFile(wDS);	/*	closes only if it is open	*/
-if (wDS->conn)
-    {
-    sqlFreeResult(&wDS->sr);
-    sqlDisconnect(&wDS->conn);
-    }
-freez(&wDS->sqlConstraint);
-}
-
-static void openWigConn(struct wiggleDataStream *wDS, char *tableName)
-/*	open connection to db or to a file, prepare SQL result for db */
-{
-if (wDS->isFile)
-    {
-    struct dyString *fileName = dyStringNew(256);
-    lineFileClose(&wDS->lf);	/*	possibly a previous file */
-    dyStringPrintf(fileName, "%s.wig", tableName);
-    wDS->lf = lineFileOpen(fileName->string, TRUE);
-    dyStringFree(&fileName);
-    }
-else
-    {
-    struct dyString *query = dyStringNew(256);
-    dyStringPrintf(query, "select * from %s", tableName);
-    if (wDS->chrName)
-	addConstraint(wDS, "chrom =", wDS->chrName);
-    if (wDS->spanLimit)
-	{
-	struct dyString *dyTmp = dyStringNew(256);
-	dyStringPrintf(dyTmp, "%u", wDS->spanLimit);
-	addConstraint(wDS, "span =", dyTmp->string);
-	dyStringFree(&dyTmp);
-	}
-    if (wDS->sqlConstraint)
-	dyStringPrintf(query, " where (%s)",
-	    wDS->sqlConstraint);
-    dyStringPrintf(query, " order by ");
-    if (!wDS->chrName)
-	dyStringPrintf(query, " chrom ASC,");
-    if (!wDS->spanLimit)
-	dyStringPrintf(query, " span ASC,");
-    dyStringPrintf(query, " chromStart ASC");
-    verbose(2, "#\t%s\n", query->string);
-    if (!wDS->conn)
-	wDS->conn = sqlConnect(wDS->db);
-    wDS->sr = sqlGetResult(wDS->conn,query->string);
-    }
-freeMem(wDS->tblName);
-wDS->tblName = cloneString(tableName);
-}
+}	/*	static void asciiOut()	*/
 
 void destroyWigDataStream(struct wiggleDataStream **wDS)
 /*	free all structures and zero the callers' structure pointer	*/
@@ -903,7 +961,7 @@ if (wDS)
     wds=*wDS;
     if (wds)
 	{
-	wds->closeWigConn(wds);
+	closeWigConn(wds);
 	wds->freeAscii(wds);
 	wds->freeBed(wds);
 	wds->freeStats(wds);
@@ -941,8 +999,6 @@ wds->bedOut = bedOut;
 wds->statsOut = statsOut;
 wds->asciiOut = asciiOut;
 wds->getData = getData;
-wds->closeWigConn = closeWigConn;
-wds->openWigConn = openWigConn;
 return wds;
 }
 
