@@ -8331,3 +8331,12 @@ rm /scratch/$chr.tmp[123].maf /scratch/$chr.hrm.maf /scratch/$chr.hrmc.maf
 # priority 190
 # visibility hide
 # type maf
+
+# twinscan genes loaded by Robert Aug 10 2004
+
+mkdir /cluster/data/hg17/bed/twinscan
+cd /cluster/data/hg17/bed/twinscan
+scp data from washU
+ldHgGene hg17 twinscan twinscan.gtf -gtf -genePredExt
+
+
