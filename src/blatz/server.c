@@ -32,6 +32,8 @@ printf("usage:\n");
 printf("   blatzServer start file(s)\n");
 printf("Starts up server. Files are either fasta files, nib files, 2bit files\n");
 printf("or text files containing the names of the above files one per line.\n");
+printf("It's important that the sequence be repeat masked with repeats in\n");
+printf("lower case.\n");
 printf("Options: (defaults are shown for numerical parameters)\n");
 bzpServerOptionsHelp(bzp);
 bzpClientOptionsHelp(bzp);
@@ -275,6 +277,8 @@ for (i=0; i<fileCount; ++i)
     struct dnaLoad *dl = dnaLoadOpen(files[i]);
     while ((seq = dnaLoadNext(dl)) != NULL)
         {
+	if (bzp->unmask)
+	    toUpperN(seq->dna, seq->size);
         slAddHead(&seqList, seq);
         }
     dnaLoadClose(&dl);

@@ -32,6 +32,7 @@ bzp->minExpand = 3000;
 bzp->ss = axtScoreSchemeDefault();
 bzp->cheapGap = gapCalcCheap();
 bzp->gapCalc = gapCalcDefault();
+bzp->unmask = FALSE;
 bzp->out = "chain";
 bzp->mafQ = "";
 bzp->mafT = "";
@@ -82,6 +83,7 @@ printf("  -matrix=fileName - Read scoring matrix from file.\n");
 printf("  -gapCost=fileName - Read gap scoring scheme from file.\n");
 printf("  -verbose=%d - Print progress info. 0=silent, 1=default, 2=wordy\n", 
         verboseLevel());
+printf("  -unmask - Don't treat lower case sequence as masked\n");
 printf("  -out=%s - Output in given format.  Options are chain, axt, maf, psl.\n",
         bzp->out);
 printf("                For maf there are -mafT=%s and -mafQ=%s options to control\n"
@@ -108,6 +110,7 @@ if (optionExists("gapCost"))
     bzp->gapCalc = gapCalcFromFile(optionVal("gapCost", NULL));
 else if (bzp->rna)
     bzp->gapCalc = gapCalcRnaDna();
+bzp->unmask = optionExists("unmask");
 bzp->out = optionVal("out", bzp->out);
 bzp->mafT = optionVal("mafT", bzp->mafT);
 bzp->mafQ = optionVal("mafQ", bzp->mafQ);

@@ -29,6 +29,8 @@ printf("usage:\n");
 printf("   blatzClient queryFile outputFile.\n");
 printf("The queryFile can be in fasta, nib, or 2bit format or a \n");
 printf("text file containing the names of the above files one per line.\n");
+printf("It's important that the sequence be repeat masked with repeats in\n");
+printf("lower case.\n");
 printf("Options: (defaults are shown for numerical parameters)\n");
 bzpClientOptionsHelp(bzp);
 printf("  -port=%d Use specified TCP/IP port\n", bzpDefaultPort);
@@ -79,6 +81,14 @@ while ((seq = dnaLoadNext(dl)) != NULL)
         sendOption(sd, options[i].name);
 
     /* Send sequence. */
+    if (optionExists("unmask"))
+        toUpperN(seq->dna, seq->size);
+    else
+	{
+	if (seqIsLower(seq))
+	    warn("Sequence %s is all lower case, and thus ignored. Use -unmask "
+	         "flag to unmask lower case sequence.");
+	}
     netSendString(sd, "seq");
     netSendString(sd, seq->name);
     netSendHugeString(sd, seq->dna);

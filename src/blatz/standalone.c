@@ -22,7 +22,8 @@ printf("usage:\n");
 printf("   blatz target query output\n");
 printf("where target and query are either fasta files, nib files, 2bit files\n");
 printf("or a text files containing the names of the above files one per line.\n");
-printf("Output is a chain file currently\n");
+printf("It's important that the sequence be repeat masked with repeats in\n");
+printf("lower case.\n");
 printf("Options: (defaults are shown for numerical parameters)\n");
 bzpServerOptionsHelp(bzp);
 bzpClientOptionsHelp(bzp);
@@ -49,10 +50,19 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     {
     double bestScore = 0;
     struct chain *chainList;
+    if (bzp->unmask)
+        toUpperN(query->dna, query->size);
     if (bzp->rna)
         maskTailPolyA(query->dna, query->size);
     chainList = blatzAlign(bzp, indexList, query);
-    if (chainList != NULL) bestScore = chainList->score;
+    if (chainList != NULL) 
+    	bestScore = chainList->score;
+    else
+        {
+	if (seqIsLower(query))
+	    warn("Sequence %s is all lower case, and thus ignored. Use -unmask "
+	         "flag to unmask lower case sequence.");
+	}
     verbose(1, "%s (%d bases) score %2.0f\n", 
             query->name, query->size, bestScore);
     blatzWriteChains(bzp, chainList, query, indexList, f);
@@ -73,6 +83,12 @@ bzpTime("loaded DNA");
 
 verbose(2, "Loaded %d in %s, opened %s\n", slCount(targetList), target,
         query);
+if (bzp->unmask)
+    {
+    struct dnaSeq *seq;
+    for (seq = targetList; seq != NULL; seq = seq->next)
+	toUpperN(seq->dna, seq->size);
+    }
 alignAll(bzp, targetList, queryDl, output);
 }
 

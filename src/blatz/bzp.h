@@ -25,6 +25,7 @@ struct bzp
     struct gapCalc *cheapGap;  /* Gap calculation info for first pass. */
     struct gapCalc *gapCalc;   /* Gap calculation info for final pass. */
     boolean bestChainOnly;  /* Only keep best chain (from MSP on) */
+    boolean unmask;	/* Unmask lower case sequence. */
     char *out;		/* Output format.  Chain, axt, psl, etc. */
     char *mafQ;		/* Prefix for query side of maf output. */
     char *mafT;		/* Prefix for target side of maf output. */
@@ -59,6 +60,7 @@ void bzpServerOptionsHelp(struct bzp *bzp);
    {"minExpand", OPTION_INT}, \
    {"matrix", OPTION_STRING}, \
    {"gapCost", OPTION_STRING}, \
+   {"unmask", OPTION_BOOLEAN}, \
    {"out", OPTION_STRING}, \
    {"mafQ", OPTION_STRING}, \
    {"mafT", OPTION_STRING},

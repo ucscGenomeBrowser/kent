@@ -325,7 +325,7 @@
 93 - Ported to Hgwdev:
       2.38 chain 1310598 human2 100000 + 27 98887 mouse17 75584 + 24 73322 1
       0:30.66 chain 8324871 human 2000000 + 361721 1947371 mouse 1120000 + 8735 1116037 1
-      2:12 chr21 vs mouse rna. 
+      2:12 chr21 vs mouse rna. (112 mRNAs)
       11:42 chr1 + chr21 vs mouse rna.
       18:55 chr1 + chr2 + chr21 vs mouse rna.
      Ported to Kolossus:
@@ -345,8 +345,15 @@
       0:52 chr21 vs mouse rna
       2:57 chr1 + chr21 vs mouse rna
          match 192351 mismatch 48776 repMatch 4425
+           chr1 + chr2 + chr21 
+      5:21 chr1 + chr2 + chr21 (2.3G RAM used) vs mouse rna
+      7:08 chr1 + chr2 + chr3 + chr21 (3.1G RAM used)
+      9:29 chr1 + chr2 + chr3 + chr4 + chr5 + chr21 (5.7G RAM)
      Kolossus -weight=13
-      chr1 + chr21 vs mouse rna
+      2:00 chr21 vs mouse rna
+      6:00 chr1 + chr21 vs mouse rna
+         Curiously slow.  Index falling out of cache?
+	 match 192458 mismatch 48596 repMatch 4233
 
     
 time blat chr21.nib humanPlusRna.fa blatHuman.psl -ooc=$HOME/src/blat/11.ooc -q=rna
@@ -361,3 +368,4 @@ Searched 531551 bases in 190 sequences
 
 time blatz test/chr21/chr21.fa test/chr21/humanPlusRna.fa -out=psl blatzHuman.psl -rna
 274.570u 74.800s 5:58.29 97.5%  0+0k 0+27io 0pf+0w
+
