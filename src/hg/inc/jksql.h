@@ -101,13 +101,15 @@ boolean sqlRowExists(struct sqlConnection *conn,
                                            returned rather than abort */
 #define SQL_TAB_FILE_CONCURRENT    0x10  /* optimize for allowing concurrent
                                           * access to the table. */
-
+#define SQL_TAB_TRANSACTION_SAFE   0x20  /* Don't use speed optimizations that 
+                                          * implicitly commit the current transaction. 
+					  * For example "alter table" */
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options);
 /* Load a tab-seperated file into a database table, checking for errors. 
  * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
- * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT */
+ * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT, SQL_TAB_TRANSACTION_SAFE */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* Query database.
