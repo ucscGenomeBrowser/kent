@@ -17,6 +17,9 @@ void mustSendWithSig(int fd, char *string);
 char *getMachine();
 /* Return host machine name. */
 
+char *getUser();
+/* Get user name */
+
 void vLogIt(char *format, va_list args);
 /* Variable args logit. */
 
