@@ -75,7 +75,7 @@ shortLabel Latest Human/Rat/Mouse
 longLabel Human/Rat (Jun. 03) /Mouse (Feb. 03) Alignments
 group compGeno
 priority 118.2
-visibility full
+visibility hide
 type maf
 
 track mammalNotHumanSynt
@@ -83,7 +83,7 @@ shortLabel Not Human Synteny
 longLabel Mammal Not Human Synteny (mm3)
 group compGeno
 priority 125.96
-visibility full
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -94,7 +94,7 @@ shortLabel Human/Mouse
 longLabel Blastz Score Based Mouse/Human Wiggle Track
 group compGeno
 priority 125.99
-visibility full
+visibility hide
 color 100,50,0
 altColor 255,240,200
 type axt mm3
@@ -106,16 +106,15 @@ group compGeno
 color 175,150,128
 altColor 175,150,128
 priority 125.5
-visibility full
+visibility hide
 type sample 0 8
-
 
 track blastzBestMm3
 shortLabel Best Mouse
 longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
 group compGeno
 priority 126
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -175,7 +174,7 @@ shortLabel Mouse Net
 longLabel Mouse/$Organism Alignment Net
 group compGeno
 priority 133.5
-visibility hide
+visibility dense
 spectrum on
 type netAlign mm3 mouseChain
 otherDb mm3
@@ -239,7 +238,7 @@ shortLabel Rat Blastz
 longLabel Merged Blastz Rat (Jan. 03) Alignments
 group compGeno
 priority 142
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
