@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.9 2003/07/10 16:05:48 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.10 2003/12/08 18:42:55 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -398,7 +398,9 @@ return result;
 int blocksOverlap(struct ggMrnaBlock *block1, struct ggMrnaBlock *block2)
 /** Return TRUE if block1 is inside block2. */
 {
-if(block1->tStart >= block2->tStart && block1->tEnd <= block2->tEnd)
+/* if(block1->tStart >= block2->tStart && block1->tEnd <= block2->tEnd) */
+/*     return TRUE; */
+if(rangeIntersection(block1->tStart, block1->tEnd, block2->tStart, block2->tEnd) > 0)
     return TRUE;
 return FALSE;
 }
@@ -477,7 +479,7 @@ int i=0;
 *oIndex =  needMem(sizeof(int)*gg->vertexCount);
 for(i=0; i<gg->vertexCount; i++)
     {
-    if(em[i][endIx] && i != softStartIx && v[i].type == startType) 
+    if(em[i][endIx] && v[i].type == startType) 
 	{
 	if(overlappingMRnas(gg, mRnaAli, softStartIx, endIx, i, endIx))
 	    {
@@ -500,7 +502,7 @@ int i=0;
 *oIndex =  needMem(sizeof(int)*gg->vertexCount);
 for(i=0; i<gg->vertexCount; i++)
     {
-    if(em[hardStartIx][i] && i != softEndIx && v[i].type == endType) 
+    if(em[hardStartIx][i] && v[i].type == endType) 
 	{
 	if(overlappingMRnas(gg, mRnaAli, hardStartIx, softEndIx, hardStartIx, i))
 	    {
@@ -527,7 +529,7 @@ return hash;
 
 int consensusSoftStartVertex(struct geneGraph *gg, int softStartIx, int hardEndIx, 
 			     int *oIndex, int oCount)
-/** Pick the best hard start out of oIndex. Return index of best hard start
+/** Pick the best soft start out of oIndex. Return index of best start
     into gg->vertices, -1 if no vertex found.
     Best is defined by:
     - Number of other alignments that support it.
@@ -539,13 +541,18 @@ struct ggEvidence ***e = gg->evidence;
 int maxDistance = 3000;
 int i=0; 
 int bestCount = 0;
-int bestDist = BIGNUM;
+int bestDist = 0;
+boolean isHard = FALSE;
 for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[oIndex[i]][hardEndIx]);
-    int curDist = abs(v[softStartIx].position - v[oIndex[i]].position);
-    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist && curDist < maxDistance) )
+    int curDist = v[softStartIx].position - v[oIndex[i]].position;
+    if( (!isHard || v[oIndex[i]].type  == ggHardStart) &&     /* Replace if not replacing hard with soft. */
+	(curCount > bestCount ||                              /* and current count is better. */
+	 (curCount == bestCount && curDist > bestDist && curDist < maxDistance) )) /* or start is farther upstream. */
 	{
+	if(v[oIndex[i]].type == ggHardStart)
+	    isHard = TRUE;
 	bestVertex = oIndex[i];
 	bestCount = curCount;
 	bestDist = curDist;
@@ -568,14 +575,19 @@ struct ggVertex *v = gg->vertices;
 struct ggEvidence ***e = gg->evidence;
 int i=0; 
 int bestCount = 0;
-int bestDist = BIGNUM;
+int bestDist = 0;
 int maxDist = 3000;
+boolean isHard = FALSE;
 for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[hardStartIx][oIndex[i]]);
-    int curDist = abs(v[softEndIx].position - v[oIndex[i]].position);
-    if( curCount > bestCount || (curCount == bestCount && curDist < bestDist && curDist < maxDist) )
+    int curDist = v[oIndex[i]].position - v[softEndIx].position;
+    if( (!isHard || v[oIndex[i]].type == ggHardEnd) &&  /* Replace if not replacing hard with soft. */
+	(curCount > bestCount ||                        /* and current count is better. */
+	 (curCount == bestCount && curDist > bestDist && curDist < maxDist) )) /* or end is farther downstream. */
 	{
+	if(v[oIndex[i]].type == ggHardEnd)
+	    isHard = TRUE;
 	bestVertex = oIndex[i];
 	bestCount = curCount;
 	bestDist = curDist;
@@ -1067,6 +1079,8 @@ for(i=0; i<gg->vertexCount; i++)
     if(gg->vertices[i].type == ggSoftEnd)
 	tryToFixSoftEndAlignment(gg, mc, aliHash, i, minOverlap);
     }
+
+/* Try to fill in soft ends and starts with hard starts and ends. */
 for(i=0; i<gg->vertexCount; i++)
     {
     if(gg->vertices[i].type == ggSoftStart)
@@ -1075,6 +1089,7 @@ for(i=0; i<gg->vertexCount; i++)
 	softEndOverlapConsensusArcs(gg, aliHash, i, ggHardEnd);
     }
 //softlyTrim(gg);
+/* Fill in soft ends and starts with the "best" soft end or start. */
 softlyTrimConsensus(gg, aliHash);
 hideLittleOrphans(gg);
 if(fillInEvidence)
