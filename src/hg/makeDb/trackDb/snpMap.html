@@ -9,25 +9,25 @@ tracks.  </P>
 <UL>
 <LI>The <B>Random</B> variants were detected by aligning reads from random
 genomic clones from a diverse pool of human DNA against the
-genome. (These were previously in the 'Random SNPs' track.)
+genome. <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(These were previously in the 'Random SNPs' track.)
 
 <LI>The <B>Mixed</B> variants were detected by both clone overlaps and the
-random genomic clones. (These were previously in the 'Random SNPs' track.)
+random genomic clones. <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(These were previously in the 'Random SNPs' track.)
 
 <LI>The <B>BAC Overlaps</B> variants were detected primarily by
 looking at overlaps between clones that cover the same region of the
-genome. (These were previously in the 'Overlap SNPs' track.)
+genome. <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(These were previously in the 'Overlap SNPs' track.)
 
 <LI>The <B>Other</B> variants were found using alternative
-methods. (These were previously in the 'Overlap SNPs' track.)
+methods. <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(These were previously in the 'Overlap SNPs' track.)
 
 <LI>The <B>Affymetrix Genotyping Array 10K</B> variants are those Single
 Nucleotide Polymorphisms that have been included in the Affymetrix
-10K SNP Genotyping Array.  (These can also be found in the 'Affymetrix 10K SNP' track.)
+10K SNP Genotyping Array.  <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(These were previously in the 'Affymetrix 10K SNP' track.)
 
 <LI>The <B>Affymetrix Genotyping Array 120K</B> variants are those Single
 Nucleotide Polymorphisms that have been included in the Affymetrix
-120K SNP Genotyping Array. (These can also be found in the 'Affymetrix 120K SNP' track.)
+120K SNP Genotyping Array. <BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(These were previously in the 'Affymetrix 120K SNP' track.)
 </UL>
 
 <B>Variant Types</B>
@@ -44,32 +44,55 @@ Nucleotide Polymorphisms that have been included in the Affymetrix
 can be mapped against the current assembly.  These include known point
 mutations (Single Nucleotide Polymorphisms), insertions, deletions,
 and segmental mutations from the current build of <A
-HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSnp</A>.
+HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSnp</A>, which is shown in our <A HREF="/releaseLog.html">release log</A>.
 </P>
 <P>
 There are three major cases that are not mapped and/or annotated:
 <UL>
+
 <LI> 
-Submissions that are completely masked as repetitive
-elements. These are dropped from any further computations. This set of
-reference SNPs is dumped in chromosome &quot;rs_chMasked&quot; on the <A HREF="ftp://ftp.ncbi.nih.gov/snp/" TARGET=_blank>dbSNP ftp site</A>.
+Submissions that are completely masked as repetitive elements. 
+These are dropped from any further computations. This set of
+reference SNPs is can be found in chromosome &quot;rs_chMasked&quot;
+on the <A HREF="ftp://ftp.ncbi.nih.gov/snp/" TARGET=_blank>dbSNP ftp
+site</A>.
+
 <LI>
 Submissions that are defined in a cDNA context with extensive
 splicing. These SNPs are typically annotated on refSeq mRNAs through a
 separate annotation process. Effort is being made to reverse map these
 variations back to contig coordinates, but that has not been
 implemented. For now, you can find this set of variations in
-&quot;rs_chNotOn&quot; on the <A HREF="ftp://ftp.ncbi.nih.gov/snp/" TARGET=_blank>dbSNP ftp site</A>.
+&quot;rs_chNotOn&quot; on the <A HREF="ftp://ftp.ncbi.nih.gov/snp/"
+TARGET=_blank>dbSNP ftp site</A>.
+
 <LI>
-Submissions with excessive hits to the genome. Variations with
-3+ hits to the genome are not included in the tracks, but are available in
-&quot;rs_chMulti&quot; on the <A HREF="ftp://ftp.ncbi.nih.gov/snp/" TARGET=_blank>dbSNP ftp site</A>.
+Submissions with excessive hits to the genome. Variations with 3+ hits
+to the genome are not included in the tracks, but are available in
+&quot;rs_chMulti&quot; on the <A HREF="ftp://ftp.ncbi.nih.gov/snp/"
+TARGET=_blank>dbSNP ftp site</A>.
+
 </UL>
 </P>
 <P>The heuristics for the non-SNP variations (i.e. named elements and
 STRs) are quite conservative; therefore, some of these are probably lost. This
 approach was chosen to avoid false annotation of variation in
 inappropriate locations.</P>
+
+<H2>Supporting Details</H2>
+
+<P> The positional information can be found in the annotations section
+of our general <A
+HREF="http://genome.ucsc.edu/downloads.html">downloads</A> page, which
+are organized by species and assembly. The non-positional information
+displayed on this page can be found the <A
+HREF="http://genome.ucsc.edu/goldenPath/hgFixed/database/">shared
+data</A> section of the same page, where they are split into tables by
+organism: 
+<TT><B><FONT size=3>dbSnpRsHg</FONT></B></TT> for Human, 
+<TT><B><FONT size=3>dbSnpRsMm</FONT></B></TT> for Mouse, and 
+<TT><B><FONT size=3>dbSnpRsRn</FONT></B></TT> for Rat.
+
 
 <H2>Credits</H2>
 
