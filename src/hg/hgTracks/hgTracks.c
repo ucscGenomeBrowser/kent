@@ -9547,6 +9547,7 @@ void ensMergeMethods(struct track *tg)
 tg->loadItems = ensMergeLoadItems;
 }
 
+#ifdef OLD
 void secretRikenTracks(struct track **pTrackList)
 /* If not on right host remove Riken tracks. */
 {
@@ -9566,6 +9567,7 @@ if (!hIsMgscHost())
 	}
     }
 }
+#endif /* OLD */
 
 
 void ctLoadSimpleBed(struct track *tg)
@@ -10087,7 +10089,7 @@ registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
-secretRikenTracks(&trackList);
+// secretRikenTracks(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 loadCustomTracks(&trackList);
 
