@@ -57,9 +57,9 @@
 #include "syntenySanger.h"
 #include "netAlign.h"
 #include "netGap.h"
+#include "chainBlock.h"
 #include "chain.h"
 #include "chainGap.h"
-#include "chainBlock.h"
 #include "knownMore.h"
 #include "estPair.h"
 #include "customTrack.h"
@@ -5173,7 +5173,7 @@ struct boxIn *bList = NULL;
 char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128] , query[256];
 
-snprintf( trackGap, sizeof(trackGap), "%sGap", track);
+snprintf( trackGap, sizeof(trackGap), "%s_%sGap", chromName, track);
 snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
