@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.14 2004/02/13 09:33:32 kent Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.15 2004/02/15 02:19:59 baertsch Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -77,10 +77,10 @@ return diff;
 }
 
 
-static void gffSyntaxError(char *fileName, int line)
+static void gffSyntaxError(char *fileName, int line, char *msg)
 /* Complain about syntax error in GFF file. */
 {
-errAbort("Bad line %d of %s:\n%s", line, fileName);
+errAbort("%s Bad line %d of %s:\n", msg, line, fileName);
 }
 
 static char *gffTnName(char *seqName, char *groupName)
@@ -220,7 +220,7 @@ struct hashEl *hel;
 struct gffLine *gl;
 
 if (wordCount < 8)
-    gffSyntaxError(fileName, lineIx);
+    gffSyntaxError(fileName, lineIx, "Word count less than 8 ");
 AllocVar(gl);
 
 if ((hel = hashLookup(gff->seqHash, words[0])) == NULL)
@@ -254,7 +254,7 @@ if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
 gl->feature = hel->name;
 
 if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
-   gffSyntaxError(fileName, lineIx);	
+   gffSyntaxError(fileName, lineIx, "col 3 or 4 not a number ");	
 gl->start = atoi(words[3])-1 + baseOffset;
 gl->end = atoi(words[4]) + baseOffset;
 gl->score = atof(words[5]);
