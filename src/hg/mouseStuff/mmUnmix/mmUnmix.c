@@ -21,7 +21,8 @@ errAbort(
   "usage:\n"
   "   mmUnmix xAli.pslx fragDir suspect.out mouseBad.out humanBad.out cloneBad.out\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -bed=contam.bed\n"
+  "   -html=contam.html\n"
   );
 }
 
@@ -498,42 +499,61 @@ for (suspect = suspectList; suspect != NULL; suspect = suspect->next)
 
 
 void printOneSuspect(struct chrom *chrom, Bits *bits, 
-	struct suspect *suspect, FILE *f)
+	struct suspect *suspect, FILE *f, FILE *bed, FILE *html)
 /* Print out one suspect to file. */
 {
 struct xAli *xa = suspect->xa;
+static char musCov[5], homCov[5];
+
+memset(musCov, '.', sizeof(musCov)-1);
+memset(musCov, '.', sizeof(musCov)-1);
 fprintf(f, "%s\t", xa->qName);
-fprintf(f, "%c", suspect->mStart ? '[' : '.');
-fprintf(f, "%c", suspect->mMost ? '+' : '.');
-fprintf(f, "%c", suspect->mTiny ? '-' : '.');
-fprintf(f, "%c", suspect->mEnd ? ']' : '.');
-fprintf(f, "\t");
+musCov[0] = ( suspect->mStart ? '[' : '.');
+musCov[1] = ( suspect->mMost ? '+' : '.');
+musCov[2] = ( suspect->mTiny ? '-' : '.');
+musCov[3] = ( suspect->mEnd ? ']' : '.');
+fprintf(f, "%s\t", musCov);
 fprintf(f, "%c", suspect->hasFish ? 'F' : '.');
 fprintf(f, "%c", suspect->hMultiClone ? 'C' : '.');
 fprintf(f, "%c", suspect->clumpsInHumanClone ? 'c' : '.');
 fprintf(f, "%c", suspect->saturatesHumanClone ? 'S' : '.');
 fprintf(f, "\t");
-fprintf(f, "%c", suspect->hStart ? '[' : '.');
-fprintf(f, "%c", suspect->hMost ? '+' : '.');
-fprintf(f, "%c", suspect->hTiny ? '-' : '.');
-fprintf(f, "%c", suspect->hEnd ? ']' : '.');
-fprintf(f, "\t");
+homCov[0] = ( suspect->hStart ? '[' : '.');
+homCov[1] = ( suspect->hMost ? '+' : '.');
+homCov[2] = ( suspect->hTiny ? '-' : '.');
+homCov[3] = ( suspect->hEnd ? ']' : '.');
+fprintf(f, "%s\t", homCov);
 fprintf(f, "%d\t%d\t%d\t%d\t%s:%d-%d\t", 
     suspect->badBits,
     xa->qStart, xa->qEnd, xa->qSize, 
     xa->tName, xa->tStart, xa->tEnd);
 showHumanFrags(f, chrom->frag, xa->tStart, xa->tEnd);
 fprintf(f, "\n");
+if (bed != NULL)
+    {
+    char *contigName = xa->qName + strlen("contig_");
+    fprintf(bed, "%s\t%d\t%d\t%s%s%s\n", 
+    	xa->tName, xa->tStart, xa->tEnd, musCov, contigName, homCov);
+    }
+if (html != NULL)
+    {
+    fprintf(html, "<A HREF=\"/cgi-bin/hgTracks?db=hg10&position=%s:%d-%d>", 
+    	xa->tName, xa->tStart, xa->tEnd); 
+    fprintf(html, "%s\t%d\t%d\t%s %s %s at %s:%d-%d", 
+    	xa->tName, xa->tStart, xa->tEnd, musCov, xa->qName, 
+	homCov, xa->tName, xa->tStart, xa->tEnd);
+    fprintf(html, "</A>\n");
+    }
 }
 
 void printSuspects(struct chrom *chrom, Bits *bits, 
-	struct suspect *suspectList, FILE *f)
+	struct suspect *suspectList, FILE *f, FILE *bed, FILE *html)
 /* Print what we think about all suspects... */
 {
 struct suspect *suspect;
 for (suspect = suspectList; suspect != NULL; suspect = suspect->next)
     {
-    printOneSuspect(chrom, bits, suspect, f);
+    printOneSuspect(chrom, bits, suspect, f, bed, html);
     }
 }
 
@@ -551,17 +571,17 @@ for (suspect = suspectList; suspect != NULL; suspect = suspect->next)
 	    {
 	    if (suspect->mStart || suspect->mEnd || suspect->mMost || suspect->mTiny)
 		{
-		printOneSuspect(chrom, bits, suspect, f);
+		printOneSuspect(chrom, bits, suspect, f, NULL, NULL);
 		}
 	    else if (suspect->hMultiClone || suspect->clumpsInHumanClone)
 		{
 		if (suspect->badBits > 2000 || pslCalcMilliBad((struct psl *)xa, FALSE) < 25)
-		    printOneSuspect(chrom, bits, suspect, f);
+		    printOneSuspect(chrom, bits, suspect, f, NULL, NULL);
 		}
 	    else if (!suspect->hStart && !suspect->hEnd && !suspect->hMost && !suspect->hTiny)
 		{
 		if (suspect->badBits > 4000)
-		    printOneSuspect(chrom, bits, suspect, f);
+		    printOneSuspect(chrom, bits, suspect, f, NULL, NULL);
 		}
 	    }
 	}
@@ -576,19 +596,20 @@ struct suspect *suspect;
 for (suspect = suspectList; suspect != NULL; suspect = suspect->next)
     {
     if (suspect->saturatesHumanClone)
-	printOneSuspect(chrom, bits, suspect, f);
+	printOneSuspect(chrom, bits, suspect, f, NULL, NULL);
     else if (!suspect->hasFish && !suspect->hMultiClone)
         {
 	if (suspect->hStart || suspect->hEnd || suspect->hMost || suspect->hTiny)
 	    {
-	    printOneSuspect(chrom, bits, suspect, f);
+	    printOneSuspect(chrom, bits, suspect, f, NULL, NULL);
 	    }
 	}
     }
 }
 
 void unmixChrom(struct chrom *chrom,  FILE *sus, 
-	FILE *badMouse, FILE *badHuman, FILE *badClone, struct hash *prescreened)
+	FILE *badMouse, FILE *badHuman, FILE *badClone, struct hash *prescreened, 
+	FILE *bed, FILE *html)
 /* Find contamination in chromosome. */
 {
 Bits *bits = bitAlloc(chrom->size);
@@ -607,7 +628,7 @@ judgeClones(chrom, bits,  suspectBk, badClone);
 addFish(chrom->name, suspectList);
 
 /* Print out results. */
-printSuspects(chrom, bits, suspectList, sus);
+printSuspects(chrom, bits, suspectList, sus, bed, html);
 printSuspectMouse(chrom, bits, suspectList, badMouse, prescreened);
 printSuspectMouse(chrom, bits, suspectList, badMouse, prescreened);
 printSuspectHuman(chrom, bits, suspectList, badHuman);
@@ -644,11 +665,24 @@ FILE *mm = mustOpen(mouseContam, "w");
 FILE *hs = mustOpen(humanContam, "w");
 FILE *sus = mustOpen(suspect, "w");
 FILE *badClone = mustOpen(badCloneName, "w");
+char *bedName = optionVal("bed", NULL);
+FILE *bed = NULL;
+char *htmlName = optionVal("html", NULL);
+FILE *html = NULL;
 
+if (bedName != NULL)
+    bed = mustOpen(bedName, "w");
+if (htmlName != NULL)
+    {
+    html = mustOpen(htmlName, "w");
+    fprintf(html, "<HTML><BODY><PRE>");
+    }
 readAli(xaliName, chromHash, &chromList);
 readFrags(fragDir, chromHash);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-    unmixChrom(chrom,  sus, mm, hs, badClone, prescreened);
+    unmixChrom(chrom,  sus, mm, hs, badClone, prescreened, bed, html);
+if (html != NULL)
+    fprintf(html, "</PRE></BODY></HTML>");
 }
 
 int main(int argc, char *argv[])

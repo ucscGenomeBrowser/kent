@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "jksql.h"
 #include "genePred.h"
+#include "xAli.h"
 
 void usage()
 /* Print usage and exit. */
@@ -25,7 +26,7 @@ for (i=0; i<gp->exonCount; ++i)
     }
 }
 
-void freen(char *input, char *output)
+void oldFreen(char *input, char *output)
 {
 FILE *f = mustOpen(output, "w");
 struct lineFile *lf = NULL;
@@ -41,10 +42,28 @@ while (lineFileChop(lf, row))
     }
 }
 
+void freen(char *root)
+{
+char buf[256];
+char *hello = "hello";
+int fd;
+struct xAli *xa = NULL;
+
+snprintf(buf, sizeof(buf), "%sXXXXXX", root);
+mkstemp(buf);
+fd = mkstemp(buf);
+printf("%d\n", fd);
+if (fd > 0)
+   write(fd, hello, strlen(hello));
+else
+   perror("mkstemp error");
+xAliFree(&xa);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 2)
    usage();
-freen(argv[1], argv[2]);
+freen(argv[1]);
 }
