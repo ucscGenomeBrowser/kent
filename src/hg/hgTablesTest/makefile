@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = hgTablesTest.o
 
 hgTablesTest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgTablesTest $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/hgTablesTest
+	${CC} ${CFLAGS} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgTablesTest $O ${MYLIBS} $L
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgTablesTest
 
 clean:
 	rm -f $O
