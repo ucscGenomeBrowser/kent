@@ -557,7 +557,6 @@ priority 33.5
 visibility hide
 spectrum on
 type bed 12
-private on
 
 track rmsk
 shortLabel RepeatMasker
@@ -617,7 +616,6 @@ priority 41
 visibility hide
 chromosomes chr21,
 type bed 12
-private on
 
 track altGraph
 shortLabel altGraph
