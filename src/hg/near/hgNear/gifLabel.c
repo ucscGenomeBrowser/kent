@@ -1,10 +1,11 @@
 /* gifLabel - create labels as GIF files. */
 
 #include "common.h"
+#include "linefile.h"
 #include "memgfx.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.1 2003/08/30 00:22:22 kent Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.2 2003/09/10 04:46:44 kent Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have

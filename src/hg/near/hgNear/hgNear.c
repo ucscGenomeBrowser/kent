@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.64 2003/09/09 07:33:46 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.65 2003/09/10 04:46:44 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -717,7 +717,7 @@ distanceTypeMethods(col, table, curGene, otherGene, valField);
 
 /* ---- Page/Form Making stuff ---- */
 
-void controlPanel(struct genePos *gp)
+void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordList)
 /* Make control panel. */
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
@@ -731,10 +731,18 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 /* Do sort by drop-down */
     {
-    static char *menu[] = {"expression", "homology", "name", "position", };
-    int menuSize = ArraySize(menu);
-    hPrintf("group by ");
-    cgiMakeDropList(groupVarName, menu, menuSize, groupOn);
+    struct order *ord;
+
+    hPrintf("sort by ");
+    hPrintf("<SELECT NAME=\"%s\">\n", orderVarName);
+    for (ord = ordList; ord != NULL; ord = ord->next)
+        {
+	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
+	if (ord == curOrd)
+	    hPrintf(" SELECTED");
+	hPrintf(">%s\n", ord->shortLabel);
+	}
+    hPrintf("</SELECT>\n");
     }
 
 /* Do items to display drop-down */
@@ -791,239 +799,6 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 hPrintf("</TD></TR></TABLE>");
 }
 
-#ifdef OLD
-static struct genePos *genePosSimple(char *name)
-/* Return a simple gene pos - with no chrom info. */
-{
-struct genePos *gp;
-AllocVar(gp);
-gp->name = cloneString(name);
-gp->distance = genePosTooFar;
-return gp;
-}
-#endif /* OLD */
-
-#ifdef OLD
-static struct genePos *genePosFull(char *name, char *chrom, int start, int end)
-/* Return full gene position */
-{
-struct genePos *gp = genePosSimple(name);
-gp->chrom = cloneString(chrom);
-gp->start = start;
-gp->end = end;
-return gp;
-}
-#endif /* OLD */
-
-static void flipDistances(struct genePos *list)
-/* Subtract distance values that are set from genePosTooFar. 
- * This lets us convert a score (close == high) to a distance. */
-{
-struct genePos *gp;
-for (gp = list; gp != NULL; gp = gp->next)
-    if (gp->distance != genePosTooFar)
-        gp->distance = genePosTooFar - gp->distance;
-}
-
-static void neighborhoodList(struct sqlConnection *conn, 
-	char *query, struct hash *geneHash, int maxCount)
-/* Fill in distance values based on query. */
-{
-struct sqlResult *sr;
-char **row;
-int count = 0;
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hashEl *hel = hashLookup(geneHash, row[0]);
-    while (hel != NULL)
-        {
-	struct genePos *gp = hel->val;
-	gp->distance = atof(row[1]);
-	hel = hashLookupNext(hel);
-	++count;
-	}
-    if (count >= maxCount)
-	break;
-    }
-sqlFreeResult(&sr);
-}
-
-static void getExpressionNeighbors(struct sqlConnection *conn,
-	struct genePos *geneList, struct hash *geneHash, int maxCount)
-/* Fill in distances for expression neighborhood. */
-{
-struct dyString *query = dyStringNew(1024);
-
-/* Look for matchers.  Look for a few more than they ask for to
- * account for dupes. */
-dyStringPrintf(query, 
-	"select target,distance from knownExpDistance where query='%s'", 
-	curGeneId->name);
-neighborhoodList(conn, query->string, geneHash, maxCount);
-dyStringFree(&query);
-}
-
-static void getHomologyNeighbors(struct sqlConnection *conn,
-	struct genePos *geneList, struct hash *geneHash, int maxCount)
-/* Fill in distances for homology neighborhood. */
-{
-struct dyString *query = dyStringNew(1024);
-struct genePos *list;
-
-/* Look for matchers.  Look for a few more than they ask for to
- * account for dupes. */
-dyStringPrintf(query, 
-	"select target,eValue from knownBlastTab where query='%s'", 
-	curGeneId->name);
-neighborhoodList(conn, query->string, geneHash, maxCount);
-dyStringFree(&query);
-}
-
-
-static void getGenomicNeighbors(struct sqlConnection *conn, 
-	struct genePos *curGp, struct hash *geneHash, int maxCount)
-/* Get fill in distance values based on genome position. */
-{
-char query[256];
-struct sqlResult *sr;
-char **row;
-
-/* Get list of all genes in chromosome */
-safef(query, sizeof(query), 
-	"select name,txStart from knownGene where chrom='%s' "
-	, curGp->chrom);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hashEl *hel = hashLookup(geneHash, row[0]);
-    while (hel != NULL)
-        {
-	struct genePos *gp = hel->val;
-	int start = sqlUnsigned(row[1]);
-	gp->distance = abs(start - curGp->start);
-	hel = hashLookupNext(hel);
-	}
-    }
-sqlFreeResult(&sr);
-}
-
-
-static void getPositionNeighbors(struct sqlConnection *conn, 
-	struct genePos *geneList, struct hash *geneHash, int maxCount)
-/* Get genes in genomic neighborhood. */
-{
-getGenomicNeighbors(conn, curGeneId, geneHash, maxCount);
-}
-
-#ifdef OLD
-struct scoredIdName
-/* A structure that stores a key, a name, and a score. */
-    {
-    struct scoredIdName *next;
-    char *id;		/* GeneID */
-    char *name;		/* Gene name. */
-    int score;		/* Big is better. */
-    };
-#endif /* OLD */
-
-#ifdef OLD
-int scoredIdNameCmpScore(const void *va, const void *vb)
-/* Compare to sort based on score. */
-{
-const struct scoredIdName *a = *((struct scoredIdName **)va);
-const struct scoredIdName *b = *((struct scoredIdName **)vb);
-int diff = b->score - a->score;
-if (diff == 0)
-    diff = strcmp(a->name, b->name);
-return diff;
-}
-#endif /* OLD */
-
-int countStartSame(char *prefix, char *name)
-/* Return how many letters of prefix match first characters of name. */
-{
-int i;
-char c;
-for (i=0; ;++i)
-    {
-    c = prefix[i];
-    if (c == 0 || c != name[i])
-        break;
-    }
-return i;
-}
-
-#ifdef OLD
-struct scoredIdName *scorePrefixMatch(char *prefix, char *id, char *name)
-/* Return scoredIdName structure based on name and how many
- * characters match prefix. */
-{
-struct scoredIdName *sin;
-AllocVar(sin);
-sin->id = cloneString(id);
-sin->name = cloneString(name);
-sin->score = countStartSame(prefix, name);
-return sin;
-}
-#endif /* OLD */
-
-static void getNameborhood(struct sqlConnection *conn,
-	char *curName, char *table, char *idField, char *nameField,
-	struct hash *geneHash, int maxCount)
-/* Fill in distance values based on how many letters match
- * current name. */
-{
-struct sqlResult *sr;
-char **row;
-char query[512];
-
-/* Scan table for names and sort by similarity. */
-safef(query, sizeof(query), "select %s,%s from %s", idField, nameField, table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hashEl *hel = hashLookup(geneHash, row[0]);
-    while (hel != NULL)
-        {
-	struct genePos *gp = hel->val;
-	gp->distance = 1000 - countStartSame(curName,row[1]);	
-	hel = hashLookupNext(hel);
-	}
-    }
-sqlFreeResult(&sr);
-}
-
-static void getNameNeighbors(struct sqlConnection *conn,
-	struct genePos *geneList, struct hash *geneHash, int maxCount)
-/* Get genes in genomic neighborhood. */
-{
-char query[256];
-char name[128];
-safef(query, sizeof(query), 
-	"select geneSymbol from kgXref where kgID = '%s'", curGeneId->name);
-if (sqlQuickQuery(conn, query, name, sizeof(name)))
-    {
-    getNameborhood(conn, name, "kgXref", "kgID", "geneSymbol", 
-    	geneHash, maxCount);
-    }
-else
-    {
-    warn("Couldn't find name for %s", curGeneId->name);
-    }
-}
-
-#ifdef OLD
-struct hash *cannonicalHash(struct sqlConnection *conn)
-/* Get cannonicalHash if necessary, otherwise return NULL. */
-{
-if (showOnlyCannonical())
-    return knownCannonicalHash(conn);
-else
-    return NULL;
-}
-#endif /* OLD */
-
 static void trimFarGenes(struct genePos **pList)
 /* Remove genes that are genePosTooFar or farther from list. */
 {
@@ -1040,7 +815,8 @@ slReverse(&newList);
 *pList = newList;
 }
 
-struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
+struct genePos *getOrderedList(struct order *ord,
+	struct column *colList, struct sqlConnection *conn)
 /* Return sorted list of gene neighbors. */
 {
 struct genePos *geneList = advFilterResults(colList, conn);
@@ -1049,26 +825,15 @@ struct genePos *gp;
 
 /* Make hash of all genes. */
 for (gp = geneList; gp != NULL; gp = gp->next)
+    {
     hashAdd(geneHash, gp->name, gp);
-
-if (sameString(groupOn, "expression"))
-    getExpressionNeighbors(conn, geneList, geneHash, displayCount);
-else if (sameString(groupOn, "homology"))
-    getHomologyNeighbors(conn, geneList, geneHash, displayCount);
-else if (sameString(groupOn, "position"))
-    getPositionNeighbors(conn, geneList, geneHash, displayCount);
-else if (sameString(groupOn, "name"))
-    getNameNeighbors(conn, geneList, geneHash, displayCount);
-else
-    {
-    warn("Unknown sort value %s", groupOn);
-    getExpressionNeighbors(conn, geneList, geneHash, displayCount);
     }
 
+/* Calculate distances, trim unset distances, and sort. */
+if (ord->calcDistances)
+    ord->calcDistances(ord, conn, geneList, geneHash, displayCount);
 if (!gotAdvFilter())
-    {
     trimFarGenes(&geneList);
-    }
 slSort(&geneList, genePosCmpDistance);
 
 /* Trim list to max number. */
@@ -1181,7 +946,6 @@ else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
 }
-
 
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
@@ -1352,8 +1116,9 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 hPrintf("</PRE></TT>");
 }
 
-void doMainDisplay(struct sqlConnection *conn, struct column *colList, 
-	struct genePos *geneList)
+void doMainDisplay(struct sqlConnection *conn, 
+	struct order *ord, struct order *ordList,
+	struct column *colList, struct genePos *geneList)
 /* Put up the main family browser display - a control panel followed by 
  * a big table. */
 {
@@ -1362,10 +1127,39 @@ safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
 makeTitle(buf, "hgNear.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
-controlPanel(curGeneId);
+controlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
 hPrintf("</FORM>");
+}
+
+struct order *curOrder(struct order *ordList)
+/* Get ordering currently selected by user, or default
+ * (first in list) if none selected. */
+{
+char *selName;
+struct order *ord;
+if (ordList == NULL)
+    errAbort("No orderings available");
+selName = cartUsualString(cart, orderVarName, ordList->name);
+for (ord = ordList; ord != NULL; ord = ord->next)
+    {
+    if (sameString(ord->name, selName))
+        return ord;
+    }
+return ordList;
+}
+
+static char *lookupProtein(struct sqlConnection *conn, char *mrnaName)
+/* Given mrna name look up protein.  FreeMem result when done. */
+{
+char query[256];
+char buf[64];
+safef(query, sizeof(query), 
+	"select protein from knownCannonical where transcript='%s'", mrnaName);
+if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
+    return NULL;
+return cloneString(buf);
 }
 
 void displayData(struct sqlConnection *conn, struct column *colList, 
@@ -1373,9 +1167,13 @@ void displayData(struct sqlConnection *conn, struct column *colList,
 /* Display data in neighborhood of gene. */
 {
 struct genePos *geneList = NULL;
+struct order *ordList = orderGetAll(conn);
+struct order *ord = curOrder(ordList);
+if (gp->protein == NULL)
+    gp->protein = lookupProtein(conn, gp->name);
 curGeneId = gp;
 if (gp)
-    geneList = getNeighbors(colList, conn);
+    geneList = getOrderedList(ord, colList, conn);
 if (cartVarExists(cart, getTextVarName))
     doGetText(conn, colList, geneList);
 else if (cartVarExists(cart, getSeqVarName))
@@ -1383,10 +1181,10 @@ else if (cartVarExists(cart, getSeqVarName))
 else if (cartVarExists(cart, getGenomicSeqVarName))
     doGetGenomicSeq(conn, colList, geneList);
 else
-    doMainDisplay(conn, colList, geneList);
+    doMainDisplay(conn, ord, ordList, colList, geneList);
 }
 
-struct genePos *curGenePos()
+static struct genePos *curGenePos()
 /* Return current gene pos from cart variables. */
 {
 struct genePos *gp;

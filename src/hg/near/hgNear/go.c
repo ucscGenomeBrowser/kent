@@ -11,7 +11,7 @@
 #include "goa.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.6 2003/09/09 08:28:18 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.7 2003/09/10 04:46:44 kent Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goa table exists. */
@@ -199,3 +199,93 @@ col->cellPrint = goCellPrint;
 col->filterControls = goFilterControls;
 col->advFilter = goAdvFilter;
 }
+
+static boolean goOrderExists(struct order *ord, struct sqlConnection *ignore)
+/* This returns true if go database and goa table exists. */
+{
+boolean gotIt = FALSE;
+struct sqlConnection *conn = sqlMayConnect("go");
+if (conn != NULL)
+    {
+    gotIt = sqlTableExists(conn, "goa");
+    sqlDisconnect(&conn);
+    }
+return gotIt;
+}
+
+
+static void goCalcDistances(struct order *ord, 
+	struct sqlConnection *ignore, /* connection to main database. */
+	struct genePos *geneList, struct hash *geneHash, int maxCount)
+/* Fill in distance fields in geneList. */
+{
+struct sqlConnection *conn = sqlConnect("go");
+struct sqlResult *sr;
+char **row;
+struct hash *curTerms = newHash(8);
+struct hash *protHash = newHash(17);
+char query[512];
+struct genePos *gp;
+
+/* Build up hash of genes keyed by protein names. (The geneHash
+ * passed in is keyed by the mrna name. */
+for (gp = geneList; gp != NULL; gp = gp->next)
+    {
+    hashAdd(protHash, gp->protein, gp);
+    }
+
+/* Build up hash full of all go IDs associated with protName. */
+
+if (curGeneId->protein != NULL)
+    {
+    safef(query, sizeof(query), 
+	    "select goId from goa where dbObjectSymbol = '%s'", curGeneId->protein);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	hashAdd(curTerms, row[0], NULL);
+	}
+    sqlFreeResult(&sr);
+    }
+
+/* Stream through association table counting matches. */
+sr = sqlGetResult(conn, "select dbObjectSymbol,goId from goa");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (hashLookup(curTerms, row[1]))
+	{
+	struct hashEl *hel = hashLookup(protHash, row[0]);
+	while (hel != NULL)
+	    {
+	    gp = hel->val;
+	    gp->count += 1;
+	    hel = hashLookupNext(hel);
+	    }
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Go through list translating non-zero counts to distances. */
+for (gp = geneList; gp != NULL; gp = gp->next)
+    {
+    if (gp->count > 0)
+        {
+	gp->distance = 1.0/gp->count;
+	gp->count = 0;
+	}
+    if (sameString(gp->name, curGeneId->name))	/* Force self to top of list. */
+        gp->distance = 0;
+    }
+
+hashFree(&protHash);
+hashFree(&curTerms);
+sqlDisconnect(&conn);
+}
+
+void goSimilarityMethods(struct order *ord, char *parameters)
+/* Fill in goSimilarity methods. */
+{
+ord->exists = goOrderExists;
+ord->calcDistances = goCalcDistances;
+}
+

@@ -22,6 +22,7 @@ struct genePos
     int end;		/* End in chromosome. Disregarded if chrom == NULL. */
     char *protein;	/* Protein ID. */
     float distance;	/* Something to help sort on. */
+    int count;		/* Something to count with. Not always set. */
     };
 #define genePosTooFar 1000000000	/* Definitely not in neighborhood. */
 
@@ -114,6 +115,37 @@ struct column
    struct sqlConnection *goConn;  /* Connection to go database. */
    };
 
+struct order
+/* An row order of the big table. */
+    {
+    struct order *next;	/* Next in list. */
+    char *name;			/* Symbolic name, not allocated here. */
+    char *shortLabel;		/* Short readable label. */
+    char *longLabel;		/* Longer description. */
+    char *type;			/* Type - encodes which methods to used etc. */
+    struct hash *settings;	/* Settings from ra file. */
+
+    boolean (*exists)(struct order *ord, struct sqlConnection *conn);
+    /* Return TRUE if this ordering can be computed from available data. */
+
+    void (*calcDistances)(struct order *ord, struct sqlConnection *conn, 
+    	struct genePos *geneList, struct hash *geneHash, int maxCount);
+    /* Fill in distance fields of first maxCount members of geneList.
+     * GeneHash and geneList contain the same genes.  GeneHash is
+     * keyed by gene->name. */
+
+    /* -- Data that may be order-specific. -- */
+    char *table;			/* Name of associated table. */
+    char *keyField;		/* GeneId field in associated table. */
+    char *valField;		/* Value field in associated table. */
+    char *curGeneField;		/* curGeneId field in associated table. */
+    float distanceMultiplier;	/* What to multiply valField by to get distance. */
+    };
+
+struct order *orderGetAll(struct sqlConnection *conn);
+/* Return list of row orders available. */
+
+
 /* ---- global variables ---- */
 
 extern struct cart *cart; /* This holds variables between clicks. */
@@ -135,6 +167,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define idPosVarName "near.idPos"      	
 	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
+#define orderVarName "near.order"	/* Ordering scheme. */
 #define getSeqVarName "near.getSeq"	/* Button to get sequence. */
 #define getGenomicSeqVarName "near.getGenomicSeq"	
 	/* Button to fetch genomic sequence. */
@@ -202,6 +235,9 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
+
+char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name);
+/* Look up in ra hash or die trying. */
 
 /* ---- Some html helper routines. ---- */
 
@@ -331,6 +367,13 @@ boolean advFilterOrLogic(struct column *col, char *varName,
 	boolean defaultOr);
 /* Return TRUE if user has selected 'all' from any/all menu */
 
+boolean gotAdvFilter();
+/* Return TRUE if advanced filter variables are set. */
+
+boolean advFilterColAnySet(struct column *col);
+/* Return TRUE if any of the advanced filter variables
+ * for this col are set. */
+
 void advFilterKeyUploadButton(struct column *col);
 /* Make a button for uploading keywords. */
 
@@ -436,12 +479,8 @@ void setupColumnExpRatio(struct column *col, char *parameters);
 void setupColumnGo(struct column *col, char *parameters);
 /* Set up gene ontology column. */
 
-boolean gotAdvFilter();
-/* Return TRUE if advanced filter variables are set. */
-
-boolean advFilterColAnySet(struct column *col);
-/* Return TRUE if any of the advanced filter variables
- * for this col are set. */
+void goSimilarityMethods(struct order *ord, char *parameters);
+/* Set up go similarity ordering. */
 
 /* ---- Get config options ---- */
 boolean showOnlyCannonical();
