@@ -825,3 +825,14 @@ priority 11
 group X
 visibility dense
 type bed 3 +
+
+track rnaGene
+shortLabel RNA Genes
+longLabel Non-coding RNA Genes (dark) and Pseudogenes (light) [Lifted from hg16]
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
+
