@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.24 2005/03/06 09:37:46 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.25 2005/03/14 18:15:44 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -632,8 +632,23 @@ ldColorsMade       = TRUE;
 void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
+int count=0;
+
 bedLoadItem(tg, tg->mapName, (ItemLoader)ldLoad);
+count = slCount((struct sList *)(tg->items));
+//printf("<BR>%d<BR>", count);
 tg->canPack = FALSE;
+if (count>5000)
+    {
+    tg->limitedVis=tvDense;
+    tg->limitedVisSet=TRUE;
+    cartSetString(cart, "ldOut", "none"); /* overkill? */
+    }
+else 
+    {
+    tg->limitedVis=tvFull;
+    tg->limitedVisSet=FALSE;
+    }
 }
 
 static void mapDiamondUi(int xl, int yl, int xt, int yt, 
@@ -655,7 +670,7 @@ int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 tg->lineHeight = tl.fontHeight+1;
 tg->heightPer  = tg->lineHeight - 1;
-if (vis==tvDense)
+if (vis==tvDense||(tg->limitedVisSet&&tg->limitedVis==tvDense))
     tg->height = tg->lineHeight;
 else if (winEnd-winStart<500000)
     tg->height = insideWidth/2;
@@ -824,15 +839,13 @@ boolean    isLod        = FALSE;
 boolean    isRsquared   = FALSE;
 boolean    isDprime     = FALSE;
 double     scale        = scaleForPixels(insideWidth);
-int        itemCount    = 0;
+int        itemCount    = slCount((struct slList *)tg->items) + 1;
 int        i            = 0;
 Color      denseColor;
-int        heightPer = tg->heightPer;
+int        heightPer    = tg->heightPer;
 int        x;
-int        w = 3;
+int        w            = 3;
 
-for (el=tg->items; el!=NULL; el=el->next)
-    itemCount++;
 makeLdShades(vg);
 if (drawOutline) 
     outlineColor = ldOutlineColor(outColor);
@@ -848,7 +861,7 @@ else
     errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; "
 	      "'%s' is not known", valArray);
 
-if (vis == tvFull) 
+if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
     for (el=tg->items; el!=NULL; el=el->next)
 	{
 	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
@@ -865,53 +878,100 @@ if (vis == tvFull)
 		     chromStarts, values, lodValues, arraySize, 
 		     drawOutline, scale, trim, isLod);
 	}
-else if (vis == tvDense)
+else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
     {
-    struct ldStats lds[itemCount+1], *ldsStartPtr=lds, *ldsEndPtr=lds;
+    struct ldStats lds[itemCount], *ldsStartPtr, *ldsEndPtr;
 
-    for (i=0, el=tg->items; i<itemCount; i++, el=el->next)
+    /* initialize array to represent SNPs and hold counts */
+    for (i=0, el=tg->items; i<itemCount-1 && el!=NULL; i++, el=el->next)
 	{
-	lds[i].chromStart = el->chromStart;
-	lds[i].n = 0;
-	lds[i].sumValues = 0;
-	lds[i].sumSquares = 0;
-	lds[i].sumLodValues = 0;
-	lds[i].sumLodSquares = 0;
+	lds[i].chromStart           = el->chromStart;
+	lds[i].n                    = 0;
+	lds[i].sumValues            = 0;
+	lds[i].sumSquares           = 0;
+	lds[i].sumLodValues         = 0;
+	lds[i].sumLodSquares        = 0;
+	lds[itemCount-1].chromStart = el->chromEnd-1;
 	}
+    lds[itemCount-1].n              = 0;
+    lds[itemCount-1].sumValues      = 0;
+    lds[itemCount-1].sumSquares     = 0;
+    lds[itemCount-1].sumLodValues   = 0;
+    lds[itemCount-1].sumLodSquares  = 0;
+
+    /* fill up the bins */
     for (el=tg->items; el!=NULL; el=el->next)
 	{
 	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
-	lds[itemCount].chromStart=chromStarts[0];
 	if (isRsquared)
+	    {
 	    sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
-	else 
+	    lodValues=values;
+	    }
+	else if (isDprime)
+	    {
 	    sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
-	sqlDoubleDynamicArray(el->lod, &lodValues, &arraySize);
+	    lodValues=values;
+	    }
+	else /* isLod */
+	    {
+	    sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
+	    sqlDoubleDynamicArray(el->lod, &lodValues, &arraySize);
+	    }
+	/* set start pointer for the first element */
+	ldsStartPtr = lds;
+	while (ldsStartPtr!=NULL && ldsStartPtr->chromStart!=el->chromStart)
+	    ldsStartPtr++;// += sizeof(struct ldStats);
+	/* note that the start pointer will remain constant for the */
+	/* remainder of this loop - the end pointer will increment */	   
+	/* end pointer must be greater than the start pointer */
+	if(ldsStartPtr==NULL)
+	    continue; // weird; check this
+	else
+	    ldsEndPtr = ldsStartPtr+1;
+	if (ldsEndPtr->chromStart >= el->chromEnd)
+	    errAbort("assert(ldsEndPtr->chromStart < el->chromEnd) failed.");
 
-	ldsStartPtr=lds;
-	while (ldsStartPtr->chromStart != el->chromStart)
-	    ldsStartPtr++;
-	ldsEndPtr=ldsStartPtr+1;
+	/* Walk through lists, update pointers, and store data in bins */
 	for (i=0; i<arraySize; i++)
 	    {
-	    while (chromStarts[i] != ldsEndPtr->chromStart
-		   && ldsEndPtr!=&(lds[itemCount]))
+	    /* move end pointer until it finds the correct bin. */
+	    /* This loop is necessary as some lists have missing data */
+	    while ( ldsEndPtr->chromStart != chromStarts[i] && ldsEndPtr != &(lds[itemCount-1]) )
 		ldsEndPtr++;
+	    fflush(stdout);
 	    ldsStartPtr->n++;
-	    ldsStartPtr->sumValues += values[i];
-	    ldsStartPtr->sumSquares += values[i]*values[i];
-	    ldsStartPtr->sumLodValues += lodValues[i];
+	    ldsStartPtr->sumValues     += values[i];
+	    ldsStartPtr->sumSquares    += values[i]*values[i];
+	    ldsStartPtr->sumLodValues  += lodValues[i];
 	    ldsStartPtr->sumLodSquares += lodValues[i]*lodValues[i];
+	    ldsEndPtr->n++;
+	    ldsEndPtr->sumValues       += values[i];
+	    ldsEndPtr->sumSquares      += values[i]*values[i];
+	    ldsEndPtr->sumLodValues    += lodValues[i];
+	    ldsEndPtr->sumLodSquares   += lodValues[i]*lodValues[i];
 	    }
 	}
+
+    /* write out the results */
+    vgBox(vg, insideX, yOff, insideWidth, tg->height-1, shadesOfGray[2]);
     for (i=0; i<itemCount; i++)
 	{
+	if (lds[i].n==0)
+	    printf("<BR>Empty bin: %d %d<BR>", (lds[i]).chromStart, (lds[i]).n);
 	if (lds[i].chromStart<winStart || lds[i].chromStart>winEnd)
 	    continue;
 	denseColor = ldDiamondColor(tg, vg, lds[i].sumValues/lds[i].n, 
 				    lds[i].sumLodValues/lds[i].n, isLod);
 	x = round((lds[i].chromStart-winStart)*scale) + xOff - w/2;
 	vgBox(vg, x, yOff, w, heightPer, denseColor);
+	if (drawOutline) 
+	    {
+	    vgLine(vg, x-1, yOff,             x+w, yOff,             outlineColor);
+	    vgLine(vg, x-1, yOff+heightPer-1, x+w, yOff+heightPer-1, outlineColor);
+	    vgLine(vg, x-1, yOff,             x-1, yOff+heightPer-1, outlineColor);
+	    vgLine(vg, x+w, yOff,             x+w, yOff+heightPer-1, outlineColor);
+	    }
 	}
     }
 else
@@ -932,6 +992,10 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 {
 char  label[16];
 char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
+char *pop         = tg->mapName;
+
+if (strlen(tg->mapName)>3)
+    pop += strlen(tg->mapName) - 3;
 
 if (sameString(valueString,"lod"))
     valueString = cloneString("LOD");
@@ -941,7 +1005,8 @@ else if (sameString(valueString,"dprime"))
     valueString = cloneString("D'");
 else
     errAbort("%s values are not recognized", valueString);
-safef(label, sizeof(label), "LD: %s; %s", tg->mapName+2, valueString);
+
+safef(label, sizeof(label), "LD: %s; %s", pop, valueString);
 toUpperN(label, sizeof(label));
 vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, 
 	    tl.fontHeight, color, font, label);
