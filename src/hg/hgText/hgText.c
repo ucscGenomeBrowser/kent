@@ -27,7 +27,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.99 2003/10/15 03:58:28 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.99.2.1 2003/10/22 17:28:24 heather Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -616,6 +616,11 @@ char *oldDb;
 
 webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
+if (! hDbIsActive(database))
+    {
+    database = hDefaultDb();
+    organism = hGenome(database);
+    }
 handleDbChange();
 
 puts(
