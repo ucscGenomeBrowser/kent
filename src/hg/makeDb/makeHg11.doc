@@ -2,7 +2,7 @@ This file describes how we made the browser database on
 NCBI build 29 (April, 2002 freeze)
 
 
-CREATING DATABASE  (done)
+CREATING DATABASE  (todo)
 
 o - ln -s /cluster/store1/gs.12/build29 ~/oo
 o - Make sure there is at least 5 gig free on hgwdev:/usr/local/mysql 
@@ -28,7 +28,7 @@ o - Create the trackDb table as so
 
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (done)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (todo)
 
 Create packed chromosome sequence files 
      ssh kkstore
@@ -115,8 +115,7 @@ Then ask admins to do a binrsync.
 
 
 
-GETTING FRESH mRNA AND EST SEQUENCE FROM GENBANK. (Need to do.
-    Looks like there will be a genbank update in a few days)
+GETTING FRESH mRNA AND EST SEQUENCE FROM GENBANK. (todo)
 
 This will create a genbank.129 directory containing compressed
 GenBank flat files and a mrna.129 containing unpacked sequence
