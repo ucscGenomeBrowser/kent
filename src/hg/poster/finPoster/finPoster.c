@@ -26,13 +26,13 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.5 2003/08/18 17:00:20 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.6 2003/09/13 04:16:14 kent Exp $";
 
 /* Which database to use */
-char *database = "hg15";
+char *database = "hg16";
 
 /* Location of mouse/human axt files. */
-char *axtDir = "/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-04-12-03-MS/axtNet";
+char *axtDir = "/gbdb/hg16/axtBestMm3";
 
 /* File with human/worm or mouse orthologs. */
 char *orthoFile = "hugo_with_worm_or_fly.txt";
@@ -40,17 +40,26 @@ char *orthoFile = "hugo_with_worm_or_fly.txt";
 /* File with disease genes. */
 char *diseaseFile = "hugo_with_disease.txt";
 
-/* File with synteny info */
-char *syntenyFile = "/cluster/store2/mm.2002.02/mm2/bed/synteny/synteny.bed";
+/* table with synteny info */
+char *syntenyTable = "syntenyMm3";
 
 /* File with stuff to remove. */
 char *weedFile = "chimera.txt";
 
 /* Mutations file. */
-char *mutFile = "t_res_quad_gc_precent.txt";
+char *mutFile = "mut34.txt";
 
 /* Resolved duplications file. */
 char *bestDupFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/dupe.rpt";
+
+/* Duplicons file from Evan Eichler. */
+char *dupliconsFile = "segDupesBuild34.txt";
+
+/* Ensemble gene predictions. */
+char *ensemblFile = "ensembl.txt";
+
+/* Noncoding RNA predictions. */
+char *rnaGeneFile = "ncrna-ncbi34.gff";
 
 /* Unresolved dupe output. */
 FILE *dupeFile;
@@ -191,6 +200,7 @@ while (lineFileRow(lf, row))
     hashStore(hash, row[1]);
     ++count;
     }
+lineFileClose(&lf);
 return hash;
 }
 
@@ -526,7 +536,7 @@ sqlFreeResult(&sr);
 void getFishBlatHits(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
 /* Get Fish Blat stuff. */
 {
-getPslTicks("blatFugu", "fugu", 0, 90, 180, cg, chrom, conn, f);
+getPslTicks("blatFr1", "fugu", 0, 90, 180, cg, chrom, conn, f);
 }
 
 
@@ -904,8 +914,8 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 safef(query, sizeof(query),
-	"select chromStart,chromEnd,name,strand from syntenyMouse "
-	"where chrom = '%s' order by chromStart", chrom);
+	"select chromStart,chromEnd,name,strand from %s "
+	"where chrom = '%s' order by chromStart", syntenyTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -922,7 +932,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void getDuplicons(struct chromGaps *cg, char *chrom, 
+void getDupliconsJk(struct chromGaps *cg, char *chrom, 
 	struct sqlConnection *conn, FILE *f)
 /* Get duplicon track. */
 {
@@ -945,6 +955,70 @@ while ((row = sqlNextRow(sr)) != NULL)
 		"duplicon", "box", gray, gray, gray, ".");
     }
 sqlFreeResult(&sr);
+}
+
+struct segDupe
+/* Minimal info on a segmental duplication. */
+    {
+    struct segDupe *next;
+    int start, end;	/* Start/end in target. */
+    double identity;	/* Base identity. */
+    };
+
+int segDupeCmpIdentity(const void *va, const void *vb)
+/* Compare to sort based on identity. */
+{
+const struct segDupe *a = *((struct segDupe **)va);
+const struct segDupe *b = *((struct segDupe **)vb);
+double dif = a->identity - b->identity;
+if (dif < 0)
+   return -1;
+else if (dif > 0)
+   return 1;
+else
+   return 0;
+}
+
+
+void getDuplicons(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f)
+/* Get duplicon track from Evan's file. */
+{
+struct lineFile *lf = lineFileOpen(dupliconsFile, TRUE);
+char *row[10];
+struct segDupe *sd, *sdList = NULL;
+while (lineFileRow(lf, row))
+    {
+    if (!startsWith("chr", row[0]) || !startsWith("chr", row[4]))
+    	errAbort("Bad format %s line %d", lf->fileName, lf->lineIx);
+    if (sameString(row[0], chrom))
+        {
+	AllocVar(sd);
+	sd->start = lineFileNeedNum(lf, row, 1);
+	sd->end = lineFileNeedNum(lf, row, 1);
+	if (sd->start > sd->end)
+	    {
+	    int temp = sd->start;
+	    sd->start = sd->end;
+	    sd->end = temp;
+	    }
+	sd->start -= 1;
+	sd->identity = atof(row[9]);
+	slAddHead(&sdList, sd);
+	}
+    }
+slSort(&sdList, segDupeCmpIdentity);
+for (sd = sdList; sd != NULL; sd = sd->next)
+    {
+    /* Want gray to be a linear function that maps 0.9 to 1.0 to 127 to 255. */
+    int gray = (sd->identity - 0.9) * 10.0 * 128 + 127;
+    if (gray < 0) gray = 0;
+    if (gray > 255) gray = 255;
+    printTab(f, cg, chrom, sd->start, sd->end, 
+		"duplicon", "box", gray, gray, gray, ".");
+    }
+slFreeList(&sd);
+lineFileClose(&lf);
 }
 
 void getCentroTelo(struct chromGaps *cg, char *chrom, 
@@ -974,9 +1048,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void fakeRnaGenes(struct chromGaps *cg, char *chrom, 
+void fakeRnaGenesFromRmsk(struct chromGaps *cg, char *chrom, 
 	struct sqlConnection *conn, FILE *f)
-/* Get centromere and telomere repeats. */
+/* Get RNA genes from RepeatMasker. */
 {
 struct sqlResult *sr;
 char **row;
@@ -1004,6 +1078,60 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "rnaGenes", "tick", r, g, b, ".");
     }
 sqlFreeResult(&sr);
+}
+
+void fakeRnaGenes(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f)
+/* Get RNA genes from Ewan's GFF. */
+{
+struct lineFile *lf = lineFileOpen(rnaGeneFile, TRUE);
+char *row[8];
+char *line;
+char *shortChrom = chrom + 3;	/* Skip over 'chr' */
+
+while (lineFileNextReal(lf, &line))
+    {
+    int r,g,b;
+    boolean isPseud = (stringIn("pseudo", line) != NULL);
+    int wordCount = chopLine(line, row);
+    lineFileExpectAtLeast(lf, 8, wordCount);
+    if (sameWord(shortChrom, row[0]))
+	{
+	int s = lineFileNeedNum(lf, row, 3);
+	int e = lineFileNeedNum(lf, row, 4);
+	if (isPseud)
+	    {
+	    r = 255, g=200, b=100;
+	    }
+	else
+	    {
+	    r = 150, g=75, b=0;
+	    }
+	printTab(f, cg, chrom, s, e, 
+		"rnaGenes", "tick", r, g, b, ".");
+	}
+    }
+lineFileClose(&lf);
+}
+
+
+void fakeEnsGenes(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f, int red, int green, int blue)
+/* Read Ensembl predictions from file. */
+{
+struct lineFile *lf = lineFileOpen(ensemblFile, TRUE);
+char *row[2];
+char *sChrom = chrom+3;	/* Skip over 'chr' */
+while (lineFileRow(lf, row))
+    {
+    if (sameString(row[0], sChrom))
+	{
+	int start = lineFileNeedNum(lf, row, 1);
+	printTab(f, cg, chrom, start, start, 
+		"genePred", "tick", red, green, blue, ".");
+	}
+    }
+lineFileClose(&lf);
 }
 
 
@@ -1199,27 +1327,32 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[5];
 struct wiggleChrom *wc;
 struct wigglePos *wig;
+int samples;
 double val;
 char *chrom;
 
 while (lineFileRow(lf, row))
     {
-    chrom = row[0];
-    val = atof(row[3]);
-    wc = hashFindVal(muteHash, chrom);
-    if (wc == NULL)
-        {
-	AllocVar(wc);
-	hashAddSaveName(muteHash, chrom, wc, &wc->chrom);
-	wc->minVal = wc->maxVal = val;
+    samples = lineFileNeedNum(lf, row, 4);
+    if (samples >= 1000)
+	{
+	chrom = row[0];
+	val = atof(row[3]);
+	wc = hashFindVal(muteHash, chrom);
+	if (wc == NULL)
+	    {
+	    AllocVar(wc);
+	    hashAddSaveName(muteHash, chrom, wc, &wc->chrom);
+	    wc->minVal = wc->maxVal = val;
+	    }
+	if (val < wc->minVal) wc->minVal = val;
+	if (val > wc->maxVal) wc->maxVal = val;
+	AllocVar(wig);
+	wig->start = atoi(row[1]);
+	wig->end = atoi(row[2]);
+	wig->val = val;
+	slAddHead(&wc->posList, wig);
 	}
-    if (val < wc->minVal) wc->minVal = val;
-    if (val > wc->maxVal) wc->maxVal = val;
-    AllocVar(wig);
-    wig->start = atoi(row[1]);
-    wig->end = atoi(row[2]);
-    wig->val = val;
-    slAddHead(&wc->posList, wig);
     }
 lineFileClose(&lf);
 return muteHash;
@@ -1312,7 +1445,8 @@ fakeRnaGenes(cg, chrom, conn, f);
 getCpgIslands(cg, chrom, conn, f);
 getFishBlatHits(cg,chrom,conn,f);
 getEstTicks(cg, chrom, conn, f);
-getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0);
+fakeEnsGenes(cg, chrom, conn, f, 160, 10, 0);
+// getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0);
 getPredGenes(cg, chrom, conn, f, "refGene", blueGene.r, blueGene.g, blueGene.b);
 getKnownGenes(cg, chrom, conn, f, dupHash, resolvedDupHash, 
 	diseaseHash, orthoHash, weedHash);
