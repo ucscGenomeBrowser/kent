@@ -327,7 +327,7 @@ int count = 0;
 int i;
 bits32 *listSizes = gf->listSizes;
 bits32 **lists = gf->lists;
-bits32 *allocated;
+bits32 *allocated = NULL;
 int ignoreCount = 0;
 bits32 maxPat = gf->maxPat;
 int size;
@@ -347,7 +347,8 @@ for (i=0; i<tileSpaceSize; ++i)
         overusedCount += 1;
         }
     }
-gf->allocated = allocated = needHugeMem(count*sizeof(allocated[0]));
+if (count > 0)
+    gf->allocated = allocated = needHugeMem(count*sizeof(allocated[0]));
 for (i=0; i<tileSpaceSize; ++i)
     {
     if ((size = listSizes[i]) < maxPat)
@@ -367,14 +368,15 @@ int count = 0;
 int i;
 bits32 *listSizes = gf->listSizes;
 bits16 **endLists = gf->endLists;
-bits16 *allocated;
+bits16 *allocated = NULL;
 int size;
 int usedCount = 0, overusedCount = 0;
 int tileSpaceSize = gf->tileSpaceSize;
 
 for (i=0; i<tileSpaceSize; ++i)
     count += listSizes[i];
-gf->allocated = allocated = needHugeMem(3*count*sizeof(allocated[0]));
+if (count > 0)
+    gf->allocated = allocated = needHugeMem(3*count*sizeof(allocated[0]));
 for (i=0; i<tileSpaceSize; ++i)
     {
     size = listSizes[i];
