@@ -15,7 +15,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cytoBand.o \
-    dbDb.o dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
+    dbDb.o dbSnpRs.o defaultDb.o dnaMotifSql.o dnaProbe.o \
     easyGene.o encodeErge.o encodeErgeHssCellLines.o\
     encodeRegionInfo.o encodeRegionInfoCustom.o ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
