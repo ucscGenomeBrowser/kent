@@ -133,7 +133,7 @@ exit; # don't actually run this like a script :)
   load data local infile 'getMaxCoord.bosTau1' into table chromInfo
   update chromInfo set fileName = "/gbdb/bosTau1/nib/bosTau1.2bit"
 
-# REPEATMASKER
+# REPEATMASKER (DONE, Oct. 5, 2004, Heather)
 # using the split scaffold fa files generated earlier
 # do a trial run
   ssh hgwdev
@@ -146,7 +146,7 @@ exit; # don't actually run this like a script :)
   # change references anoGam1 --> bosTau1
   mkdir RMRun
 
-# /bin/csh makeJoblist.csh
+  # /bin/csh makeJoblist-RM.csh
 
   cd scaffolds
   foreach i (0 1 2 3 4 5 6 7 8 9)
@@ -173,4 +173,23 @@ exit; # don't actually run this like a script :)
   cd /cluster/data/bosTau1/RMRun
   para create RMJobs
   para try
+  para push
+  para check
+  para time
+  etc.
+
+# SIMPLE REPEATS
+# put the results throughout the scaffold 0/0/0 directories,
+# same as RepeatMasker, to avoid too many files in the same directory
+  ssh kksilo
+  cd /cluster/data/bosTau1
+  mkdir bed
+  cd bed
+  mkdir simpleRepeat
+  cd simpleRepeat
+
+  # /bin/csh makeJoblist-trf.csh
+
+  # do the run
+  tcsh trf-run.csh > & ! trf.log &
 
