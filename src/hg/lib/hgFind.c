@@ -33,7 +33,7 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.80 2003/05/29 19:15:14 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.81 2003/06/04 23:14:28 hiram Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -2312,6 +2312,7 @@ else
     findGenePred(query, hgp, "softberryGene");
     findGenePred(query, hgp, "acembly");
     findGenePred(query, hgp, "genscan");
+    findGenePred(query, hgp, "sangerGene");
     }
 
 slReverse(&hgp->tableList);
