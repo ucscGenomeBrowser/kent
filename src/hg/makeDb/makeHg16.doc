@@ -9532,7 +9532,7 @@ rm $TMP/$root.pp
 	chr=`basename $dir` ;\
 	zcat `ls $dir/*.pp.gz | sort -t\. -k2,2n` | \
 	    wigAsciiToBinary -chrom=$chr \
-	    -wibFile=wib/${chr}_phastCons stdin ;\
+	    -wibFile=PHASTCONS/wib/${chr}_phastCons stdin ;\
     done
     hgLoadWiggle hg16 phastCons PHASTCONS/wib/chr*_phastCons.wig
     mkdir -p /gbdb/hg16/wib
