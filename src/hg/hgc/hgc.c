@@ -8200,19 +8200,19 @@ if (dy == NULL)
 return dy->string; 
 }
 
-void printWindow( struct psl *thisPsl, int thisWinStart, int thisWinEnd, char *winStr )
+void printWindow( struct psl *thisPsl, int thisWinStart, int
+        thisWinEnd, char *winStr, char *otherOrg, char *otherDb, 
+        char *pslTableName )
 {
 
     char otherString[256];
     char pslItem[1024];
     char *cgiPslItem;
 
-    char pslTableName[128] = "blastzBestMouse";
-
     sprintf( pslItem, "%s:%d-%d %s:%d-%d", thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
     cgiPslItem = cgiEncode(pslItem);
     sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart, 
-    pslTableName, "Mouse", "chromInfo" ,"mm2");
+    pslTableName, otherOrg, "chromInfo" , otherDb );
     if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
         {
         hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
@@ -8270,7 +8270,8 @@ boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
  
 
 void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start, int smpSize)
+	char *item, int start, int smpSize, char *otherOrg, char *otherDb,
+    char *pslTableName )
 /* Handle click in humMus sample (wiggle) track. */
 {
 
@@ -8295,7 +8296,7 @@ char str[256];
 char thisItem[256];
 char *cgiPslItem;
 
-char pslTableName[128] = "blastzBestMouse";
+//char pslTableName[128] = "blastzBestMouse";
 
 struct sqlResult *pslSr;
 struct sqlConnection *conn2 = hAllocConn();
@@ -8304,6 +8305,8 @@ int thisStart, thisEnd;
 
 int left = cartIntExp( cart, "l" );
 int right = cartIntExp( cart, "r" );
+
+//errAbort( "(%s), (%s)\n", pslTableName, pslTableName );
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s'",
@@ -8347,9 +8350,10 @@ while ((row = sqlNextRow(sr)) != NULL)
            flag = 1;
             break;
         }
-        
+
         if( flag ) 
-            longXenoPsl1Given(tdb, thisItem, "Mouse", "chromInfo", "mm2", thisPsl, pslTableName );
+            longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
+                    otherDb, thisPsl, pslTableName );
         printf("<br>");
     }
 
@@ -8386,7 +8390,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                     humMusWinSize / 2, 
                     smp->chromStart + smp->samplePosition[i] +
                     humMusWinSize / 2,
-                    str );
+                    str, otherOrg, otherDb, pslTableName );
         }
 
         printf("<br>");
@@ -8401,7 +8405,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 
-void humMusClickHandler(struct trackDb *tdb, char *item )
+void humMusClickHandler(struct trackDb *tdb, char *item, boolean reverse )
 /* Put up generic track info. */
 {
 char *dupe, *type, *words[16];
@@ -8422,7 +8426,13 @@ if (wordCount > 0)
 	if (wordCount > 1)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
-        humMusSampleClick(conn, tdb, item, start, num);
+
+    if( !reverse )
+        humMusSampleClick(conn, tdb, item, start, num,
+            "Mouse", "mm2", "blastzBestMouse" );
+    else
+        humMusSampleClick( conn, tdb, item, start, num,
+            "Human", "hg10", "blastzBestHuman" );
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -8850,9 +8860,13 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
-else if( sameWord( track, "humMusL" ))
+else if( sameWord( track, "humMusL" ) )
         {
-        humMusClickHandler( tdb, item );
+        humMusClickHandler( tdb, item, 0 );
+        }
+else if( sameWord( track, "musHumL" ) )
+        {
+        humMusClickHandler( tdb, item, 1 );
         }
 else if (sameWord(track, "jaxQTL"))
     {
