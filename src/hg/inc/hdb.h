@@ -521,4 +521,17 @@ struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
 	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash);
 /* Return list of alignments in region from axt external file as a maf. */
 
+char *hgDirForOrg(char *org);
+/* Make directory name from organism name - getting
+ * rid of dots and spaces. */
+
+struct hash *hgReadRa(char *genome, char *database, char *rootDir, 
+	char *rootName, struct hash **retHashOfHash);
+/* Read in ra in root, root/org, and root/org/database. 
+ * Returns a list of hashes, one for each ra record.  Optionally
+ * if retHashOfHash is non-null it returns there a
+ * a hash of hashes keyed by the name field in each
+ * ra sub-hash. */
+
+
 #endif /* HDB_H */

@@ -24,8 +24,9 @@
 #include "defaultDb.h"
 #include "scoredRef.h"
 #include "maf.h"
+#include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.144 2003/10/02 05:24:25 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.145 2003/10/11 09:28:09 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2908,5 +2909,54 @@ sqlFreeResult(&sr);
 lineFileClose(&lf);
 slReverse(&mafList);
 return mafList;
+}
+
+char *hgDirForOrg(char *org)
+/* Make directory name from organism name - getting
+ * rid of dots and spaces. */
+{
+org = cloneString(org);
+stripChar(org, '.');
+subChar(org, ' ', '_');
+return org;
+}
+
+struct hash *hgReadRa(char *genome, char *database, char *rootDir, 
+	char *rootName, struct hash **retHashOfHash)
+/* Read in ra in root, root/org, and root/org/database. 
+ * Returns a list of hashes, one for each ra record.  Optionally
+ * if retHashOfHash is non-null it returns there a
+ * a hash of hashes keyed by the name field in each
+ * ra sub-hash. */
+{
+struct hash *hashOfHash = newHash(10);
+char *org = hgDirForOrg(genome);
+char fileName[512];
+struct hashEl *helList, *hel;
+struct hash *raList = NULL, *ra;
+
+/* Create hash of hash. */
+safef(fileName, sizeof(fileName), "%s/%s", rootDir, rootName);
+raFoldIn(fileName, hashOfHash);
+safef(fileName, sizeof(fileName), "%s/%s/%s", rootDir, org, rootName);
+raFoldIn(fileName, hashOfHash);
+safef(fileName, sizeof(fileName), "%s/%s/%s/%s", rootDir, org, database, rootName);
+raFoldIn(fileName, hashOfHash);
+freez(&org);
+
+/* Create list. */
+helList = hashElListHash(hashOfHash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    ra = hel->val;
+    slAddHead(&raList, ra);
+    }
+
+if (retHashOfHash)
+    *retHashOfHash = hashOfHash;
+else 
+    hashFree(&hashOfHash);
+
+return raList;
 }
 
