@@ -1249,7 +1249,7 @@ searchPriority 7
 searchTable bacEndPairs
 searchMethod exact
 searchType bed
-termRegex ([[:alnum:]]+|(RP|CT|GS)[[:alnum:]]+-[[:alnum:]]+|-[[:alnum:]]+-[[:alnum:]]+)
+termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
 searchTable fosEndPairs
@@ -1269,14 +1269,14 @@ searchTable stsMap
 searchType bed
 xrefTable stsAlias
 xrefQuery select trueName,alias from %s where alias like '%s'
-termRegex (-|\?|[[:alnum:]_]+)
+termRegex [^[:space:]]+
 searchDescription Alias of STS Marker
 searchPriority 11
 padding 100000
 
 searchTable stsMap
 searchType bed
-termRegex [[:alnum:]/_]+
+termRegex [^[:space:]]+
 searchPriority 12
 padding 100000
 
@@ -1288,7 +1288,7 @@ searchPriority 15
 searchTable snpMap
 searchMethod exact
 searchType bed
-termRegex rs[0-9]+
+termRegex (rs|SNP_A-)?[0-9]+(_[0-9]+)?
 searchPriority 16
 padding 5000
 
@@ -1314,7 +1314,7 @@ searchPriority 50
 
 searchTable twinscan
 searchType genePred
-termRegex chr.*\.[0-9]+\.[0-9]+\.[a-z]
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
 searchPriority 50
 
 searchTable ECgene

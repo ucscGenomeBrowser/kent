@@ -63,7 +63,7 @@ searchPriority 16
 searchName bdgpGeneFB
 searchTable bdgpGene
 searchMethod exact
-termRegex FB[a-z]{2}[0-9]{9}
+termRegex FB[a-z]{2}[0-9]{7}[0-9]*
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 xrefTable bdgpGeneInfo
 xrefQuery select bdgpName,flyBaseId from %s where flyBaseId like '%s'
@@ -86,7 +86,7 @@ searchPriority 19
 searchName bdgpNonCodingFB
 searchTable bdgpNonCoding
 searchMethod exact
-termRegex FB[a-z]{2}[0-9]{9}
+termRegex FB[a-z]{2}[0-9]{7}[0-9]*
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 xrefTable bdgpNonCodingInfo
 xrefQuery select bdgpName,flyBaseId from %s where flyBaseId like '%s'

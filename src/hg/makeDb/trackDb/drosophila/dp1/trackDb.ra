@@ -99,3 +99,8 @@ termRegex CG[0-9]+
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 searchPriority 16
 
+searchTable genscan
+searchType genePred
+termRegex Contig[[:alnum:]_]+(\.fa)?\.[0-9]+
+searchPriority 50
+
