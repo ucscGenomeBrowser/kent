@@ -1204,7 +1204,7 @@ searchPriority 10
 termRegex uc\.[0-9]+
 
 searchTable wgRna
-searchMethod exact
+searchMethod fuzzy
 searchType bed
 searchPriority 10
 
