@@ -11,7 +11,7 @@
 #include "nib.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.14 2003/08/06 20:59:07 baertsch Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.15 2003/08/12 20:52:00 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -30,42 +30,6 @@ errAbort(
   ,  maxGap
   );
 }
-
-#ifdef DUPE // moved to chain.c
-struct hash *chainReadAll(char *fileName)
-/* Read chains into a hash keyed by id. */
-{
-char nameBuf[16];
-struct hash *hash = hashNew(18);
-struct chain *chain;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int count = 0;
-
-while ((chain = chainRead(lf)) != NULL)
-    {
-    sprintf(nameBuf, "%x", chain->id);
-    if (hashLookup(hash, nameBuf))
-        errAbort("Duplicate chain %d ending line %d of %s", 
-		chain->id, lf->lineIx, lf->fileName);
-    if (qChain)
-        chainSwap(chain);
-    hashAdd(hash, nameBuf, chain);
-    ++count;
-    }
-lineFileClose(&lf);
-fprintf(stderr, "read %d chains in %s\n", count, fileName);
-return hash;
-}
-
-struct chain *chainLookup(struct hash *hash, int id)
-/* Find chain in hash. */
-{
-char nameBuf[16];
-sprintf(nameBuf, "%x", id);
-return hashMustFindVal(hash, nameBuf);
-}
-
-#endif
 
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
