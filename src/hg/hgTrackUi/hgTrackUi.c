@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.87 2004/02/19 01:27:15 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.88 2004/03/03 17:52:35 sugnet Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -296,8 +296,33 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 
 /*cdsColorOptions(tdb->tableName, -1);*/
+}
 
+void bedUi(struct trackDb *tdb)
+/* Put up UI for an mRNA (or EST) track. */
+{
+struct mrnaUiData *mud = newBedUiData(tdb->tableName);
+struct mrnaFilter *fil;
+struct controlGrid *cg = NULL;
+char *filterTypeVar = mud->filterTypeVar;
+char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
+char *logicTypeVar = mud->logicTypeVar;
+char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
 
+/* Define type of filter. */
+filterButtons(filterTypeVar, filterTypeVal, FALSE);
+printf("  <B>Combination Logic:</B> ");
+radioButton(logicTypeVar, logicTypeVal, "and");
+radioButton(logicTypeVar, logicTypeVal, "or");
+printf("<BR>\n");
+
+/* List various fields you can filter on. */
+printf("<table border=0 cellspacing=1 cellpadding=1 width=%d><tr>\n", CONTROL_TABLE_WIDTH);
+cg = startControlGrid(4, NULL);
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+     oneMrnaFilterUi(cg, fil->label, fil->key);
+endControlGrid(&cg);
+/*cdsColorOptions(tdb->tableName, -1);*/
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -664,7 +689,9 @@ else if (sameString(track, "xenoRefGene"))
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
 else if (sameString(track, "mrna"))
-        mrnaUi(tdb, FALSE);
+    mrnaUi(tdb, FALSE);
+else if (sameString(track, "splicesP"))
+    bedUi(tdb);
 else if (sameString(track, "est"))
         mrnaUi(tdb, FALSE);
 else if (sameString(track, "tightMrna"))
