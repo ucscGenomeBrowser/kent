@@ -352,12 +352,6 @@ shortCircuit 1
 termRegex snp\.[0-9]+\.[0-9]+\.[0-9]+\.[IDS]\.[1-3]
 searchPriority 20
 
-searchTable ensGene
-searchType genePred
-shortCircuit 1
-termRegex midbuild_chicken_cdna_[0-9]+
-searchPriority 50
-
 searchTable bgiGene
 searchType genePred
 shortCircuit 1
@@ -372,6 +366,6 @@ searchPriority 1
 searchTable ensGene
 searchType genePred
 shortCircuit 1
-termRegex ENSGAL[0-9]+
+termRegex ENSGALT[0-9]+
 searchPriority 50
 
