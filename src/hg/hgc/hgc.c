@@ -137,7 +137,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.621 2004/05/03 16:09:18 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.622 2004/05/03 19:18:30 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13185,7 +13185,7 @@ else
 printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
        hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
 printf(" ALT=\"Zoom to browser coordinates of Alt-Splice\">");
-printf("Jump to browser for %s</a><font size=-1>[%s:%d-%d]</font><br><br>\n", ag->name, ag->tName, ag->tStart, ag->tEnd);
+printf("Jump to browser for %s</a><font size=-1> [%s:%d-%d] </font><br><br>\n", ag->name, ag->tName, ag->tStart, ag->tEnd);
 if(cgiVarExists("agxPrintEdges"))
     printAltGraphXEdges(ag);
 printf("</center>\n");
