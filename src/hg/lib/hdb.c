@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.234 2005/02/03 00:02:43 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.235 2005/02/03 00:56:29 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3459,7 +3459,7 @@ struct dbDb *hGetLiftOverFromDatabases()
  * from this assembly to another.
  * Dispose of this with dbDbFreeList. */
 {
-struct dbDb *currentDbList = NULL, *archiveDbList = NULL;
+struct dbDb *allDbList = NULL;
 struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
@@ -3474,13 +3474,11 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         hashAdd(hash, chain->fromDb, chain->fromDb);
     }
 
-/* Get list of all current databases */
-currentDbList = hDbDbList();
-/* Get list of all archived databases */
-archiveDbList = hArchiveDbDbList();
+/* Get list of all current and archived databases */
+allDbList = slCat(hDbDbList(),hArchiveDbDbList());
 
 /* Create a new dbDb list of all entries in the liftOver hash */
-for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
+for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     /* current dbDb entries */
     nextDbDb = dbDb->next;
@@ -3488,18 +3486,6 @@ for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
 	{
         slAddHead(&liftOverDbList, dbDb);
 	hashAdd(dbNameHash, dbDb->name, dbDb->name);
-	}
-    else
-        dbDbFree(&dbDb);
-    }
-for (dbDb = archiveDbList; dbDb != NULL; dbDb = nextDbDb)
-    {
-    /* archived dbDb entries */
-    nextDbDb = dbDb->next;
-    if (hashFindVal(hash, dbDb->name) && !hashFindVal(dbNameHash, dbDb->name))
-	{
-        slAddHead(&liftOverDbList, dbDb);
-	hashAdd(dbNameHash, dbDb->name, dbDb->name);	
 	}
     else
         dbDbFree(&dbDb);
@@ -3520,6 +3506,7 @@ struct dbDb *hGetLiftOverToDatabases(char *fromDb)
 struct dbDb *allDbList = NULL, *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0);
+struct hash *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainList();
@@ -3530,14 +3517,18 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	hashAdd(hash, chain->toDb, chain->toDb);
 
 /* Get list of all current databases */
-allDbList = hDbDbList();
+allDbList = slCat(hDbDbList(),hArchiveDbDbList());
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     nextDbDb = dbDb->next;
-    if (hashFindVal(hash, dbDb->name))
+    if (hashFindVal(hash, dbDb->name) && !hashFindVal(dbNameHash, dbDb->name))
+	{	
         slAddHead(&liftOverDbList, dbDb);
+	/* to avoid duplicates in the returned list. */
+	hashAdd(dbNameHash, dbDb->name, dbDb->name);
+	}
     else
         dbDbFree(&dbDb);
     }
