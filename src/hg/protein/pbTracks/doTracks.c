@@ -428,9 +428,15 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-9*tb-2, trackTitleLen*6+12, 14, track
 *yOffp = *yOffp + 15;
 }
 
-void mapBoxExon(int x, int y, int width, int height, char *mrnaID, 
+void mapBoxExon(int xIn, int y, int width, int height, char *mrnaID, 
 		int exonNum, char *chrom, int exonGenomeStartPos, int exonGenomeEndPos)
 {
+int x;
+// prevent the mapBox spill over to the label
+x = xIn;
+if (x < 120) x = 120;
+
+printf("<br>%d %d\n", exonNum, x);fflush(stdout);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"" 
 	,database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3);
@@ -754,7 +760,7 @@ vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
 trackTitle = cloneString("Genome Browser");
 vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
-mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "gb");
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-15, trackTitleLen*6+12, 14, trackTitle, "gb");
 
 *yOffp = *yOffp + 7;
 }
