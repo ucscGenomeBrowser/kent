@@ -38,8 +38,8 @@ type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 itemClassTbl acemblyClass
 geneClasses main putative
-gClass_main 200,0,0
-gClass_putative 0,0,200
+gClass_main 128,0,125
+gClass_putative 200,0,125
 
 track ECgene
 shortLabel ECgene Genes
