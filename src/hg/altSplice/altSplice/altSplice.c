@@ -59,9 +59,9 @@
 
  */
 #include "common.h"
+#include "altGraphX.h"
 #include "geneGraph.h"
 #include "genePred.h"
-#include "altGraphX.h"
 #include "ggMrnaAli.h"
 #include "psl.h"
 #include "dnaseq.h"
@@ -71,7 +71,7 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.6 2003/06/03 04:50:37 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.7 2003/07/10 16:06:58 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -255,7 +255,6 @@ if(ag != NULL)
 	    warn("Exon %s:%d-%d", gTemp->tName, gTemp->vertices[edge->vertex1].position, gTemp->vertices[edge->vertex2].position);
 	    edgeNum = agIndexFromEdge(ag, edge);
 	    assert(edgeNum != -1);
-	    ag->edgeTypes[edgeNum] = ggCassette;
 	    cassetteCount++;
 	    }
 	slFreeList(&cassettes);
@@ -468,19 +467,23 @@ char *outFile = NULL;
 char *bedFile = NULL;
 char *memTestStr = NULL;
 boolean memTest=FALSE;
-char *db;
+char *db = NULL;
 if(argc == 1)
     usage();
 optionInit(&argc, argv, optionSpecs);
 if(optionExists("help"))
     usage();
+db = optionVal("db", NULL);
+if(db == NULL)
+    errAbort("Must set -db flag. Try -help for usage.");
 hSetDb(db);
+outFile = optionVal("agxOut", NULL);
+if(outFile == NULL)
+    errAbort("Must specify output file with -agxOut flag. Try -help for usage.");
 memTest = optionExists("memTest");
 if(memTest == TRUE)
     warn("Testing for memory leaks, use top to monitor and CTRL-C to stop.");
 createAltSplices(outFile, memTest );
-freez(&outFile);
-freez(&db);
 return 0;
 }
 
