@@ -250,13 +250,19 @@ int statBlocks = 0, statResent = 0;
 int totalTimeOuts = 0;
 int sendAhead = 0;
 int desiredSendAhead = 3;
+long t1,t2, openTime =0, closeTime = 0, sendTime = 0,
+	primaryTime = 0, checkTime = 0;
 
 /* Open up file. */
 fd = open(fileName, O_RDONLY);
 if (fd < 0)
     errnoAbort("Can't open %s", fileName);
 
-/* Tell nodes things are coming one at a time. */
+/* Tell nodes things are coming twice by broadcast and then one at a time. */
+t1 = microTime();
+bdMakeFileOpenMessage(m, 0, ++messageIx, fileIx, fileName);
+err = broadcast(outSd, m);
+err = broadcast(outSd, m);
 for (tryIx = 0; tryIx < maxTry; ++tryIx)
     {
     for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
@@ -297,6 +303,7 @@ for (tryIx = 0; tryIx < maxTry; ++tryIx)
 	}
     }
 
+
 /* Mark as dead machines that did not open successfully. */
 for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
     {
@@ -313,6 +320,7 @@ for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
 	 dlAddTail(deadList, mNode);
 	 }
     }
+openTime = microTime() - t1;
 
 if (dlCount(machineList) <=  0)
     {
@@ -321,6 +329,7 @@ if (dlCount(machineList) <=  0)
 else
     {
     /* Do each section. */
+    t1 = microTime();
     allDone = FALSE;
     sendAhead = 0;
     for (sectionIx = 0; !allDone;  ++sectionIx)
@@ -333,6 +342,7 @@ else
 	/* Do primary broadcast for section. */
 	uglyf("Section %d\n", sectionIx);
 	blockCount = bdSectionBlocks;
+	t2 = microTime();
 	for (blockIx = 0; blockIx < bdSectionBlocks; ++blockIx)
 	    {
 	    machine = nextLivingMachine(machineList, deadList);
@@ -362,8 +372,10 @@ else
 		break;
 		}
 	    }
+	primaryTime += microTime() - t2;
 
 	/* Check nodes one at a time for this section. */
+	t2 = microTime();
 	for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
 	    {
 	    machine = mNode->val;
@@ -446,9 +458,12 @@ else
 		 dlAddTail(deadList, mNode);
 		 }
 	    }
+	checkTime += microTime() - t2;
 	}
+    sendTime = microTime() - t1;    
 
     /* Go through each node closing files. */
+    t1 = microTime();
     firstCloseMessage = messageIx + 1;
     for (tryIx = 0; tryIx < maxTry; ++tryIx)
 	{
@@ -509,7 +524,10 @@ else
 	    dlAddTail(deadList, mNode);
 	    }
 	}
+    closeTime = microTime() - t1;
     uglyf("%d blocks, %d (%4.2f%%) resent, %d time outs\n", statBlocks, statResent, 100.0 * statResent/statBlocks, totalTimeOuts);
+    uglyf("openTime %ld, sendTime %ld, closeTime %ld\n", openTime/1000, sendTime/1000, closeTime/1000);
+    uglyf("\tprimaryTime %ld, checkTime %ld\n", primaryTime/1000, checkTime/1000);
     }
 }
 
