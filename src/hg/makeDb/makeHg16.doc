@@ -2627,7 +2627,7 @@ end
     ldHgGene hg16 twinscan_raw chr_gtf/chr*.gtf -gtf
     hgPepPred hg16 generic twinscanrawPep chr_ptx/chr*-fixed.fa
 
-# LOAD GENEID GENES (DONE - 2003-09-02 - Hiram)
+# LOAD GENEID GENES (DONE - 2003-09-02 - Hiram RELOADED -gtf 2004-04-02 kate)
     mkdir -p /cluster/data/hg16/bed/geneid/download
     cd /cluster/data/hg16/bed/geneid/download
 
@@ -2646,7 +2646,7 @@ end
       echo "done $f"
     end
     cd ..
-    ldHgGene hg16 geneid download/*.gtf -exon=CDS
+    ldHgGene hg16 geneid download/*.gtf -gtf
 #	Read 32255 transcripts in 281180 lines in 40 files
 #	  32255 groups 40 seqs 1 sources 3 feature types
 #	32255 gene predictions
@@ -4063,8 +4063,8 @@ end
     mkdir -p /gbdb/hg16/$table
     cd /gbdb/hg16/$table
     ln -s /cluster/data/hg16/bed/nisc/cftr/tba9Mammal.maf tba.maf
-    mkdir -p /gbdb/hg16/${table}_fullScoring
-    cd /gbdb/hg16/${table}_fullScoring
+    mkdir -p /gbdb/hg16/${table}
+    cd /gbdb/hg16/${table}
     ln -s /cluster/data/hg16/bed/nisc/cftr/tba9Mammal.maf tba.maf
 
     # load into database
@@ -5542,6 +5542,9 @@ EOF
     # etc ...   (run cluster job)
 
     # now setup and run the cluster job to compute the conservation scores
+    # NOTE: the TMP dir should be set to something other than /scratch,
+    # as it is not shared between cluster nodes ?
+    
 cat << EOF > doPostProbs
 #!/bin/sh
 
@@ -8136,10 +8139,25 @@ set idmap=/cluster/data/hg16/bed/tfbsCons/tfbsConsMap
 hgsql hg16 < ~/kent/src/hg/lib/tfbsConsMap.sql
 echo "load data local infile '$idmap' into table tfbsConsMap;" | hgsql hg16
 
-# PREP FOR LIFTOVER CHAINS TO HG16
-#    This is doc'ed in bed/bedOver/liftOver.doc
-#    Other assemblies lifting to hg15 will use the
-#    3K Split of hg16 and resultant lifts, that are doc'ed there
+
+# PREP FOR LIFTOVER CHAINS TO HG16 (2004-04-12 kate)
+
+# split into 3K chunks
+ssh eieio
+set tempDir = /cluster/bluearc/hg/gs.17/build34/liftOver
+cd $tempDir
+mkdir lift 
+cat > split.csh << 'EOF'
+set scratch = /iscratch/i/gs.17/build34/liftOver/split
+mkdir -p $scratch
+foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y M)
+    echo chr$i
+    faSplit -lift=lift/chr$i.lft size /cluster/data/hg16/$i/chr$i.fa -oneFile 3000 $scratch/chr$i
+end
+'EOF'
+csh split.csh >&! split.log &
+tail -100f split.log
+/cluster/bin/iSync
 
 
 # LIFTOVER CHAINS TO HG13 (IN PROGRESS 2004-03-26 kate)
@@ -8524,3 +8542,82 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
       echo axtBesting $chr
       axtBest $f $chr axtBest/$chr.axt -minScore=300
     end
+
+
+# H-INVITATIONAL GENE ANNOTATION DATABASE (2004-04-29 kate)
+    # https://www.jbirc.aist.go.jp/hinv/top.html
+    # Create knownGene table to reference HINV gene ID's
+    #  for link on knownGenes details page
+    # Also, create an HINV gene track, just to look at 
+    # (probably not publish, as these are just mRNA alignments
+    # already visible on browser).
+
+    # download CDNA file (release 1.0)
+    ssh kksilo
+    mkdir /cluster/data/hinv
+    cd /cluster/data/hinv
+    wget https://www.jbirc.aist.go.jp/hinv/download/alldata/flatfile/FCDNA.gz
+    gunzip FCDNA.gz
+    mv FCDNA FCDNA.1.0
+
+    # set up assembly work area
+    ssh eieio
+    cd /cluster/data/hg16
+    mkdir -p bed/hinv
+    cd bed/hinv
+
+    # extract H-INV ID's and Genbank accessions of mRNAs
+    awk '/CDNA_ACCESSION-NO:/ {print $2}' < /cluster/data/hinv/FCDNA.1.0 \
+                                                        > accessions.txt
+    awk '/CDNA_H-INVITATIONAL-ID:/ {print $2}' < /cluster/data/hinv/FCDNA.1.0 \
+                                                        > ids.txt
+    paste accessions.txt ids.txt > queries.txt
+
+    # create PSL file from alignments for these mRNA's, extracted from the 
+    #       table of all aligned mRNA's
+    hgsql hg16 -s -e "SELECT * FROM all_mrna"  | cut -f 2- > all_mrna.tab
+
+    pslReps /dev/null stdout /dev/null | cat - all_mrna.tab > all_mrna.psl
+        # using pslReps to generate the PSL file header
+    pslSelect -queryPairs=queries.txt all_mrna.psl hinv_mrna.psl
+
+    # load track of mrna alignments
+    hgwdev
+    cd /cluster/data/hg16/bed/hinv
+    hgLoadPsl hg16 -table=hinvGeneMrna hinv_mrna.psl
+
+    # also make a gene track using the genomic exon coordinates for build34
+    # in the FCDNA file.  NOTE: not all of the genes have these
+    ssh kksilo
+    cd /cluster/data/hg16/bed/hinv
+    /cluster/data/hinv/hinvToGff.pl < /cluster/data/hinv/FCDNA.1.0 > hinv.gff
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/hinv
+    ldHgGene hg16 HInvGene hinv.gff
+        # Read 40140 transcripts
+    # TrackDb for this
+        # track HInvGene
+        # shortLabel H-INV Gene
+        # longLabel H-Invitational Genes
+        # group genes
+        # priority 37
+        # visibility hide
+        # color 0,100,180
+        # type genePred .
+
+    # also make a table with various useful items for each gene
+    ssh hgwdev
+    hgsql hg16 < ~/kent/src/hg/lib/HInv.sql
+    cd /cluster/data/hg16/bed/hinv
+    /cluster/data/hinv/hinvToTable.pl < /cluster/data/hinv/FCDNA.1.0 > HInv.tab
+    echo 'load data local infile "HInv.tab" into table HInv' | hgsql hg16
+
+    # create table for knownGenes detail page
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/hinv
+    hgMapToGene hg16 HInvGeneMrna knownGene knownToHInv
+
+
+
+
+
