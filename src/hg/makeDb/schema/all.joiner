@@ -374,6 +374,7 @@ identifier kimWormGeneId
     hgFixed.kimWormLifeMedianRatio.name full unique
     $ce.sangerToKim.value minCheck=0.6
 
+
 identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
@@ -536,6 +537,11 @@ identifier rinnSexMedianSampleId
      hgFixed.mouseRinnSexMedian.expScores comma indexOf full
      hgFixed.mouseRinnSexMedianRatio.expScores comma indexOf full
 
+identifier stanfordPromotersCellId
+"Identifiers of cell lines for Stanford ENCODE project luciferase assays"
+    hgFixed.encode_Stanford_PromotersExps.id
+    $hg.encode_Stanford_Promoters.expIds comma full 
+    $hg.encode_Stanford_Promoters.expScores comma indexOf full
 
 # Stuff to link together alignment chains and nets
 
