@@ -1,0 +1,125 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes how we made the browser database on 
+# NCBI build 34 (July 18, 2003 freeze)
+
+# HOW TO BUILD A ASSEMBLY FROM NCBI FILES
+# ---------------------------------------
+
+# 0) Make gs.17 directory, gs.17/build34 directory, and gs.17/ffa directory.
+    mkdir /cluster/store4/gs.17
+    mkdir /cluster/store4/gs.17/build34
+    mkdir /cluster/store4/gs.17/agp
+    mkdir /cluster/store4/gs.17/ffa
+
+#    Make a symbolic link from /cluster/store1 to this location
+	
+    cd /cluster/store1
+    ln -s /cluster/store4/gs.17 ./gs.17
+
+#    Make a symbolic link from your home directory to the build dir:
+
+    ln -s /cluster/store4/gs.17/build34 ~/oo
+
+# NCBI download site:
+
+    ftp ftp.ncbi.nih.gov
+    # Login: hgpguest
+    # Password: tElo8=Hp (private, do not share!)
+    cd build_34    
+ 
+# Download all finished agp's and fa's into gs.17/agp
+
+    mget chr*.agp
+    mget chr*.fa.gz
+
+
+# CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP
+
+# Create directory structure to hold information for these tracks
+        cd /projects/hg2/booch/psl/
+
+
+# Change Makefile parameters for OOVERS, GSVERS, PREVGS, PREVOO
+        make new
+
+# Update all Makefiles with latest OOVERS and GSVERS, DATABASE, and locations of .fa files
+
+# Makefile in:
+#     /gs.16/build33/
+#     /gs.16/build33/bacends
+#     /gs.16/build33/cytobands
+#     /gs.16/build33/cytoPlots
+#     /gs.16/build33/fish
+#     /gs.16/build33/fosends
+#     /gs.16/build33/g2g
+#     /gs.16/build33/geneticPlots
+#     /gs.16/build33/primers
+#     /gs.16/build33/recombrate
+#     /gs.16/build33/sts
+#     /gs.16/build33/stsPlots
+
+# Create accession_info file *****
+	make accession_info.rdb
+
+# UPDATE STS INFORMATION
+# Download and unpack updated information from dbSTS:
+
+    	cd /projects/hg2/booch/psl/update
+	wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+	wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+	#wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/
+	wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.Z
+	mv sts.Z dbSTS.FASTA.dailydump.Z
+	gunzip dbSTS.FASTA.dailydump.Z
+
+# Edit Makefile to latest sts.X version from PREV, and update STS files
+        make update
+
+# Make new directory for this info and move files there
+        mkdir /cluster/store1/sts.8
+        cp all.STS.fa /cluster/store1/sts.8
+        cp all.primers /cluster/store1/sts.8
+        cp all.primers.fa /cluster/store1/sts.8
+
+# Copy new files to cluster
+        ssh kkstore
+        cd /cluster/store1/sts.8
+        cp /cluster/store1/sts.8 /*.* /scratch/hg/STS
+
+# Ask for propagation from sysadmin
+
+# Load the sequences (change sts.# to match correct location)
+	ssh hgwdev
+	mkdir /gbdb/hg16/sts.8
+	cd /gbdb/hg16/sts.8
+	ln -s /cluster/store1/sts.8/all.STS.fa ./all.STS.fa
+	ln -s /cluster/store1/sts.8/all.primers.fa ./all.primers.fa
+	*cd /cluster/store2/tmp
+	*hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.STS.fa
+	*hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.primers.fa
+
+# UPDATE BACEND SEQUENCES
+
+# **** Sequences were determined to not have changed since bacends.4 *****
+# **** No new sequences downloaded ***** 
+
+# UPDATE FISH CLONES INFORMATION
+
+# Download the latest info from NCBI
+        # point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+        # change "Show details on sequence-tag" to "yes"
+        # change "Download or Display" to "Download table for UNIX"
+        # press Submit - save as /projects/hg2/booch/psl/fish/hbrc/hbrc.20030723.table
+
+# Format file just downloaded.  
+        cd /projects/hg2/booch/psl/fish/
+
+# Edit Makefile to point at file just downloaded (variables HBRC, HBRCFORMAT)
+        make HBRC
+
+# (Manually added 21 results from FHCRC)
+
+# Copy it to the new freeze location
+        cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.17/build34/fish/
