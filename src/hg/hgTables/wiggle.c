@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.15 2004/09/10 03:45:33 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.16 2004/09/10 18:07:22 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -501,10 +501,11 @@ double ul = 0.0;
 boolean hasConstraint = FALSE;
 char *table2 = NULL;
 boolean fullGenome = FALSE;
+boolean statsHeaderDone = FALSE;
 
 startTime = clock1000();
 
-/*	Count the regions, when only one, we can do a histogram	*/
+/*	Count the regions, when only one, we can do more stats */
 for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
 
@@ -582,14 +583,40 @@ for (region = regionList; region != NULL; region = region->next)
 		    splitTableOrFileName, operations);
 	    }
 	}
+    /*	when doing multiple regions, we need to print out each result as
+     *	it happens to keep the connection open to the browser and
+     *	prevent any timeout since this could take a while.
+     *	(worst case test is quality track on panTro1)
+     */
+    if (regionCount > 1)
+	{
+	if (statsHeaderDone)
+	    wds->statsOut(wds, "stdout", TRUE, TRUE, FALSE, TRUE);
+	else
+	    {
+	    wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, TRUE);
+	    statsHeaderDone = TRUE;
+	    }
+	wds->freeStats(wds);
+	}
     }
 
 if (1 == regionCount)
+    {
     statsPreamble(wds, regionList->chrom, regionList->start, regionList->end,
 	span, valuesMatched, table2);
+    /* 3 X TRUE = sort results, html table output, with header,
+     *	the FALSE means close the table after printing, no more rows to
+     *	come
+     */
+    wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+    }
+else
+    {
+    /*	close the table which was left open in the loop above	*/
+    printf("</TABLE></TD></TR></TABLE></P>\n");
+    }
 
-/* first TRUE == sort results, second TRUE == html table output */
-wds->statsOut(wds, "stdout", TRUE, TRUE);
 
 #if defined(NOT)
 /*	can't do the histogram now, that operation times out	*/
