@@ -1,6 +1,6 @@
 all: cgi utils
 
-alpha: clean cgi-alpha blat
+alpha: clean cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
 
@@ -46,6 +46,8 @@ blatSuite:
 	cd hg/pslSort && ${MAKE}
 	cd utils/nibFrag && ${MAKE}
 	cd utils/faToNib && ${MAKE}
+	cd utils/faToTwoBit && ${MAKE}
+	cd utils/twoBitToFa && ${MAKE}
 	cd isPcr && ${MAKE}
 
 clean:
@@ -72,9 +74,10 @@ utils: libs
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
-	cd hg && ${MAKE} utils;
+	cd hg && ${MAKE} utils
+	cd utils && ${MAKE}
 
-DIRS = ameme cdnaAli dnaDust fuzzyFind \
+DIRS = ameme blat cdnaAli dnaDust fuzzyFind \
        idbQuery index protDust reformat \
        scanIntrons tracks weblet xenoAli
 
