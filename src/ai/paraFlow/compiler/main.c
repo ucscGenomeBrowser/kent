@@ -681,7 +681,6 @@ struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(type, tok, parent);
 struct pfParse *name, *input, *output = NULL, *body;
 tok = tok->next;	/* Skip something (implicit in type) */
-uglyf("parseFunction\n");
 name = parseNameUse(parent, &tok, scope);
 scope = pfScopeNew(scope, 0);
 
