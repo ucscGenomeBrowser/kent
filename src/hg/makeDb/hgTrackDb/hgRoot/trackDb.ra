@@ -77,6 +77,14 @@ longLabel Gap Locations
 visibility dense
 type bed 3 +
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+priority 9.5
+visibility hide
+color 67,57,206
+altColor 204,20,35
+
 track genomicDups
 priority 10
 shortLabel Duplications
@@ -422,14 +430,6 @@ longLabel Simple Tandem Repeats by TRF
 priority 34
 visibility hide
 type bed 4 +
-
-track bacEndPairs
-shortLabel BAC End Pairs
-longLabel BAC End Pairs - 5'end (blue), 3'end (red)  
-priority 35
-visibility hide
-color 67,57,206
-altColor 204,20,35
 
 track rosettaTe
 shortLabel Rosetta T. E.
