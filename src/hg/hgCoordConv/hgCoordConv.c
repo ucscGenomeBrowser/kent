@@ -4,6 +4,7 @@
    from Dec to April, it was inverted. Looks to be inverted back in
    Aug.
 
+   Note: This now should do conversion between zoo species based on tracks in each zoo database.
    Note: Troubleshooting features have not been fully implemented for Zoo conversions.
 */
 #include "common.h"
@@ -495,9 +496,9 @@ ccr->good=FALSE;
 sprintf(track,"%s_%s",origGenome,newGenome);
 
 /* Get the information from loading the track. */
-/* Double check we are not in the second release... */
+/* Double check we are not using a track connecting 1 and 2 */
 
-if(!strstr(track,"2"))
+if(!(strstr(track,"2") && strstr(track,"1")))
     {
     sr = hRangeQuery(conn, track, chrom, chromStart, chromEnd, NULL, &rowOffset);
     }
@@ -597,8 +598,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 if(!success)
     {
     /* Check to see if using version two of zoo.  Not integrated into the database at this stage... */
-    if(strstr(origGenome,"2") || strstr(newGenome,"2"))
-	sprintf(success_message,"Couldn't convert between these two genomes since the second release of Zoo sequences hasn't been fully integrated into the database");
+    if((strstr(origGenome,"2") && strstr(newGenome,"1"))|| (strstr(newGenome,"2") && strstr(origGenome,"1")))
+	sprintf(success_message,"Couldn't convert between these two genomes since the cross conversion between the two zoo dataset hasn't been fully integrated into the database");
     else if (max_apart)
 	sprintf(success_message, "Coordinates couldn't reliably be converted between the two species.  Try using a smaller window. ");
     else if (incoherent)
