@@ -2431,16 +2431,17 @@ cd /usr/local/apache/htdocs/goldenPath/14nov2002/database
 zip ../bigZips/database.zip *
 
 
-SGP GENE PREDICTIONS (DONE 01/28/03)
+SGP GENE PREDICTIONS (DONE 04/04/03)
     mkdir -p ~/oo/bed/sgp/download
     cd ~/oo/bed/sgp/download
+    set webroot = http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP_mm2003
     foreach f (~/oo/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/$chr.gtf
-      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/$chr.prot
+      wget $webroot/$chr.gtf
+      wget $webroot/$chr.prot
     end
-    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/chrUn.gtf -O chrUn_random.gtf
-    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/chrUn.prot -O chrUn_random.prot
+    wget $webroot/chrUn.gtf -O chrUn_random.gtf
+    wget $webroot/chrUn.prot -O chrUn_random.prot
     # Add missing .1 to protein id's
     foreach f (*.prot)
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
