@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.59 2005/02/16 21:23:50 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.60 2005/03/28 23:23:29 donnak Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1132,7 +1132,7 @@ return trackHash;
 /****** Stuff for acembly related options *******/
 
 static char *acemblyOptions[] = {
-    "All Genes",
+    "all genes",
     "main",
     "putative",
 };
