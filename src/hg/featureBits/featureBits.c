@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.25 2004/06/28 20:51:52 kent Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.26 2004/06/28 21:21:43 kent Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -514,8 +514,12 @@ if (!faIndependent)
 	    }
 	}
     if (calcEnrichment)
-        printf("%s vs %s: coverage %5.2f%%  enrichment %5.2fx\n",
-		tables[0], tables[1],
+        printf("%s %5.3f%%, %s %5.3f%%, both %5.3f%%, cover %4.2f%%, enrich %4.2fx\n",
+		tables[0], 
+		100.0 * totalFirstBits/totalBases,
+		tables[1],
+		100.0 * totalSecondBits/totalBases,
+		100.0 * totalBits/totalBases,
 		100.0 * totalBits / totalFirstBits,
 		(totalBits/totalSecondBits) / (totalFirstBits/totalBases) );
     else
