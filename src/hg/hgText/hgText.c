@@ -550,13 +550,13 @@ if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 	{
         if(sameString(chromFieldName, ""))
             {
-            snprintf(query, 256, "SELECT * FROM %s WHERE %s >= %d AND %s <= %d",
-		table, startName, winStart, endName, winEnd);
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s < %d AND %s > %d",
+		table, startName, winEnd, endName, winStart);
             }
         else
             {
-            snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+            snprintf(query, 256, "SELECT * FROM %s WHERE %s = \"%s\" AND %s < %d AND %s > %d",
+		table, chromFieldName, choosenChromName, startName, winEnd, endName, winStart);
             }
         }
 else
@@ -1110,11 +1110,12 @@ if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 	{
 	/* build the rest of the query */
         if(sameString(chromFieldName, ""))
-            sprintf(query, "%s WHERE %s >= %d AND %s <= %d",
-                            query, startName, winStart, endName, winEnd);
+            sprintf(query, "%s WHERE %s < %d AND %s > %d",
+                            query, startName, winEnd, endName, winStart);
         else
-            sprintf(query, "%s WHERE %s = \"%s\" AND %s >= %d AND %s <= %d",
-                            query, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
+            sprintf(query, "%s WHERE %s = \"%s\" AND %s < %d AND %s > %d",
+                            query, chromFieldName, choosenChromName,
+                            startName, winEnd, endName, winStart);
 		/* Add constraints (if any) that the user specified. */
 		if (constraints != NULL && constraints[0] != 0)
 			sprintf(query, "%s AND %s", query, constraints);
@@ -1794,8 +1795,8 @@ else
     dyStringPrintf(query, "select %s,%s", startField, endField);
 	if (strandField[0] != 0)
 	    dyStringPrintf(query, ",%s", strandField);
-	dyStringPrintf(query, " from %s where %s >= %d and %s < %d", 
-				   table, startField, chromStart, endField, chromEnd);
+	dyStringPrintf(query, " from %s where %s < %d and %s > %d", 
+				   table, startField, chromEnd, endField, chromStart);
     dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
     if (where != NULL)
 	    dyStringPrintf(query, " and %s", where);
