@@ -49,6 +49,10 @@ void gsToUcsc(char *gsName, char *ucscName);
 char *skipChr(char *s);
 /* Skip leading 'chr' in string (to get the actual chromosome part). */
 
+int chromToInt(char *s);
+/* converts a chrom name chrXX into an integer from 1 to 54. 
+ *  X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
+
 boolean hIsMgcServer();
 /* Is this the MGC-customized server? Change for config variable
  * mgc.server=yes */
