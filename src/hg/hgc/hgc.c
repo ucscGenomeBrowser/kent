@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.537.2.1 2003/12/24 02:14:35 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.537.2.2 2003/12/24 18:20:27 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9950,7 +9950,7 @@ void doDbSnpRS(char *name)
 struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[256];
 struct dbSnpRS *snp=NULL;
-snprintf(query, sizeof(query),
+safef(query, sizeof(query),
 	 "select rsId, "
 	 "       avHet, "
 	 "       avHetSE, "
@@ -9981,7 +9981,7 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-/* else printf("<BR>%s<BR>\n",query);*/
+else errAbort("<BR>%s<BR>\n",query);
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -9995,7 +9995,7 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 int rowOffset;
-snprintf(query, sizeof(query),
+safef(query, sizeof(query),
          "select distinct        "
          "       rl.locusLinkID, "
          "       rl.name,        "
@@ -10068,7 +10068,7 @@ void doAffyGenoDetails(struct trackDb *tdb, char *name)
 struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[1024];
 struct affyGenoDetails *snp=NULL;
-snprintf(query, sizeof(query),
+safef(query, sizeof(query),
          "select  affyId, rsId, baseA, baseB, sequenceA, sequenceB, "
 	 "        enzyme, minFreq, hetzyg, avHetSE, "
          "        NA04477, NA04479, NA04846, NA11036, NA11038, NA13056, "
@@ -10156,7 +10156,7 @@ if (snp!=NULL)
     printf("PD24:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD24);
     printf("\n</font>\n");
     }
-else printf("<BR>%s<BR>\n",query);
+else errAbort("<BR>%s<BR>\n",query);
 affyGenoDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10174,8 +10174,8 @@ char query[256];
 int rowOffset;
 int rsId = 0;
 
-cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
-printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affyGeno "
 	       "where  chrom = '%s' "
@@ -10202,8 +10202,9 @@ struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[1024];
 struct affy10KDetails *snp=NULL;
 
-snprintf(query, sizeof(query),
+safef(query, sizeof(query),
          "select  affyId, rsId, tscId, baseA, baseB, sequenceA, sequenceB, enzyme "
+/** minFreq, hetzyg, and avHetSE are waiting for additional data from Affy **/
 /*	 "        , minFreq, hetzyg, avHetSE "*/
          "from    affy10KDetails "
          "where   affyId = '%s'", name);
@@ -10212,6 +10213,7 @@ if (snp!=NULL)
     {
     printf("<BR>\n");
     printf("<B>Sample Prep Enzyme:      </B> <I>XbaI</I><BR>\n");
+/** minFreq, hetzyg, and avHetSE are waiting for additional data from Affy **/
 /*  printf("<B>Minimum Allele Frequency:</B> %.3f<BR>\n",snp->minFreq);*/
 /*  printf("<B>Heterozygosity:          </B> %.3f<BR>\n",snp->hetzyg);*/
 /*  printf("<B>Average Heterozygosity:  </B> %.3f<BR>\n",snp->avHetSE);*/
@@ -10223,7 +10225,7 @@ if (snp!=NULL)
     printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
     printf("%s\" TARGET=_blank>Affymetrix NetAffx Analysis Center link for %s</A></P>\n",snp->affyId, snp->affyId);
 
-    if (snp->rsId>0)
+    if (strncmp(snp->rsId,"unmapped",8))
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n", snp->rsId, snp->rsId);
@@ -10234,7 +10236,7 @@ if (snp!=NULL)
 
     doSnpLocusLink(tdb, name);
     }
-else printf("<BR>Error in Query:\n%s<BR>\n",query);
+else errAbort("<BR>Error in Query:\n%s<BR>\n",query);
 affy10KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10252,8 +10254,8 @@ char query[256];
 int rowOffset;
 int rsId = 0;
 
-cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
-printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affy10K "
 	       "where  chrom = '%s' "
@@ -10372,12 +10374,12 @@ char *encodeName = NULL;
 char encodeId[8];
 
 separateIdAndName(item, encodeName, encodeId);
-cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
-printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", tdb->longLabel+7, encodeName);
+cartWebStart(cart, "ENCODE Region Data: %s", newLabel);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", newLabel, encodeName);
 genericHeader(tdb, encodeName);
 
 genericBedClick(conn, tdb, item, start, 14);
-snprintf(query, sizeof(query),
+safef(query, sizeof(query),
 	 "select   chrom, chromStart, chromEnd, name, score, strand, "
 	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
 	 "         chromStarts, Id, color "
@@ -10419,7 +10421,7 @@ genericHeader(tdb, item);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 genericBedClick(conn, tdb, item, start, atoi(words[1]));
-snprintf(query, sizeof(query),
+safef(query, sizeof(query),
 	 "select   chrom, chromStart, chromEnd, name, score, strand, "
 	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
 	 "         chromStarts, Id, color, allLines "
