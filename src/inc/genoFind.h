@@ -71,6 +71,7 @@ struct gfClump
     bits32 tStart, tEnd;	/* Position in target. */
     int hitCount;		/* Number of hits. */
     struct gfHit *hitList;	/* List of hits. Not allocated here. */
+    int queryCoverage;		/* Number of bases covered in query (thx AG!) */
     };
 
 void gfClumpFree(struct gfClump **pClump);
@@ -327,6 +328,8 @@ void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3],
    int minScore, struct gfOutput *out);
 /* Chop up query into pieces, align each in translated space, and stitch back
  * together again as nucleotides. */
+
+#define gfVersion 19	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 

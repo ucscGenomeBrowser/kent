@@ -8,8 +8,6 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
-int version = 18;	/* Synchronize this with blat version. */
-
 /* Variables that can be overridden by command line. */
 int dots = 0;
 int minScore = 30;
@@ -58,7 +56,7 @@ printf(
   "                   axt - blastz-associated axt format\n"
   "                   maf - multiz-associated maf format\n"
   "                   wublast - similar to wublast format\n"
-  "                   blast - similar to NCBI blast format\n", version);
+  "                   blast - similar to NCBI blast format\n", gfVersion);
 exit(-1);
 }
 

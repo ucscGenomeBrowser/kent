@@ -944,16 +944,67 @@ else
     return -1;
 }
 
+static int gfHitCmpQuery(const void *va, const void *vb)
+/* Compare to sort based on target offset. (Thanks AG) */
+{
+const struct gfHit *a = *((struct gfHit **)va);
+const struct gfHit *b = *((struct gfHit **)vb);
+
+if (a->qStart > b->qStart)
+    return 1;
+else if (a->qStart == b->qStart)
+    return 0;
+else
+    return -1;
+}
+
+static void gfClumpComputeQueryCoverage(struct gfClump *clumpList, 
+	int tileSize)
+/* Figure out how much of query is covered by clump list. (Thanks AG). */
+{
+struct gfClump *clump;
+struct gfHit* hit;
+struct gfHit* hitList;
+int qcov;
+int blockStart, blockEnd;
+
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    hitList = clump->hitList;
+    if ( hitList != NULL)
+	{
+	slSort(&hitList, gfHitCmpQuery);
+	qcov = 0;
+	blockStart = hitList->qStart;
+	blockEnd = blockStart + tileSize;
+	for (hit = hitList; hit != NULL; hit = hit->next)
+	    {
+	    if (hit->qStart > blockEnd)
+		{
+		qcov += blockEnd - blockStart;
+		blockStart = hit->qStart;
+		blockEnd = blockStart + tileSize;
+		}
+	    else if (hit->qStart + tileSize > blockEnd)
+		{
+		blockEnd = hit->qStart + tileSize;
+		}
+	    }
+	qcov += blockEnd - blockStart;
+	clump->queryCoverage = qcov;
+	}
+    }
+}
 
 
 
-static int gfClumpCmpHitCount(const void *va, const void *vb)
-/* Compare to sort based on hit count. */
+static int gfClumpCmpQueryCoverage(const void *va, const void *vb)
+/* Compare to sort based on query coverage. */
 {
 const struct gfClump *a = *((struct gfClump **)va);
 const struct gfClump *b = *((struct gfClump **)vb);
 
-return (b->hitCount - a->hitCount);
+return (b->queryCoverage - a->queryCoverage);
 }
 
 static void findClumpBounds(struct gfClump *clump, int tileSize)
@@ -1178,7 +1229,10 @@ for (i=0; i<bucketCount; ++i)
     boundary += bucketSize;
     }
 clumpList = clumpNear(gf, clumpList, minMatch);
-slSort(&clumpList, gfClumpCmpHitCount);
+/* slSort(&clumpList, gfClumpCmpHitCount); */
+gfClumpComputeQueryCoverage(clumpList, tileSize);	/* Thanks AG */
+slSort(&clumpList, gfClumpCmpQueryCoverage);
+
 #ifdef DEBUG
 uglyf("Dumping clumps B\n");
 for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */

@@ -1,8 +1,14 @@
 19: 
      o  Switched blat from cgiSpoof to optionHash so that it can
         be called from a web page more easily.
-     o  Adding -fastMap option.
+     o  Adding -fastMap option for very fast high similarity DNA
+        searches (blat only, not gfServer).
      o  Making it able to take subsets of a nib file as input.
+     o  Incorperating Arnaldur's improvement where clumps are
+        sorted by amount of query sequence covered rather than
+	by hit count.  This will help gfServer/gfClient performance
+	in particular on sequences containing tandem repeats.
+     o  added maxAaSize and maxNtSize options to gfServer command line.
 18: 
      o  Replaced super-stitcher dynamic program that generates 
         a table of size N*N times the number of blocks

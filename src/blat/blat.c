@@ -19,7 +19,6 @@
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
-int version = 18;		/* Blat version number. */
 char *databaseName;		/* File name of database. */
 int databaseSeqCount = 0;	/* Number of sequences in database. */
 unsigned long databaseLetters = 0;	/* Number of bases in database. */
@@ -127,7 +126,7 @@ printf(
   "                   maf - multiz-associated maf format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
-  , version
+  , gfVersion
   );
 exit(-1);
 }

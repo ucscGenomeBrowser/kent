@@ -18,8 +18,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-int version = 18;
-int maxSeqSize = 40000;
+int maxNtSize = 40000;
 int maxAaSize = 8000;
 
 int minMatch = gfMinMatch;	/* Can be overridden from command line. */
@@ -38,7 +37,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer - Make a server to quickly find where DNA occurs in genome.\n"
+  "gfServer v %d - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
   "   gfServer start host port file(s).nib\n"
   "To remove a server:\n"
@@ -68,11 +67,16 @@ errAbort(
   "   -mask      Use masking from nib file.\n"
   "   -seqLog    Include sequences in log file\n"
   "   -repMatch=N Number of occurrences of a tile (nmer) that trigger repeat masking the tile.\n"
-  "               Default is 1024.\n"
+  "               Default is %d.\n"
   "   -maxDnaHits=N Maximum number of hits for a dna query that are sent from the server.\n"
-  "               Default is 100.\n"
+  "               Default is %d.\n"
   "   -maxTransHits=N Maximum number of hits for a translated query that are sent from the server.\n"
-  "               Default is 200.\n"
+  "               Default is %d.\n"
+  "   -maxNtSize=N Maximum size of untranslated DNA query sequence\n"
+  "               Default is %d\n"
+  "   -maxAsSize=N Maximum size of protein or translated DNA queries\n"
+  "               Default is %d\n"
+  ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
 
 }
@@ -294,7 +298,8 @@ int port = atoi(portName);
 netBlockBrokenPipes();
 if (logFileName != NULL)
     logFile = mustOpen(logFileName, "a");
-logIt("gfServer version %d on host %s, port %s\n", version, hostName, portName);
+logIt("gfServer version %d on host %s, port %s\n", gfVersion, 
+	hostName, portName);
 if (doTrans)
     {
     logIt("setting up translated index\n");
@@ -354,7 +359,7 @@ for (;;)
 	}
     else if (sameString("status", command))
         {
-	sprintf(buf, "version %d", version);
+	sprintf(buf, "version %d", gfVersion);
 	netSendString(connectionHandle, buf);
 	sprintf(buf, "type %s", (doTrans ? "translated" : "nucleotide"));
 	netSendString(connectionHandle, buf);
@@ -424,7 +429,7 @@ for (;;)
 			}
 		    else
 			{
-			int maxSize = (doTrans ? maxAaSize : maxSeqSize);
+			int maxSize = (doTrans ? maxAaSize : maxNtSize);
 
 			seq.dna[seq.size] = 0;
 			if (queryIsProt)
@@ -633,6 +638,8 @@ minMatch = cgiOptionalInt("minMatch", minMatch);
 repMatch = cgiOptionalInt("repMatch", repMatch);
 maxDnaHits = cgiOptionalInt("maxDnaHits", maxDnaHits);
 maxTransHits = cgiOptionalInt("maxTransHits", maxTransHits);
+maxNtSize = cgiOptionalInt("maxNtSize", maxNtSize);
+maxAaSize = cgiOptionalInt("maxAaSize", maxAaSize);
 seqLog = cgiBoolean("seqLog");
 maskNib = cgiBoolean("mask");
 if (argc < 2)
