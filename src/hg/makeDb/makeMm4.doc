@@ -2188,7 +2188,12 @@ while (<>) {
 	VALUES ("mm4","proteins031112");' \
 	-h genome-testdb hgcentraltest
 
-# STS MARKERS TRACK (WORKING - 2003-11-20 - Hiram)
+
+# SET defaultDb in hgcentraltest to move from mm3 to mm4
+    hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
+	-h genome-testdb hgcentraltest
+
+# STS MARKERS TRACK (WORKING - 2003-11-25 - Hiram)
 
     ssh kk9
     mkdir -p /cluster/data/mm4/bed/STSmarkers/primer
@@ -2249,6 +2254,7 @@ while (<>) {
 # Longest job:                      159s       2.65m     0.04h    0.00d
 # Submission to last job:           791s      13.18m     0.22h    0.01d
 
+    ssh hgwdev
     # all those results become all.epcr
     cat epcr.out/*.epcr > all.epcr
     # comparing results to Mm3:
@@ -2295,7 +2301,7 @@ while (<>) {
     /projects/compbio/usr/booch/booch/scripts/epcrToPsl -mouse \
 	epcr.not.found /cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
 	accession_info.rdb /cluster/data/mm4
-    # epcr.not.found.psl is empty
+    ##### epcr.not.found.psl is empty !
     # Comparing results to Mm3:
     # Mm3 wc epcr*
     # 205     820    7585 epcr.not.found
@@ -2357,13 +2363,13 @@ XXXX
 	-mouse /cluster/store5/mouseMarker/stsInfoMouse.bed \
 	dummy primer/primers.initial.acc > stsMarkers_pos_all.rdb
 
-
 XXXX this createSTSbed is only for Human, does not work here
     /projects/compbio/usr/booch/booch/scripts/createSTSbed \
 	/cluster/store5/mouseMarker/stsInfoMouse.bed \
 	stsMarkers_pos.rdb > stsMapMouse.bed
 
-#  STS Markers plots
+#  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
+#	is created correctly from above
     mkdir /cluster/data/mm4/bed/STSmarkers/html
     cd /cluster/data/mm4/bed/STSmarkers/html
     mkdir maps plots sts
@@ -2397,8 +2403,7 @@ XXXX this createSTSbed is only for Human, does not work here
     STSFLAGS="-dbl -top 0.3 -mouse -m mm4"
     /projects/compbio/usr/booch/booch/scripts/createUCSCplots \
 	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
-
-
-# SET defaultDb in hgcentraltest to move from mm3 to mm4
-    hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
-	-h genome-testdb hgcentraltest
+    /projects/compbio/usr/booch/booch/scripts/createUCSCplots -x 10000000 \
+	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
+    /projects/compbio/usr/booch/booch/scripts/createUCSCplots -x 50000000 \
+	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
