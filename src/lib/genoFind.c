@@ -240,15 +240,35 @@ if (oocFile != NULL)
 return gf;
 }
 
+static int ntLookup[256];
+
+static void initNtLookup()
+{
+static boolean initted = FALSE;
+if (!initted)
+    {
+    int i;
+    for (i=0; i<ArraySize(ntLookup); ++i)
+        ntLookup[i] = -1;
+    ntLookup['a'] = A_BASE_VAL;
+    ntLookup['c'] = C_BASE_VAL;
+    ntLookup['t'] = T_BASE_VAL;
+    ntLookup['g'] = G_BASE_VAL;
+    initted = TRUE;
+    }
+}
+
 int gfDnaTile(DNA *dna, int n)
 /* Make a packed DNA n-mer. */
 {
 int tile = 0;
-int i;
+int i, c;
 for (i=0; i<n; ++i)
     {
     tile <<= 2;
-    tile += ntValNoN[dna[i]];
+    if ((c = ntLookup[dna[i]]) < 0)
+        return -1;
+    tile += c;
     }
 return tile;
 }
@@ -281,6 +301,7 @@ bits32 *listSizes = gf->listSizes;
 int i, lastTile = seq->size - tileSize;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
+initNtLookup();
 for (i=0; i<=lastTile; i += tileSize)
     {
     if ((tile = makeTile(poly, tileHeadSize)) >= 0)
@@ -399,6 +420,7 @@ int tile;
 bits32 *listSizes = gf->listSizes;
 bits32 **lists = gf->lists;
 
+initNtLookup();
 for (i=0; i<=lastTile; i += tileSize)
     {
     tile = makeTile(poly, tileSize);
@@ -431,6 +453,7 @@ bits16 **endLists = gf->endLists;
 bits16 *endList;
 int headCount;
 
+initNtLookup();
 for (i=0; i<=lastTile; i += tileSize)
     {
     tileHead = makeTile(poly, tileHeadSize);
@@ -763,7 +786,8 @@ return gf;
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
 	boolean isPep, boolean allowOneMismatch)
-/* Make index for all seqs in list. */
+/* Make index for all seqs in list.  For DNA sequences upper case bits will
+ * be unindexed. */
 {
 struct genoFind *gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, 
 				oocFile, isPep, allowOneMismatch);
@@ -1283,6 +1307,7 @@ bits32 qStart, tStart, *tList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
+initNtLookup();
 for (i=0; i<=lastStart; ++i)
     {
     tile = makeTile(poly+i, tileSize);
@@ -1327,6 +1352,7 @@ char oldChar, zeroChar, badChar;
 int *seqValLookup;
 int posMul, avoid;
 
+initNtLookup();
 if (gf->isPep)
     {
     makeTile = gfPepTile;
@@ -1410,6 +1436,7 @@ int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
 
+initNtLookup();
 for (i=0; i<=lastStart; ++i)
     {
     tileHead = makeTile(poly+i, tileHeadSize);
@@ -1466,6 +1493,7 @@ boolean modTail;
 int *seqValLookup;
 
 
+initNtLookup();
 if (gf->isPep)
     {
     makeTile = gfPepTile;
