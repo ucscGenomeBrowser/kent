@@ -10,7 +10,7 @@
 #include "linefile.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcImport.c,v 1.2 2003/06/17 03:10:57 markd Exp $";
+static char const rcsid[] = "$Id: mgcImport.c,v 1.3 2003/06/18 05:20:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -90,7 +90,7 @@ boolean haveErrorStatus(struct mgcStatus *mgcStatus)
 {
 for (; mgcStatus != NULL; mgcStatus = mgcStatus->next)
     {
-    if (mgcStatus->status->isError)
+    if (mgcStatus->status->state == MGC_STATE_PROBLEM)
         return TRUE;
     }
 return FALSE;
@@ -127,7 +127,7 @@ mgcStatus = mgcStatusTblFind(mgcStatusTbl, fullength.id_parent);
  * error status, or once of each of the other non-error status (although there
  * is probably only one). */
 if ((mgcStatus == NULL) || (strlen(fullength.gb_acc) > 0)
-    || (status->isError && !haveErrorStatus(mgcStatus))
+    || ((status->state == MGC_STATE_PROBLEM) && !haveErrorStatus(mgcStatus))
     || (!haveStatus(mgcStatus, status)))
     mgcStatusTblAdd(mgcStatusTbl, fullength.id_parent, status,
                     fullength.gb_acc,

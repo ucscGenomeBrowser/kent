@@ -3,7 +3,7 @@
 #include "localmem.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.3 2003/06/17 07:03:03 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.4 2003/06/18 05:20:14 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -13,56 +13,54 @@ static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.3 2003/06/17 07:03:03 markd
  *
  * IMPORTANT: order of constant must match create table below.
  *
- * NOTE: mgcDbLoad makes comparisons based on the numeric values.  These may
- * need to adjust. Although it's ok to reorder values since the table is
- * completely rebuilt by the load process and the browser access this
- * symbolicly.
+ * NOTE: It's ok to reorder values since the table is completely rebuilt by
+ * the load process and the browser access this symbolicly.
  */
 /** has not been picked status */
 struct mgcStatusType MGC_UNPICKED = {
-    "unpicked", 1, "not picked", FALSE};
+    "unpicked", 1, "not picked", MGC_STATE_UNPICKED};
 
 /*** these are in-progress status ***/
 struct mgcStatusType MGC_PICKED = {
-    "picked", 2, "picked", FALSE};
+    "picked", 2, "picked", MGC_STATE_PENDING};
 struct mgcStatusType MGC_NOT_BACK = {
-    "notBack", 3, "not back", FALSE};
+    "notBack", 3, "not back", MGC_STATE_PENDING};
 struct mgcStatusType MGC_NO_DECISION = {
-    "noDecision", 4, "no decision yet", FALSE};
+    "noDecision", 4, "no decision yet", MGC_STATE_PENDING};
 
 /*** these are full-length status ***/
 struct mgcStatusType MGC_FULL_LENGTH = {
-    "fullLength", 5, "full length", FALSE};
+    "fullLength", 5, "full length", MGC_STATE_FULL_LENGTH};
 struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
-    "cantSequence", 6, "full length (short isoform)", TRUE};
+    "cantSequence", 6, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
 
 /*** these are error status ***/
 struct mgcStatusType MGC_INCOMPLETE = {
-    "incomplete", 7, "incomplete", TRUE};
+    "incomplete", 7, "incomplete", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CHIMERIC = {
-    "chimeric", 8, "chimeric", TRUE};
+    "chimeric", 8, "chimeric", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_FRAME_SHIFTED = {
-    "frameShift", 9, "frame shifted", TRUE};
+    "frameShift", 9, "frame shifted", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CONTAMINATED = {
-    "contaminated", 10, "contaminated", TRUE};
+    "contaminated", 10, "contaminated", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_RETAINED_INTRON = {
-    "retainedIntron", 11, "retained intron", TRUE};
+    "retainedIntron", 11, "retained intron", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MIXED_WELLS = {
-    "mixedWells", 12, "mixed wells", TRUE};
+    "mixedWells", 12, "mixed wells", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_GROWTH = {
-    "noGrowth", 13, "no growth", TRUE};
+    "noGrowth", 13, "no growth", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_INSERT = {
-    "noInsert", 14, "no insert", TRUE};
+    "noInsert", 14, "no insert", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_5_EST_MATCH = {
-    "no5est", 15, "no 5' EST match", TRUE};
+    "no5est", 15, "no 5' EST match", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MICRODELETION = {
-    "microDel", 16, "no cloning site / microdeletion", TRUE};
+    "microDel", 16, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_LIBRARY_ARTIFACTS = {
-    "artifact", 17, "library artifacts", TRUE};
+    "artifact", 17, "library artifacts", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_POLYA_TAIL = {
-    "noPolyATail", 18, "no polyA-tail", TRUE};
+    "noPolyATail", 18, "no polyA-tail", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CANT_SEQUENCE = {
-    "cantSequence", 19, "unable to sequence", TRUE};
+    "cantSequence", 19, "unable to sequence", MGC_STATE_PROBLEM};
 
 /* hash of status code to status object */
 static struct hash *statusHash = NULL;
@@ -79,7 +77,7 @@ static char *organismNameMap[][2] =
     {NULL, NULL}
 };
 
-#define MGCSTATUS_NUM_COLS 4
+#define MGCSTATUS_NUM_COLS 5
 
 /* SQL to create status table. Should have table name sprinted into it.  The
  * values of the status enum are order such that values less than fullLength
@@ -88,8 +86,8 @@ static char *organismNameMap[][2] =
  */
 char *mgcStatusCreateSql =
 "CREATE TABLE %s ("
-"    imageId INT UNSIGNED NOT NULL,"  /* IMAGE id for clone */
-"    status ENUM("                    /* MGC status code */
+"   imageId INT UNSIGNED NOT NULL,"  /* IMAGE id for clone */
+"   status ENUM("                    /* MGC status code */
 "       'unpicked',"
 "       'picked',"
 "       'notBack',"
@@ -110,10 +108,17 @@ char *mgcStatusCreateSql =
 "       'noPolyATail',"
 "       'cantSequence'"
 "   ) NOT NULL,"
+"   state ENUM("                    /* MGC state code, matches C enum */
+"       'unpicked',"
+"       'pending',"
+"       'fullLength',"
+"       'problem'"
+"   ) NOT NULL,"
 "   acc CHAR(12) NOT NULL,"       /* genbank accession */
 "   organism CHAR(2) NOT NULL,"   /* two letter MGC organism */
 "   INDEX(imageId),"
 "   INDEX(status),"
+"   INDEX(state),"
 "   INDEX(acc),"
 "   INDEX(organism))";
 
@@ -137,6 +142,39 @@ errAbort("unknown MGC organism \"%s\" found in %s", organism, whereFound);
 return NULL;
 }
 
+static char* mgcStateFormat(enum mgcState state)
+/* convert a mgc state to a string */
+{
+switch (state)
+    {
+    case MGC_STATE_UNPICKED:
+        return "unpicked";
+    case MGC_STATE_PENDING:
+        return "pending";
+    case MGC_STATE_FULL_LENGTH:
+        return "fullLength";
+    case MGC_STATE_PROBLEM:
+        return "problem";
+    default:
+        errAbort("invalid value for mgcStateString %d", state);
+        return NULL;
+    }
+}
+
+static enum mgcState mgcStateParse(char *stateStr)
+/* convert a parse an mgc state string, return MGC_STATUS_NULL if invalid */
+{
+if (sameString(stateStr, "unpicked"))
+    return MGC_STATE_UNPICKED;
+if (sameString(stateStr, "pending"))
+    return MGC_STATE_PENDING;
+if (sameString(stateStr, "fullLength"))
+    return MGC_STATE_FULL_LENGTH;
+if (sameString(stateStr, "problem"))
+    return MGC_STATE_PROBLEM;
+return MGC_STATE_NULL;
+}
+
 static void addStatus(struct mgcStatusType* status)
 /* add a status to the status hash table */
 {
@@ -153,6 +191,7 @@ addStatus(&MGC_PICKED);
 addStatus(&MGC_NOT_BACK);
 addStatus(&MGC_NO_DECISION);
 addStatus(&MGC_FULL_LENGTH);
+addStatus(&MGC_FULL_LENGTH_SHORT);
 addStatus(&MGC_INCOMPLETE);
 addStatus(&MGC_CHIMERIC);
 addStatus(&MGC_FRAME_SHIFTED);
@@ -166,7 +205,6 @@ addStatus(&MGC_MICRODELETION);
 addStatus(&MGC_LIBRARY_ARTIFACTS);
 addStatus(&MGC_NO_POLYA_TAIL);
 addStatus(&MGC_CANT_SEQUENCE);
-addStatus(&MGC_FULL_LENGTH_SHORT);
 }
 
 static struct mgcStatusType *lookupStatus(char *statusName)
@@ -186,16 +224,23 @@ mst->imageIdHash = hashNew(22);  /* 4mb */
 return mst;
 }
 
-static void loadRow(struct mgcStatusTbl *mst, struct lineFile *lf,
-                    char **row)
+static void loadRow(struct mgcStatusTbl *mst, struct lineFile *lf, char **row)
 /* Load an mgcStatus row from a tab file */
 {
 int imageId =  lineFileNeedNum(lf, row, 0);
 struct mgcStatusType *status = lookupStatus(row[1]);
+enum mgcState state;
 if (status == NULL)
-    errAbort("%s:%d: ", lf->fileName, lf->lineIx, row[1]);
-
-mgcStatusTblAdd(mst,  imageId, status, row[2], row[3]);
+    errAbort("%s:%d: invalid status value: \"%s\"",
+             lf->fileName, lf->lineIx, row[1]);
+state = mgcStateParse(row[2]);
+if (state == MGC_STATE_NULL)
+    errAbort("%s:%d: invalid state value: \"%s\"",
+             lf->fileName, lf->lineIx, row[2]);
+if (state != status->state)
+    errAbort("%s:%d: state value \"%s\" dosn't match statue value \"%s\"",
+             lf->fileName, lf->lineIx, row[2], row[1]);
+mgcStatusTblAdd(mst,  imageId, status, row[3], row[4]);
 }
 
 struct mgcStatusTbl *mgcStatusTblLoad(char *mgcStatusTab)
@@ -272,7 +317,9 @@ return mgcStatus;
 static void mgcStatusTabOut(struct mgcStatus *mgcStatus, FILE *f)
 /* Write the mgcStatus object to a tab file */
 {
-fprintf(f, "%u\t%s\t%s\t%s\n", mgcStatus->imageId, mgcStatus->status->dbValue, 
+fprintf(f, "%u\t%s\t%s\t%s\t%s\n", mgcStatus->imageId,
+        mgcStatus->status->dbValue,
+        mgcStateFormat(mgcStatus->status->state),
         ((mgcStatus->acc != NULL) ? mgcStatus->acc : ""),
         mgcStatus->organism);
 }

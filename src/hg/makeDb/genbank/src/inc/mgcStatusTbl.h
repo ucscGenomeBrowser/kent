@@ -4,6 +4,21 @@
 #include "common.h"
 struct sqlConnection;
 
+enum mgcState
+/* MGC state type.  The detailed status extracted from the NCBI tables map to
+ * a few states that are used in most of our processing.
+ *
+ * IMPORTANT: The value of this the enums are the numeric enum value in the
+ * database column.
+ */
+{
+    MGC_STATE_NULL = 0,     /* not actually used in db */
+    MGC_STATE_UNPICKED = 1,
+    MGC_STATE_PENDING = 2,
+    MGC_STATE_FULL_LENGTH = 3,
+    MGC_STATE_PROBLEM = 4
+};
+
 struct mgcStatusType
 /* Structure used to represent a status.  There is a table of the valid
  * values, with the pointer to the status being using as the value. */
@@ -11,7 +26,7 @@ struct mgcStatusType
     char *dbValue;    /* value used for database field (which is an enum) */
     int dbIndex;      /* database enum index for value */
     char *desc;       /* natural language description */
-    boolean isError;  /* does this represent an error? */
+    enum mgcState state; /* state this status maps to */
 };
 
 /* 

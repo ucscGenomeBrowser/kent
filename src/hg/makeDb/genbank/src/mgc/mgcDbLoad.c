@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.3 2003/06/17 07:03:03 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.4 2003/06/18 05:20:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -223,15 +223,14 @@ gbVerbEnter(2, "loading %s", MGC_FULL_MRNA_TMP);
 remakePslTable(conn, MGC_FULL_MRNA_TMP, "all_mrna");
 
 /* insert a join by accession of the all_mrna table and mgcStatus rows having
- * full-length status */
+ * full-length state */
 safef(sql, sizeof(sql),
       "INSERT INTO %s"
       "  SELECT all_mrna.* FROM all_mrna, %s"
       "    WHERE (all_mrna.qName = %s.acc)"
-      "      AND ((%s.status = %d) || (%s.status = %d))",
+      "      AND (%s.state = %d)",
       MGC_FULL_MRNA_TMP, statusTbl, statusTbl,
-      statusTbl, MGC_FULL_LENGTH.dbIndex,
-      statusTbl, MGC_FULL_LENGTH_SHORT.dbIndex);
+      statusTbl, MGC_STATE_FULL_LENGTH);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_FULL_MRNA_TMP);
 }
@@ -313,8 +312,8 @@ safef(sql, sizeof(sql),
       "INSERT INTO %s"
       "  SELECT all_mrna.* FROM all_mrna, mgcStatus_tmp"
       "    WHERE (all_mrna.qName =  mgcStatus_tmp.acc)"
-      "      AND (mgcStatus_tmp.status > %d)",
-      MGC_INCOMPLETE_MRNA_TMP, MGC_FULL_LENGTH_SHORT.dbIndex);
+      "      AND (mgcStatus_tmp.state = %d)",
+      MGC_INCOMPLETE_MRNA_TMP, MGC_STATE_PROBLEM);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_INCOMPLETE_MRNA_TMP);
 }
@@ -338,10 +337,8 @@ safef(sql, sizeof(sql),
       "      AND (imageClone.direction = '5')"
       "      AND (mgcStatus_tmp.imageId = imageClone.imageId)"
       "      AND (mgcStatus_tmp.acc = '')"
-      "      AND (mgcStatus_tmp.status > %d) "
-      "      AND (mgcStatus_tmp.status < %d)",
-      MGC_PICKED_EST_TMP, MGC_UNPICKED.dbIndex,
-      MGC_FULL_LENGTH.dbIndex);
+      "      AND (mgcStatus_tmp.state = %d)",
+      MGC_PICKED_EST_TMP, MGC_STATE_PENDING);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_PICKED_EST_TMP);
 }
@@ -365,8 +362,8 @@ safef(sql, sizeof(sql),
       "      AND (imageClone.direction = '5')"
       "      AND (mgcStatus_tmp.imageId = imageClone.imageId)"
       "      AND (mgcStatus_tmp.acc = '')"
-      "      AND (mgcStatus_tmp.status > %d)",
-      MGC_FAILED_EST_TMP, MGC_FULL_LENGTH.dbIndex);
+      "      AND (mgcStatus_tmp.state = %d)",
+      MGC_FAILED_EST_TMP, MGC_STATE_PROBLEM);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_FAILED_EST_TMP);
 }
@@ -390,8 +387,8 @@ safef(sql, sizeof(sql),
       "      AND (imageClone.direction = '5')"
       "      AND (mgcStatus_tmp.imageId = imageClone.imageId)"
       "      AND (mgcStatus_tmp.acc = '')"
-      "      AND (mgcStatus_tmp.status = %d)",
-      MGC_UNPICKED_EST_TMP, MGC_UNPICKED.dbIndex);
+      "      AND (mgcStatus_tmp.state = %d)",
+      MGC_UNPICKED_EST_TMP, MGC_STATE_UNPICKED);
 sqlUpdate(conn, sql);
 gbVerbLeave(2, "loading %s", MGC_UNPICKED_EST_TMP);
 }

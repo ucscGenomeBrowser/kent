@@ -472,8 +472,13 @@
 - iserver directories not group write?  need to doc cleaning this
   up.
 
-- need to selective rsync aligned for various databases.
+- some data things to looks at:
 
-- add summary status to mgc (call state): unpicked, pending, full, error
+  - bad CDS annotation:
+    - MGC BC012901
+    - MGC BC001477
+   - NM_153032/BC003669 - very different CDS annotations.
 
-- check for loading with old table (string crc column works)
+     -mgcs with no cds annotation
+
+- check for loading with old table (string tbl crc column works)
