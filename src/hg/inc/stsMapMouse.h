@@ -14,8 +14,9 @@ struct stsMapMouse
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* Name of STS marker */
     unsigned score;	/* Score of a marker = 1000/(# of placements) */
-    unsigned identNo;	/* Marker Identification number of STS */
+    unsigned identNo;	/* UCSC Id No. */
     unsigned probeId;	/* Probe Identification number of STS */
+    unsigned markerId;	/* Marker Identification number of STS */
     };
 
 void stsMapMouseStaticLoad(char **row, struct stsMapMouse *ret);
