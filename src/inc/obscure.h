@@ -38,6 +38,9 @@ struct slName *readAllLines(char *fileName);
 void copyFile(char *source, char *dest);
 /* Copy file from source to dest. */
 
+void copyOpenFile(FILE *inFh, FILE *outFh);
+/* copy an open stdio file */
+
 void cpFile(int s, int d);
 /* Copy from source file to dest until reach end of file. */
 

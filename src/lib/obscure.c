@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.32 2004/07/17 00:56:21 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.33 2004/07/20 18:36:36 markd Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -171,6 +171,18 @@ close(s);
 if (close(d) != 0)
     errnoAbort("close failed");
 freeMem(buf);
+}
+
+void copyOpenFile(FILE *inFh, FILE *outFh)
+/* copy an open stdio file */
+{
+int c;
+while ((c = fgetc(inFh)) != EOF)
+    fputc(c, outFh);
+if (ferror(inFh))
+    errnoAbort("file read failed");
+if (ferror(outFh))
+    errnoAbort("file write failed");
 }
 
 void cpFile(int s, int d)
