@@ -46,6 +46,12 @@ char buf[1024];
 
 fillInAddress(host, port, &sai);
 sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+if (sameString(host, "255.255.255.255"))
+    {
+    int on = 1;
+    if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) != 0)
+	errAbort("Can't set broadcast option on socket %s", strerror(errno));
+    }
 if (isFile)
     readInGulp(s, &s, &size);
 
