@@ -509,7 +509,6 @@ priority 54
 visibility pack
 spectrum on
 type psl .
-cdsDrawOptions enabled
 
 track mrnaBlastz
 shortLabel $Organism mRNAs Blastz
@@ -753,6 +752,7 @@ priority 93
 visibility dense
 spectrum on
 type bed 6 +
+exonArrows off
 
 track triangle
 shortLabel Golden Extra
