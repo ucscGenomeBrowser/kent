@@ -227,7 +227,7 @@ searches GenBank mRNA records whose text annotations can include gene names, gen
 symbols, journal title words, author names, and RefSeq mRNAs. Searches on other
 selected identifiers, such as NP and
 NM accession numbers, OMIM identifiers, and LocusLink IDs are supported. 
-However, some types of position queries will return an error, e.g. post-freeze GenBank 
+However, some types of position queries will return an error, e.g. post-assembly GenBank 
 entries, withdrawn gene names, and abandoned synonyms. 
 <P>
 <B>Finding a genome location using BLAT</B><BR>
@@ -1347,12 +1347,12 @@ Put your formatted annotation file on your web site. Be sure that the file permi
 Construct a URL that will link this annotation file to the Genome Browser. The URL must contain 3 pieces of information specific
 to your annotation data: 
 <UL>
-<LI>The genome freeze on which your annotation data is based. This
+<LI>The genome assembly on which your annotation data is based. This
 information is of the form <tt>db=database_name</tt>, where
-<I>database_name</I> is to the UCSC code for the genome freeze. For a list
+<I>database_name</I> is to the UCSC code for the genome assembly. For a list
 of these codes, see the Genome Browser <A
-HREF="http://genome.ucsc.edu/FAQ.html#124" TARGET=_blank>FAQ</A>.
-Examples of this include: db=hg11 (Human April 2002 freeze), db=mm2 (Mouse Feb 2002 freeze).
+HREF="/FAQ/FAQreleases#release1" TARGET=_blank>FAQ</A>.
+Examples of this include: db=hg11 (Human April 2002 assembly), db=mm2 (Mouse Feb 2002 assembly).
 <LI>The genome position that the Genome Browser should initially open to. This information is of the form
 <tt>position=chr_position</tt>, where <I>chr_position</I> is a chromosome number, with or without a set of 
 coordinates. Examples of this include: position=chr22, position=chr22:15916196-31832390.
@@ -1371,7 +1371,7 @@ format (the information specific to your annotation file is highlighted):
 color="000099"><I>chr_position</I></font>&amp;hgt.customText=<font color="000099"><I>URL</I></font></tt>.
 
 <P><B><I>Example:</I></B><BR>
-The following URL will open up the Genome Browser window to display chr 22 of the April 2002 freeze of the 
+The following URL will open up the Genome Browser window to display chr 22 of the April 2002 assembly of the 
 human genome (hg11), and will display the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 
@@ -4327,13 +4327,13 @@ derived from DNA sequences instead of mRNA sequences are added.
 
 <P><B>Map Contigs</B><BR>
 This track shows the locations of contigs of clones on the physical map. 
-In assembly versions prior to the August 6 2001 freeze, this track was
+In assembly versions prior to the August 6 2001 assembly, this track was
 based on the Washington University accession map, which in turn was
 based on a fingerprint contig (FPC) map described in 
 <A
 HREF="http://www.nature.com/cgi-taf/DynaPage.taf?file=/nature/journal/v409/n6822/full/409934a0_fs.html"
 TARGET=_blank">'A physical map of the human genome'</A> in Nature volume 409 pages 934-941.
-Starting with the August 6 2001 freeze, this track is based on tiling path 
+Starting with the August 6 2001 assembly, this track is based on tiling path 
 fingerprint (TPF) maps curated by the sequencing centers responsible for each 
 chromosome.  The TPF maps are merged with the FPC map,
 favoring the TPF map where conflicts occur. This step increases the
