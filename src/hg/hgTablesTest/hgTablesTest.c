@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.23 2004/11/10 04:41:16 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.24 2004/11/10 04:43:29 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -400,6 +400,11 @@ if (outPage != NULL)
 		qaStatusSoftError(tablesTestList->status, 
 			"No custom track group after custom track submission");
 		}
+	    }
+	else
+	    {
+	    qaStatusSoftError(tablesTestList->status,
+	           "Error in custom track.");
 	    }
 	}
     }
