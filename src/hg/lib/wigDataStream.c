@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.20 2004/08/17 22:22:40 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.21 2004/08/17 23:28:16 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -608,6 +608,7 @@ unsigned bedElCount = 0;
 boolean firstSpanDone = FALSE;	/*	to prevent multiple bed lists */
 float *dataArrayPtr = NULL;	/*	to access the data array values */
 unsigned dataArrayPosition = 0;	/*  marches thru all from beginning to end */
+struct wiggle *wiggle;		/*	one SQL data read results	*/
 
 doAscii = operations & wigFetchAscii;
 doDataArray = operations & wigFetchDataArray;
@@ -676,11 +677,20 @@ if (doBed)
 if (!wDS->isFile && wDS->winEnd)
     summaryOnly = FALSE;
 
-/*	nextRow produces next SQL row from either DB or file	*/
-while (nextRow(wDS, row, WIGGLE_NUM_COLS))
+/*	nextRow() produces the next SQL row from either DB or file.
+ *
+ *	The unusual use of wiggleFree() as the third element of this for()
+ *	loop is to take care of the condition when the 'continue;'
+ *	statements are used to skip the loop and not have to worry about
+ *	what happens at the end of the loop.  the wiggleFree() must be
+ *	done at the end of each loop even in the case of 'continue;' or
+ *	not.  This is the single instance of wiggleFree() in the entire
+ *	source file, as it should be.
+ */
+	    
+for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); wiggleFree(&wiggle) )
     {
     struct wigAsciiData *wigAscii = NULL;
-    struct wiggle *wiggle;
     struct asciiDatum *asciiOut = NULL;	/* to address data[] in wigAsciiData */
     unsigned chromPosition;
 
@@ -700,7 +710,6 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	   )
 	    {
 	    bytesSkipped += wiggle->count;
-	    wiggleFree(&wiggle);
 	    continue;	/*	next SQL row	*/
 	    }
 	}
@@ -813,10 +822,9 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    setCompareByte(wDS, wiggle->lowerLimit, wiggle->dataRange);
 	else
 	    {
-	    bytesSkipped += wiggle->count;
-	    wiggleFree(&wiggle);
 	    verbose(VERBOSE_HIGHEST,
 		"#\tthis row fails compare, next SQL row\n");
+	    bytesSkipped += wiggle->count;
 	    continue;	/*	next SQL row	*/
 	    }
 	}
@@ -835,7 +843,7 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	if (chromEnd < wiggle->chromEnd)
 	    chromEnd = wiggle->chromEnd;
 	statsCount += wiggle->validCount;
-	wiggleFree(&wiggle);
+	bytesSkipped += wiggle->count;
 	continue;	/*	next SQL row	*/
 	}
     if (!skipDataRead)
@@ -855,8 +863,13 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	verbose(VERBOSE_PER_VALUE_LEVEL,
 		"#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
 
+	/*	The third element of the for() statement takes care of the end
+	 *	of loop operations for the case of the 'continue;'
+	 *	statement as well as the normal end of loop business
+	 */
 	datum = readData;
-	for (j = 0; j < wiggle->count; ++j)
+	for (j = 0; j < wiggle->count;
+		++datum, chromPosition += wiggle->span, ++j)
 	    {
 	    if (*datum != WIG_NO_DATA)
 		{
@@ -872,11 +885,7 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 
 		    if ( (chromPosition < wDS->winStart) ||
 			((chromPosition+span) > wDS->winEnd) )
-			{
-			++datum;	/*	out of range	*/
-			chromPosition += wiggle->span;
 			continue;	/*	next *datum	*/
-			}
 		    }
 		++validData;
 		switch (wDS->wigCmpSwitch)
@@ -995,13 +1004,10 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 		{
 		++noDataBytes;
 		}
-	    ++datum;
-	    chromPosition += wiggle->span;
 	    }	/*	for (j = 0; j < wiggle->count; ++j)	*/
 	freeMem(readData);
 	}	/*	if (!skipDataRead)	*/
-    wiggleFree(&wiggle);
-    }		/*	while (nextRow())	*/
+    }		/*	for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); ... ) */
 
 /*	there may be one last bed element to output	*/
 if (!firstSpanDone && doBed)
@@ -1233,7 +1239,7 @@ if (bedList && *bedList)
 	    verbose(VERBOSE_CHR_LEVEL,
 		"#\tfilter found nothing in bed file: %s:%u-%u\n",
 		wDS->chrName, winStart, winEnd);
-	    continue;	/*	next bed element	*/
+	    continue;	/*	next chrom */
 	    }
 	else
 	    slSort(&filteredBed,bedCmp);	/*	in proper order */
