@@ -12,6 +12,17 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder rat human dog chicken
 
+track phastConsElements
+shortLabel Cons Elements
+longLabel PhastCons Conserved Elements, Rat/Human/Dog/Chicken
+group compGeno
+priority 100.1
+visibility hide
+spectrum on
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track chainGalGal2
 shortLabel Chicken Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
