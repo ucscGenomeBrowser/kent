@@ -119,6 +119,9 @@ char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/cgi-bin/genmapdb/byclonesearch.pl?clone=";
 
+/* initialized by getCtList() if necessary: */
+struct customTrack *theCtList = NULL;
+
 static void hgcStart(char *title)
 /* Print out header of web page with title.  Set
  * error handler to normal html error handler. */
@@ -1419,10 +1422,68 @@ return (sameString("cytoBand", track) ||
 }
 
 
+struct customTrack *getCtList()
+/* initialize theCtList if necessary and return it */
+{
+if (theCtList == NULL)
+    theCtList = customTracksParseCart(cart, NULL, NULL);
+return(theCtList);
+}
+
+struct trackDb *tdbForCustomTracks()
+/* Load custom tracks (if any) and translate to list of trackDbs */
+{
+struct customTrack *ctList = getCtList();
+struct customTrack *ct;
+struct trackDb *tdbList = NULL, *tdb;
+
+for (ct=ctList;  ct != NULL;  ct=ct->next)
+    {
+    AllocVar(tdb);
+    tdb->tableName = ct->tdb->tableName;
+    tdb->shortLabel = ct->tdb->shortLabel;
+    tdb->type = ct->tdb->type;
+    tdb->longLabel = ct->tdb->longLabel;
+    tdb->visibility = ct->tdb->visibility;
+    tdb->priority = ct->tdb->priority;
+    tdb->colorR = ct->tdb->colorR;
+    tdb->colorG = ct->tdb->colorG;
+    tdb->colorB = ct->tdb->colorB;
+    tdb->altColorR = ct->tdb->altColorR;
+    tdb->altColorG = ct->tdb->altColorG;
+    tdb->altColorB = ct->tdb->altColorB;
+    tdb->useScore = ct->tdb->useScore;
+    tdb->private = ct->tdb->private;
+    tdb->url = ct->tdb->url;
+    trackDbPolish(tdb);
+    slAddHead(&tdbList, tdb);
+    }
+
+slReverse(&tdbList);
+return(tdbList);
+}
+
+
+struct customTrack *lookupCt(char *name)
+/* Return custom track for name, or NULL. */
+{
+struct customTrack *ct;
+
+for (ct=getCtList();  ct != NULL;  ct=ct->next)
+    if (sameString(name, ct->tdb->tableName))
+	return(ct);
+
+return(NULL);
+}
+
+
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
+struct trackDb *ctdbList = tdbForCustomTracks();
+
+tdbList = slCat(ctdbList, tdbList);
 
 cartWebStart(cart, "Extended DNA Case/Color");
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
@@ -1432,7 +1493,7 @@ puts(
 "case, underline, bold, italic, or color.  See below for "
 "details about color, and for examples.");
 
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 printf("Chromosome ");
@@ -1459,7 +1520,8 @@ printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD>
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->tableName;
-    if (fbUnderstandTrack(track) && !dnaIgnoreTrack(tdb->tableName))
+    if ((lookupCt(track) != NULL) ||
+	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
 	{
 	char *visString = cartOptionalString(cart, track);
 	char buf[128];
@@ -1598,6 +1660,52 @@ if (itemCount == 0)
 puts("</PRE>");
 }
 
+struct hTableInfo *ctToHti(struct customTrack *ct)
+/* Create an hTableInfo from a customTrack. */
+{
+struct hTableInfo *hti;
+
+AllocVar(hti);
+hti->rootName = cloneString(ct->tdb->tableName);
+hti->isPos = TRUE;
+hti->isSplit = FALSE;
+hti->hasBin = FALSE;
+hti->type = cloneString(ct->tdb->type);
+if (ct->fieldCount >= 3)
+    {
+    strncpy(hti->chromField, "chrom", 32);
+    strncpy(hti->startField, "chromStart", 32);
+    strncpy(hti->endField, "chromEnd", 32);
+    }
+if (ct->fieldCount >= 4)
+    {
+    strncpy(hti->nameField, "name", 32);
+    }
+if (ct->fieldCount >= 5)
+    {
+    strncpy(hti->scoreField, "score", 32);
+    }
+if (ct->fieldCount >= 6)
+    {
+    strncpy(hti->strandField, "strand", 32);
+    }
+if (ct->fieldCount >= 8)
+    {
+    strncpy(hti->cdsStartField, "thickStart", 32);
+    strncpy(hti->cdsEndField, "thickEnd", 32);
+    hti->hasCDS = TRUE;
+    }
+if (ct->fieldCount >= 12)
+    {
+    strncpy(hti->countField, "blockCount", 32);
+    strncpy(hti->startsField, "chromStarts", 32);
+    strncpy(hti->endsSizesField, "blockSizes", 32);
+    hti->hasBlocks = TRUE;
+    }
+
+return(hti);
+}
+
 void addColorToRange(int r, int g, int b, struct rgbColor *colors, int start, int end)
 /* Add rgb values to colors array from start to end.  Don't let values
  * exceed 255 */
@@ -1622,7 +1730,7 @@ for (i=start; i<end; ++i)
 
 void getDnaHandleBits(char *track, char *type, Bits *bits, 
 	int winStart, int winEnd, boolean isRc,
-	struct featureBits **pList)
+	struct featureBits *fbList)
 /* See if track_type variable exists, and if so set corresponding bits. */
 {
 char buf[256];
@@ -1633,9 +1741,7 @@ int winSize = winEnd - winStart;
 sprintf(buf, "%s_%s", track, type);
 if (cgiBoolean(buf))
     {
-    if (*pList == NULL)
-	*pList = fbGetRange(track, seqName, winStart, winEnd);
-    for (fb = *pList; fb != NULL; fb = fb->next)
+    for (fb = fbList; fb != NULL; fb = fb->next)
 	{
 	s = fb->start - winStart;
 	e = fb->end - winStart;
@@ -1658,10 +1764,12 @@ int winSize = winEnd - winStart;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
+struct trackDb *ctdbList = tdbForCustomTracks();
 Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
 Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
 Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
 
+tdbList = slCat(ctdbList, tdbList);
 
 cartWebStart(cart, "Extended DNA Output");
 printf("<TT><PRE>");
@@ -1678,22 +1786,37 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->tableName;
     struct featureBits *fbList = NULL, *fb;
-    if (fbUnderstandTrack(tdb->tableName) && !dnaIgnoreTrack(tdb->tableName))
+    struct customTrack *ct = lookupCt(track);
+    if ((ct != NULL) ||
+	(fbUnderstandTrack(track) && !dnaIgnoreTrack(track)))
         {
 	char buf[256];
 	int r,g,b;
 
+	if (ct != NULL)
+	    {
+	    struct hTableInfo *hti = ctToHti(ct);
+	    struct bedFilter *bf;
+	    struct bed *bedList2;
+	    AllocVar(bf);
+	    bedList2 = bedFilterListInRange(ct->bedList, bf, seqName, winStart,
+					    winEnd);
+	    fbList = fbFromBed(track, hti, bedList2, winStart, winEnd,
+			       TRUE, FALSE);
+	    bedFreeList(&bedList2);
+	    }
+	else
+	    fbList = fbGetRange(track, seqName, winStart, winEnd);
+
 	/* Flip underline/italic/bold bits. */
-	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, &fbList);
-	getDnaHandleBits(track, "b", bBits, winStart, winEnd, isRc, &fbList);
-	getDnaHandleBits(track, "i", iBits, winStart, winEnd, isRc, &fbList);
+	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, fbList);
+	getDnaHandleBits(track, "b", bBits, winStart, winEnd, isRc, fbList);
+	getDnaHandleBits(track, "i", iBits, winStart, winEnd, isRc, fbList);
 
 	/* Toggle case if necessary. */
 	sprintf(buf, "%s_case", track);
 	if (cgiBoolean(buf))
 	    {
-	    if (fbList == NULL)
-		fbList = fbGetRange(track, seqName, winStart, winEnd);
 	    for (fb = fbList; fb != NULL; fb = fb->next)
 	        {
 		DNA *dna;
@@ -1719,8 +1842,6 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	b = cartInt(cart, buf);
 	if (r != 0 || g != 0 || b != 0)
 	    {
-	    if (fbList == NULL)
-		fbList = fbGetRange(track, seqName, winStart, winEnd);
 	    for (fb = fbList; fb != NULL; fb = fb->next)
 	        {
 		int s = fb->start - winStart;
@@ -8575,8 +8696,8 @@ void hgCustom(char *trackId, char *fileItem)
 /* Process click on custom track. */
 {
 char *fileName, *itemName;
-struct customTrack *ctList, *ct;
-struct customTrack *customTracksFromFile(char *text);
+struct customTrack *ctList = getCtList();
+struct customTrack *ct;
 struct bed *bed;
 int start = cartInt(cart, "o");
 char *url;
@@ -8585,9 +8706,6 @@ cartWebStart(cart, "Custom Track");
 fileName = nextWord(&fileItem);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>Custom Track Item %s</H2>\n", itemName);
-if (fileName == NULL || itemName == NULL)
-    errAbort("Misformed fileItem in hgCustom");
-ctList = customTracksFromFile(fileName);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     if (sameString(trackId, ct->tdb->tableName))
