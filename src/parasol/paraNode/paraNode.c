@@ -7,6 +7,7 @@
 #include "dlist.h"
 #include "hash.h"
 #include "options.h"
+#include "subText.h"
 #include "paraLib.h"
 #include "net.h"
 
@@ -46,9 +47,48 @@ errAbort("paraNode - parasol node serve.\n"
 	 "    cpu=N - Number of CPUs to use.  Default 1\n");
 }
 
+extern char **environ;	/* The environment strings. */
 
-void execProc(char *managingHost, char *jobIdString, char *user,
-	char *dir, char *in, char *out, char *err,
+int countEnv(char **env)
+/* Count elements in environment type string. */
+{
+char *s;
+int count = 0;
+while ((s = *env++) != NULL)
+    ++count;
+return count;
+}
+
+char **envExpand(int extra)
+/* Make environ have extra slots. Return first new slot. */
+{
+int oldSize = countEnv(environ);
+int newSize = oldSize + extra + 1;
+char **newEnv;
+AllocArray(newEnv, newSize);
+memcpy(newEnv, environ, oldSize * sizeof(newEnv[0]));
+environ = newEnv;
+return environ + oldSize;
+}
+
+char *envPair(char *name, char *val)
+/* Return name=val in a freshly allocated string. */
+{
+int size = strlen(name) + strlen(val) + 2;  /* Include '=' and zero tag */
+char *pair = needMem(size);
+sprintf(pair, "%s=%s", name, val);
+return pair;
+}
+
+void addEnv(char *name, char *val)
+/* Add name=value pair to environment. */
+{
+char **env = envExpand(1);
+*env = envPair(name, val);
+}
+
+void execProc(char *managingHost, char *jobIdString, char *runJobExtra,
+	char *user, char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
 /* This routine is the child process of doExec.
  * It spawns a grandchild that actually does the
@@ -81,6 +121,9 @@ if (fork() == 0)
     close(newStdin);
     close(newStdout);
     close(newStderr);
+
+    /* Add jobId to environment. */
+    addEnv("JOB_ID", jobIdString);
 
     if (execvp(exe, params) < 0)
 	{
@@ -195,7 +238,8 @@ void doRun(char *line)
 /* Execute command. */
 {
 static char *args[1024];
-char *managingHost, *jobIdString, *user, *dir, *in, *out, *err, *cmd;
+char *managingHost, *jobIdString, *runJobExtra, *user, *dir, *in, 
+	*out, *err, *cmd;
 int argCount;
 if (line == NULL)
     warn("Executing nothing...");
@@ -203,24 +247,36 @@ else if (busyProcs < maxProcs)
     {
     char *exe;
     int childPid;
+
     managingHost = nextWord(&line);
     jobIdString = nextWord(&line);
+    runJobExtra = nextWord(&line);
     user = nextWord(&line);
     dir = nextWord(&line);
     in = nextWord(&line);
     out = nextWord(&line);
     err = nextWord(&line);
+
     if (line == NULL || (argCount = chopLine(line, args)) < 1)
-        warn("Not enough parameters to run");
+	warn("Not enough parameters to run");
     else if (argCount >= ArraySize(args))
-        warn("Too many arguments to run");
+	warn("Too many arguments to run");
     else
 	{
 	args[argCount] = NULL;
 	if ((childPid = fork()) == 0)
 	    {
-	    execProc(managingHost, jobIdString, 
-	    	user, dir, in, out, err, args[0], args);
+	    /* Do JOB_ID substitutions */
+	    struct subText *st = subTextNew("$JOB_ID", jobIdString);
+	    int i;
+	    in = subTextString(st, in);
+	    out = subTextString(st, out);
+	    err = subTextString(st, err);
+	    for (i=0; i<argCount; ++i)
+	        args[i] = subTextString(st, args[i]);
+
+	    execProc(managingHost, jobIdString, runJobExtra,
+		user, dir, in, out, err, args[0], args);
 	    }
 	else
 	    {
@@ -232,7 +288,7 @@ else if (busyProcs < maxProcs)
 	    ++busyProcs;
 	    }
 	}
-    }
+     }
 else
     {
     warn("Trying to run when busy.");
