@@ -78,14 +78,14 @@ void nci60Ui(struct trackDb *tdb)
 /* put up UI for the nci60 track from stanford track */
 {
 char *nci60Map = cartUsualString(cart, "nci60.type", nci60EnumToString(0));
-char *col = cartUsualString(cart, "nci60.color", "rg");
+char *col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Cell Lines: </b> ");
 nci60DropDown("nci60.type", nci60Map);
 printf(" ");
 printf(" <b>Color Scheme</b>: ");
-cgiMakeRadioButton("nci60.color", "rg", sameString(col, "rg"));
+cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
-cgiMakeRadioButton("nci60.color", "rb", sameString(col, "rb"));
+cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
@@ -93,7 +93,7 @@ void rosettaUi(struct trackDb *tdb)
 /* put up UI for the rosetta track */
 {
 char *rosettaMap = cartUsualString(cart, "rosetta.type", rosettaEnumToString(0));
-char *col = cartUsualString(cart, "rosetta.color", "rg");
+char *col = cartUsualString(cart, "exprssn.color", "rg");
 char *exonTypesOpts[] = {
     "Confirmed Only",
     "Predicted Only",
@@ -107,9 +107,9 @@ printf("  ");
 printf("<b>Exons Shown:</b> ");
 cgiMakeDropList("rosetta.et", exonTypesOpts, ArraySize(exonTypesOpts), exonTypes);
 printf(" <b>Color Scheme</b>: ");
-cgiMakeRadioButton("rosetta.color", "rg", sameString(col, "rg"));
+cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
-cgiMakeRadioButton("rosetta.color", "rb", sameString(col, "rb"));
+cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
