@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.119 2003/11/23 15:12:51 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.120 2003/12/02 08:01:03 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3749,8 +3749,8 @@ else if (strstrNoCase(organism, "SARS"))
     puts(
 "<P>The SARS draft genome assembly (UCSC version sc1) \n"
 "is based on sequence deposited into GenBank as of 14 April 2003. \n"
-"is browser - which represents a departure from UCSC's usual focus on vertebrate \n"
-"nomes - shows gene predictions, locations of putative proteins, and \n"
+"This browser - which represents a departure from UCSC's usual focus on vertebrate \n"
+"genomes - shows gene predictions, locations of putative proteins, and \n"
 "viral mRNA and protein alignments. Protein structure analysis and \n"
 "predictions were determined by using the  \n"
 "<A HREF=\"http://www.cse.ucsc.edu/research/compbio/sam.html\" TARGET=_blank> \n"
