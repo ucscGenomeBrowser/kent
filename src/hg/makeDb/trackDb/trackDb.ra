@@ -299,7 +299,7 @@ group genes
 priority 35.1
 visibility dense
 color 12,12,120
-type genePred refPep refMrna
+type genePred xenoRefPep xenoRefMrna
 
 track mgcGenes
 shortLabel MGC Genes
