@@ -522,3 +522,14 @@ chromosomes chr22,
 type bed 4 +
 private on
 
+track perlegen
+shortLabel Haplotype Blocks
+longLabel Perlegen Common High-Resolution Haplotype Blocks.  
+priority 38
+visibility full
+chromosomes chr21,
+color 0,0,0
+altColor 0,0,0
+spectrum on
+type bed 12
+url http://www.perlegen.com/haplotype/blk/$$.html
