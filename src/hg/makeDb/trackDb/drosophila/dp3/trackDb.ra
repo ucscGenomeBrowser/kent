@@ -6,6 +6,33 @@ group map
 visibility dense
 type bed 3 +
 
+track flybaseGene
+shortLabel FlyBase
+longLabel FlyBase Gene Annotations (Mapped Proteins)
+group genes
+priority 34
+visibility pack
+color 0,100,180
+type genePred flybasePep
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions From FlyBase
+group genes
+priority 45
+visibility hide
+color 0,100,100
+type genePred twinscanPep
+
+track genewise
+shortLabel Genewise
+longLabel Genewise Gene Predictions From FlyBase
+group genes
+priority 46
+visibility hide
+color 100,75,50
+type genePred genewisePep
+
 track xenoRefGene
 shortLabel Non-D. pseudo. RefSeq
 longLabel Non-$Organism RefSeq Genes
