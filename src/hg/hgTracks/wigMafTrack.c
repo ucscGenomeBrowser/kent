@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.50 2004/11/29 05:13:06 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.51 2004/11/30 18:08:22 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -156,7 +156,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 return miList;
 }
 
-static struct wigMafItem *scoreItem(scoreHeight)
+static struct wigMafItem *scoreItem(int scoreHeight)
 /* Make up (wiggle) item that will show the score */
 {
 struct wigMafItem *mi;
