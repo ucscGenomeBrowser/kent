@@ -2,7 +2,6 @@
  * other formats */
 #ifndef CHROMANN_H
 #define CHROMANN_H
-
 struct lineFile;
 struct coordCols;
 
@@ -52,5 +51,8 @@ struct chromAnn* chromAnnFromPsl(unsigned opts, struct lineFile *lf, char *line)
 struct chromAnn* chromAnnFromCoordCols(unsigned opts, struct lineFile *lf, char *line, struct coordCols* cols);
 /* create a chromAnn object from a line read from tab file with coordiates at
  * a specified columns */
+
+int chromAnnTotalBLockSize(struct chromAnn* ca);
+/* count the total bases in the blocks of a chromAnn */
 
 #endif

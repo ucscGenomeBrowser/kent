@@ -207,3 +207,12 @@ freez(&row);
 return ca;
 }
 
+int chromAnnTotalBLockSize(struct chromAnn* ca)
+/* count the total bases in the blocks of a chromAnn */
+{
+int bases = 0;
+struct chromAnnBlk *cab;
+for (cab = ca->blocks; cab != NULL; cab = cab->next)
+    bases += (cab->end - cab->start);
+return bases;
+}

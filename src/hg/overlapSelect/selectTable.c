@@ -4,6 +4,7 @@
 #include "selectTable.h"
 #include "linefile.h"
 #include "binRange.h"
+#include <bits.h>
 #include "hash.h"
 #include "chromAnn.h"
 #include "verbose.h"
@@ -125,24 +126,94 @@ if ((inCaBlk != NULL) || (selCaBlk != NULL))
 return TRUE;
 }
 
-static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
-/* see an chromAnn objects overlap */
+static boolean passCriteria(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)
+/* see if the global criteria for overlap are satisfied */
 {
-struct chromAnnBlk *inCaBlk, *selCaBlk;
 if ((opts & selUseStrand) && (inCa->strand != selCa->strand))
     return FALSE;
 if ((opts & selExcludeSelf) && isSelfMatch(opts, inCa, selCa))
     return FALSE;
+return TRUE;
+}
+
+static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa,
+                            float overlapThreshold)
+/* see an chromAnn objects overlap */
+{
+int inBases = 0;
+int threshBases = 0, overBases = 0;
+struct chromAnnBlk *inCaBlk, *selCaBlk;
+
+if (overlapThreshold > 0.0)
+    {
+    /* determine total required for overlap */
+    inBases = chromAnnTotalBLockSize(inCa);
+    threshBases = inBases * overlapThreshold;
+    }
+
 for (inCaBlk = inCa->blocks; inCaBlk != NULL; inCaBlk = inCaBlk->next)
+    {
     for (selCaBlk = selCa->blocks; selCaBlk != NULL; selCaBlk = selCaBlk->next)
         {
-            if ((inCaBlk->start < selCaBlk->end) && (inCaBlk->end > selCaBlk->start))
+        if ((inCaBlk->start < selCaBlk->end) && (inCaBlk->end > selCaBlk->start))
+            {
+            overBases += min(inCaBlk->end, selCaBlk->end)
+                - max(inCaBlk->start, selCaBlk->start);
+            if (overBases >= threshBases)
                 return TRUE;
+            }
         }
+    }
 return FALSE;
 }
 
+void addOverlapRecLines(struct slRef **overlappedRecLines, struct slRef *newRecLines)
+/* add overlapping records that are not dups */
+{
+struct slRef *orl;
+for (orl = newRecLines; orl != NULL; orl = orl->next)
+    {
+    if (!refOnList(*overlappedRecLines, orl->val))
+        refAdd(overlappedRecLines, orl->val);
+    }
+}
+
+static boolean selectWithOverlapping(unsigned opts, struct chromAnn *inCa,
+                                     struct binElement* overlapping,
+                                     float overlapThreshold,
+                                     struct slRef **overlappedRecLines)
+/* given a list of overlapping elements, see if inCa is selected */
+{
+boolean anyHits = FALSE;
+struct slRef *curOverRecLines = NULL;  /* don't add til the end */
+struct binElement* o;
+
+/* check each overlapping chomAnn */
+for (o = overlapping; o != NULL; o = o->next)
+    {
+    struct chromAnn* selCa = o->val;
+    if (passCriteria(opts, inCa, selCa)
+        && isOverlapped(opts, inCa, selCa, overlapThreshold))
+        {
+        anyHits = TRUE;
+        if (overlappedRecLines != NULL)
+            refAdd(&curOverRecLines, selCa);
+        else
+            break;  /* only need one overlap */
+        }
+    }
+/* n.b. delayed adding to list so minCoverage can some day be implemented */
+if (overlappedRecLines != NULL)
+    {
+    if (anyHits)
+        addOverlapRecLines(overlappedRecLines, curOverRecLines);
+    slFreeList(&curOverRecLines);
+    }
+return anyHits;
+}
+
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
+                           float overlapThreshold,
                            struct slRef **overlappedRecLines)
 /* Determine if a range is overlapped.  If overlappedRecLines is not null,
  * a list of the line form of overlaping select records is returned.  Free
@@ -153,24 +224,8 @@ struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
 if (bins != NULL)
     {
     struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
-    struct binElement* o;
-
-    /* check each overlapping chomAnn */
-    for (o = overlapping; o != NULL; o = o->next)
-        {
-        struct chromAnn* selCa = o->val;
-        hit = isOverlapped(opts, inCa, selCa);
-        if (hit)
-            {
-            if (overlappedRecLines != NULL)
-                {
-                if (!refOnList(*overlappedRecLines, selCa))
-                    refAdd(overlappedRecLines, selCa);
-                }
-            else
-                break;  /* only need one overlap */
-            }
-        }
+    hit = selectWithOverlapping(opts, inCa, overlapping, overlapThreshold,
+                                overlappedRecLines);
     slFreeList(&overlapping);
     }
 if (verboseLevel() >= 2)

@@ -16,7 +16,8 @@ test:   psl_over_NM_015110gp psl_nonover_NM_015110gp \
 	exludeself_over_mrna2 exludeself_nonover_mrna2 \
 	colSelect colExclude cdsOverlapCdsCds cdsOverlapCdsExon \
 	cdsOverlapExonCds \
-	psl_over_NM_015110gpMerge psl_over_NM_001206bedMerge bed_over_NM_015110bedMerge colSelectMerge
+	psl_over_NM_015110gpMerge psl_over_NM_001206bedMerge bed_over_NM_015110bedMerge colSelectMerge \
+	psl_gp_threshold psl_gp_non_threshold
 
 # select psls overlaping NM_015110 with gp
 psl_over_NM_015110gp: mkout
@@ -180,6 +181,20 @@ colSelectMerge: mkout
 multOverMerge: mkout
 	${OVERSEL} -excludeSelf -nonOverlapping input/mrna-self2.psl input/mrna-self2.psl output/exludeself_nonover_mrna2.psl
 	${DIFF} expected/exludeself_nonover_mrna2.psl output/exludeself_nonover_mrna2.psl
+
+# select psls overlaping NM_015110 with gp and overlapThreshold
+psl_gp_threshold: mkout
+	${OVERSEL} -overlapThreshold=0.4 -dropped=output/psl_gp_threshold.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_threshold.psl
+	${DIFF} expected/psl_gp_threshold.psl output/psl_gp_threshold.psl
+	${DIFF} expected/psl_gp_threshold.drop.psl output/psl_gp_threshold.drop.psl
+
+# select psls overlaping not NM_015110 with gp and overlapThreshold
+psl_gp_non_threshold: mkout
+	${OVERSEL} -overlapThreshold=0.4 -nonOverlapping -dropped=output/psl_gp_non_threshold.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_non_threshold.psl
+	${DIFF} expected/psl_gp_non_threshold.psl output/psl_gp_non_threshold.psl
+	${DIFF} expected/psl_gp_non_threshold.drop.psl output/psl_gp_non_threshold.drop.psl
+
+
 
 mkout:
 	@${MKDIR} output

@@ -26,6 +26,7 @@ static struct optionSpec optionSpecs[] = {
     {"excludeSelf", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
     {"merge", OPTION_BOOLEAN},
+    {"overlapThreshold", OPTION_FLOAT},
     {NULL, 0}
 };
 
@@ -45,7 +46,7 @@ unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
 boolean doMerge = FALSE;
 boolean nonOverlapping = FALSE;
-
+float overlapThreshold = 0.0;
 
 struct ioFiles
 /* object containing input files */
@@ -88,7 +89,8 @@ static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
 struct slRef *overlappedRecLines = NULL, *selectCaRef;
 boolean overlaps = FALSE;
 
-overlaps = selectIsOverlapped(selectOpts, inCa, (doMerge ? &overlappedRecLines : NULL));
+overlaps = selectIsOverlapped(selectOpts, inCa, overlapThreshold,
+                              (doMerge ? &overlappedRecLines : NULL));
 if ((nonOverlapping) ? !overlaps : overlaps)
     {
     if (doMerge)
@@ -262,6 +264,9 @@ errAbort("%s:\n"
          "  -nonOverlapping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
          "  -excludeSelf - don't compare alignments with the same coordinates and name.\n"
+         "  -overlapThreshold=0.0 - minimun fraction of an inFile block that\n"
+         "      must be overlapped by a single select record to be considered overlapping.\n"
+         "      Note that this is only coverage by a single select record, not total coverage.\n"
          "  -dropped=file - output rows that were dropped to this file.\n",
          "  -merge - output file with be a merge of the input file with the\n"
          "      selectFile records that selected it.  The format is\n"
@@ -329,7 +334,7 @@ if (optionExists("strand"))
     selectOpts |= selUseStrand;
 if (optionExists("excludeSelf"))
     selectOpts |= selExcludeSelf;
-
+overlapThreshold = optionFloat("overlapThreshold", 0.0);
 doMerge = optionExists("merge");
 if (doMerge)
     {
