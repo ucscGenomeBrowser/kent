@@ -1409,3 +1409,20 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
+LOAD SLAM GENES 
+     cd /cluster/store3/gs.13/build30/bed/slam
+     wget http://bio.math.berkeley.edu/slam/rat/gff/UCSC/rnCDS.gff.gz
+     wget http://bio.math.berkeley.edu/slam/rat/gff/UCSC/rnCNS.gff.gz
+     gunzip *
+     ldHgGene -exon=CDS hg12 slam rnCDS.gff
+     mv genePred.tab genePred.rn1
+
+     sed -e 's/;//g' -e 's/"//g' rnCNS.bed > rnCNS.bed.2
+     sort -n -k 5,5 rnCNS.bed.2 > rnCNS.bed.sort
+     examine head and tail of sorted file for range of scores
+     rm rnCNS.bed.sort
+     size.pl < rnCNS.bed.2 > rnCNS.bed.2.size
+     sort -n -k 2,2 rnCNS.bed.2.size > rnCNS.bed.2.size.sort
+     examine head and tail of sorted file for range of sizes
+     rm rnCNS.bed.2.size.sort
+     expand.pl < rnCNS.bed.2 > rnCNS.bed.2.expand
