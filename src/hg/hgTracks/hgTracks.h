@@ -201,11 +201,15 @@ extern char *organism;	  /* Name of organism we're working on. */
 extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int maxItemsInFullTrack;  /* Maximum number of items displayed in full */
+extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 extern int insideX;			/* Start of area to draw track in in pixels. */
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
+
+extern boolean withLeftLabels;		/* Display left labels? */
+extern boolean withCenterLabels;	/* Display center labels? */
 
 extern int maxShade;		  /* Highest shade in a color gradient. */
 extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
@@ -454,6 +458,36 @@ struct linkedFeatures *lfFromPslx(struct psl *psl,
 
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
+
+void sampleMethods(struct track *track, struct trackDb *tdb, int wordCount, char *words[]);
+/* Load up methods for a generic sample type track. */
+
+int sampleUpdateY( char *name, char *nextName, int lineHeight );
+/* only increment height when name root (minus the period if
+ * there is one) is different from previous one.
+  *This assumes that the entries are sorted by name as they would
+  *be if loaded by hgLoadSample*/
+
+void samplePrintYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelString,
+        double min0, double max0 );
+/*print a label for a horizontal y-axis line*/
+
+int whichSampleBin( double num, double thisMin, double thisMax, 
+	double binCount );
+/* Get bin value from num. */
+
+double whichSampleNum( double bin, double thisMin, double thisMax, 
+	double binCount );
+/* gets range nums. from bin values*/
+
+void humMusLMethods( struct track *tg );
+/* Overide the humMusL load function to look for zoomed out tracks. */
+
+void zooMethods( struct track *tg );
+/* Overide the zoo sample type load function to look for zoomed out tracks. */
+
+void affyTranscriptomeMethods(struct track *tg);
+/* Overide the load function to look for zoomed out tracks. */
 
 void rosettaMethods(struct track *tg);
 /* methods for Rosetta track using bed track */
