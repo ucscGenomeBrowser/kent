@@ -352,6 +352,7 @@ boolean anyIntersection();
 #define hgtaOffsetRelativeTo "hgta_offsetRelativeTo"
 #define hgtaOutputType "hgta_outputType"
 #define hgtaOutputPad "hgta_outputPad"
+#define hgtaOutFileName "hgta_outFileName"
 #define hgtaDatabase "hgta_database"  /* In most cases use "db" */
 #define hgtaTable "hgta_table"
 #define hgtaHistoTable "hgta_histoTable"

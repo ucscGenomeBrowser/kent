@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.44 2004/09/21 18:44:53 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.45 2004/09/22 07:59:11 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -116,6 +116,7 @@ jsDropDownCarryOver(dy, hgtaGroup);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
 jsTextCarryOver(dy, hgtaRange);
 jsDropDownCarryOver(dy, hgtaOutputType);
+jsTextCarryOver(dy, hgtaOutFileName);
 return dy;
 }
 
@@ -334,7 +335,8 @@ static char *galaWigLabels[] =
     "custom track",
     };
 
-hPrintf("<TR><TD><B>output:</B>\n");
+hPrintf("<TR><TD><B>output format:</B>\n");
+
 if (isWig)
     if (galaAvail(database))
         showOutDropDown(galaWigTypes, galaWigLabels, ArraySize(galaWigTypes));
@@ -491,6 +493,16 @@ if (isPositional)
 /* Print output type line. */
 showOutputTypeRow(isWig, isPositional);
 
+/* Print output destination line. */
+    {
+    char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+    hPrintf("<TR><TD>\n");
+    hPrintf("<B>output file:</B> ");
+    cgiMakeTextVar(hgtaOutFileName, fileName, 29);
+    hPrintf(" (leave blank to keep output in browser)\n");
+    hPrintf("</TD></TR>\n");
+    }
+
 hPrintf("</TABLE>\n");
 
 
@@ -555,7 +567,7 @@ hPrintf("</FORM>\n");
     {
     static char *saveVars[] = {
       "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
-      hgtaRange, hgtaOutputType, };
+      hgtaRange, hgtaOutputType, hgtaOutFileName};
     jsCreateHiddenForm(saveVars, ArraySize(saveVars));
     }
 

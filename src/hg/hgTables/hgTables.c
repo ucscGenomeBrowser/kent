@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.66 2004/09/21 18:44:53 giardine Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.67 2004/09/22 07:59:11 kent Exp $";
 
 
 void usage()
@@ -145,7 +145,16 @@ exit(-1);
 void textOpen()
 /* Start up page in text format. (No need to close this). */
 {
-printf("Content-Type: text/plain\n\n");
+char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+trimSpaces(fileName);
+if (fileName[0] == 0)
+    printf("Content-Type: text/plain\n\n");
+else
+    {
+    printf("Content-Disposition: attachment; filename=%s\n", fileName);
+    printf("Content-Type: application/octet-stream\n");
+    printf("\n");
+    }
 pushWarnHandler(textWarnHandler);
 pushAbortHandler(textAbortHandler);
 }
