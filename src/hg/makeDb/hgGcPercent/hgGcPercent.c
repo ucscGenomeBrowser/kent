@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.10 2004/03/31 19:20:39 baertsch Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.11 2004/04/02 04:38:34 baertsch Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -67,7 +67,7 @@ void makeGcTab(char *nibFile, char *chrom, FILE *f)
 /* Scan through nib file and write out GC percentage info in
  * 20 kb windows. */
 {
-int chromSize, start, end, oneSize;
+int chromSize, start = 0, end, oneSize;
 int minCount = winSize/4;
 int i, count, gcCount, val, ppt, gapCount;
 struct dnaSeq *seq = NULL;
@@ -77,7 +77,8 @@ int dotMod = 0;
 
 printf("#	Calculating gcPercent with window size %d\n",winSize);
 nibOpenVerify(nibFile, &nf, &chromSize);
-for (start=0; start<chromSize; start =  end - overlap)
+end = start + winSize;
+for (start=0; start<chromSize && end < chromSize; start =  end - overlap)
     {
     if ((++dotMod&127) == 0)
 	{
