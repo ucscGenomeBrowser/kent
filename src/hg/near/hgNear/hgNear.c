@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.58 2003/09/06 23:16:09 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.59 2003/09/07 02:08:19 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -710,7 +710,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 /* Do go button. */
     {
     hPrintf(" ");
-    cgiMakeButton("submit", "Go!");
+    printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" TABINDEX=0>", "submit", "Go!");
     }
 
 hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");

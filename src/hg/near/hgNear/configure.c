@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.20 2003/09/06 23:16:09 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.21 2003/09/07 02:08:19 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -219,7 +219,7 @@ if (userSettingsAnySaved(us))
     hPrintf(" ");
     userSettingsDropDown(us);
     hPrintf(" ");
-    cgiMakeButton(useSavedConfName, "Use Settings");
+    cgiMakeButton(useSavedConfName, "Use Saved Settings");
     }
 hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
@@ -303,6 +303,6 @@ void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)
 /* Save the current columns, and then go on. */
 {
 struct userSettings *us = colUserSettings();
-userSettingsProcessForm(us);
-doConfigure(conn, colList, NULL);
+if (userSettingsProcessForm(us))
+    doConfigure(conn, colList, NULL);
 }

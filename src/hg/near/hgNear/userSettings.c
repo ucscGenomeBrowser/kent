@@ -7,10 +7,11 @@
 #include "cart.h"
 #include "obscure.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.1 2003/09/06 23:16:09 kent Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.2 2003/09/07 02:08:19 kent Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -46,6 +47,14 @@ freez(&symName);
 return varName;
 }
 
+static char *settingsLabel(struct userSettings *us, char *varName)
+/* Given varName return corresponding label. */
+{
+char *spacedString = cloneString(varName + strlen(us->savePrefix));
+subChar(spacedString, '_', ' ');
+return spacedString;
+}
+
 struct userSettings *userSettingsNew(
 	struct cart *cart,
 	char *settingsPrefix, 
@@ -66,7 +75,7 @@ AllocVar(us);
 us->cart = cart;
 us->settingsPrefix = cloneString(settingsPrefix);
 us->formVar = cloneString(formVar);
-us->savePrefix = catAndClone(localVarPrefix, "named.");
+us->savePrefix = catAndClone(localVarPrefix, "named_");
 us->nameVar = catAndClone(localVarPrefix, "name");
 us->listDisplayVar = catAndClone(localVarPrefix, "displayList");
 return us;
@@ -110,13 +119,30 @@ if (setName != NULL)
     }
 }
 
+static void printLabelList(struct userSettings *us, struct hashEl *list)
+/* Print list of available settings as options. */
+{
+struct hashEl *el;
+char *curSetting = cartUsualString(us->cart, us->nameVar, "");
+for (el = list; el != NULL; el = el->next)
+    {
+    char *label = settingsLabel(us, el->name);
+    hPrintf("<OPTION%s VALUE=\"%s\">%s</OPTION>\n", 
+	    (sameString(curSetting, label) ? " SELECTED" : ""),
+	    label, label);
+    freez(&label);
+    }
+}
+
 
 void userSettingsSaveForm(struct userSettings *us, char *title, ...)
 /* Put up controls that let user name and save the current
  * set. */
 {
+struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
+
 /* Start form/save session. */
-    hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
+    hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
     cartSaveSession(us->cart);
 
 /* Put up printf formatted title */
@@ -129,18 +155,38 @@ void userSettingsSaveForm(struct userSettings *us, char *title, ...)
     va_end(args);
     }
 
-/* Put up controls. */
     {
+    /* Put up simple controls. */
     hPrintf("Please name this setup:\n");
     cartMakeTextVar(us->cart, us->nameVar, "", 16);
     hPrintf(" ");
-    cgiMakeButton(us->formVar, "Cancel");
-    hPrintf(" ");
     cgiMakeButton(us->formVar, "Submit");
+    hPrintf(" ");
+    cgiMakeButton(us->formVar, "Cancel");
+    }
+if (list != NULL)
+    {
+    struct dyString *js = newDyString(0);
+
+    htmlHorizontalLine();
+    slSort(&list, hashElCmp);
+    hPrintf("Existing Setups:");
+    dyStringPrintf(js, "document.usForm.%s.value=", us->nameVar);
+    dyStringPrintf(js, "document.usForm.%s.options", us->listDisplayVar);
+    dyStringPrintf(js, "[document.usForm.%s.selectedIndex].value;", us->listDisplayVar);
+
+    hPrintf("<SELECT NAME=\"%s\" SIZE=%d onchange=\"%s\">",
+    	us->listDisplayVar, slCount(list), js->string);
+    printLabelList(us, list);
+    hPrintf("</SELECT>\n");
+
+    /* Put up other controls. */
+    cgiMakeButton(us->formVar, "Delete Existing Setup");
     }
 
 /* End form. */
     hPrintf("</FORM>\n");
+    slFreeList(&list);
 }
 
 static void dyStringAppendQuoted(struct dyString *dy, char *s)
@@ -186,23 +232,35 @@ dyStringFree(&dy);
 slFreeList(&colVars);
 }
 
-void userSettingsProcessForm(struct userSettings *us)
-/* Handle button press in userSettings form. */
+boolean userSettingsProcessForm(struct userSettings *us)
+/* Handle button press in userSettings form. 
+ * If this returns TRUE then form is finished processing 
+ * and you can call something to make the next page. */
 {
 struct cart *cart = us->cart;
 char *command = cartString(cart, us->formVar);
+boolean retVal = TRUE;
 char *name = cartNonemptyString(cart, us->nameVar);
 
-if (name != NULL)
+if (sameWord(command, "submit") && name != NULL)
     {
-    if (!sameWord(command, "cancel"))
-	{
-	char *varName = settingsVarName(us->savePrefix, name);
-	saveSettings(cart, varName, us->settingsPrefix);
-	freez(&varName);
+    char *varName = settingsVarName(us->savePrefix, name);
+    saveSettings(cart, varName, us->settingsPrefix);
+    freez(&varName);
+    }
+else if (startsWith("Delete", command))
+    {
+    char *which = cartOptionalString(cart, us->listDisplayVar);
+    if (which != NULL)
+        {
+	char *varName = settingsVarName(us->savePrefix, which);
+	cartRemove(cart, varName);
+	userSettingsSaveForm(us, "After the Delete");
+	retVal = FALSE;
 	}
-   }
+    }
 cartRemove(cart, us->formVar);
+return retVal;
 }
 
 void userSettingsDropDown(struct userSettings *us)
@@ -211,18 +269,9 @@ void userSettingsDropDown(struct userSettings *us)
 struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
 if (list != NULL)
     {
-    char *curSetting = cartUsualString(us->cart, us->nameVar, "");
     hPrintf("<SELECT NAME=\"%s\">\n", us->nameVar);
     slSort(&list, hashElCmp);
-    for (el = list; el != NULL; el = el->next)
-        {
-	char *spacedString = cloneString(el->name + strlen(us->savePrefix));
-	subChar(spacedString, '_', ' ');
-	hPrintf("<OPTION%s VALUE=\"%s\">%s</OPTION>\n", 
-		(sameString(curSetting, spacedString) ? " SELECTED" : ""),
-		spacedString, spacedString);
-	freez(&spacedString);
-	}
+    printLabelList(us, list);
     slFreeList(&list);
     hPrintf("</SELECT>");
     }

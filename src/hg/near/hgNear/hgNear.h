@@ -153,7 +153,8 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define showAllConfName "near.showAll"  /* Show all columns. */
 
-#define colSaveSettingsPrefix "near.colUserSet."  /* Prefix for column sets. */
+#define colSaveSettingsPrefix "near_colUserSet_"  /* Prefix for column sets. */
+    /* Underbars on this one for sake of javascript. */
 #define saveCurrentConfName "near.do.colUserSet.save"   /* Save column set. */
 #define savedCurrentConfName "near.do.colUserSet.saved" /* Saved column set. */
 #define useSavedConfName "near.do.colUserSet.used"      /* Use column set. */
@@ -523,8 +524,10 @@ void userSettingsSaveForm(struct userSettings *us, char *title, ...);
 /* Put up controls that let user name and save the current
  * set. */
 
-void userSettingsProcessForm(struct userSettings *us);
-/* Handle button press in userSettings form. */
+boolean userSettingsProcessForm(struct userSettings *us);
+/* Handle button press in userSettings form. 
+ * If this returns TRUE then form is finished processing
+ * and you can call something to make the next page. */
 
 void userSettingsDropDown(struct userSettings *us);
 /* Display list of available saved settings . */
