@@ -173,7 +173,7 @@ sr = hRangeQuery(conn, track, chrom, start, end, extraWhere, &rowOffset);
 net = chainNetLoadResult(sr, rowOffset);
 sqlFreeResult(&sr);
 if (net != NULL)
-    net->size = hdbChromSize(conn, chrom);
+    net->size = hdbChromSize(database, chrom);
 sqlDisconnect(&conn);
 return net;
 }
@@ -191,7 +191,7 @@ conn = sqlConnect(database);
 sr = hChromQuery(conn, track, chrom, extraWhere, &rowOffset);
 net = chainNetLoadResult(sr, rowOffset);
 sqlFreeResult(&sr);
-net->size = hdbChromSize(conn, chrom);
+net->size = hdbChromSize(database, chrom);
 sqlDisconnect(&conn);
 return net;
 }
