@@ -70,6 +70,7 @@ static void mergeClusters(struct aBoxCluster *a, struct aBoxCluster *b)
 {
 struct aBox *box;
 
+/* Merging with yourself is always problematic. */
 if (a == b)
     return;
 
@@ -273,7 +274,6 @@ int qStart = BIGNUM, qEnd = -BIGNUM;
 int tStart = BIGNUM, tEnd = -BIGNUM;
 
 /* Make initial list containing all axt's. */
-// uglyf("clusterPair %s - %d axt's initially\n", sp->name, slCount(sp->axtList));
 fprintf(f, "Pairing %s - %d axt's initially\n", sp->name, slCount(sp->axtList));
 
 AllocVar(join);
