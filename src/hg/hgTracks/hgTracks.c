@@ -4881,24 +4881,29 @@ char chromStr[10];
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
-int x1,x2,w;
+int x1,x2,w, g1,g2;
 boolean isFull = (vis == tvFull);
 Color col;
 int ix = 0;
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr = NULL;
+struct sqlResult *srGap = NULL;
 char **row;
-int rowOffset;
+char **gapRow;
+int rowOffset, gapRowOffset;
+char levelWhere[64];
 
 if (isFull)
     {
     /* Do gray scale representation spread out among tracks. */
     struct hash *hash = newHash(8);
-    struct netAlign na;
+    struct netAlign na, np;
     int percId;
-    int grayLevel;
+    int grayLevel, boxStart, boxEnd, level = 1;
     char statusLine[128];
     char levelName[10];
+    char where[128];
 
     for (ni = tg->items; ni != NULL; ni = ni->next)
         {
@@ -4907,33 +4912,79 @@ if (isFull)
         sprintf(levelName,"%d", ni->level);
         hashAdd(hash, levelName, ni);
         }
-    sr = hRangeQuery(conn, "blastzNetAlign", chromName, winStart, winEnd, NULL, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
+    for (level = 1 ; level <=8 ; level++)
         {
-	netAlignStaticLoad(row+rowOffset, &na);
-    sprintf(levelName,"%d", na.level-1);
-	ni = hashFindVal(hash, levelName);
-	if (ni == NULL)
-        printf("ni NULL\n");
-	percId = na.score;
-	grayLevel = grayInRange(percId, 500, 1000);
-	col = shadesOfGray[grayLevel];
-    col = netItemColor(&na, mg);
-	x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
-	x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-	w = x2-x1;
-	if (w <= 0)
-	    w = 1;
-	mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
-	if (baseWidth <= 100000)
-	    {
-		sprintf(statusLine, "Level %d, Mchrom %s",
-		    na.level, na.tName);
-        sprintf(levelName,"%d", na.level);
-	    mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
-	    	levelName, statusLine);
-	    }
-	}
+        sprintf(where,"level = %d",level);
+        sr = hOrderedRangeQuery(conn, "blastzNet", chromName, winStart, winEnd, where, &rowOffset);
+        row = sqlNextRow(sr) ;
+        if (row == NULL) continue;
+        netAlignStaticLoad(row+rowOffset, &na);
+        netAlignStaticLoad(row+rowOffset, &np);
+        sprintf(levelName,"%d", na.level-1);
+        ni = hashFindVal(hash, levelName);
+        if (ni == NULL)
+            printf("ni NULL\n");
+        percId = na.score;
+        grayLevel = grayInRange(percId, 500, 1000);
+        col = shadesOfGray[grayLevel];
+        col = netItemColor(&na, mg);
+        x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+        x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+        boxStart = na.tStart;
+        boxEnd = na.tEnd;
+        w = x2-x1;
+        if (w <= 0)
+            w = 1;
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            netAlignStaticLoad(row+rowOffset, &na);
+            if (sameString(na.type, "gap"))
+                {
+                g1 = x1;
+                boxEnd = na.tStart;
+                g2 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+                w = g2-g1;
+                if (w <= 0)
+                    w = 1;
+                mgDrawBox(mg, g1, ni->yOffset, w, heightPer, col);
+                if (baseWidth <= 100000)
+                    {
+                    sprintf(statusLine, "%s %dk score %d qFar %d qOver %d tR %d",
+                        np.qName, np.qStart/1000,np.score, np.qFar, np.qOver, np.tR);
+                    sprintf(levelName,"%d", na.level);
+                    mapBoxHc(boxStart, boxEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
+                        levelName, statusLine);
+                    }
+                    boxStart = na.tEnd;
+                    g1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+                    w = x2-g1;
+                    if (w <= 0)
+                        w = 1;
+                    x1 = g1;
+                }
+            else 
+                {
+                mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
+                if (baseWidth <= 100000)
+                    {
+                    sprintf(statusLine, "Level %d, Mchrom %s",
+                        na.level, na.tName);
+                    sprintf(levelName,"%d", na.level);
+                    mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
+                        levelName, statusLine);
+                    }
+                col = netItemColor(&na, mg);
+                x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+                x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+                boxStart = na.tStart;
+                boxEnd = na.tEnd;
+                w = x2-x1;
+                if (w <= 0)
+                    w = 1;
+                }
+            netAlignStaticLoad(row+rowOffset, &np);
+            }
+        }
     freeHash(&hash);
     }
 else
@@ -4969,6 +5020,142 @@ else
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+hFreeConn(&conn2);
+}
+static void oldnetDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+int baseWidth = seqEnd - seqStart;
+struct netItem *ni;
+char chromStr[10];
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w, g1,g2;
+boolean isFull = (vis == tvFull);
+Color col;
+int ix = 0;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr = NULL;
+struct sqlResult *srGap = NULL;
+char **row;
+char **gapRow;
+int rowOffset, gapRowOffset;
+char levelWhere[64];
+
+if (isFull)
+    {
+    /* Do gray scale representation spread out among tracks. */
+    struct hash *hash = newHash(8);
+    struct netAlign na;
+    struct netGap ng;
+    int percId;
+    int grayLevel, boxStart, boxEnd;
+    char statusLine[128];
+    char levelName[10];
+
+    for (ni = tg->items; ni != NULL; ni = ni->next)
+        {
+        ni->yOffset = y;
+        y += lineHeight;
+        sprintf(levelName,"%d", ni->level);
+        hashAdd(hash, levelName, ni);
+        }
+    sr = hRangeQuery(conn, "blastzNetAlign", chromName, winStart, winEnd, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        netAlignStaticLoad(row+rowOffset, &na);
+        sprintf(levelName,"%d", na.level-1);
+        ni = hashFindVal(hash, levelName);
+        if (ni == NULL)
+            printf("ni NULL\n");
+        percId = na.score;
+        grayLevel = grayInRange(percId, 500, 1000);
+        col = shadesOfGray[grayLevel];
+        col = netItemColor(&na, mg);
+        x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+        x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+        boxStart = na.tStart;
+        boxEnd = na.tEnd;
+        w = x2-x1;
+        if (w <= 0)
+            w = 1;
+        sprintf(levelWhere," level = %d and chromEnd > %d and chromStart < %d",na.level, winStart, winEnd);
+        srGap = hOrderedRangeQuery(conn2, "blastzNetGap", chromName, na.tStart, na.tEnd, levelWhere, &gapRowOffset);
+        g1 = x1;
+        while ((gapRow = sqlNextRow(srGap)) != NULL)
+            {
+            netGapStaticLoad(gapRow+gapRowOffset, &ng);
+            boxEnd = ng.chromStart;
+            g2 = roundingScale(ng.chromStart-winStart, width, baseWidth)+xOff;
+            w = g2-g1;
+            if (w <= 0)
+                w = 1;
+            mgDrawBox(mg, g1, ni->yOffset, w, heightPer, col);
+            if (baseWidth <= 100000)
+                {
+                sprintf(statusLine, "Level %d, Mchrom %s",
+                    na.level, na.tName);
+                sprintf(levelName,"%d", na.level);
+                mapBoxHc(boxStart, boxEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
+                    levelName, statusLine);
+                }
+            boxStart = ng.chromEnd;
+            g1 = roundingScale(ng.chromEnd-winStart, width, baseWidth)+xOff;
+            w = x2-g1;
+            if (w <= 0)
+                w = 1;
+            x1 = g1;
+            }
+        mgDrawBox(mg, x1, ni->yOffset, w, heightPer, col);
+        if (baseWidth <= 100000)
+            {
+            sprintf(statusLine, "Level %d, Mchrom %s",
+                na.level, na.tName);
+            sprintf(levelName,"%d", na.level);
+            mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
+                levelName, statusLine);
+            }
+        sqlFreeResult(&srGap);
+        }
+    freeHash(&hash);
+    }
+else
+    {
+    char table[64];
+    boolean hasBin;
+    struct netAlign na;
+    struct dyString *query = newDyString(1024);
+    /* Do black and white on single track.  Fetch less than we need from database. */
+    if (hFindSplitTable(chromName, "blastzNetAlign", table, &hasBin))
+        {
+	dyStringPrintf(query, "select tStart,tEnd, qName from %s where ", table);
+	if (hasBin)
+	    hAddBinToQuery(winStart, winEnd, query);
+	dyStringPrintf(query, "tStart<%u and tEnd>%u", winEnd, winStart);
+    sr = sqlGetResult(conn, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int start = sqlUnsigned(row[0]);
+	    int end = sqlUnsigned(row[1]);
+	    x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
+	    x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
+	    w = x2-x1;
+	    if (w <= 0)
+		w = 1;
+        strncpy(chromStr,row[2]+3,2);
+        chromStr[2] = '\0';
+        col = getChromColor(chromStr, mg);
+	    mgDrawBox(mg, x1, yOff, w, heightPer, col);
+	    }
+	}
+    dyStringFree(&query);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 
@@ -9976,6 +10163,7 @@ registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("blastzNetAlign", netMethods);
+registerTrackHandler("blastzNet", netMethods);
 registerTrackHandler("netAlign", netMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
