@@ -1374,7 +1374,10 @@ o - Load Ensembl peptides:
      hgPepPred hg12 generic ensPep ensembl.pep
 
     LOAD SANGER 22 Pseudogenes (from hg10)
-    liftUp -type=.gff pseudo.gff hg12.lft ~/hg10/bed/sanger22/Chr22.3.lx.pseudogene.gff
+    cd ~/hg12/bed/sanger22
+    cp ~/hg10/bed/sanger22/cChr22.3.lx.pseudogene.gff .
+    replace ^chr22 with hg10:chr22 in Chr22.3.lx.pseudogene.gff
+    liftUp -type=.gff pseudo.gff hg12.lft Chr22.3.lx.pseudogene.gff
     ldHgGene hg12 sanger22pseudo pseudo.gff
 
 LOAD SANGER22 GENES 
