@@ -177,6 +177,14 @@ struct slName *sqlQuickList(struct sqlConnection *conn, char *query);
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */
 
+void sqlGetLock(struct sqlConnection *sc, char *name);
+/* Sets an advisory lock on the process for 1000s returns 1 if successful,*/
+/* 0 if name already locked or NULL if error occurred */
+/* blocks another client from obtaining a lock with the same name */
+
+void sqlReleaseLock(struct sqlConnection *sc, char *name);
+/* Releases an advisory lock created by GET_LOCK in sqlGetLock */
+
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
