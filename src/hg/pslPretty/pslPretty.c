@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.23 2004/01/08 00:18:24 braney Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.24 2004/02/07 19:16:56 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -243,7 +243,7 @@ for (i=0; i<size ; i++)
     fputc(t[i],f);
 fputc('\n',f);
 for (i=0; i<size ; i++) 
-    fputc(t[i],f);
+    fputc(q[i],f);
 fputc('\n',f);
 fputc('\n',f);
 }
