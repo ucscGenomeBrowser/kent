@@ -21,7 +21,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.68 2004/09/22 19:43:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.69 2004/09/23 15:55:43 giardine Exp $";
 
 
 void usage()
@@ -925,7 +925,7 @@ else if (sameString(output, outWigData))
 else if (sameString(output, outWigBed))
     doOutWigBed(track, table, conn);
 else if (sameString(output, outGala))
-    doOutGalaQuery(track, conn);
+    doOutGalaQuery(track, table, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }

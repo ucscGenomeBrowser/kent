@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.1 2004/09/21 18:44:53 giardine Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.2 2004/09/23 15:55:43 giardine Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -58,21 +58,15 @@ errAbort("GALA page not available for %s", db);
 return NULL;
 }
 
-void doOutGalaQuery(struct trackDb *track, struct sqlConnection *conn)
+void doOutGalaQuery(struct trackDb *track, char *table, struct sqlConnection *conn)
 /* Put up form to select Custom Track output format. */
 {
-/*
-if (isWiggle(database, track->tableName))
-    uglyAbort("Wiggle GALA Query output not implemented yet");
-else
-*/
-doGalaQueryOptions(track, conn);
+doGalaQueryOptions(track, table, conn);
 }
 
-void doGalaQueryOptions (struct trackDb *track, struct sqlConnection *conn)
+void doGalaQueryOptions (struct trackDb *track, char *table, struct sqlConnection *conn)
 /* Put up form to get options for GALA query */
 {
-char *table = track->tableName;
 char *table2 = NULL;    /* For now... */
 struct hTableInfo *hti = getHti(database, table);
 char buf[256];
@@ -91,8 +85,18 @@ safef(buf, sizeof(buf), "table browser query on %s%s%s",
          (table2 ? table2 : ""));
 setting = cgiUsualString(hgtaCtDesc, buf);
 cgiMakeTextVar(hgtaCtDesc, setting, 50);
-hPrintf("%s\n", "<P> <B> Create one BED record per: </B>");
-fbOptionsHtiCart(hti, cart);
+
+if (isWiggle(database, table))
+    {
+    /* GALA only handles BED format for now */
+    cgiMakeHiddenVar(hgtaCtWigOutType, outWigBed);
+    hPrintf("<BR><BR>");
+    }
+else
+    {
+    hPrintf("%s\n", "<P> <B> Create one BED record per: </B>");
+    fbOptionsHtiCart(hti, cart);
+    }
 
 cgiMakeButton(hgtaDoGetGalaQuery, "Send results to GALA");
 hPrintf(" ");
@@ -194,8 +198,10 @@ for (region = regionList; region != NULL; region = region->next)
                 char *ptr = strchr(bed->name, ' ');
                 if (ptr != NULL)
                     *ptr = 0;
+                {
                 struct bed *dupe = cloneBed(bed); /* Out of local memory. */
                 slAddHead(&ctNew->bedList, dupe);
+                }
                 gotResults = TRUE;
                 }
             }
@@ -208,8 +214,10 @@ for (region = regionList; region != NULL; region = region->next)
                 char *ptr = strchr(fbPtr->name, ' ');
                 if (ptr != NULL)
                     *ptr = 0;
+                {
                 struct bed *fbBed = fbToBedOne(fbPtr);
                 slAddHead(&ctNew->bedList, fbBed );
+                }
                 gotResults = TRUE;
                 }
             featureBitsFreeList(&fbList);
@@ -226,6 +234,15 @@ if (!gotResults)
 else 
     {
     char *wigPosition = NULL;
+    char *serverName = cgiServerName();
+    char galaUrl[512];
+    char headerText[512];
+    char posBuf[256];
+    char *position = cartOptionalString(cart, "position");
+    int redirDelay = 0;
+    char urlForResultTrack[PATH_LEN];
+    struct lineFile *lf;
+    char *line;
 
     /* Overwrite existing custom track for GALA: */
         {
@@ -270,13 +287,7 @@ else
         }
 
     /*  Put up redirect-to-browser page. */
-    char galaUrl[512];
-    char headerText[512];
-    char posBuf[256];
-    char *position = cartOptionalString(cart, "position");
-    int redirDelay = 0;
-    char urlForResultTrack[PATH_LEN];
-    // char *urlForResultTrack;
+
     if (position == NULL)
         {
         struct bed *bed = ctNew->bedList;
@@ -285,13 +296,10 @@ else
         position = posBuf;
         }
     /* change name to full url instead of relative */
-    /* hardcoded base for url, is there a way to get base? */
-    /* char *htmlExpandUrl(char *base, char *url) in htmlPage.c */
     stripString(galaFileName, ".."); 
     ZeroVar(&urlForResultTrack);
-    // urlForResultTrack = htmlExpandUrl("http://hgwdev-giardine.cse.ucsc.edu", galaFileName);
     safef(urlForResultTrack, sizeof(urlForResultTrack),
-          "%s%s", "http://hgwdev-giardine.cse.ucsc.edu", galaFileName);
+          "http://%s%s", serverName, galaFileName);
     ZeroVar(&galaUrl);
     safef(galaUrl, sizeof(galaUrl),
           "%s?mode=%s&usrfile3=%s", getGalaUrl(database), "Add+user+ranges", 
@@ -305,12 +313,6 @@ else
     webStartHeader(cart, headerText,
                    "Table Browser: %s %s: %s", hOrganism(database),
                    freezeName, "Sending results to GALA");
-/*
-    hPrintf("You will be automatically redirected to GALA in\n"
-           "%d seconds, or you can <BR>\n"
-           "<A HREF=\"%s\">click here to continue</A>.\n",
-           redirDelay, galaUrl);
-*/
     }
 }
 

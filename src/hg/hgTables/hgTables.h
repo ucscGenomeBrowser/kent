@@ -565,10 +565,10 @@ void doOutGff(char *table, struct sqlConnection *conn);
 void doOutCustomTrack(char *table, struct sqlConnection *conn);
 /* Put up form to select Custom Track output format. */
 
-void doOutGalaQuery(struct trackDb *track, struct sqlConnection *conn);
+void doOutGalaQuery(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Put up form to select GALA query output format. */
 
-void doGalaQueryOptions(struct trackDb *track, struct sqlConnection *conn);
+void doGalaQueryOptions(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* print options form for GALA query output */
 
 void doSummaryStats(struct sqlConnection *conn);
