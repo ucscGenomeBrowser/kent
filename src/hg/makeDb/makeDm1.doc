@@ -1390,6 +1390,32 @@ end
                    print ",-1," . join(",", @w); \
                 } \
                 print "\n";'
+    # Figure out what values to use for expMulti defn's absoluteMax.
+    # Report on the max and 99.5%ile absolute score:
+    echo select expScores from arbFlyLifeAll | hgsql hgFixed -N \
+    | perl -we '$max = 0.0; \
+                @all = (); \
+                while (<>) { \
+                  chop; @nums = split(","); \
+                  foreach $num (@nums) { \
+                    $max = $num if ($num > $max); \
+                    push @all, $num if (defined $num && $num ne ""); \
+                  } \
+                } \
+                $n = scalar(@all); \
+                print "max is $max, N is $n\n"; \
+                @all = sort { $a <=> $b } @all; \
+                $useMax = $all[$n * 0.995 + 1]; \
+                print "99.5%ile is $useMax -- use this for max\n";'
+# max is 65535.000, N is 797364
+# 99.5%ile is 15433.000 -- use this for max
+    # N is the product of count(*) of arbFlyLifeAll{,Exps} .  
+    # Now repeat the above perl in-liner, but on arbFlyLifeAllRatio, 
+    # to determine ratioMax:  
+    echo select expScores from arbFlyLifeAllRatio | hgsql hgFixed -N \
+    # <paste in perl from above>
+# max is 9.862, N is 797364
+# 99.5%ile is 2.915 -- use this for max
 
 
 # ENABLE HGNEAR FOR DM1 IN HGCENTRALTEST (DONE 10/17/03 angie)
@@ -1440,7 +1466,7 @@ end
       > allMrna.fa
     grep -v "Drosophila melanogaster" \
       /cluster/store5/genbank/data/processed/genbank.137.0/full/mrna.gbidx \
-	| awk '{print $1;}' | grep -v "^#" \
+        | awk '{print $1;}' | grep -v "^#" \
     > xenoAcc.lst
     faSomeRecords allMrna.fa xenoAcc.lst flyXenoRna.fa
     # Split up the sequences into manageably sized files.  
