@@ -9,8 +9,8 @@ struct mafFile
     int version;	/* Required */
     char *scoring;	/* Optional. Name of  scoring scheme. */
     struct mafAli *mafAli;	/** Possibly empty list of alignments. **/
-    FILE *f;		/* Open file if any.  NULL after parsing. */
-    struct lineFile *lf; /* Open line file if any. NULL after parsing. */
+    FILE *f;		/* Open file if any.  NULL except while parsing. */
+    struct lineFile *lf; /* Open line file if any. NULL except while parsing. */
     };
 
 struct mafAli
@@ -18,19 +18,19 @@ struct mafAli
     {
     struct mafAli *next;
     double score;	/* Optional, depending on mafFile->scoring. */
-    struct mafS *mafS;	/* List of components of alignment */
+    struct mafComp *components;	/* List of components of alignment */
     };
 
-struct mafS
+struct mafComp
 /* A component of a multiple alignment. */
     {
-    struct mafS *next;
-    char *text; /* The sequence including dashes. */
-    char *seq;	/* Name of sequence source.  */
-    int seqSize; /* Size of sequence source.  */
-    char *strand; /* Strand of sequence. */
-    int start;	/* Start within sequence.  */
+    struct mafComp *next;
+    char *src;	 /* Name of sequence source.  */
+    int srcSize; /* Size of sequence source.  */
+    char *strand; /* Strand of sequence.  Either + or -*/
+    int start;	/* Start within sequence. Zero based. */
     int size;	/* Size in sequence (does not include dashes).  */
+    char *text; /* The sequence including dashes. */
     };
 
 /* Hand generated Routines. */
@@ -75,11 +75,11 @@ void mafAliSave(struct mafAli *obj, int indent, FILE *f);
 struct mafAli *mafAliLoad(char *fileName);
 /* Load mafAli from file. */
 
-void mafSSave(struct mafS *obj, int indent, FILE *f);
-/* Save mafS to file. */
+void mafSSave(struct mafComp *obj, int indent, FILE *f);
+/* Save mafComp to file. */
 
-struct mafS *mafSLoad(char *fileName);
-/* Load mafS from file. */
+struct mafComp *mafSLoad(char *fileName);
+/* Load mafComp from file. */
 
 #endif /* MAF_H */
 

@@ -105,7 +105,7 @@ for (;;)
         break;
     if (sameString(word, "s"))
         {
-	struct mafS *comp;
+	struct mafComp *comp;
 	int wordCount;
 	char *row[7];
 
@@ -117,15 +117,15 @@ for (;;)
 	AllocVar(comp);
 
 	comp->text = cloneString(row[6]);
-	comp->seq = cloneString(row[1]);
-	comp->seqSize = lineFileNeedNum(lf, row, 5);
+	comp->src = cloneString(row[1]);
+	comp->srcSize = lineFileNeedNum(lf, row, 5);
 	comp->strand = cloneString(row[4]);
 	comp->start = lineFileNeedNum(lf, row, 2);
 	comp->size = lineFileNeedNum(lf, row, 3);
-	slAddHead(&ali->mafS, comp);
+	slAddHead(&ali->components, comp);
 	}
     }
-slReverse(&ali->mafS);
+slReverse(&ali->components);
 return ali;
 }
 
@@ -154,8 +154,8 @@ fprintf(f, "\n");
 void mafWrite(FILE *f, struct mafAli *ali)
 /* Write next alignment to file. */
 {
-struct mafS *comp;
-int seqChars = 0, startChars = 0, sizeChars = 0, seqSizeChars = 0;
+struct mafComp *comp;
+int srcChars = 0, startChars = 0, sizeChars = 0, srcSizeChars = 0;
 
 /* Write out alignment header */
 fputc('a', f);
@@ -164,29 +164,29 @@ if (ali->score != 0.0)
 fputc('\n', f);
 
 /* Figure out length of each field. */
-for (comp = ali->mafS; comp != NULL; comp = comp->next)
+for (comp = ali->components; comp != NULL; comp = comp->next)
     {
-    int len = strlen(comp->seq);
-    if (seqChars < len)
-        seqChars = len;
+    int len = strlen(comp->src);
+    if (srcChars < len)
+        srcChars = len;
     len = digitsBaseTen(comp->start);
     if (startChars < len)
         startChars = len;
     len = digitsBaseTen(comp->size);
     if (sizeChars < len)
         sizeChars = len;
-    len = digitsBaseTen(comp->seqSize);
-    if (seqSizeChars < len)
-        seqSizeChars = len;
+    len = digitsBaseTen(comp->srcSize);
+    if (srcSizeChars < len)
+        srcSizeChars = len;
     }
 
 /* Write out each component. */
-for (comp = ali->mafS; comp != NULL; comp = comp->next)
+for (comp = ali->components; comp != NULL; comp = comp->next)
     {
     fprintf(f, "s %-*s %*d %*d %s %*d %s\n", 
-    	seqChars, comp->seq, startChars, comp->start, 
+    	srcChars, comp->src, startChars, comp->start, 
 	sizeChars, comp->size, comp->strand, 
-	seqSizeChars, comp->seqSize, comp->text);
+	srcSizeChars, comp->srcSize, comp->text);
     }
 
 /* Write out blank separator line. */

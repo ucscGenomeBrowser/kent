@@ -48,7 +48,7 @@ return obj;
 void mafAliSave(struct mafAli *obj, int indent, FILE *f)
 /* Save mafAli to file. */
 {
-struct mafS *mafS;
+struct mafComp *mafComp;
 if (obj == NULL) return;
 xapIndent(indent, f);
 fprintf(f, "<ALI");
@@ -56,9 +56,9 @@ if (obj->score != 0.0)
    fprintf(f, " score=\"%f\"", obj->score);
 fprintf(f, ">");
 fprintf(f, "\n");
-for (mafS = obj->mafS; mafS != NULL; mafS = mafS->next)
+for (mafComp = obj->components; mafComp != NULL; mafComp = mafComp->next)
    {
-   mafSSave(mafS, indent+2, f);
+   mafSSave(mafComp, indent+2, f);
    }
 xapIndent(indent, f);
 fprintf(f, "</ALI>\n");
@@ -72,14 +72,14 @@ xapParseAny(fileName, "ALI", mafStartHandler, mafEndHandler, NULL, &obj);
 return obj;
 }
 
-void mafSSave(struct mafS *obj, int indent, FILE *f)
-/* Save mafS to file. */
+void mafSSave(struct mafComp *obj, int indent, FILE *f)
+/* Save mafComp to file. */
 {
 if (obj == NULL) return;
 xapIndent(indent, f);
 fprintf(f, "<S");
-fprintf(f, " seq=\"%s\"", obj->seq);
-fprintf(f, " seqSize=\"%d\"", obj->seqSize);
+fprintf(f, " src=\"%s\"", obj->src);
+fprintf(f, " srcSize=\"%d\"", obj->srcSize);
 fprintf(f, " strand=\"%s\"", obj->strand);
 fprintf(f, " start=\"%d\"", obj->start);
 fprintf(f, " size=\"%d\"", obj->size);
@@ -88,10 +88,10 @@ fprintf(f, "%s", obj->text);
 fprintf(f, "</S>\n");
 }
 
-struct mafS *mafSLoad(char *fileName)
-/* Load mafS from file. */
+struct mafComp *mafSLoad(char *fileName)
+/* Load mafComp from file. */
 {
-struct mafS *obj;
+struct mafComp *obj;
 xapParseAny(fileName, "S", mafStartHandler, mafEndHandler, NULL, &obj);
 return obj;
 }
@@ -139,15 +139,15 @@ else if (sameString(name, "ALI"))
     }
 else if (sameString(name, "S"))
     {
-    struct mafS *obj;
+    struct mafComp *obj;
     AllocVar(obj);
     for (i=0; atts[i] != NULL; i += 2)
         {
         char *name = atts[i], *val = atts[i+1];
-        if  (sameString(name, "seq"))
-            obj->seq = cloneString(val);
-        else if (sameString(name, "seqSize"))
-            obj->seqSize = atoi(val);
+        if  (sameString(name, "src"))
+            obj->src = cloneString(val);
+        else if (sameString(name, "srcSize"))
+            obj->srcSize = atoi(val);
         else if (sameString(name, "strand"))
             obj->strand = cloneString(val);
         else if (sameString(name, "start"))
@@ -155,8 +155,8 @@ else if (sameString(name, "S"))
         else if (sameString(name, "size"))
             obj->size = atoi(val);
         }
-    if (obj->seq == NULL)
-        xapError(xp, "missing seq");
+    if (obj->src == NULL)
+        xapError(xp, "missing src");
     if (obj->strand == NULL)
         xapError(xp, "missing strand");
     if (depth > 1)
@@ -164,7 +164,7 @@ else if (sameString(name, "S"))
         if  (sameString(st->elName, "ALI"))
             {
             struct mafAli *parent = st->object;
-            slAddHead(&parent->mafS, obj);
+            slAddHead(&parent->components, obj);
             }
         }
     return obj;
@@ -188,13 +188,13 @@ if (sameString(name, "MAF"))
 else if (sameString(name, "ALI"))
     {
     struct mafAli *obj = stack->object;
-    if (obj->mafS == NULL)
+    if (obj->components == NULL)
         xapError(xp, "Missing S");
-    slReverse(&obj->mafS);
+    slReverse(&obj->components);
     }
 else if (sameString(name, "S"))
     {
-    struct mafS *obj = stack->object;
+    struct mafComp *obj = stack->object;
     obj->text = cloneString(stack->text->string);
     }
 }
