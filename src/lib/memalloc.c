@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.10 2003/12/18 04:27:39 kent Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.11 2003/12/24 06:52:32 markd Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -26,12 +26,19 @@ static void defaultFree(void *vpt)
 free(vpt);
 }
 
+static void *defaultRealloc(void *vpt, size_t size)
+/* Default deallocator. */
+{
+return realloc(vpt, size);
+}
+
 static struct memHandler defaultMemHandler = 
 /* Default memory handler. */
     {
     NULL,
     defaultAlloc,
     defaultFree,
+    defaultRealloc,
     };
 
 static struct memHandler *mhStack = &defaultMemHandler;
@@ -86,12 +93,37 @@ if ((pt = mhStack->alloc(size)) == NULL)
 return pt;
 }
 
-void *needLargeZeroedMem(long size)
+void *needLargeZeroedMem(size_t size)
 /* Request a large block of memory and zero it. */
 {
 void *v;
 v = needLargeMem(size);
 memset(v, 0, size);
+return v;
+}
+
+void *needLargeMemResize(void* vp, size_t size)
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL,
+ * a new memory block is allocated.  Memory not initted. */
+{
+void *pt;
+if (size == 0 || size >= maxAlloc)
+    {
+    warn("Program error: trying to allocate %d bytes in needLargeMem", size);
+    assert(FALSE);
+    }
+if ((pt = mhStack->realloc(vp, size)) == NULL)
+    errAbort("Out of memory - request size %d bytes\n", size);
+return pt;
+}
+
+void *needLargeZeroedMemResize(void* vp, size_t oldSize, size_t newSize)
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL, a
+ * new memory block is allocated.  If block is grown, new memory is zeroed. */
+{
+void *v = needLargeMemResize(vp, newSize);
+if (newSize > oldSize)
+    memset(((char*)v)+oldSize, 0, newSize-oldSize);
 return v;
 }
 
@@ -110,7 +142,7 @@ return pt;
 }
 
 
-void *needHugeZeroedMem(long size)
+void *needHugeZeroedMem(size_t size)
 /* Request a large block of memory and zero it. */
 {
 void *v;
@@ -119,6 +151,29 @@ memset(v, 0, size);
 return v;
 }
 
+void *needHugeMemResize(void* vp, size_t size)
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL,
+ * a new memory block is allocated.  No checking on size.  Memory not
+ * initted. */
+{
+void *pt;
+if ((pt = mhStack->realloc(vp, size)) == NULL)
+    errAbort("Out of memory - request resize %d bytes\n", size);
+return pt;
+}
+
+
+void *needHugeZeroedMemResize(void* vp, size_t oldSize, size_t newSize)
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL, a
+ * new memory block is allocated.  No checking on size.  If block is grown,
+ * new memory is zeroed. */
+{
+void *v;
+v = needHugeMemResize(vp, newSize);
+if (newSize > oldSize)
+    memset(((char*)v)+oldSize, 0, newSize-oldSize);
+return v;
+}
 
 void *needMem(size_t size)
 /* Need mem calls abort if the memory allocation fails. The memory
@@ -136,16 +191,12 @@ memset(pt, 0, size);
 return pt;
 }
 
-void *needMoreMem(void *old, size_t copySize, size_t newSize)
-/* Allocate a new buffer, copy old buffer to it, free old buffer. */
+void *needMoreMem(void *old, size_t oldSize, size_t newSize)
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL, a
+ * new memory block is allocated.  No checking on size.  If block is grown,
+ * new memory is zeroed. */
 {
-char *newBuf = needLargeMem(newSize);
-if (copySize > newSize)
-    internalErr();
-memcpy(newBuf, old, copySize);
-memset(newBuf+copySize, 0, newSize - copySize);
-freeMem(old);
-return newBuf;
+return needLargeZeroedMemResize(old, oldSize, newSize);
 }
 
 void *wantMem(size_t size)
@@ -178,8 +229,8 @@ static bits32 carefulAlignMask;    /* to make sure requests are aligned. */
 
 static struct memHandler *carefulParent;
 
-static long carefulMaxToAlloc;
-static long carefulAlloced;
+static size_t carefulMaxToAlloc;
+static size_t carefulAlloced;
 
 struct carefulMemBlock
 /* Keep one of these for each outstanding memory block.   It's a doubly linked list. */
@@ -196,7 +247,7 @@ char cmbEndCookie[4] = {0x44, 0x33, 0x7F, 0x42};
 
 struct dlList *cmbAllocedList;
 
-static void carefulMemInit(long maxToAlloc)
+static void carefulMemInit(size_t maxToAlloc)
 /* Initialize careful memory system */
 {
 carefulMaxToAlloc = maxToAlloc;
@@ -206,6 +257,10 @@ if (sizeof(void *) > carefulAlignSize)
     carefulAlignSize = sizeof(void *);
 if (sizeof(long) > carefulAlignSize)
     carefulAlignSize = sizeof(long);
+if (sizeof(off_t) > carefulAlignSize)
+    carefulAlignSize = sizeof(off_t);
+if (sizeof(long long) > carefulAlignSize)
+    carefulAlignSize = sizeof(long long);
 carefulAlignAdd = carefulAlignSize-1;
 carefulAlignMask = ~carefulAlignAdd;
 }
@@ -217,12 +272,12 @@ static void *carefulAlloc(size_t size)
 {
 struct carefulMemBlock *cmb;
 char *pEndCookie;
-long newAlloced = size + carefulAlloced;
+size_t newAlloced = size + carefulAlloced;
 size_t aliSize;
 
 if (newAlloced > carefulMaxToAlloc)
     errAbort("Allocated too much memory - more than %ld bytes", carefulMaxToAlloc);
-carefulAlloced = newAlloced;
+ carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
 cmb = carefulParent->alloc(aliSize);
 cmb->size = size;
@@ -237,12 +292,10 @@ return (void *)(cmb+1);
 static void carefulFree(void *vpt)
 /* Check cookies and free. */
 {
-struct carefulMemBlock *cmb = vpt;
+struct carefulMemBlock *cmb = ((struct carefulMemBlock *)vpt)-1;
+size_t size = cmb->size;
 char *pEndCookie;
-size_t size;
 
-cmb -= 1;
-size = cmb->size;
 carefulAlloced -= size;
 pEndCookie = (((char *)(cmb+1)) + size);
 if (cmb->startCookie != cmbStartCookie)
@@ -253,6 +306,19 @@ if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
 dlRemove((struct dlNode *)cmb);
 carefulParent->free(cmb);
 }
+
+static void *carefulRealloc(void *vpt, size_t size)
+/* realloc a careful memblock block. */
+{
+unsigned char* newBlk = carefulAlloc(size);
+if (vpt != NULL)
+    {
+    struct carefulMemBlock *cmb = ((struct carefulMemBlock *)vpt)-1;
+    memcpy(newBlk, vpt, cmb->size);
+    }
+return newBlk;
+}
+
 
 void carefulCheckHeap()
 /* Walk through allocated memory and make sure that all cookies are
@@ -294,9 +360,10 @@ static struct memHandler carefulMemHandler =
     NULL,
     carefulAlloc,
     carefulFree,
+    carefulRealloc,
     };
 
-void pushCarefulMemHandler(long maxAlloc)
+void pushCarefulMemHandler(size_t maxAlloc)
 /* Push the careful (paranoid, conservative, checks everything)
  * memory handler  top of the memHandler stack and use it. */
 {
@@ -341,6 +408,19 @@ dlRemove(node);
 memTracker->parent->free(node);
 }
 
+static void *memTrackerRealloc(void *vpt, size_t size)
+/* Resize a memory block from memTrackerAlloc. */
+{
+struct dlNode *node = ((struct dlNode *)vpt)-1;
+size += sizeof (*node);
+dlRemove(node);
+node = memTracker->parent->realloc(node, size);
+if (node == NULL)
+    return node;
+dlAddTail(memTracker->list, node);
+return (void*)(node+1);
+}
+
 void memTrackerStart()
 /* Push memory handler that will track blocks allocated so that
  * they can be automatically released with memTrackerEnd().  You
@@ -355,6 +435,7 @@ AllocVar(mt);
 AllocVar(mt->handler);
 mt->handler->alloc = memTrackerAlloc;
 mt->handler->free = memTrackerFree;
+mt->handler->realloc = memTrackerRealloc;
 mt->list = dlListNew();
 mt->parent = pushMemHandler(mt->handler);
 memTracker = mt;

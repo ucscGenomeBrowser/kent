@@ -80,14 +80,32 @@ void *needLargeMem(size_t size);
 /* This calls abort if the memory allocation fails. The memory is
  * not initialized to zero. */
 
-void *needLargeZeroedMem(long size);
+void *needLargeZeroedMem(size_t size);
 /* Request a large block of memory and zero it. */
+
+void *needLargeMemResize(void* vp, size_t size);
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL,
+ * a new memory block is allocated.  Memory not initted. */
+
+void *needLargeZeroedMemResize(void* vp, size_t oldSize, size_t newSize);
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL, a
+ * new memory block is allocated.  If block is grown, new memory is zeroed. */
 
 void *needHugeMem(size_t size);
 /* No checking on size.  Memory not initted to 0. */
 
-void *needHugeZeroedMem(long size);
+void *needHugeZeroedMem(size_t size);
 /* Request a large block of memory and zero it. */
+
+void *needHugeMemResize(void* vp, size_t size);
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL,
+ * a new memory block is allocated.  No checking on size.  Memory not
+ * initted. */
+
+void *needHugeZeroedMemResize(void* vp, size_t oldSize, size_t newSize);
+/* Adjust memory size on a block, possibly relocating it.  If vp is NULL, a
+ * new memory block is allocated.  No checking on size.  If block is grown,
+ * new memory is zeroed. */
 
 void *needMoreMem(void *old, size_t copySize, size_t newSize);
 /* Allocate a new buffer, copy old buffer to it, free old buffer. */
