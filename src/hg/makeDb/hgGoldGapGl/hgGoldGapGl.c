@@ -22,6 +22,7 @@ errAbort(
   "   hgGoldGapGl database gsDir ooSubDir\n"
   "options:\n"
   "   -noGl  - don't do gl bits\n"
+  "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
   "example:\n"
   "   hgGoldGapGl hg5 /projects/hg/gs.5 oo.21\n");
 }
@@ -251,7 +252,7 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
-void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir, boolean doGl)
+void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir, boolean doGl, char *oneChrom)
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
 { 
 struct fileInfo *chrFiList, *chrFi; 
@@ -262,6 +263,9 @@ struct hash *cloneVerHash = newHash(0);
 boolean gotAny = FALSE;
 
 sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
+if (oneChrom != NULL && startsWith("chr", oneChrom))
+    oneChrom += 3;
+    
 
 if (doGl)
     {
@@ -274,12 +278,15 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
     if (chrFi->isDir && (strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name))
         {
-	sprintf(pathName, "%s/%s", ooDir, chrFi->name);
-	makeGoldAndGap(conn, pathName);
-	if (doGl)
-	    makeGl(conn, pathName, cloneVerHash);
-	gotAny = TRUE;
-	uglyf("done %s\n", chrFi->name);
+	if (oneChrom == NULL || sameWord(chrFi->name, oneChrom))
+	    {
+	    sprintf(pathName, "%s/%s", ooDir, chrFi->name);
+	    makeGoldAndGap(conn, pathName);
+	    if (doGl)
+		makeGl(conn, pathName, cloneVerHash);
+	    gotAny = TRUE;
+	    uglyf("done %s\n", chrFi->name);
+	    }
         }
     }
 slFreeList(&chrFiList);
@@ -296,6 +303,6 @@ optionHash(&argc, argv);
 if (argc != 4)
     usage();
 doGl = !(optionExists("noGl") || optionExists("nogl"));
-hgGoldGapGl(argv[1], argv[2], argv[3], doGl);
+hgGoldGapGl(argv[1], argv[2], argv[3], doGl, optionVal("chrom", NULL));
 return 0;
 }
