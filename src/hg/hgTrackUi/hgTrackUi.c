@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.79 2004/01/12 22:26:17 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.80 2004/01/20 19:41:42 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -354,96 +354,65 @@ while ((row = sqlNextRow(sr)) != NULL)
 void wigUi(struct trackDb *tdb)
 /* UI for the wiggle track */
 {
-char *typeLine = NULL;	/*	to clone the tdb->type string	*/
-char *words[8];		/*	chopping the typeLine	*/
-int wordCount = 0;	/*	number of words found in typeLine */
-char options[10][256];	/*	our option strings here	*/
-char *heightPer;	/*	string from cart	*/
-char *minY_str;	/*	string from cart	*/
-char *maxY_str;	/*	string from cart	*/
-double minYc;	/*	from cart */
-double maxYc;	/*	from cart */
-double minY;	/*	from the typeLine	*/
-double maxY;	/*	from the typeLine	*/
-int thisHeightPer;	/*	pixels per item	*/
-char *interpolate;	/*	points only, or interpolate	*/
-char *horizontalGrid;	/*	Grid lines, off by default */
+char *typeLine = NULL;	/*	to parse the trackDb type line	*/
+char *words[8];		/*	to parse the trackDb type line	*/
+int wordCount = 0;	/*	to parse the trackDb type line	*/
+char options[12][256];	/*	our option strings here	*/
+double minY;		/*	from trackDb or cart	*/
+double maxY;		/*	from trackDb or cart	*/
+double tDbMinY;		/*	data range limits from trackDb type line */
+double tDbMaxY;		/*	data range limits from trackDb type line */
+int defaultHeight;	/*	pixels per item	*/
+char *horizontalGrid = NULL;	/*	Grid lines, off by default */
 char *lineBar;	/*	Line or Bar graph */
 char *autoScale;	/*	Auto scaling on or off */
-int maxHeightPixels = atoi(trackDbSettingOrDefault(tdb,
-				"maxHeightPixels", DEFAULT_HEIGHT_PER));
+int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
+int minHeightPixels = MIN_HEIGHT_PER;
 
-minY = DEFAULT_MIN_Yv;
-maxY = DEFAULT_MAX_Yv;
-
-/*	Our min/max values are in the type field of the tdb */
-/*	We need to pick those out from there just to be safe	*/
 typeLine = cloneString(tdb->type);
-wordCount = chopLine(typeLine, words);
-/*	Possibly fetch values from the trackDb.ra file	*/
-if( wordCount > 1 )
-	minY = atof(words[1]);
-if( wordCount > 2 )
-	maxY = atof(words[2]);
+wordCount = chopLine(typeLine,words);
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
-snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
 snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
 snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
 snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
 snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
 snprintf( &options[9][0], 256, "%s.autoScale", tdb->tableName );
-minY_str = cartOptionalString(cart, &options[4][0]);
-maxY_str = cartOptionalString(cart, &options[5][0]);
 
-heightPer = cartOptionalString(cart, &options[0][0]);
-thisHeightPer = maxHeightPixels;
-if( heightPer ) thisHeightPer = min( atoi(heightPer), maxHeightPixels );
-if( thisHeightPer < MIN_HEIGHT_PER ) thisHeightPer = MIN_HEIGHT_PER;
-
-if( minY_str ) minYc = max( minY, atof(minY_str));
-else minYc = minY;
-if( maxY_str ) maxYc = min( maxY, atof(maxY_str));
-else maxYc = maxY;
-
-interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
-
-/*
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown(&options[1][0], interpolate );
-printf(" ");
-*/
-
-horizontalGrid = cartUsualString(cart, &options[7][0], "OFF");
-lineBar = cartUsualString(cart, &options[8][0], "Bar");
-autoScale = cartUsualString(cart, &options[9][0], "Auto-Scale to data view");
+wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight,
+    wordCount, words);
+wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+(void) wigFetchHorizontalGrid(tdb, &horizontalGrid, wordCount, words);
+(void) wigFetchAutoScale(tdb, &autoScale, wordCount, words);
+(void) wigFetchGraphType(tdb, &lineBar, wordCount, words);
 
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
 printf("<b>Type of graph:&nbsp;</b>");
-wiggleGraphDropDown(&options[8][0], lineBar );
+wiggleGraphDropDown(&options[8][0], lineBar);
 printf("</TD><TD ALIGN=LEFT>\n");
 
 printf("<b>Show y=0.0 line:&nbsp;</b>");
-wiggleGridDropDown(&options[7][0], horizontalGrid );
+wiggleGridDropDown(&options[7][0], horizontalGrid);
 printf(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
 printf("<b>Track height:&nbsp;</b>");
-cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
+cgiMakeIntVar(&options[0][0], defaultHeight, 5);
 printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)",
-	MIN_HEIGHT_PER, maxHeightPixels);
+	minHeightPixels, maxHeightPixels);
 printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
 printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
-cgiMakeDoubleVar(&options[4][0], minYc, 6 );
+cgiMakeDoubleVar(&options[4][0], minY, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
-cgiMakeDoubleVar(&options[5][0], maxYc, 6 );
+cgiMakeDoubleVar(&options[5][0], maxY, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>Data view scaling:&nbsp;</b>");
-wiggleScaleDropDown(&options[9][0], autoScale );
-printf("<BR>(data range limits:&nbsp;[%g:%g])", minY, maxY);
+wiggleScaleDropDown(&options[9][0], autoScale);
+printf("<BR>(data range limits:&nbsp;[%g:%g])", tDbMinY, tDbMaxY);
 printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
+
 }
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
