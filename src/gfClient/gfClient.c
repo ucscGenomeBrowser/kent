@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
-int version = 17;	/* Synchronize this with blat version. */
+int version = 18;	/* Synchronize this with blat version. */
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
