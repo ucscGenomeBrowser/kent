@@ -18,6 +18,8 @@
  * are actually pretty good (they're just passed on from
  * mySQL). */
 
+int sqlCountColumns(struct sqlResult *sr);
+
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database. */
 

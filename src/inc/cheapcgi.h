@@ -10,6 +10,17 @@
 #include "dystring.h"
 #endif 
 
+struct cgiVar
+/* Info on one cgi variable. */
+    {
+    struct cgiVar *next;	/* Next in list. */
+    char *name;			/* Name - allocated in hash. */
+    char *val;  		/* Value - also not allocated here. */
+    boolean saved;		/* True if saved. */
+    };
+
+/* return the list of cgiVar's */
+struct cgiVar* cgiVarList();
 
 /* Get the string associated with varName from the cookie string. */
 char *findCookieData(char *varName);

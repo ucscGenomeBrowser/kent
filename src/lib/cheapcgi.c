@@ -10,17 +10,6 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-struct cgiVar
-/* Info on one cgi variable. */
-    {
-    struct cgiVar *next;	/* Next in list. */
-    char *name;			/* Name - allocated in hash. */
-    char *val;  		/* Value - also not allocated here. */
-    boolean saved;		/* True if saved. */
-    };
-
-/* process a multipart form */
-//void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar **retList);
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -36,7 +25,6 @@ boolean cgiIsOnWeb()
 {
 return getenv("REQUEST_METHOD") != NULL;
 }
-
 
 char *_cgiRawInput()
 /* For debugging get the unprocessed input. */
@@ -301,6 +289,13 @@ else
 
 /* now parse the cookies */
 parseCookies(&cookieHash, &cookieList);
+}
+
+/* return the list of cgiVar's */
+struct cgiVar *cgiVarList() {
+	initCgiInput();
+	
+	return inputList;
 }
 
 static char *findVarData(char *varName)

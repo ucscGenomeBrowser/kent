@@ -23,3 +23,6 @@ $(MACHTYPE)/jkweb.a: $(O)
 
 clean:
 	rm -f ${O} $(MACHTYPE)/jkweb.a
+
+tags:
+	etags ../inc/*.h ../lib/*.c ../hg/inc/*.h ../hg/lib/*.c  

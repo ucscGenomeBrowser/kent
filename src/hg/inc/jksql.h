@@ -26,6 +26,7 @@
 #include "sqlList.h"
 #endif
 
+	
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
 
@@ -67,6 +68,9 @@ struct sqlResult *sqlMustGetResult(struct sqlConnection *sc, char *query);
 void sqlFreeResult(struct sqlResult **pRes);
 /* Free up a result. */
 
+int sqlCountColumns(struct sqlResult *sr);
+/* Count the number of columns in result. */
+
 boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
@@ -89,8 +93,9 @@ char **sqlNextRow(struct sqlResult *sr);
  * for instance.  You can call this with a NULL sqlResult.  It
  * will then return a NULL row. */
 
-int sqlCountColumns(struct sqlResult *sr);
-/* Count the number of columns in result. */
+char* sqlFieldName(struct sqlResult *sr);
+/* repeated calls to this function returns the names of the fields 
+ * the given result */
 
 int sqlTableSize(struct sqlConnection *conn, char *table);
 /* Find number of rows in table. */

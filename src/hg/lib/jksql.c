@@ -217,6 +217,7 @@ else
     }
 }
 
+
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
 /* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
@@ -272,8 +273,19 @@ boolean sqlExists(struct sqlConnection *conn, char *query)
 struct sqlResult *sr;
 if ((sr = sqlGetResult(conn,query)) == NULL)
     return FALSE;
-sqlFreeResult(&sr);
-return TRUE;
+else
+	{
+	if(sqlNextRow(sr) == NULL)
+		{
+		sqlFreeResult(&sr);
+		return FALSE;
+		}
+	else
+		{
+		sqlFreeResult(&sr);
+		return TRUE;
+		}
+	}
 }
 
 struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query)
@@ -291,6 +303,19 @@ if (sr == NULL)
     return NULL;
 else
     return mysql_fetch_row(sr->result);
+}
+
+/* repeated calls to this function returns the names of the fields 
+ * the given result */
+char* sqlFieldName(struct sqlResult *sr)
+{
+MYSQL_FIELD *field;
+
+field = mysql_fetch_field(sr->result);
+if(field == 0)
+	return 0;
+
+return field->name;
 }
 
 int sqlCountColumns(struct sqlResult *sr)
