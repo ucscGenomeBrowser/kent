@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.21 2004/12/10 04:07:19 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.22 2005/02/07 20:33:39 hiram Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -104,10 +104,16 @@ iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange,
 	hgtaNextIntersectTrack, onChange, conn);
 iName = iTrack->shortLabel;
 hPrintf("</TABLE>\n");
-hPrintf("<BR>\n");
 
-hPrintf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
+if (!isWiggle(database, curTable))
+    {
+    hPrintf("<BR>\n");
+    hPrintf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
        name);
+    }
+else
+    hPrintf("<P>\n");
+
 op = cartUsualString(cart, hgtaNextIntersectOp, "any");
 jsTrackingVar("op", op);
 makeOpButton("any", op);
@@ -116,33 +122,58 @@ printf("All %s records that have any overlap with %s <BR>\n",
 makeOpButton("none", op);
 printf("All %s records that have no overlap with %s <BR>\n",
        name, iName);
-makeOpButton("more", op);
-printf("All %s records that have at least ",
-       name);
-setting = cartCgiUsualString(cart, hgtaNextMoreThreshold, "80");
-cgiMakeTextVar(hgtaNextMoreThreshold, setting, 3);
-printf(" %% overlap with %s <BR>\n", iName);
-makeOpButton("less", op);
-printf("All %s records that have at most ",
-       name);
-setting = cartCgiUsualString(cart, hgtaNextLessThreshold, "80");
-cgiMakeTextVar(hgtaNextLessThreshold, setting, 3);
-printf(" %% overlap with %s <P>\n", iName);
 
-printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.<P>\n",
+if (!isWiggle(database, curTable))
+    {
+    makeOpButton("more", op);
+    printf("All %s records that have at least ",
+	   name);
+    setting = cartCgiUsualString(cart, hgtaNextMoreThreshold, "80");
+    cgiMakeTextVar(hgtaNextMoreThreshold, setting, 3);
+    printf(" %% overlap with %s <BR>\n", iName);
+    makeOpButton("less", op);
+    printf("All %s records that have at most ",
+	   name);
+    setting = cartCgiUsualString(cart, hgtaNextLessThreshold, "80");
+    cgiMakeTextVar(hgtaNextLessThreshold, setting, 3);
+    printf(" %% overlap with %s <P>\n", iName);
+    }
+else
+    {
+    /*	keep javaScript onClick happy	*/
+    hPrintf("<input TYPE=HIDDEN NAME=\"hgta_nextMoreThreshold\" VALUE=80>\n");
+    hPrintf("<input TYPE=HIDDEN NAME=\"hgta_nextLessThreshold\" VALUE=80>\n");
+    hPrintf(" <P>\n");
+    }
+
+
+if (!isWiggle(database, curTable))
+    {
+    printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.<P>\n",
        name);
-makeOpButton("and", op);
-printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
+    makeOpButton("and", op);
+    printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
        name, iName);
-makeOpButton("or", op);
-printf("Base-pair-wise union (OR) of %s and %s <P>\n",
-       name, iName);
-puts("Check the following boxes to complement one or both tables. To complement a table means to include a row in the intersection if it \n"
+    makeOpButton("or", op);
+    printf("Base-pair-wise union (OR) of %s and %s <P>\n",
+	name, iName);
+    puts("Check the following boxes to complement one or both tables. To complement a table means to include a row in the intersection if it \n"
      "is <I>not</I> included in the table. <P>");
-jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", FALSE);
-printf("Complement %s before intersection/union <BR>\n", name);
-jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", FALSE);
-printf("Complement %s before intersection/union <P>\n", iName);
+    jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", FALSE);
+    printf("Complement %s before intersection/union <BR>\n", name);
+    jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", FALSE);
+    printf("Complement %s before intersection/union <P>\n", iName);
+    }
+else
+    {
+    /*	keep javaScript onClick happy	*/
+    jsTrackingVar("op", op);
+    hPrintf("<SCRIPT>\n");
+    hPrintf("var invertTable=0;\n");
+    hPrintf("var invertTable2=0;\n");
+    hPrintf("</SCRIPT>\n");
+    hPrintf("(data track %s is not composed of gene records.  Specialized intersection operations are not available.)<P>\n", name);
+    }
 
 cgiMakeButton(hgtaDoIntersectSubmit, "Submit");
 hPrintf(" ");
@@ -157,7 +188,6 @@ hPrintf("</FORM>\n");
     saveVars[varCount] = hgtaDoIntersectMore;
     jsCreateHiddenForm(saveVars, varCount+1);
     }
-
 
 htmlClose();
 }
