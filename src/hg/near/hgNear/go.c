@@ -11,7 +11,7 @@
 #include "goa.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.7 2003/09/10 04:46:44 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.8 2003/09/11 21:20:14 hiram Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goa table exists. */
@@ -216,7 +216,7 @@ return gotIt;
 
 static void goCalcDistances(struct order *ord, 
 	struct sqlConnection *ignore, /* connection to main database. */
-	struct genePos *geneList, struct hash *geneHash, int maxCount)
+	struct genePos **pGeneList, struct hash *geneHash, int maxCount)
 /* Fill in distance fields in geneList. */
 {
 struct sqlConnection *conn = sqlConnect("go");
@@ -229,7 +229,7 @@ struct genePos *gp;
 
 /* Build up hash of genes keyed by protein names. (The geneHash
  * passed in is keyed by the mrna name. */
-for (gp = geneList; gp != NULL; gp = gp->next)
+for (gp = *pGeneList; gp != NULL; gp = gp->next)
     {
     hashAdd(protHash, gp->protein, gp);
     }
@@ -266,7 +266,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Go through list translating non-zero counts to distances. */
-for (gp = geneList; gp != NULL; gp = gp->next)
+for (gp = *pGeneList; gp != NULL; gp = gp->next)
     {
     if (gp->count > 0)
         {

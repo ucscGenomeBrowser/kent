@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.67 2003/09/11 06:39:07 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.68 2003/09/11 21:20:14 hiram Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1169,7 +1169,7 @@ void displayData(struct sqlConnection *conn, struct column *colList,
 struct genePos *geneList = NULL;
 struct order *ordList = orderGetAll(conn);
 struct order *ord = curOrder(ordList);
-if (gp->protein == NULL)
+if (gp != NULL && gp->protein == NULL)
     gp->protein = lookupProtein(conn, gp->name);
 curGeneId = gp;
 if (gp)
