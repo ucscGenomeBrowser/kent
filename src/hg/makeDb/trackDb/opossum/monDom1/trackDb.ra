@@ -36,6 +36,7 @@ priority 54.5
 visibility pack
 type psl xeno
 spectrum on
+blastRef hg17.blastKGRef01
 
 track blatzHg17KG2
 shortLabel Human mRNAs
