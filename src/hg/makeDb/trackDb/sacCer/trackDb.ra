@@ -1,0 +1,18 @@
+track sgdGene
+shortLabel SGD Genes
+longLabel Protein-Coding Genes from Sacchromyces Genome Database
+group genes
+priority 45.5
+visibility pack
+color 0,100,180
+type genePred sgdPep
+hgGene on
+
+track sgdOther
+shortLabel SGD Other
+longLabel Other Features from Sacchromyces Genome Database
+group genes
+priority 46
+visibility pack
+color 30,130,210
+type bed 4 +
