@@ -1051,3 +1051,7 @@ type wig 0 100
     # Reload mRNAs and load ESTS
     ssh hgwdev
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
+
+# HUMAN REFSEQ MAPPINGS (Writeup incomplete, in progress jk)
+liftOver ../../../bedOverHg16/refGene2/hg16.refGene.gtf ../../humanTarget.chain new.gtf unmapped.gtf -minMatch=0.5 -gff
+ldHgGene panTro1 mappedRefSeq new.gtf

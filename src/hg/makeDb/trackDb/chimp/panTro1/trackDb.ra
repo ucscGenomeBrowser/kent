@@ -6,6 +6,15 @@ group map
 visibility dense
 type bed 3 +
 
+track mappedRefSeq
+shortLabel Human RefSeq 
+longLabel Mapped Human RefSeq Genes
+group genes
+priority 34.5
+visibility pack
+color 12,12,120
+type genePred
+
 track xenoRefGene
 shortLabel Non$Organism RefSeq
 long label Non$Organism RefSeq Genes
