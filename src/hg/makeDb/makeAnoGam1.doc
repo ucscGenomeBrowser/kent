@@ -924,7 +924,7 @@ chainSome $(path1)
 	echo $i
     done
 
-    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastDm1FB.psl
+    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n |uniq > /cluster/data/anoGam1/bed/tblastn.dm1FB/preblastDm1FB.psl
     cd ..
     blatDir=/cluster/data/dm1/bed/blat.dm1FB
     protDat -fb preblastDm1FB.psl $blatDir/dm1FB.psl $blatDir/dm1FB.mapNames blastDm1FB.psl
