@@ -32,9 +32,14 @@ set chr=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "chrom"`
 if ($status) then
   set chr=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' | egrep -w "tName"`
   if ($status) then
-    echo '\n  '$db.$track' has no "chrom" or "tName" fields.\n'
-    exit 1 
-  endif 
+    set chr=`hgsql -N -e "DESC $track" $db | gawk '{print $1}' \
+          | egrep -w "genoName"`
+    if ($status) then
+      echo '\n  '$db.$track' has no "chrom", "tName" or "genoName" fields.\n'
+      ${0}:
+      $0
+      exit 1 
+    endif 
 endif 
 
 
@@ -62,7 +67,7 @@ hgsql -N -e "SELECT chromInfo.chrom, chromInfo.size - MAX($track.$end) \
 
 
 awk '{if($2<0) {print $2} }' $db.$track.tx.offEnd
-echo "expect blank. any chrom with anotations off the end would be printed."
+echo "expect blank. any chrom with annotations off the end would be printed."
 echo "results are in $db.$track.tx.offEnd.\n"
 
 
