@@ -12,9 +12,15 @@
 #include "chainBlock.h"
 #include "chainLink.h"
 #include "chainDb.h"
+#include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.17 2003/09/29 19:41:02 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.18 2004/07/20 23:15:22 hiram Exp $";
 
+
+struct cartOptions
+    {
+    enum chainColorEnum chainColor; /*  ChromColors, ScoreColors, NoColors */
+    };
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
 			struct lm *lm, struct hash *hash, 
@@ -75,7 +81,7 @@ struct sqlConnection *conn;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
-struct simpleFeature *components, *lastSf;
+struct simpleFeature *lastSf;
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
 
@@ -209,6 +215,9 @@ int qs;
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr;
 char extraWhere[128] ;
+struct cartOptions *chainCart;
+
+chainCart = (struct cartOptions *) tg->extraUiData;
 
 snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
@@ -230,8 +239,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     lf->start = lf->tallStart = chain.tStart;
     lf->end = lf->tallEnd = chain.tEnd;
     lf->grayIx = maxShade;
-    lf->filterColor = -1;
     lf->score = chain.score;
+    lf->filterColor = -1;
+
     if (chain.qStrand == '-')
 	{
 	lf->orientation = -1;
@@ -263,20 +273,59 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void chainMethods(struct track *tg)
+static Color chainScoreColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+int shadeOfGray = 0;
+
+shadeOfGray = (int) (10 * ((double)(lf->score-2002)/63560.0));
+
+return(tg->colorShades[shadeOfGray%11]);
+}
+
+static Color chainNoColor(struct track *tg, void *item, struct vGfx *vg)
+{
+return(tg->ixColor);
+}
+
+void chainMethods(struct track *tg, struct trackDb *tdb, 
+	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {
-char option[128]; /* Option -  rainbow chromosome color */
-char optionChr[128]; /* Option -  chromosome filter */
-char *optionChrStr; 
-char *optionStr ;
+struct cartOptions *chainCart;
+
+AllocVar(chainCart);
+
+chainCart->chainColor = chainFetchColorOption(tdb, (char **) NULL);
+
 linkedFeaturesMethods(tg);
-snprintf(option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "on");
+
 tg->itemColor = lfChromColor;
+
+switch (chainCart->chainColor)
+    {
+    case (chainColorScoreColors):
+	tg->itemColor = chainScoreColor;
+	tg->colorShades = shadesOfGray;
+	break;
+    case (chainColorNoColors):
+	tg->itemColor = chainNoColor;
+	tg->color.r = 0;
+	tg->color.g = 0;
+	tg->color.b = 0;
+	tg->altColor.r = 127;
+	tg->altColor.g = 127;
+	tg->altColor.b = 127;
+	tg->ixColor = MG_BLACK;
+	tg->ixAltColor = MG_GRAY;
+	break;
+    default:
+    case (chainColorChromColors):
+	break;
+    }
 tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
 tg->mapItemName = lfMapNameFromExtra;
 tg->subType = lfSubChain;
+tg->extraUiData = (void *) chainCart;
 }
-
