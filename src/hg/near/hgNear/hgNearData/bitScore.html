@@ -1,0 +1,14 @@
+<H3>Description</H3>
+This column shows the bit score measure of protein similarity
+between this gene and the selected gene.  The more similar two
+proteins are the higher the bit score will be.
+<H3>Method</H3>
+All known splice variants of all known $organism genes are
+put into a BLAST protein database with the formatdb command.
+Then this database is searched with each known gene using
+version 2.2.5 of the NCBI blastall command with the following
+flags:
+ -p blastp -e 0.01 -m 8 -b 1000
+which tell the program to do a protein based search and report
+up to 1000 hits of e-value 0.01 or better in a tab delimited
+format.  The output of this is loaded into our database.
