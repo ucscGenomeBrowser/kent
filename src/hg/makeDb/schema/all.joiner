@@ -1305,6 +1305,18 @@ identifier esRegMotif
     $sacCer.esRegModuleToMotif.motif 
     $sacCer.esRegGeneToMotif.name 
 
+identifier yeastGrowthCondition
+"A growth condition for yeast cells"
+    $sacCer.growthCondition.name
+    $sacCer.transRegCodeCondition.growthCondition
+
+identifier transRegCode
+"Harbison, Gordon et al regulatory motifs and CHIP/CHIP data"
+    $sacCer.transRegCodeCondition.name dupeOk
+    $sacCer.transRegCodeMotif.name
+    $sacCer.transRegCode.name
+    $sacCer.transRegCodeProbe.tfList comma chopAfter=_
+
 # Dependencies not already captured in identifiers
 
 dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRatio
