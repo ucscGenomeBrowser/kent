@@ -772,42 +772,42 @@ visibility hide
 type bed 4 .
 
 track encodeStableTransfection
-shortLabel ENCODE Stable Transfection
+shortLabel Stable Transfect
 longLabel Encyclopedia of DNA Elements (ENCODE) Stable Transfection
 group encode
 priority 170.1
 color 100,50,0
-visibility pack
+visibility hide
 type bed 12 .
 url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
 
 track encodeTransientTransfection
-shortLabel ENCODE Transient Transfection
-longLabel Encyclopedia of DNA Elements (ENCODE) Stable Transfection
+shortLabel Trans Transfect
+longLabel Encyclopedia of DNA Elements (ENCODE) Transient Transfection
 group encode
 priority 170.2
 color 100,50,0
-visibility pack
+visibility hide
 type bed 12 .
 url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
 
 track encodeFootprint
-shortLabel ENCODE in vitro Footprint
+shortLabel in vitro Footprint
 longLabel Encyclopedia of DNA Elements (ENCODE) in vitro Footprint
 group encode
 priority 170.3
 color 100,50,0
-visibility pack
+visibility hide
 type bed 11 .
 url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
 
 track encodeBinding
-shortLabel ENCODE Binding Assay
+shortLabel DNA Binding Assay
 longLabel Encyclopedia of DNA Elements (ENCODE) Binding Assay
 group encode
 priority 170.4
 color 100,50,0
-visibility pack
+visibility hide
 type bed 12 .
 url http://gala.cse.psu.edu/cgi-bin/dberge/dberge_query?mode=Submit+query&browID=$$&disp=brow+data
 
