@@ -9,8 +9,9 @@
 #include "hdb.h"
 #include "hgRelate.h"
 #include "binRange.h"
+#include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.2 2003/08/27 22:07:45 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.3 2003/08/28 04:29:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,10 +19,12 @@ void usage()
 errAbort(
   "hgClusterGenes - Cluster overlapping gene predictions\n"
   "usage:\n"
-  "   hgClusterGenes database geneTable clusterTable\n"
+  "   hgClusterGenes database geneTable clusterTable cannonicalTable\n"
+  "where clusterTable pairs clusterIds and geneIds, and cannonicalTable\n"
+  "pairs the longest protein isoform with the clusterId\n"
   "options:\n"
   "   -chrom=chrN - Just work on one chromosome\n"
-  "   -verbose=0 - Print copious debugging info. 0 for none, 3 for loads\n"
+  "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   );
 }
 
@@ -253,10 +256,48 @@ dlListFree(&clusters);
 return clusterList;
 }
 
+void createClusterTable(struct sqlConnection *conn, 
+	char *tableName, int longestName)
+/* Create cluster table. */
+{
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy,
+    "CREATE TABLE %s (\n"
+    " clusterId int unsigned not null,\n"
+    " transcript varchar(255) not null,\n"
+    " INDEX(transcript(%d)),\n"
+    " INDEX(clusterId))\n"
+    , tableName, longestName);
+sqlRemakeTable(conn, tableName, dy->string);
+uglyf("%s\n", dy->string);
+dyStringFree(&dy);
+}
+
+void createCannonicalTable(struct sqlConnection *conn, 
+	char *tableName, int longestName)
+/* Create cannonical representative of cluster table. */
+{
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy,
+    "CREATE TABLE %s (\n"
+    " chrom varchar(255) not null,\n"
+    " chromStart int not null,\n"
+    " chromEnd int not null,\n"
+    " clusterId int unsigned not null,\n"
+    " transcript varchar(255) not null,\n"
+    " UNIQUE(clusterId),\n"
+    " INDEX(transcript(%d)))\n"
+    , tableName, longestName);
+sqlRemakeTable(conn, tableName, dy->string);
+dyStringFree(&dy);
+}
+
 int clusterId = 0;	/* Assign a unique id to each cluster. */
+int longestName = 1;	/* Longest gene name. */
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
-	char *geneTable, char *chrom, char strand, FILE *f)
+	char *geneTable, char *chrom, char strand, 
+	FILE *clusterFile, FILE *canFile)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct sqlResult *sr;
@@ -265,6 +306,7 @@ int rowOffset;
 struct genePred *gp, *gpList = NULL;
 char extraWhere[64];
 struct cluster *clusterList = NULL, *cluster;
+int nameLen;
 
 if (verbose >= 1)
     printf("%s %c\n", chrom, strand);
@@ -273,7 +315,10 @@ sr = hChromQuery(conn, geneTable, chrom, extraWhere, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + rowOffset);
+    nameLen = strlen(gp->name);
     slAddHead(&gpList, gp);
+    if (nameLen > longestName)
+        longestName = nameLen;
     ++totalGeneCount;
     }
 slReverse(&gpList);
@@ -282,22 +327,34 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
     struct hashEl *helList = hashElListHash(cluster->geneHash);
     struct hashEl *hel;
+    struct genePred *cannonical = NULL;
+    int cannonicalSize = -1, size = 0;
     ++clusterId;
     for (hel = helList; hel != NULL; hel = hel->next)
         {
 	struct genePred *gp = hel->val;
-	fprintf(f, "%d\t%s\n", clusterId, gp->name);
+	fprintf(clusterFile, "%d\t%s\n", clusterId, gp->name);
+	size = genePredCodingBases(gp);
+	if (size > cannonicalSize)
+	    {
+	    cannonical = gp;
+	    cannonicalSize = size;
+	    }
 	}
+    fprintf(canFile, "%s\t%d\t%d\t%d\t%s\n", 
+    	chrom, cluster->start, cluster->end, clusterId, cannonical->name);
     ++totalClusterCount;
     }
 genePredFreeList(&gpList);
 }
 
-void hgClusterGenes(char *database, char *geneTable, char *clusterTable)
+void hgClusterGenes(char *database, char *geneTable, char *clusterTable,
+	char *cannonicalTable)
 /* hgClusterGenes - Cluster overlapping gene predictions. */
 {
 struct slName *chromList, *chrom;
-FILE *f = hgCreateTabFile(".", clusterTable);
+FILE *clusterFile = hgCreateTabFile(".", clusterTable);
+FILE *canFile = hgCreateTabFile(".", cannonicalTable);
 struct sqlConnection *conn;
 
 hSetDb(database);
@@ -308,12 +365,18 @@ else
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, geneTable, chrom->name, '+', f);
-    clusterGenesOnStrand(conn, geneTable, chrom->name, '-', f);
+    clusterGenesOnStrand(conn, geneTable, chrom->name, '+', 
+    	clusterFile, canFile);
+    clusterGenesOnStrand(conn, geneTable, chrom->name, '-', 
+    	clusterFile, canFile);
     }
+createClusterTable(conn, clusterTable, longestName);
+createCannonicalTable(conn, cannonicalTable, longestName);
+if (verbose >= 1) printf("Loading database\n");
+hgLoadTabFile(conn, ".", clusterTable, &clusterFile);
+hgLoadTabFile(conn, ".", cannonicalTable, &canFile);
 printf("Got %d clusters, from %d genes in %d chromosomes\n",
 	totalClusterCount, totalGeneCount, slCount(chromList));
-uglyAbort("All for now");
 }
 
 int main(int argc, char *argv[])
@@ -321,8 +384,8 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 verbose = optionInt("verbose", verbose);
-if (argc != 4)
+if (argc != 5)
     usage();
-hgClusterGenes(argv[1], argv[2], argv[3]);
+hgClusterGenes(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
