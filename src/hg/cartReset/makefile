@@ -35,5 +35,3 @@ clean:
 
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
-O = cartReset.o
-
