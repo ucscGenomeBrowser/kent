@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.21 2004/10/15 16:09:22 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.22 2004/10/20 23:13:29 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -234,7 +234,7 @@ else
     /* All beds have at least chrom,start,end.  We omit the chrom
      * from the query since we already know it. */
     sr = regionQuery(conn, table, fields, region, TRUE, filter);
-    while ((row = sqlNextRow(sr)) != NULL)
+    while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
 	{
 	/* If have a name field apply hash filter. */
 	if (fieldCount >= 4 && idHash != NULL)

@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.81 2004/10/20 18:37:53 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.82 2004/10/20 23:13:29 angie Exp $";
 
 
 void usage()
@@ -375,11 +375,25 @@ return regionList;
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere)
-/* Construct and execute query for table on region. */
+/* Construct and execute query for table on region. Returns NULL if 
+ * table doesn't exist (e.g. missing split table for region->chrom). */
 {
 struct sqlResult *sr;
 if (isPositional)
     {
+    /* Check for missing split tables before querying: */
+    char *db = sqlGetDatabase(conn);
+    struct hTableInfo *hti = hFindTableInfoDb(db, region->chrom, table);
+    if (hti == NULL)
+	return NULL;
+    else if (hti->isSplit)
+	{
+	char fullTableName[256];
+	safef(fullTableName, sizeof(fullTableName),
+	      "%s_%s", region->chrom, table);
+	if (!sqlTableExists(conn, fullTableName))
+	    return NULL;
+	}
     if (region->end == 0) /* Full chromosome. */
 	{
 	sr = hExtendedChromQuery(conn, table, region->chrom, 
@@ -896,6 +910,8 @@ for (region = regionList; region != NULL; region = region->next)
 
     sr = regionQuery(conn, table, fieldSpec->string, 
     	region, isPositional, filter);
+    if (sr == NULL)
+	continue;
 
     /* First time through print column names. */
     if (region == regionList)

@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.29 2004/10/02 00:12:45 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.30 2004/10/20 23:13:29 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -549,7 +549,7 @@ for (region = regionList; region != NULL; region = region->next)
     char **row;
     struct sqlResult *sr = regionQuery(conn, tj->table, 
     	sqlFields->string, region, isPositional, filter);
-    while ((row = sqlNextRow(sr)) != NULL)
+    while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
         {
 	if (idFieldIx < 0)
 	    {
