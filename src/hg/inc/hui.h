@@ -57,6 +57,9 @@ enum trackVisibility hTvFromStringNoAbort(char *s);
 char *hStringFromTv(enum trackVisibility vis);
 /* Given enum representation convert to string. */
 
+void hTvDropDownClass(char *varName, enum trackVisibility vis, boolean canPack, char *class);
+/* Make track visibility drop down for varName with style class */
+
 void hTvDropDown(char *varName, enum trackVisibility vis, boolean canPack);
 /* Make track visibility drop down for varName */
 
