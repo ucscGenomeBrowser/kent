@@ -64,7 +64,7 @@ group compGeno
 color 175,150,128
 altColor 175,150,128
 priority 118
-visibility full
+visibility hide
 type sample 0 8
 
 track regpotent
