@@ -373,56 +373,6 @@ exit; # don't actually run this like a script :)
     wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/GFF/whole_genome_translation_dmel_RELEASE3-1.GFF.gz
     wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/GFF/whole_genome_transposable_element_dmel_RELEASE3-1.GFF.gz
     gunzip *.gz
-    # Load up transposons to see if they jive with the RepeatMasker track.  
-    # Make it a bed 6+:
-    perl -we 'while (<>) { \
-                if (/(\w+)\t\w+\ttransposable_element\t(\d+)\t(\d+)\t.\t([+-]?)\t.\tgenegrp=(\w+); name=(\w+); symbol=(\S+\{\}\d+); dbxref=FlyBase:(\w+); cytorange=(\w+-\w+)/) { \
-                  $chrom=$1;  $start=$2;  $end=$3;  $strand=$4; \
-                  $genegrp=$5;  $name=$6;  $symbol=$7;  $flybase=$8; \
-                  $cytorange=$9; \
-                  die "genegrp $genegrp != name $name\n" if ($genegrp ne $name); \
-                  print "chr$chrom\t$start\t$end\t$name\t0\t$strand\t$symbol\t$flybase\t$cytorange\n"; \
-                } elsif (/transposable_element/) { \
-                  die "unrecognized format:\n\n$_\n\n"; \
-                } \
-              }' \
-      whole_genome_transposable_element_dmel_RELEASE3-1.GFF \
-      > bdgpTransposons.bed
-    ssh hgwdev
-    hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/bdgpTransposons.sql \
-      dm1 bdgpTransposons \
-      /cluster/data/dm1/bed/bdgpAnnotations/bdgpTransposons.bed
-
-    # Load up tRNA annotations.
-    # Make it a bed 6+:
-    perl -we 'while (<>) { \
-                if (/(\w+)\t\w+\ttRNA\t(\d+)\t(\d+)\t.\t([+-]?)\t.\tgenegrp=(\w+); name=(\w+); (.*)symbol=(\S+); dbxref=FlyBase:(\w+); cytorange=(\w+-\w+)/) { \
-                  $chrom=$1;  $start=$2;  $end=$3;  $strand=$4; \
-                  $genegrp=$5;  $name=$6;  $go=$7;  $symbol=$8;  $flybase=$9; \
-                  $cytorange=$10; \
-                  die "genegrp $genegrp != name $name\n" if ($genegrp ne $name); \
-                  if ($go ne "") { \
-                    @gos = split(" ", $go); \
-                    $go = ""; \
-                    foreach $id (@gos) { \
-                      if ($id =~ /dbxref=GO:(\d+)/) { \
-                        $go .= "$1,"; \
-                      } else { \
-                        die "Parse error for id=$id"; \
-                      } \
-                    }  \
-                  }  \
-                  print "chr$chrom\t$start\t$end\t$name\t0\t$strand\t$symbol\t$go\t$flybase\t$cytorange\n"; \
-                } elsif (/tRNA/) { \
-                  die "unrecognized format:\n\n$_\n\n"; \
-                } \
-              }' \
-      whole_genome_tRNA_dmel_RELEASE3-1.GFF \
-    > bdgpTRNA.bed
-    ssh hgwdev
-    hgLoadBed -noBin -tab -sqlTable=$HOME/kent/src/hg/lib/bdgpTRNA.sql \
-      dm1 bdgpTRNA \
-      /cluster/data/dm1/bed/bdgpAnnotations/bdgpTRNA.bed
     # Protein-coding genes...
     perl -wpe 's/^/chr/; s/translation/CDS/; \
                s/genegrp.*transgrp=(\S+);.*$/$1/; \
@@ -526,7 +476,7 @@ exit; # don't actually run this like a script :)
     hgsql dm1 < /cluster/data/dm1/bed/bdgpAnnotations/bdgpNonCodingInfo.sql
 
 
-# FLYBASE GENES (IN PROGRESS 10/6/03 angie)
+# FLYBASE GENES (ABANDONED 10/6/03 angie)
     ssh kksilo
     mkdir /cluster/data/dm1/bed/flyBase
     cd /cluster/data/dm1/bed/flyBase
@@ -663,6 +613,7 @@ dm1.genbank.mrna.xeno.load = yes
 dm1.genbank.est.xeno.load = no
 dm1.downloadDir = dm1
 
+TODO
     ssh eieio
     cd /cluster/store5/genbank
     # This is an -initial run:
