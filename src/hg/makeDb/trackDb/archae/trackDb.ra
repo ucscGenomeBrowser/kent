@@ -69,7 +69,7 @@ group genes
 priority 2.51
 visibility dense
 color 160,40,40
-type bed 6 .
+type bed 6 +
 
 track igenics
 shortLabel Intergenics
