@@ -5401,7 +5401,55 @@ ls /cluster/bluearc/hg17/multiz.2004-07-12/canFam1/*.maf > chrom.lst
 
 
 # PHYLO-HMM CONSERVATION FOR 8-WAY (WORKING kate)
-    # Need tree model (or model build guidance) from Adam
+
+    # tree model (acs)
+    
+    # first estimate a model for the mammals
+    ssh eieio
+    cd /cluster/bluearc/hg17/multiz.2004-07-13/panTro1mm5rn3canFam1
+
+    # collect sufficient stats (takes maybe an hour)
+    for file in *.maf ; do echo $file ; msa_view -i MAF $file -o SS --order hg17,panTro1,rn3,mm5,canFam1 > `basename $file .maf`.ss ; done
+    ls *.ss | grep -v chr6_hla_hap2 > files
+    msa_view '*files' --aggregate hg17,panTro1,rn3,mm5,canFam1 -i SS -o SS > all.ss
+
+    # estimate model, with rate variation (takes about a minute)
+    phyloFit all.ss --nrates 10 --tree "(((hg17,panTro1),(rn3,mm5)),canFam1)" --alpha 4.4 --EM --log log -i SS --out-root hprmc-rev-dg
+
+    cat hprmc-rev-dg.mod
+#ALPHABET: A C G T
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 10
+#ALPHA: 4.658942
+#TRAINING_LNL: -6889216721.159384
+#BACKGROUND: 0.294633 0.205082 0.205189 0.295097
+#RATE_MAT:
+#  -0.865237    0.159990    0.554805    0.150442
+#   0.229851   -1.194646    0.168269    0.796526
+#   0.796651    0.168182   -1.194919    0.230086
+#   0.150205    0.553556    0.159985   -0.863747
+#TREE: (((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.112364,5:0.112364);
+
+    # now add chicken and fish by hand, as follows
+
+    # obtain branch lengths to chicken, fugu, and zfish from CFTR
+    # tree, http://www.cse.ucsc.edu/~acs/cftr25_hybrid.ps
+
+    # Let species 6 be chicken, species 7 be fugu, and species 8 be
+    # zfish.  Summing branch lengths as necessary, we get:
+
+#(...):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
+
+    # We also have to root the branch between dog and the
+    # primates/rodents.  We'll use the total estimated branch length
+    # of 0.112364*2 = 0.2247 (rounded), but we'll use the proportions
+    # from the CFTR tree, 0.0193/0.2012.  This gives us a branch of
+    # 0.0196 to the primates/rodents and a branch of 0.2051 to dog.
+
+    # putting it all together, we get:
+
+#TREE: (((((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.0196,5:0.2051):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
 
     
 # 7-WAY MULTIZ MULTIPLE ALIGNMENT (2004-06-24 kate)
@@ -7400,3 +7448,4 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/hNoClass.net &
     nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
+
