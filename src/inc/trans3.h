@@ -1,4 +1,10 @@
+/*****************************************************************************
+ * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
+ * for personal, academic, and non-profit purposes.  Commercial use          *
+ * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
+ *****************************************************************************/
 /* trans3 - a sequence and three translated reading frames. */
+
 #ifndef TRANS3_H
 #define TRANS3_H
 

@@ -1,5 +1,8 @@
 /* Let the user redirect where memory allocation/deallocation
- * happens.  'careful' routines help debug scrambled heaps. */
+ * happens.  'careful' routines help debug scrambled heaps. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef MEMALLOC_H
 #define MEMALLOC_H

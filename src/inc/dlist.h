@@ -1,4 +1,7 @@
-/* dlist.h - Headers for generic doubly-linked list routines. */
+/* dlist.h - Headers for generic doubly-linked list routines. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef DLIST_H
 #define DLIST_H

@@ -1,7 +1,10 @@
 /* Common.h - functions that are commonly used.  Includes 
  * routines for managing singly linked lists, some basic
  * string manipulation stuff, and other stuff of the
- * short but useful nature. */
+ * short but useful nature. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef COMMON_H	/* Wrapper to avoid including this twice. */
 #define COMMON_H

@@ -1,9 +1,12 @@
-#ifndef RA_H
-
 /* Stuff to parse .ra files. Ra files are simple text databases.
  * The database is broken into records by blank lines. 
  * Each field takes a line.  The name of the field is the first
- * word in the line.  The value of the field is the rest of the line. */
+ * word in the line.  The value of the field is the rest of the line. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
+#ifndef RA_H
 
 struct hash *raNextRecord(struct lineFile *lf);
 /* Return a hash containing next record.   

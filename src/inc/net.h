@@ -1,4 +1,8 @@
-/* Net.h some stuff to wrap around net communications. */
+/* Net.h some stuff to wrap around net communications. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 #ifndef NET_H
 #define NET_H

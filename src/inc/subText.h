@@ -1,4 +1,7 @@
-/* subText.h - perform text substitutions. */
+/* subText.h - perform text substitutions. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef SUBTEXT_H
 #define SUBTEXT_H

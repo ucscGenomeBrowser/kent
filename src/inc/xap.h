@@ -1,5 +1,8 @@
 /* xap - XML Automatic Parser - together with autoXml this helps automatically
- * read in automatically generated data structures. */
+ * read in automatically generated data structures. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef XAP_H
 #define XAP_H

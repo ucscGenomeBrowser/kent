@@ -1,4 +1,7 @@
-/* bits - handle operations on arrays of bits. */
+/* bits - handle operations on arrays of bits. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef BITS_H
 #define BITS_H

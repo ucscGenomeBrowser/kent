@@ -1,6 +1,9 @@
 /* Stuff for processing comma separated lists - a little long so
  * in a separate module from jksql.c though interface is still
- # in jksql.c. */
+ * in jksql.c. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "sqlNum.h"

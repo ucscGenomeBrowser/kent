@@ -1,6 +1,9 @@
 /* xap - XML Automatic Parser - together with autoXml this helps automatically
  * read in automatically generated data structures.  Calls lower level routine
- * in xp module, which originally was just a thin shell around expat. */
+ * in xp module, which originally was just a thin shell around expat. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "xap.h"

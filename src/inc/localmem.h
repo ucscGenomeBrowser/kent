@@ -3,7 +3,9 @@
  * These routines are meant for the sort of scenario where
  * a lot of little to medium size pieces of memory are
  * allocated, and then disposed of all at once.
- */
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 struct lm *lmInit(int blockSize);
 /* Create a local memory pool. Parameters are:

@@ -1,3 +1,8 @@
+/*****************************************************************************
+ * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
+ * for personal, academic, and non-profit purposes.  Commercial use          *
+ * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
+ *****************************************************************************/
 /* nib.h - interface to nucleotides stored 4 bits per base (so have
  * room for N. */
 #ifndef NIB_H

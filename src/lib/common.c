@@ -1,10 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* Commonly used routines in a wide range of applications.
- * Strings, singly-linked lists, and a little file i/o. */
+ * Strings, singly-linked lists, and a little file i/o.  
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 
 void *cloneMem(void *pt, size_t size)

@@ -1,6 +1,9 @@
 /* kxTok - quick little tokenizer for stuff first
  * loaded into memory.  Originally developed for
- * "Key eXpression" evaluator. */
+ * "Key eXpression" evaluator. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef KXTOK_H
 #define KXTOK_H

@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* htmshell - a shell to wrap around programs that generate
  * html files.  Write the html initial stuff (<head>, <body>, etc.)
  * and the final stuff too.  Also catch errors here so that
@@ -10,7 +5,10 @@
  * to abort. 
  *
  * This also includes a few routines to write commonly used
- * html constructs such as images, horizontal lines. etc. */
+ * html constructs such as images, horizontal lines. etc. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "cheapcgi.h"

@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* Htmshell.h - stuff to make it easier to generate HTML files on
  * the fly.  Typically included with cheapcgi.h in almost any
  * CGI program.
@@ -15,7 +10,9 @@
  * htmShell, which then returns.  For the most part you just
  * want an error to cause an error message to be printed and
  * then terminate your CGI program, so this works fine.
- */
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 /* create a cookie with the given stats */
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);

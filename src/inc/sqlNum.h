@@ -1,5 +1,9 @@
 /* sqlNum.h - routines to convert from ascii to
- * unsigned/integer a bit more quickly than atoi. */
+ * unsigned/integer a bit more quickly than atoi. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef SQLNUM_H
 #define SQLNUM_H
 

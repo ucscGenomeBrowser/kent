@@ -1,3 +1,5 @@
+/* blastParse - read in blast output into C data structure. */
+
 #include "common.h"
 #include "dystring.h"
 #include "linefile.h"

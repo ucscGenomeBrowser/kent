@@ -1,4 +1,8 @@
-/* Hash - a simple hash table that provides name/value pairs */
+/* Hash - a simple hash table that provides name/value pairs. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef HASH_H
 #define HASH_H
 

@@ -1,5 +1,6 @@
 /* genoFind.h - Interface to modules for fast finding of sequence
  * matches. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 
 #ifndef GENOFIND_H
 #define GENOFIND_H

@@ -1,8 +1,17 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* Some stuff that you'll likely need in any program that works with
+ * DNA.  Includes stuff for amino acids as well. 
+ *
+ * Assumes that DNA is stored as a character.
+ * The DNA it generates will include the bases 
+ * as lowercase tcag.  It will generally accept
+ * uppercase as well, and also 'n' or 'N' or '-'
+ * for unknown bases. 
+ *
+ * Amino acids are stored as single character upper case. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "dnautil.h"
 

@@ -1,5 +1,9 @@
 /* lineFile - stuff to rapidly read text files and parse them into
- * lines. */
+ * lines. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef LINEFILE_H
 #define LINEFILE_H
 

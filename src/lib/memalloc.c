@@ -3,7 +3,11 @@
  * memory handler is a thin shell around malloc/free.  You can
  * substitute routines that do more integrety checking with
  * pushCarefulMem(), or routines of your own devising with
- * pushMemHandler(). */
+ * pushMemHandler(). 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "memalloc.h"
 #include "dlist.h"

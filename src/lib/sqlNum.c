@@ -1,5 +1,8 @@
 /* sqlnum.c - Routines to convert from ascii to integer
- * representation of numbers. */
+ * representation of numbers. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "sqlNum.h"

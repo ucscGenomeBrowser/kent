@@ -4,6 +4,7 @@
  * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
  *****************************************************************************/
 /* crudeAli.h - Interface to the fast, crude blast-like aligner. */
+
 #ifndef CRUDEALI_H
 #define CRUDEALI_H
 

@@ -1,3 +1,8 @@
+/*****************************************************************************
+ * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
+ * for personal, academic, and non-profit purposes.  Commercial use          *
+ * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
+ *****************************************************************************/
 /* spaceSaver - routines that help layout 1-D objects into a
  * minimum number of tracks so that no two objects overlap
  * within a single track. */

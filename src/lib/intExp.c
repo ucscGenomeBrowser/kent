@@ -1,5 +1,9 @@
 /* Below is the worlds sleaziest little numerical expression
- * evaluator. Used to do only ints, now does doubles as well. */
+ * evaluator. Used to do only ints, now does doubles as well. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "kxTok.h"
 

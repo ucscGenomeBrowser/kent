@@ -1,5 +1,6 @@
 /* ooc.h - Stuff to handle overused N-mers (tiles) in genome
  * indexing schemes. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 
 #ifndef OOC_H
 #define OOC_H

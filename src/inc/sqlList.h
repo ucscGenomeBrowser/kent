@@ -1,4 +1,8 @@
-/* Stuff for processing comma separated lists .*/
+/* Stuff for processing comma separated lists .
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef SQLLIST_H
 #define SQLLIST_H
 

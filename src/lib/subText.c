@@ -1,4 +1,7 @@
-/* Stuff to do text substitutions. */
+/* Stuff to do text substitutions. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "subText.h"

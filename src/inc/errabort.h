@@ -11,7 +11,9 @@
  *
  * Most functions in this library will call errAbort()
  * if they run out of memory.  
- */
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef ERRABORT_H
 #define ERRABORT_H

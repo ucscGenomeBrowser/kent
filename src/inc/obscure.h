@@ -1,5 +1,9 @@
 /* Obscure.h  - stuff that's relatively rarely used
- * but still handy. */
+ * but still handy. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 long incCounterFile(char *fileName);
 /* Increment a 32 bit value on disk. */

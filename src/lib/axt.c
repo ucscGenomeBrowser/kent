@@ -9,7 +9,10 @@
  * This file contains routines to read such alignments.
  * Note that though the coordinates are one based and
  * closed on disk, they get converted to our usual half
- * open zero based in memory. */
+ * open zero based in memory. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "linefile.h"

@@ -1,4 +1,7 @@
-/* Stuff to process options out of command line. */
+/* Stuff to process options out of command line. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #ifndef OPTIONS_H
 

@@ -1,5 +1,10 @@
 /* xp - A minimal non-verifying xml parser.  It's
- * stream oriented much like expas. */
+ * stream oriented much like expas.  It's a bit faster
+ * and smaller than expas.  I'm not sure it handles unicode
+ * as well.
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "dystring.h"

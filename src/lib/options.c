@@ -1,7 +1,10 @@
 /* Options.c - stuff to handle command line options.
  * This is smaller and more flexible than the cgiSpoof
  * routines we used to use - though cgiSpoof is still the
- * method of choice for actual CGI routine. */
+ * method of choice for actual CGI routine. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "hash.h"
