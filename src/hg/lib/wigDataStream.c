@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.5 2004/08/09 21:42:06 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.6 2004/08/09 22:48:27 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -84,7 +84,7 @@ if (wDS->limit_1 > (lower+range))
     wDS->ucUpperLimit = MAX_WIG_VALUE;
 else
     wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
-verbose(2, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
+verbose(3, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
 }
 
@@ -132,6 +132,7 @@ wDS->spanLimit = 0;
 wDS->setPositionConstraint(wDS, 0, 0);
 freez(&wDS->chrName);
 freez(&wDS->dataConstraint);
+wDS->wigCmpSwitch = wigNoOp;
 wDS->limit_0 = wDS->limit_1 = 0.0;
 wDS->ucLowerLimit = wDS->ucUpperLimit = 0;
 freez(&wDS->sqlConstraint);
@@ -188,92 +189,28 @@ wDS->stats = NULL;
  *	 and the row ends after the limit_0 (upper>=limit_0)
  *	i.e. there is at least some overlap of the range
  */
-static boolean wigInRange_D(struct wiggleDataStream *wDS, double lower,
-	double upper)
-{
-return ((lower <= wDS->limit_1) && (upper >= wDS->limit_0));
-}
 /* LessThan means:  the row begins before the limit_0 (value<limit_0)
  *	i.e. there are data values below the specified limit_0
  */
-static boolean wigLessThan_D(struct wiggleDataStream *wDS, double value,
-	double dummy)
-{
-return (value < wDS->limit_0);
-}
 /* LessEqual means:  the row begins at or before the limit_0 (value<=limit_0)
  *	i.e. there are data values at or below the specified limit_0
  */
-static boolean wigLessEqual_D(struct wiggleDataStream *wDS, double value,
-	double dummy)
-{
-return (value <= wDS->limit_0);
-}
 /* Equal means:  similar to InRange, the test value limit_0 can be found
  * in the SQL row, i.e. lower <= limit_0 <= upper
  */
-static boolean wigEqual_D(struct wiggleDataStream *wDS, double lower,
-	double upper)
-{
-return ((lower <= wDS->limit_0) && (wDS->limit_0 <= upper));
-}
 /* NotEqual means:  the opposite of Equal, the test value limit_0 can not
  *	be found in the SQL row, i.e. (limit_0 < lower) or (upper < limit_0)
  */
-static boolean wigNotEqual_D(struct wiggleDataStream *wDS, double lower,
-	double upper)
-{
-return ((wDS->limit_0 < lower) || (upper < wDS->limit_0));
-}
 /* GreaterEqual means:  the row ends at or after the limit_0 (limit_0<=upper)
  *	i.e. there are data values at or above the specified limit_0
  */
-static boolean wigGreaterEqual_D(struct wiggleDataStream *wDS, double dummy,
-	double upper)
-{
-return (wDS->limit_0 <= upper);
-}
 /* GreaterEqual means:  the row ends after the limit_0 (limit_0<upper)
  *	i.e. there are data values above the specified limit_0
  */
-static boolean wigGreaterThan_D(struct wiggleDataStream *wDS, double dummy,
-	double upper)
-{
-return (wDS->limit_0 < upper);
-}
 /*	the unsigned char comparison functions
  *	Unlike the above, these are straighforward, just compare the
  *	byte values
  */
-static boolean wigInRange(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return ((*value <= wDS->ucUpperLimit) && (*value >= wDS->ucLowerLimit));
-}
-static boolean wigLessThan(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return (*value < wDS->ucLowerLimit);
-}
-static boolean wigLessEqual(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return (*value <= wDS->ucLowerLimit);
-}
-static boolean wigEqual(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return (*value == wDS->ucLowerLimit);
-}
-static boolean wigNotEqual(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return (*value != wDS->ucLowerLimit);
-}
-static boolean wigGreaterEqual(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return (*value >= wDS->ucLowerLimit);
-}
-static boolean wigGreaterThan(struct wiggleDataStream *wDS, unsigned char *value)
-{
-return (*value > wDS->ucLowerLimit);
-}
-
 
 static void wigSetCompareFunctions(struct wiggleDataStream *wDS)
 {
@@ -281,40 +218,19 @@ if (!wDS->dataConstraint)
     return;
 
 if (sameWord(wDS->dataConstraint,"<"))
-    {
-    wDS->cmpDouble = wigLessThan_D;
-    wDS->cmpByte = wigLessThan;
-    }
+    wDS->wigCmpSwitch = wigLessThan;
 else if (sameWord(wDS->dataConstraint,"<="))
-    {
-    wDS->cmpDouble = wigLessEqual_D;
-    wDS->cmpByte = wigLessEqual;
-    }
+    wDS->wigCmpSwitch = wigLessEqual;
 else if (sameWord(wDS->dataConstraint,"="))
-    {
-    wDS->cmpDouble = wigEqual_D;
-    wDS->cmpByte = wigEqual;
-    }
+    wDS->wigCmpSwitch = wigEqual;
 else if (sameWord(wDS->dataConstraint,"!="))
-    {
-    wDS->cmpDouble = wigNotEqual_D;
-    wDS->cmpByte = wigNotEqual;
-    }
+    wDS->wigCmpSwitch = wigNotEqual;
 else if (sameWord(wDS->dataConstraint,">="))
-    {
-    wDS->cmpDouble = wigGreaterEqual_D;
-    wDS->cmpByte = wigGreaterEqual;
-    }
+    wDS->wigCmpSwitch = wigGreaterEqual;
 else if (sameWord(wDS->dataConstraint,">"))
-    {
-    wDS->cmpDouble = wigGreaterThan_D;
-    wDS->cmpByte = wigGreaterThan;
-    }
+    wDS->wigCmpSwitch = wigGreaterThan;
 else if (sameWord(wDS->dataConstraint,"in range"))
-    {
-    wDS->cmpDouble = wigInRange_D;
-    wDS->cmpByte = wigInRange;
-    }
+    wDS->wigCmpSwitch = wigInRange;
 else
     errAbort("wigSetCompareFunctions: unknown constraint: '%s'",
 	wDS->dataConstraint);
@@ -426,13 +342,53 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    wiggle->dataRange/(double)MAX_WIG_VALUE);
     if (wDS->useDataConstraint)
 	{
-	if (!wDS->cmpDouble(wDS, wiggle->lowerLimit,
-		(wiggle->lowerLimit + wiggle->dataRange)))
+	boolean takeIt = FALSE;
+	switch (wDS->wigCmpSwitch)
+	    {
+		default:
+		    errAbort("wig_getData: illegal wigCmpSwitch ? %#x",
+			wDS->wigCmpSwitch);
+		    break;
+		case wigNoOp:
+		    takeIt = TRUE;
+		    break;
+		case wigInRange:
+		    takeIt = (wiggle->lowerLimit <= wDS->limit_1) &&
+			((wiggle->lowerLimit + wiggle->dataRange) >=
+				wDS->limit_0);
+		    break;
+		case wigLessThan:
+		    takeIt = wiggle->lowerLimit < wDS->limit_0;
+		    break;
+		case wigLessEqual:
+		    takeIt = wiggle->lowerLimit <= wDS->limit_0;
+		    break;
+		case wigEqual:
+		    takeIt = (wiggle->lowerLimit <= wDS->limit_0) &&
+			(wDS->limit_0 <=
+			    (wiggle->lowerLimit + wiggle->dataRange));
+		    break;
+		case wigNotEqual:
+		    takeIt = (wDS->limit_0 < wiggle->lowerLimit) ||
+			((wiggle->lowerLimit + wiggle->dataRange) <
+			    wDS->limit_0);
+		    break;
+		case wigGreaterEqual:
+		   takeIt = wDS->limit_0 <=
+			(wiggle->lowerLimit + wiggle->dataRange);
+		    break;
+		case wigGreaterThan:
+		   takeIt = wDS->limit_0 <
+			(wiggle->lowerLimit + wiggle->dataRange);
+		    break;
+	    }	/*	switch (wDS->wigCmpSwitch)	*/
+	if (takeIt)
+	    setCompareByte(wDS, wiggle->lowerLimit, wiggle->dataRange);
+	else
 	    {
 	    bytesSkipped += wiggle->count;
 	    continue;
 	    }
-	setCompareByte(wDS, wiggle->lowerLimit, wiggle->dataRange);
 	}
     if (!skipDataRead)
 	{
@@ -448,58 +404,82 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	read(wDS->wibFH, ReadData,
 	    (size_t) wiggle->count * (size_t) sizeof(unsigned char));
 
-verbose(3, "#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
+    verbose(3, "#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
 
 	datum = ReadData;
 	for (j = 0; j < wiggle->count; ++j)
 	    {
 	    if (*datum != WIG_NO_DATA)
 		{
+		boolean takeIt = FALSE;
+
 		if (wDS->winEnd)  /* non-zero means a range is in effect */
 		    {
 		    if ( (chromPosition < wDS->winStart) ||
-			(chromPosition >= wDS->winEnd))
-			continue;
-		    }
-		++validData;
-		if (wDS->useDataConstraint)
-		    {
-		    if (wDS->cmpByte(wDS, datum))
+			(chromPosition >= wDS->winEnd) )
 			{
-			++valuesMatched;
-			if (doAscii)
-			    {
-			    asciiOut->value =
-                    BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
-			    asciiOut->chromStart = chromPosition;
-			    ++asciiOut;
-			    ++wigAscii->count;
-			    }
+			++datum;
+			chromPosition += wiggle->span;
+			continue;	/*	next *datum	*/
 			}
 		    }
-		else
+		++validData;
+		switch (wDS->wigCmpSwitch)
 		    {
+		    default:
+			errAbort("wig_getData: illegal wigCmpSwitch ? %#x",
+			    wDS->wigCmpSwitch);
+			break;
+		    case wigNoOp:
+			takeIt = TRUE;
+			break;
+		    case wigInRange:
+			takeIt = (*datum <= wDS->ucUpperLimit) &&
+			    (*datum >= wDS->ucLowerLimit);
+			break;
+		    case wigLessThan:
+			takeIt = *datum < wDS->ucLowerLimit;
+			break;
+		    case wigLessEqual:
+			takeIt = *datum <= wDS->ucLowerLimit;
+			break;
+		    case wigEqual:
+			takeIt = *datum == wDS->ucLowerLimit;
+			break;
+		    case wigNotEqual:
+			takeIt = *datum != wDS->ucLowerLimit;
+			break;
+		    case wigGreaterEqual:
+			takeIt = *datum >= wDS->ucLowerLimit;
+			break;
+		    case wigGreaterThan:
+			takeIt = *datum > wDS->ucLowerLimit;
+			break;
+		    }	/*	switch (wDS->wigCmpSwitch)	*/
+		if (takeIt)
+		    {
+		    ++valuesMatched;
 		    if (doAscii)
 			{
 			asciiOut->value =
-		    BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
+		BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
 			asciiOut->chromStart = chromPosition;
 			++asciiOut;
 			++wigAscii->count;
 			}
 		    }
-		}
+		}	/*	if (*datum != WIG_NO_DATA)	*/
 	    else
 		{
 		++noDataBytes;
 		}
 	    ++datum;
 	    chromPosition += wiggle->span;
-	    }
+	    }	/*	for (j = 0; j < wiggle->count; ++j)	*/
 	freeMem(ReadData);
 	}	/*	if (!skipDataRead)	*/
     wiggleFree(&wiggle);
-    }	/*	while (nextRow())	*/
+    }		/*	while (nextRow())	*/
 
 if (doAscii)
     slReverse(&wDS->ascii);
@@ -659,7 +639,7 @@ wds->useDataConstraint = FALSE;
 wds->wibFH = -1;
 wds->limit_0 = -1 * INFINITY;
 wds->limit_1 = INFINITY;
-/*	Set method pointers	*/
+wds->wigCmpSwitch = wigNoOp;
 wds->freeConstraints = freeConstraints;
 wds->freeAscii = freeAscii;
 wds->freeBed = freeBed;

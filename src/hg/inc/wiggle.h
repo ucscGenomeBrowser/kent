@@ -239,14 +239,12 @@ void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
 
 /*	the object wiggleDataStream is implemented in lib/wigDataStream.c */
 
-#if defined(NOT)
 enum wigCompare 
 /*	type of comparison to be calculated	*/
     {
     wigNoOp, wigInRange, wigLessThan, wigLessEqual, wigEqual,
 	wigNotEqual, wigGreaterEqual, wigGreaterThan,
     };
-#endif
 
 enum wigDataFetchType
 /*	bit masks to specify type of data to fetch via getData()	*/
@@ -265,6 +263,7 @@ struct wiggleDataStream
     struct bed *bed;		/*	data in bed format	*/
     struct wiggleStats *stats;	/*	list of wiggle stats	*/
     boolean useDataConstraint;	/*	to simplify checking if it is on */
+    enum wigCompare wigCmpSwitch;	/*	for compare function switch */
     char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
     double limit_0;		/*	for constraint comparison	*/
     double limit_1;		/*	for constraint comparison	*/
@@ -291,10 +290,6 @@ struct wiggleDataStream
     void (*freeBed)(struct wiggleDataStream *wDS);
     void (*freeStats)(struct wiggleDataStream *wDS);
     void (*freeConstraints)(struct wiggleDataStream *wDS);
-    boolean (*cmpDouble)(struct wiggleDataStream *wDS, double lower,
-	double upper);		/*	for comparing with SQL row values */
-    boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
-				/*	for comparing to real data bytes */
     void (*setPositionConstraint)(struct wiggleDataStream *wDS,
 	int winStart, int winEnd);
 				/*	work only within specified position */
