@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.873 2005/01/31 23:40:36 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.874 2005/02/01 04:01:10 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7824,10 +7824,15 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-char optionScoreStr[128]; /* Option -  score filter */
+char option[128]; /* Option -  score filter */
+char *words[3];
 char *optionScoreVal;
 int optionScore = 0;
-char extraWhere[128] ;
+char query[128] ;
+char *scoreCtString = NULL;
+bool doScoreCtFilter = FALSE;
+int scoreFilterCt = 0;
+char *topTable = NULL;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -7837,28 +7842,62 @@ else if (tg->bedSize == 5)
     loader = bedLoad5;
 else
     loader = bedLoad6;
-safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+
+/* limit to a specified count of top scoring items.
+ * If this is selected, it overrides selecting item by specified score */
+scoreCtString = trackDbSetting(tg->tdb, "filterTopScorers");
+if (scoreCtString != NULL)
+    {
+    chopLine(scoreCtString, words);
+    safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
+    doScoreCtFilter = 
+        cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
+    safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
+    scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
+    topTable = words[2];
+    }
+
+/* limit to items above a specified score */
+safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
-optionScore = cartUsualInt(cart, optionScoreStr, optionScore);
-if (optionScore > 0) 
+optionScore = cartUsualInt(cart, option, optionScore);
+
+if (hTableExists(topTable) && doScoreCtFilter)
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    safef(query, sizeof(query), 
+                "select * from %s order by score desc limit %d", 
+                                topTable, scoreFilterCt);
+    sr = sqlGetResult(conn, query);
+    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
+    }
+else if (optionScore > 0)
+    {
+    safef(query, sizeof(query), "score >= %d",optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
+                         query, &rowOffset);
     }
 else
     {
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
+                         NULL, &rowOffset);
     }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
     slAddHead(&list, bed);
     }
+if (doScoreCtFilter)
+    {
+    /* filter out items not in this window */
+    struct bed *newList = 
+        bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
+    list = newList;
+    }
+slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-slReverse(&list);
 tg->items = list;
 }
 
@@ -8562,15 +8601,6 @@ track->height = height;
 return height;
 }
 
-int trackPriCmp(const void *va, const void *vb)
-/* Compare for sort based on priority */
-{
-const struct track *a = *((struct track **)va);
-const struct track *b = *((struct track **)vb);
-
-return (a->priority - b->priority);
-}
-
 static void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
@@ -8584,6 +8614,7 @@ struct trackDb *subTdb;
 /* number of possible subtracks for this track */
 int subtrackCt = slCount(tdb->subtracks);
 int altColors = subtrackCt - 1;
+TrackHandler handler;
 
 /* ignore if no subtracks */
 if (!subtrackCt)
@@ -8622,7 +8653,11 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
         continue;
 
     /* initialize from composite track settings */
-    subtrack = trackFromTrackDb(tdb, FALSE);
+    subtrack = trackFromTrackDb(tdb);
+    /* install parent's track handler */
+    handler = lookupTrackHandler(tdb->tableName);
+    if (handler != NULL)
+	handler(subtrack);
 
     /* add subtrack settings (table, colors, labels, vis & pri) */
     subtrack->mapName = subTdb->tableName;
@@ -8652,10 +8687,10 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     subtrack->priority = subTdb->priority;
     slAddHead(&track->subtracks, subtrack);
     }
-slSort(&track->subtracks, trackPriCmp);
+slSort(&track->subtracks, trackDbCmp);
 }
 
-struct track *trackFromTrackDb(struct trackDb *tdb, bool doSubtracks)
+struct track *trackFromTrackDb(struct trackDb *tdb)
 /* Create a track based on the tdb. */
 {
 struct track *track = trackNew();
@@ -8705,9 +8740,6 @@ iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 fillInFromType(track, tdb);
-
-if (doSubtracks && slCount(tdb->subtracks))
-    makeCompositeTrack(track, tdb);
 return track;
 }
 
@@ -8722,19 +8754,21 @@ TrackHandler handler;
 tdbList = hTrackDb(chromName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    track = trackFromTrackDb(tdb, TRUE);
+    track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
     if (handler != NULL)
 	handler(track);
+
+    if (slCount(tdb->subtracks) != 0)
+        makeCompositeTrack(track, tdb);
+
     if (track->loadItems == NULL)
         warn("No load handler for %s", tdb->tableName);
     else if (track->drawItems == NULL)
         warn("No draw handler for %s", tdb->tableName);
     else
-        {
         slAddHead(pTrackList, track);
-	}
     }
 }
 
@@ -8845,7 +8879,7 @@ struct track *newCustomTrack(struct customTrack *ct)
 {
 struct track *tg;
 boolean useItemRgb = FALSE;
-tg = trackFromTrackDb(ct->tdb, TRUE);
+tg = trackFromTrackDb(ct->tdb);
 
 useItemRgb = bedItemRgb(ct->tdb);
 
