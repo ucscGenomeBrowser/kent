@@ -1599,39 +1599,9 @@ o - Load Ensembl peptides:
      hgPepPred hg13 generic ensPep ensembl.pep
 
 
-    LOAD SANGER 22 Pseudogenes 
-    cd ~/hg13/bed/sanger22
-    cp ~/hg10/bed/sanger22/cChr22.3.lx.pseudogene.gff .
-    replace ^chr22 with hg10:chr22 in Chr22.3.lx.pseudogene.gff
-    liftUp -type=.gff pseudo.gff hg13.lft Chr22.3.lx.pseudogene.gff
-    ldHgGene hg13 sanger22pseudo pseudo.gff
-
-LOAD SANGER22 GENES  TO DO
-      cd ~/oo/bed
-      mkdir sanger22
-      cd sanger22
-      not sure where these files were downloaded from
-      grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg13 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
-          | ldHgGene hg13 sanger22pseudo stdin
-  # Note: this creates sanger22extras, but doesn't currently create
-  # a correct sanger22 table, which are replaced in the next steps
-      sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
-          | ldHgGene hg13 sanger22 stdin
-      sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
-          | ldHgGene hg13 sanger22pseudo stdin
-
-      hgPepPred hg13 generic sanger22pep *.pep
-
-              
-              LOAD SANGER 20 GENES (todo)
-     # First download files from James Gilbert's email to ~/oo/bed/sanger20 and
-     # go to that directory while logged onto hgwdev.  Then:
-        grep -v Pseudogene chr_20*.gtf | ldHgGene hg13 sanger20 stdin
-	hgSanger20 hg13 *.gtf *.info
-
-
-LOAD VEGA GENES (DONE 04/04/03)
+LOAD VEGA GENES AND PSEUDOGENES (DONE 04/24/03)
     mkdir ~/hg13/bed/vega
+    cd ~/hg13/bed/vega
     # Saved email attachment from Steve Searle <searle@sanger.ac.uk> to
     # ~/hg13/bed/vega/vegagtf.tar.gz
     gunzip -c vegagtf.tar.gz | tar xvf -
@@ -1647,12 +1617,27 @@ LOAD VEGA GENES (DONE 04/04/03)
       ./fixOtterIds.pl $g $f > $f:r-fixed.fa
     end
     cat chr*.gtf.tab > vegaInfo.tab
-    ldHgGene hg13 vegaGene chr*-fixed.gtf
+    # Load genes and Immunoglobulin/Pseudogenes into 2 separate tracks
+    cat chr*-fixed.gtf \
+    | egrep -vw '(Pseudogene|Ig_Segment|Ig_Pseudogene_Segment)' \
+    | ldHgGene hg13 vegaGene stdin
+    cat chr*-fixed.gtf \
+    | egrep -w '(Pseudogene|Ig_Segment|Ig_Pseudogene_Segment)' \
+    | ldHgGene hg13 vegaPseudoGene stdin
     hgPepPred hg13 generic vegaPep chr*-fixed.fa
     hgsql hg13 < ~/kent/src/hg/lib/vegaInfo.sql
     echo "load data local infile 'vegaInfo.tab' into table vegaInfo" \
     | hgsql hg13
-
+    # Set cdsStart and cdsEnd to 0 if method is Novel_Transcript
+    foreach ntname (`echo 'select name from vegaGene,vegaInfo \
+                           where vegaGene.name = vegaInfo.transcriptId AND \
+                                 vegaInfo.method = "Novel_Transcript"' \
+                     | hgsql -N hg13`)
+      echo "update vegaGene set cdsStart = 0 where name = '$ntname'" \
+      | hgsql hg13
+      echo "update vegaGene set cdsEnd = 0 where name = '$ntname'" \
+      | hgsql hg13
+    end
 
 LOAD RNAGENES
       ssh hgwdev
