@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.75 2005/03/01 19:17:30 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.76 2005/03/15 19:27:00 donnak Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -192,11 +192,8 @@ else
     	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">", uiState+1);
     	puts("           Blat</A> &nbsp; - &nbsp;");
 	}
-    if (!(endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgText")))
-	{
     	printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
     	puts("           Tables</A> &nbsp; - &nbsp;");
-	}
     if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
 	{
