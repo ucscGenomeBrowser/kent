@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.158 2005/02/25 18:30:19 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.159 2005/03/24 22:38:49 heather Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1030,6 +1030,11 @@ int itemOrganismID;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+boolean xenoExists = hTableExists("xenoMrna");
+
+/* Don't do xeno alignments if xeno table doesn't exist */
+if (!aligns && !xenoExists) 
+    return alignCount;
 
 AllocVar(table);
 
@@ -1054,6 +1059,7 @@ for (el = accList; el != NULL; el = el->next)
     if (aligns != mrnaAligns(conn, acc, mrnaType, isXeno))
             /* this accession doesn't fit table criteria -- leave it alone */
             continue;
+
 
     /* item fits criteria, so enter in table */
     AllocVar(pos);
