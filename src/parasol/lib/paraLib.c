@@ -54,7 +54,6 @@ boolean parseRunJobMessage(char *line, struct runJobMessage *rjm)
 /* Parse runJobMessage as paraNodes sees it. */
 {
 bool ret;
-rjm->managingHost = nextWord(&line);
 rjm->jobIdString = nextWord(&line);
 rjm->reserved = nextWord(&line);
 rjm->user = nextWord(&line);
