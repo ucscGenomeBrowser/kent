@@ -1,6 +1,6 @@
 track chainDm1
 shortLabel D. mel. Chain
-longLabel Chained Blastz D. melanogaster/D. pseudoobscura Alignments
+longLabel Chained Blastz D. melanogaster/A. gambiae Alignments
 group compGeno
 priority 133
 visibility hide
@@ -12,7 +12,7 @@ otherDb dm1
 
 track netDm1
 shortLabel D. mel. Net
-longLabel D. melanogaster/D. pseudoobscura Alignment Net
+longLabel D. melanogaster/A. gambiae Alignment Net
 group compGeno
 priority 134
 visibility dense
@@ -20,15 +20,6 @@ spectrum on
 type netAlign dm1 chainDm1
 otherDb dm1
 
-track axtNetDm1
-shortLabel D. mel. Aligns
-longLabel D. melanogaster/D. pseudoobscura Blastz Alignments from Net
-group compGeno
-priority 135
-visibility dense
-color 100,50,0
-altColor 128,120,100
-type axt dm1
 
 
 searchTable ensGene
