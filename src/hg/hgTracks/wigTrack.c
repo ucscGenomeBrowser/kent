@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.40 2004/02/11 18:00:20 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.41 2004/02/11 18:38:19 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -597,6 +597,16 @@ overallRange = overallUpperLimit - overallLowerLimit;
 
 if (autoScale == wiggleScaleAuto)
     {
+    overallUpperLimit = -1.0e+300;	/* reset limits for auto scale */
+    overallLowerLimit = 1.0e+300;
+    for (i = preDrawZero; i < preDrawZero+width; ++i)
+	{
+	if (preDraw[i].smooth > overallUpperLimit)
+	    overallUpperLimit = preDraw[i].smooth;
+	if (preDraw[i].smooth < overallLowerLimit)
+	    overallLowerLimit = preDraw[i].smooth;
+	}
+    overallRange = overallUpperLimit - overallLowerLimit;
     if (overallRange == 0.0)
 	{
 	if (overallUpperLimit > 0.0)
