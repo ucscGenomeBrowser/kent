@@ -9,6 +9,10 @@
 #include "jksql.h"
 #endif
 
+#ifndef DNAUTIL_H
+#include "dnautil.h"
+#endif
+
 struct dnaMotif
 /* A gapless DNA motif */
     {
@@ -58,6 +62,17 @@ void dnaMotifOutput(struct dnaMotif *el, FILE *f, char sep, char lastSep);
 /* Print out dnaMotif as a comma separated list including final comma. */
 
 /********** Start of custom hand-generated code. *************/
+
+float dnaMotifSequenceProb(struct dnaMotif *motif, DNA *dna);
+/* Return probability of dna according to motif.  Make sure
+ * motif is probabalistic (with call to dnaMotifMakeProbabalistic
+ * if you're not sure) before calling this. */
+
+char dnaMotifBestStrand(struct dnaMotif *motif, DNA *dna);
+/* Figure out which strand of DNA is better for probabalistic motif. */
+
+double dnaMotifBitScore(struct dnaMotif *motif, DNA *dna);
+/* Return logBase2-odds score of dna given a probabalistic motif. */
 
 void dnaMotifNormalize(struct dnaMotif *motif);
 /* Make all columns of motif sum to one. */

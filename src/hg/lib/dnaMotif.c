@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.4 2004/09/12 23:49:04 kent Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.5 2004/09/13 15:39:06 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -198,6 +198,69 @@ fputc(lastSep,f);
 
 /********** Start of custom hand-generated code. *************/
 
+float dnaMotifSequenceProb(struct dnaMotif *motif, DNA *dna)
+/* Return probability of dna according to motif.  Make sure
+ * motif is probabalistic (with call to dnaMotifMakeProbabalistic
+ * if you're not sure) before calling this. */
+{
+float p = 1.0;
+int i;
+for (i=0; i<motif->columnCount; ++i)
+    {
+    switch (dna[i])
+        {
+	case 'a':
+	case 'A':
+	    p *= motif->aProb[i];
+	    break;
+	case 'c':
+	case 'C':
+	    p *= motif->cProb[i];
+	    break;
+	case 'g':
+	case 'G':
+	    p *= motif->gProb[i];
+	    break;
+	case 't':
+	case 'T':
+	    p *= motif->tProb[i];
+	    break;
+	case 0:
+	    warn("dna shorter than motif");
+	    internalErr();
+	    break;
+	default:
+	    p *= 0.25;
+	    break;
+	}
+    }
+return p;
+}
+
+char dnaMotifBestStrand(struct dnaMotif *motif, DNA *dna)
+/* Figure out which strand of DNA is better for probabalistic motif. */
+{
+float fScore, rScore;
+fScore = dnaMotifSequenceProb(motif, dna);
+reverseComplement(dna, motif->columnCount);
+rScore = dnaMotifSequenceProb(motif, dna);
+reverseComplement(dna, motif->columnCount);
+if (fScore >= rScore)
+    return '+';
+else
+    return '-';
+}
+
+double dnaMotifBitScore(struct dnaMotif *motif, DNA *dna)
+/* Return logBase2-odds score of dna given a probabalistic motif. */
+{
+double p = dnaMotifSequenceProb(motif, dna);
+double q = pow(0.25, motif->columnCount);
+double odds = p/q;
+return logBase2(odds);
+}
+
+
 void dnaMotifNormalize(struct dnaMotif *motif)
 /* Make all columns of motif sum to one. */
 {
@@ -257,6 +320,7 @@ if (dnaMotifIsScoreBased(motif))
 else
     dnaMotifNormalize(motif);
 }
+
 
 static double u1(double prob)
 /* Calculate partial uncertainty for one base. */
