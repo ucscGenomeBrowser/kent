@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.882 2005/02/02 22:34:14 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.883 2005/02/02 22:48:06 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7199,25 +7199,37 @@ if (track->tdb)
 return FALSE;
 }
 
-static bool subtrackVisibleTdb(struct trackDb *tdb)
+static void setSubtrackVisible(char *tableName, bool visible)
 {
 char option[64];
-safef(option, sizeof(option), "%s", tdb->tableName);
-return cartUsualBoolean(cart, option, (tdb->visibility != tvHide));
+safef(option, sizeof(option), "%s_sel", tableName);
+cartSetBoolean(cart, option, visible);
 }
 
-static bool subtrackVisible(struct track *track)
+static void subtrackVisibleTdb(struct trackDb *tdb)
+/* Determine if subtrack should be displayed.  Save in cart */
 {
 char option[64];
-safef(option, sizeof(option), "%s", track->mapName);
-return cartUsualBoolean(cart, option, (track->visibility != tvHide));
+char *words[2];
+char *setting;
+bool selected = TRUE;
+
+if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+    {
+    if (chopLine(cloneString(setting), words) >= 2)
+        if (sameString(words[1], "off"))
+            selected = FALSE;
+    }
+safef(option, sizeof(option), "%s_sel", tdb->tableName);
+selected = cartCgiUsualBoolean(cart, option, selected);
+setSubtrackVisible(tdb->tableName, selected);
 }
 
-static void setSubtrackVisible(char *tableName)
+static bool isSubtrackVisible(char *table)
 {
 char option[64];
-safef(option, sizeof(option), "%s", tableName);
-cartSetBoolean(cart, option, TRUE);
+safef(option, sizeof(option), "%s_sel", table);
+return cartCgiUsualBoolean(cart, option, TRUE);
 }
 
 static int subtrackCount(struct track *trackList)
@@ -7225,7 +7237,7 @@ static int subtrackCount(struct track *trackList)
 struct track *subtrack;
 int ct = 0;
 for (subtrack = trackList; subtrack; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack))
+    if (isSubtrackVisible(subtrack->mapName))
         ct++;
 return ct;
 }
@@ -7326,7 +7338,7 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                if (!subtrackVisible(subtrack))
+                if (!isSubtrackVisible(subtrack->mapName))
                     continue;
                 subtrack->visibility = track->visibility;
                 pixHeight = limitTrackVis(subtrack, pixHeight, fontHeight);
@@ -7377,7 +7389,7 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                if (!subtrackVisible(subtrack))
+                if (!isSubtrackVisible(subtrack->mapName))
                     continue;
                 subtrack->ixColor = vgFindRgb(vg, &subtrack->color);
                 subtrack->ixAltColor = vgFindRgb(vg, &subtrack->altColor);
@@ -7470,7 +7482,7 @@ if (withLeftLabels)
             {
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (subtrackVisible(subtrack))
+                if (isSubtrackVisible(subtrack->mapName))
                     y = doLeftLabels(subtrack, vg, font, y);
             }
         else
@@ -7658,7 +7670,7 @@ if (withCenterLabels)
             {
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (subtrackVisible(subtrack))
+                if (isSubtrackVisible(subtrack->mapName))
                     y = doCenterLabels(subtrack, track, vg, font, y);
             }
         else
@@ -7682,7 +7694,7 @@ if (withCenterLabels)
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (subtrackVisible(subtrack))
+                if (isSubtrackVisible(subtrack->mapName))
                     y = doDrawItems(subtrack, vg, font, y, &lastTime);
             }
         else
@@ -7709,7 +7721,7 @@ if (withLeftLabels)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL;
                              subtrack = subtrack->next)
-                    if (subtrackVisible(subtrack))
+                    if (isSubtrackVisible(subtrack->mapName))
                         y = doOwnLeftLabels(subtrack, vg, font, y);
                 }
             else
@@ -7751,7 +7763,7 @@ for (track = trackList; track != NULL; track = track->next)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL;
                                 subtrack = subtrack->next)
-                    if (subtrackVisible(subtrack))
+                    if (isSubtrackVisible(subtrack->mapName))
                         y = doMapItems(subtrack, fontHeight, y);
                 }
             else
@@ -7880,7 +7892,6 @@ else
 scoreCtString = trackDbSetting(tg->tdb, "filterTopScorers");
 if (scoreCtString != NULL)
     {
-    chopLine(scoreCtString, words);
     safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
     doScoreCtFilter = 
         cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
@@ -8617,7 +8628,7 @@ static void compositeLoad(struct track *track)
 {
 struct track *subtrack;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack))
+    if (isSubtrackVisible(subtrack->mapName))
         subtrack->loadItems(subtrack);
 }
 
@@ -8627,7 +8638,7 @@ static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 struct track *subtrack;
 int height = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (subtrackVisible(subtrack))
+    if (isSubtrackVisible(subtrack->mapName))
         height += subtrack->totalHeight(subtrack, vis);
 track->height = height;
 return height;
@@ -8669,19 +8680,20 @@ if (altColors && (finalR || finalG || finalB))
 subtrackCt = 0;
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
-    if (subtrackVisibleTdb(subTdb))
+    subtrackVisibleTdb(subTdb);
+    if (isSubtrackVisible(subTdb->tableName))
         subtrackCt++;
     }
 /* if no subtracks are selected in cart, turn them all on */
 if (!subtrackCt)
     for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-        setSubtrackVisible(subTdb->tableName);
+        setSubtrackVisible(subTdb->tableName, TRUE);
 
 /* fill in subtracks of composite track */
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
     struct track *subtrack;
-    if (!subtrackVisibleTdb(subTdb))
+    if (!isSubtrackVisible(subTdb->tableName))
         continue;
 
     /* initialize from composite track settings */
@@ -9797,7 +9809,7 @@ if (!hideControls)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL; 
                                                     subtrack = subtrack->next)
-                    if (subtrackVisible(subtrack))
+                    if (isSubtrackVisible(subtrack->mapName))
                         hPrintf("%s, %d, %d<BR>\n", subtrack->shortLabel, 
                                 subtrack->loadTime, subtrack->drawTime);
                 }

@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.232 2005/02/01 18:23:37 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.233 2005/02/02 22:48:44 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2904,7 +2904,6 @@ if (table != NULL)
         }
     if (order)
         dyStringPrintf(query, " order by %s", hti->startField);
-    //printf(" %s <p>",query->string);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
@@ -3110,17 +3109,23 @@ while (tdbLocalList != NULL)
 nextTdb = tdbFullList;
 for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
     {
-    char *composite = trackDbSetting(tdb, "subTrack");
+    char *words[1];
+    char *setting;
+
     nextTdb = tdb->next;
-    if (composite)
+    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
         {
-        compositeTdb = (struct trackDb *)hashFindVal(compositeHash, composite);
-        if (compositeTdb)
+        if (chopLine(cloneString(setting), words) >= 1)
             {
-            /* should be a short list -- we can shortcut and add to tail
-             * rather than reversing later */
-            tdb->type = cloneString(compositeTdb->type);
-            slAddTail(&compositeTdb->subtracks, tdb);
+            compositeTdb = 
+                (struct trackDb *)hashFindVal(compositeHash, words[0]);
+            if (compositeTdb)
+                {
+                /* should be a short list -- we can shortcut and add to tail
+                 * rather than reversing later */
+                tdb->type = cloneString(compositeTdb->type);
+                slAddTail(&compositeTdb->subtracks, tdb);
+                }
             }
         }
     else
@@ -3137,7 +3142,7 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn, char *tra
 struct trackDb *tdb, *nextTdb, *tdbList, *compositeTdb = NULL;
 char where[256];
 
-safef(where, sizeof(where), "tableName = '%s' or settings like '%%subTrack %s\n%%'", track, track);
+safef(where, sizeof(where), "tableName = '%s' or settings like '%%subTrack %s%%'", track, track);
 
 tdbList = loadTrackDbLocal(conn, where);
 if (tdbList == NULL)
