@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.26 2004/05/18 23:46:57 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.27 2004/05/27 17:45:47 angie Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -139,18 +139,16 @@ if (e != NULL)
 return table;
 }
 
-boolean isChromId(char *seqName)
-/* Return TRUE if ID is just a chromosome number/name, w/o "chr" prefix */
+char *chromNumberToName(char *seqName)
+/* If seqName is a chrom number, prepend "chr". */
 {
-return((!hasLogicalChromName(seqName)) &&
-       (isdigit(seqName[0]) ||
-	sameString("X", seqName)  || sameString("X_random", seqName)  ||
-	sameString("Y", seqName)  || sameString("Y_random", seqName)  ||
-	sameString("Un", seqName) || sameString("Un_random", seqName) ||
-	sameString("UL", seqName) || sameString("UL_random", seqName) ||
-	sameString("NA", seqName) || sameString("NA_random", seqName) ||
-	sameString("NA_unmapped", seqName) || 
-	sameString("M", seqName)  ));
+char *official = NULL;
+char chrName[128];
+safef(chrName, sizeof(chrName), "chr%s", seqName);
+official = hgOfficialChromName(chrName);
+if (official == NULL)
+    official = seqName;
+return(official);
 }
 
 boolean dasableTrack(char *name)
@@ -317,13 +315,8 @@ if (segList != NULL)
 
 	wholeThing = FALSE;
 	partCount = chopString(seg->name, ":,", parts, ArraySize(parts));
-	seq = seqName = parts[0];
-	if (isChromId(seqName))
-	    {
-	    /* Prepend "chr" if client passes in chromosome number */
-	    seq = needMem(strlen(seqName)+4);
-	    snprintf(seq, strlen(seqName)+4, "chr%s", seqName);
-	    }
+	seqName = parts[0];
+	seq = chromNumberToName(seqName);
 	if (partCount == 1)
 	    {
 	    start = 0;
@@ -351,9 +344,9 @@ if (segList != NULL)
 else
     {
     /* Handle old format (pre 0.995 spec) lists. */
-    seq = seqName = cgiOptionalString("ref");
+    seqName = cgiOptionalString("ref");
     wholeThing = TRUE;
-    if (seq == NULL)
+    if (seqName == NULL)
 	{
 	if (mustExist)
 	    earlyError(402);
@@ -362,12 +355,7 @@ else
 	    return NULL;
 	    }
 	}
-    if (isChromId(seqName))
-	{
-	/* Prepend "chr" if client passes in chromosome number */
-	seq = needMem(strlen(seqName)+4);
-	snprintf(seq, strlen(seqName)+4, "chr%s", seqName);
-	}
+    seq = chromNumberToName(seqName);
     if (cgiVarExists("start"))
 	{
         start = cgiInt("start")-1;
@@ -389,7 +377,7 @@ else
 /* Check all segments are chromosomes. */
 for (segment = segmentList; segment != NULL; segment = segment->next)
     {
-    if (!hasLogicalChromName(segment->seq))
+    if (hgOfficialChromName(segment->seq) == NULL)
         earlyError(403);
     }
 return segmentList;
