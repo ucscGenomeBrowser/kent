@@ -1,5 +1,4 @@
 #!/bin/csh 
-
 exit;
 
 ############################################################
@@ -9,11 +8,14 @@ exit;
 #    - http://www.nisc.nih.gov/open_page.html?/projects/encode/index.cgi
 #    - http://www.ncbi.nlm.nih.gov/IEB/Research/Schuler/ENCODE/ENCODE_seqids.txt
 
+# /cluster/bluearc/encode/metadata.txt
+
 ############################################################
 # get sequences
 
+cd /cluster/bluearc/encode
 rm -rf makeLists.pl >& /dev/null
-cat > makeLists.pl <<EOF
+cat > makeLists.pl << EOF
 #!/usr/bin/perl -W
 
 %libOptions = 
@@ -43,56 +45,66 @@ $efetchURL  = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&r
 $bluearc    = "/cluster/bluearc/encode";
 $msaDir     = "/usr/local/apache/htdocs/encode/downloads/msa";
 $freezeDate = shift;
-$metadata   = "${msaDir}/${freezeDate}/metadata.txt";
-$wgetList   = "/cluster/bluearc/encode/wgetList";
-$maskList   = "/cluster/bluearc/encode/para/maskList";
+$metadata   = "$msaDir/$freezeDate/metadata.txt";
+$wgetList   = "$bluearc/wgetList";
+$maskList   = "$bluearc/para/maskList";
+$testDir    = "$bluearc/$freezeDate.test";
+$nibFragF   = "$testDir/runNibFragDiff";
 
 open(METADATA, " < $metadata") or die "can't open $metadata for reading.\n";
 open(WGETLIST, " > $wgetList") or die "can't open $wgetList";
 open(MASKLIST, " > $maskList") or die "can't open $maskList";
+open(NIBFRAG,  " > $nibFragF") or die "can't open $nibFragF";
 
-print(WGETLIST, "cd /cluster/bluearc/encode\n");
+print(WGETLIST "cd $bluearc\n");
 
 while (<METADATA>)
 {
     if (/niscOrganism/) { next; }
-    @fields  = split /\t/;
-    $species = $fields[0];
-    $acc     = $fields[10];
+    @fields     = split /\t/;
+    $species    = $fields[0];
+    $db         = $fields[6];
+    $chrom      = $fields[7];
+    $chromStart = $fields[8];
+    $chromEnd   = $fields[9];
+    $acc        = $fields[10];
 
-    print(WGETLIST "wget -O $bluearc/$acc \"${efetchURL}&id=$acc\"\n");
-    if (defined $libOptions{lc($species)})
-	{
-	print(MASKLIST "/cluster/bin/scripts/maskOne.csh $acc $libOptions{lc($species)}\n");
-	}
-    else
-	{
-	print "Missing species: ". lc($species) . "\n";
-	}
+    print(WGETLIST "wget -O $bluearc/original/$acc \"${efetchURL}&id=$acc\"\n");
+    if ($db ne ".")
+    {
+	$chromStart -= 1;
+	print(NIBFRAG  "nibFrag -masked /cluster/data/$db/nib/$chrom.nib $chromStart $chromEnd + $testDir/$acc.nibFrag;\n");
+	print(NIBFRAG  "diff -biB $bluearc/masked/$acc $testDir/$acc.nibFrag;\n");
+    }
+    die ("Missing species: ". lc($species) . "\n") unless (defined $libOptions{lc($species)});
+    print(MASKLIST "/cluster/bin/scripts/maskOne.csh $acc $libOptions{lc($species)}\n");
 } 
 EOF
-# 
-
+#
 chmod ug+x makeLists.pl
-./makeLists.pl
-chmod ug+x /cluster/bluearc/encode/wgetList /cluster/bluearc/encode/para/maskList
-/cluster/bluearc/encode/wgetList
+
+set freezeDate = "OCT-2004"
+set bluearc = /cluster/bluearc/encode
+./makeLists.pl $freezeDate
+chmod ug+x $bluearc/wgetList $bluearc/para/maskList $bluearc/$freezeDate.test/runNibFragDiff
+
+$bluearc/wgetList
 
 ############################################################
 # update metadata file with correct seq lengths, N count
 # This is still done manually and needs to be updated
 
 rm -rf getLengths.pl >& /dev/null
-cat > getLengths.pl <<EOF
+cat > getLengths.pl << EOF
 #!/usr/bin/perl -W
 
-opendir(DIR,".");
+opendir(DIR,"/cluster/bluearc/encode/original");
 @files= grep /NT/, readdir DIR;
 closedir(DIR);
 foreach $file (@files)
 {
     $seq="";
-    open(FASTA,$file) or die "Ha!";
+    open(FASTA,"/cluster/bluearc/encode/original/$file") or die "Ha! $file ";
     <FASTA>; # ignore header line;
     while (<FASTA>) { $seq .= $_; }
     close(FASTA);
@@ -106,12 +118,15 @@ foreach $file (@files)
 EOF
 #
 chmod ug+x getLengths.pl
-./getLengths.pl < metadata.txt > lengths
+
+rm -f lengths
+# ./getLengths.pl < metadata.txt > lengths
 
 ############################################################
 # mask sequences
 
-cat > /cluster/bin/scripts/maskOne.csh <<EOF
+rm -f /cluster/bin/scripts/maskOne.csh
+cat > /cluster/bin/scripts/maskOne.csh << EOF
 #!/bin/csh
 
 if ( $#argv < 1 ) then
@@ -137,21 +152,21 @@ cd /tmp
 /bin/mv -f $acc.out /cluster/bluearc/encode/RepeatMasker
 /bin/mv -f $acc.bed /cluster/bluearc/encode/trf
 /bin/rm -f $acc*
-
+echo
 EOF
 #
 chmod ug+x /cluster/bin/scripts/maskOne.csh
 
-ssh kk
-cd /cluster/bluearc/encode/para
-para create maskList
-para push, para check, ...
+#ssh kk
+#cd /cluster/bluearc/encode/para
+#para create maskList
+#para push, para check, ...
 
 ############################################################
 # rewrite files with new headers
 
-rm -rf writeEncodeFasta.pl >& /dev/null
-cat > writeEncodeFasta.pl <<EOF
+rm -f writeEncodeFasta.pl >& /dev/null
+cat > writeEncodeFasta.pl << EOF
 #!/usr/bin/perl -W
 
 # echo "select * from encodeOrthology where release_date='releaseDate'"|mysql $database > metadata
@@ -185,12 +200,13 @@ while (<HEADERLIST>)
 }
 EOF
 #
+chmod ug+x writeEncodeFasta.pl
 
 set downloadDir = /usr/local/apache/htdocs/encode/downloads/msa
-set releaseDate  = OCT-2004
-set releaseDir   = $downloadDir/$releaseDate
+set releaseDate = OCT-2004
+set releaseDir  = $downloadDir/$releaseDate
+exit;
 
-chmod ug+x writeEncodeFasta.pl
 ./writeEncodeFasta.pl $releaseDate metadata.txt
 
 ssh hgwdev
@@ -198,6 +214,8 @@ rm -rf $releaseDir/EN*
 cp -rf metadata.txt /cluster/bluearc/encode/$releaseDate/EN* $releaseDir
 
 chmod 775 $downloadDir $releaseDir $releaseDir/EN* $releaseDir/RepeatMasker $releaseDir/trf
-chmod 664 $releaseDir/EN*/* $dreezeDir/RepeatMasker/* $releaseDir/trf/*  $releaseDir/metadata.txt
+chmod 664 $releaseDir/EN*/* $freezeDir/RepeatMasker/* $releaseDir/trf/*  $releaseDir/metadata.txt
 
 # update htdocs/encode/orthoAll.html
+
+# loadOrthology.pl < ~/htdocs/encode/downloads/msa/OCT-2004/metadata.txt | hg16 |& more
