@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.7 2003/09/25 00:37:45 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.8 2003/10/14 07:02:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -374,7 +374,7 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	    protName = newVal;
 	}
     fprintf(canFile, "%s\t%d\t%d\t%d\t%s\t%s\n", 
-    	chrom, cluster->start, cluster->end, clusterId, cannonical->name,
+    	chrom, cannonical->txStart, cannonical->txEnd, clusterId, cannonical->name,
 	protName);
     ++totalClusterCount;
     }
