@@ -412,6 +412,28 @@ stripChar(buf, '"');
 return buf;
 }
 
+static double gffGroupAverageScore(struct gffGroup *group, double defaultScore)
+/* Return average score of GFF group, or average if none. */
+{
+double cumScore = 0;
+int count = 0;
+struct gffLine *line;
+
+/* First see if any non-zero */
+for (line = group->lineList; line != NULL; line = line->next)
+    {
+    if (line->score != 0.0)
+        ++count;
+    }
+if (count <= 0)
+    return defaultScore;
+
+/* Calculate and return average score. */
+for (line = group->lineList; line != NULL; line = line->next)
+    cumScore += line->score;
+return cumScore / count;
+}
+
 static struct bed *gffHelperFinish(struct gffFile *gff, struct hash *chromHash)
 /* Create bedList from gffHelper. */
 {
@@ -435,7 +457,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	bed->chromStart = chromStart = gp->txStart;
 	bed->chromEnd = gp->txEnd;
 	bed->name = cloneString(gp->name);
-	bed->score = 1000;
+	bed->score = gffGroupAverageScore(group, 1000);
 	bed->strand[0] = gp->strand[0];
 	bed->thickStart = gp->cdsStart;
 	bed->thickEnd = gp->cdsEnd;

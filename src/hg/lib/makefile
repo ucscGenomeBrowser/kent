@@ -21,13 +21,15 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     ggCluster.o altGraph.o ggDbIo.o \
     ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o \
-    jksql.o knownInfo.o knownMore.o lfs.o plasEndPairs.o stsMap.o stsMapMouse.o \
+    jksql.o knownInfo.o knownMore.o lfs.o \
     mapSts.o mcnBreakpoints.o mouseSyn.o mouseOrtho.o \
-    ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o riken.o rmskOut.o \
-    rnaGene.o rnaGroup.o rikenCluster.o roughAli.o \
+    ooUtils.o pepPred.o plasEndPairs.o pslWScore.o \
+    qaSeq.o refLink.o riken.o rmskOut.o \
+    rnaGene.o rnaGroup.o rikenBest.o rikenCluster.o roughAli.o \
     sage.o sageExp.o sanger22extra.o \
     simpleRepeat.o snp.o softberryHom.o \
-    softPromoter.o stsAlias.o stsInfo.o stsMarker.o stsInfoMouse.o synteny100000.o\
+    softPromoter.o stsAlias.o stsInfo.o \
+    stsMap.o stsMapMouse.o stsMarker.o stsInfoMouse.o synteny100000.o\
     tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackDb.o trackTable.o wabAli.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
