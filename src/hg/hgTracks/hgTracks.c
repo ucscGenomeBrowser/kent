@@ -1494,7 +1494,7 @@ else if( sameString( tg->mapName, "zooCons" ) )
 else if( sameString( tg->mapName, "binomialCons2" ) )
     {
     minRange = 0.0;
-    maxRange = 300.0;
+    maxRange = 1000.0;
     }
 else if( sameString( tg->mapName, "binomialCons3" ) )
     {
