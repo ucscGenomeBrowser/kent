@@ -1009,6 +1009,8 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     >> bdgpSwissProt.sql
     hgsql dm1 < bdgpSwissProt.sql
 
+    # Re-ran the following steps 1/7/05 after reloading bdgpGene 
+    # without -genePredExt, see 1/6/05 note below...:
     # Use the above table to add a proteinID field to bdgpGene.  
     hgsql dm1 -e 'create table bdgpGene2 \
                   select bdgpGene.*, bdgpSwissProt.swissProtId as proteinID \
