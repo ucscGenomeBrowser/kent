@@ -137,4 +137,18 @@ int intronOrientation(DNA *iStart, DNA *iEnd);
  * Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
  * intron. */
 
+int dnaScore2(DNA a, DNA b);
+/* Score match between two bases (relatively crudely). */
+
+int dnaScoreMatch(DNA *a, DNA *b, int size);
+/* Compare two pieces of DNA base by base. Total mismatches are
+ * subtracted from total matches and returned as score. 'N's 
+ * neither hurt nor help score. */
+
+int aaScore2(AA a, AA b);
+/* Score match between two bases (relatively crudely). */
+
+int aaScoreMatch(AA *a, AA *b, int size);
+/* Compare two peptides aa by aa. */
+
 #endif /* DNAUTIL_H */

@@ -54,8 +54,8 @@ struct gfRange
     struct dnaSeq *tSeq;	/* Target sequence. (May be NULL if in .nib.  Not allocated here.) */
     int tStart;	/* Start in target */
     int tEnd;	/* End in target */
-    int hitCount;	/* Number of hits */
     struct gfRange *components;	/* Components of range. */
+    int hitCount;	/* Number of hits. */
     };
 
 static void gfRangeFreeList(struct gfRange **pList);
@@ -292,7 +292,6 @@ for (range = combined->components; range != NULL; range = range->next)
         {
 	AllocVar(ffi);
 	ffi->ff = ali;
-	ffi->score = ffScore(ali, stringency);
 	slAddHead(&bun->ffList, ffi);
 	gotAny = TRUE;
 	}
@@ -368,14 +367,13 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     range->tStart = clump->tStart;
     range->tEnd = clump->tEnd;
     range->tSeq = seq;
-    range->hitCount = clump->hitCount;
     slAddHead(&rangeList, range);
     }
 slReverse(&rangeList);
 return rangeList;
 }
 
-void gfAlignSeqClumps(struct gfClump *clumpList, struct dnaSeq *seq,
+void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
     boolean isRc,  enum ffStringency stringency, int minMatch, 
     GfSaveAli outFunction, void *outData)
 /* Convert gfClumps to an actual alignment that gets saved via 
@@ -405,6 +403,221 @@ for (range = rangeList; range != NULL; range = range->next)
     ssBundleFree(&bun);
     }
 gfRangeFreeList(&rangeList);
+}
+
+static int maxDown = 10;
+
+void extendHitRight(int qMax, int tMax,
+	char **pEndQ, char **pEndT, int (*scoreMatch)(char a, char b))
+/* Extend endQ/endT as much to the right as possible. */
+{
+int maxScore = 0;
+int score = 0;
+int maxPos = -1;
+int last = min(qMax, tMax);
+int i;
+char *q = *pEndQ, *t = *pEndT;
+
+uglyf("  extend hit right qMax %d, tMax %d\n", qMax, tMax);
+for (i=0; i<last; ++i)
+    {
+    score += scoreMatch(q[i], t[i]);
+    if (score > maxScore)
+	 {
+         maxScore = score;
+	 maxPos = i;
+	 }
+    else
+         {
+	 if (i - maxPos >= maxDown)
+	     break;
+	 }
+    }
+uglyf("  Extended to right %d, score up %d\n", maxPos+1, maxScore);
+*pEndQ = q+maxPos+1;
+*pEndT = t+maxPos+1;
+}
+
+void extendHitLeft(int qMax, int tMax,
+	char **pStartQ, char **pStartT, int (*scoreMatch)(char a, char b))
+/* Extend startQ/startT as much to the left as possible. */
+{
+int maxScore = 0;
+int score = 0;
+int maxPos = 0;
+int last = -min(qMax, tMax);
+int i;
+char *q = *pStartQ, *t = *pStartT;
+
+uglyf("  extend hit left qMax %d, tMax %d\n", qMax, tMax);
+for (i=-1; i>=last; --i)
+    {
+    score += scoreMatch(q[i], t[i]);
+    if (score > maxScore)
+	 {
+         maxScore = score;
+	 maxPos = i;
+	 }
+    else
+         {
+	 if (i - maxPos >= maxDown)
+	     break;
+	 }
+    }
+uglyf("  Extended to left %d, score up %d\n", -maxPos, maxScore);
+*pStartQ = q+maxPos;
+*pStartT = t+maxPos;
+}
+
+
+void clumpToHspRange(struct gfClump *clump, aaSeq *qSeq, int tileSize,
+	struct gfRange **pRangeList)
+/* Covert clump->hitList to HSPs (high scoring local sequence pair,
+ * that is longest alignment without gaps) and add resulting HSPs to
+ * rangeList. */
+{
+struct gfSeqSource *target = clump->target;
+aaSeq *tSeq = target->seq;
+int maxDown = 10;
+AA *qs, *ts, *qe, *te;
+int maxScore = 0, maxPos = 0, score, pos;
+struct gfHit *hit;
+int qStart, tStart, qEnd, tEnd, newQ, newT;
+boolean outOfIt = TRUE;		/* Logically outside of a clump. */
+struct gfRange *range;
+
+if (tSeq == NULL)
+    internalErr();
+
+/* The termination condition of this loop is a little complicated.
+ * We want to output something either when the next hit can't be
+ * merged into the previous, or at the end of the list.  To avoid
+ * duplicating the output code we're forced to complicate the loop
+ * termination logic. */
+for (hit = clump->hitList; ; hit = hit->next)
+    {
+    if (hit != NULL)
+        {
+	newQ = hit->qStart;
+	newT = hit->tStart - target->start;
+	uglyf("  hit %s %d %s %d\n", qSeq->name, hit->qStart, tSeq->name, hit->tStart);
+	}
+
+    /* See if it's time to output merged (diagonally adjacent) hits. */
+    if (!outOfIt)	/* Not first time through. */
+        {
+	if (hit == NULL || newQ != qEnd || newT != tEnd)
+	    {
+	    uglyf("Output clump %d-%d %d-%d\n", qStart, qEnd, tStart, tEnd);
+	    qs = qSeq->dna + qStart;
+	    ts = tSeq->dna + tStart;
+	    qe = qSeq->dna + qEnd;
+	    te = tSeq->dna + tEnd;
+	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
+		&qe, &te, aaScore2);
+	    extendHitLeft(qStart, tStart, &qs, &ts, aaScore2);
+	    AllocVar(range);
+	    range->qStart = qs - qSeq->dna;
+	    range->qEnd = qe - qSeq->dna;
+	    range->tName = tSeq->name;
+	    range->tSeq = tSeq;
+	    range->tStart = ts - tSeq->dna;
+	    range->tEnd = te - tSeq->dna;
+	    range->hitCount = qe - qs;
+	    slAddHead(pRangeList, range);
+	    outOfIt = TRUE;
+	    }
+	}
+    if (hit == NULL)
+        break;
+
+    if (outOfIt)
+        {
+	qStart = newQ;
+	qEnd = qStart + tileSize;
+	tStart = newT;
+	tEnd = tStart + tileSize;
+	outOfIt = FALSE;
+	}
+    else
+        {
+	qEnd = newQ + tileSize;
+	tEnd = newT + tileSize;
+	}
+    }
+}
+
+struct ssFfItem *rangesToFfItem(struct gfRange *rangeList, aaSeq *qSeq, aaSeq *tSeq)
+/* Convert ranges to ssFfItem's. */
+{
+AA *q = qSeq->dna, *t = tSeq->dna;
+struct ffAli *ffList = NULL, *ff;
+struct gfRange *range;
+struct ssFfItem *ffi;
+
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    AllocVar(ff);
+    ff->nStart = q + range->qStart;
+    ff->nEnd = q + range->qEnd;
+    ff->hStart = t + range->tStart;
+    ff->hEnd = t + range->tEnd;
+    ff->left = ffList;
+    ffList = ff;
+    }
+AllocVar(ffi);
+ffi->ff = ffMakeRightLinks(ffList);
+return ffi;
+}
+
+void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
+    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    GfSaveAli outFunction, void *outData)
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. */
+{
+struct gfClump *clump;
+struct gfRange *rangeList = NULL, *range;
+aaSeq *targetSeq;
+struct ssBundle *bun;
+
+uglyf("Found %d clumps in %s\n", slCount(clumpList), seq->name);
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    gfClumpDump(gf, clump, uglyOut);
+uglyf("ok1\n");
+    clumpToHspRange(clump, seq, gf->tileSize, &rangeList);
+uglyf("ok2\n");
+    }
+slReverse(&rangeList);
+slSort(&rangeList, gfRangeCmpTarget);
+uglyf("ok3\n");
+uglyf("Before bundling %d ranges\n", slCount(rangeList));
+rangeList = gfRangesBundle(rangeList, 500000/3);
+uglyf("After bundling %d ranges\n", slCount(rangeList));
+uglyf("ok4\n");
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    targetSeq = range->tSeq;
+    uglyf("seq %p targetSeq %p\n", seq, targetSeq);
+    uglyf("Range %s %d %d %s %d %d\n", seq->name, range->qStart, range->qEnd, targetSeq->name, range->tStart, range->tEnd);
+    uglyf("  %d components\n", slCount(range->components));
+    AllocVar(bun);
+    bun->qSeq = seq;
+    bun->genoSeq = targetSeq;
+    bun->data = range;
+uglyf("ok5\n");
+    bun->ffList = rangesToFfItem(range->components, seq, targetSeq);
+uglyf("ok6\n");
+    bun->isProt = TRUE;
+    ssStitch(bun, stringency);
+uglyf("ok7\n");
+    saveAlignments(targetSeq->name, targetSeq->size, 0, 
+	bun, outData, isRc, stringency, minMatch, outFunction);
+uglyf("ok8\n");
+    ssBundleFree(&bun);
+uglyf("ok9\n");
+    }
 }
 
 

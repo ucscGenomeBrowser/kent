@@ -148,6 +148,16 @@ for (bun = bunList; bun != NULL; bun = bun->next)
 
 #endif /* DEBUG */
 
+static int bioScoreMatch(boolean isProt, char *a, char *b, int size)
+/* Return score of match (no inserts) between two bio-polymers. */
+{
+if (isProt)
+    {
+    return aaScoreMatch(a, b, size);
+    }
+else
+    return dnaScoreMatch(a, b, size);
+}
 
 static int findCrossover(struct ffAli *left, struct ffAli *right, int overlap, boolean isProt)
 /* Find ideal crossover point of overlapping blocks.  That is
@@ -160,11 +170,20 @@ int bestPos = 0;
 char *nStart = right->nStart;
 char *lhStart = left->hEnd - overlap;
 char *rhStart = right->hStart;
-int bestScore = ffScoreMatch(nStart, rhStart, overlap);
-int score = bestScore;
 int i;
-int (*scoreMatch)(char a, char b) = (isProt ? aaScore2 : dnaScore2);
+int (*scoreMatch)(char a, char b);
+int score, bestScore;
 
+if (isProt)
+    {
+    scoreMatch = aaScore2;
+    score = bestScore = aaScoreMatch(nStart, rhStart, overlap);
+    }
+else
+    {
+    scoreMatch = dnaScore2;
+    score = bestScore = dnaScoreMatch(nStart, rhStart, overlap);
+    }
 
 for (i=0; i<overlap; ++i)
     {
@@ -179,6 +198,7 @@ for (i=0; i<overlap; ++i)
     }
 return bestPos;
 }
+
 
 static struct ssGraph *ssGraphMake(struct ffAli *ffList, DNA *needle, DNA *haystack, 
 	enum ffStringency stringency, boolean isProt)
@@ -203,7 +223,7 @@ graph->nodes = AllocArray(nodes, nodeCount+1);
 for (i=1, ff = ffList; i<=nodeCount; ++i, ff = ff->right)
     {
     nodes[i].ff = ff;
-    nodes[i].nodeScore = ffScoreMatch(ff->nStart, ff->hStart, ff->hEnd - ff->hStart);
+    nodes[i].nodeScore = bioScoreMatch(isProt, ff->nStart, ff->hStart, ff->hEnd - ff->hStart);
     }
 
 graph->edges = AllocArray(edges, maxEdgeCount);
@@ -236,8 +256,8 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
 		int ffSize = ff->hEnd - ff->hStart;
 		int newMidScore, newFfScore;
 		e->crossover = crossover = findCrossover(ff, mid, overlap, isProt);
-		newMidScore = ffScoreMatch(mid->nStart, mid->hStart, midSize-overlap+crossover);
-		newFfScore = ffScoreMatch(ff->nStart+crossover, ff->hStart+crossover,
+		newMidScore = bioScoreMatch(isProt, mid->nStart, mid->hStart, midSize-overlap+crossover);
+		newFfScore = bioScoreMatch(isProt, ff->nStart+crossover, ff->hStart+crossover,
 				ffSize-crossover);
 		score = newMidScore - ffNode->nodeScore + newFfScore;
 		nGap = 0;
@@ -393,12 +413,12 @@ aliList = ffRemoveEmptyAlis(aliList, TRUE);
 return aliList;
 }
 
-int cmpFflScore(const void *va, const void *vb)
+int cmpFflTrimScore(const void *va, const void *vb)
 /* Compare to sort based on query. */
 {
 const struct ssFfItem *a = *((struct ssFfItem **)va);
 const struct ssFfItem *b = *((struct ssFfItem **)vb);
-return b->score - a->score;
+return b->trimScore - a->trimScore;
 }
 
 static void trimBundle(struct ssBundle *bundle, int maxFfCount,
@@ -409,11 +429,13 @@ struct ssFfItem *ffl, *newFflList = NULL, *lastFfl = NULL;
 int ffCountAll = 0;
 int ffCountOne;
 
+if (bundle->isProt)
+    errAbort("proteins not yet supported in trimBundle");
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
     {
-    ffl->score = ffScore(ffl->ff, stringency);
+    ffl->trimScore = ffScore(ffl->ff, stringency);
     }
-slSort(&bundle->ffList, cmpFflScore);
+slSort(&bundle->ffList, cmpFflTrimScore);
 
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
     {

@@ -29,7 +29,7 @@ struct ssFfItem
     {
     struct ssFfItem *next;      /* Next in list. */
     struct ffAli *ff;		/* Alignment (owned by ssFfItem) */
-    int score;                  /* Alignment score.  Not always updated. */
+    int trimScore;                  /* Alignment score during trimming. */
     };
 
 void ssFfItemFree(struct ssFfItem **pEl);
@@ -44,11 +44,12 @@ struct ssBundle
     {
     struct ssBundle *next;	/* Next in list. */
     struct ssFfItem *ffList;    /* Item list - memory owned by bundle. */
-    struct dnaSeq *qSeq;        /* Query sequence (not owned by bundle.) */
-    struct dnaSeq *genoSeq;     /* Genomic sequence (not owned by bundle.) */
+    bioSeq *qSeq;        /* Query sequence (not owned by bundle.) */
+    bioSeq *genoSeq;     /* Genomic sequence (not owned by bundle.) */
     int genoIx;                 /* Index of bac in associated PatSpace. */
     int genoContigIx;           /* Index of contig inside of seq. */
     void *data;			/* User defined data pointer. */
+    boolean isProt;		/* True if it's a protein based bundle. */
     };
 
 void ssBundleFree(struct ssBundle **pEl);

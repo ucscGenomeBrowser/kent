@@ -99,9 +99,6 @@ int ffScore(struct ffAli *ali, enum ffStringency stringency);
 int ffScoreSomeAlis(struct ffAli *ali, int count, enum ffStringency stringency);
 /* Figure out score of count consecutive alis. */
 
-int ffScoreMatch(DNA *a, DNA *b, int len);
-/* Return scoring of a stretch of DNA (no insertions considered) */
-
 int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency);
 /* Return gap penalty for given h and n gaps. */
 

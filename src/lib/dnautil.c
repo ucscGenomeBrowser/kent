@@ -499,6 +499,64 @@ else
     return 0;
 }
 
+int dnaScore2(DNA a, DNA b)
+/* Score match between two bases (relatively crudely). */
+{
+if (a == 'n' || b == 'n') return 0;
+if (a == b) return 1;
+else return -1;
+}
+
+int dnaScoreMatch(DNA *a, DNA *b, int size)
+/* Compare two pieces of DNA base by base. Total mismatches are
+ * subtracted from total matches and returned as score. 'N's 
+ * neither hurt nor help score. */
+{
+int i;
+int score = 0;
+for (i=0; i<size; ++i)
+    {
+    DNA aa = a[i];
+    DNA bb = b[i];
+    if (aa == 'n' || bb == 'n')
+        continue;
+    if (aa == bb)
+        ++score;
+    else
+        score -= 1;
+    }
+return score;
+}
+
+
+int aaScore2(AA a, AA b)
+/* Score match between two bases (relatively crudely). */
+{
+if (a == 'X' || b == 'X') return 0;
+if (a == b) return 3;
+else return -1;
+}
+
+int aaScoreMatch(AA *a, AA *b, int size)
+/* Compare two peptides aa by aa. */
+{
+int i;
+int score = 0;
+for (i=0; i<size; ++i)
+    {
+    AA aa = a[i];
+    AA bb = b[i];
+    if (aa == 'X' || bb == 'X')
+        continue;
+    if (aa == bb)
+        score += 3;
+    else
+        score -= 1;
+    }
+return score;
+}
+
+
 /* Tables to convert from 0-20 to ascii single letter representation
  * of proteins. */
 int aaVal[256];
@@ -555,22 +613,6 @@ for (i=0; i<ArraySize(aminoAcidTable); ++i)
     aaChars[c] = aaChars[lowc] = c;
     valToAa[i] = c;
     }
-}
-
-int dnaScore2(DNA a, DNA b)
-/* Score match between two bases (relatively crudely). */
-{
-if (a == 'n' || b == 'n') return 0;
-if (a == b) return 1;
-else return -1;
-}
-
-int aaScore2(AA a, AA b)
-/* Score match between two bases (relatively crudely). */
-{
-if (a == 'X' || b == 'X') return 0;
-if (a == b) return 3;
-else return -1;
 }
 
 void dnaUtilOpen()

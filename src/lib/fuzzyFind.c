@@ -262,6 +262,8 @@ for (i=0; i<size; ++i)
     }
 return score;
 }
+#ifdef OLD   /* This got renamed to dnaScoreMatch and moved to dnaUtils. */
+#endif /* OLD */
 
 int ffCalcCdnaGapPenalty(int hGap, int nGap)
 /* Return gap penalty for given h and n gaps. */
@@ -342,7 +344,7 @@ while (--count >= 0)
     {
     int len = ali->hEnd - ali->hStart;
     struct ffAli *right = ali->right;
-    oneScore = ffScoreMatch(ali->hStart, ali->nStart, len);
+    oneScore = dnaScoreMatch(ali->hStart, ali->nStart, len);
     score += oneScore;
     if (count > 0)  /* Calculate gap penalty */
         score -= ffGapPenalty(ali, right,stringency);
@@ -364,7 +366,7 @@ while (ali != NULL)
     {
     int len = ali->hEnd - ali->hStart;
     struct ffAli *right = ali->right;
-    oneScore = ffScoreMatch(ali->hStart, ali->nStart, len);
+    oneScore = dnaScoreMatch(ali->hStart, ali->nStart, len);
     score += oneScore;
     if (right)  /* Calculate gap penalty */
         {
@@ -521,7 +523,7 @@ for (;;)
         if (windowSize > nSize) windowSize = nSize;
         if (windowSize > hSize) windowSize = hSize;
         if (windowSize > 0)
-            score = ffScoreMatch(ns-windowSize, hs-windowSize, windowSize); 
+            score = dnaScoreMatch(ns-windowSize, hs-windowSize, windowSize); 
         else
             score = -1;
 
@@ -594,7 +596,7 @@ for (;;)
         if (windowSize > nSize) windowSize = nSize;
         if (windowSize > hSize) windowSize = hSize;
         if (windowSize > 0)
-            score = ffScoreMatch(ne, he, windowSize); 
+            score = dnaScoreMatch(ne, he, windowSize); 
         else
             score = -1;
 
@@ -783,7 +785,7 @@ for (;;)
         int gapScore;
         int matchScore;
         gapScore = -ffCdnaGapPenalty(left, a);
-        matchScore = ffScoreMatch(left->nEnd, left->hEnd, gapSize);
+        matchScore = dnaScoreMatch(left->nEnd, left->hEnd, gapSize);
         if (matchScore > gapScore)
             {
             /* Make current cover left. RemoveEmpty will take

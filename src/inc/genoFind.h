@@ -104,6 +104,24 @@ struct gfClump *gfPepFindClumps(struct genoFind *gf, struct dnaSeq *seq);
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
 /* Print out info on clump */
 
+typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
+	struct ffAli *ali, bioSeq *genoSeq, bioSeq *otherSeq, 
+	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
+/* This is the type of a client provided function to save an alignment. */
+
+void gfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
+    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    GfSaveAli outFunction, void *outData);
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
+ * a FILE as outData in this case.. */
+
+void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
+    boolean isRc,  enum ffStringency stringency, int minMatch, 
+    GfSaveAli outFunction, void *outData);
+/* Convert gfClumps to an actual alignment that gets saved via 
+ * outFunction/outData. */
+
 /* ---  Some routines for dealing with gfServer at a low level ---- */
 
 char *gfSignature();
@@ -127,23 +145,11 @@ int gfReadMulti(int sd, void *vBuf, size_t size);
 
 /* ---  Some routines for dealing with gfServer at a high level ---- */
 
-typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
-	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
-/* This is the type of a client provided function to save an alignment. */
-
 void gfSavePsl(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format.  */
-
-void gfAlignSeqClumps(struct gfClump *clumpList, struct dnaSeq *seq,
-    boolean isRc,  enum ffStringency stringency, int minMatch, 
-    GfSaveAli outFunction, void *outData);
-/* Convert gfClumps to an actual alignment that gets saved via 
- * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
- * a FILE as outData in this case.. */
 
 void gfAlignStrand(char *hostName, char *portName, char *nibDir, struct dnaSeq *seq,
     boolean isRc,  enum ffStringency stringency, int minMatch, GfSaveAli outFunction, void *outData);
