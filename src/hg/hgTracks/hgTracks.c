@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.612 2003/10/09 10:20:10 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.613 2003/10/14 03:39:44 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6361,7 +6361,7 @@ if (hTableExists("grp"))
     struct sqlConnection *conn = hAllocConn();
     struct sqlResult *sr;
     char **row;
-    sr = sqlGetResult(conn, "select * from grp");
+    sr = sqlGetResult(conn, "select * from grp order by priority");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	struct grp grp;
