@@ -34,6 +34,7 @@ int i;
 struct dlList *list = newDlList();	/* List of lineFiles */
 struct dlNode *node, *next;
 struct chainFile *cf;
+int id = 0;
 
 /* Open up all input files and read first chain. */
 for (i=0; i<fileCount; ++i)
@@ -59,6 +60,7 @@ while (!dlEmpty(list))
 	    }
 	}
     cf = bestNode->val;
+    cf->chain->id = ++id;		/* We reset id's here. */
     chainWrite(cf->chain, stdout);
     chainFree(&cf->chain);
     if ((cf->chain = chainRead(cf->lf)) == NULL)
