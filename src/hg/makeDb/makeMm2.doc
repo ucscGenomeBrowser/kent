@@ -81,7 +81,7 @@ Create packed chromosome sequence files
 
 Load chromosome sequence info into database 
      ssh hgwdev
-     mysql -A -u hgcat -pbigsecret mm2  < ~/src/hg/lib/chromInfo.sql
+     hgsql mm2  < ~/src/hg/lib/chromInfo.sql
      cd ~/mm
      hgNibSeq -preMadeNib mm2 /cluster/store2/mm.2002.02/mm2/nib ?/chr*.fa ??/chr*.fa 
 
@@ -751,16 +751,9 @@ LOAD SOFTBERRY GENES (todo)
      - mkdir softberry
      - cd softberry
      - get ftp://www.softberry.com/pub/SC_MOU_NOV01/softb_mou_genes_nov01.tar.gz
-     - mkdir output
-     - Run the fixFormat.pl routine in
-        ~/mm/bed/softberry like so:
-        ./fixFormat.pl output
-     - This will stick all the properly converted .gff and .pro files in
-     the directory named "output".
-     - cd output
      ldHgGene mm2 softberryGene chr*.gff
-     hgPepPred mm2 softberry *.pro
-     hgSoftberryHom mm2 *.pro
+     hgPepPred mm2 softberry *.protein
+     hgSoftberryHom mm2 *.protein
 
 LOAD ACEMBLY (todo)
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and

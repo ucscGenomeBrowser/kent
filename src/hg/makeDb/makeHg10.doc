@@ -346,7 +346,7 @@ Transfer this to Windows and do k-means clustering
 with k=200 with cluster.  Transfer results file back
 to ~/oo/bed/triangle/affyCluster_K_G200.kgg.  Then
 do
-      promoSeqFromCluster hg10 1000 affyCluster_K_G200.kgg kg200.unmasked
+      promoSeqFromCluster hg10 1000 affyCluster_K_G200.kgg kg200.unmasked kg200.lift
 Then RepeatMask the .fa file inkg200.unmasked, and copy masked versions
 to kg200.   Then
       cat kg200/*.fa > all1000.fa
