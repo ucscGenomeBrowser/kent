@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.664 2004/06/15 00:46:31 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.665 2004/06/15 14:53:42 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13380,6 +13380,7 @@ bedPrintPos(bed, ct->fieldCount);
 void blastProtein(struct trackDb *tdb, char *itemName)
 /* Show protein to translated dna alignment for accession. */
 {
+char startBuf[64], endBuf[64];
 int start = cartInt(cart, "o");
 boolean same;
 struct lineFile *lf;
@@ -13422,7 +13423,9 @@ if (hTableExists("hg16KG"))
 	printf("Human Position:\n");
 	printf("<A TARGET=_BLANK HREF=\"%s?position=%s:%d-%d&db=%s\">",
 		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, "hg16");
-	printf("%s:%d-%d</A><BR>",psl->tName,psl->tStart + 1, psl->tEnd);
+	sprintLongWithCommas(startBuf, psl->tStart + 1);
+	sprintLongWithCommas(endBuf, psl->tEnd);
+	printf("%s:%s-%s</A><BR>",psl->tName,startBuf, endBuf);
 	printf("protein length: %d<BR>\n",psl->qSize);
 	}
     sqlFreeResult(&sr);
@@ -13458,7 +13461,9 @@ for (same = 1; same >= 0; same -= 1)
 	    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
 		hgTracksName(), psl->tName, psl->tStart + 1, psl->tEnd, database, 
 		tdb->tableName, itemName, uiState);
-	    printf("%s:%d-%d</A> <BR>",psl->tName,psl->tStart + 1, psl->tEnd);
+	    sprintLongWithCommas(startBuf, psl->tStart + 1);
+	    sprintLongWithCommas(endBuf, psl->tEnd);
+	    printf("%s:%s-%s</A> <BR>",psl->tName,startBuf, endBuf);
 	    if (same)
 		printf("\n");
 	    }
