@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.25 2004/10/28 08:01:19 kent Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.26 2004/12/15 20:08:36 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -53,6 +53,7 @@ static struct optionSpec optionSpecs[] = {
     {"name", OPTION_STRING},
     {"minVal", OPTION_FLOAT},
     {"maxVal", OPTION_FLOAT},
+    {"obsolete", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -74,8 +75,9 @@ static char * chrom = (char *) NULL;	/* to specify chrom name	*/
 static char * wibFile = (char *) NULL;	/* to name the .wib file	*/
 static char * name = (char *) NULL;	/* to specify feature name	*/
 static double minVal = BIGNUM;          /* minimum value that is allowed in data. */
-static double maxVal = BIGNUM;          /* maximum value that is allowed in data. */
-static boolean trimVals = FALSE;        /* should the data be trimmed by min & maxVal? */
+static double maxVal = BIGNUM;     /* maximum value that is allowed in data. */
+static boolean trimVals = FALSE;/*should the data be trimmed by min & maxVal?*/
+static boolean obsolete = FALSE;/*use this program even though it is obsolete*/
 
 static void usage()
 /* Explain how to use program. */
@@ -95,6 +97,7 @@ errAbort(
     "\t-verbose=N - display process while underway (only N=2 does something)\n"
     "\t-minVal=N - minimum allowable data value, values will be capped here.\n"
     "\t-maxVal=N - maximum allowable data value, values will be capped here.\n"
+    "\t-obsolete - Use this program even though it is obsolete.\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
     "\tset the output file names.  Otherwise use the -wibFile option.\n"
     "Generally the ascii files have one to three columns.\n"
@@ -441,6 +444,14 @@ return;
 int main( int argc, char *argv[] )
 {
 optionInit(&argc, argv, optionSpecs);
+
+obsolete = optionExists("obsolete");
+if (! obsolete)
+    {
+    verbose(1,"ERROR: This loader is obsolete.  Please use: 'wigEncode'\n");
+    verbose(1,"\t(use -obsolete flag to run this encoder despite it being obsolete)\n");
+    errAbort("ERROR: wigAsciiToBinary is obsolete, use 'wigEncode' instead");
+    }
 
 if (argc < 2)
     usage();
