@@ -34,6 +34,7 @@ DIRS = \
 	hgLoadRna \
 	hgLoadSeq \
 	hgLoadSample \
+	hgLoadWiggle \
 	hgNibSeq \
 	hgPepPred \
 	hgPhMouse \
