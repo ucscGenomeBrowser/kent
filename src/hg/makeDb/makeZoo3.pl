@@ -63,7 +63,7 @@ my $blatDir;
 my $workingDir;
 
 # One time step - create all the databases
-##run("mysql -u hgcat -pCa7outB6 -A < ${zooDir}/createDbs.sql\n");
+##run("mysql -u SECRET_USER -pBIG_SECRET -A < ${zooDir}/createDbs.sql\n");
 
 # Set up the blat and repeat masker directories
 ##run("rm -rf work");
@@ -150,13 +150,13 @@ for $org (keys(%orgHash)) {
 # Load repeat masker and GCPercent tracks
 ##   run("scripts/makeNib.csh $dirName");
 ##   run("hgLoadOut $dbName $zooDir/$dirName/bed/rmskS/*.fa.out");
-##   run("mysql -u hgcat -pCa7outB6 -A $dbName  < ~/kent/src/hg/lib/chromInfo.sql");
+##   run("mysql -u SECRET_USER -pBIG_SECRET -A $dbName  < ~/kent/src/hg/lib/chromInfo.sql");
 ##   run("hgNibSeq -preMadeNib $dbName $zooDir/$dirName/nib $zooDir/$dirName/?/*.fa");
 ##   run("hgGoldGapGl $dbName $zooDir/ $dirName -noGl");
 
     # Make and load GC percent table
 ##   run("mkdir -p $zooDir/$dirName/bed/gcPercent");
-##   run("mysql -u hgcat -pCa7outB6 -A $dbName < ~/src/hg/lib/gcPercent.sql");
+##   run("mysql -u SECRET_USER -pBIG_SECRET -A $dbName < ~/src/hg/lib/gcPercent.sql");
 ##   run("hgGcPercent $dbName $dirName/nib");
 ##   run("mv gcPercent.bed $dirName/bed/gcPercent");
 
