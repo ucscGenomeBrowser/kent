@@ -6,10 +6,11 @@
 #include "psl.h"
 #include "fa.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.11 2004/02/24 22:04:11 kent Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.12 2004/10/13 06:48:48 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,6 +28,8 @@ errAbort(
   "The genoFile can be a fasta file or a nib.\n"
   "Subranges of nib files may specified using the syntax:\n"
   "   /path/file.nib:seqid:start-end\n"
+  "or\n"
+  "   /path/file.2bit:seqid:start-end\n"
   "or\n"
   "   /path/file.nib:start-end\n"
   "With the second form, a sequence id of file:start-end will be used.\n"
@@ -209,6 +212,8 @@ FILE *f = NULL;
 
 if (nibIsFile(genoFile))
     geno = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
+else if (twoBitIsFileOrRange(genoFile))
+    geno = twoBitLoadAll(genoFile);
 else
     geno = faReadDna(genoFile);
 tolowers(geno->dna);

@@ -5,9 +5,10 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.7 2004/02/24 22:04:13 kent Exp $";
+static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.8 2004/10/13 06:50:14 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +22,8 @@ errAbort(
   "Subranges of nib files may specified using the syntax:\n"
   "   /path/file.nib:seqid:start-end\n"
   "or\n"
+  "   /path/file.2bit:seqid:start-end\n"
+  "or\n"
   "   /path/file.nib:start-end\n"
   "With the second form, a sequence id of file:start-end will be used.\n");
 }
@@ -32,7 +35,7 @@ struct dnaSeq *genoSeqCache = NULL;
 char genoFileName[PATH_LEN];
 
 /* data for seqments or subrange nibs */
-boolean nibSubrange = FALSE;
+boolean isSubrange = FALSE;
 FILE *nibFile = NULL;
 int nibStart = 0, nibEnd = 0, nibSize = 0;
 int nibSegTargetSize = 32*1024*1024;
@@ -61,11 +64,11 @@ if (rangeIntersection(tStart, tEnd, nibStart, nibEnd) < pslSegSize)
 return genoSeqCache;
 }
 
-struct dnaSeq* subNibGet(char *tName, int tStart, int tEnd, int *tOffsetPtr)
-/* Get the DNA sequence from a subrange nib */
+struct dnaSeq* subRangeGet(char *tName, int tStart, int tEnd, int *tOffsetPtr)
+/* Get the DNA sequence from a subrange nib or twobit */
 {
 if (!sameString(tName, genoSeqCache->name))
-    errAbort("sequence name %s does not match nib subrange name %s from %s",
+    errAbort("sequence name %s does not match subrange name %s from %s",
              tName, genoSeqCache->name, genoFileName);
 *tOffsetPtr = 0;
 return genoSeqCache;
@@ -96,7 +99,7 @@ void initGenoRead(char *inGenoFile)
 strcpy(genoFileName, inGenoFile);
 if (nibIsRange(inGenoFile))
     {
-    nibSubrange = TRUE;
+    isSubrange = TRUE;
     genoSeqCache = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME,
                                     genoFileName);
     tolowers(genoSeqCache->dna);
@@ -104,6 +107,12 @@ if (nibIsRange(inGenoFile))
 else if (nibIsFile(inGenoFile))
     {
     nibOpenVerify(genoFileName, &nibFile, &nibSize);
+    }
+else if (twoBitIsFileOrRange(inGenoFile))
+    {
+    isSubrange = TRUE;
+    genoSeqCache = twoBitLoadAll(inGenoFile);
+    tolowers(genoSeqCache->dna);
     }
 else
     {
@@ -115,8 +124,8 @@ struct dnaSeq *getDnaSeq(char *tName, int tStart, int tEnd, int *tOffsetPtr)
 /* get the DNA sequence containing the range. */
 {
 struct dnaSeq *genoSeq;
-if (nibSubrange)
-    genoSeq = subNibGet(tName, tStart, tEnd, tOffsetPtr);
+if (isSubrange)
+    genoSeq = subRangeGet(tName, tStart, tEnd, tOffsetPtr);
 else if (nibFile != NULL)
     genoSeq = chromNibGet(tName, tStart, tEnd, tOffsetPtr);
 else
