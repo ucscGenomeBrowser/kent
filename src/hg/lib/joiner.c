@@ -448,7 +448,11 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
      jf->table = cloneString(parts[1]);
      jf->field = cloneString(parts[2]);
      if (js->fieldList == NULL && !js->isFuzzy)
+	 {
          jf->isPrimary = TRUE;
+	 jf->unique = TRUE;
+	 jf->full = TRUE;
+	 }
      jf->minCheck = 1.0;
      slAddHead(&js->fieldList, jf);
 
@@ -486,13 +490,24 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	     }
 	 else if (sameString("dupeOk", word))
 	     {
-	     jf->dupeOk = TRUE;
+	     if (!jf->isPrimary)
+	         warn("dupeOk outsite primary key line %d of %s",
+		 	lf->lineIx, lf->fileName);
+	     jf->unique = FALSE;
 	     }
 	 else if (sameString("minCheck", word))
 	     {
 	     if (e == NULL)
 	         unspecifiedVar(lf, word);
 	     jf->minCheck = atof(e);
+	     }
+	 else if (sameString("unique", word))
+	     {
+	     jf->unique = TRUE;
+	     }
+	 else if (sameString("full", word))
+	     {
+	     jf->full = TRUE;
 	     }
 	 else if (sameString("splitPrefix", word))
 	     {
@@ -751,8 +766,8 @@ for (js=joiner->jsList; js != NULL; js = nextJs)
 		newJf->separator = cloneString(jf->separator);
 		newJf->indexOf = jf->indexOf;
 		newJf->isPrimary = jf->isPrimary;
-		newJf->dupeOk = jf->dupeOk;
-		newJf->oneToOne = jf->oneToOne;
+		newJf->unique = jf->unique;
+		newJf->full = jf->full;
 		newJf->minCheck = jf->minCheck;
 		newJf->splitPrefix = cloneString(jf->splitPrefix);
 		newJf->exclude = slNameCloneList(jf->exclude);

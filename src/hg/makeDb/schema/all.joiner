@@ -59,9 +59,13 @@ set split splitPrefix=chr%_
 identifier goAccession external=GO
 "Gene ontology term accessions.  Example - GO:0003574"
      go.term.acc 
-     $dm.bdgpGeneInfo.go comma
-     $dm.bdgpNonCodingInfo.go comma
-     go.goaPart.goId
+     go.goaPart.goId minCheck=0.999
+
+identifier goAccessionChopped
+"Gene ontology term accessions without the GO:"
+     go.term.acc chopBefore=GO:
+     $dm.bdgpGeneInfo.go comma minCheck=0.99
+     $dm.bdgpNonCodingInfo.go comma minCheck=0.99
 
 identifier goId external=GO
 "Gene ontology term ID's.  Shouldn't be used outside of go database"
@@ -70,8 +74,8 @@ identifier goId external=GO
      go.term2term.term2_id
      go.term_audit.term_id
      go.term_dbxref.term_id
-     go.term_definition.term_id
-     go.term_synonym.term_id
+     go.term_definition.term_id unique 
+     go.term_synonym.term_id 
      go.graph_path.term1_id
      go.graph_path.term2_id
 
@@ -85,158 +89,159 @@ identifier goDbXrefId external=GO
 identifier swissProtId external=SwissProt
 "Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
      swissProt.displayId.val 
-     go.goaPart.dbObjectSymbol
-     $gbd.dupSpMrna.proteinID
-     $gbd.dupSpMrna.dupProteinID
-     $kgDb.kgProtAlias.displayID
-     $kgDb.kgXref.spDisplayID
-     $kgDb.knownCanonical.protein
-     $kgDb.knownGene.proteinID
-     $gbd.spMrna.spID
-     $dm.bdgpSwissProt.spSymbol
-     $dm.flyBaseSwissProt.spSymbol 
+     go.goaPart.dbObjectSymbol minCheck=0.95
+     $gbd.dupSpMrna.proteinID minCheck=0.80
+     $gbd.dupSpMrna.dupProteinID minCheck=0.50
+     $kgDb.kgProtAlias.displayID minCheck=0.80
+     $kgDb.kgXref.spDisplayID minCheck=0.80
+     $kgDb.knownCanonical.protein minCheck=0.80
+     $kgDb.knownGene.proteinID minCheck=0.80
+     $gbd.spMrna.spID minCheck=0.80
+     $dm.bdgpSwissProt.spSymbol minCheck=0.80
+     $dm.flyBaseSwissProt.spSymbol minCheck=0.80
 
 identifier swissProtAccession external=SwissProt
 "SwissProt Accession"
      swissProt.displayId.acc
      swissProt.accToKeyword.acc 
-     swissProt.accToTaxon.acc
+     swissProt.accToTaxon.acc full
      swissProt.citation.acc
      swissProt.comment.acc
-     swissProt.description.acc
+     swissProt.description.acc unique full
      swissProt.extDbRef.acc
      swissProt.feature.acc
      swissProt.gene.acc
      swissProt.geneLogic.acc
-     swissProt.info.acc
+     swissProt.info.acc unique full
      swissProt.otherAcc.acc
-     swissProt.protein.acc
-     $kgDb.kgProtAlias.alias 
-     $kgDb.kgProtMap.qName
-     $kgDb.kgXref.spID
-     $gbd.pepMwAa.accession
-     $gbd.pepPi.accession
+     swissProt.protein.acc unique full
+     $kgDb.kgProtAlias.alias  minCheck=0.2
+     $kgDb.kgProtMap.qName minCheck=0.9
+     $kgDb.kgXref.spID minCheck=0.9
+     $gbd.pepMwAa.accession minCheck=0.9
+     $gbd.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
      $ce.sangerGene.proteinID minCheck=0.8
      $ce.sangerLinks.protName minCheck=0.8
-     $dm.bdgpCanonical.protein
-     $dm.bdgpGene.proteinID
-     $dm.bdgpSwissProt.swissProtId
-     $dm.flyBaseSwissProt.swissProtId
-     $sacCer.sgdGene.proteinID
-     $sacCer.sgdCanonical.protein
-     $sacCer.sgdToSwissProt.value
-     go.goaPart.dbObjectId
+     $dm.bdgpCanonical.protein minCheck=0.9
+     $dm.bdgpGene.proteinID minCheck=0.9
+     $dm.bdgpSwissProt.swissProtId minCheck=0.9
+     $dm.flyBaseSwissProt.swissProtId minCheck=0.9
+     $sacCer.sgdGene.proteinID minCheck=0.9
+     $sacCer.sgdCanonical.protein minCheck=0.9
+     $sacCer.sgdToSwissProt.value minCheck=0.9
+     go.goaPart.dbObjectId minCheck=0.99
 
 identifier swissProtAuthor
 "Author ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
     swissProt.author.id 
-    swissProt.referenceAuthors.author
+    swissProt.referenceAuthors.author full
 
 identifier swissProtReference
 "Reference (journal) ID in SwissProt (just inside UCSC Relationalized)"
     swissProt.reference.id
-    swissProt.citation.reference
-    swissProt.referenceAuthors.reference
+    swissProt.citation.reference full
+    swissProt.referenceAuthors.reference full
 
 identifier swissProtCitation
 "Citation ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
     swissProt.citation.id 
-    swissProt.citationRc.citation
+    swissProt.citationRc.citation 
 
 identifier swissProtCitationRp
 "Reference Position Line ID in SwissProt (just inside UCSC Relationalized)"
     swissProt.citationRp.id
-    swissProt.citation.rp
+    swissProt.citation.rp full
 
 identifier swissProtRcType
 "Reference Comment Type in SwissProt (just inside UCSC Relationalized)"
     swissProt.rcType.id
-    swissProt.citationRc.rcType
+    swissProt.citationRc.rcType full
 
 identifier swissProtRcVal
 "Reference Comment Text in SwissProt (just inside UCSC Relationalized)"
     swissProt.rcVal.id 
-    swissProt.citationRc.rcVal
+    swissProt.citationRc.rcVal full
 
 identifier swissProtCommentType
 "Type of swissProt comment type (just inside UCSC Relationalized)"
     swissProt.commentType.id
-    swissProt.comment.commentType
+    swissProt.comment.commentType full
 
 identifier swissProtCommentVal
 "Text of swissProt comment text (just inside UCSC Relationalized)"
      swissProt.commentVal.id
-     swissProt.comment.commentVal
+     swissProt.comment.commentVal full
 
 identifier swissProtExtDb
 "SwissProt external database ID (just inside UCSC Relationalized)"
      swissProt.extDb.id 
-     swissProt.extDbRef.extDb
+     swissProt.extDbRef.extDb full
 
 identifier swissProtFeatureClass
 "Type of swissProt feature class (just inside UCSC Relationalized)"
      swissProt.featureClass.id
-     swissProt.feature.featureClass
+     swissProt.feature.featureClass full
 
 identifier swissProtFeatureType
 "Type of swissProt feature type (just inside UCSC Relationalized)"
      swissProt.featureType.id 
-     swissProt.feature.featureType
+     swissProt.feature.featureType full exclude=0
 
 identifier swissProtOrganelle
 "Type of swissProt organelle ID (just inside UCSC Relationalized)"
      swissProt.organelle.id
-     swissProt.info.organelle
+     swissProt.info.organelle full exclude=0
 
 identifier swissProtKeyword
 "SwissProt keyword ID (just inside UCSC Relationalized)"
      swissProt.keyword.id
-     swissProt.accToKeyword.keyword
+     swissProt.accToKeyword.keyword full
 
 identifier ncbiTaxon
 "NCBI Taxon ID - number for a species.  Used by SwissProt too"
      swissProt.taxon.id dupeOk
-     swissProt.accToTaxon.taxon
-     swissProt.commonName.taxon
+     swissProt.accToTaxon.taxon full
+     swissProt.commonName.taxon 
 
 # Various types of gene predictions in UCSC Genome Browser
 
 identifier acemblyName
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
-    $hg.acemblyPep.name
+    $hg,!hg13.acemblyPep.name full unique
+    hg13.acemblyPep.name unique minCheck=0.90
 
 identifier ECgeneName
 "Link together EC gene predicted gene structure and peptide"
     $gbd.ECgene.name
-    $gbd.ECgenePep.name
+    $gbd.ECgenePep.name full unique
 
 identifier geneidName
 "Link together geneid predicted gene structure and peptide"
     $gbd.geneid.name
-    $gbd.geneidPep.name
+    $gbd.geneidPep.name full unique
 
 identifier genscanName
 "Link together genscan predicted gene structure and peptide"
     $gbd.genscan.name
-    $gbd.genscanPep.name
+    $gbd.genscanPep.name full unique
 
 identifier sgpGeneName
 "Link together sgp predicted gene structure and peptide"
     $gbd.sgpGene.name
-    $gbd.sgpPep.name
+    $gbd.sgpPep.name full unique
 
 identifier softberryGeneName
 "Link together Fshgene++ gene structure, pepdide, and homolog"
     $gbd.softberryGene.name
-    $gbd.softberryPep.name
-    $gbd.softberryHom.name
+    $gbd.softberryPep.name full unique
+    $gbd.softberryHom.name unique
 
 identifier twinscanName
 "Link together twinscan predicted gene structure and peptide"
     $gbd.twinscan.name
-    $gbd.twinscanPep.name
+    $gbd.twinscanPep.name full unique
 
 identifier vegaName
 "Link together various VEGA human curated gene annotation"
@@ -245,7 +250,7 @@ identifier vegaName
 identifier vegaGeneName typeOf=vegaName
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
-    $gbd.vegaPep.name
+    $gbd.vegaPep.name full unique
 
 identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info."
@@ -255,7 +260,7 @@ identifier vegaPseudogeneName typeOf=vegaName
 
 identifier affyU95
 "Affymetrix Human U95 chip identifiers"
-    $hg.affyU95.qName dupeOk minCheck=0.6
+    $hg.affyU95.qName dupeOk
     $hg.affyRatio.name
     $hg.knownToU95.value
 
@@ -275,13 +280,13 @@ identifier affyU74
 identifier kimWormGeneId
 "Identifiers for Kim-lab worm genes"
     hgFixed.kimWormLifeAllRatio.name
-    hgFixed.kimWormLifeMedianRatio.name
+    hgFixed.kimWormLifeMedianRatio.name full unique
     $ce.sangerToKim.value minCheck=0.6
 
 identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
-    $hg.nci60.expIds comma
+    $hg.nci60.expIds comma 
     $hg.nci60.expScores comma indexOf
 
 identifier rosettaChr22SampleId
@@ -504,7 +509,7 @@ identifier xenoMrnaAccession typeOf=mrnaAccession
 identifier nativeMrnaAccession typeOf=mrnaAccession fuzzy
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName 
-    $gbd.mrnaOrientInfo.name dupeOk
+    $gbd.mrnaOrientInfo.name 
     $gbd.dupSpMrna.mrnaID minCheck=0.80
     $gbd.dupSpMrna.dupMrnaID minCheck=0.95
     $gbd.mrnaRefseq.mrna
