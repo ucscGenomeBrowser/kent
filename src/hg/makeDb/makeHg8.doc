@@ -415,6 +415,23 @@ o - Copy to cc94:/scratch.  Rename to correspond with tables as so and
 
 
 
+TIGR GENE INDEX
+
+  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
+      ~/oo.29/bed/tgi and then execute the following commands:
+          cd ~/oo.29/bed/tgi
+	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
+	  foreach i (mouse cow human pig rat)
+	      mkdir $i
+	      cd $i
+	      gtar -zxf ../${i}*.tgz
+	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
+	      cd ..
+	  end
+	  mv human.gff human.bak
+	  sed s/THCs/TCs/ human.bak > human.gff
+	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
+
 
       
 LOADING IN EXTERNAL FILES
