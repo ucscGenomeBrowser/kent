@@ -31,6 +31,8 @@ CREATE TABLE stsMap (
     beginBand varchar(255) not null,	# Beginning of range of bands on FISH map
     endBand varchar(255) not null,	# End of range of bands on FISH map
     lab varchar(255) not null,	# Laboratory that placed the FISH clone
+    decodeChrom varchar(255) not null,	# Chromosome (no chr) from deCODE map or 0 if none
+    decodePos float not null,	# Position on deCODE map
               #Indices
     INDEX(name),
     INDEX(chrom(8),chromStart),

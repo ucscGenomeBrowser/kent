@@ -35,13 +35,23 @@ struct stsMap
     char *beginBand;	/* Beginning of range of bands on FISH map */
     char *endBand;	/* End of range of bands on FISH map */
     char *lab;	/* Laboratory that placed the FISH clone */
+    char *decodeChrom;	/* Chromosome (no chr) from deCODE genetic map or 0 if none */
+    float decodePos;	/* Position on deCODE genetic map */
     };
 
 void stsMapStaticLoad(char **row, struct stsMap *ret);
 /* Load a row from stsMap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
+void stsMapStaticLoad28(char **row, struct stsMap *ret);
+/* Load a row from stsMap table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
 struct stsMap *stsMapLoad(char **row);
+/* Load a stsMap from row fetched with select * from stsMap
+ * from database.  Dispose of this with stsMapFree(). */
+
+struct stsMap *stsMapLoad28(char **row);
 /* Load a stsMap from row fetched with select * from stsMap
  * from database.  Dispose of this with stsMapFree(). */
 

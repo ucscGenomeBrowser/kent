@@ -29,4 +29,6 @@ table stsMap
     string beginBand;		"Beginning of range of bands on FISH map"
     string endBand;		"End of range of bands on FISH map"
     string lab;			"Laboratory that placed the FISH clone"
+    string decodeChrom;		"Chromosome (no chr) from deCODE genetic map or 0 if none"
+    float decodePos;		"Position on deCODE genetic map"
     )

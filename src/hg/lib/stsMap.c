@@ -41,6 +41,45 @@ ret->fishChrom = row[22];
 ret->beginBand = row[23];
 ret->endBand = row[24];
 ret->lab = row[25];
+ret->decodeChrom = "0";
+ret->decodePos = 0;
+}
+
+void stsMapStaticLoad28(char **row, struct stsMap *ret)
+/* Load a row from stsMap table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+int sizeOne,i;
+char *s;
+
+ret->chrom = row[0];
+ret->chromStart = sqlSigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = row[3];
+ret->score = sqlUnsigned(row[4]);
+ret->identNo = sqlUnsigned(row[5]);
+ret->ctgAcc = row[6];
+ret->otherAcc = row[7];
+ret->genethonChrom = row[8];
+ret->genethonPos = atof(row[9]);
+ret->marshfieldChrom = row[10];
+ret->marshfieldPos = atof(row[11]);
+ret->gm99Gb4Chrom = row[12];
+ret->gm99Gb4Pos = atof(row[13]);
+ret->shgcTngChrom = row[14];
+ret->shgcTngPos = atof(row[15]);
+ret->shgcG3Chrom = row[16];
+ret->shgcG3Pos = atof(row[17]);
+ret->wiYacChrom = row[18];
+ret->wiYacPos = atof(row[19]);
+ret->wiRhChrom = row[20];
+ret->wiRhPos = atof(row[21]);
+ret->fishChrom = row[22];
+ret->beginBand = row[23];
+ret->endBand = row[24];
+ret->lab = row[25];
+ret->decodeChrom = row[26];
+ret->decodePos = atof(row[27]);
 }
 
 struct stsMap *stsMapLoad(char **row)
@@ -78,6 +117,49 @@ ret->fishChrom = cloneString(row[22]);
 ret->beginBand = cloneString(row[23]);
 ret->endBand = cloneString(row[24]);
 ret->lab = cloneString(row[25]);
+ret->decodeChrom = cloneString("0");
+ret->decodePos = 0;
+
+return ret;
+}
+
+struct stsMap *stsMapLoad28(char **row)
+/* Load a stsMap from row fetched with select * from stsMap
+ * from database.  Dispose of this with stsMapFree(). */
+{
+struct stsMap *ret;
+int sizeOne,i;
+char *s;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlSigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+ret->identNo = sqlUnsigned(row[5]);
+ret->ctgAcc = cloneString(row[6]);
+ret->otherAcc = cloneString(row[7]);
+ret->genethonChrom = cloneString(row[8]);
+ret->genethonPos = atof(row[9]);
+ret->marshfieldChrom = cloneString(row[10]);
+ret->marshfieldPos = atof(row[11]);
+ret->gm99Gb4Chrom = cloneString(row[12]);
+ret->gm99Gb4Pos = atof(row[13]);
+ret->shgcTngChrom = cloneString(row[14]);
+ret->shgcTngPos = atof(row[15]);
+ret->shgcG3Chrom = cloneString(row[16]);
+ret->shgcG3Pos = atof(row[17]);
+ret->wiYacChrom = cloneString(row[18]);
+ret->wiYacPos = atof(row[19]);
+ret->wiRhChrom = cloneString(row[20]);
+ret->wiRhPos = atof(row[21]);
+ret->fishChrom = cloneString(row[22]);
+ret->beginBand = cloneString(row[23]);
+ret->endBand = cloneString(row[24]);
+ret->lab = cloneString(row[25]);
+ret->decodeChrom = cloneString(row[26]);
+ret->decodePos = atof(row[27]);
 return ret;
 }
 
@@ -160,7 +242,7 @@ freeMem(el->wiRhChrom);
 freeMem(el->fishChrom);
 freeMem(el->beginBand);
 freeMem(el->endBand);
-freeMem(el->lab);
+freeMem(el->decodeChrom);
 freez(pEl);
 }
 
@@ -262,6 +344,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->lab);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->decodeChrom);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%f", el->decodePos);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -296,5 +382,7 @@ el->beginBand = oldEl->beginBand;
 el->endBand = oldEl->endBand;
 el->wiRhChrom = "0";
 el->wiRhPos = 0;
+el->decodeChrom = "0";
+el->decodePos = 0;
 el->lab = "-";
 }
