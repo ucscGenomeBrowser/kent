@@ -5385,6 +5385,8 @@ done
          >> axtInfoInserts.sql
      end
     
+    # these axtInfo file entries should be appended to the table,
+    # not replacing it.  The previous hg17 entries are needed  --  bob kuhn
     hgsql mm5 -e 'drop table mm5.axtInfo;'
     hgsql mm5 < ~/kent/src/hg/lib/axtInfo.sql
     hgsql mm5 < axtInfoInserts.sql
