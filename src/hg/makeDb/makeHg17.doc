@@ -13493,6 +13493,40 @@ SEQ2_LEN=$BASE/S2.len
     hg17.refseq.mrna.xeno.load  = yes
     hg17.refseq.mrna.xeno.loadDesc = yes
 
+# BUILD ccdsGene and ccdsInfo tables (markd 2005-02-25)
+    # download files to the genbank data area, as this will eventually
+    # be done automatically as part of the genbank build process.
+    cd  /cluster/data/genbank
+    mkdir -p data/ccds/hg17/2005-02-25
+    cd data/ccds/hg17/2005-02-25
+
+    # get the basic text dumps of the data, rather than the database dumps
+    wget -r ftp://ftp.ncbi.nlm.nih.gov/pub/CCDS/
+    # ends up with:
+        About-NcbiHinxton.txt
+        NcbiHinxton.txt
+        NcbiHinxtonAllAccessions.txt
+
+    # this is a preliminary release, it contained 2 PAR genes that had
+    # bad coordinates and 7 genes that were determined at be pseudogenes
+    # at the last minute.  The accessions for these 9 genes were
+    # placed in skip.ccds and then removed:
+    fgrep -v -f skip.ccds  /scratch/markd/gene-sets/ncbiDb/set1.5/NcbiHinxtonAllAccessions.txt >  /scratch/markd/gene-sets/ncbiDb/set1.5/NcbiHinxtonAllAccessions.cleaned.txt
+
+    # create the tab files to load in the database
+    /cluster/data/genbank/bin/i386/ccdsImport NcbiHinxtonAllAccessions.cleaned.txt ccdsGene.gp ccdsInfo.tab
+
+    # load ccdsInfo
+    hgsql hg17 <../../../../../lib/ccdsInfo.sql 
+    hgsql -e 'load data local infile "ccdsInfo.tab" into table ccdsInfo'  hg17
+
+    # load cdsGene.gp and check
+    ldHgGene -predTab -genePredExt hg17 ccdsGene ccdsGene.gp 
+    checkTableCoords hg17 -verbose=2 ccdsGene
+    rm *.tab
+    gzip -9 NcbiHinxton*.txt
+  
+    
 # BUILD refSeqKg TABLE TO SUPPORT CCDS GENES (RE-DONE, Fan 2/26/05)
 
     hgsql hg17 -N -e "select * from knownGene" >kg.gp
