@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.16 2004/02/13 21:06:27 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.17 2004/12/03 04:27:29 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,7 @@ fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 if (doCvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.16 2004/02/13 21:06:27 kent Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.17 2004/12/03 04:27:29 kent Exp $\";\n");
     fprintf(f, "\n");
     }
 fprintf(f, "void usage()\n");
@@ -89,7 +89,7 @@ fprintf(f,
 "\n"
 "L = -lm\n"
 "MYLIBDIR = ../../../lib/${MACHTYPE}\n"
-"MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a\n"
+"MYLIBS =  ${MYLIBDIR}/jkweb.a\n"
 "\n"
 "O = %s.o\n"
 "\n"
