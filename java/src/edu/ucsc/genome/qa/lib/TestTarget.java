@@ -43,7 +43,7 @@ public class TestTarget {
     
   public void setDefaults() {
     machine = "localhost";
-    dbSpec = "hg16";
+    dbSpec = "hg17";
     table = "refGene";
     quickOn = false;
     zoomCount = 1;
