@@ -1,16 +1,16 @@
 include ../../inc/common.mk
 
 
-L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = -lm ${MYSQLLIBS}
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgText
 
 O = $A.o
 
 my: compile
-	mv $A ${CGI_BIN}-$(USER)/$A
+	mv $A ${CGI_BIN}-${USER}/$A
 
 alpha: compile
 	mv $A ${CGI_BIN}/$A
@@ -19,7 +19,7 @@ beta: compile
 	mv $A ${CGI_BIN}-beta/$A
 
 compile: $O 
-	${CC} $O $(MYLIBS) $(L) 
+	${CC} $O ${MYLIBS} ${L} 
 	mv a.out $A
 	strip $A
 	chmod a+rx $A
