@@ -1,3 +1,11 @@
+track clonePos
+priority 14
+shortLabel Coverage
+longLabel Clone Coverage
+group map
+visibility hide
+altColor 180,180,180 
+
 track blastzMm3
 shortLabel Mouse Blastz
 longLabel Blastz All Mouse (Feb. 03) Alignments
