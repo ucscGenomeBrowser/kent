@@ -1,24 +1,31 @@
 /*
- * hgRefAlign format db rootTable alignfile ...
+ * hgRefAlign [-n] format db rootTable alignfile ...
  *
  * Load a reference alignment into a table.  If alignfile is `-',
  * stdin is read.
  *
+ * -n - If specified, indicies will be non-unique.
  * o format - Specifies the format of the input.  Currently
  *   support values:
  *   o webb - Format of alignment's from Webb Miller.
+ *   o tab - tab seperated file of fields, including the bin.
  */
 #include "common.h"
 #include "errabort.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "hgRefAlignWebb.h"
+#include "hgRefAlignTab.h"
 #include "hgRefAlignChromList.h"
 #include "refAlign.h"
 
-/* table construction parameters; fixed for now */
+/* set to zero for debugging */
+#define REMOVE_TMP_FILE 1
+
+/* table construction parameters */
 static boolean noBin = FALSE;
 static boolean tablePerChrom = TRUE;
+static boolean uniqueIndices = TRUE;
 
 static char* TMP_TAB_FILE = "refAlign.tab";
 
@@ -42,8 +49,8 @@ static char* createTableCmd =
 "    attribs varchar(255) not null,	# Comma seperated list of attribute names\n"
 "    #Indices\n"
 "    %s"				/* Optional bin */
-"    UNIQUE(%schromStart),\n"           /* different depending if using one */
-"    UNIQUE(%schromEnd)\n"              /* table per chrom or a single table */
+"    %s(%schromStart),\n"           /* different depending if using one */
+"    %s(%schromEnd)\n"              /* table per chrom or a single table */
 ")\n";
 
 static int countInserts(char* insertSeq, char* otherSeq, int* numInsert,
@@ -149,6 +156,7 @@ static void createTable(struct sqlConnection *conn,
 /* create a refAlign table, dropping old if it exists */
 {
 struct dyString *sqlCmd = newDyString(2048);
+char *ixType = (uniqueIndices ? "UNIQUE" : "INDEX");
 char *extraIx = (tablePerChrom ? "" : "chrom(8),");
 char binIx[64];
 if (tablePerChrom)
@@ -159,7 +167,7 @@ else
 dyStringPrintf(sqlCmd, createTableCmd, table, 
                (noBin ? "" : "bin smallint unsigned not null,\n"),
                (noBin ? "" : binIx),
-               extraIx, extraIx);
+               ixType, extraIx, ixType, extraIx);
 sqlRemakeTable(conn, table, sqlCmd->string);
 dyStringFree(&sqlCmd);
 }
@@ -184,8 +192,10 @@ printf("Importing into %d rows into %s.%s\n",
 sprintf(query, "load data local infile '%s' into table %s", TMP_TAB_FILE,
         table);
 sqlUpdate(conn, query);
-unlink(TMP_TAB_FILE);
 
+#if REMOVE_TMP_FILE
+unlink(TMP_TAB_FILE);
+#endif
 }
 
 static void loadSingleTable(char* database,
@@ -224,14 +234,17 @@ sqlDisconnect(&conn);
 refAlignChromListFree(chromList);
 }
 
-static void usage()
+static void usage(char* msg)
 /* Explain usage and exit. */
 {
+if (msg != NULL)
+    fprintf(stderr, "%s\n", msg);
+
 errAbort(
 "hgRefAlign - Load a reference alignment into a table.\n"
   "usage:\n"
-  "   hgRefAlign format db table alignfile ...\n"
-  "supported format is: `webb'");
+  "   hgRefAlign [-n] format db table alignfile ...\n"
+  "supported formats are: `webb', `tab'");
 }
 
 int main(int argc, char *argv[])
@@ -242,20 +255,39 @@ char* database;
 char* rootTable;
 int nfiles;
 char** fnames;
+int opt;
 struct refAlign* refAlignList = NULL;
 setlinebuf(stdout); 
 setlinebuf(stderr); 
 
-if (argc < 5)
-    usage();
-fileFormat = argv[1];
-database = argv[2];
-rootTable = argv[3];
-nfiles = argc-4;
-fnames = argv+4;
+/* parse args */
+while ((opt = getopt(argc, argv, "n")) != -1)
+    {
+    switch (opt)
+        {
+        case 'n':
+            uniqueIndices = FALSE;
+            break;
+        default:
+            usage("unknown option");
+        }
+    }
+argc -= optind;
+argv += optind;
+if (argc < 4)
+    usage("wrong # args");
 
+fileFormat = argv[0];
+database = argv[1];
+rootTable = argv[2];
+nfiles = argc-3;
+fnames = argv+3;
+
+/* read data */
 if (strcmp(fileFormat, "webb") == 0)
     refAlignList = parseWebbFiles(nfiles, fnames);
+ else if (strcmp(fileFormat, "tab") == 0)
+    refAlignList = parseTabFiles(nfiles, fnames);
 else
     errAbort("unknown alignment file format \"%s\"", fileFormat);
 
@@ -264,6 +296,7 @@ if (refAlignList == NULL)
 
 calcStats(refAlignList);
 
+/* load database  */
 if (tablePerChrom)
     loadTablePerChrom(database, rootTable, refAlignList);
 else

@@ -8,7 +8,7 @@ PROG =  $(HOME)/bin/$(MACHTYPE)/hgRefAlign
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = hgRefAlign.o hgRefAlignWebb.o hgRefAlignChromList.o
+O = hgRefAlign.o hgRefAlignWebb.o hgRefAlignTab.o hgRefAlignChromList.o
 
 ${PROG}: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	gcc ${OPT} -o ${PROG} $O $(MYLIBS) $L
