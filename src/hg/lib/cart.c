@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.43 2004/07/21 04:17:31 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.44 2004/09/14 01:11:21 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -845,6 +845,30 @@ cartCheckout(&cart);
 htmlEnd();
 }
 
+void cartHtmlShellPbGlobal(char *title, void (*doMiddle)(struct cart *cart),
+        char *cookieName, char **exclude, struct hash *oldVars)
+/* For Proteome Browser, Load cart from cookie and session cgi variable.  Write web-page
+ * preamble, call doMiddle with cart, and write end of web-page.
+ * Exclude may be NULL.  If it exists it's a comma-separated list of
+ * variables that you don't want to save in the cart between
+ * invocations of the cgi-script. */
+/* cartHtmlShellPbGloabl differs from cartHtmlShellPB that it does not call getDbAndGenome */
+{
+struct cart *cart;
+int status;
+char *db, *org;
+char titlePlus[128];
+char *proteinID;
+pushWarnHandler(cartEarlyWarningHandler);
+cart = cartAndCookie(cookieName, exclude, oldVars);
+proteinID = cartOptionalString(cart, "proteinID");
+safef(titlePlus, sizeof(titlePlus), "Protein %s - %s", proteinID, title);
+popWarnHandler();
+htmStart(stdout, titlePlus);
+cartWarnCatcher(doMiddle, cart, htmlVaWarn);
+cartCheckout(&cart);
+htmlEnd();
+}
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
 	char *cookieName, char **exclude, struct hash *oldVars)
