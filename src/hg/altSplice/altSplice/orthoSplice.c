@@ -12,7 +12,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.3 2003/05/23 06:15:52 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.4 2003/05/25 06:28:39 sugnet Exp $";
 
 struct orthoAgReport
 /* Some summary information on comparison of splice graphs. */
@@ -233,7 +233,6 @@ if(orthoV == -1)
 else if(vMap[v] == -1)
     {
     vMap[v] = orthoV;
-    agRep->ssFound++;
     }
 else if(vMap[v] != -1 && vMap[v] != orthoV)
     {
@@ -276,14 +275,14 @@ for(i=0;i<vCount; i++)
 seList = altGraphXToEdges(ag);
 for(se = seList; se != NULL; se = se->next)
     {
-    if(se->type != ggExon && se->type != ggCassette)
-	continue;
+    if(se->type == ggExon || se->type == ggCassette)
+	agRep->exonCount++;
+    else
+	agRep->exonCount += 0;
     chainSubsetOnT(chain, se->start, se->end, &subChain, &toFree);    
-    agRep->exonCount++;
     if(subChain != NULL)
 	{
 	int v1 =-1, v2 = -1;
-	agRep->exonsFound++;
 	qChainRangePlusStrand(subChain, &qs, &qe);
 	v1 = vertexForPosition(orthoAg, qs, agRep);
 	if(reverse)
@@ -308,8 +307,6 @@ for(i=0; i<vCount; i++)
 	fprintf(stdout, "%s\t%d\t%d\t%d-%d\n", orthoAg->tName, orthoAg->vPositions[(*vertexMap)[i]], 
 		orthoAg->vPositions[(*vertexMap)[i]] +1, i, (*vertexMap)[i]);
 	}
-    else
-	agRep->ssMissing++;
     }
 warn("%d exons: %d found, %d missing.", agRep->exonCount, agRep->exonsFound, agRep->exonsMissing);
 warn("%d splice sites: %d found, %d missing, %d doubles, %d very close (+/- 1)",
@@ -317,6 +314,125 @@ warn("%d splice sites: %d found, %d missing, %d doubles, %d very close (+/- 1)",
 slFreeList(&seList);
 }
 
+int findBestOrthoStartByOverlap(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm,
+				struct chain *chain, int *vMap, int softStart, int hardEnd, bool reverse )
+{
+int bestVertex = -1;
+struct chain *subChain = NULL, *toFree = NULL;
+int *vPos = ag->vPositions;
+int *orthoPos = orthoAg->vPositions;
+int bestOverlap = 0;
+int i=0,j=0;
+int qs = 0, qe = 0;
+int oVCount = orthoAg->vertexCount;
+bool edge; 
+chainSubsetOnT(chain, vPos[softStart], vPos[hardEnd], &subChain, &toFree);    
+qChainRangePlusStrand(subChain, &qs, &qe);
+if(subChain == NULL)
+    return -1;
+for(i=0; i<oVCount; i++)
+    {
+    if(reverse)
+	edge = orthoEm[vMap[hardEnd]][i];
+    else
+	edge = orthoEm[i][vMap[hardEnd]];
+    if(edge)
+	{
+	int oStart = orthoPos[i];
+	int oEnd = orthoPos[vMap[hardEnd]];
+	int overlap = 0;
+	if(reverse)
+	    overlap = rangeIntersection(qs, qe, oEnd, oStart);
+	else
+	    overlap = rangeIntersection(qs, qe, oStart, oEnd);
+	if(overlap > bestOverlap)
+	    {
+	    overlap = bestOverlap;
+	    bestVertex = i;
+	    }
+	}
+    }
+chainFree(&toFree);
+return bestVertex;
+}
+
+int findBestOrthoEndByOverlap(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm,
+				struct chain *chain, int *vMap, int hardStart, int softEnd, bool reverse )
+{
+int bestVertex = -1;
+struct chain *subChain = NULL, *toFree = NULL;
+int *vPos = ag->vPositions;
+int *orthoPos = orthoAg->vPositions;
+int bestOverlap = 0;
+int i=0,j=0;
+int qs = 0, qe = 0;
+int oVCount = orthoAg->vertexCount;
+bool edge; 
+chainSubsetOnT(chain, vPos[hardStart], vPos[softEnd], &subChain, &toFree);    
+qChainRangePlusStrand(subChain, &qs, &qe);
+if(subChain == NULL)
+    return -1;
+for(i=0; i<oVCount; i++)
+    {
+    if(reverse)
+	edge = orthoEm[i][vMap[hardStart]];
+    else
+	edge = orthoEm[vMap[hardStart]][i];
+    if(edge)
+	{
+	int oStart = orthoPos[i];
+	int oEnd = orthoPos[vMap[hardStart]];
+	int overlap = 0;
+	if(reverse)
+	    overlap = rangeIntersection(qs, qe, oStart, oEnd);
+	else
+	    overlap = rangeIntersection(qs, qe, oEnd, oStart);
+	if(overlap > bestOverlap)
+	    {
+	    overlap = bestOverlap;
+	    bestVertex = i;
+	    }
+	}
+    }
+chainFree(&toFree);
+return bestVertex;
+}
+
+
+/* int findBestOrthoEndByOverlap(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm, */
+/* 			      struct chain *chain, int *vMap, int hardStart, int softEnd) */
+/* { */
+/* int bestVertex = -1; */
+/* struct chain *subChain = NULL, *toFree = NULL; */
+/* int *vPos = ag->vPositions; */
+/* int *orthoPos = ag->vPositions; */
+/* int bestOverlap = 0; */
+/* int i=0,j=0; */
+/* int qs = 0, qe = 0; */
+/* int oVCount = orthoAg->vertexCount; */
+/* chainSubsetOnT(chain, vPos[hardStart], vPos[softEnd], &subChain, &toFree);     */
+/* qChainRangePlusStrand(subChain, &qs, &qe); */
+/* if(subChain == NULL) */
+/*     return -1; */
+/* for(i=0; i<oVCount; i++) */
+/*     { */
+/*     if(orthoEm[vMap[hardStart]][softEnd]) */
+/* 	{ */
+/* 	int oStart = orthoPos[vMap[hardStart]]; */
+/* 	int oEnd = orthoPos[i]; */
+/* 	int overlap = 0; */
+/* 	overlap = rangeIntersection(qs, qe, oStart, oEnd); */
+/* 	if(overlap > bestOverlap) */
+/* 	    { */
+/* 	    overlap = bestOverlap; */
+/* 	    bestVertex = i; */
+/* 	    } */
+/* 	} */
+/*     } */
+/* chainFree(&toFree); */
+/* return bestVertex; */
+/* } */
+	
 struct altGraphX *commonAgInit(struct altGraphX *ag)
 /** Make a clone of ag with same arrays but edgeCount = 0 even
     though memory allocated. Free with altGraphXFree().*/
@@ -334,6 +450,71 @@ AllocArray(ret->edgeEnds, eC);
 AllocArray(ret->edgeTypes, eC);
 return ret;
 }
+
+bool isExon(struct altGraphX *ag, int v1, int v2)
+{
+int i = 0;
+int eC = ag->edgeCount;
+for(i=0;i<eC; i++)
+    {
+    if(ag->edgeStarts[i] == v1 && ag->edgeEnds[i] == v2)
+	{
+	enum ggEdgeType t= getSpliceEdgeType(ag, i);
+	return (t == ggExon);
+	}
+    }
+errAbort("orthoSplice::isExon() - Can't find edge with vertexes %d and %d in altGraphX %s",
+	 v1, v2, ag->name);
+return FALSE;
+}
+
+boolean notAssigned(int *vMap, int vCount, int val)
+/* Look through vMap, return FALSE if val is already in vMap, TRUE otherwise. */
+{
+int i;
+for(i=0; i<vCount; i++)
+    {
+    if(vMap[i] == val)
+	return FALSE;
+    }
+return TRUE;
+}
+
+void findSoftStartsEnds(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm,
+			struct chain *chain, int *vMap, int vertexCount, 
+			struct orthoAgReport *agRep, bool reverse)
+/** Transcription start and end in much more variable than splice sites.
+    Map soft vertexes by looking for a vertex in the orthologous
+    graph with an edge that overlaps. */
+{
+int i=0,j=0;
+int vCount = ag->vertexCount;
+unsigned char *vTypes = ag->vTypes;
+for(i=0; i<vCount; i++)
+    {
+    /* If we haven't mapped this vertex and it is softStart or softEnd. */
+    if(vMap[i] == -1 && (vTypes[i] == ggSoftStart || vTypes[i] == ggSoftEnd))
+	{
+	/* Look for an edge with a vertex that is mapped. */
+	for(j=0; j<vCount; j++)
+	    {
+	    /* If there is an edge with one vertex already found. */
+	    if(em[i][j] && vMap[j] != -1 && isExon(ag, i, j))
+		{
+		int orthoV = -1;
+		if(vTypes[i] == ggSoftStart)
+		    orthoV = findBestOrthoStartByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
+		else
+		    orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
+		if(notAssigned(vMap, vCount, orthoV))
+		    vMap[i] = orthoV;
+		}
+	    }
+	}
+    }
+}
+
+		
 
 void *freeCommonAg(struct altGraphX **ag)
 /** Free a common stub copied from another algGraphX */
@@ -356,6 +537,7 @@ struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 {
 bool **em = NULL;
 bool **orthoEm = NULL;
+bool **commonEm = NULL;
 struct altGraphX *commonAg = NULL, *orthoAg = NULL;
 struct orthoAgReport *agRep = NULL;
 int *vertexMap = NULL; /* Map of ag's vertexes to agOrthos's vertexes. */
@@ -366,11 +548,12 @@ char query[256];
 int qs = 0, qe = 0;
 bool match = FALSE;
 bool reverse = FALSE;
-struct sqlConnection *orthoConn = hAllocConn2();
+struct sqlConnection *orthoConn = NULL; //hAllocConn2();
 /* First find the orthologous splicing graph. */
 chainSubsetOnT(chain, ag->tStart, ag->tEnd, &subChain, &toFree);    
 if(subChain == NULL)
     return NULL;
+orthoConn = hAllocConn2();
 qChainRangePlusStrand(subChain, &qs, &qe);
 safef(query, sizeof(query), "select * from %s where tName='%s' and tStart<%d and tEnd>%d",
       altTable, subChain->qName, qe, qs);
@@ -387,8 +570,8 @@ agRep = newOrthoAgReport(ag->name, orthoAg->name);
 makeVertexMap(ag, orthoAg, chain, &vertexMap, &vCount, agRep, reverse);
 em = altGraphXCreateEdgeMatrix(ag);
 orthoEm = altGraphXCreateEdgeMatrix(orthoAg);
+findSoftStartsEnds(ag, em, orthoAg, orthoEm, chain, vertexMap, vCount, agRep, reverse);
 commonAg = commonAgInit(ag);
-
 for(i=0;i<vCount; i++) 
     {
     for(j=0; j<vCount; j++)
@@ -396,7 +579,7 @@ for(i=0;i<vCount; i++)
 	if(em[i][j])
 	    {
 	    /* Have to look at the splice graph differently if we're on 
-	       the '-' strand. */
+	       the chain is on the '-' strand. */
 	    if(vertexMap[i] != -1 && vertexMap[j] != -1)
 		{
 		if(reverse) { match = orthoEm[vertexMap[j]][vertexMap[i]]; }
@@ -414,7 +597,10 @@ for(i=0;i<vCount; i++)
 	    }
 	}
     }
-altGraphXFreeEdgeMatrix(&em, vCount);
+commonEm = altGraphXCreateEdgeMatrix(commonAg);
+//fillInReport(agRep, ag, em, orthoAg, orthoEm, commonAg, commonEm, vertexMap)
+altGraphXFreeEdgeMatrix(&em, ag->vertexCount);
+altGraphXFreeEdgeMatrix(&commonEm, commonAg->vertexCount);
 altGraphXFreeEdgeMatrix(&orthoEm, orthoAg->vertexCount);
 if(commonAg->edgeCount > 0)
     {
@@ -526,6 +712,7 @@ while(lineFileNextCharRow(lf, '\t', row, rowCount))
 warn("%d graphs, %d orthos found %d no ortho splice graph",
      (noOrtho+foundOrtho), foundOrtho, noOrtho);
 freez(&row);
+hFreeConn(&conn);
 lineFileClose(&lf);
 carefulClose(&cFile);
 carefulClose(&rFile);
