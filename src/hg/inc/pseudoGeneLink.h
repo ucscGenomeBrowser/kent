@@ -27,7 +27,7 @@ struct pseudoGeneLink
     unsigned exonCount;	/* # of exons in gene  */
     unsigned geneOverlap;	/* bases overlapping */
     unsigned polyA;	/* length of polyA */
-    unsigned polyAstart;	/* start f polyA */
+    int polyAstart;	/* start of polyA, relative to end of pseudogene */
     unsigned exonCover;	/* number of exons in Gene covered */
     unsigned intronCount;	/* number of introns in pseudogene */
     unsigned bestAliCount;	/* number of good mrnas aligning */
@@ -43,15 +43,15 @@ struct pseudoGeneLink
     unsigned chainId;	/* chain id of gene/pseudogene alignment */
     int axtScore;	/* blastz score, gene mrna aligned to pseudogene */
     char *refSeq;	/* Name of closest regSeq to gene */
-    unsigned rStart;	/* refSeq alignment start position */
-    unsigned rEnd;	/* refSeq alignment end position */
+    int rStart;	/* refSeq alignment start position */
+    int rEnd;	/* refSeq alignment end position */
     char *mgc;	/* Name of closest mgc to gene */
-    unsigned mStart;	/* mgc alignment start position */
-    unsigned mEnd;	/* mgc alignment end position */
+    int mStart;	/* mgc alignment start position */
+    int mEnd;	/* mgc alignment end position */
     char *kgName;	/* Name of closest knownGene to gene */
-    unsigned kStart;	/* kg alignment start position */
-    unsigned kEnd;	/* kg alignment end position */
-    unsigned kgId;	/* kg id */
+    int kStart;	/* kg alignment start position */
+    int kEnd;	/* kg alignment end position */
+    int kgId;	/* kg id */
     };
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
