@@ -14,6 +14,10 @@ join affyU95
     human.affyRatio.name
     human.affyRatioNew.name
     human.affyU95.qName
+    human.knownToU95.value
+
+join affyU133
+    human.knownToU133.value
 
 join affyU133
     human.affyU133.qName
@@ -21,13 +25,23 @@ join affyU133
 join chainPt0Id
     hg16.allChainPt0.id
     hg16.chainPt0.id
-    ht16.chainPt0Link.chainId
+    hg16.chainPt0Link.chainId
+    hg16.netRxBestPt0.chainId
+
+join chainMm4Id
+    gbd.netMm4.chainId
+    gbd.netMm4NonGap.chainId
+
+join chainRn3Id
+    gbd.netRn3.chainId
 
 join bacCloneName 
     gbd.fishClones.name
     gbd.bacEndPairs.name
 
-join bacEndAccession external genbank
+join genbankAccession external=genbank
+
+join bacEndAccession typeOf=genbankAccession
     gbd.all_bacends.qName
     gbd.seq.name subset
     gbd.mrna.acc subset
@@ -37,29 +51,37 @@ join bacEndAccession external genbank
 join stsNames
     human.fishClones.stsNames comma
 
-join estAccession external genbank
-    gbd.all_est.qName
+imageCloneId
+    gbd.mgcFullStatus.imageId
+    gbd.imageClone.imageId
+
+join estOrMrnaAccession typeOf=genbankAccession
+    gbd.mrna.acc subset
     gbd.seq.name subset
     gbd.gbSeq.acc subset
     gbd.gbStatus.acc subset
-    gbd.mrna.acc subset
+    gbd.imageClone.acc subset
+
+join estAccession typeOf=estOrMrnaAccession
+    gbd.all_est.qName
     gbd.est.qName
     gbd.intronEst.qName
     gbd.estOrientInfo.name
-    gbd.imageClone.acc subset
 
-join mrnaAccession external genbank
+join mrnaAccession typeOf=estOrMrnaAccession
     gbd.all_mrna.qName
-    gbd.seq.name subset
-    gbd.gbSeq.acc subset
-    gbd.gbStatus.acc subset
-    gbd.mrna.acc subset
     gbd.chr*_mrna.qName
     gbd.dupSpMrna.mrnaID
     gbd.dupSpMrna.dupMrnaID
-    gbd.imageClone.acc subset
+    gbd.mrnaOrientInfo.name
+    gbd.mrnaRefseq.mrna
 
-join proteinAcc external genbank
+join mgcAccession typeOf=mrnaAccession
+    gdb.mgcFullMrna.qName 
+    gbd.mgcFullStatus.acc
+    gbd.mgcGenes.name
+
+join proteinAcc typeOf=genbankAccession
     gbd.kgProtAlias.alias subset 
     gbd.kgXref.protAcc
 
@@ -70,11 +92,11 @@ join humanFosmidReadId
     human.all_fosend.qName
     human.fosEndPairs.lfNames comma
 
-join dbStsId external dbSts
+join dbStsId external=dbSts
     gbd.all_sts_primer.qName prepend=dbSTS_
     gbd.all_sts_seq.qName
 
-join hugoName external hugo
+join hugoName external=HUGO
     human.atlasOncoGene.locusSymbol
     human.kgAlias.alias subset
     human.kgXref.geneSymbol
@@ -107,31 +129,63 @@ join genBankKeyword
     gbd.mrna.keyword
     gbd.keyword.id
 
-join bioCycMapId external bioCyc
+join genBankLibrary
+    gbd.mrna.library
+    gbd.library.id
+
+join genBankSource
+    gbd.mrna.source
+    gbd.source.id
+
+join genBankOrganism
+    gbd.mrna.organism
+    gbd.organism.id
+
+join genBankMrnaClone
+    gbd.mrna.mrnaClone
+    gbd.mrnaClone.id
+
+join genBankProductName
+    gbd.mrna.productName
+    gbd.productName.id
+
+join genBankSex
+    gbd.mrna.sex
+    sex.id
+
+join genBankTissue
+    gbd.mrna.tissue
+    tissue.id
+
+join bioCycMapId external=BioCyc
     gbd.bioCycMapDesc.mapID
     gbd.bioCycPathway.mapID
 
-join keggMapId external kegg
+join keggMapId external=KEGG
     gbd.keggMapDesc.mapID
     gbd.keggPathway.mapID
 
-join refSeqId external genbank
+join refSeqId typeOf=mrnaAccession
     gbd.bioCycPathway.geneId
     gbd.cgapAlias.alias
     gbd.imageClone.acc subset
     human.kgAlias.alias subset
     gbd.kgXref.refseq
+    gbd.knownToRefSeq.value
+    gbd.mrnaRefseq.refseq
 
-join locusLinkId external locusLink
+join locusLinkId external=LocusLink
     gbd.keggPathway.mapID
+    gbd.knownToLocusLink.value
 
 join knownAlignId
     gbd.knownGene.alignId
 
 join knownClusterId
     gbd.knownCanonical.clusterId
+    gbd.knownIsoforms.clusterId
 
-join knownGeneId external genbank
+join knownGeneId typeOf=mrnaAccession
     gbd.bioCycPathway.kgID
     human&mouse.ceBlastTab.query
     human&mouse.dmBlastTab.query
@@ -152,8 +206,25 @@ join knownGeneId external genbank
     gbd.knownBlastTab.target
     gbd.knownCanonical.transcript
     gbd.knownGene.name
+    gbd.knownGeneMrna.name
+    gbd.knownGenePep.name
+    gbd.knownGnfDistance.query
+    gbd.knownGnfDistance.target
+    gbd.knownIsoforms.transcript
+    gbd.knownToCdsSnp.name
+    gbd.knownToEnsembl.name
+    gbd.knownToLocusLink.name
+    gbd.knownToPfam.name
+    gbd.knownToRefSeq.name
+    gbd.knownToSuper.name
+    human.knownToU133.name
+    human.knownToU95.name
+    human.mmBlastTab.query
 
-join swissProtId external SwissProt
+join mouseKnownGeneId typeOf=knownGeneId
+    gbd.mmBlastTab.target
+
+join swissProtId external=SwissProt
     gbd.dupSpMrna.proteinID
     gbd.dupSpMrna.dupProteinID
     gbd.kgProtAlias.displayID
@@ -161,10 +232,16 @@ join swissProtId external SwissProt
     gbd.knownCanonical.protein
     gbd.knownGene.proteinId
 
-join swissProtAccession external SwissProt
+join swissProtAccession external=SwissProt
     gbd.kgProtAlias.alias part
     gbd.kgProtMap.qName
     gbd.kgXref.spID
+
+join pfamId external=Pfam
+    gbd.knownToPfam.value
+
+join superfamilyId external=Superfamily
+    gbd.knownToSuper.value
 
 join wormBaseId
     gbd.ceBlastTab.target
@@ -178,6 +255,7 @@ join ensemblTranscriptId
     gbd.ensGtp.transcript chop=.
     gbd.ensPep.name
     gbd.ensTranscript.transcript_name
+    gbd.knownToEnsembl.value
 
 join ensemblGeneId
     gbd.ensGeneXref.gene_name
@@ -224,4 +302,8 @@ join chainSelf
     gbd.chainSelf.id
     gbd.chainSelfLink.chainId
 
+join dbSnpId external=dbSNP
+    gbd.knownToCdsSnp.value
 
+join nci60Id
+    human.nci60.name
