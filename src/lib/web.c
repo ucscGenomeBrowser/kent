@@ -19,8 +19,14 @@ webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
 }
 
-
 void webStartWrapper(char *format, va_list args, boolean withHttpHeader, boolean withLogo)
+    /* allows backward compatibility with old webStartWrapper that doesn't contain the "skipHeader" arg */
+	/* output a CGI and HTML header with the given title in printf format */
+{
+webStartWrapperGateway(format, args, withHttpHeader, withLogo, FALSE);
+}	
+
+void webStartWrapperGateway(char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 /* don't output two headers */
@@ -45,63 +51,62 @@ vprintf(format, args);
 puts(
     "	</TITLE>" "\n"
     "	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
-    "	<STYLE TYPE=\"text/css\">" "\n"
-    "		p    {  text-align: none; font-family: times new roman, arial, helvetica, verdana, serif; color: black; margin-left: 0px }" "\n"
-    "		p.justify    {  text-align: justify; font-family: times new roman, arial, helvetica, verdana, serif; color: black; margin-left: 0px }" "\n"
-    "	</STYLE>" "\n"
     "</HEAD>" "\n"
     "<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
     "<A NAME=\"TOP\"></A>" "\n"
     "" "\n"
-    "<TABLE BORDER=0 WIDTH=\"100%\">" "\n");
+    "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0>" "\n");
+
 if (withLogo)
     puts(
-    "<TR><TH COLSPAN=2 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
+    "<TR><TH COLSPAN=1 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
     "" "\n"
     );
 puts(
-    "<!--HOTLINKS BAR----------------------------------------------------------->" "\n"
-    "<TR><TD COLSPAN=2 HEIGHT=40>" "\n"
-    "   <CENTER>" "\n"
-    "	<TABLE WIDTH=\"100%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>" "\n"
-    "	<TABLE WIDTH=\"100%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>" "\n"
-    "		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>" "\n"
-    "		<TD WIDTH=1></TD>" "\n"
-    "		<TD WIDTH=75>" "\n"
-    "			<A HREF=\"/index.html\" onMouseOver=\"HOME.src='/images/hl_home.jpg'\" onMouseOut=\"HOME.src='/images/h_home.jpg'\">" "\n"
-    "			<IMG SRC=\"/images/h_home.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"HOME\" ALT=\"Home\" ></A></TD>" "\n"
-    "		<TD WIDTH=155>" "\n"
-    "			<A HREF=\"/cgi-bin/hgGateway\" onMouseOver=\"BROWSER.src='/images/hl_browser.jpg'\" onMouseOut=\"BROWSER.src='/images/h_browser.jpg'\">" "\n"
-    "			<IMG SRC=\"/images/h_browser.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"BROWSER\" ALT=\"&nbsp;&nbsp; Genome Browser\"></A></TD>		" "\n"
-    "		<TD WIDTH=100>" "\n"
-    "			<A HREF=\"/cgi-bin/hgBlat?command=start\" onMouseOver=\"SEARCH.src='/images/hl_blat.jpg'\" onMouseOut=\"SEARCH.src='/images/h_blat.jpg'\">" "\n"
-    "			<IMG SRC=\"/images/h_blat.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"SEARCH\" ALT=\"&nbsp;&nbsp; BLAT Search\"></A></TD>	" "\n"
-    "		<TD WIDTH=100>" "\n"
-    "			<A HREF=\"/FAQ.html\" onMouseOver=\"GUIDE.src='/images/hl_faq.jpg'\" onMouseOut=\"GUIDE.src='/images/h_faq.jpg'\">" "\n"
-    "			<IMG SRC=\"/images/h_faq.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"GUIDE\" ALT=\"&nbsp;&nbsp; FAQ\"></A></TD>" "\n"
-    "		</TR></TABLE>" "\n"
-    "	 </TD></TR></TABLE>" "\n"
-    "	 </TD></TR></TABLE>" "\n"
-    "	 </CENTER>" "\n"
-    "</TD></TR>" "\n"
+
+	"<!--HOTLINKS BAR---------------------------------------------------------->" "\n"
+	"<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
+	"<table bgcolor=\"000000\" cellpadding=\"1\" cellspacing=\"1\" width=\"100%\" height=\"27\">" "\n"
+	"<tr bgcolor=\"2636D1\"><td valign=\"middle\">" "\n"
+	"	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor=\"2636D1\" height=\"24\">" "\n	"
+ 	" 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
+    "       &nbsp;<A HREF=\"/index.html\" class=\"topbar\">" "\n"
+    "           Home</A> &nbsp; - &nbsp;" "\n"
+    "       <A HREF=\"/cgi-bin/hgGateway\" class=\"topbar\">" "\n"
+	"           Genome Browser</A> &nbsp; - &nbsp;" "\n"
+	"       <A HREF=\"/cgi-bin/hgBlat?command=start\" class=\"topbar\">" "\n"
+	"           Blat Search</A> &nbsp; - &nbsp;" "\n" 
+	"       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
+	"           FAQ</A> &nbsp; - &nbsp;" "\n" 
+	"       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
+	"           User Guide</A> &nbsp;</font></TD>" "\n"
+    "       </TR></TABLE>" "\n"
+	"</TD></TR></TABLE>" "\n"
+	"</TD></TR>	" "\n"	
     "" "\n"
-    "<!--Content Tables------------------------------------------------------->" "\n"
-    "<TR><TD CELLPADDING=10>	" "\n"
-    "  	<!--outer table is for border purposes-->" "\n"
-    "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-    "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-    "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
-    "		<FONT SIZE=\"4\"><b>&nbsp;"
 );
 
-vprintf(format, args);
+if(!skipSectionHeader)
+/* this HTML must be in calling code if skipSectionHeader is TRUE */
+{
+	puts(
+        "<!--Content Tables------------------------------------------------------->" "\n"
+        "<TR><TD COLSPAN=3 CELLPADDING=10>	" "\n"
+        "  	<!--outer table is for border purposes-->" "\n"
+        "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
+        "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
+        "	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
+        "		<FONT SIZE=\"4\"><b>&nbsp;"
+	);
+	vprintf(format, args);
 
-puts(
-    "</b></FONT></TD></TR></TABLE>" "\n"
-    "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
-    "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
-    "	" "\n"
-);
+	puts(
+        "</b></FONT></TD></TR></TABLE>" "\n"
+        "	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
+        "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
+        "	" "\n"
+    );
+};
 
 pushWarnHandler(webVaWarn);
 
