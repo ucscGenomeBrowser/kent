@@ -237,7 +237,6 @@ priority 130
 visibility hide
 color 0,60,120
 altColor 255,220,100
-spectrum on
 type bed 4
 
 track unAnnotated
