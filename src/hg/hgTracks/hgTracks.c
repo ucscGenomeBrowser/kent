@@ -74,8 +74,9 @@
 #include "chromColors.h"
 #include "cdsColors.h"
 #include "cds.h"
+#include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.652 2004/01/08 19:37:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.652.2.1 2004/01/15 23:46:11 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3529,6 +3530,29 @@ void jkDupliconMethods(struct track *tg)
 /* Load up custom methods for duplicon. */
 {
 tg->itemColor = jkDupliconColor;
+}
+
+
+static void loadSimpleNucDiff(struct track *tg)
+/* Load up simple diffs from database table to track items. */
+{
+bedLoadItem(tg, tg->mapName, (ItemLoader)simpleNucDiffLoad);
+}
+
+static char *simpleNucDiffName(struct track *tg, void *item)
+/* Return name of simpleDiff item. */
+{
+static char buf[32];
+struct simpleNucDiff *snd = item;
+safef(buf, sizeof(buf), "%s<->%s", snd->tSeq, snd->qSeq);
+return buf;
+}
+
+static void chimpSimpleDiffMethods(struct track *tg)
+/* Load up custom methods for simple diff */
+{
+tg->loadItems = loadSimpleNucDiff;
+tg->itemName = simpleNucDiffName;
 }
 
 char *simpleRepeatName(struct track *tg, void *item)
@@ -7161,6 +7185,7 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
+registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
