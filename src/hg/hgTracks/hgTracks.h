@@ -299,6 +299,11 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 
+void mapBoxJumpTo(int x, int y, int width, int height, 
+		  char *newChrom, int newStart, int newEnd, char *message);
+/* Print out image map rectangle that would invoke this program again
+ * at a different window. */
+
 double scaleForPixels(double pixelWidth);
 /* Return what you need to multiply bases by to
  * get to scale of pixel coordinates. */
@@ -400,6 +405,11 @@ void bedDrawSimpleAt(struct track *tg, void *item,
 
 typedef struct slList *(*ItemLoader)(char **row);
 
+void bedLoadItemByQuery(struct track *tg, char *table, 
+			char *query, ItemLoader loader);
+/* Generic tg->item loader. If query is NULL use generic
+ hRangeQuery(). */
+
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
@@ -468,6 +478,9 @@ void goldMethods(struct track *tg);
 
 void coverageMethods(struct track *tg);
 /* Make track for golden path positions of all frags. */
+
+void cytoBandIdeoMethods(struct track *tg);
+/* Draw ideogram of chromosome. */
 
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
