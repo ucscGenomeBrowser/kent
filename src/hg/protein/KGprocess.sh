@@ -3,14 +3,14 @@
 #	usage: KGprocess <DB> <RO_DB> <YYMMDD>
 #		<DB> - database to load, can be temporary
 #		<RO_DB> - actual organism database to read other data from
-#		<YYMMDD> - date stamp used to find proteinsYYMMDD database
+#		<YYMMDD> - date stamp used to find protYYMMDD database
 #	use a temporary test <DB> to verify correct operation
 #
 #	This script is used AFTER a new swissprot and proteins database
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.14 2004/03/18 19:37:14 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.15 2004/03/23 18:05:52 hiram Exp $"
 #
 #	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
@@ -61,7 +61,7 @@ if [ "$#" -ne 3 ]; then
     echo "usage: KGprocess <DB> <RO_DB> <YYMMDD>"
     echo -e "\t<DB> - organism database to load"
     echo -e "\t<RO_DB> - read only from this database (the target)"
-    echo -e "\t<YYMMDD> - date stamp used to find proteinsYYMMDD DB"
+    echo -e "\t<YYMMDD> - date stamp used to find protYYMMDD DB"
     echo -e "\tFor the DB, instead of loading directly into an organism"
     echo -e "\tDB, you can load into a new DB to see if everything is going"
     echo -e "\tto work out."
@@ -112,16 +112,40 @@ fi
 DB=$1
 RO_DB=$2
 DATE=$3
-PDB=proteins${DATE}
+PDB=prot${DATE}
 TOP=/cluster/data/kgDB/bed/${DB}
 export DB RO_DB DATE PDB TOP
+
+ISERVER_SETUP=/cluster/bin/scripts/setupIserver
+KLUSTER_RUN=/cluster/bin/scripts/runKlusterBatch
+
+ssh kkr1u00 "${ISERVER_SETUP}"  testConnection
+RC=$?
+if [ "${RC}" -ne 42 ]; then
+    echo "ERROR: can not run setupIserver on kkr1u00 via ssh"
+    echo -e "\tplease correct to continue.  This command:"
+    echo -e "\tssh kkr1u00 ${ISERVER_SETUP} testConnection"
+    echo -e "\tneeds to function OK with a return code of 42"
+    exit 255
+fi
+
+ssh kk "${KLUSTER_RUN}"  testConnection
+RC=$?
+if [ "${RC}" -ne 42 ]; then
+    echo "ERROR: can not access kluster run script on kk via ssh"
+    echo -e "\tplease correct to continue.  This command:"
+    echo -e "\tssh kk ${KLUSTER_RUN} testConnection"
+    echo -e "\tneeds to function OK with a return code of 42"
+    exit 255
+fi
+
 
 IS_THERE=`hgsql -e "show tables;" ${PDB} | wc -l`
 
 if [ ${IS_THERE} -lt 10 ]; then
 	echo "ERROR: can not find database: ${PDB}"
 	echo -e "\tcurrently existing protein databases:"
-	hgsql -e "show databases;" mysql | grep -y protein
+	hgsql -e "show databases;" mysql | grep -y prot
 	exit 255
 fi
 
@@ -249,9 +273,9 @@ if [ ! -s mrnaRefseq.tab ]; then
 fi
 
 #	kgGetPep reads the mrna.lis (mrna accession numbers) to
-#	extract from DBs proteins${DATE} and sp{DATE} the fasta records
+#	extract from DBs prot${DATE} and sp{DATE} the fasta records
 #	for each mrna
-#	reads from proteins${DATE}.spXref2 and sp${DATE}.protein
+#	reads from prot${DATE}.spXref2 and sp${DATE}.protein
 #	to create mrnaPep.tab and mrna.lis
 if [ ! -s mrnaPep.fa ]; then
     echo "`date` running: kgGetPep ${DATE}"
@@ -335,7 +359,7 @@ TablePopulated "knownGeneMrna" ${DB} || { \
      'LOAD DATA local INFILE "refMrna.tab" into table knownGeneMrna;' ${DB}; \
 }
 
-#	spm3 reads from ${DB}Temp.refGene and proteins${DATE}.spXref2
+#	spm3 reads from ${DB}Temp.refGene and prot${DATE}.spXref2
 #	to create proteinMrna.tab and protein.lis
 if [ ! -s proteinMrna.tab ]; then
     echo "`date` running spm3 ${DATE} ${DB}"
@@ -368,15 +392,44 @@ ln -s ../protein.lis . 2> /dev/null
 #	and the ${DB}Temp.spMrna table to generate a hierarchy
 #	of data directories to be used in the cluster run.
 if [ ! -d clusterRun ]; then
-	echo "`date` Preparing kgPrepBestMrna cluster run data and jobList"
-	kgPrepBestMrna ${DATE} ${DB} 2> jobList > Prep.out
-	echo "`date` Cluster Run kgPrepBestMrna has been prepared."
-	echo "on machine kk in: "`pwd`
-	echo "perform:"
-	echo "para create jobList"
-	echo "para try"
-	echo "para push ... etc."
+    echo "`date` Preparing kgPrepBestMrna cluster run data and jobList"
+    kgPrepBestMrna ${DATE} ${DB} 2> rawJobList > Prep.out
+    sed -e \
+	"s#./clusterRun#/iscratch/i/kgDB/${DB}/kgBestMrna/clusterRun#g" \
+	rawJobList > jobList
+
+    rm -f iserverSetupOK
+    echo "`date` Preparing iservers for kluster run"
+    ssh kkr1u00 ${ISERVER_SETUP} `pwd`/clusterRun kgDB/${DB}/kgBestMrna
+    RC=$?
+    if [ "${RC}" -ne 0 ]; then
+	echo "ERROR: iserver setup did not complete successfully"
 	exit 255
+    fi
+    touch iserverSetupOK
+fi
+
+if [ ! -f iserverSetupOK ]; then
+    echo "ERROR: iserver setup is not correct."
+    echo -e "\tsomething has failed in the kluster run setup"
+    exit 255
+fi
+
+if [ ! -f klusterRunComplete ]; then
+    rm -f klusterRunComplete
+    ssh kk "${KLUSTER_RUN}"  `pwd`
+    RC=$?
+    if [ "${RC}" -ne 0 ]; then
+	echo "ERROR: kluster batch did not complete successfully"
+	exit 255
+    fi
+    touch klusterRunComplete
+fi
+
+if [ ! -f klusterRunComplete ]; then
+    echo "ERROR: kluster run has failed."
+    echo -e "\tneeds to be corrected before continuing"
+    exit 255
 fi
 
 #	About 45 minutes of processing time to here
