@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.519 2003/05/19 23:40:59 blanchem Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.520 2003/05/20 01:12:59 blanchem Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -7202,7 +7202,11 @@ pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
 /* Determine zoom level. */
-z = humMusZoomLevel();
+ if (!strstr(tg->mapName,"HMRConservation"))
+   z = humMusZoomLevel();
+ else z=0;
+
+
 if(z == 1 )
     snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
 	    tg->mapName);
