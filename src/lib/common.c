@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.69 2004/09/25 22:30:17 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.70 2004/10/01 07:10:32 daryl Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1418,7 +1418,7 @@ void chopSuffixAt(char *s, char c)
 /* Remove end of string from first occurrence of char c. 
  * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
 {
-char *e = strrchr(s, c);
+char *e = strchr(s, c);
 if (e != NULL)
     *e = 0;
 }
