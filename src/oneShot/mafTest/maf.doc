@@ -1,0 +1,62 @@
+Specification of the Multiple Alignment Format (.maf) v1
+
+Introduction
+
+The multiple alignment format stores a series of multiple
+alignments in a format that is easy to parse and relatively
+easy to read.  We apologize for creating yet another
+multiple alignment format.  We realize that there are
+many in existence.  What motivates this format is
+the storage multiple alignments at the dna level between
+entire genomes. The existing formats we are aware of
+are geared towards multiple alignments of single proteins,
+and would require considerable extension at the least to
+cope with genomic issues such as forward and reverse
+strand directions,  multiple pieces to the alignment,
+and so forth.
+
+A Simple Example
+
+Here is a simple example of a file with two alignments
+with three sequences each:
+
+##maf version=1 scoring=multiz
+#mblastz 8.91 02-Jan-2005
+a score=0.128
+s human_hoxa 100  9 + 100257 ACA-TTACT
+s horse_hoxa 120 10 -  98892 ACAATTGCT
+s fugu_hoxa   88  8  + 90788 ACA--TGCT
+
+a score=0.071
+s human_unc 9077 8 + 10998 ACAGTATT
+s horse_unc 4555 6 -  5099 ACA--ATT
+s fugu_unc  4000 4 +  4038 AC----TT
+
+
+General Structure
+
+The .maf format is line oriented. Multiple alignments each
+end with a blank line.  Each sequence in an alignment 
+is on a single line, which can get quite long. Lines 
+starting with # are considered comments.  Lines starting 
+with ## can be ignored by most programs, but contain 
+meta-data of one form or another.  
+
+Each non-comment line within a multiple alignment begins
+with a type word.  Currently only types 'a' and 's' are
+defined.   Alignments begin with an 'a' line, which is
+followed by an arbitrary number of 's' lines.  Parsers
+should ignore lines starting with other type words for now.
+
+
+The First Line
+
+The first line of a .maf file begins with ##maf.  This
+word is followed by whitespace separated name/value pairs.  
+A version name/value pair is required
+
+
+The 'a' Lines
+
+Each alignment begins with an 'a' line.
+
