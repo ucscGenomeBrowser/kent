@@ -14,7 +14,7 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o  supStitch.o trans3.o wildcmp.o wormdna.o \
-    xa.o xap.o xenbig.o xenshow.o xensmall.o xp.o
+    xa.o xap.o xenbig.o xenshow.o xensmall.o xp.o web.o
 
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
