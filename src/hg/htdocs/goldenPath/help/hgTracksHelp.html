@@ -682,7 +682,7 @@ is always in synch.
 The Table Browser can be accessed in two different ways: 
 <TABLE>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Clicking the Tables link on the UCSC Genome Bioinformatics home page opens up 
+	Click the Tables link on the UCSC Genome Bioinformatics home page to open up 
 	the Table Browser Gateway page. On this page, select a date from the
 	<I>Freeze</I> menu and
 	enter the position of the genome that you would like to view, then click the
@@ -690,7 +690,7 @@ The Table Browser can be accessed in two different ways:
 	queries.  <TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Clicking the Tables link in the blue menu bar on the Genome Browser page will open
+	Click the Tables link in the blue menu bar on the Genome Browser page to open
 	up the Table Browser to the same assembly and position displayed in the annotation
 	tracks window. </TD></TR>
 </TABLE> 
@@ -717,17 +717,41 @@ To display a table, follow these steps:
 
 	<TR><TD WIDTH="20" VALIGN="top"><B>3.</B></TD><TD>
 	Click one of the buttons on the <I>Choose an action</I> line to select the type of output
-	and display it. Click the <I>Choose fields</I> button if you want to hand-select
-	the table fields that are displayed in the text output. The <I>Get all fields</I> button
-	defaults to a display containing all the fields in the table. If you have selected
-	a positional table, click the <I>Get DNA</I> button to display a list of DNA sequences in
-	fasta format for all the table features in the specified position range. If a
-	Table Browser query fails to return data, it may be necessary to broaden the range
-	of the position query.
+	and display it. 
+	<TABLE>
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<I>Filter fields</I>: Click this button to display a filter page that lets
+	you hand-select the table fields and lines that are displayed in the text output. To 
+	specify which fields to display, check the boxes in front of the appropriate 
+	fields or click the <I>Check All</I> button to select all the fields.
+	By default, all lines in the specified position range will be returned.
+	To restrict the number of lines that are returned, you may enter patterns with 
+	wildcards for each text field and/or enter range restrictions for numeric 
+	fields. The match criteria for different fields can be combined by selecting
+	<I>AND</I> or <I>OR</I>. By default, fields are combined using <I>AND</I>.
+	<I>ORs</I> have precedence: if any field marked <I>OR</I> matches, then the line 
+	matches. Otherwise, if all fields marked <I>AND</I> match, the line matches. To
+	view the filtered output, click the <I>Get these fields</I> button.
+	<TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<I>Get all fields</I>:  This button
+	defaults to a display containing all the fields in the table. 
+	</TD></TR>
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<I>Get DNA</I>: If you have selected
+	a positional table, click this button to display a list of DNA sequences in
+	fasta format for all the table features in the specified position range.
+	For many tables, an interim page displays giving you the opportunity to 
+	restrict the regions for which DNA will be retrieved. 
+	</TD></TR>
+	</TABLE> 
 	</TD></TR>
 </TABLE> 
 <P>
-If you are not familiar with a particular table, it is recommended that you select the <I>Choose 
+If a Table Browser query fails to return data, it may be necessary to broaden the 
+range of the position query. If you are not familiar with a particular table, it is recommended that you select the <I>Choose 
 fields</I> button to configure the output of the table display. Some tables offer many columns 
 of data, of which only a few may be relevant. Reducing the number of fields to the minimum 
 necessary simplifies viewing and further processing of the data. 
@@ -802,13 +826,23 @@ formatted by the tool is approximately 10 Mbp.
 
 <P>Coordinates of features frequently
 change from one assembly to the next as gaps are closed, strand orientations are
-corrected, and duplications are reduced. The Genome Browser Convert tool is useful for 
+corrected, and duplications are reduced. Occasionally, a chunk of sequence will
+even get moved from one chromosome to another as the map is
+refined. The Genome Browser Convert tool is useful for 
 locating the position of a feature of interest in a newer release of a genome.
 During the conversion process, portions of the genome in the coordinate range of
 the original assembly are aligned to the new assembly while preserving their order and 
 orientation. In general, it is easier to achieve successful conversions with shorter 
 sequences.
 <P>
+The Conversion tool works by performing a BLAT search on the first 1000, last 1000, and middle
+1000 bases
+in the current window. If all three searches land uniquely in the same order on
+the other version, the program announces a successful
+conversion. If the search results are not so straightforward, the user is given
+various options to find the corresponding sequence.
+Frequently, if the feature the user is looking for is tied to an mRNA, it is
+simplest just to BLAT the mRNA. 
 <P><B>Using the convert tool</B><BR>
 To access the conversion tool, click the Convert link in the top menu bar on the
 Genome Browser page. On the page that displays, select the assembly
