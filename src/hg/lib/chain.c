@@ -93,31 +93,6 @@ ret->id = sqlUnsignedComma(&s);
 return ret;
 }
 
-void chainFree(struct chain **pEl)
-/* Free a single dynamically allocated chain such as created
- * with chainLoad(). */
-{
-struct chain *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->tName);
-freeMem(el->qName);
-freez(pEl);
-}
-
-void chainFreeList(struct chain **pList)
-/* Free a list of dynamically allocated chain's */
-{
-struct chain *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    chainFree(&el);
-    }
-*pList = NULL;
-}
-
 void chainOutput(struct chain *el, FILE *f, char sep, char lastSep) 
 /* Print out chain.  Separate fields with sep. Follow last field with lastSep. */
 {
