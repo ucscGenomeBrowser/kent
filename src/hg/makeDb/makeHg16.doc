@@ -1424,6 +1424,9 @@ SEQ2_LEN=$BASE/S2.len
     # chr19 came along later:
     cp -p chr19.axt /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
 
+    #  IMPORTANT NOTE - This axtBest process has been replaced by the
+    #  chain to net to axt process.  Note procedure below continues
+    #  after the chain and nets have been produced.
     ssh kk
     cd /cluster/data/hg16/bed/blastz.mm3
     mkdir -p axtBest pslBest
@@ -1481,29 +1484,51 @@ Longest job:                     1247s      20.78m     0.35h    0.01d
 Submission to last job:          1261s      21.02m     0.35h    0.01d
 
     #  To get a result for chr19 - proceed with the chain and net below
-    #	When the mouse.net is complete:
-    ssh eieio
-    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
-    mkdir mouseNet
-    netSplit mouse.net mouseNet
-    netToAxt mouseNet/chr19.net chain/chr19.chain \
-	/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
-	/cluster/data/mm3.RM030619/mixedNib \
-	../axtNet/chr19.axt
+    #	When the mouse.net is complete:  - This chr19 processing is
+    #	replaced by processing all the chroms as indicated next
+    # ssh eieio
+    # cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    # mkdir mouseNet
+    # netSplit mouse.net mouseNet
+    # netToAxt mouseNet/chr19.net chain/chr19.chain \
+    #	/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+    #	/cluster/data/mm3.RM030619/mixedNib \
+    #	../axtNet/chr19.axt
 # read 6175021 chains in chain/chr19.chain
 # Processing chr19
 # loaded /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs/chr19.nib
 
-    cd /cluster/data/hg16/bed/blastz.mm3/axtBest
-    rm chr19.axt
-    ln -s ../axtNet/chr19.axt .
+    #	Better yet, Jim says to be consistent, do all the chroms in
+    #	this manner:
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mkdir mouseNet
+    netSplit mouse.net mouseNet
+    foreach n (mouseNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt mouseNet/$c.net chain/$c.chain \
+		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+		/cluster/data/mm3.RM030619/mixedNib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> $c.axt"
+    end
 
+    mkdir -p /cluster/data/hg16/bed/blastz.mm3/axtBest
+    cd /cluster/data/hg16/bed/blastz.mm3/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    #  Convert those axt files to psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3
-    /cluster/bin/i386/axtToPsl axtBest/chr19.axt \
-	/cluster/data/hg16/bed/blastz.mm3/S1.len \
-	/cluster/data/hg16/bed/blastz.mm3/S2.len \
-	pslBest/chr19_blastzBestMm3.psl
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestMm3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestMm3.psl
+	echo "Done: ${c}_blastzBestMm3.psl"
+    end
 
     # Load tables
      ssh hgwdev
@@ -1514,18 +1539,25 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
 XXXX
 
      # check results
-     featureBits hg16 blastzBestMm3
-        # 1667035238 bases of 2571104688 (64.837%) in intersection
-     featureBits hg16 blastzMm3
-        # 1669090687 bases of 2571104688 (64.917%) in intersection
+     # the original axtBest stuff from the axtBest operation:
+#  featureBits hg16 blastzBestMm3
+#  1027438291 bases of 2865248791 (35.859%) in intersection
+     #  After going through the chain->net->axt operation:
+#  featureBits hg16 blastzBestMm3
+#   991468768 bases of 2865248791 (34.603%) in intersection
+
+
+#  featureBits hg15 blastzBestMm3
+#  1035090465 bases of 2866466359 (36.110%) in intersection
+
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg16/axtBestMm3
      cd /gbdb/hg16/axtBestMm3
-     foreach f ($base/axtBest/chr*.axt)
+     foreach f (/cluster/data/hg16/bed/blastz.mm3/axtNet/chr*.axt)
        ln -s $f .
      end
-     cd $base/axtBest
+     cd /cluster/data/hg16/bed/blastz.mm3/axtNet
      rm -f axtInfoInserts.sql
      touch axtInfoInserts.sql
      foreach f (/gbdb/hg16/axtBestMm3/chr*.axt)
@@ -1534,9 +1566,34 @@ XXXX
                 VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
          >> axtInfoInserts.sql
      end
-     # already done, above
-     # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
+
+# MAKING THE AXTTIGHT FROM AXTBEST (TBD)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtNet
+    mkdir -p ../axtTight
+    tcsh
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/pslTight
+    hgLoadPsl hg16 chr*_blastzTightMm3.psl
 
 # CHAIN MOUSE BLASTZ (DONE 2003-08-28 - Hiram)
 
