@@ -10,7 +10,7 @@ import org.xml.sax.*;
  * LinkCheck.java
  * Purpose: check all links on a web page and report ok links and
  *   error links in separate files
- * Accepts command line input:  path in htdocs, file[.html], [yymmmdd]
+ * Accepts command line input:  path in htdocs, file[.html], [dateString]
  * Use zero for path if at top level
  * @author Heather Trumbower
  * @author Robert Kuhn
