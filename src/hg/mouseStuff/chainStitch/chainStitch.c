@@ -72,9 +72,9 @@ int boxInCmpBoth(const void *va, const void *vb)
 const struct boxIn *a = *((struct boxIn **)va);
 const struct boxIn *b = *((struct boxIn **)vb);
 int dif;
-dif = a->qStart - b->qStart;
+dif = a->tStart - b->tStart;
 if (dif == 0)
-    dif = a->tStart - b->tStart;
+    dif = a->qStart - b->qStart;
 return dif;
 }
 
@@ -97,13 +97,13 @@ boolean checkChainRange(struct chain *chain, int qs, int qe, int ts, int te)
 struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
 
 prevChainBlock = NULL;
-if ((te < chain->tStart) && (qe < chain->qStart))
-    return FALSE;
+//if ((te < chain->tStart) && (qe < chain->qStart))
+    //return FALSE;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
     {
     nextChainBlock = chainBlock->next;
-    if (((ts <= chainBlock->tEnd) && (te > chainBlock->tStart)) &&
-	 (qs <= chainBlock->qEnd) && (qe > chainBlock->qStart))
+    if (((ts < chainBlock->tEnd) && (te > chainBlock->tStart)) ||
+	 (qs < chainBlock->qEnd) && (qe > chainBlock->qStart))
 	return TRUE;
     }
     return FALSE;
@@ -138,26 +138,25 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
     return FALSE;
 }
 
-void addPslToChain(struct chain *chain, struct psl *psl, int *addedBases)
+boolean addPslToChain(struct chain *chain, struct psl *psl, int *addedBases)
 {
 struct boxIn *bList;
 struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
-int qStart = psl->qStart;
-int qEnd = psl->qEnd;
+int qStart = psl->qStarts[0];
+int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+int tStart = psl->tStarts[0];
+int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 
-if (psl->strand[0] == '-')
-    {
-    qStart = psl->qSize - psl->qEnd;
-    qEnd = psl->qSize - psl->qStart;
-    }
 prevChainBlock = NULL;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
     {
     nextChainBlock = chainBlock->next;
-    if ((chainBlock->tEnd > psl->tStart) || (chainBlock->qEnd > qStart))
+    if ((chainBlock->tEnd > tStart) || (chainBlock->qEnd > qStart))
 	{
-	if  (prevChainBlock && !((prevChainBlock->tEnd <= psl->tStart) && (prevChainBlock->qEnd <= qStart)))
-	    errAbort("badd add\n");
+	if  (prevChainBlock && !((prevChainBlock->tEnd < tStart) && (prevChainBlock->qEnd < qStart)))
+	    return FALSE;
+	if  (chainBlock && !((chainBlock->tStart > tEnd) && (chainBlock->qStart > qEnd)))
+	    return FALSE;
 
 	break;
 	}
@@ -176,8 +175,8 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 	{
 	if (chainBlock == NULL)
 	    {
-	    chain->tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-	    chain->qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	    chain->tEnd = tEnd;
+	    chain->qEnd = qEnd;
 	    }
 	prevChainBlock->next = bList;
 	}
@@ -186,6 +185,9 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
 	*addedBases += bList->tEnd - bList->tStart;
     *addedBases += bList->tEnd - bList->tStart;
     bList->next = chainBlock;
+
+    //slSort(&chain->blockList,  boxInCmpBoth);
+    return TRUE;
 }
 
 void checkInChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
@@ -204,17 +206,18 @@ for(psl = *pslList; psl ;  psl = nextPsl)
     int tStart = psl->tStarts[0];
     int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 
+    assert(tEnd > tStart);
+    assert(qEnd > qStart);
     prevChain = 0;
     for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
 	{
 	nextChain = chain->next;
-	if (((tStart <= chain->tEnd) && (tEnd > chain->tStart)) &&
-	     (qStart <= chain->qEnd) && (qEnd > chain->qStart))
+	if (((tStart < chain->tEnd) && (tEnd > chain->tStart)) &&
+	     (qStart < chain->qEnd) && (qEnd > chain->qStart))
 	    {
-	    if (!checkChainRange(chain, qStart, qEnd, tStart, tEnd))
+	    if ( addPslToChain(chain, psl, addedBases))
 		{
 		pslTabOut(psl, outFound);
-		addPslToChain(chain, psl, addedBases);
 		}
 
 	    if (prevPsl != NULL)
@@ -234,6 +237,7 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 
 void checkAfterChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
 {
+struct boxIn *block;
 struct chain *nextChain, *prevChain;
 struct chain *chain;
 struct psl *psl;
@@ -254,7 +258,8 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 	if (((tStart <= chain->tEnd + fudge) && (tStart > chain->tEnd)) &&
 	     (qStart <= chain->qEnd + fudge) && (qStart > chain->qEnd))
 	    {
-	    addPslToChain(chain, psl, addedBases);
+	    if (!addPslToChain(chain, psl, addedBases))
+		errAbort("after chains");
 
 	    if (prevPsl != NULL)
 		prevPsl->next = nextPsl;
@@ -272,8 +277,59 @@ for(psl = *pslList; psl ;  psl = nextPsl)
     }
 }
 
+struct chain *aggregateChains( struct chain *chainIn)
+{
+struct chain *outChain = NULL;
+struct chain *chain1, *chain2, *chain1Next;
+
+//printf("%s%c%s\n",chainIn->qName, chainIn->qStrand, chainIn->tName);
+for(chain1 = chainIn; chain1 ; chain1 = chain1Next)
+    {
+    chain1Next = chain1->next;
+    for(chain2 = chain1Next; chain2 ; chain2 = chain2->next)
+	{
+	    if ((chain1->tStart <= chain2->tStart) && (chain1->tEnd + fudge > chain2->tStart)
+	       && (chain1->qStart <= chain2->qStart) && (chain1->qEnd + fudge > chain2->qStart) &&
+		(chain1->qEnd < chain2->qStart) && (chain1->tEnd < chain2->tStart))
+		{
+		assert(chain1->tStart < chain1->tEnd);
+		assert(chain1->qStart < chain1->qEnd);
+		assert(chain2->tStart < chain2->tEnd);
+		assert(chain2->qStart < chain2->qEnd);
+		assert(chain1->qEnd < chain2->qStart);
+		assert(chain1->qEnd < chain2->qStart);
+		chain2->tStart = chain1->tStart;
+		chain2->qStart = chain1->qStart;
+		chain2->tEnd = max(chain1->tEnd, chain2->tEnd);
+		chain2->qEnd = max(chain1->qEnd, chain2->qEnd);
+		chain2->blockList = slCat(chain1->blockList,chain2->blockList);
+	//	slSort(&chain2->blockList,  boxInCmpBoth);
+		freez(&chain1);
+		break;
+		}
+	    else if ((chain1->tStart >= chain2->tEnd) && (chain1->tStart - fudge < chain2->tEnd)
+		&& (chain1->qStart >= chain2->qEnd) && (chain1->qStart - fudge < chain2->qEnd))
+		{
+		errAbort("shouldn't get here\n");
+		chain2->tEnd = chain1->tEnd;
+		chain2->qEnd = chain1->qEnd;
+		chain2->blockList = slCat(chain2->blockList,chain1->blockList);
+		freez(&chain1);
+		break;
+		}
+	}
+
+    if (chain2 == NULL)
+	{
+	slAddHead(&outChain, chain1);
+	}
+    }
+return outChain;
+}
+
 void checkBeforeChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
 {
+struct boxIn *block;
 struct chain *nextChain, *prevChain;
 struct chain *chain;
 struct psl *psl;
@@ -294,7 +350,8 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 	if (((tStart > chain->tStart - fudge) && (tEnd < chain->tStart)) &&
 	     (qStart > chain->qStart - fudge) && (qEnd < chain->qStart))
 	    {
-	    addPslToChain(chain, psl, addedBases);
+	    if (!addPslToChain(chain, psl, addedBases))
+		errAbort("before chains");
 
 	    if (prevPsl != NULL)
 		prevPsl->next = nextPsl;
@@ -385,7 +442,10 @@ lineFileClose(&chainsLf);
 printf("read in %d chains\n",count);
 
 for(csp = cspList; csp; csp = csp->next)
+    {
     slSort(&csp->chain, chainCmpTarget);
+//    csp->chain = aggregateChains(csp->chain);
+    }
 
 addedBases = deletedBases = 0;
 for(sp = spList; sp; sp = sp->next)
@@ -408,16 +468,18 @@ for(sp = spList; sp; sp = sp->next)
     if (sp->psl != NULL)
 	{
 	/* make sure we have a chainList */
+	chainList = NULL;
 	if (csp == NULL)
 	    {
 	    AllocVar(csp);
 	    slAddHead(&cspList, csp);
-	    hashAddSaveName(chainHash, dy->string, csp, &csp->name);
 	    csp->qName = cloneString(sp->psl->qName);
 	    csp->tName = cloneString(sp->psl->tName);
 	    csp->qStrand = sp->psl->strand[0];
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "%s%c%s", csp->qName, csp->qStrand, csp->tName);
+	    hashAddSaveName(chainHash, dy->string, csp, &csp->name);
 	    }
-
 	for(psl = sp->psl; psl ;  psl = nextPsl)
 	    {
 	    /* this psl will either fit a chain or make a new one */
@@ -427,19 +489,22 @@ for(sp = spList; sp; sp = sp->next)
 
 	    psl->next = NULL;
 	    fakePslList = psl;
-	    checkInChains(&fakePslList, &csp->chain, outFound, &addedBases);
+	    if (chainList)
+		checkInChains(&fakePslList, &chainList, outFound, &addedBases);
 	    if (fakePslList == NULL)
 		{
 		//freez(&psl);
 		continue;
 		}
-	    checkAfterChains(&fakePslList, &csp->chain, outFound, &addedBases);
+	    if (chainList)
+		checkAfterChains(&fakePslList, &chainList, outFound, &addedBases);
 	    if (fakePslList == NULL)
 		{
 		//freez(&psl);
 		continue;
 		}
-	    checkBeforeChains(&fakePslList, &csp->chain, outFound, &addedBases);
+	    if (chainList)
+		checkBeforeChains(&fakePslList, &chainList, outFound, &addedBases);
 	    if (fakePslList == NULL)
 		{
 		//freez(&psl);
@@ -447,6 +512,10 @@ for(sp = spList; sp; sp = sp->next)
 		}
 
 	    AllocVar(chain);
+	    chain->tStart = psl->tStarts[0];
+	    chain->qStart = psl->qStarts[0];
+	    chain->tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+	    chain->qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
 	    chain->tSize = psl->tSize;
 	    chain->qSize = psl->qSize;
 	    chain->qName = cloneString(psl->qName);
@@ -454,13 +523,19 @@ for(sp = spList; sp; sp = sp->next)
 	    chain->qStrand = psl->strand[0];
 	    chain->id = ++lastChainId;
 
-	    addPslToChain(chain, psl, &addedBases);
-	    slAddHead(&csp->chain, chain);
+	    if (!addPslToChain(chain, psl, &addedBases))
+		errAbort("new ");
+	    slAddHead(&chainList, chain);
 
 	    pslTabOut(psl, outFound);
 	    freez(&psl);
 	    }
+
+	csp->chain = slCat(csp->chain, chainList);
 	}
+
+    slSort(&csp->chain, chainCmpTarget);
+    csp->chain = aggregateChains(csp->chain);
     }
 fclose(outFound);
 printf("deleted %d bases\n",deletedBases);
