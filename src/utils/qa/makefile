@@ -7,4 +7,5 @@ install:
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
 	cp -p --remove-destination checkAllStaticLinks.csh ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
+	cp -p --remove-destination generic_range_check.csh ${SCRIPTS}
 

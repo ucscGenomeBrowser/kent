@@ -66,9 +66,11 @@ while ( $del_num != $linenum )
 	set table_id=`echo $current_line | gawk '{ print $1 }'`
 	set cnt_null=`hgsql -N -e 'SELECT COUNT(*) from '$table_id' WHERE '$col_id' is NULL' $db`
 	set cnt_empty=`hgsql -N -e 'SELECT COUNT(*) from '$table_id' WHERE '$col_id' = ""' $db`
-	if ($col_type =~ "varchar(255)" || \
-	$col_type =~ "longblob" || \
-	$col_type =~ "char(1)" ) then
+	# If col_type is non numeric, set min and max values to na
+	if ($col_type =~ varchar* || \
+	$col_type =~ longblob || \
+	$col_type =~ enum* || \
+	$col_type =~ char* ) then
                        set cnt_min="na"
                        set cnt_max="na"
 	else
@@ -86,7 +88,7 @@ echo
 
 # For those rows which are indexed, display 'SHOW INDEX' info
 
-echo "Show index information for indexed columns"
+echo "*** Show index information for indexed columns"
 echo
 
 egrep 'MUL|PRI' temp.txt | gawk '{ print $1 }' | sort | uniq > temp_indexed_tables.txt
