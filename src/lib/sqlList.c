@@ -10,7 +10,7 @@
 #include "sqlList.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: sqlList.c,v 1.15 2003/05/27 20:31:34 sugnet Exp $";
+static char const rcsid[] = "$Id: sqlList.c,v 1.16 2004/05/19 23:53:02 angie Exp $";
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 
@@ -139,6 +139,75 @@ unsigned char *sArray, *dArray = NULL;
 int size;
 
 sqlUbyteStaticArray(s, &sArray, &size);
+if (size > 0)
+    {
+    AllocArray(dArray,size);
+    CopyArray(sArray, dArray, size);
+    }
+*retArray = dArray;
+*retSize = size;
+}
+
+/*-------------------------*/
+
+int sqlCharArray(char *s, char *array, int arraySize)
+/* Convert comma separated list of chars to an array.  Pass in 
+ * array and max size of array. */
+{
+unsigned count = 0;
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0 || count == arraySize)
+	break;
+    e = strchr(s, ',');
+    if (e != NULL)
+	*e++ = 0;
+    array[count++] = s[0];
+    s = e;
+    }
+return count;
+}
+
+void sqlCharStaticArray(char *s, char **retArray, int *retSize)
+/* Convert comma separated list of chars to an array which will be
+ * overwritten next call to this function, but need not be freed. */
+{
+static signed char *array = NULL;
+static unsigned alloc = 0;
+unsigned count = 0;
+
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0)
+	break;
+    e = strchr(s, ',');
+    if (e != NULL)
+	*e++ = 0;
+    if (count >= alloc)
+	{
+	if (alloc == 0)
+	    alloc = 64;
+	else
+	    alloc <<= 1;
+	ExpandArray(array, count, alloc);
+	}
+    array[count++] = s[0];
+    s = e;
+    }
+*retSize = count;
+*retArray = array;
+}
+
+void sqlCharDynamicArray(char *s, char **retArray, int *retSize)
+/* Convert comma separated list of chars to a dynamically allocated
+ * array, which should be freeMem()'d when done. */
+{
+char *sArray, *dArray = NULL;
+int size;
+
+sqlCharStaticArray(s, &sArray, &size);
 if (size > 0)
     {
     AllocArray(dArray,size);
@@ -828,6 +897,20 @@ dyStringFree(&string);
 return toRet;
 }
 
+char *sqlCharArrayToString( char *array, int arraySize)
+{
+int i;
+struct dyString *string = newDyString(256);
+char *toRet = NULL;
+for( i = 0 ; i < arraySize; i++ )
+    {
+    dyStringPrintf(string, "%c,", array[i]);
+    }
+toRet = cloneString(string->string);
+dyStringFree(&string);
+return toRet;
+}
+
 char *sqlLongLongArrayToString( long long *array, int arraySize)
 {
 int i;
@@ -896,6 +979,19 @@ int ret;
 *e++ = 0;
 *pS = e;
 ret = sqlSigned(s);
+return ret;
+}
+
+char sqlCharComma(char **pS)
+/* Return char at *pS.  Advance *pS past comma after char */
+{
+char *s = *pS;
+char *e = strchr(s, ',');
+int ret;
+
+*e++ = 0;
+*pS = e;
+ret = s[0];
 return ret;
 }
 
