@@ -1710,7 +1710,7 @@ compositeTrack on
 shortLabel RNA/Affy Signal
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60) Signal in ENCODE Regions
 group encode
-color 10,10,130
+color 130,10,10
 altColor 50,50,50
 priority 48.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
