@@ -9,30 +9,40 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.29 2004/09/13 20:19:36 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.30 2004/09/15 17:14:26 hiram Exp $";
 
-void printHistoGram(struct histoResult *histoResults)
+void printHistoGram(struct histoResult *histoResults, boolean html)
 {
-printf("<P><!--outer table is for border purposes-->" "\n"
-	    "<TABLE BGCOLOR=\"#" HG_COL_BORDER
+if (html)
+    {
+    printf("<P><!--outer table is for border purposes-->" "\n"
+	"<TABLE BGCOLOR=\"#" HG_COL_BORDER
 	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
-puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
-printf("<TR><TH ALIGN=CENTER COLSPAN=8> %d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
+    puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
+    printf("<TR><TH ALIGN=CENTER COLSPAN=8> %d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
+	    histoResults->binCount - 1, histoResults->count);
+    puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
+    puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
+    puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
+    puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
+    puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range in bin </TH></TR>\n");
+    puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
+    puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
+    puts ("      </TABLE>\n");
+    puts ("    </TD>\n");
+    puts ("    <TH ALIGN=CENTER> count </TH>\n");
+    puts ("    <TH ALIGN=CENTER> p&nbsp;Value </TH>\n");
+    puts ("    <TH ALIGN=CENTER> log2(p&nbsp;Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution <BR> (CPD) </TH>\n");
+    puts ("    <TH ALIGN=CENTER> 1.0&nbsp;-&nbsp;CPD </TH></TR>\n");
+    }
+else
+    {
+    printf("#\t%d bin histogram on %u values (zero count bins not shown)\n",
 	histoResults->binCount - 1, histoResults->count);
-puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
-puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
-puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
-puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
-puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range in bin </TH></TR>\n");
-puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
-puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
-puts ("      </TABLE>\n");
-puts ("    </TD>\n");
-puts ("    <TH ALIGN=CENTER> count </TH>\n");
-puts ("    <TH ALIGN=CENTER> p&nbsp;Value </TH>\n");
-puts ("    <TH ALIGN=CENTER> log2(p&nbsp;Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution <BR> (CPD) </TH>\n");
-puts ("    <TH ALIGN=CENTER> 1.0&nbsp;-&nbsp;CPD </TH></TR>\n");
+    printf("# bin    range   count  pValue   log2(pValue)  CPD   1.0 - CPD\n");
+    printf("#      min:max\n");
+    }
 
 if (histoResults)
     {
@@ -51,37 +61,76 @@ if (histoResults)
 				histoResults->binZero;
 	    max = min + histoResults->binSize;
 
-	    printf ("<TR><TD ALIGN=LEFT> %d </TD>\n", i );
-	    printf ("    <TD ALIGN=RIGHT> %g </TD><TD ALIGN=RIGHT> %g </TD>\n", min, max);
-	    printf ("    <TD ALIGN=RIGHT> %u </TD>\n",
-			    histoResults->binCounts[i] );
+	    if (html)
+		{
+		printf ("<TR><TD ALIGN=LEFT> %d </TD>\n", i );
+		printf ("    <TD ALIGN=RIGHT> %g </TD><TD ALIGN=RIGHT> %g </TD>\n", min, max);
+		printf ("    <TD ALIGN=RIGHT> %u </TD>\n",
+				histoResults->binCounts[i] );
+		}
+	    else
+		printf ("%02d\t%g:%g %u", i, min, max,
+			histoResults->binCounts[i]);
+
 	    if (histoResults->binCounts[i] > 0)
 		{
 		pValue = (double) histoResults->binCounts[i] /
 			    (double) histoResults->count;
 		cpd += pValue;
-		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", pValue);
-		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", log(pValue)/log2_0);
+		if (html)
+		    {
+		    printf ("    <TD ALIGN=RIGHT> %g </TD>\n", pValue);
+		    printf ("    <TD ALIGN=RIGHT> %g </TD>\n",
+			log(pValue)/log2_0);
+		    }
+		else
+		    printf ("\t%f\t%f", pValue, log(pValue)/log2_0);
+
 		}
 	    else
 		{
-		printf ("    <TD ALIGN=RIGHT> 0.0 </TD>\n");
-		printf ("    <TD ALIGN=RIGHT> N/A </TD>\n");
+		if (html)
+		    {
+		    printf ("    <TD ALIGN=RIGHT> 0.0 </TD>\n");
+		    printf ("    <TD ALIGN=RIGHT> N/A </TD>\n");
+		    }
+		else
+		    printf ("\t0.0\tN/A");
+
 		}
 
-	    printf ("    <TD ALIGN=RIGHT> %g </TD>\n", cpd);
-	    printf ("    <TD ALIGN=RIGHT> %g </TD></TR>\n", 1.0 - cpd);
+	    if (html)
+		{
+		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", cpd);
+		printf ("    <TD ALIGN=RIGHT> %g </TD></TR>\n", 1.0 - cpd);
+		}
+	    else
+		printf ("\t%f\t%f\n", cpd, 1.0 - cpd);
 	    someDisplayed = TRUE;
 	    }
 	}
     if (!someDisplayed)
-	puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
+	{
+	if (html)
+	    puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> "
+		"no data found for histogram </TD></TR>\n");
+	else
+	    puts ("#\tno data found for histogram\n");
+	}
     }
 else
-    puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
+    {
+    if (html)
+	puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> "
+		"no data found for histogram </TD></TR>\n");
+    else
+	puts ("#\tno data found for histogram\n");
+    }
 
-printf ("</TABLE></TD></TR></TABLE></P>\n");
-
+if (html)
+    {
+    printf ("</TABLE></TD></TR></TABLE></P>\n");
+    }
 }
 
 void statsPreamble(struct wiggleDataStream *wds, char *chrom,

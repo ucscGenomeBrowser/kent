@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.21 2004/09/14 18:47:29 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.22 2004/09/15 17:14:54 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -652,7 +652,7 @@ if ((valuesMatched > 1) && (1 == regionCount))
 		(float) (wds->stats->lowerLimit + wds->stats->dataRange),
 		(struct histoResult *)NULL);
 
-    printHistoGram(histoGramResult);
+    printHistoGram(histoGramResult, TRUE);	/* TRUE == html output */
 
     freeHistoGram(&histoGramResult);
     wds->freeAscii(wds);

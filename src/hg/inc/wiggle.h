@@ -354,7 +354,7 @@ void wiggleDataStreamFree(struct wiggleDataStream **wds);
 #define VERBOSE_HIGHEST		5
 
 /*	in lib/wiggleUtils.c	*/
-void printHistoGram(struct histoResult *histoResults);
+void printHistoGram(struct histoResult *histoResults, boolean html);
 
 void statsPreamble(struct wiggleDataStream *wds, char *chrom,
     int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,

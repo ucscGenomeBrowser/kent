@@ -103,9 +103,9 @@ wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
 		    (struct histoResult *)NULL);
 
     /*	histoGram() may return NULL if it doesn't work, that's OK, the
-     *	print out will indicate no results
+     *	print out will indicate no results  (TRUE == html output)
      */
-    printHistoGram(histoGramResult);
+    printHistoGram(histoGramResult, TRUE);
 
     freeHistoGram(&histoGramResult);
     freeMem(valuesArray);
