@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.20 2003/06/18 16:22:27 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.21 2003/06/21 16:48:25 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
@@ -481,7 +481,7 @@ for (el = elList; el != NULL; el = el->next)
 hashElFreeList(&el);
 }
 
-char *cartFindLike(struct cart *cart, char *wildCard)
+char *cartFindFirstLike(struct cart *cart, char *wildCard)
 /* Find name of first variable that matches wildCard in cart. 
  * Return NULL if none. */
 {

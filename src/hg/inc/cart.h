@@ -130,7 +130,7 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
-char *cartFindLike(struct cart *cart, char *wildCard);
+char *cartFindFirstLike(struct cart *cart, char *wildCard);
 /* Find name of first variable that matches wildCard in cart. 
  * Return NULL if none. */
 
