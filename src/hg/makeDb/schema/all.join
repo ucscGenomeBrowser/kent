@@ -1,460 +1,481 @@
-join ECgeneName
+set hg hg11,hg12,hg13,hg15,hg16
+set mm mm1,mm2,mm3,mm4
+set rn rn1,rn2,rn3
+set fr fr1
+set ce ce1
+set ci ci1
+set cb cb1
+set dm dm1
+set dp dp1
+set sc sc1
+set sacCer sacCer1
+set panTro panTro1
+set galGal galGal1,galGal2
+set pyrFur pyrFur1,pyrFur2
+set pyrAer pyAer1
+set plaFac falciparum
+
+set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,plaFac
+
+identifier ECgeneName
 "Link together EC gene predicted gene structure and peptide"
-    gbd.ECgene.name
-    gbd.ECgenePep.name
+    $gbd.ECgene.name
+    $gbd.ECgenePep.name
 
-join geneidName
+identifier geneidName
 "Link together geneid predicted gene structure and peptide"
-    gbd.geneid.name
-    gbd.geneidPep.name
+    $gbd.geneid.name
+    $gbd.geneidPep.name
 
-join genscanName
+identifier genscanName
 "Link together genscan predicted gene structure and peptide"
-    gbd.genscan.name
-    gbd.genscan.pep
+    $gbd.genscan.name
+    $gbd.genscan.pep
 
-join sgpGeneName
+identifier sgpGeneName
 "Link together sgp predicted gene structure and peptide"
-    gbd.sgpGene.name
-    gbd.sgpPep.name
+    $gbd.sgpGene.name
+    $gbd.sgpPep.name
 
-join softberryGeneName
+identifier softberryGeneName
 "Link together Fshgene++ gene structure, pepdide, and homolog"
-    gbd.softberryGene.name
-    gbd.softberryPep.name
-    gbd.softberryHom.name
+    $gbd.softberryGene.name
+    $gbd.softberryPep.name
+    $gbd.softberryHom.name
 
-join twinscanName
+identifier twinscanName
 "Link together twinscan predicted gene structure and peptide"
-    gbd.twinscan.name
-    gbd.twinscanPep.name
+    $gbd.twinscan.name
+    $gbd.twinscanPep.name
 
-join vegaName
+identifier vegaName
 "Link together various VEGA human curated gene annotation"
-    gbd.vegaInfo.transcriptId
+    $gbd.vegaInfo.transcriptId
 
-join vegaGeneName typeOf=vegaName
+identifier vegaGeneName typeOf=vegaName
 "Link together VEGA predicted gene structure and peptide"
-    gbd.vegaGene.name
-    gbd.vegaPep.name
+    $gbd.vegaGene.name
+    $gbd.vegaPep.name
 
-join vegaPseudogeneName typeOf=vegaName
+identifier vegaPseudogeneName typeOf=vegaName
 "Link together VEGA pseudogene and other info. */
-    gbd.vegaPseudoGene.name
+    $gbd.vegaPseudoGene.name
 
-join affyU95
+identifier affyU95
 "Affymetrix Human U95 chip identifiers"
-    human.affyRatio.name
-    human.affyRatioNew.name
-    human.affyU95.qName
-    human.knownToU95.value
+    $hg.affyRatio.name
+    $hg.affyRatioNew.name
+    $hg.affyU95.qName
+    $hg.knownToU95.value
 
-join affyU133
+identifier affyU133
 "Affymetrix Human U133 chip identifiers"
-    human.knownToU133.value
-    human.affyU133.qName
+    $hg.knownToU133.value
+    $hg.affyU133.qName
 
-join chainPt0Id
+identifier chainPt0Id
 "Link together chimp pt0 chain info"
     hg16.allChainPt0.id
     hg16.chainPt0.id
     hg16.chainPt0Link.chainId
     hg16.netRxBestPt0.chainId
 
-join chainMm4Id
+identifier chainMm4Id
 "Link together mouse mm4 chain info"
-    gbd.chainMm4.id
-    gbd.chainMm4Link.chainId
-    gbd.netMm4.chainId
-    gbd.netMm4NonGap.chainId
+    $gbd.chainMm4.id
+    $gbd.chainMm4Link.chainId
+    $gbd.netMm4.chainId
+    $gbd.netMm4NonGap.chainId
 
-join chainRn3
+identifier chainRn3
 "Link together rat rn2 chain info"
-    gbd.chainRn3.id
-    gbd.chainRn3Link.chainId
-    gbd.netRn3.chainId
+    $gbd.chainRn3.id
+    $gbd.chainRn3Link.chainId
+    $gbd.netRn3.chainId
 
-join chainSelf
+identifier chainSelf
 "Link together self chain info"
-    gbd.chainSelf.id
-    gbd.chainSelfLink.chainId
+    $gbd.chainSelf.id
+    $gbd.chainSelfLink.chainId
 
-join bacCloneName 
+identifier bacCloneName 
 "A Roswell Park, Cal Tech or other clone ID"
-    gbd.fishClones.name
-    gbd.bacEndPairs.name
+    $gbd.fishClones.name
+    $gbd.bacEndPairs.name
 
-imageCloneId
+imageCloneId external="IMAGE Consortium"
 "An image cDNA clone ID"
-    gbd.mgcFullStatus.imageId
-    gbd.imageClone.imageId
+    $gbd.mgcFullStatus.imageId
+    $gbd.imageClone.imageId
 
-join genbankAccession external=genbank
+identifier genbankAccession external=genbank
 "Generic Genbank Accession.  More specific Genbank accessions follow"
-    gbd.seq.acc
-    gbd.gbSeq.acc
-    gbd.stsInfo2.genbank
+    $gbd.seq.acc
 
-join bacEndAccession typeOf=genbankAccession
+identifier stsAccession external=genbank
+"Genbank accession of a Sequence Tag Site (STS) sequence."
+    $gbd.stsInfo2.genbank
+
+identifier bacEndAccession typeOf=genbankAccession
 "Genbank accession of a BAC end read."
-    gbd.all_bacends.qName
-    gbd.mrna.acc subset
-    gbd.bacEndPairs.lfNames comma
-    human.fishClones.beNames comma
+    $gbd.all_bacends.qName
+    $gbd.bacEndPairs.lfNames comma
+    $hg.fishClones.beNames comma
 
-join bacAccession typeOf=genbankAccession
+identifier bacAccession typeOf=genbankAccession
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
 
-join humanBacAccession typeOf=bacAccession
-"Genbank accession of a sequenced human BAC (~150kb of genomic sequence)."
-    human.certificate.accession1
-    human.certificate.accession2
-    human.gl.frag chopAfter=.
-    human.gold.frag chopAfter=.
-    human.clonePos.name chopAfter=.
-    human.fishClones.accNames chopAfter=. comma
+identifier $hg.acAccession typeOf=bacAccession
+"Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
+    $hg.certificate.accession1
+    $hg.certificate.accession2
+    $hg.gl.frag chopAfter=.
+    $hg.gold.frag chopAfter=.
+    $hg.clonePos.name chopAfter=.
+    $hg.fishClones.accNames chopAfter=. comma
 
-join humanBacAccessionVersion typeOf=bacAccession
-"Genbank accession.version of sequence human BAC"
-    human.gl.frag chopAfter=_
-    human.gold.frag
-    human.clonePos.name
+identifier $hg.acAccessionVersion typeOf=bacAccession
+"Genbank accession.version of sequence $hg.BAC"
+    $hg.gl.frag chopAfter=_
+    $hg.gold.frag
+    $hg.clonePos.name
 
-join proteinAcc typeOf=genbankAccession
+identifier proteinAccession typeOf=genbankAccession
 "Genbank protein accession."
-    gbd.kgProtAlias.alias 
-    gbd.kgXref.protAcc
-    gbd.refLink.protAcc 
+    $gbd.kgProtAlias.alias 
+    $gbd.kgXref.protAcc
+    $gbd.refLink.protAcc 
 
-join estOrMrnaAccession typeOf=genbankAccession
+identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
-    gbd.mrna.acc subset
-    gbd.gbSeq.acc subset
-    gbd.gbStatus.acc subset
-    gbd.imageClone.acc subset
+    $gbd.mrna.acc subset
+    $gbd.gbSeq.acc subset
+    $gbd.gbStatus.acc subset
+    $gbd.imageClone.acc subset
 
-join estAccession typeOf=estOrMrnaAccession
+identifier estAccession typeOf=estOrMrnaAccession
 "Genbank EST accession"
+    $gbd.gbSeq.acc
 
-join nativeEstAccession typeOf=estAccession
+identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
-    gbd.all_est.qName
-    gbd.est.qName
-    gbd.intronEst.qName
-    gbd.estOrientInfo.name
+    $gbd.all_est.qName
+    $gbd.est.qName
+    $gbd.intronEst.qName
+    $gbd.estOrientInfo.name
 
-join xenoEstAccession typeOf=estAccession
+identifier xenoEstAccession typeOf=estAccession
 "Genbank xeno (different organism from database) EST accession"
-    gbd.xenoEst.qName
+    $gbd.xenoEst.qName
 
-join mrnaAccession typeOf=estOrMrnaAccession
+identifier mrnaAccession typeOf=estOrMrnaAccession
 "Genbank mRNA accession"
 
-join xenoMrnaAccession typeOf=mrnaAccession
+identifier xenoMrnaAccession typeOf=mrnaAccession
 "Genbank xeno (different organism from database) mRNA accession"
-    gbd.xenoMrna.qName
+    $gbd.xenoMrna.qName
 
-join nativeMrnaAccession typeOf=mrnaAccession
+identifier nativeMrnaAccession typeOf=mrnaAccession
 "Genbank Native (same organism as database) mRNA accession"
-    gbd.all_mrna.qName
-    gbd.chr*_mrna.qName
-    gbd.dupSpMrna.mrnaID
-    gbd.dupSpMrna.dupMrnaID
-    gbd.mrnaOrientInfo.name
-    gbd.mrnaRefseq.mrna
-    gbd.spMrna.mrnaID
+    $gbd.all_mrna.qName
+    $gbd.chr*_mrna.qName
+    $gbd.dupSpMrna.mrnaID
+    $gbd.dupSpMrna.dupMrnaID
+    $gbd.mrnaOrientInfo.name
+    $gbd.mrnaRefseq.mrna
+    $gbd.spMrna.mrnaID
 
-join mgcAccession typeOf=nativeMrnaAccession
+identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
     gdb.mgcFullMrna.qName 
-    gbd.mgcFullStatus.acc
-    gbd.mgcGenes.name
+    $gbd.mgcFullStatus.acc
+    $gbd.mgcGenes.name
 
-join refSeqId typeOf=mrnaAccession
+identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
-    gbd.bioCycPathway.geneId
-    gbd.cgapAlias.alias
-    gbd.imageClone.acc subset
-    human.kgAlias.alias subset
-    gbd.kgXref.refseq
-    gbd.knownToRefSeq.value
-    gbd.mrnaRefseq.refseq
-    gbd.refFlat.name
-    gbd.refGene.name
-    gbd.refLink.mrnaAcc
-    gbd.refSeqId.qName
-    gbd.refSeqStatus.mrnaAcc
-    gbd.refSeqSummarry.mrnaAcc
+    $gbd.bioCycPathway.geneId
+    $gbd.cgapAlias.alias
+    $gbd.imageClone.acc subset
+    $hg.kgAlias.alias subset
+    $gbd.kgXref.refseq
+    $gbd.knownToRefSeq.value
+    $gbd.mrnaRefseq.refseq
+    $gbd.refFlat.name
+    $gbd.refGene.name
+    $gbd.refLink.mrnaAcc
+    $gbd.refSeqId.qName
+    $gbd.refSeqStatus.mrnaAcc
+    $gbd.refSeqSummarry.mrnaAcc
 
-join knownGeneId typeOf=nativeMrnaAccession
+identifier knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
-    gbd.bioCycPathway.kgID
-    human&mouse.ceBlastTab.query
-    human&mouse.dmBlastTab.query
-    human&mouse.drBlastTab.query
-    human&mouse.scBlastTab.query
-    gbd.dupSpMrna.mrnaID
-    gbd.mrna.acc subset
-    gbd.seq.acc subset
-    gbd.foldUtr3.name
-    gbd.foldUtr5.name
-    human.gnfU95Distance.query
-    human.gnfU95Distance.target
-    gbd.keggPathway.kgID
-    gbd.kgAlias.kgID
-    gbd.kgProtAlias.kgID
-    gbd.kgXref.kgID
-    gbd.kgXref.mRNA
-    gbd.knownBlastTab.query
-    gbd.knownBlastTab.target
-    gbd.knownCanonical.transcript
-    gbd.knownGene.name
-    gbd.knownGeneMrna.name
-    gbd.knownGenePep.name
-    gbd.knownGnfDistance.query
-    gbd.knownGnfDistance.target
-    gbd.knownIsoforms.transcript
-    gbd.knownToCdsSnp.name
-    gbd.knownToEnsembl.name
-    gbd.knownToLocusLink.name
-    gbd.knownToPfam.name
-    gbd.knownToRefSeq.name
-    gbd.knownToSuper.name
-    human.knownToU133.name
-    human.knownToU95.name
-    human.mmBlastTab.query
+    $gbd.bioCycPathway.kgID
+    $hg,$mm.ceBlastTab.query
+    $hg,$mm.dmBlastTab.query
+    $hg,$mm.drBlastTab.query
+    $hg|$mm.scBlastTab.query
+    $gbd.dupSpMrna.mrnaID
+    $gbd.mrna.acc subset
+    $gbd.seq.acc subset
+    $gbd.foldUtr3.name
+    $gbd.foldUtr5.name
+    $hg.gnfU95Distance.query
+    $hg.gnfU95Distance.target
+    $gbd.keggPathway.kgID
+    $gbd.kgAlias.kgID
+    $gbd.kgProtAlias.kgID
+    $gbd.kgXref.kgID
+    $gbd.kgXref.mRNA
+    $gbd.knownBlastTab.query
+    $gbd.knownBlastTab.target
+    $gbd.knownCanonical.transcript
+    $gbd.knownGene.name
+    $gbd.knownGeneMrna.name
+    $gbd.knownGenePep.name
+    $gbd.knownGnfDistance.query
+    $gbd.knownGnfDistance.target
+    $gbd.knownIsoforms.transcript
+    $gbd.knownToCdsSnp.name
+    $gbd.knownToEnsembl.name
+    $gbd.knownToLocusLink.name
+    $gbd.knownToPfam.name
+    $gbd.knownToRefSeq.name
+    $gbd.knownToSuper.name
+    $hg.knownToU133.name
+    $hg.knownToU95.name
+    $hg.mmBlastTab.query
 
-join mouseKnownGeneId typeOf=knownGeneId
+identifier mouseKnownGeneId typeOf=knownGeneId
 "A known gene in mouse."
-    gbd.mmBlastTab.target
+    $gbd.mmBlastTab.target
 
-join humanFosmidId
+identifier $hg.osmidId
 "Human Fosmid (~50kb genomic sequence) clone"
-    human.fosEndPairs.name
+    $hg.fosEndPairs.name
 
-join humanFosmidEndId
+identifier $hg.fosmidEndId
 "Identifier of read from one end of human formid."
-    human.all_fosend.qName
-    human.fosEndPairs.lfNames comma
+    $hg.all_fosend.qName
+    $hg.fosEndPairs.lfNames comma
 
-join dbStsId external=dbSts
+identifier dbStsId external=dbSts
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
-    gbd.all_sts_primer.qName chopBefore=dbSTS_
-    gbd.all_sts_seq.qName
-    gbd.stsInfo2.dbSTSid
+    $gbd.all_sts_primer.qName chopBefore=dbSTS_
+    $gbd.all_sts_seq.qName
+    $gbd.stsInfo2.dbSTSid
 
-join ucscStsId
+identifier ucscStsId
 "UCSC STS (Sequenced Tagged Site, aka mapping sequence) ID"
-    gbd.stsAlias.identNo
-    gbd.stsInfo2.identNo
-    gbd.stsMap.indentNo
+    $gbd.stsAlias.identNo
+    $gbd.stsInfo2.identNo
+    $gbd.stsMap.indentNo
 
-join stsName
+identifier stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
-    human.fishClones.stsNames comma
-    gbd.stsInfo2.otherNames comma
+    $hg.fishClones.stsNames comma
+    $gbd.stsInfo2.otherNames comma
  
-join stsTrueName typeOf stsName
+identifier stsTrueName typeOf stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
-    gbd.stsAlias.trueName
-    gbd.stsInfo2.name
-    gbd.stsMap.name
+    $gbd.stsAlias.trueName
+    $gbd.stsInfo2.name
+    $gbd.stsMap.name
 
-join hugoName external=HUGO
+identifier hugoName external=HUGO
 "International Human Gene Identifier"
-    human.atlasOncoGene.locusSymbol
-    human.kgAlias.alias subset
-    human.kgXref.geneSymbol
-    human.refFlat.geneName
-    human.refLink.name
+    $hg.atlasOncoGene.locusSymbol
+    $hg.kgAlias.alias subset
+    $hg.kgXref.geneSymbol
+    $hg.refFlat.geneName
+    $hg.refLink.name
 
-join genBankAuthor
+identifier genBankAuthor
 "Connects genBank mRNA/EST and it's author"
-    gbd.mrna.author
-    gbd.author.id
+    $gbd.mrna.author
+    $gbd.author.id
 
-join genBankCds
+identifier genBankCds
 "Connects genBank mRNA/EST and it's coding region (CDS)"
-    gbd.mrna.cds
-    gbd.cds.id
+    $gbd.mrna.cds
+    $gbd.cds.id
 
-join genBankCell
+identifier genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
-    gbd.mrna.cell
-    gbd.cell.id
+    $gbd.mrna.cell
+    $gbd.cell.id
 
-join genBankDevelopment
+identifier genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
-    gbd.mrna.development
-    gbd.development.id
+    $gbd.mrna.development
+    $gbd.development.id
 
-join genBankDescription
+identifier genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
-    gbd.mrna.description
-    gbd.description.id
+    $gbd.mrna.description
+    $gbd.description.id
     
-join genBankGeneName
+identifier genBankGeneName
 "Connects genBank mRNA/EST and gene name"
-    gbd.mrna.geneName
-    gbd.geneName.id
-    gbd.refLink.geneName
+    $gbd.mrna.geneName
+    $gbd.geneName.id
+    $gbd.refLink.geneName
 
-join genBankKeyword
+identifier genBankKeyword
 "Connects genBank mRNA/EST and keyword"
-    gbd.mrna.keyword
-    gbd.keyword.id
+    $gbd.mrna.keyword
+    $gbd.keyword.id
 
-join genBankLibrary
+identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
-    gbd.mrna.library
-    gbd.library.id
+    $gbd.mrna.library
+    $gbd.library.id
 
-join genBankMrnaClone
+identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
-    gbd.mrna.mrnaClone
-    gbd.mrnaClone.id
+    $gbd.mrna.mrnaClone
+    $gbd.mrnaClone.id
 
-join genBankOrganism
+identifier genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
-    gbd.mrna.organism
+    $gbd.mrna.organism
     organism.id
 
-join genBankProductName
+identifier genBankProductName
 "Connects genBank mRNA/EST and protein product name"
-    gbd.mrna.productName
-    gbd.productName.id
-    gbd.refLink.prodName
+    $gbd.mrna.productName
+    $gbd.productName.id
+    $gbd.refLink.prodName
 
-join genBankSex
+identifier genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
-    gbd.mrna.sex
+    $gbd.mrna.sex
     sex.id
 
-join genBankSource
+identifier genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
-    gbd.mrna.source
-    gbd.source.id
+    $gbd.mrna.source
+    $gbd.source.id
 
-join genBankTissue
+identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
-    gbd.mrna.tissue
+    $gbd.mrna.tissue
     tissue.id
 
-join bioCycMapId external=BioCyc
+identifier bioCycMapId external=BioCyc
 "BioCyc Pathway Map ID"
-    gbd.bioCycMapDesc.mapID
-    gbd.bioCycPathway.mapID
+    $gbd.bioCycMapDesc.mapID
+    $gbd.bioCycPathway.mapID
 
-join keggMapId external=KEGG
+identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
-    gbd.keggMapDesc.mapID
-    gbd.keggPathway.mapID
+    $gbd.keggMapDesc.mapID
+    $gbd.keggPathway.mapID
 
-join locusLinkId external=LocusLink
+identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
-    gbd.keggPathway.mapID
-    gbd.knownToLocusLink.value
-    gbd.refLink.locusLinkId
+    $gbd.keggPathway.mapID
+    $gbd.knownToLocusLink.value
+    $gbd.refLink.locusLinkId
 
-join omimId external=OMIM
+identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
-    gbd.refLink.omimId
+    $gbd.refLink.omimId
 
-join knownAlignId
+identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
-    gbd.knownGene.alignId
+    $gbd.knownGene.alignId
 
-join knownClusterId
+identifier knownClusterId
 "ID of a cluster of overlapping known genes"
-    gbd.knownCanonical.clusterId
-    gbd.knownIsoforms.clusterId
+    $gbd.knownCanonical.clusterId
+    $gbd.knownIsoforms.clusterId
 
-join swissProtId external=SwissProt
+identifier swissProtId external=SwissProt
 "Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
-    gbd.dupSpMrna.proteinID
-    gbd.dupSpMrna.dupProteinID
-    gbd.kgProtAlias.displayID
-    gbd.kgXref.spDisplayID
-    gbd.knownCanonical.protein
-    gbd.knownGene.proteinId
-    gbd.spMrna.spID
+    $gbd.dupSpMrna.proteinID
+    $gbd.dupSpMrna.dupProteinID
+    $gbd.kgProtAlias.displayID
+    $gbd.kgXref.spDisplayID
+    $gbd.knownCanonical.protein
+    $gbd.knownGene.proteinId
+    $gbd.spMrna.spID
 
-join swissProtAccession external=SwissProt
+identifier swissProtAccession external=SwissProt
 "SwissProt Accession"
-    gbd.kgProtAlias.alias part
-    gbd.kgProtMap.qName
-    gbd.kgXref.spID
-    gbd.pepMwAa.accession
-    gbd.pepPi.accession
+    $gbd.kgProtAlias.alias part
+    $gbd.kgProtMap.qName
+    $gbd.kgXref.spID
+    $gbd.pepMwAa.accession
+    $gbd.pepPi.accession
 
-join pfamId external=Pfam
+identifier pfamId external=Pfam
 "Pfam (Protein Family) ID"
-    gbd.knownToPfam.value
+    $gbd.knownToPfam.value
 
-join superfamilyId external=Superfamily
+identifier superfamilyId external=Superfamily
 "Protein Superfamily ID"
-    gbd.knownToSuper.value
-    gbd.sfAssign.sfID
-    gbd.sfDes.id
+    $gbd.knownToSuper.value
+    $gbd.sfAssign.sfID
+    $gbd.sfDes.id
 
-join wormBaseId external=WormBase
+identifier wormBaseId external=WormBase
 "WormBase (C. elegans) ORF ID"
-    gbd.ceBlastTab.target
+    $gbd.ceBlastTab.target
 
-join flyBaseId external=FlyBase
+identifier flyBaseId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
-    gbd.dmBlastTab.target
+    $gbd.dmBlastTab.target
 
-join scdId external=SGD
+identifier scdId external=SGD
 "Sacchromyces Genome Database ORF ID"
-    gbd.scBlastTab.target
+    $gbd.scBlastTab.target
 
-join ensemblGeneId external=Ensembl
+identifier ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
-    gbd.ensGeneXref.gene_name
-    gbd.ensGtp.gene chopAfter=.
-    gbd.ensTranscript.gene_name
+    $gbd.ensGeneXref.gene_name
+    $gbd.ensGtp.gene chopAfter=.
+    $gbd.ensTranscript.gene_name
 
-join ensemblProteinId external=Ensembl
+identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
-    gbd.ensGtp.protein chopAfter=.
-    gbd.ensTranscript.translation_name
-    gbd.sfDescription.proteinID
+    $gbd.ensGtp.protein chopAfter=.
+    $gbd.ensTranscript.translation_name
+    $gbd.sfDescription.proteinID
 
-join ensemblTranscriptId external=Ensembl
+identifier ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
-    gbd.ensGene.name
-    gbd.ensGeneXref.transcript_name
-    gbd.ensGtp.transcript chopAfter=.
-    gbd.ensPep.name
-    gbd.ensTranscript.transcript_name
-    gbd.knownToEnsembl.value
-    gbd.sfDescription.name
+    $gbd.ensGene.name
+    $gbd.ensGeneXref.transcript_name
+    $gbd.ensGtp.transcript chopAfter=.
+    $gbd.ensPep.name
+    $gbd.ensTranscript.transcript_name
+    $gbd.knownToEnsembl.value
+    $gbd.sfDescription.name
 
-join cgapId
+identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
-    gbd.cgapAlias.cgapID
-    gbd.cgapBiocPathway.cgapID
+    $gbd.cgapAlias.cgapID
+    $gbd.cgapBiocPathway.cgapID
 
-join cgapMapId
+identifier cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
-    gbd.cgapBioDesc.mapID
-    gbd.cgapBiocPathway.mapID
+    $gbd.cgapBioDesc.mapID
+    $gbd.cgapBiocPathway.mapID
 
-join dbSnpId external=dbSNP
+identifier dbSnpId external=dbSNP
 "NCBI dbSNP ID"
-    gbd.knownToCdsSnp.value
-    gbd.snpMap.name
-    gbd.snpNih.name
-    gbd.snpTsc.name
+    $gbd.knownToCdsSnp.value
+    $gbd.snpMap.name
+    $gbd.snpNih.name
+    $gbd.snpTsc.name
 
-join unigeneId
+identifier unigeneId
 "NCBI UniGene Cluster ID"
-    gbd.sage.uni
-    gbd.uniGene_2.name chopBefore=.
+    $gbd.sage.uni
+    $gbd.uniGene_2.name chopBefore=.
 
-join sageExpId
+identifier sageExpId
 "Sage experiment (tissue type etc) ID"
-    gbd.sageExp.num
-    gbd.sage.exps comma
+    $gbd.sageExp.num
+    $gbd.sage.exps comma
 
