@@ -1,5 +1,6 @@
 #This file contains definitions of orderings common to all genomes.
 #
+
 name knownExpUcla
 shortLabel Expression (UCLA)
 longLabel Difference in Expression with Selected Gene
@@ -23,6 +24,12 @@ shortLabel Expression (GNF U74A)
 longLabel Difference in Expression with Selected Gene
 type pair affyGnfU74ADistance query target distance 1
 priority 2
+
+name regulatoryModule
+shortLabel Regulation Module
+longLabel Eran Segal Regulation Module
+type group esRegGeneToModule gene module
+priority 2.5
 
 name blastp
 shortLabel Protein Homology
@@ -77,3 +84,5 @@ shortLabel Chromosome
 longLabel Ordered by Chromosome Position
 type genomePos
 priority 8
+
+
