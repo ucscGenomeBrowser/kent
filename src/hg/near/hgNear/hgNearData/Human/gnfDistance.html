@@ -10,7 +10,8 @@ profiles.
 The expression distance between two genes is a weighted
 sum computed with the following formula:
 <PRE>
-  &nbsp;&nbsp;&nbsp;delta(a,b) = sum(w[i] * |a[i] - b[i]| ) / sum(w[i])<BR>
+  &nbsp;&nbsp;&nbsp;delta(a,b) = sum(w[i] * |a[i] - b[i]| ) / sum(w[i])
+</PRE>
 where a and b are expression vectors associated with the two
 genes indexed by tissue,  w is an array of weights, and the
 sums are taken over all tissues.  Currently, all weights have a value
