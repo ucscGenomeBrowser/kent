@@ -114,6 +114,7 @@ static struct optionSpec optionSpecs[] =
     {"geneStats", OPTION_STRING},
     {"tissueExpThresh", OPTION_INT},
     {"geneJsStats", OPTION_STRING},
+    {"brainSpecific", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -146,7 +147,8 @@ static char *optionDescripts[] =
     "[optional] Output splice sites for cassette exons.",
     "[optional] Output stats about genes, junctions expressed, junctions alt to file name.",
     "[optional] Number of tissues that must express a probe set before considred expressed.",
-    "[optional] Print out junction sets per gene stats."
+    "[optional] Print out junction sets per gene stats.",
+    "[optional] Output brain specific isoforms to file specified.",
 };
 
 
@@ -539,7 +541,8 @@ int includeIx = 0;
 struct bed *bed1 = NULL, *bed2 = NULL;
 
 assert(js->cassette);
-assert(js->junctUsedCount == 2);
+if(js->junctUsedCount < 2)
+    return 0;
 
 bed1 = hashMustFindVal(bedHash, js->junctUsed[0]);
 bed2 = hashMustFindVal(bedHash, js->junctUsed[1]);
@@ -557,7 +560,8 @@ int skipIx = 0;
 struct bed *bed1 = NULL, *bed2 = NULL;
 
 assert(js->cassette);
-assert(js->junctUsedCount == 2);
+if(js->junctUsedCount < 2)
+    return 0;
 
 bed1 = hashMustFindVal(bedHash, js->junctUsed[0]);
 bed2 = hashMustFindVal(bedHash, js->junctUsed[1]);
@@ -583,7 +587,7 @@ return FALSE;
 
 boolean junctionExpressed(struct junctSet *js, int colIx, int junctIx)
 /* Is the junction at junctIx expressed above the 
-   threshold in colIx? */
+   thresnhold in colIx? */
 {
 boolean geneExp = FALSE;
 boolean junctExp = FALSE;
@@ -763,8 +767,11 @@ switch(type)
     case altCassette:
 	altCassetteExpCount++;
 	break;
-    default:
+    case altOther:
 	otherExpCount++;
+	break;
+    deafult:
+	warn("Don't recognize type: %d", type);
     }
 }
 
@@ -788,8 +795,11 @@ switch(type)
     case altCassette:
 	altCassetteExpAltCount++;
 	break;
-    default:
+    case altOther:
 	otherExpAltCount++;
+	break;
+    deafult:
+	warn("Don't recognize type: %d", type);
     }
 }
 
@@ -861,13 +871,15 @@ if(geneJsOutName != NULL)
     geneCounts = mustOpen(geneJsOutName, "w");
 for(js = jsList; js != NULL; js = js->next)
     {
-    int *expressed = NULL;
+    int **expressed = NULL;
     int totalTissues = 0;
     int junctExpressed = 0;
     int geneExpCount = 0;
     int altExpTissues = 0;
     int jsExpCount = 0;
     AllocArray(expressed, js->junctUsedCount);
+    for(i = 0; i < js->junctUsedCount; i++)
+	AllocArray(expressed[i], colCount);
     
     /* Loop through and see how many junctions
        are actually expressed and in how many tissues. */
@@ -881,8 +893,8 @@ for(js = jsList; js != NULL; js = js->next)
 	    {
 	    if(junctionExpressed(js, colIx, junctIx) == TRUE)
 		{
-		expressed[junctIx]++;
-		if(expressed[junctIx] >= tissueExpThresh)
+		expressed[junctIx][colIx]++;
+		if(expressed[junctIx][colIx] >= tissueExpThresh)
 		    anyExpressed++;
 		}
 	    if(js->junctProbs[junctIx][colIx] >= presThresh)
@@ -900,8 +912,21 @@ for(js = jsList; js != NULL; js = js->next)
     /* Set number expressed. */
     for(i = 0; i < js->junctUsedCount; i++)
 	{
-	if(expressed[i] >= tissueExpThresh)
-	    junctExpressed++;
+	for(j = 0; j < colCount; j++)
+	    {
+	    int numTissueExpressed = 0;
+	    if(expressed[i][j])
+		{
+		/* If this junction has been expressed more than
+		   the threshold stop counting and move on to the 
+		   next on. */
+		if(++numTissueExpressed >= tissueExpThresh)
+		    {
+		    junctExpressed++;
+		    break;
+		    }
+		}
+	    }
 	}
     
     /* Record that there is a junction set for this gene. */
@@ -924,8 +949,8 @@ for(js = jsList; js != NULL; js = js->next)
 	}
     if(js->altExpressed == TRUE)
 	{
-	js->score = calcMinCorrelation(js, expressed, totalTissues, colCount);
-	countExpSpliceType(js->spliceType);
+	js->score = calcMinCorrelation(js, expressed[0], totalTissues, colCount);
+/*	countExpSpliceType(js->spliceType);*/
 	}
     else
 	js->score = BIGNUM;
@@ -939,6 +964,8 @@ for(js = jsList; js != NULL; js = js->next)
 	fprintf(geneOut, "%s\t%s\t%d\t%d\t%d\n", js->name, tmpName, geneExpCount, jsExpCount, altExpTissues);
 	freez(&tmpName);
 	}
+    for(i = 0; i < js->junctUsedCount; i++)
+	freez(&expressed[i]);
     freez(&expressed);
     }
 carefulClose(&geneOut);
@@ -1647,7 +1674,7 @@ if(js->altExpressed && cassetteBedOut)
     bed.chrom = bedUp->chrom;
     bed.chromStart = ag->vPositions[altBpStart];
     bed.chromEnd = ag->vPositions[altBpEnd];
-    bed.name = bedUp->name;
+    bed.name = js->name;
     bed.strand[0] = bedUp->strand[0];
     bed.score = altCassette;
     bedTabOutN(&bed,6,cassetteBedOut);
@@ -1725,7 +1752,10 @@ if(bedUp->chromStart == bedDown->chromStart)
 	}
     else if(agxIsCassette(ag, em, start, ve1, ve2, 
 			  &altBpStart,  &altBpEnd, &firstVertex, &lastVertex))
+	{
 	type = altCassette;
+	js->cassette = TRUE;
+	}
 /*     outputAlt3Dna(js, bedUp, bedDown, ag, em, start, ve1, ve2, altBpStart, altBpEnd) */
     if(type == altCassette)
 	outputCassetteBed(js, bedUp, bedDown, ag, em, start, ve1, ve2, altBpStart, altBpEnd);
@@ -1760,7 +1790,10 @@ else if(bedUp->chromEnd == bedDown->chromEnd)
 	start = agxVertexByPos(ag, bedSpliceStart(bedUp));
 	if(agxIsCassette(ag, em, start, start2, end,
 			 &altBpStart, &altBpEnd, &firstVertex, &lastVertex)) 
+	    {
 	    type = altCassette;
+	    js->cassette = TRUE;
+	    }
 	if(type == altCassette)
 	    outputCassetteBed(js, bedUp, bedDown, ag, em, start, ve1, ve2, altBpStart, altBpEnd);
 	}
@@ -1834,13 +1867,14 @@ for(js = jsList; js != NULL; js = js->next)
     }
 }
 
-void outputTissueSpecific(struct junctSet *jsList, struct resultM *probM)
+void outputTissueSpecific(struct junctSet *jsList, struct resultM *probM, struct hash *bedHash)
 /* Output alternatively spliced isoforms that are tissue specific. */
 {
 struct junctSet *js = NULL;
 char *tissueSpecific = optionVal("tissueSpecific", NULL);
 FILE *tsOut = NULL;
 int tsCount = 0;
+tissueExpThresh = optionInt("tissueExpThresh",1);
 assert(tissueSpecific);
 tsOut = mustOpen(tissueSpecific, "w");
 for(js = jsList; js != NULL; js = js->next)
@@ -1850,29 +1884,152 @@ for(js = jsList; js != NULL; js = js->next)
 	continue;
     for(junctIx = 0; junctIx < js->junctUsedCount; junctIx++)
 	{
+	boolean isSkip = FALSE;
+	boolean isInclude = FALSE;
 	int count = 0;
 	int tissueIx = 0;
 	int colIx = 0, rowIx = 0;
-	int junctIx = 0;
+	if(js->spliceType == altCassette)
+	    {
+	    isSkip = (skipJsIx(js, bedHash) == junctIx);
+	    isInclude = (includeJsIx(js, bedHash) == junctIx);
+	    }
 	for(colIx = 0; colIx < probM->colCount; colIx++)
 	    {
 	    if(junctionExpressed(js, colIx, junctIx) == TRUE)
 		{
+
 		tissueIx = colIx;
 		count++;
-		if(count > 1)
-		    break;
 		}
 	    }
 	if(count == 1)
 	    {
-	    fprintf(tsOut, "%s\t%s\t%d\n", js->junctUsed[junctIx], probM->colNames[tissueIx], js->spliceType);
-	    tsCount++;
+	    int otherJunctIx = 0;
+	    /* Require that at least one other junction is expressed in another tissue. */
+	    for(otherJunctIx = 0; otherJunctIx < js->junctUsedCount; otherJunctIx++)
+		{   
+		int otherColIx = 0;
+		if(otherJunctIx == junctIx)
+		    continue;
+		for(otherColIx = 0; otherColIx < probM->colCount; otherColIx++)
+		    {
+		    if(otherColIx == tissueIx)
+			continue;
+		    if(junctionExpressed(js, otherColIx, otherJunctIx)) 
+			{
+			fprintf(tsOut, "%s\t%s\t%d\t%d\t%d\n", js->junctUsed[junctIx], probM->colNames[tissueIx], 
+				js->spliceType, isSkip, isInclude);
+			tsCount++;
+			otherJunctIx = js->junctUsedCount+1; /* To end the outer loop. */
+			break; /* to end the inner loop. */
+			}
+		    }
+		}
 	    }
 	}
     }
 warn("%d junctions are tissue specific", tsCount);
 carefulClose(&tsOut);
+}
+
+void outputBrainSpecific(struct junctSet *jsList, struct resultM *probM, struct hash *bedHash)
+/* Output alternatively spliced isoforms that are brain specific. */
+{
+struct junctSet *js = NULL;
+char *brainSpecific = optionVal("brainSpecific", NULL);
+FILE *bsOut = NULL;
+int bsCount = 0;
+boolean *isBrain = NULL;
+int i = 0, j = 0;
+char *brainTissues[] = {"cerebellum","cerebral_hemisphere","cortex","medial_eminence","olfactory_bulb","pinealgland","thalamus"};
+tissueExpThresh = optionInt("tissueExpThresh",1);
+assert(brainSpecific);
+AllocArray(isBrain, probM->colCount);
+for(i = 0; i < probM->colCount; i++)
+    {
+    for(j = 0; j < ArraySize(brainTissues); j++) 
+	{
+	if(sameWord(brainTissues[j], probM->colNames[i])) 
+	    {
+	    isBrain[i] = TRUE;
+	    break;
+	    }
+	}
+    }
+
+bsOut = mustOpen(brainSpecific, "w");
+for(js = jsList; js != NULL; js = js->next)
+    {
+    int junctIx = 0;
+/*     if(js->altExpressed != TRUE) */
+/* 	continue; */
+    for(junctIx = 0; junctIx < js->junctUsedCount; junctIx++)
+	{
+	boolean isSkip = FALSE;
+	boolean isInclude = FALSE;
+	int count = 0;
+	int brainIx = 0;
+	int colIx = 0, rowIx = 0;
+	for(colIx = 0; colIx < probM->colCount; colIx++)
+	    {
+	    if((junctionExpressed(js, colIx, junctIx) == TRUE ||
+		geneExpressed(js, colIx) == TRUE)
+		&& isBrain[colIx])
+		{
+		brainIx = colIx;
+		if(js->spliceType == altCassette)
+		    {
+		    isSkip = (skipJsIx(js, bedHash) == junctIx);
+		    isInclude = (includeJsIx(js, bedHash) == junctIx);
+		    }
+		count++;
+		}
+	    else if(junctionExpressed(js, colIx, junctIx) == TRUE && !isBrain[colIx])
+		{
+		count = -1;
+		break;
+		}
+	    }
+	if(count >= tissueExpThresh)
+	    {
+	    int otherJunctIx = 0;
+	    /* Require that at least one other junction is expressed in another non-brain tissue. */
+	    for(otherJunctIx = 0; otherJunctIx < js->junctUsedCount; otherJunctIx++)
+		{   
+		int otherJunctExpCount = 0;
+		int otherColIx = 0;
+		if(otherJunctIx == junctIx)
+		    continue;
+		for(otherColIx = 0; otherColIx < probM->colCount; otherColIx++)
+		    {
+		    if(isBrain[otherColIx])
+			continue;
+		    if(junctionExpressed(js, otherColIx, otherJunctIx)) 
+			{
+			otherJunctExpCount++;
+			if(otherJunctExpCount >= tissueExpThresh)
+			    {
+			    int includeIx = junctIx;
+			    int before = 0;
+			    if(js->spliceType == altCassette)
+				includeIx = includeJsIx(js, bedHash);
+			    
+			    fprintf(bsOut, "%s\t%s\t%d\t%d\t%d\n", js->name, probM->colNames[brainIx], 
+				    js->spliceType, isSkip, isInclude);
+			    bsCount++;
+			    otherJunctIx = js->junctUsedCount+1; /* To end the outer loop. */
+			    break; /* to end the inner loop. */
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+freez(&isBrain);
+warn("%d junctions are brain specific", bsCount);
+carefulClose(&bsOut);
 }
 
 void altHtmlPages(char *junctFile, char *probFile, char *intensityFile, char *bedFile)
@@ -1917,7 +2074,6 @@ assert(bedFile);
 probM = readResultMatrix(probFile);
 warn("Loaded %d rows and %d columns from %s", probM->rowCount, probM->colCount, probFile);
 
-
 fillInJunctUsed(jsList, intenM);
 fillInProbs(jsList, probM);
 fillInIntens(jsList, intenM);
@@ -1950,7 +2106,12 @@ warn("Calculating expression");
 
 if(optionExists("tissueSpecific"))
     {
-    outputTissueSpecific(jsList, probM);
+    outputTissueSpecific(jsList, probM, bedHash);
+    }
+
+if(optionExists("brainSpecific"))
+    {
+    outputBrainSpecific(jsList, probM, bedHash);
     }
 
 if(optionExists("outputDna"))
