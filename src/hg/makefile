@@ -136,6 +136,7 @@ DIRS = \
 	hgTracks \
 	hgc \
 	hgsql \
+	hgsqldump \
 	intronEnds \
 	lib \
 	liftAgp \
