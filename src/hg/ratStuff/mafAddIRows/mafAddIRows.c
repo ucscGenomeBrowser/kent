@@ -7,7 +7,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.1 2005/04/06 18:43:25 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.2 2005/04/06 18:47:10 braney Exp $";
 
 int redCount;
 int blackCount;
@@ -98,10 +98,10 @@ while((maf = mafNext(mf)) != NULL)
 	    {
 	    if (blockStatus->mc)
 		{
-		blockStatus->mc->rightStatus =  NEW_STATUS;
+		blockStatus->mc->rightStatus =  MAF_NEW_STATUS;
 		blockStatus->mc->rightLen = blockStatus->mc->srcSize - blockStatus->end;
 		}
-	    mc->leftStatus = NEW_STATUS;
+	    mc->leftStatus = MAF_NEW_STATUS;
 	    mc->leftLen = mc->start;
 	    //printf("newBefore %s\n",chrom);
 	    }
@@ -110,19 +110,19 @@ while((maf = mafNext(mf)) != NULL)
 
 	    if (blockStatus->end > mc->start)
 		{
-		blockStatus->mc->rightStatus = mc->leftStatus = DUP_STATUS;
+		blockStatus->mc->rightStatus = mc->leftStatus = MAF_DUP_STATUS;
 		blockStatus->mc->rightLen = mc->leftLen = blockStatus->end - mc->start;
 		//printf("sameStrand %d ",blockStatus->end - mc->start);
 		}
 	    else if (blockStatus->end < mc->start)
 		{
-		blockStatus->mc->rightStatus = mc->leftStatus = INSERT_STATUS;
+		blockStatus->mc->rightStatus = mc->leftStatus = MAF_INSERT_STATUS;
 		blockStatus->mc->rightLen = mc->leftLen = -blockStatus->end + mc->start;
 		//printf("insert %s %d ",mc->src,-blockStatus->end + mc->start);
 		}
 	    else 
 		{
-		blockStatus->mc->rightStatus = mc->leftStatus = CONTIG_STATUS;
+		blockStatus->mc->rightStatus = mc->leftStatus = MAF_CONTIG_STATUS;
 		}
 	    }
 	///printf("|\n");
@@ -140,7 +140,7 @@ while((maf = mafNext(mf)) != NULL)
     for(cookie = hashFirst(statusHash),  hashEl = hashNext(&cookie); hashEl; hashEl = hashNext(&cookie))
 	{
 	blockStatus = hashEl->val;
-	blockStatus->mc->rightStatus = NEW_STATUS;
+	blockStatus->mc->rightStatus = MAF_NEW_STATUS;
 	blockStatus->mc->rightLen = 0;
 	}
 mafFileFree(&mf);
@@ -172,11 +172,11 @@ for(maf = mafList; maf ; maf = maf->next)
 		{
 		switch (blockStatus->mc->rightStatus)
 		    {
-		    case CONTIG_STATUS:
-		    case INSERT_STATUS:
-		    case DUP_STATUS:
+		    case MAF_CONTIG_STATUS:
+		    case MAF_INSERT_STATUS:
+		    case MAF_DUP_STATUS:
 		    default:
-			printf("insert i rwo black %c %d\n",blockStatus->mc->rightStatus,blockStatus->mc->rightLen);
+			//printf("insert i rwo black %c %d\n",blockStatus->mc->rightStatus,blockStatus->mc->rightLen);
 			AllocVar(mc);
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
@@ -186,8 +186,6 @@ for(maf = mafList; maf ; maf = maf->next)
 			break;
 		    }
 		}
-		else
-			printf("first %s\n",blockStatus->species);
 	    }
 	if (mc)
 	    blockStatus->mc = mc;
