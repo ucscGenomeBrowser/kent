@@ -98,6 +98,7 @@ struct indel
   int codonGenPos[3];  /* position of the codon bases */
   char genCodon[4];
   char mrnaCodon[4];
+  boolean knownSnp;
 };
 
 struct pslInfo
@@ -784,7 +785,8 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
 
 struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaStart,
                              char *mCodon, char* chr, int genPos[3], char* gCodon,
-                             struct dnaSeq *rna, char *strand, struct clone *cloneId)
+                             struct dnaSeq *rna, char *strand, struct clone *cloneId,
+			     boolean knownSnp)
 /* Create a record of a mismatch */
 {
   struct indel *mi;
@@ -808,8 +810,8 @@ struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaSta
   strcpy(mi->mrnaCodon, mCodon);
   mi->hs = createEvid();
   mi->xe = createEvid();
-  
-  
+  mi->knownSnp = knownSnp;
+    
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
   searchTrans(conn, "mrna", mrna, rna, mi, strand, CODONSUB, cloneId);
   searchTrans(conn, "est", mrna, rna, mi, strand, CODONSUB, cloneId);
@@ -833,6 +835,7 @@ int nCodonBases = 0;   /* to deal with partial codons */
 struct indel *mi, *miList=NULL;
 struct indel *codonSub, *codonSubList=NULL;
 ZeroVar(codonGenPos);
+boolean knownSnp = FALSE;
 
 strcpy(rCodon, "---");
 strcpy(dCodon, "---");
@@ -896,12 +899,16 @@ for (i = 0; i < pi->psl->blockCount; i++)
             /* If third base, check codon for mismatch */
             if ((iCodon==2) && (nCodonBases == 3) && !sameString(rCodon, dCodon))
                 {
+		if ((codonSnps) && (codonMismatches == 0))
+		    knownSnp = TRUE;
+		else
+		    knownSnp = FALSE;
                 if (lookupCodon(rCodon) == lookupCodon(dCodon))
                     {
                     pi->synSub++;
                     if ((codonSnps > 0) && (codonMismatches == 0))
-                        pi->synSubSnp++;
-                    }
+			pi->synSubSnp++;
+                    }		
                 else
                     {
                     pi->nonSynSub++;
@@ -912,7 +919,8 @@ for (i = 0; i < pi->psl->blockCount; i++)
                     {
                     codonSub = createCodonSub(conn, pi->psl->qName, qstart+j,
                                               rCodon, pi->psl->tName, codonGenPos,
-                                              dCodon, rna, pi->psl->strand, pi->mrnaCloneId);
+                                              dCodon, rna, pi->psl->strand, 
+					      pi->mrnaCloneId, knownSnp);
                     slAddHead(&codonSubList, codonSub);
                     }
                 }
@@ -1204,9 +1212,13 @@ for (indel = iList; indel != NULL; indel=indel->next)
        else
            fprintf(of, "%c vs. ", mrnaAA);
        if (genAA == 0)
-           fprintf(of, "STOP\n");
+           fprintf(of, "STOP");
        else
-           fprintf(of, "%c\n", genAA);
+           fprintf(of, "%c", genAA);
+       if (indel->knownSnp)
+	   fprintf(of, ", SNP\n");
+       else
+	   fprintf(of, "\n");	   
        fprintf(of, "\tpsl %s %d %d\t%s %d %d\n",
 	       psl->qName, psl->qStart, psl->qEnd,
 	       psl->tName, psl->tStart, psl->tEnd);
