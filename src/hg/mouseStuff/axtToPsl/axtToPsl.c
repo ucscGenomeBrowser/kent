@@ -170,7 +170,9 @@ int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 	}
     }
 
-
+/* Don't ouput if either query or target is zero length */
+ if ((qStart == qEnd) || (tStart == tEnd))
+     return;
 /* First count up number of blocks and inserts. */
 countInserts(qString, aliSize, &qNumInsert, &qBaseInsert);
 countInserts(tString, aliSize, &tNumInsert, &tBaseInsert);
