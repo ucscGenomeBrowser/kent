@@ -20,7 +20,7 @@
 #include "web.h"
 
 /* Variables used by getFeatDna code */
-char *database = "hg7";		/* Which database? */
+char *database;			/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
@@ -65,11 +65,11 @@ static boolean existsAndEqual(char* var, char* value)
 }
 
 
-static boolean findGenomePos(char *spec, char **retChromName, 
+static boolean findPositionInGenome(char *spec, char **retChromName, 
 		    int *retWinStart, int *retWinEnd)
 /* process the position information given in spec and gives a chrom name
  * as well as a start and end values on that chrom */
-{
+{ 
 struct hgPositions *hgp;
 struct hgPos *pos;
 struct dyString *ui;
@@ -89,9 +89,9 @@ if ((pos = hgp->singlePos) != NULL)
     *retWinEnd = pos->chromEnd;
     hgPositionsFree(&hgp);
     return TRUE;
-	}
+    }
 else
-	{
+    {
     webStart("Genome Table Browser");
     hgPositionsHtml(hgp, stdout, FALSE, NULL);
     hgPositionsFree(&hgp);
@@ -159,9 +159,7 @@ struct hashEl *currentListEl;
 position = cgiOptionalString("position");
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -172,14 +170,14 @@ if(position == NULL)
 if(position[0] == '\0')
     webAbort("Missing position", "Please enter a position");
 if(strcmp(position, "genome"))
+    {
+    if(position != NULL && position[0] != 0)
 	{
-	if(position != NULL && position[0] != 0)
-		{
-		if (!findGenomePos(position, &chromName, &winStart, &winEnd))
-			return;
-		}
-	findGenomePos(position, &chromName, &winStart, &winEnd);
+	if (!findPositionInGenome(position, &chromName, &winStart, &winEnd))
+		return;
 	}
+    findPositionInGenome(position, &chromName, &winStart, &winEnd);
+    }
 
 /* iterate through all the tables and store the positional ones in a list */
 strcpy(query, "SHOW TABLES");
@@ -311,7 +309,7 @@ puts(
 }
 
 void parseTableName(char* dest, char* chrom_name)
-/* given a chrom name (such as one produced by findGenomePos) return the
+/* given a chrom name (such as one produced by findPositionInGenome) return the
  * table name of the table selected by the user */
 {
 char* table;
@@ -363,10 +361,10 @@ if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
 		{
-		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
+		if (!findPositionInGenome(position, &choosenChromName, &winStart, &winEnd))
 			return;
 		}
-	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
+	findPositionInGenome(position, &choosenChromName, &winStart, &winEnd);
 	}
 
 /* if they haven't choosen a table tell them */
@@ -458,9 +456,7 @@ if(existsAndEqual("table0", "Choose table") && existsAndEqual("table1", "Choose 
 	webAbort("Missing table selection", "Please choose a table.");
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -474,10 +470,10 @@ if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
 		{
-		if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+		if (!findPositionInGenome(position, &chromName, &winStart, &winEnd))
 			return;
 		}
-	findGenomePos(position, &chromName, &winStart, &winEnd);
+	findPositionInGenome(position, &chromName, &winStart, &winEnd);
 	}
 else
 	allGenome = TRUE;	/* read all chrom info */
@@ -574,10 +570,10 @@ if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
 		{
-		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
+		if (!findPositionInGenome(position, &choosenChromName, &winStart, &winEnd))
 			return;
 		}
-	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
+	findPositionInGenome(position, &choosenChromName, &winStart, &winEnd);
 	}
 
 /* get the real name of the table */
@@ -688,9 +684,7 @@ char* database;
 char* table = getTableVar();
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -833,9 +827,7 @@ char* table = getTableVar();
 char parsedTableName[256];
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -994,9 +986,7 @@ char* table = getTableVar();
 char parsedTableName[256];
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -1348,9 +1338,7 @@ if(existsAndEqual("table", "Choose table"))
 	}
 	
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-	database = "hg7";
+database = cgiUsualString("db", hGetDb());
 
 /* if the position information is not given, get it */
 if(position == NULL)
@@ -1361,10 +1349,10 @@ if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
 		{
-		if (!findGenomePos(position, &choosenChromName, &winStart, &winEnd))
+		if (!findPositionInGenome(position, &choosenChromName, &winStart, &winEnd))
 			return;
 		}
-	findGenomePos(position, &choosenChromName, &winStart, &winEnd);
+	findPositionInGenome(position, &choosenChromName, &winStart, &winEnd);
 	}
 
 /* make sure that the table name doesn't have anything "weird" in it */
@@ -1436,9 +1424,7 @@ char* database;
 char* freezeName;
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 
 /* output the freexe name and informaion */
@@ -1504,9 +1490,7 @@ if (!cgiIsOnWeb())
    }
 
 /* select the database */
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = "hg7";
+database = cgiUsualString("db", hGetDb());
 hSetDb(database);
 hDefaultConnect();
 
