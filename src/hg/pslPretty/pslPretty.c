@@ -17,7 +17,7 @@ errAbort(
   "usage:\n"
   "   pslPretty in.psl target.lst query.lst pretty.out\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -axt - save in Scott Schwartz's axt format\n"
   "It's a really good idea if the psl file is sorted by target\n"
   "if it contains multiple targets.  Otherwise this will be\n"
   "very very slow.   The target and query lists can either be\n"
@@ -53,7 +53,6 @@ int size;
 FILE *f = NULL;
 splitPath(file, NULL, root, NULL);
 AllocVar(sfp);
-uglyf("Adding %s\n", file);
 hashAddSaveName(seqHash, root, sfp, &sfp->name);
 sfp->file = hashStoreName(fileHash, file);
 sfp->isNib = TRUE;
@@ -69,7 +68,6 @@ char *line, *name;
 char root[128];
 char *rFile = hashStoreName(fileHash, file);
 
-uglyf("Adding %s\n", file);
 while (lineFileNext(lf, &line, NULL))
     {
     if (line[0] == '>')
@@ -161,6 +159,16 @@ dlAddValHead(cache, cf);
 return cf->f;
 }
 
+struct dnaSeq *readSeqFromFaPos(struct seqFilePos *sfp,  FILE *f)
+/* Read part of FA file. */
+{
+struct dnaSeq *seq;
+fseek(f, sfp->pos, SEEK_SET);
+if (!faReadNext(f, "", TRUE, NULL, &seq))
+    errAbort("Couldn't faReadNext on %s in %s\n", sfp->name, sfp->file);
+return seq;
+}
+
 struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash, 
 	struct dlList *fileCache)
 /* Read sequence hopefully using file cashe. */
@@ -173,12 +181,45 @@ if (sfp->isNib)
     }
 else
     {
-    struct dnaSeq *seq;
-    fseek(f, sfp->pos, SEEK_SET);
-    if (!faReadNext(f, "", TRUE, NULL, &seq))
-        errAbort("Couldn't faReadNext on %s in %s\n", seqName, sfp->file);
-    return seq;
+    return readSeqFromFaPos(sfp, f);
     }
+}
+
+void readCachedSeqPart(char *seqName, int start, int size, 
+     struct hash *hash, struct dlList *fileCache, 
+     struct dnaSeq **retSeq, int *retOffset, boolean *retIsNib)
+/* Read sequence hopefully using file cashe. If sequence is in a nib
+ * file just read part of it. */
+{
+struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
+FILE *f = openFromCache(fileCache, sfp->file);
+if (sfp->isNib)
+    {
+    *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
+    *retOffset = start;
+    *retIsNib = TRUE;
+    }
+else
+    {
+    *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
+    *retOffset = 0;
+    *retIsNib = FALSE;
+    }
+}
+
+void axtOutString(char *q, char *t, int size, int lineSize, 
+	struct psl *psl, FILE *f)
+/* Output string side-by-side in Scott's axt format. */
+{
+static int ix = 0;
+int qs = psl->qStart, qe = psl->qEnd;
+
+if (psl->strand[0] == '-')
+    reverseIntRange(&qs, &qe, psl->qSize);
+
+fprintf(f, "%d %s %d %d %s %d %d %s\n", ++ix, psl->tName, psl->tStart+1, psl->tEnd,
+	psl->qName, qs+1, qe, psl->strand);
+fprintf(f, "%s\n%s\n\n", t, q);
 }
 
 void prettyOutString(char *q, char *t, int size, int lineSize, 
@@ -221,7 +262,7 @@ while (sizeLeft > 0)
 }
 
 void prettyOne(struct psl *psl, struct hash *qHash, struct hash *tHash,
-	struct dlList *fileCache, FILE *f)
+	struct dlList *fileCache, FILE *f, boolean axt)
 /* Make pretty output for one psl.  Find target and query
  * sequence in hash.  Load them.  Output bases. */
 {
@@ -232,14 +273,18 @@ struct dyString *t = newDyString(16*1024);
 int blockIx, diff;
 int qs, ts;
 int lastQ = 0, lastT = 0, size;
+int qOffset;
+boolean qIsNib;
 
 if (qName == NULL || !sameString(qName, psl->qName))
     {
     freeDnaSeq(&qSeq);
     freez(&qName);
     qName = cloneString(psl->qName);
-    uglyf("Looking for %s\n", qName);
-    qSeq = readCachedSeq(qName, qHash, fileCache);
+    readCachedSeqPart(qName, psl->qStart, psl->qEnd-psl->qStart, 
+    	qHash, fileCache, &qSeq, &qOffset, &qIsNib);
+    if (qIsNib && psl->strand[0] == '-')
+	qOffset = psl->qSize - psl->qEnd;
     }
 if (tName == NULL || !sameString(tName, psl->tName))
     {
@@ -256,7 +301,7 @@ if (psl->strand[1] == '-')
 
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     {
-    qs = psl->qStarts[blockIx];
+    qs = psl->qStarts[blockIx] - qOffset;
     ts = psl->tStarts[blockIx];
 
     /* Output gaps except in first case. */
@@ -288,19 +333,24 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     lastT = ts + size;
     }
 
-if (psl->strand[0] == '-')
+if (psl->strand[0] == '-' && !qIsNib)
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
     reverseComplement(tSeq->dna, tSeq->size);
 
 assert(q->stringSize == t->stringSize);
-prettyOutString(q->string, t->string, q->stringSize, 60, psl, f);
+if (axt)
+    axtOutString(q->string, t->string, q->stringSize, 60, psl, f);
+else
+    prettyOutString(q->string, t->string, q->stringSize, 60, psl, f);
 dyStringFree(&q);
 dyStringFree(&t);
+if (qIsNib)
+    freez(&qName);
 }
 
 void pslPretty(char *pslName, char *targetList, char *queryList, 
-	char *prettyName)
+	char *prettyName, boolean axt)
 /* pslPretty - Convert PSL to human readable output. */
 {
 struct hash *fileHash = newHash(0);  /* No value. */
@@ -311,11 +361,15 @@ struct lineFile *lf = pslFileOpen(pslName);
 FILE *f = mustOpen(prettyName, "w");
 struct psl *psl;
 
+printf("Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
+printf("Scanning %s\n", queryList);
 hashFileList(queryList, fileHash, qHash);
+printf("Converting %s\n", pslName);
 while ((psl = pslNext(lf)) != NULL)
     {
-    prettyOne(psl, qHash, tHash, fileCache, f);
+    uglyf("%s %s %s\n", psl->qName, psl->strand, psl->tName);
+    prettyOne(psl, qHash, tHash, fileCache, f, axt);
     pslFree(&psl);
     }
 lineFileClose(&lf);
@@ -324,9 +378,12 @@ lineFileClose(&lf);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+static boolean axt;
+
 optionHash(&argc, argv);
+axt = optionExists("axt");
 if (argc != 5)
     usage();
-pslPretty(argv[1], argv[2], argv[3], argv[4]);
+pslPretty(argv[1], argv[2], argv[3], argv[4], axt);
 return 0;
 }
