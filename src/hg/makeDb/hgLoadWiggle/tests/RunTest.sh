@@ -35,13 +35,13 @@ if [ "$?" -ne 0 ]; then
     exit 255
 fi
 
-oneTest "$HGWIGGLE -chr=chrM -db=ce2 gc5Base" "26963    31"
+oneTest "$HGWIGGLE -lift=1 -chr=chrM -db=ce2 gc5Base" "26963    31"
 oneTest "$HGWIGGLE -chr=chrM -doBed -db=ce2 gc5Base" "37864     1"
 oneTest "$HGWIGGLE -chr=chrM -doStats -db=ce2 gc5Base" "40185     1"
-oneTest "$HGWIGGLE -position=chrM:4000-10000 -db=ce2 gc5Base" "15554    14"
-oneTest "$HGWIGGLE -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "22894     2"
-oneTest "$HGWIGGLE -position=chrM:4000-10000 -dataConstraint=\"<=\" -ll=50 -db=ce2 gc5Base" "01708    12"
-oneTest "$HGWIGGLE -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "40914     5"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -db=ce2 gc5Base" "15554    14"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "22894     2"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\"<=\" -ll=50 -db=ce2 gc5Base" "01708    12"
+oneTest "$HGWIGGLE -lift=1 -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "40914     5"
 oneTest "$HGWIGGLE -doBed -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "15056     3"
 oneTest "$HGWIGGLE -doStats -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "38601     1"
 oneTest "$HGWIGGLE -doBed -doStats -position=chrM:4000-10000 -dataConstraint=\">\" -ll=50 -db=ce2 gc5Base" "14143     4"
