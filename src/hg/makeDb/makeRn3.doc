@@ -734,6 +734,26 @@ AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
     nice ./bin/gbDbLoadStep -verbose=1 -initialLoad rn3
     # This load took about 7 hours
 
+    # native mRNAs were suspect due to bug in gbBlat script, redoing them.
+    # alignment now uses a config file, so add rn3 to etc/genbank.conf
+        
+    # remove suspect mRNAs.
+    rm -f data/aligned/genbank.136.0/rn3/*/mrna.*
+
+    # align genbank and refseq mrnas, using bluearc for cluster fs:
+    nice bin/gbAlignStep -type=mrna -verbose=1 -initial -iserver=no -clusterRootDir=/cluster/bluearc/genbank rn3&
+
+    # need to clean out all mRNAs from database, but leave ESTs inplace.
+      - drop these tables: chr*_mrna all_mrna xenoMrna mrnaOrientInfo
+      - selectively delete mrna related rows:
+        delete from imageClone where type = 'mRNA';
+        delete from mrna where type = 'mRNA';
+        delete from gbStatus where type = 'mRNA';
+        delete from gbSeq where type = 'mRNA';
+        delete from gbExtFile where path like '%/mrna.fa';
+
+    # load genbank and refseq mRNAs into database
+    nice ./bin/gbDbLoadStep -type=mrna -verbose=1 rn3
 
 CREATE RNACLUSTER TABLE (TO DO)
     # Make sure that refSeqAli, estOrientInfo and mrnaOrientInfo tables are 
@@ -947,69 +967,6 @@ TWINSCAN GENE PREDICTIONS (TO DO)
     end
     ldHgGene rn3 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
     hgPepPred rn3 generic twinscanPep chr_ptx/chr*-fixed.fa
-
-
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TO DO)
-
-    # Here you align non-mouse mRNAs against the masked genome on the
-    # cluster you set up during the previous step.
-    # Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from 
-    # Genbank into /cluster/store2/genbank.133 and unpacked by organism into 
-    # /cluster/store2/mrna.133/org. 
-
-    # Set up cluster run more or less as so:
-      ssh kk
-      cd ~/rn3/bed
-      mkdir xenoMrna
-      cd xenoMrna
-      ls -1S /scratch/hg/rn3/trfFa/* > genome.lst
-      cp -R /cluster/store2/mrna.133/org /mnt/scratch/hg/mrna.133
-    # The below ls command fails when you have too many files so skip it and 
-    # instead run the find command after it.
-    #      ls -1S /mnt/scratch/hg/mrna.133/org/*/mrna.fa > allMrna.lst
-      find /mnt/scratch/hg/mrna.133/org -name mrna.fa -ls \
-        | awk '{print $7,$11}' | grep -v /Rattus_norvegicus/ \
-        | sort -gr | awk '{print $2}' \
-        >  allMrna.lst
-    # Put the first line of allMrna.lst into 1.org, the second line into 
-    # 2.org, and so forth:
-      foreach n (1 2 3 4 5 6)
-        head -$n allMrna.lst | tail -1 > $n.org
-      end
-    # After the 6th line just leave the rest in 7.org.
-      tail +7 allMrna.lst > 7.org
-    # Then
-      ls -1 *.org > mrna.lst
-      cp ~/lastRn/bed/xenoMrna/gsub .
-      mkdir psl
-      gensub2 genome.lst mrna.lst gsub spec
-      para create spec
-      para try
-      para check
-    # If all looks well do
-      para push
-
-    # Sort xeno mRNA alignments as so:
-       ssh kkstore
-       cd ~/rn3/bed/xenoMrna
-       pslSort dirs raw.psl /cluster/store2/temp psl
-       pslReps raw.psl cooked.psl /dev/null -minAli=0.25
-       liftUp chrom.psl ../../jkStuff/liftAll.lft warn cooked.psl
-       pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
-       pslCat -dir chrom > xenoMrna.psl
-       rm -r chrom raw.psl cooked.psl chrom.psl
-
-    # Load into database as so:
-       ssh hgwdev
-       cd ~/rn3/bed/xenoMrna
-       hgLoadPsl rn3 xenoMrna.psl -tNameIx
-
-    # Make the xenoRna file
-       # Make a /gbdb symlink for the .fa (not .ra)
-       cd /gbdb/rn3/mrna.133
-       ln -s /cluster/store2/mrna.133/ratXenoRna.fa ratXenoRna.fa
-       hgLoadRna add -type=xenoRna rn3 /gbdb/rn3/mrna.133/ratXenoRna.fa \
-         /cluster/store2/mrna.133/ratXenoRna.ra
 
 
 PRODUCING TETRAODON FISH ALIGNMENTS (TO DO)
