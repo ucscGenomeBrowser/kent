@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.14 2003/10/14 17:52:19 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.15 2003/10/14 22:02:58 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -385,7 +385,7 @@ struct section *section;
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
 hPrintLinkTableStart();
-hPrintf("<TD BGCOLOR=\"#1616D1\"><FONT COLOR=\"#FFFFFF\">Page Index</FONT></TD>");
+hPrintf("<TD BGCOLOR=\"#1616D1\"><FONT COLOR=\"#FFFFFF\"><B>Page Index</B></FONT></TD>");
 itemPos += 1;
 for (section=sectionList; section != NULL; section = section->next)
     {
@@ -528,7 +528,7 @@ else if (cartVarExists(cart, hggDoGetProteinSeq))
 else
     {
     /* Default case - start fancy web page. */
-    cartWebStart(cart, "%s Gene %s Description and Index", genome, curGeneName);
+    cartWebStart(cart, "%s Gene %s Description and Page Index", genome, curGeneName);
     webMain(conn);
     cartWebEnd();
     }

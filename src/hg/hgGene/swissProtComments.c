@@ -44,6 +44,45 @@ if (acc != NULL)
 return list != NULL;
 }
 
+static char *omimUrl = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%d&doptcmdl=Detailed&tool=genome.ucsc.edu";
+
+static void mimSubPrint(char *s)
+/* Print out putting in hyperlinks for OMIM. */
+{
+char *e, *f, *g;
+while (s != NULL && s[0] != 0)
+    {
+    boolean gotOmim = FALSE;
+    e = stringIn("[MIM:", s);
+    if (e != NULL)
+        {
+	f = e + strlen("[MIM:");
+	if (isdigit(f[0]))
+	    {
+	    g = strchr(f, ']');
+	    if (g != 0 && g - f < 8)
+	        {
+		int omimId = atoi(f);
+		int skipSize = g - e + 1;
+		mustWrite(stdout, s, e-s);
+		hPrintf("<A HREF=\"");
+		hPrintf(omimUrl, omimId);
+		hPrintf("\">");
+		mustWrite(stdout, e, skipSize);
+		hPrintf("</A>");
+		s = e + skipSize;
+		gotOmim = TRUE;
+		}
+	    }
+	}
+    if (!gotOmim)
+        {
+	hPrintf("%s", s);
+	s = NULL;
+	}
+    }
+}
+
 static void swissProtCommentsPrint(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Print out SwissProt comments - looking up typeId/commentVal. */
@@ -57,7 +96,9 @@ for (com = section->items; com != NULL; com = com->next)
     {
     char *type = spCommentType(spConn, com->typeId);
     char *val = spCommentVal(spConn, com->valId);
-    hPrintf("<B>%s:</B> %s<BR>\n", type, val);
+    hPrintf("<B>%s:</B> ", type);
+    mimSubPrint(val);
+    hPrintf("<BR>");
     freeMem(type);
     freeMem(val);
     }
