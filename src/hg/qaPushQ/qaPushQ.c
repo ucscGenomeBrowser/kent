@@ -29,7 +29,7 @@
 #include "dbDb.h"
 
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.40 2004/05/24 18:12:29 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.41 2004/05/24 18:25:15 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -654,6 +654,7 @@ else
     
 replaceInStr(html, sizeof(html) , "<!msg>"         , msg           );
 
+safef(msg,sizeof(msg),"");
 
 printf("%s",html);
 
@@ -1665,6 +1666,7 @@ else
 	safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
 	safef(newQid,sizeof(newQid),msg,newqid);
 	safef(q.qid, sizeof(q.qid), newQid);
+    	safef(msg, sizeof(msg), "");
 	pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
 	}
     else
@@ -1682,6 +1684,7 @@ if (sameString(clonebutton,"clone"))
     safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
+    safef(msg, sizeof(msg), "");
     q.rank = getNextAvailRank(q.priority);
     safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
@@ -1698,7 +1701,6 @@ if (sameString(showSizes,"Show Sizes"))
 if (sameString(submitbutton,"Submit")) 
     { /* if submit button, saved data, now return to readonly view.  */
     cgiVarSet("qid", q.qid); /* for new rec */
-    //replacePushQFields(&q, isNew);  
     doEdit();
     return;
     }
