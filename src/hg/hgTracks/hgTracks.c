@@ -87,7 +87,7 @@
 #define BRIGHT 3
 #define MAXPIXELS 14000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
-
+int imagePixelHeight = 0;
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
@@ -9178,6 +9178,7 @@ for (group = groupList; group != NULL; group = group->next)
 	    pixHeight += fontHeight;
 	}
     }
+imagePixelHeight = pixHeight;
 if (psOutput)
     vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
 else
@@ -10318,6 +10319,7 @@ if (sameString(database, "hg12"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?hgsid=%d&hgt.psOutput=on\">%s</A></TD>\n", cart->sessionId, wrapWhiteFont("PDF/PS"));
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>%s</A></TD>\n", wrapWhiteFont("Guide"));
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
@@ -10620,8 +10622,6 @@ if (!hideControls)
     smallBreak();
 
     /* Display bottom control panel. */
-    hButton("hgt.psOutput", "PostScript");
-    hPrintf(" ");
     hButton("hgt.reset", "reset all");
     hPrintf(" ");
     hButton("hgt.hideAll", "hide all");
@@ -10777,18 +10777,68 @@ x = atof(stringVal);
 return round(x*guideBases);
 }
 
+char * convertEpsToPdf(char *epsFile) 
+/* Convert EPS to PDF and return filename, or NULL if failure. */
+{
+char *pdfTmpName = NULL, *pdfName=NULL;
+char cmdBuffer[2048];
+int sysVal = 0;
+struct lineFile *lf = NULL;
+char *line;
+int lineSize=0;
+float width=0, height=0;
+pdfTmpName = cloneString(epsFile);
+
+/* Get the dimensions of bounding box. */
+lf = lineFileOpen(epsFile, TRUE);
+while(lineFileNext(lf, &line, &lineSize)) 
+    {
+    if(strstr( line, "BoundingBox:")) 
+	{
+	char *words[5];
+	chopLine(line, words);
+	width = atof(words[3]);
+	height = atof(words[4]);
+	break;
+	}
+    }
+lineFileClose(&lf);
+	
+/* Do conversion. */
+chopSuffix(pdfTmpName);
+pdfName = addSuffix(pdfTmpName, ".pdf");
+safef(cmdBuffer, sizeof(cmdBuffer), "ps2pdf -dDEVICEWIDTHPOINTS=%d -dDEVICEHEIGHTPOINTS=%d %s %s", 
+      round(width), round(height), epsFile, pdfName);
+sysVal = system(cmdBuffer);
+if(sysVal != 0)
+    freez(&pdfName);
+freez(&pdfTmpName);
+return pdfName;
+}
+
 void handlePostscript()
 /* Deal with Postscript output. */
 {
 struct tempName psTn;
+char *pdfFile = NULL;
 makeTempName(&psTn, "hgt", ".eps");
-printf("<H1>PostScript Output</H1>\n");
+printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
-       "Illustrator. ");
+       "Illustrator.<BR>");
 doTrackForm(psTn.forCgi);
 printf("<A HREF=\"%s\">Click here to download</A> "
        "the browser graphic in PostScript.  ", psTn.forCgi);
+pdfFile = convertEpsToPdf(psTn.forCgi);
+if(pdfFile != NULL) 
+    {
+    printf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
+    printf("<A HREF=\"%s\">Click here to download</A> "
+	   "the browser graphic in PDF", pdfFile);
+    }
+else
+    printf("<BR><BR>PDF format not available");
+freez(&pdfFile);
 }
 
 void tracksDisplay()
