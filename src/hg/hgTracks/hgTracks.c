@@ -1607,7 +1607,8 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 //errAbort( "(%g,%g) cutoff=(%g,%g)\n", tg->minRange, tg->maxRange, minRangeCutoff, maxRangeCutoff );
 
 if( sameString( tg->mapName, "humMusL" ) 
-	|| sameString( tg->mapName, "musHumL" )  )
+	|| sameString( tg->mapName, "musHumL" )  
+	|| sameString( tg->mapName, "regPotential" ))
     {
 
 
@@ -8700,7 +8701,8 @@ if (withLeftLabels)
 	    
 	
     	if( sameString( track->mapName, "humMusL" ) ||
-		 sameString( track->mapName, "musHumL" ))
+		 sameString( track->mapName, "musHumL" ) ||
+	    sameString( track->mapName, "regPotential" ) )
 	    {
 	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
 	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
