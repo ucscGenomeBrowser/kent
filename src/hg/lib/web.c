@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.52 2004/06/07 23:15:48 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.53 2004/06/08 15:44:15 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -62,6 +62,7 @@ void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
 /* output a CGI and HTML header with the given title in printf format */
 {
 char uiState[256];
+char *scriptName = cgiScriptName();
 
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
@@ -132,8 +133,20 @@ puts(
 
 printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
 puts("           Home</A> &nbsp; - &nbsp;");
-printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
-       uiState);
+if (endsWith(scriptName, "hgTracks") ||
+    endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
+    {
+    printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+	   uiState);
+    puts("           Genomes</A> &nbsp; - &nbsp;");
+    printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
+	   uiState);
+    }
+else
+    {
+    printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+	   uiState);
+    }
 puts("           Genome Browser</A> &nbsp; - &nbsp;");
 printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
        uiState);
@@ -145,8 +158,18 @@ printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
 puts("           Table Browser</A> &nbsp; - &nbsp;");
 puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
-     "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
-     "           Help</A> &nbsp;</font></TD>" "\n"
+     );
+if (endsWith(scriptName, "hgBlat"))
+    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
+else if (endsWith(scriptName, "hgText"))
+    puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
+else if (endsWith(scriptName, "hgNear"))
+    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+else
+    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
+puts("       class=\"topbar\">");
+
+puts("           Help</A> &nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
      "</TD></TR>	" "\n"	
