@@ -163,6 +163,9 @@ struct wiggleDataStream
 /*	this will be internal only when the read functions are here */
     void (*openWibFile)(struct wiggleDataStream *wDS, char *file);
 /*	this will be internal only when the read functions are here */
+    boolean (*nextRow)(struct wiggleDataStream *wDS, char *row[], int maxRow);
+	    /*      read next wig row from sql query or lineFile
+	     *      FALSE return on no more data    */
     void (*closeWigConn)(struct wiggleDataStream *wDS);
 				/*	close a connection	*/
     void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
