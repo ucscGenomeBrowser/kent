@@ -9,7 +9,7 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.6 2003/10/09 20:55:17 hiram Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.7 2003/10/14 22:20:33 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -99,6 +99,8 @@ int i;				/*	for loop counting	*/
 int elCount = 0;		/*	to count the hash elements	*/
 double *probabilities;		/*	will be an array of probabilities */
 double *log_2;			/*	will be an array of the log_2	*/
+double *inverseProbabilities;	/*	inverse of probabilities	*/
+double *inverseLog_2;		/*	inverse of log_2	*/
 struct hashEl *el, *elList;	/*	to traverse the hash	*/
 double cumulativeProbability;	/*	to show CPD	*/
 double cumulativeLog_2;		/*	to show CPD	*/
@@ -111,6 +113,8 @@ for (el = elList; el != NULL; el = el->next) {
 /*	Allocate the arrays	*/
 probabilities = (double *) needMem((size_t)(sizeof(double) * elCount));
 log_2 = (double *) needMem((size_t) (sizeof(double) * elCount));
+inverseProbabilities = (double *) needMem((size_t)(sizeof(double) * elCount));
+inverseLog_2 = (double *) needMem((size_t) (sizeof(double) * elCount));
 
 /*	Traverse the list again, this time placing all values in the
  *	arrays
@@ -127,17 +131,32 @@ hashElFreeList(&elList);
 cumulativeProbability = 0.0;
 cumulativeLog_2 = -500.0;	/*	arbitrarily small number	*/
 
+/*	compute the inverse  P(V<=v)	*/
+for (i = elCount-1; i >= 0; --i)
+    {
+    if (i == (elCount-1))
+	{
+    	cumulativeLog_2 = log_2[i];
+	} else {
+	cumulativeLog_2 = addLogProbabilities(cumulativeLog_2, log_2[i]);
+	}
+    if (cumulativeLog_2 > 0.0) cumulativeLog_2 = 0.0;
+    inverseLog_2[i] = cumulativeLog_2;
+    inverseProbabilities[i] = pow(2.0,cumulativeLog_2);
+    }
+
 printf("Histogram with %d bins:\n", elCount);
 /*	Now the array is an ordered list	*/
 for (i = 0; i < elCount; ++i)
     {
-    double inverseProbability;
-    double inverseLog_2;
-
-    cumulativeLog_2 = addLogProbabilities(cumulativeLog_2, log_2[i]);
+    if (i == 0)
+	{
+    	cumulativeLog_2 = log_2[i];
+	} else {
+	cumulativeLog_2 = addLogProbabilities(cumulativeLog_2, log_2[i]);
+	}
+    if (cumulativeLog_2 > 0.0) cumulativeLog_2 = 0.0;
     cumulativeProbability  = pow(2.0,cumulativeLog_2);
-    inverseProbability = 1.0 - cumulativeProbability;
-    inverseLog_2 = log2(inverseProbability);
     if (html)
 	{
 	if (medianBin == i)
@@ -146,12 +165,12 @@ for (i = 0; i < elCount; ++i)
 	printf("\t<TD ALIGN=RIGHT> %% %.2f </TD><TD ALIGN=RIGHT> %.4g </TD>\n\t<TD ALIGN=RIGHT> %% %.2f </TD><TD ALIGN=RIGHT> %.4f </TD>\n\t<TD ALIGN=RIGHT> %% %.2f </TD><TD ALIGN=RIGHT> %.4f </TD></TR>\n",
 		100.0 * probabilities[i],
 		log_2[i], 100.0 * cumulativeProbability,
-		cumulativeLog_2, 100.0 * inverseProbability, inverseLog_2);
+		cumulativeLog_2, 100.0 * inverseProbabilities[i], inverseLog_2[i]);
 	} else {
 	printf("bin %d: %% %.2f %0.6g\t%% %.2f\t%.6g\t%% %.2f\t%.6g", i,
 		100.0 * probabilities[i], log_2[i],
 		100.0 * cumulativeProbability,
-		cumulativeLog_2, 100.0 * inverseProbability, inverseLog_2);
+		cumulativeLog_2, 100.0 * inverseProbabilities[i], inverseLog_2[i]);
 	if (medianBin == i)
 	    printf(" - median\n");
 	else
