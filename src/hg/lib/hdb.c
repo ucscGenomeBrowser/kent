@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.139 2003/09/17 17:10:58 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.140 2003/09/18 03:15:15 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2652,7 +2652,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Scan through dbDb table, keeping ones that are indexed. */
-sr = sqlGetResult(conn, "select * from dbDb");
+sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
