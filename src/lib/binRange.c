@@ -13,7 +13,7 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.12 2003/08/28 04:26:29 kent Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.13 2003/09/09 19:01:16 markd Exp $";
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */
@@ -260,4 +260,33 @@ for (el = *pList; el != NULL; el = next)
     }
 slReverse(&newList);
 *pList = newList;
+}
+
+struct binKeeperCookie binKeeperFirst(struct binKeeper *bk)
+/* Return an object to use by binKeeperNext() to traverse the binElements.
+ * The first call to binKeeperNext() will return the first entry in the
+ * table. */
+{
+struct binKeeperCookie cookie;
+cookie.bk = bk;
+cookie.blIdx = 0;
+cookie.nextBel = bk->binLists[0];
+return cookie;
+}
+
+struct binElement* binKeeperNext(struct binKeeperCookie *cookie)
+/* Return the next entry in the binKeeper table.  */
+{
+/* if we don't have a next, move down bin list until we find one */
+while ((cookie->nextBel == NULL)
+       && (++cookie->blIdx < cookie->bk->binCount))
+    cookie->nextBel = cookie->bk->binLists[cookie->blIdx];
+if (cookie->blIdx >= cookie->bk->binCount)
+    return NULL;  /* no more */
+else
+    {
+    struct binElement* bel = cookie->nextBel;
+    cookie->nextBel = cookie->nextBel->next;
+    return bel;
+    }
 }

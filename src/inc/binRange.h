@@ -56,6 +56,14 @@ struct binKeeper
     struct binElement **binLists; /* A list for each bin. */
     };
 
+struct binKeeperCookie
+/* used by binKeeperFirst/binKeeperNext in tracking location in traversing bins */
+    {
+    struct binKeeper *bk;       /* binKeeper we are associated with */
+    int blIdx;                  /* current bin list index */
+    struct binElement *nextBel; /* next binElement */
+    };
+
 struct binKeeper *binKeeperNew(int minPos, int maxPos);
 /* Create new binKeeper that can cover range. */
 
@@ -87,5 +95,14 @@ struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end)
 
 void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val);
 /* Remove item from binKeeper. */ 
+
+struct binKeeperCookie binKeeperFirst(struct binKeeper *bk);
+/* Return an object to use by binKeeperNext() to traverse the binElements.
+ * The first call to binKeeperNext() will return the first entry in the
+ * table. */
+
+struct binElement* binKeeperNext(struct binKeeperCookie *cookie);
+/* Return the next entry in the binKeeper table.  */
+
 #endif /* BINRANGE_H */
 
