@@ -22,6 +22,7 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "stsMapMouse.h"
+#include "stsMapRat.h"
 #include "knownInfo.h"
 #include "cart.h"
 #include "hgFind.h"
@@ -992,8 +993,9 @@ boolean ok = FALSE;
 char *alias = NULL, *temp;
 struct stsMap sm;
 struct stsMapMouse smm;
+struct stsMapRat smr;
 char *tableName, *tableAlias;
-boolean newFormat = FALSE, mouse = FALSE;
+boolean newFormat = FALSE, mouse = FALSE, rat = FALSE;
 char *chrom;
 char buf[64];
 struct hgPosTable *table = NULL;
@@ -1004,6 +1006,12 @@ if (hTableExists("stsMapMouse"))
     mouse = TRUE;
     tableName = "stsMapMouse";
     tableAlias = "stsAliasMouse";
+    }
+else if (hTableExists("stsMapRat"))
+    {
+    rat = TRUE;
+    tableName = "stsMapRat";
+    tableAlias = "stsAlias";
     }
 else if (hTableExists("stsMap"))
     {
@@ -1055,6 +1063,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     if (mouse)
 	stsMapMouseStaticLoad(row, &smm);
+    else if (rat)
+	stsMapRatStaticLoad(row, &smr);
     else if (newFormat)
 	stsMapStaticLoad(row, &sm);
     else
@@ -1069,6 +1079,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
 		 smm.chrom, tableName);
 	}
+    else if (rat) 
+	{
+	if ((chrom = hgOfficialChromName(smr.chrom)) == NULL)
+	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
+		 smr.chrom, tableName);
+	}
     else 
 	{
 	if ((chrom = hgOfficialChromName(sm.chrom)) == NULL)
@@ -1081,6 +1097,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	pos->chromStart = smm.chromStart - 100000;
 	pos->chromEnd = smm.chromEnd + 100000;
+	}
+    else if (rat) 
+	{
+	pos->chromStart = smr.chromStart - 100000;
+	pos->chromEnd = smr.chromEnd + 100000;
 	}
     else 
 	{
