@@ -1431,6 +1431,9 @@
   href="#PslInfo">kgProtMap</A> 
   - Known Genes protein mapping
   <LI><A 
+  href="#KgSpAlias">kgSpAlias</A> 
+  - Links together a Known Gene ID, Swiss-Prot/TrEMBL accession and an alias
+  <LI><A 
   href="#KgXref">kgXref</A> 
   - Links together a Known Gene ID and mRNA, SwissProt, RefSeq, and NCBI accessions/IDs
   <LI><A 
@@ -3824,6 +3827,18 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     )
 </PRE>
 
+<H4><A name=KnownTo></A>Known Genes Associations</H4>
+<P>
+The following definition describes tables that associate Known Genes with other 
+IDs and accessions.
+<PRE>table knownTo
+"Maps Known Gene to another ID"
+    (
+    string name;        "Same as name field in known gene"
+    string value;       "Other id"
+    )
+</PRE>
+
 <H4><A name=KgXref></A>Known Genes Cross Reference</H4>
 <PRE>table kgXref
 "Links a Known Gene ID with mRNA, SwissProt, RefSeq, and NCBI accessions/IDs"
@@ -3836,6 +3851,20 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     string refseq;      "RefSeq ID"
     string protAcc;     "NCBI protein Accession number"
     string description; "Description"
+    )
+</PRE>
+
+<H4><A name=KnownIsoforms></A>Known Genes Isoforms</H4>
+<P>
+The following definition describes tables that link together various transcripts 
+of a gene into a cluster.
+
+<PRE>table knownIsoforms
+"Links together various transcripts of a gene into a cluster"
+    (
+    int clusterId;      "Unique id for transcript cluster (aka gene)"
+    string transcript;  "Corresponds to name in knownGene table, transcript in 
+			 knownCanonical"
     )
 </PRE>
 
@@ -3859,33 +3888,6 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
     )
 </PRE>
 
-<H4><A name=KnownTo></A>Known Genes Associations</H4>
-<P>
-The following definition describes tables that associate Known Genes with other 
-IDs and accessions.
-<PRE>table knownTo
-"Maps Known Gene to another ID"
-    (
-    string name;        "Same as name field in known gene"
-    string value;       "Other id"
-    )
-
-</PRE>
-
-<H4><A name=KnownIsoforms></A>Known Genes Isoforms</H4>
-<P>
-The following definition describes tables that link together various transcripts 
-of a gene into a cluster.
-
-<PRE>table knownIsoforms
-"Links together various transcripts of a gene into a cluster"
-    (
-    int clusterId;      "Unique id for transcript cluster (aka gene)"
-    string transcript;  "Corresponds to name in knownGene table, transcript in 
-			 knownCanonical"
-    )
-</PRE>
-
 <H4><A name=KnownToSuper></A>Known Genes Superfamily Link</H4>
 <PRE>table knownToSuper
 "Maps protein superfamilies to known genes"
@@ -3898,20 +3900,30 @@ of a gene into a cluster.
     )
 </PRE>
 
-<H4><A name=MoreKnown></A>Known (RefSeq) Gene IDs in Other Databases</H4>
+<H4><A name=KgSpAlias></A>Known Genes Swiss-Prot Alias</H4>
+<PRE>table kgSpAlias
+"Links together a Known Gene ID and a protein alias"
+    (
+    string kgID;        "Known Gene ID"
+    string spID;	"Swiss-Prot/TrEMBL protein accession number"
+    string alias;	"Alias - could be either a gene alias or protein alias"
+    )
+</PRE>
+
+<H4><A name=MoreKnown></A>Known (RefSeq) Genes IDs in Other Databases</H4>
 Last used Oct. 2000 <BR><BR>
 <PRE>table knownMore 
 "Lots of auxiliary info about a known gene" 
     (  
     string name;	  "The name displayed in the browser:
                            OMIM, gbGeneName, or transId"   
-    string transId;       "Transcript id. Genie generated ID." 
+    string transId;       "Transcript ID. Genie-generated ID" 
     string geneId;        "Gene (not transcript) Genie ID"   
     uint   gbGeneName;    "Connect to geneName table. GenBank gene name"   
     uint   gbProductName; "Connects to productName table. GenBank product name" 
     string gbProteinAcc;  "GenBank accession of protein"  
-    string gbNgi;         "GenBank gi of nucleotide seq." 
-    string gbPgi;         "GenBank gi of protein seq."   
+    string gbNgi;         "GenBank GI of nucleotide sequence" 
+    string gbPgi;         "GenBank GI of protein sequence"   
     uint   omimId;        "OMIM ID or 0 if none"  
     string omimName;      "OMIM primary name"  
     uint   hugoId;        "HUGO Nomeclature Committee ID or 0 if none" 
@@ -3933,14 +3945,14 @@ Last used Oct. 2000
 "Auxiliary info about a known gene"
     (
     string name;         "Connects with genieKnown-&gt;name"
-    string transId;      "Transcript id. Genie generated ID."
-    string geneId;       "Gene (not transcript) id"
+    string transId;      "Transcript id. Genie-generated ID"
+    string geneId;       "Gene (not transcript) ID"
     uint   geneName;     "Connect to geneName table"
     uint   productName;  "Connects to productName table"
     string proteinId;    "GenBank accession of protein?"
-    string ngi;          "GenBank gi of nucleotide seq."
-    string pgi;          "GenBank gi of protein seq."
-    )                                                                           
+    string ngi;          "GenBank gi of nucleotide seq"
+    string pgi;          "GenBank gi of protein seq"
+    )
 </PRE>
 
 <H4><A name=MGCFullStatus></A>MGC Full Status</H4>
@@ -3954,7 +3966,7 @@ Last used Oct. 2000
 			 microDel, artifact, noPolyATail, or cantSequence. Status will
 			 always be fullLength on main databases."
     char acc;		"GenBank accession"
-    char organism;    	"Two letter MGC organism" 
+    char organism;    	"Two-letter MGC organism" 
     )
 </PRE>
 
