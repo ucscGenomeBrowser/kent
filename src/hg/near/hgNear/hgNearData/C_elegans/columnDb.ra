@@ -18,6 +18,13 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 name refSeq
 type lookup sangerToRefSeq name value
 
+name altSplice
+shortLabel Alt Splice
+longLabel Alternate-Splicing Curated by Zahler Lab
+priority 2.5
+visibility off
+type lookup altSplice name value
+
 name kimLifeCycleMedian
 shortLabel Median Expression
 longLabel Median Kim-lab Life-cycle Expression Data
