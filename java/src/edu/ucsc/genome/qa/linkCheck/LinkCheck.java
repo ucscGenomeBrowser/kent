@@ -23,16 +23,6 @@ class LinkCheck {
 
     /* path / file pairs
 
-    String localPath = new String("");
-    String file      = new String("downloads");
-    String file      = new String("mirror");
-    String file      = new String("cite");
-    String file      = new String("staff");
-    String file      = new String("contacts");
-
-    String localPath = new String("license/");
-    String file      = new String("index");
-
     String localPath = new String("goldenPath/");
     String file      = new String("gbdDescriptions");
     String file      = new String("credits");
@@ -42,65 +32,54 @@ class LinkCheck {
     String file      = new String("newsarch");
     String file      = new String("textBrowser");
 
-    String localPath = new String("goldenPath/customTracks/");
-    String file      = new String("custTracks");
-
-    String localPath = new String("goldenPath/help/");
-    String file      = new String("hgTracksHelp");
-
-    String localPath = new String("FAQ/");
-    String file      = new String("index");
-    String file      = new String("FAQblat");
-    String file      = new String("FAQcite");
-    String file      = new String("FAQcustom");
-    String file      = new String("FAQdisplay");
-    String file      = new String("FAQdownloads");
-    String file      = new String("FAQlicense");
-    String file      = new String("FAQlink");
-    String file      = new String("FAQreleases");
-    String file      = new String("FAQtracks");
-
      */
 
     // set parameters for naming file to check here and using as variable
+    String machine   = "genome";
     String localPath = "";
     String file      = "";
     String yymmmdd   = "today";
 
     if (args.length < 2) {
        System.out.println("\n  Checks all links on a web page.");
-       System.out.println("  Usage: path in htdocs, file[.html], [dateString].");
-       System.out.println("  Use zero for path if at htdocs level.\n");
+       System.out.println("  Usage: [machine:]path in htdocs, file[.html], [dateString].");
+       System.out.println("  Use zero for path if at htdocs level.");
+       System.out.println("  dateString defaults to \"today\".");
+       System.out.println("  machine defaults to genome.\n");
        System.exit(-1);
-     } else {
-       // command line db
-       if (args[0].equals("0")) {
-         //  System.out.println("got a zero as input: " + args[0]);
-         localPath = "";
-       } else {
-         // System.out.println("no zero as input: " + args[0]);
-         localPath = args[0] + "/";
-       }
-       file      = args[1];
-       
-       if (args.length == 3) {
-         yymmmdd   = args[2];
-       }
-       // clean off extra "/" if present
-       localPath = localPath.replaceAll("//", "/");
-     }
+    }
+
+    localPath = args[0] + "/";
+    // parse out machine name, if present
+    if ( localPath.indexOf(":") > 0 ) {
+       String[] machPath = localPath.split(":");
+       machine   = machPath[0];
+       localPath = machPath[1];
+    }
+    if (! machine.equals("genome") ) {
+      machine = machine + ".cse";
+    }
+    if (localPath.equals("0/")) {
+      //  System.out.println("got a zero as input: " + args[0]);
+      localPath = "";
+    }
+
+    file      = args[1];
+    
+    if (args.length == 3) {
+      yymmmdd   = args[2];
+    }
+    // clean off extra "/" if present
+    localPath = localPath.replaceAll("//", "/");
 
     // replace / with . for output file name
     String outputPath = localPath.replaceAll("/", ".");
 
-
     // System.out.println("localPath: " + localPath + "\n");
     // System.out.println("outputPath: " + outputPath + "\n");
 
-
-
     // take this as command line arg or read from data file
-    String baseURL = "http://genome.ucsc.edu/" + localPath + file;
+    String baseURL = "http://" + machine + ".ucsc.edu/" + localPath + file;
     if (! baseURL.endsWith("html")) {
       // System.out.println("no html ending");
       baseURL = baseURL + ".html";
