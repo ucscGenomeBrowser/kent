@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "promoSeqFromCluster - Get promoter regions from cluster\n"
   "usage:\n"
-  "   promoSeqFromCluster database size clusterFile.kgg outDir\n"
+  "   promoSeqFromCluster database size clusterFile.kgg outDir out.lft\n"
   "clusterFile is the output from Eisen's cluster program in kmeans\n"
   "settings.\n"
   "options:\n"
@@ -27,7 +27,7 @@ errAbort(
 boolean hFindSplitTable(char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin);
 
-void fetchPromoter(char *rangeId, int size, FILE *f)
+void fetchPromoter(char *rangeId, int size, FILE *f, FILE *liftFile)
 /* Get promoter region and write it to file. */
 {
 struct sqlResult *sr;
@@ -66,18 +66,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (bed->strand[0] == '-')
         reverseComplement(seq->dna, seq->size);
     faWriteNext(f, bed->name, seq->dna, seq->size);
+    fprintf(liftFile, "%d\t%s\t%d\t%s\t%d\t%s\n",
+    	start, bed->name, seq->size, bed->chrom, chromSize, bed->strand);
     freeDnaSeq(&seq);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void promoSeqFromCluster(char *database, int size, char *clusterFile, char *outDir)
+void promoSeqFromCluster(char *database, int size, char *clusterFile, 
+	char *outDir, char *outBed)
 /* promoSeqFromCluster - Get promoter regions from cluster. */
 {
 char fileName[512];
 struct lineFile *lf = lineFileOpen(clusterFile, TRUE);
 FILE *f = NULL;
+FILE *liftFile = mustOpen(outBed, "w");
 char *row[3];
 char *id, *group, *lastGroup = NULL;
 
@@ -99,7 +103,7 @@ while (lineFileRow(lf, row))
 	snprintf(fileName, sizeof(fileName), "%s/%s.fa", outDir, group);
 	f = mustOpen(fileName, "w");
 	}
-    fetchPromoter(id, size, f);
+    fetchPromoter(id, size, f, liftFile);
     printf(".");
     fflush(stdout);
     }
@@ -112,10 +116,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 5)
+if (argc != 6)
     usage();
 if (!isdigit(argv[2][0]))
     usage();
-promoSeqFromCluster(argv[1], atoi(argv[2]), argv[3], argv[4]);
+promoSeqFromCluster(argv[1], atoi(argv[2]), argv[3], argv[4], argv[5]);
 return 0;
 }
