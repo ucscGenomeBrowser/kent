@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.153 2003/10/29 00:05:33 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.154 2003/10/29 19:02:44 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2624,8 +2624,8 @@ if (! hTableExists("axtInfo"))
 sr = sqlGetResult(conn, "select species from axtInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    // uniquify database names
-    if (hashLookup(hash, row[0]) == NULL)
+    // uniquify database names and make sure the databases still exist
+    if ((hashLookup(hash, row[0]) == NULL) && hDbExists(row[0]))
 	{
 	struct slName *sln = newSlName(cloneString(row[0]));
 	slAddHead(&dbNames, sln);
