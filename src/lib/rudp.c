@@ -48,11 +48,13 @@
 #include "errabort.h"
 #include "rudp.h"
 
+#define MAX_TIME_OUT 999999
+
 static int rudpCalcTimeOut(struct rudp *ru)
 /* Return calculation of time out based on current data. */
 {
 int timeOut = ru->rttAve + (ru->rttVary<<2);
-if (timeOut > 999999) timeOut = 999999;	/* No more than a second. */
+if (timeOut > MAX_TIME_OUT) timeOut = MAX_TIME_OUT; /* No more than a second. */
 if (timeOut < 10000) timeOut = 10000;	/* No less than 1/100th second */
 return timeOut;
 }
@@ -74,6 +76,8 @@ static void rudpTimedOut(struct rudp *ru)
 /* Tell system about a time-out. */
 {
 ru->timeOut <<=  1;   /* Back off exponentially. */
+if (ru->timeOut >= MAX_TIME_OUT)
+    ru->timeOut = MAX_TIME_OUT;
 }
 
 struct rudp *rudpNew(int socket)
