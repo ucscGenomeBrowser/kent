@@ -114,8 +114,9 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
+#include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.505 2003/10/24 15:59:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.506 2003/10/29 16:36:00 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6584,9 +6585,31 @@ if (rl->locusLinkId != 0)
     } 
 if (!startsWith("Worm", organism))
     {
-    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-    if (rl->product[0] != 0)
-	medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+    if (startsWith("dm", database))
+	{
+	// PubMed never seems to have BDGP gene IDs... so if that's all 
+	// that's given for a name/product, ignore name / truncate product.
+	char *cgp = strstr(rl->product, "CG");
+	if (cgp != NULL)
+	    {
+	    char *cgWord = firstWordInLine(cloneString(cgp));
+	    char *dashp = strchr(cgWord, '-');
+	    if (dashp != NULL)
+		*dashp = 0;
+	    if (isBDGPName(cgWord))
+		*cgp = 0;
+	    }
+	if (! isBDGPName(rl->name))
+	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+	if (rl->product[0] != 0)
+	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+	}
+    else
+	{
+	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+	if (rl->product[0] != 0)
+	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+	}
     printf("\n");
     if (!startsWith("dm", database))
 	{
