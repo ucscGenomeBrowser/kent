@@ -447,8 +447,14 @@ for (bed = list; bed != NULL; bed = bed->next)
     struct simpleFeature *sf;
     int i;
     lf = lfFromBed(bed);
-    for (sf = lf->components, i = 0; sf != NULL, i < bed->expCount; sf = sf->next, i++)
-	sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
+    sf = lf->components;  
+    for (i = 0; i < bed->expCount; i++) 
+        {
+	if (sf == NULL)
+           break;
+        sf->grayIx = grayInRange((int)(bed->expScores[i]),0,1000);
+        sf = sf->next;
+        }
     slAddHead(&lfList,lf);
     }
 tg->items = lfList;
