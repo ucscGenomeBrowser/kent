@@ -12,5 +12,6 @@ CREATE TABLE simpleNucDiff (
     tSeq varchar(255) not null,	# Sequence in target species
     qSeq varchar(255) not null,	# Sequence in other (query) species
               #Indices
-    INDEX(chrom(8),bin)
+    INDEX(chrom(8),bin),
+    INDEX(chrom(8),chromStart)
 );
