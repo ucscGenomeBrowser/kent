@@ -4721,6 +4721,32 @@ genericClickHandler(tdb, item, buf);
 }
 
 
+void doJaxQTL(struct trackDb *tdb, char *item)
+/* Put up info on tigr gene index item. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256];
+char **row;
+char acc[128];
+
+// look up mgiID field [8th]
+acc[0] = 0;
+snprintf(query, sizeof(query), "select mgiID from jaxQTL where name = '%s'",
+	 item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL && row[0] != NULL)
+    {
+    strncpy(acc, row[0], sizeof(acc));
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+// if we can pack desc into 9th field, get that too.
+genericClickHandler(tdb, item, acc);
+}
+
+
 #ifdef FUREY_CODE
 
 void printOtherLFS(char *clone, char *table, int start, int end)
@@ -7598,6 +7624,10 @@ else if( sameWord( track, "humMusL" ))
         {
         humMusClickHandler( tdb, item );
         }
+else if (sameWord(track, "jaxQTL"))
+    {
+    doJaxQTL(tdb, item);
+    }
 else if (tdb != NULL)
    {
    genericClickHandler(tdb, item, NULL);
