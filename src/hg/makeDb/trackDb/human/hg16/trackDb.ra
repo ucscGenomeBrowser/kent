@@ -970,7 +970,6 @@ group compGeno
 priority 101
 visibility hide
 color 0, 10, 100
-altColor 1,128,0
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle multizMm3Rn3GalGal2_phyloHMM_wig
