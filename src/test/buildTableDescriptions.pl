@@ -30,6 +30,7 @@ my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
 		      "hg/lib/rmskOut.as" => "",
 		      "hg/makeDb/schema/joinerGraph/all.as" => "",
 		      "hg/makeDb/schema/joinerGraph/swissProt.as" => "",
+		      "hg/protein/spToDb/spDbTables.as" => "",
 		      "lib/pslWScore.as" => "",
 		    );
 
