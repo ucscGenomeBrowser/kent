@@ -5,6 +5,7 @@
 #ifndef CHAIN_H
 #define CHAIN_H
 
+
 void chainStaticLoad(char **row, struct chain *ret);
 /* Load a row from chain table into ret.  The contents of ret will
  * be replaced at the next call to this function. */

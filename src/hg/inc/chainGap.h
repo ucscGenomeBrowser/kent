@@ -9,9 +9,10 @@ struct chainGap
 /* alignment block in chain */
     {
     struct chainGap *next;  /* Next in singly linked list. */
+    char *tName;	/* Target sequence name */
     unsigned tStart;	/* Alignment start position in target */
     unsigned tEnd;	/* Alignment end position in target */
-    unsigned qGap;	/* Gap size in query */
+    unsigned qStart;	/* start in query */
     unsigned chainId;	/* chain id in chain table */
     };
 
@@ -25,11 +26,6 @@ struct chainGap *chainGapLoad(char **row);
 
 struct chainGap *chainGapLoadAll(char *fileName);
 /* Load all chainGap from a tab-separated file.
- * Dispose of this with chainGapFreeList(). */
-
-struct chainGap *chainGapLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all chainGap from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
  * Dispose of this with chainGapFreeList(). */
 
 struct chainGap *chainGapCommaIn(char **pS, struct chainGap *ret);
@@ -52,6 +48,8 @@ void chainGapOutput(struct chainGap *el, FILE *f, char sep, char lastSep);
 
 #define chainGapCommaOut(el,f) chainGapOutput(el,f,',',',');
 /* Print out chainGap as a comma separated list including final comma. */
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* CHAINGAP_H */
 
