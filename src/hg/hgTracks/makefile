@@ -10,9 +10,9 @@ O = hgTracks.o
 hgTracks: $O 
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out hgTracks
-#	strip hgTracks
-#	chmod a+rx hgTracks
-#	mv hgTracks $(HGCGI)
+	strip hgTracks
+	chmod a+rx hgTracks
+	mv hgTracks $(HGCGI)
 
 lib:
 	cd ../../lib; make
