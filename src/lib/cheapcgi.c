@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.57 2004/02/10 16:45:13 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.58 2004/02/10 17:38:34 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -372,8 +372,8 @@ return ok;
 static void updateEnv(char *name, char *value)
 /* Update environment string */
 {
-int size = strlen(name) + strlen(value) + 1;
-char *s = needMem(size+1);
+int size = strlen(name) + strlen(value) + 2;
+char *s = needMem(size);
 safef(s, size, "%s=%s", name, value);
 putenv(s);
 freeMem(s);
