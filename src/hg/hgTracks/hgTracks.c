@@ -9,8 +9,8 @@
 #include "dystring.h"
 #include "hash.h"
 #include "jksql.h"
-#include "memgfx.h"
 #include "gfxPoly.h"
+#include "memgfx.h"
 #include "vGfx.h"
 #include "browserGfx.h"
 #include "cheapcgi.h"
@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.865 2005/01/21 05:45:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.866 2005/01/21 06:51:53 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7232,6 +7232,7 @@ if (!tg->limitedVisSet)
 return tg->limitedVis;
 }
 
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -8281,6 +8282,28 @@ tg->itemNameColor = blastNameColor;
 }
 
 
+static void drawTri(struct vGfx *vg, int x, int y1, int y2, Color color,
+	char strand)
+/* Draw traingle. */
+{
+struct gfxPoly *poly = gfxPolyNew();
+int half = (y2 - y1) / 2;
+if (strand == '-')
+    {
+    gfxPolyAddPoint(poly, x, y1+half);
+    gfxPolyAddPoint(poly, x+half, y1);
+    gfxPolyAddPoint(poly, x+half, y2);
+    }
+else
+    {
+    gfxPolyAddPoint(poly, x, y1);
+    gfxPolyAddPoint(poly, x+half, y1+half);
+    gfxPolyAddPoint(poly, x, y2);
+    }
+vgDrawPoly(vg, poly, color, TRUE);
+gfxPolyFree(&poly);
+}
+
 static void triangleDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -8290,7 +8313,7 @@ static void triangleDrawAt(struct track *tg, void *item,
 {
 struct bed *bed = item; 
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int y2 = y + tg->heightPer;
+int y2 = y + tg->heightPer-1;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
@@ -8303,10 +8326,7 @@ else
 	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
 
-if (bed->strand[0] == '-')
-    vgTriLeft(vg, x1, y, y2, color);
-else
-    vgTriRight(vg, x1, y, y2, color);
+drawTri(vg, x1, y, y2, color, bed->strand[0]);
 }
 
 void simpleBedTriangleMethods(struct track *tg)
