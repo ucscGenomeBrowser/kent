@@ -42,6 +42,10 @@ if(score)
     slSort(&bedList, bedCmpScore);
     slReverse(&bedList);
     }
+else
+    {
+    slSort(&bedList, bedCmp);
+    }
 htmlFrame = mustOpen(frame, "w");
 
 writeOutFrames(htmlFrame, html, db, url, bedList);
