@@ -1,12 +1,12 @@
 #!/bin/csh -ef
 # Name:         makeLoChain-split
 #
-# Function:     Split new assembly sequence into 3k chunks for fast mapping 
+# Function:     Split new assembly sequence into 10k chunks for fast mapping 
 #		of old assembly to new.  
 #
 # Author:       angie
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh,v 1.1 2004/09/18 00:18:57 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh,v 1.2 2004/09/27 22:15:11 angie Exp $
 
 if ( $#argv != 2 ) then
     echo "$0 usage: <new-assembly> <new-nibdir>"
@@ -27,7 +27,7 @@ if ( $HOST != "kkr1u00" ) then
     exit 1
 endif
 
-set destDir = /iscratch/i/$newDb/split3k
+set destDir = /iscratch/i/$newDb/split10k
 rm -rf $destDir
 mkdir -p $destDir
 
@@ -36,7 +36,7 @@ foreach f ($newNibDir/*.nib)
     set size = `nibSize $f | awk '{print $3;}'`
     echo $chr
     nibFrag -name=$chr -masked $f 0 $size + stdout \
-    | faSplit -lift=$destDir/$chr.lft -oneFile size stdin 3000 $destDir/$chr
+    | faSplit -lift=$destDir/$chr.lft -oneFile size stdin 10000 $destDir/$chr
 end
 
 iSync
