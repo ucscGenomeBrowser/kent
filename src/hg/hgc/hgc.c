@@ -1752,6 +1752,7 @@ char *oLetters = cloneString(oSeq->dna);
 //int cfmStart=0;
 int qbafStart, qbafEnd, tbafStart, tbafEnd;
 int qcfmStart, qcfmEnd, tcfmStart, tcfmEnd;
+char *organism = hOrganism(database);
 
 /* Load dna sequence. */
 dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
@@ -1855,8 +1856,8 @@ tolowers(oLetters);
     htmHorizontalLine(f);
     }
 
-fprintf(f, "<H4><A NAME=genomic></A>Human.%s %s:</H4>\n", 
-    psl->tName, (tIsRc ? "(reverse strand)" : ""));
+fprintf(f, "<H4><A NAME=genomic></A>%s.%s %s:</H4>\n", 
+	organism, psl->tName, (tIsRc ? "(reverse strand)" : ""));
 /* Display DNA sequence. */
     {
     struct cfm *cfm;
