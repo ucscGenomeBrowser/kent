@@ -1787,23 +1787,23 @@ char *gs = GS_PATH;
 char *gs = NULL;
 #endif
 
-printf("<PRE>");
+fprintf(htmlOut,"<PRE>");
 if (motif != NULL)
     {
     struct tempName pngTn;
     dnaMotifMakeProbabalistic(motif);
     makeTempName(&pngTn, "logo", ".png");
     dnaMotifToLogoPng(motif, 47, 140, gs, "../trash", pngTn.forCgi);
-    printf("   ");
-    printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
-    printf("\n");
+    fprintf(htmlOut,"   ");
+    fprintf(htmlOut,"<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
+    fprintf(htmlOut,"\n");
     }
 if (motif != NULL)
     {
-    printf("motif consensus\n");
-    dnaMotifPrintProb(motif, stdout);
+    fprintf(htmlOut,"motif consensus\n");
+    dnaMotifPrintProb(motif, htmlOut);
     }
-printf("</PRE>");
+fprintf(htmlOut,"</PRE>");
 }
 
 void printProfile(FILE *f, struct profile *prof)
@@ -3203,14 +3203,20 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     {
     errAbort("ameme - find common patterns in DNA\n"
              "usage\n"
-             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName] [html=output.html] [gif=output.gif]\n"
+             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName] [html=output.html] [gif=output.gif] [rcToo=on] [controlRun=on] [startScanLimit=20]\n"
              "where goodIn.fa is a multi-sequence fa file containing instances\n"
 	     "of the motif you want to find, badIn.fa is a file containing similar\n"
 	     "sequences but lacking the motif, numMotifs is the number of motifs\n"
 	     "to scan for, background is m0,m1, or m2 for various levels of Markov\n"
 	     "models, maxOcc is the maximum occurrences of the motif you \n"
-	     "expect to find in a single sequence and motifOutput is the name of a"
-             "file to store just the motifs in.\n");
+	     "expect to find in a single sequence and motifOutput is the name \n"
+             "of a file to store just the motifs in. rcToo=on searches both strands.\n"
+             "If you include controlRun=on in the command line, a random set of \n"
+             "sequences will be generated that match your foreground data set in size, \n"
+             "and your background data set in nucleotide probabilities. The program \n"
+             "will then look for motifs in this random set. If the scores you get in a \n"
+             "real run are about the same as those you get in a control run, then the motifs\n"
+             "Improbizer has found are probably not significant.\n");
     }
 
 /* Figure out where to put html output. */
