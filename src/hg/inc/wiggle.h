@@ -116,8 +116,8 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue);
 
 /*	in lib/wiggleUtils.c	*/
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
-    int winStart, int winEnd, boolean summaryOnly, int tableId,
-	boolean (*wiggleCompare)(int tableId, double value,
+    int winStart, int winEnd, boolean summaryOnly, boolean freeData,
+	int tableId, boolean (*wiggleCompare)(int tableId, double value,
 	    boolean summaryOnly, struct wiggle *wiggle),
 		char *constraints);
 /*  return linked list of wiggle data between winStart, winEnd
@@ -125,6 +125,8 @@ struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
  *	summaries in the table rows
  */
 #define	WIG_SUMMARY_ONLY	TRUE
+#define	WIG_DATA_NOT_RETURNED	TRUE
+#define	WIG_RETURN_DATA	FALSE
 #define	WIG_ALL_DATA		FALSE
 void wigFreeData(struct wiggleData *wigData);
 /* free everything in the wiggleData structure */
