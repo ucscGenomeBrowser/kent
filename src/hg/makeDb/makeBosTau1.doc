@@ -617,6 +617,17 @@ SEQ2_LEN=$BASE/S2.len
     mkdir ../axtNet
     /cluster/home/heather/bin/x86_64/netToAxt noClass.net all.chain /cluster/data/bosTau1/bosTau1.2bit /cluster/data/hg17/nib ../axtNet/all.axt
 
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz.swap/axtNet
+    cp all.axt all.axt.backup
+
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/blastz.swap/axtChain
+    /cluster/bin/i386/netClass -noAr noClass.net bosTau1 hg17 bosTau1.net (WORKING HERE)
+    rm noClass.net
+    /cluster/bin/i386/netFilter -minGap=10 bosTau1.net | /cluster/bin/i386/hgLoadNet bosTau1 netHg17 stdin
+    /cluster/bin/i386/hgLoadChain -tIndex bosTau1 chainHg17 all.chain
+    rm chain.tab link.tab
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
     ssh kksilo
