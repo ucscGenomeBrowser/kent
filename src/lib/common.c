@@ -1027,6 +1027,7 @@ char *addSuffix(char *head, char *suffix)
 {
 char *ret = NULL;
 int size = strlen(head) + strlen(suffix) +1;
+ret = needMem(sizeof(char)*size);
 snprintf(ret, size, "%s%s", head, suffix);
 return ret;
 }
