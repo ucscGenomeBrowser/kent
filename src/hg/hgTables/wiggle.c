@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.42 2005/02/11 19:45:35 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.43 2005/02/11 23:03:43 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -194,15 +194,6 @@ struct bed *inverseBedList = NULL;		/*	new list	*/
 struct bed *el;
 
 slSort(&bedList, bedLineCmp);	/* make sure it is sorted */
-
-/*	Do not need to work on full chrom if not necessary */
-if ((chromStart != 0) || (chromEnd != 0))
-    {
-    start = chromStart;
-    end = start;
-    if (chromEnd < chromSize)
-	    chromSize = chromEnd;
-    }
 
 for (el = bedList; el != NULL; el=el->next)
     {
