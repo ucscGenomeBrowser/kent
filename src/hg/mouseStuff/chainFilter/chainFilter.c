@@ -27,6 +27,9 @@ errAbort(
   "   -strand=?    -restrict strand (to + or -)\n"
   "   -long        -output in long format\n"
   "   -zeroGap     -get rid of gaps of length zero\n"
+  "   -minGapless=N - pass those with minimum gapless block of at least N\n"
+  "   -qMinGap=N     - pass those with minimum gap size of at least N\n"
+  "   -tMinGap=N     - pass those with minimum gap size of at least N\n"
   );
 }
 
@@ -83,6 +86,52 @@ slReverse(&bList);
 chain->blockList = bList;
 }
 
+boolean calcMaxGapless(struct chain *chain)
+/* Calculate largest block. */
+{
+struct boxIn *b;
+int size, maxSize = 0;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    size = b->tEnd - b->tStart;
+    if (maxSize < size)
+        maxSize = size;
+    }
+return maxSize;
+}
+
+boolean qCalcMaxGap(struct chain *chain)
+/* Calculate largest q gap. */
+{
+struct boxIn *b, *next;
+int size, maxSize = 0;
+for (b = chain->blockList; ; b = next)
+    {
+    if ((next = b->next) == NULL)
+        break; 
+    size = next->qStart - b->qEnd;
+    if (maxSize < size)
+        maxSize = size;
+    }
+return maxSize;
+}
+
+boolean tCalcMaxGap(struct chain *chain)
+/* Calculate largest t gap. */
+{
+struct boxIn *b, *next;
+int size, maxSize = 0;
+for (b = chain->blockList; ; b = next)
+    {
+    if ((next = b->next) == NULL)
+        break; 
+    size = next->tStart - b->tEnd;
+    if (maxSize < size)
+        maxSize = size;
+    }
+return maxSize;
+}
+
 void chainFilter(int inCount, char *inNames[])
 /* chainFilter - Filter chain files. */
 {
@@ -96,6 +145,9 @@ int qStartMin = optionInt("qStartMin", -BIGNUM);
 int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
+int minGapless = optionInt("minGapless", 0);
+int qMinGap = optionInt("qMinGap", 0);
+int tMinGap = optionInt("tMinGap", 0);
 char *strand = optionVal("strand", NULL);
 boolean zeroGap = optionExists("zeroGap");
 int id = optionInt("id", -1);
@@ -130,6 +182,12 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (id >= 0 && id != chain->id)
 	    writeIt = FALSE;
+	if (minGapless != 0)
+	    writeIt = (calcMaxGapless(chain) >= minGapless);
+	if (qMinGap != 0)
+	    writeIt = (qCalcMaxGap(chain) >= qMinGap);
+	if (tMinGap != 0)
+	    writeIt = (tCalcMaxGap(chain) >= tMinGap);
 	if (writeIt)
 	    {
 	    if (doLong)
