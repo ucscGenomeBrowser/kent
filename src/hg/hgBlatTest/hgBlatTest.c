@@ -11,12 +11,12 @@
 #include "fa.h"
 #include "nib.h"
 #include "htmlPage.h"
-#include "../../near/hgNear/hgNear.h"
+#include "../near/hgNear/hgNear.h"
 #include "hdb.h"
 
 #include <time.h>
 
-static char const rcsid[] = "$Id: hgBlatTest.c,v 1.1 2004/06/22 23:06:06 galt Exp $";
+static char const rcsid[] = "$Id: hgBlatTest.c,v 1.2 2004/06/22 23:32:33 galt Exp $";
 
 /* Command line variables. */
 char *dataDir = "./";
