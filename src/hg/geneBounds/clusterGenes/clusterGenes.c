@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.5 2004/01/13 00:36:35 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.6 2004/01/15 18:56:19 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -328,7 +328,7 @@ while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
         genePredFree(&gp);
         }
     }
- lineFileClose(&lf); 
+lineFileClose(&lf); 
 }
 
 void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
