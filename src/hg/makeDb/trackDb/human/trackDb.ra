@@ -61,7 +61,7 @@ track affyU133
 shortLabel Affymetrix U133
 longLabel Alignments of Affymetrix Targets from HG-U133
 group regulation
-priority 85.1
+priority 90.1
 visibility hide
 type psl .
 
@@ -69,7 +69,7 @@ track affyU95
 shortLabel Affymetrix U95
 longLabel Alignments of Affymetrix Targets from HG-U95
 group regulation
-priority 85.2
+priority 90.2
 visibility hide
 type psl .
 
