@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.11 2003/11/10 20:08:23 angie Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.12 2003/12/19 19:52:10 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,6 +21,9 @@ errAbort(
   "   hgPepPred database generic table files(s)\n"
   "which will load the given table assuming the peptide name is\n"
   "in the fasta record\n"
+  "or\n"
+  "   hgPepPred database tab table file\n"
+  "which will load the given table from a single tab separated file\n"
   "options:\n"
   "   -abbr=prefix  Abbreviate by removing prefix from names\n"
   );
@@ -324,6 +327,31 @@ loadTableFromTabFile(database, table, tempName);
 freeHash(&uniq);
 }
 
+void tabPepPred(char *database, int fileCount, char *fileNames[], char *table)
+/* Load a tab separated peptide file. */
+{
+struct hash *uniq = newHash(16);
+struct lineFile *lf = lineFileOpen(fileNames[0], TRUE);
+char *words[2];
+
+if (fileCount != 1)
+    errAbort("Only one file allowed for tab separated peptides");
+
+makeCustomTable(database, table, createString);
+
+printf("Processing %s\n", fileNames[0]);
+while (lineFileRow(lf, words))
+    {
+    if (hashLookup(uniq, words[0]) != NULL)
+	errAbort("Duplicate %s line %d of %s", words[0], lf->lineIx, lf->fileName);
+    hashAdd(uniq, words[0], NULL);
+    }
+lineFileClose(&lf);
+printf("Loading %s\n", fileNames[0]);
+loadTableFromTabFile(database, table, fileNames[0]);
+freeHash(&uniq);
+}
+
 void softberryPepPred(char *database, int fileCount, char *fileNames[])
 /* Load Softberry peptide predictions into database. */
 {
@@ -347,6 +375,8 @@ else if (sameWord(type, "softberry"))
     softberryPepPred(argv[1], argc-3, argv+3);
 else if (sameWord(type, "generic"))
     genericPepPred(argv[1], argc-4, argv+4, argv[3]);
+else if (sameWord(type, "tab"))
+    tabPepPred(argv[1], argc-4, argv+4, argv[3]);
 else
     usage();
 return 0;
