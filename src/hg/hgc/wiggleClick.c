@@ -46,7 +46,7 @@ else
     {
     hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
     /*span = spanInUse(conn, table, chrom, winStart, winEnd, cart);*/
-    span = minSpan(conn, table, chrom, winStart, winEnd, cart);
+    span = minSpan(conn, table, chrom, winStart, winEnd, cart, tdb);
     }
 
 /*	if for some reason we don't have a chrom and win positions, this
