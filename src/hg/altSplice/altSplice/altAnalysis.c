@@ -9,13 +9,14 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.14 2004/06/13 06:20:38 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.15 2004/07/06 22:35:30 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
 static int flankingSize = 0;
 static int alt5PrimeCount = 0;
 static int alt3PrimeCount = 0;
+static int alt3Prime3bpCount = 0;
 static int altCassetteCount = 0;
 static int altRetIntCount = 0;
 static int altIdentityCount = 0;
@@ -46,7 +47,7 @@ errAbort("altAnalysis - Analyze the altSplicing in a series of altGraphX's\n"
 	 );
 }
 
-void logSpliceType(enum altSpliceType type)
+void logSpliceType(enum altSpliceType type, int size)
 /* Log the different types of splicing. */
 {
 switch (type) 
@@ -56,6 +57,8 @@ switch (type)
 	break;
     case alt3Prime: 
 	alt3PrimeCount++;
+	if(size == 3)
+	    alt3Prime3bpCount++;
 	break;
     case altCassette:
 	altCassetteCount++;
@@ -71,10 +74,10 @@ switch (type)
     }
 }
 	
-void printSpliceTypeInfo()
+void printSpliceTypeInfo(int altSpliceLoci)
 {
 fprintf(stderr, "alt 5' Count:\t%d (%d on '-' strand)\n", alt5PrimeCount, alt3Flipped);
-fprintf(stderr, "alt 3' Count:\t%d (%d on '-' strand)\n", alt3PrimeCount, alt5Flipped);
+fprintf(stderr, "alt 3' Count:\t%d (%d on '-' strand, %d are 3bp)\n", alt3PrimeCount, alt5Flipped, alt3Prime3bpCount);
 fprintf(stderr, "alt Cass Count:\t%d\n", altCassetteCount);
 fprintf(stderr, "alt Ret. Int. Count:\t%d\n", altRetIntCount);
 fprintf(stderr, "alt Ident. Count:\t%d\n", altIdentityCount);
@@ -82,7 +85,7 @@ fprintf(stderr, "alt Other Count:\t%d\n", altOtherCount);
 fprintf(stderr, "alt Total Count:\t%d\n", altTotalCount);
 fprintf(stderr, "totalSplices:\t%d\n", totalSplices);
 fprintf(stderr, "%d alt spliced sites out of %d total loci with %.2f alt splices per alt spliced loci\n",
-	splicedLoci, totalLoci, (float)totalSplices/splicedLoci);
+	splicedLoci, totalLoci, (float)totalSplices/altSpliceLoci);
 }
 
 char * nameForType(struct altSpliceSite *as)
@@ -140,13 +143,11 @@ for(i=0; i<vCount; i++)
 return count;
 }
 
-
 boolean areConsSplice(bool **em, int vCount,  unsigned char *vTypes, int v1, int v2)
 /* Return TRUE if v1 an v2 are both hard starts or hard ends. */
 {
 if((vTypes[v1] == ggHardStart || vTypes[v1] == ggHardEnd) &&
-   (vTypes[v2] == ggHardStart || vTypes[v2] == ggHardEnd) &&
-   (rowSum(em[v2], vTypes, vCount ) > 0) )
+   (vTypes[v2] == ggHardStart || vTypes[v2] == ggHardEnd) ) // && (rowSum(em[v2], vTypes, vCount ) > 0) )
     return TRUE;
 return FALSE;
 }
@@ -167,9 +168,6 @@ for(i=0; i<=v1; i++)
     }
  return sum;
 }
-
-
-
 
 int findClosestDownstreamVertex(struct altGraphX *ag, bool **em, int v)
 /* Return the closest vertex that connects from v. -1 if none connect. */ 
@@ -521,131 +519,6 @@ if(em[vs][ve1] && em[vs][ve2])
 		    }
 		*altBpStartV = ve1;
 		*altBpEndV = i;
-/* 		if(altGraphXOut != NULL) */
-/* 		    { */
-/* 		    char name[256]; */
-/* 		    int hardStart = -1; */
-/* 		    int hardEnd = -1; */
-/* 		    int k; */
-/* 		    /\* Find the begining and end of flanking exons. *\/ */
-/* 		    for(k=0; k<vCount; k++) */
-/* 			{ */
-/* 			if(vTypes[k] == ggHardStart && em[k][vs])  */
-/* 			    { */
-/* 			    hardStart = k; */
-/* 			    break; */
-/* 			    } */
-/* 			} */
-/* 		    for(k=0; k<vCount; k++) */
-/* 			{ */
-/* 			if(vTypes[k] == ggHardEnd && em[ve2][k])  */
-/* 			    { */
-/* 			    hardEnd = k; */
-/* 			    break; */
-/* 			    } */
-/* 			} */
-/* 		    if(hardStart != -1 && hardEnd != -1) */
-/* 			{ */
-/* 			struct evidence *ev = NULL, *agEv = NULL; */
-/* 			int evIndex; */
-/* 			safef(name, sizeof(name), "%s.cass", ag->name); */
-/* 			AllocVar(subAg); */
-/* 			subAg->tName = cloneString(ag->tName); */
-/* 			subAg->name = cloneString(name); */
-/* 			safef(subAg->strand, sizeof(subAg->strand), "%s", ag->strand); */
-/* 			subAg->tStart = vPos[hardStart]; */
-/* 			subAg->tEnd = vPos[hardEnd]; */
-/* 			subAg->vertexCount = 6; */
-/* 			subAg->edgeCount = 6; */
-/* 			AllocArray(subAg->vTypes, 6); */
-/* 			AllocArray(subAg->vPositions, 6); */
-/* 			AllocArray(subAg->edgeStarts, 6); */
-/* 			AllocArray(subAg->edgeEnds, 6); */
-/* 			AllocArray(subAg->edgeTypes, 6); */
-/* 			subAg->mrnaRefCount = ag->mrnaRefCount; */
-/* 			subAg->mrnaTissues = ag->mrnaTissues; */
-/* 			subAg->mrnaRefs = ag->mrnaRefs; */
-/* 			subAg->mrnaLibs = ag->mrnaLibs; */
-/* 			/\* work out the positions. *\/ */
-/* 			subAg->vPositions[0] = vPos[hardStart]; */
-/* 			subAg->vPositions[1] = vPos[vs]; */
-/* 			subAg->vPositions[2] = vPos[ve1]; */
-/* 			subAg->vPositions[3] = vPos[i]; */
-/* 			subAg->vPositions[4] = vPos[ve2]; */
-/* 			subAg->vPositions[5] = vPos[hardEnd]; */
-
-/* 			/\* work out the types. *\/ */
-/* 			subAg->vTypes[0] = vTypes[hardStart]; */
-/* 			subAg->vTypes[1] = vTypes[vs]; */
-/* 			subAg->vTypes[2] = vTypes[ve1]; */
-/* 			subAg->vTypes[3] = vTypes[i]; */
-/* 			subAg->vTypes[4] = vTypes[ve2]; */
-/* 			subAg->vTypes[5] = vTypes[hardEnd]; */
-
-/* 			/\* work out edges *\/ */
-/* 			subAg->edgeStarts[0] = 0; */
-/* 			subAg->edgeEnds[0] = 1; */
-/* 			subAg->edgeTypes[0] = ggExon; */
-/* 			evIndex = altGraphXGetEdgeNum(ag, hardStart, vs); */
-/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
-/* 			ev = CloneVar(agEv); */
-/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
-/* 			slAddHead(&subAg->evidence, ev); */
-			
-/* 			subAg->edgeStarts[1] = 1; */
-/* 			subAg->edgeEnds[1] = 2; */
-/* 			subAg->edgeTypes[1] = ggSJ; */
-/* 			evIndex = altGraphXGetEdgeNum(ag, vs, ve1); */
-/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
-/* 			ev = CloneVar(agEv); */
-/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
-/* 			slAddHead(&subAg->evidence, ev); */
-
-/* 			subAg->edgeStarts[2] = 1; */
-/* 			subAg->edgeEnds[2] = 4; */
-/* 			subAg->edgeTypes[2] = ggSJ; */
-/* 			evIndex = altGraphXGetEdgeNum(ag, vs, ve2); */
-/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
-/* 			ev = CloneVar(agEv); */
-/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
-/* 			slAddHead(&subAg->evidence, ev); */
-
-/* 			subAg->edgeStarts[3] = 2; */
-/* 			subAg->edgeEnds[3] = 3; */
-/* 			subAg->edgeTypes[3] = ggExon; */
-/* 			evIndex = altGraphXGetEdgeNum(ag, ve1, i); */
-/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
-/* 			ev = CloneVar(agEv); */
-/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
-/* 			slAddHead(&subAg->evidence, ev); */
-
-/* 			subAg->edgeStarts[4] = 3; */
-/* 			subAg->edgeEnds[4] = 4; */
-/* 			subAg->edgeTypes[4] = ggSJ; */
-/* 			evIndex = altGraphXGetEdgeNum(ag, i, ve2); */
-/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
-/* 			ev = CloneVar(agEv); */
-/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
-/* 			slAddHead(&subAg->evidence, ev); */
-
-/* 			subAg->edgeStarts[5] = 4; */
-/* 			subAg->edgeEnds[5] = 5; */
-/* 			subAg->edgeTypes[5] = ggExon; */
-/* 			evIndex = altGraphXGetEdgeNum(ag, ve2, hardEnd); */
-/* 			agEv = slElementFromIx(ag->evidence, evIndex); */
-/* 			ev = CloneVar(agEv); */
-/* 			ev->mrnaIds = CloneArray(agEv->mrnaIds, agEv->evCount); */
-/* 			slAddHead(&subAg->evidence, ev); */
-
-/* 			slReverse(&subAg->evidence); */
-/* 			altGraphXTabOut(subAg, altGraphXOut); */
-/* 			subAg->mrnaRefCount = 0; */
-/* 			subAg->mrnaRefs = NULL; */
-/* 			subAg->mrnaTissues = NULL; */
-/* 			subAg->mrnaLibs = NULL; */
-/* 			altGraphXFree(&subAg); */
-/* 			} */
-/* 		    } */
 		return TRUE;
 		}
 	    }
@@ -1284,14 +1157,6 @@ int altBpEnd = 0;
 if(aSplice->altCount >= aSplice->altMax) 
     {
     warn("Why the hell?");
-/*     ExpandArray(aSplice->altStarts, aSplice->altMax, 2*aSplice->altMax); */
-/*     ExpandArray(aSplice->altTypes, aSplice->altMax, 2*aSplice->altMax); */
-/*     ExpandArray(aSplice->spliceTypes, aSplice->altMax, 2*aSplice->altMax); */
-/*     ExpandArray(aSplice->altBpStarts, aSplice->altMax, 2*aSplice->altMax); */
-/*     ExpandArray(aSplice->altBpEnds, aSplice->altMax, 2*aSplice->altMax); */
-/*     ExpandArray(aSplice->support, aSplice->altMax, 2*aSplice->altMax); */
-/*     ExpandArray(aSplice->vIndexes, aSplice->altMax, 2*aSplice->altMax); */
-/*     aSplice->altMax = aSplice->altMax * 2; */
     }
 aSplice->altStarts[aSplice->altCount] = ag->vPositions[ve];
 aSplice->altTypes[aSplice->altCount] = ag->vTypes[ve];
@@ -1603,7 +1468,7 @@ for(i=0; i<vCount; i++)
 	{
 	altTotalCount++;	
 	fixOtherStrand(aSplice);
-	logSpliceType(aSplice->spliceTypes[1]);
+	logSpliceType(aSplice->spliceTypes[1], abs(aSplice->altBpEnds[1] - aSplice->altBpStarts[1]));
 	if(aSplice->spliceTypes[1] == alt3Prime && (aSplice->altBpEnds[1] - aSplice->altBpStarts[1] == 3))
 	    reportThreeBpBed(aSplice);
 	if(doSScores)
@@ -1775,7 +1640,7 @@ warn("\nDone.");
 fprintf(htmlOut,"</body></html>\n");
 warn("%d altSpliced sites in %d alt-spliced loci out of %d total loci.",
      altSpliceSites, altSpliceLoci, slCount(agList));
-printSpliceTypeInfo();
+printSpliceTypeInfo(altSpliceLoci);
 altGraphXFreeList(&agList);
 if(RData != NULL)
     {
