@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.513 2003/11/05 21:22:17 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.514 2003/11/17 21:04:10 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -652,7 +652,7 @@ switch (class)
 	return PURPLE;
     case UTR5:
     case UTR3:
-	return LTGRAY;
+	return ORANGE;
     case INTRON:
 	return LTGRAY;
     case SPLICESITE:
