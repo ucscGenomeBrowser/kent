@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.1 2004/03/31 07:35:34 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.2 2004/10/14 00:02:51 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -249,6 +249,25 @@ if (verboseLevel() > 0)
     }
 }
 
+void adjustTrackDbName(char *hgFindSpecName)
+/* Some hgFindSpec info is pulled from the trackDb table.  When the 
+ * hgFindSpec name is hgFindSpec_$USER and the user's ~/.hg.conf file 
+ * specifies trackDb_$USER, that works fine.  However, when the 
+ * hgFindSpec name is just hgFindSpec (as for make alpha / make strict 
+ * invocations), but ~/hg.conf says trackDb_$USER, they're inconsistent.
+ * So to make a long story short -- circumvent the ~/.hg.conf!  */
+{
+if (sameString(hgFindSpecName, "hgFindSpec"))
+    hSetTrackDbName("trackDb");
+else if (startsWith(hgFindSpecName, "hgFindSpec_"))
+    {
+    char trackDbName[256];
+    safef(trackDbName, sizeof(trackDbName), "trackDb_%s",
+	  hgFindSpecName + strlen("hgFindSpec_"));
+    hSetTrackDbName(trackDbName);
+    }
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -256,6 +275,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
+adjustTrackDbName(argv[3]);
 hgFindSpec(argv[1], argv[2], argv[3], argv[4], argv[5],
            optionExists("strict"));
 return 0;
