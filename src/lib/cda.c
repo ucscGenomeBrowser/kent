@@ -1,10 +1,8 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* cda.c - cDNA Alignment structure.  This stores all the info except
- * the bases themselves on an cDNA alignment. */
+ * the bases themselves on an cDNA alignment. 
+ * 
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "dnautil.h"

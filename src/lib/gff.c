@@ -1,8 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* gff - routines to read many types of gff and gtf files
+ * and turn them into a relatively easy to deal with form
+ * in memory.
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

@@ -1,9 +1,7 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-/* xao.c - Manage cross-species alignments in Intronerator database. */
+/* xao.c - Manage cross-species alignments in Intronerator database. 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "sig.h"
 #include "xa.h"

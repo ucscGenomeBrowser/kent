@@ -3,7 +3,7 @@
 
 L = -lm $(SOCKETLIB)
 MYLIBDIR = ../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a 
 
 O = gfClient.o
 

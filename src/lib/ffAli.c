@@ -1,11 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* Some relatively small utility functions that act on ffAlis.
  * (Separated from fuzzyFinder.c so people can do light ffAli 
- * work without including 100k of fuzzyFinder object code.) */
+ * work without including 100k of fuzzyFinder object code.) 
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "dnautil.h"

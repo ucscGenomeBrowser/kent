@@ -1,9 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-
 /* gemfont.c - Raster Font stuff, draws text based on a blit and a font
    in a format that some day may approach Ventura Publisher, but currently
    looks much more like GEM on the ST with some Mac-like mutations. */

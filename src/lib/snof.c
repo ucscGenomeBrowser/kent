@@ -1,13 +1,10 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* Snof.c Sorted Name Offset File.
  * This accesses a file of name/offset pairs that are sorted by
  * name.  Does a binary search of file to find the offset given name.
  * Most typically this is used to do a quick lookup given an index file. 
- */
+ *
+ * This file is copyright 2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "snof.h"
