@@ -107,9 +107,7 @@ for (i=-1; i>=last; --i)
 *pStartT = t+bestPos;
 }
 
-
-
-int ffHashFuncN(char *s, int seedSize)
+static int ffHashFuncN(char *s, int seedSize)
 /* Return hash function for a 4k hash on sequence. */
 {
 int acc = 0;
@@ -129,7 +127,7 @@ struct seqHashEl
     char *seq;
     };
 
-boolean totalDegenerateN(char *s, int seedSize)
+static boolean totalDegenerateN(char *s, int seedSize)
 /* Return TRUE if repeat of period 1 or 2. */
 {
 char c1 = s[0], c2 = s[1];
@@ -148,7 +146,7 @@ for (i=2; i<seedSize; i += 2)
 return TRUE;
 }
 
-struct ffAli *ffFindExtendNmers(char *nStart, char *nEnd, char *hStart, char *hEnd,
+static struct ffAli *ffFindExtendNmers(char *nStart, char *nEnd, char *hStart, char *hEnd,
 	int seedSize)
 /* Find perfectly matching n-mers and extend them. */
 {
@@ -286,8 +284,8 @@ for (hit = clump->hitList; ; hit = hit->next)
     }
 }
 
-void addExtraHits(struct gfHit *hitList, int hitSize, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
-	struct ffAli **pExtraList)
+static void addExtraHits(struct gfHit *hitList, int hitSize, 
+	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct ffAli **pExtraList)
 /* Extend hits as far as possible, convert to ffAli, and add to extraList. */
 {
 struct gfHit *hit;
@@ -522,22 +520,26 @@ return ffList;
 }
 
 
-int seedResolvePower(int seedSize)
+static int seedResolvePower(int seedSize, int resolveLimit)
 /* Return how many bases to search for seed of given
  * size. */
 {
-if (seedSize >= 12)
+int res;
+if (seedSize >= 14)	/* Avoid int overflow */
     return ffIntronMax;
-return 1 << (seedSize+seedSize-3);
+res  = (1 << (seedSize+seedSize-resolveLimit));
+if (res > ffIntronMax)
+    res = ffIntronMax;
+return res;
 }
 
-static char *scanExactLeft(char *n, int nSize, int hSize, char *hEnd)
+static char *scanExactLeft(char *n, int nSize, int hSize, char *hEnd, int resolveLimit)
 /* Look for first exact match to the left. */
 {
 /* Optimize a little by comparing the first character inline. */
 char n1 = *n++;
 char *hStart;
-int maxSize = seedResolvePower(nSize);
+int maxSize = seedResolvePower(nSize, resolveLimit);
 
 if (hSize > maxSize) hSize = maxSize;
 nSize -= 1;
@@ -553,13 +555,13 @@ while (hEnd >= hStart)
 return NULL;
 }
 
-static char *scanExactRight(char *n, int nSize, int hSize, char *hStart)
+static char *scanExactRight(char *n, int nSize, int hSize, char *hStart, int resolveLimit)
 /* Look for first exact match to the right. */
 {
 /* Optimize a little by comparing the first character inline. */
 char n1 = *n++;
 char *hEnd;
-int maxSize = seedResolvePower(nSize);
+int maxSize = seedResolvePower(nSize, resolveLimit);
 
 if (hSize > maxSize) hSize = maxSize;
 hEnd = hStart + hSize;
@@ -576,7 +578,7 @@ return NULL;
 }
 
 static struct ffAli *fillInExact(char *nStart, char *nEnd, char *hStart, char *hEnd, 
-	boolean isRc, boolean scanLeft, boolean scanRight)
+	boolean isRc, boolean scanLeft, boolean scanRight, int resolveLimit)
 /* Try and add exact match to the region, adding splice sites to
  * the area to search for small query sequences. scanRight and scanLeft
  * specify which way to scan and which side of the splice site to
@@ -592,7 +594,7 @@ if (minGap <= 2)
     return NULL;
 if (scanLeft)
     {
-    if ((hPos = scanExactLeft(nStart, nGap, hGap, hEnd)) != NULL)
+    if ((hPos = scanExactLeft(nStart, nGap, hGap, hEnd, resolveLimit)) != NULL)
 	{
 	AllocVar(ff);
 	ff->nStart = nStart;
@@ -604,7 +606,7 @@ if (scanLeft)
     }
 else
     {
-    if ((hPos = scanExactRight(nStart, nGap, hGap, hStart)) != NULL)
+    if ((hPos = scanExactRight(nStart, nGap, hGap, hStart, resolveLimit)) != NULL)
 	{
 	AllocVar(ff);
 	ff->nStart = nStart;
@@ -617,9 +619,9 @@ else
 return NULL;
 }
 
-struct ffAli *frizzyFindFromSmallerSeeds(char *nStart, char *nEnd, 
+static struct ffAli *findFromSmallerSeeds(char *nStart, char *nEnd, 
 	char *hStart, char *hEnd, boolean isRc, 
-	boolean scanLeft, boolean scanRight, int seedSize)
+	boolean scanLeft, boolean scanRight, int seedSize, int resolveLimit)
 /* Look for matches with smaller seeds. */
 {
 int nGap = nEnd - nStart;
@@ -629,7 +631,7 @@ if (nGap >= seedSize)
     if (scanLeft || scanRight)
         {
 	int hGap = hEnd - hStart;
-	int maxSize = seedResolvePower(seedSize);
+	int maxSize = seedResolvePower(seedSize, resolveLimit);
 	if (hGap > maxSize) hGap = maxSize;
 	if (scanLeft)
 	    hStart = hEnd - hGap;
@@ -681,11 +683,12 @@ for (i=size-1; i >= 0; --i)
 return count;
 }
 
-struct ffAli *frizzyFind(char *nStart, char *nEnd, char *hStart, char *hEnd, 
+struct ffAli *scanTinyOne(char *nStart, char *nEnd, char *hStart, char *hEnd, 
 	boolean isRc, boolean scanLeft, boolean scanRight, int seedSize)
 /* Try and add some exon candidates in the region. */
 {
 struct ffAli *ff;
+int resolverLimit =  3;
 int nGap = nEnd - nStart;
 if (nGap > 80)		/* The index should have found things this big already. */
     return NULL;
@@ -693,16 +696,17 @@ if (scanLeft && isRc)
     nStart += countT(nStart, nGap);
 if (scanRight && !isRc)
     nEnd -= countA(nStart, nGap);
-ff = fillInExact(nStart, nEnd, hStart, hEnd, isRc, scanLeft, scanRight);
+ff = fillInExact(nStart, nEnd, hStart, hEnd, isRc, scanLeft, scanRight, 3);
 if (ff != NULL)
     {
     return ff;
     }
-return frizzyFindFromSmallerSeeds(nStart, nEnd, hStart, hEnd, isRc,
-	scanLeft, scanRight, seedSize);
+return findFromSmallerSeeds(nStart, nEnd, hStart, hEnd, isRc,
+	scanLeft, scanRight, seedSize, 3);
 }
 
-static struct ffAli *scanForTinyExons(int seedSize, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
+static struct ffAli *scanForSmallerExons( int seedSize, 
+	struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	boolean isRc, struct ffAli *ffList)
 /* Look for exons too small to be caught by index. */
 {
@@ -712,7 +716,7 @@ if (ff == NULL)
     return NULL;
 
 /* Look for initial gap. */
-newFf = frizzyFind(qSeq->dna, ff->nStart, tSeq->dna, ff->hStart, 
+newFf = scanTinyOne(qSeq->dna, ff->nStart, tSeq->dna, ff->hStart, 
 	isRc, TRUE, FALSE, seedSize); 
 ffCat(&extraList, &newFf);
 
@@ -723,15 +727,40 @@ for (;;)
     ff = ff->right;
     if (ff == NULL)
 	break;
-    newFf = frizzyFind(lastFf->nEnd, ff->nStart, lastFf->hEnd, ff->hStart, 
+    newFf = scanTinyOne(lastFf->nEnd, ff->nStart, lastFf->hEnd, ff->hStart, 
 	isRc, FALSE, FALSE, seedSize);
     ffCat(&extraList, &newFf);
     }
 
 /* Look for end gaps. */
-newFf = frizzyFind(lastFf->nEnd, qSeq->dna + qSeq->size, 
+newFf = scanTinyOne(lastFf->nEnd, qSeq->dna + qSeq->size, 
 	lastFf->hEnd, tSeq->dna + tSeq->size, isRc, FALSE, TRUE, seedSize);
 ffCat(&extraList, &newFf);
+
+ffList = foldInExtras(qSeq, tSeq, ffList, extraList);
+return ffList;
+}
+
+static struct ffAli *scanForTinyInternal(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
+	boolean isRc, struct ffAli *ffList)
+/* Look for exons too small to be caught by index. */
+{
+struct ffAli *extraList = NULL, *ff = ffList, *lastFf = NULL, *newFf;
+
+if (ff == NULL)
+    return NULL;
+
+/* Look for middle gaps. */
+for (;;)
+    {
+    lastFf = ff;
+    ff = ff->right;
+    if (ff == NULL)
+	break;
+    newFf = fillInExact(lastFf->nEnd, ff->nStart, lastFf->hEnd, ff->hStart, isRc, 
+	FALSE, FALSE, 0);
+    ffCat(&extraList, &newFf);
+    }
 
 ffList = foldInExtras(qSeq, tSeq, ffList, extraList);
 return ffList;
@@ -757,7 +786,7 @@ if (intronOrientation(left->hEnd, right->hStart-1) == orientation)
 return FALSE;
 }
 
-int calcSpliceScore(struct axtScoreScheme *ss, 
+static int calcSpliceScore(struct axtScoreScheme *ss, 
 	char a1, char a2, char b1, char b2, int orientation)
 /* Return adjustment for match/mismatch of consensus. */
 {
@@ -884,7 +913,7 @@ if (maxScore > 0)
     /* Peel back surrounding ffAli's */
     if (left->nStart > npStart || right->nEnd < npEnd)
 	{
-	warn("Unable to peel in hardRefineSplice\n");
+	warn("Unable to peel in hardRefineSplice");
 	/* It would take a lot of code to handle this case. 
 	 * I believe it is rare enough that it's not worth
 	 * it.  This warning will help keep track of how
@@ -924,7 +953,7 @@ if (maxScore > 0)
 	    if (ff == NULL)
 		{
 		AllocVar(ff);
-		uglyf("starting insert\n");
+		// uglyf("starting insert\n");
 		ff->left = left;
 		ff->right = right;
 		left->right = ff;
@@ -962,7 +991,7 @@ if (maxScore > 0)
 	    if (ff == NULL)
 		{
 		AllocVar(ff);
-		uglyf("starting insert 2\n");
+		// uglyf("starting insert 2\n");
 		ff->left = left;
 		ff->right = right;
 		left->right = ff;
@@ -1084,6 +1113,7 @@ static void refineBundle(struct genoFind *gf,
 /* Refine bundle - extending alignments and looking for smaller exons. */
 {
 struct ssFfItem *ffi;
+int seedSize;
 struct gfSeqSource *target = gfFindNamedSource(gf, tSeq->name);
 /* Find target of given name.  Return NULL if none. */
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
@@ -1100,11 +1130,14 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     ffi->ff = bandedExtend(qSeq, tSeq, ffi->ff);
  // uglyf("after bandedExtend:\n");
  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
-    ffi->ff = scanForTinyExons(gf->tileSize, qSeq, tSeq, isRc, ffi->ff);
- // uglyf("after scanForTinyExons:\n");
+    ffi->ff = scanForSmallerExons(gf->tileSize, qSeq, tSeq, isRc, ffi->ff);
+ // uglyf("after scanForSmallerExons:\n");
  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = refineSpliceSites(qSeq, tSeq, ffi->ff);
  // uglyf("after refineSpliceSites:\n");
+ // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
+    ffi->ff = scanForTinyInternal(qSeq, tSeq, isRc, ffi->ff);
+ // uglyf("after scanForTinyInternal:\n");
  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = smoothSmallGaps(qSeq, tSeq, ffi->ff);
  // uglyf("after smoothSmallGaps:\n");
@@ -1113,7 +1146,7 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
 }
 
 
-struct ssBundle *gfSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
+struct ssBundle *ffSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
 	int qOffset, struct lm *lm, int minScore, boolean isRc)
 /* Do seed and extend type alignment */
 {

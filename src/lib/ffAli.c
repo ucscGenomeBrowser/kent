@@ -9,6 +9,19 @@
 #include "dnautil.h"
 #include "fuzzyFind.h"
 
+void ffFreeAli(struct ffAli **pAli)
+/* Dispose of memory gotten from fuzzyFind(). */
+{
+struct ffAli *ali = *pAli;
+if (ali != NULL)
+    {
+    while (ali->right)
+        ali = ali->right;
+    slFreeList(&ali);
+    }
+*pAli = NULL;
+}
+
 int ffOneIntronOrientation(struct ffAli *left, struct ffAli *right)
 /* Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
  * intron. */
@@ -58,6 +71,7 @@ for (ff = rightMost; ff != NULL; ff = ff->left)
     }
 return last;
 }
+
 
 static int countGoodStart(struct ffAli *ali)
 /* Return number of perfect matchers at start. */
@@ -112,6 +126,7 @@ while (d != NULL)
 return acc;
 }
 
+#ifdef UNUSED
 boolean ffSolidMatch(struct ffAli **pLeft, struct ffAli **pRight, DNA *needle, 
     int minMatchSize, int *retStartN, int *retEndN)
 /* Return start and end (in needle coordinates) of solid parts of 
@@ -170,6 +185,7 @@ for (;;)
 *pRight = right;
 return *retEndN - *retStartN >= minMatchSize;
 }
+#endif /* UNUSED */
 
 
 struct ffAli *ffAliFromSym(int symCount, char *nSym, char *hSym,

@@ -39,23 +39,9 @@ struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron);
 struct ssFfItem *gfRangesToFfItem(struct gfRange *rangeList, aaSeq *qSeq);
 /* Convert ranges to ssFfItem's. */
 
-void dumpBuns(struct ssBundle *bunList);  /* uglyf */
-void dumpFf(struct ffAli *left, DNA *needle, DNA *hay);/* uglyf */
-
-void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd);
-/* Expand aligned segment to right as far as can exactly. */
-
-void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart);
-/* Expand aligned segment to left as far as can exactly. */
-
-struct ssBundle *gfSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
+struct ssBundle *ffSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
 	int qOffset, struct lm *lm, int minScore, boolean isRc);
 /* Do seed and extend type alignment */
 
-struct ffAli *ffFindExtendEightmers(char *nStart, char *nEnd, char *hStart, char *hEnd);
-/* Find perfectly matching 8-mers and extend them. */
-
-struct ffAli *ffMergeClose(struct ffAli *aliList);
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors or
- * ones that could be merged at the expense of just a few mismatches.*/
+void dumpBuns(struct ssBundle *bunList);  /* uglyf */
+void dumpFf(struct ffAli *left, DNA *needle, DNA *hay);/* uglyf */

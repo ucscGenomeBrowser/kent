@@ -187,47 +187,6 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
-struct ffAli *ffMergeClose(struct ffAli *aliList)
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors or
- * ones that could be merged at the expense of just a few mismatches.*/
-{
-struct ffAli *mid, *ali;
-int closeEnough = -3;
-
-if (aliList == NULL)
-    return NULL;
-for (mid = aliList->right; mid != NULL; mid = mid->right)
-    {
-    for (ali = aliList; ali != mid; ali = ali->right)
-	{
-	DNA *nStart, *nEnd;
-	int nOverlap, diag;
-	nStart = max(ali->nStart, mid->nStart);
-	nEnd = min(ali->nEnd, mid->nStart);
-	nOverlap = nEnd - nStart;
-	/* Overlap or perfectly abut in needle, and needle/hay
-	 * offset the same. */
-	if (nOverlap >= closeEnough)
-	    {
-	    int diag = ali->nStart - ali->hStart;
-	    if (diag == mid->nStart - mid->hStart)
-		{
-		/* Make mid encompass both, and make ali empty. */
-		mid->nStart = min(ali->nStart, mid->nStart);
-		mid->nEnd = max(ali->nEnd, mid->nEnd);
-		mid->hStart = mid->nStart-diag;
-		mid->hEnd = mid->nEnd-diag;
-		ali->hEnd = mid->hStart;
-		ali->nEnd = mid->nStart;
-		}
-	    }
-	}
-    }
-aliList = ffRemoveEmptyAlis(aliList, TRUE);
-return aliList;
-}
-
 struct ffAli *smallMiddleExons(struct ffAli *aliList, 
 	struct ssBundle *bundle, 
 	enum ffStringency stringency)

@@ -1288,6 +1288,7 @@ for (oneBun = *pOneList; oneBun != NULL; oneBun = oneBun->next)
 	bigBun->qSeq = query;
 	bigBun->genoSeq = oneBun->genoSeq;
 	bigBun->isProt = oneBun->isProt;
+	bigBun->avoidFuzzyFindKludge = oneBun->avoidFuzzyFindKludge;
 	}
     bigBun->ffList = slCat(bigBun->ffList, oneBun->ffList);
     oneBun->ffList = NULL;
@@ -1442,7 +1443,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     *endPos = 0;
     if (band)
 	{
-	oneBunList = gfSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore, isRc);
+	oneBunList = ffSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore, isRc);
 	}
     else
 	{

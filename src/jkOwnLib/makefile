@@ -1,6 +1,6 @@
 include ../inc/common.mk
 
-O = crudeali.o bandExt.o ffSeedExtend.o fuzzyFind.o \
+O = crudeali.o bandExt.o ffAliHelp.o ffSeedExtend.o fuzzyFind.o \
     genoFind.o gfClientLib.o gfOut.o ooc.o \
     patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 
 
