@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.23 2004/05/18 20:14:00 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.24 2004/06/20 20:31:29 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1567,7 +1567,7 @@ ss = spaceSaverMaxCellsNew(0, width, maxRows, maxCells);
 
 /* Layout the exons using the spaceSaver to make sure that
    different exons don't overlap. */
-for(eg = egList; eg != NULL; eg = egNext)	
+  for(eg = egList; eg != NULL; eg = egNext)	
     {
     egNext = eg->next;
     eg->itemNumber = agIx;
@@ -1779,7 +1779,7 @@ int i,j,k;
 int maxIntron=0;
 char *vTypes = ag->vTypes;
 int *vPos = ag->vPositions;
-int minExon =BIGNUM;
+int minExon = BIGNUM;
 int increment = 0;
 double multFact = 1.2;
 double minIntronFact = .03;
@@ -1801,6 +1801,10 @@ for(i=0; i<vC; i++)
     }
 
 multFact = (minIntronFact*maxIntron)/minExon;
+/* Some genes already have small introns-
+   have to avoid shrinking the exons. */
+if(multFact < 1)
+    multFact = 1;
 last = -1;
 
 /* Enlarge each exon by stretching one end. */
