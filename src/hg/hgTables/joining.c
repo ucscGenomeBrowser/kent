@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.40 2005/02/12 00:07:03 angie Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.41 2005/02/12 00:22:46 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -930,8 +930,10 @@ char *words[16];
 char dtf[256];
 int i;
 bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
-chopCommas(fields, words);
-for (i=fieldCount-2;  i >= 0;  i--)
+/* Update our notion of fieldCount -- the chrom field is omitted, and 
+ * (if applicable) the reserved field is omitted too: */
+fieldCount = chopCommas(fields, words);
+for (i=fieldCount-1;  i >= 0;  i--)
     {
     if (sameString(words[i], "0"))
 	continue;
