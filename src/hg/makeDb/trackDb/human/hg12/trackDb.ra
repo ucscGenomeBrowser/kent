@@ -1,3 +1,14 @@
+track rnaGene
+shortLabel RNA Genes
+longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
+group genes
+priority 52
+visibility hide
+color 170,80,0
+altColor 230,180,130
+type bed 6 +
+chromosomes chr7
+
 track slamMouse
 shortLabel SLAM Mouse
 longLabel SLAM Gene Predictions Using Human/Mouse Homology
