@@ -18,7 +18,6 @@ CREATE TABLE cutter (
     numCompanies int unsigned not null,	# Number of companies selling this enzyme
     companies longblob not null,	# Company letters
     numRefs int unsigned not null,	# Number of references
-    refs longblob not null,	# Reference numbers
+    refs longblob not null	# Reference numbers
               #Indices
-    PRIMARY KEY(name)
 );

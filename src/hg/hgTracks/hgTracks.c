@@ -88,8 +88,9 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 #include "cytoBand.h"
+#include "cutter.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.925 2005/03/14 18:17:13 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.926 2005/03/17 00:42:20 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -4087,6 +4088,61 @@ tg->mapItemName = oligoMatchName;
 tg->priority = 99;
 tg->groupName = "map";
 tdb->tableName = tg->mapName;
+tdb->shortLabel = tg->shortLabel;
+tdb->longLabel = tg->longLabel;
+trackDbPolish(tdb);
+tg->tdb = tdb;
+return tg;
+}
+
+void cuttersLoad(struct track *tg)
+{
+struct sqlConnection *conn;
+struct cutter *cutters;
+struct slName *includes, *excludes;
+struct dnaSeq *windowDna = NULL;
+struct bed *plus = NULL, *minus = NULL, *bedList = NULL;
+
+/* Do different things based on window size. */
+if (winEnd - winStart < 1000)
+    {
+    windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
+    hSetDb2("hgFixed");
+    conn = hAllocConn2();
+    cutters = cutterLoadByQuery(conn, "select * from cutters");
+    includes = sqlQuickList(conn, "select name from cuttersIncluded");
+    excludes = sqlQuickList(conn, "select name from cuttersExcluded");
+    /* Make the FALSE for the semicolon an hui.h default.  */ 
+    cullCutters(cutters, FALSE, includes, excludes, 6);
+    plus = matchEnzymes(cutters, windowDna, '+', TRUE, winStart);
+    reverseComplement(windowDna->dna, windowDna->size);
+    minus = matchEnzymes(cutters, windowDna, '-', FALSE, winStart);
+    bedList = slCat(plus, minus);
+    tg->items = bedList;
+    hFreeConn2(&conn);
+    slFreeList(&includes);
+    slFreeList(&excludes);
+    }
+}
+
+struct track *cuttersTg()
+/* Track group for the restriction enzymes. */
+{
+struct track *tg = trackNew();
+struct trackDb *tdb;
+
+bedMethods(tg);
+AllocVar(tdb);
+tg->mapName = CUTTERS_TRACK_NAME;
+tg->canPack = TRUE;
+tg->visibility = tvHide;
+tg->hasUi = FALSE;
+tg->shortLabel = cloneString(CUTTERS_TRACK_LABEL);
+tg->longLabel = cloneString(CUTTERS_TRACK_LONGLABEL);			    
+tg->loadItems = cuttersLoad;
+tg->priority = 99.9;
+tg->groupName = "map";
+tdb->tableName = CUTTERS_TRACK_NAME;
 tdb->shortLabel = tg->shortLabel;
 tdb->longLabel = tg->longLabel;
 trackDbPolish(tdb);
@@ -9662,6 +9718,7 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
 loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
+slSafeAddHead(&trackList, cuttersTg());
 loadCustomTracks(&trackList);
 
 /* Get visibility values if any from ui. */

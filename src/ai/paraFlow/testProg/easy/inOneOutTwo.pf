@@ -1,3 +1,0 @@
-to inOneOutTwo(var radians) into (var x, var y)
-    {
-    }

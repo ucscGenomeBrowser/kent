@@ -66,8 +66,9 @@ return cloneOrNull(sqlQuickQuery(conn, query, buf, sizeof(buf)));
 }
 
 char *genePixStage(struct sqlConnection *conn, int id, boolean doLong)
-/* Return string describing growth stage of organism 
- * FreeMem this when done. */
+/* Return string describing growth stage of organism.  The description
+ * will be 5 or 6 characters wide if doLong is false, and about
+ * 20 characters wide if it is true. FreeMem this when done. */
 {
 char query[256], buf[256];
 boolean isEmbryo;
@@ -96,7 +97,7 @@ else
     if (isEmbryo)
         c = 'e';
     else
-        c = 'n';
+        c = 'p';
     safef(buf, sizeof(buf), "%c%3.1f", c, daysPassed);
     }
 sqlFreeResult(&sr);
@@ -293,8 +294,8 @@ switch (how)
     case gpsPrefix:
         dyStringPrintf(dy, " like \"%s%%\"", pattern);
 	break;
-    case gpsText:
-        dyStringPrintf(dy, " like \"%%%s%%\"", pattern);
+    case gpsLike:
+        dyStringPrintf(dy, " like \"%s\"", pattern);
 	break;
     default:
         internalErr();
@@ -390,6 +391,13 @@ struct slInt *genePixSelectRefSeq(struct sqlConnection *conn, char *acc)
 /* Return ids of images that have probes involving refSeq mRNA seq. */
 {
 return matchingExtId(conn, acc, "refSeq");
+}
+
+struct slInt *genePixSelectLocusLink(struct sqlConnection *conn, char *id)
+/* Return ids of images that have probes involving locusLink (entrez gene)
+ * id. */
+{
+return matchingExtId(conn, id, "locusLink");
 }
 
 struct slInt *genePixSelectGenbank(struct sqlConnection *conn, char *acc)

@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.70 2004/12/02 01:11:40 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.71 2005/03/16 22:33:12 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1522,4 +1522,58 @@ sqlDisconnect(&conn);
 return list;
 }
 
+static struct sqlFieldInfo *sqlFieldInfoParse(char **row)
+/* parse a row into a sqlFieldInfo object */
+{
+struct sqlFieldInfo *fi;
+AllocVar(fi);
+fi->field = cloneString(row[0]);
+fi->type = cloneString(row[1]);
+fi->allowsNull = sameString(row[2], "YES");
+fi->key = cloneString(row[3]);
+fi->defaultVal = cloneString(row[4]);
+fi->extra = cloneString(row[5]);
+return fi;
+}
+
+struct sqlFieldInfo *sqlFieldInfoGet(struct sqlConnection *conn, char *table)
+/* get a list of objects describing the fields of a table */
+{
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct sqlFieldInfo *fiList = NULL;
+
+safef(query, sizeof(query), "SHOW COLUMNS FROM %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    slSafeAddHead(&fiList, sqlFieldInfoParse(row));
+sqlFreeResult(&sr);
+slReverse(&fiList);
+return fiList;
+}
+
+static void sqlFieldInfoFree(struct sqlFieldInfo **fiPtr)
+/* Free a sqlFieldInfo object */
+{
+struct sqlFieldInfo *fi = *fiPtr;
+if (fi != NULL)
+    {
+    freeMem(fi->field);
+    freeMem(fi->type);
+    freeMem(fi->key); 
+    freeMem(fi->defaultVal);
+    freeMem(fi->extra);
+    freeMem(fi);
+    *fiPtr = NULL;
+    }
+}
+
+void sqlFieldInfoFreeList(struct sqlFieldInfo **fiListPtr)
+/* Free a list of sqlFieldInfo objects */
+{
+struct sqlFieldInfo *fi;
+while ((fi = slPopHead(fiListPtr)) != NULL)
+       sqlFieldInfoFree(&fi);
+}
 

@@ -1,3 +1,0 @@
-This is a little calculator in algebraic notation that
-keeps track of where each token is for better error handling.
-It is the third example in the bison docs.

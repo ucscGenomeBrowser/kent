@@ -19,6 +19,11 @@ char *wrapWhiteFont(char *s);
 #define RULER_TRACK_LABEL       "Base Position"
 #define RULER_TRACK_LONGLABEL   "Genome Base Position"
 
+/* Definitions for restriction enzyme track. */
+#define CUTTERS_TRACK_NAME "cutters"
+#define CUTTERS_TRACK_LABEL "Restriction Enzymes"
+#define CUTTERS_TRACK_LONGLABEL "Restriction Enzymes from REBASE"
+
 /* Definition for oligo match track. */
 #define oligoMatchVar "hgt.oligoMatch" 
 #define oligoMatchDefault "aaaaa"
