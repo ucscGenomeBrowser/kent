@@ -86,8 +86,9 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 #include "bedCart.h"
+#include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.905 2005/02/14 03:18:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.906 2005/02/14 07:27:51 sugnet Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6782,6 +6783,32 @@ for(tr = track->group->trackList; tr != NULL; tr = tr->next)
     }
 }
 
+
+void fillInStartEndBands(struct track *ideoTrack, char *startBand, char *endBand, int buffSize)
+/* Loop through the bands and fill in the one that the current window starts
+   on and ends on. */
+{
+struct cytoBand *cb = NULL, *cbList = ideoTrack->items;
+for(cb = cbList; cb != NULL; cb = cb->next)
+    {
+    /* If the start or end is encompassed by this band fill
+       it in. */
+    if(winStart >= cb->chromStart &&
+       winStart <= cb->chromEnd) 
+	{
+	safef(startBand, buffSize, "%s", cb->name);
+	}
+    /* End is > rather than >= due to odditiy in the
+       cytoband track where the starts and ends of two
+       bands overlaps by one. */
+    if(winEnd > cb->chromStart &&
+       winEnd <= cb->chromEnd) 
+	{
+	safef(endBand, buffSize, "%s", cb->name);
+	}
+    }
+}
+
 void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
 /* Make an ideogram image of the chromsome and our position in
    it. */
@@ -6826,6 +6853,11 @@ else
     }
 if(doIdeo)
     {
+    char startBand[16];
+    char endBand[16];
+    char title[32];
+    startBand[0] = endBand[0] = '\0';
+    fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand)); 
     /* Draw the ideogram. */
     makeTempName(&gifTn, "hgtIdeo", ".gif");
     /* Start up client side map. */
@@ -6838,8 +6870,12 @@ if(doIdeo)
     ideoTrack->ixColor = vgFindRgb(vg, &ideoTrack->color);
     ideoTrack->ixAltColor = vgFindRgb(vg, &ideoTrack->altColor);
     vgSetClip(vg, 0, gfxBorder, ideoWidth, ideoTrack->height);
-    textWidth = mgFontStringWidth(font, chromName);
-    vgTextCentered(vg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, chromName);
+    if(sameString(startBand, endBand)) 
+	safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+    else
+	safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
+    textWidth = mgFontStringWidth(font, title);
+    vgTextCentered(vg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
     ideoTrack->drawItems(ideoTrack, winStart, winEnd, vg, textWidth+4, gfxBorder, ideoWidth-textWidth-4,
 			 font, ideoTrack->ixColor, ideoTrack->limitedVis);
     vgUnclip(vg);
