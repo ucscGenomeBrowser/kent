@@ -72,7 +72,8 @@ char *thisFrame = NULL;
 /* end Chuck code */
 #endif /*CHUCK_CODE*/
 
-int maxItemsInFullTrack = 400;
+int maxItemsInFullTrack = 400;  /* Maximum number of items displayed in full */
+int guidelineSpacing = 10;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
 
@@ -5170,6 +5171,17 @@ void smallBreak()
 printf("<FONT SIZE=1><BR></FONT>\n");
 }
 
+int gfxBorder = 1;
+
+int trackOffsetX()
+/* Return x offset where track display proper begins. */
+{
+int x = gfxBorder;
+if (withLeftLabels)
+    x += tl.leftLabelWidth + gfxBorder;
+return x;
+}
+
 void makeActiveImage(struct trackGroup *groupList)
 /* Make image and image map. */
 {
@@ -5181,8 +5193,8 @@ char *mapName = "map";
 
 int fontHeight = mgFontLineHeight(font);
 int insideHeight = fontHeight-1;
-int border = 1;
-int xOff = border;
+int gfxBorder = 1;
+int xOff = trackOffsetX();
 int pixWidth, pixHeight;
 int insideWidth;
 int y;
@@ -5200,19 +5212,14 @@ int typeCount = slCount(groupList);
 int leftLabelWidth = 0;
 
 int rulerHeight = fontHeight;
-int yAfterRuler = border;
+int yAfterRuler = gfxBorder;
 int relNumOff;
 int i;
 
 /* Figure out dimensions and allocate drawing space. */
-if (withLeftLabels)
-    {
-    leftLabelWidth = tl.leftLabelWidth;
-    xOff += leftLabelWidth + border;
-    }    
 pixWidth = tl.picWidth;
-insideWidth = pixWidth-border-xOff;
-pixHeight = border;
+insideWidth = pixWidth-gfxBorder-xOff;
+pixHeight = gfxBorder;
 if (withRuler)
     {
     yAfterRuler += rulerHeight;
@@ -5250,13 +5257,13 @@ for (group = groupList; group != NULL; group = group->next)
 /* Draw left labels. */
 if (withLeftLabels)
     {
-    int inWid = xOff-border*3;
-    mgDrawBox(mg, xOff-border*2, 0, border, pixHeight, mgFindColor(mg, 0, 0, 200));
-    mgSetClip(mg, border, border, inWid, pixHeight-2*border);
-    y = border;
+    int inWid = xOff-gfxBorder*3;
+    mgDrawBox(mg, xOff-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
+    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
+    y = gfxBorder;
     if (withRuler)
 	{
-	mgTextRight(mg, border, y, inWid-1, rulerHeight, 
+	mgTextRight(mg, gfxBorder, y, inWid-1, rulerHeight, 
 	    MG_BLACK, font, "Base Position");
 	y += rulerHeight;
 	}
@@ -5274,14 +5281,14 @@ if (withLeftLabels)
 		    {
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
-		    mgTextRight(mg, border, y, inWid-1, itemHeight, group->ixColor, font, name);
+		    mgTextRight(mg, gfxBorder, y, inWid-1, itemHeight, group->ixColor, font, name);
 		    y += itemHeight;
 		    }
 		break;
 	    case tvDense:
 		if (withCenterLabels)
 		    y += fontHeight;
-		mgTextRight(mg, border, y, inWid-1, group->lineHeight, group->ixColor, font, group->shortLabel);
+		mgTextRight(mg, gfxBorder, y, inWid-1, group->lineHeight, group->ixColor, font, group->shortLabel);
 		y += group->lineHeight;
 		break;
 	    }
@@ -5293,15 +5300,15 @@ if (withGuidelines)
     {
     int clWidth = insideWidth-openCloseHideWidth;
     int ochXoff = xOff + clWidth;
-    int height = pixHeight - 2*border;
+    int height = pixHeight - 2*gfxBorder;
     int x;
     Color color = mgFindColor(mg, 220, 220, 255);
     int lineHeight = mgFontLineHeight(tl.font)+1;
 
-    mgSetClip(mg, xOff, border, insideWidth, height);
-    y = border;
+    mgSetClip(mg, xOff, gfxBorder, insideWidth, height);
+    y = gfxBorder;
 
-    for (x = xOff+9; x<pixWidth; x += 10)
+    for (x = xOff+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
 	mgDrawBox(mg, x, y, 1, height, color);
 #ifdef SOMETIMES
     for (y= yAfterRuler + lineHeight/2 - 1; y<pixHeight; y += lineHeight)
@@ -5358,7 +5365,7 @@ if (withCenterLabels)
     {
     int clWidth = insideWidth-openCloseHideWidth;
     int ochXoff = xOff + clWidth;
-    mgSetClip(mg, xOff, border, insideWidth, pixHeight - 2*border);
+    mgSetClip(mg, xOff, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
     for (group = groupList; group != NULL; group = group->next)
         {
@@ -6054,25 +6061,21 @@ if (!hideControls)
     {
     struct controlGrid *cg = NULL;
 
-    printf("<TABLE BORDER=0 CELLSPACING=2 CELLPADDING=2 WIDTH=%d COLS=%d><TR>\n", 
-    	CONTROL_TABLE_WIDTH, 12);
-    printf("<TD COLSPAN=2 ALIGN=CENTER>");
-    printf("move left end<BR>");
+    printf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n", 
+    	tl.picWidth, 26);
+    printf("<TD COLSPAN=6 ALIGN=CENTER>");
+    printf("move start<BR>");
     cgiMakeButton("hgt.dinkLL", " < ");
-    cgiMakeTextVar("dinkLP", cartUsualString(cart, "dinkLP", "5%"), 4);
+    cgiMakeTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     cgiMakeButton("hgt.dinkLR", " > ");
-    printf("</TD>");
-    printf("<TD COLSPAN=8>");
-    fputs("Click on object to view more information on that object. "
-	  "Click on base position to zoom in by 3x around where you "
-	  "clicked.",
-	  stdout);
-    printf("<TD COLSPAN=2 ALIGN=CENTER>");
-    printf("move right end<BR>");
+    printf("<TD COLSPAN=14>");
+    fputs("Click on a feature for details. "
+	  "Click on base position to zoom in around cursor.", stdout);
+    printf("<TD COLSPAN=6 ALIGN=CENTER>");
+    printf("move end<BR>");
     cgiMakeButton("hgt.dinkRL", " < ");
-    cgiMakeTextVar("dinkRP", cartUsualString(cart, "dinkRP", "5%"), 4);
+    cgiMakeTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     cgiMakeButton("hgt.dinkRR", " > ");
-    printf("</TD>");
     printf("<TR></TABLE>\n");
     smallBreak();
 
@@ -6216,18 +6219,17 @@ int dinkSize(char *var)
 /* Return size to dink. */
 {
 char *stringVal = cartOptionalString(cart, var);
+double x;
+double guideBases = (double)guidelineSpacing * (double)(winEnd - winStart) 
+	/ ((double)tl.picWidth - trackOffsetX());
+
 if (stringVal == NULL || !isdigit(stringVal[0]))
     {
-    stringVal = "5%";
+    stringVal = "1";
     cartSetString(cart, var, stringVal);
     }
-if (lastChar(stringVal) == '%')
-    {
-    double x = atof(stringVal);
-    return round(0.01 * x * (winEnd - winStart));
-    }
-else
-    return atoi(stringVal);
+x = atof(stringVal);
+return round(x*guideBases);
 }
 
 boolean findGenomePos(char *spec, char **retChromName, 
@@ -6312,13 +6314,13 @@ else if (cgiVarExists("hgt.out2"))
 else if (cgiVarExists("hgt.out3"))
     zoomAroundCenter(10.0);
 else if (cgiVarExists("hgt.dinkLL"))
-    dinkWindow(TRUE, -dinkSize("dinkLP"));
+    dinkWindow(TRUE, -dinkSize("dinkL"));
 else if (cgiVarExists("hgt.dinkLR"))
-    dinkWindow(TRUE, dinkSize("dinkLP"));
+    dinkWindow(TRUE, dinkSize("dinkL"));
 else if (cgiVarExists("hgt.dinkRL"))
-    dinkWindow(FALSE, -dinkSize("dinkRP"));
+    dinkWindow(FALSE, -dinkSize("dinkR"));
 else if (cgiVarExists("hgt.dinkRR"))
-    dinkWindow(FALSE, dinkSize("dinkRP"));
+    dinkWindow(FALSE, dinkSize("dinkR"));
 
 /* Clip chromosomal position to fit. */
 if (winEnd < winStart)
