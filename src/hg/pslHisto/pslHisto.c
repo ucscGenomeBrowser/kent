@@ -41,7 +41,7 @@ errAbort("\n%s",
          "    for alignments of a query.  Output line per query, with the difference.\n"
          "\n" 
          "Options:\n"
-         "   -multiOnly - omit queries with only one alignment from output."
+         "   -multiOnly - omit queries with only one alignment from output.\n"
          "   -nonZero - omit queries with zero values.");
 }
 
