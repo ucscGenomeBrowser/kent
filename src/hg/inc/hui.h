@@ -54,10 +54,11 @@ enum stsMapOptEnum {
    smoeGenetic = 0,
    smoeGenethon = 1,
    smoeMarshfield = 2,
-   smoeGm99 = 3,
-   smoeWiYac = 4,
-   smoeWiRh = 5,
-   smoeTng = 6,
+   smoeDecode = 3,
+   smoeGm99 = 4,
+   smoeWiYac = 5,
+   smoeWiRh = 6,
+   smoeTng = 7,
 };
 
 enum stsMapOptEnum smoeStringToEnum(char *string);

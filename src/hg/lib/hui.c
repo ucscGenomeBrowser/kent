@@ -102,6 +102,7 @@ static char *stsMapOptions[] = {
     "All Genetic",
     "Genethon",
     "Marshfield",
+    "deCODE",
     "GeneMap 99",
     "Whitehead YAC",
     "Whitehead RH",
