@@ -272,6 +272,8 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	errAbort("bed %s doesn't seem to fit the mold with chrom %s and chromEnd %d",
 		 bed->name, currentChrom, currentEnd);
     }
+if(set != setList && set != NULL)
+    slSafeAddHead(&setList, set);
 slReverse(&setList);
 return setList;
 }
@@ -467,22 +469,25 @@ int nameCount = 0;
 int junctIx = 0, i = 0, j = 0;
 int count = 0;
 char *exonPs = NULL;
-nameCount = set->junctCount+set->junctDupCount;
+nameCount = set->junctDupCount;
 AllocArray(names, nameCount);
+
 /* Loop through the junctions and get the names for 
    any associated exon probe sets. */
-for(junctIx = 0; junctIx < set->junctCount; junctIx++)
-    names[junctIx] = hashFindVal(altExons, set->bedArray[junctIx]->name);
-count = junctIx; /* remember our offset in the names array. */
+/* for(junctIx = 0; junctIx < set->junctCount; junctIx++) */
+/*     names[junctIx] = hashFindVal(altExons, set->bedArray[junctIx]->name); */
+/* count = junctIx; /\* remember our offset in the names array. *\/ */
 for(junctIx = 0; junctIx < set->junctDupCount; junctIx++)
     names[junctIx+count] = hashFindVal(altExons, set->bedDupArray[junctIx]->name);
 
 /* Now make sure that the names are all the same. */
+count = 0;
 for(i = 0; i < nameCount; i++)
     {
     if(names[i] == NULL)
 	continue;
     exonPs = names[i];
+    count++;
     for(j = i+1; j < nameCount; j++)
 	{
 	if(names[j] != NULL && differentString(names[i], names[j]))
@@ -491,14 +496,47 @@ for(i = 0; i < nameCount; i++)
 	    exonPs = NULL;
 	    break;
 	    }
+	count++;
 	}
+    i = j;
     }
-if(exonPs == NULL)
+if(exonPs == NULL || count != 2)
     exonPs = cloneString("NA");
 else
     exonPs = cloneString(exonPs);
 freez(&names);
 return exonPs;
+}
+
+char *confirmingExon(struct junctionSet *js, struct hash *altExons)
+/* Look to see if there is a confirming exon for the shorter
+   junction. */
+{
+int includeIx = 0, otherIx = 0;
+struct bed *bed1 = NULL, *bed2 = NULL;
+char *exon = NULL;
+char *otherExon = NULL;
+if(js->junctCount != 2)
+    return NULL;
+bed1 = js->bedArray[0];
+bed2 = js->bedArray[1];
+if(bed1->chromEnd - bed1->chromStart > bed2->chromEnd - bed2->chromStart)
+    {
+    includeIx = 1;
+    otherIx = 0;
+    }
+else
+    {
+    includeIx = 0;
+    otherIx = 1;
+    }
+
+exon = hashFindVal(altExons, js->bedArray[includeIx]->name);
+otherExon = hashFindVal(altExons, js->bedArray[otherIx]->name);
+/* Make sure that the two junctions don't contain the same exon. */
+if(exon != NULL && otherExon != NULL && sameString(exon, otherExon))
+    exon = NULL;
+return exon;
 }
 
 struct junctionSet* mergeSetLists(struct junctionSet *starts, struct junctionSet *ends, struct hash *altExons)
@@ -559,6 +597,20 @@ for(jsEnd = ends; jsEnd != NULL; jsEnd = jsNext)
     if(!jsEnd->merged && jsEnd->junctCount > 1)
 	{
 	slAddHead(&mergedList, jsEnd);
+	}
+    }
+
+for(jsStart = mergedList; jsStart != NULL; jsStart = jsStart->next)
+    {
+    char *name = NULL;
+    if(!jsStart->cassette)
+	{
+	name = confirmingExon(jsStart, altExons);
+	if(name != NULL)
+	    {
+	    jsStart->cassette = TRUE;
+	    jsStart->exonPsName = name;
+	    }
 	}
     }
 warn("\nDone Merging");
