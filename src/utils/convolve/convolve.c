@@ -5,7 +5,7 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.2 2003/10/08 18:31:12 hiram Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.3 2003/10/08 18:35:29 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -73,6 +73,7 @@ for( el = elList; el != NULL; el = el->next )
     }
 hashElFreeList(&elList);
 
+printf( "Histogram with %d bins:\n", elCount );
 /*	Now the array is an ordered list	*/
 for( i = 0; i < elCount; ++i )
     {
@@ -234,7 +235,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 		    log_2 = -32.0;
 		}
 	    if( verbose ) printf("bin %d: %g %0.5g\n",
-		    inputValuesCount, probInput, log_2);
+		    inputValuesCount-1, probInput, log_2);
 
 	    AllocVar(hg);	/*	the histogram element	*/
 	    hg->bin = j;
