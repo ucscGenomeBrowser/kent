@@ -74,6 +74,7 @@
 #include "stsMapMouse.h"
 #include "stsInfoMouse.h"
 #include "dnaMotif.h"
+#include "dbSnpRS.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -4451,6 +4452,39 @@ puts("<P>This track syntenous (corresponding) regions between human "
      "<A HREF=\"mailto:church@ncbi.nlm.nih.gov\">Deanna Church</A> at NCBI. Please "
      "visit <A HREF=\"http://www.ncbi.nlm.nih.gov/Homology/\" TARGET = _blank>"
      "http://www.ncbi.nlm.nih.gov/Homology/</A> for more details.");
+}  
+
+void doDbSnpRS(char *name)
+/* print additional SNP details */
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[256];
+struct dbSnpRS *snp=NULL;
+snprintf(query, sizeof(query),"select * from dbSnpRS where rsId = '%s'",name);
+snp=dbSnpRSLoadByQuery(conn, query);
+if (snp!=NULL)
+    {
+    printf("<BR>\n");
+    if(snp->avHetSE>0)
+	{
+	printf("<B>Average Heterozygosity:</B> %f<BR>\n",snp->avHet);
+	printf("<B>Standard Error of Average Heterozygosity:</B> %f<BR>\n",snp->avHetSE);
+	}
+    else
+	{
+	printf("<B>Average Heterozygosity:</B> Not Known<BR>\n");
+	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
+	}
+    printf("<B>Validation Status:</B> %s<BR>\n",snp->valid);
+    printf("<B>Base1:</B> %s<BR>\n",snp->base1);
+    printf("<B>Base2:</B> %s<BR>\n",snp->base2);
+    printf("<font face=\"Courier New\">Sequence in Assembly:&nbsp;%s<BR></font>\n",snp->assembly);
+    printf("<font face=\"Courier New\">Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
+    }
+else
+    printf("Could not find detail record for rsID %s<BR>\n",name);
+dbSnpRSFree(&snp);
+sqlDisconnect(&conn);
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -4471,13 +4505,13 @@ printf("<H2>Single Nucleotide Polymorphism (SNP) rs%s</H2>\n", itemName);
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
     group, seqName, start, itemName);
 rowOffset = hOffsetPastBin(seqName, group);
-
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
     bedPrintPos((struct bed *)&snp, 3);
     }
+doDbSnpRS(itemName);
 printf(
   "<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" TARGET=_blank>", 
   snp.name);
@@ -4841,6 +4875,82 @@ hFreeConn(&conn);
 }
 
 void perlegenDetails(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+char *itemForUrl = item;
+int numSnpsReq = -1;
+if(tdb == NULL)
+    errAbort("TrackDb entry null for perlegen, item=%s\n", item);
+
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+    	table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name;
+    /* set up for first time */
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 12);
+
+    /* chop leading digits off name which should be in xx/yyyyyy format */
+    name = strstr(bed->name, "/");
+    if(name == NULL)
+	name = bed->name;
+    else
+	name++;
+
+    /* determine number of SNPs required from score */ 
+    switch(bed->score)
+    {
+    case 1000:
+	numSnpsReq = 0;
+	break;
+    case 650:
+	numSnpsReq = 1;
+	break;
+    case 500:
+	numSnpsReq = 2;
+	break;
+    case 250:
+	numSnpsReq = 3;
+	break;
+    case 50:
+	numSnpsReq = 4;
+	break;
+    }
+    
+    /* finish off report ... */
+    printf("<B>Block:</B> %s<BR>\n", name);
+    printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
+    printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    bedPrintPos(bed, 3);
+    }
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void mitoDetails(struct trackDb *tdb, char *item)
 {
 char *dupe, *type, *words[16];
 char title[256];
@@ -6841,6 +6951,10 @@ else if (sameWord(track, "nci60"))
 else if (sameWord(track, "perlegen"))
     {
     perlegenDetails(tdb, item);
+    }
+else if (sameWord(track, "mitoSnps"))
+    {
+    mitoDetails(tdb, item);
     }
 else if(sameWord(track, "rosetta"))
     {
