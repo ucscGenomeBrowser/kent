@@ -7,6 +7,15 @@ visibility hide
 color 34,139,34
 type genePred
 
+track wz_ests
+shortLabel Zfish WZ EST Clusters
+longLabel $Organism WZ EST Clusters from Washington University
+group rna
+priority 58
+visibility hide
+spectrum on
+type psl est
+
 track blastHg16KG
 shortLabel Human Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
