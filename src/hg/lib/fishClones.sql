@@ -5,10 +5,10 @@
 
 #Describes the positions of fishClones in the assembly
 CREATE TABLE fishClones (
-    chrom varchar(255) not null,	# Human chromosome number
+    chrom varchar(25) not null,	# Human chromosome number
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
-    name varchar(255) not null,	# Name of clone
+    name varchar(25) not null,	# Name of clone
     score int unsigned not null,	# Always 1000
     placeCount int unsigned not null,	# Number of times FISH'd
     bandStarts longblob not null,	# Start FISH band
