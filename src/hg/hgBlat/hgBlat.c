@@ -541,7 +541,7 @@ cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(
 puts("</TD>\n");
 
 puts("<TD><CENTER>&nbsp;<BR>\n"
-    "<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"top\">\n"
+    "<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
     "</TD>\n"
     "</TR>\n"
     "<TR>\n"
