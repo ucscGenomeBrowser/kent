@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.19 2004/01/29 01:28:33 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.20 2004/03/03 17:56:34 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1344,7 +1344,7 @@ int diff = a->type - b->type;
 if(diff == 0)
     diff = a->start - b->start;
 if(diff == 0)
-    diff = a->end - b->end;
+    diff = b->end - a->end;
 return diff;
 }
 
@@ -1423,7 +1423,9 @@ static boolean bitsClear(struct spaceSaver *ss, struct spliceEdge *eg, int curre
 {
 struct spaceRowTracker *sr = NULL;
 int count=0,i=0;
-int minSpace = max(round(((eg->end-eg->start)*scale)/7.5),6);
+int minSpace = max(round(((eg->end-eg->start)*scale)/5),5);
+if(minSpace > 15)
+    minSpace = 15;
 for(sr = ss->rowList; sr != NULL; sr = sr->next)
     {
     if(eg->rowStarts[count] == 1 || eg->rowEnds[count] == 1)
@@ -1468,19 +1470,20 @@ int currentPos = midWay;
 int i=0,offSet=0;
 boolean found = FALSE;
 struct spaceNode *sn = NULL;
+int step = max(1,(e - s)/10);
 /* Look for empty pixels. */
 if(bitsClear(ss, eg, currentPos,scale))
     found = TRUE;
-while(!found && currentPos < e-2 && currentPos > s+2)
+while(!found && currentPos < e-step && currentPos > s+step)
     {
     int diff = currentPos - midWay;
-    if(diff > 0)
-	diff += 2;
+    if(diff >= 0)
+	diff += step;
     else 
-	diff -= 2;
+	diff -= step;
     diff = -1 * diff;
     currentPos = midWay + diff;
-    if(bitsClear(ss, eg, currentPos,scale))
+    if(bitsClear(ss, eg, currentPos, scale))
 	{
 	found = TRUE;
 	break;
@@ -1556,7 +1559,7 @@ bool *vSeen = NULL; /* Have we seen a given vertex yet? */
 AllocArray(vSeen, ag->vertexCount);
 if(width == 0)
     width=1;
-ss = spaceSaverNew(0, width, maxRows);
+ss = spaceSaverMaxCellsNew(0, width, maxRows, width/4);
 
 /* Layout the exons using the spaceSaver to make sure that
    different exons don't overlap. */
@@ -1638,105 +1641,6 @@ for(ag = agList; ag != NULL; ag = ag->next)
     }
 slReverse(ssList);
 }
-
-/* void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList,  */
-/* 		       int xOff, int yOff, int width,  int heightPer, int lineHeight, */
-/* 		       int regionStart, int regionEnd, double scale, int baseWidth,  */
-/* 		       struct vGfx *vg, MgFont *font, Color color, Color *shades, char *drawName, */
-/* 		       void (*mapItem)(char *tableName, struct altGraphX *ag, int start, int end, */
-/* 				       int x, int y, int width, int height)) */
-/* /\** Draw a splicing graph for each altGraphX in the agList where the */
-/*     exons don't overlap as they have been laid out in the spaceSaver */
-/*     list. *\/ */
-/* { */
-/* struct hash *spliceHash = newHash(8); */
-/* char key[128]; */
-/* struct altGraphX *ag = NULL; */
-/* struct spliceEdge *eg = NULL, *egList = NULL, *egNext = NULL; */
-/* struct spaceSaver *ss = NULL; */
-/* int count =0; */
-/* int i=0,j=0, minRow=0; */
-/* double y1=0, y2=0; */
-/* int y=0; */
-/* for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next) */
-/*     { */
-/*     struct spaceNode *sn = NULL; */
-/*     int *sjStarts = NULL, *sjEnds = NULL; */
-
-/*     /\* Draw a clickable thing if we can. *\/ */
-/*     if(mapItem != NULL) */
-/* 	{ */
-/* 	int mapStart = round((ag->tStart - regionStart)*scale) + xOff; */
-/* 	int mapEnd = round((ag->tEnd - regionStart)*scale) + xOff;	 */
-/* 	int mapHeight = ss->rowCount * lineHeight; */
-/* 	int mapWidth = mapEnd - mapStart; */
-/* 	if(mapWidth < 1)  */
-/* 	    mapStart = 1; */
-/* 	mapItem(drawName, ag, ag->tStart, ag->tEnd, mapStart, yOff, mapWidth, mapHeight); */
-/* 	} */
-/*     /\* Draw all of the exons that have been stored in the spacesaver. *\/ */
-/*     for (sn = ss->nodeList; sn != NULL; sn = sn->next) */
-/* 	{ */
-/* 	struct spliceEdge *se = sn->val; */
-/* 	int s = se->start; */
-/* 	int e = se->end; */
-/* 	int x1 = round((s - regionStart)*scale) + xOff; */
-/* 	int x2 = round((e - regionStart)*scale) + xOff;	 */
-/* 	y = yOff + (lineHeight * sn->row) + (lineHeight/2); */
-/* 	drawExonAt(se, heightPer, regionStart, regionEnd, */
-/* 		   vg, xOff, y, scale, font, color, shades); */
-/* 	/\* Record the row that this exon was drawn at. *\/ */
-/* 	addSpliceNode(spliceHash, count, s, sn->row, ss->rowCount); */
-/* 	addSpliceNode(spliceHash, count, e, sn->row, ss->rowCount); */
-/* 	} */
-/*     /\* For every edge in item's graph. *\/ */
-/*     egList = altGraphXToEdges(ag); */
-/*     slSort(&egList, spliceEdgeTypeConfCmp); */
-/*     for(eg = egList; eg != NULL; eg = egNext)	 */
-/* 	{ */
-/* 	egNext = eg->next; */
-/* 	/\* We are only drawing splice junctions now. *\/ */
-/* 	if(eg->type != ggSJ) */
-/* 	    { */
-/* 	    freez(&eg); */
-/* 	    continue; */
-/* 	    } */
-/* 	/\* Look up the rows that this splice junction starts and ends at. *\/ */
-/* 	safef(key, sizeof(key), "%d-%d", count, eg->start); */
-/* 	sjStarts = hashFindVal(spliceHash, key); */
-
-/* 	safef(key, sizeof(key), "%d-%d", count, eg->end); */
-/* 	sjEnds = hashFindVal(spliceHash, key); */
-/* 	/\* Draw and edge from each starting row to each ending column. *\/ */
-/* 	for(i=0; i< ss->rowCount; i++) */
-/* 	    { */
-/* 	    if(sjStarts != NULL && sjStarts[i] == 1) */
-/* 		{ */
-/* 		for(j=0; j< ss->rowCount; j++) */
-/* 		    { */
-/* 		    if(sjEnds != NULL && sjEnds[j] == 1) */
-/* 			{ */
-/* 			int s = eg->start; */
-/* 			int e = eg->end; */
-/* 			int x1 = round((s - regionStart)*scale) + xOff; */
-/* 			int x2 = round((e - regionStart)*scale) + xOff;	 */
-/* 			int midX = 0, midY =0; */
-/* 			Color c = MG_BLACK; */
-/* 			minRow = min(j, i); */
-/* 			midY = yOff + (lineHeight * minRow); */
-/* 			midX = (x1+x2)/2; */
-/* 			vgLine(vg, x1,round(yOff+(lineHeight*i)+lineHeight/2), midX, midY, c); */
-/* 			vgLine(vg, midX, midY, x2, round(yOff+(lineHeight*j)+lineHeight/2), c); */
-/* 			} */
-/* 		    } */
-/* 		} */
-/* 	    } */
-/* 	} */
-/*     count++; */
-/*     yOff += ss->rowCount *lineHeight; */
-/*     } */
-/* freeHashAndVals(&spliceHash); */
-/* } */
 
 void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList, 
 		       struct vGfx *vg, int xOff, int yOff, int width, 
