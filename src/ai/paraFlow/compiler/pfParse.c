@@ -270,7 +270,6 @@ if (tok->type != pftName)
     errAt(tok, "Expecting variable.");
     }
 pp->name = tok->val.s;
-pfScopeFindOrCreateVar(scope, pp->name);
 *pTokList = tok->next;
 return pp;
 }
