@@ -1194,7 +1194,7 @@ EOF
 #sgdGene:cds 69.491%, sacCer1.sacPar.mafRanges.bed 96.550%, both 68.464%, cover 98.52%, enrich 1.02x
 
 # CREATE TABLES TO SUPPORT SHOWING SAM-T02 RESULTS (DONE 1/4/05, Fan)
-    
+# Kevin just did his monthly update, so reuild ... (REBUILT 1/7/05 Fan)   
     ssh hgwdev
     cd /cluster/data/sacCer1/bed
     mkdir sam
@@ -1206,6 +1206,8 @@ ls /projects/compbio/experiments/protein-predict/yeast/$1/*/summary.html >j1.tmp
 cat j1.tmp |sed -e 's/yeast\// /g' |sed -e 's/\/summary/ /g' >j2.tmp
 cat j2.tmp | awk '{print $2}' |sed -e 's/\// /g ' | awk '{print "do1 " $1 " " $2}' >> doall
 '_EOF_'
+
+    chmod +x do1Subdir
 
 # create high level script to parse all SAM results
     ls -l /projects/compbio/experiments/protein-predict/yeast | grep drw >j1
@@ -1224,6 +1226,8 @@ cat j2.tmp | awk '{print $2}' |sed -e 's/\// /g ' | awk '{print "do1 " $1 " " $2
 
 # create data needed for the samSubdir table and load them
     cat doall |awk '{print $3"\t"$2}' >samSubdir.lis
+    hgsql sacCer1 -e "drop table samSubdir"
+    hgsql sacCer1 < ~/src/hg/lib/samSubdir.sql
     hgsql sacCer1 -e 'load data local infile "samSubdir.lis" into table samSubdir'
 
 # create script to parse SAM output results in one subdirectory
@@ -1239,11 +1243,13 @@ samHit $2 /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.best-
     rm *.tab
     doall
 # collect all results    
-    cat *.tab |sort -u >protHomolog.tab
+    cat *.tab |sort -u >protHomolog.all
     
 # load the results into the protHomolog table
     hgsql sacCer1 -e "drop table protHomolog"
     hgsql sacCer1 < ~/src/hg/lib/protHomolog.sql
-    hgsql sacCer1 -e 'load data local infile "protHomolog.tab" into table protHomolog'
+    hgsql sacCer1 -e 'load data local infile "protHomolog.all" into table protHomolog'
 	
-    
+# remove all intermediate .tab files
+    rm *.tab
+
