@@ -119,7 +119,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.531 2003/12/09 02:56:38 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.532 2003/12/09 19:24:06 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4509,17 +4509,20 @@ start = cartInt(cart, "o");
 
 /* Get cds start and stop, if available */
 conn = hAllocConn();
-sprintf(query, "select cds from mrna where acc = '%s'", acc);
-sr = sqlGetResult(conn, query); 
-if ((row = sqlNextRow(sr)) != NULL)
+if (sqlTableExists(conn, "mrna"))
     {
-    sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
-    sqlFreeResult(&sr);
-    sr = sqlGetResult(conn, query);
+    sprintf(query, "select cds from mrna where acc = '%s'", acc);
+    sr = sqlGetResult(conn, query); 
     if ((row = sqlNextRow(sr)) != NULL)
-	genbankParseCds(row[0], &cdsStart, &cdsEnd);
+	{
+	sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+	sqlFreeResult(&sr);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    genbankParseCds(row[0], &cdsStart, &cdsEnd);
+	}
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 
 /* Look up alignments in database */
 hFindSplitTable(seqName, type, table, &hasBin);
