@@ -703,3 +703,16 @@ chainSome $(path1)
 #0 bases of 208434669 (0.000%) in intersection
 
 
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/honeybee_image.jpg' \
+	-O honeybee_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 1760x2000+240+480 -quality 80 -sharpen 0 \
+	-normalize honeybee_image.jpg aam.jpg
+    convert -geometry 200x200 -quality 80 aam.jpg Apis_mellifera.jpg
+    rm -f aam.jpg honeybee_image.jpg
+    cp -p Apis_mellifera.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push
