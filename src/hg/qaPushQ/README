@@ -1,4 +1,13 @@
 
+add support for multiple species
+Bob says that an entire queue can 
+run for things with the same database.
+If this is true, I need to modify the 
+code for maintaining rank and filtering.
+Plus provide a way for people to select 
+and change between databases.  
+Then would they still be able to see all at once?
+
 cron job to backup hgsqldump the qapushq database on beta.
 dev will have just a testing version for the new stuff.
 

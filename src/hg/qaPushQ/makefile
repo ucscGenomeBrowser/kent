@@ -7,7 +7,7 @@ JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 EXE = qaPushQ
 
 .c.o:
-	gcc -ggdb -Wimplicit -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
+	gcc -ggdb -Wimplicit -pedantic -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
 
 L = $(MYSQLLIBS) -lm -lcrypt
 MYLIBS = $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a 
@@ -19,6 +19,12 @@ pushQ.c pushQ.h: pushQ.as
 	autoSql pushQ.as pushQ -dbLink
 
 pushQ.o: pushQ.c pushQ.h 
+
+formPushQ.h: formPushQ.html
+	echo "char formQ[] =" > formPushQ.h
+	gawk '{ print "\"" $$0 "\"" }' formPushQ.html >> formPushQ.h
+	echo ";" >> formPushQ.h
+	
 
 $(EXE).o: formPushQ.h
 
