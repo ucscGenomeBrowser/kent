@@ -1,0 +1,61 @@
+'frontal cortex'	brain	10 11
+'cerebral cortex'	brain	12 13
+'substantia nigra'	brain	0 1
+'cerebellum'	brain	22 23
+'amygdala'	brain	14 15
+'hypothalamus'	brain	6 7
+'hippocampus'	brain	18 19
+'dorsal striatum'	brain	16 17
+'preoptic'	brain	8 9
+'eye'	brain	30 31
+'olfactory bulb'	brain	20 21
+'spinal cord upper'	nerve	2 3
+'spinal cord lower'	nerve	4 5
+'trigeminal'	nerve	24 25
+'dorsal root ganglia'	nerve	26 27
+'thymus'	group	84 85
+'spleen'	group	82 83
+'lymph node'	group	32 33
+'bone marrow'	group	78 79
+'B220+ B-cells'	group	86 87
+'CD4+T-cells'	group	88 89
+'CD8+T-cells'	group	90 91
+'mammary gland'	group	100 101
+'adrenal gland'	group	42 43
+'prostate'	group	66 67
+'pituitary'	group	28 29
+'thyroid'	group	110 111
+'bone'	group	80 81
+'adipose tissue'	group	40 41
+'brown fat'	group	92 93
+'bladder'	group	44 45
+'heart'	group	94 95
+'skeletal muscle'	group	96 97
+'uterus'	group	36 37
+'salivary gland'	group	108 109
+'stomach'	group	74 75
+'small intestine'	group	106 107
+'large intestine'	group	76 77
+'pancreas'	group	118 119
+'kidney'	group	104 105
+'liver'	group	112 113
+'lung'	group	70 71
+'trachea'	group	34 35
+'digits'	group	58 59
+'epidermis'	group	56 57
+'snout epidermis'	group	60 61
+'tongue'	group	62 63
+'med. olfactory epi.'	group	64 65
+'vomeralnasal organ'	group	68 69
+'placenta'	group	98 99
+'umbilical cord'	group	72 73
+'testis'	group	120 121
+'ovary'	group	38 39
+'oocyte'	group	116 117
+'fertilized egg'	group	114 115
+'blastocysts'	group	102 103
+'embryo day 6.5'	group	54 55
+'embryo day 7.5'	group	52 53
+'embryo day 8.5'	group	50 51
+'embryo day 9.5'	group	48 49
+'embryo day 10.5'	group	46 47
