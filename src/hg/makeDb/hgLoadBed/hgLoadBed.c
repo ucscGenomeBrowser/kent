@@ -8,8 +8,9 @@
 #include "dystring.h"
 #include "bed.h"
 #include "hdb.h"
+#include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.18 2003/12/01 20:21:07 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.19 2004/01/29 21:40:21 hartera Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -74,7 +75,6 @@ if (dif == 0)
 return dif;
 }
 
-
 void loadOneBed(char *fileName, int bedSize, struct bedStub **pList)
 /* Load one bed file.  Make sure all lines have bedSize fields.
  * Put results in *pList. */
@@ -138,6 +138,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
 int loadOptions = (cgiBoolean("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
+char comment[256];
 
 /* First make table definition. */
 if (sqlTable != NULL)
@@ -203,8 +204,11 @@ writeBedTab(tab, bedList, bedSize);
 
 printf("Loading %s\n", database);
 sqlLoadTabFile(conn, tab, track, loadOptions);
-sqlDisconnect(&conn);
-}
+
+// add a comment to the history table and finish up connection
+safef(comment, sizeof(comment), "Add %d element(s) from bed list to %s table", slCount(bedList), track);
+hgHistoryComment(conn, comment);
+sqlDisconnect(&conn);                                                           }
 
 void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */

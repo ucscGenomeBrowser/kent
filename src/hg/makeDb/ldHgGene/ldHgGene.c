@@ -1,4 +1,4 @@
-/* ldHgGene - load a set of gene predictions from GFF  or GTF file into
+/* ldHgGene - load a set of gene predictions from GFF or GTF file into
  * mySQL database. */
 
 #include "common.h"
@@ -9,8 +9,9 @@
 #include "gff.h"
 #include "jksql.h"
 #include "genePred.h"
+#include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.15 2004/01/16 01:36:59 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.16 2004/01/29 21:37:19 hartera Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -70,6 +71,7 @@ void loadIntoDatabase(char *database, char *table, char *tabName)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
+char comment[256];
 
 if (!optionExists("oldTable"))
     {
@@ -83,7 +85,12 @@ if (!optionExists("oldTable"))
     }
 dyStringPrintf(ds, 
    "LOAD data local infile '%s' into table %s", tabName, table);
+
 sqlUpdate(conn, ds->string);
+
+// add a comment and ids to the history table and finish up connection
+safef(comment, sizeof(comment), "Add gene predictions to %s table", table);
+hgHistoryComment(conn, comment);
 sqlDisconnect(&conn);
 freeDyString(&ds);
 }
@@ -167,6 +174,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     genePredTabOut(gp, f);
     }
 carefulClose(&f);
+
 if (outFile == NULL)
     loadIntoDatabase(database, table, tabName);
 }
