@@ -5,22 +5,33 @@
  */
 
 #include "common.h"
+#include "options.h"
 #include "bed.h"
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.1 2004/08/12 00:37:57 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.2 2004/08/12 01:58:57 kate Exp $";
+
+#define DIR_OPTION      "dir"
+
+static struct optionSpec options[] = {
+        {DIR_OPTION, OPTION_BOOLEAN},
+        {NULL, 0}
+};
 
 void usage()
 /* Print usage instructions and exit. */
 {
-errAbort("regionAgp - generate an AGP file for a region\n\n"
-     "usage:\n"
-     "    regionAgp region.bed chrom.agp region.agp\n\n"
+errAbort("regionAgp - generate an AGP file for a region\n"
+     "\nusage:\n"
+     "    regionAgp region.bed chrom.agp out\n\n"
      " region.bed describes the region with lines formatted:\n"
      "          <chrom> <start> <end> <region> <seq no>\n"
      " chrom.agp is the intput AGP file\n"
-     " region.agp is the output AGP file\n");
+     " out is the output AGP file, or directory if -dir option used\n"
+     "\noptions:\n"
+     "    -%s   directory for output AGP files, to be named <region>.agp",
+                DIR_OPTION);
 }
 
 struct agp {
@@ -29,6 +40,8 @@ struct agp {
     bool isFrag;
     void *entry;        /* agpFrag or agpGap */
 } agp;
+
+bool dirOption = FALSE;
 
 struct hash *agpLoadAll(char *agpFile)
 /* load AGP entries into a hash of AGP lists, one per chromosome */
@@ -111,9 +124,13 @@ struct bed *pos, *posList;
 struct hash *agpHash;
 struct agp *agpList, *agp;
 struct lineFile *lf = lineFileOpen(agpIn, TRUE);
-FILE *fout = mustOpen(agpOut, "w");
+FILE *fout = NULL;
 int start = 1;
 int seqNum = 1;
+#define REGION_NAME_SIZE 16
+char regionName[REGION_NAME_SIZE];
+#define OUTFILE_NAME_SIZE 64
+char outFile[OUTFILE_NAME_SIZE];
 
 /* read in BED file with chromosome coordinate ranges */
 fprintf(stderr, "Loading bed file\n");
@@ -122,6 +139,10 @@ posList = bedLoadNAll(bedFile, 5);
 /* read chrom AGP file into a hash of AGP's, one per chrom */
 fprintf(stderr, "Loading AGP's\n");
 agpHash = agpLoadAll(agpIn);
+
+fprintf(stderr, "Creating new AGP's\n");
+if (!dirOption)
+    fout = mustOpen(agpOut, "w");
 
 /* process BED lines, emitting an AGP file */
 for (pos = posList; pos != NULL; pos = pos->next)
@@ -132,6 +153,14 @@ for (pos = posList; pos != NULL; pos = pos->next)
     fprintf(stderr, "chr=%s, start=%d, end=%d, region=%s, seqnum=%d\n",
             pos->chrom, pos->chromStart, pos->chromEnd, pos->name, pos->score);
 #endif
+    safef(regionName, REGION_NAME_SIZE, "%s_%d", pos->name, pos->score);
+    if (dirOption)
+        {
+        start = 1;
+        seqNum = 1;
+        safef(outFile, OUTFILE_NAME_SIZE, "%s/%s.agp", agpOut, regionName);
+        fout = mustOpen(outFile, "w");
+        }
     agpList = (struct agp *)hashMustFindVal(agpHash, pos->chrom);
     for (agp = agpList->next; agp != NULL; agp = agp->next)
         {
@@ -150,7 +179,7 @@ for (pos = posList; pos != NULL; pos = pos->next)
             chromEnd = min(pos->chromEnd, agpFrag->chromEnd);
 
             /* populate the fragment */
-            frag.chrom = pos->name;
+            frag.chrom = regionName;
             frag.chromStart = start - 1;  // agpFragOutput adds 1
             frag.chromEnd = start + chromEnd - chromStart;
             frag.fragStart = agpFrag->fragStart +
@@ -176,7 +205,7 @@ for (pos = posList; pos != NULL; pos = pos->next)
             if (pos->chromEnd < agpGap->chromStart ||
                 pos->chromStart > agpGap->chromEnd)
                     continue;
-            gap.chrom = pos->name;
+            gap.chrom = regionName;
             gap.chromStart = start;
             gap.chromEnd = gap.chromStart + agpGap->size - 1;
             start = gap.chromEnd + 1;
@@ -189,18 +218,26 @@ for (pos = posList; pos != NULL; pos = pos->next)
             agpGapOutput(&gap, fout, '\t', '\n');
             }
         }
+    if (dirOption)
+        carefulClose(&fout);
     }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *regionBedFile = argv[1];
-char *chromAgpFile = argv[2];
-char *regionAgpFile = argv[3];
+char *regionBedFile;
+char *chromAgpFile;
+char *out;
+
+optionInit(&argc, argv, options);
+dirOption = optionExists(DIR_OPTION);
 
 if (argc != 4)
     usage();
-regionAgp(regionBedFile, chromAgpFile, regionAgpFile);
+regionBedFile = argv[1];
+chromAgpFile = argv[2];
+out = argv[3];
+regionAgp(regionBedFile, chromAgpFile, out);
 return 0;
 }
