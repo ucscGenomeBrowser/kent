@@ -84,15 +84,20 @@ static int mulDiv()
 /* Multiplication or division. */
 {
 int val = uMinus();
-if (tok->type == kxtMul)
+for (;;)
     {
-    nextTok();
-    val *= mulDiv();
-    }
-else if (tok->type == kxtDiv)
-    {
-    nextTok();
-    val /= mulDiv();
+    if (tok->type == kxtMul)
+	{
+	nextTok();
+	val *= uMinus();
+	}
+    else if (tok->type == kxtDiv)
+	{
+	nextTok();
+	val /= uMinus();
+	}
+    else
+        break;
     }
 return val;
 }
@@ -102,15 +107,20 @@ static int addSub()
 {
 int val;
 val = mulDiv();
-if (tok->type == kxtAdd)
+for (;;)
     {
-    nextTok();
-    val += addSub();
-    }
-else if (tok->type == kxtSub)
-    {
-    nextTok();
-    val -= addSub();
+    if (tok->type == kxtAdd)
+	{
+	nextTok();
+	val += mulDiv();
+	}
+    else if (tok->type == kxtSub)
+	{
+	nextTok();
+	val -= mulDiv();
+	}
+    else
+        break;
     }
 return val;
 }
