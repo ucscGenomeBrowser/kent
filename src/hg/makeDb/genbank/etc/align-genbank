@@ -1,4 +1,4 @@
-/bash -e
+#!/bin/bash -e
 
 # align-genbank [-finish] [-workdir dir]
 
