@@ -86,6 +86,12 @@ wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
     hMin = min(minY,tDbMinY);
     hMax = max(maxY,tDbMaxY);
     hRange = hMax - hMin;
+     /*  need to make hMax slightly larger to get the last data point
+     *  in the last bin.  This is a floating point round off situation.
+     */
+    hMax = hMax + (hRange/1000000.0);
+    hRange = hMax - hMin;
+
 
     /*	convert the ascii data listings to one giant float array 	*/
     valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
