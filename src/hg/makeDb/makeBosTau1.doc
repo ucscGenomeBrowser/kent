@@ -793,21 +793,6 @@ SEQ2_LEN=$BASE/S2.len
   hgsql bosTau1 -e 'drop index tname_3 on all_mrna'
   hgsql bosTau1 -e 'create index tName on all_mrna(tName(16))'
 
-# MAKE VSHG17 DOWNLOADABLES (DONE Dec. 15, 2004 Heather)
-    ssh kksilo
-    cd /cluster/data/bosTau1/bed/blastz.swap/axtChain
-    nice gzip all.chain
-    nice gzip hg17.net
-    cd ../axtNet
-    nice gzip all.axt
-    ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17
-    cd /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17
-    cp -p /cluster/data/bosTau1/bed/blastz.swap/axtChain/all.chain.gz  human.chain.gz
-    cp -p /cluster/data/bosTau1/bed/blastz.swap/axtChain/hg17.net.gz human.net.gz
-    cp -p /cluster/data/bosTau1/bed/blastz.swap/axtNet/all.axt.gz human.axt.gz
-    # Make a README.txt which explains the files & formats.
-    md5sum *.gz */*.gz > md5sum.txt
 
 # MAKE Human Proteins track (hg17 DONE 2004-12-20 braney)
     ssh kksilo
@@ -1173,6 +1158,23 @@ chainSome $(path1)
     /cluster/bin/i386/axtToMaf $f /cluster/data/hg17/chrom.sizes /cluster/data/bosTau1/chrom.sizes mafNet/$c.maf -tPrefix=hg17. -qPrefix=bosTau1.
   end
 
+# MAKE HG17 DOWNLOADABLES (DONE Feb. 15, 2005 Heather)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir vsBosTau1
+    cd vsBosTau1
+    mkdir axtNet
+    cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+    cp -p all.chain.gz  /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1/cow.chain.gz
+    cp -p bosTau1.net.gz /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1/cow.net.gz
+    cd ../axtNet
+    cp -p * /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1/axtNet
+
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsBosTau1
+    # Make a README.txt which explains the files & formats.
+    md5sum *.gz > md5sum.txt
+    cd axtNet
+    md5sum *.gz > md5sum.txt
 
 # MAKE 11.OOC FILE FOR BLAT (REDONE, Jan. 18, 2004, Heather)
   ssh kkr1u00
@@ -1306,6 +1308,20 @@ chainSome $(path1)
 
     cd /cluster/data/bosTau1/bed/blastz/axtNet
     cp all.axt all.axt.backup
+
+# MAKE VSHG17 DOWNLOADABLES (DONE Feb. 15, 2005 Heather)
+  ssh hgwdev
+  cd /usr/local/apache/htdocs/goldenPath/bosTau1
+  mkdir vsHg17
+  cd /cluster/data/bosTau1/bed/blastz/axtNet
+  cp -p all.axt.gz /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17/axtNet.gz
+  cd ../axtChain
+  cp -p all.chain.gz /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17/human.chain.gz
+  cp -p hg17.net.gz /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17/human.net.gz
+
+  cd /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17
+  # Make a README.txt which explains the files & formats.
+  md5sum *.gz > md5sum.txt
 
 
 # LOAD CPGISSLANDS (DONE, Nov. 27, 2004, Heather)
