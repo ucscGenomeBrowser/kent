@@ -10,11 +10,12 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.12 2004/08/31 16:06:21 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.13 2004/10/25 10:21:04 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
         {"noBin", OPTION_BOOLEAN},
+        {"tIndex", OPTION_BOOLEAN},
         {"oldTable", OPTION_BOOLEAN},
         {"normScore", OPTION_BOOLEAN},
         {"sqlTable", OPTION_STRING},
@@ -25,6 +26,7 @@ static struct optionSpec optionSpecs[] = {
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
+static boolean tIndex = FALSE;		/* Include tName in index. */
 static boolean oldTable = FALSE;	/* Don't redo table. */
 static boolean normScore = FALSE;	/* Add normScore column */
 static char *sqlTable = NULL;	/* Read table from this .sql if non-NULL. */
@@ -39,6 +41,7 @@ errAbort(
   "usage:\n"
   "   hgLoadChain database chrN_track chrN.chain\n"
   "options:\n"
+  "   -tIndex  Include tName in indexes (for non-split chain tables)\n"
   "   -noBin   suppress bin field, default: bin field is added\n"
   "   -oldTable add to existing table, default: create new table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
@@ -111,8 +114,16 @@ else if (!oldTable)
     dyStringAppend(dy, "  qStart int unsigned not null,\n");
     dyStringAppend(dy, "  chainId int unsigned not null,\n");
     dyStringAppend(dy, "#Indices\n");
-    if (!noBin)
-       dyStringAppend(dy, "  INDEX(bin),\n");
+    if (tIndex)
+        {
+	if (!noBin)
+	   dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
+	}
+    else
+	{
+	if (!noBin)
+	   dyStringAppend(dy, "  INDEX(bin),\n");
+	}
     dyStringAppend(dy, "  INDEX(chainId)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
@@ -163,10 +174,20 @@ else if (!oldTable)
     if (normScore)
 	dyStringAppend(dy, "  normScore double not null,\n");
     dyStringAppend(dy, "#Indices\n");
-    if (!noBin)
-       dyStringAppend(dy, "  INDEX(bin),\n");
-    dyStringAppend(dy, "  INDEX(tStart),\n");
-    dyStringAppend(dy, "  INDEX(tEnd),\n");
+    if (tIndex)
+        {
+	if (!noBin)
+	   dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
+	dyStringAppend(dy, "  INDEX(tName(16),tStart),\n");
+	dyStringAppend(dy, "  INDEX(tName(16),tEnd),\n");
+	}
+    else
+	{
+	if (!noBin)
+	   dyStringAppend(dy, "  INDEX(bin),\n");
+	dyStringAppend(dy, "  INDEX(tStart),\n");
+	dyStringAppend(dy, "  INDEX(tEnd),\n");
+	}
     dyStringAppend(dy, "  INDEX(id)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
@@ -245,6 +266,7 @@ normScore = optionExists("normScore");
 sqlTable = optionVal("sqlTable", NULL);
 qPrefix = optionVal("qPrefix", NULL);
 test = optionExists("test");
+tIndex = optionExists("tIndex");
 hgLoadChain(argv[1], argv[2], argv[3]);
 return 0;
 }
