@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.129 2003/08/12 01:39:52 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.130 2003/08/13 00:43:05 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -628,6 +628,7 @@ boolean hScaffoldPos(char *chrom, int start, int end,
  * it is truncated to the scaffold end.
  * Return FALSE if unable to convert */
 {
+int ret = FALSE;
 char table[64];
 strncpy(table, chrom, 59);
 strcat(table, "_gold");
@@ -640,28 +641,41 @@ else
     struct sqlResult *sr;
     char **row;
     int chromStart, chromEnd;
+    int scaffoldStart, scaffoldEnd;
     sprintf(query, 
 	"SELECT frag, chromStart, chromEnd FROM %s WHERE chromStart <= %d ORDER BY chromStart DESC LIMIT 1", table, start);
     sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row == NULL)
-        return FALSE;
-    if (retScaffold != NULL)
-        *retScaffold = cloneString(row[0]);
-
-    chromStart = sqlUnsigned(row[1]);
-    chromEnd = sqlUnsigned(row[2]);
-    if (retStart != NULL)
-        *retStart = start - chromStart;
-    if (retEnd != NULL)
+    if (sr != NULL)
         {
-        if (end > chromEnd)
-            end = chromEnd;
-        *retEnd = end - chromStart;
+        row = sqlNextRow(sr);
+        if (row != NULL)
+            {
+            chromStart = sqlUnsigned(row[1]);
+            chromEnd = sqlUnsigned(row[2]);
+
+            scaffoldStart = start - chromStart;
+            if (retStart != NULL)
+                *retStart = scaffoldStart;
+
+            if (end > chromEnd)
+                end = chromEnd;
+            scaffoldEnd = end - chromStart;
+            if (retEnd != NULL)
+                *retEnd = scaffoldEnd;
+
+            if (scaffoldStart < scaffoldEnd)
+                {
+                /* check for "reversed" endpoints -- e.g.
+                 * if printing scaffold itself */
+                if (retScaffold != NULL)
+                    *retScaffold = cloneString(row[0]);
+                 ret = TRUE;
+                }
+            }
+        sqlFreeResult(&sr);
         }
-    sqlFreeResult(&sr);
     hFreeConn(&conn);
-    return TRUE;
+    return ret;
     }
 }
 
