@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.6 2004/02/10 00:49:14 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.7 2004/03/30 21:55:03 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -18,7 +18,7 @@ extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 	{ double d; d = max; max = min; min = d; }
 /* check a min,max pair (doubles) and keep them properly in order */
 
-#if defined(DEBUG)
+#if ! defined(DEBUG)
 
 #include "portable.h"
 
@@ -94,7 +94,6 @@ char * defaultViewLimits =
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
 boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
-char cartStr[64];	/*	to set cart strings	*/
 
 
 /*	Assume last resort defaults, these should never be used
@@ -205,7 +204,6 @@ int defaultHeight;      /*      truncated by limits     */
 int minHeightPixels = MIN_HEIGHT_PER;
 char * maxHeightPixelString =
     trackDbSettingOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER);
-char cartStr[64];	/*	to set cart strings	*/
 
 /*	the maxHeightPixels string can be one, two, or three words
  *	separated by :
@@ -469,11 +467,8 @@ void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark )
 char option[MAX_OPT_STRLEN]; /* Option 11 - value from: .yLineMark */
 char *yLineMarkValue = NULL;  /*	string from cart	*/
 double yLineValue;   /*	value from cart or trackDb */
-double yLineTdbValue;    /*	from trackDb.ra entry defaultYMarkLine */
 char * defaultYMarkLine =
     trackDbSettingOrDefault(tdb, YLINEMARK, "NONE");
-boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
-char cartStr[64];	/*	to set cart strings	*/
 
 /*	If nothing else, it is zero	*/
 yLineValue = 0.0;
