@@ -1,15 +1,15 @@
 # Build all directories in makeDb 
 
 all:
-	@for D in $(USE_DIRS) x; do \
+	@for D in ${USE_DIRS} x; do \
 	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE) ) ;\
+	    ( cd $$D && echo $$D && ${MAKE} ) ;\
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
 	    done
 
 # List of directories to build
-USE_DIRS = $(DIRS)
+USE_DIRS = ${DIRS}
 
 BADDIRS = \
         correctEst
@@ -77,3 +77,8 @@ DIRS = \
 	subsetAxt \
 	subsetTraces \
 	whyConserved 
+
+clean::
+	@for D in ${DIRS}; do \
+		(cd $${D} && ${MAKE} clean;) \
+	done
