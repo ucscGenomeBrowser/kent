@@ -29,9 +29,11 @@ o - Store the mRNA (non-alignment) info in database.
      hgLoadRna add mm1 /cluster/store1/mrna.127/mouseEst.fa /cluster/store1/mrna.127/mouseEst.ra
     The last line will take quite some time to complete.  It will count up to
     about 3,800,000 before it is done.
+    NOTE: I had to patch the extFile table a little after this.  Time to add a type option
+    to hgLoadRna perhaps. -jk
 
 
-BREAK UP THE MOUSE SEQUENCE INTO 1 MB CHUNKS AT NON_BRIDGED CONTIGS
+BREAK UP THE MOUSE SEQUENCE INTO 1 MB CHUNKS AT NON_BRIDGED CONTIGS (done)
 
 o - This version of the mouse sequence data is in /cluster/store2/mm.2001.11/mm1/assembly
   - The files are mouse.oo.03.agp and mouse.oo.03.agp.fasta
@@ -42,7 +44,7 @@ o - cd into your CVS source tree under kent/src/hg/splitFaIntoContigs
     - The resulting dir structure will include 1 dir for each chromosome, each of which has a set of subdirectories, one subdir per supercontig.    
 
 
-COPY THE MOUSE SEQUENCE DATA TO THE CLUSTER
+COPY THE MOUSE SEQUENCE DATA TO THE CLUSTER (done)
 o - ssh kkstore
 o - Copy the mouseRNA and mouseEst data to the cluster
     - cp /cluster/store1/mrna.127/mouseRna.fa /scratch/hg/mrna.127
@@ -52,26 +54,34 @@ o - Copy the mouse sequence supercontigs to the cluster
     - mkdir /scratch/hg/mm1/contigs
     - cp /cluster/store2/mm.2001.11/mm1/*/chr*/chr*.fa /scratch/hg/mm1/contigs
 
-REPEAT MASKING (todo)
+REPEAT MASKING (done)
 
-For the NCBI assembly we repeat mask on the sensitive mode setting.
-Patrick Gavin did this, and perhaps will fill in the details later.
-Overall the process was to break the NT contigs into pieces of
-1000000 bases each with
-    cd NTXXX
-    mkdir split
-    cd split
-    faSplit size ../NTXXX.fa 1000000 NTXXX -maxN=1000001 -lift=../NTXXX.lft
-and then arrange to do a cluster run that generates NTXXX_X.fa.out files
-in the split directory.   After this lift up the .out files to whole contig
-coordinates with
-    liftUp NTXXX.fa.out NTXXX.lft warn split/*.fa.out
+Repeat mask on sensitive settings by doing
+    ssh kk
+    cd ~/mm/bed
+    mkdir rmskS
+    cd rmskS
+    cp ~/lastMm/bed/rmskS/rmskS.csh .
+edit rmskS.csh to update paths to current mouse assembly
+    cp ~/lastMm/bed/rmskS/template
+    ls -1 /scratch/hg/mm1/contigs/*.fa > genome.lst
+    gensub2 genome.lst single template spec
+    mkdir out
+    para create spec
+then do
+    para try
+and check things out.  If it looks good then para push or para shove
+until finished.
+
+Next copy these into the chromosome/contig directories by updating
+the paths in jkStuff/cpRmskS.sh, and then sourcing it.
+
 Then lift these up to chromosome coordinates with
-    cd ~/oo
+    cd ~/mm
     tcsh jkStuff/liftOut2.sh
 Then load the .out files into the database with:
     ssh hgwdev
-    cd ~/oo
+    cd ~/mm
     hgLoadOut mm1 ?/*.fa.out ??/*.fa.out
 
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION 
@@ -85,16 +95,16 @@ Load chromosome sequence info into database (done)
      ssh hgwdev
      mysql -A -u hgcat -pbigsecret mm1  < ~/src/hg/lib/chromInfo.sql
      cd ~/mm
-     hgNibSeq -preMadeNib mm1 /cluster/store2/mm.2001.11/mm1/nib ?/chr*.fa ??/chr*.fa
+     hgNibSeq -preMadeNib mm1 /cluster/store2/mm.2001.11/mm1/nib ?/chr*.fa ??/chr*.fa NA*/chr*.fa
 
 Store o+o info in database.
      cd /cluster/store2/mm.2001.11/mm1
      jkStuff/liftGl.sh contig.gl
      hgGoldGapGl mm1 /cluster/store2/mm.2001.11 mm1 
      cd /cluster/store2/mm.2001.11
-     hgClonePos mm1 build28 ffa/sequence.inf /cluster/store2/mm.2001.11
+     hgClonePos mm1 mm1 ffa/sequence.inf /cluster/store2/mm.2001.11
 (Ignore warnings about missing clones - these are in chromosomes 21 and 22)
-     # hgCtgPos mm1 build28  - NCBI has no physical map.
+     # hgCtgPos mm1 mm1  - NCBI has no physical map.
 
 Make and load GC percent table
      ssh hgwdev
@@ -106,7 +116,7 @@ Make and load GC percent table
 
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS 
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (done except for refSeq)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
@@ -142,15 +152,13 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       cd mrna
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
-                 (done to here)
       liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /cluster/fast1/temp chrom.psl
+      pslSortAcc nohead chrom /cluster/fast1/temp all_mrna.psl
       cd ..
 
       cd est
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
-                  (done to here)
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
       cd ..
@@ -183,7 +191,7 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/mm/bed/est/intronEst
       hgLoadPsl mm1 *.psl
 
-PRODUCING KNOWN GENES 
+PRODUCING KNOWN GENES (todo)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.127/refSeq.
@@ -218,7 +226,7 @@ o - Add Jackson labs info
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-SIMPLE REPEAT TRACK 
+SIMPLE REPEAT TRACK (todo)
 
 o - Create cluster jabba job like so:
         ssh kkstore
@@ -245,26 +253,21 @@ o - Load this into the database as so
 	hgLoadBed mm1 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (todo)
+PRODUCING GENSCAN PREDICTIONS (done)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
-     ssh roar
-     cd ~/build28
-     source jkStuff/gsBig.sh &
-    Wait about 3 1/2 days for these to finish.
-     started 11:00 am Oct 5.
-     finished by 9:00 pm Oct 8.
+    (Fan - please fill this in)
 
 o - Convert these to chromosome level files as so:
-     cd ~/build28
-     mkdir bed/genscan
-     liftUp bed/genscan/genscan.gtf jkStuff/liftAll.lft warn ?/ctg*/genscan.gtf ??/ctg*/genscan.gtf
-     liftUp bed/genscan/genscanSubopt.bed jkStuff/liftAll.lft warn ?/ctg*/genscanSub.bed ??/ctg*/genscanSub.bed
-     cat ?/ctg*/genscan.pep ??/ctg*/genscan.pep > bed/genscan/genscan.pep
+     cd ~/mm
+     cd bed/genscan
+     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+     cat pep/*.pep > genscan.pep
 
 o - Load into the database as so:
      ssh hgwdev
-     cd ~/build28/bed/genscan
+     cd ~/mm/bed/genscan
      ldHgGene mm1 genscan genscan.gtf
      hgPepPred mm1 generic genscanPep genscan.pep
      hgLoadBed mm1 genscanSubopt genscanSubopt.bed
