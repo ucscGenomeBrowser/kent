@@ -5477,3 +5477,16 @@ EOF
         # 0-2594 warnings/file
     
     #NOTE: only added track to hgwdev-kpollard (for now).
+
+
+# LIFTOVER RNAGENE FROM HG15 (DONE CIRCA 12/27/03 schattner)
+    cd /cluster/data/hg16/bed/bedOver
+    mkdir rnaGene
+    cd rnaGene
+    hgsql -N hg15 '-e select * from rnaGene' > rnaGeneHg15.bed 
+    liftOver rnaGeneHg15.bed ../over.chain rnaGeneLiftGene.bed \
+      rnaGeneLiftGeneMiss.bed
+    hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/rnaGene.sql hg16 rnaGene \
+      /cluster/data/hg16/bed/bedOver/rnaGene/rnaGeneLiftGene.bed
+
+
