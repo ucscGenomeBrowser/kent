@@ -50,7 +50,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
     trackTable.o vegaInfo.o wabAli.o web.o \
     wiggle.o wiggleCart.o wiggleUtils.o \
-    splignAlign.o tfbsConsMap.o zdobnovSynt.o
+    splignAlign.o tfbsConsMap.o vntr.o zdobnovSynt.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

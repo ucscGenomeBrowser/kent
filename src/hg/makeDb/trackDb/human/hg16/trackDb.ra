@@ -264,8 +264,8 @@ type netAlign rn3 chainRn3
 otherDb rn3
 
 track chainPanTro1
-shortLabel Chimp All Chain
-longLabel Chimp (Nov 03 - panTro1) Chained Alignments
+shortLabel Chimp Chain
+longLabel Chimp (panTro1-Nov 03) Chained Alignments
 group compGeno
 priority 200
 visibility hide
@@ -277,7 +277,7 @@ otherDb panTro1
 
 track rBestChainPanTro1
 shortLabel Chimp Best Chain 
-longLabel Chimp (Nov 03 - panTro1) Reciprocal Best Chained Alignments
+longLabel Chimp (panTro1-Nov 03) Reciprocal Best Chained Alignments
 group compGeno
 priority 201
 visibility hide
@@ -287,14 +287,14 @@ spectrum on
 type chain panTro1
 otherDb panTro1
 
-track rBestNetPanTro1
-shortLabel Chimp Best Net
+track netPanTro1
+shortLabel Chimp Net
 longLabel Chimp (panTro1-Nov 03) Reciprocal Best Net
 group compGeno
 priority 202
 visibility hide
 spectrum on
-type netAlign panTro1 rBestChainPanTro1
+type netAlign panTro1 chainPanTro1
 
 track chimpDels
 shortLabel Chimp Deletions
@@ -562,6 +562,14 @@ shortLabel Recon Repeats
 longLabel Repeats Determined with Recon
 group varRep
 priority 147.5
+visibility hide
+type bed 4 +
+
+track vntr
+shortLabel Microsatellites
+longLabel Perfect Microsatellites - VNTR
+priority 148
+group varRep
 visibility hide
 type bed 4 +
 
@@ -897,7 +905,7 @@ maxHeightPixels 100:40:11
 wiggle multizMm3Rn3GalGal2_phyloHMM_wig
 yLineOnOff Off
 autoScaleDefault Off
-pairwise hmrg
+pairwise hmrg 
 speciesOrder mouse rat chicken
 
 track mzPt1Mm3Rn3Gg2_pHMM
@@ -1143,7 +1151,7 @@ type bed 5 .
 track pseudoMrna
 shortLabel Pseudo Mrna
 longLabel Processed Pseudogene Locus Based on mrna alignments
-group x
+group genes
 priority 131
 visibility hide
 color 100,50,0

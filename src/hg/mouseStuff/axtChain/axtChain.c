@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.22 2004/02/07 02:14:01 angie Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.26 2004/04/29 18:14:38 kent Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -159,7 +159,7 @@ else
     *pStrand = strand;
     if (strand == '-')
         reverseComplement(seq->dna, seq->size);
-    uglyf("Loaded %d bases in %s\n", seq->size, fileName);
+    verbose(1, "Loaded %d bases in %s\n", seq->size, fileName);
     }
 }
 
@@ -186,7 +186,7 @@ else
     *pStrand = strand;
     if (strand == '-')
         reverseComplement(seq->dna, seq->size);
-    uglyf("Loaded %d bases from %s fa\n", seq->size, newName);
+    verbose(1, "Loaded %d bases from %s fa\n", seq->size, newName);
     }
 }
 int boxInCmpBoth(const void *va, const void *vb)
@@ -237,6 +237,7 @@ for (i=0; i<size; ++i)
 return score;
 }
 
+
 static void findCrossover(struct boxIn *left, struct boxIn *right,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq,  
 	int overlap, int matrix[256][256], int *retPos, int *retScoreAdjustment)
@@ -259,11 +260,13 @@ if (overlap > (left->tEnd - left->tStart) ||
     overlap > (right->tEnd - right->tStart))
     errAbort("overlap is %d -- too large for one of these:\n"
 	     "qSize=%d  tSize=%d\n"
-	     "left: qStart=%d qEnd=%d  tStart=%d tEnd=%d\n"
-	     "right: qStart=%d qEnd=%d  tStart=%d tEnd=%d\n",
+	     "left: qStart=%d qEnd=%d (%d) tStart=%d tEnd=%d (%d)\n"
+	     "right: qStart=%d qEnd=%d (%d) tStart=%d tEnd=%d (%d)\n",
 	     overlap, qSeq->size, tSeq->size,
-	     left->qStart, left->qEnd, left->tStart, left->tEnd,
-	     right->qStart, right->qEnd, right->tStart, right->tEnd);
+	     left->qStart, left->qEnd, left->qEnd - left->qStart,
+	     left->tStart, left->tEnd, left->tEnd - left->tStart,
+	     right->qStart, right->qEnd, right->qEnd - right->qStart, 
+	     right->tStart, right->tEnd, right->tEnd - right->tStart);
 
 score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix);
 lScore = scoreBlock(lqStart, ltStart, overlap, matrix);
@@ -287,7 +290,6 @@ struct scoreData
     struct dnaSeq *qSeq;	/* Query sequence. */
     struct dnaSeq *tSeq;	/* Target sequence. */
     struct axtScoreScheme *ss;  /* Scoring scheme. */
-    double gapPower;		/* Power to raise gap size to. */
     };
 struct scoreData scoreData;
 struct axtScoreScheme *scoreScheme = NULL;
@@ -485,9 +487,6 @@ else
                                aid.tLastPos, aid.longPos[aid.tPosCount-2]);
     aid.bLastSlope = calcSlope(aid.bLastPosVal, aid.bLong[aid.bPosCount-2],
                                aid.bLastPos, aid.longPos[aid.bPosCount-2]);
-    // uglyf("qLastPos %d, qlastPosVal %f, qLastSlope %f\n", aid.qLastPos, aid.qLastPosVal, aid.qLastSlope);
-    // uglyf("tLastPos %d, tlastPosVal %f, tLastSlope %f\n", aid.tLastPos, aid.tLastPosVal, aid.tLastSlope);
-    // uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
 }
 
 int gapCost(int dq, int dt)
@@ -535,16 +534,23 @@ int connectCost(struct boxIn *a, struct boxIn *b)
 int dq = b->qStart - a->qEnd;
 int dt = b->tStart - a->tEnd;
 int overlapAdjustment = 0;
+
+if (a->qStart >= b->qStart || a->tStart >= b->tStart)
+    {
+    errAbort("a (%d %d) not strictly before b (%d %d)",
+    	a->qStart, a->tStart, b->qStart, b->tStart);
+    }
 if (dq < 0 || dt < 0)
    {
    int bSize = b->qEnd - b->qStart;
+   int aSize = a->qEnd - a->qStart;
    int overlap = -min(dq, dt);
    int crossover;
-   if (overlap > bSize) 
+   if (overlap >= bSize || overlap >= aSize) 
        {
-       /* B is enclosed in A.  Discourage this overlap. */
-       overlapAdjustment = scoreBlock(scoreData.qSeq->dna + a->qStart, 
-       	scoreData.tSeq->dna + a->tStart, a->tEnd - a->tStart, scoreData.ss->matrix);
+       /* One of the blocks is enclosed completely on one dimension
+        * or other by the other.  Discourage this overlap. */
+       overlapAdjustment = 100000000;
        }
    else
        {
@@ -558,7 +564,6 @@ if (dq < 0 || dt < 0)
    }
 ++connCount;
 return overlapAdjustment + gapCost(dq, dt);
-// return 400 * pow(dt+dq, scoreData.gapPower) + overlapAdjustment;
 }
 
 void calcChainBounds(struct chain *chain)
@@ -626,48 +631,159 @@ slReverse(&newList);
 chain->blockList = newList;
 }
 
+
+void checkChainIncreases(struct chain *chain, char *message)
+/* Check that qStart and tStart both strictly increase
+ * in chain->blockList. */
+{
+struct boxIn *a, *b;
+a = chain->blockList;
+if (a == NULL)
+    return;
+for (b = a->next; b != NULL; b = b->next)
+    {
+    if (a->qStart >= b->qStart || a->tStart >= b->tStart)
+	{
+	errAbort("a (%d %d) not before b (%d %d) %s",
+	    a->qStart, a->tStart, b->qStart, b->tStart, message);
+	}
+    a = b;
+    }
+}
+
+void checkStartBeforeEnd(struct chain *chain, char *message)
+/* Check qStart < qEnd, tStart < tEnd for each block. */
+{
+struct boxIn *b;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    if (b->qStart >= b->qEnd || b->tStart >= b->tEnd)
+	errAbort("Start after end in (%d %d) to (%d %d) %s",
+	    b->qStart, b->tStart, b->qEnd, b->tEnd, message);
+    }
+}
+
+void checkChainGaps(struct chain *chain, char *message)
+/* Check that gaps between blocks are non-negative. */
+{
+struct boxIn *a, *b;
+a = chain->blockList;
+if (a == NULL)
+    return;
+for (b = a->next; b != NULL; b = b->next)
+    {
+    if (a->qEnd > b->qStart || a->tEnd > b->tStart)
+	{
+	errAbort("Negative gap between (%d %d - %d %d) and (%d %d - %d %d) %s",
+	    a->qStart, a->tStart, a->qEnd, a->tEnd, 
+	    b->qStart, b->tStart, b->qEnd, b->tEnd, message);
+	}
+    a = b;
+    }
+}
+
+void setChainBounds(struct chain *chain)
+/* Set chain overall bounds to fit blocks. */
+{
+struct boxIn *b = chain->blockList;
+chain->qStart = b->qStart;
+chain->tStart = b->tStart;
+while (b->next != NULL)
+     b = b->next;
+chain->qEnd = b->qEnd;
+chain->tEnd = b->tEnd;
+}
+
 void removePartialOverlaps(struct chain *chain, 
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, int matrix[256][256])
 /* If adjacent blocks overlap then find crossover points between them. */
 {
-struct boxIn *b, *nextB;
+struct boxIn *a, *b;
+boolean totalTrimA, totalTrimB;
 
-do
+assert(chain->blockList != NULL);
+
+/* Do an internal sanity check to make sure that things
+ * really are sorted by both qStart and tStart. */
+checkChainIncreases(chain, "before removePartialOverlaps");
+
+/* Remove overlapping portion of blocks.  In some
+ * tricky repeating regions this can result in 
+ * complete blocks being removed.  This complicates
+ * the loop below in some cases, forcing us to essentially
+ * start over when the first of the two blocks we
+ * are examining gets trimmed out completely. */
+for (;;)
     {
-    for (b = chain->blockList; b != NULL; b = nextB)
-	{
-	nextB = b->next;
-	if (nextB != NULL)
-	    {
-	    int oq = rangeIntersection(b->qStart, b->qEnd,
-				       nextB->qStart, nextB->qEnd);
-	    int ot = rangeIntersection(b->tStart, b->tEnd,
-				       nextB->tStart, nextB->tEnd);
-	    /* If nextB's t or q is a subset of b's, make nextB a */
-	    /* "dried up husk" to be removed by removeNegativeBlocks(). */
-	    /* Otherwise we could lose coverage by finding crossover. */
-	    if (nextB->tEnd < b->tEnd || nextB->qEnd < b->qEnd)
-		{
-		nextB->tEnd = nextB->tStart;
-		nextB->qEnd = nextB->qStart;
-		}
-	    else if (oq > 0 || ot > 0)
+    totalTrimA = totalTrimB = FALSE;
+    a = chain->blockList;
+    b = a->next;
+    for (;;)
+        {
+	int dq, dt;
+	if (b == NULL)
+	    break;
+	dq = b->qStart - a->qEnd;
+	dt = b->tStart - a->tEnd;
+	if (dq < 0 || dt < 0)
+	   {
+	   int overlap = -min(dq, dt);
+	   int aSize = a->qEnd - a->qStart;
+	   int bSize = b->qEnd - b->qStart;
+	   int crossover, invCross, overlapAdjustment;
+	   if (overlap >= aSize || overlap >= bSize)
 	       {
-	       int overlap = max(oq, ot);
-	       int crossover, invCross, overlapAdjustment;
-	       findCrossover(b, nextB, scoreData.qSeq, scoreData.tSeq, overlap, 
+	       totalTrimB = TRUE;
+	       }
+	   else
+	       {
+	       findCrossover(a, b, scoreData.qSeq, scoreData.tSeq, overlap, 
 		    scoreData.ss->matrix,
 		    &crossover, &overlapAdjustment);
-               nextB->qStart += crossover;
-	       nextB->tStart += crossover;
+	       b->qStart += crossover;
+	       b->tStart += crossover;
 	       invCross = overlap - crossover;
-	       b->qEnd -= invCross;
-	       b->tEnd -= invCross;
+	       a->qEnd -= invCross;
+	       a->tEnd -= invCross;
+	       if (b->qEnd <= b->qStart)
+		   {
+		   totalTrimB = TRUE;
+		   }
+	       else if (a->qEnd <= a->qStart)
+		   {
+		   totalTrimA = TRUE;
+		   }
 	       }
+	   }
+	if (totalTrimA == TRUE)
+	    {
+	    removeNegativeBlocks(chain);
+	    break;
+	    }
+	else if (totalTrimB == TRUE)
+	    {
+	    b = b->next;
+	    freez(&a->next);
+	    a->next = b;
+	    totalTrimB = FALSE;
+	    }
+	else
+	    {
+	    a = b;
+	    b = b->next;
 	    }
 	}
+    if (!totalTrimA)
+        break;
     }
-while (removeNegativeBlocks(chain));
+
+/* Reset chain bounds - may have clipped them in this
+ * process. */
+setChainBounds(chain);
+
+/* Do internal sanity checks. */
+checkChainGaps(chain, "after removePartialOverlaps");
+checkStartBeforeEnd(chain, "after removePartialOverlaps");
 }
 
 #ifdef TESTONLY
@@ -684,9 +800,12 @@ struct boxIn *b;
 int totalBases = 0;
 double maxPerBase = 100, maxScore;
 int gapCount = 0;
+int size = 0;
+int gaplessScore = 0;
+int oneScore = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
-    int size = b->qEnd - b->qStart;
+    size = b->qEnd - b->qStart;
     if (size != b->tEnd - b->tStart)
         abortChain(chain, "q/t size mismatch");
     totalBases += b->qEnd - b->qStart;
@@ -695,18 +814,16 @@ for (b = chain->blockList; b != NULL; b = b->next)
 maxScore = totalBases * maxPerBase;
 if (maxScore < chain->score)
     {
-    int gaplessScore = 0;
-    int oneScore = 0;
-    uglyf("maxScore %f, chainScore %f\n", maxScore, chain->score);
+    verbose(1, "maxScore %f, chainScore %f\n", maxScore, chain->score);
     for (b = chain->blockList; b != NULL; b = b->next)
         {
-	int size = b->qEnd - b->qStart;
+	size = b->qEnd - b->qStart;
 	oneScore = scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, size, scoreData.ss->matrix);
-        uglyf(" q %d, t %d, size %d, score %d\n",
+        verbose(1, " q %d, t %d, size %d, score %d\n",
              b->qStart, b->tStart, size, oneScore);
 	gaplessScore += oneScore;
 	}
-    uglyf("gaplessScore %d\n", gaplessScore);
+    verbose(1, "gaplessScore %d\n", gaplessScore);
     abortChain(chain, "score too big");
     }
 }
@@ -718,9 +835,10 @@ double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 {
 struct boxIn *b, *a = NULL;
 double score = 0;
+int size = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
     {
-    int size = b->qEnd - b->qStart;
+    size = b->qEnd - b->qStart;
     score += scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, 
     	size, matrix);
     if (a != NULL)
@@ -738,19 +856,19 @@ void chainPair(struct seqPair *sp,
 struct chain *chainList, *chain, *next;
 struct boxIn *b;
 long startTime, dt;
+int size = 0;
 
-uglyf("chainPair %s\n", sp->name);
+verbose(1, "chainPair %s\n", sp->name);
 
 /* Set up info for connect function. */
 scoreData.qSeq = qSeq;
 scoreData.tSeq = tSeq;
 scoreData.ss = scoreScheme;
-scoreData.gapPower = 1.0/2.5;
 
 /* Score blocks. */
 for (b = sp->blockList; b != NULL; b = b->next)
     {
-    int size = b->qEnd - b->qStart;
+    size = b->qEnd - b->qStart;
     b->score = axtScoreUngapped(scoreData.ss, 
     	qSeq->dna + b->qStart, tSeq->dna + b->tStart, size);
     }
@@ -761,6 +879,7 @@ startTime = clock1000();
 chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand, 
 	sp->tName, tSeq->size, &sp->blockList, connectCost, gapCost, details);
 dt = clock1000() - startTime;
+verbose(1, "Main chaining step done in %ld milliseconds\n", dt);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     removePartialOverlaps(chain, qSeq, tSeq, scoreData.ss->matrix);
@@ -885,7 +1004,7 @@ for (sp = spList; sp != NULL; sp = sp->next)
     {
     slReverse(&sp->blockList);
     removeExactOverlaps(&sp->blockList);
-    uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
+    verbose(1, "%d blocks after duplicate removal\n", slCount(sp->blockList));
     if (optionExists("faQ"))
         {
         assert (faHash != NULL);
@@ -912,17 +1031,17 @@ void testGaps()
 int i;
 for (i=1; i<=10; i++)
    {
-   uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
+   verbose(1, "%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
    }
 for (i=1; ; i *= 10)
    {
-   uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
+   verbose(1, "%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
    if (i == 1000000000)
        break;
    }
-uglyf("%d %d cost %d\n", 6489540, 84240, gapCost(84240, 6489540));
-uglyf("%d %d cost %d\n", 2746361, 1075188, gapCost(1075188, 2746361));
-uglyf("%d %d cost %d\n", 6489540 + 2746361 + 72, 84240 + 1075188 + 72, gapCost(84240 + 1075188 + 72, 6489540 + 2746361 + 72));
+verbose(1, "%d %d cost %d\n", 6489540, 84240, gapCost(84240, 6489540));
+verbose(1, "%d %d cost %d\n", 2746361, 1075188, gapCost(1075188, 2746361));
+verbose(1, "%d %d cost %d\n", 6489540 + 2746361 + 72, 84240 + 1075188 + 72, gapCost(84240 + 1075188 + 72, 6489540 + 2746361 + 72));
 }
 
 
@@ -944,7 +1063,7 @@ else
     scoreScheme = axtScoreSchemeDefault();
 dnaUtilOpen();
 initGapAid(gapFileName);
-// testGaps();
+/* testGaps(); */
 if (argc != 5)
     usage();
 axtChain(argv[1], argv[2], argv[3], argv[4]);

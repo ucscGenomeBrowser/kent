@@ -2301,23 +2301,71 @@ LOAD ENSEMBL ESTs (TO DO)
        rat-est-fixed.pep
      hgPepPred rn3 generic ensEstPep rat-est-fixed.pep
 
-LOAD ENSEMBLE GENES (TO DO)
-     mkdir -p ~/rn3/bed/ensembl
-     cd ~/rn3/bed/ensembl
-     wget http://www.ebi.ac.uk/~stabenau/rat-ensembl.gz
-     wget http://www.ebi.ac.uk/~stabenau/rat-ensembl.pep.gz
-     gunzip -c rat-ensembl.gz | \
-       perl -w -p -e 's/^(\w)/chr$1/' > rat-ensembl-fixed.gtf
-     ldHgGene rn3 ensGene rat-ensembl-fixed.gtf
-> rat-ensembl contains stopcodons, due to some glitches in our
-> genebuild. The id behind '>' is internal and was not in our gtf dump, so
-> you have to do some more parsing.
-# pick out the transcript= attribute -- that's the id to use:
-# also remove the first line:
-     tail +2 rat-ensembl.pep | \
-       perl -w -p -e 's/^\>gene_id=.*transcript=(\w+)\s+.*$/\>$1/' > \
-       rat-ensembl-fixed.pep
-     hgPepPred rn3 generic ensPep rat-ensembl-fixed.pep
+#### LOAD ENSEMBL GENES (DONE - 2004-04-28 - Fan)
+#	ensGene is needed for Superfamily track, Family Browser, and Proteome Browser
+#	Ensembl released Rat build 3.1 the week of Feb 9th, 2004
+     mkdir /cluster/data/rn3/bed/ensembl
+     cd /cluster/data/rn3/bed/ensembl
+
+        Get the ensembl gene data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Rattus norvegicus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+        Page 3) Choose the "Structures" tab. 
+        Page 4) Choose GTF as the ouput, choose gzip compression , name the
+	output file ensGeneRn3 and then hit Export
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     zcat ensGeneRn3.gff.gz | grep -v ^6_DR51 | grep -v _NT_ > unrandom.gtf
+#	Let's see how much it loses:
+#	For Rn3 there is no difference
+#       
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+    sed -e "s/^/chr/" unrandom.gtf > ensGene.gtf
+    ldHgGene rn3 ensGene ensGene.gtf
+#	Read 28545 transcripts in 475909 lines in 1 files
+#  	28545 groups 36 seqs 1 sources 4 feature types
+#	28545 gene predictions
+
+#	save space, gzip them:
+    gzip unrandom.gtf
+    gzip ensGene.gtf
+
+o - Load Ensembl peptides:
+        Get the ensembl protein data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Rattus norvegicus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Sequences" tab. 
+        Page 4) Choose Transcripts/Proteins and peptide Only as the output,
+		choose text/fasta and gzip compression,
+		name the file ensGeneRn3.pep and then hit export.
+
+     If needed, substitute ENST for ENSP in ensPep with the program called subs
+     edit subs.in to read: ENSP|ENST
+     #subs -e rn3EnsGene.pep > /dev/null
+
+     #delete * at end of each protein
+     zcat ensGeneRn3.pep.fasta.gz | sed "s/\*$//" > ensembl.pep
+    ~matt/bin/fixPep.pl ensembl.pep fixPep_ensembl.pep
+     hgPepPred rn3 generic ensPep fixPep_ensembl.pep
+
+o - Load ensGtp table.
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" tab. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format, gzip.
+    #  Result name file as ensGtpRn3.tsv.gz
+    gunzip ensGtpRn3.tsv.gz
+    hgsql rn3 < ~/kent/src/hg/lib/ensGtp.sql
+    hgsql -N -e 'load data local infile "ensGtpRn3.tsv" into table ensGtp ignore 1 lines;' rn3
 
 LOAD RNAGENES (TO DO)
       - login to hgwdev
@@ -3284,6 +3332,7 @@ o Create pbAaDistX tables
 
   use rn3;
 
+load data local infile "pbAaDistW.tab" into table rn3.pbAaDistW;
 load data local infile "pbAaDistC.tab" into table rn3.pbAaDistC;
 load data local infile "pbAaDistM.tab" into table rn3.pbAaDistM;
 load data local infile "pbAaDistH.tab" into table rn3.pbAaDistH;
@@ -3301,8 +3350,8 @@ load data local infile "pbAaDistP.tab" into table rn3.pbAaDistP;
 load data local infile "pbAaDistG.tab" into table rn3.pbAaDistG;
 load data local infile "pbAaDistE.tab" into table rn3.pbAaDistE;
 load data local infile "pbAaDistA.tab" into table rn3.pbAaDistA;
-load data local infile "pbAaDistA.tab" into table rn3.pbAaDistL;
-load data local infile "pbAaDistA.tab" into table rn3.pbAaDistS;
+load data local infile "pbAaDistL.tab" into table rn3.pbAaDistL;
+load data local infile "pbAaDistS.tab" into table rn3.pbAaDistS;
 
 o Create pbAnomLimit and pbResAvgStd tables
 
@@ -3378,31 +3427,10 @@ o Download Superfamily data files and build the Superfamily DB
    	hgsql superfam040321 -e \
 	   "load data local infile "ass_28-Mar-2004.tab" into table superfam040321.sfAssign;"
 
-o Build or rebuild Superfamily track and create sf tables needed for PB 
-  (TO BE DONE, Superfamily track needs Ensembl Genes track (ensGene table) to be created first)
-
-  If rn3.superfamily already exists
-
-	alter table rn3.superfamily rename as kgRn3Sav.superfamily;
-
-  hgSuperfam rn3 superfam040321 >doSf.log
-   
-  It is normal that many proteins does not have corresponding Superfamily entries.
-
-   	hgLoadBed rn3 superfamily sf.tab -tab
-
-   If rn3.sfDescription exists,
-
-   	alter table rn3.sfDescription rename as kgRn3Sav.sfDescription;
-
-   hgsql rn3 < ~/src/hg/lib/sfDescription.sql
-
-   hgsql rn3 -e 'LOAD DATA local INFILE "sfDesc.tab"  into table rn3.sfDescription;'
+o Load sfAssign and sfDes tables into rn3, they are needed by PB and Superfamily track
 
    hgsql rn3 < ~/src/hg/lib/sfAssign.sql
 
-   cd /cluster/store1/superFamily/040331
-   
    hgsql rn3 -e 'load data local infile "ass_28-Mar-2004.tab" into table rn3.sfAssign;'
 
    If rn3.sfDes already exists,
@@ -3414,6 +3442,29 @@ o Build or rebuild Superfamily track and create sf tables needed for PB
    hgsql rn3 < ~/src/hg/lib/sfDes.sql
 
    hgsql rn3 -e 'load data local infile "des.tab" into table rn3.sfDes ignore 1 lines'
+
+o Build or rebuild Superfamily track
+  (Superfamily track needs Ensembl Genes track (ensGene table) to be built first)
+
+  If rn3.superfamily already exists
+
+	alter table rn3.superfamily rename as kgRn3Sav.superfamily;
+
+  Go to rn3 build working directory.
+
+     hgSuperfam rn >doSf.log
+   
+  It is normal that many proteins does not have corresponding Superfamily entries.
+
+   If rn3.sfDescription exists,
+   	alter table rn3.sfDescription rename as kgRn3Sav.sfDescription;
+
+   hgsql rn3 < ~/src/hg/lib/sfDescription.sql
+   hgsql rn3 -e 'LOAD DATA local INFILE "sfDesc.tab"  into table rn3.sfDescription;'
+
+  Finally, load the superfamily table.
+  
+      hgLoadBed mm4 superfamily superfamily.tab -tab
 
 o Create pbStamp table for PB
    

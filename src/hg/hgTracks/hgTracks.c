@@ -82,8 +82,9 @@
 #include "encode.h"
 #include "variation.h"
 #include "estOrientInfo.h"
+#include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.715 2004/04/22 02:30:04 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.719 2004/04/29 17:00:48 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -122,6 +123,7 @@ int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
+struct hash *hgFindMatches; /* The matches found by hgFind that should be highlighted. */
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -373,7 +375,7 @@ for (item = tg->items; item != NULL; item = item->next)
     if (!tg->drawName && withLabels)
 	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
     end = round((baseEnd - winStart)*scale);
-    if (start < insideWidth && end > 0)
+    if (baseStart < winEnd && baseEnd > winStart)
         {
 	if (start < 0) start = 0;
 	if (end > insideWidth) end = insideWidth;
@@ -504,9 +506,9 @@ for (tg = trackList; tg != NULL; tg = tg->next)
     if (tg == toggleGroup)
 	{
 	if (vis == tvDense)
-	    {
+	    {    
 	    if (tg->canPack)
-	        vis = tvPack;
+		vis = tvPack;
 	    else
 		vis = tvFull;
 	    }
@@ -1425,11 +1427,14 @@ if (vis == tvPack || vis == tvSquish)
 	int x2 = round((e - winStart)*scale) + xOff;
 	int textX = x1;
 	char *name = tg->itemName(tg, item);
+	boolean drawNameInverted = FALSE;
 	if(tg->itemNameColor != NULL) 
 	    color = tg->itemNameColor(tg, item, vg);
 
 	y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	drawNameInverted = (hgFindMatches != NULL && 
+			    hashIntValDefault(hgFindMatches, name, 0) == 1);
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
@@ -1440,13 +1445,29 @@ if (vis == tvPack || vis == tvSquish)
 		textX = leftLabelX;
 		vgUnclip(vg);
 		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
-			    color, font, name);
+		if(drawNameInverted)
+		    {
+		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+		    vgBox(vg, boxStart, y, nameWidth+1, heightPer - 1, color);
+		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+				MG_WHITE, font, name);
+		    }
+		else
+		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+				color, font, name);
 		vgUnclip(vg);
 		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+		{
+		if(drawNameInverted)
+		    {
+		    vgBox(vg, textX - 1, y, nameWidth+1, heightPer-1, color);
+		    vgTextRight(vg, textX, y, nameWidth, heightPer, MG_WHITE, font, name);
+		    }
+		else
+		    vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+		}
             }
         if (!tg->mapsSelf)
             {
@@ -8047,6 +8068,23 @@ pos = trimSpaces(pos);
 return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
 }
 
+void createHgFindMatchHash()
+/* Read from the cart the string assocated with matches and 
+   put the matching items into a hash for highlighting later. */
+{
+char *matchLine = NULL;
+struct slName *nameList = NULL, *name = NULL;
+matchLine = cartOptionalString(cart, "hgFind.matches");
+if(matchLine == NULL)
+    return;
+nameList = slNameListFromString(matchLine,',');
+hgFindMatches = newHash(5);
+for(name = nameList; name != NULL; name = name->next)
+    {
+    hashAddInt(hgFindMatches, name->name, 1);
+    }
+slFreeList(&nameList);
+}
 
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
@@ -8069,8 +8107,7 @@ if((position == NULL) || sameString(position, ""))
 
 chromName = NULL;
 winStart = 0;
-if (isGenome(position) ||
-    NULL ==
+if (isGenome(position) || NULL ==
     (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
     {
     if (winStart == 0)	/* number of positions found */
@@ -8083,6 +8120,10 @@ if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     char *trackName = hgp->tableList->name;
     cartSetString(cart, trackName, hTrackOpenVis(trackName));
     }
+
+/* After position is found set up hash of matches that should
+   be drawn with names highlighted for easy identification. */
+createHgFindMatchHash();
 
 /* This means that no single result was found 
 I.e., multiple results may have been found and are printed out prior to this code*/
@@ -8319,6 +8360,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v61", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

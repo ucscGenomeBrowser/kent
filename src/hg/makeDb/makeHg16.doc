@@ -7982,6 +7982,30 @@ end
     #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
     #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
 
+    #Copy files to download area
+    cd /gbdb/hg16
+    set dir = /usr/local/apache/htdocs/goldenPath/hg16/mzPt1Mm3Rn3Gg2
+    mkdir $dir
+    ln -s $dir multiz
+    cp -p /gbdb/hg16/mzPt1Mm3Rn3Gg2_pHMM/*.maf $dir
+    cd $dir
+    gzip *
+
+    # edit downloads page to add links
+    # add pairwise mafs to downloads page 
+    mkdir $dir/{rn3,mm3,pt1,gg2}
+    cd /cluster/data/hg16/bed/humor/maf
+    cp *.mm3.maf $dir/mm3
+    cp *.rn3.maf $dir/rn3
+    gzip $dir/mm3/*
+    gzip $dir/rn3/*
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/mafBest
+    cp *.maf $dir/gg2
+    gzip $dir/gg2/*
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/mafRBestNet/
+    cp *.maf $dir/pt1
+    gzip $dir/pt1/*
+
 # EXONIPHY HMR
 # (started, acs, 2004-03-23)
 
@@ -8238,20 +8262,19 @@ cat > makeNet.csh << 'EOF'
     # ecoresFr1.html and ecoresTetraodon.html
 
 
-# VNTR MICROSATELLITE REPEATS FROM GEROME BREEN (IN PROGRESS 4/5/04 angie)
-    # 4/5/04 -- test data loaded; waiting for the rest of the data, and some 
-    # help with the description.
+# VNTR MICROSATELLITE REPEATS FROM GEROME BREEN (DONE 4/28/04 angie)
     ssh hgwdev
     mkdir /cluster/data/hg16/bed/vntr
     cd /cluster/data/hg16/bed/vntr
     # saved email attachment from Gerome Breen <g.breen@iop.kcl.ac.uk>
-    # as hum_VNTRs_chr1_test_sub.txt
-    # Replace 1-based start coords with 0-based; use microsat seq for name.
-    tail +2 hum_VNTRs_chr1_test_sub.txt \
-    | awk '{printf "%s\t%d\t%d\t%s\t%.3f\t%d\t%s\t%s\t%s\n", $1, $2-1, $3, $5, $6, $7, $8, $9, $10;}'  \
-      > hum_VNTRs_chr1_test_sub.bed
-    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/vntr.sql hg16 \
-      vntr hum_VNTRs_chr1_test_sub.bed
+    # as HumJuly2003microsats_finished_for_angieH.txt
+    # Replace 1-based start coords with 0-based, tweak n/a distance values:
+    tail +2 HumJuly2003microsats_finished_for_angieH.txt \
+    | perl -wpe 's/(first|last) in chromosome\/sequence/-1/i' \
+    | awk '{printf "%s\t%d\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", $1, $2-1, $3, $4, $5, $6, $7, $8, $9, $10;}'  \
+      > vntr.bed
+    hgLoadBed -tab -sqlTable=$HOME/kent/src/hg/lib/vntr.sql hg16 \
+      vntr vntr.bed
 
 
 # WEBB'S PUTATIVE NON-EXONIC CONSERVED REGIONS (DONE 4/6/04 angie)
@@ -8439,7 +8462,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
-        hgLoadChain hg16 ${c}_chainFr1New $i
+        hgLoadChain hg16 ${c}_chainFr1 $i
     end
 
 
@@ -8465,8 +8488,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Load the nets into database 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet hg16 netFr1New stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyFr1New stdin
+    netFilter -minGap=10 human.net |  hgLoadNet hg16 netFr1 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyFr1 stdin
 
 
 # RUN AXTBEST (DONE 4/20/04 angie)

@@ -234,6 +234,14 @@ priority 50
 visibility dense
 type bed 5
 
+track snapGene
+shortLabel SNAP Genes
+longLabel SNAP Gene Predictions
+group rna
+priority 49
+visibility dense
+type genePred
+
 track xenoRefGene
 shortLabel xenoRefGene 
 longLabel xenoRefGene

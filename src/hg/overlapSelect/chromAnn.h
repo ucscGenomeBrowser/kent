@@ -43,7 +43,9 @@ struct chromAnn* chromAnnFromBed(unsigned opts, struct lineFile *lf, char *line)
 /* create a chromAnn object from line read from a BED file */
 
 struct chromAnn* chromAnnFromGenePred(unsigned opts, struct lineFile *lf, char *line);
-/* create a chromAnn object from line read from a GenePred file */
+/* create a chromAnn object from line read from a GenePred file.  If there is
+ * no CDS, and chromAnnCds is specified, it will return a record with
+ * zero-length range.*/
 
 struct chromAnn* chromAnnFromPsl(unsigned opts, struct lineFile *lf, char *line);
 /* create a chromAnn object from line read from a psl file */

@@ -45,6 +45,7 @@ CREATE TABLE pseudoGeneLink (
     oldIntronCount int not null,	# old simple intron count
     conservedIntrons int not null,	# conserved intron count
     intronScores varchar(255) not null,	# Intron sizes in gene/pseudogene
+    chainId int not null,	#  reserved
     axtScore int not null,	# blastz score, gene mrna aligned to pseudogene
     refSeq varchar(255) not null,	# Name of closest regSeq to gene
     rStart int not null,	# refSeq alignment start position
@@ -55,7 +56,9 @@ CREATE TABLE pseudoGeneLink (
     kgName varchar(255) not null,	# Name of closest knownGene to gene
     kStart int not null,	# kg alignment start position
     kEnd int not null,	# kg alignment end position
-    kgId int ,	# kg id
+    adaBoost int not null,	# adaBoost label
+    posConf float not null,	# pvalue for positive
+    negConf float not null,	# pvalue for positive
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
     INDEX (name(8))

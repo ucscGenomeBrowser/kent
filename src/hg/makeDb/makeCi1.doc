@@ -135,3 +135,14 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION
     ./bin/gbDbLoadStep -noPerChrom=ci1 -initialLoad ci1 
     # ./bin/i386/gbLoadRna -drop ci1
 
+
+# SNAP GENE PREDICTIONS FROM COLIN DEWEY (DONE 4/23/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/ci1/bed/snap
+    cd /cluster/data/ci1/bed/snap
+    # contact: Colin Dewey <cdewey@eecs.berkeley.edu>
+    wget http://hanuman.math.berkeley.edu/~cdewey/tracks/ci1/SNAP.gff.gz
+    gunzip SNAP.gff.gz
+    ldHgGene -gtf -frame -id -geneName ci1 snapGene SNAP.gff
+
+

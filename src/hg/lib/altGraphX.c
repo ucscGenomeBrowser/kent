@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.20 2004/03/03 17:56:34 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.21 2004/04/29 20:45:31 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1556,10 +1556,14 @@ int width = round((seqEnd - seqStart)*scale);
 char keyBuff[1024];
 int start, end, height;
 bool *vSeen = NULL; /* Have we seen a given vertex yet? */
+int maxCells = 0;
 AllocArray(vSeen, ag->vertexCount);
 if(width == 0)
     width=1;
-ss = spaceSaverMaxCellsNew(0, width, maxRows, width/4);
+maxCells = width/4;
+if(maxCells == 0)
+    maxCells = 1;
+ss = spaceSaverMaxCellsNew(0, width, maxRows, maxCells);
 
 /* Layout the exons using the spaceSaver to make sure that
    different exons don't overlap. */

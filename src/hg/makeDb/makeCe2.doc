@@ -17,7 +17,8 @@ exit; # don't actually run this like a script :)
     wget -o ce2.fetch.log -r -l1 --no-directories \
         ftp://ftp.sanger.ac.uk/pub/wormbase/WS120/CHROMOSOMES/
                                                                            
-                                                                                
+    # This site is now at:                                                          # ftp://ftp.sanger.ac.uk/pub/wormbase/FROZEN_RELEASES/WS120/CHROMOSOMES/
+
 # Takes about five minutes
 # This current_release is updated every two weeks.  Although the
 #     sequence is quite stable at this time and changes very little.
@@ -49,8 +50,8 @@ exit; # don't actually run this like a script :)
         echo -n "${f} "
         zcat sanger/CHROMOSOME_${f}.dna.gz | tr '[a-z]' '[A-Z]' | \
                 sed -e "s/CHROMOSOME_/chr/" > sangerFa/chr${f}.fa
-        mkdir sangerFa/${f}
-        ln -s ~/ce2/sanger/CHROMOSOME_${f}.agp sangerFa/${f}/chr${f}.agp
+        mkdir -p sangerFa/${f}
+        ln -s /cluster/data/ce2/sanger/CHROMOSOME_${f}.agp sangerFa/${f}/chr${f}.agp
     end
     # hgGoldGap does not handle dir names over 2 characters:
     mv sangerFa/III sangerFa/3
@@ -532,7 +533,116 @@ done
     # Check it in and copy (ideally using "make alpha" in trackDb) to
     # /gbdb/ce2/html
     cvs commit description.html
-   
+  
+# MAKE SANGER GENE (WORM BASE GENES) TRACK (DONE, 2004-04-09, hartera)
+                                                                                
+   # next machine
+   ssh eieio
+   mkdir -p /cluster/data/ce2/bed/sangerGene
+   cd /cluster/data/ce2/bed/sangerGene
+    # the perl trims these files down to a reasonable size.  As they are
+    #   they cause ldHgGene to hangup due to memory size.
+    foreach f (I II III IV V X M)
+        echo -n "${f} "
+        zcat ../../sanger/CHROMOSOME_${f}.gff.gz | \
+        sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
+        -e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
+        -e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
+        -e "s/CHROMOSOME_M/chrM/g" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
+        perl -ne '@a = split; \
+        print if($a[1] =~ /curated|DNA|RNA/i && \
+        $a[2] =~ /intron|exon|cds|sequence|transcri/i);' > chr${f}.gff
+    end
+    echo
+    # remove CDS before id e.g. from CDS "Y74C9A.2" and remove "
+    perl -pi.bak -e 's/CDS "//' chr*.gff
+    perl -pi.bak -e 's/"//' chr*.gff
+    # check this worked ok then cleanup
+    rm *.bak
+    #  check file sizes, should be reasonable
+    ls -ogrt
+# total 23352
+# -rw-rw-r--    1  3430979 Apr  9 16:09 chrIII.gff
+# -rw-rw-r--    1  3885105 Apr  9 16:09 chrII.gff
+# -rw-rw-r--    1  3680753 Apr  9 16:09 chrI.gff
+# -rw-rw-r--    1  4926390 Apr  9 16:09 chrV.gff
+# -rw-rw-r--    1     3635 Apr  9 16:09 chrM.gff
+# -rw-rw-r--    1  3854560 Apr  9 16:09 chrIV.gff
+# -rw-rw-r--    1  4085489 Apr  9 16:09 chrX.gff                                                                                
+    # now load database with those transformed gff files
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/sangerGene
+    ldHgGene ce2 sangerGene *.gff
+# Read 41259 transcripts in 423845 lines in 7 files
+#  41259 groups 7 seqs 11 sources 6 feature types
+# 23076 gene predictions
+
+    # if you need to delete that table:
+    echo 'drop table sangerGene' | hgsql ce2
+
+#    worm/ce2 trackDb.ra entry
+# track sangerGene
+# shortLabel WormBase Genes
+# longLabel WormBase Gene Annotations
+# group genes
+# priority 48
+# visibility pack
+# color 0,0,200
+# chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX,chrM
+# type genePred sangerPep
+# url http://www.wormbase.org/db/gene/gene?name=$$
+# hgGene on
+
+# MAKE WORMBASE GENEFINDER TRACKS (DONE, 2004-04-12, hartera)
+   # next machine
+   ssh eieio
+   mkdir -p /cluster/data/ce2/bed/sangerGenefinder
+   cd /cluster/data/ce2/bed/sangerGenefinder
+    # the perl trims these files down to a reasonable size.  As they are
+    #   they cause ldHgGene to hangup due to memory size.
+    foreach f (I II III IV V X M)
+        echo -n "${f} "
+        zcat ../../sanger/CHROMOSOME_${f}.gff.gz | \
+        sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
+        -e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
+        -e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
+        -e "s/CHROMOSOME_M/chrM/g" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
+        perl -ne '@a = split; \
+        print if($a[1] =~ /Genefinder/i && \
+        $a[2] =~ /intron|exon|cds|sequence|transcri/i);' > chr${f}.gff
+    end
+    echo
+    # remove CDS before id e.g. from CDS "Y74C9A.2" and remove "
+    perl -pi.bak -e 's/CDS "//' chr*.gff
+    perl -pi.bak -e 's/"//' chr*.gff
+    # check this worked ok then cleanup
+    rm *.bak
+    #  check file sizes, should be reasonable
+    ls -ogrt
+# total 23712
+# -rw-rw-r--    1  3984558 Apr 12 09:14 chrII.gff
+# -rw-rw-r--    1  3702836 Apr 12 09:14 chrI.gff
+# -rw-rw-r--    1        0 Apr 12 09:14 chrM.gff
+# -rw-rw-r--    1  3948579 Apr 12 09:14 chrIV.gff
+# -rw-rw-r--    1  3364561 Apr 12 09:14 chrIII.gff
+# -rw-rw-r--    1  5303266 Apr 12 09:14 chrV.gff
+# -rw-rw-r--    1  3929597 Apr 12 09:14 chrX.gff
+
+    # now load database with those transformed gff files
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/sangerGenefinder
+    ldHgGene ce2 sangerGenefinder *.gff
+# Read 36976 transcripts in 401688 lines in 7 files
+#   36976 groups 6 seqs 1 sources 4 feature types
+# 21180 gene predictions
+
+    # if you need to delete that table:
+    echo 'drop table sangerGenefinder' | hgsql ce2
+
 # RUN Waba alignment with briggsae  (WORKING - 2004-04-06 - Hiram)
     # prepare contigs from C. briggsae
     #   Assumes C. briggsae data has been downloaded according to
@@ -650,6 +760,15 @@ exit 0
 
 # NEED TO GET BLAT SERVERS SET UP
 
+# MAKE 2BIT FILE FOR BLAT (DONE, 2004-04-07, hartera)  
+    # Make one big 2bit file as well, and make a link to it in
+    # /gbdb/ce2/nib because hgBlat looks there:
+    ssh eieio
+    cd /cluster/data/ce2
+    faToTwoBit softMask/chr*.fa ce2.2bit
+    ssh hgwdev
+    ln -s /cluster/data/ce2/ce2.2bit /gbdb/ce2/nib/
+
 # MAKE 11.OOC FILE FOR BLAT (DONE, 2004-04-07, hartera)
 # Use -repMatch=40 (based on size, for human use 1024)
     ssh kkr1u00
@@ -664,7 +783,7 @@ exit 0
    cp -p /cluster/bluearc/ce2/11.ooc /iscratch/i/worms/Celegans2/
    iSync
 
-# AUTO UPDATE GENBANK MRNA AND EST RUN (in progress, 2004-04-05, hartera)
+# AUTO UPDATE GENBANK MRNA AND EST RUN (DONE, 2004-04-07, hartera)
     # next machine
     ssh hgwdev
     # Update genbank config and source in CVS:
@@ -698,4 +817,885 @@ ce2.downloadDir = ce2
     cd /cluster/data/genbank
     # This is an -initial run, RefSeq mRNA only:
     nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial ce2
+
+    # Load results for RefSeq mRNAs:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad ce2
+    # To start next run, results need to be moved out the way
+    cd /cluster/data/genbank/work
+    mv initial.ce2 initial.ce2.refseq.mrna
+
+    # -initial for GenBank mRNAs
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial ce2
+
+    # Load results for GenBank mRNAs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 ce2 
+    cd /cluster/data/genbank/work
+    mv initial.ce2 initial.ce2.genbank.mrna
+
+    # -initial for ESTs
+    ssh eieio
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial ce2
+
+    # Load results for GenBank ESTs
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 ce2 
+    cd /cluster/data/genbank/work
+    mv initial.ce2 initial.ce2.genbank.est
+   
+    # Everything loaded ok, so clean up
+    rm -r /cluster/data/genbank/work/initial.ce2*
+    
+# REMOVE XENO mRNAs (DONE, 2004-04-09, hartera)
+    # Remove xeno mRNAs, too many are distantly related and do 
+    # not have meaningful alignments using Blat
+    ssh hgwdev
+    # Remove all mrna.xeno.* files from
+    # /cluster/data/genbank/data/aligned/genbank.140.0/ce2
+    # edit /cluster/data/genbank/etc/genbank.conf
+    cd ~/kent/src/hg/makeDb/genbank
+    # add line to ce2:
+ce2.genbank.mrna.xeno.load = no
+# so now it is:
+# ce2 (C. elegans)
+ce2.genome = /iscratch/i/worms/Celegans2/nib/chr*.nib
+ce2.lift = no
+ce2.genbank.mrna.xeno.load = no
+ce2.downloadDir = ce2
+    make
+    cvs update etc/genbank.conf
+    cvs commit etc/genbank.conf
+    make install-server
+
+    cd /cluster/data/genbank/
+    # reload only the native mRNAs to the database
+    nice bin/gbDbLoadStep -reload -type=mrna -srcDb=genbank -verbose=1 ce2
+    # drop xenoMrna table
+    echo 'drop table xenoMrna' | hgsql ce2
+    
+# PRODUCING FUGU BLAT ALIGNMENTS (DONE, 2004-04-07, hartera)
+    # Assumes masked NIBs have been prepared as above
+    # and Fugu pieces are already on kluster /iscratch/i.
+    # next machine
+    ssh kk
+    mkdir /cluster/data/ce2/bed/blatFr1
+    cd /cluster/data/ce2/bed/blatFr1
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /iscratch/i/worms/Celegans2/nib/*.nib > worm.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    mkdir psl
+    gensub2 worm.lst fugu.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+# para time
+# Completed: 4046 of 4046 jobs
+# CPU time in finished jobs:     263359s    4389.31m    73.16h    3.05d  0.008 y
+# IO & Wait Time:                 13317s     221.95m     3.70h    0.15d  0.000 y
+# Average job time:                  68s       1.14m     0.02h    0.00d
+# Longest job:                     1103s      18.38m     0.31h    0.01d
+# Submission to last job:          2170s      36.17m     0.60h    0.03d
+
+    # When cluster run is done, sort alignments
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce2/bed/blatFr1
+    foreach d (I II III IV V X M)
+        echo -n "${d} "
+        pslCat psl/chr${d}_*.psl | \
+        pslSortAcc nohead chrom temp stdin
+        rm -f chrom/chr${d}_blatFr1.psl
+        mv chrom/chr${d}.psl chrom/chr${d}_blatFr1.psl
+    end
+
+    # next machine
+    ssh hgwdev
+    # Load Fugu Blat alignments
+    cd /cluster/data/ce2/bed/blatFr1/chrom
+    cat *.psl | hgLoadPsl -fastLoad -table=blatFr1 ce2 stdin
+
+    # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    mkdir /gbdb/ce2/fuguSeq
+    ln -s cluster/data/fr1/fugu_v3.masked.fa /gbdb/ce2/fuguSeq
+    cd /cluster/data/ce2/bed/blatFr1
+    hgLoadSeq ce2 /gbdb/ce2/fuguSeq/fugu_v3.masked.fa
+    # Adding /gbdb/ce2/fuguSeq/fugu_v3.masked.fa
+    # 20379 sequences
+
+    # worm/ce2 trackDb.ra entry
+#   track blatFr1
+#   shortLabel Fugu Blat
+#   longLabel Takifugu rubripes (fr1) Translated Blat Alignments
+#   group compGeno
+#   priority 110
+#   visibility dense
+#   color 0,60,120
+#   altColor 200,220,255
+#   spectrum on
+#   type psl xeno
+
+# BLASTZ C. Briggsae (Cb1) (DONE, 2004-04-13, hartera)
+                                                                                
+    # next machine
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats but there are none for the worms
+    # so create empty files for each chromsome and iSync
+    mkdir -p /iscratch/i/worms/Celegans2/linSpecRep.notinCbriggsae
+    cd /iscratch/i/worms/Celegans2/linSpecRep.notinCbriggsae
+    # create chrI.out.spec and cp to chrN.out.spec for chrII, chrIII, chrIV, chrV, chrX, chrM
+    mkdir -p /iscratch/i/worms/Cbriggsae/linSpecRep.notinCelegans
+    # create empty chrUn.out.spec file
+    iSync
+    
+    ssh kk
+    mkdir -p /cluster/data/ce2/bed/blastz.cb1.2004-04-12
+    cd /cluster/data/ce2/bed
+    ln -s  blastz.cb1.2004-04-12 blastz.cb1
+    cd blastz.cb1
+ 
+cat << '_EOF_' > DEF
+# C. elegans vs. C. briggsae
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+#BLASTZ_ABRIDGE_REPEATS=1
+#  when SMSK=/dev/null
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET
+SEQ1_DIR=/iscratch/i/worms/Celegans2/nib
+# RMSK not currently used
+SEQ1_RMSK=/iscratch/i/worms/Celegans2/rmsk
+SEQ1_SMSK=/iscratch/i/worms/Celegans2/linSpecRep.notinCbriggsae
+# FLAG not currently used
+SEQ1_FLAG=-worm
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+SEQ2_DIR=/iscratch/i/worms/Cbriggsae/bothMasksNib
+# RMSK not currently used
+SEQ2_RMSK=/iscratch/i/worms/Cbriggsae/rmsk
+# FLAG not currently used
+SEQ2_SMSK=/iscratch/i/worms/Cbriggsae/linSpecRep.notinCelegans
+SEQ2_FLAG=-worm
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/ce2/bed/blastz.cb1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy  
+    
+    # Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.ce2-cb1.2004-04-12
+    # Need shell scripts from mm4 to do cluster runs
+    mv /cluster/data/mm4/jkStuff/BlastZ*.sh /cluster/data/ce2/jkStuff/
+
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/ce2/bed/blastz.cb1
+    source DEF
+    /cluster/data/ce2/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+# para time
+# Completed: 56 of 56 jobs
+# CPU time in finished jobs:     155723s    2595.39m    43.26h    1.80d  0.005 y
+# IO & Wait Time:                  6387s     106.45m     1.77h    0.07d  0.000 y
+# Average job time:                2895s      48.25m     0.80h    0.03d
+# Longest job:                     6137s     102.28m     1.70h    0.07d
+# Submission to last job:         11078s     184.63m     3.08h    0.13d
+
+    #   Second cluster run to convert the .out's to .lav's
+    cd /cluster/data/ce2/bed/blastz.cb1
+    source DEF
+    /cluster/data/ce2/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:        762s      12.70m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                    62s       1.03m     0.02h    0.00d  0.000 y
+# Average job time:                  59s       0.98m     0.02h    0.00d
+# Longest job:                      115s       1.92m     0.03h    0.00d
+# Submission to last job:           293s       4.88m     0.08h    0.00d
+
+    #   Third cluster run to convert lav's to axt's
+    cd /cluster/data/ce2/bed/blastz.cb1
+    source DEF
+    /cluster/data/ce2/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try
+    para check
+    # only 7 jobs so all completed by para try
+# para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        187s       3.11m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                   169s       2.82m     0.05h    0.00d  0.000 y
+# Average job time:                  51s       0.85m     0.01h    0.00d
+# Longest job:                       77s       1.28m     0.02h    0.00d
+# Submission to last job:            77s       1.28m     0.02h    0.00d
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/ce2/bed/blastz.cb1
+    mkdir -p pslChrom
+    set tbl = "blastzCb1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+   # Load database tables
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastz.cb1/pslChrom
+    foreach d (I II III IV V X M)
+        /cluster/bin/i386/hgLoadPsl ce2 chr${d}_blastzCb1.psl
+    end
+
+# CHAIN Cb1 BLASTZ (DONE, 2004-04-13, hartera)
+
+# The axtChain is best run on the small kluster, or the kki kluster
+#       in this case, it was run on the kk kluster
+    ssh kk
+    mkdir -p /cluster/data/ce2/bed/blastz.cb1/axtChain/run1
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/ce2/bed/blastz.cb1/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ_random $1 | axtChain stdin \
+        /iscratch/i/worms/Celegans2/nib \
+        /iscratch/i/worms/Cbriggsae/bothMasksNib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    # only 7 jobs so all done by para try
+    para try
+    para check
+# para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1273s      21.22m     0.35h    0.01d  0.000 y
+# IO & Wait Time:                   168s       2.80m     0.05h    0.00d  0.000 y
+# Average job time:                 206s       3.43m     0.06h    0.00d
+# Longest job:                      652s      10.87m     0.18h    0.01d
+# Submission to last job:           652s      10.87m     0.18h    0.01d
+
+    # now on the file server, sort chains
+    ssh eieio
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain
+
+    # User 36.800u 
+    # System 2.920s 
+    # Elapsed Real 0:41.75
+
+    time chainSplit chain all.chain
+    # User 37.550u 
+    # System 2.420s 
+    # Elapsed Real 0:41.96
+
+   # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain ce2 ${c}_chainCb1 $i
+        echo done $c
+    end
+
+# NET Cb1 (DONE, 2004-04-16, hartera)
+
+   ssh eieio
+   cd /cluster/data/ce2/bed/blastz.cb1/axtChain
+   mkdir preNet
+   mv /cluster/data/ce2/tmp/chrom.sizes /cluster/data/ce2/
+   # remove header line in file so chainPreNet will work
+   cd chain
+   foreach i (*.chain)
+   echo preNetting $i
+   /cluster/bin/i386/chainPreNet $i /cluster/data/ce2/chrom.sizes \
+                        /cluster/data/cb1/chrom.sizes ../preNet/$i
+    end
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/ce2/chrom.sizes \
+                            /cluster/data/cb1/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 84226048, utime 703 s/100, stime 77
+
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain
+    # add classification info using db tables 
+    # use -noAr option - don't look for ancient repeats
+    time netClass -noAr hNoClass.net ce2 cb1 cb1.net
+    # User 12.030u 
+    # System 1.610s 
+    # Elapsed Real 0:15.59
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain
+    netFilter -minGap=10 cb1.net |  hgLoadNet ce2 netCb1 stdin
+
+# MAKE axtNet TRACK (in progress, 2004-04-21, hartera)
+    # Move back to the file server to create axt files corresponding to the net
+    ssh kksilo
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain
+    # try without netFilter as not working well
+    # netFilter -minGap=10 cb1.net > cb1Filt.net
+    mkdir /cluster/data/ce2/bed/blastz.cb1/axtNet1
+    # netSplit cb1.netFilt cb1NetSplit
+    netSplit cb1.net cb1NetSplit1
+    # cd cb1NetSplit
+    cd cb1NetSplit1
+    foreach i (*.net)
+        set c = $i:r
+        netToAxt -maxGap=300 $i \
+            /cluster/data/ce2/bed/blastz.cb1/axtChain/chain/$c.chain \
+            /iscratch/i/worms/Celegans2/nib \
+            /iscratch/i/worms/Cbriggsae/bothMasksNib \
+            /cluster/data/ce2/bed/blastz.cb1/axtNet1/$c.axt
+        echo done ../axtNet1/$c.axt
+    end
+    cd ..
+    rm -r cb1NetSplit
+   
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE2 (DONE, 2003-04-13, hartera)
+    # next machine
+    ssh hgwdev
+    # DNA port is "0", trans prot port is "1"
+    echo 'insert into blatServers values("ce2", "blat1", "17781", "0"); \
+          insert into blatServers values("ce2", "blat1", "17780", "1");' \
+      | hgsql -h genome-testdb hgcentraltest
+        # if you need to delete those entries
+        echo 'delete from blatServers where db="ce2";' \
+        | hgsql -h genome-testdb hgcentraltest
+        # to check the entries:
+        echo 'select * from blatServers where db="ce2";' \
+        | hgsql -h genome-testdb hgcentraltest
+
+# CREATE ORFTOGENE TABLE (Used by hgGene and hgNear) (DONE, 2004-04-27, hartera)
+   mkdir /cluster/data/ce2/bed/orfToGene
+   cd !$
+   # gene_names.txt for WS120 was created and provided by todd.harris@cshl.edu
+   # ORF e.g. Y110A7A.10 gene e.g. aap-1
+   awk -F '\t' '$2 == "Caenorhabditis elegans" && $3 == "Gene" {printf("%s\t%s\n", $4, $1)}' gene_names.txt > orfToGene.txt
+   # reformat this for use in creating Sanger Links with hgWormLinks
+   awk 'NF == 2' orfToGene.txt > orfToGene.txt2
+   # use perl script to move ORFs with the same gene name onto separate lines
+   # and remove lines where there is a gene name with an alternate name
+   # in parentheses. this output file is used for Sanger Links
+   /cluster/data/ce2/jkStuff/formatorfToGene.pl < orfToGene.txt2 > orfToGene.tab2   
+   hgCeOrfToGene ce2 gene_names.txt sangerGene orfToGene
+                                                                                
+# DOWNLOAD WORMBASE FOR WS120 RELEASE (DONE, 2004-04-23, hartera)
+    ssh eieio
+    mkdir -p /cluster/store7/acedb
+    cd /cluster/store7/acedb
+    wget -o ce2.fetchws120.log -r -l1 --timestamp --no-directories \
+        ftp://ftp.sanger.ac.uk/pub/wormbase/FROZEN_RELEASES/WS120/
+    gunzip *.gz
+    tar xvf *.tar
+
+# CREATE SANGER LINKS TABLE FROM WORMBASE INFO (used by hgGene and hgNear)
+# (DONE, 2004-04-28, hartera)
+   mkdir /cluster/data/ce2/bed/steinHelp
+# Mail Lincoln Stein and ask for mappings from wormPep to
+# SwissProt and from ORF to wormPep to description.  Place
+# these files in the steinHelp directory:
+#       swissprot_dump.txt  - contains ORF/WormPep/Description
+#       and contains WormPep/SwissProt
+    # Jorge downloaded and installed the software for using AceDB 
+    # to /cluster/bin/acedb/
+    # To use 
+    ssh hgwdev
+    cd /cluster/store7/acedb
+    # can use /cluster/bin/acedb/xace/ . to get X-Window query interface 
+    # To use AceDB Query Language (AQL)
+    cd /cluster/store7/acedb
+    /cluster/bin/acede/tace .
+    # At prompt, can type ? for help, type the following queries
+#    wbGeneClass.txt - associates 3 letter first part of worm gene
+#             name with a brief description.  
+    acedb> AQL -o wbGeneClass.txt select l,l->Description  from l in class Gene_Clas
+#    wbConcise.txt - associates worm gene name with a several
+#             sentence description. 
+    acedb> AQL -o wbConcise.txt select l,g from l in class Locus, g in l->Gene_information[Provisional_description]
+    # remove "" in wbGeneClass.txt and wbConcise.txt
+    sed -e 's/"//g;' wbGeneClass.txt > wbGeneClass.new
+    sed -e 's/"//g;' wbConcise.txt > wbConcise.new
+    mv wbGeneClass.new wbGeneClass.txt
+    mv wbConcise.new wbConcise.txt
+    # first remove header lines
+    sed -e 's/Format//' wbConcise.txt | sed -e 's/Locus[:]*//' > tmp
+    sed -e 's/Text//' tmp > tmp2
+    mv tmp2 wbConcise.txt
+    rm tmp
+    sed -e 's/Format//' wbGeneClass.txt | sed -e 's/Gene_class[:]*//' > tmp
+    sed -e 's/Text//' tmp > tmp2
+    mv tmp2 wbGeneClass.txt
+    rm tmp
+    
+    hgWormLinks swissprot_dump.txt wbConcise.txt wbGeneClass.txt \ 
+        /cluster/data/ce2/bed/orfToGene/orfToGene.tab2 sangerLinks.txt
+    # create table in ce2 database and load data
+    hgsql ce2 < ~/kent/src/hg/near/hgWormLinks/sangerLinks.sql
+    hgsql -e \
+        'load data local infile "sangerLinks.txt" into table sangerLinks' \
+        ce2
+
+# TWINSCAN GENE PREDICTIONS (DONE, 2004-04-16, hartera)
+    # These are Iscan (new version of Twinscan) gene predictions
+    # e-mailed Michael Brent at WUSTL: brent@cse.wustl.edu to obtain data
+    ssh hgwdev
+    mkdir /cluster/data/ce2/bed/twinscan
+    cd /cluster/data/ce2/bed/twinscan
+    wget --timestamping -r \
+        http://genes.cs.wustl.edu/predictions/worm/C_elegans/WS120/4-13-2004/
+    mv ./genes.cs.wustl.edu/predictions/worm/C_elegans/WS120/4-13-2004/* \
+        /cluster/data/ce2/bed/twinscan/
+    rm -r genes.cs.wustl.edu
+    rm index* ./chr_gtf/index* ./chr_ptx/index* ./chr_tx/index*
+
+    # Clean up chrom field of GTF files
+    foreach c (I II III IV V X)
+        set f = chr_gtf/chr_${c}.iscan_pred_gtf
+        echo ${f}
+        sed -e "s/CHROMOSOME_/chr/g" ${f} | \
+        sed -e "s/_[0-9][0-9]*.seq\t/\t/" > \
+                chr_gtf/chr${c}-fixed.gtf
+    end
+
+    # pare down protein FASTA header to id and add missing .1:
+    foreach c (I II III IV V X)
+        set f = chr_ptx/CHROMOSOME_${c}.ptx
+        echo ${f}
+        perl -wpe 's/^\>CHROMOSOME_(\S+).*$/\>chr$1.1/;' < \
+                ${f} > chr_ptx/chr${c}-fixed.fa
+    end
+    # load data into database, need -gtf option as no stop codons in
+    # these predictions. also use new -frame -id and -geneName options
+    ldHgGene -gtf -frame -id -geneName ce2 twinscan chr_gtf/chr*-fixed.gtf
+    
+    # Read 20990 transcripts in 147535 lines in 6 files
+    # 20990 groups 6 seqs 1 sources 3 feature types
+    # 20990 gene predictions
+
+    hgPepPred ce2 generic twinscanPep chr_ptx/chr*-fixed.fa
+  
+#  MAKING BLASTZ SELF (DONE, 2004-04-20, hartera)
+    # The procedure for lineage spec business with self is to simply
+    # use the actual repeat masker output for this C. elegans assembly as
+    # the lineage specific repeats for itself.  Thus, merely make
+    # symlinks to the repeat masker out files and name them as expected
+    # for blastz.  In this case they are called notinCelegans but they
+    # really mean inCelegans.  Yes, it is confusing, but that's just the
+    # nature of the game in this case. 
+
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Celegans2/linSpecRep.notinCelegans
+    cd /iscratch/i/worms/Celegans2/linSpecRep.notinCelegans
+    foreach f (/iscratch/i/worms/Celegans2/bothMasksFa/*.fa)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        ln -s $f $base.out.spec
+    end
+    iSync
+
+    # next machine
+    ssh hgwdev
+    mkdir -p /cluster/data/ce2/bed/blastzSelf
+    cd /cluster/data/ce2/bed/blastzSelf
+
+    cat << '_EOF_' > DEF
+# C. elegans vs. C. elegans
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+                                                                                
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+                                                                                
+# TARGET
+# C. elegans
+SEQ1_DIR=/iscratch/i/worms/Celegans2/nib
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/worms/Celegans2/linSpecRep.notinCelegans
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+                                                                                
+# QUERY
+# C. elegans
+SEQ2_DIR=/iscratch/i/worms/Celegans2/nib
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/worms/Celegans2/linSpecRep.notinCelegans
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/ce2/bed/blastzSelf
+                                                                                
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+# Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.ce2-ce2.2004-04-14
+    ssh kk
+    cd /cluster/data/ce2/bed/blastzSelf
+                                                                                
+    # source the DEF file to establish environment for following commands
+    source DEF
+    /cluster/data/mm4/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check, ....
+# para time
+# Completed: 196 of 196 jobs
+# CPU time in finished jobs:     418569s    6976.16m   116.27h    4.84d  0.013 y
+# IO & Wait Time:                  2416s      40.26m     0.67h    0.03d  0.000 y
+# Average job time:                2148s      35.80m     0.60h    0.02d
+# Longest job:                    17917s     298.62m     4.98h    0.21d
+# Submission to last job:         53181s     886.35m    14.77h    0.62d
+
+    cd /cluster/data/ce2/bed/blastzSelf
+    source DEF
+    /cluster/data/ce2/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+
+# para time
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:       3340s      55.67m     0.93h    0.04d  0.000 y
+# IO & Wait Time:                    98s       1.63m     0.03h    0.00d  0.000 y
+# Average job time:                 246s       4.09m     0.07h    0.00d
+# Longest job:                      439s       7.32m     0.12h    0.01d
+# Submission to last job:           892s      14.87m     0.25h    0.01d
+
+    # Third cluster run to convert lav's to axt's
+    # lavToAxt has a new -dropSelf option that replaces axtDropOverlap
+    # to remove the alignment blocks on the diagonal
+    # When this was first run, it crashed for chrV with the 
+    # error: breakUpIfOnDiagonal: Too many fragmented block lists!
+    # This means that when a blockList is taken and broken up everywhere
+    # there is a block along the diagonal and added to an array of 
+    # fragmented sub-lists then in this chrosomosome the list has exceeded
+    # the array size of 256 for an alignment. Change the line:
+    # struct block *bArr[256] to struct block *bArr[1024] in the
+    # parseIntoAxt function, make and re-run 
+  
+    cd /cluster/data/ce2/bed/blastzSelf
+    mkdir axtChrom
+    mkdir run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| ~/bin/i386/lavToAxt -dropSelf stdin /iscratch/i/worms/Celegans2/nib \
+    /iscratch/i/worms/Celegans2/nib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/ce2/bed/blastzSelf/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    # check jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check ....
+
+    # only 7 jobs so all completed by para try
+    para try, para check ...etc.
+# para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        796s      13.27m     0.22h    0.01d  0.000 y
+# IO & Wait Time:                   551s       9.18m     0.15h    0.01d  0.000 y
+# Average job time:                 192s       3.21m     0.05h    0.00d
+# Longest job:                      302s       5.03m     0.08h    0.00d
+# Submission to last job:           303s       5.05m     0.08h    0.00d
+
+    # Use Blastz alignments to create Self Chain. Do not create 
+    # Self Blastz track since this is redundant with the Self Chain.
+
+# CHAIN SELF BLASTZ (DONE, 2004-04-20, hartera)
+# The axtChain is best run on the small kluster, or the kki kluster
+#       in this case, it was run on the kk kluster
+    ssh kk
+    mkdir -p /cluster/data/ce2/bed/blastzSelf/axtChain/run1
+    cd /cluster/data/ce2/bed/blastzSelf/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/ce2/bed/blastzSelf/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+# Problems running this. At first, all jobs crashed and para problems said that
+# the ./out/*.out files were empty. Then copied nib files also to a nib2 
+# directory and change in doChain so the 2 nib arguments are not the same.
+# Then crashed saying that the ./chain/*.chain files were empty and that the 
+# files in nib2 could not be opened (permissions ok). changed doChain back to 
+# having the two nib directory arguments the same. Removed and recreated jobList# but left ./chain/*.chain and ./out/*.out 
+# This time the jobs ran ok. Also runs ok if run axtFilter followed by 
+# axtChain separately on the command line.                                                                                
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtFilter $1 | axtChain stdin \
+    /iscratch/i/worms/Celegans2/nib /iscratch/i/worms/Celegans2/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    # 7 jobs so all completed by para try
+    para try, check,....etc.
+# after remaking the axt files using the -dropSelf option for lavToAxt,
+# these jobs no longer crashed.
+# para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       2997s      49.95m     0.83h    0.03d  0.000 y
+# IO & Wait Time:                   537s       8.95m     0.15h    0.01d  0.000 y
+# Average job time:                 505s       8.41m     0.14h    0.01d
+# Longest job:                      923s      15.38m     0.26h    0.01d
+# Submission to last job:           923s      15.38m     0.26h    0.01d
+    # now on the file server, sort chains
+    ssh eieio
+    cd /cluster/data/ce2/bed/blastzSelf/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+    # for chrI
+    # chrI
+# large values truncated: need 1411 bins or larger binSize than 10000
+#  0 ************************************************************ 720199
+# 10000 ******** 90544
+# 20000 ** 24718
+# 30000 * 10225
+# 40000  5805
+# 50000  2890
+# 60000  2114
+# 70000  1757
+# 80000  1324
+# 90000  879
+# 100000  628
+# 110000  564
+# 120000  451
+# 130000  390
+# 140000  343
+# 150000  329
+# 160000  277
+# 170000  223
+# 180000  88
+# 190000  127
+# 200000  141
+# 210000  78
+# 220000  57
+# 230000  80
+# 240000  44
+# max(score) is 14113666 for chrI
+   
+    # trim to minScore=20000 to cut some of the fluff
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      chainFilter -minScore=20000 $f > chainFilt/$f:t
+    end
+ 
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastzSelf/axtChain/chainFilt
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain ce2 ${c}_chainSelf $i
+        echo done $c
+    end
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-04-21, hartera)
+    ssh kksilo
+    cd /cluster/data/ce2
+    #- Build the .zip files
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf zip
+mkdir zip
+# chrom AGP's
+zip -j zip/chromAgp.zip ./sangerFa/[0-9A-Z]*/chr*.agp
+# chrom RepeatMasker out files
+zip -j zip/chromOut.zip ./RMRun/chr*.fa.out
+# soft masked chrom fasta
+zip -j zip/chromFa.zip ./softMask/chr*.fa
+# hard masked chrom fasta
+zip -j zip/chromFaMasked.zip hardMask/chr*.fa
+# chrom TRF output files
+cd bed/simpleRepeat
+zip ../../zip/chromTrf.zip trfMask/chr*.bed
+cd ../..
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=ce2 -native GenBank mrna \
+        /cluster/data/ce2/zip/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=ce2 -xeno GenBank mrna \
+        /cluster/data/ce2/zip/xenoMrna.fa
+# get native RefSeq mRNAs
+./bin/i386/gbGetSeqs -db=ce2 -native refseq mrna \
+/cluster/data/ce2/zip/refMrna.fa
+# get native GenBank ESTs
+./bin/i386/gbGetSeqs -db=ce2 -native GenBank est \
+/cluster/data/ce2/zip/est.fa
+
+cd /cluster/data/ce2/zip
+# zip GenBank native and xeno mRNAs, native ESTs and RefSeq mRNAs
+zip -j mrna.zip mrna.fa
+zip -j xenoMrna.zip xenoMrna.fa
+zip -j refMrna.zip refMrna.fa
+zip -j est.zip est.fa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh ./jkStuff/zipAll.csh |& tee zipAll.log
+    cd zip
+    #- Look at zipAll.log to make sure all file lists look reasonable.
+
+    # Make upstream files and Copy the .zip files to 
+    # hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/ce2/zip
+    # make upstream files for C. elegans RefSeq
+    featureBits ce2 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    featureBits ce2 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    featureBits ce2 refGene:upstream:5000 -fa=upstream5000.fa
+    zip upstream5000.zip upstream5000.fa
+
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+    
+    set gp = /usr/local/apache/htdocs/goldenPath/ce2
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    mkdir -p $gp/chromosomes
+    foreach f ( ../sangerFa/chr*.fa )
+      zip -j $gp/chromosomes/$f:t.zip $f
+    end
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
+    cd $gp/chromosomes
+    md5sum *.zip > md5sum.txt
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+# MAKE VSCB1 DOWNLOADS (in progress, 2004-04-21, hartera)
+    # DO THIS LATER
+    ssh kksilo
+    cd /cluster/data/ce2/bed/blastz.cb1
+    zip /cluster/data/ce2/zip/Cb1axtChrom.zip axtChrom/chr*.axt
+    cd /cluster/data/ce2/bed/blastz.Cb1/axtChain
+    cp all.chain cb1.chain
+    zip /cluster/data/ce2/zip/cb1.chain.zip cb1.chain
+    rm cb1.chain
+    zip /cluster/data/ce2/zip/cb1.net.zip cb1Filt.net
+    # add add axtNets when done 
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/ce2/vsCb1
+    cd /usr/local/apache/htdocs/goldenPath/ce2/vsCb1
+    mv /cluster/data/ce2/zip/Cb1axtChrom.zip axtChrom.zip
+    mv /cluster/data/ce2/zip/cb1*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# MAKE VSSELF DOWNLOADS (in progress, 2004-04-21, hartera)
+    # DO THIS LATER
+    ssh kksilo
+    cd /cluster/data/galGal2/bed/blastSelf
+    zip /cluster/data/galGal2/zip/SelfaxtChrom.zip axtChrom/chr*.axt
+    cd /cluster/data/ce2/bed/blastzSelf/axtChain
+    cp all.chain self.chain
+    zip /cluster/data/galGal2/zip/self.chain.zip self.chain
+    rm self.chain
+   
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/ce2/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/ce2/vsSelf
+    mv /cluster/data/ce2/zip/SelfaxtChrom.zip axtChrom.zip
+    mv /cluster/data/ce2/zip/self.chain.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats. 
 

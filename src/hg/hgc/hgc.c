@@ -134,9 +134,10 @@
 #include "bgiSnp.h"
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
+#include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.613 2004/04/22 19:42:34 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.620 2004/04/28 22:02:17 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1939,6 +1940,7 @@ netAlignFree(&net);
 }
 
 void tfbsCons(struct trackDb *tdb, char *item)
+/* detail page for tfbsCons track */
 {
 boolean printFactors = FALSE;
 boolean printedPlus = FALSE;
@@ -1960,6 +1962,7 @@ struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
 char *linkName = NULL;
 char *mappedId = NULL;
+boolean haveProtMap = hTableExists("kgProtMap");
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -2032,15 +2035,16 @@ if (printFactors)
 	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbs->id, "N")? "unknown": tfbs->id);
 
 	    /* Only display link if entry exists in protein browser */
-	    sprintf(query, "select * from hg16.kgProtMap where qName = '%s';", tfbs->id );
-	    sr = sqlGetResult(conn, query); 
-	    if ((row = sqlNextRow(sr)) != NULL)                                                         
+	    if (haveProtMap)
 		{
-		printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s&db=hg16\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
-		sqlFreeResult(&sr); 
+		sprintf(query, "select * from kgProtMap where qName = '%s';", tfbs->id );
+		sr = sqlGetResult(conn, query); 
+		if ((row = sqlNextRow(sr)) != NULL)                                                         
+		    {
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
+		    sqlFreeResult(&sr); 
+		    }
 		}
-	    else                                                                                          
-		printf("No Protein Browser entry.\n<BR><BR>"); 
 	    }
 	}
     }
@@ -3151,7 +3155,7 @@ void printGeneLynxAcc(char *search)
 /* Print link to GeneLynx search using accession (X07876, BC001451 etc) */
 {
 printf("<B>GeneLynx</B> ");
-printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLYNX_INDEX.word&IDlist=%s&dir=1\" TARGET=_blank>", search);
+printf("<A HREF=\"http://human.genelynx.org/cgi-bin/fullsearch?fullquery=%s&submit=submit\" TARGET=_blank>", search);
 printf("%s</A><BR>\n", search);
 }
 
@@ -3209,25 +3213,42 @@ if (row != NULL)
 }
 
 void printStanSource(char *acc, char *type)
-/* Print out a link to Stanford's SOURCE web resource. 
+/* Print out a link (Human/Mouse/Rat only) to Stanford's SOURCE web resource. 
    Types known are: est,mrna,unigene,locusLink. */
 {
-char *stanSourceLink = "http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?"; 
-if(sameWord(type, "est"))
+if (startsWith("Human", organism) || startsWith("Mouse", organism) ||
+    startsWith("Rat", organism))
     {
-    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
-    printf("<A HREF=\"%soption=Number&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
+    char *stanSourceLink = "http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?"; 
+    if(sameWord(type, "est"))
+	{
+	printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
+	printf("<A HREF=\"%soption=Number&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
+	}
+    else if(sameWord(type,"unigene"))
+	{
+	printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=CLUSTER&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
+	printf("<A HREF=\"%soption=CLUSTER&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
+	}
+    else if(sameWord(type,"mrna"))
+	printf("<B>Stanford SOURCE:</B> <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
+    else if(sameWord(type,"locusLink"))
+	printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
     }
-else if(sameWord(type,"unigene"))
-    {
-    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=CLUSTER&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
-    printf("<A HREF=\"%soption=CLUSTER&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
-    }
-else if(sameWord(type,"mrna"))
-    printf("<B>Stanford SOURCE:</B> <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
-else if(sameWord(type,"locusLink"))
-    printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
 }
+
+void printGeneCards(char *geneName)
+/* Print out a link to GeneCards (Human only). */
+{
+if (startsWith("hg", database) && isNotEmpty(geneName))
+    {
+    printf("<B>GeneCards:</B> "
+	   "<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?"
+	   "search=%s\" TARGET=_blank>%s</A><BR>\n",
+	   geneName, geneName);
+    }
+}
+
 
 int getImageId(struct sqlConnection *conn, char *acc)
 /* get the image id for a clone, or 0 if none */
@@ -3480,11 +3501,7 @@ if (row != NULL)
 	{
 	printGeneLynxAcc(acc);
 	}
-    if (startsWith("Human", organism) || startsWith("Mouse", organism) ||
-	startsWith("Rat", organism))
-	{
-	printStanSource(acc, type);
-	}
+    printStanSource(acc, type);
     if (hGenBankHaveSeq(acc, NULL))
         {
         printf("<B>%s sequence:</B> ", type); 
@@ -6003,10 +6020,7 @@ if (geneName != NULL)
     {
     medlineLinkedLine("Symbol", geneName, geneName);
     printGeneLynxName(geneName);
-    printf("<B>GeneCards:</B> ");
-    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-	   geneName);
-    printf("%s</A><BR>\n", geneName);
+    printGeneCards(geneName);
     anyMore = TRUE;
     }
 
@@ -6712,10 +6726,7 @@ if (hasMedical)
 	    printf("\n");
 	    printGeneLynxName(rl->name);
 	    printf("\n");
-	    printf("<B>GeneCards:</B> ");
-	    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?");
-	    printf("search=%s\" TARGET=_blank>", rl->name);
-	    printf("%s</A><BR>\n", rl->name);
+	    printGeneCards(rl->name);
 	    if (hTableExists("jaxOrtholog"))
 		{
 		struct jaxOrtholog jo;
@@ -6840,12 +6851,19 @@ if (url != NULL && url[0] != 0)
 	    	{
 		genomeStr = "mm";
 	    	}
-	    else
-	    	{
-	    	warn("Organism %s not found!", organism); 
-	    	return;
-	    	}
-	    }
+            else
+                {
+	        if (sameWord(organism, "rat"))
+                    {
+                    genomeStr = "rn";
+                    }
+                else
+                    {
+                    warn("Organism %s not found!", organism);
+                    return;
+                    }
+                }
+            }
     	sprintf(cond_str, "name='%s'", shortItemName);    
     	ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
     	if (ans != NULL)
@@ -6905,7 +6923,7 @@ if (url != NULL && url[0] != 0)
     char supfamURL[1024];
     char cond_str[256];
     char *proteinID;
-    char genomeStr[10];
+    char *genomeStr;
 
     struct sqlConnection *conn = hAllocConn();
     char query[256];
@@ -6932,18 +6950,25 @@ if (url != NULL && url[0] != 0)
 
     if (sameWord(organism, "human"))
 	{
-        strcpy(genomeStr, "hs");
+        genomeStr = "hs";
 	}
     else
 	{
     	if (sameWord(organism, "mouse"))
 	    {
-	    strcpy(genomeStr, "mm");
+	    genomeStr = "mm";
 	    }
 	else
 	    {
-	    printf("<br>Organism %s not found!!!", organism); fflush(stdout);
-	    return;
+	    if (sameWord(organism, "rat"))
+            	{
+                genomeStr = "rn";
+                }
+            else
+                {
+                warn("Organism %s not found!", organism);
+                return;
+		}
 	    }
 	}
 
@@ -7110,13 +7135,7 @@ if (!startsWith("Worm", organism))
         printGeneLynxName(rl->name);
 	printf("\n");
         }
-    if (!startsWith("dm", database))
-	{
-	printf("<B>GeneCards:</B> ");
-	printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-	       rl->name);
-	printf("%s</A><BR>\n", rl->name);
-	}
+    printGeneCards(rl->name);
     }
 if (hTableExists("jaxOrtholog"))
     {
@@ -7147,11 +7166,7 @@ if (startsWith("hg", hGetDb()))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-if (!startsWith("Worm", organism) && !startsWith("dm", database) && 
-    !startsWith("Fugu", organism) && !startsWith("Yeast", organism))
-{
-    printStanSource(rl->mrnaAcc, "mrna");
-}
+printStanSource(rl->mrnaAcc, "mrna");
 
 htmlHorizontalLine();
 
@@ -7462,6 +7477,7 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
+printf("<B>PseudoGene Confidence:</B> %4.3f \n",pg->posConf);
 printf("<B>PseudoGene Score:</B> %d \n",pg->score);
 printf("<B>Syntenic with mouse:</B> %d %%\n",pg->overlapDiag);
 printf("<B>PolyA tail:</B> %d \n",pg->polyA);
@@ -13690,6 +13706,49 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+static void doVntr(struct trackDb *tdb, char *item)
+/* Perfect microsatellite repeats from VNTR program (Gerome Breen). */
+{
+struct vntr vntr;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char extra[256];
+int rowOffset = 0;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+genericBedClick(conn, tdb, item, start, 4);
+safef(extra, sizeof(extra), "chromStart = %d", start);
+sr = hRangeQuery(conn, tdb->tableName, seqName, winStart, winEnd, extra,
+		 &rowOffset);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    vntrStaticLoad(row + rowOffset, &vntr);
+    printf("<B>Number of perfect repeats:</B> %.02f<BR>\n", vntr.repeatCount);
+    printf("<B>Distance to last microsatellite repeat:</B> ");
+    if (vntr.distanceToLast == -1)
+	printf("n/a (first in chromosome)<BR>\n");
+    else
+	printf("%d<BR>\n", vntr.distanceToLast);
+    printf("<B>Distance to next microsatellite repeat:</B> ");
+    if (vntr.distanceToNext == -1)
+	printf("n/a (last in chromosome)<BR>\n");
+    else
+	printf("%d<BR>\n", vntr.distanceToNext);
+    if (isNotEmpty(vntr.forwardPrimer) &&
+	! sameString("Design_Failed", vntr.forwardPrimer))
+	{
+	printf("<B>Forward PCR primer:</B> %s<BR>\n", vntr.forwardPrimer);
+	printf("<B>Reverse PCR primer:</B> %s<BR>\n", vntr.reversePrimer);
+	printf("<B>PCR product length:</B> %s<BR>\n", vntr.pcrLength);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 static void doZdobnovSynt(struct trackDb *tdb, char *item)
 /* Gene homology-based synteny blocks from Zdobnov, Bork et al. */
 {
@@ -14304,7 +14363,7 @@ else if(sameWord(track, "affy"))
     }
 else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
 	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") 
-	|| sameWord(track, "affyUclaNorm") || sameWord(track, "gnfAtlas2"))
+	|| sameWord(track, "affyUclaNorm") )
     {
     gnfExpRatioDetails(tdb, item);
     }
@@ -14443,6 +14502,10 @@ else if(sameWord(track, "sgdClone"))
 else if (sameWord(track, "sgdOther"))
     {
     doSgdOther(tdb, item);
+    }
+else if (sameWord(track, "vntr"))
+    {
+    doVntr(tdb, item);
     }
 else if (startsWith("zdobnov", track))
     {

@@ -40,6 +40,7 @@ table pseudoGeneLink
     int oldIntronCount; "old simple intron count"
     int conservedIntrons; "conserved intron count"
     string intronScores; "Intron sizes in gene/pseudogene"
+    int chainId ;       " reserved"
     int axtScore;       "blastz score, gene mrna aligned to pseudogene"
     string refSeq;	"Name of closest regSeq to gene"
     int rStart;	        "refSeq alignment start position"
@@ -50,5 +51,7 @@ table pseudoGeneLink
     string kgName;	"Name of closest knownGene to gene"
     int kStart;	        "kg alignment start position"
     int kEnd;           "kg alignment end position"
-    int kgId;           "kg id"
+    int adaBoost;       "adaBoost label"
+    float posConf;      "pvalue for positive"
+    float negConf;      "pvalue for positive"
     )

@@ -1171,8 +1171,6 @@ type wig 0.0 1.0
 autoScaleDefault Off
 
 
-
-
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
@@ -1208,7 +1206,7 @@ searchTable gold
 searchMethod exact
 searchType gold
 shortCircuit 1
-termRegex [abz].[0-9]+(\.[0-9]+)?
+termRegex [abuz].[0-9]+(\.[0-9]+)?
 searchPriority 8
 
 searchName mrnaAcc

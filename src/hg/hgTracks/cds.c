@@ -378,7 +378,7 @@ else
         gp = genePredFromPsl2(psl, 12, &cds, 0);
 
 /*cds not in genbank - revert to normal*/
-if (gp->cdsStartStat != cdsComplete || gp->cdsEndStat != cdsComplete)
+if (gp->cdsStartStat <= cdsUnknown || gp->cdsEndStat <= cdsUnknown)
 {
     int grayIx = pslGrayIx(psl, isXeno, maxShade);
     sfList = sfFromPslX(psl, grayIx, sizeMul);
