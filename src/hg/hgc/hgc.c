@@ -133,6 +133,7 @@
 #include "ensFace.h"
 #include "bdgpGeneInfo.h"
 #include "flyBaseSwissProt.h"
+#include "flyBase2004Xref.h"
 #include "affy10KDetails.h"
 #include "affy120KDetails.h"
 #include "encodeRegionInfo.h"
@@ -156,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.814 2005/01/12 11:49:47 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.815 2005/01/13 01:02:11 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8425,6 +8426,186 @@ printf("</UL>\n");
 printTrackHtml(tdb);
 }
 
+char *pepTableFromType(char *type)
+/* If type (should be from tdb->type) starts with "genePred xxxx", 
+ * return "xxxx" as the pepTable for this track. */
+{
+char *dupe, *words[16];
+int wordCount;
+char *pepTable = NULL;
+dupe = cloneString(type);
+wordCount = chopLine(dupe, words);
+
+if (wordCount > 1 && sameWord(words[0], "genePred") && words[1] != NULL)
+    pepTable = cloneString(words[1]);
+freeMem(dupe);
+return pepTable;
+}
+
+struct bed *getBedAndPrintPos(struct trackDb *tdb, char *name, int maxN)
+/* Dig up the bed for this item just to print the position. */
+{
+struct bed *bed = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char query[256];
+char table[64];
+boolean hasBin = FALSE;
+int n = atoi(tdb->type + 4);
+int start = cgiInt("o");
+if (n < 3)
+    n = 3;
+if (n > maxN)
+    n = maxN;
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromStart = %d "
+      "and name = '%s'",
+      table, seqName, start, name);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+hasBin, n);
+    bedPrintPos(bed, n);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return bed;
+}
+
+void printFBLinkLine(char *label, char *id)
+/* If id is not NULL/empty, print a label and link to FlyBase. */
+{
+if (isNotEmpty(id))
+    {
+    printf("<B>%s:</B> <A HREF=", label);
+    printFlyBaseUrl(stdout, id);
+    printf(" TARGET=_BLANK>%s</A><BR>\n", id);
+    }
+}
+
+void showFlyBase2004Xref(char *xrefTable, char *geneName)
+/* Show FlyBase gene info provided as of late 2004 
+ * (D. mel. v4.0 / D. pseud. 1.0).  Assumes xrefTable exists 
+ * and matches flyBase2004Xref.sql! */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct flyBase2004Xref *xref = NULL;
+struct flyBaseSwissProt *fbsp = NULL;
+char query[512];
+
+safef(query, sizeof(query),
+      "select * from %s where name = \"%s\";", xrefTable, geneName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    xref = flyBase2004XrefLoad(row);
+    if (hTableExists("flyBaseSwissProt") && isNotEmpty(xref->fbgn))
+	{
+	safef(query, sizeof(query),
+	      "select * from flyBaseSwissProt where flyBaseId = \"%s\"",
+	      xref->fbgn);
+	sqlFreeResult(&sr);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    fbsp = flyBaseSwissProtLoad(row);
+	}
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (xref != NULL)
+    {
+    if (isNotEmpty(xref->symbol) && !sameString(xref->symbol, geneName))
+	{
+	printf("<B>Gene symbol:</B> %s<BR>\n", xref->symbol);
+	}
+    if (isNotEmpty(xref->synonyms))
+	{
+	int last = strlen(xref->synonyms) - 1;
+	if (xref->synonyms[last] == ',')
+	    xref->synonyms[last] = 0;
+	printf("<B>Synonyms:</B> %s<BR>\n", xref->synonyms);
+	}
+    if (fbsp != NULL)
+	{
+	printf("<B>SwissProt:</B> <A HREF=");
+	printSwissProtProteinUrl(stdout, fbsp->swissProtId);
+	printf(" TARGET=_BLANK>%s</A> (%s) %s<BR>\n",
+	       fbsp->swissProtId, fbsp->spSymbol, fbsp->spGeneName);
+	}
+    if (isNotEmpty(xref->type))
+	printf("<B>Type:</B> %s<BR>\n", xref->type);
+    printFBLinkLine("FlyBase Gene", xref->fbgn);
+    printFBLinkLine("FlyBase Transcript", xref->fbtr);
+    printFBLinkLine("FlyBase Protein", xref->fbpp);
+    printFBLinkLine("FlyBase Annotation", xref->fban);
+    }
+}
+
+void doFlyBaseGene(struct trackDb *tdb, char *geneName)
+/* Show FlyBase gene info. */
+{
+char *xrefTable = trackDbSettingOrDefault(tdb, "xrefTable", "flyBase2004Xref");
+genericHeader(tdb, geneName);
+
+/* Note: if we need to expand to a different xref table definition, do 
+ * some checking here.  For now, assume it's flyBase2004Xref-compatible: */
+if (hTableExists(xrefTable))
+    showFlyBase2004Xref(xrefTable, geneName);
+
+printCustomUrl(tdb, geneName, FALSE);
+if (startsWith("genePred", tdb->type))
+    {
+    char *geneTable = tdb->tableName;
+    char *pepTable = pepTableFromType(tdb->type);
+    showGenePos(geneName, tdb);
+    printf("<H3>Links to sequence:</H3>\n");
+    printf("<UL>\n");
+
+    if (pepTable != NULL && hGenBankHaveSeq(geneName, pepTable))
+	{
+	puts("<LI>\n");
+	hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable,
+			   seqName);
+	printf("Predicted Protein</A> \n"); 
+	puts("</LI>\n");
+	}
+    else { uglyf("Doh, no go for %s from %s<BR>\n", geneName, pepTable); }
+
+    puts("<LI>\n");
+    hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+    printf("%s</A> may be different from the genomic sequence.\n", 
+	   "Predicted mRNA");
+    puts("</LI>\n");
+
+    puts("<LI>\n");
+    hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+    printf("Genomic Sequence</A> from assembly\n");
+    puts("</LI>\n");
+
+    if (hTableExists("axtInfo"))
+	{
+	puts("<LI>\n");
+	hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
+	printf("Comparative Sequence</A> Annotated codons and translated "
+	       "protein with alignment to another species <BR>\n");
+	puts("</LI>\n");
+	}
+    printf("</UL>\n");
+    }
+else if (startsWith("bed", tdb->type))
+    {
+    struct bed *bed = getBedAndPrintPos(tdb, geneName, 4);
+    if (bed != NULL && bed->strand[0] != 0)
+	printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    bedFree(&bed);
+    }
+printTrackHtml(tdb);
+}
+
 void doBGIGene(struct trackDb *tdb, char *geneName)
 /* Show Beijing Genomics Institute gene annotation info. */
 {
@@ -15530,6 +15711,10 @@ else if (sameWord(track, "gbProtAnn"))
 else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
     {
     doBDGPGene(tdb, item);
+    }
+else if (sameWord(track, "flyBaseGene") || sameWord(track, "flyBaseNoncoding"))
+    {
+    doFlyBaseGene(tdb, item);
     }
 else if (sameWord(track, "bgiGene"))
     {
