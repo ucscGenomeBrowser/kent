@@ -4337,7 +4337,7 @@ pref=`basename $1 .ss.gz`
 chr=`echo $pref | awk -F\. '{print $1}'`
 tmpfile=/scratch/phastCons.$$
 zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod
---expected-lengths 12 --target-coverage 0.125 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/mm5/phastCons/ELEMENTS/$pref.bed --score --require-informative 0 > $tmpfile
+--expected-lengths 12 --target-coverage 0.15 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/mm5/phastCons/ELEMENTS/$pref.bed --score --require-informative 0 > $tmpfile
 gzip -c $tmpfile > /cluster/bluearc/mm5/phastCons/POSTPROBS/$pref.pp.gz
 rm $tmpfile
 EOF
@@ -4364,7 +4364,7 @@ EOF
 
     # check coverage
     featureBits mm5 phastConsElements
-#119288270 bases of 2615483787 (4.561%) in intersection
+#135605549 bases of 2615483787 (5.185%) in intersection
     # This should be close enough.  If necessary, you can rerun the
     # steps above with a different target coverage.  When hitting the
     # target is important, you may want to perform several iterations
@@ -4372,7 +4372,7 @@ EOF
     # seems to work pretty well)
 
     # set up wiggle
-    mkdir -p /cluster/bluearc/mm5/phastCons/wibWay
+    mkdir -p /cluster/bluearc/mm5/phastCons/wib
     cat << 'EOF' > doWigAsciiToBinary.sh
 #!/bin/sh
 chr=$1
