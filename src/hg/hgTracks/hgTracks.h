@@ -40,6 +40,7 @@ struct track
     Color *colorShades;	       /* Color scale (if any) to use. */
     struct rgbColor color;     /* Main color. */
     Color ixColor;             /* Index of main color. */
+    Color *altColorShades;     /* optional alternate color scale */
     struct rgbColor altColor;  /* Secondary color. */
     Color ixAltColor;
 

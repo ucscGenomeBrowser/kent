@@ -3,13 +3,15 @@
 
 #include "variation.h"
 
-void filterSnpMapItems(struct track *tg, boolean (*filter)(struct track *tg, void *item))
+void filterSnpMapItems(struct track *tg, boolean (*filter)
+		       (struct track *tg, void *item))
 /* Filter out items from track->itemList. */
 {
 filterSnpItems(tg, filter);
 }
 
-void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item))
+void filterSnpItems(struct track *tg, boolean (*filter)
+		    (struct track *tg, void *item))
 /* Filter out items from track->itemList. */
 {
 struct slList *newList = NULL, *el, *next;
@@ -144,9 +146,11 @@ void loadSnpMap(struct track *tg)
 int  snpMapSource, snpMapType;
 
 for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
-    snpMapSourceCart[snpMapSource] = cartUsualString(cart, snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
+    snpMapSourceCart[snpMapSource] = cartUsualString(cart, 
+       snpMapSourceStrings[snpMapSource], snpMapSourceDefault[snpMapSource]);
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
-    snpMapTypeCart[snpMapType] = cartUsualString(cart, snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
+    snpMapTypeCart[snpMapType] = cartUsualString(cart, 
+       snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
 if (!startsWith("hg",database))
     return;
@@ -166,17 +170,23 @@ int  snpLocType = 0;
 
 snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0.0"));
 for (snpSource=0;  snpSource  < snpSourceCartSize; snpSource++)
-    snpSourceCart[snpSource] = cartUsualString(cart, snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
+    snpSourceCart[snpSource] = cartUsualString(cart, 
+       snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
 for (snpMolType=0; snpMolType < snpMolTypeCartSize; snpMolType++)
-    snpMolTypeCart[snpMolType] = cartUsualString(cart, snpMolTypeStrings[snpMolType], snpMolTypeDefault[snpMolType]);
+    snpMolTypeCart[snpMolType] = cartUsualString(cart, 
+       snpMolTypeStrings[snpMolType], snpMolTypeDefault[snpMolType]);
 for (snpClass=0;   snpClass   < snpClassCartSize; snpClass++)
-    snpClassCart[snpClass] = cartUsualString(cart, snpClassStrings[snpClass], snpClassDefault[snpClass]);
+    snpClassCart[snpClass] = cartUsualString(cart, 
+       snpClassStrings[snpClass], snpClassDefault[snpClass]);
 for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
-    snpValidCart[snpValid] = cartUsualString(cart, snpValidStrings[snpValid], snpValidDefault[snpValid]);
+    snpValidCart[snpValid] = cartUsualString(cart, 
+       snpValidStrings[snpValid], snpValidDefault[snpValid]);
 for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
-    snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
+    snpFuncCart[snpFunc] = cartUsualString(cart, 
+       snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
 for (snpLocType=0; snpLocType < snpLocTypeCartSize; snpLocType++)
-    snpLocTypeCart[snpLocType] = cartUsualString(cart, snpLocTypeStrings[snpLocType], snpLocTypeDefault[snpLocType]);
+    snpLocTypeCart[snpLocType] = cartUsualString(cart, 
+       snpLocTypeStrings[snpLocType], snpLocTypeDefault[snpLocType]);
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
 
 filterSnpItems(tg, snpAvHetFilterItem);
@@ -204,7 +214,13 @@ Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snpMap track item. */
 {
 struct snpMap *el = item;
-enum   snpColorEnum thisSnpColor = stringArrayIx(snpMapSourceCart[stringArrayIx(el->source,snpMapSourceDataName,snpMapSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
+enum   snpColorEnum thisSnpColor = \
+    stringArrayIx(snpMapSourceCart[
+		     stringArrayIx(el->source,
+				   snpMapSourceDataName,
+				   snpMapSourceDataNameSize
+				   )],
+		  snpColorLabel,snpColorLabelSize);
 
 switch (thisSnpColor)
     {
@@ -228,13 +244,15 @@ Color snpColor(struct track *tg, void *item, struct vGfx *vg)
 {
 struct snp *el = item;
 enum   snpColorEnum thisSnpColor = snpColorBlack;
-char  *snpColorSource = cartUsualString(cart, snpColorSourceDataName[0], snpColorSourceDefault[0]);
+char  *snpColorSource = cartUsualString(cart, 
+			snpColorSourceDataName[0], snpColorSourceDefault[0]);
 char  *validString = NULL;
 char  *funcString = NULL;
 int    snpValid = 0;
 int    snpFunc = 0;
 
-switch (stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStringsSize))
+switch (stringArrayIx(snpColorSource, 
+		      snpColorSourceStrings, snpColorSourceStringsSize))
     {
     case snpColorSourceSource:
 	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpSourceCart[stringArrayIx(el->source,snpSourceDataName,snpSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
@@ -374,7 +392,8 @@ if (vis == tvPack || vis == tvSquish)
 		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		vgTextRight(vg, textX, y, nameWidth, heightPer, itemNameColor, font, name);
+		vgTextRight(vg, textX, y, nameWidth, heightPer, 
+			    itemNameColor, font, name);
             }
         if (!tg->mapsSelf)
             {
@@ -450,7 +469,8 @@ if (vis == tvPack || vis == tvSquish)
 		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 		}
             else
-		vgTextRight(vg, textX, y, nameWidth, heightPer, itemNameColor, font, name);
+		vgTextRight(vg, textX, y, nameWidth, heightPer, 
+			    itemNameColor, font, name);
             }
         if (!tg->mapsSelf)
             {
@@ -544,7 +564,8 @@ if (lf->components != NULL && !hideLine)
     x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
     x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
     w = x2 - x1;
-    color =  shades[lf->grayIx+isXeno];
+    color = shades[lf->grayIx+isXeno];
+
     vgBox(vg, x1, y+3, w, shortHeight-2, color);
     if (vis==tvSquish)
 	vgBox(vg, x1, y+1, w, tg->heightPer/2, color);
@@ -559,7 +580,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (vis==tvSquish)
 	drawScaledBox(vg, s, e, scale, xOff, y, tg->heightPer, blackIndex());
     else
-	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer-heightPer)/2), heightPer, blackIndex());
+	drawScaledBox(vg, s, e, scale, xOff, y+((tg->heightPer-heightPer)/2),
+		      heightPer, blackIndex());
     }
 }
 
@@ -575,4 +597,293 @@ void perlegenMethods(struct track *tg)
 {
 haplotypeMethods(tg);
 tg->itemName = perlegenName;
+}
+
+
+/*******************************************************************/
+
+/* Declare our color gradients and the the number of colors in them */
+Color   ldShadesOfGreen[LD_DATA_SHADES+1];
+Color   ldShadesOfRed[LD_DATA_SHADES+1];
+Color   ldShadesOfBlue[LD_DATA_SHADES+1];
+boolean ldColorsMade  = FALSE; /* Have the shades been allocated? */
+int     maxLdRgbShade = LD_DATA_SHADES - 1;
+
+void makeLdShades(struct vGfx *vg) 
+/* Allocate the LD shades of Red, Green and Blue */
+{
+static struct rgbColor white = {255, 255, 255};
+static struct rgbColor red   = {255,   0,   0};
+static struct rgbColor green = {  0, 255,   0};
+static struct rgbColor blue  = {  0,   0, 255};
+vgMakeColorGradient(vg, &white, &red,   LD_DATA_SHADES, ldShadesOfRed);
+vgMakeColorGradient(vg, &white, &green, LD_DATA_SHADES, ldShadesOfGreen);
+vgMakeColorGradient(vg, &white, &blue,  LD_DATA_SHADES, ldShadesOfBlue);
+ldColorsMade = TRUE;
+}
+
+void ldLoadItems(struct track *tg)
+/* loadItems loads up items for the chromosome range indicated.   */
+{
+bedLoadItem(tg, "ld", (ItemLoader)ldLoad);
+tg->canPack=FALSE;
+tg->limitedVis=TRUE;
+tg->visibility=tvFull;
+}
+
+static void mapDiamondUi(int xl, int yl, int xr, int yr, 
+			 int xt, int yt, int xb, int yb, 
+			 char *name, char *shortLabel)
+/* Print out image map rectangle that invokes hgTrackUi. */
+{
+hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
+	xl, yl, xr, yr, xt, yt, xb, yb);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), cartSessionVarName(),
+                         cartSessionId(cart), chromName, name);
+mapStatusMessage("%s controls", shortLabel);
+hPrintf(">\n");
+}
+
+int ldTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Return total height. Called before and after drawItems. 
+ * Must set height, lineHeight, heightPer */ 
+{
+tg->lineHeight          = 0;
+tg->heightPer           = 0;
+if (cartUsualInt(cart, "ld", 2) == 2)
+    tg->height = min(cartUsualInt(cart, "ldHeight", 200), 400);
+else 
+    tg->height = min(cartUsualInt(cart, "ldHeight",  50), 400);
+return tg->height;
+}
+
+int ldCoverage()
+{
+return min(cartUsualInt(cart, "ldCov", 100000), 500000);
+}
+
+double ldSlope(int height, int width)
+{
+return height*(winEnd-winStart)/(1.0*width*insideWidth);
+}
+
+Color ldDiamondColor(struct track *tg, double score)
+{
+Color *posShades = tg->colorShades;
+Color *negShades = tg->altColorShades;
+if (abs(score)>1)
+    errAbort("Score must be between -1 and 1, inclusive. (score=%.3f)",score);
+if (score>=0)
+    return posShades[(int)(score * (LD_DATA_SHADES+1))];
+return negShades[(int)(-score * LD_DATA_SHADES)];
+}
+
+void drawDiamond(struct track *tg, struct vGfx *vg, int width, int xOff, int yOff, 
+		 int i, int j, int k, int l, double score, char *name, 
+		 char *shortLabel, boolean drawOutline, Color outlineColor)
+/* Draw a single pairwise LD box */
+{
+double scale  = scaleForPixels(insideWidth);
+int    height = ldTotalHeight(tg, tvFull);
+double m      = ldSlope(height, ldCoverage());
+Color  color  = ldDiamondColor(tg, score);
+int    xl,xr,xt,xb,yl,yr,yt,yb;
+
+/* only calculate what is necesary by ignoring items to be 
+ * drawn entirely outside the box.  Calculated in order of 
+ * 'most likely' violations - left, right, top are first. */
+xl=round((double)(scale*((k+i)/2-winStart)))+xOff;
+if (xl > xOff+width)
+    return; /*  left-most point is to the right of the window */
+xr=round((double)(scale*((l+j)/2-winStart)))+xOff;
+if (xr < xOff)
+    return; /* right-most point is to the left  of the window */
+yb=round((double)(scale*m*(k-j)))+yOff;
+if (yb > height+yOff)
+    return; /*     bottom point is to the top  of the window */
+
+xt = round((double)(scale*((l+i)/2-winStart))) + xOff;
+xb = round((double)(scale*((k+j)/2-winStart))) + xOff;
+yl = round((double)(scale*m*(k-i))) + yOff;
+yr = round((double)(scale*m*(l-j))) + yOff;
+yt = round((double)(scale*m*(l-i))) + yOff;
+
+if (xr>=xOff && xl<width+xOff)
+    {
+    vgDiamond(vg, xl, yl, xr, yr, xt, yt, xb, yb, 
+	      color, drawOutline, outlineColor);
+    /* this section should be corrected by the slope for the 
+     * non-zeroed coordinate,  which would make a polygon 
+     * instead of a diamond.  It's a non-trivial problem, 
+     * as it could be a 5, 6, 7, or 8 sided polygon */
+/*
+    if (xl<xOff) xl=xOff; if (xl>width)  xl=width;
+    if (xr<xOff) xr=xOff; if (xr>width)  xr=width;
+    if (xt<xOff) xt=xOff; if (xt>width)  xt=width;
+    if (xb<xOff) xb=xOff; if (xb>width)  xb=width;
+    if (yl<yOff) yl=yOff; if (yl>height) yl=height;
+    if (yr<yOff) yr=yOff; if (yr>height) yr=height;
+    if (yt<yOff) yt=yOff; if (yt>height) yt=height;
+    if (yb<yOff) yb=yOff; if (yb>height) yb=height; 
+*/
+    mapDiamondUi(xl, yl, xr, yr, xt, yt, xb, yb, name, shortLabel);
+    }
+}
+
+void drawNecklace(struct track *tg, int width, int xOff, int yOff, 
+		  void *item, struct vGfx *vg, Color outlineColor,
+		  int *chromStarts, double *values, int arraySize)
+/* Draw a string of diamonds that represent the pairwise LD
+ * values for the current marker */
+{
+struct ld *ld       = item;
+int        n        = 0;
+int        coverage = ldCoverage();
+
+for (n=1; n < ld->ldCount-1; n++)
+    {
+
+    if ((chromStarts[n-1]-ld->chromStart)/2 > winEnd) /* left is outside window */
+	return;
+    if ((chromStarts[n-1]-chromStarts[0]) > coverage) /* bottom is outside window */
+	return;
+//    if ((chromStarts[n]-chromStarts[0])/2 < winStart) /* right is outside window */
+//	continue;
+    drawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, 
+		chromStarts[0], chromStarts[n], chromStarts[n+1], 
+		values[n], ld->name, tg->shortLabel, TRUE, outlineColor);
+    }
+}
+
+void ldTransformLods(int arraySize, double *values)
+/* take an array of non-negative numbers and transform them to [0,1] */
+{
+int i;
+for (i=0; i<arraySize; i++)
+    values[i]=1-exp(-values[i]);
+}
+
+void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
+		  struct vGfx *vg, int xOff, int yOff, int width, 
+		  MgFont *font, Color color, enum trackVisibility vis)
+/* Draw item list, one per track. */
+{
+int        arraySize;
+struct ld *el           = NULL;
+int       *chromStarts  = NULL;
+double    *values       = NULL;
+char      *posColor     = cartUsualString(cart, "ldPos",    "red");
+char      *negColor     = cartUsualString(cart, "ldNeg",    "blue");
+char      *outColor     = cartUsualString(cart, "ldOut",    "yellow");
+char      *valArray     = cartUsualString(cart, "ldValues", "rsquared");
+Color      outlineColor;
+
+makeLdShades(vg);   // for testing: vgDiamond(vg, xOff, yOff+100, xOff+width, yOff+300, xOff+width/4,yOff+400, xOff+3*width/4, yOff, MG_GREEN, TRUE, MG_BLACK);
+
+/* get positive color from cart */
+if (sameString(posColor,"red"))
+    tg->colorShades = ldShadesOfRed;
+else if (sameString(posColor,"blue"))
+    tg->colorShades = ldShadesOfBlue;
+else
+    tg->colorShades = ldShadesOfGreen;
+
+/* get negative color from cart */
+if (sameString(negColor,"blue"))
+    tg->altColorShades = ldShadesOfBlue;
+else if (sameString(negColor,"green"))
+    tg->altColorShades = ldShadesOfGreen;
+else
+    tg->altColorShades = ldShadesOfRed;
+
+/* get outline color from cart */
+if (sameString(outColor,"yellow"))
+    outlineColor = MG_YELLOW;
+else if (sameString(outColor,"red"))
+    outlineColor = MG_RED;
+else if (sameString(outColor,"black"))
+    outlineColor = MG_BLACK;
+else if (sameString(outColor,"green"))
+    outlineColor = MG_GREEN;
+else
+    outlineColor = MG_BLUE;
+
+/* choose values from different arrays based on cart settings */
+if (sameString(valArray,"rsquared"))
+    for (el=tg->items; el!=NULL; el=el->next)
+	{
+	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
+	if(arraySize != el->ldCount) 
+	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
+		      "el->ldCount=%d<BR>el->ldStarts: %s",
+		      el->name,arraySize,el->ldCount,el->ldStarts);
+	sqlDoubleDynamicArray(el->rsquared, &values, &arraySize);
+	if(arraySize != el->ldCount) 
+	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
+		      "el->ldCount=%d<BR>el->rsquared: %s",
+		      el->name,arraySize,el->ldCount,el->rsquared);
+	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
+		     chromStarts, values, arraySize);
+	}
+else if (sameString(valArray, "dprime"))
+    for (el=tg->items; el!=NULL; el=el->next)
+	{
+	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
+	if(arraySize != el->ldCount) 
+	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
+		      "el->ldCount=%d<BR>el->ldStarts: %s",
+		      el->name,arraySize,el->ldCount,el->ldStarts);
+	sqlDoubleDynamicArray(el->dprime, &values, &arraySize);
+	if(arraySize != el->ldCount) 
+	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
+		      "el->ldCount=%d<BR>el->dprime: %s",
+		      el->name,arraySize,el->ldCount,el->dprime);
+	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
+		     chromStarts, values, arraySize);
+	}
+else if (sameString(valArray, "lod"))
+    for (el=tg->items; el!=NULL; el=el->next)
+	{
+	sqlSignedDynamicArray(el->ldStarts, &chromStarts, &arraySize);
+	if(arraySize != el->ldCount) 
+	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
+		      "el->ldCount=%d<BR>el->ldStarts: %s",
+		      el->name,arraySize,el->ldCount,el->ldStarts);
+	sqlDoubleDynamicArray(el->lod, &values, &arraySize);
+	if(arraySize != el->ldCount) 
+	    errAbort ("%s: arraySize error in ldDrawItems (arraySize=%d, "
+		      "el->ldCount=%d<BR>el->lod: %s",
+		      el->name,arraySize,el->ldCount,el->lod);
+	/* transform lod values to [0,1] */
+	ldTransformLods(arraySize, values);
+	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
+		     chromStarts, values, arraySize);
+	}
+else
+    errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'.  "
+	      "'%s' is not known", valArray);
+}
+
+void ldFreeItems(struct track *tg)
+/* Free item list. */
+{
+ldFreeList((struct ld**)&tg->items);
+}
+
+void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	boolean withCenterLabels, MgFont *font,
+	Color color, enum trackVisibility vis)
+/* Draw Left Labels - don't do anything. */
+{
+}
+
+void ldMethods(struct track *tg)
+/* setup special methods for Linkage Disequilibrium track */
+{
+tg->loadItems      = ldLoadItems;
+tg->totalHeight    = ldTotalHeight;
+tg->drawItems      = ldDrawItems;
+tg->freeItems      = ldFreeItems;
+tg->drawLeftLabels = ldDrawLeftLabels;
 }
