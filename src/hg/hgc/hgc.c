@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.575 2004/02/29 23:39:17 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.576 2004/03/01 16:41:08 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4618,6 +4618,7 @@ else if (qType == gftProtChes)
     blockCount = showChesAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 else 
     blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
+htmEnd(body);
 fclose(body);
 chmod(bodyTn.forCgi, 0666);
 
@@ -8769,7 +8770,7 @@ if (row != NULL)
 		{
 		printf(", %s",infoRow->otherNames[i]);
 		}
-	    printf("</TR>\n</TABLE>\n");
+	    printf("</TD></TR>\n</TABLE>\n");
 	    htmlHorizontalLine();
 	    }
 	printf("<TABLE>\n");
