@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.14 2003/09/27 01:35:06 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.15 2003/09/27 01:37:20 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -287,9 +287,9 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
 hPrintf("<BR>");
-hPrintf("With this page you can restrict which genes appear in the main<BR>");
-hPrintf("table based on the values in any column. Submit will take you<BR>");
-hPrintf("back to the main page withthe current filter.");
+hPrintf("With this page you can restrict which genes appear in the main table<BR>");
+hPrintf("based on the values in any column. Submit will take you back to the<BR>");
+hPrintf("main page with the current filter.");
 bigButtons();
 hPrintf("To quickly get a list of gene "
  "names that pass the filter push ");
