@@ -83,7 +83,7 @@ node *current_node = root->next;
 
 while(current_node != NULL)
     {
-    fprintf(stderr,"(%d %d) --> (%d %d)\n",current_node->from->begin,current_node->from->end,current_node->to->begin,current_node->to->end);
+    fprintf(stdout,"%d %d %d %d\n",current_node->from->begin,current_node->from->end,current_node->to->begin,current_node->to->end);
     current_node = current_node->next;
     }
 }
@@ -224,7 +224,7 @@ print_list(right_list);
 /* Infer alignment */
 inferred_list = infer_alignment(left_list,right_list);
 
-fprintf(stderr,"\nInferred list\n");
+fprintf(stdout,"\nInferred list\n");
 print_list(inferred_list);
 }
 
