@@ -51,6 +51,9 @@ public class HGGeneCheck {
     machine = mainProps.getProperty("machine", "hgwbeta.cse.ucsc.edu");
     String table;
     table = mainProps.getProperty("table", "knownGene");
+    String quick;
+    quick = mainProps.getProperty("quick", "off");
+    boolean quickOn = quick.equals("on");
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -110,7 +113,7 @@ public class HGGeneCheck {
           String track = (String) trackIter.next();
           if (!track.equals(table)) continue;
           System.out.println(track);
-          HgTracks.hggene(dbinfo, machine, assembly, track, table);
+          HgTracks.hggene(dbinfo, machine, assembly, track, table, quickOn);
           System.out.println();
         }
       } catch (Exception e) {

@@ -137,15 +137,18 @@ public class HgTracks {
    * @param track    the track to check (same as table)
    */
    public static void hggene(HGDBInfo dbinfo, String machine, String assembly,
-                            String track, String table) {
+                            String track, String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
 
+    int count = 0;
     boolean pb = false;
     ArrayList kglist = QADBLibrary.getGenes(dbinfo, table, pb);
 
     Iterator kgiter = kglist.iterator();
     while (kgiter.hasNext()) {
+      count++;
+      if (quickOn && count > 10) return;
       // not using all of the elements
       KnownGene kg = (KnownGene) kgiter.next();
       String name = kg.name;
