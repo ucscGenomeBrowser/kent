@@ -13,7 +13,7 @@
 #include "sample.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.70 2003/09/24 15:55:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.71 2003/09/25 14:01:37 hiram Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -309,6 +309,7 @@ double maxYc;	/*	from cart */
 double minY;	/*	from the typeLine	*/
 double maxY;	/*	from the typeLine	*/
 int thisHeightPer = DEFAULT_HEIGHT_PER;	/*	pixels per item	*/
+char *interpolate;	/*	points only, or interpolate	*/
 
 minY = DEFAULT_MIN_Yv;
 maxY = DEFAULT_MAX_Yv;
@@ -324,6 +325,7 @@ if( wordCount > 2 )
 	maxY = atof(words[2]);
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
 snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
 snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
 minY_str = cartOptionalString(cart, &options[4][0]);
@@ -337,6 +339,12 @@ if( minY_str ) minYc = max( minY, atof(minY_str));
 else minYc = minY;
 if( maxY_str ) maxYc = min( maxY, atof(maxY_str));
 else maxYc = maxY;
+
+interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown(&options[1][0], interpolate );
+printf(" ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
