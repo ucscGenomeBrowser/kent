@@ -523,6 +523,7 @@ priority 54
 visibility pack
 spectrum on
 type psl .
+intronGap 30
 
 track mrnaBlastz
 shortLabel $Organism mRNAs Blastz
