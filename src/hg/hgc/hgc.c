@@ -631,40 +631,63 @@ printf("<TABLE BORDER=1 COL=8>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (fbUnderstandTrack(tdb->tableName) && !dnaIgnoreTrack(tdb->tableName))
+    char *track = tdb->tableName;
+    if (fbUnderstandTrack(track) && !dnaIgnoreTrack(tdb->tableName))
 	{
+	char *visString = cartOptionalString(cart, track);
 	char buf[128];
-	printf("<TR>");
-	printf("<TD>%s</TD>", tdb->shortLabel);
-	sprintf(buf, "%s_case", tdb->tableName);
-	printf("<TD>");
-	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
-	printf("</TD>");
-	sprintf(buf, "%s_u", tdb->tableName);
-	printf("<TD>");
-	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
-	printf("</TD>");
-	sprintf(buf, "%s_b", tdb->tableName);
-	printf("<TD>");
-	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
-	printf("</TD>");
-	sprintf(buf, "%s_i", tdb->tableName);
-	printf("<TD>");
-	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
-	printf("</TD>");
-	printf("<TD>");
-	sprintf(buf, "%s_red", tdb->tableName);
-	cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
-	printf("</TD>");
-	printf("<TD>");
-	sprintf(buf, "%s_green", tdb->tableName);
-	cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
-	printf("</TD>");
-	printf("<TD>");
-	sprintf(buf, "%s_blue", tdb->tableName);
-	cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
-	printf("</TD>");
-	printf("</TR>\n");
+	if (visString != NULL && sameString(visString, "hide"))
+	    {
+	    char varName[256];
+	    sprintf(varName, "%s_case", track);
+	    cartSetBoolean(cart, varName, FALSE);
+	    sprintf(varName, "%s_u", track);
+	    cartSetBoolean(cart, varName, FALSE);
+	    sprintf(varName, "%s_b", track);
+	    cartSetBoolean(cart, varName, FALSE);
+	    sprintf(varName, "%s_i", track);
+	    cartSetBoolean(cart, varName, FALSE);
+	    sprintf(varName, "%s_red", track);
+	    cartSetInt(cart, varName, 0);
+	    sprintf(varName, "%s_green", track);
+	    cartSetInt(cart, varName, 0);
+	    sprintf(varName, "%s_blue", track);
+	    cartSetInt(cart, varName, 0);
+	    }
+	else
+	    {
+	    printf("<TR>");
+	    printf("<TD>%s</TD>", tdb->shortLabel);
+	    sprintf(buf, "%s_case", tdb->tableName);
+	    printf("<TD>");
+	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
+	    printf("</TD>");
+	    sprintf(buf, "%s_u", tdb->tableName);
+	    printf("<TD>");
+	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
+	    printf("</TD>");
+	    sprintf(buf, "%s_b", tdb->tableName);
+	    printf("<TD>");
+	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
+	    printf("</TD>");
+	    sprintf(buf, "%s_i", tdb->tableName);
+	    printf("<TD>");
+	    cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
+	    printf("</TD>");
+	    printf("<TD>");
+	    sprintf(buf, "%s_red", tdb->tableName);
+	    cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
+	    printf("</TD>");
+	    printf("<TD>");
+	    sprintf(buf, "%s_green", tdb->tableName);
+	    cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
+	    printf("</TD>");
+	    printf("<TD>");
+	    sprintf(buf, "%s_blue", tdb->tableName);
+	    cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
+	    printf("</TD>");
+	    printf("</TR>\n");
+	    }
 	}
     }
 printf("</TABLE>\n");
@@ -3333,114 +3356,6 @@ mustParseRange(tRange, &tName, &tStart, &tEnd);
 return loadPslAt(track, qName, qStart, qEnd, tName, tStart, tEnd);
 }
 
-void pslRecalcBounds(struct psl *psl)
-/* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
- * with blocks. */
-{
-int qStart, qEnd, tStart, tEnd, size;
-int last = psl->blockCount - 1;
-qStart = psl->qStarts[0];
-tStart = psl->tStarts[0];
-size = psl->blockSizes[last];
-qEnd = psl->qStarts[last] + size;
-tEnd = psl->tStarts[last] + size;
-if (psl->strand[0] == '-')
-    reverseIntRange(&qStart, &qEnd, psl->qSize);
-if (psl->strand[1] == '-')
-    reverseIntRange(&tStart, &tEnd, psl->tSize);
-psl->qStart = qStart;
-psl->qEnd = qEnd;
-psl->tStart = tStart;
-psl->tEnd = tEnd;
-}
-
-struct psl *trimPsl(struct psl *oldPsl, int tMin, int tMax)
-/* Return psl trimmed to fit inside tMin/tMax.  Note this does not
- * update the match/misMatch and related fields. */
-{
-int newSize;
-int oldBlockCount = oldPsl->blockCount;
-boolean tIsRc = (oldPsl->strand[1] == '-');
-boolean qIsRc = (oldPsl->strand[0] == '-');
-int newBlockCount = 0, completeBlockCount = 0;
-int i, newI = 0;
-struct psl *newPsl = NULL;
-int tMn = tMin, tMx = tMax;   /* tMin/tMax adjusted for strand. */
-
-/* Deal with case where we're completely trimmed out quickly. */
-newSize = rangeIntersection(oldPsl->tStart, oldPsl->tEnd, tMin, tMax);
-if (newSize <= 0)
-    return NULL;
-
-if (tIsRc)
-    reverseIntRange(&tMn, &tMx, oldPsl->tSize);
-
-/* Count how many blocks will survive trimming. */
-oldBlockCount = oldPsl->blockCount;
-for (i=0; i<oldBlockCount; ++i)
-    {
-    int s = oldPsl->tStarts[i];
-    int e = s + oldPsl->blockSizes[i];
-    int sz = e - s;
-    int overlap;
-    if ((overlap = rangeIntersection(s, e, tMn, tMx)) > 0)
-        ++newBlockCount;
-    if (overlap == sz)
-        ++completeBlockCount;
-    }
-
-if (newBlockCount == 0)
-    return NULL;
-
-/* Allocate new psl and fill in what we already know. */
-AllocVar(newPsl);
-strcpy(newPsl->strand, oldPsl->strand);
-newPsl->qName = cloneString(oldPsl->qName);
-newPsl->qSize = oldPsl->qSize;
-newPsl->tName = cloneString(oldPsl->tName);
-newPsl->tSize = oldPsl->tSize;
-newPsl->blockCount = newBlockCount;
-AllocArray(newPsl->blockSizes, newBlockCount);
-AllocArray(newPsl->qStarts, newBlockCount);
-AllocArray(newPsl->tStarts, newBlockCount);
-
-/* Fill in blockSizes, qStarts, tStarts with real data. */
-newBlockCount = completeBlockCount = 0;
-for (i=0; i<oldBlockCount; ++i)
-    {
-    int oldSz = oldPsl->blockSizes[i];
-    int sz = oldSz;
-    int tS = oldPsl->tStarts[i];
-    int tE = tS + sz;
-    int qS = oldPsl->qStarts[i];
-    int qE = qS + sz;
-    if (rangeIntersection(tS, tE, tMn, tMx) > 0)
-        {
-	int diff;
-	if ((diff = (tMn - tS)) > 0)
-	    {
-	    tS += diff;
-	    qS += diff;
-	    sz -= diff;
-	    }
-	if ((diff = (tE - tMx)) > 0)
-	    {
-	    tE -= diff;
-	    qE -= diff;
-	    sz -= diff;
-	    }
-	newPsl->qStarts[newBlockCount] = qS;
-	newPsl->tStarts[newBlockCount] = tS;
-	newPsl->blockSizes[newBlockCount] = sz;
-	++newBlockCount;
-	if (sz == oldSz)
-	    ++completeBlockCount;
-	}
-    }
-pslRecalcBounds(newPsl);
-return newPsl;
-}
-
 void longXenoPsl1(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable)
 /* Put up cross-species alignment when the second species
@@ -3467,7 +3382,7 @@ printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winE
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
 	tdb->tableName, otherOrg, otherChromTable);
-if (trimPsl(psl, winStart, winEnd) != NULL)
+if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
     printf("View details of parts of alignment within browser window.</A><BR>\n");
@@ -3506,7 +3421,7 @@ char name[256];
 struct dnaSeq *musSeq = NULL;
 struct sqlConnection *conn = hAllocConn();
 
-psl = trimPsl(psl, winStart, winEnd);
+psl = pslTrimToTargetRange(psl, winStart, winEnd);
 sprintf(query, "select fileName from %s where chrom = '%s'", 
 	otherChromTable, psl->qName);
 if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
@@ -6459,7 +6374,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         trackDbFree(&tdb);
     }
-freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return trackHash;
@@ -6586,7 +6500,7 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMouse(tdb, item);
     }
- else if (sameWord(track, "blatMus"))
+else if (sameWord(track, "blatMus"))
     {
     doBlatMus(tdb, item);
     }
@@ -6773,7 +6687,7 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
-else if (sameWord(track, "triangle") || sameWord(track, "transfacHit"))
+else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameWord(track, "transfacHit"))
     {
     doTriangle(tdb, item);
     }
