@@ -8766,6 +8766,14 @@ else if (sameWord(track, "blatFish"))
     {
     doBlatFish(tdb, item);
     }
+else if (sameWord(track, "blatTetra"))
+    {
+    doBlatFish(tdb, item);
+    }
+else if (sameWord(track, "blatFugu"))
+    {
+    doBlatFish(tdb, item);
+    }
 else if (sameWord(track, "rnaGene"))
     {
     doRnaGene(tdb, item);
