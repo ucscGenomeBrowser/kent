@@ -20,7 +20,7 @@ CREATE TABLE rmskOut (
     repStart int not null,	# Start in repeat sequence
     repEnd int unsigned not null,	# End in repeat sequence
     repLeft int not null,	# Size left in repeat sequence
-    id char(1) not null,	# '*' or ' '.  I don't know what this means
+    id char(1) not null,	# First digit of id field in RepeatMasker .out file.  Best ignored
               #Indices
     PRIMARY KEY(swScore)
 );
