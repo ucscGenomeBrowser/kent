@@ -573,7 +573,7 @@ struct linkedFeaturesSeries
 /* series of linked features that are comprised of multiple linked features */
 {
     struct linkedFeaturesSeries *next; 
-    char name[32];                         /* name for series of linked features */
+    char *name;                      /* name for series of linked features */
     int start, end;                     /* Start/end in browser coordinates. */
     int orientation;                    /* Orientation. */
     int grayIx;				/* Gray index (average of features) */
@@ -1695,7 +1695,7 @@ struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf; 
 
 AllocVar(lfs);
-strncpy(lfs->name, lfsbed->name, sizeof(lfs->name));
+lfs->name = cloneString(lfsbed->name);
 lfs->start = lfsbed->chromStart;
 lfs->end = lfsbed->chromEnd;
 lfs->orientation = orientFromChar(lfsbed->strand[0]);
@@ -4825,9 +4825,9 @@ if(bedList == NULL)
    in bed->score */
 AllocVar(lfs);
 if(name != NULL)
-    snprintf(lfs->name, sizeof(lfs->name), "%s", name);
+    lfs->name = cloneString(name);
 else
-    snprintf(lfs->name, sizeof(lfs->name), "%s", "unknown");
+    lfs->name = cloneString("unknown");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     lf = lfFromBed(bed);
@@ -4951,7 +4951,7 @@ for(i=0;i<numIndexes;i++)
     AllocVar(lfsArray[i]);
     snprintf(buff, sizeof(buff), "%d", i);
     name = hashMustFindVal(expIndexesToNames, buff);	
-    snprintf(lfsArray[i]->name, sizeof(lf->name), "%s", name);
+    lfsArray[i]->name = cloneString(name);
     }
 /* for every bed we need to group together the tissue specific
  scores in that bed */
@@ -4971,8 +4971,6 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 
 	/* create the linked features */
 	lf = lfFromBed(bed);
-	/*lf->tallStart = bed->chromStart;
-	  lf->tallEnd = bed->chromEnd;*/
 
 	/* average the scores together to get the ave score for this
 	   tissue type */
@@ -5021,21 +5019,26 @@ filter type */
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL;
-char *grouping = cartUsualString(cart, "nci60.group", "Tissue");
+char *nci60Map = cartUsualString(cart, "nci60.type", nci60EnumToString(0));
+enum nci60OptEnum nci60Type = nci60StringToEnum(nci60Map);
 int i=0;
 bedList = tg->items;
 
-if(tg->visibility == tvDense)
+if(tg->limitedVis == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "NCI 60");
     }
-else if(sameString(grouping,"Tissue"))
+else if(nci60Type == nci60Tissue)
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 1, NULL, -1);
     }
-else 
+else if(nci60Type == nci60All)
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0, NULL, -1);
+    }
+else
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0, nci60Map, 1);
     }
 bedFreeList(&bedList);
 }
@@ -5047,24 +5050,75 @@ filter type */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
-struct bed *bed = NULL, *bedList= NULL;
-char *grouping = cartUsualString(cart, "rosetta.group", "All");
-int i=0;
+struct bed *bed = NULL, *bedList= NULL, *tmp=NULL, *tmpList=NULL;
+char *rosettaMap = cartUsualString(cart, "rosetta.type", rosettaEnumToString(0));
+enum rosettaOptEnum rosettaType = rosettaStringToEnum(rosettaMap);
+char *exonTypes = cartUsualString(cart, "rosetta.et", "Confirmed Only");
+int i=0, et=-1;
 bedList = tg->items;
 
+/* remove predicted or confirmed exons if necessary. */
 
-if(tg->visibility == tvDense)
+/* first get a numeric type so cheap to compare. */
+if(sameString(exonTypes, "All"))
+    et = 0;
+else if(sameString(exonTypes, "Confirmed Only"))
+    et =1;
+else if(sameString(exonTypes, "Predicted Only"))
+    et =2;
+else 
+    errAbort("hgTracks::lfsFromRosettaBed() - don't recognize exonTypes: %s", exonTypes);
+
+/* go through and remove appropriate beds */
+for(bed = bedList; bed != NULL; )
+    {
+    if(et == 0)
+	break;
+    else if(et == 1)
+	{
+	tmp = bed->next;
+	if(strstr(bed->name, "te"))
+	    slSafeAddHead(&tmpList, bed);
+	else
+	    bedFree(&bed);
+	bed = tmp;
+	}
+    else if(et == 2)
+	{
+	tmp = bed->next;
+	if(strstr(bed->name, "pe"))
+	    slSafeAddHead(&tmpList, bed);
+	else
+	    bedFree(&bed);
+	bed = tmp;
+	}
+    }
+if(et != 0)
+    {
+    slReverse(&tmpList);
+    bedList = tmpList;
+    }
+
+/* determine how to display the experiments */
+if(tg->limitedVis == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "Rosetta");
     }
-else if(sameString(grouping,"All"))
+else if(rosettaType == rosettaAll)
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 0, NULL, -1);
     }
-else if(sameString(grouping, "Common Pool"))
+else if(rosettaType == rosettaPoolOther)
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 1, NULL, -1);
+    lfsList = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 1, NULL, -1);
+    lfsList->name=cloneString("Common Pool");
+    lfsList->next->name=cloneString("Other Exps");
+    tg->items = lfsList;
     }
+else 
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 0, rosettaMap, 1);
+    }    
 bedFreeList(&bedList);
 }
 
@@ -5080,7 +5134,7 @@ int i=0;
 bedList = tg->items;
 
 
-if(tg->visibility == tvDense)
+if(tg->limitedVis == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "CGH NCI 60");
     }
@@ -5107,7 +5161,7 @@ struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL;
 int i=0;
-if(tg->visibility == tvDense)
+if(tg->limitedVis == tvDense)
     {
     lfsList = lfsFromMsBedSimple(bedList, tg->shortLabel);
     }
@@ -5116,12 +5170,16 @@ else
     /* for each experiment create a linked features series */
     for(i = 0; i < bedList->expCount; i++) 
 	{
+	char buff[256];
 	AllocVar(lfs);
 	if(bedList != NULL)
-	    snprintf(lfs->name, sizeof(lfs->name), "%d", bedList->expIds[i]);
+	    {
+	    snprintf(buff, sizeof(buff), "%d", bedList->expIds[i]);
+	    lfs->name = cloneString(buff);
+	    }
 	else
-	    snprintf(lfs->name, sizeof(lfs->name), "%s", tg->shortLabel);
-	for(bed = bedList; bed != NULL; bed = bed->next)
+	    lfs->name = cloneString(tg->shortLabel);
+      	for(bed = bedList; bed != NULL; bed = bed->next)
 	    {
 	    lf = lfFromBed(bed);
 	    /* lf->tallStart = bed->chromStart; */
@@ -5247,6 +5305,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+int itemCount =0;
 struct bed *bedList = NULL, *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
@@ -5256,10 +5315,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 15);
     slAddHead(&bedList, bed);
+    itemCount++;
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&bedList);
+
+/* a lot of the filters condense many items down to 
+   two or three, this can be computationally expensive.
+   use the maxItemsInFullTrack as a cap on the number that
+   will be computed */
+if(!tg->limitedVisSet)
+    {
+    enum trackVisibility vis = tg->visibility;
+    tg->limitedVisSet = TRUE;
+    if(vis == tvFull)
+	{
+	if(itemCount > maxItemsInFullTrack) 
+	    vis = tvDense;
+	}
+    tg->limitedVis = vis;
+    }
+
+/* run the filter if it exists, otherwise use default */
 if(tg->trackFilter != NULL)
     {
     /* let the filter do the assembly of the linkedFeaturesList */
@@ -5290,6 +5368,10 @@ if(tmp != NULL)
 	*tmp = '\0';
     strncpy(abbrev, full, sizeof(abbrev));
     freez(&full);
+    }
+else if(lfs->name != NULL) 
+    {
+    strncpy(abbrev, lfs->name, sizeof(abbrev));
     }
 else 
     {
@@ -6522,6 +6604,7 @@ struct trackGroup *group;
 char *freezeName = NULL;
 int controlColNum=0;
 char *s;
+boolean hideAll = cgiVarExists("hgt.hideAll");
 
 /* Tell browser where to go when they click on image. */
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
@@ -6599,6 +6682,13 @@ for (group = tGroupList; group != NULL; group = group->next)
     char *s = cartOptionalString(cart, group->mapName);
     if (s != NULL)
 	group->visibility = hTvFromString(s);
+    }
+
+/* If hideAll flag set, make all tracks hidden */
+if(hideAll)
+    {
+    for (group = tGroupList; group != NULL; group = group->next)
+	group->visibility = tvHide;
     }
 
 /* Tell groups to load their items. */
@@ -6686,6 +6776,8 @@ if (!hideControls)
 
     /* Display bottom control panel. */
     cgiMakeButton("hgt.reset", "reset all");
+    printf(" ");
+    cgiMakeButton("hgt.hideAll", "hide all");
     printf(" Guidelines ");
     cgiMakeCheckBox("guidelines", withGuidelines);
     printf(" <B>Labels:</B> ");
@@ -6968,13 +7060,13 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
  * variables are not hgt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "hgt.reset",
-	"hgt.in1", "hgt.in2", "hgt.in3", 
-	"hgt.out1", "hgt.out2", "hgt.out3",
-	"hgt.left1", "hgt.left2", "hgt.left3", 
-	"hgt.right1", "hgt.right2", "hgt.right3", 
-	"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-	"hgt.customText", "hgt.customFile", "hgt.tui",
-	NULL };
+			"hgt.in1", "hgt.in2", "hgt.in3", 
+			"hgt.out1", "hgt.out2", "hgt.out3",
+			"hgt.left1", "hgt.left2", "hgt.left3", 
+			"hgt.right1", "hgt.right2", "hgt.right3", 
+			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
+			"hgt.customText", "hgt.customFile", "hgt.tui", "hgt.hideAll",
+			NULL };
 
 void resetVars()
 /* Reset vars except for position and database. */
@@ -6989,6 +7081,8 @@ cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
+
+
 
 int main(int argc, char *argv[])
 {
