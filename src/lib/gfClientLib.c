@@ -174,10 +174,8 @@ static struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
 {
 struct gfRange *geneList = NULL, *gene = NULL, *lastExon = NULL, *exon, *nextExon;
 
-uglyf(" gfRangesBundle %d ranges, %d maxIntron\n", slCount(exonList), maxIntron);
 for (exon = exonList; exon != NULL; exon = nextExon)
     {
-    uglyf("  %d-%d hits %s %d-%d\n", exon->qStart, exon->qEnd, exon->tName, exon->tStart, exon->tEnd);
     nextExon = exon->next;
     if (lastExon == NULL || !sameString(lastExon->tName, exon->tName) 
         || exon->tStart - lastExon->tEnd > maxIntron)
@@ -313,7 +311,6 @@ if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
-    uglyf(" possibly saving ali\n");
     (*outFunction)(chromName, chromSize, chromOffset, ff, tSeq, qSeq, isRc, stringency, minMatch, outData);
     }
 }
@@ -501,7 +498,6 @@ for (hit = clump->hitList; ; hit = hit->next)
         {
 	newQ = hit->qStart;
 	newT = hit->tStart - target->start;
-	//  uglyf("   newQ %d, newT %d, qEnd %d, tEnd %d\n", newQ, newT, qEnd, tEnd);
 	}
 
     /* See if it's time to output merged (diagonally adjacent) hits. */
@@ -513,7 +509,6 @@ for (hit = clump->hitList; ; hit = hit->next)
 	    ts = tSeq->dna + tStart;
 	    qe = qSeq->dna + qEnd;
 	    te = tSeq->dna + tEnd;
-	    // uglyf(" extending range\n");
 	    extendHitRight(qSeq->size - qEnd, tSeq->size - tEnd,
 		&qe, &te, aaScore2);
 	    extendHitLeft(qStart, tStart, &qs, &ts, aaScore2);
@@ -533,7 +528,6 @@ for (hit = clump->hitList; ; hit = hit->next)
 		range->hitCount = qe - qs;
 		range->frame = frame;
 		slAddHead(pRangeList, range);
-		// uglyf(" outputRange %d-%d %s %d-%d\n", range->qStart, range->qEnd, range->tName, range->tStart, range->tEnd);
 		}
 	    outOfIt = TRUE;
 	    }
@@ -595,7 +589,7 @@ struct ssBundle *bun;
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
-    gfClumpDump(gf, clump, uglyOut);
+    // gfClumpDump(gf, clump, uglyOut);
     clumpToHspRange(clump, seq, gf->tileSize, 0, &rangeList);
     }
 slReverse(&rangeList);
@@ -638,7 +632,7 @@ for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	{
-	gfClumpDump(gfs[frame], clump, uglyOut);
+	// gfClumpDump(gfs[frame], clump, uglyOut);
 	clumpToHspRange(clump, qSeq, tileSize, frame, &rangeList);
 	}
     }
@@ -671,14 +665,12 @@ struct gfRange *range;
 struct trans3 *t3;
 for (range = rangeList; range != NULL; range = range->next)
     {
-    uglyf(" old %d-%d %d-%d ", range->qStart, range->qEnd, range->tStart, range->tEnd);
     range->qStart = 3*range->qStart + qFrame;
     range->qEnd = 3*range->qEnd + qFrame;
     range->tStart = 3*range->tStart + tFrame;
     range->tEnd = 3*range->tEnd + tFrame;
     t3 = hashMustFindVal(t3Hash, range->tSeq->name);
     range->tSeq = t3->seq;
-    uglyf(" new %d-%d %d-%d\n", range->qStart, range->qEnd, range->tStart, range->tEnd);
     }
 }
 
@@ -701,21 +693,18 @@ for (qFrame = 0; qFrame<3; ++qFrame)
     gfTransFindClumps(gfs, qTrans->trans[qFrame], clumps[qFrame]);
     for (tFrame=0; tFrame<3; ++tFrame)
 	{
-	uglyf(" qFrame %d, tFrame %d, clumps %d\n", qFrame, tFrame, slCount(clumps[qFrame][tFrame]));
 	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfRange *rangeSet = NULL;
-	    gfClumpDump(gfs[tFrame], clump, uglyOut);
+	    // gfClumpDump(gfs[tFrame], clump, uglyOut);
 	    clumpToHspRange(clump, qSeq, tileSize, tFrame, &rangeSet);
 	    untranslateRangeList(rangeSet, qFrame, tFrame, t3Hash);
 	    rangeList = slCat(rangeSet, rangeList);
 	    }
 	}
     }
-uglyf("Got %d ranges before merge\n", slCount(rangeList));
 slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, 500000);
-uglyf("Got %d ranges after merge\n", slCount(rangeList));
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -813,7 +802,6 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	}
     }
 
-uglyf("  matchCount %d, minMatch %d\n", matchCount, minMatch);
 /* See if it looks good enough to output. */
 if (matchCount >= minMatch)
     {
