@@ -22,7 +22,7 @@
 #include "rbTree.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.10 2003/08/05 19:54:13 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.11 2003/08/15 13:32:01 weber Exp $";
 static struct rbTree *gpTree = NULL;
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -30,6 +30,7 @@ static struct optionSpec optionSpecs[] =
     {"help", OPTION_BOOLEAN},
     {"db", OPTION_STRING},
     {"bedFile", OPTION_STRING},
+    {"genePredFile", OPTION_STRING},
     {"orthoEvalOut", OPTION_STRING},
     {"bestOrfExe", OPTION_STRING},
     {"tmpFa", OPTION_STRING},
@@ -45,6 +46,7 @@ static char *optionDescripts[] =
     "Display this message.",
     "Database (i.e. hg15) that bedFile corresponds to.",
     "File with beds to be evaluated.",
+    "[xor bedFile] File with gene predictions to be evaluated.",
     "File to output evaluation records.",
     "[optional default: borf] bestOrf executable name.",
     "[optional default: generated] temp fasta file for bestOrf.",
@@ -645,15 +647,27 @@ ave = ave/bed->blockCount;
 return ave;
 }
     
-struct orthoEval *scoreOrthoBeds(char *bedFile, char *db, FILE *out)
+struct orthoEval *scoreOrthoBeds(char *bedFile, char *genePredFile, char *db, FILE *out)
 /* Score each bed in the orhtoBed file. */
 {
 struct bed *bedList = NULL, *bed = NULL;
+struct genePred *genePredList = NULL, *genePred = NULL;
 struct borf *borf = NULL;
 boolean skipBorf = optionExists("skipBorf");
 struct orthoEval *evList = NULL, *ev = NULL;
 hSetDb(db);
-bedList = bedLoadNAll(bedFile, 12);
+if(genePredFile != NULL)    //input from genePred file
+{
+    genePredList = genePredLoadAll(genePredFile);
+    for(genePred = genePredList; genePred != NULL; genePred = genePred->next )
+    {
+        bed = bedFromGenePred(genePred);
+        slAddHead(&bedList,bed);
+    }
+    slReverse(&bedList);
+}
+else    //input from bed file
+    bedList = bedLoadNAll(bedFile, 12);
 warn("Scoring beds");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
@@ -672,9 +686,9 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	ev->borf = makeUpBorf();
 	ev->borf->score = codingBasesForBed(bed);
 	}
-    calcBasesOverlap(ev);
+//    calcBasesOverlap(ev);
     calcIntronStats(ev);
-//    borfTabOut(borf, stdout);
+    borfTabOut(borf, stdout);
     if(ev->numIntrons > 0)
 	orthoEvalTabOut(ev, out);
     orthoEvalFree(&ev);
@@ -686,7 +700,7 @@ return evList;
 }
 
 
-void orthoEvaluate(char *bedFile, char *db)
+void orthoEvaluate(char *bedFile, char *genePredFile, char *db)
 /* Create orthoEval records and find best introns
    where best is:
    1) Supported by native transcripts.
@@ -701,7 +715,7 @@ orthoEvalOutName = optionVal("orthoEvalOut", NULL);
 if(orthoEvalOutName == NULL)
     errAbort("Please specify an orthoEvalOut file. Use -help for usage.");
 orthoEvalOut = mustOpen(orthoEvalOutName, "w");
-evList = scoreOrthoBeds(bedFile, db, orthoEvalOut);
+evList = scoreOrthoBeds(bedFile, genePredFile, db, orthoEvalOut);
 carefulClose(&orthoEvalOut);
 }
 
@@ -710,6 +724,7 @@ int main(int argc, char *argv[])
 {
 char *db = NULL;
 char *bedFile = NULL;
+char *genePredFile = NULL;
 doHappyDots = isatty(1);  /* stdout */
 if(argc == 1)
     usage();
@@ -720,8 +735,9 @@ db = optionVal("db", NULL);
 if(db == NULL)
     errAbort("Must specify db. Use -help for usage.");
 bedFile = optionVal("bedFile", NULL);
-if(bedFile == NULL)
-    errAbort("Must specify bedFile. Use -help for usage.");
-orthoEvaluate(bedFile, db);
+genePredFile = optionVal("genePredFile", NULL);
+if((bedFile == NULL && genePredFile == NULL)||(bedFile != NULL && genePredFile != NULL))
+    errAbort("Must specify bedFile xor genePredFile. Use -help for usage.");
+orthoEvaluate(bedFile, genePredFile, db);
 return 0;
 }
