@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.851 2004/12/08 18:41:50 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.852 2004/12/08 21:43:40 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5095,6 +5095,7 @@ void xenoMrnaMethods(struct track *tg)
 {
 tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
+tg->totalHeight = tgFixedTotalHeightUsingOverflow;
 }
 
 void xenoRefGeneMethods(struct track *tg)
