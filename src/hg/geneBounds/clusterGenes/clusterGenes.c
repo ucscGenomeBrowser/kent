@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.3 2003/12/21 06:34:36 kent Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.4 2004/01/12 23:05:45 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -292,7 +292,7 @@ void clusterGenesOnStrand(struct sqlConnection *conn,
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-struct genePred *gp, *gpList = NULL;
+struct genePred *gp = NULL, *gpList = NULL;
 char extraWhere[64], query[256];
 struct cluster *clusterList = NULL, *cluster;
 int nameLen;
@@ -318,13 +318,6 @@ for (tableIx = 0; tableIx < tableCount; ++tableIx)
     sqlFreeResult(&sr);
     }
 clusterList = clusterMakerFinish(&cm);
-fprintf(f, "#");
-fprintf(f, "cluster\t");
-fprintf(f, "table\t");
-fprintf(f, "gene\t");
-fprintf(f, "chrom\t");
-fprintf(f, "txStart\t");
-fprintf(f, "txEnd\n");
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
     struct hashEl *helList = hashElListHash(cluster->geneHash);
@@ -349,6 +342,13 @@ struct slName *chromList, *chrom;
 struct sqlConnection *conn;
 int tableIx;
 FILE *f = mustOpen(outFile, "w");
+fprintf(f, "#");
+fprintf(f, "cluster\t");
+fprintf(f, "table\t");
+fprintf(f, "gene\t");
+fprintf(f, "chrom\t");
+fprintf(f, "txStart\t");
+fprintf(f, "txEnd\n");
 
 hSetDb(database);
 if (optionExists("chrom"))
