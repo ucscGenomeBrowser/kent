@@ -485,16 +485,16 @@ return retDb;
 
 void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 /*
-  The order of preference here is as follows:
-If we got a request that explicitly names the db, that takes
-highest priority, and we synch the organism to that db.
-If we get a cgi request for a specific organism then we use that
-organism to choose the DB.
+ * The order of preference here is as follows:
+ * If we got a request that explicitly names the db, that takes
+ * highest priority, and we synch the organism to that db.
+ * If we get a cgi request for a specific organism then we use that
+ * organism to choose the DB.
 
-In the cart only, we use the same order of preference.
-If someone requests an Genome we try to give them the same db as
-was in their cart, unless the Genome doesn't match.
-*/
+ * In the cart only, we use the same order of preference.
+ * If someone requests an Genome we try to give them the same db as
+ * was in their cart, unless the Genome doesn't match.
+ */
 {
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
