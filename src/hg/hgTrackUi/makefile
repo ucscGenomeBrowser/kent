@@ -19,7 +19,7 @@ beta: compile
 	mv $A /usr/local/apache/cgi-bin-beta/$A
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	${CC} $O $(MYLIBS) $(L) 
 	mv a.out $A
 	strip $A
 	chmod a+rx $A
@@ -29,6 +29,9 @@ install:	compile
 
 lib:
 	cd ../../lib; make
+
+clean:
+	rm -f $O $A
 
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h

@@ -1,6 +1,7 @@
 include ../../inc/common.mk
 
-L = -lm $(MYSQLLIBS) 
+
+L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
@@ -22,7 +23,7 @@ beta: compile
 
 
 compile: $O 
-	gcc $O ${F64} $(MYLIBS) $(L) 
+	${CC} $O ${F64} $(MYLIBS) $(L) 
 	mv a.out $A
 #strip $A
 	chmod a+rx $A
@@ -31,13 +32,15 @@ install:	compile
 	mv $A ${DESTDIR}/usr/local/apache/cgi-bin/$A
 
 debug: $O
-	gcc $O $(MYLIBS) $(L) 
+	${CC} $O $(MYLIBS) $(L) 
 	mv a.out $A
 
 
 lib:
 	cd ../../lib; make
 
+clean:
+	rm -f $O $A
+
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
-
