@@ -11,6 +11,7 @@
 #include "psl.h"
 #include "portable.h"
 #include "featureBits.h"
+#include "chain.h"
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -45,6 +46,10 @@ errAbort(
   "                   have txStart==cdsStart or txEnd==cdsEnd\n"
   "    :endAll:N      Like end, but doesn't filter out genes that \n"
   "                   have txStart==cdsStart or txEnd==cdsEnd\n"
+  "The tables can be bed, psl, or chain files, or a directory full of\n"
+  "such files as well as actual database tables.  To count the bits\n"
+  "used in dir/chrN_something*.bed you'd do:\n"
+  "   featureBits dir/something.bed\n"
   );
 }
 
@@ -118,14 +123,16 @@ if (fileExists(track))
 else
     {
     char dir[256], root[128], ext[65];
+    int len;
     splitPath(track, dir, root, ext);
+    /* Chop trailing / off of dir. */
+    len = strlen(dir);
+    if (len > 0 && dir[len-1] == '/')
+        dir[len-1] = 0;
     sprintf(fileName, "%s%s/%s%s", dir, root, chrom, ext);
     if (!fileExists(fileName))
 	{
         warn("Couldn't find %s or %s", track, fileName);
-	}
-    else
-	{
 	strcpy(fileName, track);
 	}
     }
@@ -135,7 +142,7 @@ return fileName;
 void outOfRange(struct lineFile *lf, char *chrom, int chromSize)
 /* Complain that coordinate is out of range. */
 {
-errAbort("Coordinate out of allowed range [%d,%d) for %s line %d of %s",
+errAbort("Coordinate out of allowed range [%d,%d) for %s near line %d of %s",
 	0, chromSize, chrom, lf->lineIx, lf->fileName);
 }
 
@@ -213,6 +220,31 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
+void fbOrChain(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or in a chain file. */
+{
+struct lineFile *lf;
+char fileName[512];
+struct chain *chain;
+struct boxIn *b;
+
+chromFileName(track, chrom, fileName);
+if (!fileExists(fileName))
+    return;
+lf = lineFileOpen(fileName, TRUE);
+while ((chain = chainRead(lf)) != NULL)
+    {
+    for (b = chain->blockList; b != NULL; b = b->next)
+        {
+	int s = b->tStart, e = b->tEnd;
+	if (s < 0) outOfRange(lf, chrom, chromSize);
+	if (e > chromSize) outOfRange(lf, chrom, chromSize);
+	bitSetRange(acc, b->tStart, b->tEnd - b->tStart);
+	}
+    chainFree(&chain);
+    }
+}
+
 
 void isolateTrackPartOfSpec(char *spec, char track[512])
 /* Convert something like track:exon to just track */
@@ -221,6 +253,26 @@ char *s;
 strcpy(track, spec);
 s = strchr(track, ':');
 if (s != NULL) *s = 0;
+}
+
+void orFile(Bits *acc, char *track, char *chrom, int chromSize)
+/* Or some sort of file into bits. */
+{
+char *suffix = strrchr(track, '.');
+if (suffix == NULL)
+    errAbort("Unknown file type %s", track);
+if (sameString(suffix, ".psl"))
+    {
+    fbOrPsl(acc, track, chrom, chromSize);
+    }
+else if (sameString(suffix, ".bed"))
+    {
+    fbOrBed(acc, track, chrom, chromSize);
+    }
+else if (sameString(suffix, ".chain"))
+    {
+    fbOrChain(acc, track, chrom, chromSize);
+    }
 }
 
 void orTable(Bits *acc, char *track, char *chrom, 
@@ -235,14 +287,7 @@ isolateTrackPartOfSpec(track, t);
 s = strrchr(t, '.');
 if (s != NULL)
     {
-    if (sameString(s, ".psl"))
-        {
-	fbOrPsl(acc, track, chrom, chromSize);
-	}
-    else if (sameString(s, ".bed"))
-        {
-	fbOrBed(acc, track, chrom, chromSize);
-	}
+    orFile(acc, track, chrom, chromSize);
     }
 else
     {
