@@ -34,6 +34,7 @@ struct sts
   struct sts *next;
   struct stsInfo2 *si;
   struct dnaSeq *fa;
+  char *faAcc;
   boolean mapped;
   boolean dbstsIdExists;
 } *sList=NULL;
@@ -52,7 +53,7 @@ struct gb
 {
   struct gb *next;
   char* acc;
-  struct stsInfo2 *si;
+  struct sts *s;
   boolean gbSeq;
 };
 
@@ -184,37 +185,32 @@ void addName(struct sts *s, char *name)
 /* Add a name to a sts record */
 {
     char *namesCurr, namesNew[1024];
-  int sizeOne;
+    int sizeOne;
+    struct gb *gb;
 
   /* See if it is a genBank record */
   if (checkGb(name))
     {
-      /*namesCurr = sqlStringArrayToString(s->si->genbank, s->si->gbCount);
-      sprintf(namesNew, "%s%s,", namesCurr, name);
-      s->si->gbCount++;
-      freeMem(&s->si->genbank);
-      sqlStringDynamicArray(namesNew, &s->si->genbank, &sizeOne);
-      assert(sizeOne == s->si->gbCount);*/
       addElement(name, &s->si->genbank, &s->si->gbCount);
+      if (hashLookup(gbAccHash, name))
+	{
+	  gb = hashMustFindVal(gbAccHash, name);
+	  gb->s = s;
+	}
+      else
+	{
+	  AllocVar(gb);
+	  gb->next = NULL;
+	  gb->acc = cloneString(name);
+	  gb->s = s;
+	}
     }
   else if (checkGdb(name))
     {
-      /* namesCurr = sqlStringArrayToString(s->si->gdb, s->si->gdbCount);
-      sprintf(namesNew, "%s%s,", namesCurr, name);
-      s->si->gdbCount++;
-      freeMem(&s->si->gdb);
-      sqlStringDynamicArray(namesNew, &s->si->gdb, &sizeOne);
-      assert(sizeOne == s->si->gbCount); */
       addElement(name, &s->si->gdb, &s->si->gdbCount);
     }    
   else
     {
-      /* namesCurr = sqlStringArrayToString(s->si->otherNames, s->si->nameCount);
-      sprintf(namesNew, "%s%s,", namesCurr, name);
-      s->si->nameCount++;
-      freeMem(&s->si->otherNames);
-      sqlStringDynamicArray(namesNew, &s->si->otherNames, &sizeOne);
-      assert(sizeOne == s->si->nameCount);*/
       addElement(name, &s->si->otherNames, &s->si->nameCount);
     }
 }
@@ -233,7 +229,7 @@ void readStsInfo(struct lineFile *sif)
   dbStsIdHash = newHash(20);
   primerHash = newHash(20);
   nameHash = newHash(24);
-  gbAccHash = newHash(16);
+  gbAccHash = newHash(20);
   ucscIdHash = newHash(20);
 
   /* Read in all rows */  
@@ -282,7 +278,7 @@ void readStsInfo(struct lineFile *sif)
 	      AllocVar(gb);
 	      gb->next = NULL;
 	      gb->acc = cloneString(si->genbank[i]);
-	      gb->si = si;
+	      gb->s = s;
 	      gb->gbSeq = FALSE;
 	      hashAdd(gbAccHash, gb->acc, gb);
 	    }
@@ -305,6 +301,10 @@ void readStsInfo(struct lineFile *sif)
 	      hashAdd(primerHash, name, p);
 	    }
 	}
+      else 
+	{
+	  stsInfo2Free(&si);
+	}
     }
 }
 
@@ -322,7 +322,7 @@ void readGbAcc(struct lineFile *gaf)
 	  AllocVar(gb);
 	  gb->next = NULL;
 	  gb->acc = cloneString(acc[0]);
-	  gb->si = NULL;
+	  gb->s = NULL;
 	  gb->gbSeq = TRUE;
 	  hashAdd(gbAccHash, acc[0], gb);
 	  if (hashLookup(nameHash, acc[0]))
@@ -593,23 +593,87 @@ void readAllSts(FILE *asf)
 {
   struct dnaSeq *ds;
   struct sts *s;
-  char *name, *words[8];
+  char *words[8], *acc=NULL, *line;
+  int wordCount;
 
-
-  ds = faReadOneDnaSeq(asf, "default", TRUE);
-  while (ds != NULL)
+  while (faReadMixedNext(asf, 0, "default", TRUE, &line, &ds))
     {
       /* Determine the UCSC id */
-      name = cloneString(ds->name);
-      chopByWhite(name, words, ArraySize(words));
+      wordCount = chopByWhite(line, words, ArraySize(words));
       stripString(words[0], ">");
+      if (wordCount == 3)
+	acc = cloneString(words[2]);
+      else
+	acc = NULL;
       /* Find the record and attach */
-      if (hashLookup(stsHash, words[0]))
+      if (hashLookup(stsHash, ds->name))
 	{
-	  s = hashMustFindVal(stsHash, words[0]);
+	  s = hashMustFindVal(stsHash, ds->name);
 	  s->fa = ds;
+	  s->faAcc = acc;
 	}
-      ds = faReadOneDnaSeq(asf, "default", TRUE);
+      else 
+	{
+	  dnaSeqFree(&ds);
+	  freez(&line);
+	  if (acc != NULL)
+	    freez(&acc);
+	}
+    }
+}
+
+void readDbstsFa(FILE *dff)
+/* Read in sequences from dbSTS.fa and add, if possible */
+{
+  struct dnaSeq *ds;
+  struct sts *s;
+  struct gb *gb;
+  char *id, *words[8], *acc=NULL, name[256], *line;
+  int wordCount;
+
+  while (faReadMixedNext(dff, 0, "default", TRUE, &line, &ds))
+    {
+      /* Determine the UCSC id */
+      if (hashLookup(gbAccHash, ds->name)) 
+	{
+	  /* Determine if this is linked to a marker */
+	  gb = hashMustFindVal(gbAccHash, ds->name);
+	  if (gb->s != NULL) 
+	    {
+	      /* If no recorded sequence, then add */ 
+	      s = gb->s;
+	      if (s->fa == NULL) 
+		{
+		  s->faAcc = cloneString(ds->name);
+		  sprintf(name, "%d", s->si->identNo);
+		  ds->name = cloneString(name);
+		  s->fa = ds;
+		  s->si->sequence = 1;
+		} 
+	      /* If no accession recorded, see if sequences are the same */
+	      else if (s->faAcc == NULL) 
+		{
+		  if (sameString(s->fa->dna, ds->dna))
+		    {
+		      s->faAcc = cloneString(ds->name);
+		      s->si->sequence = 1;		  
+		    }
+		  freeDnaSeq(&ds);
+		}	  
+	      /* If same accession as recorded, the update sequence */
+	      else if (sameString(s->faAcc, ds->name))
+		{
+		  ds->name = cloneString(s->fa->name);
+		  freeDnaSeq(&s->fa);
+		  s->fa = ds;
+		  s->si->sequence = 1;
+		}
+	      else
+		freeDnaSeq(&ds);	    
+	    }
+	  else
+	    freeDnaSeq(&ds);	    
+	}
     }
 }
 
@@ -683,8 +747,8 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 	  /* Write out to fa file */
 	  if (s->fa != NULL)
 	    {
-	      gb = sqlStringArrayToString(si->genbank, si->gbCount);
-	      sprintf(name, "%s %s %s", s->fa->name, si->name, gb);
+	      /* gb = sqlStringArrayToString(si->genbank, si->gbCount); */
+	      sprintf(name, "%s %s %s", s->fa->name, si->name, s->faAcc);
 	      faWriteNext(off, name, s->fa->dna, s->fa->size);
 	    }
 	}
@@ -753,6 +817,7 @@ verboseSetLevel(verb);
 
  /* Read in new sequences from dbSTS.fa */
  verbose(1, "Reading dbSTS.fa file\n");
+ readDbstsFa(dff);
 
  /* Print out the new files */
  verbose(1, "Creating output files\n");
