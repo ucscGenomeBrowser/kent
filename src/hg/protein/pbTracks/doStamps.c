@@ -357,7 +357,7 @@ struct pbStamp *getStampData(char *stampName)
 void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *tagName)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-hPrintf("HREF=\"../goldenPath/help/pbTracksHelp.html#%s\"", tagName);
+hPrintf("HREF=\"../goldenPath/help/pb%s.html\"", tagName);
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
