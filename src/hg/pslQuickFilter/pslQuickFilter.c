@@ -39,6 +39,8 @@ void quickFilter(struct lineFile *pf, FILE *of)
      wordCount = chopTabs(line, words);
      if (wordCount != 21)
        errAbort("Bad line %d of %s\n", pf->lineIx, pf->fileName);
+     if (words[15][0] == '-')
+       continue;
      psl = pslLoad(words);
      if ((psl->match >= MINMATCH) &&
 	 (psl->misMatch <= MAXMISMATCH) &&
