@@ -30,10 +30,10 @@ public class PBGeneCheck {
     System.out.println(
       "PBGeneCheck - do some basic automatic tests on pbTracks cgi\n" +
       "usage:\n" +
-      "   java HGGeneCheck propertiesFile\n" +
+      "   PBGeneCheck propertiesFile\n" +
       "where properties files may contain machine, database, quick." +
-      "   java HGGeneCheck default\n" +
-      "This will use the default properties\n"
+      "   \n\n   PBGeneCheck default\n" +
+      "will use the default properties (hg17)\n"
       );
     System.exit(-1);
  }
@@ -47,6 +47,7 @@ public class PBGeneCheck {
     boolean debug = false;
     if (args.length != 1)
         usage();
+    // target is properties file on command line
     TestTarget target = new TestTarget(args[0]);
 
     String table    = "knownGene";
