@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.8 2003/06/11 07:04:01 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.9 2003/08/29 00:22:49 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -163,6 +163,7 @@ void fillInEstInfo(struct estOrientInfo *ei, struct dnaSeq *est, struct dnaSeq *
 {
 static char *signals[] = {"aataaa", "attaaa"};
 int unAliSize;
+struct dnaSeq* revEst;
 ei->chrom = psl->tName;
 ei->chromStart = psl->tStart;
 ei->chromEnd = psl->tEnd;
@@ -180,19 +181,20 @@ correctEst(psl, est, geno);
 
 /* Find poly A signal - first looking for most common signal, then
  * for less common signal on both strands. */
+revEst = cloneDnaSeq(est);
+reverseComplement(revEst->dna, est->size);
 ei->signalPos = findSignalPos(psl, est, ei->sizePolyA, signals[0]);
-reverseComplement(est->dna, est->size);
-ei->revSignalPos = findSignalPos(psl, est, ei->revSizePolyA, signals[0]);
+ei->revSignalPos = findSignalPos(psl, revEst, ei->revSizePolyA, signals[0]);
 if (ei->signalPos == 0 && ei->revSignalPos == 0)
     {
-    ei->revSignalPos = findSignalPos(psl, est, ei->revSizePolyA, signals[1]);
+    ei->revSignalPos = findSignalPos(psl, revEst, ei->revSizePolyA, signals[1]);
     if (ei->revSignalPos == 0)
 	{
 	reverseComplement(est->dna, est->size);
 	ei->signalPos = findSignalPos(psl, est, ei->sizePolyA, signals[1]);
 	}
     }
-
+dnaSeqFree(&revEst);
 }
 
 void polyInfo(char *pslFile, char *genoFile, char *estFile, char *outputFile)
