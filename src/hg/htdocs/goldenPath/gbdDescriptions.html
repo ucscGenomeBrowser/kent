@@ -186,7 +186,7 @@ format description of their fields.</P>
   href="#GpInfo">chrN_gold</A> 
   - Instructions on creating golden path from fragments 
   <LI><A 
-  href="#wiggleTrack">chrN_humMusL</A> 
+  href="#WiggleTrack">chrN_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores 
   <LI><A 
   href="#PslInfo">chrN_intronEst</A> 
@@ -195,7 +195,7 @@ format description of their fields.</P>
   href="#PslInfo">chrN_mrna</A> 
   - mRNA alignments 
   <LI><A 
-  href="#wiggleTrack">chrN_musHumL</A> 
+  href="#WiggleTrack">chrN_musHumL</A> 
   - Mouse/Human Evolutionary Conservation Scores 
   <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
@@ -204,13 +204,13 @@ format description of their fields.</P>
   href="#WabaChromCreate">chrN_wabaCbr</A> 
   - C. briggsae WABA alignments - abbreviated description
   <LI><A 
-  href="#wiggleTrack">chrN_zoom1_humMusL</A> 
+  href="#WiggleTrack">chrN_zoom1_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores (very large scale)
   <LI><A 
-  href="#wiggleTrack">chrN_zoom2500_humMusL</A> 
+  href="#WiggleTrack">chrN_zoom2500_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores (medium scale)
   <LI><A 
-  href="#wiggleTrack">chrN_zoom50_humMusL</A> 
+  href="#WiggleTrack">chrN_zoom50_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores (large scale)
 </UL>
 
@@ -685,7 +685,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#BED">perlegen</A> 
   - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
   <LI><A 
-  href="#wiggleTrack">pGC</A> 
+  href="#WiggleTrack">pGC</A> 
   - Percentage of bases that are G or C in small regions across the genome </LI>
   <LI><A 
   href="#LFS">phMouse</A> 
@@ -728,10 +728,10 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#RefSeqSummary">RefSeqSummary</A> 
   - Sparse summary table created only for refSeqs that have "Summary:" or "COMPLETENESS:" in comment
   <LI><A 
-  href="#RegPotential">regPotential2X</A> 
+  href="#WiggleTrack2">regPotential2X</A> 
   - 2-way regulatory potential score computed from human/mouse alignments
   <LI><A 
-  href="#RegPotential">regPotential3X</A> 
+  href="#WiggleTrack2">regPotential3X</A> 
   - 3-way regulatory potential score computed from human/mouse/rat alignments
   <LI><A 
   href="#RikenAltid">rikenaltid</A> 
@@ -947,16 +947,16 @@ cover the same region </LI>
   href="#PslInfo">xenoMrna</A> 
   - Nonhuman mRNAs from GenBank </LI>
   <LI><A 
-  href="#wiggleTrack">zoo</A> 
+  href="#WiggleTrack">zoo</A> 
   - Zoo conservation scores for each zoo species based on blastz pair-wise alignments </LI>
   <LI><A 
   href="#PslInfo">zooHuman3_zoo[Organism]3</A> 
   - Blastz alignments of each zoo species against human (Zoo)</LI>
   <LI><A 
-  href="#wiggleTrack">zoom1_affyTranscriptome</A> 
+  href="#WiggleTrack">zoom1_affyTranscriptome</A> 
   - Affymetrix Transcriptome scores (large scale)</LI>
   <LI><A 
-  href="#wiggleTrack">zoom2_affyTranscriptome</A> 
+  href="#WiggleTrack">zoom2_affyTranscriptome</A> 
   - Affymetrix Transcriptome scores (medium scale)</LI>
 </UL>
 
@@ -2415,25 +2415,6 @@ First used Oct. 2003
     )
 </PRE>
 
-<H4><A name=RegPotential></A>Regulatory Potential </H4>
-<PRE>table regPotentialX
-"Links RefSeq mRNA accessions with status"
-    (
-    string chrom; 	
-    int chromStart;
-    int chromEnd;
-    string cname; 
-    int span; 
-    int count;
-    int offset; 
-    string cfile; 
-    double lowerLimit; 
-    double dataRange; 
-    int validCount; 
-    double sumData; 
-    double sumSquares;
-</PRE>
-
 <H4><A name=RepeatInfo></A>Repeating Elements</H4>
 These tables were created from RepeatMasker .out files.
 <PRE>table chrN_rmsk
@@ -2592,7 +2573,7 @@ Last used Apr. 2001.
     )
 </PRE>
 
-<H4><A name=wiggleTrack></A>Sample Tracks for Plotting Real-valued Data</H4>
+<H4><A name=WiggleTrack></A>Sample Tracks for Plotting Real-valued Data</H4>
 The following definition is used for: affyTranscriptome, binomialCons2, 
 chrN_humMusL, chrN_musHumL, chrN_zoom2500_humMusL, chrN_zoom50_humMusL, 
 chrN_zoom1_humMusL, pGC, zoo, zoom1_affyTranscriptome, zoom2_affyTranscriptome.
@@ -2607,6 +2588,7 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
 
 <PRE>table sample9
 "Describes (x,y) pairs of samples"
+   {
     ushort bin;                         "A field to speed indexing added to many
                                          tables August 2001"
     string  chrom;                      "Chromosome alignment is on."
@@ -2619,6 +2601,28 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
     uint[sampleCount]   samplePosition  "Base position of each sample in this
                                          block, relative to chromStart"
     uint[sampleCount]   sampleHeight    "Score for each sample (y-value) from 0 to 1000"
+    }
+</PRE>
+
+<H4><A name=WiggleTrack2></A>Sample Tracks for Plotting Real-valued Data (Rev 2)</H4>
+The following definition is used for: regPotential2X, regPotential3X.
+<PRE>table wiggle
+"Wiggle track values to display as y-values (first 6 fields are bed6)"
+    (
+    string chrom;         "Human chromosome or FPC contig"
+    uint chromStart;      "Start position in chromosome"
+    uint chromEnd;        "End position in chromosome"
+    string name;          "Name of item"
+    uint span;            "Each value spans this many bases"
+    uint count;           "Number of values in this block"
+    uint offset;          "Offset in File to fetch data"
+    string file;          "Path name to data file, one byte per value"
+    double lowerLimit;    "Lowest data value in this block"
+    double dataRange;     "LowerLimit + dataRange = upperLimit"
+    uint validCount;      "Number of valid data values in this block"
+    double sumData;       "Sum of the data points, for average and stddev calc"
+    double sumSquares;    "Sum of data points squared, for stddev calc"
+    )
 </PRE>
 
 <H4><A name=SangerExtra></A>Sanger 20 and 22 Genes - Additional Information</H4>
