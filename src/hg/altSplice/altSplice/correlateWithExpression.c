@@ -80,208 +80,6 @@ if(count > 0)
 return 0;
 }
 
-
-boolean isExon(struct altGraphX *agx, int edge)
-{
-if((agx->vTypes[agx->edgeStarts[edge]] == ggHardStart ||
-    agx->vTypes[agx->edgeStarts[edge]] == ggSoftStart) &&
-   (agx->vTypes[agx->edgeEnds[edge]] == ggHardEnd ||
-    agx->vTypes[agx->edgeEnds[edge]] == ggSoftEnd))
-    return TRUE;
-return FALSE;
-}
-
-int calcDistance(struct psl *pslList, struct altGraphX *ag)
-{
-int distance = 0;
-int minDiff = BIGNUM;
-struct psl *psl = NULL;
-for(psl = pslList; psl != NULL; psl = psl->next)
-    {
-    if(sameString(ag->strand, "+")) 
-	distance = abs(ag->tEnd - psl->tStart);
-    else
-	distance = abs(ag->tStart - psl->tStart);
-    if(distance < minDiff && sameString(ag->tName, psl->tName) && distance < 1000)
-	minDiff = distance;
-    }
-return minDiff;
-}
-
-int calcOverlap(struct psl *pslList, struct altGraphX *ag)
-{
-int i,j,overlap=0;
-struct psl *psl = NULL;
-if(pslList == NULL)
-    return 0;
-for(psl = pslList; psl != NULL; psl = psl->next)
-    {
-    for(i=0; i< ag->edgeCount; i++)
-	{
-	if(isExon(ag,i))
-	    {
-	    for(j=0; j<psl->blockCount; j++)
-		{
-		overlap += positiveRangeIntersection(ag->vPositions[ag->edgeStarts[i]], ag->vPositions[ag->edgeEnds[i]], psl->tStarts[j], (psl->tStarts[j] + psl->blockSizes[j]));
-		}
-	    }
-	}
-    }
-return overlap;
-}
-
-struct psl *getPslForId(char *acc, struct sqlConnection *conn)
-{
-struct psl *pslList = NULL, *psl = NULL;
-struct sqlResult *sr = NULL;
-char **row;
-char *id = NULL;
-char *table = NULL;
-char buff[256];
-if(strstr(acc, "NM_") != NULL)
-    table = "refSeqAli";
-else
-    {
-
-    int type = -1;
-    snprintf(buff, sizeof(buff), "select type from mrna where acc = '%s'", acc);
-    type = sqlQuickNum(conn, buff);
-    if(type == 0)
-	table = "all_est";
-    else
-	table = "all_mrna";
-    }
-snprintf(buff, sizeof(buff), "select * from %s where qName = '%s'", table, acc);
-sr = sqlGetResult(conn, buff);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    psl = pslLoad(row+1);
-    slAddHead(&pslList, psl);
-    }
-sqlFreeResult(&sr);
-return pslList;
-}
-
-
-
-char *resolveTies(struct altGraphX *ag, struct psl *pslList, struct hash *apHash, struct sqlConnection *conn)
-/* Return the first id whose representative sequence we can find in our ag. */
-{
-struct psl *psl = NULL, *tmpPsl=NULL;
-struct affyPres *ap = NULL;
-int maxOverlap = 0;
-static char buff[256];
-static char closeBuff[256];
-int minDiff = BIGNUM;
-*buff = 0;
-*closeBuff =0;
-for(psl = pslList; psl != NULL; psl = psl->next)
-    {
-    ap = hashFindVal(apHash, psl->qName);
-    if(ap == NULL)
-	warn("Can't find %s in apHash", psl->qName);
-    else
-	{
-	char *info = cloneString(ap->info);
-	char *repString = NULL;
-	if(strstr(info, "gb:"))
-	    {
-	    repString = strstr(info, "gb:");
-	    repString += 3;
-	    }
-	else if(strstr(info, "Cluster_Incl._"))
-	    {
-	    repString = strstr(info, "Cluster_Incl._");
-	    repString += 14;
-	    }
-	else if (strstr(info, "gb|"))
-	    {
-	    repString = strstr(info, "gb|");
-	    repString += 3;
-	    }
-	if(repString != NULL)
-	    {
-	    char *tmp = strstr(repString+4, "_");
-	    int overlap = 0;
-	    int distance = 0;
-	    if(tmp != NULL)
-		{
-		int i;
-		*tmp = 0;
-		tmp = strstr(repString, ".");
-		if(tmp != NULL)
-		    *tmp = 0;
-		tmpPsl = getPslForId(repString, conn);
-		/* First try direct overlap. */
-		overlap = calcOverlap(tmpPsl, ag);
-		/* If the overlap isn't good enough try overlapping the probe. */
-		if(overlap <= maxOverlap)
-		    {
-		    struct psl *tmp = psl->next;
-		    psl->next = NULL;
-		    overlap = calcOverlap(psl, ag);
-		    psl->next = tmp;
-		    }
-		if(overlap > maxOverlap)
-		    {
-		    snprintf(buff, sizeof(buff), "%s", ap->probeId);
-		    maxOverlap = overlap;
-		    }
-		/* then try distance. */
-		distance = calcDistance(tmpPsl, ag);
-		if(distance < minDiff)
-		    snprintf(closeBuff, sizeof(closeBuff), "%s", ap->probeId);
-		pslFreeList(&tmpPsl);
-		}
-	    }	
-	freez(&info);
-	}
-    }
-if(maxOverlap == 0 && minDiff == BIGNUM)
-    warn("Out of %d psl none overlapped for %s:%d-%d", slCount(pslList), ag->tName, ag->tStart, ag->tEnd);
-
-if(*buff == 0 && *closeBuff != 0)
-    return closeBuff;
-return buff;
-}
-	
-char *findAffyId(struct altGraphX *ag, struct sqlConnection *conn, struct hash *apHash)
-{
-struct psl *pslList = NULL, *psl = NULL;
-struct sqlResult *sr = NULL;
-char **row;
-int rowOffset;
-int pslCount = 0;
-char buff[256];
-char *id = NULL;
-snprintf(buff, sizeof(buff), "strand = '%s'", ag->strand);
-sr = hRangeQuery(conn, "affy_HG_U133A", ag->tName, ag->tStart, ag->tEnd, buff, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    psl = pslLoad(row+rowOffset);
-    slAddHead(&pslList, psl);
-    }
-sqlFreeResult(&sr);
-pslCount = slCount(pslList);
-if(pslCount == 0)
-    return NULL;
-if(pslCount == 1)
-    return pslList->qName;
-id =  resolveTies(ag, pslList, apHash, conn);
-if(pslCount > 0 && id == NULL)
-    warn("Out of %d psls couldn't find probe for %s:%d-%d", ag->tName, ag->tStart, ag->tEnd);
-return id;
-}
-
-void hashApList(struct hash *apHash, struct affyPres *apList)
-{
-struct affyPres *ap = NULL;
-for(ap=apList; ap!=NULL; ap=ap->next)
-    {
-    hashAddUnique(apHash, ap->probeId, ap);
-    }
-}
-
 void correlateWithExpression(char *db, char *agxName, char *expName, char *minNum)
 {
 FILE *html = NULL;
@@ -337,13 +135,16 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 		{
 		if(agx->edgeTypes[i] == ggCassette)
 		    {
-		    float confidence = altGraphConfidenceForEdge(agx, i, 10);
-		    if(confidence > minConfidence) 
+		    float confidence = altGraphCassetteConfForEdge(agx, i, 10);
+		    if(confidence >= minConfidence) 
 			{
 			char *string = cloneString(ap->info);
 			fprintf(log, "%f\t%d\n", ave, count);
 			passCount++;
 			subChar(string, '_', ' ');
+			freez(&agx->name);
+			agx->name = cloneString(ap->probeId);
+			altGraphXTabOut(agx, stdout);
 			writeBrowserLink(html, db, agx, ap->probeId, string, ave, count, i);
 			freez(&string);
 			}

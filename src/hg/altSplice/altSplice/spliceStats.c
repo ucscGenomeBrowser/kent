@@ -4,6 +4,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "hdb.h"
+#include "bed.h"
 #include "geneGraph.h"
 
 char *db = NULL;
@@ -13,7 +14,8 @@ errAbort("spliceStats - counts the number of cassette exons from an altGraphX fi
 	 "which occur in a number of different libraries(confidence). Optionally\n"
 	 "outputs sequence from said exons to a fasta file.\n"
 	 "usage:\n\t"
-	 "spliceStats <altGraphXFile> <confidence> <db>  <optional:fastaFileOut> <optional: estPrior=10.0>\n");
+	 "spliceStats <altGraphXFile> <confidence> <db>  <optional:fastaFileOut> <optional: estPrior=10.0>\n"
+	 "\t\t<optional: bedFile=bedFileName>\n");
 }
 
 boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
@@ -55,6 +57,32 @@ const struct bed *b = *((struct bed **)vb);
 return b->score - a->score;
 }
 
+void writeCassetteExon(struct bed *bedList, struct altGraphX *ag, int eIx, boolean *outputted, 
+		       FILE *bedOutFile, FILE *outfile, FILE *html, float conf )
+/* Write out the information for a cassette exon. */
+{
+int i = eIx;
+struct bed *bed=NULL;
+if(bedOutFile != NULL)
+    for(bed=bedList; bed != NULL; bed = bed->next)
+	bedTabOutN(bed,12, bedOutFile);
+writeBrowserLink(html, ag, conf, i);
+if(!outputted)
+    {
+    altGraphXTabOut(ag, stdout);
+    *outputted = TRUE;
+    }
+if(outfile != NULL)
+    {
+    struct dnaSeq *seq = hChromSeq(ag->tName, ag->vPositions[ag->edgeStarts[i]], ag->vPositions[ag->edgeEnds[i]]);
+    if(sameString(ag->strand , "+")) 
+	reverseComplement(seq->dna, seq->size);
+    if(seq->size < 200)
+	faWriteNext(outfile, seq->name, seq->dna, seq->size);
+    freeDnaSeq(&seq);
+    }
+}
+
 int countCassetteExons(struct altGraphX *agList, float minConfidence, FILE *outfile, FILE *bedOutFile)
 /* count up the number of cassette exons that have a certain
    confidence, returns number of edges. If outfile != NULL will output fasta sequences
@@ -81,34 +109,16 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	    float conf = altGraphCassetteConfForEdge(ag, i, estPrior);
 	    struct bed *bed, *bedList = altGraphGetExonCassette(ag, i);
 	    char buff[256];
-	    snprintf(buff, sizeof(buff), "%d", counter);
+	    if(ag->name == NULL)
+		ag->name = cloneString("");
+	    snprintf(buff, sizeof(buff), "%s.%d", ag->name, counter);
 	    slSort(&bedList, bedCmpMaxScore);
 	    for(bed=bedList; bed != NULL; bed = bed->next)
 		bed->name = cloneString(buff);
 	    fprintf(log, "%f\n", conf);
 	    if(conf >= minConfidence) 
 		{
-		if(bedOutFile != NULL)
-		    for(bed=bedList; bed != NULL; bed = bed->next)
-			bedTabOutN(bed,12, bedOutFile);
-		writeBrowserLink(html, ag, conf, i);
-		cassetteCount++;
-		if(!outputted)
-		    {
-		    altGraphXTabOut(ag, stdout);
-		    outputted = TRUE;
-		    }
-		if(((ag->vPositions[ag->edgeEnds[i]] - ag->vPositions[ag->edgeStarts[i]]) % 3) == 0)
-		    mod3++;
-		if(outfile != NULL)
-		    {
-		    struct dnaSeq *seq = hChromSeq(ag->tName, ag->vPositions[ag->edgeStarts[i]], ag->vPositions[ag->edgeEnds[i]]);
-		    if(sameString(ag->strand , "+")) 
-			reverseComplement(seq->dna, seq->size);
-		    if(seq->size < 200)
-			faWriteNext(outfile, seq->name, seq->dna, seq->size);
-		    freeDnaSeq(&seq);
-		    }
+		writeCassetteExon(bedList, ag, i, &outputted, bedOutFile, outfile, html, conf);
 		}
 	    counter++;
 	    bedFreeList(&bedList);
