@@ -60,9 +60,11 @@ void chainFreeList(struct chain **pList);
 int chainCmpScore(const void *va, const void *vb);
 /* Compare to sort based on score. */
 
-void chainWrite(struct chain *chain, FILE *F);
-/* Write out chain to file. */
+void chainWrite(struct chain *chain, FILE *f);
+/* Write out chain to file in dense format. */
 
+void chainWriteLong(struct chain *chain, FILE *f);
+/* Write out chain to file in more verbose format. */
 struct chain *chainRead(struct lineFile *lf);
 /* Read next chain from file.  Return NULL at EOF. 
  * Note that chain block scores are not filled in by
