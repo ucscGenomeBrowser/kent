@@ -7,7 +7,7 @@
 #include "pairHmm.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtAffine.c,v 1.4 2004/12/13 19:56:31 galt Exp $";
+static char const rcsid[] = "$Id: axtAffine.c,v 1.5 2005/01/06 20:12:26 galt Exp $";
 
 
 boolean axtAffineSmallEnough(double querySize, double targetSize)
@@ -213,7 +213,26 @@ return axt;
 }
 
 
-/* ----- axtAffine2Level begins ----- */
+/* ----- axtAffine2Level begins ----- 
+
+ Written by Galt Barber, December 2004
+ I wrote this on my own time and am donating this
+ to the public domain.  The original concept 
+ was Don Speck's, as described by Kevin Karplus.
+
+ @article{Grice97,
+     author = "J. A. Grice and R. Hughey and D. Speck",
+     title = "Reduced space sequence alignment",
+     journal = cabios,
+     volume=13,
+     number=1,
+     year=1997,
+     month=feb,
+     pages="45-53"
+     }
+								 
+
+*/
 
 #define WORST 0xC0000000 /* WORST Score approx neg. inf. 0x80000000 overflowed, reduced by half */
 
