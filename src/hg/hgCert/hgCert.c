@@ -99,11 +99,11 @@ else
     fprintf(stdout, "  <TR BGCOLOR=#fffee8><TH>Accession 1</TH>\n");
     fprintf(stdout, "  <TH>Accession 2</TH>\n");
     fprintf(stdout, "  <TH>Spanner</TH>\n");
-    fprintf(stdout, "  <TH>Evaluation</TH>\n");
     fprintf(stdout, "  <TH>Variation</TH>\n");
     fprintf(stdout, "  <TH>Variation Evidence</TH>\n");
-    fprintf(stdout, "  <TH>Remark</TH>\n");
     fprintf(stdout, "  <TH>Comment</TH>\n");
+    fprintf(stdout, "  <TH>Evaluation</TH>\n");
+    fprintf(stdout, "  <TH>Remark</TH>\n");
     fprintf(stdout, "  <TH>Contact</TH>\n");
     fprintf(stdout, "  </TR>\n");
 
@@ -192,12 +192,12 @@ else
 	    printf("<TD>%s</TD>", join2);
 
 	    printf("<TD>%s</TD>", spanner);
-	    printf("<TD>%s</TD>", evaluation);
 	    printf("<TD>%s</TD>", variation);
 	    printf("<TD>%s</TD>", variationEvidence);
-			
-	    printf("<TD>%s</TD>", remark);
 	    printf("<TD>%s</TD>", comment);
+			
+	    printf("<TD>%s</TD>", evaluation);
+	    printf("<TD>%s</TD>", remark);
 		
 	    printf("<TD><A HREF=\"mailto:%s\">%s</A></TD>", contact, contact);
 	    printf("</TR>\n");
