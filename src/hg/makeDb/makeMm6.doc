@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.10 2005/03/21 05:20:49 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.11 2005/03/23 01:09:00 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -970,50 +970,44 @@ SEQ2_LEN=$BASE/S2.len
     ssh kksilo
     cd /cluster/data/mm6/bed/blastzHg17.2005_03_14
     time /cluster/bin/scripts/doBlastzChainNet.pl -continue chainMerge `pwd`/DEF > chainMerge.run.out 2>&1 &
-XXX - RUNNING - 2005-03-18 15:00
+    # STARTED - 2005-03-18 15:00
+    # FINISHED 2005-03-18 16:33
 
 #########################################################################
-# BLASTZ RAT Rn3 (DONE - 2005-03-15 - 2005-03-17 - Hiram)
+# BLASTZ RAT Rn3 (FIRST TRY - 2005-03-15 - 2005-03-17 - Hiram)
+#   REDONE 2005-03-22 - more stringent BLASTZ parameters and chain filtering
     ssh kksilo
-    mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_15
-    cd /cluster/data/mm6/bed/blastzRn3.2005_03_15
+    mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_22
+    cd /cluster/data/mm6/bed/blastzRn3.2005_03_22
     cat << '_EOF_' > DEF
-# mouse vs. human
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/bin/scripts:/cluster/home/angie/schwartzbin/
 
-ALIGN=blastz-run
-BLASTZ=blastz
+# mouse vs. rat
+#	more stringent parameters to reduce output
 BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=50000
+BLASTZ_T=2
+# scoring matrix
+BLASTZ_Q=/cluster/data/blastz/mus_rat.q 
 BLASTZ_ABRIDGE_REPEATS=1
-
-# TARGET: Mouse
+# TARGET: Mouse (mm6)
 SEQ1_DIR=/panasas/store/mm6/nib
-# not used
-SEQ1_RMSK=/panasas/store/mm6/rmsk
-# not used
-SEQ1_FLAG=-rodent
 SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInRat
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY
-# Rat
+# QUERY: Rat (rn3)
 SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
-# RMSK not currently used
-SEQ2_RMSK=
-# FLAG not currently used
-SEQ2_FLAG=
 SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
+SEQ2_LEN=/iscratch/i/bosTau1/chrom.sizes
 
-BASE=/cluster/data/mm6/bed/blastzRn3.2005_03_15
+BASE=/cluster/data/mm6/bed/blastzRn3.2005_03_22
 
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
 '_EOF_'
@@ -1023,48 +1017,54 @@ SEQ2_LEN=$BASE/S2.len
     sort -rn +1 /cluster/data/rn3/chrom.sizes > S2.len
     #	establish a screen to control this job
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
-	blast.run.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore 5000 \
+	`pwd`/DEF > blast.run.out 2>&1 &
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
-    #	STARTED - 2005-03-16 11:33
+    #	These more strict blastz parameters make this run much faster;
 # Completed: 40713 of 40713 jobs
-# CPU time in finished jobs:   18170174s  302836.24m  5047.27h  210.30d  0.576 y
-# IO & Wait Time:               1770530s   29508.83m   491.81h   20.49d  0.056 y
-# Average job time:                 490s       8.16m     0.14h    0.01d
+# CPU time in finished jobs:    4813023s   80217.06m  1336.95h   55.71d  0.153 y
+# IO & Wait Time:               1788355s   29805.91m   496.77h   20.70d  0.057 y
+# Average job time:                 162s       2.70m     0.05h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           28252s     470.87m     7.85h    0.33d
-# Submission to last job:         69864s    1164.40m    19.41h    0.81d
+# Longest finished job:            2543s      42.38m     0.71h    0.03d
+# Submission to last job:         10945s     182.42m     3.04h    0.13d
 
 # Completed: 331 of 331 jobs
-# CPU time in finished jobs:       1168s      19.46m     0.32h    0.01d  0.000 y
-# IO & Wait Time:                  3047s      50.79m     0.85h    0.04d  0.000 y
-# Average job time:                  13s       0.21m     0.00h    0.00d
-# Longest job:                      119s       1.98m     0.03h    0.00d
-# Submission to last job:           359s       5.98m     0.10h    0.00d
+# CPU time in finished jobs:        146s       2.43m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                   840s      14.00m     0.23h    0.01d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest job:                        7s       0.12m     0.00h    0.00d
+# Submission to last job:            66s       1.10m     0.02h    0.00d
 
 # Completed: 40 of 40 jobs
-# CPU time in finished jobs:      12274s     204.56m     3.41h    0.14d  0.000 y
-# IO & Wait Time:                  1719s      28.66m     0.48h    0.02d  0.000 y
-# Average job time:                 350s       5.83m     0.10h    0.00d
-# Longest job:                     1016s      16.93m     0.28h    0.01d
-# Submission to last job:          1482s      24.70m     0.41h    0.02d
+# CPU time in finished jobs:       3870s      64.50m     1.08h    0.04d  0.000 y
+# IO & Wait Time:                   364s       6.06m     0.10h    0.00d  0.000 y
+# Average job time:                 106s       1.76m     0.03h    0.00d
+# Longest job:                      224s       3.73m     0.06h    0.00d
+# Submission to last job:           406s       6.77m     0.11h    0.00d
 
-    #	real    1545m58.914s
-    #	user    0m0.461s
-    #	sys     0m0.360s
-    #	FINISHED - 2005-03-17 13:26
+    #	FINISHED - 2005-03-22 15:44
 
-    #	it is helpful if you time these commands to make sure everything
+    #	it is helpful to time these commands to make sure everything
     #	is sane.  The times should also be similar, as are the numbers.
 
     #	check the numbers
-    featureBits mm6 chainRn3
-    2768422449 bases of 2597150411 (106.595%) in intersection
-    featureBits mm5 chainRn3
+    time featureBits mm6 chainRn3
+    2705309999 bases of 2597150411 (104.165%) in intersection
+    time featureBits mm5 chainRn3
     2646682349 bases of 2615483787 (101.193%) in intersection
+    #	These chainRn3 tables on mm6 are much smaller than mm5
+    #	There was an attempt during mm5 to run the blastz on rn3 with
+    #	the stringent parameters used here, but that ran into
+    #	difficulties as there were other tracks depending upon the
+    #	older bulky alignments and it was necessary to bring the bulky
+    #	alignments back.  There is a vast difference in the number of
+    #	chains:  mm5.chr1_chainRn3: 1,865,181 rows, mm6.chr1_chainRn3: 16466
+    #	mm5.chr1_chainRn3Link: 18,252,937 rows, mm6.chr1_chainRn3Link: 2,340,447
+
     #	trying to do the chainLink's requires kolossus, big memory
     ssh kolossus
     #	specify a .hg.conf file with read-only passwords:
@@ -1077,18 +1077,17 @@ SEQ2_LEN=$BASE/S2.len
     #	1798705001 bases of 2615483787 (68.771%) in intersection
 
 
-
     #	the netRn3 measurements take about 2m30s
-    featureBits mm6 netRn3
-    #	2720144602 bases of 2597150411 (104.736%) in intersection
-    featureBits mm5 netRn3
+    time featureBits mm6 netRn3
+    #	2705309999 bases of 2597150411 (104.165%) in intersection
+    time featureBits mm5 netRn3
     #	2638255333 bases of 2615483787 (100.871%) in intersection
 
 
     #	And then the swap of that:
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
 	swap.run.out 2>&1 &
-    #	FINISHED - 2004-03-18 00:20
+    #	STARTED - 2005-03-22 16:15
     #	real    908m11.042s
     #	user    0m0.467s
     #	sys     0m0.353s
@@ -1255,7 +1254,8 @@ SEQ2_LEN=$BASE/S2.len
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
-XXXX - RUNNING - 2005-03-17 11:00
+    #	STARTED - 2005-03-17 11:00
+    #	FINISHED - 2005-03-19 00:14
 
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (TBD - 2005-03-17 - Hiram)
@@ -1538,6 +1538,8 @@ SEQ2_LEN=$BASE/S2.len
     ssh kksilo
     screen -d -r
     #	STARTED - 2005-03-18 09:57
+    #	BROKEN - 2005-03-20 11:00 - due to rearrangements on /scratch/
+    #		need to regenerate the linSpec not in mouse for canFam1
 
 #########################################################################
 # BLASTZ Cow bosTau1 (WORKING - 2005-03-18 - Hiram)
@@ -1571,4 +1573,5 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
-XXX    #	STARTED - 2005-03-18 13:20
+    #	STARTED - 2005-03-18 13:20
+    #	BROKEN - 2005-03-20 - 22:03 - power failure to all machines
