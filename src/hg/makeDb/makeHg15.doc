@@ -1894,6 +1894,7 @@ o - # ssh hgwdev
     findStanAlignments hg15 ../BC2.txt.ns ../../image/cumulative_plates.011204.list.human hg15.image.psl >& hg15.image.log 
     cp ../experimentOrder.txt ./
     sed -e 's/ / \.\.\//g' < experimentOrder.txt > epo.txt
+    egrep -v unknown hg15.image.psl > hg15.image.good.psl
     stanToBedAndExpRecs  hg15.image.good.psl hg15.nci60.exp hg15.nci60.bed `cat epo.txt`
     hg15S -A < ../../scripts/nci60.sql
     echo "load data local infile 'hg15.nci60.bed' into table nci60" | hg15S -A

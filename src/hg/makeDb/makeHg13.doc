@@ -1762,7 +1762,7 @@ o - Load genomic dupes
     mysql -u hgcat -pbigSECRET hg13 < ~/src/hg/lib/genomicDups.sql
     hgLoadBed hg13 -oldTable genomicDups genomicDupes.bed
 
-LOAD NCI60 (TO DO)
+LOAD NCI60 ( DONE. Mon May  5 14:03:23 PDT 2003 - sugnet )
 o - # ssh hgwdev
     cd /projects/cc/hg/mapplots/data/NCI60/dross_arrays_nci60/
     mkdir hg13
@@ -1770,6 +1770,7 @@ o - # ssh hgwdev
     findStanAlignments hg13 ../BC2.txt.ns ../../image/cumulative_plates.011204.list.human hg13.image.psl >& hg13.image.log 
     cp ../experimentOrder.txt ./
     sed -e 's/ / \.\.\//g' < experimentOrder.txt > epo.txt
+    egrep -v unknown hg13.image.psl > hg13.image.good.psl
     stanToBedAndExpRecs  hg13.image.good.psl hg13.nci60.exp hg13.nci60.bed `cat epo.txt`
     hg13S -A < ../../scripts/nci60.sql
     echo "load data local infile 'hg13.nci60.bed' into table nci60" | hg13S -A
