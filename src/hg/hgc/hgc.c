@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.653 2004/06/02 13:48:56 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.654 2004/06/02 21:13:19 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14209,7 +14209,7 @@ int scaffoldStart, scaffoldEnd;
 struct dyString *itemUrl = newDyString(128), *d;
 char *old = "_";
 char *new = "";
-                                                                                
+char *pat = "fold";                                                                                
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 /* get bed size */
@@ -14229,9 +14229,9 @@ if (hScaffoldPos(bed->chrom, bed->chromStart, bed->chromEnd, &scaffoldName,     
    {
    scaffoldStart += 1; 
    dyStringPrintf(itemUrl, "%s:%d-%d", scaffoldName, scaffoldStart,                           scaffoldEnd);
-   /* remove underscore in scaffold name */
+   /* remove underscore in scaffold name and change to "scafN" */
    d = dyStringSub(itemUrl->string, old, new);
-   itemUrl = d;
+   itemUrl = dyStringSub(d->string, pat, new);
    printCustomUrl(tdb, itemUrl->string, TRUE);
    }
                                                                                 
