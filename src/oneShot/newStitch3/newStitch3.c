@@ -30,7 +30,6 @@ struct asBlock
     int qStart, qEnd;		/* Range covered in query. */
     int tStart, tEnd;		/* Range covered in target. */
     int score;			/* Alignment score for this block. */
-    void *ali;			/* Alignment in some format. */
     struct asBranch *branch;	/* Node in tree. Used internally. */
     struct asBranch *bestPred;	/* Best predicessor - used internally. */
     int totalScore;		/* Total score of chain up to here. */
@@ -414,8 +413,8 @@ struct seqPair
 /* Pair of sequences. */
     {
     struct seqPair *next;
-    char *name;	/* Allocated in hash */
-    struct axt *axtList; /* List of alignments. */
+    char *name;	                /* Allocated in hash */
+    struct asBlock *blockList; /* List of alignments. */
     };
 
 int scoreBlocks(struct asBlockRef *refList)
@@ -445,39 +444,27 @@ struct axt *axt, *first, *last;
 struct asBlock *blockList = NULL, *block;
 struct asChain *chainList = NULL, *chain;
 
-/* Make block list */
-for (axt = sp->axtList; axt != NULL; axt = axt->next)
-    {
-    AllocVar(block);
-    block->qStart = axt->qStart;
-    block->qEnd = axt->qEnd;
-    block->tStart = axt->tStart;
-    block->tEnd = axt->tEnd;
-    block->score = block->totalScore = axt->score;
-    block->ali = axt;
-    slAddHead(&blockList, block);
-    }
-slSort(&blockList, asBlockCmpT);
 
 /* Make up tree and time it for debugging. */
 startTime = clock1000();
-tree = asTreeMake(blockList);
+slSort(&sp->blockList, asBlockCmpT);
+tree = asTreeMake(sp->blockList);
 // asTreeDump(tree, uglyOut);
 dt = clock1000() - startTime;
 uglyf("Made tree in %5.3f seconds\n", dt*0.001);
 
 /* Connect up blocks to their best predecessors. */
 startTime = clock1000();
-connectBlocks(tree, blockList);
+connectBlocks(tree, sp->blockList);
 dt = clock1000() - startTime;
 uglyf("Traversed tree in %5.3f seconds\n", dt*0.001);
 
 /* Create list of all chains. */
 startTime = clock1000();
-slSort(&blockList, asBlockCmpTotal);
-for (block = blockList; block != NULL; block = block->next)
+slSort(&sp->blockList, asBlockCmpTotal);
+for (block = sp->blockList; block != NULL; block = block->next)
     block->hit = FALSE;
-for (block = blockList; block != NULL; block = block->next)
+for (block = sp->blockList; block != NULL; block = block->next)
     {
     if (!block->hit)
         {
@@ -521,17 +508,16 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	first->block->qStart, last->block->qEnd, first->block->tStart, last->block->tEnd);
     for (ref = chain->blockList; ref != NULL; ref = ref->next)
         {
-	struct axt *axt = ref->block->ali;
-	fprintf(f, " %s%c%s %d %d, %d %d, %d\n",
-		axt->qName, axt->qStrand, axt->tName, 
-		axt->qStart, axt->qEnd, axt->tStart, axt->tEnd,
-		axt->score);
+	struct asBlock *block = ref->block;
+	fprintf(f, " %s %d %d, %d %d, %d\n",
+		sp->name,
+		block->qStart, block->qEnd, block->tStart, block->tEnd,
+		block->score);
 	}
     fprintf(f, "\n");
     }
 uglyf("\n");
 asTreeFree(&tree);
-slFreeList(&blockList);
 }
 
 
@@ -548,6 +534,7 @@ FILE *f = mustOpen(output, "w");
 /* Read input file and divide alignments into various parts. */
 while ((axt = axtRead(lf)) != NULL)
     {
+    struct asBlock *block;
     if (axt->score < 500)
         {
 	axtFree(&axt);
@@ -562,11 +549,18 @@ while ((axt = axtRead(lf)) != NULL)
 	slAddHead(&spList, sp);
 	hashAddSaveName(pairHash, dy->string, sp, &sp->name);
 	}
-    slAddHead(&sp->axtList, axt);
+    AllocVar(block);
+    block->qStart = axt->qStart;
+    block->qEnd = axt->qEnd;
+    block->tStart = axt->tStart;
+    block->tEnd = axt->tEnd;
+    block->score = block->totalScore = axt->score;
+    slAddHead(&sp->blockList, block);
+    axtFree(&axt);
     }
 for (sp = spList; sp != NULL; sp = sp->next)
     {
-    slReverse(&sp->axtList);
+    slReverse(&sp->blockList);
     chainPair(sp, f);
     }
 dyStringFree(&dy);
