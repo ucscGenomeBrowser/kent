@@ -29,6 +29,7 @@ struct axtData
     int databaseSeqCount;	/* Just used for blast. */
     double databaseLetters; /* Just used for blast. */
     boolean isWu;		/* Is wuBlast? */
+    boolean isXml;		/* Is xml output? */
     };
 
 static void savePslx(char *chromName, int chromSize, int chromOffset,
@@ -363,10 +364,6 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 axtBundleFreeList(&aod->bundleList);
 }
 
-void axtBlastOut(struct axtBundle *abList, 
-	int queryIx, boolean isProt, FILE *f, 
-	char *databaseName, int databaseSeqCount, double databaseLetters, 
-	boolean isWu, char *ourId);
 
 static void blastQueryOut(struct gfOutput *out, FILE *f)
 /* Output wublast on query. */
@@ -374,7 +371,7 @@ static void blastQueryOut(struct gfOutput *out, FILE *f)
 struct axtData *aod = out->data;
 axtBlastOut(aod->bundleList, out->queryIx, out->qIsProt, f,
 	aod->databaseName, aod->databaseSeqCount, aod->databaseLetters,
-	aod->isWu, "blat");
+	aod->isWu, aod->isXml, "blat");
 axtBundleFreeList(&aod->bundleList);
 }
 
@@ -449,7 +446,7 @@ return out;
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
-	boolean isWu, FILE *f)
+	boolean isWu, boolean isXml, FILE *f)
 /* Setup output for blast format. */
 {
 struct gfOutput *out = gfOutputAxtMem(goodPpt, qIsProt, tIsProt);
@@ -458,6 +455,7 @@ ad->databaseName = databaseName;
 ad->databaseSeqCount = databaseSeqCount;
 ad->databaseLetters = databaseLetters;
 ad->isWu = isWu;
+ad->isXml = isXml;
 out->queryOut = blastQueryOut;
 return out;
 }
@@ -469,7 +467,7 @@ struct gfOutput *gfOutputAny(char *format,
 	FILE *f)
 /* Initialize output in a variety of formats in file or memory. 
  * Parameters:
- *    format - either 'psl', 'pslx', 'blast', 'wublast', 'axt'
+ *    format - either 'psl', 'pslx', 'blast', 'wublast', 'axt', 'xml'
  *    goodPpt - minimum identity of alignments to output in parts per thousand
  *    qIsProt - true if query side is a protein.
  *    tIsProt - true if target (database) side is a protein.
@@ -489,10 +487,13 @@ else if (sameWord(format, "pslx"))
     out = gfOutputPsl(goodPpt, qIsProt, tIsProt, f, TRUE, noHead);
 else if (sameWord(format, "blast"))
     out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-    		databaseName, databaseSeqCount, databaseLetters, FALSE, f);
+	    databaseName, databaseSeqCount, databaseLetters, FALSE, FALSE, f);
 else if (sameWord(format, "wublast"))
     out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-    		databaseName, databaseSeqCount, databaseLetters, TRUE, f);
+	    databaseName, databaseSeqCount, databaseLetters, TRUE, FALSE, f);
+else if (sameWord(format, "xml"))
+    out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
+	    databaseName, databaseSeqCount, databaseLetters, FALSE, TRUE, f);
 else if (sameWord(format, "axt"))
     out = gfOutputAxt(goodPpt, qIsProt, tIsProt, f);
 else if (sameWord(format, "maf"))
