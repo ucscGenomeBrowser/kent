@@ -530,32 +530,9 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     ./runTrf /cluster/store4/gs.17/build34/M/NT_999999/NT_999999.fa trf/NT_999999.bed
     # That produces an empty .bed file, mark it so:
     echo "# trf run produces nothing for this one" >> trf/NT_999999.bed
-    # A couple of NG_ contigs were missed  (these same instructions are
-    #	mentioned above where the contigs/ directory was initially
-    #	populated.  This should be done there.)
-    ssh eieio
-    cd ~/hg16/contigs
-    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
-	"ref|NG_002392" > NG_002392.fa
-    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
-	"ref|NG_002432" > NG_002432.fa
-    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
-	"ref|NT_079581" > NT_079581.fa
-    # These three files end up with non-Standard (for UCSC) ident lines,
-    # edit them to remove everything except their NG_, NT_ numbers:
-	>NG_002392
-	>NG_002432
-	>NT_079581
-    ./runTrf /cluster/store4/gs.17/build34/contigs/NT_079581.fa \
-	trf/NT_079581.bed
-    ./runTrf /cluster/store4/gs.17/build34/contigs/NG_002392.fa \
-	trf/NG_002392.bed
-    ./runTrf /cluster/store4/gs.17/build34/contigs/NG_002432.fa \
-	trf/NG_002432.bed
 
-    liftUp simpleRepeat.bed ~/hg16/jkStuff/liftAll.lft warn trf/*.bed
-    # This produces some errors related to:
-    # NT_078020 isn't in liftSpec file line 1 of trf/NT_078020.bed
+    liftUp simpleRepeat.bed ~/hg16/jkStuff/liftAll.lft warn trf/*.bed \
+	> lu.out 2>&1
 
     # Load into the database:
     ssh hgwdev
@@ -564,7 +541,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 #	stringTab = 0
 #	Reading simpleRepeat.bed
-#	Loaded 627376 elements
+#	Loaded 627883 elements
 #	Sorted
 #	Saving bed.tab
 #	Loading hg16
@@ -575,7 +552,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     ssh eieio
     cd ~/hg16/bed/simpleRepeat
     mkdir -p trfMask
-    foreach f (trf/N{T,G}_*.bed)
+    foreach f (trf/*.bed)
       awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
     end
     # Lift up filtered trf output to chrom coords as well:
@@ -595,19 +572,6 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
           jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
       endif
     end
-    #  We have some errors from the above that need to be checked:
-# lift list: 6/lift/rTrf.lst
-# Got 483 lifts in jkStuff/liftAll.lft
-# Couldn't open bed/simpleRepeat/trfMask/NG_002432.bed , No such file or direc
-# lift list: M/lift/oTrf.lst
-# Got 483 lifts in jkStuff/liftAll.lft
-# Couldn't open bed/simpleRepeat/trfMask/NT_999999.bed , No such file or direc
-# lift list: X/lift/oTrf.lst
-# Got 483 lifts in jkStuff/liftAll.lft
-# Couldn't open bed/simpleRepeat/trfMask/NT_079581.bed , No such file or direc
-# lift list: Y/lift/oTrf.lst
-# Got 483 lifts in jkStuff/liftAll.lft
-# Couldn't open bed/simpleRepeat/trfMask/NT_079581.bed , No such file or direc
 
 # MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE - 2003-07-27)
 #							 but problems -Hiram
@@ -615,34 +579,11 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
     ssh eieio
     cd ~/hg16
+
     # Make chr*.fa from contig .fa
     #  Copied chrFa.sh from hg15/jkStuff - reset  path from ~kent to
     #  /cluster for the ctgToChromFa comand
-    # This doesn't work.  There is something fundamentally wrong with
-    # all the names.  The contig names have extra digits on them.  These
-    # were the split repeat masker names.  I don't know why they don't
-    # have the original names.  I would imagine the lifting should have
-    # brought them into existence.  But I don't see any lifting.
-    #  These things are in the ./contigs directory
-    #  Let's try this business which used to be at the top of makeHg15:
-# 7) Distribute contig .fa to appropriate directory (assumes all files
-#    are in "contigs" directory).
-
-    cd ~/hg16
-    /cluster/bin/scripts/distNcbiCtgFa contigs .
-#  This fails because of the confusion on the X and Y chromosomes
-#	Reset the script to not die on missing sequences, run it
-#	again and it gets everything except the two on chr6:
-#	NT_078020.fa  NT_078023.fa
-#   move them manually
-	mv contigs/NT_078020.fa 6/NT_078020
-	mv contigs/NT_078023.fa 6/NT_078023
-
-    rm -r contigs
-
-#  Now, with those in place, maybe this will work:
-    ./jkStuff/chrFa.sh > chrFa.out 2>&1 &
-#  Nope, that doesn't work.  It fails in X and Y due to missing sequence
+    tcsh ./jkStuff/chrFa.sh > chrFa.out 2>&1 &
 
     # copied these three scripts from hg15 - fixup path names to
     # reference /cluster/bin instead of ~kent/bin
@@ -706,3 +647,29 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     end 
     cd /cluster/store4/gs.17
     hgCtgPos hg16 build34 
+
+# AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2003-07-30 - Hiram)
+
+    ssh eieio
+    cd /cluster/store5/genbank
+    # This is a new organism, edit the etc/genbank.conf file and add:
+	# hg16
+	hg16.genome = /scratch/hg/gs.17/build34/bothMaskedNibs/chr*.nib
+	hg16.lift = /cluster/store4/gs.17/build34/jkStuff/liftAll.lft
+	hg16.genbank.est.xeno.load = yes
+	hg16.mgcTables.default = full
+	hg16.mgcTables.mgc = all
+	hg16.downloadDir = hsJul2003
+
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=genbank -type=mrna -verbose=1 -initial hg16
+
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=refseq -type=mrna -verbose=1 -initial hg16
+
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=genbank -type=est -verbose=1 -initial hg16
+
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+	-srcDb=refseq -type=est -verbose=1 -initial hg16
+
