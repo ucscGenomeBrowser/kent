@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+# Script to update donwload files.
+
+set -e  # errors terminate
+trap "echo Error: `hostname` update download failed >&2; exit 1" ERR
+exec </dev/null
+
+# initialize
+gbRoot=/export/genbank
+cd $gbRoot
+. $gbRoot/lib/gbCommon.sh
+
+# Checking for an existing lock file, Silently exits if lock file exists
+# and is less than one day old,  error if older.
+gbCheckLock $gbRoot/var/copy/run/update-download.lock
+
+./bin/gbUpdateDownload

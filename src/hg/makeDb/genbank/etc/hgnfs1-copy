@@ -29,6 +29,6 @@ gbBuildRoot=/cluster/data/genbank
 gbCheckLock $gbRoot/var/copy/run/copy.lock
 
 
-exec gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
+gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
 
 # we don't put put a completed message, as gbCopyStep does the checking.
