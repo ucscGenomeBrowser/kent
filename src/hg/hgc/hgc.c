@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.630 2004/05/17 23:11:07 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.631 2004/05/18 21:38:57 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9235,7 +9235,7 @@ if ((alignment == NULL) && (aiList != NULL))
     }
 if (species == NULL)
     species = aiList->species;
-
+printf("Some alignments may not be correct due to problems in the cross species chains.<b>");
 species[0] = (char)toupper(species[0]);
 safef(chainTable, sizeof(chainTable),"rBestChain%s",species);
 chain = getChainFromRange(chainTable, gp->chrom, gp->txStart, gp->txEnd);
@@ -9275,17 +9275,17 @@ if (subChain != NULL && db2 != NULL)
         {
         int start = qs-1;
         int end = qe;
-        printf("chain %s:%d-%d %s:%d-%d %c\n",
-                subChain->tName, subChain->tStart, subChain->tEnd, 
-                subChain->qName, start, end, subChain->qStrand);
+//        printf("chain %s:%d-%d %s:%d-%d %c\n",
+//                subChain->tName, subChain->tStart, subChain->tEnd, 
+//                subChain->qName, start, end, subChain->qStrand);
         qSeq = nibLoadPartMasked(NIB_MASK_MIXED, qNibFile, start, size);
         reverseComplement(qSeq->dna, qSeq->size);
         }
     else
         {
-        printf("chain %s:%d-%d %s:%d-%d %c\n",
-                subChain->tName, subChain->tStart, subChain->tEnd, 
-                subChain->qName, subChain->qStart, subChain->qEnd, subChain->qStrand);
+//        printf("chain %s:%d-%d %s:%d-%d %c\n",
+//                subChain->tName, subChain->tStart, subChain->tEnd, 
+//                subChain->qName, subChain->qStart, subChain->qEnd, subChain->qStrand);
         qSeq = nibLoadPartMasked(NIB_MASK_MIXED, qNibFile, subChain->qStart, size);
         }
     if (tSeq != NULL && qSeq != NULL)
