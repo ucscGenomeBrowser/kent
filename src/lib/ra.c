@@ -12,7 +12,7 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: ra.c,v 1.5 2003/06/21 16:51:03 kent Exp $";
 
 struct hash *raNextRecord(struct lineFile *lf)
 /* Return a hash containing next record.   
@@ -24,6 +24,16 @@ struct hash *raNextRecord(struct lineFile *lf)
 struct hash *hash = NULL;
 char *line, *key, *val;
 
+/* Skip leading empty lines. */
+for (;;)
+   {
+   if (!lineFileNext(lf, &line, NULL))
+       return NULL;
+   line = skipLeadingSpaces(line);
+   if (line[0] != 0)
+       break;
+   }
+lineFileReuse(lf);
 for (;;)
    {
    if (!lineFileNext(lf, &line, NULL))
@@ -31,6 +41,13 @@ for (;;)
    line = skipLeadingSpaces(line);
    if (line[0] == 0)
        break;
+   if (line[0] == '#')
+       {
+       if (startsWith("#EOF", line))
+           return NULL;
+       else
+	   continue;
+       }
    if (hash == NULL)
        hash = newHash(7);
    key = nextWord(&line);
