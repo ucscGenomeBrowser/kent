@@ -321,6 +321,7 @@ for (i=0; i<fileCount; ++i)
 	    count += 1;
 	    }
 	faFreeFastBuf();
+	lineFileClose(&lf);
 	}
 
     /* If necessary mask sequence from file. */

@@ -1,4 +1,7 @@
 19 - a) Made it so that it will find perfect 20-mers with tileSize=10.
+     b) Fixed bug where it wasn't closeing genome files, resulting in
+        it only being able to process 250 files on the genome side
+	on most systems.
 18 - a) Fixed bug where you had to do -oneOff=1 rather than -oneOff
      in command line of blat.  
      b) Clarified makeOoc usage message.
