@@ -256,7 +256,7 @@ longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
 group compGeno
 priority 145.8
 visibility hide
-type bed
+type bed 4 .
 
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
