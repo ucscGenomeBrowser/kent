@@ -21,7 +21,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.123 2004/07/21 19:47:12 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.124 2004/07/23 23:35:56 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -903,7 +903,7 @@ else if (sameString(track, "humMusL") ||
          sameString( track, "mm3Hg15L" ) ||
          sameString( track, "hg15Mm3L" ))
             humMusUi(tdb,7);
-else if (sameString(database,"hg17") && sameString(track, "XXX_chainRn3"))
+else if ( (sameString(database,"hg17") && sameString(track, "chainSelf")))
             chainColorUi(tdb);	/* under development */
 /* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
  * add explicitly here only if track has another type (bed, chain).
