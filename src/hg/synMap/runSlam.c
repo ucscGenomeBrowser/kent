@@ -16,7 +16,7 @@ errAbort("runSlam - runs the Slam program program given a reference chromosome\n
 char *slamBin = "/cluster/home/sugnet/slam/";
 char *repeatMaskBin = "/scratch/hg/RepeatMasker/";
 char *outputRoot = "/tmp/slam/";
-boolean runAvidFirst = TRUE; 
+boolean runAvidFirst = TRUE; /* if true run avid first to order and orient fasta files. */
 char *slamOpts = NULL; /* Options to pass to slam.pl */
 int bpLimit = 400000; /* maximum nubmer of base pairs to allow in a fasta file. */
 
@@ -243,7 +243,7 @@ freez(&fileName);
 
 void createFastaFilesForBits(char *root, struct genomeBit *gbList, boolean addDummy)
 /* load all of the fasta records for the bits in the genome list into one
-   fasta file. */
+   fasta file. Uses .nib files as they are much more compact and allow random access. */
 {
 struct dnaSeq *seq = NULL;
 struct genomeBit *gb = NULL;
@@ -279,6 +279,7 @@ freez(&faFile);
 }
 
 void touchFile(char *root, char *suffix)
+/* same functionality as the "touch" unix command. */
 {
 struct dyString *file = newDyString(2048);
 FILE *touch = NULL;
@@ -299,6 +300,7 @@ struct dyString *dy = newDyString(1024);
 
 char command[2048];
 int retVal = 0;
+/* get our arguments */
 fa1 = fileNameFromGenomeBit("", ".fa", target);
 fa2 = fileNameFromGenomeBit("", ".fa", aligns);
 gff1 = fileNameFromGenomeBit("", "", target);
@@ -317,6 +319,8 @@ if(runAvidFirst)
     system(command);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s.merged", fa2); 
+
+    /* Check to make sure that the merged fa file is smaller than our limit. */
     faMerged = faReadAllDna(dy->string);
     for(fa = faMerged; fa !=NULL; fa = fa->next)
 	bpCount += fa->size;
@@ -327,14 +331,15 @@ if(runAvidFirst)
 	exit(0); // Exit zero to let parasol know we did what we could....
 	}
     dyStringClear(dy);
-//    dnaSeqFreeList(&faMerged);
     }
+/* File is hardmasked already, create fake repeat-masker files so other
+   programs don't squawk. */
 touchFile(fa1, ".out");
 touchFile(fa1, ".masked");
 touchFile(fa2, ".merged.out");
 touchFile(fa2, ".merged.masked");
 
-if(runAvidFirst)
+if(runAvidFirst) /* if we ran avid first then we need to use .merged files. */
     {
       snprintf(command, sizeof(command),  
   	     "%sslam.pl %s %s %s.merged -outDir %s -o1 %s.%s -o2 %s.%s.merged",   
@@ -349,6 +354,8 @@ else
 warn("Running %s", command);
 retVal = system(command);
 warn("%s exited with value %d", command, retVal);
+
+/* cleanup */
 freez(&fa1);
 freez(&fa2);
 freez(&gff1);
@@ -356,7 +363,7 @@ freez(&gff2);
 }
 
 void runSlam(char *chrNibDir, char *alignNibDir, char *outputDir, char *refPrefix, char *alignPrefix,  char *pos, char **alignBits, int numAlignBits)
-/* Top level function */
+/* Top level function. Pipeline is to cut out genome bits, order and orient using avid, align merged using avid, then run slam. */
 {
 char *tmpDir = NULL;
 struct genomeBit *target = parseGenomeBit(pos);
@@ -371,16 +378,21 @@ char *cwd = NULL;
 int fileNo = 0, stderrNo = 0, stdoutNo =0;
 FILE *logFile = NULL;
 char *host = NULL;
+
+/* quick hack to reverse args for slam.pl */
 if(sameString(refPrefix, "mm"))
     slamOpts = " --org1 M.musculus --org2 H.sapiens ";
 else
     slamOpts = "";
+
+/* create file names we're going to be using */
 fa1 = fileNameFromGenomeBit("", ".fa", target);
 fa2 = fileNameFromGenomeBit("", ".fa", aligns);
 gff1 = fileNameFromGenomeBit("", "", target);
 gff2 = fileNameFromGenomeBit("", "", aligns);
-// if(slCount(aligns) > 1) Now we need to run avid every time to ensure that stuff is oriented...
-runAvidFirst = TRUE; 
+runAvidFirst = TRUE;  /* Run avid to order and orient before using to align. */
+
+/* We're going to create a temporary working directory and move the program there. */
 tmpDir = slamTempName("/tmp", "slam", "/");
 outputRoot = tmpDir;
 makeTempDir();
@@ -393,23 +405,29 @@ fileNo = fileno(logFile);
 stderrNo = fileno(stderr);
 stdoutNo = fileno(stdout);
 setbuf(logFile, NULL);
+/* pipe both stderr and stdout to our logfile. */
 dup2(fileNo, stderrNo);
 dup2(fileNo,stdoutNo);
+
+/* little debugging info */
 host = slamGetHost();
 warn("Host is: %s", host);
 warn("creating %s", target->chrom);
+
+/* create fasta files and run slam.pl on them. */
 createFastaFilesForBits(chrNibDir, target, FALSE); 
 warn("creating %s", aligns->chrom); 
 createFastaFilesForBits(alignNibDir, aligns, TRUE);
 warn("running slam"); 
 runSlamExe(outputDir,target, aligns, refPrefix, alignPrefix);
 warn("removing stuff"); 
+
+/* Cleanup. */
 carefulClose(&logFile);
 chdir(cwd);
 removeTempDir(target, aligns);
 genomeBitFreeList(&target);
 genomeBitFreeList(&aligns);
-
 }
 
 int main(int argc, char *argv[])
