@@ -1,13 +1,13 @@
 #!/bin/tcsh
 
-rm -f /tmp/hostlist
+/bin/rm -f /tmp/hostlist
 hgsql -h genome-centdb -e "select remote_host from access_log" apachelog  > /tmp/hostlist
 
-sort /tmp/hostlist > /tmp/hostlist.sort
-rm -f /tmp/hostlist
+/bin/sort /tmp/hostlist > /tmp/hostlist.sort
+/bin/rm -f /tmp/hostlist
 
-uniq -c /tmp/hostlist.sort > /tmp/hostlist.uniq
-rm -f /tmp/hostlist.sort
+/usr/bin/uniq -c /tmp/hostlist.sort > /tmp/hostlist.uniq
+/bin/rm -f /tmp/hostlist.sort
 
-sort -nr /tmp/hostlist.uniq 
-rm -f /tmp/hostlist.uniq
+/bin/sort -nr /tmp/hostlist.uniq 
+/bin/rm -f /tmp/hostlist.uniq
