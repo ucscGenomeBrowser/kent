@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>UCSC Family Browser: Custom Columns</TITLE>
+	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+</HEAD>
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+
+<!--HOTLINKS BAR-->
+<TR><TD COLSPAN=2 HEIGHT=40>
+	<table bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27"><tr bgcolor="2636D1"><td valign="middle">
+	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
+			<TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp;&nbsp;
+		<A HREF="/index.html" class="topbar">
+			Home</A> &nbsp; - &nbsp;
+		<A HREF="/cgi-bin/hgGateway" class="topbar">
+			Genome Browser</A> &nbsp; - &nbsp; 
+		<A HREF="/cgi-bin/hgNear" class="topbar">
+			Family Browser</A> &nbsp; - &nbsp; 
+		<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
+			Blat </A> &nbsp; - &nbsp; 
+		<A HREF="/cgi-bin/hgText?command=start" class="topbar">
+			Table Browser</A> &nbsp; - &nbsp; 
+		<A HREF="/FAQ/" class="topbar">
+			FAQ</A> &nbsp; - &nbsp; 
+		<A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">
+			Help</A> &nbsp;</font></TD>
+	</TR></TABLE>
+	</TD></TR></TABLE>
+</TD></TR>
+
+<!--Content Tables------------------------------------------------------->
+<TR><TD COLSPAN=2 CELLPADDING=10>	
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<FONT SIZE="4"><b>&nbsp;  Displaying Your Own Columns in the Family Browser</b></FONT>
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+
+
+<P>The Family Browser provides dozens of columns containing information on genes that have been computed at UCSC or have been provided by
+outside collaborators. In addition to these standard columns, it is also possible for users to upload their own columns for
+temporary display in the Family Browser. These custom columns are viewable only on the machine from which they were uploaded and are only 
+kept for 8 hours after the last time they were accessed. Users can optionally make custom columns viewable by others as well.
+
+<P>Family Browser custom columns are based on files in line-oriented format. 
+The first line of a column starts with the word "column" and describes the 
+name, hyperlinks, and other overall characteristics of that column. 
+This is followed by a line for each gene annotated by the column.  If the file contains multiple columns, the columns are separated by blank lines. Lines
+starting with # are ignored.</P>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	<br></TD></TR></TABLE>
+	</TD></TR></TABLE>
+
+	<BR>
+
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<FONT SIZE="4"><a name="Column Line"></a><b>&nbsp; The Column Line</b></FONT>
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+	
+<P> The first line in a column starts with the word "column", and
+is followed by one or more attribute=value pairs.  The values must be
+enclosed in quotes if they contain spaces or tabs.  Here is a list of the
+attributes:</P>
+<UL>
+  <LI><B>name</B> - Symbolic name (not displayed to user) for column.
+  <LI><B>shortLabel</B> - Defines the column label that will be
+       displayed at the top of the main family browser table. The default value 
+       is <I>User Column</I>.
+  <LI><B>longLabel</B> - A short description of the column
+       that is displayed by the name in the configuration and filter pages.
+       The default value is <I>Custom user column</I>.
+  <LI><B>visibility</B> - Controls if column is on by default. Put a
+       off here to hide the column, a on here to show it.  Default is <I>on</I>.
+  <LI><B>priority</B> - Defines the order of the column relative to others.
+       Use low numbers to make the column appear earlier in the display.
+       Standard columns have priorities between 0 and 20.  Default is <I>2.01</I>.
+  <LI><B>itemUrl</B> - URL to use to construct hyperlinks from column items. 
+       The %s in this string this will be substituted with the contents of
+       the column.  There is no default for this attribute.
+  <LI><B>labelUrl</B> - URL of hyperlink from column label. No default.
+  <LI><B>org</B> - Name of organism column describes.  Default is current
+       organism displayed by Family Browser.
+  <LI><B>db</B> - Name of genome database to associate with column.
+       This is typically something like 'hg16' or 'mm4'.  Default is
+       the current database used by Family Browser.
+  <LI><B>search</B> - Set if column is searchable to one of these values:
+    <UL>
+     <LI>exact - only match if what user puts in search box exactly matches
+          what's in column.
+     <LI>prefix - matches if search term is same as first part of column.
+     <LI>fuzzy - matches if search term is anywhere in column.
+    </UL>
+  <LI><B>idLookup</B> - ID's are of given type.  Some common types are
+      name, swissProt, refSeq, locusLink, ensembl.
+  <LI><B>isNumber</B> - If set to 'on' then filter page has numerical (min/max) 
+      controls for this column.
+</UL>
+
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	<br></TD></TR></TABLE>
+	</TD></TR></TABLE>
+
+	<BR>
+
+  	<!--outer table is for border purposes-->
+  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
+		<FONT SIZE="4"><a name="Data Lines"></a><b>&nbsp; Data Lines</b></FONT>
+	</TD></TR></TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
+	<TR><TD WIDTH=10>&nbsp;</TD><TD>
+	
+<P> The first word of a data line contains the gene ID. The rest of the line
+contains the value to display in the column for that gene.  It is ok to have more
+than one line per gene.  In this case the column will show a comma-separated
+list of values. </P>
+
+</TD><TD WIDTH=15></TD></TR></TABLE>
+	<br></TD></TR></TABLE>
+	</TD></TR></TABLE>
+
+</TD></TR></TABLE>
+</BODY></HTML>
+
+
+
