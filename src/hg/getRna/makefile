@@ -17,5 +17,5 @@ ${PROG}: $O $(MYLIBS)
 $O: makefile $A.c
 
 lib:
-	cd ../lib; make
-	cd ../../lib; make
+	cd ../lib && ${MAKE}
+	cd ../../lib && ${MAKE}

@@ -14,4 +14,4 @@ pslToBed:
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

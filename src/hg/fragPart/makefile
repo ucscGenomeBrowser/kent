@@ -13,4 +13,4 @@ fragPart: $O $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/fragPart${EXE}
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

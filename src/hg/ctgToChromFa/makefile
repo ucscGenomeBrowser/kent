@@ -13,4 +13,4 @@ ctgToChromFa: $O $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/ctgToChromFa${EXE}
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

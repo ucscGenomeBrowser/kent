@@ -15,4 +15,4 @@ O =  axtCountBeds
 exe: $(O)
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

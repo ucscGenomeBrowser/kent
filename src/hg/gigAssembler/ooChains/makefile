@@ -12,5 +12,5 @@ ooChains: $O $(MYLIBS)
 
 
 lib:
-	cd ../../lib; make
-	cd ../../../lib; make
+	cd ../../lib && ${MAKE}
+	cd ../../../lib && ${MAKE}

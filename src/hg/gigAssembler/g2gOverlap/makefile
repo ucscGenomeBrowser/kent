@@ -13,4 +13,4 @@ g2gOverlap: $O $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/g2gOverlap${EXE}
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}

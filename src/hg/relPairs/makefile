@@ -12,4 +12,4 @@ relPairs: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/relPairs $O $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

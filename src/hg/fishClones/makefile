@@ -20,7 +20,7 @@ debug: $O
 	mv a.out $A
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
 
 tags:  
 	ctags *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h

@@ -13,4 +13,4 @@ $(A): $O $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/$(A)${EXE}
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}

@@ -11,5 +11,5 @@ ooGreedy.84:
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooGreedy.84 ooGreedy.o $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
-	cd ../../../lib; make
+	cd ../../lib && ${MAKE}
+	cd ../../../lib && ${MAKE}

@@ -11,7 +11,7 @@ gbToFaRa: $O ../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -O -o ${HOME}/bin/${MACHTYPE}/gbToFaRa $O ${MYLIBS} $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
 
 test: 
 	${MKDIR} output

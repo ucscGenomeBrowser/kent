@@ -17,12 +17,12 @@ ${PROG}: $O $(MYLIBS)
 $O: makefile $A.c
 
 lib:
-	cd ../lib; make
-	cd ../../lib; make
+	cd ../lib && ${MAKE}
+	cd ../../lib && ${MAKE}
 
 test::
-	(cd tests && ${MAKE} test)
+	cd tests && ${MAKE} test
 
 clean::
 	rm -f $O
-	(cd tests && ${MAKE} clean)
+	cd tests && ${MAKE} clean

@@ -11,4 +11,4 @@ makePai: $O ../../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/makePai $O $(MYLIBS) $L
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}

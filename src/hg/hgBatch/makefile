@@ -31,8 +31,8 @@ install:	compile
 	mv $A ${DESTDIR}${CGI_BIN}/$A
 
 lib:
-	cd ../lib; make
-	cd ../../lib; make
+	cd ../lib && ${MAKE}
+	cd ../../lib && ${MAKE}
 
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
