@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.12 2004/01/29 01:29:54 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.13 2004/04/29 20:50:20 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -397,8 +397,11 @@ for(i=0; i<totalVertexCount; ++i)
 return sync;
 }
 
-void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct sqlConnection *sc)
-/* Load up the library and tissue information for mrnas from the mrna table. */
+void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct hash *tissLibHash,
+				 struct sqlConnection *conn)
+/* Load up the library and tissue information for mrnas from the mrna table. 
+   If the tissLibHash != NULL use it to find the library and tissue. They
+   will be stored as an slInt list keyed by the accessions. */
 {
 int i;
 int mrnaCount = gg->mrnaRefCount;
@@ -407,18 +410,32 @@ gg->mrnaLibs = needMem(sizeof(int)*mrnaCount);
 //gg->mrnaLibs = AllocArray(gg->mrnaLibs, mrnaCount);
 for(i=0; i< mrnaCount; ++i)
     {
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    char query[256];
-    assert(gg->mrnaRefs[i]);
-    snprintf(query, sizeof(query), "select library, tissue from mrna where acc='%s'", gg->mrnaRefs[i]);
-    sr = sqlGetResult(sc, query);
-    row = sqlNextRow(sr);
-    if(row == NULL)
-	errAbort("geneGraph.c::ggFillInTissuesAndLibraries() - Couldn't load library and tissue info for est: %s using query:\n%s", gg->mrnaRefs[i], query);
-    gg->mrnaLibs[i] = sqlSigned(row[0]);
-    gg->mrnaTissues[i] = sqlSigned(row[1]);
-    sqlFreeResult(&sr);
+    /* Look in the hash if provided first. */
+    if(tissLibHash != NULL)
+	{
+	struct slInt *library = NULL, *tissue=NULL;
+	library = hashMustFindVal(tissLibHash, gg->mrnaRefs[i]);
+	gg->mrnaLibs[i] = library->val;
+	tissue = library->next;
+	assert(tissue);
+	gg->mrnaTissues[i] = tissue->val;
+	}
+    else
+	{
+	
+	struct sqlResult *sr = NULL;
+	char **row = NULL;
+	char query[256];
+	assert(gg->mrnaRefs[i]);
+	snprintf(query, sizeof(query), "select library, tissue from mrna where acc='%s'", gg->mrnaRefs[i]);
+	sr = sqlGetResult(conn, query);
+	row = sqlNextRow(sr);
+	if(row == NULL)
+	    errAbort("geneGraph.c::ggFillInTissuesAndLibraries() - Couldn't load library and tissue info for est: %s using query:\n%s", gg->mrnaRefs[i], query);
+	gg->mrnaLibs[i] = sqlSigned(row[0]);
+	gg->mrnaTissues[i] = sqlSigned(row[1]);
+	sqlFreeResult(&sr);
+	}
     }
 }
 

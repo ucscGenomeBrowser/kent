@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.12 2004/02/13 22:42:16 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.13 2004/04/29 20:50:20 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -1073,11 +1073,12 @@ for(i=0; i<vCount; i++)
     }
 }
 		
-struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, boolean fillInEvidence)
+struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, 
+					  struct hash *tissLibHash, boolean fillInEvidence)
 /* Make up a gene transcript graph out of the ggMrnaCluster. Only
  extending truncated exons to consensus splice sites. */
 {
-struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn = NULL;
 struct geneGraph *gg = makeInitialGraph(mc, ci);
 struct hash *aliHash = newAlignmentHash(mc);
 int minOverlap = 6; /* Don't believe any soft start/end that is less
@@ -1105,7 +1106,11 @@ for(i=0; i<gg->vertexCount; i++)
 softlyTrimConsensus(gg, aliHash);
 hideLittleOrphans(gg);
 if(fillInEvidence)
-    ggFillInTissuesAndLibraries(gg, conn);
+    {
+    if(tissLibHash == NULL)
+	conn = hAllocConn();
+    ggFillInTissuesAndLibraries(gg, tissLibHash, conn);
+    }
 else
     {
     AllocArray(gg->mrnaTissues, gg->mrnaRefCount);
@@ -1125,7 +1130,7 @@ struct geneGraph *gg = makeInitialGraph(mc, ci);
 arcsForOverlaps(gg);
 softlyTrim(gg);
 hideLittleOrphans(gg);
-ggFillInTissuesAndLibraries(gg, conn);
+ggFillInTissuesAndLibraries(gg, NULL, conn);
 hFreeConn(&conn);
 return gg;
 }
