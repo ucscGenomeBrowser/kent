@@ -60,5 +60,9 @@ void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName);
 /* get the maximum value of the id column in a table or zero if empry  */
 
+int hgAddToExtFile(char *path, struct sqlConnection *conn);
+/* Add entry to ext file table.  Delete it if it already exists. 
+ * Returns extFile id. */
+
 #endif /* HGRELATE_H */
 
