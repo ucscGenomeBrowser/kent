@@ -14,6 +14,15 @@ group map
 visibility hide
 altColor 180,180,180 
 
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Mouse/Human Homology
+group genes
+priority 47
+visibility hide
+color 0,90,100
+type genePred sgpPep
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
@@ -115,7 +124,7 @@ type bed 4 .
 
 track blastzTightRn2
 shortLabel Tight Rat 
-longLabel Blastz Rat (Jan, 03), Tight Subset of Best Alignments
+longLabel Blastz Rat (Jan. 03), Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -124,9 +133,19 @@ altColor 255,240,200
 spectrum on
 type psl xeno rn2
 
+track syntenyRat
+shortLabel Rat Synteny
+longLabel $Organism/Rat Synteny using blastz single coverage (100k window)
+group compGeno
+priority 140.5
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 +
+
 track blastzBestRn2
 shortLabel Best Rat
-longLabel Blastz Rat (Jan, 03) Best in Genome Alignments
+longLabel Blastz Rat (Jan. 03) Best in Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -137,7 +156,7 @@ type psl xeno rn2
 
 track blastzRn2
 shortLabel Blastz Rat
-longLabel Merged Blastz Rat (Jan, 03) Alignments
+longLabel Merged Blastz Rat (Jan. 03) Alignments
 group compGeno
 priority 142
 visibility dense
