@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.858 2004/12/22 03:34:06 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.859 2005/01/13 01:00:55 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3636,6 +3636,38 @@ void bdgpGeneMethods(struct track *tg)
 /* Special handling for bdgpGene items. */
 {
 tg->itemName = bdgpGeneName;
+}
+
+char *flyBaseGeneName(struct track *tg, void *item)
+/* Return symbolic name for FlyBase gene with lookup table for name->symbol
+ * specified in trackDb. */
+{
+struct linkedFeatures *lf = item;
+char *name = cloneString(lf->name);
+char *infoTable = trackDbSettingOrDefault(tg->tdb, "symbolTable", "");
+if (isNotEmpty(infoTable) && hTableExists(infoTable))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char *symbol = NULL;
+    char query[256];
+    char buf[64];
+    safef(query, sizeof(query),
+	  "select symbol from %s where name = '%s';", infoTable, name);
+    symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    hFreeConn(&conn);
+    if (isNotEmpty(symbol))
+	{
+	freeMem(name);
+	name = cloneString(symbol);
+	}
+    }
+return(name);
+}
+
+void flyBaseGeneMethods(struct track *tg)
+/* Special handling for FlyBase genes. */
+{
+tg->itemName = flyBaseGeneName;
 }
 
 char *sgdGeneName(struct track *tg, void *item)
@@ -9148,6 +9180,8 @@ registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftNonCoding", bdgpGeneMethods);
+registerTrackHandler("flyBaseGene", flyBaseGeneMethods);
+registerTrackHandler("flyBaseNoncoding", flyBaseGeneMethods);
 registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
