@@ -150,86 +150,735 @@ char *smroeEnumToString(enum stsMapRatOptEnum x);
 void smroeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
-/****** Some stuff for snpType related controls *******/
+/****** Some stuff for snp colors *******/
 
-/* SingleNP, indel, segnemtal */
-enum snpTypeEnum {
-    snpTypeInclude,
-    snpTypeExclude,
-    snpTypeCount
+enum snpColorEnum {
+    snpColorRed,
+    snpColorGreen,
+    snpColorBlue,
+    snpColorBlack,
+    snpColorExclude
 };
 
-enum snpTypeEnum snpTypeStringToEnum(char *string);
+static char *snpColorLabel[] = {
+    "red",
+    "green",
+    "blue",
+    "black",
+    "exclude",
+};
+
+enum snpColorEnum snpColorStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpTypeEnumToString(enum snpTypeEnum x);
+char *snpColorEnumToString(enum snpColorEnum x);
 /* Convert from enum to string representation. */
 
-enum snpTypeEnum snpTypeLabelStringToEnum(char *string);
+/****** Some stuff for snpMapSource related controls *******/
+
+/* dbSnp, Affy10K, Affy10Kv2, Affy50K_HindIII, Affy50K_XbaI */
+
+static char *snpMapSourceLabels[] = {
+    "Bac Overlaps",
+    "Random",
+    "Mixed",
+    "Other",
+    "Affymetrix Genotyping Array 10K",
+    "Affymetrix Genotyping Array 120K",
+};
+
+static char *snpMapSourceStrings[] = {
+    "snpMapSourceBacOverlap",
+    "snpMapSourceRandom",
+    "snpMapSourceMixed",
+    "snpMapSourceOther",
+    "snpMapSourceAffy10K",
+    "snpMapSourceAffy120K",
+};
+
+static char *snpMapSourceDataName[] = {
+    "BAC_OVERLAP",
+    "RANDOM",
+    "MIXED",
+    "OTHER",
+    "Affy10K",
+    "Affy120K",
+};
+
+static char *snpMapSourceDefault[] = {
+    "black",
+    "blue",
+    "red",
+    "red",
+    "green",
+    "green",
+};
+
+static char *snpMapSourceCart[] = {
+    "black",
+    "blue",
+    "red",
+    "red",
+    "green",
+    "green",
+};
+
+int snpMapSourceIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpMapSourceString(int x);
+/* Convert from index to string representation. */
+
+int snpMapSourceStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpTypeLabelEnumToString(enum snpTypeEnum x);
+int snpMapSourceLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMapSourceLabel(int x);
 /* Convert from enum to string representation. */
 
-enum snpTypeEnum snpTypeStateStringToEnum(char *string);
+int snpMapSourceColorStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpTypeStateEnumToString(enum snpTypeEnum x);
+char *snpMapSourceColorEnumToString(int x);
 /* Convert from enum to string representation. */
 
-enum snpTypeEnum snpTypeDefaultStringToEnum(char *string);
+int snpMapSourceDefaultStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpTypeDefaultEnumToString(enum snpTypeEnum x);
+int snpMapSourceDefaultEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMapSourceDefaultEnumToString(int x);
 /* Convert from enum to string representation. */
 
-enum snpTypeEnum snpTypeDataStringToEnum(char *string);
+char *snpMapSourceDefaultString(int x);
+/* Convert from enum to string representation. */
+
+int snpMapSourceDataStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpTypeDataEnumToString(enum snpTypeEnum x);
+int snpMapSourceDataIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpMapSourceDataString(int x);
+/* Convert from index to string representation. */
+
+char *snpMapSourceDataEnumToString(int x);
+/* Convert from enum to string representation. */
+
+/****** Some stuff for snpMapType related controls *******/
+
+/* SingleNP, indel, segnemtal */
+enum snpMapTypeEnum {
+    snpMapTypeInclude,
+    snpMapTypeExclude
+};
+
+static char *snpMapTypeLabel[] = {
+    "include",
+    "exclude",
+};
+
+static char *snpMapTypeLabels[] = {
+    "Single Nucleotide Polymorphisms",
+    "Insertions and Deletions",
+    "Segmental Duplications",
+};
+
+static char *snpMapTypeStrings[] = {
+    "snpMapTypeSingle",
+    "snpMapTypeIndels",
+    "snpMapTypeSegmental",
+};
+
+static char *snpMapTypeDataName[] = {
+    "SNP",
+    "INDEL",
+    "SEGMENTAL",
+};
+
+static char *snpMapTypeDefault[] = {
+    "include",
+    "include",
+    "include",
+};
+
+static char *snpMapTypeCart[] = {
+    "include",
+    "include",
+    "include",
+};
+
+int snpMapTypeIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpMapTypeString(int x);
+/* Convert from index to string representation. */
+
+enum snpMapTypeEnum snpMapTypeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMapTypeEnumToString(enum snpMapTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpMapTypeEnum snpMapTypeLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMapTypeLabelStr(int x);
+/* Convert from enum to string representation. */
+
+char *snpMapTypeDefaultString(int x);
+/* Convert from index to string representation. */
+
+enum snpMapTypeEnum snpMapTypeDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMapTypeDefaultEnumToString(enum snpMapTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpMapTypeEnum snpMapTypeDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMapTypeDataString(int x);
+/* Convert from index to string representation. */
+
+char *snpMapTypeDataEnumToString(enum snpMapTypeEnum x);
+/* Convert from enum to string representation. */
+
+/****** Some stuff for snpColorSource related controls *******/
+
+/* Source, Molecule Type, Class, Validation, Function */
+
+enum snpColorSourceEnum {
+    snpColorSourceSource,
+    snpColorSourceMolType,
+    snpColorSourceClass,
+    snpColorSourceValid,
+    snpColorSourceFunc,
+    snpColorSourceBlack
+};
+
+static char *snpColorSourceLabel[] = {
+    "Source",
+    "MolType",
+    "Class",
+    "Valid",
+    "Func",
+    "Black",
+};
+
+static char *snpColorSourceDataName[] = {
+    "snpColor",
+};
+
+static char *snpColorSourceDefault[] = {
+    "source",
+};
+
+static char *snpColorSourceCart[] = {
+    "source",
+};
+
+int snpColorSourceIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpColorSourceString(int x);
+/* Convert from index to string representation. */
+
+enum snpColorSourceEnum snpColorSourceDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpColorSourceDefaultEnumToString(enum snpColorSourceEnum x);
 /* Convert from enum to string representation. */
 
 /****** Some stuff for snpSource related controls *******/
 
-/* Random, Bac, Mixed, Other, Affy10K, Affy120K */
-enum snpSourceEnum {
-    snpSourceRed,
-    snpSourceGreen,
-    snpSourceBlue,
-    snpSourceBlack,
-    snpSourceExclude,
-    snpSourceCount
+/* dbSnp, Affy10K, Affy10Kv2, Affy50K_HindIII, Affy50K_XbaI */
+static char *snpSourceLabels[] = {
+    "dbSnp",
+    "Affymetrix Genotyping Array 10K",
+    "Affymetrix Genotyping Array 10K v2",
+    "Affymetrix Genotyping Array 50K HindIII",
+    "Affymetrix Genotyping Array 50K XbaI",
 };
 
-enum snpSourceEnum snpSourceStringToEnum(char *string);
+static char *snpSourceStrings[] = {
+    "snpSourceDbSnp",
+    "snpSourceAffy10K",
+    "snpSourceAffy10Kv2",
+    "snpSourceAffy50KHindIII",
+    "snpSourceAffy50KXbaI",
+};
+
+static char *snpSourceDataName[] = {
+    "dbSnp",
+    "Affy10K",
+    "Affy10Kv2",
+    "Affy50K_HindIII",
+    "Affy50K_XbaI",
+};
+
+static char *snpSourceDefault[] = {
+    "black",
+    "blue",
+    "red",
+    "green",
+    "green",
+};
+
+static char *snpSourceCart[] = {
+    "black",
+    "blue",
+    "red",
+    "green",
+    "green",
+};
+
+int snpSourceIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpSourceString(int x);
+/* Convert from index to string representation. */
+
+int snpSourceLabelStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpSourceEnumToString(enum snpSourceEnum x);
+char *snpSourceLabel(int x);
 /* Convert from enum to string representation. */
 
-enum snpSourceEnum snpSourceLabelStringToEnum(char *string);
+int snpSourceColorStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpSourceLabelEnumToString(enum snpSourceEnum x);
+char *snpSourceColorEnumToString(int x);
 /* Convert from enum to string representation. */
 
-enum snpSourceEnum snpSourceColorStringToEnum(char *string);
+int snpSourceDefaultStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpSourceColorEnumToString(enum snpSourceEnum x);
+char *snpSourceDefaultString(int x);
+/* Convert from index to string representation. */
+
+char *snpSourceDefaultEnumToString(int x);
 /* Convert from enum to string representation. */
 
-enum snpSourceEnum snpSourceDefaultStringToEnum(char *string);
+int snpSourceDataIndex(char *string);
 /* Convert from string to enum representation. */
 
-char *snpSourceDefaultEnumToString(enum snpSourceEnum x);
+char *snpSourceDataEnumToString(int x);
 /* Convert from enum to string representation. */
 
-enum snpSourceEnum snpSourceDataStringToEnum(char *string);
+char *snpSourceDataString(int x);
+/* Convert from index to string representation. */
+
+/****** Some stuff for snpMolType related controls *******/
+
+/* unknown, genomic, cDNA, mito, chloro */
+static char *snpMolTypeLabels[] = {
+    "Unknown",
+    "Genomic",
+    "cDNA",
+    "Mitochondrial",
+    "Chloroplast",
+};
+
+static char *snpMolTypeStrings[] = {
+    "snpMolTypeUnknown",
+    "snpMolTypeGenomic",
+    "snpMolTypecDNA",
+    "snpMolTypeMito",
+    "snpMolTypeChloro",
+};
+
+static char *snpMolTypeDataName[] = {
+    "unknown",
+    "genomic",
+    "cDNA",
+    "mito",
+    "chloro",
+};
+
+static char *snpMolTypeDefault[] = {
+    "red",
+    "black",
+    "blue",
+    "green",
+    "green",
+};
+
+static char *snpMolTypeCart[] = {
+    "red",
+    "black",
+    "blue",
+    "green",
+    "green",
+};
+
+int snpMolTypeIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpMolTypeString(int x);
+/* Convert from index to string representation. */
+
+int snpMolTypeStringToEnum(char *string);
 /* Convert from string to enum representation. */
 
-char *snpSourceDataEnumToString(enum snpSourceEnum x);
+int snpMolTypeLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMolTypeLabel(int x);
 /* Convert from enum to string representation. */
+
+int snpMolTypeStateStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMolTypeStateEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpMolTypeDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMolTypeDefaultString(int x);
+/* Convert from index to string representation. */
+
+char *snpMolTypeDefaultEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpMolTypeDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpMolTypeDataEnumToString(int x);
+/* Convert from enum to string representation. */
+
+char *snpMolTypeDataString(int x);
+/* Convert from index to string representation. */
+
+int snpMolTypeDataIndex(char *string);
+/* Convert from string to index representation. */
+
+/****** Some stuff for snpClass related controls *******/
+
+/* unknown, snp, in-del, het, microsat, named, no-variation, mixed, mnp */
+static char *snpClassLabels[] = {
+    "Unknown",
+    "Single Nucleotide Polymorphism",
+    "Insertion / Deletion",
+    "Heterozygous",
+    "Microsatellite",
+    "Named",
+    "No Variation",
+    "Mixed",
+    "Multiple Nucleotide Polymorphism",
+};
+
+static char *snpClassStrings[] = {
+    "snpClassUnknown",
+    "snpClassSnp",
+    "snpClassInDel",
+    "snpClassHet",
+    "snpClassMicrosat",
+    "snpClassNamed",
+    "snpClassNoVariation",
+    "snpClassMixed",
+    "snpClassMnp",
+};
+
+static char *snpClassDataName[] = {
+    "unknown",
+    "snp",
+    "in-del",
+    "het",
+    "microsat",
+    "named",
+    "no-variation",
+    "mixed",
+    "mnp",
+};
+
+static char *snpClassDefault[] = {
+    "red",
+    "black",
+    "blue",
+    "red",
+    "green",
+    "green",
+    "red",
+    "black",
+    "blue",
+};
+
+static char *snpClassCart[] = {
+    "red",
+    "black",
+    "blue",
+    "red",
+    "green",
+    "green",
+    "red",
+    "black",
+    "blue",
+};
+
+int snpClassIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpClassString(int x);
+/* Convert from index to string representation. */
+
+int snpClassStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+int snpClassLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpClassLabel(int x);
+/* Convert from enum to string representation. */
+
+int snpClassColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpClassColorEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpClassStateStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpClassStateEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpClassDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpClassDefaultString(int x);
+/* Convert from index to string representation. */
+
+char *snpClassDefaultEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpClassDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+int snpClassDataIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpClassDataEnumToString(int x);
+/* Convert from enum to string representation. */
+
+char *snpClassDataString(int x);
+/* Convert from index to string representation. */
+
+/****** Some stuff for snpValid related controls *******/
+
+/* unknown, other-pop, by-frequency, by-cluster, by-2hit-2allele, by-hapmap, genotype */
+
+static char *snpValidLabels[] = {
+    "Unknown",
+    "Other Population",
+    "By Frequency",
+    "By Cluster",
+    "By 2 Hit / 2 Allele",
+    "By HapMap",
+    "By Genotype",
+};
+
+static char *snpValidStrings[] = {
+    "snpValidUnknown",
+    "snpValidOtherPop",
+    "snpValidFrequency",
+    "snpValidCluster",
+    "snpValid2H2A",
+    "snpValidHapMap",
+    "snpValidGenotype",
+};
+
+static char *snpValidDataName[] = {
+    "unknown",
+    "other-pop",
+    "by-frequency",
+    "by-cluster",
+    "by-2hit-2allele",
+    "by-hapmap",
+    "genotype",
+};
+
+static char *snpValidDefault[] = {
+    "red",
+    "black",
+    "black",
+    "black",
+    "black",
+    "blue",
+    "green",
+};
+
+static char *snpValidCart[] = {
+    "red",
+    "black",
+    "black",
+    "black",
+    "black",
+    "blue",
+    "green",
+};
+
+int snpValidIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpValidString(int x);
+/* Convert from index to string representation. */
+
+int snpValidStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+int snpValidLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpValidLabel(int x);
+/* Convert from enum to string representation. */
+
+int snpValidColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpValidColorEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpValidStateStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpValidStateEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpValidDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpValidDefaultString(int x);
+/* Convert from index to string representation. */
+
+char *snpValidDefaultEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpValidDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpValidDataEnumToString(int x);
+/* Convert from enum to string representation. */
+
+char *snpValidDataString(int x);
+/* Convert from index to string representation. */
+
+/****** Some stuff for snpFunc related controls *******/
+
+/* unknown, locus-region, coding, coding-synon, coding-nonsynon, mrna-utr, intron, splice-site, reference, exception */
+static char *snpFuncLabels[] = {
+    "Unknown",
+    "Locus Region",
+    "Coding",
+    "Coding - Synonymous",
+    "Coding - Non-Synonymous",
+    "mRNA/UTR",
+    "Intron",
+    "Splice site",
+    "Reference",
+    "Exception",
+};
+
+static char *snpFuncStrings[] = {
+    "snpFuncUnknown",
+    "snpFuncLocus",
+    "snpFuncCoding",
+    "snpFuncSynon",
+    "snpFuncNonSynon",
+    "snpFuncmRnaUtr",
+    "snpFuncIntron",
+    "snpFuncSplice",
+    "snpFuncReference",
+    "snpFuncException",
+};
+
+static char *snpFuncDataName[] = {
+    "unknown",
+    "locus-region",
+    "coding",
+    "coding-synon",
+    "coding-nonsynon",
+    "mrna-utr",
+    "intron",
+    "splice-site",
+    "reference",
+    "exception",
+};
+
+static char *snpFuncDefault[] = {
+    "black",
+    "black",
+    "black",
+    "green",
+    "red",
+    "blue",
+    "blue",
+    "blue",
+    "black",
+    "black",
+};
+
+static char *snpFuncCart[] = {
+    "black",
+    "black",
+    "black",
+    "green",
+    "red",
+    "blue",
+    "blue",
+    "blue",
+    "black",
+    "black",
+};
+
+int snpFuncIndex(char *string);
+/* Convert from string to index representation. */
+
+char *snpFuncString(int x);
+/* Convert from index to string representation. */
+
+int snpFuncStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+int snpFuncLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpFuncLabel(int x);
+/* Convert from enum to string representation. */
+
+int snpFuncColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpFuncColorEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpFuncStateStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpFuncStateEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpFuncDefaultStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpFuncDefaultString(int x);
+/* Convert from index to string representation. */
+
+char *snpFuncDefaultEnumToString(int x);
+/* Convert from enum to string representation. */
+
+int snpFuncDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpFuncDataEnumToString(int x);
+/* Convert from enum to string representation. */
+
+char *snpFuncDataString(int x);
+/* Convert from index to string representation. */
 
 /****** Some stuff for fishClones related controls *******/
 enum fishClonesOptEnum {
