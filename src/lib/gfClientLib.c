@@ -550,7 +550,6 @@ struct dnaSeq *seq;
 char *name;
 int tOff;
 
-uglyf("seqClumpToRangeList\n");
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     tOff = clump->target->start;
@@ -564,7 +563,6 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     range->tSeq = clump->target->seq;
     range->frame = frame;
     slAddHead(&rangeList, range);
-    uglyf("  clump %s: %d-%d toff %d range %d-%d\n", name, clump->tStart, clump->tEnd, tOff, range->tStart, range->tEnd);
     }
 slReverse(&rangeList);
 return rangeList;
@@ -753,13 +751,10 @@ struct ffAli *ffList = NULL, *ff;
 struct gfRange *range;
 struct ssFfItem *ffi;
 
-uglyf("rangestoFfItem qSeq %s, size %d\n", qSeq->name, qSeq->size);
 for (range = rangeList; range != NULL; range = range->next)
     {
     aaSeq *tSeq = range->tSeq;
     AA *t = tSeq->dna;
-    uglyf("   tSeq %s %x, size %d, qStart %d, qEnd %d, tStart %d, tEnd %d\n",
-    	tSeq->name, tSeq->dna, tSeq->size, range->qStart, range->qEnd, range->tStart, range->tEnd);
     AllocVar(ff);
     ff->nStart = q + range->qStart;
     ff->nEnd = q + range->qEnd;
@@ -786,7 +781,6 @@ struct ssBundle *bun;
 
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
-    // gfClumpDump(gf, clump, uglyOut);
     clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList);
     }
 slReverse(&rangeList);
@@ -831,7 +825,6 @@ for (frame=0; frame<3; ++frame)
     {
     for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	{
-	// gfClumpDump(gfs[frame], clump, uglyOut);
 	clumpToHspRange(clump, qSeq, tileSize, frame, NULL, &rangeList);
 	}
     }
@@ -899,18 +892,15 @@ struct dnaSeq *targetSeq, *tSeqList = NULL;
 struct slRef *t3RefList = NULL, *ref;
 struct gfRange *range;
 
-uglyf("loadHashT3Ranges\n");
 for (range = rangeList; range != NULL; range = range->next)
     {
     int chromSize;
     struct trans3 *t3, *oldT3;
 
-    uglyf("  range: %d-%d, %d-%d\n", range->qStart, range->qEnd, range->tStart, range->tEnd);
     targetSeq = expandAndLoad(range, nibDir, qSeqSize*3, &chromSize, TRUE, isRc);
     slAddHead(&tSeqList, targetSeq);
     freez(&targetSeq->name);
     targetSeq->name = cloneString(range->tName);
-    uglyf("  t3 loaded %s: %d-%d\n", range->tName, range->tStart, range->tEnd);
     t3 = trans3New(targetSeq);
     refAdd(&t3RefList, t3);
     t3->start = range->tStart;
@@ -1084,8 +1074,6 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
         {
         for (tFrame = 0; tFrame < 3; ++tFrame)
             {
-	    uglyf("%d %d %d has %d clumps\n", 
-	    	tIsRc, qFrame, tFrame, slCount(clumps[tIsRc][qFrame][tFrame]));
 	    rl = seqClumpToRangeList(clumps[tIsRc][qFrame][tFrame], tFrame);
 	    rangeList = slCat(rangeList, rl);
 	    }
@@ -1110,7 +1098,6 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 		{
 		struct gfSeqSource *ss = clump->target;
 		struct gfRange *rangeSet = NULL;
-		uglyf("  raw clump %s: %d-%d\n", clumpTargetName(clump), clump->tStart, clump->tEnd);
 		t3 = findTrans3(t3Hash, clumpTargetName(clump), clump->tStart*3, clump->tEnd*3);
 		ss->seq = t3->trans[tFrame];
 		ss->start = t3->start/3;
@@ -1134,7 +1121,6 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->qSeq = qSeq;
 	bun->genoSeq = targetSeq;
 	bun->data = range;
-	uglyf("targetSeq: %s %x\n", targetSeq->name, targetSeq->dna);
 	bun->ffList = rangesToFfItem(range->components, qSeq);
 	ssStitch(bun, ffCdna);
 	outData->targetRc = tIsRc;
@@ -1194,7 +1180,6 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfRange *rangeSet = NULL;
-	    // gfClumpDump(gfs[tFrame], clump, uglyOut);
 	    clumpToHspRange(clump, qSeq, tileSize, tFrame, NULL, &rangeSet);
 	    untranslateRangeList(rangeSet, qFrame, tFrame, t3Hash, NULL, 0);
 	    rangeList = slCat(rangeSet, rangeList);
@@ -1294,7 +1279,6 @@ struct trans3 *t3 = NULL;
 struct trans3 *t3List = NULL;
 
 
-uglyf("gfSavePslOrPslx(%s %d %d ... t3Hash %x)\n", chromName, chromSize, chromOffset, t3Hash);
 if (t3Hash != NULL)
     t3List = hashMustFindVal(t3Hash, genoSeq->name);
 hStart = t3GenoPos(ali->hStart, genoSeq, t3List) + chromOffset;

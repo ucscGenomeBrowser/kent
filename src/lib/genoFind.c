@@ -493,20 +493,26 @@ for (isRc=0; isRc <= 1; ++isRc)
 	}
     }
 
-/* Mask simple AA repeats. */
+/* Mask simple AA repeats (of period 1 and 2). */
 for (i=0; i<20; ++i)
     {
-    int j;
-    int tile = 0;
-    for (j=0; j<tileSize; ++j)
-        {
-	tile *= 20;
-	tile += i;
-	}
-    for (isRc = 0; isRc <= 1; ++isRc)
-        {
-	for (frame = 0; frame < 3; ++frame)
-	    transGf[isRc][frame]->listSizes[tile] = maxPat;
+    int j, k;
+    for (j=0; j<20; ++j)
+	{
+	int tile = 0;
+	for (k=0; k<tileSize; ++k)
+	    {
+	    tile *= 20;
+	    if (k&1)
+		tile += j;
+	    else
+	        tile += i;
+	    }
+	for (isRc = 0; isRc <= 1; ++isRc)
+	    {
+	    for (frame = 0; frame < 3; ++frame)
+		transGf[isRc][frame]->listSizes[tile] = maxPat;
+	    }
 	}
     }
 /* Scan through nib files once counting tiles. */

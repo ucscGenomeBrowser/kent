@@ -158,7 +158,6 @@ if (isProt)
     }
 else
     {
-    uglyf("size %d, score %d\n", size, dnaOrAaScoreMatch(a, b, size, 2, -1, 'n'));
     return dnaOrAaScoreMatch(a, b, size, 2, -1, 'n');
     }
 }
