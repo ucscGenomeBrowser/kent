@@ -135,6 +135,7 @@ UTIL_DIRS = \
 	gpToGtf \
 	gpcrParser \
 	gsBig \
+	hgTablesTest \
 	hgChroms \
 	hgGetAnn \
 	hgsql \
@@ -161,6 +162,7 @@ UTIL_DIRS = \
 	near/hgProtIdToGenePred \
 	near/hgWormLinks \
 	near/pepPredToFa \
+	near/hgNearTest \
 	nci60 \
 	orthoMap \
 	overlapSelect \
