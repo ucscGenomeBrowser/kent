@@ -2,12 +2,13 @@
  *	either a DB access or from a .wig text file (==custom track)
  */
 #include "common.h"
+#include "obscure.h"
 #include "memalloc.h"
 #include "wiggle.h"
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.40 2004/09/10 03:49:09 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.41 2004/09/10 17:56:30 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -318,34 +319,6 @@ if (wds->useDataConstraint)
 	    fprintf (fh, "#\tdata values %s %g\n",
 		    wds->dataConstraint, wds->limit_0);
     }
-}
-
-static int chrStrippedCmp(char *chrA, char *chrB)
-/*	compare chrom names after stripping chr or scaffold prefix */
-{
-int dif;
-int lenA = 0;
-int lenB = 0;
-
-if (startsWith("chr", chrA))
-    chrA += strlen("chr");
-else if (startsWith("scaffold",chrA))
-    chrA += strlen("scaffold");
-
-if (startsWith("chr",chrB))
-    chrB += strlen("chr");
-else if (startsWith("scaffold",chrB))
-    chrB += strlen("scaffold");
-
-lenA = strlen(chrA);
-lenB = strlen(chrB);
-
-dif = lenA - lenB;
-
-if (dif == 0)
-    dif = strcmp(chrA, chrB);
-
-return dif;
 }
 
 static int arrayDataCmp(const void *va, const void *vb)
@@ -1753,8 +1726,62 @@ carefulClose(&fh);
 return (linesOut);
 }	/*	static void bedOut()	*/
 
+void wigStatsHeader(struct wiggleDataStream *wds, FILE * fh, boolean htmlOut)
+{
+if (htmlOut)
+    {
+    /* For some reason BORDER=1 does not work in our web.c nested table
+     * scheme.  So use web.c's trick of using an enclosing table
+     *	to provide a border.  
+     */
+    fprintf(fh,"<P><!--outer table is for border purposes-->" "\n"
+	"<TABLE BGCOLOR=\"#" HG_COL_BORDER
+	"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+
+    fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\"" HG_COL_INSIDE
+	"\" ALIGN=CENTER HSPACE=0><TR>");
+    if (wds->db)
+	fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wds->db, wds->tblName);
+    if (wds->isFile)
+	{
+	if (stringIn("trash/ct_",wds->tblName))
+	    fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> custom track </TH></TR>\n" );
+	else
+	    fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wds->tblName);
+	}
+
+    fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
+    fprintf(fh,"<TH> Data <BR> end </TH>");
+    fprintf(fh,"<TH> #&nbsp;of&nbsp;Data <BR> values </TH><TH> Each&nbsp;data <BR> value&nbsp;spans <BR> #&nbsp;bases </TH>");
+    fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
+    fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
+    fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
+    }
+else
+    {
+    if (wds->db)
+	fprintf(fh, "#\t Database: %s, Table: %s\n",
+		wds->db, wds->tblName);
+    if (wds->isFile)
+	fprintf(fh, "#\t from file, Table: %s\n", wds->tblName);
+
+    fprintf(fh,"# Chrom\tData\tData");
+    fprintf(fh,"\t# Data\tData");
+    fprintf(fh,"\tBases\tMinimum");
+    fprintf(fh,"\tMaximum\tRange\tMean");
+    fprintf(fh,"\tVariance Standard\n");
+
+    fprintf(fh,"#\tstart\tend");
+    fprintf(fh,"\tvalues\tspan");
+    fprintf(fh,"\tcovered\t");
+    fprintf(fh,"\t\t\t");
+    fprintf(fh,"\t\tdeviation\n");
+    }
+}	/*	void wigStatsHeader()	*/
+
 static void statsOut(struct wiggleDataStream *wds, char *fileName,
-	boolean sort, boolean htmlOut)
+    boolean sort, boolean htmlOut, boolean withHeader,
+	boolean leaveTableOpen)
 /*	print to fileName the statistics */
 {
 FILE * fh;
@@ -1767,53 +1794,8 @@ if (wds->stats)
     if (sort)
 	slSort(&wds->stats, statsDataCmp);
 
-    if (htmlOut)
-	{
-	/* For some reason BORDER=1 does not work in our web.c nested table
-	 * scheme.  So use web.c's trick of using an enclosing table
-	 *	to provide a border.  
-	 */
-	fprintf(fh,"<P><!--outer table is for border purposes-->" "\n"
-	    "<TABLE BGCOLOR=\"#" HG_COL_BORDER
-	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-
-	fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\""HG_COL_INSIDE"\" ALIGN=CENTER HSPACE=0><TR>");
-	if (wds->db)
-	    fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wds->db, wds->tblName);
-	if (wds->isFile)
-	    {
-	    if (stringIn("trash/ct_",wds->tblName))
-		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> custom track </TH></TR>\n" );
-	    else
-		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wds->tblName);
-	    }
-
-	fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
-	fprintf(fh,"<TH> Data <BR> end </TH>");
-	fprintf(fh,"<TH> #&nbsp;of&nbsp;Data <BR> values </TH><TH> Each&nbsp;data <BR> value&nbsp;spans <BR> #&nbsp;bases </TH>");
-	fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
-	fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
-	fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
-	}
-    else
-	{
-	if (wds->db)
-	    fprintf(fh, "#\t Database: %s, Table: %s\n", wds->db, wds->tblName);
-	if (wds->isFile)
-	    fprintf(fh, "#\t from file, Table: %s\n", wds->tblName);
-
-	fprintf(fh,"# Chrom\tData\tData");
-	fprintf(fh,"\t# Data\tData");
-	fprintf(fh,"\tBases\tMinimum");
-	fprintf(fh,"\tMaximum\tRange\tMean");
-	fprintf(fh,"\tVariance Standard\n");
-
-	fprintf(fh,"#\tstart\tend");
-	fprintf(fh,"\tvalues\tspan");
-	fprintf(fh,"\tcovered\t");
-	fprintf(fh,"\t\t\t");
-	fprintf(fh,"\t\tdeviation\n");
-	}
+    if (withHeader)
+	wigStatsHeader(wds, fh, htmlOut);
 
     for (stats = wds->stats; stats; stats = next )
 	{
@@ -1862,7 +1844,7 @@ if (wds->stats)
 	    fprintf(fh,"#\tNo data found matching this request\n");
 	}
 
-    if (htmlOut)
+    if (!leaveTableOpen && withHeader && htmlOut)
 	fprintf(fh,"</TABLE></TD></TR></TABLE></P>\n");
     }
 else
