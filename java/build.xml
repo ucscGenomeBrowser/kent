@@ -18,9 +18,6 @@
         <property name="javadoc.packages" value="*" />
         <property name="javadoc.dir" value="${doc.dir}/api" />
        
-        <!-- running tests -->
-        <property name="test.quickProps" value="src/edu/ucsc/genome/qa/cgiCheck/quick.props" />
-        <property name="test.fullProps" value="src/edu/ucsc/genome/qa/cgiCheck/full.props" />
     </target>
 
     <target name="build" depends="compile, javaDoc, quickTest">
@@ -51,36 +48,46 @@
        </javadoc>
     </target>
 
-    <target name="quickTest" depends="init"
-	   description="Quick test of the tests">
+    <target name="setQuickTest">
+        <property name="test.props" 
+		  value="src/edu/ucsc/genome/qa/cgiCheck/quick.props" />
+    </target>
+
+    <target name="setHourTest">
+        <property name="test.props" 
+		  value="src/edu/ucsc/genome/qa/cgiCheck/hour.props" />
+    </target>
+
+    <target name="setFullTest">
+        <property name="test.props" 
+		  value="src/edu/ucsc/genome/qa/cgiCheck/full.props" />
+    </target>
+
+    <target name="someTest">
         <java classname="edu.ucsc.genome.qa.cgiCheck.TrackCheck"
                classpath="${build.classes}">
-           <arg value="${test.quickProps}"/>
+           <arg value="${test.props}"/>
         </java>
         <java classname="edu.ucsc.genome.qa.cgiCheck.HGGeneCheck"
                classpath="${build.classes}">
-           <arg value="${test.quickProps}"/>
+           <arg value="${test.props}"/>
         </java>
         <java classname="edu.ucsc.genome.qa.cgiCheck.PBGeneCheck"
                classpath="${build.classes}">
-           <arg value="${test.quickProps}"/>
+           <arg value="${test.props}"/>
         </java>
     </target>
 
-    <target name="fullTest" depends="init"
+    <target name="quickTest" depends="init,setQuickTest,someTest"
+	   description="Quick test of the tests">
+    </target>
+
+    <target name="hourTest" depends="init,setHourTest,someTest"
+	   description="Roughly hour long test of site">
+    </target>
+
+    <target name="fullTest" depends="init,setFullTest,someTest"
 	   description="Full automated test of site.">
-        <java classname="edu.ucsc.genome.qa.cgiCheck.TrackCheck"
-               classpath="${build.classes}">
-           <arg value="${test.fullProps}"/>
-        </java>
-        <java classname="edu.ucsc.genome.qa.cgiCheck.HGGeneCheck"
-               classpath="${build.classes}">
-           <arg value="${test.fullProps}"/>
-        </java>
-        <java classname="edu.ucsc.genome.qa.cgiCheck.PBGeneCheck"
-               classpath="${build.classes}">
-           <arg value="${test.fullProps}"/>
-        </java>
     </target>
 
 
