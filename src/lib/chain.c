@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.17 2004/09/24 23:49:06 baertsch Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.18 2005/01/10 00:12:39 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -34,6 +34,38 @@ for (el = *pList; el != NULL; el = next)
     chainFree(&el);
     }
 *pList = NULL;
+}
+
+int cBlockCmpTarget(const void *va, const void *vb)
+/* Compare to sort based on target start. */
+{
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
+return a->tStart - b->tStart;
+}
+
+int cBlockCmpBoth(const void *va, const void *vb)
+/* Compare to sort based on query, then target. */
+{
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
+int dif;
+dif = a->qStart - b->qStart;
+if (dif == 0)
+    dif = a->tStart - b->tStart;
+return dif;
+}
+
+int cBlockCmpDiagQuery(const void *va, const void *vb)
+/* Compare to sort based on diagonal, then query. */
+{
+const struct cBlock *a = *((struct cBlock **)va);
+const struct cBlock *b = *((struct cBlock **)vb);
+int dif;
+dif = (a->tStart - a->qStart) - (b->tStart - b->qStart);
+if (dif == 0)
+    dif = a->qStart - b->qStart;
+return dif;
 }
 
 int chainCmpScore(const void *va, const void *vb)
@@ -119,7 +151,7 @@ fprintf(f, "chain %1.0f %s %d + %d %d %s %d %c %d %d %d\n", chain->score,
 void chainWrite(struct chain *chain, FILE *f)
 /* Write out chain to file in usual format*/
 {
-struct boxIn *b, *nextB;
+struct cBlock *b, *nextB;
 
 chainWriteHead(chain, f);
 for (b = chain->blockList; b != NULL; b = nextB)
@@ -134,10 +166,18 @@ for (b = chain->blockList; b != NULL; b = nextB)
 fputc('\n', f);
 }
 
+void chainWriteAll(struct chain *chainList, FILE *f)
+/* Write all chains to file. */
+{
+struct chain *chain;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    chainWrite(chain, f);
+}
+
 void chainWriteLong(struct chain *chain, FILE *f)
 /* Write out chain to file in longer format*/
 {
-struct boxIn *b, *nextB;
+struct cBlock *b, *nextB;
 
 chainWriteHead(chain, f);
 for (b = chain->blockList; b != NULL; b = nextB)
@@ -204,7 +244,7 @@ for (;;)
     {
     int wordCount = lineFileChop(lf, row);
     int size = lineFileNeedNum(lf, row, 0);
-    struct boxIn *b;
+    struct cBlock *b;
     AllocVar(b);
     slAddHead(&chain->blockList, b);
     b->qStart = q;
@@ -235,7 +275,7 @@ void chainSwap(struct chain *chain)
 /* Swap target and query side of chain. */
 {
 struct chain old = *chain;
-struct boxIn *b;
+struct cBlock *b;
 
 /* Copy basic stuff swapping t and q. */
 chain->qName = old.tName;
@@ -250,7 +290,7 @@ chain->tSize = old.qSize;
 /* Swap t and q in blocks. */
 for (b = chain->blockList; b != NULL; b = b->next)
     {
-    struct boxIn old = *b;
+    struct cBlock old = *b;
     b->qStart = old.tStart;
     b->qEnd = old.tEnd;
     b->tStart = old.qStart;
@@ -337,7 +377,7 @@ void chainSubsetOnT(struct chain *chain, int subStart, int subEnd,
  * properly filled in. */
 {
 struct chain *sub = NULL;
-struct boxIn *oldB, *b, *bList = NULL;
+struct cBlock *oldB, *b, *bList = NULL;
 int qStart = BIGNUM, qEnd = -BIGNUM;
 int tStart = BIGNUM, tEnd = -BIGNUM;
 
@@ -414,7 +454,7 @@ void chainSubsetOnQ(struct chain *chain, int subStart, int subEnd,
  * properly filled in. */
 {
 struct chain *sub = NULL;
-struct boxIn *oldB, *b, *bList = NULL;
+struct cBlock *oldB, *b, *bList = NULL;
 int qStart = BIGNUM, qEnd = -BIGNUM;
 int tStart = BIGNUM, tEnd = -BIGNUM;
 

@@ -9,19 +9,35 @@
 #include "linefile.h"
 #endif
 
-#ifndef BOXCLUMP_H
-#include "boxClump.h"	/* Include so can share boxIn structure */
-#endif
 
 #ifndef BITS_H
 #include "bits.h"
 #endif
 
+struct cBlock
+/* A gapless part of a chain. */
+    {
+    struct cBlock *next;	/* Next in list. */
+    int tStart,tEnd;		/* Range covered in target. */
+    int qStart,qEnd;		/* Range covered in query. */
+    int score;	 	 	/* Score of block. */
+    void *data;			/* Some associated data pointer. */
+    };
+
+int cBlockCmpTarget(const void *va, const void *vb);
+/* Compare to sort based on target start. */
+
+int cBlockCmpBoth(const void *va, const void *vb);
+/* Compare to sort based on query, then target. */
+
+int cBlockCmpDiagQuery(const void *va, const void *vb);
+/* Compare to sort based on diagonal, then query. */
+
 struct chain
 /* A chain of blocks.  Used for output of chainBlocks. */
     {
     struct chain *next;	  	  /* Next in list. */
-    struct boxIn *blockList;      /* List of blocks. */
+    struct cBlock *blockList;      /* List of blocks. */
     double score;	  	  /* Total score for chain. */
     char *tName;		  /* target name, allocated here. */
     int tSize;			  /* Overall size of target. */
@@ -54,6 +70,9 @@ int chainCmpQuery(const void *va, const void *vb);
 
 void chainWrite(struct chain *chain, FILE *f);
 /* Write out chain to file in dense format. */
+
+void chainWriteAll(struct chain *chainList, FILE *f);
+/* Write all chains to file. */
 
 void chainWriteLong(struct chain *chain, FILE *f);
 /* Write out chain to file in more verbose format. */
