@@ -868,6 +868,19 @@ zip -j mrna.zip mrna.fa
     end
 
 
+# MAKE CHICKEN LINEAGE-SPECIFIC REPEATS (DONE 2/18/04 angie)
+    # In an email 2/13/04, Arian said we could treat all human repeats as 
+    # lineage-specific, but could exclude these from chicken as ancestral:
+    # L3, L3a, L3b, MIR, MIR3, MIRb, MIRm
+    ssh kksilo
+    cd /cluster/data/galGal1
+    mkdir /cluster/bluearc/galGal1/linSpecRep
+    foreach f (*/chr*.fa.out)
+      awk '$10 !~/^(L3|L3a|L3b|MIR|MIR3|MIRb|MIRm)$/ {print;}' $f \
+      > /cluster/bluearc/galGal1/linSpecRep/$f:t:r:r.out.spec
+    end
+
+
 # SWAP BLASTZ HUMAN-CHICKEN TO CHICKEN-HUMAN (HG16) (DONE 2/3/04 angie)
     ssh kolossus
     mkdir /cluster/data/galGal1/bed/blastz.hg16.swap
@@ -891,7 +904,7 @@ zip -j mrna.zip mrna.fa
     rm -r unsorted
 
 
-# CHAIN HUMAN BLASTZ (DONE 2/4/04 angie)
+# CHAIN HUMAN BLASTZ (DONE 2/12/04 angie)
     # Run axtChain on little cluster
     ssh kkr1u00
     cd /cluster/data/galGal1/bed/blastz.hg16.swap
@@ -907,10 +920,24 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 '_EOF_'
     # << this line makes emacs coloring happy
 
+    # Make our own linear gap file with reduced gap penalties, 
+    # in hopes of getting longer chains:
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtFilter -notQ=chrUn_random $1 \
-| ~/bin/i386/axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q stdin \
+| ~/bin/i386/axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../chickenHumanTuned.gap \
+                      -minScore=5000 stdin \
   /cluster/bluearc/galGal1/nib \
   /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs $2 > $3
 '_EOF_'
@@ -920,9 +947,9 @@ axtFilter -notQ=chrUn_random $1 \
     para create jobList
     para try, check, push, check...
 #Completed: 47 of 47 jobs
-#Average job time:                 437s       7.29m     0.12h    0.01d
-#Longest job:                     2284s      38.07m     0.63h    0.03d
-#Submission to last job:          2284s      38.07m     0.63h    0.03d
+#Average job time:                 484s       8.06m     0.13h    0.01d
+#Longest job:                     2678s      44.63m     0.74h    0.03d
+#Submission to last job:          3908s      65.13m     1.09h    0.05d
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -931,9 +958,23 @@ axtFilter -notQ=chrUn_random $1 \
     chainSplit chain all.chain
     rm run1/chain/*.chain
 
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+    # Filter with -minScore - just use 20000 for now.
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      echo filtering $f:t:r
+      chainFilter -minScore=20000 $f > chainFilt/$f:t
+    end
+
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain/chain
+    cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain/chainFilt
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain galGal1 ${c}_chainHg16 $i
@@ -941,7 +982,7 @@ axtFilter -notQ=chrUn_random $1 \
     end
 
 
-# NET HUMAN BLASTZ (DONE 2/5/04 angie)
+# NET HUMAN BLASTZ (DONE 2/12/04 angie)
     ssh kksilo
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
     mkdir preNet
@@ -979,11 +1020,10 @@ axtFilter -notQ=chrUn_random $1 \
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet galGal1 netHg16 stdin
     netFilter -minGap=10 humanSyn.net | hgLoadNet galGal1 netSyntenyHg16 stdin
-
     # Add entries for chaing16, netHg16, syntenyHg16 to chicken/galGal1 trackDb
 
 
-# RUN AXTBEST (DONE 2/3/04 angie)
+# RUN AXTBEST ON CHICKEN/HUMAN (DONE 2/3/04 angie)
     # chain/net seem kinda sparse, let's try axtBest...
     ssh kolossus
     cd /cluster/data/galGal1/bed/blastz.hg16.swap
@@ -999,14 +1039,13 @@ axtFilter -notQ=chrUn_random $1 \
     cat pslBest/chr*.psl | hgLoadPsl -table=blastzBestHg16 galGal1 stdin
 
 
-# BLASTZ Self (TODO)
-
-    ssh kksilo
-    mkdir -p /cluster/data/galGal1/bed/blastz.galGal1
-    cd /cluster/data/galGal1/bed/blastz.galGal1
+# BLASTZ Self (DONE 2/12/04 angie)
+    ssh kk
+    mkdir -p /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
     cat << '_EOF_' > DEF
 # chicken vs. chicken
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/bin/i386
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
 
 ALIGN=blastz-run
 BLASTZ=blastz
@@ -1016,11 +1055,8 @@ BLASTZ_ABRIDGE_REPEATS=0
 # TARGET
 # Chicken
 SEQ1_DIR=/cluster/bluearc/galGal1/nib
-# not used
 SEQ1_RMSK=
-# not used
 SEQ1_FLAG=
-# not used
 SEQ1_SMSK=
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
@@ -1029,16 +1065,14 @@ SEQ1_LAP=10000
 # QUERY
 # Human
 SEQ2_DIR=/cluster/bluearc/galGal1/nib
-# not currently used
 SEQ2_RMSK=
-# not currently used
 SEQ2_FLAG=
 SEQ2_SMSK=
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=10000
 
-BASE=/cluster/data/galGal1/bed/blastz.galGal1
+BASE=/cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -1052,134 +1086,188 @@ SEQ2_LEN=$BASE/S2.len
     chmod +x DEF
     cp DEF ~angie/hummus/DEF.galGal1-galGal1
 
-    ssh kk
-    cd /cluster/data/galGal1/bed/blastz.galGal1
-
     # source the DEF file
     bash
     . ./DEF
-
-    # follow the next set of directions slavishly
     mkdir -p $BASE/run
-    # give up on avoiding angie's directories
-    # tcl script
-    # creates xdir.sh and joblist run/j
     ~angie/hummus/make-joblist $DEF > $BASE/run/j
-
-    # xdir.sh makes a bunch of result directories in $BASE/raw/
-    # based on chrom name and CHUNK size
     sh $BASE/xdir.sh
     cd $BASE/run
-
     # now edit j to prefix path to executable name
-    # NOTE: we should have a controlled version of schwartz bin executables
     sed -e 's#^#/cluster/bin/penn/#' j > j2
     wc -l j*
     head j2
-
     # make sure the j2 edits are OK, then use it:
     mv j2 j
-
-    # para create will create the file: 'batch' for the cluster run
     para create j
-        # 97344 jobs 
-    para try
-    para check
-    para push
-    # ... etc ...
-       # 1.3 hr longest job
+    para try, check, push, check, ...
+#Completed: 21025 of 21025 jobs
+#Average job time:                 286s       4.76m     0.08h    0.00d
+#Longest job:                     4935s      82.25m     1.37h    0.06d
+#Submission to last job:          7545s     125.75m     2.10h    0.09d
 
-    # make tSizes, qSizes files
-    ssh hgwdev
-    cd /cluster/data/galGal1/bed/blastz.galGal1
-    echo 'select chrom,size from chromInfo' | hgsql -A -N galGal1 \
-      > tSizes
-    echo 'select chrom,size from chromInfo' | hgsql -A -N galGal1 \
-      > qSizes
-
-    # post-process blastz
     # --- normalize (PennSpeak for lift)
-    ssh kk
-    cd /cluster/data/galGal1/bed/blastz.galGal1
+    ssh kkr1u00
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
     # run bash shell if not running it already
     source DEF
     mkdir -p $BASE/run.1
     mkdir -p $BASE/lav
-    
     # create a new job list to convert out files to lav
     /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
                         > run.1/jobList
     cd run.1
-
-    # make sure the job list is OK
     wc -l jobList
     head jobList
-
+    # make sure the job list is OK
     para create jobList
     para push
+#Completed: 145 of 145 jobs
+#Average job time:                  48s       0.80m     0.01h    0.00d
+#Longest job:                      344s       5.73m     0.10h    0.00d
+#Submission to last job:          1516s      25.27m     0.42h    0.02d
 
     # convert lav files to axt
-    ssh kk
-    cd /cluster/data/galGal1/bed/blastz.galGal1
+    ssh kkr1u00
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
     mkdir axtChrom
-    
     # a new run directory
     mkdir run.2
     cd run.2
-
-    # create template file for gensub2
     # Use blastz-self-chromlav2axt, which includes axtDropOverlap in 
     # the pipe (that helps to keep axtSort from barfing).
     # usage:  blastz-self-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/scripts/blastz-self-chromlav2axt /cluster/data/galGal1/bed/blastz.galGal1/lav/$(root1) {check out line+ /cluster/data/galGal1/bed/blastz.galGal1/axtChrom/$(root1).axt} /cluster/bluearc/galGal1/nib /cluster/bluearc/galGal1/nib /cluster/data/galGal1/bed/blastz.galGal1/tSizes /cluster/data/galGal1/bed/blastz.galGal1/qSizes
+/cluster/bin/scripts/blastz-self-chromlav2axt /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/lav/$(root1) {check out line+ /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChrom/$(root1).axt} /cluster/bluearc/galGal1/nib /cluster/bluearc/galGal1/nib /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/S1.len /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/S2.len
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
-    \ls -1S /cluster/data/galGal1/bed/blastz.galGal1/lav > chrom.list
+    \ls -1S /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/lav > chrom.list
     gensub2 chrom.list single gsub jobList
     wc -l jobList
     head jobList
-
-    cd /cluster/data/galGal1/bed/blastz.galGal1/run.2
     para create jobList
-    para try
-    para check
-    para push
-
-    # Chroms 1,2,3,4,Un,X crashed... run in 2 passes:
-    ssh kksilo
-    cd /cluster/data/galGal1/bed/blastz.galGal1
-    set base=/cluster/data/galGal1/bed/blastz.galGal1
+    para try, check, push, check,...
+#Completed: 46 of 47 jobs
+#Crashed: 1 jobs
+#Average job time:                  44s       0.74m     0.01h    0.00d
+#Longest job:                      461s       7.68m     0.13h    0.01d
+#Submission to last job:          1664s      27.73m     0.46h    0.02d
+    # chrUn crashed -- run on kolossus, in two passes!
+    ssh kolossus
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
+    set base=`pwd`
     set seq1_dir=/cluster/data/galGal1/nib
     set seq2_dir=/cluster/data/galGal1/nib
-    foreach c (lav/chr1 lav/chr2 lav/chr3 lav/chr4 lav/chrX lav/chrUn)
-      pushd $c
-      set chr=$c:t
-      set out=$base/axtChrom/$chr.axt
+    foreach chr (chrUn)
+      set out=axtChrom/$chr.axt
       echo "Translating $chr lav to $out"
-      foreach d (*.lav)
+      foreach d (lav/$chr/*.lav)
         set smallout=$d.axt
         lavToAxt $d $seq1_dir $seq2_dir stdout \
-        | axtDropOverlap stdin /cluster/data/galGal1/bed/blastz.galGal1/tSizes \
-          /cluster/data/galGal1/bed/blastz.galGal1/qSizes stdout \
+        | axtDropOverlap stdin $base/S1.len $base/S2.len stdout \
         | axtSort stdin $smallout
       end
-      cat `ls -1 *.lav.axt | sort -g` > $out
-      popd
-    end
-    foreach f (axtChrom/chr*.axt)
-      echo gzipping $f...
-      gzip $f
+      cat `ls -1 lav/$chr/*.lav.axt | sort -g` | axtSort stdin $out
     end
 
-    # Make the axt's available on genome-test:
+
+# CHAIN SELF BLASTZ (DONE 2/11/04 angie -- but needs help w/gap costs or something...?)
+    # Run axtChain on little cluster
+    ssh kkr1u00
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtFilter -notQ=chrUn $1 \
+| ~/bin/i386/axtChain stdin \
+  /cluster/bluearc/galGal1/nib \
+  /cluster/bluearc/galGal1/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 47 of 47 jobs
+#Average job time:                 140s       2.33m     0.04h    0.00d
+#Longest job:                      766s      12.77m     0.21h    0.01d
+#Submission to last job:           766s      12.77m     0.21h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+    # trim to minScore=20000
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      chainFilter -minScore=20000 $f > chainFilt/$f:t
+    end
+
+    # Load chains into database
     ssh hgwdev
-    mkdir -p /usr/local/apache/htdocs/goldenPath/galGal1/alignments/vsGalGal1
-    cd /usr/local/apache/htdocs/goldenPath/galGal1/alignments/vsGalGal1
-    cp -p /cluster/data/galGal1/bed/blastz.galGal1/axtChrom/*.axt.gz .
-        
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChain/chainFilt
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain galGal1 ${c}_chainSelf $i
+        echo done $c
+    end
+
+
+# NET SELF BLASTZ (IN PROGRESS 2/12/04 angie)
+    ssh kksilo
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChain
+    netClass -noAr noClass.net galGal1 galGal1 self.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+TODO
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChain
+    rm noClass.net
+    netFilter -syn self.net > selfSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11/axtChain
+    netFilter -minGap=10 self.net |  hgLoadNet galGal1 netSelf stdin
+    netFilter -minGap=10 selfSyn.net | hgLoadNet galGal1 netSyntenySelf stdin
+    # Add entries for chainSelf, netSelf, netSyntenySelf to 
+    # chicken/galGal1 trackDb
+
+
+# RUN AXTBEST ON SELF (DONE 2/12/04 angie)
+    # chain/net seem kinda sparse, let's try axtBest...
+    ssh kolossus
+    cd /cluster/data/galGal1/bed/blastz.galGal1.2004-02-11
+    mkdir axtBest pslBest
+    foreach f (axtChrom/chr*.axt)
+      set chr=$f:t:r
+      echo axtBesting $chr
+      axtBest $f $chr axtBest/$chr.axt -minScore=300
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/$chr.psl
+    end
+
 
 # MAKE 11.OOC FILE FOR BLAT (DONE 2/1/04 angie)
     ssh kksilo
@@ -1604,4 +1692,40 @@ type wig 0 100
     hgLoadWiggle -oldTable galGal1 quality *.wig
     #	create symlinks for .wib files
     ln -s `pwd`/*.wib /gbdb/galGal1/wib
+
+# PLOT MRNA-MARKER GENETIC VS. GENOMIC POS (DONE 2/10/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/galGal1/bed/mrnaPlots
+    cd /cluster/data/galGal1/bed/mrnaPlots
+    # Need to find out where Terry got this file:
+    cp -p /cluster/bluearc/gg1/markers/stsAlias.bed .
+    echo 'select all_mrna.tName, all_mrna.tStart, all_mrna.tEnd, \
+                 all_mrna.qName, 0, all_mrna.strand, geneName.name \
+            from all_mrna, mrna, geneName \
+            where all_mrna.qName = mrna.acc and mrna.geneName != 0 and \
+                  mrna.geneName = geneName.id' \
+    | hgsql galGal1 -N > mrnaWithNames.bed
+
+    mkdir gnuplot
+    # This is a one-shot and I'm writing a perl script -- too long for inliner.
+    chmod a+x ./plotMrnaMarkers.pl
+    ./plotMrnaMarkers.pl ../markerPlots/genetic.map stsAlias.bed \
+      mrnaWithNames.bed 
+    # Too few results to plot -- just emailed summary to LaDeana et al.
+
+
+# COMPARE GENBANK MRNA ANNOTATED POSITION TO ALIGNED (DONE 2/11/04 angie)
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/mrnaPlots
+    echo 'select tName, tStart, tEnd, qName, 0, strand from all_mrna' \
+    | hgsql galGal1 -N > mrnaPos.bed
+    # write another 1-shot perl script
+    chmod a+x getMrnaGBPos.pl
+    # eieio is the fileserver for genbank stuff...
+    ssh eieio
+    cd /cluster/data/galGal1/bed/mrnaPlots
+    gunzip -c /cluster/store5/genbank/data/download/genbank.139.0/gbvrt*.gz \
+    | ./getMrnaGBPos.pl mrnaPos.bed
+    # emailed report files mrnaGB*.txt
+
 
