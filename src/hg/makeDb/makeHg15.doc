@@ -2015,7 +2015,7 @@ LOAD SANGER22 GENES  (TODO)
         hgSanger20 hg15 *.gtf *.info
 
 
-# JAX ORTHOLOG (table only) (TODO -- check with Carol Bult at JAX)
+# JAX ORTHOLOG (table only) (  Done braney 2003-07-01 )
     # Add Jackson labs info
     cd ~/hg15/bed
     mkdir jaxOrtholog
@@ -2026,10 +2026,10 @@ LOAD SANGER22 GENES  (TODO)
     awk -f filter.awk *.rpt > jaxOrtholog.tab
     # Drop (just in case), create and load the table like this:
     echo 'drop table jaxOrtholog;' | hgsql hg15
-    hgsql hg15 < ~/src/hg/lib/jaxOrtholog.sql
-    echo "load data local infile '"`pwd`"/jaxOrtholog.tab' into table \
-          jaxOrtholog;" \
-    | hgsql hg15
+    hgsql hg15 < ~/kent/src/hg/lib/jaxOrtholog.sql
+    set table=`pwd`/jaxOrtholog.tab
+    set cmd="load data local infile '$table' into table jaxOrtholog;" 
+    echo $cmd | hgsql hg15
 
 
 LOAD RNAGENES
