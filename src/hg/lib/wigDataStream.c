@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.48 2004/09/23 21:54:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.49 2004/09/24 19:01:22 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -98,7 +98,7 @@ verbose(VERBOSE_HIGHEST, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 }
 
 static void resetStats(float *lowerLimit, float *upperLimit, double *sumData,
-	double *sumSquares, unsigned *statsCount, long int *chromStart,
+	double *sumSquares, unsigned long *statsCount, long int *chromStart,
 	long int *chromEnd)
 {
 *lowerLimit = INFINITY;
@@ -644,7 +644,7 @@ float lowerLimit = INFINITY;
 float upperLimit = -1.0 * INFINITY;
 double sumData = 0.0;
 double sumSquares = 0.0;
-unsigned statsCount = 0;
+unsigned long statsCount = 0;
 long int chromStart = -1;
 long int chromEnd = 0;
 boolean summaryOnly = TRUE;
@@ -1190,7 +1190,7 @@ if (bedList && *bedList)
     struct slName *chromList = NULL;
     struct slName *chr;
     struct hash *chromSizes = NULL;
-    struct { unsigned chrStart; unsigned chrEnd; } *chrStartEnd;
+    struct { unsigned long chrStart; unsigned long chrEnd; } *chrStartEnd;
     unsigned long long valuesFound = 0;
     boolean maxReached = FALSE;
     unsigned long long prevMaxOutput = 0;
@@ -1223,8 +1223,8 @@ if (bedList && *bedList)
 	{
 	char *chrName = NULL;
 	struct bed *bed;
-	unsigned bedStart = 0;
-	unsigned bedEnd = 0;
+	unsigned long bedStart = 0;
+	unsigned long bedEnd = 0;
 
 	/*	no need to clone the name, it remains there, we are just
 	 *	pointing to it.
@@ -1275,26 +1275,26 @@ if (bedList && *bedList)
 	boolean doNoOp = FALSE;
 	boolean doDataArray = FALSE;
 	struct bed *bed;
-	unsigned bedExtent = 0;	/* from first thru last element of bedList*/
-	unsigned bedStart = 0;
-	unsigned bedEnd = 0;
-	unsigned bedPosition = 0;
+	unsigned long bedExtent = 0;	/* from first thru last element of bedList*/
+	unsigned long bedStart = 0;
+	unsigned long bedEnd = 0;
+	unsigned long bedPosition = 0;
 	char *bedArray;	/*	meaning is boolean but	*/
 	char *boolPtr;	/*	boolean is 4 bytes, char is 1	*/
-	unsigned bedArraySize = 0;
-	unsigned winStart = 0;
-	unsigned winEnd = 0;
-	unsigned winExtent = 0;
-	unsigned bedMarked = 0;
-	unsigned chromPosition = 0;
-	unsigned bedElStart = 0;
-	unsigned bedElEnd = 0;
-	unsigned bedElCount = 0;
+	unsigned long bedArraySize = 0;
+	unsigned long winStart = 0;
+	unsigned long winEnd = 0;
+	unsigned long winExtent = 0;
+	unsigned long bedMarked = 0;
+	unsigned long chromPosition = 0;
+	unsigned long bedElStart = 0;
+	unsigned long bedElEnd = 0;
+	unsigned long bedElCount = 0;
 	float lowerLimit = INFINITY;		/*	stats accumulators */
 	float upperLimit = -1.0 * INFINITY;	/*	stats accumulators */
 	double sumData = 0.0;			/*	stats accumulators */
 	double sumSquares = 0.0;		/*	stats accumulators */
-	unsigned statsCount = 0;		/*	stats accumulators */
+	unsigned long statsCount = 0;		/*	stats accumulators */
 	long int chromStart = -1;		/*	stats accumulators */
 	long int chromEnd = 0;			/*	stats accumulators */
 	size_t dataArraySize = 0;
@@ -1413,13 +1413,13 @@ if (bedList && *bedList)
 	boolPtr = bedArray;
 	for (bed = filteredBed; bed; bed = bed->next)
 	    {
-	    unsigned gap = bed->chromStart - bedPosition;
-	    unsigned elSize = bed->chromEnd - bed->chromStart;
+	    unsigned long elSize = bed->chromEnd - bed->chromStart;
 
-	    boolPtr += gap;
+	    boolPtr = bedArray + (bed->chromStart - bedStart);
 	    memset((void *)boolPtr, TRUE, elSize);
 	    boolPtr += elSize;
-	    bedPosition += gap + elSize;
+	    bedPosition += (unsigned long)((void *)boolPtr - (void *)bedArray)
+				 + elSize;
 	    bedMarked += elSize;	/*	number of bases marked	*/
 	    }
 	bedEnd = bedPosition;
@@ -1613,7 +1613,8 @@ if (bedList && *bedList)
 		size_t newSize;
 		newSize = sizeof(struct asciiDatum) * wigAscii->count;
 
-		smallerDataArea = (struct asciiDatum *) needMem(newSize);
+		setMaxAlloc((size_t)2100000000); /*2^31 = 2,147,483,648 */
+		smallerDataArea = (struct asciiDatum *) needLargeMem(newSize);
 		memcpy(smallerDataArea, wigAscii->data, newSize);
 		freeMem(wigAscii->data);
 		wigAscii->data = smallerDataArea;
