@@ -1,6 +1,7 @@
 /* htmlCheck - Do a little reading and verification of html file. */
 #include "common.h"
 #include "errabort.h"
+#include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -8,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.7 2004/02/28 10:47:54 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.8 2004/02/28 11:26:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -196,7 +197,6 @@ for (;;)
 	    slAddHead(&tagList, tag);
 	    pos = tagName - dupe - 1;
 	    tag->start = html+pos;
-	    // uglyf(">>>%s<<<\n", tagName);
 
 	    /* If already got end tag (or EOF) stop processing tag. */
 	    if (c == '>' || c == 0)
@@ -242,11 +242,11 @@ for (;;)
 		name = s;
 		*e++ = 0;
 		eraseTrailingSpaces(name);
-		// uglyf(" (%s)\n", name);
 		if (c == '>')
 		    {
 		    val = "";
 		    gotEnd = TRUE;
+		    tag->end = html + (e - dupe);
 		    }
 		else
 		    {
@@ -282,7 +282,6 @@ for (;;)
 		AllocVar(att);
 		att->name = cloneString(name);
 		att->val = cloneString(val);
-		// uglyf("  [%s]\n", val);
 		slAddTail(&tag->attributes, att);
 		s = e;
 		if (gotEnd)
@@ -312,7 +311,6 @@ page->status = status;
 page->header = httpHeaderRead(&s);
 page->htmlText = html + (s - dupe);
 page->tags = httpTagScan(s);
-freeMem(dupe);
 return page;
 }
 
@@ -488,7 +486,9 @@ for (tag = startTag; tag != endTag; tag = tag->next)
 	if (table->row == NULL)
 	    tagAbort(tag, "</TR> with no <TR>");
 	if (table->row->inTd)
+	    {
 	    tagAbort(tag, "</TR> while <TD> is open");
+	    }
 	if (table->row->tdCount == 0)
 	    tagAbort(tag, "Empty row in <TABLE>");
 	freez(&table->row);
