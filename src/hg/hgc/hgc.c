@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.780 2004/11/09 23:45:33 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.781 2004/11/12 16:28:19 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14959,6 +14959,7 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	 sameWord(track, "all_mrna") ||
+	 sameWord(track, "all_est") ||
 	 sameWord(track, "celeraMrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
