@@ -29,6 +29,212 @@
 #include "cheapcgi.h"
 #include "web.h"
 
+char *MrnaIDforGeneName(char *geneName)
+/* return mRNA ID for a gene name */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char * result;
+
+conn = hAllocConn();
+query = newDyString(256);
+
+dyStringPrintf(query, "SELECT mrnaAcc FROM refLink WHERE name='%s'", geneName);
+sr = sqlGetResult(conn, query->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    result = strdup(row[0]);
+    }
+else
+    {
+    result = NULL;
+    }
+
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return result;
+}
+
+char *MrnaIDforProtein(char *proteinID)
+/* return mRNA ID for a protein */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char * result;
+
+conn = hAllocConn();
+query = newDyString(256);
+
+dyStringPrintf(query, "SELECT mrnaID FROM spMrna WHERE spID='%s'", proteinID);
+sr = sqlGetResult(conn, query->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    result = strdup(row[0]);
+    }
+else
+    {
+    result = NULL;
+    }
+
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return result;
+}
+
+static boolean findKnownGeneExact(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in gene prediction table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char *chrom;
+struct snp snp;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+
+localName = spec;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, 
+	       "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
+		tableName, localName);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->name = cloneString(query->string);
+	slAddHead(&hgp->tableList, table);
+	}
+    AllocVar(pos);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    pos->name = cloneString(row[3]);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL) 
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
+static boolean findKnownGeneLike(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in gene prediction table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char *chrom;
+struct snp snp;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+
+localName = spec;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, localName);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->name = cloneString(query->string);
+	slAddHead(&hgp->tableList, table);
+	}
+
+    AllocVar(pos);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    pos->name = cloneString(row[3]);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+static boolean findKnownGene(char *spec, struct hgPositions *hgp, char *tableName)
+/* Look for position in gene prediction table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char *chrom;
+struct snp snp;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+char *mrnaID;
+
+if (findKnownGeneExact(spec, hgp, tableName))
+    {    
+    return(TRUE);
+    }
+else
+    {
+    mrnaID = MrnaIDforProtein(spec);
+	
+    if (mrnaID != NULL)
+	{
+	return(findKnownGeneExact(mrnaID, hgp, tableName));
+	}
+    else
+	{
+	mrnaID = MrnaIDforGeneName(spec);
+	if (mrnaID != NULL)
+	    {
+	    return(findKnownGeneExact(mrnaID, hgp, tableName));
+	    }
+	else
+	    {
+	    return(findKnownGeneLike(mrnaID, hgp, tableName));
+	    }
+	}
+    }
+}
+
 static struct hgPositions *handleTwoSites(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart,
 	boolean useWeb, char *hgAppName);
@@ -1261,7 +1467,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 }
-
 
 static boolean isUnsignedInt(char *s)
 /* Return TRUE if s is in format to be an unsigned int. */
