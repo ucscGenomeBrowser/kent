@@ -2012,15 +2012,9 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 12/6/02)
     cd ~/hg13/bed/blastz.mm2.2002-12-5-ASH/pslTight
     hgLoadPsl hg13 chr*_blastzTightMouse.psl
 
+BEGINNING OF RAT BLASTZ
 
-
-
-
-
-
-XXX BEGINNING OF RAT BLASTZ
-
-LOADING RAT RN1 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/6/02)
+LOADING RAT RN1 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 1/09/03 - MATT)
 
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
@@ -2065,7 +2059,7 @@ LOADING RAT RN1 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/6/02)
       set c=$f:t:r
       axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
-
+STOPPED HERE AND DIDN'T LOAD THE TABLES SINCE NO ONE WANTED THE DATA IN THE BROWSER
     # Load tables
     ssh hgwdev
     set base="/cluster/store4/gs.14/build31/bed/blastz.rn1.2002-12-26"
@@ -2073,7 +2067,7 @@ LOADING RAT RN1 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/6/02)
     cd $base/pslChrom
     hgLoadPsl hg13 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN1 AXT FILES (DONE 12/6/02)
+MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN1 AXT FILES (DONE 1/10/03 - MATT)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
@@ -2103,8 +2097,6 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN1 AXT FILES (DONE 12/6/02)
       axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
 
-DONE TO HERE
-
     # Load tables
      ssh hgwdev
      set base="/cluster/store4/gs.14/build31/bed/blastz.rn1.2002-12-26"
@@ -2129,7 +2121,9 @@ DONE TO HERE
      hgsql hg13 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg13 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 12/6/02)
+DONE TO HERE
+
+MAKING THE AXTTIGHT FROM AXTBEST (TODO if anyone wants it)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
     cd ~/hg13/bed/blastz.rn1.2002-12-26/axtBest
