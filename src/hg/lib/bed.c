@@ -240,6 +240,33 @@ ret->score = sqlUnsigned(row[4]);
 return ret;
 }
 
+struct bed *bedLoad12(char **row)
+/* Load a bed from row fetched with select * from bed
+ * from database.  Dispose of this with bedFree(). */
+{
+struct bed *ret;
+int sizeOne,i;
+char *s;
+
+AllocVar(ret);
+ret->blockCount = sqlSigned(row[9]);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlUnsigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->thickStart = sqlUnsigned(row[6]);
+ret->thickEnd = sqlUnsigned(row[7]);
+ret->reserved = sqlUnsigned(row[8]);
+sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+return ret;
+}
+
+
 struct bed *bedLoadN(char *row[], int wordCount)
 /* Convert a row of strings to a bed. */
 {
@@ -274,3 +301,53 @@ if (wordCount > 11)
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
 return bed;
 }
+
+
+void fullBedOutput(struct bed *el, FILE *f, char sep, char lastSep) 
+/* Print out bed.  Separate fields with sep. Follow last field with lastSep. */
+{
+int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->thickStart);
+fputc(sep,f);
+fprintf(f, "%u", el->thickEnd);
+fputc(sep,f);
+fprintf(f, "%u", el->reserved);
+fputc(sep,f);
+fprintf(f, "%d", el->blockCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->blockSizes[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->chromStarts[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(lastSep,f);
+}
+
