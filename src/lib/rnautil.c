@@ -44,13 +44,14 @@ for (;*s;s++)
     }
 }
 
-void fold2pairingList(char *fold, int len, int *pairList)
+void fold2pairingList(char *fold, int len, int **p2pairList)
 /* take a parenthesis string, allocate and return an array of pairing
    positions: pairList[i] = j <=> i pair with j and pairList[i] = -1
    <=> i does not pair.*/
 {
 int i,j, stackSize = 0;
-AllocArray(pairList, len);
+int *pairList      = needMem(len * sizeof(int));
+*p2pairList        = pairList;
 
 /* initialize array */
 for (i = 0; i < len; i++)
@@ -173,8 +174,6 @@ void markCompensatoryMutations(char *s, char *ref, int *pairList, int *markList)
  * 3: pairing, single substitution (one of: CG<->TG, GC<->GT, TA<->TG, AT<->GT)
  * 4: pairing, double substitution (i.e. a compensatory change)
  * 5: annoated as pairing but dinucleotide cannot pair 
-
-
  */
 {
 int i, size = strlen(s);
