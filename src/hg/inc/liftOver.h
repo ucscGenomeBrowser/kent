@@ -16,7 +16,7 @@ int liftOverBed(char *fileName, struct hash *chainHash,
                         double minMatch,  double minBlocks, 
                         int minSizeT, int minSizeQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
-                        bool multiple, int *errCt);
+                        bool multiple, char *chainTable, int *errCt);
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 
