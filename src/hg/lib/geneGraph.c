@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.9 2003/06/18 16:48:19 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.10 2003/08/18 15:56:41 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -171,15 +171,35 @@ for (i=0; i<vCount; ++i)
     }
 }
 
-static int countUsed(struct ggVertex *v, int vCount, int *translator)
+boolean vertexUsed(struct geneGraph *gg, int vertexIx)
+/* Is the vertex attached to anything in the edgeMatrix? */
+{
+bool **em = gg->edgeMatrix;
+int vC = gg->vertexCount;
+int i=0;
+/* First check the row. */
+for(i=0; i<vC; i++)
+    if(em[vertexIx][i])
+	return TRUE;
+/* Now check the column. */
+for(i=0; i<vC; i++)
+    if(em[i][vertexIx])
+	return TRUE;
+
+/* Guess it isn't used. */
+return FALSE;
+}
+
+static int countUsed(struct geneGraph *gg, int vCount, int *translator)
 /* Count number of vertices actually used. */
 {
 int i;
 int count = 0;
+struct ggVertex *v = gg->vertices;
 for (i=0; i<vCount; ++i)
     {
     translator[i] = count;
-    if (v[i].type != ggUnused)
+    if (v[i].type != ggUnused && vertexUsed(gg,i))
 	++count;
     }
 return count;
@@ -203,7 +223,7 @@ unsigned *vBacs, *vPositions, *edgeStarts, *edgeEnds, *mrnaRefs;
 struct maRef *ref;
 
 AllocArray(translator, totalVertexCount);
-usedVertexCount = countUsed(vertices, totalVertexCount, translator);
+usedVertexCount = countUsed(gg, totalVertexCount, translator);
 for (i=0; i<totalVertexCount; ++i)
     {
     bool *waysOut = em[i];
@@ -456,22 +476,31 @@ enum ggEdgeType ggClassifyEdge(struct geneGraph *gg, int v1, int v2)
  * necessarily coding. */
 {
 struct ggVertex *vertices = gg->vertices;
-
+enum ggEdgeType et = 0;
 /* Make sure the indexes are in bounds and edge exists. */
 assert(v1 < gg->vertexCount && v2 < gg->vertexCount && gg->edgeMatrix[v1][v2]);
 
 if( (vertices[v1].type == ggHardStart || vertices[v1].type == ggSoftStart) &&
     (vertices[v2].type == ggHardEnd || vertices[v2].type == ggSoftEnd))
-    return ggExon;
+    et =  ggExon;
 else if((vertices[v1].type == ggHardEnd || vertices[v1].type == ggSoftEnd) &&
     (vertices[v2].type == ggHardStart || vertices[v2].type == ggSoftStart))
-    return ggIntron;
+    et = ggIntron;
 else
     errAbort("geneGraph::ggClassifyEdge() - "
 	     "Edge from %d -> %d has types %d-%d which isn't recognized as intron or exon.\n",
 	     v1, v2, vertices[v1].type, vertices[v2].type);
-return -1;
+if(sameString(gg->strand, "-"))
+    {
+    if(et == ggExon)
+	et = ggIntron;
+    else if(et == ggIntron)
+	et = ggExon;
+    }
+return et;
 }
+
+
 
 struct altGraphX *ggToAltGraphX(struct geneGraph *gg)
 /* Convert a gene graph to an altGraphX data structure for storage in
@@ -494,7 +523,7 @@ struct evidence **evidence = NULL;
 struct maRef *ref;
 
 AllocArray(translator, totalVertexCount);
-usedVertexCount = countUsed(vertices, totalVertexCount, translator);
+usedVertexCount = countUsed(gg, totalVertexCount, translator);
 for (i=0; i<totalVertexCount; ++i)
     {
     bool *waysOut = em[i];
@@ -513,15 +542,12 @@ ag->vTypes = AllocArray(vTypes, usedVertexCount);
 ag->vPositions = AllocArray(vPositions, usedVertexCount);
 ag->mrnaRefCount = gg->mrnaRefCount;
 accessionList = newDyString(10*gg->mrnaRefCount);
+/* Have to print the accessions all out in the same string to conform
+   to how the memory is handled later. */
 for(i=0; i<gg->mrnaRefCount; i++)
     dyStringPrintf(accessionList, "%s,", gg->mrnaRefs[i]);
 sqlStringDynamicArray(accessionList->string, &ag->mrnaRefs, &ag->mrnaRefCount);
 dyStringFree(&accessionList);
-/*ag->mrnaRefs = AllocArray(ag->mrnaRefs, gg->mrnaRefCount);*/
-/* for(i=0; i < gg->mrnaRefCount; i++) */
-/*     { */
-/*     ag->mrnaRefs[i] = cloneString(gg->mrnaRefs[i]); */
-/*     } */
 ag->mrnaTissues = CloneArray(gg->mrnaTissues, gg->mrnaRefCount);
 ag->mrnaLibs = CloneArray(gg->mrnaLibs, gg->mrnaRefCount);
 
@@ -529,7 +555,7 @@ ag->mrnaLibs = CloneArray(gg->mrnaLibs, gg->mrnaRefCount);
 for (i=0,j=0; i<totalVertexCount; ++i)
     {
     struct ggVertex *v = vertices+i;
-    if (v->type != ggUnused)
+    if (v->type != ggUnused && vertexUsed(gg, i))
 	{
 	vTypes[j] = v->type;
 	vPositions[j] = v->position;

@@ -5,7 +5,6 @@
  *****************************************************************************/
 /* geneGraph - stuff that represents the alt splicing patterns possible for a
  * gene based on the mRNA evidence as a graph. */
-
 #ifndef GENEGRAPH_H
 #define GENEGRAPH_H
 
@@ -43,7 +42,6 @@ enum ggEdgeType
     ggExon,      /* Exon, not necessarily coding */
     ggIntron,    /* Intron, spliced out */
     ggSJ,        /* Splice Junction */
-    ggCassette,  /* Cassette exon */
 };
 
 struct ggVertex

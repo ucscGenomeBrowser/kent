@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.14 2003/08/13 23:14:45 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.15 2003/08/18 15:56:41 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -1095,8 +1095,8 @@ for(i=0; i<baseCount; i++)
 	{
 	bed->blockSizes[bed->blockCount] = i - currentStart;
 	bed->chromStarts[bed->blockCount] = currentStart;
-	bed->thickEnd = bed->chromEnd = max(bed->thickEnd, i+offSet);
-	bed->thickStart = bed->chromStart = min(bed->thickStart, (currentStart + offSet));
+/* 	bed->thickEnd = bed->chromEnd = max(bed->thickEnd, i+offSet); */
+/* 	bed->thickStart = bed->chromStart = min(bed->thickStart, (currentStart + offSet)); */
 	bed->blockCount++;
 	currentStart = BIGNUM;
 	extending = FALSE;
@@ -1107,12 +1107,21 @@ if(extending)
     {
     bed->blockSizes[bed->blockCount] = i - currentStart;
     bed->chromStarts[bed->blockCount] = currentStart;
-    bed->thickEnd = bed->chromEnd = max(bed->thickEnd, i+offSet);
-    bed->thickStart = bed->chromStart = min(bed->thickStart, currentStart+offSet);
+/*     bed->thickEnd = bed->chromEnd = max(bed->thickEnd, i+offSet); */
+/*     bed->thickStart = bed->chromStart = min(bed->thickStart, currentStart+offSet); */
     bed->blockCount++;
     currentStart = BIGNUM;
     extending = FALSE;
     }
+bed->chromStart = BIGNUM;
+bed->chromEnd = 0;
+for(i=0; i<bed->blockCount; i++)
+    {
+    bed->chromStart = bed->thickStart = min(bed->chromStarts[i], bed->chromStart);
+    bed->chromEnd = bed->thickEnd = max(bed->chromStarts[i]+bed->blockSizes[i], bed->chromEnd);
+    }
+bed->chromStart = bed->thickStart = bed->chromStart + ag->tStart;
+bed->chromEnd = bed->thickEnd = bed->chromEnd + ag->tStart;
 freez(&bases);
 return bed;
 }
