@@ -47,10 +47,10 @@ void genePredFreeList(struct genePred **pList);
 void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep);
 /* Print out genePred.  Separate fields with sep. Follow last field with lastSep. */
 
-#define genePredTabOut(el,f) genePredOutput(el,f,'\t','\n');
+#define genePredTabOut(el,f) genePredOutput(el,f,'\t','\n')
 /* Print out genePred as a line in a tab-separated file. */
 
-#define genePredCommaOut(el,f) genePredOutput(el,f,',',',');
+#define genePredCommaOut(el,f) genePredOutput(el,f,',',',')
 /* Print out genePred as a comma separated list including final comma. */
 
 /* ---------  Start of hand generated code. ---------------------------- */
