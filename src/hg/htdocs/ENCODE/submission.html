@@ -559,8 +559,10 @@
 
 		        A functional description of these options can
 		        be seen in the <A target=_blank
-		        HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=panTro1&org=Chimp&c=chr6&g=quality">
-		        Quality Scores track</A>.
+		        HREF="http://genome.ucsc.edu/goldenPath/help/hgWiggleTrackHelp.html">
+		        Wiggle Track Configuration</A> description. <BR>
+			(Custom tracks do not have interactive configuration
+			options.)
 
 			<P><B>Data Values</B></P>
 			Wiggle track data values can be integer or
@@ -600,7 +602,7 @@
 		    data values that apply to a constant size run of bases.
 		    The fixedStep single-column data format begins with the
 		    declaration line: 
-<FONT color="#0000FF"><PRE>  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I></I>]</PRE></FONT>
+<FONT color="#0000FF"><PRE>  <B>fixedStep chrom=</B><I>chrN</I> <B>start=</B>chromStart<I></I> <B>step=</B><I>stepInterval</I> <B>[span=</B><I>windowSize</I>]</PRE></FONT>
 		    and is followed by a single-column of data values.
 		    The declaration line starts with the word
 		    fixedStep, and it must include specifications for
