@@ -52,7 +52,7 @@
 #include "lfs.h"
 #include "mcnBreakpoints.h"
 
-#define hgTracksName() "../cgi-bin/jkTracks"
+#define hgTracksName() "../cgi-bin/jkTracks"	/* uglyf */
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -80,7 +80,7 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
 char *selfName = "hgTracks";	/* Symbolic name of program */
 
 /* These variables persist from one incarnation of this program to the
- * next - living mostly in hidden variables. */
+ * next - living mostly in the cart. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *position; 		/* Name of position. */
@@ -95,8 +95,6 @@ boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
-
-boolean calledSelf;			/* True if program called by page it generated. */
 
 struct trackLayout
 /* This structure controls the basic dimensions of display. */
@@ -131,7 +129,7 @@ char *s;
 font = tl.font = mgSmallFont();
 tl.leftLabelWidth = 100;
 tl.picWidth = 610;
-setPicWidth(cgiOptionalString("pix"));
+setPicWidth(cartOptionalString(cart, "pix"));
 }
 
 char *tvStrings[] = 
@@ -312,35 +310,6 @@ else
 }
 
 
-void makeHiddenVar(char *name, char *val)
-/* Make hidden variable. */
-{
-cgiMakeHiddenVar(name, val);	/* Variable set to let us know we called ourselves. */
-putchar('\n');
-}
-
-void makeHiddenBoolean(char *name, boolean val)
-{
-if (val)
-    makeHiddenVar(name, "1");
-}
-
-void saveHiddenVars()
-/* Save all the variables we want to continue between states. */
-{
-char buf[16];
-putchar('\n');
-makeHiddenVar("old", chromName);    /* Variable set when calling ourselves. */
-makeHiddenBoolean("hideControls", hideControls);
-makeHiddenVar("db", database);
-if(otherFrame != NULL)
-    cgiMakeHiddenVar("of",otherFrame);
-if(thisFrame != NULL)
-    cgiMakeHiddenVar("tf",thisFrame);
-cgiContinueHiddenVar("ss");
-cgiContinueHiddenVar("ct");
-}
-
 struct controlGrid
 /* Keep track of a control grid (table) */
     {
@@ -405,21 +374,7 @@ static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
 struct dyString *dy = newDyString(512);
 struct trackGroup *tg;
 
-dyStringPrintf(dy, "db=%s&pix=%d", database, tl.picWidth);
-if (eUserSeqString != NULL)
-    dyStringPrintf(dy, "&ss=%s", eUserSeqString);
-if (ctFileName != NULL)
-    dyStringPrintf(dy, "&ct=%s", ctFileName);
-if (withLeftLabels)
-    dyStringPrintf(dy, "&leftLabels=on");
-if (withCenterLabels)
-    dyStringPrintf(dy, "&centerLabels=on");
-if (withGuidelines)
-    dyStringPrintf(dy, "&guidelines=on");
-if (withRuler)
-    dyStringPrintf(dy, "&ruler=on");
-else
-    dyStringPrintf(dy, "&ruler=off");
+dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 for (tg = tGroupList; tg != NULL; tg = tg->next)
     {
     int vis = tg->visibility;
@@ -429,14 +384,9 @@ for (tg = tGroupList; tg != NULL; tg = tg->next)
 	    vis = tvFull;
 	else if (vis == tvFull)
 	    vis = tvDense;
+	dyStringPrintf(dy, "&%s=%s", tg->mapName, tvStrings[vis]);
 	}
-    dyStringPrintf(dy, "&%s=%s", tg->mapName, tvStrings[vis]);
     }
-/* Chuck code to sync with frames */
-if(otherFrame)
-    dyStringPrintf(dy, "&of=%s",otherFrame);
-if(thisFrame)
-    dyStringPrintf(dy, "&th=%s",thisFrame);
 return dy;
 }
 
@@ -458,8 +408,8 @@ if (chrom == NULL)
     start = winStart;
     end = winEnd;
     }
-printf("HREF=\"%s?seqName=%s&old=%s&winStart=%d&winEnd=%d", 
-	hgTracksName(), chrom, chrom, start, end);
+printf("HREF=\"%s?seqName=%s&winStart=%d&winEnd=%d", 
+	hgTracksName(), chrom, start, end);
 printf("&%s\"", ui->string);
 freeDyString(&ui);
 
@@ -1561,7 +1511,7 @@ void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
 {
 controlGridStartCell(cg);
 printf("%s:<BR>", text);
-cgiMakeTextVar(var, cgiUsualString(var, ""), 19);
+cgiMakeTextVar(var, cartUsualString(cart, var, ""), 19);
 controlGridEndCell(cg);
 }
 
@@ -1579,9 +1529,9 @@ struct mrnaUiData *mud = tg->extraUiData;
 struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
 char *filterTypeVar = mud->filterTypeVar;
-char *filterTypeVal = cgiUsualString(filterTypeVar, "red");
+char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
 char *logicTypeVar = mud->logicTypeVar;
-char *logicTypeVal = cgiUsualString(logicTypeVar, "and");
+char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
 
 /* Define type of filter. */
 printf("<B>Filter:</B> ");
@@ -1629,14 +1579,14 @@ if (*pLfList == NULL || mud == NULL)
  * to do the filter. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    fil->pattern = cgiUsualString(fil->key, "");
+    fil->pattern = cartUsualString(cart, fil->key, "");
     if (fil->pattern[0] != 0)
         anyFilter = TRUE;
     }
 if (!anyFilter)
     return;
 
-type = cgiUsualString(mud->filterTypeVar, "red");
+type = cartUsualString(cart, mud->filterTypeVar, "red");
 if (sameString(type, "red"))
     colorIx = MG_RED;
 else if (sameString(type, "green"))
@@ -1649,7 +1599,7 @@ else if (sameString(type, "include"))
     isExclude = FALSE;
 else
     errAbort("Unknown filter type %s (%s)", type, mud->filterTypeVar);
-type = cgiUsualString(mud->logicTypeVar, "and");
+type = cartUsualString(cart, mud->logicTypeVar, "and");
 andLogic = sameString(type, "and");
 
 
@@ -1658,7 +1608,7 @@ andLogic = sameString(type, "and");
 conn = hAllocConn();
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    fil->pattern = cgiUsualString(fil->key, "");
+    fil->pattern = cartUsualString(cart, fil->key, "");
     if (fil->pattern[0] != 0)
 	{
 	fil->hash = newHash(10);
@@ -1985,7 +1935,7 @@ return lf->extra;
 void loadUserPsl(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
 {
-char *ss = cgiString("ss");
+char *ss = cartString(cart, "ss");
 char buf[1024];
 char buf2[3*512];
 char *ssWords[4];
@@ -5789,15 +5739,15 @@ void loadCustomTracks(struct trackGroup **pGroupList)
 {
 struct customTrack *ctList = NULL, *ct;
 struct trackGroup *tg;
-char *customText = cgiOptionalString("customText");
-char *fileName = cgiOptionalString("ct");
+char *customText = cartOptionalString(cart, "customText");
+char *fileName = cartOptionalString(cart, "ct");
 struct slName *browserLines = NULL, *bl;
 
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && bogusMacEmptyChars(customText))
     customText = NULL;
 if (customText == NULL || customText[0] == 0)
-    customText = cgiOptionalString("customFile");
+    customText = cartOptionalString(cart, "customFile");
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && customText[0] != 0)
     {
@@ -5806,7 +5756,6 @@ if (customText != NULL && customText[0] != 0)
     ctList = customTracksParse(customText, FALSE, &browserLines);
     ctFileName = tn.forCgi;
     customTrackSave(ctList, tn.forCgi);
-    makeHiddenVar("ct", tn.forCgi);
     }
 else if (fileName != NULL)
     {
@@ -5865,7 +5814,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
     tg = newCustomTrack(ct);
-    vis = cgiOptionalString(tg->mapName);
+    vis = cartOptionalString(cart, tg->mapName);
     if (vis != NULL)
 	tg->visibility = stringArrayIx(vis, tvStrings, ArraySize(tvStrings));
     slAddHead(pGroupList, tg);
@@ -5921,29 +5870,28 @@ void doForm()
 struct trackGroup *group;
 char *freezeName = NULL;
 int controlColNum=0;
+char *s;
 
 /* Tell browser where to go when they click on image. */
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 cartSaveSession(cart, selfName);
 
-
 /* See if want to include sequence search results. */
-userSeqString = cgiOptionalString("ss");
+userSeqString = cartOptionalString(cart, "ss");
+if (userSeqString && !fileExists(userSeqString))
+    {
+    userSeqString = NULL;
+    cartRemove(cart, "ss");
+    }
 if (userSeqString != NULL)
     eUserSeqString = cgiEncode(userSeqString);
 
-hideControls = cgiBoolean("hideControls");
-
-if (calledSelf)
-    {
-    char *s;
-    /* Set center and left labels from UI. */
-    withLeftLabels = cgiBoolean("leftLabels");
-    withCenterLabels = cgiBoolean("centerLabels");
-    withGuidelines = cgiBoolean("guidelines");
-    if ((s = cgiOptionalString("ruler")) != NULL)
-	withRuler = !sameWord(s, "off");
-    }
+hideControls = cartBoolean(cart, "hideControls", selfName);
+withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE, selfName);
+withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE, selfName);
+withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE, selfName);
+s = cartUsualString(cart, "ruler", "on");
+withRuler = sameWord(s, "on");
 
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
@@ -5996,7 +5944,7 @@ slSort(&tGroupList, tgCmpPriority);
 /* Get visibility values if any from ui. */
 for (group = tGroupList; group != NULL; group = group->next)
     {
-    char *s = cgiOptionalString(group->mapName);
+    char *s = cartOptionalString(cart, group->mapName);
     if (s != NULL)
 	{
 	int vis = stringArrayIx(s, tvStrings, ArraySize(tvStrings));
@@ -6142,8 +6090,6 @@ if (!hideControls)
     }
 
 
-saveHiddenVars();
-
 /* Clean up. */
 for (group = tGroupList; group != NULL; group = group->next)
     {
@@ -6239,13 +6185,12 @@ void doMiddle(struct cart *theCart)
 /* Print the body of an html file.  This routine handles zooming and
  * scrolling. */
 {
-char *oldSeq;
 char *submitVal;
 boolean testing = FALSE;
 
 /* Initialize layout and database. */
 cart = theCart;
-database = cgiOptionalString("db");
+database = cartOptionalString(cart, "db");
 if (database == NULL)
     database = hGetDb();
 hSetDb(database);
@@ -6253,11 +6198,8 @@ hDefaultConnect();
 initTl();
 
 /* Read in input from CGI. */
-oldSeq = cgiOptionalString("old");
-if (oldSeq != NULL)
-   calledSelf = TRUE; 
-position = cgiOptionalString("position");
-if ((submitVal = cgiOptionalString("submit")) != NULL)
+position = cartOptionalString(cart, "position");
+if ((submitVal = cartOptionalString(cart, "submit")) != NULL)
     if (sameString(submitVal, "refresh"))
         position = NULL;
 if (position == NULL)
@@ -6269,9 +6211,9 @@ if (position != NULL && position[0] != 0)
     }
 if (chromName == NULL)
     {
-    chromName = cgiString("seqName");
-    winStart = cgiIntExp("winStart");
-    winEnd = cgiIntExp("winEnd");
+    chromName = cartString(cart, "seqName");
+    winStart = cartIntExp(cart, "winStart");
+    winEnd = cartIntExp(cart, "winEnd");
     }
 
 /* Clip chromosomal position to fit. */
@@ -6326,8 +6268,8 @@ else if (cgiVarExists("out3"))
     zoomAroundCenter(10.0);
 
 /* Chuck code for synching with different frames */
-otherFrame = cgiOptionalString("of");
-thisFrame = cgiOptionalString("tf");
+otherFrame = cartOptionalString(cart, "of");
+thisFrame = cartOptionalString(cart, "tf");
 
 doForm();
 }
@@ -6341,7 +6283,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 }
 
 char *excludeVars[] = { "old", "submit", "in1", "in2", "in3", "out1", "out2", "out3",
-	"left1", "left2", "left3", "right1", "right2", "right3", NULL };
+	"left1", "left2", "left3", "right1", "right2", "right3", "customText", NULL };
 
 int main(int argc, char *argv[])
 {
