@@ -332,7 +332,7 @@ shortLabel NCBI Gene Models
 longLabel $Organism Gene Models from NCBI
 group genes
 priority 43
-visibility dense
+visibility hide
 type genePred ncbiPep
 
 track npredGene
@@ -350,7 +350,7 @@ shortLabel Twinscan
 longLabel Twinscan Gene Predictions Using Mouse/Human Homology
 group genes
 priority 45
-visibility dense
+visibility hide
 color 0,100,100
 altColor 0,50,50
 type genePred twinscanPep
@@ -370,7 +370,7 @@ shortLabel NCBI GenomeScan
 longLabel $Organism GenomeScan Models from NCBI
 group genes
 priority 46
-visibility dense
+visibility hide
 type genePred genomeScanPep
 
 track sgpGene
@@ -378,7 +378,7 @@ shortLabel SGP Genes
 longLabel SGP Gene Predictions Using Mouse/Human Homology
 group genes
 priority 47
-visibility dense
+visibility hide
 color 0,90,100
 type genePred sgpPep
 
@@ -574,7 +574,7 @@ shortLabel TIGR Gene Index
 longLabel Alignment of TIGR Gene Index TCs Against the $Organism Genome
 group rna
 priority 68
-visibility dense
+visibility hide
 color 100,0,0
 type genePred
 url http://www.tigr.org/tigr-scripts/nhgi_scripts/tc_report.pl?$$
@@ -718,7 +718,7 @@ shortLabel NCI60
 longLabel Microarray Experiments for NCI 60 Cell Lines
 group regulation
 priority 84
-visibility dense
+visibility hide
 type bed 15 +
 
 track affy
@@ -726,7 +726,7 @@ shortLabel GNF
 longLabel GNF Gene Expression Atlas using Affymetrix GeneChips
 group regulation
 priority 85
-visibility hide
+visibility dense
 type bed 15 +
 
 track affyRatio
@@ -1034,7 +1034,7 @@ shortLabel Overlap SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
 group varRep
 priority 144
-visibility dense
+visibility hide
 type bed 4 .
 
 track snpTsc
@@ -1042,7 +1042,7 @@ shortLabel Random SNPs
 longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
 group varRep
 priority 145
-visibility dense
+visibility hide
 type bed 4 .
 
 track perlegen
@@ -1050,7 +1050,7 @@ shortLabel Haplotype Blocks
 longLabel Perlegen Common High-Resolution Haplotype Blocks.  
 group varRep
 priority 146
-visibility dense
+visibility hide
 chromosomes chr21,
 color 0,0,0
 altColor 0,0,0
@@ -1246,7 +1246,7 @@ shortLabel Haplotype Blocks
 longLabel Common Haplotype Blocks.  
 group varRep
 priority 161
-visibility dense
+visibility hide
 chromosomes chr22,
 color 0,0,0
 altColor 0,0,0
