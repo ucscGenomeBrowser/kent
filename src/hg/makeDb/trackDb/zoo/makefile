@@ -7,20 +7,6 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
-beta_update:
-	hgTrackDb zoo zooBaboon3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooCat3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooChicken3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooChimp3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooCow3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooDog3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooFugu3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooHuman3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooMouse3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooPig3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
-
 update:
 	hgTrackDb zoo zooBaboon3 trackDb_$(USER) ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooCat3 trackDb_$(USER) ../../../lib/trackDb.sql .
@@ -35,3 +21,18 @@ update:
 	hgTrackDb zoo zooRat3 trackDb_$(USER) ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooTetra3 trackDb_$(USER) ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooZebrafish3 trackDb_$(USER) ../../../lib/trackDb.sql .
+
+alpha:
+	hgTrackDb zoo zooBaboon3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooCat3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooChicken3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooChimp3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooCow3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooDog3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooFugu3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooHuman3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooMouse3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooPig3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
+
