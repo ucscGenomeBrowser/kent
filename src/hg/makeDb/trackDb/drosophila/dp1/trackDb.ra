@@ -6,7 +6,7 @@ priority 9
 visibility pack
 color 150,0,0
 
-track drosRefSeq
+track xenoDrosRefSeq
 shortLabel All-Dros. RefSeq
 longLabel RefSeq Genes from All Drosophila Species
 group rna
@@ -17,7 +17,7 @@ color 12,12,120
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
 
-track drosMrna
+track xenoDrosMrna
 shortLabel All-Dros. mRNAs
 longLabel All Drosophila Species mRNAs from Genbank
 group rna
@@ -27,7 +27,7 @@ spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
 
-track drosEst
+track xenoDrosEst
 shortLabel All-Dros. ESTs
 longLabel All Drosophila Species ESTs from Genbank 
 group rna
