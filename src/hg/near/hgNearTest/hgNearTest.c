@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.15 2004/05/03 19:33:49 galt Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.16 2004/10/14 18:27:23 galt Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -440,7 +440,7 @@ struct qaStatus *qs;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
 htmlPageSetVar(emptyConfig, NULL, visVar, "on");
-htmlPageSetVar(emptyConfig, NULL, orderVarName, "geneDistance");
+htmlPageSetVar(emptyConfig, NULL, orderVarName, "nameSimilarity");
 htmlPageSetVar(emptyConfig, NULL, countVarName, "25");
 
 printPage = quickSubmit(emptyConfig, NULL, org, db, col, gene, "colPrint", "Submit", "on");
