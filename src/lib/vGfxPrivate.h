@@ -32,5 +32,8 @@ typedef void (*vg_unclip)(void *v);
 typedef void (*vg_verticalSmear)(void *v,
 	    int xOff, int yOff, int width, int height, 
 	    unsigned char *dots, boolean zeroClear);
-typedef void (*vg_fillUnder)(struct memGfx *mg, int x1, int y1, 
+typedef void (*vg_fillUnder)(void *v, int x1, int y1, 
 	int x2, int y2, int bottom, Color color);
+typedef void (*vg_triLeft)(void *v, int x1, int y1, int y2, int color);
+typedef void (*vg_triRight)(void *v, int x1, int y1, int y2, int color);
+

@@ -62,12 +62,20 @@ struct vGfx
 	    unsigned char *dots, boolean zeroClear);
     /* Put a series of one 'pixel' width vertical lines. */
 
-    void (*fillUnder)(struct memGfx *mg, int x1, int y1, int x2, int y2, 
+    void (*fillUnder)(void *v, int x1, int y1, int x2, int y2, 
 	    int bottom, Color color);
     /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
      * it's top, a horizontal line at bottom at it's bottom,  and
      * vertical lines from the bottom to y1 on the left and bottom to
      * y2 on the right. */
+
+    void (*triLeft)(void *v, int x1, int y1, int y2, int color);
+    /* Draw a triangle pointing left with straight edge along x+((y1-y2)/2) 
+     * from y1 to y2 (point at x1). */
+
+    void (*triRight)(void *v, int x1, int y1, int y2, int color);
+    /* Draw a triangle pointing right with straight edge along x from y1 
+     * to y2 */
     };
 
 struct vGfx *vgOpenGif(int width, int height, char *fileName);
@@ -125,6 +133,19 @@ void vgClose(struct vGfx **pVg);
 
 #define vgFillUnder(v,x1,y1,x2,y2,bottom,color) \
 	v->fillUnder(v->data,x1,y1,x2,y2,bottom,color)
+    /* Draw a 4 sided filled figure that has line x1/y1 to x2/y2 at
+     * it's top, a horizontal line at bottom at it's bottom,  and
+     * vertical lines from the bottom to y1 on the left and bottom to
+     * y2 on the right. */
 
+#define vgTriLeft(v,x1,y1,y2,color) \
+	v->triLeft(v->data,x1,y1,y2,color)
+    /* Draw a triangle pointing left with straight edge along x+((y1-y2)/2) 
+     * from y1 to y2 (point at x1). */
+
+#define vgTriRight(v,x1,y1,y2,color) \
+	v->triRight(v->data,x1,y1,y2,color)
+    /* Draw a triangle pointing right with straight edge along x from y1 
+     * to y2 */
 
 #endif /* VGFX_H */
