@@ -161,7 +161,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.847 2005/03/08 21:50:45 jsp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.848 2005/03/15 01:18:40 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4055,7 +4055,7 @@ if (row != NULL)
     printf("%s</A><BR>\n", orgFullName);
     printf("<B>Tissue:</B> %s<BR>\n", tissue);
     printf("<B>Development stage:</B> %s<BR>\n", development);
-    printf("<B>Cell type:</B> %s<BR>\n", cell);
+    printf("<B>Cell line:</B> %s<BR>\n", cell);
     printf("<B>Sex:</B> %s<BR>\n", sex);
     printf("<B>Library:</B> %s<BR>\n", library);
     printf("<B>Clone:</B> %s<BR>\n", clone);
