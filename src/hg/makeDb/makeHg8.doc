@@ -151,6 +151,18 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
      ssh cc94
      cd /projects/hg2/refseq.126
      hgRefSeqMrna hg8 refSeq.fa refSeq.ra known.oo33.psl loc2ref refSeqPep.fa mim2loc
+o - Add Jackson labs info
+     cd ~/oo/bed
+     mkdir jaxOrtholog
+     cd jaxOrtholog
+     ftp ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
+     awk -f filter.awk *.rpt > jaxOrtholog.tab
+    Load this into mysql with something like:
+     mysql -u hgcat -pBIGSECRET hg8 < ~/src/hg/lib/jaxOrtholog.sql
+     mysql -u hgcat -pBIGSECRET -A hg8
+    and at the mysql> prompt
+     load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
+
     
 
 
@@ -439,6 +451,16 @@ o  - Load mouseRef track.
     in each of the alignment files.  Finally do:
        hgRefAlign webb hg8 mouseRef *.alignments
 
+o - Load Avid Mouse tracks
+      ssh cc98
+      cd ~/oo/bed
+      mkdir avidMouse
+      cd avidMouse
+      wget http://pipeline.lbl.gov/tableCS-LBNL.txt
+      hgAvidShortBed *.txt avidRepeat.bed avidUnique.bed
+      hgLoadBed avidRepeat avidRepeat.bed
+      hgLoadBed avidUnique avidUnique.bed
+
 o - Load in Exonerate alignments 
       ssh cc94
       cd ~/oo/bed
@@ -606,7 +628,7 @@ o - Load genomic dupes
     unzip *.zip
     awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
     mysql -u hgcat -pbigSECRET hg8 < ~/src/hg/lib/genomicDups.sql
-    hdLoadBed hg8 -oldTable genomicDups genomicDupes.bed
+    hgLoadBed hg8 -oldTable genomicDups genomicDupes.bed
 
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
