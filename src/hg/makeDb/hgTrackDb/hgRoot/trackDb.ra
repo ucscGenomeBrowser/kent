@@ -487,7 +487,7 @@ altColor 255,240,200
 spectrum on
 type bed 5 +
 
-track blastzMm2
+track blastzMm2XXX
 shortLabel Blastz Mouse
 longLabel Merged Blastz Mouse Alignments
 priority 25.8
@@ -497,7 +497,7 @@ altColor 255,240,200
 spectrum on
 type psl .
 
-track blastzMm2Sc
+track blastzMm2ScXXX
 shortLabel Blastz Mouse SC
 longLabel Merged Blastz Mouse Single Coverage Alignments
 priority 25.81
