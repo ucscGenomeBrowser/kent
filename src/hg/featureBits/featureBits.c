@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.33 2005/03/02 04:32:19 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.34 2005/03/06 09:27:42 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -34,6 +34,7 @@ static struct optionSpec optionSpecs[] =
     {"where", OPTION_STRING},
     {"bin", OPTION_STRING},
     {"binSize", OPTION_INT},
+    {"binOverlap", OPTION_INT},
     {NULL, 0}
 };
 
@@ -47,6 +48,7 @@ boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 boolean noHap = FALSE;	/* Exclude _hap chromosomes? */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 int binSize = 500000;	/* Default bin size. */
+int binOverlap = 250000;	/* Default bin size. */
 
 void usage()
 /* Explain usage and exit. */
@@ -63,7 +65,7 @@ errAbort(
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
   "   -or               Or tables together instead of anding them\n"
-  "   -not              Output negation of resultsing bit set.\n"
+  "   -not              Output negation of resulting bit set.\n"
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
   "   -noHap            Don't include _hap chromosomes\n"
@@ -72,6 +74,7 @@ errAbort(
   "                     alignment gaps and introns.\n"
   "   -bin=output.bin   Put bin counts in output file\n"
   "   -binSize=N        Bin size for generating counts in bin file (default 500000)\n"
+  "   -binOverlap=N     Bin overlap for generating counts in bin file (default 250000)\n"
   "   -enrichment       Calculates coverage and enrichment assuming first table\n"
   "                     is reference gene track and second track something else\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
@@ -167,20 +170,20 @@ if (lastBit && i-start >= minSize)
     }
 }
 
-void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize)
+void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *binFile, int binSize, int binOverlap)
 /* Write out binned counts of bits. */
 {
 int bin, count;
 
 if (!binFile)
     return;
-for (bin=0; bin+binSize<chromSize; bin=bin+binSize)
+for (bin=0; bin+binSize<chromSize; bin=bin+binOverlap)
     {
     count = bitCountRange(bits, bin, binSize);
-    fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, bin+binSize, count, chrom, bin/binSize+1);
+    fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, bin+binSize, count, chrom, bin/binOverlap+1);
     }
 count = bitCountRange(bits, bin, chromSize-bin);
-fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, chromSize, count, chrom, bin/binSize+1);
+fprintf(binFile, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, bin, chromSize, count, chrom, bin/binOverlap+1);
 }
 
 void check(struct sqlConnection *conn, char *table)
@@ -452,7 +455,8 @@ if (bedFile != NULL || faFile != NULL)
 if (binFile != NULL)
     {
     binSize = optionInt("binSize", binSize);
-    bitsToBins(acc, chrom, chromSize, binFile, binSize);
+    binOverlap = optionInt("binOverlap", binOverlap);
+    bitsToBins(acc, chrom, chromSize, binFile, binSize, binOverlap);
     }
 bitFree(&acc);
 bitFree(&bits);
