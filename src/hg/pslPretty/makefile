@@ -10,7 +10,6 @@ O = pslPretty.o
 pslPretty: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPretty $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/pslPretty
-test: test1
-%:	input/%.psl
+test:: 
 	${MKDIR} output
-	pslPretty -long -axt input/$@.psl input/S1.lst input/S2.lst output/$@.axt
+	pslPretty -long -axt input/test1.psl input/S1.lst input/S2.lst output/test1.axt
