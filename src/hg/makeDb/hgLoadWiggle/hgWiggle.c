@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.33 2004/11/01 18:51:03 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.34 2005/01/07 21:56:02 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -38,6 +38,10 @@ static float hMinVal = 0.0;	/*	histoGram minimum value	*/
 static float hRange = 0.0;	/*	hRange = hBinSize * hBinCount; */
 static float hMax = 0.0;	/*	hMax = hMinVal + hRange;	*/
 static int lift = 0;		/*	offset to lift ascii positions out */
+
+#if defined(DEBUG)
+struct cart *cart;
+#endif
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -171,7 +175,10 @@ else if (chr)
 else
     {
     if (db && !bedFile)
+	{
 	chromList = hAllChromNamesDb(db);
+	slReverse(&chromList);
+	}
     else
 	verbose(VERBOSE_CHR_LEVEL, "#\tno chrom specified for file read, do them all\n");
     }
