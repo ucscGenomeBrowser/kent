@@ -688,6 +688,14 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
      hgsql hg16  < ~/kent/src/hg/lib/gcPercent.sql
      hgGcPercent hg16 ../../nib
 
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE - 2003-07-31 - Hiram)
+    ssh hgwdev
+    # Substitute BBB with the correct number for the hostname:
+    echo 'insert into blatServers values("hg16", "blat6", "17778", "1"); \
+          insert into blatServers values("hg16", "blat6", "17779", "0");' \
+    | hgsql -h genome-testdb hgcentraltest
+
+
 # PRODUCING GENSCAN PREDICTIONS (WORKING - 2003-07-31 - Hiram)
 
     ssh eieio
