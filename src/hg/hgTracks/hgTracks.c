@@ -3255,8 +3255,7 @@ struct netItem
     };
 
 static char *netClassNames[] =  {
-    "Level 0", "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Level 8", "Other",
-};
+    "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Level 8" };
 
 struct netItem *makeNetItems()
 /* Make the levels for net alignment track. */
@@ -4898,7 +4897,7 @@ if (isFull)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	netAlignStaticLoad(row+rowOffset, &na);
-    sprintf(levelName,"%d", na.level);
+    sprintf(levelName,"%d", na.level-1);
 	ni = hashFindVal(hash, levelName);
 	if (ni == NULL)
         printf("ni NULL\n");
