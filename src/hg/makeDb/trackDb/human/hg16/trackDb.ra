@@ -365,7 +365,7 @@ altColor 0,0,255
 type sample
 
 track tbaCFTR_9way
-shortLabel 9 Species CFTR TBA
+shortLabel 9 Species CFTR
 longLabel CFTR Region TBA Alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
 group compGeno
 priority 147
