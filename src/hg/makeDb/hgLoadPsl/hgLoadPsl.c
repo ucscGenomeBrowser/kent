@@ -8,7 +8,20 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.22 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.23 2004/03/05 04:57:01 markd Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"tNameIx", OPTION_BOOLEAN},
+    {"nobin", OPTION_BOOLEAN},
+    {"xa", OPTION_BOOLEAN},
+    {"fastLoad", OPTION_BOOLEAN},
+    {"onServer", OPTION_BOOLEAN},
+    {"append", OPTION_BOOLEAN},
+    {"export", OPTION_BOOLEAN},
+    {"table", OPTION_STRING},
+    {NULL, 0}
+};
 
 unsigned pslCreateOpts = 0;
 unsigned pslLoadOpts = 0;
@@ -58,85 +71,90 @@ else
 freez(&sqlCmd);
 }
 
+void copyPslsToTab(char *tabFile, int pslCount, char *pslNames[])
+/* copy a the PSL to a tab file */
+{
+FILE *f = mustOpen(tabFile, "w");
+int i;
+
+for (i = 0; i<pslCount; ++i)
+    {
+    verbose(1, "Processing %s\n", pslNames[i]);
+    if (pslCreateOpts & PSL_XA_FORMAT)
+        {
+        struct xAli *xa;
+        char *row[23];
+	struct lineFile *lf = lineFileOpen(pslNames[i], TRUE);
+        while (lineFileRow(lf, row))
+            {
+            xa = xAliLoad(row);
+            if (pslCreateOpts & PSL_WITH_BIN)
+                fprintf(f, "%u\t", hFindBin(xa->tStart, xa->tEnd));
+            xAliTabOut(xa, f);
+            xAliFree(&xa);
+            }
+        lineFileClose(&lf);
+        }
+    else
+        {
+        struct psl *psl;
+        struct lineFile *lf = pslFileOpen(pslNames[i]);
+        while ((psl = pslNext(lf)) != NULL)
+            {
+            if (pslCreateOpts & PSL_WITH_BIN)
+                fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
+            pslTabOut(psl, f);
+            pslFree(&psl);
+            }
+        lineFileClose(&lf);
+        }
+    }
+carefulClose(&f);
+}
+
 void hgLoadPsl(char *database, int pslCount, char *pslNames[])
 /* hgLoadPsl - Load up a mySQL database with psl alignment tables. */
 {
-int i;
 char table[128];
-char *pslName;
+char tabFile[1024];
 struct sqlConnection *conn = NULL;
 char comment[256];
 
 if (!exportOutput)
     conn = sqlConnect(database);
 
-for (i = 0; i<pslCount; ++i)
-    {
-    char tabFile[1024];
-    pslName = pslNames[i];
-    verbose(1, "Processing %s\n", pslName);
-    if (clTableName != NULL)
-        strcpy(table, clTableName);
-    else
-	splitPath(pslName, NULL, table, NULL);
-    if (!(pslCreateOpts & PSL_WITH_BIN))
-        strcpy(tabFile, pslName);  /* not bin, load directly */
-    else
-        {
-        FILE *f;
-	struct lineFile *lf = NULL;
-        if (exportOutput)
-            sprintf(tabFile, "%s.txt", table);
-        else
-            strcpy(tabFile, "psl.tab");
+if (clTableName != NULL)
+    strcpy(table, clTableName);
+else
+    splitPath(pslNames[0], NULL, table, NULL);
 
-	f = mustOpen(tabFile, "w");
-	if (pslCreateOpts & PSL_XA_FORMAT)
-	    {
-	    struct xAli *xa;
-	    char *row[23];
-	    lf = lineFileOpen(pslName, TRUE);
-	    while (lineFileRow(lf, row))
-	        {
-		xa = xAliLoad(row);
-		fprintf(f, "%u\t", hFindBin(xa->tStart, xa->tEnd));
-		xAliTabOut(xa, f);
-		xAliFree(&xa);
-		}
-	    }
-	else
-	    {
-	    struct psl *psl;
-	    lf = pslFileOpen(pslName);
-	    while ((psl = pslNext(lf)) != NULL)
-		{
-		fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
-		pslTabOut(psl, f);
-		pslFree(&psl);
-		}
-	    lineFileClose(&lf);
-	    }
-	carefulClose(&f);
-        }
-    if (!append)
-        createTable(conn, table);
-    if (!exportOutput)
-        {
-        sqlLoadTabFile(conn, tabFile, table, pslLoadOpts);
-        /* add a comment and ids to the history table */
-        safef(comment, sizeof(comment), "Add psl alignments to %s table", table);
-        hgHistoryComment(conn, comment);
-        }
+/* not bin and only one PSL, load directly */
+if ((pslCount == 1) && !(pslCreateOpts & PSL_WITH_BIN) && !exportOutput)
+    strcpy(tabFile, pslNames[0]);
+else if (exportOutput)
+    sprintf(tabFile, "%s.txt", table);
+else
+    strcpy(tabFile, "psl.tab");
+
+copyPslsToTab(tabFile, pslCount, pslNames);
+
+if (!append)
+    createTable(conn, table);
+if (!exportOutput)
+    {
+    sqlLoadTabFile(conn, tabFile, table, pslLoadOpts);
+    /* add a comment and ids to the history table */
+    safef(comment, sizeof(comment), "Add psl alignments to %s table", table);
+    hgHistoryComment(conn, comment);
     }
 
-if (conn != NULL)
-    sqlDisconnect(&conn);
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (optionExists("tNameIx"))
     pslCreateOpts |= PSL_TNAMEIX;
 if (!optionExists("nobin"))
