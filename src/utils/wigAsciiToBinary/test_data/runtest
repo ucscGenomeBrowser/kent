@@ -1,0 +1,12 @@
+#!/bin/sh
+
+rm -f chrM.ascii chr0.wib chrM.wib
+./testData.pl 16570 4 > chrM.ascii
+wigAsciiToBinary -chrom=chr0 chrM.ascii
+
+S0=`sum -r gold.wib`
+S1=`sum -r chr0.wib`
+
+if [ "${S0}" != "${S1}" ]; then
+	echo "*** FAIL ***"
+fi
