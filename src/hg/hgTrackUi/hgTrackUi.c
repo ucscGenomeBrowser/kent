@@ -333,13 +333,14 @@ void mouseSynUi(struct trackDb *tdb)
 /* put up UI for the selecting rainbow chromosome color or intensity score*/
 {
 char *aa = cartUsualString(cart, "mouseSyn.color", "on");
-
+/*
 printf("<p><b>Color track based on mouse chromosome</b>: ");
 cgiMakeRadioButton("mouseSyn.color", "on", sameString(aa, "on"));
 printf(" on ");
 cgiMakeRadioButton("mouseSyn.color", "off", sameString(aa, "off"));
 printf(" off ");
 printf("<br><br>");
+*/
 
 }
 
