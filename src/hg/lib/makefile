@@ -12,7 +12,7 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o \
+O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     borf.o borkPseudoHom.o cart.o cartDb.o chromInfo.o chromInserts.o chr18deletions.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
