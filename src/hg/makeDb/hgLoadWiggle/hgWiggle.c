@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.20 2004/08/17 19:36:55 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.21 2004/08/17 19:49:41 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -118,7 +118,7 @@ else if (chr)
     }
 else
     {
-    if (db)
+    if (db && !bedFile)
 	chromList = hAllChromNamesDb(db);
     else
 	verbose(2, "#\tno chrom specified for file read, do them all\n");
