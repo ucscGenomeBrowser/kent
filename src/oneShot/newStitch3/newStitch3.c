@@ -301,7 +301,7 @@ int defaultGapPenalty(int qSize, int tSize)
 int total = qSize + tSize;
 if (total <= 0)
     return 0;
-return 400 * pow(total, 1.0/3.3);
+return 400 * pow(total, 1.0/2.5);
 }
 
 int gap(struct asBlock *a, struct asBlock *b)
@@ -443,6 +443,7 @@ struct axt *axt, *first, *last;
 struct asBlock *blockList = NULL, *block;
 struct asChain *chainList = NULL, *chain;
 
+uglyf("%s %d nodes\n", sp->name, slCount(sp->blockList));
 
 /* Make up tree and time it for debugging. */
 startTime = clock1000();
