@@ -17,7 +17,7 @@ preCutAt -
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
 priority 25
 
-name swissProt
+name uniProt
 tables bdgpGene
 idSql select proteinID from bdgpGene where name = '%s' and proteinId != "n/a"
 
