@@ -55,7 +55,7 @@ char seqTable[] =
 /* This keeps track of a sequence. */
 "create table seq ("
   "id int unsigned not null primary key," /* Unique ID across all tables. */
-  "acc char(12) not null ,"	 /* GenBank accession number. */
+  "acc varchar(24) not null ,"	 /* GenBank accession number or other ID. */
   "size int unsigned not null,"           /* Size of sequence in bases. */
   "gb_date date not null,"       /* GenBank last modified date. */
   "extFile int unsigned not null,"       /* File it is in. */
