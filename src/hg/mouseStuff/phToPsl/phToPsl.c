@@ -5,6 +5,7 @@
 #include "dystring.h"
 #include "options.h"
 #include "psl.h"
+#include "obscure.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -12,7 +13,7 @@ void usage()
 errAbort(
   "phToPsl - Convert from Pattern Hunter to PSL format\n"
   "usage:\n"
-  "   phToPsl in.ph out.psl\n"
+  "   phToPsl in.ph qSizes tSizes out.psl\n"
   "options:\n"
   "   -tName=target  (defaults to 'in')\n"
   );
@@ -21,9 +22,37 @@ errAbort(
 char *tName; /* Name of target side of alignment. */
 boolean psl = TRUE;	/* Output PSL format. */
 
-void aliStringToPsl(char *qName, char *tName, 
-	char *qString, char *tString, int size, 
-	int qStart, int tStart, int qIsRc, FILE *f)
+struct hash *readSizes(char *fileName)
+/* Read tab-separated file into hash with
+ * name key size value. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = newHash(0);
+char *row[2];
+while (lineFileRow(lf, row))
+    {
+    char *name = row[0];
+    int size = lineFileNeedNum(lf, row, 1);
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+	hashAdd(hash, name, intToPt(size));
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+int findSize(struct hash *hash, char *name)
+/* Find size of name in hash or die trying. */
+{
+void *val = hashMustFindVal(hash, name);
+return ptToInt(val);
+}
+
+void aliStringToPsl(struct lineFile *lf, char *qName, char *tName, 
+	char *qString, char *tString, 
+	int qSize, int tSize, int aliSize, 
+	int qStart, int tStart, FILE *f)
 /* Output alignment in a pair of strings with insert chars
  * to a psl line in a file. */
 {
@@ -37,17 +66,29 @@ boolean qInInsert = FALSE; /* True if in insert state on query. */
 boolean tInInsert = FALSE; /* True if in insert state on target. */
 boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int blockCount = 1, blockIx=0;
+boolean qIsRc = FALSE;
+char strand;
 int i;
 char q,t;
-int qs = qStart,ts = tStart,qe = qStart,te = tStart; /* Start/end of block */
+int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 
 uglyf("alignStringToPsl\n");
 uglyf("%s\n%s\n", qString, tString);
-uglyf("size %d, qStart %d, tStart %d, qIsRc %d\n", size, qStart, tStart, qIsRc);
+uglyf("aliSize %d, qStart %d, tStart %d, qIsRc %d\n", aliSize, qStart, tStart, qIsRc);
+
+/* Deal with minus strand issues. */
+if (tStart < 0)
+    errAbort("Can't handle minus target strand line %d of %s",
+    	lf->lineIx, lf->fileName);
+if (qStart < 0)
+    {
+    qStart = qSize + qStart;
+    qIsRc = TRUE;
+    }
 
 /* First count up number of blocks and inserts. */
-for (i=0; i<size; ++i)
+for (i=0; i<aliSize; ++i)
     {
     q = qString[i];
     t = tString[i];
@@ -92,6 +133,16 @@ for (i=0; i<size; ++i)
 	}
     }
 
+/* Deal with minus strand. */
+qs = qStart;
+qe = qs + qBaseInsert + match + misMatch;
+strand = '+';
+if (qIsRc)
+    {
+    strand = '-';
+    reverseIntRange(&qs, &qe, qSize);
+    }
+
 /* Output header */
 fprintf(f, "%d\t", match);
 fprintf(f, "%d\t", misMatch);
@@ -101,13 +152,13 @@ fprintf(f, "%d\t", qNumInsert);
 fprintf(f, "%d\t", qBaseInsert);
 fprintf(f, "%d\t", tNumInsert);
 fprintf(f, "%d\t", tBaseInsert);
-fprintf(f, "%s\t", (qIsRc ? "-" : "+"));
+fprintf(f, "%c\t", strand);
 fprintf(f, "%s\t", qName);
-fprintf(f, "~~~\t");
-fprintf(f, "%d\t", qStart);
-fprintf(f, "%d\t", qStart + qBaseInsert + match + misMatch);
+fprintf(f, "%d\t", qSize);
+fprintf(f, "%d\t", qs);
+fprintf(f, "%d\t", qe);
 fprintf(f, "%s\t", tName);
-fprintf(f, "~~~\t");
+fprintf(f, "%d\t", tSize);
 fprintf(f, "%d\t", tStart);
 fprintf(f, "%d\t", tStart + tBaseInsert + match + misMatch);
 fprintf(f, "%d\t", blockCount);
@@ -124,7 +175,9 @@ AllocArray(tStarts, blockCount);
 
 /* Figure block sizes and starts. */
 eitherInsert = FALSE;
-for (i=0; i<size; ++i)
+qs = qe = qStart;
+ts = te = tStart;
+for (i=0; i<aliSize; ++i)
     {
     q = qString[i];
     t = tString[i];
@@ -155,7 +208,6 @@ for (i=0; i<size; ++i)
 	te += 1;
 	}
     }
-uglyf("blockIx = %d, blockCount = %d\n", blockIx, blockCount);
 assert(blockIx == blockCount-1);
 blocks[blockIx] = qe - qs;
 qStarts[blockIx] = qs;
@@ -182,13 +234,13 @@ freez(&qStarts);
 freez(&tStarts);
 }
 
-boolean convertOneAli(struct lineFile *lf, char *qName, char *tName, FILE *f)
+boolean convertOneAli(struct lineFile *lf, char *qName, char *tName, 
+	int qSize, int tSize, FILE *f)
 /* Convert one pattern hunter alignment to one psl line. */
 {
 char c, *line, *parts[16];
 int partCount;
 int qStart, tStart;
-boolean isRc = FALSE;
 struct dyString *q = newDyString(4096);
 struct dyString *t = newDyString(4096);
 
@@ -205,11 +257,6 @@ if (partCount < 6)
     errAbort("Can't deal with format of Pattern Hunter file %s line %d",
     	lf->fileName, lf->lineIx);
 qStart = lineFileNeedNum(lf, parts, 1);
-if (qStart < 0)
-    {
-    isRc = TRUE;
-    qStart = -qStart;
-    }
 tStart = lineFileNeedNum(lf, parts, 2);
 
 /* Loop through rest of file 4 lines at a time, appending
@@ -247,8 +294,8 @@ if (q->stringSize != t->stringSize)
     }
 if (q->stringSize <= 0)
     errAbort("Empty alignment string line %d of %s", lf->lineIx, lf->fileName);
-aliStringToPsl(qName, tName, q->string, t->string, 
-	q->stringSize, qStart-1, tStart-1, isRc, f);
+aliStringToPsl(lf, qName, tName, q->string, t->string, qSize, tSize,
+	q->stringSize, qStart, tStart, f);
 
 /* Clean up time. */
 freeDyString(&q);
@@ -256,13 +303,15 @@ freeDyString(&t);
 return TRUE;
 }
 
-boolean convertOneQuery(struct lineFile *lf, FILE *f)
+boolean convertOneQuery(struct lineFile *lf, 
+	struct hash *qSizeHash, struct hash *tSizeHash, FILE *f)
 /* Convert pattern hunter alignments on one query
  * to psl */
 {
 char *line, *word;
 char *qName;
 struct block *blockList = NULL;
+int qSize, tSize;
 
 /* Grab first line and extract query name from it. */
 if (!lineFileNext(lf, &line, NULL))
@@ -277,27 +326,32 @@ if (word == NULL)
         lf->lineIx, lf->fileName);
 qName = cloneString(word);
 
+/* Figure out sizes. */
+qSize = findSize(qSizeHash, qName);
+tSize = findSize(tSizeHash, tName);
+
 /* Loop through alignments between this query and target. */
-while (convertOneAli(lf, qName, tName, f))
+while (convertOneAli(lf, qName, tName, qSize, tSize, f))
     ;
 
 freez(&qName);
 return TRUE;
 }
 
-void phToPsl(char *inName, char *outName)
+void phToPsl(char *inName, char *qSizes, char *tSizes, char *outName)
 /* phToPsl - Convert from Pattern Hunter to PSL format. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 char dir[256], root[128], ext[64];
+struct hash *qSizeHash = readSizes(qSizes);
+struct hash *tSizeHash = readSizes(tSizes);
 
 splitPath(inName, dir, root, ext);
 tName = optionVal("tName", root);
-uglyf("tName = %s\n", tName);
 
 pslWriteHead(f);
-while (convertOneQuery(lf, f))
+while (convertOneQuery(lf, qSizeHash, tSizeHash, f))
     ;
 }
 
@@ -305,8 +359,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 3)
+if (argc != 5)
     usage();
-phToPsl(argv[1], argv[2]);
+phToPsl(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
