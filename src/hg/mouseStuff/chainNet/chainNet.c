@@ -272,6 +272,21 @@ void fsAdd(void *item)
 refAdd(&fsList, item);
 }
 
+void checkSort(struct slRef *spaceRefList)
+/* Check that list is really sorted. */
+{
+int lastStart = -BIGNUM;
+struct slRef *ref;
+struct space *space;
+for (ref = spaceRefList; ref != NULL; ref = ref->next)
+    {
+    space = ref->val;
+    if (space->start < lastStart)
+        errAbort("space list is not sorted after rbTreeTraverseRange");
+    lastStart = space->start;
+    }
+}
+
 struct slRef *findSpaces(struct rbTree *tree, int start, int end)
 /* Return a list of subGaps that intersect interval between start
  * and end. */
@@ -281,6 +296,7 @@ space.start = start;
 space.end = end;
 fsList = NULL;
 rbTreeTraverseRange(tree, &space, &space, fsAdd);
+slReverse(&fsList);
 return fsList;
 }
 
@@ -500,6 +516,23 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     }
 }
 
+void printMem()
+/* Print out memory used. */
+{
+struct lineFile *lf = lineFileOpen("/proc/self/stat", TRUE);
+char *line, *words[50];
+int wordCount;
+if (lineFileNext(lf, &line, NULL))
+    {
+    printf("/proc/stat reads:\n");
+    puts(line);
+    wordCount = chopLine(line, words);
+    if (wordCount >= 22)
+        printf("memory usage %s, utime %s s/100, stime %s\n", words[22], words[13], words[14]);
+    }
+lineFileClose(&lf);
+}
+
 void chainNet(char *chainFile, char *tSizes, char *qSizes, char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
 {
@@ -530,10 +563,11 @@ while ((chain = chainRead(lf)) != NULL)
     addChain(qChrom, tChrom, chain);
     uglyf("%s has %d inserts, %s has %d\n", tChrom->name, tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
-printf("Outputing %s\n", tNet);
+printf("writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
-printf("Outputing %s\n", qNet);
+printf("writing %s\n", qNet);
 outputNetSide(qChromList, qNet, TRUE);
+printMem();
 }
 
 int main(int argc, char *argv[])
