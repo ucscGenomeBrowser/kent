@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.59 2005/03/10 00:16:40 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.60 2005/03/14 03:15:52 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -440,7 +440,7 @@ for (i=0; i < maf->textSize && baseIx < baseCount; i++)
                 }
             }
         }
-    if (insertCounts[baseIx] == 0)
+    else
         baseIx++;
     }
 }
