@@ -373,7 +373,6 @@ if (lastHost != NULL && sameString(lastHost, host))
 freez(&lastHost);
 lastHost = cloneString(host);
 lastAddress = internetHostIp(host);
-logIt("lookupIp(%s) = %x (the slow way)\n", host, lastAddress);
 return lastAddress;
 }
 
@@ -382,9 +381,16 @@ void tellManagerJobIsDone(char *managingHost, char *jobIdString, char *line)
 /* Try and send message to host saying job is done. */
 {
 struct paraMessage pm;
-pmInit(&pm, lookupIp(managingHost), paraHubPort);
+bits32 ip;
+if (!internetDottedQuadToIp(managingHost, &ip))
+    {
+    logIt("%s doesn't seem to be in dotted quad form\n", managingHost);
+    return;
+    }
+pmInit(&pm, ip, paraHubPort);
 pmPrintf(&pm, "jobDone %s %s", jobIdString, line);
-pmSend(&pm, mainRudp);
+if (!pmSend(&pm, mainRudp))
+    logIt("Couldn't send message to %s to say %s is done\n", managingHost, jobIdString);
 }
 
 void jobFree(struct job **pJob)
