@@ -9,6 +9,7 @@
 #include "xAli.h"
 #include "rmskOut.h"
 #include "chromInserts.h"
+#include "axt.h"
 
 boolean nohead = FALSE;	/* No header for psl files? */
 int dots=0;	/* Put out I'm alive dot now and then? */
@@ -17,8 +18,8 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
- "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf .gdup or .bed files\n"
- "to parent coordinate system. \n"
+ "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf \n"
+ ".gdup .axt or .bed files to parent coordinate system. \n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
  "The optional -type parameter tells what type of files to lift\n"
@@ -43,6 +44,7 @@ errAbort(
  "   -nohead  No header written for .psl files\n"
  "   -dots=N Output a dot every N lines processed\n"
  "   -pslQ  Lift query (rather than target) side of psl\n"
+ "   -axtQ  Lift query (rather than target) side of axt\n"
  );
 }
 
@@ -287,6 +289,20 @@ else
     pslFree(&psl);
 }
 
+void doDots(int *pDotMod)
+/* Output a dot every now and then. */
+{
+if (dots > 0 && !pipeOut)
+    {
+    if (--*pDotMod <= 0)
+	{
+	fputc('.', stdout);
+	fflush(stdout);
+	*pDotMod = dots;
+	}
+    }
+}
+
 void liftPsl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[],
 	boolean querySide, boolean isExtended)
 /* Lift up coordinates in .psl file. */
@@ -331,15 +347,7 @@ for (i=0; i<sourceCount; ++i)
 	    psl = pslNext(lf);
 	if (psl == NULL)
 	    break;
-	if (dots > 0)
-	    {
-	    if (--dotMod <= 0)
-	        {
-		fputc('.', stdout);
-		fflush(stdout);
-		dotMod = dots;
-		}
-	    }
+	doDots(&dotMod);
 	if (querySide)
 	    seqName = psl->qName;
 	else
@@ -413,6 +421,72 @@ for (i=0; i<sourceCount; ++i)
     lineFileClose(&lf);
     }
 fclose(dest);
+}
+
+void liftAxt(char *destFile, struct hash *liftHash, 
+	int sourceCount, char *sources[], boolean querySide)
+/* Lift up coordinates in .axt file. */
+{
+FILE *f = mustOpen(destFile, "w");
+int sourceIx;
+int dotMod = dots;
+
+for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
+    {
+    char *source = sources[sourceIx];
+    struct lineFile *lf = lineFileOpen(source, TRUE);
+    struct axt *axt;
+    if (!pipeOut) printf("Lifting %s\n", source);
+    while ((axt = axtRead(lf)) != NULL)
+        {
+	struct liftSpec *spec;
+	struct axt a = *axt;
+	char *seqName;
+	if (querySide)
+	    seqName = a.qName;
+	else
+	    seqName = a.tName;
+	spec = findLift(liftHash, seqName, lf);
+	if (spec == NULL)
+	    {
+	    if (!carryMissing)
+	        {
+		axtFree(&axt);
+		continue;
+		}
+	    }
+	else
+	    {
+	    int offset;
+	    char strand = (querySide ? a.qStrand : a.tStrand);
+	    if (strand == '-')
+		{
+		int ctgEnd = spec->offset + spec->oldSize;
+		offset = spec->newSize - ctgEnd;
+		}
+	    else
+		offset = spec->offset;
+	    if (querySide)
+	        {
+		a.qStart += offset;
+		a.qEnd += offset;
+		a.qName = spec->newName;
+		}
+	    else
+	        {
+		a.tStart += offset;
+		a.tEnd += offset;
+		a.tName = spec->newName;
+		if (strand == '-')
+		    warn("Target minus strand, please double check results.");
+		}
+	    }
+	axtWrite(&a, f);
+	axtFree(&axt);
+	doDots(&dotMod);
+	}
+    lineFileClose(&lf);
+    }
 }
 
 void malformedAgp(struct lineFile *lf)
@@ -855,6 +929,13 @@ else if (strstr(destType, "gold"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, FALSE);
     liftAgp(destFile, liftHash, sourceCount, sources);
+    }
+else if (strstr(destType, ".axt"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, FALSE);
+    liftAxt(destFile, liftHash, sourceCount, sources, 	
+    	cgiBoolean("axtQ") || cgiBoolean("axtq"));
     }
 else 
     {
