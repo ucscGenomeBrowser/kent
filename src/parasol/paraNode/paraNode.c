@@ -51,7 +51,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.72 2004/09/25 01:30:17 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.73 2004/09/25 06:15:02 galt Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -605,8 +605,8 @@ void doFetch(char *line)
  * file one UDP packet at a time.  A zero length packet
  * indicates end of file. */
 {
-char *user = nextWord(&line);
-char *fileName = nextWord(&line);
+char *user = cloneString(nextWord(&line));
+char *fileName = cloneString(nextWord(&line));
 if ((user == NULL) || (fileName != NULL))
     {
     FILE *f = fopen(fileName, "r");
@@ -643,6 +643,8 @@ if ((user == NULL) || (fileName != NULL))
 	fclose(f);
 	}
     }
+freez(&user);
+freez(&fileName);
 }
 
 void doKill(char *line)
