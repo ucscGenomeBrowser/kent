@@ -758,6 +758,12 @@ if (status != NULL)
 	struct user *user = job->user;
 	if (job != NULL)
 	    {
+	    struct machine *mach = job->machine;
+	    if (mach != NULL)
+	        {
+	        dlRemove(mach->node);
+	        dlAddTail(freeMachines, mach->node);
+		}
 	    requeueJob(job);
 	    logIt("hub:  requeueing job in nodeCheckIn\n");
 	    }
