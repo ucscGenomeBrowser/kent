@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.26 2004/03/25 02:22:28 baertsch Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.27 2004/03/25 07:11:13 baertsch Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -370,9 +370,6 @@ void reverseComplement(DNA *dna, long length)
 int i;
 reverseBytes(dna, length);
 complement(dna, length);
-if (strlen(dna) < length)
-    errAbort("reverseComplement truncated string from %ld to %d. Check for invalid characters.\n",
-            length, strlen(dna));
 }
 
 /* Reverse offset - return what will be offset (0 based) to
