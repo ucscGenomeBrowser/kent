@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.2 2003/06/11 03:22:22 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.3 2003/06/24 07:06:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,11 +20,12 @@ errAbort(
   "File.tab is something generated via ncbi blast\n"
   "using the -m 8 flag\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -createOnly - just create the table, don't load it\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"createOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -56,32 +57,38 @@ dyStringFree(&dy);
 void hgLoadBlastTab(char *database, char *table, int inCount, char *inNames[])
 /* hgLoadBlastTab - Load blast table into database. */
 {
-int i;
-FILE *f = hgCreateTabFile(".", table);
-int count = 0;
-struct sqlConnection *conn = NULL;
-printf("Scanning through %d files\n", inCount);
-for (i=0; i<inCount; ++i)
-    {
-    struct lineFile *lf = lineFileOpen(inNames[i], TRUE);
-    struct blastTab bt;
-    char *row[BLASTTAB_NUM_COLS];
-    while (lineFileRow(lf, row))
-        {
-	blastTabStaticLoad(row, &bt);
-	bt.qStart -= 1;
-	bt.tStart -= 1;
-	blastTabTabOut(&bt, f);
-	++count;
-	}
-    lineFileClose(&lf);
-    }
-printf("Loading database with %d rows\n", count);
-conn = sqlConnect(database);
+struct sqlConnection *conn = sqlConnect(database);
 blastTabTableCreate(conn, table);
-hgLoadTabFile(conn, ".", table, &f);
-hgRemoveTabFile(".", table);
 sqlDisconnect(&conn);
+
+if (!optionExists("createOnly"))
+    {
+    FILE *f = hgCreateTabFile(".", table);
+    int i;
+    int count = 0;
+    printf("Scanning through %d files\n", inCount);
+
+    for (i=0; i<inCount; ++i)
+	{
+	struct lineFile *lf = lineFileOpen(inNames[i], TRUE);
+	struct blastTab bt;
+	char *row[BLASTTAB_NUM_COLS];
+	while (lineFileRow(lf, row))
+	    {
+	    blastTabStaticLoad(row, &bt);
+	    bt.qStart -= 1;
+	    bt.tStart -= 1;
+	    blastTabTabOut(&bt, f);
+	    ++count;
+	    }
+	lineFileClose(&lf);
+	}
+    printf("Loading database with %d rows\n", count);
+    conn = sqlConnect(database);
+    hgLoadTabFile(conn, ".", table, &f);
+    hgRemoveTabFile(".", table);
+    sqlDisconnect(&conn);
+    }
 }
 
 int main(int argc, char *argv[])
