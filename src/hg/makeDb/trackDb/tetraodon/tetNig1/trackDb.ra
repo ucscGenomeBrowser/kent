@@ -83,3 +83,14 @@ visibility hide
 spectrum on
 type netAlign fr1 chainFr1
 otherDb fr1
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility hide
+spectrum on
+type psl est
+
+
