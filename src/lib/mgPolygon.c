@@ -395,15 +395,18 @@ while (--i >= 0)
 	    p = np;
 	    np = np->next;		
 	    }
-	totalHeight = valley->y - highy;
+	totalHeight = valley->y - highy + 1;
 	AllocArray(thread1, totalHeight);
 	AllocArray(thread2, totalHeight);
 	fill_ebuf(peak, pcount, thread1);
 	pcount = fill_ebuf(valley, poly->ptCount - pcount, thread2)
 		- thread2;
 	blast_hlines(mg, thread1, thread2, highy, pcount, color);
+	uglyf("ok 1\n");
 	freeMem(thread1);
+	uglyf("ok 2\n");
 	freeMem(thread2);
+	uglyf("ok 3\n");
 	return;
 	}
     pcount++;
