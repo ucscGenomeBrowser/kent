@@ -4,9 +4,33 @@
 #include "hash.h"
 #include "jksql.h"
 #include "gifLabel.h"
+#include "cart.h"
+#include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.1 2003/10/13 19:52:59 kent Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.2 2003/10/13 23:53:26 kent Exp $";
+
+static char *colorSchemeVals[] = {
+/* Menu option for color scheme. */
+   "red high/green low",
+   "yellow high/blue low",
+};
+
+void hgExpColorDropDown(struct cart *cart, char *varName)
+/* Make color drop-down. */
+{
+char *checked = cartUsualString(cart, varName, colorSchemeVals[0]);
+cgiMakeDropList(varName, 
+	colorSchemeVals, ArraySize(colorSchemeVals), checked);
+}
+
+boolean hgExpRatioUseBlue(struct cart *cart, char *varName)
+/* Return TRUE if should use blue instead of red
+ * in the expression ratios. */
+{
+char *val = cartUsualString(cart, varName, colorSchemeVals[0]);
+return !sameString(val, colorSchemeVals[0]);
+}
 
 char **hgExpGetNames(char *database, char *table, 
 	int expCount, int *expIds, int skipSize)
@@ -97,5 +121,194 @@ for (i=0; i<representativeCount; i += groupSize+1)
 for (i=0; i<representativeCount; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
+}
+
+boolean hgExpLoadVals(struct sqlConnection *lookupConn,
+	struct sqlConnection *dataConn,
+	char *lookupTable, char *name, char *dataTable,
+	int *retValCount, float **retVals)
+/* Load up and return expression bed record.  Return NULL
+ * if none of given name exist. */
+{
+char query[256];
+char expName[64];
+struct sqlResult *sr;
+char **row;
+boolean ok = FALSE;
+safef(query, sizeof(query), "select value from %s where name = '%s'", 
+	lookupTable, name);
+if (sqlQuickQuery(lookupConn, query, expName, sizeof(expName)) == NULL)
+    return FALSE;
+safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+	dataTable, expName);
+sr = sqlGetResult(dataConn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    sqlFloatDynamicArray(row[0], retVals, retValCount);
+    ok = TRUE;
+    }
+sqlFreeResult(&sr);
+return ok;
+}
+
+
+static void hexOne(double val)
+/* Convert val 0.0-1.0 to hex 00 to FF */
+{
+int hex = val * 0xFF;
+if (hex > 0xFF) hex = 0xFF;
+printf("%02X", hex);
+}
+
+static void colorVal(double val, double scale, boolean useBlue, boolean useGrays)
+/* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
+ * using green for minus values, red for plus values, but
+ * optionally using blue for minus values and yellow for plus values. */
+{
+if (useGrays)
+    {
+    if (val < 1)
+        printf("000000");
+    else
+	{
+	val = log(val) * scale;
+	hexOne(val);
+	hexOne(val);
+	hexOne(val);
+	}
+    }
+else 
+    {
+    val *= scale;
+    if (useBlue)
+	{
+	if (val < 0)
+	    {
+	    val = -val;
+	    printf("00");
+	    printf("00");
+	    hexOne(val);
+	    }
+	else
+	    {
+	    val *= 0.7;
+	    hexOne(val);    /* Red */
+	    hexOne(val);     /* Green */
+	    printf("00");   /* Blue */
+	    }
+	}
+    else 
+	{
+	if (val < 0)
+	    {
+	    printf("00");	    /* Red */
+	    hexOne(-val*0.8);    /* Green - brighter than red*/
+	    printf("00");      /* Blue */
+	    }
+	else
+	    {
+	    hexOne(val);
+	    printf("00");
+	    printf("00");
+	    }
+	}
+    }
+}
+
+static int expSubcellWidth = 16;
+
+static void startExpCell()
+/* Print out start of expression cell, which contains a table. */
+{
+printf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
+}
+
+static void endExpCell()
+/* Print out end of expression cell, closing up internal table. */
+{
+printf("</TR></TABLE></TD>");
+}
+
+static void restartExpCell()
+/* End expression cell and begin a new one. */
+{
+endExpCell();
+startExpCell();
+}
+
+static void printRatioShades(char *colName, int repCount, 
+	int *reps, int valCount, float *vals, 
+	boolean colorBlindColors,
+	boolean useGrays, float scale)
+/* Print out representatives in shades of color in table background. */
+{
+int i;
+float val;
+startExpCell();
+for (i=0; i<repCount; ++i)
+    {
+    int ix = reps[i];
+    if (ix > valCount)
+        errAbort("Representative larger than biggest experiment in %s", colName);
+    if (ix == -1)
+        {
+	restartExpCell();
+	}
+    else
+	{
+	val = vals[ix];
+	if (val <= -9999)
+	    printf("<TD WIDTH=%d>&nbsp;</TD>", expSubcellWidth);
+	else
+	    {
+	    printf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
+	    colorVal(val, scale, colorBlindColors, useGrays);
+	    printf("\">&nbsp;</TD>");
+	    }
+	}
+    }
+endExpCell();
+}
+
+static void replicate(char *s, int repCount, int *reps)
+/* Replicate s in cells of table */
+{
+int i;
+startExpCell();
+printf("%s", s);
+for (i=0; i<repCount; ++i)
+    {
+    int ix = reps[i];
+    if (ix == -1)
+        {
+	restartExpCell();
+	printf("%s", s);
+	}
+    }
+endExpCell();
+}
+
+void hgExpCellPrint(char *colName, char *geneId, 
+	struct sqlConnection *lookupConn, char *lookupTable,
+	struct sqlConnection *dataConn, char *dataTable,
+	int representativeCount, int *representatives,
+	boolean useBlue, boolean useGrays, float scale)
+/* Print out html for expression cell in table. */
+{
+int i;
+int valCount;
+float *vals = NULL;
+
+if (hgExpLoadVals(lookupConn, dataConn, lookupTable, geneId, dataTable, 
+	&valCount, &vals))
+    {
+    printRatioShades(colName, representativeCount, representatives, 
+    	valCount, vals, useBlue, useGrays, scale);
+    freez(&vals);
+    }
+else
+    {
+    replicate("n/a", representativeCount, representatives);
+    }
 }
 

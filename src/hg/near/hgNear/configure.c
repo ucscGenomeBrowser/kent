@@ -10,9 +10,10 @@
 #include "hdb.h"
 #include "cart.h"
 #include "web.h"
+#include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.37 2003/10/08 07:29:10 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.38 2003/10/13 23:53:26 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -169,28 +170,6 @@ slSort(pColList, columnCmpPriority);
 savePriorities(*pColList);
 }
 
-static char *colorSchemeVals[] = {
-/* Menu option for color scheme. */
-   "red high/green low",
-   "yellow high/blue low",
-};
-
-static void colorSchemeDropDown()
-/* Make color drop-down. */
-{
-char *checked = cartUsualString(cart, expRatioColorVarName, colorSchemeVals[0]);
-cgiMakeDropList(expRatioColorVarName, 
-	colorSchemeVals, ArraySize(colorSchemeVals), checked);
-}
-
-boolean expRatioUseBlue()
-/* Return TRUE if should use blue instead of red
- * in the expression ratios. */
-{
-char *val = cartUsualString(cart, expRatioColorVarName, colorSchemeVals[0]);
-return !sameString(val, colorSchemeVals[0]);
-}
-
 boolean showOnlyCanonical()
 /* Return TRUE if we only show canonical splicing variants. */
 {
@@ -244,7 +223,7 @@ hPrintf("</TD></TR></TABLE>");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 hPrintf("Expression ratio colors: ");
-colorSchemeDropDown();
+hgExpColorDropDown(cart, expRatioColorVarName);
 hPrintf("</TD><TD>");
 hPrintf("Show all splicing variants: ");
 cgiMakeCheckBox(showAllSpliceVarName, 

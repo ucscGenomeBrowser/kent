@@ -132,6 +132,7 @@ void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 #define hggChrom "hgg_chrom"	/* Chromosome gene is on. */
 #define hggStart "hgg_start"	/* Start position. */
 #define hggEnd	"hgg_end"	/* End position. */
+#define hggExpRatioColors "hgg_expRatioColors" /* Expression Ratio coloring. */
 
 /* -------- Global Variables --------*/
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */

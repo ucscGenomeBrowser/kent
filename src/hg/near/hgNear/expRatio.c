@@ -13,36 +13,8 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.27 2003/10/13 19:52:59 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.28 2003/10/13 23:53:26 kent Exp $";
 
-
-static boolean loadExpVals(struct sqlConnection *lookupConn,
-	struct sqlConnection *dataConn,
-	char *lookupTable, char *name, char *dataTable,
-	int *retValCount, float **retVals)
-/* Load up and return expression bed record.  Return NULL
- * if none of given name exist. */
-{
-char query[256];
-char expName[64];
-struct sqlResult *sr;
-char **row;
-boolean ok = FALSE;
-safef(query, sizeof(query), "select value from %s where name = '%s'", 
-	lookupTable, name);
-if (sqlQuickQuery(lookupConn, query, expName, sizeof(expName)) == NULL)
-    return FALSE;
-safef(query, sizeof(query), "select expScores from %s where name = '%s'",
-	dataTable, expName);
-sr = sqlGetResult(dataConn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    sqlFloatDynamicArray(row[0], retVals, retValCount);
-    ok = TRUE;
-    }
-sqlFreeResult(&sr);
-return ok;
-}
 
 static char *expCellVal(struct genePos *gp,
     struct sqlConnection *lookupConn, char *lookupTable,
@@ -56,7 +28,7 @@ int valCount;
 float *vals = NULL;
 char *result;
 
-if (loadExpVals(lookupConn, dataConn, lookupTable, gp->name, dataTable, &valCount, &vals))
+if (hgExpLoadVals(lookupConn, dataConn, lookupTable, gp->name, dataTable, &valCount, &vals))
     {
     for (i=0; i<representativeCount; ++i)
 	{
@@ -99,172 +71,11 @@ boolean expTableOk = sqlTableExists(conn, col->experimentTable);
 return tableOk && posTableOk && expTableOk;
 }
 
-static void hexOne(double val)
-/* Convert val 0.0-1.0 to hex 00 to FF */
-{
-int hex = val * 0xFF;
-if (hex > 0xFF) hex = 0xFF;
-hPrintf("%02X", hex);
-}
-
-static void colorVal(double val, double scale, boolean useBlue, boolean useGrays)
-/* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
- * using green for minus values, red for plus values, but
- * optionally using blue for minus values and yellow for plus values. */
-{
-if (useGrays)
-    {
-    if (val < 1)
-        hPrintf("000000");
-    else
-	{
-	val = log(val) * scale;
-	hexOne(val);
-	hexOne(val);
-	hexOne(val);
-	}
-    }
-else 
-    {
-    val *= scale;
-    if (useBlue)
-	{
-	if (val < 0)
-	    {
-	    val = -val;
-	    hPrintf("00");
-	    hPrintf("00");
-	    hexOne(val);
-	    }
-	else
-	    {
-	    val *= 0.7;
-	    hexOne(val);    /* Red */
-	    hexOne(val);     /* Green */
-	    hPrintf("00");   /* Blue */
-	    }
-	}
-    else 
-	{
-	if (val < 0)
-	    {
-	    hPrintf("00");	    /* Red */
-	    hexOne(-val*0.8);    /* Green - brighter than red*/
-	    hPrintf("00");      /* Blue */
-	    }
-	else
-	    {
-	    hexOne(val);
-	    hPrintf("00");
-	    hPrintf("00");
-	    }
-	}
-    }
-}
-
-static int expSubcellWidth = 16;
-
-static void startExpCell()
-/* Print out start of expression cell, which contains a table. */
-{
-hPrintf("<TD><TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR>");
-}
-
-static void endExpCell()
-/* Print out end of expression cell, closing up internal table. */
-{
-hPrintf("</TR></TABLE></TD>");
-}
-
-static void restartExpCell()
-/* End expression cell and begin a new one. */
-{
-endExpCell();
-startExpCell();
-}
-
-static void printRatioShades(struct column *col, int repCount, 
-	int *reps, int valCount, float *vals, 
-	boolean colorBlindColors,
-	boolean useGrays, float scale)
-/* Print out representatives in shades of color in table background. */
-{
-int i;
-float val;
-startExpCell();
-for (i=0; i<repCount; ++i)
-    {
-    int ix = reps[i];
-    if (ix > valCount)
-        errAbort("Representative larger than biggest experiment in %s", col->name);
-    if (ix == -1)
-        {
-	restartExpCell();
-	}
-    else
-	{
-	val = vals[ix];
-	if (val <= -9999)
-	    hPrintf("<TD WIDTH=%d>&nbsp;</TD>", expSubcellWidth);
-	else
-	    {
-	    hPrintf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
-	    colorVal(val, scale, colorBlindColors, useGrays);
-	    hPrintf("\">&nbsp;</TD>");
-	    }
-	}
-    }
-endExpCell();
-}
-
-
-static void replicate(char *s, int repCount, int *reps)
-/* Replicate s in cells of table */
-{
-int i;
-startExpCell();
-hPrintf("%s", s);
-for (i=0; i<repCount; ++i)
-    {
-    int ix = reps[i];
-    if (ix == -1)
-        {
-	restartExpCell();
-	hPrintf("%s", s);
-	}
-    }
-endExpCell();
-}
-
-void expCellPrint(struct column *col, struct genePos *gp, 
-	struct sqlConnection *lookupConn, char *lookupTable,
-	struct sqlConnection *dataConn, char *dataTable,
-	int representativeCount, int *representatives,
-	boolean useBlue, boolean useGrays, float scale)
-/* Print out html for expRatio cell. */
-{
-int i, numExpts = col->representativeCount;
-int valCount;
-float *vals = NULL;
-
-if (loadExpVals(lookupConn, dataConn, lookupTable, gp->name, dataTable, 
-	&valCount, &vals))
-    {
-    printRatioShades(col, representativeCount, representatives, 
-    	valCount, vals, useBlue, useGrays, scale);
-    freez(&vals);
-    }
-else
-    {
-    replicate("n/a", representativeCount, representatives);
-    }
-}
-
 void expRatioCellPrint(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Print out html for expRatio cell. */
 {
-expCellPrint(col, gp, conn, col->table, conn, col->posTable, 
+hgExpCellPrint(col->name, gp->name, conn, col->table, conn, col->posTable, 
 	col->representativeCount, col->representatives,
 	col->expRatioUseBlue, FALSE, col->expScale);
 }
@@ -581,7 +392,7 @@ else
 
 /* Figure out color scheme. */
     {
-    col->expRatioUseBlue = expRatioUseBlue();
+    col->expRatioUseBlue = hgExpRatioUseBlue(cart, expRatioColorVarName);
     }
 
 /* Figure out scale. */
@@ -723,7 +534,7 @@ else
     format = "%4.3f";
     scale = col->expRatioScale;
     }
-expCellPrint(col, gp, conn, col->table, hgFixedConn(), dataTable, 
+hgExpCellPrint(col->name, gp->name, conn, col->table, hgFixedConn(), dataTable, 
 	emd->representativeCount, emd->representatives,
 	col->expRatioUseBlue, col->expShowAbs, scale);
 }
@@ -866,7 +677,7 @@ col->emd = getSelectedEmd(col, emdList);
 
 /* Figure out color scheme. */
     {
-    col->expRatioUseBlue = expRatioUseBlue();
+    col->expRatioUseBlue = hgExpRatioUseBlue(cart, expRatioColorVarName);
     }
 
 /* Figure out scale. */

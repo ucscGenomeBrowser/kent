@@ -567,9 +567,6 @@ boolean showOnlyCanonical();
 struct hash *canonicalHash();
 /* Get canonicalHash if necessary, otherwise return NULL. */
 
-boolean expRatioUseBlue();
-/* Return TRUE if should use blue instead of red
- * in the expression ratios. */
 
 /* ---- Create high level pages. ---- */
 void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp);

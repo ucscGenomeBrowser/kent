@@ -142,9 +142,12 @@ if ((row = sqlNextRow(sr)) != NULL)
     ag = altGraphXLoad(row+hasBin);
     hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
     altGraphXMakeImage(ag);
-    hPrintf("</TD></TR></TABLE>");
+    hPrintf("</TD></TR></TABLE><BR>");
     }
 sqlFreeResult(&sr);
+hPrintf("This graph shows alternative splicing observed in mRNAs and "
+        "ESTs that is either conserved in mouse, present in full length "
+	"mRNAs, or observed at least three times in ESTs.");
 }
 
 struct section *altSpliceSection(struct sqlConnection *conn,

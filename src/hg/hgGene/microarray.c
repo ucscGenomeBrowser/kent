@@ -1,9 +1,11 @@
-/* microarray - Gene Ontology annotations. */
+/* microarray - Microarray data. */
 
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "cart.h"
+#include "cheapcgi.h"
 #include "hdb.h"
 #include "hgExp.h"
 #include "hgGene.h"
@@ -18,6 +20,7 @@ struct expColumn
     char *type;		/* What type this is. */
     struct hash *settings;	/* Rest of stuff. */
     char *probe;		/* Name of probe if any. */
+    char *lookupTable;		/* Table to lookup gene ID to get expId. */
     };
 
 static void expColumnFree(struct expColumn **pEl)
@@ -28,6 +31,7 @@ if (el != NULL)
     {
     hashFree(&el->settings);
     freeMem(el->probe);
+    freeMem(el->lookupTable);
     freez(pEl);
     }
 }
@@ -100,6 +104,7 @@ for (ra = raList; ra != NULL; ra = raNext)
 	    col->type = fullType;
 	    col->settings = ra;
 	    col->probe = probe;
+	    col->lookupTable = cloneString(lookup);
 	    slAddHead(&colList, col);
 	    }
 	}
@@ -120,16 +125,6 @@ section->items = microarrayColumns(conn, geneId);
 return section->items != NULL;
 }
 
-static void expRatioPrint(struct expColumn *col,
-	struct sqlConnection *conn, struct sqlConnection *fConn,
-	char *geneId)
-/* Print out label and dots for expression ratio. */
-{
-char *dupe = cloneString(col->type);
-
-freeMem(dupe);
-}
-
 static void expLabelPrint(struct expColumn *col, char *subName,
 	int representativeCount, int *representatives,
 	char *expTable)
@@ -142,20 +137,60 @@ if ((skips = hashFindVal(col->settings, "skipName")) != NULL)
 hPrintf("<TR>\n");
 hgExpLabelPrint(col->name, subName, skipName, NULL,
 	representativeCount, representatives, expTable);
+hPrintf("<TD> </TD>\n");	/* Dummy entry for labels. */
 hPrintf("</TR>\n");
 }
 
+static void expRatioPrint(struct expColumn *col,
+	struct sqlConnection *conn, struct sqlConnection *fConn,
+	char *geneId, boolean useBlue)
+/* Print out label and dots for expression ratio. */
+{
+float ratioMax = atof(hashMustFindVal(col->settings, "max"));
+char *dupe = cloneString(col->type);
+char *s = dupe;
+char *repString = cloneString(hashMustFindVal(col->settings, "representatives"));
+char *shortType, *lookupTable, *expTable, *ratioTable;
+int representativeCount, *representatives = NULL;
+
+shortType = nextWord(&s);
+lookupTable = nextWord(&s);
+ratioTable = nextWord(&s);
+expTable = nextWord(&s);
+if (expTable == NULL)
+    errAbort("short type line in %s", col->name);
+sqlSignedDynamicArray(repString, &representatives, &representativeCount);
+
+hPrintf("<TABLE>\n");
+expLabelPrint(col, "", representativeCount, representatives, expTable);
+hPrintf("<TR>");
+hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
+	conn, ratioTable, representativeCount, representatives,
+	useBlue, FALSE, 1.0/ratioMax);
+hPrintf("<TD>Ratios</TD>\n");
+hPrintf("</TR>\n");
+hPrintf("</TABLE>\n");
+
+freeMem(representatives);
+freeMem(repString);
+freeMem(dupe);
+}
+
+
 static void expMultiPrint(struct expColumn *col,
 	struct sqlConnection *conn, struct sqlConnection *fConn,
-	char *geneId)
+	char *geneId, boolean useBlue)
 /* Print out label and dots for expression multi. */
 {
 char *subName = "median";
 char *subType = hashFindVal(col->settings, subName);
+float ratioMax = atof(hashMustFindVal(col->settings, "ratioMax"));
+float absoluteMax = atof(hashMustFindVal(col->settings, "absoluteMax"));
 char *dupe = NULL, *s;
 char *expTable, *ratioTable, *absTable, *repString;
 int representativeCount, *representatives = NULL;
 
+uglyf("absoluteMax = %f<BR>\n", absoluteMax);
 if (subType == NULL)
     {
     subName = "all";
@@ -174,25 +209,36 @@ if (repString == NULL)
     errAbort("short %s line in %s", subName, col->name);
 sqlSignedDynamicArray(repString, &representatives, &representativeCount);
 
+hPrintf("<TABLE>\n");
 expLabelPrint(col, subName, representativeCount, representatives, expTable);
+hPrintf("<TR>");
+hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
+	fConn, ratioTable, representativeCount, representatives,
+	useBlue, FALSE, 1.0/ratioMax);
+hPrintf("<TD>Ratios</TD>\n");
+hPrintf("</TR>\n");
+hPrintf("<TR>");
+hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
+	fConn, absTable, representativeCount, representatives,
+	useBlue, TRUE, 1.0/log(absoluteMax));
+hPrintf("<TD>Absolute</TD>\n");
+hPrintf("</TR>");
+hPrintf("</TABLE>\n");
 
 freeMem(representatives);
 freeMem(dupe);
 }
 
-
 static void expColumnPrint(struct expColumn *col,
-	struct sqlConnection *conn, char *geneId)
+	struct sqlConnection *conn, char *geneId, boolean useBlue)
 /* Print out one expColumn. */
 {
 struct sqlConnection *fConn = sqlConnect("hgFixed");
 hPrintf("<H3>%s</H3>\n", hashMustFindVal(col->settings, "longLabel"));
-hPrintf("<TABLE>\n");
 if (startsWith("expRatio", col->type))
-    expRatioPrint(col, conn, fConn, geneId);
+    expRatioPrint(col, conn, fConn, geneId, useBlue);
 else if (startsWith("expMulti", col->type))
-    expMultiPrint(col, conn, fConn, geneId);
-hPrintf("</TABLE>\n");
+    expMultiPrint(col, conn, fConn, geneId, useBlue);
 sqlDisconnect(&fConn);
 }
 
@@ -201,12 +247,19 @@ static void microarrayPrint(struct section *section,
 /* Print out microarray annotations. */
 {
 struct expColumn *colList = section->items, *col;
+boolean useBlue = hgExpRatioUseBlue(cart, hggExpRatioColors);
 
-uglyf("%d columns<BR>\n", slCount(section->items));
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGene\" METHOD=GET>\n");
+cartSaveSession(cart);
+hPrintf("Expression ratio colors: ");
+hgExpColorDropDown(cart, hggExpRatioColors);
+cgiMakeButton("submit", "Submit");
+hPrintf("<BR>");
 for (col = colList; col != NULL; col = col->next)
-    expColumnPrint(col, conn, geneId);
+    expColumnPrint(col, conn, geneId, useBlue);
 
 /* Clean up. */
+hPrintf("</FORM>\n");
 expColumnFreeList(&colList);
 section->items = NULL;
 }
