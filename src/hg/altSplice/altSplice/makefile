@@ -13,7 +13,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceG
 	gcc -Wimplicit -ggdb  -I../../inc -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
 
-O =  altSplice orthoSplice agxToBed altSummary # spliceStats spliceVis
+O =  altAnalysis altSplice orthoSplice agxToBed altSummary # spliceStats spliceVis
 
 TESTO = test_geneGraph.o
 
