@@ -160,6 +160,14 @@ struct sqlConnection *hConnectCentral();
 void hDisconnectCentral(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+struct sqlConnection *hConnectCart();
+/* Connect to cart database.  Defaults to the central connection
+ * unless cart.db or cart.host are configured. Free this
+ * up with hDisconnectCart(). */
+
+void hDisconnectCart(struct sqlConnection **pConn);
+/* Put back connection for reuse. */
+
 char *hgOfficialChromName(char *name);
 /* Returns "cannonical" name of chromosome or NULL
  * if not a chromosome. */
