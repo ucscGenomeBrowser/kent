@@ -1,11 +1,14 @@
-#These are instructions for building the
-#neighborhood browser.
+# These are instructions for building the
+# neighborhood browser.  Don't start these until
+# there is a knownGene track.
 
 # Set up some variables and make working directory
 ssh hgwdev
 set db = hg16
 set dbDir = /cluster/data/$db
 
+# Cluster together various alt-splicing isoforms.
+hgClusterGenes $db knownGene knownIsoforms knownCannonical
 
 # Extract peptides from knownGenes into fasta file
 # and create a blast database out of them.
