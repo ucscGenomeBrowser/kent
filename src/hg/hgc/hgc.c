@@ -114,11 +114,11 @@ static void hgcStart(char *title)
 cartHtmlStart(title);
 }
 
- /*gets range nums. from bin values*/
- double whichNum( double tmp, double min0, double max0, int n)
- {
-    return( (max0 - min0)/(double)n * tmp + min0 );
-  }
+double whichNum( double tmp, double min0, double max0, int n)
+/*gets range nums. from bin values*/
+{
+return( (max0 - min0)/(double)n * tmp + min0 );
+}
 
 
 void printEntrezNucleotideUrl(FILE *f, char *accession)
@@ -243,35 +243,13 @@ cfmFree(&cfm);
 printf("</PRE></TT>");
 }
 
-boolean chromBand(char *chrom, int pos, char *retBand)
-/* Return text string that says what band pos is on. 
- * Return FALSE if not on any band, or table missing. */
-{
-struct sqlConnection *conn = hAllocConn();
-char query[256];
-char buf[64];
-char *s;
-/*static char band[64];*/
-
-if (!hTableExists("cytoBand"))
-    return FALSE;
-sprintf(query, 
-	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
-	chrom, pos, pos);
-buf[0] = 0;
-s = sqlQuickQuery(conn, query, buf, sizeof(buf));
-sprintf(retBand, "%s%s", skipChr(chrom), buf);
-hFreeConn(&conn);
-return s != NULL;
-}
-
 void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
 /* Print position lines.  'strand' argument may be null. */
 {
 char band[64];
 
 printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
-if (chromBand(chrom, (start + end)/2, band))
+if (hChromBand(chrom, (start + end)/2, band))
     printf("<B>Band:</B> %s<BR>\n", band);
 printf("<B>Begin in Chromosome:</B> %d<BR>\n", start+1);
 printf("<B>End in Chromosome:</B> %d<BR>\n", end);
@@ -3962,7 +3940,7 @@ if (row != NULL)
 	    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
 	    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
 	    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-	    if (chromBand(seqName, start, band))
+	    if (hChromBand(seqName, start, band))
 		printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
 	    printf("</TABLE>\n");
 	    htmlHorizontalLine();
@@ -4402,8 +4380,8 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-    gotS = chromBand(seqName, start, sband);
-    gotB = chromBand(seqName, end, eband);
+    gotS = hChromBand(seqName, start, sband);
+    gotB = hChromBand(seqName, end, eband);
     if (gotS && gotB)
 	{
 	if (sameString(sband,eband)) 
@@ -4520,8 +4498,8 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
     size = end - start + 1;
     printf("<TR><TH ALIGN=left>Size:</TH><TD>%d</TD></TR>\n",size);
-    gotS = chromBand(seqName, start, sband);
-    gotB = chromBand(seqName, end, eband);
+    gotS = hChromBand(seqName, start, sband);
+    gotB = hChromBand(seqName, end, eband);
     if (gotS && gotB)
 	{
 	if (sameString(sband,eband)) 
@@ -5208,7 +5186,7 @@ printf("<TABLE>\n");
 printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
 printf("<TR><TH ALIGN=left>Begin in Chromosome:</TH><TD>%d</TD></TR>\n",start);
 printf("<TR><TH ALIGN=left>End in Chromosome:</TH><TD>%d</TD></TR>\n",end);
-if (chromBand(seqName, start, startBand) && chromBand(seqName, end - 1, endBand))
+if (hChromBand(seqName, start, startBand) && hChromBand(seqName, end - 1, endBand))
     printf("<TR><TH Align=left>Chromosome Band Range:</TH><TD>%s - %s<TD></TR>\n",
 	   startBand, endBand);	
 printf("</TABLE>\n");
