@@ -1916,7 +1916,10 @@ for (;;)
     int connectionHandle = accept(socketHandle, 
     	(struct sockaddr *)&inAddress, &len_inet);
     if (connectionHandle < 0)
+	{
+	logIt("accept error %s", strerror(errno));
         continue;
+	}
     findNow();
     if (ipAddressOk(inAddress.sin_addr.s_addr, subnet) || 
     	ipAddressOk(inAddress.sin_addr.s_addr, localHost))
