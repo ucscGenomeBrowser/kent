@@ -107,7 +107,7 @@ char *uniqueTableNames[] =
     {
     "development", "cell", "cds", "geneName", "productName",
     "source", "organism", "library", "mrnaClone", "sex", "tissue",
-    "center", "bacClone", "cytoMap", "chromosome", "author", "keyword", "description",
+    "author", "keyword", "description",
     };
 
 struct uniqueTable
