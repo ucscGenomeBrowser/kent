@@ -199,8 +199,7 @@ longLabel Saccharomyces cerevisiae ortholog (best blastp hit to RefSeq)
 priority 8.5
 visibility off
 type lookup scBlastTab query target
-itemUrl http://www.wormbase.org/db/gene/gene?name=%s
-itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+itemUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 
 name pfamDomains
 shortLabel Pfam Domains

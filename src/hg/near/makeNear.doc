@@ -375,15 +375,17 @@ hgLoadBlastTab $db drBlastTab -maxPer=1 *.tab
 cd /cluster/data/sc1/bed
 mkdir blastp
 cd blastp
-wget ftp://ftp.ncbi.nih.gov/refseq/release/fungi/fungi1.protein.faa.gz
-zcat *.faa.gz | faFilter "[Saccharomyces cerevisiae]" stdin | faNcbiToUcsc -wordBefore=ref stdin refSeq.faa
-formatdb -i refSeq.faa -t refSeq -n refSeq
+wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+zcat orf_trans.fasta.gz > sgd.faa
+echo "ORFP:|" > subs.in
+subs -e sgd.faa > /dev/null
+formatdb -i sgd.faa -t sgd -n sgd
 ssh kkr1u00
 if (-e /iscratch/i/sc1/blastp) then
    rm -r /iscratch/i/sc1/blastp
 endif
 mkdir -p /iscratch/i/sc1/blastp
-cp /cluster/data/sc1/bed/blastp/refSeq.p?? /iscratch/i/sc1/blastp
+cp /cluster/data/sc1/bed/blastp/sgd.p?? /iscratch/i/sc1/blastp
 iSync
 
 # Make parasol run directory 
@@ -398,7 +400,7 @@ mkdir out
 cat > blastSome <<end
 #!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sc1/blastp/refSeq -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sc1/blastp/sgd -i \$1 -o \$2 -e 0.01 -m 8 -b 1
 end
 chmod a+x blastSome
 
