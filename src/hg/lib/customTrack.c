@@ -58,11 +58,11 @@ if ((wordCount != 3) || (!isdigit(row[0][0]) || !isdigit(row[1][0]) || !isdigit(
 *retB = atoi(row[2]);
 }
 
-static int needNum(char *nums, int lineIx)
+static int needNum(char *nums, int lineIx, int wordIx)
 /* Return a number or throw syntax error. */
 {
-if (!isdigit(nums[0]))
-    errAbort("line %d of custom input: Expecting number got %s", lineIx, nums);
+if (! (isdigit(nums[0]) || ((nums[0] == '-') && isdigit(nums[1]))))
+    errAbort("line %d word %d of custom input: Expecting number got %s", lineIx, wordIx, nums);
 return atoi(nums);
 }
 
@@ -89,7 +89,7 @@ if ((val = hashFindVal(hash, "url")) != NULL)
     tdb->url = cloneString(val);
 if ((val = hashFindVal(hash, "visibility")) != NULL)
     {
-    tdb->visibility = needNum(val, lineIx);
+    tdb->visibility = needNum(val, lineIx, -1);
     if (tdb->visibility > 2)
         errAbort("line %d of custom input: Expecting visibility 0,1, or 2 got %s", lineIx, val);
     }
@@ -156,15 +156,15 @@ AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, row[0]);
 checkChromName(bed->chrom, lineIx);
 
-bed->chromStart = needNum(row[1], lineIx);
-bed->chromEnd = needNum(row[2], lineIx);
+bed->chromStart = needNum(row[1], lineIx, 1);
+bed->chromEnd = needNum(row[2], lineIx, 2);
 if (bed->chromEnd < bed->chromStart)
     errAbort("line %d of custom input: chromStart after chromEnd", lineIx);
 
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
 if (wordCount > 4)
-     bed->score = needNum(row[4], lineIx);
+     bed->score = needNum(row[4], lineIx, 4);
 if (wordCount > 5)
      {
      strncpy(bed->strand, row[5], sizeof(bed->strand));
@@ -172,19 +172,19 @@ if (wordCount > 5)
 	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
-     bed->thickStart = needNum(row[6], lineIx);
+     bed->thickStart = needNum(row[6], lineIx, 6);
 else
      bed->thickStart = bed->chromStart;
 if (wordCount > 7)
-     bed->thickEnd = needNum(row[7], lineIx);
+     bed->thickEnd = needNum(row[7], lineIx, 7);
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
     {
-    bed->reserved = needNum(row[8], lineIx);
+    bed->reserved = needNum(row[8], lineIx, 8);
     }
 if (wordCount > 9)
-    bed->blockCount = needNum(row[9], lineIx);
+    bed->blockCount = needNum(row[9], lineIx, 9);
 if (wordCount > 10)
     {
     sqlSignedDynamicArray(row[10], &bed->blockSizes, &count);
