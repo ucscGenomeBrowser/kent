@@ -149,7 +149,7 @@ for (bun = bunList; bun != NULL; bun = bun->next)
 #endif /* DEBUG */
 
 
-static int findCrossover(struct ffAli *left, struct ffAli *right, int overlap)
+static int findCrossover(struct ffAli *left, struct ffAli *right, int overlap, boolean isProt)
 /* Find ideal crossover point of overlapping blocks.  That is
  * the point where we should start using the right block rather
  * than the left block.  This point is an offset from the start
@@ -157,36 +157,20 @@ static int findCrossover(struct ffAli *left, struct ffAli *right, int overlap)
  * right block). */
 {
 int bestPos = 0;
-DNA *nStart = right->nStart;
-DNA *lhStart = left->hEnd - overlap;
-DNA *rhStart = right->hStart;
+char *nStart = right->nStart;
+char *lhStart = left->hEnd - overlap;
+char *rhStart = right->hStart;
 int bestScore = ffScoreMatch(nStart, rhStart, overlap);
 int score = bestScore;
 int i;
+int (*scoreMatch)(char a, char b) = (isProt ? aaScore2 : dnaScore2);
 
 
 for (i=0; i<overlap; ++i)
     {
-    DNA n = nStart[i];
-    DNA lh = lhStart[i];
-    DNA rh = rhStart[i];
-    if (n != 'n')
-	{
-	if (rh != 'n')
-	    {
-	    if (n == rh)
-		score -= 1;
-	    else
-		score += 1;
-	    }
-	if (lh != 'n')
-	    {
-	    if (n == lh)
-		score += 1;
-	    else
-		score -= 1;
-	    }
-	}
+    char n = nStart[i];
+    score += scoreMatch(lhStart[i], n);
+    score -= scoreMatch(rhStart[i], n);
     if (score > bestScore)
 	{
 	bestScore = score;
@@ -197,7 +181,7 @@ return bestPos;
 }
 
 static struct ssGraph *ssGraphMake(struct ffAli *ffList, DNA *needle, DNA *haystack, 
-	enum ffStringency stringency)
+	enum ffStringency stringency, boolean isProt)
 /* Make a graph corresponding to ffList */
 {
 int nodeCount = ffAliCount(ffList);
@@ -251,7 +235,7 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
 		int midSize = mid->hEnd - mid->hStart;
 		int ffSize = ff->hEnd - ff->hStart;
 		int newMidScore, newFfScore;
-		e->crossover = crossover = findCrossover(ff, mid, overlap);
+		e->crossover = crossover = findCrossover(ff, mid, overlap, isProt);
 		newMidScore = ffScoreMatch(mid->nStart, mid->hStart, midSize-overlap+crossover);
 		newFfScore = ffScoreMatch(ff->nStart+crossover, ff->hStart+crossover,
 				ffSize-crossover);
@@ -493,7 +477,7 @@ ffList = ffMergeExactly(ffList, mrnaSeq->dna, genoSeq->dna);
 
 while (ffList != NULL)
     {
-    graph = ssGraphMake(ffList, mrnaSeq->dna, genoSeq->dna, stringency);
+    graph = ssGraphMake(ffList, mrnaSeq->dna, genoSeq->dna, stringency, bundle->isProt);
     ssGraphFindBest(graph, &bestPath, &score, &ffList);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);

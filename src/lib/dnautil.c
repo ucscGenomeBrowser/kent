@@ -557,6 +557,22 @@ for (i=0; i<ArraySize(aminoAcidTable); ++i)
     }
 }
 
+int dnaScore2(DNA a, DNA b)
+/* Score match between two bases (relatively crudely). */
+{
+if (a == 'n' || b == 'n') return 0;
+if (a == b) return 1;
+else return -1;
+}
+
+int aaScore2(AA a, AA b)
+/* Score match between two bases (relatively crudely). */
+{
+if (a == 'X' || b == 'X') return 0;
+if (a == b) return 3;
+else return -1;
+}
+
 void dnaUtilOpen()
 /* Initialize stuff herein. */
 {
