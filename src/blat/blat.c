@@ -11,6 +11,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
+
 /* Variables that can be set from command line. */
 int tileSize = 10;
 int minMatch = 3;
@@ -19,7 +20,9 @@ int maxGap = 2;
 int repMatch = 1024;
 boolean noHead = FALSE;
 char *ooc = NULL;
-boolean isProt = FALSE;
+enum gfType qType = gftDna;
+enum gfType dType = gftDna;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -46,8 +49,32 @@ errAbort(
   "               Default is 16384\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc\n"
-  "   -prot       Query sequence is protein\n"
+  "   -d=type     Database type.  Type is one of:\n"
+  "                 dna - DNA sequence\n"
+  "                 prot - protein sequence\n"
+  "                 dnax - DNA sequence translated in six frames to protein\n"
+  "               The default is dna\n"
+  "   -q=type     Query type.  Type is one of:\n"
+  "                 dna - DNA sequence\n"
+  "                 rna - RNA sequence\n"
+  "                 prot - protein sequence\n"
+  "                 dnax - DNA sequence translated in six frames to protein\n"
+  "                 rnax - DNA sequence translated in three frames to protein\n"
+  "               The default is dna\n"
+  "   -prot       Synonymous with -d=prot -q=prot\n"
   );
+}
+
+enum gfType gftFromString(char *string)
+/* Return blatType that corresponds to string. */
+{
+if (sameWord(string, "dna")) return gftDna;
+else if (sameWord(string, "rna")) return gftRna;
+else if (sameWord(string, "prot")) return gftProt;
+else if (sameWord(string, "dnax")) return gftDnaX;
+else if (sameWord(string, "rnax")) return gftRnaX;
+else 
+    errAbort("Unrecognized BLAT type '%s'", string);
 }
 
 boolean isNib(char *fileName)
@@ -91,7 +118,7 @@ else
     }
 }
 
-bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash)
+bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, boolean isProt)
 /* From an array of .fa and .nib file names, create a
  * list of dnaSeqs. */
 {
@@ -153,7 +180,7 @@ gfAlignAaClumps(gf, clumpList, seq, FALSE, ffCdna, minBases, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
 }
 
-void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl)
+void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
 /* Search for seq on either strand in index. */
 {
 if (isProt)
@@ -169,8 +196,8 @@ else
     }
 }
 
-void searchIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut)
-/* Search all sequences in all files against genoFind index. */
+void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut, boolean isProt)
+/* Search all sequences in all files against single genoFind index. */
 {
 int i;
 char *fileName;
@@ -191,13 +218,13 @@ for (i=0; i<fileCount; ++i)
 	struct dnaSeq *seq;
 
 	if (isProt)
-	    errAbort("%s: Can't use .nib files with -prot option\n", fileName);
+	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
 	nibOpenVerify(fileName, &f, &size);
 	seq = nibLdPart(fileName, f, size, 0, size);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
 	carefulClose(&f);
-	searchOne(seq, gf, psl);
+	searchOne(seq, gf, psl, isProt);
 	freeDnaSeq(&seq);
 	totalSize += size;
 	count += 1;
@@ -208,7 +235,7 @@ for (i=0; i<fileCount; ++i)
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isProt))
 	    {
-	    searchOne(&seq, gf, psl);
+	    searchOne(&seq, gf, psl, isProt);
 	    totalSize += seq.size;
 	    count += 1;
 	    }
@@ -229,29 +256,84 @@ struct dnaSeq *dbSeqList, *seq;
 struct hash *dbHash = newHash(16);
 struct genoFind *gf;
 
+boolean dbIsProt = (dType == gftProt);
 getFileArray(dbFile, &dbFiles, &dbCount);
 getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash);
-gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, isProt);
-searchIndex(queryCount, queryFiles, gf, pslOut);
+dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt);
+
+if ((dType == gftDna && (qType == gftDna || qType == gftRna))
+ || (dType == gftProt && qType == gftProt))
+    {
+    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, dbIsProt);
+    searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
+    }
+else
+    {
+    uglyAbort("Don't handle translated types yet\n");
+    }
 }
 
 int main(int argc, char *argv[])
-/* Process command line. */
+/* Process command line into global variables and call blat. */
 {
+boolean cmpIsProt;	/* True if comparison takes place in protein space. */
+boolean dIsProtLike, qIsProtLike;
+
 cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
-tileSize = cgiOptionalInt("tileSize", tileSize);
+
+/* Get database and query sequence types and make sure they are
+ * legal and compatable. */
 if (cgiVarExists("prot"))
+    qType = dType = gftProt;
+if (cgiVarExists("d"))
+    dType = gftFromString(cgiString("d"));
+switch (dType)
     {
-    uglyf("is prot\n");
-    isProt = TRUE;
+    case gftProt:
+    case gftDnaX:
+        dIsProtLike = TRUE;
+	break;
+    case gftDna:
+        dIsProtLike = FALSE;
+	break;
+    default:
+        errAbort("Illegal value for 'd' parameter");
+	break;
+    }
+if (cgiVarExists("q"))
+    qType = gftFromString(cgiString("q"));
+switch (qType)
+    {
+    case gftProt:
+    case gftDnaX:
+    case gftRnaX:
+        qIsProtLike = TRUE;
+	break;
+    default:
+        qIsProtLike = FALSE;
+	break;
+    }
+if ((dIsProtLike ^ qIsProtLike) != 0)
+    errAbort("d and q must both be either protein or dna");
+
+/* Set default tile size for protein-based comparisons. */
+if (dIsProtLike)
+    {
+    uglyf("is prot-like\n");
     tileSize = 4;
     minMatch = 3;
     maxGap = 0;
     }
-if (isProt)
+
+/* Get tile size and related parameters from user and make sure
+ * they are within range. */
+tileSize = cgiOptionalInt("tileSize", tileSize);
+minMatch = cgiOptionalInt("minMatch", minMatch);
+minBases = cgiOptionalInt("minBases", minBases);
+maxGap = cgiOptionalInt("maxGap", maxGap);
+if (dIsProtLike)
     {
     if (tileSize < 2 || tileSize > 6)
 	errAbort("protein tileSize must be between 2 and 6");
@@ -261,13 +343,15 @@ else
     if (tileSize < 6 || tileSize > 15)
 	errAbort("DNA tileSize must be between 6 and 15");
     }
-minMatch = cgiOptionalInt("minMatch", minMatch);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");
-minBases = cgiOptionalInt("minBases", minBases);
-maxGap = cgiOptionalInt("maxGap", maxGap);
 if (maxGap > 100)
     errAbort("maxGap must be less than 100");
+
+
+/* Set repMatch parameter from command line, or
+ * to reasonable value that depends on tile size.
+ * ~~~ Need to add proper support for this for protein case. */
 if (cgiVarExists("repMatch"))
     repMatch = cgiInt("repMatch");
 else
@@ -293,9 +377,12 @@ else
     else if (tileSize == 6)
         repMatch = 4*1024*1024;
     }
+
+/* Gather last few command line options. */
 noHead = (cgiVarExists("noHead") || cgiVarExists("nohead"));
 ooc = cgiOptionalString("ooc");
 
+/* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
 return 0;
 }
