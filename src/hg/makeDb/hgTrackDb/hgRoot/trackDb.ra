@@ -719,3 +719,19 @@ spectrum on
 private 1
 type psl est
 
+track blatMus0202
+shortLabel blatMus0202
+longLabel Blat alignment of mm.2002.02/arachne for contamination checking
+priority 50.0
+visibility hide
+private 1
+type psl .
+
+track blatMus0202_500_97
+shortLabel blatMus0202_500_97
+longLabel Blocks from blatMus0202 where aligned>=500 and id>=0.97
+priority 50.1
+visibility hide
+private 1
+type psl .
+
