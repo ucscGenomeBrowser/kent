@@ -238,19 +238,20 @@ else
 	    }
 	else if (type->base == pfc->bitType && pt->base == pfc->stringType)
 	    {
-	    insertCast(pptCastStringToBit, type, pPp);
+	    struct pfType *tt = pfTypeNew(pfc->varType);
+	    insertCast(pptCastStringToBit, tt, pPp);
 	    ok = TRUE;
 	    }
 	else if (type->base == pfc->varType)
 	    {
-	    // struct pfType *tt = pfTypeNew(pfc->varType);
-	    // insertCast(pptCastTypedToVar, tt, pPp);
-	    insertCast(pptCastTypedToVar, type, pPp);
+	    struct pfType *tt = pfTypeNew(pfc->varType);
+	    insertCast(pptCastTypedToVar, tt, pPp);
 	    ok = TRUE;
 	    }
 	else if (pt->base == pfc->varType)
 	    {
-	    insertCast(pptCastVarToTyped, type, pPp);
+	    struct pfType *tt = CloneVar(type);
+	    insertCast(pptCastVarToTyped, tt, pPp);
 	    ok = TRUE;
 	    }
 	else
@@ -327,9 +328,9 @@ struct pfType *inputType = functionType->children;
 struct pfType *outputType = inputType->next;
 coerceTuple(pfc, paramTuple, inputType);
 if (outputType->children != NULL && outputType->children->next == NULL)
-    pp->ty = outputType->children;
+    pp->ty = CloneVar(outputType->children);
 else
-    pp->ty = outputType;
+    pp->ty = CloneVar(outputType);
 }
 
 static void coerceWhile(struct pfCompile *pfc, struct pfParse *pp)

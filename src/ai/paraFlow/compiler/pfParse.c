@@ -332,8 +332,6 @@ for (child = pp->children; child != NULL; child = child->next)
 }
 
 
-struct pfParse *pfParseSemilessStatement(struct pfParse *parent, 
-	struct pfToken **pTokList, struct pfScope *scope);
 
 struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
@@ -347,6 +345,16 @@ static void syntaxError(struct pfToken *tok, int code)
 errAt(tok, "Syntax error #%d", code);
 }
 
+void eatSemi(struct pfToken **pTokList)
+/* Make sure there's a semicolon, and eat it. */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type != ';')
+    expectingGot(";", tok);
+tok = tok->next;
+*pTokList = tok;
+}
+    	
 struct pfParse *pfParseNew(enum pfParseType type,
 	struct pfToken *tok, struct pfParse *parent, struct pfScope *scope)
 /* Return new parse node.  It's up to caller to fill in
@@ -1198,6 +1206,21 @@ slAddHead(&pp->children, element);
 return pp;
 }
 
+static struct pfParse * parseExpressionAndSemi(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression and following semicolon if any. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp;
+if (tok->type == ';')
+    pp = emptyStatement(parent, tok, scope);
+else
+    pp = pfParseExpression(parent, &tok, scope);
+eatSemi(&tok);
+*pTokList = tok;
+return pp;
+}
+
 static struct pfParse *parseFor(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse for statement */
@@ -1216,29 +1239,14 @@ if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
 
-/* Parse up through first semicolon */
-if (tok->type == ';')
-    init = emptyStatement(pp, tok, scope);
-else
-    init = pfParseSemilessStatement(pp, &tok, scope);
-if (tok->type != ';')
-    expectingGot(";", tok);
-tok = tok->next;
-
-/* Parse up through through semicolon */
-if (tok->type == ';')
-    check = emptyStatement(pp, tok, scope);
-else
-    check = pfParseExpression(pp, &tok, scope);
-if (tok->type != ';')
-    expectingGot(";", tok);
-tok = tok->next;
+init = parseExpressionAndSemi(pp, &tok, scope);
+check = parseExpressionAndSemi(pp, &tok, scope);
 
 /* Parse advance statment and closing ')' */
 if (tok->type == ')')
     advance = emptyStatement(pp, tok, scope);
 else
-    advance = pfParseSemilessStatement(pp, &tok, scope);
+    advance = pfParseExpression(pp, &tok, scope);
 if (tok->type != ')')
     expectingGot(")", tok);
 tok = tok->next;
@@ -1261,8 +1269,10 @@ static struct pfParse *parseWordStatement(struct pfParse *parent,
 /* Parse one word statement. */
 {
 struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(type, tok, parent, scope);
+eatSemi(&tok);
 *pTokList = tok->next;
-return pfParseNew(type, tok, parent, scope);
+return pp;
 }
 
 static struct pfParse *parseBreak(struct pfParse *parent,
@@ -1300,10 +1310,10 @@ pp->children = parseDottedNames(pp, &tok, scope);
 return pp;
 }
 
-    	
-struct pfParse *pfParseSemilessStatement(struct pfParse *parent, 
+struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse a single statement, and add results to (head) of
+/* Parse a single statement up to but not including semicolon,
+ * and add results to (head) of
  * parent->childList. */
 {
 struct pfToken *tok = *pTokList;
@@ -1314,11 +1324,12 @@ switch (tok->type)
     case pftInto:
         statement = parseInto(parent, &tok, scope);
 	break;
-    case '{':
-	statement = parseCompound(parent, &tok, scope);
-	break;
     case ';':
 	statement = emptyStatement(parent, tok, scope);
+	tok = tok->next;
+	break;
+    case '{':
+	statement = parseCompound(parent, &tok, scope);
 	break;
     case pftIf:
         statement = parseIf(parent, &tok, scope);
@@ -1356,6 +1367,7 @@ switch (tok->type)
     case pftName:
     case '(':
 	statement = pfParseExpression(parent, &tok, scope);
+	eatSemi(&tok);
 	break;
     default:
         expectingGot("statement", tok);
@@ -1366,18 +1378,6 @@ switch (tok->type)
 return statement;
 }
 
-
-struct pfParse *pfParseStatement(struct pfParse *parent, 
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse a statement followed by any number of semicolons. */
-{
-struct pfParse *statement = pfParseSemilessStatement(parent, pTokList, scope);
-struct pfToken *tok = *pTokList;
-while (tok->type == ';')
-    tok = tok->next;
-*pTokList = tok;
-return statement;
-}
 
 static struct pfParse *pfParseTokens(struct pfToken *tokList, struct pfScope *scope,
 	struct pfParse *program)

@@ -13,6 +13,8 @@
 #include "pfParse.h"
 #include "pfBindVars.h"
 
+boolean parseOnly = FALSE;
+
 void usage()
 /* Explain command line and exit. */
 {
@@ -20,10 +22,15 @@ errAbort(
 "This program compiles paraFlow code.  ParaFlow is a parallel programming\n"
 "language designed by Jim Kent.\n"
 "Usage:\n"
-"    paraFlow input.pf\n");
+"    paraFlow input.pf\n"
+"options:\n"
+"    -parseOnly  - Just parse, don't do type checking or anything\n"
+);
+
 }
 
 static struct optionSpec options[] = {
+   {"parseOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -171,7 +178,8 @@ struct pfCompile *pfc = pfCompileNew(fileName);
 struct pfParse *program = pfParseProgram(fileName, pfc);
 
 pfBindVars(pfc, program);
-pfTypeCheck(pfc, program);
+if (!parseOnly)
+    pfTypeCheck(pfc, program);
 
 pfParseDump(program, 0, stdout);
 
@@ -186,6 +194,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+parseOnly = optionExists("parseOnly");
 paraFlow(argv[1]);
 return 0;
 }

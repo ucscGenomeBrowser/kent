@@ -78,7 +78,12 @@ va_end(args);
 void expectingGot(char *expecting, struct pfToken *got)
 /* Complain about unexpected stuff and quit. */
 {
-char *s = cloneStringZ(got->text, got->textSize);
+char *s;
+
+if (got->type == pftEnd)
+    s = "end of file";
+else
+    s = cloneStringZ(got->text, got->textSize);
 errAt(got, "Expecting %s got %s", expecting, s);
 }
 
@@ -788,7 +793,12 @@ int line, col;
 char *fileName;
 if (tok == NULL)
     {
-    fprintf(f, "EOF token\n");
+    fprintf(f, "NULL token\n");
+    return;
+    }
+else if (tok->type == pftEnd)
+    {
+    fprintf(f, "end of file\n");
     return;
     }
 pfTokenFileLineCol(tok, &fileName, &line, &col);
