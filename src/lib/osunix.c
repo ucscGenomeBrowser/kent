@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include "common.h"
 #include "portable.h"
+#include "portimpl.h"
 
 
 /* Return how long the named file is in bytes. 
@@ -184,7 +185,11 @@ if (hostName == NULL)
     hostName = getenv("HTTP_HOST");
     if (hostName == NULL)
         {
-	hostName = "";
+	hostName = getenv("HOST");
+	if (hostName == NULL)
+	    {
+	    hostName = "";
+	    }
 	}
     strncpy(buf, hostName, sizeof(buf));
     chopSuffix(buf);
@@ -211,4 +216,23 @@ if (!gotIt)
     }
 return host;
 }
+
+char *rTempName(char *dir, char *base, char *suffix)
+/* Make a temp name that's almost certainly unique. */
+{
+char midder[256];
+int pid = getpid();
+int num = time(NULL);
+static char fileName[512];
+
+for (;;)
+   {
+   sprintf(fileName, "%s/%s_%d_%d%s", dir, base, pid, num, suffix);
+   if (!fileExists(fileName))
+       break;
+   num += 1;
+   }
+return fileName;
+}
+
 

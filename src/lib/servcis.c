@@ -8,6 +8,7 @@
 #include "portable.h"
 #include "portimpl.h"
 #include "obscure.h"
+#include "hash.h"
 
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
@@ -17,13 +18,9 @@ char *tname;
 char buf[64];
 
 sprintf(buf, "%s_%s", getHost(), base);
-#ifdef WIN32
-tname = _tempnam("../trash", buf);
-#else
-tname = tempnam("../trash", buf);
-#endif
-sprintf(tn->forCgi, "%s%s", tname, suffix);
-strcpy(tn->forHtml, tn->forCgi);
+tname = rTempName("../trash", buf, suffix);
+strcpy(tn->forCgi, tname);
+strcpy(tn->forHtml, tname);
 }
 
 static char *_cgiDir()
