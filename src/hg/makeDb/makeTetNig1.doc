@@ -2295,7 +2295,7 @@ axtChain $1 \
   
     ssh hgwdev
     cd /cluster/data/tetNig1/bed/Genoscope/ecoresHg17
-    nice ldHgGene -exon=ecore tetNig1 ecoresHg17 tetNig1vsHg17.gff
+    nice ldHgGene tetNig1 ecoresHg17 tetNig1vsHg17.gff
     # Read 36417 transcripts in 184981 lines in 1 files
     # 36417 groups 27 seqs 1 sources 2 feature types
     # 36417 gene predictions
