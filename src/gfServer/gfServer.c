@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.47 2004/10/28 19:02:38 galt Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.48 2004/11/28 18:01:28 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"trans", OPTION_BOOLEAN},
@@ -453,6 +453,17 @@ else    /* They long jumped here because of an error. */
 memTrackerEnd();
 }
 
+boolean badPcrPrimerSeq(char *s)
+/* Return TRUE if have a character we can't handle in sequence. */
+{
+unsigned char c;
+while ((c = *s++) != 0)
+    {
+    if (ntVal[c] < 0)
+        return TRUE;
+    }
+return FALSE;
+}
 
 void startServer(char *hostName, char *portName, int fileCount, 
 	char *seqFiles[])
@@ -674,6 +685,11 @@ for (;;)
 	    warn("Can't pcr on translated server");
 	    ++warnCount;
 	    }
+	else if (badPcrPrimerSeq(f) || badPcrPrimerSeq(r))
+	    {
+	    warn("Can only handle ACGT in primer sequences.");
+	    ++warnCount;
+	    }
 	else
 	    {
 	    maxDistance = atoi(s);
@@ -872,6 +888,7 @@ int main(int argc, char *argv[])
 char *command;
 
 gfCatchPipes();
+dnaUtilOpen();
 optionInit(&argc, argv, optionSpecs);
 command = argv[1];
 if (optionExists("trans"))
