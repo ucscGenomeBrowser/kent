@@ -83,6 +83,37 @@ zooUpdate:
 	hgTrackDb zooZebrafish1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb zooCombo1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
+betaZooUpdate2:
+	hgTrackDb zooBaboon2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCat2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChicken2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChimp2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCow2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooDog2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooFugu2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooHuman2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooMouse2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooPig2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooRat2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooZebrafish2 trackDb ../../lib/trackDb.sql hgRoot
+
+
+zooUpdate2:
+	hgTrackDb zooBaboon2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCat2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChicken2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChimp2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCow2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooDog2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooFugu2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooHuman2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooMouse2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooPig2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooRat2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooZebrafish2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+
+
+
 debug : $O
 	gcc -ggdb -o hgTrackDb $O $(MYLIBS) $L	
 	cp hgTrackDb $(HOME)/bin/$(MACHTYPE)/
