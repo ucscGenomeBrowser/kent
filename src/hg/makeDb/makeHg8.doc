@@ -511,8 +511,14 @@ o - Load Sanger22 genes:
       - cd sanger22
       - not sure where these files were downloaded from
       - grep -v Pseudogene Chr22*.genes.gff | hgSanger22 hg8 stdin Chr22*.cds.gff *.genes.dna *.cds.pep 0
-      - sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.exons.gff \
-        | ldHgGene hg8 sanger22pseudo stdin
+          | ldHgGene hg8 sanger22pseudo stdin
+         - Note: this creates sanger22extras, but doesn't currently create
+           a correct sanger22 table, which are replaced in the next steps
+      - sanger22-gff-doctor Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
+          | ldHgGene hg8 sanger22 stdin
+      - sanger22-gff-doctor -pseudogenes Chr22.3.1x.cds.gff Chr22.3.1x.genes.gff \
+          | ldHgGene hg8 sanger22pseudo stdin
+
       - hgPepPred hg8 generic sanger22pep *.pep
 
 o - Load Sanger20 genes:
