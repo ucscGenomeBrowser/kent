@@ -97,7 +97,8 @@ int genePredCodingBases(struct genePred *gp);
 
 void findCdsStartEndInGenome(struct psl *psl,
                                     int rnaCdsStart, int rnaCdsEnd,
-                                    int *retCdsStart, int *retCdsEnd);
+                                    int *retCdsStart, int *retCdsEnd,
+                                    boolean haveRefSeqInfo);
 /* Convert cdsStart/End from mrna to genomic coordinates. */
 
 #endif /* GENEPRED_H */
