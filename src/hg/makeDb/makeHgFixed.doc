@@ -77,6 +77,22 @@ hgMedianMicroarray hgFixed gnfMouseAtlas2AllRatio gnfMouseAtlas2AllExps gnfMouse
 # Also make a median version of the absolute measurements
 hgMedianMicroarray hgFixed gnfMouseAtlas2All gnfMouseAtlas2AllExps gnfMouseAtlas2.ra gnfMouseAtlas2Median gnfMouseAtlas2MedianExps -minExps=1
 
+#The Rat GNF Expression Atlas 2 (2004)
+# Create the main expRecord table and the expData table for
+# the absolute measurements as so:
+hgGnfMicroarray gnfRatAtlas2AllExps gnfRatAtlas2All /projects/compbio/data/microarray/geneAtlas2/rat/PivotNoApwithTissues.txt -chip=RG-U34A -ref=http://expression.gnf.org/ratlas
+# Convert these to ratios using the median of medians of non-cancerous
+# tissues or cell types (in this case, this is all the tissues) as the 
+# denominator as so:
+cd ~/src/hg/makeDb/hgRatioMicroarray
+hgRatioMicroarray gnfRatAtlas2All gnfRatAtlas2AllRatio -clump=gnfRatAtlas2Clumps.ra
+# Take the median value over multiple replicants and put in this table.
+# Use Clumps.ra file renamed as gnfRatAtlas2.ra as this contains all the 
+# tissues since there are no cancer tissues in this expression data set:
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed gnfRatAtlas2AllRatio gnfRatAtlas2AllExps gnfRatAtlas2.ra gnfRatAtlas2MedianRatio gnfRatAtlas2MedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfRatAtlas2All gnfRatAtlas2AllExps gnfRatAtlas2.ra gnfRatAtlas2Median gnfRatAtlas2MedianExps -minExps=1
 
 # C. elegans life cycle data from the Kim Lab via the Stanford Microarray Database.
 cd ~/kent/src/hg/makeDb/hgStanfordMicroarray
