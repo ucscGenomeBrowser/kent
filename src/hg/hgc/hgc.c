@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.476 2003/09/23 05:47:58 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.477 2003/09/23 19:16:15 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5629,7 +5629,19 @@ char *seqType;
 boolean dnaBased;
 char *proteinAC;
 char *pfamAC, *pfamID, *pfamDesc;
-cartWebStart(cart, "Known Gene");
+char *atlasUrl;
+char *mapID, *locusID, *mapDescription;
+char *geneID;
+char *geneSymbol;
+char cart_name[255];
+boolean hasPathway, hasMedical;
+
+sprintf(cond_str, "kgID='%s'", mrnaName);
+geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+if (geneSymbol == NULL) geneSymbol = mrnaName;
+
+sprintf(cart_name, "Known Gene: %s", geneSymbol);
+cartWebStart(cart, cart_name);
 
 dnaBased = FALSE;
 if (hTableExists("knownGeneLink"))
@@ -5645,7 +5657,6 @@ if (hTableExists("knownGeneLink"))
         proteinAC = sqlGetField(conn, database, "knownGeneLink", "proteinID", cond_str);
         }
     }
-
 // Display mRNA or DNA info and NCBI link
 if (dnaBased && refSeqName != NULL)
     {
@@ -5676,6 +5687,7 @@ else
 
 // Display protein description and links
 printf("<B>Protein:</B> ");
+
 sprintf(cond_str, "name='%s'", mrnaName);
 proteinID = sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
 if (proteinID == NULL)
@@ -5727,6 +5739,7 @@ while (row != NULL)
 sqlFreeResult(&sr);
 printf("<BR>");
 
+// show Pfam links
 if (hTableExistsDb(protDbName, "pfamXref"))
     {
     sprintf(cond_str, "swissDisplayID='%s'", proteinID);
@@ -5752,16 +5765,16 @@ if (hTableExistsDb(protDbName, "pfamXref"))
             pfamDesc= sqlGetField(conn2, protDbName, "pfamDesc", "description", cond_str);
 	    printf(" %s<BR>\n", pfamDesc);
     	    }
-    	printf("<BR>");
     	sqlFreeResult(&sr);
     	}
     }
 
 //The following is disabled until UCSC Proteome Browser relased to public
-/*
+goto skipPB;
+
 // display link to UCSC Proteome Browser
 printf("<LI><B>UCSC Proteome Browser: </B>");
-printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
+printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb10?");
 printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
 printf(" target=_blank>");
 printf(" %s</A>", proteinID);
@@ -5772,21 +5785,122 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
-{
-printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
-printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
-printf(" target=_blank>");
-printf(" %s</A>", row[0]);
-row = sqlNextRow(sr);
-if (row != NULL) printf(", ");
-}
+    {
+    printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb10?");
+    printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
+    printf(" target=_blank>");
+    printf(" %s</A>", row[0]);
+    row = sqlNextRow(sr);
+    if (row != NULL) printf(", ");
+    }
 sqlFreeResult(&sr);
-*/
 
-    printf("</UL>");
-    fflush(stdout);
+skipPB:
+printf("</UL>");
+
+// Display Gene Family Browser link
+printf("<B>UCSC Gene Family Browser:</B> ");
+printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgNear?near.search=%s\"", mrnaName);
+printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
+printf("<BR>");
+
+// Show Pathway links if any exists
+hasPathway = FALSE;
+
+//Process KEGG Pathway link data
+if (sqlTableExists(conn, "keggPathway"))
+    {
+    sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	if (!hasPathway)
+	    {
+	    printf("<BR><B>Pathways</B><UL>");
+	    hasPathway = TRUE;
+	    }
+        while (row != NULL)
+            {
+            locusID = row[1];
+	    mapID   = row[2];
+	    printf("<LI><B>KEGG:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+            row = sqlNextRow(sr);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+// Process SRI BioCyc link data
+if (sqlTableExists(conn, "bioCycPathway"))
+    {
+    sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	if (!hasPathway)
+	    {
+	    printf("<BR><B>Pathways</B><UL>");
+	    hasPathway = TRUE;
+	    }
+        while (row != NULL)
+            {
+            geneID = row[1];
+	    mapID   = row[2];
+	    printf("<LI><B>BioCyc:&nbsp</B>");
+	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
+	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
+	    printf("<A HREF = \"");
+	    printf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
+		   mapID);
+	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+            row = sqlNextRow(sr);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+if (hasPathway)
+    {
+    printf("</UL>\n");
+    }
+
+// Process medical related links here
+hasMedical = FALSE;
+
+// process links to Atlas of Genetics and Cytogenetics in Oncology and Haematology 
+if (sqlTableExists(conn, "atlasOncoGene"))
+    {
+    sprintf(cond_str, "locusSymbol=%c%s%c", '\'', geneSymbol, '\'');
+    atlasUrl = sqlGetField(conn, database, "atlasOncoGene", "url", cond_str);
+    if (atlasUrl != NULL)
+	{
+	if (!hasMedical)
+	    {
+    	    printf("<B>Medical Related Links:</B><UL>");
+	    hasMedical = TRUE;
+	    }
+
+    	printf("<LI><B>Atlas of Genetics and Cytogenetics in Oncology and Haematology:&nbsp</B>");
+
+	printf("<A HREF = \"%s%s\" TARGET=_blank>%s</A><BR></LI>\n", 
+	   "http://www.infobiogen.fr/services/chromcancer/", atlasUrl, geneSymbol);fflush(stdout);
+    	}
+    }
+
+if (hasMedical)
+    {
+    printf("</UL>\n");
+    }
 
 // Display RefSeq related info, if there is a corresponding RefSeq
+
     sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -5921,7 +6035,6 @@ sqlFreeResult(&sr);
 		}
 	    printStanSource(rl->mrnaAcc, "mrna");
 	    }
-
 	htmlHorizontalLine();
 	if (dnaBased)
 	    {
