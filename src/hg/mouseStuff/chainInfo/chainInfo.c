@@ -484,26 +484,37 @@ for (chain = chainList; chain != NULL; chain = chain->next)
                 fprintf(f," %7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %c %s %d %d %c %d %d" ,
                         iChain->score1, iChain->score2, retSubChain->tEnd-retSubChain->tStart, iChain->tIntron, iChain->qIntron, 
                         iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, 
-                        retSubChain->tStart, retSubChain->tEnd, iChain->strand , retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, 
+                        retSubChain->tStart, retSubChain->tEnd, iChain->strand , 
+                        retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, 
                         chain->id, overlapDiagonal);
             else
                 fprintf(f," %7.1f %7.1f %6d %2d %2d %5d %5d %4d %4d %s %d %d %c %s %d %d %c %d %d",
                         iChain->score1, iChain->score2, retSubChain->tEnd-retSubChain->tStart, iChain->tIntron, iChain->qIntron, 
                         iChain->tGap, iChain->qGap, iChain->tReps, iChain->qReps, chain->tName, 
-                        retSubChain->tStart, retSubChain->tEnd, iChain->strand , retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, 
+                        retSubChain->tStart, retSubChain->tEnd, iChain->strand , 
+                        retSubChain->qName, qStart(retSubChain), qEnd(retSubChain), retSubChain->qStrand, 
                         chain->id, overlapDiagonal);
             if (gp != NULL && genePredBases(gp) != 0)
                 fprintf(f," %s %s %d %d %d %2.2f %c",
-                        gp->name, gp->chrom, gp->txStart, gp->txEnd, iChain->overlap1, (float)iChain->overlap1/(float)genePredBases(gp), gp->strand[0]);
+                        gp->name, gp->chrom, gp->txStart, gp->txEnd, iChain->overlap1, 
+                        (float)iChain->overlap1/(float)genePredBases(gp), gp->strand[0]);
             else
                 fprintf(f," NO gene 0 0 0 0.0 0");
 
             if (vg != NULL && genePredBases(vg) != 0 && gp != NULL)
                 fprintf(f," %s %s %d %d %d %2.2f %c",
-                        vg->name, vg->chrom, vg->txStart, vg->txEnd, iChain->overlap2, (float)iChain->overlap2/(float)genePredBases(vg), vg->strand[0]);
+                        vg->name, vg->chrom, vg->txStart, vg->txEnd, iChain->overlap2, 
+                        (float)iChain->overlap2/(float)genePredBases(vg), vg->strand[0]);
 
             fprintf(f,"\n");
             chainFree(&retChainToFree);
+            }
+        else
+            {
+                fprintf(f," 0 0 0 0 0 0 0 0 0 %s %d %d + %s %d %d %c %d %d NO gene 0 0 0 0.0 0\n",
+                    chain->tName, chain->tStart, chain->tEnd,  
+                    chain->qName, qStart(chain), qEnd(chain), chain->qStrand, 
+                    chain->id, overlapDiagonal);
             }
         }
     }
