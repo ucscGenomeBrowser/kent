@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.11 2003/08/15 17:43:49 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.12 2003/09/30 22:46:13 markd Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -140,6 +140,7 @@ static struct optionSpec optionSpecs[] =
     {"itemTable", OPTION_STRING},
     {"itemType", OPTION_STRING},
     {"outputFile", OPTION_STRING},
+    {"selectedFile", OPTION_STRING},
     {"cdsErrorFile", OPTION_STRING},
     {NULL, 0}
 };
@@ -158,6 +159,7 @@ static char *optionDescripts[] =
     "Table containing items to map.",
     "Type of item: {psl, bed, altGraphX, genePred}"
     "File to output mappings to.",
+    "Records that are mapped are copied to this file",
     "File for gene predictions with CDS errors."
 };
 
@@ -798,7 +800,7 @@ return agNew;
 
 void mapAltGraphXFile(struct sqlConnection *conn, char *db, char *orthoDb, char *chrom,
 		      char *netTable, char *altGraphXFileName, char *altGraphXTableName,
-		      FILE *agxOut, int *foundCount, int *notFoundCount)
+		      FILE *agxOut, FILE *selectedOut, int *foundCount, int *notFoundCount)
 /* Map over altGraphX Structures from one organism to
 another. Basically create a mapping for the vertices and then reverse
 them if on '-' strand.*/
@@ -835,6 +837,8 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	(*foundCount)++;
 	altGraphXTabOut(agNew, agxOut);
 	altGraphXFree(&agNew);
+        if (selectedOut != NULL)
+            altGraphXTabOut(ag, selectedOut);
 	}
     count++;
     }	
@@ -842,24 +846,30 @@ for(ag = agList; ag != NULL; ag = ag->next)
 
 void doAltGraphXs(struct sqlConnection *conn, char *db, char *orthoDb, char *chrom,
 		  char *netTable, char *altGraphXFileName, char *altGraphXTableName,
-		  char *agxOutName, int *foundCount, int *notFoundCount)
+		  char *agxOutName, char *selectedFileName, int *foundCount, int *notFoundCount)
 /* Map over altGraphX Records. */
 {
 FILE *agxOut = NULL;
+FILE *selectedOut = NULL;
 if(agxOutName == NULL)
     errAbort("Must specify altGraphXOut if specifying altGraphXFile. Use -help for help");
 agxOut = mustOpen(agxOutName, "w");
+if (selectedFileName != NULL)
+    selectedOut = mustOpen(selectedFileName, "w");
 mapAltGraphXFile(conn, db, orthoDb, chrom, netTable, altGraphXFileName, altGraphXTableName, 
-		 agxOut, foundCount, notFoundCount);
+		 agxOut, selectedOut, foundCount, notFoundCount);
+carefulClose(&selectedOut);
 carefulClose(&agxOut);
 }
 
 void doPsls(struct sqlConnection *conn, char *db, char *orthoDb, char *chrom, 
 	    char *netTable, char *pslFileName, char *pslTableName,
-	    char *outBedName, int *foundCount, int *notFoundCount)	
+	    char *outBedName, char *selectedFileName, 
+            int *foundCount, int *notFoundCount)
 /* Map over psls. */
 {
 FILE *bedOut = NULL;
+FILE *selectedOut = NULL;
 struct bed *bed = NULL;
 struct psl *psl=NULL, *pslList = NULL;
 /* Load psls. */
@@ -872,6 +882,8 @@ else
 warn("Converting psls.");
 assert(outBedName);
 bedOut = mustOpen(outBedName, "w");
+if (selectedFileName != NULL)
+    selectedOut = mustOpen(selectedFileName, "w");
 for(psl = pslList; psl != NULL; psl = psl->next)
     {
     if(differentString(psl->tName, chrom))
@@ -882,11 +894,15 @@ for(psl = pslList; psl != NULL; psl = psl->next)
 	{
 	(*foundCount)++;
 	bedTabOutN(bed, 12, bedOut);
+        if (selectedOut != NULL)
+            pslTabOut(psl, selectedOut);
 	}
     else
 	(*notFoundCount)++;
     bedFree(&bed);
     }
+carefulClose(&selectedOut);
+carefulClose(&bedOut);
 }
 
 void fillInGene(struct chain *chain, struct genePred *gene, struct genePred **pGene)
@@ -1023,11 +1039,12 @@ return geneList;
 
 void doGenePreds(struct sqlConnection *conn, char *db, char *orthoDb, char *chrom, 
 	    char *netTable, char *geneFileName, char *geneTableName,
-	    char *outBedName, int *foundCount, int *notFoundCount)	
+	    char *outBedName, char *selectedFileName, int *foundCount, int *notFoundCount)	
 /* Map over genePreds. */
 {
 FILE *bedOut = NULL;
-FILE *cdsErrorFp;
+FILE *selectedOut = NULL;
+FILE *cdsErrorFp = NULL;
 struct genePred *gene = NULL, *geneList = NULL;
 struct bed *bed = NULL;
 
@@ -1048,6 +1065,8 @@ else
 /* Convert genePreds. */
 warn("Converting genes.");
 bedOut = mustOpen(outBedName, "w");
+if (selectedFileName != NULL)
+    selectedOut = mustOpen(selectedFileName, "w");
 for(gene = geneList; gene != NULL; gene = gene->next)
     {
     struct genePred *synGene = NULL;
@@ -1059,19 +1078,24 @@ for(gene = geneList; gene != NULL; gene = gene->next)
 	{
 	(*foundCount)++;
 	genePredTabOut(synGene, bedOut);
+        if (selectedOut != NULL)
+            genePredTabOut(gene, selectedOut);
 	}
     else
 	(*notFoundCount)++;
     genePredFree(&synGene);
     }
+carefulClose(&selectedOut);
+ carefulClose(&bedOut);
 }
 
 void doBeds(struct sqlConnection *conn, char *db, char *orthoDb, char *chrom, 
 	    char *netTable, char *bedFileName, char *bedTableName,
-	    char *outBedName, int *foundCount, int *notFoundCount)	
+	    char *outBedName, char *selectedFileName, int *foundCount, int *notFoundCount)	
 /* Map over beds. */
 {
 FILE *bedOut = NULL;
+FILE *selectedOut = NULL;
 struct bed *bed=NULL, *bedList = NULL, *orthoBed=NULL;
 /* Load beds. */
 warn("Loading beds.");
@@ -1083,6 +1107,8 @@ else
 warn("Converting beds.");
 assert(outBedName);
 bedOut = mustOpen(outBedName, "w");
+if (selectedFileName != NULL)
+    selectedOut = mustOpen(selectedFileName, "w");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     if(differentString(bed->chrom, chrom))
@@ -1093,12 +1119,16 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	{
 	(*foundCount)++;
 	bedTabOutN(orthoBed, 12, bedOut);
+        if (selectedOut != NULL)
+            bedTabOutN(bed, 12, selectedOut);
 	}
     else
 	(*notFoundCount)++;
     bedFree(&orthoBed);
     }
 bedFreeList(&bedList);
+carefulClose(&selectedOut);
+carefulClose(&bedOut);
 }
 
 void orthoMap()
@@ -1109,6 +1139,7 @@ char *itemTableName = NULL;
 char *itemFileName = NULL;
 char *itemType = NULL;
 char *outputFileName = NULL;
+char *selectedFileName = NULL;
 
 /* Parameters common to all mappings. */
 char *db = NULL;
@@ -1131,6 +1162,7 @@ itemFileName = optionVal("itemFile", NULL);
 itemTableName = optionVal("itemTable", NULL);
 itemType = optionVal("itemType", NULL);
 outputFileName = optionVal("outputFile", NULL);
+selectedFileName = optionVal("selectedFile", NULL);
 netTable = optionVal("netTable", NULL);
 db = optionVal("db", NULL);
 orthoDb = optionVal("orthoDb", NULL);
@@ -1181,22 +1213,22 @@ if(needConnection)
 if(sameWord("altGraphX", itemType))
     {
     doAltGraphXs(conn, db, orthoDb, chrom, netTable, itemFileName, itemTableName,
-		 outputFileName, &foundCount, &notFoundCount);
+		 outputFileName, selectedFileName,&foundCount, &notFoundCount);
     }
 else if(sameWord("psl", itemType))
     {
     doPsls(conn, db, orthoDb, chrom, netTable, itemFileName, itemTableName,
-	   outputFileName, &foundCount, &notFoundCount);
+	   outputFileName, selectedFileName, &foundCount, &notFoundCount);
     }
 else if(sameWord("genePred", itemType))
     {
     doGenePreds(conn, db, orthoDb, chrom, netTable, itemFileName, itemTableName,
-		outputFileName, &foundCount, &notFoundCount);
+		outputFileName, selectedFileName,&foundCount, &notFoundCount);
     }
 else if(sameWord("bed", itemType))
     {
     doBeds(conn, db, orthoDb, chrom, netTable, itemFileName, itemTableName,
-	   outputFileName, &foundCount, &notFoundCount);
+	   outputFileName, selectedFileName,&foundCount, &notFoundCount);
     }
 else
     errAbort("orthoMap::orthoMap() - Don't recognize itemType: %s", itemType);
