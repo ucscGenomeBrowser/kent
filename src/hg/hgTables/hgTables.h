@@ -191,6 +191,32 @@ struct bed *getAllFilteredBeds(struct sqlConnection *conn,
 /* getAllFilteredBeds - get list of beds in selected regions 
  * that pass filtering. */
 
+void bedSqlFieldsExceptForChrom(struct hTableInfo *hti,
+	int *retFieldCount, char **retFields);
+/* Given tableInfo figure out what fields are needed to
+ * add to a database query to have information to create
+ * a bed. The chromosome is not one of these fields - we
+ * assume that is already known since we're processing one
+ * chromosome at a time.   Return a comma separated (no last
+ * comma) list of fields that can be freeMem'd, and the count
+ * of fields (this *including* the chromosome). */
+
+struct bed *bedFromRow(
+	char *chrom, 		  /* Chromosome bed is on. */
+	char **row,  		  /* Row with other data for bed. */
+	int fieldCount,		  /* Number of fields in final bed. */
+	boolean isPsl, 		  /* True if in PSL format. */
+	boolean isGenePred,	  /* True if in GenePred format. */
+	boolean isBedWithBlocks,  /* True if BED with block list. */
+	boolean *pslKnowIfProtein,/* Have we figured out if psl is protein? */
+	boolean *pslIsProtein,    /* True if we know psl is protien. */
+	struct lm *lm);		  /* Local memory pool */
+/* Create bed from a database row when we already understand
+ * the format pretty well.  The bed is allocated inside of
+ * the local memory pool lm.  Generally use this in conjunction
+ * with the results of a SQL query constructed with the aid
+ * of the bedSqlFieldsExceptForChrom function. */
+
 struct bed *getAllIntersectedBeds(struct sqlConnection *conn, 
 	struct trackDb *track, struct lm *lm);
 /* Get list of beds in selected regions that pass intersection
