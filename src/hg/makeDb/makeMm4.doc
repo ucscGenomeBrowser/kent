@@ -506,27 +506,32 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
     cp -p liftAll.lft /iscratch/i/mm4
     mkdir -p /iscratch/i/mm4/mixedNib
     cp -p mixedNib/chr*.nib /cluster/bluearc/mm4/mixedNib
+    mkdir -p /iscratch/i/mm4/trfFa
+    cp ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
     /cluster/bin/scripts/iSync
 
 
 # AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS - 2003-07-07 - kate)
 
     ssh eieio
-    cd /cluster/store5/genbank
+    cd /cluster/data/genbank
     set db = mm4
     # set nibGlob = '/cluster/bluearc/mm4/mixedNib/chr*.nib'
     # set liftFile = /cluster/bluearc/$db/liftAll.lft
     # make sure 'ssh localhost' works before running this:
+    # Add mm4 entries for lift file and nib dir to 
+    # /cluster/data/genbank/etc/genbank.conf
     # NOTE: initially just align RefSeq, for speed
     # nice bin/gbAlignStep -verbose=1 -initial -iserver=localhost \
-        # -clusterdir=/cluster/bluearc/genbank/work \
-        # -srcDb=refseq -type=mrna $db "$nibGlob" $liftFile &
-    set nibGlob = '/iscratch/i/mm4/mixedNib/chr*.nib'
-    set liftFile = /iscratch/i/$db/liftAll.lft
+    # set nibGlob = '/cluster/bluearc/mm4/mixedNib/chr*.nib'
+    # set liftFile = /cluster/bluearc/mm4/liftAll.lft
+    #set nibGlob = '/iscratch/i/mm4/mixedNib/chr*.nib'
+    #set liftFile = /iscratch/i/$db/liftAll.lft
      nice bin/gbAlignStep -verbose=1 -initial \
-         -clusterdir=/iscratch/i/genbank/work \
-         -omit-iserver=kkr5u00 -omit-iserver=kkr6u00 \
-         -srcDb=refseq -type=mrna $db "$nibGlob" $liftFile &
+         -clusterRootDir=/cluster/bluearc/genbank \
+         -iserver=no \
+         -srcDb=refseq -type=mrna $db &
+    # -omit-iserver=kkr5u00 -omit-iserver=kkr6u00 \
 
     # To watch the progress of your cluster job, go to machine kk and
     # cd /cluster/store5/genbank/work/initial.mm4/align
@@ -541,5 +546,96 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
     cd /cluster/store5/genbank
     ./bin/i386/gbLoadRna -drop mm4
     nice ./bin/gbDbLoadStep -verbose=1 -initialLoad mm4
+    # check log file /cluster/data/genbank/var/build/logs/*mm4*
+    # check for para problems in /cluster/bluearc/genbank/work/initial.mm4/align
 
 
+# MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-07-08 kate)
+    ssh eieio
+    cd /cluster/data/mm4
+
+    # Build the .zip files
+    jkStuff/zipAll.sh >&! zipAll.log &
+    tail -f zipAll.log
+    mkdir zip
+    mv *.zip zip
+    cd zip
+    # Look at zipAll.log to make sure all file lists look reasonable.
+    # Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    # Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd ~/mm4/zip
+    ../jkStuff/cpToWeb.sh
+    cd /usr/local/apache/htdocs/goldenPath/mmFeb2003
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+    # Make the upstream sequence files.
+    cd bigZips
+    featureBits mm4 refGene:upstream:1000 -fa=upstream1000.fa
+    zip upstream1000.zip upstream1000.fa
+    rm upstream1000.fa
+    featureBits mm4 refGene:upstream:2000 -fa=upstream2000.fa
+    zip upstream2000.zip upstream2000.fa
+    rm upstream2000.fa
+    featureBits mm4 refGene:upstream:5000 -fa=upstream5000.fa
+    zip upstream5000.zip upstream5000.fa
+    rm upstream5000.fa
+
+# PRODUCING GENSCAN PREDICTIONS (IN PROGRESS 2003-07-09 - kate)
+    
+    ssh eieio
+    mkdir -p ~/mm4/bed/genscan
+    cd ~/mm4/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir -p gtf pep subopt
+       
+    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    # NOTE: running on rack 9
+    ssh kkr9u01
+    cd ~/mm4/bed/genscan
+    ls -1S /cluster/store5/mm.2003.06/mm4/?{,?}/chr*_*/chr*_*.fa.masked \
+      > genome.list
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    # Note: I changed this to 1800000 in this build because some jobs were
+    # taking so long I thought they had crashed.
+#LOOP
+/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=1800000
+#ENDLOOP
+    echo "" > dummy.list
+    gensub2 genome.list dummy.list gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    # Issue either one of the following two commands to check the
+    # status of the cluster and your jobs, until they are done.
+    parasol status
+    para check
+    # If there were out-of-memory problems (run "para problems"), then
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.
+    # chr8_24
+
+    # Convert these to chromosome level files as so:
+    ssh eieio
+    cd ~/mm4/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/chr*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/chr*.bed > \
+      /dev/null
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/mm4/bed/genscan
+    ldHgGene mm4 genscan genscan.gtf
+    hgPepPred mm4 generic genscanPep genscan.pep
+    hgLoadBed mm4 genscanSubopt genscanSubopt.bed > /dev/null
