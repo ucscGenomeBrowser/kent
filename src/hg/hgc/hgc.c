@@ -136,7 +136,7 @@
 #include "botDelay.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.613 2004/04/22 19:42:34 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.613.2.1 2004/04/26 23:25:07 galt Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2179,7 +2179,7 @@ if (wordCount > 0)
         {
 	genericAxtClick(conn, tdb, item, start, words[1]);
 	}
-    else if (sameString(type, "expRatio"))
+    else if (sameString(type, "expRatio") || sameString(type, "gnfAtlas2"))
         {
 	genericExpRatio(conn, tdb, item, start);
 	}
@@ -7462,6 +7462,9 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
+/* new baertsch thing not working yet in our branch.
+printf("<B>PseudoGene Confidence:</B> %4.3f \n",pg->posConf);
+*/
 printf("<B>PseudoGene Score:</B> %d \n",pg->score);
 printf("<B>Syntenic with mouse:</B> %d %%\n",pg->overlapDiag);
 printf("<B>PolyA tail:</B> %d \n",pg->polyA);
@@ -14304,7 +14307,7 @@ else if(sameWord(track, "affy"))
     }
 else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A") 
 	|| sameWord(track, "affyGnfU74B") || sameWord(track, "affyGnfU74C") 
-	|| sameWord(track, "affyUclaNorm") || sameWord(track, "gnfAtlas2"))
+	|| sameWord(track, "affyUclaNorm") )
     {
     gnfExpRatioDetails(tdb, item);
     }
