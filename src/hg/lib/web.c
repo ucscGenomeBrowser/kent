@@ -56,7 +56,10 @@ webPushErrHandlers();
 void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
-char *db = NULL;
+char *organism = NULL;
+char *theDb = NULL;
+
+getDbAndOrganism(theCart, &theDb, &organism);
 
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
@@ -92,11 +95,6 @@ if (withLogo)
     "" "\n"
     );
 
-if (NULL != theCart)
-    {
-    db = cartUsualString(theCart, "db", hGetDb());
-    }
-
 puts(
        "<!--HOTLINKS BAR---------------------------------------------------------->" "\n"
        "<TR><TD COLSPAN=3 HEIGHT=40 >" "\n"
@@ -106,9 +104,9 @@ puts(
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
        );
 
-if (NULL != db)
+if (NULL != organism)
     {
-    printf("&nbsp;<A HREF=\"/index.html?db=%s\" class=\"topbar\">" "\n", db);
+    printf("&nbsp;<A HREF=\"/index.html?org=%s\" class=\"topbar\">" "\n", organism);
     }
 else
     {
@@ -472,7 +470,7 @@ if (!strstrNoCase(organism, queryOrganism))
 return retDb;
 }
 
-void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism)
+void getDbAndOrganism(struct cart *cart, char **retDb, char **retGenome)
 /*
   The order of preference here is as follows:
 If we got a request that explicitly names the db, that takes
@@ -481,30 +479,25 @@ If we get a cgi request for a specific organism then we use that
 organism to choose the DB.
 
 In the cart only, we use the same order of preference.
-If someone requests an organism we try to give them the same db as
-was in their cart, unless the organism doesn't match.
+If someone requests an Genome we try to give them the same db as
+was in their cart, unless the Genome doesn't match.
 */
 {
 *retDb = cgiOptionalString(dbCgiName);
-//uglyf("\n<BR>CGI DB = %s", *retDb);
-*retOrganism = cgiOptionalString(orgCgiName);
-//uglyf("\n<BR>CGI ORG = %s", *retOrganism);
+*retGenome = cgiOptionalString(orgCgiName);
 
 if (*retDb)
     {
-    *retOrganism = hOrganism(*retDb);
-//    uglyf("\n<BR>HORGANISM = %s", *retOrganism);
+    *retGenome = hOrganism(*retDb);
     }
-else if (*retOrganism)
+else if (*retGenome)
     {
-    *retDb = getDbForOrganism(*retOrganism, cart);
-//    uglyf("\n<BR>GETDB = %s", *retDb);
+    *retDb = getDbForOrganism(*retGenome, cart);
+    *retGenome = hOrganism(*retDb);
     }
 else
     {
     *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-    *retOrganism = hOrganism(*retDb);
-//    uglyf("\n<BR>RET DB = %s", *retDb);
-//    uglyf("\n<BR>RET ORG = %s", *retOrganism);
+    *retGenome = hOrganism(*retDb);
     }
 }
