@@ -55,7 +55,7 @@ type psl xeno rn2
 
 track blastzTightHuman
 shortLabel Tight Human
-longLabel Blastz Human(Nov02), Tight Subset of Alignments
+longLabel Blastz Human(Apr03), Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
