@@ -24,6 +24,7 @@ float *valuesArray = NULL;
 size_t valueCount = 0;
 struct customTrack *ct;
 boolean isCustom = FALSE;
+int operations = wigFetchStats;	/*	default operation */
 
 if (startsWith("ct_", tdb->tableName))
     {
@@ -57,14 +58,19 @@ wds->setSpanConstraint(wds, span);
 wds->setChromConstraint(wds, chrom);
 wds->setPositionConstraint(wds, winStart, winEnd);
 
+/*	If our window is less than 1000000 points, we can do
+ *	the histogram too.
+ */
+if ((winEnd - winStart) < 1000001)
+	operations |= wigFetchAscii;
+
 /*	We want to also fetch the actual data values so we can run a
  *	histogram function on them.  You can't fetch the data in the
  *	form of the data array since the span information is then lost.
  *	We have to do the ascii data list format, and prepare that to
  *	send to the histogram function.
  */
-valuesMatched = wds->getData(wds, database, table,
-			wigFetchStats | wigFetchAscii );
+valuesMatched = wds->getData(wds, database, table, operations);
 
 statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
 
@@ -73,7 +79,8 @@ statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
  */
 wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
 
-{
+if ((winEnd - winStart) < 1000001)
+    {
     char *words[16];
     int wordCount = 0;
     char *dupe = cloneString(tdb->type);
@@ -109,8 +116,12 @@ wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
 
     freeHistoGram(&histoGramResult);
     freeMem(valuesArray);
-}
+    }
+else
+    {
+    printf("<P>(viewing windows of less than 1,000,000 bases will also"
+	" display a histogram)</P>\n");
+    }
 
 wiggleDataStreamFree(&wds);
-
 }
