@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.4 2004/02/02 19:52:42 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.5 2004/02/02 23:13:43 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -73,7 +73,7 @@ double maxYc;   /*	value from cart */
 double minY;    /*	from trackDb.ra words, the absolute minimum */
 double maxY;    /*	from trackDb.ra words, the absolute maximum */
 char * defaultViewLimits =
-    trackDbSettingOrDefault(tdb, "defaultViewLimits", "NONE");
+    trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE");
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
 boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
@@ -136,8 +136,8 @@ if (differentWord("NONE",defaultViewLimits))
     }
 
 /*	And finally, let's see if values are available in the cart */
-snprintf( o4, sizeof(o4), "%s.minY", tdb->tableName);
-snprintf( o5, sizeof(o5), "%s.maxY", tdb->tableName);
+snprintf( o4, sizeof(o4), "%s.%s", tdb->tableName, MIN_Y);
+snprintf( o5, sizeof(o5), "%s.%s", tdb->tableName, MAX_Y);
 minY_str = cartOptionalString(cart, o4);
 maxY_str = cartOptionalString(cart, o5);
 
@@ -187,7 +187,7 @@ int defaultHeightPixels = maxHeightPixels;
 int defaultHeight;      /*      truncated by limits     */
 int minHeightPixels = MIN_HEIGHT_PER;
 char * maxHeightPixelString =
-    trackDbSettingOrDefault(tdb, "maxHeightPixels", DEFAULT_HEIGHT_PER);
+    trackDbSettingOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER);
 char cartStr[64];	/*	to set cart strings	*/
 
 /*	the maxHeightPixels string can be one, two, or three words
@@ -237,7 +237,7 @@ if (differentWord(DEFAULT_HEIGHT_PER,maxHeightPixelString))
 	    break;
 	}
     }
-snprintf( option, sizeof(option), "%s.heightPer", tdb->tableName);
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, HEIGHTPER);
 heightPer = cartOptionalString(cart, option);
 /*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
 if (heightPer) defaultHeight = min( maxHeightPixels, atoi(heightPer));
@@ -266,7 +266,7 @@ char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
 char option[MAX_OPT_STRLEN]; /* .horizGrid  */
 char *horizontalGrid = NULL;
 
-snprintf( option, sizeof(option), "%s.horizGrid", tdb->tableName );
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, HORIZGRID );
 horizontalGrid = cartOptionalString(cart, option);
 
 /*	If horizontalGrid is a string, it came from the cart, otherwise
@@ -275,7 +275,7 @@ horizontalGrid = cartOptionalString(cart, option);
 if (!horizontalGrid)
     {
     char * gridDefault = 
-	trackDbSettingOrDefault(tdb, "gridDefault", Default);
+	trackDbSettingOrDefault(tdb, GRIDDEFAULT, Default);
     if (differentWord(Default,gridDefault))
 	horizontalGrid = notDefault;
     else
@@ -296,7 +296,7 @@ char * notDefault = wiggleScaleEnumToString(wiggleScaleManual);
 char option[MAX_OPT_STRLEN]; /* .autoScale  */
 char * autoScale = NULL;
 
-snprintf( option, sizeof(option), "%s.autoScale", tdb->tableName );
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, AUTOSCALE );
 autoScale = cartOptionalString(cart, option);
 
 /*	If autoScale is a string, it came from the cart, otherwise
@@ -306,7 +306,7 @@ autoScale = cartOptionalString(cart, option);
 if (!autoScale)
     {
     char * autoScaleDefault = 
-	trackDbSettingOrDefault(tdb, "autoScaleDefault", Default);
+	trackDbSettingOrDefault(tdb, AUTOSCALEDEFAULT, Default);
     if (differentWord(Default,autoScaleDefault))
 	autoScale = notDefault;
     else
@@ -327,7 +327,7 @@ char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
 char option[MAX_OPT_STRLEN]; /* .lineBar  */
 char *graphType = NULL;
 
-snprintf( option, sizeof(option), "%s.lineBar", tdb->tableName );
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, LINEBAR );
 graphType = cartOptionalString(cart, option);
 
 /*	If graphType is a string, it came from the cart, otherwise
@@ -336,7 +336,7 @@ graphType = cartOptionalString(cart, option);
 if (!graphType)
     {
     char * graphTypeDefault = 
-	trackDbSettingOrDefault(tdb, "graphTypeDefault", Default);
+	trackDbSettingOrDefault(tdb, GRAPHTYPEDEFAULT, Default);
     if (differentWord(Default,graphTypeDefault))
 	graphType = notDefault;
     else
@@ -357,7 +357,7 @@ char * Default = wiggleWindowingEnumToString(wiggleWindowingMax);
 char option[MAX_OPT_STRLEN]; /* .windowingFunction  */
 char * windowingFunction = NULL;
 
-snprintf( option, sizeof(option), "%s.windowingFunction", tdb->tableName );
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, WINDOWINGFUNCTION );
 windowingFunction = cartOptionalString(cart, option);
 
 /*	If windowingFunction is a string, it came from the cart, otherwise
@@ -367,7 +367,7 @@ windowingFunction = cartOptionalString(cart, option);
 if (!windowingFunction)
     {
     char * windowingTdb = 
-	trackDbSettingOrDefault(tdb, "windowingFunction", Default);
+	trackDbSettingOrDefault(tdb, WINDOWINGFUNCTION, Default);
     if (differentWord(Default,windowingTdb))
 	windowingFunction = windowingTdb;
     else
@@ -388,7 +388,7 @@ char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
 char option[MAX_OPT_STRLEN]; /* .smoothingWindow  */
 char * smoothingWindow = NULL;
 
-snprintf( option, sizeof(option), "%s.smoothingWindow", tdb->tableName );
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, SMOOTHINGWINDOW );
 smoothingWindow = cartOptionalString(cart, option);
 
 /*	If smoothingWindow is a string, it came from the cart, otherwise
@@ -398,7 +398,7 @@ smoothingWindow = cartOptionalString(cart, option);
 if (!smoothingWindow)
     {
     char * smoothingTdb = 
-	trackDbSettingOrDefault(tdb, "smoothingWindow", Default);
+	trackDbSettingOrDefault(tdb, SMOOTHINGWINDOW, Default);
     if (differentWord(Default,smoothingTdb))
 	smoothingWindow = smoothingTdb;
     else
@@ -411,3 +411,70 @@ if (optString)
 return wiggleSmoothingStringToEnum(smoothingWindow);
 }	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindow()	*/
 
+/*	yLineMark - off by default **********************************/
+enum wiggleYLineMarkEnum wigFetchYLineMark(struct trackDb *tdb,
+    char **optString)
+{
+char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
+char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
+char option[MAX_OPT_STRLEN]; /* .yLineMark  */
+char *yLineMark = NULL;
+
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, YLINEONOFF );
+yLineMark = cartOptionalString(cart, option);
+
+/*	If yLineMark is a string, it came from the cart, otherwise
+ *	return the default for this option.
+ */
+if (!yLineMark)
+    {
+    char * gridDefault = 
+	trackDbSettingOrDefault(tdb, YLINEONOFF, Default);
+    if (differentWord(Default,gridDefault))
+	yLineMark = notDefault;
+    else
+	yLineMark = Default;
+    }
+
+if (optString)
+    *optString = yLineMark;
+
+return wiggleYLineMarkStringToEnum(yLineMark);
+}	/*	enum wiggleYLineMarkEnum wigFetchYLineMark()	*/
+
+/*	y= marker line value
+ *	User requested value is defined in the cart
+ *	A Default value can be defined as
+ *		defaultYMarkLine declaration from trackDb
+ *****************************************************************************/
+void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark )
+{
+char option[MAX_OPT_STRLEN]; /* Option 11 - value from: .yLineMark */
+char *yLineMarkValue = NULL;  /*	string from cart	*/
+double yLineValue;   /*	value from cart or trackDb */
+double yLineTdbValue;    /*	from trackDb.ra entry defaultYMarkLine */
+char * defaultYMarkLine =
+    trackDbSettingOrDefault(tdb, YLINEMARK, "NONE");
+boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
+char cartStr[64];	/*	to set cart strings	*/
+
+/*	If nothing else, it is zero	*/
+yLineValue = 0.0;
+
+/*	Let's see if a value is available in the cart */
+snprintf( option, sizeof(option), "%s.%s", tdb->tableName, YLINEMARK);
+yLineMarkValue = cartOptionalString(cart, option);
+
+/*	if yLineMarkValue is non-Null, it is the requested value 	*/
+if (yLineMarkValue)
+    yLineValue = atof(yLineMarkValue);
+else /*    See if a default line is specified in the trackDb.ra file */
+    if (differentWord("NONE",defaultYMarkLine))
+	yLineValue = atof(defaultYMarkLine);
+
+/*	If possible to return	*/
+if (tDbYMark)
+	*tDbYMark = yLineValue;
+
+return;
+}	/*	void wigFetchYLineMarkValue()	*/
