@@ -89,6 +89,13 @@ canPack off
 
 
 
+searchTable gold
+searchMethod exact
+searchType gold
+shortCircuit 1
+termRegex Contig[0-9]+
+searchPriority 8
+
 searchTable bdgpLiftGene
 searchMethod exact
 searchType genePred
