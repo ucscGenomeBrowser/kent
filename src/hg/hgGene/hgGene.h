@@ -85,6 +85,10 @@ struct section *pathwaysSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create pathways section. */
 
+struct section *rnaStructureSection(struct sqlConnection *conn,
+	struct hash *sectionRa);
+/* Create rnaStructure section. */
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
@@ -115,6 +119,15 @@ void hPrintLinkCellStart();
 void hPrintLinkCellEnd();
 /* Print link cell end in our colors. */
 
+void hPrintLinkCell(char *label);
+/* Print label cell in our colors. */
+
+void hPrintLabelCell(char *label);
+/* Print label cell in our colors. */
+
+void hPrintWideLabelCell(char *label, int colSpan);
+/* Print label cell over multiple columns in our colors. */
+
 void hFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow);
 /* Fill out partially empty last row. */
 
@@ -130,10 +143,14 @@ boolean checkDatabases(char *databases);
 boolean checkTables(char *databases, struct sqlConnection *conn);
 /* Check all tables in space delimited string exist. */
 
+
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"
 #define hggDoGetProteinSeq "hgg_do_getProteinSeq"
+#define hggDoRnaFoldDisplay "hgg_do_rnaFoldDisplay"
+
+#define geneCgi "../cgi-bin/hgGene"
 
 /* -------- Commands ---------- */
 
@@ -143,6 +160,9 @@ void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 /* Get mRNA sequence in a simple page. */
 
+void doRnaFoldDisplay(struct sqlConnection *conn, char *geneId, char *geneName);
+/* Display mRNA sequence folding. */
+
 /* -------- CGI Data Variables ---------- */
 #define hggOrg "org"		/* Organism we're working on. */
 #define hggDb "db"		/* Database we're working on. */
@@ -151,6 +171,8 @@ void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 #define hggStart "hgg_start"	/* Start position. */
 #define hggEnd	"hgg_end"	/* End position. */
 #define hggExpRatioColors "hgg_expRatioColors" /* Expression Ratio coloring. */
+#define hggMrnaFoldRegion "hgg_mrnaFoldRegion"	/* Which region in mRNA to show. */
+#define hggMrnaFoldPs	"hgg_mrnaFoldPs"	/* PostScript file. */
 
 /* -------- Global Variables --------*/
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */

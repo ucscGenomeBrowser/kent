@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.15 2003/10/14 22:02:58 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.16 2003/10/15 08:49:04 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -210,6 +210,30 @@ void hPrintLinkCellEnd()
 hPrintf("</TD>");
 }
 
+void hPrintLinkCell(char *label)
+/* Print label cell in our colors. */
+{
+hPrintLinkCellStart();
+hPrintf(label);
+hPrintLinkCellEnd();
+}
+
+void hPrintWideLabelCell(char *label, int colSpan)
+/* Print label cell over multiple columns in our colors. */
+{
+hPrintf("<TD BGCOLOR=\"#1616D1\"");
+// hPrintf("<TD BGCOLOR=\"#D9F8E4\"");
+if (colSpan > 1)
+    hPrintf(" COLSPAN=%d", colSpan);
+hPrintf("><FONT COLOR=\"#FFFFFF\"><B>%s</B></FONT></TD>", label);
+}
+
+void hPrintLabelCell(char *label)
+/* Print label cell in our colors. */
+{
+hPrintWideLabelCell(label, 1);
+}
+
 void hFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
 /* Fill out partially empty last row. */
 {
@@ -361,7 +385,7 @@ addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(proteinStructureSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(rnaStructureSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(altSpliceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
@@ -375,6 +399,7 @@ slSort(&sectionList, sectionCmpPriority);
 return sectionList;
 }
 
+
 void printIndex(struct section *sectionList)
 /* Print index to section. */
 {
@@ -385,7 +410,7 @@ struct section *section;
 hPrintf("<BR>\n");
 hPrintf("<BR>\n");
 hPrintLinkTableStart();
-hPrintf("<TD BGCOLOR=\"#1616D1\"><FONT COLOR=\"#FFFFFF\"><B>Page Index</B></FONT></TD>");
+hPrintLabelCell("Page Index");
 itemPos += 1;
 for (section=sectionList; section != NULL; section = section->next)
     {
@@ -525,6 +550,8 @@ if (cartVarExists(cart, hggDoGetMrnaSeq))
     doGetMrnaSeq(conn, curGeneId, curGeneName);
 else if (cartVarExists(cart, hggDoGetProteinSeq))
     doGetProteinSeq(conn, curGeneId, curGeneName);
+else if (cartVarExists(cart, hggDoRnaFoldDisplay))
+    doRnaFoldDisplay(conn, curGeneId, curGeneName);
 else
     {
     /* Default case - start fancy web page. */
