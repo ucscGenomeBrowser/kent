@@ -38,7 +38,7 @@ color 30,130,210
 type genePred
 
 track slamMouse
-shortLabel Slam Mouse
+shortLabel SLAM Mouse
 longLabel SLAM gene predictions using human/mouse homology
 group genes
 priority 45.5
@@ -48,7 +48,7 @@ altColor 175,150,128
 type genePred 
 
 track slamRat
-shortLabel Slam Rat
+shortLabel SLAM Rat
 longLabel SLAM gene predictions using human/rat homology
 group genes
 priority 45.6
@@ -78,7 +78,7 @@ visibility hide
 type sample 0 8
 
 track slamNonCodingMouse
-shortLabel Slam Non Coding Mouse
+shortLabel SLAM Non Coding Mouse
 longLabel SLAM predictions of human/mouse conserved non-coding regions
 group compGeno
 priority 120
@@ -89,7 +89,7 @@ spectrum on
 type bed 5 
 
 track slamNonCodingRat
-shortLabel Slam Non Coding Rat
+shortLabel SLAM Non Coding Rat
 longLabel SLAM predictions of human/rat conserved non-coding regions
 group compGeno
 priority 121

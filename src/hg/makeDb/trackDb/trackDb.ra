@@ -52,7 +52,7 @@ type bed 6 +
 
 track recombRate
 shortLabel Recomb Rate
-longLabel Recombination Rate from deCODE, Marshfield, or Genethon maps (deCODE default)
+longLabel Recombination Rate from deCODE, Marshfield, or Genethon Maps (deCODE default)
 group map
 priority 8
 visibility hide
@@ -94,7 +94,7 @@ type psl .
 
 track missingHg
 shortLabel Missing Human 
-longLabel unplaced human reqseq genes blatted against mouse translated
+longLabel Unplaced Human RefSeq Genes Blatted against Mouse Translated
 group map
 priority 13
 visibility hide
@@ -168,7 +168,7 @@ type bed 6 +
 
 track isochores
 shortLabel Isochores
-longLabel GC-rich (dark) and AT-rich (light) Isochores
+longLabel GC-Rich (dark) and AT-Rich (light) Isochores
 group map
 priority 22
 visibility hide
@@ -212,7 +212,7 @@ type sample
 
 track genomicSuperDups
 shortLabel Segmental Dups
-longLabel Duplications of >1000 Bases of non-repeatMasked Sequence
+longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group map
 priority 27
 visibility hide
@@ -239,7 +239,7 @@ type bed 6 +
 
 track celeraDupPositive
 shortLabel WSSD Duplication
-longLabel Sequence identified as duplicate by high depth Celera Reads 
+longLabel Sequence Identified as Duplicate by High Depth Celera Reads 
 group map
 priority 30
 visibility hide
@@ -265,7 +265,7 @@ type bed 6 .
 
 track genieKnown
 shortLabel Known Genes
-longLabel Known Genes (from full length mRNAs)
+longLabel Known Genes (from Full-Length mRNAs)
 group genes
 priority 33
 visibility pack
@@ -329,7 +329,7 @@ url http://www.ensembl.org/perl/transview?transcript=$$
 
 track acembly
 shortLabel Acembly Genes
-longLabel Acembly Gene Predictions With Alt-splicing
+longLabel Acembly Gene Predictions With Alt-Splicing
 group genes
 priority 41
 visibility dense
@@ -374,7 +374,7 @@ type genePred twinscanPep
 
 track pseudoUcsc
 shortLabel Ucsc pseudo
-longLabel Processed Pseudogene Locus based on blastz chains Ucsc
+longLabel Processed Pseudogene Locus based on BLASTZ Chains UCSC
 group genes
 priority 45
 visibility hide
@@ -385,7 +385,7 @@ type bed 5 .
 
 track ucscFromMouse
 shortLabel ucsc mm3
-longLabel UCSC gene predictions from known Mouse genes mapped to Human
+longLabel UCSC Gene Predictions from Known Mouse Genes Mapped to Human
 group genes
 priority 45
 visibility hide
@@ -459,7 +459,7 @@ type bed 6 +
 
 track superfamily
 shortLabel Superfamily
-longLabel Superfamily/SCOP: Proteins having homologs with known structure/function
+longLabel Superfamily/SCOP: Proteins Having Homologs with Known Structure/Function
 group genes
 priority 53
 visibility dense
@@ -477,8 +477,8 @@ spectrum on
 type psl .
 
 track mrnaBlastz
-shortLabel $Organism mRNAs Blastz
-longLabel $Organism mRNAs from Genbank aligned with Blastz
+shortLabel $Organism mRNAs BLASTZ
+longLabel $Organism mRNAs from Genbank Aligned with BLASTZ
 group rna
 priority 54
 visibility hide
@@ -551,7 +551,7 @@ url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
 shortLabel mRNA/EST/pseud
-longLabel Blastz Alignments of GenBank mRNA including Pseudogenes and all ESTs
+longLabel BLASTZ Alignments of GenBank mRNA Including Pseudogenes and All ESTs
 group rna
 priority 66
 visibility hide
@@ -560,7 +560,7 @@ type bed 3
 
 track anyMrnaCov
 shortLabel mRNA/pseud
-longLabel Blastz Alignments of GenBank mRNA including Pseudogenes
+longLabel BLASTZ Alignments of GenBank mRNA Including Pseudogenes
 group rna
 priority 67
 visibility hide
@@ -721,7 +721,7 @@ type bed 6
 
 track psuReg
 shortLabel Known Regulatory 
-longLabel Functional Regulatory Elements compiled by Penn State 
+longLabel Functional Regulatory Elements Compiled by Penn State 
 group regulation
 priority 82
 visibility hide
@@ -747,7 +747,7 @@ type bed 15 +
 
 track affy
 shortLabel GNF
-longLabel GNF Gene Expression Atlas using Affymetrix GeneChips
+longLabel GNF Gene Expression Atlas Using Affymetrix GeneChips
 group regulation
 priority 85
 visibility dense
@@ -755,7 +755,7 @@ type bed 15 +
 
 track affyRatio
 shortLabel GNF Ratio
-longLabel GNF Gene Expression Atlas Ratios using Affymetrix GeneChips
+longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
 group regulation
 priority 86
 visibility hide
@@ -802,8 +802,8 @@ type bed 5 .
 url http://www.genoscope.cns.fr/proxy/cgi-bin/exofish.cgi?Id=$$&Mode=Id
 
 track blatFish
-shortLabel Tetraodon Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+shortLabel Tetraodon BLAT
+longLabel Tetraodon nigriviridis Translated BLAT Alignments
 group compGeno
 priority 112
 visibility dense
@@ -813,8 +813,8 @@ spectrum on
 type psl xeno
 
 track blatFugu
-shortLabel Fugu Blat
-longLabel Takifugu rubripes Translated Blat Alignments
+shortLabel Fugu BLAT
+longLabel Takifugu rubripes Translated BLAT Alignments
 group compGeno
 priority 113
 visibility dense
@@ -824,8 +824,8 @@ spectrum on
 type psl xeno
 
 track blatSquirt
-shortLabel Squirt Blat
-longLabel Ciona intestinalis Translated Blat Alignments
+shortLabel Squirt BLAT
+longLabel Ciona intestinalis Translated BLAT Alignments
 group compGeno
 priority 110
 visibility hide
@@ -835,8 +835,8 @@ spectrum on
 type psl xeno 
 
 track blatTetra
-shortLabel Tetra Blat
-longLabel Tetraodon nigriviridis Translated Blat Alignments
+shortLabel Tetra BLAT
+longLabel Tetraodon nigriviridis Translated BLAT Alignments
 group compGeno
 priority 114
 visibility dense
@@ -855,8 +855,8 @@ color 50,100,200
 altColor 85,170,225
 
 track blatChicken
-shortLabel Chicken Blat
-longLabel Chicken Translated Blat Alignments
+shortLabel Chicken BLAT
+longLabel Chicken Translated BLAT Alignments
 group compGeno
 priority 116
 visibility hide
@@ -887,7 +887,7 @@ type sample 0 8
 
 track syntenyHuman
 shortLabel Human Synteny
-longLabel Human/Mouse Synteny using blastz single coverage (100k window)
+longLabel Human/Mouse Synteny Using BLASTZ Single Coverage (100k window)
 group compGeno
 priority 127
 visibility hide
@@ -897,7 +897,7 @@ type bed 4 +
 
 track ratChain
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat/$Organism Alignments
+longLabel Chained BLASTZ Rat/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -935,7 +935,7 @@ altColor 0,0,0
 type bed 4+
 
 shortLabel Rat Synteny
-longLabel Human/Rat Synteny using blastz single coverage with 100,000 base window
+longLabel Human/Rat Synteny Using BLASTZ Single Coverage (100,000 base window)
 group compGeno
 priority 138
 visibility hide
@@ -955,7 +955,7 @@ type bed 6+
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny using blastz single coverage (100k window)
+longLabel $Organism/Rat Synteny Using BLASTZ Single Coverage (100k window)
 group compGeno
 priority 140
 visibility hide
@@ -964,8 +964,8 @@ altColor 255,240,200
 type bed 4 +
 
 track blatChimpWashu
-shortLabel Chimp Blat - WashU
-longLabel Chimp Blat Alignments - WashU
+shortLabel Chimp BLAT - WashU
+longLabel Chimp BLAT Alignments - WashU
 group compGeno
 priority 141
 visibility hide
@@ -1012,7 +1012,7 @@ type bed 4 .
 
 track perlegen
 shortLabel Haplotype Blocks
-longLabel Perlegen Common High-Resolution Haplotype Blocks.  
+longLabel Perlegen Common High-Resolution Haplotype Blocks
 group varRep
 priority 145.01
 visibility hide
@@ -1025,7 +1025,7 @@ url http://www.perlegen.com/haplotype/blk/$$.html
 
 track haplotype
 shortLabel Haplotype Blocks
-longLabel Common Haplotype Blocks.  
+longLabel Common Haplotype Blocks
 group varRep
 priority 145.02
 visibility hide
@@ -1047,7 +1047,7 @@ canPack off
 
 track reconRepeat
 shortLabel Recon Repeats
-longLabel Repeats determined with Recon
+longLabel Repeats Determined with Recon
 group varRep
 priority 147.5
 visibility hide
@@ -1055,7 +1055,7 @@ type bed 4 +
 
 track blastzSelfUnmasked
 shortLabel Self Unmasked
-longLabel blastz self join without repeats masked (tandem repeats masked)
+longLabel BLASTZ Self Join without Repeats Masked (tandem repeats masked)
 group x
 priority 159
 visibility hide
@@ -1105,7 +1105,7 @@ type genePred
 
 track gpcrUcsc
 shortLabel Gpcr Ucsc
-longLabel Gpcr predictions based on synteny
+longLabel Gpcr Predictions Based on Synteny
 group x
 priority 150
 visibility hide
@@ -1121,7 +1121,7 @@ type genePred
 
 track borkPseudo
 shortLabel Bork Pseudo
-longLabel bork pseudogene predictions 
+longLabel Bork Pseudogene Predictions 
 group x
 priority 150
 visibility hide
@@ -1130,7 +1130,7 @@ type genePred
 track loweProbes
 track loweProbes
 shortLabel Lowe's Probes
-longLabel Candidate oligos for Stanford microarray
+longLabel Candidate Oligos for Stanford Microarray
 group x
 priority 151
 visibility hide
@@ -1170,7 +1170,7 @@ type bed 4 .
 
 track mouseOrtho
 shortLabel Mouse Ortholog
-longLabel Mouse Orthology using Fgenesh++ Gene Predictions (top 4 reciprocal best)
+longLabel Mouse Orthology Using Fgenesh++ Gene Predictions (top 4 reciprocal best)
 group x
 priority 156
 visibility hide
@@ -1181,7 +1181,7 @@ type bed 5+
 
 track mouseOrtho
 shortLabel Mouse Ortholog
-longLabel Mouse Orthology using Fgenesh++ Gene Predictions
+longLabel Mouse Orthology Using Fgenesh++ Gene Predictions
 group x
 priority 157
 visibility hide
@@ -1191,7 +1191,7 @@ type bed 5+
 
 track mouseOrthoSeed
 shortLabel Tight Ortholog
-longLabel Tight Mouse Orthology using Fgenesh++ Gene Predictions (only reciprocal best)
+longLabel Tight Mouse Orthology Using Fgenesh++ Gene Predictions (only reciprocal best)
 group x
 priority 158
 visibility hide
@@ -1247,7 +1247,7 @@ type bed 12
 
 track twinscanMgc
 shortLabel TwinScan MGC
-longLabel TwinScan MGC candidates
+longLabel TwinScan MGC Candidates
 group x
 priority 159
 visibility hide
