@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.540 2003/12/29 06:08:11 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.541 2003/12/29 06:13:23 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10155,7 +10155,7 @@ if (snp!=NULL)
     printf("PD24:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD24);
     printf("\n</font>\n");
     }
-else errAbort("<BR>%s<BR>\n",query);
+/* else errAbort("<BR>%s<BR>\n",query); */
 affyGenoDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10235,7 +10235,7 @@ if (snp!=NULL)
 
     doSnpLocusLink(tdb, name);
     }
-else errAbort("<BR>Error in Query:\n%s<BR>\n",query);
+/* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */
 affy10KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
