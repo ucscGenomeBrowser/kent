@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.11 2004/03/25 00:46:39 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.12 2004/04/12 23:43:29 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -43,9 +43,12 @@ char *genomeList[] = {"Human", 0};
 char *origAssemblyList[] = {"April 2003"};
 char *newAssemblyList[] = {"July 2003"};
 
-void webMain()
+void webMain(char *db, char *organism)
 /* set up page for entering data */
 {
+struct dbDb *dbList;
+char *previousDb;
+
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
@@ -70,15 +73,25 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 
 cgiSimpleTableFieldStart();
-cgiMakeDropList("genome", genomeList, 1, "Human");
+//cgiMakeDropList("genome", genomeList, 1, "Human");
+// NOTE: get default DB from cart, else use default Human
+dbList = hGetLiftOverFromDatabases();
+printSomeGenomeListHtml(db, dbList, "");
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
-cgiMakeDropList("origAssembly", origAssemblyList, 1, "April 2003");
+//cgiMakeDropList("origAssembly", origAssemblyList, 1, "April 2003");
+previousDb = hPreviousAssembly(db);
+printSomeAssemblyListHtml(previousDb, dbList, "");
+//printAssemblyListHtml("hg15", "");
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
-cgiMakeDropList("newAssembly", newAssemblyList, 1, "July 2003");
+//cgiMakeDropList("newAssembly", newAssemblyList, 1, "July 2003");
+if (dbList)
+    dbDbFreeList(&dbList);
+dbList = hGetLiftOverToDatabases(previousDb);
+printSomeAssemblyListHtml(db, dbList, "");
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -176,7 +189,9 @@ if (cartOptionalString(cart, "SubmitFile"))
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
 cartWebStart(cart, "Lift Genome Annotations");
-webMain();
+
+getDbAndGenome(cart, &db, &organism);
+webMain(db, organism);
 
 if (userData == NULL || userData[0] == '\0')
     {
