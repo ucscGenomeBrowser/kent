@@ -15,64 +15,49 @@ void usage()
 {
 errAbort("netC - net client.\n"
          "usage:\n"
-	 "    netC messages(s)\n"
+	 "    netC host count messages\n"
 	 "options:\n"
-	 "    -ip=NNN.NNN.NNN.NNN IP address to send to\n"
 	 "    -file - parameters are files to send, not text to send\n");
 
 }
 
-char *ipAddress = "10.1.255.255";
+void fillInAddress(char *hostName, int port, struct sockaddr_in *address)
+/* Fill in address. Return FALSE if can't.  */
+{
+struct hostent *hostent;
+ZeroVar(address);
+address->sin_family = AF_INET;
+address->sin_port = htons(port);
+hostent = gethostbyname(hostName);
+if (hostent == NULL)
+    errnoAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
+memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
+}
 
-void netC(boolean isFile, int argc, char *argv[])
+void netC(char *host, int count, char *message, boolean isFile)
 /* netC - a net client. */
 {
 int sd;
 struct sockaddr_in sai;
-int fromlen;
-int childCount = 0;
-struct hostent *host;
-char *alias;
-UBYTE *addr;
-int i;
+int i, size;
 int port = 0x46DC;
-char *command = argv[0];
-int optVal = 1;
-int optLen = sizeof(optVal);
+char *s = message;
+char buf[1024];
 
-/* Set up broadcast connection. */
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-sai.sin_addr.s_addr = inet_addr(ipAddress);
+fillInAddress(host, port, &sai);
 sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, (char *)&optVal, optLen) != 0)
-    {
-    close(sd);
-    errAbort("Can't set broadcast option on socket\n");
-    }
-{
-int b=0;
-int bSz = sizeof(b);
-if (getsockopt(sd, IPPROTO_IP, IP_TTL, (char *)&b, &bSz) != 0)
-    {
-    close(sd);
-    errAbort("Can't get TTL on socket\n");
-    }
-uglyf("ttl = %d\n", b);
-}
+if (isFile)
+    readInGulp(s, &s, &size);
 
-for (i=0; i<argc; ++i)
+for (i=0; i<count; ++i)
     {
-    char *s = argv[i];
-    size_t size = strlen(s);
-    if (isFile)
-        readInGulp(s, &s, &size);
-    if (sendto(sd, s, size+1, 0, (struct sockaddr *)&sai, sizeof(sai)) < 0)
+    size_t size;
+    size = snprintf(buf, sizeof(buf), "%s %d", s, i);
+    if (sendto(sd, buf, size+1, 0, (struct sockaddr *)&sai, sizeof(sai)) < 0)
 	errnoAbort("Couldn't sendto size %d", size+1);
-    if (isFile)
-        freez(&s);
     }
-
+if (isFile)
+    freez(&s);
 close(sd);
 }
 
@@ -81,10 +66,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc < 2)
+if (argc < 4)
     usage();
-ipAddress = optionVal("ip", ipAddress);
-netC(optionExists("file"), argc-1, argv+1);
+netC(argv[1], atoi(argv[2]), argv[3], optionExists("file"));
 return 0;
 }
 

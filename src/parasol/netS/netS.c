@@ -31,32 +31,19 @@ int readSize;
 struct hostent *hostent;
 int port = 0x46DC;
 char *command;
+int bufSize = 1024*1024;
 
 /* Set up socket and self to listen to it. */
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
-sai.sin_addr.s_addr = inet_addr(ipAddress);
+sai.sin_addr.s_addr = 0;
 socketHandle = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+setsockopt(socketHandle, SOL_SOCKET, SO_RCVBUF, &bufSize, sizeof(bufSize));
 if (bind(socketHandle, (struct sockaddr *)&sai, sizeof(sai)) == -1)
     errAbort("Couldn't bind socket");
-
-#ifdef NEVER
-/* Set timeouts just to experiment. */
-    {
-    struct timeval tv;
-    int tvSize = sizeof(tv);
-    int bufSize;
-    int bufSizeSize = sizeof(bufSize);
-    tv.tv_sec = 0;
-    tv.tv_usec = 100000;
-    setsockopt(socketHandle, SOL_SOCKET, SO_RCVTIMEO, &tv, tvSize);
-    getsockopt(socketHandle, SOL_SOCKET, SO_RCVTIMEO, &tv, &tvSize);
-    printf("Read timeout = %lu.%lu\n",  tv.tv_sec, tv.tv_usec);
-    getsockopt(socketHandle, SOL_SOCKET, SO_RCVBUF, &bufSize, &bufSizeSize);
-    printf("Read buf size %d\n",  bufSize);
-    }
-#endif
-
+printf("Hit enter to continue\n");
+gets(buf);
+printf("Ok, recieving\n");
 for (;;)
     {
     int saiSize = sizeof(sai);
