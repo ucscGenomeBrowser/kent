@@ -1,0 +1,26 @@
+track	stsMarker
+visibility	dense
+
+track	gap
+visibility	dense
+
+track	refGene
+visibility	pack
+
+track	geneid
+visibility	pack
+
+track	genscan
+visibility	pack
+
+track	mrna
+visibility	pack
+
+track	intronEst
+visibility	dense
+
+track	xenoMrna
+visibility	dense
+
+track           rmsk
+visibility      full
