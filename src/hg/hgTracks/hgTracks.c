@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.885 2005/02/03 03:58:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.886 2005/02/03 18:57:34 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8429,11 +8429,57 @@ bedMethods(tg);
 tg->drawItemAt = triangleDrawAt;
 }
 
+boolean genePredClassFilter(struct track *tg, void *item)
+/* Returns true if an item should be added to the filter. */
+{
+struct linkedFeatures *lf = item;
+char *classString;
+char *table = tg->mapName;
+char *classType = NULL;
+enum acemblyOptEnum ct;
+struct sqlConnection *conn = NULL;
+char query[256];
+char **row = NULL;
+struct sqlResult *sr;
+char *classTable = NULL;
+classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
+/* default is true then for no filtering */
+boolean sameClass = TRUE;
+
+AllocVar(classString);
+if (classTable != NULL && hTableExists(classTable))
+    {
+    classString = addSuffix(table, ".type");
+    if (sameString(table, "acembly"))
+        {
+        classType = cartUsualString(cart, classString, acemblyEnumToString(0));
+        ct = acemblyStringToEnum(classType);
+        if (ct == acemblyAll)
+            return sameClass;
+        }
+    conn = hAllocConn();
+    sprintf(query, "select class from %s where name = '%s'", classTable,
+lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        /* check if this is the same as the class required */
+        if (!sameString(row[0], classType))
+            sameClass = FALSE;
+        }
+    sqlFreeResult(&sr);
+    }
+freeMem(classString);
+hFreeConn(&conn);
+return sameClass;
+}
 
 void loadGenePred(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
+/* filter items on selected criteria if filter is available */
+filterItems(tg, genePredClassFilter, "include");
 }
 
 Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
@@ -8449,7 +8495,7 @@ else
 
 Color genePredItemClassColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a genePred based on looking up the gene class */
-/* in an itemClass table */
+/* in an itemClass table. */
 {
 char *geneClasses = trackDbSetting(tg->tdb, GENEPRED_CLASS_VAR);
 char *gClassesClone = NULL;
