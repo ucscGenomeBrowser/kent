@@ -20,3 +20,11 @@ boolean bitReadOne(Bits *b, int bitIx);
 int bitCountRange(Bits *b, int startIx, int bitCount);
 /* Count number of bits set in range. */
 
+void bitClear(Bits *b, int bitCount);
+/* Clear many bits. */
+
+void bitAnd(Bits *a, Bits *b, int bitCount);
+/* And two bitmaps.  Put result in a. */
+
+void bitOr(Bits *a, Bits *b, int bitCount);
+/* Or two bitmaps.  Put result in a. */
