@@ -15,7 +15,7 @@ visibility pack
 #color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle multiz8way
+wiggle multiz8wayCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
