@@ -651,6 +651,7 @@ if (col->isSizeLink == isSizeLink)
 		    col->name, colIx);
 		break;
 	    case t_float:
+	    case t_double:
 		fprintf(f, "ret->%s = atof(row[%d]);\n",
 		    col->name, colIx);
 		break;
