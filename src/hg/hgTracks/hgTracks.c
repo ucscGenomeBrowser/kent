@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.939 2005/04/02 19:43:57 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.940 2005/04/06 19:11:25 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2643,75 +2643,24 @@ return lf->name;
 }
 
 void lookupKnownGeneNames(struct linkedFeatures *lfList)
-/* This converts the known gene name to a gene name where possible via refLink. */
+/* This converts the known gene ID to a gene symbol */
 {
 struct linkedFeatures *lf;
-char query[256];
 struct sqlConnection *conn = hAllocConn();
-char *seqType;
-char *refSeqName;
-char *proteinID;
-char *hugoID;
+char *geneSymbol;
 char cond_str[256];
 
-if (hTableExists("refLink") && hTableExists("knownGeneLink"))
+if (hTableExists("kgXref"))
     {
-    struct sqlResult *sr;
-    char **row;
-
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-        sprintf(cond_str, "name='%s' and seqType='g'", lf->name);
-        seqType = sqlGetField(conn, database, "knownGeneLink", "seqType", cond_str);
-
-        if (seqType != NULL)
-            {
-	    // special processing for RefSeq DNA based genes
-    	    sprintf(cond_str, "mrnaAcc = '%s'", lf->name);
-    	    refSeqName = sqlGetField(conn, database, "refLink", "name", cond_str);
-	    if (refSeqName != NULL)
-		{
-		lf->extra = cloneString(refSeqName);
-		}
-	    }
-	else if (protDbName != NULL)
-	    {
-	    sprintf(cond_str, "mrnaID='%s'", lf->name);
-	    proteinID = sqlGetField(conn, database, "spMrna", "spID", cond_str);
- 
-            sprintf(cond_str, "displayID = '%s'", proteinID);
-	    hugoID = sqlGetField(conn, protDbName, "spXref3", "hugoSymbol", cond_str);
-	    if (!((hugoID == NULL) || (*hugoID == '\0')) )
-		{
-		lf->extra = cloneString(hugoID);
-		}
-	    else
-	    	{
-	    	sprintf(query,"select refseq from %s.mrnaRefseq where mrna = '%s';",  
-		        database, lf->name);
-
-	    	sr = sqlGetResult(conn, query);
-	    	row = sqlNextRow(sr);
-	    	if (row != NULL)
-    	    	    {
-    	    	    sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
-    	    	    sqlFreeResult(&sr);
-    	    	    sr = sqlGetResult(conn, query); 
-    	    	    if ((row = sqlNextRow(sr)) != NULL)
-        	    	{
-                        if (strlen(row[0]) > 0)
-                            lf->extra = cloneString(row[0]);
-		    	}
-            	    sqlFreeResult(&sr);
-	    	    }
-	    	else
-            	    {
-	    	    sqlFreeResult(&sr);
-	    	    }
-	    	}
-	    }
+	/* default is to use kgID */
+	lf->extra = lf->name;
+        sprintf(cond_str, "kgID='%s'", lf->name);
+        geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+	if (geneSymbol != NULL) lf->extra = geneSymbol;
 	}
-    } 
+    }
 hFreeConn(&conn);
 }
 
