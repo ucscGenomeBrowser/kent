@@ -76,8 +76,8 @@ int version = 6;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
-int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
-int assumeDeadPeriod = 60;      /* If haven't heard from job in this long assume
+int machineCheckPeriod = 20; /* Minutes between checking dead machines. */
+int assumeDeadPeriod = 60;   /* If haven't heard from job in this long assume
                                  * machine running it is dead. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char hubSubnet[4] = {255,255,255,255};   /* Subnet to check. */
@@ -635,7 +635,7 @@ struct machine *machine;
 char message[512];
 int i;
 
-sprintf(message, "%s %s", checkMessage, hubHost);
+sprintf(message, "%s", checkMessage);
 for (i=0; i<spokesToUse; ++i)
     {
     /* If we have some free spokes and some busy machines, and
@@ -684,7 +684,7 @@ for (i=0; i<spokesToUse; ++i)
 	else
 	    {
 	    char message[512];
-	    sprintf(message, "check %s %d", hubHost, job->id);
+	    sprintf(message, "check %d", job->id);
 	    sendViaSpoke(machine, message);
 	    }
 	}

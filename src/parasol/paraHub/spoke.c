@@ -55,7 +55,6 @@ if (ru != NULL)
 	char *job = NULL;
 	if (sameString(runCmd, command))
 	    {
-	    char *hub = nextWord(&message);
 	    job = nextWord(&message);
 	    if (job != 0)
 		notifyNodeDown(machine, job);
@@ -172,7 +171,6 @@ fillInErrFile(err, job->id, machine->tempDir);
 freez(&job->err);
 job->err = cloneString(err);
 pmPrintf(pm, "%s", runCmd);
-pmPrintf(pm, " %s", hubHost);
 pmPrintf(pm, " %d", job->id);
 pmPrintf(pm, " %s", reserved);
 pmPrintf(pm, " %s", job->batch->user->name);
