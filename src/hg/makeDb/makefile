@@ -13,6 +13,7 @@ USE_DIRS = $(DIRS)
 
 DIRS = \
 	hgAar \
+	hgAddLiftOverChain \
 	hgAvidShortBed \
 	hgClonePos \
 	hgCountAlign \
