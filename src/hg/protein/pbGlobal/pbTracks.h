@@ -11,6 +11,8 @@
 
 #define MAX_PB_PIXWIDTH 30000
 
+#define MAX_PB_ORG 50		/* max number of oganisms that support PB */
+
 #define GLOBAL_PB_DB "pbGlobal"
 
 #ifndef VGFX_H
@@ -112,6 +114,8 @@ extern Color abnormalColor;
 extern Color normalColor;
 extern char hgsidStr[];
 extern boolean proteinInSupportedGenome;
+extern int protCntInSupportedGenomeDb; /* The protein count in supported genome DBs */
+extern int protCntInSwissByGene;       /* The protein count from gene search in Swiss-Prot */
 
 void hWrites(char *string);
 void hButton(char *name, char *label);
@@ -138,6 +142,7 @@ void domainsPrint(struct sqlConnection *conn, char *swissProtAcc);
 void aaPropertyInit(int *hasResFreq);
 void printFASTA(char *proteinID, char *aa);
 int  searchProteinsInSupportedGenomes(char *proteinID, char **gDatabase);
+int  searchProteinsInSwissProtByGene(char *queryGeneID);
 void presentProteinSelections(char *proteinID);
 char *hDbOrganism(char *database);
 
