@@ -1087,6 +1087,15 @@ identifier ensemblTranscriptId3 external=Ensembl dependency
     $gbd.superfamily.name
     $gbd.sfDescription.name chopAfter=.
 
+
+# H-Invitational Database Identifiers
+
+identifier hinvTranscriptId external=H-INV dependency
+"H-Invitational Transcript ID"
+    $hg.HInv.geneId
+    $hg.knownToHInv.value
+    $hg.HInvGeneMrna.qName
+
 # Protein Family Identifiers
 
 identifier pfamId external=Pfam fuzzy
@@ -1274,6 +1283,7 @@ type pepPred
 type psl
     $hg.affyU95
     $hg.affyU133
+    $hg.HInvGeneMrna
     $mm.affyU74
     $gbd.all_bacends
     $gbd.all_fosends
@@ -1382,6 +1392,7 @@ type knownTo
     $gbd.knownToRefSeq
     $hg.knownToU95
     $hg.knownToU133
+    $hg.knownToHInv
     $mm.knownToU74
     $ce.sangerToKim
     $ce.sangerToPfam
