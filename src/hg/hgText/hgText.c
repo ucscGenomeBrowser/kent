@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.89 2003/07/25 16:34:37 donnak Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.90 2003/08/12 19:24:54 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -414,13 +414,13 @@ puts(
 "</FONT></TD></TR></TABLE></CENTER><P>\n"
 );
 
-puts("<P>This tool allows you to download portions of the Genome Browser 
-	database in several output formats.
-	Enter a genome position (or enter <B>genome</B> to 
-        search all chromosomes), then press the Submit button.\n");
+puts("<P>This tool allows you to download portions of the Genome Browser \n"
+"\tdatabase in several output formats. \n"
+"\tEnter a genome position (or enter <B>genome</B> to \n"
+"\tsearch all chromosomes), then press the Submit button.\n");
 
-printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
-        locate a particular sequence in the genome.\n",
+printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to\n"
+"\tlocate a particular sequence in the genome.\n",
        database, cartSessionId(cart));
 puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "User Guide</A> for more information.<P>\n");
@@ -4095,7 +4095,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
 	    if (! sameString(el->name, row[0]))
 		printf("Hash-collision warning: %s --> %s<P>\n",
 		       el->name, row[0]);
-	    (int)(el->val) = (int)(el->val) + 1;
+		(el->val) = (void *)((int)(el->val) + 1);
 	    }
 	}
     sqlFreeResult(&sr);
