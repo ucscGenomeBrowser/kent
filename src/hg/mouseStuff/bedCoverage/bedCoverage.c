@@ -19,6 +19,7 @@ errAbort(
   "usage:\n"
   "   bedCoverage database bedFile\n"
   "Note bed file must be sorted by chromosome\n"
+  "   -restrict=restrict.bed Restrict to parts in restrict.bed\n"
   );
 }
 
@@ -42,7 +43,16 @@ slReverse(&ciList);
 return ciList;
 }
 
-#define maxCover 100
+#define maxCover 100    /* Maximum coverage we track. */
+#define restricted 255	/* Special value for masked out. */
+
+struct range
+/* A range inside of a chromosome. */
+   {
+   struct range *next;
+   int start;	/* Start (zero based) */
+   int end;	/* End (not included) */
+   };
 
 struct chromSizes
 /* Sizes of each chromosome, with and without gaps. */
@@ -51,25 +61,49 @@ struct chromSizes
    char *name;	/* Allocated in hash */
    double seqSize;   /* Size without N's. */
    double totalSize; /* Size with N's. */
+   double unrestrictedSize;	/* Size unrestricted. */
    double totalDepth;  /* Sum of coverage of all bases. */
    double totalCov;    /* Sum of bases covered at least once. */
 
    double histogram[maxCover+1]; /* Coverage histogram. */
    boolean completed;   /* True if completed. */
+   struct range *restrictList;	/* List of ranges to restrict to. */
    };
+
+
+void addRestrictions(struct hash *hash, char *fileName)
+/* Add restrictions from bed file */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+int count = 0;
+while (lineFileRow(lf, row))
+    {
+    struct chromSizes *cs = hashMustFindVal(hash, row[0]);
+    struct range *r;
+    AllocVar(r);
+    r->start = lineFileNeedNum(lf, row, 1);
+    r->end = lineFileNeedNum(lf, row, 2);
+    if (r->start < 0 || r->end > cs->totalSize)
+        errAbort("%d-%d doesn't fit into %s size %d line %d of %s", r->start, r->end, row[0], lf->lineIx, lf->fileName);
+    slAddHead(&cs->restrictList, r);
+    ++count;
+    }
+printf("Added %d restrictions from %s\n", count, fileName);
+}
 
 void showStats(struct chromSizes *cs)
 /* Print out stats. */
 {
 int i, j;
 printf("%-6s %9.0f depth %10.0f %5.2f anyCov %10.0f %5.2f%%\n", 
-	cs->name, cs->seqSize, 
-	cs->totalDepth, 100.0 * cs->totalDepth/cs->seqSize,
-	cs->totalCov, 100.0 * cs->totalCov/cs->seqSize);
+	cs->name, cs->unrestrictedSize, 
+	cs->totalDepth, 100.0 * cs->totalDepth/cs->unrestrictedSize,
+	cs->totalCov, 100.0 * cs->totalCov/cs->unrestrictedSize);
 for (i=1; i<10; ++i)
     {
     double sum = cs->histogram[i];
-    printf("%2d  %10.0f %5.3f%%\n", i, sum, 100.0 * sum/cs->seqSize);
+    printf("%2d  %10.0f %5.3f%%\n", i, sum, 100.0 * sum/cs->unrestrictedSize);
     }
 for (i=0; i<100; i += 10)
     {
@@ -79,10 +113,11 @@ for (i=0; i<100; i += 10)
 	int ix = i+j;
 	sum += cs->histogram[ix];
 	}
-    printf("%2d to %2d:  %10f %5.3f%%\n", i, i+9, sum, 100.0 * sum/cs->seqSize);
+    printf("%2d to %2d:  %10f %5.3f%%\n", i, i+9, sum, 100.0 * sum/cs->unrestrictedSize);
     }
 printf(">=100  %10f %5.3f%%\n", cs->histogram[100], 
-	100.0 * cs->histogram[100]/cs->seqSize);
+	100.0 * cs->histogram[100]/cs->unrestrictedSize);
+printf("\n");
 }
 
 void shortStats(struct chromSizes *cs)
@@ -95,12 +130,12 @@ twoOrMore = totalCov - cs->histogram[1];
 for (i=10; i<=100; ++i)
     tenOrMore += cs->histogram[i];
 hundredOrMore = cs->histogram[100];
-printf("%s\t%1.3f\t%1.3f\t%1.3f\t%1.3f\n", 
+printf("%s\t%1.2f\t%1.2f\t%1.2f\t%1.2f\n", 
 	cs->name, 
-	totalCov * 100.0 / cs->seqSize, 
-	twoOrMore * 100.0 / cs->seqSize, 
-	tenOrMore * 100.0 / cs->seqSize, 
-	hundredOrMore * 100.0 / cs->seqSize);
+	totalCov * 100.0 / cs->unrestrictedSize, 
+	twoOrMore * 100.0 / cs->unrestrictedSize, 
+	tenOrMore * 100.0 / cs->unrestrictedSize, 
+	hundredOrMore * 100.0 / cs->unrestrictedSize);
 }
 
 void getChromSizes(struct hash **retHash, 
@@ -162,7 +197,7 @@ int i, size = cs->totalSize;
 for (i=0; i<size; ++i)
    {
    c = cov[i];
-   if (c > 0)
+   if (c > 0 && c != restricted)
        {
        cs->histogram[c] += 1;
        cs->totalCov += 1;
@@ -176,7 +211,54 @@ showStats(cs);
 }
 
 
-void scanBed(char *fileName, struct hash *chromHash)
+void restrictCov(UBYTE *cov, int size, struct range *restrictList)
+/* Set areas that are restricted (not in restrict list) to restricted
+ * value. Assumes cov is all zero to begin with. */
+{
+struct range *r;
+memset(cov, restricted, size);
+for (r = restrictList; r != NULL; r = r->next)
+    {
+    assert(r->start >= 0);
+    assert(r->end <= size);
+    memset(cov + r->start, 0, r->end - r->start);
+    }
+}
+
+void restrictGaps(UBYTE *cov, int size, char *chrom)
+/* Mark gaps as off-limits. */
+{
+int rowOffset;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
+char **row;
+int s,e;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    s = sqlUnsigned(row[1+rowOffset]);
+    e = sqlUnsigned(row[2+rowOffset]);
+    assert(s >= 0);
+    assert(e < size);
+    memset(cov + s, restricted, e - s);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+int calcUnrestrictedSize(UBYTE *cov, int size)
+/* Figure out number of bases not restricted. */
+{
+int count = 0;
+int i;
+for (i=0; i<size; ++i)
+    if (cov[i] != restricted)
+        ++count;
+return count;
+}
+
+
+void scanBed(char *fileName, struct hash *chromHash, boolean restrict)
 /* Scan through bed file (which must be sorted by
  * chromosome) and fill in coverage histograms on 
  * each chromosome. */
@@ -200,6 +282,10 @@ while (lineFileRow(lf, row))
 	if (lastCs != NULL)
 	    closeChromCov(lf, lastCs, &cov);
 	AllocArray(cov, cs->totalSize);
+	if (restrict)
+	    restrictCov(cov, cs->totalSize, cs->restrictList);
+	restrictGaps(cov, cs->totalSize, chrom);
+	cs->unrestrictedSize = calcUnrestrictedSize(cov, cs->totalSize);
 	lastCs = cs;
 	}
     if (end > cs->totalSize)
@@ -220,6 +306,7 @@ AllocVar(g);
 g->name = "all";
 for (cs = chromSizes; cs != NULL; cs = cs->next)
     {
+    g->unrestrictedSize += cs->unrestrictedSize;
     g->seqSize += cs->seqSize;
     g->totalSize += cs->totalSize;
     g->totalDepth += cs->totalDepth;
@@ -230,7 +317,7 @@ for (cs = chromSizes; cs != NULL; cs = cs->next)
 return g;
 }
 
-void bedCoverage(char *database, char *bedFile)
+void bedCoverage(char *database, char *bedFile, char *restrictFile)
 /* bedCoverage - Analyse coverage by bed files - chromosome by 
  * chromosome and genome-wide.. */
 {
@@ -240,7 +327,9 @@ struct chromSizes *genome;
 hSetDb(database);
 
 getChromSizes(&chromHash, &csList);
-scanBed(bedFile, chromHash);
+if (restrictFile != NULL)
+    addRestrictions(chromHash, restrictFile);
+scanBed(bedFile, chromHash, restrictFile != NULL);
 genome = genoSize(csList);
 showStats(genome);
 
@@ -257,6 +346,6 @@ pushCarefulMemHandler(350000000);
 optionHash(&argc, argv);
 if (argc != 3)
     usage();
-bedCoverage(argv[1], argv[2]);
+bedCoverage(argv[1], argv[2], optionVal("restrict", NULL));
 return 0;
 }
