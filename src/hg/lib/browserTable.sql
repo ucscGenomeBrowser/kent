@@ -21,6 +21,9 @@ CREATE TABLE browserTable (
     private smallint unsigned not null,	# True(1) if private, false(0) otherwise.
     useScore smallint unsigned not null,	# If True(1) use score information in table, only shades of gray color supported.
     isSplit smallint unsigned not null,	# True(1) if table is split over different chromosomes. i.e. chrN_est
+    isPlaced smallint unsigned not null,	# True(1) if the table has positional information.
+    startName char(32) not null,	# The name of the field with the start position.
+    endName char(32) not null,	# The name of the field with the end position.
     priority int not null,	# Priority to load tracks in, i.e. order to load tracks in.
     credit longblob not null,	# Who to credit/blame for information in table.
     url longblob not null,	# Link to more information about track.

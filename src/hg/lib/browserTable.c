@@ -30,10 +30,13 @@ ret->altColorB = sqlUnsigned(row[12]);
 ret->private = sqlUnsigned(row[13]);
 ret->useScore = sqlUnsigned(row[14]);
 ret->isSplit = sqlUnsigned(row[15]);
-ret->priority = sqlSigned(row[16]);
-ret->credit = row[17];
-ret->url = row[18];
-ret->other = row[19];
+ret->isPlaced = sqlUnsigned(row[16]);
+strcpy(ret->startName, row[17]);
+strcpy(ret->endName, row[18]);
+ret->priority = sqlSigned(row[19]);
+ret->credit = row[20];
+ret->url = row[21];
+ret->other = row[22];
 }
 
 struct browserTable *browserTableLoad(char **row)
@@ -61,10 +64,13 @@ ret->altColorB = sqlUnsigned(row[12]);
 ret->private = sqlUnsigned(row[13]);
 ret->useScore = sqlUnsigned(row[14]);
 ret->isSplit = sqlUnsigned(row[15]);
-ret->priority = sqlSigned(row[16]);
-ret->credit = cloneString(row[17]);
-ret->url = cloneString(row[18]);
-ret->other = cloneString(row[19]);
+ret->isPlaced = sqlUnsigned(row[16]);
+strcpy(ret->startName, row[17]);
+strcpy(ret->endName, row[18]);
+ret->priority = sqlSigned(row[19]);
+ret->credit = cloneString(row[20]);
+ret->url = cloneString(row[21]);
+ret->other = cloneString(row[22]);
 return ret;
 }
 
@@ -74,7 +80,7 @@ struct browserTable *browserTableLoadAll(char *fileName)
 {
 struct browserTable *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[20];
+char *row[23];
 
 while (lineFileRow(lf, row))
     {
@@ -112,6 +118,9 @@ ret->altColorB = sqlUnsignedComma(&s);
 ret->private = sqlUnsignedComma(&s);
 ret->useScore = sqlUnsignedComma(&s);
 ret->isSplit = sqlUnsignedComma(&s);
+ret->isPlaced = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->startName, sizeof(ret->startName));
+sqlFixedStringComma(&s, ret->endName, sizeof(ret->endName));
 ret->priority = sqlSignedComma(&s);
 ret->credit = sqlStringComma(&s);
 ret->url = sqlStringComma(&s);
@@ -194,6 +203,16 @@ fputc(sep,f);
 fprintf(f, "%u", el->useScore);
 fputc(sep,f);
 fprintf(f, "%u", el->isSplit);
+fputc(sep,f);
+fprintf(f, "%u", el->isPlaced);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->startName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->endName);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->priority);
 fputc(sep,f);
