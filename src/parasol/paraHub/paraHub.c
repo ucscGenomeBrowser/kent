@@ -848,6 +848,7 @@ void sendKillJobMessage(struct machine *machine, struct job *job)
 {
 char message[64];
 sprintf(message, "kill %d", job->id);
+logIt("  %s %s\n", machine->name, message);
 sendViaSpoke(machine, message);
      /* There's a race condition here that can cause jobs not
       * to be killed if there are no spokes free to handle
@@ -884,6 +885,7 @@ void removeJobId(int id)
 /* Remove job of a given id. */
 {
 struct job *job = jobFind(runningJobs, id);
+logIt("Running job %x\n", job);
 if (job == NULL)
     {
     /* If it's not running look in user job queues. */
@@ -893,16 +895,19 @@ if (job == NULL)
 	if ((job = jobFind(user->jobQueue, id)) != NULL)
 	    break;
 	}
+    logIt("Pending job %x\n", job);
     }
 if (job != NULL)
     removeJob(job);
 }
 
-void removeJobName(char *name)
-/* Remove job of a given name. */
+void removeJobAcknowledge(char *names, int connectionHandle)
+/* Remove job of a given name(s). */
 {
-name = trimSpaces(name);
-removeJobId(atoi(name));
+char *name;
+while ((name = nextWord(&names)) != NULL)
+    removeJobId(atoi(name));
+netSendLongString(connectionHandle, "ok");
 }
 
 void jobDone(char *line)
@@ -1248,7 +1253,7 @@ startSpokes();
 startHeartbeat();
 
 /* Set up socket. */
-socketHandle = netAcceptingSocket(paraPort, 500);
+socketHandle = netAcceptingSocket(paraPort, 1100);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
@@ -1300,7 +1305,7 @@ for (;;)
 	else if (sameWord(command, "checkIn"))
 	     nodeCheckIn(line);
 	else if (sameWord(command, "removeJob"))
-	     removeJobName(line);
+	     removeJobAcknowledge(line, connectionHandle);
 	else if (sameWord(command, "ping"))
 	     respondToPing(connectionHandle);
 	else if (sameWord(command, "addMachine"))

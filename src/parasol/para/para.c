@@ -593,18 +593,6 @@ if ((hash = *pHash) != NULL)
 }
 
 
-void killSubmission(struct submission *sub)
-/* Kill a submission. */
-{
-struct dyString *cmd = newDyString(256);
-int err;
-dyStringPrintf(cmd, "%s %s", killCommand, sub->id);
-err = system(cmd->string);
-if (err != 0)
-   warn("Couldn't kill job id %s", sub->id);
-freeDyString(&cmd);
-}
-
 int statusToRetVal(int status)
 /* Convert wait() return status to return value. */
 {
@@ -1038,6 +1026,68 @@ printf("total jobs running: %d\n", runCount);
 }
 
 
+/* Death row is where jobs to be killed get
+ * bundled together to send to server in 
+ * batches of 256 or so. */
+
+static struct dyString *deathRow = NULL;
+static int deathRowSize = 0;
+static int deathRowMaxSize = 10;
+
+void deathRowStart()
+/* Start up death row */
+{
+deathRow = newDyString(16*1024);
+deathRowSize = 0;
+dyStringAppend(deathRow, "removeJob");
+}
+
+
+
+
+void deathRowExecute()
+/* Send list of jobs to kill to server. */
+{
+int hubFd = netConnect("localhost", paraPort);
+char *ok;
+mustSendWithSig(hubFd, deathRow->string);
+ok = netRecieveLongString(hubFd);
+if (ok == NULL || !sameString(ok, "ok"))
+    errAbort("No reciept in deathRowExecute");
+freez(&ok);
+close(hubFd);
+dyStringClear(deathRow);
+dyStringAppend(deathRow, "removeJob");
+deathRowSize = 0;
+}
+
+void deathRowEnd()
+/* Close out death row. */
+{
+deathRowExecute();
+dyStringFree(&deathRow);
+}
+
+void deathRowAdd(char *jobId)
+/* Add job to death row. */
+{
+dyStringPrintf(deathRow, " %s", jobId);
+++deathRowSize;
+if (deathRowSize >= deathRowMaxSize)
+    deathRowExecute();
+}
+
+void killSubmission(struct submission *sub)
+/* Kill a submission. */
+{
+struct dyString *cmd = newDyString(256);
+int hubFd = netConnect("localhost", paraPort);
+dyStringPrintf(cmd, "%s %s", "removeJob", sub->id);
+mustSendWithSig(hubFd, cmd->string);
+close(hubFd);
+freeDyString(&cmd);
+}
+
 
 void paraStop(char *batch)
 /* Stop batch of jobs. */
@@ -1045,8 +1095,10 @@ void paraStop(char *batch)
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
+
 markQueuedJobs(db);
 markRunJobStatus(db);
+deathRowStart();
 /* It's less thrashing on the scheduler if we kill jobs
  * in opposite order. */
 slReverse(&db->jobList);
@@ -1057,11 +1109,12 @@ for (job = db->jobList; job != NULL; job = job->next)
         {
 	if (sub->inQueue || sub->running)
 	    {
-	    killSubmission(sub);
+	    deathRowAdd(sub->id);
 	    sub->crashed = TRUE;
 	    }
 	}
     }
+deathRowEnd();
 slReverse(&db->jobList);
 atomicWriteBatch(db, batch);
 }
