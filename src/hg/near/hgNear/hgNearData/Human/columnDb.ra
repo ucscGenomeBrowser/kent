@@ -1,6 +1,14 @@
 name ensembl
 itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
+name gnfHumanAtlas2Id
+shortLabel GNF Atlas 2 ID
+longLabel ID of Associated GNF Atlas 2 Expression Data
+priority 2.60
+visibility off
+type lookup knownToGnfAtlas2 name value
+search exact
+
 name expId
 shortLabel U133 ID
 longLabel ID of Associated Affymetrix U133 Expression Data 
@@ -16,6 +24,7 @@ priority 2.62
 visibility off
 type lookup knownToU95 name value
 search exact
+
 
 name gnfHumanAtlas2
 shortLabel GNF Atlas 2
