@@ -29,6 +29,9 @@ void blastTabStaticLoad(char **row, struct blastTab *ret);
 /* Load a row from blastTab table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
+struct blastTab *blastTabNext(struct lineFile *lf);
+/* get next blastTab from file */
+
 struct blastTab *blastTabLoad(char **row);
 /* Load a blastTab from row fetched with select * from blastTab
  * from database.  Dispose of this with blastTabFree(). */
