@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.38 2004/02/24 03:42:02 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.39 2004/04/05 05:47:32 angie Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -239,13 +239,7 @@ if (wordCount > 11)
 	    else
 		errAbort("line %d of custom input: BED chromStarts[i]+chromStart must be less than chromEnd.",
 			 lineIx);
-	if (bed->chromStarts[i] <= lastStart)
-	    errAbort("line %d of custom input: BED chromStarts[i] must be in ascending order.",
-		     lineIx);
 	lastStart = bed->chromStarts[i];
-	if (bed->chromStart + bed->chromStarts[i] < lastEnd)
-	    errAbort("line %d of custom input: BED blocks must not overlap, i.e. the end of block i should be less than or equal to the start of block i+1.",
-		     lineIx);
 	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
 	}
     if (bed->chromStarts[0] != 0)
