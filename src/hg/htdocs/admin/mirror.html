@@ -437,8 +437,8 @@ for SQL in *.sql
 do
     T_NAME=${SQL%%.sql}
     echo "loading table ${T_NAME}"
-    hgsql -e "DROP TABLE ${T_NAME};" ${DB} > /dev/null 2> /dev/null
-    hgsql ${DB} < ${SQL}
+    mysql -youraccountoptions -e "DROP TABLE ${T_NAME};" ${DB} > /dev/null 2> /dev/null
+    mysql -youraccountoptions ${DB} < ${SQL}
     zcat "${T_NAME}.txt.gz" | mysql -youraccountoptions -e \
         "LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};" ${DB}
 done 
