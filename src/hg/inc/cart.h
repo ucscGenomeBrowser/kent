@@ -62,8 +62,11 @@ void cartRemoveExcept(struct cart *cart, char **except);
  * from cart.  Except array may be NULL in which case all
  * are removed. */
 
-char *cartRemoveLike(struct cart *cart, char *wildCard);
+void cartRemoveLike(struct cart *cart, char *wildCard);
 /* Remove all variable from cart that match wildCard. */
+
+void cartRemovePrefix(struct cart *cart, char *prefix);
+/* Remove variables with given prefix from cart. */
 
 boolean cartVarExists(struct cart *cart, char *var);
 /* Return TRUE if variable is in cart. */

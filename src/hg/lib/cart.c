@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.25 2003/08/19 23:54:43 baertsch Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.26 2003/08/21 01:56:06 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -295,11 +295,10 @@ hashFree(&exceptHash);
 hashElFreeList(&list);
 }
 
-char *cartRemoveLike(struct cart *cart, char *wildCard)
+void cartRemoveLike(struct cart *cart, char *wildCard)
 /* Remove all variable from cart that match wildCard. */
 {
 struct hashEl *el, *elList = hashElListHash(cart->hash);
-char *val = NULL;
 
 slSort(&elList, hashElCmp);
 for (el = elList; el != NULL; el = el->next)
@@ -308,7 +307,20 @@ for (el = elList; el != NULL; el = el->next)
 	cartRemove(cart, el->name);
     }
 hashElFreeList(&el);
-return val;
+}
+
+void cartRemovePrefix(struct cart *cart, char *prefix)
+/* Remove variables with given prefix from cart. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+
+slSort(&elList, hashElCmp);
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (startsWith(prefix, el->name))
+	cartRemove(cart, el->name);
+    }
+hashElFreeList(&el);
 }
 
 boolean cartVarExists(struct cart *cart, char *var)
