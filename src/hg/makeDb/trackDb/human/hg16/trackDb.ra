@@ -862,14 +862,13 @@ autoScaleDefault off
 
 track phastConsElements
 shortLabel Cons Elements
-longLabel phastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
+longLabel PhastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
 group compGeno
 priority 100.12
 visibility hide
 spectrum on
-color 0,60,120
-altColor 200,220,255
 exonArrows off
+showTopScorers 200
 type bed 12 .
 
 track multizMm3Rn3GalGal2_phyloHMM
