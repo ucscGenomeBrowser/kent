@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.47 2003/10/01 23:13:43 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.48 2003/11/13 17:23:35 baertsch Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1414,7 +1414,7 @@ while (((ch = getc(fh)) != EOF) && (ch != '\n'))
         buf = realloc(buf, bufCapacity);
         if (buf == NULL)
             {
-            errAbort("Out of memory - request size %d bytes", bufCapacity);
+            errAbort("Out of memory in readline - request size %d bytes", bufCapacity);
             }
         }
     buf[bufSize++] = ch;
