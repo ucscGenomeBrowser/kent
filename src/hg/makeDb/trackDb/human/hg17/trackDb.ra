@@ -86,15 +86,15 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
-track syntenyRn3
+track ensRatMusHom
 shortLabel Rat Synteny
 longLabel $Organism/Rat (rn3-Jun 03) Synteny Using Blastz Single Coverage (100k window)
-group compGeno
 priority 178
+group compGeno
 visibility hide
 color 0,100,0
 altColor 255,240,200
-type bed 4 +
+type bed 6+
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
