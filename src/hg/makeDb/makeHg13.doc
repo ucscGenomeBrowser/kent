@@ -2496,3 +2496,17 @@ o - Load refFull alignments into database
       cd /cluster/store4/gs.14/build31/bed/refFull
       pslCat -dir chrom > refFullAli.psl
       hgLoadPsl hg13 -tNameIx refFullAli.psl
+
+
+MAKING PROMOTER FILES
+    cd /usr/local/apache/htdocs/goldenPath/14nov2002/bigZips
+    featureBits hg13 -fa=upstream1000.fa refGene:upstream:1000
+    zip upstream1000.zip upstream1000.fa
+    featureBits hg13 -fa=upstream2000.fa refGene:upstream:2000
+    zip upstream2000.zip upstream2000.fa
+    featureBits hg13 -fa=upstream5000.fa refGene:upstream:5000
+    zip upstream5000.zip upstream5000.fa
+    rm upstream*.fa
+    
+    
+    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
