@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.17 2004/10/06 17:21:46 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.18 2004/10/07 17:32:07 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -310,6 +310,7 @@ int errs = 0;
 int bedCount;
 struct bed *bedList = NULL, *unmappedBedList = NULL;
 int totalUnmapped = 0;
+double unmappedRatio;
 int totalUnmappedAll = 0;
 int totalBases = 0;
 double mappedRatio;
@@ -386,7 +387,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
                         bed->chrom, bed->chromStart, bed->chromEnd,
                         size, bed->name);
             }
-        double unmappedRatio = (double)(totalUnmapped * 100) / (e - s);
+        unmappedRatio = (double)(totalUnmapped * 100) / (e - s);
         verbose(2, "Unmapped total: %s\t%5.1f\%\t%7d\n", 
                             region, unmappedRatio, totalUnmapped);
         totalUnmappedAll += totalUnmapped;
