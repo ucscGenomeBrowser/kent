@@ -21,6 +21,7 @@
 #include "genePredReader.h"
 #include "dystring.h"
 #include "pseudoGeneLink.h"
+#include "scoreWindow.h"
 
 #define ScoreNorm 2
 #define BEDCOUNT 3
@@ -32,7 +33,7 @@
 #define NOTPSEUDO -1
 #define BETTER -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.19 2004/05/06 05:11:27 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.20 2004/06/15 22:34:01 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -592,6 +593,7 @@ if (pg->gStrand[0] != '+' && pg->gStrand[0] == '-')
     }
 pg->polyAstart = (psl->strand[0] == '+') ? pg->polyAstart - psl->tEnd : psl->tStart - pg->polyAstart ;
 pg->matches = psl->match+psl->repMatch ;
+pg->qSize = psl->qSize;
 pg->qEnd = psl->qSize - psl->qEnd;
 if (pg->intronScores == NULL)
     pg->intronScores = cloneString("0,0");
@@ -622,8 +624,8 @@ pseudoGeneLinkOutput(pg, linkFile, '\t','\n');
 
 void initWeights()
 {
-wt[0] = 0.6; wt[1] = 0.9; wt[2] = 0.7; wt[3] = 1;
-wt[4] = 1; wt[5] = 0.5; wt[6] = 1; wt[7] = 1;
+wt[0] = 0.3; wt[1] = 0.75; wt[2] = 1; wt[3] = 0.5;
+wt[4] = 0.5; wt[5] = 0.25; wt[6] = 0.5; wt[7] = 0.5;
 }
 void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *reason)
    /* char *type, char *bestqName, char *besttName, 
@@ -644,6 +646,7 @@ pg->type = reason->string;
 
 if (pg->label == PSEUDO || pg->label == BETTER)
     {
+    pslTabOut(psl, pseudoFile);
     axt = pslToAxt(psl, qHash, tHash, fileCache);
     if (axt != NULL)
         {
@@ -842,7 +845,8 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 return FALSE;
 }
 
-int scoreWindow(char c, char *s, int size, int *score, int *start, int *end)
+#ifdef NEVER
+int scoreWindow(char c, char *s, int size, int *score, int *start, int *end, int match, int misMatch)
 /* calculate score array with score at each position in s, match to char c adds 1 to score, mismatch adds -1 */
 /* index of max score is returned , size is size of s */
 {
@@ -855,9 +859,9 @@ for (i=0 ; i<size ; i++)
     int prevScore = (i > 0) ? score[i-1] : 0;
 
     if (toupper(s[i]) == toupper(c) )
-        score[i] = prevScore+1;
+        score[i] = prevScore+match;
     else
-        score[i] = prevScore-1;
+        score[i] = prevScore-misMatch;
     if (score[i] >= max)
         {
         max = score[i];
@@ -890,6 +894,7 @@ for (i=*start ; i<=*end ; i++)
     }
 return count;
 }
+#endif
    
 
 int countCharsInWindow(char c, char *s, int size, int winSize, int *start)
@@ -939,13 +944,13 @@ if (strand[0] == '+')
     {
     assert (seq->size <= POLYAREGION);
 printf("\n + range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
-    count = scoreWindow('A',seq->dna,seq->size, score, polyAstart, polyAend);
+    count = scoreWindow('A',seq->dna,seq->size, score, polyAstart, polyAend, 1, -1);
     }
 else
     {
     assert (seq->size <= POLYAREGION);
 printf("\n - range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
-    count = scoreWindow('T',seq->dna,seq->size, score, polyAend, polyAstart);
+    count = scoreWindow('T',seq->dna,seq->size, score, polyAend, polyAstart, 1, -1);
     }
 pStart += seqStart;
 *polyAstart += seqStart;
@@ -1643,6 +1648,7 @@ if (pslList != NULL)
         /* count # of alignments that span introns */
         pg->exonCover = pslCountExonSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
         pg->intronCount = pslCountIntrons(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps,intronSlop, iString, &conservedIntrons) ;
+        pg->conservedIntrons = conservedIntrons;
         pg->trfRatio = calcTrf(psl, trfHash);
         if (bestPsl == NULL)
             pg->intronCount = pg->oldIntronCount;
@@ -1765,8 +1771,8 @@ if (pslList != NULL)
                 struct psl *mPsl;
                 int exonCount = -1;
                 maxOverlap = overlapSplicedMrna(psl, mrnaHash, &exonCount, &mPsl);
-                if ((float)maxOverlap/(float)psl->qSize > splicedOverlapRatio && maxOverlap > 50  && exonCount > 1) 
-                    /* if overlap > 50 bases and not single exon mrna , then skip */
+                if ((float)maxOverlap/(float)psl->qSize > splicedOverlapRatio && maxOverlap > 50 ) 
+                    /* if overlap > 50 bases , then skip */
                     {
                     if (!quiet)
                         printf("NO %s:%d-%d %s better blat mrna %s %d bases overlap %f %%\n",
@@ -1804,7 +1810,6 @@ if (pslList != NULL)
                             pg->polyA, pg->polyAstart );
                        printf("\n");
                        }
-                   pslTabOut(psl, pseudoFile);
                    if (pg->exonCover < 2)
                        {
                        dyStringAppend(reason,"singleExon ");
