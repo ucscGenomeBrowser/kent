@@ -19,7 +19,7 @@ cd $gbRoot
 
 # download and process
 cd $gbRoot
-gbDownloadStep
-gbProcessStep
+nice gbDownloadStep
+nice gbProcessStep
 
 exec etc/genbank-align

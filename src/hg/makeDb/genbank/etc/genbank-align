@@ -14,7 +14,7 @@
 # IMPORTANT: set omitIServers to a list of -omit-iserver=host options
 # if one or more iservers are down
 omitIServers=""
-omitIServers="-omit-iserver=kkr5u00"
+omitIServers="-omit-iserver=kkr5u00 -omit-iserver=kkr6u00"
 
 # errors terminate with message
 set -e
@@ -60,7 +60,7 @@ hg15lift=/cluster/store5/gs.16/build33/jkStuff/liftAll.lft
 mm3nibs='/scratch/hg/mm3/chromTrfMixedNib/chr*.nib'
 mm3lift=/cluster/store2/mm.2003.02/mm3/jkStuff/liftAll.lft
 
-gbAlignStep $finish $omitIServers \
+nice gbAlignStep $finish $omitIServers \
     -workdir=$workdir \
     -clusterdir=$clusterdir \
     hg15 "$hg15nibs" $hg15lift \

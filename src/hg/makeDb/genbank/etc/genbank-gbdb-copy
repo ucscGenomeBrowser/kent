@@ -18,7 +18,7 @@ cd $gbRoot
 gbdb=/gbdb
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=kkstore
+gbBuildServer=eieio
 rsyncPort="ssh"
 gbBuildRoot=/cluster/store5/genbank
 
