@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.30 2004/04/19 06:28:56 angie Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.31 2004/04/22 16:35:21 kate Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -380,9 +380,25 @@ if (wordsRead < wordCount)
 return TRUE;
 }
 
+int lineFileNeedFullNum(struct lineFile *lf, char *words[], int wordIx)
+/* Make sure that words[wordIx] is an ascii integer, and return
+ * binary representation of it. Require all chars in word to be digits.*/
+{
+char *c;
+for (c = words[wordIx]; *c; c++)
+    {
+    if (*c == '-' || isdigit(*c))
+        /* NOTE: embedded '-' will be caught by lineFileNeedNum */
+        continue;
+    errAbort("Expecting number field %d line %d of %s, got %s", 
+            wordIx+1, lf->lineIx, lf->fileName, words[wordIx]);
+    }
+return lineFileNeedNum(lf, words, wordIx);
+}
+
 int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx)
 /* Make sure that words[wordIx] is an ascii integer, and return
- * binary representation of it. */
+ * binary representation of it. Conversion stops at first non-digit char. */
 {
 char *ascii = words[wordIx];
 char c = ascii[0];

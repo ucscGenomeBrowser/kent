@@ -117,6 +117,10 @@ int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii integer, and return
  * binary representation of it. */
 
+int lineFileNeedFullNum(struct lineFile *lf, char *words[], int wordIx);
+/* Make sure that words[wordIx] is an ascii integer, and return
+ * binary representation of it. Require all chars in word to be digits.*/
+
 double lineFileNeedDouble(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii double value, and return
  * binary representation of it. */
