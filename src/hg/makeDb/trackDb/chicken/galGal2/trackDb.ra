@@ -377,6 +377,28 @@ type bed 12 .
 url http://www.genoscope.cns.fr/comparative?premier=Chicken&deuxieme=Tetraodon&position=$$
 urlLabel Exofish Ecotig Display Link:
 
+track cpgIslandExt
+shortLabel CpG Islands (WUSTL)
+longLabel CpG Islands Predicted by WUSTL program (Islands < 300 Bases are Light Green)
+group regulation
+priority 90
+visibility hide
+color 0,100,0
+altColor 128,228,128
+type bed 4 +
+
+track cpgIslandGgfAndy
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+priority 90.01
+visibility hide
+color 0,100,0
+altColor 128,228,128
+type bed 4 +
+
+
+
 searchTable gold
 searchMethod exact
 shortCircuit 1
