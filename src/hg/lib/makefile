@@ -1,5 +1,5 @@
-XINC = -I$(MYSQLINC)
 include ../../inc/common.mk
+XINC = -I$(MYSQLINC)
 
 L = -lm $(MYSQLLIBS)
 
