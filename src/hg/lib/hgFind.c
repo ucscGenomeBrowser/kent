@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.145 2004/07/15 06:33:57 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.146 2004/07/19 17:48:12 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -823,10 +823,7 @@ else
     pslList = psl = findAllAli(acc, suffix);
     pslCount = slCount(pslList);
     if (pslCount <= 0)
-        {
-        freez(type);
 	return FALSE;
-	}
     else
         {
 	struct dyString *dy = newDyString(1024);
