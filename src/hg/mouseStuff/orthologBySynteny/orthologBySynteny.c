@@ -16,9 +16,10 @@ void usage()
 errAbort(
   "orthologBySynteny - Find syntenic location for a list of locations\n"
   "usage:\n"
-  "   orthologBySynteny from-database geneTable netTable chrom chainFile\n"
+  "   orthologBySynteny from-db to-db geneTable netTable chrom chainFile\n"
   "options:\n"
-  "   -name=field name in gene table to get name from [default: name]"
+  "   -name=field name in gene table to get name from [default: name]\n"
+  "   -track=name of track in to-db - find gene overlapping with syntenic location\n"
   );
 }
 
@@ -38,24 +39,49 @@ struct hash *allChains(char *fileName)
     lineFileClose(&lf);
     return hash;
 }
-void chainPrintHead(struct chain *chain, FILE *f)
+void chainPrintHead(struct chain *chain, FILE *f, char *ortholog, char *name, char *type, double score)
 {
 if (chain->qStrand == '+')
-    fprintf(f, "chain %s %d + %d %d %s %d %c %d %d id %d score %1.0f\n", 
+    fprintf(f, "chain %s %d + %d %d %s %d %c %d %d id %d score %1.0f %s %s %s\n", 
         chain->tName, chain->tSize, chain->tStart, chain->tEnd,
         chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd,
-        chain->id,chain->score);
+        chain->id,score, name, ortholog, type);
 else
-    fprintf(f, "chain %s %d + %d %d %s %d %c %d %d id %d score %1.0f\n", 
+    fprintf(f, "chain %s %d + %d %d %s %d %c %d %d id %d score %1.0f %s %s %s\n", 
         chain->tName, chain->tSize, chain->tStart, chain->tEnd,
         chain->qName, chain->qSize, chain->qStrand, chain->qSize - chain->qEnd, chain->qSize - chain->qStart,
-        chain->id,chain->score);
+        chain->id,score, name, ortholog, type);
+}
+
+char *mapOrtholog(char *geneTable, char *chrom, int gStart, int gEnd)
+    /* finds orthlogous gene name based on syntenic cordinates */
+{
+struct sqlConnection *conn = NULL;
+struct sqlResult *sr;
+char **row;
+int i = 0;
+char query[512];
+
+    conn = hAllocConn2();
+    sprintf(query, "select name, cdsStart, cdsEnd from %s where chrom = '%s' and txStart <= %d and txEnd >= %d",geneTable,chrom,gEnd, gStart);
+    printf("%s \n",query);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        char *name = (row[0]);
+        int geneStart = atoi(row[1]);
+        int geneEnd = atoi(row[2]);
+        /*printf("gene %s %d-%d %d-%d\n",name, gStart, gEnd, geneStart, geneEnd); */
+    return(name);
+        }
+    return(NULL);
 }
 
 void printChain(char *geneTable, char *netTable, char *chrom, struct hash *chainHash)
 /* Return subset ofchain at syntenic location. */
 {
 char *fieldName = optionVal("name", "name");
+char *syntenicGene = optionVal("track", "knownGene");
 struct hash *hash = newHash(0);
 struct chain *aChain;
 struct sqlConnection *conn = hAllocConn();
@@ -63,19 +89,23 @@ struct sqlResult *sr;
 char **row;
 int i = 0;
 char query[512];
+char prevName[255] = "x";
+char *ortholog = NULL;
 struct chain *retSubChain;
 struct chain *retChainToFree;
 /*int chainArr[MAXCHAINARRAY];*/
 
-sprintf(query, "select chainId, cdsStart, cdsEnd, %s, type, level, qName, qStart, qEnd from %s g, %s_%s n where n.tName = '%s' and n.tStart <= g.cdsEnd and n.tEnd >=  g.cdsStart and chrom = '%s' and type <> 'gap' ",fieldName, geneTable,chrom,netTable, chrom,chrom );
+sprintf(query, "select chainId, cdsStart, cdsEnd, %s, type, level, qName, qStart, qEnd from %s g, %s_%s n where n.tName = '%s' and n.tStart <= g.cdsEnd and n.tEnd >=  g.cdsStart and chrom = '%s' and type <> 'gap' order by cdsStart, score desc",fieldName, geneTable,chrom,netTable, chrom,chrom );
+    printf("%s \n",query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *chainId = (row[0]);
-    int geneStart = atoi(row[1]);
-    int geneEnd = atoi(row[2]);
+    int geneStart = sqlUnsigned(row[1]);
+    int geneEnd = sqlUnsigned(row[2]);
+    char *name = row[3];
     /*assert(i<MAXCHAINARRARY);*/
-    if (atoi(row[0]) != 0)
+    if ((atoi(row[0]) != 0) && strcmp(prevName,name))
         {
         aChain = hashMustFindVal(chainHash, chainId);
         chainSubsetOnT(aChain, geneStart, geneEnd, &retSubChain,  &retChainToFree);
@@ -84,8 +114,10 @@ while ((row = sqlNextRow(sr)) != NULL)
             assert(atoi(row[0]) > 0);
             assert(atoi(row[1]) > 0);
             assert(atoi(row[2]) > 0);
-            printf("gene %s %s %s ",row[3], row[4], row[5]);
-            chainPrintHead(retSubChain, stdout);
+               printf("gene %s %d %d \n",retSubChain->qName, retSubChain->qStart, retSubChain->qEnd);
+            if (syntenicGene)
+                ortholog = mapOrtholog(syntenicGene, retSubChain->qName, retSubChain->qStart, retSubChain->qEnd);
+            chainPrintHead(retSubChain, stdout, ortholog, name, row[4], aChain->score);
             }
         else
             {
@@ -94,11 +126,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             }
         chainFree(&retChainToFree);
         }
-    else
-        {
-            printf("***zero chain*** row0 %s %s %s %s %s %s\n",row[0],row[1],row[2],row[3],row[4],row[5]);
-
-        }
+    sprintf(prevName , "%s",name);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -108,28 +136,6 @@ void orthologBySyntenyChrom(char *geneTable, char *netTable, char *chrom, struct
 {
     printChain(geneTable, netTable, chrom, chainHash);
 
- 
- 
- 
- 
-        /*
-    struct lineFile *lf = lineFileOpen(inFiles[i], TRUE);
-	struct chainNet *net;
-	while ((net = chainNetRead(lf)) != NULL)
-	    {
-	    boolean writeIt = TRUE;
-	    if (tHash != NULL && !hashLookup(tHash, net->name))
-		writeIt = FALSE;
-	    if (notTHash != NULL && hashLookup(notTHash, net->name))
-		writeIt = FALSE;
-	    if (writeIt)
-		{
-		writeFiltered(net, f);
-		}
-	    chainNetFree(&net);
-	    }
-    lineFileClose(&lf);
-    */
 }
 
 int main(int argc, char *argv[])
@@ -138,10 +144,11 @@ int main(int argc, char *argv[])
 struct hash *chainHash;
 
 optionHash(&argc, argv);
-if (argc != 6)
+if (argc != 7)
     usage();
 hSetDb(argv[1]);
-chainHash = allChains(argv[4]);
-orthologBySyntenyChrom(argv[2],argv[3], argv[5], chainHash);
+hSetDb2(argv[2]);
+chainHash = allChains(argv[6]);
+orthologBySyntenyChrom(argv[3], argv[4], argv[5], chainHash);
 return 0;
 }
