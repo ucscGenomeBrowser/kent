@@ -3,7 +3,9 @@
 ###############################################
 # 
 #  07-14-04
-#  Will get an entire table from dev and beta and check diffs
+#  Robert Kuhn
+# 
+#  Gets an entire table from dev and beta and check diffs
 # 
 ###############################################
 
@@ -34,5 +36,7 @@ hgsql -N -h hgwbeta -e "SELECT * FROM $table" $db | sort  > $db.$table.beta
 comm -23 $db.$table.dev $db.$table.beta >$db.$table.devOnly
 comm -13 $db.$table.dev $db.$table.beta >$db.$table.betaOnly
 comm -12 $db.$table.dev $db.$table.beta >$db.$table.common
-wc -l $db.$table.devOnly $db.$table.betaOnly $db.$table.common
+echo
+wc -l $db.$table.devOnly $db.$table.betaOnly $db.$table.common | grep -v "total"
+echo
 
