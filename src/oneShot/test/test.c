@@ -30,6 +30,7 @@ struct lineFile *lf = lineFileOpen(in, TRUE);
 FILE *f = mustOpen(out, "w");
 char *line, *word;
 struct rbTree *rb = rbTreeNew(rbTreeCmpString);
+struct slRef *list, *ref;
 while (lineFileNext(lf, &line, NULL))
     {
     while ((word = nextWord(&line)) != NULL)
@@ -39,6 +40,9 @@ while (lineFileNext(lf, &line, NULL))
 	}
     }
 rbTreeDump(rb, f, dumpString);
+list = rbTreeItems(rb);
+for (ref = list; ref != NULL; ref = ref->next)
+    printf("%s\n", (char *)(ref->val));
 }
 
 int main(int argc, char *argv[])
