@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.483 2003/09/29 20:56:34 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.484 2003/09/30 02:45:29 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5819,7 +5819,7 @@ printf("</UL>");
 if (sqlTableExists(conn, "knownCanonical"))
     {
     printf("<B>UCSC Gene Family Browser:</B> ");
-    printf("<A HREF=\"http:/cgi-bin/hgNear?near.id=%s\"", mrnaName);
+    printf("<A HREF=\"http:/cgi-bin/hgNear?near_search=%s\"", mrnaName);
     printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
     printf("<BR><BR>");
     }
