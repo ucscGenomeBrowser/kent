@@ -39,3 +39,17 @@ alpha:
 
 beta: alpha
 
+strict:
+	hgTrackDb -strict=yes zoo zooBaboon3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooCat3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooChicken3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooChimp3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooCow3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooDog3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooFugu3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooHuman3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooMouse3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooPig3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooRat3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb -strict=yes zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
