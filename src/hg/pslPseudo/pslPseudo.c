@@ -20,7 +20,7 @@
 #define POLYASLIDINGWINDOW 10
 #define POLYAREGION 160
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.3 2003/11/05 13:09:00 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.4 2003/11/06 00:20:44 baertsch Exp $";
 
 double minAli = 0.98;
 double maxRep = 0.35;
@@ -647,6 +647,12 @@ if (pslList != NULL)
                         {
                         if (!quiet)
                             printf("NO %s better blat mrna %s \n",psl->qName,mPsl->qName);
+                        fprintf(linkFile,"%s %d hg15 better %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                                psl->qName, calcMilliScore(psl), mPsl->qName, mPsl->tName, 
+                                mPsl->tStart, mPsl->tEnd, 
+                                maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
+                                psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                                intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                         continue;
                         }
                     }
@@ -660,6 +666,12 @@ if (pslList != NULL)
                         {
                         if (!quiet)
                             printf("NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, overlapDiagonal, psl->tName, psl->tStart, bestChrom);
+                        fprintf(linkFile,"%s %d hg15 diagonal %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
+                                psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                                bestPsl->tStart, bestPsl->tEnd, 
+                                maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
+                                psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                                intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                         }
                     else
                         {
@@ -683,11 +695,12 @@ if (pslList != NULL)
                                 bestPsl->tEnd , &geneOverlap);
                         if (kg != NULL)
                             {
-                            fprintf(linkFile,"%s %d hg15 knownGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s\n",
+                            fprintf(linkFile,"%s %d hg15 knownGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
                                     psl->qName, calcMilliScore(psl), kg->name, bestPsl->tName, 
                                     bestPsl->tStart, bestPsl->tEnd, 
                                     maxIntrons, geneOverlap, kg->strand, polyA, polyAstart, 
-                                    psl->tName, psl->tStart, psl->tEnd, psl->strand); 
+                                    psl->tName, psl->tStart, psl->tEnd, psl->strand, 
+                                    intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                             }
                         else 
                             {
@@ -695,11 +708,12 @@ if (pslList != NULL)
                                     bestPsl->tEnd , &geneOverlap);
                             if (gp != NULL)
                                 {
-                                fprintf(linkFile,"%s %d hg15 refGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s\n",
+                                fprintf(linkFile,"%s %d hg15 refGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
                                         psl->qName, calcMilliScore(psl), gp->name, bestPsl->tName, 
                                         bestPsl->tStart, bestPsl->tEnd, 
                                         maxIntrons, geneOverlap, gp->strand, polyA, polyAstart, 
-                                        psl->tName, psl->tStart, psl->tEnd, psl->strand); 
+                                        psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                                 }
                             else 
                                 {
@@ -707,20 +721,22 @@ if (pslList != NULL)
                                         bestPsl->tEnd , &geneOverlap);
                                 if (gp != NULL)
                                     {
-                                    fprintf(linkFile,"%s %d hg15 mgcGenes %s %s %d %d %d %d 0 %s %d %d %s %d %d %s\n",
+                                    fprintf(linkFile,"%s %d hg15 mgcGenes %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
                                             psl->qName, calcMilliScore(psl), gp->name, bestPsl->tName, 
                                             bestPsl->tStart, bestPsl->tEnd, 
                                             maxIntrons, geneOverlap, gp->strand, polyA, polyAstart, 
-                                            psl->tName, psl->tStart, psl->tEnd, psl->strand); 
+                                            psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                                            intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                                     }
                                 }
                             if (gp == NULL)
                                 {
-                                fprintf(linkFile,"%s %d hg15 mrna %s %s %d %d %d %d 0 %s %d %d %s %d %d %s\n",
+                                fprintf(linkFile,"%s %d hg15 mrna %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
                                         psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
                                         bestPsl->tStart, bestPsl->tEnd, 
                                         maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
-                                        psl->tName, psl->tStart, psl->tEnd, psl->strand); 
+                                        psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                                 }
                             }
                         }
@@ -734,15 +750,36 @@ if (pslList != NULL)
                             bestAliCount, intronSpan,
                             calcMilliScore(psl),  psl->match + psl->repMatch , 
                             minCoverPseudo * (float)psl->qSize, tReps + qReps);
+                    fprintf(linkFile,"%s %d hg15 span %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                            psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                            bestPsl->tStart, bestPsl->tEnd, 
+                            maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
+                            psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                            intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, -1); 
                 }
             }
             else 
             {
+                int intronSpan = pslCountIntronSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
                 if (!quiet)
                     printf("NO. %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d pCB na score %d match %d cover %3.1f rp %d\n",
                         psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
                         psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash), maxIntrons , bestAliCount,
                         calcMilliScore(psl),  psl->match + psl->repMatch , minCoverPseudo * (float)psl->qSize, tReps + qReps);
+                if (bestPsl != NULL)
+                    fprintf(linkFile,"%s %d hg15 introns %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                        psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                        bestPsl->tStart, bestPsl->tEnd, 
+                        maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
+                        psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, -1); 
+                else
+                    fprintf(linkFile,"%s %d hg15 introns %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                        psl->qName, calcMilliScore(psl), "none", "none", 
+                        -1, -1, 
+                        maxIntrons, geneOverlap, " ", polyA, polyAstart, 
+                        psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, -1); 
             }
         }
     }
