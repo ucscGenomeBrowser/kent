@@ -209,7 +209,7 @@ exit; # don't actually run this like a script :)
     ~kent/bin/iSync
 
 
-# REPEAT MASKING (TODO)
+# REPEAT MASKING (IN PROGRESS)
     # Split contigs, run RepeatMasker, lift results
     # Notes: 
     # * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -249,7 +249,7 @@ exit; # don't actually run this like a script :)
     ssh kk
     cd ~/hg14/RMRun
     para create RMJobs
-    para try, para check, para check, para push, para check,...
+TODO    para try, para check, para check, para push, para check,...
     #- Now while that's running, run TRF (simpleRepeat), and RefSeq 
     #- alignments, in parallel.  Also, create the database and the 
     #- tracks that don't rely on cluster runs or on masked sequence.  
@@ -267,8 +267,6 @@ exit; # don't actually run this like a script :)
     cd ~/hg14
     tcsh jkStuff/liftOut2.sh
 
-    #- Make chr*.fa from contig .fa
-    tcsh jkStuff/chrFa.sh
 
 # VERIFY REPEATMASKER RESULTS (TODO)
 
@@ -299,7 +297,7 @@ exit; # don't actually run this like a script :)
     # <1/NT_004321, Y/NT_025975, 11/NT_033237> (TODO)
 
 
-# MAKE LIFTALL.LFT, NCBI.LFT (TODO)
+# MAKE LIFTALL.LFT, NCBI.LFT (DONE 03/16/03)
     cd ~/hg14
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
     # Create jkStuff/ncbi.lft for lifting stuff built with the NCBI assembly.
@@ -311,13 +309,14 @@ exit; # don't actually run this like a script :)
     # to match.
 
 
-# SIMPLE REPEAT [TRF] TRACK (TODO)
+# SIMPLE REPEAT [TRF] TRACK (DONE 03/16/03)
     # Distribute contigs to /iscratch/i
     ssh kkr1u00
     rm -rf /iscratch/i/gs.15/build32/contigs
     mkdir -p /iscratch/i/gs.15/build32/contigs
     cd ~/hg14
     foreach c (?{,?})
+      echo copying contigs of chr$c
       cp -p $c/NT_*/NT_??????.fa /iscratch/i/gs.15/build32/contigs
     end
     # Make sure the total size looks like what you'd expect:
@@ -348,7 +347,7 @@ exit; # don't actually run this like a script :)
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-# REFSEQ ALIGNMENTS AND REFGENE TRACK PREP (TODO)
+# REFSEQ ALIGNMENTS AND REFGENE TRACK PREP (DONE 03/16/03)
     # Make sure contigs have been distributed to /iscratch/i/ (should have 
     # been done for simpleRepeat/TRF above)
     # Make sure refSeq.fa is under /iscratch/i too (GENBANK above)
@@ -375,7 +374,7 @@ exit; # don't actually run this like a script :)
     # After the database has been created, go to "LOAD REFGENE" below...
 
 
-# PROCESS SIMPLE REPEATS INTO MASK (TODO)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE 03/16/03)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
@@ -489,7 +488,7 @@ exit; # don't actually run this like a script :)
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
-# CREATING DATABASE  (TODO)
+# CREATING DATABASE  (DONE 03/16/03)
     ssh hgwdev
     # if you haven't already:
     ln -s /cluster/store5/gs.15/build32 ~/oo
@@ -513,29 +512,43 @@ exit; # don't actually run this like a script :)
     hgLoadOut hg14 ?/*.fa.out ??/*.fa.out
 
 
-# SEQUENCE INFO: CHROMINFO (TODO)
-    # Make unmasked nibs -- necessary for building chromInfo.
+# SEQUENCE INFO: CHROMINFO (DONE 03/16/03)
     ssh eieio
     cd ~/hg14
+    # Sanity-check */lift/ordered.lft length vs. agp length:
+    foreach c ( ?{,?} )
+      if (-e $c/lift/ordered.lst) then
+        set lftLen = `tail -1 $c/lift/ordered.lft | awk '{print $5;}'`
+        set agpLen = `tail -1 $c/chr$c.agp | awk '{print $3;}'`
+        if ($lftLen != $agpLen) then
+          echo "ERROR: chr$c : lftLen=$lftLen, agpLen=$agpLen"
+        else
+          echo "chr$c : $lftLen"
+        endif
+      endif
+    end
+    # Make chr*.fa from contig .fa
+    tcsh jkStuff/chrFa.sh
+    # Make unmasked nibs -- necessary for building chromInfo.
     mkdir nib
     foreach f (?{,?}/chr?{,?}{,_random}.fa)
+      echo making unmasked nib for $f
       faToNib $f nib/$f:t:r.nib
     end
     # Make symbolic links from /gbdb/hg14/nib to the real nibs.
     ssh hgwdev
     mkdir -p /gbdb/hg14/nib
-    foreach f (/cluster/store4/hg14/nib/chr*.nib)
+    foreach f (/cluster/store5/gs.15/build32/nib/chr*.nib)
       ln -s $f /gbdb/hg14/nib
     end
     # Load /gbdb/hg14/nib paths into database and save size info.
-    ssh hgwdev
     hgsql hg14  < ~/src/hg/lib/chromInfo.sql
     cd ~/hg14
     hgNibSeq -preMadeNib hg14 /gbdb/hg14/nib ?{,?}/chr?{,?}{,_random}.fa
     echo "select chrom,size from chromInfo" | hgsql -N hg14 > chrom.sizes
 
 
-# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (TODO)
+# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (DONE 03/16/03)
     # Store o+o info in database.
     # Note: for build31, Terry specially requested these files from NCBI:
     # finished.finf
@@ -546,20 +559,24 @@ exit; # don't actually run this like a script :)
     cd /cluster/store5/gs.15/build32
     if (-f contig_overlaps.agp) then
       jkStuff/liftGl.sh contig.gl
-      hgGoldGapGl hg14 /cluster/store5/gs.15 build32 
-      cd /cluster/store5/gs.15
-      hgClonePos hg14 build32 ffa/sequence.inf /cluster/store5/gs.15 -maxErr=3
     else
       hgGoldGapGl -noGl hg14 /cluster/store5/gs.15 build32 
       echo ""
       echo "*** Note from makeHg14.doc:"
       echo "Come back to this step later when we have contig_overlaps.agp\!"
     endif
+    ssh hgwdev
+    cd /cluster/store5/gs.15/build32
+    if (-f contig_overlaps.agp) then
+      hgGoldGapGl hg14 /cluster/store5/gs.15 build32 
+      cd /cluster/store5/gs.15
+      hgClonePos hg14 build32 ffa/sequence.inf /cluster/store5/gs.15 -maxErr=3
+    end
     cd /cluster/store5/gs.15
     hgCtgPos hg14 build32 
 
 
-# LOAD REFGENE (TODO)
+# LOAD REFGENE (DONE 03/16/03)
     # Do this after the database has been created and the RefSeq alignments 
     # are done (above)
     # Load refSeq alignments into database
@@ -575,8 +592,7 @@ exit; # don't actually run this like a script :)
     hgLoadRna add -type=refSeq hg14 /gbdb/hg14/mrna.134/refSeq.fa \
       /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.ra
     cd ~/hg14/bed/refSeq
-    hgRefSeqMrna hg14 \
-      /gbdb/hg14/mrna.134/refSeq/org/Homo_sapiens/refSeq.fa \
+    hgRefSeqMrna hg14 /gbdb/hg14/mrna.134/refSeq.fa \
       /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.ra \
       all_refSeq.psl \
       /cluster/store5/mrna.134/refSeq/loc2ref \
@@ -594,7 +610,7 @@ exit; # don't actually run this like a script :)
     | hgsql hg14
 
 
-# GC PERCENT (TODO)
+# GC PERCENT (DONE 03/16/03)
      ssh hgwdev
      mkdir -p ~/hg14/bed/gcPercent
      cd ~/hg14/bed/gcPercent
@@ -602,11 +618,11 @@ exit; # don't actually run this like a script :)
      hgGcPercent hg14 ../../nib
 
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (TODO)
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 03/16/03)
     ssh hgwdev
     # Enter hg14 into hgcentraltest.dbDb so test browser knows about it:
     echo 'insert into dbDb values("hg14", "Human Mar. 2003", \
-            "/gbdb/hg14/nib", "Human", "USP18", 1, 60, "Human");' \
+            "/gbdb/hg14/nib", "Human", "DUSP18", 1, 80, "Human");' \
     | hgsql -h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
     cd ~/src/hg/makeDb/trackDb
@@ -619,8 +635,9 @@ exit; # don't actually run this like a script :)
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO)
     ssh hgwdev
-    echo 'insert into blatServers values("hg14", "blat10", "17778", "1"); \
-          insert into blatServers values("hg14", "blat10", "17779", "0");' \
+    # Substitute BBB with the correct number for the hostname:
+    echo 'insert into blatServers values("hg14", "blatBBB", "17778", "1"); \
+          insert into blatServers values("hg14", "blatBBB", "17779", "0");' \
     | hgsql -h genome-testdb hgcentraltest
 
 
@@ -1728,9 +1745,12 @@ o - # ssh hgwdev
     ssh hgwdev
     cd ~/kent/src/hg/sage
     make
-    cd /projects/cc/hg/sugnet/sage
-    mkdir sage.XXX # XXX = current uniGene build
-    cd sage.XXX
+    # XXX = uniGene build for which SAGE was built -- not necessarily current!
+    # Figure out the build number by peeking at this file:
+    lynx ftp://ftp.ncbi.nih.gov/pub/sage/map/info.txt
+    set version = XXX
+    mkdir /projects/cc/hg/sugnet/sage/sage.$version
+    cd /projects/cc/hg/sugnet/sage/sage.$version
     ncftp ftp://ftp.ncbi.nih.gov/pub/sage
       mget -R map/readme.txt map/info.txt extr info map/Hs
       quit
@@ -1760,7 +1780,8 @@ DONE TO HERE
     # ~/hg14/uniGene/hg14.uniGene.lifted.pslReps.psl
     # -- see "MAKE UNIGENE ALIGNMENTS" below
     cd /projects/cc/hg/sugnet/sage/sage.XXX/extr
-    addAveMedScoreToPsls ~/hg14/bed/uniGene/hg14.uniGene.lifted.pslReps.psl \
+    addAveMedScoreToPsls \
+      ~/hg14/bed/uniGene.$version/hg14.uniGene.lifted.pslReps.psl \
       sageSummary.sage  uniGene.wscores.bed
     hgLoadBed hg14 uniGene_2 uniGene.wscores.bed
     hgsql hg14 < ~kent/src/hg/lib/sage.sql 
@@ -1801,12 +1822,12 @@ DONE TO HERE
 DONE TO HERE
     ssh kk
     set version = XXX # same as above
-    mkdir -p ~/hg14/bed/uniGene
-    cd ~/hg14/bed/uniGene
-    ls -1S /cluster/store5/gs.15/build32/trfFa/ > allctg.lst
-    ls -1  /iscratch/i/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
+    mkdir -p ~/hg14/bed/uniGene.$version
+    cd ~/hg14/bed/uniGene.$version
+    ls -1S /cluster/store5/gs.15/build32/trfFa/* > allctg.lst
+    ls -1S /iscratch/i/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store5/gs.15/build32/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
     para create para.spec
     mkdir psl
@@ -1814,12 +1835,12 @@ DONE TO HERE
     para check
     para push
     # ssh eieio
-    cd ~/hg14/bed/uniGene
-    pslSort dirs hg14.uniGene.psl tmp psl >& pslSort.log
-    liftUp hg14.uniGene.lifted.psl \
-      /cluster/store5/gs.15/build32/jkStuff/liftAll.lft carry hg14.uniGene.psl
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 \
-      hg14.uniGene.lifted.psl hg14.uniGene.lifted.pslReps.psl /dev/null
+    set version = XXX # same as above
+    cd ~/hg14/bed/uniGene.$version
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
+    | pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 \
+      stdin hg14.uniGene.lifted.pslReps.psl /dev/null
     # use hg14.uniGene.lifted.pslReps.psl for building SAGE track (above).
 
 
