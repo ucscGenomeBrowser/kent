@@ -74,6 +74,10 @@ for( my $i = 0; $i < $totColors; ++$i ) {
 		} else {
 			$xText = $x;		# finally Un is the widest
 		}
+	} else {
+		if( $names[$i] =~ m/^[XM]/ ) {
+			$xText -= 2;	#	X and M are too far right
+		}
 	}
         #	color the digits based on the the lightness of the block
 	my $fontColor = "#ffffff";
