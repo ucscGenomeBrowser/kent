@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.167 2005/01/20 00:49:51 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.168 2005/01/22 20:56:21 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -254,10 +254,11 @@ radioButton("ldNeg", ldNeg, "green");
 radioButton("ldNeg", ldNeg, "blue");
 printf("&nbsp; - Color for negative values of LD<BR>&nbsp;&nbsp;");
 radioButton("ldOut", ldOut, "red");
-radioButton("ldOut", ldOut, "green"); /* must add mg_green in hgtracks */
+radioButton("ldOut", ldOut, "green");
 radioButton("ldOut", ldOut, "blue");
 radioButton("ldOut", ldOut, "yellow");
 radioButton("ldOut", ldOut, "black");
+radioButton("ldOut", ldOut, "white");
 radioButton("ldOut", ldOut, "none");
 printf("&nbsp; - Color for outlines<BR>&nbsp;&nbsp;");
 }
