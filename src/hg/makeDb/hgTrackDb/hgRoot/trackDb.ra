@@ -698,6 +698,7 @@ longLabel NCBI Clone Picks for the Mammalian Gene Collection
 priority 45
 visibility hide
 spectrum on
+private 1
 type psl est
 
 track mgcNcbiSplicedPicks
@@ -706,6 +707,7 @@ longLabel NCBI Clone Picks for the Mammalian Gene Collection That Have Been Spli
 priority 45.2
 visibility hide
 spectrum on
+private 1
 type psl est
 
 track mgcUcscPicks
@@ -714,5 +716,6 @@ longLabel UCSC Clone Picks for the Mammalian Gene Collection
 priority 45.3
 visibility hide
 spectrum on
+private 1
 type psl est
 
