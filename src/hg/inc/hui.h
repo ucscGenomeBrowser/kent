@@ -574,6 +574,9 @@ struct mrnaUiData
    struct mrnaFilter *filterList;	/* List of filters that can be applied. */
    };
 
+struct mrnaUiData *newBedUiData(char *track);
+/* Make a new  in extra-ui data structure for a bed. */
+
 struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno);
 /* Make a new  in extra-ui data structure for mRNA. */
 

@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.29 2004/02/07 02:09:45 angie Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.30 2004/03/03 16:19:41 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -203,7 +203,8 @@ for (i=0; i<symCount; ++i)
 	    score -= gapExt;
 	else
 	    {
-	    score -= gapStart;
+	    /* Use gapStart+gapExt to be consistent with blastz: */
+	    score -= (gapStart + gapExt);
 	    lastGap = TRUE;
 	    }
 	}

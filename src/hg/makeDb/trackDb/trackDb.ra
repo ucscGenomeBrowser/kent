@@ -314,7 +314,7 @@ shortLabel NCBI gene set
 longLabel NCBI $Organism 34.3 gene set
 group x
 priority 30.10
-visibility pack
+visibility hide
 color 10,100,15
 type genePred
 
@@ -323,7 +323,7 @@ shortLabel Hinxton gene set
 longLabel Hinxton $Organism 34 gene set
 group x
 priority 30.12
-visibility pack
+visibility hide
 color 10,15,100,
 type genePred
 
@@ -400,28 +400,6 @@ priority 45
 visibility hide
 color 0,100,100
 type genePred twinscanPep
-
-track pseudoUcsc
-shortLabel UCSC Pseudo
-longLabel Processed Pseudogene Locus Based on Blastz Chains UCSC
-group genes
-priority 45
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type bed 5 .
-
-track pseudoMrna
-shortLabel Pseudo Mrna
-longLabel Processed Pseudogene Locus Based on mrna alignments
-group genes
-priority 45
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno
 
 track ucscFromMouse
 shortLabel UCSC Mm3
@@ -510,15 +488,6 @@ url http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?seqid=$$
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
-group rna
-priority 54
-visibility pack
-spectrum on
-type psl .
-
-track mrnaBad
-shortLabel Bad mRNAs
-longLabel $Organism mRNAs from GenBank with potential genomic priming
 group rna
 priority 54
 visibility pack
@@ -689,11 +658,13 @@ type psl .
 
 track miRNA
 shortLabel miRNA
-longLabel Sanger miRNA Registry
-group rna
-priority 73
+longLabel MicroRNAs from the miRNA Registry
+group genes
+priority 63
 visibility hide
-type bed 5 +
+useScore 1
+color 255,64,64
+type bed 8
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
 
 track cpgIsland
@@ -1124,7 +1095,6 @@ priority 148.6
 visibility hide
 type sample 0 5 0.199
 
-
 track gpcr
 shortLabel Gpcr
 longLabel Gpcr from softberry and Rachel Karchin's HMM
@@ -1132,41 +1102,6 @@ group x
 priority 149
 visibility hide
 type genePred
-
-track gpcrKnown
-shortLabel Gpcr Known
-longLabel Gpcr from gpcrdb and genewise 
-group x
-priority 150
-visibility hide
-type genePred
-
-track gpcrUcsc
-shortLabel Gpcr UCSC
-longLabel Gpcr Predictions Based on Synteny
-group x
-priority 150
-visibility hide
-type genePred
-
-track gpcrTwinscan
-shortLabel Gpcr Twinscan
-longLabel Gpcr predictions based on Twinscan and Rachel Karchin's HMM
-group x
-priority 150
-visibility hide
-type genePred
-
-track borkPseudo
-shortLabel Bork Pseudo
-longLabel Bork Pseudogene Predictions 
-group x
-priority 150
-visibility hide
-type genePred
-blurb This is a the bork blurb.
-otherDb rn3
-pizza pepperoni and mushroom
 
 track loweProbes
 track loweProbes
@@ -1260,5 +1195,4 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
-
 

@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.34 2004/02/02 23:21:04 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.35 2004/03/03 17:57:53 sugnet Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1042,6 +1042,20 @@ sprintf(buf, "%s_%s", track, key);
 fil->key = cloneString(buf);
 fil->table = table;
 slAddTail(&mud->filterList, fil);
+}
+
+struct mrnaUiData *newBedUiData(char *track)
+/* Make a new  in extra-ui data structure for a bed. */
+{
+struct mrnaUiData *mud;
+char buf[64];
+AllocVar(mud);
+sprintf(buf, "%sFt", track);
+mud->filterTypeVar = cloneString(buf);
+sprintf(buf, "%sLt", track);
+mud->logicTypeVar = cloneString(buf);
+addMrnaFilter(mud, track, "name", "name",track);
+return mud;
 }
 
 struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)

@@ -79,6 +79,12 @@ void htmlVaWarn(char *format, va_list args);
 /* Write an error message.  (Generally you just call warn() or errAbort().
  * This is exposed mostly for the benefit of the cart.) */
 
+char *htmlWarnStartPattern();
+/* Return starting pattern for warning message. */
+
+char *htmlWarnEndPattern();
+/* Return ending pattern for warning message. */
+
 void htmlAbort();
 /* Terminate HTML file.  Exposed for cart's use. */
 

@@ -103,6 +103,30 @@ priority 6
 visibility off
 type distance knownBlastTab query target identity
 
+name foldUtr5
+shortLabel 5' UTR Fold
+longLabel 5' UTR Fold Energy (Estimated kcal/mol)
+priority 6.5
+visibility off
+type float foldUtr5 name energy
+itemUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_mrnaFoldRegion=foldUtr3&hgg_do_rnaFoldDisplay=text
+urlChromVar hgg_chrom
+urlStartVar hgg_start
+urlEndVar hgg_end
+hgsid on
+
+name foldUtr3
+shortLabel 3' UTR Fold
+longLabel 3' UTR Fold Energy (Estimated kcal/mol)
+priority 6.51
+visibility off
+type float foldUtr3 name energy
+itemUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_mrnaFoldRegion=foldUtr3&hgg_do_rnaFoldDisplay=text
+urlChromVar hgg_chrom
+urlStartVar hgg_start
+urlEndVar hgg_end
+hgsid on
+
 name knownPos
 shortLabel Genome Position
 longLabel Genome Position/Link to Genome Browser

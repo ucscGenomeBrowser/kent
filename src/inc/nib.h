@@ -99,5 +99,8 @@ void nibInfoFree(struct nibInfo **pNib);
 struct nibInfo *nibInfoFromCache(struct hash *hash, char *nibDir, char *nibName);
 /* Get nibInfo on nibDir/nibName.nib from cache, filling cache if need be. */
 
+int nibGetSize(char* nibFile);
+/* Get the number of nucleotides in a nib */
+
 #endif /* NIB_H */
 

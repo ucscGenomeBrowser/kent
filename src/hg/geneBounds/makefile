@@ -21,6 +21,7 @@ DIRS = \
 	axtForEst \
 	bedCons \
 	checkableBorf \
+	clusterGenes \
 	clusterRna \
 	dnaMotifFind \
 	eisenInput \

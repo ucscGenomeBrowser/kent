@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.573 2004/02/23 10:15:15 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.577 2004/03/02 04:52:46 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1692,7 +1692,9 @@ char *thisOrg = hOrganism(database);
 char *otherOrg = NULL;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
+double subSetScore = 0.0;
 int qs, qe;
+boolean nullSubset = FALSE;
 
 if (! sameWord(otherDb, "seq"))
     {
@@ -1705,6 +1707,13 @@ if (otherOrg == NULL)
     }
 
 chain = chainDbLoad(conn, database, track, seqName, atoi(item));
+chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
+if (subChain == NULL)
+    nullSubset = TRUE;
+else
+    /* Note: chain.c's chainSubsetOnT says this is a "fake" (scaled) score. */
+    subSetScore = subChain->score;
+chainFree(&toFree);
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
@@ -1721,7 +1730,12 @@ else
 	   qs, qe, chain->qEnd - chain->qStart);
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
-printf("<B>Score:</B> %1.0f<BR>\n", chain->score);
+printf("<B>Score:</B> %1.0f\n", chain->score);
+if (nullSubset)
+    printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
+else
+    printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
+	   subSetScore);
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
@@ -2970,6 +2984,17 @@ else
 freeMem(encoded);
 }
 
+void medlineProductLinkedLine(char *title, char *text)
+/* Produce something that shows up on the browser as
+ *     TITLE: value
+ * with the value hyperlinked to medline. 
+ * Replaces commas in the product name with spaces, as commas sometimes
+ * interfere with PubMed search */
+{
+    subChar(text, ',', ' ');
+    medlineLinkedLine(title, text, text);
+}
+
 void appendAuthor(struct dyString *dy, char *gbAuthor, int len)
 /* Convert from  Kent,W.J. to Kent WJ and append to dy.
  * gbAuthor gets eaten in the process. 
@@ -3323,7 +3348,7 @@ if (row != NULL)
     printf("<B>Description:</B> %s<BR>\n", description);
 
     medlineLinkedLine("Gene", geneName, geneName);
-    medlineLinkedLine("Product", productName, productName);
+    medlineProductLinkedLine("Product", productName);
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
     medlineLinkedLine("Author", author, dy->string);
@@ -4602,6 +4627,7 @@ else if (qType == gftProtChes)
     blockCount = showChesAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 else 
     blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
+htmEnd(body);
 fclose(body);
 chmod(bodyTn.forCgi, 0666);
 
@@ -6476,7 +6502,7 @@ if (hasMedical)
 		}
 	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 	    if (rl->product[0] != 0)
-    		medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+    		medlineProductLinkedLine("PubMed on Product", rl->product);
 	    printf("\n");
 	    printGeneLynxName(rl->name);
 	    printf("\n");
@@ -6825,13 +6851,13 @@ if (!startsWith("Worm", organism))
 	if (! isBDGPName(rl->name))
 	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 	if (rl->product[0] != 0)
-	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     else
 	{
 	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 	if (rl->product[0] != 0)
-	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     printf("\n");
     if (startsWith("Human", organism)) 
@@ -8753,7 +8779,7 @@ if (row != NULL)
 		{
 		printf(", %s",infoRow->otherNames[i]);
 		}
-	    printf("</TR>\n</TABLE>\n");
+	    printf("</TD></TR>\n</TABLE>\n");
 	    htmlHorizontalLine();
 	    }
 	printf("<TABLE>\n");

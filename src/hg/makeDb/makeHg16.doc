@@ -916,7 +916,10 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
       /cluster/bin/i386/hgClonePos hg16 build34 ffa/sequence.inf /cluster/store4/gs.17 -maxErr=3
     end 
     cd /cluster/store4/gs.17
+    # (2/27/04 angie) re-loaded -- chr{1,4,8,15}_random lift files changed
+    # 7/30/04.
     hgCtgPos hg16 build34 
+
 
 # CREATE NON-STANDARD JOIN CERTIFICATES WEB PAGE AND TABLE
 
@@ -932,12 +935,18 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 
 # Donna's edits to html page
 
+# (3/2/04 angie: edit cert.tab to remove some extra tab characters in comments
+#  so mySql doesn't truncate them, & reload)
+
 # Load cert table into database
 
     ssh hgwdev
     cd ~/hg16/certificates
-    hgsql hg16 < kent/src/hg/lib/certificate.sql 
-    echo 'load data local infile "cert.tab" into table certificate;' | hgsql hg16
+    echo "drop table certificate" | hgsql hg16
+    hgsql hg16 < ~/kent/src/hg/lib/certificate.sql 
+    echo 'load data local infile "cert.tab" into table certificate;' \
+    | hgsql hg16
+
 
 # AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2003-07-30 - Hiram)
 
@@ -3645,7 +3654,7 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     # added to hashPsls to process shorter Affy probe set names
     # assumes that names has 2 colons but when shortened to fit in the seq 
     # database, there is only 1.
-    # e.g. full name: consensus:HG-U133A:212933_x_at; short name: HG-U133A:212933_x_at;
+    # e.g. full name: "consensus:HG-U133A:212933_x_at;" short name: "HG-U133A:212933_x_at;"
     affyUclaMergePslData affyUclaMergePslData -pslFile=affyU133.psl -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt -bedOut=affyUcla.bed -expRecordOut=affyUcla.expRecords -expFile=/projects/compbio/data/microarray/affyUcla/data/expNames -toDiffFile=toDiff.txt
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyUcla.sql hg16 affyUcla affyUcla.bed
     hgLoadPsl hg16 affyU133.psl
@@ -3659,7 +3668,12 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     cd /gbdb/hgFixed/affyProbes
     ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa .
     ln -s /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
-    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    
+    # use perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # in HG-U95Av2_all.fa seque
+    # reload sequences with "U95Av2" prefix removed so acc matches name used 
+    # in other dependent tables for affyU95Av2 only
+    hgLoadSeq -abbr=U95Av2: hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
     hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
 # Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
@@ -3722,6 +3736,35 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     
     # Cleanup
     rm HG-U133AB_all 
+
+# DO FAMILY BROWSER VERSIONS OF AFFYUCLANORMAL TRACK (In Progress -jk 3/2/2004)
+   # Create affyU133Orient table data
+   ssh eieio
+   cd /cluster/data/hg16/bed/affyUcla.2044-02-04
+   pslSortAcc nohead chrom temp affyU133.psl
+   rm -r temp
+   cd chrom
+   #This loop takes about 15 minutes
+   foreach i (*.psl)
+     polyInfo $i /cluster/data/hg16/nib/$i:r.nib \
+       /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa \
+       $i:r.polyInfo
+     echo done $i
+   end
+   cat *.polyInfo > ../affyU133OrientInfo.bed
+   rm *.polyInfo
+
+   # Load orientation table data 
+   ssh hgwdev
+   cd /cluster/data/hg16/bed/affyUcla.2044-02-04
+   sed 's/mrnaOrientInfo/affyU133OrientInfo/' \
+       $HOME/kent/src/hg/lib/mrnaOrientInfo.sql > affyU133OrientInfo.sql
+   hgLoadBed hg16 affyU133OrientInfo affyU133OrientInfo.bed \
+      -sqlTable=affyU133OrientInfo.sql > /dev/null
+       
+   # Do clustering (this takes about 10 minutes to run)
+   clusterRna hg16 u133Cluster.bed /dev/null -noEst -noRefSeq -group=u133Group.tab -mRNAOrient=affyU133OrientInfo -rna=affyU133
+~~~
 
 # GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
     # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)
@@ -5994,22 +6037,23 @@ hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
     # In an email 2/13/04, Arian said we could treat all human repeats as 
     # lineage-specific for human-chicken blastz.  Scripts expect *.out.spec 
     # filenames, so set that up:
-    ssh kksilo
+    ssh kkr1u00
     cd /cluster/data/hg16
-    mkdir /cluster/bluearc/hg16/linSpecRep.Chicken
+    mkdir /iscratch/i/gs.17/build34/linSpecRep.Chicken
     foreach f (/scratch/hg/gs.17/build34/rmsk/chr*.fa.out)
-      cp -p $f /cluster/bluearc/hg16/linSpecRep.Chicken/$f:t:r:r.out.spec
+      cp -p $f /iscratch/i/gs.17/build34/linSpecRep.Chicken/$f:t:r:r.out.spec
     end
+    iSync
     # Use these the next time we run human-chicken blastz.
 
 
-# BLASTZ CHICKEN (GALGAL1) (DONE 2/19/04 angie)
+# BLASTZ CHICKEN (GALGAL2) (DONE 2/26/04 angie)
     ssh kk
-    # space is awful tight on store4 -- use bluearc.  
-    mkdir /cluster/bluearc/hg16/bed/blastz.galGal1.2004-02-18
-    ln -s /cluster/bluearc/hg16/bed/blastz.galGal1.2004-02-18 \
+    # space is awful tight on store4 -- use store7.  
+    mkdir -p /cluster/store7/hg16/bed/blastz.galGal2.2004-02-25
+    ln -s /cluster/store7/hg16/bed/blastz.galGal2.2004-02-25 \
       /cluster/data/hg16/bed/
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
     # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
     # repeats.
     cat << '_EOF_' > DEF
@@ -6031,21 +6075,21 @@ BLASTZ_ABRIDGE_REPEATS=1
 SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
 SEQ1_RMSK=
 SEQ1_FLAG=
-SEQ1_SMSK=/cluster/bluearc/hg16/linSpecRep.Chicken
+SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.Chicken
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY: Chicken
-SEQ2_DIR=/cluster/bluearc/galGal1/nib
+SEQ2_DIR=/iscratch/i/galGal2/nib
 SEQ2_RMSK=
 SEQ2_FLAG=
-SEQ2_SMSK=/cluster/bluearc/galGal1/linSpecRep
+SEQ2_SMSK=/iscratch/i/galGal2/linSpecRep
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/bluearc/hg16/bed/blastz.galGal1.2004-02-18
+BASE=/cluster/store7/hg16/bed/blastz.galGal2.2004-02-25
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -6058,7 +6102,7 @@ SEQ2_LEN=$BASE/S2.len
     # first cluster run: raw blastz alignments
     ssh kk
     bash # if a csh/tcsh user
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
     source DEF
     mkdir $RAW run.0
     /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
@@ -6067,16 +6111,15 @@ SEQ2_LEN=$BASE/S2.len
     sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
     para create jobList
     para try, check, push, check, ....
-    # A couple crashes had to be re-pushed in the morning, thus the long time:
-#Completed: 49155 of 49155 jobs
-#Average job time:                 518s       8.64m     0.14h    0.01d
-#Longest job:                     1546s      25.77m     0.43h    0.02d
-#Submission to last job:         48034s     800.57m    13.34h    0.56d
+#Completed: 51189 of 51189 jobs
+#Average job time:                 477s       7.95m     0.13h    0.01d
+#Longest job:                     2318s      38.63m     0.64h    0.03d
+#Submission to last job:         29598s     493.30m     8.22h    0.34d
 
     # second cluster run: lift raw alignments -> lav dir
-    ssh kkr1u00
+    ssh kki
     bash # if a csh/tcsh user
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
     source DEF
     mkdir run.1 lav
     /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
@@ -6085,36 +6128,43 @@ SEQ2_LEN=$BASE/S2.len
     para create jobList
     para try, check, push, etc ...
 #Completed: 339 of 339 jobs
-#Average job time:                  11s       0.18m     0.00h    0.00d
-#Longest job:                       55s       0.92m     0.02h    0.00d
-#Submission to last job:           642s      10.70m     0.18h    0.01d
+#Average job time:                   6s       0.11m     0.00h    0.00d
+#Longest job:                       21s       0.35m     0.01h    0.00d
+#Submission to last job:           150s       2.50m     0.04h    0.00d
 
     # third run: lav -> axt
-    ssh kolossus
-    bash # if a csh/tcsh user
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
-    source DEF
-    mkdir axtChrom pslChrom
-    cd lav
-    # oops, can't see iscratch (anymore?):
-    SEQ1_DIR=/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs
-    for chr in chr*
-    do
-      cd $chr
-      echo $chr lav to axt,psl
-      cat `ls -1 *.lav | sort -g` \
-      | $HOME/bin/x86_64/lavToAxt stdin $SEQ1_DIR $SEQ2_DIR stdout \
-      | $HOME/bin/x86_64/axtSort stdin ../../axtChrom/$chr.axt
-      axtToPsl ../../axtChrom/$chr.axt $SEQ1_LEN $SEQ2_LEN \
-        ../../pslChrom/$chr.psl
-      cd ..
-    done
-    cd ..
+    ssh kki
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| $HOME/bin/x86_64/lavToAxt stdin \
+    /iscratch/i/gs.17/build34/bothMaskedNibs /iscratch/i/galGal2/nib stdout \
+| $HOME/bin/x86_64/axtSort stdin ../../axtChrom/$chr.axt 
+$HOME/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+  ../../pslChrom/$chr.psl
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+    para try, check, push, check
+#Completed: 42 of 42 jobs
+#Average job time:                  38s       0.64m     0.01h    0.00d
+#Longest job:                      147s       2.45m     0.04h    0.00d
+#Submission to last job:           147s       2.45m     0.04h    0.00d
 
 
-# RUN AXTBEST AND GENERATE MAF FOR MULTIZ (DONE 2/19/04 angie)
+# RUN AXTBEST AND GENERATE MAF FOR MULTIZ (DONE 2/26/04 angie)
     ssh kolossus
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
     mkdir axtBest pslBest
     foreach chrdir (lav/chr*)
       set chr=$chrdir:t
@@ -6126,22 +6176,22 @@ SEQ2_LEN=$BASE/S2.len
     foreach f (axtBest/chr*.axt)
       set maf = mafBest/$f:t:r.hg.maf
       axtToMaf $f \
-            /cluster/data/hg16/chrom.sizes /cluster/data/galGal1/chrom.sizes \
-            $maf -tPrefix=hg16. -qPrefix=galGal1.
+            /cluster/data/hg16/chrom.sizes /cluster/data/galGal2/chrom.sizes \
+            $maf -tPrefix=hg16. -qPrefix=galGal2.
     end
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
-    cat pslBest/chr*.psl | hgLoadPsl -table=blastzBestGalGal1 hg16  stdin
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
+    cat pslBest/chr*.psl | hgLoadPsl -table=blastzBestGalGal2 hg16  stdin
 
 
-# CHAIN CHICKEN BLASTZ (DONE 2/19/04 angie)
+# CHAIN CHICKEN BLASTZ (DONE 2/26/04 angie)
     # Run axtChain on little cluster
-    ssh kkr1u00
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18
+    ssh kki
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChrom/*.axt \
+    ls -1S /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChrom/*.axt \
       > input.lst
     cat << '_EOF_' > gsub
 #LOOP
@@ -6165,11 +6215,11 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtFilter -notQ=chrUn $1 \
-| ~/bin/i386/axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+| axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
                       -linearGap=../../chickenHumanTuned.gap \
                       -minScore=5000 stdin \
-    /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
-    /cluster/bluearc/galGal1/nib $2 > $3
+    /iscratch/i/gs.17/build34/bothMaskedNibs \
+    /iscratch/i/galGal2/nib $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
@@ -6180,53 +6230,95 @@ axtFilter -notQ=chrUn $1 \
     # failed:
 #Completed: 40 of 42 jobs
 #Crashed: 2 jobs
-#Average job time:                  99s       1.64m     0.03h    0.00d
-#Longest job:                      181s       3.02m     0.05h    0.00d
-#Submission to last job:           689s      11.48m     0.19h    0.01d
+#Average job time:                  28s       0.46m     0.01h    0.00d
+#Longest job:                       76s       1.27m     0.02h    0.00d
+#Submission to last job:            92s       1.53m     0.03h    0.00d
 
     # now on the cluster server, sort chains
     ssh kksilo
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain/chain
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
-        hgLoadChain hg16 ${c}_chainGalGal1 $i
+        hgLoadChain hg16 ${c}_chainGalGal2 $i
     end
 
 
-# NET HUMAN BLASTZ (DONE 2/19/04 angie)
+# RESCORE CHICKEN BLASTZ (DONE 3/1/04 angie)
+    # Webb noticed low scores in latest runs with repeats abridged --
+    # PSU's restore_rpts program rescored alignments with default matrix 
+    # instead of BLASTZ_Q matrix.  Rescore them here so the chainer sees 
+    # the higher scores:
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
+    mkdir axtChrom.rescore
+    foreach f (axtChrom/chr*.axt)
+      axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
+        $f axtChrom.rescore/$f:t
+    end
+    mv axtChrom axtChrom.orig
+    mv axtChrom.rescore axtChrom
+
+
+# NET HUMAN BLASTZ (DONE 2/26/04 angie)
     ssh kksilo
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
     | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
     | netSyntenic stdin noClass.net
 
     # Add classification info using db tables:
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
-    netClass noClass.net hg16 galGal1 human.net
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
+    netClass noClass.net hg16 galGal2 human.net
 
     # Make a 'syntenic' subset:
     ssh kksilo
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
     rm noClass.net
     # Make a 'syntenic' subset of these with
     netFilter -syn human.net > humanSyn.net
 
     # Load the nets into database 
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-02-18/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet hg16 netGalGal1 stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyGalGal1 stdin
-    # Add entries for chainGalGal1, netGalGal1, syntenyGalGal1 to 
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg16 netGalGal2 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyGalGal2 stdin
+    # Add entries for chainGalGal2, netGalGal2, syntenyGalGal2 to 
     # human/hg16 trackDb
+
+
+# MAKE VSGALGAL2 DOWNLOADABLES (DONE 3/1/04 angie)
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25
+    # Webb asked for axtChrom/chr22.axt... since axtChrom is rel. small 
+    # this time, just put it all out there.
+    zip /cluster/data/hg16/zip/GGaxtChrom.zip axtChrom/chr*.axt
+    cd /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
+    cp all.chain chicken.chain
+    zip /cluster/data/hg16/zip/chicken.chain.zip chicken.chain
+    rm chicken.chain
+    cp human.net chicken.net
+    zip /cluster/data/hg16/zip/chicken.net.zip chicken.net
+    rm chicken.net
+    cp humanSyn.net chickenSyn.net
+    zip /cluster/data/hg16/zip/chickenSyn.net.zip chickenSyn.net
+    rm chickenSyn.net
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg16/vsGalGal2
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsGalGal2
+    mv /cluster/data/hg16/zip/GGaxtChrom.zip axtChrom.zip
+    mv /cluster/data/hg16/zip/chicken*.zip .
+    md5sum *.zip > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
 # LOAD SOFTBERRY GENES (DONE - 2004-02-10 - Hiram)
@@ -6276,7 +6368,7 @@ axtFilter -notQ=chrUn $1 \
     #add a track entry to trackDb.ra 
     # in ~/kent/src/hg/makeDb/trackDb/human/hg16
 
-#	FAMILY BROWSER UPDATE	(WORKING - 2004-02-17 - Hiram)
+#	FAMILY BROWSER UPDATE	(DONE - 2004-02-17 - Hiram)
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
@@ -6774,6 +6866,8 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     mkdir jaxOrtholog
     cd jaxOrtholog
     wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/HMD_Human4.rpt
+    # save a little space
+    gzip HMD_Human4.rpt
 
     # this is a tricky one to parse.  This .rpt file is plain text, no
     # tabs, with expected text columns to contain the data.  We need to
@@ -6804,25 +6898,26 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     humanSymbol = substr($0,153,26)
     gsub(" ","",humanSymbol)
     Band = substr($0,179)
-    humanBand = Band;
-    numBands = split(Band,humanBands," ")
-    if (numBands > 1) { humanBand = humanBands[0] }
-    gsub(" ","",humanBand)
+    gsub(" *$","",Band)
+    gsub("^ *","",Band)
     mouseBand = substr($0,111,11)
     gsub(" ","",mouseBand)
     if (length(mouseBand) < 1) { mouseBand = "N/A" }
-    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", humanSymbol,humanBand,
+    printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", humanSymbol,Band,
 	$1,$3,$4,$5,mouseBand
 }
 '_EOF_'
+    # << this line makes emacs coloring happy
     # then using that script to fix it:
-    awk -f jaxToUCSC.awk *.rpt > jaxOrtholog.tab
+    zcat HMD_Human4.rpt.gz | awk -f jaxToUCSC.awk > jaxOrtholog.tab
 
     # Drop (just in case), create and load the table:
     hgsql -e 'drop table jaxOrtholog;' hg16
     hgsql hg16 < ~/kent/src/hg/lib/jaxOrtholog.sql
     hgsql -e \
 	'load data local infile "jaxOrtholog.tab" into table jaxOrtholog;' hg16
+    # save a little space
+    gzip jaxOrtholog.tab
 
 LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
     mkdir -p /cluster/data/hg16/bed/acembly
@@ -6864,3 +6959,76 @@ LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
     hgPepPred hg16 generic acemblyPep \
       acembly.$build.genes.proteins.fasta/chr*.fa
     unset build
+
+
+# MAKE HUMAN-CHIMP OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg16/bed/bedOver/hg16toPt0
+    cd /cluster/data/hg16/bed/bedOver/hg16toPt0
+    # use the combined blastz-blat best human chain, but assign unique IDs
+    # so that netChainSubset doesn't die:
+    chainSort /cluster/data/pt0/bed/blastz-blatHg16/human.best.2.chain stdout \
+    | chainMergeSort stdin \
+    | chainSplit chain stdin
+    # re-net with the new IDs:
+    mkdir net
+    foreach f (chain/*.chain)
+      echo chaining $f
+      chainNet $f /cluster/data/hg16/chrom.sizes \
+        /cluster/data/pt0/scaffold.sizes net/$f:t:r.net /dev/null
+    end
+    mkdir subset
+    foreach f (chain/*.chain)
+      echo subsetting net/$f:t:r.net, $f to subset/$f:t
+      netChainSubset net/$f:t:r.net $f subset/$f:t
+    end
+    cat subset/*.chain > /cluster/data/hg16/bed/bedOver/hg16Topt0.chain
+    # make it available:
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg16/liftOver/
+    zip -j hg16Topt0.zip /cluster/data/hg16/bed/bedOver/hg16Topt0.chain
+    # update README.txt
+
+
+# MAKE HUMAN-CHICKEN OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg16/bed/bedOver/hg16TogalGal2
+    cd /cluster/data/hg16/bed/bedOver/hg16TogalGal2
+    set chainDir = /cluster/data/hg16/bed/blastz.galGal2.2004-02-25/axtChain
+    netSplit $chainDir/human.net net
+    mkdir subset
+    foreach f ($chainDir/chain/*.chain)
+      echo subsetting $f:t:r
+      netChainSubset net/$f:t:r.net $f subset/$f:t
+    end
+    cat subset/*.chain > /cluster/data/hg16/bed/bedOver/hg16TogalGal2.chain
+
+
+#  miRNA track (DONE - 2004-03-02 - Hiram)
+    #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #	and Michel.Weber@ibcg.biotoul.fr
+    #	notify them if this assembly updates to renew this track
+    mkdir /cluster/data/hg16/bed/miRNA
+    cd /cluster/data/hg16/bed/miRNA
+    wget --timestamping \
+    "http://www.sanger.ac.uk/Software/Rfam/mirna/data/ucsc_human_mir_track.txt"
+    grep "^chr" ucsc_human_mir_track.txt | sed -e "s/ /\t/g" > human.mir.bed
+    hgLoadBed hg16 miRNA human.mir.bed
+    # added an entry to trackDb/trackDb.ra:  (good for Mm4 and Ce1 too)
+track miRNA
+shortLabel miRNA
+longLabel MicroRNAs from the miRNA Registry
+group genes
+priority 63
+visibility hide
+useScore 1
+color 255,64,64
+type bed 8
+url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
+    #	Note the useScore item.  This colors plus strand items in black
+    #	and minus strand items in gray.  A rarely used option.
+    #	This same track is in Mm4 and Ce1 too.  Added
+    #	findBedPos(query, hgp, "miRNA");
+    #	to lib/hgFind.c to allow searching for these items.
+
+

@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.130 2004/02/26 19:11:08 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.134 2004/03/03 20:29:31 hiram Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -402,8 +402,8 @@ safef(query, sizeof(query), "select %s from %s where %s = '%s'",
 return sqlQuickString(conn, query);
 }
 
-void cellSimplePrint(struct column *col, struct genePos *gp, 
-	struct sqlConnection *conn)
+void cellSimplePrintExt(struct column *col, struct genePos *gp, 
+	struct sqlConnection *conn, boolean lookupForUrl)
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, gp, conn);
@@ -423,7 +423,18 @@ else
     else if (col->itemUrl != NULL)
         {
 	hPrintf("<A HREF=\"");
-	hPrintf(col->itemUrl, s);
+	if (lookupForUrl)
+	    hPrintf(col->itemUrl, s);
+	else
+	    hPrintf(col->itemUrl, gp->name);
+	if (col->useHgsid)
+	    hPrintf("&%s", cartSidUrlString(cart));
+	if (col->urlChromVar)
+	    hPrintf("&%s=%s", col->urlChromVar, gp->chrom);
+	if (col->urlStartVar)
+	    hPrintf("&%s=%d", col->urlStartVar, gp->start);
+	if (col->urlEndVar)
+	    hPrintf("&%s=%d", col->urlEndVar, gp->end);
 	hPrintf("\" TARGET=_blank>");
 	hPrintNonBreak(s);
         hPrintf("</A>");
@@ -435,6 +446,21 @@ else
     freeMem(s);
     }
 hPrintf("</TD>");
+}
+
+void cellSimplePrint(struct column *col, struct genePos *gp, 
+	struct sqlConnection *conn)
+/* This just prints one field from table. */
+{
+cellSimplePrintExt(col, gp, conn, TRUE);
+}
+
+void cellSimplePrintNoLookupUrl(struct column *col, struct genePos *gp, 
+	struct sqlConnection *conn)
+/* This just prints one field from table using gp->name for
+ * itemUrl. */
+{
+cellSimplePrintExt(col, gp, conn, FALSE);
 }
 
 static void hPrintSpaces(int count)
@@ -946,9 +972,29 @@ void setupColumnFloat(struct column *col, char *parameters)
 {
 setupColumnLookup(col, parameters);
 col->simpleSearch = NULL;
+col->cellPrint = cellSimplePrintNoLookupUrl;
 col->filterControls = minMaxAdvFilterControls;
 col->advFilter = floatAdvFilter;
 }
+
+#ifdef OLD
+void setupColumnFloat(struct column *col, char *parameters)
+/* Set up column that looks up one numerical field in a table
+ * keyed by the geneId. */
+{
+col->table = cloneString(nextWord(&parameters));
+col->keyField = cloneString(nextWord(&parameters));
+col->valField = cloneString(nextWord(&parameters));
+if (col->valField == NULL)
+    errAbort("Not enough fields in type float for %s", col->name);
+col->exists = simpleTableExists;
+col->cellVal = cellLookupVal;
+col->cellPrint = cellSimplePrintNoLookupUrl;
+col->filterControls = minMaxAdvFilterControls;
+col->advFilter = floatAdvFilter;
+}
+#endif /* OLD */
+
 
 /* ---- Page/Form Making stuff ---- */
 
@@ -1047,7 +1093,6 @@ static void mainControlPanel(struct genePos *gp,
 /* Make control panel. */
 {
 controlPanelStart();
-// hPrintf("<TR><TD ALIGN=CENTER>");
 
 makeGenomeAssemblyControls();
 
@@ -1156,7 +1201,6 @@ gp = slElementFromIx(geneList, maxCount-1);
 if (gp != NULL)
     gp->next = NULL;
 
-// for (gp = geneList; gp !=NULL; gp = gp->next) uglyf("%s %f<BR>\n", gp->name, gp->distance);
 return geneList;
 }
 
@@ -1317,7 +1361,6 @@ safef(query, sizeof(query), "select name from %s where proteinId='%s'",
 return sqlQuickString(conn, query);
 }
 
-
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
@@ -1332,16 +1375,20 @@ for (raHash = raList; raHash != NULL; raHash = raHash->next)
     {
     AllocVar(col);
     col->name = mustFindInRaHash(raName, raHash, "name");
+    col->settings = raHash;
     col->shortLabel = mustFindInRaHash(raName, raHash, "shortLabel");
     col->longLabel = mustFindInRaHash(raName, raHash, "longLabel");
     col->priority = atof(mustFindInRaHash(raName, raHash, "priority"));
     col->on = col->defaultOn = sameString(mustFindInRaHash(raName, raHash, "visibility"), "on");
     col->type = mustFindInRaHash(raName, raHash, "type");
     col->itemUrl = hashFindVal(raHash, "itemUrl");
+    col->useHgsid = columnSettingExists(col, "hgsid");
+    col->urlChromVar = hashFindVal(raHash, "urlChromVar");
+    col->urlStartVar = hashFindVal(raHash, "urlStartVar");
+    col->urlEndVar = hashFindVal(raHash, "urlEndVar");
     selfLink = hashFindVal(raHash, "selfLink");
     if (selfLink != NULL && selfLink[0] != '0')
         col->selfLink = TRUE;
-    col->settings = raHash;
     columnDefaultMethods(col);
     setupColumnType(col);
     if (!hashFindVal(raHash, "hide"))
@@ -1409,7 +1456,6 @@ if (geneList == NULL)
 	}
     return;
     }
-// hPrintf("<TABLE BGCOLOR=\"#"HG_COL_BORDER"\">");
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 COLS=%d BGCOLOR=\"#"HG_COL_INSIDE"\">\n", 
 	totalHtmlColumns(colList));
 
@@ -1448,7 +1494,6 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         errAbort("Write error to stdout");
     }
 
-// hPrintf("</TABLE>");
 hPrintf("</TABLE>");
 }
 
@@ -1827,6 +1872,6 @@ htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 // htmlSetBgColor(HG_CL_INSIDE);
 oldCart = hashNew(10);
-cartHtmlShell("Gene Family v18", doMiddle, hUserCookie(), excludeVars, oldCart);
+cartHtmlShell("Gene Family v19", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }

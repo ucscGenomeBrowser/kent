@@ -5,13 +5,14 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.11 2003/05/21 05:19:17 baertsch Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.12 2004/02/29 00:21:51 daryl Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"masked", OPTION_BOOLEAN},
     {"hardMasked", OPTION_BOOLEAN},
     {"upper", OPTION_BOOLEAN},
     {"name", OPTION_STRING},
+    {"dbHeader", OPTION_STRING},
     {NULL, 0}
 };
 void usage()
@@ -26,6 +27,7 @@ errAbort(
   "   -hardMasked - use upper case for not masked-out and 'N' characters for masked-out bases\n"
   "   -upper - use uppper case characters for all bases\n"
   "   -name=name Use given name after '>' in output sequence\n"
+  "   -dbHeader=db Add full database info to the header, with or without -name option\n"
   );
 }
 
@@ -33,16 +35,16 @@ void nibFrag(int options, char *nibFile, int start, int end, char strand, char *
 /* nibFrag - Extract part of a nib file as .fa. */
 {
 struct dnaSeq *seq;
+char header[255];
+char name[128];
+int chromLength;
+
 if (strand != '+' && strand != '-'&& strand != 'm')
-   {
    usage();
-   }
 if (strand == 'm')
     strand = '-';
 if (start >= end)
-   {
    usage();
-   }
 seq = nibLoadPartMasked(options, nibFile, start, end-start);
 if (strand == '-')
     reverseComplement(seq->dna, seq->size);
@@ -50,7 +52,17 @@ if (optUpper == 1)
     touppers(seq->dna);
 if (hardMask)
     lowerToN(seq->dna, seq->size);
-faWrite(faFile, optionVal("name", seq->name), seq->dna, seq->size);
+if (optionExists("dbHeader"))
+    {
+    chromLength = nibGetSize(nibFile);
+    splitPath(nibFile, NULL, name, NULL);
+    safef(header,sizeof(header),"%s:%s.%s:%d-%d:%c:%d", 
+	  optionVal("name", seq->name), optionVal("dbHeader", "db"),
+	  name, start, end, strand, chromLength);
+    }
+else
+    safef(header,sizeof(header),"%s",optionVal("name", seq->name));
+faWrite(faFile, header, seq->dna, seq->size);
 }
 
 int main(int argc, char *argv[])
@@ -59,12 +71,15 @@ int main(int argc, char *argv[])
 int options = 0;
 int optUpper = 0;
 boolean hardMask = FALSE;
+
 optionInit(&argc, argv, optionSpecs);
 if(optionExists("masked") && optionExists("hardMasked"))
     {
     warn("\nError: Must choose 'masked' or 'hardMasked' but not both.\n");
     usage();
     }
+if(optionExists("dbHeader") && !optionExists("name"))
+    warn("\nPossible error: 'dbHeader' option chosen without 'name' option.\n");
 if (optionExists("masked"))
     options = NIB_MASK_MIXED;
 if(optionExists("hardMasked"))
@@ -76,15 +91,8 @@ if(optionExists("hardMasked"))
     }
 if (optionExists("upper"))
     optUpper = 1;
-
-if (argc != 6)
-    {
+if (argc != 6 || !isdigit(argv[2][0]) || !isdigit(argv[3][0]))
     usage();
-    }
-if (!isdigit(argv[2][0]) || !isdigit(argv[3][0]))
-    {
-    usage();
-    }
 nibFrag(options, argv[1], atoi(argv[2]), atoi(argv[3]), argv[4][0], argv[5], optUpper, hardMask);
 return 0;
 }

@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.3 2003/10/15 23:15:39 kent Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.4 2004/03/02 17:05:39 kent Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -308,7 +308,7 @@ if (hgExpLoadVals(lookupConn, dataConn, lookupTable, geneId, dataTable,
     }
 else
     {
-    replicate("n/a", representativeCount, representatives);
+    replicate("<TD>n/a</TD>", representativeCount, representatives);
     }
 }
 

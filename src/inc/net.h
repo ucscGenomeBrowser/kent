@@ -115,6 +115,13 @@ int netUrlOpen(char *url);
 /* Return unix low-level file handle for url. 
  * Just close(result) when done. */
 
+struct hash;
+
+int netUrlHead(char *url, struct hash *hash);
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines, including hopefully Content-Type: */
+
 struct lineFile *netLineFileOpen(char *url);
 /* Return a lineFile attatched to url.  This one
  * will skip any headers.   Free this with
@@ -123,6 +130,9 @@ struct lineFile *netLineFileOpen(char *url);
 struct lineFile *netLineFileMayOpen(char *url);
 /* Same as netLineFileOpen, but warns and returns
  * null rather than aborting on problems. */
+
+struct dyString *netSlurpFile(int sd);
+/* Slurp file into dynamic string and return. */
 
 struct dyString *netSlurpUrl(char *url);
 /* Go grab all of URL and return it as dynamic string. */
@@ -133,6 +143,10 @@ struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu);
 void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
 		boolean keepAlive);
 /* Send a GET request, possibly with Keep-Alive. */
+
+int netOpenHttpExt(char *url, char *method, boolean end);
+/* Return a file handle that will read the url.  If end is not
+ * set then can send cookies and other info to returned file 
 
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
 		       void (*responseCB)(void *userData, char *req,

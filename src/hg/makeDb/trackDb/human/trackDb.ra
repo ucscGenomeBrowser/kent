@@ -118,6 +118,36 @@ altColor 0,0,255
 chromosomes chr22,chr21
 type sample
 
+track affyTfbs_Sp1
+shortLabel Sp1 TFBS
+longLabel Affymetrix Experimentally Derived Sp1 Binding Sites
+group regulation
+priority 89.1
+visibility hide
+color 255,0,0
+chromosomes chr22,chr21
+type bed
+
+track affyTfbs_cMyc
+shortLabel cMyc TFBS
+longLabel Affymetrix Experimentally Derived cMyc Binding Sites
+group regulation
+priority 89.2
+visibility hide
+color 0,255,0
+chromosomes chr22,chr21
+type bed
+
+track affyTfbs_p53
+shortLabel p53 TFBS
+longLabel Affymetrix Experimentally Derived p53 Binding Sites
+group regulation
+priority 89.3
+visibility hide
+color 65,105,225
+chromosomes chr22,chr21
+type bed
+
 track affyU133
 shortLabel Affymetrix U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133

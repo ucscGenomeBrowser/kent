@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.24 2004/02/23 18:10:32 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.25 2004/02/28 00:56:00 angie Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -458,6 +458,8 @@ for (db = dbList; db != NULL; db = db->next)
     {
     char *freeze = hFreezeFromDb(db->name);
     char *organism = hOrganism(db->name);
+    if (! hDbIsActive(db->name))
+	continue;
     printf("   <DSN>\n");
     printf("     <SOURCE id=\"%s\" version=\"%s\">%s at UCSC</SOURCE>\n", 
     	db->name, version, freeze);
@@ -909,7 +911,7 @@ if (sameString(dataSource, "dsn"))
     {
     doDsn(dbList);
     }
-else if (slNameFind(dbList, dataSource) != NULL)
+else if (slNameFind(dbList, dataSource) != NULL && hDbIsActive(dataSource))
     {
     database = dataSource;
     hSetDb(dataSource);

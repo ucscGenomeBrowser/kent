@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.19 2004/02/15 01:10:48 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.20 2004/03/01 21:31:59 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -295,10 +295,10 @@ for (onOff = 1; onOff >= 0; --onOff)
 			col->shortLabel, col->longLabel);
 		hPrintf("<TR><TD>");
 		col->filterControls(col, conn);
-		hPrintf("</TD></TR>");
+		hPrintf("</TD></TR>\n");
 		hPrintf("</TABLE>");
 		hPrintf("<BR>");
-		hPrintf("</TD></TR>");
+		hPrintf("</TD></TR>\n");
 		}
 	    }
 	hPrintf("</TABLE>\n");

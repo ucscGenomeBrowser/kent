@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.7 2004/02/23 09:07:23 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.8 2004/03/03 18:10:42 sugnet Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +31,8 @@ errAbort(
   "Options:\n"
   "   -type=xxx - Set the type line here rather than looking it up in\n"
   "              the trackDb table.\n"
+  "   -geneTableType=xxx - Set the gene table type (bed or genePred)\n"
+  "                       rather than look it up in trackDb table.\n" 
   "   -all - Put all elements of track that intersect with geneTrack\n"
   "          into mapTable, not just the best for each gene.\n"
   "   -cds - Only consider coding portions of gene.\n"
@@ -56,6 +58,7 @@ static struct optionSpec options[] = {
    {"noLoad", OPTION_BOOLEAN},
    {"createOnly", OPTION_BOOLEAN},
    {"lookup", OPTION_STRING},
+   {"geneTableType", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -384,13 +387,17 @@ char typeBuf[128];
 char *type = optionVal("type", NULL);
 char *lookupFile = optionVal("lookup", NULL);
 struct hash *lookupHash = NULL;
-char *geneTableType = NULL;
+char *geneTableType = optionVal("geneTableType", NULL);
 hSetDb(database);
 if (lookupFile != NULL)
     lookupHash = hashTwoColumns(lookupFile);
 if (type == NULL)
     type = tdbType(conn, track);
-geneTableType = tdbType(conn, geneTrack);
+
+/* If geneTableType not specified query database. */
+if(geneTableType == NULL)
+    geneTableType = tdbType(conn, geneTrack);
+    
 if (!startsWith("genePred", geneTableType) && !startsWith("bed", geneTableType))
     errAbort("%s is neither a genePred or bed type track", geneTrack);
 hgMapTableToGene(conn, geneTrack, geneTableType, track, type, newTable, lookupHash);

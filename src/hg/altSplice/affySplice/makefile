@@ -10,11 +10,9 @@ GNUSL = /cluster/home/sugnet/local
 	$(CC) $(COPT) -I../inc -I../../inc  -I../../../inc -I$(GNUSL)/include -L$(GNUSL)/lib -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) $(GNUSL)/lib/libgsl.a $(GNUSL)/lib/libgslcblas.a -lm -lz 
 	cp $@ $(HOME)/bin/$(MACHTYPE)
 
-%Test: %Test.c 
-	gcc -Wimplicit -ggdb  -I../../inc -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
-
-
-O =  bedOverlap gcPresAbs junctionSets agxStartsEnds bedsSpliceCheck probeMatcher seqForExonProbes mergeAffyProbes merge1lqAndCels makeRFiles
+O =  altHtmlPages bedOverlap gcPresAbs junctionSets agxStartsEnds \
+     bedsSpliceCheck probeMatcher seqForExonProbes mergeAffyProbes \
+      merge1lqAndCels makeRFiles
 
 exe: $(O)
 

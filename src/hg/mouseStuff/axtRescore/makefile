@@ -1,0 +1,13 @@
+include ../../../inc/common.mk
+
+L = -lm
+MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+
+O = axtRescore.o
+
+axtRescore: compile
+	strip $(HOME)/bin/$(MACHTYPE)/axtRescore
+
+compile: $O $(MYLIBS)
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtRescore $O $(MYLIBS) $L

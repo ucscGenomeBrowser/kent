@@ -9,19 +9,23 @@
 #include "jksql.h"
 #endif
 
-#define TIGRCMRGENE_NUM_COLS 16
+#define TIGRCMRGENE_NUM_COLS 21
 
 struct tigrCmrGene
 /* For TIGR CMR genes tracks */
     {
     struct tigrCmrGene *next;  /* Next in singly linked list. */
-    char *tigrLocus;	/* TIGR locus */
+    short bin;	/* Bin number for browser speedup */
+    char *chrom;	/* Human chromosome or FPC contig */
+    unsigned chromStart;	/* Start position in chromosome */
+    unsigned chromEnd;	/* End position in chromosome */
+    char *name;	/* TIGR locus */
+    unsigned score;	/* Score from 900-1000.  1000 is best */
+    char strand[2];	/* Value should be + or - */
     char *tigrCommon;	/* TIGR Common Name */
     char *tigrGene;	/* TIGR Gene Symbol */
     char *tigrECN;	/* TIGR Enzyme Commission Number */
     char *primLocus;	/* Primary Locus Name */
-    unsigned tigr5p;	/* TIGR 5' end */
-    unsigned tigr3p;	/* TIGR 3' end */
     unsigned tigrLength;	/* TIGR sequence length */
     unsigned tigrPepLength;	/* TIGR Protein length */
     char *tigrMainRole;	/* TIGR Main Role */
@@ -31,6 +35,7 @@ struct tigrCmrGene
     float tigrMw;	/* Molecular Weight */
     float tigrPi;	/* Isoelectric point (I think) */
     float tigrGc;	/* GC content */
+    char *goTerm;	/* GO term (gene ontology) */
     };
 
 void tigrCmrGeneStaticLoad(char **row, struct tigrCmrGene *ret);

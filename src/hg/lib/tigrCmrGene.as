@@ -1,13 +1,17 @@
 table tigrCmrGene
 "For TIGR CMR genes tracks"
     (
-    string tigrLocus;      "TIGR locus"
+    short  bin;            "Bin number for browser speedup"
+    string chrom;          "Human chromosome or FPC contig"
+    uint chromStart;       "Start position in chromosome"
+    uint chromEnd;         "End position in chromosome"
+    string name;           "TIGR locus"
+    uint score;            "Score from 900-1000.  1000 is best"
+    char[1] strand;        "Value should be + or -"
     lstring tigrCommon;    "TIGR Common Name"
     string tigrGene;       "TIGR Gene Symbol"
     string tigrECN;        "TIGR Enzyme Commission Number"
     string primLocus;      "Primary Locus Name"
-    uint tigr5p;           "TIGR 5' end"
-    uint tigr3p;           "TIGR 3' end"
     uint tigrLength;       "TIGR sequence length"
     uint tigrPepLength;    "TIGR Protein length"
     lstring tigrMainRole;  "TIGR Main Role"
@@ -17,4 +21,5 @@ table tigrCmrGene
     float tigrMw;          "Molecular Weight"
     float tigrPi;          "Isoelectric point (I think)"
     float tigrGc;          "GC content"
+    string goTerm;         "GO term (gene ontology)"
     )

@@ -2,16 +2,16 @@
 #include "common.h"
 #include "linefile.h"
 #include "options.h"
+#include "verbose.h"
 #include "dlist.h"
 #include "jksql.h"
 #include "genePred.h"
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.10 2004/02/03 08:39:08 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.11 2004/02/28 19:59:53 angie Exp $";
 
 /* Command line driven variables. */
-int verbose = 0;
 char *clChrom = NULL;
 
 void usage()
@@ -38,7 +38,6 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-   {"verbose", OPTION_INT},
    {"chrom", OPTION_STRING},
    {"chromFile", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
@@ -231,7 +230,7 @@ struct cluster *aCluster = aNode->val;
 struct cluster *bCluster = bNode->val;
 struct binElement *bkEl;
 
-if (verbose >= 3) 
+if (verboseLevel() >= 3) 
     {
     fprintf(stderr, " a: ");
     clusterDump(aCluster);
@@ -263,7 +262,7 @@ if (aCluster->end < bCluster->end)
 /* Remove all traces of bNode. */
 dlRemove(bNode);
 clusterFree(&bCluster);
-if (verbose >= 3) 
+if (verboseLevel() >= 3) 
     {
     fprintf(stderr, " ab: ");
     clusterDump(aCluster);
@@ -409,7 +408,7 @@ else
             else
                 {
                 /* Merge new cluster into old one. */
-                if (verbose >= 3)
+                if (verboseLevel() >= 3)
                     fprintf(stderr, "Merging %p %p\n", oldNode, newNode);
                 mergeClusters(cm->bk, bEl->next, oldNode, newNode);
                 }
@@ -436,7 +435,7 @@ struct dlNode *oldNode = NULL;
  * cluster.  In this case merge the new cluster into
  * the old one. */
 
-if (verbose >= 2)
+if (verboseLevel() >= 2)
     fprintf(stderr, "%s %s %d-%d\n", track->name, gp->name, gp->txStart, gp->txEnd);
 
 for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
@@ -444,7 +443,7 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     int exonStart, exonEnd;
     if (gpGetExon(gp, exonIx, &exonStart, &exonEnd))
         {
-        if (verbose >= 4)
+        if (verboseLevel() >= 4)
             fprintf(stderr, "  %s %d %d\n", track->name, exonIx, exonStart);
         clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &oldNode);
         }
@@ -508,7 +507,7 @@ void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
                struct genePred **gpList)
 /* load genes into cluster from a table or file */
 {
-if (verbose >= 1)
+if (verboseLevel() >= 1)
     fprintf(stderr, "%s %s %c\n", table, chrom, strand);
 if (fileExists(table))
     loadGenesFromFile(cm, table, chrom, strand, gpList);
@@ -597,7 +596,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-verbose = optionInt("verbose", verbose);
 if (argc < 4)
     usage();
 useCds = optionExists("cds");

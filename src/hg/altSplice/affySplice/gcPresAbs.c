@@ -16,14 +16,15 @@ struct row1lq
 /* A single row from a affymetrix 1lq file. Also used for 
    storing values and probability of expression. */
 {
-    struct row1lq *next;
-    char *psName;
-    char *seq;
-    int x;
-    int y;
-    int gcCount;
-    double intensity;
-    double pVal;
+    struct row1lq *next;    /* Next in list. */
+    char *psName;           /* Name of probe set.*/
+    char *seq;              /* Sequence of probe, in weird affy format. */
+    int x;                  /* X coordinate from affy cel file. */
+    int y;                  /* Y coordinate from affy cel file. */
+    int gcCount;            /* Number of g's and c's in sequence. */
+    int repCount;           /* Number of experiments we're looking at. */
+    double *intensity;      /* Intensities for each experiment. */
+    double *pVal;           /* Pvals for each experiment. */
 };
 
 struct psProb 
@@ -34,6 +35,15 @@ struct psProb
     double pVal;         /* P-Value of expression. */
 };
 
+struct replicateMap 
+/* Map the replicates to eachother. */
+{
+    struct replicateMap *next;  /* Next in list. */
+    char *rootName;             /* Root name of replicates. */
+    int repCount;               /* Number of replicates. */
+    int *repIndexes;            /* Indexes into matrix columns. */
+};
+
 struct row1lq **gcBins = NULL;     /* Bins of lists of row1lqs for different amounts of GCs. */
 struct hash *probeSetHash = NULL;  /* Hash of slRefs for each probe set where slRef->val is a row1lq. */
 struct hash *killHash = NULL;      /* Hash of probes to be ignored. */
@@ -41,8 +51,11 @@ int minGcBin = 0;                  /* Minimum GC bin. */
 int maxGcBin = 0;                  /* Maximum GC bin. */
 struct psProb *probePVals = NULL;  /* List of psProbe structs with pVals filled in. */
 int minProbeNum = 3;               /* Ignore probe sets that have less than this many probes. */
-char *placeHolder = "dummy";        /* Hold a place in a hash. */
-
+char *placeHolder = "dummy";       /* Hold a place in a hash. */
+boolean combineCols = FALSE;       /* Combine columns that are the same samples? */
+int repToSort = 0;                 /* What replicate to sort the gc bins by. */
+int maxReplicates = 0;             /* What are the maximum number of replicates. */
+int sampleCount = 0;               /* Number of samples. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -50,6 +63,8 @@ static struct optionSpec optionSpecs[] =
     {"1lqFile", OPTION_STRING},
     {"outFile", OPTION_STRING},
     {"badProbes", OPTION_STRING},
+    {"combineReplicates", OPTION_BOOLEAN},
+    {"outputDuplicates", OPTION_BOOLEAN},
     {"testVals", OPTION_BOOLEAN},
     {NULL,0}
 };
@@ -61,6 +76,8 @@ static char *optionDescripts[] =
     "1lq file from affymetrix specifying probe layout on chip",
     "File to output matrix of probabilities to.",
     "File with sequence of probes that are known to be bad and should be ignored.",
+    "Combine experiments with same name prefix.",
+    "When used with combineReplicates, outputs a column for each tissue that has same prefix.",
     "Skip everything else and just run inverse chisq on each value degreeFreedom pair on command line.",
 };
 
@@ -87,12 +104,12 @@ return strcmp(a->psName, b->psName);
 }
 
 int row1lqCmp(const void *va, const void *vb)
-/* Compare to sort based on pVal (although when this is called
-  it is still a signal. */
+/* Compare to sort based on intensity for the
+   given repliate. */
 {
 const struct row1lq *a = *((struct row1lq **)va);
 const struct row1lq *b = *((struct row1lq **)vb);
-return b->intensity - a->intensity;
+return b->intensity[repToSort] - a->intensity[repToSort];
 }
 
 int countGc(char *sequence)
@@ -279,6 +296,8 @@ struct psProb *ps = NULL;
 struct row1lq *row = NULL;
 double probProduct = 0;
 int probeCount = 0;
+int probRepCount = 0;
+int i = 0, j = 0;
 refList = val;
 probeCount = slCount(refList);
 
@@ -292,14 +311,20 @@ assert(probeCount > 0);
 AllocVar(ps);
 row = refList->val;
 safef(ps->psName, sizeof(ps->psName), "%s", row->psName);
+
+/* For each probe in probe set look at all the replicates. */
 for(ref = refList; ref != NULL; ref = ref->next)
     {
     row = ref->val;
-    probProduct = probProduct + log(row->pVal);
+    for(i = 0; i < row->repCount; i++)
+	{
+	probRepCount++;
+	probProduct = probProduct + log(row->pVal[i]);
+	}
     }
 
 /* Fisher's method for combining probabilities. */
-ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probeCount); 
+ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probRepCount); 
 if(ps->pVal > 1 || ps->pVal < 0) 
     warn("%s pVal is %.10f, wrong!");
 slAddHead(&probePVals, ps);
@@ -318,8 +343,9 @@ for(i = 1; i < argc; i+=2)
 }
 
 
-void fillInProbeSetPvals(double **matrix, int rowCount, int colCount, int colIx, struct row1lq **row1lqArray,
-			 double ***probeSetPValsP, char ***probeSetNamesP, int *psCountP)
+void fillInProbeSetPvals(double **matrix, int rowCount, int colCount, int repCount, int *repIndexes, 
+			 int sampleIx, struct row1lq **row1lqArray, double ***probeSetPValsP, 
+			 char ***probeSetNamesP, int *psCountP)
 /* Calculate and fill in the probe set probabilities of expression given
    the data in the matrix. */
 {
@@ -329,19 +355,32 @@ int binCount = 0;
 struct psProb *probe = NULL;
 struct row1lq *row = NULL;
 int psCount = 0;
+
 /* Fill in the values for the rows. */
 for(i = 0; i < rowCount; i++)
-    row1lqArray[i]->intensity = matrix[i][colIx];
-
+    {
+    row1lqArray[i]->repCount = repCount;
+    for(j = 0; j < repCount; j++)
+	{
+	row1lqArray[i]->intensity[j] = matrix[i][repIndexes[j]];
+	}
+    }
+/* Sort the gc bins by their rank and fill 
+   in the pVals as an empiracal rank. */
 for(i = minGcBin; i < maxGcBin; i++)
     {
-    rank = 1;
-    slSort(&gcBins[i-minGcBin], row1lqCmp);
-    binCount = slCount(gcBins[i-minGcBin]);
-    for(row = gcBins[i-minGcBin]; row != NULL; row = row->next)
+    /* Sort for each replicate. */
+    for(j = 0; j < repCount; j++)
 	{
-	row->pVal = ((double)rank)/binCount;
-	rank++;
+	rank = 1;
+	repToSort = j;
+	slSort(&gcBins[i-minGcBin], row1lqCmp);
+	binCount = slCount(gcBins[i-minGcBin]);
+	for(row = gcBins[i-minGcBin]; row != NULL; row = row->next)
+	    {
+	    row->pVal[j] = ((double)rank)/binCount;
+	    rank++;
+	    }
 	}
     }
 
@@ -356,7 +395,7 @@ if(*probeSetPValsP == NULL)
     AllocArray((*probeSetPValsP), psCount);
     for(i = 0; i < psCount; i++)
 	{
-	AllocArray((*probeSetPValsP)[i], colCount);
+	AllocArray((*probeSetPValsP)[i], sampleCount);
 	}
     i = 0;
     for(probe = probePVals; probe != NULL; probe = probe->next)
@@ -368,11 +407,92 @@ if(*probeSetPValsP == NULL)
 i = 0;
 for(probe = probePVals; probe != NULL; probe = probe->next)
     {
-    (*probeSetPValsP)[i++][colIx] = probe->pVal;
+    (*probeSetPValsP)[i++][sampleIx] = probe->pVal;
     }
 slFreeList(&probePVals);
 }
 
+struct replicateMap *createReplicateMap(char **expNames, int expCount)
+/* Group replicates together if required or
+   just make a replicate for each one if no replicates
+   are required. */
+{
+struct replicateMap *rMapList = NULL, *rMap = NULL;
+int i = 0, j = 0;
+boolean combineReplicates = optionExists("combineReplicates");
+boolean *used = NULL;
+char expBuff[256], nameBuff[256];
+char *mark = NULL;
+
+/* If we're combining results look for 
+   expNames that have the same root (string before 
+   first ".") */
+if(combineReplicates)
+    {
+    AllocArray(used, expCount);
+    for(i = 0; i < expCount; i++)
+	{
+	/* If we haven't seen this experiment before
+	   start a new replicateMap. */
+	if(!used[i])
+	    {
+	    safef(nameBuff, sizeof(nameBuff), "%s", expNames[i]);
+	    mark = strchr(nameBuff, '.');
+	    if(mark != NULL)
+		*mark = '\0';
+	    AllocVar(rMap);
+	    used[i] = TRUE;
+	    rMap->rootName = cloneString(nameBuff);
+	    rMap->repCount = 1;
+	    AllocArray(rMap->repIndexes, expCount);
+	    rMap->repIndexes[0] = i;
+
+	    /* Loop through the experiments finding the ones
+	       that are replicates. */
+	    for(j = i+1; j < expCount; j++)
+		{
+		safef(nameBuff, sizeof(nameBuff), "%s", expNames[j]);
+		mark = strchr(nameBuff, '.');
+		if(mark != NULL)
+		    *mark = '\0';
+		if(sameString(nameBuff, rMap->rootName))
+		    {
+		    used[j] = TRUE;
+		    rMap->repIndexes[rMap->repCount++] = j;
+		    }
+		}
+	    maxReplicates = max(maxReplicates, rMap->repCount);
+	    slAddHead(&rMapList, rMap);
+	    }
+	}
+    }
+else /* Make each expName a new replicate. */
+    {
+    for(i = 0; i < expCount; i++)
+	{
+	AllocVar(rMap);
+	rMap->rootName = cloneString(expNames[i]);
+	rMap->repCount = 1;
+	AllocArray(rMap->repIndexes, rMap->repCount);
+	rMap->repIndexes[0] = i;
+	maxReplicates = max(maxReplicates, rMap->repCount);
+	slAddHead(&rMapList, rMap);
+	}
+    }
+
+slReverse(&rMapList);
+/* Do a summmary of the replicates... */
+for(rMap = rMapList; rMap != NULL; rMap = rMap->next)
+    {
+    printf("%s\t", rMap->rootName);
+    for(i = 0; i < rMap->repCount; i++)
+	{
+	printf("%s,", expNames[rMap->repIndexes[i]]);
+	}
+    printf("\n");
+    }
+return rMapList;
+}
 
 void gcPresAbs(char *outFile, char *file1lq, int celCount, char *celFiles[])
 /* Output all of the probe sets and their pvals for expression as
@@ -385,9 +505,11 @@ double **probeSetPVals = NULL; /* Matrix of pVals of expression with probe sets 
 char **probeSetNames = NULL;   /* List of probe set names indexing the probeSetPVals matrix. */
 char *badProbeName = NULL;     /* Name of file with bad probes. */
 int psCount = 0;
-int i=0,j=0;
+int i=0, j=0, k=0;
 int rowCount=0;
 FILE *out = NULL;
+struct replicateMap *rMapList = NULL, *rMap = NULL;
+boolean outputDuplicates = optionExists("outputDuplicates");
 dotForUserInit(1);
 initGcBins(5,20);
 
@@ -413,32 +535,84 @@ for(i=0; i<rowCount; i++)
 /* Read in the cel files. */
 for(i=0; i<celCount; i++)
     {
+    char *lastSlash = NULL;
     warn("Reading in cel file: %s", celFiles[i]);
     dotForUser();
     expNames[i] = cloneString(celFiles[i]);
+    lastSlash = strrchr(expNames[i], '/');
+    if(lastSlash != NULL)
+	expNames[i] = lastSlash+1;
     fillInMatrix(matrix, i, rowCount, celFiles[i]);
     }
 warn("Done.");
+rMapList = createReplicateMap(expNames, celCount);
+sampleCount = slCount(rMapList);
+/* Allocate enough memory for the maximum number of replicates. */
+for(i = 0; i < rowCount; i++)
+    {
+    AllocArray(rowArray[i]->intensity, maxReplicates);
+    AllocArray(rowArray[i]->pVal, maxReplicates);
+    }
+
 warn("Calculating pVals");
-for(i=0; i<celCount; i++)
+//for(i=0; i<celCount; i++)
+i = 0;
+for(rMap = rMapList; rMap != NULL; rMap = rMap->next)
     {
     dotForUser();
-    fillInProbeSetPvals(matrix, rowCount, celCount, i, rowArray,
+    fillInProbeSetPvals(matrix, rowCount, celCount, rMap->repCount, rMap->repIndexes, i++, rowArray,
 			&probeSetPVals, &probeSetNames, &psCount);
     }
 warn("Done.");
 warn("Writing out the results.");
 out = mustOpen(outFile, "w");
-for(i = 0; i < celCount; i++)
-    fprintf(out, "\t%s", expNames[i]);
-fprintf(out, "\n");
 
-for(i = 0; i < psCount; i++) 
+
+if(outputDuplicates)
     {
-    fprintf(out, "%s\t", probeSetNames[i]);
-    for(j = 0; j < celCount-1; j++)
-	fprintf(out, "%.10g\t", probeSetPVals[i][j]);
-    fprintf(out, "%.10g\n", probeSetPVals[i][j]);
+    /* Output each name, this only works if duplicates are
+       next to each other. */
+    for(rMap = rMapList; rMap->next != NULL; rMap = rMap->next)
+	{
+	for(i = 0; i < rMap->repCount; i++)
+	    fprintf(out, "%s\t", expNames[rMap->repIndexes[i]]);
+	}
+    for(i = 0; i < rMap->repCount - 1; i++)
+	fprintf(out, "%s\t", expNames[rMap->repIndexes[i]]);
+    fprintf(out, "%s\n", expNames[rMap->repIndexes[i]]);
+    
+    for(i = 0; i < psCount; i++) 
+	{
+	fprintf(out, "%s\t", probeSetNames[i]);
+	for(j = 0; j < sampleCount; j++)
+	    {
+	    /* Output a column for each repetition. */
+	    rMap = slElementFromIx(rMapList, j);
+	    for(k = 0; k < rMap->repCount -1; k++)
+		fprintf(out, "%.10g\t", probeSetPVals[i][j]);
+
+	    /* If this is the last repetion then print the newline
+	       otherwise continue with tabs. */
+	    if(j == sampleCount -1)
+		fprintf(out, "%.10g\n", probeSetPVals[i][j]);
+	    else
+		fprintf(out, "%.10g\t", probeSetPVals[i][j]);
+	    }
+	}
+    }
+else /* Only print one column per rMap. */
+    {
+    for(rMap = rMapList; rMap->next != NULL; rMap = rMap->next)
+	fprintf(out, "%s\t", rMap->rootName);
+    fprintf(out, "%s\n", rMap->rootName);
+    
+    for(i = 0; i < psCount; i++) 
+	{
+	fprintf(out, "%s\t", probeSetNames[i]);
+	for(j = 0; j < sampleCount -1; j++)
+	    fprintf(out, "%.10g\t", probeSetPVals[i][j]);
+	fprintf(out, "%.10g\n", probeSetPVals[i][j]);
+	}
     }
 carefulClose(&out);
 warn("Done");

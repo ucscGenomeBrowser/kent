@@ -8,9 +8,10 @@
 #include "common.h"
 #include "spaceSaver.h"
 
-static char const rcsid[] = "$Id: spaceSaver.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: spaceSaver.c,v 1.8 2004/03/03 18:12:28 sugnet Exp $";
 
-struct spaceSaver *spaceSaverNew(int winStart, int winEnd, int maxRows)
+
+struct spaceSaver *spaceSaverMaxCellsNew(int winStart, int winEnd, int maxRows, int maxCells)
 /* Create a new space saver around the given window.   */
 {
 struct spaceSaver *ss;
@@ -22,10 +23,16 @@ ss->winEnd = winEnd;
 ss->maxRows = maxRows;
 winWidth = winEnd - winStart;
 ss->cellsInRow = winWidth;
-while (ss->cellsInRow > 800)
+while (ss->cellsInRow > maxCells)
     ss->cellsInRow /= 2;
 ss->scale = ss->cellsInRow/winWidth;
 return ss;
+}
+
+struct spaceSaver *spaceSaverNew(int winStart, int winEnd, int maxRows)
+/* Create a new space saver around the given window.   */
+{
+return spaceSaverMaxCellsNew(winStart, winEnd, maxRows, 800);
 }
 
 void spaceSaverFree(struct spaceSaver **pSs)

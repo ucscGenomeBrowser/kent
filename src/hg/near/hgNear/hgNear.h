@@ -66,6 +66,11 @@ struct column
                                  * May be NULL.  Should contain one %s, which
 				 * get's filled in with whatever cellVal
 				 * return. */
+   boolean useHgsid;		/* Add hgsid= to itemUrl? */
+   char *urlChromVar;		/* Chromosome var for URL. */
+   char *urlStartVar;		/* Start var for URL. */
+   char *urlEndVar;		/* End var for URL. */
+   char *urlDbVar;		/* Database var for URL. */
    struct hash *settings;	/* Settings from ra file. */
 
    /* -- Methods -- */

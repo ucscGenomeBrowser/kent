@@ -25,6 +25,35 @@ freeMem(encodedItem1);
 freeMem(encodedItem2);
 }
 
+int affyUclaNormIndexForName(char *string)
+/* Return the index in sorting as provided by Allen Day at UCLA. */
+{
+int i = 0;
+char *tissues[] = {"adipose tissue", "abdominal aorta", "cartilage",
+		   "ligament", "tendon", "adrenal gland", "pancreas",
+		   "thyroid gland", "pituitary gland", "bone marrow",
+		   "lymph node", "spleen", "thymus", "mammary gland",
+		   "body skin", "cardiac muscle", "skeletal muscle",
+		   "brain", "thalamus", "telencephalon", "amygdala",
+		   "caudate nucleus", "cerebral cortex", "frontal cortex",
+		   "occipital cortex", "parietal cortex", "temporal cortex",
+		   "auditory cortex", "cerebral white matter", "corpus callosum",
+		   "cerebellum", "spinal cord", "colon", "small intestine",
+		   "ileum", "intestine mucosa", "salivary gland",
+		   "oesophagus", "stomach", "liver", "kidney", "ureter",
+		   "urinary bladder", "ovary", "placenta", "uterus",
+		   "prostate gland", "testis", "lung", "trachea", "monocyte",
+		   "chondrocyte", "granulocyte"};
+
+for(i = 0; i < ArraySize(tissues); i++)
+    {
+    if(sameWord(tissues[i], string))
+	return i;
+    }
+/* If no match. */
+/* warn("Can't match %s in affyUclaNorm.", string); */
+return -1;
+}
 
 void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int end, 
 		    int x, int y, int width, int height)
@@ -120,7 +149,7 @@ int diff = a->start - b->start;
 if(diff == 0)
     diff = a->end - b->end;
 if(diff == 0)
-    diff = strcmp(a->name, b->name);
+    diff = affyUclaNormIndexForName(a->name) -  affyUclaNormIndexForName(b->name);
 return diff;
 }
 

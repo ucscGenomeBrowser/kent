@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "binRange.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "psl.h"
@@ -11,7 +11,7 @@
 #include "ggMrnaAli.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: clusterRna.c,v 1.13 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: clusterRna.c,v 1.14 2004/03/02 19:35:50 kent Exp $";
 
 /* Global variables set for sorting alignments. */
 char *clusterStrand = NULL;
@@ -34,10 +34,29 @@ errAbort(
   "   -chrom=chrN - work on chrN (default chr22)\n"
   "   -rna=rnaTable - table to use for mRNA\n"
   "   -est=estTable - table to use for ESTs\n"
+  "   -noEst  - Don't do EST part of job\n"
+  "   -noRefSeq  - Don't do refSeq part of job\n"
   "   -orient=orientTable - table to use for EST orientation\n"
   "   -group=group.out - produce list of mRNA/EST in cluster\n"
   );
 }
+
+static struct optionSpec options[] = {
+   {"MGC", OPTION_STRING},
+   {"mgcNumPicks", OPTION_INT},
+   {"mgcMaxDist", OPTION_INT},
+   {"mrnaExclude", OPTION_STRING},
+   {"mRNAOrient", OPTION_STRING},
+   {"chrom", OPTION_STRING},
+   {"rna", OPTION_STRING},
+   {"est", OPTION_STRING},
+   {"noEst", OPTION_BOOLEAN},
+   {"noRefSeq", OPTION_BOOLEAN},
+   {"orient", OPTION_STRING},
+   {"group", OPTION_STRING},
+   {NULL, 0},
+};
+
 
 struct ggAiSorter
 /* Singly linked list that holds a ggAliInfo, used for storing and sorting them. */
@@ -64,8 +83,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-freez(&hti);
-printf("Loaded %d from %s\n", slCount(pslList), table);
+verbose(2, "Loaded %d from %s\n", slCount(pslList), table);
 return pslList;
 }
 
@@ -91,7 +109,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	if (assumeForward)
 	    {
 	    int bias = (psl->strand[0] == '-' ? -1 : 1);
-	    if (bias * intronDir < 0) uglyf("%s %s %d\n", psl->qName, psl->strand, intronDir);
+	    if (bias * intronDir < 0) verbose(1, "%s %s %d\n", psl->qName, psl->strand, intronDir);
 	    intronDir += bias;
 	    }
 	el->orientation = intronDir;
@@ -142,12 +160,11 @@ struct estOrientInfo *loadEstOrientInfo(struct sqlConnection *conn,
 {
 struct estOrientInfo *eoiList = NULL, *eoi;
 int rowOffset;
-struct sqlResult *sr = hChromQuery(conn, orientTable, chromName, NULL, &rowOffset);
+struct sqlResult *sr;
 char **row;
-struct hTableInfo *hti = hFindTableInfo(chromName, orientTable);
-if(hti == NULL)
-    errAbort("clusterRna::loadEstOrientInfo() - Table %s doesn't exist for chrom %s.", orientTable, chromName);
 
+verbose(2, "LoadEstOrientInfo(%s)\n", chromName);
+sr = hChromQuery(conn, orientTable, chromName, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     eoi = estOrientInfoLoad(row + rowOffset);
@@ -155,7 +172,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&eoiList);
-freez(&hti);
 return eoiList;
 }
 
@@ -197,7 +213,7 @@ for (eoi = eoiList; eoi != NULL; eoi = eoi->next)
 	}
     hashAdd(hash, eoi->name, eoi);
     }
-printf("Got %d spliced, %d tailed, %d other ests\n", splicedCount, tailedCount, otherCount);
+verbose(2, "Got %d spliced, %d tailed, %d other ests\n", splicedCount, tailedCount, otherCount);
 }
 
 
@@ -263,14 +279,13 @@ void ggMrnaClusterMerge(struct ggMrnaCluster *aMc, struct ggMrnaCluster *bMc);
 
 
 void outputClusters(struct binKeeper *bins, char *chromName, int chromSize, 
-	char *fileName)
+	FILE *f)
 /* Write out clusters to file. */
 {
 struct binElement *el, *list = binKeeperFindSorted(bins, 0, chromSize);
 struct ggMrnaCluster *cluster;
 int index = 0;
 int score, start, end;
-FILE *f = mustOpen(fileName, "w");
 for (el = list; el != NULL; el = el->next)
     {
     cluster = el->val;
@@ -284,7 +299,6 @@ for (el = list; el != NULL; el = el->next)
 	0, end - start - 1);
     }
 slFreeList(&list);
-carefulClose(&f);
 }
 
 void addCluster(struct ggMrnaAli *maList, struct binKeeper *bins,
@@ -301,8 +315,6 @@ for (ma = maList; ma != NULL; ma = nextMa)
     int overlap = 0, overlapSign = 0;
     char targetStrand = '?';
     nextMa = ma->next;
-
-    //uglyf("Processing %s: %d-%d, orient %d\n", ma->qName, ma->tStart, ma->tEnd, ma->orientation);
 
     /* Make up cluster for this RNA and merge with overlapping clusters
      * if any. */
@@ -324,7 +336,6 @@ for (ma = maList; ma != NULL; ma = nextMa)
 	nextBinEl = binEl->next;
 	oldCluster = binEl->val;
 	overlap = exonsOverlapCluster(oldCluster, newCluster);
-	// uglyf(" oldCluster %d,%d %s exonOverlap %d strand %s\n", binEl->start, binEl->end, oldCluster->refList->ma->qName, overlap, oldCluster->strand);
 	if (overlap > 0)
 	    {
 	    slAddHead(&overlapList, binEl);
@@ -382,12 +393,10 @@ for (ma = maList; ma != NULL; ma = nextMa)
 	struct ggMrnaCluster *oldCluster = binEl->val;
 	char oldStrand = oldCluster->strand[0];
 
-	// uglyf("  merging with old cluster %d-%d\n", oldCluster->tStart, oldCluster->tEnd);
 	binKeeperRemove(bins, oldCluster->tStart, oldCluster->tEnd, oldCluster);
 	ggMrnaClusterMerge(newCluster, oldCluster);
 	if (oldStrand != '?')
 	    newCluster->strand[0] = oldStrand;
-	// uglyf("  afterMerge - cluster goes %d-%d\n", newCluster->tStart, newCluster->tEnd);
 	}
     
     /* Add new cluster to bin and clean up. */
@@ -420,7 +429,7 @@ void weedWeakClusters(struct binKeeper *bins, int chromSize)
 {
 struct binElement *el, *list = binKeeperFind(bins, 0, chromSize);
 
-uglyf("%d elements before weeding\n", slCount(list));
+verbose(2, "%d elements before weeding\n", slCount(list));
 for (el = list; el != NULL; el = el->next)
     {
     int score = clusterScore(el->val);
@@ -431,7 +440,9 @@ for (el = list; el != NULL; el = el->next)
 	}
     }
 slFreeList(&list);
-list = binKeeperFind(bins, 0, chromSize); uglyf("%d elements after weeding\n", slCount(list)); slFreeList(&list);
+list = binKeeperFind(bins, 0, chromSize); 
+verbose(1,"%d elements after weeding\n", slCount(list)); 
+slFreeList(&list);
 }
 
 int ggAliInfoEndPos(struct ggAliInfo *da)
@@ -541,7 +552,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     ++count;
     }
 sqlFreeResult(&sr);
-uglyf("%d match %s\n", count, query);
+verbose(2, "%d match %s\n", count, query);
 return hash;
 }
 
@@ -594,13 +605,11 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
-void outputGroup(struct sqlConnection *conn, 
-	struct binKeeper *bins, char *chromName,
-	int chromSize, 
-    	struct ggMrnaAli *refSeqMa, struct ggMrnaAli *mrnaMa, struct ggMrnaAli *estMa, 
-	char *fileName)
+void outputGroup(
+	struct binKeeper *bins, char *chromName, int chromSize, 
+    	struct ggMrnaAli *refSeqMa, struct ggMrnaAli *mrnaMa, 
+	struct ggMrnaAli *estMa, FILE *f)
 {
-FILE *f = mustOpen(fileName, "w");
 struct binElement *el, *list = binKeeperFindSorted(bins, 0, chromSize);
 int clusterIx = 0;
 struct hash *refHash = hashMa(refSeqMa);
@@ -635,7 +644,7 @@ void outputBestAndGoodMgc(struct binElement *list, char *fileName, char *chromNa
 struct binElement *el = NULL;
 FILE *f = mustOpen(fileName, "w");
 int clusterIx =0;
-uglyf("Printing %s\n", fileName);
+verbose(2, "Printing %s\n", fileName);
 fprintf(f, "#chrom\tstart    \tend      \tstrand\tMGC EST \t5' dist\tAli%%\tGood EST\t5' dist\tAli%%\tMGC RNA \t5' dist\tAli%%\tGood RNA\t5' dist\tAli%%\tOther RNA \t5' dist\tAli%%\tRefSeq  \t5' dist\tAli%%\tGroup Number\n");
 for (el = list; el != NULL; el = el->next)
     {
@@ -751,15 +760,15 @@ struct hash *rnaAuthorHash = wildHash(conn, "author", "Strausberg,R.");
 struct sqlResult *sr = NULL;
 char **row=NULL;
 char *mgcOutFile = NULL;
-int maxPicks = cgiUsualInt("mgcNumPicks", 10);     /* How many picks to make. */
-int maxDistance = cgiUsualInt("mgcMaxDist", 100);  /* Max distance allowed from 5' end to allow. */
+int maxPicks = optionInt("mgcNumPicks", 10);     /* How many picks to make. */
+int maxDistance = optionInt("mgcMaxDist", 100);  /* Max distance allowed from 5' end to allow. */
 int i=0;
 int clusterNumber = 0;   /* Group number for each cluster. */
 
 struct binElement *el, *list = binKeeperFindSorted(bins, 0, chromSize);
 
 /* Read mRNA table and split into hashes. */
-uglyf("Scanning mrna table\n");
+verbose(2, "Scanning mrna table\n");
 sr = sqlGetResult(conn, "select acc,type,author from mrna");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -836,7 +845,7 @@ for(psl = pslList; psl != NULL; psl = psl->next)
 }
 
 void clusterChromRna(struct sqlConnection *conn, char *chromName,
-	char *rnaOut, char *estOut)
+	FILE *rnaOut, FILE *estOut, FILE *groupOut)
 /* Cluster RNA on one chromosome. */
 {
 struct ggMrnaAli *refSeqMaList = NULL, *mrnaMaList = NULL, 
@@ -853,16 +862,17 @@ struct estOrientInfo *mRnaOiList = NULL;
 struct psl *estPslList = NULL, *mrnaPslList = NULL;
 struct ggMrnaCluster *clusterList = NULL, *cluster;
 struct binKeeper *bins = NULL;
-char *mgcOut = cgiOptionalString("MGC");
-char *group = cgiOptionalString("group");
-char *rnaTable = cgiUsualString("rna", "mrna");
-char *estTable = cgiUsualString("est", "est");
-char *orientTable = cgiUsualString("orient", "estOrientInfo");
-char *mRnaOrientTable = cgiUsualString("mRNAOrient", "mrnaOrientInfo");
-char *mRnaExclude = cgiOptionalString("mrnaExclude");
+char *mgcOut = optionVal("MGC", NULL);
+char *rnaTable = optionVal("rna", "mrna");
+char *estTable = optionVal("est", "est");
+boolean doEsts = !optionExists("noEst");
+boolean doRefSeq = !optionExists("noRefSeq");
+char *orientTable = optionVal("orient", "estOrientInfo");
+char *mRnaOrientTable = optionVal("mRNAOrient", "mrnaOrientInfo");
+char *mRnaExclude = optionVal("mrnaExclude", NULL);
 
 chrom = hLoadChrom(chromName);
-printf("Loaded %d bases in %s\n", chrom->size, chromName);
+verbose(1, "Loaded %d bases in %s\n", chrom->size, chromName);
 
 /* If we got an exclusion list of accessions to avoid, filter them out. */
 if(mRnaExclude != NULL)
@@ -870,7 +880,7 @@ if(mRnaExclude != NULL)
     
 /* Load mRNA info and use it to categorize mRNAs, mainly with Intron or not. */
 mRnaOiList = loadEstOrientInfo(conn, chromName, mRnaOrientTable);
-uglyf("Loaded %d mRnaOi's\n", slCount(mRnaOiList));
+verbose(2, "Loaded %d mRnaOi's\n", slCount(mRnaOiList));
 categorizeEsts(mRnaOiList, splicedRnaHash, tailedRnaHash, otherRnaHash);
 
 /* Load mRNA psls, then do any necessary filtering. */
@@ -882,80 +892,118 @@ splicedRnaMaList = maFromSomePsls(mrnaPslList, chromName,
 				  chrom, splicedRnaHash, FALSE, FALSE); 
 hashAddSomePsls(pslHash, mrnaPslList);
 
-hashFree(&splicedRnaHash);
-hashFree(&tailedRnaHash);
-hashFree(&otherRnaHash);
-estOrientInfoFreeList(&mRnaOiList);
-
 /* Load RefGenes. */
-refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName, 
-	chrom, TRUE, TRUE);
+if (doRefSeq)
+    refSeqMaList = maFromPslTable(conn, "refSeqAli", chromName, 
+	    chrom, TRUE, TRUE);
 
-/* Load EST info and use it to categorize ESTs. */
-eoiList = loadEstOrientInfo(conn, chromName, orientTable);
-uglyf("Loaded %d eoi's\n", slCount(eoiList));
-categorizeEsts(eoiList, splicedHash, tailedHash, otherHash);
+if (doEsts)
+    {
+    /* Load EST info and use it to categorize ESTs. */
+    eoiList = loadEstOrientInfo(conn, chromName, orientTable);
+    verbose(2, "Loaded %d eoi's\n", slCount(eoiList));
+    categorizeEsts(eoiList, splicedHash, tailedHash, otherHash);
 
-/* Load ESTs into three separate lists. */
-estPslList = loadPsls(conn, estTable, chromName);
-estPslList = filterByExcludeHash(estPslList, excludeRnaHash);
-hashAddSomePsls(pslHash, estPslList);
-freeHashAndVals(&excludeRnaHash);
+    /* Load ESTs into three separate lists. */
+    estPslList = loadPsls(conn, estTable, chromName);
+    estPslList = filterByExcludeHash(estPslList, excludeRnaHash);
+    hashAddSomePsls(pslHash, estPslList);
+    freeHashAndVals(&excludeRnaHash);
 
-splicedEstMaList = maFromSomePsls(estPslList, chromName, 
-	chrom, splicedHash, FALSE, FALSE);
-tailedEstMaList = maFromSomePsls(estPslList, chromName, 
-	chrom, tailedHash, FALSE, FALSE);
-otherEstMaList = maFromSomePsls(estPslList, chromName, 
-	chrom, otherHash, FALSE, FALSE);
+    splicedEstMaList = maFromSomePsls(estPslList, chromName, 
+	    chrom, splicedHash, FALSE, FALSE);
+    tailedEstMaList = maFromSomePsls(estPslList, chromName, 
+	    chrom, tailedHash, FALSE, FALSE);
+    otherEstMaList = maFromSomePsls(estPslList, chromName, 
+	    chrom, otherHash, FALSE, FALSE);
 
-estOrientInfoFreeList(&eoiList);
+    estOrientInfoFreeList(&eoiList);
+    }
 /* Create bin to put clusters in, and cluster
  * refSeq and mRNAs. */
 bins = binKeeperNew(0, chrom->size);
 addCluster(refSeqMaList, bins, NULL, chrom);
-uglyf("Added refSeqMrna to bins ok.\n");
+verbose(2, "Added refSeqMrna to bins ok.\n");
 addCluster(splicedRnaMaList, bins, NULL, chrom);
-uglyf("Added tightMrna to bins ok.\n");
+verbose(2, "Added tightMrna to bins ok.\n");
 weedWeakClusters(bins, chrom->size);
 outputClusters(bins, chromName, chrom->size, rnaOut);
 
 /* Cluster ESTs. */
-addCluster(splicedEstMaList, bins, splicedHash, chrom);
-// addCluster(tailedEstMaList, bins, tailedHash, chrom);
-// addCluster(otherEstMaList, bins, otherHash, chrom);
-// orientEstMa(tailedEstMaList, tailedHash);
-weedWeakClusters(bins, chrom->size);
-outputClusters(bins, chromName, chrom->size, estOut);
+if (doEsts)
+    {
+    addCluster(splicedEstMaList, bins, splicedHash, chrom);
+    // addCluster(tailedEstMaList, bins, tailedHash, chrom);
+    // addCluster(otherEstMaList, bins, otherHash, chrom);
+    // orientEstMa(tailedEstMaList, tailedHash);
+    weedWeakClusters(bins, chrom->size);
+    outputClusters(bins, chromName, chrom->size, estOut);
+    }
 
-hashFree(&splicedHash);
-hashFree(&tailedHash);
-hashFree(&otherHash);
-estOrientInfoFreeList(&eoiList);
 
 /* TODO: Merge clusters that share 3'/5' ESTs. */
 
 if (mgcOut != NULL)
     outputMgc(pslHash, conn, bins, chromName, chrom->size, mgcOut);
-if (group != NULL)
-    outputGroup(conn, bins, chromName, chrom->size, 
-    	refSeqMaList, mrnaMaList, splicedEstMaList, group);
+if (groupOut != NULL)
+    outputGroup(bins, chromName, chrom->size, 
+    	refSeqMaList, splicedRnaMaList, splicedEstMaList, groupOut);
+
+/* Cleanup. */
+freeDnaSeq(&chrom);
+hashFree(&splicedHash);
+hashFree(&tailedHash);
+hashFree(&otherHash);
+hashFree(&splicedRnaHash);
+hashFree(&tailedRnaHash);
+hashFree(&otherRnaHash);
+hashFree(&excludeRnaHash);
+estOrientInfoFreeList(&eoiList);
+estOrientInfoFreeList(&mRnaOiList);
+ggMrnaAliFreeList(&refSeqMaList);
+ggMrnaAliFreeList(&mrnaMaList);
+ggMrnaAliFreeList(&splicedEstMaList);
+ggMrnaAliFreeList(&tailedEstMaList);
+ggMrnaAliFreeList(&otherEstMaList);
+ggMrnaAliFreeList(&splicedRnaMaList);
+pslFreeList(&estPslList);
+pslFreeList(&mrnaPslList);
 }
 
 void clusterRna(char *database, char *rnaOut, char *estOut)
 /* clusterRna - Make clusters of mRNA and ESTs. */
 {
 struct sqlConnection *conn;
+struct slName *chromList = NULL, *chrom;
+FILE *rnaOutFile = mustOpen(rnaOut, "w");
+FILE *estOutFile = mustOpen(estOut, "w");
+FILE *groupOutFile = NULL;
+char *group = optionVal("group", NULL);
+
 hSetDb(database);
+if (optionExists("chrom"))
+    chromList = slNameNew(optionVal("chrom", NULL));
+else
+    {
+    chromList = hAllChromNames();
+    if (optionExists("MGC"))
+        errAbort("Currently MGC can't be used except with chrom option");
+    }
 conn = hAllocConn();
-clusterChromRna(conn, cgiUsualString("chrom", "chr22"), rnaOut, estOut);
+if (group != NULL)
+    groupOutFile = mustOpen(group, "w");
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    clusterChromRna(conn, chrom->name, rnaOutFile, estOutFile, groupOutFile);
 hFreeConn(&conn);
+carefulClose(&groupOutFile);
+carefulClose(&rnaOutFile);
+carefulClose(&estOutFile);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 clusterRna(argv[1], argv[2], argv[3]);

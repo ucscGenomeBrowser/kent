@@ -9,10 +9,11 @@
 #include <string.h>
 #include "internet.h"
 #include "errabort.h"
+#include "hash.h"
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.27 2004/01/31 21:22:50 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.30 2004/03/03 07:23:51 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -251,9 +252,10 @@ else
 strncpy(parsed->host, s, sizeof(parsed->host));
 }
 
-static int netGetOpenHttp(char *url)
-/* Return a file handle that will read the url.  This
- * skips past any header. */
+int netOpenHttpExt(char *url, char *method, boolean end)
+/* Return a file handle that will read the url.  If end is not
+ * set then can send cookies and other info to returned file 
+ * handle before reading. */
 {
 struct netParsedUrl npu;
 struct dyString *dy = newDyString(512);
@@ -266,16 +268,64 @@ if (!sameString(npu.protocol, "http"))
 sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* Ask remote server for a file. */
-dyStringPrintf(dy, "GET %s HTTP/1.0\r\n", npu.file);
+dyStringPrintf(dy, "%s %s HTTP/1.0\r\n", method, npu.file);
 dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
 dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
-dyStringPrintf(dy, "Accept: */*\r\n", npu.host, npu.port);
-dyStringPrintf(dy, "\r\n", npu.host, npu.port);
+dyStringPrintf(dy, "Accept: */*\r\n");
+if (end)
+    dyStringPrintf(dy, "\r\n", npu.host, npu.port);
 write(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
 return sd;
+}
+
+static int netGetOpenHttp(char *url)
+/* Return a file handle that will read the url.  */
+{
+return netOpenHttpExt(url, "GET", TRUE);
+}
+
+int netUrlHead(char *url, struct hash *hash)
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines, including hopefully Content-Type: */
+{
+int sd = netOpenHttpExt(url, "HEAD", TRUE);
+int status = EIO;
+if (sd >= 0)
+    {
+    char *line, *word;
+    struct lineFile *lf = lineFileAttach(url, TRUE, sd);
+
+    if (lineFileNext(lf, &line, NULL))
+	{
+	if (startsWith("HTTP/", line))
+	    {
+	    word = nextWord(&line);
+	    word = nextWord(&line);
+	    if (word != NULL && isdigit(word[0]))
+	        {
+		status = atoi(word);
+		if (hash != NULL)
+		    {
+		    while (lineFileNext(lf, &line, NULL))
+		        {
+			word = nextWord(&line);
+			if (word == NULL)
+			    break;
+			hashAdd(hash, word, cloneString(skipLeadingSpaces(line)));
+			}
+		    }
+		}
+	    }
+	}
+    lineFileClose(&lf);
+    }
+else
+    status = errno;
+return status;
 }
 
 int netUrlOpen(char *url)
@@ -285,17 +335,25 @@ int netUrlOpen(char *url)
 return netGetOpenHttp(url);
 }
 
-struct dyString *netSlurpUrl(char *url)
-/* Go grab all of URL and return it as dynamic string. */
+struct dyString *netSlurpFile(int sd)
+/* Slurp file into dynamic string and return. */
 {
 char buf[4*1024];
 int readSize;
 struct dyString *dy = newDyString(4*1024);
-int sd = netUrlOpen(url);
 
 /* Slurp file into dy and return. */
 while ((readSize = read(sd, buf, sizeof(buf))) > 0)
     dyStringAppendN(dy, buf, readSize);
+return dy;
+}
+
+struct dyString *netSlurpUrl(char *url)
+/* Go grab all of URL and return it as dynamic string. */
+{
+int sd = netUrlOpen(url);
+struct dyString *dy = netSlurpFile(sd);
+
 close(sd);
 return dy;
 }

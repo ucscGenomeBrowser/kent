@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.33 2003/10/30 07:54:05 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.35 2004/03/01 21:31:59 kent Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -88,7 +88,6 @@ void expLabelPrint(struct column *col, char *subName,
 {
 int skipName = atoi(columnSetting(col, "skipName", "0"));
 char *url = colInfoUrl(col);
-    colInfoAnchor(col);
 hgExpLabelPrint(col->name, subName, skipName, url,
 	representativeCount, representatives, expTable, 0);
 freeMem(url);
@@ -138,9 +137,9 @@ hPrintf("<TR><TH>%s</TH><TH>Minimum</TH><TH>Maximum</TH></TR>\n",
 for (i=0; i<representativeCount; ++i)
     {
     int ix = representatives[i];
-    hPrintf("<TR>");
     if (ix != -1)
         {
+	hPrintf("<TR>");
 	hPrintf("<TD>&nbsp;%s</TD>", experiments[i]);
 	safef(lVarName, sizeof(lVarName), "%smin%d", subName, ix);
 	hPrintf("<TD>");
@@ -150,8 +149,8 @@ for (i=0; i<representativeCount; ++i)
 	hPrintf("<TD>");
 	advFilterRemakeTextVar(col, lVarName, 8);
 	hPrintf("</TD>");
+	hPrintf("</TR>\n");
 	}
-    hPrintf("</TR>");
     }
 hPrintf("</TABLE>\n");
 hPrintf("Include if ");

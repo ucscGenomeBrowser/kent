@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.127 2004/02/19 01:49:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.130 2004/03/03 05:59:31 daryl Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1849,8 +1849,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		 row[0], tableName); 
     AllocVar(pos);
     pos->chrom = chrom;
-    pos->chromStart = sqlUnsigned(row[1]) - 5000;
-    pos->chromEnd = sqlUnsigned(row[2]) + 5000;
+    pos->chromStart = sqlUnsigned(row[1]);
+    pos->chromEnd = sqlUnsigned(row[2]);
     pos->name = cloneString(spec);
     slAddHead(&table->posList, pos);
     }
@@ -2785,21 +2785,21 @@ if (tigrList != NULL)
     for (tigr = tigrList; tigr != NULL; tigr = tigr->next)
         {
         /* Don't return duplicate TIGR CMR accessions */
-        if (hashFindVal(hash, tigr->tigrLocus))
+        if (hashFindVal(hash, tigr->name))
             {
-            hashAdd(hash, tigr->tigrLocus, tigr);
+            hashAdd(hash, tigr->name, tigr);
             continue;
             }
-        hashAdd(hash, tigr->tigrLocus, tigr);
+        hashAdd(hash, tigr->name, tigr);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from tigrCmrORFs where name = '%s'", tigr->tigrLocus);
+	dyStringPrintf(ds, "select * from tigrCmrORFs where name = '%s'", tigr->name);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    bed = bedLoadN(row+1,6);
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
-	    pos->name = cloneString(tigr->tigrLocus);
+	    pos->name = cloneString(tigr->name);
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "%s; %s; %s", tigr->tigrCommon, tigr->tigrMainRole, tigr->tigrSubRole);
 	    pos->description = cloneString(ds->string);
@@ -3336,6 +3336,7 @@ else
     findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
     findBedPos(query, hgp, "uniGene_2");
     findBedPos(query, hgp, "sgdOther");
+    findBedPos(query, hgp, "miRNA");
     // findBedPos(query,hgp,"gbRRNA");
     // findBedPos(query,hgp,"gbTRNA");
     // findBedPos(query,hgp,"gbMiscRNA");

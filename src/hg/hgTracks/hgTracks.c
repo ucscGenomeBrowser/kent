@@ -78,7 +78,9 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.675 2004/02/26 19:10:13 heather Exp $";
+
+
+static char const rcsid[] = "$Id: hgTracks.c,v 1.682 2004/03/03 20:28:32 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1107,7 +1109,13 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
         struct vGfx *vg, Color *retColor, Color *retBarbColor)
 /* Figure out color to draw linked feature in. */
 {
-if (lf->filterColor > 0)
+/* If this is the item that the user searched by
+   make it be in red so visible. */
+if(sameString(position, lf->name)) 
+    {
+    *retColor = *retBarbColor =  MG_RED;
+    }
+else if (lf->filterColor > 0)
     {
     *retColor = *retBarbColor = lf->filterColor;
     }
@@ -1130,7 +1138,13 @@ else
     }
 }
 
-
+Color linkedFeaturesNameColor(struct track *tg, void *item, struct vGfx *vg)
+/* Determine the color of the name for the linked feature. */
+{
+Color col, barbCol;
+lfColors(tg, item, vg, &col, &barbCol);
+return col;
+}
 
 static void linkedFeaturesDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
@@ -1177,6 +1191,8 @@ if (chainLines && (vis == tvSquish))
     midY2 = y + heightPer - 1;
     }
 lfColors(tg, lf, vg, &color, &bColor);
+
+
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
 if (tallStart == 0 && tallEnd == 0)
@@ -1395,16 +1411,19 @@ if (vis == tvPack || vis == tvSquish)
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn;
     vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+    assert(ss);
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
-        struct slList *item = sn->val;
-        int s = tg->itemStart(tg, item);
-        int e = tg->itemEnd(tg, item);
-        int x1 = round((s - winStart)*scale) + xOff;
-        int x2 = round((e - winStart)*scale) + xOff;
-        int textX = x1;
-        char *name = tg->itemName(tg, item);
-        
+	struct slList *item = sn->val;
+	int s = tg->itemStart(tg, item);
+	int e = tg->itemEnd(tg, item);
+	int x1 = round((s - winStart)*scale) + xOff;
+	int x2 = round((e - winStart)*scale) + xOff;
+	int textX = x1;
+	char *name = tg->itemName(tg, item);
+	if(tg->itemNameColor != NULL) 
+	    color = tg->itemNameColor(tg, item, vg);
+
 	y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
         if (withLabels)
@@ -1441,10 +1460,12 @@ else
     struct slList *item;
     y = yOff;
     for (item = tg->items; item != NULL; item = item->next)
-        {
-        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-        if (isFull) y += lineHeight;
-        } 
+	{
+	if(tg->itemColor != NULL) 
+	    color = tg->itemColor(tg, item, vg);
+	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+	if (isFull) y += lineHeight;
+	} 
     }
 }
 
@@ -1706,6 +1727,7 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
+tg->itemNameColor = linkedFeaturesNameColor;
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
@@ -4917,6 +4939,7 @@ tg->drawItems = snpMapDrawItems;
 tg->drawItemAt = snpMapDrawItemAt;
 tg->loadItems = loadSnpMap;
 tg->freeItems = freeSnpMap;
+tg->labelColor = MG_BLUE;
 tg->itemColor = snpMapColor;
 tg->itemNameColor = snpMapColor;
 }
@@ -6029,13 +6052,29 @@ else
     str[strlen(str) - strlen(t)] = '\0';
 }
 
-void spreadString(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font, char *s, int count)
-/* Draw evenly spaced letters in string. */
+Color lighterColor(struct vGfx *vg, Color color)
+/* Get lighter shade of a color */ 
+{
+struct rgbColor rgbColor =  vgColorIxToRgb(vg, color);
+rgbColor.r = (rgbColor.r+255)/2;
+rgbColor.g = (rgbColor.g+255)/2;
+rgbColor.b = (rgbColor.b+255)/2;
+return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
+                        Color color, MgFont *font, char *s, char *match,
+                        int count)
+/* Draw evenly spaced letters in string.  For multiple alignments,
+ * supply a non-NULL match string, and then matching letters will be colored
+ * with the main color, mismatched letters will have alt color */
 {
 char c[2];
 int i;
 int x1,x2;
+
+Color noMatchColor = lighterColor(vg, color);
+Color clr;
 
 c[1] = 0;	/* Put zero tag on string. */
 for (i=0; i<count; ++i)
@@ -6043,8 +6082,19 @@ for (i=0; i<count; ++i)
     x1 = i * width / count;
     x2 = (i+1) * width/count;
     c[0] = s[i];
-    vgTextCentered(vg,x1+x,y,x2-x1,height,color,font,c);
+    clr = color;
+    if (match != NULL && match[i])
+        if (s[i] != match[i])
+            clr = noMatchColor;
+    vgTextCentered(vg,x1+x,y,x2-x1,height,clr,font,c);
     }
+}
+
+void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+	                Color color, MgFont *font, char *s, int count)
+/* Draw evenly spaced letters in string. */
+{
+    spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
@@ -6220,8 +6270,10 @@ if (withLeftLabels)
 	char o5[128];
 	struct slList *item;
 	enum trackVisibility vis = track->limitedVis;
+        enum trackVisibility savedVis = vis;
 	int tHeight;
-	Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+	Color labelColor = (track->labelColor ? 
+                                track->labelColor : track->ixColor);
 	if (vis == tvHide)
 	    continue;
 	tHeight = track->height;
@@ -6232,8 +6284,10 @@ if (withLeftLabels)
 	minRange = 0.0;
 	safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
 	safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
-        minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
-   	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
+        minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, 
+                                        track->minRange );
+   	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
+                                        track->maxRange);
 	
 	/*  if a track can do its own left labels, do them after drawItems */
 	if (track->drawLeftLabels != NULL)
@@ -6277,6 +6331,14 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%d", (int)round(minRangeCutoff));
 	    sprintf( maxRangeStr, "%d", (int)round(maxRangeCutoff));
 	    }
+        /* special label handling for wigMaf type tracks -- they
+           display a left label in pack mode.  To use the full mode
+           labelling, temporarily set visibility to full.
+           Restore savedVis later */
+        {
+        if (sameString(track->tdb->type, "wigMaf"))
+            vis = tvFull;
+        }
 	switch (vis)
 	    {
 	    case tvHide:
@@ -6295,7 +6357,7 @@ if (withLeftLabels)
 		if( track->subType == lfSubSample && track->items == NULL )
 		    y += track->height;
 
-		for (item = track->items; item != NULL; item = item->next)
+                for (item = track->items; item != NULL; item = item->next)
 		    {
 	            char *rootName;
 		    char *name = track->itemName(track, item);
@@ -6374,6 +6436,10 @@ if (withLeftLabels)
 		y += track->height;
 		break;
 	    }
+        /* NOTE: might want to just restore savedVis here for all track types,
+           but I'm being cautious... */
+        if (sameString(track->tdb->type, "wigMaf"))
+            vis = savedVis;
 	vgUnclip(vg);
         }
     }
@@ -6779,6 +6845,162 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
+static void filterBed(struct track *tg, struct linkedFeatures **pLfList)
+/* Apply filters if any to mRNA linked features. */
+{
+struct linkedFeatures *lf, *next, *newList = NULL, *oldList = NULL;
+struct mrnaUiData *mud = tg->extraUiData;
+struct mrnaFilter *fil;
+char *type;
+int i = 0;
+boolean anyFilter = FALSE;
+boolean colorIx = 0;
+boolean isExclude = FALSE;
+boolean andLogic = TRUE;
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = NULL;
+boolean isDense;
+
+if (*pLfList == NULL || mud == NULL)
+    return;
+
+/* First make a quick pass through to see if we actually have
+ * to do the filter. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    fil->pattern = cartUsualString(cart, fil->key, "");
+    if (fil->pattern[0] != 0)
+        anyFilter = TRUE;
+    }
+if (!anyFilter)
+    return;
+
+type = cartUsualString(cart, mud->filterTypeVar, "red");
+if (sameString(type, "exclude"))
+    isExclude = TRUE;
+else if (sameString(type, "include"))
+    isExclude = FALSE;
+else
+    colorIx = getFilterColor(type, MG_BLACK);
+type = cartUsualString(cart, mud->logicTypeVar, "and");
+andLogic = sameString(type, "and");
+
+/* Make a pass though each filter, and start setting up search for
+ * those that have some text. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    fil->pattern = cartUsualString(cart, fil->key, "");
+    if (fil->pattern[0] != 0)
+	{
+	fil->hash = newHash(10);
+	}
+    }
+
+/* Scan tables id/name tables to build up hash of matching id's. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    struct hash *hash = fil->hash;
+    int wordIx, wordCount;
+    char *words[128];
+
+    if (hash != NULL)
+	{
+	boolean anyWild;
+	char *dupPat = cloneString(fil->pattern);
+	wordCount = chopLine(dupPat, words);
+	for (wordIx=0; wordIx <wordCount; ++wordIx)
+	    {
+	    char *pattern = cloneString(words[wordIx]);
+	    if (lastChar(pattern) != '*')
+		{
+		int len = strlen(pattern)+1;
+		pattern = needMoreMem(pattern, len, len+1);
+		pattern[len-1] = '*';
+		}
+	    anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
+	    touppers(pattern);
+	    for(lf = *pLfList; lf != NULL; lf=lf->next)
+		{
+		char copy[64];
+		boolean gotMatch;
+		safef(copy, sizeof(copy), "%s", lf->name);
+		touppers(copy);
+		if (anyWild)
+		    gotMatch = wildMatch(pattern, copy);
+		else
+		    gotMatch = sameString(pattern, copy);
+		if (gotMatch)
+		    {
+		    hashAdd(hash, lf->name, NULL);
+		    }
+		}
+	    freez(&pattern);
+	    }
+	freez(&dupPat);
+	}
+    }
+
+/* Scan through linked features coloring and or including/excluding ones that 
+ * match filter. */
+for (lf = *pLfList; lf != NULL; lf = next)
+    {
+    boolean passed = andLogic;
+    next = lf->next;
+    for (fil = mud->filterList; fil != NULL; fil = fil->next)
+	{
+	if (fil->hash != NULL)
+	    {
+	    if (hashLookup(fil->hash, lf->name) == NULL)
+		{
+		if (andLogic)    
+		    passed = FALSE;
+		}
+	    else
+		{
+		if (!andLogic)
+		    passed = TRUE;
+		}
+	    }
+	}
+    if (passed ^ isExclude)
+	{
+	slAddHead(&newList, lf);
+	if (colorIx > 0)
+	    lf->filterColor = colorIx;
+	}
+    else
+        {
+	slAddHead(&oldList, lf);
+	}
+    }
+
+slReverse(&newList);
+slReverse(&oldList);
+if (colorIx > 0)
+   {
+   /* Draw stuff that passes filter first in full mode, last in dense. */
+   if (tg->visibility == tvDense)
+       {
+       newList = slCat(oldList, newList);
+       }
+   else
+       {
+       newList = slCat(newList, oldList);
+       }
+   }
+*pLfList = newList;
+tg->limitedVisSet = FALSE;	/* Need to recalculate this after filtering. */
+
+/* Free up hashes, etc. */
+for (fil = mud->filterList; fil != NULL; fil = fil->next)
+    {
+    hashFree(&fil->hash);
+    }
+hFreeConn(&conn);
+}
+
 void loadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -6803,6 +7025,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&lfList);
+if(tg->extraUiData)
+    filterBed(tg, &lfList);
 slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
@@ -6864,6 +7088,7 @@ if (sameWord(type, "bed"))
     else 
 	{
 	linkedFeaturesMethods(track);
+	track->extraUiData = newBedUiData(track->mapName);
 	track->loadItems = loadGappedBed;
 	}
     }
@@ -7521,6 +7746,10 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
+/* registerTrackHandler("altGraphXCon2", altGraphXMethods ); */
+/* registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); */
+/* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
+/* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 
@@ -7638,7 +7867,9 @@ if (!hideControls)
 	hWrites("position ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
+#ifdef SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES
 	hOnClickButton("document.TrackForm.position.value=''","clear");
+#endif /* SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES */
 	hPrintf(" size %s ", buf);
 	hWrites(" bp. &nbsp;image width: ");
 	hIntVar("pix", tl.picWidth, 4);
@@ -7661,16 +7892,16 @@ if (!hideControls)
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
-    hPrintf("<TD COLSPAN=15>");
+    hPrintf("</TD><TD COLSPAN=15>");
     hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
 	  "Click on left mini-buttons for track-specific options" );
-    hPrintf("<TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
+    hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
     hButton("hgt.dinkRR", " > ");
-    hPrintf("<TR></TABLE>\n");
+    hPrintf("</TD></TR></TABLE>\n");
     smallBreak();
 
     /* Display bottom control panel. */
@@ -7708,6 +7939,7 @@ if (!hideControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
+    hPrintf("<TR>");
     for (group = groupList; group != NULL; group = group->next)
         {
 	struct trackRef *tr;
@@ -7747,7 +7979,8 @@ if (!hideControls)
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */
-	controlGridEndRow(cg);
+	if (group->next != NULL)
+	    controlGridEndRow(cg);
 	}
     endControlGrid(&cg);
     }
@@ -8208,10 +8441,11 @@ static boolean initted = FALSE;
 if (!initted)
     {
     htmlStart("Very Early Error");
-    printf("<!-- HGERROR -->\n");
     initted = TRUE;
     }
+printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
+printf("%s", htmlWarnEndPattern());
 }
 
 void veryEarlyAbortHandler()
@@ -8232,6 +8466,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v53", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v54", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

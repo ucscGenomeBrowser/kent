@@ -39,6 +39,9 @@ struct spaceRowTracker
     bool *used;                 /* A flag for each spot used. */
     };
 
+struct spaceSaver *spaceSaverMaxCellsNew(int winStart, int winEnd, int maxRows, int maxCells);
+/* Create a new space saver around the given window.   */
+
 struct spaceSaver *spaceSaverNew(int winStart, int winEnd, int maxRows);
 /* Create a new space saver around the given window.   */
 

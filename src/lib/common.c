@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.49 2004/02/13 09:33:32 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.52 2004/03/03 08:00:25 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -533,6 +533,81 @@ if (refOnList(*pRefList, val) == NULL)
     {
     refAdd(pRefList, val);
     }
+}
+
+struct slPair *slPairNew(char *name, void *val)
+/* Allocate new name/value pair. */
+{
+struct slPair *el;
+AllocVar(el);
+el->name = cloneString(name);
+el->val = val;
+return el;
+}
+
+void slPairAdd(struct slPair **pList, char *name, void *val)
+/* Add new slPair to head of list. */
+{
+struct slPair *el = slPairNew(name, val);
+slAddHead(pList, el);
+}
+
+void slPairFree(struct slPair **pEl)
+/* Free up struct and name.  (Don't free up values.) */
+{
+struct slPair *el = *pEl;
+if (el != NULL)
+    {
+    freeMem(el->name);
+    freez(pEl);
+    }
+}
+
+void slPairFreeList(struct slPair **pList)
+/* Free up list.  (Don't free up values.) */
+{
+struct slPair *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    slPairFree(&el);
+    }
+*pList = NULL;
+}
+
+void slPairFreeVals(struct slPair *list)
+/* Free up all values on list. */
+{
+struct slPair *el;
+for (el = list; el != NULL; el = el->next)
+    freez(&el->val);
+}
+
+void slPairFreeValsAndList(struct slPair **pList)
+/* Free up all values on list and list itself */
+{
+slPairFreeVals(*pList);
+slPairFreeList(pList);
+}
+
+struct slPair *slPairFind(struct slPair *list, char *name)
+/* Return list element of given name, or NULL if not found. */
+{
+struct slPair *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameString(name, el->name))
+        break;
+return el;
+}
+
+void *slPairFindVal(struct slPair *list, char *name)
+/* Return value associated with name in list, or NULL if not found. */
+{
+struct slPair *el = slPairFind(list, name);
+if (el == NULL)
+    return NULL;
+return el->val;
 }
 
 
@@ -1163,54 +1238,6 @@ return TRUE;
 } 
 
 
-void splitPath(char *path, char dir[256], char name[128], char extension[64])
-/* Split a full path into components.  The dir component will include the
- * trailing / if any.  The extension component will include the starting
- * . if any.   Pass in NULL for dir, name, or extension if you don't care about
- * that part. */
-{
-char *dirStart, *nameStart, *extStart, *extEnd;
-int dirSize, nameSize, extSize;
-
-dirStart = path;
-nameStart = strrchr(path,'/');
-if (nameStart == NULL)	/* Do a little coping with MS-DOS style paths. */
-    {
-    nameStart = strrchr(path, '\\');
-    if (nameStart != NULL)
-	subChar(path, '\\', '/');
-    }
-if (nameStart == NULL)
-    nameStart = path;
-else
-    nameStart += 1;
-extStart = strrchr(nameStart, '.');
-if (extStart == NULL)
-    extStart = nameStart + strlen(nameStart);
-extEnd = extStart + strlen(extStart);
-if ((dirSize = (nameStart - dirStart)) >= 256)
-    errAbort("Directory too long in %s", path);
-if ((nameSize = (extStart - nameStart)) >= 128)
-    errAbort("Name too long in %s", path);
-if ((extSize = (extEnd - extStart)) >= 64)
-    errAbort("Extension too long in %s", path);
-if (dir != NULL)
-    {
-    memcpy(dir, dirStart, dirSize);
-    dir[dirSize] = 0;
-    }
-if (name != NULL)
-    {
-    memcpy(name, nameStart, nameSize);
-    name[nameSize] = 0;
-    }
-if (extension != NULL)
-    {
-    memcpy(extension, extStart, extSize);
-    extension[extSize] = 0;
-    }
-}
-
 char *addSuffix(char *head, char *suffix)
 /* Return a needMem'd string containing "headsuffix". Should be free'd
  when finished. */
@@ -1509,6 +1536,14 @@ va_start(args, format);
 sz = vasafef(buffer, bufSize, format, args);
 va_end(args);
 return sz;
+}
+
+char *naForNull(char *s)
+/* Return 'n/a' if s is NULL, otherwise s. */
+{
+if (s == NULL) 
+   s = "n/a";
+return s;
 }
 
 int chromToInt(char *s)
