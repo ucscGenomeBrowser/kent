@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.4 2004/03/23 22:10:12 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.5 2004/03/24 01:01:18 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -48,7 +48,7 @@ if (f != (FILE *) NULL)
 }
 
 static struct wiggleData * readWigDataRow(struct wiggle *wiggle,
-    int winStart, int winEnd, boolean summaryOnly, int tableId,
+    int winStart, int winEnd, int tableId,
 	boolean (*wiggleCompare)(int tableId, double value))
 /*  read one row of wiggle data, return data values between winStart, winEnd */
 {
@@ -69,71 +69,59 @@ double sumData = 0.0;
 double sumSquares = 0.0;
 unsigned dataArea;
 
-if (summaryOnly)
+openWibFile(wiggle->file);
+fseek(f, wiggle->offset, SEEK_SET);
+readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
+itemsRead = fread(readData, (size_t) wiggle->count,
+	(size_t) sizeof(unsigned char), f);
+if (itemsRead != sizeof(unsigned char))
+    errAbort("readWigDataRow: can not read %u bytes from %s at offset %u",
+	wiggle->count, wiggle->file, wiggle->offset);
+
+/*	need at most this amount, perhaps less	*/
+dataArea = sizeof(struct wiggleDatum)*wiggle->validCount;
+
+data = (struct wiggleDatum *) needMem((size_t)
+    (sizeof(struct wiggleDatum)*wiggle->validCount));
+
+dataPtr = data;
+chromPosition = wiggle->chromStart;
+
+for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
     {
-    upperLimit = wiggle->lowerLimit + wiggle->dataRange;
-    lowerLimit = wiggle->lowerLimit;
-    chromStart = wiggle->chromStart;
-    chromEnd = wiggle->chromEnd;
-    validCount = wiggle->validCount;
-    sumData = wiggle->sumData;
-    sumSquares = wiggle->sumSquares;
-    }
-else
-    {
-    openWibFile(wiggle->file);
-    fseek(f, wiggle->offset, SEEK_SET);
-    readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
-    itemsRead = fread(readData, (size_t) wiggle->count,
-	    (size_t) sizeof(unsigned char), f);
-    if (itemsRead != sizeof(unsigned char))
-	errAbort("readWigDataRow: can not read %u bytes from %s at offset %u",
-	    wiggle->count, wiggle->file, wiggle->offset);
-
-    /*	need at most this amount, perhaps less	*/
-    dataArea = sizeof(struct wiggleDatum)*wiggle->validCount;
-
-    data = (struct wiggleDatum *) needMem((size_t)
-	(sizeof(struct wiggleDatum)*wiggle->validCount));
-
-    dataPtr = data;
-    chromPosition = wiggle->chromStart;
-
-    for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
+    unsigned char datum = readData[dataOffset];
+    if (datum == WIG_NO_DATA)
+	++noData;
+    else
 	{
-	unsigned char datum = readData[dataOffset];
-	if (datum == WIG_NO_DATA)
-	    ++noData;
-	else
+	if (chromPosition >= winStart && chromPosition < winEnd)
 	    {
-	    if (chromPosition >= winStart && chromPosition < winEnd)
-		{
-		double value =
-		    BIN_TO_VALUE(datum,wiggle->lowerLimit,wiggle->dataRange);
-		boolean takeIt = TRUE;
-		if (wiggleCompare)
-		    takeIt = (*wiggleCompare)(tableId, value);
-		if (takeIt)
-		    { 
-		    dataPtr->chromStart = chromPosition;
-		    dataPtr->value = value;
-		    ++validCount;
-		    if (chromStart < 0)
-			chromStart = chromPosition;
-		    chromEnd = chromPosition + 1 + wiggle->span;
-		    if (lowerLimit > dataPtr->value)
-			lowerLimit = dataPtr->value;
-		    if (upperLimit < dataPtr->value)
-			upperLimit = dataPtr->value;
-		    sumData += dataPtr->value;
-		    sumSquares += dataPtr->value * dataPtr->value;
-		    ++dataPtr;
-		    }
+	    double value =
+		BIN_TO_VALUE(datum,wiggle->lowerLimit,wiggle->dataRange);
+	    boolean takeIt = TRUE;
+	    if (wiggleCompare)
+		takeIt = (*wiggleCompare)(tableId, value);
+	    if (takeIt)
+		{ 
+		dataPtr->chromStart = chromPosition;
+		dataPtr->value = value;
+		++validCount;
+		if (chromStart < 0)
+		    chromStart = chromPosition;
+		chromEnd = chromPosition + 1 + wiggle->span;
+		if (lowerLimit > dataPtr->value)
+		    lowerLimit = dataPtr->value;
+		if (upperLimit < dataPtr->value)
+		    upperLimit = dataPtr->value;
+		sumData += dataPtr->value;
+		sumSquares += dataPtr->value * dataPtr->value;
+		++dataPtr;
 		}
 	    }
-	chromPosition += wiggle->span;
 	}
+    chromPosition += wiggle->span;
     }
+
 if (validCount)
     {
     double dataRange = upperLimit - lowerLimit;
@@ -217,6 +205,15 @@ snprintf(query, sizeof(query),
     "SELECT span from %s where chrom = '%s' group by span",
     tableName, chromName );
 
+/*	make sure table exists before we try to talk to it
+ *	If it does not exist, we return a null result
+ */
+if (! sqlTableExists(conn, tableName))
+    {
+    hFreeConn(&conn);
+    return(wdList);
+    }
+
 /*	Survey the spans to see what the story is here */
 
 sr = sqlMustGetResult(conn,query);
@@ -250,8 +247,10 @@ while ((el = hashNext(&cookie)) != NULL)
 	{
 	++rowCount;
 	wiggle = wiggleLoad(row + rowOffset);
-	wigData = readWigDataRow(wiggle, winStart, winEnd, summaryOnly,
+	wigData = readWigDataRow(wiggle, winStart, winEnd,
 		tableId, wiggleCompare );
+	if (summaryOnly)
+	    freeMem(wigData->data);
 	if (wigData)
 	    slAddHead(&wdList,wigData);
 	}
