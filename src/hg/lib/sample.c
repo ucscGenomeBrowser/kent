@@ -20,7 +20,7 @@ AllocVar(ret);
 ret->sampleCount = sqlUnsigned(row[6]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
+ret->chromEnd = sqlSigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
