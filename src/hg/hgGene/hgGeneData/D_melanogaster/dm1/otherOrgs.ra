@@ -1,0 +1,14 @@
+name human
+db hg16
+
+name mouse
+db mm4
+
+name zebrafish
+db danRer1
+
+name cElegans
+db ce2
+
+name yeast
+db sacCer1

@@ -1,8 +1,5 @@
 name mouse
-db mm5
-
-name rat
-db rn3
+db mm4
 
 name zebrafish
 db danRer1

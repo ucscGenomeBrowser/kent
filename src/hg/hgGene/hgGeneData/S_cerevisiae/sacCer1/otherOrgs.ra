@@ -1,0 +1,15 @@
+name human
+db hg16
+
+name mouse
+db mm4
+
+name zebrafish
+db danRer1
+
+name drosophila
+db dm1
+
+name cElegans
+db ce1
+

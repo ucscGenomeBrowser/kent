@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.5 2004/11/22 21:15:56 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.6 2004/11/22 22:48:39 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -126,7 +126,7 @@ static char *otherOrgProteinId(struct otherOrg *otherOrg, struct sqlConnection *
 {
 char *otherId = otherOrgId(otherOrg, conn, geneId);
 char *protId = NULL;
-if (otherId != NULL && otherOrg->idToProtIdSql != NULL)
+if (otherOrg->db != NULL && otherId != NULL && otherOrg->idToProtIdSql != NULL)
     {
     struct sqlConnection *conn = sqlConnect(otherOrg->db);
     char query[512];
@@ -198,6 +198,7 @@ if (id != NULL)
 	    char query[256];
 	    safef(query, sizeof(query), "select seq from %s where name = '%s'",
 	    	dbTable, id);
+	    uglyf("%s<BR>\n", query);
 	    sr = sqlGetResult(conn, query);
 	    if ((row = sqlNextRow(sr)) != NULL)
 	        {

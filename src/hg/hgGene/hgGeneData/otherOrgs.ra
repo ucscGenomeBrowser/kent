@@ -49,7 +49,6 @@ name drosophila
 shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
-idToProtIdSql select bdgpToCanonical.name from bdgpGeneInfo,bdgpToCanonical where flyBaseId='%s' and bdgpGeneInfo.bdgpName = bdgpToCanonical.value
 pepTable bdgpGenePep
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
 sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&db=0&near_search=%s
