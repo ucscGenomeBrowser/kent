@@ -270,7 +270,10 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/maskOutFa -softAdd bosTau1.softmask.fa bed/simpleRepeat/trf.bed bosTau1.softmask2.fa
 
   # hard masking (Ns instead of lower case) for download files
+  # split for use by genscan
   /cluster/bin/i386/maskOutFa bosTau1.softmask2.fa hard bosTau1.hardmask.fa
+  mkdir hardmask-split
+  /cluster/bin/i386/faSplit about bosTau1.hardmask.fa 2000000 hardmask-split
 
 # REGENERATE 2BIT NIB (DONE, Oct. 10, 2004, Heather)
   ssh kksilo
