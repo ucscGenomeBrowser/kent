@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.29 2004/08/19 17:16:49 angie Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.30 2004/08/31 23:12:22 sugnet Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -263,7 +263,7 @@ struct bed *bedLoad6(char **row)
 /* Load first six fields of bed. */
 {
 struct bed *ret = bedLoad5(row);
-strcpy(ret->strand, row[5]);
+safef(ret->strand, sizeof(ret->strand), "%s", row[5]);
 return ret;
 }
 
@@ -292,7 +292,6 @@ sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 return ret;
 }
-
 
 struct bed *bedLoadN(char *row[], int wordCount)
 /* Convert a row of strings to a bed. */
