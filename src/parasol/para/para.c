@@ -14,8 +14,18 @@
 #include "jobDb.h"
 #include "jobResult.h"
 
-/* should we output dots to let the user know we are doing something?*/
-static boolean doHappytDots;
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"retries", OPTION_INT},
+    {"maxQueue", OPTION_INT},
+    {"minPush", OPTION_INT},
+    {"maxPush", OPTION_INT},
+    {"warnTime", OPTION_INT},
+    {"killTime", OPTION_INT},
+    {NULL, 0}
+};
+
+static boolean doHappytDots;   /* output activity dots? */
 
 void usage()
 /* Explain usage and exit. */
@@ -1441,9 +1451,9 @@ int main(int argc, char *argv[])
 {
 char *command;
 char *batch;
-doHappytDots = isatty(1);  /* stdin */
+doHappytDots = isatty(1);  /* stdout */
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 2)
     usage();
 retries = optionInt("retries",  retries);
