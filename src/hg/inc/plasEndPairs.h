@@ -5,10 +5,10 @@
 #ifndef PLASENDPAIRS_H
 #define PLASENDPAIRS_H
 
-struct lfs
+struct plasEndPairs
 /* Standard linked features series table */
     {
-    struct lfs *next;  /* Next in singly linked list. */
+    struct plasEndPairs *next;  /* Next in singly linked list. */
     short bin;	/* Bin number for browser speedup */
     char *chrom;	/* Human chromosome or FPC contig */
     unsigned chromStart;	/* Start position of clone in chromosome */
@@ -23,39 +23,39 @@ struct lfs
     char **lfNames;	/* Comma separated list of names of linked features */
     };
 
-struct lfs *lfsLoad(char **row);
-/* Load a lfs from row fetched with select * from lfs
- * from database.  Dispose of this with lfsFree(). */
+struct plasEndPairs *plasEndPairsLoad(char **row);
+/* Load a plasEndPairs from row fetched with select * from plasEndPairs
+ * from database.  Dispose of this with plasEndPairsFree(). */
 
-struct lfs *lfsLoadAll(char *fileName);
-/* Load all lfs from a tab-separated file.
- * Dispose of this with lfsFreeList(). */
+struct plasEndPairs *plasEndPairsLoadAll(char *fileName);
+/* Load all plasEndPairs from a tab-separated file.
+ * Dispose of this with plasEndPairsFreeList(). */
 
-struct lfs *lfsLoadWhere(struct sqlConnection *conn, char *table, char *where);
-/* Load all lfs from table that satisfy where clause. The
+struct plasEndPairs *plasEndPairsLoadWhere(struct sqlConnection *conn, char *table, char *where);
+/* Load all plasEndPairs from table that satisfy where clause. The
  * where clause may be NULL in which case whole table is loaded
- * Dispose of this with lfsFreeList(). */
+ * Dispose of this with plasEndPairsFreeList(). */
 
-struct lfs *lfsCommaIn(char **pS, struct lfs *ret);
-/* Create a lfs out of a comma separated string. 
+struct plasEndPairs *plasEndPairsCommaIn(char **pS, struct plasEndPairs *ret);
+/* Create a plasEndPairs out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new lfs */
+ * return a new plasEndPairs */
 
-void lfsFree(struct lfs **pEl);
-/* Free a single dynamically allocated lfs such as created
- * with lfsLoad(). */
+void plasEndPairsFree(struct plasEndPairs **pEl);
+/* Free a single dynamically allocated plasEndPairs such as created
+ * with plasEndPairsLoad(). */
 
-void lfsFreeList(struct lfs **pList);
-/* Free a list of dynamically allocated lfs's */
+void plasEndPairsFreeList(struct plasEndPairs **pList);
+/* Free a list of dynamically allocated plasEndPairs's */
 
-void lfsOutput(struct lfs *el, FILE *f, char sep, char lastSep);
-/* Print out lfs.  Separate fields with sep. Follow last field with lastSep. */
+void plasEndPairsOutput(struct plasEndPairs *el, FILE *f, char sep, char lastSep);
+/* Print out plasEndPairs.  Separate fields with sep. Follow last field with lastSep. */
 
-#define lfsTabOut(el,f) lfsOutput(el,f,'\t','\n');
-/* Print out lfs as a line in a tab-separated file. */
+#define plasEndPairsTabOut(el,f) plasEndPairsOutput(el,f,'\t','\n');
+/* Print out plasEndPairs as a line in a tab-separated file. */
 
-#define lfsCommaOut(el,f) lfsOutput(el,f,',',',');
-/* Print out lfs as a comma separated list including final comma. */
+#define plasEndPairsCommaOut(el,f) plasEndPairsOutput(el,f,',',',');
+/* Print out plasEndPairs as a comma separated list including final comma. */
 
 #endif /* PLASENDPAIRS_H */
 
