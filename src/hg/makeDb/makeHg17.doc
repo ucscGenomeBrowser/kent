@@ -5874,6 +5874,36 @@ ls /cluster/bluearc/hg17/multiz.2004-07-12/canFam1/*.maf > chrom.lst
     # make a copy of the .mod file and replace the TREE line with the
     # one above.  The new one is called
     # hg17panTro1rn3mm5canFam1galGal2fr1danRer1.mod
+
+    # UPDATE (8/4/04).  There's now a program in phast, called
+    # tree_doctor, that will do this automatically.  The above can be
+    # accomplished with:
+
+    # (replace numbers with names in hprmc-rev-dg.mod; this won't be necessary in the future)
+    tree_doctor --rename "1->hg17;2->panTro1;3->rn3;4->mm5;5->canFam1" hprmc-rev-dg.mod > hprmc-rev-dg.names.mod
+    # (obtain 8-way subtree from cftr25_hybrid.nh; also map names as necessary to match above)
+    tree_doctor /cluster/data/nisc/targets/cftr/phyloHMMcons25/cftr25_hybrid.nh --prune-all-but hg16,chimp,mm3,rn3,dog,chicken,fr1,zfish --rename "hg16->hg17;mm3->mm5;chimp->panTro1;dog->canFam1;chicken->galGal2;zfish->danRer1" > cftr8way.nh
+    # now merge (see tree_doctor help page for explanation)
+    tree_doctor hprmc-rev-dg.names.mod --merge cftr8way.nh > hg17panTro1rn3mm5canFam1galGal2fr1danRer1.auto.mod
+
+    cat hg17panTro1rn3mm5canFam1galGal2fr1danRer1.auto.mod
+#ALPHABET: A C G T
+#ORDER: 0
+#SUBST_MOD: REV
+#NRATECATS: 10
+#ALPHA: 4.658942
+#BACKGROUND: 0.294633 0.205082 0.205189 0.295097
+#RATE_MAT:
+#  -0.865237    0.159990    0.554805    0.150442
+#   0.229851   -1.194646    0.168269    0.796526
+#   0.796651    0.168182   -1.194919    0.230086
+#   0.150205    0.553556    0.159985   -0.863747
+#TREE: (((((hg17:0.006523,panTro1:0.007997):0.103779,(rn3:0.104867,mm5:0.078911):0.265676):0.019461,canFam1:0.205267):0.377150,galGal2:0.511134):0.536627,(danRer1:0.905323,fr1:0.922995):0.536627);
+
+    # (this tree is slightly different from the one above because
+    # tree_doctor scales the supertree before merging -- probably a
+    # better strategy in general)
+
     
 # 7-WAY MULTIZ MULTIPLE ALIGNMENT (2004-06-24 kate)
 
