@@ -39,7 +39,7 @@
 #include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.27 2004/08/24 21:17:07 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.28 2004/12/27 20:39:40 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -459,7 +459,6 @@ int maxSize = 0;
 agxList = altGraphXLoadAll(fileName);
 
 findChromsAndMaxSizes(agxList, &nameList, &maxSize);
-assert(nameList);
 chromKeeperInitChroms(nameList, maxSize);
 for(agx = agxList; agx != NULL; agx = agx->next)
     {
@@ -721,18 +720,6 @@ struct slRef *refList = NULL, *ref = NULL;
 (*toFree) = NULL;
 if(differentString(workingChrom, chrom))
     return;
-/* if(netBins != NULL) */
-/*     { */
-/*     struct binElement *be=NULL, *beList = NULL; */
-/*     beList = binKeeperFind(netBins, start, end); */
-/*     for(be=beList; be!=NULL; be=be->next) */
-/* 	{ */
-/* 	slSafeAddHead(fill, ((struct slList*)be->val)); */
-/* 	} */
-/*     slReverse(fill); */
-/*     (*toFree) = NULL; */
-/*     slFreeList(&beList); */
-/*     } */
 if(netTree != NULL)
     {
     AllocVar(searchLo);
@@ -1691,12 +1678,6 @@ for(i=0;i<vCount; i++)
 		    match = TRUE;
 		else
 		    match = FALSE;
-/* 		if(speciesSpecific && oldEv->evCount <= minEdgeNum) */
-/* 		    match = FALSE; */
-/* 		if(match == TRUE)  */
-/* 		    match = !overlappingExon(orthoAgList, orthoEmP, vertexOrthoPos[i], vertexOrthoPos[j]); */
-/* 		if(match == TRUE && possibleExons != NULL) */
-/* 		    match = (!overlapsPossibleExon(ag, i, j)); */
 		}
 	    else if(trumpValue(oldEv, ag) >= trumpNum && !isSoftEdge(ag, i, j))
 		match = TRUE;

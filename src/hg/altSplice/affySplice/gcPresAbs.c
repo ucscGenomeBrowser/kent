@@ -361,6 +361,8 @@ else
 	    probRepCount++;
 	    if(row->pVal[i] != 0)
 		probProduct = probProduct + log(row->pVal[i]);
+	    else
+		probProduct = probProduct + log(.9999999999);
 	    }
 /* 	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
 /* 	    fprintf(stderr,"\n"); */
