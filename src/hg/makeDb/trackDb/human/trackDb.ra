@@ -99,6 +99,14 @@ color 100,50,0
 altColor 175,150,128
 type genePred 
 
+track altGraphX
+shortLabel Alt-Splicing
+longLabel Alternative Splicing from ESTs/mRNAs
+group rna
+priority 74
+visibility hide
+type bed 3
+
 track affyU133
 shortLabel Affymetrix U133
 longLabel Alignments of Affymetrix Targets from HG-U133
@@ -164,6 +172,40 @@ priority 11
 group map
 visibility dense
 type bed 3 +
+
+track affyUcla
+shortLabel UCLA GeneChip
+longLabel UCLA Affymetrix U133 GeneChip data
+group regulation
+priority 87
+visibility hide
+type bed 15 +
+canPack off
+
+track mgcIntrons
+shortLabel mgcIntronPicks
+longLabel Introns and Flanking Exons for RACE PCR
+group rna
+priority 76
+visibility hide
+type bed 12
+
+track mgcIntrons
+shortLabel mgcIntronPicks
+longLabel Introns and Flanking Exons for RACE PCR
+group rna
+priority 76
+visibility hide
+type bed 12
+
+track orthoMrna
+shortLabel Mouse mRNAs
+longLabel Mouse mRNAs Mapped from mm3 via nets/chains
+group rna
+color 16,107,44
+priority 77
+visibility hide
+type bed 12
 
 track chainSelf
 shortLabel Self Chain 
