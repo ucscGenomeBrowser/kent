@@ -5,7 +5,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: wigAsciiCrunch.c,v 1.1 2004/10/28 04:38:06 kent Exp $";
+static char const rcsid[] = "$Id: wigAsciiCrunch.c,v 1.2 2004/10/28 05:24:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,6 +46,7 @@ int wordCount;
 char *data = NULL;
 char *seq = initialSeq, *lastSeq = NULL;
 
+verbose(1, "%s\n", input);
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     /* Read line that may already be crunched. */
@@ -89,6 +90,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     lastOffset = offset;
     }
 freeMem(lastSeq);
+lineFileClose(&lf);
 }
 
 void crunchDir(char *dir, FILE *f)
@@ -129,12 +131,15 @@ int firstLinePos(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[3];
-int retVal;
+int retVal = 0;
 int wordCount = lineFileChop(lf, words);
-if (wordCount != 2)
-    errAbort("%s is not a two column file", fileName);
-retVal = lineFileNeedNum(lf, words, 0);
-lineFileClose(&lf);
+if (wordCount > 0)
+    {
+    if (wordCount != 2)
+	errAbort("%s is not a two column file", fileName);
+    retVal = lineFileNeedNum(lf, words, 0);
+    lineFileClose(&lf);
+    }
 return retVal;
 }
 
