@@ -4,6 +4,7 @@
 #  05-12-04
 # 
 #  checks all the static links in htdocs tree.
+#  Robert Kuhn
 # 
 ###############################################
 
@@ -17,7 +18,7 @@ if ($#argv == 0) then
   echo
   echo "  checks all the static links in htdocs tree."
   echo
-  echo "    usage:  <input file with paths | all>, "
+  echo '    usage: <file of paths | all> -- "all" uses /cluster/bin/scripts/staticpaths,'
   echo '       yymmmdd (or other date string  --  defaults to "today")'
   echo
   exit
