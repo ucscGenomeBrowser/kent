@@ -85,7 +85,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.837 2004/11/24 19:46:44 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.838 2004/11/24 19:53:28 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8540,7 +8540,7 @@ if (gotBlat)
     }
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
-if (sameString(database, "hg16")
+if (sameString(database, "hg17")
             || sameString(database, "mm5")
             || sameString(database, "rn3") 
             || sameString(database, "fr1"))
