@@ -515,6 +515,7 @@ leapCount = x/4 + 1;
 dayCount = (year - 2001) * 365 + leapCount;
 for (x=0; x<month; ++x)
     dayCount += daysInMonths[x];
+dayCount += day-1;
 if (year%4 == 0 && month >= 2)
     ++dayCount;
 result = secondsInDay*dayCount + hour*3600 + minute*60 + second;
@@ -628,7 +629,7 @@ for (job=db->jobList; job != NULL; job = job->next)
         {
 	/* Look for hitherto unclassified jobs that are either running or
 	 * possibly finished. */
-	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->ranOk)
+	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->hung && !sub->ranOk)
 	    {
 	    char *startTime, *endTime;
 	    parseRunJobOutput(sub->outFile, &startTime, &endTime, 
@@ -639,8 +640,10 @@ for (job=db->jobList; job != NULL; job = job->next)
 		subTime = dateToSeconds(sub->submitTime);
 		curTime = nowInSeconds();
 		duration = curTime - subTime;
-		if (duration > 60*10)	/* Give it up to 10 minutes to show up. */
+		if (duration > 60*20)	/* Give it up to 20 minutes to show up. */
 		    sub->trackingError = TRUE;
+		else
+		    sub->inQueue = TRUE;
 		}
 	    else
 	        {
@@ -844,6 +847,7 @@ void jabbaTimes(char *batch)
 {
 struct jobDb *db = readBatch(batch);
 double totalCpu = 0, totalWall = 0;
+double oneWall, longestWall = 0;
 struct job *job;
 struct submission *sub;
 int jobCount = 0;
@@ -883,13 +887,17 @@ for (job = db->jobList; job != NULL; job = job->next)
 	       {
 	       ++timedCount;
 	       totalCpu += cpuTime;
-	       totalWall += dateToSeconds(endTime) - dateToSeconds(startTime);
+	       oneWall = dateToSeconds(endTime) - dateToSeconds(startTime);
+	       if (oneWall < cpuTime - 1.0) uglyf("%f vs %f in %s\n", oneWall, cpuTime, sub->id);
+	       totalWall += oneWall;
+	       if (oneWall > longestWall) longestWall = oneWall;
 	       }
 	   }
 	}
     }
-printf("Completed %d of %d jobs.  CPU %2.1fs IO %2.1fs\n",
-     timedCount, jobCount, totalCpu, totalWall-totalCpu);
+printf("Completed %d of %d jobs.  CPU %2.1fs IO %2.1fs longest %2.1fs\n",
+     timedCount, jobCount, totalCpu, totalWall-totalCpu, longestWall);
+printf("totalWall = %f\n", totalWall);
 }
 
 int main(int argc, char *argv[])
