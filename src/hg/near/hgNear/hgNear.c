@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.57 2003/09/06 18:55:09 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.58 2003/09/06 23:16:09 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1491,7 +1491,10 @@ else if (cartVarExists(cart, hideAllConfName))
 else if (cartVarExists(cart, showAllConfName))
     doConfigShowAll(conn, colList);
 else if (cartVarExists(cart, saveCurrentConfName))
-    doConfigSaveCurrent(conn, colList);
+    // doConfigSaveCurrent(conn, colList);
+    doNameCurrentColumns();
+else if (cartVarExists(cart, savedCurrentConfName))
+    doSaveCurrentColumns(conn, colList);
 else if (cartVarExists(cart, useSavedConfName))
     doConfigUseSaved(conn, colList);
 else if (cartVarExists(cart, advFilterVarName))
