@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.48 2004/11/09 17:10:30 kent Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.49 2004/11/10 22:33:36 hiram Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -913,8 +913,10 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, ++i)
         line = seq->dna;
         }
     /* draw sequence letters for alignment */
+    vgSetClip(vg, x, y, width, mi->height-1);
     spreadAlignString(vg, x, y, width, mi->height-1, color,
                         font, line, selfLine, winBaseCount, dots);
+    vgUnclip(vg);
     y += mi->height;
     }
 
