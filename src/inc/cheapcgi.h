@@ -112,6 +112,9 @@ void cgiContinueAllVars();
 void cgiVarExclude(char *varName);
 /* If varName exists, remove it. */
 
+void cgiVarSet(char *varName, char *val);
+/* Set a cgi variable to a particular value. */
+
 struct dyString *cgiUrlString();
 /* Get URL-formatted that expresses current CGI variable state. */
 

@@ -599,6 +599,16 @@ if (cgiVarExists(varName))
     }
 }
 
+void cgiVarSet(char *varName, char *val)
+/* Set a cgi variable to a particular value. */
+{
+struct cgiVar *var;
+initCgiInput();
+AllocVar(var);
+var->val = cloneString(val);
+hashAddSaveName(inputHash, varName, var, &var->name);
+}
+
 struct dyString *cgiUrlString()
 /* Get URL-formatted that expresses current CGI variable state. */
 {
