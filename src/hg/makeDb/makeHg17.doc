@@ -1778,7 +1778,7 @@ exit ${RET}
   
   The script was run successfully with the last message:
 
-  	Tue Jun  8 15:36:52 PDT 2004 DONE =========================
+  	Tue Jun  8 15:36:52 PDT 2004 DONE 
 
   After initial inspection of tables in kgHg17, do the following
   from mySql prompt:
@@ -1913,8 +1913,14 @@ cat > template << 'EOF'
     # primers
     ssh eieio
     cd /cluster/data/ncbi/sts.9
+    # strip out N's and wobbles (KS) from primers, as isPcr
+    # can't currently handle them
+    # strip out primers < 10 as isPcr can't handle them
+    awk '$0 !~ /[^ACGT0-9\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
+                all.primers > all.primers.ispcr
     mkdir -p /cluster/bluearc/sts.9/primers
-    faSplit about all.primers.fa 50000 /cluster/bluearc/sts.9/primers/primers
+    cd /cluster/bluearc/sts.9/primers
+    split -l 5000 /cluster/data/ncbi/sts.9/all.primers.ispcr primers_
 
     ssh kk
     cd /cluster/data/hg17
@@ -1922,26 +1928,109 @@ cat > template << 'EOF'
     cd bed/sts/primers
     mkdir run
     cd run
-    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
-    ls -1S /cluster/bluearc/sts.9/primers/primers*.fa > primers.lst
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/primers/primers_* > primers.lst
     mkdir -p /cluster/bluearc/hg17/sts/primers/out
-    foreach c (`cat contigs.lst`)
-        set d = $c:t:r
-        echo $d
-        mkdir -p /cluster/bluearc/hg17/sts/primers/out/$d
-    end
 cat > template << 'EOF'
 #LOOP
-# special blat version needed for primer alignment
-/cluster/bin/i386/blat.2 -tileSize=10 -oneOff -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=0 -minIdentity=80 $(path1) $(path2) {check out line+ /cluster/bluearc/hg17/sts/primers/out/$(root1)/$(root1).$(root2).psl}
+/cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=5 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  $(path1) $(path2) {check out line+ /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
     gensub2 contigs.lst primers.lst template jobList
     para create jobList
-        # 215840 jobs
+        # 9500 jobs
     para try
     para check
     para push
+
+    ssh eieio
+    cd /cluster/bluearc/hg17/sts/primers/out
+    # Note: got error that -4 is invalid number -- must remove all
+    # these before liftUp
+    ls | xargs sed '/-[1-9]/d' > all.psl.unlifted
+    liftUp /cluster/data/hg17/bed/sts/primers/all.psl /cluster/data/hg17/jkStuff/liftAll.lft warn all.psl.unlifted
+
+    # filter primer alignments (booch)
+    cd /cluster/data/hg17/bed/sts/primers
+    touch all.epcr
+    /cluster/bin/scripts/filterPrimers /cluster/data/ncbi/sts.9/stsInfo2.bed \
+        all.psl  /cluster/data/ncbi/sts.9/all.primers all.epcr > all.filter.psl
+    cut -f 1 /cluster/data/ncbi/sts.9 |  sort -n > all.primer.list
+    cut -f 10 all.filter.psl | cut -f 2 -d "_" | sort -n | \
+                uniq > placed.primers.list
+    diff all.primer.list placed.primers.list | grep "<" | \
+                cut -f 2 -d " " > missing.primers.list
+    wc -l all.primer.list missing.primers.list
+        # 143132 all.primer.list
+        # 39670 missing.primers.list
+        # 182802 total
+
+    # use Greg Schuler's ePCR to attempt alignment of primers missed
+    # by isPcr (kate)
+    ssh eieio
+    cd /cluster/data/hg17
+    cd bed/sts/primers
+    mkdir run.epcr
+    cd run.epcr
+cat > listPrimers.sh << 'EOF'
+    sed -n "s/^$1\t/dbSTS_$1\t/p" /cluster/data/ncbi/sts.9/all.primers 
+'EOF'
+    chmod +x listPrimers.sh
+    # this takes a few hours -- but shouldn't (ac to Hiram) ? 
+    cat /cluster/data/hg17/bed/sts/primers/missing.primers.list | \
+                xargs -n 1 listPrimers.sh > missing.primers
+    mkdir -p /cluster/bluearc/hg17/sts/epcr
+    cd /cluster/bluearc/hg17/sts/epcr
+    split -l 5000 /cluster/data/hg17/bed/sts/primers/run.epcr/missing.primers \
+                        primers_
+    cd /cluster/data/hg17/bed/sts/primers/run.epcr
+    ls -1S /cluster/bluearc/hg17/sts/epcr/primers_* > primers.lst
+    #ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
+    #ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > \
+        #/cluster/bluearc/hg17/sts/epcr/contigs.lst
+    ls -1S /iscratch/i/hg17/maskedContigs/*.fa > \
+        /cluster/bluearc/hg17/sts/epcr/contigs.lst
+    mkdir -p /cluster/bluearc/hg17/sts/epcr/out
+
+    ssh kki
+    cd /cluster/data/hg17/sts/primers/run.epcr
+
+cat > template << 'EOF'
+#LOOP
+/cluster/bin/scripts/runEpcr $(path1) /cluster/bluearc/hg17/sts/epcr/contigs.lst {check out line+ /cluster/bluearc/hg17/sts/epcr/out/$(root1).epcr}
+#ENDLOOP
+'EOF'
+    gensub2 primers.lst single template jobList
+    para create jobList
+        # 8 jobs
+    para try
+    para check
+    para push
+
+#Completed: 8 of 8 jobs
+#CPU time in finished jobs:      33914s     565.23m     9.42h    0.39d  0.001 y
+#IO & Wait Time:                  3104s      51.74m     0.86h    0.04d  0.000 y
+#Average job time:                4627s      77.12m     1.29h    0.05d
+#Longest job:                     5248s      87.47m     1.46h    0.06d
+#Submission to last job:          5248s      87.47m     1.46h    0.06d
+
+    ssh eieio
+    cd /cluster/bluearc/hg17/sts/epcr
+
+    # merge results, convert to 4 column format, and add rdb header
+    cat out/*.epcr | sed 's/\.\./\t/' > all.epcr
+    wc -l all.epcr
+        # 375977 all.epcr
+    sed 's/dbSTS_//' all.epcr | awk '{print $4}' | sort -g | uniq | wc -l
+        # total aligned =
+        # 18511 (out of 39000 total missing)
+    sed 's/dbSTS_//' all.epcr | sort -g -k 4 | \
+        awk '{printf "%s\t%s\t%s\tdbSTS_%s\n", $1, $2, $3, $4}' \
+                > all.epcr.initial
+
+    # convert to PSL
+    # lift results from contigs to chrom coordinates
+
 
     # GOT HERE
     
@@ -2041,11 +2130,14 @@ done
     gensub2 nibList cloneList gsub jobList
     para create jobList
 
+
 # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN & FUGU (DONE 2004-06-10 kate)
     # In an email 2/13/04 to Angie, Arian said we could treat all 
     # human repeats as 
     # lineage-specific for human-chicken blastz.  
     # and Angie did the same for fugu.
+    # Lacking input from Arian, and using blastzSelf as a model,
+    # I'm also using all human repeats for the human/chimp blastz.
     # Scripts expect *.out.spec filenames.
     ssh kkr1u00
     cd /cluster/data/hg17
@@ -2055,6 +2147,8 @@ done
     end
     ln -s /iscratch/i/hg17/linSpecRep.chicken \
           /iscratch/i/hg17/linSpecRep.fugu
+    ln -s /iscratch/i/hg17/linSpecRep.chicken \
+          /iscratch/i/hg17/linSpecRep.chimp
     iSync
 
 
@@ -2851,6 +2945,61 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
         /cluster/bin/i386/hgLoadPsl hg17 ${I}
         echo "done: ${I}"
     done   
+
+
+
+    # CHIMP ALIGNMENTS (2004-06-15, 2004-06-21 kate)
+
+    # Align with nucleotide blat, unmasked (same method as liftOver chains
+    # Use 1K split of panTro1 doc'ed in makePanTro1.doc
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/blat.panTro1.2004-06-22
+    cd bed/blat.panTro1.2004-06-22
+    mkdir run raw
+    cd run
+cat > gsub << 'EOF'
+#LOOP
+blat $(path1) $(path2) {check out line+ ../raw/$(root1)/$(root1)_$(root2).psl} -tileSize=11 -ooc=/cluster/bluearc/hg/h/11.ooc -minScore=100 -minIdentity=93 -fastMap
+#ENDLOOP
+'EOF'
+    ls -1S /scratch/hg/hg17/bothMaskedNibs/*.nib > human.lst
+    ls -1S /cluster/bluearc/panTro1/blatSplit/split1K/*.fa > chimp.lst
+    gensub2 human.lst chimp.lst gsub spec
+    foreach f (`cat human.lst`)
+        set d = $f:t:r
+        echo $d
+        mkdir ../raw/$d
+    end
+    para create spec
+        # 89332 jobs
+    para try 
+    para check
+    para push
+
+    ssh kksilo
+    cd /cluster/data/hg17
+    cd bed/blat.panTro1/raw
+
+    # lift results (1K chunks to scaffolds)
+    ssh kksilo
+    cd /cluster/bluearc/panTro1/blatSplit
+    cat lift1K/*.lft > lift1K.lft
+    cd /cluster/data/hg17
+    cd bed/blat.panTro1/raw
+    mkdir -p ../psl2
+cat > liftup.csh << 'EOF'
+    foreach d (chr*)
+        echo $d
+        pslCat $d/*.psl | \
+            liftUp -pslQ ../psl2/$d.psl \
+                /cluster/bluearc/panTro1/blatSplit/lift1K.lft warn stdin
+    end
+'EOF'
+    csh liftup.csh >&! liftup.log &
+    tail -100f liftup.log
+    cd ..
+    rm -r raw
 
 
 # LOAD AffyUclaRatio (WORKING - 2004-06-15 - Hiram)
@@ -3866,3 +4015,121 @@ XXX - running 2004-06-22 16:50
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
+
+# BLASTZ CHIMP panTro1 (2004-06-21 kate)
+
+    ssh kk
+    cd /cluster/data/hg17/bed
+    mkdir -p blastz.panTro1.2004-06-22
+    rm -f blastz.panTro1
+    ln -s /cluster/data/hg17/bed/blastz.panTro1.2004-06-22 blastz.panTro1
+    cd blastz.panTro1
+
+    cat << 'EOF' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# Specific settings for chimp
+BLASTZ_Y=3400
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/penn/human_chimp.q
+
+# TARGET: Human
+SEQ1_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+# not used 
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/hg17/linSpecRep.chimp
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp
+SEQ2_DIR=/scratch/chimp/panTro1/nib
+# not currently used
+SEQ2_RMSK=/iscratch/i/chimp/panTro1/linSpecRep.human
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.panTro1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+'EOF'
+    # << this line keeps emacs coloring happy
+
+    # first cluster run: raw blastz alignments
+    ssh kk
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg17/bed/blastz.panTro1
+    source DEF
+    mkdir $RAW run.0
+    /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+    sh ./xdir.sh
+    cd run.0
+    sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+    para create jobList
+        # 160270 jobs written to batc
+    para try, check, push, check, ....
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22
+    source DEF
+    mkdir run.1 lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+    cd run.1
+    wc -l jobList
+    para create jobList
+        # 341 jobs
+    para try, check, push, etc ...
+# CPU time in finished jobs:       3458s      57.63m     0.96h    0.04d  0.000 y
+# IO & Wait Time:                 57996s     966.60m    16.11h    0.67d  0.002 y
+# Average job time:                 180s       3.00m     0.05h    0.00d
+# Longest job:                      483s       8.05m     0.13h    0.01d
+# Submission to last job:          1498s      24.97m     0.42h    0.02d
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| /cluster/bin/x86_64/lavToAxt stdin \
+    /iscratch/i/hg17/bothMaskedNibs /iscratch/i/chimp/panTro1/nib stdout \
+| /cluster/bin/x86_64/axtSort stdin ../../axtChrom/$chr.axt 
+/cluster/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+  ../../pslChrom/$chr.psl
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+#Completed: 42 of 42 jobs
+#Average job time:                  38s       0.64m     0.01h    0.00d
+#Longest job:                      147s       2.45m     0.04h    0.00d
+#Submission to last job:           147s       2.45m     0.04h    0.00d
