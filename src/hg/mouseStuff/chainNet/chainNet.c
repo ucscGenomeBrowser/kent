@@ -7,7 +7,7 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.26 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.27 2003/12/03 22:20:22 kent Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -740,6 +740,7 @@ struct lineFile *lf = lineFileOpen(chainFile, TRUE);
 struct hash *qHash, *tHash;
 struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
+double lastScore = -1;
 
 makeChroms(qSizes, &qHash, &qChromList);
 makeChroms(tSizes, &tHash, &tChromList);
@@ -749,8 +750,15 @@ printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
 /* Loop through chain file building up net. */
 while ((chain = chainRead(lf)) != NULL)
     {
+    /* Make sure that input is really sorted. */
+    if (lastScore >= 0 && chain->score > lastScore)
+        errAbort("%s must be sorted in order of score", chainFile);
+    lastScore = chain->score;
+
     if (chain->score < minScore) 
+	{
     	break;
+	}
     if (verbose)
 	{
 	printf("chain %f (%d els) %s %d-%d %c %s %d-%d\n", 
