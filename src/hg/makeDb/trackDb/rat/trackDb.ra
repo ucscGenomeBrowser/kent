@@ -174,3 +174,11 @@ searchType bed
 shortCircuit 1
 termRegex rno-(mir|let)-.+
 searchPriority 18.5
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex ENSRNOT[0-9]+.9
+searchPriority 50
+
+
