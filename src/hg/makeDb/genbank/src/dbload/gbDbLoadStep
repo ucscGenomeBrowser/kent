@@ -156,7 +156,7 @@ sub handleDownloadDump($$) {
     } else {
         $downloadTime = loadTimeFile($timeFile);
     }
-    my $deltaDays = (time() - $downloadTime) * 60 * 60 * 24;
+    my $deltaDays = (time() - $downloadTime) / (60 * 60 * 24);
 
     # update if non-existant or out-of-date
     if ($deltaDays > $downloadDumpDays) {
