@@ -12783,9 +12783,14 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
     # correctly into the table.
     sed -e 's/ecore/CDS/' Hs35Tnig1format.gff | sed -e 's/ecotig/transcript/' \
            > Hg17vstetNig1.gff
+    # add "chr" in front of the chromsome name in first field (2005-02-08)
+    perl -pi.bak -e 's/^([0-9XYM]{1,2})/chr$1/' Hg17vstetNig1.gff
+    rm *.bak
+    # need to reload table
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/ecoresTetNig1
+    echo 'drop table ecoresTetNig1;' | hgsql hg17
     nice ldHgGene hg17 ecoresTetNig1 Hg17vstetNig1.gff
     # Read 40172 transcripts in 186032 lines in 1 files
     #  40172 groups 42 seqs 1 sources 2 feature types
