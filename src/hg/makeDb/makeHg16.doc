@@ -9500,7 +9500,6 @@ TMP=/tmp/phastCons
 file=$1
 root=`basename $file .ss.gz`
 chrom=`echo $root | awk -F\. '{print $1}'`
-echo $chrom
 
 mkdir -p $TMP PREDICTIONS/$chrom PHASTCONS/$chrom
 zcat $file | $PHAST/phastCons - hpmrc_rev_dg.mod --rates-cut 1 --nrates 20 --suppress-missing --cut-params 0.018,0.002 --viterbi PREDICTIONS/$chrom/$root.bed --score --seqname $chrom --quiet > ${TMP}/$root.pp
