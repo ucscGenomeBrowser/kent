@@ -89,7 +89,7 @@ while ((chain = chainRead(lf)) != NULL)
     ++count;
     }
 lineFileClose(&lf);
-printf("read %d chains in %s\n", count, fileName);
+fprintf(stderr, "read %d chains in %s\n", count, fileName);
 return hash;
 }
 
@@ -213,12 +213,12 @@ for (b = startB; b != endB; b = b->next)
 /* Allocate axt and fill in most fields. */
 AllocVar(axt);
 axt->qName = cloneString(chain->qName);
-axt->qStart = chain->qStart;
-axt->qEnd = chain->qEnd;
+axt->qStart = startB->qStart;
+axt->qEnd = a->qEnd;
 axt->qStrand = chain->qStrand;
 axt->tName = cloneString(chain->tName);
-axt->tStart = chain->tStart;
-axt->tEnd = chain->tEnd;
+axt->tStart = startB->tStart;
+axt->tEnd = a->tEnd;
 axt->tStrand = '+';
 axt->symCount = symCount;
 axt->qSym = qSym = needMem(symCount+1);
@@ -369,13 +369,13 @@ char path[512];
 chainHash = chainReadAll(chainName);
 while ((net = chainNetRead(lf)) != NULL)
     {
-    printf("Processing %s\n", net->name);
+    fprintf(stderr, "Processing %s\n", net->name);
     sprintf(path, "%s/%s.nib", tNibDir, net->name);
     tChrom = nibLoadAllMasked( NIB_MASK_MIXED ,path);
     if (tChrom->size != net->size)
         errAbort("Size mismatch on %s.  Net/nib out of sync or possibly nib dirs swapped?", 
 		tChrom->name);
-    printf("loaded %s\n", path);
+    fprintf(stderr, "loaded %s\n", path);
 
     rConvert(net->fillList, tChrom, qChromHash, qNibDir, chainHash, f);
     freeDnaSeq(&tChrom);
