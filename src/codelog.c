@@ -639,3 +639,7 @@
          Also working on unpacking the NT contigs in .gl and gold files.
 390 - Adding DNA sequence info to page that comes up in browser when
       you click on a known gene.
+391 - Starting on 'genoFind' program which will ultimately sit on
+      kks00 with an index of the human genome in RAM, servicing
+      requests for alignments quickly.
+392 - Modularized and improved genoFind.  Server is 'gfServer' now.
