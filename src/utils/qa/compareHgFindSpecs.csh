@@ -41,7 +41,7 @@ wget -q -O $machine.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$fi
 
 "diff" $machine1.$db.$table $machine2.$db.$table
 if ( $status ) then
- echo "Differences in trackDb found between $machine1 and $machine2"
+ echo "Differences in $table found between $machine1 and $machine2"
 else
- echo "No differences in trackDb."
+ echo "No differences in $table."
 endif

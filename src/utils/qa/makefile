@@ -2,6 +2,7 @@ include ../../inc/common.mk
 
 install:
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
+	cp -p --remove-destination compareTableLists.csh   ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbs.csh     ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
