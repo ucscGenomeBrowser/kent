@@ -161,6 +161,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 struct traceInfo* traceInfoList;
+setlinebuf(stdout); 
+setlinebuf(stderr); 
 
 if (argc < 4)
     usage();
