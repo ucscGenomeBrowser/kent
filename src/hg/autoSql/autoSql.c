@@ -16,7 +16,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.25 2004/07/31 20:34:05 markd Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.26 2004/07/31 20:56:06 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -303,7 +303,6 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct asObject *obj = col->obType;
 		fprintf(f, "{\n");
-		fprintf(f, "int sizeOne;\n");
 		fprintf(f, "char *s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   ret->%s = %sCommaIn(&s, NULL);\n", col->name, obj->name);
@@ -662,7 +661,6 @@ for (col = table->columnList; col != NULL; col = col->next)
     {
     char *colName = col->name;
     char *outString = NULL; /* printf formater for column, i.e. %d for int, '%s' for string */
-    struct asObject *obType = col->obType;
     struct asTypeInfo *lt = col->lowType;
     enum asTypes type = lt->type;
     char colInsertBuff[256]; /* what variable name  matches up with the printf format character in outString */
@@ -813,7 +811,6 @@ for (col = table->columnList; col != NULL; col = col->next)
     struct asTypeInfo *lt = col->lowType;
     enum asTypes type = lt->type;
     char colInsertBuff[256]; /* what variable name  matches up with the printf format character in outString */
-    struct asObject *obType = col->obType;
     boolean colInsertFlag = TRUE; /* if column is not a native type insert NULL with no associated variable */
     switch(type)
 	{
@@ -1027,7 +1024,6 @@ for (col = table->columnList; col != NULL; col = col->next)
     enum asTypes type = lt->type;
     struct asObject *obType = col->obType;
     char *lineEnd = (col->next != NULL ? "sep" : "lastSep");
-    char outChar = 0;
     boolean mightNeedQuotes = FALSE;
 
     switch(type)
@@ -1195,7 +1191,8 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-fprintf(cFile, "static char const rcsid[] = \"$Id: autoSql.c,v 1.25 2004/07/31 20:34:05 markd Exp $\";\n");
+/* split string so cvs doesn't substitute in this file */
+fprintf(cFile, "static char const rcsid[] = \"$" "Id:" "$\";\n");
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 

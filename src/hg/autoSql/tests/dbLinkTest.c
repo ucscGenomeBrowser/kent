@@ -10,7 +10,7 @@
 #include "hgConfig.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: dbLinkTest.c,v 1.1 2004/05/19 23:58:56 angie Exp $";
+static char const rcsid[] = "$Id: dbLinkTest.c,v 1.2 2004/07/31 20:56:06 markd Exp $";
 
 char *testTableName = "autoTest"; /* table name that newTest.as will produce. */
 int numPassed = 0;  /* How many tests we have passed. */
@@ -48,10 +48,8 @@ void setupTable(struct sqlConnection *conn)
 {
 struct lineFile *lf = lineFileOpen("newTest.sql", TRUE);
 char *update = NULL;
-char *noNull = NULL, *noNullClone = NULL;
 char *line = NULL;
 struct dyString *ds = newDyString(256);
-int size = 0;
 if(sqlTableExists(conn, testTableName))
     errAbort("dbLinkTest.c::setupTable() - Table autoTest already exists. Can't create another.");
 while(lineFileNextReal(lf, &line)) 
@@ -226,7 +224,6 @@ void testTabOutputInput()
 struct autoTest *at = newAutoTestSample();
 struct autoTest *atRead = NULL;
 char *fileName =  "_testAutoTest.test";
-char * line = NULL;
 struct lineFile *lf = NULL;
 FILE *out = NULL;
 boolean result = FALSE;

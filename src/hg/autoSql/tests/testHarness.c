@@ -2,7 +2,7 @@
 #include "jksql.h"
 #include "mainTest.h"
 
-static char const rcsid[] = "$Id: testHarness.c,v 1.1 2004/05/19 23:58:56 angie Exp $";
+static char const rcsid[] = "$Id: testHarness.c,v 1.2 2004/07/31 20:56:06 markd Exp $";
 
 int nextId()
 {
@@ -96,7 +96,6 @@ void testPolyOut()
 struct polygon *tri;
 struct point *pt;
 int i;
-char *commaList;
 
 AllocVar(tri);
 tri->id = 21060;
@@ -164,7 +163,6 @@ char *in =
 
 struct polyhedron *ph;
 struct polygon *poly;
-struct point *point;
 
 in = cloneString(in);
 uglyf("testPolyhIn - in = %s\n", in);

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "output/newTest.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.24 2004/05/19 23:56:24 angie Exp $";
+static char const rcsid[] = "$Id:$";
 
 struct point *pointCommaIn(char **pS, struct point *ret)
 /* Create a point out of a comma separated string. 
@@ -85,7 +85,6 @@ sqlUbyteDynamicArray(row[7], &ret->difs, &sizeOne);
 assert(sizeOne == ret->difCount);
 }
 {
-int sizeOne;
 char *s = row[8];
 if(s != NULL && differentString(s, ""))
    ret->xy = pointCommaIn(&s, NULL);

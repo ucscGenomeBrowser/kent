@@ -1,5 +1,6 @@
 include ../../../inc/common.mk
 
+HG_WARN = ${HG_WARN_ERR}
 AUTOSQL = ${HOME}/bin/${MACHTYPE}/autoSql
 DIFF = diff -u
 

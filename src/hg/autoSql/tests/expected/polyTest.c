@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "output/polyTest.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.24 2004/05/19 23:56:24 angie Exp $";
+static char const rcsid[] = "$Id:$";
 
 struct point *pointCommaIn(char **pS, struct point *ret)
 /* Create a point out of a comma separated string. 
