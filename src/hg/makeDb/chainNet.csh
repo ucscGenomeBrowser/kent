@@ -5,20 +5,20 @@
 # browser database.  
 
 # some variable you need to set before running this script
-set tDbName = mm3
-set qDbName = rn2
-set tOrg = mouse
-set qOrg = rat
-set aliDir = /cluster/store2/mm.2003.02/mm3/bed/blastz.rn2.2003-03-07-ASH
+set tDbName = hg13
+set qDbName = mm3
+set tOrg = human
+set qOrg = mouse
+set aliDir = /cluster/store4/gs.14/build31/bed/blastz.mm3.JK
 set chainDir = $aliDir/axtChain
-set tSeqDir = /cluster/store2/mm.2003.02/mm3
-set qSeqDir = /cluster/store4/rn2
-set fileServer = kkstore
+set tSeqDir = /cluster/store4/gs.14/build31
+set qSeqDir = /cluster/store2/mm.2003.02/mm3
+set fileServer = eieio
 set dbServer = hgwdev
 set parasolServer = kkr1u00
 
-mkdir -p chainNet.tmp
-cd chainNet.tmp
+mkdir -p chainNet.$tDbName.$qDbName.tmp
+cd chainNet.$tDbName.$qDbName.tmp
 cat >chainRun.csh <<endCat
 #!/bin/csh -efx
 
@@ -64,7 +64,7 @@ cat > loadChains.csh <<endCat
     cd chain
     foreach i (*.chain)
 	set c = \$i:r
-	hgLoadChain $tDbName \${c}_${qOrt}Chain \$i
+	hgLoadChain $tDbName \${c}_${qOrg}Chain \$i
     end
 endCat
 
@@ -93,7 +93,7 @@ cat > makeNet.csh <<endCat
     cd ..
     rm -r preNet
     # Classify parts of net as syntenic, nonsyntenic etc.
-    cat n1/*.net | netSyntenic stdin hNoClass.net
+    cat n1/*.net | netSyntenic stdin noClass.net
 endCat
 
 cat > finishLoadNet.csh <<endCat
@@ -103,11 +103,11 @@ cat > finishLoadNet.csh <<endCat
     # hasn't already.
     # ssh $dbServer
     cd $chainDir
-    netClass hNoClass.net $tDbName $qDbName $tOrg.net -tNewR=$tSeqDir/bed/linSpecRep -qNewR=$qSeqDir/bed/linSpecRep
-    rm -r n1 hNoClass.net
+    netClass noClass.net $tDbName $qDbName $tOrg.net -tNewR=$tSeqDir/bed/linSpecRep -qNewR=$qSeqDir/bed/linSpecRep
+    rm -r n1 noClass.net
 
     # Load the net into the database as so:
-    netFilter -minGap=10 $tOrg.net |  hgLoadNet $tDbName ${qOrt}Net stdin
+    netFilter -minGap=10 $tOrg.net |  hgLoadNet $tDbName ${qOrg}Net stdin
 endCat
 
 cat > makeAxtNet.csh <<endCat
