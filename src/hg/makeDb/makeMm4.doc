@@ -3421,17 +3421,31 @@ hgMapToGene mm4 refGene knownGene knownToRefSeq
 
 # Create a table that maps between known genes and 
 # the nice affy expression data.
+#	fixup problem with names
+cd /cluster/data/mm4/bed/famBro
+mkdir fixupAffyNames
+cd fixupAffyNames
+hgsqldump --all -c mm4 affyGnfU74A > affyGnfU74A.sql.orig
+hgsqldump --all -c mm4 affyGnfU74B > affyGnfU74B.sql.orig
+hgsqldump --all -c mm4 affyGnfU74C > affyGnfU74C.sql.orig
+
+sed -e "s/U74Av2://" affyGnfU74A.sql.orig > affyGnfU74A.sql
+sed -e "s/U74Bv2://" affyGnfU74B.sql.orig > affyGnfU74B.sql
+sed -e "s/U74Cv2://" affyGnfU74C.sql.orig > affyGnfU74C.sql
+hgsql -e "rename table affyGnfU74A to affyGnfU74AlongName;" mm4
+hgsql -e "rename table affyGnfU74B to affyGnfU74BlongName;" mm4
+hgsql -e "rename table affyGnfU74C to affyGnfU74ClongName;" mm4
+hgsql mm4 < affyGnfU74A.sql
+hgsql mm4 < affyGnfU74B.sql
+hgsql mm4 < affyGnfU74C.sql
+
+hgsqldump --all -c mm4 affyU74 > affyU74.sql.orig
+sed -e "s/U74Av2://; s/U74Bv2://; s/U74Cv2://; s/;'/'/" affyU74.sql.orig > \
+	affyU74.sql
+hgsql -e "rename table affyU74 to affyU74longName;" mm4
+hgsql mm4 < affyU74.sql
 hgMapToGene mm4 affyU74  knownGene knownToU74
 #	row count went from 18831 to 25613
-#	we have a problem of correspondence of names between these
-#	tables and the affyGnfU74[ABC} tables.  They need to be
-#	identical for the hgExpDistance thing to work.  This table needs
-#	to have the semi-colon ; removed from the end of the name.  So,
-#	dump the table, fix the names and reload:
-hgsqldump --all -c mm4 knownToU74 > knownToU74.sql
-sed -e "s/;'/'/" knownToU74.sql > fixedValueToU74.sql
-hgsql -e "drop table knownToU74;" mm4
-hgsql mm4 < fixedValueToU74.sql
 
 
 #	I believe this GNF business is taken care of elsewhere, or at
@@ -3451,6 +3465,8 @@ hgsql mm4 < fixedValueToU74.sql
 # Create table that gives distance in expression space between 
 # GNF genes.  The first one takes about 20 minutes, the other two 5 and 1
 #	The affyGnfU74?Exps arguments appear to be unused in hgExpDistance
+#  runs most efficiently in /tmp since it makes large temporary files
+cd /tmp
 hgExpDistance mm4 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance \
 	-lookup=knownToU74
 #	Got 13450 unique elements in affyGnfU74A
@@ -3465,6 +3481,7 @@ hgExpDistance mm4 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance \
 See README in /cluster/store1/geneOntology.
 
 # Create knownToEnsembl column
+cd /cluster/data/mm4/bed/famBro
 hgMapToGene mm4 ensGene knownGene knownToEnsembl
 #	creates 22975 rows in knownToEnsembl
 
