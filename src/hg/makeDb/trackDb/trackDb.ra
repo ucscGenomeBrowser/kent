@@ -498,12 +498,12 @@ visibility pack
 spectrum on
 type psl .
 
-track celeraMrna
-shortLabel Celera mRNAs
-longLabel $Organism mRNAs from celera assembly 
+track mrnaBad
+shortLabel Bad mRNAs
+longLabel $Organism mRNAs from GenBank with potential genomic priming
 group rna
 priority 54
-visibility hide
+visibility pack
 spectrum on
 type psl .
 
