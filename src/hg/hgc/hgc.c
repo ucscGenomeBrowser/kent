@@ -344,7 +344,15 @@ if (url != NULL && url[0] != 0)
     eUrl = subMulti(url, ArraySize(ins), ins, outs);
     printf("<B>Outside Link: </B>");
     printf("<A HREF=\"%s\" target=_blank>", eUrl->string);
-    printf("%s</A><BR>\n", uUrl->string);
+    
+    if (sameWord(tdb->tableName, "npredGene"))
+    	{
+   	printf("%s (%s)</A><BR>\n", itemName, "NCBI MapView");
+	}
+    else
+    	{
+    	printf("%s</A><BR>\n", uUrl->string);
+	}
     freeMem(eItem);
     freeDyString(&uUrl);
     freeDyString(&eUrl);
