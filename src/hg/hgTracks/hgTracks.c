@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.565 2003/07/26 14:03:21 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.566 2003/07/29 14:20:37 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2388,7 +2388,7 @@ hFreeConn(&conn);
 
 void connectedLfFromPslsInRange(struct sqlConnection *conn,
     struct track *tg, int start, int end, char *chromName,
-    boolean isXeno, boolean nameGetsPos)
+    boolean isXeno, boolean nameGetsPos, int sizeMul)
 /* Return linked features from range of table after have
  * already connected to database.. */
 {
@@ -2420,7 +2420,7 @@ if (sqlCountColumns(sr) < 21+rowOffset)
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
-    lf = lfFromPslx(psl, 1, isXeno, nameGetsPos);
+    lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }
@@ -2434,13 +2434,14 @@ tg->items = lfList;
 sqlFreeResult(&sr);
 }
 
+
 void lfFromPslsInRange(struct track *tg, int start, int end, 
-	char *chromName, boolean isXeno, boolean nameGetsPos)
+	char *chromName, boolean isXeno, boolean nameGetsPos, int sizeMul)
 /* Return linked features from range of table. */
 {
 struct sqlConnection *conn = hAllocConn();
 connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
-	isXeno, nameGetsPos);
+	isXeno, nameGetsPos, sizeMul);
 hFreeConn(&conn);
 }
 
@@ -2450,7 +2451,7 @@ void lfFromPslsInRangeAndFilter(struct track *tg, int start, int end,
 {
 struct sqlConnection *conn = hAllocConn();
 connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
-	isXeno, nameGetsPos);
+	isXeno, nameGetsPos, 1);
 hFreeConn(&conn);
 }
 
@@ -5068,7 +5069,7 @@ else
 void loadXenoPslWithPos(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE, 1);
 }
 
 void longXenoPslMethods(struct track *tg)
@@ -9365,13 +9366,19 @@ tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
 void loadPsl(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE, FALSE);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE, FALSE, 1);
+}
+
+void loadProteinPsl(struct track *tg)
+/* load up all of the psls from correct table into tg->items item list*/
+{
+lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE, 3);
 }
 
 void loadXenoPsl(struct track *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE, 1);
 }
 
 void drawColorMethods(struct track *tg)
@@ -9457,7 +9464,12 @@ else if (sameWord(type, "psl"))
     linkedFeaturesMethods(track);
     if (!tdb->useScore)
         track->colorShades = NULL;
-    if (sameString(subType, "xeno"))
+    if (sameString(subType, "protein"))
+	{
+	track->loadItems = loadProteinPsl;
+	track->subType = lfSubXeno;
+	}
+    else if (sameString(subType, "xeno"))
 	{
 	track->loadItems = loadXenoPsl;
 	track->subType = lfSubXeno;
@@ -9551,7 +9563,7 @@ void rikenMrnaLoadItems(struct track *tg)
 /* Load riken mrna's  - have to get them from special secret database. */
 {
 struct sqlConnection *conn = sqlConnect("mgsc");
-connectedLfFromPslsInRange(conn, tg, winStart, winEnd, chromName, FALSE, FALSE);
+connectedLfFromPslsInRange(conn, tg, winStart, winEnd, chromName, FALSE, FALSE, 1);
 sqlDisconnect(&conn);
 }
 
