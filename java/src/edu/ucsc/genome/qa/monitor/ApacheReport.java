@@ -248,6 +248,9 @@ public class ApacheReport {
         long millisecondsReport = calYesterday.getTimeInMillis();
         long secondsReportStart = millisecondsReport / 1000;
         long secondsReportEnd = secondsReportStart + secondsInHour;
+        if (mode.equals("verbose")) {
+          System.out.println("reportHour = " + reportHour);
+        }
         if (debug == true) {
           System.out.println("reportHour = " + reportHour);
           System.out.println("millisecReport = " + millisecondsReport);
