@@ -2217,6 +2217,18 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void htcExtSeq(char *item)
+/* Print out DNA from some external but indexed .fa file. */
+{
+struct dnaSeq *seq;
+htmlStart(item);
+seq = hExtSeq(item);
+printf("<PRE><TT>");
+faWriteNext(stdout, item, seq->dna, seq->size);
+printf("</PRE></TT>");
+freeDnaSeq(&seq);
+}
+
 void doBlatMouse(char *itemName, char *tableName)
 /* Handle click on blatMouse track. */
 {
@@ -2229,23 +2241,51 @@ struct psl *pslList = NULL, *psl;
 struct dnaSeq *seq;
 char *tiNum = strrchr(itemName, '|');
 
-/* Print heading info. */
+/* Print heading info including link to NCBI. */
 if (tiNum == NULL) 
     tiNum = itemName;
 else
     ++tiNum;
 htmlStart(itemName);
-printf("<H1>BLAT Alignment of Mouse Read ");
-printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", 
-	tiNum);
-printf("%s</A></H1>", itemName);
+printf("<H1>Information on Mouse Read %s</H1>", itemName);
 
-/* Print sequence. */
-printf("<H2>%s sequence</H2>\n", itemName);
-printf("<PRE><TT>");
-seq = hExtSeq(itemName);
-faWriteNext(stdout, itemName, seq->dna, seq->size);
-printf("</PRE></TT>");
+/* Print links to NCBI and to sequence. */
+printf("Link to ");
+printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", tiNum);
+printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
+printf("Get ");
+printf("<A HREF=\"%s?g=htcExtSeq&c=%s&l=%d&r=%d&i=%s&db=%s\">",
+      hgcPath(), seqName, winStart, winEnd, itemName, database);
+printf("DNA for this read</A><BR>\n");
+
+/* Print info about mate pair. */
+    {
+    char buf[256];
+    char *templateId;
+    boolean gotMate = FALSE;
+    sprintf(query, "select templateId from mouseTraceInfo where ti = '%s'", itemName);
+    templateId = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    if (templateId != NULL)
+        {
+	sprintf(query, "select ti from mouseTraceInfo where templateId = '%s'", templateId);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    char *ti = row[0];
+	    if (!sameString(ti, itemName))
+	        {
+		printf("Get ");
+		printf("<A HREF=\"%s?g=htcExtSeq&c=%s&l=%d&r=%d&i=%s&db=%s\">",
+		      hgcPath(), seqName, winStart, winEnd, ti, database);
+		printf("DNA for read on other end of plasmid</A><BR>\n");
+		gotMate = TRUE;
+		}
+	    }
+	sqlFreeResult(&sr);
+	}
+    if (!gotMate)
+	printf("No read from other end of plasmid in database.<BR>\n");
+    }
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
@@ -2903,8 +2943,7 @@ char title[256];
 struct browserTable *tableList = NULL;
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg5";
-
+    database = "hg6";
 
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
@@ -3065,6 +3104,10 @@ else if (sameWord(group, "htcUserAli"))
 else if (sameWord(group, "htcBlatMouse"))
    {
    htcBlatMouse(item, cgiString("type"));
+   }
+else if (sameWord(group, "htcExtSeq"))
+   {
+   htcExtSeq(item);
    }
 else if (sameWord(group, "htcTranslatedProtein"))
    {
