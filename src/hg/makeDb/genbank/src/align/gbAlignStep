@@ -39,7 +39,6 @@
 #        - finish - finish processing the alignments.
 #    Continue the blat portion by using parasol directly.
 #    
-#
 #   -keep - Keep work directory.
 #
 #   -verbose=n - Set verbose level.
@@ -181,6 +180,13 @@ if (!defined($continueTask)) {
 my $alignNone = "$workDir/align.none";  # indicates nothing to align
 my $alignJobs = "$workDir/align.jobs";
 my $alignDone = "$workDir/align.done";
+
+# If TMPDIR is not set, set it to a local directory. /var/tmp doesn't
+# usually have enough space, so we use a tmp dir in the gbRoot
+if (!defined($main::ENV{TMPDIR})) {
+    $main::ENV{TMPDIR} = "tmp";
+    makeDir("tmp");
+}
 
 # begin
 if ($initialBuild) {
