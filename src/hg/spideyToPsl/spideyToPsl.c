@@ -9,7 +9,7 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spideyToPsl.c,v 1.2 2004/01/11 20:31:01 markd Exp $";
+static char const rcsid[] = "$Id: spideyToPsl.c,v 1.3 2004/01/17 16:52:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -439,25 +439,6 @@ if (!parser->skip)
     checkAlignSeq(parser, &parser->target);
     }
 return TRUE;
-}
-
-void pslRc(struct psl *psl)
-/* reverse-complement a PSL alignment.  This makes target strand explicit */
-{
-int i;
-
-/* swap strand, forcing target to have an explict strand */
-psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
-psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
-
-for (i = 0; i < psl->blockCount; i++)
-    {
-    psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
-    psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
-    }
-reverseUnsigned(psl->tStarts, psl->blockCount);
-reverseUnsigned(psl->qStarts, psl->blockCount);
-reverseUnsigned(psl->blockSizes, psl->blockCount);
 }
 
 void convertAlign(struct parser *parser, FILE *outFh)
