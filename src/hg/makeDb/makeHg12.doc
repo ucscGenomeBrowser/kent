@@ -144,7 +144,7 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       Make sure that /scratch/hg/gs.13/build30/contigs is loaded
       with NT_*.fa and pushed to the cluster nodes.
 
-          ssh kkstore
+          ssh kk
 
 	  cd /cluster/store1/gs.13/build30
           mkdir -p bed
@@ -166,7 +166,7 @@ Using the bash shell do:
 	  done 
 
     Now, by hand cd to the mrna, refSeq, and est directories respectively
-     and run a para push and para check in each one. IN PROGRESS
+     and run a para push and para check in each one.
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
@@ -190,7 +190,7 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /oldscratch all_est.psl
-      cd .. IN PROGRESS
+      cd ..
 
 o - Load refSeq alignments into database
       ssh hgwdev
@@ -205,13 +205,13 @@ o - Load mRNA alignments into database.
 In tcsh:
       foreach i (*.psl)
           mv $i $i:r_mrna.psl
-      end
+      end pslSortAcc nohead chrom /oldscratch all_est.psl
 
       hgLoadPsl hg12 *.psl
       cd ..
       hgLoadPsl hg12 all_mrna.psl -nobin
 
-o - Load EST alignments into database. TODO
+o - Load EST alignments into database.
       ssh hgwdev
       cd /cluster/store1/gs.13/build30/bed/est/chrom
 
@@ -223,7 +223,7 @@ in tcsh do:
       cd ..
       hgLoadPsl hg12 all_est.psl -nobin
 
-o - Create subset of ESTs with introns and load into database. TODO
+o - Create subset of ESTs with introns and load into database.
       - ssh kkstore
       cd ~/oo
       tcsh jkStuff/makeIntronEst.sh
@@ -234,10 +234,10 @@ o - Create subset of ESTs with introns and load into database. TODO
 o - Put orientation info on ESTs into database:
      ssh kkstore
      cd ~/oo/bed/est
-     pslSortAcc nohead contig /tmp contig.psl
+     pslSortAcc nohead contig /oldscratch contig.psl
      mkdir /scratch/hg/gs.13/build30/bed
      cp -r contig /scratch/hg/gs.13/build30/bed/est
-     sudo /cluster/install/utilities/updateLocal
+TODO     sudo /cluster/install/utilities/updateLocal
      cd ~/oo/bed
      mkdir estOrientInfo
      cd estOrientInfo
@@ -248,7 +248,7 @@ o - Put orientation info on ESTs into database:
    gsub from the previous version and edit it to say where
    things are located in scratch on this version.  Then:
      gensub2 psl.lst single gsub spec
-     para create spec
+TODO     para create spec
      para try 
      para push
    check until done, or use 'para shove'
@@ -320,7 +320,7 @@ o - Add Jackson labs info
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-SIMPLE REPEAT TRACK (IN PROGRESS)
+SIMPLE REPEAT TRACK (DONE)
 
 o - Create cluster parasol job like so:
         ssh kk
@@ -336,7 +336,7 @@ Ask the admins to push /scratch/hg/gs.13/build30/ to the cluster
 	para create spec
 	para try
 	para check
-	para push IN PROGRESS
+	para push
         liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
 
 o - Load this into the database as so
