@@ -8,12 +8,14 @@
 #include "nib.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.2 2004/02/27 00:30:27 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.3 2004/02/27 19:33:34 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
 unsigned motifLen = 0;		/*	length of motif	*/
 unsigned long long motifVal;	/*	motif converted to a number	*/
+unsigned long long complementVal;	/*	- strand complement	*/
+boolean bedOutput;		/*	output bed file instead of wiggle */
 
 void usage()
 /* Explain usage and exit. */
@@ -26,6 +28,7 @@ errAbort(
   "   nibDir - path to nib directory, relative or absolute path OK\n"
   "   -motif=acgt - search for this specified motif (case ignored, acgt only)\n"
   "   -chr=<chrN> - process only this one chrN from the nibDir\n"
+  "   -bedOutput - output bed format instead of the default wiggle\n"
   "   NOTE: motif must be longer than 4 characters, less than 17"
   );
 }
@@ -33,6 +36,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"chr", OPTION_STRING},
    {"motif", OPTION_STRING},
+   {"bedOutput", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -47,17 +51,21 @@ DNA *dna;
 int blockCount = 0;
 unsigned long long mask;
 unsigned long long chromPosition = 0;
-unsigned long long incomingVal = 0;
+register unsigned long long incomingVal = 0;
 unsigned long long incomingLength = 0;
-unsigned long long timesFound = 0;
-unsigned long long previousPosition = 0;
+unsigned long long posFound = 0;
+unsigned long long negFound = 0;
+unsigned long long posPreviousPosition = 0;
+unsigned long long negPreviousPosition = 0;
+register unsigned long long posNeedle = motifVal;
+register unsigned long long negNeedle = complementVal;
 
 nibOpenVerify(nibFile, &nf, &chromSize);
 mask = 3;
 for (i=1; i < motifLen; ++i )
 	mask = (mask << 2) | 3;
 verbose(2, "#\tnib: %s size: %d, motifMask: %#lx\n", nibFile, chromSize, mask);
-verbose(2, "#\tmotif numerical value: %llu (%#lx)\n", motifVal, motifVal);
+verbose(2, "#\tmotif numerical value: %llu (%#lx)\n", posNeedle, posNeedle);
 for (start=0; start<chromSize; start = end)
     {
     end = start + winSize;
@@ -78,13 +86,27 @@ for (start=0; start<chromSize; start = end)
 	    case G_BASE_VAL:
     		incomingVal = mask & ((incomingVal << 2) | val);
 		++incomingLength;
-		if ((incomingLength >= motifLen) && (incomingVal == motifVal))
+		if ((incomingLength >= motifLen) && (incomingVal == posNeedle))
 		    {
-			++timesFound;
-		printf("%llu 1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,motifVal);
-		    if ((previousPosition + motifLen) > chromPosition)
-verbose(2, "#\toverlapping at: %llu, %llu\n", previousPosition, chromPosition);
-		    previousPosition = chromPosition;
+			++posFound;
+		    if (bedOutput)
+		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "+");
+		    else
+		printf("%llu 1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,posNeedle);
+		    if ((posPreviousPosition + motifLen) > chromPosition)
+verbose(2, "#\toverlapping + at: %s:%llu-%llu\n", chrom, posPreviousPosition, chromPosition);
+		    posPreviousPosition = chromPosition;
+		    }
+		if ((incomingLength >= motifLen) && (incomingVal == negNeedle))
+		    {
+			++negFound;
+		    if (bedOutput)
+		printf("%s\t%llu\t%llu\t%llu\t%d\t%s\n", chrom, chromPosition-motifLen, chromPosition, posFound+negFound, 1000, "-");
+		    else
+		printf("%llu -1 %#llx == %#llx\n", chromPosition-motifLen+1, incomingVal&mask,negNeedle);
+		    if ((negPreviousPosition + motifLen) > chromPosition)
+verbose(2, "#\toverlapping - at: %s:%llu-%llu\n", chrom, negPreviousPosition, chromPosition);
+		    negPreviousPosition = chromPosition;
 		    }
 		break;
 	    default:
@@ -97,7 +119,8 @@ verbose(2, "#\toverlapping at: %llu, %llu\n", previousPosition, chromPosition);
     ++blockCount;
     }
 
-verbose(2, "#\tfound: %llu times, %g %% of chromosome\n", timesFound, (double)(timesFound*motifLen)/(double)chromPosition);
+verbose(2, "#\tfound: %llu times + strand, %llu times - strand\n", posFound, negFound );
+verbose(2, "#\t%% of chromosome: %g %% + strand %g %% - strand\n", (double)(posFound*motifLen)/(double)chromPosition,(double)(negFound*motifLen)/(double)chromPosition);
 carefulClose(&nf);
 }
 
@@ -134,6 +157,7 @@ int main(int argc, char *argv[])
 {
 int i;
 char *cp;
+unsigned long long reversed;
 
 optionInit(&argc, argv, options);
 
@@ -144,6 +168,7 @@ dnaUtilOpen();
 
 motif = optionVal("motif", NULL);
 chr = optionVal("chr", NULL);
+bedOutput = optionExists("bedOutput");
 
 if (chr)
     verbose(2, "#\tprocessing chr: %s\n", chr);
@@ -153,6 +178,7 @@ else {
     warn("ERROR: -motif string empty, please specify a motif\n");
     usage();
 }
+verbose(2, "#\ttype output: %s\n", bedOutput ? "bed format" : "wiggle data");
 verbose(2, "#\tspecified nibDir: %s\n", argv[1]);
 verbose(2, "#\tsizeof(motifVal): %d\n", sizeof(motifVal));
 motifLen = strlen(motif);
@@ -166,6 +192,7 @@ if (motifLen > (4*sizeof(motifVal))/2 )
     }
 cp = motif;
 motifVal = 0;
+complementVal = 0;
 for (i = 0; i < motifLen; ++i)
     {
 	switch (*cp)
@@ -173,18 +200,22 @@ for (i = 0; i < motifLen; ++i)
 	case 'a':
 	case 'A':
 	    motifVal = (motifVal << 2) | A_BASE_VAL;
+	    complementVal = (complementVal << 2) | T_BASE_VAL;
 	    break;
 	case 'c':
 	case 'C':
 	    motifVal = (motifVal << 2) | C_BASE_VAL;
+	    complementVal = (complementVal << 2) | G_BASE_VAL;
 	    break;
 	case 'g':
 	case 'G':
 	    motifVal = (motifVal << 2) | G_BASE_VAL;
+	    complementVal = (complementVal << 2) | C_BASE_VAL;
 	    break;
 	case 't':
 	case 'T':
 	    motifVal = (motifVal << 2) | T_BASE_VAL;
+	    complementVal = (complementVal << 2) | A_BASE_VAL;
 	    break;
 	default:
 	    warn(
@@ -193,7 +224,17 @@ for (i = 0; i < motifLen; ++i)
 	}
 	++cp;
     }
+reversed = 0;
+for (i = 0; i < motifLen; ++i)
+    {
+    int base;
+    base = complementVal & 3;
+    reversed = (reversed << 2) | base;
+    complementVal >>= 2;
+    }
+complementVal = reversed;
 verbose(2, "#\tmotif numerical value: %llu (%#llx)\n", motifVal, motifVal);
+verbose(2, "#\tcomplement numerical value: %llu (%#llx)\n", complementVal, complementVal);
 if (motifLen < 5)
     {
     warn("ERROR: motif string must be more than 4 characters\n");
