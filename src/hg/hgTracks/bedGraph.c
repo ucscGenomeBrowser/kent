@@ -12,8 +12,9 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 #include "customTrack.h"
+#include "wigCommon.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.4 2005/02/09 19:57:40 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.5 2005/02/09 21:54:18 hiram Exp $";
 
 /*	bedGraphCartOptions structure - to carry cart options from
  *	bedGraphMethods to all the other methods via the
@@ -35,17 +36,6 @@ struct bedGraphCartOptions
     double yLineMark;	/*	user requested line at y = */
     char *colorTrack;   /*	Track to use for coloring the graph. */
     int graphColumn;	/*	column to be graphing	*/
-    };
-
-struct preDrawElement
-    {
-    double	max;	/*	maximum value seen for this point	*/
-    double	min;	/*	minimum value seen for this point	*/
-    unsigned long long	count;	/* number of datum at this point */
-    double	sumData;	/*	sum of all values at this point	*/
-    double  sumSquares;	/* sum of (values squared) at this point */
-    double  plotValue;	/*	raw data to plot	*/
-    double  smooth;	/*	smooth data values	*/
     };
 
 struct bedGraphItem
@@ -366,21 +356,8 @@ if (pixelsPerBase > 0.0)
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
 itemCount = 0;
-/*	we are going to keep an array that is three times the size of
- *	the screen to allow a screen full on either side of the visible
- *	region.  Those side screens can be used in the smoothing
- *	operation so there won't be any discontinuity at the visible screen
- *	boundaries.
- */
-preDrawSize = width * 3;
-preDraw = (struct preDrawElement *) needMem ((size_t)
-		preDrawSize * sizeof(struct preDrawElement));
-preDrawZero = width / 3;
-for (i = 0; i < preDrawSize; ++i) {
-	preDraw[i].count = 0;
-	preDraw[i].max = -1.0e+300;
-	preDraw[i].min = 1.0e+300;
-}
+
+preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
 
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
@@ -450,126 +427,15 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	cooresponds to a single pixel on the screen
  */
 
-/*	Determine the raw plotting value	*/
-for (i = 0; i < preDrawSize; ++i)
-    {
-    double dataValue;
-    if (preDraw[i].count)
-	{
-    switch (windowingFunction)
-	{
-	case (wiggleWindowingMin):
-		if (fabs(preDraw[i].min)
-				< fabs(preDraw[i].max))
-		    dataValue = preDraw[i].min;
-		else 
-		    dataValue = preDraw[i].max;
-		break;
-	case (wiggleWindowingMean):
-		dataValue =
-		    preDraw[i].sumData / preDraw[i].count;
-		break;
-	default:
-	case (wiggleWindowingMax):
-		if (fabs(preDraw[i].min)
-			> fabs(preDraw[i].max))
-		    dataValue = preDraw[i].min;
-		else 
-		    dataValue = preDraw[i].max;
-		break;
-	}
-	preDraw[i].plotValue = dataValue;
-	preDraw[i].smooth = dataValue;
-	}
-    }
-
-
-/*	Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
- *	to enum funny business in inc/hui.h and lib/hui.c 	*/
-if (bedGraphCart->smoothingWindow > 0)
-    {
-    int winSize = bedGraphCart->smoothingWindow + 1; /* enum funny business */
-    int winBegin = 0;
-    int winMiddle = -(winSize/2);
-    int winEnd = -winSize;
-    double sum = 0.0;
-    unsigned long long points = 0LL;
-
-    for (winBegin = 0; winBegin < preDrawSize; ++winBegin)
-	{
-	if (winEnd >=0)
-	    {
-	    if (preDraw[winEnd].count)
-		{
-		points -= preDraw[winEnd].count;
-		sum -= preDraw[winEnd].plotValue * preDraw[winEnd].count;
-		}
-	    }
-	if (preDraw[winBegin].count)
-	    {
-	    points += preDraw[winBegin].count;
-	    sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
-	    }
-	if ((winMiddle >= 0) && points && preDraw[winMiddle].count)
-		preDraw[winMiddle].smooth = sum / points;
-	++winEnd;
-	++winMiddle;
-	}
-    }
-
-for (i = preDrawZero; i < preDrawZero+width; ++i)
-    {
-    /*	count is non-zero meaning valid data exists here	*/
-    if (preDraw[i].count)
-	{
-	if (preDraw[i].max > overallUpperLimit)
-	    overallUpperLimit = preDraw[i].max;
-	if (preDraw[i].min < overallLowerLimit)
-	    overallLowerLimit = preDraw[i].min;
-	}
-    }
-overallRange = overallUpperLimit - overallLowerLimit;
-
-if (autoScale == wiggleScaleAuto)
-    {
-    overallUpperLimit = -1.0e+300;	/* reset limits for auto scale */
-    overallLowerLimit = 1.0e+300;
-    for (i = preDrawZero; i < preDrawZero+width; ++i)
-	{
-	/*	count is non-zero meaning valid data exists here	*/
-	if (preDraw[i].count)
-	    {
-	    if (preDraw[i].smooth > overallUpperLimit)
-		overallUpperLimit = preDraw[i].smooth;
-	    if (preDraw[i].smooth < overallLowerLimit)
-		overallLowerLimit = preDraw[i].smooth;
-	    }
-	}
-    overallRange = overallUpperLimit - overallLowerLimit;
-    if (overallRange == 0.0)
-	{
-	if (overallUpperLimit > 0.0)
-	    {
-	    graphUpperLimit = overallUpperLimit;
-	    graphLowerLimit = 0.0;
-	    } else if (overallUpperLimit < 0.0) {
-	    graphUpperLimit = 0.0;
-	    graphLowerLimit = overallUpperLimit;
-	    } else {
-	    graphUpperLimit = 1.0;
-	    graphLowerLimit = -1.0;
-	    }
-	    graphRange = graphUpperLimit - graphLowerLimit;
-	} else {
-	graphUpperLimit = overallUpperLimit;
-	graphLowerLimit = overallLowerLimit;
-	}
-    } else {
-	graphUpperLimit = bedGraphCart->maxY;
-	graphLowerLimit = bedGraphCart->minY;
-    }
-graphRange = graphUpperLimit - graphLowerLimit;
-epsilon = graphRange / tg->lineHeight;
+preDrawWindowFunction(preDraw, preDrawSize, windowingFunction);
+preDrawSmoothing(preDraw, preDrawSize, bedGraphCart->smoothingWindow);
+overallRange = preDrawLimits(preDraw, preDrawZero, width,
+    &overallUpperLimit, &overallLowerLimit);
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width, autoScale,
+    &overallUpperLimit, &overallLowerLimit,
+    &graphUpperLimit, &graphLowerLimit,
+    &overallRange, &epsilon, tg->lineHeight,
+    bedGraphCart->maxY, bedGraphCart->minY);
 
 /*
  *	We need to put the graphing limits back into the items
@@ -584,32 +450,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	wi->graphUpperLimit = graphUpperLimit;
 	wi->graphLowerLimit = graphLowerLimit;
     }
-/*	Set up the color by array. Determine color of each pixel
- *	based initially on the sign of the data point. If a colorTrack
- *	is specified also fill in the color array with that. 
- */
-AllocArray(colorArray, width);
-for(x1 = 0; x1 < width; ++x1)
-    {
-    int preDrawIndex = x1 + preDrawZero;
-    if (preDraw[preDrawIndex].count)
-	{
-	double dataValue;	/*	the data value in data space	*/
-	dataValue = preDraw[preDrawIndex].smooth;
-	/*	negative data is the alternate color	*/
-	if (dataValue < 0.0)
-	    colorArray[x1] = tg->ixAltColor;
-	else
-	    colorArray[x1] = tg->ixColor;
-	}
-    }
 
-/* Fill in colors from alternate track if necessary. */
-if(bedGraphCart->colorTrack != NULL) 
-    {
-    struct track *cTrack = hashMustFindVal(trackHash, bedGraphCart->colorTrack);
-    bedGraphFillInColorArray(tg, vg, colorArray, width, cTrack);
-    }
+colorArray = allocColorArray(preDraw, width, preDrawZero,
+    bedGraphCart->colorTrack, tg, vg);
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements will smooth this data and draw boxes where pixels

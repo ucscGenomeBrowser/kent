@@ -11,8 +11,9 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 #include "customTrack.h"
+#include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.61 2005/01/19 00:56:39 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.62 2005/02/09 21:54:18 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -36,17 +37,6 @@ struct wigCartOptions
     int minHeight;	/*	minimum pixels height from trackDb	*/
     double yLineMark;	/*	user requested line at y = */
     char *colorTrack;   /*	Track to use for coloring wiggle track. */
-    };
-
-struct preDrawElement
-    {
-	double	max;	/*	maximum value seen for this point	*/
-	double	min;	/*	minimum value seen for this point	*/
-	unsigned long long	count;	/* number of datum at this point */
-	double	sumData;	/*	sum of all values at this point	*/
-	double  sumSquares;	/* sum of (values squared) at this point */
-	double  plotValue;	/*	raw data to plot	*/
-	double  smooth;	/*	smooth data values	*/
     };
 
 struct wigItem
@@ -483,9 +473,223 @@ wigDebugPrint("wigFreeItems");
 #endif
 }
 
-/*	DrawItems has grown too large.  It has several distinct sections
- *	in it that should now be broken out into their own routines.
+struct preDrawElement * initPreDraw(int width, int *preDrawSize,
+	int *preDrawZero)
+/*	initialize a preDraw array of size width	*/
+{
+struct preDrawElement *preDraw = (struct preDrawElement *)NULL;
+int i = 0;
+
+/*	we are going to keep an array that is three times the size of
+ *	the screen to allow a screen full on either side of the visible
+ *	region.  Those side screens can be used in the smoothing
+ *	operation so there won't be any discontinuity at the visible screen
+ *	boundaries.
  */
+*preDrawSize = width * 3;
+*preDrawZero = width / 3;
+preDraw = (struct preDrawElement *) needMem ((size_t)
+		*preDrawSize * sizeof(struct preDrawElement));
+for (i = 0; i < *preDrawSize; ++i)
+    {
+    preDraw[i].count = 0;
+    preDraw[i].max = -1.0e+300;
+    preDraw[i].min = 1.0e+300;
+    }
+return preDraw;
+}
+
+void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
+	enum wiggleWindowingEnum windowingFunction)
+/*	apply windowing function to the values in preDraw array	*/
+{
+int i;
+
+/*	Determine the raw plotting value	*/
+for (i = 0; i < preDrawSize; ++i)
+    {
+    double dataValue;
+    if (preDraw[i].count)
+	{
+    switch (windowingFunction)
+	{
+	case (wiggleWindowingMin):
+		if (fabs(preDraw[i].min)
+				< fabs(preDraw[i].max))
+		    dataValue = preDraw[i].min;
+		else 
+		    dataValue = preDraw[i].max;
+		break;
+	case (wiggleWindowingMean):
+		dataValue =
+		    preDraw[i].sumData / preDraw[i].count;
+		break;
+	default:
+	case (wiggleWindowingMax):
+		if (fabs(preDraw[i].min)
+			> fabs(preDraw[i].max))
+		    dataValue = preDraw[i].min;
+		else 
+		    dataValue = preDraw[i].max;
+		break;
+	}
+	preDraw[i].plotValue = dataValue;
+	preDraw[i].smooth = dataValue;
+	}
+    }
+}
+
+void preDrawSmoothing(struct preDrawElement *preDraw, int preDrawSize,
+    enum wiggleSmoothingEnum smoothingWindow)
+/*	apply smoothing function to preDraw array	*/
+{
+/*	Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
+ *	to enum funny business in inc/hui.h and lib/hui.c 	*/
+if (smoothingWindow > 0)
+    {
+    int winSize = smoothingWindow + 1; /* enum funny business */
+    int winBegin = 0;
+    int winMiddle = -(winSize/2);
+    int winEnd = -winSize;
+    double sum = 0.0;
+    unsigned long long points = 0LL;
+
+    for (winBegin = 0; winBegin < preDrawSize; ++winBegin)
+	{
+	if (winEnd >=0)
+	    {
+	    if (preDraw[winEnd].count)
+		{
+		points -= preDraw[winEnd].count;
+		sum -= preDraw[winEnd].plotValue * preDraw[winEnd].count;
+		}
+	    }
+	if (preDraw[winBegin].count)
+	    {
+	    points += preDraw[winBegin].count;
+	    sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
+	    }
+	if ((winMiddle >= 0) && points && preDraw[winMiddle].count)
+		preDraw[winMiddle].smooth = sum / points;
+	++winEnd;
+	++winMiddle;
+	}
+    }
+}
+
+double preDrawLimits(struct preDrawElement *preDraw, int preDrawZero,
+    int width, double *overallUpperLimit, double *overallLowerLimit)
+/*	scan preDraw array and determine graph limits */
+{
+int i;
+
+/*	Just in case they haven't been initialized before	*/
+*overallUpperLimit = -1.0e+300;
+*overallLowerLimit = 1.0e+300;
+for (i = preDrawZero; i < preDrawZero+width; ++i)
+    {
+    /*	count is non-zero meaning valid data exists here	*/
+    if (preDraw[i].count)
+	{
+	if (preDraw[i].max > *overallUpperLimit)
+	    *overallUpperLimit = preDraw[i].max;
+	if (preDraw[i].min < *overallLowerLimit)
+	    *overallLowerLimit = preDraw[i].min;
+	}
+    }
+return (overallUpperLimit - overallLowerLimit);
+}
+
+double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
+    int width, enum wiggleScaleOptEnum autoScale,
+    double *overallUpperLimit, double *overallLowerLimit,
+    double *graphUpperLimit, double *graphLowerLimit,
+    double *overallRange, double *epsilon, int lineHeight,
+    double maxY, double minY)
+/*	if autoScaling, scan preDraw array and determine limits */
+{
+double graphRange;
+if (autoScale == wiggleScaleAuto)
+    {
+    int i;
+
+    *overallUpperLimit = -1.0e+300;	/* reset limits for auto scale */
+    *overallLowerLimit = 1.0e+300;
+    for (i = preDrawZero; i < preDrawZero+width; ++i)
+	{
+	/*	count is non-zero meaning valid data exists here	*/
+	if (preDraw[i].count)
+	    {
+	    if (preDraw[i].smooth > *overallUpperLimit)
+		*overallUpperLimit = preDraw[i].smooth;
+	    if (preDraw[i].smooth < *overallLowerLimit)
+		*overallLowerLimit = preDraw[i].smooth;
+	    }
+	}
+    *overallRange = *overallUpperLimit - *overallLowerLimit;
+    if (*overallRange == 0.0)
+	{
+	if (*overallUpperLimit > 0.0)
+	    {
+	    *graphUpperLimit = *overallUpperLimit;
+	    *graphLowerLimit = 0.0;
+	    } else if (*overallUpperLimit < 0.0) {
+	    *graphUpperLimit = 0.0;
+	    *graphLowerLimit = *overallUpperLimit;
+	    } else {
+	    *graphUpperLimit = 1.0;
+	    *graphLowerLimit = -1.0;
+	    }
+	    graphRange = *graphUpperLimit - *graphLowerLimit;
+	} else {
+	*graphUpperLimit = *overallUpperLimit;
+	*graphLowerLimit = *overallLowerLimit;
+	}
+    } else {
+	*graphUpperLimit = maxY;
+	*graphLowerLimit = minY;
+    }
+graphRange = *graphUpperLimit - *graphLowerLimit;
+*epsilon = graphRange / lineHeight;
+return(graphRange);
+}
+
+Color * allocColorArray(struct preDrawElement *preDraw, int width,
+    int preDrawZero, char *colorTrack, struct track *tg, struct vGfx *vg)
+/*	allocate and fill in a coloring array based on another track */
+{
+int x1;
+Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
+/*	Set up the color by array. Determine color of each pixel
+ *	based initially on the sign of the data point. If a colorTrack
+ *	is specified also fill in the color array with that. 
+ */
+AllocArray(colorArray, width);
+for(x1 = 0; x1 < width; ++x1)
+    {
+    int preDrawIndex = x1 + preDrawZero;
+    if (preDraw[preDrawIndex].count)
+	{
+	double dataValue;	/*	the data value in data space	*/
+	dataValue = preDraw[preDrawIndex].smooth;
+	/*	negative data is the alternate color	*/
+	if (dataValue < 0.0)
+	    colorArray[x1] = tg->ixAltColor;
+	else
+	    colorArray[x1] = tg->ixColor;
+	}
+    }
+
+/* Fill in colors from alternate track if necessary. */
+if(colorTrack != NULL) 
+    {
+    struct track *cTrack = hashMustFindVal(trackHash, colorTrack);
+    wigFillInColorArray(tg, vg, colorArray, width, cTrack);
+    }
+
+return colorArray;
+}
+
 static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -539,21 +743,8 @@ if (pixelsPerBase > 0.0)
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
 itemCount = 0;
-/*	we are going to keep an array that is three times the size of
- *	the screen to allow a screen full on either side of the visible
- *	region.  Those side screens can be used in the smoothing
- *	operation so there won't be any discontinuity at the visible screen
- *	boundaries.
- */
-preDrawSize = width * 3;
-preDraw = (struct preDrawElement *) needMem ((size_t)
-		preDrawSize * sizeof(struct preDrawElement));
-preDrawZero = width / 3;
-for (i = 0; i < preDrawSize; ++i) {
-	preDraw[i].count = 0;
-	preDraw[i].max = -1.0e+300;
-	preDraw[i].min = 1.0e+300;
-}
+
+preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
 
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
@@ -710,125 +901,14 @@ if (currentFile)
  *	cooresponds to a single pixel on the screen
  */
 
-/*	Determine the raw plotting value	*/
-for (i = 0; i < preDrawSize; ++i)
-    {
-    double dataValue;
-    if (preDraw[i].count)
-	{
-    switch (windowingFunction)
-	{
-	case (wiggleWindowingMin):
-		if (fabs(preDraw[i].min)
-				< fabs(preDraw[i].max))
-		    dataValue = preDraw[i].min;
-		else 
-		    dataValue = preDraw[i].max;
-		break;
-	case (wiggleWindowingMean):
-		dataValue =
-		    preDraw[i].sumData / preDraw[i].count;
-		break;
-	default:
-	case (wiggleWindowingMax):
-		if (fabs(preDraw[i].min)
-			> fabs(preDraw[i].max))
-		    dataValue = preDraw[i].min;
-		else 
-		    dataValue = preDraw[i].max;
-		break;
-	}
-	preDraw[i].plotValue = dataValue;
-	preDraw[i].smooth = dataValue;
-	}
-    }
-
-/*	Are we perhaps doing smoothing ?  smoothingWindow is 1 off due
- *	to enum funny business in inc/hui.h and lib/hui.c 	*/
-if (wigCart->smoothingWindow > 0)
-    {
-    int winSize = wigCart->smoothingWindow + 1; /* enum funny business */
-    int winBegin = 0;
-    int winMiddle = -(winSize/2);
-    int winEnd = -winSize;
-    double sum = 0.0;
-    unsigned long long points = 0LL;
-
-    for (winBegin = 0; winBegin < preDrawSize; ++winBegin)
-	{
-	if (winEnd >=0)
-	    {
-	    if (preDraw[winEnd].count)
-		{
-		points -= preDraw[winEnd].count;
-		sum -= preDraw[winEnd].plotValue * preDraw[winEnd].count;
-		}
-	    }
-	if (preDraw[winBegin].count)
-	    {
-	    points += preDraw[winBegin].count;
-	    sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
-	    }
-	if ((winMiddle >= 0) && points && preDraw[winMiddle].count)
-		preDraw[winMiddle].smooth = sum / points;
-	++winEnd;
-	++winMiddle;
-	}
-    }
-
-for (i = preDrawZero; i < preDrawZero+width; ++i)
-    {
-    /*	count is non-zero meaning valid data exists here	*/
-    if (preDraw[i].count)
-	{
-	if (preDraw[i].max > overallUpperLimit)
-	    overallUpperLimit = preDraw[i].max;
-	if (preDraw[i].min < overallLowerLimit)
-	    overallLowerLimit = preDraw[i].min;
-	}
-    }
-overallRange = overallUpperLimit - overallLowerLimit;
-
-if (autoScale == wiggleScaleAuto)
-    {
-    overallUpperLimit = -1.0e+300;	/* reset limits for auto scale */
-    overallLowerLimit = 1.0e+300;
-    for (i = preDrawZero; i < preDrawZero+width; ++i)
-	{
-	/*	count is non-zero meaning valid data exists here	*/
-	if (preDraw[i].count)
-	    {
-	    if (preDraw[i].smooth > overallUpperLimit)
-		overallUpperLimit = preDraw[i].smooth;
-	    if (preDraw[i].smooth < overallLowerLimit)
-		overallLowerLimit = preDraw[i].smooth;
-	    }
-	}
-    overallRange = overallUpperLimit - overallLowerLimit;
-    if (overallRange == 0.0)
-	{
-	if (overallUpperLimit > 0.0)
-	    {
-	    graphUpperLimit = overallUpperLimit;
-	    graphLowerLimit = 0.0;
-	    } else if (overallUpperLimit < 0.0) {
-	    graphUpperLimit = 0.0;
-	    graphLowerLimit = overallUpperLimit;
-	    } else {
-	    graphUpperLimit = 1.0;
-	    graphLowerLimit = -1.0;
-	    }
-	    graphRange = graphUpperLimit - graphLowerLimit;
-	} else {
-	graphUpperLimit = overallUpperLimit;
-	graphLowerLimit = overallLowerLimit;
-	}
-    } else {
-	graphUpperLimit = wigCart->maxY;
-	graphLowerLimit = wigCart->minY;
-    }
-graphRange = graphUpperLimit - graphLowerLimit;
-epsilon = graphRange / tg->lineHeight;
+preDrawWindowFunction(preDraw, preDrawSize, windowingFunction);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+overallRange = preDrawLimits(preDraw, preDrawZero, width,
+    &overallUpperLimit, &overallLowerLimit);
+graphRange = preDrawAutoScale(preDraw, preDrawZero, width, autoScale,
+    &overallUpperLimit, &overallLowerLimit,
+    &graphUpperLimit, &graphLowerLimit,
+    &overallRange, &epsilon, tg->lineHeight, wigCart->maxY, wigCart->minY);
 
 /*
  *	We need to put the graphing limits back into the items
@@ -843,35 +923,12 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	wi->graphUpperLimit = graphUpperLimit;
 	wi->graphLowerLimit = graphLowerLimit;
     }
-/*	Set up the color by array. Determine color of each pixel
- *	based initially on the sign of the data point. If a colorTrack
- *	is specified also fill in the color array with that. 
- */
-AllocArray(colorArray, width);
-for(x1 = 0; x1 < width; ++x1)
-    {
-    int preDrawIndex = x1 + preDrawZero;
-    if (preDraw[preDrawIndex].count)
-	{
-	double dataValue;	/*	the data value in data space	*/
-	dataValue = preDraw[preDrawIndex].smooth;
-	/*	negative data is the alternate color	*/
-	if (dataValue < 0.0)
-	    colorArray[x1] = tg->ixAltColor;
-	else
-	    colorArray[x1] = tg->ixColor;
-	}
-    }
 
-/* Fill in colors from alternate track if necessary. */
-if(wigCart->colorTrack != NULL) 
-    {
-    struct track *cTrack = hashMustFindVal(trackHash, wigCart->colorTrack);
-    wigFillInColorArray(tg, vg, colorArray, width, cTrack);
-    }
+colorArray = allocColorArray(preDraw, width, preDrawZero,
+    wigCart->colorTrack, tg, vg);
 
 /*	right now this is a simple pixel by pixel loop.  Future
- *	enhancements will smooth this data and draw boxes where pixels
+ *	enhancements could draw boxes where pixels
  *	are all the same height in a run.
  */
 for (x1 = 0; x1 < width; ++x1)
