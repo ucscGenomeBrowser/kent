@@ -778,7 +778,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     lfs->grayIx = lf->grayIx;
     lfs->start = lf->start;
     lfs->end = lf->end;
-    slAddHead(&lfsList, lfs)
+    slAddHead(&lfsList, lfs);
     }
 slReverse(&lfsList);
 for (lfs = lfsList; lfs != NULL; lfs = lfs->next) 
@@ -794,7 +794,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
-    slAddHead(&lfList, lfs->features)
+    slAddHead(&lfList, lfs->features);
     lfs->features = NULL;
     }
 slReverse(&lfList);
