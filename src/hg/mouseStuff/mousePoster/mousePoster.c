@@ -35,16 +35,26 @@ char *axtDir = "/cluster/store2/mm.2002.02/mm2/bed/blastz.gs11.2002-06-05/axtBes
 /* File with human/mouse orthologs. */
 char *orthoFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/ortholog.rpt";
 
+/* File with OMIM morbid map. */
+char *morbidMapFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/morbidMap";
+
+/* File with orthologs to human disease genes. */
+char *diseaseFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/disease.rpt";
+
 /* File with mouse stock strains with tweaked genes. */
 char *stockFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/stockMice.rpt";
 
 /* File with stock strains orthologous to human diseases */
 char *diseaseStockFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/diseaseStockMice.rpt";
+
+/* Quantitative trait locus file. */
+char *qtlFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/mgi_qtl.rpt";
+
 /* File with synteny info */
 char *syntenyFile = "/cluster/store2/mm.2002.02/mm2/bed/synteny/synteny.bed";
 
 /* Resolved duplications file. */
-char *bestDupFile = "bestDup.oct";
+char *bestDupFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/dupe.rpt";
 
 /* Unresolved dupe output. */
 FILE *dupeFile;
@@ -122,10 +132,10 @@ struct resolvedDup
     };
 
 void makeResolvedDupes(struct hash *hash, struct resolvedDup **retList)
-/* Read in list of dupes that John resolved by hand. */
+/* Read in list of dupes that Deanna resolved by hand. */
 {
 struct lineFile *lf = lineFileMayOpen(bestDupFile, TRUE);
-char *words[32], *parts[4];
+char *row[3], *parts[4];
 int wordCount, partCount;
 struct resolvedDup *rd, *rdList = NULL;
 
@@ -134,17 +144,21 @@ if (lf == NULL)
     warn("Can't find %s", bestDupFile);
     return;
     }
-while ((wordCount = lineFileChop(lf, words)) > 0)
+while (lineFileRow(lf, row))
     {
-    lineFileExpectWords(lf, 4, wordCount);
     AllocVar(rd);
-    hashAddSaveName(hash, words[1], rd, &rd->name);
-    partCount = chopString(words[3], ":-", parts, ArraySize(parts));
+    hashAddSaveName(hash, row[1], rd, &rd->name);
+    partCount = chopString(row[2], ":-", parts, ArraySize(parts));
     if (partCount != 3)
         errAbort("Misformed chromosome location line %d of %s", lf->lineIx, lf->fileName);
-    rd->trueChrom = cloneString(parts[0]);
-    rd->trueStart = atoi(parts[1]);
-    rd->trueEnd = atoi(parts[2]);
+    if (sameString(row[0], "Un"))
+       rd->trueChrom = "Un";
+    else
+	{
+	rd->trueChrom = cloneString(parts[0]);
+	rd->trueStart = atoi(parts[1])-1;
+	rd->trueEnd = atoi(parts[2]);
+	}
     slAddHead(&rdList, rd);
     }
 slReverse(&rdList);
@@ -173,16 +187,71 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-
-struct hash *makeFirstColumnHash(char *fileName)
-/* Make hash of ID's in first column of file. */
+void fillFirstColumnHash(char *fileName, struct hash *hash)
+/* Fill in hash with ID's in first column of file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *hash = newHash(0);
 char *row[1];
 while (lineFileRow(lf, row))
     hashStore(hash, row[0]);
 lineFileClose(&lf);
+}
+
+struct hash *parseMorbidMap(char *fileName)
+/* Parse morbidMap into hash */
+{
+struct hash *hash = newHash(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+char *fields[4], *names[16];
+int fieldCount, nameCount;
+int loci = 0, syns = 0;
+int i;
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    line = skipLeadingSpaces(line);
+    if (line[0] == '#' || line[0] == 0)
+        continue;
+    fieldCount = chopString(line, "|", fields, ArraySize(fields));
+    if (fieldCount < 3)
+        errAbort("Expecting at least 3 | separated fields line %d of %s",
+		lf->lineIx, lf->fileName);
+    nameCount = chopString(fields[1], ", ", names, ArraySize(names));
+    for (i=0; i<nameCount; ++i)
+        {
+	hashStore(hash, names[i]);
+	++syns;
+	}
+    ++loci;
+    }
+return hash;
+}
+
+struct hash *makeDiseaseOrthoHash(char *orthoFile, struct hash *morbidHash)
+/* Fill in hash of orthologs of human disease genes keyed by MGI id . */
+{
+struct lineFile *lf = lineFileOpen(orthoFile, TRUE);
+char *row[6];
+int count = 0;
+struct hash *hash = newHash(0);
+
+while (lineFileRow(lf, row))
+    {
+    if (hashLookup(morbidHash, row[5]))
+       {
+       ++count;
+       hashStore(hash, row[0]);
+       }
+    }
+return hash;
+}
+
+struct hash *makeFirstColumnHash(char *fileName)
+/* Make hash of ID's in first column of file. */
+{
+struct hash *hash = newHash(0);
+fillFirstColumnHash(fileName, hash);
 return hash;
 }
 
@@ -196,13 +265,16 @@ void makeDiseaseStockHash(struct sqlConnection *conn,
  * Safer to use stuff straight from Jackson Labs though I think. 
  * These hashes are all keyed by the RefSeq accession. */
 {
+struct hash *morbidHash = parseMorbidMap(morbidMapFile);
 struct hash *llToJax = makeLocusLinkToJaxHash(conn);
+struct hash *jaxDiseaseHash = makeDiseaseOrthoHash(orthoFile, morbidHash);
 struct hash *jaxStockHash = makeFirstColumnHash(stockFile);
 struct hash *jaxDiseaseStockHash = makeFirstColumnHash(diseaseStockFile);
 struct sqlResult *sr;
 char **row;
 char *jaxId;
 
+/* Using ensembl fillFirstColumnHash(diseaseFile, diseaseHash); */
 sr = sqlGetResult(conn, "select mrnaAcc,locusLinkId from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -220,6 +292,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (hashLookup(jaxDiseaseStockHash, jaxId))
 		{
 		hashAdd(diseaseStockHash, acc, NULL);
+		}
+	    if (hashLookup(jaxDiseaseHash, jaxId))
+	        {
+		hashAdd(diseaseHash, acc, NULL);
 		}
 	    }
 	}
@@ -360,10 +436,10 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 	/* Keep track for dupes.  Show it first time around */
 	if ((ap = hashFindVal(dupHash, geneName)) == NULL)
 	    {
-	    showIt = TRUE;
 	    AllocVar(ap);
 	    hashAddSaveName(dupHash, geneName, ap, &ap->name);
 	    }
+	showIt = TRUE;
 	if (ap->list == NULL || !sameString(ap->list->chrom, chrom) || 
 		abs(gp->cdsStart - ap->list->chromStart) > 300000)
 	    {
@@ -413,13 +489,9 @@ for (node = geneList->head; !dlEnd(node); node = node->next)
     if (hashLookup(yellowHash, acc))
         col = &yellow;
     else if (hashLookup(redHash, acc))
-	{
         col = &red;
-	}
     else if (hashLookup(greenHash, acc))
-	{
         col = &green;
-	}
     else
         col = &blue;
     printTab(f, cg, chrom, kg->start, kg->end, "hugo", 
@@ -649,7 +721,8 @@ void outputWindowedWiggle(struct chromGaps *cg, FILE *f,
 	int *hitBases, int *winBases, 
 	int windowSize, int winsPerChrom, 
 	char *chrom, int chromSize, 
-	int red, int green, int blue, char *type, double offset, double scale)
+	int red, int green, int blue, char *type, double offset, double scale,
+	double minData)
 /* Output a wiggle plot. */
 {
 int i;
@@ -661,7 +734,7 @@ int winStart, winEnd;
 /* Output density. */
 for (i=0; i<winsPerChrom; ++i)
     {
-    if ((baseCount = winBases[i]) > windowSize/3)
+    if ((baseCount = winBases[i]) > windowSize * minData)
         {
 	repCount = hitBases[i];
 	density = (double)repCount/(double)baseCount;
@@ -716,7 +789,7 @@ sqlFreeResult(&sr);
  * the density as a wiggle. */
 winBases = getWinBases(conn, winsPerChrom, windowSize, chrom, chromSize);
 outputWindowedWiggle(cg, f, winRepBases, winBases, windowSize, winsPerChrom, 
-	chrom, chromSize, red, green, blue, repClass, 0.0, scale);
+	chrom, chromSize, red, green, blue, repClass, 0.0, scale, 0.333);
 
 freeMem(winBases);
 freeMem(winRepBases);
@@ -751,7 +824,7 @@ lineFileClose(&lf);
  * the density as a wiggle. */
 winBases = getWinBases(conn, winsPerChrom, windowSize, chrom, chromSize);
 outputWindowedWiggle(cg, f, covBases, winBases, windowSize, winsPerChrom, 
-	chrom, chromSize, red, green, blue, type, 0.0, scale);
+	chrom, chromSize, red, green, blue, type, 0.0, scale, 0.333);
 
 freeMem(winBases);
 freeMem(covBases);
@@ -816,7 +889,7 @@ lineFileClose(&lf);
 /* Call routines to get the bases in each window and to output
  * the density as a wiggle. */
 outputWindowedWiggle(cg, f, idBases, covBases, windowSize, winsPerChrom, 
-	chrom, chromSize, red, green, blue, type, 0.54, 4.0);
+	chrom, chromSize, red, green, blue, type, 0.54, 4.0, 0.1);
 
 freeMem(idBases);
 freeMem(covBases);
@@ -920,6 +993,37 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
+void getQtl(struct chromGaps *cg, char *fileName, char *chrom, FILE *f)
+/* Get data for Quantitative Trait Locus track. */
+{
+char *line;
+char *row[9];
+int fieldCount;
+int doLong;
+
+for (doLong = 0; doLong <= 1; ++doLong)
+    {
+    struct lineFile *lf = lineFileOpen(qtlFile, TRUE);
+    char *type = (doLong ? "QTL" : "QTL_SHORT");
+    int nameField = (doLong ? 3 : 2);
+    while (lineFileNext(lf, &line, NULL))
+	{
+	line = skipLeadingSpaces(line);
+	if (line[0] == '#' || line[0] == 0)
+	    continue;
+	fieldCount = chopTabs(line, row);
+	lineFileExpectWords(lf, 9, fieldCount);
+	if (sameString(chrom, row[0]))
+	    {
+	    int start = lineFileNeedNum(lf, row, 4);
+	    int end = lineFileNeedNum(lf, row, 5);
+	    printTab(f, cg, chrom, start, end, 
+		    type, "text", 0, 0, 0, row[nameField]);
+	    }
+	}
+    lineFileClose(&lf);
+    }
+}
 
 void oneChrom(char *chrom, struct sqlConnection *conn, 
 	struct hash *dupHash, struct hash *resolvedDupHash, 
@@ -938,10 +1042,11 @@ getSynteny(cg, chrom, f);
 getMouseAli(cg, chrom, chromSize, axtFile, conn, f, 
 	"HS_ALI", 50000, 1.0/0.85, 0, 0, 255);
 getMouseId(cg, chrom, chromSize, axtFile, conn, f,
-	"HS_ID", 20000, 255, 0, 0);
+	"HS_ID", 25000, 255, 0, 0);
 getGc(cg, chrom, conn, f);
 getRepeatDensity(cg, chrom, chromSize, conn, f, "SINE", 100000, 1.0/0.66, 255, 0, 0);
 getRepeatDensity(cg, chrom, chromSize, conn, f, "LINE", 100000, 1.0/0.66, 0, 0, 255);
+getQtl(cg, qtlFile, chrom, f);
 getRnaGenes(cg, chrom, conn, f);
 getCpgIslands(cg, chrom, conn, f);
 getFishBlatHits(cg,chrom,conn,f);
