@@ -17,9 +17,10 @@
 #include "customTrack.h"
 #include "hgSeq.h"
 #include "agpGap.h"
+#include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.2 2004/07/20 21:49:53 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.3 2004/07/20 22:13:58 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -262,9 +263,18 @@ hPrintf("</TD><TR>\n");
 }
 
 static void floatStatRow(char *label, double x)
-/* Print label, x (double-precision floating point) in table. */
+/* Print label, x in table. */
 {
-hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%3.2f</TD></TR>\n", label, x);
+hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>", label);
+hPrintf("%3.2f", x);
+hPrintf("</TD><TR>\n");
+}
+
+
+static void twoStringRow(char *label, char *val)
+/* Print label, string value. */
+{
+hPrintf("<TR><TD>%s</TD><TD ALIGN=RIGHT>%s</TD></TR>\n", label, val);
 }
 
 void doOutSummaryStats(struct trackDb *track, struct sqlConnection *conn)
@@ -281,30 +291,28 @@ struct hTableInfo *hti = getHti(database, track->tableName);
 int fieldCount = hTableInfoBedFieldCount(hti);
 
 
-htmlOpen("Summary Stats for %s", track->shortLabel);
+htmlOpen("%s Summary Statistics", track->shortLabel);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
+cartSaveSession(cart);
 startTime = clock1000();
 bedList = getFilteredBedsInRegion(conn, track);
 loadTime = clock1000() - startTime;
 
+
 hTableStart();
 startTime = clock1000();
+numberStatRow("item count", slCount(bedList));
 covList = calcSpanOverRegions(regionList, bedList);
 cov = covStatsSum(covList);
-numberStatRow("bases in region", regionSize);
-numberStatRow("bases in gaps", gapTotal);
-numberStatRow("item count", slCount(bedList));
 percentStatRow("item bases", cov->basesCovered, realSize);
 percentStatRow("item total", cov->sumBases, realSize);
 numberStatRow("smallest item", cov->minBases);
 numberStatRow("average item", round((double)cov->sumBases/cov->itemCount));
 numberStatRow("biggest item", cov->maxBases);
 covStatsFreeList(&covList);
-hTableEnd();
-hPrintf("<BR>\n");
 
 if (fieldCount >= 12)
     {
-    hTableStart();
     covList = calcBlocksOverRegions(regionList, bedList);
     cov = covStatsSum(covList);
     hPrintf("<TR><TD>block count</TD><TD ALIGN=RIGHT>");
@@ -316,12 +324,31 @@ if (fieldCount >= 12)
     numberStatRow("average block", round((double)cov->sumBases/cov->itemCount));
     numberStatRow("biggest block", cov->maxBases);
     covStatsFreeList(&covList);
-    hTableEnd();
     }
 calcTime = clock1000() - startTime;
+hTableEnd();
+hPrintf("<BR>");
+cgiMakeButton(hgtaDoMainPage, " OK ");
 
-hPrintf("load time: %5.3f  calculation time: %5.3f<BR>\n",
-	0.001*loadTime, 0.001*calcTime);
+webNewSection("Region and Timing Statistics");
+hTableStart();
+/* Print out region and filter status. */
+    {
+    char *region = cartUsualString(cart, hgtaRegionType, "genome");
+    if (sameString(region, "range"))
+        region = cartUsualString(cart, hgtaRange, "n/a");
+    twoStringRow("region", region);
+    }
+numberStatRow("bases in region", regionSize);
+numberStatRow("bases in gaps", gapTotal);
+floatStatRow("load time", 0.001*loadTime);
+floatStatRow("calculation time", 0.001*calcTime);
+twoStringRow("filter", (anyFilter() ? "on" : "off"));
+hTableEnd();
+hPrintf("<BR>");
+cgiMakeButton(hgtaDoMainPage, " OK ");
+hPrintf("</FORM>");
+
 htmlClose();
 }
 
