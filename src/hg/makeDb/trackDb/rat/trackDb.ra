@@ -71,7 +71,7 @@ type genePred sgpPep
 
 track stsMapRat
 shortLabel STS Markers
-longLabel STS Markers on STS Maps
+longLabel STS Markers on Genetic and Radiation Hybrid Maps
 group map
 priority 5
 visibility dense

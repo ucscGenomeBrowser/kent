@@ -73,7 +73,7 @@ type psl xeno mm3
 
 track stsMapMouseNew
 shortLabel STS Markers
-longLabel STS Markers on Genetic Maps
+longLabel STS Markers on Genetic and Radiation Hybrid Maps
 group map
 priority 5
 visibility dense
