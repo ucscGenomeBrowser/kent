@@ -9,7 +9,7 @@
 #include "fa.h"
 #include "nib.h"
 
-int maxDiff = 2;
+int maxDiff = 3;
 int ollySize = 25;
 int ramMb = 490;
 boolean easyOut = FALSE;
@@ -297,7 +297,6 @@ for (i=ollyInSize; i<regionSize; ++i)
 	   lmAllocVar(lm, hit);
 	   hit->tPos = tPos;
 	   slAddHead(&hits[qPos], hit);
-	   uglyf(" %d %d\n", tPos, qPos);
 	   }
        }
     if (target[tPos] != query[qPos])
@@ -503,7 +502,7 @@ easyOut = optionExists("easyOut");
 
 if (maxDiff > 3)
    errAbort("maxDiff can only be up to 3");
-if (minOllySize[maxDiff] < ollySize)
+if (ollySize < minOllySize[maxDiff] )
    errAbort("For %d mismatches, minimum oligo size is %d", maxDiff, ollySize);
 
 if (argc != 6)
