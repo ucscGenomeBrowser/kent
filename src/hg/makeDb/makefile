@@ -17,6 +17,7 @@ DIRS = \
 	hgClonePos \
 	hgCountAlign \
 	hgCtgPos \
+	hgDeleteChrom \
 	hgExonerate \
 	hgFiberglass \
 	hgGcPercent \
@@ -57,6 +58,7 @@ DIRS = \
 	sanger22gtf \
 	tailLines \
 	toBb \
+	vegaBuildInfo \
 	hgBioCyc \
 	hgKegg \
 	hgMrnaRefseq \
