@@ -153,7 +153,7 @@ if(!webInTextMode)
 	    "<!-- END SECOND SECTION ---------------------------------------------------------->" "\n"
 	    "" "\n"
 	    "</TD></TR></TABLE>" "\n"
-	    "</BODY></HTML" "\n"
+	    "</BODY></HTML>" "\n"
 	);
 }
 
