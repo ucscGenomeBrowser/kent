@@ -10709,6 +10709,6 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 zooSpeciesHashInit();
-cartHtmlShell("UCSC Genome Browser v18-alpha", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v19", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
