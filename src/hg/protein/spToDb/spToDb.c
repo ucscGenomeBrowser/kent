@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.7 2003/11/15 21:02:41 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.8 2004/03/19 19:39:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -760,6 +760,7 @@ struct uniquer *rcValUni = uniquerNew(rcVal, 18);
 
 /* Other unique helpers. */
 struct hash *taxonHash = newHash(18);
+struct hash *taxonIdHash = newHash(18);
 int citationId = 0;
 
 for (;;)
@@ -830,9 +831,13 @@ for (;;)
 	    /* Swiss prot only has full info on the first taxa when it
 	     * contains multiple taxons, so we have to rely on NCBI here... */
 	    int ncbiId = spr->taxonList->id;
-	    if (!hashLookup(taxonHash, spr->orgSciName))
+	    char ncbiIdX[16];
+	    safef(ncbiIdX, sizeof(ncbiIdX), "%x", ncbiId);
+	    if (!hashLookup(taxonHash, spr->orgSciName) 
+	    	|| !hashLookup(taxonIdHash, ncbiIdX))
 	        {
 		hashAdd(taxonHash, spr->orgSciName, NULL);
+		hashAdd(taxonIdHash, ncbiIdX, NULL);
 		fprintf(taxon, "%d\t%s\t%s\n",
 			ncbiId, spr->orgSciName, spr->taxonToGenus);
 		for (n = spr->commonNames; n != NULL; n = n->next)
