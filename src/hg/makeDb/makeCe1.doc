@@ -466,6 +466,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.fa \
 	/gbdb/ce1/mrna.134
     # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
+    cd ~/ce1/bed/mrna
     hgLoadRna add -type=mRNA ce1 /gbdb/ce1/mrna.134/mrna.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.ra
     hgLoadPsl ce1 all_mrna.psl
@@ -522,6 +523,7 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa \
 	/gbdb/ce1/mrna.134
     # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
+    cd ~/ce1/bed/est
     hgLoadRna add -mrnaType=EST -type=EST ce1 /gbdb/ce1/mrna.134/est.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.ra
     hgLoadPsl ce1 all_est.psl -nobin
@@ -587,6 +589,7 @@ PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-06-05 - Hiram)
     mkdir /gbdb/ce1/fuguSeq
     ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta /gbdb/ce1/fuguSeq
     # ! ! !  DO NOT RUN hgLoadRna in /gbdb - it leaves .tab files
+    cd ~/ce1/bed/blatFugu
     hgLoadRna addSeq ce1 /gbdb/ce1/fuguSeq/fugu_v3_mask.fasta
 
 # RUN Waba alignment with briggsae  (DONE - 2003-06-02 - Hiram)
@@ -832,14 +835,16 @@ Longest job:                      136s       2.27m     0.04h    0.00d
     cd ~/ce1/bed/blastzCb1/pslChrom
     /cluster/bin/i386/hgLoadPsl ce1 chr*_*.psl
     # trackDb/worm/ce1/trackDb.ra entry:
-# track blastzCb1
-# shortLabel C. Briggsae
-# longLabel BLASTZ C. Briggsae
-# group compGeno
-# priority 159
-# visibility dense
-# spectrum on
-# type psl xeno
+#   track blastzCb1
+#   shortLabel briggsae Blastz
+#   longLabel Blastz C briggsae
+#   group compGeno
+#   priority 159
+#   visibility dense
+#   color 0,0,0
+#   altColor 50,128,50
+#   spectrum on
+#   type psl xeno cb1
 
 # CHAINING Briggsae blastz
     # next machine, small cluster is good for these tiny jobs
@@ -914,11 +919,11 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
     # for reference:
     ln -s \
  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.* .
-    ls -1S /iscratch/i/worms/Celegans/bothMasksNib/chr*.nib > worm.lst
-    ls -1S /iscratch/i/worms/Celegans/refSeq/r*.fa > refSeq.lst
+    ls -1S /cluster/bluearc/iscratch/i/worms/Celegans/bothMasksNib/chr*.nib > worm.lst
+    ls -1S /cluster/bluearc/iscratch/i/worms/Celegans/refSeq/r*.fa > refSeq.lst
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/blat -q=rna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -fine -q=rna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
 
@@ -926,10 +931,9 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
     para create spec
     para try
     para check
-    para push
-    ... etc ...
-# Average job time:                  21s       0.34m     0.01h    0.00d
-# Longest job:                      107s       1.78m     0.03h    0.00d
+    para push  ... etc ...
+# Average job time:                  55s       0.92m     0.02h    0.00d
+# Longest job:                      626s      10.43m     0.17h    0.01d
 
     # when cluster run done
     # next machine
@@ -974,3 +978,182 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
     | hgsql ce1
 
 # END - MAKING AND STORING refSeq ALIGNMENTS
+
+# BEGINNING OF Self BLASTZ
+
+#	DEF file here is the same as the blastzCb1/DEF file, with
+#	the following changes:
+#	SEQ1_DIR=/iscratch/i/worms/Celegans/bothMasksNib
+#	SEQ2_DIR=/iscratch/i/worms/Celegans/bothMasksNib
+#	SEQ2_RMSK=/iscratch/i/worms/Celegans/rmsk
+#	SEQ2_CHUNK=10000000
+#	SEQ2_LAP=10000
+#	BASE=/cluster/store5/worm/ce1/bed/blastzSelf
+
+#	Reproduced here are the instructions as specified in the
+#	hummus/Notes file.
+#	Evidently historical archives of the DEF files exist in
+#	in ~angie/hummus/DEF* and they are copied out of there to
+#	to the file: $BASE/DEF for the actual run.  Don't worry, none of
+#	this seems to make any sense.
+	# next machine
+    ssh kk
+    mkdir -p ~/ce1/bed/blastzSelf
+    cd ~/ce1/bed/blastzSelf
+    . ./DEF
+    mkdir -p $BASE/run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    # that created xdir.sh and joblist run/j
+    sh $BASE/xdir.sh
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    cd $BASE/run
+    # now edit j because it is not correct:
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+    # *** make sure the j2 edits are OK, then use it:
+    mv j2 j
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+    para try
+    para check
+    para push
+	... etc ...
+Average job time:                2228s      37.14m     0.62h    0.03d
+Longest job:                    15281s     254.68m     4.24h    0.18d
+    # That longest job time is not correct.  I was having trouble with
+    # the cluster during that run.
+
+    # When that cluster run is done, results are in $BASE/raw/chr*/*
+    # continuing with ~angie/hummus/Notes:
+    # --- normalize and single_cov
+    cd ~/ce1/bed/blastzSelf
+    #   source the DEF file again in case you are coming back to this
+    . ./DEF
+    # a new run directory
+    mkdir -p $BASE/run.1
+    # another obscure script creates a new job list:
+    ~angie/hummus/do.out2lav $DEF >$BASE/run.1/j
+    cd $BASE/run.1
+    # the job list is once again incorrect, edit it:
+    sed -e 's/^/\/cluster\/home\/angie\/schwartzbin\//' j > j2
+    wc -l j*
+    head j2
+    # make sure the edited j2 is OK, then use it:
+    mv j2 j
+    para create j
+    para try
+    para push;para check; ... etc ...
+Average job time:                 241s       4.01m     0.07h    0.00d
+Longest job:                      459s       7.65m     0.13h    0.01d
+
+
+    # Translate the .lav files created by the end of ~angie/hummus Notes
+    # into axt files
+    ssh eieio
+    set base="/cluster/store5/worm/ce1/bed/blastzSelf"
+    set seq1_dir="/cluster/store5/worm/ce1/nib"
+    set seq2_dir="/cluster/store5/worm/ce1/nib"
+    set tbl="blastzSelf"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | /cluster/home/hiram/bin/i386/lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | /cluster/bin/i386/axtSort stdin $out
+      popd
+    end
+
+    #  DropOverlap cleans out a bit more than DropSelf:
+    cd $base
+    mkdir DropOverlap
+    foreach c (M I II III IV V X)
+	echo "dropping chr${c}"
+	/cluster/bin/i386/axtDropOverlap axtChrom/chr${c}.axt \
+		DropOverlap/chr${c}.axt
+    end
+
+    # Translate the sorted axt files into psl:
+    mkdir -p pslChrom
+    foreach f (DropOverlap/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # load these blastz results  (they already have the correct names
+    #		chr*_blastzSelf.psl from axtToPsl above)
+    # next machine
+    ssh hgwdev
+    cd ~/ce1/bed/blastzSelf/pslChrom
+    /cluster/bin/i386/hgLoadPsl ce1 chr*_*.psl
+    # trackDb/worm/ce1/trackDb.ra entry:
+#   track blastzSelf
+#   shortLabel Blastz Self
+#   longLabel Blastz C elegans (self)
+#   group compGeno
+#   priority 159
+#   visibility dense
+#   color 0,0,0
+#   altColor 50,128,50
+#   spectrum on
+#   type psl xeno ce1
+
+# CHAINING Self blastz
+    # next machine, small cluster is good for these tiny jobs
+    ssh kkr1u00
+    cd /cluster/store5/worm/ce1/bed/blastzSelf
+    mkdir -p axtChain/run1
+    cd /cluster/store5/worm/ce1/bed/blastzSelf/axtChain/run1
+    ls -1S /cluster/store5/worm/ce1/bed/blastzSelf/DropOverlap/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    #  Nibs are on /cluster/bluearc now
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtChain $1  /cluster/bluearc/iscratch/i/worms/Celegans/bothMasksNib /iscratch/i/worms/Celegans/bothMasksNib $2 > $3
+'_EOF_'
+    chmod a+x doChain
+
+    mkdir out chain
+    gensub2 input.lst single gsub spec
+    para create spec
+    para try
+    para push ... etc ...
+Average job time:                 502s       8.37m     0.14h    0.01d
+Longest job:                      874s      14.57m     0.24h    0.01d
+
+    # now on the cluster server, sort chains
+    # next machine
+    ssh eieio
+    cd ~/ce1/bed/blastzSelf/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd ~/ce1/bed/blastzSelf/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain ce1 ${c}_chainSelf $i
+        echo done $c
+    end
+#  Loading 845504 chains into ce1.chrI_chainSelf
+#  Loading 845307 chains into ce1.chrII_chainSelf
+#  Loading 1152790 chains into ce1.chrIII_chainSelf
+#  Loading 859566 chains into ce1.chrIV_chainSelf
+#  Loading 2 chains into ce1.chrM_chainSelf
+#  Loading 1114939 chains into ce1.chrV_chainSelf
+#  Loading 604293 chains into ce1.chrX_chainSelf
+
+
+#  END of Blastz Self
