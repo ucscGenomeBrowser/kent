@@ -380,6 +380,9 @@ void subChar(char *s, char oldChar, char newChar);
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
 
+void stripString(char *s, char *strip);
+/* Remove all occurences of strip from s. */
+
 int countChars(char *s, char c);
 /* Return number of characters c in string s. */
 
