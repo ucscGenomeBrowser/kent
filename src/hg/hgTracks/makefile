@@ -13,7 +13,7 @@ hgTracks: $O
 	strip hgTracks
 	chmod a+rx hgTracks
 #	mv hgTracks $(HGCGI)
-	mv hgTracks $(HGCGI)/jkTracks
+	mv hgTracks $(HGCGI)/hgTracks
 
 lib:
 	cd ../../lib; make
