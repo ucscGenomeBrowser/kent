@@ -125,8 +125,9 @@ void positionLookupSamePhase()
 {
 if (tableIsPositional)
     {
-    fputs("position: ", stdout);
+    puts("position: ");
     positionLookup(cgiString("phase"));
+    puts("<P>");
     }
 else
     {
@@ -1129,8 +1130,30 @@ return ret;
 
 
 void preserveConstraints()
+/* Add CGI variables for filtering constraints, so they will be passed to 
+ * the next page.  Also parse the constraints and do a null query with them 
+ * in order to catch any syntax errors sooner rather than later. */
 {
+struct sqlConnection *conn;
+struct sqlResult *sr;
 struct cgiVar *current;
+struct dyString *query = newDyString(512);
+char *constraints = constrainFields();
+
+// Null query will cause errAbort if there's a syntax error, no-op if OK.
+dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
+	       getTableName(), constraints);
+if (sameString(database, getTableDb()))
+    conn = hAllocConn();
+else
+    conn = hAllocConn2();
+sr = sqlGetResult(conn, query->string);
+dyStringFree(&query);
+sqlFreeResult(&sr);
+if (sameString(database, getTableDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
 
 for (current = cgiVarList();  current != NULL;  current = current->next)
     {
