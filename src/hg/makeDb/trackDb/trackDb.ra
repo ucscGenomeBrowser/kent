@@ -1241,6 +1241,15 @@ visibility hide
 colorChromDefault off
 type psl protein
 
+track blastDm1FB
+shortLabel Drosophila Proteins
+longLabel Drosophila Proteins
+group compGeno
+priority 142
+visibility pack
+colorChromDefault off
+type psl protein
+
 track blastHg16KG
 shortLabel Human Proteins
 longLabel Human Proteins
