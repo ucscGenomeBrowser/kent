@@ -142,6 +142,9 @@ int pslCmpTarget(const void *va, const void *vb);
 int pslCalcMilliBad(struct psl *psl, boolean isMrna);
 /* Calculate badness in parts per thousand. */
 
+int pslCmpScore(const void *va, const void *vb);
+/* Compare to sort based on score. */
+
 int pslScore(const struct psl *psl);
 /* Return score for psl. */
 
