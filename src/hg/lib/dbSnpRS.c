@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "dbSnpRS.h"
 
-static char const rcsid[] = "$Id: dbSnpRS.c,v 1.4 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: dbSnpRS.c,v 1.5 2004/02/19 02:02:33 daryl Exp $";
 
 void dbSnpRSStaticLoad(char **row, struct dbSnpRS *ret)
 /* Load a row from dbSnpRS table into ret.  The contents of ret will
@@ -17,7 +17,7 @@ void dbSnpRSStaticLoad(char **row, struct dbSnpRS *ret)
 int sizeOne,i;
 char *s;
 
-ret->rsId = sqlUnsigned(row[0]);
+ret->rsId = row[0];
 ret->avHet = atof(row[1]);
 ret->avHetSE = atof(row[2]);
 ret->valid = row[3];
@@ -36,7 +36,7 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->rsId = sqlUnsigned(row[0]);
+ret->rsId = cloneString(row[0]);
 ret->avHet = atof(row[1]);
 ret->avHetSE = atof(row[2]);
 ret->valid = cloneString(row[3]);
@@ -48,7 +48,7 @@ return ret;
 }
 
 struct dbSnpRS *dbSnpRSLoadAll(char *fileName) 
-/* Load all dbSnpRS from a tab-separated file.
+/* Load all dbSnpRS from a whitespace-separated file.
  * Dispose of this with dbSnpRSFreeList(). */
 {
 struct dbSnpRS *list = NULL, *el;
@@ -56,6 +56,24 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[8];
 
 while (lineFileRow(lf, row))
+    {
+    el = dbSnpRSLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct dbSnpRS *dbSnpRSLoadAllByChar(char *fileName, char chopper) 
+/* Load all dbSnpRS from a chopper separated file.
+ * Dispose of this with dbSnpRSFreeList(). */
+{
+struct dbSnpRS *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[8];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
     el = dbSnpRSLoad(row);
     slAddHead(&list, el);
@@ -97,7 +115,7 @@ void dbSnpRSSaveToDb(struct sqlConnection *conn, struct dbSnpRS *el, char *table
  * If worried about this use dbSnpRSSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,%f,%f,'%s','%s','%s','%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s')", 
 	tableName,  el->rsId,  el->avHet,  el->avHetSE,  el->valid,  el->allele1,  el->allele2,  el->assembly,  el->alternate);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
@@ -113,17 +131,19 @@ void dbSnpRSSaveToDbEscaped(struct sqlConnection *conn, struct dbSnpRS *el, char
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *valid, *allele1, *allele2, *assembly, *alternate;
+char  *rsId, *valid, *allele1, *allele2, *assembly, *alternate;
+rsId = sqlEscapeString(el->rsId);
 valid = sqlEscapeString(el->valid);
 allele1 = sqlEscapeString(el->allele1);
 allele2 = sqlEscapeString(el->allele2);
 assembly = sqlEscapeString(el->assembly);
 alternate = sqlEscapeString(el->alternate);
 
-dyStringPrintf(update, "insert into %s values ( %u,%f,%f,'%s','%s','%s','%s','%s')", 
-	tableName, el->rsId , el->avHet , el->avHetSE ,  valid,  allele1,  allele2,  assembly,  alternate);
+dyStringPrintf(update, "insert into %s values ( '%s',%f,%f,'%s','%s','%s','%s','%s')", 
+	tableName,  rsId, el->avHet , el->avHetSE ,  valid,  allele1,  allele2,  assembly,  alternate);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
+freez(&rsId);
 freez(&valid);
 freez(&allele1);
 freez(&allele2);
@@ -141,7 +161,7 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->rsId = sqlUnsignedComma(&s);
+ret->rsId = sqlStringComma(&s);
 ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->valid = sqlStringComma(&s);
@@ -160,7 +180,10 @@ void dbSnpRSFree(struct dbSnpRS **pEl)
 struct dbSnpRS *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->rsId);
 freeMem(el->valid);
+freeMem(el->allele1);
+freeMem(el->allele2);
 freeMem(el->assembly);
 freeMem(el->alternate);
 freez(pEl);
@@ -183,7 +206,9 @@ void dbSnpRSOutput(struct dbSnpRS *el, FILE *f, char sep, char lastSep)
 /* Print out dbSnpRS.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->rsId);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->rsId);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%f", el->avHet);
 fputc(sep,f);
