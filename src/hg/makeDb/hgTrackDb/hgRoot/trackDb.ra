@@ -88,7 +88,7 @@ altColor 180,180,180
 track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
-priority 11
+priority 12
 visibility full
 color 20,20,170
 type genePred
@@ -147,6 +147,13 @@ track mrna
 shortLabel Human mRNAs
 longLabel Human mRNAs from Genbank
 priority 18
+visibility full
+type psl .
+
+track xenoMrna
+shortLabel Other mRNAs
+longLabel Non-Human mRNAs from Genbank
+priority 18.2
 visibility full
 type psl .
 
