@@ -82,6 +82,9 @@ char *curTableLabel();
 void jsCreateHiddenForm(char **vars, int varCount);
 /* Create a hidden form with the given variables */
 
+void jsWriteFunctions();
+/* Write out Javascript functions. */
+
 char *jsOnChangeEnd(struct dyString **pDy);
 /* Finish up javascript onChange command. */
 
@@ -106,6 +109,10 @@ void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar,
 void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal);
 /* Make a check box filling in with existing value and
  * putting a javascript tracking variable on it. */
+
+char *jsOnRangeChange(char *cgiVar, char *jsVar, char *val);
+/* Make a little javascript to set the range radio button when
+ * they type in the range text box. */
 
 /* ---------- Other UI stuff. ----------------------*/
 
