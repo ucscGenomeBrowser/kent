@@ -971,6 +971,68 @@ printf("<B>Gene Lynx</B> ");
 printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1\" TARGET=_blank>", search);
 printf("%s</A><BR>\n", search);
 }
+
+/* --- */
+void printRikenInfo(char *acc, struct sqlConnection *conn )
+/* Print Riken annotation info */
+{
+struct sqlResult *sr;
+char **row;
+char qry[512];
+char *seqid, *fantomid, *cloneid, *modified_time, *accession, *comment;
+char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;   
+
+accession = acc;
+
+	//!!! uncomment the following line, if you want to test Riken annotation 
+	// before the new genbank data get loaded into the mouse genome database.  
+	//    Fan 3/28/02
+	//accession = strdup("AK002809");
+
+	snprintf(qry, sizeof(qry), "select seqid from rikenaltid where altid='%s';", accession);
+	sr = sqlMustGetResult(conn, qry);
+	row = sqlNextRow(sr);
+
+	if (row != NULL)
+		{
+		seqid=strdup(row[0]);
+
+		snprintf(qry, sizeof(qry), "select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence from rikenann where seqid='%s';", seqid);
+
+		sqlFreeResult(&sr);
+		sr = sqlMustGetResult(conn, qry);
+		row = sqlNextRow(sr);
+	
+		while (row !=NULL)
+			{
+			qualifier = row[0];
+			anntext   = row[1];
+			datasrc   = row[2];
+			srckey    = row[3];
+			href      = row[4];
+			evidence  = row[5];
+		
+			printf("<B>Riken/%s link:</B> ",datasrc);
+	        	printf("<A HREF=\"%s\">", href);	
+	        	printf("%s",anntext);
+			printf("</A><BR>\n");
+
+			row = sqlNextRow(sr);		
+			}
+	
+		snprintf(qry, sizeof(qry), "select comment from rikenseq where id='%s';", seqid);
+		sqlFreeResult(&sr);
+		sr = sqlMustGetResult(conn, qry);
+		row = sqlNextRow(sr);
+
+		if (row != NULL)
+	        	{
+			comment = row[0];
+			printf("<B>Riken/comment:</B> %s<BR>\n",comment);
+			}
+		}  
+}
+
 void printRnaSpecs(char *acc)
 /* Print auxiliarry info on RNA. */
 {
@@ -983,11 +1045,7 @@ char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
      *date,*productName;
 int seqSize,fileSize;
 long fileOffset;
-char *ext_file;
-char qtemp[512];
-char *seqid, *fantomid, *cloneid, *modified_time, *accession, *comment;
-char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;   
- 		    
+char *ext_file;		    
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
  * clause, and the results in the row ... is really tedious.
@@ -1061,67 +1119,11 @@ if (row != NULL)
     if (sameWord(type, "mrna"))
         printGeneLynx(acc);
 
-  /* --- */
-
-accession = strdup(acc);
-
-//!!! uncomment the following line, if you want to test Riken annotation 
-// before the new genbank data get loaded into the mouse genome database.  
-//    Fan 3/28/02
-//accession = strdup("AK002809");
-
-sprintf(qtemp, "select seqid from rikenaltid where altid='%s';", accession);
-sqlFreeResult(&sr);
-
-sr = sqlMustGetResult(conn, qtemp);
-row = sqlNextRow(sr);
-
-if (row != NULL)
-	{	
-	//printf("<BR><P><HR ALIGN=\"CENTER\"></P>");
-	
-	seqid=strdup(row[0]);
-	
-	//printf("<H3>Riken Annotation</H3>\n");
-
-	sprintf(qtemp, "select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence from rikenann where seqid='%s';", seqid);
-
-	sqlFreeResult(&sr);
-	
-	sr = sqlMustGetResult(conn, qtemp);
-	row = sqlNextRow(sr);
-	
-	while (row !=NULL)
-		{
-		qualifier = row[0];
-		anntext   = row[1];
-		datasrc   = row[2];
-		srckey    = row[3];
-		href      = row[4];
-		evidence  = row[5];
-		
-		//printf("<B>%s</B>: \n",qualifier);
-		printf("<B>Riken/%s link:</B> ",datasrc);
-	
-	        printf("<A HREF=\"%s\">", href);	
-	        printf("%s",anntext);
-		printf("</A><BR>\n");
-
-		//printf("<B>evidence: </B>%s<BR>\n",evidence);
-		//printf("<BR>\n");
-		row = sqlNextRow(sr);		
-		}
-	
-	sprintf(qtemp, "select comment from rikenseq where id='%s';", seqid);
-	sqlFreeResult(&sr);
-	sr = sqlMustGetResult(conn, qtemp);
-	row = sqlNextRow(sr);
-
-	if (row != NULL)
-	        {
-		comment = row[0];
-		printf("<B>Riken/comment:</B> %s<BR>\n",comment);
-		}
+    if ((strstr(hgGetDb(), "mm") != NULL) 
+        && hTableExists("rikenaltid"))
+	{
+        sqlFreeResult(&sr);
+	printRikenInfo(acc, conn);
 	}
     }
 else
