@@ -2,7 +2,7 @@ track multiz5way
 shortLabel Conservation
 longLabel Rat/Human/Dog/Chicken Multiz Alignments & PhyloHMM Cons
 group compGeno
-priority 180
+priority 100
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
