@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.9 2003/06/26 00:06:48 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.10 2003/07/08 06:18:04 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -81,7 +81,7 @@ static boolean expRatioExists(struct column *col, struct sqlConnection *conn)
 {
 boolean tableOk = sqlTableExists(conn, col->table);
 boolean posTableOk = sqlTableExists(conn, col->posTable);
-boolean expTableOk = sqlTableExists(conn, col->expTable);
+boolean expTableOk = sqlTableExists(conn, col->experimentTable);
 return tableOk && posTableOk && expTableOk;
 }
 
@@ -97,7 +97,7 @@ static char *colSchemeVarName(struct column *col)
 /* Return variable name for use-blue. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "near.col.%s.color", col->name);
+safef(buf, sizeof(buf), "%s.%s.color", colConfigPrefix, col->name);
 return buf;
 }
 
@@ -105,7 +105,7 @@ static char *scaleVarName(struct column *col)
 /* Return variable name for use-blue. */
 {
 static char buf[128];
-safef(buf, sizeof(buf), "near.col.%s.scale", col->name);
+safef(buf, sizeof(buf), "%s.%s.scale", colConfigPrefix, col->name);
 return buf;
 }
 
@@ -294,7 +294,7 @@ void expRatioLabelPrint(struct column *col)
 {
 int i, numExpts = col->representativeCount;
 boolean doGreen = FALSE;
-char **experiments = getExperimentNames("hgFixed", col->expTable, numExpts,
+char **experiments = getExperimentNames("hgFixed", col->experimentTable, numExpts,
 	col->representatives);
 startExpCell();
 for (i=0; i<numExpts; ++i)
@@ -367,7 +367,7 @@ void expRatioSearchControls(struct column *col, struct sqlConnection *conn)
 {
 char lVarName[16];
 int i, numExpts = col->representativeCount;
-char **experiments = getExperimentNames("hgFixed", col->expTable, numExpts,
+char **experiments = getExperimentNames("hgFixed", col->experimentTable, numExpts,
 	col->representatives);
 
 hPrintf("Note: expression ratio values are scaled from -1 to 1");
@@ -513,7 +513,7 @@ char *expMax = hashFindVal(col->settings, "max");
 
 col->table = cloneString(nextWord(&parameters));
 col->posTable = cloneString(nextWord(&parameters));
-col->expTable = cloneString(nextWord(&parameters));
+col->experimentTable = cloneString(nextWord(&parameters));
 if (col->posTable == NULL)
     errAbort("missing parameters from type line of %s", col->name);    
 

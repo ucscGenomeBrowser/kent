@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.32 2003/06/26 05:36:48 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.33 2003/07/08 06:18:04 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -157,6 +157,22 @@ hPrintf("<TD>");
 selfAnchorId(gp);
 hPrintf("%s</A></TD>", s);
 freeMem(s);
+}
+
+struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash)
+/* Return input list with stuff not in hash removed. */
+{
+struct genePos *outList = NULL, *gp, *next;
+for (gp = inList; gp != NULL; gp = next)
+    {
+    next = gp->next;
+    if (hashLookup(hash, gp->name))
+        {
+	slAddHead(&outList, gp);
+	}
+    }
+slReverse(&outList);
+return outList;
 }
 
 static boolean alwaysExists(struct column *col, struct sqlConnection *conn)
@@ -342,22 +358,6 @@ hPrintf("minimum: ");
 advSearchRemakeTextVar(col, "min", 8);
 hPrintf(" maximum: ");
 advSearchRemakeTextVar(col, "max", 8);
-}
-
-struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash)
-/* Return input list with stuff not in hash removed. */
-{
-struct genePos *outList = NULL, *gp, *next;
-for (gp = inList; gp != NULL; gp = next)
-    {
-    next = gp->next;
-    if (hashLookup(hash, gp->name))
-        {
-	slAddHead(&outList, gp);
-	}
-    }
-slReverse(&outList);
-return outList;
 }
 
 struct genePos *distanceAdvancedSearch(struct column *col, 
@@ -809,7 +809,7 @@ struct column *col;
 
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "near.col.%s", col->name);
+    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
     val = cartOptionalString(cart, varName);
     if (val != NULL)
 	col->on = sameString(val, "on");

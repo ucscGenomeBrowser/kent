@@ -1,3 +1,6 @@
+/* advSearch - stuff to put up advanced search controls and to build
+ * gene lists based on advanced searches. */
+
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"
@@ -6,7 +9,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.8 2003/06/26 05:36:48 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.9 2003/07/08 06:18:04 kent Exp $";
 
 static boolean anyRealInCart(struct cart *cart, char *wild)
 /* Return TRUE if advanced search variables are set. */
@@ -113,6 +116,8 @@ for (onOff = 1; onOff >= 0; --onOff)
 	    passPresent[onOff] = TRUE;
     }
 
+/* Print out two tables of search controls - one for displayed
+ * columns and one for hidden ones. */
 for (onOff = 1; onOff >= 0; --onOff)
     {
     if (passPresent[onOff])
@@ -138,11 +143,12 @@ for (onOff = 1; onOff >= 0; --onOff)
 	hPrintf("</TABLE>\n");
 	}
     }
+
+/* Put submit buttons at bottom of page as well. */
 bigButtons();
 hPrintf("</FORM>\n");
 }
 
-/* Return TRUE if advanced search variables are set. */
 void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList)
 /* Clear variables in advanced search page. */
 {

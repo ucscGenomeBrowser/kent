@@ -1,4 +1,5 @@
 /* configure - Do configuration page. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.12 2003/06/25 21:47:28 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.13 2003/07/08 06:18:04 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -49,7 +50,7 @@ for (col = colList; col != NULL; col = col->next)
 
     /* Do on/off dropdown. */
     hPrintf("<TD>");
-    safef(varName, sizeof(varName), "near.col.%s", col->name);
+    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
     onOffVal = cartUsualString(cart, varName, onOffString(col->on));
     cgiMakeDropList(varName, onOffMenu, ArraySize(onOffMenu), onOffVal);
     hPrintf("</TD>");
@@ -168,9 +169,11 @@ void doDefaultConfigure(struct sqlConnection *conn, struct column *colList)
 /* Do configuration starting with defaults. */
 {
 struct column *col;
+char varPattern[64];
 for (col=colList; col != NULL; col = col->next)
     col->on = col->defaultOn;
-cartRemoveLike(cart, "near.col.*");
+safef(varPattern, sizeof(varPattern), "%s.*", colConfigPrefix);
+cartRemoveLike(cart, varPattern);
 cartRemove(cart, colOrderVar);
 doConfigure(conn, colList, NULL);
 }
@@ -182,7 +185,7 @@ char varName[64];
 struct column *col;
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "near.col.%s", col->name);
+    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
     cartSetString(cart, varName, "off");
     }
 doConfigure(conn, colList, NULL);

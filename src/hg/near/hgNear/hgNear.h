@@ -1,4 +1,5 @@
-/* hgNear.h - interfaces to plug columns into hgNear. */
+/* hgNear.h - interfaces to plug columns into hgNear.  The must important
+ * thing here is the column structure. */
 
 #ifndef HGNEAR_H
 #define HGNEAR_H
@@ -12,7 +13,7 @@
 #endif
 
 struct genePos
-/* A gene and optionally a position */
+/* A gene and optionally a position. */
     {
     struct genePos *next;
     char *name;		/* Gene ID. */
@@ -22,7 +23,7 @@ struct genePos
     };
 
 struct searchResult
-/* A result from search - includes short and long names as well
+/* A result from simple search - includes short and long names as well
  * as genePos. */
     {
     struct searchResult *next;
@@ -38,8 +39,7 @@ struct column
 /* A column in the big table. The central data structure for
  * hgNear. */
    {
-   /* Data set during initialization and afterwards held constant 
-    * that is guaranteed to be in each track.  */
+   /* Data set during initializatio that is guaranteed to be in each track.  */
    struct column *next;		/* Next column. */
    char *name;			/* Column name, not allocated here. */
    char *shortLabel;		/* Column label. */
@@ -82,11 +82,15 @@ struct column
    /* Return list of positions for advanced search. */
 
    /* -- Data that may be track-specific. -- */
+      /* Most columns that need any data at all use the next few fields. */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
    char *valField;		/* Value field in associated table. */
-   char *curGeneField;		/* curGeneId field in associated table. */
-   char *expTable;		/* Experiment table in hgFixed if any. */
+      /* The distance type columns like homology need this field too. */
+   char *curGeneField;		/* curGeneId field in associated table.  Used by distance columns*/
+      /* The expression ratio type columns use the next bunch of fields as well as
+       * the table/key/val fields above. */
+   char *experimentTable;	/* Experiment table in hgFixed if any. */
    char *posTable;		/* Positional (bed12) for expression experiments. */
    double expScale;		/* What to scale by to get expression val from -1 to 1. */
    int representativeCount;	/* Count of representative experiments. */
@@ -121,6 +125,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
+#define colConfigPrefix "near.col"      /* Prefix for stuff set in configuration pages. */
 #define advSearchPrefix "near.as"       /* Prefix for advanced search variables. */
 
 /* ---- Some html helper routines. ---- */
@@ -170,9 +175,6 @@ static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
 
-void columnDefaultMethods(struct column *col);
-/* Set up default methods. */
-
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the methods for a simple lookup column. */
 
@@ -205,6 +207,9 @@ struct genePos *getSearchNeighbors(struct column *colList,
 /* Get neighbors by search. */
 
 /* ---- Column method setters. ---- */
+
+void columnDefaultMethods(struct column *col);
+/* Set up default methods. */
 
 void setupColumnNum(struct column *col, char *parameters);
 /* Set up column that displays index in displayed list. */
