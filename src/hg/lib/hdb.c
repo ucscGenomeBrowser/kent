@@ -26,7 +26,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.148 2003/10/15 04:09:50 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.149 2003/10/21 21:21:07 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -192,6 +192,20 @@ char buf[128];
 char query[256];
 boolean res = FALSE;
 sprintf(query, "select name from dbDb where name = '%s'", database);
+res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
+hDisconnectCentral(&conn);
+return res;
+}
+
+boolean hDbIsActive(char *database)
+/* Function to check if this is a valid and active db name */
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+boolean res = FALSE;
+sprintf(query, "select name from dbDb where name = '%s' and active = 1",
+	database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
 return res;
