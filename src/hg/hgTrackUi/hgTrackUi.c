@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.92 2004/04/01 15:31:38 weber Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.93 2004/04/01 16:16:09 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -250,20 +250,6 @@ void cdsColorOptions(char *tableName, int value)
     drawOption = cartUsualString(cart, cdsColorVar, CDS_DRAW_DEFAULT);
     cdsColorDropDown(cdsColorVar, drawOption, value);
 }
-
-void cdsColorPlusOptions(char *tableName, int value)
-/*Codon coloring options with extra info.*/
-{
-    char *drawOption;
-    char cdsColorPlusVar[128];
-    printf("<p>Color track by codons:</b>");
-    safef(cdsColorPlusVar, 128, "%s.cds.draw", tableName );
-    drawOption = cartUsualString(cart, cdsColorPlusVar, CDS_DRAW_DEFAULT);
-    cdsColorPlusDropDown(cdsColorPlusVar, drawOption, value);
-}
-
-
-
 
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
@@ -799,14 +785,8 @@ else
     wordCount = chopLine(typeLine, words);
     
     if (sameWord(words[0], "genePred"))
-        {
-        /*see if last word is '+' meaning all optional fields are present*/
-        if (sameWord(words[wordCount-1], "+"))
-                cdsColorPlusOptions(tdb->tableName, 3);
-        else        
 	        cdsColorOptions(tdb->tableName, 2);
-        }
-        if (sameWord(words[0], "psl"))
+    else if (sameWord(words[0], "psl"))
                 {
                 if (wordCount == 3)
                         if(sameWord(words[1], "xeno"))
