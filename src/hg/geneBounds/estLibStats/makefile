@@ -4,7 +4,7 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = estLibStats.o ../lib/estInfo.o
+O = estLibStats.o
 
 estLibStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/estLibStats $O $(MYLIBS) $L

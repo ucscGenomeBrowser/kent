@@ -4,9 +4,9 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "jksql.h"
-#include "estInfo.h"
+#include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: estLibStats.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: estLibStats.c,v 1.5 2003/06/14 17:23:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,7 +20,7 @@ errAbort(
   );
 }
 
-int scoreEi(struct estInfo *ei, int *retStrand)
+int scoreEi(struct estOrientInfo *ei, int *retStrand)
 /* Assign a score to an ei.  retStrand if non-null
  * returns +1 or -1 depending which strand est appears
  * to be on relative to transcript. */
@@ -63,13 +63,13 @@ struct hash *hash = newHash(20);
 
 while (lineFileRow(lf, row))
     {
-    struct estInfo *ei = estInfoLoad(row), *oldEi;
+    struct estOrientInfo *ei = estOrientInfoLoad(row), *oldEi;
     oldEi = hashFindVal(hash, ei->name);
     if (oldEi != NULL)
         {
 	if (scoreEi(ei, NULL) < scoreEi(oldEi, NULL))
 	     {
-	     estInfoFree(&ei);
+	     estOrientInfoFree(&ei);
 	     continue;
 	     }
 	}
@@ -86,9 +86,9 @@ struct libInfo
     char *libName;		/* Full name of library. */
     char *author;		/* Library authors. */
     int estCount;		/* Total count of ESTs. */
-    struct estInfo *threePrime;	/* List of 3' ESTs. */
-    struct estInfo *fivePrime;      /* List of 5' ESTs. */
-    struct estInfo *unPrime;       /* List of unknown orientation ests. */
+    struct estOrientInfo *threePrime;	/* List of 3' ESTs. */
+    struct estOrientInfo *fivePrime;      /* List of 5' ESTs. */
+    struct estOrientInfo *unPrime;       /* List of unknown orientation ests. */
     };
 
 int libInfoCmp(const void *va, const void *vb)
@@ -138,7 +138,7 @@ struct libInfo *addEsts(char *database, struct hash *eiHash,
  * library they belong to. */
 {
 struct libInfo *liList = NULL, *li;
-struct estInfo *ei;
+struct estOrientInfo *ei;
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr = NULL;
 char liId[256];
@@ -185,10 +185,10 @@ slSort(&liList, libInfoCmp);
 return liList;
 }
 
-void sumStrandAndScore(struct estInfo *eiList, int *retStrand, int *retScore)
+void sumStrandAndScore(struct estOrientInfo *eiList, int *retStrand, int *retScore)
 /* Return sum of strand and score. */
 {
-struct estInfo *ei;
+struct estOrientInfo *ei;
 int strand = 0, score = 0, strand1, score1;
 for (ei = eiList; ei != NULL; ei = ei->next)
     {
@@ -206,12 +206,12 @@ void labelGroup(FILE *f, char *name)
 fprintf(f, "%s\torient\tsplice+\tsplice-\tsignal+\tsignal-\tpolyA+\tpolyA-\t", name);
 }
 
-void printGroupStats(FILE *f, struct estInfo *eiList)
+void printGroupStats(FILE *f, struct estOrientInfo *eiList)
 /* Print stats from list. */
 {
 int splicePlus=0, spliceMinus=0, signalPlus=0, signalMinus=0, polyPlus=0, polyMinus=0;
 int all = 0, orient = 0, strand;
-struct estInfo *ei;
+struct estOrientInfo *ei;
 
 for (ei=eiList; ei != NULL; ei = ei->next)
     {
@@ -240,6 +240,7 @@ fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t",
 }
 
 
+#ifdef NEEDSWORK
 void addSizeAndDates(struct estInfo *eiList, long *size, int *count, char **minDate, char **maxDate)
 /* Fold in size and date info from this est list. */
 {
@@ -254,6 +255,7 @@ for (ei = eiList; ei != NULL; ei = ei->next)
     *count += 1;
     }
 }
+#endif /* NEEDSWORK */
 
 void printLibStats(struct libInfo *liList, char *fileName)
 /* Write stats on libs to file. */
@@ -262,7 +264,11 @@ struct libInfo *li;
 FILE *f = mustOpen(fileName, "w");
 int score, strand;
 
+#ifdef NEEDSWORK
 fprintf(f, "#ests\tsize\tstartDate\tendngDate\t");
+#else
+fprintf(f, "#ests\t");
+#endif /* NEEDSWORK */
 labelGroup(f, "3'");
 labelGroup(f, "5'");
 labelGroup(f, "?");
@@ -277,12 +283,14 @@ for (li = liList; li != NULL; li = li->next)
     if (li->estCount == 0)
         continue;
     fprintf(f, "%d\t", li->estCount);
+#ifdef NEEDSWORK
     addSizeAndDates(li->threePrime, &totalSize, &count, &minDate, &maxDate);
     addSizeAndDates(li->fivePrime, &totalSize, &count, &minDate, &maxDate);
     addSizeAndDates(li->unPrime, &totalSize, &count, &minDate, &maxDate);
     if (count > 0)
         avgSize = totalSize/count;
     fprintf(f, "%d\t%s\t%s\t", avgSize, minDate, maxDate);
+#endif /* NEEDSWORK */
     printGroupStats(f, li->threePrime);
     printGroupStats(f, li->fivePrime);
     printGroupStats(f, li->unPrime);
@@ -292,6 +300,7 @@ for (li = liList; li != NULL; li = li->next)
 carefulClose(&f);
 }
 
+#ifdef NEEDSWORK
 void addSizes(char *database, struct hash *eiHash, struct hash *dateHash)
 /* Add and date info to ests in eiHash. Date strings are stored in dateHash */
 {
@@ -313,6 +322,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 }
+#endif /* NEEDSWORK */
 
 void estLibStats(char *database, char *eiInfoBed, char *output)
 /* estLibStats - Calculate some stats on EST libraries given file from polyInfo. */
@@ -327,7 +337,9 @@ authorHash = readIdHash(database, "author");
 printf("Read libs and authors\n");
 eiHash = readEstInfo(eiInfoBed);
 printf("Read %s\n", eiInfoBed);
+#ifdef NEEDSWORK
 addSizes(database, eiHash, dateHash);
+#endif /* NEEDSWORK */
 printf("Added size info\n");
 liList = addEsts(database, eiHash, libHash, authorHash, liHash);
 printf("Read in 3' and other info from %s\n", database);
