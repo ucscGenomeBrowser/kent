@@ -15,8 +15,9 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-int version = 18;       /* Current version number. */
+int version = 19;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
+boolean isPlaced;	/* TRUE if want to really follow map. */
 FILE *logFile;	/* File to write decision steps to. */
 
 char *contigName;	/* Name of contig from info file. */
@@ -472,12 +473,19 @@ double size = max(a->size, b->size);
 double dist;
 struct mmClone *outerClone = NULL, *innerClone = NULL;
 int overlap = (ignoreEnds ? ocp->sloppyOverlap : ocp->overlap);
+boolean bothFin = (a->phase == htgFinished && b->phase == htgFinished);
+boolean bothGreat = (ocpGreatEnds(as, at) && ocpGreatEnds(bs, bt));
 
 score += round(100000.0 * overlap / size);
 score += ocp->externalPriority * 10000;
 dist = maxMapDif(a, b);
 if (dist > maxMapDeviation)
-    score -= 1200000;
+    {
+    if (isPlaced && bothGreat && bothFin && dist < maxMapDeviation*4)
+        score -= 600000;
+    else
+	score -= 1200000;
+    }
 if (ignoreEnds)
     {
     score -= dist/50;
@@ -496,8 +504,13 @@ if (ocpDoubleMiss(bs, bt))
     innerClone = b;
     outerClone = a;
     }
-if (ocpGreatEnds(as, at) && ocpGreatEnds(bs, bt))
+if (bothGreat)
+    {
     score += 1000000;
+    bothGreat = TRUE;
+    if (bothFin)
+        score += 40000;
+    }
 else if (ocpGreatEnds(as, at) && ocpHalfGood(bs, bt))
     score += 500000;
 else if (ocpGreatEnds(bs, bt) && ocpHalfGood(as, at))
@@ -678,8 +691,6 @@ while ((psl = pslNext(lf)) != NULL)
 	}
     }
 lineFileClose(&lf);
-uglyf("%d of %d alignments in %s seem relevant\n",
-	goodCount, count, fileName);
 }
 
 boolean cloneHasKnownEnd(struct mmClone *clone)
@@ -2813,6 +2824,8 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
      ce = newCloneEnd(clone, NULL);
      ce->pos = clone->mapPos + clone->size;
      dlAddValTail(barge->cloneEndList, ce);
+     if (ce->pos > lastEnd)
+         lastEnd = ce->pos;
      }
 
 /* Some ends may be out of order, so sort them. */
@@ -2861,6 +2874,11 @@ status("Loaded %d clones from %s\n", slCount(cloneList), fileName);
 
 sprintf(fileName, "%s/info", contigDir);
 mmAddInfo(fileName, cloneList, cloneHash);
+if (sameWord(contigType, "PLACED"))
+    {
+    maxMapDeviation = 50000;
+    isPlaced = TRUE;
+    }
 status("Added map info from %s\n", fileName);
 
 sprintf(fileName, "%s/cloneEnds", contigDir);
@@ -2911,6 +2929,7 @@ sprintf(fileName, "%s/mmBarge", contigDir, version);
 saveBargeFile(fileName, contigName, bargeList, ocpHash, cloneHash, bepHash);
 
 sprintf(fileName, "%s/info.mm", contigDir);
+#ifdef BROKEN
 if (sameWord(contigType, "PLACED"))
     {
     char sourceFile[512];
@@ -2921,6 +2940,7 @@ if (sameWord(contigType, "PLACED"))
     saveLiteralEnds(fileName, cloneList);
     }
 else
+#endif
     {
     saveInfo(fileName, contigName, bargeList);
     }
