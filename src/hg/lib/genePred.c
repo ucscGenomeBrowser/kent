@@ -253,8 +253,6 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
 return gp;
 }
 
-#define SMALL_INS 5
-
 static void findCdsStartEndInGenome(struct psl *psl,
                                     int rnaCdsStart, int rnaCdsEnd,
                                     int *retCdsStart, int *retCdsEnd)
@@ -323,7 +321,8 @@ if ((cdsStart == -1) || (cdsEnd == -1))
 *retCdsEnd = cdsEnd;
 }
 
-static void pslToExons(struct psl *psl, struct genePred *gene)
+static void pslToExons(struct psl *psl, struct genePred *gene,
+                       int insertMergeSize)
 /* Convert psl alignment blocks to genePred exons, merging together blocks
  * separated by small inserts as necessary. */
 {
@@ -336,7 +335,7 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     unsigned tStart = psl->tStarts[iBlk];
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
-    if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > SMALL_INS))
+    if ((iExon < 0) || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
         {
         iExon++;
         gene->exonStarts[iExon] = tStart;
@@ -346,9 +345,11 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
 gene->exonCount = iExon+1;
 }
 
-struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd)
+struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
+                                 int insertMergeSize)
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
- * specification string to genomic coordinates.  */
+ * specification string to genomic coordinates. Small inserts, no more
+ * than insertMergeSize, will be dropped and the blocks merged. */
 {
 struct genePred *gene;
 AllocVar(gene);
@@ -360,7 +361,7 @@ gene->txEnd = psl->tEnd;
 
 findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
                         &gene->cdsStart, &gene->cdsEnd);
-pslToExons(psl, gene);
+pslToExons(psl, gene, insertMergeSize);
 return gene;
 }
 

@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "mrnaToGene - convert PSL alignments of mRNAs to gene annotations\n"
   "usage:\n"
-  "   mrnaToGene -requireUtr database pslTable genePredFile\n"
+  "   mrnaToGene [options] database pslTable genePredFile\n"
   "\n"
   "Convert the PSL alignments with CDS annotation from genbank to gene\n"
   "annotation in genePred format.  Accessions without CDS or with incomplete\n"
@@ -180,7 +180,7 @@ gPslWithCdsCnt++;
 gCdsStatCnt[stat]++;
 if (stat != CDS_OK)
     return NULL;
-return genePredFromPsl(psl, cdsStart, cdsEnd);
+return genePredFromPsl(psl, cdsStart, cdsEnd, 5);
 }
 
 void convertPslRow(char **row, boolean requireUtr, FILE *genePredFh)

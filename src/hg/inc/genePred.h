@@ -65,9 +65,11 @@ struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *gr
 /* Convert gff->groupList to genePred list.   Only put lines where feature type  matches
  * exonSelectWord into the gene.  (If exonSelectWord is NULL, all go in) */
 
-struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd);
+struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
+                                 int insertMergeSize);
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
- * specification string to genomic coordinates.  */
+ * specification string to genomic coordinates. Small inserts, no more
+ * than insertMergeSize, will be dropped and the blocks merged. */
 
 #endif /* GENEPRED_H */
 
