@@ -118,7 +118,7 @@ return count;
 void aliStringToPsl(struct lineFile *lf, char *qName, char *tName, 
 	char *qString, char *tString, 
 	int qSize, int tSize, int aliSize, 
-	int qStart, int tStart, char strand, FILE *f)
+	int qStart, int qEnd, int tStart, int tEnd, char strand, FILE *f)
 /* Output alignment in a pair of strings with insert chars
  * to a psl line in a file. */
 {
@@ -161,8 +161,12 @@ int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
     if (endInsert > 0)
         {
 	aliSize -= endInsert;
+	qNonCount = countNonInsert(qString+aliSize, endInsert);
+	tNonCount = countNonInsert(tString+aliSize, endInsert);
 	qString[aliSize] = 0;
 	tString[aliSize] = 0;
+        qEnd -= qNonCount;
+        tEnd -= tNonCount;
 	}
     }
 
@@ -188,11 +192,16 @@ for (i=0; i<aliSize; ++i)
 
 /* Deal with minus strand. */
 qs = qStart;
-qe = qs - qBaseInsert + match + misMatch;
+qe = qStart + match + misMatch + tBaseInsert;
+assert(qe == qEnd); 
 if (strand == '-')
     {
     reverseIntRange(&qs, &qe, qSize);
     }
+assert(qs < qe);
+te = tStart + match + misMatch + qBaseInsert;
+assert(te == tEnd);
+assert(tStart < te);
 
 /* Output header */
 fprintf(f, "%d\t", match);
@@ -211,7 +220,7 @@ fprintf(f, "%d\t", qe);
 fprintf(f, "%s\t", tName);
 fprintf(f, "%d\t", tSize);
 fprintf(f, "%d\t", tStart);
-fprintf(f, "%d\t", tStart - tBaseInsert + match + misMatch);
+fprintf(f, "%d\t", te);
 fprintf(f, "%d\t", blockCount);
 if (ferror(f))
     {
@@ -314,7 +323,8 @@ while ((axt = axtRead(lf)) != NULL)
     {
     aliStringToPsl(lf, axt->qName, axt->tName, axt->qSym, axt->tSym,
     	findSize(qSizeHash, axt->qName),  findSize(tSizeHash, axt->tName),
-	axt->symCount, axt->qStart, axt->tStart, axt->qStrand, f);
+	axt->symCount, axt->qStart, axt->qEnd, axt->tStart, axt->tEnd,
+        axt->qStrand, f);
     axtFree(&axt);
     }
 lineFileClose(&lf);
