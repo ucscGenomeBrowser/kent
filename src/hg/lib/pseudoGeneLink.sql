@@ -11,7 +11,13 @@ CREATE TABLE pseudoGeneLink (
     chromEnd int unsigned not null,	# pseudogene alignment end position
     name varchar(255) not null,	# Name of pseudogene
     score int unsigned not null,	# score of pseudogene with gene
-    strand varchar(255) not null,	# strand of pseudoegene
+    strand varchar(255) not null,	# + or -
+    thickStart int unsigned not null,	# Start of where display should be thick (start codon)
+    thickEnd int unsigned not null,	# End of where display should be thick (stop codon)
+    reserved int unsigned not null,	# Always zero for now
+    blockCount int not null,	# Number of blocks
+    blockSizes longblob not null,	# Comma separated list of block sizes
+    chromStarts longblob not null,	# Start positions relative to chromStart
     assembly varchar(255) not null,	# assembly for gene
     geneTable varchar(255) not null,	# mysql table of gene
     gene varchar(255) not null,	# Name of gene

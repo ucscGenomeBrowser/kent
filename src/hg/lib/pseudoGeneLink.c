@@ -8,57 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.11 2004/03/25 20:39:47 baertsch Exp $";
-
-void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
-/* Load a row from pseudoGeneLink table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-int sizeOne,i;
-char *s;
-
-ret->chrom = row[0];
-ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
-ret->name = row[3];
-ret->score = sqlUnsigned(row[4]);
-ret->strand = row[5];
-ret->assembly = row[6];
-ret->geneTable = row[7];
-ret->gene = row[8];
-ret->gChrom = row[9];
-ret->gStart = sqlUnsigned(row[10]);
-ret->gEnd = sqlUnsigned(row[11]);
-ret->gStrand = row[12];
-ret->exonCount = sqlUnsigned(row[13]);
-ret->geneOverlap = sqlUnsigned(row[14]);
-ret->polyA = sqlUnsigned(row[15]);
-ret->polyAstart = sqlSigned(row[16]);
-ret->exonCover = sqlUnsigned(row[17]);
-ret->intronCount = sqlUnsigned(row[18]);
-ret->bestAliCount = sqlUnsigned(row[19]);
-ret->matches = sqlUnsigned(row[20]);
-ret->qSize = sqlUnsigned(row[21]);
-ret->qEnd = sqlUnsigned(row[22]);
-ret->tReps = sqlUnsigned(row[23]);
-ret->qReps = sqlUnsigned(row[24]);
-ret->overlapDiag = sqlUnsigned(row[25]);
-ret->coverage = sqlUnsigned(row[26]);
-ret->label = sqlUnsigned(row[27]);
-ret->milliBad = sqlUnsigned(row[28]);
-ret->chainId = sqlUnsigned(row[29]);
-ret->axtScore = sqlSigned(row[30]);
-ret->refSeq = row[31];
-ret->rStart = sqlSigned(row[32]);
-ret->rEnd = sqlSigned(row[33]);
-ret->mgc = row[34];
-ret->mStart = sqlSigned(row[35]);
-ret->mEnd = sqlSigned(row[36]);
-ret->kgName = row[37];
-ret->kStart = sqlSigned(row[38]);
-ret->kEnd = sqlSigned(row[39]);
-ret->kgId = sqlSigned(row[40]);
-}
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.12 2004/04/04 04:20:29 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -69,47 +19,55 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
+ret->blockCount = sqlSigned(row[9]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 ret->strand = cloneString(row[5]);
-ret->assembly = cloneString(row[6]);
-ret->geneTable = cloneString(row[7]);
-ret->gene = cloneString(row[8]);
-ret->gChrom = cloneString(row[9]);
-ret->gStart = sqlUnsigned(row[10]);
-ret->gEnd = sqlUnsigned(row[11]);
-ret->gStrand = cloneString(row[12]);
-ret->exonCount = sqlUnsigned(row[13]);
-ret->geneOverlap = sqlUnsigned(row[14]);
-ret->polyA = sqlUnsigned(row[15]);
-ret->polyAstart = sqlSigned(row[16]);
-ret->exonCover = sqlUnsigned(row[17]);
-ret->intronCount = sqlUnsigned(row[18]);
-ret->bestAliCount = sqlUnsigned(row[19]);
-ret->matches = sqlUnsigned(row[20]);
-ret->qSize = sqlUnsigned(row[21]);
-ret->qEnd = sqlUnsigned(row[22]);
-ret->tReps = sqlUnsigned(row[23]);
-ret->qReps = sqlUnsigned(row[24]);
-ret->overlapDiag = sqlUnsigned(row[25]);
-ret->coverage = sqlUnsigned(row[26]);
-ret->label = sqlUnsigned(row[27]);
-ret->milliBad = sqlUnsigned(row[28]);
-ret->chainId = sqlUnsigned(row[29]);
-ret->axtScore = sqlSigned(row[30]);
-ret->refSeq = cloneString(row[31]);
-ret->rStart = sqlSigned(row[32]);
-ret->rEnd = sqlSigned(row[33]);
-ret->mgc = cloneString(row[34]);
-ret->mStart = sqlSigned(row[35]);
-ret->mEnd = sqlSigned(row[36]);
-ret->kgName = cloneString(row[37]);
-ret->kStart = sqlSigned(row[38]);
-ret->kEnd = sqlSigned(row[39]);
-ret->kgId = sqlSigned(row[40]);
+ret->thickStart = sqlUnsigned(row[6]);
+ret->thickEnd = sqlUnsigned(row[7]);
+ret->reserved = sqlUnsigned(row[8]);
+sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+ret->assembly = cloneString(row[12]);
+ret->geneTable = cloneString(row[13]);
+ret->gene = cloneString(row[14]);
+ret->gChrom = cloneString(row[15]);
+ret->gStart = sqlUnsigned(row[16]);
+ret->gEnd = sqlUnsigned(row[17]);
+ret->gStrand = cloneString(row[18]);
+ret->exonCount = sqlUnsigned(row[19]);
+ret->geneOverlap = sqlUnsigned(row[20]);
+ret->polyA = sqlUnsigned(row[21]);
+ret->polyAstart = sqlSigned(row[22]);
+ret->exonCover = sqlUnsigned(row[23]);
+ret->intronCount = sqlUnsigned(row[24]);
+ret->bestAliCount = sqlUnsigned(row[25]);
+ret->matches = sqlUnsigned(row[26]);
+ret->qSize = sqlUnsigned(row[27]);
+ret->qEnd = sqlUnsigned(row[28]);
+ret->tReps = sqlUnsigned(row[29]);
+ret->qReps = sqlUnsigned(row[30]);
+ret->overlapDiag = sqlUnsigned(row[31]);
+ret->coverage = sqlUnsigned(row[32]);
+ret->label = sqlUnsigned(row[33]);
+ret->milliBad = sqlUnsigned(row[34]);
+ret->chainId = sqlUnsigned(row[35]);
+ret->axtScore = sqlSigned(row[36]);
+ret->refSeq = cloneString(row[37]);
+ret->rStart = sqlSigned(row[38]);
+ret->rEnd = sqlSigned(row[39]);
+ret->mgc = cloneString(row[40]);
+ret->mStart = sqlSigned(row[41]);
+ret->mEnd = sqlSigned(row[42]);
+ret->kgName = cloneString(row[43]);
+ret->kStart = sqlSigned(row[44]);
+ret->kEnd = sqlSigned(row[45]);
+ret->kgId = sqlSigned(row[46]);
 return ret;
 }
 
@@ -119,7 +77,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[41];
+char *row[47];
 
 while (lineFileRow(lf, row))
     {
@@ -137,7 +95,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[41];
+char *row[47];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -165,6 +123,26 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 ret->strand = sqlStringComma(&s);
+ret->thickStart = sqlUnsignedComma(&s);
+ret->thickEnd = sqlUnsignedComma(&s);
+ret->reserved = sqlUnsignedComma(&s);
+ret->blockCount = sqlSignedComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->blockSizes, ret->blockCount);
+for (i=0; i<ret->blockCount; ++i)
+    {
+    ret->blockSizes[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->chromStarts, ret->blockCount);
+for (i=0; i<ret->blockCount; ++i)
+    {
+    ret->chromStarts[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
 ret->assembly = sqlStringComma(&s);
 ret->geneTable = sqlStringComma(&s);
 ret->gene = sqlStringComma(&s);
@@ -214,6 +192,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->strand);
+freeMem(el->blockSizes);
+freeMem(el->chromStarts);
 freeMem(el->assembly);
 freeMem(el->geneTable);
 freeMem(el->gene);
@@ -259,6 +239,30 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->thickStart);
+fputc(sep,f);
+fprintf(f, "%u", el->thickEnd);
+fputc(sep,f);
+fprintf(f, "%u", el->reserved);
+fputc(sep,f);
+fprintf(f, "%d", el->blockCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->blockSizes[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->chromStarts[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->assembly);
