@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.77 2004/09/29 02:25:42 markd Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.78 2004/09/29 05:54:23 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -213,7 +213,7 @@ batch->priority = NORMAL_PRIORITY;
 return batch;
 }
 
-struct batch *findBatch(struct user *user, char *name)
+struct batch *findBatch(struct user *user, char *name, boolean holding)
 /* Find batch of jobs.  If no such batch yet make it. */
 {
 struct batch *batch;
@@ -226,7 +226,11 @@ if (batch == NULL)
 	dlRemove(batch->node);
     else
 	batch = newBatch(name, user);
-    dlAddTail(user->curBatches, batch->node);
+    if (holding && dlEmpty(batch->jobQueue)) 
+        /* setPriority must not release batch if jobs not yet pushed */
+    	dlAddTail(user->oldBatches, batch->node);
+    else
+	dlAddTail(user->curBatches, batch->node);
     updateUserPriority(user);
     }
 return batch;
@@ -609,7 +613,7 @@ struct job *jobNew(char *cmd, char *userName, char *dir, char *in, char *out,
 {
 struct job *job;
 struct user *user = findUser(userName);
-struct batch *batch = findBatch(user, results);
+struct batch *batch = findBatch(user, results, FALSE);
 
 AllocVar(job);
 AllocVar(job->node);
@@ -1106,7 +1110,7 @@ int setPriority(char *userName, char *dir, int priority)
 /* Set new priority for batch */
 {
 struct user *user = findUser(userName);
-struct batch *batch = findBatch(user, dir);
+struct batch *batch = findBatch(user, dir, TRUE);
 if (user == NULL) return 0;
 if (batch == NULL) return 0;
 batch->priority = priority;
