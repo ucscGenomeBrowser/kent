@@ -12,13 +12,27 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.17 2004/08/04 16:24:30 angie Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.18 2004/12/02 01:07:38 angie Exp $";
 
+/* Command line switches. */
 char *tNewR = NULL;
 char *qNewR = NULL;
 boolean noAr = FALSE;
 struct hash *liftHashT = NULL;
 struct hash *liftHashQ = NULL;
+
+/* Localmem obj shared by cached query rbTrees. */
+struct lm *qLm = NULL;
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"tNewR", OPTION_STRING},
+    {"qNewR", OPTION_STRING},
+    {"noAr", OPTION_BOOLEAN},
+    {"liftT", OPTION_STRING},
+    {"liftQ", OPTION_STRING},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -58,6 +72,8 @@ struct range
     int start, end;	/* Half open zero based coordinates. */
     };
 
+#define overlap(r1, r2) ((r1)->start <= (r2)->end && (r2)->start <= (r1)->end)
+
 int rangeCmp(void *va, void *vb)
 /* Return -1 if a before b,  0 if a and b overlap,
  * and 1 if a after b. */
@@ -87,6 +103,8 @@ interSize += size;
 int intersectionSize(struct rbTree *tree, int start, int end)
 /* Return total size of things intersecting range start-end. */
 {
+if (tree == NULL)
+    return 0;
 interRange.start = start;
 interRange.end = end;
 interSize = 0;
@@ -94,10 +112,61 @@ rbTreeTraverseRange(tree, &interRange, &interRange, addInterSize);
 return interSize;
 }
 
-struct rbTree *getSeqGaps(char *db, char *chrom)
+void setNGap(char *chr, struct hash *chromHash, struct rbTree *tree)
+/* Set the appropriate chrom->nGaps to tree -- make sure it's NULL first. */
+{
+struct chrom *chrom = hashMustFindVal(chromHash, chr);
+if (chrom->nGaps != NULL)
+    errAbort("getSeqGapsUnsplit: query results must be orderd by chrom, but "
+	     "looks like they weren't for %s", chr);
+chrom->nGaps = tree;
+}
+
+void getSeqGapsUnsplit(struct sqlConnection *conn, struct hash *chromHash)
+/* Return a tree of ranges for sequence gaps in all chromosomes, 
+ * assuming an unsplit gap table -- when the table is unsplit, it's 
+ * probably for a scaffold assembly where we *really* don't want 
+ * to do one query per scaffold! */
+{
+struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+struct rbTree *tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+int rowOffset = hOffsetPastBin(NULL, "gap");
+struct sqlResult *sr;
+char **row;
+char *prevChrom = NULL;
+
+sr = sqlGetResult(conn, "select * from gap order by chrom");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct agpGap gap;
+    struct range *range;
+    agpGapStaticLoad(row+rowOffset, &gap);
+    if (prevChrom == NULL)
+	prevChrom = cloneString(gap.chrom);
+    else if (! sameString(prevChrom, gap.chrom))
+	{
+	setNGap(prevChrom, chromHash, tree);
+	freeMem(prevChrom);
+	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+	tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	prevChrom = cloneString(gap.chrom);
+	}
+    lmAllocVar(tree->lm, range);
+    range->start = gap.chromStart;
+    range->end = gap.chromEnd;
+    rbTreeAdd(tree, range);
+    }
+if (prevChrom != NULL)
+    {
+    setNGap(prevChrom, chromHash, tree);
+    freeMem(prevChrom);
+    }
+sqlFreeResult(&sr);
+}
+
+struct rbTree *getSeqGaps(struct sqlConnection *conn, char *chrom)
 /* Return a tree of ranges for sequence gaps in chromosome */
 {
-struct sqlConnection *conn = sqlConnect(db);
 struct rbTree *tree = rbTreeNew(rangeCmp);
 int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
@@ -114,16 +183,79 @@ while ((row = sqlNextRow(sr)) != NULL)
     rbTreeAdd(tree, range);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
 return tree;
 }
 
-struct rbTree *getTrf(char *db, char *chrom)
+void setTrf(char *chr, struct hash *chromHash, struct rbTree *tree)
+/* Set the appropriate chrom->trf to tree -- make sure it's NULL first. */
+{
+struct chrom *chrom = hashMustFindVal(chromHash, chr);
+if (chrom->trf != NULL)
+    errAbort("getTrfUnsplit: query results must be orderd by chrom, but "
+	     "looks like they weren't for %s", chr);
+chrom->trf = tree;
+}
+
+void getTrfUnsplit(struct sqlConnection *conn, struct hash *chromHash)
+/* Return a tree of ranges for simple repeats in all chromosomes, 
+ * from a single query on the whole (unsplit) simpleRepeat table. */
+{
+struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+struct rbTree *tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+struct range *range, *prevRange = NULL;
+struct sqlResult *sr;
+char **row;
+char *prevChrom = NULL;
+
+sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd from simpleRepeat"
+		  " order by chrom,chromStart");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (prevChrom == NULL)
+	prevChrom = cloneString(row[0]);
+    else if (! sameString(prevChrom, row[0]))
+	{
+	rbTreeAdd(tree, prevRange);
+	setTrf(prevChrom, chromHash, tree);
+	prevRange = NULL;
+	freeMem(prevChrom);
+	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+	tree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	prevChrom = cloneString(row[0]);
+	}
+    lmAllocVar(tree->lm, range);
+    range->start = sqlUnsigned(row[1]);
+    range->end = sqlUnsigned(row[2]);
+    if (prevRange == NULL)
+	prevRange = range;
+    else if (overlap(range, prevRange))
+	{
+	/* merge r into prevR & discard; prevR gets passed forward. */
+	if (range->end > prevRange->end)
+	    prevRange->end = range->end;
+	if (range->start < prevRange->start)
+	    prevRange->start = range->start;
+	}
+    else
+	{
+	rbTreeAdd(tree, prevRange);
+	prevRange = range;
+	}
+    }
+if (prevChrom != NULL)
+    {
+    rbTreeAdd(tree, prevRange);
+    setTrf(prevChrom, chromHash, tree);
+    freeMem(prevChrom);
+    }
+sqlFreeResult(&sr);
+}
+
+struct rbTree *getTrf(struct sqlConnection *conn, char *chrom)
 /* Return a tree of ranges for simple repeats in chromosome. */
 {
 struct rbTree *tree = rbTreeNew(rangeCmp);
-struct range *range;
-struct sqlConnection *conn = sqlConnect(db);
+struct range *range, *prevRange = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -137,18 +269,139 @@ while ((row = sqlNextRow(sr)) != NULL)
     lmAllocVar(tree->lm, range);
     range->start = sqlUnsigned(row[0]);
     range->end = sqlUnsigned(row[1]);
-    rbTreeAdd(tree, range);
+    if (prevRange == NULL)
+	prevRange = range;
+    else if (overlap(range, prevRange))
+	{
+	/* merge r into prevR & discard; prevR gets passed forward. */
+	if (range->end > prevRange->end)
+	    prevRange->end = range->end;
+	if (range->start < prevRange->start)
+	    prevRange->start = range->start;
+	}
+    else
+	{
+	rbTreeAdd(tree, prevRange);
+	prevRange = range;
+	}
     }
+if (prevRange != NULL)
+    rbTreeAdd(tree, prevRange);
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
 return tree;
 }
 
-void getRepeats(char *db, struct hash *arHash, char *chrom,
+void setRepeats(char *chr, struct hash *chromHash, struct rbTree *allTree,
+		struct rbTree *newTree)
+/* Set the appropriate chrom->repeats to tree -- make sure it's NULL first. */
+{
+struct chrom *chrom = hashMustFindVal(chromHash, chr);
+if (chrom->repeats != NULL)
+    errAbort("getRepeatsUnsplit: query results must be orderd by genoName "
+	     "(chrom), but looks like they weren't for %s", chr);
+chrom->repeats = allTree;
+chrom->newRepeats = newTree;
+}
+
+void getRepeatsUnsplit(struct sqlConnection *conn, struct hash *chromHash,
+		       struct hash *arHash)
+/* Return a tree of ranges for sequence gaps all chromosomes, 
+ * assuming an unsplit table -- when the table is unsplit, it's 
+ * probably for a scaffold assembly where we *really* don't want 
+ * to do one query per scaffold! */
+{
+struct sqlResult *sr;
+char **row;
+struct rbTreeNode **stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+struct rbTree *allTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+struct rbTreeNode **newstack = lmAlloc(qLm, 256 * sizeof(newstack[0]));
+struct rbTree *newTree = rbTreeNewDetailed(rangeCmp, qLm, newstack);
+char *prevChrom = NULL;
+struct range *prevRange = NULL, *prevNewRange = NULL;
+
+sr = sqlGetResult(conn,
+    "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk"
+    " order by genoName,genoStart");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct range *range;
+    char arKey[512];
+    if (prevChrom == NULL)
+	prevChrom = cloneString(row[0]);
+    else if (! sameString(prevChrom, row[0]))
+	{
+	rbTreeAdd(allTree, prevRange);
+	if (prevNewRange != NULL)
+	    rbTreeAdd(newTree, prevNewRange);
+	setRepeats(prevChrom, chromHash, allTree, newTree);
+	freeMem(prevChrom);
+	prevRange = prevNewRange = NULL;
+	stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+	allTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	if (arHash != NULL)
+	    {
+	    stack = lmAlloc(qLm, 256 * sizeof(stack[0]));
+	    newTree = rbTreeNewDetailed(rangeCmp, qLm, stack);
+	    }
+	prevChrom = cloneString(row[0]);
+	}
+    lmAllocVar(allTree->lm, range);
+    range->start = sqlUnsigned(row[1]);
+    range->end = sqlUnsigned(row[2]);
+    if (prevRange == NULL)
+	prevRange = range;
+    else if (overlap(range, prevRange))
+	{
+	/* merge r into prevR & discard; prevR gets passed forward. */
+	if (range->end > prevRange->end)
+	    prevRange->end = range->end;
+	if (range->start < prevRange->start)
+	    prevRange->start = range->start;
+	}
+    else
+	{
+	rbTreeAdd(allTree, prevRange);
+	prevRange = range;
+	}
+    sprintf(arKey, "%s.%s.%s", row[3], row[4], row[5]);
+    if (arHash != NULL && hashLookup(arHash, arKey))
+        {
+	lmAllocVar(newTree->lm, range);
+	range->start = sqlUnsigned(row[1]);
+	range->end = sqlUnsigned(row[2]);
+	if (prevNewRange == NULL)
+	    prevNewRange = range;
+	else if (overlap(range, prevNewRange))
+	    {
+	    /* merge r into prevR & discard; prevR gets passed forward. */
+	    if (range->end > prevNewRange->end)
+		prevNewRange->end = range->end;
+	    if (range->start < prevNewRange->start)
+		prevNewRange->start = range->start;
+	    }
+	else
+	    {
+	    rbTreeAdd(newTree, prevNewRange);
+	    prevNewRange = range;
+	    }
+	}
+    }
+if (prevChrom != NULL)
+    {
+    rbTreeAdd(allTree, prevRange);
+    if (prevNewRange != NULL)
+	rbTreeAdd(newTree, prevNewRange);
+    setRepeats(prevChrom, chromHash, allTree, newTree);
+    freeMem(prevChrom);
+    }
+sqlFreeResult(&sr);
+}
+
+void getRepeats(struct sqlConnection *conn, struct hash *arHash, char *chrom,
 	struct rbTree **retAllRepeats,  struct rbTree **retNewRepeats)
 /* Return a tree of ranges for sequence gaps in chromosome */
 {
-struct sqlConnection *conn = sqlConnect(db);
+char *db = sqlGetDatabase(conn);
 struct sqlResult *sr;
 char **row;
 struct rbTree *allTree = rbTreeNew(rangeCmp);
@@ -156,6 +409,7 @@ struct rbTree *newTree = rbTreeNew(rangeCmp);
 char tableName[64];
 char query[256];
 boolean splitRmsk = TRUE;
+struct range *prevRange = NULL, *prevNewRange = NULL;
 
 safef(tableName, sizeof(tableName), "%s_rmsk", chrom);
 if (! sqlTableExists(conn, tableName))
@@ -183,18 +437,49 @@ while ((row = sqlNextRow(sr)) != NULL)
     lmAllocVar(allTree->lm, range);
     range->start = sqlUnsigned(row[0]);
     range->end = sqlUnsigned(row[1]);
-    rbTreeAdd(allTree, range);
+    if (prevRange == NULL)
+	prevRange = range;
+    else if (overlap(range, prevRange))
+	{
+	/* merge r into prevR & discard; prevR gets passed forward. */
+	if (range->end > prevRange->end)
+	    prevRange->end = range->end;
+	if (range->start < prevRange->start)
+	    prevRange->start = range->start;
+	}
+    else
+	{
+	rbTreeAdd(allTree, prevRange);
+	prevRange = range;
+	}
     sprintf(arKey, "%s.%s.%s", row[2], row[3], row[4]);
     if (arHash != NULL && hashLookup(arHash, arKey))
         {
 	lmAllocVar(newTree->lm, range);
 	range->start = sqlUnsigned(row[0]);
 	range->end = sqlUnsigned(row[1]);
-	rbTreeAdd(newTree, range);
+	if (prevNewRange == NULL)
+	    prevNewRange = range;
+	else if (overlap(range, prevNewRange))
+	    {
+	    /* merge r into prevR & discard; prevR gets passed forward. */
+	    if (range->end > prevNewRange->end)
+		prevNewRange->end = range->end;
+	    if (range->start < prevNewRange->start)
+		prevNewRange->start = range->start;
+	    }
+	else
+	    {
+	    rbTreeAdd(allTree, prevNewRange);
+	    prevNewRange = range;
+	    }
 	}
     }
+if (prevRange != NULL)
+    rbTreeAdd(allTree, prevRange);
+if (prevNewRange != NULL)
+    rbTreeAdd(newTree, prevNewRange);
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
 *retAllRepeats = allTree;
 *retNewRepeats = newTree;
 }
@@ -230,32 +515,23 @@ lineFileClose(&lf);
 return tree;
 }
 
-boolean tableExists(char *db, char *table)
-/* Return TRUE if table exists in database. */
-{
-struct sqlConnection *conn = sqlConnect(db);
-boolean exists = sqlTableExists(conn, table);
-sqlDisconnect(&conn);
-return exists;
-}
-
-struct hash *getAncientRepeats(char *tDb, char *qDb)
+struct hash *getAncientRepeats(struct sqlConnection *tConn,
+			       struct sqlConnection *qConn)
 /* Get hash of ancient repeats.  This keyed by name.family.class. */
 {
-char *db = NULL;
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr;
 char **row;
 char key[512];
 struct hash *hash = newHash(10);
 
-if (tableExists(tDb, "ancientRepeat"))
-    db = tDb;
-else if (tableExists(qDb, "ancientRepeat"))
-    db = qDb;
+if (sqlTableExists(tConn, "ancientRepeat"))
+    conn = tConn;
+else if (sqlTableExists(qConn, "ancientRepeat"))
+    conn = qConn;
 else
-    errAbort("Can't find ancientRepeat table in %s or %s", tDb, qDb);
-conn = sqlConnect(db);
+    errAbort("Can't find ancientRepeat table in %s or %s",
+	     sqlGetDatabase(tConn), sqlGetDatabase(qConn));
 sr = sqlGetResult(conn, "select name,family,class from ancientRepeat");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -263,14 +539,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, key, NULL);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
 return hash;
 }
 
-void getChroms(char *db, struct hash **retHash, struct chrom **retList)
+void getChroms(struct sqlConnection *conn, struct hash **retHash,
+	       struct chrom **retList)
 /* Get hash of chromosomes from database. */
 {
-struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 struct chrom *chromList = NULL, *chrom;
@@ -285,7 +560,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&chromList, chrom);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
 slReverse(&chromList);
 *retHash = hash;
 *retList = chromList;
@@ -464,31 +738,46 @@ FILE *f = mustOpen(outName, "w");
 struct chrom *qChromList, *chrom;
 struct hash *qChromHash;
 struct hash *arHash = NULL;
+struct sqlConnection *tConn = sqlConnect(tDb);
+struct sqlConnection *qConn = sqlConnect(qDb);
+
+qLm = lmInit(0);
 
 if (!noAr)
-    arHash = getAncientRepeats(tDb, qDb);
+    arHash = getAncientRepeats(tConn, qConn);
 
-getChroms(qDb, &qChromHash, &qChromList);
+getChroms(qConn, &qChromHash, &qChromList);
 
-
-printf("Reading gaps in %s\n", qDb);
-for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
-    chrom->nGaps = getSeqGaps(qDb, chrom->name);
+verbose(1, "Reading gaps in %s\n", qDb);
+if (sqlTableExists(qConn, "gap"))
+    {
+    getSeqGapsUnsplit(qConn, qChromHash);
+    }
+else
+    {
+    for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
+	chrom->nGaps = getSeqGaps(qConn, chrom->name);
+    }
 
 if (qNewR)
     {
-    printf("Reading new repeats from %s\n", qNewR);
+    verbose(1, "Reading new repeats from %s\n", qNewR);
     for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
         chrom->newRepeats = getNewRepeats(qNewR, chrom->name);
     }
 
-printf("Reading simpleRepeats in %s\n", qDb);
-for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
-    chrom->trf = getTrf(qDb, chrom->name);
+verbose(1, "Reading simpleRepeats in %s\n", qDb);
+getTrfUnsplit(qConn, qChromHash);
 
-printf("Reading repeats in %s\n", qDb);
-for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
-    getRepeats(qDb, arHash, chrom->name, &chrom->repeats, &chrom->oldRepeats);
+verbose(1, "Reading repeats in %s\n", qDb);
+if (sqlTableExists(qConn, "rmsk"))
+    getRepeatsUnsplit(qConn, qChromHash, arHash);
+else
+    {
+    for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
+	getRepeats(qConn, arHash, chrom->name, &chrom->repeats,
+		   &chrom->oldRepeats);
+    }
 
 while ((net = chainNetRead(lf)) != NULL)
     {
@@ -500,13 +789,13 @@ while ((net = chainNetRead(lf)) != NULL)
 	tName = lft->newName;
 	}
 
-    printf("Processing %s.%s\n", tDb, net->name);
-    tN = getSeqGaps(tDb, tName);
+    verbose(1, "Processing %s.%s\n", tDb, net->name);
+    tN = getSeqGaps(tConn, tName);
     tAddN(net, net->fillList, tN);
     rbTreeFree(&tN);
     qAddN(net, net->fillList, qChromHash);
 
-    getRepeats(tDb, arHash, tName, &tRepeats, &tOldRepeats);
+    getRepeats(tConn, arHash, tName, &tRepeats, &tOldRepeats);
     tAddR(net, net->fillList, tRepeats);
     if (!noAr)
 	tAddOldR(net, net->fillList, tOldRepeats);
@@ -516,7 +805,7 @@ while ((net = chainNetRead(lf)) != NULL)
     if (!noAr)
 	qAddOldR(net, net->fillList, qChromHash);
 
-    tTrf = getTrf(tDb, tName);
+    tTrf = getTrf(tConn, tName);
     tAddTrf(net, net->fillList, tTrf);
     rbTreeFree(&tTrf);
     qAddTrf(net, net->fillList, qChromHash);
@@ -532,13 +821,16 @@ while ((net = chainNetRead(lf)) != NULL)
     chainNetWrite(net, f);
     chainNetFree(&net);
     }
+sqlDisconnect(&tConn);
+sqlDisconnect(&qConn);
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *liftFileQ = NULL, *liftFileT = NULL;
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 5)
     usage();
 tNewR = optionVal("tNewR", tNewR);
