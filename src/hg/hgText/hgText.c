@@ -1128,7 +1128,7 @@ if ((constraints != NULL) && (constraints[0] != 0))
     {
     // Null query will cause errAbort if there's a syntax error, no-op if OK.
     dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
-		   getTableName(), constraints);
+		   fullTableName, constraints);
     if (sameString(database, getTableDb()))
 	conn = hAllocConn();
     else
