@@ -1,5 +1,5 @@
 #OPT= -ggdb 
-OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
+OPT = -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
 #OPT= -ggdb -pg
 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
@@ -20,7 +20,7 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = spliceGraph.o exonGraph.o heap.o 
+O = spliceGraph.o exonGraph.o heap.o altSpliceSite.o
 
 TESTS = heapTest
 
