@@ -10,6 +10,10 @@
 #include "dystring.h"
 #endif 
 
+#ifndef HASH_H
+#include "hash.h"
+#endif 
+
 struct cgiVar
 /* Info on one cgi variable. */
     {
