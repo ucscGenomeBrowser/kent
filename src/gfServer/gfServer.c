@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.43 2004/06/10 05:37:08 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.44 2004/08/03 22:20:33 galt Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -458,12 +458,20 @@ int fromLen, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
 char *logFileName = cgiOptionalString("log");
 int port = atoi(portName);
+time_t curtime;
+struct tm *loctime;
+char timestr[256];
 
 netBlockBrokenPipes();
 if (logFileName != NULL)
     logFile = mustOpen(logFileName, "a");
-logIt("gfServer version %d on host %s, port %s\n", gfVersion, 
-	hostName, portName);
+
+curtime = time (NULL);           /* Get the current time. */
+loctime = localtime (&curtime);  /* Convert it to local time representation. */
+strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* formate datetime as string */
+								
+logIt("gfServer version %d on host %s, port %s  (%s) \n", gfVersion, 
+	hostName, portName, timestr);
 if (doTrans)
     {
     uglyf("starting translated server...\n");
