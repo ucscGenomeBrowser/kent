@@ -9,7 +9,7 @@ CREATE TABLE stsMarker (
     chromStart int not null,	# Start position in chrom - negative 1 if unpositioned
     chromEnd int unsigned not null,	# End position in chrom
     name varchar(255) not null,	# Name of STS marker
-    score int unsigned not null,	# Score of a marker - depends on how many contigs it hits
+    score int unsigned not null,	# Score of a marker = 1000/# of markers it hits
     identNo int unsigned not null,	# Identification number of STS
     ctgAcc varchar(255) not null,	# Contig accession number
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits
@@ -28,8 +28,9 @@ CREATE TABLE stsMarker (
     fishChrom varchar(255) not null,	# Chromosome (no chr) from FISH map or 0 if none
     beginBand varchar(255) not null,	# Beginning of range of bands on FISH map
     endBand varchar(255) not null,	# End of range of bands on FISH map
+    lab varchar(255) not null,	# Laboratory that placed the FISH clone
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd),
-    INDEX(name)
+    INDEX chrom (chrom(12),chromStart),
+    INDEX chrom_2 (chrom(12),chromEnd),
+    INDEX name (name)
 );
