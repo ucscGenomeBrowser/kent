@@ -123,7 +123,7 @@ void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
 carefulClose(fh);
-sqlLoadTabFile(conn, path, tableName);
+sqlLoadTabFile(conn, path, tableName, 0);
 }
 
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)

@@ -30,8 +30,12 @@
 #include "hash.h"
 #endif
 
+/* Options to sqlLoadTabFile */
+#define SQL_SERVER_TAB_FILE 0x01  /* tab file is directly accessable
+                                   * by the sql server */
+
 extern boolean sqlTrace;      /* setting to true prints each query */
-extern int sqlTraceIndent;    /* number space far to indent traces */
+extern int sqlTraceIndent;    /* number of spaces to indent traces */
 	
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
@@ -74,7 +78,8 @@ int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched);
 boolean sqlExists(struct sqlConnection *conn, char *query);
 /* Query database and return TRUE if it had a non-empty result. */
 
-void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table);
+void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
+                    unsigned options);
 /* Load a tab-seperated file into a database table, checking for errors */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);

@@ -13,7 +13,7 @@
 #include "hgConfig.h"
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
-int sqlTraceIndent = 0;    /* number space far to indent traces */
+int sqlTraceIndent = 0;    /* number of spaces to indent traces */
 
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
@@ -323,16 +323,37 @@ if (matched != NULL)
 return numChanged;
 }
 
-void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table)
-/* Load a tab-seperated file into a database table, checking for errors */
+void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
+                    unsigned options)
+/* Load a tab-seperated file into a database table, checking for errors. 
+ * Options are SQL_SERVER_TAB_FILE */
 {
+char tabPath[PATH_LEN];
 char query[PATH_LEN+256];
 int numScan, numRecs, numSkipped, numWarnings;
-char *info;
+char *localOpt, *info;
 struct sqlResult *sr;
 
-safef(query, sizeof(query),  "LOAD data local infile '%s' into table %s",
-      path, table);
+if ((options & SQL_SERVER_TAB_FILE) == 0)
+    {
+    /* tab file on server requiries full path */
+    strcpy(tabPath, "");
+    if (path[0] != '/')
+        {
+        getcwd(tabPath, sizeof(tabPath));
+        strcat(tabPath, "/");
+        }
+    strcat(tabPath, path);
+    localOpt = "";
+    }
+else
+    {
+    strcpy(tabPath, path);
+    localOpt = "local";
+    }
+
+safef(query, sizeof(query),  "LOAD data %s infile '%s' into table %s",
+      localOpt, tabPath, table);
 sr = sqlGetResult(conn, query);
 info = mysql_info(conn->conn);
 if (info == NULL)
