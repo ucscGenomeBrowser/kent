@@ -3590,7 +3590,11 @@ o - # ssh hgwdev
     cd /cluster/data/hg16/bed/affyGnf.2004-02-04
     /cluster/home/sugnet/bin/i386/affyPslAndAtlasToBed -chip=U95Av2 affyU95.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg16 affyRatio affyRatio.bed    
-    hgLoadPsl hg16 affyU95.psl
+    #	This affyU95 load was later changed to eliminate the long names
+    # hgLoadPsl hg16 affyU95.psl
+    #	by the following:
+    sed -e "s/U95Av2://" affyU95.psl | sed -e "s/;//" > affyU95shortQname.psl
+    hgLoadPsl hg16 -table=affyU95.psl affyU95shortQname.psl
     # Clean up
     rm -r psl tmp err affyRatio.bed affyRatio.exr bed.tab scores.tab *.debug batch.bak contig.psl raw.psl
 
@@ -6424,15 +6428,10 @@ time hgExpDistance hg16 affyUcla affyUclaExp knownExpDistance \
 # Create table that maps between known genes and 
 # the GNF data.
 hgMapToGene hg16 affyU95 knownGene knownToU95
-cd ~/kent/src/hg/near/hgExpDistance
-XXXX - needs to be done after above affyUcla run is done
-#	affyRatioExps argument is unused, no need to exist
-hgExpDistance hg16 gnfHumanU95Median gnfHumanU95Exps \
-	knownGnfDistance  -lookup=knownToU95
-hgExpDistance hg16 affyRatio affyRatioExps knownGnfDistance -lookup=knownToU95
-#	this does not work, claims there is nothing in common between
-#	the knownToU95 and the affyRatio tables
-#	row count went from 11718000 to
+cd /tmp
+#	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
+hgExpDistance hg16 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95Exps knownGnfDistance  -lookup=knownToU95
+#	row count went from 11718000 to 17330000
 #  original makeNear.doc had this as:
 # hgExpDistance hg16 affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
 
