@@ -3,19 +3,30 @@
 #include "cheapcgi.h"
 #include "dnaseq.h"
 #include "fa.h"
+#include "hash.h"
 #include "hdb.h"
 #include "bed.h"
 #include "geneGraph.h"
 
 char *db = NULL;
+struct hash *mrnaHash = NULL;
+
 void usage()
 {
 errAbort("spliceStats - counts the number of cassette exons from an altGraphX file\n"
-	 "which occur in a number of different libraries(confidence). Optionally\n"
+	 "which occur in a number of different libraries(confidence see below). Optionally\n"
 	 "outputs sequence from said exons to a fasta file.\n"
 	 "usage:\n\t"
-	 "spliceStats <altGraphXFile> <confidence> <db>  <optional:fastaFileOut> <optional: estPrior=10.0>\n"
-	 "\t\t<optional: bedFile=bedFileName>\n");
+	 "spliceStats <altGraphXFile> <minConf=5> <db=hgN> <optional: faFile=fastaFileOut> <optional: estPrior=10.0>\n"
+	 "\t\t<optional: bedFile=bedFileName>\n"
+	 "\n\nConfidence note from the function that returns confidence:\n"
+	 "Return the score for this cassette exon. Want to have cassette exons\n"
+	 "that are present in multiple transcripts and that are not present in multiple\n"
+	 "transcripts. We want to see both forms of the cassette exon, we don't want to have\n"
+	 "one outlier be chosen. Thus we count the times that the exon is seen, we\n"
+	 "count the times that the exon isn't seen and we calculate a final score by:\n"
+	 "(seen + notseen + prior)/(abs(seen - notSeen+prior) + 1) . Thus larger scores are\n"
+	 "better, but tend to range between 1-2.\n");
 }
 
 boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
@@ -64,8 +75,7 @@ void writeCassetteExon(struct bed *bedList, struct altGraphX *ag, int eIx, boole
 int i = eIx;
 struct bed *bed=NULL;
 if(bedOutFile != NULL)
-    for(bed=bedList; bed != NULL; bed = bed->next)
-	bedTabOutN(bed,12, bedOutFile);
+    bedTabOutN(bedList,12, bedOutFile);
 writeBrowserLink(html, ag, conf, i);
 if(!outputted)
     {
@@ -83,6 +93,76 @@ if(outfile != NULL)
     }
 }
 
+void hashRow0(struct sqlConnection *conn, char *query, struct hash *hash)
+/** Return hash of row0 of return from query. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+int count = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(hash, row[0], NULL);
+    ++count;
+    }
+sqlFreeResult(&sr);
+uglyf("%d match %s\n", count, query);
+}
+
+void addMrnaAccsToHash(struct hash *hash)
+/** Load up all the accessions from the database that are mRNAs. */
+{
+char query[256];
+struct sqlConnection *conn = NULL;
+conn = hAllocConn();
+snprintf(query, sizeof(query), "select acc from mrna where type = 2");
+hashRow0(conn, query, hash);
+}
+
+void loadMrnaHash() 
+{
+if(mrnaHash != 0)
+    errAbort("spliceStats::loadMrnaHash() - mrnaHash has already been created.\n");
+mrnaHash = newHash(10);
+addMrnaAccsToHash(mrnaHash);
+}
+
+boolean passFilter(struct bed *bed, int blockNum, struct altGraphX *ag, int minNum, int minFlankingSize, boolean mrnaFilter)
+{
+struct evidence *ev = slElementFromIx(ag->evidence,bed->expIds[blockNum]);
+int i =0;
+boolean pass = FALSE;
+if(minFlankingSize > bed->blockSizes[blockNum])
+    return FALSE;
+if(ev->evCount >= minNum)
+    return TRUE;
+if(mrnaFilter)
+    {
+    for(i =0; i<ev->evCount; i++)
+	{
+	if(hashLookup(mrnaHash, ag->mrnaRefs[ev->mrnaIds[i]]))
+	    return TRUE;
+	}
+    }
+return FALSE;
+}
+
+boolean bedPassFilters(struct bed *bed, struct altGraphX *ag, int cassetteEdge)
+{
+int minNum = cgiUsualInt("minNum", 2);
+int minFlankingSize = cgiUsualInt("minFlankingSize", 0);
+boolean mrnaFilter = cgiBoolean("mrnaFilter");
+boolean passed = TRUE;
+int i =0;
+for(i = 0; i<bed->blockCount; i++)
+    {
+    if(bed->expIds[i] != cassetteEdge)
+	{
+	passed &= passFilter(bed, i, ag, minNum, minFlankingSize, mrnaFilter);
+	}
+    }
+return passed;
+}
+
 int countCassetteExons(struct altGraphX *agList, float minConfidence, FILE *outfile, FILE *bedOutFile)
 /* count up the number of cassette exons that have a certain
    confidence, returns number of edges. If outfile != NULL will output fasta sequences
@@ -98,6 +178,8 @@ boolean outputted = FALSE;
 float estPrior = cgiOptionalDouble("estPrior", 10);
 FILE *log = mustOpen("confidences.log", "w");
 FILE *html = mustOpen("confidences.html", "w");
+FILE *sizes = mustOpen("sizes.log", "w");
+int minSize = cgiOptionalInt("minSize", 0);
 startHtml(html);
 for(ag = agList; ag != NULL; ag = ag->next)
     {
@@ -109,18 +191,28 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	    float conf = altGraphCassetteConfForEdge(ag, i, estPrior);
 	    struct bed *bed, *bedList = altGraphGetExonCassette(ag, i);
 	    char buff[256];
+	    int size = ag->vPositions[ag->edgeEnds[i]] - ag->vPositions[ag->edgeStarts[i]];
+	    boolean filtersOk = FALSE;
 	    if(ag->name == NULL)
 		ag->name = cloneString("");
-	    snprintf(buff, sizeof(buff), "%s.%d", ag->name, counter);
+
 	    slSort(&bedList, bedCmpMaxScore);
 	    for(bed=bedList; bed != NULL; bed = bed->next)
-		bed->name = cloneString(buff);
-	    fprintf(log, "%f\n", conf);
-	    if(conf >= minConfidence) 
 		{
-		writeCassetteExon(bedList, ag, i, &outputted, bedOutFile, outfile, html, conf);
+		snprintf(buff, sizeof(buff), "%s.%d", ag->name, counter);
+		bed->name = cloneString(buff);
+		fprintf(log, "%f\n", conf);
+		fprintf(sizes, "%d\n", size);
+		filtersOk = bedPassFilters(bed, ag, i);
+		if(conf >= minConfidence && size >= minSize && filtersOk) 
+		    {
+		    writeCassetteExon(bed, ag, i, &outputted, bedOutFile, outfile, html, conf);
+		    cassetteCount++;
+		    if((size % 3) == 0)
+			mod3++;
+		    }
+		counter++;
 		}
-	    counter++;
 	    bedFreeList(&bedList);
 	    }
 	}
@@ -132,32 +224,62 @@ warn("%d cassettes are mod 3", mod3);
 return cassetteCount;
 }
 
+void printCommandState(char *progName, FILE *out)
+{
+struct cgiVar *c = NULL, *cList = NULL;
+int i;
+fprintf(out, "#");
+if(progName != NULL)
+    fprintf(out, "%s ", progName);
+else
+    fprintf(out, "noProgName ");
+cList = cgiVarList();
+for(c = cList; c != NULL; c = c->next)
+    {
+    fprintf(out, "%s=\"%s\" ", c->name, c->val);
+    }
+fprintf(out, "\n");
+}
+    
 int main(int argc, char *argv[])
 {
 struct altGraphX *agList = NULL;
 int cassetteCount = 0;
 float minConfidence = 0;
 char *bedFileName = NULL;
+char *faFile = NULL;
+FILE *faOut = NULL;
+FILE *bedOut = NULL;
+boolean mrnaFilter = FALSE;
+float estPrior = 0.0;
+int minSize = 0;
 if(argc < 4)
     usage();
 cgiSpoof(&argc, argv);
 warn("Loading graphs.");
 agList = altGraphXLoadAll(argv[1]);
 bedFileName = cgiOptionalString("bedFile");
-minConfidence = atof(argv[2]);
-db = argv[3];
+minConfidence = cgiDouble("minConf");
+db = cgiString("db");
+faFile = cgiOptionalString("faFile");
+estPrior = cgiOptionalDouble("estPrior", 10);
+minSize = cgiOptionalInt("minSize", 0);
+mrnaFilter = cgiBoolean("mrnaFilter");
+if(mrnaFilter)
+    loadMrnaHash();
 warn("Counting cassette exons from %d clusters above confidence: %f", slCount(agList), minConfidence);
-if(argc == 4)
-    cassetteCount = countCassetteExons(agList, minConfidence, NULL, NULL);
-else
+if(bedFileName != NULL)
     {
-    FILE *out = mustOpen(argv[4], "w");    
-    FILE *bedOut = NULL;
-    if(bedFileName != NULL)
-	bedOut = mustOpen(bedFileName, "w");
-    cassetteCount = countCassetteExons(agList, minConfidence, out,bedOut );
-    carefulClose(&out);
+    bedOut = mustOpen(bedFileName, "w");
+    printCommandState(argv[0], bedOut);
+    fprintf(bedOut, "track name=cass_conf-%4.2f_est-%3.2f description=\"spliceStats minConf=%4.2f estPrior=%3.2f minSize=%d\"\n", 
+	    minConfidence, estPrior, minConfidence, estPrior, minSize);
     }
+if(faFile != NULL)
+    faOut = mustOpen(faFile, "w");
+cassetteCount = countCassetteExons(agList, minConfidence, faOut,bedOut );
+carefulClose(&faOut);
+carefulClose(&bedOut);
 warn("%d cassette exons out of %d clusters in %s", cassetteCount, slCount(agList), argv[1]);
 altGraphXFreeList(&agList);
 return 0;
