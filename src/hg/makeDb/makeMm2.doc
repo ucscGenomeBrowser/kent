@@ -254,28 +254,45 @@ o - Load this into the database as so
 	hgLoadBed mm2 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (in progress)
+PRODUCING GENSCAN PREDICTIONS (done)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 
-	First make sure you have appropriate set up, permissions, etc. and you have 
-     	tried using Parasol to submit and finished a set of jobs successfully.
+	First make sure you have appropriate set up, permissions, etc.
+	and you have tried using Parasol to submit and finished a set 
+	of jobs successfully.
+	
 	Load up the cluster with hard-masked contigs in
 	   /scratch/hg/mm2/mContigs
      	
-	Log into kk
+	Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+	cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
+	big cluster, due to limitation of memory and swap space on each
+	processing node).
 	     	cd ~/mm
      		cd bed/genscan
 	Make 3 subdirectories for genscan to put their output files in
 		mkdir gtf pep subopt
 	Generate a list file, genome.list, of all the contigs
-		ls -1S /scratch/hg/mm2/mContigs/* >genome.list	
+		ls -1S /scratch/hg/mm2/mContigs/* >genome.list
+	Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
+	Those files have pure Ns due to heterochromatin (unsequencable
+	stuff) and will cause genscan to run forever.
+	
 	Create template file, gsub, for gensub2.  For example (3 lines file):
-		#LO:xP
+		#LOOP
 		/cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
 		#ENDLOOP
+	Create a file containing a single line.
+		echo single > single
 	Generate job list file, jobList, for Parasol
 		gensub2 genome.list single gsub jobList
+	
+	Edit jobList to find the line containing "chr12_5.fa.masked"
+	and change "-window=2400000" into "-window=1200000", because
+	genscan has "not enough memory" problem with this particular
+	file.
+	
 	First issue the following Parasol command:
 		para create jobList
 	Run the following command, which will try first 10 jobs from jobList
@@ -284,7 +301,8 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 		para check
 	If they have problems, debug and fix your program, template file, 
 	commands, etc. and try again.  If they are OK, then issue the following 
-	command, which will ask Parasol to start all the jobs (around 3000 jobs).
+	command, which will ask Parasol to start all the remaining jobs (around
+	~252 jobs).
 		para push
 	Issue either one of the following two commands to check the 
 	status of the cluster and your jobs, until they are done.
