@@ -1,0 +1,16 @@
+.c.o:
+	gcc -ggdb -Wimplicit -I../inc -I../../inc -c $*.c
+
+L = $(MYSQLLIBS) -lm 
+MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+
+O = hgc.o
+
+hgc: $O ../../lib/$(MACHTYPE)/jkweb.a 
+	gcc $O $(MYLIBS) $L
+	mv a.out hgc
+	strip hgc
+	chmod a+rx hgc
+	mv hgc /usr/local/apache/cgi-bin
+
