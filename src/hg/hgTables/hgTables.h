@@ -327,6 +327,7 @@ boolean anyIntersection();
 #define hgtaDoSummaryStats "hgta_doSummaryStats"
 #define hgtaDoSchema "hgta_doSchema"
 #define hgtaDoPasteIdentifiers "hgta_doPasteIdentifiers"
+#define hgtaDoClearPasteIdentifierText "hgta_doClearPasteIdentifierText"
 #define hgtaDoPastedIdentifiers "hgta_doPastedIdentiers"
 #define hgtaDoUploadIdentifiers "hgta_doUploadIdentifiers"
 #define hgtaDoClearIdentifiers "hgta_doClearIdentifiers"
@@ -549,6 +550,9 @@ void doValueRange(char *field);
 
 void doPasteIdentifiers(struct sqlConnection *conn);
 /* Respond to paste identifiers button. */
+
+void doClearPasteIdentifierText(struct sqlConnection *conn);
+/* Respond to clear within paste identifier page. */
 
 void doPastedIdentifiers(struct sqlConnection *conn);
 /* Process submit in past identifiers page. */

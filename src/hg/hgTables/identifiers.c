@@ -11,19 +11,23 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.2 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.3 2004/10/12 00:59:02 kent Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
 /* Respond to paste identifiers button. */
 {
+char *oldPasted = cartUsualString(cart, hgtaPastedIdentifiers, "");
 htmlOpen("Paste In Identifiers for %s", curTableLabel());
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.<BR>\n");
-cgiMakeTextArea(hgtaPastedIdentifiers, "", 10, 70);
+uglyf("or whatever...<BR>\n");
+cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
 hPrintf("<BR>\n");
 cgiMakeButton(hgtaDoPastedIdentifiers, "Submit");
+hPrintf(" ");
+cgiMakeButton(hgtaDoClearPasteIdentifierText, "Clear");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 hPrintf("</FORM>");
@@ -64,12 +68,13 @@ if (idText != NULL && idText[0] != 0)
     mustWrite(f, idText, strlen(idText));
     carefulClose(&f);
     cartSetString(cart, hgtaIdentifierFile, tn.forCgi);
+    if (strlen(idText) > 64 * 1024)
+         cartRemove(cart, hgtaPastedIdentifiers);
     }
 else
     {
     cartRemove(cart, hgtaIdentifierFile);
     }
-cartRemove(cart, hgtaPastedIdentifiers);
 mainPageAfterOpen(conn);
 htmlClose();
 }
@@ -108,6 +113,13 @@ else
 	}
     return hash;
     }
+}
+
+void doClearPasteIdentifierText(struct sqlConnection *conn)
+/* Respond to clear within paste identifier page. */
+{
+cartRemove(cart, hgtaPastedIdentifiers);
+doPasteIdentifiers(conn);
 }
 
 void doClearIdentifiers(struct sqlConnection *conn)

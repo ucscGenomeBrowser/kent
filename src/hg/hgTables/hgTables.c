@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.77 2004/10/02 00:12:45 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.78 2004/10/12 00:59:02 kent Exp $";
 
 
 void usage()
@@ -1063,6 +1063,9 @@ else if (cartVarExists(cart, hgtaDoIntersectSubmit))
     doIntersectSubmit(conn);
 else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
     doPasteIdentifiers(conn);
+else if (cartVarExists(cart, hgtaDoClearPasteIdentifierText))
+    doClearPasteIdentifierText(conn);
+/* Respond to clear within paste identifier page. */
 else if (cartVarExists(cart, hgtaDoPastedIdentifiers))
     doPastedIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoUploadIdentifiers))
