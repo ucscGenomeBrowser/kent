@@ -103,7 +103,7 @@ int i;
 
 /* Build up list of nodes that might possibly follow this one. */
 dlListInit(&scratchList);
-for (i=nodeIx+1; i<graph->nodeCount; ++i)
+for (i=nodeIx+1; i<graph->nodeCount+1; ++i)
     {
     dlNode = graph->builderNodes+i;
     dlAddTail(&scratchList, dlNode);
@@ -159,6 +159,7 @@ int overlap;
 if (nodeCount == 1)
     maxEdgeCount = 1;
     
+/* Build up nodes from 1 to nodeCount based on data. */
 AllocVar(graph);
 graph->nodeCount = nodeCount;
 graph->nodes = AllocArray(nodes, nodeCount+1);
@@ -171,18 +172,11 @@ for (i=1, block = blockList; i<=nodeCount; ++i, block = block->next)
     builderNodes[i].val = n;
     }
 
-/* Add initial edges from 0 to all nodes. */
-for (i=1; i<=nodeCount; ++i)
-    {
-    n = &nodes[i];
-    lmAllocVar(graph->lm, e);
-    e->nodeIn = &nodes[0];
-    e->score = n->block->score;
-    n->waysIn = e;
-    graph->edgeCount += 1;
-    }
+/* Fake a node 0 at 0,0 */
+n = &nodes[0];
+lmAllocVar(graph->lm, n->block);
 
-for (i=1; i<=nodeCount; ++i)
+for (i=0; i<=nodeCount; ++i)
     addFollowingNodes(graph, i);
 
 freez(&graph->builderNodes);
@@ -244,15 +238,20 @@ while ((axt = axtRead(lf)) != NULL)
     }
 for (sp = spList; sp != NULL; sp = sp->next)
     {
+    time_t startTime, dt;
+    int fullSize; 
     slReverse(&sp->blockList);
     uglyf("%s\t%d blocks\n", sp->name, slCount(sp->blockList));
+    startTime = time(NULL);
     graph = asGraphMake(sp->blockList);
-	{
-	int fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
-	uglyf("%d edges (%d in full graph) %4.1f%% of full\n",
-	    graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize);
-	}
-    fprintf(f, "%s ", sp->name);
+    dt = time(NULL) - startTime;
+    fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
+    uglyf("%d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
+	graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, dt);
+    fprintf(f, 
+    	"%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
+	sp->name, graph->edgeCount, fullSize, 
+	100.0*graph->edgeCount/fullSize, dt);
     asGraphDump(graph, f);
     asGraphFree(&graph);
     }
