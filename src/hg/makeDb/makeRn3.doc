@@ -445,18 +445,31 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
     # calculated position the same as rn2
     # Note: for next assembly, set scientificName column to "Rattus norvegicus"
     echo 'insert into dbDb values("rn3", "Jun 2003", \
-        "/gbdb/rn3/nib", "Rat", "chr5:168054448-168086858", 1, \
-        30, "Rat");' | hgsql -h genome-testdb hgcentraltest
-    # since Espn is the specified position here, this default position
-    # will not function as the make trackDb is done next since there are
-    # no tables in which to look up Espn.  But you can run the browser
-    # if you enter actual coodinates, e.g. chr1:1-1000, etc ...
-    #	Espn in Jan 2003 rat is: chr5:186572879-186605289
-    #	The new rat is much shorter for chr5
+        "/gbdb/rn3/nib", "Rat", "chr5:169359914-169392264", 1, \
+        30, "Rat", "Rattus norvegicus");' | hgsql -h genome-testdb hgcentraltest
+    # Trying to request Espn in this new rat results in 4 different
+    # hits on the genome.  Thus, the specified position here is the
+    # desired Espn position as was in the previous Rat
     #  If you need to delete this dbDb entry to rewrite it:
         echo 'delete from dbDb where name="rn3";' \
         | hgsql -h genome-testdb hgcentraltest
+    # To change the default version of the Rat on the organism
+    #	menu.  First delete it, then add the new one:
 
+    echo 'delete from defaultDb where genome="Rat";' \
+	| hgsql -h genome-testdb hgcentraltest
+
+    echo 'insert into defaultDb values("Rat", "rn3");' \
+	| hgsql -h genome-testdb hgcentraltest
+
+    #  For the beta machine, during release cycle only:
+    echo 'insert into dbDb values("rn3", "Jun 2003", \
+        "/gbdb/rn3/nib", "Rat", "chr5:169359914-169392264", 1, \
+        30, "Rat", "Rattus norvegicus");' | hgsql -h genome-testdb hgcentralbeta
+    echo 'delete from defaultDb where genome="Rat";' \
+	| hgsql -h genome-testdb hgcentralbeta
+    echo 'insert into defaultDb values("Rat", "rn3");' \
+	| hgsql -h genome-testdb hgcentralbeta
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
