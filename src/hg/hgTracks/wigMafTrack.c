@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.15 2004/03/16 07:06:23 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.16 2004/03/16 17:39:05 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -158,8 +158,8 @@ slAddHead(&miList, mi);
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
-    enum trackVisibility wigVis = (track->visibility == tvFull || 
-                                   track->visibility == tvPack ? tvFull : tvDense);
+    enum trackVisibility wigVis = 
+                (track->visibility == tvFull ? tvFull : tvDense);
     mi = scoreItem(wigTotalHeight(track->subtracks, wigVis));
     slAddHead(&miList, mi);
     }
@@ -712,19 +712,14 @@ if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
-    /*
-     * TODO: debug this -- the squished wiggle seems to persist, and
-     * leak into other tracks.  
     if (zoomedToBaseLevel && (vis == tvSquish || vis == tvPack))
         {
         /* display squished wiggle by reducing wigTrack height */
-    /*
         wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
                                                             tl.fontHeight - 1;
         vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
         }
     else
-        */
     vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
