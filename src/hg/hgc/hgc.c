@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.715 2004/08/06 18:08:46 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.716 2004/08/07 00:45:02 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3966,10 +3966,6 @@ void doRHmap(struct trackDb *tdb, char *itemName)
 char *dupe, *type, *words[16];
 char buffer[1024];
 char title[256];
-char *item = NULL;
-char *ext = NULL;
-char *accType = NULL;
-char *id = NULL;
 int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
@@ -3977,38 +3973,9 @@ struct sqlConnection *conn = hAllocConn();
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 
-strcpy(buffer, itemName);
-item = buffer;
-if ((ext = strchr(item, '.')) != NULL)
-    {
-    *ext++ = 0;
-    if ((accType = strchr(ext, '.')) != NULL)
-	{
-	*accType++ = 0;
-	}
-        if (startsWith("EMB",accType) && ((id = strchr(accType, ':')) != NULL) ) 
-            {
-            *id++ = 0;
-            }
-    }
-
-if (item != NULL) 
-    {
-    genericHeader(tdb, item);
-    }
-else 
-    {
-    genericHeader(tdb, itemName);
-    }
+genericHeader(tdb, itemName);
 /* Print non-sequence info */
 cartWebStart(cart, title);
-
-if (id != NULL)
-    {
-    printf("<H3>Genbank Accession: <A HREF=\"");
-    printEntrezNucleotideUrl(stdout, id);
-    printf("\" TARGET=_blank>%s</A><BR></H3>", id);
-    }
 
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
