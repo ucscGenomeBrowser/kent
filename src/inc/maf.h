@@ -102,6 +102,17 @@ void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
  * this function will invalidate the previous temp value.
  * It's sort of a kludge, but quick to run and easy to implement. */
 
+struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
+	int newStart, int newEnd);
+/* Extract subset of maf that intersects a given range
+ * in a component sequence.  The newStart and newEnd
+ * are given in the forward strand coordinates of the
+ * component sequence.  The componentSource is typically
+ * something like 'mm3.chr1'.  This will return NULL
+ * if maf does not intersect range.  The score field
+ * in the returned maf will not be filled in (since
+ * we don't know which scoring scheme to use). */
+
 double mafScoreMultiz(struct mafAli *maf);
 /* Return score of a maf (calculated rather than what is
  * stored in the structure. */

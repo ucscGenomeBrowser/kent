@@ -97,62 +97,69 @@ typedef char Codon; /* Our codon type. */
  * Returns X for bad input, 0 for stop codon. */
 AA lookupCodon(DNA *dna); 
 
+Codon codonVal(DNA *start);
 /* Return value from 0-63 of codon starting at start. 
  * Returns -1 if not a codon. */
-Codon codonVal(DNA *start);
 
-/* Return  codon corresponding to val (0-63) */
 DNA *valToCodon(int val);
+/* Return  codon corresponding to val (0-63) */
 
 void dnaTranslateSome(DNA *dna, char *out, int outSize);
 /* Translate up to outSize bases of DNA.  Output will be zero terminated. */
 
+char *skipIgnoringDash(char *a, int size, bool skipTrailingDash);
+/* Count size number of characters, and any 
+ * dash characters. */
+
+int countNonDash(char *a, int size);
+/* Count number of non-dash characters. */
+
+int nextPowerOfFour(long x);
 /* Return next power of four that would be greater or equal to x.
  * For instance if x < 4, return 1, if x < 16 return 2.... 
  * (From biological point of view how many bases are needed to
  * code this number.) */
-int nextPowerOfFour(long x);
 
-/* Return how long DNA will be after non-DNA is filtered out. */
 long dnaFilteredSize(char *rawDna);
+/* Return how long DNA will be after non-DNA is filtered out. */
 
-/* Return how long peptide will be after non-peptide is filtered out. */
 long aaFilteredSize(char *rawDna);
+/* Return how long peptide will be after non-peptide is filtered out. */
 
-/* Filter out non-DNA characters. */
 void dnaFilter(char *in, DNA *out);
+/* Filter out non-DNA characters. */
 
-/* Filter out non-peptide characters. */
 void aaFilter(char *in, DNA *out);
+/* Filter out non-peptide characters. */
 
-/* Change all non-DNA characters to N. */
 void dnaFilterToN(char *in, DNA *out);
+/* Change all non-DNA characters to N. */
 
-/* Turn upper case letters to N's. */
 void upperToN(char *s, int size);
+/* Turn upper case letters to N's. */
 
-/* Turn lower case letters to N's. */
 void lowerToN(char *s, int size);
+/* Turn lower case letters to N's. */
 
+void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4]);
 /* Count up frequency of occurance of each base and store 
  * results in histogram. Use X_BASE_VAL to index histogram. */
-void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4]);
 
-/* Filter out non-DNA characters but leave case intact. */
 void dnaMixedCaseFilter(char *in, DNA *out);
+/* Filter out non-DNA characters but leave case intact. */
 
-/* pack 16 bases into a word */
 bits32 packDna16(DNA *in);
+/* pack 16 bases into a word */
 
-/* Pack 8 bases into a short word */
 bits16 packDna8(DNA *in);
+/* Pack 8 bases into a short word */
 
-/* Unpack DNA. Expands to 16x tileCount in output. */
 void unpackDna(bits32 *tiles, int tileCount, DNA *out);
+/* Unpack DNA. Expands to 16x tileCount in output. */
 
+void unalignedUnpackDna(bits32 *tiles, int start, int size, DNA *unpacked);
 /* Unpack into out, even though not starting/stopping on tile 
  * boundaries. */
-void unalignedUnpackDna(bits32 *tiles, int start, int size, DNA *unpacked);
 
 int intronOrientation(DNA *iStart, DNA *iEnd);
 /* Given a gap in genome from iStart to iEnd, return 
