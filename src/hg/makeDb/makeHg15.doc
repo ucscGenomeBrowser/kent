@@ -3420,6 +3420,11 @@ cd syntenyCow
 
 hgLoadBed -noBin hg15 syntenyCow in.bed
 
+# New data from UIUC (using chrom names)
+# Reloaded from in2.bed 
+
+hgLoadBed -noBin hg15 syntenyCow in2.bed
+
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
 # COW BACENDS (Done, Heather, Mar. 8, 2005)
