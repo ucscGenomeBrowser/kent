@@ -23,6 +23,7 @@ errAbort(
   "   -minScore=N - restrict to those scoring at least N\n"
   "   -maxScore=N - restrict to those scoring less than N\n"
   "   -minGap=N  - restrict to those with gap size (tSize) >= minSize\n"
+  "   -minAli=N - restrict to those with at least given bases aligning\n"
   "   -syn        - do filtering based on synteny.  \n"
   );
 }
@@ -64,6 +65,7 @@ double minSynSize = 20000;    /* Minimum size for syntenic block. */
 double minSynAli = 10000;     /* Minimum alignment size. */
 double maxFar = 200000;  /* Maximum distance to allow synteny. */
 int minGap = 0;		      /* Minimum gap size. */
+int minAli = 0;			/* Minimum ali size. */
 
 boolean synFilter(struct cnFill *fill)
 /* Filter based on synteny */
@@ -90,6 +92,8 @@ if (fill->chainId)
     {
     if (fill->score < minScore || fill->score > maxScore)
 	return FALSE;
+    if (fill->ali < minAli)
+        return FALSE;
     if (doSyn && !synFilter(fill))
 	return FALSE;
     }
@@ -148,6 +152,7 @@ minScore = optionInt("minScore", -BIGNUM);
 maxScore = optionInt("maxScore", BIGNUM);
 doSyn = optionExists("syn");
 minGap = optionInt("minGap", minGap);
+minAli = optionInt("minAli", minAli);
 
 for (i=0; i<inCount; ++i)
     {
