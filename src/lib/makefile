@@ -14,7 +14,7 @@ O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
     memalloc.o memgfx.o net.o nib.o \
-    nt4.o obscure.o oldGff.o options.o osunix.o pairHmm.o \
+    nt4.o obscure.o oldGff.o options.o osunix.o pairHmm.o pipeline.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pslShow.o pthreadWrap.o ra.o rbTree.o \
     repMask.o rle.o rudp.o sailfnt.o scoreWindow.o \
     seqOut.o servBrcMcw.o servcis.o \
