@@ -2248,5 +2248,24 @@ hgsql -h hgwbeta -e 'update dbDb set hgNearOk = 1 where name = "Ce2";' \
          hgcentraltest
 
 
+# MITOPRED DATA FOR HGGENE (DONE 8/10/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/ce2/bed/mitopred
+    cd /cluster/data/ce2/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/cel_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' cel_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    hgsql ce2 < mitopred.sql
+    hgsql ce2 -e 'load data local infile "mitopred.tab" into table mitopred'
+
+
 
 

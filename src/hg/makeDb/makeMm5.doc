@@ -3712,6 +3712,7 @@ rm -fr /tmp/${root1}_${root2}
 $(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
 '_EOF_'
+    # << this line keeps emacs coloring happy
     #ls -1S /iscratch/i/mm5/bacEnds/BACends???.fa > bacEnds.lst
     ls -1S /scratch/mus/mm5/bacEnds/BACends???.fa > bacEnds.lst
     mkdir bacEnds.out
@@ -3856,6 +3857,7 @@ skipped, 4519 warning(s) loading psl.tab
 # 541027882 bases of 2615483787 (20.686%) in intersection
 # featureBits mm4 bacEndPairsBad
 # 1074505863 bases of 2627444668 (40.895%) in intersection
+
 
 # BLASTZ FUGU (FR1) (WORKING 7/28/04 kate)
     # Using Angie's hg17/fugu as a model
@@ -4499,6 +4501,7 @@ cat > split.csh << 'EOF'
     ssh kkr1u00
     iSync
 
+
 # LOAD GENEID GENES (DONE 8/2/04 Fan)
     # reloaded 3/16/04 with -gtf instead of -exon=CDS (nec. now! for stop_codon)
     mkdir -p /cluster/data/mm5/bed/geneid/download
@@ -4517,6 +4520,7 @@ http://genome.imim.es/genepredictions/M.musculus/mmMay2004/geneid_v1.2/$chr.prot
     cd ..
     ldHgGene -genePredExt -gtf mm5 geneid download/*.gtf
     hgPepPred mm5 generic geneidPep download/*-fixed.prot
+
 
 # PRODUCING GENSCAN PREDICTIONS (DONE 08-03-04 Fan)
     ssh hgwdev
@@ -4580,4 +4584,25 @@ tmp=/tmp -window=1200000
     ldHgGene mm5 -genePredExt genscan genscan.gtf
     hgPepPred mm5 generic genscanPep genscan.pep
     hgLoadBed mm5 genscanSubopt genscanSubopt.bed
+
+
+# MITOPRED DATA FOR HGGENE (DONE 8/10/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/mm5/bed/mitopred
+    cd /cluster/data/mm5/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/mus_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' mus_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    # << this line makes emacs coloring happy
+    hgsql mm5 < mitopred.sql
+    hgsql mm5 -e 'load data local infile "mitopred.tab" into table mitopred'
+
 
