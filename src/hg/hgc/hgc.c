@@ -49,7 +49,6 @@
 #include "snp.h"
 #include "softberryHom.h"
 #include "sanger22extra.h"
-#include "exprBed.h"
 #include "refLink.h"
 #include "hgConfig.h"
 #include "estPair.h"
@@ -2932,10 +2931,6 @@ printTrackHtml(tdb);
 webEnd();
 }
 
-
-
-
-
 void doEst3(char *itemName)
 /* Handle click on EST 3' end track. */
 {
@@ -4022,12 +4017,7 @@ static char abbrev[32];
 char *ret;
 strncpy(abbrev, name, sizeof(abbrev));
 abbr(abbrev, "LINK_Em:");
-ret = strstr(abbrev, "_");
-if(ret != NULL)
-    ret++;
-else
-    ret = "";
-return ret;
+return abbrev;
 }
 
 void printTableHeaderName(char *name, char *clickName, char *url) 
@@ -4074,151 +4064,6 @@ for(i = 0; i < length; i++)
     }
 printf("</table>\n");
 freez(&header);
-}
-
-void printRosettaReference() 
-{
-puts(
-     "<table border=0 width=600><tr><td>\n"
-     "<p>Expression data from <a href=\"http://www.rii.com\">Rosetta Inpharmatics</a>. "
-     "See the paper \"<a href=\"http://www.rii.com/tech/pubs/nature_shoemaker.htm\"> "
-     "Experimental Annotation of the Human Genome Using Microarray Technology</a>\" "
-     "[<a href=\"http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract\">medline</a>] "
-     "<i>Nature</i> vol 409 pp 922-7 for more information. Rosetta created DNA probes for "
-     "each exon as described by the Sanger center for the October 2000 draft of the genome. "
-     "Exons are labeled according whether they are predicted (pe) or true (te) exons, the "
-     "relative position in the genome, and the contig name. The probes presented here correspond to those contained "
-     "in window range seen on the Genome Browser, the exon probe selected is highlighted "
-     "in blue.</p><br></br>"
-     "<p>This display below is an average of many data points to see the detailed data "
-     "select the checkboxes for the experiments of interest and hit the submit value below. "
-     "It is possible to view both the browser and the expression summary and detailed plots "
-     "at the same time by clicking the <b>Show Browser in different Frame</b> check box. This "
-     "will create two frames which are aware of eachother, one displaying the browser and the other "
-     "the detailed expression data.<br><br>\n"
-     "</td></tr></table>\n"
-     );
-}
-
-void exprBedPrintTable(struct exprBed *expList, char *itemName)
-/* prints out a table from the data present in the exprBed */
-{
-int i,featureCount=0, currentRow=0,square=10;
-struct exprBed *exp = NULL;
-char buff[32];
-if(expList == NULL) 
-    errAbort("No exprBeds were selected.\n");
-
-featureCount = slCount(expList);
-
-/* time to write out some html, first the table and header */
-printf("<basefont size=-1>\n");
-printf("<table cellspacing=0 border=0 cellpadding=0 >\n");
-printf("<tr>\n");
-printf("<th align=center>Hybridization</th>\n");
-printf("<th align=center colspan=%d valign=top>Exons</th>\n",featureCount);
-printf("</tr>\n<tr><td>&nbsp</td>\n");
-for(exp = expList; exp != NULL; exp = exp->next)
-    {
-    printf("<td valign=top align=center>\n");
-    printTableHeaderName(abbrevExprBedName(exp->name), itemName, NULL);
-    printf("</td>");
-    }
-printf("</tr>\n");
-/* for each experiment write out the name and then all of the values */
-for(i = 0; i < expList->numExp; i++) 
-    {
-    zeroBytes(buff,32);
-    sprintf(buff,"e%d",i);
-    printf("<tr>\n");
-    printf("<td align=left>");
-    makeCheckBox(buff,FALSE);
-    printf(" %s</td>\n",expList->hybes[i]);
-    for(exp = expList;exp != NULL; exp = exp->next)
-	{
-	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 1.0, TRUE);
-	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
-	}
-    printf("</tr>\n");
-    }
-printf("</table>");
-printf("</basefont>\n");
-}
-
-struct exprBed *selectExprBedFromDB(char *table, char *chrom, int start, int end)
-/* select all of the exprBed (expression data) from by chromosome name, position in 
-   chomosome and table name */
-{
-char query[256];
-struct exprBed *expList = NULL, *exp = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int rowOffset = hOffsetPastBin(seqName, table);
-sprintf(query, 
-	"select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u order by chromStart",
-	table, chrom, end, start);
-sr = sqlGetResult(conn,query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    exp = exprBedLoad(row+rowOffset);
-    slAddHead(&expList, exp);
-    }
-
-slReverse(&expList);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return expList;
-}
-
-void doGetExprBed(char *tableName, char *itemName)
-/* Print out a colored table of the expression band track. */
-{
-struct exprBed *expList=NULL;
-char buff[64];
-char *type;
-char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
-char *thisFrame = cartOptionalString(cart, "tf");
-char *otherFrame = cartOptionalString(cart, "of");
-type = abbrevExprBedName(itemName);
-type = strstr(type, "_");
-type++;
-
-chuckHtmlStart("Rosetta Expression Data Requested");
-printf("<h2>Rosetta Expression Data For: %s %d-%d</h2>\n", seqName, winStart, winEnd);
-printRosettaReference();
-expList = selectExprBedFromDB(tableName, seqName, winStart, winEnd);
-puts("<table width=\"100%\" cellpadding=0 cellspacing=0><tr><td>\n");
-printf("<form action=\"../cgi-bin/rosChr22VisCGI\" method=get>\n");
-exprBedPrintTable(expList, itemName);
-printf("</td></tr><tr><td><br>\n");
-
-puts("<table width=\"100%\" cellpadding=0 cellspacing=0>\n"
-     "<tr><th align=left><h3>Plot Options:</h3></th></tr><tr><td><p><br>");
-makeCheckBox("f", FALSE);
-printf(" Show browser in different Frame<br>\n");
-cgiMakeHiddenVar("table", tableName);
-cgiMakeHiddenVar("db", database);
-zeroBytes(buff,64);
-sprintf(buff,"%d",winStart);
-cgiMakeHiddenVar("winStart", buff);
-zeroBytes(buff,64);
-sprintf(buff,"%d",winEnd);
-cgiMakeHiddenVar("t",type);
-cgiMakeHiddenVar("winEnd", buff);
-if(thisFrame != NULL)
-    cgiMakeHiddenVar("of",thisFrame);
-if(otherFrame != NULL)
-    cgiMakeHiddenVar("tf",otherFrame);
-printf("<br>\n");
-cgiMakeDropList("mi",maxIntensity, 9, "20");
-printf(" Maximum Itensity value to allow.\n");
-printf("</td></tr><tr><td align=center><br>\n");
-printf("<b>Press Here to View Detailed Plots</b><br><input type=submit name=Submit value=submit>\n");
-printf("<br><br><br><b>Clear Values</b><br><input type=reset name=Reset></form>\n");
-printf("</td></tr></table></td></tr></table>\n");
-chuckHtmlContactInfo();
 }
 
 void msBedPrintTableHeader(struct bed *bedList, struct hash *erHash, char *itemName, 
@@ -4268,7 +4113,7 @@ void printExprssnColorKey(float maxVal)
 float currentVal = -1 * maxVal;
 char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
 boolean redColor = sameString(colorScheme, "rg");
-int square = 10;
+int square = 15;
 int numColumns;
 float stepSize = .2;
 assert(stepSize > 0);
@@ -4285,7 +4130,7 @@ printf("</tr><tr>\n");
 for(currentVal = -1 * maxVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
     {
     struct rgbColor rgb = getColorForExprBed(currentVal, maxVal, redColor);
-    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+    printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
     }
 printf("</tr></table>\n");
 printf("</td></tr></table>\n");
@@ -5033,18 +4878,6 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     doSnp(tdb, item);
     }
 #ifdef CHUCK_CODE
-else if (sameWord(track, "exprBed"))
-    {
-    doGetExprBed(track, item);
-    } 
-else if (sameWord(track, "rosettaPe"))
-    {
-    doGetExprBed(track, item);
-    }
-else if (sameWord(track, "rosettaTe"))
-    {
-    doGetExprBed(track, item);
-    }
 else if (sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item);
