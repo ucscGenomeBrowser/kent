@@ -67,7 +67,7 @@ char *outputTypeNonPosMenu[] =
 int outputTypeNonPosMenuSize = 2;
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
-#define outputOptionsPhase  "Specify output..."
+#define outputOptionsPhase  "Constrain query..."
 #define getSomeFieldsPhase  "Get these fields"
 #define getSequencePhase    "Get sequence"
 #define getBedPhase         "Get BED"
@@ -150,9 +150,7 @@ char *assembly = NULL;
 webStart(cart, "Table Browser: %s", freezeName);
 
 puts(
-     "<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0>\n"
-     "<TR><TH HEIGHT=10></TH></TR><TR><TD WIDTH=10></TD>\n"
-     "<TD><P>This tool allows you to download portions of the database used 
+     "<P>This tool allows you to download portions of the database used 
 	by the genome browser in a simple tab-delimited text format.
 	Please enter a position in the genome and press the submit button:\n"
      );
@@ -207,7 +205,8 @@ puts(
 <P>
 <TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
 <TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
-<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD>
+	<TD WIDTH=14></TD>
+<TD VALIGN=Top><B>Genome Browser Response:</B><br></TD>
 </TR>
 <TR><TD VALIGN=Top><br></TD></TR>
 <TR><TD VALIGN=Top NOWRAP>chr7</TD>
@@ -270,17 +269,13 @@ puts(
 	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E. Evans</TD></TR>
 
 <TR><TD VALIGN=Top><br></TD></TR>
-<TR><TD COLSPAN=\"3\" >
+</TABLE>
+</FORM>
 Use this last format for entry authors -- even though Genbank
 searches require Evans JE format, GenBank entries themselves use
-Evans,J.E. internally.
-</TABLE>
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<BR></TD></TR></TABLE>
-</FORM>
-<BR></TD></TR></TABLE>
-</BODY></HTML>"
+Evans,J.E. internally."
      );
+webEnd();
 }
 
 static boolean allLetters(char *s)
@@ -579,7 +574,7 @@ puts("</TD></TR>");
 puts("<TR><TD>");
 puts("Choose an action: ");
 puts("</TD><TD>");
-cgiMakeButton("phase", allFieldsPhase);
+cgiMakeButton("phase", oldAllFieldsPhase);
 cgiMakeButton("phase", outputOptionsPhase);
 puts("</TD></TR>");
 puts("</TABLE>");
@@ -693,7 +688,8 @@ cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
 positionLookupSamePhase();
 
-printf("<H3> Select Output Format for Table %s </H3>\n", getTableName());
+printf("<P><HR><H3> Select Output Format for Table %s </H3>\n",
+       getTableName());
 if (tableIsPositional)
     cgiMakeDropList("phase", outputTypePosMenu, outputTypePosMenuSize,
 		    outputTypePosMenu[0]);
@@ -702,17 +698,12 @@ else
 		    outputTypeNonPosMenu[0]);
 cgiMakeButton("submit", "Submit");
 
-puts("<H3> (Optional) Filter Table Records by Field Values </H3>");
+puts("<P><HR><H3> (Optional) Filter Table Records by Field Values </H3>");
 
 snprintf(query, 256, "DESCRIBE %s", fullTableName);
 sr = sqlGetResult(conn, query);
 
 puts("<TABLE><TR><TD>\n");
-puts("Free-form query: ");
-cgiMakeTextVar("rawQuery", "", 50);
-strncpy(name, "log_rawQuery", sizeof(name));
-cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
-puts(" </TD></TR><TR><TD>");
 puts("<TABLE>\n");
 gotFirst = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -744,6 +735,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 puts("</TD></TR></TABLE>\n");
+puts(" </TD></TR><TR><TD>");
+strncpy(name, "log_rawQuery", sizeof(name));
+cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
+puts("Free-form query: ");
+cgiMakeTextVar("rawQuery", "", 50);
+puts("</TD></TR></TABLE>");
 if (sameString(database, getTableDb()))
     hFreeConn(&conn);
 else
@@ -771,7 +768,6 @@ puts(
      "</P>\n"
      );
 
-puts("</TD></TR></TABLE>");
 webEnd();
 }
 
