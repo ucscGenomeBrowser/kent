@@ -9,7 +9,84 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.21 2004/08/30 19:51:35 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.22 2004/08/30 23:53:36 hiram Exp $";
+
+void printHistoGram(struct histoResult *histoResults)
+{
+
+printf("<P><!--outer table is for border purposes-->" "\n"
+	    "<TABLE BGCOLOR=\"#" HG_COL_BORDER
+	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n");
+
+/*      And  the row to enclose the histogram table */
+puts ("<TR><TD BGCOLOR=\""HG_COL_INSIDE"\">\n");
+
+puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
+printf("<TR><TH ALIGN=CENTER COLSPAN=8> Histogram on %u values (zero count bins not shown)</TH></TR>\n",
+	histoResults->count);
+puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
+puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
+puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
+puts (HG_COL_INSIDE"\" BORDER=0 HSPACE=0>\n");
+puts ("        <TR><TH COLSPAN=2 ALIGN=CENTER> range </TH></TR>\n");
+puts ("        <TR><TH ALIGN=LEFT> minimum </TH>\n");
+puts ("              <TH ALIGN=RIGHT> maximum </TH></TR>\n");
+puts ("      </TABLE>\n");
+puts ("    </TD>\n");
+puts ("    <TH ALIGN=CENTER> count </TH>\n");
+puts ("    <TH ALIGN=CENTER> p Value </TH>\n");
+puts ("    <TH ALIGN=CENTER> log2(p Value) </TH><TH ALIGN=CENTER> Cumulative <BR> Probability <BR> Distribution </TH>\n");
+puts ("    <TH ALIGN=CENTER> 1.0 - CPD </TH></TR>\n");
+
+if (histoResults)
+    {
+    boolean someDisplayed = FALSE;
+    double cpd = 0.0;
+    double log2_0 = log(2.0);
+    int i;
+
+    for (i=0; i < histoResults->binCount; ++i)
+	{
+	if (histoResults->binCounts[i] > 0)
+	    {
+	    double min, max, pValue;
+
+	    min = ((double)i * histoResults->binSize) +
+				histoResults->binZero;
+	    max = min + histoResults->binSize;
+
+	    printf ("<TR><TD ALIGN=LEFT> %d </TD>\n", i );
+	    printf ("    <TD ALIGN=RIGHT> %g </TD><TD ALIGN=RIGHT> %g </TD>\n", min, max);
+	    printf ("    <TD ALIGN=RIGHT> %u </TD>\n",
+			    histoResults->binCounts[i] );
+	    if (histoResults->binCounts[i] > 0)
+		{
+		pValue = (double) histoResults->binCounts[i] /
+			    (double) histoResults->count;
+		cpd += pValue;
+		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", pValue);
+		printf ("    <TD ALIGN=RIGHT> %g </TD>\n", log(pValue)/log2_0);
+		}
+	    else
+		{
+		printf ("    <TD ALIGN=RIGHT> 0.0 </TD>\n");
+		printf ("    <TD ALIGN=RIGHT> N/A </TD>\n");
+		}
+
+	    printf ("    <TD ALIGN=RIGHT> %g </TD>\n", cpd);
+	    printf ("    <TD ALIGN=RIGHT> %g </TD></TR>\n", 1.0 - cpd);
+	    someDisplayed = TRUE;
+	    }
+	}
+    if (!someDisplayed)
+	puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
+    }
+else
+    puts ("<TR><TD COLSPAN=8 ALIGN=CENTER> no data found for histogram </TD></TR>\n");
+
+printf ("</TABLE></TD></TR></TABLE></P>\n");
+
+}
 
 void statsPreamble(struct wiggleDataStream *wDS, char *chrom,
     int winStart, int winEnd, unsigned span, unsigned long long valuesMatched)
