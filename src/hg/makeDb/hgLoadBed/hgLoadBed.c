@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.19 2004/01/29 21:40:21 hartera Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.20 2004/01/30 22:42:09 hartera Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -205,7 +205,7 @@ writeBedTab(tab, bedList, bedSize);
 printf("Loading %s\n", database);
 sqlLoadTabFile(conn, tab, track, loadOptions);
 
-// add a comment to the history table and finish up connection
+/* add a comment to the history table and finish up connection */
 safef(comment, sizeof(comment), "Add %d element(s) from bed list to %s table", slCount(bedList), track);
 hgHistoryComment(conn, comment);
 sqlDisconnect(&conn);                                                           }

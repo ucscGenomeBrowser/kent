@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.16 2004/01/29 21:37:19 hartera Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.17 2004/01/30 22:43:06 hartera Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -88,7 +88,7 @@ dyStringPrintf(ds,
 
 sqlUpdate(conn, ds->string);
 
-// add a comment and ids to the history table and finish up connection
+/* add a comment and ids to the history table and finish up connection */
 safef(comment, sizeof(comment), "Add gene predictions to %s table", table);
 hgHistoryComment(conn, comment);
 sqlDisconnect(&conn);
