@@ -926,6 +926,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-11-22, hartera)
 # RE-DONE (2004-12-03, hartera)
+# PUT MASKED SEQUENCE ON BLUEARC (DONE, 2004-12-22, hartera)
     ssh kkr1u00
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
     rm -rf /iscratch/i/danRer2/nib
@@ -942,6 +943,10 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     cp -p /cluster/data/danRer2/*/chr*.fa.out /iscratch/i/danRer2/rmsk
     cp -p /cluster/data/danRer2/danRer2.2bit /iscratch/i/danRer2/
     iSync
+    # add to the bluearc
+    ssh kksilo
+    mkdir -p /cluster/bluearc/danRer2/nib
+    cp -p /cluster/data/danRer2/nib/chr*.nib /cluster/bluearc/danRer2/nib
 
 # CREATE gc5Base wiggle TRACK (DONE, 2004-12-03, hartera)
     ssh kksilo
@@ -2544,3 +2549,231 @@ Completed: 2990 of 2990 jobs
 
     cp -p Danio_rerio.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
+
+# EXTRACT AXTs and MAFs FROM FUGU (fr1) NET (DONE, 2004-12-22, hartera)
+    ssh kksilo
+    # create axts
+    cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
+    gunzip fuguFr1.net.gz
+    gunzip chainAR/*.chain.gz
+    netSplit fuguFr1.net fuguFr1Net
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (fuguFr1Net/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt fuguFr1Net/$c.net chainAR/$c.chain \
+                 /cluster/data/danRer2/nib \
+                 /cluster/data/fr1/nib ../axtNet/$c.axt
+    echo "Complete: $c.net -> $c.axt"
+    end
+'EOF'
+    chmod +x axtNet.csh
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+    # sort axts before making mafs - must be sorted for multiz
+    cd /cluster/data/danRer2/bed/blastz.fr1
+    mv axtNet axtNet.unsorted
+    mkdir axtNet
+    foreach f (axtNet.unsorted/*.axt)
+        set c = $f:t:r
+        echo "Sorting $c"
+        axtSort $f axtNet/$c.axt
+    end
+    # create maf
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.fr1
+    cd axtNet
+    mkdir ../mafNet
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.fr1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/danRer2/chrom.sizes /cluster/data/fr1/chrom.sizes \
+            ../mafNet/$maf -tPrefix=danRer2.  -qPrefix=fr1.
+    end
+'EOF'
+    chmod +x makeMaf.csh
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+    cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
+    nice gzip fuguFr1.net chainAR/*.chain &
+
+# EXTRACT AXTs and MAFs FROM TETRAODON (tetNig1) NET (DONE, 2004-12-22, hartera)
+    ssh kksilo
+    # create axts
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain
+    netSplit tetraTetNig1.net tetraTetNig1Net
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (tetraTetNig1Net/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt tetraTetNig1Net/$c.net chainAR/$c.chain \
+                 /cluster/data/danRer2/nib \
+                 /cluster/data/tetNig1/nib ../axtNet/$c.axt
+    echo "Complete: $c.net -> $c.axt"
+    end
+'EOF'
+    chmod +x axtNet.csh
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+    # sort axts before making mafs - must be sorted for multiz
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+    mv axtNet axtNet.unsorted
+    mkdir axtNet
+    foreach f (axtNet.unsorted/*.axt)
+        set c = $f:t:r
+        echo "Sorting $c"
+        axtSort $f axtNet/$c.axt
+    end
+    # create maf
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+    cd axtNet
+    mkdir ../mafNet
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.tetNig1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+          /cluster/data/danRer2/chrom.sizes /cluster/data/tetNig1/chrom.sizes \
+          ../mafNet/$maf -tPrefix=danRer2.  -qPrefix=tetNig1.
+    end
+'EOF'
+    chmod +x makeMaf.csh
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+
+# TIGR GENE INDEX (DONE, 2004-12-22, hartera)
+# Data from rsultana@tigr.org (Razvan Sultana at TIGR)
+    ssh kksilo
+    mkdir -p /cluster/data/danRer2/bed/tigr
+    cd /cluster/data/danRer2/bed/tigr
+wget ftp://ftp.tigr.org/pub/data/tgi/Danio_rerio/TGI_track_danRer2_12-2004.tgz    
+    tar xvzf TGI*.tgz
+    foreach f (*g_gallus*)
+       set f1 = `echo $f | sed -e 's/g_gallus/chicken/g'`
+       mv $f $f1
+    end
+
+    foreach f (*drosoph*)
+    set f1 = `echo $f | sed -e 's/drosoph/Dmelano/g'`
+       mv $f $f1
+    end
+
+    foreach o (Dmelano chicken elegans human mouse rat zfish)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/tigr
+    hgsql danRer2 -e "drop table tigrGeneIndex"
+
+    nice ldHgGene -exon=TC danRer2 tigrGeneIndex *.gff
+    # Read 114013 transcripts in 395310 lines in 196 files
+    # 114013 groups 28 seqs 1 sources 1 feature types
+    # 114013 gene predictions
+
+    hgsql danRer2 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql danRer2 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords danRer2 tigrGeneIndex
+    /cluster/bin/scripts/runGeneCheck /cluster/data/danRer2/bed/tigr
+    # 135739 badUtrSplice
+    # 114013 noCDS - fixed these in table as above
+    # 30191 gap
+
+    gzip *.gff *TCs
+    # make changes in doTigrGeneIndex function in hgc to add original species
+    # name back when constructing URL to TIGR web site.
+
+# 3-WAY MULTIZ MULTIPLE ALIGNMENT 
+# (zebrafish danRer2, fugu fr1 and tetraodon tetNig1)
+# (DONE, 2004-12-23, hartera)
+# use v.8 of multiz (see makeHg17.doc for 8-WAY alignment)
+    ssh kksilo
+    set multizDir = multiz.2004-12-22
+    set workingDir = /cluster/bluearc/danRer2/$multizDir
+    ln -s $workingDir /cluster/bluearc/danRer2/multiz3way
+    mkdir -p $workingDir
+    mkdir -p /cluster/data/danRer2/bed/$multizDir
+    ln -s /cluster/data/danRer2/bed/$multizDir \
+          /cluster/data/danRer2/bed/multiz3way
+    cd /cluster/data/danRer2/bed/multiz3way
+
+# wrapper script for multiz
+    # NOTE: first arg is pairwise, 2nd arg is multiple (to add to)
+    # NOTE: next time, modify script so it only needs one arg -- saves the
+    # multiple dirname in a file for use by the next run
+cat << 'EOF' > doMultiz.csh
+#!/bin/csh -fe
+mkdir -p $3:h
+/cluster/bin/penn/multiz $1 $2 - > $3
+'EOF'
+# << for emacs
+    cat << 'EOF' > gsub
+#LOOP
+../doMultiz.csh {check in line /cluster/bluearc/danRer2/multiz3way/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/danRer2/multiz3way/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/danRer2/multiz3way/$(root1)$(dir1)/$(root2).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+    chmod +x doMultiz.csh
+
+    ssh kksilo
+    set workingDir = /cluster/bluearc/danRer2/multiz3way
+    # copy mafs to bluearc for tetraodon (tetNig1)
+    mkdir $workingDir/tetNig1
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/mafNet
+    foreach f (*.maf)
+       set c = $f:t:r
+       set g = $c:t:r
+       echo $g
+       cp $f $workingDir/tetNig1/${g}.maf
+    end
+    cd /cluster/data/danRer2/bed/multiz3way
+    ls $workingDir/tetNig1/*.maf > chrom.lst
+
+    # fugu (fr1)
+    mkdir $workingDir/fr1
+    cd /cluster/data/danRer2/bed/blastz.fr1/mafNet
+    foreach f (*.maf)
+       set c = $f:t:r
+       set g = $c:t:r
+       echo $g
+       cp $f $workingDir/fr1/${g}.maf
+    end
+
+    # one multiz - add in fugu to zebrafish/tetraodon
+    ssh kki
+    set workingDir = /cluster/bluearc/danRer2/multiz3way
+    cd /cluster/data/danRer2/bed/multiz3way
+    mkdir run.fr1
+    cd run.fr1
+    echo "fr1/tetNig1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+    # 28 jobs in batch 
+    para try, check, push, check ...
+# para time
+# CPU time in finished jobs:        337s       5.62m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                   153s       2.55m     0.04h    0.00d  0.000 y
+# Average job time:                  18s       0.29m     0.00h    0.00d
+# Longest job:                       66s       1.10m     0.02h    0.00d
+# Submission to last job:           134s       2.23m     0.04h    0.00d
+
+    cd ..
+    # copy 3-way mafs to build directory
+    ssh kksilo
+    set workingDir = /cluster/bluearc/danRer2/multiz3way
+    ln -s $workingDir/tetNig1fr1 $workingDir/maf
+    cd /cluster/data/danRer2/bed/multiz3way
+    mkdir maf
+    cp $workingDir/maf/*.maf maf
+
+
