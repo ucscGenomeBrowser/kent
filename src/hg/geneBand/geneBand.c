@@ -65,7 +65,6 @@ char **row;
 struct refLink rl;
 FILE *f = mustOpen(outFile, "w");
 
-fprintf(f, "#name\trefSeq\tbands\npositions\n");
 sr = sqlGetResult(conn, "select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
