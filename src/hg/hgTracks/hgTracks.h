@@ -114,6 +114,8 @@ struct track
     struct group *group;  /* Group this track is associated with. */
     boolean canPack;	/* Can we pack the display for this track? */
     struct spaceSaver *ss;  /* Layout when packed. */
+
+    struct trackDb *tdb; /*todo:change visibility, etc. to use this */
     };
 
 struct trackRef 
@@ -364,6 +366,9 @@ typedef struct slList *(*ItemLoader)(char **row);
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
+
+struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax);
+/* Return a linked feature from a (full) bed. */
 
 struct linkedFeatures *lfFromBed(struct bed *bed);
 /* Return a linked feature from a (full) bed. */
