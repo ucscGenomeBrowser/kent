@@ -292,7 +292,7 @@ else if (sameWord(type, "genie"))
     geniePepPred(argv[1], argc-3, argv+3);
 else if (sameWord(type, "softberry"))
     softberryPepPred(argv[1], argc-3, argv+3);
-if (sameWord(type, "generic"))
+else if (sameWord(type, "generic"))
     genericPepPred(argv[1], argc-4, argv+4, argv[3]);
 else
     usage();
