@@ -84,25 +84,33 @@ format description of their fields.</P>
   href="#PslInfo">chrN_blastzBestMouse</A> 
   - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
     of mouse vs. human, filtered to retain only the best match for a given 
-    region of the human genome.  (Dec 2001 and later)
+    region of the human genome  (Dec 2001 and later)
+  <LI><A 
+  href="#PslInfo">chrN_blastzCb1</A> 
+  - Blastz alignments of May 2003 C. elegans (ce1) vs. Jul 2002 C. briggsae (cb1)
+  <LI><A 
+  href="#PslInfo">chrN_blastzCe1</A> 
+  - Blastz alignments of Jul 2002 C. briggsae (cb1) vs. May 2003 C. elegans (ce1)
   <LI><A 
   href="#PslInfo">chrN_blastzMm2</A> 
-  - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
-    of Feb. 2002 mouse (mm2) vs. human.  (Dec 2001 and later)
+  - Blastz alignments of Feb. 2002 mouse (mm2) vs. human
   <LI><A 
   href="#PslInfo">chrN_blastzMm3</A> 
-  - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
-    of Feb. 2003 mouse (mm3) vs. human.  (Dec 2001 and later)
+  - Blastz alignments of Feb. 2003 mouse (mm3) vs. human  (Dec 2001 and 
+    later)
+  <LI><A 
+  href="#PslInfo">chrN_blastzSelf</A> 
+  - Blastz alignments of a genome against itself
   <LI><A 
   href="#PslInfo">chrN_blastzTightMm3</A> 
-  - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
-    of mouse (mm3) vs. human, filtered to retain only the best match for a given 
-    region of the human genome, and further filtered to high-scoring matches.
+  - Blastz alignments of mouse (mm3) vs. human, filtered to retain only the 
+    best match for a given region of the human genome, and further filtered to 
+    high-scoring matches
   <LI><A 
   href="#PslInfo">chrN_blastzTightMouse</A> 
   - Blastz alignments 
     of mouse vs. human, filtered to retain only the best match for a given 
-    region of the human genome, and further filtered to high-scoring matches.
+    region of the human genome, and further filtered to high-scoring matches
     (June 2002)
   <LI><A 
   href="#PslInfo">chrN_blatFish</A> 
@@ -119,6 +127,24 @@ format description of their fields.</P>
   <LI><A 
   href="#PslInfo">chrN_blatMus</A> 
   - Translated BLAT mouse alignments.  (Dec 2001 and later)
+  <LI><A 
+  href="#Chain">chrN_cb1Chain</A> 
+  - Summary info about chain of C. briggsae alignments </LI>
+  <LI><A 
+  href="#ChainLink">chrN_cb1ChainLink</A> 
+  - Alignment block in C. briggsae chain </LI>
+  <LI><A 
+  href="#Chain">chrN_ce1Chain</A> 
+  - Summary info about chain of C. elegans alignments </LI>
+  <LI><A 
+  href="#ChainLink">chrN_ce1ChainLink</A> 
+  - Alignment block in C. elegans chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainSelf</A> 
+  - Summary info about chain of self alignments </LI>
+  <LI><A 
+  href="#ChainLink">chrN_chainSelfLink</A> 
+  - Alignment block in self alignment chain </LI>
   <LI><A 
   href="#PslInfo">chrN_est</A> 
   - EST alignments 
@@ -143,6 +169,9 @@ format description of their fields.</P>
   <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
   - Repeating elements created using RepeatMasker </LI>
+  <LI><A 
+  href="#WabaChromCreate">chrN_wabaCbr</A> 
+  - C. briggsae WABA alignments - abbreviated description
   <LI><A 
   href="#wiggleTrack">chrN_zoom1_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores (very large scale)
@@ -581,6 +610,9 @@ cover the same region </LI>
   <LI><A 
   href="#GenePredictions">vegaPseudoGene</A> 
   - Annotated pseudogenes and immunoglobulin segments from the VEGA database</A> (Human chr14, 20, 22 only) </LI>
+  <LI><A 
+  href="#WabaFullCreate">wabaCbr</A> 
+  - C. briggsae WABA alignments - full description
   <LI><A 
   href="#PslInfo">xenoEst</A> 
   - Nonhuman ESTs from Genbank </LI>
@@ -2191,6 +2223,39 @@ The bacEndPairs table uses all fields.
     int chromIx;        "Number of clone in tiling path starting chrom start"
     )
 </PRE>
+
+<H4><A name=WabaChromCreate></A>Waba Alignments (Abbreviated version)</H4>
+<PRE>table chrN_wabaCbr
+"Abbreviated Waba alignment table for quick display"
+    (
+    string query;	"Name of foreign sequence"
+    uint chromStart;	"Start in genomic sequence"
+    uint chromEnd; 	"End in genomic sequence"
+    char strand; 	"Relative orientation"
+    uint milliScore; 	"Identity in parts per thousand"
+    longblob squeezed;	"HMM symbols with target inserts squeezed out"
+    }
+</PRE>
+
+<H4><A name=WabaFullCreate></A>Waba Alignments (Full description)</H4>
+<PRE>table wabaCbr
+"Information on a Waba alignment"
+  (
+  string query; 	"Name of foreign sequence"
+  uint qStart;		"Start of alignment in query"
+  uint qEnd; 		"End of alignment in query"
+  char qStrand;		"Which strand"
+  string chrom; 	"Which chromosome"
+  uint chromStart;	"Start in chromosome sequence"
+  uint chromEnd; 	"End in chromosome sequence"
+  uint milliScore	"Identity in parts per thousand"
+  uint symCount;	"Number of symbols in following blobs"
+  longblob qSym; 	"Query sequence and insert chars"
+  longblob tSym;	"Target sequence and insert chars"
+  longblob hSym;	"HMM symbols"
+  )
+</PRE>
+
 
 	<BR></TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
