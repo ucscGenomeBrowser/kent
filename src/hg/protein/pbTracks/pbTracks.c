@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.20 2004/01/29 19:57:41 donnak Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.21 2004/02/02 18:16:25 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -26,6 +26,7 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
 char *hgsid;
+char hgsidStr[50];
 
 int gfxBorder = 1;		/* Width of graphics border. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
@@ -65,6 +66,9 @@ char aa[100000];
 
 struct vGfx *g_vg;
 MgFont *g_font;
+
+int pbRed, pbBlue;
+
 int  currentYoffset;
 int  pbScale = {6};
 char pbScaleStr[5];
@@ -84,7 +88,8 @@ int exStart[500], exEnd[500];
 int exCount;
 int aaStart[500], aaEnd[500];
 
-char kgProtMapTableName[20] = {"markdKgProtMap"}; 
+//char kgProtMapTableName[20] = {"markdKgProtMap"}; 
+char kgProtMapTableName[20] = {"kgProtMap"}; 
 int blockSize[500], blockSizePositive[500];
 int blockStart[500], blockStartPositive[500];
 int blockEnd[500],   blockEndPositive[500];
@@ -97,8 +102,11 @@ boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
 Color bkgColor;
 
-int abnormalColor = MG_RED;
-int normalColor   = MG_BLUE;
+//int abnormalColor = MG_RED;
+//int normalColor   = MG_BLUE;
+
+int abnormalColor;
+int normalColor;
 
 void dvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
@@ -228,6 +236,12 @@ else
 
 g_vg = vg2;
 
+pbRed    = vgFindColorIx(vg2, 0xf9, 0x51, 0x59);
+pbBlue   = vgFindColorIx(g_vg, 0x00, 0x00, 0xd0);
+
+normalColor   = pbBlue;
+abnormalColor = pbRed;
+
 bkgColor = vgFindColorIx(vg2, 255, 254, 232);
 vgBox(vg2, 0, 0, insideWidth, pixHeight, bkgColor);
 
@@ -259,9 +273,9 @@ histDone:
 
 hPrintf("<P>");
 
-doGenomeBrowserLink(protDisplayID, mrnaID);
-doGeneDetailsLink(protDisplayID, mrnaID);
-doFamilyBrowserLink(protDisplayID, mrnaID);
+doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
+doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
+doFamilyBrowserLink(protDisplayID, mrnaID, hgsidStr);
 
 hPrintf("<P>");
 domainsPrint(conn, proteinID);
@@ -287,10 +301,10 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
-hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", 
-	"UCSC Proteome Browser (V1.0)");
+hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
+        "UCSC Proteome Browser (V1.0)");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbTracks?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
-	cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
+        cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
 hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\">%s</A></TD>",
         wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
@@ -381,6 +395,15 @@ hDefaultConnect();
 conn  = hAllocConn();
 
 hgsid     = cartOptionalString(cart, "hgsid");
+if (hgsid != NULL)
+    {
+    sprintf(hgsidStr, "&hgsid=%s", hgsid);
+    }
+else
+    {
+    strcpy(hgsidStr, "");
+    }
+
 proteinID = cartOptionalString(cart, "proteinID");
 
 // check proteinID to see if it is a valid SWISS-PROT/TrEMBL accession or display ID
