@@ -669,6 +669,15 @@ priority 73
 visibility hide
 type psl .
 
+track miRNA
+shortLabel miRNA
+longLabel Sanger miRNA Registry
+group rna
+priority 73
+visibility hide
+type bed 5 +
+url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
+
 track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
@@ -1217,4 +1226,3 @@ gridDefault OFF
 color 0,128,255
 altColor 255,128,0
 type wig 0 100 
-
