@@ -154,6 +154,7 @@ endControlGrid(&cg);
 void wiggleUi(struct trackDb *tdb)
 /* put up UI for the wiggle track for representing curves inside * tracks */
 {
+int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "10"));
 char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "anti.alias", "on");
 printf("<p><b>Interpolation: </b> ");
@@ -164,6 +165,11 @@ cgiMakeRadioButton("anti.alias", "on", sameString(aa, "on"));
 printf(" on ");
 cgiMakeRadioButton("anti.alias", "off", sameString(aa, "off"));
 printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("wiggle.heightPer", wiggleHeightPer, 5 );
+printf("&nbsp;pixels");
+
 }
 
 
