@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.16 2004/05/24 18:33:25 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.17 2004/09/24 23:49:06 baertsch Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -42,6 +42,17 @@ int chainCmpScore(const void *va, const void *vb)
 const struct chain *a = *((struct chain **)va);
 const struct chain *b = *((struct chain **)vb);
 double diff = b->score - a->score;
+if (diff < 0.0) return -1;
+else if (diff > 0.0) return 1;
+else return 0;
+}
+
+int chainCmpScoreDesc(const void *va, const void *vb)
+/* Compare to sort based on total score descending. */
+{
+const struct chain *a = *((struct chain **)va);
+const struct chain *b = *((struct chain **)vb);
+double diff = a->score - b->score;
 if (diff < 0.0) return -1;
 else if (diff > 0.0) return 1;
 else return 0;

@@ -43,6 +43,9 @@ void chainFreeList(struct chain **pList);
 int chainCmpScore(const void *va, const void *vb);
 /* Compare to sort based on score. */
 
+int chainCmpScoreDesc(const void *va, const void *vb);
+/* Compare to sort based on score descending. */
+
 int chainCmpTarget(const void *va, const void *vb);
 /* Compare to sort based on target position. */
 
