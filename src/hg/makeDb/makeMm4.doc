@@ -1454,7 +1454,7 @@ SEQ2_LEN=$BASE/S2.len
     cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
     cd /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
     gzip *.axt
-XXXX running - 2003-10-31 - 16:20
+
     # add README.txt file to dir, if needed
 
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
@@ -1552,7 +1552,12 @@ SEQ2_LEN=$BASE/S2.len
     ../../jkStuff/BlastZ_run1.sh
     cd run.1
     para try, check, push, etc ...
-XXXX running 2003-10-31 14:30
+# Completed: 323 of 323 jobs
+# CPU time in finished jobs:      70707s    1178.45m    19.64h    0.82d  0.002 y
+# IO & Wait Time:                 14609s     243.48m     4.06h    0.17d  0.000 y
+# Average job time:                 264s       4.40m     0.07h    0.00d
+# Longest job:                     5502s      91.70m     1.53h    0.06d
+# Submission to last job:         10167s     169.45m     2.82h    0.12d
 
     #	Third cluster run to convert lav's to axt's
     ssh kk
@@ -1561,6 +1566,7 @@ XXXX running 2003-10-31 14:30
     ../../jkStuff/BlastZ_run2.sh
     cd run.2
     para try, check, push, etc ...
+XXXX running 2003-10-31 21:30
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2003-10-27 - Hiram)
 
@@ -1834,16 +1840,19 @@ rm -fr /tmp/${root1}_${root2}
 # Submission to last job:          5781s      96.35m     1.61h    0.07d
 
 # Compile alignments and lift the files (takes a while)
-    ssh kksilo
+    ssh kolossus
     cd /cluster/data/mm4/bed/bacends
     time pslSort dirs raw.psl temp bacEnds.out/*
     # real    836m25.100s	<- that is 14 hours !
     # user    522m23.850s
     # sys     63m52.100s
-    # it was a 68 Gb file !
-
+    # it is a 68 Gb file !
 
     time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl  bacEnds.psl /dev/null
+# Processed 540122688 alignments
+# 5289.06user 306.10system 1:56:57elapsed
+# 79%CPU (0avgtext+0avgdata 0maxresident)k
+# 0inputs+0outputs (146major+16134522minor)pagefaults 0swaps
 
 # time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl  bacEnds.psl /dev/null
     # Processed 540122688 alignments
@@ -1854,7 +1863,11 @@ rm -fr /tmp/${root1}_${root2}
     rmdir temp
     rm raw.psl		# 68 Gb !  It takes a while even to remove it.
 
+    ssh kksilo
     time /cluster/bin/scripts/lifter -psl -mouse /cluster/data/mm4 bacEnds.psl
+    # 4037.85
+    # user 743.34
+    # system 1:48:09elapsed 73%CP
     # real    28m29.554s	== 9 hours
     # user    4m48.770s
     # sys     4m3.580s
@@ -1862,15 +1875,24 @@ rm -fr /tmp/${root1}_${root2}
     cp -p ~booch/bacends/split.pl .
     cp -p ~booch/bacends/header .
     time ./split.pl header < bacEnds.psl.lifted
-    # real    12m14.003s
-    # user    2m38.230s
-    # sys     2m52.460s
+    # real 169.41
+    # user 38.91
+    # sys 43.44
+
+    #	These are 2 Gb files:
+    # -rw-rw-r--    1 2275160342 Nov  1 15:15 bacEnds.psl
+    # -rw-rw-r--    1 2385296298 Nov  1 22:19 bacEnds.psl.lifted
+
     # we are up to 8 Gb for these files:
     # -rw-rw-r--    1 8476583727 Oct 30 10:49 bacEnds.psl
     # -rw-rw-r--    1 8892639725 Oct 30 23:04 bacEnds.psl.lifted
 
     cp -p bacEnds.psl.lifted bacEnds.psl.lifted.save
     time pslSort dirs bacEnds.psl.lifted temp split
+    # real 1135.23
+    # user 934.31
+    # sys 112.83
+
     #real    72m23.363s
     #user    58m48.260s
     #sys     7m13.090s
@@ -1881,6 +1903,7 @@ rm -fr /tmp/${root1}_${root2}
     # Copy files to final destination and remove
     mkdir /cluster/data/mm4/bacends
     cp -p bacEnds.psl.lifted /cluster/data/mm4/bacends
+XXX done 2003-11-01 23:50
 
 # BACEND PAIRS TRACK (WORKING - 2003-10-28 - Hiram)
 
@@ -1896,6 +1919,8 @@ bin     chr     start   end     clone   score   strand  all     features        
 	time ${HOME}/bin/${MACHTYPE}/pslPairs -min=50000 -max=300000 \
 	-short -long -orphan -mismatch -verbose bacEnds.psl.lifted \
 	../bed/bacends/ncbi/bacEndPairs.txt bacEnds
+XXX running 2003-11-01 23:55
+
 XXXX - running 2003-10-31 14:45
 
         cat header ../bed/bacends/ncbi/bacEndPairs.txt | \
