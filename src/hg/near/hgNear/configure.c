@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.18 2003/08/29 21:33:37 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.19 2003/09/03 18:33:21 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -183,15 +183,14 @@ makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
-hPrintf("<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
+hPrintf("Show all splicing varients: ");
 cgiMakeCheckBox(showAllSpliceVarName, 
 	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
-hPrintf("Show all splicing varients. ");
 hPrintf("</TD><TD>");
 hPrintf("Expression ratio colors: ");
 colorSchemeDropDown();
-hPrintf(".");
 hPrintf("</TD><TD>");
 cgiMakeButton("submit", "Submit");
 hPrintf("</TD></TR></TABLE>");

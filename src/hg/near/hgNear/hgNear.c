@@ -15,7 +15,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.51 2003/08/30 05:57:46 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.52 2003/09/03 18:33:21 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -775,7 +775,7 @@ struct genePos *list;
 dyStringPrintf(query, 
 	"select target from knownExpDistance where query='%s'", 
 	curGeneId->name);
-dyStringPrintf(query, " order by distance limit %d", maxCount);
+dyStringPrintf(query, " order by distance limit %d", maxCount*2);
 list = neighborhoodList(conn, query->string, goodHash, maxCount);
 dyStringFree(&query);
 if (list == NULL)
@@ -795,7 +795,7 @@ struct genePos *list;
 dyStringPrintf(query, 
 	"select target from knownBlastTab where query='%s'", 
 	curGeneId->name);
-dyStringPrintf(query, " order by bitScore desc limit %d", (int)(maxCount*1.5));
+dyStringPrintf(query, " order by bitScore desc limit %d", (int)(maxCount*2));
 list = neighborhoodList(conn, query->string, goodHash, maxCount);
 dyStringFree(&query);
 if (list == NULL)
