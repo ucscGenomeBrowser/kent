@@ -12,7 +12,6 @@
 int maxDiff = 3;
 int ollySize = 25;
 int batchSize = 20000;
-boolean easyOut = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -34,9 +33,14 @@ errAbort(
   "   -batchSize=N Default number of oligoes to query in batch\n"
   "       For maxDiff 3, 10000 is good, for maxDiff 2 or less\n"
   "       100000 is good\n"
+  "   -batchChrom=chrN Restrict batch to one chromosome\n"
+  "   -extendedOut=file\n"
+  "       Put extended output in file\n"
   , maxDiff, ollySize 
   );
 }
+
+FILE *extendedOut;	/* Extended output file. */
 
 /* Olly first looks for perfect matches to discontinuous
  * seeds - similar to WABA, PatternHunter, and blastz.
@@ -101,10 +105,6 @@ for (i=0; i<seedSpan; ++i)
     if (seed[i] == '1')
         seedOff[wIx++] = i;
     }
-uglyf("%s\n", seed);
-for (i=0; i<seedWeight; ++i)
-    uglyf("%d,", seedOff[i]);
-uglyf("\n");
 }
 
 struct oHashEl
@@ -133,7 +133,6 @@ struct oHash *oHashNew()
 {
 struct oHash *hash;
 int tableSize = oHashTableSize();
-uglyf("tableSize %d\n", tableSize);
 AllocVar(hash);
 AllocArray(hash->table, tableSize);
 hash->lm = lmInit(1024 * 256);
@@ -212,7 +211,7 @@ struct match
     };
 
 void scanNeighborhood(struct dnaSeq *tSeq, DNA *tHit, char strand,
-	DNA *query, int qSize, DNA *qHit, 
+	char *queryChrom, int queryStart, DNA *query, int qSize, DNA *qHit, 
 	struct match **matches,  struct lm *lm, int *counts)
 /* Given a seed hit, scan for 25-mers that overlap hit that are
  * good enough to be promoted to matches. */
@@ -291,6 +290,15 @@ for (i=ollyInSize; i<regionSize; ++i)
 	   lmAllocVar(lm, match);
 	   match->tPos = tPos;
 	   slAddHead(&matches[qPos], match);
+	   if (extendedOut)
+	       {
+	       int qp = qPos + queryStart;
+	       fprintf(extendedOut, "%s\t%d\t", queryChrom, qPos + queryStart);
+	       mustWrite(extendedOut, query+qPos, ollySize);
+	       fprintf(extendedOut, "\t%d\t%c\t%s\t%d\t", diffCount, strand, tSeq->name,tPos);
+	       mustWrite(extendedOut, target+tPos, ollySize);
+	       fprintf(extendedOut, "\n");
+	       }
 	   }
        }
     if (target[tPos] != query[qPos])
@@ -299,7 +307,7 @@ for (i=ollyInSize; i<regionSize; ++i)
 }
 
 void scanSeq(struct oHash *hash, struct dnaSeq *geno, DNA *query, int querySize,
-	int *counts, char strand)
+	int *counts, char *queryChrom, int queryStart, char strand)
 /* Scan a sequence for matches. */
 {
 int i;
@@ -313,7 +321,7 @@ for (dna = geno->dna; dna <= end; dna += 1)
     struct oHashEl *el;
     for (el = hash->table[oHashFunc(dna)]; el != NULL; el = el->next)
 	{
-	scanNeighborhood(geno, dna, strand, query, querySize, el->pt,
+	scanNeighborhood(geno, dna, strand, queryChrom, queryStart, query, querySize, el->pt,
 		matches, lm, counts);
 	}
     }
@@ -322,13 +330,13 @@ lmCleanup(&lm);
 }
 
 void scanNib(struct oHash *hash, char *fileName, DNA *base, int baseSize,
-	int *counts)
+	char *queryChrom, int queryStart, int *counts)
 /* Scan nib file for matches */
 {
-struct dnaSeq *geno = nibLoadAll(fileName);
-scanSeq(hash, geno, base, baseSize, counts, '+');
+struct dnaSeq *geno = nibLoadAllMasked(NIB_BASE_NAME, fileName);
+scanSeq(hash, geno, base, baseSize, counts, queryChrom, queryStart, '+');
 reverseComplement(geno->dna, geno->size);
-scanSeq(hash, geno, base, baseSize, counts, '-');
+scanSeq(hash, geno, base, baseSize, counts, queryChrom, queryStart, '-');
 freeDnaSeq(&geno);
 }
 
@@ -352,69 +360,61 @@ chromSeq = nibLoadPartMasked(NIB_MASK_MIXED, nibName, start, seqSize);
 toggleCase(chromSeq->dna, chromSeq->size);
 
 hash = makeOllyHash(chromSeq, maxDiff);
+toLowerN(chromSeq->dna, chromSeq->size);
 AllocArray(counts, seqSize);
 if (hash != NULL)
     {
+    int total = 0;
+    int firstReal = -1, lastReal = 0;
     dirList = listDir(nibDir, "*.nib");
     for (el = dirList; el != NULL; el = el->next)
 	{
 	sprintf(nibName, "%s/%s", nibDir, el->name);
 	uglyf("%s\n", nibName);
-	scanNib(hash, nibName, chromSeq->dna, chromSeq->size, counts);
+	scanNib(hash, nibName, chromSeq->dna, chromSeq->size, chrom, start, counts);
 	}
-    if (easyOut)
+    for (i=0; i<ollyCount; ++i)
 	{
-	fprintf(f, "olly %s %d %d\n", chrom, start, ollyCount);
-	for (i=0; i<ollyCount; ++i)
-	    fprintf(f, "%d\n", counts[i]);
+	if (counts[i] != 0) 
+	    {
+	    ++total;
+	    if (firstReal < 0)
+		firstReal = i;
+	    lastReal = i;
+	    }
 	}
-    else
+    if (total > 0)
 	{
-	int total = 0;
-	int firstReal = -1, lastReal = 0;
+	fprintf(f, "%s\t%d\t%d\t", chrom, start + firstReal + ollySize/2, start + lastReal + ollySize/2 + 1);
+	fprintf(f, ".\t0\t+\t%d\t", total);
 	for (i=0; i<ollyCount; ++i)
 	    {
-	    if (counts[i] != 0) 
-		{
-	    	++total;
-		if (firstReal < 0)
-		    firstReal = i;
-		lastReal = i;
-		}
+	    if (counts[i] != 0)
+		fprintf(f, "%d,", i-firstReal);
 	    }
-	if (total > 0)
+	fprintf(f, "\t");
+	for (i=0; i<ollyCount; ++i)
 	    {
-	    fprintf(f, "%s\t%d\t%d\t", chrom, start + firstReal + ollySize/2, start + lastReal + ollySize/2 + 1);
-	    fprintf(f, ".\t0\t+\t%d\t", total);
-	    for (i=0; i<ollyCount; ++i)
+	    int c = counts[i];
+	    if (c != 0)
 		{
-		if (counts[i] != 0)
-		    fprintf(f, "%d,", i-firstReal);
+		fprintf(f, "%d,", c);
 		}
-	    fprintf(f, "\t");
-	    for (i=0; i<ollyCount; ++i)
-	        {
-		int c = counts[i];
-		if (c != 0)
-		    {
-		    fprintf(f, "%d,", c);
-		    }
-		}
-	    fprintf(f, "\n");
 	    }
+	fprintf(f, "\n");
 	}
     }
 }
 
 
 void batchLineOut(FILE *f, char *nibDir, char *chromName, 
-	int start, int end)
+	int start, int end, boolean doExtended)
 /* Output one line to batch file. */
 {
 fprintf(f, "olly %s %s %d %d -ollySize=%d -maxDiff=%d",
 	nibDir, chromName, start, end, ollySize, maxDiff);
-if (easyOut)
-    fprintf(f, " -easyOut");
+if (doExtended)
+     fprintf(f, " -extendedOut={check out line extendedOut/%s_%d.tab}", chromName, start);
 fprintf(f, " {check out line out/%s_%d.olly}\n", chromName, start);
 }
 
@@ -429,12 +429,16 @@ struct dnaSeq *chromSeq;
 DNA *dna;
 int i, lastOlly;
 int rangeStart, goodCount;
+boolean doExtended = optionExists("extendedOut");
+char *batchChrom = optionVal("batchChrom", NULL);
 
 dirList = listDir(nibDir, "*.nib");
 for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     {
     sprintf(nibName, "%s/%s", nibDir, dirEl->name);
     splitPath(dirEl->name, NULL, chromName, NULL);
+    if (batchChrom && !sameString(chromName, batchChrom))
+        continue;
     chromSeq = nibLoadAllMasked(NIB_MASK_MIXED, nibName);
     printf("%s \n", chromName);
     dna = chromSeq->dna;
@@ -448,7 +452,7 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
 	    ++goodCount;
 	    if (goodCount >= batchSize)
 	        {
-		batchLineOut(f, nibDir, chromName, rangeStart, i+ollySize);
+		batchLineOut(f, nibDir, chromName, rangeStart, i+ollySize, doExtended);
 		rangeStart = i;
 		goodCount = 0;
 		}
@@ -456,7 +460,7 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
 	}
     if (goodCount != 0)
         {
-	batchLineOut(f, nibDir, chromName, rangeStart, chromSeq->size);
+	batchLineOut(f, nibDir, chromName, rangeStart, chromSeq->size, doExtended);
 	}
     freeDnaSeq(&chromSeq);
     }
@@ -469,13 +473,14 @@ optionHash(&argc, argv);
 dnaUtilOpen();
 ollySize = optionInt("ollySize", ollySize);
 maxDiff = optionInt("maxDiff", maxDiff);
-easyOut = optionExists("easyOut");
 
 if (maxDiff > 3)
    errAbort("maxDiff can only be up to 3");
 if (ollySize < minOllySize[maxDiff] )
    errAbort("For %d mismatches, minimum oligo size is %d", maxDiff, ollySize);
 batchSize = optionInt("batchSize", defaultBatchSize[maxDiff]);
+if (optionExists("extendedOut"))
+    extendedOut = mustOpen(optionVal("extendedOut", NULL), "w");
 
 seedInit(seedForMiss[maxDiff]);
 if (optionExists("makeBatch"))
