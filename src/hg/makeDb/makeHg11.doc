@@ -360,6 +360,8 @@ o - Add Jackson labs info DONE
      mysql -u hgcat -pBIGSECRET -A hg11
     and at the mysql> prompt
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
+o - Add RefSeq status info (DONE 6/19/02)
+    hgRefSeqStatus hg11 loc2ref
 
 
 PRODUCING GENSCAN PREDICTIONS (done)

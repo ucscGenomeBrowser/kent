@@ -252,6 +252,8 @@ o - Get extra info from NCBI and produce refGene table as so:
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc
 o - Produce refGenn, refPep, refMrna, and refLink tables as so:
        hgRefSeqMrna mm2 refSeq.fa refSeq.ra all_refSeq.psl loc2ref mouse.faa mim2loc
+o - Add RefSeq status info (done 6/19/02)
+    hgRefSeqStatus mm2 loc2ref
 
 
 SIMPLE REPEAT TRACK (done)

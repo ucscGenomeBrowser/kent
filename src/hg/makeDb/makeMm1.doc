@@ -209,6 +209,8 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        cd ~/mm/bed/refSeq
        ln -s /cluster/store1/mrna.127 mrna
        hgRefSeqMrna mm1 mrna/mouseRefSeq.fa mrna/mouseRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/mouse.faa mim2loc
+o - Add RefSeq status info (done 6/19/02)
+    hgRefSeqStatus mm1 loc2ref
 
 
 SIMPLE REPEAT TRACK (done)
