@@ -125,7 +125,9 @@ for (contig = contigList; contig != NULL; contig = contig->next)
         {
 	if (agp->type[0] != 'N')
 	    {
-	    fprintf(f, "%s_1\t%d\t%d\t%s\n",  agp->frag, agp->chromStart, agp->chromEnd,
+	    fprintf(f, "%s_1\t%d\t%d\t%s\n",  agp->frag, 
+	    	agp->chromStart, 
+		agp->chromEnd,
 	        agp->strand);
 	    }
 	}
@@ -149,8 +151,8 @@ for (contig = contigList; contig != NULL; contig = contig->next)
 	strcpy(clone, agp->frag);
 	chopSuffix(clone);
 	
-	fprintf(f, "%d\t%s\t%d\t100\tn/a\t0\n", agp->chromStart, clone,
-		agp->chromEnd - agp->chromStart);
+	fprintf(f, "%d\t%s\t%d\t100\tn/a\t0\n", agp->chromStart, 
+		clone, agp->chromEnd);
 	}
     carefulClose(&f);
 
