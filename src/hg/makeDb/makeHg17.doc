@@ -3967,16 +3967,22 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     hgLoadBed hg17 gnfAtlas2 gnfAtlas2.bed
     #	Loaded 34319 elements of size 15
 
-# LOAD SNPS ( Daryl Thomas; November 7, 2004 ; snpExceptions added January 8, 2005 )
+# LOAD SNPS ( Daryl Thomas; November 7, 2004 ; 
+	      snpExceptions added January 8, 2005 ; 
+	      updated to build 124 on January 13, 2005)
     set db    = hg17
     set org   = human
-    set build = 123
+    set build = 124
     set dir   = /cluster/bluearc/snp/$db/build$build
 
     # ssh to some quiet machine with fast access to the bluearc
-    # it takes ~3 hours to download the data
-    mkdir -p $dir
+    # it takes ~4.5 hours to download the data 
+    # (build 124 directly to /cluster/bluearc/... from eieio)
+    # Check to make sure the chrMT file is included
+    mkdir -p $dir $dir/ds_ch.xml $dir/det $dir/str $dir/loc $dir/seq
     cd $dir
+    ln -s /cluster/data/$db/jkStuff/liftAll.lft .
+
     screen
     ftp ftp.ncbi.nih.gov
     cd snp/$org/XML
@@ -3984,6 +3990,8 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     mget ds_ch*.xml.gz
     exit # screen
     exit # machine
+
+    # TODO: check chromStart for each locType
 
     cp -f {$HOME}/kent/src/hg/snp/parseDbSnpXML /cluster/bin/scripts
     chmod 775 /cluster/bin/scripts/parseDbSnpXML
@@ -3994,34 +4002,75 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
 	    set out = $file:t:r
 	    echo /cluster/bin/scripts/parseDbSnpXML $file /cluster/bluearc/snp/$db/build$build $out.contig >> jobList
     end
-    # para create jobList; para push; para check ... ( ~ 35 minutes for hg16.build121 chr1 )
+
+    # I removed ds_chMulti.xml.gz and ds_chNotOn.xml.gz from the job list
+    # para create jobList; para push; para check ... 
+
+#Completed: 25 of 25 jobs
+#CPU time in finished jobs:      30120s     502.01m     8.37h    0.35d  0.001 y
+#IO & Wait Time:                  2533s      42.21m     0.70h    0.03d  0.000 y
+#Average job time:                1306s      21.77m     0.36h    0.02d
+#Longest job:                     2611s      43.52m     0.73h    0.03d
+#Submission to last job:          2611s      43.52m     0.73h    0.03d
     exit # kk
 
-    cd $dir
-    time cat *.det > $db.build$build.contig.bed # ~2 minutes
-    ln -s /cluster/data/$db/jkStuff/liftAll.lft .
-    time liftUp $db.build$build.bed liftAll.lft warn $db.build$build.contig.bed # ~7 minutes
-    time hgLoadBed $db snp $db.build$build.bed -sqlTable=${HOME}/kent/src/hg/lib/snp.sql # ~45 minutes
     mv -r $dir /cluster/data/$db/bed/snp/build$build
+    set dir = /cluster/data/$db/bed/snp/build$build
+    cd $dir
+
+    # concatenate the details files to make it easier to lift (and load)
+    time zcat det/ds_ch*.xml.contig.det.gz > $db.build$build.contig.bed
+    # 33.380u 24.470s 1:54.79 50.3%   0+0k 0+0io 86pf+0w (hgwdev)
+    time gzip $db.build$build.contig.bed
+    # 251.160u 16.770s 12:40.77 35.2% 0+0k 0+0io 83pf+0w (hgwdev/bluearc - should have done it on eieio/store5)
+
+    # some of the NT contigs are not in the liftSpec - this is expected as snps that map to
+    # alternate assemblies (Celera) are in the original files, but we disregard their mappings.
+    time liftUp $db.build$build.bed liftAll.lft warn $db.build$build.contig.bed.gz 
+    # 232.260u 30.050s 5:09.04 84.8%  0+0k 0+0io 379pf+0w (hgwdev/store5)
+
+    time gzip hg17.build124.bed                                                                      
+    # 141.980u 8.180s 2:34.43 97.2%   0+0k 0+0io 83pf+0w
+
+    # hgLoadBed is the important step - check to make sure there are no warnings
+    time hgLoadBed $db snp $db.build$build.bed.gz -sqlTable=${HOME}/kent/src/hg/lib/snp.sql
+    # Loaded 9131054 elements of size 16
+    # 225.040u 37.030s 35:20.45 12.3% 0+0k 0+0io 308pf+0w
 
     # basic snp table is now loaded, but exception column needs to be updated
     # ~ 3 hours wall clock time from here to end
 
     # run queries from snpException.query against snp table
-    time snpException hg17 0 hg17snpException > log
-    # 8.780u 16.590s 49:41.52 0.8%    0+0k 0+0io 301pf+0w
+    mkdir -p /usr/local/apache/htdocs/qa/test-results/snpException/build$build
+    cd       /usr/local/apache/htdocs/qa/test-results/snpException/build$build
+    time snpException hg17 0 ${db}snpException > ${db}snpException.log
+    chmod o+rx . 
+    chmod o+r  * 
+    # 10.610u 19.200s 53:59.98 0.9%   0+0k 0+0io 264pf+0w
 
     # check alignment of flanking sequences
-    time snpValid hg17 /cluster/data/hg17/bed/snp/build123/seq > hg17.log
-    # 5258.690u 187.500s 1:38:45.90 91.9%     0+0k 0+0io 50390pf+0w
+    time snpValid $db /cluster/data/$db/bed/snp/build$build/seq > ${db}snpValid.log
+    # 5205.860u 216.570s 1:55:10.27 78.4%     0+0k 0+0io 72408pf+0w (hgwdev)
+
+    ### NOTE: the pseudoautosomal snps are reported in the chrX files
+    ### only, which causes problems for snpValid when checking the
+    ### chrY snp mappings.  I got around this by confirming that all
+    ### of the 'missing flank' errors (#23) were in pseudoautosomal
+    ### regions and ignoring them.  I manually truncated the
+    ### hg17snpException.23.bed file before continuing with the next
+    ### step.  This could/should be fixed in the next iteration.
 
     # create list of statements to update the snp table and run them
-    time tail +3 hg17snpException.* | awk '/rs/ {printf "%s\t%d\t%d\n",$4,$2,$5}' | sort -k1,2n > exceptionList.txt
+    time tail +3 ${db}snpException.* | awk '/rs/ {printf "%s\t%d\t%d\n",$4,$2,$5}' | sort -k1,2n > exceptionList.txt
     # ~10 seconds
     time updateExceptionList.pl < exceptionList.txt > updateExceptionList.sql
-    # 7.660u 0.460s 0:08.11 100.1%    0+0k 0+0io 337pf+0w
+    # 7.250u 0.390s 0:07.87 97.0%     0+0k 0+0io 337pf+0w
     time hgsql hg17 < updateExceptionList.sql
-    # 8.420u 10.370s 11:58.44 2.6%    0+0k 0+0io 413pf+0w  (this is mostly a mysql process)
+    # 8.420u 10.370s 11:58.44 2.6%    0+0k 0+0io 413pf+0w build123 (this is mostly a mysql process)
+    # 6.550u  9.370s 14:34.17 1.8%    0+0k 0+0io 413pf+0w build124
+    # > wc -l build12*/updateExceptionList.sql
+    #  387166 build123/updateExceptionList.sql
+    #  383759 build124/updateExceptionList.sql
 
 
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
