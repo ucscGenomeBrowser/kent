@@ -953,10 +953,6 @@ struct hashEl *hel;
 hel = hashLookup(fragHash, name);
 if (hel == NULL)
     {
-    hel = hashLookup(fragHash, "NT_000458.1_1");
-    uglyf("hel = %x for %s\n", hel, "NT_000458.1_1");
-    if (hel != NULL)
-        uglyf("hel->name = %s\n", hel->name);
     errAbort("Conflict between psl file and clone fragments. "
 	     "Can't find %s", name);
     }
@@ -1674,7 +1670,6 @@ struct barge *barge;
  * clones in the same barge. */
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    uglyf("psl tName = %s, qName = %s\n", psl->qName, psl->tName);
     if (pslFragFilter(psl, fragHash))
 	{
 	qClone = cloneFromName(psl->qName, pCloneList, cloneHash);
@@ -2938,7 +2933,7 @@ for (barge = bargeList; barge != NULL; barge = barge->next)
 	    }
 	}
     }
-uglyf("Got %d map overlaps\n", mapOverlapCount);
+printf("Got %d map overlaps\n", mapOverlapCount);
 }
 
 void figureMapEnclosures(struct barge *bargeList)
@@ -2996,7 +2991,7 @@ for (barge = bargeList; barge != NULL; barge = barge->next)
 	    }
 	}
     }
-uglyf("Found %d enclosed clones\n", enclosedCount);
+printf("Found %d enclosed clones\n", enclosedCount);
 freeMem(openClones);
 }
 
