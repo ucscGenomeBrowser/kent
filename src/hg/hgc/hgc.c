@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.842 2005/03/02 16:11:00 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.843 2005/03/03 07:46:48 donnak Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2739,10 +2739,10 @@ else
 
 hgSeqOptionsHtiCart(hti,cart);
 puts("<P>");
-cgiMakeButton("submit", "Get DNA");
-cgiMakeButton("submit", "Extended case/color options");
+cgiMakeButton("submit", "get DNA");
+cgiMakeButton("submit", "extended case/color options");
 puts("</FORM><P>");
-puts("Note: The \"Mask repeats\" option applies only to \"Get DNA\", not to \"Extended case/color options\". <P>");
+puts("Note: The \"Mask repeats\" option applies only to \"get DNA\", not to \"extended case/color options\". <P>");
 }
 
 boolean dnaIgnoreTrack(char *track)
@@ -2966,7 +2966,7 @@ cgiMakeRadioButton("case", "upper", caseUpper);
 printf(" Upper ");
 cgiMakeRadioButton("case", "lower", !caseUpper);
 printf(" Lower ");
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("Submit", "submit");
 printf("<BR>\n");
 printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
