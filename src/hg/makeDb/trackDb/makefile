@@ -12,6 +12,8 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
+include ../../../inc/common.mk
+
 DBS = 	hg13 hg15 hg16 hg17 \
 	panTro1 \
 	canFam1 \
@@ -84,7 +86,7 @@ update:
 	done
 
 alpha:
-	cvs up -d -P .
+	${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
                 if [ -e "$$D/makefile" ]; then \
@@ -117,7 +119,7 @@ alpha:
 	cmd="../../encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
 
 strict:
-	cvs up -d -P .
+	${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
                 if [ -e "$$D/makefile" ]; then \
@@ -147,7 +149,7 @@ strict:
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
-	cvs status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
+	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
 beta: checkbeta strict
 
