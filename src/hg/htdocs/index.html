@@ -23,6 +23,8 @@
     	    <TR><TD VALIGN="middle"><FONT color="#89A1DE">&nbsp; 
  	    <A HREF="../cgi-bin/hgGateway" class="topbar">
 			Genome Browser</a> &nbsp; - &nbsp; 
+ 	    <A HREF="../cgi-bin/hgNear" class="topbar">
+			Family Browser</a> &nbsp; - &nbsp; 
 	    <A HREF="../cgi-bin/hgBlat" class="topbar">
 			Blat Search</a> &nbsp; - &nbsp; 
 	    <A HREF="../cgi-bin/hgText" class="topbar">
@@ -49,6 +51,8 @@
 	        <TD BGCOLOR="738ED3" VALIGN="top" HEIGHT="100%" > 
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgGateway">
 			Browser</A><HR>
+	        <A CLASS="leftbar" HREF="../cgi-bin/hgNear">
+			Family Browser</A><HR>
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgBlat">
 			Blat</A><HR>
 	        <A CLASS="leftbar" HREF="../cgi-bin/hgText">
@@ -97,8 +101,8 @@
                     <TR><TD WIDTH=10></TD><TD>
 	            <P>
 		    This site contains the reference sequence for the human
-	            and C. elegans genomes and working drafts for the mouse, rat, 
-		    C. briggsae, and SARS genomes. It also provides access to the Target 1 
+	            and <em>C. elegans</em> genomes and working drafts for the mouse, rat, 
+		    Fugu, <em>C. briggsae</em>, and SARS genomes. It also provides access to the Target 1 
 		    sequence and annotations for the NIH Intramural Sequencing 
 		    Center (NISC) Comparative Sequencing Program, labeled as
 		    the &quot;Zoo&quot; genome in the browser. To access a genome, click 
@@ -137,6 +141,58 @@
                     <TR><TD WIDTH=10></TD>
                     <TD>
 	            <P>
+                    <FONT FACE="courier" SIZE=3><B>Sep. 23, 2003</B></FONT><BR>
+		    We have added the <em>Takifugu rubripes</em> (pufferfish) assembly to 
+		    the growing collection of genomes available in the UCSC Genome Browser
+		    and Blat servers. The Fugu v.3.0 
+		    (Aug. 2002) whole genome shotgun assembly -- 
+		    which is the fourth
+		    vertebrate assembly to be added to the UCSC Genome Browser -- was 
+		    provided by 
+		    the <A HREF="http://genome.jgi-psf.org/fugu6/fugu6.info.html" TARGET=_blank>US 
+		    DOE Joint Genome Institute</A> (JGI) as part of the 
+		    International Fugu Genome Consortium. 
+
+		    <P>This assembly was 
+		    constructed with the JGI assembler, JAZZ, from paired end 
+		    sequencing reads produced at JGI, Myriad Genetics, and 
+		    Celera Genomics, resulting in a sequence coverage of 5.7X. 
+		    All reads are plasmid, cosmid, or BAC end sequences, with 
+		    the predominant coverage derived from 2 Kb insert plasmids. 
+		    This assembly contains 20,379 scaffolds totaling 319 million 
+		    base pairs. The largest 679 scaffolds total 160 million base 
+		    pairs.
+		    
+		    <P>The Fugu, which was one of the first
+		    vertebrate genomes to be draft-sequenced after human, 
+		    serves an important role in the exploration of the human 
+		    genome. In contrast 
+		    to other vertebrates that have been sequenced, the intergenic
+		    and intron regions of the Fugu are highly compressed and 
+		    uncluttered with repetitive sequence, resulting in a 
+		    genome that is unusually compact in size. The Fugu genome
+		    has proved useful in gene discovery and the identification and
+		    characterization of gene regulatory elements in other genomes.
+		   
+		    <P>Bulk downloads of the Fugu sequence and annotation data are 
+		    available via FTP at
+                    <A HREF="ftp://genome.ucsc.edu/goldenPath/fr1">ftp://genome.ucsc.edu/goldenPath/fr1</A> 
+        	    or through the Downloads 
+		    link on this page. We recommend that FTP be used rather than 
+		    HTML for the download of large or multiple files. 
+		    
+		    <P>We'd like to thank JGI and the other members of the 
+		    International Fugu Genome Consortium, including the Institute of 
+		    Molecular and Cell Biology (Singapore), the UK Human Genome 
+		    Mapping Project (Hinxton), and the Institute for Systems 
+		    Biology (Seattle),
+		    for providing the sequence, assembly, and analysis of this
+		    genome. We'd also like to acknowledge the members of the 
+		    UCSC Genome Bioinformatics group who contributed to this 
+		    release: Kate Rosenbloom (lead engineer), Heather Trumbower, Bob Kuhn,
+		    Donna Karolchik, and Jim Kent.
+
+		    <P>
                     <FONT FACE="courier" SIZE=3><B>Aug 13, 2003</B></FONT><BR>
 		    The UCSC Genome Bioinformatics group has released a browser 
 		    and blat server on the first of more than 100 targeted 
@@ -212,46 +268,6 @@
 		    members of the UCSC Genome Bioinformatics group who 
 		    contributed to the research effort and browser 
 		    development for this project.
-	            <P>
-                    <FONT FACE="courier" SIZE=3><B>Aug 8, 2003</B></FONT><BR>
-		    The latest human genome reference sequence (NCBI Build 34,
-		    July 2003) is now available as database hg16 in the UCSC
-		    Genome Browser and blat server.
-		    <P>
-		    There are 
-		    2,843,433,602 finished sequenced bases in the ordered and 
-		    oriented portion of the assembly, which is an increase of 
-		    0.4 percent, or approximately 11 Mb, over the Build 33 
-		    assembly. 
-		    Of particular note in this release is the addition of the 
-		    pseudoautosomal regions of the Y chromosome. This sequence 
-		    was taken from the corresponding regions in the X chromosome 
-		    and is an exact duplication of that sequence.
-		    <P>
-		    Some sequence joins between adjacent clones in this assembly
-		    could not be computationally 
-		    validated because the clones originated from different 
-		    haplotypes and contained polymorphisms in the overlapping 
-		    sequence, or the overlap was too small to be to be reliable. 
-		    In these instances, the sequencing center responsible for 
-		    the particular chromosome has provided data to support 
-		    the join in the form of an electronic certificate. The 
-		    Build 34 certificates may be reviewed 
-		    <A HREF="http://genome.cse.ucsc.edu/goldenPath/certificates/certificate_hg16.html">here</A>.
-		    <P>
-		    Bulk downloads of the data are available via FTP at 
-		    <A HREF="ftp://genome.ucsc.edu/goldenPath/hg16">ftp://genome.ucsc.edu/goldenPath/hg16</A> 
-		    or through the <A HREF="../downloads.html">Downloads</A> 
-		    link on this page.  We recommend that FTP be used rather 
-		    than HTML for the download of large or multiple files.
-		    <P>
-		    We'd like to thank NCBI and the International Human Genome 
-		    Sequencing Consortium for
-		    furnishing the data, and the UCSC team members who 
-		    contributed to this release: Terry Furey, Hiram Clawson, 
-		    Heather Trumbower, Mark Diekhans, Robert Baertsch, 
-		    Donna Karolchik, Jim Kent and our sysadmin team Patrick 
-		    Gavin, Jorge Garcia, and Paul Tatarsky.
     	            </TD><TD WIDTH=15>
                  </TD></TR></TABLE>
 	    <BR></TD></TR></TABLE>
