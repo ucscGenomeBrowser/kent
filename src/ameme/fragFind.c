@@ -367,7 +367,7 @@ static int fuzzVal(int *table, int oligoSize, int mismatchesAllowed, boolean con
  * matches that are off by no more than mismatchesAllowed. */
 {
 int *rcTable = NULL;
-int ret;
+int ret = 0;
 if (considerRc)
     rcTable = makeRcTable(oligoSize);
 if (mismatchesAllowed == 0)

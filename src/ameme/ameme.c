@@ -18,10 +18,16 @@
 #include "dnaMarkov.h"
 #include "ameme.h"
 #include "fragFind.h"
+#include "linefile.h"
+#include "dystring.h"
+#include "dnaMotif.h"
 
 boolean isFromWeb;          /* True if run as CGI. */
 boolean isMotifMatcher;     /* True if run from motifMatcher.html. */
 FILE *htmlOut;		    /* Where to send output. */
+
+
+
 
 static void vaProgress(char *format, va_list args)
 /* Print message to indicate progress - to web page if in 
@@ -1772,6 +1778,34 @@ buf[consIx] = 0;
 return buf;
 }
 
+static void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
+/* Print out section about motif. */
+{
+#ifdef GS_PATH
+char *gs = GS_PATH;
+#else
+char *gs = NULL;
+#endif
+
+printf("<PRE>");
+if (motif != NULL)
+    {
+    struct tempName pngTn;
+    dnaMotifMakeProbabalistic(motif);
+    makeTempName(&pngTn, "logo", ".png");
+    dnaMotifToLogoPng(motif, 47, 140, gs, "../trash", pngTn.forCgi);
+    printf("   ");
+    printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
+    printf("\n");
+    }
+if (motif != NULL)
+    {
+    printf("motif consensus\n");
+    dnaMotifPrintProb(motif, stdout);
+    }
+printf("</PRE>");
+}
+
 void printProfile(FILE *f, struct profile *prof)
 /* Display salient facts about a profile. */
 {
@@ -1780,20 +1814,48 @@ int i;
 char *consSeq = consensusSeq(prof);
 int orderTranslater[4] = {A_BASE_VAL, C_BASE_VAL, G_BASE_VAL, T_BASE_VAL};
 int baseVal;
+struct dnaMotif *motif;
 
 fprintf(f, "%5.4f @ %4.2f sd %4.2f ", invSlogScale*prof->score, prof->locale.mean, prof->locale.standardDeviation);
 touppers(consSeq);
+AllocVar(motif);
+motif->name = NULL;
+motif->columnCount = 0;
 fprintf(f, "%s\n", consSeq);
+for (col = prof->columns; col != NULL; col = col->next)
+    motif->columnCount++;
+AllocArray(motif->aProb, motif->columnCount);
+AllocArray(motif->cProb, motif->columnCount);
+AllocArray(motif->gProb, motif->columnCount);
+AllocArray(motif->tProb, motif->columnCount);
 for (i = 0; i<4; ++i)
     {
+    int j = 0;
     baseVal = orderTranslater[i];
     fprintf(f, "\t%c  ", valToNt[baseVal]);
     for (col = prof->columns; col != NULL; col = col->next)
         {
         fprintf(f, "%4.3f ", invSlog(col->slogProb[baseVal]) );
+        switch (valToNt[baseVal])
+            {
+            case 'a':
+                motif->aProb[j] = (float)invSlog(col->slogProb[baseVal]);
+                break;
+            case 'c':
+                motif->cProb[j] = (float)invSlog(col->slogProb[baseVal]);
+                break;
+            case 'g':
+                motif->gProb[j] = (float)invSlog(col->slogProb[baseVal]);
+                break;
+            case 't':
+                motif->tProb[j] = (float)invSlog(col->slogProb[baseVal]);
+                break;
+            }
+        j++;
         }
     fprintf(f, "\n");
     }
+motifHitSection(NULL, motif);
 }
 
 void makeNullModels(struct seqList *bgSeq)
