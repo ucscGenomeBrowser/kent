@@ -32,9 +32,9 @@ errAbort(
   "   retry failed jobs\n"
   "   options:\n"
   "      -retries=N   Number of retries per job - default 4.\n"
-  "      -maxQueue=N  Number of jobs to allow on parasol queue - default 100000\n"
+  "      -maxQueue=N  Number of jobs to allow on parasol queue - default 200000\n"
   "      -minPush=N  Minimum number of jobs to queue - default 1.  Overrides maxQueue\n"
-  "      -maxPush=N  Maximum number of jobs to queue - default 10000\n"
+  "      -maxPush=N  Maximum number of jobs to queue - default 100000\n"
   "      -warnTime=N Number of minutes job runs before hang warning - default 4320 (3 days)\n"
   "      -killTime=N Number of minutes job runs before push kills it - default 20160 (2 weeks)\n"
   "para try \n"
@@ -69,9 +69,9 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 4;
-int maxQueue = 100000;
+int maxQueue = 200000;
 int minPush = 1;
-int maxPush = 10000;
+int maxPush = 100000;
 int warnTime = 3*24*60;
 int killTime = 14*24*60;
 int sleepTime = 5*60;
@@ -354,7 +354,7 @@ AllocVar(db);
 while (lineFileNext(lf, &line, NULL))
     {
     line = trimSpaces(line);
-    if (line[0] == '#')
+    if (line == NULL || line[0] == '#' || line[0] == 0)
         continue;
     ++db->jobCount;
     job = jobFromLine(lf, line);
@@ -754,7 +754,7 @@ struct jobDb *db;
 struct job *job;
 struct submission *sub;
 int maxSleep = 5*60;
-int curSleep = 30;
+int curSleep = 15;
 time_t start = time(NULL), now;
 
 for (;;)
@@ -782,7 +782,7 @@ for (;;)
         break;
     sleep(curSleep);
     if (curSleep < maxSleep)
-        curSleep += 30;
+        curSleep += 15;
     now = time(NULL);
     printf("Checking job status %d minutes after launch\n",  round((now-start)/60.0));
     }
@@ -1034,6 +1034,9 @@ struct job *job;
 struct submission *sub;
 markQueuedJobs(db);
 markRunJobStatus(db);
+/* It's less thrashing on the scheduler if we kill jobs
+ * in opposite order. */
+slReverse(&db->jobList);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     sub = job->submissionList;
@@ -1046,6 +1049,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	    }
 	}
     }
+slReverse(&db->jobList);
 writeBatch(db, batch);
 }
 
