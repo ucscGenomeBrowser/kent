@@ -20,19 +20,18 @@ factor &rho (0 &le &rho &le 1).  The phylogenetic model and the scaling
 factor &rho are estimated from the data by maximum likelihood using an EM
 algorithm.  The state-transition probabilities of the phylo-HMM may also be
 estimated by maximum likelihood, but we find that more biologically useful
-results are obtained by treating them as tuning parameters.  The transition
-probabilities are set such that the "coverage" of the track (portion of
-sites in conserved elements) is approximately equal to the share of the
-reference genome believed to be under purifying selection (5% for mammalian
-genomes) and the prior expected length of a conserved element is 12 bp.  To
-ensure that the scores in different regions of the genome are directly
-comparable, we first obtain global estimates of all parameters, by
-averaging estimates obtained from different regions of the genome, and
-then, in a second pass, we produce predictions across the genome using the
-same parameters everywhere.  The predicted elements are segments of the
-alignment that are likely to have been "generated" by the conserved state
-of the phylo-HMM--i.e., maximal segments in which the maximum-likelihood
-(Viterbi) path completely resides in the conserved state.  </P>
+results are obtained by treating them as tuning parameters.  In this case,
+the transition probabilities were set such that the "coverage" of the track
+(portion of sites in conserved elements) is approximately 60% and the prior
+expected length of a conserved element is 75 bp.  To ensure that the scores
+in different regions of the genome are directly comparable, we first obtain
+global estimates of all parameters, by averaging estimates obtained from
+different regions of the genome, and then, in a second pass, we produce
+predictions across the genome using the same parameters everywhere.  The
+predicted elements are segments of the alignment that are likely to have
+been "generated" by the conserved state of the phylo-HMM--i.e., maximal
+segments in which the maximum-likelihood (Viterbi) path completely resides
+in the conserved state.  </P>
 
 <P>Each predicted conserved element is assigned a log-odds score equal to
 its log probability under the conserved model minus its log probability
