@@ -110,7 +110,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.482 2003/09/25 16:25:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.483 2003/09/29 20:56:34 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -731,7 +731,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 void axtOneGeneOut(struct axt *axtList, int lineSize, 
-		   FILE *f, struct genePred *gp, char *nibDir)
+		   FILE *f, struct genePred *gp, char *nibFile)
 /* Output axt and orf in pretty format. */
 {
 struct axt *axt;
@@ -765,7 +765,7 @@ DNA qCodon[4];
 DNA tCodon[4];
 AA qProt, tProt = 0;
 int tPtr = 0;
-char nibFile[128];
+//char nibFile[128];
 
 if (gp->strand[0] == '+')
     {
@@ -795,10 +795,13 @@ else
     exit(0);
     }
 
-safef(nibFile, sizeof(nibFile), "%s/%s.nib",nibDir,gp->chrom);
+//safef(nibFile, sizeof(nibFile), "%s/%s.nib",nibDir,gp->chrom);
 /* if no alignment , make a bad one */
 if (axtList == NULL)
-    axtList = createAxtGap(nibFile,gp->chrom,tStart,tEnd ,gp->strand[0]);
+    if (gp->strand[0] == '+')
+        axtList = createAxtGap(nibFile,gp->chrom,tStart,tEnd ,gp->strand[0]);
+    else
+        axtList = createAxtGap(nibFile,gp->chrom,tEnd,tStart ,gp->strand[0]);
 
 /* append unaligned coding region to list */ 
 if (posStrand)
@@ -1249,7 +1252,7 @@ while ((axt = axtRead(lf)) != NULL)
             axt->qEnd = tmp;
             if (prevEnd < (axt->tStart)-1)
                 {
-                axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+                axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart),gp->strand[0]);
                 reverseComplement(axtGap->qSym, axtGap->symCount);
                 reverseComplement(axtGap->tSym, axtGap->symCount);
                 slAddHead(&axtList, axtGap);
@@ -1257,7 +1260,7 @@ while ((axt = axtRead(lf)) != NULL)
             }
         else if (prevEnd < (axt->tStart)-1)
             {
-            axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart),gp->strand[0]);
             slAddHead(&axtList, axtGap);
             }
         slAddHead(&axtList, axt);
@@ -1266,9 +1269,9 @@ while ((axt = axtRead(lf)) != NULL)
         }
     if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd)) 
         {
-        if (prevEnd < axt->tStart )
+        if (prevEnd < axt->tStart) //&& gp->txEnd > axt->tStart)
             {
-            axtGap = createAxtGap(nib,gp->chrom,prevEnd+1,(axt->tStart)-1,gp->strand[0]);
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd,min(axt->tStart,gp->txEnd),gp->strand[0]);
             if (gp->strand[0] == '-')
                 {
                 reverseComplement(axtGap->qSym, axtGap->symCount);
@@ -1276,6 +1279,17 @@ while ((axt = axtRead(lf)) != NULL)
                 }
             slAddHead(&axtList, axtGap);
             }
+        else
+            if (axtList == NULL)
+                {
+                axtGap = createAxtGap(nib,gp->chrom,prevEnd,gp->txEnd,gp->strand[0]);
+                if (gp->strand[0] == '-')
+                    {
+                    reverseComplement(axtGap->qSym, axtGap->symCount);
+                    reverseComplement(axtGap->tSym, axtGap->symCount);
+                    }
+                slAddHead(&axtList, axtGap);
+                }
         break;
         }
     }
@@ -6719,7 +6733,7 @@ htmlHorizontalLine();
 /* lookup chain if not stored */
 if (pg->chainId == 0 && pg->strand != NULL)
     {
-    if (sameString(pg->strand,"+"))
+    if (sameString(pg->strand,pg->pStrand))
         safef(query,sizeof(query),
             "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
             chrom, chainTable,chromStart,chromEnd, pg->chrom, pg->gStart, pg->gEnd);
@@ -7751,7 +7765,7 @@ if (chainId > 0)
 
     /* output fancy formatted alignment */
     puts("<PRE><TT>");
-    axtOneGeneOut(axtList, LINESIZE, stdout , gp, qNibDir);
+    axtOneGeneOut(axtList, LINESIZE, stdout , gp, qNibFile);
     puts("</TT></PRE>");
     }
 
