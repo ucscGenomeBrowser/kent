@@ -7,6 +7,8 @@
 int binSize = 1;
 int maxBinCount = 25;
 int minVal = 0;
+boolean doLog = FALSE;
+boolean noStar = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +22,8 @@ errAbort(
   "   -binSize=N  Size of bins, default 1\n"
   "   -maxBinCount=N  Maximum # of bins, default 25\n"
   "   -minVal=N  Minimum value to put in histogram, default 0\n"
+  "   -log Do log transformation before plotting\n"
+  "   -noStar Don't draw asterisks\n"
   );
 }
 
@@ -32,6 +36,7 @@ struct lineFile *lf = lineFileOpen(inFile, TRUE);
 int i;
 int minData = maxBinCount, maxData = 0;
 int maxCount = 0;
+double maxCt;
 AllocArray(hist, maxBinCount);
 while (lineFileRow(lf, row))
     {
@@ -54,15 +59,30 @@ for (i=0; i<maxBinCount; ++i)
 	if (maxData < i) maxData = i;
 	}
     }
-for (i=minData; i<=maxData; ++i)
+maxCt = maxCount;
+if (doLog)
+    maxCt = log(maxCt);
+if (noStar)
     {
-    int j;
-    int count = hist[i];
-    int astCount = round(count * 60.0 / maxCount);
-    printf("%3d ", i*binSize + minVal);
-    for (j=0; j<astCount; ++j)
-        putchar('*');
-    printf(" %d\n", count);
+    printf("%d\t%d\n", i*binSize + minVal, hist[i]);
+    }
+else
+    {
+    for (i=minData; i<=maxData; ++i)
+	{
+	int j;
+	int count = hist[i];
+	double ct = count;
+	int astCount;
+
+	if (doLog)
+	    ct = log(ct);
+	astCount = round(ct * 60.0 / maxCt);
+	printf("%3d ", i*binSize + minVal);
+	for (j=0; j<astCount; ++j)
+	    putchar('*');
+	printf(" %d\n", count);
+	}
     }
 }
 
@@ -73,6 +93,8 @@ optionHash(&argc, argv);
 binSize = optionInt("binSize", binSize);
 maxBinCount = optionInt("maxBinCount", maxBinCount);
 minVal = optionInt("minVal", minVal);
+doLog = optionExists("log");
+noStar = optionExists("noStar");
 if (argc != 2)
     usage();
 textHistogram(argv[1]);
