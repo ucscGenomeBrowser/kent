@@ -10,13 +10,12 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.7 2004/02/16 02:17:47 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.8 2004/02/23 09:07:21 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
-boolean verbose = FALSE;	/* Explain what is happening */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
 /* command line option specifications */
@@ -26,7 +25,6 @@ static struct optionSpec optionSpecs[] = {
     {"tab", OPTION_BOOLEAN},
     {"noBin", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
-    {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -112,7 +110,7 @@ while (lineFileNext(lf, &line, NULL))
     slAddHead(pList, wiggle);
     }
 lineFileClose(&lf);
-logPrintf(2, "Read %d lines from %s\n", lineCount, fileName);
+verbose(2, "Read %d lines from %s\n", lineCount, fileName);
 }
 
 void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList,
@@ -157,8 +155,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "wiggle.tab";
 
-if( verbose )
-    uglyf("Connected to database %s for track %s\n", database, track);
+verbose(1, "Connected to database %s for track %s\n", database, track);
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -176,7 +173,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    logPrintf(1, "Creating table definition with %d columns in %s.%s\n",
+    verbose(1, "Creating table definition with %d columns in %s.%s\n",
 	    wiggleSize, database, track);
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
@@ -204,10 +201,10 @@ else if (!oldTable)
     sqlRemakeTable(conn, track, dy->string);
     }
 
-logPrintf(1, "Saving %s\n", tab);
+verbose(1, "Saving %s\n", tab);
 writeWiggleTab(tab, wiggleList, wiggleSize, database);
 
-logPrintf(1, "Loading %s\n", database);
+verbose(1, "Loading %s\n", database);
 dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
@@ -238,12 +235,12 @@ noBin = optionExists("noBin");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", NULL);
-logPrintf(2, "noBin: %s, tab: %s, oldTable: %s\n",
+verbose(2, "noBin: %s, tab: %s, oldTable: %s\n",
 	noBin ? "TRUE" : "FALSE",
 	strictTab ? "TRUE" : "FALSE",
 	oldTable ? "TRUE" : "FALSE");
 if( sqlTable )
-    logPrintf(2, "using sql definition file: %s\n", sqlTable);
+    verbose(2, "using sql definition file: %s\n", sqlTable);
 hgLoadWiggle(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }

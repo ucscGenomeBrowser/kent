@@ -65,7 +65,7 @@ if (sqlTableExists(conn, GB_STATUS_TBL))
         if (inGbStatusTable(conn, igAcc->acc, igAcc->modDate))
             {
             if (deleter == NULL)
-                deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
+                deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
             sqlDeleterAddAcc(deleter, igAcc->acc);
             gbVerbMsg(1, "%s %s ignored, will delete", igAcc->acc, 
                       gbFormatDate(igAcc->modDate));
@@ -122,7 +122,7 @@ while (lineFileChopNext(lf, row, ArraySize(row)))
     if (gbGuessSrcDb(acc) == srcDb)
         {
         if (deleter == NULL)
-            deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
+            deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
         sqlDeleterAddAcc(deleter, acc);
         gbVerbMsg(1, "%s delete for reloading", acc);
         }

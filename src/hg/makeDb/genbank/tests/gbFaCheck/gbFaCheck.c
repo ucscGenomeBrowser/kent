@@ -4,12 +4,11 @@
 #include "gbFileOps.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbFaCheck.c,v 1.1 2003/07/14 07:27:31 markd Exp $";
+static char const rcsid[] = "$Id: gbFaCheck.c,v 1.2 2004/02/23 09:07:20 kent Exp $";
 static unsigned gVerbose = 0;
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"verbose", OPTION_INT},
     {NULL, 0}
 };
 
@@ -92,7 +91,6 @@ errAbort("   gbFaCheck fa [...]\n"
          "Validate the contents of genbank fa files. \n"
          "\n"
          " Options:\n"
-         "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity:\n"
          "      1 - print invalid characters in each sequence,\n"
          "\n");

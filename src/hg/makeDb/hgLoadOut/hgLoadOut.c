@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.9 2004/02/16 02:17:46 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.10 2004/02/23 09:07:21 kent Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "%s"				/* Optional bin */
@@ -98,7 +98,7 @@ char *tempName = "out.tab";
 FILE *f = NULL;
 struct dyString *query = newDyString(1024);
 
-logPrintf(1, "Processing %s\n", rmskFile);
+verbose(1, "Processing %s\n", rmskFile);
 
 /* Make temporary tab delimited file. */
 if (tabFile != NULL)
@@ -160,7 +160,7 @@ if (tabFile == NULL)
     splitPath(rmskFile, dir, base, extension);
     chopSuffix(base);
     sprintf(tableName, "%s_%s", base,suffix);
-    logPrintf(1, "Loading up table %s\n", tableName);
+    verbose(1, "Loading up table %s\n", tableName);
     if (sqlTableExists(conn, tableName))
 	{
 	dyStringPrintf(query, "DROP table %s", tableName);

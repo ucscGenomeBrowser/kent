@@ -15,7 +15,7 @@
 #include "errabort.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.3 2003/10/12 21:26:21 genbank Exp $";
+static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.4 2004/02/23 09:07:21 kent Exp $";
 
 /* FIXME: need a way to get both native and xenos that are know to align */
 
@@ -25,7 +25,6 @@ static struct optionSpec optionSpecs[] = {
     {"numEsts", OPTION_INT},
     {"accList", OPTION_STRING},
     {"selectAcc", OPTION_STRING},
-    {"verbose", OPTION_INT},
     {NULL, 0}
 };
 
@@ -180,18 +179,15 @@ if (accCount != NULL)
 
 /* flag acc, and flag all updates that contain acc */
 entry->selectVer = processed->version;
-if (verbose)
-    fprintf(stderr, "  select:");
+verbose(1, "  select:");
 for (processed = entry->processed; processed != NULL;
      processed = processed->next)
     {
     processed->update->selectProc = TRUE;
-    if (verbose)
-        fprintf(stderr, "  %s.%d (%s)", entry->acc, processed->version,
+    verbose(1, "  %s.%d (%s)", entry->acc, processed->version,
                 processed->update->name);
     }
-if (verbose)
-    fprintf(stderr, "\n");
+verbose(1, "\n");
 }
 
 void findInUpdate(int numAccs, unsigned type, struct gbRelease* release,
@@ -223,7 +219,7 @@ void findEntries(int numAccs, unsigned type, struct gbRelease* release,
 struct gbUpdate* update;
 int localAccCount = 0;
 
-if (verbose)
+if (verboseLevel() > 1)
     {
     fprintf(stderr, "findEntries: num=%d", numAccs);
     if (flags & FE_FULL)
@@ -247,8 +243,7 @@ for (update = release->updates; (update != NULL) && (localAccCount < numAccs);
                      flags, orgCats, update, accTbl, &localAccCount);
     }
 (*accCount) += localAccCount;
-if (verbose)
-    fprintf(stderr, "  found: %d entries\n", localAccCount);
+verbose(1, "  found: %d entries\n", localAccCount);
 
 }
 
@@ -366,8 +361,7 @@ int lineNum = 0;
 int i;
 char* acc;
 
-if (verbose)
-    fprintf(stderr, "copying from %s\n", inName);
+verbose(1, "copying from %s\n", inName);
 
 inFh = gzMustOpen(inName, "r");
 
@@ -551,8 +545,7 @@ strcpy(faOutPath, outDir);
 strcat(faOutPath, "/");
 strcat(faOutPath, faInPath);
 
-if (verbose)
-    fprintf(stderr, "copying from %s\n", faInPath);
+verbose(1, "copying from %s\n", faInPath);
 
 /* copy selected, don't bother with fa readers */
 inLf = gzLineFileOpen(faInPath);
@@ -567,9 +560,8 @@ while (lineFileNext(inLf, &line, NULL))
         if (geneAcc != NULL)
             entry = gbReleaseFindEntry(release, geneAcc);
         copying = ((entry != NULL) && (entry->selectVer > 0));
-        if (verbose > 1)
-            fprintf(stderr, "acc for pep: %s: %s\n", geneAcc,
-                    (copying ? "yes" : "no"));
+	verbose(2, "acc for pep: %s: %s\n", geneAcc,
+		(copying ? "yes" : "no"));
         }
     if (copying)
         {
@@ -709,7 +701,7 @@ numEsts = optionInt("numEsts", 10);
 accList = optionVal("accList",  NULL);
 selectAccFile = optionVal("selectAcc",  NULL);
 gbVerbInit(optionInt("verbose", 0));
-if (verbose > 0)
+if (verboseLevel() > 0)
     setlinebuf(stderr);
 
 getTestSubset(numMrnas, numEsts, accList, selectAccFile,

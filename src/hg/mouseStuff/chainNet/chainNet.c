@@ -7,12 +7,11 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.29 2004/02/13 19:34:30 angie Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.30 2004/02/23 09:07:22 kent Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 double minScore = 2000;	/* Minimum chain score to look at. */
-boolean verbose = FALSE;/* Verbose output. */
 boolean usingStdout = FALSE;
 
 void usage()
@@ -32,7 +31,7 @@ errAbort(
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
   "   -minScore=N - minimum chain score to consider, default %d\n"
-  "   -verbose - make copious output\n"
+  "   -verbose=N - make copious output\n"
   , minSpace, minScore);
 }
 
@@ -762,13 +761,10 @@ while ((chain = chainRead(lf)) != NULL)
 	{
     	break;
 	}
-    if (verbose)
-	{
-	printf("chain %f (%d els) %s %d-%d %c %s %d-%d\n", 
-		chain->score, slCount(chain->blockList), 
-		chain->tName, chain->tStart, chain->tEnd, 
-		chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
-	}
+    verbose(1, "chain %f (%d els) %s %d-%d %c %s %d-%d\n", 
+	    chain->score, slCount(chain->blockList), 
+	    chain->tName, chain->tStart, chain->tEnd, 
+	    chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
     qChrom = hashMustFindVal(qHash, chain->qName);
     if (qChrom->size != chain->qSize)
         errAbort("%s is %d in %s but %d in %s", chain->qName, 
@@ -780,9 +776,8 @@ while ((chain = chainRead(lf)) != NULL)
 		chain->tSize, chainFile,
 		tChrom->size, tSizes);
     addChain(qChrom, tChrom, chain);
-    if (verbose)
-	printf("%s has %d inserts, %s has %d\n", tChrom->name, 
-		tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
+    verbose(1, "%s has %d inserts, %s has %d\n", tChrom->name, 
+	    tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
 /* Build up other side of fills.  It's just for historical 
  * reasons this is not done during the main build up.   
@@ -814,7 +809,6 @@ if (argc != 6)
 minSpace = optionInt("minSpace", minSpace);
 minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
-verbose = optionExists("verbose");
 chainNet(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }

@@ -12,7 +12,7 @@
 #include "gbFileOps.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: chkGbIndex.c,v 1.1 2003/06/03 01:27:43 markd Exp $";
+static char const rcsid[] = "$Id: chkGbIndex.c,v 1.2 2004/02/23 09:07:20 kent Exp $";
 
 static void chkProcessed(struct gbEntry* entry, struct gbProcessed* processed)
 /* check a single processed object */
@@ -43,7 +43,7 @@ static void chkEntryProcessed(struct gbEntry* entry)
  * aligned */
 {
 struct gbProcessed* processed = entry->processed;
-if (verbose >= 3)
+if (gbVerbose >= 3)
     gbVerbMsg(3, "chkEntryProcessed %s", entry->acc);
     
 /* must be a processed entry, unless ignored */

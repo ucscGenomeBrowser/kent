@@ -66,7 +66,7 @@ if ((entry != NULL) && (version == entry->selectVer)
     }
 
 /* trace if enabled */
-if (verbose >= 3)
+if (gbVerbose >= 3)
     {
     if (entry == NULL)
         gbVerbPr(3, "no entry: %s.%d", acc, version);

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.6 2003/12/14 23:30:29 sugnet Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.7 2004/02/23 09:07:23 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,7 +35,7 @@ errAbort(
   "          into mapTable, not just the best for each gene.\n"
   "   -cds - Only consider coding portions of gene.\n"
   "   -noLoad - Don't load database, just create mapTable.tab file\n"
-  "   -verbose - Print intermediate status info\n"
+  "   -verbose=N - Print intermediate status info if N > 0\n"
   "   -intronsToo - Include introns\n"
   "   -createOnly - Just create mapTable, don't populate it\n"
   "   -lookup=lookup.txt - Lookup.txt is a 2 column file\n"
@@ -44,7 +44,6 @@ errAbort(
   );
 }
 
-boolean verbose = FALSE;
 boolean cdsOnly = FALSE;
 boolean intronsToo = FALSE;
 boolean createOnly = FALSE;
@@ -56,7 +55,6 @@ static struct optionSpec options[] = {
    {"intronsToo", OPTION_BOOLEAN},
    {"noLoad", OPTION_BOOLEAN},
    {"createOnly", OPTION_BOOLEAN},
-   {"verbose", OPTION_BOOLEAN},
    {"lookup", OPTION_STRING},
    {NULL, 0},
 };
@@ -326,7 +324,7 @@ if (!createOnly)
     chromList = hAllChromNames();
     for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	{
-	if (verbose)
+	if (verboseLevel() > 0)
 	    printf("%s\n", chrom->name);
 	oneChromStrandBedToGene(conn, chrom->name, '+', geneTable, geneTableType,  
 	    otherTable, otherType, dupeHash, doAll, lookupHash, f);
@@ -403,7 +401,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-verbose = optionExists("verbose");
 cdsOnly = optionExists("cds");
 intronsToo = optionExists("intronsToo");
 createOnly = optionExists("createOnly");

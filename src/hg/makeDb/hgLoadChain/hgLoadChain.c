@@ -10,7 +10,7 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.9 2004/02/16 02:17:46 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.10 2004/02/23 09:07:21 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -212,7 +212,7 @@ fclose(chainFile);
 fclose(linkFile);
 if (!test)
     {
-    logPrintf(1, "Loading %d chains into %s.%s\n", count, database, track);
+    verbose(1, "Loading %d chains into %s.%s\n", count, database, track);
     loadDatabaseChain(database, chainFileName, track);
     loadDatabaseLink(database, linkFileName, linkTrack);
     }

@@ -7,7 +7,7 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSort.c,v 1.4 2003/09/29 19:50:51 braney Exp $";
+static char const rcsid[] = "$Id: pslSort.c,v 1.5 2004/02/23 09:07:23 kent Exp $";
 
 
 void usage()
@@ -33,7 +33,6 @@ errAbort(
    );
 }
 
-int verbose = 1;
 void makeMidName(char *tempDir, int ix, char *retName)
 /* Return name of temp file of given index. */
 {
@@ -133,8 +132,7 @@ for (tmp = tmpList; tmp != NULL; tmp = tmp->next)
     mid->lf = pslFileOpen(fileName);
     slAddHead(&midList, mid);
     }
-if (verbose >= 1)
-    printf("writing %s", outFile);
+verbose(1, "writing %s", outFile);
 fflush(stdout);
 /* Write out the lowest sorting line from mid list until done. */
 for (;;)
@@ -142,8 +140,7 @@ for (;;)
     struct midFile *bestMid = NULL;
     if ( (++aliCount & 0xffff) == 0)
 	{
-	if (verbose >= 1)
-	    printf(".");
+	verboseDot();
 	fflush(stdout);
 	}
     for (mid = midList; mid != NULL; mid = mid->next)
@@ -310,8 +307,7 @@ if (!secondOnly)
 	dirDir = listDir(inDir, "*.psl");
 	if (slCount(dirDir) == 0)
 	    errAbort("No psl files in %s\n", inDir);
-	if (verbose >= 1)
-	    printf("%s with %d files\n", inDir, slCount(dirDir));
+	verbose(1, "%s with %d files\n", inDir, slCount(dirDir));
 	for (dirFile = dirDir; dirFile != NULL; dirFile = dirFile->next)
 	    {
 	    sprintf(fileName, "%s/%s", inDir, dirFile->name);
@@ -320,15 +316,13 @@ if (!secondOnly)
 	    }
 	slFreeList(&dirDir);
 	}
-    if (verbose >= 1)
-	printf("%d files in %d dirs\n", slCount(fileList), inDirCount);
+    verbose(1, "%d files in %d dirs\n", slCount(fileList), inDirCount);
     slReverse(&fileList);
     fileCount = slCount(fileList);
     filesPerMidFile = round(sqrt(fileCount));
     // if (filesPerMidFile > 20)
 	// filesPerMidFile = 20;  /* bandaide! Should keep track of mem usage. */
-    if (verbose >= 1)
-	printf("Got %d files %d files per mid file\n", fileCount, filesPerMidFile);
+    verbose(1, "Got %d files %d files per mid file\n", fileCount, filesPerMidFile);
 
     /* Read in files a group at a time, sort, and write merged, sorted
      * output of one group. */
@@ -349,8 +343,7 @@ if (!secondOnly)
 		{
 		reflectMe = !selfFile(name->name);
 		}
-	    if (verbose >= 2)
-		printf("Reading %s (%d of %d)\n", name->name, totalFilesProcessed+1, fileCount);
+	    verbose(2, "Reading %s (%d of %d)\n", name->name, totalFilesProcessed+1, fileCount);
 	    lf = pslFileOpen(name->name);
 	    while ((psl = nextLmPsl(lf, lm)) != NULL)
 		{
@@ -371,8 +364,7 @@ if (!secondOnly)
 	    }
 	slSort(&pslList, pslCmpQuery);
 	makeMidName(tempDir, midFileCount, fileName);
-	if (verbose >= 1)
-	    printf("Writing %s\n", fileName);
+	verbose(1, "Writing %s\n", fileName);
 	f = mustOpen(fileName, "w");
 	pslWriteHead(f);
 	for (psl = pslList; psl != NULL; psl = psl->next)
@@ -382,8 +374,7 @@ if (!secondOnly)
 	fclose(f);
 	pslList = NULL;
 	lmCleanup(&lm);
-	if (verbose >= 2)
-	    printf("lfileCount %d\n", lfileCount);
+	verbose(2, "lfileCount %d\n", lfileCount);
 	++midFileCount;
 	}
     }
@@ -397,7 +388,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc < 5)
     usage();
-verbose = optionInt("verbose", verbose);
 pslSort(argv[1], argv[2], argv[3], &argv[4], argc-4);
 return 0;
 }

@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.10 2004/02/23 07:40:18 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.11 2004/02/23 09:07:20 kent Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -82,7 +82,7 @@ statusTbl->numDelete++;
 status->stateChg = GB_DELETED;
 if (!(status->orgCat & ssData->select->orgCats))
     ssData->orgCatDelCnt++;
-if (verbose >= 4)
+if (gbVerbose >= 4)
     {
     if (!(status->orgCat & ssData->select->orgCats))
         traceSelect("delete, orgCat not selected", status);
@@ -118,7 +118,7 @@ status->extUpdate = status->seqUpdate;
 processed->entry->selectVer = aligned->version;
 processed->update->selectProc = TRUE;
 aligned->update->selectAlign = TRUE;
-if (verbose >= 4)
+if (gbVerbose >= 4)
     traceSelect("seqChg", status);
 }
 
@@ -151,7 +151,7 @@ if (!sameString(status->extRelease, select->release->version))
 /* flag update as needing processing */
 processed->entry->selectVer = aligned->version;
 processed->update->selectProc = TRUE;
-if (verbose >= 4)
+if (gbVerbose >= 4)
     traceSelect("metaChg", status);
 }
 
@@ -176,7 +176,7 @@ status->extUpdate = gbStatusTblGetStr(statusTbl,
 /* flag update as needing processing */
 processed->entry->selectVer = aligned->version;
 processed->update->selectProc = TRUE;
-if (verbose >= 4)
+if (gbVerbose >= 4)
     traceSelect("extChg", status);
 }
 
@@ -187,7 +187,7 @@ static void markNoChange(struct gbStatusTbl* statusTbl,
 {
 entry->selectVer = GB_UNCHG_SELECT_VER;
 statusTbl->numNoChg++;
-if (verbose >= 4)
+if (gbVerbose >= 4)
     traceSelect("noChg", tmpStatus);
 }
 
@@ -216,7 +216,7 @@ status->extUpdate = status->seqUpdate;
 processed->entry->selectVer = aligned->version;
 processed->update->selectProc = TRUE;
 aligned->update->selectAlign = TRUE;
-if (verbose >= 4)
+if (gbVerbose >= 4)
     traceSelect("new", status);
 }
 
@@ -527,7 +527,7 @@ ZeroVar(&ssData);
 
 gOptions = options;
 *maxShrinkageExceeded = FALSE;
-verbose = verboseLevel;
+gbVerbose = verboseLevel;
 gErrorCnt = 0;
 
 gbVerbEnter(1, "build state table");
@@ -538,7 +538,7 @@ ssData.seqHash = seqTblLoadAcc(conn, select);
 gbVerbMsg(1, "reading gbStatus");
 statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
                                   selectStatus, &ssData,
-                                  tmpDir, maxExtFileChg, (verbose >= 2));
+                                  tmpDir, maxExtFileChg, (gbVerbose >= 2));
 findNewEntries(select, statusTbl);
 
 /* Don't allow deletes when select criteria has changed */

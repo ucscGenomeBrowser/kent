@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.21 2004/02/16 02:17:46 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.22 2004/02/23 09:07:21 kent Exp $";
 
 unsigned pslCreateOpts = 0;
 unsigned pslLoadOpts = 0;
@@ -74,7 +74,7 @@ for (i = 0; i<pslCount; ++i)
     {
     char tabFile[1024];
     pslName = pslNames[i];
-    logPrintf(1, "Processing %s\n", pslName);
+    verbose(1, "Processing %s\n", pslName);
     if (clTableName != NULL)
         strcpy(table, clTableName);
     else

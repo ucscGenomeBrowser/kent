@@ -176,7 +176,7 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-void logPrintf(int verbosity, char *format, ...)
+void verbose(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
  * default is stdout) if global verbose variable
  * is set to verbosity or higher. */
@@ -185,8 +185,11 @@ __attribute__((format(printf, 2, 3)))
 #endif
     ;
 
-void logDot();
+void verboseDot();
 /* Write I'm alive dot (at verbosity level 1) */
+
+int verboseLevel();
+/* Get verbosity level. */
 
 void zeroBytes(void *vpt, int count);     
 /* fill a specified area of memory with zeroes */

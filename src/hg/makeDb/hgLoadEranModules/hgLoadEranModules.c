@@ -11,7 +11,7 @@
 #include "esMotif.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.5 2004/02/16 02:17:46 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.6 2004/02/23 09:07:21 kent Exp $";
 
 
 void usage()
@@ -88,7 +88,7 @@ dyStringPrintf(dy,
 ")\n", table);
 sqlRemakeTable(conn, table, dy->string);
 sqlLoadTabFile(conn, fileName, table, 0);
-logPrintf(1, "Loaded %s table\n", table);
+verbose(1, "Loaded %s table\n", table);
 return hashTwoColumnFile(fileName, 0);
 }
 
@@ -159,7 +159,7 @@ while (lineFileRow(lf, row))
 	}
     ++count;
     }
-logPrintf(1, "%d genes in %s\n", count, fileName);
+verbose(1, "%d genes in %s\n", count, fileName);
 return hash;
 }
 
@@ -341,11 +341,11 @@ lineFileClose(&lf);
     "    INDEX(chrom(8),bin)\n"
     ")\n",  table);
     sqlRemakeTable(conn, table, dy->string);
-    logPrintf(1, "%d genes, %d motifs, %d motifs in genes\n",
+    verbose(1, "%d genes, %d motifs, %d motifs in genes\n",
 	    geneCount, motifCount-1, total);
     hgLoadTabFile(conn, tmpDir, table, &f);
     // hgRemoveTabFile(tmpDir, table);
-    logPrintf(1, "Loaded %s table\n", table);
+    verbose(1, "Loaded %s table\n", table);
     slFreeList(&motifPosList);
     }
 
@@ -421,11 +421,11 @@ dyStringPrintf(dy,
 "    INDEX(motif(16))\n"
 ")\n",  table);
 sqlRemakeTable(conn, table, dy->string);
-logPrintf(1, "%d modules, %d motifs in modules\n",
+verbose(1, "%d modules, %d motifs in modules\n",
 	moduleCount, motifCount);
 hgLoadTabFile(conn, tmpDir, table, &f);
 hgRemoveTabFile(tmpDir, table);
-logPrintf(1, "Loaded %s table\n", table);
+verbose(1, "Loaded %s table\n", table);
 lineFileClose(&lf);
 return hash;
 }
@@ -491,7 +491,7 @@ dyStringPrintf(dy,
 sqlRemakeTable(conn, table, dy->string);
 hgLoadTabFile(conn, tmpDir, table, &f);
 hgRemoveTabFile(tmpDir, table);
-logPrintf(1, "Processed %d motifs into %s\n", slCount(motifs->esmMotif), table);
+verbose(1, "Processed %d motifs into %s\n", slCount(motifs->esmMotif), table);
 return hash;
 }
 
@@ -543,9 +543,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(modMotHash, modMot, NULL);
     }
 sqlFreeResult(&sr);
-logPrintf(1, "%d motifs reuses in modules\n", reusedMotifCount);
+verbose(1, "%d motifs reuses in modules\n", reusedMotifCount);
 
-logPrintf(1, "Cross-checking tables\n");
+verbose(1, "Cross-checking tables\n");
 
 /* Load up geneToModule table, and make sure that all modules actually
  * exist in moduleToMotif table. */
@@ -611,7 +611,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-logPrintf(1, "%d errors\n", fatalErrorCount);
+verbose(1, "%d errors\n", fatalErrorCount);
 }
 
 

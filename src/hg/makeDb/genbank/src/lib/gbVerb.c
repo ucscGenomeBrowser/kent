@@ -7,11 +7,11 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbVerb.c,v 1.3 2004/02/23 07:40:19 markd Exp $";
+static char const rcsid[] = "$Id: gbVerb.c,v 1.4 2004/02/23 09:07:20 kent Exp $";
 
 #define INDENT_AMT 2  /* characters per indent level */
 
-unsigned verbose = 0;  /* verbose level */ 
+unsigned gbVerbose = 0;  /* verbose level */ 
 
 static boolean initialized = FALSE;
 static unsigned indent = 0;      /* indentation level */
@@ -78,7 +78,7 @@ void gbVerbInit(int level)
 /* Set verbose level and initialize start time */
 {
 startTime = getTimeOfDay();
-verbose = level;
+gbVerbose = level;
 fflush(stderr);
 setlinebuf(stderr);
 initialized = TRUE;
@@ -91,7 +91,7 @@ void gbVerbEnter(int level, char* msg, ...)
 va_list args;
 double curTime = getRealSec();
 
-if (verbose >= level)
+if (gbVerbose >= level)
     {
     prIndent();
     fprintf(stderr, "->");
@@ -118,7 +118,7 @@ stepStart = startTimes[indent];
 indent--;
 sqlMonitorSetIndent(indent*INDENT_AMT);
 
-if (verbose >= level)
+if (gbVerbose >= level)
     {
     double curTime = getRealSec();
     prIndent();
@@ -135,7 +135,7 @@ void gbVerbMsg(int level, char* msg, ...)
 /* If the current verbose level is level or greater, print message. */ 
 {
 va_list args;
-if (verbose >= level)
+if (gbVerbose >= level)
     {
     prIndent();
     va_start(args, msg);
@@ -151,7 +151,7 @@ void gbVerbPr(int level, char* msg, ...)
 {
 va_list args;
 
-if (verbose >= level)
+if (gbVerbose >= level)
     {
     prIndent();
     va_start(args, msg);

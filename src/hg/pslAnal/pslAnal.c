@@ -28,7 +28,6 @@ static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"ver", OPTION_STRING},
     {"der", OPTION_STRING},
-    {"verbose", OPTION_BOOLEAN},
     {"xeno", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
     {"unaligned", OPTION_BOOLEAN},
@@ -38,7 +37,6 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-boolean verbose = FALSE;
 boolean indelReport = FALSE;
 boolean unaliReport = FALSE;
 boolean mismatchReport = FALSE;
@@ -1622,8 +1620,7 @@ void processCds(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *r
 struct acc *acc;
 char *name = cloneString(pi->psl->qName);
 
-if (verbose)
-    printf("Processing %s\n", name);
+verbose(1, "Processing %s\n", name);
 /* Create the accession for the query */
 acc = createAcc(name);
 /* Compare the actual aligned parts */
@@ -1851,31 +1848,27 @@ fprintf(of, "\n");
 /* Write out detailed records of indels, if requested */
 if (indelReport) 
     {
-    if (verbose)
-        printf("Writing out indels\n");
+    verbose(1, "Writing out indels\n");
     writeList(in, pi->indelList, INDEL, NULL, NULL);
     }
 
 /* Write out detailed records of indels, if requested */
 if (unaliReport) 
     {
-    if (verbose)
-        printf("Writing out unaligned regions\n");
+    verbose(1, "Writing out unaligned regions\n");
     writeList(un, pi->unaliList, UNALIGNED, NULL, NULL);
     }
 
 /* Write out detailed records of mismatches, if requested */
 if (mismatchReport) 
     {
-    if (verbose)
-        printf("Writing out mismatches\n");
+    verbose(1, "Writing out mismatches\n");
     writeList(mm, pi->mmList, MISMATCH, NULL, NULL);
     }
 /* Write out detailed records of codon substitutions, if requested */
 if (codonSubReport) 
     {
-    if (verbose)
-        printf("Writing out codon substitutions\n");
+    verbose(1, "Writing out codon substitutions\n");
     writeList(cs, pi->codonSubList, CODONSUB, pi->psl, pi->mrna);
     }
 }
@@ -1929,7 +1922,6 @@ if (argc != 6)
 db = optionVal("db", "hg15");
 vfName = optionVal("ver", NULL);
 dfName = optionVal("der", NULL);
-verbose = optionExists("verbose");
 indelReport = optionExists("indels");
 unaliReport = optionExists("unaligned");
 mismatchReport = optionExists("mismatches");
@@ -1973,29 +1965,23 @@ if (codonSubReport)
 hSetDb(db);
  if (getenv("HGDB_HOST") == NULL)
      hSetDbConnect("hgwdev.cse.ucsc.edu", db, user, password);
-if (verbose)
-    printf("Reading CDS file\n");
+verbose(1, "Reading CDS file\n");
 readCds(cf);
-if (verbose)
-    printf("Reading FA file\n");
+verbose(1, "Reading FA file\n");
 readRnaSeq(faFile);
-if (verbose)
-    printf("Reading loci file\n");
+verbose(1, "Reading loci file\n");
 readLoci(lf);
 if (vf) 
     {
-    if (verbose)
-        printf("Reading version file\n");
+    verbose(1, "Reading version file\n");
     readVersion(vf);
     }
 if (df) 
     {
-    if (verbose)
-        printf("Reading refseq derived accessions file\n");
+    verbose(1, "Reading refseq derived accessions file\n");
     readRsDerived(df);
     }
-if (verbose)
-    printf("Processing psl file\n");
+verbose(1, "Processing psl file\n");
 doFile(pf, of, in, mm, cs, un);
 
 if (indelReport)

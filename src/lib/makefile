@@ -11,7 +11,7 @@ O = aliType.o axt.o bits.o binRange.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o internet.o intExp.o jointalign.o\
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
-    log.o maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
+    maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
     memalloc.o memgfx.o net.o nib.o \
     nt4.o obscure.o oldGff.o options.o osunix.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pthreadWrap.o ra.o rbTree.o \
@@ -19,7 +19,7 @@ O = aliType.o axt.o bits.o binRange.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o \
-    twoBit.o vGfx.o vGif.o wildcmp.o wormdna.o \
+    twoBit.o verbose.o vGfx.o vGif.o wildcmp.o wormdna.o \
     xa.o xAli.o xap.o xenshow.o xp.o
 
 

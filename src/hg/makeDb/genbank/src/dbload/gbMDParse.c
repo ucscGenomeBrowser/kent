@@ -12,7 +12,7 @@
 #include "gbFileOps.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.1 2003/11/05 07:37:04 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.2 2004/02/23 09:07:20 kent Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -73,7 +73,7 @@ raf->raName = hel->name;
 raf->valBuf = dyStringNew(0);
 raf->ust = uniqueStrTblNew(conn, table, hashPow2Size,
                            ((gOptions->flags & DBLOAD_GO_FASTER) != 0),
-                           gTmpDir, (verbose >= 2));
+                           gTmpDir, (gbVerbose >= 2));
 raf->next = gRaFieldTableList;
 gRaFieldTableList = raf;
 }

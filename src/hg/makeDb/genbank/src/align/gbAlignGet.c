@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.6 2003/10/08 21:06:18 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.7 2004/02/23 09:07:19 kent Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
@@ -122,26 +122,26 @@ if (entry != NULL)
     char* seq = gbFaGetSeq(inFa);
     if (strlen(seq) < MIN_SEQ_SIZE)
         {
-        if (verbose >= 3)
+        if (gbVerbose >= 3)
             gbVerbPr(3, "skip %s, less than minimum sequence size", inFa->id);
         }
     else if ((version == entry->selectVer) && (entry->clientFlags & ALIGN_FLAG))
         {
         outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa), inFa );
-        if (verbose >= 3)
+        if (gbVerbose >= 3)
             gbVerbPr(3, "aligning %s %s", inFa->id,
                      gbOrgCatName(entry->orgCat));
         }
     else if ((version == entry->selectVer) && (entry->clientFlags & MIGRATE_FLAG))
         {
-        if (verbose >= 3)
+        if (gbVerbose >= 3)
             gbVerbPr(3, "migrating %s %s", inFa->id,
                      gbOrgCatName(entry->orgCat));
         }
     else 
         {
         assert(version != entry->selectVer);
-        if (verbose >= 3)
+        if (gbVerbose >= 3)
             gbVerbPr(3, "skip %s, wrong version %s != %d", 
                      gbOrgCatName(entry->orgCat), inFa->id,
                      entry->selectVer);
@@ -149,7 +149,7 @@ if (entry != NULL)
     }
 else
     {
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "skip %s, no entry: %s", inFa->id,
                  gbOrgCatName(entry->orgCat));
     }

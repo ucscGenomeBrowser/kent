@@ -9,10 +9,10 @@
 
 #include "common.h"
 #include "hash.h"
-#include "log.h"
+#include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.16 2004/02/15 01:10:12 kent Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.17 2004/02/23 09:07:24 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -23,7 +23,6 @@ static char const rcsid[] = "$Id: options.c,v 1.16 2004/02/15 01:10:12 kent Exp 
 
 static struct optionSpec commonOptions[] = {
    {"verbose", OPTION_INT},
-   {"logFile", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -188,9 +187,7 @@ static void setOptions(struct hash *hash)
 {
 options = hash;
 if (optionExists("verbose"))
-    logSetVerbosity(optionInt("verbose", 0));
-if (optionExists("logFile"))
-    logToFile(optionVal("logFile", NULL));
+    verboseSetLevel(optionInt("verbose", 0));
 }
 
 void optionHashSome(int *pArgc, char *argv[], boolean justFirst)

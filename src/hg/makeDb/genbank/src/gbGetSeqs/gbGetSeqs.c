@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.10 2004/02/23 07:39:56 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.11 2004/02/23 09:07:20 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -205,7 +205,7 @@ if (orgCatOk && !alreadySelected)
     else 
         selectImplict(entry);
     }
-if (verbose >= 3)
+if (gbVerbose >= 3)
     {
     if (alreadySelected)
         gbVerbPr(3, "select: skip %s, altready selected", entry->acc);

@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.88 2004/02/11 01:07:02 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.89 2004/02/23 09:07:18 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -51,7 +51,6 @@ char *qMask = NULL;
 double minRepDivergence = 15;
 double minIdentity = 90;
 char *outputFormat = "psl";
-boolean verbose = FALSE;
 
 
 void usage()
@@ -507,7 +506,7 @@ for (i=0; i<fileCount; ++i)
 	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
 	    Bits *qMaskBits = NULL;
-	    if (verbose) fprintf(stderr, "%s\n", seq.name);
+	    verbose(1, "%s\n", seq.name);
 	    if (isProt)
 		faToProtein(seq.dna, seq.size);
 	    else
@@ -907,7 +906,6 @@ mask = optionVal("mask", NULL);
 qMask = optionVal("qMask", NULL);
 outputFormat = optionVal("out", outputFormat);
 dotEvery = optionInt("dots", 0);
-verbose = optionExists("verbose");
 /* set global for fuzzy find functions */
 setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
 setFfExtendThroughN(optionExists("extendThroughN"));

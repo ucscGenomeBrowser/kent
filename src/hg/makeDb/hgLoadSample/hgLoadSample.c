@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadSample.c,v 1.3 2004/02/16 02:17:46 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadSample.c,v 1.4 2004/02/23 09:07:21 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -82,7 +82,7 @@ char *words[64], *line, *dupe;
 int wordCount;
 struct bedStub *bed;
 
-logPrintf(1, "Reading %s\n", fileName);
+verbose(1, "Reading %s\n", fileName);
 while (lineFileNext(lf, &line, NULL))
     {
     dupe = cloneString(line);
@@ -152,7 +152,7 @@ if (sqlTable != NULL)
 else if (!oldTable)
     {
     /* Create definition statement. */
-    logPrintf(1, "Creating table definition for \n");
+    verbose(1, "Creating table definition for \n");
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
@@ -182,10 +182,10 @@ else if (!oldTable)
     sqlRemakeTable(conn, track, dy->string);
     }
 
-logPrintf(1, "Saving %s\n", tab);
+verbose(1, "Saving %s\n", tab);
 writeBedTab(tab, bedList, bedSize);
 
-logPrintf(1, "Loading %s\n", database);
+verbose(1, "Loading %s\n", database);
 dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
@@ -201,9 +201,9 @@ int i;
 
 for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
-logPrintf(1, "Loaded %d elements\n", slCount(bedList));
+verbose(1, "Loaded %d elements\n", slCount(bedList));
 slSort(&bedList, bedStubCmp);
-logPrintf(1, "Sorted\n");
+verbose(1, "Sorted\n");
 loadDatabase(database, track, bedSize, bedList);
 }
 

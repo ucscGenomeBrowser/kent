@@ -64,7 +64,7 @@ if ((entry != NULL) && (version == entry->selectVer) && !entry->clientFlags)
         }
     }
 /* trace if enabled */
-if (verbose >= 3)
+if (gbVerbose >= 3)
     {
     if (entry == NULL)
         gbVerbPr(3, "no entry: %s.%d", acc, version);

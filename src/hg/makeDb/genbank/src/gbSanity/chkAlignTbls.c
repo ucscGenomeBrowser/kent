@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.4 2004/02/23 07:38:56 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.5 2004/02/23 09:07:20 kent Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -66,7 +66,7 @@ static void chkPsl(struct psl* psl, unsigned iRow, char* database,
 unsigned chromSize = getChromSize(psl->tName);
 struct metaData* md = metaDataTblsFind(metaDataTbls, psl->qName);
 char pslDesc[128];
-if (verbose >= 3)
+if (gbVerbose >= 3)
     gbVerbMsg(3, "chkPsl %s:%d %s %s",  table, iRow, psl->qName, psl->tName);
 
 safef(pslDesc, sizeof(pslDesc), "psl %s.%s row %u", database, table, iRow);
@@ -181,7 +181,7 @@ unsigned chromSize = getChromSize(gene->chrom);
 unsigned iExon;
 struct metaData* md = metaDataTblsFind(metaDataTbls, gene->name);
 
-if (verbose >= 3)
+if (gbVerbose >= 3)
     gbVerbMsg(3, "chkGenePred %s:%d %s %s",  table, iRow, 
               gene->name, gene->chrom);
 safef(geneDesc, sizeof(geneDesc), "gene %s.%s:%u %s %s", database, table,

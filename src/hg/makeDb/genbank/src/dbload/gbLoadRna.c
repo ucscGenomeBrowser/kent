@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.18 2004/02/23 07:40:18 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.19 2004/02/23 09:07:20 kent Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -439,7 +439,7 @@ if (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
  * have the change and new entries so we can limit the per-update processing.
  */
 statusTbl = gbBuildState(conn, select, &gOptions, gMaxShrinkage, tmpDir,
-                         verbose, maxExtFileChg, &maxShrinkageExceeded);
+                         gbVerbose, maxExtFileChg, &maxShrinkageExceeded);
 if (maxShrinkageExceeded)
     {
     fprintf(stderr, "Warning: switching to dryRun mode due to maxShrinkage being exceeded\n");
@@ -860,7 +860,7 @@ if ((drop+move+copy) > 1)
     errAbort("can only specify one of -drop, -move, or -copy");
 
 gbVerbInit(optionInt("verbose", 0));
-if (verbose >= 5)
+if (gbVerbose >= 5)
     sqlMonitorEnable(JKSQL_TRACE);
 if (drop)
     dropAll(argv[1]);

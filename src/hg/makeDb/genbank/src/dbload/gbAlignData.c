@@ -27,7 +27,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.9 2004/02/23 07:40:18 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.10 2004/02/23 09:07:20 kent Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -115,7 +115,7 @@ static FILE* getPslTabFile(char* table, struct sqlConnection* conn,
 {
 if (*tabFileVar == NULL)
     {
-    *tabFileVar = sqlUpdaterNew(table, gTmpDir, (verbose >= 2), &gAllUpdaters);
+    *tabFileVar = sqlUpdaterNew(table, gTmpDir, (gbVerbose >= 2), &gAllUpdaters);
     if (!sqlTableExists(conn, table))
         {
         /* create with tName index and bin */
@@ -164,7 +164,7 @@ if (hel == NULL)
     char table[64];
     struct sqlUpdater* tabFile;
     safef(table, sizeof(table), "%s_%s", chrom, rootTable);
-    tabFile = sqlUpdaterNew(table, gTmpDir, (verbose >= 2), &gAllUpdaters);
+    tabFile = sqlUpdaterNew(table, gTmpDir, (gbVerbose >= 2), &gAllUpdaters);
     hel = hashAdd(*chromHashPtr, chrom, tabFile);
     }
 return sqlUpdaterGetFh((struct sqlUpdater*)hel->val, 1);
@@ -176,7 +176,7 @@ static FILE* getOITabFile(char* table, struct sqlConnection* conn,
 {
 if (*tabFileVar == NULL)
     {
-    *tabFileVar = sqlUpdaterNew(table, gTmpDir, (verbose >= 2), &gAllUpdaters);
+    *tabFileVar = sqlUpdaterNew(table, gTmpDir, (gbVerbose >= 2), &gAllUpdaters);
     if (!sqlTableExists(conn, table))
         {
         char *createSql = estOrientInfoGetCreateSql(table);
@@ -193,7 +193,7 @@ static FILE* getOtherTabFile(char* table, struct sqlConnection* conn,
 {
 if (*tabFileVar == NULL)
     {
-    *tabFileVar = sqlUpdaterNew(table, gTmpDir, (verbose >= 2), &gAllUpdaters);
+    *tabFileVar = sqlUpdaterNew(table, gTmpDir, (gbVerbose >= 2), &gAllUpdaters);
     if (!sqlTableExists(conn, table))
         sqlRemakeTable(conn, table, createSql);
     }
@@ -609,7 +609,7 @@ void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
                                char *tmpDirPath)
 /* delete outdated alignment data */
 {
-struct sqlDeleter* deleter = sqlDeleterNew(tmpDirPath, (verbose >= 2));
+struct sqlDeleter* deleter = sqlDeleterNew(tmpDirPath, (gbVerbose >= 2));
 struct gbStatus* status;
 strcpy(gTmpDir, tmpDirPath);
 

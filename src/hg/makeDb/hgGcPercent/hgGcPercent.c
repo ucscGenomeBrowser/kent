@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.6 2004/02/03 00:44:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.7 2004/02/23 09:07:21 kent Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -17,7 +17,6 @@ char *file = (char *)NULL;	/* file name for output */
 char *chr = (char *)NULL;	/* process only chromosome listed */
 boolean noDots = FALSE;	/* TRUE == do not display ... progress */
 boolean doGaps = FALSE;	/* TRUE == process gaps correctly */
-boolean verbose = FALSE;	/* Explain what is happening */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,7 +26,6 @@ static struct optionSpec optionSpecs[] = {
     {"chr", OPTION_STRING},
     {"noDots", OPTION_BOOLEAN},
     {"doGaps", OPTION_BOOLEAN},
-    {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -46,7 +44,7 @@ errAbort(
   "   -chr=<chrN> - process only chrN from the nibDir\n"
   "   -noDots - do not display ... progress during processing\n"
   "   -doGaps - process gaps correctly (default: gaps are not counted as GC)\n"
-  "   -verbose - display details to stderr during processing");
+  "   -verbose=N - display details to stderr during processing");
 }
 
 char *createTable = 
@@ -140,7 +138,7 @@ if (file)
 
 tabFile = mustOpen(tabFileName, "w");
 
-if (verbose) fprintf(stderr, "writing to file %s\n", tabFileName);
+verbose(1, "writing to file %s\n", tabFileName);
 
 /* Create tab file with all GC percent data. */
 for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
@@ -150,7 +148,7 @@ for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)
 	{
 	char chrNib[256];
 	safef(chrNib, ArraySize(chrNib), "%s/%s.nib", nibDir, chr);
-	if (verbose) fprintf( stderr, "checking name: chrNib %s =? %s nibEl->name\n", chrNib, nibEl->name);
+	verbose(1, "checking name: chrNib %s =? %s nibEl->name\n", chrNib, nibEl->name);
 	if (sameString(chrNib,nibEl->name))
 	    {
 	    printf("Processing %s\n", nibEl->name);
@@ -192,7 +190,6 @@ if (argc <3)
 dnaUtilOpen();
 winSize = optionInt("win", 20000);
 noLoad = optionExists("noLoad");
-verbose = optionExists("verbose");
 noDots = optionExists("noDots");
 doGaps = optionExists("doGaps");
 file = optionVal("file", NULL);
@@ -208,7 +205,7 @@ if (file)
     }
 
 
-if (verbose)
+if (verboseLevel() > 0)
     {
     fprintf(stderr, "hgGcPercent -win=%d", winSize);
     if (file) fprintf(stderr, " -file=%s", file);

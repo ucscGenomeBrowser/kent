@@ -12,25 +12,23 @@
 #include	"options.h"
 #include	"linefile.h"
 
-static char const rcsid[] = "$Id: wigZoom.c,v 1.1 2004/02/20 17:50:31 hiram Exp $";
+static char const rcsid[] = "$Id: wigZoom.c,v 1.2 2004/02/23 09:07:26 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"dataSpan", OPTION_LONG_LONG},
-    {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static long long dataSpan = 1024;	/* bases spanned per data point */
-static boolean verbose = FALSE;		/* describe what happens	*/
 
 static void usage()
 {
 errAbort(
     "wigZoom - process wiggle data to a zoomed view\n"
-    "usage: wigZoom [-verbose] [-dataSpan=N] <file names>\n"
+    "usage: wigZoom [-verbose=1] [-dataSpan=N] <file names>\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1024\n"
-    "\t-verbose - display process while underway\n"
+    "\t-verbose=1 - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
     "First column of data is a chromosome location (IN NUMERICAL ORDER !).\n"
@@ -87,7 +85,7 @@ dataBlock = (struct dataPoint *)
 /*	for each input data file	*/
 for (i = 1; i < argc; ++i)
     {
-    if (verbose) printf("translating file: %s\n", argv[i]);
+    verbose(1, "translating file: %s\n", argv[i]);
     lineCount = 0;
     validLines = 0;
     dataCount = 0;
@@ -142,12 +140,8 @@ if (argc < 2)
     usage();
 
 dataSpan = optionLongLong("dataSpan", 1024);
-verbose = optionExists("verbose");
 
-if (verbose)
-    {
-    printf("options: -verbose, dataSpan= %llu\n", dataSpan);
-    }
+verbose(1, "options: -verbose, dataSpan= %llu\n", dataSpan);
 if (dataSpan < 2)
     errAbort("ERROR: data span: %llu ! must be greater than one\n");
 

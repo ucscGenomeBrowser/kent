@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.8 2003/10/17 17:45:10 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.9 2004/02/23 09:07:20 kent Exp $";
 
 /*
  * Notes:
@@ -249,7 +249,7 @@ if (aligned != NULL)
         /* for rawPsl and intronPsl only count PSLs */
         gbCountNeedAligned(counts, aligned->entry, 0, 1);
         }
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "migrating %s %s %s",
                  gbOrgCatName(aligned->entry->orgCat), 
                  gPslFileExt[pslFileType], psl->qName);
@@ -289,7 +289,7 @@ void migrateOrientInfo(struct migrateAligns* migrate,
 struct gbAligned* aligned = getMigrateAligned(migrate, oi->name, inOi);
 if (aligned != NULL)
     {
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "migrating %s oi %s",
                  gbOrgCatName(aligned->entry->orgCat), oi->name);
     estOrientInfoTabOut(oi, outOiFh);
@@ -401,7 +401,7 @@ else
     /* for rawPsl and intronPsl only count PSLs */
     gbCountNeedAligned(counts, entry, 0, 1);
     }
-if (verbose >= 3)
+if (gbVerbose >= 3)
     gbVerbPr(3, "installing %s %s %s.%d", gbOrgCatName(entry->orgCat),
              gPslFileExt[pslFileType], acc, version);
 }
@@ -440,7 +440,7 @@ gbSplitAccVer(oi->name, acc);
 entry = getEntry(select, acc, inOi);
 if (entry != NULL)
     {
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "installing %s oi %s", gbOrgCatName(entry->orgCat),
                  oi->name);
     estOrientInfoTabOut(oi, outOiFh);
@@ -484,7 +484,7 @@ gbSplitAccVer(psl->qName, acc);
 entry = getEntry(select, acc, inPsl);
 if (entry != NULL)
     {
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "installing %s intronPsl %s", gbOrgCatName(entry->orgCat),
                  psl->qName);
     pslTabOut(psl, outPslFh);

@@ -4,7 +4,7 @@
 
 #include <stdarg.h>
 
-extern unsigned verbose;  /* verbose level */ 
+extern unsigned gbVerbose;  /* verbose level */ 
 
 void gbVerbInit(int level);
 /* Set verbose level and initialize start time */

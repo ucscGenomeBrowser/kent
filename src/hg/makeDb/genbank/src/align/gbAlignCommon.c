@@ -7,7 +7,7 @@
 #include "gbGenome.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: gbAlignCommon.c,v 1.3 2004/02/10 20:33:08 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignCommon.c,v 1.4 2004/02/23 09:07:19 kent Exp $";
 
 void gbCountNeedAligned(struct gbEntryCnts* cnts, struct gbEntry* entry,
                         unsigned accIncr, unsigned recIncr)
@@ -194,7 +194,7 @@ if ((prevAligned != NULL) && canMigrate(processed, prevAligned))
     processed->entry->clientFlags |= MIGRATE_FLAG;
     prevAligned->update->selectAlign |= prevEntry->orgCat;
     gbCountNeedAligned(&alignInfo->migrate, prevEntry, 1, prevAligned->numAligns);
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "migrate %s %s.%d %d psls", 
                  gbOrgCatName(prevEntry->orgCat), prevEntry->acc,
                  prevAligned->version, prevAligned->numAligns);
@@ -206,7 +206,7 @@ else
     entry->clientFlags |= ALIGN_FLAG;
     processed->update->selectProc |= entry->orgCat;
     gbCountNeedAligned(&alignInfo->align, entry, 1, 0);
-    if (verbose >= 3)
+    if (gbVerbose >= 3)
         gbVerbPr(3, "align %s %s.%d", gbOrgCatName(entry->orgCat),
                  entry->acc, processed->version);
     }

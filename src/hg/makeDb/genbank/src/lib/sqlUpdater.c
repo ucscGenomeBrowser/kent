@@ -7,7 +7,7 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.4 2003/10/12 21:26:21 genbank Exp $";
+static char const rcsid[] = "$Id: sqlUpdater.c,v 1.5 2004/02/23 09:07:20 kent Exp $";
 
 #define UPDATE_QUERY_MAX 4096
 
@@ -105,7 +105,7 @@ int numMatched;
 /* boolean arg enables for current verbose level (so level is under control
  * of caller) */
 if (su->verbose)
-    gbVerbMsg(verbose, "update %d rows in %s", su->numUpdates,
+    gbVerbMsg(gbVerbose, "update %d rows in %s", su->numUpdates,
               su->table);
         
 for (cmd = su->updateCmds; cmd != NULL; cmd = cmd->next)
@@ -126,9 +126,9 @@ static void addRows(struct sqlUpdater* su, struct sqlConnection *conn)
 if (su->verbose)
     {
     if (su->numAdds < 0)
-        gbVerbMsg(verbose, "add rows to %s", su->table);
+        gbVerbMsg(gbVerbose, "add rows to %s", su->table);
     else
-        gbVerbMsg(verbose, "add %d rows to %s", su->numAdds,
+        gbVerbMsg(gbVerbose, "add %d rows to %s", su->numAdds,
                   su->table);
     }
 if (ferror(su->tabFh))

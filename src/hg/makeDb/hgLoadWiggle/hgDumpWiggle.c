@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.2 2004/02/16 02:17:47 kent Exp $";
+static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.3 2004/02/23 09:07:21 kent Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* do not expect a bin column in the table */
@@ -48,7 +48,7 @@ int i;
 struct wiggle *wiggle;
 
 for (i=0; i<trackCount; ++i)
-    logPrintf(2, "track: %s\n", tracks[i]);
+    verbose(2, "track: %s\n", tracks[i]);
 
 if (db)
     {
@@ -69,14 +69,14 @@ if (db)
 	    snprintf(query, 256, "select * from %s where chrom = \"%s\"\n", tracks[i], chr);
 	else
 	    snprintf(query, 256, "select * from %s\n", tracks[i]);
-	logPrintf(2, "%s\n", query);
+	verbose(2, "%s\n", query);
 	sr = sqlGetResult(conn,query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    ++rowCount;
 	    wiggle = wiggleLoad(row + 1);  /* the +1 avoids the bin column*/
-	    logPrintf(2, "row: %d, start: %u, data range: %g: [%g:%g]\n", rowCount, wiggle->chromStart, wiggle->dataRange, wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
-	    logPrintf(2, "\tresolution: %g per bin\n",wiggle->dataRange/(double)MAX_WIG_VALUE);
+	    verbose(2, "row: %d, start: %u, data range: %g: [%g:%g]\n", rowCount, wiggle->chromStart, wiggle->dataRange, wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
+	    verbose(2, "\tresolution: %g per bin\n",wiggle->dataRange/(double)MAX_WIG_VALUE);
 	    if (wibFile)
 		{
 		if (differentString(wibFile,wiggle->file))
@@ -99,7 +99,7 @@ if (db)
 	    ReadData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
 	    fread(ReadData, (size_t) wiggle->count,
 		(size_t) sizeof(unsigned char), f);
-	    logPrintf(2, "row: %d, reading: %u bytes\n", rowCount, wiggle->count);
+	    verbose(2, "row: %d, reading: %u bytes\n", rowCount, wiggle->count);
 	    for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
                 {
                 unsigned char datum = ReadData[dataOffset];
@@ -107,7 +107,7 @@ if (db)
 		    {
 		    double dataValue =
   wiggle->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wiggle->dataRange);
-		    logPrintf(1, "%d\t%g\n",
+		    verbose(1, "%d\t%g\n",
 	1 + wiggle->chromStart + (dataOffset * wiggle->span), dataValue);
 		    }
 		}
@@ -141,13 +141,13 @@ file = optionVal("file", NULL);
 chr = optionVal("chr", NULL);
 noBin = optionExists("noBin");
 if (db)
-    logPrintf(2, "database: %s\n", db);
+    verbose(2, "database: %s\n", db);
 if (file)
-    logPrintf(2, ".wig file: %s\n", file);
+    verbose(2, ".wig file: %s\n", file);
 if (chr)
-    logPrintf(2, "select chrom: %s\n", chr);
+    verbose(2, "select chrom: %s\n", chr);
 if (noBin)
-    logPrintf(2, "expect no bin column in table\n");
+    verbose(2, "expect no bin column in table\n");
 if (db && file)
     {
     warn("ERROR: specify only one of db or file, not both\n");

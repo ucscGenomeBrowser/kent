@@ -19,7 +19,6 @@
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"verbose", OPTION_BOOLEAN},
     {"slop", OPTION_BOOLEAN},
     {"short", OPTION_BOOLEAN},
     {"long", OPTION_BOOLEAN},

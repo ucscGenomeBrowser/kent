@@ -7,7 +7,7 @@
 #include "sqlUpdater.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: sqlDeleter.c,v 1.2 2003/07/11 04:13:41 markd Exp $";
+static char const rcsid[] = "$Id: sqlDeleter.c,v 1.3 2004/02/23 09:07:20 kent Exp $";
 
 #define DIRECT_MAX 50000  /* maximum number to directly delete */
 
@@ -142,7 +142,7 @@ void sqlDeleterDel(struct sqlDeleter* sd, struct sqlConnection *conn,
 if ((sd->accCount > 0) && sqlTableExists(conn, table))
     {
     if (sd->verbose)
-        gbVerbMsg(verbose, "deleting %d keys from %s", sd->accCount, table);
+        gbVerbMsg(gbVerbose, "deleting %d keys from %s", sd->accCount, table);
     if (sd->useDeleteJoin)
         deleteJoin(sd, conn, table, column);
     else

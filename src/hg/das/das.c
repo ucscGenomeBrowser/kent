@@ -13,11 +13,10 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.22 2004/01/13 04:44:02 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.23 2004/02/23 09:07:19 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
-boolean verbose = FALSE;	/* For debugging. */
 
 void usage()
 /* Explain usage and exit. */
@@ -774,8 +773,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	    boolean hasBin;
 	    char table[64];
 
-	    if (verbose)
-	        warn("track %s", td->name);
+	    verbose(1, "track %s", td->name);
 	    hFindSplitTable(seq, td->name, table, &hasBin);
 	    tt = hashFindVal(trackHash, td->name);
 	    sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
@@ -960,7 +958,6 @@ if (path == NULL)
     path = cloneString("hg16/features");
 #endif /* DEBUG */
 cgiSpoof(&argc, argv);
-verbose = cgiVarExists("verbose");
 if (argc == 2)
     path = argv[1];
 das(path);

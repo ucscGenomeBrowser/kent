@@ -5,9 +5,7 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCrudeCmp.c,v 1.6 2003/05/06 07:22:34 kate Exp $";
-
-boolean verbose = FALSE;
+static char const rcsid[] = "$Id: pslCrudeCmp.c,v 1.7 2004/02/23 09:07:23 kent Exp $";
 
 /* output files */
 FILE *only1Fh = NULL;
@@ -24,7 +22,6 @@ errAbort(
   "usage:\n"
   "   pslCrudeCmp 1.psl 2.psl\n"
   "options:\n"
-  "   -verbose\n"
   "   -only1=file - Write PSLs occuring only in the 1.psl to this file.\n"
   "   -only2=file - Write PSLs occuring only in the 2.psl to this file.\n"
   "   -better1=file - Write PSLs that are better in 1.psl to this file.\n"
@@ -127,8 +124,7 @@ struct queryList *q, *h;
 char *qName;
 int count = 0;
 
-if (verbose)
-    printf("Comparing %s and %s\n", listName, hashName);
+verbose(1, "Comparing %s and %s\n", listName, hashName);
 for (q = list; q != NULL; q = q->next)
     {
     ++count;
@@ -138,16 +134,14 @@ for (q = list; q != NULL; q = q->next)
 	++uniqCount;
         if (onlyFh != NULL)
             pslTabOut(q->psl, onlyFh);
-	if (verbose)
-	    printf(" %s only in %s\n", qName, listName);
+	verbose(1, " %s only in %s\n", qName, listName);
 	}
     else if (!pslSame(q->psl, h->psl) && q->score > h->score)
         {
 	++betterCount;
         if (betterFh != NULL)
             pslTabOut(q->psl, betterFh);
-	if (verbose)
-	    printf(" %s better in %s\n", qName, listName);
+	verbose(1, " %s better in %s\n", qName, listName);
 	}
     }
 printf("%d total in %s\n", count, listName);
@@ -178,8 +172,8 @@ for (el = list; el != NULL; el = el->next)
             if (sameFh != NULL)
                 pslTabOut(b, sameFh);
             }
-	else if (verbose)
-	    printf(" %s is different in two files.\n", name);
+	else 
+	    verbose(1, " %s is different in two files.\n", name);
 	}
     }
 printf("%d of %d (%4.2f%%) are the same in both files\n", same, total, 100.0 * same / total);
@@ -206,7 +200,6 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 3)
     usage();
-verbose = optionExists("verbose");
 if (optionExists("only1"))
     only1Fh = mustOpen(optionVal("only1", NULL), "w");
 if (optionExists("only2"))

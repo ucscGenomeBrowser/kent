@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkSgdSync.c,v 1.1 2003/11/29 18:56:19 kent Exp $";
+static char const rcsid[] = "$Id: checkSgdSync.c,v 1.2 2004/02/23 09:07:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,10 +23,7 @@ errAbort(
   );
 }
 
-boolean verbose = FALSE;
-
 static struct optionSpec options[] = {
-   {"verbose", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -114,7 +111,7 @@ while (lineFileRowTab(lf, row))
 	    ++badCount;
 	else
 	    ++goodCount;
-	if (verbose)
+	if (verboseLevel()>0)
 	    {
 	    char *s = startCodon;
 	    printf("%s\t%d\t%c%c%c\t%c\t%s\n", chrom, start, s[0], s[1], s[2], strand, row[9]);
@@ -145,7 +142,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-verbose = optionExists("verbose");
 if (argc != 2)
     usage();
 checkSgdSync(argv[1]);

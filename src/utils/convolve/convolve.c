@@ -9,21 +9,19 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.7 2003/10/14 22:20:33 hiram Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.8 2004/02/23 09:07:25 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"count", OPTION_INT},
     {"html", OPTION_BOOLEAN},
     {"logs", OPTION_BOOLEAN},
-    {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static int convolve_count = 4;		/* # of times to convolve	*/
 static boolean html = FALSE;		/* need neat html output	*/
 static boolean logs = FALSE;		/* input data is in logs, not probs */
-static boolean verbose = FALSE;		/* describe what happens	*/
 
 static void usage()
 {
@@ -319,7 +317,7 @@ warn("Expecting at least a word at line %d, file: %s, found %d words",
 	if (wordCount == 128)
 warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 
-	if (verbose) printf("Input data read from file: %s\n", argv[i]);
+	verbose(1, "Input data read from file: %s\n", argv[i]);
 	for (j = 0; j < wordCount; ++j)
 	    {
 	    char binName[128];
@@ -347,7 +345,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 		medianLog_2 = log_2;
 		medianBin0 = bin;
 		}
-	    if (verbose) printf("bin %d: %g %0.5g\n",
+	    verbose(1, "bin %d: %g %0.5g\n",
 		    inputValuesCount-1, probInput, log_2);
 
 	    AllocVar(hg);	/*	the histogram element	*/
@@ -362,7 +360,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 	}	/*	for each line in a file	*/
 
 	/*	file read complete, echo input	*/
-	if (verbose)
+	if (verboseLevel() > 0)
 	    printHistogram(histo0, medianBin0);
 
 	/*	perform convolutions to specified count
@@ -375,7 +373,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 	    int medianBin;
 	    histo1 = newHash(0);
 	    medianBin = iteration(histo0, histo1);
-	    if (verbose)
+	    if (verboseLevel() > 0)
 		printHistogram(histo1, medianBin);
 	    freeHashAndVals(&histo0);
 	    histo0 = histo1;
@@ -395,11 +393,10 @@ if(argc < 2)
     usage();
 
 convolve_count = optionInt("count", 4);
-verbose = optionExists("verbose");
 logs = optionExists("logs");
 html = optionExists("html");
 
-if (verbose)
+if (verboseLevel() > 0)
     {
     printf("options: -verbose, input file(s):\n");
     printf("-count=%d\n", convolve_count);

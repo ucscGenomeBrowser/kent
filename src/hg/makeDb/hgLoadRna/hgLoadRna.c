@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.29 2004/02/16 02:17:46 kent Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.30 2004/02/23 09:07:21 kent Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -472,11 +472,11 @@ for (;;)
     ++count;
     if (--mod == 0)
 	{
-	logDot();
+	verboseDot();
 	mod = maxMod;
 	if (--lineMod == 0)
 	    {
-	    logPrintf(1, "%d\n", count);
+	    verbose(1, "%d\n", count);
 	    lineMod = lineMaxMod;
 	    }
 	}
@@ -575,26 +575,26 @@ for (;;)
             uniSex->curId, uniTis->curId, uniDev->curId, uniCel->curId,
             uniCds->curId, uniKey->curId, uniDef->curId, uniGen->curId, uniPro->curId, uniAut->curId);
     }
-logPrintf(1, "%d\n", count);
+verbose(1, "%d\n", count);
 
 if (noDbLoad || test) 
     {
     /* command-line option to suppress loading database */
-    logPrintf(1, "Created tab files... exiting\n");
+    verbose(1, "Created tab files... exiting\n");
     exit(0);
     }
-logPrintf(1, "Updating tissue, lib, etc. values\n");
+verbose(1, "Updating tissue, lib, etc. values\n");
 storeUniqueTables(conn);
 lineFileClose(&faLf);
 lineFileClose(&raLf);
 fclose(mrnaTab);
 fclose(seqTab);
-logPrintf(1, "Updating mrna table\n");
+verbose(1, "Updating mrna table\n");
 hgLoadTabFile(conn, ".", "mrna", NULL);
-logPrintf(1, "Updating seq table\n");
+verbose(1, "Updating seq table\n");
 hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add mRNA from %s,%s", faName, raName);
-logPrintf(1, "All done\n");
+verbose(1, "All done\n");
 }
 
 
@@ -623,7 +623,7 @@ if (type == NULL)
 
 if (mrnaType == NULL)
     {
-    logPrintf(1, "guessing mrnatype\n");
+    verbose(1, "guessing mrnatype\n");
     if (strstrNoCase(type, "rna") || strstrNoCase(type, "refseq"))
         mrnaType = "mRNA";
     else if (strstrNoCase(type, "est"))
@@ -632,7 +632,7 @@ if (mrnaType == NULL)
         errAbort("can't guess mrna type from \"%s\", specify with -mrnaType");
     }
 
-logPrintf(1, "Adding data of type: %s, mrna type: %s\n", type, mrnaType);
+verbose(1, "Adding data of type: %s, mrna type: %s\n", type, mrnaType);
 addRna(faPath, type, raFile, type, mrnaType);
 }
 
@@ -682,7 +682,7 @@ for (i=0; i<fileCount; ++i)
     fileName = fileNames[i];
     splitPath(fileName, NULL, symFaName, ext);
     strcat(symFaName, ext);
-    logPrintf(1, "Adding %s (%s)\n", fileName, symFaName);
+    verbose(1, "Adding %s (%s)\n", fileName, symFaName);
     faLf = lineFileOpen(fileName, TRUE);
     extFileId = hgStoreExtFilesTable(conn, symFaName, fileName);
 
@@ -706,11 +706,11 @@ for (i=0; i<fileCount; ++i)
 	++count;
 	if (--mod == 0)
 	    {
-	    logDot();
+	    verboseDot();
 	    mod = maxMod;
 	    if (--lineMod == 0)
 		{
-		logPrintf(1, "%d\n", count);
+		verbose(1, "%d\n", count);
 		lineMod = lineMaxMod;
 		}
 	    }
@@ -737,14 +737,14 @@ for (i=0; i<fileCount; ++i)
 	fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lld\t%d\n",
 	    id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
 	}
-    logPrintf(1, "%d\n", count);
+    verbose(1, "%d\n", count);
     lineFileClose(&faLf);
     }
-logPrintf(1, "Updating seq table\n");
+verbose(1, "Updating seq table\n");
 fclose(seqTab);
 hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add sequences");
-logPrintf(1, "All done\n");
+verbose(1, "All done\n");
 }
 
 void createAll(char *database)

@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.12 2004/01/05 22:55:09 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.13 2004/02/23 09:07:26 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -35,7 +35,7 @@ int col = 0;
 int aveCol = -1;
 boolean real = FALSE;
 int autoscale = 0;
-boolean verbose = FALSE;
+boolean extraVerbose = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -108,7 +108,7 @@ else
     fprintf(stderr, "#\tautoscale data range: (%d - %d)/%d = %d\n",
 	(int) ceil(max), minVal, maxBinCount, binSize);
     }
-if (verbose)
+if (extraVerbose)
     {
     fprintf(stderr, "#\tautoscale number of data values: %lu\n", dataCount);
     fprintf(stderr, "#\tautoscale maxBinCount: %d\n", maxBinCount);
@@ -191,7 +191,7 @@ while (wordCount = lineFileChop(lf, row))
 	}
 	else
 	    {
-	    if (verbose)
+	    if (extraVerbose)
 		fprintf(stderr, "truncating index %d\n", x);
 	    truncation = (x > truncation) ? x : truncation;
 	    }
@@ -244,7 +244,7 @@ if (doLog)
 
 begin = minData;
 end = maxData + 1;
-if (verbose)
+if (extraVerbose)
     {
     begin = 0;
     end = maxBinCount;
@@ -255,13 +255,13 @@ if (pValues)
     totalCounts = 0;
     for (i=begin; i<end; ++i)
 	totalCounts += hist[i];
-    if (verbose)
+    if (extraVerbose)
 	printf("#\ttotal data values: %llu\n", totalCounts);
     if (totalCounts < 1)
 	errAbort("ERROR: No bins with any data ?\n");
     }
 
-if (verbose)
+if (extraVerbose)
     {
     if (noStar) {
 	if (pValues)
@@ -299,7 +299,7 @@ for (i=begin; i<end; ++i)
 	ct = log(ct);
     if (noStar)
 	{
-	if (verbose)
+	if (extraVerbose)
 	    printf("%2d\t", i);
 	if (real)
 	    printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
@@ -314,7 +314,7 @@ for (i=begin; i<end; ++i)
     else
 	{
 	int astCount = round(ct * 60.0 / maxCt);
-	if (verbose)
+	if (extraVerbose)
 	    printf("%2d ", i);
 	if (real)
 	    printf("%f ", binStartR);
@@ -349,7 +349,7 @@ col = optionInt("col", 1) - 1;
 aveCol = optionInt("aveCol", 0) - 1;
 real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
-verbose = optionExists("verbose");
+extraVerbose = optionExists("verbose");
 
 /*	pValues turns on noStar too	*/
 if (pValues) noStar = TRUE;
@@ -376,7 +376,7 @@ else
     minVal = atoi(minValStr);
     }
 
-if (verbose)
+if (extraVerbose)
     {
     fprintf(stderr, "#\tverbose on, options:\n");
     fprintf(stderr, "#\tbinSize: ");
