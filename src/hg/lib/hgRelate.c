@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.15 2004/01/29 21:26:04 hartera Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.16 2004/01/29 22:57:13 hartera Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -258,8 +258,7 @@ sqlUpdate(conn, dy->string);
 
 /* Add it to table. */
 dyStringClear(dy);
-dyStringPrintf(dy, "INSERT into extFile (id, name, path, size) 
-    VALUES(%u,'%s','%s',%lld)", id, name, path, size);
+dyStringPrintf(dy, "INSERT into extFile (id, name, path, size) VALUES(%u,'%s','%s',%lld)", id, name, path, size);
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);
