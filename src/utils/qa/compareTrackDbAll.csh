@@ -88,4 +88,4 @@ else
   compareTrackDbs.csh $machine1 $machine2 $db $field 
 endif
 
-exit
+exit 0
