@@ -264,8 +264,7 @@ if ((grandChildId = fork()) == 0)
     /* Change to given user and dir. */
     changeUid(user, &homeDir);
     chdir(dir);
-    setpgrp();  /* Make childPid the process group leader for any of it's children 
-		 * (so we can reap things spawned by user's scripts). */
+    setpgid(0,0);
     umask(umaskVal); 
 
     /* Update environment. */
