@@ -250,7 +250,7 @@ void hgcAnchorSomewhereDb(char *group, char *item, char *other,
  * and other parameters. */
 {
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&db=%s\">",
-	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, db);
+	hgcPathAndSettings(), group, cgiEncode(item), chrom, winStart, winEnd, other, db);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
