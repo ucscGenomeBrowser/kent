@@ -14,7 +14,7 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToAxtRna.c,v 1.1 2003/07/26 20:36:44 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToAxtRna.c,v 1.2 2003/07/26 20:40:20 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -417,7 +417,6 @@ static boolean tIsNib;
 int blockCount = 1, blockIx=0;
 boolean qIsRc = FALSE;
 int i;
-//char q,t;
 int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 struct boxIn *b, *nextB;
@@ -446,24 +445,14 @@ if (tName == NULL || !sameString(tName, tNameParm) || tIsNib)
     readCachedSeqPart(tName, tStart, tEnd-tStart, 
 	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
     }
-//if (tIsNib && psl->strand[1] == '-')
-//    tOffset = psl->tSize - psl->tEnd;
 if (strand == '-')
     reverseComplement(qSeq->dna, qSeq->size);
-//if (psl->strand[1] == '-')
-//    reverseComplement(tSeq->dna, tSeq->size);
 for (b = chain->blockList; b != NULL; b = nextB)
     {
     blockCount++;
     qbSize += b->qEnd - b->qStart + 1;
     tbSize += b->tEnd - b->tStart + 1;
     nextB = b->next;
-                                    //    }
-                                    //printf("blockCount %d qbSize %d tbSize %d %d %s\n",blockCount, qbSize, tbSize, 0, chain->qName);
-                                    //for (blockIx=0; blockIx < blockCount; ++blockIx)
-                                    //    {
-    //qs = psl->qStarts[blockIx] - qOffset;
-    //ts = psl->tStarts[blockIx] - tOffset;
     qs = b->qStart - qOffset;
     ts = b->tStart - tOffset;
 
@@ -490,27 +479,18 @@ for (b = chain->blockList; b != NULL; b = nextB)
 	}
     /* Output sequence. */
     size = (b->tEnd)-(b->tStart);
-    //printf("before q %d\n",q->stringSize);
     dyStringAppendN(q, qSeq->dna + qs, size);
-    //printf("after  q %d\n",q->stringSize);
     lastQ = qs + size;
-    //printf("before t %d\n",t->stringSize);
     dyStringAppendN(t, tSeq->dna + ts, size);
-    //printf("after  t %d\n",t->stringSize);
     lastT = ts + size;
-    //printf("qs %d ts %d lastQ %d lastT %d size %d t %d q %d\n",qs,ts,lastQ,lastT,size, ts+tOffset, qs+qOffset);
     if(q->stringSize != t->stringSize)
         {
         fprintf(stderr,"warning: unequal string size %d BLK %s q size %d t size %d diff %d qlen %d tlen %d tStart %d\n",blockIx, qName, q->stringSize, t->stringSize, q->stringSize - t->stringSize, strlen(q->string), strlen(t->string),tStart);
         }
     }
 
-//if (tIsNib && psl->strand[1] == '-')
- //   tOffset = psl->tSize - psl->tEnd;
 if (strand == '-')
     reverseComplement(qSeq->dna, qSeq->size);
-//if (psl->strand[1] == '-')
-//    reverseComplement(tSeq->dna, tSeq->size);
 /* Count up match/mismatch. */
 
 /*
@@ -526,25 +506,8 @@ for (i=0; i<min(tSeq->size, qSeq->size); ++i)
 	    ++misMatch;
 	}
     }
+match=chain->score * tbSize / 70;
 */
-//match=chain->score * tbSize / 70;
-/* Deal with minus strand. */
-/*
-//qs = qStart;
-//qe = qStart + match + misMatch + tBaseInsert;
-//assert(qe == qEnd); 
-//if (strand == '-')
-//    {
-//    reverseIntRange(&qs, &qe, qSize);
-//    }
-//assert(qs < qe);
-//te = tStart + match + misMatch + qBaseInsert;
-//assert(te == tEnd);
-//assert(tStart < te);
-*/
-
-/* Output header */
-//    axtOutString(q->string, t->string, q->stringSize, 60, psl, f);
 
 AllocVar(axt);
 
@@ -578,69 +541,6 @@ freeDyString(&q);
 freeDyString(&t);
 axtFree(&axt);
 
-
-/*
-fprintf(f, "%d\t", match);
-fprintf(f, "%d\t", misMatch);
-fprintf(f, "0\t");
-fprintf(f, "0\t");
-fprintf(f, "%d\t", qNumInsert);
-fprintf(f, "%d\t", qBaseInsert);
-fprintf(f, "%d\t", tNumInsert);
-fprintf(f, "%d\t", tBaseInsert);
-fprintf(f, "%c\t", strand);
-fprintf(f, "%s\t", qNameParm);
-fprintf(f, "%d\t", qSize);
-if (strand == '+')
-    {
-    fprintf(f, "%d\t", qStart);
-    fprintf(f, "%d\t", qEnd);
-    }
-    else
-    {
-    fprintf(f, "%d\t", qSize - qEnd);
-    fprintf(f, "%d\t", qSize - qStart);
-    }
-fprintf(f, "%s\t", tNameParm);
-fprintf(f, "%d\t", tSize);
-fprintf(f, "%d\t", tStart);
-fprintf(f, "%d\t", tEnd);
-fprintf(f, "%d\t", blockCount-1);
-if (ferror(f))
-    {
-    perror("Error writing psl file\n");
-    errAbort("\n");
-    }
-    */
-
-/* Allocate dynamic memory for block lists. */
-/*
-AllocArray(blocks, blockCount);
-AllocArray(qStarts, blockCount);
-AllocArray(tStarts, blockCount);
-*/
-/* Figure block sizes and starts. */
-/*
-eitherInsert = FALSE;
-qs = qe = qStart;
-ts = te = tStart;
-nextB = NULL;
-for (b = chain->blockList; b != NULL; b = nextB)
-    {
-	    qStarts[blockIx] = b->qStart;
-	    tStarts[blockIx] = b->tStart;
-	    blocks[blockIx] = b->tEnd - b->tStart;
-	    ++blockIx;
-	    eitherInsert = TRUE;
-        nextB = b->next;
-    }
-assert(blockIx == blockCount-1);
-*/
-
-/* Clean Up. */
-/*freez(&blocks);
-freez(&qStarts);
-freez(&tStarts);*/
 }
 
 
