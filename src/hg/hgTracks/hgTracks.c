@@ -10086,6 +10086,7 @@ registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("sanger22", sanger22Methods);
+registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
