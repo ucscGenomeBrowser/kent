@@ -1,4 +1,4 @@
-table spXref2
+table spXref3
 "A xref table between SWISS-PROT ids and other databases."
 	(
 	string accession;	"SWISS-PROT accession number"
