@@ -12,7 +12,7 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.23 2003/08/26 05:17:09 kate Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.24 2004/03/17 00:43:01 angie Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -154,6 +154,7 @@ static void fbAddFeature(struct featureBits **pList, char *name,
 struct featureBits *fb;
 int s, e;
 char nameBuf[512];
+int chromSize = hChromSize(chrom);
 
 if (name == NULL)
     sprintf(nameBuf, "%s:%d-%d", chrom, start+1, start+size);
@@ -161,6 +162,11 @@ else
     sprintf(nameBuf, "%s %s:%d-%d", name, chrom, start+1, start+size);
 s = start;
 e = s + size;
+/* Padding might push us off the edge of the chrom; if so, truncate: */
+if (s < 0)
+    s = 0;
+if (e > chromSize)
+    e = chromSize;
 if (clipToWin)
     {
     if (s < winStart) s = winStart;
@@ -289,6 +295,9 @@ puts(" Downstream by </TD><TD> ");
 setting = cartCgiUsualString(cart, "fbDownBases", "200");
 cgiMakeTextVar("fbDownBases", setting, 8);
 puts(" bases </TD></TR></TABLE>");
+puts("Note: if a feature is close to the beginning or end of a chromosome \n"
+     "and upstream/downstream bases are added, they may be truncated \n"
+     "in order to avoid extending past the edge of the chromosome. <BR>");
 }
 
 void fbOptionsHti(struct hTableInfo *hti)
