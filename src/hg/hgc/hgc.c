@@ -111,8 +111,9 @@
 #include "ensFace.h"
 #include "bdgpGeneInfo.h"
 #include "flyBaseSwissProt.h"
+#include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.490 2003/10/09 01:24:09 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.491 2003/10/09 09:43:28 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9725,6 +9726,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+
 void doSnp(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -9762,6 +9764,251 @@ printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+void doAffyGenoDetails(struct trackDb *tdb, char *name)
+/* print additional SNP details */
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[1024];
+struct affyGenoDetails *snp=NULL;
+snprintf(query, sizeof(query),
+         "select  affyId, rsId, baseA, baseB, sequenceA, sequenceB, "
+	 "        enzyme, minFreq, hetzyg, avHetSE, "
+         "        NA04477, NA04479, NA04846, NA11036, NA11038, NA13056, "
+         "        NA17011, NA17012, NA17013, NA17014, NA17015, NA17016, "
+         "        NA17101, NA17102, NA17103, NA17104, NA17105, NA17106, "
+         "        NA17201, NA17202, NA17203, NA17204, NA17205, NA17206, "
+         "        NA17207, NA17208, NA17210, NA17211, NA17212, NA17213, "
+         "        PD01, PD02, PD03, PD04, PD05, PD06, PD07, PD08, PD09, "
+         "        PD10, PD11, PD12, PD13, PD14, PD15, PD16, PD17, PD18, "
+         "        PD19, PD20, PD21, PD22, PD23, PD24 "
+         "from    affyGenoDetails "
+         "where   affyId = '%s'", name);
+snp = affyGenoDetailsLoadByQuery(conn, query);
+if (snp!=NULL)
+    {
+    printf("<BR>\n");
+    printf("<B>Sample Prep Enzyme:</B> <I>%s</I><BR>\n",snp->enzyme);
+    printf("<B>Minimum Allele Frequency:</B> %f.3<BR>\n",snp->minFreq);
+    printf("<B>Heterozygosity:</B> %f.3<BR>\n",snp->hetzyg);
+    printf("<B>Base A:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseA);
+    printf("<B>Base B:          </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
+    printf("<B>Sequence of Allele A:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
+    printf("<B>Sequence of Allele B:</B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+    if (snp->rsId>0)
+	{
+	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("type=rs&rs=rs%d\" TARGET=_blank>dbSNP link for rs%d</A></P>\n", snp->rsId, snp->rsId);
+	}
+    doSnpLocusLink(tdb, name);
+    printf("<BR>Genotypes:<BR><font face=\"Courier\">\n");
+/*
+    printf("<BR>NA04477:%s" , snp->NA04477);
+    printf("<BR>NA04479:%s" , snp->NA04479);
+    printf("<BR>NA04846:%s" , snp->NA04846);
+    printf("<BR>NA11036:%s" , snp->NA11036);
+    printf("<BR>NA11038:%s" , snp->NA11038);
+    printf("<BR>NA13056:%s" , snp->NA13056);
+    printf("<BR>NA17011:%s" , snp->NA17011);
+    printf("<BR>NA17012:%s" , snp->NA17012);
+    printf("<BR>NA17013:%s" , snp->NA17013);
+    printf("<BR>NA17014:%s" , snp->NA17014);
+    printf("<BR>NA17015:%s" , snp->NA17015);
+    printf("<BR>NA17016:%s" , snp->NA17016);
+    printf("<BR>NA17101:%s" , snp->NA17101);
+    printf("<BR>NA17102:%s" , snp->NA17102);
+    printf("<BR>NA17103:%s" , snp->NA17103);
+    printf("<BR>NA17104:%s" , snp->NA17104);
+    printf("<BR>NA17105:%s" , snp->NA17105);
+    printf("<BR>NA17106:%s" , snp->NA17106);
+    printf("<BR>NA17201:%s" , snp->NA17201);
+    printf("<BR>NA17202:%s" , snp->NA17202);
+    printf("<BR>NA17203:%s" , snp->NA17203);
+    printf("<BR>NA17204:%s" , snp->NA17204);
+    printf("<BR>NA17205:%s" , snp->NA17205);
+    printf("<BR>NA17206:%s" , snp->NA17206);
+    printf("<BR>NA17207:%s" , snp->NA17207);
+    printf("<BR>NA17208:%s" , snp->NA17208);
+    printf("<BR>NA17210:%s" , snp->NA17210);
+    printf("<BR>NA17211:%s" , snp->NA17211);
+    printf("<BR>NA17212:%s" , snp->NA17212);
+    printf("<BR>NA17213:%s" , snp->NA17213);
+    printf("<BR>PD01:&nbsp&nbsp&nbsp%s", snp->PD01);
+    printf("<BR>PD02:&nbsp&nbsp&nbsp%s", snp->PD02);
+    printf("<BR>PD03:&nbsp&nbsp&nbsp%s", snp->PD03);
+    printf("<BR>PD04:&nbsp&nbsp&nbsp%s", snp->PD04);
+    printf("<BR>PD05:&nbsp&nbsp&nbsp%s", snp->PD05);
+    printf("<BR>PD06:&nbsp&nbsp&nbsp%s", snp->PD06);
+    printf("<BR>PD07:&nbsp&nbsp&nbsp%s", snp->PD07);
+    printf("<BR>PD08:&nbsp&nbsp&nbsp%s", snp->PD08);
+    printf("<BR>PD09:&nbsp&nbsp&nbsp%s", snp->PD09);
+    printf("<BR>PD10:&nbsp&nbsp&nbsp%s", snp->PD10);
+    printf("<BR>PD11:&nbsp&nbsp&nbsp%s", snp->PD11);
+    printf("<BR>PD12:&nbsp&nbsp&nbsp%s", snp->PD12);
+    printf("<BR>PD13:&nbsp&nbsp&nbsp%s", snp->PD13);
+    printf("<BR>PD14:&nbsp&nbsp&nbsp%s", snp->PD14);
+    printf("<BR>PD15:&nbsp&nbsp&nbsp%s", snp->PD15);
+    printf("<BR>PD16:&nbsp&nbsp&nbsp%s", snp->PD16);
+    printf("<BR>PD17:&nbsp&nbsp&nbsp%s", snp->PD17);
+    printf("<BR>PD18:&nbsp&nbsp&nbsp%s", snp->PD18);
+    printf("<BR>PD19:&nbsp&nbsp&nbsp%s", snp->PD19);
+    printf("<BR>PD20:&nbsp&nbsp&nbsp%s", snp->PD20);
+    printf("<BR>PD21:&nbsp&nbsp&nbsp%s", snp->PD21);
+    printf("<BR>PD22:&nbsp&nbsp&nbsp%s", snp->PD22);
+    printf("<BR>PD23:&nbsp&nbsp&nbsp%s", snp->PD23);
+    printf("<BR>PD24:&nbsp&nbsp&nbsp%s", snp->PD24);
+*/
+/*
+    printf("<BR>NA04477:&nbsp%s&nbsp&nbsp", snp->NA04477);
+    printf("<BR>NA04479:&nbsp%s&nbsp&nbsp", snp->NA04479);
+    printf("<BR>NA04846:&nbsp%s&nbsp&nbsp", snp->NA04846);
+    printf("<BR>NA11036:&nbsp%s&nbsp&nbsp", snp->NA11036);
+    printf("<BR>NA11038:&nbsp%s&nbsp&nbsp", snp->NA11038);
+    printf("<BR>NA13056:&nbsp%s&nbsp&nbsp", snp->NA13056);
+    printf("<BR>NA17011:&nbsp%s&nbsp&nbsp", snp->NA17011);
+    printf("<BR>NA17012:&nbsp%s&nbsp&nbsp", snp->NA17012);
+    printf("<BR>NA17013:&nbsp%s&nbsp&nbsp", snp->NA17013);
+    printf("<BR>NA17014:&nbsp%s&nbsp&nbsp", snp->NA17014);
+    printf("<BR>NA17015:&nbsp%s&nbsp&nbsp", snp->NA17015);
+    printf("<BR>NA17016:&nbsp%s&nbsp&nbsp", snp->NA17016);
+    printf("<BR>NA17101:&nbsp%s&nbsp&nbsp", snp->NA17101);
+    printf("<BR>NA17102:&nbsp%s&nbsp&nbsp", snp->NA17102);
+    printf("<BR>NA17103:&nbsp%s&nbsp&nbsp", snp->NA17103);
+    printf("<BR>NA17104:&nbsp%s&nbsp&nbsp", snp->NA17104);
+    printf("<BR>NA17105:&nbsp%s&nbsp&nbsp", snp->NA17105);
+    printf("<BR>NA17106:&nbsp%s&nbsp&nbsp", snp->NA17106);
+    printf("<BR>NA17201:&nbsp%s&nbsp&nbsp", snp->NA17201);
+    printf("<BR>NA17202:&nbsp%s&nbsp&nbsp", snp->NA17202);
+    printf("<BR>NA17203:&nbsp%s&nbsp&nbsp", snp->NA17203);
+    printf("<BR>NA17204:&nbsp%s&nbsp&nbsp", snp->NA17204);
+    printf("<BR>NA17205:&nbsp%s&nbsp&nbsp", snp->NA17205);
+    printf("<BR>NA17206:&nbsp%s&nbsp&nbsp", snp->NA17206);
+    printf("<BR>NA17207:&nbsp%s&nbsp&nbsp", snp->NA17207);
+    printf("<BR>NA17208:&nbsp%s&nbsp&nbsp", snp->NA17208);
+    printf("<BR>NA17210:&nbsp%s&nbsp&nbsp", snp->NA17210);
+    printf("<BR>NA17211:&nbsp%s&nbsp&nbsp", snp->NA17211);
+    printf("<BR>NA17212:&nbsp%s&nbsp&nbsp", snp->NA17212);
+    printf("<BR>NA17213:&nbsp%s&nbsp&nbsp", snp->NA17213);
+    printf("<BR>PD01:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD01);
+    printf("<BR>PD02:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD02);
+    printf("<BR>PD03:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD03);
+    printf("<BR>PD04:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD04);
+    printf("<BR>PD05:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD05);
+    printf("<BR>PD06:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD06);
+    printf("<BR>PD07:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD07);
+    printf("<BR>PD08:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD08);
+    printf("<BR>PD09:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD09);
+    printf("<BR>PD10:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD10);
+    printf("<BR>PD11:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD11);
+    printf("<BR>PD12:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD12);
+    printf("<BR>PD13:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD13);
+    printf("<BR>PD14:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD14);
+    printf("<BR>PD15:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD15);
+    printf("<BR>PD16:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD16);
+    printf("<BR>PD17:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD17);
+    printf("<BR>PD18:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD18);
+    printf("<BR>PD19:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD19);
+    printf("<BR>PD20:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD20);
+    printf("<BR>PD21:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD21);
+    printf("<BR>PD22:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD22);
+    printf("<BR>PD23:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD23);
+    printf("<BR>PD24:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD24);
+*/
+    printf("\n<BR>NA04477:&nbsp%s&nbsp&nbsp", snp->NA04477);
+    printf("NA04479:&nbsp%s&nbsp&nbsp", snp->NA04479);
+    printf("NA04846:&nbsp%s&nbsp&nbsp", snp->NA04846);
+    printf("NA11036:&nbsp%s&nbsp&nbsp", snp->NA11036);
+    printf("NA11038:&nbsp%s&nbsp&nbsp", snp->NA11038);
+    printf("NA13056:&nbsp%s&nbsp&nbsp", snp->NA13056);
+    printf("\n<BR>NA17011:&nbsp%s&nbsp&nbsp", snp->NA17011);
+    printf("NA17012:&nbsp%s&nbsp&nbsp", snp->NA17012);
+    printf("NA17013:&nbsp%s&nbsp&nbsp", snp->NA17013);
+    printf("NA17014:&nbsp%s&nbsp&nbsp", snp->NA17014);
+    printf("NA17015:&nbsp%s&nbsp&nbsp", snp->NA17015);
+    printf("NA17016:&nbsp%s&nbsp&nbsp", snp->NA17016);
+    printf("\n<BR>NA17101:&nbsp%s&nbsp&nbsp", snp->NA17101);
+    printf("NA17102:&nbsp%s&nbsp&nbsp", snp->NA17102);
+    printf("NA17103:&nbsp%s&nbsp&nbsp", snp->NA17103);
+    printf("NA17104:&nbsp%s&nbsp&nbsp", snp->NA17104);
+    printf("NA17105:&nbsp%s&nbsp&nbsp", snp->NA17105);
+    printf("NA17106:&nbsp%s&nbsp&nbsp", snp->NA17106);
+    printf("\n<BR>NA17201:&nbsp%s&nbsp&nbsp", snp->NA17201);
+    printf("NA17202:&nbsp%s&nbsp&nbsp", snp->NA17202);
+    printf("NA17203:&nbsp%s&nbsp&nbsp", snp->NA17203);
+    printf("NA17204:&nbsp%s&nbsp&nbsp", snp->NA17204);
+    printf("NA17205:&nbsp%s&nbsp&nbsp", snp->NA17205);
+    printf("NA17206:&nbsp%s&nbsp&nbsp", snp->NA17206);
+    printf("\n<BR>NA17207:&nbsp%s&nbsp&nbsp", snp->NA17207);
+    printf("NA17208:&nbsp%s&nbsp&nbsp", snp->NA17208);
+    printf("NA17210:&nbsp%s&nbsp&nbsp", snp->NA17210);
+    printf("NA17211:&nbsp%s&nbsp&nbsp", snp->NA17211);
+    printf("NA17212:&nbsp%s&nbsp&nbsp", snp->NA17212);
+    printf("NA17213:&nbsp%s&nbsp&nbsp", snp->NA17213);
+    printf("\n<BR>PD01:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD01);
+    printf("PD02:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD02);
+    printf("PD03:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD03);
+    printf("PD04:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD04);
+    printf("PD05:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD05);
+    printf("PD06:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD06);
+    printf("\n<BR>PD07:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD07);
+    printf("PD08:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD08);
+    printf("PD09:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD09);
+    printf("PD10:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD10);
+    printf("PD11:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD11);
+    printf("PD12:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD12);
+    printf("\n<BR>PD13:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD13);
+    printf("PD14:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD14);
+    printf("PD15:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD15);
+    printf("PD16:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD16);
+    printf("PD17:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD17);
+    printf("PD18:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD18);
+    printf("\n<BR>PD19:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD19);
+    printf("PD20:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD20);
+    printf("PD21:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD21);
+    printf("PD22:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD22);
+    printf("PD23:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD23);
+    printf("PD24:&nbsp&nbsp&nbsp&nbsp%s&nbsp&nbsp", snp->PD24);
+    printf("\n</font>\n");
+    }
+else printf("<BR>%s<BR>\n",query);
+affyGenoDetailsFree(&snp);
+sqlDisconnect(&conn);
+}
+
+void doAffyGeno(struct trackDb *tdb, char *itemName)
+/* Put up info on an Affymetrix SNP. */
+{
+char *group = tdb->tableName;
+struct snp snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+int rsId = 0;
+
+cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
+printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+sprintf(query, "select * "
+	       "from   affyGeno "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and  name = '%s'",
+               seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    }
+doAffyGenoDetails(tdb, itemName);
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
@@ -12380,6 +12627,10 @@ else if (startsWith("ct_", track))
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
+    }
+else if (sameWord(track, "affyGeno"))
+    {
+    doAffyGeno(tdb, item);
     }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
