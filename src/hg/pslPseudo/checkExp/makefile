@@ -15,7 +15,7 @@ O = checkExp.o
 
 checkExp: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkExp $O $(MARKDEBUG) $(MYLIBS) $L 
-	strip $(HOME)/bin/$(MACHTYPE)/checkExp
+#strip $(HOME)/bin/$(MACHTYPE)/checkExp
 
 lib:
 	cd ../../lib && ${MAKE}
@@ -23,5 +23,5 @@ lib:
 test: chr3 chr9 chr11
 %:	input/%.bed
 	${MKDIR} output
-	checkExp input/$@.bed S1.len $(PSEUDO)/all_mrna.psl input/S1.lst /cluster/data/genbank/data/processed/genbank.143.0/mrna.2bit ~/hg17/blastzSelf/axtChain/chain/$@.chain /cluster/data/hg17/nib output/$@.tab  > $@.log 
+	checkExp -verbose=4 input/$@.bed S1.len $(PSEUDO)/all_mrna.psl input/S1.lst /cluster/data/hg17/bed/pseudo/stats/checkExp/mrna.2bit ~/hg17/blastzSelf/axtChain/chain/$@.chain /cluster/data/hg17/nib output/$@.tab  > $@.log 
 	diff expected/$@.tab output/$@.tab 

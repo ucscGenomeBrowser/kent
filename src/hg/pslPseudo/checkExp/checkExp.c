@@ -24,7 +24,7 @@
 #include "twoBit.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: checkExp.c,v 1.2 2004/09/30 16:52:15 baertsch Exp $";
+static char const rcsid[] = "$Id: checkExp.c,v 1.3 2004/11/25 20:43:36 baertsch Exp $";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
 struct hash *pseudoHash = NULL, *mrnaHash = NULL, *chainHash = NULL, *faHash = NULL, *tHash = NULL;
@@ -443,7 +443,7 @@ struct misMatch *el;
 
 for (el = *misMatchList; el != NULL ; el = el->next)
     {
-    //verbose(8,"%d == %d\n",el->retroLoc, retroLoc);
+    verbose(5,"%d == %d %c %c\n",el->retroLoc, retroLoc, el->retroBase, el->parentBase);
     if (el->retroLoc == retroLoc && el->retroBase != '-' && el->parentBase != '-')
         return el;
     }
@@ -473,12 +473,18 @@ for (i = 0 ; i <= axt->symCount ; i++)
             misMatch->parentBase = axt->qSym[i];
             slAddHead(misMatchList, misMatch);
 
-            verbose(2,"mismatch %d %d %c %c\n",
+            verbose(5, "listLen = %d\n",slCount(misMatchList));
+            verbose(4,"add [%d] %d %d R %c P %c\n",
+                i, 
                 misMatch->retroLoc ,
                 misMatch->parentLoc,
                 misMatch->retroBase,
                 misMatch->parentBase);
             }
+        }
+    else
+        {
+        verbose(8,"don't add [%d] %d \n",i, axt->tStart+i);
         }
     }
 }
@@ -491,7 +497,6 @@ char *tmpName[512], cmd[512];
 struct axt *axtList = NULL, *axt, *mAxt = NULL;
 struct dnaSeq *qSeq = NULL, *tSeq = NULL, *seqList = NULL;
 struct nibInfo *qNib = NULL, *tNib = NULL;
-struct misMatch *misMatchList = NULL, *misMatch;
 FILE *op;
 int ret;
 
@@ -499,6 +504,7 @@ if (nibHash == NULL)
     nibHash = hashNew(0);
 while (lineFileNextRow(bf, row, ArraySize(row)))
     {
+    struct misMatch *misMatchList = NULL, *misMatch;
     struct binKeeper *bk = NULL;
     struct binElement *el, *elist = NULL;
     struct psl *mPsl = NULL, *gPsl = NULL, *rPsl = NULL, *pPsl = NULL, *psl ;
@@ -537,6 +543,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
         struct chain *chain = el->val, *subChain, *retChainToFree, *retChainToFree2;
         int qs = chain->qStart;
         int qe = chain->qEnd;
+        int id = chain->id;
         if (chain->qStrand == '-')
             {
             qs = chain->qSize - chain->qEnd;
@@ -552,7 +559,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
             continue;
             }
         verbose(2,"chain id %d %4.0f",chain->id, chain->score);
-        chainSubsetOnT(chain, ps->chromStart, ps->chromEnd, 
+        chainSubsetOnT(chain, ps->chromStart+7, ps->chromEnd-7, 
             &subChain,  &retChainToFree);
         if (subChain != NULL)
             chain = subChain;
@@ -579,15 +586,16 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
 	qSeq = nibInfoLoadStrand(qNib, chain->qStart, chain->qEnd, chain->qStrand);
 	axtList = chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart,
 	    maxGap, BIGNUM);
-        verbose(2,"axt count %d\n",slCount(axtList));
+        verbose(2,"axt count %d misMatch cnt %d\n",slCount(axtList), slCount(misMatchList));
         for (axt = axtList; axt != NULL ; axt = axt->next)
             {
             int i;
             addMisMatch(&misMatchList, axt, chain->qSize);
             }
-        verbose(2,"%d in mismatch list \n",slCount(misMatchList));
+        verbose(2,"%d in mismatch list %s id %d \n",slCount(misMatchList), chain->qName, id);
         chainFree(&retChainToFree);
         chainFree(&retChainToFree2);
+        break;
         }
     /* get mrna from hash */
     bk = hashFindVal(mrnaHash, ps->chrom);
@@ -596,9 +604,9 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     char queryName[512];
     char axtName[512];
     char pslName[512];
-    safef(queryName, sizeof(queryName), "tmp/query.%s.fa", ps->chrom);
-    safef(axtName, sizeof(axtName), "tmp/tmp.%s.axt", ps->chrom);
-    safef(pslName, sizeof(pslName), "tmp/tmp.%s.psl", ps->chrom);
+    safef(queryName, sizeof(queryName), "/tmp/query.%s.fa", ps->chrom);
+    safef(axtName, sizeof(axtName), "/tmp/tmp.%s.axt", ps->chrom);
+    safef(pslName, sizeof(pslName), "/tmp/tmp.%s.psl", ps->chrom);
     op = fopen(pslName,"w");
     for (el = elist ; el != NULL ; el = el->next)
         {
@@ -640,6 +648,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
             for (i = 0 ; i< (mPsl->tEnd-mPsl->tStart) ; i++)
                 {
                 int j = mAxt->tStart - mPsl->tStart;
+                verbose(5, "listLen = %d\n",slCount(&misMatchList));
                 if ((mf = matchFound(&misMatchList, (mPsl->tStart)+i)) != NULL)
                     if (toupper(mf->retroBase) == toupper(mAxt->qSym[j+i]))
                         {
@@ -660,7 +669,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                     else
                         {
                         verbose (3,"match neither[%d] %d %c != %c retro %c %d\n",
-                                i,mf->parentBase, mf->parentLoc, mAxt->tSym[j+i], 
+                                i,mf->parentLoc, mf->parentBase, mAxt->tSym[j+i], 
                                 mf->retroBase, mf->retroLoc);
                         scoreNeither++;
                         }
