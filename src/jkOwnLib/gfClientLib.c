@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.28 2004/02/25 21:51:15 kent Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.29 2004/02/27 19:59:06 angie Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -630,6 +630,20 @@ if (cache != NULL)
 }
 
 
+static void getSeqName(char *spec, char *name)
+/* Extract sequence name from spec. */
+{
+if (nibIsFile(spec))
+    splitPath(spec, NULL, name, NULL);
+else
+    {
+    char *s = strchr(spec, ':');
+    if (s == NULL)
+	errAbort("Expecting colon in %s", spec);
+    strcpy(name, s+1);
+    }
+}
+
 void gfAlignStrand(int *pConn, char *tSeqDir, struct dnaSeq *seq,
     boolean isRc, int minMatch, struct hash *tFileCache, struct gfOutput *out)
 /* Search genome on server with one strand of other sequence to find homology. 
@@ -649,7 +663,7 @@ slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {
-    splitPath(range->tName, dir, chromName, ext);
+    getSeqName(range->tName, chromName);
     targetSeq = expandAndLoadCached(range, tFileCache, tSeqDir, 
     	seq->size, &range->tTotalSize, FALSE, FALSE);
     AllocVar(bun);
@@ -1123,20 +1137,6 @@ for (range = rangeList; range != NULL; range = range->next)
 *retT3Hash = t3Hash;
 *retSeqList = tSeqList;
 *retT3RefList = t3RefList;
-}
-
-static void getSeqName(char *spec, char *name)
-/* Extract sequence name from spec. */
-{
-if (nibIsFile(spec))
-    splitPath(spec, NULL, name, NULL);
-else
-    {
-    char *s = strchr(spec, ':');
-    if (s == NULL)
-	errAbort("Expecting colon in %s", spec);
-    strcpy(name, s+1);
-    }
 }
 
 void gfAlignTrans(int *pConn, char *tSeqDir, aaSeq *seq, int minMatch, 
