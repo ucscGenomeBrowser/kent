@@ -11,10 +11,16 @@ P.two	{	line-height: 1.6;
 		color: black;
 		margin-left: 15px;
 
+P.leftjustify{	line-height: 1.1;
+		text-align: left;
+		font-family: times new roman, arial, helvetica, verdana, serif;
+		color: black;
+		margin-left: 0px;
 
 	}
 TABLE{	cellpadding: 0;
 		cellspacing: 0;
+		margins: 0;
 		border: 0;
 	}
 IMG {  	border-width: 0px; 
