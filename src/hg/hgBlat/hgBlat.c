@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.79 2004/07/02 01:51:41 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.80 2004/07/20 17:15:40 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -94,29 +94,51 @@ errAbort(
   "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
 }
 
+int countSameNonDigit(char *a, char *b)
+/* Return count of characters in a,b that are the same
+ * up until first digit in either one. */
+{
+char cA, cB;
+int same = 0;
+for (;;)
+   {
+   cA = *a++;
+   cB = *b++;
+   if (cA != cB)
+       break;
+   if (cA == 0 || cB == 0)
+       break;
+   if (isdigit(cA) || isdigit(cB))
+       break;
+   ++same;
+   }
+return same;
+}
+
+boolean allDigits(char *s)
+/* Return TRUE if s is all digits */
+{
+char c;
+while ((c = *s++) != 0)
+    if (!isdigit(c))
+        return FALSE;
+return TRUE;
+}
+
 int cmpChrom(char *a, char *b)
 /* Compare two chromosomes. */
 {
-char cA, cB;
-int cSame = countSame(a, b);
+int cSame = countSameNonDigit(a, b);
 int diff;
 
 a += cSame;
 b += cSame;
-cA = *a;
-cB = *b;
-if (isdigit(cA))
-    {
-    if (isdigit(cB))
-       return atoi(a) - atoi(b);
-    else
-       return -1;
-    }
-else if (isdigit(cB))
-    return 1;
+if (allDigits(a) && allDigits(b))
+    return atoi(a) - atoi(b);
 else
-    return strcmp(a, b);
+    return strcmp(a,b);
 }
+
 
 
 int pslCmpTargetScore(const void *va, const void *vb)
