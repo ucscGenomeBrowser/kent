@@ -112,3 +112,13 @@ priority 3.2
 visibility off
 type distance gnfU95Distance query target distance
 
+name HInv
+shortLabel H-Inv
+longLabel H-Invitational Gene Database
+priority 2.7
+visibility off
+type association knownToHInv
+queryFull select name,value from knownToHInv
+queryOne select value,name from knownToHInv where name = '%s'
+invQueryOne select name from knownToHInv where value = '%s'
+itemUrl http://www.jbirc.aist.go.jp/hinv/soup/pub_Detail.pl?acc_id=%s
