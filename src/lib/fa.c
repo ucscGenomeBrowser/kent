@@ -11,12 +11,26 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.21 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.22 2003/06/04 16:17:01 kate Exp $";
 
-boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment, 
-    char **retCommentLine, struct dnaSeq **retSeq)
-/* Read next sequence from .fa file. Return sequence in retSeq.  If retCommentLine is non-null
- * return the '>' line in retCommentLine.   The whole thing returns FALSE at end of file. */
+boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
+                         char **retCommentLine, struct dnaSeq **retSeq) 
+/* Read next sequence from .fa file. Return sequence in retSeq.  
+ * If retCommentLine is non-null
+ * return the '>' line in retCommentLine.   
+ * The whole thing returns FALSE at end of file.  
+ * DNA chars are mapped to lower case.*/
+{
+    return faReadMixedNext(f, 0, defaultName, mustStartWithComment,
+                                        retCommentLine, retSeq);
+}
+
+boolean faReadMixedNext(FILE *f, boolean preserveCase, char *defaultName, 
+    boolean mustStartWithComment, char **retCommentLine, struct dnaSeq **retSeq)
+/* Read next sequence from .fa file. Return sequence in retSeq.  
+ * If retCommentLine is non-null return the '>' line in retCommentLine.
+ * The whole thing returns FALSE at end of file. 
+ * Contains parameter to preserve mixed case. */
 {
 char lineBuf[1024];
 int lineSize;
@@ -86,11 +100,15 @@ for (;;)
         break;
     if (!isspace(c) && !isdigit(c))
         {
-        if ((b = ntChars[c]) == 0)
-	    {
-            b = 'n';
-	    }
-        *dna++ = b;
+        // check for non-DNA char
+        if (ntChars[c] == 0)
+            {
+            *dna++ = preserveCase ? 'N' : 'n';
+            }
+        else
+            {
+            *dna++ = preserveCase ? c : ntChars[c];
+            }
         }
     }
 if (c == '>')

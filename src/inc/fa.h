@@ -44,7 +44,12 @@ boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
 /* Read next sequence from .fa file. Return sequence in retSeq.  If retCommentLine is non-null
  * return the '>' line in retCommentLine.   The whole thing returns FALSE at end of file. 
  * Assumes positioned at or before the '>' at start of sequence.  File must have been
- * opened in binary mode! */
+ * opened in binary mode! Note: sequence is mapped to lower case */
+
+boolean faReadMixedNext(FILE *f, boolean preserveCase, char *defaultName, 
+    boolean mustStartWithComment, char **retCommentLine, struct dnaSeq **retSeq);
+/* Read next sequence from .fa file. Return sequence in retSeq.  If retCommentLine is non-null
+ * return the '>' line in retCommentLine.   The whole thing returns FALSE at end of file. Provides flag for preserving case in sequence */
 
 struct dnaSeq *faFromMemText(char *text);
 /* Return a sequence from a .fa file that's been read into

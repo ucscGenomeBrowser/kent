@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.5 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.6 2003/06/04 16:17:01 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +30,8 @@ errAbort(
   "             list of freeze subdirectories.\n"
   "   -simpleMulti - treat freezeDir as a single file, multi-record FASTA\n"
   "                  which contains all fragment records.\n"
+  "   -simpleMultiMixed - same as simpleMulti, but preserves \n"
+  "                  mixed-case sequence\n"
   );
 }
 
@@ -37,17 +39,18 @@ errAbort(
 /* Overridable options. */
 char *subDirs = "extras,fin,draft,predraft";
 
-void simpleMultiFillInSequence(char *seqFile, struct agpFrag *agpList,
-    DNA *dna, int dnaSize)
+void simpleMultiFillInSequence(boolean preserveCase, char *seqFile, 
+                        struct agpFrag *agpList, DNA *dna, int dnaSize)
 /* Fill in DNA array with sequences from one multi-record fasta file. */
 {
 struct hash *fragHash = newHash(17);
 struct agpFrag *agp;
 struct dnaSeq *seq;
 FILE *f;
+boolean ret = 0;
 
 f = mustOpen(seqFile, "r");
-while (faReadNext(f, "bogus", TRUE, NULL, &seq))
+while (faReadMixedNext(f, preserveCase, "bogus", TRUE, NULL, &seq))
     {
     hashAdd(fragHash, seq->name, seq);
     }
@@ -270,7 +273,11 @@ memset(dna, 'n', lastPos);
 dna[lastPos] = 0;
 if (cgiVarExists("simpleMulti"))
     {
-    simpleMultiFillInSequence(seqDir, agpList, dna, lastPos);
+    simpleMultiFillInSequence(0, seqDir, agpList, dna, lastPos);
+    }
+else if (cgiVarExists("simpleMultiMixed"))
+    {
+    simpleMultiFillInSequence(1, seqDir, agpList, dna, lastPos);
     }
 else if (cgiVarExists("simple"))
     {
