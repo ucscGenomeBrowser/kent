@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.4 2003/10/14 05:35:01 kent Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.5 2003/10/14 06:28:49 kent Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -28,7 +28,7 @@ if (spIsPrimaryAcc(conn, id))
     return cloneString(id);
 acc = spIdToAcc(conn, id);
 if (acc != NULL)
-    return cloneString(acc);
+    return acc;
 else
     {
     char query[256];
