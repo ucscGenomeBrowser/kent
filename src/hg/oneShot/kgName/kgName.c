@@ -5,6 +5,7 @@
 #include "options.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "spDb.h"
 
 char *database = "hg16";
 void usage()
@@ -92,10 +93,19 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 return name;
 }
 
-void kgName(char *database,  char *inList, char *outPsl)
+char *getSwiss( struct sqlConnection *conn , char *id)
+{
+char cond_str[256];
+
+sprintf(cond_str, "mrnaID='%s'", id);
+return sqlGetField(conn, database, "spMrna", "spID", cond_str);
+}
+
+void kgName(char *database, char *protDb,  char *inList, char *outPsl)
 /* kgName - builds association table between knownPep and gene common name. */
 {
 struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn2 = sqlConnect("swissProt");
 char *words[1], **row;
 FILE *f = mustOpen(outPsl, "w");
 struct lineFile *lf = lineFileOpen(inList, TRUE);
@@ -103,7 +113,7 @@ int count = 0, found = 0;
 char query[256];
 while (lineFileRow(lf, words))
     {
-    fprintf(f,"%s\t%s\n",words[0], lookupName(conn,words[0]));
+    fprintf(f,"%s\t%s\t%s\n",words[0], lookupName(conn,words[0]), getSwiss(conn, words[0]));
     }
 hFreeConn(&conn);
 }
@@ -111,11 +121,12 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-hSetDb(database);
-protDbName = hPdbFromGdb(database);
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-kgName(argv[1], argv[2], argv[3]);
+database=argv[1];
+hSetDb(argv[1]);
+protDbName = hPdbFromGdb(database);
+kgName(argv[1], protDbName, argv[2], argv[3]);
 return 0;
 }
