@@ -44,11 +44,11 @@ visibility dense
 type bed 3 +
 
 track ccdsGene
-shortLabel Consensus CDS
-longLabel Consensus CDS Genes
+shortLabel CCDS
+longLabel Consensus CDS
 group genes
-priority 30
-visibility pack
+priority 34.5
+visibility dense
 color 12,120,12
 hgGene on
 type genePred
