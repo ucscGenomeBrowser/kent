@@ -284,7 +284,7 @@ int heightFromCart;
 char o1[128];
 
 sprintf( o1, "%s.heightPer", tg->mapName);
-heightFromCart = atoi(cartUsualString(cart, o1, "10"));
+heightFromCart = atoi(cartUsualString(cart, o1, "100"));
 
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
@@ -1017,7 +1017,7 @@ sprintf( o3, "%s.fill", tg->mapName);
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
-fill = atoi(cartUsualString(cart, o3, "0"));
+fill = atoi(cartUsualString(cart, o3, "1"));
 
 
 //errAbort( "(%s)", lf->name );
