@@ -169,14 +169,6 @@ spectrum on
 type chain hg16
 otherDb hg16
 
-track blastHg16KG
-shortLabel hg16 protein blast
-longLabel hg16 protein blast
-group x
-priority 1101
-visibility hide
-type psl protein
-
 track blastzDanRer1
 shortLabel Zebrafish Blastz
 longLabel Blastz Zebrafish (danRer1-Nov 03) Alignments
