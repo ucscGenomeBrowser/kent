@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.689 2004/07/15 16:35:22 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.690 2004/07/15 19:20:30 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1438,26 +1438,54 @@ void showGenePos(char *name, struct trackDb *tdb)
 char *track = tdb->tableName;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct genePred *gp = NULL;
+struct genePred *gpList = NULL, *gp = NULL;
 boolean hasBin; 
-int posCount = 0;
 char table[64];
 
 hFindSplitTable(seqName, track, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s'", table, name);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+safef(query, sizeof(query), "name = \"%s\"", name);
+gpList = genePredReaderLoadQuery(conn, table, query);
+for (gp = gpList; gp != NULL; gp = gp->next)
     {
-    if (posCount > 0)
-        printf("<BR>\n");
-    ++posCount;
-    gp = genePredLoad(row + hasBin);
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
-    genePredFree(&gp);
+    if (gp->name2 != NULL)
+        {
+        printf("<b>Alternate Name:</b> %s<br>\n",gp->name2);
+        }
+    if (gp->exonFrames != NULL ) 
+        switch (gp->cdsStartStat)
+            {
+            case cdsNone:        /* "none" - No CDS (non-coding)  */
+                printf("<b>No CDS Start (non-coding)</b><br>\n");
+                break;
+            case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
+                printf("<b>CDS Start is unknown. (coding, but not known)</b><br>\n");
+                break;
+            case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
+                printf("<b>CDS Start is not complete at this end of gene. <br>\n");
+                break;
+            case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
+                printf("<b>CDS Start is complete. <br>\n");
+                break;
+            }
+    if (gp->exonFrames != NULL ) 
+        switch (gp->cdsEndStat)
+            {
+            case cdsNone:        /* "none" - No CDS (non-coding)  */
+                printf("<b>No CDS End (non-coding)</b><br>\n");
+                break;
+            case cdsUnknown:     /* "unk" - CDS is unknown (coding, but not known)  */
+                printf("<b>CDS End is unknown. (coding, but not known)</b><br>\n");
+                break;
+            case cdsIncomplete:  /* "incmpl" - CDS is not complete at this end  */
+                printf("<b>CDS End is not complete at this end of gene. <br>\n");
+                break;
+            case cdsComplete:    /* "cmpl" - CDS is complete at this end  */
+                printf("<b>CDS End is complete. <br>\n");
+                break;
+            }
     }
-sqlFreeResult(&sr);
+genePredFreeList(&gpList);
 hFreeConn(&conn);
 }
 
