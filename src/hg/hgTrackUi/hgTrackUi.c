@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.109 2004/06/03 00:02:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.110 2004/06/08 00:05:53 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -560,7 +560,7 @@ void rulerUi(struct trackDb *tdb)
 {
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
-puts("<P><B>Zoom:&nbsp;</B>");
+puts("<P><B>Zoom in:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 }
 
@@ -588,30 +588,35 @@ for (i = 0; i < speciesCt; i++)
     }
 puts("</TR></TABLE><BR>");
 
-safef(option, sizeof(option), "%s.%s", tdb->tableName, "mafCodon");
+safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
 
-#ifdef CODON_HIGHLIGHT
 puts("<p><b>Base-level codon highlighting:</b></p>" );
-currentCodonMode = cartCgiUsualString(cart, option, "Gene");
+
+#define CODON_HIGHLIGHT
+#ifdef CODON_HIGHLIGHT
+
+currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
 
 /* Dissable codon highlighting */
 puts("&nbsp; &nbsp; None &nbsp;");
-cgiMakeRadioButton(option, "0", sameString("0", currentCodonMode));
+cgiMakeRadioButton(option, MAF_FRAME_NONE, 
+                sameString(MAF_FRAME_NONE, currentCodonMode));
 
 /* User-specified frames 1-3 */
 puts("&nbsp; &nbsp; Frame 1 &nbsp;");
-cgiMakeRadioButton(option, "1", sameString("1", currentCodonMode));
+cgiMakeRadioButton(option, MAF_FRAME_1, sameString(MAF_FRAME_1, currentCodonMode));
 puts("&nbsp; &nbsp; Frame 2 &nbsp;");
-cgiMakeRadioButton(option, "2", sameString("2", currentCodonMode));
+cgiMakeRadioButton(option, MAF_FRAME_2, sameString(MAF_FRAME_2, currentCodonMode));
 puts("&nbsp; &nbsp; Frame 3 &nbsp;");
-cgiMakeRadioButton(option, "3", sameString("3", currentCodonMode));
+cgiMakeRadioButton(option, MAF_FRAME_3, sameString(MAF_FRAME_3, currentCodonMode));
 puts("<br>");
 
 /* Use gene pred */
 puts("&nbsp; &nbsp; CDS-annotated frame &nbsp;");
-cgiMakeRadioButton(option, "Gene", sameString("Gene", currentCodonMode));
+cgiMakeRadioButton(option, MAF_FRAME_GENE, 
+                        sameString(MAF_FRAME_GENE, currentCodonMode));
 puts("&nbsp; &nbsp; based on &nbsp;");
-safef(option, sizeof(option), "%s.%s", tdb->tableName, "mafGenePred");
+safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
 genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
 
 #else
