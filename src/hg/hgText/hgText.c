@@ -6,6 +6,7 @@
 #include "dnaseq.h"
 #include "dystring.h"
 #include "htmshell.h"
+#include "cart.h"
 #include "jksql.h"
 #include "knownInfo.h"
 #include "hdb.h"
@@ -73,7 +74,7 @@ struct hgPositions *hgp;
 struct hgPos *pos;
 struct dyString *ui;
 
-hgp = hgPositionsFind(spec, "", FALSE);
+hgp = hgPositionsFind(spec, "", FALSE, NULL);
 
 if (hgp == NULL || hgp->posCount == 0)
     {
@@ -92,7 +93,7 @@ if ((pos = hgp->singlePos) != NULL)
 else
 	{
     webStart("Genome Table Browser");
-    hgPositionsHtml(hgp, stdout, FALSE);
+    hgPositionsHtml(hgp, stdout, FALSE, NULL);
     hgPositionsFree(&hgp);
     webEnd();
     return FALSE;

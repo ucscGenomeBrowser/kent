@@ -33,10 +33,12 @@ void hgPositionsFree(struct hgPositions **pEl);
 void hgPositionsFreeList(struct hgPositions **pList);
 /* Free a list of dynamically allocated hgPos's */
 
-struct hgPositions *hgPositionsFind(char *query, char *extraCgi, boolean useHgTracks);
+struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
+	boolean useHgTracks, struct cart *cart);
 /* Return table of positions that match query or NULL if none such. */
 
-void hgPositionsHtml(struct hgPositions *positions, FILE *f, boolean useHgTracks);
+void hgPositionsHtml(struct hgPositions *positions, FILE *f, boolean useHgTracks, 
+	struct cart *cart);
 /* Write out positions table as HTML to file. */
 
 struct hgPosTable

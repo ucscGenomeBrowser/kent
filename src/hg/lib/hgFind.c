@@ -21,6 +21,7 @@
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "knownInfo.h"
+#include "cart.h"
 #include "hgFind.h"
 #include "hdb.h"
 #include "refLink.h"
@@ -53,18 +54,17 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-static char *getUiUrl()
+static char *getUiUrl(struct cart *cart)
 /* Get rest of UI from browser. */
 {
 static struct dyString *dy = NULL;
 static char *s = NULL;
 if (dy == NULL)
     {
-    cgiVarExclude("position");
-    dy = cgiUrlString();
+    dy = newDyString(64);
+    if (cart != NULL)
+	dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
     s = dy->string;
-    if (s[0] == 0)
-       s = NULL;
     }
 return s;
 }
@@ -459,13 +459,13 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 fprintf(f, "%s", pos->description);
 }
 
-static boolean findMrnaPos(char *acc,  struct hgPositions *hgp, boolean useHgTracks)
+static boolean findMrnaPos(char *acc,  struct hgPositions *hgp, boolean useHgTracks, struct cart *cart)
 /* Look to see if it's an mRNA.  Fill in hgp and return
  * TRUE if it is, otherwise return FALSE. */
 {
 char *type;
 char *extraCgi = hgp->extraCgi;
-char *ui = getUiUrl();
+char *ui = getUiUrl(cart);
 
 if ((type = mrnaType(acc)) == NULL)
     return FALSE;
@@ -978,7 +978,7 @@ static void mrnaKeysHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE
 fprintf(f, "%s", pos->description);
 }
 
-static void findMrnaKeys(char *keys, struct hgPositions *hgp, boolean useHgTracks)
+static void findMrnaKeys(char *keys, struct hgPositions *hgp, boolean useHgTracks, struct cart *cart)
 /* Find mRNA that has keyword in one of it's fields. */
 {
 char *words[32];
@@ -1045,7 +1045,7 @@ table->htmlOnePos = mrnaKeysHtmlOnePos;
     char **row;
     char query[256];
     char description[512];
-    char *ui = getUiUrl();
+    char *ui = getUiUrl(cart);
     for (el = allKeysList; el != NULL; el = el->next)
 	{
 	AllocVar(pos);
@@ -1212,7 +1212,8 @@ hFreeConn(&conn);
 }
 
 
-struct hgPositions *hgPositionsFind(char *query, char *extraCgi, boolean useHgTracks)
+struct hgPositions *hgPositionsFind(char *query, char *extraCgi, boolean useHgTracks, 
+	struct cart *cart)
 /* Return table of positions that match query or NULL if none such. */
 {
 struct hgPositions *hgp;
@@ -1252,7 +1253,7 @@ else if (hgFindClonePos(query, &chrom, &start, &end))
     {
     singlePos(hgp, "Genomic Clone", NULL, query, chrom, start, end);
     }
-else if (findMrnaPos(query, hgp, useHgTracks))
+else if (findMrnaPos(query, hgp, useHgTracks, cart))
     {
     }
 else if (findSnpPos(query, hgp, "snpTsc"))
@@ -1290,7 +1291,7 @@ else
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
     findStsPos(query, hgp);
-    findMrnaKeys(query, hgp, useHgTracks);
+    findMrnaKeys(query, hgp, useHgTracks, cart);
     }
 
 slReverse(&hgp->tableList);
@@ -1361,7 +1362,7 @@ sprintf(range, "%s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
 return range;
 }
 
-void hgPositionsHtml(struct hgPositions *hgp, FILE *f, boolean useHgTracks)
+void hgPositionsHtml(struct hgPositions *hgp, FILE *f, boolean useHgTracks, struct cart *cart)
 /* Write out hgp table as HTML to file. */
 {
 struct hgPosTable *table;
@@ -1369,7 +1370,7 @@ struct hgPos *pos;
 char *desc;
 char range[64];
 char *browserUrl;
-char *ui = getUiUrl();
+char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 
 if(useHgTracks)

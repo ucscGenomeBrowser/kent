@@ -6,7 +6,6 @@
 #include "knownInfo.h"
 #include "hdb.h"
 #include "hgConfig.h"
-#include "hgFind.h"
 #include "hash.h"
 
 static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,

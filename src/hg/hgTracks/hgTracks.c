@@ -85,7 +85,6 @@ char *position; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
-char *eUserSeqString = NULL;    /* CGI encoded user seq. string. */
 char *ctFileName = NULL;	/* Custom track file. */
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
@@ -1930,14 +1929,34 @@ struct linkedFeatures *lf = item;
 return lf->extra;
 }
 
+void parseSs(char *ss, char **retPsl, char **retFa)
+/* Parse out ss variable into components. */
+{
+static char buf[1024];
+char *words[2];
+int wordCount;
+
+strcpy(buf, ss);
+wordCount = chopLine(buf, words);
+if (wordCount < 2)
+    errAbort("Badly formated ss variable");
+*retPsl = words[0];
+*retFa = words[1];
+}
+
+boolean ssFilesExist(char *ss)
+/* Return TRUE if both files in ss exist. */
+{
+char *faFileName, *pslFileName;
+parseSs(ss, &pslFileName, &faFileName);
+return fileExists(pslFileName) && fileExists(faFileName);
+}
+
 void loadUserPsl(struct trackGroup *tg)
 /* Load up rnas from table into trackGroup items. */
 {
-char *ss = cartString(cart, "ss");
-char buf[1024];
+char *ss = userSeqString;
 char buf2[3*512];
-char *ssWords[4];
-int wordCount;
 char *faFileName, *pslFileName;
 struct lineFile *f;
 struct psl *psl;
@@ -1945,14 +1964,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 enum gfType qt, tt;
 int sizeMul = 1;
 
-strcpy(buf, ss);
-wordCount = chopLine(buf, ssWords);
-if (wordCount < 2)
-    errAbort("Badly formated ss variable");
-pslFileName = ssWords[0];
-faFileName = ssWords[1];
-
-
+parseSs(ss, &pslFileName, &faFileName);
 pslxFileOpen(pslFileName, &qt, &tt, &f);
 if (qt == gftProt)
     {
@@ -5314,6 +5326,16 @@ if (withRuler)
 	    mid = (ws + we)/2 + winStart;
 	    ns = mid-newWinWidth/2;
 	    ne = ns + newWinWidth;
+	    if (ns < 0)
+	        {
+		ns = 0;
+		ne -= ns;
+		}
+	    if (ne > seqBaseCount)
+	        {
+		ns -= (ne - seqBaseCount);
+		ne = seqBaseCount;
+		}
 	    mapBoxJumpTo(ps+xOff,y,pe-ps,rulerHeight,
 		chromName, ns, ne, "3x zoom");
 	    }
@@ -5754,11 +5776,20 @@ if (customText != NULL && customText[0] != 0)
     ctList = customTracksParse(customText, FALSE, &browserLines);
     ctFileName = tn.forCgi;
     customTrackSave(ctList, tn.forCgi);
+    cartSetString(cart, "ct", tn.forCgi);
     }
 else if (fileName != NULL)
     {
-    ctList = customTracksParse(fileName, TRUE, &browserLines);
-    ctFileName = fileName;
+    if (!fileExists(fileName))	/* Cope with expired tracks. */
+        {
+	fileName = NULL;
+	cartRemove(cart, "ct");
+	}
+    else
+        {
+	ctList = customTracksParse(fileName, TRUE, &browserLines);
+	ctFileName = fileName;
+	}
     }
 
 /* Process browser commands in custom track. */
@@ -5876,13 +5907,11 @@ cartSaveSession(cart, selfName);
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
-if (userSeqString && !fileExists(userSeqString))
+if (userSeqString && !ssFilesExist(userSeqString))
     {
     userSeqString = NULL;
     cartRemove(cart, "ss");
     }
-if (userSeqString != NULL)
-    eUserSeqString = cgiEncode(userSeqString);
 
 hideControls = cartUsualBoolean(cart, "hideControls", FALSE, selfName);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE, selfName);
@@ -6256,7 +6285,8 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 }
 
 char *excludeVars[] = { "old", "submit", "in1", "in2", "in3", "out1", "out2", "out3",
-	"left1", "left2", "left3", "right1", "right2", "right3", "customText", NULL };
+	"left1", "left2", "left3", "right1", "right2", "right3", "customText", "customFile",
+	NULL };
 
 int main(int argc, char *argv[])
 {

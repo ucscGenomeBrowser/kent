@@ -24,6 +24,15 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude
 void cartCheckout(struct cart **pCart);
 /* Save cart to database and free it up. */
 
+char *cartSessionVarName();
+/* Return name of CGI session ID variable. */
+
+unsigned int cartSessionId(struct cart *cart);
+/* Return session id. */
+
+unsigned int cartUserId(struct cart *cart);
+/* Return session id. */
+
 void cartRemove(struct cart *cart, char *var);
 /* Remove variable from cart. */
 
@@ -41,6 +50,9 @@ void cartSetString(struct cart *cart, char *var, char *val);
 
 int cartInt(struct cart *cart, char *var);
 /* Return int valued variable. */
+
+int cartIntExp(struct cart *cart, char *var);
+/* Return integer valued expression in variable. */
 
 int cartUsualInt(struct cart *cart, char *var, int usual);
 /* Return variable value if it exists or usual if not. */

@@ -10,7 +10,6 @@
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *selfVar = "hgself";	/* Name of cgi variable script name is stored in. */
-static boolean savedSession = FALSE;	/* TRUE if they've called cartSaveSession. */
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -185,6 +184,24 @@ if (cart != NULL)
     }
 }
 
+char *cartSessionVarName()
+/* Return name of CGI session ID variable. */
+{
+return sessionVar;
+}
+
+unsigned int cartSessionId(struct cart *cart)
+/* Return session id. */
+{
+return cart->sessionInfo->id;
+}
+
+unsigned int cartUserId(struct cart *cart)
+/* Return session id. */
+{
+return cart->userInfo->id;
+}
+
 void cartRemove(struct cart *cart, char *var)
 /* Remove variable from cart. */
 {
@@ -229,6 +246,12 @@ int cartInt(struct cart *cart, char *var)
 {
 char *s = cartString(cart, var);
 return atoi(s);
+}
+
+int cartIntExp(struct cart *cart, char *var)
+/* Return integer valued expression in variable. */
+{
+return intExp(cartString(cart, var));
 }
 
 int cartUsualInt(struct cart *cart, char *var, int usual)
@@ -352,7 +375,6 @@ char buf[64];
 sprintf(buf, "%u", cart->sessionInfo->id);
 cgiMakeHiddenVar(sessionVar, buf);
 cgiMakeHiddenVar(selfVar, selfName);
-savedSession = TRUE;
 }
 
 static void cartDumpItem(struct hashEl *hel)
@@ -406,8 +428,6 @@ status = setjmp(htmlRecover);
 if (status == 0)
     {
     doMiddle(cart);
-    if (!savedSession)
-	errAbort("Program error - need to call saveSession inside form");
     cartCheckout(&cart);
     }
 

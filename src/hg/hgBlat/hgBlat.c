@@ -11,8 +11,11 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "hdb.h"
+#include "cart.h"
 
+struct cart *cart;	/* The user's ui state. */
 char *defaultDatabase;	/* Default database. */
+char *selfName = "hgBlat";	/* Symbolic id of this script. */
 
 struct serverTable
 /* Information on a server. */
@@ -144,6 +147,7 @@ if (diff == 0)
 return diff;
 }
 
+#ifdef OLD
 static void earlyWarning(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
@@ -163,6 +167,7 @@ static void enterHtml(char *title)
 htmlStart(title);
 pushWarnHandler(htmlVaParagraph);
 }
+#endif /* OLD */
 
 
 void showAliPlaces(char *pslName, char *faName, char *database)
@@ -172,21 +177,12 @@ struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
 char *hgcUrl = hgcName();
-char *uiState;
-char *sort = cgiUsualString("sort", sortList[0]);
-char *output = cgiUsualString("output", outputList[0]);
+char uiState[64];
+char *sort = cartUsualString(cart, "sort", sortList[0]);
+char *output = cartUsualString(cart, "output", outputList[0]);
 boolean pslOut = startsWith("psl", output);
 
-cgiVarExclude("userSeq");
-cgiVarExclude("seqFile");
-cgiVarExclude("genome");
-cgiVarExclude("type");
-cgiVarExclude("sort");
-cgiVarExclude("position");
-cgiVarExclude("db");
-cgiVarExclude("ss");
-uiState = cgiUrlString()->string;
-
+sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 while ((psl = pslNext(lf)) != NULL)
     {
     slAddHead(&pslList, psl);
@@ -239,9 +235,9 @@ else
 	    browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
 	    pslName, faName, uiState);
 	printf("browser</A> ");
-	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s\">", 
+	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
 	    hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
-	    psl->tStart, psl->tEnd, database);
+	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
 	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
 	    psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
@@ -443,7 +439,7 @@ void askForSeq()
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-char *db = cgiOptionalString("db");
+char *db = cartOptionalString(cart, "db");
 struct serverTable *serve = findServer(db, FALSE);
 
 printf("%s", 
@@ -452,6 +448,7 @@ printf("%s",
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"96%\">\n"
 "<TR>\n");
+cartSaveSession(cart, selfName);
 
 printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
 printf("Freeze:<BR>");
@@ -461,11 +458,11 @@ printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
 printf("%s", "</TD><TD WIDTH=\"20%\"<CENTER>\n");
 printf("Sort output:<BR>");
-cgiMakeDropList("sort", sortList, ArraySize(sortList), NULL);
+cgiMakeDropList("sort", sortList, ArraySize(sortList), cartOptionalString(cart, "sort"));
 printf("%s", "</TD>\n");
 printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
 printf("Output type:<BR>");
-cgiMakeDropList("output", outputList, ArraySize(outputList), NULL);
+cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
 printf("%s", "</TD>\n");
 printf("%s", "<TD WIDTH=\"18%\">\n"
     "<CENTER>\n"
@@ -487,8 +484,6 @@ puts("Rather than pasting a sequence, you can choose to upload a text file conta
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
-
-cgiContinueAllVars();
 
 printf("%s", 
 "<P>Only DNA sequences less than 20,000 bases and protein or translated \n"
@@ -520,30 +515,31 @@ printf("%s",
 "</FORM>\n");
 }
 
-void doMiddle()
+void doMiddle(struct cart *theCart)
 {
-// get the sequence
-char *userSeq = cgiOptionalString("userSeq");
+char *userSeq;
 
-// have no sequence in userSeq
-if(userSeq != 0 && userSeq[0] == '\0') {
-	// try the file
-	userSeq = cgiOptionalString("seqFile");
-}
+cart = theCart;
+dnaUtilOpen();
+
+/* Get sequence - from userSeq variable, or if 
+ * that is empty from a file. */
+userSeq = cartOptionalString(cart, "userSeq");
+if(userSeq != 0 && userSeq[0] == '\0')
+    userSeq = cartOptionalString(cart, "seqFile");
 
 if(userSeq == NULL || userSeq[0] == '\0')
     {
-    enterHtml("BLAT Search");
     askForSeq();
     }
 else
     {
-    enterHtml("BLAT Results");
     blatSeq(skipLeadingSpaces(userSeq));
     }
 }
 
 
+#ifdef OLD
 void errDoMiddle()
 /* Do middle with a nice early warning error handler. */
 {
@@ -551,6 +547,11 @@ pushWarnHandler(earlyWarning);
 dnaUtilOpen();
 doMiddle();
 }
+#endif /* OLD */
+
+/* Null terminated list of CGI Variables we don't want to save
+ * permanently. */
+char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -558,6 +559,6 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
-htmEmptyShell(errDoMiddle, NULL);
+cartHtmlShell("BLAT Search", doMiddle, "hguid", excludeVars);
 return 0;
 }

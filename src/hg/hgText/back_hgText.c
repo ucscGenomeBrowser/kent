@@ -2,6 +2,7 @@
 #include "hCommon.h"
 #include "linefile.h"
 #include "cheapcgi.h"
+#include "cart.h"
 #include "genePred.h"
 #include "dnaseq.h"
 #include "dystring.h"
