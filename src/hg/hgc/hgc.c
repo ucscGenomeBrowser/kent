@@ -125,7 +125,7 @@
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.551 2004/01/23 17:22:42 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.552 2004/01/26 22:41:53 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5221,7 +5221,7 @@ void printProbRow(char *label, float *p, int pCount)
 int i;
 printf("%s ", label);
 for (i=0; i < pCount; ++i)
-    printf("%4.2f ", p[i]);
+    printf("%5.2f ", p[i]);
 printf("\n");
 }
 
@@ -5265,7 +5265,7 @@ void printSpacedDna(char *dna, int size)
 int i;
 printf("  ");
 for (i=0; i<size; ++i)
-    printf(" %c   ", dna[i]);
+    printf("  %c   ", dna[i]);
 }
 
 void printConsensus(struct dnaMotif *motif)
@@ -5295,7 +5295,7 @@ for (i=0; i<size; ++i)
 	best = motif->tProb[i];
 	c = 't';
 	}
-    printf(" ");
+    printf("  ");
     if (best >= 0.90)
 	printf("<B>%c</B>", toupper(c));
     else if (best >= 0.75)
@@ -5310,7 +5310,7 @@ for (i=0; i<size; ++i)
     }
 }
 
-void doTriangle(struct trackDb *tdb, char *item)
+void doTriangle(struct trackDb *tdb, char *item, char *motifTable)
 /* Display detailed info on a regulatory triangle item. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -5350,7 +5350,7 @@ if (hit != NULL)
     }
 
 sprintf(query, "name = '%s'", item);
-motif = dnaMotifLoadWhere(conn, "dnaMotif", query);
+motif = dnaMotifLoadWhere(conn, motifTable, query);
 if (motif != NULL)
     {
     printConsensus(motif);
@@ -13395,9 +13395,13 @@ else if (sameWord(track, "celeraDupPositive"))
     doCeleraDupPositive(tdb, item);
     }
 
-else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameWord(track, "transfacHit"))
+else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameWord(track, "transfacHit") )
     {
-    doTriangle(tdb, item);
+    doTriangle(tdb, item, "dnaMotif");
+    }
+else if (sameWord(track, "esRegGeneToMotif"))
+    {
+    doTriangle(tdb, item, "esRegMotif");
     }
 else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
     {
