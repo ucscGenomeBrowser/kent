@@ -152,7 +152,7 @@ fromGxfTests: fromGxfMinTest fromGxfFrameTest \
 	fromGxfExonSelTest fromGxfExonSelFrameTest \
 	fromGxfVegaTest fromGxfVegaFrameTest fromGxfVegaPseudoTest \
 	fromGxfAcemblyTest fromGxfAcemblyFrameTest \
-	fromGxfNcbiTest fromGxfRegressTest
+	fromGxfNcbiTest fromGtfRegressTest fromGffRegressTest
 
 
 doFromGxfTest = ${MAKE} -f genePredTests.mk doFromGxfTest
@@ -188,11 +188,16 @@ fromGxfAcemblyFrameTest:
 fromGxfNcbiTest:
 	${doFromGxfTest} id=$@ what=fromGff inBase=ncbi.gff opts="-name2Fld -cdsStatFld -exonFramesFld -idFld -exonSelectWord=exon"
 
-# bug regression:
+# GTF bug regression:
 #   - stop_codon wiping out frame on last CDS 
 #   - stop_codon being the only codon in an exon didn't get frame right
-fromGxfRegressTest:
+fromGtfRegressTest:
 	${doFromGxfTest} id=$@ what=fromGtf inBase=regress.gtf opts="-cdsStatFld -exonFramesFld"
+
+
+# GFF bug regression:
+fromGffRegressTest:
+	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-cdsStatFld -exonFramesFld"
 
 
 # recursive target for GFF/GTF tests

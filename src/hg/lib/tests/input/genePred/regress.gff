@@ -1,0 +1,4 @@
+# caused abort because of no frame info.  The first one is not an even
+# multiple of 3...
+chrI	curated	CDS	11641	16585	.	+	.	Y74C9A.2
+chrI	curated	CDS	43733	44677	.	+	.	Y74C9A.1

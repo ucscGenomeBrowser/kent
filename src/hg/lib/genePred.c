@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.47 2004/05/02 06:11:00 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.48 2004/05/10 21:51:17 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -380,6 +380,22 @@ if (dif == 0)
 return dif;
 }
 
+static boolean haveStartStopCodons(struct gffFile *gff)
+/* For GFFs, determine if any of the annotations use start_codon or
+ * stop_codon */
+{
+struct gffGroup *group;
+struct gffLine *gl;
+for (group = gff->groupList; group != NULL; group = group->next)
+    for (gl = group->lineList; gl != NULL; gl = gl->next)
+        {
+        if (sameWord(gl->feature, "start_codon")
+            || (sameWord(gl->feature, "stop_codon")))
+            return TRUE;
+        }
+return FALSE;
+}
+
 static boolean isExon(char *feat, boolean isGtf, char *exonSelectWord)
 /* determine if a feature is an exon; different criteria for GFF ane GTF */
 {
@@ -417,32 +433,71 @@ if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
     }
 }
 
-static void fixStopFrame(struct genePred *gp)
-/* Nasty corner case: GTF with the all or part of the stop codon as the only
- * codon in an exon, we must set the frame on this exon.  */
+static void fixFrame(struct genePred *gp)
+/* Fix various problems with exon frames fields:
+ *   1) GFF/GTF that don't specify frame.
+ *   2) GTF with the all or part of the stop codon as the only
+ *       codon in an exon, we must set the frame on this exon.
+ */
 {
-int stopPos = (gp->strand[0] == '+') ? gp->cdsEnd-1 : gp->cdsStart;
-int iStop = -1, i;
+int iStart, iEnd, iIncr, iExon;
+int frame = 0;
 
-/* find position containing last base */
-for (i = 0; (i < gp->exonCount) && (iStop < 0); i++)
+/* start at 3' end unless incomplete */
+if (gp->strand[0] == '+')
     {
-    if ((gp->exonStarts[i] <= stopPos) && (stopPos < gp->exonEnds[i]))
-        iStop = i;
-    }
-if ((iStop >= 0) && (gp->exonFrames[iStop] < 0))
-    {
-    if (gp->strand[0] == '+')
+    if (gp->cdsEndStat == cdsComplete)
         {
-        /* pos, compute from previous exon */
-        assert(iStop > 0);
-        gp->exonFrames[iStop] = (gp->exonFrames[iStop-1]+(gp->exonEnds[iStop-1]-gp->exonStarts[iStop-1])) % 3;
+        iStart = gp->exonCount-1;
+        iEnd = -1;
+        iIncr = -1;
         }
     else
         {
-        /* neg, compute from next exon */
-        assert(iStop < gp->exonCount-1);
-        gp->exonFrames[iStop] = (gp->exonFrames[iStop+1]+(gp->exonEnds[iStop+1]-gp->exonStarts[iStop+1])) % 3;
+        iStart = 0;
+        iEnd = gp->exonCount;
+        iIncr = 1;
+        }
+    }
+else
+    {
+    if (gp->cdsEndStat == cdsComplete)
+        {
+        iStart = 0;
+        iEnd = gp->exonCount;
+        iIncr = 1;
+        }
+    else
+        {
+        iStart = gp->exonCount-1;
+        iEnd = -1;
+        iIncr = -1;
+        }
+    }
+
+for (iExon = iStart; iExon != iEnd; iExon += iIncr)
+    {
+    /* get CDS within exon */
+    int cdsStart = gp->exonStarts[iExon];
+    int cdsEnd = gp->exonEnds[iExon];
+    if (cdsStart < gp->cdsStart)
+        cdsStart = gp->cdsStart;
+    if (cdsEnd > gp->cdsEnd)
+        cdsEnd = gp->cdsEnd;
+    if (cdsStart < cdsEnd)
+        {
+        if (gp->cdsEndStat == cdsComplete)
+            {
+            /* pre-adjust 3' -> 5' */
+            frame = (frame + (cdsEnd - cdsStart)) % 3;
+            frame = (frame == 2) ? 1 : (frame == 1) ? 2 : 0;
+            }
+        if (gp->exonFrames[iExon] >= 0)
+            frame = gp->exonFrames[iExon];  /* have frame, sync up */
+        else
+            gp->exonFrames[iExon] = frame;
+        if (gp->cdsEndStat != cdsComplete)
+            frame = (frame + (cdsEnd - cdsStart)) % 3;  /* post-adjust 5' -> 3' */
         }
     }
 }
@@ -475,7 +530,11 @@ int exonCount = 0;
 boolean haveCds = FALSE, haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
 unsigned *eStarts, *eEnds, *eFrames;
+boolean haveFrame = FALSE;
 int i;
+
+/* should we count on start/stop codon annotation in GFFs? */
+boolean useStartStops = isGtf || haveStartStopCodons(gff);
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
@@ -550,7 +609,13 @@ if (optFields & genePredCdsStatFld)
     {
     if (haveCds)
         {
-        if (group->strand == '+')
+        if (!useStartStops)
+            {
+            /* GFF doesn't require start or stop, if not used, assume complete */
+            gp->cdsStartStat = cdsComplete;
+            gp->cdsEndStat = cdsComplete;
+            }
+        else if (group->strand == '+')
             {
             gp->cdsStartStat = (haveStartCodon ? cdsComplete : cdsIncomplete);
             gp->cdsEndStat = (haveStopCodon ? cdsComplete : cdsIncomplete);;
@@ -620,8 +685,8 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     }
 gp->exonCount = i+1;
 
-if (optFields & genePredExonFramesFld)
-    fixStopFrame(gp);
+if ((optFields & genePredExonFramesFld) && haveCds)
+    fixFrame(gp);
 
 return gp;
 }
