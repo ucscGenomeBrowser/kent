@@ -117,8 +117,10 @@ struct stanMad *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[40];
 
-while (lineFileRow(lf, row))
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
     {
+    if(strstr(row[0], "EXP"))
+	continue;
     el = stanMadLoad(row);
     slAddHead(&list, el);
     }
