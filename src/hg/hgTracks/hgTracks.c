@@ -267,6 +267,7 @@ char *s;
 font = tl.font = mgSmallFont();
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "N");
+tl.fontHeight = mgFontLineHeight(font);
 tl.leftLabelWidth = 120;
 tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
@@ -369,7 +370,7 @@ int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
-tg->lineHeight = mgFontLineHeight(tl.font)+1;
+tg->lineHeight = tl.fontHeight+1;
 tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
@@ -437,7 +438,7 @@ if( vis == tvDense )
 else
     heightFromCart = atoi(cartUsualString(cart, o1, "50"));
 
-tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
+tg->lineHeight = max(tl.fontHeight+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
@@ -480,17 +481,30 @@ else
 }
 
 enum trackVisibility limitVisibility(struct track *tg, void *items)
-/* Return default visibility limited by number of items. */
+/* Return default visibility limited by number of items. 
+ * This also sets tg->height. */
 {
 if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
+    int h;
+    int maxHeight = maxItemsInFullTrack * (tl.fontHeight+1);
     tg->limitedVisSet = TRUE;
-    if (vis == tvFull || vis == tvPack)
-	{
-	if (slCount(items) > maxItemsInFullTrack)
+    h = tg->totalHeight(tg, vis);
+    if (h > maxHeight)
+        {
+	if (vis == tvFull && tg->canPack)
+	    vis = tvPack;
+	else
 	    vis = tvDense;
+	h = tg->totalHeight(tg, vis);
+	if (h > maxHeight)
+	    {
+	    vis = tvDense;
+	    h = tg->totalHeight(tg, vis);
+	    }
 	}
+    tg->height = h;
     tg->limitedVis = vis;
     }
 return tg->limitedVis;
@@ -6162,7 +6176,7 @@ static int cloneItemHeight(struct track *tg, void *item)
 /* Return item height for fixed height track. */
 {
 struct cloneInfo *ci = item;
-int height1 = mgFontLineHeight(tl.font)+1;
+int height1 = tl.fontHeight+1;
 if (winBaseCount <= cloneFragMaxWin)
     return height1*oneOrRowCount(ci)+2;
 else
@@ -6202,7 +6216,7 @@ switch (vis)
 	break;
 	}
     case tvDense:
-	tg->lineHeight = mgFontLineHeight(tl.font)+1;
+	tg->lineHeight = tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight - 1;
 	tg->height = tg->lineHeight;
 	break;
@@ -7024,12 +7038,12 @@ static int altGraphFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 switch (vis)
     {
     case tvFull:
-	tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
+	tg->lineHeight  = 2 * tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight -1;
 	tg->height = slCount(tg->items) * tg->lineHeight;
 	break;
     case tvDense:
-	tg->lineHeight  = mgFontLineHeight(tl.font)+1;
+	tg->lineHeight  = tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight -1;
 	tg->height = tg->lineHeight;
 	break;
@@ -7265,12 +7279,12 @@ static int altGraphXFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 switch (vis)
     {
     case tvFull:
-	tg->lineHeight  = 2 * mgFontLineHeight(tl.font)+1;
+	tg->lineHeight  = 2 * tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight -1;
 	tg->height = slCount(tg->items) * tg->lineHeight;
 	break;
     case tvDense:
-	tg->lineHeight  = mgFontLineHeight(tl.font)+1;
+	tg->lineHeight  = tl.fontHeight+1;
 	tg->heightPer = tg->lineHeight -1;
 	tg->height = tg->lineHeight;
 	break;
@@ -8766,7 +8780,7 @@ void printYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelSt
 /*print a label for a horizontal y-axis line*/
 {
     double tmp;
-    int fontHeight = mgFontLineHeight(tl.font);
+    int fontHeight = tl.fontHeight;
     double ymin = y - (track->heightPer / 2) + fontHeight;
     int itemHeight0 = track->itemHeight(track, track->items);
     int inWid = insideX-gfxBorder*3;
@@ -8798,14 +8812,12 @@ int rulerHeight = fontHeight;
 int yAfterRuler = gfxBorder;
 int relNumOff;
 int i;
-
 int ymin, ymax;
 int scaledHeightPer;
 double minRange, maxRange;
 int binCount = 999;
 char minRangeStr[32];
 char maxRangeStr[32];
-
 struct slList *prev = NULL;
 int start;
 int newy;
@@ -8814,6 +8826,8 @@ int newy;
 pixWidth = tl.picWidth;
 insideX = trackOffsetX();
 insideWidth = pixWidth-gfxBorder-insideX;
+
+/* Figure out height of each visible track. */
 pixHeight = gfxBorder;
 if (withRuler)
     {
@@ -8824,12 +8838,15 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (track->visibility != tvHide)
 	{
-	track->height = track->totalHeight(track, track->limitedVis);
-	pixHeight += track->height;
 	if (withCenterLabels)
 	    pixHeight += fontHeight;
+	limitVisibility(track, track->items);
+	pixHeight += track->height;
 	}
+    else
+        track->limitedVis = tvHide;
     }
+
 imagePixelHeight = pixHeight;
 if (psOutput)
     vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
@@ -9084,7 +9101,7 @@ if (withGuidelines)
     int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
-    int lineHeight = mgFontLineHeight(tl.font)+1;
+    int lineHeight = tl.fontHeight+1;
     Color lightBlue = vgFindRgb(vg, &guidelineColor);
 
     vgSetClip(vg, insideX, gfxBorder, insideWidth, height);
@@ -9654,7 +9671,7 @@ track->color.b = tdb->colorB;
 track->altColor.r = tdb->altColorR;
 track->altColor.g = tdb->altColorG;
 track->altColor.b = tdb->altColorB;
-track->lineHeight = mgFontLineHeight(tl.font)+1;
+track->lineHeight = tl.fontHeight+1;
 track->heightPer = track->lineHeight - 1;
 track->private = tdb->private;
 track->priority = tdb->priority;
@@ -10303,7 +10320,6 @@ for (track = trackList; track != NULL; track = track->next)
     if (track->visibility != tvHide)
 	{
 	track->loadItems(track); 
-	limitVisibility(track, track->items);
 	}
     }
 

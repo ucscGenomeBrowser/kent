@@ -168,6 +168,7 @@ struct trackLayout
     int picWidth;		/* Width of entire picture. */
     int mWidth;			/* Width of 'M' in font. */
     int nWidth;			/* Width of 'N' in font. */
+    int fontHeight;		/* Height of font. */
     };
 
 extern struct trackLayout tl;

@@ -161,10 +161,7 @@ char *optionStr ;
 linkedFeaturesMethods(tg);
 snprintf(option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
-if( sameString( optionStr, "on" )) /*use chromosome coloring*/
-    tg->itemColor = lfChromColor;
-else
-    tg->itemColor = NULL;
+tg->itemColor = lfChromColor;
 tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
 tg->mapItemName = lfMapNameFromExtra;
