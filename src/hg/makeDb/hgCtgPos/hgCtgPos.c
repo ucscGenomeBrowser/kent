@@ -9,7 +9,7 @@
 #include "liftSpec.h"
 #include "ctgPos.h"
 
-static char const rcsid[] = "$Id: hgCtgPos.c,v 1.3 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: hgCtgPos.c,v 1.4 2003/06/10 16:57:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -88,13 +88,12 @@ void saveCtgPos(struct ctgPos *ctgList, char *database)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct ctgPos *ctg;
-char tabFileName[L_tmpnam];
+char *tabFileName = "ctgPos.tab";
 FILE *f;
 struct dyString *ds = newDyString(2048);
 
 /* Create tab file from ctg list. */
 printf("Creating tab file\n");
-tmpnam(tabFileName);
 f = mustOpen(tabFileName, "w");
 for (ctg = ctgList; ctg != NULL; ctg = ctg->next)
     ctgPosTabOut(ctg, f);
