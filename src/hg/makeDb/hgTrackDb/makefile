@@ -23,41 +23,39 @@ hgTrackDb: $O
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
-old_update:
-	hgTrackDb hg6  trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg7  trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-
 update:
-	hgTrackDb hg8 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg9 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg10 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg11 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg12 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg13 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb rn1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg8 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg9 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg10 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg11 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg12 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg13 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb mouse mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb mouse rn1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql hgRoot
 	cd zoo; make update; cd ..
 
-beta_old_update:
-	hgTrackDb hg6  trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg7  trackDb ../../lib/trackDb.sql hgRoot
+old_update:
+	hgTrackDb human hg6 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg7 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
-alpha: beta_update
+alpha:
+	hgTrackDb human hg8 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg9 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg10 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg11 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg12 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg13 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb mouse mm1 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql hgRoot
+	cd zoo; make alpha; cd ..
 
-beta: beta_update
+old_alpha:
+	hgTrackDb human hg6  trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb human hg7  trackDb ../../lib/trackDb.sql hgRoot
 
-beta_update:
-	hgTrackDb hg8 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg9 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg10 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg11 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg12 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb hg13 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb rn1 trackDb ../../lib/trackDb.sql hgRoot
-	cd zoo; make beta_update; cd ..
 
 debug : $O
 	gcc -ggdb -o hgTrackDb $O $(MYLIBS) $L	

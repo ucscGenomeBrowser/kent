@@ -26,7 +26,8 @@ errAbort(
   );
 }
 
-void addVersion(char *database, char *dirName, char *raName, struct hash *uniqHash,
+void addVersion(char *dirName, char *raName, 
+    struct hash *uniqHash,
     struct hash *htmlHash,
     struct trackDb **pTrackList)
 /* Read in tracks from raName and add them to list/database if new. */
@@ -111,27 +112,42 @@ return cloneString(newCreate);
 }
 
 
-void hgTrackDb(char *database, char *trackDbName, char *sqlFile, char *hgRoot)
+void layerOn(char *dir, struct hash *uniqHash, 
+	struct hash *htmlHash,  boolean mustExist, struct trackDb **tdList)
+/* Read trackDb.ra from directory and any associated .html files,
+ * and layer them on top of whatever is in tdList. */
+{
+char raFile[512];
+sprintf(raFile, "%s/trackDb.ra", dir);
+if (fileExists(raFile))
+    {
+    addVersion(dir, raFile, uniqHash, htmlHash, tdList);
+    }
+else 
+    {
+    if (mustExist)
+        errAbort("%s doesn't exist!", raFile);
+    }
+}
+
+void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot)
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct hash *uniqHash = newHash(8);
 struct hash *htmlHash = newHash(8);
 struct trackDb *tdList = NULL, *td;
-char dirName[512], raName[512];
+char rootDir[512], orgDir[512], asmDir[512];
 char tab[512];
 snprintf(tab, sizeof(tab), "%s.tab", trackDbName);
 
-/* Create track list from hgRoot and hgRoot/database. */
-sprintf(dirName, "%s/%s", hgRoot, database);
-sprintf(raName, "%s/%s", dirName, "trackDb.ra");
-if (fileExists(raName))
-    {
-    addVersion(database, dirName, raName, uniqHash, htmlHash, &tdList);
-    printf("Loaded %d track descriptions from %s\n", slCount(tdList), dirName);
-    }
-sprintf(dirName, "%s", hgRoot);
-sprintf(raName, "%s/%s", dirName, "trackDb.ra");
-addVersion(database, dirName, raName, uniqHash, htmlHash, &tdList);
+/* Create track list from hgRoot and hgRoot/org and hgRoot/org/assembly 
+ * ra format database. */
+sprintf(rootDir, "%s", hgRoot);
+sprintf(orgDir, "%s/%s", hgRoot, org);
+sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
+layerOn(asmDir, uniqHash, htmlHash, FALSE, &tdList);
+layerOn(orgDir, uniqHash, htmlHash, FALSE, &tdList);
+layerOn(rootDir,uniqHash, htmlHash, TRUE, &tdList);
 slSort(&tdList, trackDbCmp);
 printf("Loaded %d track descriptions total\n", slCount(tdList));
 
@@ -172,14 +188,16 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     sqlDisconnect(&conn);
     printf("Loaded database %s\n", database);
     }
+
+remove(tab);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 5)
+if (argc != 6)
     usage();
-hgTrackDb(argv[1], argv[2], argv[3], argv[4]);
+hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
