@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.591 2003/09/05 23:14:57 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.592 2003/09/09 00:39:04 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2120,7 +2120,8 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     	    	    sr = sqlGetResult(conn, query); 
     	    	    if ((row = sqlNextRow(sr)) != NULL)
         	    	{
-		    	lf->extra = cloneString(row[0]);
+                        if (strlen(row[0]) > 0)
+                            lf->extra = cloneString(row[0]);
 		    	}
             	    sqlFreeResult(&sr);
 	    	    }
@@ -2476,15 +2477,11 @@ tg->drawName 	= FALSE;
 }
 
 char *refGeneName(struct track *tg, void *item)
-/* Return abbreviated genie name. */
+/* Get name to use for refGene item. */
 {
-static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL) 
-    {
-    sprintf(cat,"%s",(char *)lf->extra);
-    return cat;
-    }
+    return lf->extra;
 else 
     return lf->name;
 }
@@ -2503,6 +2500,12 @@ struct linkedFeatures *lf;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
 char *newName;
+boolean isMgc = hIsMgcServer();
+char *refGeneLabel = cartUsualString(cart, "refGene.label", "gene");
+boolean useGeneName = sameString(refGeneLabel, "gene")
+    || sameString(refGeneLabel, "both");
+boolean useAcc = sameString(refGeneLabel, "accession")
+    || sameString(refGeneLabel, "both");
 
 if (hTableExists("refLink"))
     {
@@ -2516,7 +2519,26 @@ if (hTableExists("refLink"))
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    lf->extra = cloneString(row[0]);
+            if (strlen(row[0]) > 0)
+                {
+                /* allow space for both */
+                int size = strlen(row[0]) + strlen(lf->name) + 2;
+                lf->extra = needMem(size);
+                if (useGeneName)
+                    strcat(lf->extra, row[0]);
+                if (useGeneName && useAcc)
+                    strcat(lf->extra, "/");
+                if (useAcc)
+                    strcat(lf->extra, lf->name);
+                }
+            else
+                {
+                /* no reflink, use name unless none is selected  */
+                if (useGeneName || useAcc)
+                    lf->extra = cloneString(lf->name);
+                else
+                    lf->extra = cloneString("");
+                }
 	    }
 	sqlFreeResult(&sr);
 	}
