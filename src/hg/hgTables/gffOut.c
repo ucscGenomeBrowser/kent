@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.4 2004/07/23 08:18:12 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.5 2004/07/23 22:09:05 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -224,23 +224,27 @@ int itemCount;
 // make an options page for just one param... any others?  
 // ? exon / CDS ?
 boolean gtf2StopCodons = FALSE;
-struct lm *lm = lmInit(64*1024);
+struct region *region, *regionList = getRegions();
 
 textOpen();
-bedList = getAllIntersectedBeds(conn, track, lm);
 
 safef(source, sizeof(source), "%s_%s", database, table);
 itemCount = 0;
-gffList = bedToGffLines(bedList, hti, source, gtf2StopCodons);
-bedFreeList(&bedList);
-for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
+for (region = regionList; region != NULL; region = region->next)
     {
-    gffTabOut(gffPtr, stdout);
-    itemCount++;
+    struct lm *lm = lmInit(64*1024);
+    bedList = getAllIntersectedBeds(conn, track, lm);
+    gffList = bedToGffLines(bedList, hti, source, gtf2StopCodons);
+    bedList = NULL;
+    lmCleanup(&lm);
+    for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
+	{
+	gffTabOut(gffPtr, stdout);
+	itemCount++;
+	}
+    slFreeList(&gffList);
     }
-slFreeList(&gffList);
 if (itemCount == 0)
     hPrintf("\n# No results returned from query.\n\n");
-lmCleanup(&lm);
 }
 
