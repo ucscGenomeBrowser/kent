@@ -4842,6 +4842,7 @@ int midY = y + midLineOff;
 int compCount = 0;
 int w;
 int prevEnd = -1;
+int prevY = -1;
 
 lf=tg->items;    
 for(lf = tg->items; lf != NULL; lf = lf->next) 
@@ -4859,15 +4860,16 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	{
 	x1 = round((double)((int)s+1-winStart)*scale) + xOff;
 	x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-    y1 = 0;
-    y2 = 1;
+    y1 = y-e+s+10;
+    y2 = prevY;
 
-    if( (x2-x1) > 0 && (y2-y1) > 0 )
-    mgConnectingLine( mg, x1, y-e+s+10, x2, y-e+s+10, shadesOfSea[3]);
+    if( (x2-x1) > 0 )
+    mgConnectingLine( mg, x1, y1, x2, y2, shadesOfSea[3]);
 
 	}
 
     prevEnd = s;
+    prevY = y-e+s+10;
 
 
 	}
