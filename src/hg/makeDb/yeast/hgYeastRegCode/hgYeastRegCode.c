@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.4 2004/09/22 18:18:04 kent Exp $";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.5 2004/09/26 04:45:51 kent Exp $";
 
 char *tmpDir = ".";
 char *tableName = "transRegCode";
@@ -232,6 +232,14 @@ if (s != NULL)
     *s = 0;
 }
 
+struct tfBinding
+/* A transcription factor and it's binding probability. */
+    {
+    struct tfBinding *next;
+    char *tf;	/* Transcription factor. */
+    double binding;	/* Binding val. */
+    };
+
 struct hash *makeProbeBed(char *inGff, char *outBed)
 /* Convert probe location GFF file to BED. */
 {
@@ -246,8 +254,8 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
     int end = lineFileNeedNum(lf, row, 4);
     char *s = row[8];
     char *probe, *orf, *note; 
-    char *boundBy = "Bound by: ";
-    struct slName *tfList = NULL, *tf;
+    char *boundAt = "Bound at ";
+    struct tfBinding *tfbList = NULL, *tfb;
     if (!startsWith("Probe ", s))
         errAbort("Expecting 9th column to start with 'Probe ' line %d of %s",
 		lf->lineIx, lf->fileName);
@@ -262,33 +270,54 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
     if (!parseQuotedString(s, s, NULL))
         errAbort("Expecting quoted string in 9th column line %d of %s",
 		lf->lineIx, lf->fileName);
-    if (startsWith(boundBy, s))
-        {
-	char *word;
-	s += strlen(boundBy);
-	while ((word = nextWord(&s)) != NULL)
-	    {
-	    chopOff(word, ',');
-	    tf = slNameNew(word);
-	    slAddHead(&tfList, tf);
-	    }
-	slReverse(&tfList);
-	}
-    else if (startsWith("Bad Probe", s))
+    if (startsWith("Bad Probe", s))
         continue;
     else if (startsWith("Not bound", s))
         {
 	/* Ok, we do nothing. */
 	}
+    else if (startsWith(boundAt, s))
+	{
+	while (s != NULL && startsWith(boundAt, s))
+	    {
+	    char *word, *by;
+	    double binding;
+	    s += strlen(boundAt);
+	    word = nextWord(&s);
+	    binding = atof(word);
+	    by = nextWord(&s);
+	    if (!sameString("by:", by))
+	        errAbort("Expecting by: line %d of %s", lf->lineIx, lf->fileName);
+	    while ((word = nextWord(&s)) != NULL)
+		{
+		char lastChar = 0, *e;
+		e = word + strlen(word) - 1;
+		lastChar = *e;
+		if (lastChar == ';' || lastChar == ',')
+		     *e = 0;
+		AllocVar(tfb);
+		tfb->binding = binding;
+		tfb->tf = cloneString(word);
+		slAddHead(&tfbList, tfb);
+		if (lastChar == ';')
+		     break;
+		}
+	    s = skipLeadingSpaces(s);
+	    }
+	slReverse(&tfbList);
+	}
     else
         {
-	errAbort("Expecting %s in note line %d of %s", boundBy, 
+	errAbort("Expecting %s in note line %d of %s", boundAt, 
 		lf->lineIx, lf->fileName);
 	}
     fprintf(f, "chr%d\t%d\t%d\t", chromIx+1, start, end);
-    fprintf(f, "%s\t%d\t", orf, slCount(tfList));
-    for (tf = tfList; tf != NULL; tf = tf->next)
-	fprintf(f, "%s,", tf->name);
+    fprintf(f, "%s\t%d\t", orf, slCount(tfbList));
+    for (tfb = tfbList; tfb != NULL; tfb = tfb->next)
+	fprintf(f, "%s,", tfb->tf);
+    fprintf(f, "\t");
+    for (tfb = tfbList; tfb != NULL; tfb = tfb->next)
+        fprintf(f, "%4.3f,", tfb->binding);
     fprintf(f, "\n");
     hashAdd(hash, orf, NULL);
     }
