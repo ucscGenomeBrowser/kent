@@ -244,3 +244,26 @@ NA' > pyrAer1-params-rrna-xra.txt
     cd /cluster/data/pyrAer1/bed/primAORF
     hgLoadBed pyrAer1 primAORF aorfs.bed
 
+
+# CHANGE "chr1" to "chr"
+
+    ssh hgdev
+    mv /cluster/data/pyrAer1/nib/chr1.nib /cluster/data/pyrAer1/nib/chr.nib
+    rm /gbdb/pyrAer1/nib/chr1.nib
+    ln -s /cluster/data/pyrAer1/nib/chr.nib /gbdb/pyrAer1/nib/chr.nib
+    # a quick script to replace chr1 with chr
+
+#!/bin/bash
+sed 's/chr1/chr/g' $1 > /tmp/whatever
+mv /tmp/whatever $1
+
+    cd /cluster/data/pyrAer1/bed 
+    find -name '*.bed' | xargs changeCh.sh
+    # Now change the DB
+    cd /tmp
+    hgsqldump pyrAer1 | sed 's/chr1/chr/g' > paeNew.sql
+    echo drop database pyrAer1 | hgsql test
+    echo create database pyrAer1 | hgsql test
+    hgsql pyrAer1 < paeNew.sql
+    rm paeNew.sql
+    echo 'update dbDb set defaultPos="chr:550000-580000" where name="pyrAer1"' | hgsql -h genome-testdb hgcentraltest
