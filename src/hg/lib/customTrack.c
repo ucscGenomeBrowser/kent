@@ -11,8 +11,8 @@
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
- *  shortLabel - any text up to 15 letters.  
- *  longLabel - any text up to 60 letters. 
+ *  name - any text up to 15 letters.  
+ *  description - any text up to 60 letters. 
  *  url - URL.  If it contains '$$' this will be substituted with itemName.
  *  visibility - 0=hide, 1=dense, 2=full
  *  useScore - 0=use colors. 1=use grayscale based on score.
@@ -27,11 +27,12 @@ static struct browserTable *btDefault()
 struct browserTable *bt;
 AllocVar(bt);
 strncpy(bt->tableName, "custom", sizeof(bt->tableName));
-strncpy(bt->longLabel, "user supplied track", sizeof(bt->longLabel));
-strncpy(bt->shortLabel, "user track", sizeof(bt->shortLabel));
+strncpy(bt->longLabel, "User Supplied Track", sizeof(bt->longLabel));
+strncpy(bt->shortLabel, "User Track", sizeof(bt->shortLabel));
 strncpy(bt->mapName, "custom", sizeof(bt->mapName));
 strncpy(bt->trackType, "bed", sizeof(bt->trackType));
 bt->visibility = 1;
+bt->version = cloneString("");
 return bt;
 }
 
@@ -63,9 +64,9 @@ static struct browserTable *btFromLine(char *line, int lineIx)
 struct browserTable *bt = btDefault();
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
-if ((val = hashFindVal(hash, "shortLabel")) != NULL)
+if ((val = hashFindVal(hash, "name")) != NULL)
     strncpy(bt->shortLabel, val, sizeof(bt->shortLabel));
-if ((val = hashFindVal(hash, "longLabel")) != NULL)
+if ((val = hashFindVal(hash, "description")) != NULL)
     strncpy(bt->longLabel, val, sizeof(bt->longLabel));
 if ((val = hashFindVal(hash, "url")) != NULL)
     bt->url = cloneString(val);
@@ -224,6 +225,11 @@ for (;;)
 	continue;
 	}
 
+    /* Chop up line and skip empty lines. */
+    wordCount = chopLine(line, row);
+    if (wordCount == 0)
+        continue;
+
     /* Deal with ordinary line.   First make track if one doesn't exist. */
     if (track == NULL)
         {
@@ -233,7 +239,6 @@ for (;;)
 	}
 
     /* Chop up line.  Make sure all lines in track have the same number of words. */
-    wordCount = chopTabs(line, row);
     if (track->fieldCount == 0)
         {
 	if (wordCount < 3)
@@ -311,9 +316,9 @@ struct browserTable *def = btDefault();
 
 fprintf(f, "track");
 if (!sameString(bt->shortLabel, def->shortLabel))
-    fprintf(f, "\t%s='%s'", "shortLabel", bt->shortLabel);
+    fprintf(f, "\t%s='%s'", "name", bt->shortLabel);
 if (!sameString(bt->longLabel, def->longLabel))
-    fprintf(f, "\t%s='%s'", "longLabel", bt->longLabel);
+    fprintf(f, "\t%s='%s'", "description", bt->longLabel);
 if (!sameString(bt->tableName, def->tableName))
     fprintf(f, "\t%s='%s'", "tableName", bt->tableName);
 if (!sameString(bt->mapName, def->mapName))
