@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.1 2003/12/17 20:19:44 kent Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.2 2003/12/17 20:32:04 kent Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -286,7 +286,7 @@ int clusterId = 0;	/* Assign a unique id to each cluster. */
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
 	int tableCount, char *tables[], char *chrom, char strand, 
-	FILE *clusterFile)
+	FILE *f)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct sqlResult *sr;
@@ -316,6 +316,13 @@ for (tableIx = 0; tableIx < tableCount; ++tableIx)
     sqlFreeResult(&sr);
     }
 clusterList = clusterMakerFinish(&cm);
+fprintf(f, "#");
+fprintf(f, "cluster\t");
+fprintf(f, "table\t");
+fprintf(f, "gene\t");
+fprintf(f, "chrom\t");
+fprintf(f, "txStart\t");
+fprintf(f, "txEnd\n");
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
     struct hashEl *helList = hashElListHash(cluster->geneHash);
@@ -323,7 +330,10 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     char *protName;
     ++clusterId;
     for (hel = helList; hel != NULL; hel = hel->next)
-	fprintf(clusterFile, "%d\t%s\n", clusterId, hel->name);
+	{
+	struct genePred *gp = hel->val;
+	fprintf(f, "%d\t%s\t%s\t%d\t%d\n", clusterId, hel->name, gp->chrom, gp->txStart, gp->txEnd);
+	}
     ++totalClusterCount;
     }
 genePredFreeList(&gp);
