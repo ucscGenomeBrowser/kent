@@ -1066,45 +1066,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno galGal2
 
-track tblastGalGal2
-shortLabel tblastGalGal2
-longLabel best galGal1 tblastn hit/hg16 knownGene exon
-group x
-spectrum on
-priority 158
-visibility hide
-type psl xeno
-
-track blast22Br
-shortLabel chr22 protein blast
-longLabel chr22 protein blast
-group x
-priority 1101
-visibility hide
-type psl protein
-
-track splatGalGal1
-shortLabel splatGalGal1 
-longLabel splatGalGal1
-group x
-priority 126
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type psl xeno galGal1
-otherDb galGal1
-
-track best10GalGal1
-shortLabel best10GalGal1
-longLabel best10GalGal1
-group x
-priority 126
-visibility hide
-spectrum on
-type psl xeno galGal1
-otherDb galGal1
-
 track chainFr1
 shortLabel Fugu Chain 
 longLabel Chained (Aug. 2002 - fr1) Fugu/$Organism Blastz Alignments
@@ -1156,18 +1117,6 @@ priority 132
 visibility hide
 spectrum on
 type psl .
-
-track chainGalGal2Stitch
-shortLabel chainGalGal2Stitch
-longLabel chainGalGal2Stitch
-group x
-priority 125
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain galGal2
-otherDb galGal2
 
 track NISC
 shortLabel NISC TBA
@@ -1240,18 +1189,6 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
 
-track chainHg16Ex
-shortLabel chainHg16Ex
-longLabel chainHg16Ex
-group x
-priority 125
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain hg16
-otherDb hg16
-
 track ecoresFr1
 shortLabel Fugu Ecores
 longLabel Human/Fugu Evolutionary Conserved Regions
@@ -1286,41 +1223,17 @@ color 173,17,162
 exonArrows on
 type bed 12
 
-track chainGalGal2Ex
-shortLabel chainGalGal2Ex
-longLabel chainGalGal2Ex
+track chainFr1ProtEx
+shortLabel chainFr1ProtEx
+longLabel chainFr1ProtEx
 group x
 priority 125
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type chain galGal2
-otherDb galGal2
-
-track chainGalGal2MergeEx
-shortLabel chainGalGal2MergeEx
-longLabel chainGalGal2MergeEx
-group x
-priority 125
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain galGal2
-otherDb galGal2
-
-track chainGalGal2ProtEx
-shortLabel chainGalGal2ProtEx
-longLabel chainGalGal2ProtEx
-group x
-priority 125
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain galGal2
-otherDb galGal2
+type chain fr1
+otherDb fr1
 
 track DJT_snpSingleValid_knownGeneCds
 shortLabel cons snps
@@ -1393,6 +1306,97 @@ priority 160
 group x
 visibility hide
 type bed 5
+
+track chainFr1Ex
+shortLabel chainFr1Ex
+longLabel chainFr1Ex
+group x
+priority 125
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain fr1
+otherDb fr1
+
+track chainFr1MergeEx
+shortLabel chainFr1MergeEx
+longLabel chainFr1MergeEx
+group x
+priority 125
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain fr1
+otherDb fr1
+
+track chainCi1ProtEx
+shortLabel chainCi1ProtEx
+longLabel chainCi1ProtEx
+group x
+priority 125
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain ci1
+otherDb ci1
+
+track chainGalGal2Ex
+shortLabel chainGalGal2Ex
+longLabel chainGalGal2Ex
+group x
+priority 125
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain galGal2
+otherDb galGal2
+
+track chainGalGal2MergeEx
+shortLabel chainGalGal2MergeEx
+longLabel chainGalGal2MergeEx
+group x
+priority 125
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain galGal2
+otherDb galGal2
+
+track chainGalGal2ProtEx
+shortLabel chainGalGal2ProtEx
+longLabel chainGalGal2ProtEx
+group x
+priority 125
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain galGal2
+otherDb galGal2
+
+track tblastFr1
+shortLabel tblastFr1
+longLabel best Fr1 tblastn hit/hg16 knownGene exon
+group x
+spectrum on
+priority 158
+visibility hide
+type psl xeno
+
+track tblastGalGal2
+shortLabel tblastGalGal2
+longLabel best galGal1 tblastn hit/hg16 knownGene exon
+group x
+spectrum on
+priority 158
+visibility hide
+type psl xeno
+
 
 searchTable HInvGeneMrna
 searchMethod exact
