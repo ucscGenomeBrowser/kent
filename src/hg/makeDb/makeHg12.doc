@@ -518,6 +518,10 @@ o - Add Jackson labs info
      echo "load data local infile '"`pwd`"/jaxOrtholog.tab' into table jaxOrtholog;" \
        | hgsql hg12
 
+REFFLAT
+
+o - create precomputed join of refFlat and refGene:
+      echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql hg12
 
 SIMPLE REPEAT TRACK (DONE)
 

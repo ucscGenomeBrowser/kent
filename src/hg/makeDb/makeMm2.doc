@@ -302,6 +302,10 @@ o - Produce refGenn, refPep, refMrna, and refLink tables as so:
 o - Add RefSeq status info (done 6/19/02)
     hgRefSeqStatus mm2 loc2ref
 
+REFFLAT
+
+o - create precomputed join of refFlat and refGene:
+      echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql mm2
 
 SIMPLE REPEAT TRACK (done)
 
