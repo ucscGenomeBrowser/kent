@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.587 2003/08/28 18:10:13 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.588 2003/08/29 05:54:04 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -5683,8 +5683,11 @@ if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
     /* Also, must give "chrom" as "Chr_scaffold_N" */
-    hScaffoldPos(chromName, winStart, winEnd,
-                        &scaffoldName, &start, &end);
+    if (!hScaffoldPos(chromName, winStart, winEnd,
+                        &scaffoldName, &start, &end))
+        /* position doesn't appear on Ensembl browser.
+         * Ensembl doesn't show scaffolds < 2K */
+        return;
     strcpy(ensemblChrScaffoldName, "Chr_");
     strncat(ensemblChrScaffoldName, scaffoldName, 60);
     name = ensemblChrScaffoldName;
