@@ -3,8 +3,10 @@ exit; # don't actually run this like a script :)
 
 # This file describes how we made the browser database on the 
 # Fugu Rubripes (Japanese pufferfish), whole genome shotgun assembly dated 
-# 26 August 2002.  This release contains ~320Mbases, in 20,378 scaffolds.
+# 26 August 2002, from the DOE Joint Genome Institute (v3.0).
+# This release contains ~320Mbases, in 20,378 scaffolds.
 # Size distribution is: 2 scaffolds ~1Mbase, 17 are 500-1000kbase.
+# Kate Rosenbloom 4/03
 
 # DOWNLOAD THE SEQUENCE FROM JGI (04/22/03 KRR)
 
@@ -12,91 +14,200 @@ exit; # don't actually run this like a script :)
     set fugudir = /cluster/store5/Fugu_Rubripes_V3
     mkdir $fugudir
     cd $fugudir
+
+    # NOTE: there are two downloads available on the site -- one
+    # is named indicating it is masked, and contains additional N's.
+    # The other file (the one we are using) contains lower-case,
+    # indicating it is soft-masked. (As an aside, the mask locations are not
+    # consistent between the two files).
+    # We use the soft-masked file, since it has more sequence; however
+    # we will translate to upper case and repeat mask ourselves, 
+    # so that we can generate a Repeats track.
+    #
+    # The file consists of fasta records, each named scaffold_#.
+    # Unfortunately, the ordering of scaffolds is alphabetic, not numeric,
+    # so scaffold_1 is followed by scaffold_10, not scaffold_2.
+    # Also, the scaffold numbering has holes -- the highest numbered
+    # scaffold is 32607. 
+
     wget ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3.fasta.Z
     ln -s $fugudir ~/fr1
     cd ~/fr1
     gunzip fugu_v3.fasta.Z
 
-    # trim off garbage at end of file (list of scaffolds)
+    # trim off garbage at end of file (list of scaffolds),
+    # this appears to be an artifact of the release process
+
     mv fugu_v3.fasta fugu_v3.orig.fasta
-    grep -v '^scaffold' fugu_v3.origfasta > fugu_v3.fasta
+    grep -v '^scaffold' fugu_v3.orig.fasta > fugu_v3.fasta
 
-# CREATE AGP FILE WITH SCAFFOLDS SEPARATED BY 1000 BP GAPS
-# CREATE CHROM FA FROM AGP AND SCAFFOLDS
+    # force to upper case (see above), but preserve lower case headers
+    tr '[a-z]' '[A-Z]' < fugu_v3.fasta | \
+        sed 's/>SCAFFOLD_/>scaffold_/' > fugu_v3.upper.fasta
 
-    ssh eieio
-    cd ~/fr1
-    scaffoldFaToAgp fugu_v3.fasta
-    mkdir Un
-    mv fugu_v3.agp Un/chrUn.agp
-    cd Un
-    agpToFa -simpleMulti chrUn.agp chrUn chrUn.fa ../fugu_v3.fasta
-    # translate back to upper case
-    tr '[a-z]' '[A-Z]' < chrUn.fa | sed 's/CHRUN/chrUn/' > chrUn.upper.fa
-    mv chrUn.fa chrUn.lower.fa
-    mv chrUn.upper.fa chrUn.fa
-
-# REPEAT MASKING (5/2/03 KRR)
-
-    # Split file into 500kb chunks, preserving sequences
-    # Note: fugu library ("puffer.lib") is dated 7/9/2002
-    # This will produce ~700 files (Fugu V3.0)
+# SPLIT THE FASTA FILE INTO SCAFFOLDS FOR FURTHER PROCESSING (DONE KRR)
+# Chunk the scaffolds into ~500Kb "super-scaffolds" for convenience
 
     ssh eieio
-    cd ~/fr1
-    cd Un
-    mkdir split
-    faSplit size chrUn.fa 500000 split/chrUn_ -lift=split.lft 
-
-    # Make the run directory and job list
-
-    cd ..
-    mkdir RMRun
-    rm -f RMRun/RMJobs
-    touch RMRun/RMJobs
     set fugudir = /cluster/store5/Fugu_Rubripes_V3
-    foreach f (Un/split/*.fa)
-        set f = $f:t
-        echo /cluster/bin/scripts/RMFugu \
-                 $fugudir/Un/split/ $f \
-               '{'check out line+ $fugudir/Un/split/$f.out'}' \
-              >> RMRun/RMJobs
+    cd $fugudir
+    mkdir scaffolds
+
+    # NOTE: must give a record count larger than the number of scaffolds
+    # next time, use "faSplit byName" to do this
+    faSplit sequence fugu_v3.upper.fasta 30000 scaffolds/
+
+    # rename files to match scaffold (in fasta header)
+    # and store in directories (00 .. 32) for convenience and readability
+    # This produces directories with 200 - 1000 files per dir.
+    # The directory is the leading two digits of the scaffold number,
+    # (when represented as a zero-filled 5-digit number)
+    cd scaffolds
+    foreach d1 (0 1 2 3)
+        foreach d2 (0 1 2 3 4 5 6 7 8 9)
+            foreach file ($d1$d2*.fa)
+                set num = `sed -n '1s/>scaffold_//p' $file`
+                set dir = `printf "%05d" $num | sed 's/...$//'`
+                mkdir -p $dir
+                echo "moving $file to $dir/scaffold_$num"
+                mv $file $dir/scaffold_${num}.fa
+            end
+        end
     end
 
-    # Do the run
+    # remake a whole-genome fasta file, with the scaffold records
+    # ordered more sensibly (numeric, not alphabetic)
+    set ordered_file = fugu_v3.ordered.fa
+    cp /dev/null $ordered_file
+    cd scaffolds
+    foreach d ([0-9][0-9])
+        set filelist = `(cd $d; ls *.fa | sort -n -k 1.10)`
+        foreach f ($filelist) 
+            echo "concatenating $f"
+            cat $d/$f >> ../$ordered_file
+        end
+    end
+    cd ..
+
+    # split into ~500KB "super-scaffolds"
+    # each file has one or more scaffolds. Fasta records are preserved
+    # This creates 577 files, size range ~51000 to ~1.2Mb
+    rm -fr superscaffolds
+    mkdir superscaffolds
+    faSplit about $ordered_file 500000 superscaffolds/ss_
+    
+
+# RUN REPEAT MASKER ON THE SUPER-SCAFFOLDS (6/2/03 KRR)
+    # note: fugu library ("puffer.lib") is dated 7/9/2002
+    ssh eieio
+    cd ~/fr1
+
+    # make the run directory, output directory, and job list
+    mkdir -p RMRun/Un
+    cp /dev/null RMRun/RMJobs
+    set fugudir = /cluster/store5/Fugu_Rubripes_V3
+    cd superscaffolds
+    foreach f (ss_*.fa)
+        echo /cluster/bin/scripts/RMFugu \
+                $fugudir/superscaffolds $f $fugudir/RMRun/Un \
+               '{'check out line+ $fugudir/RMRun/Un/$f.out'}' \
+              >> ../RMRun/RMJobs
+    end
+
+    # do the run
     ssh kk
     cd ~/fr1/RMRun
     para create RMJobs
-    para try, para check, para check, para push, para check,...
+    para try
+    para check
+    para push
+    para check,...
 
-    # Lift up the repeat output files to chr coordinates
+
+# PROCESS SUPER-SCAFFOLDS FOR SIMPLE REPEATS (6/2/03 KRR)
+    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+    # so instead of binrsyncing and para-running, just do this on the
+    # local fileserver
+    ssh eieio
+    mkdir ~/fr1/bed/simpleRepeat
+    cd ~/fr1/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    set fugudir = /cluster/store5/Fugu_Rubripes_V3
+    foreach f ($fugudir/superscaffolds/*.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    tcsh jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+
+
+# FILTER SIMPLE REPEATS INTO MASK (6/3/03 KRR)
+    # make a filtered version # of the trf output: 
+    # keep trf's with period <= 12:
+    ssh eieio
+    cd ~/fr1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+        echo "filtering $f"
+        awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+
+# MASK SUPER-SCAFFOLDS USING REPEATMASKER AND FILTERED TRF FILES (6/3/03 KRR)
     ssh eieio
     cd ~/fr1
+    mkdir superscaffolds.masked
+    foreach p (superscaffolds/ss_*.fa)
+        set f = $p:t
+        echo "masking $f"
+        maskOutFa $p RMRun/Un/$f.out superscaffolds.masked/$f -soft
+        maskOutFa superscaffolds.masked/$f bed/simpleRepeat/trfMask/${f:r}.bed superscaffolds.masked/$f -softAdd
+    end
+
+
+# CREATE FASTA FOR UNORDERED CHROM FROM MASKED SUPER-SCAFFOLDS (6/3/03 KRR)
+# Note: scaffolds are separated by 1000 Bp gaps
+    ssh eieio
+    cd ~/fr1
+
+    # remake a whole-genome fasta file from the masked supser-scaffolds
+    set masked_file = fugu_v3.masked.fa
+    cd superscaffolds.masked
+    cat `ls ss_*.fa | sort -n -k 1.4` > ../$masked_file
+    cd ..
+    
+    # generate AGP and lift files from the chromosome fasta 
+
+    scaffoldFaToAgp $masked_file
+    # gap size is 1000, total gaps: 20379
+    # chrom size is 349519338
+
+    mkdir Un
+    mv fugu_v3.masked.agp Un/chrUn.agp
+    mv fugu_v3.masked.lft Un/chrUn.lft
+
+    # Create chromosome FA file from AGP and file of masked scaffolds
     cd Un
-    liftUp chrUn.fa.out split.lft warn split/*.fa.out > /dev/null
-
-    # Mask the chrom FA file using the lifted RM output file
-    maskOutFa chrUn.fa chrUn.fa.out chrUn.fa.softmask -soft
-    mv chrUn.fa chrUn.fa.unmasked
-    mv chrUn.fa.softmask chrUn.fa
-    maskOutFa chrUn.fa.unmasked chrUn.fa.out chrUn.fa.masked -hard
-
-# RUN TRF, POSSIBLY MASK WITH THE OUTPUT
-# SimpleRepeat track
+    agpToFa -simpleMultiMixed chrUn.agp chrUn chrUn.fa ../fugu_v3.masked.fa
 
 
 # CREATING DATABASE (5/2/03 KRR)
-
     # Create the database.
     ssh hgwdev
     echo 'create database fr1' | hgsql ''
-    # make a semi-permanent read-only alias:
+    # Make a semi-permanent read-only alias:
     alias fr1 "mysql -u hguser -phguserstuff -A fr1"
-    # Use df to ake sure there is at least 5 gig free on 
-    # hgwdev:/var/lib/mysql
+    # Make sure there is at least 5 gig free for the database
+    df -h /var/lib/mysql
 
 
-# STORE SEQUENCE AND ASSEMBLY INFORMATION (5/2/03 KRR)
+# STORE SEQUENCE AND ASSEMBLY INFORMATION (6/3/03 KRR)
 
     # Translate to nib
     ssh eieio
@@ -114,51 +225,84 @@ exit; # don't actually run this like a script :)
      ssh hgwdev
      hgsql fr1  < ~/src/hg/lib/chromInfo.sql
      cd ~/fr1
+
     # NOTE: last arg here may be in error
      hgNibSeq -preMadeNib fr1 /gbdb/fr1/nib chrUn.nib
      echo "select chrom,size from chromInfo" | hgsql -N fr1 > chrom.sizes
 
+    # create assembly and gap tracks
+    ssh hgwdev
+    hgGoldGapGl -noGl fr1 ~ fr1 
+
 
 # CREATING GRP TABLE FOR TRACK GROUPING (5/2/03 KRR)
+    # Copy all the data from the table "grp" 
+    # in the existing database "rn1" to the new database
     ssh hgwdev
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql fr1
 
 
-# MAKE GCPERCENT (5/2/03 KRR)
+# CREATE REPEAT TRACKS (6/3/03 KRR)
+
+    ssh eieio
+    cd ~/fr1
+
+    # merge and lift up the repeatmasker output files to chrom coordinates
+    liftUp Un/chrUn.fa.out Un/chrUn.lft warn RMRun/Un/*.out
+
+    # load into the database (chrUn_rmsk table)
+    ssh hgwdev
+    hgLoadOut fr1 Un/chrUn.fa.out
+
+    # lift the simple repeat output to chrom coordinates
+    ssh eieio
+    cd ~/fr1
+    cd bed/simpleRepeat
+    liftUp simpleRepeat.bed ~/fr1/Un/chrUn.lft warn trf/*.bed
+
+    # load into the database (simpleRepeat table)
+    ssh hgwdev
+    cd ~/fr1/bed/simpleRepeat
+    hgLoadBed fr1 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+# MAKE GCPERCENT (6/3/03 KRR)
      ssh hgwdev
     set fugudir = /cluster/store5/Fugu_Rubripes_V3
      mkdir -p $fugudir/bed/gcPercent
      cd $fugudir/bed/gcPercent
      hgsql fr1  < ~/src/hg/lib/gcPercent.sql
+
+     # load gcPercent table
      hgGcPercent fr1 ../../nib
 
-# LOAD MRNA DATA (TODO)
-    hgLoadRna new fr1
-    set mrnaDir = mrna.134
-    hgLoadRna add -type=mRNA fr1 /gbdb/fr1/$mrnaDir/mrna.fa \
-      /cluster/store5/$mrnaDir/org/Takifugu_rubripes/mrna.ra
-    hgLoadRna add -type=EST fr1 /gbdb/fr1/$mrnaDir/est.fa \
-      /cluster/store5/$mrnaDir/org/Takifugu_rubripes/est.ra
+
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR FUGU (5/6/03 KRR)
     echo 'insert into defaultDb values("Fugu", "fr1");' \
       | hgsql -h genome-testdb hgcentraltest
+
     # Warning: must change genome, organism fields to correspond
     # with defaultDb values
     echo 'insert into dbDb values("fr1", "Aug. 2002", \
           "/gbdb/fr1/nib", "Fugu", "chrUn", 0, 10, "Fugu");' \
       | hgsql -h genome-testdb hgcentraltest
+
     # activate database
     #echo 'insert into dbDb values("fr1", "Aug. 2002", \
           #"/gbdb/fr1/nib", "Fugu", "chrUn", 1, 10, "Fugu");' \
       #| hgsql -h genome-testdb hgcentraltest
+
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
     cd ~/src/hg/makeDb/trackDb
     cvs up -d -P
+
     # Edit that makefile to add fr1 in all the right places and do
     make update
+
     # go public on genome-test
     #make alpha
     cvs commit makefile
@@ -170,124 +314,173 @@ exit; # don't actually run this like a script :)
     cvs add fugu/fr1
     cvs commit fugu
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR FUGU (TODO)
+# MAKE RNA TABLES
+
+    hgLoadRna new fr1
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR FUGU (6/4/03 KRR)
     ssh hgwdev
     # Get appropriate hostname from cluster admins
-    echo 'insert into blatServers values("fr1", "blat10", "17778", "1"); \
-          insert into blatServers values("fr1", "blat10", "17779", "0");' \
+    echo 'insert into blatServers values("fr1", "blat11", "17783", "1"); \
+          insert into blatServers values("fr1", "blat11", "17782", "0");' \
       | hgsql -h genome-testdb hgcentraltest
 
 
-SIMPLE REPEAT TRACK (TODO)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
-    # so instead of binrsyncing and para-running, just do this on eieio:
-    ssh eieio
-    mkdir ~/fr1/bed/simpleRepeat
-    cd ~/fr1/bed/simpleRepeat
-    mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    foreach f (/cluster/store5/Fugu_Rubripes_V3/*.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
-    end
-    tcsh jobs.csh |& tee jobs.log
-    wc -l jobs.csh
-    ls -1 trf | wc -l
+# MAKING AND STORING mRNA ALIGNMENTS  (6/8/03 KRR)
 
-    # When job is done do:
-    liftUp simpleRepeat.bed ~/fr1/jkStuff/liftAll.lft warn trf/*.bed
+    # Load up the local disks of the small cluster with  mrna.fa
+    # and masked super-scaffolds
+    # from /cluster/store5/mrna.134/org/Takifugu_rubripes
+    # note: there are 76 mrna sequences, and 24398 EST's
+    ssh kkr1u00
+    cd /iscratch/i/fugu
+    set mrnaDir = /cluster/store5/mrna.134/org/Takifugu_rubripes
+    mkdir mrna 
+    cp -p $mrnaDir/mrna.fa mrna
+    mkdir trfFa 
+    cp -p ~/fr1/superscaffolds.masked/*.fa trfFa
+    # note: this isn't currently working for me 
+    # (permission errors) -- Hiram did it
+    ~kent/bin/iSync
 
-    # Load this into the database as so
-    ssh hgwdev
-    cd ~/fr1/bed/simpleRepeat
-    hgLoadBed fr1 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
-
-    # Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    # from /cluster/store2/mrna.133  into /scratch/hg/mrna.133
-    # Make sure that /scratch/hg/rn2/trfFa is loaded with chr*_*.fa and pushed 
-    # to the cluster nodes.  
-    ssh kk
-    cd ~/rn2/bed
-    foreach i (refSeq mrna est)
-      mkdir -p $i
-      cd $i
-      ls -1S /scratch/hg/rn2/trfFa/* > genome.lst
-      # Get latest mrna's
-      ls -1 /mnt/scratch/hg/mrna.133/Rattus_norvegicus/$i.fa > mrna.lst
-      cp ~/lastRn/bed/$i/gsub .
-      mkdir psl
-      # generate alignment job
-      gensub2 genome.lst mrna.lst gsub spec
-      para create spec
-      cd ..
-    end 
-
-    # In each dir: para try, para check, para push, para check....
-    # para time > time
-      
-    # Process refSeq, mRNA, and EST alignments into near best in genome.
-    ssh eieio
-    cd ~/rn2/bed
-    cd refSeq
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    # filter out poor alignments
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl \
-      contig.psl /dev/null
-    liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft warn contig.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_refSeq.psl
-    cd ..
-
+    # generate alignment job 
+    # TODO: try aligning whole mrna file against whole chrUn nib
+    # on file server (eieio), instead of using cluster.
+    # this would be simpler, and probably fast enough
+    cd ~/fr1/bed
+    mkdir mrna
     cd mrna
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
-      /dev/null
-    liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft warn contig.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_mrna.psl
-    cd ..
+    mkdir psl
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > genome.lst
+    ls -1S /iscratch/i/fugu/mrna/*.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -ooc={check in exists /scratch/hg/h/11.ooc} {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP 
+'_EOF_' 
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    # this just takes a few minutes
 
-    cd est
-    pslSort dirs raw.psl /cluster/store2/temp psl
-    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl \
-      /dev/null
-    liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft warn contig.psl
-    pslSortAcc nohead chrom /cluster/store2/temp all_est.psl
-    cd ..
-
-    # Load mRNA alignments into database.
-    ssh hgwdev
-    cd ~/rn2/bed/mrna/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        mv $i $i:r_mrna.psl
-    end
-    hgLoadPsl rn2 *.psl
-    cd ..
-    hgLoadPsl rn2 all_mrna.psl -nobin
-
-    # Load EST alignments into database.
-    ssh hgwdev
-    cd ~/rn2/bed/est/chrom
-    foreach i (chr?{,?}{,_random}.psl)
-        echo mv $i $i:r_est.psl
-    end
-    hgLoadPsl rn2 *.psl
-    cd ..
-    hgLoadPsl rn2 all_est.psl -nobin
-
-    # Create subset of ESTs with introns and load into database.
     ssh eieio
-    cd ~/rn2
-    tcsh jkStuff/makeIntronEst.sh
-    ssh hgwdev
-    cd ~/rn2/bed/est/intronEst
-    hgLoadPsl rn2 *.psl
+    cd ~/fr1/bed/mrna
+    pslSort dirs raw.psl /tmp psl
+        # psl with 578 files
+        # 578 files in 1 dirs
+        # Got 578 files 24 files per mid file
+        # Writing /tmp/tmp0.psl
+        # ...
+        # Writing /tmp/tmp24.psl
+        # writing raw.psl
+        # Cleaning up temp files
 
-    # Load refSeq alignments into database
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl scaffolds.psl \
+      /dev/null
+        # Processing raw.psl to scaffolds.psl and /dev/null
+        # Processed 161 alignments
+
+    # lift up PSL files to chrom coordinates
+    liftUp -nohead all_mrna.psl ~/fr1/Un/chrUn.lft warn scaffolds.psl
+        # Got 40758 lifts in /cluster/home/kate/fr1/Un/chrUn.lft
+        # Lifting scaffolds.psl
+
+    pslSortAcc nohead chrom /tmp all_mrna.psl
+        # Processing all_mrna.psl
+        # Processed 89 lines into 1 temp files
+
+    # load mrna tables
     ssh hgwdev
-    cd ~/rn2/bed/refSeq
-    pslCat -dir chrom > refSeqAli.psl
-    hgLoadPsl rn2 -tNameIx refSeqAli.psl
+    cd ~/fr1/bed/mrna/chrom
+
+    # rename psl file to required format (must be chr*_mrna)
+    mv chrUn.psl chrUn_mrna.psl
+
+    # load alignments
+    hgLoadPsl fr1 chrUn_mrna.psl
+    cd ..
+    hgLoadPsl fr1 all_mrna.psl -nobin
+
+    # prepare for data load
+    set mrnaDir = mrna.134
+    mkdir /gbdb/fr1/mrna.134
+    #ln -s /cluster/store5/$mrnaDir/org/Takifugu_rubripes /gbdb/fr1/$mrnaDir
+    ln -s /cluster/store5/$mrnaDir/org/Takifugu_rubripes/mrna.fa /gbdb/fr1/$mrnaDir
+    # load mRna into database
+    # WARNING: had to use -ignore flag... check on this
+    hgLoadRna add -type=mRNA fr1 /gbdb/fr1/$mrnaDir/mrna.fa \
+        /cluster/store5/$mrnaDir/org/Takifugu_rubripes/mrna.ra
+        # Adding data of type: mRNA ...
+
+# MAKING AND STORING EST ALIGNMENTS  (IN PROGRESS KRR)
+
+    # setup BlueArc with EST files
+    ssh kk
+    mkdir -p /cluster/bluearc/fugu/est
+    cd /cluster/bluearc/fugu/est
+    
+    # split up est file into 100Kb chunks 
+    # (makes ~120 query files * ~600 target superscaffolds = 70000 jobs)
+    faSplit about  /cluster/store5/mrna.134/org/Takifugu_rubripes/est.fa \
+                                100000 e
+
+    # TODO: try aligning est files against whole chrUn nib
+    # this would be easier on the filesystem, and probably fast enough
+    cd ~/fr1/bed
+    mkdir est
+    cd est
+    mkdir psl
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > genome.lst
+    ls -1S /cluster/bluearc/fugu/est/*.fa > est.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -ooc={check in exists /scratch/hg/h/11.ooc} {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP 
+'_EOF_' 
+    gensub2 genome.lst est.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check...
+    # just a few minutes to complete
+
+    # process alignments
+    ssh eieio
+    cd ~/fr1/bed/est
+
+    pslSort dirs raw.psl /tmp psl
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl scaffolds.psl \
+      /dev/null
+
+    # lift up PSL files to chrom coordinates
+    liftUp -nohead all_est.psl ~/fr1/Un/chrUn.lft warn scaffolds.psl
+        # Got 40758 lifts in /cluster/home/kate/fr1/Un/chrUn.lft
+        # Lifting scaffolds.psl
+
+    pslSortAcc nohead chrom /tmp all_est.psl
+        # Processing all_est.psl
+        # Processed 20501 lines into 1 temp files
+
+    # load into database
+    ssh hgwdev
+    cd ~/fr1/bed/est/chrom
+
+    # rename psl file to required format (must be chr*_est)
+    mv chrUn.psl chrUn_est.psl
+
+    # load alignments
+    hgLoadPsl fr1 chrUn_est.psl
+    cd ..
+    hgLoadPsl fr1 all_est.psl -nobin
+
+    set mrnaDir = mrna.134
+    ln -s /cluster/store5/$mrnaDir/org/Takifugu_rubripes/est.fa /gbdb/fr1/$mrnaDir
+    hgLoadRna add -type=EST fr1 /gbdb/fr1/$mrnaDir/est.fa \
+        /cluster/store5/$mrnaDir/org/Takifugu_rubripes/est.ra
+
+    # note: there is no Genbank RefSeq directory for this organism
+
