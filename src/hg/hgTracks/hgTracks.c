@@ -1382,12 +1382,17 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 0.0;
     maxRange = 1000.0;
     }
-    else if( sameString( tg->mapName, "binomialCons3" ) )
+    else if( sameString( tg->mapName, "binomialCons2" ) )
     {
     minRange = 0.0;
     maxRange = 300.0;
     }
-    else if( startsWith( tg->mapName, "binomialCons" ) )
+    else if( sameString( tg->mapName, "binomialCons3" ) )
+    {
+    minRange = 0.0;
+    maxRange = 200.0;
+    }
+    else if( sameString( tg->mapName, "binomialCons" ) )
     {
     minRange = 0.0;
     maxRange = 500.0;
@@ -8327,18 +8332,21 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
 	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
 	    }
-         else if( sameString( group->mapName, "binomialCons3" ) )
+         else if( sameString( group->mapName, "binomialCons2" ) )
 	    {
 	    sprintf( minRangeStr, "%d", (int)0.0 );
 	    sprintf( maxRangeStr, "%d", (int)300.0);
 	    }
-     else if( startsWith( group->mapName, "binomialCons" ) )
+     else if( sameString( group->mapName, "binomialCons3" ) )
+	    {
+	    sprintf( minRangeStr, "%d", (int)0.0);
+	    sprintf( maxRangeStr, "%d", (int)200.0);
+	    }
+    else if( sameString( group->mapName, "binomialCons" ) )
 	    {
 	    sprintf( minRangeStr, "%d", (int)0.0);
 	    sprintf( maxRangeStr, "%d", (int)500.0);
 	    }
-       
-	
 	else
 	    {
 	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
