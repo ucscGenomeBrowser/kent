@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.9 2004/03/10 22:58:41 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.10 2004/03/10 23:04:45 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -152,8 +152,9 @@ slAddHead(&miList, mi);
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
-    mi = scoreItem(wigTotalHeight(track->subtracks, 
-                                track->visibility == tvFull ? tvFull : tvDense));
+    enum trackVisibility wigVis = (track->visibility == tvFull || 
+                                   track->visibility == tvPack ? tvFull : tvDense);
+    mi = scoreItem(wigTotalHeight(track->subtracks, wigVis));
     slAddHead(&miList, mi);
     }
 slReverse(&miList);
@@ -671,7 +672,7 @@ static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
 struct track *wigTrack = track->subtracks;
 
 /* wiggle is displayed dense for all visibilities except full */
-enum trackVisibility wigVis = (vis == tvFull ? tvFull : tvDense);
+enum trackVisibility wigVis = (vis == tvFull || vis == tvPack ? tvFull : tvDense);
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
