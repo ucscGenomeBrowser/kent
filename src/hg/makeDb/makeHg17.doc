@@ -2475,6 +2475,10 @@ cat > template << 'EOF'
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql \
 	hg17 cytoBand cytobands.bed
 	    
+# Load ideogram table
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
+	hg17 cytoBandIdeo cytobands.bed
+	    
 
 # LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
 #	Copied from Hg16 doc
