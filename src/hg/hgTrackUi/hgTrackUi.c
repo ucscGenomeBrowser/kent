@@ -198,24 +198,17 @@ char *interpolate, *aa, *fill;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
-snprintf( &options[2][0], 256, "%s.anti.alias", tdb->tableName );
 snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
 snprintf( &options[4][0], 256, "%s.interp.gap", tdb->tableName );
     
-thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "100"));
+thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
 interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
-aa = cartUsualString(cart, &options[2][0], "on");
 fill = cartUsualString(cart, &options[3][0], "1");
 thisLineGap = atoi(cartUsualString(cart, &options[4][0], "200"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown(&options[1][0], interpolate );
 printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton(&options[2][0], "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton(&options[2][0], "off", sameString(aa, "off"));
-printf(" off ");
 
 printf("<br><br>");
 printf(" <b>Fill Blocks</b>: ");
@@ -235,8 +228,6 @@ if( optionNum >= 5 )
     cgiMakeIntVar(&options[4][0], thisLineGap, 10 );
     printf("&nbsp;bases");
     }
-
-
 }
 
 
