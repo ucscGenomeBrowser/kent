@@ -1548,12 +1548,13 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
-void savePosInHidden()
-/* Save basic position/database info in hidden vars. */
+void savePosInTextBox(char *chrom, int start, int end)
+/* Save basic position/database info in text box and hidden var. 
+ Positions becomes chrom:start-end*/
 {
-cgiContinueHiddenVar("c");
-cgiContinueHiddenVar("l");
-cgiContinueHiddenVar("r");
+char position[128];
+snprintf(position, 128, "%s:%d-%d", chrom, start, end);
+cgiMakeTextVar("getDnaPos", position, strlen(position) + 2);
 cgiContinueHiddenVar("db");
 }
 
@@ -1567,12 +1568,12 @@ char parsedChrom[32];
 hParseTableName(tbl, rootName, parsedChrom);
 hti = hFindTableInfo(seqName, rootName);
 cartWebStart(cart, "Get DNA in Window");
-printf("<H2>Get DNA for %s:%d-%d</H2>\n", seqName, winStart+1, winEnd);
+printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 cgiMakeHiddenVar("table", tbl);
-savePosInHidden();
+savePosInTextBox(seqName, winStart+1, winEnd);
 hgSeqOptionsHti(hti);
 puts("<P>");
 cgiMakeButton("submit", "Get DNA");
@@ -1750,6 +1751,7 @@ int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
 char *casing     = cgiUsualString("hgSeq.casing", "");
 char *repMasking = cgiUsualString("hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
+char *pos = NULL;
 
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
@@ -1797,13 +1799,13 @@ if (*casing != 0)
 printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
-printf("Chromosome ");
-cgiMakeTextVar("c", seqName, 6);
-printf(" Start ");
-cgiMakeIntVar("l", winStart+1 - (revComp ? padding3 : padding5), 9);
-printf(" End ");
-cgiMakeIntVar("r", winEnd   + (revComp ? padding5 : padding3), 9);
-cgiContinueHiddenVar("db");
+
+if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+    {
+    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+    }
+puts("Position ");
+savePosInTextBox(seqName, winStart+1 - (revComp ? padding3 : padding5), winEnd + (revComp ? padding5 : padding3));
 printf(" Reverse complement ");
 cgiMakeCheckBox("hgc.dna.rc", isRc);
 printf("<BR>\n");
@@ -1943,9 +1945,22 @@ if (sameString(action, "Extended case/color options"))
 puts("<PRE>");
 if (tbl[0] == 0)
     {
+    char *pos = NULL;
+    char *chrom = NULL;
+    int start = 0;
+    int end = 0;
+
     itemCount = 1;
-    hgSeqRange(seqName, cartInt(cart, "l"), cartInt(cart, "r"),
-	       '?', "dna");
+    if ( NULL != (pos = cartOptionalString(cart, "getDnaPos")) &&
+         hgParseChromRange(pos, &chrom, &start, &end))
+        {
+        hgSeqRange(chrom, start, end, '?', "dna");
+        }
+    else
+        {        
+        hgSeqRange(seqName, cartInt(cart, "l"), cartInt(cart, "r"),
+                   '?', "dna");
+        }
     }
 else
     {
@@ -2173,14 +2188,22 @@ struct rgbColor *colors;
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
+char *pos = NULL;
 
 Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
 Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
 Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
 
+if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+    {
+    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+    }
+
 /* The range entry input is 1-based, to be consistent with the coord range 
  * displayed to the user. Adjust it back here: */
-winStart -= 1;
+/* winStart -= 1; Commented out because this is inconsistent
+with how getDna2 works
+*/
 winSize = winEnd - winStart;
 
 ctdbList = slCat(ctdbList, tdbList);
@@ -4208,11 +4231,6 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-
-//puts("position: ");
-//cgiMakeTextVar("c", cartString(cart, "c"), 0);
-//cgiMakeTextVar("l", cartString(cart, "l"), 0);
-//cgiMakeTextVar("r", cartString(cart, "r"),  0);
 
 hgSeqOptions(cgiString("o"));
 cgiMakeButton("submit", "submit");
