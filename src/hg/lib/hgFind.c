@@ -926,7 +926,7 @@ else
     pslCount = slCount(pslList);
     if (pslCount <= 0)
         {
-	errAbort("%s %s doesn't align anywhere in the draft genome",
+	errAbort("%s %s doesn't align anywhere in the genome",
 		 type, acc);
 	return FALSE;
 	}
@@ -1539,7 +1539,7 @@ for (i = 0; i<tableCount; ++i)
     sqlFreeResult(&sr);
     for (idEl = idList; idEl != NULL; idEl = idEl->next)
         {
-        /* don't check srcDb to exclude refseq for compat with other tables */
+        /* don't check srcDb to exclude refseq for compat with older tables */
 	sprintf(query, "select acc from mrna where %s = %s and type = 'mRNA'", field, idEl->name);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
