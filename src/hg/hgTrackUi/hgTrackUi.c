@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.172 2005/02/03 00:37:38 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.173 2005/02/03 19:01:53 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1215,6 +1215,15 @@ cgiMakeCheckBox("affyTransfrags.skipDups", skipDups);
 printf(" Remove transfrags that have a BLAT match elsewhere in the genome from display.<br>");
 }
 
+void acemblyUi(struct trackDb *tdb)
+/* Options for filtering the acembly track based on gene class */
+{
+char *acemblyClass = cartUsualString(cart, "acembly.type", acemblyEnumToString(0));
+printf("<p><b>Gene Class: </b>");
+acemblyDropDown("acembly.type", acemblyClass);
+printf("  ");
+}
+
 void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
@@ -1336,7 +1345,11 @@ else if (tdb->type != NULL)
     if (wordCount > 0)
 	{
 	if (sameWord(words[0], "genePred"))
+            {
+            if (sameString(track, "acembly"))
+                acemblyUi(tdb);
 	    cdsColorOptions(tdb, 2);
+            }
 	/* if bed has score then show optional filter based on score */
 	if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
