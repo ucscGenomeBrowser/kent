@@ -2,6 +2,10 @@
 
 #ifndef OPTIONS_H
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
 char *optionVal(char *name, char *defaultVal);
 /* Return named option if in options hash, otherwise default. */
 

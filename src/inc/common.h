@@ -520,4 +520,10 @@ int intExp(char *text);
 char* readLine(FILE* fh);
 /* Read a line of any size into dynamic memory, return null on EOF */
 
+long fileSize(char *fileName);
+/* The size of a file. */
+
+boolean fileExists(char *fileName);
+/* Does a file exist? */
+
 #endif /* COMMON_H */
