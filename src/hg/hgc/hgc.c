@@ -109,6 +109,7 @@
 #include "tigrCmrGene.h"
 #include "llaInfo.h"
 #include "loweTrnaGene.h"
+#include "blastTab.h"
 #include "hgc.h"
 #include "genbank.h"
 #include "pseudoGeneLink.h"
@@ -128,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.572 2004/02/22 01:03:33 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.573 2004/02/23 10:15:15 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12145,6 +12146,88 @@ printTrackHtml(tdb);
 tigrCmrGeneFree(&tigr);
 }
 
+void doCrudeBlastP(struct trackDb *tdb, char *itemName, char *trackName)
+/* For the P.furiosus/P.aerophilum BLASTP tracks. */
+{
+struct sqlConnection *conn = hAllocConn(), *conn2;
+struct sqlResult *sr = NULL;
+struct minGeneInfo *mgi = NULL;
+struct blastTab *bt = NULL;
+char *queryDb = replaceChars(trackName,"BlastP",""), *thisDb = hGetDbName();
+char *bothNames = cloneString(itemName), *qname = chopPrefix(itemName);
+char **row;
+char *queryGenome = cloneString(trackName);
+char query[512];
+int hit = 1;
+
+genericHeader(tdb,bothNames);
+
+/* Print Target information */
+
+printf("<B>Target protein: </B>%s<br>\n",itemName);
+sprintf(query,"select * from gbProtCodeXra where name='%s'",itemName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    mgi = minGeneInfoLoad(row);
+    if (mgi != NULL)
+	{
+	printf("<B>Target note: </B>%s<br>\n",mgi->note);
+	printf("<B>Target product: </B>%s<br>\n",mgi->product);
+	}
+    }
+sqlFreeResult(&sr);
+minGeneInfoFree(&mgi);
+hFreeConn(&conn);
+
+/* Print Query information */
+
+conn2 = hAllocOrConnect(queryDb);
+printf("<B>Query protein: </B>%s<br>\n",qname);
+sprintf(query,"select * from gbProtCodeXra where name='%s'",qname);
+sr = sqlGetResult(conn2, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    mgi = minGeneInfoLoad(row);
+    if (mgi != NULL)
+	{
+	printf("<B>Target note: </B>%s<br>\n",mgi->note);
+	printf("<B>Target product: </B>%s<br>\n",mgi->product);
+	}
+    }
+sqlFreeResult(&sr);
+minGeneInfoFree(&mgi);
+hFreeConn(&conn2);
+hSetDb(thisDb);
+
+/* Print all the BLASTP info */
+
+conn = hAllocConn();
+sprintf(query,"select * from %sStuff where target='%s' and query='%s'",trackName, itemName,qname);
+printf("<br><hr>\n");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bt = blastTabLoad(row);
+    printf("<u><h3>Hit #%d</h3></u>",hit++);
+    printf("<B>Percent Identity: </B>%.2f<BR>\n",bt->identity);
+    printf("<B>E-value: </B>%.2E<BR>\n",bt->eValue);
+    printf("<B>Bit score: </B>%.2f<BR>\n",bt->bitScore);
+    printf("<B>Length of alignment: </B>%d<BR>\n",bt->aliLength);
+    printf("<B>Number of mismatches: </B>%d<BR>\n",bt->mismatch);
+    printf("<B>Number of gap openings: </B>%d<BR>\n",bt->gapOpen);
+    printf("<B>Query Start: </B>%d<BR>\n",bt->qStart+1);
+    printf("<B>Query End: </B>%d<BR>\n",bt->qEnd);
+    printf("<B>Target Start: </B>%d<BR>\n",bt->tStart+1);
+    printf("<B>Target End: </B>%d<BR>\n",bt->tEnd);
+    blastTabFree(&bt);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+freeMem(queryDb);
+freeMem(bothNames);
+}
+
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
 {
 struct bed *sgList = NULL;
@@ -13486,6 +13569,10 @@ else if (sameWord(track, "tigrCmrORFs"))
 else if (sameWord(track, "loweTrnaGene"))
     {
     doLoweTrnaGene(tdb,item);
+    }
+else if (startsWith("BlastP", track))
+    {
+    doCrudeBlastP(tdb,item,track);
     }
 /* else if (startsWith("lla", track))  */
 /*     { */
