@@ -348,14 +348,21 @@ o - Load into the database as so:
      hgLoadBed mm2 genscanSubopt genscanSubopt.bed
 
 
-TWINSCAN GENE PREDICTIONS (done 6/3/02 - pep todo)
+TWINSCAN GENE PREDICTIONS (done 6/3/02 - pep 6/7/02)
 
     mkdir -p ~/mm2/bed/twinscan
     cd ~/mm2/bed/twinscan
     wget http://genes.cs.wustl.edu/mouse/AllChr.tgz
+    wget http://genes.cs.wustl.edu/mouse/Ptx.tgz
     gunzip -c AllChr.tgz | tar xvf -
+    gunzip -c Ptx.tgz | tar xvf -
     ldHgGene mm2 twinscan chr*.gtf -exon=CDS
-    ??? hgPepPred mm2 generic twinscanPep *.prot
+    - pare down to id:
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
+      perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
+	chr$c.ptx > chr$c-fixed.fa
+    end
+    hgPepPred mm2 generic twinscanPep chr*-fixed.fa
 
 NCBI GENE MODELS (done 05/31/02)
 
@@ -751,7 +758,7 @@ LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo)
      mkdir -p ~/mm2/bed/ensRiken
      cd ~/mm2/bed/ensRiken
      wget http://www.ebi.ac.uk/~stabenau/mouse-riken.gz
-    *** wget http://www.ebi.ac.uk/~stabenau/mouse-riken.pep.gz
+     wget http://www.ebi.ac.uk/~stabenau/???
      gunzip -c mouse-riken.gz | \
        perl -w -p -e 's/^(\w)/chr$1/' > mouse-riken-fixed.gtf
      ldHgGene mgsc ensRiken mouse-riken-fixed.gtf

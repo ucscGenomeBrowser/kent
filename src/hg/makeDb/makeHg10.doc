@@ -333,14 +333,24 @@ Then ask admins to do a binrsync.
 
 
 
-TWINSCAN GENE PREDICTIONS (done 06/03/02 - pep todo)
+TWINSCAN GENE PREDICTIONS (done 06/03/02 - pep 06/07/02)
 
     mkdir -p ~/oo/bed/twinscan
     cd ~/oo/bed/twinscan
     wget http://genes.cs.wustl.edu/gp12/AllChrs.tgz
+    wget http://genes.cs.wustl.edu/human/Ptx.tgz
     gunzip -c AllChrs.tgz | tar xvf -
+    gunzip -c Ptx.tgz | tar xvf -
     ldHgGene hg10 twinscan *.gtf -exon=CDS
-    ??? hgPepPred hg10 generic twinscanPep *.prot
+    - pare down to id (and remove 0-length files) :
+    foreach f (chr*.ptx)
+      perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
+	$f > $f:r-fixed.fa
+      if (-z $f:r-fixed.fa) then
+        rm $f:r-fixed.fa
+      endif
+    end
+    hgPepPred hg10 generic twinscanPep chr*-fixed.fa
 
 
 CREATE GOLDEN TRIANGLE (todo)
