@@ -10,13 +10,13 @@ A = hgText
 O = $A.o
 
 my: compile
-	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
+	mv $A ${CGI_BIN}-$(USER)/$A
 
 alpha: compile
-	mv $A /usr/local/apache/cgi-bin/$A
+	mv $A ${CGI_BIN}/$A
 
 beta: compile
-	mv $A /usr/local/apache/cgi-bin-beta/$A
+	mv $A ${CGI_BIN}-beta/$A
 
 compile: $O 
 	${CC} $O $(MYLIBS) $(L) 
@@ -25,8 +25,10 @@ compile: $O
 	chmod a+rx $A
 
 install:	compile
-	mkdir -p ${DESTDIR}/usr/local/apache/cgi-bin
-	mv $A ${DESTDIR}/usr/local/apache/cgi-bin/$A
+	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
+		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
+	fi
+	mv $A ${DESTDIR}${CGI_BIN}/$A
 
 lib:
 	cd ../../lib; make
