@@ -61,13 +61,14 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s%s\">",
 	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
 	pslName, faName, extraCgi);
-    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
+    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>\n",
 	psl->match + psl->misMatch + psl->repMatch + psl->nCount,
 	100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 	skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
 	psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
     }
 pslFreeList(&pslList);
+printf("</TT></PRE>");
 }
 
 void blatSeq(char *userSeq)
@@ -120,6 +121,25 @@ carefulClose(&f);
 showAliPlaces(pslTn.forCgi, faTn.forCgi);
 }
 
+char *defaultOrDb(char *db)
+/* Return default database if db is null, else db. */
+{
+if (db == NULL)
+    db = database;
+return db;
+}
+
+char *dateForDb(char *db)
+/* Return date associated with database. */
+{
+if (db == NULL)
+   db = database;
+if (sameString(db, "hg6"))
+    return "12 Dec. 2000";
+else
+    return "7 Oct. 2000";
+}
+
 void askForSeq()
 /* Put up a little form that asks for sequence.
  * Call self.... */
@@ -133,7 +153,9 @@ printf("%s",
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"94%\">\n"
 "<TR>\n"
-"<TD WIDTH=\"85%\">Please paste in a DNA sequence to see where it is located in the Oct. 7, 2000 UCSC assembly\n"
+"<TD WIDTH=\"85%\">Please paste in a DNA sequence to see where it is located in the ");
+printf("%s ", dateForDb(db));
+printf("%s", "UCSC assembly\n"
 "of the human genome.</TD>\n"
 "<TD WIDTH=\"15%\">\n"
 "<CENTER>\n"
@@ -170,6 +192,7 @@ if (db != NULL)
     }
 else
     {
+    db = database;
     cgiContinueHiddenVar("port");
     cgiContinueHiddenVar("host");
     cgiContinueHiddenVar("nib");
@@ -178,8 +201,9 @@ else
 
 printf("%s", 
 "<P>Only the first 20,000 bases of a sequence will be used.  BLAT is designed to\n"
-"quickly find sequences of 95% and greater similarity of length 50 bases or\n"
-"more.  It may miss more divergent or shorter sequence alignments.</P>\n"
+"quickly find sequences of 95% and greater similarity of length 40 bases or\n"
+"more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
+"perfect sequence matches of 36 bases, and sometimes find them down to 24 bases.</P>\n"
 "<P>BLAT is not BLAST.  BLAT works by keeping an index of the entire genome\n"
 "in memory.  The index consists of all non-overlapping 12-mers except for\n"
 "those heavily involved in repeats.  The index takes up a bit less than\n"
