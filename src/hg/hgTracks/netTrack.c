@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.8 2003/05/21 22:01:37 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.9 2003/07/25 20:27:39 kate Exp $";
 
 struct netItem
 /* A net track item. */
@@ -71,16 +71,8 @@ static double rScale;   /* Scale from bases to pixels. */
 static boolean rIsFull; /* Full display? */
 
 static Color netColor(char *chrom)
-/* Get color for chromosome, caching a bit. */
 {
-static char *lastChrom = NULL;
-static Color color;
-if (chrom != lastChrom)
-    {
-    lastChrom = chrom;
-    color = getChromColor(lastChrom+3, rVg);
-    }
-return color;
+return getChromColor(chrom+3, rVg);
 }
 
 static void rNetBox(struct cnFill *fill, int start, int end, int y, int level,
