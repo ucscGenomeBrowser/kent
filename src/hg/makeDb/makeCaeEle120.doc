@@ -1,0 +1,238 @@
+#!/bin/sh
+echo "This is not a script"
+exit 255
+
+#########  Creating the Intronerator for C. elegans WS120 version
+#
+#	This is done after the Ce2 browser has been built, using
+#	the sequences from there.
+#
+
+#  Linking to sequence and creating NIB files (old style nibs)
+
+ssh hgwdev
+cd /projects/compbio/experiments/worm
+mkdir idb.120
+cd idb.120
+mkdir sanger
+ln -s /cluster/data/ce2/sanger/* sanger
+
+mkdir nt4
+cd nt4
+
+cat << '_EOF_' > dna2nt4.sh
+#!/bin/sh
+
+S=/cluster/data/ce2/sangerFa
+export S
+
+DoOne() {
+        if [ ! -f "$2.nt4" ]; then
+                echo "chr$1.fa -> $2.nt4"
+                rm -f $2.nt4 
+                fatont4 ${S}/chr$1.fa $2.nt4
+        else
+                echo "$2.nt4 already complete"
+        fi
+}
+
+DoOne M m
+DoOne I i
+DoOne II ii
+DoOne III iii
+DoOne IV iv
+DoOne X x
+DoOne V v
+'_EOF_'
+
+chmod +x dna2nt4.sh
+time ./dna2nt4.sh
+
+#  create features listings from gff files
+#	binary makec2c is in kent/src/reformat/makec2c
+
+ssh hgwdev
+cd /projects/compbio/experiments/worm/idb.ws120
+mkdir features
+time makec2c sanger features/c2c /dev/null > features/make.c2c.out 2>&1
+#	real    0m31.317s
+#	user    0m27.290s
+#	sys     0m3.220s
+
+mkdir features/sanger
+cd features/sanger
+echo "/projects/compbio/experiments/worm/idb.ws120/cDNA/" > cdna.dir
+echo "/projects/compbio/experiments/worm/idb.ws120/features/" > feat.dir
+echo "/projects/compbio/experiments/worm/idb.ws120/nt4/" > nt4.dir
+echo "/projects/compbio/experiments/worm/idb.ws120/xeno/" > xeno.dir
+cd ../..
+ln -s features/sanger/*.dir .
+
+makepgo features/c2c features/ .coo
+
+#  XXXXX
+#	This c2g isn't ready yet
+cd sanger
+time gffgenes ../features/sanger/c2g ../features/sanger/genes.gdf \
+	> ../features/sanger/gffgenes.out 2>&1
+#	real    0m36.061s
+#	user    0m31.660s
+#	sys     0m3.660s
+
+cd ..
+cp -p features/sanger/c2g features
+makepgo features/sanger/c2g features/sanger/ .pgo
+#	Writing 9 entries nameSize 11 into features/sanger/i.pgo
+#	Writing 7 entries nameSize 9 into features/sanger/ii.pgo
+#	Writing 7 entries nameSize 10 into features/sanger/iii.pgo
+#	Writing 8 entries nameSize 9 into features/sanger/iv.pgo
+#	Writing 6 entries nameSize 8 into features/sanger/v.pgo
+#	Writing 13 entries nameSize 10 into features/sanger/x.pgo
+#	Writing 0 entries nameSize 0 into features/sanger/m.pgo
+
+cd features/sanger
+indexgl genes.gdf genes.ix
+#	Reading input
+#	Got 50 offsets 12 nameSize.  Sorting...
+#	Writing index file 
+
+cd ../..
+ixword3 features/c2c features/c2c.ix
+#	Got 3391 offsets 10 nameSize.  Sorting...
+ixword3 features/c2g features/c2g.ix
+#	Got 50 offsets 12 nameSize.  Sorting...
+
+#	down load genbank mRNA's 
+#	mRNA_title.gb obtained from http://www.ncbi.nlm.nih.gov/entrez/
+#	with a search on "nucleotide" and a search string of:
+#	mRNA[Title] AND Caenorhabditis Elegans[Organism]
+
+#	resulting in 254069 matches, downloaded in "GenBank" format
+#	and a pretty significant file:
+
+#	-rw-rw-r--    1 hiram    572034420 Mar  2 00:28 mRNA_title.gb
+
+#	convert the downloaded genbank format into a .fa and a .cdi file:
+#	can build gb2cdi binary in src/reformat/gb2cdi
+#	make sure it gets into your cse home bin MACHTYPE directory
+#	for this kks00 operation
+#
+ssh kks00
+cd /projects/compbio/experiments/worm/idb.ws120/cDNA
+gb2cdi mRNA_title.gb allcdna.fa allcdna.cdi > gb2cdi.out 2>&1
+tail -4 gb2cdi.out
+#	96094 by Kohara, 1515 by Martin, 3184 by Stratagene,
+#		388 Univ Ariz/U Wash, 152880 full cDNAs
+#	0 male 141394 hermaphrodite 86165 mixed
+#	32 adult 71547 embryo 80454 varied 70110 L1 5180 L2 3346 L4 0 other
+#	253941 cDNAs in all
+
+#	previous counts were:
+#	96094 by Kohara, 1515 by Martin, 3184 by Stratagene,
+#		388 Univ Ariz/U Wash, 113712 full cDNAs
+#	1 male 141467 hermaphrodite 47123 mixed
+#	33 adult 55646 embryo 57368 varied 70127 L1 5180 L2 3346 L4 0 other
+#	214773 cDNAs in all
+time indexfa allcdna.fa allcdna.ix >> indexfa.out 2>&1
+#	real    0m15.549s
+#	user    0m5.660s
+#	sys     0m1.680s
+#
+#	fixup names from WABA alignments from Ce2
+#	to access cluster filesystems and projects/compbio, on hgwdev:
+ssh hgwdev
+cd /projects/compbio/experiments/worm/idb.ws120
+mkdir xeno
+cd xeno
+mkdir cbriggsae
+#!/bin/sh
+#
+RESULT=/projects/compbio/experiments/worm/idb.ws120/xeno/cbriggsae/all.st
+THERE=/cluster/data/ce2/bed/waba/out/
+
+for i in I II III IV V X M
+do
+        IChr=i
+        case $i in
+            I) IChr=i;;
+            II) IChr=ii;;
+            III) IChr=iii;;
+            IV) IChr=IV;;
+            V) IChr=v;;
+            X) IChr=x;;
+            M) IChr=m;;
+        esac
+        cd ${THERE}/chr${i}
+        ls c*.wab | while read FN
+        do
+        sed -e \
+"s#/iscratch/i/worms/Celegans2/unmaskedFa/chr${i}.fa.chr${i}#${IChr}#" ${FN}
+        done
+done > $RESULT
+
+#	back on kks00, index that all.st file, and st files
+ssh kks00
+cd /projects/compbio/experiments/worm/idb.ws120
+time ixxenost xeno/cbriggsae/all.st xeno/cbriggsae/all.ix
+#	real    4m29.919s
+#	user    3m50.790s
+#	sys     0m14.070s
+time stToXao xeno/cbriggsae/all.st xeno/cbriggsae/
+#	real    4m37.433s
+#	user    3m51.040s
+#	sys     0m14.650s
+
+cd /projects/compbio/experiments/worm/idb.ws120
+mkdir ra ea
+
+#	this needs ea/all.out which is from blasting the mRNA's
+time refiAli ea/all.out cDNA/allcdna nt4 ra/good.txt \
+        ra/bad.txt ra/cool.txt ra/err.txt 0 1000000 features/sanger/c2g \
+        > ra/refiAli.out 2>&1
+
+#  prepare mRNA alignments cluster job
+ssh eieio
+mkdir /cluster/bluearc/ce2/nt4
+mkdir /cluster/bluearc/ce2/exonAli
+cp -p  /projects/compbio/experiments/worm/idb.ws120/cDNA/allcdna.* \
+	/cluster/bluearc/ce2/exonAli
+cp -p  /projects/compbio/experiments/worm/idb.ws120/nt4/*.nt4 \
+	/cluster/bluearc/ce2/nt4
+ssh kkr1u00
+mkdir /iscratch/i/worms/Celegans2/nt4
+cp -p /cluster/bluearc/ce2/nt4/*.nt4 /iscratch/i/worms/Celegans2/nt4
+/cluster/bin/iSync
+ssh kk
+mkdir /cluster/data/ce2/bed/exonAli
+cd /cluster/data/ce2/bed/exonAli
+date | awk '
+{
+        for (i = 0; i < 253943; i+=200) {
+printf "runOne {check out line+ results/%06d.out} %d 200\n", i, i
+        }
+}
+' > jobList
+echo '#!/bin/sh' > runOne
+echo '/cluster/bin/i386/exonAli starting $1 \' >> runOne
+echo '	/cluster/bluearc/ce2/exonAli/allcdna.fa \' >> runOne
+echo '	/iscratch/i/worms/Celegans2/nt4 $2 $3 > out/$2.out' >> runOne
+chmod +x runOne
+para create jobList
+para try
+para push
+para time
+# Completed: 1270 of 1270 jobs
+# CPU time in finished jobs:     161830s    2697.16m    44.95h    1.87d  0.005 y
+# IO & Wait Time:                336112s    5601.87m    93.36h    3.89d  0.011 y
+# Average job time:                 392s       6.53m     0.11h    0.00d
+# Longest job:                      625s      10.42m     0.17h    0.01d
+# Submission to last job:           725s      12.08m     0.20h    0.01d
+
+cat results/*.out > /projects/compbio/experiments/worm/idb/idb.ws120/ea/all.out
+
+#	refine those alignments  (refiAli source is in src/cdnaAli/refineAli)
+ssh kks00
+cd /projects/compbio/experiments/worm/idb.ws120
+refiAli ea/all.out cDNA/allcdna nt4 ra/good.txt \
+        ra/bad.txt ra/cool.txt ra/err.txt 0 1000000 features/sanger/c2g \
+        > ra/refiAli.out 2>&1
