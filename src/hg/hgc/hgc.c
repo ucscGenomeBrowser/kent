@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.670 2004/06/17 02:06:38 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.671 2004/06/18 22:08:52 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7537,8 +7537,8 @@ if (startsWith(track,"pseudoMrna") || startsWith(track,"pseudoGeneLink"))
         safef(table, sizeof(table), "mrnaBlastz");
     else
         {
-        if (hTableExists("mrnaBlat") )
-            safef(table, sizeof(table), "mrnaBlat");
+        if (hTableExists("pseudoMrna") )
+            safef(table, sizeof(table), "pseudoMrna");
         }
     }
 else 
