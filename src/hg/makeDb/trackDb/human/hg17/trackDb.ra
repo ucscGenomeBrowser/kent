@@ -104,6 +104,7 @@ group compGeno
 priority 109
 visibility pack
 #color 0, 10, 100
+#altColor 255,128,0
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
@@ -935,7 +936,7 @@ longLabel Insertions into the human genome found by indelible
 priority 11
 group x
 visibility dense
-type bed 3 +
+type bed 4 +
 
 track tarjeiUnverify
 shortLabel Unverified Tarjei
