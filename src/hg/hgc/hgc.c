@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.465 2003/08/08 01:01:27 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.466 2003/08/12 04:42:00 booch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -148,7 +148,7 @@ char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&d
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
-char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
+char *gdbScript = "http://gdb.wehi.edu.au/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 
