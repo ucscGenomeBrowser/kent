@@ -27,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
     {"dropped", OPTION_STRING},
     {"merge", OPTION_BOOLEAN},
     {"overlapThreshold", OPTION_FLOAT},
+    {"idOutput", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -46,6 +47,7 @@ unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
 boolean doMerge = FALSE;
 boolean nonOverlapping = FALSE;
+boolean idOutput = FALSE;
 float overlapThreshold = 0.0;
 
 struct ioFiles
@@ -82,6 +84,42 @@ errAbort("can't determine file format of %s", path);
 return UNKNOWN_FMT;
 }
 
+static void writeId(struct chromAnn* ca, FILE* out)
+/* output and id, or <unknown> if not known */
+{
+fputs(((ca->name == NULL) ? "<unknown>" : ca->name), out);
+}
+
+static void outputMerge(struct chromAnn* inCa, struct ioFiles *ioFiles,
+                        struct slRef *overlappedRecLines)
+/* output for the -merge option; pairs of inRec and overlap */
+{
+struct slRef *selectCaRef;
+for (selectCaRef = overlappedRecLines; selectCaRef != NULL; selectCaRef = selectCaRef->next)
+    {
+    struct chromAnn *selectCa = selectCaRef->val;
+    fputs(inCa->recLine, ioFiles->outFh);
+    fputc('\t', ioFiles->outFh);
+    fputs(selectCa->recLine, ioFiles->outFh);
+    fputc('\n', ioFiles->outFh);
+    }
+}
+
+static void outputIds(struct chromAnn* inCa, struct ioFiles *ioFiles,
+                        struct slRef *overlappedRecLines)
+/* output for the -idOutput option; pairs of inRec and overlap ids */
+{
+struct slRef *selectCaRef;
+for (selectCaRef = overlappedRecLines; selectCaRef != NULL; selectCaRef = selectCaRef->next)
+    {
+    struct chromAnn *selectCa = selectCaRef->val;
+    writeId(inCa, ioFiles->outFh);
+    fputc('\t', ioFiles->outFh);
+    writeId(selectCa, ioFiles->outFh);
+    fputc('\n', ioFiles->outFh);
+    }
+}
+
 static void doOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
 /* Check if a chromAnn object is overlapped given the criteria, and if so
  * output */
@@ -90,22 +128,13 @@ struct slRef *overlappedRecLines = NULL, *selectCaRef;
 boolean overlaps = FALSE;
 
 overlaps = selectIsOverlapped(selectOpts, inCa, overlapThreshold,
-                              (doMerge ? &overlappedRecLines : NULL));
+                              ((doMerge || idOutput) ? &overlappedRecLines : NULL));
 if ((nonOverlapping) ? !overlaps : overlaps)
     {
     if (doMerge)
-        {
-        /* out pairs of inRec and overlap */
-        for (selectCaRef = overlappedRecLines; selectCaRef != NULL; selectCaRef = selectCaRef->next)
-            {
-            struct chromAnn *selectCa = selectCaRef->val;
-            fputs(inCa->recLine, ioFiles->outFh);
-            fputc('\t', ioFiles->outFh);
-            fputs(selectCa->recLine, ioFiles->outFh);
-            fputc('\n', ioFiles->outFh);
-            }
-        slFreeList(&overlappedRecLines);
-        }
+        outputMerge(inCa, ioFiles, overlappedRecLines);
+    else if (idOutput)
+        outputIds(inCa, ioFiles, overlappedRecLines);
     else
         {
         fputs(inCa->recLine, ioFiles->outFh);
@@ -114,9 +143,14 @@ if ((nonOverlapping) ? !overlaps : overlaps)
     }
 else if (ioFiles->dropFh != NULL)
     {
-    fputs(inCa->recLine, ioFiles->dropFh);
+    if (idOutput)
+        writeId(inCa, ioFiles->dropFh);
+    else
+        fputs(inCa->recLine, ioFiles->dropFh);
     fputc('\n', ioFiles->dropFh);
     }
+
+slFreeList(&overlappedRecLines);
 }
 
 void pslSelect(struct ioFiles *ioFiles)
@@ -273,6 +307,7 @@ errAbort("%s:\n"
          "         inRec<tab>selectRec.\n"
          "      if multiple select records hit, inRec is repeated.\n"
          "      This will increase the memory required\n"
+         "  -idOutput - output a list of pairs of inId<tab>selectId\n"
          "  -verbose=n - verbose > 1 prints some details\n",
          msg);
 }
@@ -336,6 +371,9 @@ if (optionExists("excludeSelf"))
     selectOpts |= selExcludeSelf;
 overlapThreshold = optionFloat("overlapThreshold", 0.0);
 doMerge = optionExists("merge");
+idOutput = optionExists("idOutput");
+if (doMerge && idOutput)
+    errAbort("can't specify both -merge and -idOutput");
 if (doMerge)
     {
     if (nonOverlapping)
