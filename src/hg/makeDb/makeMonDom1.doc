@@ -1085,10 +1085,13 @@ done
 
     # Load chains into database (takes about 4 hours).
     hgLoadChain -tIndex monDom1 chainHg17 all.chain
-    #	nearly 4 hours
-    #	I wonder if this would go better if loaded without an index,
-    #	then create the index after ?
-    #	Examining the index, it doesn't look too good.
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainHg17;"
+    hgsql monDom1 -e "analyze table chainHg17Link;"
+
+    #	check featureBits
     featureBits monDom1 chainHg17Link
     #	459086956 bases of 3492108230 (13.146%) in intersection
     featureBits monDom1 chainHg17
@@ -1430,8 +1433,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.galGal2/axtChain
     netClass -noAr noClass.net galGal2 monDom1 chicken.net
-XXXX - RUNNING - 2004-12-15 15:57
-    #	41 minutes
+    #	56 minutes
     rm noClass.net
 
     # Load the nets into database 
@@ -1441,11 +1443,13 @@ XXXX - RUNNING - 2004-12-15 15:57
     #	4 minutes
     #	compare featureBits with some other assemblies
     featureBits galGal2 netMonDom1
-    #	2595812636 bases of 2866216770 (90.566%) in intersection
-    featureBits galGal2 netBosTau1
-    #	2261085097 bases of 2866216770 (78.887%) in intersection
-    featureBits galGal2 netRn3
-    #	2817656275 bases of 2866216770 (98.306%) in intersection
+    #	771045333 bases of 1054197620 (73.140%) in intersection
+    featureBits galGal2 netHg17
+    #	908340945 bases of 1054197620 (86.164%) in intersection
+    featureBits galGal2 netMm5
+    #	835277984 bases of 1054197620 (79.234%) in intersection
+    featureBits galGal2 netXenTro1
+    #	674438463 bases of 1054197620 (63.976%) in intersection
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create CHICKEN TO OPOSSUM chain, net
@@ -1453,46 +1457,46 @@ XXXX - RUNNING - 2004-12-15 15:57
     cd /cluster/data/monDom1/bed
     mkdir -p bz.galGal2/axtChain
     chainSwap zb.galGal2/axtChain/all.chain bz.galGal2/axtChain/all.chain
-    #	4 minutes
+    #	1 minute
 
     cd bz.galGal2/axtChain
-    chainPreNet all.chain ../../zb.galGal2/S2.len ../../zb.galGal2/S1.len stdout \
+    chainPreNet all.chain ../../zb.galGal2/S2.len \
+		../../zb.galGal2/S1.len stdout \
 	| chainNet stdin -minSpace=1 ../../zb.galGal2/S2.len \
 		../../zb.galGal2/S1.len stdout /dev/null \
 	| netSyntenic stdin noClass.net
-    #	10 minutes
+    #	2 minutes
     mkdir ../axtNet
     netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
 	/cluster/data/galGal2/nib ../axtNet/all.axt
-    #	23 minutes
+    #	6 minutes
 
     # Classify net and load into database
     ssh hgwdev
     cd /cluster/data/monDom1/bed/bz.galGal2/axtChain
     netClass -noAr noClass.net monDom1 galGal2 monDom1.net
-    #	16 minutes
+    #	31 minutes
     rm noClass.net
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netGalGal2 stdin
-    #	6 minutes
+    #	4 minutes
 
     # Load chains into database (takes about 4 hours).
     hgLoadChain -tIndex monDom1 chainGalGal2 all.chain
-    #	nearly 4 hours
-    #	I wonder if this would go better if loaded without an index,
-    #	then create the index after ?
-    #	Examining the index, it doesn't look too good.
-    featureBits monDom1 chainGalGal2Link
-    #	459086956 bases of 3492108230 (13.146%) in intersection
-    featureBits monDom1 chainGalGal2
-    #	3246158618 bases of 3492108230 (92.957%) in intersection
-    featureBits monDom1 netGalGal2
-    #	3223616544 bases of 3492108230 (92.311%) in intersection
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainGalGal2;"
+    hgsql monDom1 -e "analyze table chainGalGal2Link;"
 
+    featureBits monDom1 chainGalGal2Link
+    #	110933245 bases of 3492108230 (3.177%) in intersection
+    featureBits monDom1 chainGalGal2
+    #	2437546469 bases of 3492108230 (69.802%) in intersection
 
 # BLASTZ CHICKEN CLEAN UP (TBD)
     rm chain.tab link.tab
 
-# ALIGN TO MOUSE (WORKING - 2004-12-14 - Hiram)
+# ALIGN TO MOUSE (DONE - 2004-12-16 - Hiram)
 #	NAMING CONVENTION: the zb.mm5 directory will be the Opossum
 #	aligned to the Mouse blastz result.
 #	The bz.mm5 directory will the swapped result, Mouse aligned
@@ -1554,13 +1558,14 @@ SEQ2_LEN=$BASE/S2.len
 
     cd run.0
     para try, push check, para push, para check....
-XXXX - RUNNING - 2004-12-14 15:52
 # Completed: 112871 of 112871 jobs
-# CPU time in finished jobs:   42061387s  701023.12m 11683.72h  486.82d  1.334 y
-# IO & Wait Time:                578862s    9647.70m   160.80h    6.70d  0.018 y
-# Average job time:                 378s       6.30m     0.10h    0.00d
-# Longest job:                     3157s      52.62m     0.88h    0.04d
-# Submission to last job:         81243s    1354.05m    22.57h    0.94d
+# CPU time in finished jobs:   36169619s  602826.99m 10047.12h  418.63d  1.147 y
+# IO & Wait Time:                452242s    7537.36m   125.62h    5.23d  0.014 y
+# Average job time:                 324s       5.41m     0.09h    0.00d
+# Longest job:                     2755s      45.92m     0.77h    0.03d
+# Submission to last job:        153519s    2558.65m    42.64h    1.78d
+    #	extra delay in this run due to disk problems in the middle and
+    #	thus being interrupted
 
     #	Second cluster run to convert the .out's to .lav's
     #	You do NOT want to run this on the big cluster.  It brings
@@ -1572,11 +1577,11 @@ XXXX - RUNNING - 2004-12-14 15:52
     cd run.1
     para try, check, push, etc ...
 # Completed: 341 of 341 jobs
-# CPU time in finished jobs:       3525s      58.75m     0.98h    0.04d  0.000 y
-# IO & Wait Time:                 11315s     188.58m     3.14h    0.13d  0.000 y
-# Average job time:                  44s       0.73m     0.01h    0.00d
-# Longest job:                      181s       3.02m     0.05h    0.00d
-# Submission to last job:          1524s      25.40m     0.42h    0.02d
+# CPU time in finished jobs:       3131s      52.19m     0.87h    0.04d  0.000 y
+# IO & Wait Time:                  9815s     163.58m     2.73h    0.11d  0.000 y
+# Average job time:                  38s       0.63m     0.01h    0.00d
+# Longest job:                      223s       3.72m     0.06h    0.00d
+# Submission to last job:          1267s      21.12m     0.35h    0.01d
 
     # third run: lav -> axt (an I/O bound process, run only on fileserver)
     #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
@@ -1594,7 +1599,7 @@ do
     echo -n "${L} -> ${chr}.axt working ... "
     cat `ls -1 *.lav | sort -g` \
 	| lavToAxt stdin \
-	/iscratch/i/mm5/bothMaskedNibs \
+	/scratch/mus/mm5/softNib \
 	/iscratch/i/monDom1/chunks.2bit stdout \
 	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
 	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
@@ -1608,6 +1613,7 @@ done
 
     chmod +x lav2axt.sh
     ./lav2axt.sh
+    #	38 minutes
 
     #	load this blast result just to see how it looks
     #	It is not needed in the browser after the chains and nets are
@@ -1615,15 +1621,198 @@ done
     ssh hgwdev
     cd /cluster/data/monDom1/bed/zb.mm5/pslChrom
     hgLoadPsl -table=blastzMonDom1 -noTNameIx mm5 chrM.psl
+    bash		#	if you are csh normally
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx mm5 ${I}
         echo "done: ${I}"
     done
+    #	12 minutes
+    exit		#	back to csh if you are csh normally
     #	Let's see what featureBits has to say about this data
     featureBits mm5 blastzMonDom1
-    # 486216407 bases of 2866216770 (16.964%) in intersection
+    263272041 bases of 2615483787 (10.066%) in intersection
+
+# CHAIN MOUSE BLASTZ  (TBD)
+    # Run axtChain on file server, job is mostly I/O, cluster does not help
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+
+    ls -1S /cluster/data/monDom1/bed/zb.mm5/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > doChain.sh
+#!/bin/sh
+for chrAxtFile in `cat input.lst`
+do
+    chr=`basename ${chrAxtFile}`
+    axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+	-linearGap=../../opossumMouseTuned.gap \
+	-minScore=5000 ${chrAxtFile} \
+	/scratch/mus/mm5/softNib \
+	/cluster/data/monDom1/monDom1.2bit chainRaw/${chr}.chain > out/${chr}.out
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # Reuse gap penalties from mouse run.
+    cat << '_EOF_' | sed 's/  */\t/g' > ../../opossumMouseTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x doChain
+    time ./doChain
+XXXX - RUNNING - 2004-12-16 14:32
+    #	42 minutes
+
+    # On the cluster server weed the chains for repeats
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    mkdir chain
+    cd run1/chainRaw
+    bash			# if you are normally csh
+    for i in *.chain
+    do
+        chainAntiRepeat /scratch/mus/mm5/softNib \
+		/cluster/data/monDom1/monDom1.2bit $i ../../chain/$i
+	echo "$i done"
+    done
+    #	7 minutes
+    exit			# exit bash if you are normally csh
+
+    # now on the cluster server, sort chains.  The chainMergeSort and
+    # chainSplit steps each take less than a minute
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    chainMergeSort chain/*.chain > all.chain
+    mv chain chainBeforeMerge
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database.  This takes an hour
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain/chain
+    bash		#	if you are csh normally
+    for i in *.chain
+    do
+	c=${i/.chain/}
+	echo "loading ${c}"
+	hgLoadChain mm5 ${c}_chainMonDom1 $i
+    done
+    #	4 minutes
+    exit		#	exit bash if you are csh normally
+
+    #	Compare to some other organisms
+    featureBits mm5 chainMonDom1
+    #	782212657 bases of 1054197620 (74.200%) in intersection
+    featureBits mm5 chainHg17
+    #	921410328 bases of 1054197620 (87.404%) in intersection
+    featureBits mm5 chainXenTro1
+    #	691628520 bases of 1054197620 (65.607%) in intersection
+    featureBits mm5 chainMm5
+    #	846905330 bases of 1054197620 (80.336%) in intersection
+
+# NET OPOSSUM TO MOUSE BLASTZ (TBD)
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    #	2 minutes
+
+    # Create axt files for the net as so:
+    netSplit noClass.net noClass
+    #	1 minute
+    cd noClass
+    mkdir ../../axtNet
+    bash		#	if you are csh normally
+    for i in *.net
+    do
+	r=${i/.net/}
+	netToAxt $i ../chain/${r}.chain /scratch/mus/mm5/softNib \
+		/cluster/data/monDom1/monDom1.2bit ../../axtNet/${r}.axt
+    done
+    #	6 minutes
+    exit		#	back to csh if you are csh normally
+
+    cd ..
+    rm -r noClass
+    
+    # Add classification info using db tables: 
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.mm5/axtChain
+    netClass -noAr noClass.net mm5 monDom1 mouse.net
+    #	56 minutes
+    rm noClass.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/zb.mm5/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet mm5 netMonDom1 stdin
+    #	4 minutes
+    #	compare featureBits with some other assemblies
+    featureBits mm5 netMonDom1
+    #	771045333 bases of 1054197620 (73.140%) in intersection
+    featureBits mm5 netBosTau1
+    #	2261085097 bases of 2866216770 (78.887%) in intersection
+    featureBits mm5 netRn3
+    #	2817656275 bases of 2866216770 (98.306%) in intersection
+
+# SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
+#	Create MOUSE TO OPOSSUM chain, net
+    ssh eieio
+    cd /cluster/data/monDom1/bed
+    mkdir -p bz.mm5/axtChain
+    chainSwap zb.mm5/axtChain/all.chain bz.mm5/axtChain/all.chain
+    #	1 minute
+
+    cd bz.mm5/axtChain
+    chainPreNet all.chain ../../zb.mm5/S2.len \
+		../../zb.mm5/S1.len stdout \
+	| chainNet stdin -minSpace=1 ../../zb.mm5/S2.len \
+		../../zb.mm5/S1.len stdout /dev/null \
+	| netSyntenic stdin noClass.net
+    #	2 minutes
+    mkdir ../axtNet
+    netToAxt noClass.net all.chain /cluster/data/monDom1/monDom1.2bit \
+	/scratch/mus/mm5/softNib ../axtNet/all.axt
+    #	6 minutes
+
+    # Classify net and load into database
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/bz.mm5/axtChain
+    netClass -noAr noClass.net monDom1 mm5 monDom1.net
+    #	31 minutes
+    rm noClass.net
+    netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netMm5 stdin
+    #	4 minutes
+
+    # Load chains into database (takes about 4 hours).
+    hgLoadChain -tIndex monDom1 chainMm5 all.chain
+    # if you do a 'show index' SQL reports Cardinality NULL for the tName
+    #	indexes although they are actually working.   To make the
+    #	cardinality show up:
+    hgsql monDom1 -e "analyze table chainMm5;"
+    hgsql monDom1 -e "analyze table chainMm5Link;"
+
+    featureBits monDom1 chainMm5Link
+    #	110933245 bases of 3492108230 (3.177%) in intersection
+
+    featureBits monDom1 chainMm5
+    #	3246158618 bases of 3492108230 (92.957%) in intersection
+    featureBits monDom1 netMm5
+    #	3223616544 bases of 3492108230 (92.311%) in intersection
+
+# BLASTZ MOUSE CLEAN UP (TBD)
+    rm chain.tab link.tab
 
 # MAKE Human Proteins track (hg17 DONE 2004-12-15 braney)
     ssh eieio
