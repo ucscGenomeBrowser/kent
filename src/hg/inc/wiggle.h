@@ -376,6 +376,10 @@ void wigFreeData(struct wiggleData **wigData);
 
 #define wiggleDataFreeList(a) wigFreeData(a)
 
+int minSpan(struct sqlConnection *conn, char *table, char *chrom,
+	int winStart, int winEnd, struct cart *cart);
+/*	determine minimum span in this area	*/
+
 int spanInUse(struct sqlConnection *conn, char *table, char *chrom,
 	int winStart, int winEnd, struct cart *cart);
 /*	determine span used in drawing in hgTracks	*/
