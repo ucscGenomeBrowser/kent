@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.120 2003/12/02 08:01:03 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.121 2003/12/03 19:24:26 fanhsu Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -471,7 +471,7 @@ hFreeConn(&conn);
 }
 
 static void findSuperfamily(char *spec, struct hgPositions *hgp)
-/* Look up superfamily entry using sfDescription table. */
+/* Look up Superfamily entry using sfDescription table. */
 {
 struct sqlConnection *conn  = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
@@ -483,20 +483,18 @@ boolean gotOne = FALSE;
 struct hgPosTable *table = NULL;
 struct hgPos *pos;
 struct bed *bed;
-
-char *tname;
+boolean ok;
 char *desc;
 
-AllocVar(table);
-slAddHead(&hgp->tableList, table);
-table->description = cloneString("Superfamily Associated Search Results");
-table->name = cloneString("superfamily");
-
+if (!hTableExists("superfamily")) return;
+ 
+ok = FALSE;
 dyStringClear(ds);
-dyStringPrintf(ds, "select name, description from sfDescription where description like'%c%s%c';", '%',spec,'%');
+dyStringPrintf(ds, "select name, description from sfDescription where description like'%c%s%c';", 
+	       '%',spec,'%');
 sr2 = sqlGetResult(conn2, ds->string);
-
-while ((row2 = sqlNextRow(sr2)) != NULL)
+row2 = sqlNextRow(sr2);
+while (row2 != NULL)
     {
     dyStringClear(ds);
     dyStringPrintf(ds, "select * from superfamily where name = '%s';", row2[0]);
@@ -504,6 +502,14 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
         
     while ((row = sqlNextRow(sr)) != NULL)
     	{
+	if (ok == FALSE)
+            {
+            ok = TRUE;
+	    AllocVar(table);
+	    slAddHead(&hgp->tableList, table);
+	    table->description = cloneString("Superfamily Associated Search Results");
+	    table->name = cloneString("superfamily");
+	    }
     	bed = bedLoad3(row+1);
  
     	AllocVar(pos);
@@ -517,6 +523,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     	pos->chromEnd   = bed->chromEnd + (bed->chromEnd - bed->chromStart)/100*10;
     	}
     sqlFreeResult(&sr);
+    row2 = sqlNextRow(sr2);
     }
 sqlFreeResult(&sr2);
 freeDyString(&ds);
@@ -3217,7 +3224,7 @@ else
 
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
-    if (hTableExists("superfamily")) findSuperfamily(query, hgp);
+    findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
     findFosEndPairs(query, hgp);
