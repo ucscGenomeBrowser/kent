@@ -414,7 +414,7 @@ shortLabel HapMap LD
 longLabel HapMap Linkage Disequilibrium
 group varRep
 priority 144.5
-visibility hide
+visibility dense
 canPack off
 type bed 4 +
 
