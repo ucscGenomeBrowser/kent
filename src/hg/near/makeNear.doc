@@ -100,6 +100,8 @@ hgMapToGene $db refGene knownGene knownToRefSeq
 echo "select mrnaAcc,locusLinkId from refLink" | hgsql -N $db > refToLl.txt
 hgMapToGene $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt $db knownGene name proteinID Pfam knownToPfam
 
 # Create a table that maps between known genes and 
 # the nice affyUcla expression data.
