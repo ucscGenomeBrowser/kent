@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.5 2004/04/15 00:39:29 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.6 2005/02/05 00:29:18 angie Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -163,6 +163,8 @@ field = cloneString(ptr + strlen(" where "));
 ptr = strchr(field, '=');
 if (ptr == NULL)
     ptr = strstr(field, " like ");
+if (ptr == NULL)
+    ptr = strstr(field, " rlike ");
 if (ptr == NULL)
     errAbort("Can't find \"=\" or \" like \" after \" where %s\" in query "
 	     "\"%s\" for search %s",
