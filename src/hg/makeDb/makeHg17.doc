@@ -13498,7 +13498,7 @@ SEQ2_LEN=$BASE/S2.len
     hgsql hg17 -N -e "select * from knownGene" >kg.gp
     hgsql hg17 -N -e "select * from refGene"   >ref.gp
 
-    overlapSelect -inCds -strand  -idOutput -fraction=fraction.out -selectCds -overlapThreshold=0.90 -selectFmt=genePred -inFmt=genePred kg.gp ref.gp refSeqKg.90.tab
+    overlapSelect -inCds -strand  -idOutput -fraction=fraction.out -selectCds -overlapSimilarity=0.90 -selectFmt=genePred -inFmt=genePred kg.gp ref.gp refSeqKg.90.tab
     cat fraction.out|sort -u >refSeqKg.tab
 
     hgsql hg17 -e 'drop table refSeqKg'
