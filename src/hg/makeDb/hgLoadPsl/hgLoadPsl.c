@@ -109,7 +109,6 @@ for (i = 0; i<pslCount; ++i)
 	struct lineFile *lf = pslFileOpen(pslName);
 	while ((psl = pslNext(lf)) != NULL)
 	    {
-	    uglyf("%s line %d\n", lf->fileName, lf->lineIx);
 	    fprintf(f, "%u\t", hFindBin(psl->tStart, psl->tEnd));
 	    pslTabOut(psl, f);
 	    pslFree(&psl);

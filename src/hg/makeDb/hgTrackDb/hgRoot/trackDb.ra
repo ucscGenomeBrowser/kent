@@ -415,6 +415,7 @@ altColor 255,240,200
 spectrum on
 type bed 5 .
 visibility dense
+url http://pipeline.lbl.gov/cgi-bin/zBrowser.pl?chrom=$s&from=$[&to=$]&hg=$D&dGenome=dGenome2
 
 track avidRepeat
 shortLabel Avid Rep Mouse
