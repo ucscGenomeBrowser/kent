@@ -616,6 +616,8 @@ para push
                   Default 20160 (2 weeks).
       -delayTime=N  Number of seconds to delay before submitting next job
                to minimize i/o load at startup - default 0.
+      -eta  Show estimated time to completion with 'time' function.
+            This is a rough estimated based on average job time and jobs left
       -priority=x  Set batch priority to high, medium, or low.
                   Default medium (use high only with approval).
                   If needed, use with make, push, create, shove, or try.
@@ -625,7 +627,7 @@ para push
 	          100 is low for bottomfeeders.
 	          Setting priority higher than normal (1-9) will be logged.
 		  Please keep low priority jobs short, they won't be pre-empted.
-											     
+
 para try
    This is like para push, but only submits up to 10 jobs.
 
@@ -668,6 +670,7 @@ para running
 
 para time
    List timing information.
+   with option: -eta also show estimated time to completion.
       
 para recover jobList newJobList
    Generate a job list by selecting jobs from an existing list where
@@ -1001,4 +1004,3 @@ options:
 </body>
 
 </html>
-
