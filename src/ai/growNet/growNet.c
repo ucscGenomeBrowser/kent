@@ -7,7 +7,7 @@
 #include "dlist.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: growNet.c,v 1.5 2004/11/13 05:31:25 kent Exp $";
+static char const rcsid[] = "$Id: growNet.c,v 1.6 2004/11/24 17:17:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -150,6 +150,22 @@ dumpSymbols(il->history, ArraySize(il->history));
 printf("'\n");
 }
 
+struct dlNode *randomCycleList(struct dlList *list)
+/* Pick a random number from 1 to 15.  Move the head of the
+ * list to the tail that number of times, and return the head. */
+{
+struct dlNode *node;
+int count = (rand()&15) + 1;
+if (list == NULL || dlEmpty(list))
+    return NULL;
+while (--count >= 0)
+    {
+    node = dlPopHead(list);
+    dlAddTail(list, node);
+    }
+return list->head;
+}
+
 
 struct associator *associatorNewEmpty(struct growNet *gn, struct interleaver *il)
 /* Create a new associator that subscribes to interleaver. */
@@ -259,7 +275,7 @@ else
     }
 }
 
-struct associator *associatorNewRandom(struct growNet *gn, struct interleaver *il)
+struct associator *associatorNewRandom(struct growNet *gn)
 /* Create a new random associator. */
 {
 /* We cycle through each of the arrays below to determine the
@@ -272,6 +288,8 @@ static int orders[] = {1, 0, 0};
 static int orderIx = 0;
 static int boundaries[] = {1, 0};
 static int boundaryIx = 0;
+struct dlNode *ilNode = randomCycleList(gn->interleavers);
+struct interleaver *il = ilNode->val;
 struct associator *assoc = associatorNewEmpty(gn, il);
 int i;
 
@@ -288,7 +306,7 @@ AllocArray(assoc->symbols, assoc->symbolCount);
 assert(assoc->symbolCount <= ArraySize(il->history));
 for (i=0; i<assoc->symbolCount; ++i)
     assoc->symbols[i] = il->history[i];
-uglyf("Creating associator: %d %d %d\n   ", assoc->symbolCount, assoc->forceOrder, assoc->forceBoundaries);
+uglyf("Creating associator on %d: %d %d %d\n   ", il->id, assoc->symbolCount, assoc->forceOrder, assoc->forceBoundaries);
 dumpAssociator(assoc);
 allocatePredictions(assoc);
 assoc->score = 0.5;
@@ -301,8 +319,8 @@ struct interleaver *interleaverNew(struct growNet *gn, boolean compressRuns)
 struct interleaver *il;
 int i;
 AllocVar(il);
-if (gn != NULL)
-    il->selfNode = dlAddValTail(gn->interleavers, il);
+il->id = gn->nextId++;
+il->selfNode = dlAddValTail(gn->interleavers, il);
 il->inList = dlListNew();
 il->inDone = dlListNew();
 il->subscriptions = dlListNew();
@@ -668,22 +686,6 @@ for (node = il->subscriptions->head; !dlEnd(node); node = node->next)
     }
 }
 
-struct dlNode *randomCycleList(struct dlList *list)
-/* Pick a random number from 1 to 15.  Move the head of the
- * list to the tail that number of times, and return the head. */
-{
-struct dlNode *node;
-int count = (rand()&15) + 1;
-if (list == NULL || dlEmpty(list))
-    return NULL;
-while (--count >= 0)
-    {
-    node = dlPopHead(list);
-    dlAddTail(list, node);
-    }
-return list->head;
-}
-
 struct classifier *classifierNewRandom(struct growNet *gn, int inputCount)
 /* Create new classifier with inputCount random inputs. */
 {
@@ -728,7 +730,7 @@ interleaverRecordInput(gn->inputInterleaver, sym);
 dumpInterleaver(gn->inputInterleaver);
 propagateFromInterleaver(gn, gn->inputInterleaver);
 for (i=0; i<5; ++i)
-    assoc = associatorNewRandom(gn, gn->inputInterleaver);
+    assoc = associatorNewRandom(gn);
 cl = classifierNewRandom(gn, 3);
 il = interleaverNew(gn, TRUE);
 interleaverAddStream(il, cl);
@@ -745,6 +747,8 @@ struct growNet *gn = growNetNew();
 readInGulp(inFile, &inBuf, &inSize);
 for (i=0; i<inSize; ++i)
     growNetNext(gn, inBuf[i]);
+verbose(1, "At end %d associators, %d classifiers, %d interleavers\n",
+	dlCount(gn->associators), dlCount(gn->classifiers), dlCount(gn->interleavers));
 }
 
 int main(int argc, char *argv[])

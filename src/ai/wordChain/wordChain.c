@@ -8,6 +8,10 @@
 #include "rbTree.h"
 
 int maxChainSize = 3;
+int minUse = 1;
+boolean lower = FALSE;
+boolean unpunc = FALSE;
+boolean fullOnly = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,14 +24,22 @@ errAbort(
   "   -size=N - Set max chain size, default %d\n"
   "   -chain=fileName - Write out word chain to file\n"
   "   -nonsense=fileName - Write out predicted nonsense to file\n"
-  , maxChainSize
+  "   -lower - Lowercase all words\n"
+  "   -unpunc - Strip punctuation\n"
+  "   -fullOnly - Only output chains of size\n"
+  "   -minUse=N - Set minimum use in output chain, default %d\n"
+  , maxChainSize, minUse
   );
 }
 
 static struct optionSpec options[] = {
    {"size", OPTION_INT},
+   {"minUse", OPTION_INT},
    {"nonsense", OPTION_STRING},
    {"chain", OPTION_STRING},
+   {"lower", OPTION_BOOLEAN},
+   {"unpunc", OPTION_BOOLEAN},
+   {"fullOnly", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -102,14 +114,19 @@ void wordTreeDump(int level, struct wordTree *wt, FILE *f)
 static char *words[64];
 struct slRef *list, *ref;
 int i;
-int followingCount = 0;
 assert(level < ArraySize(words));
+
 words[level] = wt->word;
-for (i=1; i<=level; ++i)
-    fprintf(f, "%s ", words[i]);
-if (wt->following)
-    followingCount = wt->following->n;
-fprintf(f, "%d %d\n", wt->useCount, followingCount);
+if (wt->useCount >= minUse)
+    {
+    if (!fullOnly || level == maxChainSize)
+	{
+	fprintf(f, "%d\t", wt->useCount);
+	for (i=1; i<=level; ++i)
+	    fprintf(f, "%s ", words[i]);
+	fprintf(f, "\n");
+	}
+    }
 if (wt->following != NULL)
     {
     list = rbTreeItems(wt->following);
@@ -241,8 +258,24 @@ struct rbTreeNode **stack;
 stack = lmAllocArray(lm, stack, 256);
 while (lineFileNext(lf, &line, NULL))
     {
+    if (lower)
+        tolowers(line);
     while ((word = nextWord(&line)) != NULL)
 	{
+	if (unpunc)
+	    {
+	    stripChar(word, ',');
+	    stripChar(word, '.');
+	    stripChar(word, ';');
+	    stripChar(word, '-');
+	    stripChar(word, '"');
+	    stripChar(word, '?');
+	    stripChar(word, '!');
+	    stripChar(word, '(');
+	    stripChar(word, ')');
+	    if (word[0] == 0)
+	         continue;
+	    }
 	verbose(2, "%s\n", word);
 	if (wordCount == 0)
 	    firstWord = cloneString(word);
@@ -300,6 +333,10 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 maxChainSize = optionInt("size", maxChainSize);
+minUse = optionInt("minUse", minUse);
+lower = optionExists("lower");
+unpunc = optionExists("unpunc");
+fullOnly = optionExists("fullOnly");
 wordChain(argv[1], maxChainSize);
 return 0;
 }

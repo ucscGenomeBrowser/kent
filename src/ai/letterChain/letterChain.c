@@ -91,13 +91,13 @@ for (node = ll->head; !dlEnd(node); node = node->next)
 
 static char dumpPrefix[256];
 
-void rDumpTrie(int level, struct trie *trie, FILE *f)
+void rDumpTrie(int level, int total, struct trie *trie, FILE *f)
 /* Dump out trie */
 {
 int i;
-if (level >= 0)
-    dumpPrefix[level] = trie->letter;
-for (i=0; i<=level; ++i)
+
+dumpPrefix[level] = trie->letter;
+for (i=1; i<=level; ++i)
     {
     char c = dumpPrefix[i];
     if (c == '\n')
@@ -105,11 +105,11 @@ for (i=0; i<=level; ++i)
     else
          fprintf(f, "%c", c);
     }
-fprintf(f, " %d %d\n", trie->useCount, trie->branchCount);
+fprintf(f, " %d %1.1f%% %d\n", trie->useCount, 100.0*trie->useCount/total, trie->branchCount);
 if (trie->branchCount > 0)
     {
     if (trie->singleFollowing)
-        rDumpTrie(level+1, trie->singleFollowing, f);
+        rDumpTrie(level+1, trie->useCount, trie->singleFollowing, f);
     else
         {
 	struct trie *next;
@@ -118,7 +118,7 @@ if (trie->branchCount > 0)
 	    {
 	    if ((next = trie->multipleFollowing[i]) != NULL)
 	        {
-		rDumpTrie(level+1, next, f);
+		rDumpTrie(level+1, trie->useCount, next, f);
 		}
 	    }
 	}
@@ -171,7 +171,7 @@ dlListFree(&ll);
 carefulClose(&in);
 
 out = mustOpen(outFile, "w");
-rDumpTrie(-1, trie, out);
+rDumpTrie(0, trie->useCount, trie, out);
 
 carefulClose(&out);
 }

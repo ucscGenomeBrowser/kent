@@ -32,13 +32,13 @@ struct compSym
 /* Compression symbol */
     {
     struct compSym *next;		/* Next in list. */
-    struct slRef *children;		/* Children (mom's side). */
+    struct slRef *children;		/* Children (that begin with us as prefix). */
     int id;				/* ID */
     char *text;				/* Output text. */
     int size;				/* Size of text. */
     int useCount;			/* Number of times used. */
     int indirectUseCount;		/* Number of times used by descendents. */
-    struct compSym *mom, *dad;		/* Ancestors. */
+    struct compSym *prefix, *suffix;		/* Ancestors. */
     };
 
 int compSymCmp(const void *va, const void *vb)
@@ -116,8 +116,8 @@ void rMarkIndirectUse(struct compSym *sym)
 if (sym != NULL)
     {
     sym->indirectUseCount += 1;
-    rMarkIndirectUse(sym->mom);
-    rMarkIndirectUse(sym->dad);
+    rMarkIndirectUse(sym->prefix);
+    rMarkIndirectUse(sym->suffix);
     }
 }
 
@@ -134,10 +134,10 @@ for (ref = initialSym->children; ref != NULL; ref = ref->next)
     sym = ref->val;
     if (sym->useCount >= minUse && sym->size <= size)
         {
-	struct compSym *dad = sym->dad;
-	if (memcmp(string, dad->text, dad->size) == 0)
+	struct compSym *suffix = sym->suffix;
+	if (memcmp(string, suffix->text, suffix->size) == 0)
 	    {
-	    promising = rLongest(sym, string+dad->size, size - dad->size, minUse);
+	    promising = rLongest(sym, string+suffix->size, size - suffix->size, minUse);
 	    if (promising->size > bestSize)
 	        {
 		bestSoFar = promising;
@@ -227,17 +227,6 @@ outFinalBits();
 errAbort("All for now");
 }
 
-void output(FILE *f, struct compSym *cur, struct compSym *baby)
-/* Output to compression stream. */
-{
-outSym(f, cur);
-fprintf(f, "\t");
-outSym(f, baby);
-fprintf(f, "\n");
-if (binaryFile)
-    outBinary(cur->id);
-}
-
 void pairCompress(char *inText, int inSize, char *streamOut, char *symOut)
 /* pairCompress - Pairwise compresser - similar to lz in some ways, but adds 
  * new symbol rather than new letter at each stage. */
@@ -246,31 +235,39 @@ struct compSym *symList = NULL, *sym;
 struct compresser *comp = compresserNew(&symList);
 struct lm *lm = comp->lm;
 struct compSym *prev = NULL, *cur, *baby;
-int inPos = 0;
+int inPos = 0, babyStart;
 FILE *f =  mustOpen(streamOut, "w");
 
 while (inPos < inSize)
     {
     cur = longestMatching(comp, (unsigned char *)inText+inPos, inSize - inPos);
+    outSym(f, cur);
+    if (binaryFile)
+	outBinary(cur->id);
     inPos += cur->size;
     if (prev != NULL)
         {
 	struct slRef *ref;
-	lmAllocVar(lm, baby);
-	baby->id = comp->symCount++;
-	baby->size = prev->size + cur->size;
-	baby->mom = prev;
-	baby->dad = cur;
-	baby->text = lmAlloc(lm, baby->size);
-	memcpy(baby->text, inText + inPos - baby->size, baby->size);
-	slAddHead(&symList, baby);
-	lmAllocVar(lm, ref);
-	ref->val = baby;
-	slAddHead(&prev->children, ref);
-	output(f, cur, baby);
+	struct compSym *newSuffix;
+	babyStart = inPos - prev->size - cur->size;
+	for (newSuffix = cur; newSuffix != NULL; newSuffix = newSuffix->prefix)
+	    {
+	    lmAllocVar(lm, baby);
+	    baby->id = comp->symCount++;
+	    baby->size = prev->size + newSuffix->size;
+	    baby->prefix = prev;
+	    baby->suffix = newSuffix;
+	    baby->text = lmAlloc(lm, baby->size);
+	    memcpy(baby->text, inText + babyStart, baby->size);
+	    slAddHead(&symList, baby);
+	    lmAllocVar(lm, ref);
+	    ref->val = baby;
+	    slAddHead(&prev->children, ref);
+	    fprintf(f, "\t");
+	    outSym(f, baby);
+	    }
 	}
-    else
-        output(f, cur, NULL);
+    fprintf(f, "\n");
     prev = cur;
     }
 carefulClose(&f);
