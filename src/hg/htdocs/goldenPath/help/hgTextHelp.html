@@ -110,8 +110,6 @@ All rights reserved.
   <LI><A CLASS="toc" HREF="#Constraints">
       Filtering Results by Constraining Field Values</A>
       <UL>
-        <LI><A CLASS="toc" HREF="#WhatConstrain">
-        What can constraints on fields do?</A>
         <LI><A CLASS="toc" HREF="#StringConstraints">
         Constraints on strings</A>
         <LI><A CLASS="toc" HREF="#NumericConstraints">
@@ -180,6 +178,8 @@ The Table Browser provides a query interface to the Genome Browser
 database tables.  
 Because the Table Browser uses the same database as the Genome Browser, 
 the two views are always consistent.  
+(Chromosomal coordinates usually change with each assembly because of
+newly filled gaps or assembly procedure refinements.) 
 
 <A NAME="Purpose"></A>
 <H4> What can the Table Browser do? </H4>
@@ -546,22 +546,86 @@ the "Tab Separated, Choose Fields..." output format.
 <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-<A NAME="WhatConstrain"></A>
-<H4> What can constraints on fields do? </H4>
+
+By default, the table browser retrieves all records for the specified
+coordinate range (use <B>"genome"</B> to search all chromosomes). 
+To restrict the set of records retrieved from this range, you may
+enter constraints on the values of fields.
+
+The individual field constraints are combined with AND. In other
+words, a record must meet all individual field constraints in order to
+be retrieved. The default values will match all records, so the only
+constraints that apply are the ones that you edit.
 
 
 <A NAME="StringConstraints"></A>
 <H4> Constraints on strings </H4>
 
+Text fields are compared to words or patterns containing wildcard
+characters. Wildcards are "*" (to match 0 or more characters) and "?"
+(to match a single character). Each space-separated word/pattern in a
+text field box will be matched against the value of that field in each
+record. If any word/pattern matches the value, then the record meets
+the constraint on that field.
+
 
 <A NAME="NumericConstraints"></A>
 <H4> Constraints on numbers </H4>
+
+Numeric fields are compared to table data using an operator such as <,
+>, != (not equal) followed by a number. To specify a range, enter two
+numbers (start and end) separated by a "-".
 
 
 <A NAME="FreeFormConstraints"></A>
 <H4> Free-Form Query </H4>
 
+When the filters above aren't enough, free-form queries allow 
+fancier constraints that typically relate two or more field names of 
+the selected table. If you are familiar with 
+<A HREF="http://www.w3schools.com/sql/sql_where.asp" TARGET=_blank>
+SQL syntax</A>, 
+queries here are just "where" clauses (with wildcards as above). 
+Queries can combine simple constraints with AND, OR, and NOT using 
+parentheses as needed for clarity. 
+<P> A simple constraint consists of a field name listed above, 
+     a comparison operator (see below), 
+     and a value: a number, string, wildcard value (see below), 
+     or another field name. 
+     In place of a field name, you may use 
+     an arithmetic expression of numeric field names.  </P>
+<P> String or wildcard values for text comparisons must be quoted.  
+     Single or double quotes may be used.  
+     If comparing to a literal string value, 
+     you may use the "=" (or "!=") operator.  
+     If comparing to a wildcard 
+     value, you must use the "LIKE" (or "NOT LIKE") operator.  
+     </P> 
+<P> Numeric comparison operators include &lt;, &lt;=, =, != (not equal), 
+     &gt;=, and &gt; .  
+     Arithmetic operators include +, -, *, and /.  
+     Other <A HREF="http://www.w3schools.com/sql/sql_where.asp" TARGET=_blank>
+     SQL</A> 
+     comparison keywords may be used.  
+     </P> 
+</P><P>
+Free-form query examples (taken from the refGene table):
+<UL>
+<LI> <FONT COLOR="#0000FF">txStart = cdsStart</FONT> 
 
+searches for gene models missing expected 5' UTR upstream sequence 
+(if strand is '+'; 3' UTR downstream if strand is '-'). </LI>
+<LI> <FONT COLOR="#0000FF">chrom NOT LIKE "chr??"</FONT> 
+filters search to chromosomes 1-9 plus X and Y. </LI> 
+<LI> <FONT COLOR="#0000FF">(cdsEnd - cdsStart) &gt; 10000</FONT> 
+selects genes whose coding regions span over 10 kbp. </LI> 
+<LI> <FONT COLOR="#0000FF">(txStart != cdsStart) AND (txEnd != cdsEnd) 
+     AND exonCount = 1</FONT> 
+     finds single exon genes with both 3' and 5' flanking UTR.</LI> 
+<LI><FONT COLOR="#0000FF">((cdsEnd - cdsStart) &gt; 30000) 
+     AND (exonCount=2 OR exonCount=3)</FONT> 
+     finds genes with long spans but only 2-3 exons.</LI></UL>
+</P>
 
 </TD></TR></TABLE>
 <BR></TD></TR>
