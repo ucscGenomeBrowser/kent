@@ -1038,6 +1038,7 @@ dyStringFree(&dy);
 if (result == NULL || !sameString(result, "ok"))
     errAbort("Couldn't chill %s\n", curDir);
 freez(&result);
+printf("Told hub to chill out\n");
 }
 
 
@@ -1061,6 +1062,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	    }
 	}
     }
+printf("Chilled %d jobs\n", count);
 return count;
 }
 
@@ -1074,7 +1076,6 @@ int chillCount;
 markQueuedJobs(db);
 markRunJobStatus(db);
 chillCount = cleanTrackingErrors(db);
-printf("Chilled %d jobs\n", chillCount);
 atomicWriteBatch(db, batch);
 }
 
@@ -1083,7 +1084,6 @@ void paraChill(char *batch)
  *  does not stop jobs that are already running.\n */
 {
 sendChillMessage();
-printf("Told hub to chill out %s\n", batch);
 removeChilledSubmissions(batch);
 }
 
@@ -1136,19 +1136,18 @@ if (deathRowSize >= deathRowMaxSize)
     deathRowExecute();
 }
 
-void paraStop(char *batch)
+void paraStopAll(char *batch)
 /* Stop batch of jobs. */
 {
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
+int chillCount;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
+chillCount = cleanTrackingErrors(db);
 deathRowStart();
-/* It's less thrashing on the scheduler if we kill jobs
- * in opposite order. */
-slReverse(&db->jobList);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     sub = job->submissionList;
@@ -1157,13 +1156,20 @@ for (job = db->jobList; job != NULL; job = job->next)
 	if (sub->inQueue || sub->running)
 	    {
 	    deathRowAdd(sub->id);
-	    sub->crashed = TRUE;
+	    job->submissionCount -= 1;
+	    job->submissionList = sub->next;
 	    }
 	}
     }
 deathRowEnd();
-slReverse(&db->jobList);
 atomicWriteBatch(db, batch);
+}
+
+void paraStop(char *batch)
+/* Stop batch of jobs. */
+{
+sendChillMessage();	/* Remove waiting jobs first, it's faster. */
+paraStopAll(batch);
 }
 
 void printTimes(char *title, double seconds,  boolean showYears)
