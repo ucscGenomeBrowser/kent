@@ -16,3 +16,7 @@ exe: $(O)
 
 lib:
 	cd ../../lib; make
+
+clean::
+	rm -f affyPslAndAtlasToBed affyUclaMergePslData
+
