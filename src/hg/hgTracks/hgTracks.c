@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.553 2003/07/08 06:14:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.554 2003/07/09 22:31:37 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1244,6 +1244,11 @@ int midY1 = midY - (heightPer>>2);
 int midY2 = midY + (heightPer>>2);
 int w;
 
+if (chainLines && (vis == tvSquish))
+    {
+	midY1 = y;
+	midY2 = y + heightPer - 1;
+    }
 lfColors(tg, lf, vg, &color, &bColor);
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
@@ -1259,8 +1264,6 @@ if (!hideLine)
 	}
     innerLine(vg, x1, midY, w, color);
     }
-if (chainLines)
-    slSort(&lf->components, linkedFeaturesCmpStart);
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
