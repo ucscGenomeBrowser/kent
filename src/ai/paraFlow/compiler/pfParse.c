@@ -178,27 +178,8 @@ void pfParseDump(struct pfParse *pp, int level, FILE *f)
 struct pfParse *child;
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
-if (pp->var != NULL)
-    {
-    struct pfVar *var = pp->var;
-    struct pfCollectedType *ct = var->type;
-    if (ct == NULL)
-        {
-	fprintf(f, " noType");
-	}
-    else
-	{
-	while (ct != NULL)
-	    {
-	    if (ct->base != NULL)
-		fprintf(f, " %s", ct->base->name);
-	    if (ct->next != NULL)
-		fprintf(f, " of");
-	    ct = ct->next;
-	    }
-	}
-    fprintf(f, " %s", var->name);
-    }
+if (pp->name != NULL)
+    fprintf(f, " %s", pp->name);
 switch (pp->type)
     {
     case pptConstUse:
@@ -281,7 +262,8 @@ if (tok->type != pftName)
     {
     errAt(tok, "Expecting variable.");
     }
-pp->var = pfScopeFindOrCreateVar(scope, tok->val.s);
+pp->name = tok->val.s;
+pfScopeFindOrCreateVar(scope, pp->name);
 *pTokList = tok->next;
 return pp;
 }
@@ -1187,11 +1169,10 @@ return statement;
 }
 
 static struct pfParse *pfParseProgram(struct pfToken *tokList, struct pfScope *scope,
-	struct pfParse *parent)
+	struct pfParse *program)
 /* Convert token list to parsed program. */
 {
 struct pfToken *tok = tokList;
-struct pfParse *program = pfParseNew(pptModule, tok, parent);
 
 while (tok->type != pftEnd)
     {
@@ -1229,9 +1210,12 @@ struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz,
 /* Convert file to parse tree using tkz. */
 {
 struct pfToken *tokList = NULL, *tok;
-struct pfParse *program;
 int endCount = 3;
+struct pfParse *program = pfParseNew(pptModule, NULL, parent);
 struct pfScope *scope = pfScopeNew(tkz->scope, 16);
+char *module = hashStoreName(tkz->modules, fileName);
+
+program->name = module;
 
 /* Read tokens, add scoping info, and add to list. */
 while ((tok = pfTokenizerNext(tkz)) != NULL)
@@ -1262,7 +1246,7 @@ while (--endCount >= 0)
 slReverse(&tokList);
 
 addClasses(tokList, scope);
-program = pfParseProgram(tokList, scope, parent);
+pfParseProgram(tokList, scope, program);
 return program;
 }
 

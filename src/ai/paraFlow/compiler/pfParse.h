@@ -78,7 +78,6 @@ struct pfParse
     struct pfToken *tok;	/* Token associated with node. */
     struct pfParse *parent;	/* Parent statement if any. */
     struct pfParse *children;	/* subparts. */
-    struct pfVar *var;		/* Associated variable if any. */
     };
 
 struct pfParse *pfParseNew(enum pfParseType type,

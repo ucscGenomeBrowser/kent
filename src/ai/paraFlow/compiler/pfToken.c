@@ -154,6 +154,7 @@ pfTkz->pos = pfTkz->source->contents;
 pfTkz->endPos = pfTkz->pos + pfTkz->source->contentSize;
 pfTkz->symbols = hashNew(16);
 pfTkz->strings = hashNew(16);
+pfTkz->modules = hashNew(0);
 pfTkz->dy = dyStringNew(0);
 if (reservedWords == NULL)
     reservedWords = hashNew(1);

@@ -83,6 +83,7 @@ struct pfTokenizer
     struct hash *reserved;	/* Hash of built-in reserved words. */
     struct hash *symbols;	/* Hash containing all symbols. */
     struct hash *strings;	/* Hash containing all strings. */
+    struct hash *modules;	/* Full path to all modules. */
     struct dyString *dy;	/* Dynamic string buffer - for symbols and
                                  * strings before they go in hash. */
     };
