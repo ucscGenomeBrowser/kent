@@ -218,7 +218,7 @@ LOAD SOFTBERRY GENES
      hgSoftberryHom sc1 *.protein
 
 
-LOAD GENBANK ANNOTATED PROTEINS (DONE 04/22/03)
+LOAD GENBANK ANNOTATED PROTEINS (DONE 04/23/03)
     mkdir -p ~/sc1/bed/gbProtAnn
     cd ~/sc1/bed/gbProtAnn
     # go to http://www.ncbi.nlm.nih.gov/ -- search Protein for NP_828849
@@ -233,6 +233,8 @@ LOAD GENBANK ANNOTATED PROTEINS (DONE 04/22/03)
     #  /coded_by="join(NC_004718.1:250..13383, NC_004718.1:13383..21470)"
     #  /note="putative -1 frameshift"
     # and strip the "gi:" from genbank id numbers:
+    # OK, also use the proteinId as the name instead of my short names so 
+    # that others can link in more easily as Fan suggested:
     perl -wpe '@w = split(/\t/); \
                if ($w[1] < 4379) { \
                  $w[1] = (($w[1] - 1) * 3) + 250 - 1; \
@@ -242,6 +244,7 @@ LOAD GENBANK ANNOTATED PROTEINS (DONE 04/22/03)
                  $w[2] = (($w[2] - 4379) * 3) + 13383 + 2; \
                } \
                $w[7] =~ s/gi://i; \
+               $w[3] = $w[6]; \
                $_ = join("\t", @w); \
               ' NP_828849.pbed \
     > NP_828849.bed
@@ -249,4 +252,23 @@ LOAD GENBANK ANNOTATED PROTEINS (DONE 04/22/03)
     sdiff NP_828849.pbed NP_828849.bed
     hgLoadBed sc1 gbProtAnn NP_828849.bed \
       -tab -noBin -sqlTable=$HOME/src/hg/lib/gbProtAnn.sql
+
+
+PRODUCING GENSCAN PREDICTIONS (DONE 4/23/03)
+    ssh kkr1u00
+    mkdir -p ~/sc1/bed/genscan
+    cd ~/sc1/bed/genscan
+    # No cluster run (or liftUp) required -- just run it:
+    /cluster/home/kent/bin/i386/gsBig ~/sc1/chr1.fa genscan.gtf \
+      -trans=genscan.pep -subopt=genscanSubopt.bed \
+      -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan \
+      -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat \
+      -tmp=/tmp -window=2400000
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/sc1/bed/genscan
+    ldHgGene sc1 genscan genscan.gtf
+    hgPepPred sc1 generic genscanPep genscan.pep
+    hgLoadBed sc1 genscanSubopt genscanSubopt.bed
+
 
