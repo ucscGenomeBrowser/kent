@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.16 2003/11/01 16:53:13 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.17 2003/12/09 21:12:42 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -83,19 +83,14 @@ retDb[len] = 0;
 return TRUE;
 }
 
-static struct mafItem *baseByBaseItems(struct track *tg, int scoreHeight, 
-	struct mafAli *mafList)
-/* Given a list of mafs, make up base-by-base tracks. */
+static struct mafItem *baseByBaseItems(struct track *tg, int scoreHeight)
+/* Make up base-by-base track items. */
 {
 struct mafItem *miList = NULL, *mi;
 struct mafAli *maf;
 char *myOrg = hOrganism(database);
 char buf[64];
 char *otherOrganism;
-
-/* Load up mafs and store in track so drawer doesn't have
- * to do it again. */
-tg->customPt = mafList;
 
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
@@ -115,7 +110,7 @@ slAddHead(&miList, mi);
     {
     struct hash *hash = newHash(8);	/* keyed by database. */
     hashAdd(hash, mi->db, mi);		/* Add in current organism. */
-    for (maf = mafList; maf != NULL; maf = maf->next)
+    for (maf = tg->customPt; maf != NULL; maf = maf->next)
         {
 	struct mafComp *mc;
 	for (mc = maf->components; mc != NULL; mc = mc->next)
@@ -147,8 +142,61 @@ slReverse(&miList);
 return miList;
 }
 
-static struct mafItem *mafBaseByBaseItems(struct track *tg, int scoreHeight, boolean isAxt)
-/* Load up what we need for base-by-base view. */
+static struct mafItem *pairwiseItems(struct track *tg, int scoreHeight)
+/* Make up pairwise alignment items for each 
+   "other species" in the multiple alignment. */
+{
+struct mafItem *miList = NULL, *mi;
+struct mafAli *maf;
+char buf[64];
+char *otherOrganism;
+
+/* Make up item for wiggle */
+AllocVar(mi);
+mi->name = cloneString("Score");
+mi->height = scoreHeight;
+slAddHead(&miList, mi);
+
+/* Make up items for other organisms by scanning through
+ * all mafs and looking at database prefix to source. */
+    {
+    // TODO: share code with baseByBaseItems
+    struct hash *hash = newHash(8);	/* keyed by database. */
+    for (maf = tg->customPt; maf != NULL; maf = maf->next)
+        {
+	struct mafComp *mc;
+        boolean isMyOrg = TRUE;
+	for (mc = maf->components; mc != NULL; mc = mc->next)
+	    {
+            if (isMyOrg) 
+                {
+                /* skip first maf component (this organism) */
+                isMyOrg = FALSE;
+                continue;
+                }
+	    dbPartOfName(mc->src, buf, sizeof(buf));
+	    if (hashLookup(hash, buf) == NULL)
+	        {
+		AllocVar(mi);
+		mi->db = cloneString(buf);
+                otherOrganism = hOrganism(mi->db);
+                mi->name = 
+                    (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
+		mi->height = tl.fontHeight;
+		slAddHead(&miList, mi);
+		hashAdd(hash, mi->db, mi);
+		}
+	    }
+	}
+    hashFree(&hash);
+    }
+slReverse(&miList);
+return miList;
+}
+
+static struct mafItem *mafItems(struct track *tg, int scoreHeight,
+                                         boolean isBaseLevel, boolean isAxt)
+/* Load up items for full mode */
 {
 struct mafAli *mafList = NULL;
 struct mafItem *miList = NULL;
@@ -157,9 +205,15 @@ struct sqlConnection *conn = hAllocConn();
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
 mafList = mafOrAxtLoadInRegion(conn, tg, chromName, winStart, winEnd, isAxt);
+tg->customPt = mafList;
 
 /* Make up tracks for display. */
-miList = baseByBaseItems(tg, scoreHeight, mafList);
+if (isBaseLevel)
+    miList = baseByBaseItems(tg, scoreHeight);
+else
+    {
+    miList = pairwiseItems(tg, scoreHeight);
+    }
 hFreeConn(&conn);
 return miList;
 }
@@ -177,13 +231,20 @@ if (tg->visibility == tvFull)
     scoreHeight *= 4;
 if (zoomedToBaseLevel)
     {
-    miList = mafBaseByBaseItems(tg, scoreHeight, isAxt);
+    miList = mafItems(tg, scoreHeight, zoomedToBaseLevel, isAxt);
     }
 else
     {
-    AllocVar(miList);
-    miList->name = cloneString(tg->shortLabel);
-    miList->height = scoreHeight;
+    if (tg->visibility == tvFull)
+        {
+        miList = mafItems(tg, scoreHeight, FALSE, isAxt);
+        }
+    else
+        {
+        AllocVar(miList);
+        miList->name = cloneString(tg->shortLabel);
+        miList->height = scoreHeight;
+        }
     }
 tg->items = miList;
 }
@@ -439,23 +500,19 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis, boolean isAxt)
-/* Draw wiggle/density plot based on scoring things on the fly. 
- * The */
+static void drawMafRegionDetails(struct mafAli *mafList, int height,
+        int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff,
+        int width, MgFont *font, Color color, Color altColor,
+        enum trackVisibility vis, boolean isAxt)
+/* Draw wiggle/density plot based on scoring things on the fly. */
 {
-int seqSize = seqEnd - seqStart;
-struct mafAli *mafList, *full, *sub = NULL, *maf = NULL;
+struct mafAli *full, *sub = NULL, *maf = NULL;
 struct mafComp *mcMaster, mc;
 char dbChrom[64];
-struct sqlConnection *conn = hAllocConn();
-struct mafItem *mi = tg->items;
-int height1 = mi->height-2;
+int height1 = height-2;
+int ixMafAli = 0;       /* alignment index, to allow alternating color */
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
-mafList = mafOrAxtLoadInRegion(conn, tg, chromName, seqStart, seqEnd, isAxt);
-int ixMafAli = 0;       /* alignment index, to allow alternating color */
 for (full = mafList; full != NULL; full = full->next)
     {
     double scoreScale;
@@ -486,21 +543,63 @@ for (full = mafList; full != NULL; full = full->next)
 		{
 		int y = pixelScores[i] * height1;
 		vgBox(vg, i+mafPixelStart+xOff, yOff + height1 - y, 
-		    1, y+1, (ixMafAli % 2) ? color : tg->ixAltColor);
+		    1, y+1, (ixMafAli % 2) ? color : altColor);
 		}
 	    else
 	        {
 		int shade = pixelScores[i] * maxShade;
 		Color c = shadesOfGray[shade];
 		vgBox(vg, i+mafPixelStart+xOff, yOff, 
-		    1, mi->height-1, c);
+		    1, height-1, c);
 		}
 	    }
 	freez(&pixelScores);
 	}
     mafAliFree(&sub);
     }
+}
+
+static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        Color color, enum trackVisibility vis, boolean isAxt)
+/* Draw wiggle/density plot based on scoring things on the fly. */
+{
+int seqSize = seqEnd - seqStart;
+struct mafAli *mafList;
+struct sqlConnection *conn = hAllocConn();
+struct mafItem *miList = tg->items, *mi = miList;
+char buf[64];
+
+mafList = tg->customPt;
+if (mafList == NULL)
+    mafList = mafOrAxtLoadInRegion(conn, tg, chromName, 
+                                                seqStart, seqEnd, isAxt);
+
+/* display the multiple alignment in this region */
+drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
+                             width, font, color, tg->ixAltColor,  vis, isAxt);
 mafAliFreeList(&mafList);
+
+yOff += mi->height + 1;
+if (vis == tvFull)
+    {
+    while ((mi = mi->next) != NULL)
+        {
+        /* construct pairwise table name for this organism */
+        /* NOTE: might want a "pairwise" trackDb setting for this */
+        char bzTable[64];
+        safef(bzTable, 64, "%s_%s", mi->name, tg->mapName);
+        if (!hTableExistsDb(database, bzTable))
+            continue;
+        mafList = mafLoadInRegion(conn, bzTable, chromName, seqStart, seqEnd);
+        /* display pairwise alignments in this region in dense format */
+        drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, 
+                                 vg, xOff, yOff, width, font,
+                                 color, tg->ixAltColor, tvDense, isAxt);
+        yOff += mi->height + 1;
+        mafAliFreeList(&mafList);
+        }
+    }
 hFreeConn(&conn);
 }
 
@@ -520,6 +619,18 @@ else
     mafDrawDetails(tg, seqStart, seqEnd, vg, 
                         xOff, yOff, width, font, color, vis, isAxt);
     }
+// density gradient of blastz's
+// mafDrawPairwise(tg, seqStart, seqEnd, vg, xOff, yOff, font, width, color, vis);
+}
+
+static void mafDrawPairwise(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+//NOTE: must load this from blastz tables
+struct mafAli *mafList = tg->customPt;
+// draw a line for each loaded maf item (species)
+// reuse species ordering from multiple alignment
 }
 
 static void mafDrawBases(struct track *tg, int seqStart, int seqEnd,
@@ -671,8 +782,10 @@ static void mafOrAxtDraw(struct track *tg, int seqStart, int seqEnd,
 if (zoomedToBaseLevel)
     mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 else 
+    {
     mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
                     color, vis, isAxt);
+    }
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
     tg->mapName, NULL);
 }
