@@ -29,7 +29,6 @@ char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
 
-
 void usage()
 /* Explain usage and exit. */
 {
