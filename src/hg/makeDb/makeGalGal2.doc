@@ -3278,3 +3278,76 @@ chainSome $(path1)
     rm -rf blastOut
 # End tblastn
 
+# MAKE Human Known Gene mRNAs Mapped by BLATZ track (hg17 DONE 1/18/05 braney)
+    # Create working directory and extract known gene mrna from database
+    ssh hgwdev
+    mkdir -p /cluster/data/galGal2/bed/blatz.hg17KG
+    cd /cluster/data/galGal2/bed/blatz.hg17KG
+    pepPredToFa hg17 knownGeneMrna known.fa
+
+    # Split known genes into pieces and load on /iscratch/i temp device
+    ssh kkr1u00
+    cd /iscratch/i/hg17
+    mkdir knownRna2
+    cd knownRna2
+    faSplit sequence /cluster/data/galGal2/bed/blatz.hg17KG/known.fa 580 known
+    iSync
+    rm /cluster/data/galGal2/bed/blatz.hg17KG/known.fa
+
+    # Do parasol job to align via blatz
+    ssh kk
+    cd /cluster/data/galGal2/bed/blatz.hg17KG
+    mkdir run0
+    cd run0
+    mkdir psl
+    # awk '{print $1;}' /cluster/data/galGal2/chrom.sizes > genome.lst
+    ls -1S /iscratch/i/galGal2/trfFa/*.fa > genome.lst
+    for i in `cat genome.lst` ;  do f=`basename $i .fa`; mkdir psl/$f ; done 
+    for i in  /iscratch/i/hg17/knownRna2/*.fa ; do echo $i; done > mrna.lst
+    cat << '_EOF_' > doBlatz
+#!/bin/sh
+f=/tmp/`basename $1`.`basename $2`
+if blatz -rna -minScore=6000 -out=psl $1 $2 $f.1
+then
+    if liftUp -nosort -type=".psl" -nohead $f.2 ../../../jkStuff/liftAll.lft carry $f.1
+    then
+	mv $f.2 $3
+	rm $f.1
+	exit 0
+    fi
+fi
+rm $f.1 $f.2
+exit 1
+'_EOF_'
+    chmod +x doBlatz
+    cat << '_EOF_' > gsub
+#LOOP
+doBlatz   $(path1) $(path2) {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    # Then do usual para try/para push/para time
+# Completed: 148407 of 148407 jobs
+# CPU time in finished jobs:    1884903s   31415.06m   523.58h   21.82d  0.060 y
+# IO & Wait Time:                490225s    8170.41m   136.17h    5.67d  0.016 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest job:                      116s       1.93m     0.03h    0.00d
+# Submission to last job:         28248s     470.80m     7.85h    0.33d
+
+    # Do sort and near-besting on file server
+    ssh kksilo
+    cd /cluster/data/galGal2/bed/blatz.hg17KG/run0
+    catDir -r psl | pslFilter -minScore=100 -minAli=255 -noHead stdin stdout | sort -k 10 > ../filtered.psl
+    cd ..
+    pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
+    sort -k 14 nearBest.psl > blatzHg17KG.psl
+
+    # Clean up
+    rm -r run0/psl 
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/blatz.hg17KG
+    hgLoadPsl galGal2 blatzHg17KG.psl 
