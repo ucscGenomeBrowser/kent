@@ -393,7 +393,7 @@ return(val);
 char *getTrack2Name()
 {
 char *trackName = cloneString(getTable2Name());
-if (startsWith("chrN_", trackName))
+if ((trackName != NULL) && startsWith("chrN_", trackName))
     strcpy(trackName, trackName+strlen("chrN_"));
 return trackName;
 }
