@@ -17,6 +17,7 @@ DIRS = \
 	hgClonePos \
 	hgCountAlign \
 	hgCtgPos \
+	hgExonerate \
 	hgFiberglass \
 	hgGcPercent \
 	hgGeneBands \
