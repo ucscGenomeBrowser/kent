@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.3 2003/07/14 07:31:09 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.4 2003/07/14 19:53:25 markd Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -31,21 +31,21 @@ if (!gAllowedRNABasesInit)
     }
 }
 
-boolean allowedRNABases(char *rna)
-/* check if a sequence consists of only allowed characters.  An empty
- * string is also invalid */
+int numAllowedRNABases(char *rna)
+/* count the number of invalid base characters in a sequence. */
 {
 char *p = rna;
+int cnt = 0;
 
 if (!gAllowedRNABasesInit)
     allowedRNABasesInit();
 
-if (*p == '\0')
-    return FALSE;
 for (; *p != '\0'; p++)
+    {
     if (!gAllowedRNABases[(int)*p])
-        return FALSE;
-return TRUE;
+        cnt++;
+    }   
+return cnt;
 }
 
 boolean gbIsReadable(char* path)

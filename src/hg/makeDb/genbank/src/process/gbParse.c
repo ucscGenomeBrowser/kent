@@ -9,7 +9,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.3 2003/07/14 07:31:09 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.4 2003/07/14 19:53:25 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -508,7 +508,7 @@ dna[dnaCount] = 0;
 *retSize = dnaCount;
 
 /* FIXME: make abort */
-if (!allowedRNABases(dna))
+if (numAllowedRNABases(dna) > 0)
     warn("invalid mRNA bases for %s in %s", gbAccessionField->val->string,
          lf->fileName);
 return dna;

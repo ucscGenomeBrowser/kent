@@ -14,7 +14,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.4 2003/07/14 07:31:09 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.5 2003/07/14 19:53:25 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -22,15 +22,20 @@ static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"native", OPTION_BOOLEAN},
     {"xeno", OPTION_BOOLEAN},
+    {"accFile", OPTION_STRING},
+    {"allowMissing", OPTION_BOOLEAN},
     {"inclVersion", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
 
-/* global options from command line */
-unsigned gOrgCats;
-boolean gInclVersion;
+/* maximum faction of sequence that can be invalid mRNA characters */
+#define MAX_INVALID_MRNA_BASES 0.01
 
+/* global options from command line */
+static unsigned gOrgCats;
+static boolean gInclVersion;
+static boolean gAllowMissing;
 
 struct seqIdSelect
 /* Record in hash table of a sequence id that was specified  */
@@ -51,6 +56,9 @@ void addIdSelect(char *accSpec)
 {
 struct seqIdSelect *seqIdSelect;
 AllocVar(seqIdSelect);
+
+if (gIdHash == NULL)
+    gIdHash = hashNew(20);
 if (strchr(accSpec, '.') != NULL)
     seqIdSelect->version = gbSplitAccVer(accSpec, seqIdSelect->acc);
 else
@@ -58,11 +66,23 @@ else
 hashAdd(gIdHash, seqIdSelect->acc, seqIdSelect);
 }
 
+void loadAccSelectFile(char* path)
+/* load a file with accessions to select */
+{
+struct lineFile* lf = gzLineFileOpen(path);
+char *words[1];
+
+while (lineFileNextRow(lf, words, 1))
+    addIdSelect(words[0]);
+
+gzLineFileClose(&lf);
+}
+
 int idSelectedVer(struct gbEntry* entry)
 /* check if the sequence id was specified, if so return version, or 0
  * if not specified */
 {
-    struct seqIdSelect *seqIdSelect = hashFindVal(gIdHash, entry->acc);
+struct seqIdSelect *seqIdSelect = hashFindVal(gIdHash, entry->acc);
 int selectVer = 0;
 if (seqIdSelect != NULL)
     {
@@ -95,10 +115,19 @@ boolean orgCatSelected(struct gbEntry* entry)
 return ((entry->orgCat & gOrgCats) || (entry->orgCat == 0));
 }
 
+boolean shouldSelect(struct gbEntry* entry)
+/* check if the entry should be selected */
+{
+if (!orgCatSelected(entry))
+    return FALSE;
+else
+    return TRUE;
+}
+
 void selectEntry(struct gbEntry* entry)
 /* Mark an entry if it passes criteria */
 {
-if (orgCatSelected(entry))
+if (shouldSelect(entry))
     {
     int selectVer;
     if (gIdHash != NULL)
@@ -124,6 +153,17 @@ while ((hel = hashNext(&cookie)) != NULL)
     selectEntry((struct gbEntry*)hel->val);
 }
 
+boolean isValidMrnaSeq(struct gbFa* inFa)
+/* check if the sequence appears to be a valid mrna sequence */
+{
+char* seq = gbFaGetSeq(inFa);
+int numInvalid = numAllowedRNABases(seq);
+int maxInvalid = MAX_INVALID_MRNA_BASES * inFa->seqLen;
+if ((MAX_INVALID_MRNA_BASES > 0.0) && (maxInvalid == 0))
+    maxInvalid = 1;  /* round up */
+return (numInvalid <= maxInvalid);
+}
+
 void processSeq(struct gbSelect* select, struct gbFa* inFa, struct gbFa* outFa)
 /* process the next sequence from an update fasta file, possibly outputing
  * the sequence */
@@ -135,10 +175,18 @@ short version = gbSplitAccVer(inFa->id, acc);
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
 if ((entry != NULL) && (entry->selectVer == version))
     {
-    /* selected, output */
-    if (!gInclVersion)
-        strcpy(inFa->id, acc);  /* remove version */
-    gbFaWriteFromFa(outFa, inFa, NULL);
+    /* selected, output if it appears valid */
+    if (isValidMrnaSeq(inFa))
+        {
+        if (!gInclVersion)
+            strcpy(inFa->id, acc);  /* remove version */
+        gbFaWriteFromFa(outFa, inFa, NULL);
+        }
+    else
+        {
+        fprintf(stderr, "warning: %s does not appear to be a valid mRNA sequence, skipped: %s:%d\n",
+                inFa->id, inFa->fileName, inFa->recLineNum);
+        }
     }
 }
 
@@ -182,7 +230,7 @@ int numNotFound = gNumMissingVersions;
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct seqIdSelect *seqIdSelect = hel->val;
-    if (seqIdSelect->count > 0)
+    if (seqIdSelect->count == 0)
         {
         if (seqIdSelect->version > 0)
             fprintf(stderr, "Error: %s.%d not found\n", seqIdSelect->acc,
@@ -193,7 +241,12 @@ while ((hel = hashNext(&cookie)) != NULL)
         }
     }
 if (numNotFound > 0)
-    errAbort("%d sequences not found", numNotFound);
+    {
+    if (gAllowMissing)
+        warn("%d sequences not found", numNotFound);
+    else
+        errAbort("%d sequences not found", numNotFound);
+    }
 }
 
 void gbGetSeqs(char *gbRoot, char *database, unsigned srcDb, unsigned type,
@@ -238,6 +291,10 @@ errAbort("   gbGetSeqs [options] srcDb type seqFa [ids ...]\n"
          "     supplied.\n"
          "    -native - get native sequence\n"
          "    -xeno - get xeno sequences\n"
+         "    -accFile=file - select only accessions in this file.\n"
+         "     Accession may optional include version number.\n"
+         "    -allowMissing - It is not an error if explictly specified\n"
+         "     accessions were not found.\n"
          "    -version - include version number in sequence id\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
@@ -278,12 +335,15 @@ if (optionExists("xeno"))
 if (gOrgCats == 0)
     gOrgCats = GB_NATIVE|GB_XENO;
 gInclVersion = optionExists("inclVersion");
+gAllowMissing = optionExists("allowMissing");
+
+if (optionExists("accFile"))
+    loadAccSelectFile(optionVal("accFile", NULL));
 
 if (argc > 4)
     {
     int argi;
-    gIdHash = hashNew(0);
-    for (argi = 3; argi < argc; argi++)
+    for (argi = 4; argi < argc; argi++)
         addIdSelect(argv[argi]);
     }
 gbGetSeqs(gbRoot, database, srcDb, type, outFasta);

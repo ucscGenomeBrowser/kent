@@ -17,9 +17,8 @@ bool gAllowedRNABases[256];
 void allowedRNABasesInit();
 /* initialize allowed RNA bases */
 
-boolean allowedRNABases(char *rna);
-/* check if a sequence consists of only allowed characters.  An empty
- * string is also invalid */
+int numAllowedRNABases(char *rna);
+/* count the number of invalid base characters in a sequence. */
 
 boolean gbIsReadable(char* path);
 /* Test if a file exists and is readable by the user. */
