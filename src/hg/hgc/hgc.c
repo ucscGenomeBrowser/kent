@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.686 2004/07/14 21:11:27 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.687 2004/07/14 21:20:24 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3736,7 +3736,7 @@ else if (startsWith("mrnaBlastz",track  ))
 else if (startsWith("pseudoMrna",track) || startsWith("pseudoGeneLink",track))
     {
     type = "mRNA";
-    table = "mrnaBlastz";
+    table = "pseudoMrna";
     }
 else if (startsWith("celeraMrna",track))
     {
@@ -7466,12 +7466,12 @@ if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
     sqlFreeResult(&sr);
     }
 
-if (hTableExists("mrnaBlastz"))
+if (hTableExists("all_mrna"))
     {
-    struct psl *pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
+    struct psl *pslList = loadPslRangeT("all_mrna", pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
         {
-        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "mrnaBlastz", pg->name);
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", "all_mrna", pg->name);
         htmlHorizontalLine();
         safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pg->chrom);
         if (hTableExists(chainTable_chrom) )
