@@ -129,7 +129,7 @@ static struct dyString *dy = NULL;
 if (dy == NULL)
     {
     dy = newDyString(128);
-    dyStringPrintf(dy, "%s?%s", hgcPath, cartSidUrlString(cart));
+    dyStringPrintf(dy, "%s?%s", hgcPath(), cartSidUrlString(cart));
     }
 return dy->string;
 }
