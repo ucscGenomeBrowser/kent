@@ -2824,7 +2824,7 @@ hgLoadBlastTab mm3 dmBlastTab -maxPer=1 *.tab
 # make sure that knownToEnsembl and ensGtp tables are created, then:
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper mm3 mm stdin
 
-# LOAD ECgene tables
+# LOAD ECgene tables (re-done with new ldHgGene (braney 2004-01-30))
     cd /cluster/data/mm3/bed
     rm -f ECgene
     mkdir ECgene.2003-12-19
@@ -2835,4 +2835,5 @@ hgLoadBlastTab mm3 dmBlastTab -maxPer=1 *.tab
     gunzip *.gz
     ldHgGene -predTab mm3 ECgene ECgene_mm3_v1.1_25oct2003_genes.txt
     hgPepPred mm3 tab ECgenePep ECgene_mm3_v1.1_25oct2003_genepep.txt
+    rm genePred.tab
     gzip *
