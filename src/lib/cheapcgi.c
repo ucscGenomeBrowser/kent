@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.49 2003/06/25 15:18:54 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.50 2003/06/26 16:35:40 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -816,7 +816,8 @@ for (cv = inputList; cv != NULL; cv = cv->next)
     if (cv != inputList)
        dyStringAppend(dy, "&");
     e = cgiEncode(cv->val);
-    dyStringPrintf(dy, "%s=%s", cv->name, e);
+    dyStringPrintf(dy, "%s=", cv->name);
+    dyStringAppend(dy, e);
     freez(&e);
     }
 return dy;
