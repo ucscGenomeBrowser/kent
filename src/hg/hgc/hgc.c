@@ -9357,7 +9357,7 @@ else if (stringIn(track, "blastzChain"))
     {
     chainClickHandler(tdb, item);
     }
-else if (sameString(tdb->type, "netAlign"))
+else if ((tdb != NULL) && sameString(tdb->type, "netAlign"))
     {
     netAlignClickHandler(tdb, item);
     }
