@@ -1169,6 +1169,14 @@ chainSome $(path1)
   # add bosTau1 to list of databases to align in
   #  /cluster/data/genbank/etc/align-genbank
 
+# GENBANK DOWNLOAD FILES (DONE, Jan. 26 Heather)
+
+  ssh hgwbeta
+  cd /genbank
+  ./bin/gbDbLoadStep -getDownloadSeqs=1 bosTau1
+  # output goes to /genbank/download/bosTau1/bigZips
+  # these are automatically resynced to hgnfs1 (which hgdownload reads)
+
 
 # SWAP human(target)/cow(query) alignments to make bosTau1.chainHg17
     ssh kksilo
