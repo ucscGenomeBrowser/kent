@@ -75,6 +75,9 @@ struct slName *stringToSlNames(char *string);
  * white space, but allowing multiple words in quotes.
  * Quotes if any are stripped.  */
 
+struct slName *commaSepToSlNames(char *commaSep);
+/* Convert comma-separated list of items to slName list. */
+
 struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */

@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.30 2004/04/24 19:04:50 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.31 2004/07/16 19:05:21 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -386,6 +386,34 @@ freeMem(dupe);
 slReverse(&list);
 return list;
 }
+
+struct slName *commaSepToSlNames(char *commaSep)
+/* Convert comma-separated list of items to slName list. */
+{
+struct slName *list = NULL, *el;
+char *s, *e;
+
+s = commaSep;
+while (s != NULL && s[0] != 0)
+    {
+    e = strchr(s, ',');
+    if (e == NULL)
+        {
+	el = slNameNew(s);
+	slAddHead(&list, el);
+	break;
+	}
+    else
+        {
+	el = slNameNewN(s, e - s);
+	slAddHead(&list, el);
+	s = e+1;
+	}
+    }
+slReverse(&list);
+return list;
+}
+
 
 void sprintLongWithCommas(char *s, long l)
 /* Print out a long number with commas a thousands, millions, etc. */
