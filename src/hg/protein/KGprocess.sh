@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.13 2004/03/18 17:22:00 fanhsu Exp $"
+#	"$Id: KGprocess.sh,v 1.14 2004/03/18 19:37:14 hiram Exp $"
 #
 #	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
@@ -32,6 +32,10 @@
 #
 
 ###########################  subroutines  ############################
+
+#	ensure usage of latest binaries no matter what PATH the user may have
+PATH=/cluster/bin/i386:$PATH
+export PATH
 
 #	see if a table exists and it has rows
 #	returns 1 for NOT EXISTS 0 for EXISTS
@@ -171,7 +175,7 @@ if [ ! -s all_mrna.psl ]; then
 #	-gbRoot=/cluster/data/genbank genbank mrna all_mrna.psl
 #	hg15 doesn't have the bin column, no cut necessary
     case ${RO_DB} in
-	hg15) hgsql -N -e 'select * from all_mrna' ${RO_DB}  > all_mrna.psl
+	rn2|hg15) hgsql -N -e 'select * from all_mrna' ${RO_DB}  > all_mrna.psl
 	    ;;
 	*) hgsql -N -e 'select * from all_mrna' ${RO_DB} \
 		| cut -f 2-30 >all_mrna.psl
@@ -457,6 +461,7 @@ if [ ! -s dnaLink.tab ]; then
     echo "`date` running dnaGene ${DB} ${PDB} ${RO_DB}"
     dnaGene ${DB} ${PDB} ${RO_DB}
     rm -f sortedKnownGene.tab
+    hgsql -e "drop table knownGeneLink;" ${DB} 2> /dev/null; \
 fi
 
 if [ ! -s dnaGene.tab ]; then
@@ -741,8 +746,16 @@ TablePopulated "keggMapDesc" ${DB} || { \
 #	next cluster run requires a lot of I/O, use the bluearc
 #	to alleviate the stress
 if [ ! -d /cluster/bluearc/kgDB/${DB}/kgProtMap ]; then
-	mkdir -p /cluster/bluearc/kgDB/${DB}/kgProtMap
-	ln -s /cluster/bluearc/kgDB/${DB}/kgProtMap ${TOP}/kgProtMap
+    mkdir -p /cluster/bluearc/kgDB/${DB}/kgProtMap
+    ln -s /cluster/bluearc/kgDB/${DB}/kgProtMap ${TOP}/kgProtMap
+fi
+
+if [ ! -d ${TOP}/kgProtMap ]; then
+    echo "ERROR: directory does not exist: ${TOP}/kgProtMap"
+    echo -e "\tmay be due to pre-existing bluearc directory:"
+    echo -e "\t/cluster/bluearc/kgDB/${DB}/kgProtMap"
+    echo -e "\tCorrect this before continuing"
+    exit 255
 fi
 
 cd ${TOP}/kgProtMap
