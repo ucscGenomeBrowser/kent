@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.824 2005/01/26 23:43:49 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.825 2005/01/27 00:40:38 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10498,6 +10498,44 @@ if (!strcmp(dbOrg,"Hg"))
 return rsId;
 }
 
+void doSnpEntrezGeneLink(struct trackDb *tdb, char *name)
+/* print link to EntrezGene for this SNP */
+{
+char *group = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[512];
+int rowOffset;
+
+safef(query, sizeof(query),
+      "select distinct        "
+      "       rl.locusLinkID, "
+      "       rl.name,        "
+      "       kg.name,        "
+      "       kg.proteinID    "
+      "from   knownGene  kg,  "
+      "       refLink    rl,  "
+      "       %s         snp, "
+      "       mrnaRefseq mrs  "
+      "where  snp.chrom  = kg.chrom       "
+      "  and  kg.name    = mrs.mrna       "
+      "  and  mrs.refSeq = rl.mrnaAcc     "
+      "  and  kg.txStart < snp.chromStart "
+      "  and  kg.txEnd   > snp.chromEnd   "
+      "  and  snp.name   = '%s'", group, name);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    printf("geneId=%s\" TARGET=_blank>Entrez Gene for ", row[0]);
+    printf("%s (%s; %s)</A></P>\n", row[1], row[2], row[3]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doSnpOld(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -10541,10 +10579,15 @@ if (printId)
     {
     printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     if (!strcmp(printId, "valid"))
+	{	
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
+	doSnpEntrezGeneLink(tdb, itemName);
+	}
     else
-	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A></P>\n", 
-	       printId, printId);
+	{
+	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A></P>\n", printId, printId);
+	doSnpEntrezGeneLink(tdb, printId);
+	}
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -10627,6 +10670,14 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",   snp.locType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+if (stringIn("nonsynon",snp.func)!=NULL)
+    {
+    printf("<P><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
+    printf("PropertySelect=Functional&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Function</A>\n", snp.name);
+    printf("<BR><A HREF=\"http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?");
+    printf("PropertySelect=Protein_structure&idtype=rsID&idvalue=%s\" TARGET=_blank>LS-SNP Protein Structure</A>\n", snp.name);
+    printf("<BR><a href=\"#LSSNP\" >LS-SNP description</A></P>\n");
+    }
 printf("<P>\n");
 }
 
@@ -10667,6 +10718,7 @@ while ((row = sqlNextRow(sr))!=NULL)
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
+doSnpEntrezGeneLink(tdb, itemName);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
@@ -10714,6 +10766,7 @@ if (snp!=NULL)
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n",
 	       snp->rsId, snp->rsId);
 	}
+    doSnpEntrezGeneLink(tdb, snp->rsId);
     printf("<BR>Genotypes:<BR>");
     printf("\n<BR><font face=\"Courier\">");
     printf("NA04477:&nbsp;%s&nbsp;&nbsp;", snp->NA04477);
@@ -10855,6 +10908,7 @@ if (snp!=NULL)
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
 	   snp->tscId, snp->tscId);
+    doSnpEntrezGeneLink(tdb, snp->rsId);
     }
 /* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */
 affy10KDetailsFree(&snp);
