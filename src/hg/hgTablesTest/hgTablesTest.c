@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.12 2004/11/08 04:47:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.13 2004/11/08 05:15:04 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -148,6 +148,15 @@ if (oldPage != NULL)
     	testName, button, buttonVal);
     htmlPageFree(&oldPage);
     }
+}
+
+int tableSize(char *db, char *table)
+/* Return number of rows in table. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+int size = sqlTableSize(conn, table);
+sqlDisconnect(&conn);
+return size;
 }
 
 void quickErrReport()
@@ -462,19 +471,28 @@ if (tablePage != NULL)
 	errAbort("Couldn't get main form on tablePage");
     testSchema(tablePage, mainForm, org, db, group, track, table);
     testSummaryStats(tablePage, mainForm, org, db, group, track, table);
-    if (outTypeAvailable(mainForm, "primaryTable"))
-	{
-	int rowCount;
-	rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-	testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-	if (outTypeAvailable(mainForm, "bed"))
+    if (outTypeAvailable(mainForm, "bed")) 
+        {
+	if (outTypeAvailable(mainForm, "primaryTable"))
 	    {
+	    int rowCount;
+	    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+	    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
 	    testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
 	    testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
 	    testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
 	    testOutGff(tablePage, mainForm, org, db, group, track, table);
 	    if (rowCount > 0)
 		testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+	    }
+	}
+    else if (outTypeAvailable(mainForm, "primaryTable"))
+	{
+	if (tableSize(db, table) < 500000)
+	    {
+	    int rowCount;
+	    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+	    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
 	    }
 	}
     verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
@@ -664,14 +682,14 @@ if (!gotNa)
            "Expected some rows in joint to have n/a.");
 }
 
+
 void testJoining(struct htmlPage *rootPage)
 /* Simulate pressing buttons to get a reasonable join on a
  * couple of swissProt tables. */
 {
 struct htmlPage *allPage, *page;
 char *org = NULL, *db = "swissProt", *group = "allTables", *track="swissProt";
-struct sqlConnection *conn = sqlConnect("swissProt");
-int expectedCount = sqlTableSize(conn, "taxon");
+int expectedCount = tableSize("swissProt", "taxon");
 
 allPage = quickSubmit(rootPage, org, db, group, "swissProt", 
 	"swissProt.taxon", "swissProtTables", NULL, NULL);
@@ -705,7 +723,6 @@ if (allPage != NULL)
     }
 
 htmlPageFree(&allPage);
-sqlDisconnect(&conn);
 verbose(1, "Tested joining on swissProt.taxon & commonName\n");
 }
 
