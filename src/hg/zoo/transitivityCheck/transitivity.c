@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "misc.h"
 
-static char const rcsid[] = "$Id: transitivity.c,v 1.3 2003/05/06 07:22:36 kate Exp $";
+static char const rcsid[] = "$Id: transitivity.c,v 1.4 2003/06/14 17:24:18 kent Exp $";
 
 #define MARKER -77
 
@@ -228,6 +228,7 @@ inferred_list = infer_alignment(left_list,right_list);
 
 fprintf(stdout,"\nInferred list\n");
 print_list(inferred_list);
+return 0;
 }
 
 

@@ -633,7 +633,7 @@ hitOut = mustOpen(hitFileName, "w");
 mergerOut = mustOpen(mergerFileName, "w");
 seqListList = needMem(genoListSize*sizeof(seqListList[0]) );
 fprintf(hitOut, "Pattern space 0.2 cDNA matcher\n");
-fprintf(hitOut, "cDNA files: ", cdnaListSize);
+fprintf(hitOut, "cDNA files: ");
 for (i=0; i<cdnaListSize; ++i)
     fprintf(hitOut, " %s", cdnaList[i]);
 fprintf(hitOut, "\n");
@@ -651,7 +651,7 @@ for (i=0; i<genoListSize; ++i)
         }
     }
 
-patSpace = makePatSpace(seqListList, genoListSize, oocFileName, 4, 100000);
+patSpace = makePatSpace(seqListList, genoListSize, 10, oocFileName, 4, 100000);
 
 for (i=0; i<cdnaListSize; ++i)
     {
