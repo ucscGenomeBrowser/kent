@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.10 2004/03/10 23:04:45 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.11 2004/03/15 06:55:12 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -299,6 +299,7 @@ if (isBaseLevel)
     {
     miList = loadBaseByBaseItems(track);
     }
+/* zoomed out */
 else if (track->visibility == tvFull || track->visibility == tvPack)
     {
     miList = loadPairwiseItems(track);
@@ -534,9 +535,11 @@ for (mi = miList; mi != NULL; mi = mi->next)
         mafList = wigMafLoadInRegion(conn, tablename, chromName, 
                                     seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
+        vgSetClip(vg, xOff, yOff, width, mi->height);
         drawDenseMaf(mafList, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
                                  color, track->ixAltColor);
+        vgUnclip(vg);
         ret = TRUE;
         mafAliFreeList(&mafList);
         }
@@ -670,9 +673,14 @@ static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
 {
 /* Draw routine for score graph, returns new Y offset */
 struct track *wigTrack = track->subtracks;
+enum trackVisibility wigVis;
 
-/* wiggle is displayed dense for all visibilities except full */
-enum trackVisibility wigVis = (vis == tvFull || vis == tvPack ? tvFull : tvDense);
+if (zoomedToBaseLevel)
+    /* wiggle is displayed dense for all visibilities except full and  pack */
+    wigVis = (vis == tvFull || vis == tvPack ? tvFull : tvDense);
+else
+    /* wiggle is displayed full for all visibilities except dense */
+    wigVis = (vis == tvDense ? tvDense : tvFull);
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
@@ -690,7 +698,7 @@ if (wigTrack != NULL)
         }
     else
         */
-        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
+    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
     vgUnclip(vg);
