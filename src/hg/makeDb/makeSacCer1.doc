@@ -775,8 +775,8 @@ end
 
 # LOADING REGULATORY CODE STUFF (In Progress 2004-9-22 -Jim)
     cd /cluster/data/sacCer1/bed
-    mkdir fraenkelYoung
-    cd fraenkelYoung
+    mkdir harbisonGordon
+    cd harbisonGordon
     # Get GFF files and motif file from downloads section of 
     # http://jura.wi.mit.edu/fraenkel/regulatory_map
     # Also get v24_probes_040923.GFF from Ben Gordon dbgordon@wi.mit.edu via email.
