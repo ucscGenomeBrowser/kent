@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.1 2003/09/16 22:46:41 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.2 2003/10/10 21:45:41 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will
@@ -23,10 +23,11 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->Span = sqlUnsigned(row[6]);
-ret->Count = sqlUnsigned(row[7]);
-ret->Offset = sqlUnsigned(row[8]);
-ret->File = row[9];
+ret->Min = sqlUnsigned(row[6]);
+ret->Span = sqlUnsigned(row[7]);
+ret->Count = sqlUnsigned(row[8]);
+ret->Offset = sqlUnsigned(row[9]);
+ret->File = row[10];
 }
 
 struct wiggle *wiggleLoad(char **row)
@@ -44,10 +45,11 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->Span = sqlUnsigned(row[6]);
-ret->Count = sqlUnsigned(row[7]);
-ret->Offset = sqlUnsigned(row[8]);
-ret->File = cloneString(row[9]);
+ret->Min = sqlUnsigned(row[6]);
+ret->Span = sqlUnsigned(row[7]);
+ret->Count = sqlUnsigned(row[8]);
+ret->Offset = sqlUnsigned(row[9]);
+ret->File = cloneString(row[10]);
 return ret;
 }
 
@@ -57,7 +59,7 @@ struct wiggle *wiggleLoadAll(char *fileName)
 {
 struct wiggle *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -75,7 +77,7 @@ struct wiggle *wiggleLoadAllByChar(char *fileName, char chopper)
 {
 struct wiggle *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -103,6 +105,7 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->Min = sqlUnsignedComma(&s);
 ret->Span = sqlUnsignedComma(&s);
 ret->Count = sqlUnsignedComma(&s);
 ret->Offset = sqlUnsignedComma(&s);
@@ -158,6 +161,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->Min);
 fputc(sep,f);
 fprintf(f, "%u", el->Span);
 fputc(sep,f);
