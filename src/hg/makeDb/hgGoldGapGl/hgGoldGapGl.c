@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.18 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.19 2004/10/23 20:47:25 kent Exp $";
 
 
 void usage()
@@ -22,6 +22,8 @@ errAbort(
   "hgGoldGapGl - Put chromosome .agp and .gl files into browser database.\n"
   "usage:\n"
   "   hgGoldGapGl database gsDir ooSubDir\n"
+  "or\n"
+  "   hgGoldGapGl database agpFile\n"
   "options:\n"
   "   -noGl  - don't do gl bits\n"
   "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
@@ -29,6 +31,9 @@ errAbort(
   "example:\n"
   "   hgGoldGapGl -noGl hg16 /cluster/data/hg16 .\n");
 }
+
+char *goldTabName = "gold.tab";
+char *gapTabName = "gap.tab";
 
 char *createGold =
 "CREATE TABLE %s (\n"
@@ -42,10 +47,19 @@ char *createGold =
 "   fragStart int unsigned not null,    # start position in frag\n"
 "   fragEnd int unsigned not null,      # end position in frag\n"
 "   strand char(1) not null,    # + or - (orientation of fragment)\n"
-"             #Indices\n"
+"             #Indices\n";
+
+char *goldSplitIndex =
 "   INDEX(bin),\n"
 "   UNIQUE(chromStart),\n"
 "   UNIQUE(chromEnd),\n"
+"   INDEX(frag(14))\n"
+")\n";
+
+char *goldIndex = 
+"   INDEX(chrom(16),bin),\n"
+"   UNIQUE(chrom(16),chromStart),\n"
+"   UNIQUE(chrom(16),chromEnd),\n"
 "   INDEX(frag(14))\n"
 ")\n";
 
@@ -60,10 +74,18 @@ char *createGap =
 "   size int unsigned not null,	# size of gap\n"
 "   type varchar(255) not null,	# contig, clone, fragment, etc.\n"
 "   bridge varchar(255) not null,	# yes, no, mrna, bacEndPair, etc.\n"
-"             #Indices\n"
+"             #Indices\n";
+
+char *gapSplitIndex =
 "   INDEX(bin),\n"
 "   UNIQUE(chromStart),\n"
 "   UNIQUE(chromEnd)\n"
+")\n";
+
+char *gapIndex =
+"   INDEX(chrom(16),bin),\n"
+"   UNIQUE(chrom(16),chromStart),\n"
+"   UNIQUE(chrom(16),chromEnd)\n"
 ")\n";
 
 char *createGl = 
@@ -79,6 +101,54 @@ char *createGl =
 ")\n";
 
 
+void splitAgp(char *agpName, char *goldFileName, char *gapFileName)
+/* Split up agp file into gold and gap files. */
+{
+struct lineFile *lf;
+char *words[16];
+int wordCount;
+FILE *goldTab, *gapTab;
+
+/* Scan through .agp file splitting it into gold
+ * and gap components. */
+goldTab = mustOpen(goldFileName, "w");
+gapTab = mustOpen(gapFileName, "w");
+lf = lineFileOpen(agpName, TRUE);
+while ((wordCount = lineFileChop(lf, words)) > 0)
+    {
+    int start, end;
+    if (wordCount < 5)
+	errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
+    start = sqlUnsigned(words[1])-1;
+    end = sqlUnsigned(words[2]);
+    if (words[4][0] == 'N' || words[4][0] == 'U')
+	{
+	struct agpGap gap;
+	agpGapStaticLoad(words, &gap);
+	gap.chromStart -= 1;
+	fprintf(gapTab, "%u\t", hFindBin(start, end));
+	agpGapTabOut(&gap, gapTab);
+	}
+    else
+	{
+	struct agpFrag gold;
+	agpFragStaticLoad(words, &gold);
+	// file is 1-based. agpFragLoad() now assumes 0-based. 
+	// and agpFragTabOut() will assume 1-based, but we will load 
+	// the generated file straight into the database, so 
+	// subtract 2:
+	gold.chromStart -= 2;
+	gold.fragStart  -= 2;
+	fprintf(goldTab, "%u\t", hFindBin(start, end));
+	agpFragTabOut(&gold, goldTab);
+	}
+    }
+lineFileClose(&lf);
+carefulClose(&goldTab);
+carefulClose(&gapTab);
+
+}
+
 void makeGoldAndGap(struct sqlConnection *conn, char *chromDir)
 /* Read in .agp files in chromDir and use them to create the
  * gold and gap tables for the corresponding chromosome(s). */
@@ -87,22 +157,15 @@ struct dyString *ds = newDyString(2048);
 struct fileInfo *fiList, *fi;
 char dir[256], chrom[128], ext[64];
 char goldName[128], gapName[128];
-char *goldTabName = "gold.tab";
-char *gapTabName = "gap.tab";
 char *agpName;
-FILE *goldTab, *gapTab;
-struct lineFile *lf;
 int lineSize;
 char *line;
 char oLine[512];
+char *ptr;
 
 fiList = listDirX(chromDir, "*.agp", TRUE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
-    char *ptr;
-    char *words[16];
-    int wordCount;
-
     /* Get full path name of .agp file and process it
      * into table names. */
     agpName = fi->name;
@@ -113,54 +176,14 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     sprintf(goldName, "%s_gold", chrom);
     sprintf(gapName, "%s_gap", chrom);
 
-    /* Scan through .agp file splitting it into gold
-     * and gap components. */
-    goldTab = mustOpen(goldTabName, "w");
-    gapTab = mustOpen(gapTabName, "w");
-    lf = lineFileOpen(agpName, TRUE);
-    while ((wordCount = lineFileChop(lf, words)) > 0)
-        {
-	int start, end;
-	if (wordCount < 5)
-	    errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
-	start = sqlUnsigned(words[1])-1;
-	end = sqlUnsigned(words[2]);
-	if (words[4][0] == 'N' || words[4][0] == 'U')
-	    {
-	    struct agpGap gap;
-	    agpGapStaticLoad(words, &gap);
-	    gap.chromStart -= 1;
-	    fprintf(gapTab, "%u\t", hFindBin(start, end));
-	    agpGapTabOut(&gap, gapTab);
-	    }
-	else
-	    {
-	    struct agpFrag gold;
-	    agpFragStaticLoad(words, &gold);
-	    // file is 1-based. agpFragLoad() now assumes 0-based. 
-	    // and agpFragTabOut() will assume 1-based, but we will load 
-	    // the generated file straight into the database, so 
-	    // subtract 2:
-	    gold.chromStart -= 2;
-	    gold.fragStart  -= 2;
-	    fprintf(goldTab, "%u\t", hFindBin(start, end));
-	    agpFragTabOut(&gold, goldTab);
-	    }
-	}
-    lineFileClose(&lf);
-    fclose(goldTab);
-    fclose(gapTab);
+    /* Create gold & gap tab separated files. */
+    splitAgp(fi->name, goldTabName, gapTabName);
 
     /* Create gold table and load it up. */
-    if (sqlTableExists(conn, goldName))
-	{
-	dyStringClear(ds);
-	dyStringPrintf(ds, "drop table %s", goldName);
-	sqlUpdate(conn, ds->string);
-	}
     dyStringClear(ds);
     dyStringPrintf(ds, createGold, goldName);
-    sqlUpdate(conn, ds->string);
+    dyStringAppend(ds, goldSplitIndex);
+    sqlRemakeTable(conn, goldName, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
         goldTabName, goldName);
@@ -168,14 +191,10 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     remove(goldTabName);
 
     /* Create gap table and load it up. */
-    if (sqlTableExists(conn, gapName))
-	{
-	dyStringClear(ds);
-	dyStringPrintf(ds, "DROP table %s", gapName);
-	sqlUpdate(conn, ds->string);
-	}
     dyStringClear(ds);
     dyStringPrintf(ds, createGap, gapName);
+    dyStringAppend(ds, gapSplitIndex);
+    sqlRemakeTable(conn, gapName, ds->string);
     sqlMaybeMakeTable(conn, gapName, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
@@ -322,14 +341,53 @@ if (!gotAny)
     errAbort("No contig agp and gold files found");
 }
 
+
+void hgGoldGap(char *database, char *agpFile)
+/* hgGoldGap - Put chromosome .agp file into browser database.. */
+{
+struct dyString *ds = dyStringNew(0);
+struct sqlConnection *conn = sqlConnect(database);
+
+splitAgp(agpFile, goldTabName, gapTabName);
+
+/* Create gold table and load it up. */
+dyStringClear(ds);
+dyStringPrintf(ds, createGold, "gold");
+dyStringAppend(ds, goldIndex);
+sqlRemakeTable(conn, "gold", ds->string);
+dyStringClear(ds);
+dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+    goldTabName, "gold");
+sqlUpdate(conn, ds->string);
+remove(goldTabName);
+
+/* Create gap table and load it up. */
+dyStringClear(ds);
+dyStringPrintf(ds, createGap, "gap");
+dyStringAppend(ds, gapIndex);
+sqlRemakeTable(conn, "gap", ds->string);
+sqlMaybeMakeTable(conn, "gap", ds->string);
+dyStringClear(ds);
+dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
+    gapTabName, "gap");
+sqlUpdate(conn, ds->string);
+remove(gapTabName);
+
+sqlDisconnect(&conn);
+dyStringFree(&ds);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 boolean doGl;
 optionHash(&argc, argv);
-if (argc != 4)
+if (argc != 4 && argc != 3)
     usage();
 doGl = !(optionExists("noGl") || optionExists("nogl"));
-hgGoldGapGl(argv[1], argv[2], argv[3], doGl, optionVal("chrom", NULL));
+if (argc == 3)
+    hgGoldGap(argv[1], argv[2]);
+else
+    hgGoldGapGl(argv[1], argv[2], argv[3], doGl, optionVal("chrom", NULL));
 return 0;
 }
