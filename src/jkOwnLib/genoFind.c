@@ -15,7 +15,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.8 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.9 2004/02/03 03:48:13 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -243,8 +243,8 @@ for (i=0; i<=lastTile; i += tileSize)
     }
 }
 
-static void gfCountTilesInNib(struct genoFind *gf, char *nibName)
-/* Count all tiles in nib file. */
+static int gfCountTilesInNib(struct genoFind *gf, char *nibName)
+/* Count all tiles in nib file.  Returns nib size. */
 {
 FILE *f;
 int tileSize = gf->tileSize;
@@ -265,6 +265,7 @@ for (i=0; i < nibSize; i = endBuf)
     freeDnaSeq(&seq);
     }
 fclose(f);
+return nibSize;
 }
 
 static int gfAllocLists(struct genoFind *gf)
@@ -481,11 +482,19 @@ int i;
 bits32 offset = 0, nibSize;
 char *nibName;
 struct gfSeqSource *ss;
+long long total = 0, warnAt;
 
+/* Warn if they exceed 4 gig. */
+warnAt = 1024*1024;
+warnAt *= 4*1024;	
 if (allowOneMismatch)
     errAbort("Don't currently support allowOneMismatch in gfIndexNibs");
 for (i=0; i<nibCount; ++i)
-    gfCountTilesInNib(gf, nibNames[i]);
+    {
+    total += gfCountTilesInNib(gf, nibNames[i]);
+    if (total >= warnAt)
+	errAbort("Exceeding 4 billion bases, sorry gfServer can't handle that.");
+    }
 gfAllocLists(gf);
 gfZeroNonOverused(gf);
 AllocArray(gf->sources, nibCount);
