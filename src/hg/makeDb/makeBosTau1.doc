@@ -18,6 +18,7 @@ exit; # don't actually run this like a script :)
     mkdir downloads
     cd downloads
 
+    # we won't use these, but download them for completeness
     mkdir Bin0
     cd Bin0
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau20040927-freeze-bin0.fa.gz
