@@ -19,7 +19,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.23 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.24 2003/05/18 07:56:51 baertsch Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -79,8 +79,8 @@ axt->symCount = symCount = strlen(line);
 axt->tSym = cloneMem(line, symCount+1);
 lineFileNeedNext(lf, &line, NULL);
 if (strlen(line) != symCount)
-    errAbort("Symbol count inconsistent between sequences line %d of %s",
-    	lf->lineIx, lf->fileName);
+    errAbort("Symbol count %d != %d inconsistent between sequences line %d and prev line of %s",
+    	symCount, strlen(line), lf->lineIx, lf->fileName);
 axt->qSym = cloneMem(line, symCount+1);
 lineFileNext(lf, &line, NULL);	/* Skip blank line */
 return axt;
@@ -100,6 +100,9 @@ fputc('\n', f);
 mustWrite(f, axt->qSym, axt->symCount);
 fputc('\n', f);
 fputc('\n', f);
+if ((strlen(axt->tSym) != strlen(axt->qSym)) || (axt->symCount > strlen(axt->tSym)))
+    fprintf(stderr,"Symbol count %d != %d inconsistent in %s in record %d.\n",
+    	strlen(axt->qSym),strlen(axt->tSym), axt->qName, ix);
 }
 
 int axtCmpQuery(const void *va, const void *vb)
