@@ -123,11 +123,8 @@ struct outFiles
     FILE *pslFh;               /* filtered psls */
     FILE *droppedFh;           /* dropped psls, or NULL */
     FILE *weirdOverPslFh;      /* wierd overlap psls, or NULL */
-    FILE *alignStatsFh;        /* alignment stats, or NULL;
-}
-
-XXX;
-
+    FILE *alignStatsFh;        /* alignment stats, or NULL; */
+};
 
 void minQSizeFilter(struct cDnaAligns *cdAlns)
 /* filter by minimum query size */
@@ -376,7 +373,7 @@ gCoverWeight = optionFrac("coverWeight", gCoverWeight);
 gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
 gMinQSize = optionInt("minQSize", gMinQSize);
 gMaxAligns = optionInt("maxAligns", gMaxAligns);
-gAlignStats = optionInt("alignStats", alignStats);
+gAlignStats = optionVal("alignStats", gAlignStats);
 
 if (optionExists("nonComparative"))
     {
