@@ -48,6 +48,7 @@
 #include "humanParalog.h"
 #include "synteny100000.h"
 #include "mouseSyn.h"
+#include "mouseSynWhd.h"
 #include "syntenyBerk.h"
 #include "syntenySanger.h"
 #include "knownMore.h"
@@ -5078,6 +5079,7 @@ else
     tg->itemColor = NULL;
 tg->drawName = TRUE;
 }
+
 void freeMouseSyn(struct trackGroup *tg)
 /* Free up mouseSyn items. */
 {
@@ -5089,8 +5091,8 @@ Color mouseSynItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 {
 char chromStr[20];     
 struct mouseSyn *ms = item;
-/* return (ms->segment&1) ? tg->ixColor : tg->ixAltColor; old color scheme */    
-strncpy(chromStr,ms->name+6,2);
+
+strncpy(chromStr, ms->name+strlen("mouse "), 2);
 chromStr[2] = '\0';
 return ((Color)getChromColor(chromStr, mg));
 }
@@ -5102,6 +5104,38 @@ tg->loadItems = loadMouseSyn;
 tg->freeItems = freeMouseSyn;
 tg->itemColor = mouseSynItemColor;
 tg->drawName = TRUE;
+}
+
+void loadMouseSynWhd(struct trackGroup *tg)
+/* Load up mouseSynWhd from database table to trackGroup items. */
+{
+bedLoadItem(tg, "mouseSynWhd", (ItemLoader)mouseSynWhdLoad);
+}
+
+void freeMouseSynWhd(struct trackGroup *tg)
+/* Free up mouseSynWhd items. */
+{
+mouseSynWhdFreeList((struct mouseSynWhd**)&tg->items);
+}
+
+Color mouseSynWhdItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of mouseSynWhd track item. */
+{
+char chromStr[20];
+struct mouseSynWhd *ms = item;
+
+strncpy(chromStr, ms->name+strlen("chr"), 2);
+chromStr[2] = '\0';
+return ((Color)getChromColor(chromStr, mg));
+}
+
+void mouseSynWhdMethods(struct trackGroup *tg)
+/* Make track group for mouseSyn. */
+{
+tg->loadItems = loadMouseSynWhd;
+tg->freeItems = freeMouseSynWhd;
+tg->itemColor = mouseSynWhdItemColor;
+tg->subType = lfWithBarbs;
 }
 
 #ifdef EXAMPLE
@@ -9293,6 +9327,7 @@ registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
+registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
