@@ -26,13 +26,13 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.3 2003/08/13 04:49:14 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.4 2003/08/13 19:16:12 kent Exp $";
 
 /* Which database to use */
 char *database = "hg15";
 
 /* Location of mouse/human axt files. */
-char *axtDir = "/cluster/store2/mm.2002.02/mm2/bed/blastz.gs11.2002-06-05/axtBestUnzip";
+char *axtDir = "/cluster/store5/gs.16/build33/bed/blastz.mm3.2003-04-12-03-MS/axtNet";
 
 /* File with human/worm or mouse orthologs. */
 char *orthoFile = "hugo_with_worm_or_fly.txt";
@@ -52,9 +52,6 @@ char *bestDupFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/dupe.rpt";
 /* Unresolved dupe output. */
 FILE *dupeFile;
 char *dupeFileName = "dupes.out";
-
-/* Centromere/big gap info.  Obsolete as of October 2000 assembly. */
-//char *gapFile = "centro.tab";
 
 /* Some colors. */
 struct rgbColor rgbRed = {240,0,0};
@@ -160,26 +157,6 @@ slReverse(&rdList);
 uglyf("Got %d resolved duplications\n", slCount(rdList));
 }
 
-struct hash *makeLocusLinkToJaxHash(struct sqlConnection *conn)
-/* Make hash keyed by locus link ID with value 
- * of Jackson Labs ID. */
-{
-struct hash *hash = newHash(0);
-struct sqlResult *sr;
-char **row;
-int count = 0;
-
-sr = sqlGetResult(conn, "select LLid, MGIid from MGIid");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *jaxId = cloneString(row[1]);
-    hashAdd(hash, row[0], jaxId);
-    ++count;
-    }
-sqlFreeResult(&sr);
-return hash;
-}
-
 void fillFirstColumnHash(char *fileName, struct hash *hash)
 /* Fill in hash with ID's in first column of file. */
 {
@@ -190,7 +167,15 @@ while (lineFileRow(lf, row))
 lineFileClose(&lf);
 }
 
-struct hash *hashFromTwoColumn(char *fileName, int column)
+struct hash *makeFirstColumnHash(char *fileName)
+/* Make hash of ID's in first column of file. */
+{
+struct hash *hash = newHash(0);
+fillFirstColumnHash(fileName, hash);
+return hash;
+}
+
+struct hash *makeSecondColumnHash(char *fileName)
 /* Parse column of two column file into hash. */
 {
 struct hash *hash = newHash(0);
@@ -200,19 +185,12 @@ int count = 0;
 
 while (lineFileRow(lf, row))
     {
-    hashStore(hash, row[column]);
+    hashStore(hash, row[1]);
     ++count;
     }
 return hash;
 }
 
-struct hash *makeFirstColumnHash(char *fileName)
-/* Make hash of ID's in first column of file. */
-{
-struct hash *hash = newHash(0);
-fillFirstColumnHash(fileName, hash);
-return hash;
-}
 
 struct knownGene
 /* Enough info to draw a known gene. */
@@ -515,6 +493,7 @@ sqlFreeResult(&sr);
 }
 
 
+
 void getPslTicks(char *track, char *outputName, int r, int g, int b,
 	struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
 /* Get PSL track stuff. */
@@ -735,7 +714,6 @@ freeMem(winBases);
 freeMem(winRepBases);
 }
 
-#ifdef SOON
 void getMouseAli(struct chromGaps *cg, char *chrom, int chromSize, 
 	char *axtFile, struct sqlConnection *conn, FILE *f, char *type, 
 	int windowSize, double scale, int red, int green, int blue)
@@ -835,7 +813,6 @@ outputWindowedWiggle(cg, f, idBases, covBases, windowSize, winsPerChrom,
 freeMem(idBases);
 freeMem(covBases);
 }
-#endif /* SOON */
 
 
 double nRatio(struct sqlConnection *conn, 
@@ -938,6 +915,113 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(label, sizeof(label), "%s%s", mouseChrom+3, strand);
     printTab(f, cg, chrom, start, end, 
 		"synteny", "box", col->r, col->g, col->b, label);
+    }
+sqlFreeResult(&sr);
+}
+
+void getDuplicons(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f)
+/* Get duplicon track. */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+safef(query, sizeof(query),
+	"select chromStart,chromEnd,score from jkDuplicon "
+	"where chrom = '%s' order by chromStart", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int start = atoi(row[0]);
+    int end = atoi(row[1]);
+    double idRatio = 0.001 * atoi(row[2]);
+    int gray = 255 - (idRatio*2.0 - 1.0) * 255;
+    if (gray < 0) gray = 0;
+    if (gray > 255) gray = 255;
+    printTab(f, cg, chrom, start, end, 
+		"duplicon", "box", gray, gray, gray, ".");
+    }
+sqlFreeResult(&sr);
+}
+
+void getCentroTelo(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f)
+/* Get centromere and telomere repeats. */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+safef(query, sizeof(query),
+	"select genoStart,genoEnd,repFamily from %s_rmsk "
+	"where repFamily = 'centr' or repFamily = 'telo'"
+	, chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int start = atoi(row[0]);
+    int end = atoi(row[1]);
+    char *label = NULL;
+    if (sameString(row[2], "telo"))
+	printTab(f, cg, chrom, start, end, 
+		    "repTelomere", "box", 50, 50, 250, ".");
+    else
+	printTab(f, cg, chrom, start, end, 
+		    "repCentromere", "box", 200, 0, 250, ".");
+    }
+sqlFreeResult(&sr);
+}
+
+void fakeRnaGenes(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f)
+/* Get centromere and telomere repeats. */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+struct rmskOut rmsk;
+safef(query, sizeof(query),
+	"select * from %s_rmsk "
+	"where repClass = 'tRNA'"
+	, chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int r,g,b;
+    rmskOutStaticLoad(row + 1, &rmsk);
+    if (rmsk.milliDiv > 20 || rmsk.repStart < -5 || rmsk.repStart > 5
+    	|| rmsk.repLeft < -5 || rmsk.repLeft > 5)
+	{
+	r = 255, g=200, b=100;
+	}
+    else
+        {
+	r = 150, g=75, b=0;
+	}
+    printTab(f, cg, chrom, rmsk.genoStart, rmsk.genoEnd, 
+	    "rnaGenes", "tick", r, g, b, ".");
+    }
+sqlFreeResult(&sr);
+}
+
+
+void getGaps(struct chromGaps *cg, char *chrom, 
+	struct sqlConnection *conn, FILE *f)
+/* Get gaps track. */
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+safef(query, sizeof(query),
+	"select chromStart,chromEnd,type from %s_gap "
+	"order by chromStart", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int start = atoi(row[0]);
+    int end = atoi(row[1]);
+    char *type = row[2];
+    printTab(f, cg, chrom, start, end, 
+		"gap", "box", 150, 0, 0, type);
     }
 sqlFreeResult(&sr);
 }
@@ -1056,6 +1140,20 @@ freeMem(winBases);
 freeMem(winRepBases);
 }
 
+void fakeMutationRate(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
+/* Draw sine wave to fake mutation rate. */
+{
+int i;
+for (i=0; i<chromSize; i += 25000)
+    {
+    double angle = 3.1415 * i / 1000000;
+    double val = (1.0 + sin(angle)) * 0.5;
+    printTabNum(f, cg, chrom, i, i+25000, 
+	    "mutation", "wiggle", 0, 128, 0, val);
+    }
+}
+
+
 void getBands(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
 /* Get chromosome bands stuff. */
 {
@@ -1119,21 +1217,26 @@ char axtFile[512];
 printf("Processing %s\n", chrom);
 sprintf(axtFile, "%s/%s.axt", axtDir, chrom);
 
-getSnpDensity(cg, chrom, chromSize, conn, f);
 getBands(cg, chrom, conn, f);
+getDuplicons(cg, chrom, conn, f);
+getCentroTelo(cg, chrom, conn, f);
+getGaps(cg, chrom, conn, f);
+
+/* Get centromere and telomere repeats. */
 getSynteny(cg, chrom, conn, f);
-#ifdef SOON
+getSnpDensity(cg, chrom, chromSize, conn, f);
+fakeMutationRate(cg, chrom, chromSize, conn, f);
 getMouseAli(cg, chrom, chromSize, axtFile, conn, f, 
 	"HS_ALI", 50000, 1.0/0.85, 0, 0, 255);
 getMouseId(cg, chrom, chromSize, axtFile, conn, f,
 	"HS_ID", 25000, 255, 0, 0);
-#endif /* SOON */
 getGc(cg, chrom, conn, f);
 getRepeatDensity(cg, chrom, chromSize, conn, f, "SINE", 100000, 1.0/0.33, 255, 0, 0);
 getRepeatDensity(cg, chrom, chromSize, conn, f, "LINE", 100000, 1.0/0.66, 0, 0, 255);
 #ifdef SOON
 getRnaGenes(cg, chrom, conn, f);
 #endif /* SOON */
+fakeRnaGenes(cg, chrom, conn, f);
 getCpgIslands(cg, chrom, conn, f);
 getFishBlatHits(cg,chrom,conn,f);
 getEstTicks(cg, chrom, conn, f);
@@ -1183,9 +1286,9 @@ struct sqlConnection *conn = sqlConnect(database);
 struct hash *dupHash = newHash(0);
 struct hash *resolvedDupHash = newHash(8);
 struct resolvedDup *rdList = NULL;
-struct hash *diseaseHash = hashFromTwoColumn(diseaseFile, 1);
-struct hash *orthoHash = hashFromTwoColumn(orthoFile, 0);
-struct hash *weedHash = hashFromTwoColumn(weedFile, 0);
+struct hash *diseaseHash = makeSecondColumnHash(diseaseFile);
+struct hash *orthoHash = makeFirstColumnHash(orthoFile);
+struct hash *weedHash = makeFirstColumnHash(weedFile);
 
 dupeFile = mustOpen(dupeFileName, "w");
 hSetDb(database);
