@@ -11,7 +11,7 @@
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
 
-int winSize = 1500000;	/* Size of window to pass to genscan. */
+int winSize = 1200000;	/* Size of window to pass to genscan. */
 int stepSize;
 
 void usage()
@@ -25,7 +25,8 @@ errAbort(
   "   -subopt=output.bed - Produce suboptimal exons.\n"
   "   -trans=output.fa - where to put translated proteins.\n"
   "   -prerun=input.genscan - Assume genscan run already with this output.\n"
-  "   -window=size    Set window to pass to genscan specific size (default 1500000)"
+  "   -window=size    Set window to pass to genscan specific size (default 1200000)\n"
+  "                   You want ~400 bytes memory for each base in window."
   );
 }
 
