@@ -308,6 +308,7 @@ _EOF_
     zip -j zips/chromOut.zip RMOut/Group?{,?}.out
     zip -j zips/chromFa.zip maskedFa/Group?{,?}.fa
     zip -j zips/GroupTrf.zip bed/simpleRepeat/trfMask.bed    
+    zip -j zips/GroupAgp.zip downloads/contigs/*.agp
     for fa in maskedFa/Group?{,?}.fa; do
       maskOutFa $fa hard $fa.hardMasked
     done
@@ -315,7 +316,8 @@ _EOF_
     cd /usr/local/apache/htdocs/goldenPath/apiMel2
     mkdir bigZips database
     # Create README.txt files in bigZips/ and database/ to explain the files.
-    cp -p /cluster/data/dm2/zips/*.zip bigZips
+    cp -p /cluster/data/apiMel2/zips/*.zip bigZips
+    md5sum *.zip > md5sum.txt
 
 # MAKE 11.OOC FILE FOR BLAT (DONE 2/8/2005 Andy)
     # Use -repMatch=100 (based on size -- for human we use 1024, and 
