@@ -27,7 +27,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.98 2003/10/03 03:34:46 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.99 2003/10/15 03:58:28 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -161,7 +161,8 @@ int outputTypeNonPosMenuSize = 3;
 #define getSomeFieldsPhase  "Get these fields"
 #define getSequencePhase    "Get sequence"
 #define getBedPhase         "Get BED"
-#define getCtPhase         "Get Custom Track"
+#define getCtPhase          "Get Custom Track"
+#define getCtBedPhase       "Get Custom Track File"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
 /* Old "phase" values handled for backwards compatibility: */
@@ -3207,14 +3208,12 @@ else
 puts("</TD></TR><TR><TD></TD><TD>name=");
 if (op == NULL)
     table2 = NULL;
-snprintf(buf, sizeof(buf), "tb_%s%s%s", hti->rootName,
-	 (table2 ? "_" : ""),
-	 (table2 ? table2 : ""));
+snprintf(buf, sizeof(buf), "tb_%s", hti->rootName);
 setting = cgiUsualString("tbCtName", buf);
 cgiMakeTextVar("tbCtName", setting, 16);
 puts("</TD></TR><TR><TD></TD><TD>description=");
 snprintf(buf, sizeof(buf), "table browser query on %s%s%s",
-	 hti->rootName,
+	 table,
 	 (table2 ? ", " : ""),
 	 (table2 ? table2 : ""));
 setting = cgiUsualString("tbCtDesc", buf);
@@ -3229,7 +3228,15 @@ puts("</TD></TR><TR><TD></TD><TD>");
 puts("</TD></TR></TABLE>");
 puts("<P> <B> Create one BED record per: </B>");
 fbOptionsHtiCart(hti, cart);
-cgiMakeButton("phase", (doCt ? getCtPhase : getBedPhase));
+if (doCt)
+    {
+    cgiMakeButton("phase", getCtPhase);
+    cgiMakeButton("phase", getCtBedPhase);
+    }
+else
+    {
+    cgiMakeButton("phase", getBedPhase);
+    }
 puts("</FORM>");
 webEnd();
 }
@@ -4561,6 +4568,8 @@ else
     else if (existsAndEqual("phase", ctOptionsPhase))
 	doBedCtOptions(TRUE);
     else if (existsAndEqual("phase", getBedPhase))
+	doGetBedCt(FALSE);
+    else if (existsAndEqual("phase", getCtBedPhase))
 	doGetBedCt(FALSE);
     else if (existsAndEqual("phase", getCtPhase))
 	doGetBedCt(TRUE);
