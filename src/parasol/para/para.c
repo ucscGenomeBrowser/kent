@@ -18,44 +18,44 @@ errAbort(
   "Normal usage is to do a 'para make' followed by 'para push' until\n"
   "job is done.  Use 'para check' to check status\n"
   "usage:\n"
-  "   para command batch.hut [command-specific arguments]\n"
+  "   para command batch [command-specific arguments]\n"
   "The commands are:\n"
-  "para make batch.hut jobList\n"
+  "para make batch jobList\n"
   "   This makes the job-tracking database from a text file with the\n"
   "   command line for each job on a separate line\n"
-  "para push batch.hut\n"
+  "para push batch\n"
   "   This pushes forward the batch of jobs by submitting jobs to codine\n"
   "   It will try and keep the codine queue a size that is efficient for\n"
   "   codine, and retry failed jobs\n"
   "   options:\n"
   "      -retries=N   Number of retries per job - default 4.\n"
-  "      -maxQueue=N  Number of jobs to allow on codine queue - default 10000\n"
+  "      -maxQueue=N  Number of jobs to allow on parasol queue - default 100000\n"
   "      -minPush=N  Minimum number of jobs to queue - default 1.  Overrides maxQueue\n"
-  "      -maxPush=N  Maximum numer of jobs to queue - default 10000\n"
+  "      -maxPush=N  Maximum number of jobs to queue - default 100000\n"
   "      -warnTime=N Number of minutes job can run before hang warning - default 4320 (3 days)\n"
   "      -killTime=N Number of minutes job can run before push kills it - default 20160 (2 weeks)\n"
-  "para shove batch.hut\n"
+  "para shove batch\n"
   "   Push jobs until can't push any more.  Options as with push and also:\n"
   "      -sleepTime=N  Number of seconds to sleep between pushes\n"
-  "para try batch.hut\n"
+  "para try batch\n"
   "      This is like para push, but only submits up to 10 jobs\n"
-  "para check batch.hut\n"
+  "para check batch\n"
   "   This checks on the progress of the jobs.\n"
-  "para stop batch.hut\n"
+  "para stop batch\n"
   "   This stops all the jobs in the batch\n"
-  "para finished batch.hut\n"
+  "para finished batch\n"
   "   List jobs that have finished\n"
-  "para hung batch.hut\n"
+  "para hung batch\n"
   "   List hung jobs in the batch\n"
-  "para crashed batch.hut\n"
+  "para crashed batch\n"
   "   List jobs that crashed or failed output checks\n"
-  "para failed batch.hut\n"
+  "para failed batch\n"
   "   List jobs that crashed or hung\n"
-  "para problems batch.hut\n"
+  "para problems batch\n"
   "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
-  "para running batch.hut\n"
+  "para running batch\n"
   "   Print info on currently running jobs\n"
-  "para time batch.hut\n"
+  "para time batch\n"
   "   List timing information\n"
   );
 }
@@ -63,9 +63,9 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 4;
-int maxQueue = 10000;
+int maxQueue = 100000;
 int minPush = 1;
-int maxPush = 20000;
+int maxPush = 100000;
 int warnTime = 3*24*60;
 int killTime = 14*24*60;
 int sleepTime = 20*60;
@@ -110,25 +110,6 @@ char *checkWhens[] = {"in", "out"};
 
 /* Types of checks. */
 char *checkTypes[] = {"exists", "exists+", "line", "line+"};
-
-char *nowAsString()
-/* Return current time and date in more or less above format. */
-{
-time_t timer;
-char *s;
-time(&timer);
-s = ctime(&timer);
-return trimSpaces(s);
-}
-
-char *cloneEvenNull(char *s)
-/* Clone string.  Replace NULL with clone of "". */
-{
-if (s == NULL)
-   return cloneString("");
-else
-   return cloneString(s);
-}
 
 struct job *jobFromLine(struct lineFile *lf, char *line)
 /* Parse out the beginnings of a job from input line. 
@@ -190,7 +171,7 @@ struct fileStatus
     {
     bool exists;	/* TRUE if file exists. */
     bool hasData;	/* TRUE if nonempty. */
-    bool completeLastLine;	/* TRUE if last line ends with <lf> */
+    bool completeLastLine; /* TRUE if last line ends with <lf> */
     bool reported;	/* TRUE if reported error. */
     };
 
@@ -411,17 +392,16 @@ if (getcwd(dirBuf, sizeof(dirBuf)) == NULL)
     errAbort("Couldn't get current directory");
 dyStringPrintf(cmd, "parasol results=%s/para.results qsub %s > %s", 
 	dirBuf, job->command, tempName);
-
 err = system(cmd->string);
 AllocVar(sub);
 slAddHead(&job->submissionList, sub);
 job->submissionCount += 1;
 sub->submitTime = time(NULL);
+sub->host = cloneString("n/a");
 if (err != 0)
     {
     sub->submitError = TRUE;
     sub->id = cloneString("n/a");
-    sub->errFile = cloneString("n/a");
     }
 else
     {
@@ -446,7 +426,7 @@ struct lineFile *lf;
 struct hash *hash = newHash(0);
 struct job *job;
 struct submission *sub;
-char *line, *row[5];
+char *line, *row[6];
 int wordCount;
 int queueSize = 0;
 
@@ -475,7 +455,7 @@ lf = lineFileOpen(tempName, TRUE);
 while (lineFileRow(lf, row))
     {
     char *state = row[0], *jobId = row[1], *user = row[2],
-         *exe = row[3], *ticks = row[4];
+         *exe = row[3], *ticks = row[4], *host = row[5];
     time_t t = atol(ticks);
     if ((sub = hashFindVal(hash, jobId)) != NULL)
 	{
@@ -483,6 +463,7 @@ while (lineFileRow(lf, row))
 	    {
 	    sub->running = TRUE;
 	    sub->startTime = t;
+	    sub->host = cloneString(host);
 	    }
 	else
 	    {
@@ -495,69 +476,6 @@ freeHash(&hash);
 dyStringFree(&cmd);
 printf("%d\n", queueSize);
 return queueSize;
-}
-
-long dateToSeconds(char *date)
-/* Convert from format like:
- *   'Wed Nov 7 13:35:11 PST 2001' to seconds since Jan. 1 2001.
- * This should be in a library somewhere, but I can't find it. 
- * This function is not totally perfect.  It'll add a leap year in 2200
- * when it shouldn't for instance. */
-{
-char *dupe = cloneString(skipLeadingSpaces(date));
-char *words[8], *parts[4];
-static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-static int daysInMonths[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-int wordCount;
-int leapDiv = 4;
-int x;
-int leapCount;
-long secondsInDay = 24*60*60;
-int year, month, day, hour, minute, second;
-char *yearString;
-long dayCount;
-long result;
-
-/* Parse string into various integer variables. */
-wordCount = chopLine(dupe, words);
-if (wordCount < 5)
-    errAbort("Badly formatted(1) date '%s'", date);
-if (wordCount == 5)
-    yearString = words[4];
-else
-    yearString = words[5];
-if (!isdigit(yearString[0]))
-    errAbort("Badly formatted(2) date '%s'", date);
-year = atoi(yearString);
-if ((month = stringIx(words[1], months)) < 0)
-    errAbort("Unrecognized month '%s'", date);
-day = atoi(words[2]);
-wordCount = chopString(words[3], ":", parts, ArraySize(parts));
-if (wordCount != 3)
-    errAbort("Badly formated time in '%s'", date);
-hour = atoi(parts[0]);
-minute = atoi(parts[1]);
-second = atoi(parts[2]);
-freez(&dupe);
-
-/* Figure out elapsed days with leap-years. */
-x = year - 1 - 2000;	/* 1972 is nearest leap year. */
-leapCount = x/4 + 1;
-dayCount = (year - 2001) * 365 + leapCount;
-for (x=0; x<month; ++x)
-    dayCount += daysInMonths[x];
-dayCount += day-1;
-if (year%4 == 0 && month >= 2)
-    ++dayCount;
-result = secondsInDay*dayCount + hour*3600 + minute*60 + second;
-return result;
-}
-
-long nowInSeconds()
-/* Return current date in above format. */
-{
-return dateToSeconds(nowAsString());
 }
 
 struct hash *hashResults(char *fileName)
@@ -573,98 +491,6 @@ if (fileExists(fileName))
 return hash;
 }
 
-#ifdef OLD
-struct runJobOutput
-/* Info about a run job. */
-    {
-    char *startTime;
-    char *endTime;
-    float cpuTime;
-    int retVal;
-    boolean gotRet;
-    boolean trackingError;
-    char host[128];
-    };
-
-struct runJobOutput *parseRunJobOutput(char *fileName)
-/* Parse a run job output file.  Might have trouble if the program output
- * is horribly complex. */
-{
-static struct runJobOutput ret;
-struct lineFile *lf;
-char *line, *words[20], *s;
-int wordCount;
-char *startPattern = "Start time: ";
-char *endPattern = "Finish time: ";
-char *returnPattern = "Return value = ";
-char *hostPattern = "Executing host: ";
-boolean gotStart = FALSE, gotEnd = FALSE;
-boolean gotCpu = FALSE, gotReturn = FALSE;
-
-/* Set up default return values.  Free old strings. */
-freez(&ret.startTime);
-freez(&ret.endTime);
-ZeroVar(&ret);
-
-lf = lineFileMayOpen(fileName, TRUE);
-if (lf == NULL)
-    {
-    ret.trackingError = 1;
-    return &ret;
-    }
-while (lineFileNext(lf, &line, NULL))
-    {
-    if (startsWith(startPattern, line))
-        {
-	line += strlen(startPattern);
-	ret.startTime = cloneString(trimSpaces(line));
-	gotStart = TRUE;
-	}
-    else if (startsWith(endPattern, line))
-	{
-	line += strlen(endPattern);
-	ret.endTime = cloneString(trimSpaces(line));
-	gotEnd = TRUE;
-	break;
-	}
-    else if (startsWith(hostPattern, line))
-        {
-	line += strlen(hostPattern);
-	trimSpaces(line);
-	strcpy(ret.host, line);
-	}
-    else if (isdigit(line[0]) )
-	{
-	wordCount = chopLine(line, words);
-	if (wordCount >= 3 && lastChar(words[0]) == 'u'
-	    && lastChar(words[1]) == 's' && isdigit(words[1][0]))
-	    {
-	    ret.cpuTime = atof(words[0]) + atof(words[1]);
-	    gotCpu = TRUE;
-	    }
-	}
-    else if (startsWith(returnPattern, line))
-	{
-	line += strlen(returnPattern);
-	line = skipLeadingSpaces(line);
-	ret.retVal = atoi(line);
-	ret.gotRet = TRUE;
-	gotReturn = TRUE;
-	}
-    }
-if (!gotStart)
-    {
-    ret.trackingError = 2;
-    }
-if (gotEnd)
-    {
-    if (!gotCpu || !gotReturn)
-       errAbort("%s is not in a runJob format para can parse", fileName);
-    }
-lineFileClose(&lf);
-return  &ret;
-}
-#endif /* OLD */
 
 void killSubmission(struct submission *sub)
 /* Kill a submission. */
@@ -715,7 +541,8 @@ for (job=db->jobList; job != NULL; job = job->next)
         {
 	/* Look for hitherto unclassified jobs that are either running or
 	 * possibly finished. */
-	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->hung && !sub->ranOk)
+	if (!sub->queueError && !sub->inQueue && !sub->crashed && 
+		!sub->hung && !sub->running && !sub->ranOk)
 	    {
 	    struct jobResult *jr = hashFindVal(resultsHash, sub->id);
 	    if (jr == NULL)
@@ -735,6 +562,9 @@ for (job=db->jobList; job != NULL; job = job->next)
 		sub->cpuTime = jrCpuTime(jr);
 		sub->retVal = statusToRetVal(jr->status);
 		sub->gotRetVal = TRUE;
+		sub->host = cloneString(jr->host);
+		sub->inQueue = FALSE;
+		sub->running = FALSE;
 		if (sub->retVal == 0 && checkOneJob(job, "out", checkHash) == 0)
 		    sub->ranOk = TRUE;
 		else
@@ -920,22 +750,25 @@ for (job = db->jobList; job != NULL; job = job->next)
 void printErrFile(struct submission *sub, struct jobResult *jr)
 /* Print error file if it exists. */
 {
-#ifdef SOON
-if (fileExists(sub->errFile))
+char localName[64];
+sprintf(localName, "err/%s", jr->jobId);
+if (!fileExists(localName))
+    {
+    struct dyString *dy = newDyString(256);
+    dyStringPrintf(dy, "rcp %s:%s %s", jr->host, jr->errFile, localName);
+    if (system(dy->string) != 0)
+        warn("'%s' failed", dy->string);
+    freeDyString(&dy);
+    }
+if (fileExists(localName))
     {
     char *buf;
     size_t size;
     printf("stderr:\n");
-    readInGulp(sub->errFile, &buf, &size);
+    readInGulp(localName, &buf, &size);
     mustWrite(stdout, buf, size);
     freez(&buf);
     }
-else
-    {
-    printf("stderr file doesn't exist\n");
-    }
-#endif /* SOON */
-uglyf("stderr file reporting coming soon.\n");
 }
 
 void problemReport(struct job *job, struct submission *sub, char *type, struct hash *resultsHash)
@@ -954,7 +787,7 @@ else
     {
     time_t startTime = jr->startTime;
     printf("host: %s\n", jr->host);
-    printf("start time: %s\n", ctime(&startTime));
+    printf("start time: %s", ctime(&startTime));
     printf("return: %d\n", statusToRetVal(jr->status));
     for (check = job->checkList; check != NULL; check = check->next)
 	doOneCheck(check, hash, stdout);
@@ -1004,25 +837,19 @@ for (job = db->jobList; job != NULL; job = job->next)
 printf("%d problems total\n", problemCount);
 }
 
-#ifdef SOON
 void runningReport(struct job *job, struct submission *sub)
 /* Print report on one running job. */
 {
 struct check *check;
+time_t startTime = sub->startTime;
+int duration = time(NULL) - startTime;
 
 printf("command: %s\n", job->command);
 printf("jobId: %s\n", sub->id);
-if (jr == NULL)
-    printf("tracking error\n");
-else
-    {
-    int duration = time(NULL) - jr->startTime;
-    printf("host: %s\n", jr->host);
-    printf("start time: %s\n", ctime(&rjo->startTime));
-    printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
-	    duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
-    printErrFile(sub, jr);
-    }
+printf("host: %s\n", sub->host);
+printf("start time: %s", ctime(&startTime));
+printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n", 
+	duration, duration/60.0, duration/3600.0,  duration/(3600.0*24.0));
 printf("\n");
 }
 
@@ -1046,7 +873,6 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 printf("total jobs running: %d\n", runCount);
 }
-#endif /* SOON */
 
 
 
@@ -1239,6 +1065,8 @@ warnTime = optionInt("warnTime", warnTime);
 killTime = optionInt("killTime", killTime);
 command = argv[1];
 batch = argv[2];
+if (strchr(batch, '/') != NULL)
+    errAbort("para needs to be run in the same directory as the batch file.");
 if (sameString(command, "make"))
     {
     if (argc != 4)
@@ -1288,8 +1116,7 @@ else if (sameString(command, "problems") || sameString(command, "problem"))
     }
 else if (sameString(command, "running"))
     {
-    // paraRunning(batch);
-    uglyf("running command coming back soon I hope");
+    paraRunning(batch);
     }
 else if (sameString(command, "time") || sameString(command, "times"))
     {

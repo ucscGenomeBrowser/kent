@@ -20,7 +20,7 @@ int i;
 if (ret == NULL)
     AllocVar(ret);
 ret->id = sqlStringComma(&s);
-ret->errFile = sqlStringComma(&s);
+ret->host = sqlStringComma(&s);
 ret->cpuTime = sqlFloatComma(&s);
 ret->submitTime = sqlUnsignedComma(&s);
 ret->startTime = sqlUnsignedComma(&s);
@@ -48,7 +48,7 @@ struct submission *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->id);
-freeMem(el->errFile);
+freeMem(el->host);
 freez(pEl);
 }
 
@@ -74,7 +74,7 @@ fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->errFile);
+fprintf(f, "%s", el->host);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%f", el->cpuTime);

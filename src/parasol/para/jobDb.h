@@ -10,7 +10,7 @@ struct submission
     {
     struct submission *next;  /* Next in singly linked list. */
     char *id;	/* Submission ID from scheduler */
-    char *errFile;	/* Error file associated with submission */
+    char *host;	/* Host this is running/ran on or NULL */
     float cpuTime;	/* CPU time in seconds */
     unsigned submitTime;	/* Time submitted */
     unsigned startTime;	/* Start time of job */

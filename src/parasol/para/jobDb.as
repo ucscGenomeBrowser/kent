@@ -3,7 +3,7 @@ object submission
 "Keeps track of a job submission"
     (
     string id;	"Submission ID from scheduler"
-    lstring errFile;	"Error file associated with submission"
+    lstring host;	"Host this is running/ran on or NULL"
     float cpuTime;	"CPU time in seconds"
     uint submitTime;	"Time submitted"
     uint startTime;	"Start time of job"

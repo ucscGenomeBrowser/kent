@@ -820,7 +820,6 @@ void listJobs(int fd)
  * followed by a blank line. */
 {
 struct dyString *dy = newDyString(256);
-
 oneJobList(fd, runningJobs, dy, TRUE);
 oneJobList(fd, pendingJobs, dy, FALSE);
 netSendLongString(fd, "");
@@ -894,8 +893,8 @@ for (node = list->head; !dlEnd(node); node = node->next)
     else
         t = job->submitTime;
     dyStringClear(dy);
-    dyStringPrintf(dy, "%s %d %s %s %lu", 
-        state, job->id, job->user, job->exe, t);
+    dyStringPrintf(dy, "%s %d %s %s %lu %s", 
+        state, job->id, job->user, job->exe, t, machName);
     netSendLongString(fd, dy->string);
     }
 }
