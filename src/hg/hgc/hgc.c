@@ -1020,6 +1020,12 @@ else
         printf("This track contains the %s class of repeats<BR>\n", repeat);
     printf("Click right on top of an individual repeat for more information on that repeat<BR>\n");
     }
+htmlHorizontalLine();
+puts(
+  "This track was created by Arian Smit's RepeatMasker program "
+  "which uses the RepBase library of repeats from the Genetic "
+  "Information Research Institute.  RepBase is described in "
+  "J. Jurka,  RepBase Update, <I>Trends in Genetics</I> 16:418-420, 2000");
 }
 
 void doHgIsochore(char *item)
@@ -1311,8 +1317,11 @@ char other[256];
 showGenePos(geneName, geneTable);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
-hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable, seqName);
-printf("<LI>Translated Protein</A>\n"); 
+if (pepTable != NULL && hTableExists(pepTable))
+    {
+    hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable, seqName);
+    printf("<LI>Translated Protein</A>\n"); 
+    }
 hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
 printf("<LI>Predicted mRNA</A>\n");
 hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
@@ -1678,6 +1687,16 @@ if (!sameString(database, "hg3"))
     printf("<P>Visit <A HREF=\"http://www.ensembl.org/perl/transview?transcript=%s\" _TARGET=blank>"
        "Ensembl TransView</A> for more information on this gene prediction.", geneName);      
     }
+hFreeConn(&conn);
+}
+
+void doSanger22(char *geneName)
+/* Handle click on Sanger 22 track. */
+{
+struct sqlConnection *conn = hAllocConn();
+htmlStart("Sanger Chromosome 22 Annotation");
+printf("<H2>Sanger Chromosome 22 Annotation %s</H2>\n", geneName);
+geneShowCommon(geneName, "sanger22", NULL);
 hFreeConn(&conn);
 }
 
@@ -2513,6 +2532,10 @@ else if (sameWord(group, "hgCpgIsland2"))
 else if (sameWord(group, "genieKnown"))
     {
     doKnownGene(item);
+    }
+else if (sameWord(group, "hgSanger22"))
+    {
+    doSanger22(item);
     }
 else if (sameWord(group, "genieAlt"))
     {
