@@ -82,7 +82,7 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
-char *position; 		/* Name of position. */
+char *position = NULL; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
@@ -103,6 +103,16 @@ struct trackLayout
     int picWidth;		/* Width of entire picture. */
     } tl;
 
+void printHtmlComment(char *comment)
+/*
+ Function to print output as a comment so it is not seen in the HTML
+ output but only in the HTML source
+param comment _ The comment to be printed
+*/
+{
+printf("\n<!--%s-->\n", comment);
+//fflush(stdout); /* USED ONLY FOR DEBUGGING, IT"S SLOOOWWW - MATT */
+}
 
 void setPicWidth(char *s)
 /* Set pixel width from ascii string. */
@@ -7698,6 +7708,64 @@ char c = *s;
 return c != '_' && !isalnum(c);
 }
 
+char *getPositionFromCustomTracks()
+/*
+  Parses custom track data to get the position variable
+return - The first chromosome position variable found in the 
+ custom track data.
+ */
+{
+char *pos = NULL;
+char *customText = cloneString(cartOptionalString(cart, "hgt.customText"));
+char *fileName = cloneString(cartOptionalString(cart, "ct"));
+struct slName *browserLines = NULL;
+struct slName *bl = NULL;
+struct customTrack *ctList = NULL;
+
+customText = skipLeadingSpaces(customText);
+if (NULL != customText && bogusMacEmptyChars(customText))
+    {
+    customText = NULL;
+    }
+
+if (NULL == customText || 0 == customText[0])
+    {
+    customText = cloneString(cartOptionalString(cart, "hgt.customFile"));
+    }
+
+if (NULL != customText && 0 != customText[0])
+    {
+    ctList = customTracksParse(customText, FALSE, &browserLines);
+    }
+else if (fileName != NULL && fileExists(fileName))
+    {
+    ctList = customTracksParse(fileName, TRUE, &browserLines);
+    }
+
+for (bl = browserLines; bl != NULL; bl = bl->next)
+    {
+    char *words[96];
+    int wordCount;
+
+    wordCount = chopLine(bl->name, words);
+    if (wordCount >= 3)
+        {
+        char *command = words[1];
+        if (sameString(command, "position"))
+            {
+            /* Return the first position found */
+            pos = words[2];
+            break;
+            }
+        }
+    }
+
+freez(&fileName);
+freez(&customText);
+
+return pos;
+}
+
 void loadCustomTracks(struct trackGroup **pGroupList)
 /* Load up custom tracks and append to list. */
 {
@@ -8220,16 +8288,20 @@ x = atof(stringVal);
 return round(x*guideBases);
 }
 
-
-
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
 char newPos[256];
 
-/* Read in input from CGI. */
-position = cartString(cart, "position");
+position = getPositionFromCustomTracks();
+
+if (NULL == position) 
+    {
+    /* Read in input from CGI. */
+    position = cartString(cart, "position");
+    }
+
 if(sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart)) 
