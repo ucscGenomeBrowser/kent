@@ -12,12 +12,13 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.15 2003/11/20 17:31:33 angie Exp $";
+static char const rcsid[] = "$Id: netClass.c,v 1.16 2003/12/04 01:00:19 angie Exp $";
 
 char *tNewR = NULL;
 char *qNewR = NULL;
 boolean noAr = FALSE;
-struct hash *liftHash = NULL;
+struct hash *liftHashT = NULL;
+struct hash *liftHashQ = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -33,6 +34,8 @@ errAbort(
   "   -noAr - Don't look for ancient repeats\n"
   "   -liftQ=file.lft - Lift in.net's query coords to chrom-level using\n"
   "                     file.lft (for accessing chrom-level coords in qDb)\n"
+  "   -liftT=file.lft - Lift in.net's target coords to chrom-level using\n"
+  "                     file.lft (for accessing chrom-level coords in tDb)\n"
   );
 }
 
@@ -273,13 +276,25 @@ slReverse(&chromList);
 *retList = chromList;
 }
 
+int liftStart(char *name, int start, struct hash *liftHash)
+/* Lift start if necessary. */
+{
+int s = start;
+if (liftHash != NULL)
+    {
+    struct liftSpec *lft = hashMustFindVal(liftHash, name);
+    s += lft->offset;
+    }
+return s;
+}
+
 void tAddN(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 /* Add tN's to all gaps underneath fillList. */
 {
 struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    int s = fill->tStart;
+    int s = liftStart(net->name, fill->tStart, liftHashT);
     fill->tN = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
 	tAddN(net, fill->children, tree);
@@ -290,26 +305,14 @@ struct chrom *getQChrom(char *qName, struct hash *qChromHash)
 /* Lift qName to chrom if necessary and dig up from qChromHash. */
 {
 struct chrom *qChrom = NULL;
-if (liftHash != NULL)
+if (liftHashQ != NULL)
     {
-    struct liftSpec *lft = hashMustFindVal(liftHash, qName);
+    struct liftSpec *lft = hashMustFindVal(liftHashQ, qName);
     qChrom = hashMustFindVal(qChromHash, lft->newName);
     }
 else
     qChrom = hashMustFindVal(qChromHash, qName);
 return(qChrom);
-}
-
-int liftQStart(char *qName, int qStart)
-/* Lift qStart if necessary. */
-{
-int s = qStart;
-if (liftHash != NULL)
-    {
-    struct liftSpec *lft = hashMustFindVal(liftHash, qName);
-    s += lft->offset;
-    }
-return s;
 }
 
 void qAddN(struct chainNet *net, struct cnFill *fillList, struct hash *qChromHash)
@@ -320,7 +323,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = getQChrom(fill->qName, qChromHash);
     struct rbTree *tree = qChrom->nGaps;
-    int s = liftQStart(fill->qName, fill->qStart);
+    int s = liftStart(fill->qName, fill->qStart, liftHashQ);
     fill->qN = intersectionSize(tree, s, s + fill->qSize);
     if (fill->children)
 	qAddN(net, fill->children, qChromHash);
@@ -333,7 +336,7 @@ void tAddR(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    int s = fill->tStart;
+    int s = liftStart(net->name, fill->tStart, liftHashT);
     fill->tR = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
 	tAddR(net, fill->children, tree);
@@ -347,7 +350,7 @@ struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = getQChrom(fill->qName, qChromHash);
-    int s = liftQStart(fill->qName, fill->qStart);
+    int s = liftStart(fill->qName, fill->qStart, liftHashQ);
     fill->qR = intersectionSize(qChrom->repeats, s, s + fill->qSize);
     if (fill->children)
 	qAddR(net, fill->children, qChromHash);
@@ -360,7 +363,7 @@ void tAddNewR(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree
 struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    int s = fill->tStart;
+    int s = liftStart(net->name, fill->tStart, liftHashT);
     fill->tNewR = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
 	tAddNewR(net, fill->children, tree);
@@ -374,7 +377,7 @@ struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = getQChrom(fill->qName, qChromHash);
-    int s = liftQStart(fill->qName, fill->qStart);
+    int s = liftStart(fill->qName, fill->qStart, liftHashQ);
     fill->qNewR = intersectionSize(qChrom->newRepeats, s, s + fill->qSize);
     if (fill->children)
 	qAddNewR(net, fill->children, qChromHash);
@@ -387,7 +390,7 @@ void tAddOldR(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree
 struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    int s = fill->tStart;
+    int s = liftStart(net->name, fill->tStart, liftHashT);
     fill->tOldR = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
 	tAddOldR(net, fill->children, tree);
@@ -401,7 +404,7 @@ struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = getQChrom(fill->qName, qChromHash);
-    int s = liftQStart(fill->qName, fill->qStart);
+    int s = liftStart(fill->qName, fill->qStart, liftHashQ);
     fill->qOldR = intersectionSize(qChrom->oldRepeats, s, s + fill->qSize);
     if (fill->children)
 	qAddOldR(net, fill->children, qChromHash);
@@ -414,7 +417,7 @@ void tAddTrf(struct chainNet *net, struct cnFill *fillList, struct rbTree *tree)
 struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    int s = fill->tStart;
+    int s = liftStart(net->name, fill->tStart, liftHashT);
     fill->tTrf = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
 	tAddTrf(net, fill->children, tree);
@@ -428,7 +431,7 @@ struct cnFill *fill;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     struct chrom *qChrom = getQChrom(fill->qName, qChromHash);
-    int s = liftQStart(fill->qName, fill->qStart);
+    int s = liftStart(fill->qName, fill->qStart, liftHashQ);
     fill->qTrf = intersectionSize(qChrom->trf, s, s + fill->qSize);
     if (fill->children)
 	qAddTrf(net, fill->children, qChromHash);
@@ -475,14 +478,20 @@ for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
 while ((net = chainNetRead(lf)) != NULL)
     {
     struct rbTree *tN, *tRepeats, *tOldRepeats, *tTrf;
+    char *tName = net->name;
+    if (liftHashT != NULL)
+	{
+	struct liftSpec *lft = hashMustFindVal(liftHashT, net->name);
+	tName = lft->newName;
+	}
 
     printf("Processing %s.%s\n", tDb, net->name);
-    tN = getSeqGaps(tDb, net->name);
+    tN = getSeqGaps(tDb, tName);
     tAddN(net, net->fillList, tN);
     rbTreeFree(&tN);
     qAddN(net, net->fillList, qChromHash);
 
-    getRepeats(tDb, arHash, net->name, &tRepeats, &tOldRepeats);
+    getRepeats(tDb, arHash, tName, &tRepeats, &tOldRepeats);
     tAddR(net, net->fillList, tRepeats);
     if (!noAr)
 	tAddOldR(net, net->fillList, tOldRepeats);
@@ -492,14 +501,14 @@ while ((net = chainNetRead(lf)) != NULL)
     if (!noAr)
 	qAddOldR(net, net->fillList, qChromHash);
 
-    tTrf = getTrf(tDb, net->name);
+    tTrf = getTrf(tDb, tName);
     tAddTrf(net, net->fillList, tTrf);
     rbTreeFree(&tTrf);
     qAddTrf(net, net->fillList, qChromHash);
 
     if (tNewR)
         {
-	struct rbTree *tree = getNewRepeats(tNewR, net->name);
+	struct rbTree *tree = getNewRepeats(tNewR, tName);
 	tAddNewR(net, net->fillList, tree);
 	rbTreeFree(&tree);
 	}
@@ -513,18 +522,24 @@ while ((net = chainNetRead(lf)) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *liftFile = NULL;
+char *liftFileQ = NULL, *liftFileT = NULL;
 optionHash(&argc, argv);
 if (argc != 5)
     usage();
 tNewR = optionVal("tNewR", tNewR);
 qNewR = optionVal("qNewR", qNewR);
 noAr = optionExists("noAr");
-liftFile = optionVal("liftQ", liftFile);
-if (liftFile != NULL)
+liftFileQ = optionVal("liftQ", liftFileQ);
+liftFileT = optionVal("liftT", liftFileT);
+if (liftFileQ != NULL)
     {
-    struct liftSpec *lifts = readLifts(liftFile);
-    liftHash = hashLift(lifts, TRUE);
+    struct liftSpec *lifts = readLifts(liftFileQ);
+    liftHashQ = hashLift(lifts, TRUE);
+    }
+if (liftFileT != NULL)
+    {
+    struct liftSpec *lifts = readLifts(liftFileT);
+    liftHashT = hashLift(lifts, TRUE);
     }
 netClass(argv[1], argv[2], argv[3], argv[4]);
 return 0;
