@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.58.4.3 2005/01/06 08:24:33 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.58.4.4 2005/01/06 08:38:04 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -78,7 +78,8 @@ errAbort(
   "         Setting priority higher than normal (1-%d) will be logged.\n"
   "         Please keep low priority jobs short, they won't be pre-empted.\n"
   "      -maxNode=x  Limit the number of nodes the batch can use.\n"
-  "         Default unlimited or -1.\n"
+  "         Specify number of nodes, e.g 10, or 'unlimited'.\n"
+  "         Default unlimited displays as -1.\n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs.\n"
   "para shove\n"
