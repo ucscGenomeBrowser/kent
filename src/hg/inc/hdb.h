@@ -132,6 +132,10 @@ struct dbDb *hDbDbList();
 boolean hIsPrivateHost();
 /* Return TRUE if this is running on private web-server. */
 
+boolean hIsMgscHost();
+/* Return TRUE if this is running on web server only
+ * accessible to Mouse Genome Sequencing Consortium. */
+
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
 
