@@ -9,7 +9,7 @@ include ../inc/common.mk
 
 #	This version string needs to be raised for a release
 
-VER=36
+VER=38
 
 DESTDIR=.
 install_dir=${DESTDIR}/install_image

@@ -64,7 +64,7 @@ cp ${CDROM}/example/hg.conf ${WEBROOT}/cgi-bin
 cp -Rp ${CDROM}/goldenPath ${WEBROOT}/html
 
 #	Copy the /gbdb data
-cp -Rp ${CDROM}/gbdb /${GBDB}
+cp -Rp ${CDROM}/gbdb ${GBDB}
 
 #	Create hgFixed database and load its data
 mysql -pgenome -e "create database hgFixed;"
