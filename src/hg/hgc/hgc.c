@@ -45,13 +45,16 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
-
+#include "sage.h"
+#include "sageExp.h"
+#include "pslWScore.h"
 #define CHUCK_CODE 0
 #define ROGIC_CODE 1
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 
+struct pslWScore *sageExpList = NULL;
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
 
 static void earlyWarning(char *format, va_list args)
@@ -2751,16 +2754,18 @@ ret++;
 return ret;
 }
 
-void printTableHeaderName(char *name, char *clickName) 
+void printTableHeaderName(char *name, char *clickName, char *url) 
 /* creates a table to display a name vertically,
  * basically creates a column of letters 
  */
 {
 int i, length;
 char *header = cloneString(name);
-header = cloneString(abbrevExprBedName(header));
+header = cloneString(header);
 subChar(header,'_',' ');
 length = strlen(header);
+if(url == NULL)
+    url = cloneString("");
 
 printf("<table border=0 cellspacing=0 cellpadding=0>\n");
 for(i = 0; i < length; i++)
@@ -2769,18 +2774,18 @@ for(i = 0; i < length; i++)
 	printf("<tr><td align=center>&nbsp</td></tr>\n");
     else
 	{
-	printf("<tr><td align=center>");
 	if(sameString(name,clickName)) 
-	    {
-	    printf("<font color=blue>");
-	    }
-	printf("%c", header[i]);
+	    printf("<tr><td align=center bgcolor=\"red\">");
+	else 
+	    printf("<tr><td align=center>");
+	printf("<a href=\"%s\">%c</a>", url, header[i]);
 	if(sameString(name, clickName)) 
 	    {
 	    printf("</font>");
 	    }
 	printf("</tr></td>");
 	}
+    printf("\n");
     }
 printf("</table>\n");
 freez(&header);
@@ -2831,7 +2836,7 @@ printf("</tr>\n<tr><td>&nbsp</td>\n");
 for(exp = expList; exp != NULL; exp = exp->next)
     {
     printf("<td valign=top align=center>\n");
-    printTableHeaderName(exp->name, itemName);
+    printTableHeaderName(abbrevExprBedName(exp->name), itemName, NULL);
     printf("</td>");
     }
 printf("</tr>\n");
@@ -2928,6 +2933,249 @@ printf("</td></tr><tr><td align=center><br>\n");
 printf("<b>Press Here to View Detailed Plots</b><br><input type=submit name=Submit value=submit>\n");
 printf("<br><br><br><b>Clear Values</b><br><input type=reset name=Reset></form>\n");
 printf("</td></tr></table></td></tr></table>\n");
+chuckHtmlContactInfo();
+}
+
+
+struct sageExp *loadSageExps(char *tableName, struct pslWScore  *psList)
+/* load the sage experiment data 
+ * This data should be moved from the temporary database on peep to main db.
+ */
+{
+struct sqlConnection *sc = sqlConnectRemote("peep.cse.ucsc.edu", "sugnet", "169Mpls", "sugnet");
+char query[256];
+struct sageExp *seList = NULL, *se=NULL;
+char **row;
+struct sqlResult *sr = NULL;
+char *tmp= cloneString("select * from sageExp order by num");
+
+sprintf(query,"%s",tmp);
+sr = sqlGetResult(sc,query);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    se = sageExpLoad(row);
+    slAddHead(&seList,se);
+    }
+freez(&tmp);
+sqlFreeResult(&sr);
+sqlDisconnect(&sc);
+slReverse(&seList);
+return seList;
+}
+
+struct sage *loadSageData(char *table, struct pslWScore* pslList)
+/* load the sage data by constructing a query based on the qNames of the pslList
+ * This data should be moved from the temporary database on peep to main db.
+ */
+{
+struct sqlConnection *sc = sqlConnectRemote("peep.cse.ucsc.edu", "sugnet", "169Mpls", "sugnet");
+struct dyString *query = newDyString(2048);
+struct sage *sgList = NULL, *sg=NULL;
+struct pslWScore *psl=NULL;
+char **row;
+int count=0;
+struct sqlResult *sr = NULL;
+dyStringPrintf(query, "%s", "select * from sage where ");
+for(psl=pslList;psl!=NULL;psl=psl->next)
+    {
+    if(count++) 
+	{
+	dyStringPrintf(query," or uni=%d ", atoi(psl->qName + 3 ));
+	}
+    else 
+	{
+	dyStringPrintf(query," uni=%d ", atoi(psl->qName + 3));
+	}
+    }
+sr = sqlGetResult(sc,query->string);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    sg = sageLoad(row);
+    slAddHead(&sgList,sg);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&sc);
+slReverse(&sgList);
+freeDyString(&query);
+return sgList;
+}
+
+int sagePslWSListIndex(struct pslWScore *pslList, int uni)
+/* find the index of a psl by the unigene identifier in a psl list */
+{
+struct pslWScore *psl;
+int count =0;
+char buff[128];
+sprintf(buff,"Hs.%d",uni);
+for(psl = pslList; psl != NULL; psl = psl->next)
+    {
+    if(sameString(psl->qName,buff))
+	return count;
+    count++;
+    }
+errAbort("Didn't find the unigene tag %s",buff);
+return 0;
+}
+
+int sortSageByPslOrder(const void *e1, const void *e2)
+/* used by slSort to sort the sage experiment data using the order of the psls */
+{
+const struct sage *s1 = *((struct sage**)e1);
+const struct sage *s2 = *((struct sage**)e2);
+return(sagePslWSListIndex(sageExpList,s1->uni) - sagePslWSListIndex(sageExpList,s2->uni));
+}
+
+void printSageGraphUrl(struct sage *sgList)
+/* print out a url to a cgi script which will graph the results */
+{
+struct sage *sg = NULL;
+printf("Please click ");
+printf("<a target=other href=\"http://genome-test.cse.ucsc.edu/cgi-bin/sageVisCGI?");
+for(sg = sgList; sg != NULL; sg = sg->next)
+    {
+    if(sg->next == NULL)
+	printf("u=%d", sg->uni);
+    else 
+	printf("u=%d&", sg->uni);
+    }
+printf("\">here</a>");
+printf(" to see the data as a graph.\n");
+}
+
+void printSageReference(struct sage *sgList)
+{
+puts(
+     "<table width=600 cellpadding=0 cellspacing=0><tr><td><p><b>Description: S</b>erial <b>A</b>nalysis of <b>G</b>ene <b>E</b>xpression (SAGE)"
+     "is a quantative measurement gene expression. Data is presented for every cluster contained "
+     "in the browser window and the selected cluster name is highlighted in red. All data is from "
+     "the repository at the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>"
+     "project. Selecting the UniGene cluster name will display SageMap's page for that cluster.");
+printSageGraphUrl(sgList);
+puts(
+     "<p><b>Brief Methodology:</b> SAGE counts are produced "
+     "by sequencing small \"tags\" of DNA believed to be associated with a "
+     "gene. These tags are produced by attatching poly-A RNA to oligo-dT "
+     "beads. After synthesis of double stranded cDNA transcripts are "
+     "cleaved by an anchoring enzyme (usually NIaIII). Then small tags are "
+     "produced by ligation with a linker containing a type IIS restriction "
+     "enzyme site and cleavage with the tagging enzyme (usually BsmFI). The "
+     "tags are then concatenated together and sequenced. The frequency of each "
+     "tag is counted and used to infer expression level of transcripts that can "
+     "be matched to that tag. All SAGE data presented here was mapped to UniGene "
+     "transcripts by the <a href=\"http://www.ncbi.nlm.nih.gov/SAGE/\"> SageMap </a>"
+     "project at <a href=\"http://www.ncbi.nlm.nih.gov\"> NCBI </a>.</td></tr></table><br><br>"
+);
+}
+
+void sagePrintTable(struct pslWScore *pslList, char *itemName) 
+/* load up the sage experiment data using psl->qNames and display it as a table */
+{
+struct sageExp *seList = NULL, *se =NULL;
+struct sage *sgList=NULL, *sg=NULL;
+int featureCount;
+int count=0;
+seList=loadSageExps("sageExp",pslList);
+sgList = loadSageData("sage", pslList);
+slSort(&sgList,sortSageByPslOrder);
+
+printSageReference(sgList);
+printSageGraphUrl(sgList);
+featureCount= slCount(sgList); 
+printf("<basefont size=-1>\n");
+printf("<table cellspacing=0 border=1 bordercolor=\"black\">\n");
+printf("<tr>\n");
+printf("<th align=center>Sage Experiment</th>\n");
+printf("<th align=center>Tissue</th>\n");
+printf("<th align=center colspan=%d valign=top>Uni-Gene Clusters<br>(<b>Median</b> [Ave &plusmn Stdev])</th>\n",featureCount);
+printf("</tr>\n<tr><td>&nbsp</td><td>&nbsp</td>\n");
+for(sg = sgList; sg != NULL; sg = sg->next)
+    {
+    char buff[32];
+    char url[256];
+    sprintf(buff,"Hs.%d",sg->uni);
+    printf("<td valign=top align=center>\n");
+    sprintf(url, "http://www.ncbi.nlm.nih.gov/SAGE/SAGEcid.cgi?cid=%d&org=Hs",sg->uni);
+    printTableHeaderName(buff, itemName, url);
+    printf("</td>");
+    }
+printf("</tr>\n");
+/* for each experiment write out the name and then all of the values */
+for(se=seList;se!=NULL;se=se->next)
+    {
+    char *tmp;
+    float mark = (float)10000.0/se->totalCount;
+    tmp = strstr(se->exp,"_");
+    if(++count%2)
+	printf("<tr>\n");
+    else 
+	printf("<tr bgcolor=\"#bababa\">\n");
+    printf("<td align=left>");
+    printf("%s</td>\n", tmp ? (tmp+1) : se->exp);
+
+    printf("<td align=left>%s</td>\n", se->tissueType);
+    for(sg=sgList; sg!=NULL; sg=sg->next)
+	{
+	if(sg->aves[se->num] == -1.0) 
+	    printf("<td>N/A</td>");
+	else 
+	    printf("<td>  <b>%4.1f</b> <font size=-2>[%.2f &plusmn %.2f]</font></td>\n",
+		   sg->meds[se->num],sg->aves[se->num],sg->stdevs[se->num]);
+	}
+    printf("</tr>\n");	   
+    }
+printf("</table>\n");
+}
+
+
+struct pslWScore *pslWScoreLoadByChrom(char *table, char *chrom, int start, int end)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct pslWScore *pslWS, *pslWSList = NULL;
+char **row;
+int rowOffset;
+sr = hRangeQuery(conn,table,seqName,winStart,winEnd,NULL, &rowOffset);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    pslWS = pslWScoreLoad(row);
+    slAddHead(&pslWSList, pslWS);
+    }
+slReverse(&pslWSList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return pslWSList;
+}
+
+
+void doSageDataDisp(char *tableName, char *itemName)
+{
+struct pslWScore *sgList = NULL;
+char buff[64];
+char *s=NULL;
+int sgCount=0;
+chuckHtmlStart("Sage Data Requested");
+printf("<h2>Sage Data for: %s %d-%d</h2>\n", seqName, winStart, winEnd);
+puts("<table cellpadding=0 cellspacing=0><tr><td>\n");
+
+sgList = pslWScoreLoadByChrom("uniGene", seqName, winStart, winEnd);
+
+sgCount = slCount(sgList);
+if(sgCount > 50)
+    printf("<hr><p>That will create too big of a table, try creating a window with less than 50 elements.<hr>\n");
+else 
+    {
+    sageExpList = sgList;
+    sagePrintTable(sgList, itemName);
+    }
+printf("</td></tr></table>\n");
+/*zeroBytes(buff,64);
+sprintf(buff,"%d",winStart);
+cgiMakeHiddenVar("winStart", buff);
+zeroBytes(buff,64);
+sprintf(buff,"%d",winEnd);
+cgiMakeHiddenVar("winEnd", buff);
+cgiMakeHiddenVar("db",database); 
+printf("<br>\n");*/
 chuckHtmlContactInfo();
 }
 
@@ -3130,7 +3378,10 @@ else if (sameWord(track, "rosettaTe"))
     {
     doGetExprBed(track, item);
     }
-
+else if (sameWord(track, "uniGene"))
+    {
+    doSageDataDisp(track, item);
+    }
 #endif /*CHUCK_CODE*/
 #ifdef ROGIC_CODE
  else if (sameWord(track, "mgc_mrna"))

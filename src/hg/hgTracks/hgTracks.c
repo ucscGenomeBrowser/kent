@@ -44,6 +44,7 @@
 #include "estPair.h"
 #include "customTrack.h"
 #include "trackDb.h"
+#include "pslWScore.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -3830,6 +3831,94 @@ tg->mapItemName = gapName;
 /* begin Chuck code */
 
 
+int pslWScoreScale(struct pslWScore *psl, boolean isXeno, float maxScore)
+/* takes the score field and scales it to the correct shade using maxShade and maxScore */
+{
+/* move from float to int by multiplying by 100 */
+int score = (int)(100 * psl->score);
+int level;
+level = grayInRange(score, 0, (int)(100 * maxScore));
+if(level==1) level++;
+return level;
+}
+
+struct linkedFeatures *lfFromPslWScore(struct pslWScore *psl, int sizeMul, boolean isXeno, float maxScore)
+/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
+ * sizeMul=3 for protein. */
+{
+unsigned *starts = psl->tStarts;
+unsigned *sizes = psl->blockSizes;
+int i, blockCount = psl->blockCount;
+int grayIx = pslWScoreScale(psl, isXeno, maxScore);
+struct simpleFeature *sfList = NULL, *sf;
+struct linkedFeatures *lf;
+boolean rcTarget = (psl->strand[1] == '-');
+
+AllocVar(lf);
+lf->grayIx = grayIx;
+strncpy(lf->name, psl->qName, sizeof(lf->name));
+lf->orientation = orientFromChar(psl->strand[0]);
+if (rcTarget)
+    lf->orientation = -lf->orientation;
+for (i=0; i<blockCount; ++i)
+    {
+    AllocVar(sf);
+    sf->start = sf->end = starts[i];
+    sf->end += sizes[i]*sizeMul;
+    if (rcTarget)
+        {
+	int s, e;
+	s = psl->tSize - sf->end;
+	e = psl->tSize - sf->start;
+	sf->start = s;
+	sf->end = e;
+	}
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+finishLf(lf);
+lf->start = psl->tStart;	/* Correct for rounding errors... */
+lf->end = psl->tEnd;
+return lf;
+}
+
+struct linkedFeatures *lfFromPslsWScoresInRange(char *table, int start, int end, char *chromName, boolean isXeno, float maxScore)
+/* Return linked features from range of table with the scores scaled appriately */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset;
+struct linkedFeatures *lfList = NULL, *lf;
+
+sr = hRangeQuery(conn,table,chromName,start,end,NULL, &rowOffset);
+while((row = sqlNextRow(sr)) != NULL)
+    {
+    struct pslWScore *pslWS = pslWScoreLoad(row);
+    lf = lfFromPslWScore(pslWS, 1, FALSE, maxScore);
+    slAddHead(&lfList, lf);
+    pslWScoreFree(&pslWS);
+    }
+slReverse(&lfList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return lfList;
+}
+
+void loadUniGeneAli(struct trackGroup *tg)
+{
+tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, chromName,FALSE, 3.0);
+}
+
+void uniGeneMethods(struct trackGroup *tg)
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadUniGeneAli;
+tg->colorShades = shadesOfGray;
+}
+
 int calcExprBedFullSize(struct exprBed  *exp) 
 /* Because exprBedItemHeight and exprBedTotalHeight are also
 used to center the labels on the left hand side
@@ -4804,7 +4893,7 @@ registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("rosettaTe",rosettaTeMethods);   
 registerTrackHandler("rosettaPe",rosettaPeMethods); 
-
+registerTrackHandler("uniGene",uniGeneMethods);
 /* Load first track user has pasted or blatted in. Then tracks
  * that are built into database. */
 loadCustomTracks(&tGroupList);
