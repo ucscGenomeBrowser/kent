@@ -22,7 +22,7 @@ beta: compile
 	mv $A ${CGI_BIN}-beta/$A
 
 mgsc: compile
-	mv $A /usr/local/apache/cgi-bin-mgsc/$A
+	mv $A ${CGI_BIN}-mgsc/$A
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
