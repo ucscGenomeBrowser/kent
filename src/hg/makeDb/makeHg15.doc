@@ -1396,6 +1396,24 @@ DONE TO HERE - RUNNING...
 	echo 'load data local infile "recombRate.bed" into table recombRate;' | hgsql hg15
 
 
+# CREATE AND LOAD GENMAPDB TRACK (TO DO)
+
+# Get file from UPenn and name upenn.txt (Contact: Mike Morley <mmorley@mail.med.upenn.edu>)
+# Move file to /projects/hg2/booch/psl/gs.16/build33/genMapDb
+
+# Create bed file
+	cd /projects/hg2/booch/psl/gs.16/build33/genMapDb
+	make genMapDb.bed
+
+# Create database table
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg15 < genMapDb.sql
+        
+# Load the table
+	cd /projects/hg2/booch/psl/gs.16/build33/genMapDb/
+	echo 'load data local infile "genMapDb.bed" into table genMapDb;' | hgsql hg15
+
 
 # CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (DONE 4/28/2003)
 # (Must wait until after the STS Map track has been finished for STS and genetic plots)
