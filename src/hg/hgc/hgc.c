@@ -95,8 +95,9 @@ int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 char *database2;		/* Name of secondary mySQL database. (for comparision/ orthology)*/
 
-int prevColor = 0; /* used to opetimize color change html commands */
-int currentColor = 0; /* used to opetimize color change html commands */
+#define NUMTRACKS 9
+int prevColor[NUMTRACKS]; /* used to opetimize color change html commands */
+int currentColor[NUMTRACKS]; /* used to opetimize color change html commands */
 int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black */
 
@@ -196,7 +197,7 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 void hgcAnchorSomewhereTag(char *group, char *item, char *other, char *chrom, char *tag)
 /* Generate an anchor that calls click processing program with item and other parameters. */
 {
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s#%s\">",
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&xyzzy=xyzzy#%s\">",
 	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other, tag);
 }
 
@@ -456,10 +457,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 #define INFRAMESTOP 19
 #define INTERGENIC 20
 #define REGULATORY 21
+#define LABEL 22
 
 #define RED 0xFF0000
 #define GREEN 0x00FF00
 #define BLUE 0x0000FF
+#define MEDBLUE 0x6699FF
 #define PURPLE 0x9900cc
 #define BLACK 0x000000
 #define CYAN 0x00FFFF
@@ -469,6 +472,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 #define MAGENTA 0xFF00FF
 #define GRAY 0xcccccc
 #define LTGRAY 0x999999
+#define WHITE 0xFFFFFF
 
 int setAttributeColor(int class)
 {
@@ -479,13 +483,12 @@ switch (class)
    case STOPCODON:
       return RED;
    case CODINGA:
-      return BLUE;
+      return MEDBLUE;
    case CODINGB:
       return PURPLE;
    case UTR5:
    case UTR3:
-      return GRAY;
-      return GRAY;
+      return LTGRAY;
    case INTRON:
       return LTGRAY;
    case SPLICESITE:
@@ -496,31 +499,33 @@ switch (class)
    case REGULATORY:
       return YELLOW;
    case INTERGENIC:
+      return GRAY;
+   case LABEL:
    default:
       return BLACK;
     }
 }
 
-void startColor(FILE *f, int color)
+void startColor(FILE *f, int color, int track)
 {
 //if (prevColor != color)
     fprintf(f,"</FONT><FONT COLOR=\"%06X\">",color);
-currentColor = color;
+currentColor[track] = color;
 }
-void startColorStr(struct dyString *dy, int color)
+void startColorStr(struct dyString *dy, int color, int track)
 {
-currentColor = color;
-if (prevColor != currentColor)
+currentColor[track] = color;
+if (prevColor[track] != currentColor[track])
     dyStringPrintf(dy,"</FONT><FONT COLOR=\"%06X\">",color);
 }
-void stopColor(FILE *f)
+void stopColor(FILE *f, int track)
 {
-prevColor = currentColor;
+prevColor[track] = currentColor[track];
 }
-void stopColorStr(struct dyString *dy)
+void stopColorStr(struct dyString *dy, int track)
 {
 //if (prevColor != currentColor)
-prevColor = currentColor;
+prevColor[track] = currentColor[track];
 }
 
 void endLine(FILE *f)
@@ -531,28 +536,32 @@ void endLineStr(struct dyString *dy)
 {
     dyStringPrintf(dy,"</FONT>");
 }
-void setClass(FILE *f, int class)
+void setClass(FILE *f, int class, int track)
 {
-startColor(f,setAttributeColor(class));
+startColor(f,setAttributeColor(class),track);
 if (class == STARTCODON)
     fprintf(f,"<A name=startcodon></a>");
 }
 
-void setClassStr(struct dyString *dy, int class)
+void addTag(struct dyString *dy, struct dyString *tag)
+{
+    dyStringPrintf(dy,"<A name=%s></a>",tag->string);
+}
+void setClassStr(struct dyString *dy, int class, int track)
 {
 if (class == STARTCODON)
     dyStringAppend(dy,"<A name=startcodon></a>");
-startColorStr(dy,setAttributeColor(class));
+startColorStr(dy,setAttributeColor(class),track);
 }
 
-void resetClass(FILE *f)
+void resetClass(FILE *f, int track)
 {
-    stopColor(f);
+    stopColor(f,track);
 }
 
-void resetClassStr(struct dyString *dy)
+void resetClassStr(struct dyString *dy, int track)
 {
-    stopColorStr(dy);
+    stopColorStr(dy,track);
 }
 
 void axtOneGeneOut(struct axt *axtList, int lineSize, FILE *f, struct genePred *gp)
@@ -625,17 +634,10 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     char *t = axt->tSym;
     int size = axt->symCount;
     int sizeLeft = size;
-    int tmp;
     int qPtr ;
-    if (axt->qStrand == '-')
-        {
-        tmp = hChromSize2(axt->qName) - axt->qStart;
-        axt->qStart = hChromSize2(axt->qName) - axt->qEnd;
-        axt->qEnd = tmp;
-        }
-    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d xscript %d-%d nEnd=%d\n", 
+    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d xscript %d-%d \n", 
         axt->tName, axt->tStart+1, axt->tEnd,
-        axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, nextEnd);
+        axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
 
     qPtr = axt->qStart;
     if (!posStrand)
@@ -654,11 +656,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         struct dyString *dyQ = newDyString(1024);
         struct dyString *dyQprot = newDyString(1024);
         struct dyString *dyTprot = newDyString(1024);
+        struct dyString *exonTag = newDyString(1024);
         oneSize = sizeLeft;
         if (oneSize > lineSize)
             oneSize = lineSize;
-        setClassStr(dyT,tClass);
-        setClassStr(dyQ,qClass);
+        setClassStr(dyT,tClass, 0);
+        setClassStr(dyQ,qClass, 1);
         for (i=0; i<oneSize; ++i)
             {
             if (posStrand)
@@ -666,6 +669,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if ((tClass==INTRON) && (tPtr >= nextStart) && (tPtr >= tStart) && (tPtr < tEnd))
                     {
                     tCoding=TRUE;
+                    dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
+                    addTag(dyT,exonTag);
                     if (qStopCodon == FALSE) qCoding=TRUE;
                     }
                 else if ((tPtr >= nextStart) && (tPtr < tStart))
@@ -674,12 +679,15 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 }
             else{
-                if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
+                if ((tClass==INTRON) && (tPtr <= nextStart-1) && (tPtr <= tStart) && (tPtr > tEnd))
                     {
                     tCoding=TRUE;
+                    dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
+                    addTag(dyT,exonTag);
+
                     if (qStopCodon == FALSE) qCoding=TRUE;
                     }
-                else if ((tPtr <= nextStart) && (tPtr > tStart))
+                else if ((tPtr <= nextStart-1) && (tPtr > tStart))
                     {
                     tClass=UTR5; qClass=UTR5;
                     }
@@ -692,6 +700,32 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 qClass=CODINGA;
             if (qCoding && (qFlip == FALSE) && !qStopCodon)
                 qClass=CODINGB;
+            if (posStrand)
+                {
+                if (tPtr == nextEnd)
+                    {
+                    tCoding=FALSE;
+                    qCoding=FALSE;
+                    tClass=INTRON;
+                    qClass=INTRON;
+                    nextEndIndex++;
+                    nextStart = gp->exonStarts[nextEndIndex];
+                    nextEnd = gp->exonEnds[nextEndIndex];
+                    }
+                }
+            else
+                {
+                if (tPtr == nextEnd-1)
+                    {
+                    tCoding=FALSE;
+                    qCoding=FALSE;
+                    tClass=INTRON;
+                    qClass=INTRON;
+                    nextEndIndex--;
+                    nextStart = (gp->exonEnds[nextEndIndex]);
+                    nextEnd = (gp->exonStarts[nextEndIndex]);
+                    }
+                }
             if (posStrand)
                 {
                 if ((tPtr >= (tStart)) && (tPtr <=(tStart+2)))
@@ -709,24 +743,26 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if ((tPtr >= tEnd) && (tPtr <= (tEnd+2)))
                     {
                     tClass=STOPCODON;
+                    qClass=STOPCODON;
                     tCoding=FALSE;
+                    qCoding=FALSE;
                     }
                 }
             else
                 {
-                if ((tPtr <= (tStart+1)) && (tPtr >=(tStart-1)))
+                if ((tPtr <= (tStart)) && (tPtr >=(tStart-2)))
                     {
                     tClass=STARTCODON;
                     qClass=STARTCODON;
                     tCoding=TRUE;
                     qCoding=TRUE;
-                    if (tPtr == tStart+1) 
+                    if (tPtr == tStart-3) 
                         {
                         tCodonPos=1;
                         qCodonPos=1;
                         }
                     }
-                if ((tPtr <= tEnd+2) && (tPtr >= (tEnd)))
+                if ((tPtr <= tEnd+1) && (tPtr >= (tEnd-1)))
                     {
                     tClass=STOPCODON;
                     tCoding=FALSE;
@@ -735,35 +771,22 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             if (posStrand)
                 {
                 if (tPtr == (tEnd +3) )
-                        tClass = UTR3;
+                    {
+                    tClass = UTR3;
+                    qClass = UTR3;
+                    }
                 }
             else 
                 {
-                if (tPtr == (tEnd -1) )
-                        tClass = UTR3;
-                }
-            if (tPtr == nextEnd)
-                {
-                tCoding=FALSE;
-                qCoding=FALSE;
-                tClass=INTRON;
-                qClass=INTRON;
-                if (posStrand)
+                if (tPtr == (tEnd -2) )
                     {
-                    nextEndIndex++;
-                    nextStart = gp->exonStarts[nextEndIndex];
-                    nextEnd = gp->exonEnds[nextEndIndex];
-                    }
-                else 
-                    {
-                    nextEndIndex--;
-                    nextStart = (gp->exonEnds[nextEndIndex]);
-                    nextEnd = (gp->exonStarts[nextEndIndex]);
+                    tClass = UTR3;
+                    qClass = UTR3;
                     }
                 }
             if (tClass != prevTclass)
                 {
-                setClassStr(dyT,tClass);
+                setClassStr(dyT,tClass,0);
                 prevTclass = tClass;
                 }
             dyStringAppendC(dyT,t[i]);
@@ -771,7 +794,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 resetClassStr(dyT);*/
             if (qClass != prevQclass)
                 {
-                setClassStr(dyQ,qClass);
+                setClassStr(dyQ,qClass,0);
                 prevQclass = qClass;
                 }
             dyStringAppendC(dyQ,q[i]);
@@ -815,9 +838,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 if (qProt == 0) 
                     {
                     qProt = '*'; /* stop codon is * */
-                    qClass = STOPCODON;
+                    qClass = INFRAMESTOP;
                     qStopCodon = TRUE;
-                    qCoding = FALSE;
+                    qCoding = TRUE;
                     }
                 if (tProt == qProt) qProt = '|'; /* if the AA matches  print | */
                 dyStringAppendC(dyQprot,qProt);
@@ -863,18 +886,42 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 qClass=INTRON;
                 }*/
             }
-        setClassStr(dyT,INTERGENIC);
+        resetClassStr(dyT,0);
+        setClassStr(dyT,LABEL,0);
         if (posStrand)
-            dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d nEnd=%d",tPtr, gp->exonStarts[(nextEndIndex == 0) ? 0 : nextEndIndex - 1]+1, gp->exonEnds[(nextEndIndex == 0) ? 0 : nextEndIndex - 1],(nextEndIndex == 0) ? 1 : nextEndIndex,nextEnd);
+            {
+            dyStringPrintf(dyT, " %d ",tPtr);
+            if (tCoding)
+                dyStringPrintf(dyT, "exon %d",(nextEndIndex == 0) ? 1 : nextEndIndex+1);
+            }
         else
-            dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d nEnd=%d",tPtr, gp->exonStarts[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ]+1, gp->exonEnds[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ],(nextEndIndex == 0) ? 1 : nextEndIndex,nextEnd);
+            {
+            dyStringPrintf(dyT, " %d ",tPtr+1);
+            if (tCoding)
+                dyStringPrintf(dyT, "exon %d", (nextEndIndex == 0) ? 1 : nextEndIndex+1);
+            }
+        /* debug version
+        if (posStrand)
+            dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == 0) ? 0 : nextEndIndex - 1]+1, gp->exonEnds[(nextEndIndex == 0) ? 0 : nextEndIndex - 1],(nextEndIndex == 0) ? 1 : nextEndIndex);
+        else
+            dyStringPrintf(dyT, " %d thisExon=%d-%d xon %d",tPtr, gp->exonStarts[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ]+1, gp->exonEnds[(nextEndIndex == gp->exonCount) ? gp->exonCount : nextEndIndex ],(nextEndIndex == 0) ? 1 : nextEndIndex);
+            */
         dyStringAppendC(dyT,'\n');
-        setClassStr(dyQ,INTERGENIC);
+        resetClassStr(dyT,0);
+        resetClassStr(dyQ,1);
+        setClassStr(dyQ,LABEL,1);
+        if (posStrand)
+            dyStringPrintf(dyQ, " %d ",qPtr);
+        else
+            dyStringPrintf(dyQ, " %d ",qPtr);
+        /* debug version
         if (posStrand)
             dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex+1);
         else
-            dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex-1);
+            dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex);
+            */
         dyStringAppendC(dyQ,'\n');
+        resetClassStr(dyQ,1);
         dyStringAppendC(dyQprot,'\n');
         dyStringAppendC(dyTprot,'\n');
         fputs(dyTprot->string,f);
@@ -949,10 +996,12 @@ struct axt *axtList = NULL;
 struct axtInfo *ai;
 int lineSize = 70;
 int prevEnd = gp->txStart; /* change this to gp->cdsStart if you want to display coding */
+int prevStart = gp->txEnd; /* change this to gp->cdsStart if you want to display coding */
 char query[255];
 struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
 char **row;
+int tmp;
 
 sprintf(query, "select * from %s where chrom = '%s'", table, gp->chrom);
 sr = sqlGetResult(conn, query);
@@ -961,8 +1010,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     ai = axtInfoLoad(row );
     }
 lf = lineFileOpen(ai->fileName, TRUE);
-/*if (gp->strand[0] == '-')
-    prevEnd = gp->txEnd;*/
 while ((axt = axtRead(lf)) != NULL)
     {
     if (sameString(gp->chrom , axt->tName) && 
@@ -976,8 +1023,29 @@ while ((axt = axtRead(lf)) != NULL)
             {
             reverseComplement(axt->qSym, axt->symCount);
             reverseComplement(axt->tSym, axt->symCount);
+            tmp = hChromSize2(axt->qName) - axt->qStart;
+            axt->qStart = hChromSize2(axt->qName) - axt->qEnd;
+            axt->qEnd = tmp;
+            if (prevEnd < (axt->tStart)-1)
+                {
+                axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+                reverseComplement(axtGap->qSym, axtGap->symCount);
+                reverseComplement(axtGap->tSym, axtGap->symCount);
+                slAddHead(&axtList, axtGap);
+                }
             }
-        if (prevEnd < (axt->tStart)-1)
+        else if (prevEnd < (axt->tStart)-1)
+            {
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+            slAddHead(&axtList, axtGap);
+            }
+        slAddHead(&axtList, axt);
+        prevEnd = axt->tEnd;
+        prevStart = axt->tStart;
+        }
+    if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd)) 
+        {
+        if (prevEnd < axt->tStart )
             {
             axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
             if (gp->strand[0] == '-')
@@ -987,21 +1055,14 @@ while ((axt = axtRead(lf)) != NULL)
                 }
             slAddHead(&axtList, axtGap);
             }
-        slAddHead(&axtList, axt);
-        prevEnd = axt->tEnd;
-        }
-    if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd)) 
-        {
-        /*axtFree(&axt);*/
         break;
         }
-/*    axtFree(&axt);*/
     }
 axtInfoFree(&ai);
 if (gp->strand[0] == '+')
     slReverse(&axtList);
 axtOneGeneOut(axtList, lineSize, stdout , gp);
-axtFree(&axtList);
+//axtFree(&axtList);
 }
 
 void showGenePos(char *name, struct trackDb *tdb)
@@ -1072,16 +1133,16 @@ printf("<UL>\n");
 if (pepTable != NULL && hTableExists(pepTable))
     {
     hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("<LI>Translated Protein</A>\n"); 
+    printf("<LI>Predicted Protein</A> \n"); 
     }
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-printf("<LI>%s</A>\n", mrnaDescription);
+printf("<LI>%s</A> may be different from the assembly\n", mrnaDescription);
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
-printf("<LI>Genomic Sequence</A>\n");
+printf("<LI>Genomic Sequence</A> from assembly\n");
 if (hTableExists("axtInfo"))
     {
-    hgcAnchorSomewhereTag("htcGenePsl", geneName, geneTable, seqName,"STARTCODON");
-    printf("<LI>Comparative Sequence</A><BR>\n");
+    hgcAnchorSomewhereTag("htcGenePsl", geneName, geneTable, seqName,"startcodon");
+    printf("<LI>Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
     }
 printf("</UL>\n");
 }
@@ -1099,12 +1160,12 @@ printf("<UL>\n");
 if (pepTable != NULL && hTableExists(pepTable))
     {
     hgcAnchorSomewhereDb(pepClick, pepName, pepTable, seqName, mousedb);
-    printf("<LI>Translated Protein</A>\n"); 
+    printf("<LI>Translated Protein</A> \n"); 
     }
 hgcAnchorSomewhereDb(mrnaClick, geneName, geneTable, seqName, mousedb);
 printf("<LI>%s</A>\n", mrnaDescription);
 hgcAnchorSomewhereDb(genomicClick, geneName, geneTable, seqName, mousedb);
-printf("<LI>Genomic Sequence</A>\n");
+printf("<LI>Genomic Sequence</A> DNA sequence from assembly\n");
 printf("</UL>\n");
 }
 void geneShowCommon(char *geneName, struct trackDb *tdb, char *pepTable)
@@ -4387,6 +4448,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
+int white = WHITE;
 boolean hasBin; 
 
 
@@ -4410,6 +4472,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + hasBin);
     }
+    htmlSetBgColor(&white);
     htmStart(stdout, "alignment");
     fprintf(stdout, "<TT><PRE>");
     fprintf(stdout, "<H3>Alignment of %s in %s</H3>", seqName, database);
