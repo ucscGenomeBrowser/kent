@@ -9,4 +9,4 @@ O = netToAxt.o
 
 netToAxt: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netToAxt $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/netToAxt
+#	strip $(HOME)/bin/$(MACHTYPE)/netToAxt
