@@ -491,7 +491,12 @@ char *assembly = NULL;
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
-char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeText = "onchange=\"document.orgForm.org.value = "
+    " document.mainForm.org.options[document.mainForm.org.selectedIndex].value; "
+    " document.orgForm.seqFile.value = document.mainForm.seqFile.value; "
+    " document.orgForm.userSeq.value = document.mainForm.userSeq.value; "
+    " document.orgForm.submit();\"";
+char *userSeq = NULL;
 
 getDbAndGenome(cart, &db, &organism);
 serve = findServer(db, FALSE);
@@ -542,9 +547,18 @@ puts("<TD><CENTER>&nbsp;<BR>\n"
 
 puts("<P>");
 
-puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
-puts("<P>");
+userSeq = cartOptionalString(cart, "userSeq");
+if (NULL == userSeq || userSeq[0] == '\0')
+    {
+    puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
+    }
+else 
+    {
+    printf("<TEXTAREA NAME=userSeq ROWS=14 COLS=80>%s</TEXTAREA>\n", userSeq);
+    }
 
+
+puts("<P>");
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
@@ -579,7 +593,11 @@ printf("%s",
 "\n"
 "</FORM>\n");
 
-printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"GET\" NAME=\"orgForm\">"
+       "<input type=\"hidden\" name=\"org\" value=\"%s\">\n"
+       "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
+       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n", organism);
 cartSaveSession(cart);
 puts("</FORM>");
 }
@@ -588,19 +606,21 @@ void doMiddle(struct cart *theCart)
 {
 char *userSeq;
 char *db, *organism;
+char *showPage = FALSE;
 
 cart = theCart;
 dnaUtilOpen();
 getDbAndGenome(cart, &db, &organism);
 
-
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
 userSeq = cartOptionalString(cart, "userSeq");
 if(userSeq != 0 && userSeq[0] == '\0')
+    {
     userSeq = cartOptionalString(cart, "seqFile");
-
-if(userSeq == NULL || userSeq[0] == '\0')
+    }
+showPage = cartOptionalString(cart, "showPage");
+if(userSeq == NULL || userSeq[0] == '\0' || showPage)
     {
     cartWebStart(theCart, "%s BLAT Search", organism);
     askForSeq();
@@ -615,7 +635,7 @@ cartWebEnd();
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", NULL};
+char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", "showPage", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
