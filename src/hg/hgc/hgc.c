@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.742 2004/09/08 23:13:39 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.743 2004/09/09 03:58:32 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1968,6 +1968,30 @@ findNib(db, chrom, nibFile);
 return nibLoadPart(nibFile, start, end - start);
 }
 
+void printLabeledNumber(char *org, char *label, long long number)
+/* Print label: in bold face, and number with commas. */
+{
+char *space = " ";
+if (org == NULL)
+    org = space = "";
+printf("<B>%s%s%s:</B> ", org, space, label);
+printLongWithCommas(stdout, number);
+printf("<BR>\n");
+}
+
+void printLabeledPercent(char *org, char *label, long p, long q)
+/* Print label: in bold, then p, and then 100 * p/q */
+{
+char *space = " ";
+if (org == NULL)
+    org = space = "";
+printf("<B>%s%s%s:</B> ", org, space, label);
+printLongWithCommas(stdout, p);
+if (q != 0)
+    printf(" (%3.1f%%)", 100.0 * p / q);
+printf("<BR>\n");
+}
+
 void genericNetClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		     char *item, int start, char *otherDb, char *chainTrack)
 /* Generic click handler for net tracks. */
@@ -2035,108 +2059,49 @@ if (net->chainId != 0)
     htmlHorizontalLine();
     }
 printf("<B>Type:</B> %s<BR>\n", net->type);
-printf("<B>Level:</B> %d<BR>\n", net->level/2 + 1);
+printf("<B>Level:</B> %d<BR>\n", (net->level+1)/2);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
        org, net->tName, net->tStart+1, net->tEnd);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
        otherOrg, net->qName, net->qStart+1, net->qEnd);
 printf("<B>Strand:</B> %c<BR>\n", net->strand[0]);
-printf("<B>Score:</B> %1.1f<BR>\n", net->score);
+printLabeledNumber(NULL, "Score", net->score);
 if (net->chainId)
     {
     printf("<B>Chain ID:</B> %u<BR>\n", net->chainId);
-    printf("<B>Bases aligning:</B> %u<BR>\n", net->ali);
+    printLabeledNumber(NULL, "Bases aligning", net->ali);
     if (net->qOver >= 0)
-	printf("<B>%s parent overlap:</B> %d<BR>\n", otherOrg, net->qOver);
+	printLabeledNumber(otherOrg, "parent overlap", net->qOver);
     if (net->qFar >= 0)
-	printf("<B>%s parent distance:</B> %d<BR>\n", otherOrg, net->qFar);
+	printLabeledNumber(otherOrg, "parent distance", net->qFar);
     if (net->qDup >= 0)
-	printf("<B>%s bases duplicated:</B> %d<BR>\n", otherOrg, net->qDup);
+	printLabeledNumber(otherOrg, "bases duplicated", net->qDup);
     }
 if (net->tN >= 0)
-    {
-    printf("<B>N's in %s:</B> %d ", org, net->tN);
-    if (tSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->tN/tSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(org, "N's", net->tN, tSize);
 if (net->qN >= 0)
-    {
-    printf("<B>N's in %s:</B> %d ", otherOrg, net->qN);
-    if (qSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->qN/qSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(otherOrg, "N's", net->qN, qSize);
 if (net->tTrf >= 0)
-    {
-    printf("<B>%s tandem repeat (trf) bases:</B> %d ", org, net->tTrf);
-    if (tSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->tTrf/tSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(org, "tandem repeat (trf) bases", net->tTrf, tSize);
 if (net->qTrf >= 0)
-    {
-    printf("<B>%s tandem repeat (trf) bases:</B> %d ", otherOrg, net->qTrf);
-    if (qSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->qTrf/qSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(otherOrg, "tandem repeat (trf) bases", net->qTrf, qSize);
 if (net->tR >= 0)
-    {
-    printf("<B>%s RepeatMasker bases:</B> %d ", org, net->tR);
-    if (tSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->tR/tSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(org, "RepeatMasker bases", net->tR, tSize);
 if (net->qR >= 0)
-    {
-    printf("<B>%s RepeatMasker bases:</B> %d ", otherOrg, net->qR);
-    if (qSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->qR/qSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(otherOrg, "RepeatMasker bases", net->qR, qSize);
 if (net->tOldR >= 0)
-    {
-    printf("<B>%s old repeat bases:</B> %d ", org, net->tOldR);
-    if (tSize != 0 )
-        printf("(%1.1f%%)<BR>\n", 100.0*net->tOldR/tSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(org, "old repeat bases", net->tOldR, tSize);
 if (net->qOldR >= 0)
-    {
-    printf("<B>%s old repeat bases:</B> %d ", otherOrg, net->qOldR);
-    if (qSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->qOldR/qSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(otherOrg, "old repeat bases", net->qOldR, qSize);
 if (net->tNewR >= 0)
-    {
-    printf("<B>%s new repeat bases:</B> %d ", org, net->tNewR);
-    if (tSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->tNewR/tSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(org, "new repeat bases", net->tOldR, tSize);
 if (net->qNewR >= 0)
-    {
-    printf("<B>%s new repeat bases:</B> %d ", otherOrg, net->qNewR);
-    if (qSize != 0)
-        printf("(%1.1f%%)<BR>\n", 100.0*net->qNewR/qSize);
-    else
-        printf("<BR>\n");
-    }
+    printLabeledPercent(otherOrg, "new repeat bases", net->qOldR, qSize);
 if (net->tEnd >= 0)
-    printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
+    printLabeledNumber(org, "size", net->tEnd - net->tStart);
 if (net->qEnd >= 0)
-    printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
+    printLabeledNumber(otherOrg, "size", net->qEnd - net->qStart);
+printf("(Fields above refer to entire chain or gap, not just the part inside of the window.)<BR>\n");
 netAlignFree(&net);
 }
 
