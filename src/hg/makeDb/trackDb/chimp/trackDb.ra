@@ -1,0 +1,8 @@
+track xenoRefGene
+shortLabel Human RefSeq
+longLabel Human RefSeq Genes
+group genes
+priority 35
+visibility pack
+color 12,12,120
+type genePred
