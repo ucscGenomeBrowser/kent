@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.43 2005/02/25 00:20:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.44 2005/03/01 18:30:24 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -348,6 +348,7 @@ char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
 boolean gotRnaAli = idInAllMrna(id, conn);
+char *oldDisplayId;
 
 if (sameWord(curGeneType, "ccdsGene"))
     {
@@ -387,11 +388,15 @@ if (protAcc != NULL)
 	{
 	hPrintf(" (aka %s", spDisplayId);
 	/* show once if the new and old displayId are the same */
-	if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
-	    {
-	    hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+ 	oldDisplayId = oldSpDisplayId(spDisplayId);
+	if (oldDisplayId != NULL)
+ 	    {
+            if (!sameWord(spDisplayId, oldDisplayId))
+	    	{
+	    	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	    	}
 	    }
-	hPrintf(")\n", oldSpDisplayId(spDisplayId));
+	hPrintf(")\n");
 	}
     }
 
