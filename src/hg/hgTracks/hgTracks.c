@@ -4784,11 +4784,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	/* if we're at the stop or start of a linked feature add a black tick for the snp 
 	 * in addtion to the larger tic of shaded color */
 	if(heightPer == tg->heightPer)
-	    {
-	    heightPer -= 4;
-	    color = blackIndex();
-	    drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
-	    }
+	    drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer - 4)/2), (heightPer -4), blackIndex());
 	}
     if (isFull)
 	y += lineHeight;
