@@ -204,17 +204,20 @@ else
     
 if (yValue >= (avg[iTarget] + 2.0*stddev[iTarget]))
     {
-    vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
+    //vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
+    vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, abnormalColor);
     }
 else
     {
     if (yValue <= (avg[iTarget] - 2.0*stddev[iTarget]))
 	{
-	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
+	//vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
+	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, abnormalColor);
 	}
     else
 	{
-	vLineM(tx[iTarget]+0.5, 0, yPlotValue, 2, MG_BLUE);
+	//vLineM(tx[iTarget]+0.5, 0, yPlotValue, 2, MG_BLUE);
+	vLineM(tx[iTarget]+0.5, 0, yPlotValue, 2, normalColor);
 	}
     }
 }
@@ -265,22 +268,26 @@ else
     
 if (yPlotValue > 0.0)
     {
-    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_BLUE);
+    //vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_BLUE);
+    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 2, normalColor);
     }
 else
     {
-    vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_BLUE);
+    //vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_BLUE);
+    vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 2, normalColor);
     }
 
 if (yPlotValue >= 2.0)
     {
-    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_RED);
+    //vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_RED);
+    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, abnormalColor);
     }
 else
     {
     if (yPlotValue <= -2.0)
   	{
-	vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_RED);
+	//vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_RED);
+	vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, abnormalColor);
 	}
     }
 }
