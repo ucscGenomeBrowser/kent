@@ -768,12 +768,27 @@ CREATING HUMAN/MOUSE CHAINS AND NET BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
     netClass hNoClass.net mm3 hg13 mouse.net -tNewR=$HOME/mm/bed/linSpecRep -qNewR=$HOME/oo/bed/linSpecRep
     rm -r n1 hNoClass.net
 
-    # Make a syntenic subset of the net as so:
-    netFilter -syn mouse.net > mouseSyn.net
-
     # Load the net into the database as so:
     netFilter -minGap=10 mouse.net |  hgLoadNet mm3 humanNet stdin
 
+    # Move back to the file server to create axt files corresponding
+    # to the net.
+    ssh kkstore
+    cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH/axtChain
+    mkdir ../axtNet
+    netSplit mouse.net mouseNet
+    cd mouseNet
+    foreach i (*.net)
+        set c = $i:r
+	netToAxt $i ../chain/$c.chain ~/mm/mixedNib ~/oo/mixedNib ../../axtNet/$c.axt
+	echo done ../axt/$c.axt
+    end
+    cd ..
+    rm -r mouseNet
+
+    # At this point there is a blastz..../axtNet directory that should
+    # be used in place of the axtBest for making the human/mouse
+    # conservation track and for loading up the downloads page.
 
 
 LOADING MOUSE MM3 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
