@@ -535,7 +535,7 @@ while (ffList != NULL)
 	ffSlideIntrons(bestPath);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    if (score > 20)
+    if (score >= 20)
 	{
 	AllocVar(ffl);
 	ffl->ff = bestPath;
