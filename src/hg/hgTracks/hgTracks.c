@@ -1292,8 +1292,8 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 0.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( minRange, 0.0, 3.66958, 1000 );
-    max0 = whichNum( maxRange, 0.0, 3.66958, 1000 );
+    min0 = whichNum( minRange, 0.0, 8.0, 1000 );
+    max0 = whichNum( maxRange, 0.0, 8.0, 1000 );
 
     if( !isFull )
     {   
@@ -7935,8 +7935,8 @@ if (withLeftLabels)
 	    }
     else if( sameString( group->mapName, "humMusL" ) )
     {
-        min0 = whichNum( 0.0, 0.0, 3.66958, 1000 );
-        max0 =  whichNum( 1000.0, 0.0, 3.66958, 1000 );
+        min0 = whichNum( 0.0, 0.0, 8.0, 1000 );
+        max0 =  whichNum( 1000.0, 0.0, 8.0, 1000 );
         sprintf( minRangeStr, "%0.2g", min0  );
         sprintf( maxRangeStr, "%0.2g", max0 );
 
