@@ -17,7 +17,8 @@
  * catch the aborts.  The error messages from bad SQL syntax
  * are actually pretty good (they're just passed on from
  * mySQL). */
-
+#ifndef JKSQL_H
+#define JKSQL_H
 #ifndef SQLNUM_H
 #include "sqlNum.h"
 #endif
@@ -30,9 +31,6 @@
 #include "hash.h"
 #endif
 
-extern boolean sqlTrace;      /* setting to true prints each query */
-extern int sqlTraceIndent;    /* number of spaces to indent traces */
-	
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
 
@@ -233,3 +231,31 @@ char *connGetDatabase(struct sqlConnCache *conn);
 char *sqlLikeFromWild(char *wild);
 /* Convert normal wildcard string to SQL wildcard by
  * mapping * to % and ? to _.  Escape any existing % and _'s. */
+
+/* flags controlling mysql tracing and time logging */
+#define JKSQL_TRACE   0x01   /* enable tracing of each mysql query to stderr */
+#define JKSQL_PROF    0x02   /* record time spend in database queries,
+                              * and dump at exit. */
+
+void sqlMonitorEnable(unsigned flags);
+/* Enable disable tracing or profiling of SQL queries.
+ * If JKSQL_TRACE is specified, then tracing of each SQL query is enabled,
+ * along with the timing of the queries.
+ * If JKSQL_PROF is specified, then time spent in SQL queries is logged
+ * and printed when the program exits or when sqlMonitorDisable is called.
+ *
+ * These options can also be enabled by setting the JKSQL_TRACE and/or
+ * JKSQL_PROF environment variables to "on".  The cheapcgi module will set
+ * these environment variables if the corresponding CGI variables are set
+ * to "on".
+ */
+
+void sqlMonitorSetIndent(unsigned indent);
+/* set the sql indent level indent to the number of spaces to indent each
+ * trace, which can be helpful in making voluminous trace info almost
+ * readable. */
+
+void sqlMonitorDisable();
+/* Disable tracing or profiling of SQL queries. */
+
+#endif /* JKSQL_H */
