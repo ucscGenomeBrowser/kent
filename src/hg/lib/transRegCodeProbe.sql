@@ -5,13 +5,15 @@
 
 #CHIP/CHIP Probe and Transcription Factor Binding Info
 CREATE TABLE transRegCodeProbe (
-    bin smallint unsigned not null,
+    bin smallint not null,
     chrom varchar(255) not null,	# Chromosome binding site is on
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of probe
-    tfCount int unsigned not null,	# Count of bound transcription factors
-    tfList longblob not null,	# List of bound transcription factors
+    tfCount int unsigned not null,	# Count of bound transcription factors_conditions
+    tfList longblob not null,	# List of bound transcription factors_conditions
+    bindVals longblob not null,	# E values for factor binding (lower is better)
               #Indices
-    PRIMARY KEY(name(16))
+    PRIMARY KEY(name(24)),
+    INDEX(chrom(8),bin)
 );

@@ -7,4 +7,5 @@ table transRegCodeProbe
     string name;        "Name of probe"
     uint tfCount;	"Count of bound transcription factors_conditions"
     string[tfCount] tfList;    "List of bound transcription factors_conditions"
+    float[tfCount] bindVals;   "E values for factor binding (lower is better)"
     )

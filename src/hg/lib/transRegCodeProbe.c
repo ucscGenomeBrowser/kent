@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "transRegCodeProbe.h"
 
-static char const rcsid[] = "$Id: transRegCodeProbe.c,v 1.1 2004/09/22 00:09:46 kent Exp $";
+static char const rcsid[] = "$Id: transRegCodeProbe.c,v 1.2 2004/09/26 06:29:27 kent Exp $";
 
 struct transRegCodeProbe *transRegCodeProbeLoad(char **row)
 /* Load a transRegCodeProbe from row fetched with select * from transRegCodeProbe
@@ -27,6 +27,11 @@ int sizeOne;
 sqlStringDynamicArray(row[5], &ret->tfList, &sizeOne);
 assert(sizeOne == ret->tfCount);
 }
+{
+int sizeOne;
+sqlFloatDynamicArray(row[6], &ret->bindVals, &sizeOne);
+assert(sizeOne == ret->tfCount);
+}
 return ret;
 }
 
@@ -36,7 +41,7 @@ struct transRegCodeProbe *transRegCodeProbeLoadAll(char *fileName)
 {
 struct transRegCodeProbe *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -54,7 +59,7 @@ struct transRegCodeProbe *transRegCodeProbeLoadAllByChar(char *fileName, char ch
 {
 struct transRegCodeProbe *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -91,6 +96,17 @@ for (i=0; i<ret->tfCount; ++i)
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
+{
+int i;
+s = sqlEatChar(s, '{');
+AllocArray(ret->bindVals, ret->tfCount);
+for (i=0; i<ret->tfCount; ++i)
+    {
+    ret->bindVals[i] = sqlFloatComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+}
 *pS = s;
 return ret;
 }
@@ -108,6 +124,7 @@ freeMem(el->name);
 if (el->tfList != NULL)
     freeMem(el->tfList[0]);
 freeMem(el->tfList);
+freeMem(el->bindVals);
 freez(pEl);
 }
 
@@ -149,6 +166,17 @@ for (i=0; i<el->tfCount; ++i)
     if (sep == ',') fputc('"',f);
     fprintf(f, "%s", el->tfList[i]);
     if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+}
+fputc(sep,f);
+{
+int i;
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->tfCount; ++i)
+    {
+    fprintf(f, "%g", el->bindVals[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
