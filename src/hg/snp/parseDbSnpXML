@@ -1,64 +1,168 @@
 #!/usr/bin/perl -W
-# takes dbSnp XML files as stdin and prints condensed information
-# to stdout in one line per SNP in tab delimited format
 
-$chrom=$strand=$alleles=$class=$func=$valid="";
-$chromEnd=$rsId=$score=$het=$hetSE=0;
+$usage  = "
+parseDbSnpXML takes dbSnp XML files as stdin and writes condensed file of information
+     that can be lifted and loaded directly into snp table.  It also creates files of 
+     flanking sequences, structural information, and locus info.\n
+usage: parseDbSnpXML <infile> <outDir> <outRoot>
+       parseDbSnpXML ds_chY.xml.gz ds_chY
+where <infile>  is a gzipped XML file,
+      <outDir>  is the directory for output files, and 
+      <outRoot> specifies the root for the output files:
+                    <outRoot>.det:  details for snp table
+                    <outRoot>.seq:  flanking sequences
+                    <outRoot>.str:  structural info
+                    <outRoot>.loc:  locus link info\n\n";
 
-$source="dbSnp";
+if ($#ARGV != 2) {die $usage;}
+$inputFile   = $ARGV[0];
+$outDir      = $ARGV[1];
+$outRoot     = $ARGV[2];
+$tmpDetail   = "/tmp/$outRoot.det";
+$tmpSeq      = "/tmp/$outRoot.seq";
+$tmpStruct   = "/tmp/$outRoot.str";
+$tmpLocus    = "/tmp/$outRoot.loc";
+unlink( " /tmp/$outRoot.* $outDir/$outRoot.* " );
+open( IN,  " zcat $inputFile | " ) or die "can't open INPUT  file: $inputFile; $!";
+open( DET, " > $tmpDetail      " ) or die "can't open OUTPUT file: $tmpDetail; $!";
+open( SEQ, " > $tmpSeq         " ) or die "can't open OUTPUT file: $tmpSeq;    $!";
+open( STR, " > $tmpStruct      " ) or die "can't open OUTPUT file: $tmpStruct; $!";
+open( LOC, " > $tmpLocus       " ) or die "can't open OUTPUT file: $tmpLocus;  $!";
 
-do
+$accession=$strand=$observed=$molType=$class=$status=$locType=$hitQuality=$valid=".";
+$protAcc=$frame=$allele=$residue=$aaPos=$func=".";
+$version=$contigStart=$contigEnd=$rsId=$avHet=$avHetSE=0;
+$mapWeight=$chromHits=$contigHits=$seqHits=0;
+%mapLoc=();
+%funcHash=();
+%validHash=();
+
+$printHeaders="FALSE";
+if ($printHeaders eq "TRUE")
 {
-    $line = <>;
-    if ($line =~ /<(NSE-ExchangeSet_query)>select distinct snp_id from vwSNP_hs_chr where chr = &apos;(.*)&apos;<\/\1>/)
-    { $chrom = "chr$2"; }
-} until ( $line =~ /<NSE-rs>/);
+    print DET "chr/acc\tctgStrt\tctgEnd\trsId\tscore\tstrand\tmolType\tclass\tvalid\t";
+    print DET "avHet\tavHetSE\tfunc\tlocType\thitQual\tmapWt\tchrHits\tctgHits\tseqHits\n";
+    print STR "rsId\tprotAcc\tprotGi\tstructGi\tprotLoc\trsRes\tprotRes\tstructRes\tstructLoc\n";
+    print LOC "rsId\tlocusId\tsymbol\tmrnaAcc\tprotAcc\tfunc\tframe\tallele\tresidue\taaPos\n";
+    print SEQ "rsId\tflank5\tflank3\tobserved\n";
+}
 
-while (<>) 
+while (<IN>) 
 {
-    if (/<(NSE-rsMaploc_physmap-int)>(\S+)<\/\1>/)          { $chromEnd = $2;}
-    elsif (/<(NSE-rs_refsnp-id)>(\S+)<\/\1>/)               { $rsId     = $2;}
-    elsif (/<(NSE-rsMaploc_orient value=\")(\S+)\"\/>/)     { $strand   = $2;}
-    elsif (/<(NSE-rs_observed)>(\S+)<\/\1>/)                { $alleles  = $2;}
-    elsif (/<(NSE-rs_snp-class value=\")(.*)\"\/>/)         { $class    = $2;}
-    elsif (/<(NSE-rs_het)>(\S+)<\/\1>/)                     { $het      = $2;}
-    elsif (/<(NSE-rs_het-SE)>(\S+)<\/\1>/ && ($2 ne "NaN")) { $hetSE    = $2;}
-    elsif (/<(NSE-FxnSet_fxn-class-contig value=\")(\S+)\"\/>/)
-    { if (index($func, $2) == -1) { $func  .= "$2,";} }
-    elsif (/<(NSE-rs_validated-)(\S+) value=\"true\"\/>/)
-    { if (index($valid,$2) == -1) { $valid .= "$2,";} }
-    elsif (/<\/NSE-rsMaploc>/) # end of current location
-    {   # store current pos/strand/fxn and reinit
-	if ($chromEnd == 0 )         { $chromEnd = 1; }
-	if ($func eq "")             { $func     = "unknown,"; }
-	if    ($strand eq "forward") { $strand   = "+"; }
-	elsif ($strand eq "reverse") { $strand   = "-"; }
-	$func =~ tr/ //;
-	substr($func, -1) = ""; # remove last character
-	$loc{$chromEnd}="$strand $func";
-	$strand=$func="";
-	$chromEnd=0;
-    }
-    elsif (/<\/NSE-rs>/) # end of current SNP
+    chomp;
+    if    (/NSE-rsStruct/) 
     {
-	if    (index($valid,"other-pop")       != -1) { $score += 1; }
-	elsif (index($valid,"by-frequency")    != -1) { $score += 2; }
-	elsif (index($valid,"by-cluster")      != -1) { $score += 4; }
-	elsif (index($valid,"by-2hit-2allele") != -1) { $score += 8; }
-	if ($valid   eq "") {$valid = "no-information,"; }
-	substr($valid, -1) = ""; # remove last character
-	$alleles =~ tr/\//,/;
-	if ($alleles eq "") { $alleles = "?"; }
-	for $chromEnd (sort keys %loc )
+	if    (/<(NSE-rsStruct_prot-acc)>(\S+)\s?<\/\1>/)           { $protAcc       = $2; }
+	elsif (/<(NSE-rsStruct_prot-gi)>(\S+)<\/\1>/)               { $protGi        = $2; }
+	elsif (/<(NSE-rsStruct_prot-loc)>(\S+)<\/\1>/)              { $protLoc       = $2; }
+	elsif (/<(NSE-rsStruct_prot-res)>(\S+)<\/\1>/)              { $protRes       = $2; }
+	elsif (/<(NSE-rsStruct_rs-res)>(\S+)<\/\1>/)                { $rsRes         = $2; }
+	elsif (/<(NSE-rsStruct_struct-gi)>(\S+)<\/\1>/)             { $structGi      = $2; }
+	elsif (/<(NSE-rsStruct_struct-loc)>(\S+)<\/\1>/)            { $structLoc     = $2; }
+	elsif (/<(NSE-rsStruct_struct-res)>(\S+)<\/\1>/)            { $structRes     = $2; }
+	elsif (/<\/NSE-rsStruct>/)
 	{
-	    ($strand, $func) = split / /, $loc{$chromEnd};
-	    $chromStart = $chromEnd - 1;
-	    print  "$chrom\t$chromStart\t$chromEnd\trs$rsId\t$score\t$strand\t";
-	    print  "$alleles\t$source\t$class\t$valid\t";
-	    printf "%.4f\t%.4f\t%s\n",$het, $hetSE, $func;
+	    print STR "$rsId\t$protAcc\t$protGi\t$structGi\t$protLoc\t$rsRes\t$protRes\t$structRes\t$structLoc\n";
+	    $protAcc=$protGi=$protLoc=$protRes=$rsRes=$structGi=$structLoc=$structRes=".";
 	}
-	%loc=();
-	$strand=$alleles=$class=$func=$valid="";
-	$rsId=$score=$het=$hetSE=0;
+    }
+    elsif (/NSE-FxnSet/) 
+    { 
+	if    (/<(NSE-FxnSet_fxn-class-contig value=\")(\S+)\"\/>/) { $func          = $2; }
+	elsif (/<(NSE-FxnSet_locusid)>(\S+)<\/\1>/)                 { $locusId       = $2; }
+	elsif (/<(NSE-FxnSet_symbol)>(\S+)<\/\1>/)                  { $symbol        = $2; }
+	elsif (/<(NSE-FxnSet_mrna-acc)>(\S+)<\/\1>/)                { $mrnaAcc       = $2; }
+	elsif (/<(NSE-FxnSet_prot-acc)>(\S+)<\/\1>/)                { $protAcc       = $2; }
+	elsif (/<(NSE-FxnSet_reading-frame)>(\S+)<\/\1>/)           { $frame         = $2; }
+	elsif (/<(NSE-FxnSet_allele)>(\S+)<\/\1>/)                  { $allele        = $2; }
+	elsif (/<(NSE-FxnSet_residue)>(\S+)<\/\1>/)                 { $residue       = $2; }
+	elsif (/<(NSE-FxnSet_aa-position)>(\S+)<\/\1>/)             { $aaPos         = $2; }
+	elsif (/<\/NSE-FxnSet>/)
+	{
+	    print LOC "rs$rsId\t$locusId\t$symbol\t$mrnaAcc\t$protAcc\t$func\t$frame\t$allele\t$residue\t$aaPos\n";
+	    if ($func ne "reference")                               { $funcHash{$func}= 1; }
+	    $locusId=$symbol=$mrnaAcc=$protAcc=$frame=$allele=$residue=$aaPos=$func=".";
+	}
+    }
+    elsif (/NSE-rs_seq/) 
+    {
+	if (/<(NSE-rs_seq-5_E)>(\S+)<\/\1>/)                        { $flank5       .= $2; }
+	if (/<(NSE-rs_seq-3_E)>(\S+)<\/\1>/)                        { $flank3       .= $2; }
+    }
+    elsif (/NSE-rsMaploc/)
+    {
+	if    (/<(NSE-rsMaploc_asn-from)>(\S+)<\/\1>/)              { $contigStart   = $2; }
+	elsif (/<(NSE-rsMaploc_asn-to)>(\S+)<\/\1>/)                { $contigEnd     = $2; }
+	elsif (/<(NSE-rsMaploc_loc-type value=\")(\S+)\"\/>/)       { $locType       = $2; }
+	elsif (/<(NSE-rsMaploc_hit-quality value=\")(\S+)\"\/>/)    { $hitQuality    = $2; }
+	elsif (/<(NSE-rsMaploc_orient value=\")(\S+)\"\/>/)         { $strand        = $2; }
+	elsif (/<\/NSE-rsMaploc>/)
+	{
+	    $func="";
+	    foreach $key (sort keys %funcHash)                      { $func         .= "$key,"; }
+	    if ($func eq "")                                        { $func          = "unknown,"; }
+	    substr($func, -1) = "";
+	    if    ($locType ne "between")                           { $contigStart  -= 1;   } # half open
+	    if    ($strand eq "forward")                            { $strand        = "+"; }
+	    elsif ($strand eq "reverse")                            { $strand        = "-"; }
+	    $key = "$contigStart:$contigEnd:$locType:$hitQuality:$strand:$func";
+	    $mapLoc{$key}=1;
+	    $contigStart=$contigEnd=$locType=$hitQuality=$strand=$func=".";
+	    %funcHash=();
+	}
+    }
+    elsif (/<(NSE-rs_refsnp-id)>(\S+)<\/\1>/)                       { $rsId          = $2; }
+    elsif (/<(NSE-rs_snp-class value=\")(.*)\"\/>/)                 { $class         = $2; }
+    elsif (/<(NSE-rs_moltype value=\")(.*)\"\/>/)                   { $molType       = $2; }
+    elsif (/<(NSE-rs_observed)>(.+)<\/\1>/)                         { $observed      = $2; }
+    elsif (/<(NSE-rs_ncbi-num-chr-hits)>(\S+)<\/\1>/)               { $chromHits     = $2; }
+    elsif (/<(NSE-rs_ncbi-num-ctg-hits)>(\S+)<\/\1>/)               { $contigHits    = $2; }
+    elsif (/<(NSE-rs_ncbi-num-seq-loc)>(\S+)<\/\1>/)                { $seqHits       = $2; }
+    elsif (/<(NSE-rs_ncbi-mapweight)>(\S+)<\/\1>/)                  { $mapWeight     = $2; }
+    elsif (/<(NSE-rs_het)>(\S+)<\/\1>/)                             { $avHet         = $2; }
+    elsif (/<(NSE-rs_het-SE)>(\S+)<\/\1>/ && ($2 ne "NaN"))         { $avHetSE       = $2; }
+    elsif (/<(NSE-rs_validated-)(\S+) value=\"true\"\/>/)           { $validHash{$2} = 1;  }
+    elsif (/<(NSE-rs_)(genotype) value=\"true\"\/>/)                { $validHash{$2} = 1;  }
+    elsif (/<(NSE-rsContigHit_accession)>(\S+)<\/\1>/)              { $accession     = $2; }
+    elsif (/<(NSE-rsContigHit_chromosome)>(.*)<\/\1>/)              { $chrom         = $2; }
+    elsif (/<\/NSE-rsContigHit>/) # end of current contig
+    {   
+	if ($observed eq ".")    { die "Observed: rs$rsId >[$_]<; $!" }
+	$observed =~ s/ /_/g;
+	if ($valid eq ".")
+	{
+	    $valid="";
+	    foreach $key (sort keys %validHash)                     { $valid        .= "$key,";    }
+	    if ($valid   eq "")                                     { $valid         = "unknown,"; }
+	    substr($valid, -1) = "";
+	    %validHash=();
+	}
+	foreach $key (sort keys %mapLoc)
+	{
+	    ( $contigStart, $contigEnd, $locType, $hitQuality, $strand, $func ) = split(":", $key);
+	    print DET "$chrom/$accession\t$contigStart\t$contigEnd\trs$rsId\t0\t";
+	    print DET "$strand\t$observed\t$molType\t$class\t$valid\t";
+	    if ($avHet>0)        { printf DET ("%.3f\t%.3f\t",$avHet,$avHetSE); }
+	    else                 { print  DET "0\t0\t"; }
+	    print DET "$func\t$locType\t$hitQuality\t$mapWeight\t$chromHits\t$contigHits\t$seqHits\n";
+	}
+	%mapLoc=();
+    }
+    elsif (/<\/NSE-rs>/) # end of current SNP; reinitialize
+    {
+	print SEQ "rs$rsId\t$flank5\t$flank3\t$observed\n";
+	$accession=$strand=$observed=$molType=$class=$valid=$status=$locType=$hitQuality=".";
+	$protAcc=$frame=$allele=$residue=$aaPos=$func=".";
+	$flank3=$flank5="";
+	$version=$contigStart=$contigEnd=$rsId=$avHet=$avHetSE=0;
+	$mapWeight=$chromHits=$contigHits=$seqHits=0;
+	%mapLoc=();
+	%funcHash=();
+	%validHash=();
     }
 }
+close(DET);
+close(SEQ);
+close(STR);
+close(LOC);
+system("/bin/mv -f /tmp/$outRoot.* .");
