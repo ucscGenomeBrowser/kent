@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.583 2003/08/19 17:05:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.584 2003/08/21 01:55:31 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -260,7 +260,7 @@ tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "N");
 tl.fontHeight = mgFontLineHeight(font);
 tl.leftLabelWidth = 120;
-tl.picWidth = 620;
+tl.picWidth = hgDefaultPixWidth;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
 

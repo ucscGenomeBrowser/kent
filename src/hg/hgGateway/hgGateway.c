@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.61 2003/08/15 16:38:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.62 2003/08/21 01:55:33 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -138,7 +138,7 @@ freez(&defaultPosition);
 position = NULL;
 
 puts("<td align=center>\n");
-cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
+cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
 printf("</td>\n");
 printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
