@@ -134,7 +134,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.604 2004/04/04 04:22:52 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.605 2004/04/06 06:04:04 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7337,7 +7337,7 @@ else
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
 printf("<B>PseudoGene Score:</B> %d \n",pg->score);
-printf("<B>Syntenic with mouse:</B> %d bp\n",pg->overlapDiag);
+printf("<B>Syntenic with mouse:</B> %d %%\n",pg->overlapDiag);
 printf("<B>PolyA tail:</B> %d \n",pg->polyA);
 printf("<B>Start:</B> %d \n",pg->polyAstart);
 printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
