@@ -1895,7 +1895,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
