@@ -27,6 +27,45 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track slam
+shortLabel Slam
+longLabel SLAM gene predictions using human/rat homology
+group genes
+priority 45.5
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred
+
+track slamNonCoding
+shortLabel Slam Non Coding 
+longLabel SLAM predictions of human/rat conserved non-coding regions
+group compGeno
+priority 120
+visibility hide
+color 30,130,210
+altColor 200,220,255
+spectrum on
+type bed 5 
+
+track twinscan
+shortLabel Twinscan
+longLabel Twinscan Gene Predictions Using Rat/Human Homology
+group genes
+priority 45
+visibility dense
+color 0,100,100
+altColor 0,50,50
+type genePred twinscanPep
+
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Rat/Human Homology
+group genes
+priority 47
+visibility dense
+color 0,90,100
+type genePred sgpPep
 
 track stsMapRat
 shortLabel STS Markers
@@ -36,7 +75,3 @@ priority 5
 visibility dense
 altColor 128,128,255
 type bed 5 +
-
-
-
-
