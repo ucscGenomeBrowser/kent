@@ -452,3 +452,9 @@
    - need to handle MGC being select multiple times
 
 - change nib glob to nib directory.
+
+- errors can be hard to see in the log files:
+  mkdir work/initial.ci1 at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 176. at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 176.
+  command failed: gbAlignSetup -workdir=work/initial.ci1/align -verbose=1 -clusterdir=/iscratch/genbank ci1 '/scratch/hg/ci1/nib/*.nib' "" at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 176. at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 176.
+
+- make sure directorys have the group stick bit maintained.

@@ -36,5 +36,5 @@
         ./bin/aListLoad a-list.2003.04.25.hs.tab hg15
 
 # align rn2
-  bin/gbAlignStep -verbose=1 -initial -omit-iserver=kkr5u00 rn2 '/cluster/store4/rn2/mixedNib/*.nib' /cluster/store4/rn2/jkStuff/liftAll.lft 
+  bin/gbAlignStep -verbose=1 -initial -parahost=kkr9u01 -iserver=kkr9u01 rn2 '/scratch/hg/rn2/chromTrfMixedNib/*.nib' /cluster/store4/rn2/jkStuff/liftAll.lft 
 
