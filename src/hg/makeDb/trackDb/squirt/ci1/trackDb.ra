@@ -143,12 +143,21 @@ visibility dense
 spectrum on
 type psl xeno
 
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility hide
+spectrum on
+type psl est
+
 track xenoEst
 shortLabel Non-ciona EST
 longLabel Non$organism ESTs from Genbank 
 group rna
 priority 65
-visibility dense
+visibility hide
 spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
@@ -229,5 +238,5 @@ shortLabel xenoRefGene
 longLabel xenoRefGene
 group rna
 priority 50
-visibility hide
+visibility dense
 type genePred refPep refMrna
