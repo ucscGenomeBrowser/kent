@@ -113,11 +113,11 @@ symColor['L'] = tg->ixAltColor;
 static int countSameColor(char *sym, int symCount, Color symColor[])
 /* Count how many symbols are the same color as the current one. */
 {
-Color color = symColor[sym[0]];
+Color color = symColor[(int)sym[0]];
 int ix;
 for (ix = 1; ix < symCount; ++ix)
     {
-    if (symColor[sym[ix]] != color)
+    if (symColor[(int)sym[ix]] != color)
         break;
     }
 return ix;
@@ -137,8 +137,6 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-int ix = 0;
-
 
 makeSymColors(tg, vis, symColor);
 for (wch = tg->items; wch != NULL; wch = wch->next)
@@ -151,7 +149,7 @@ for (wch = tg->items; wch != NULL; wch = wch->next)
 	{
 	typeWidth = countSameColor(sym+typeStart, symCount-typeStart, symColor);
 	typeEnd = typeStart + typeWidth;
-	color = symColor[sym[typeStart]];
+	color = symColor[(int)sym[typeStart]];
 	if (color != MG_WHITE)
 	    {
 	    x1 = roundingScale(typeStart+chromStart-winStart, width, baseWidth)+xOff;
