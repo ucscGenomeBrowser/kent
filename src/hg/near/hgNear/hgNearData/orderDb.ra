@@ -12,6 +12,12 @@ longLabel Difference in expression with selected gene
 type pair knownGnfDistance query target distance 1
 priority 2
 
+name knownExpGnfU74A
+shortLabel Expression (GNF U74A)
+longLabel Difference in expression with selected gene
+type pair affyGnfU74ADistance query target distance 1
+priority 2
+
 name blastp
 shortLabel Protein Homology
 longLabel blastp E value with selected gene
