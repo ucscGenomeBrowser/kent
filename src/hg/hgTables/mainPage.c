@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.68 2005/02/21 23:56:33 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.69 2005/02/24 18:27:28 angie Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -91,6 +91,7 @@ static char *onChangeTable()
 /* Return javascript executed when they change group. */
 {
 struct dyString *dy = onChangeStart();
+jsDropDownCarryOver(dy, "clade");
 jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, hgtaTable);
