@@ -119,7 +119,7 @@ int ffShAliPart(FILE *f, struct ffAli *aliList,
     int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
     boolean showJumpTable, 
     boolean showNeedle, boolean showHaystack,
-    boolean showSideBySide);
+    boolean showSideBySide, boolean upcMatch);
 /* Display parts of alignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 

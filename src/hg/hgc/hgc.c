@@ -454,7 +454,7 @@ printf(" all lower case<BR>\n");
 cgiMakeRadioButton("out1", "uc", FALSE);
 printf(" all upper case<BR>\n");
 cgiMakeRadioButton("out1", "extended", FALSE);
-printf(" Extended case/color options<BR>\n");
+printf(" extended case/color options<BR>\n");
 printf(" reverse complement ");
 cgiMakeCheckBox("rc", FALSE);
 printf(" ");
@@ -490,7 +490,8 @@ boolean dnaIgnoreTrack(char *track)
 return (sameString("cytoBand", track) ||
     sameString("gcPercent", track) ||
     sameString("gold", track) ||
-    sameString("gap", track));
+    sameString("gap", track) ||
+    sameString("mouseSyn", track));
 }
 
 
@@ -508,32 +509,31 @@ puts("You can use this page to make the case, text attributes and/or color of th
      "pure red (RGB 255,0,0) and another is assigned pure green (RGB 0,255,0) "
      "then bases covered by both tracks will be yellow (RGB 255,255,0). "
      "If the track contains multiple overlapping items it is useful to color "
-     "it with a dark color such as deep green (RGB 0,0,80).  Try this with "
+     "it with a dark color such as deep green (RGB 0,0,75).  Try this with "
      "the EST track.   Bases covered by a single EST in this case will be "
-     "a very dark green, while bases covered with more ESTs will get progressively "
+     "a dark green, while bases covered with more ESTs will get progressively "
      "brighter - saturating at 4 ESTs.");
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
-savePosInHidden();
 cgiMakeHiddenVar("g", "htcGetDna3");
-printf("Letters Per Line ");
-cgiMakeIntVar("lineWidth", 60, 3);
-printf(" Default Case: ");
-cgiMakeRadioButton("case", "upper", FALSE);
-printf(" upper ");
-cgiMakeRadioButton("case", "lower", TRUE);
-printf(" lower ");
-cgiMakeButton("Submit", "Submit");
-printf("<BR>");
-printf("chromosome ");
+printf("Chromosome ");
 cgiMakeTextVar("c", seqName, 6);
-printf(" start ");
+printf(" Start ");
 cgiMakeIntVar("l", winStart, 9);
-printf(" end ");
+printf(" End ");
 cgiMakeIntVar("r", winEnd, 9);
 cgiContinueHiddenVar("db");
-printf(" reverse complement ");
+printf(" Reverse complement ");
 cgiMakeCheckBox("rc", cgiBoolean("rc"));
 printf("<BR>\n");
+printf("Letters per line ");
+cgiMakeIntVar("lineWidth", 60, 3);
+printf(" Default case: ");
+cgiMakeRadioButton("case", "upper", FALSE);
+printf(" Upper ");
+cgiMakeRadioButton("case", "lower", TRUE);
+printf(" Lower ");
+cgiMakeButton("Submit", "Submit");
+printf("<BR>");
 printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -1044,8 +1044,8 @@ slReverse(&pslList);
 
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
-
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
+
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
@@ -1297,16 +1297,21 @@ boolean isProt = (qType == gftProt);
 int tStart = psl->tStart, tEnd = psl->tEnd;
 int qStart = 0;
 int mulFactor = (isProt ? 3 : 1);
+int dnaSize = 0;
+DNA *dna = NULL;	/* Mixed case version of genomic DNA. */
+int oSize = oSeq->size;
+char *oLetters = cloneString(oSeq->dna);
 
 
 /* Load dna sequence. */
-dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaMixed);
+dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
+dnaSize = dnaSeq->size;
 if (tIsRc)
     {
     int temp;
-    reverseComplement(dnaSeq->dna, dnaSeq->size);
+    reverseComplement(dnaSeq->dna, dnaSize);
     temp = psl->tSize - tEnd;
     tEnd = psl->tSize - tStart;
     tStart = temp;
@@ -1316,9 +1321,11 @@ if (qIsRc)
     reverseComplement(oSeq->dna, oSeq->size);
     qStart = oSeq->size;
     }
+dna = cloneString(dnaSeq->dna);
 
 fprintf(f, "<TT><PRE>");
 fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse complemented)" : ""));
+tolowers(oLetters);
 /* Display query sequence. */
     {
     struct cfm *cfm;
@@ -1331,7 +1338,9 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse 
 	int ts = psl->tStarts[i] - tStart;
 	int sz = psl->blockSizes[i]-1;
 	colorFlags[qs] = socBrightBlue;
+	oLetters[qs] = toupper(oLetters[qs]);
 	colorFlags[qs+sz] = socBrightBlue;
+	oLetters[qs+sz] = toupper(oLetters[qs+sz]);
 	if (isProt)
 	    {
 	    for (j=1; j<sz; ++j)
@@ -1340,7 +1349,10 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse 
 		DNA *codon = &dnaSeq->dna[ts + 3*j];
 		AA trans = lookupCodon(codon);
 		if (trans != 'X' && trans == aa)
+		    {
 		    colorFlags[qs+j] = socBlue;
+		    oLetters[qs+j] = toupper(oLetters[qs+j]);
+		    }
 		}
 	    }
 	else
@@ -1348,13 +1360,16 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse 
 	    for (j=1; j<sz; ++j)
 	        {
 		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		    {
 		    colorFlags[qs+j] = socBlue;
+		    oLetters[qs+j] = toupper(oLetters[qs+j]);
+		    }
 		}
 	    }
 	}
     cfm = cfmNew(10, 60, TRUE, qIsRc, f, qStart);
-    for (i=0; i<oSeq->size; ++i)
-	cfmOut(cfm, oSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
+    for (i=0; i<oSize; ++i)
+	cfmOut(cfm, oLetters[i], seqOutColorLookup[colorFlags[i]]);
     cfmFree(&cfm);
     freez(&colorFlags);
     htmHorizontalLine(f);
@@ -1388,6 +1403,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 		    colorFlags[codonStart] = socBlue;
 		    colorFlags[codonStart+1] = socBlue;
 		    colorFlags[codonStart+2] = socBlue;
+		    toUpperN(dna+codonStart, 3);
 		    }
 		}
 	    }
@@ -1396,7 +1412,10 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	    for (j=1; j<sz; ++j)
 	        {
 		if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		    {
 		    colorFlags[ts+j] = socBlue;
+		    dna[ts+j] = toupper(dna[ts+j]);
+		    }
 		}
 	    }
 	colorFlags[ts] = socBrightBlue;
@@ -1411,7 +1430,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	     {
 	     fprintf(f, "<A NAME=%d></A>", ++curBlock);
 	     }
-	cfmOut(cfm, dnaSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, dna[i], seqOutColorLookup[colorFlags[i]]);
 	}
     cfmFree(&cfm);
     freez(&colorFlags);
@@ -1458,6 +1477,8 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
 fprintf(f, "</TT></PRE>");
 if (qIsRc)
     reverseComplement(oSeq->dna, oSeq->size);
+freeMem(dna);
+freeMem(oLetters);
 return psl->blockCount;
 }
 
@@ -1505,7 +1526,7 @@ ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
 
 blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
 	dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
-	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE);
+	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE);
 return blockCount;
 }
 
@@ -4108,8 +4129,8 @@ if (database == NULL)
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
 seqName = cgiString("c");
-winStart = cgiInt("l");
-winEnd = cgiInt("r");
+winStart = cgiIntExp("l");
+winEnd = cgiIntExp("r");
 trackHash = makeTrackHash(seqName);
 tdb = hashFindVal(trackHash, track);
 if (sameWord(track, "getDna"))

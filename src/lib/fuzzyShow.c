@@ -17,7 +17,7 @@ int ffShAliPart(FILE *f, struct ffAli *aliList,
     int blockMaxGap, boolean rcNeedle, boolean rcHaystack,
     boolean showJumpTable, 
     boolean showNeedle, boolean showHaystack,
-    boolean showSideBySide)
+    boolean showSideBySide, boolean upcMatch)
 /* Display parts of allignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 {
@@ -41,7 +41,8 @@ if (showJumpTable)
     fputs("<TD WIDTH=\"21%\"><P ALIGN=\"CENTER\"><A HREF=\"#ali\">Side by Side</A></TD>", f);
     fputs("</TR></TABLE>", f);
     }
-fputs("Matching bases in cDNA and genomic sequences are colored blue. ", f);
+fprintf(f, "Matching bases in cDNA and genomic sequences are colored blue%s. ", 
+	(upcMatch ? " and capitalized" : ""));
 fputs("Light blue bases indicate gaps in the alignment. ", f);
 // if (showHaystack)
     // fputs("Predicted exons are in upper case.", f);
@@ -66,6 +67,7 @@ if (rcNeedle)
 if (showNeedle)
     {
     struct cfm *cfm = cfmNew(10, 50, TRUE, FALSE, f, needleNumOffset);
+    char *n = cloneMem(needle, needleSize);
     zeroBytes(colorFlags, needleSize);
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
@@ -75,20 +77,26 @@ if (showNeedle)
 	for (i=0; i<count; ++i)
 	    {
 	    if (toupper(ali->hStart[i]) == toupper(ali->nStart[i]))
+		{
 		colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
+		if (upcMatch)
+		    n[off+i] = toupper(n[off+i]);
+		}
 	    }
 	}
     for (i=0; i<needleSize; ++i)
 	{
-	cfmOut(cfm, needle[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, n[i], seqOutColorLookup[colorFlags[i]]);
 	}
     cfmFree(&cfm);
+    freeMem(n);
     htmHorizontalLine(f);
     }
 
 if (showHaystack)
     {
     struct cfm *cfm = cfmNew(10, 50, TRUE, rcHaystack, f, hayNumOffset);
+    char *h = cloneMem(haystack, haySize);
     fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
     	haystackName,
 	(rcHaystack ? "(reverse strand)" : ""));
@@ -101,7 +109,11 @@ if (showHaystack)
 	for (i=0; i<count; ++i)
 	    {
 	    if (toupper(ali->hStart[i]) == toupper(ali->nStart[i]))
+		{
 		colorFlags[off+i] = ((i == 0 || i == count-1) ? socBrightBlue : socBlue);
+		if (upcMatch)
+		    h[off+i] = toupper(h[off+i]);
+		}
 	    }
 	}
     if (leftAli != NULL)
@@ -123,9 +135,10 @@ if (showHaystack)
 	    lastAli = ali;
 	    ali = ali->right;
 	    }
-	cfmOut(cfm, haystack[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, h[i], seqOutColorLookup[colorFlags[i]]);
 	}
     cfmFree(&cfm);
+    freeMem(h);
     htmHorizontalLine(f);
     }
 
@@ -204,7 +217,7 @@ int ffShAli(FILE *f, struct ffAli *aliList,
 {
 return ffShAliPart(f, aliList, needleName, needle, needleSize, needleNumOffset,
     haystackName, haystack, haySize, hayNumOffset, blockMaxGap, rcNeedle, FALSE,
-    TRUE, TRUE, TRUE, TRUE);
+    TRUE, TRUE, TRUE, TRUE, FALSE);
 }
 
 void ffShowAli(struct ffAli *aliList, char *needleName, DNA *needle, int needleNumOffset,
