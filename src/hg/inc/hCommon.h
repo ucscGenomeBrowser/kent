@@ -49,9 +49,6 @@ void gsToUcsc(char *gsName, char *ucscName);
 char *skipChr(char *s);
 /* Skip leading 'chr' in string (to get the actual chromosome part). */
 
-boolean hIsFin(char *chrom);
-/* Return TRUE if this is a finished chromosome. */
-
 boolean hIsMgcServer();
 /* Is this the MGC-custom server? */
 
