@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.32 2004/05/20 17:32:50 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.33 2004/05/21 00:14:02 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2219,6 +2219,10 @@ if (size > 0)
     {
     safef(temp,slength,s);
     safef(s,slength,"%3d%s%s",(int)size,sep,temp);
+    }
+if (sameString(temp,""))
+    {
+    safef(temp,slength,"0");  /* special case zero*/
     }
 freez(&temp);
 }
