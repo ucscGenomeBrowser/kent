@@ -1,4 +1,4 @@
-/* olly - Look for matches and near matches to short sequences genome-wide. */
+/* olly25 - Look for matches and near matches to 25-mers genome-wide. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -18,28 +18,72 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "olly - Look for matches and near matches to short sequences genome-wide\n"
+  "olly25 - Look for matches and near matches to short sequences genome-wide\n"
   "Output can be loaded as a wiggle track\n"
   "usage:\n"
-  "   olly nibDir chrom start stop out.sample\n"
+  "   olly25 nibDir chrom start stop out.sample\n"
   "example:\n"
-  "   olly ~/oo/mixedNib chr1 0 1000 chr1_0_1000.sample\n"
+  "   olly25 ~/oo/mixedNib chr1 0 1000 chr1_0_1000.sample\n"
   "options:\n"
-  "   -maxDiff=N (default %d) Maximum variation in bases.\n"
-  "   -ollySize=N (default %d) Size of oligo.  Sizes > 26 will be slow\n"
+  "   -maxDiff=N (default %d) Maximum variation in bases. Must be 3 or less.\n"
+  "   -ollySize=N (default %d) Size of oligo.\n"
   "   -ramMb=N (default %d) Size of RAM to use\n"
   "   -makeBatch=parasolSpec Make batch file for parasol\n"
   "       In this case just do \n"
   "         olly nibDir -makeBatch=spec.\n"
   "       Spec will be a parasol spec to do everything in nibDir\n" 
-  "   -easyOut Output is in a simpler format\n"
   , maxDiff, ollySize, ramMb
   );
 }
 
-int oHashSize = 25;
+/* Seeds for 2 and 3 mismatches calculated with checkSeed. */
+
+char seed0[] = "111111111111";		/* This seed works down to 12-mers for
+                                         * no mismatches. */
+char seed1[] = "1111110111111";		/* This seed works down to 19-mers for
+                                         * single mismaches allowed. */
+char seed2[] = "111100110101111";	/* One of 12 seeds that will work 
+                                         * for 11 significant bases, 2
+					 * mismatches allowed on 25-mers.
+					 * There are no possible 12 significant
+					 * base seeds. */
+char seed3[] = "11101001000111";	/* This is the shortest seed that
+                                         * works for 8 significant bases,
+					 * 3 mismatches allowed on 25-mers.
+					 * It will work for 24-mers too.
+					 * There are no possible 9 significant
+					 * base seeds. */
+char *seedForMiss[4] = {seed0, seed1, seed2, seed3};
+int minOllySize[4] = {12, 19, 25, 24};
+
 int maxMem;		/* Maximum amount of memory to use. */
 int bigChromSize = 240000000;
+
+int seedWeight;	 /* Number of non-zeroes in seed. */
+int seedSpan;	 /* Number of bases covered by seed. */
+int *seedOff;	 /* Offsets of significant characters in seed. */
+char *seedChars; /* 0's and 1's that make up seed. */
+int seedIndexSize; /* Size of seed index. */
+
+void seedInit(char *seed)
+/* Initialize seed system from a string of ascii 0 and 1's. */
+{
+int i, wIx = 0;
+seedSpan = strlen(seed);
+seedChars = seed;
+seedWeight = countChars(seed, '1');
+seedIndexSize = (1<<(2*seedWeight));
+AllocArray(seedOff, seedWeight);
+for (i=0; i<seedSpan; ++i)
+    {
+    if (seed[i] == '1')
+        seedOff[wIx++] = i;
+    }
+uglyf("%s\n", seed);
+for (i=0; i<seedWeight; ++i)
+    uglyf("%d,", seedOff[i]);
+uglyf("\n");
+}
 
 struct oHashEl
 /* Oligomer hash element. */
@@ -52,7 +96,6 @@ struct oHash
 /* Oligomer hash, keyed by first part of oligomre. */
     {
     struct oHashEl **table;   /* The hash table. */
-    int mask;                 /* Mask to get hash function in range of hash table */
     struct lm *lm;            /* Local memory buffer for hash elements. */
     };
 
@@ -75,7 +118,7 @@ return TRUE;
 int oHashTableSize()
 /* Return size of table. */
 {
-return (1<<oHashSize);
+return seedIndexSize+1;
 }
 
 struct oHash *oHashNew()
@@ -83,23 +126,30 @@ struct oHash *oHashNew()
 {
 struct oHash *hash;
 int tableSize = oHashTableSize();
+uglyf("tableSize %d\n", tableSize);
 AllocVar(hash);
 AllocArray(hash->table, tableSize);
 hash->lm = lmInit(1024 * 256);
-hash->mask = tableSize-1;
 return hash;
 }
 
 int oHashFunc(DNA *dna)
 /* DNA hash function. */
 {
+int oneVal;
 int val = 0;
 int nt;
 int i;
-for (i=0;i<ollySize;++i)
+for (i=0;i<seedWeight;++i)
     {
-    val <<= 1;
-    val += ntVal[dna[i]];
+    oneVal = ntValLower[dna[seedOff[i]]];
+    if (oneVal < 0)
+	{
+	val = seedIndexSize;	/* This slot is always empty */
+	break;
+	}
+    val <<= 2;
+    val += oneVal;
     }
 return val;
 }
@@ -111,7 +161,7 @@ struct oHashEl *oHashAdd(struct oHash *hash, DNA *key)
 struct oHashEl *el, **pList;
 lmAllocVar(hash->lm, el);
 el->pt = key;
-pList = hash->table + (oHashFunc(key) & hash->mask);
+pList = hash->table + oHashFunc(key);
 slAddHead(pList, el);
 return el;
 }
@@ -120,7 +170,7 @@ DNA *oHashFindVal(struct oHash *hash, DNA *key)
 /* Find value in hash */
 {
 struct oHashEl *el;
-for (el = hash->table[oHashFunc(key)&hash->mask]; el != NULL; el = el->next)
+for (el = hash->table[oHashFunc(key)]; el != NULL; el = el->next)
     {
     if (closeEnough(el->pt, key))
 	return el->pt;
@@ -128,60 +178,11 @@ for (el = hash->table[oHashFunc(key)&hash->mask]; el != NULL; el = el->next)
 return NULL;
 }
 
-/* Parameters to recursive function below. */
-static struct oHash *rHash;	/* Hash to put oligo and varients into */
-static DNA *rOlly;		/* Oligomer sequence. */
-static bool *rMask;		/* Mask of positions we've already varied. */
-static int rCount;		/* Count of variations. */
-static int rMemUsed;		/* Amount of memory used. */
-
-void raddVarients(int maxMiss, int startIx)
-/* Add all varients of olly that differ from olly by at most maxMiss.  Don't bother
- * varying at mask position. */
-{
-++rCount;
-oHashAdd(rHash, rOlly);
-rMemUsed += sizeof(struct oHashEl);
-if (rMemUsed >= maxMem)
-    errAbort("Out of memory.  Try using less sequence or a smaller maxDiff");
-if (maxMiss > 0)
-    {
-    int i,j;
-    DNA save;
-    static char nt[4] = {'a', 'c', 'g', 't'};
-    for (i=startIx; i<ollySize; ++i)
-	{
-	if (!rMask[i])
-	    {
-	    rMask[i] = TRUE;
-	    save = rOlly[i];
-	    for (j=0; j<4; ++j)
-		{
-		char c = nt[j];
-		if (c != save)
-		    {
-		    rOlly[i] = c;
-		    raddVarients(maxMiss-1, i+1);
-		    }
-		}
-	    rMask[i] = FALSE;
-	    rOlly[i] = save;
-	    }
-	}
-    }
-}
-
-
-boolean goodSeq(DNA *dna, int size)
+boolean goodSeq(DNA *dna)
 /* Return TRUE if all lower case and non-n. */
 {
 int i;
-for (i=0; i<size; ++i)
-    {
-    if (ntValLower[dna[i]] < 0)
-        return FALSE;
-    }
-return TRUE;
+return oHashFunc(dna) != seedIndexSize;
 }
 
 struct oHash *makeOllyHash(struct dnaSeq *rootSeq, int maxMiss)
@@ -189,24 +190,18 @@ struct oHash *makeOllyHash(struct dnaSeq *rootSeq, int maxMiss)
 {
 struct oHash *hash = oHashNew();
 DNA *dna = rootSeq->dna;
-DNA *end = dna + rootSeq->size - ollySize;
+DNA *end = dna + rootSeq->size - seedSpan;
 int realCount = 0;
 
-AllocArray(rMask, ollySize);
-rHash = hash;
-rMemUsed = oHashTableSize() * sizeof(hash->table[0]); 
 while (dna <= end)
     {
-    if (goodSeq(dna, ollySize))
+    if (goodSeq(dna))
         {
-	rOlly = dna;
-	rCount = 0;
-	raddVarients(maxMiss, 0);
+	oHashAdd(hash, dna);
 	++realCount;
 	}
     ++dna;
     }
-freez(&rMask);
 if (realCount == 0)
     {
     warn("No unmasked oligoes");
@@ -215,34 +210,133 @@ if (realCount == 0)
 return hash;
 }
 
-
-void scanSeq(struct oHash *hash, struct dnaSeq *seq, DNA *base, int *counts)
-/* Scan a sequence for hits. */
-{
-int i;
-DNA *dna, *end = seq->dna + seq->size - ollySize;
-DNA *hit;
-for (dna = seq->dna; dna <= end; dna += 1)
+struct hit
+/* A single hit - matching 25-mer. */
     {
-    struct oHashEl *el;
-    for (el = hash->table[oHashFunc(dna)&hash->mask]; el != NULL; el = el->next)
-	{
-	if (closeEnough(el->pt, dna))
-	    {
-	    ++counts[el->pt - base];
-	    break;
-	    }
-	}
+    struct hit *next;
+    int tPos;		/* Target position of start of hit */
+    };
+
+void scanNeighborhood(struct dnaSeq *tSeq, DNA *tHit, char strand,
+	DNA *query, int qSize, DNA *qHit, 
+	struct hit **hits,  struct lm *lm, int *counts)
+/* Given a hit, scan for 25-mers that overlap hit that are
+ * good enough. */
+{
+DNA *target = tSeq->dna;
+int tSize = tSeq->size;
+int ollySeedDiff = ollySize - seedSpan;
+int tStart = tHit - target - ollySeedDiff;
+int tEnd = tHit - target + seedSpan + ollySeedDiff;
+int qStart = qHit - query - ollySeedDiff;
+int qEnd = qHit - query + seedSpan + ollySeedDiff;
+int pastEnd, regionSize, diffCount = 0;
+int ollyInSize = ollySize - 1;
+int i;
+
+/* Clip. */
+if (qStart < 0)
+    {
+    tStart -= qStart;
+    qStart = 0;
+    }
+if (tStart < 0)
+    {
+    qStart -= tStart;
+    tStart = 0;
+    }
+pastEnd = qEnd -  qSize;
+if (pastEnd > 0)
+    {
+    qEnd -= pastEnd;
+    tEnd -= pastEnd;
+    }
+pastEnd = tEnd - tSize;
+if (pastEnd > 0)
+    {
+    qEnd -= pastEnd;
+    tEnd -= pastEnd;
+    }
+regionSize = qEnd - qStart;
+assert(regionSize == tEnd - tStart);
+assert(regionSize >= ollySize);
+
+/* Do initial scan to count up differences in first ollyInSize-1
+ * bases. */
+for (i=0; i<ollyInSize; ++i)
+    {
+    if (target[i+tStart] != query[i+qStart])
+       ++diffCount;
+    }
+
+/* Add base to end of oligoSize window, output if matches well enough,
+ * then subtract base at start of window. */
+for (i=ollyInSize; i<regionSize; ++i)
+    {
+    int tPos = i + tStart;
+    int qPos = i + qStart;
+    if (target[tPos] != query[qPos])
+       ++diffCount;
+    tPos -= ollyInSize;
+    qPos -= ollyInSize;
+    if (diffCount <= maxDiff)
+       {
+       boolean alreadyRecorded = FALSE;
+       struct hit *hit;
+       for (hit = hits[qPos]; hit != NULL; hit = hit->next)
+           {
+	   if (hit->tPos == tPos)
+	      {
+	      alreadyRecorded = TRUE;
+	      break;
+	      }
+	   }
+       if (!alreadyRecorded)
+           {
+	   counts[qPos] += 1;
+	   lmAllocVar(lm, hit);
+	   hit->tPos = tPos;
+	   slAddHead(&hits[qPos], hit);
+	   uglyf(" %d %d\n", tPos, qPos);
+	   }
+       }
+    if (target[tPos] != query[qPos])
+       --diffCount;
     }
 }
 
-void scanNib(struct oHash *hash, char *fileName, DNA *base, int *counts)
+void scanSeq(struct oHash *hash, struct dnaSeq *geno, DNA *query, int querySize,
+	int *counts, char strand)
+/* Scan a sequence for hits. */
+{
+int i;
+DNA *dna, *end = geno->dna + geno->size - seedSpan;
+struct lm *lm = lmInit(1024);
+struct hit **hits;
+
+AllocArray(hits, querySize);
+for (dna = geno->dna; dna <= end; dna += 1)
+    {
+    struct oHashEl *el;
+    for (el = hash->table[oHashFunc(dna)]; el != NULL; el = el->next)
+	{
+	scanNeighborhood(geno, dna, strand, query, querySize, el->pt,
+		hits, lm, counts);
+	}
+    }
+freez(&hits);
+lmCleanup(&lm);
+}
+
+void scanNib(struct oHash *hash, char *fileName, DNA *base, int baseSize,
+	int *counts)
 /* Scan nib file for hits */
 {
-struct dnaSeq *seq = nibLoadAll(fileName);
-scanSeq(hash, seq, base, counts);
-reverseComplement(seq->dna, seq->size);
-freeDnaSeq(&seq);
+struct dnaSeq *geno = nibLoadAll(fileName);
+scanSeq(hash, geno, base, baseSize, counts, '+');
+reverseComplement(geno->dna, geno->size);
+scanSeq(hash, geno, base, baseSize, counts, '-');
+freeDnaSeq(&geno);
 }
 
 void olly(char *nibDir, char *chrom, int start, int end, char *hitOut)
@@ -273,7 +367,7 @@ if (hash != NULL)
 	{
 	sprintf(nibName, "%s/%s", nibDir, el->name);
 	uglyf("%s\n", nibName);
-	scanNib(hash, nibName, chromSeq->dna, counts);
+	scanNib(hash, nibName, chromSeq->dna, chromSeq->size, counts);
 	}
     if (easyOut)
 	{
@@ -319,6 +413,8 @@ if (hash != NULL)
     }
 }
 
+
+#ifdef OLD
 int ollySizeNeighborhood()
 /* Count number of oligos that differ by maxDiff
  * or less.*/
@@ -374,7 +470,7 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     rangeStart = goodCount = 0;
     for (i=0; i <= lastOlly; ++i)
         {
-	if (goodSeq(dna+i, ollySize))
+	if (goodSeq(dna+i))
 	    {
 	    ++goodCount;
 	    if (goodCount >= maxGood)
@@ -392,6 +488,7 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     freeDnaSeq(&chromSeq);
     }
 }
+#endif /* OLD */
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -403,19 +500,15 @@ maxDiff = optionInt("maxDiff", maxDiff);
 ramMb = optionInt("ramMb", ramMb);
 maxMem = 1024 * 1024 * ramMb;
 easyOut = optionExists("easyOut");
-if (optionExists("makeBatch"))
-    {
-    if (argc < 2)
-        errAbort("Need nibDir");
-    makeBatch(optionVal("makeBatch", NULL), argv[1]);
-    }
-else
-    {
-    if (argc != 6)
-	usage();
-    if (maxDiff > 3)
-	errAbort("Can only handle maxDiff up to 3");
-    olly(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]), argv[5]);
-    }
+
+if (maxDiff > 3)
+   errAbort("maxDiff can only be up to 3");
+if (minOllySize[maxDiff] < ollySize)
+   errAbort("For %d mismatches, minimum oligo size is %d", maxDiff, ollySize);
+
+if (argc != 6)
+     usage();
+seedInit(seedForMiss[maxDiff]);
+olly(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]), argv[5]);
 return 0;
 }
