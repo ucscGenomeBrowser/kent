@@ -336,7 +336,7 @@ longLabel Blat of mammalNotHuman
 group x
 priority 1102
 visibility hide
-type psl xeno
+type psl protein
 
 track chesChordataBlat
 shortLabel Chordata BLAT
@@ -344,7 +344,7 @@ longLabel Blat of chordataNotMammal
 group x
 priority 1102
 visibility hide
-type psl xeno
+type psl protein
 
 track chesSimpleRepeat
 shortLabel Filtered Simple Repeats
