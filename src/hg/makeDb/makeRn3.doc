@@ -1453,3 +1453,42 @@ TWINSCAN GENE PREDICTIONS (DONE 07/14/03)
     ldHgGene rn3 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
     hgPepPred rn3 generic twinscanPep chr_ptx/chr*-fixed.fa
 
+AXTBEST
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    tcsh
+    set base="/cluster/store3/rn3/bed/blastz.hg15"
+    set tbl="blastzBestHg15"
+    cd $base
+    mkdir -p axtBest pslBest
+    #chrom 1 is too big
+    axtFilter -tStartMax=99999999 chr1.axt >chr1FirstHalf.axt
+    axtFilter -tStartMin=100000000 chr1.axt >chr1SecondHalf.axt
+    foreach chrdir (`cat chrom.lst`)
+      set chr=$chrdir:t
+      echo axtBesting $chr
+      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+    end
+    axtBest axtChrom/chr1FirstHalf.axt chr1 axtBest/chr1FirstHalf.axt -minScore=300
+    axtBest axtChrom/chr1SecondHalf.axt chr1 axtBest/chr1SecondHalf.axt -minScore=300
+    cd axtBest
+    cat chr1FirstHalf.axt chr1SecondHalf.axt > chr1.axt
+    rm chr1FirstHalf.axt chr1SecondHalf.axt
+    cd ../axtChrom
+    rm chr1FirstHalf.axt chr1SecondHalf.axt
+    cd ..
+    foreach chrdir (`cat chrom.lst`)
+      set chr=$chrdir:t
+      echo translating axtBest to psl for $chr
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+    # Load tables
+    ssh hgwdev
+    set base="/cluster/store3/rn3/bed/blastz.hg15"
+    set tbl="blastzBestHg15"
+    cd $base/pslBest
+    hgLoadPsl hg15 chr*_${tbl}.psl
+
+                                                                                
+
