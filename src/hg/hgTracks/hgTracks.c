@@ -1669,6 +1669,33 @@ tg->color.b = brownColor.b;
 return tg;
 }
 
+
+void loadBlatFish(struct trackGroup *tg)
+/* Load up mouse alignments (psl format) from table. */
+{
+char table[64];
+sprintf(table, "%s_blatFish", chromName);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
+}
+
+struct trackGroup *blatFishTg()
+/* Make track group of fish alignments. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgBlatFish";
+tg->visibility = tvDense;
+tg->longLabel = "Tetroadon Translated Blat Alignments";
+tg->shortLabel = "Fish Blat";
+tg->loadItems = loadBlatFish;
+tg->subType = lfSubXeno;
+tg->colorShades = shadesOfSea;
+tg->color.r = darkSeaColor.r;
+tg->color.g = darkSeaColor.g;
+tg->color.b = darkSeaColor.b;
+return tg;
+}
+
+
 void loadMus7of8(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
@@ -3279,7 +3306,7 @@ struct trackGroup *exoMouseTg()
 struct trackGroup *tg = bedTg();
 
 tg->mapName = "hgExoMouse";
-if (sameString(database, "hg6") && sameString(chromName, "chr22") && privateVersion())
+if (sameString(chromName, "chr22") && privateVersion())
     tg->visibility = tvDense;
 else
     tg->visibility = tvHide;
@@ -3293,6 +3320,38 @@ tg->itemColor = exoMouseColor;
 tg->color.r = brownColor.r;
 tg->color.g = brownColor.g;
 tg->color.b = brownColor.b;
+return tg;
+}
+
+void loadFiberMouse(struct trackGroup *tg)
+/* Load up exoFish from database table to trackGroup items. */
+{
+bedLoadItem(tg, "fiberMouse", (ItemLoader)bedLoad);
+}
+
+void freeFiberMouse(struct trackGroup *tg)
+/* Free up isochore items. */
+{
+bedFreeList((struct bed**)&tg->items);
+}
+
+
+struct trackGroup *fiberMouseTg()
+/* Make track group for Dan Brown's Fiberglass mouse/human alignments. */
+{
+struct trackGroup *tg = bedTg();
+if (privateVersion())
+    tg->visibility = tvDense;
+else
+    tg->visibility = tvHide;
+tg->mapName = "hgFiberMouse";
+tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Fiberglass)";
+tg->shortLabel = "Fiberglass Mouse";
+tg->loadItems = loadFiberMouse;
+tg->freeItems = freeFiberMouse;
+tg->color.r = 130;
+tg->color.g = 80;
+tg->color.b = 30;
 return tg;
 }
 
@@ -5732,8 +5791,10 @@ if (privateVersion())
     }
 if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
+if (sameString(chromName, "chr22") && hTableExists("fiberMouse")) slSafeAddHead(&tGroupList, fiberMouseTg());
 /* if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg()); */
 if (hTableExists("exoFish")) createAndAddTrack("exoFish", &tGroupList, &tableList, exoFishTg);
+if (chromTableExists("_blatFish")) slSafeAddHead(&tGroupList, blatFishTg());
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
 /* if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg()); */
 if(hTableExists("rnaGene")) createAndAddTrack("rnaGene", &tGroupList, &tableList, rnaGeneTg);
