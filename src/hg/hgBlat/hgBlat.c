@@ -421,8 +421,8 @@ puts("<P>");
 
 puts("Rather than pasting a sequence, you can choose to upload a text file containing "
 	 "the sequence.<BR>");
-puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\"");
-puts("<P>");
+puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
+puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=Submit><P>\n");
 
 cgiMakeHiddenVar("db", serve->db);
 
