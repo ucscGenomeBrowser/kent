@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.8 2004/03/24 18:28:07 angie Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.9 2004/03/24 19:06:28 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *f = (FILE *) NULL;			/* file handle to binary file */
@@ -81,6 +81,7 @@ if (itemsRead != sizeof(unsigned char))
 /*	need at most this amount, perhaps less	*/
 dataArea = sizeof(struct wiggleDatum)*wiggle->validCount;
 
+/*	this data area goes with the result, must be freed by wigFreeData */
 data = (struct wiggleDatum *) needMem((size_t)
     (sizeof(struct wiggleDatum)*wiggle->validCount));
 
@@ -122,6 +123,8 @@ for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
     chromPosition += wiggle->span;
     }
 
+freeMem(readData);
+
 if (validCount)
     {
     double dataRange = upperLimit - lowerLimit;
@@ -142,35 +145,22 @@ if (validCount)
 return (ret);	/* may be null if validCount < 1	*/
 }	/*	static struct wiggleData * wigReadDataRow()	*/
 
-static void insertOrderedWigData(struct wiggleData * *wdList, struct wiggleData *wd)
-/* insert wiggle data, keeping in chrom position order */
+void wigFreeData(struct wiggleData *wigData)
+/* free everything in the wiggleData structure */
 {
-struct wiggleData *wdPtr;
-struct wiggleData *wdPrev;
+struct wiggleData *wd;
 
-/*	If first one, it becomes the list	*/
-if (*wdList == (struct wiggleData *)NULL)
-    {
-    wd->next = (struct wiggleData *)NULL;	/*	redundant safety */
-    *wdList = wd;
-    return;			/*	!! RETURN !!	*/
-    }
+if (wigData == (struct wiggleData *)NULL)
+    return;
 
-wdPrev = *wdList;
-/*	Not first one, find position to insert	*/
-for (wdPtr = *wdList; wdPtr != (struct wiggleData *)NULL; wdPtr = wdPtr->next)
+for (wd = wigData; wd != (struct wiggleData *) NULL; )
     {
-    if (wd->chromEnd <= wdPtr->chromStart)
-	{
-	wd->next = wdPtr;
-	wdPrev->next = wd;
-	return;			/*	!! RETURN !!	*/
-	}
-    wdPrev = wdPtr;
+    struct wiggleData *wdPtr = wd;
+    if (wdPtr->data)
+	freeMem(wdPtr->data);
+    wd = wd->next;	/*	get this pointer before it is gone */
+    freeMem(wdPtr);	/*	going, going, gone	*/
     }
-/*	It is last on the list	*/
-wdPrev->next = wd;
-wd->next = (struct wiggleData *)NULL;	/*	redundant safety	*/
 }
 
 struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
@@ -236,6 +226,7 @@ sr = sqlMustGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
 {
     unsigned span = sqlUnsigned(row[0]);
+
     ++rowCount;
 
     snprintf(spanName, sizeof(spanName), "%u", span);
@@ -277,7 +268,10 @@ while ((el = hashNext(&cookie)) != NULL)
 	    if (wigData)
 		{
 		if (summaryOnly)
-		    freeMem(wigData->data);
+		    {
+		    freeMem(wigData->data); /* and mark it gone */
+		    wigData->data = (struct wiggleDatum *)NULL;
+		    }
 		slAddHead(&wdList,wigData);
 		}
 	    }
@@ -292,4 +286,4 @@ if (wdList != (struct wiggleData *) NULL)
 	slReverse(&wdList);
 
 return(wdList);
-}	/*	struct wiggleData *fetchWigData()	*/
+}	/*	struct wiggleData *wigFetchData()	*/
