@@ -5,6 +5,10 @@
 #ifndef SAMPLE_H
 #define SAMPLE_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif 
+
 struct sample
 /* Any track that has samples to display as y-values (first 6 fields are bed6) */
     {
