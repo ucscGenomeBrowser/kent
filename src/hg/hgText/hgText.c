@@ -147,7 +147,7 @@ char *organism;
 char *defaultPosition;
 char *position;
 
-getDbAndOrganism(cart, &database, &organism);
+getDbAndGenome(cart, &database, &organism);
 freezeName = hFreezeFromDb(database);
 defaultPosition = hDefaultPos(database);
 position = cartUsualString(cart, "position", defaultPosition);
@@ -190,7 +190,7 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-printOrgListHtml(database, onChangeText);
+printGenomeListHtml(database, onChangeText);
 puts("</td>\n");
 
 puts("<td align=center>\n");

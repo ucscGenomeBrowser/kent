@@ -500,7 +500,7 @@ This was done in order to be able to flexibly arrange the UI HTML
 */
 char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
-getDbAndOrganism(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism);
 serve = findServer(db, FALSE);
 
 printf( 
@@ -513,7 +513,7 @@ cartSaveSession(cart);
 
 printf("%s", "<TD><CENTER>\n");
 printf("Genome:<BR>");
-printOrgListHtml(db, onChangeText);
+printGenomeListHtml(db, onChangeText);
 printf("%s", "</TD><TD><CENTER>\n");
 printf("Assembly:<BR>");
 printBlatAssemblyListHtml(db);

@@ -83,7 +83,7 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-printOrgListHtml(db, onChangeText);
+printGenomeListHtml(db, onChangeText);
 puts("</td>\n");
 
 puts("<td align=center>\n");
@@ -146,7 +146,7 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
-getDbAndOrganism(cart, &db, &organism);
+getDbAndGenome(cart, &db, &organism);
 cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();
