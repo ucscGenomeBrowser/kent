@@ -6,4 +6,4 @@ CLASSPATH="@CLASSPATH@"
 
 export JAVA_HOME CLASSPATH
 
-exec ${JAVA_HOME}/bin/java @PROG_CLASS@ "$@"
+exec ${JAVA_HOME}/bin/java -Xms256m -Xmx512m @PROG_CLASS@ "$@"
