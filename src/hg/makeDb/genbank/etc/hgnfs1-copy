@@ -27,6 +27,7 @@ gbBuildRoot=/cluster/data/genbank
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/copy/run/copy.lock
 
-gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
 
-echo "`hostname` copy completed"
+exec gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
+
+# we don't put put a completed message, as gbCopyStep does the checking.
