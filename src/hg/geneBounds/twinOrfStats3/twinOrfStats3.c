@@ -10,17 +10,19 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "twinOrfStats2 - Collect stats on refSeq cDNAs aligned to another \n"
+  "twinOrfStats3 - Collect stats on refSeq cDNAs aligned to another \n"
   "species via axtForEst\n"
   "usage:\n"
-  "   twinOrfStats2 refSeqAli.axt refSeq.ra twinOrf.stats\n"
+  "   twinOrfStats3 refSeqAli.axt refSeq.ra twinOrf.stats\n"
   "options:\n"
+  "   -earlyAaSize=N - default 20 - number of amino acids in N terminal model\n"
   "   -predict=predict.out - Predict start codon position on same set\n"
-  "   -threshold=N.N - default 4\n"
+  "   -threshold=N.N - default 4 - used with predict only\n"
   );
 }
 
 double threshold = 4.0;
+int earlyAaSize = 20;	/* Size of first bits. */
 
 boolean parseCds(char *gbCds, int start, int end, int *retStart, int *retEnd)
 /* Parse genBank style cds string into something we can use... */
@@ -273,13 +275,16 @@ return TRUE;
 void addCodons(struct c3Counts *cm, struct axt *axt, int startT, int endT)
 /* Add range of values to matrix. */
 {
-int symIx = tIxToSymIx(axt, startT);
 int tPos = startT;
 char t,q;
 int ix[3];
 static char tCod[4], qCod[4];
 int codIx = 0, i;
+int symIx;
 
+if (startT >= endT)
+    return;
+symIx = tIxToSymIx(axt, startT);
 for (;symIx < axt->symCount; ++symIx)
     {
     if (tPos >= endT)
@@ -579,16 +584,22 @@ static struct c3Counts c3All, c3Utr5, c3Utr3, c3Cds;
 char label[64];
 char *predictFile = optionVal("predict", NULL);
 int i;
-static struct c3Counts cod1, cod2, cod3, stop;
+static struct c3Counts cod1, cod2, cod3, stop, earlyCod1, earlyCod2, earlyCod3;
+int earlySize;
 
 initC3Counts(&cod1, 0);
 initC3Counts(&cod2, 0);
 initC3Counts(&cod3, 0);
+initC3Counts(&earlyCod1, 0);
+initC3Counts(&earlyCod2, 0);
+initC3Counts(&earlyCod3, 0);
 initC3Counts(&c3Utr3, 0);
 initC3Counts(&c3Utr5, 0);
 initC3Counts(&stop, 0);
 
 threshold = optionFloat("threshold", threshold);
+earlyAaSize = optionInt("earlyAaSize", earlyAaSize);
+earlySize = 3*earlyAaSize;
 while ((axt = axtRead(lf)) != NULL)
     {
     struct refSeqInfo *rsi = hashFindVal(rsiHash, axt->tName);
@@ -602,9 +613,18 @@ while ((axt = axtRead(lf)) != NULL)
 	    addRange(&c1utr5, &c2Utr5, &c3Utr5, axt, 0, rsi->cdsStart);
 	    addRange(&c1cds, &c2Cds, &c3Cds, axt, rsi->cdsStart, rsi->cdsEnd);
 	    addRange(&c1utr3, &c2Utr3, &c3Utr3, axt, rsi->cdsEnd, rsi->size);
-	    addCodons(&cod1, axt, rsi->cdsStart+1, rsi->cdsEnd-5);
-	    addCodons(&cod2, axt, rsi->cdsStart+2, rsi->cdsEnd-4);
-	    addCodons(&cod3, axt, rsi->cdsStart+3, rsi->cdsEnd-3);
+
+	    /* The +3+1 in the expression below breaks down as so:  the
+	     * +3 is to move past the first 'ATG' codon, which is part of
+	     * the Kozak consensus model, not the coding model.  The +1
+	     * is so that we look at the 2nd and 3rd bases of the previous
+	     * codon, and the first base of the current codon.   */
+	    addCodons(&earlyCod1, axt, rsi->cdsStart+3+1, rsi->cdsStart+1+earlySize);
+	    addCodons(&earlyCod2, axt, rsi->cdsStart+3+2, rsi->cdsStart+2+earlySize);
+	    addCodons(&earlyCod3, axt, rsi->cdsStart+3+3, rsi->cdsStart+3+earlySize);
+	    addCodons(&cod1, axt, rsi->cdsStart+3+1+earlySize, rsi->cdsEnd-5);
+	    addCodons(&cod2, axt, rsi->cdsStart+3+2+earlySize, rsi->cdsEnd-4);
+	    addCodons(&cod3, axt, rsi->cdsStart+3+3+earlySize, rsi->cdsEnd-3);
 	    addCodons(&stop, axt, rsi->cdsEnd-3, rsi->cdsEnd);
 	    }
 	}
@@ -635,6 +655,9 @@ for (i=0; i<10; ++i)
     sprintf(label, "c2_kozak[%d]", i-5);
     dumpC2(f, &c2Kozak[i], label);
     }
+dumpC3(f, &earlyCod1, "earlyCod1");
+dumpC3(f, &earlyCod2, "earlyCod2");
+dumpC3(f, &earlyCod3, "earlyCod3");
 dumpC3(f, &cod1, "cod1");
 dumpC3(f, &cod2, "cod2");
 dumpC3(f, &cod3, "cod3");
