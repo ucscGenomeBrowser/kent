@@ -1030,7 +1030,7 @@ void affyUclaNormMethods(struct track *tg)
 /* Set up special methods for the affyUcla normal tissue track
    scores in general */
 {
-linkedFeaturesSeriesMethods(tg);
+expRatioMethods(tg);
 tg->itemColor = affyUclaNormColor;
 tg->trackFilter = lfsFromAffyUclaNormBed;
 }

@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.18 2004/04/02 20:21:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.19 2004/04/03 02:21:37 kent Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -582,6 +582,26 @@ for (mi = miList; mi != NULL; mi = mi->next)
 return ret;
 }
 
+static void alternateBlocksBehindChars(struct vGfx *vg, int x, int y, 
+	int width, int height, int charWidth, int charCount, 
+	int stripeCharWidth, Color a, Color b)
+/* Draw blocks that alternate between color a and b. */
+{
+int x1,x2, xEnd = x + width;
+int color = a;
+int i;
+for (i=0; i<charCount; i += stripeCharWidth)
+    {
+    x1 = i * width / charCount;
+    x2 = (i+stripeCharWidth) * width/charCount;
+    vgBox(vg, x1+x, y, x2-x1, height, color);
+    if (color == a)
+        color = b;
+    else
+        color = a;
+    }
+}
+    
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -679,6 +699,10 @@ spreadString(vg, x, y, width, mi->height-1, color,
 y += mi->height;
 
 /* draw base-level alignments */
+alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
+	tl.mWidth, winBaseCount, 4,
+	MG_WHITE, shadesOfSea[1]);
+
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
     char *line = lines[i];

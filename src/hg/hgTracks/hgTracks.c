@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.702 2004/04/02 17:11:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.703 2004/04/03 02:21:36 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -121,7 +121,7 @@ int z;
 int maxCount;
 int bestColor;
 int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
-int guidelineSpacing = 10;	/* Pixels between guidelines. */
+int guidelineSpacing = 12;	/* Pixels between guidelines. */
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
 
@@ -5765,7 +5765,7 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
                         int count)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
- * with the main color, mismatched letters will have alt color */
+ * with the main color, mismatched letters will have alt color. */
 {
 char c[2];
 int i;
@@ -5792,7 +5792,7 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 	                Color color, MgFont *font, char *s, int count)
 /* Draw evenly spaced letters in string. */
 {
-    spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
+spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
