@@ -2807,6 +2807,15 @@ cat > template << 'EOF'
 
     mkdir affyU95
     hgLoadPsl hg17 -table=affyU95 affyU95shortQname.psl
+    # sequences loaded 2004-08-06
+    hgLoadSeq -abbr=U95Av2: hg17 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #	Advisory lock created
+    #	Creating .tab file
+    #	Adding /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #	12386 sequences
+    #	Updating seq table
+    #	Advisory lock has been released
+    #	All done
 
 # Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
 # final freeze of data set.		(DONE - 2004-07-14 - Hiram)
