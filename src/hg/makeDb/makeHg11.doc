@@ -1192,20 +1192,16 @@ LOAD GENIE (todo)
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
-LOAD SOFTBERRY GENES (todo)
-     - ln -s /cluster/store1/gs.12/build29/ ~/oo
-     - cd ~/oo/bed
-     - mkdir softberry
-     - cd softberry
-DONE TO HERE - WAITING FOR NEW DATA
-     - get ftp://www.softberry.com/pub/SC_DEC01/*
-     - mkdir output
-     - Run the fixFormat.pl routine in
-     	~/oo/bed/softberry like so:
-        ./fixFormat.pl output
-     - This will stick all the properly converted .gff and .pro files in
-     the directory named "output".
-     - cd output
+LOAD SOFTBERRY GENES (DONE 8/8/02)
+     ln -s /cluster/store1/gs.12/build29/ ~/hg11
+     mkdir -p ~/hg11/bed/softberry
+     cd ~/hg11/bed/softberry
+     GET ftp://www.softberry.com/pub/sc_fgenesh_ap02/sb_fgenesh_ap02.tar.gz \
+       > sb_fgenesh_ap02.tar.gz
+     gunzip -c sb_fgenesh_ap02.tar.gz | tar xvf -
+     cd sb_fgenesh_ap02
+     ssh hgwdev
+     cd ~/hg11/bed/softberry/sb_fgenesh_ap02
      ldHgGene hg11 softberryGene chr*.gff
      hgPepPred hg11 softberry *.pro
      hgSoftberryHom hg11 *.pro
