@@ -14,6 +14,8 @@
 #   -downloadDump=days - dump genbank tables and mrna.zip to directories
 #    to $gbRoot/download  If download/dump.time doesn't exists or time is
 #    more than $days days old.
+#   -downloadUpdate - update download files under 
+#    /usr/local/apache/htdocs/goldenPath/ if they have changed.
 #   -drop - drop tables before load.  This removes all of genbank and
 #    refseq data, not just what is being loaded.
 #  -gbdbGenBank=dir - Use dir instead of /gbdb/genbank, for testing.
@@ -164,11 +166,26 @@ sub handleDownloadDump($$) {
     }
 }
 
+# update the download files for the web server. Just use rsync to detect
+# if anything changed, don't bother with time files
+sub updateDownload($) {
+    my($db) = @_;
+    my $dbDir = getConf("$db.downloadDir");
+
+    # download dir can't have trailing / for rsync
+    my $downloadDir = "download/$dbDir";
+    $downloadDir =~ s/\/$//;
+    my $htdocsDir = "/usr/local/apache/htdocs/goldenPath";
+
+    makeDir("$htdocsDir/$dbDir");
+    runProg("rsync -r $downloadDir $htdocsDir");
+}
+
 # drop genbank tables
 sub dropTables($) {
     my($db) = @_;
     if ($gbCommon::verbose) {
-        prMsg("droping tables fro $db");
+        prMsg("droping tables from $db");
     }
     runProg("gbLoadRna -drop $db");    
 }
@@ -181,6 +198,7 @@ my $keep = 0;
 my $initialLoad = 0;
 my $allowLargeDeletes = 0;
 my $downloadDumpDays;
+my $downloadUpdate = 0;
 my $gbdbGenBank;
 while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
     my $opt = $ARGV[0];
@@ -199,6 +217,8 @@ while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
         $initialLoad = 1;
     } elsif ($opt =~ /^-downloadDump(=|$)/) {
         $downloadDumpDays = parseOptEq($opt);
+    } elsif ($opt eq "-downloadUpdate") {
+        $downloadUpdate = 1;
     } elsif ($opt eq "-allowLargeDeletes") {
         $allowLargeDeletes = 1;
     } elsif ($opt eq "-keep") {
@@ -256,6 +276,13 @@ foreach my $db (@databases) {
 if ($downloadDumpDays) {
     foreach my $db (@databases) {
         handleDownloadDump($db, $downloadDumpDays);
+    }
+}
+
+# update download files in htdocs
+if ($downloadUpdate) {
+    foreach my $db (@databases) {
+        updateDownload($db);
     }
 }
 
