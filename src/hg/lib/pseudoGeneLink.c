@@ -8,15 +8,13 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.17 2004/05/07 22:11:56 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.18 2004/08/25 23:55:51 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
  * from database.  Dispose of this with pseudoGeneLinkFree(). */
 {
 struct pseudoGeneLink *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->blockCount = sqlSigned(row[9]);
@@ -29,10 +27,16 @@ strcpy(ret->strand, row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
 ret->reserved = sqlUnsigned(row[8]);
+{
+int sizeOne;
 sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
 assert(sizeOne == ret->blockCount);
+}
+{
+int sizeOne;
 sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
+}
 ret->trfRatio = atof(row[12]);
 ret->type = cloneString(row[13]);
 ret->axtScore = sqlSigned(row[14]);
@@ -76,7 +80,7 @@ ret->overEnd = sqlSigned(row[51]);
 strcpy(ret->overStrand, row[52]);
 ret->adaBoost = sqlSigned(row[53]);
 ret->posConf = atof(row[54]);
-ret->negConf = atof(row[55]);
+ret->polyAlen = sqlUnsigned(row[55]);
 return ret;
 }
 
@@ -122,7 +126,6 @@ struct pseudoGeneLink *pseudoGeneLinkCommaIn(char **pS, struct pseudoGeneLink *r
  * return a new pseudoGeneLink */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -136,6 +139,8 @@ ret->thickStart = sqlUnsignedComma(&s);
 ret->thickEnd = sqlUnsignedComma(&s);
 ret->reserved = sqlUnsignedComma(&s);
 ret->blockCount = sqlSignedComma(&s);
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->blockSizes, ret->blockCount);
 for (i=0; i<ret->blockCount; ++i)
@@ -144,6 +149,9 @@ for (i=0; i<ret->blockCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
+{
+int i;
 s = sqlEatChar(s, '{');
 AllocArray(ret->chromStarts, ret->blockCount);
 for (i=0; i<ret->blockCount; ++i)
@@ -152,6 +160,7 @@ for (i=0; i<ret->blockCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+}
 ret->trfRatio = sqlFloatComma(&s);
 ret->type = sqlStringComma(&s);
 ret->axtScore = sqlSignedComma(&s);
@@ -195,7 +204,7 @@ ret->overEnd = sqlSignedComma(&s);
 sqlFixedStringComma(&s, ret->overStrand, sizeof(ret->overStrand));
 ret->adaBoost = sqlSignedComma(&s);
 ret->posConf = sqlFloatComma(&s);
-ret->negConf = sqlFloatComma(&s);
+ret->polyAlen = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -237,7 +246,6 @@ for (el = *pList; el != NULL; el = next)
 void pseudoGeneLinkOutput(struct pseudoGeneLink *el, FILE *f, char sep, char lastSep) 
 /* Print out pseudoGeneLink.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
@@ -264,6 +272,8 @@ fprintf(f, "%u", el->reserved);
 fputc(sep,f);
 fprintf(f, "%d", el->blockCount);
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)
     {
@@ -271,7 +281,10 @@ for (i=0; i<el->blockCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
+{
+int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)
     {
@@ -279,6 +292,7 @@ for (i=0; i<el->blockCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+}
 fputc(sep,f);
 fprintf(f, "%f", el->trfRatio);
 fputc(sep,f);
@@ -384,7 +398,7 @@ fprintf(f, "%d", el->adaBoost);
 fputc(sep,f);
 fprintf(f, "%f", el->posConf);
 fputc(sep,f);
-fprintf(f, "%f", el->negConf);
+fprintf(f, "%u", el->polyAlen);
 fputc(lastSep,f);
 }
 
