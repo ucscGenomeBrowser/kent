@@ -13,12 +13,13 @@
 #The Human Affy GNF Expression Atlas 2003 Version:
 # Create the main expRecord table and the expData table for
 # the absolute measurements as so:
-hgGnfMicroarray gnfHumanU95Exps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95
+hgGnfMicroarray gnfHumanU95AllExps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95
 # Convert these to ratios using the median of medians of non-cancerous
 # cell types as the denominator as so:
 cd ~/src/hg/makeDb/hgRatioMicroarray
 hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra
 # Take the median value over multiple replicants and put in this table:
 cd ../hgMedianMicroarray
-hgMedianMicroarray hgFixed gnfHumanU95AllRatio gnfHumanU95Exps gnfU95Median.ra gnfHumanU95MedianRatio gnfHumanU95MedianExps -minExps=1
-
+hgMedianMicroarray hgFixed gnfHumanU95AllRatio gnfHumanU95AllExps gnfU95Median.ra gnfHumanU95MedianRatio gnfHumanU95MedianExps -minExps=1
+# Also make a median version of the absolute measurements
+hgMedianMicroarray hgFixed gnfHumanU95All gnfHumanU95AllExps gnfU95Median.ra gnfHumanU95Median gnfHumanU95MedianExps -minExps=1
