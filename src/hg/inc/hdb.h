@@ -23,6 +23,10 @@
 #include "trackDb.h"
 #endif
 
+#ifndef HGRELATE_H
+#include "hgRelate.h"
+#endif
+
 struct blatServerTable
 /* Information about a BLAT server. */
 {
@@ -173,6 +177,10 @@ void hNibForChrom(char *chromName, char retNibName[512]);
 
 struct slName *hAllChromNames();
 /* Get list of all chromosomes. */
+
+char* hGetSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId);
+/* Return sequence as a fasta record in a string and it's database ID, or 
+ * NULL if not found. */
 
 struct dnaSeq *hExtSeq(char *acc);
 /* Return sequence for external seq. */
