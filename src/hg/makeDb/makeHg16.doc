@@ -3723,6 +3723,35 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     # Cleanup
     rm HG-U133AB_all 
 
+# DO FAMILY BROWSER VERSIONS OF AFFYUCLANORMAL TRACK (In Progress -jk 3/2/2004)
+   # Create affyU133Orient table data
+   ssh eieio
+   cd /cluster/data/hg16/bed/affyUcla.2044-02-04
+   pslSortAcc nohead chrom temp affyU133.psl
+   rm -r temp
+   cd chrom
+   #This loop takes about 15 minutes
+   foreach i (*.psl)
+     polyInfo $i /cluster/data/hg16/nib/$i:r.nib \
+       /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa \
+       $i:r.polyInfo
+     echo done $i
+   end
+   cat *.polyInfo > ../affyU133OrientInfo.bed
+   rm *.polyInfo
+
+   # Load orientation table data 
+   ssh hgwdev
+   cd /cluster/data/hg16/bed/affyUcla.2044-02-04
+   sed 's/mrnaOrientInfo/affyU133OrientInfo/' \
+       $HOME/kent/src/hg/lib/mrnaOrientInfo.sql > affyU133OrientInfo.sql
+   hgLoadBed hg16 affyU133OrientInfo affyU133OrientInfo.bed \
+      -sqlTable=affyU133OrientInfo.sql > /dev/null
+       
+   # Do clustering (this takes about 10 minutes to run)
+   clusterRna hg16 u133Cluster.bed /dev/null -noEst -noRefSeq -group=u133Group.tab -mRNAOrient=affyU133OrientInfo -rna=affyU133
+~~~
+
 # GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
     # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)
     cd /cluster/store4/gs.17/build34/
