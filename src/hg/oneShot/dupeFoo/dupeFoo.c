@@ -37,6 +37,7 @@ struct dnaSeq seq;
 char *s;
 int fragIx;
 struct hash *chromHash = newHash(5);
+ZeroVar(&seq);
 
 printf("Reading %s\n", fileName);
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))

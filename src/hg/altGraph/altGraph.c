@@ -299,6 +299,7 @@ while (genoIx < genoCount)
 	char *mrnaFile = mrnaFiles[i];
 	struct dnaSeq mrna;
 	FILE *f = mustOpen(mrnaFile, "rb");
+        ZeroVar(&seq);
 
 	while (faFastReadNext(f, &mrna.dna, &mrna.size, &mrna.name))
 	    {

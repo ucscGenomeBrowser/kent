@@ -162,7 +162,7 @@ unsigned long curPos = 0;
 int fileCount = 0;
 FILE *f = NULL;
 char outDir[256], outFile[128], ext[64], outPath[512];
-
+ZeroVar(&seq);
 
 splitPath(outRoot, outDir, outFile, ext);
 while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
@@ -194,7 +194,7 @@ unsigned long curPos = approxSize;
 int fileCount = 0;
 FILE *f = NULL;
 char outDir[256], outFile[128], ext[64], outPath[512];
-
+ZeroVar(&seq);
 
 splitPath(outRoot, outDir, outFile, ext);
 while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
@@ -310,6 +310,7 @@ int seqCount = 0;
 char *outFile = optionVal("out", NULL);
 char *liftFile = optionVal("lift", NULL);
 FILE *lift = NULL;
+ZeroVar(&seq);
 
 splitPath(outRoot, dirOnly, noPath, NULL);
 if (oneFile)

@@ -280,6 +280,8 @@ char gTempName[512], mTempName[512], sTempName[512];
 char gSeqName[512];
 struct dyString *command = newDyString(512);
 FILE *f = mustOpen(outputFile, "w");
+ZeroVar(&gSeq);
+ZeroVar(&mSeq);
 
 tempFile(tempDir, "g", ".fa", gTempName);
 tempFile(tempDir, "m", ".fa", mTempName);

@@ -93,6 +93,7 @@ unsigned long nCount = 0;
 struct lineFile *lf;
 struct faInfo *fiList = NULL, *fi;
 boolean detailed = cgiBoolean("detailed");
+ZeroVar(&seq);
 
 dnaUtilOpen();
 for (i = 0; i<faCount; ++i)

@@ -564,6 +564,7 @@ FILE *transFile = NULL;
 
 char temp_str[500];
 char dir1[256], root1[128], ext1[64], file1[265];
+ZeroVar(&seq);
 
 if (suboptName != NULL)
     subFile = mustOpen(suboptName, "w");

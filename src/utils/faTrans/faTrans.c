@@ -23,6 +23,7 @@ void faTrans(char *inFile, char *outFile, boolean stop, int offset)
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct dnaSeq dna, *pep;
+ZeroVar(&dna);
 
 while (faSpeedReadNext(lf, &dna.dna, &dna.size, &dna.name))
     {

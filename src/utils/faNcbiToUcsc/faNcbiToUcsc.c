@@ -34,6 +34,7 @@ struct dnaSeq seq;
 FILE *f = NULL;
 char *wordBefore = cgiUsualString("wordBefore", "gb");
 int wordIx = cgiUsualInt("wordIx", -1);
+ZeroVar(&seq);
 
 if (split)
     makeDir(out);

@@ -23,6 +23,7 @@ struct dnaSeq seq;
 unsigned long total = 0;
 int i;
 FILE *f;
+ZeroVar(&seq);
 
 readAllWords(genoLst, &fileNames, &fileCount, &buf);
 for (i=0; i<fileCount; ++i)

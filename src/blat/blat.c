@@ -479,6 +479,7 @@ FILE *psl = mustOpen(pslOut, "w");
 boolean maskQuery = (qMask != NULL);
 boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
 struct dnaSeq trimmedSeq;
+ZeroVar(&trimmedSeq);
 
 if (!noHead)
     pslWriteHead(psl);

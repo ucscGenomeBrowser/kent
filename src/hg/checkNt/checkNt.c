@@ -63,6 +63,8 @@ void addNtSize(struct hash *ntHash, char *fileName)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct dnaSeq seq;
 char *words[3];
+ZeroVar(&seq);
+
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     struct nt *nt;

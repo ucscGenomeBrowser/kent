@@ -112,6 +112,7 @@ for (i=0; i<faCount; ++i)
 	    {
 	    struct lineFile *lf = lineFileOpen(faName, TRUE);
 	    struct dnaSeq seq;
+            ZeroVar(&seq);
 
 	    while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	        {

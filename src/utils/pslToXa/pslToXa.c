@@ -16,9 +16,9 @@ void usage()
 errAbort(
   "pslToXa - Convert from psl to xa alignment format\n"
   "usage:\n"
-  "   pslToXa in.psl out.xa qSeqDir tSeqDir\n"
+  "   pslToXa [options] in.psl out.xa qSeqDir tSeqDir\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -masked - use lower case characters for masked-out bases\n"
   );
 }
 
@@ -100,7 +100,7 @@ fprintf(stderr, "\n");
 }
 
 
-void outputSeqBlocks(FILE *f, struct hash *seqHash,
+void outputSeqBlocks(int options, FILE *f, struct hash *seqHash,
      char *name, char strand, int start, int end, 
      int blockCount, unsigned *starts, unsigned *sizes)
 /* Output sequence blocks as comma separated list. */
@@ -120,7 +120,7 @@ if (!seqFile->isNib)
     seqOffset = start;
     seqSizeLoaded = end-start;
     seqSizeTotal = seqFile->nibSize;
-    seq = nibLdPart(seqFile->name, seqFile->f, seqFile->nibSize,
+    seq = nibLdPartMasked(options, seqFile->name, seqFile->f, seqFile->nibSize,
          start, seqSizeLoaded);
     }
 dna = seq->dna;
@@ -137,7 +137,8 @@ for (blockIx = 0; blockIx < blockCount; ++blockIx)
 freeDnaSeq(&seq);
 }
 
-void outputConverted(struct psl *psl, FILE *f, struct hash *seqHash)
+void outputConverted(int options, struct psl *psl, FILE *f,
+                     struct hash *seqHash)
 /* Output psl in xa format. */
 {
 char seqName[256];
@@ -146,20 +147,20 @@ pslOutput(psl, f, '\t', '\t');
 
 /* Print out query sequence. */
 sprintf(seqName, "q.%s", psl->qName);
-outputSeqBlocks(f, seqHash, seqName, psl->strand[0], 
+outputSeqBlocks(options, f, seqHash, seqName, psl->strand[0], 
 	psl->qStart, psl->qEnd,
 	psl->blockCount, psl->qStarts, psl->blockSizes);
 fputc('\t', f);
 
 /* Print out target sequence. */
 sprintf(seqName, "t.%s", psl->tName);
-outputSeqBlocks(f, seqHash, seqName, psl->strand[1], 
+outputSeqBlocks(options, f, seqHash, seqName, psl->strand[1], 
 	psl->tStart, psl->tEnd,
 	psl->blockCount, psl->tStarts, psl->blockSizes);
 fputc('\n', f);
 }
 
-void pslToXa(char *inName, char *outName, char *qSeqDir, char *tSeqDir)
+void pslToXa(int options, char *inName, char *outName, char *qSeqDir, char *tSeqDir)
 /* pslToXa - Convert from psl to xa alignment format. */
 {
 struct hash *fileHash = newHash(0);
@@ -172,7 +173,7 @@ scanFilesInDir(qSeqDir, "q.", fileHash, seqHash);
 scanFilesInDir(tSeqDir, "t.", fileHash, seqHash);
 while ((psl = pslNext(lf)) != NULL)
     {
-    outputConverted(psl, f, seqHash);
+    outputConverted(options, psl, f, seqHash);
     pslFree(&psl);
     }
 }
@@ -180,9 +181,12 @@ while ((psl = pslNext(lf)) != NULL)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int options = 0;
 optionHash(&argc, argv);
 if (argc != 5)
     usage();
-pslToXa(argv[1], argv[2], argv[3], argv[4]);
+if (optionExists("masked"))
+    options = NIB_MASK_MIXED;
+pslToXa(options, argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

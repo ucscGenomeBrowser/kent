@@ -187,6 +187,8 @@ else if (!endsWith(input, ".nib") && !endsWith(output, ".nib"))
     struct dnaSeq seq;
     FILE *f = mustOpen(output, "w");
     FILE *out = mustOpen(output, "w");
+
+    ZeroVar(&seq);
     while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
 	fprintf(out, ">%s\n", seq.name);

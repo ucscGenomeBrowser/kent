@@ -133,6 +133,7 @@ struct hash *outHash = hashOut(outName);
 char *pslName = cgiOptionalString("uniq");
 struct psl *pslList = NULL;
 struct hash *usedHash = newHash(0);
+ZeroVar(&seq);
 
 if (pslName != NULL)
     pslList = pslLoadAll(pslName);

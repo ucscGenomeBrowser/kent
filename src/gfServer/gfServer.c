@@ -72,6 +72,7 @@ static struct genoFind *transGf[2][3];
 struct lineFile *lf = lineFileOpen(probeName, TRUE);
 struct dnaSeq seq;
 int hitCount = 0, clumpCount = 0, oneHit;
+ZeroVar(&seq);
 
 if (doTrans)
     errAbort("Don't support translated direct stuff currently, sorry");
@@ -384,6 +385,7 @@ for (;;)
 	    {
 	    struct dnaSeq seq;
 	    char *type = NULL;
+            ZeroVar(&seq);
 
 	    if (queryIsProt && !doTrans)
 	        {

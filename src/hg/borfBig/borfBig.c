@@ -49,6 +49,7 @@ char *row[13];
 int i;
 struct dnaSeq seq;
 int seqSize;
+ZeroVar(&seq);
 
 line = mustFindLine(lf, "Seq name:");
 word = nextWord(&line);
@@ -95,6 +96,7 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct dnaSeq seq;
 struct dyString *cmd = newDyString(256);
+ZeroVar(&seq);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {

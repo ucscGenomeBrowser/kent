@@ -23,6 +23,7 @@ void splitNcbiFa(char *ncbiIn, char *outDir)
 {
 struct lineFile *lf = lineFileOpen(ncbiIn, TRUE);
 static struct dnaSeq seq;
+ZeroVar(&seq);
 
 makeDir(outDir);
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))

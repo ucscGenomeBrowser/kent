@@ -541,6 +541,7 @@ for (i=0; i<otherListSize; ++i)
     int c;
     int dotCount = 0;
     struct dnaSeq otherSeq;
+    ZeroVar(&otherSeq);
 
     otherName = otherList[i];
     if (startsWith("#", otherName)  )
