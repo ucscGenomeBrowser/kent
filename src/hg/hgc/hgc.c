@@ -40,6 +40,7 @@
 #include "softberryHom.h"
 #include "roughAli.h"
 #include "exprBed.h"
+#include "refLink.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -329,7 +330,6 @@ char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
-struct linkedFeatures *lfList = NULL, *lf;
 char *type = (isEst ? "est" : "mrna");
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
@@ -860,7 +860,6 @@ start = cgiInt("o");
 
 /* Look up alignments in database */
 conn = hAllocConn();
-/* ~~~ Include tName here in query too? */
 sprintf(query, "select * from %s_%s where qName = '%s' and tStart=%d",
     seqName, type, acc, start);
 sr = sqlGetResult(conn, query);
@@ -911,6 +910,39 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
 showSomeAlignment(psl, oSeq, qt);
+}
+
+void htcBlatMouse(char *readName)
+/* Show alignment for accession. */
+{
+char *pslName, *faName, *qName;
+struct lineFile *lf;
+bioSeq *oSeqList = NULL, *oSeq = NULL;
+struct psl *psl;
+int start;
+enum gfType tt, qt;
+boolean isProt;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq;
+char query[256], **row;
+
+/* Print start of HTML. */
+puts("Content-Type:text/html\n");
+printf("<HEAD>\n<TITLE>Mouse Read %s</TITLE>\n</HEAD>\n\n", readName);
+puts("<HTML>");
+
+start = cgiInt("o");
+sprintf(query, "select * from blatMouse where qName = '%s' and tName = '%s' and tStart=%d",
+    readName, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s at %d", readName, start);
+psl = pslLoad(row);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+seq = hExtSeq(readName);
+showSomeAlignment(psl, seq, gftDnaX);
 }
 
 
@@ -1310,7 +1342,8 @@ if (name == NULL)
 return name;
 }
 
-void geneShowCommon(char *geneName, char *geneTable, char *pepTable)
+void geneShowPosAndLinks(char *geneName, char *pepName, char *geneTable, char *pepTable,
+	char *pepClick, char *mrnaClick, char *genomicClick)
 /* Show parts of gene common to everything */
 {
 char other[256];
@@ -1319,16 +1352,23 @@ printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 if (pepTable != NULL && hTableExists(pepTable))
     {
-    hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable, seqName);
+    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
     printf("<LI>Translated Protein</A>\n"); 
     }
-hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
 printf("<LI>Predicted mRNA</A>\n");
-hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A>\n");
 printf("</UL>\n");
 }
 
+
+void geneShowCommon(char *geneName, char *geneTable, char *pepTable)
+/* Show parts of gene common to everything */
+{
+geneShowPosAndLinks(geneName, geneName, geneTable, pepTable, "htcTranslatedProtein",
+	"htcGeneMrna", "htcGeneInGenome");
+}
 
 void htcTranslatedProtein(char *geneName)
 /* Display translated protein. */
@@ -1428,6 +1468,26 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 }
+
+void htcRefMrna(char *geneName)
+/* Display mRNA associated with a refSeq gene. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+htmlStart("RefSeq mRNA");
+sprintf(query, "select seq from refMrna where name = '%s'", geneName);
+sr = sqlGetResult(conn, query);
+printf("<PRE><TT>");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    faWriteNext(stdout, NULL, row[0], strlen(row[0]));
+    }
+sqlFreeResult(&sr);
+}
+
 
 void htcGeneInGenome(char *geneName)
 /* Put up page that lets user display genomic sequence
@@ -1654,6 +1714,62 @@ if (!upgraded)
        "preliminary.  We hope to provide links into OMIM and LocusLink "
        "in the near future.</P>");
     }
+puts(
+   "<P>Additional information may be available by clicking on the with the "
+   "mRNA associated with this gene in the main browser window.</P>");
+}
+
+void doRefGene(char *rnaName)
+/* Process click on a known RefSeq gene. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct refLink *rl;
+struct genePred *gp;
+
+htmlStart("Known Gene");
+sprintf(query, "select * from refLink where mrnaAcc = '%s'", rnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
+rl = refLinkLoad(row);
+sqlFreeResult(&sr);
+printf("<H2>Known Gene %s</H2>\n", rl->name);
+    
+if (rl->omimId != 0)
+    {
+    printf("<B>OMIM:</B> ");
+    printf(
+       "<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" TARGET=_blank>%d</A><BR>\n", 
+	rl->omimId, rl->omimId);
+    }
+if (rl->locusLinkId != 0)
+    {
+    printf("<B>LocusLink:</B> ");
+    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
+	    rl->locusLinkId);
+    printf("%d</A><BR>\n", rl->locusLinkId);
+    }
+
+medlineLinkedLine("Symbol", rl->name, rl->name);
+printf("<B>GeneCards:</B> ");
+printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
+	rl->name);
+printf("%s</A><BR>\n", rl->name);
+htmlHorizontalLine();
+
+geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, "refGene", "refPep", "htcTranslatedProtein",
+	"htcRefMrna", "htcGeneInGenome");
+
+puts(
+   "<P>Known genes are derived from the "
+   "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
+   "RefSeq</A> mRNA database. "
+   "These mRNAs were mapped to the draft "
+   "human genome using <A HREF = \"http://www.cse.ucsc.edu/~kent\" TARGET=_blank>"
+   "Jim Kent's</A> BLAT software.</P>\n");
 puts(
    "<P>Additional information may be available by clicking on the with the "
    "mRNA associated with this gene in the main browser window.</P>");
@@ -1928,6 +2044,35 @@ puts("<P>The Exonerate mouse shows regions of homology with the "
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
+void doBlatMouse(char *itemName)
+/* Handle click on blatMouse track. */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cgiInt("o");
+struct psl *pslList = NULL, *psl;
+
+/* Print non-sequence info. */
+htmlStart(itemName);
+printf("<H1>BLAT Alignment of Mouse Read %s</H1>", itemName);
+
+/* Get alignment info. */
+sprintf(query, "select * from blatMouse where qName = '%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+
+printAlignments(pslList, start, "htcBlatMouse", "blatMouse", itemName);
+}
+
 
 
 void doEst3(char *itemName)
@@ -2529,6 +2674,10 @@ else if (sameWord(group, "hgCpgIsland2"))
     {
     doCpgIsland(item, "cpgIsland2");
     }
+else if (sameWord(group, "hgRefGene"))
+    {
+    doRefGene(item);
+    }
 else if (sameWord(group, "genieKnown"))
     {
     doKnownGene(item);
@@ -2560,6 +2709,10 @@ else if (sameWord(group, "hgExoFish"))
 else if (sameWord(group, "hgExoMouse"))
     {
     doExoMouse(item);
+    }
+else if (sameWord(group, "hgBlatMouse"))
+    {
+    doBlatMouse(item);
     }
 else if (sameWord(group, "hgEst3"))
     {
@@ -2601,6 +2754,10 @@ else if (sameWord(group, "htcUserAli"))
    {
    htcUserAli(item);
    }
+else if (sameWord(group, "htcBlatMouse"))
+   {
+   htcBlatMouse(item);
+   }
 else if (sameWord(group, "htcTranslatedProtein"))
    {
    htcTranslatedProtein(item);
@@ -2608,6 +2765,10 @@ else if (sameWord(group, "htcTranslatedProtein"))
 else if (sameWord(group, "htcGeneMrna"))
    {
    htcGeneMrna(item);
+   }
+else if (sameWord(group, "htcRefMrna"))
+   {
+   htcRefMrna(item);
    }
 else if (sameWord(group, "htcGeneInGenome"))
    {
