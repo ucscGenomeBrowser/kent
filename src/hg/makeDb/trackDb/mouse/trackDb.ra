@@ -244,6 +244,26 @@ priority 87
 visibility hide
 type psl .
 
+track netFr1
+shortLabel Fugu Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 140.1
+visibility hide
+spectrum on
+type netAlign fr1 chainFr1
+otherDb fr1
+
+track netHg17
+shortLabel Human Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 250.1
+visibility dense
+spectrum on
+type netAlign hg17 chainHg17
+otherDb hg17
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
