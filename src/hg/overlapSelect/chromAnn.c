@@ -96,7 +96,7 @@ else
         if ((opts & chromAnnCds) && (bed->thickStart < bed->thickEnd))
             {
             if (start < bed->thickStart)
-                start - bed->thickStart;
+                start = bed->thickStart;
             if (end > bed->thickEnd)
                 end = bed->thickEnd;
             }
