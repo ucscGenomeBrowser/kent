@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.7 2003/09/27 08:31:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.8 2003/09/27 08:38:04 hiram Exp $";
 
 struct wigCartOptions
     {
@@ -452,10 +452,10 @@ debugPrint("wigDrawItems");
 	dataPointsInView = dataSpan / usingDataSpan;
 	if( dataPointsInView < 1 ) dataPointsInView = 1;
 	w = (dataViewEnds - dataViewStarts) * pixelsPerBase;
+	if( w < 1 ) w = 1;
 	dataValuesPerPixel = (double) dataPointsInView / (double) w;
 	pixelsPerDataValue = 1.0 / dataValuesPerPixel;
 	if( pixelsPerDataValue < 1 ) pixelsPerDataValue = 1;
-	if( w < 1 ) w = 1;
 snprintf(dbgMsg, DBGMSGSZ, "seek to: %d, read: %d bytes, dataViewStarts: %d, dataViewEnds: %d, pixels: %d", wi->Offset, wi->Count, dataViewStarts, dataViewEnds, w );
 debugPrint("wigDrawItems");
 snprintf(dbgMsg, DBGMSGSZ, "dataOffsetStart %d, dataOffsetEnd: %d, using Span: %d", dataOffsetStart, dataOffsetEnd, usingDataSpan );
