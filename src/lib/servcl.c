@@ -8,7 +8,7 @@
 #include "portimpl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: servcl.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: servcl.c,v 1.6 2004/02/09 20:21:15 kent Exp $";
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 /* Figure out a temp name, and how CGI and HTML will access it. */
@@ -20,7 +20,6 @@ strcpy(tn->forHtml, tn->forCgi);
 
 static char *_cgiDir()
 {
-
 char *jkwebDir;
 if ((jkwebDir = getenv("JKWEB")) == NULL)
     return "";
@@ -28,10 +27,6 @@ else
     return jkwebDir;
 }
 
-static char *_cgiSuffix()
-{
-return "";
-}
 
 static double _speed()
 {
@@ -44,6 +39,5 @@ struct webServerSpecific wssCommandLine =
     "commandLine",
     _makeTempName,
     _cgiDir,
-    _cgiSuffix,
     _speed,
     };

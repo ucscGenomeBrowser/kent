@@ -18,8 +18,10 @@ struct webServerSpecific
     /* Return directory to look for cgi in. */
     char * (*cgiDir)();
 
+#ifdef NEVER
     /* Return cgi suffix. */
     char * (*cgiSuffix)();
+#endif /* NEVER */
     
     /* Return relative speed of CPU. (UCSC CSE 1999 FTP machine is 1.0) */
     double (*speed)();
@@ -28,7 +30,7 @@ struct webServerSpecific
 
 
 extern struct webServerSpecific wssMicrosoftII, wssMicrosoftPWS, wssDefault,
-	wssLinux, wssCommandLine;
+	wssLinux, wssCommandLine, wssBrcMcw;
 
 char *rTempName(char *dir, char *base, char *suffix);
 /* Make a temp name that's almost certainly unique. */

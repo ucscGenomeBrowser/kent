@@ -8,7 +8,7 @@
 #include "portimpl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: servmsII.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: servmsII.c,v 1.5 2004/02/09 20:21:15 kent Exp $";
 
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
@@ -24,11 +24,6 @@ static char *_cgiDir()
 return "";
 }
 
-static char *_cgiSuffix()
-{
-return ".exe";
-}
-
 static double _speed()
 {
 return 2.5;
@@ -40,6 +35,5 @@ struct webServerSpecific wssMicrosoftII =
     "Microsoft-IIS",
     _makeTempName,
     _cgiDir,
-    _cgiSuffix,
     _speed,
     };

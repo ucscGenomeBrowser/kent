@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.8 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: portimpl.c,v 1.9 2004/02/09 20:21:15 kent Exp $";
 
 static struct webServerSpecific *wss = NULL;
 
@@ -37,6 +37,8 @@ if (wss == NULL)
 		{
 		if (sameWord(t, "Crunx"))
 		    wss = &wssLinux;
+		else if (endsWith(t, "brc.mcw.edu"))
+		    wss = &wssBrcMcw;
 		}
 	    }
         }
@@ -56,11 +58,13 @@ setupWss();
 return wss->cgiDir();
 }
 
+#ifdef NEVER
 char *cgiSuffix()
 {
 setupWss();
 return wss->cgiSuffix();
 }
+#endif /* NEVER */
     
 double machineSpeed()
 /* Return relative speed of machine.  UCSC CSE dept. 1999 web server is 1.0 */
