@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.94 2003/07/11 18:07:29 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.95 2003/07/15 19:13:58 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3189,7 +3189,7 @@ else if (strstrNoCase(organism, "rat"))
 "Baylor Human Genome Sequencing Center</A> \n"
 "(HGSC) as part of the Rat Genome Sequencing Consortium. \n"
 "The rat sequence was assembled using a hybrid approach that combines the \n"
-"clone by clone and whole genome shotgun methods. \n"
+"clone-by-clone and whole genome shotgun methods. \n"
 "This assembly is a minor update to the 3.0 release. Sequence changes \n"
 "affect only chromosomes 7 and X. No additional assembly releases are planned \n"
 "prior to the publication of the rat genome analysis papers. \n"
