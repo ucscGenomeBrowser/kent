@@ -511,8 +511,8 @@ for (i=0; i<nibCount; ++i)
 	    gfCountSeq(transGf[isRc][frame], t3->trans[frame]);
 	    uglyf("Counted frame %d\n", frame);
 	    }
+	trans3Free(&t3);
 	}
-    trans3Free(&t3);
     freeDnaSeq(&seq);
     }
 
@@ -557,8 +557,8 @@ for (i=0; i<nibCount; ++i)
 	    offset[isRc][frame] += t3->trans[frame]->size;
 	    ss->end = offset[isRc][frame];
 	    }
+	trans3Free(&t3);
 	}
-    trans3Free(&t3);
     freeDnaSeq(&seq);
     }
 
