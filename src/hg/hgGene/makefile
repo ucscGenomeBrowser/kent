@@ -12,23 +12,23 @@ O = hgGene.o altSplice.o domains.o flyBaseInfo.o go.o links.o microarray.o \
 include ../../inc/cgi_build_rules.mk
 
 my::
-	chmod -R a+r hgGeneData
-	chmod a+rx hgGeneData
-	find hgGeneData -type d -exec /bin/chmod -f a+rx {} \;
 	rsync -ar --delete hgGeneData ${CGI_BIN}-${USER}/
 	find ${CGI_BIN}-${USER}/hgGeneData -type d -name CVS | xargs rm -fr
+	chmod -R a+rX ${CGI_BIN}-${USER}/hgGeneData
 
 alpha::
 	rm -fr ${CGI_BIN}/hgGeneData
 	rsync -ar --delete hgGeneData ${CGI_BIN}/
 	find ${CGI_BIN}/hgGeneData -type d -name CVS | xargs rm -fr
 	chmod -R g+w ${CGI_BIN}/hgGeneData
+	chmod -R a+rX ${CGI_BIN}/hgGeneData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgGeneData
 	rsync -ar --delete hgGeneData ${CGI_BIN}-beta/
 	find ${CGI_BIN}-beta/hgGeneData -type d -name CVS | xargs rm -fr
 	chmod -R g+w ${CGI_BIN}-beta/hgGeneData
+	chmod -R a+rX ${CGI_BIN}-beta/hgGeneData
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
