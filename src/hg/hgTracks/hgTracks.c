@@ -323,6 +323,7 @@ if(otherFrame != NULL)
 if(thisFrame != NULL)
     cgiMakeHiddenVar("tf",thisFrame);
 cgiContinueHiddenVar("ss");
+cgiContinueHiddenVar("ct");
 }
 
 static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
@@ -333,9 +334,11 @@ static struct dyString *uiStateUrlPart(struct trackGroup *toggleGroup)
 struct dyString *dy = newDyString(512);
 struct trackGroup *tg;
 
-dyStringPrintf(dy, "&db=%s&pix=%d", database, tl.picWidth);
+dyStringPrintf(dy, "db=%s&pix=%d", database, tl.picWidth);
 if (eUserSeqString != NULL)
     dyStringPrintf(dy, "&ss=%s", eUserSeqString);
+if (ctFileName != NULL)
+    dyStringPrintf(dy, "&ct=%s", ctFileName);
 if (withLeftLabels)
     dyStringPrintf(dy, "&leftLabels=on");
 if (withCenterLabels)
@@ -366,21 +369,6 @@ if(thisFrame)
 return dy;
 }
 
-char *hgTracksDefUrl()
-/* Return URL of browser plus options that keep the UI state
- * intact. */
-{
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    {
-    struct dyString *ui = uiStateUrlPart(NULL);
-    dy = newDyString(0);
-    dyStringPrintf(dy, "%s%s", hgTracksName(), ui->string);
-    freeDyString(&ui);
-    }
-return dy->string;
-}
-
 
 
 void mapBoxReinvoke(int x, int y, int width, int height, 
@@ -401,7 +389,7 @@ if (chrom == NULL)
     }
 printf("HREF=\"%s?seqName=%s&old=%s&winStart=%d&winEnd=%d", 
 	hgTracksName(), chrom, chrom, start, end);
-printf("%s\"", ui->string);
+printf("&%s\"", ui->string);
 freeDyString(&ui);
 
 if (toggleGroup)
@@ -5430,7 +5418,6 @@ else if (fileName != NULL)
     {
     ctList = customTracksFromFile(fileName);
     ctFileName = fileName;
-    makeHiddenVar("ct", fileName);
     }
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
@@ -5765,6 +5752,9 @@ struct browserTable *tableList = NULL, *table = NULL;
 char *freezeName = NULL;
 int controlColNum=0;
 
+/* Tell browser where to go when they click on image. */
+printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
+
 
 /* See if want to include sequence search results. */
 userSeqString = cgiOptionalString("ss");
@@ -5872,9 +5862,6 @@ for (group = tGroupList; group != NULL; group = group->next)
 	}
     }
 
-/* Tell browser where to go when they click on image. */
-printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
-
 /* Center everything from now on. */
 printf("<CENTER>\n");
 
@@ -5940,7 +5927,10 @@ if (!hideControls)
 	fputs("Visit Ensembl</A></TD>", stdout);
 	}
     if (sameString(database, "hg5") || sameString(database, "hg6") || sameString(database, "hg7"))
-	fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD>", database);
+	{
+	struct dyString *uiVars = uiStateUrlPart(NULL);
+	fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">BLAT Search</A></TD>", uiVars->string);
+	}
     printf("<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
     printf("<td align=center><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A></td>\n");
     fputs("</TR>", stdout);
@@ -6252,7 +6242,6 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
- cgiSpoof(&argc,argv);
 htmShell("Working Draft Genome Browser v5", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 return 0;
