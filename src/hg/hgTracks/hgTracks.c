@@ -1167,12 +1167,32 @@ struct trackGroup *musTest1Tg()
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgMusTest1";
 tg->visibility = tvDense;
-tg->longLabel = "Mouse Translated Blat Alignments Test 1";
-tg->shortLabel = "Mouse Test1";
+tg->longLabel = "Mouse Translated Blat Alignments Score > 40";
+tg->shortLabel = "Mouse Test 40";
 tg->loadItems = loadMusTest1;
 tg->drawItems = linkedFeaturesAverageDense;
 return tg;
 }
+
+void loadMusTest2(struct trackGroup *tg)
+/* Load up mouse alignments (psl format) from table. */
+{
+tg->items = lfFromPslsInRange("musTest2", winStart, winEnd, chromName, TRUE);
+}
+
+struct trackGroup *musTest2Tg()
+/* Make track group of full length mRNAs. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgMusTest2";
+tg->visibility = tvDense;
+tg->longLabel = "Mouse Translated Blat Alignments Score > 6";
+tg->shortLabel = "Mouse Test 6";
+tg->loadItems = loadMusTest2;
+tg->drawItems = linkedFeaturesAverageDense;
+return tg;
+}
+
 
 struct linkedFeatures *lfFromGenePredInRange(char *table, 
 	char *chrom, int start, int end)
@@ -4680,6 +4700,7 @@ if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
 if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
+if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
 if (chromTableExists("_tet_waba")) slSafeAddHead(&tGroupList, tetTg());
 if (hTableExists("rnaGene")) slSafeAddHead(&tGroupList, rnaGeneTg());
