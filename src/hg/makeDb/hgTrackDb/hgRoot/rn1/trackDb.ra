@@ -1,0 +1,9 @@
+track ensRatMusHom
+shortLabel PhusionBlast
+longLabel Ensembl PhusionBlast of Rat vs. Mouse
+priority 29.8
+visibility hide
+color 120,70,30
+altColor 0,0,0
+type bed 6+
+
