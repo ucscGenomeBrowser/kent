@@ -901,3 +901,18 @@ chainSome $(path1)
     # back to kksilo
     rm -rf blastOut
 # End tblastn
+
+# Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
+    ssh hgwdev
+    cd /tmp
+    wget \
+	'http://www.genome.gov/Pages/News/Photos/Science/bovine_image.jpg'
+	-O bovine_image.jpg
+    #	view that image in 'display' to determine crop edges, then:
+    convert -crop 1280x800+280+240 -quality 80 -sharpen 0 \
+	-normalize bovine_image.jpg bbt.jpg
+    convert -geometry 300x200 -quality 80 bbt.jpg Bos_taurus.jpg
+    rm -f bbt.jpg bovine_image.jpg
+
+    cp -p Bos_taurus.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push
