@@ -7,12 +7,13 @@
 #include "localmem.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSelect.c,v 1.3 2004/05/05 22:39:52 kate Exp $";
+static char const rcsid[] = "$Id: pslSelect.c,v 1.4 2004/05/11 01:17:45 baertsch Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"qtPairs", OPTION_STRING},
     {"queries", OPTION_STRING},
+    {"qtStart", OPTION_STRING},
     {"queryPairs", OPTION_STRING},
     {NULL, 0}
 };
@@ -20,6 +21,7 @@ static struct optionSpec optionSpecs[] = {
 #define QT_PAIRS_MODE   1
 #define QUERY_MODE      2
 #define QUERY_PAIRS_MODE 3
+#define QT_START        4
 
 static int mode = 0;
 static int isPairs = TRUE;
@@ -42,6 +44,7 @@ errAbort(
   "   -qtPairs=file - file is tab-separated query and query to select\n"
   "   -query=file - file is list of query to select\n"
   "   -queryPairs=file - file is list of queries, with substitution value\n"
+  "   -qtStart=file - file is list of qName,tName, tStart\n"
   );
 }
 
@@ -59,6 +62,39 @@ while (lineFileNextRowTab(lf, row, wordCount))
     }
 lineFileClose(&lf);
 return hash;
+}
+
+struct hash *loadSelect3(char *selectFile)
+/* load select file. */
+{
+struct hash *hash = hashNew(20);
+char *row[3];
+char buff[128];
+struct lineFile *lf = lineFileOpen(selectFile, TRUE);
+while (lineFileNextRowTab(lf, row, ArraySize(row)))
+    {
+    sprintf(buff, "%s%s",lmCloneString(hash->lm, row[1]),lmCloneString(hash->lm, row[2]));
+    hashAdd(hash, row[0], lmCloneString(hash->lm, buff));
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+boolean pairSelected3(struct hash* selectHash, char *qName, char *tName, int tStart)
+/* determine if the query/target/tStart triple is selected.  Handle the query
+ * being paired to multiple targets */
+{
+char buff[128];
+struct hashEl *hel = hashLookup(selectHash, qName);
+while (hel != NULL)
+    {
+    char *target = hel->val;
+    sprintf(buff,"%s%d",tName, tStart);
+    if (sameString(target, buff))
+        return TRUE;
+    hel = hashLookupNext(hel);
+    }
+return FALSE;
 }
 
 struct hashEl *selectedItem(struct hash* selectHash, char *qName, char *tName)
@@ -81,15 +117,22 @@ return NULL;
 void pslSelect(char *inPsl, char *outPsl)
 /* select psl */
 {
-struct hash *selectHash = loadSelect(selectFile);
+struct hash *selectHash = NULL;
 struct lineFile *inPslLf = pslFileOpen(inPsl);
 FILE *outPslFh = mustOpen(outPsl, "w");
 struct psl* psl;
 struct hashEl *hel;
 
+if (mode != QT_START)
+    selectHash = loadSelect(selectFile);
+else
+    selectHash = loadSelect3(selectFile);
 while ((psl = pslNext(inPslLf)) != NULL)
     {
-    if ((hel = selectedItem(selectHash, psl->qName, psl->tName)) != NULL)
+    if (mode == QT_START)
+        if (pairSelected3(selectHash, psl->qName, psl->tName, psl->tStart))
+            pslTabOut(psl, outPslFh);
+    else if ((hel = selectedItem(selectHash, psl->qName, psl->tName)) != NULL)
         {
         if (mode == QUERY_PAIRS_MODE)
             {
@@ -120,6 +163,8 @@ else if ((selectFile = optionVal("queries", NULL)) != NULL)
     }
 else if ((selectFile = optionVal("queryPairs", NULL)) != NULL)
     mode = QUERY_PAIRS_MODE;
+else if ((selectFile = optionVal("qtStart", NULL)) != NULL)
+    mode = QT_START;
 else
     errAbort("must specify option");
 
