@@ -12,13 +12,16 @@
 #include "../hgTables/hgTables.h"
 #include "hdb.h"
 #include "qa.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.1 2004/11/07 02:39:08 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.2 2004/11/07 16:50:51 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
 char *clDb = NULL;	/* DB from command line */
-int clRepeat = 3;	/* Number of repetitions. */
+int clGroups = BIGNUM;	/* Number of groups to test. */
+int clTracks = 2;	/* Number of track to test. */
+int clTables = 2;	/* Number of tables to test. */
 
 void usage()
 /* Explain usage and exit. */
@@ -29,9 +32,11 @@ errAbort(
   "   hgTablesTest url log\n"
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"
-  "   -db=hg16 - Restrict to particular database\n"
-  "   -repeat=N - Number of times to repeat test (on random genes)\n"
-  , clRepeat);
+  "   -db=hg17 - Restrict to particular database\n"
+  "   -groups=N - Number of groups to test (default all)\n"
+  "   -tracks=N - Number of tracks per group to test (default %d)\n"
+  "   -tables=N - Number of tables per track to test (deault %d)\n"
+  , clTracks, clTables);
 }
 
 
@@ -39,7 +44,9 @@ static struct optionSpec options[] = {
    {"org", OPTION_STRING},
    {"db", OPTION_STRING},
    {"search", OPTION_STRING},
-   {"repeat", OPTION_INT},
+   {"groups", OPTION_INT},
+   {"tracks", OPTION_INT},
+   {"tables", OPTION_INT},
    {NULL, 0},
 };
 
@@ -53,30 +60,33 @@ struct tablesTest
 
 enum tablesTestInfoIx {
    ntiiType,
-   ntii_testType1,
    ntiiOrg,
    ntiiDb,
    ntiiGroup,
+   ntiiTrack,
+   ntiiTable,
    ntiiTotalCount,
 };
 
 char *tablesTestInfoTypes[] =
-   { "type", "testType1", "organism", "db", "group", };
+   { "type", "organism", "db", "group", "track", "table"};
 
 struct tablesTest *tablesTestList = NULL;	/* List of all tests, latest on top. */
 
 struct tablesTest *tablesTestNew(struct qaStatus *status,
-	char *type, char *testType1, char *org, char *db, char *group)
+	char *type, char *org, char *db, char *group, 
+	char *track, char *table)
 /* Save away column test results. */
 {
 struct tablesTest *test;
 AllocVar(test);
 test->status = status;
 test->info[ntiiType] = cloneString(naForNull(type));
-test->info[ntii_testType1] = cloneString(naForNull(testType1));
 test->info[ntiiOrg] = cloneString(naForNull(org));
 test->info[ntiiDb] = cloneString(naForNull(db));
 test->info[ntiiGroup] = cloneString(naForNull(group));
+test->info[ntiiTrack] = cloneString(naForNull(track));
+test->info[ntiiTable] = cloneString(naForNull(table));
 slAddHead(&tablesTestList, test);
 return test;
 }
@@ -91,7 +101,7 @@ fprintf(f, "%s\n", test->status->errMessage);
 }
 
 struct htmlPage *quickSubmit(struct htmlPage *basePage,
-	char *testType1, char *org, char *db, char *group,
+	char *org, char *db, char *group, char *track, char *table,
 	char *testName, char *button, char *buttonVal)
 /* Submit page and record info.  Return NULL if a problem. */
 {
@@ -104,22 +114,26 @@ if (basePage != NULL)
 	htmlPageSetVar(basePage, NULL, "db", db);
     if (org != NULL)
 	htmlPageSetVar(basePage, NULL, "org", org);
+    if (group != NULL)
+        htmlPageSetVar(basePage, NULL, hgtaGroup, group);
+    if (track != NULL)
+        htmlPageSetVar(basePage, NULL, hgtaTrack, track);
     qs = qaPageFromForm(basePage, basePage->forms, 
 	    button, buttonVal, &page);
-    test = tablesTestNew(qs, testName, testType1, org, db, group);
+    test = tablesTestNew(qs, testName, org, db, group, track, table);
     }
 return page;
 }
 
 void serialSubmit(struct htmlPage **pPage,
-	char *testType1, char *org, char *db, char *group,
+	char *org, char *db, char *group, char *track, char *table,
 	char *testName, char *button, char *buttonVal)
 /* Submit page, replacing old page with new one. */
 {
 struct htmlPage *oldPage = *pPage;
 if (oldPage != NULL)
     {
-    *pPage = quickSubmit(oldPage, testType1, org, db, group,
+    *pPage = quickSubmit(oldPage, org, db, group, track, table,
     	testName, button, buttonVal);
     htmlPageFree(&oldPage);
     }
@@ -133,18 +147,139 @@ if (test->status->errMessage != NULL)
     tablesTestLogOne(test, stderr);
 }
 
+void testOneTable(struct htmlPage *trackPage, char *org, char *db,
+	char *group, char *track, char *table)
+/* Test stuff on one table. */
+{
+struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group, 
+	track, table, "selectTable", hgtaTable, table);
+struct htmlPage *schemaPage = quickSubmit(tablePage, org, db, group,
+        track, table, "schema", hgtaDoSchema, "submit");
+struct htmlForm *mainForm;
+htmlPageFree(&schemaPage);
+if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
+    errAbort("Couldn't get main form on tablePage");
+if (htmlFormVarGet(mainForm, hgtaDoSummaryStats) != NULL)
+    {
+    struct htmlPage *statsPage = quickSubmit(tablePage, org, db, group,
+    	track, table, "summaryStats", hgtaDoSummaryStats, "submit");
+    htmlPageFree(&statsPage);
+    }
+verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
+htmlPageFree(&tablePage);
+}
+
+void testOneTrack(struct htmlPage *groupPage, char *org, char *db,
+	char *group, char *track, int maxTables)
+/* Test a little something on up to maxTables in one track. */
+{
+struct htmlPage *trackPage = quickSubmit(groupPage, org, db, group, 
+	track, NULL, "selectTrack", hgtaTrack, track);
+struct htmlForm *mainForm;
+struct htmlFormVar *tableVar;
+struct slName *table;
+int tableIx;
+
+if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
+    errAbort("Couldn't get main form on trackPage");
+if ((tableVar = htmlFormVarGet(mainForm, hgtaTable)) == NULL)
+    errAbort("Can't find table var");
+for (table = tableVar->values, tableIx = 0; 
+	table != NULL && tableIx < maxTables; 
+	table = table->next, ++tableIx)
+    {
+    testOneTable(trackPage, org, db, group, track, table->name);
+    }
+/* Clean up. */
+htmlPageFree(&trackPage);
+}
+
+void testOneGroup(struct htmlPage *dbPage, char *org, char *db, char *group, 
+	int maxTracks)
+/* Test a little something on up to maxTracks in one group */
+{
+struct htmlPage *groupPage = quickSubmit(dbPage, org, db, group, NULL, NULL,
+	"selectGroup", hgtaGroup, group);
+struct htmlForm *mainForm;
+struct htmlFormVar *trackVar;
+struct slName *track;
+int trackIx;
+
+if ((mainForm = htmlFormGet(groupPage, "mainForm")) == NULL)
+    errAbort("Couldn't get main form on groupPage");
+if ((trackVar = htmlFormVarGet(mainForm, hgtaTrack)) == NULL)
+    errAbort("Can't find track var");
+for (track = trackVar->values, trackIx = 0; 
+	track != NULL && trackIx < maxTracks; 
+	track = track->next, ++trackIx)
+    {
+    testOneTrack(groupPage, org, db, group, track->name, clTables);
+    }
+
+/* Clean up. */
+htmlPageFree(&groupPage);
+}
+
+void testGroups(struct htmlPage *dbPage, char *org, char *db, int maxGroups)
+/* Test a little something in all groups for dbPage. */
+{
+struct htmlForm *mainForm;
+struct htmlFormVar *groupVar;
+struct slName *group;
+int groupIx;
+
+if ((mainForm = htmlFormGet(dbPage, "mainForm")) == NULL)
+    errAbort("Couldn't get main form on dbPage");
+if ((groupVar = htmlFormVarGet(mainForm, hgtaGroup)) == NULL)
+    errAbort("Can't find group var");
+for (group = groupVar->values, groupIx=0; 
+	group != NULL && groupIx < maxGroups; 
+	group = group->next, ++groupIx)
+    {
+    if (!sameString("allTables", group->name))
+        testOneGroup(dbPage, org, db, group->name, clTracks);
+    }
+}
+
+void getTestRegion(char *db, char region[256], int regionSize)
+/* Look up first chromosome in database and grab five million bases
+ * from the middle of it. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo limit 1");
+char **row;
+struct chromInfo ci;
+int start,end,middle;
+
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't get one row from chromInfo");
+chromInfoStaticLoad(row, &ci);
+middle = ci.size/2;
+start = middle-2500000;
+end = middle+2500000;
+if (start < 0) start = 0;
+if (end > ci.size) end = ci.size;
+safef(region, regionSize, "%s:%d-%d", ci.chrom, start+1, end);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+}
+
 void testDb(struct htmlPage *orgPage, char *org, char *db)
 /* Test on one database. */
 {
 struct htmlPage *dbPage;
+char region[256];
 htmlPageSetVar(orgPage, NULL, "db", db);
-dbPage = quickSubmit(orgPage, NULL, org, db, NULL, "dbEmptyPage", "submit", "go");
+getTestRegion(db, region, sizeof(region));
+htmlPageSetVar(orgPage, NULL, "position", region);
+htmlPageSetVar(orgPage, NULL, hgtaRegionType, "range");
+dbPage = quickSubmit(orgPage, org, db, NULL, NULL, NULL, "selectDb", "submit", "go");
 quickErrReport();
 if (dbPage != NULL)
     {
-    /* Now we want to actually do some tests. */
-    uglyf("Testing %s %s. More tests coming soon.\n", org, db);
+    testGroups(dbPage, org, db, clGroups);
     }
+htmlPageFree(&dbPage);
 }
 
 
@@ -157,7 +292,6 @@ struct htmlForm *mainForm;
 struct htmlFormVar *dbVar;
 struct slName *db;
 
-uglyf("testOrg %s %s\n", org, forceDb);
 htmlPageSetVar(rootPage, rootForm, "org", org);
 if (forceDb)
     htmlPageSetVar(rootPage, rootForm, "db", forceDb);
@@ -289,7 +423,9 @@ if (argc != 3)
     usage();
 clDb = optionVal("db", clDb);
 clOrg = optionVal("org", clOrg);
-clRepeat = optionInt("repeat", clRepeat);
+clGroups = optionInt("groups", clGroups);
+clTracks = optionInt("tracks", clTracks);
+clTables = optionInt("tables", clTables);
 hgTablesTest(argv[1], argv[2]);
 carefulCheckHeap();
 return 0;
