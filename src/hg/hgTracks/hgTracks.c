@@ -9693,9 +9693,12 @@ if (!hideControls)
     printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
     smallBreak();
-    printf("<B>Track Controls:</B><BR> ");
+    printf("<B>Track Controls:</B>");
     printf("</th></tr>\n");
     printf("<tr>\n");
+    printf("<tr><td colspan='5' align='middle'>Note: Tracks with more than %d items are always displayed in "
+           "dense mode.</td></tr>\n", maxItemsInFullTrack);
+
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
     controlGridStartCell(cg);
     printf(" Base Position <BR>");
@@ -9716,9 +9719,6 @@ if (!hideControls)
 	}
     /* now finish out the table */
     endControlGrid(&cg);
-    printf("Note: Tracks with more than %d items are always displayed in "
-           "dense mode.", maxItemsInFullTrack);
-
     printf("</CENTER>\n");
     }
 
