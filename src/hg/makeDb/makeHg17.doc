@@ -7440,6 +7440,10 @@ SEQ2_LEN=$BASE/S2.len
 XXX - running 2004-07-01 11:26
 
 
+# LIFTOVER (DROP) CHAINS TO HG16 (IN PROGRESS 2005-01-03 kate)
+
+   # swap hg16->hg17 chains 
+
 # LIFTOVER (DROP) CHAINS TO HG16 (IN PROGRESS 2004-07-07 kate)
 
     # run alignment
@@ -12117,7 +12121,7 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     para try; para check
     para push
 
-    # load table
+    # load tables
     ssh hgwdev
     set mafDir = /gbdb/hg17
     set table = multiz10way
@@ -12133,3 +12137,208 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     set table = tetNig1_netBlastz
     ln -s /cluster/data/hg17/bed/blastz.tetNig1/mafNet $mafDir/$table
     hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
+
+
+# CONSERVATION SCORING WITH PHASTCONS (WORKING 2005-01-06 kate)
+# 1. Partition multiple alignment into windows, using "msa_split"
+# 2. Create starting tree model, with branch lengths
+#       use "phyloFit" on alignments, or hand-craft from another tree
+# 3. Estimate GC avg. over all species, use "msa_view" on maf
+# 4. Estimate other model params, using phastCons (via doEstimate script)
+
+    # NOTE: no alignment filtering done -- the scores don't look
+    # particularly meaningful w/ this version of multiz.
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    set mafDir = /cluster/bluearc/hg17/multiz10way.v8/maf
+    mkdir -p $mafDir
+    cp -r maf/*.maf $mafDir
+
+    ssh kk9
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    mkdir cons
+    cd cons
+
+    # break up the genome-wide MAFs into pieces
+    # NOTE: chrom fasta files are already on the bluearc
+    # from previous run
+    mkdir /cluster/bluearc/hg17/chrom
+    cd /cluster/data/hg17
+    foreach f (`cat chrom.lst`)
+        echo $f
+        cp -r $f/*.fa /cluster/bluearc/hg17/chrom
+    end
+
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons
+    mkdir run.split
+    cd run.split
+    set WINDOWS = /cluster/bluearc/hg17/multiz10way.v8/cons/WINDOWS
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+    cat << 'EOF' > doSplit.sh
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+FA_SRC=/cluster/bluearc/hg17/chrom
+WINDOWS=/cluster/bluearc/hg17/multiz10way.v8/cons/WINDOWS
+
+maf=$1
+c=`basename $maf .maf`
+echo $c
+mkdir -p /scratch/msa_split
+${PHAST}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O hg17,panTro1,mm5,rn3,canFam1,galGal2,xenTro1,fr1,tetNig1,danRer1 -w 1000000,0 -r /scratch/msa_split/$c -o SS -I 1000 -B 5000
+[ $? -eq 0 ] || exit 1
+echo "Copying..."
+cd /scratch/msa_split
+for file in $c.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
+[ $? -eq 0 ] || exit 1
+rm -f /scratch/msa_split/$c.*.ss
+echo "Done copying"
+echo "Done" >> ${WINDOWS}/$c.done
+'EOF'
+# << for emacs
+
+    set WINDOWS = /cluster/bluearc/hg17/multiz10way.v8/cons/WINDOWS
+    chmod +x doSplit.sh
+    rm -f jobList
+    foreach file (/cluster/bluearc/hg17/multiz10way.v8/maf/*.maf) 
+        set c = $file:t:r
+	echo "doSplit.sh $file {check out line+ $WINDOWS/$c.done}" >> jobList
+    end
+    
+    para create jobList
+        # 46 jobs
+    para try
+    para check
+
+    # TODO: cleanup
+    # rm -fr $mafDir
+    
+    # now generate conservation scores and predicted elements
+    set path = ($path /cluster/bin/phast); rehash
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons
+    mkdir run.elements   
+    cd run.elements
+
+    # create a starting tree model from a chr1 ss files in WINDOWS dir.
+    ssh kolossus
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons/run.elements
+    gunzip -c /cluster/bluearc/hg17/multiz10way.v8/cons/WINDOWS/chr1.14996059-15998256.ss.gz \
+                > /tmp/phastCons.$$
+     phyloFit -i SS /tmp/phastCons.$$ --out-root starting-tree --tree \
+        "((((((hg17,panTro1),(mm5,rn3)),canFam1),galGal2),xenTro1),((fr1,tetNig1),danRer1))" 
+    rm /tmp/phastCons.$$
+    cat starting-tree.mod
+#ALPHABET: A C G T 
+#ORDER: 0
+#SUBST_MOD: REV
+#TRAINING_LNL: -2635749.517410
+#BACKGROUND: 0.247225 0.248374 0.250827 0.253574 
+#RATE_MAT:
+#-0.997890    0.201447    0.648573    0.147870 
+#0.200515   -1.020796    0.190184    0.630096 
+#0.639258    0.188324   -1.025170    0.197587 
+#0.144168    0.617176    0.195447   -0.956791 
+#TREE: ((((((hg17:0.006401,panTro1:0.008342):0.099376,(mm5:0.083404,rn3:0.105411):0.242694):0.020883,canFam1:0.221922):0.099131,galGal2:0.275759):0.041997,xenTro1:0.280306):0.064815,((fr1:0.137674,tetNig1:0.091463):0.118573,danRer1:0.250847):0.064815);
+
+    # estimate model parameters
+    # estimate avg. cross-species avg. GC content from chr1 maf's
+    ssh kolossus
+    set path = ($path /cluster/bin/phast); rehash
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons/run.elements
+    msa_view --aggregate hg17,panTro1,rn3,mm5,canFam1,galGal2,xenTro1,danRer1,tetNig1,fr1 \
+        -i MAF \
+        --summary-only /cluster/data/hg17/bed/multiz10way.v8/maf/chr1.maf\
+            > maf_summary.txt
+    awk '$1 == "[aggregate]" {printf "%0.3f\n", $3 + $4}' maf_summary.txt
+       # 0.424
+
+    # Generate models from chr1
+    cat << 'EOF' > doEstimate.sh
+#!/bin/sh
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.424 --nrates 1,1 --no-post-probs --ignore-missing --expected-lengths 12 --target-coverage 0.17 --quiet --log $2 --estimate-trees $3
+'EOF'
+    chmod u+x doEstimate.sh
+
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobs.lst
+    foreach f (/cluster/bluearc/hg17/multiz10way.v8/cons/WINDOWS/chr1.*.ss.gz)
+        set root = $f:t:r:r
+	echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobs.lst
+    end
+
+    # run cluster job
+    ssh kk9
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons/run.elements
+    para create jobs.lst
+       # 226 jobs written to batch
+    para try; para check
+    para push
+
+    # After 50 min. 200 jobs completed.  OK to stop at this point
+    #  enough representatives to get reasonable models
+    # (Check with Adam).
+
+    ls TREES/*.cons.mod > cons.txt
+    phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    grep TREE ave.cons.mod
+# TREE: ((((((hg17:0.002133,panTro1:0.002649):0.033890,(mm5:0.027560,rn3:0.036796):0.090237):0.003983,canFam1:0.073658):0.047276,galGal2:0.151093):0.020934,xenTro1:0.171580):0.029788,((fr1:0.068902,tetNig1:0.056306):0.086275,danRer1:0.137161):0.029788);
+    ls TREES/*.noncons.mod > noncons.txt
+    phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+    grep TREE ave.noncons.mod
+# TREE: ((((((hg17:0.006943,panTro1:0.008608):0.110612,(mm5:0.089885,rn3:0.120001):0.294510):0.013343,canFam1:0.240139):0.155929,galGal2:0.494578):0.068972,xenTro1:0.564971):0.099185,((fr1:0.225208,tetNig1:0.183767):0.288473,danRer1:0.451989):0.099185);
+
+    cat << 'EOF' > doPhastCons.sh
+#!/bin/sh
+
+mkdir -p /cluster/bluearc/hg17/multiz10way.v8/phastCons/POSTPROBS /cluster/bluearc/hg17/multiz10way.v8/phastCons/ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --expected-lengths 12 --target-coverage 0.17 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/hg17/multiz10way.v8/phastCons/ELEMENTS/$pref.bed --score --require-informative 0 > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/hg17/multiz10way.v8/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+'EOF'
+    chmod u+x doPhastCons.sh
+
+    rm -fr /cluster/bluearc/hg17/multiz10way.v8/phastCons/POSTPROBS /cluster/bluearc/hg17/multiz10way.v8/phastCons/ELEMENTS
+    rm -f jobs2.lst
+    foreach f (/cluster/bluearc/hg17/multiz10way.v8/cons/WINDOWS/*.ss.gz)
+        echo doPhastCons.sh $f >> jobs2.lst
+    end
+
+    # run cluster job
+    # NOTE: ran this time on kk9, as there were problems on kk
+    ssh kk
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons/run.elements
+    para create jobs2.lst
+        # 2932 jobs written to batch
+    para try; para check
+    para push
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    # do in a way that avoids limits on numbers of args
+    rm -f splitfiles* all.raw.bed
+    find /cluster/bluearc/hg17/multiz10way.v8/phastCons/ELEMENTS -name "*.bed" > files
+    split files splitfiles
+    foreach s (splitfiles*)
+       awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' `cat $s` >> all.raw.bed
+    end
+    /cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+    rm files splitfiles* 
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz10way.v8/cons/run.elements
+    hgLoadBed hg17 phastConsElements10way all.bed
+
+    # check coverage
+    featureBits -chrom=chr1 hg17 phastConsElements10way
+        # 11223214 bases of 222827847 (5.037%) in intersection
+    featureBits -chrom=chr1 hg17 phastConsElements
+        # 12180340 bases of 222827847 (5.466%) in intersection
+    /cluster/bin/phast/consEntropy .17 12 \
+                        ave.cons.mod ave.noncons.mod --NH 9.78
+        # Recommended expected length: omega=10.489681 sites (for NH=9.780000)
+
