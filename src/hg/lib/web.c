@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.76 2005/03/15 19:27:00 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.77 2005/03/21 23:40:10 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -192,8 +192,29 @@ else
     	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">", uiState+1);
     	puts("           Blat</A> &nbsp; - &nbsp;");
 	}
-    	printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
-    	puts("           Tables</A> &nbsp; - &nbsp;");
+    {
+    char *table = (endsWith(scriptName, "hgGene") ?
+		   cartOptionalString(theCart, "hgg_type") :
+		   cartOptionalString(theCart, "g"));
+    if ((endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
+	 endsWith(scriptName, "hgGene"))
+	&& (table != NULL))
+	{
+	struct trackDb *tdb = hTrackDbForTrack(table);
+	if (tdb != NULL)
+	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_group=%s"
+		   "&hgta_track=%s&hgta_table=%s\" class=\"topbar\">\n",
+		   uiState, tdb->grp, table, table);
+	else
+	    printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n",
+		   uiState);
+	trackDbFree(&tdb);
+	}
+    else
+	printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n",
+	       uiState);
+    }
+    puts("           Tables</A> &nbsp; - &nbsp;");
     if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
 	{
