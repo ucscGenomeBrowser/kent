@@ -1342,3 +1342,4 @@ type wigMaf 0.0 1.0
 #pairwise fakePairwise
 summary ancestor4waySummary
 speciesOrder eutPri2 eutGli2 borEut2 
+chromosomes chr13
