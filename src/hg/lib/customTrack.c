@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.48 2004/08/24 17:14:47 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.49 2004/11/09 18:28:18 kent Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -277,7 +277,7 @@ row[12] = "";
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word) || startsWith("Scaffold_", word); 
+return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word) || startsWith("Scaffold_", word) || startsWith("scaffold", word) || startsWith("SCAFFOLD", word); 
 }
 
 static void checkChromName(char *word, int lineIx)
@@ -883,7 +883,7 @@ printf(" wc:%d <BR>\n", wordCount);
 	    bed = customTrackPsl(pslIsProt, row, wordCount, chromHash, lineIx);
 	else
 	    bed = customTrackBed(row, wordCount, chromHash, lineIx);
-	if (!startsWith("chr", bed->chrom) && !startsWith("target", bed->chrom) && !startsWith("Scaffold", bed->chrom))
+	if (!isChromName(bed->chrom))
 	    track->needsLift = TRUE;
 	slAddHead(&track->bedList, bed);
 	}
