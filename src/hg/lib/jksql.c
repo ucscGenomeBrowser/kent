@@ -12,6 +12,9 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
+boolean sqlTrace = FALSE;  /* setting to true prints each query */
+int sqlTraceIndent = 0;    /* number space far to indent traces */
+
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
     {
@@ -201,6 +204,10 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
  * that you can do sqlRow() on. */
 {
 MYSQL *conn = sc->conn;
+if (sqlTrace)
+    fprintf(stderr, "%.*squery: %s\n", sqlTraceIndent,
+            "                                                       ",
+            query);
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
     if (abort)

@@ -29,6 +29,9 @@
 #ifndef HASH_H
 #include "hash.h"
 #endif
+
+extern boolean sqlTrace;      /* setting to true prints each query */
+extern int sqlTraceIndent;    /* number space far to indent traces */
 	
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
