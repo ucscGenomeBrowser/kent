@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.60 2005/03/14 03:15:52 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.61 2005/03/14 22:35:31 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -609,7 +609,8 @@ if (miList == NULL)
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
 
-/* load maf summary entries for all species in item list */
+/* Create SQL where clause that will load up just the
+ * summaries for the species that we are including. */ 
 conn = hAllocConn();
 dyStringAppend(where, "src in (");
 for (mi = miList; mi != NULL; mi = mi->next)
@@ -623,7 +624,10 @@ for (mi = miList; mi != NULL; mi = mi->next)
     }
 dyStringAppend(where, ")");
 sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
-                        dyStringCannibalize(&where), &rowOffset);
+                        where->string, &rowOffset);
+
+/* Loop through result creating a hash of lists of maf summary blocks.
+ * The hash is keyed by species. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ms = mafSummaryLoad(row + rowOffset);
