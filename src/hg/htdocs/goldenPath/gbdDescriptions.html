@@ -115,11 +115,34 @@ format description of their fields.</P>
 stored in a single table rather than one table per chromosome:</P>
 <UL>
   <LI><A 
+  href="#GenePredictions">acembly</A> 
+  - Acembly Gene Predictions With Alt-splicing </LI>
+  <LI><A 
+  href="#PepPredictions">acemblyPep</A> 
+  - Translations of Acembly gene predictions into corresponding amino acid sequences </LI>
+  <LI><A 
+  href="#PslInfo">all_bacends</A> 
+  - BLAT alignment information for BAC clone end sequences on 
+    the draft assembly sequence </LI>
+  <LI><A 
   href="#PslInfo">all_est</A> 
   - EST alignments (concatenation of chr*_est) 
   <LI><A 
   href="#PslInfo">all_mrna</A> 
   - mRNA alignments (concatenation of chr*_mrna) 
+  <LI><A 
+  href="#PslInfo">all_sts_primer</A> 
+  - BLAT alignment information for STS markers using primer 
+    sequences on the draft sequence assembly </LI>
+  <LI><A 
+  href="#PslInfo">all_sts_seq</A> 
+  - BLAT alignment information for full STS markers sequences 
+    on the draft sequence assembly </LI>
+  <LI><A 
+  href="#LFS">bacEndPairs</A> 
+  - Locations of BAC clones using placements of its 5' and 3' 
+    end sequences.  BAC end sequence information comes from the dbGSS 
+    portion of GenBank. </LI>
   <LI><A 
   href="#ChromInfo">chromInfo</A> 
   - describes name and size of each chromosome as well as an external file 
@@ -139,14 +162,26 @@ stored in a single table rather than one table per chromosome:</P>
   - 800 chromosome bands mapped to golden path by Terry Furey using
   fish data from BAC Resource Consortium.
   <LI><A 
+  href="#GenePredictions">ensGene</A> 
+  - Ensembl Gene Predictions </LI>
+  <LI><A 
+  href="#PepPredictions">ensPep</A> 
+  - Translations of Ensembl gene predictions into corresponding amino acid sequences </LI>
+  <LI><A 
   href="#Exofish">exoFish</A> 
   - Genescope Exofish Tetraodon evolutionarily conserved regions. 
   <LI><A 
   href="#ExoMouse">exoMouse</A> 
-  - Exonerate mouse/human evolutionarily conserved regions. 
+  - Exonerate mouse/human evolutionarily conserved regions. (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#FishClones">fishClones</A> 
+  - Clones placed on Cytogenetic Map using FISH. </LI>
   <LI><A 
   href="#GCpercent">gcPercent</A> 
   - average number of G and C per 1000 bases in non-overlapping 20Kb windows 
+  <LI><A 
+  href="#GenomicDups">genomicDups</A> 
+  - Duplications of >1000 Bases Sequence </LI>
   <LI><A 
   href="#GenePredictions">genieAlt</A> 
   - Genie gene predictions - all constrained by one degree or another by EST or 
@@ -164,6 +199,18 @@ stored in a single table rather than one table per chromosome:</P>
   - translations of known genes into its corresponding amino acid sequence (Oct. 
   2000 and earlier known gene track). 
   <LI><A 
+  href="#GenePredictions">genScan</A> 
+  - Genscan Gene Predictions </LI>
+  <LI><A 
+  href="#PepPredictions">genscanPep</A> 
+  - Translations of Genscan gene predictions into corresponding amino acid sequences </LI>
+  <LI><A 
+  href="#LFS">genscanSubopt</A> 
+  - Genscan byproducts: good individual exons out of frame with main predictions. (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#JaxOrtholog">jaxOrtholog</A> 
+  - Jackson Labs Mouse Orthologs </LI>
+  <LI><A 
   href="#OtherKnown">knownInfo</A> 
   - other information about known genes (Oct. 2000 and earlier known gene 
   track). 
@@ -171,6 +218,24 @@ stored in a single table rather than one table per chromosome:</P>
   href="#MoreKnown">knownMore</A> 
   - links to other databases: GenBank, OMIN, HUGO, RefSeq, GBD. 
   (Oct. 2000 and earlier known gene track). 
+  <LI><A 
+  href="#MouseSyn">mouseSyn</A> 
+  - synteny between mouse and human chromosomes (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#BED">nci60</A> 
+  - Microarray Experiments for NCI 60 Cell Lines </LI>
+  <LI><A 
+  href="#BED">perlegen</A> 
+  - Perlegen Common High-Resolution Haplotype Blocks. </LI>
+  <LI><A 
+  href="#LFS">phMouse</A> 
+  - Pattern Hunter Mouse/Human Evolutionarily Conserved Regions (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#RefFlat">refFlat</A> 
+  - Known Genes (from RefSeq), with additional name (as it appears in genome browser) field.  </LI>
+  <LI><A 
+  href="#GenePredictions">refGene</A> 
+  - Known Genes (from RefSeq) </LI>
   <LI><A 
   href="#GenePredictions">refKnown</A> 
   - known genes as derived from alignments of RefSeq mRNA (Dec 2000 and later 
@@ -184,13 +249,24 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#RefLink">refLink</A> 
   - Relates RefSeq mRNA accession to LocusLink, HUGO, etc. (Dec. 2000 and later) 
-
-  <LI><A 
-  href="#MouseSyn">mouseSyn</A> 
-  - synteny between mouse and human chromosomes 
   <LI><A 
   href="#RNAgenes">rnaGene</A> 
-  - functional RNA genes 
+  - functional RNA genes (Last used Apr. 2001) </LI>
+  <LI><A 
+  href="#BED">rosetta</A> 
+  - Rosetta Experimental Confirmation of Chr22 Exons </LI>
+  <LI><A 
+  href="#GenePredictions">sanger20</A> 
+  - Sanger Institute Chromosome 20 Genes </LI>
+  <LI><A 
+  href="#SangerExtra">sanger20extra</A> 
+  - Additional information about a Sanger 20 or 22 gene </LI>
+  <LI><A 
+  href="#GenePredictions">sanger22</A> 
+  - Sanger Institute Chromosome 22 Genes </LI>
+  <LI><A 
+  href="#SangerExtra">sanger22extra</A> 
+  - Additional information about a Sanger 20 or 22 gene </LI>
   <LI><A 
   href="#SimpleRepeats">simpleRepeats</A> 
   - simple tandem repeats generated with the TRF program 
@@ -201,9 +277,42 @@ stored in a single table rather than one table per chromosome:</P>
   href="#SNPsites">snpTsc</A> 
   - locations of random SNPs as determined by the SNP Consortium 
   <LI><A 
+  href="#GenePredictions">softberryGene</A> 
+  - Fgenesh++ Gene Predictions </LI>
+  <LI><A 
+  href="#SoftberryHom">softberryHom</A> 
+  - String with Genbank gi and accession. </LI>
+  <LI><A 
+  href="#PepPredictions">softberryPep</A> 
+  - Translations of Fgenesh++ gene predictions into corresponding amino acid sequences </LI>
+  <LI><A 
   href="#STSsites">stsMarker</A> 
   - STS marker mappings from various maps and FISH clone mappings from the BAC 
-  Resource Consortium </LI>
+  Resource Consortium (obsolete as of Apr. 2001, replaced by stsMap)</LI>
+  <LI><A 
+  href="#STSmap">stsMap</A> 
+  - STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps </LI> 
+  <LI><A 
+  href="#STSalias">stsAlias</A> 
+  - STS marker aliases and associated identification numbers  </LI>
+  <LI><A 
+  href="#STSinfo">stsInfo</A> 
+  - Constant STS marker information </LI>
+  <LI><A 
+  href="#GenePredictions">tigrGeneIndex</A> 
+  - Fgenesh++ Gene Predictions </LI>
+  <LI><A 
+  href="#TilingPath">tilingPath</A> 
+  - A tiling path of clones through a chromosome </LI>
+  <LI><A 
+  href="#PslInfo">uniGene</A> 
+  - UniGene Alignments and SAGE Info (Last used Apr. 2001)  </LI>
+  <LI><A 
+  href="#PslInfo">xenoEst</A> 
+  - Nonhuman ESTs from Genbank </LI>
+  <LI><A 
+  href="#PslInfo">xenoMrna</A> 
+  - Nonhuman mRNAs from Genbank </LI>
 </UL>
 
 <P>The following tables contain additional information about mRNA sequences: 
@@ -216,6 +325,10 @@ stored in a single table rather than one table per chromosome:</P>
   href="#MrnaInfo">author</A> 
   - list of authors 
   <LI><A 
+  href="#MrnaInfo">bacClone</A> 
+  - name of the Bacterial Artificial Chromosome clone that a sequence 
+    was grown in, if applicable </LI>
+  <LI><A 
   href="#MrnaInfo">cds</A> 
   - coding sequence in Genbank format 
   <LI><A 
@@ -224,6 +337,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#MrnaInfo">center</A> 
   - sequencing center 
+  <LI><A 
+  href="#MrnaInfo">chromosome</A> 
+  - chromosome ID and name
   <LI><A 
   href="#MrnaInfo">cytoMap</A> 
   - position on a cytological map 
@@ -260,7 +376,7 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#MrnaInfo">tissue</A> 
   - tissue isolated from </LI></UL>
-<P>The last three tables are primarily for internal use:</P>
+<P>The last four tables are primarily for internal use:</P>
 <UL>
   <LI><A 
   href="#seqInfo">seq</A> 
@@ -272,6 +388,9 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#HistoryInfo">history</A> 
   - modification history of database, only used by RNA programs </LI>
+  <LI><A 
+  href="#TrackDB">trackDb</A> 
+  - Describes an annotation track </LI>
 </UL>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
@@ -286,6 +405,34 @@ stored in a single table rather than one table per chromosome:</P>
 
 This section describes the format of each table field by field in 
 <a href=" http://www.soe.ucsc.edu/~kent/exe/doc/">  AutoSql</a> format.
+
+<H3><A name=BED></A>Browser Extensible Data</H3>
+The following definition is used for the 
+nci60, perlegen, and rosetta
+tables as follows:<BR>
+nci60 uses the first 15 fields of this table. <BR>
+perlegen uses the first 12 fields of this table. <BR>
+rosetta uses the first 15 fields of this table. <BR>
+<PRE>table bed
+"Browser extensible data"
+    (
+    string chrom;      "Human chromosome or FPC contig"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Name of item"
+    uint   score;      "Score from 0-1000"
+    char[1] strand;    "+ or -"
+    uint thickStart;   "Start of where display should be thick (start codon)"
+    uint thickEnd;     "End of where display should be thick (stop codon)"
+    uint reserved;     "Always zero for now"
+    int blockCount;    "Number of blocks"
+    int[blockCount] blockSizes; "Comma separated list of block sizes"
+    int[blockCount] blockStarts; "Start positions relative to chromStart."
+    int expCount;      "Number of experiments."
+    int[expCount] expIds; "Experiment IDs."
+    int[expCount] expScores; "Experiment scores."
+    )
+</PRE>
 <H3><A name=ChromInfo></A>Chromosome Information</H3>
 <PRE>table chromInfo
 "Chromosome names and sizes"
@@ -374,6 +521,7 @@ G/C.
    )
 </PRE>
 <H3><A name=ExoMouse></A>Exonerate Mouse Homologies</H3>
+Last used Apr. 2001.
 <PRE>table exoMouse
 "A rough alignment - not detailed"
    (
@@ -385,6 +533,28 @@ G/C.
    char[1] strand;      " or -"
    uint otherStart;     "Start in other sequence"
    uint otherEnd;       "End in other sequence"
+   )
+</PRE>
+<H3><A name=FishClones></A>FISH Clones</H3>
+<PRE>table fishClones
+"Describes the positions of fishClones in the assembly"
+   (
+   string chrom;                   "Human chromosome number"
+   uint   chromStart;              "Start position in chromosome"
+   uint   chromEnd;                "End position in chromosome"
+   string name;                    "Name of clone"
+   uint score;                     "Always 1000"
+   uint placeCount;                "Number of times FISH'd"
+   string[placeCount] bandStarts;  "Start FISH band"
+   string[placeCount] bandEnds;    "End FISH band"
+   string[placeCount] labs;        "Lab where clone FISH'd"
+   string placeType;               "How clone was placed on the sequence assembly"
+   uint accCount;                  "Number of accessions associated with the clone"
+   string[accCount] accNames;      "Accession associated with clone"
+   uint stsCount;                  "Number of STS markers associated with this clone"
+   string[stsCount] stsNames;      "Names of STS  markers"
+   uint beCount;                   "Number of BAC end sequences associated with this clone"
+   string[beCount] beNames;        "Accessions of BAC ends"
    )
 </PRE>
 <H3><A name=GapInfo></A>Gap Positions</H3>
@@ -417,7 +587,9 @@ G/C.
    )                                                                            
 </PRE>
 <H3><A name=GenePredictions></A>Gene Predictions and Known Genes</H3>
-The following definition is used for the refGene, ensGene, genieAlt and similar tables. In alternative splicing situations
+The following definition is used for the refGene, ensGene, genieAlt, 
+acembly, ensGene, genScan, genscanSubopt, sanger20, sanger22, softberryGene, tigrGeneIndex 
+and similar tables. In alternative splicing situations
 each transcript has a row in this table.
 <PRE>table genePred
 "A gene prediction."
@@ -433,6 +605,26 @@ each transcript has a row in this table.
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
     )
+</PRE>
+<H3><A name=GenomicDups></A>genomicDups</H3>
+<PRE>table genomicDups
+"Summary of large genomic Duplications (>1KB >90% similar)"
+  (
+  string   chrom;       "Human chromosome"
+  uint    chromStart;   "Start position in chromosome"
+  uint    chromEnd;     "End position in chromosome"
+  string  name;         "Other FPC contig involved"
+  uint    score;        "Score from 900-1000.  1000 is best"
+  char[1] strand;       "Value should be + or -"
+  string  otherChrom;   "Human chromosome"
+  uint    otherStart;   "Start in other sequence"
+  uint    otherEnd;     "End in other sequence"
+  uint    alignB;       "bases Aligned"
+  uint    matchB;       "aligned bases that match"
+  uint    mismatchB;    "aligned bases that do not match"
+  float   fracMatch;    "fraction of matching bases"
+  float   jcK;          "K-value calculated with Jukes-Cantor"
+  )
 </PRE>
 
 <H3><A name=PepPredictions></A>Gene Predictions and Known Genes Amino Acid Translations</H3>
@@ -453,7 +645,58 @@ each transcript has a row in this table.
     )
 </PRE>
 
+<H3><A name=JaxOrtholog></A>Jackson Labs Mouse Orthologs</H3>
+<PRE>table jaxOrtholog
+"Jackson Labs Mouse Orthologs"
+    (
+    string humanSymbol;	"Human HUGO symbol"
+    string humanBand; "Human chromosomal location"
+    string mgiId;     "Mouse database id"
+    string mouseSymbol; "Mouse human symbol"
+    string mouseChr; "Mouse chromosome"
+    string mouseCm; "Mouse genetic map positionin centimorgans"
+    string mouseBand; "Mouse chromosome band if any"
+    )
+</PRE>
+<H3><A name=LFS></A>Standard Linked Features</H3>
+phMouse and genscanSubopt use the first 7 fields of this table.
+bacEndPairs uses all fields.
+<PRE>table lfs
+"Standard linked features series table"
+   (
+   short  bin;        "Bin number for browser speedup"
+   string chrom;      "Human chromosome or FPC contig"
+   uint   chromStart; "Start position of clone in chromosome"
+   uint   chromEnd;   "End position of clone in chromosome"
+   string name;       "Name of clone"
 
+   uint   score;      "Score = 1000/(# of times clone appears in assembly)"
+   char[1] strand;    "Value should be + or -"
+   string pslTable;   "Table which contains corresponding PSL records for linked features"
+   uint   lfCount;    "Number of linked features in the series"
+   uint[lfCount]   lfStarts;  "Comma separated list of start positions of each linked feature in genomic"
+   uint[lfCount]   lfSizes;   "Comma separated list of sizes of each linked feature in genomic"
+   string[lfCount] lfNames;   "Comma separated list of names of linked features"
+   )
+</PRE>
+<H3><A name=RefFlat></A>Gene Predictions and Known Genes</H3>
+In alternative splicing situations each transcript has a row in this table.
+<PRE>table refFlat
+"A gene prediction with additional geneName field."
+    (
+    string  geneName;   "Name of gene as it appears in genome browser."
+    string  name;       "Name of gene"
+    string  chrom;      "Chromosome name"
+    char[1] strand;     "+ or - for strand"
+    uint    txStart;    "Transcription start position"
+    uint    txEnd;      "Transcription end position"
+    uint    cdsStart;   "Coding region start"
+    uint    cdsEnd;     "Coding region end"
+    uint    exonCount;  "Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    )
+</PRE>
 <H3><A name=RefLink></A>Link between RefSeq mRNAs and HUGO, LocusLink etc.</H3>
 First used Dec. 2000
 <PRE>table refLink
@@ -537,6 +780,7 @@ Last used Oct. 2000
 </PRE>
 
 <H3><A name=MouseSyn></A>Mouse Synteny</H3>
+Last used Apr. 2001.
 <PRE>table mouseSyn
 "Synteny between mouse and human chromosomes."
     (
@@ -550,7 +794,9 @@ Last used Oct. 2000
 
 <H3><A name=PslInfo></A>mRNA/EST/Mouse Alignments</H3>
 The following definition is used for the chrN_mrna, chrN_est, chrN_intronEst, 
-all_mrna and all_est tables.<BR><BR>
+all_mrna, all_est 
+uniGene, xenoEst and xenoMrna 
+tables.<BR><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0 BORDER=0>
 <TR><TD><PRE>table psl  </TD></TR>
 <TR><TD><PRE>"Summary info about a patSpace alignment"  </TD></TR>
@@ -640,6 +886,7 @@ These tables were created from RepeatMasker .out files.
 </PRE>
 
 <H3><A name=RNAgenes></A>RNA Gene Positions</H3>
+Last used Apr. 2001.
 <PRE>table rnaGene
 "Describes functional RNA genes."
     (
@@ -656,6 +903,17 @@ These tables were created from RepeatMasker .out files.
     )                                                                           
 </PRE>
 
+<H3><A name=SangerExtra></A>Additional information about a Sanger 20 or 22 gene</H3>
+<PRE>table sanger22extra
+"Table with additional information about a Sanger 22 gene"
+    (
+    string name;	"Transcript name"
+    string locus;	"Possibly biological short name"
+    lstring description; "Description from Sanger gene GFFs"
+    string geneType;	"Type field from Sanger gene GFFs"
+    string cdsType;	"Type field from Sanger CDS GFFs"
+    )
+</PRE>
 <H3><A name=SimpleRepeats></A>Simple Repeats</H3>
 This table was generated by the trf program.  It does a more thorough job 
 of finding simple tandem repeats than RepeatMaskerdoes.
@@ -685,6 +943,15 @@ of finding simple tandem repeats than RepeatMaskerdoes.
    )
 </PRE>
 
+<H3><A name=SoftberryHom></A>String with Genbank gi and accession</H3>
+<PRE>table softberryHom
+"Protein homologies behind Softberry genes"
+    (
+    string name;        "Softberry gene name"
+    string giString;    "String with Genbank gi and accession"
+    lstring description; "Freeform (except for no tabs) description"
+    )
+</PRE>
 <H3><A name=SNPsites></A>SNP Positions</H3>
 This table is used for both the snpNih and snpTsc tables.
 <PRE>table snp
@@ -701,7 +968,74 @@ This table is used for both the snpNih and snpTsc tables.
    )                                                                           
 </PRE>
 
+<H3><A name=STSalias></A>STS marker aliases and associated identification numbers</H3>
+<PRE>table stsAlias
+"STS marker aliases and associated identification numbers"
+    (
+    string alias;       "STS marker name"
+    uint identNo;       "Identification number of STS marker"
+    string trueName;        "Official UCSC name for marker"
+    )
+</PRE>
+<H3><A name=STSinfo></A>Constant STS marker information</H3>
+<PRE>table stsInfo
+"Constant STS marker information"
+    (
+    uint identNo;                 "UCSC identification number"
+    string name;                  "Official UCSC name"
+    uint gbCount;                 "Number of related GenBank accessions"
+    string[gbCount] genbank;      "Related GeneBank accessions"
+    uint gdbCount;                "Number of related GDB identifiers"
+    string[gdbCount] gdb;         "Related GDB identifies"
+    uint nameCount;               "Number of alias names"
+    string[nameCount] otherNames; "Alias names"
+    uint dbSTSid;                 "ID number in UniSTS or dbSTS"
+    uint otherDbstsCount;         "Number of related dbSTS IDs"
+    uint[otherDbstsCount] otherDbSTS;  "Related dbSTS IDs"
+
+    string leftPrimer;            "5' primer sequence"
+    string rightPrimer;           "3' primer sequence"
+    string distance;              "Length of STS sequence"
+    string organism;              "Organism for which STS discovered"
+    uint sequence;                "Whether the full sequence is available (1) or not (0) for STS"
+
+    uint otherUCSCcount;          "Number of related active UCSC ids"
+    uint[otherUCSCcount] otherUCSC;  "Related active UCSC ids"
+    uint mergeUCSCcount;          "Number of merged inactive UCSC ids"
+    uint[mergeUCSCcount] mergeUCSC;  "Related merged inactive UCSC ids"
+
+    string genethonName;          "Name in Genethon map"
+    string genethonChr;           "Chromosome in Genethon map"
+    float genethonPos;            "Position in Genethon map"
+    float genethonLOD;            "LOD score in Genethon map"
+    string marshfieldName;        "Name in Marshfield map"
+    string marshfieldChr;         "Chromosome in Marshfield map"
+    float marshfieldPos;          "Position in Marshfield map"
+    float marshfieldLOD;          "LOD score in Marshfield map"
+    string wiyacName;             "Name in WI YAC map"
+    string wiyacChr;              "Chromosome in WI YAC map"
+    float wiyacPos;               "Position in WI YAC map"
+    float wiyacLOD;               "LOD score in WI YAC map"
+    string wirhName;              "Name in WI RH map"
+    string wirhChr;               "Chromosome in WI RH map"
+    float wirhPos;                "Position in WI RH map"
+    float wirhLOD;                "LOD score in WI RH map"
+    string gm99gb4Name;           "Name in GeneMap99 GB4 map"
+    string gm99gb4Chr;            "Chromosome in GeneMap99 GB4 map"
+    float gm99gb4Pos;             "Position in GeneMap99 GB4 map"
+    float gm99gb4LOD;             "LOD score in GeneMap99 GB4 map"
+    string gm99g3Name;            "Name in GeneMap99 G3 map"
+    string gm99g3Chr;             "Chromosome in GeneMap99 G3 map"
+    float gm99g3Pos;              "Position in GeneMap99 G3 map"
+    float gm99g3LOD;              "LOD score in GenMap99 G3 map"
+    string tngName;               "Name in Stanford TNG map"
+    string tngChr;                "Chromosome in Stanford TNG map"
+    float tngPos;                 "Position in Stanford TNG map"
+    float tngLOD;                 "LOD score in Stanford TNG map"
+    )
+</PRE>
 <H3><A name=STSsites></A>STS and FISH clone Positions</H3>
+(obsolete as of Apr. 2001, replaced by <A href="#STSmap">stsMap</A>)
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0 BORDER=0>
 <TR><TD><PRE>table stsMarker  </TD></TR>
 <TR><TD><PRE>"STS marker and its position on golden path and various maps"  </TD></TR>
@@ -735,6 +1069,52 @@ This table is used for both the snpNih and snpTsc tables.
 <TR><TD><PRE>    string lab;              "Laboratory that placed the FISH clone"  </TD></TR>
 <TR><TD><PRE>    )                </TD></TR>                                                                                        
 </TABLE>
+
+<H3><A name=STSmap></A>STS clone Positions</H3>
+<PRE>table stsMap
+"STS marker and its position on golden path and various maps"
+    (
+    string chrom;	"Chromosome or 'unknown'"
+    int chromStart;     "Start position in chrom - negative 1 if unpositioned"
+    uint chromEnd;	"End position in chrom"
+    string name;	"Name of STS marker"
+    uint score;	        "Score of a marker = 1000/(# of placements)"
+
+    uint identNo;	"Identification number of STS"
+    string ctgAcc;	"Contig accession number"
+    string otherAcc;	"Accession number of other contigs that the marker hits"
+
+    string genethonChrom;	"Chromosome (no chr) from Genethon map or 0 if none"
+    float genethonPos;		"Position on Genethon map"
+    string marshfieldChrom;	"Chromosome (no chr) from Marshfield map or 0 if none"
+    float marshfieldPos;	"Position on Marshfield map"
+    string gm99Gb4Chrom;	"Chromosome (no chr) from GeneMap99 map or 0 if none"
+    float gm99Gb4Pos;		"Position on gm99_bg4 map"
+    string shgcTngChrom;	"Chromosome (no chr) from shgc_tng map or 0 if none"
+    float shgcTngPos;		"Position on shgc_tng map"
+    string shgcG3Chrom;		"Chromosome (no chr) from Stanford G3 map or 0 if none"
+    float shgcG3Pos;		"Position on shgc_g3 map"
+    string wiYacChrom;		"Chromosome (no chr) from Whitehead YAC map or 0 if none"
+    float wiYacPos;		"Position on wi_yac map"
+    string wiRhChrom;		"Chromosome (no chr) from Whitehead RH map or 0 if none"
+    float wiRhPos;		"Position on wi_rh map"
+    string fishChrom;		"Chromosome (no chr) from FISH map or 0 if none"
+    string beginBand;		"Beginning of range of bands on FISH map"
+    string endBand;		"End of range of bands on FISH map"
+    string lab;			"Laboratory that placed the FISH clone"
+    )
+</PRE>
+<H3><A name=TilingPath></A>A tiling path of clones through a chromosome</H3>
+<PRE>table tilingPath
+"A tiling path of clones through a chromosome"
+(
+string chrom;	"Chromosome name: chr1, chr2, etc."
+string accession; "Clone accession or ? or GAP"
+string clone;     "Clone name in BAC library"
+string contig;    "Contig (or gap size)"
+int chromIx;      "Number of clone in tiling path starting chrom start"
+)
+</PRE>
 
 	<BR></TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -779,10 +1159,10 @@ in the corresponding <TT>organism</TT> table will give the name of the organism.
 </PRE>
 
 <H4>mRNA/EST Characteristic Tables</H4>
-This table is used for the author, cds, cell, center, cytoMap, description, development, geneName,
+This table is used for the author, bacClone, cds, cell, center, chromosome, cytoMap, description, development, geneName,
 keyword, library, mrnaClone, organism, productName, sex, source, and tissue tables.  Each has a 
 reference in the above mrna table.
-<PRE>table mrnaCharateristic
+<PRE>table mrnaCharacteristic
 "Characteristics of mRNA and EST referenced in the mrna table"
    (
    int    id               "Unique id of characteristic in each table"
@@ -835,6 +1215,31 @@ reference in the above mrna table.
   string    what      "What they did"
   timestamp when      "When they did it"
   )
+</PRE>
+
+<H3><A name=TrackDB></A>Describes an annotation track</H3>
+<PRE>table trackDb
+"This describes an annotation track."
+(
+string tableName; "Symbolic ID of Track"
+string shortLabel; "Short label displayed on left"
+string type;      "Track type: bed, psl, genePred, etc."
+string longLabel; "Long label displayed in middle"
+ubyte visibility; "0=hide, 1=dense, 2=full"
+float priority;   "0-100 - where to position.  0 is top"
+ubyte colorR;	  "Color red component 0-255"
+ubyte colorG;	  "Color green component 0-255"
+ubyte colorB;	  "Color blue component 0-255"
+ubyte altColorR;  "Light color red component 0-255"
+ubyte altColorG;  "Light color green component 0-255"
+ubyte altColorB;  "Light color blue component 0-255"
+ubyte useScore;   "1 if use score, 0 if not"
+ubyte private;	  "1 if only want to show it on test site"
+int restrictCount;	"Number of chromosomes this is on (0=all though!)"
+string[restrictCount] restrictList; "List of chromosomes this is on"
+lstring url;	"URL to link to when they click on an item"
+lstring html;   "Some html to display when they click on an item"
+)
 </PRE>
 
 	<BR></TD><TD WIDTH=7></TD></TR></TABLE>
