@@ -144,7 +144,8 @@ genome          UCSC Human Genome Web Site (85 GB)
 gbdb            UCSC Human Genome Browser New Config Files (161 GB)
 </PRE>
 <br>
-<li>Determine the destination of the copy and fire off the production copy:<br>
+<li>Determine the destination of the copy ($WEBROOT) and fire off the
+	production copy:<br>
 	The trailing slash is important!<br>
 <PRE>
 rsync --progress -avz \
@@ -166,30 +167,10 @@ rsync --progress -avz \
 
 <p><a NAME="step3"></a><b>3. Get the data for each individual
 genome assembly and installing databases ( 70 GB )</b>
-<ul>
-<p><a NAME="table"></a> Use the following table to identify the freeze 
-date ($FREEZEDATE) and the database version ($DBVERSION) for each genome 
-assembly:
-<p>
-<TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
-<TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
-<TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
-<TR><TD> cbJul2002   </TD><TD></TD><TD> cb1         </TD></TR>
-<TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
-<TR><TD> scApr2003   </TD><TD></TD><TD> sc1         </TD></TR>
-<TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
-<TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
-<TR><TD> rnNov2002   </TD><TD></TD><TD> rn1         </TD></TR>
-<TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
-<TR><TD> mmFeb2002   </TD><TD></TD><TD> mm2         </TD></TR>
-<TR><TD> 10april2003 </TD><TD></TD><TD> hg15         </TD></TR>
-<TR><TD> 14nov2002   </TD><TD></TD><TD> hg13         </TD></TR>
-<TR><TD> 28jun2002   </TD><TD></TD><TD> hg12         </TD></TR>
-</TABLE>
-</ul>
+
 <ol type="a">
 
-<li>Get C. briggsae July 2002 full data set (315 Mb) by doing:
+<li>Get C. briggsae July, 2002 full data set (cb1: 315 Mb) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -197,7 +178,7 @@ rsync --progress -avz \
   $WEBROOT/goldenPath/cbJul2002/
 </PRE>
 
-<li>Get C. elegans May, 2003 full data set (2.0 GB) by doing:
+<li>Get C. elegans May, 2003 full data set (ce1: 2.0 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -205,7 +186,7 @@ rsync --progress -avz \
   $WEBROOT/goldenPath/ceMay2003/
 </PRE>
 
-<li>Get SARS coronavirus April, 2003 full data set (106 Mb) by doing:
+<li>Get SARS coronavirus April, 2003 full data set (sc1: 106 Mb) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -213,7 +194,7 @@ rsync --progress -avz \
   $WEBROOT/goldenPath/scApr2003/
 </PRE>
 
-<li>Get Rat June, 2003 full data set (5.5 GB) by doing:
+<li>Get Rat June, 2003 full data set (rn3: 5.5 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -221,7 +202,7 @@ rsync --progress -avz \
   $WEBROOT/goldenPath/rnJun2003/
 </PRE>
 
-<li>Get Rat January, 2003 full data set (4.1 GB) by doing:
+<li>Get Rat January, 2003 full data set (rn2: 4.1 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -235,21 +216,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
 
-<li>Get Rat Novemeber, 2002 full data set (4.4 GB) by doing:
-<p> 
-<PRE>
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnNov2002/bigZips/ \
-  $WEBROOT/goldenPath/rnNov2002/bigZips/
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnNov2002/chromosomes/ \
-  $WEBROOT/goldenPath/rnNov2002/chromosomes/
-rsync --progress -avz  \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnNov2002/database/ \
-  $WEBROOT/goldenPath/rnNov2002/database/
-</PRE>
-
-<li>Get Mouse February, 2003 full data set (12 GB) by doing:
+<li>Get Mouse February, 2003 full data set (mm3: 12 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -263,7 +230,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/mmFeb2003/database/
 </PRE>
 
-<li>Get Mouse February, 2002 full data set (6.2 GB) by doing:
+<li>Get Mouse February, 2002 full data set (mm2: 6.2 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -278,7 +245,21 @@ rsync --progress -avz  \
 </PRE>
 
 
-<li>Get Human April 10, 2003 full data set (6.5 GB) by doing:
+<li>Get Human July, 2003 full data set (hg16: 6.5 GB) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hg16/bigZips/ \
+  $WEBROOT/goldenPath/hg16/bigZips/
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hg16/chromosomes/ \
+  $WEBROOT/goldenPath/hg16/chromosomes/
+rsync --progress -avz  \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hg16/database/ \
+  $WEBROOT/goldenPath/hg16/database/
+</PRE>
+
+<li>Get Human April 10, 2003 full data set (hg15: 6.5 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -292,7 +273,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/10april2003/database/
 </PRE>
 
-<li>Get Human November 14, 2002 full data set (12.0 GB) by doing:
+<li>Get Human November 14, 2002 full data set (hg13: 12.0 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -306,19 +287,6 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/14nov2002/database/
 </PRE>
 
-<li>Get Human June 28, 2002 full data set (11 GB) by doing:
-<p> 
-<PRE>
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/bigZips/ \
-  $WEBROOT/goldenPath/28jun2002/bigZips/
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/chromosomes/ \
-  $WEBROOT/goldenPath/28jun2002/chromosomes/
-rsync --progress -avz  \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/database/ \
-  $WEBROOT/goldenPath/28jun2002/database/
-</PRE>
 </ol>
 
 <h4><a NAME="step4"></a>4. Obtain the /gbdb data file area</h4>
@@ -341,6 +309,29 @@ You are advised to consider dropping and rebuilding the databases.
 If that presents a problem, contact us and we can provide detailed
 updates to be made, but that is not directly documented.
 </B>
+
+<ul>
+<p><a NAME="table"></a> Use the following table to identify the freeze 
+date ($FREEZEDATE) and the database version ($DBVERSION) for each genome 
+assembly:
+<p>
+<TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
+<TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
+<TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> cbJul2002   </TD><TD></TD><TD> cb1         </TD></TR>
+<TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
+<TR><TD> scApr2003   </TD><TD></TD><TD> sc1         </TD></TR>
+<TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
+<TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
+<TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
+<TR><TD> mmFeb2002   </TD><TD></TD><TD> mm2         </TD></TR>
+<TR><TD> hg16 </TD><TD></TD><TD> hg16         </TD></TR>
+<TR><TD> 10april2003 </TD><TD></TD><TD> hg15         </TD></TR>
+<TR><TD> 14nov2002   </TD><TD></TD><TD> hg13         </TD></TR>
+<TR><TD> 28jun2002   </TD><TD></TD><TD> hg12         </TD></TR>
+</TABLE>
+</ul>
+
 <ol type="a">
 <li>After connecting to the MySQL server, create a database called "$DBVERSION"
 corresponding to $FREEZEDATE in the <a href="#table">table</a> above.
@@ -358,13 +349,17 @@ do
 mysql -youraccountoptions $DBVERSION < $file
 done 
 </PRE>
-<li>Load data into the tables: (You may have to use the following 
-shell script for this step.)
+<li>Load data into the tables: (The script here is an example
+for this process.  This takes a long time, on the order of hours.)
 <PRE>
-for file in *.txt.gz 
+for file in *.txt.gz
 do
-gunzip $file
-mysqlimport -youraccountoptions $DBVERSION $file
+        FN=`echo $file | sed -e "s/.gz//"`
+        echo "working on $file"
+        gunzip $file
+        mysqlimport -youraccountoptions $DBVERSION $FN
+        echo "imported $FN"
+        gzip $FN &amp;
 done
 </PRE>
 </ul>

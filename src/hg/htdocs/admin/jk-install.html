@@ -48,7 +48,7 @@
 <li>Check that the environment variable MACHTYPE exists on your system.&nbsp;
 It should on Unix. (And making this on non-Unix systems is beyond the scope
 of this README).&nbsp; For a Linux system MACHTYPE will probably be 'i686',
-for a Sun probably 'sparc'. If necessary set up this environment variable. <br>
+for a Sun probably 'sparc'. If necessary, set this environment variable. <br>
 <PRE>
 MACHTYPE=i686
 </PRE>
@@ -66,19 +66,19 @@ MACHTYPE=i686
 <li> Set the environment variable MYSQLINC for mySQL include files.
 	For example:
 <PRE>
-MYSQLINC=/usr/local/mysql/include
+MYSQLINC=/usr/include/mysql
 --or---
-MYSQLINC=/usr/include
+MYSQLINC=/usr/local/mysql/include
 </PRE>
 <li> Then set the MYSQLLIBS variable to point to the location of
 the libmysqlclient.a library and any other libraries needed on
 your platform to link network applications.
 <PRE>
-MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a'
+MYSQLLIBS='/usr/lib/mysql/libmysqlclient.a -lz'
 
 ---Solaris for example often needs----
 
-MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz' 
+MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz -lsocket -lnsl' 
 
 </PRE>
 
@@ -91,8 +91,7 @@ MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz'
 	This creates the source hierarchy: <em> ./kent </em>
 <br><br>
 
-
-<li>Go to the kent/src directory and type 'make'. <br>
+<li>Go to the kent/src directory and type 'make libs'. <br>
 	This builds the libraries in directories:
 	<ul>
 	<li> kent/src/lib
@@ -101,7 +100,8 @@ MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz'
 	</ul>
 <br><br>
 
-<li>Go to the kent/src/hg directory and type 'make alpha'. <br>
+<li>Go to the kent/src/hg directory and type 'make compile'. <br>
+    Then 'make install DESTDIR=/destination/prefix CGI_BIN=/cgi-bin/path' <br>
 	This builds the cgi binaries from directories:
 	<ul>
 	<li> kent/src/hg/cartReset
@@ -109,19 +109,16 @@ MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz'
 	<li> kent/src/hg/hgBlat
 	<li> kent/src/hg/hgCoordConv
 	<li> kent/src/hg/hgGateway
+	<li> kent/src/hg/hgGene
 	<li> kent/src/hg/hgText
 	<li> kent/src/hg/hgTracks
 	<li> kent/src/hg/hgTracksUi
 	<li> kent/src/hg/hgc
 	<li> kent/src/hg/cartDump
+	<li> kent/src/hg/near/hgNear
 	</ul>
 	And the resulting binaries are moved to:
-	<em> /usr/local/apache/cgi-bin </em> <br>
-	If this isn't your location for your cgi binaries, make this
-	path a symlink to your cgi binary directory and thus the make
-	will send the binaries to the correct location.  We are working
-	on fixing the makefiles to allow specification of a destination
-	directory. <br>
+	<em> /destination/prefix/cgi-bin/path </em> <br>
 	Pre-compiled Red-Hat Intel x86 binaries can be found
 	in the <A HREF="cgi-binaries.tgz"> cgi-binaries.tgz </A>
 	file.  Download this file and extract with:
