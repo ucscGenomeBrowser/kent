@@ -2259,6 +2259,7 @@ printf("<A HREF=\"%s?g=htcExtSeq&c=%s&l=%d&r=%d&i=%s&db=%s\">",
 printf("DNA for this read</A><BR>\n");
 
 /* Print info about mate pair. */
+if (sqlTableExists(conn, "mouseTraceInfo"))
     {
     char buf[256];
     char *templateId;
