@@ -497,7 +497,7 @@ while ((psl = pslNext(lf)) != NULL)
 	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     	rsi = hashMustFindVal(rsiHash, psl->qName);
 
-        gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, -1);
+        gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, 0);
         if (!gp)
             errAbort("Cannot convert psl (%s) to genePred.\n", psl->qName);
 
