@@ -129,7 +129,7 @@ if (hTableExists(chrN_track))
 else
     safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), track);
 webStart(cart, "Table Browser: Enter a Position or Search Term");
-puts("Enter a genome position (or enter \"genome\" to "
+puts("Enter a genome position (or enter <B>genome</B> to "
      "search all chromosomes), then press the Submit button.\n");
 printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to "
        "locate a particular sequence in the genome.\n",
