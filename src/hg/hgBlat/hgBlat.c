@@ -20,7 +20,6 @@
 #include "hash.h"
 
 struct cart *cart;	/* The user's ui state. */
-char *defaultDatabase;	/* Default database. */
 struct hash *oldVars = NULL;
 
 struct serverTable
@@ -183,29 +182,6 @@ if (diff == 0)
     diff = a->tStart - b->tStart;
 return diff;
 }
-
-#ifdef OLD
-static void earlyWarning(char *format, va_list args)
-/* Write an error message so user can see it before page is really started. */
-{
-static boolean initted = FALSE;
-if (!initted)
-    {
-    htmlStart("HTC Error");
-    initted = TRUE;
-    }
-htmlVaParagraph(format,args);
-}
-
-static void enterHtml(char *title)
-/* Print out header of web page with title.  Set
- * error handler to normal html error handler. */
-{
-htmlStart(title);
-pushWarnHandler(htmlVaParagraph);
-}
-#endif /* OLD */
-
 
 void showAliPlaces(char *pslName, char *faName, char *database, 
 	enum gfType qType, enum gfType tType)
@@ -500,11 +476,11 @@ void askForSeq()
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-char *db = NULL; //cartUsualString(cart, "db", defaultDatabase);
+char *db = NULL; 
 struct serverTable *serve = NULL; //findServer(db, FALSE);
 char **genomeList;
 int genomeCount;
-char *organism = NULL; //hOrganism(db);
+char *organism = NULL; 
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
@@ -611,11 +587,12 @@ puts("</FORM>");
 void doMiddle(struct cart *theCart)
 {
 char *userSeq;
+char *db, *organism;
 
 cart = theCart;
 dnaUtilOpen();
+getDbAndGenome(cart, &db, &organism);
 
-cartWebStart(theCart, "BLAT Search");
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
@@ -625,10 +602,12 @@ if(userSeq != 0 && userSeq[0] == '\0')
 
 if(userSeq == NULL || userSeq[0] == '\0')
     {
+    cartWebStart(theCart, "%s BLAT Search", organism);
     askForSeq();
     }
 else
     {
+    cartWebStart(theCart, "%s BLAT Results", organism);
     blatSeq(skipLeadingSpaces(userSeq));
     }
 cartWebEnd();
@@ -643,7 +622,6 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
 cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
 return 0;
