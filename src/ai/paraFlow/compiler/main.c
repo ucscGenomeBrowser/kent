@@ -661,7 +661,6 @@ struct pfParse *pfParseExpression(struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseSum(parent, &tok, scope);
 struct pfParse *tuple = NULL;
-uglyf("pfParseExpression\n");
 if (tok->type == ',')
     {
     tuple = pfParseNew(pptTuple, tok, parent);
