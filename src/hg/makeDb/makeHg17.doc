@@ -2885,6 +2885,9 @@ cat << 'EOF' > makeMaf.csh
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
+    cd /cluster/data/hg17/bed/blastz.rn3/axtBest
     ln -s ../axtNet/chr*.axt .
 
     # copy net axt's to download area
@@ -6138,7 +6141,7 @@ cat `ls -1 *.lav.axt | sort -g` > $BASE/$OUT
     #	254410837 bases of 2865248791 (8.879%) in intersection
 
 
-# CHAIN SELF BLASTZ (WORKING - 2004-07-07 - Hiram)
+# CHAIN SELF BLASTZ (DONE - 2004-07-07 - Hiram)
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -6216,11 +6219,13 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
         hgLoadChain hg17 ${c}_chainSelf $I
         echo done $c
     done
-XXXX - running 2004-07-08 08:56
     # exit bash if you are tcsh
-    #	This is a 50 minute job
+    #	This is almost 3 hours to load
 
     #	featureBits hg17 chainSelf
+    #	682833453 bases of 2866216770 (23.824%) in intersection
+    #	featureBits hg16 chainSelf
+    #	626345319 bases of 2865248791 (21.860%) in intersection
 
 # NET SELF (WORKING - 2004-07-08 - Hiram)
 
@@ -6235,18 +6240,21 @@ XXXX - running 2004-07-08 08:56
       /cluster/bin/i386/chainPreNet $I /cluster/data/hg17/chrom.sizes \
                         /cluster/data/hg17/chrom.sizes ../preNet/$I
     done
-XXX - running 2004-07-08 10:25
+    #	23 minutes
 
     cd ..
     mkdir n1
     cd preNet
-    foreach i (*.chain)
-      set n = $i:r.net
+    for I in *.chain
+    do
+      n=${I/.chain/}.net
       echo primary netting $i
-      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg17/chrom.sizes \
-                            /cluster/data/hg17/chrom.sizes ../n1/$n /dev/null
-    end
+      /cluster/bin/i386/chainNet $i -minSpace=1 \
+	/cluster/data/hg17/chrom.sizes /cluster/data/hg17/chrom.sizes \
+	../n1/$n /dev/null
+    done
     # exit bash if you are tcsh
+    #	5 minute job
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
@@ -6255,11 +6263,11 @@ XXX - running 2004-07-08 10:25
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/axtChain
     time netClass hNoClass.net hg17 hg17 human.net \
-	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInRat \
-	-qNewR=/cluster/bluearc/rat/hg17/linSpecRep.notInHuman
-    #	real    34m29.829s
-    #	user    11m30.440s
-    #	sys     1m52.730s
+	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInHuman \
+	-qNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInHuman
+    #	real    7m37.867s
+    #	user    3m34.010s
+    #	sys     1m21.310s
 
     # If things look good do
     ssh eieio
@@ -6267,31 +6275,27 @@ XXX - running 2004-07-08 10:25
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
     time netFilter -syn human.net > humanSyn.net
-    #	real    16m25.640s
-    #	user    7m41.330s
-    #	sys     1m1.150s
+    #	real    0m50.076s
+    #	user    0m45.810s
+    #	sys     0m3.610s
 
     # Load the nets into database
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet hg17 netRn3 stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 syntenyNetRn3 stdin
-    #	real    37m0.199s
-    #	user    15m13.770s
-    #	sys     1m41.540s
+    netFilter -minGap=10 human.net |  hgLoadNet hg17 netSelf stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 syntenyNetSelf stdin
 
     # check results
-    # featureBits hg17 netRn3
-    # 2817656275 bases of 2866216770 (98.306%) in intersection
-    # (with axtFilter) 2816623107 bases of 2866216770 (98.270%) in intersection
-    # featureBits hg16 netRn3
-    # 2820958389 bases of 2865248791 (98.454%) in intersection
+    # featureBits hg17 netSelf
+    #	620731846 bases of 2866216770 (21.657%) in intersection
+    # featureBits hg16 netSelf
+    #	563788850 bases of 2865248791 (19.677%) in intersection
 
-    # featureBits hg17 syntenyNetRn3
-    # 2781748096 bases of 2866216770 (97.053%) in intersection
-    # (with axtFilter) 2780883450 bases of 2866216770 (97.023%) in intersection
-    # featureBits hg16 syntenyNetRn3
-    # 2784011730 bases of 2865248791 (97.165%) in intersection
+
+    # featureBits hg17 syntenyNetSelf
+    #	404531125 bases of 2866216770 (14.114%) in intersection
+    # featureBits hg16 syntenyNetSelf
+    #	340871322 bases of 2865248791 (11.897%) in intersection
 
     # Add entries for net and chain to rat/hg17 trackDb
 
@@ -6300,9 +6304,9 @@ XXX - running 2004-07-08 10:25
     cd /cluster/data/hg17/bed/blastzSelf/axtChain
     mkdir humanNet
     time netSplit human.net humanNet
-    #	real    12m1.478s
-    #	user    8m35.050s
-    #	sys     1m7.230s
+    #	real    1m24.412s
+    #	user    1m11.620s
+    #	sys     0m6.870s
 
     # extract axts from net 
     mkdir ../axtNet 
@@ -6312,12 +6316,14 @@ XXX - running 2004-07-08 10:25
 	rm -f ../axtNet/$c.axt
 	netToAxt humanNet/$c.net chain/$c.chain \
 		/cluster/data/hg17/nib \
-		/cluster/data/hg17/nib stdout ../axtNet/$c.axt
+		/cluster/data/hg17/nib stdout > ../axtNet/$c.axt
 	echo "Complete: $c.net -> axtNet/$c.axt"
     end
+
     # sort axt's and convert to maf format
     mkdir ../mafNet
-cat << 'EOF' > makeMaf.csh
+cat << '_EOF_' > makeMaf.csh
+#!/bin/csh -fe
     foreach f (../axtNet/chr*.axt)
         set c=$f:t:r
         echo $c.axt
@@ -6328,18 +6334,22 @@ cat << 'EOF' > makeMaf.csh
             /cluster/data/hg17/chrom.sizes /cluster/data/hg17/chrom.sizes \
                 ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=hg17.
     end
-'EOF'
+'_EOF_'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+    # a 3 minute job
 
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/blastzSelf/axtBest
+    cd /cluster/data/hg17/bed/blastzSelf/axtBest
     ln -s ../axtNet/chr*.axt .
 
     # copy net axt's to download area
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/axtNet
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
 
@@ -6349,27 +6359,28 @@ cat << 'EOF' > makeMaf.csh
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
-	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+	echo "processing $c.axt -> ${c}_blastzBestSelf.psl"
     /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
-	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
-	echo "Done: ${c}_blastzBestRn3.psl"
+	S1.len S2.len pslBest/${c}_blastzBestSelf.psl
+	echo "Done: ${c}_blastzBestSelf.psl"
     end
 
     # Load tables
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/pslBest
-    for I in chr*BestRn3.psl
+    for I in chr*BestSelf.psl
     do
 	/cluster/bin/i386/hgLoadPsl hg17 ${I}
 	echo "done ${I}"
     done
 
-     # check results
-    # featureBits hg17 blastzBestRn3
-    #	975533772 bases of 2866216770 (34.036%) in intersection
-    # (with axtFilter) 970005525 bases of 2866216770 (33.843%) in intersection
-    # featureBits hg16 blastzBestRn3
-    #	976121391 bases of 2865248791 (34.068%) in intersection
+    #	check results
+    #	featureBits hg17 blastzBestSelf
+    #	233983062 bases of 2866216770 (8.163%) in intersection
+    #	featureBits hg16 blastzBestSelf
+    #	1388295977 bases of 2865248791 (48.453%) in intersection
+
+XXX - Seems to be incorrect here ? - 2004-07-08 14:50
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg17/axtBest/Rn3
