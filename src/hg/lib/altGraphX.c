@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.12 2003/06/18 20:24:30 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.13 2003/06/22 23:12:20 sugnet Exp $";
 
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
@@ -1572,4 +1572,20 @@ for(i=0; i<ag->vertexCount; i++)
 tmp = ag->edgeEnds;
 ag->edgeEnds = ag->edgeStarts;
 ag->edgeStarts = tmp;
+}
+
+int altGraphXGetEdgeNum(struct altGraphX *ag, int v1, int v2)
+/** Find the edge index that corresponds to v1 and v2 */
+{
+int eC = ag->edgeCount;
+int i=0;
+for(i=0;i<eC; i++)
+    {
+    if(ag->edgeStarts[i] == v1 && ag->edgeEnds[i] == v2)
+	{
+	return i;
+	}
+    }
+errAbort("altGraphX::getEdgeNum() - Didn't find edge with vertices %d-%d in %s.", v1, v2, ag->name);
+return -1;
 }

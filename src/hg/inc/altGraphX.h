@@ -221,5 +221,8 @@ void altGraphXReverseComplement(struct altGraphX *ag);
 /* Switch an altGraphX record around so it looks like the
    chromosomal coordinates were reverse complemented. */
 
+int altGraphXGetEdgeNum(struct altGraphX *ag, int v1, int v2);
+/** Find the edge index that corresponds to v1 and v2 */
+
 #endif /* ALTGRAPHX_H */
 
