@@ -2535,3 +2535,145 @@ zcat `ls -1 /cluster/bluearc/canFam1/phastCons/POSTPROBS/$chr.*.pp.gz \
     cp -p Canis_familiaris.jpg /usr/local/apache/htdocs/images
     rm -f ccf.jpg dog_image.jpg
     #	add links to this image in the description.html page, request push
+
+# MAKE Human Proteins track (DONE 2005-1-15 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/canFam1/blastDb
+    cd /cluster/data/canFam1/blastDb
+    #cut -f 1 ../chrom.sizes | sed "s/chr//" | sed "/NA/d" | sed "/Un/d" > chrom.list
+    for i in `cat ../chrom.lst`; do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
+    for i in `cat list`
+    do
+	ln -s $i .
+	formatdb -i `basename $i` -p F
+    done
+    rm *.log *.fa list
+    cd ..
+    for i in `cat chrom.lst`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/canFam1/blastDb
+    cd /cluster/data/canFam1/blastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/canFam1/blastDb     ; echo $i; done
+
+    cd
+    (iSync) > sync.out
+
+    mkdir -p /cluster/data/canFam1/bed/tblastn.hg17KG
+    cd /cluster/data/canFam1/bed/tblastn.hg17KG
+    echo  /iscratch/i/canFam1/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
+    # back to kksilo
+    exit
+
+    # we want around 250000 jobs
+    cd /cluster/data/canFam1/bed/tblastn.hg17KG
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(500000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(500000/6373) = 537.320376
+    mkdir -p /cluster/bluearc/canFam1/bed/tblastn.hg17KG/kgfa
+    split -l 537 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/canFam1/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/canFam1/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/canFam1/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/canFam1/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 ../../jkStuff/subChr.lft carry $f.2       
+        liftUp -nosort -type=".psl" -nohead $f.4 ../../jkStuff/liftAll.lft carry $f.3       
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.4       
+        if pslCheck -prot $3.tmp                                                                          
+        then                                                                                              
+            mv $3.tmp $3                                                                                  
+            rm -f $f.1 $f.2 $f.3 $f.4                                                                              
+        fi
+        exit 0                                                                                            
+    fi                                                                                                    
+fi                                                                                                        
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4      
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/canFam1/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 503467 of 503467 jobs
+# CPU time in finished jobs:  101853630s 1697560.49m 28292.67h 1178.86d  3.230 y
+# IO & Wait Time:              21902864s  365047.74m  6084.13h  253.51d  0.695 y
+# Average job time:                 246s       4.10m     0.07h    0.00d
+# Longest job:                     1208s      20.13m     0.34h    0.01d
+# Submission to last job:        204867s    3414.45m    56.91h    2.37d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q."$2"* | simpleChain -prot -outPsl -maxGap=200000 stdin ../c.`basename $1`.$2.psl)
+'_EOF_'
+    chmod +x chainOne
+
+    for j in blastOut/kg??; do for i in `cat ../../chrom.lst`; do echo chainOne $j chr"$i"; done ; done > chainSpec
+
+    ssh kki
+    cd /cluster/data/canFam1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 3239 of 3239 jobs
+# CPU time in finished jobs:    2859185s   47653.08m   794.22h   33.09d  0.091 y
+# IO & Wait Time:                212945s    3549.09m    59.15h    2.46d  0.007 y
+# Average job time:                 948s      15.81m     0.26h    0.01d
+# Longest job:                    49695s     828.25m    13.80h    0.58d
+# Submission to last job:        227112s    3785.20m    63.09h    2.63d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/canFam1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	cat c.$i.*.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/canFam1/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/tblastn.hg17KG
+    hgLoadPsl canFam1 blastHg17KG.psl
+
+    # back to kksilo
+    rm -rf blastOut
+# End tblastn
+
