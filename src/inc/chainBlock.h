@@ -41,10 +41,13 @@ typedef int (*ConnectCost)(struct boxIn *a, struct boxIn *b);
 
 struct chain *chainBlocks(char *qName, int qSize, char qStrand,
 	char *tName, int tSize, struct boxIn **pBlockList, 
-	ConnectCost connectCost, GapCost gapCost);
+	ConnectCost connectCost, GapCost gapCost, FILE *details);
 /* Create list of chains from list of blocks.  The blockList will get
  * eaten up as the blocks are moved from the list to the chain. 
  * The chain returned is sorted by score. 
+ *
+ * The details FILE may be NULL, and is where additional information
+ * about the chaining is put.
  *
  * Note that the connectCost needs to adjust for possibly partially 
  * overlapping blocks, and that these need to be taken out of the
