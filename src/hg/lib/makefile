@@ -11,7 +11,7 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o \
     chromInfo.o chromInserts.o cgh.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     est3.o estPair.o exoFish.o exprBed.o \
-    featureBits.o gcPercent.o geneGraph.o \
+    featureBits.o fishClones.o gcPercent.o geneGraph.o \
     genePred.o genomicDups.o \
     glDbRep.o ggCluster.o ggDbIo.o ggDbRep.o ggDump.o \
     ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
