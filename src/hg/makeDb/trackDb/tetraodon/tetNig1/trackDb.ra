@@ -40,6 +40,7 @@ longLabel HOX Genes Annotations (Human Curated)
 group genes
 priority 51
 visibility hide
+chromosomes chr2,chr8,chr9,chr17,chr21,chrUn_random,
 color 170,100,0
 type genePred
 
