@@ -10,6 +10,10 @@ spTest: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/spTest $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/spTest
 
-test:
-	spTest sp092903 Q9FFH7
-	spTest sp092903 P29312
+test: 
+	mkdir -p output
+	spTest sp092903 Q9FFH7 > output/Q9FFH7
+	diff expected/Q9FFH7 output/Q9FFH7
+	spTest sp092903 P29312 > output/P29312
+	diff expected/P29312 output/P29312
+	rm -r output
