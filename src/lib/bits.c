@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.12 2003/12/22 19:49:33 markd Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.13 2004/01/08 08:36:49 markd Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -134,7 +134,7 @@ int iBit = startIx;
 int endByte = ((bitCount-1)>>3);
 int iByte;
 
-/* scan initial bits upto a byte boundry */
+/* scan initial byte */
 while (((iBit & 7) != 0) && (iBit < bitCount))
     {
     if (bitReadOne(b, iBit) == val)
@@ -142,13 +142,16 @@ while (((iBit & 7) != 0) && (iBit < bitCount))
     iBit++;
     }
 
-/* scan byte at a time */
+/* scan byte at a time, if not already in last byte */
 iByte = (iBit >> 3);
-while ((iByte < endByte) && (b[iByte] == notByteVal))
-    iByte++;
+if (iByte < endByte)
+    {
+    while ((iByte < endByte) && (b[iByte] == notByteVal))
+        iByte++;
+    iBit = iByte << 3;
+    }
 
-/* scan into current byte */
-iBit = iByte << 3;
+/* scan last byte */
 while (iBit < bitCount)
     {
     if (bitReadOne(b, iBit) == val)
