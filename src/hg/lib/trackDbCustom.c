@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.14 2003/10/24 19:28:23 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.15 2004/03/04 06:33:00 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -125,8 +125,9 @@ static boolean packableType(char *type)
 {
 char *t = cloneString(type);
 char *s = firstWordInLine(t);
-boolean canPack = (sameString("psl", s) || sameString("chain", s) 
-    || sameString("bed", s) || sameString("genePred", s));
+boolean canPack = (sameString("psl", s) || sameString("chain", s) || 
+                   sameString("bed", s) || sameString("genePred", s) || 
+                   sameString("wigMaf", s));
 freeMem(t);
 return canPack;
 }
