@@ -499,14 +499,14 @@ while (<STDIN>) {
     end
 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-06-08 - hartera)
-    # Make symbolic links from /gbdb/galGal2/nib to the real nibs.
+    # Make symbolic links from /gbdb/danRer1/nib to the real nibs.
     ssh hgwdev
     cd /cluster/data/danRer1
     mkdir -p /gbdb/danRer1/nib
     foreach f (/cluster/data/danRer1/nib/chr*.nib)
       ln -s $f /gbdb/danRer1/nib
     end
-    # Load /gbdb/ce2/nib paths into database and save size info
+    # Load /gbdb/danRer1/nib paths into database and save size info
     # hgNibSeq creates chromInfo table
     hgNibSeq -preMadeNib danRer1 /gbdb/danRer1/nib */chr*.fa
     echo "select chrom,size from chromInfo" | hgsql -N danRer1 > chrom.sizes
@@ -545,6 +545,7 @@ while (<STDIN>) {
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR DANRER1 
 # (DONE, 2004-06-08, hartera)
 # CHANGE DEFAULT POSITION FOR BROWSER (DONE, 2004-07-16, hartera)
+# CHANGED ERROR IN SCIENTIFIC NAME (DONE, 2004-08-19, hartera)
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
@@ -579,6 +580,11 @@ while (<STDIN>) {
 
     echo 'update dbDb set defaultPos = "chr2:16,330,443-16,335,196" \
          where name = "danRer1";' | hgsql -h genome-testdb hgcentraltest
+    
+# error in scientific name: uppercase beginning of species name so correct
+# (2004-08-19, hartera)
+    echo 'update dbDb set scientificName = "Danio rerio" where \
+         name = "danRer1";' | hgsql -h genome-testdb hgcentraltest
 
 # MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-06-30, hartera)
     ssh hgwdev
@@ -941,7 +947,7 @@ cat `ls -1 *.lav | sort -g` \
 # with the Blastz with L=6000.
 
 # RESCORE HG17 BLASTZ (DONE, 2004-06-21, hartera)
-# USE HG17 BLASTZ WITH L=6000 SO AS NOT TO MISS TOO MUCH CDS ALIGING
+# USE HG17 BLASTZ WITH L=6000 SO AS NOT TO MISS TOO MUCH CDS ALIGNING
     # Low scores can occur with repeats abridged and using the
     # HoxD55.q matrix. PSU's restore_rpts program rescored alignments
     # with the default matrix instead of the BLASTZ_Q matrix.
@@ -1188,8 +1194,11 @@ danRer1.downloadDir = danRer1
     # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
     # not xeno RefSeq
     cvs commit -m "Added danRer1" etc/genbank.conf
-    # Edit src/align/gbBlat to add /iscratch/i/danRer1/11.ooc
+    # Edit ~/kent/hg/makeDb/genbnank/src/align/gbBlat 
+    # to add /iscratch/i/danRer1/11.ooc
     # Add line:  DANRER_OOC=/iscratch/i/danRer1/11.ooc
+    # Add line:  danRer*) oocOpt="-ooc=${DANRER_OOC}" ;;
+
     cvs diff src/align/gbBlat
     make
     cvs commit -m "Added 11.ooc for danRer1." src/align/gbBlat
@@ -2407,6 +2416,7 @@ zip -j est.zip est.fa
     gzip *.axt
     md5sum *.gz > md5sum.txt
 
+    cd /cluster/data/danRer1/bed/blastz.hg17/axtChain
     zip -j /cluster/data/danRer1/zip/hg17.chain.zip hg17.chain
     rm hg17.chain
     cp humanhg17.net hg17.net
@@ -2986,3 +2996,290 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
     cd /cluster/data/danRer1/bed/tblastn.hg16KG/blastOut
     hgLoadPsl danRer1 blastHg16KG.psl
 #end Human Proteins
+
+# BLASTZ SWAP FOR mm5 vs danRer1 BLASTZ TO CREATE danRer1 vs mm5 BLASTZ
+# USE RESCORED ALIGNMENTS (see makeMm5.doc)
+# CONVERT AXTs TO PSL AND LOAD INTO DATABASE
+# (DONE, 2004-08-05, hartera)
+
+    ssh kolossus
+    mkdir /cluster/data/danRer1/bed/blastz.mm5.swap
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap
+    # use rescored axtChrom from blastzDanRer1 on mm5
+    set aliDir = /cluster/data/mm5/bed/blastz.danRer1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+        # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    # 3.2G    /cluster/data/mm5/bed/blastz.danRer1/axtChrom
+    # 3.2G    unsorted
+    # 3.2G    axtChrom
+    rm -r unsorted
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap
+    mkdir -p pslChrom
+    set tbl = "blastzMm5"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer1 $f
+      echo "$f Done"
+    end
+
+# CHAIN MOUSE (mm5) BLASTZ (DONE, 2004-08-05, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/danRer1/bed/blastz.mm5.swap/axtChrom/*.axt \
+                    > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+
+    # << this line makes emacs coloring happy
+
+# Reuse gap penalties from hg16 vs chicken run.
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V 72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V 31600^V 56600
+tGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V 31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V  16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+# create chains with only default filtering on score - minScore = 1000
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/danRer1/nib \
+    /cluster/bluearc/scratch/mus/mm5/softNib $2 >& $3
+'_EOF_'
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 29 of 29 jobs
+# CPU time in finished jobs:       2987s      49.78m     0.83h    0.03d  0.000 y
+# IO & Wait Time:                   848s      14.14m     0.24h    0.01d  0.000 y
+# Average job time:                 132s       2.20m     0.04h    0.00d
+# Longest job:                      426s       7.10m     0.12h    0.00d
+# Submission to last job:           710s      11.83m     0.20h    0.01d
+
+   # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain/chain
+    hgLoadChain danRer1 chr1_chainMm5 chr1.chain
+# featureBits -chrom=chr1 danRer1 refGene:cds chainMm5Link -enrichment
+# refGene:cds 0.449%, chainMm5Link 9.488%, both 0.364%, cover 81.22%, 
+# enrich 8.56x
+# featureBits -chrom=chr1 danRer1 refGene:cds chainHg17Link -enrichment
+# refGene:cds 0.449%, chainHg17Link 3.924%, both 0.358%, cover 79.76%, 
+# enrich 20.33x
+
+    # Try filtering for minScore = 5000
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    rm -r chain
+    chainSplit chain all.chain
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain/chain
+    hgLoadChain danRer1 chr1_chainMm5Filt5k chr1.chain
+
+# featureBits -chrom=chr1 danRer1 refGene:cds chainMm5Filt5kLink -enrichment
+# refGene:cds 0.449%, chainMm5Filt5kLink 7.948%, both 0.362%, cover 80.64%,
+# enrich 10.15x
+# featureBits -chrom=chr1 danRer1 refGene:cds chainMm5Filt10kLink -enrichment
+# refGene:cds 0.449%, chainMm5Filt10kLink 6.363%, both 0.357%, cover 79.66%, 
+# enrich 12.52x
+# rows: chr1_chainMm5Link 303196
+#       chr1_chainMm5Filt5kLink 231508
+#       chr1_chainMm5Filt10kLink 147336
+    # filter chr1-25, M and Finished with minScore=5000
+    # and minScore=10000 for chrNA and chrUn which have a lot more 
+    # low scoring hits.
+# featureBits -chrom=chrNA danRer1 refGene:cds chainMm5Link -enrichment
+
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain/chain
+    rm chrNA.chain chrUn.chain
+    
+    # replace with those filtered on minScore=10000
+    cp ../filt10k/chain/chrUn.chain .
+    cp ../filt10k/chain/chrNA.chain .
+    cd ..
+    rm -r filt10k
+    gzip all.chain.unfiltered 
+
+    hgsql -e "drop table chr1_chainMm5Filt5k" danRer1 
+    hgsql -e "drop table chr1_chainMm5Filt5kLink" danRer1
+    hgsql -e "drop table chr1_chainMm5Filt10k" danRer1
+    hgsql -e "drop table chr1_chainMm5Filt10kLink" danRer1
+ 
+    # load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain danRer1 ${c}_chainMm5 $i
+        echo done $c
+    end
+
+# NET MOUSE (mm5) BLASTZ (DONE, 2004-08-05, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 205414400, utime 5596 s/100, stime 237
+    # Add classification info using db tables:
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    mkdir -p /cluster/bluearc/danRer1/linSpecRep.notInMouse
+    cp /iscratch/i/mm5/linSpecRep.notInZebrafish/* \
+       /cluster/bluearc/mm5/linSpecRep.notInZebrafish
+    cp /iscratch/i/danRer1/linSpecRep.notInMouse/* \
+       /cluster/bluearc/danRer1/linSpecRep.notInMouse
+
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain
+    time netClass noClass.net danRer1 mm5 mm5.net \
+          -tNewR=/cluster/bluearc/danRer1/linSpecRep.notInMouse \
+          -qNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish -noAr
+    # 112.390u 57.180s 4:17.17 65.9%  0+0k 0+0io 4565pf+0w
+    netFilter -minGap=10 mm5.net |  hgLoadNet danRer1 netMm5 stdin
+# featureBits danRer1 refGene:cds netMm5 -enrichment
+# refGene:cds 0.380%, netMm5 36.622%, both 0.331%, cover 87.02%, enrich 2.38x
+
+# CLEANUP BACENDS (DONE, 2004-08-10, hartera)
+
+   ssh kksilo
+   cd /cluster/data/danRer1/bed/ZonLab/bacends/clusterBlast/
+   nice rm batch batch.bak out *.lst blastToPsl.log para.results \
+           clusterBacEnds.psl clusterBacEnds.out
+   cd zeroEval
+   nice rm blastToPsl.log
+   nice rm clusterBacEnds.psl
+   nice zip cluster.zip *
+   cd /cluster/data/danRer1/bed/ZonLab/bacends
+   nice rm -r err
+   nice rm bacends.remove bacends.percentNs80 bacends.noseqswithlotsNs \
+      bacends_good.fa batch batch.bak bed.tab BACerror.log psl.tab raw.psl \
+      seq.tab para.results
+   nice rm -r psl
+   nice gzip bacends.1/* duplicates/* pairs/* singles/* scores/* &
+
+# BLASTZ MM5 CLEANUP (DONE, 2004-08-10, hartera)
+    ssh eieio
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+    # unzipped all.chain.gz and mm5.net.gz to make VSMM5 downloadables 
+    # and then zip up again (hartera, 2004-09-10)
+
+# MAKE VSMM5 DOWNLOADABLES (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    # zip chains and nets 
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChain
+    gunzip all.chain.gz
+    cp all.chain mm5.chain
+    zip -j /cluster/data/danRer1/zip/mm5.chain.zip mm5.chain
+    rm mm5.chain
+    gunzip mm5.net.gz
+    zip -j /cluster/data/danRer1/zip/mm5.net.zip mm5.net
+
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer1
+    mkdir -p $gp/vsMm5
+    cd $gp/vsMm5
+    mv /cluster/data/danRer1/zip/mm5*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # move axt files to downloads area and zip
+    cd /cluster/data/danRer1/bed/blastz.mm5.swap/axtChrom
+    mkdir -p $gp/vsMm5/axtChrom
+    nice cp -p *.axt $gp/vsMm5/axtChrom
+    cd $gp/vsMm5/axtChrom
+    nice gzip *.axt
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# BLASTZ HG17 CLEANUP (DONE, 2004-08-10, hartera)
+    ssh eieio
+    cd /cluster/data/danRer1/bed/blastz.hg17
+    nice rm -rf raw &
+    nice rm -rf axtChrom.orig &
+    nice rm -rf axtChain.orig &
+    nice rm -rf lav &
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+
+# BLASTZ FR1 CLEANUP (DONE, 2004-08-10, hartera)
+    ssh eieio
+    cd /cluster/data/danRer1/bed/blastz.fr1
+    nice rm -rf raw &
+    nice rm -rf axtChain.orig &
+    nice rm -rf lav &
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+
