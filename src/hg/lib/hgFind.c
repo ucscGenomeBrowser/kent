@@ -160,9 +160,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(256);
 char **row;
-
 boolean foundIt;
-struct ctgPos *ctgPos;
+
 dyStringPrintf(query, "select * from ctgPos where contig = '%s'", contig);
 sr = sqlMustGetResult(conn, query->string);
 row = sqlNextRow(sr);
@@ -170,7 +169,7 @@ if (row == NULL)
     foundIt = FALSE;
 else
     {
-    ctgPos = ctgPosLoad(row);
+    struct ctgPos *ctgPos = ctgPosLoad(row);
     *retChromName = hgOfficialChromName(ctgPos->chrom);
     *retWinStart = ctgPos->chromStart;
     *retWinEnd = ctgPos->chromEnd;
@@ -180,7 +179,7 @@ else
 freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-return TRUE;
+return foundIt;
 }
 
 static char *startsWithShortHumanChromName(char *chrom)
@@ -1284,12 +1283,11 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
-boolean findGenomePos(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart)
+static boolean genomePos(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias)
 /* Search for positions in genome that match user query.   
-Return TRUE if the query results in a unique position.  
-Otherwise display list of positions and return FALSE. */
-
+ * Return TRUE if the query results in a unique position.  
+ * Otherwise display list of positions and return FALSE. */
 { 
 struct hgPositions *hgp;
 struct hgPos *pos;
@@ -1307,7 +1305,7 @@ if (hgp == NULL || hgp->posCount == 0)
     errAbort("Sorry, couldn't locate %s in genome database\n", spec);
     return TRUE;
     }
-if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
+if (((pos = hgp->singlePos) != NULL) && (!showAlias || !hgp->useAlias))
     {
     *retChromName = pos->chrom;
     *retWinStart = pos->chromStart;
@@ -1326,9 +1324,18 @@ else
     }
 }
 
+boolean findGenomePos(char *spec, char **retChromName, 
+	int *retWinStart, int *retWinEnd, struct cart *cart)
+/* Search for positions in genome that match user query.   
+ * Return TRUE if the query results in a unique position.  
+ * Otherwise display list of positions and return FALSE. */
+{
+return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE);
+}
+
 boolean handleTwoSites(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart)
-
+/* Deal with specifications that in form start;end. */
 {
 struct hgPositions *hgp;
 struct hgPos *pos;
@@ -1354,8 +1361,8 @@ commaspot = strcspn(spec,";");
 strncpy(firststring,spec,commaspot);
 firststring[commaspot] = '\0';
 strncpy(secondstring,spec + commaspot + 1,strlen(spec));
-firstSuccess = findGenomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd, cart);
-secondSuccess = findGenomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd, cart); 
+firstSuccess = genomePos(firststring,&firstChromName,&firstWinStart,&firstWinEnd, cart, FALSE);
+secondSuccess = genomePos(secondstring,&secondChromName,&secondWinStart,&secondWinEnd, cart, FALSE); 
 if (firstSuccess == FALSE && secondSuccess == FALSE)
     {
     errAbort("Neither site uniquely determined.  %d locations for %s and %d locations for %s.",firstWinStart,firststring,secondWinStart,secondstring);
