@@ -7366,9 +7366,16 @@ if (row != NULL)
           slAddHead(&pslList, psl);
       }
       slReverse(&pslList);
-      printf("<H3><A HREF=\"");
-      printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
-      printf("\">%s</A></H3>\n", lfs->lfNames[i]);
+      if (!sameString("fosEndPairs", track)) 
+	  {
+	  printf("<H3><A HREF=");
+	  printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
+	  printf(">%s</A></H3>\n",lfs->lfNames[i]);
+	  }
+      else 
+	  {
+	  printf("<B>%s</B>\n", lfs->lfNames[i]);
+	  }
       printAlignments(pslList, lfs->lfStarts[i], "htcCdnaAli", lfs->pslTable, lfs->lfNames[i]);
       htmlHorizontalLine();
       pslFreeList(&pslList);
