@@ -693,11 +693,11 @@ MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TODO)
     cd ~/mm3/bed/blastz.hg13.2003-03-06-ASH/pslTight
     hgLoadPsl mm3 chr*_blastzTightHuman.psl
 
-CREATING HUMAN/MOUSE CHAINS BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
+CREATING HUMAN/MOUSE CHAINS AND NET BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
     # Do small cluster run on kkr1u00
     # Make sure that ~/oo points to the latest human and ~/mm to the 
     # latest mouse.
-    # The little cluster run will probably take about 2 hours.
+    # The little cluster run will probably take about 1 hours.
     ssh kkr1u00
     cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH
     mkdir axtChain
@@ -713,6 +713,67 @@ CREATING HUMAN/MOUSE CHAINS BASED ON BLASTZ ALIGNMENTS MM3 vs HG12
     echo '#!/bin/csh' > doChain
     echo 'gunzip -c $1 | axtChain stdin  ~/mm/mixedNib ~/oo/mixedNib $2 > $3' >> doChain
     para shove
+
+    # Do some sorting on the little cluster job on the file server
+    # This will take about 20 minutes.  This also ends up assigning
+    # a unique id to each member of the chain.
+    ssh kkstore
+    cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load the chains into the database as so.  This will take about
+    # 45 minutes.
+    ssh hgwdev
+    cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH/axtChain
+    cd chain
+    foreach i (*.chain)
+	set c = $i:r
+	hgLoadChain mm3 ${c}_humanChain $i
+	echo done $c
+    end
+
+    # Create the nets.  You can do this while the database is loading
+    # This is fastest done on the file server.  All told it takes about
+    # 40 minutes.
+    ssh kkstore
+    cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH/axtChain
+    # First do a crude filter that eliminates many chains so the
+    # real chainer has less work to do.
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      chainPreNet $i ~/mm/chrom.sizes ~/oo/chrom.sizes ../preNet/$i
+    end
+    cd ..
+    # Run the main netter, putting the results in n1.
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      chainNet $i -minSpace=1 ~/mm/chrom.sizes ~/oo/chrom.sizes ../n1/$n /dev/null
+    end
+    cd ..
+    # Classify parts of net as syntenic, nonsyntenic etc.
+    cat n1/*.net | netSyntenic stdin hNoClass.net
+
+    # The final step of net creation needs the database.
+    # Best to wait for the database load to finish if it
+    # hasn't already.
+    ssh hgwdev
+    cd /cluster/store2/mm.2003.02/mm3/bed/blastz.hg13.2003-03-06-ASH/axtChain
+    netClass hNoClass.net mm3 hg13 mouse.net -tNewR=$HOME/mm/bed/linSpecRep -qNewR=$HOME/oo/bed/linSpecRep
+    rm -r n1 hNoClass.net
+
+    # Make a syntenic subset of the net as so:
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the net into the database as so:
+    netFilter -minGap=10 mouse.net |  hgLoadNet mm3 humanNet stdin
+
 
 
 LOADING MOUSE MM3 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
