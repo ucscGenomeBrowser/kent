@@ -9,17 +9,17 @@
 #include "jksql.h"
 #endif
 
-#define SNP_NUM_COLS 20
+#define SNP_NUM_COLS 14
 
 struct snp
-/* Polymorphism data from dbSnp XML or genotyping arrays */
+/* Polymorphism data from dbSnp XML files or genotyping arrays */
     {
     struct snp *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* Reference SNP identifier or Affy SNP name */
-    unsigned score;	/* Source of SNP data: dbSnp or genotyping array */
+    unsigned score;	/* Not used */
     char strand[2];	/* Which DNA strand contains the observed alleles */
     char *observed;	/* The sequences of the observed alleles */
     char *molType;	/* Sample type from exemplar ss */
@@ -28,12 +28,6 @@ struct snp
     float avHet;	/* The average heterozygosity from all observations */
     float avHetSE;	/* The Standard Error for the average heterozygosity */
     char *func;	/* The functional category of the SNP */
-    char *locType;	/* Location type and quality */
-    char *hitQuality;	/* Location type and quality */
-    unsigned mapWeight;	/* Location quality score for NCBI map display */
-    unsigned chromHits;	/* Number of distinct chromosomes with a hit */
-    unsigned contigHits;	/* Number of distinct contigs with a hit */
-    unsigned seqHits;	/* Total number of hits to genome */
     char *source;	/* Source of the data - dbSnp, Affymetrix, ... */
     };
 

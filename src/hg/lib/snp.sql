@@ -124,20 +124,6 @@ CREATE TABLE snp (
                    'splice-site',
                    'reference',
                    'exception') DEFAULT 'unknown' NOT NULL,
-    locType    enum(
-                   'unknown',
-                   'range',
-                   'exact',
-                   'between') DEFAULT 'unknown' NOT NULL,
-    hitQuality enum(
-                   'unknown',
-                   'high',
-                   'loose',
-                   'dense') DEFAULT 'unknown' NOT NULL,
-    mapWeight  int(5) unsigned NOT NULL,
-    chromHits  int(5) unsigned NOT NULL,
-    contigHits int(5) unsigned NOT NULL,
-    seqHits    int(5) unsigned NOT NULL,
     source     enum(
                    'unknown',
                    'dbSnp',

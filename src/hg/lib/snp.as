@@ -1,11 +1,11 @@
 table snp
-"Polymorphism data from dbSnp XML or genotyping arrays"
+"Polymorphism data from dbSnp XML files or genotyping arrays"
     (
     string  chrom;      "Chromosome"
     uint    chromStart; "Start position in chrom"
     uint    chromEnd;   "End position in chrom"
     string  name;       "Reference SNP identifier or Affy SNP name"
-    uint    score;      "Source of SNP data: dbSnp or genotyping array"
+    uint    score;      "Not used"
     char[1] strand;     "Which DNA strand contains the observed alleles"
     string  observed;   "The sequences of the observed alleles"
     string  molType;    "Sample type from exemplar ss"
@@ -14,11 +14,5 @@ table snp
     float   avHet;      "The average heterozygosity from all observations"
     float   avHetSE;    "The Standard Error for the average heterozygosity"
     string  func;       "The functional category of the SNP"
-    string  locType;    "Location type and quality"
-    string  hitQuality; "Location type and quality"
-    uint    mapWeight;  "Location quality score for NCBI map display"
-    uint    chromHits;  "Number of distinct chromosomes with a hit"
-    uint    contigHits; "Number of distinct contigs with a hit"
-    uint    seqHits;    "Total number of hits to genome"
     string  source;     "Source of the data - dbSnp, Affymetrix, ..."
     )
