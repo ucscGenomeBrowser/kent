@@ -11,7 +11,8 @@
 #include "binRange.h"
 #include "obscure.h"
 
-
+#define minDistance 500000 /* minimum distance for reciprocal best alignment */
+                            
 int baseInCount = 0;    /* Keep track of target bases input. */
 int totalAlignedBases[300];
 char outFile[128];
@@ -22,8 +23,8 @@ void usage()
 errAbort(
   "axtRecipBest - create file for dot plot using recip best \n"
   "usage:\n"
-  "   axtRecipBest chrom qSizes <directory containing axt files for query species> <.axt file(s) for target> \n"
-  "   where qSizes is a tab-delimited file with <chrom><size>\n" 
+  "   axtRecipBest chrom tSizes qSizes <directory containing axt files for query species> <.axt file(s) for target> \n"
+  "   where tSizes, qSizes is a tab-delimited file with <chrom><size>\n" 
   "options:\n"
   "    -minScore=5000 (default 5000) throw out any alignment below this score\n"
   );
@@ -78,7 +79,7 @@ void *val = hashMustFindVal(hash, name);
 return ptToInt(val);
 }
 
-void showHumanAlignments(FILE *f, struct binKeeper *bk, struct axt *target,  FILE *outFile)
+void showHumanAlignments(FILE *f, struct binKeeper *bk, struct axt *target,  FILE *outFile, struct hash *qSizeHash)
 /* Show human alignments in range. */
 {
 struct binElement *el, *list;
@@ -86,23 +87,31 @@ struct axt *axt;
 float intensity=0;
 int prevStart=0;
 int i=0;
-//        struct chrom *chrom = hashFindVal( nameHash, target->qName);
-    fprintf(f, "SHOW %s %d %d %s %d %d %d %c %d bet %d %d recip Best chr2 %d out of %d Human %d\n", target->tName, target->tStart, target->tEnd, target->qName, target->qStart, target->qEnd, target->score, target->qStrand, target->symCount, target->tStart,target->tEnd, totalAlignedBases[102],totalAlignedBases[100], totalAlignedBases[202]);
-list = binKeeperFindSorted(bk, target->qStart, target->qEnd);
+int tempStart=target->qStart;
+int tempEnd=target->qEnd;
+
+    //        struct chrom *chrom = hashFindVal( nameHash, target->qName);
+        if (target->qStrand == '-')
+            {
+            tempStart = findSize(qSizeHash, target->qName) - target->qEnd;
+            tempEnd = findSize(qSizeHash, target->qName) - target->qStart;
+            }
+    fprintf(f, "SHOW %s %d %d %s %d %d %d %c %d bet %d %d \n", target->tName, target->tStart, target->tEnd, target->qName, tempStart, tempEnd, target->score, target->qStrand, target->symCount, target->tStart,target->tEnd);
+    /*, totalAlignedBases[102],totalAlignedBases[100], totalAlignedBases[202]);*/
+list = binKeeperFindSorted(bk, tempStart, tempEnd);
 for (el = list; el != NULL; el = el->next)
     {
     axt = el->val;
     if (prevStart == target->tStart)
         continue;
+    /* check if recip best alignment within certain distance*/
+     if (abs(target->tStart - axt->qStart) > minDistance)
+        continue;
     prevStart = target->tStart; 
     totalAlignedBases[100] += axt->symCount;
     totalAlignedBases[200] += target->symCount;
-    if (sameString(axt->tName,"chr2"))
-        {
-        totalAlignedBases[102] += axt->symCount;
-        totalAlignedBases[202] += target->symCount;
-        }
-    fprintf(f, "%s %d %d Match %s %d %d %s %d %d %d %c %d bet %s %d %d recip Best chr2 %d out of %d Human %d out of %d\n", target->tName, target->tStart, target->tEnd , axt->qName, axt->qStart, axt->qEnd, axt->tName, axt->tStart, axt->tEnd, axt->score, axt->tStrand, axt->symCount, target->qName, target->qStart,target->qEnd, totalAlignedBases[102],totalAlignedBases[100], totalAlignedBases[202], totalAlignedBases[200]);
+    fprintf(f, "%s %d %d Match %s %d %d %s %d %d %d %c %d bet %s %d %d \n", target->tName, target->tStart, target->tEnd , axt->qName, axt->qStart, axt->qEnd, axt->tName, axt->tStart, axt->tEnd, axt->score, axt->tStrand, axt->symCount, target->qName, tempStart,tempEnd);
+    /*, totalAlignedBases[102],totalAlignedBases[100], totalAlignedBases[202], totalAlignedBases[200]);*/
     axtWrite(target, outFile);
     if (axt->symCount < 3500) 
         {
@@ -121,9 +130,10 @@ for (el = list; el != NULL; el = el->next)
 slFreeList(&list);
 }
 
-struct axt *readAllAxt(char *target, char *fileName, struct axtScoreScheme *ss, int threshold, struct hash *nameHash, struct hash *qSizeHash, struct chrom **chromList)
+struct axt *readAllAxt(char *target, char *fileName, struct axtScoreScheme *ss, int threshold, struct hash *nameHash, struct hash *tSizeHash, struct hash *qSizeHash, struct chrom **chromList)
 /* Read all axt's in a file. */
 {
+int tempStart;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct axt *list = NULL, *axt;
 while ((axt = axtRead(lf)) != NULL)
@@ -136,6 +146,12 @@ while ((axt = axtRead(lf)) != NULL)
 	if (axt->tStrand != '+')
 	    errAbort("Can't handle minus target strand line %d of %s",
 	        lf->lineIx, lf->fileName);
+    if (axt->qStrand == '-')
+        {
+        tempStart = findSize(tSizeHash, axt->qName) - axt->qEnd;
+        axt->qEnd = findSize(tSizeHash, axt->qName) - axt->qStart;
+        axt->qStart = tempStart;
+        }
 	axt->score = axtScore(axt, ss);
 	baseInCount += axt->qEnd - axt->qStart;
 	if ((axt->score >= threshold) && (sameString(axt->qName,target) ))
@@ -158,7 +174,7 @@ slReverse(&list);
 return list;
 }
 
-void axtRecipBest(int axtCount, char *target, char *outFile, char *qSizeFile, char *inDir, char *files[])
+void axtRecipBest(int axtCount, char *target, char *outFile, char *tSizeFile, char *qSizeFile, char *inDir, char *files[])
 /* axtRecipBest - Dotplot human to mouse alignment  look for reciprical best */
 {
 char *matrixName = optionVal("matrix", NULL);
@@ -184,6 +200,7 @@ struct chrom *chromList = NULL ;
 int totalT = 0, totalMatch = 0, totalMismatch = 0, 
 	tGapStart = 0, tGapExt=0, qGapStart = 0, qGapExt = 0;
 
+    struct hash *tSizeHash = readSizes(tSizeFile);
     struct hash *qSizeHash = readSizes(qSizeFile);
     FILE *of = mustOpen(outFile,"w");
     printf("directory = %s\n",inDir);
@@ -222,7 +239,7 @@ int totalT = 0, totalMatch = 0, totalMismatch = 0,
             ss = axtScoreSchemeDefault();
         else
             ss = axtScoreSchemeRead(matrixName);
-        axt = readAllAxt(target, name->name, ss, minScore, nameHash, qSizeHash, &chromList);
+        axt = readAllAxt(target, name->name, ss, minScore, nameHash, tSizeHash, qSizeHash, &chromList);
                 
         /*slSort(&axtList, axtCmpQuery);*/
 	    slAddHead(&axtList, axt);
@@ -242,23 +259,17 @@ for (fileIx = 0; fileIx < 1; ++fileIx)
     printf("Reading Target %s\n", fileName );
     while ((axtTarget = axtRead(lf)) != NULL)
         {
-        if (axtTarget->qStrand == '-')
-            {
-            tempStart = findSize(qSizeHash, axtTarget->qName) - axtTarget->qEnd;
-            axtTarget->qEnd = findSize(qSizeHash, axtTarget->qName) - axtTarget->qStart;
-            axtTarget->qStart = tempStart;
-            }
         totalT += axtTarget->tEnd - axtTarget->tStart;
         totalAlignedBases[0] += axtTarget->symCount;
         if (sameString(axtTarget->qName,"chr2"))
             totalAlignedBases[2] += axtTarget->symCount;
-        printf("axt tStart %d qName %s qStart %d bases %d chr2 %d\n",axtTarget->tStart, axtTarget->qName, axtTarget->qStart, totalAlignedBases[0],totalAlignedBases[2]);
+//        printf("axt tStart %d qName %s qStart %d bases %d chr2 %d\n",axtTarget->tStart, axtTarget->qName, axtTarget->qStart, totalAlignedBases[0],totalAlignedBases[2]);
 //        fprintf(stdout, "Dot tName tStart tEnd qName qStart qEnd score qStrand len intensity\n");
         for (chrom = chromList; chrom != NULL; chrom = chrom->next)
             {
             if (sameString(chrom->name, axtTarget->qName) )
                 {
-                showHumanAlignments(stdout, chrom->ali, axtTarget, of);
+                showHumanAlignments(stdout, chrom->ali, axtTarget, of , qSizeHash);
                 }
             }
         axtFree(&axtTarget);
@@ -278,10 +289,11 @@ int main(int argc, char *argv[])
 {
 optionHash(&argc, argv);
 dnaUtilOpen();
-if (argc < 5)
+if (argc < 6)
     usage();
 setMaxAlloc(3000000000U);
 sprintf(outFile,"%s.axt",argv[1]);
-axtRecipBest(argc-2, argv[1],outFile, argv[2], argv[3], argv+4);
+printf("output written to %s\n",outFile);
+axtRecipBest(argc-2, argv[1],outFile, argv[2], argv[3], argv[4], argv+5);
 return 0;
 }
