@@ -166,14 +166,14 @@ else
     slSort(&pslList, pslCmpQueryScore);
     }
 printf("<TT><PRE>");
-printf(" QUERY       SCORE START END  TOTAL IDENTITY CHROMOSOME STRAND  START    END  \n");
-printf("--------------------------------------------------------------------------------\n");
+printf(" QUERY           SCORE START END  TOTAL IDENTITY CHROMOSOME STRAND  START    END  \n");
+printf("----------------------------------------------------------------------------------\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s%s\">",
 	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
 	pslName, faName, extraCgi);
-    printf("%-12s %5d %5d %5d %5d %5.1f%%  %9s  %2s  %9d %9d</A>\n",
+    printf("%-14s %5d %5d %5d %5d %5.1f%%  %9s  %2s  %9d %9d</A>\n",
 	psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
 	100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 	skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd);
@@ -182,14 +182,38 @@ pslFreeList(&pslList);
 printf("</TT></PRE>");
 }
 
-void checkSeqNamesUniq(bioSeq *seqList)
-/* Check that all seq's in list have a unique name. */
+void trimUniq(bioSeq *seqList)
+/* Check that all seq's in list have a unique name.  Try and
+ * abbreviate longer sequence names. */
 {
 struct hash *hash = newHash(0);
 bioSeq *seq;
 
 for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    if (strlen(seq->name) > 14)	/* Try and get rid of long NCBI .fa cruft. */
+        {
+	char *nameClone = NULL;
+	char *abbrv = NULL;
+	char *words[32];
+	int wordCount;
+
+	nameClone = cloneString(seq->name);
+	wordCount = chopString(nameClone, "|", words, ArraySize(words));
+	if (wordCount > 2)	/* Looks like it's an NCBI long name alright. */
+	    {
+	    abbrv = words[wordCount-1];
+	    if (abbrv[0] == 0) abbrv = words[wordCount-2];
+	    if (hashLookup(hash, abbrv) == NULL)
+	        {
+		freeMem(seq->name);
+		seq->name = cloneString(abbrv);
+		}
+	    freez(&nameClone);
+	    }
+	}
     hashAddUnique(hash, seq->name, hash);
+    }
 freeHash(&hash);
 }
 
@@ -257,7 +281,7 @@ if (seqList != NULL && seqList->name[0] == 0)
     freeMem(seqList->name);
     seqList->name = cloneString("YourSeq");
     }
-checkSeqNamesUniq(seqList);
+trimUniq(seqList);
 
 /* Figure out size allowed. */
 maxSingleSize = (isTx ? 4000 : 20000);
@@ -312,27 +336,27 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	data.reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 12, gfSavePslx, &data);
+	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &data);
 	    if (txTxBoth)
 		{
 		close(conn);
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 12, gfSavePslx, &data);
+		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &data);
 		}
 	    }
 	else
 	    {
-	    gfAlignTrans(conn, serve->nibDir, seq, 12, gfSavePslx, &data);
+	    gfAlignTrans(conn, serve->nibDir, seq, 5, gfSavePslx, &data);
 	    }
 	}
     else
 	{
-	gfAlignStrand(conn, serve->nibDir, seq, FALSE, 36, gfSavePsl, f);
+	gfAlignStrand(conn, serve->nibDir, seq, FALSE, 20, gfSavePsl, f);
 	close(conn);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(conn, serve->nibDir, seq, TRUE, 36, gfSavePsl, f);
+	gfAlignStrand(conn, serve->nibDir, seq, TRUE, 20, gfSavePsl, f);
 	}
     close(conn);
     }
