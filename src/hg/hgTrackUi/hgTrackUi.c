@@ -61,11 +61,13 @@ void cghNci60Ui(struct trackDb *tdb)
 /* Put up UI cghNci60. */
 {
 char *cghNci60Map = cartUsualString(cart, "cghNci60.type", cghoeEnumToString(0));
-char *col = cartUsualString(cart, "cghNci60.color", "rg");
+char *col = cartUsualString(cart, "cghNci60.color", "gr");
 printf(" <b>Cell Lines: </b> ");
 cghoeDropDown("cghNci60.type", cghNci60Map);
 printf(" ");
 printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("cghNci60.color", "gr", sameString(col, "gr"));
+printf(" green/red ");
 cgiMakeRadioButton("cghNci60.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("cghNci60.color", "rb", sameString(col, "rb"));
