@@ -5,6 +5,7 @@
  *****************************************************************************/
 /* ggDump - Dump out geneGraph structures. */
 #include "common.h"
+#include "ggMrnaAli.h"
 #include "ggPrivate.h"
 
 static char charForType(int type)
@@ -85,7 +86,7 @@ struct maRef *ref;
 
 printf("refs -");
 for (ref = mc->refList; ref != NULL; ref = ref->next)
-    printf(" %s", ref->ma->name);
+    printf(" %s", ref->ma->tName);
 printf("\n");
 for (da = mc->mrnaList; da != NULL; da = da->next)
     dumpGgAliInfo(da, mc->tStart, mc->tEnd);
@@ -118,7 +119,7 @@ void freeGgMrnaAli(struct ggMrnaAli **pMa)
 struct ggMrnaAli *ma;
 if ((ma = *pMa) != NULL)
     {
-    freeMem(ma->name);
+    freeMem(ma->tName);
     freeMem(ma->blocks);
     freez(pMa);
     }
@@ -142,10 +143,8 @@ void freeGgMrnaInput(struct ggMrnaInput **pCi)
 struct ggMrnaInput *ci;
 if ((ci = *pCi) != NULL)
     {
-    freeDnaSeqList(&ci->seqList);
-    freeMem(ci->seqArray);
-    freeMem(ci->seqIds);
     freeGgMrnaAliList(&ci->maList);
+    freeDnaSeq(&ci->genoSeq);
     freez(pCi);
     }
 }
