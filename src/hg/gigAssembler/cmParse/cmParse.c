@@ -304,8 +304,7 @@ while (lineFileNext(in, &line, &lineSize))
 		    {
 		    struct hashEl *hel;
 		    AllocVar(nt);
-		    hel = hashAdd(ntHash, ntName, nt);
-		    nt->name = hel->name;
+		    hel = hashAddSaveName(ntHash, ntName, nt, &nt->name);
 		    nt->ctg = contig->name;
 		    slAddTail(&contig->ntList, nt);
 		    }
@@ -441,7 +440,6 @@ while (lineFileNext(in, &line, &lineSize))
 		!isOrdered, cloneHash, pCloneList, ctgHash, ntHash);
     }
 slReverse(&chromList);
-freeHash(&ntHash);
 return chromList;
 }
 
@@ -781,7 +779,7 @@ int missingFromFreeze = 0;
 struct ntCtgClonePos *nccp;
 char contigName[256];
 
-uglyf("Reading %s\n", imreFile);
+printf("Reading %s\n", imreFile);
 splitPath(imreFile, sDir, NULL, NULL);
 len = strlen(sDir);
 if (sDir[len-1] == '/') sDir[len-1] = 0;
@@ -1053,10 +1051,8 @@ struct cmContig *contig;
 splitNtFile = mustOpen("splitNt.out", "w");
 fprintf(splitNtFile, "#chrom\tcontig\tcloneName\tnt\n");
 
-uglyf("starting in addNtsToImre\n");
 nccpList = makeNtCloneHash(gsDir, ntCloneHash);
 ntList = ntInfoFromNccpList(nccpList, ntHash, cloneHash, basicHash);
-uglyf("just hanging out in addNtsToImre\n");
 for (nt = ntList; nt != NULL; nt = nextNt)
     {
     nextNt = nt->next;
