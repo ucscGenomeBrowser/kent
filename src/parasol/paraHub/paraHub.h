@@ -141,6 +141,4 @@ void logIt(char *format, ...);
 
 #define MINUTE 60
 
-#define NORMAL_PRIORITY 10   /* 1 is highest priority */
-
 #endif /* PARAHUB_H */
