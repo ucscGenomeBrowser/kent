@@ -1186,7 +1186,8 @@ if (pepTable != NULL && hTableExists(pepTable))
     }
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
 
-printf("<LI>%s</A> may be different from the assembly\n", mrnaDescription);
+printf("<LI>%s</A> may be different from the genomic sequence.\n", 
+	mrnaDescription);
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("<LI>Genomic Sequence</A> from assembly\n");
 if (hTableExists("axtInfo"))
@@ -8837,10 +8838,24 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
+<<<<<<< hgc.c
+else if( sameWord( track, "humMusL" ))
+    {
+    humMusClickHandler( tdb, item, 0);
+    }
+else if( sameWord( track, "musHumL" ) )
+    {
+    humMusClickHandler( tdb, item, 1);
+    }
+=======
 /*BLANCHETTE'S CODE*/
+>>>>>>> 1.253
 else if( sameWord( track, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
+<<<<<<< hgc.c
+    }
+=======
     }
 else if( sameWord( track, "humMusL" ) )
         {
@@ -8851,6 +8866,7 @@ else if( sameWord( track, "musHumL" ) )
         humMusClickHandler( tdb, item, 1 );
         }
 
+>>>>>>> 1.253
 else if (sameWord(track, "jaxQTL"))
     {
     doJaxQTL(tdb, item);
