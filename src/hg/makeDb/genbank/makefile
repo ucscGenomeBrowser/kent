@@ -25,6 +25,7 @@ install: check-etc all
 	cp -rf lib ${PREFIX}
 	test -e ${PREFIX}/etc/CVS || cp -r etc/CVS ${PREFIX}/etc
 	(cd ${PREFIX}/etc && cvs update -d)
+	cp -f src/ccds/createTables.sql src/ccds/createKeys.sql ${PREFIX}/etc
 
 check-etc:
 	@echo check if etc/ is committed
