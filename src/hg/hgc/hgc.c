@@ -38,6 +38,7 @@
 #include "cpgIsland.h"
 #include "cpgIslandExt.h"
 #include "genePred.h"
+#include "genePredReader.h"
 #include "pepPred.h"
 #include "wabAli.h"
 #include "genomicDups.h"
@@ -134,7 +135,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.607 2004/04/12 23:26:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.608 2004/04/13 01:50:29 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -183,6 +184,7 @@ struct customTrack *theCtList = NULL;
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 void printAlignments(struct psl *pslList, 
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
+char *getPredMRnaProtSeq(struct genePred *gp);
 
 void hgcStart(char *title)
 /* Print out header of web page with title.  Set
@@ -1482,18 +1484,32 @@ showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
 
-if ((pepTable != NULL) && hGenBankHaveSeq(pepName, pepTable))
+if (pepTable != NULL)
+    {
+    if (hGenBankHaveSeq(pepName, pepTable))
+        {
+        puts("<LI>\n");
+        hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
+        printf("Predicted Protein</A> \n"); 
+        puts("</LI>\n");
+        }
+    }
+else
     {
     puts("<LI>\n");
-    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("Predicted Protein</A> \n"); 
+    hgcAnchorSomewhere("htcTranslatedPredMRna", geneName, "translate", seqName);
+    printf("Translated Protein</A> from predicted mRNA \n"); 
     puts("</LI>\n");
     }
 
 puts("<LI>\n");
 hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-printf("%s</A> may be different from the genomic sequence.\n", 
-       mrnaDescription);
+/* ugly hack to put out a correct message describing the mRNA */
+if (sameString(mrnaClick, "htcGeneMrna"))
+    printf("%s</A> from genomic sequence.\n", mrnaDescription);
+else
+    printf("%s</A> may be different from the genomic sequence.\n", 
+           mrnaDescription);
 puts("</LI>\n");
 
 puts("<LI>\n");
@@ -5560,12 +5576,56 @@ if (name == NULL)
 return name;
 }
 
+void displayProteinPrediction(char *pepName, char *pepSeq)
+/* display a protein prediction. */
+{
+printf("<PRE><TT>");
+printf(">%s\n", pepName);
+printLines(stdout, pepSeq, 50);
+printf("</TT></PRE>");
+}
 
-void htcTranslatedProtein(char *geneName)
+void htcTranslatedProtein(char *pepName)
 /* Display translated protein. */
 {
+char *table = cartString(cart, "o");
 hgcStart("Protein Translation");
-showProteinPrediction(geneName, cartString(cart, "o"));
+/* checks both gbSeq and table */
+aaSeq *seq = hGenBankGetPep(pepName, table);
+if (seq == NULL)
+    {
+    warn("Predicted peptide %s is not avaliable", pepName);
+    }
+else
+    {
+    displayProteinPrediction(pepName, seq->dna);
+    dnaSeqFree(&seq);
+    }
+}
+
+void htcTranslatedPredMRna(struct trackDb *tdb, char *geneName)
+/* Translate virtual mRNA defined by genePred to protein and display it. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct genePred *gp = NULL;
+char where[256];
+char protName[256];
+char *prot = NULL;
+
+hgcStart("Protein Translation");
+
+safef(where, sizeof(where), "name = \"%s\"", geneName);
+gp = genePredReaderDoQuery(conn, tdb->tableName, where);
+hFreeConn(&conn);
+if (gp == NULL)
+    errAbort("%s not found in %s when translating to protein",
+             geneName, tdb->tableName);
+prot = getPredMRnaProtSeq(gp);
+safef(protName, sizeof(protName), "%s_prot", geneName);
+displayProteinPrediction(protName, prot);
+
+freez(&prot);
+genePredFree(&gp);
 }
 
 void getCdsInMrna(struct genePred *gp, int *retCdsStart, int *retCdsEnd)
@@ -5626,8 +5686,48 @@ freeDnaSeq(&genoSeq);
 return cdnaSeq;
 }
 
+struct dnaSeq *getCdsSeq(struct genePred *gp)
+/* Load in genomic CDS sequence associated with gene prediction. */
+{
+struct dnaSeq *genoSeq = hDnaFromSeq(gp->chrom, gp->cdsStart, gp->cdsEnd,  dnaLower);
+struct dnaSeq *cdsSeq;
+int cdsSize = genePredCodingBases(gp);
+int cdsOffset = 0, exonStart, exonEnd, exonSize, exonIx;
+
+AllocVar(cdsSeq);
+cdsSeq->dna = needMem(cdsSize+1);
+cdsSeq->size = cdsSize;
+for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+    {
+    genePredCdsExon(gp, exonIx, &exonStart, &exonEnd);
+    exonSize = (exonEnd - exonStart);
+    if (exonSize > 0)
+        {
+        memcpy(cdsSeq->dna + cdsOffset, genoSeq->dna + (exonStart - gp->cdsStart), exonSize);
+        cdsOffset += exonSize;
+        }
+    }
+assert(cdsOffset == cdsSeq->size);
+freeDnaSeq(&genoSeq);
+if (gp->strand[0] == '-')
+    reverseComplement(cdsSeq->dna, cdsSeq->size);
+return cdsSeq;
+}
+
+char *getPredMRnaProtSeq(struct genePred *gp)
+/* Get the predicted mRNA from the genome and translate it to a
+ * protein. free returned string. */
+{
+struct dnaSeq *cdsDna = getCdsSeq(gp);
+int protBufSize = (cdsDna->size/3)+4;
+char *prot = needMem(protBufSize);
+dnaTranslateSome(cdsDna->dna, prot, protBufSize);
+dnaSeqFree(&cdsDna);
+return prot;
+}
+
 void htcGeneMrna(char *geneName)
-/* Display associated cDNA. */
+/* Display cDNA predicted from genome */
 {
 char *table = cartString(cart, "o");
 char query[512];
@@ -14044,6 +14144,14 @@ else if (sameWord(track, "htcExtSeq"))
 else if (sameWord(track, "htcTranslatedProtein"))
     {
     htcTranslatedProtein(item);
+    }
+else if (sameWord(track, "htcTranslatedPredMRna"))
+    {
+    char *table = cartString(cart, "table");
+    tdb = hashFindVal(trackHash, table);
+    if (tdb == NULL)
+        errAbort("no trackDb entry for %s", table);
+    htcTranslatedPredMRna(tdb, item);
     }
 else if (sameWord(track, "htcGeneMrna"))
     {
