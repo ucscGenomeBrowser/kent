@@ -2,8 +2,9 @@
 #include "hash.h"
 #include "localmem.h"
 #include "linefile.h"
+#include "jksql.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.8 2004/02/10 05:05:59 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.9 2004/03/29 02:25:38 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -13,8 +14,9 @@ static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.8 2004/02/10 05:05:59 markd
  *
  * IMPORTANT: order of constant must match create table below.
  *
- * NOTE: It's ok to reorder values since the table is completely rebuilt by
- * the load process and the browser access this symbolicly.
+ * IMPORTANT NOTE: It's ok to reorder or add values since the table is
+ * completely rebuilt by the load process and the browser access this
+ * symbolicly.
  */
 /** has not been picked status */
 struct mgcStatusType MGC_UNPICKED = {
@@ -63,6 +65,34 @@ struct mgcStatusType MGC_NO_POLYA_TAIL = {
     "noPolyATail", 19, "no polyA-tail", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CANT_SEQUENCE = {
     "cantSequence", 20, "unable to sequence", MGC_STATE_PROBLEM};
+struct mgcStatusType MGC_INCONSISTENT_WITH_GENE = {
+    "inconsistentWithGene", 21, "inconsistent with known gene structure", MGC_STATE_PROBLEM};
+
+/* null terminated, ordered list of mgcStatusType constants */
+static struct mgcStatusType *mgcStatusList[] = {
+    &MGC_UNPICKED,
+    &MGC_CANDIDATE,
+    &MGC_PICKED,
+    &MGC_NOT_BACK,
+    &MGC_NO_DECISION,
+    &MGC_FULL_LENGTH,
+    &MGC_FULL_LENGTH_SHORT,
+    &MGC_INCOMPLETE,
+    &MGC_CHIMERIC,
+    &MGC_FRAME_SHIFTED,
+    &MGC_CONTAMINATED,
+    &MGC_RETAINED_INTRON,
+    &MGC_MIXED_WELLS,
+    &MGC_NO_GROWTH,
+    &MGC_NO_INSERT,
+    &MGC_NO_5_EST_MATCH,
+    &MGC_MICRODELETION,
+    &MGC_LIBRARY_ARTIFACTS,
+    &MGC_NO_POLYA_TAIL,
+    &MGC_CANT_SEQUENCE,
+    &MGC_INCONSISTENT_WITH_GENE,
+    NULL
+};
 
 /* hash of status code to status object */
 static struct hash *statusHash = NULL;
@@ -86,7 +116,7 @@ static char *organismNameMap[][2] =
 /* SQL to create status table. Should have table name sprinted into it.  The
  * values of the status enum are order such that values less than fullLength
  * are in progress and ones great than fullLength have some kind of error.
- * Note that you must compare to the numeric index, not the symolic string.
+ * Note that you must compare to the numeric index, not the symbolic string.
  */
 char *mgcStatusCreateSql =
 "CREATE TABLE %s ("
@@ -111,7 +141,8 @@ char *mgcStatusCreateSql =
 "       'microDel',"
 "       'artifact',"
 "       'noPolyATail',"
-"       'cantSequence'"
+"       'cantSequence',"
+"       'inconsistentWithGene'"
 "   ) NOT NULL,"
 "   state ENUM("                    /* MGC state code, matches C enum */
 "       'unpicked',"
@@ -131,7 +162,6 @@ static void makeKey(unsigned imageId, char *key)
 {
 sprintf(key, "%u", imageId);
 }
-
 
 char *mgcOrganismNameToCode(char *organism, char *whereFound)
 /* convert a MGC organism name to a two-letter code.  An error with
@@ -180,37 +210,14 @@ if (sameString(stateStr, "problem"))
 return MGC_STATE_NULL;
 }
 
-static void addStatus(struct mgcStatusType* status)
-/* add a status to the status hash table */
-{
-hashAdd(statusHash, status->dbValue, status);
-}
-
 static void buildStatusHash()
 /* build the global statusHash table */
 {
+int i;
+assert(statusHash == NULL);
 statusHash = hashNew(9);
-
-addStatus(&MGC_UNPICKED);
-addStatus(&MGC_CANDIDATE);
-addStatus(&MGC_PICKED);
-addStatus(&MGC_NOT_BACK);
-addStatus(&MGC_NO_DECISION);
-addStatus(&MGC_FULL_LENGTH);
-addStatus(&MGC_FULL_LENGTH_SHORT);
-addStatus(&MGC_INCOMPLETE);
-addStatus(&MGC_CHIMERIC);
-addStatus(&MGC_FRAME_SHIFTED);
-addStatus(&MGC_CONTAMINATED);
-addStatus(&MGC_RETAINED_INTRON);
-addStatus(&MGC_MIXED_WELLS);
-addStatus(&MGC_NO_GROWTH);
-addStatus(&MGC_NO_INSERT);
-addStatus(&MGC_NO_5_EST_MATCH);
-addStatus(&MGC_MICRODELETION);
-addStatus(&MGC_LIBRARY_ARTIFACTS);
-addStatus(&MGC_NO_POLYA_TAIL);
-addStatus(&MGC_CANT_SEQUENCE);
+for (i = 0; mgcStatusList[i] != NULL; i++)
+    hashAdd(statusHash, mgcStatusList[i]->dbValue, mgcStatusList[i]);
 }
 
 static struct mgcStatusType *lookupStatus(char *statusName)
@@ -220,6 +227,7 @@ if (statusHash == NULL)
     buildStatusHash();
 return hashFindVal(statusHash, statusName);
 }
+
 
 struct mgcStatusTbl *mgcStatusTblNew()
 /* Create an mgcStatusTbl object */
