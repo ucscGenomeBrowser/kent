@@ -46,10 +46,7 @@ for(ag = tg->items; ag != NULL; ag = ag->next)
     maxEnd = max(maxEnd, ag->tEnd);
     }
 if(maxDiff*scale < .3*insideWidth)
-    {
-    tg->limitedVis = tvDense;
     return altGraphXMaxRows;
-    }
 /* Have to pretend we have a wider screen to do all the exons,
    even if they aren't visable still want to have links to them. */
 extendedWidth = (maxEnd - minStart) * scale;
