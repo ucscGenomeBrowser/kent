@@ -50,7 +50,7 @@ group genes
 priority 34.5
 visibility dense
 color 12,120,12
-hgGene on
+hgGene off
 type genePred
 cdsDrawDefault genomic\ codons
 
