@@ -2,7 +2,18 @@
 
 rm -f chrM.ascii chr0.wib chrM.wib
 ./testData.pl 16570 4 > chrM.ascii
-wigAsciiToBinary -chrom=chr0 chrM.ascii
+wigAsciiToBinary -verbose -chrom=chr0 chrM.ascii
+
+S0=`sum -r gold.wib`
+S1=`sum -r chr0.wib`
+
+if [ "${S0}" != "${S1}" ]; then
+	echo "*** FAIL ***"
+fi
+
+rm -f chrM_256.ascii chrS.wig chrS.wib
+./testData.pl 16570 4 256 > chrM_256.ascii
+wigAsciiToBinary -verbose -dataSpan=256 -binsize=4 -chrom=chrS chrM_256.ascii
 
 S0=`sum -r gold.wib`
 S1=`sum -r chr0.wib`
