@@ -5,6 +5,7 @@
 #include "dystring.h"
 #include "portable.h"
 #include "htmlPage.h"
+#include "errabort.h"
 #include "errCatch.h"
 #include "htmshell.h"
 #include "qa.h"
@@ -176,6 +177,7 @@ void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
 struct dyString *dy = dyStringNew(0);
 va_list args;
 va_start(args, format);
+vaWarn(args, format);
 if (qs->errMessage)
     {
     dyStringAppend(dy, qs->errMessage);
