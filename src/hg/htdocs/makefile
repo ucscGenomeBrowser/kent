@@ -13,5 +13,7 @@ beta:
 
 
 # recursive target to do install to DEST, with extra excludes EXCL
+# this queries CVS to find out the list of files to install, so
+# avoid the usual crud that collects in directories.
 doInstall:
-	rsync -ra --cvs-exclude ${EXCL} . ${DEST}
+	rsync -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
