@@ -1579,6 +1579,9 @@ IN PROGRESS
     # Sequence info should have already been loaded into database (PRELOAD)
 
 
+# PRODUCING SQUIRT ALIGNMENTS (DONE 052003)
+    # Distribute fugu sequence to /iscratch/i/fugu/ (if it isn't already there)
+    Doing...
 # PRODUCING FUGU ALIGNMENTS (DONE 041203)
     # Distribute fugu sequence to /iscratch/i/fugu/ (if it isn't already there)
     ssh kkr1u00
