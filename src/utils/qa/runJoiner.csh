@@ -44,14 +44,9 @@ if ( $#argv == 4 ) then
   set noTimes=$argv[4]
   if ( $noTimes != "noTimes" ) then
     echo
-    echo "  runs joiner check, -keys, finding all identifiers for a table."
-    echo '  set database to "all" for global.'
-    echo '  for chains/nets, use tablename format: chainDb#.'
-    echo
-    echo "    usage:  database, table, [path to all.joiner]"
-    echo "           (defaults to tip of the tree) [noTimes]"
-    echo
-    exit
+    echo "${0}:"
+    $0
+    exit 1
   endif
 endif
 
