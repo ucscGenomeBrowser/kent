@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.46 2004/09/16 20:17:53 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.47 2004/09/21 23:26:46 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1496,7 +1496,8 @@ if (bedList && *bedList)
 		wigAscii->chrom = cloneString(wds->chrName);
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
-		wigAscii->data = (struct asciiDatum *) needMem((size_t)
+		setMaxAlloc((size_t)2100000000);  /*2^31 = 2,147,483,648 */
+		wigAscii->data = (struct asciiDatum *) needLargeMem((size_t)
 		    (sizeof(struct asciiDatum) * dataArraySize));
 			/*	maximum area needed, may use less 	*/
 		asciiOut = wigAscii->data;	/* ptr to data area	*/
