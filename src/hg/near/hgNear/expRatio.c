@@ -11,14 +11,69 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.7 2003/06/24 20:16:32 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.8 2003/06/25 06:10:49 kent Exp $";
 
+
+static boolean loadExpVals(struct sqlConnection *conn,
+	char *table, char *name, char *posTable,
+	int *retValCount, float **retVals)
+/* Load up and return expression bed record.  Return NULL
+ * if none of given name exist. */
+{
+char query[256];
+char expName[64];
+struct sqlResult *sr;
+char **row;
+boolean ok = FALSE;
+safef(query, sizeof(query), "select value from %s where name = '%s'", 
+	table, name);
+if (sqlQuickQuery(conn, query, expName, sizeof(expName)) == NULL)
+    return FALSE;
+safef(query, sizeof(query), "select expScores from %s where name = '%s'",
+	posTable, expName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    sqlFloatDynamicArray(row[0], retVals, retValCount);
+    ok = TRUE;
+    }
+sqlFreeResult(&sr);
+return ok;
+}
 
 static char *expRatioCellVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get comma separated list of values. */
 {
-return cloneString("coming soon");
+int i, numExpts = col->representativeCount;
+struct dyString *dy = newDyString(1024);
+int valCount;
+float *vals = NULL;
+char *result;
+
+if (loadExpVals(conn, col->table, gp->name, col->posTable, &valCount, &vals))
+    {
+    for (i=0; i<numExpts; ++i)
+	{
+	int ix = col->representatives[i];
+	if (i != -1)
+	    {
+	    float val = vals[ix];
+	    if (val < -9999)
+	        dyStringPrintf(dy, "n/a,");
+	    else
+	        dyStringPrintf(dy, "%4.3f,", val);
+	    }
+	}
+    freez(&vals);
+    }
+else
+    {
+    dyStringPrintf(dy, "n/a");
+    }
+result = cloneString(dy->string);
+dyStringFree(&dy);
+return result;
 }
 
 static boolean expRatioExists(struct column *col, struct sqlConnection *conn)
@@ -176,32 +231,19 @@ void expRatioCellPrint(struct column *col, struct genePos *gp,
 /* Print out html for expRatio cell. */
 {
 int i, numExpts = col->representativeCount;
-struct bed *bed;
-struct sqlResult *sr;
-char **row, query[256];
-char expName[64];
+int valCount;
+float *vals = NULL;
 
-safef(query, sizeof(query), "select value from %s where name = '%s'", 
-	col->table, gp->name);
-if (sqlQuickQuery(conn, query, expName, sizeof(expName)) == NULL)
+if (loadExpVals(conn, col->table, gp->name, col->posTable, &valCount, &vals))
     {
-    replicate("n/a", col->representativeCount, col->representatives);
-    return;
-    }
-safef(query, sizeof(query), "select expScores from %s where name = '%s'",
-	col->posTable, expName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    replicate("n/a???", col->representativeCount, col->representatives);
-else 
-    {
-    int idCount, valCount;
-    float *vals;
-    sqlFloatDynamicArray(row[0], &vals, &valCount);
     printRatioShades(col, col->representativeCount, col->representatives, 
     	valCount, vals);
+    freez(&vals);
     }
-sqlFreeResult(&sr);
+else
+    {
+    replicate("n/a", col->representativeCount, col->representatives);
+    }
 }
 
 static char **getExperimentNames(char *database, char *table, int expCount, int *expIds)

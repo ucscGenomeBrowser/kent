@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.9 2003/06/25 01:01:41 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.10 2003/06/25 06:10:49 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -153,6 +153,8 @@ makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
+cgiMakeButton(hideAllConfName, "Hide All");
+hPrintf(" ");
 cgiMakeButton(defaultConfName, "Default Configuration");
 hPrintf(" ");
 cgiMakeButton("submit", "Submit");
@@ -163,9 +165,24 @@ configTable(colList, conn);
 void doDefaultConfigure(struct sqlConnection *conn, struct column *colList)
 /* Do configuration starting with defaults. */
 {
+struct column *col;
+for (col=colList; col != NULL; col = col->next)
+    col->on = col->defaultOn;
 cartRemoveLike(cart, "near.col.*");
 cartRemove(cart, colOrderVar);
 doConfigure(conn, colList, NULL);
 }
 
+void doConfigHideAll(struct sqlConnection *conn, struct column *colList)
+/* Respond to hide all button in configuration page. */
+{
+char varName[64];
+struct column *col;
+for (col = colList; col != NULL; col = col->next)
+    {
+    safef(varName, sizeof(varName), "near.col.%s", col->name);
+    cartSetString(cart, varName, "off");
+    doConfigure(conn, colList, NULL);
+    }
+}
 

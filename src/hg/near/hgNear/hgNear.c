@@ -13,9 +13,11 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.23 2003/06/25 03:25:13 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.24 2003/06/25 06:10:49 kent Exp $";
 
-char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
+char *excludeVars[] = { "submit", "Submit", confVarName, 
+	defaultConfName, hideAllConfName, 
+	getSeqVarName, getTextVarName, advSearchVarName, 
         resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
@@ -346,11 +348,11 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 /* Do items to display drop-down */
     {
-    char *count = cartUsualString(cart, countVarName, "25");
+    char buf[16];
     static char *menu[] = {"25", "50", "100", "200", "500", "1000"};
+    safef(buf, sizeof(buf), "%d", displayCount);
     hPrintf(" display ");
-    cgiMakeDropList(countVarName, menu, ArraySize(menu), count);
-    displayCount = atoi(count);
+    cgiMakeDropList(countVarName, menu, ArraySize(menu), buf);
     }
 
 /* Do search box. */
@@ -366,6 +368,33 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     hPrintf(" ");
     cgiMakeButton("submit", "Go!");
     }
+
+hPrintf("</TR>\n<TR><TD ALIGN=CENTER>");
+
+/* Do genome drop down (just fake for now) */
+    {
+    static char *menu[] = {"Human"};
+    hPrintf("genome: ");
+    cgiMakeDropList("near.genome", menu, ArraySize(menu), menu[0]);
+    }
+
+/* Do assembly drop down (again just fake) */
+    {
+    static char *menu[] = {"April 2003"};
+    hPrintf(" assembly: ");
+    cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
+    }
+
+/* Make getDna, getText, advancedSearch buttons */
+    {
+    hPrintf(" ");
+    cgiMakeButton(getSeqVarName, "sequence");
+    hPrintf(" ");
+    cgiMakeButton(getTextVarName, "as text");
+    hPrintf(" ");
+    cgiMakeButton(advSearchVarName, "advanced search");
+    }
+
 
 hPrintf("</TD></TR></TABLE>");
 }
@@ -740,7 +769,7 @@ while ((raHash = raNextRecord(lf)) != NULL)
     col->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
     col->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
     col->priority = atof(mustFindInRaHash(lf, raHash, "priority"));
-    col->on = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
+    col->on = col->defaultOn = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
     col->type = mustFindInRaHash(lf, raHash, "type");
     col->settings = raHash;
     columnDefaultMethods(col);
@@ -815,18 +844,74 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 hPrintf("</TABLE>");
 }
 
+void doGetText(struct sqlConnection *conn, struct column *colList)
+/* Put up great big table. */
+{
+struct genePos *geneList = getNeighbors(conn), *gene;
+struct column *col;
+boolean first = TRUE;
+
+hPrintf("<TT><PRE>");
+/* Print labels. */
+hPrintf("#");
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (first)
+	first = FALSE;
+    else
+	hPrintf("\t");
+    if (col->on)
+	hPrintf("%s", col->name);
+    }
+hPrintf("\n");
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    first = TRUE;
+    for (col = colList; col != NULL; col = col->next)
+	{
+	if (col->on)
+	    {
+	    char *val = col->cellVal(col, gene, conn);
+	    if (first)
+	        first = FALSE;
+	    else
+		hPrintf("\t");
+	    if (val == NULL)
+		hPrintf("n/a", val);
+	    else
+		hPrintf("%s", val);
+	    freez(&val);
+	    }
+	}
+    hPrintf("\n");
+    }
+hPrintf("</PRE></TT>");
+#ifdef SOON
+#endif /* SOON */
+}
+
 void doMain(struct sqlConnection *conn, struct column *colList, struct genePos *gp)
 /* The put up main page at given single position. */
 {
-char buf[128];
-safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
-makeTitle(buf, "hgNear.html");
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
-controlPanel(gp);
-if (gp != NULL)
+curGeneId = gp;
+if (cartVarExists(cart, getTextVarName))
     {
-    curGeneId = gp;
-    bigTable(conn, colList);
+    if (curGeneId == NULL)
+        hPrintf("Empty table");
+    else
+	doGetText(conn, colList);
+    }
+else
+    {
+    char buf[128];
+    safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
+    makeTitle(buf, "hgNear.html");
+    hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
+    controlPanel(gp);
+    if (curGeneId != NULL)
+	{
+	bigTable(conn, colList);
+	}
     }
 }
 
@@ -851,7 +936,7 @@ void doMiddle(struct cart *theCart)
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
-char *var = NULL;
+char *var = NULL, *val;
 struct sqlConnection *conn;
 struct column *colList;
 cart = theCart;
@@ -859,6 +944,8 @@ getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 conn = hAllocConn();
 groupOn = cartUsualString(cart, groupVarName, "expression");
+val = cartUsualString(cart, countVarName, "25");
+displayCount = atoi(val);
 colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
@@ -868,6 +955,8 @@ else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
     doConfigure(conn, colList, var);
 else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
+else if (cartVarExists(cart, hideAllConfName))
+    doConfigHideAll(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
 else

@@ -45,6 +45,7 @@ struct column
    char *shortLabel;		/* Column label. */
    char *longLabel;		/* Column description. */
    boolean on;			/* True if turned on. */
+   boolean defaultOn;		/* On by default? */
    float priority;		/* Order displayed. */
    char *type;			/* Type - encodes which methods to used etc. */
    struct hash *settings;	/* Settings from ra file. */
@@ -72,6 +73,12 @@ struct column
    struct searchResult *(*simpleSearch)(struct column *col, 
    	struct sqlConnection *conn, char *search);
    /* Return list of genes with descriptions that match search. */
+
+   void (*searchControls)(struct column *col);
+   /* Print out controls for advanced search. */
+
+   struct genePos *(*advancedSearch)(struct column *col);
+   /* Return list of positions for advanced search. */
 
    /* -- Data that may be track-specific. -- */
    char *table;			/* Name of associated table. */
@@ -104,8 +111,12 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define idVarName "near.id"         	/* Overrides searchVarName if it exists */
 #define idPosVarName "near.idPos"      	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
+#define getSeqVarName "near.getSeq"	/* Button to get sequence. */
+#define getTextVarName "near.getText"	/* Button to get as text. */
+#define advSearchVarName "near.advSearch" /* Advanced search */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
+#define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define resetConfName "near.reset"      /* Ignore setting changes. */
 
 /* ---- Some html helper routines. ---- */
@@ -208,6 +219,9 @@ void doConfigure(struct sqlConnection *conn, struct column *colList,
 
 void doDefaultConfigure(struct sqlConnection *conn, struct column *colList );
 /* Do configuration starting with defaults. */
+
+void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
+/* Respond to hide all button in configuration page. */
 
 #endif /* HGNEAR_H */
 
