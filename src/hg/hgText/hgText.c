@@ -22,7 +22,7 @@ char *database = "hg6";		/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
-boolean breakUp = TRUE;	/* Break up things? */
+boolean breakUp =  TRUE;	/* Break up things? */
 int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 
@@ -31,6 +31,7 @@ static int blockIx = 0;	/* Index of block written. */
 boolean webHeadAlreadyOutputed = FALSE;
 boolean webInTextMode = FALSE;
 
+
 void webStartText()
 {
 printf("Content-Type: text/plain\n\n");
@@ -38,6 +39,7 @@ printf("Content-Type: text/plain\n\n");
 webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
 }
+
 
 void webStart(char* title)
 {
@@ -112,6 +114,31 @@ webHeadAlreadyOutputed = TRUE;
 }
 
 
+void webNewSection(char* title)
+{
+puts(
+	"" "\n"
+	"" "\n"
+	"	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
+	"	<br></TD></TR></TABLE>" "\n"
+	"	" "\n"
+	"<!--START SECOND SECTION ------------------------------------------------------->" "\n"
+	"<BR>" "\n"
+	"" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDERCOLOR=\"888888\" BORDER=1><TR><TD>" "\n"
+	"	<TABLE BGCOLOR=\"ffffff\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
+	"		<FONT SIZE=\"4\"><b>&nbsp;  "
+);
+puts(title);
+
+puts("</b></FONT>" "\n"
+	"	</TD></TR></TABLE>" "\n"
+	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0><TH HEIGHT=10></TH>" "\n"
+	"	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
+	"" "\n"
+);
+}
+
 void webEnd()
 {
 if(!webInTextMode)
@@ -143,6 +170,30 @@ webEnd();
 
 va_end(args);
 exit(1);
+}
+
+
+char* getTableVar()
+{
+char* table  = cgiOptionalString("table");
+char* table0 = cgiOptionalString("table0");
+char* table1 = cgiOptionalString("table1");
+	
+if(table != 0 && strcmp(table, "Choose table") == 0)
+	table = 0;
+
+if(table0 != 0 && strcmp(table0, "Choose table") == 0)
+	table0 = 0;
+	
+if(table1 != 0 && strcmp(table1, "Choose table") == 0)
+	table1 = 0;
+
+if(table != 0)
+	return table;
+else if(table0 != 0)
+	return table0;
+else
+	return table1;
 }
 
 
@@ -267,24 +318,12 @@ if(strcmp(position, "genome"))
 	findGenomePos(position, &chromName, &winStart, &winEnd);
 	}
 
-/* print the form */
-puts("<CENTER>");
-printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
-
 /* output the freexe name and informaion */
 freezeName = hFreezeFromDb(database);
 if(freezeName == NULL)
 	freezeName = "Unknown";
 printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
 
-/* print the location and a jump button */
-fputs("position ", stdout);
-cgiMakeTextVar("position", position, 30);
-cgiMakeButton("submit", " jump ");
-cgiMakeHiddenVar("db", database);
-cgiMakeHiddenVar("phase", "table");
-
-puts("<P>");
 
 /* iterate through all the tables and store the positional ones in a list */
 strcpy(query, "SHOW TABLES");
@@ -292,7 +331,7 @@ strcpy(query, "SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
 	{
-	if(strcmp(row[0], "all_est") == 0)
+	if(strcmp(row[0], "all_est") == 0 || strcmp(row[0], "all_mrna") == 0)
 		continue;
 
 	/* if they are positional, print them */
@@ -322,10 +361,26 @@ while((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 
+/* print the form */
+printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
+puts("<TABLE CELLPADDING=\"8\">");
+puts("<TR><TD>");
+
+/* print the location and a jump button */
+puts("Choose a position: ");
+puts("</TD><TD>");
+cgiMakeTextVar("position", position, 30);
+cgiMakeButton("submit", " jump ");
+cgiMakeHiddenVar("db", database);
+cgiMakeHiddenVar("phase", "table");
+puts("</TD></TR>");
+
+puts("<TR><TD>");
 /* get the list of tables */
-puts("<SELECT NAME=table SIZE=1>");
-puts("<OPTION>Choose table</OPTION>");
-printf("<OPTION VALUE=\"Choose table\">----Positional tables----</OPTION>\n");
+puts("Choose a table:");
+puts("</TD><TD>");
+puts("<SELECT NAME=table0 SIZE=1>");
+printf("<OPTION VALUE=\"Choose table\">Positional tables</OPTION>\n");
 
 posTableList = hashElListHash(posTableHash);
 slSort(&posTableList, compareTable);
@@ -336,42 +391,55 @@ slSort(&nonposTableList, compareTable);
 currentListEl = posTableList;
 while(currentListEl != 0)
 	{
-	printf("<OPTION>%s\n", currentListEl->name);
+	printf("<OPTION>%s</OPTION>\n", currentListEl->name);
 
 	currentListEl = currentListEl->next;
 	}
+puts("</SELECT>");
 
-printf("<OPTION VALUE=\"Choose table\">--Non-positional tables--</OPTION>\n");
+puts("<SELECT NAME=table1 SIZE=1>");
+printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
 
 currentListEl = nonposTableList;
 while(currentListEl != 0)
 	{
-	printf("<OPTION>%s\n", currentListEl->name);
+	printf("<OPTION>%s</OPTION>\n", currentListEl->name);
 
 	currentListEl = currentListEl->next;
 	}
 
 puts("</SELECT>");
 
+puts("</TD></TR>");
+
+puts("<TR><TD>");
+puts("Choose an action: ");
+puts("</TD><TD>");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Choose fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get all fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get DNA\" NAME=\"phase\">");
+puts("</TD></TR>");
+puts("</TABLE>");
 
 puts("</FORM>");
 
 hashElFreeList(&posTableList);
 
-puts("</CENTER>");
+webNewSection("Table Description");
+
+puts("Hello world!");
 }
 
 void parseTableName(char* dest, char* chrom_name)
 /* given a chrom name (such as one produced by findGenomePos) return the
  * table name of the table selected by the user */
 {
-char* table = cgiString("table");
+char* table;
 char selectChro[64];
 char chro[64];
 char post[64];
+
+table = getTableVar();
 
 sscanf(chrom_name, "chr%64s", selectChro);
 
@@ -466,6 +534,7 @@ while((row = sqlNextRow(sr)) != NULL)
 	}
 }
 
+
 void getChoosenFields()
 /* output a form that allows the user to choose what fields they want to download */
 {
@@ -495,7 +564,7 @@ boolean allGenome = FALSE;	/* this flag is true if we are fetching the whole gen
 position = cgiOptionalString("position");
 
 /* if they haven't choosen a table tell them */
-if(existsAndEqual("table", "Choose table"))
+if(existsAndEqual("table0", "Choose table") && existsAndEqual("table1", "Choose table"))
 	webAbort("Please choose a table.");
 
 webStart("Genome Text Browser");
@@ -540,7 +609,7 @@ if(!allGenome)
 	}
 else	/* if all the genome */
 	{
-	strncpy(table, cgiString("table"), 255);
+	strncpy(table, getTableVar(), 255);
 	/* take table of the form chrN_* to chr1_* and uses chr1_* as prototypical table */
 	if(table[0] == 'c' && table[1] == 'h' && table[2] == 'r' && table[3] == 'N' && table[4] == '_')
 		table[3] = '1';
@@ -565,17 +634,25 @@ cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("phase", "Choose fields");
 
 /* print the name of the selected table */
-printf("<H3>Track: %s</H3>\n", cgiString("table"));
+printf("<H3>Track: %s</H3>\n", getTableVar());
 
 snprintf(query, 256, "DESCRIBE %s", table);
 //puts(query);
 sr = sqlGetResult(conn, query);
 
-printf("<INPUT TYPE=\"hidden\" NAME=\"table\" VALUE=\"%s\">\n", cgiString("table"));
+printf("<INPUT TYPE=\"hidden\" NAME=\"table\" VALUE=\"%s\">\n", getTableVar());
 puts("<TABLE><TR><TD>");
 while((row = sqlNextRow(sr)) != NULL)
-	printf("<INPUT TYPE=\"checkbox\" NAME=\"field_%s\"> %s<BR>\n", row[0], row[0]);
+	{
+	char name[126];
+	snprintf(name, 126, "field_%s", row[0]);
+	if(existsAndEqual(name, "on"))
+		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s<BR>\n", name, row[0]);
+	else
+		printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s<BR>\n", name, row[0]);
+	}
 
+	
 puts("<INPUT TYPE=\"submit\" NAME=\"phase\" VALUE=\"Get these fields\">");
 
 puts("</TD></TR></TABLE>");
@@ -585,6 +662,7 @@ sqlDisconnect(&conn);
 
 webEnd();
 }
+
 
 void getSomeFields()
 /* get the prints the fields choosen by the user */
@@ -721,7 +799,7 @@ char **row;
 char* field;
 char* database;
 
-char* table = cgiString("table");
+char* table = getTableVar();
 
 /* select the database */
 database = cgiOptionalString("db");
@@ -859,7 +937,7 @@ char **row;
 char* field;
 char* database;
 
-char* table = cgiString("table");
+char* table = getTableVar();
 char parsedTableName[256];
 
 /* select the database */
@@ -968,7 +1046,7 @@ outputTabData(query, parsedTableName, conn, FALSE);
 void getSomeFieldsGenome()
 /* get the fields that the user choose for the genome-wide informations */
 {
-char* table = cgiString("table");
+char* table = getTableVar();
 	
 if(strstr(table, "chrN_") == table)
 	{
@@ -990,7 +1068,7 @@ char* table;
 char query[256];
 struct sqlConnection *conn;
 
-table = cgiString("table");
+table = getTableVar();
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
@@ -1018,7 +1096,7 @@ struct sqlConnection *conn;
 char* database;
 int c;
 
-char* table = cgiString("table");
+char* table = getTableVar();
 char parsedTableName[256];
 
 /* select the database */
@@ -1083,7 +1161,7 @@ outputTabData(query, parsedTableName, conn, FALSE);
 
 void getAllFieldsGenome()
 {
-char* table = cgiString("table");
+char* table = getTableVar();
 	
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
@@ -1352,7 +1430,7 @@ if (!toStdout)
 void getDNA()
 /* get the DNA for the given position */
 {
-char* table = cgiString("table");
+char* table = getTableVar();
 char* position = cgiString("position");
 char *choosenChromName;		/* Name of chromosome sequence . */
 int winStart;				/* Start of window in sequence. */
@@ -1434,9 +1512,14 @@ else
 	{
 	/* get the real name of the table */
 	parseTableName(parsedTableName, choosenChromName);
-	
+
 	chromStart = winStart;
 	chromEnd = winEnd;
+
+	puts(parsedTableName);
+	puts(choosenChromName);
+
+	printf("%d to %d\n", chromStart, chromEnd);
 	
 	getFeatDna(parsedTableName, choosenChromName, "stdout");
 	}
@@ -1446,7 +1529,7 @@ else
 /* the main body of the program */
 void execute()
 {
-char* table = cgiOptionalString("table");
+char* table = getTableVar("table");
 
 hDefaultConnect();	/* read in the default connection options */
 
