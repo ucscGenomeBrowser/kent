@@ -55,6 +55,7 @@
 #include "synteny100000.h"
 #include "mouseSyn.h"
 #include "mouseSynWhd.h"
+#include "ensFace.h"
 #include "ensPhusionBlast.h"
 #include "knownMore.h"
 #include "customTrack.h"
@@ -74,7 +75,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.532 2003/06/17 01:14:13 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.533 2003/06/18 03:26:02 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9139,37 +9140,11 @@ hPrintf("><BR>\n");
 void printEnsemblAnchor(char *database)
 /* Print anchor to Ensembl display on same window. */
 {
-int bigStart, bigEnd, smallStart, smallEnd;
-int ucscSize;
 char *organism = hOrganism(database);
-char *dir = NULL;
-
-if (sameWord(organism, "human"))
-    dir = "Homo_sapiens";
-else if (sameWord(organism, "mouse"))
-    dir = "Mus_musculus";
-else if (sameWord(organism, "rat"))
-    dir = "Rattus_norvegicus";
-
-ucscSize = winEnd - winStart;
-bigStart = smallStart = winStart;
-bigEnd = smallEnd = winEnd;
-if (ucscSize < 1000000)
-    {
-    bigStart -= 500000;
-    if (bigStart < 0) bigStart = 0;
-    bigEnd += 500000;
-    if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
-    hPrintf("<A HREF=\"http://www.ensembl.org/%s/contigview"
-	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>",
-	    dir, chromName, bigStart, bigEnd, smallStart, smallEnd);
-    }
-else
-    {
-    hPrintf("<A HREF=\"http://www.ensembl.org/%s/contigview"
-	   "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>",
-	    dir, chromName, bigStart, bigEnd);
-    }
+char *dir = ensOrgName(organism);
+struct dyString *ensUrl = ensContigViewUrl(dir, chromName, seqBaseCount, winStart, winEnd);
+hPrintf("<A HREF=\"%s\" TARGET=_blank>", ensUrl->string);
+dyStringFree(&ensUrl);
 }
 
 typedef void (*TrackHandler)(struct track *tg);
@@ -9900,14 +9875,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
-}
-
-char *wrapWhiteFont(char *s)
-/* Write white font around s */
-{
-static char buf[256];
-sprintf(buf, "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
-return buf;
 }
 
 void hideAllTracks(struct track *trackList)

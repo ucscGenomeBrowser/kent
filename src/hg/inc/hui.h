@@ -6,6 +6,9 @@
 char *hUserCookie();
 /* Return our cookie name. */
 
+char *wrapWhiteFont(char *s);
+/* Write white font around s */
+
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
 

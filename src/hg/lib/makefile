@@ -12,7 +12,8 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraphX.o ancientRref.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
     chromInfo.o chromInserts.o chr18deletions.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
-    defaultDb.o dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
+    defaultDb.o dbDb.o dnaMotif.o ensFace.o \
+    est3.o estOrientInfo.o estPair.o exoFish.o \
     featureBits.o fishClones.o gcPercent.o geneBands.o geneGraph.o \
     genePred.o genomicDups.o \
     genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\

@@ -9,13 +9,22 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.21 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.22 2003/06/18 03:26:03 kent Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
 {
 return "hguid";
 }
+
+char *wrapWhiteFont(char *s)
+/* Write white font around s */
+{
+static char buf[256];
+sprintf(buf, "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
+return buf;
+}
+
 
 /******  Some stuff for tables of controls ******/
 

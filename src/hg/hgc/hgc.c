@@ -106,8 +106,9 @@
 #include "genbank.h"
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
+#include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.434 2003/06/17 15:31:35 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.435 2003/06/18 03:26:02 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5478,8 +5479,8 @@ if (url != NULL && url[0] != 0)
     {
     char supfamURL[512];
     char *organism;
-    char genomeStr[10];
-    char genomeStrEnsembl[30];
+    char *genomeStr = "";
+    char *genomeStrEnsembl = "";
 
     struct sqlConnection *conn = hAllocConn();
     char cond_str[256];
@@ -5488,30 +5489,12 @@ if (url != NULL && url[0] != 0)
     char *ans;
 
     organism = hOrganism(database);
-    if (sameWord(organism, "human"))
+    genomeStrEnsembl = ensOrgName(organism);
+    if (genomeStrEnsembl == NULL)
 	{
-        strcpy(genomeStrEnsembl, "Homo_sapiens");
+	warn("Organism %s not found!", organism); fflush(stdout);
+	return;
 	}
-    else
-	{
-        if (sameWord(organism, "mouse"))
-	    {
-	    strcpy(genomeStrEnsembl, "Mus_musculus");
-	    }
-        else
-            {
-            if (sameWord(organism, "rat"))
-                {
-                strcpy(genomeStrEnsembl, "Rattus_norvegicus");
-                }
-            else
-                {
-                printf("<br>Organism %s not found!!!", organism); fflush(stdout);
-                return;
-                }
-            }
-	}
-        
 
     printf("<B>Ensembl Gene Link: </B>");
     printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" target=_blank>", 
@@ -5534,17 +5517,17 @@ if (url != NULL && url[0] != 0)
     	// get genomeStr to be used in Superfamily URL */ 
     	if (sameWord(organism, "human"))
 	    {
-            strcpy(genomeStr, "hs");
+	    genomeStr = "hs";
 	    }
     	else
 	    {
     	    if (sameWord(organism, "mouse"))
 	    	{
-	    	strcpy(genomeStr, "mm");
+		genomeStr = "mm";
 	    	}
 	    else
 	    	{
-	    	printf("<br>Organism %s not found!!!", organism); fflush(stdout);
+	    	warn("Organism %s not found!", organism); 
 	    	return;
 	    	}
 	    }
@@ -5553,7 +5536,7 @@ if (url != NULL && url[0] != 0)
     	if (ans != NULL)
 	    {
             printf("<B>Superfamily Link: </B>");
-            sprintf(supfamURL, "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
+            safef(supfamURL, sizeof(supfamURL), "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
 	            "http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?genome=", 
 	    	    genomeStr, proteinID);
             printf("%s", supfamURL);
