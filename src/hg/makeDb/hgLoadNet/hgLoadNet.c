@@ -10,11 +10,13 @@
 #include "hdb.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.8 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.9 2003/11/17 18:27:54 kate Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean oldTable = FALSE;	/* Don't redo table. */
+boolean warnFlag = FALSE;           /* load even with missing fields */
+boolean warned = FALSE;
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
 
@@ -29,6 +31,7 @@ errAbort(
   "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
+  "   -warn load even with missing fields\n"
   );
 }
 
@@ -110,7 +113,16 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 	if (fill->type == NULL)
 	    errAbort("No type field, please run netSyntenic on input");
 	if (fill->tN < 0)
-	    errAbort("Missing fields.  Please run netClass on input");
+            if (warnFlag)
+                {
+                if (!warned)
+                    {
+                    fprintf(stderr, "Warning: missing fields\n");
+                    warned = TRUE;
+                    }
+                }
+            else
+                errAbort("Missing fields.  Please run netClass on input");
 	}
     if (fill->score < 0)
         fill->score = 0;
@@ -182,6 +194,7 @@ if (argc < 4)
     usage();
 noBin = cgiBoolean("noBin");
 oldTable = cgiBoolean("oldTable");
+warnFlag = cgiBoolean("warn");
 sqlTable = cgiOptionalString("sqlTable");
 hgLoadNet(argv[1], argv[2], argc-3, argv+3);
 return 0;
