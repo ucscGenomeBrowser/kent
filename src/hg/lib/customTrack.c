@@ -7,6 +7,7 @@
 #include "linefile.h"
 #include "sqlList.h"
 #include "customTrack.h"
+#include "ctgPos.h"
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -111,7 +112,7 @@ int count;
 
 AllocVar(bed);
 bed->chrom = hashStoreName(chromHash, row[0]);
-if (!startsWith("chr", bed->chrom))
+if (!startsWith("chr", bed->chrom) && !startsWith("ctg", bed->chrom))
     errAbort("line %d of custom input: not a chromosome", lineIx);
 
 bed->chromStart = needNum(row[1], lineIx);
@@ -130,18 +131,14 @@ if (wordCount > 5)
 	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
-     bed->otherStart = needNum(row[6], lineIx);
+     bed->reserved1 = needNum(row[6], lineIx);
 if (wordCount > 7)
      {
-     bed->otherEnd = needNum(row[7], lineIx);
-     if (bed->otherStart > bed->otherEnd)
-	errAbort("line %d of custom input: otherStart after otherEnd", lineIx);
+     bed->reserved2 = needNum(row[7], lineIx);
      }
 if (wordCount > 8)
     {
-    bed->otherSize = needNum(row[8], lineIx);
-    if (bed->otherEnd > bed->otherSize)
-	errAbort("line %d of custom input: otherEnd after otherSize", lineIx);
+    bed->reserved3 = needNum(row[8], lineIx);
     }
 if (wordCount > 9)
     bed->blockCount = needNum(row[9], lineIx);
@@ -154,12 +151,6 @@ if (wordCount > 10)
 if (wordCount > 11)
     {
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
-    if (count != bed->blockCount)
-	errAbort("line %d of custom input: expecting %d elements in array", lineIx);
-    }
-if (wordCount > 12)
-    {
-    sqlSignedDynamicArray(row[12], &bed->otherStarts, &count);
     if (count != bed->blockCount)
 	errAbort("line %d of custom input: expecting %d elements in array", lineIx);
     }
@@ -195,7 +186,7 @@ int lineIx = 0, lineSize, wordCount;
 char *line = NULL, *nextLine = NULL;
 char *row[13];
 struct bed *bed = NULL;
-struct hash *chromHash = newHash(6);
+struct hash *chromHash = newHash(8);
 struct lineFile *lf = NULL;
 
 customDefaultRows(row);
@@ -257,12 +248,48 @@ for (;;)
 
     /* Create bed data structure from row and hang on list in track. */
     bed = customTrackBed(row, wordCount, chromHash, lineIx);
+    if (!startsWith("chr", bed->chrom))
+        track->needsLift = TRUE;
     slAddHead(&track->bedList, bed);
     }
 for (track = trackList; track != NULL; track = track->next)
      slReverse(&track->bedList);
 return trackList;
 }
+
+boolean customTrackNeedsLift(struct customTrack *trackList)
+/* Return TRUE if any track in list needs a lift. */
+{
+struct customTrack *track;
+for (track = trackList; track != NULL; track = track->next)
+    if (track->needsLift)
+        return TRUE;
+return FALSE;
+}
+
+void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash)
+/* Lift tracks based on hash of ctgPos. */
+{
+struct hash *chromHash = newHash(8);
+struct customTrack *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    struct bed *bed;
+    for (bed = track->bedList; bed != NULL; bed = bed->next)
+        {
+	struct ctgPos *ctg = hashFindVal(ctgPosHash, bed->chrom);
+	if (ctg != NULL)
+	    {
+	    bed->chrom = hashStoreName(chromHash, ctg->chrom);
+	    bed->chromStart += ctg->chromStart;
+	    bed->chromEnd += ctg->chromStart;
+	    }
+	}
+    track->needsLift = FALSE;
+    }
+}
+
+
 
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */
@@ -324,11 +351,11 @@ if (fieldCount > 4)
 if (fieldCount > 5)
     fprintf(f, "\t%s", bed->strand);
 if (fieldCount > 6)
-    fprintf(f, "\t%d", bed->otherStart);
+    fprintf(f, "\t%d", bed->reserved1);
 if (fieldCount > 7)
-    fprintf(f, "\t%d", bed->otherEnd);
+    fprintf(f, "\t%d", bed->reserved2);
 if (fieldCount > 8)
-    fprintf(f, "\t%d", bed->otherSize);
+    fprintf(f, "\t%d", bed->reserved3);
 if (fieldCount > 9)
     {
     count = bed->blockCount;
@@ -348,17 +375,10 @@ if (fieldCount > 11)
     for (i=0; i<count; ++i)
         fprintf(f, "%d,", pt[i]);
     }
-if (fieldCount > 12)
-    {
-    pt = bed->otherStarts;
-    fputc('\t', f);
-    for (i=0; i<count; ++i)
-        fprintf(f, "%d,", pt[i]);
-    }
 fputc('\n', f);
 }
 
-void customTrackSave(char *fileName, struct customTrack *trackList)
+void customTrackSave(struct customTrack *trackList, char *fileName)
 /* Save out custom tracks. */
 {
 struct customTrack *track;
@@ -380,8 +400,8 @@ static char *testData =
 "chr2	22	219	yellow\n"
 "chr2	18	188	green\n"
 "track shortLabel=animals longLabel='Some fuzzy animals'\n"
-"chr2	122	219	gorilla	900	+	10	20	30	2	4,4	10,20,\n"
-"chr2	128	229	mongoose	620	-	1	2	10	1	1,	1,\n";
+"ctgY2	122	219	gorilla	900	+	10	20	30	2	10,4	10,20,\n"
+"ctgY2	128	229	mongoose	620	-	1	2	10	1	1,	1,\n";
 
 boolean customTrackTest()
 /* Tests module - returns FALSE and prints warning message on failure. */
@@ -392,7 +412,7 @@ if (slCount(trackList) != 2)
     warn("Failed customTrackTest() 1");
     return FALSE;
     }
-customTrackSave("test.foo", trackList);
+customTrackSave(trackList, "test.foo");
 trackList = customTracksFromFile("test.foo");
 if (slCount(trackList) != 2)
     {

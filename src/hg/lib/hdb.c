@@ -1,6 +1,7 @@
 /* hdb - human genome browser database. */
 #include "common.h"
 #include "portable.h"
+#include "hash.h"
 #include "jksql.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -9,6 +10,7 @@
 #include "hgRelate.h"
 #include "fa.h"
 #include "hgConfig.h"
+#include "ctgPos.h"
 
 static struct sqlConnCache *hdbCc = NULL;
 
@@ -25,6 +27,7 @@ struct dbConv dbTable[] = {
     {"hg5","Oct. 7, 2000"},
     {"hg6","Dec. 12, 2000"},
     {"hg7","April 1, 2001"},
+    {"hg8","May 31, 2001"},
 };
 
 static char *hdbHost;
@@ -138,6 +141,27 @@ sprintf(query, "select fileName from chromInfo where chrom = '%s'", chromName);
 if (sqlQuickQuery(conn, query, retNibName, 512) == NULL)
     errAbort("Sequence %s isn't in database", chromName);
 hFreeConn(&conn);
+}
+
+struct hash *hCtgPosHash()
+/* Return hash of ctgPos from current database keyed by contig name. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(10);
+struct ctgPos *ctg;
+
+conn = hAllocConn();
+sr = sqlGetResult(conn, "select * from ctgPos");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ctg = ctgPosLoad(row);
+    hashAdd(hash, ctg->contig, ctg);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return hash;
 }
 
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
