@@ -341,9 +341,9 @@ aid.tLastSlope = calcSlope(aid.tLastPosVal, aid.tLong[aid.tPosCount-2],
 			   aid.tLastPos, aid.longPos[aid.tPosCount-2]);
 aid.bLastSlope = calcSlope(aid.bLastPosVal, aid.bLong[aid.bPosCount-2],
 			   aid.bLastPos, aid.longPos[aid.bPosCount-2]);
-uglyf("qLastPos %d, qlastPosVal %f, qLastSlope %f\n", aid.qLastPos, aid.qLastPosVal, aid.qLastSlope);
-uglyf("tLastPos %d, tlastPosVal %f, tLastSlope %f\n", aid.tLastPos, aid.tLastPosVal, aid.tLastSlope);
-uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
+// uglyf("qLastPos %d, qlastPosVal %f, qLastSlope %f\n", aid.qLastPos, aid.qLastPosVal, aid.qLastSlope);
+// uglyf("tLastPos %d, tlastPosVal %f, tLastSlope %f\n", aid.tLastPos, aid.tLastPosVal, aid.tLastSlope);
+// uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPosVal, aid.bLastSlope);
 }
 
 int gapCost(int dq, int dt)
@@ -480,6 +480,66 @@ do
 while (removeNegativeBlocks(chain));
 }
 
+#ifdef TESTONLY
+void abortChain(struct chain *chain, char *message)
+/* Report chain problem and abort. */
+{
+errAbort("%s tName %s, tStart %d, tEnd %d, qStrand %c, qName %s, qStart %d, qEnd %d", message, chain->tName, chain->tStart, chain->tEnd, chain->qStrand, chain->qName, chain->qStart, chain->qEnd);
+}
+
+void checkChainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq)
+/* Check that chain score is reasonable. */
+{
+struct boxIn *b;
+int totalBases = 0;
+double maxPerBase = 100, maxScore;
+int gapCount = 0;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    int size = b->qEnd - b->qStart;
+    if (size != b->tEnd - b->tStart)
+        abortChain(chain, "q/t size mismatch");
+    totalBases += b->qEnd - b->qStart;
+    ++gapCount;
+    }
+maxScore = totalBases * maxPerBase;
+if (maxScore < chain->score)
+    {
+    int gaplessScore = 0;
+    int oneScore = 0;
+    uglyf("maxScore %f, chainScore %f\n", maxScore, chain->score);
+    for (b = chain->blockList; b != NULL; b = b->next)
+        {
+	int size = b->qEnd - b->qStart;
+	oneScore = scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, size, scoreData.ss->matrix);
+	uglyf(" q %d, t %d, size %d, score %d\n",
+		b->qStart, b->tStart, size, oneScore);
+	gaplessScore += oneScore;
+	}
+    uglyf("gaplessScore %d\n", gaplessScore);
+    abortChain(chain, "score too big");
+    }
+}
+#endif /* TESTONLY */
+
+double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
+    int matrix[256][256], int (*gapCost)(int dt, int dq))
+/* Calculate score of chain from scratch looking at blocks. */
+{
+struct boxIn *b, *a = NULL;
+double score = 0;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    int size = b->qEnd - b->qStart;
+    score += scoreBlock(qSeq->dna + b->qStart, tSeq->dna + b->tStart, 
+    	size, matrix);
+    if (a != NULL)
+	score -= gapCost(b->tStart - a->tEnd, b->qStart - a->qEnd);
+    a = b;
+    }
+return score;
+}
+
 void chainPair(struct seqPair *sp,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct chain **pChainList)
 /* Chain up blocks and output. */
@@ -512,7 +572,10 @@ chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand,
 dt = clock1000() - startTime;
 uglyf("Made %d chains in %5.3f s\n", slCount(chainList), dt*0.001);
 for (chain = chainList; chain != NULL; chain = chain->next)
+    {
     removePartialOverlaps(chain, qSeq, tSeq, scoreData.ss->matrix);
+    chain->score = chainScore(chain, qSeq, tSeq, scoreData.ss->matrix, gapCost);
+    }
 
 /* Move chains scoring over threshold to master list. */
 for (chain = chainList; chain != NULL; chain = next)
@@ -585,6 +648,17 @@ dyStringFree(&dy);
 uglyf("ConnCount = %d, overlapCount = %d\n", connCount, overlapCount);
 }
 
+void testGaps()
+{
+int i;
+for (i=1; ; i *= 10)
+   {
+   uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
+   if (i == 1000000000)
+       break;
+   }
+}
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -593,15 +667,7 @@ optionHash(&argc, argv);
 minScore = optionInt("minScore", minScore);
 dnaUtilOpen();
 initGapAid();
-   {
-   int i;
-   for (i=1; ; i *= 10)
-       {
-       uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
-       if (i == 1000000000)
-           break;
-       }
-    }
+// testGaps();
 if (argc != 5)
     usage();
 axtChain(argv[1], argv[2], argv[3], argv[4]);
