@@ -800,7 +800,11 @@ for (cn = cns; cn != NULL; cn = cn->next)
     // currently there are no flanks for chrN_random
     if (endsWith(cn->name,"_random"))
 	continue;
-
+    // currently there are no flanks for 
+    if (endsWith(cn->name,"_hla_hap1"))
+	continue;
+    if (endsWith(cn->name,"_hla_hap2"))
+	continue;
     // currently no flanks for chrM 
     if (sameWord(cn->name,"chrM"))
 	continue;
