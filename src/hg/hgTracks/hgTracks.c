@@ -83,8 +83,9 @@
 #include "variation.h"
 #include "estOrientInfo.h"
 #include "versionInfo.h"
+#include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.836 2004/11/19 17:43:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.837 2004/11/24 19:46:44 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1225,7 +1226,17 @@ if(sameString(position, lf->name))
     }
 else if (lf->filterColor > 0)
     {
-    *retColor = *retBarbColor = lf->filterColor;
+    if (lf->extra == (void *)USE_ITEM_RGB)
+	{
+	struct rgbColor itemRgb;
+	itemRgb.r = (lf->filterColor & 0xff0000) >> 16;
+	itemRgb.g = (lf->filterColor & 0xff00) >> 8;
+	itemRgb.b = lf->filterColor & 0xff;
+	*retColor = *retBarbColor =
+		vgFindColorIx(vg, itemRgb.r, itemRgb.g, itemRgb.b);
+	}
+    else
+	*retColor = *retBarbColor = lf->filterColor;
     }
 else if (tg->itemColor)
     {
@@ -1655,7 +1666,6 @@ if (vis == tvPack || vis == tvSquish)
 	    /* Draw label if we haven't yet. */
 	    if(withLeftLabels && !overflowDrawn)
 		{
-		int nameWidth = 0;
 		vgUnclip(vg);
 		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
 		safef(nameBuff, sizeof(nameBuff), "%d in Last Row", overflowCount);
@@ -1999,6 +2009,7 @@ int *sizes = bed->blockSizes;
 int blockCount = bed->blockCount, i;
 
 assert(starts != NULL && sizes != NULL && blockCount > 0);
+
 AllocVar(lf);
 lf->grayIx = grayIx;
 strncpy(lf->name, bed->name, sizeof(lf->name));
@@ -3113,7 +3124,7 @@ if ((blastRef != NULL) && (hTableExists(blastRef)))
 	
 	buffer = needMem(strlen(lf->name) + 1);
 	strcpy(buffer, lf->name);
-	if (ptr = strchr(buffer, '.'))
+	if ((char *)NULL != (ptr = strchr(buffer, '.')))
 	    *ptr = 0;
 	if (!sameString("blastDm1FB", tg->tdb->tableName))
 	    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
@@ -3915,7 +3926,6 @@ struct track *tg = trackNew();
 char *oligo = oligoMatchSeq();
 int oligoSize = strlen(oligo);
 char *medOligo = cloneString(oligo);
-static char shortLabel[17];
 static char longLabel[80];
 struct trackDb *tdb;
 
@@ -6526,7 +6536,6 @@ Color noMatchColor = lighterColor(vg, color);
 Color clr;
 int textLength = strlen(text);
 bool selfLine = (match == text);
-char option[32];
 
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0)
@@ -7587,6 +7596,44 @@ if ((bed->thickEnd != 0) &&
     bed->thickEnd = bed->chromEnd;
 }
 
+void loadBed9(struct track *tg)
+/* Convert bed 9 info in window to linked feature.  (to handle itemRgb)*/
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+boolean useItemRgb = FALSE;
+
+useItemRgb = bedItemRgb(tdb);
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 9);
+    bed8To12(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+    if (useItemRgb)
+	{
+	lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+	lf->filterColor=bed->itemRgb;
+	}
+    slAddHead(&lfList, lf);
+    bedFree(&bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
+
 void loadBed8(struct track *tg)
 /* Convert bed 8 info in window to linked feature. */
 {
@@ -7836,7 +7883,8 @@ for (bed = list; bed != NULL; bed = bed->next)
     lf = lfFromBed(bed);
     lf->grayIx = 9;
     slReverse(&lf->components);
-    for (sf = lf->components, i = 0; sf != NULL, i < bed->expCount; sf = sf->next, i++)
+    for (sf = lf->components, i = 0; sf != NULL && i < bed->expCount;
+		sf = sf->next, i++)
 	{
 	sf->grayIx = bed->expIds[i];
 	//sf->grayIx = grayInRange((int)(bed->expIds[i]),11,13);
@@ -7855,11 +7903,8 @@ struct linkedFeatures *lf = item;
 struct simpleFeature *sf;
 int heightPer = tg->heightPer;
 int x1,x2;
-int s, e, e2, s2;
-Color *shades = tg->colorShades;
+int s, e;
 int midY = y + (heightPer>>1);
-int midY1 = midY - (heightPer>>2);
-int midY2 = midY + (heightPer>>2);
 int w;
 
 color = shadesOfGray[2];
@@ -8017,13 +8062,23 @@ type = words[0];
 if (sameWord(type, "bed"))
     {
     int fieldCount = 3;
+    boolean useItemRgb = FALSE;
+
+    useItemRgb = bedItemRgb(tdb);
+
     if (wordCount > 1)
         fieldCount = atoi(words[1]);
     track->bedSize = fieldCount;
+
     if (fieldCount < 8)
 	{
 	bedMethods(track);
 	track->loadItems = loadSimpleBed;
+	}
+    else if (useItemRgb && fieldCount == 9)
+	{
+	linkedFeaturesMethods(track);
+	track->loadItems = loadBed9;
 	}
     else if (fieldCount < 12)
 	{
@@ -8183,6 +8238,37 @@ slSort(&list, bedCmp);
 tg->items = list;
 }
 
+void ctLoadBed9(struct track *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+boolean useItemRgb = FALSE;
+
+useItemRgb = bedItemRgb(ct->tdb);
+
+for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    {
+    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+    		&& sameString(chromName, bed->chrom))
+	{
+	bed8To12(bed);
+	lf = lfFromBed(bed);
+	if (useItemRgb)
+	    {
+	    lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+	    lf->filterColor=bed->itemRgb;
+	    }
+	slAddHead(&lfList, lf);
+	}
+    }
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
+
 void ctLoadBed8(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -8239,7 +8325,10 @@ struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
 struct track *tg;
+boolean useItemRgb = FALSE;
 tg = trackFromTrackDb(ct->tdb);
+
+useItemRgb = bedItemRgb(ct->tdb);
 
 if (ct->wiggle)
     tg->loadItems = ctWigLoadItems;
@@ -8248,6 +8337,10 @@ else
     if (ct->fieldCount < 8)
 	{
 	tg->loadItems = ctLoadSimpleBed;
+	}
+    else if (useItemRgb && ct->fieldCount == 9)
+	{
+	tg->loadItems = ctLoadBed9;
 	}
     else if (ct->fieldCount < 12)
 	{
