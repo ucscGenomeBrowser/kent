@@ -13,6 +13,7 @@
 
 char *tNewR = NULL;
 char *qNewR = NULL;
+boolean noAr = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +26,7 @@ errAbort(
   "   -tNewR=dir - Dir of chrN.out.spec files, with RepeatMasker .out format\n"
   "                lines describing lineage specific repeats in target\n"
   "   -qNewR=dir - Dir of chrN.out.spec files for query\n"
+  "   -noAr - Don't look for ancient repeats\n"
   );
 }
 
@@ -159,7 +161,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     range->end = sqlUnsigned(row[1]);
     rbTreeAdd(allTree, range);
     sprintf(arKey, "%s.%s.%s", row[2], row[3], row[4]);
-    if (hashLookup(arHash, arKey))
+    if (arHash != NULL && hashLookup(arHash, arKey))
         {
 	lmAllocVar(newTree->lm, range);
 	range->start = sqlUnsigned(row[0]);
@@ -405,7 +407,10 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct chrom *qChromList, *chrom;
 struct hash *qChromHash;
-struct hash *arHash = getAncientRepeats(tDb, qDb);
+struct hash *arHash = NULL;
+
+if (!noAr)
+    arHash = getAncientRepeats(tDb, qDb);
 
 getChroms(qDb, &qChromHash, &qChromList);
 
@@ -441,11 +446,13 @@ while ((net = chainNetRead(lf)) != NULL)
 
     getRepeats(tDb, arHash, net->name, &tRepeats, &tOldRepeats);
     tAddR(net, net->fillList, tRepeats);
-    tAddOldR(net, net->fillList, tOldRepeats);
+    if (!noAr)
+	tAddOldR(net, net->fillList, tOldRepeats);
     rbTreeFree(&tRepeats);
     rbTreeFree(&tOldRepeats);
     qAddR(net, net->fillList, qChromHash);
-    qAddOldR(net, net->fillList, qChromHash);
+    if (!noAr)
+	qAddOldR(net, net->fillList, qChromHash);
 
     tTrf = getTrf(tDb, net->name);
     tAddTrf(net, net->fillList, tTrf);
@@ -473,6 +480,7 @@ if (argc != 5)
     usage();
 tNewR = optionVal("tNewR", tNewR);
 qNewR = optionVal("qNewR", qNewR);
+noAr = optionExists("noAr");
 netClass(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
