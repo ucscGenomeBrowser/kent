@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.13 2004/07/14 21:10:01 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.14 2004/07/14 23:32:26 kent Exp $";
 
 
 void usage()
@@ -432,7 +432,6 @@ struct dyString *fieldSpec = newDyString(256);
 struct hash *idHash = NULL;
 int outCount = 0;
 
-textOpen();
 regionList = getRegions(conn);
 checkTableExists(conn, table);
 hti = getHti(database, table);
@@ -522,6 +521,7 @@ void doOutPrimaryTable(struct trackDb *track,
 	struct sqlConnection *conn)
 /* Dump out primary table. */
 {
+textOpen();
 doTabOutTable(track->tableName, conn, NULL);
 }
 
@@ -538,6 +538,8 @@ if (sameString(output, outPrimaryTable))
     doOutPrimaryTable(track, conn);
 else if (sameString(output, outSchema))
     doTrackSchema(track, conn);
+else if (sameString(output, outSelectedFields))
+    doOutSelectedFields(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -579,6 +581,8 @@ else if (cartVarExists(cart, hgtaDoValueHistogram))
     doValueHistogram(cartString(cart, hgtaDoValueHistogram));
 else if (cartVarExists(cart, hgtaDoValueRange))
     doValueRange(cartString(cart, hgtaDoValueRange));
+else if (cartVarExists(cart, hgtaDoSelectedFields))
+    doSelectedFields();
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
 else	/* Default - put up initial page. */

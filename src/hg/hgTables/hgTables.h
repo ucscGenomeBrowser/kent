@@ -79,6 +79,9 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 /* Return chrN_table if table is split, otherwise table. 
  * You can freeMem this when done. */
 
+void doTabOutTable(char *table, struct sqlConnection *conn, char *fields);
+/* Do tab-separated output on table. */
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from
@@ -98,6 +101,7 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
 #define hgtaDoValueHistogram "hgta_doValueHistogram"
 #define hgtaDoValueRange "hgta_doValueRange"
+#define hgtaDoSelectedFields "hgta_doSelectedFields"
 
 /* Other CGI variables. */
 #define hgtaGroup "hgta_group"
@@ -112,6 +116,10 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 #define hgtaTable "hgta_table"
 #define hgtaPastedIdentifiers "hgta_pastedIdentifiers"
 #define hgtaIdentifierFile "hgta_identifierFile"
+
+/* Prefix for variables managed by field selector. */
+#define hgtaFieldSelectPrefix "hgta_fs_"
+
 
 /* Output types. */
 #define outPrimaryTable "primaryTable"
@@ -164,6 +172,12 @@ void doUploadIdentifiers(struct sqlConnection *conn);
 
 void doClearIdentifiers(struct sqlConnection *conn);
 /* Respond to clear identifiers button. */
+
+void doSelectedFields();
+/* Actually produce selected field output as text stream. */
+
+void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn);
+/* Put up select fields (for tab-separated output) page. */
 
 #endif /* HGTABLES_H */
 
