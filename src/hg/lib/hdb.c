@@ -927,9 +927,10 @@ char query[256];
 char *res = NULL;
 sprintf(query, "select genome from dbDb where name = '%s'", database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+    {
     res = cloneString(buf);
-else
-    errAbort("Can't find genome for %s", database);
+    }
+
 hDisconnectCentral(&conn);
 return res;
 }

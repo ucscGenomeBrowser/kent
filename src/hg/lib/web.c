@@ -467,15 +467,14 @@ param cart - The cart to use to first search for a suitable database name
 return - The database matching this Genome type
 */
 char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-char *queryGenome = NULL;
 
 if (!hDbExists(retDb))
     {
     retDb = hDefaultDb();
     }
 
-queryGenome = hGenome(retDb);
-if (!strstrNoCase(genome, queryGenome))
+/* If genomes dont match, then get the default db for that genome */
+if (!containsStringNoCase(genome, hGenome(retDb)))
     {
     retDb = hDefaultDbForGenome(genome);
     }
@@ -505,7 +504,6 @@ if (*retDb)
         {
         *retDb = hDefaultDb();
         }
-
     *retGenome = hGenome(*retDb);
     }
 else if (*retGenome)
