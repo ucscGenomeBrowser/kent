@@ -53,6 +53,10 @@ boolean parseQuotedString( char *in, char *out, char **retNext);
  * Return pointer to character past end of string in *retNext. 
  * Return FALSE if can't find end. */
 
+char *makeQuotedString(char *in, char quoteChar);
+/* Create a string surrounded by quoteChar, with internal
+ * quoteChars escaped.  freeMem result when done. */
+
 struct slName *stringToSlNames(char *string);
 /* Convert string to a list of slNames separated by
  * white space, but allowing multiple words in quotes.

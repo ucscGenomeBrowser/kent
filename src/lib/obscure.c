@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.19 2003/08/29 22:16:52 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.20 2003/09/13 04:14:38 kent Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -246,6 +246,25 @@ for (;;)
 *out = 0;
 *retNext = s;
 return TRUE;
+}
+
+char *makeQuotedString(char *in, char quoteChar)
+/* Create a string surrounded by quoteChar, with internal
+ * quoteChars escaped.  freeMem result when done. */
+{
+int newSize = 2 + strlen(in) + countChars(in, quoteChar);
+char *out = needMem(newSize+1);
+char c, *s = out;
+*s++ = quoteChar;
+while ((c = *in++) != 0)
+    {
+    if (c == quoteChar)
+       *s++ = '\\';
+    *s++ = c;
+    }
+*s++ = quoteChar;
+*s = 0;
+return out;
 }
 
 struct hash *hashVarLine(char *line, int lineIx)
