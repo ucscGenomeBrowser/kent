@@ -9961,16 +9961,19 @@ if(sameString(position, ""))
 chromName = NULL;
 hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 
-/* This means that no result was found */
-if (NULL == chromName)
-    {
-    return;
-    }
+//fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", chromName);
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     cartSetString(cart, hgp->tableList->name, "full");
     fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
+    }
+
+/* This means that no single result was found 
+I.e., multiple results may have been found and are printed out prior to this code*/
+if (NULL == chromName)
+    {
+    return;
     }
 
 seqBaseCount = hChromSize(chromName);
