@@ -46,4 +46,6 @@
      as well as after specified number of iterations.  Making ffSeedExtend
      initially call supStitch with 8 rather than 1 iteration.  This fixes
      a missed exon on a case in chr19 with a very tricky tandem repeat.
-17 - Having it trim ends that look suspicious.
+17 - Having it trim ends that look suspicious.  It looks now like 
+     this new system works well for mRNAs, but it still is not optimal
+     for ESTs.  This is released as blat.21
