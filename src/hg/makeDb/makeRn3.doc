@@ -1,5 +1,15 @@
 # This file describes how we made the browser database on the Rattus 
-# Norvegicus genome, January 2003 update.
+# Norvegicus genome, June 2003 update.
+#
+#	Things got a bit confused because the first Rat for June
+#	got started about June 22.  Processing proceeded on that for
+#	that week, then it was annnounced that portions of Chr 7 and Chr X
+#	were being moved around and a new Rat was released June 29.
+#	Also, had some difficulty with RepeatMasker.
+#	And, there were cluster difficulties to work around.
+#	What happens is that some things may not be exactly where they
+#	are claimed to be.  Although I believe everything has been
+#	corrected.
 
 DOWNLOAD SEQUENCE (DONE Rnor3.1 - 2003-06-29 - Hiram)
 
@@ -260,17 +270,18 @@ REPEAT MASKING (RUNNING - 2003-06-30 - Hiram)
 
 cd $1
 pushd .
-/bin/mkdir -p /tmp/$2
-/bin/cp $2 /tmp/$2/
-cd /tmp/$2
+/bin/mkdir -p /tmp/rn3/$2
+/bin/cp $2 /tmp/rn3/$2/
+cd /tmp/rn3/$2
 /cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s -spec rat -comp mouse $2
 popd
-/bin/cp /tmp/$2/$2.out ./
-if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
-if (-e /tmp/$2/$2.tbl) /bin/cp /tmp/$2/$2.tbl ./
-if (-e /tmp/$2/$2.cat) /bin/cp /tmp/$2/$2.cat ./
-/bin/rm -fr /tmp/$2/*
-/bin/rmdir --ignore-fail-on-non-empty /tmp/$2
+/bin/cp /tmp/rn3/$2/$2.out ./
+if (-e /tmp/rn3/$2/$2.align) /bin/cp /tmp/rn3/$2/$2.align ./
+if (-e /tmp/rn3/$2/$2.tbl) /bin/cp /tmp/rn3/$2/$2.tbl ./
+if (-e /tmp/rn3/$2/$2.cat) /bin/cp /tmp/rn3/$2/$2.cat ./
+/bin/rm -fr /tmp/rn3/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/rn3/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/rn3
 '_EOF_'
     chmod +x jkStuff/RMRat
     mkdir RMRun
@@ -324,10 +335,21 @@ if (-e /tmp/$2/$2.cat) /bin/cp /tmp/$2/$2.cat ./
 	# You will see a few WARNING lines from maskOutFa.  This is a
 	# a good sign.  Much better than when maskOutFa used to exit.
 	# With the fix, everything is getting masked properly.
+	# Fixing a temporary glitch in repeat masker.  This hasn't
+	# affected anything above, but it will change the result of
+#	/cluster/bluearc/RepeatMasker030619 
+	# the load below.
+        foreach i (?{,?})
+	    /cluster/bluearc/RepeatMasker030619/MakeRMoutSane.pl ${i}/*.fa.out
+		foreach k ($i/chr${i}_?{,?}/chr${i}_?{,?}.fa.out \
+			$i/chr${i}_random_?{,?}/chr${i}_random_?{,?}.fa.out)
+	    /cluster/bluearc/RepeatMasker030619/MakeRMoutSane.pl ${k}
+		end
+	end
 
         #- Load the .out files into the database with:
         ssh hgwdev
-        cd ~/rn3
+	cd ~/rn3
         hgLoadOut rn3 ?{,?}/*.fa.out
 
 MAKE LIFTALL.LFT (DONE - 2003-07-01 - Hiram)
@@ -356,15 +378,19 @@ VERIFY REPEATMASKER RESULTS (DONE - 2003-06-24 - Hiram)
     #	1100534407 bases of 2495551408 (44.100%) in intersection
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-07-02 - Hiram)
 
     # Make (unmasked) nibs
     ssh kkstore
     cd ~/rn3
     mkdir nibNotMasked
-    foreach f (?{,?}/chr*.fa)
-      echo -n "${f} - "
-      ~/bin/i386/faToNib $f nibNotMasked/$f:t:r.nib
+    foreach i (?{,?})
+	cd $i
+	foreach j ( chr?{,?}{,_random}.fa )
+	echo "nibbing $j"
+	~/bin/i386/faToNib $j ../nibNotMasked/$j:r.nib
+	end
+	cd ..
     end
 
     # Make symbolic links from /gbdb/rn3/nib to the real nibs.
@@ -373,7 +399,7 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
     # going to reset these links to point to the soft masked nibs.
     ssh hgwdev
     mkdir -p /gbdb/rn3/nib
-    foreach f (/cluster/store3/rn3/nib/chr*.nib)
+    foreach f (/cluster/store3/rn3/nibNotMasked/chr*.nib)
       ln -s $f /gbdb/rn3/nib
     end
     # Load /gbdb/rn3/nib paths into database and save size info.
@@ -389,13 +415,13 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
     #	44      88     778 chrom.sizes
 
 
-GOLD AND GAP TRACKS (DONE - 2003-06-26 - Hiram)
+GOLD AND GAP TRACKS (DONE - 2003-07-02 - Hiram)
     ssh hgwdev
     cd ~/rn3
     hgGoldGapGl -noGl rn3 /cluster/store3/rn3 .
 
 
-MAKE GCPERCENT (DONE - 2003-06-26 - Hiram)
+MAKE GCPERCENT (DONE - 2003-07-02 - Hiram)
      ssh hgwdev
      mkdir -p /cluster/store3/rn3/bed/gcPercent
      cd /cluster/store3/rn3/bed/gcPercent
@@ -441,7 +467,7 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN3 (TO DO)
       | hgsql -h genome-testdb hgcentraltest
 
 
-SIMPLE REPEAT TRACK (DONE - 2003-06-26 - Hiram)
+SIMPLE REPEAT TRACK (DONE - 2003-07-01 - Hiram)
     #  Need to be careful with this one on the cluster.  This trf
     #  thing does a lot of I/O on the input and output file.
     #  Place the splits on /cluster/bluearc for cluster access
@@ -449,14 +475,14 @@ SIMPLE REPEAT TRACK (DONE - 2003-06-26 - Hiram)
     mkdir -p /cluster/bluearc/rat/rn3
     cd /cluster/store3/rn3/
     ls ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa  \
-	| cpio -pdm /cluster/bluearc/rat/rn3
+	| tar -c -T - -f - | (cd /cluster/bluearc/rat/rn3.1.split; tar xfBp -)'
 
     # now, a safe cluster job to trf mask
     ssh kk
     mkdir ~/rn3/bed/simpleRepeat
     cd ~/rn3/bed/simpleRepeat
     mkdir trf
-    ls /cluster/bluearc/rat/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
+ ls /cluster/bluearc/rat/rn3.1.split/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
 	> genome.lst
 
     cat << '_EOF_' > runTrf
@@ -508,7 +534,7 @@ Submission to last job:           263s       4.38m     0.07h    0.00d
     hgLoadBed rn3 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 
-PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-26 - Hiram)
+PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-07-02 - Hiram)
 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
@@ -538,7 +564,7 @@ PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-26 - Hiram)
 
 
 MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
-			(DONE - 2003-06-26 - Hiram)
+			(DONE - 2003-07-02 - Hiram)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
@@ -560,10 +586,13 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
     cp -p ~/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
 	/cluster/bluearc/rat/rn3/trfFa
 
-RESET NIB POINTERS TO softNib (DONE - 2003-06-27 - Hiram)
+RESET NIB POINTERS TO softNib (DONE - 2003-07-02 - Hiram)
 
     # As mentioned above the first time this was done, I don't know if
     # this needs to done to reset the links, but I'm going to do it.
+    # In fact, if you have been watching carefully, I am actually
+    # changing the names of where things are.  This used to be
+    # nibNotMasked, now it is softNib which is both masks.
     ssh hgwdev
     cd /gbdb/rn3/nib
     rm -f *
