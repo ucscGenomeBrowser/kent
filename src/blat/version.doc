@@ -1,4 +1,6 @@
 19: 
+     o  Handle a rare case that could lead to zero sized exons.
+     o  Handled a rare case that could lead to backtracking.
      o  Switched blat from cgiSpoof to optionHash so that it can
         be called from a web page more easily.
      o  Adding -fastMap option for very fast high similarity DNA
