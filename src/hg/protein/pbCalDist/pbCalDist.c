@@ -256,9 +256,9 @@ while (row2 != NULL)
 	molWtCnt++;
 	}
     
-    // process PiMw
+    // process pI
     sprintf(cond_str, "accession='%s'", accession);
-    answer2 = sqlGetField(conn, database, "pepPiMw", "pI", cond_str);
+    answer2 = sqlGetField(conn, database, "pepPi", "pI", cond_str);
     if (answer2 != NULL)
 	{
 	pI[pIcnt] = (double)(atof(answer2));
