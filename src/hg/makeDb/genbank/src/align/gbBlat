@@ -29,7 +29,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.23.2.1 2004/07/18 05:23:13 markd Exp $
+# $Id: gbBlat,v 1.23.2.2 2004/07/19 07:14:53 markd Exp $
 #
 set -e
 
@@ -208,8 +208,8 @@ case "$genomeFile" in
         liftFile="$tmpDir/chr.lift"
         # parse the nib spec into various components and get size
         #    /scratch/hg/gs.18/build35/bothMaskedNibs/chr22.nib:1000000-2000000
-        nibDir=`dirname $genomeFile`\
-        nibBase=`basename $genomeFile`\
+        nibDir=`dirname $genomeFile`
+        nibBase=`basename $genomeFile`
 
         set -- `echo $nibBase | gawk '
                 {match($0, "^(.+)\\\..+:([0-9]+)-([0-9]+)$", a);
