@@ -4,7 +4,7 @@
 #include "xa.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgWaba.c,v 1.3 2003/06/04 23:25:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgWaba.c,v 1.4 2003/06/19 18:54:55 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -111,8 +111,8 @@ slSort(&xaList, xaAliCmpTstart);
 
 /* Create names of tables and the tables themselves. 
  * Clear anything in the chrom table. */
-sprintf(fullTable, "waba_%s", species);
-sprintf(chromTable, "%s_%s_waba", chromosome, species);
+sprintf(fullTable, "waba%s", species);
+sprintf(chromTable, "%s_waba%s", chromosome, species);
 dyStringClear(query);
 dyStringPrintf(query, wabaFullCreate, fullTable);
 sqlMaybeMakeTable(conn, fullTable, query->string);

@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.9 2003/06/18 21:38:03 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.10 2003/06/20 08:20:30 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -259,6 +259,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    break;
 	}
     }
+sqlFreeResult(&sr);
 dyStringFree(&query);
 freeHash(&dupeHash);
 slReverse(&list);
@@ -606,9 +607,9 @@ getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 if (cgiVarExists(confVarName))
     doConfigure(NULL);
-else if ((var = cartFindLike(cart, "near.up.*")) != NULL)
+else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
     doConfigure(var);
-else if ((var = cartFindLike(cart, "near.down.*")) != NULL)
+else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
     doConfigure(var);
 else if (cgiVarExists(defaultConfName))
     {

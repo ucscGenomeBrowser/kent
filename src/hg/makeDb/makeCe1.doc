@@ -321,16 +321,30 @@ MAKE GCPERCENT AND GAP tracks (DONE 2003-05-12 - Hiram)
     #	directory III has been moved to 3 when all this was created above
      hgGoldGapGl -noGl ce1 /cluster/store5/worm/ce1 sangerFa
     # there are no gaps in these chromosomes.  They are all making
-    # empty tables
-    #  So, remove them:
-    echo "drop table chrI_gap;" | hgsql ce1
-    echo "drop table chrII_gap;" | hgsql ce1
-    echo "drop table chrIII_gap;" | hgsql ce1
-    echo "drop table chrIV_gap;" | hgsql ce1
-    echo "drop table chrV_gap;" | hgsql ce1
-    echo "drop table chrX_gap;" | hgsql ce1
+    # empty tables except for chrM.  We tried running the browser
+    # with these empty tables removed, but then it complained when
+    # we tried to display the assembly track.  The browser needs to
+    # be fixed.  In the meantime, for completeness, and to allow
+    # featureBits to function, create an empty chrM_gap:
+    cat << '_EOF_' | hgsql ce1
+CREATE TABLE chrM_gap (
+     bin smallint not null,
+     chrom varchar(255) not null,
+     chromStart int unsigned not null,
+     chromEnd int unsigned not null,
+     ix int not null,
+     n char(1) not null,
+     size int unsigned not null,
+     type varchar(255) not null,
+     bridge varchar(255) not null,
+     UNIQUE(chromStart),
+     UNIQUE(chromEnd)
+);
+'_EOF_'
     #  hgGoldGapGl needs to be fixed so it can create a gold track
-    #	and not need to create a gap track.
+    #	and not need to create a gap track.  And the browser needs to
+    #	be fixed so it can display the assembly track without the need
+    #	for the gap tables to exist.
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
     # next machine
@@ -667,8 +681,9 @@ rmdir --ignore-fail-on-non-empty /tmp/$d
 #
 for c in I II III IV V X M
 do
+	echo -n "${c} "
         cat /cluster/store5/worm/ce1/bed/waba/out/chr${c}/c*.wab |
-        ~/bin/i386/hgWaba ce1 cbr chr${c} 0 stdin > proc${c}.out 2>&1
+        ~/bin/i386/hgWaba ce1 Cbr chr${c} 0 stdin > proc${c}.out 2>&1
 done
 
 exit 0
@@ -681,15 +696,14 @@ exit 0
     rm chrom_waba.tab
 
     # worm/ce1/trackDb.ra entry:
-# track cbr_waba
-# shortLabel C. briggsae
-# longLabel C. briggsae homologies
-# #group compGeno    - temporary cheating to get track next to sangerGene
-# group genes
-# priority 50
-# visibility dense
-# color 140,0,200
-# altColor 210,140,250
+#   track cbrWaba
+#   shortLabel Briggsae Waba
+#   longLabel C. briggsae Waba Alignments
+#   group genes
+#   priority 50
+#   visibility dense
+#   color 140,0,200
+#   altColor 210,140,250
 
 # BEGINNING OF Cb1 BLASTZ
 

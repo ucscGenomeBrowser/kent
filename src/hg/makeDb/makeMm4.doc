@@ -35,7 +35,7 @@ GET UPDATED MOUSE ASSEMBLY FILES FROM NCBI (Maybe later if updates)
       mget allrefcontig.chr.agp.gz contig.idmap ctg_coords seq_contig.md
       quit    
 
-BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (Working 2003-06-17)
+BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-06-18 - hc)
 
     # This version of the mouse sequence data is in 
     # /cluster/store5/mm.2003.06/mm4/assembly
@@ -63,6 +63,7 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (Working 2003-06-17)
     end
 
 CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (TBD)
+    #  At this time, I do not find any _random bits - 2003-06-18 - Hiram
     ssh eieio
     cd /cluster/store5/mm.2003.06/ncbi
     ../mm4/jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.agp \
@@ -114,49 +115,58 @@ BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (TBD)
       endif
     end
 
-CREATING DATABASE (TBD)
+CREATING DATABASE (DONE - 2003-06-18 - Hiram)
 
 o - Create the database.
-     - ssh hgwdev
-     - Enter mysql via:
-           mysql -u hgcat -pbigsecret
-     - At mysql prompt type:
-        create database mm4;
-        quit
-     - make a semi-permanent read-only alias:
-        alias mm4 "mysql -u hguser -phguserstuff -A mm4"
-o - Use df to ake sure there is at least 5 gig free on hgwdev:/var/lib/mysql
-
-
-CREATING GRP TABLE FOR TRACK GROUPING (TBD)
     ssh hgwdev
-    echo "create table grp (PRIMARY KEY(NAME)) select * from mm2.grp" \
+    echo 'create database mm4' | hgsql ''
+    # if you need to delete this database:  !!! WILL DELETE EVERYTHING !!!
+    #	echo 'drop database mm4' | hgsql ce1
+        alias mm4 "mysql -u hguser -phguserstuff -A mm4"
+o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
+    # [hiram@hgwdev /] df -h /var/lib/mysql
+    # Filesystem            Size  Used Avail Use% Mounted on
+    # /dev/sda1             472G  378G   69G  85% /var/lib/mysql
+
+
+CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-18 - Hiram)
+    ssh hgwdev
+    echo "create table grp (PRIMARY KEY(NAME)) select * from mm3.grp" \
       | hgsql mm4
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TBD)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-18 - Hiram)
 
     # Create (unmasked) nib files 
     ssh eieio
-    cd ~/mm
-    mkdir -p nib
+    cd /cluster/store5/mm.2003.06/mm4
+    mkdir -p unmaskedNib
     foreach f (?{,?}/chr*.fa)
       echo $f:t:r
-      faToNib $f nib/$f:t:r.nib
+      faToNib $f unmaskedNib/$f:t:r.nib
     end
     # Create symbolic links from /gbdb/mm4/nib to real nib files
     ssh hgwdev
     mkdir -p /gbdb/mm4/nib
-    foreach f (/cluster/store5/mm.2003.06/mm4/nib/chr*.nib)
+    foreach f (/cluster/store5/mm.2003.06/mm4/unmaskedNib/chr*.nib)
       ln -s $f /gbdb/mm4/nib
     end
 
     # Load /gbdb nib paths into database and save size info.
     ssh hgwdev
     hgsql mm4  < ~/src/hg/lib/chromInfo.sql
-    cd ~/mm
+    cd /cluster/store5/mm.2003.06/mm4
     hgNibSeq -preMadeNib mm4 /gbdb/mm4/nib ?/chr*.fa ??/chr*.fa 
     echo "select chrom,size from chromInfo" | hgsql -N mm4 > chrom.sizes
+    # check the resulting file chrom.sizes for numbers such as:
+#    chr1    211105805
+#    chr2    185157585
+#    chr3    174736067
+#          ... etc ...
+#    chr17   104075538
+#    chr18   98331070
+#    chr19   64517277
+
 
 Store o+o info in database.
      cd /cluster/store5/mm.2003.06/mm4
@@ -167,7 +177,7 @@ Make and load GC percent table
      mkdir -p /cluster/store5/mm.2003.06/mm4/bed/gcPercent
      cd /cluster/store5/mm.2003.06/mm4/bed/gcPercent
      hgsql mm4  < ~/src/hg/lib/gcPercent.sql
-     hgGcPercent mm4 ../../nib
+     hgGcPercent mm4 ../../unmaskedNib
 
 
 ADD MAP CONTIGS TRACK (TBD)
@@ -195,8 +205,12 @@ ADD MAP CONTIGS TRACK (TBD)
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (TBD)
     # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
-    echo 'insert into dbDb values("mm4", "Mouse Feb. 2003", "/gbdb/mm4/nib", "Mouse", "USP18", 1, 30, "Mouse");' \
+    echo 'insert into dbDb values("mm4", "June 2003", "/gbdb/mm4/nib", "Mouse", "USP18", 1, 30, "Mouse");' \
       | hgsql -h genome-testdb hgcentraltest
+    #	If you need to delete that entry:
+    	echo 'delete from dbDb where name="mm4";' \
+    		 hgsql -h genome-testdb hgcentraltest
+
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
     cd ~/src/hg/makeDb/trackDb
@@ -205,9 +219,10 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (TBD)
     make update
     make alpha
     cvs commit makefile
+    # the browser doesn't actually function until 
 
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM4 (TBD)
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM4 (mm4 SERVER REQUESTED 2003-06-18)
     ssh hgwdev
     echo 'insert into blatServers values("mm4", "blat9", "17778", "1"); \
           insert into blatServers values("mm4", "blat9", "17779", "0");' \

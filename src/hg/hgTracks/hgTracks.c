@@ -75,7 +75,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.537 2003/06/19 15:57:09 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.538 2003/06/19 18:53:50 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -5795,7 +5795,7 @@ void cbrWabaMethods(struct track *tg)
 /* Make track for C briggsae alignments. */
 {
 wabaMethods(tg);
-tg->customPt = "_cbr_waba";
+tg->customPt = "_wabaCbr";
 cartSetInt(cart, "cbrWaba.start", winStart);
 cartSetInt(cart, "cbrWaba.end", winEnd);
 }
@@ -9977,7 +9977,7 @@ registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
 registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
-registerTrackHandler("cbr_waba", cbrWabaMethods);
+registerTrackHandler("wabaCbr", cbrWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
