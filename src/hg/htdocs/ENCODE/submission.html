@@ -72,10 +72,11 @@
 		    descriptions below and create a tab-delimited file
 		    in that format.</LI>
 
-		    <LI>If necessary, use our <a
+		    <LI>If necessary, data from previous assemblies in
+		    BED format may be transformed to the Human July
+		    2003 (hg16) assembly with our <a
 		    href="http://hgwdev.cse.ucsc.edu/cgi-bin/hgLiftOver"
-		    >liftOver</a> tools to transform the coordinates
-		    to the Human July 2003 (hg16) assembly.</LI>
+		    >liftOver</a> tools.</LI>
 
 		    <LI>Test your file by loading it into the browser
                     as a <a
@@ -412,12 +413,12 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 
 		    <P><B>Parameters for wiggle track definition lines</B></P>
 		    All options are placed in a single line separated by spaces:
-<FONT color="#0000FF"><PRE>  <B>track type=wiggle_0 name=</B><I>track_label</I> <B>description=</B><I>center_label</I> \
-<B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I> \
-<B>        priority=</B><I>priority</I> <B>offset=</B><I>offset</I> <B>autoScale=</B><I>on|off</I> \
-<B>        gridDefault=</B><I>on|off</I> <B>maxHeightPixels=</B><I>max:default:min</I> \
-<B>        graphType=</B><I>bar|points</I> <B>viewLimits=</B><I>lower:upper</I> \
-<B>        yLineMark=</B><I>real-value</I> <B>yLineOnOff=</B><I>on|off</I> \
+<FONT color="#0000FF"><PRE>  <B>track type=wiggle_0 name=</B><I>track_label</I> <B>description=</B><I>center_label</I>
+<B>        visibility=</B><I>display_mode</I> <B>color=</B><I>r,g,b</I> <B>altColor=</B><I>r,g,b</I>
+<B>        priority=</B><I>priority</I> <B>offset=</B><I>offset</I> <B>autoScale=</B><I>on|off</I>
+<B>        gridDefault=</B><I>on|off</I> <B>maxHeightPixels=</B><I>max:default:min</I>
+<B>        graphType=</B><I>bar|points</I> <B>viewLimits=</B><I>lower:upper</I>
+<B>        yLineMark=</B><I>real-value</I> <B>yLineOnOff=</B><I>on|off</I>
 <B>        windowingFunction=</B><I>maximum|mean|minimum</I> <B>smoothingWindow=</B>off|2-16
 </I></PRE></FONT>
 		    The track type with version is REQUIRED, and it currently must be <I>wiggle_0</I>:
@@ -453,7 +454,8 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 		    position is 1.  The last position in a chromosome
 		    of length N would be N.  Only positions specified
 		    have data.  Positions not specified do not have
-		    data and will not be graphed.
+		    data and will not be graphed.  All positions specified
+		    in the input data must be in numerical order.
 
 		    <UL><LI>The BED format is a subset of the previous description, with four columns of data:
 <FONT color="#0000FF"><PRE> <I>chrom chromStart chromEnd dataValue</I></PRE></FONT> 
@@ -486,26 +488,49 @@ chr22 2000 6000 cloneB 900 - 2000 6000 0 2 433,399, 0,3601</TT></PRE></FONT>
 		    chrom, start, and step.
 		    </UL>
 		    <P><B>Example</B></P>
-		    Specifying 14 separate data points on chr19 covering a range of 1157713 to 1160650
-		    <FONT color="#0000FF"><PRE>  browser position chr19:1157713-1160650
-  browser hide all
-  track type=wiggle_0 name=STK11 description="STK11 exon 1" visibility=full
-  chr19 1157713 1157981 35.0
-  chr19 1177982 1158269 68.3
-  chr19 1158306 1158970 0.0
-  variableStep chrom=chr19 span=5
-  1159001 45.3
-  1159006 47.8
-  1159011 48.9
-  1159101 36.0
-  fixedStep chrom=chr19 start=1160001 step=100 span=50
-  -1.0
-  -0.5
-  -0.25
-  0.0
-  0.5
-  1.0
-  1.5</PRE></FONT>
+		    Specifying 28 separate data points in three tracks on chr19 in the region 59,302,001 to 59,311,000
+		    <FONT color="#0000FF"><PRE>
+browser position chr19:59302001-59311000
+browser hide all
+browser pack refGene
+browser full altGraph
+#	300 base wide bar graph
+track type=wiggle_0 name="Bed Format" description="BED format" visibility=full
+chr19 59302001 59302300 -1.0
+chr19 59302301 59302600 -0.75
+chr19 59302601 59302900 -0.50
+chr19 59302901 59303200 -0.25
+chr19 59303201 59303500 0.0
+chr19 59303501 59303800 0.25
+chr19 59303801 59304100 0.50
+chr19 59304101 59304400 0.75
+chr19 59304401 59304700 1.00
+#	150 base wide bar graph at every 300 bases
+track type=wiggle_0 name="variableStep" description="variableStep format" visibility=full
+variableStep chrom=chr19 span=150
+59304701 10.0
+59305001 12.5
+59305301 15.0
+59305601 17.5
+59305901 20.0
+59306201 17.5
+59306501 15.0
+59306801 12.5
+59307101 10.0
+#	100 base wide bar graph at every 300 bases
+track type=wiggle_0 name="fixedStep" description="fixed step" visibility=full
+fixedStep chrom=chr19 start=59307401 step=300 span=100
+1000
+ 900
+ 800
+ 700
+ 600
+ 500
+ 400
+ 300
+ 200
+ 100
+                    </PRE></FONT>
 	            </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
 	    <BR></TD></TR></TABLE>
