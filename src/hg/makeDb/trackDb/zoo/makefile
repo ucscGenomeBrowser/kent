@@ -37,3 +37,5 @@ alpha:
 	hgTrackDb zoo zooTetra3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zoo zooZebrafish3 trackDb ../../../lib/trackDb.sql .
 
+beta: alpha
+
