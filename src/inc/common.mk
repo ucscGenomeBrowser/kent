@@ -12,6 +12,15 @@ HG_WARN_ERR = -DJK_WARN -Wall -Werror
 SCRIPTS=/cluster/bin/scripts
 CGI_BIN=/usr/local/apache/cgi-bin
 MKDIR=mkdir -p
+STRIP=strip
+
+# portable naming of compiled executables: add ".exe" if compiled on 
+# Windows (with cygwin).
+ifeq (${OS}, Windows_NT)
+  EXE=.exe
+else
+  EXE=
+endif
 
 .c.o:
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -c $*.c
