@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.40 2004/06/06 03:23:37 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.41 2004/06/07 23:05:16 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -68,6 +68,7 @@ errAbort(
   "Options:\n"
   "   -tileSize=N size of n-mers to index.  Default is 11 for nucleotides, 4 for\n"
   "               proteins (or translated nucleotides).\n"
+  "   -stepSize=N spacing between tiles. Default is tileSize.\n"
   "   -minMatch=N Number of n-mer matches that trigger detailed alignment\n"
   "               Default is 2 for nucleotides, 3 for protiens.\n"
   "   -maxGap=N   Number of insertions or deletions allowed between n-mers.\n"
