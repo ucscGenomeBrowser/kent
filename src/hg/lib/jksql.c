@@ -261,7 +261,7 @@ sqlUpdate(sc, query);
 return TRUE;
 }
 
-boolean sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
+void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
 /* Drop table if it exists, and recreate it. */
 {
 sqlDropTable(sc, table);

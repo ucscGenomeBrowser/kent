@@ -120,7 +120,7 @@ boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
 
-boolean sqlRemakeTable(struct sqlConnection *sc, char *table, char *create);
+void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create);
 /* Drop table if it exists, and recreate it. */
 
 char **sqlNextRow(struct sqlResult *sr);
