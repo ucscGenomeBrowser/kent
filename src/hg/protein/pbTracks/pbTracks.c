@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.14 2004/01/16 18:38:07 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.15 2004/01/16 20:00:43 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -227,7 +227,7 @@ hPrintf("<P>");
 
 hPrintf("\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
             gifTn2.forCgi, pixWidth, pixHeight, mapName);
-hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
+hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelp.shtml#histograms\" TARGET=_blank>");
 hPrintf("Explanation of Protein Property Histograms</A><BR>");
 
 hPrintf("<P>");
@@ -260,7 +260,7 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>", 
 	"UCSC Proteome Browser (V1.0)");
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/hgTracksHelp.html\">%s</A></TD>",
+hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelp.shtml\">%s</A></TD>",
         wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
 fflush(stdout);
