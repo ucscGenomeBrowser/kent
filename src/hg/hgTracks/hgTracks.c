@@ -1610,7 +1610,9 @@ maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount 
 if( sameString( tg->mapName, "humMusL" ) 
 	|| sameString( tg->mapName, "musHumL" )  
 	|| sameString( tg->mapName, "regPotential" )
-	|| sameString( tg->mapName, "olly25"))
+	|| sameString( tg->mapName, "olly25")
+	|| sameString( tg->mapName, "olly2")
+	)
     {
 
 
