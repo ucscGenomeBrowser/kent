@@ -129,6 +129,7 @@ void showAliPlaces(char *pslName, char *faName, char *database)
 struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
+char *hgcUrl = hgcName();
 char *extraCgi = "";
 char *sort = cgiUsualString("sort", sortList[0]);
 
@@ -165,15 +166,21 @@ else
     uglyf("DEFAULT<BR>\n");
     slSort(&pslList, pslCmpQueryScore);
     }
+printf("<H2>BLAT Search Results</H2>");
 printf("<TT><PRE>");
-printf(" QUERY           SCORE START END  TOTAL IDENTITY CHROMOSOME STRAND  START    END  \n");
-printf("----------------------------------------------------------------------------------\n");
+printf("   ACTIONS      QUERY           SCORE START END  TOTAL IDENTITY CHRO STRAND  START    END  \n");
+printf("--------------------------------------------------------------------------------------------\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s%s\">",
 	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
 	pslName, faName, extraCgi);
-    printf("%-14s %5d %5d %5d %5d %5.1f%%  %9s  %2s  %9d %9d</A>\n",
+    printf("browser</A> ");
+    printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s\">", 
+    	hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
+	psl->tStart, psl->tEnd, database);
+    printf("details</A> ");
+    printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
 	psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
 	100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
 	skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd);
