@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.60 2003/08/08 17:09:07 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.61 2003/08/15 16:38:37 hiram Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -116,7 +116,14 @@ printGenomeListHtml(db, onChangeOrg);
 puts("</td>\n");
 
 puts("<td align=center>\n");
-printAssemblyListHtml(db, onChangeDB);
+/*   HACK ALERT - Zoo needs to have different pulldown behavior - Hiram */
+if ( startsWith( "Zoo", organism ) ) {
+puts("<select NAME=\"db\" onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\">"
+    "\t<option SELECTED VALUE=\"zooHuman3\">June 2002</option>"
+    "\t</select>");
+} else {
+    printAssemblyListHtml(db, onChangeDB);
+}
 puts("</td>\n");
 
 puts("<td align=center>\n");
