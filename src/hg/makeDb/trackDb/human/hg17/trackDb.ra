@@ -84,6 +84,15 @@ color 100,50,0
 type bed 6 .
 url http://www.sanger.ac.uk/Software/Rfam/
 
+track wgRna
+shortLabel wgRna
+longLabel C/D and H/ACA Box snoRNAs and microRNAs from Weber and Griffiths-Jones
+group genes
+priority 63.5
+visibility full
+color 200,80,0
+type bed 8 +
+
 track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
