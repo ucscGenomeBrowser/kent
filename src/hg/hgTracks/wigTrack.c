@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.30 2004/01/20 19:44:36 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.31 2004/01/20 20:02:10 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -95,7 +95,7 @@ for (el = *pList; el != NULL; el = next)
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
 
-#if ! defined(DEBUG)
+#if defined(DEBUG)
 #define DBGMSGSZ	1023
 extern char dbgMsg[DBGMSGSZ+1];
 extern void wigDebugPrint(char * name);
