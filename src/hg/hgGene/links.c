@@ -20,6 +20,8 @@ struct link
     char *nameFormat;	/* Text formatting for name. */
     char *url;		/* URL of link. */
     boolean useHgsid;	/* If true add hgsid to link. */
+    char *preCutAt;	/* String to chop at before sql. */
+    char *postCutAt;	/* String to chop at after sql. */
     };
 
 static int linkCmpPriority(const void *va, const void *vb)
@@ -75,12 +77,27 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    link->nameFormat = linkOptionalField(ra, "nameFormat");
 	    link->url = linkRequiredField(ra, "url");
 	    link->useHgsid = (linkOptionalField(ra, "hgsid") != NULL);
+	    link->preCutAt = linkOptionalField(ra, "preCutAt");
+	    link->postCutAt = linkOptionalField(ra, "postCutAt");
 	    slAddHead(&linkList, link);
 	    }
 	}
     }
 slSort(&linkList, linkCmpPriority);
 return linkList;
+}
+
+static char *cloneAndCut(char *s, char *cutAt)
+/* Return copy of string that may have stuff cut off end. */
+{
+char *clone = cloneString(s);
+if (cutAt != NULL)
+    {
+    char *end = stringIn(cutAt, clone);
+    if (end != NULL)
+	*end = 0;
+    }
+return clone;
 }
 
 char *linkGetUrl(struct link *link, struct sqlConnection *conn,
@@ -99,19 +116,23 @@ if (sameString(link->name, "family"))
     if (!hgNearOk(database))
         return NULL;
     }
+geneId = cloneAndCut(geneId, link->preCutAt);
 safef(query, sizeof(query), link->idSql, geneId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
     struct dyString *dy = newDyString(0);
-    dyStringPrintf(dy, link->url, row[0], row[1], row[2]);
+    char *name = cloneAndCut(row[0], link->postCutAt);
+    dyStringPrintf(dy, link->url, name, row[1], row[2]);
     if (link->useHgsid)
 	dyStringPrintf(dy, "&%s", cartSidUrlString(cart));
     url = cloneString(dy->string);
     dyStringFree(&dy);
+    freez(&name);
     }
 sqlFreeResult(&sr);
+freeMem(geneId);
 return url;
 }
 

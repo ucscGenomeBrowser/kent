@@ -9,10 +9,19 @@ name family
 tables bdgpGene
 idSql select name from bdgpGene where name = '%s'
 
+name flyBase
+shortLabel FlyBase
+tables bdgpGeneInfo
+idSql select flyBaseId from bdgpGeneInfo where bdgpName = '%s'
+preCutAt -
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
+priority 25
+
 name bdgp
 shortLabel BDGP
 tables bdgpGene
 idSql select name from bdgpGene where name = '%s'
+postCutAt -
 url http://www.fruitfly.org/cgi-bin/annot/gene?%s
 priority 26
 
