@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.10 2003/12/08 23:02:05 angie Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.11 2003/12/10 04:02:39 angie Exp $";
 
 double minMatch = 0.95;
 double minBlocks = 1.00;
@@ -686,7 +686,6 @@ if (error == NULL)
     	&rangeList, &badRanges, &error);
     }
 
-
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
 if (error == NULL)
     {
@@ -697,6 +696,7 @@ if (error == NULL)
 	bed->strand[0] = otherStrand(bed->strand[0]);
 	}
     bed->chromStart = start = rangeList->start;
+    bed->blockCount = slCount(rangeList);
     for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
 	{
 	end = range->end;
@@ -833,6 +833,7 @@ if (error == NULL)
 	psl->strand[0] = otherStrand(psl->strand[0]);
 	}
     psl->tStart = start = rangeList->start;
+    psl->blockCount = slCount(rangeList);
     for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
 	{
 	end = range->end;
@@ -1027,6 +1028,7 @@ if (error == NULL)
 	bed->strand[0] = otherStrand(bed->strand[0]);
 	}
     bed->chromStart = start = rangeList->start;
+    bed->blockCount = slCount(rangeList);
     for (i=0, range = rangeList; range != NULL; range = range->next, ++i)
 	{
 	end = range->end;
