@@ -14,14 +14,15 @@ set today=""
 set diffs=0
 set outfile=""
 set summaryFile=""
-set mode="terse realTime"
+set mode="fast"
 
 if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  checks all databases on RR and compares trackDbs."
   echo
   echo "    usage:  RRmachine, "
-  echo "            [mode] (realTime|fast = uses mysql instead of WGET)"
+  echo "            [mode] (realTime|fast)"
+  echo "       - defaults to fast which uses mysql-genome instead of WGET"
   echo
   exit 1
 else
@@ -29,7 +30,7 @@ else
 endif
 
 if ( $#argv ==  2 ) then
-  set mode="terse $argv[2]"
+  set mode="$argv[2]"
 endif
 
 checkMachineName.csh $machine
@@ -83,7 +84,6 @@ foreach db ( $dbs )
     echo "    $diffs\n<P>" >> $summaryFile
   endif
   compareTrackDbFast.csh hgwbeta $machine $db html >& $htmlfile
-  sleep 30
 end
 
 echo "\n</PRE></BODY></HTML>" >> $summaryFile
