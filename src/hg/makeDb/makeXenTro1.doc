@@ -331,6 +331,65 @@ cvs commit etc/genbank.conf
     ln -s `pwd`/gc5Base.wib /gbdb/xenTro1/wib
     hgLoadWiggle -pathPrefix=/gbdb/xenTro1/wib xenTro1 gc5Base gc5Base.wig
 
+# PRODUCE X. LAEVIS MRNA ALIGNMENTS (DONE 1/14/05 JK)
+    # Make working directory and get Laevis RNA
+    ssh hgwdev
+    mkdir -p /cluster/data/xenTro1/bed/xenLaeRna
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    hgSpeciesRna hg17 Xenopus laevis xenLaeRna.fa
+
+    # Split RNA into 3 and load on temp device
+    ssh kkr1u00
+    cd /iscratch/i/xenTro1
+    mkdir xenLaeRna
+    cd xenLaeRna
+    faSplit sequence /cluster/data/xenTro1/bed/xenLaeRna/xenLaeRna.fa 3 xl
+    iSync
+
+    # Do blatz cluster run
+    ssh kk
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    mkdir run1
+    cd run1
+    mkdir psl
+    awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > genome.lst
+    ls -1 /iscratch/i/xenTro1/xenLaeRna/*.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=6000 /iscratch/i/xenTro1/nib/xenTro1.2bit:$(file1) $(path2) -out=psl {check out line psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    # Then do usual para try/para push/para time
+CPU time in finished jobs:    3896883s   64948.04m  1082.47h   45.10d  0.124 y
+IO & Wait Time:               1031103s   17185.06m   286.42h   11.93d  0.033 y
+Average job time:                  61s       1.01m     0.02h    0.00d
+Longest job:                     3276s      54.60m     0.91h    0.04d
+Submission to last job:          5989s      99.82m     1.66h    0.07d
+
+    # Do sort and near-besting on file server
+    ssh kksilo
+    cd /cluster/data/xenTro1/bed/xenLaeRna/run1
+    catDir psl | pslFilter -minScore=100 -minAli=255 -noHead stdin stdout | sort -k 10 > ../filtered.psl
+    cd ..
+    pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
+    sort -k 14 nearBest.psl > xenLaeRna.psl
+
+    # Clean up
+    rm -r run1/psl 
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    hgLoadPsl xenTro1 xenLaeRna.psl 
+    ln -s /cluster/data/xenTro1/bed/xenLaeRna/xenLaeRna.fa /gbdb/xenTro1/xenLaeRna.fa
+
+
+
+
+
 # PRODUCING GENSCAN PREDICTIONS (DONE 10/27/04 Fan)
   
     ssh hgwdev
