@@ -123,7 +123,11 @@ boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
-char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
+
+/* See this NCBI web doc for more info about entrezFormat:
+ * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
+char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
+/* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
@@ -143,17 +147,31 @@ cartHtmlStart(title);
 static void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
-fprintf(f, "\"%s&db=n&term=%s\"", entrezScript, accession);
+fprintf(f, entrezFormat, "Nucleotide", accession, "GenBank");
 }
 
 static void printEntrezProteinUrl(FILE *f, char *accession)
-/* Print URL for Entrez browser on a nucleotide. */
+/* Print URL for Entrez browser on a protein. */
 {
-fprintf(f, "\"%s&db=p&term=%s\"", entrezScript, accession);
+fprintf(f, entrezFormat, "Protein", accession, "GenPept");
+}
+
+static void printEntrezPubMedUrl(FILE *f, char *term)
+/* Print URL for Entrez browser on a PubMed search. */
+{
+fprintf(f, entrezFormat, "PubMed", term, "DocSum");
+}
+
+static void printEntrezOMIMUrl(FILE *f, int id)
+/* Print URL for Entrez browser on an OMIM search. */
+{
+char buf[64];
+snprintf(buf, sizeof(buf), "%d", id);
+fprintf(f, entrezFormat, "OMIM", buf, "Detailed");
 }
 
 static void printSwissProtProteinUrl(FILE *f, char *accession)
-/* Print URL for Entrez browser on a nucleotide. */
+/* Print URL for SwissProt browser on a protein. */
 {
 fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
 }
@@ -2414,8 +2432,11 @@ printf("<B>%s:</B> ", title);
 if (sameWord(text, "n/a"))
     printf("n/a<BR>\n");
 else
-    printf("<A HREF=\"%s&db=m&term=%s\" TARGET=_blank>%s</A><BR>", entrezScript, 
-        encoded, text);
+    {
+    printf("<A HREF=\"");
+    printEntrezPubMedUrl(stdout, encoded);
+    printf("\" TARGET=_blank>%s</A><BR>\n", text);
+    }
 freeMem(encoded);
 }
 
@@ -2639,9 +2660,9 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    printf("<H2>Information on %s <A HREF=", type);
+    printf("<H2>Information on %s <A HREF=\"", type);
     printEntrezNucleotideUrl(stdout, acc);
-    printf(" TARGET=_blank>%s</A></H2>\n", acc);
+    printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
     printf("<B>description:</B> %s<BR>\n", description);
 
@@ -2651,7 +2672,7 @@ if (row != NULL)
     gbToEntrezAuthor(author, dy);
     medlineLinkedLine("author", author, dy->string);
     printf("<B>organism:</B> ");
-    printf("<A href=\"http://www.ncbi.nlm.nih.gov/htbin-post/Taxonomy/wgetorg?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>", 
+    printf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>", 
     	cgiEncode(organism));
     printf("%s</A><BR>\n", organism);
     printf("<B>tissue:</B> %s<BR>\n", tissue);
@@ -3003,12 +3024,12 @@ sprintf(query,
     clone->chrom, clone->chromStart, clone->chromEnd, clone->name);
 fragCount = sqlQuickNum(conn, query);
 
-printf("<H2>Information on <A HREF=");
+printf("<H2>Information on <A HREF=\"");
 printEntrezNucleotideUrl(stdout, cloneName);
-printf(" TARGET=_blank>%s</A></H2>\n", cloneName);
-printf("<B>GenBank: <A HREF=");
+printf("\" TARGET=_blank>%s</A></H2>\n", cloneName);
+printf("<B>GenBank: <A HREF=\"");
 printEntrezNucleotideUrl(stdout, cloneName);
-printf(" TARGET=_blank>%s</A></B> <BR>\n", cloneName);
+printf("\" TARGET=_blank>%s</A></B> <BR>\n", cloneName);
 printf("<B>status:</B> %s<BR>\n", cloneStageName(clone->stage));
 printf("<B>fragments:</B> %d<BR>\n", fragCount);
 printf("<B>size:</B> %d bases<BR>\n", clone->seqSize);
@@ -4458,10 +4479,9 @@ if (km != NULL)
 	printf("<B>Aliases:</B> %s<BR>\n", km->aliases);
     if (km->omimId != 0)
 	{
-	printf("<B>OMIM:</B> ");
-	printf(
-	   "<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" TARGET=_blank>%d</A><BR>\n", 
-	    km->omimId, km->omimId);
+	printf("<B>OMIM:</B> <A HREF=\"");
+	printEntrezOMIMUrl(stdout, km->omimId);
+	printf("\" TARGET=_blank>%d</A><BR>\n", km->omimId);
 	}
     if (km->locusLinkId != 0)
         {
@@ -4555,9 +4575,9 @@ if (dnaBased)
     printf("  Please follow the link below for further details.<br>\n");
 
     printf("<UL><LI>");
-    printf("<B>NCBI: </B> <A HREF =\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi");
-    printf("?db=nucleotide&cmd=search&term=%s\" TARGET=_blank>%s</A><BR>\n",
-            refSeqName, refSeqName);
+    printf("<B>NCBI: </B> <A HREF=\"");
+    printEntrezNucleotideUrl(stdout, refSeqName);
+    printf("\" TARGET=_blank>%s</A><BR>\n", refSeqName);
     printf("</UL>");
     }
 else
@@ -4570,8 +4590,9 @@ else
     if (mrnaDesc != NULL) printf("%s\n", mrnaDesc);
 
     printf("<UL><LI>");
-    printf("<B>NCBI: </B> <A HREF =\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=%s\" TARGET=_blank>%s</A><BR>\n", 
-        mrnaName, mrnaName);
+    printf("<B>NCBI: </B> <A HREF=\"");
+    printEntrezNucleotideUrl(stdout, mrnaName);
+    printf("\" TARGET=_blank>%s</A><BR>\n", mrnaName);
     printf("</UL>");
     }
 
@@ -4685,9 +4706,9 @@ else
     	sqlFreeResult(&sr);
     	printf("<B>RefSeq:</B>"); 
     	printf(" A corresponding Reference Sequence ");
-    	printf("<A HREF=");
+    	printf("<A HREF=\"");
     	printEntrezNucleotideUrl(stdout, refSeqName);
-    	printf(" TARGET=_blank>%s</A>", refSeqName);
+    	printf("\" TARGET=_blank>%s</A>", refSeqName);
 	printf(" is not found in our database for "); 
         freezeName = hFreezeFromDb(database);
         if(freezeName == NULL) freezeName = "Unknown";
@@ -4700,9 +4721,9 @@ else
     	sqlFreeResult(&sr);
     
     	htmlHorizontalLine();
-    	printf("<B>RefSeq:</B> <A HREF=");
+    	printf("<B>RefSeq:</B> <A HREF=\"");
     	printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-    	printf(" TARGET=_blank>%s</A>", rl->mrnaAcc);
+    	printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 
     	/* If refSeqStatus is available, report it: */
     	if (hTableExists("refSeqStatus"))
@@ -4722,10 +4743,9 @@ else
     
     	if (rl->omimId != 0)
     	    {
-    	    printf("<B>OMIM:</B> ");
-    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" ",
-		   rl->omimId);
-	    printf("TARGET=_blank>%d</A><BR>\n", rl->omimId);
+    	    printf("<B>OMIM:</B> <A HREF=\"");
+	    printEntrezOMIMUrl(stdout, rl->omimId);
+	    printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
     	    }
     	if (rl->locusLinkId != 0)
    	    {
@@ -5048,9 +5068,9 @@ rl = refLinkLoad(row);
 sqlFreeResult(&sr);
 printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
     
-printf("<B>RefSeq:</B> <A HREF=");
+printf("<B>RefSeq:</B> <A HREF=\"");
 printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-printf(" TARGET=_blank>%s</A>", rl->mrnaAcc);
+printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 /* If refSeqStatus is available, report it: */
 if (hTableExists("refSeqStatus"))
     {
@@ -5066,11 +5086,9 @@ if (hTableExists("refSeqStatus"))
 puts("<BR>");
 if (rl->omimId != 0)
     {
-    printf("<B>OMIM:</B> ");
-    printf(
-       "<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" TARGET=_blank>%d</A><BR>\n
-", 
-	rl->omimId, rl->omimId);
+    printf("<B>OMIM:</B> <A HREF=\"");
+    printEntrezOMIMUrl(stdout, rl->omimId);
+    printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
     }
 if (rl->locusLinkId != 0)
     {
@@ -5196,10 +5214,10 @@ if (sqlTableExists(conn, table))
 	    isFirst = FALSE;
 	    gotAny = TRUE;
 	    }
-	printf("<A HREF=");
+	printf("<A HREF=\"");
 	sprintf(query, "%s", gi);
 	printEntrezProteinUrl(stdout, query);
-	printf(" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
+	printf("\" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
 	}
     }
 if (gotAny)
@@ -5300,10 +5318,10 @@ if (sqlTableExists(connMm, table))
 	    isFirst = FALSE;
 	    gotAny = TRUE;
 	    }
-	printf("<A HREF=");
+	printf("<A HREF=\"");
 	sprintf(query, "%s[gi]", gi);
 	printEntrezProteinUrl(stdout, query);
-	printf(" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
+	printf("\" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
 	}
     }
 if (gotAny)
@@ -6242,9 +6260,9 @@ if (row != NULL)
 	    printf("<TR><TH ALIGN=left>Genbank:</TH>");
 	    for (i = 0; i < infoRow->gbCount; i++) 
 		{
-		printf("<TD><A HREF=");
+		printf("<TD><A HREF=\"");
 		printEntrezNucleotideUrl(stdout, infoRow->genbank[i]);
-		printf(">%s</A></TD>", infoRow->genbank[i]);
+		printf("\">%s</A></TD>", infoRow->genbank[i]);
 		}
 	    printf("</TR>\n");
 	    } 
@@ -6677,9 +6695,9 @@ if (row != NULL)
 	printf("<TR><TH>Genbank Accession:</TH>");
 	for (i = 0; i < fc->accCount; i++) 
 	    {
-	    printf("<TD><A HREF=");
+	    printf("<TD><A HREF=\"");
 	    printEntrezNucleotideUrl(stdout, fc->accNames[i]);
-	    printf(">%s</A></TD>", fc->accNames[i]);	  
+	    printf("\">%s</A></TD>", fc->accNames[i]);	  
 	    }
 	printf("</TR>\n");
 	}
@@ -6697,9 +6715,9 @@ if (row != NULL)
 	printf("<TR><TH ALIGN=left>BAC end sequence:</TH>");
 	for (i = 0; i < fc->beCount; i++) 
 	    {
-	    printf("<TD><A HREF=");
+	    printf("<TD><A HREF=\"");
 	    printEntrezNucleotideUrl(stdout, fc->beNames[i]);
-	    printf(">%s</A></TD>", fc->beNames[i]);
+	    printf("\">%s</A></TD>", fc->beNames[i]);
 	    }
 	printf("</TR>\n");
 	} 
@@ -6856,9 +6874,9 @@ if (row != NULL)
     if (upc->accT7) 
 	{
 	printf("<TR><TH ALIGN=left>T7 end sequence:</TH>");
-	printf("<TD><A HREF=");
+	printf("<TD><A HREF=\"");
 	printEntrezNucleotideUrl(stdout, upc->accT7);
-	printf(">%s</A></TD>", upc->accT7);
+	printf("\">%s</A></TD>", upc->accT7);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->startT7, upc->endT7);
 	printf("</TR>\n");
@@ -6866,9 +6884,9 @@ if (row != NULL)
     if (upc->accSP6) 
 	{
 	printf("<TR><TH ALIGN=left>SP6 end sequence:</TH>");
-	printf("<TD><A HREF=");
+	printf("<TD><A HREF=\"");
 	printEntrezNucleotideUrl(stdout, upc->accSP6);
-	printf(">%s</A></TD>", upc->accSP6);
+	printf("\">%s</A></TD>", upc->accSP6);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->startSP6, upc->endSP6);
 	printf("</TR>\n");
@@ -6876,9 +6894,9 @@ if (row != NULL)
     if (upc->stsMarker) 
 	{
 	printf("<TR><TH ALIGN=left>STS Marker:</TH>");
-	printf("<TD><A HREF=");
+	printf("<TD><A HREF=\"");
 	printEntrezUniSTSUrl(stdout, upc->stsMarker);
-	printf(">%s</A></TD>", upc->stsMarker);
+	printf("\">%s</A></TD>", upc->stsMarker);
 	printf("<TD>%s:</TD><TD ALIGN=right>%d</TD><TD ALIGN=LEFT> - %d</TD>", 
 	       seqName, upc->stsStart, upc->stsEnd);
 	printf("</TR>\n");
@@ -7348,9 +7366,9 @@ if (row != NULL)
           slAddHead(&pslList, psl);
       }
       slReverse(&pslList);
-      printf("<H3><A HREF=");
+      printf("<H3><A HREF=\"");
       printEntrezNucleotideUrl(stdout, lfs->lfNames[i]);
-      printf(" >%s</A></H3>\n", lfs->lfNames[i]);
+      printf("\">%s</A></H3>\n", lfs->lfNames[i]);
       printAlignments(pslList, lfs->lfStarts[i], "htcCdnaAli", lfs->pslTable, lfs->lfNames[i]);
       htmlHorizontalLine();
       pslFreeList(&pslList);
@@ -7532,10 +7550,10 @@ posStr=colonPlaceHolder+1;
 }
 
 
-void doGenomicSuperDups(char *track, char *dupName)
+void doGenomicSuperDups(struct trackDb *tdb, char *dupName)
 /* Handle click on genomic dup track. */
 {
-
+char *track = tdb->tableName;
 struct genomicSuperDups dup;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -7603,7 +7621,6 @@ if (cgiVarExists("o"))
 	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching:</B>%3.4f<BR>\n",dup.fracMatch);
 	printf("&nbsp;&nbsp;&nbsp;<B>Fraction Matching with Indels:</B>%3.4f<BR>\n",dup.fracMatchIndel);
 	printf("&nbsp;&nbsp;&nbsp;<B>Jukes Cantor:</B>%3.4f<BR>\n",dup.jcK);
-	htmlHorizontalLine();
 
 	}
     }
@@ -7612,17 +7629,7 @@ else
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
     }
 
-
-puts("This region was detected as a putative genomic duplication within the golden path. "
-     "Orange, yellow, dark-light gray represent similarities of >99\%, 99-98\% and 98-90% "
-     "respectively. Duplications greater than 98% similarity that lack sufficient SDD "
-     "evidence (likely missed overlaps) are shown as red.Cut off values were at least "
-     "1 kb of total sequence aligned (containing at least 500 bp non-RepeatMasked sequence) "
-     "and at least 90% sequence identity. For a description of the 'fuguization' detection "
-     "method see <a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11381028&dopt=Abstract\">Bailey, <i>et al</i> (2001) Genome Res 11:1005-17</a>. "
-     "The data was provided by <A HREF=\"mailto:jab@po.cwru.edu\">Jeff Bailey</A> "
-	 "and <A HREF=\"mailto:eee@po.cwru.edu\">Evan Eichler</A>. ");
-
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 webEnd();
@@ -7738,9 +7745,12 @@ void doMgcMrna(char *track, char *acc)
 {
 
   printf("Content-Type: text/html\n\n<HTML><BODY><SCRIPT>\n");
-  printf("location.replace('http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=%s');\n",acc); 
-  printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <b><a href=\"http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=%s\">continue</a></b> for the requested GenBank report. </NOSCRIPT>\n",acc); 
-}
+  printf("location.replace('");
+  printEntrezNucleotideUrl(stdout, acc);
+  puts("');"); 
+  printf("</SCRIPT> <NOSCRIPT> No JavaScript support. Click <B><A HREF=\"");
+  printEntrezNucleotideUrl(stdout, acc);
+  puts("\">continue</A></B> for the requested GenBank report. </NOSCRIPT>");}
 
 void doProbeDetails(struct trackDb *tdb, char *item)
 {
@@ -10368,7 +10378,7 @@ else if( sameWord(track, "altGraphX"))
 /*Ewan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))
     {
-    doGenomicSuperDups(track, item);
+    doGenomicSuperDups(tdb, item);
     }
 else if (sameWord(track, "celeraCoverage"))
     {
