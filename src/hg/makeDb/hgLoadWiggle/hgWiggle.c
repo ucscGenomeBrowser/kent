@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.5 2004/07/29 23:36:09 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.6 2004/07/30 22:40:35 hiram Exp $";
 
 /* Command line switches. */
 static char *db = NULL;		/* database to read from */
@@ -326,7 +326,9 @@ for (i=0; i<trackCount; ++i)
 	long et;
 	chrEndClock = clock1000();
 	et = chrEndClock - chrStartClock;
-	if (!file)
+	/*	file per chrom output already happened above except for
+	 *	the last one */
+	if (!file || (file && ((i+1)==trackCount)))
  verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, %ld ms, %llu rows, %llu matched\n",
 		    tracks[i], currentChrom, chrBytesRead, chrNoDataBytes, et,
 			rowCount, valuesMatched);
