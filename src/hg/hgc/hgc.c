@@ -11098,9 +11098,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
-void humMusClickHandler(struct trackDb *tdb, char *item, boolean
-			reverse, boolean printWindowFlag )
-/* Put up generic track info. */
+void humMusClickHandler(struct trackDb *tdb, char *item,
+        char *targetName, char *targetDb, char *targetTable, boolean printWindowFlag )
+/* Put up sample track info. */
 {
 char *dupe, *type, *words[16];
 char title[256];
@@ -11121,12 +11121,9 @@ if (wordCount > 0)
 	num = atoi(words[1]);
     if (num < 3) num = 3;
 
-    if( !reverse )
-        humMusSampleClick(conn, tdb, item, start, num,
-			  "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
-    else
-        humMusSampleClick( conn, tdb, item, start, num,
-			   "Human", "hg12", "blastzBestHuman_08_30", printWindowFlag );
+        //humMusSampleClick(conn, tdb, item, start, num, "Mouse", "mm2", "blastzBestMouse", printWindowFlag );
+        humMusSampleClick( conn, tdb, item, start, num, targetName, targetDb, targetTable, printWindowFlag );
+        //    "Human", "hg12", "blastzBestHuman_08_30", printWindowFlag );
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -11642,11 +11639,15 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     }
 else if( sameWord( track, "humMusL" ) || sameWord( track, "regpotent" ))
     {
-    humMusClickHandler( tdb, item, 0, 0);
+    humMusClickHandler( tdb, item, "Mouse", "mm2", "blastzBestMouse", 0);
     }
 else if( sameWord( track, "musHumL" ))
     {
-    humMusClickHandler( tdb, item, 1, 0);
+    humMusClickHandler( tdb, item, "Human", "hg12", "blastzBestHuman_08_30" , 0);
+    }
+else if( sameWord( track, "mm3Rn2L" ))
+    {
+    humMusClickHandler( tdb, item, "Rat", "rn2", "blastzBestRat", 0 );
     }
 else if( sameWord( track, "footPrinter" ))
     {
