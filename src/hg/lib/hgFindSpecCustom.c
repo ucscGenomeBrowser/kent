@@ -13,7 +13,7 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.2 2004/04/03 02:36:12 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.3 2004/04/03 19:38:55 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -382,6 +382,28 @@ char *hgFindSpecSettingOrDefault(struct hgFindSpec *hfs, char *name,
 }
 
 
+char *hgFindSpecName()
+/* Return the hgFindSpec table name to use (based on trackDb name). */
+{
+char *trackDbName = hTrackDbName();
+char buf[256];
+
+if (startsWith("trackDb", trackDbName))
+    {
+    char *p = trackDbName + strlen("trackDb");
+    safef(buf, sizeof(buf), "hgFindSpec%s", p);
+    if (! hTableExists(buf))
+	safef(buf, sizeof(buf), "hgFindSpec");
+    }
+else
+    {
+    /* catch-all */
+    safef(buf, sizeof(buf), "hgFindSpec");
+    }
+return(cloneString(buf));
+}
+
+
 struct hgFindSpec *hgFindSpecGetShortCircuits()
 /* Load all short-circuit search specs from the current db, sorted by 
  * searchPriority. */
@@ -390,8 +412,12 @@ struct hgFindSpec *hfsList = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
-char *query = "select * from hgFindSpec where shortCircuit = 1 order by searchPriority";
+char *hgFindSpec = hgFindSpecName();
+char query[512];
 
+safef(query, sizeof(query),
+      "select * from %s where shortCircuit = 1 order by searchPriority",
+      hgFindSpec);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -412,7 +438,12 @@ struct hgFindSpec *hfsList = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
-char *query = "select * from hgFindSpec where shortCircuit = 0 order by searchPriority";
+char *hgFindSpec = hgFindSpecName();
+char query[512];
+
+safef(query, sizeof(query),
+      "select * from %s where shortCircuit = 0 order by searchPriority",
+      hgFindSpec);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
