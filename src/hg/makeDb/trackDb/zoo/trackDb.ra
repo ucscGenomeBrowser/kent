@@ -4,7 +4,7 @@ longLabel GC Percent Sample Track
 group map
 priority 1
 visibility full
-type sample 9
+type sample
 
 track ctgPos
 shortLabel Map Contigs
@@ -151,7 +151,7 @@ group compGeno
 priority 17
 altColor 160,0,0
 visibility hide
-type sample 9
+type sample 0 500
 
 track binomialCons2
 shortLabel Binomial Conservation Score
@@ -160,7 +160,7 @@ group compGeno
 priority 18
 altColor 160,0,0
 visibility full
-type sample 9
+type sample
 
 track mcs_p
 shortLabel MCS (ParsPVal)
@@ -178,7 +178,7 @@ group compGeno
 priority 20
 altColor 0,0,160
 visibility full
-type sample 9
+type sample
 
 track mcs_u
 shortLabel MCS (Uniform)
@@ -196,7 +196,7 @@ group compGeno
 priority 22
 altColor 0,120,0
 visibility full
-type sample 9
+type sample
 
 track footPrinter
 shortLabel FootPrinter
@@ -205,7 +205,7 @@ group compGeno
 priority 23
 altColor 0,160,0
 visibility hide
-type sample 9
+type sample
 
 track footPrinterHMR
 shortLabel FootPrinterHMR
@@ -214,7 +214,7 @@ group compGeno
 priority 24
 altColor 0,160,0
 visibility hide
-type sample 9
+type sample
 
 track zoo
 shortLabel ZooSeq
@@ -225,7 +225,7 @@ visibility full
 chromosomes target1,chr7,
 color 0,60,120
 altColor 0,128,0
-type sample 9
+type sample 500 1000
 
 track blastzStrictChainHuman
 shortLabel Blastz Human
@@ -459,7 +459,7 @@ priority 48
 visibility hide
 color 0,60,120
 altColor 0,128,0
-type sample 9
+type sample
 
 track parsPValHMM
 shortLabel Parsimony P-Values HMM
@@ -468,7 +468,7 @@ group compGeno
 priority 49
 altColor 0,0,160
 visibility full
-type sample 9
+type sample
 
 track longMCS
 shortLabel Long MCSs
@@ -558,5 +558,5 @@ priority 59
 color 100,100,100
 altColor 0,0,160
 visibility hide
-type sample 9
+type sample
 
