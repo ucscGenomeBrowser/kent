@@ -750,9 +750,8 @@ while (row3 != NULL)
     
     conn = sqlConnect(gDatabase);
     safef(cond_str, sizeof(cond_str), 
-    	  "spDisplayID='%s' or spID='%s' or geneSymbol='%s' or kgID='%s'", 
-	  queryID, queryID, queryID, queryID);
-    answer = sqlGetField(conn, gDatabase, "kgXref", "count(*)", cond_str);
+    	  "alias='%s'", queryID);
+    answer = sqlGetField(conn, gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     sqlDisconnect(&conn); 
     if ((answer != NULL) && (!sameWord(answer, "0")))
     	{
@@ -839,10 +838,8 @@ while (row3 != NULL)
     orgSciName= row3[2];
     
     conn = sqlConnect(gDatabase);
-    safef(cond_str, sizeof(cond_str), 
-	  "spDisplayID='%s' or spID='%s' or geneSymbol='%s' or kgID='%s'",
-	  queryID, queryID, queryID, queryID);
-    answer = sqlGetField(conn, gDatabase, "kgXref", "count(*)", cond_str);
+    safef(cond_str, sizeof(cond_str), "alias='%s'", queryID);
+    answer = sqlGetField(conn, gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
 	/* display organism name */
@@ -854,8 +851,7 @@ while (row3 != NULL)
     	    
 	conn = sqlConnect(gDatabase);
        	safef(query, sizeof(query), 
-              "select spID from %s.kgXref where spDisplayID='%s' or spID='%s' or geneSymbol='%s' or kgID='%s'"
-	      , gDatabase, queryID, queryID, queryID, queryID);
+              "select distinct spID from %s.kgSpAlias where alias='%s'", gDatabase, queryID);
 
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
