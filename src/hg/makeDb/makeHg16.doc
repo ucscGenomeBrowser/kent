@@ -7550,7 +7550,19 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     #  387166 build123/updateExceptionList.sql
     #  383759 build124/updateExceptionList.sql
 
+# Kluge: add Affy SNPs from snpMap table.
 
+mysql> insert into snp select bin, chrom, chromStart, chromEnd, name, 0 as score, '?' as strand, concat(baseA,'/',baseB) as observed, 'genomic' as molType, 'snp' as class, 'unknown' as valid, 0 as avHet, 0 as avHetSE, 'unknown' as function, 'exact' as locType, 'Affy10K' as source, 0 as exception from snpMap, hgFixed.affy10KDetails where name=affyId;
+Query OK, 11454 rows affected (1 min 45.92 sec)
+Records: 11454  Duplicates: 0  Warnings: 0
+
+mysql> insert into snp select bin, chrom, chromStart, chromEnd, name, 0 as score, '?' as strand, concat(baseA,'/',baseB) as observed, 'genomic' as molType, 'snp' as class, 'unknown' as valid, hetzyg as avHet, avHetSE, 'unknown' as function, 'exact' as locType, 'Affy50K_HindIII' as source, 0 as exception from snpMap, hgFixed.affy120KDetails where name=affyId and enzyme='HindIII';
+Query OK, 59589 rows affected (2 min 2.91 sec)
+Records: 59589  Duplicates: 0  Warnings: 7845180
+
+mysql> insert into snp select bin, chrom, chromStart, chromEnd, name, 0 as score, '?' as strand, concat(baseA,'/',baseB) as observed, 'genomic' as molType, 'snp' as class, 'unknown' as valid, hetzyg as avHet, avHetSE, 'unknown' as function, 'exact' as locType, 'Affy50K_XbaI' as source, 0 as exception from snpMap, hgFixed.affy120KDetails where name=affyId and enzyme='XbaI';
+Query OK, 60605 rows affected (1 min 54.37 sec)
+Records: 60605  Duplicates: 0  Warnings: 7845180
 
 # JAX ORTHOLOG (WORKING hiram 2004-02-20 )
     # Add Jackson labs info
