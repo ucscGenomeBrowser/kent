@@ -218,6 +218,12 @@ The example mysql user here is: "browser" with a password of: "genome"
 	time has not been described.  Users should implement a
 	cron job to periodically remove files from trash.
 
+        src/lib/log.c optionally uses syslog to support logging
+        by parasol and gfServer. This is not required for these
+        programs to function.  Older implementions of syslog 
+        may not have the vsyslog() function.  If you gets errors,
+        add -DNO_SYSLOG to the HG_DEFS line in inc/common.mk.
+
 16.  Useful links:
 
 	Links to various documentation related to the browser software:
