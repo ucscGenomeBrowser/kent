@@ -3,7 +3,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitInfo.c,v 1.2 2004/07/18 19:51:37 markd Exp $";
+static char const rcsid[] = "$Id: twoBitInfo.c,v 1.3 2005/03/24 13:26:52 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ errAbort(
   "Output file has the columns::\n"
   "   seqName size\n"
   "\n"
-  "In the 2bit file is in the form path:seq or path:seq:start-end:, the\n"
+  "In the 2bit file is in the form path:seq or path:seq:start-end: or path:seq1,seq2,seqN...\n"
   "the information is returned only on the requested sequence (start-end\n"
   "is ignored).\n"
   );
@@ -40,7 +40,11 @@ outFile = mustOpen(outName, "w");
 
 if (seqName != NULL)
     {
-    fprintf(outFile, "%s\t%d\n", seqName, twoBitSeqSize(tbf, seqName));
+    char *seqArray[1023];
+    int i;
+    int seqCount = chopString(seqName, ",", seqArray, ArraySize(seqArray));
+    for (i = 0 ; i < seqCount ; i++)
+        fprintf(outFile, "%s\t%d\n", seqArray[i], twoBitSeqSize(tbf, seqArray[i]));
     }
 else
     {
