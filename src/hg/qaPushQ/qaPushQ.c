@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.17 2004/05/11 22:31:58 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.18 2004/05/11 23:55:46 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -178,7 +178,6 @@ enum colEnum colOrder[MAXCOLS];
 int numColumns = 0;
 
 
-
 void encryptPWD(char *password, char *salt, char *buf, int bufsize)
 /* encrypt a password */
 {
@@ -230,7 +229,6 @@ void doMsg()
 printf("%s",msg);
 cleanUp();
 }
-
 
 bool mySqlGetLock(char *name)
 /* Tries to acquire (for 10 seconds) and set an advisory lock.
@@ -1413,16 +1411,16 @@ char *meta = ""
 
 htmlSetCookie("qapushq", "", NULL, NULL, NULL, FALSE);
 
+safef(qaUser,sizeof(qaUser),"");
 safef(msg,sizeof(msg),"Cookie reset.<br>\n");
 htmShellWithHead(TITLE, meta, doMsg, NULL);
-
 }
 
 
 void doLogin()
 /* make form for login */
 {
-printf("<FORM ACTION=\"/cgi-bin/qaPushQ\" NAME=\"loginForm\" METHOD=\"GET\">\n");
+printf("<FORM ACTION=\"/cgi-bin/qaPushQ\" NAME=\"loginForm\" METHOD=\"POST\">\n");
 
 printf("<input TYPE=\"hidden\" NAME=\"action\" VALUE=\"postLogin\"  >\n");
 
@@ -1465,7 +1463,6 @@ printf("</TR>\n");
 
 printf("</TABLE>\n");
 printf("</FORM>\n");
-cleanUp();
 }
 
 
@@ -1594,6 +1591,10 @@ char tempVar[2048];
 char tempVarName[256];
 char tempVal[2048];
 
+if ((qaUser == NULL) || (sameString(qaUser,"")))
+    {
+    return;
+    }
 safef(myUser.user,sizeof(myUser.user),qaUser);
 readAUser(&myUser, FALSE);
 
@@ -1631,6 +1632,10 @@ void saveMyUser()
 {
 char *tbl = "users";
 struct dyString * query = newDyString(2048);
+if ((qaUser == NULL) || (sameString(qaUser,"")))
+    {
+    return;
+    }
 dyStringPrintf(query,  
     "update %s set contents = '?showColumns=%s?org=%s?month=%s' where user = '%s'",
     tbl, showColumns, pushQtbl, month, myUser.user);
@@ -2465,22 +2470,23 @@ htmShell("Push Queue debug", doMsg, NULL);
 exit(0);
 */
 
-conn = sqlConnectRemote(host, user, password, database);
-
-setLock();
-
 qaUser = findCookieData("qapushq");  /* will also cause internal structures to load cookie data */
 
 action = cgiUsualString("action","display");  /* get action, defaults to display of push queue */
 /* initCgiInput() is not exported in cheapcgi.h, but it should get called by cgiUsualString
 So it will find all input regardless of Get/Put/Post/etc and make available as cgivars */
 
+/* note: the postlogin needs db access and must come before check for qaUser="" otherwise cookie is never set. */
+conn = sqlConnectRemote(host, user, password, database);
+
+setLock();
+
 if (sameString(action,"postLogin")) 
     {
     doPostLogin();  /* will redirect back to display */
     return;
     }
-    
+
 
 if ((qaUser == NULL) || (sameString(qaUser,"")))
     {
@@ -2527,8 +2533,6 @@ return 0;
 */
 
 
-
-/* saveMyUser(); */
 
 /* ---- Push Queue  ----- */
 
