@@ -104,6 +104,9 @@ void columnDefaultMethods(struct column *col);
 void simpleMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the simplest type of methods for column. */
 
+char *knownPosVal(struct column *col, char *geneId, 
+	struct sqlConnection *conn);
+/* Get genome position of knownPos table.  Ok to have col NULL. */
 
 /* ---- Column method setters. ---- */
 void accMethods(struct column *col);

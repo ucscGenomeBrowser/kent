@@ -3,14 +3,16 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "obscure.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
 #include "cart.h"
+#include "hdb.h"
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colGenePred.c,v 1.2 2003/06/18 16:22:57 kent Exp $";
+static char const rcsid[] = "$Id: colGenePred.c,v 1.3 2003/06/18 17:44:49 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -26,16 +28,16 @@ safef(buf, sizeof(buf), "%s:%d-%d", chrom, start+1, end);
 return cloneString(buf);
 }
 
-static char *genePredPosVal(struct column *col, char *geneId, 
+static char *genePredPosFromTable(char *table, char *geneId, 
 	struct sqlConnection *conn)
-/* Get genome position of genePred type table. */
+/* Get genePred position from table. */
 {
 char query[256];
 struct sqlResult *sr;
 char *pos = NULL;
 char **row;
 safef(query, sizeof(query), "select chrom, txStart, txEnd from %s where name = '%s'",
-	col->table, geneId);
+	table, geneId);
 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -44,19 +46,33 @@ sqlFreeResult(&sr);
 return pos;
 }
 
+static char *genePredPosVal(struct column *col, char *geneId, 
+	struct sqlConnection *conn)
+/* Get genome position of genePred type table. */
+{
+return genePredPosFromTable(col->table, geneId, conn);
+}
+
 static void genePredPosPrint(struct column *col, char *geneId, 
 	struct sqlConnection *conn)
 /* Print genome position with hyperlink to browser. */
 {
 char *pos = col->cellVal(col, geneId, conn);
+char *chrom;
+int start, end;
+
+
 hPrintf("<TD>");
 if (pos == NULL)
     hPrintf("n/a");
 else
     {
+    char numBuf[32];
+    hgParseChromRange(pos, &chrom, &start, &end);
+    sprintLongWithCommas(numBuf, (start+end+1)/2);
     hPrintf("<A HREF=\"%s?db=%s&position=%s&%s\">",
 	    hgTracksName(), database, pos, cartSidUrlString(cart));
-    hPrintf("%s</A>", pos);
+    hPrintf("%s %s</A>", chrom, numBuf);
     freeMem(pos);
     }
 hPrintf("</TD>");
@@ -72,11 +88,11 @@ col->cellVal = genePredPosVal;
 col->cellPrint = genePredPosPrint;
 }
 
-static char *knownPosVal(struct column *col, char *geneId, 
+char *knownPosVal(struct column *col, char *geneId, 
 	struct sqlConnection *conn)
-/* Get genome position of genePred type table. */
+/* Get genome position of knownPos table.  Ok to have col NULL. */
 {
-char *pos = genePredPosVal(col, geneId, conn);
+char *pos = genePredPosFromTable("knownGene", geneId, conn);
 if (pos == NULL)
     {
     char query[256];

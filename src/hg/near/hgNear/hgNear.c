@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.4 2003/06/18 16:22:57 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.5 2003/06/18 17:44:49 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -77,9 +77,15 @@ void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *con
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, geneId, conn);
-if (s == NULL) s = "n/a";
-hPrintf("<TD>%s</TD>", s);
-freeMem(s);
+if (s == NULL) 
+    {
+    hPrintf("<TD>n/a</TD>", s);
+    }
+else
+    {
+    hPrintf("<TD>%s</TD>", s);
+    freeMem(s);
+    }
 }
 
 static boolean alwaysExists(struct column *col, struct sqlConnection *conn)
@@ -170,7 +176,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 /* Do sort by drop-down */
 groupOn = cartUsualString(cart, groupVarName, "homology");
     {
-    static char *menu[] = {"homology", "expression", "chromosome"};
+    static char *menu[] = {"homology", "position"};
     hPrintf("group by ");
     cgiMakeDropList(groupVarName, menu, ArraySize(menu), groupOn);
     }
@@ -246,11 +252,114 @@ slReverse(&list);
 return list;
 }
 
+struct slName *getGenomicNeighbors(struct sqlConnection *conn, char *geneId,
+	char *chrom, int start, int end)
+/* Get neighbors in genome. */
+{
+struct genePos
+/* A gene position (a little local helper struct) */
+    {
+    struct genePos *next;
+    char *name;
+    int start;
+    int end;
+    } *gpList = NULL, *gp;
+char query[256];
+struct sqlResult *sr;
+char **row;
+int i, ix = 0, chosenIx = -1;
+int startIx, endIx, listSize;
+int geneCount = 0;
+struct slName *geneList = NULL, *gene;
+
+/* Get list of all genes in chromosome */
+safef(query, sizeof(query), 
+	"select name,txStart,txEnd from knownGene where chrom='%s'", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(gp);
+    gp->name = cloneString(row[0]);
+    gp->start = sqlUnsigned(row[1]);
+    gp->end = sqlUnsigned(row[2]);
+    slAddHead(&gpList, gp);
+    if (start == gp->start && end == gp->end && sameString(geneId, gp->name) )
+        chosenIx = ix;
+    ++ix;
+    ++geneCount;
+    }
+sqlFreeResult(&sr);
+slReverse(&gpList);
+
+/* If not already found, find gene that we should try to put in middle of
+ * our list. */
+if (chosenIx < 0)
+    {
+    int middle = (start+end)/2, mid;
+    int distance, bestDistance = BIGNUM;
+    for (gp = gpList,ix=0; gp != NULL; gp = gp->next,++ix)
+        {
+	mid = (gp->start + gp->end)/2;
+	distance = middle - mid;
+	if (distance < 0) distance = -distance;
+	if (distance < bestDistance)
+	    {
+	    bestDistance = distance;
+	    chosenIx = ix;
+	    }
+	}
+    warn("%s is not mapped", geneId);
+    }
+
+/* Figure out start and ending index of genes we want. */
+startIx = chosenIx - displayCount/2;
+endIx = startIx + displayCount;
+if (startIx < 0) startIx = 0;
+if (endIx > geneCount) endIx = geneCount;
+listSize = endIx - startIx;
+
+gp = slElementFromIx(gpList, startIx);
+for (i=0; i<listSize; ++i, gp=gp->next)
+    {
+    gene = slNameNew(gp->name);
+    slAddHead(&geneList, gene);
+    }
+slReverse(&geneList);
+
+/* Clean up. */
+for (gp = gpList; gp != NULL; gp = gp->next)
+    freez(&gp->name);
+slFreeList(&gpList);
+
+return geneList;
+}
+
+
+struct slName *getPositionNeighbors(struct sqlConnection *conn)
+/* Get genes in genomic neighborhood. */
+{
+char *pos = knownPosVal(NULL, curGeneId, conn);
+if (pos == NULL)
+    {
+    warn("no position associated with %s", curGeneId);
+    return NULL;
+    }
+else
+    {
+    char *chrom;
+    int start,end;
+    hgParseChromRange(pos, &chrom, &start, &end);
+    return getGenomicNeighbors(conn, curGeneId, chrom, start, end);
+    }
+}
+
 struct slName *getNeighbors(struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
 if (sameString(groupOn, "homology"))
     return getHomologyNeighbors(conn);
+else if (sameString(groupOn, "position"))
+    return getPositionNeighbors(conn);
 else
     {
     errAbort("Unknown sort value %s", groupOn);
