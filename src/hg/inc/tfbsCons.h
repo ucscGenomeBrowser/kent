@@ -26,9 +26,6 @@ struct tfbsCons
     char id[11];	/* id */
     };
 
-void tfbsConsStaticLoadWBin(char **row, struct tfbsCons *ret);
-/* Load a row from tfbsCons table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
 void tfbsConsStaticLoad(char **row, struct tfbsCons *ret);
 /* Load a row from tfbsCons table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
