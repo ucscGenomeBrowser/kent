@@ -186,15 +186,19 @@ BEGIN { name="" }
     #	generate chrom.sizes list in order by size, biggest first
     twoBitInfo monDom1.2bit stdout | sort -rn +1 > chrom.sizes
 
-    # Enter monDom1 into hgcentraltest.dbDb so test browser knows about it:
+    # Enter monDom1 into dbDb and defaultDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
 	defaultPos, active, orderKey, genome, scientificName, \
 	htmlPath, hgNearOk, hgPbOk, sourceName) \
-	VALUES("monDom1", "Oct 2004", "/gbdb/monDom1/nib", "M. domestica", \
-	"scaffold_0:1-1048", 1, 33, "Opossum", "Monodelphis domestica", \
+	VALUES("monDom1", "Oct 2004", "/gbdb/monDom1", "M. domestica", \
+	"scaffold_13303:1000000-11000000", 0, 33, "Opossum", \
+	"Monodelphis domestica", \
 	"/gbdb/monDom1/html/description.html", 0, 0, \
 	"Broad Inst. Prelim Oct04");' \
-	-h genome-testdb hgcentraltest
+	-h localhost hgcentraltest
+    hgsql -e 'INSERT INTO defaultDb (name, genome) \
+	VALUES("monDom1", "Opossum")' \
+        -h localhost hgcentraltest
 
     # Make trackDb table so browser knows what tracks to expect (DONE - Hiram)
     cd $HOME/kent/src/hg/makeDb/trackDb
@@ -255,7 +259,7 @@ BEGIN { name="" }
     hgsql -e "analyze table gold; analyze table gap;" monDom1
 
 
-# RUN REPEAT MASKER (WORKING - 2004-12-03 - Hiram)
+# RUN REPEAT MASKER (DONE - 2004-12-06 - Hiram)
     #	Received a library from Michele Clamp who says Damian Keefe
     #	at Ensembl created to use in addition to the generic mammal library.
     #	Will run both -mammal and this one, and combine the results.
@@ -304,49 +308,97 @@ popd
     cd /cluster/data/monDom1/RMRun
     para create RMJobs
     para try, check, push, check,...
-XXX - RUNNING - 2004-12-03 16:42
 
-#Completed: 682 of 682 jobs
-#Average job time:                5942s      99.03m     1.65h    0.07d
-#Longest job:                    14569s     242.82m     4.05h    0.17d
-#Submission to last job:         14569s     242.82m     4.05h    0.17d
+    #	This takes extra long compared to normal because of the two
+    #	passes being run on the data
+Completed: 7627 of 7627 jobs
+CPU time in finished jobs:  117842813s 1964046.88m 32734.11h 1363.92d  3.737 y
+IO & Wait Time:                704870s   11747.84m   195.80h    8.16d  0.022 y
+Average job time:               15543s     259.05m     4.32h    0.18d
+Longest job:                    24045s     400.75m     6.68h    0.28d
+Submission to last job:        185727s    3095.45m    51.59h    2.15d
 
     # Lift up the split-scaffold .out's to scaffold .out's
-    ssh kksilo
-    cd /cluster/data/monDom1
-    foreach f (RMOut/*.fa.out)
-      liftUp $f:r:r.scaf.out jkStuff/scaffoldsSplit.lft warn $f > /dev/null
-    end
-    # Make a consolidated scaffold .out file too:
-    head -3 RMOut/chunk_00.fa.out > RMOut/scaffolds.fa.out
-    foreach f (RMOut/*.scaf.out)
-      tail +4 $f >> RMOut/scaffolds.fa.out 
-    end
-    # Load the .out files into the database with:
-    ssh hgwdev
-    hgLoadOut monDom1 /cluster/data/monDom1/RMOut/scaffolds.fa.out
-    # hgLoadOut made a "scaffolds_rmsk" table even with -table=rmsk, 
-    # but we want a non-split with no prefix table:
-    hgsql monDom1 -e 'rename table scaffolds_rmsk to rmsk'
-    # Fix up the indices too:
-    hgsql monDom1 -e 'drop index bin       on rmsk; \
-                  drop index genoStart on rmsk; \
-                  drop index genoEnd   on rmsk; \
-                  create index bin       on rmsk (genoName(11), bin); \
-                  create index genoStart on rmsk (genoName(11), genoStart); \
-                  create index genoEnd   on rmsk (genoName(11), genoEnd);'
-    # THIS APPLIES ONLY WHEN REPEATMASKER IS RUN MULTIPLE TIMES PER SEQUENCE:
-    # 11/29/04: Need to remove duplicate Simple/Low Complexity repeats 
-    # caused by the two separate RepeatMasker invocations.  Unfortunately 
-    # whitespace is different in the .out files, so sort & uniq the .tab:
-    ssh hgwdev
-    cd /cluster/data/monDom1/RMOut
-    hgLoadOut -tabFile=hgLoadOut.tab monDom1 -nosplit scaffolds.fa.out 
-    sort -k 6,6 -k7n,7n hgLoadOut.tab | uniq > hgLoadOutUniq.tab 
-    hgsql monDom1 -e 'delete from rmsk'
-    hgsql monDom1 -e 'load data local infile "hgLoadOutUniq.tab" into table rmsk'
+    ssh eieio
+    cd /cluster/store1/monDom1
+    mkdir RMOutLifted
+    ln -s `pwd`/RMOutLifted /cluster/data/monDom1
+    bash		# if you are csh
+    find ./RMOut -type f | while read F
+    do
+        B=${F/.\/RMOut\//}
+        echo "$F -> RMOutLifted/$B"
+        liftUp RMOutLifted/$B jkStuff/scaffoldsSplit.lft warn $F
+    done
+    exit		# the bash session if your are csh
 
-# SIMPLE REPEAT [TRF] TRACK (WORKING - 2004-12-03 - Hiram)
+    # Cat all those lifted .out files together into one single file
+    head -3 RMOutLifted/chunk_00.fa.out > RMRun/scaffolds.fa.RM.out
+    find ./RMOutLifted -type f | while read f
+    do
+	tail +4 $f >> RMRun/scaffolds.fa.RM.out
+    done
+    #	I tried the following sort in the above loop to see if
+    #	the sort mentioned below could be avoided:
+    #	tail +4 $f | sort -u >> scaffolds.unique.fa.RM.out
+    #	but this sort was not thorough enough.  It ended up with more
+    #	records loaded into the database, but with the same amount
+    #	of featureBits coverage.
+
+    #	Eliminate the duplicates from the double RepeatMasker run.
+    #	When run twice, it finds the Simple and Low Complexity repeats
+    #	twice.
+    hgLoadOut -tabFile=hgLoadOut.tab monDom1 -nosplit scaffolds.fa.RM.out 
+    #	A few "Strange perc. field" outputs, which always happens, but
+    #	not too many.  e.g.:
+    #	Strange perc. field -1.4 line 1939539 of scaffolds.fa.RM.out
+    #	Strange perc. field -2.5 line 3078381 of scaffolds.fa.RM.out
+    #	Strange perc. field -2.1 line 3078381 of scaffolds.fa.RM.out
+    #	Strange perc. field -40.9 line 3442991 of scaffolds.fa.RM.out
+    #	Strange perc. field -3.9 line 3442991 of scaffolds.fa.RM.out
+    #	... etc ...
+    #	note: 3 records dropped due to repStart > repEnd
+    ls -og scaffolds.fa.RM.out hgLoadOut.tab
+    #	-rw-rw-r--  1 2553485808 Dec  6 00:05 scaffolds.fa.RM.out
+    #	-rw-rw-r--  1 1935604506 Dec  6 00:16 hgLoadOut.tab
+
+    sort -k 6,6 -k7n,7n hgLoadOut.tab | uniq > hgLoadOutUniq.tab 
+    #	takes almost an hour
+
+    ssh hgwdev
+    cd /cluster/store1/monDom1
+    #	Get the structure of the table started
+    hgLoadOut -nosplit -table=rmsk monDom1 RMOutLifted/chunk_1000.fa.out
+    #	Now, reload it fully with the unique set
+    hgsql -e 'delete from rmsk;' monDom1
+    hgsql -e 'load data local infile "hgLoadOutUniq.tab" into table rmsk;' \
+	monDom1
+    #	This load takes an hour, 12 minutes for a featureBits:
+    featureBits monDom1 rmsk
+    #	1775646140 bases of 3492108230 (50.847%) in intersection
+    featureBits hg17 rmsk
+    #	1390952984 bases of 2866216770 (48.529%) in intersection
+    #	time featureBits mm5 rmsk
+    #	1137310280 bases of 2615483787 (43.484%) in intersection
+
+
+
+    #	Verify the indexes are correct
+    hgsql -e "show index from rmsk;" monDom1
+    #	Should be a good cardinality count for each one
+    #	It does not, it shows None for genoName (genoName(14), bin)
+    #	and 18744904 for both (genomeName(14), genoStart) and (...genoEnd)
+    hgsql monDom1 -e 'drop index genoName       on rmsk; \
+                  drop index genoName_2 on rmsk; \
+                  drop index genoName_3   on rmsk; \
+                  create index bin       on rmsk (genoName(14), bin); \
+                  create index genoStart on rmsk (genoName(14), genoStart); \
+                  create index genoEnd   on rmsk (genoName(14), genoEnd);'
+    #	This index creation took 76 minutes
+    #	After that, the "bin" index has a cardinality of 48,561
+    #	genoStart and genoEnd are still at 18,744,904
+
+# SIMPLE REPEAT [TRF] TRACK (DONE - 2004-12-03 - Hiram)
     #	Run this on the rack 9 cluster
     ssh kk9
     mkdir /cluster/data/monDom1/bed/simpleRepeat
@@ -386,60 +438,91 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     para try
     para check
     para push
-XXXX - RUNNING - 2004-12-03 16:55
-    para check
-# Completed: 380 of 380 jobs
-# CPU time in finished jobs:      13230s     220.49m     3.67h    0.15d  0.000 y
-# IO & Wait Time:                  2078s      34.64m     0.58h    0.02d  0.000 y
-# Average job time:                  40s       0.67m     0.01h    0.00d
-# Longest job:                     1590s      26.50m     0.44h    0.02d
-# Submission to last job:          2504s      41.73m     0.70h    0.03d
+Completed: 7627 of 7627 jobs
+CPU time in finished jobs:      24845s     414.08m     6.90h    0.29d  0.001 y
+IO & Wait Time:                 19407s     323.45m     5.39h    0.22d  0.001 y
+Average job time:                   6s       0.10m     0.00h    0.00d
+Longest job:                       49s       0.82m     0.01h    0.00d
+Submission to last job:          1309s      21.82m     0.36h    0.02d
 
-    liftUp simpleRepeat.bed /cluster/data/monDom1/jkStuff/scaffoldsSplit.lft \
-	warn trf/*.bed  > lu.out 2>&1
+
+    find ./trf -type f | xargs cat | \
+	liftUp simpleRepeat.bed \
+	/cluster/data/monDom1/jkStuff/scaffoldsSplit.lft \
+	warn stdin  > lu.out 2>&1
 
     # Load into the database:
     ssh hgwdev
     cd /cluster/data/monDom1/bed/simpleRepeat
-    /cluster/bin/i386/hgLoadBed monDom1 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-    #	Loaded 629076 elements of size 16
-    #	Compare with previous assembly
+    hgLoadBed monDom1 simpleRepeat simpleRepeat.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 697668 elements of size 16
+    #	Compare with some other assemblies
     featureBits monDom1 simpleRepeat
+    #	55000238 bases of 3492108230 (1.575%) in intersection
+    featureBits rn3 simpleRepeat
+    #	70073656 bases of 2571104688 (2.725%) in intersection
+    featureBits mm5 simpleRepeat
+    #	81414259 bases of 2615483787 (3.113%) in intersection
+    featureBits hg17 simpleRepeat
     #	54952425 bases of 2866216770 (1.917%) in intersection
 
-
-# PROCESS SIMPLE REPEATS INTO MASK (TBD)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2004-12-06 - Hiram)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
     cd /cluster/data/monDom1/bed/simpleRepeat
-    mkdir -p trfMask
-    foreach f (trf/*.bed)
-      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
-    end
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
 
-    #	EXPERIMENT, at a filter of <= 12, we have coverage:
-    #	20904399 bases of 2867328468 (0.729%) in intersection
-    #	at a filter of <= 9, we have coverage:
-    #	19271270 bases of 2867328468 (0.672%) in intersection
+# MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE - 2004-12-06 - Hiram)
+    #	maskOutFa is trying to read in the entire input sequence to get
+    #	it ready for masking.  This doesn't work on the ordinary memory
+    #	machines since scaffolds.fa is the whole thing.
+    ssh kolossus
+    mkdir /scratch/monDom1
+    cd /scratch/monDom1
+    cp -p /cluster/store8/monDom1/broad.mit.edu/scaffolds.fa .
+    cp -p /cluster/store1/monDom1/bed/simpleRepeat/trfMask.bed .
+    cp -p /cluster/store1/monDom1/RMRun/scaffolds.fa.RM.out .
 
+    maskOutFa -soft scaffolds.fa trfMask.bed maskedScaffolds.fa
+    maskOutFa -clip -softAdd maskedScaffolds.fa scaffolds.fa.RM.out \
+	maskedScaffolds.fa
+    #	those two mask operations each take 3 to 4 minutes.
+    #	There were a number of negative rEnd warnings on scaffold_13261,
+    #	all on type L1Md_T, one warning each on
+    #	scaffold_13244, scaffold_13338 for type L1M4c,
+    #	and one on scaffold_13498 for type monodelphis_domestica_23_1
+    #	and one warning:
+    #	Mask record out of range line 6686033 of scaffolds.fa.RM.out
+    #	scaffold_13485 size is 3678616,  range is 3678568-3678618
+    #	This last error makes it stop without doing anything.  Need to
+    #	fix this.  Use the -clip option.  That helps it past that and
+    #	now more warnings are seen, on scaffold_16808 for type Lx5,
+    #	and one warning on scaffold_14879 for type monodelphis_domestica_48
 
-    # Lift up filtered trf output to chrom coords as well:
+    #	May as well create a 2bit while we are here:
+    time faToTwoBit maskedScaffolds.fa masked.2bit
+    #	3 minutes
+    #	Then, check it:
+    twoBitToFa masked.2bit stdout | faCount stdin | tail -1
+    #	4 minutes, seems to have lost 2A's and 1 C:
+    # total   3563247202      1085390298      660684418       660336425
+    #      1085697086      71138975        16821709
+    #	previously:
+    # total   3563247205      1085390300      660684418       660336426
+    #      1085697086      71138975        16821709
+    #	I went back through this sequence and could not duplicate this
+    #	failure of missing three bases ...
+
+    #	Copy the masked 2bit file back to kksilo
+    ssh kksilo
     cd /cluster/data/monDom1
-    mkdir bed/simpleRepeat/trfMaskChrom
-    foreach c ( `cat chrom.lst` )
-      if (-e $c/lift/ordered.lst) then
-        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
-          $c/lift/ordered.lst > $c/lift/oTrf.lst
-        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
-          jkStuff/scaffoldsSplit.lft warn `cat $c/lift/oTrf.lst`
-      endif
-      if (-e $c/lift/random.lst) then
-        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
-           $c/lift/random.lst > $c/lift/rTrf.lst
-        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
-          jkStuff/scaffoldsSplit.lft warn `cat $c/lift/rTrf.lst`
-      endif
-    end
+    scp -p kolossus:/scratch/hiram/monDom1/masked.2bit .
+    rm monDom1.2bit
+    mv masked.2bit monDom1.2bit
+    #	Ask for the blat servers to be restarted with this new masked
+    #	sequence
+    # Now clean up the unmasked split scaffolds to avoid confusion later.
+    rm -r chunks500k scaffoldsSplit.fa jkStuff/scaffoldsSplit.lft
 
