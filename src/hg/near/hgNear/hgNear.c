@@ -18,7 +18,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.120 2003/12/04 17:32:03 heather Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.121 2003/12/05 23:44:28 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -814,6 +814,7 @@ col->filterControls = lookupAdvFilterControls;
 col->advFilter = lookupAdvFilter;
 }
 
+
 /* ---- Distance table type columns ---- */
 
 static char *cellDistanceVal(struct column *col, struct genePos *gp, struct sqlConnection *conn)
@@ -841,6 +842,22 @@ hPrintf(" maximum: ");
 advFilterRemakeTextVar(col, "max", 8);
 }
 
+struct genePos *advFilterFromQuery(struct sqlConnection *conn, char *query,
+	struct genePos *list)
+/* Return list of genes from list that are returned by query */
+{
+struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(passHash, row[0], NULL);
+list = weedUnlessInHash(list, passHash);
+sqlFreeResult(&sr);
+hashFree(&passHash);
+return list;
+}
+
+
 struct genePos *distanceAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on distance type. */
@@ -849,9 +866,6 @@ char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
-    struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
-    struct sqlResult *sr;
-    char **row;
     struct dyString *dy = newDyString(512);
     dyStringPrintf(dy, "select %s from %s where", col->keyField, col->table);
     dyStringPrintf(dy, " %s='%s'", col->curGeneField, curGeneId->name);
@@ -863,13 +877,8 @@ if (minString != NULL || maxString != NULL)
 	     dyStringPrintf(dy, " and ");
          dyStringPrintf(dy, " and %s <= %s", col->valField, maxString);
 	 }
-    sr = sqlGetResult(conn, dy->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        hashAdd(passHash, row[0], NULL);
-    list = weedUnlessInHash(list, passHash);
-    sqlFreeResult(&sr);
+    list = advFilterFromQuery(conn, dy->string, list);
     dyStringFree(&dy);
-    hashFree(&passHash);
     }
 return list;
 }
@@ -900,6 +909,45 @@ char *valField = nextWord(&parameters);
 if (valField == NULL)
     errAbort("Not enough fields in type distance for %s", col->name);
 distanceTypeMethods(col, table, curGene, otherGene, valField);
+}
+
+/* ---------- Lookup floating point number column ------------- */
+
+struct genePos *floatAdvFilter(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced filter on float type. */
+{
+char *minString = advFilterVal(col, "min");
+char *maxString = advFilterVal(col, "max");
+if (minString != NULL || maxString != NULL)
+    {
+    struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
+    struct sqlResult *sr;
+    char **row;
+    struct dyString *dy = newDyString(512);
+    dyStringPrintf(dy, "select %s from %s where ", col->keyField, col->table);
+    if (minString && maxString)
+       dyStringPrintf(dy, "%s >= %s and %s <= %s",
+       		col->valField, minString, col->valField, maxString);
+    else if (minString)
+       dyStringPrintf(dy, "%s >= %s", col->valField, minString);
+    else
+       dyStringPrintf(dy, "%s <= %s", col->valField, maxString);
+    list = advFilterFromQuery(conn, dy->string, list);
+    dyStringFree(&dy);
+    }
+return list;
+}
+
+
+void setupColumnFloat(struct column *col, char *parameters)
+/* Set up column that just looks up one floating point field
+ * in a table keyed by the geneId. */
+{
+setupColumnLookup(col, parameters);
+col->simpleSearch = NULL;
+col->filterControls = minMaxAdvFilterControls;
+col->advFilter = floatAdvFilter;
 }
 
 /* ---- Page/Form Making stuff ---- */
@@ -1196,6 +1244,8 @@ else if (sameString(type, "lookup"))
     setupColumnLookup(col, s);
 else if (sameString(type, "association"))
     setupColumnAssociation(col, s);
+else if (sameString(type, "float"))
+    setupColumnFloat(col, s);
 else if (sameString(type, "acc"))
     setupColumnAcc(col, s);
 else if (sameString(type, "distance"))
