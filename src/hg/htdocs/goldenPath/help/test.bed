@@ -1,0 +1,9 @@
+browser position chr22:1-20001
+track name=spacer description="Blue ticks every 10000 bases" color=0,0,255,
+chr22   0        1
+chr22   10000 10001
+chr22   20000 20001
+track name=even description="This track paints 100 bases red, skips 100" color=255,0,0
+chr22   0       100 first
+chr22   200     300 second
+chr22   400     500 third
