@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.511 2003/11/04 18:52:40 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.512 2003/11/05 20:52:15 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12237,8 +12237,9 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hPepSeq(itemName);
-showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
-//showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, NULL, 0, 0);
+showSomeAlignment(psl, seq, gftProt, 0, seq->size, NULL, 0, 0);
+//showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
+//showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, psl->qName, 0, 0);
 }
 
 void doMiddle()
@@ -12475,6 +12476,14 @@ else if (sameWord(track, "firstEF"))
     firstEF(tdb, item);
     }
 else if (sameWord(track, "chesChordataBlat"))
+    {
+    chesProtein(tdb, item);
+    }
+else if ( sameWord(track, "blastHg15KG") )
+    {
+    chesProtein(tdb, item);
+    }
+else if ( sameWord(track, "blast22Br") )
     {
     chesProtein(tdb, item);
     }
