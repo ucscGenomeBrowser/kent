@@ -105,7 +105,7 @@ for (bigStart = chromStart; bigStart < chromEnd;  bigStart += bigStepSize)
      * size how much to weigh it in histogram */
     bigEnd = bigStart + bigWinSize;
     if (bigEnd > chromEnd) bigEnd = chromEnd;
-    bigWeight = round(10.0 * (bigEnd - bigStart)) / bigWinSize;
+    bigWeight = round(10.0 * (bigEnd - bigStart) / bigWinSize);
 
 
     /* Figure out number of non-N bases, and skip this window
