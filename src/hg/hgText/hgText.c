@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.123 2004/03/24 17:40:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.124 2004/03/24 19:06:58 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4437,11 +4437,12 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 	}
 
     if (numChroms > 1)
-	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd, TRUE,
-		tableId, wiggleCompare[tableId], constraints);
+	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd,
+		WIG_SUMMARY_ONLY, tableId, wiggleCompare[tableId],
+		constraints);
     else
-	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd, FALSE,
-		tableId, wiggleCompare[tableId], constraints);
+	wigData = wigFetchData(database, tbl, chrom, winStart, winEnd,
+		WIG_ALL_DATA, tableId, wiggleCompare[tableId], constraints);
 
     if (wigData)
 	{
@@ -4493,10 +4494,11 @@ for (chromPtr=chromList;  chromPtr != NULL; chromPtr=chromPtr->next)
 	    if (wdPtr->chromEnd > chromEnd)
 		    chromEnd = wdPtr->chromEnd;
 	    }
-	    wigStatsCalc(count, wigSumData, wigSumSquares,
-		&mean, &variance, &stddev);
-	    wigStatsRow(chrom, chromStart, chromEnd, span, count,
-		wigUpperLimit, wigLowerLimit, mean, variance, stddev);
+	wigStatsCalc(count, wigSumData, wigSumSquares,
+	    &mean, &variance, &stddev);
+	wigStatsRow(chrom, chromStart, chromEnd, span, count,
+	    wigUpperLimit, wigLowerLimit, mean, variance, stddev);
+	wigFreeData(wigData);
 	}
     else
 	{
@@ -5067,8 +5069,8 @@ webStartText();
 /* temporarily disabled until a method is determined to not kill a
  *	browser with a massive amount of output
 if (! allGenome)
-    wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE,
-	WIG_TABLE_1, wiggleCompare[WIG_TABLE_1], (char *)NULL);
+    wigData = wigFetchData(database, table, chrom, winStart, winEnd,
+	WIG_ALL_DATA, WIG_TABLE_1, wiggleCompare[WIG_TABLE_1], (char *)NULL);
 */
 
 if (wigData)
@@ -5104,6 +5106,7 @@ if (wigData)
 	    ++wd;
 	    }
 	}
+    wigFreeData(wigData);
     }
 else
     printf("#\tthis data fetch function is under development, expected early April 2004\n");
