@@ -2706,6 +2706,10 @@ hgMapToGene mm5 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
 # row count is 29069
 
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm5 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
 # ENABLE GENE SORTER FOR mm5 IN HGCENTRALTEST (DONE 7/20/04 Fan)
     echo "update dbDb set hgNearOk = 1 where name = 'mm5';" \
       | hgsql -h genome-testdb hgcentraltest
