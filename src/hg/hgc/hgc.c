@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.777 2004/10/22 23:03:13 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.778 2004/10/29 19:22:56 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7234,6 +7234,20 @@ if (access(textPath, R_OK) == 0)
     }
 }
 
+int gbCdnaGetVersion(struct sqlConnection *conn, char *acc)
+/* return mrna/est version, or 0 if not available */
+{
+int ver = 0;
+if (hHasField("gbCdnaInfo", "version"))
+    {
+    char query[128];
+    safef(query, sizeof(query),
+          "select version from gbCdnaInfo where acc = '%s'", acc);
+    ver = sqlQuickNum(conn, query);
+    }
+return ver;
+}
+
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl)
 /* print basic details information and links for a RefGene */
@@ -7241,13 +7255,18 @@ void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
 struct sqlResult *sr;
 char **row;
 char query[256];
+int ver = gbCdnaGetVersion(conn, rl->mrnaAcc);
+char accVer[64];
 char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
 printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
 printf("<B>RefSeq:</B> <A HREF=\"");
 printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
+if (ver > 0)
+    printf("\" TARGET=_blank>%s.%d</A>", rl->mrnaAcc, ver);
+else
+    printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 
 /* If refSeqStatus is available, report it: */
 if (hTableExists("refSeqStatus"))
