@@ -484,14 +484,18 @@ o - Put orientation info on ESTs and mRNAs into database:
 o - Create rnaCluster table (depends on {est,mrna}OrientInfo above)
    ssh hgwdev
    cd ~/oo
+   # Create a list of accessions that come from RAGE libraries and need to
+   # be excluded. (added by Chuck Wed Nov 27 13:09:07 PST 2002)
+   kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg12 hg12.rage.libs	
    mkdir -p ~/oo/bed/rnaCluster/chrom
    foreach i (? ??)
        cd $i
        foreach j (chr*.fa)
            set c = $j:r
            set f = ../bed/rnaCluster/chrom/$c.bed
-           echo clusterRna hg12 /dev/null $f -chrom=$c
-           clusterRna hg12 /dev/null $f -chrom=$c
+           # Exclude accesions in the RAGE file up one directory
+           echo clusterRna -mrnaExclude=../hg12.rage.libs hg12 /dev/null $f -chrom=$c
+           clusterRna -mrnaExclude=../hg12.rage.libs  hg12 /dev/null $f -chrom=$c
        end
        cd ..
    end
