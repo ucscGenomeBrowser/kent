@@ -1750,17 +1750,17 @@ LOAD ACEMBLY (DONE 02/14/03)
     hgPepPred hg13 generic acemblyPep \
       acembly.ncbi_31.genes.proteins.fasta/chr*.fa
 
-LOAD GENOMIC DUPES (todo)
+LOAD GENOMIC DUPES (done June 2003 Heather and Jim)
 o - Load genomic dupes
     ssh hgwdev
-    cd ~/oo/bed
-    mkdir genomicDups
-    cd genomicDups
+    cd /cluster/store4/gs.14/build31/bed
+    mkdir segmentalDups
+    cd segmentalDups
     wget http://codon/jab/web/takeoff/oo33_dups_for_kent.zip
     unzip *.zip
-    awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
-    mysql -u hgcat -pbigSECRET hg13 < ~/src/hg/lib/genomicDups.sql
-    hgLoadBed hg13 -oldTable genomicDups genomicDupes.bed
+    awk -f filter.awk oo33_dups_for_kent > genomicSuperDups.bed
+    mysql -u hgcat -pbigSECRET hg13 < ~/src/hg/lib/genomicSuperDups.sql
+    echo "load data local infile 'genomicSuperDups.bed' into table genomicSuperDups" | hg13
 
 LOAD NCI60 ( DONE. Mon May  5 14:03:23 PDT 2003 - sugnet )
 o - # ssh hgwdev
