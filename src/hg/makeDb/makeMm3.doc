@@ -164,6 +164,29 @@ Make and load GC percent table
      hgGcPercent mm3 ../../nib
 
 
+ADD MAP CONTIGS TRACK (DONE 02/28/03)
+    ssh hgwdev
+    mkdir -p ~/mm3/bed/ctgPos
+    cd ~/mm3/bed/ctgPos
+    # hgCtgPos uses the lift files... but mouse lift files are for the 
+    # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs 
+    # from the assembly.  (In the future, we should go with the NT's!)  
+    # So... just for this release, go straight from the seq_contig.md 
+    # to the table def'n: contig, size, chrom, chromStart, chromEnd 
+    perl -we \
+     'while (<>) { \
+        if (/^\d+\s+(\w+)\s+(\d+)\s+(\d+)\s+\S+\s+(NT_\d+)\s+.*ref_strain/) { \
+          $chr=$1; $start=$2; $start -= 1; $end=$3; $ctg=$4; \
+          print "$ctg\t" . ($end-$start) . "\tchr$chr\t$start\t$end\n"; \
+        } \
+      }' /cluster/store2/mm.2003.02/ncbi/seq_contig.md \
+    > ctgPos.tab
+    hgsql mm3 < ~/kent/src/hg/lib/ctgPos.sql
+    echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql mm3
+    # Note: the info is there in seq_contig.md to also do the _random's, 
+    # but we'd have to do some more work: duplicate the gaps of 50000 between 
+    # contigs for all _random's except chrUn_random (1000 between).  
+
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM3 (DONE 02/06/03)
     # Enter mm3 into hgcentraltest.dbDb so test browser knows about it:
     mysql -h genome-testdb -u root -pbigSecret -A hgcentraltest
@@ -188,7 +211,7 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM3 (DONE 02/13/03)
       | hgsql -h genome-testdb hgcentraltest
 
 
-REPEAT MASKING (DONE 02/07/03)
+REPEAT MASKING (IN PROGRESS)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -227,7 +250,7 @@ REPEAT MASKING (DONE 02/07/03)
         ssh kk
         cd ~/mm3/RMRun
         para create RMJobs
-        para try, para check, para check, para push, para check,...
+TODO        para try, para check, para check, para push, para check,...
 
         #- Lift up the split-contig .out's to contig-level .out's
 	ssh kkstore
@@ -489,6 +512,29 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 02/09/03)
       hgLoadPsl mm3 *.psl
 
 
+ADD REFSEQ/MRNA/EST ALIGNMENTS TO _RANDOMS (IN PROGRESS)
+    # Note: in future builds, we should get the _randoms in the beginning,
+    # so this should not be necessary!  
+    ssh kk
+    cd ~/mm/bed
+    foreach i (refSeq mrna est)
+      mkdir ${i}_random
+      cd ${i}_random
+      ls -1S /mnt/scratch/hg/mm3/contigs/chr*_random_*.fa > genome.lst
+      ls -1 /mnt/scratch/hg/mrna.133/Mus_musculus/$i.fa > mrna.lst
+      cp -p ~/lastMm/bed/$i/gsub .
+      #-- Edit the gsub so it doesn't say -mask=lower!!! 
+      # _randoms are all lower right now -- I'm running this before masking.
+      mkdir psl
+      gensub2 genome.lst mrna.lst gsub spec
+      para create spec
+      cd ..
+    end 
+    # para try,check,push,check... in each ${i}_random directory.
+
+    # Now run the "Process..." and "Load..." steps above, but for *_random
+
+
 CREATE REFSEQ GENES TRACK (DONE 02/09/03)
     # Load the refSeq mRNA
     ssh hgwdev
@@ -519,7 +565,7 @@ CREATE REFSEQ GENES TRACK (DONE 02/09/03)
     hgRefSeqStatus mm3 loc2ref
 
 
-REFFLAT (DONE 02/09/03)
+REFFLAT (DONE 02/25/03)
     # create precomputed join of refFlat and refGene:
     echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql mm3
 
