@@ -8,6 +8,8 @@
 #include "common.h"
 #include "kxTok.h"
 
+boolean includeQuotes = FALSE;
+
 static struct kxTok *kxTokNew(enum kxTokType type, char *string, int stringSize)
 /* Allocate and initialize a new token. */
 {
@@ -64,7 +66,8 @@ for (;;)
     else if (c == '"')
         {
         type = kxtString;
-        start = s;
+        if (! includeQuotes)
+	    start = s;
         for (;;)
             {
             c = *s++;
@@ -73,8 +76,29 @@ for (;;)
             if (c == '*' || c == '?')
                 type = kxtWildString;
             }
-        end = s-1;
+	if (! includeQuotes)
+	    end = s-1;
+	else
+	    end = s;
         }
+    else if (c == '\'')
+        {
+        type = kxtString;
+        if (! includeQuotes)
+	    start = s;
+        for (;;)
+            {
+            c = *s++;
+            if (c == '\'')
+                break;
+            if (c == '*' || c == '?')
+                type = kxtWildString;
+            }
+	if (! includeQuotes)
+	    end = s-1;
+	else
+	    end = s;
+        } 
     else if (c == '=')
         {
         type = kxtEquals;
@@ -173,6 +197,13 @@ tok = kxTokNew(kxtEnd, "end", 3);
 slAddHead(&tokList, tok);
 slReverse(&tokList);
 return tokList;
+}
+
+
+void kxTokIncludeQuotes(boolean val)
+/* Pass in TRUE if kxTok should include quote characters in string tokens. */
+{
+includeQuotes = val;
 }
 
 

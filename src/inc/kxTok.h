@@ -46,4 +46,7 @@ struct kxTok *kxTokenize(char *text, boolean wildAst);
  * TRUE then '*' character will be treated as wildcard
  * rather than multiplication sign. */
 
+void kxTokIncludeQuotes(boolean val);
+/* Pass in TRUE if kxTok should include quote characters in string tokens. */
+
 #endif /* KXTOK_K */
