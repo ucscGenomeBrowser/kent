@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.723 2004/05/06 00:22:20 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.724 2004/05/07 22:35:33 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -152,6 +152,8 @@ char *protDbName;               /* Name of proteome database for this genome. */
 struct customTrack *ctList = NULL;  /* Custom tracks. */
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
+boolean withIdeogram = TRUE;            /* Display chromosome ideogram? */
+boolean ideogramAvail = FALSE;           /* Is the ideogram data available for this genome? */
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
@@ -363,7 +365,8 @@ struct spaceSaver *ss;
 struct slList *item;
 MgFont *font = tl.font;
 int extraWidth = tl.mWidth * 2;
-int start, end, height;
+long long start, end;
+int height;
 double scale = (double)insideWidth/(winEnd - winStart);
 spaceSaverFree(&tg->ss);
 ss = tg->ss = spaceSaverNew(0, insideWidth, maxCount);
@@ -1415,6 +1418,12 @@ highlight = (hgFindMatches != NULL &&
 return highlight;
 }
 
+double scaleForWindow(double width, int seqStart, int seqEnd)
+/* Return the scale for the window. */
+{
+return width / (seqEnd - seqStart);
+}
+
 
 void genericDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
@@ -1423,7 +1432,8 @@ void genericDrawItems(struct track *tg,
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 {
-double scale = scaleForPixels(width);
+double scale = scaleForWindow(width, seqStart, seqEnd);
+//double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int s, e;
@@ -3213,15 +3223,21 @@ void sgdGeneMethods(struct track *tg)
 tg->itemName = sgdGeneName;
 }
 
-void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
-/* Generic tg->item loader. */
+void bedLoadItemByQuery(struct track *tg, char *table, 
+			char *query, ItemLoader loader)
+/* Generic tg->item loader. If query is NULL use generic
+ hRangeQuery(). */
 {
 struct sqlConnection *conn = hAllocConn();
-int rowOffset;
-struct sqlResult *sr = hRangeQuery(conn, table, chromName, 
-	winStart, winEnd, NULL, &rowOffset);
-char **row;
+int rowOffset = 0;
+struct sqlResult *sr = NULL;
+char **row = NULL;;
 struct slList *itemList = NULL, *item;
+if(query == NULL)
+    sr = hRangeQuery(conn, table, chromName, 
+		     winStart, winEnd, NULL, &rowOffset);
+else
+    sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3232,6 +3248,12 @@ slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 tg->items = itemList;
 hFreeConn(&conn);
+}
+
+void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
+/* Generic tg->item loader. */
+{
+bedLoadItemByQuery(tg, table, NULL, loader);
 }
 
 Color contrastingColor(struct vGfx *vg, int backgroundIx)
@@ -5938,6 +5960,104 @@ void drawComplementArrow( struct vGfx *vg, int leftLabel,
 		        MG_BLACK, font, "--->");
 }
 
+void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
+/* Make an ideogram image of the chromsome and our position in
+   it. */
+{
+struct track *track = NULL, *ideoTrack = NULL;
+MgFont *font = tl.font;
+char *mapName = "ideoMap";
+int fontHeight = mgFontLineHeight(font);
+int insideHeight = fontHeight-1;
+struct vGfx *vg;
+int trackTabX = gfxBorder;
+struct tempName gifTn;
+boolean doIdeo = TRUE;
+int ideoWidth = round(.65 *tl.picWidth);
+int ideoHeight = 0;
+int textWidth = 0;
+/* Find the ideogram track. */
+for(track = *pTrackList; track != NULL; track = track->next)
+    {
+    if(sameString(track->mapName, "cytoBandIdeo"))
+	{
+	ideoTrack = track;
+	break;
+	}
+    }
+/* If no ideogram don't draw. */
+if(ideoTrack == NULL)
+    doIdeo = FALSE;
+else
+    {
+    struct trackRef *tr = NULL;
+    /* Find and remove the track from the group and track list. */
+    ideogramAvail = TRUE;
+    for(tr = ideoTrack->group->trackList; tr != NULL; tr = tr->next)
+	{
+	if(tr->track == ideoTrack)
+	    break;
+	}
+    slRemoveEl(&ideoTrack->group->trackList, tr);
+    slRemoveEl(pTrackList, ideoTrack);
+
+    /* Fix for hide all button hiding the ideogram as well. */
+    if(withIdeogram && ideoTrack->items == NULL)
+	{
+	ideoTrack->visibility = tvDense;
+	ideoTrack->loadItems(ideoTrack);
+	}
+    limitVisibility(ideoTrack);
+    
+    /* If hidden don't draw. */
+    if(ideoTrack->limitedVis == tvHide || !withIdeogram)
+	doIdeo = FALSE;
+
+    /* If doing postscript, skip ideogram. */
+    if(psOutput)
+	doIdeo = FALSE;
+    }
+if(doIdeo)
+    {
+    /* Draw the ideogram. */
+    makeTempName(&gifTn, "hgt", ".gif");
+    /* Start up client side map. */
+    hPrintf("<MAP Name=%s>\n", mapName);
+    ideoHeight = gfxBorder + ideoTrack->height;
+    vg = vgOpenGif(ideoWidth, ideoHeight, gifTn.forCgi);
+    makeGrayShades(vg);
+    makeBrownShades(vg);
+    makeSeaShades(vg);
+    ideoTrack->ixColor = vgFindRgb(vg, &ideoTrack->color);
+    ideoTrack->ixAltColor = vgFindRgb(vg, &ideoTrack->altColor);
+    vgSetClip(vg, 0, gfxBorder, ideoWidth, ideoTrack->height);
+    textWidth = mgFontStringWidth(font, chromName);
+    vgTextCentered(vg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, chromName);
+    ideoTrack->drawItems(ideoTrack, winStart, winEnd, vg, textWidth+4, gfxBorder, ideoWidth-textWidth-4,
+			 font, ideoTrack->ixColor, ideoTrack->limitedVis);
+    vgUnclip(vg);
+    /* Save out picture and tell html file about it. */
+    vgClose(&vg);
+    /* Finish map. */
+    hPrintf("</MAP>\n");
+    }
+hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
+if(doIdeo)
+    {
+    hPrintf("<TR><TD HEIGHT=5></TD></TR>");
+    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
+	    gifTn.forHtml, ideoWidth, ideoHeight, mapName);
+    hPrintf("</TD></TR>");
+    hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>");
+    }
+else
+    hPrintf("<TR><TD HEIGHT=10></TD></TR></TABLE>");
+if(ideoTrack != NULL)
+    {
+    ideoTrack->limitedVisSet = TRUE;
+    ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
+    }
+}
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -5969,7 +6089,6 @@ char minRangeStr[32];
 char maxRangeStr[32];
 int start;
 int newy;
-
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
@@ -6038,9 +6157,9 @@ if (withLeftLabels && psOutput == NULL)
 	int h, yStart = y, yEnd;
 	if (track->limitedVis != tvHide)
 	    {
+	    y += track->height;
 	    if (withCenterLabels)
 		y += fontHeight;
-	    y += track->height;
 	    yEnd = y;
 	    h = yEnd - yStart - 1;
 
@@ -6068,16 +6187,16 @@ if (withLeftLabels)
     double min0, max0;
     Color lightRed = vgFindColorIx(vg, 255, 180, 180);
 
-    vgBox(vg, leftLabelX + leftLabelWidth, 0, 
+    vgBox(vg, leftLabelX + leftLabelWidth, 0,
     	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
     if (withRuler)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, "Base Position");
-    if(zoomedToBaseLevel)
-        drawComplementArrow(vg,leftLabelX, y+rulerHeight,
-                leftLabelWidth-1, baseHeight, font);
+	if(zoomedToBaseLevel)
+	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
+				leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
@@ -6294,6 +6413,7 @@ if (withGuidelines)
 /* Show ruler at top. */
 if (withRuler)
     {
+    struct track *track = trackList;
     y = 0;
     vgSetClip(vg, insideX, y, insideWidth, basePositionHeight);
     relNumOff = winStart;
@@ -6306,45 +6426,45 @@ if (withRuler)
         if(complementRulerBases)
             baseColor = MG_GRAY;
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
-        baseColor, font, complementRulerBases);
+		  baseColor, font, complementRulerBases);
         /*make a click on the bases complement them*/
         mapBoxToggleComplement(insideX, y+rulerHeight, insideWidth,
-                baseHeight, NULL, chromName, winStart, winEnd, "complement bases");
+			       baseHeight, NULL, chromName, winStart, winEnd, "complement bases");
         }
     vgUnclip(vg);
-
+    
     /* Make hit boxes that will zoom program around ruler. */
+    {
+    int boxes = 30;
+    int winWidth = winEnd - winStart;
+    int newWinWidth = winWidth/3;
+    int i, ws, we = 0, ps, pe = 0;
+    int mid, ns, ne;
+    double wScale = (double)winWidth/boxes;
+    double pScale = (double)insideWidth/boxes;
+    for (i=1; i<=boxes; ++i)
 	{
-	int boxes = 30;
-	int winWidth = winEnd - winStart;
-	int newWinWidth = winWidth/3;
-	int i, ws, we = 0, ps, pe = 0;
-	int mid, ns, ne;
-	double wScale = (double)winWidth/boxes;
-	double pScale = (double)insideWidth/boxes;
-	for (i=1; i<=boxes; ++i)
+	ps = pe;
+	ws = we;
+	pe = round(pScale*i);
+	we = round(wScale*i);
+	mid = (ws + we)/2 + winStart;
+	ns = mid-newWinWidth/2;
+	ne = ns + newWinWidth;
+	if (ns < 0)
 	    {
-	    ps = pe;
-	    ws = we;
-	    pe = round(pScale*i);
-	    we = round(wScale*i);
-	    mid = (ws + we)/2 + winStart;
-	    ns = mid-newWinWidth/2;
-	    ne = ns + newWinWidth;
-	    if (ns < 0)
-		{
-		ns = 0;
-		ne -= ns;
-		}
-	    if (ne > seqBaseCount)
-		{
-		ns -= (ne - seqBaseCount);
-		ne = seqBaseCount;
-		}
-	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
-			 chromName, ns, ne, "3x zoom");
+	    ns = 0;
+	    ne -= ns;
 	    }
+	if (ne > seqBaseCount)
+	    {
+	    ns -= (ne - seqBaseCount);
+	    ne = seqBaseCount;
+	    }
+	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
+		     chromName, ns, ne, "3x zoom");
 	}
+    }
     }
 
 
@@ -6373,7 +6493,7 @@ if (withCenterLabels)
 
 
 /* Draw tracks. */
-    {
+{
     y = yAfterRuler;
     for (track = trackList; track != NULL; track = track->next)
 	{
@@ -6516,8 +6636,8 @@ hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
 vgClose(&vg);
-smallBreak();
-smallBreak();
+/* smallBreak(); */
+/* smallBreak(); */
 hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s ",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
 hPrintf("><BR>\n");
@@ -7458,6 +7578,7 @@ withRuler = sameWord(s, "on");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
+registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
 registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
@@ -7746,6 +7867,9 @@ if (!hideControls)
 	}
     }
 
+/* Make chromsome ideogram gif and map. */
+makeChromIdeoImage(&trackList, psOutput);
+
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 if (!hideControls)
@@ -7775,6 +7899,11 @@ if (!hideControls)
     hButton("hgt.reset", "reset all");
     hPrintf(" ");
     hButton("hgt.hideAll", "hide all");
+    if(ideogramAvail)
+	{
+	hPrintf(" Chromosome");
+	hCheckBox("ideogram", withIdeogram);
+	}
     hPrintf(" Guidelines ");
     hCheckBox("guidelines", withGuidelines);
     hPrintf(" <B>Labels:</B> ");
@@ -8123,6 +8252,7 @@ winBaseCount = winEnd - winStart;
 /* Figure out basic dimensions of display.  This
  * needs to be done early for the sake of the
  * zooming and dinking routines. */
+withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
