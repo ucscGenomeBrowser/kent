@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "orthoEval.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.7 2003/06/24 00:08:54 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.8 2003/06/24 05:53:07 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -472,7 +472,7 @@ return borf;
 struct borf *borfForBed(struct bed *bed)
 /* borfBig - Run Victor Solovyev's bestOrf on a bed. */
 {
-char *exe = optionVal("bestOrfExe", "/projects/compbio/bin/bestorf.linux/bestorf /projects/compbio/bin/bestorf.linux/hume.dat");
+char *exe = optionVal("bestOrfExe", "/cluster/home/sugnet/bin/bestorf /cluster/home/sugnet/bin/hume.dat");
 static char *tmpFa = NULL;
 static char *tmpOrf = NULL;
 struct borf *borf = NULL;
@@ -522,7 +522,7 @@ bed->thickStart = thickStart;
 bed->thickEnd = thickEnd;
 }
 
-struct orthoEval *scoreOrthoBeds(char *bedFile, char *db)
+struct orthoEval *scoreOrthoBeds(char *bedFile, char *db, FILE *out)
 /* Score each bed in the orhtoBed file. */
 {
 struct bed *bedList = NULL, *bed = NULL;
@@ -543,6 +543,8 @@ for(bed = bedList; bed != NULL; bed = bed->next)
     calcBasesOverlap(ev);
     calcIntronStats(ev);
 //    borfTabOut(borf, stdout);
+    if(ev->numIntrons > 0)
+	orthoEvalTabOut(ev, out);
     slAddHead(&evList, ev);
     }
 warn("\nDone.");
@@ -566,12 +568,7 @@ orthoEvalOutName = optionVal("orthoEvalOut", NULL);
 if(orthoEvalOutName == NULL)
     errAbort("Please specify an orthoEvalOut file. Use -help for usage.");
 orthoEvalOut = mustOpen(orthoEvalOutName, "w");
-evList = scoreOrthoBeds(bedFile, db);
-for(ev=evList; ev != NULL; ev = ev->next)
-    {
-    if(ev->numIntrons > 0)
-	orthoEvalTabOut(ev, orthoEvalOut);
-    }
+evList = scoreOrthoBeds(bedFile, db, orthoEvalOut);
 carefulClose(&orthoEvalOut);
 }
 
