@@ -164,7 +164,7 @@
 #include "putaInfo.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.851 2005/03/15 23:43:53 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.852 2005/03/17 11:39:53 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6192,7 +6192,7 @@ if (url != NULL && url[0] != 0)
     	if (ans != NULL)
 	    {
 	    /* double check to make sure trackDb is also updated to be in sync with existence of supfamily table */
-	    tdbSf = hashFindVal(trackHash, "superfamily");;
+	    tdbSf = hashFindVal(trackHash, "superfamily");
             if (tdbSf != NULL)
 	    	{
 		printf("<B>Superfamily Link: </B>");
@@ -14549,7 +14549,7 @@ void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qS
 			int qEnd, char *entryName, char *geneName, char *geneTable, int cdsS, int cdsE)
 /* Display protein or DNA alignment in a frame. */
 {
-int blockCount = 0, i = 0, j= 0, *exnStarts = NULL, *exnEnds = NULL;;
+int blockCount = 0, i = 0, j= 0, *exnStarts = NULL, *exnEnds = NULL;
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
 struct sqlConnection *conn = hAllocConn();
