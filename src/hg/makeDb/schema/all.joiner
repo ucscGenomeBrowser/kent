@@ -2,7 +2,7 @@
 # in various databases.
 #
 # So far have looked through hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
-# panTro1,galGal2,fr1,cb1,hgFixed,go, and swissProt databases
+# panTro1,galGal2,fr1,cb1,hgFixed,go, and UniProt databases
 # Adding hg17 June 1, 2004 (heather)
 
 # Define databases used for various organisms
@@ -23,7 +23,7 @@ set canFam canFam1
 set droYak droYak1
 set droMult droAna1,droMoj1,droVir1,droEre1
 set anoGam anoGam1
-set apiMel apiMel1
+set apiMel apiMel1,apiMel2
 set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1
@@ -44,10 +44,10 @@ set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult
 exclusiveSet $gbd
 
 # Define other databases that we check
-set otherDb swissProt,go,hgFixed
+set otherDb uniProt,go,hgFixed,proteome
 
 # Define protein databases (currently not checked)
-set proteinDb proteins,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
+set proteinDb proteins050201,proteins041115,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
 
 # Define zoo databases (currently not checked)
 set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooHuman3,zooMouse3,zooPig3,zooRat3,zooTetra3,zooZebrafish3
@@ -106,15 +106,19 @@ identifier goDbXrefId external=GO
      go.dbxref.id
      go.term_dbxref.dbxref_id
 
-# SwissProt Related Stuff
+# UniProt Related Stuff
 
-identifier swissProtId external=SwissProt
-"Swiss Prot ID. Same as accession for uncurated trEMBL proteins"
-     swissProt.displayId.val 
+identifier UniProtId external=UniProt
+"UniProt(Swiss-Prot/TrEMBL) display ID."
+     uniProt.displayId.val 
+     proteome.uniProtAlias.alias minCheck=0.2
+     proteome.spOldNew.newDisplayId minCheck=0.3
+     proteome.spOldNew.oldDisplayId minCheck=0.3
      go.goaPart.dbObjectSymbol minCheck=0.95
      $gbd.dupSpMrna.proteinID minCheck=0.80
      $gbd.dupSpMrna.dupProteinID minCheck=0.50
      $kgDb.kgProtAlias.displayID minCheck=0.80
+     $kgDb.kgSpAlias.alias minCheck=0.20
      $kgDb.kgXref.spDisplayID minCheck=0.80
      $kgDb.knownCanonical.protein minCheck=0.80
      $kgDb.knownGene.proteinID minCheck=0.80
@@ -122,22 +126,25 @@ identifier swissProtId external=SwissProt
      $dm.bdgpSwissProt.spSymbol minCheck=0.80
      $dm.flyBaseSwissProt.spSymbol minCheck=0.80
 
-identifier swissProtAccession external=SwissProt
-"SwissProt Accession"
-     swissProt.displayId.acc
-     swissProt.accToKeyword.acc 
-     swissProt.accToTaxon.acc full
-     swissProt.citation.acc
-     swissProt.comment.acc
-     swissProt.description.acc unique full
-     swissProt.extDbRef.acc
-     swissProt.feature.acc
-     swissProt.gene.acc
-     swissProt.geneLogic.acc
-     swissProt.info.acc unique full
-     swissProt.otherAcc.acc
-     swissProt.protein.acc unique full
+identifier UniProtAccession external=UniProt
+"UniProt(Swiss-Prot/TrEMBL) Accession"
+     uniProt.displayId.acc
+     uniProt.accToKeyword.acc 
+     uniProt.accToTaxon.acc full
+     uniProt.citation.acc
+     uniProt.comment.acc
+     uniProt.description.acc unique full
+     uniProt.extDbRef.acc
+     uniProt.feature.acc
+     uniProt.gene.acc
+     uniProt.geneLogic.acc
+     uniProt.info.acc unique full
+     uniProt.otherAcc.acc
+     uniProt.protein.acc unique full
+     proteome.spOldNew.acc minCheck=0.8
+     proteome.uniProtAlias.acc minCheck=0.9
      $kgDb.kgProtAlias.alias  minCheck=0.2
+     $kgDb.kgSpAlias.spId  minCheck=0.2
      $kgDb.kgProtMap.qName minCheck=0.9
      $kgDb.kgXref.spID minCheck=0.9
      $gbd.pepMwAa.accession minCheck=0.9
@@ -154,77 +161,77 @@ identifier swissProtAccession external=SwissProt
      $sacCer.sgdToSwissProt.value minCheck=0.9
      go.goaPart.dbObjectId minCheck=0.99
 
-identifier swissProtAuthor
-"Author ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
-    swissProt.author.id 
-    swissProt.referenceAuthors.author full
+identifier UniProtAuthor
+"Author ID in UniProt (just use inside UCSC Relationalized UniProt)"
+    uniProt.author.id 
+    uniProt.referenceAuthors.author full
 
-identifier swissProtReference
-"Reference (journal) ID in SwissProt (just inside UCSC Relationalized)"
-    swissProt.reference.id
-    swissProt.citation.reference full
-    swissProt.referenceAuthors.reference full
+identifier UniProtReference
+"Reference (journal) ID in UniProt (just inside UCSC Relationalized)"
+    uniProt.reference.id
+    uniProt.citation.reference full
+    uniProt.referenceAuthors.reference full
 
-identifier swissProtCitation
-"Citation ID in SwissProt (just use inside UCSC Relationalized SwissProt)"
-    swissProt.citation.id 
-    swissProt.citationRc.citation 
+identifier UniProtCitation
+"Citation ID in UniProt (just use inside UCSC Relationalized UniProt)"
+    uniProt.citation.id 
+    uniProt.citationRc.citation 
 
-identifier swissProtCitationRp
-"Reference Position Line ID in SwissProt (just inside UCSC Relationalized)"
-    swissProt.citationRp.id
-    swissProt.citation.rp full
+identifier UniProtCitationRp
+"Reference Position Line ID in UniProt (just inside UCSC Relationalized)"
+    uniProt.citationRp.id
+    uniProt.citation.rp full
 
-identifier swissProtRcType
-"Reference Comment Type in SwissProt (just inside UCSC Relationalized)"
-    swissProt.rcType.id
-    swissProt.citationRc.rcType full
+identifier UniProtRcType
+"Reference Comment Type in UniProt (just inside UCSC Relationalized)"
+    uniProt.rcType.id
+    uniProt.citationRc.rcType full
 
-identifier swissProtRcVal
-"Reference Comment Text in SwissProt (just inside UCSC Relationalized)"
-    swissProt.rcVal.id 
-    swissProt.citationRc.rcVal full
+identifier UniProtRcVal
+"Reference Comment Text in UniProt (just inside UCSC Relationalized)"
+    uniProt.rcVal.id 
+    uniProt.citationRc.rcVal full
 
-identifier swissProtCommentType
-"Type of swissProt comment type (just inside UCSC Relationalized)"
-    swissProt.commentType.id
-    swissProt.comment.commentType full
+identifier UniProtCommentType
+"Type of UniProt comment type (just inside UCSC Relationalized)"
+    uniProt.commentType.id
+    uniProt.comment.commentType full
 
-identifier swissProtCommentVal
-"Text of swissProt comment text (just inside UCSC Relationalized)"
-     swissProt.commentVal.id
-     swissProt.comment.commentVal full
+identifier UniProtCommentVal
+"Text of UniProt comment text (just inside UCSC Relationalized)"
+     uniProt.commentVal.id
+     uniProt.comment.commentVal full
 
-identifier swissProtExtDb
-"SwissProt external database ID (just inside UCSC Relationalized)"
-     swissProt.extDb.id 
-     swissProt.extDbRef.extDb full
+identifier UniProtExtDb
+"UniProt(Swiss-Prot/TrEMBL) external database ID (just inside UCSC Relationalized)"
+     uniProt.extDb.id 
+     uniProt.extDbRef.extDb full
 
-identifier swissProtFeatureClass
-"Type of swissProt feature class (just inside UCSC Relationalized)"
-     swissProt.featureClass.id
-     swissProt.feature.featureClass full
+identifier UniProtFeatureClass
+"Type of UniProt feature class (just inside UCSC Relationalized)"
+     uniProt.featureClass.id
+     uniProt.feature.featureClass full
 
-identifier swissProtFeatureType
-"Type of swissProt feature type (just inside UCSC Relationalized)"
-     swissProt.featureType.id 
-     swissProt.feature.featureType full exclude=0
+identifier UniProtFeatureType
+"Type of UniProt feature type (just inside UCSC Relationalized)"
+     uniProt.featureType.id 
+     uniProt.feature.featureType full exclude=0
 
-identifier swissProtOrganelle
-"Type of swissProt organelle ID (just inside UCSC Relationalized)"
-     swissProt.organelle.id
-     swissProt.info.organelle full exclude=0
+identifier UniProtOrganelle
+"Type of UniProt organelle ID (just inside UCSC Relationalized)"
+     uniProt.organelle.id
+     uniProt.info.organelle full exclude=0
 
-identifier swissProtKeyword
-"SwissProt keyword ID (just inside UCSC Relationalized)"
-     swissProt.keyword.id
-     swissProt.accToKeyword.keyword full
+identifier UniProtKeyword
+"UniProt(Swiss-Prot/TrEMBL) keyword ID (just inside UCSC Relationalized)"
+     uniProt.keyword.id
+     uniProt.accToKeyword.keyword full
 
 identifier ncbiTaxon
-"NCBI Taxon ID - number for a species.  Used by SwissProt too"
-     swissProt.taxon.id dupeOk
-     swissProt.accToTaxon.taxon full
-     swissProt.commonName.taxon 
+"NCBI Taxon ID - number for a species.  Used by UniProt too"
+     uniProt.taxon.id dupeOk
+     uniProt.accToTaxon.taxon full
+     uniProt.commonName.taxon 
 
 # Various types of gene predictions in UCSC Genome Browser
 
@@ -647,6 +654,7 @@ identifier wgsContigName
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
     $kgDb.kgProtAlias.alias
+    $kgDb.kgSpAlias.alias minCheck=0.1
     $kgDb.kgXref.protAcc
     $gbd.refLink.protAcc 
 
@@ -745,6 +753,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
+    $kgDb.kgSpAlias.kgID
     $kgDb.kgXref.kgID full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
@@ -931,6 +940,7 @@ identifier hugoName external=HUGO fuzzy
     $hg.refLink.name
     $hg.atlasOncoGene.locusSymbol
     $hg.kgAlias.alias 
+    $hg.kgSpAlias.alias minCheck=0.1 
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
@@ -1354,7 +1364,7 @@ identifier blastHg17KGPep01Id
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
      $hg.blastKGRef01.extra1 dupeOk
-     swissProt.displayId.acc
+     uniProt.displayId.acc
 
 identifier tfbsCons
 "transcription factor binding sites"

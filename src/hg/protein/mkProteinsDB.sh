@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.6 2004/09/25 00:14:50 fanhsu Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.7 2005/02/11 22:10:48 fanhsu Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
@@ -63,7 +63,7 @@ if [ -d "$SPDB_DATE" ]; then
 	if [ "${YN}" = "Y" -o "${YN}" = "y" ]; then
 	echo "Recreating ${PDB}"
 	rm -fr ./${SPDB_DATE}
-	hgsql -e "drop database ${PDB}" proteins040315
+	hgsql -e "drop database ${PDB}" proteins041115
 	else
 	echo "Will not recreate at this time."
 	exit 255
@@ -72,11 +72,15 @@ fi
 
 mkdir ${TOP}/${SPDB_DATE}
 cd ${TOP}/${SPDB_DATE}
-echo hgsql -e "create database ${PDB};" proteins040315
-hgsql -e "create database ${PDB};" proteins040315
-hgsqldump -d proteins040315 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
+echo hgsql -e "create database ${PDB};" proteins041115
+hgsql -e "create database ${PDB};" proteins041115
+hgsqldump -d proteins041115 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
 echo "hgsql ${PDB} < proteins.sql"
 hgsql ${PDB} < proteins.sql
+hgsql ${PDB} -e "drop index i2 on spXref2"
+hgsql ${PDB} -e "drop index i3 on spXref2"
+hgsql ${PDB} -e "drop index ii2 on spXref3"
+hgsql ${PDB} -e "drop index ii3 on spXref3"
 
 #	build HUGO database
 mkdir /cluster/store5/proteins/hugo/${SPDB_DATE}

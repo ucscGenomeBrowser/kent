@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.29 2005/02/11 19:45:35 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.30 2005/02/15 22:29:58 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -197,6 +197,20 @@ if (outList != NULL)
     }
 }
 
+static char *getDbTable(char *db, char *table)
+/* If table already contains its real database as a dot-prefix, then 
+ * return a clone of table; otherwise alloc and return db.table . */
+{
+if (strchr(table, '.') != NULL)
+    return cloneString(table);
+else
+    {
+    char dbTable[256];
+    safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
+    return cloneString(dbTable);
+    }
+}
+
 /* ------- Select Fields Stuff ----------*/
 
 static char *checkVarPrefix()
@@ -220,15 +234,6 @@ static char buf[128];
 safef(buf, sizeof(buf), "%s%s.", hgtaFieldSelectPrefix, "linked");
 return buf;
 }
-
-#ifdef OLD
-static char *selFieldLinkedTableVar(char *db, char *table)
-/* Get variable name that lets us know whether to include
- * linked tables or not. */
-{
-return dbTableVar(selFieldLinkedTablePrefix(), db, table);
-}
-#endif
 
 static char *setClearAllVar(char *setOrClearPrefix, char *db, char *table)
 /* Return concatenation of a and b. */
@@ -356,6 +361,7 @@ struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
 char dbTableBuf[256];
 
+cartSetString(cart, hgtaFieldSelectTable, getDbTable(db, table));
 if (strchr(table, '.'))
     htmlOpen("Select Fields from %s", table);
 else
@@ -394,9 +400,50 @@ void doOutSelectedFields(char *table, struct sqlConnection *conn)
 if (anyIntersection())
     errAbort("Can't do selected fields output when intersection is on. "
     "Please go back and select another output type, or clear the intersection.");
-table = connectingTableForTrack(table);
-cartRemovePrefix(cart, hgtaFieldSelectPrefix);
-doBigSelectPage(database, table);
+else
+    {
+    char *fsTable = cartOptionalString(cart, hgtaFieldSelectTable);
+    char *dbTable = NULL;
+    table = connectingTableForTrack(table);
+    dbTable = getDbTable(database, table);
+    /* Remove cart state if table has been changed: */
+    if (fsTable && ! sameString(fsTable, dbTable))
+	{
+	cartRemovePrefix(cart, hgtaFieldSelectPrefix);
+	cartRemove(cart, hgtaFieldSelectTable);
+	}
+    doBigSelectPage(database, table);
+    }
+}
+
+boolean primaryOrLinked(char *dbTableField)
+/* Return TRUE if this is the primary table for field selection, or if it 
+ * is linked with that table. */
+{
+char dbTable[256];
+char *ptr = NULL;
+
+/* Extract just the db.table part of db.table.field */
+safef(dbTable, sizeof(dbTable), "%s", dbTableField);
+ptr = strchr(dbTable, '.');
+if (ptr == NULL)
+    errAbort("Expected 3 .-separated words in %s but can't find first .",
+	     dbTableField);
+ptr = strchr(ptr+1, '.');
+if (ptr == NULL)
+    errAbort("Expected 3 .-separated words in %s but can't find second .",
+	     dbTableField);
+*ptr = 0;
+
+if (sameString(dbTable, cartString(cart, hgtaFieldSelectTable)))
+    return TRUE;
+else
+    {
+    char varName[256];
+    safef(varName, sizeof(varName),
+	  "%s%s", selFieldLinkedTablePrefix(), dbTable);
+    return cartUsualBoolean(cart, varName, FALSE);
+    }
 }
 
 void doPrintSelectedFields()
@@ -411,14 +458,15 @@ struct slName *fieldList = NULL, *field;
 
 textOpen();
 
-/* Gather together field list from cart. */
+/* Gather together field list for primary and linked tables from cart. */
 varList = cartFindPrefix(cart, varPrefix);
 for (var = varList; var != NULL; var = var->next)
     {
     if (!sameString(var->val, "0"))
 	{
 	field = slNameNew(var->name + varPrefixSize);
-	slAddHead(&fieldList, field);
+	if (primaryOrLinked(field->name))
+	    slAddHead(&fieldList, field);
 	}
     }
 if (fieldList == NULL)
@@ -487,9 +535,10 @@ if (filterTable == NULL)
     return FALSE;
 else
     {
-    char dbTable[256];
-    safef(dbTable, sizeof(dbTable), "%s.%s", database, curTable);
-    if (sameString(filterTable, dbTable))
+    char *dbTable = getDbTable(database, curTable);
+    boolean curTableHasFilter = sameString(filterTable, dbTable);
+    freez(&dbTable);
+    if (curTableHasFilter)
 	return TRUE;
     else
 	{
@@ -843,9 +892,7 @@ doBigFilterPage(conn, db, table);
 void doFilterSubmit(struct sqlConnection *conn)
 /* Respond to submit on filters page. */
 {
-char dbTable[256];
-safef(dbTable, sizeof(dbTable), "%s.%s", database, curTable);
-cartSetString(cart, hgtaFilterTable, dbTable);
+cartSetString(cart, hgtaFilterTable, getDbTable(database, curTable));
 doMainPage(conn);
 }
 
@@ -1002,12 +1049,11 @@ static boolean filteredOrLinked(char *db, char *table)
 /* Return TRUE if this table is the table to be filtered or if it is to be 
  * linked with that table. */
 {
-char dbTable[256];
-if (sameString(db, database))
-    safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
-else
-    safef(dbTable, sizeof(dbTable), "%s.%s.%s", database, db, table);
-if (sameString(dbTable, cartUsualString(cart, hgtaFilterTable, "")))
+char *dbTable = getDbTable(db, table);
+char *filterTable = cartUsualString(cart, hgtaFilterTable, "");
+boolean isFilterTable = sameString(dbTable, filterTable);
+freez(&dbTable);
+if (isFilterTable)
     return TRUE;
 else
     {

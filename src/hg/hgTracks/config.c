@@ -19,6 +19,7 @@ cartUsualString(cart, textSizeVar, "small");
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
+
 void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
 /* Put up track configurations. If groupTarget is 
@@ -31,6 +32,7 @@ struct group *group;
 boolean showedRuler = FALSE;
 
 setRulerMode();
+changeTrackVis(groupList, groupTarget, changeVis);
 
 /* Set up ruler mode according to changeVis. */
 #ifdef BOB_DOESNT_LIKE
@@ -56,18 +58,6 @@ for (group = groupList; group != NULL; group = group->next)
 	continue;
 
     hTableStart();
-    if (changeVis != -2 && (groupTarget == NULL || sameString(group->name,groupTarget)))
-        {
-	for (tr = group->trackList; tr != NULL; tr = tr->next)
-	    {
-	    struct track *track = tr->track;
-	    if (changeVis == -1)
-	        track->visibility = track->tdb->visibility;
-	    else
-	        track->visibility = changeVis;
-	    }
-	}
-
     hPrintf("<TR>");
     hPrintf("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
@@ -205,6 +195,11 @@ hPrintf("<TR><TD>");
 hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Display track description above each track.");
+hPrintf("</TD></TR>");
+hPrintf("<TR><TD>");
+hCheckBox("trackControlsOnMain", cartUsualBoolean(cart, "trackControlsOnMain", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Show track controls under main graphic.");
 hPrintf("</TD></TR>");
 hTableEnd();
 

@@ -29,6 +29,9 @@ char *wrapWhiteFont(char *s);
 /* Display of bases on the ruler, and multiple alignments.
  * If present, indicates reverse strand */
 #define COMPLEMENT_BASES_VAR    "complement"
+/*	For trackUi and hgTracks, motif highlight options	*/
+#define BASE_MOTIFS	"hgt.motifs"
+#define MOTIF_COMPLEMENT	"hgt.motifComplement"
 
 /* Configuration variable to cause ruler zoom to zoom to base level */
 #define RULER_BASE_ZOOM_VAR      "rulerBaseZoom"
@@ -38,6 +41,10 @@ char *wrapWhiteFont(char *s);
 #define MAF_FRAMING_VAR   "mafFrame"
 #define MAF_DOT_VAR       "mafDot"
 #define MAF_CHAIN_VAR     "mafChain"
+
+/* display of bases for tracks such as EST's that have psl and sequence */
+#define PSL_SEQUENCE_BASES	"pslSequenceBases"
+#define PSL_SEQUENCE_DEFAULT	"off"
 
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
@@ -404,6 +411,24 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
+
+/*** for base labeling of EST like track related controls *****/
+
+enum baseColorOptEnum {
+   baseColorOff = 0,
+   baseColorAllBases = 1,
+   baseColorDifferentBases = 2,
+};
+
+enum baseColorOptEnum baseColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *baseColorEnumToString(enum baseColorOptEnum x);
+/* Convert from enum to string representation. */
+
+void baseColorDropDown(char *var, char *curVal);
+/* Make drop down of options.*/
+
 
 /*** Some Stuff for the cdsColor track ***/
 

@@ -356,7 +356,7 @@ shortLabel Non-$Organism RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1
-visibility dense
+visibility hide
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
@@ -574,6 +574,7 @@ visibility dense
 spectrum on
 intronGap 30
 type psl est
+pslSequenceBases no
 
 track est
 shortLabel $Organism ESTs
@@ -584,6 +585,7 @@ visibility hide
 spectrum on
 intronGap 30
 type psl est
+pslSequenceBases no
 
 track tightEst
 shortLabel Tight ESTs
@@ -621,6 +623,7 @@ priority 65
 visibility hide
 spectrum on
 type psl xeno
+pslSequenceBases no
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
 track anyCovBed
@@ -649,6 +652,7 @@ priority 68
 visibility hide
 color 100,0,0
 type genePred
+autoTranslate 0
 url http://www.tigr.org/tigr-scripts/tgi/tc_report.pl?$$
 
 track uniGene_2
@@ -1736,7 +1740,7 @@ searchPriority 2
 
 searchTable xenoRefGene
 searchType refGene
-searchPriority 1
+searchPriority 2.1
 
 searchTable superfamily
 searchType bed

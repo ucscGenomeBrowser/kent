@@ -238,14 +238,13 @@ commonName = NULL;
    but we will just use the first valid one */
 safef(cond_str, sizeof(cond_str),"accToTaxon.acc='%s' and accToTaxon.taxon=taxon.id", proteinID);
 answer = sqlGetField(conn, UNIPROT_DB_NAME, "accToTaxon, taxon", "taxon.id", cond_str);
-    
 if (answer != NULL)
     {
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
-    sciName = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    sciName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
-    commonName = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    commonName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     }
 if (sciName != NULL)
     {
@@ -260,7 +259,7 @@ hPrintf("<br>");
 protSeq = getAA(proteinID);
 if (protSeq == NULL)
     {
-    errAbort("%s is not a current valid entry in SWISS-PROT/TrEMBL\n", proteinID);
+    errAbort("%s is not a current valid entry in UniProt(SWISS-PROT/TrEMBL)\n", proteinID);
     }
 protSeqLen = strlen(protSeq);
 
@@ -549,26 +548,20 @@ else
 	else
 	    {
 	    /* not found in genome DBs that support KG/PB */
-	    /* now search Swiss-Prot to see if this protein is there. */
+	    /* now search PROTEOME_DB_NAMES to see if this protein is there. */
 	    
-	    spConn = sqlConnect("proteins");
-	    safef(cond_str, sizeof(cond_str), "displayID='%s'", queryID);
-            answer = sqlGetField(spConn, "proteins", "spXref3", "accession", cond_str);
+	    answer = uniProtFindPrimAcc(queryID);
 	    if (answer == NULL)
-    		{
-	        safef(cond_str, sizeof(cond_str), "accession='%s'", queryID);
-                answer = sqlGetField(spConn, "proteins", "spXref3", "accession", cond_str);
-	        if (answer == NULL)
-		    {
-	            errAbort(
-		    "'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or a gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
-		    , queryID);
-	    	    }
-		}
+		{
+	        errAbort(
+		"'%s' does not seem to be a valid UniProt(Swiss-Prot/TrEMBL) protein ID or a gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
+		    	, queryID);
+	    	}
+	    
 	    proteinInSupportedGenome = FALSE;
 	    database = strdup(GLOBAL_PB_DB);
 	    organism = strdup("");
-    	    protDbName = strdup("proteins");
+    	    protDbName = strdup(PROTEOME_DB_NAME);
 	    proteinID = strdup(answer);
 	    }
 	}

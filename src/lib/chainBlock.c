@@ -9,7 +9,7 @@
 #include "dlist.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainBlock.c,v 1.15 2005/01/10 00:13:45 kent Exp $";
+static char const rcsid[] = "$Id: chainBlock.c,v 1.16 2005/02/11 16:17:38 angie Exp $";
 
 struct kdBranch
 /* A kd-tree. That is a binary tree which partitions the children
@@ -424,6 +424,9 @@ if (*pBlockList == NULL)
 lm = lmInit(0);  /* Memory for tree, branches and leaves. */
 for (block = *pBlockList; block != NULL; block = block->next)
     {
+    /* Watch out for 0-length blocks in input: */
+    if (block->tStart == block->tEnd)
+	continue;
     lmAllocVar(lm, leaf);
     leaf->cb = block;
     leaf->totalScore = block->score;

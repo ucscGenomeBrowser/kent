@@ -16,7 +16,7 @@ idSql select name from sgdGene where name = '%s'
 url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 priority 25
 
-name swissProt
+name uniProt
 tables sgdGene
 idSql select proteinID from sgdGene where name = '%s'
 

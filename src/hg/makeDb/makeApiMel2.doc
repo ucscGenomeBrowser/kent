@@ -293,13 +293,6 @@ _EOF_
           insert into blatServers values("apiMel2", "blat14", "17793", 0, 1);' \
       | hgsql -N hgcentraltest
 
-# MAKE GCPERCENT (DONE 2/4/2005 Andy)
-    ssh hgwdev
-    mkdir /cluster/data/apiMel2/bed/gcPercent
-    cd /cluster/data/apiMel2/bed/gcPercent
-    # create and load gcPercent table
-    hgGcPercent apiMel2 /gbdb/apiMel2/nib
-
 # MAKE DOWNLOADABLE FILES (DONE 2/6/2005 Andy)
     ssh kksilo
     cd /cluster/data/apiMel2
@@ -420,8 +413,16 @@ _EOF_
     hgPepPred apiMel2 generic genscanPep genscan.pep
     hgLoadBed apiMel2 genscanSubopt genscanSubopt.bed
 
-# MAKE Drosophila Proteins track  (DONE braney 11/17/04)
-# GET GENBANK mRNA AND EST COUNTS (DONE 11/8/04 angie)
+# GENBANK mRNA AND EST COUNTS (DONE 2/14/2005 Andy)
+    # Go to the latest GenBank full release dir and get an idea of how
+    # many mRNAs and ESTs there are to align.
+    ssh eieio
+    cd /cluster/data/genbank/data/processed/genbank.145.0/full
+    awk '$4 == "Apis" {print $4 " " $5;}' mrna.gbidx | sort | uniq -c
+#    199 Apis mellifera
+    awk '$4 == "Apis" {print $4 " " $5;}' est*.gbidx | sort | uniq -c
+#  24643 Apis mellifera
+
 # AUTO UPDATE GENBANK MRNA RUN  (DONE 2/8/2005 Andy)
     ssh hgwdev
     # Update genbank config and source in CVS:
@@ -459,7 +460,7 @@ apiMel2.perChromTables = no
     rm -rf work/initial.apiMel2
 
     # -initial for ESTs
-    ssh kksilo
+    ssh eieio
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=est -initial apiMel2 &
     tail -f [its logfile]
@@ -468,7 +469,7 @@ apiMel2.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 apiMel2 &
     featureBits apiMel2 all_est
-#5563769 bases of 208434669 (2.669%) in intersection
+#5809581 bases of 249601222 (2.328%) in intersection
     # Clean up:
     rm -rf work/initial.apiMel2
 
@@ -481,11 +482,73 @@ apiMel2.perChromTables = no
     cp $aliDir/S1.len S2.len
     cp $aliDir/S2.len S1.len
     # I get errors with this:
-    #zcat $aliDir/axtChrom/chr*.axt.gz \
-    #| axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
-    #| axtSort stdin dm2.axt
+    zcat $aliDir/pslChrom/chr*.psl.gz \
+      | pslSwap stdin dm2.unsorted.psl 
+    sort -k 14,14 -k 16n,17n < dm2.unsorted.psl > dm2.psl
+    rm dm2.unsorted.psl
 
-# CHAIN MELANOGASTER BLASTZ (TODO)
-# MAKE AXTNET (TODO)
-# MAKE VSDM1 DOWNLOADABLES (TODO)
+# CHAIN MELANOGASTER BLASTZ (DONE 2/9/2005)
+    # Run axtChain on kolossus (one big dm1.axt input)
+    ssh kolossus
+    mkdir /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    axtChain -psl -scoreScheme=/cluster/data/blastz/HoxD55.q \
+         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
+         -verbose=0 ../dm2.psl /cluster/data/apiMel2/nib \
+      /cluster/data/dm2/nib stdout \
+    | chainAntiRepeat /cluster/data/apiMel2/nib \
+      /cluster/data/dm2/nib stdin stdout \
+    | chainMergeSort stdin > all.chain
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    hgLoadChain -tIndex apiMel2 chainDm2 all.chain
+
+# NET MELANOGASTER BLASTZ (DONE 2/9/2005 Andy)
+    ssh kksilo
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    netClass -noAr noClass.net apiMel2 dm2 melanogaster.net
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    rm noClass.net
+    netFilter -syn melanogaster.net > melanogasterSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    netFilter -minGap=10 melanogaster.net |  hgLoadNet apiMel2 netDm2 stdin
+    netFilter -minGap=10 melanogasterSyn.net \
+    | hgLoadNet apiMel2 netSyntenyDm2 stdin
+
+# MAKE AXTNET (DONE 2/10/2005 Andy)
+    ssh kksilo
+    # Well actually I'm using hgwdev
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    netToAxt melanogaster.net all.chain /cluster/data/apiMel2/nib \
+        /cluster/data/dm2/nib stdout \
+      | axtSort stdin melanogasterNet.axt
+
+# MAKE VSDM1 DOWNLOADABLES (DONE 2/10/2005 Andy)
+    ssh kksilo
+    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
+    nice gzip *.{chain,net,axt}
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/apiMel2/vsDm2
+    cd /usr/local/apache/htdocs/goldenPath/apiMel2/vsDm2
+    cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/all.chain.gz \
+      melanogaster.chain.gz
+    cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/melanogaster.net.gz .
+    cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/melanogasterNet.axt.gz .
+    # Make a README.txt which explains the files & formats.
+    md5sum *.gz > md5sum.txt
+
 # MAKE MELANOGASTER PROTEINS TRACK (TODO)

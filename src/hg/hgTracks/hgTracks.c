@@ -17,6 +17,7 @@
 #include "htmshell.h"
 #include "cart.h"
 #include "hdb.h"
+#include "spDb.h"
 #include "hui.h"
 #include "hgFind.h"
 #include "hgTracks.h"
@@ -86,8 +87,9 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 #include "bedCart.h"
+#include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.901 2005/02/09 23:43:05 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.910 2005/02/16 21:23:20 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -502,6 +504,35 @@ int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fon
 return height;
 }
 
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+/* Change track visibilities. If groupTarget is 
+ * NULL then set visibility for tracks in all groups.  Otherwise,
+ * just set it for the given group.  If vis is -2, then visibility is
+ * unchanged.  If -1 then set visibility to default, otherwise it should 
+ * be tvHide, tvDense, etc. */
+{
+struct group *group;
+if (changeVis == -2)
+    return;
+for (group = groupList; group != NULL; group = group->next)
+    {
+    struct trackRef *tr;
+    if (groupTarget == NULL || sameString(group->name,groupTarget))
+        {
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
+	    struct track *track = tr->track;
+	    if (changeVis == -1)
+	        track->visibility = track->tdb->visibility;
+	    else
+	        track->visibility = changeVis;
+	    cartSetString(cart, track->mapName, 
+	    	hStringFromTv(track->visibility));
+	    }
+	}
+    }
+}
+
 char *dnaInWindow()
 /* This returns the DNA in the window, all in lower case. */
 {
@@ -579,7 +610,7 @@ void mapStatusMessage(char *format, ...)
 {
 va_list(args);
 va_start(args, format);
-hPrintf(" ALT=\"");
+hPrintf(" TITLE=\"");
 hvPrintf(format, args);
 hPutc('"');
 va_end(args);
@@ -1271,12 +1302,18 @@ boolean *foundStartPtr = &foundStart;
 int drawOptionNum = 0; //off
 boolean errorColor = FALSE;
 Color saveColor = color;
+boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
 if (zoomedToCdsColorLevel && (vis != tvDense))
+    {
+    if (!pslSequenceBases && tg->tdb)
+	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
+		PSL_SEQUENCE_BASES));
     drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
             &errorColor, lf, cdsColorsMade);
+    }
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1334,7 +1371,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e > s)
 	{
         if (zoomedToCdsColorLevel && drawOptionNum>0 && vis != tvDense &&
-            e + 6 >= winStart && s - 6 < winEnd && e-s <= 3) 
+            e + 6 >= winStart && s - 6 < winEnd &&
+		(e-s <= 3 || pslSequenceBases)) 
                 drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
                                     scale, font, s, e, heightPer, 
                                     zoomedToCodonLevel, mrnaSeq, psl, 
@@ -3135,7 +3173,7 @@ if ((blastRef != NULL) && (hTableExists(blastRef)))
 		if (added)
 		    strcat(lf->extra, "/");
 		added = TRUE;
-		strcat(lf->extra, row[2]);
+		strcat(lf->extra, uniProtFindPrimAcc(row[2]));
 		}
 	    if (usePos)
 		{
@@ -6252,27 +6290,6 @@ else
     }
 }
 
-#ifdef OLD
-void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine, boolean target, char *otherFrame)
-/* Print out image map rectangle that would invoke the htc (human track click)
- * program. */
-{
-char *encodedItem = cgiEncode(item);
-hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcNameAndSettings(), start, end, track, encodedItem, chromName, winStart, winEnd, 
-    database, tl.picWidth);
-if(target) 
-    {
-    hPrintf(" target=\"%s\" ", otherFrame);
-    } 
-hPrintf("ALT=\"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
-freeMem(encodedItem);
-}
-#endif /* OLD */
-
-
 /* Use the RepeatMasker style code to generate the
  * the Comparative Genomic Hybridization track */
 
@@ -6603,7 +6620,8 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 char c[2] = "";
 int i,j,textPos=0;
 int x1, x2;
-char *motifString = cartOptionalString(cart,"hgt.motifs");
+char *motifString = cartOptionalString(cart,BASE_MOTIFS);
+boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 char **motifs = NULL;
 boolean *inMotif = NULL;
 int motifCount = 0;
@@ -6618,8 +6636,21 @@ if(motifString != NULL && strlen(motifString) != 0)
     touppers(motifString);
     motifString = cloneString(motifString);
     motifCount = chopString(motifString, ",", NULL, 0);
-    AllocArray(motifs, motifCount);
+    if (complementsToo)
+	AllocArray(motifs, motifCount*2);	/* twice as many */
+    else
+	AllocArray(motifs, motifCount);
     chopString(motifString, ",", motifs, motifCount);
+    if (complementsToo)
+	{
+	for(i = 0; i < motifCount; i++)
+	    {
+	    int comp = i + motifCount;
+	    motifs[comp] = cloneString(motifs[i]);
+	    reverseComplement(motifs[comp],strlen(motifs[comp]));
+	    }
+	motifCount *= 2;	/* now we have this many	*/
+	}
     AllocArray(inMotif, textLength);
     for(i = 0; i < motifCount; i++)
 	{
@@ -6635,6 +6666,7 @@ if(motifString != NULL && strlen(motifString) != 0)
 	    }
 	}
     freez(&motifString);
+    freez(&motifs);
     }
 
 for (i=0; i<count; i++, text++, textPos++)
@@ -6759,6 +6791,32 @@ for(tr = track->group->trackList; tr != NULL; tr = tr->next)
     }
 }
 
+
+void fillInStartEndBands(struct track *ideoTrack, char *startBand, char *endBand, int buffSize)
+/* Loop through the bands and fill in the one that the current window starts
+   on and ends on. */
+{
+struct cytoBand *cb = NULL, *cbList = ideoTrack->items;
+for(cb = cbList; cb != NULL; cb = cb->next)
+    {
+    /* If the start or end is encompassed by this band fill
+       it in. */
+    if(winStart >= cb->chromStart &&
+       winStart <= cb->chromEnd) 
+	{
+	safef(startBand, buffSize, "%s", cb->name);
+	}
+    /* End is > rather than >= due to odditiy in the
+       cytoband track where the starts and ends of two
+       bands overlaps by one. */
+    if(winEnd > cb->chromStart &&
+       winEnd <= cb->chromEnd) 
+	{
+	safef(endBand, buffSize, "%s", cb->name);
+	}
+    }
+}
+
 void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
 /* Make an ideogram image of the chromsome and our position in
    it. */
@@ -6769,7 +6827,7 @@ char *mapName = "ideoMap";
 struct vGfx *vg;
 struct tempName gifTn;
 boolean doIdeo = TRUE;
-int ideoWidth = round(.65 *tl.picWidth);
+int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
 
@@ -6803,6 +6861,11 @@ else
     }
 if(doIdeo)
     {
+    char startBand[16];
+    char endBand[16];
+    char title[32];
+    startBand[0] = endBand[0] = '\0';
+    fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand)); 
     /* Draw the ideogram. */
     makeTempName(&gifTn, "hgtIdeo", ".gif");
     /* Start up client side map. */
@@ -6815,8 +6878,12 @@ if(doIdeo)
     ideoTrack->ixColor = vgFindRgb(vg, &ideoTrack->color);
     ideoTrack->ixAltColor = vgFindRgb(vg, &ideoTrack->altColor);
     vgSetClip(vg, 0, gfxBorder, ideoWidth, ideoTrack->height);
-    textWidth = mgFontStringWidth(font, chromName);
-    vgTextCentered(vg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, chromName);
+    if(sameString(startBand, endBand)) 
+	safef(title, sizeof(title), "%s (%s)", chromName, startBand);
+    else
+	safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
+    textWidth = mgFontStringWidth(font, title);
+    vgTextCentered(vg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
     ideoTrack->drawItems(ideoTrack, winStart, winEnd, vg, textWidth+4, gfxBorder, ideoWidth-textWidth-4,
 			 font, ideoTrack->ixColor, ideoTrack->limitedVis);
     vgUnclip(vg);
@@ -6930,7 +6997,7 @@ else
     }
 /* special label handling for wigMaf type tracks -- they
    display a left label in pack mode.  To use the full mode
-   labelling, temporarily set visibility to full.
+   labeling, temporarily set visibility to full.
    Restore savedVis later */
 {
 if (sameString(track->tdb->type, "wigMaf"))
@@ -8425,8 +8492,8 @@ if (classTable != NULL && hTableExists(classTable))
             return sameClass;
         }
     conn = hAllocConn();
-    sprintf(query, "select class from %s where name = '%s'", classTable,
-lf->name);
+    safef(query, sizeof(query),
+         "select class from %s where name = \"%s\"", classTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8493,7 +8560,8 @@ if (geneClasses)
    }
 if (hTableExists(classTable))
    {
-   sprintf(query, "select class from %s where name = '%s'", classTable, lf->name);   
+   safef(query, sizeof(query), 
+        "select class from %s where name = \"%s\"", classTable, lf->name);   
    sr = sqlGetResult(conn, query);
    if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -9093,6 +9161,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }	/*	void loadCustomTracks(struct track **pGroupList)	*/
 
+#ifdef UNUSED
 void hideAllTracks(struct track *trackList)
 /* hide all the tracks (and any in trackDb too) */
 {
@@ -9113,6 +9182,7 @@ freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+#endif /* UNUSED */
 
 
 void hotLinks()
@@ -9523,7 +9593,9 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
+boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clade = hClade(hGenome(database));
 
@@ -9556,13 +9628,10 @@ trackList = getTrackList();
 groupTracks(&trackList, &groupList);
 
 /* If hideAll flag set, make all tracks hidden */
-if(hideAll)
+if(hideAll || defaultTracks)
     {
-    for (track = trackList; track != NULL; track = track->next)
-	{
-	track->visibility = tvHide;
-	}
-    hideAllTracks(trackList);
+    int vis = (hideAll ? tvHide : -1);
+    changeTrackVis(groupList, NULL, vis);
     }
 
 /* Tell tracks to load their items. */
@@ -9649,6 +9718,8 @@ if (!hideControls)
     topButton("hgt.out3", ZOOM_10X);
     hWrites("<BR>\n");
 
+if (showTrackControls)
+    {
     /* Break into a second form so that zooming and scrolling
      * can be done with a 'GET' so that user can back up from details
      * page without Internet Explorer popping up an annoying dialog.
@@ -9665,6 +9736,7 @@ if (!hideControls)
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
     cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
     hPrintf("<CENTER>");
+    }
 
 
     /* Make line that says position. */
@@ -9724,47 +9796,35 @@ if (!hideControls)
     // smallBreak();
 
     /* Display bottom control panel. */
-    hButton("hgt.reset", "reset all");
-    hPrintf(" ");
-    hButton("hgt.hideAll", "hide all");
-
-#ifdef OLD
-    if(ideogramAvail)
+    hButton("hgt.reset", "default tracks");
+    if (showTrackControls)
 	{
-	hPrintf(" Chromosome");
-	hCheckBox("ideogram", withIdeogram);
+	hPrintf(" ");
+	hButton("hgt.hideAll", "hide all");
 	}
-    hPrintf(" Guidelines ");
-    hCheckBox("guidelines", withGuidelines);
-    hPrintf(" <B>Labels:</B> ");
-    hPrintf("left ");
-    hCheckBox("leftLabels", withLeftLabels);
-    hPrintf("center ");
-    hCheckBox("centerLabels", withCenterLabels);
-    hPrintf(" ");
-#endif /* OLD */
 
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
-    hPrintf(" ");
-    hButton("submit", "refresh");
+    if (showTrackControls)
+	{
+	hPrintf(" ");
+	hButton("submit", "refresh");
+	}
 
     hPrintf("<BR>\n");
 
-    /* Display viewing options for each track. */
-    /* Chuck: This is going to be wrapped in a table so that
-     * the controls don't wrap around randomly
-     */
     if( chromosomeColorsMade )
         {
         hPrintf("<B>Chromosome Color Key:</B><BR> ");
         hPrintf("<IMG SRC = \"../images/new_colorchrom.gif\" BORDER=1 WIDTH=596 HEIGHT=18 ><BR>\n");
         }
+
+if (showTrackControls)
+    {
+    /* Display viewing options for each track. */
+    /* Chuck: This is going to be wrapped in a table so that
+     * the controls don't wrap around randomly */
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    // hPrintf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
-    // smallBreak();
-    // hPrintf("<B>Track Controls:</B>");
-    // hPrintf("</th></tr>\n");
     hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
 	   "Use drop down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
@@ -9830,6 +9890,7 @@ if (!hideControls)
 	    controlGridEndRow(cg);
 	}
     endControlGrid(&cg);
+    }
 
     if (measureTiming)
         {
@@ -9853,7 +9914,8 @@ if (!hideControls)
 	    }
 	}
     }
-hButton("submit", "refresh");
+if (showTrackControls)
+    hButton("submit", "refresh");
 hPrintf("</CENTER>\n");
 
 
@@ -10092,7 +10154,7 @@ void tracksDisplay()
 {
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
-char *motifString = cartOptionalString(cart,"hgt.motifs");
+char *motifString = cartOptionalString(cart,BASE_MOTIFS);
 boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 position = getPositionFromCustomTracks();
 if (NULL == position) 
@@ -10149,8 +10211,6 @@ withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
-if (cgiVarExists("hgt.hideAll"))
-    cartSetString(cart, RULER_TRACK_NAME, "dense");
 setRulerMode();
 
 /* Do zoom/scroll if they hit it. */
@@ -10534,8 +10594,6 @@ int main(int argc, char *argv[])
 uglyTime(NULL);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-if (cgiVarExists("hgt.reset"))
-    resetVars();
 htmlSetBackground("../images/floret.jpg");
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);

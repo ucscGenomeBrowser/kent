@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.76 2005/01/10 00:16:15 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.77 2005/02/15 01:12:19 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -798,8 +798,8 @@ char *memMatch(char *needle, int nLen, char *haystack, int hLen)
  * haystack (of hLen chars) */
 {
 char c = *needle++;
-hLen -= nLen;
 nLen -= 1;
+hLen -= nLen;
 while (--hLen >= 0)
     {   
     if (*haystack++ == c && memcmp(needle, haystack, nLen) == 0)

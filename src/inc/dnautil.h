@@ -97,8 +97,14 @@ void toRna(DNA *dna);
 typedef char Codon; /* Our codon type. */
 
 /* Return single letter code (upper case) for protein.
- * Returns X for bad input, 0 for stop codon. */
+ * Returns X for bad input, 0 for stop codon.
+ * The "Standard" Code */
 AA lookupCodon(DNA *dna); 
+
+/* Returns one letter code for protein, 
+ * 0 for stop codon or X for bad input,
+ * Vertebrate Mitochondrial Code */
+AA lookupMitoCodon(DNA *dna);
 
 Codon codonVal(DNA *start);
 /* Return value from 0-63 of codon starting at start. 

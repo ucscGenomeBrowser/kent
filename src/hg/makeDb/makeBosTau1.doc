@@ -179,6 +179,11 @@ exit; # don't actually run this like a script :)
 
 # REPEATMASKER (DONE, Oct. 5, 2004, Heather)
 # using the split scaffold fa files generated earlier
+
+# note the version of RepeatMasker in use; will want this for download README
+  cat /cluster/bluearc/RepeatMasker/Libraries/version
+  # RepBase Update 9.04, RM database version 20040702
+
 # do a trial run
   ssh hgwdev
   cd /cluster/data/bosTau1/scaffolds/0/0/0
@@ -1049,6 +1054,44 @@ chainSome $(path1)
       echo loading $c
       /cluster/bin/i386/hgLoadChain hg17 ${c}_chainBosTau1 $i
     end
+
+    # featureBits -chrom=chr1 hg17 chainBosTau1Link
+    # 103272818 bases of 222827847 (46.346%) in intersection
+    # featureBits -chrom=chr2 hg17 chainBosTau1Link
+    # 105920345 bases of 237506229 (44.597%) in intersection
+    # featureBits -chrom=chr3 hg17 chainBosTau1Link
+    # 89582887 bases of 194635740 (46.026%) in intersection
+    # featureBits -chrom=chr4 hg17 chainBosTau1Link
+    # 77513949 bases of 187161218 (41.416%) in intersection
+    # featureBits -chrom=chr5 hg17 chainBosTau1Link
+    # 80428726 bases of 177702766 (45.260%) in intersection
+    # featureBits -chrom=chr6 hg17 chainBosTau1Link
+    # 71830264 bases of 167317699 (42.930%) in intersection
+    # featureBits -chrom=chr7 hg17 chainBosTau1Link
+    # 64561289 bases of 154759139 (41.717%) in intersection
+    # featureBits -chrom=chr8 hg17 chainBosTau1Link
+    # 55896735 bases of 142612826 (39.195%) in intersection
+    # featureBits -chrom=chr9 hg17 chainBosTau1Link
+    # 52068957 bases of 117781268 (44.208%) in intersection
+    # featureBits -chrom=chr10 hg17 chainBosTau1Link
+    # 57427282 bases of 131613628 (43.633%) in intersection
+    # featureBits -chrom=chr11 hg17 chainBosTau1Link
+    # 58412709 bases of 131130853 (44.545%) in intersection
+    # featureBits -chrom=chr12 hg17 chainBosTau1Link
+    # 56076163 bases of 130259811 (43.049%) in intersection
+    # featureBits -chrom=chr13 hg17 chainBosTau1Link
+    # 37951944 bases of 95559980 (39.715%) in intersection
+    # featureBits -chrom=chr14 hg17 chainBosTau1Link
+    # 39896970 bases of 88290585 (45.188%) in intersection
+    # featureBits -chrom=chr15 hg17 chainBosTau1Link
+    # 37507979 bases of 81341915 (46.112%) in intersection
+    # featureBits -chrom=chr16 hg17 chainBosTau1Link
+    # 33883573 bases of 78884754 (42.953%) in intersection
+    # featureBits -chrom=chr17 hg17 chainBosTau1Link
+    # 31871034 bases of 77800220 (40.965%) in intersection
+    # featureBits -chrom=chr18 hg17 chainBosTau1Link
+    # 30359555 bases of 74656155 (40.666%) in intersection
+
 
 
 # NET 

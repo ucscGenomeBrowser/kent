@@ -23,8 +23,9 @@
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
+#define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.178 2005/02/10 00:49:36 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.183 2005/02/16 21:24:11 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -369,6 +370,22 @@ cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
 
+void baseColorOptions(struct trackDb *tdb)
+/*base coloring options*/
+{
+char *drawOption;
+char *baseDrawDefault;
+char baseColorVar[128];
+
+printf("<p><b>Show sequence for&nbsp;</b>");
+safef(baseColorVar, 128, "%s.%s", tdb->tableName, PSL_SEQUENCE_BASES );
+baseDrawDefault = trackDbSettingOrDefault(tdb, PSL_SEQUENCE_BASES, PSL_SEQUENCE_DEFAULT);
+drawOption = cartUsualString(cart, baseColorVar, baseDrawDefault);
+baseColorDropDown(baseColorVar, drawOption);
+printf("&nbsp;<b>bases.</b>\n");
+printf("<BR><BR><a href=%s>Help on EST base labeling</a><br>",CDS_BASE_HELP_PAGE);
+}
+
 
 void cdsColorOptions(struct trackDb *tdb, int value)
 /*Codon coloring options*/
@@ -517,7 +534,7 @@ printf("Human Gene ");
 cgiMakeCheckBox(accName, useAcc);
 printf("Human mRNA ");
 cgiMakeCheckBox(sprotName, useSprot);
-printf("SwissProt ID ");
+printf("UniProt(Swiss-Prot/TrEMBL) ID ");
 cgiMakeCheckBox(posName, usePos);
 printf("Human Position");
 
@@ -559,6 +576,8 @@ char *filterTypeVar = mud->filterTypeVar;
 char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
 char *logicTypeVar = mud->logicTypeVar;
 char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
+boolean pslSequenceBases = (cartVarExists(cart, PSL_SEQUENCE_BASES) ||
+    ((char *) NULL != trackDbSetting(tdb, PSL_SEQUENCE_BASES)));
 
 /* Define type of filter. */
 filterButtons(filterTypeVar, filterTypeVal, FALSE);
@@ -573,7 +592,10 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
-cdsColorOptions(tdb, -1);
+if (pslSequenceBases)
+    baseColorOptions(tdb);
+else
+    cdsColorOptions(tdb, -1);
 }
 
 void bedUi(struct trackDb *tdb)
@@ -890,14 +912,17 @@ freeMem(typeLine);
 void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
+boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
-char *motifString = cartCgiUsualString(cart, "hgt.motifs", "");
+char *motifString = cartCgiUsualString(cart, BASE_MOTIFS, "");
 puts("<P><B>Zoom in:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
-cgiMakeTextVar("hgt.motifs", motifString, 20);
+cgiMakeTextVar(BASE_MOTIFS, motifString, 20);
 puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
+puts("<P><B>Show reverse complements of motifs also:&nbsp;</B>");
+cgiMakeCheckBox(MOTIF_COMPLEMENT, complementsToo);
 }
 
 void oligoMatchUi(struct trackDb *tdb)

@@ -1,40 +1,40 @@
 <H2>Description</H2>
 <P>
-This track shows <em>$o_Organism</em>/<em>$Organism</em> genomic 
-alignments using a gap scoring system that allows longer gaps than 
-traditional affine gap scoring systems. It can also tolerate gaps
-in both organisms simultaneously. These &quot;double-sided&quot;
-gaps can be caused by local inversions and overlapping deletions
-in both species. 
+This track shows alignments of <em>$o_Organism</em> ($o_db, $o_date) to the
+<em>$organism</em> genome using a gap scoring system that allows longer gaps 
+than traditional affine gap scoring systems. It can also tolerate gaps in both
+<em>$o_Organism</em> and <em>$Organism</em> simultaneously. These 
+&quot;double-sided&quot; gaps can be caused by local inversions and 
+overlapping deletions in both species.</P>
 <P>
-The chain track displays boxes joined together by either single or 
-double lines. The boxes represent aligning regions.  Single lines indicate 
-gaps that are largely due to a deletion in the <em>$o_Organism</em> assembly
-or an insertion in the <em>$Organism</em> assembly.
-Double lines represent more complex gaps that involve substantial
+The chain track displays boxes joined together by either single or
+double lines. The boxes represent aligning regions.
+Single lines indicate gaps that are largely due to a deletion in the
+<em>$o_Organism</em> assembly or an insertion in the <em>$Organism</em> 
+assembly.  Double lines represent more complex gaps that involve substantial
 sequence in both species. This may result from inversions, overlapping
-deletions, an abundance of local mutation, or an unsequenced gap in one 
-species.  In cases where there are multiple chains over a particular portion
-of the <em>$Organism genome</em>, chains with 
-single-lined gaps are often due to processed pseudogenes, while chains 
-with double-lined gaps are more often due to paralogs and unprocessed 
-pseudogenes.</P>
+deletions, an abundance of local mutation, or an unsequenced gap in one
+species.  In cases where multiple chains align over a particular region of
+the <em>$Organism</em> genome, the chains with single-lined gaps are often 
+due to processed pseudogenes, while chains with double-lined gaps are more 
+often due to paralogs and unprocessed pseudogenes.</P> 
 <P>
-In the fuller display modes, the individual feature names indicate the 
-chromosome, strand, and location (in thousands) of the match for each 
-matching alignment. </P>
+In the fuller display
+modes, the individual feature names indicate the chromosome, strand, and
+location (in thousands) of the match for each matching alignment.</P>
 
 <H2>Methods</H2>
 <P>
+<P>
 The <em>$o_Organism</em>/<em>$Organism</em> genomes were aligned with 
-blastz and converted into axt format with <em>lavToAxt</em>.
-The resulting axts were fed into <em>axtChain</em>.  AxtChain organizes all 
-the alignments between a single <em>$o_Organism</em> and a single 
+blastz and converted into axt format using the lavToAxt program.
+The axt alignments were fed into axtChain, which organizes all 
+alignments between a single <em>$o_organism</em> chromosome and a single 
 <em>$Organism</em> chromosome into a group and creates a kd-tree out 
-of all the gapless subsections (blocks) of the alignments.  Next, maximally 
-scoring chains of these blocks were found by running a dynamic program over 
-the kd-tree. Chains scoring below a threshold were discarded, and the 
-remaining chains are displayed here.</P>
+of the gapless subsections (blocks) of the alignments. A dynamic program 
+was then run over the kd-trees to find the maximally scoring chains of these 
+blocks. Chains scoring below a threshold were discarded; the remaining 
+chains are displayed in this track.</P>
 
 <H2>Credits</H2>
 <P>
@@ -43,8 +43,9 @@ TARGET=_blank>Pennsylvania State University</A> by
 Scott Schwartz, Zheng Zhang, and Webb Miller with advice from
 Ross Hardison.</P>
 <P>
-Lineage-specific repeats were identified by Arian Smit and his program 
-<A HREF="http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>.</P>
+Lineage-specific repeats were identified by Arian Smit and his 
+<A HREF="http://www.repeatmasker.org" TARGET=_blank>RepeatMasker</A>
+program.</P>
 <P>
 The axtChain program was developed at the University of California at 
 Santa Cruz by Jim Kent with advice from Webb Miller and David Haussler.</P>

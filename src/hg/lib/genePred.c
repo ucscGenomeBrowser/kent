@@ -11,10 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-/* FIXME: remove when bugs fixes */
-#define WARN_BLAT_BUGS 1
-
-static char const rcsid[] = "$Id: genePred.c,v 1.59 2005/01/07 00:36:47 angie Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.60 2005/02/13 20:11:09 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1214,6 +1211,40 @@ fputc('\n', gpErrFh);
 gpErrorCnt++;
 }
 
+static void checkExon(char *desc, struct genePred* gp, int iExon)
+/* check one exon of a genePred */
+{
+unsigned exonStart = gp->exonStarts[iExon];
+unsigned exonEnd = gp->exonEnds[iExon];
+if (exonStart >= exonEnd)
+    gpError("%s: %s exon %u start %u >= end %u", desc, gp->name,
+            iExon, exonStart, exonEnd);
+if (exonStart < gp->txStart)
+    gpError("%s: %s exon %u start %u < txStart %u", desc, gp->name,
+            iExon, exonStart, gp->txStart);
+if (exonEnd > gp->txEnd)
+    gpError("%s: %s exon %u end %u > txEnd %u", desc, gp->name,
+            iExon, exonEnd, gp->txEnd);
+if (iExon > 0)
+    {
+    /* other than first exon */
+    unsigned prevExonEnd = gp->exonEnds[iExon-1];
+    if (exonStart < prevExonEnd)
+        gpError("%s: %s exon %u overlaps previous exon", desc,
+                gp->name, iExon);
+    if (exonStart == prevExonEnd)
+        gpError("%s: %s exon %u follows zero length intron", desc,
+                gp->name, iExon);
+    }
+
+if (gp->optFields & genePredExonFramesFld)
+    {
+    int frame = gp->exonFrames[iExon];
+    if ((frame < -1) || (frame > 2))
+        gpError("%s: %s invalid exonFrame: %d", desc, gp->name, frame);
+    }
+}
+
 int genePredCheck(char *desc, FILE* out, int chromSize, 
                   struct genePred* gp)
 /* Validate a genePred for consistency.  desc is printed the error messages
@@ -1255,50 +1286,19 @@ if (gp->cdsStart != gp->cdsEnd)
         gpError("%s: %s cdsEnd %u not in tx bounds %u-%u", desc, 
                 gp->name, gp->cdsEnd, gp->txStart, gp->txEnd);
     }
+
+/* make sure first/last exons match tx range */
+if (gp->txStart != gp->exonStarts[0])
+    gpError("%s: %s first exon start %u doesn't match txStart %u", desc, 
+            gp->name, gp->exonStarts[0], gp->txStart);
+if (gp->txEnd != gp->exonEnds[gp->exonCount-1])
+    gpError("%s: %s last exon end %u doesn't match txEnd %u", desc, 
+            gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
+
+
+/* check each exon */
 for (iExon = 0; iExon < gp->exonCount; iExon++)
-    {
-    unsigned exonStart = gp->exonStarts[iExon];
-    unsigned exonEnd = gp->exonEnds[iExon];
-#if WARN_BLAT_BUGS
-    if (exonStart >= exonEnd)
-        fprintf(stderr, "%s: %s exon %u start %u >= end %u\n", desc, gp->name,
-                iExon, exonStart, exonEnd);
-#else
-    if (exonStart >= exonEnd)
-        gpError("%s: %s exon %u start %u >= end %u", desc, gp->name,
-                iExon, exonStart, exonEnd);
-#endif
-    if (exonStart < gp->txStart)
-        gpError("%s: %s exon %u start %u < txStart %u", desc, gp->name,
-                iExon, exonStart, gp->txStart);
-    if (exonEnd > gp->txEnd)
-        gpError("%s: %s exon %u end %u > txEnd %u", desc, gp->name,
-                iExon, exonEnd, gp->txEnd);
-    if (iExon > 0)
-        {
-        unsigned prevExonEnd = gp->exonEnds[iExon-1];
-#if WARN_BLAT_BUGS
-        if (exonStart < prevExonEnd)
-            fprintf(stderr, "%s: %s exon %u overlaps previous exon\n", desc,
-                    gp->name, iExon);
-#else
-        if (exonStart < prevExonEnd)
-            gpError("%s: %s exon %u overlaps previous exon", desc,
-                    gp->name, iExon);
-#endif
-        if (exonStart == prevExonEnd)
-            gpError("%s: %s exon %u follows zero length intron", desc,
-                    gp->name, iExon);
-        }
-    }
-if (gp->optFields & genePredExonFramesFld)
-    {
-    for (iExon = 0; iExon < gp->exonCount; iExon++)
-        {
-        int frame = gp->exonFrames[iExon];
-        if ((frame < -1) || (frame > 2))
-            gpError("%s: %s invalid exonFrame: %d", desc, gp->name, frame);
-        }
-    }
+    checkExon(desc, gp, iExon);
+
 return gpErrorCnt;
 }

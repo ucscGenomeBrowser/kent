@@ -39,6 +39,18 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track chainDm1
+shortLabel D. mel. Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+group compGeno
+priority 133
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain dm1
+otherDb dm1
+
 track chainDp2
 shortLabel D. pseud. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
@@ -216,7 +228,7 @@ type netAlign apiMel1 chainApiMel1
 otherDb apiMel1
 
 track chainAnoGam1
-shortLabel Anopheles Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 132.1
@@ -228,7 +240,7 @@ type chain anoGam1
 otherDb anoGam1
 
 track netAnoGam1
-shortLabel Anopheles Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 132.2
@@ -431,7 +443,7 @@ searchMethod exact
 searchType genePred
 termRegex FBgn[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fbgn from %s where fbgn like '%s'
 searchDescription FlyBase FBgn ID of FlyBase Gene
 searchPriority 1.2
@@ -442,7 +454,7 @@ searchMethod exact
 searchType genePred
 termRegex FBtr[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fbtr from %s where fbtr like '%s'
 searchDescription FlyBase FBtr ID of FlyBase Gene
 searchPriority 1.2
@@ -453,7 +465,7 @@ searchMethod exact
 searchType genePred
 termRegex FBpp[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fbpp from %s where fbpp like '%s'
 searchDescription FlyBase FBpp ID of FlyBase Gene
 searchPriority 1.2
@@ -464,7 +476,7 @@ searchMethod exact
 searchType genePred
 termRegex FBan[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fban from %s where fban like '%s'
 searchDescription FlyBase FBan ID of FlyBase Gene
 searchPriority 1.2
@@ -474,7 +486,7 @@ searchTable flyBaseGene
 searchMethod fuzzy
 searchType genePred
 termRegex [^[:space:]]+
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,symbol from %s where symbol like '%%%s%%'
 searchPriority 1.3
 
@@ -498,7 +510,7 @@ searchMethod exact
 searchType bed
 termRegex FBgn[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fbgn from %s where fbgn like '%s'
 searchDescription FlyBase FBgn ID of FlyBase Noncoding Gene
 searchPriority 2.2
@@ -509,7 +521,7 @@ searchMethod exact
 searchType bed
 termRegex FBtr[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fbtr from %s where fbtr like '%s'
 searchDescription FlyBase FBtr ID of FlyBase Noncoding Gene
 searchPriority 2.2
@@ -520,7 +532,7 @@ searchMethod exact
 searchType bed
 termRegex FBan[0-9]{7}[0-9]*
 shortCircuit 1
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,fban from %s where fban like '%s'
 searchDescription FlyBase FBan ID of FlyBase Noncoding Gene
 searchPriority 2.2
@@ -530,7 +542,7 @@ searchTable flyBaseNoncoding
 searchMethod fuzzy
 searchType bed
 termRegex [^[:space:]]+
-xrefTable flyBaseDMel4Xref
+xrefTable flyBase2004Xref
 xrefQuery select name,symbol from %s where symbol like '%%%s%%'
 searchPriority 2.3
 

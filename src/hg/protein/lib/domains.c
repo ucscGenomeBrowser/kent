@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.3 2005/01/05 17:53:51 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.4 2005/02/17 01:11:13 fanhsu Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -19,7 +19,7 @@ char condStr[128];
 char *taxon;
 
 safef(condStr, sizeof(condStr), "acc='%s'", proteinId);
-taxon = sqlGetField(NULL, "swissProt", "accToTaxon", "taxon", condStr);
+taxon = sqlGetField(NULL, UNIPROT_DB_NAME, "accToTaxon", "taxon", condStr);
 if (sameWord(taxon, "4932")) 
     {
     return(strdup("sacCer1"));

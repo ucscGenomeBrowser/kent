@@ -6926,3 +6926,31 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 
     cp -p Mus_musculus.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
+
+# UPDATE kgSpAlias TABLE WITH NEW UNIPROT DISPLAY ID ENTRIES (done 2/11/05 Fan)
+# Add new mm5 protein display IDs to the alias table to support user search
+    
+    ssh hgwdev
+    mkdir -p /cluster/data/mm5/bed/pb/newDisplayId
+    cd /cluster/data/mm5/bed/pb/newDisplayId
+ 
+    hgsql proteome -e 'select mm5.kgSpAlias.kgID, mm5.kgSpAlias.SpID, spOldNew.newDisplayId from spOldNew, mm5.kgSpAlias where spOldNew.acc=mm5.kgSpAlias.spID and oldDisplayId != newDisplayId' |sort -u >mm5.tab
+   
+# get rid of the header line at the end of the file
+    vi mm5.tab
+
+    hgsql mm5 -e 'load data local infile "mm5.tab" into table mm5.kgSpAlias'
+
+# UPDATE kgProtAlias TABLE WITH NEW UNIPROT DISPLAY ID ENTRIES (done 2/11/05 Fan)
+# Add new mm5 protein display IDs to the alias table to support user search
+    
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/pb/newDisplayId
+
+     hgsql proteome -e 'select mm5.kgSpAlias.kgID,spOldNew.oldDisplayId,spOldNew.newDisplayId from spOldNew, mm5.kgSpAlias where spOldNew.acc=mm5.kgSpAlias.spID and oldDisplayId != newDisplayId' |sort -u >mm5.kgProtAlias.tab
+
+# get rid of the header line at the end of the file
+    vi mm5.kgProtAlias.tab 
+
+    hgsql mm5 -e 'load data local infile "mm5.kgProtAlias.tab" into table mm5.kgProtAlias'
+

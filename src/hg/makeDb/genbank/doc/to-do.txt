@@ -828,3 +828,10 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
             
 
        spAcc/spDisplayId, alignment
+
+- some entries may have multiple gene ids (e.g. NM_066958)
+
+- tmp load files should be removed first or they get write permission
+  errors if loaded by a different user.
+
+

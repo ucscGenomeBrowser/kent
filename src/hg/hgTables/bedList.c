@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.31 2005/02/10 00:32:03 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.32 2005/02/14 20:14:46 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -547,7 +547,7 @@ if (!gotResults)
     }
 else if (doCt)
     {
-    char *wigPosition = NULL;
+    int wigDataSize = 0;
 
     /* Load existing custom tracks and add this new one: */
 	{
@@ -560,7 +560,6 @@ else if (doCt)
 	    unsigned i;
 	    unsigned chromEnd;
 	    struct asciiDatum *aData;
-	    char posBuf[256];
 	    struct wiggleDataStream *wds = NULL;
 	    /*	create an otherwise empty wds so we can print out the list */
 	    wds = wiggleDataStreamNew();
@@ -572,16 +571,11 @@ else if (doCt)
 #endif
 	    aData = wds->ascii->data;
 	    chromEnd = 0;
-	    for( i = 0; i < wds->ascii->count; ++i, ++aData)
+	    wigDataSize = wds->ascii->count;
+	    for( i = 0; i < wigDataSize; ++i, ++aData)
 		if (aData->chromStart > chromEnd) chromEnd = aData->chromStart;
 
 	    chromEnd += wds->ascii->span;
-
-	    safef(posBuf, sizeof(posBuf), 
-		"%s:%d-%d", wds->ascii->chrom, wds->ascii->data->chromStart,
-		chromEnd);
-	    wigPosition = cloneString(posBuf);
-	    
 	    wiggleDataStreamFree(&wds);
 	    }
 	else
@@ -602,28 +596,25 @@ else if (doCt)
 	{
 	char browserUrl[256];
 	char headerText[512];
-	char posBuf[256];
-	char *position;
 	int redirDelay = 3;
-	if (isWig && wigOutData)
-	    position = wigPosition;
-	else
-	    {
-	    struct bed *bed = ctNew->bedList;
-	    safef(posBuf, sizeof(posBuf), 
-		"%s:%d-%d", bed->chrom, bed->chromStart+1, bed->chromEnd);
-	    position = posBuf;
-	    }
 	safef(browserUrl, sizeof(browserUrl),
-	      "%s?db=%s&position=%s", hgTracksName(), database, position);
+	      "%s?db=%s", hgTracksName(), database);
 	safef(headerText, sizeof(headerText),
 	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	      redirDelay, browserUrl);
 	webStartHeader(cart, headerText,
 		       "Table Browser: %s %s: %s", hOrganism(database), 
 		       freezeName, "Get Custom Track");
+	if (isWig && wigOutData)
+	    {
+	    hPrintf("There are %d data points in custom track. ", wigDataSize);
+	    }
+	else
+	    {
+	    hPrintf("There are %d items in custom track. ", slCount(ctNew->bedList));
+	    }
 	hPrintf("You will be automatically redirected to the genome browser in\n"
-	       "%d seconds, or you can <BR>\n"
+	       "%d seconds, or you can \n"
 	       "<A HREF=\"%s\">click here to continue</A>.\n",
 	       redirDelay, browserUrl);
 	}

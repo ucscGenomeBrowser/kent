@@ -1,5 +1,5 @@
 table bdgpGeneInfo
-"Berkeley Drosophile Genome Project Protein-Coding Genes track additional information"
+"Berkeley Drosophila Genome Project Protein-Coding Genes track additional information"
     (
     string bdgpName;		"BDGP annotation gene name"
     string flyBaseId;		"FlyBase FBgn ID"

@@ -22,6 +22,7 @@ extern char *raRefSeqStatus;
 extern char *raRefSeqCompleteness;
 extern struct dyString* raRefSeqSummary;
 extern unsigned raLocusLinkId;
+extern unsigned raGeneId;
 extern unsigned raOmimId;
 extern char raCds[];
 extern char raProtAcc[];

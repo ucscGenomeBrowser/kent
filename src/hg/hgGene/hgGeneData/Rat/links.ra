@@ -4,7 +4,7 @@ name rgd
 shortLabel RGD
 tables kgXref
 priority 25
-idSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'RGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
+idSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'RGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 url http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
 
 name cgap

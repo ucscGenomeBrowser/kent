@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.14 2005/02/09 23:00:29 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.15 2005/02/10 17:36:12 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -659,6 +659,60 @@ for(path = splice->paths; path != NULL; path = path->next)
 slSort(&splice->paths, pathBpCountCmp);
 }
 
+boolean isMutuallyExclusiveExonPath(struct splice *splice, struct altGraphX *ag, bool **em,
+				    int source, int sink)
+/* Return TRUE if splice is a pair of mutally exclusive exons, FALSE otherwise. 
+   Looks like:
+   eeeee0-------1eeee2------------------3eeeeeeee
+   eeeee0-----------------1eeeee2-------3eeeeeeee
+*/
+
+{
+int altStart = 0, altEnd = 0, startV = 0, endV = 0;
+struct path *shortPath = splice->paths;
+struct path *longPath = splice->paths->next;
+int endVert = longPath->vCount - 1;
+int startVert = 0;
+int *shortVerts = shortPath->vertices;
+int *longVerts = longPath->vertices;
+boolean mutuallyExclusiveExon = FALSE;
+int vCount = ag->vertexCount;
+unsigned char *vTypes = ag->vTypes;
+/* Make sure we're stopping and staring at same vertices. */
+assert(shortPath->vertices[shortPath->vCount-1] == longPath->vertices[longPath->vCount-1] &&
+       shortPath->vertices[0] == longPath->vertices[0]);
+
+/* Quick check. */
+if(longPath->vCount != 4 || shortPath->vCount != 4 ||
+   longVerts[startVert] == source || longVerts[endVert] == sink)
+    return FALSE;
+
+/* More in depth check. */
+if(
+   /* These are all internal exons. */
+   vTypes[shortVerts[0]] == ggHardEnd &&
+   vTypes[shortVerts[1]] == ggHardStart &&
+   vTypes[shortVerts[2]] == ggHardEnd &&
+   vTypes[shortVerts[3]] == ggHardStart &&
+   vTypes[longVerts[1]] == ggHardStart &&
+   vTypes[longVerts[2]] == ggHardEnd &&
+   /* There aren't any other oddities coming in or out of this sub graph. */
+   outDegree(em, shortVerts[0], 0, vCount) == 2 && /* First 5' connects to 2 3' ss. */
+   inDegree(em, shortVerts[1], 0, vCount) == 1  && /* short 3' ss has 1 connection in. */
+   outDegree(em, shortVerts[1], 0, vCount) == 1 && /* Only 1 way out of short 3' ss. */
+   inDegree(em, shortVerts[2], 0, vCount) == 1  && /* Only 1 way into short 5' ss. */
+   outDegree(em, shortVerts[2], 0, vCount) == 1 && /* Only 1 way out of short 5' ss. */
+   inDegree(em, shortVerts[3], 0, vCount) == 2  && /* Downstream 3' connects to both exons. */
+
+   inDegree(em, longVerts[1], 0, vCount) == 1  && /* long 3' ss has 1 connection in. */
+   outDegree(em, longVerts[1], 0, vCount) == 1 && /* Only 1 way out of long 3' ss. */
+   inDegree(em, longVerts[2], 0, vCount) == 1  && /* Only 1 way into long 5' ss. */
+   outDegree(em, longVerts[2], 0, vCount) == 1 && /* Only 1 way out of long 5' ss. */
+   isMutuallyExclusive(splice, ag, em, source,sink))
+    mutuallyExclusiveExon = TRUE;
+return mutuallyExclusiveExon;
+}
+
 boolean cassettePaths(struct splice *splice, struct altGraphX *ag, bool **em,
 		       int source, int sink)
 /* Return TRUE if paths are mutually exclusive and the longer
@@ -1014,7 +1068,7 @@ else if(isAlt3Path(splice, ag, em, source, sink))
     type = alt3Prime;
 else if(isRetIntPath(splice, ag, em, source, sink))
     type = altRetInt;
-else if(isMutuallyExclusive(splice, ag, em, source, sink))
+else if(isMutuallyExclusiveExonPath(splice, ag, em, source, sink))
     type = altMutExclusive;
 
 /* Fix the strand. */

@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.97 2004/12/11 00:34:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.101 2005/02/21 23:57:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1001,12 +1001,11 @@ struct dyString *fieldSpec = newDyString(256);
 struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
-boolean doIntersection;
 int fieldCount;
-int bedFieldsOffset, bedFieldCount;
 char *idField;
 boolean showItemRgb = FALSE;
 int itemRgbCol = -1;	/*	-1 means not found	*/
+boolean printedColumns = FALSE;
 
 hti = getHti(db, table);
 idField = getIdField(db, curTrack, table, hti);
@@ -1024,7 +1023,6 @@ else
     dyStringAppend(fieldSpec, "*");
     fieldCount = countTableColumns(conn, table);
     }
-bedFieldsOffset = fieldCount;
 
 /* If can find id field for table then get
  * uploaded list of identifiers, create identifier hash
@@ -1036,21 +1034,9 @@ if (idField != NULL)
 	{
 	dyStringAppendC(fieldSpec, ',');
 	dyStringAppend(fieldSpec, idField);
-	bedFieldsOffset += 1;
 	}
     }
 isPositional = htiIsPositional(hti);
-
-/* If intersecting add fields needed to calculate bed as well. */
-doIntersection = (anyIntersection() && isPositional);
-if (doIntersection)
-    {
-    char *bedFields;
-    bedSqlFieldsExceptForChrom(hti, &bedFieldCount, &bedFields);
-    dyStringAppendC(fieldSpec, ',');
-    dyStringAppend(fieldSpec, bedFields);
-    freez(&bedFields);
-    }
 
 /* Loop through each region. */
 for (region = regionList; region != NULL; region = region->next)
@@ -1066,7 +1052,7 @@ for (region = regionList; region != NULL; region = region->next)
 	continue;
 
     /* First time through print column names. */
-    if (region == regionList)
+    if (! printedColumns)
         {
 	if (filter != NULL)
 	    hPrintf("#filter: %s\n", filter);
@@ -1083,6 +1069,7 @@ for (region = regionList; region != NULL; region = region->next)
 		hPrintf("%s\t", sqlFieldName(sr));
 	    hPrintf("%s\n", sqlFieldName(sr));
 	    }
+	printedColumns = TRUE;
 	}
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1361,12 +1348,22 @@ curTable = findSelectedTable(conn, curTrack, hgtaTable);
 }
 
 
+/* Remove any custom track data from the cart. (Copied from hgGateway!) */
+void removeCustomTrackData()
+{
+cartRemove(cart, "hgt.customText");
+cartRemove(cart, "hgt.customFile");
+cartRemove(cart, "ct");
+}
+
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks. 
  * Here we set up cart and some global variables, dispatch the command,
  * and put away the cart when it is done. */
 {
 struct sqlConnection *conn = NULL;
+char *oldDb = NULL, *oldGenome = NULL, *oldClade = NULL;
+char *clade = NULL;
 
 oldVars = hashNew(10);
 
@@ -1376,10 +1373,21 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");
-getDbAndGenome(cart, &database, &genome);
+getDbGenomeClade(cart, &database, &genome, &clade);
 freezeName = hFreezeFromDb(database);
 hSetDb(database);
 conn = hAllocConn();
+
+/* If user has changed db/org/clade, remove *all* custom tracks: */
+oldDb = hashFindVal(oldVars, "db");
+oldGenome = hashFindVal(oldVars, "org");
+oldClade = hashFindVal(oldVars, "clade");
+if ((oldDb     && differentWord(oldDb, database)) ||
+    (oldGenome && differentWord(oldGenome, genome)) ||
+    (oldClade  && differentWord(oldClade, clade)))
+    {
+    removeCustomTrackData();
+    }
 
 if (lookupPosition())
     {

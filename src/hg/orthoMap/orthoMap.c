@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.14 2005/01/10 00:42:08 kent Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.16 2005/02/16 08:30:14 markd Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -985,7 +985,6 @@ int i;
 unsigned *blockSizes;
 struct chain *chain = NULL;
 int diff = 0;
-
 AllocArray(blockSizes, gene->exonCount);
 for(i=0; i<gene->exonCount; i++)
     blockSizes[i] = gene->exonEnds[i] - gene->exonStarts[i];
@@ -1012,8 +1011,55 @@ else
 	addExonToGene(chain, gene, synGene, i);
 	}
     }
+
 if(synGene->exonCount > 0 && synGene->exonStarts[0] != 0)
     diff = synGene->exonStarts[0];
+
+/* Make sure the txStart/End and cdsStart/End are at reasonable places. */
+if(synGene->exonCount > 0) 
+    {
+    synGene->txStart = synGene->exonStarts[0];
+    synGene->txEnd = synGene->exonEnds[synGene->exonCount - 1];
+    }
+
+/* Adjust cdsStart to be in an exon */
+for(i = 0; i < synGene->exonCount; i++) 
+    {
+    if(synGene->cdsStart >= synGene->exonStarts[i] &&
+       synGene->cdsStart < synGene->exonEnds[i])
+        break;  /* found in exon */
+    if(synGene->cdsStart < synGene->exonStarts[i])
+        {
+        /* move to next exon */
+        synGene->cdsStart = synGene->exonStarts[i];
+        break;
+        }
+    }
+if(i == synGene->exonCount)
+    synGene->cdsStart = synGene->txEnd;  /* didn't find start */
+
+/* Adjust cdsEnd to be in an exon */
+for(i = synGene->exonCount-1; i >= 0; i--) 
+    {
+    if(synGene->cdsEnd > synGene->exonStarts[i] &&
+       synGene->cdsEnd <= synGene->exonEnds[i])
+        break;  /* found in exon */
+    if(synGene->cdsEnd >= synGene->exonEnds[i])
+        {
+        /* move to previous exon */
+        synGene->cdsEnd = synGene->exonEnds[i];
+        break;
+        }
+    }
+if(i == -1)
+    synGene->cdsEnd = synGene->txStart;  /* didn't find start */
+
+if (synGene->cdsStart >= synGene->cdsEnd)
+    synGene->cdsStart = synGene->cdsEnd = synGene->txEnd; /* no CDS left */
+
+if(synGene->exonCount == 0)
+    genePredFree(&synGene);
+
 return synGene;
 }
 

@@ -3,7 +3,7 @@ To fetch the source tree via CVS,
 set the following environment in your shell environment:
 
 CVS_RSH=ssh
-CVSROOT=:pserver:anonymous@hgwdev.cse.ucsc.edu:/cbse
+CVSROOT=:pserver:anonymous@genome-test.cse.ucsc.edu:/cbse
 export CVSROOT CVS_RSH
 
 Then execute the following commands in the directory

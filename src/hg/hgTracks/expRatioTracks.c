@@ -20,7 +20,7 @@ hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
        hgcNameAndSettings(), start, end, track, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
        database, tl.picWidth);
-hPrintf("ALT=\"%s\">\n", statusLine); 
+hPrintf("TITLE=\"%s\">\n", statusLine); 
 freeMem(encodedItem1);
 freeMem(encodedItem2);
 }
