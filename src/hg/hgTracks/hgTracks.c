@@ -633,7 +633,7 @@ hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ",
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 if (start !=-1)
-    hPrintf("onMouseOver=\"javascript:void(popup('%s'));\"",statusLine);
+    hPrintf("onMouseOver=\"javascript:void(popup('%s'));\">\n",statusLine);
 freeMem(encodedItem);
 }
 
