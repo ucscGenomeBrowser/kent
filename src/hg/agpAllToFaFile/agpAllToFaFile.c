@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.3 2003/12/02 00:30:12 kate Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.4 2004/07/21 23:44:11 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,7 +55,7 @@ while (lineFileNext(lf, &line, &lineSize))
     wordCount = chopLine(line, words);
     if (wordCount < 5)
         errAbort("Bad line %d of %s\n", lf->lineIx, lf->fileName);
-    if (words[4][0] != 'N')
+    if (words[4][0] != 'N' && words[4][0] != 'U')
 	{
         /* not a gap */
 	lineFileExpectWords(lf, 9, wordCount);

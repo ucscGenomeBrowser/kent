@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: checkNt.c,v 1.4 2003/05/06 07:22:15 kate Exp $";
+static char const rcsid[] = "$Id: checkNt.c,v 1.5 2004/07/21 23:44:13 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,7 +49,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 while ((wordCount = lineFileChop(lf, row)) > 0)
     {
     lineFileExpectWords(lf, ArraySize(row), wordCount);
-    if (row[4][0] != 'N')
+    if (row[4][0] != 'N' && row[4][0] != 'U')
         {
 	int end = lineFileNeedNum(lf, row, 2);
 	struct nt *nt = findNt(ntHash, row[0]);

@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: agpFrag.c,v 1.6 2003/10/06 23:15:29 kent Exp $";
+static char const rcsid[] = "$Id: agpFrag.c,v 1.7 2004/07/21 23:44:13 angie Exp $";
 
 void agpFragStaticLoad(char **row, struct agpFrag *ret)
 /* Load a row from agpFrag table into ret.  The contents of ret will
@@ -173,7 +173,7 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
     {
     if (wordCount < 5)
 	errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
-    if(sameWord(words[4], "N"))
+    if(words[4][0] == 'N' || words[4][0] == 'U')
 	continue;
     el = agpFragLoad(words);
 /* There is a strange thing about agp files, Jim's load functions subtract 1 off

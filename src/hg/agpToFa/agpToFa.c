@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.10 2004/02/24 18:44:36 angie Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.11 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -247,7 +247,7 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount < 5)
         errAbort("Bad line %d of %s: need at least 5 words, got %d\n",
 		 lf->lineIx, lf->fileName, wordCount);
-    if (words[4][0] != 'N')
+    if (words[4][0] != 'N' && words[4][0] != 'U')
 	{
 	lineFileExpectAtLeast(lf, 9, wordCount);
 	if (sameWord(words[0], agpSeq))

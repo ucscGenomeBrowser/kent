@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fakeFinContigs.c,v 1.7 2003/10/14 01:25:20 angie Exp $";
+static char const rcsid[] = "$Id: fakeFinContigs.c,v 1.8 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,7 +58,7 @@ while (lineFileNext(lf, &line, &lineSize))
     wordCount = chopLine(line, words);
     if (wordCount < 5)
         errAbort("Expecting at least 5 words line %d of %s", lf->lineIx, lf->fileName);
-    if (words[4][0] == 'N')
+    if (words[4][0] == 'N' || words[4][0] == 'U')
 	{
         contig = NULL;
         continue;
@@ -128,7 +128,7 @@ for (contig = contigList; contig != NULL; contig = contig->next)
     f = mustOpen(path, "w");
     for (agp = contig->agpList; agp != NULL; agp = agp->next)
         {
-	if (agp->type[0] != 'N')
+	if (agp->type[0] != 'N' && agp->type[0] != 'U')
 	    {
 	    fprintf(f, "%s_1\t%d\t%d\t%s\n",  agp->frag, 
 	    	agp->chromStart, 

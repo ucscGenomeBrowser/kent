@@ -11,7 +11,7 @@ that they are in synch.
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.5 2004/02/28 02:43:50 angie Exp $";
+static char const rcsid[] = "$Id: checkAgpAndFa.c,v 1.6 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* 
@@ -118,7 +118,7 @@ printf("In agpMatchesFaEntry()\n");
 
 if (sameString(agp->chrom, seqName))
     {
-    if (sameString(agp->type, "N"))
+    if (agp->type[0] == 'N' || agp->type[0] == 'U')
         {
         printf("FASTA gap entry\n");
         result =  containsOnlyChar(dna, offset, fragSize, 'n');
@@ -184,7 +184,7 @@ while (faSpeedReadNext(lfFa, &retDna, &retSize, &retName))
             errAbort("Bad line %d of %s\n", lfAgp->lineIx, lfAgp->fileName);
             }
    
-        if (words[4][0] != 'N')
+        if (words[4][0] != 'N' && words[4][0] != 'U')
             {
             lineFileExpectWords(lfAgp, 9, wordCount);
             agpFrag = agpFragLoad(words);

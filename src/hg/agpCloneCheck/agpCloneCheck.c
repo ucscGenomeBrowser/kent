@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: agpCloneCheck.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: agpCloneCheck.c,v 1.4 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +38,7 @@ while (lineFileNext(lf, &line, &lineSize))
         continue;
     if (wordCount < 5)
         errAbort("Bad line %d of %s", lf->lineIx, lf->fileName);
-    if (words[4][0] == 'N')
+    if (words[4][0] == 'N' || words[4][0] == 'U')
         continue;
     cloneVer = words[5];
     strcpy(clone, cloneVer);

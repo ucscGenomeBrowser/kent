@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.31 2004/06/21 16:58:30 hiram Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.32 2004/07/21 23:44:13 angie Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -901,7 +901,7 @@ void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
                 wordCount = chopLine(line, words);
                 if (wordCount != 8 && wordCount != 9)
                     malformedAgp(lf);
-                if (*words[4] != 'N')
+                if (words[4][0] != 'N' && words[4][0] != 'U')
                     errAbort("Found non-gap in .gap file: %s", words[4]);
                 contig = words[0];
                 spec = findLift(liftHash, contig, lf);

@@ -13,7 +13,7 @@ and split each chromosomes into subdirs and files for each supercontig.
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.20 2003/10/14 01:25:21 angie Exp $";
+static char const rcsid[] = "$Id: splitFaIntoContigs.c,v 1.21 2004/07/21 23:44:13 angie Exp $";
 
 /* Default array size for file paths */
 #define DEFAULT_PATH_SIZE 1024
@@ -344,7 +344,7 @@ curAgpData->prev = NULL;
 curAgpData->next = NULL;
 
 chopLine(line, words);
-if ('N' == words[4][0])
+if (words[4][0] == 'N' || words[4][0] == 'U')
     {
     agpGap = agpGapLoad(words);
     /* 

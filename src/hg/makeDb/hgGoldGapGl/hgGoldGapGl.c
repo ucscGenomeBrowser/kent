@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.17 2004/02/02 15:18:27 angie Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.18 2004/07/21 23:44:13 angie Exp $";
 
 
 void usage()
@@ -125,7 +125,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	    errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
 	start = sqlUnsigned(words[1])-1;
 	end = sqlUnsigned(words[2]);
-	if (sameWord(words[4], "N"))
+	if (words[4][0] == 'N' || words[4][0] == 'U')
 	    {
 	    struct agpGap gap;
 	    agpGapStaticLoad(words, &gap);

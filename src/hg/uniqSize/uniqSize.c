@@ -7,7 +7,7 @@
 #include "sqlNum.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: uniqSize.c,v 1.7 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: uniqSize.c,v 1.8 2004/07/21 23:44:13 angie Exp $";
 
 boolean stretch = FALSE;
 
@@ -40,7 +40,7 @@ while (lineFileNext(lf, &line, &lineSize))
     start = atoi(words[1]) - 1;
     end = atoi(words[2]);
     size = end-start;
-    if (words[4][0] == 'N')
+    if (words[4][0] == 'N' || words[4][0] == 'U')
 	n += size;
     else
 	u += size;
@@ -150,7 +150,7 @@ while (lineFileNext(lf, &line, &lineSize))
     start = atoi(words[1]) - 1;
     end = atoi(words[2]);
     size = end-start;
-    if (words[4][0] == 'N')		/* It's a gap line. */
+    if (words[4][0] == 'N' || words[4][0] == 'U')  /* It's a gap line. */
 	{
 	boolean isOpen = sameWord(words[7], "no");
 	/* Keep track of contig and scaffold sizes. */

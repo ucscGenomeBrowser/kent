@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "ooUtils.h"
 
-static char const rcsid[] = "$Id: checkGoldDupes.c,v 1.4 2003/05/06 07:22:15 kate Exp $";
+static char const rcsid[] = "$Id: checkGoldDupes.c,v 1.5 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -62,7 +62,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     if (wordCount < 8)
         errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
-    if (words[4][0] != 'N')
+    if (words[4][0] != 'N' && words[4][0] != 'U')
         {
 	char *frag = words[5];
 	char cloneName[256];

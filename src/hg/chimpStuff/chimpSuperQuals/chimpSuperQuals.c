@@ -7,7 +7,7 @@
 #include "rle.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: chimpSuperQuals.c,v 1.1 2003/12/13 07:21:35 kent Exp $";
+static char const rcsid[] = "$Id: chimpSuperQuals.c,v 1.2 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -93,7 +93,7 @@ for (;;)
         break;
     if (wordCount < 8)
 	lineFileShort(lf);
-    if (row[4][0] == 'N')
+    if (row[4][0] == 'N' || row[4][0] == 'U')
         continue;
     if (wordCount < 9)
         lineFileShort(lf);

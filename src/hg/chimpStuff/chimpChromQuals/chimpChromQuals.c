@@ -8,7 +8,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.3 2004/07/07 02:04:51 kate Exp $";
+static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.4 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -96,7 +96,7 @@ for (;;)
     if (wordCount < 8)
 	lineFileShort(lf);
 
-    if (row[4][0] == 'N')
+    if (row[4][0] == 'N' || row[4][0] == 'U')
         {
         /* need to get chromEnd from gaps to determine chrom size
          * if the chrom ends with a gap */

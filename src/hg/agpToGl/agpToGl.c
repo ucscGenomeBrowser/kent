@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: agpToGl.c,v 1.4 2004/06/21 17:33:03 hiram Exp $";
+static char const rcsid[] = "$Id: agpToGl.c,v 1.5 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -127,7 +127,7 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     {
     if (wordCount < 5)
         errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
-    if (row[4][0] == 'N')
+    if (row[4][0] == 'N' || row[4][0] == 'U')
         continue;
     lineFileExpectWords(lf, 9, wordCount);
     contigName = row[0];

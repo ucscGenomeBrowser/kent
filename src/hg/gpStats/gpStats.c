@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gpStats.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
+static char const rcsid[] = "$Id: gpStats.c,v 1.4 2004/07/21 23:44:13 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -103,7 +103,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     if (wordCount < 6)
         errAbort("Expecting at least 5 words line %d of %s\n", 
 	     lf->lineIx, lf->fileName);
-    if (sameString(words[4], "N"))
+    if (words[4][0] == 'N' || words[4][0] == 'U')
         {
 	if (inRaft)
 	    {

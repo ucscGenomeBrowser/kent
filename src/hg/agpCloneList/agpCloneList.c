@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: agpCloneList.c,v 1.3 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: agpCloneList.c,v 1.4 2004/07/21 23:44:12 angie Exp $";
 
 boolean ver = FALSE;
 
@@ -40,7 +40,7 @@ for (i=0; i<agpCount; ++i)
         {
 	if (wordCount < 6)
 	    errAbort("Expecting at least 6 words line %d of %s", lf->lineIx, lf->fileName);
-	if (words[4][0] != 'N')
+	if (words[4][0] != 'N' && words[4][0] != 'U')
 	    {
 	    strcpy(cloneName, words[5]);
 	    chopSuffix(cloneName);
