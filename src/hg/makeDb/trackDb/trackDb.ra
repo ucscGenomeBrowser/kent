@@ -883,7 +883,7 @@ shortLabel Fugu Blat
 longLabel Takifugu rubripes Translated Blat Alignments
 group compGeno
 priority 150
-visibility dense
+visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
@@ -894,7 +894,7 @@ shortLabel Fugu Blat
 longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
 priority 113
-visibility dense
+visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
