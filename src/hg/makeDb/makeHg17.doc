@@ -2173,8 +2173,10 @@ cat > split.csh << 'EOF'
 # FILTERED OUT noOoc ALIGNMENTS WITH tBaseInsert >=1000 
 # (DONE, 2005-02-17, hartera) AND RELOADED stsMap, stsInfo2 and all_sts_seq
 # DATABASE TABLES AFTER ADDING FILTERED ALIGNMENTS TO all_sts_seq AND 
-# REMOVING DATA FROM stsMap and stsInfo2 FOR THE MARKERS REMOVED FROM THE FILTERED SET
-# (DONE, 2005-02-18, hartera)
+# REMOVING DATA FROM stsMap and stsInfo2 FOR THE MARKERS REMOVED FROM THE 
+# FILTERED SET (DONE, 2005-02-18, hartera)
+# UPDATE PSL ALIGNMENTS FOR D21S167 and D21S168 AND RELOAD INTO all_sts_seq
+# (DONE, 2005-02-23, hartera)
 
     # Terry's sts.9 dir is in /cluster/store5/sts.2004-07.old
     # remove this after verifying the newer version
@@ -2750,6 +2752,14 @@ cat > template << 'EOF'
     cd /cluster/data/hg17/bed/sts
     # manually update the stsMarkers.lifted.psl file with the new
     # co-ordinates as above.
+    # (2005-02-23) Correct alignments.
+    # need to swap the names for the alignments not just the start and end
+    # coords as before as now the rest of the alignment data fields in the 
+    # table are incorrect. Change the start and end co-ordinates and just swap 
+    # the names for D21S167 and D21S168 in the psl file then reload the table. 
+    # sort on the ID field (qName)
+    sort -k 10n stsMarkers.lifted.psl > sts.lifted.sort
+    mv sts.lifted.sort stsMarkers.lifted.psl 
     hgsql hg17 -e 'drop table all_sts_seq'
     hgLoadPsl -nobin -table=all_sts_seq hg17 stsMarkers.lifted.psl
     
