@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -W
 
 # mkOrthologFrame - generate ENCODE region frame page including orthologs, from regions file
 #       and description file
@@ -14,22 +14,21 @@ sub countBases {
     my ($db, $chr, $start, $end) = @_;
     my $nibDir;
     if (-d "/cluster/data/$db/mixedNib") {
-        $nibDir = mixedNib;
+        $nibDir = "mixedNib";
     } elsif (-d "/cluster/data/$db/softNib") {
-        $nibDir = softNib;
+        $nibDir = "softNib";
     } elsif (-d "/cluster/data/$db/nib") {
-        $nibDir = nib;
+        $nibDir = "nib";
     } else {
         die "can't find nib dir for $db\n";
     }
 
     my $faSize = 
             `nibFrag /cluster/data/$db/$nibDir/$chr.nib $start $end + stdout | faSize stdin`;
-    $faSize =~ /.* bases .* N's ([0-9]+) real/;
+    $faSize =~ /.* bases .* N's ([0-9]+) real/; # ' 
     my $bases = $1;
     return $bases;
 }
-
 # MAIN
 
 @ARGV == 7 or die "usage: mkOrthologFrame <description-file> <position-file> <header-file> <assembly> <consensus-bed-file> <liftOver-bed-file> <Mercator-bed-file>\n";
@@ -37,9 +36,9 @@ my ($descriptionFile, $positionFile, $headerFile, $genome, $consensusFile, $lift
 my $baseTracks = "&amp;netHg16=full&amp;refGene=pack&amp;encodeRegionConsensus=full&amp;encodeRegions2=full&amp;encodeRegionMercator=full";
 my $netHide = "&amp;netCanFam1=hide&amp;netGalGal2=hide&amp;netMm5=hide&amp;netPanTro1=hide&amp;netRn3=hide";
 
-open(POSITIONS, $positionFile) or die "ERROR: can't open $regionFile\n";
+open(POSITIONS, $positionFile) or die "ERROR: can't open $positionFile\n";
 open(DESCRS, $descriptionFile) or die "ERROR: can't open $descriptionFile\n";
-open(HEADER, $headerFile) or die "ERROR: can't open $headerFile\n";
+#open(HEADER, $headerFile) or die "ERROR: can't open $headerFile\n";
 open(CONSENSUS, $consensusFile) or die "ERROR: can't open $consensusFile\n";
 open(LIFTOVER, $liftOverFile) or die "ERROR: can't open $liftOverFile\n";
 open(MERCATOR, $MercatorFile) or die "ERROR: can't open $MercatorFile\n";
@@ -104,6 +103,7 @@ while (<LIFTOVER>) {
 my %MCRegionParts = ();
 my %MCRegionPartPosition = ();
 while (<MERCATOR>) {
+    if (/MEN/) {next;} # ignore spurious Mercator ENCODE regions.
     chomp;
     my ($chr, $start, $end, $regionPart) = split /\s/;
     $MCRegionPartPosition{$regionPart} = 
@@ -147,62 +147,67 @@ foreach $region (sort keys %descriptions) {
         my ($chr, $range) = split (/:/, $orthoRegionPartPosition{$part});
         my ($start, $end) = split (/-/, $range);
         $length = $length + ($end - $start + 1);
-	printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
+	printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
 		$genome, $orthoRegionPartPosition{$part}, $baseTracks, $netHide, $chr);
     }
     my $ratio = $length * 100 / $regionLength;
     $length = $length/1000;
     $length = $length/1000;
-    printf "<TD>%.1f</TD>\n", $length;
+    printf "</TD><TD>%.1f</TD>\n", $length;
     printf "<TD ALIGN=right>%3.0f%%</TD>\n", $ratio;
 
     # liftOver regions in ortholog browser - region links, size
-    @parts = split (/,/, $LORegionParts{$region});
-    $length = 0;
-    printf "<TD>";
-    foreach $part (@parts) {
-        my ($chr, $range) = split (/:/, $LORegionPartPosition{$part});
-        my ($start, $end) = split (/-/, $range);
-        $length = $length + ($end - $start + 1);
-        $nonNlength = $nonNlength + &countBases($genome, $chr, $start, $end);
-        printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
-		$genome, $LORegionPartPosition{$part}, $baseTracks, $netHide, $chr);
-    }
+    if (defined $LORegionParts{$region})
+    {
+	@parts = split (/,/, $LORegionParts{$region});
+	$length = $nonNlength = 0;
+	printf "<TD>";
+	foreach $part (@parts) {
+	    my ($chr, $range) = split (/:/, $LORegionPartPosition{$part});
+	    my ($start, $end) = split (/-/, $range);
+	    $length = $length + ($end - $start + 1);
+	    $nonNlength = $nonNlength + &countBases($genome, $chr, $start, $end);
+	    printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
+		   $genome, $LORegionPartPosition{$part}, $baseTracks, $netHide, $chr);
+	}
+    } else {printf "<TD>-";}
+
     my $LOlength = $length;
-    my $LOnonNlength = $LOnonNlength;
     $length = $length/1000;
     $length = $length/1000;
     $nonNlength = $nonNlength/1000;
     $nonNlength = $nonNlength/1000;
-    printf "<TD>%.1f </TD><TD>%.1f</TD>\n", $length, $nonNlength;
+    printf "</TD><TD>%.1f </TD><TD>%.1f</TD>\n", $length, $nonNlength;
 
     # Mercator regions in ortholog browser - region links, size, diff
-    @parts = split (/,/, $MCRegionParts{$region});
-    $length = 0;
-    printf "<TD>";
-    foreach $part (@parts) {
-        my ($chr, $range) = split (/:/, $MCRegionPartPosition{$part});
-        my ($start, $end) = split (/-/, $range);
-        $length = $length + ($end - $start + 1);
-        $nonNlength = $nonNlength + &countBases($genome, $chr, $start, $end);
-        printf ("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
-		$genome, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $chr);
-    }
+    if (defined $MCRegionParts{$region})
+    {
+	@parts = split (/,/, $MCRegionParts{$region});
+	$length = 0;
+	printf "<TD>";
+	foreach $part (@parts) {
+	    my ($chr, $range) = split (/:/, $MCRegionPartPosition{$part});
+	    my ($start, $end) = split (/-/, $range);
+	    $length = $length + ($end - $start + 1);
+	    $nonNlength = $nonNlength + &countBases($genome, $chr, $start, $end);
+	    printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s\" TARGET=browser2>%s</A>\n", 
+		   $genome, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $chr);
+	}
+    } else {printf "<TD>-";}
     my $diff = $length - $LOlength;
-    my $nonNdiff = $length - $LOnonNlength;
     $diff = $diff/1000;
     $length = $length/1000;
     $length = $length/1000;
     $nonNlength = $nonNlength/1000;
     $nonNlength = $nonNlength/1000;
-    printf "<TD>%.1f </TD><TD>%.1f</TD>\n", $length, $nonNlength;
+    printf "</TD><TD>%.1f </TD><TD>%.1f</TD>\n", $length, $nonNlength;
     printf "<TD ALIGN=right>";
     if ($diff > 100 || $diff < -100) {
         printf("<FONT COLOR=red>");
     } elsif ($diff > 20 || $diff < -20) {
         printf("<FONT COLOR=orange>");
     }
-    printf "%d</TR>\n", $diff;
+    printf "%d</TD></TR>\n", $diff;
     printf("</FONT>");
 }
 
