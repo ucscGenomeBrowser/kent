@@ -13,6 +13,7 @@ boolean doLog = FALSE;
 int margin = 0;
 int psSize = 5*72;
 int labelStep = 1;
+double postScale = 1.0;
 
 void usage()
 /* Explain usage and exit. */
@@ -34,6 +35,8 @@ errAbort(
   "   -labelStep=N - How many bins to skip between labels\n"
   "   -margin=N - Margin in points for PostScript output\n"
   "   -log    - Logarithmic output (only works with ps now)\n"
+  "   -postScale=N (default %f) - What to scale by after normalization\n"
+  , postScale
   );
 }
 
@@ -83,8 +86,9 @@ double grayScale;
 double xPos, yPos, xMid, yMid;
 double xBinPts = psInnerSize/xBins;
 double yBinPts = psInnerSize/yBins;
+double psGrayVal;
 
-grayScale = 1.0 / maxVal;
+grayScale = 1.0 / maxVal * postScale;
 for (y=0; y<yBins; ++y)
     {
     int yg = yBins-1-y;
@@ -93,8 +97,10 @@ for (y=0; y<yBins; ++y)
         {
 	xPos = x * xBinPts + labelSize;
 	both = y*xBins + x;
-	val = mightLog(hist[both]);
-	psSetGray(ps, 1.0 - val * grayScale);
+	val = mightLog(hist[both]) * grayScale;
+	if (val > 1.0) val = 1.0;
+	if (val < 0.0) val = 0.0;
+	psSetGray(ps, 1.0 - val);
 	boxOut(ps, xPos, yPos, xBinPts, yBinPts);
 	}
     }
@@ -207,6 +213,7 @@ psSize = optionInt("psSize", psSize);
 margin = optionInt("margin", margin);
 doLog = optionExists("log");
 labelStep = optionInt("labelStep", labelStep);
+postScale = optionFloat("postScale", postScale);
 textHist2(argv[1]);
 return 0;
 }
