@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.12 2004/08/11 18:55:40 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.13 2004/08/11 21:54:12 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -253,13 +253,34 @@ freeMem(wDS->tblName);		/*	potentially previously existing */
 wDS->tblName = cloneString(table);
 }
 
+static void showConstraints(struct wiggleDataStream *wDS, FILE *fh)
+{
+if (wDS->winEnd)
+    fprintf (fh, "#\tposition specified: %d-%d\n",
+	wDS->winStart+1, wDS->winEnd);
+if (wDS->bedConstrained)
+    fprintf (fh, "#\tconstrained by coordinates in bed list\n");
+if (wDS->spanLimit)
+    fprintf (fh, "#\tspan specified: %u\n", wDS->spanLimit);
+if (wDS->useDataConstraint)
+    {
+    if ((wDS->dataConstraint) &&
+	sameWord(wDS->dataConstraint,"in range"))
+	    fprintf (fh, "#\tdata values in range [%g : %g]\n",
+		    wDS->limit_0, wDS->limit_1);
+    else
+	    fprintf (fh, "#\tdata values %s %g\n",
+		    wDS->dataConstraint, wDS->limit_0);
+    }
+}
+
 /*	PUBLIC	METHODS   **************************************************/
 static void setPositionConstraint(struct wiggleDataStream *wDS,
 	int winStart, int winEnd)
 /*	both 0 means no constraint	*/
 {
 if ((!wDS->isFile) && wDS->conn)
-    {
+    {	/*	this should not happen	*/
     errAbort("setPositionConstraint: not allowed after openWigConn()");
     }
 /*	keep them in proper order	*/
@@ -301,6 +322,7 @@ wDS->limit_0 = wDS->limit_1 = 0.0;
 wDS->ucLowerLimit = wDS->ucUpperLimit = 0;
 freez(&wDS->sqlConstraint);
 wDS->useDataConstraint = FALSE;
+wDS->bedConstrained = FALSE;
 }
 
 static void freeAscii(struct wiggleDataStream *wDS)
@@ -819,6 +841,26 @@ wDS->bytesSkipped += bytesSkipped;
 closeWigConn(wDS);
 }	/*	void getData()	*/
 
+static void getDataViaBed(struct wiggleDataStream *wDS, char *db, char *table,
+	 int operations, struct bed **bedList)
+/* getDataViaBed - constrained by the bedList	*/
+{
+struct bed *el, *next;
+
+if (bedList && *bedList)
+    {
+    slReverse(bedList);
+    wDS->bedConstrained = TRUE;
+    for (el = *bedList; el; el = next)
+	{
+	wDS->setPositionConstraint(wDS, el->chromStart, el->chromEnd);
+	wDS->getData(wDS, db, table, operations);
+	next = el->next;
+	}
+    wDS->setPositionConstraint(wDS, 0, 0);
+    }
+}
+
 static void bedOut(struct wiggleDataStream *wDS, char *fileName)
 /*	print to fileName the bed list */
 {
@@ -837,6 +879,7 @@ if (wDS->bed)
     }
 else
     {
+    showConstraints(wDS, fh);
     fprintf(fh, "#\tno data points found for bed format output\n");
     }
 carefulClose(&fh);
@@ -916,21 +959,7 @@ if (wDS->ascii)
 		freeMem(chrom);
 		chrom = cloneString(asciiData->chrom);
 		span = asciiData->span;
-		if (wDS->winEnd)
-		    fprintf (fh, "#\tposition specified: %d-%d\n",
-			wDS->winStart+1, wDS->winEnd);
-		if (wDS->spanLimit)
-		    fprintf (fh, "#\tspan specified: %u\n", wDS->spanLimit);
-		if (wDS->useDataConstraint)
-		    {
-		    if ((wDS->dataConstraint) &&
-			sameWord(wDS->dataConstraint,"in range"))
-			    fprintf (fh, "#\tdata values in range [%g : %g]\n",
-				    wDS->limit_0, wDS->limit_1);
-		    else
-			    fprintf (fh, "#\tdata values %s %g\n",
-				    wDS->dataConstraint, wDS->limit_0);
-		    }
+		showConstraints(wDS, fh);
 		fprintf (fh, "variableStep chrom=%s span=%u\n",
 		    chrom, span);
 		}
@@ -947,6 +976,7 @@ if (wDS->ascii)
     }
 else
     {
+    showConstraints(wDS, fh);
     fprintf(fh, "#\tno data points found\n");
     }
 carefulClose(&fh);
@@ -998,6 +1028,7 @@ wds->setDataConstraint = setDataConstraint;
 wds->bedOut = bedOut;
 wds->statsOut = statsOut;
 wds->asciiOut = asciiOut;
+wds->getDataViaBed = getDataViaBed;
 wds->getData = getData;
 return wds;
 }
