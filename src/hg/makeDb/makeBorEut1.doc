@@ -1186,82 +1186,20 @@ doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check 
     axtToMaf $f /cluster/data/borEut1/chrom.sizes /cluster/data/eutPri1/chrom.sizes $maf -tPrefix=borEut1. -qPrefix=eutPri1.
     end
 
-# DESCENDANT MULTIZ MULTIPLE ALIGNMENT 
-    ssh kksilo
-    set multizDir = multiz.2004-12-22
-    set workingDir = /cluster/bluearc/borEut1/$multizDir
-    ln -s $workingDir /cluster/bluearc/borEut1/multiz3way
-    mkdir -p $workingDir
-    mkdir -p /cluster/data/borEut1/bed/$multizDir
-    ln -s /cluster/data/borEut1/bed/$multizDir /cluster/data/borEut1/bed/multizDescend
-    cd /cluster/data/borEut1/bed/multizDescend
+# Load into database
+  ssh hgwdev
+  cd /cluster/data/borEut1/bed/multizDescend
+  /cluster/bin/pen
+  mkdir -p /gbdb/borEut1/multiz4way
+  ln -s /cluster/data/borEut1/bed/multizDescend/multiz4way.maf /gbdb/borEut1/multiz4way
+  hgLoadMaf borEut1 multiz4way
 
-# wrapper script for multiz
-    # NOTE: first arg is pairwise, 2nd arg is multiple (to add to)
-    # NOTE: next time, modify script so it only needs one arg -- saves the
-    # multiple dirname in a file for use by the next run
-cat << 'EOF' > doMultiz.csh
-#!/bin/csh -fe
-mkdir -p $3:h
-/cluster/bin/penn/multiz $1 $2 - > $3
-'EOF'
-# << for emacs
-    cat << 'EOF' > gsub
-#LOOP
-../doMultiz.csh {check in line /cluster/bluearc/borEut1/multiz3way/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/borEut1/multiz3way/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/borEut1/multiz3way/$(root1)$(dir1)/$(root2).maf}
-#ENDLOOP
-'EOF'
-# << for emacs
-    chmod +x doMultiz.csh
+    /cluster/bin/penn/maf_project global4way.maf  borEut1.chr15 > multiz4way.maf
 
-    ssh kksilo
-    set workingDir = /cluster/bluearc/borEut1/multiz3way
-    # copy mafs to bluearc for tetraodon (tetNig1)
-    mkdir $workingDir/tetNig1
-    cd /cluster/data/borEut1/bed/blastz.tetNig1/mafNet
-    foreach f (*.maf)
-       set c = $f:t:r
-       set g = $c:t:r
-       echo $g
-       cp $f $workingDir/tetNig1/${g}.maf
-    end
-    cd /cluster/data/borEut1/bed/multiz3way
-    ls $workingDir/tetNig1/*.maf > chrom.lst
-
-    # fugu (fr1)
-    mkdir $workingDir/fr1
-    cd /cluster/data/borEut1/bed/blastz.fr1/mafNet
-    foreach f (*.maf)
-       set c = $f:t:r
-       set g = $c:t:r
-       echo $g
-       cp $f $workingDir/fr1/${g}.maf
-    end
-
-    # one multiz - add in fugu to zebrafish/tetraodon
-    ssh kki
-    set workingDir = /cluster/bluearc/borEut1/multiz3way
-    cd /cluster/data/borEut1/bed/multiz3way
-    mkdir run.fr1
-    cd run.fr1
-    echo "fr1/tetNig1" > species.lst
-    gensub2 species.lst ../chrom.lst ../gsub jobList
-    para create jobList
-    # 28 jobs in batch 
-    para try, check, push, check ...
-# para time
-# CPU time in finished jobs:        337s       5.62m     0.09h    0.00d  0.000 y
-# IO & Wait Time:                   153s       2.55m     0.04h    0.00d  0.000 y
-# Average job time:                  18s       0.29m     0.00h    0.00d
-# Longest job:                       66s       1.10m     0.02h    0.00d
-# Submission to last job:           134s       2.23m     0.04h    0.00d
-
-    cd ..
-    # copy 3-way mafs to build directory
-    ssh kksilo
-    set workingDir = /cluster/bluearc/borEut1/multiz3way
-    ln -s $workingDir/tetNig1fr1 $workingDir/maf
-    cd /cluster/data/borEut1/bed/multiz3way
-    mkdir maf
-    cp $workingDir/maf/*.maf maf
-    }
+      for i in eutGli1 eutPri1 hg17
+      do
+	  f="$i"_netBlastz
+	  mkdir -p /gbdb/borEut1/multiz4way/$f
+	  ln -s /cluster/data/borEut1/bed/blastz.$i/chr15.maf /gbdb/borEut1/multiz4way/$f/$i.maf
+	  hgLoadMaf borEut1 $f -pathPrefix=/gbdb/borEut1/multiz4way/$f
+      done
