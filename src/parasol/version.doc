@@ -45,5 +45,8 @@
 11 - Added estimated completion time to para. -eta for time function.
      Added -maxNode to limit number of nodes a batch can have.
      Added longest running job to para time output and renamed
-     longest job to longest finished job.
+     longest job to longest finished job. Fixed paraFormatIp to 
+     return host instead of network order. Added reminder to 
+     documentation that the machine names in .ms files should 
+     match the $HOST variables on the nodes.
 
