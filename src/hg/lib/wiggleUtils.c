@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.26 2004/09/03 22:15:18 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.27 2004/09/10 03:48:20 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults)
 {
@@ -85,7 +85,8 @@ printf ("</TABLE></TD></TR></TABLE></P>\n");
 }
 
 void statsPreamble(struct wiggleDataStream *wds, char *chrom,
-    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched)
+    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,
+	char *table2)
 {
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
 
@@ -104,6 +105,8 @@ if (wds->useDataConstraint)
 	printf("<P><B> Filter: (data value %s %g) </B> </P>\n",
 		wds->dataConstraint, wds->limit_0);
     }
+if (table2)
+    printf("<P><B> Intersection with table: %s </B></P>\n", table2);
 
 if (valuesMatched == 0)
     {
@@ -117,11 +120,16 @@ if (valuesMatched == 0)
     }
 else
     {
-    sprintLongWithCommas(num1Buf, wds->stats->count * wds->stats->span);
+    unsigned printSpan = wds->stats->span;
+
+    if ((span > 0) && (span < wds->stats->span))
+	printSpan = span;
+
+    sprintLongWithCommas(num1Buf, wds->stats->count * printSpan);
     printf(
 	"<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
 	num1Buf,
-	100.0*(wds->stats->count * wds->stats->span)/(winEnd - winStart));
+	100.0*(wds->stats->count * printSpan)/(winEnd - winStart));
     }
 }
 
