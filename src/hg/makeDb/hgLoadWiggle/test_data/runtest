@@ -1,0 +1,14 @@
+#!/bin/sh
+
+TEST_PL=~/kent/src/utils/wigAsciiToBinary/test_data
+export TEST_PL
+
+hgsql -e "drop database wiggleTest;" test
+hgsql -e "create database wiggleTest;" test
+#       16570 data values, frequency of 4 - simple single base coverage
+#       of chrM, with test of -chrom option to set output file names
+rm -f chrM.ascii chr0.wib chrM.wib
+${TEST_PL}/testData.pl 16570 4 > chrM.ascii
+wigAsciiToBinary ${VERBOSE} chrM.ascii
+
+hgLoadWiggle -verbose -tab wiggleTest chrM chrM.wig
