@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.8 2004/01/07 20:57:57 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.9 2004/01/26 19:57:31 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -113,7 +113,8 @@ for (tf = tfList; tf != NULL; tf = tf->next)
 		    cgiDecode(note, note, strlen(note));
 		    }
 		}
-	    fprintf(f, "%s\t%s\t%s\n", id, tf->fields[2], note);
+	    if (!stringIn(";Note=", id))	/* Fix Mike's typo. */
+		fprintf(f, "%s\t%s\t%s\n", id, tf->fields[2], note);
 	    }
 	tf->fields[8] = id;
 	}
