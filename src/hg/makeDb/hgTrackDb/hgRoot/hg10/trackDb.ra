@@ -6,13 +6,3 @@ visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$
-
-track blatFish
-shortLabel Fugu Blat
-longLabel Takifugu rubripes Translated Blat Alignments
-priority 29
-visibility dense
-color 0,60,120
-altColor 200,220,255
-spectrum on
-type psl xeno
