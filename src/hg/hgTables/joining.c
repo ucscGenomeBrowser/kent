@@ -14,14 +14,14 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.25 2004/09/06 16:53:51 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.26 2004/09/07 05:02:41 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
     {
     struct joinedRow *next;
-    char **fields;	/* Fields user has requested. */
-    char **keys;	/* Fields to key from. */
+    struct slName **fields;	/* Fields user has requested. */
+    struct slName **keys;	/* Fields to key from. */
     };
 
 struct joinedTables
@@ -39,7 +39,7 @@ struct joinedTables
     struct dyString *filter;  /* Filter if any applied. */
     };
 
-void joinedTablesTabOut(struct joinedTables *joined)
+static void joinedTablesTabOut(struct joinedTables *joined)
 /* Write out fields. */
 {
 struct joinedRow *jr;
@@ -81,13 +81,22 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 	{
 	for (i=0; i<joined->fieldCount; ++i)
 	    {
-	    char *s;
+	    struct slName *s;
 	    if (i != 0)
 		hPrintf("\t");
 	    s = jr->fields[i];
 	    if (s == NULL)
-		s = "n/a";
-	    hPrintf("%s", s);
+	        hPrintf("n/a");
+	    else if (s->next == NULL)
+	        hPrintf("%s", s->name);
+	    else
+	        {
+		while (s != NULL)
+		    {
+		    hPrintf("%s,", s->name);
+		    s = s->next;
+		    }
+		}
 	    }
 	hPrintf("\n");
 	++outCount;
@@ -95,7 +104,7 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
     }
 }
 
-struct joinedTables *joinedTablesNew(int fieldCount, 
+static struct joinedTables *joinedTablesNew(int fieldCount, 
 	int keyCount, int maxRowCount)
 /* Make up new empty joinedTables. */
 {
@@ -110,7 +119,7 @@ jt->maxRowCount = maxRowCount;
 return jt;
 }
 
-void joinedTablesFree(struct joinedTables **pJt)
+static void joinedTablesFree(struct joinedTables **pJt)
 /* Free up joinable table and associated rows. */
 {
 struct joinedTables *jt = *pJt;
@@ -143,10 +152,10 @@ else
     lmAllocArray(lm, jr->fields, joined->fieldCount);
     lmAllocArray(lm, jr->keys, joined->keyCount);
     for (i=0; i<fieldCount; ++i)
-	jr->fields[i] = lmCloneString(lm, row[i]);
+	jr->fields[i] = lmSlName(lm, row[i]);
     row += fieldCount;
     for (i=0; i<keyCount; ++i)
-	jr->keys[i] = lmCloneString(lm, row[i]);
+	jr->keys[i] = lmSlName(lm, row[i]);
     slAddHead(&joined->rowList, jr);
     joined->rowCount += 1;
     return jr;
@@ -159,8 +168,9 @@ static void jrRowExpand(struct joinedTables *joined,
 /* Add some more to row. */
 {
 int i;
-char **keys = jr->keys + keyOffset;
-char **fields = jr->fields + fieldOffset;
+struct slName **keys = jr->keys + keyOffset;
+struct slName **fields = jr->fields + fieldOffset;
+struct slName *name, **pList;
 struct lm *lm = joined->lm;
 
 if (fieldCount + fieldOffset > joined->fieldCount)
@@ -169,22 +179,15 @@ if (keyCount + keyOffset > joined->keyCount)
     internalErr();
 for (i=0; i<fieldCount; ++i)
     {
-    if (fields[i] == NULL)
-        fields[i] = lmCloneString(lm, row[i]);
-    else
-        {
-	int oldLen = strlen(fields[i]);
-	int newLen = oldLen + strlen(row[i]) + 2;
-	char *newString = lmAlloc(lm, newLen);
-	strcpy(newString, fields[i]);
-	newString[oldLen] = ',';
-	strcpy(newString+oldLen+1, row[i]);
-	fields[i] = newString;
-	}
+    name = lmSlName(lm, row[i]);
+    slAddTail(&fields[i], name);
     }
 row += fieldCount;
 for (i=0; i<keyCount; ++i)
-    keys[i] = lmCloneString(lm, row[i]);
+    {
+    name = lmSlName(lm, row[i]);
+    slAddHead(&keys[i], name);
+    }
 }
 
 static char *chopKey(struct slName *prefixList, 
@@ -627,7 +630,7 @@ return -1;
 }
 
 struct hash *hashKeyField(struct joinedTables *joined, int keyIx,
-	struct slName *chopBefore, struct slName *chopAfter)
+	struct joinerField *jf)
 /* Make a hash based on key field. */
 {
 int hashSize = digitsBaseTwo(joined->rowCount);
@@ -639,11 +642,28 @@ if (hashSize > 20)
 hash = newHash(hashSize);
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
-    char *key = jr->keys[keyIx];
-    if (key != NULL)
+    struct slName *key;
+    for (key = jr->keys[keyIx]; key != NULL; key = key->next)
 	{
-	key = chopKey(chopBefore, chopAfter, jr->keys[keyIx]);
-	hashAdd(hash, key, jr);
+	if (jf->separator == NULL)
+	    {
+	    char *s = chopKey(jf->chopBefore, jf->chopAfter, key->name);
+	    hashAdd(hash, s, jr);
+	    }
+	else
+	    {
+	    char *s = key->name, *e;
+	    char sep = jf->separator[0];
+	    while (s != NULL && s[0] != 0)
+	        {
+		e = strchr(s, sep);
+		if (e != NULL)
+		    *e++ = 0;
+		s = chopKey(jf->chopBefore, jf->chopAfter, s);
+		hashAdd(hash, s, jr);
+		s = e;
+		}
+	    }
 	}
     }
 return hash;
@@ -748,8 +768,7 @@ for (route = routeList; route != NULL; route = route->next)
 	keyIx = findDtfIndex(joined->keyList, route->a);
 	if (keyIx < 0)
 	    internalErr();
-	keyHash = hashKeyField(joined, keyIx, 
-	    jfA->chopBefore, jfA->chopAfter);
+	keyHash = hashKeyField(joined, keyIx, jfA);
 	tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
 	    route->b->field, keyHash, 
 	    jfB->chopBefore, jfB->chopAfter, 
