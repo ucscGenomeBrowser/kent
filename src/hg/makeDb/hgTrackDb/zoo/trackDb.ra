@@ -323,3 +323,27 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno
+
+track mcs_u
+shortLabel MCS (Uniform)
+longLabel Uniform P-Value Based Approach
+priority 500
+visibility hide
+color 0,120,0
+type bed 3 .
+
+track mcs_b
+shortLabel MCS (Binomial)
+longLabel Binomial-based Conservation Score, threshold = 1.05
+priority 510
+visibility hide
+color 0,60,120
+type bed 3 .
+
+track dhs
+shortLabel DHS
+longLabel DNAase I hypersensitive sites
+priority 520
+visibility hide
+color 120,0,120
+type bed 3 .
