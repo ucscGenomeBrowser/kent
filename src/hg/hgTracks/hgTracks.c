@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.795 2004/09/02 20:54:52 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.796 2004/09/03 02:06:15 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -409,20 +409,32 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
+int maximumTrackHeight()
+/* Return the maximum track height allowed in pixels. */
+{
+return maxItemsInFullTrack * tl.fontHeight;
+}
+
 int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
 			       int lineHeight, int heightPer, boolean allowOverflow)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
 int rows;
-double maxHeight = maxItemsInFullTrack * tl.fontHeight;
+double maxHeight = maximumTrackHeight();
 int itemCount = slCount(tg->items);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
 
 /* Note that the maxCount variable passed to packCountRowsOverflow() 
    is tied to the maximum height allowed for a track and influences
-   decisions about when to squish, dense, or overflow a track. */
+   decisions about when to squish, dense, or overflow a track.
+
+   If doing overflow try to pack all the items into the maxHeight area
+   or put all the overflow into the last row. If not doing overflow
+   allow the track enough rows to go over the maxHeight (thus if the
+   spaceSaver fills up the total height will be more than maxHeight).
+*/
 switch (vis)
     {
     case tvFull:
@@ -466,8 +478,8 @@ return tgFixedTotalHeightOptionalOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight
 }
 
 int tgFixedTotalHeightUsingOverflow(struct track *tg, enum trackVisibility vis)
-/* Returns how much height this track will use, but ensures that the max
-   reported is never more than maxItemsInFullTrack * tl.fontHeight. */
+/* Returns how much height this track will use, tries to pack overflow into
+  last row to avoid being more than maximumTrackHeight(). */
 {
 int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
 return height;
@@ -522,7 +534,7 @@ if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
     int h;
-    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
+    int maxHeight = maximumTrackHeight();
     tg->limitedVisSet = TRUE;
     h = tg->totalHeight(tg, vis);
     if (h > maxHeight)
@@ -1525,7 +1537,7 @@ if (vis == tvPack || vis == tvSquish)
     struct spaceNode *sn;
     /* These variables keep track of state if there are
        too many items and there is going to be an overflow row. */
-    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
+    int maxHeight = maximumTrackHeight();
     int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
     int overflowCount = 0;
     boolean overflowDrawn = FALSE;
