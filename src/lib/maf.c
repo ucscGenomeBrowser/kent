@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "errabort.h"
 #include "obscure.h"
+#include "axt.h"
 #include "maf.h"
 
 struct mafFile *mafMayOpen(char *fileName)
