@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.60 2004/09/10 21:28:34 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.61 2004/09/11 03:29:36 kent Exp $";
 
 
 void usage()
@@ -529,6 +529,65 @@ if (track == NULL)
 return track;
 }
 
+static void addTablesAccordingToTrackType(struct slName **pList, 
+	struct hash *uniqHash, struct trackDb *track)
+/* Parse out track->type and if necessary add some tables from it. */
+{
+char *trackDupe = cloneString(track->type);
+if (trackDupe != NULL && trackDupe[0] != 0)
+    {
+    char *s = trackDupe;
+    char *type = nextWord(&s);
+    if (sameString(type, "wigMaf"))
+        {
+	char *wigTrack = trackDbSetting(track, "wiggle");
+	if (wigTrack != NULL) 
+	    {
+	    struct slName *name = slNameNew(wigTrack);
+	    slAddHead(pList, name);
+	    hashAdd(uniqHash, wigTrack, NULL);
+	    }
+	}
+    }
+freez(&trackDupe);
+}
+
+struct slName *tablesForTrack(struct trackDb *track)
+/* Return list of all tables associated with track. */
+{
+struct hash *uniqHash = newHash(8);
+struct slName *name, *nameList = NULL;
+struct joinerPair *jpList, *jp;
+
+hashAdd(uniqHash, track->tableName, NULL);
+jpList = joinerRelate(allJoiner, database, track->tableName);
+for (jp = jpList; jp != NULL; jp = jp->next)
+    {
+    struct joinerDtf *dtf = jp->b;
+    char buf[256];
+    char *s;
+    if (sameString(dtf->database, database))
+	s = dtf->table;
+    else
+	{
+	safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
+	s = buf;
+	}
+    if (!hashLookup(uniqHash, s))
+	{
+	hashAdd(uniqHash, s, NULL);
+	name = slNameNew(s);
+	slAddHead(&nameList, name);
+	}
+    }
+slNameSort(&nameList);
+name = slNameNew(track->tableName);
+slAddHead(&nameList, name);
+addTablesAccordingToTrackType(&nameList, uniqHash, track);
+hashFree(&uniqHash);
+return nameList;
+}
+
 char *findSelectedTable(struct trackDb *track, char *var)
 /* Find selected table.  Default to main track table if none
  * found. */
@@ -538,27 +597,11 @@ if (isCustomTrack(track->tableName))
 else
     {
     char *table = cartUsualString(cart, var, track->tableName);
-    struct joinerPair *jpList, *jp;
-    if (sameString(track->tableName, table))
-        return track->tableName;
-    jpList = joinerRelate(allJoiner, database, track->tableName);
-    for (jp = jpList; jp != NULL; jp = jp->next)
-        {
-	if (sameString(database, jp->b->database))
-	    {
-	    if (sameString(jp->b->table, table))
-	        return table;
-	    }
-	else
-	    {
-	    char buf[256];
-	    safef(buf, sizeof(buf), "%s.%s", jp->b->database, jp->b->table);
-	    if (sameString(buf, table))
-	        return table;
-	    }
-	}
+    struct slName *tableList = tablesForTrack(track);
+    if (slNameInList(tableList, table))
+        return table;
+    return tableList->name;
     }
-return track->tableName;
 }
 
 
@@ -781,9 +824,9 @@ else if (sameString(output, outGff))
 else if (sameString(output, outHyperlinks))
     doOutHyperlinks(table, conn);
 else if (sameString(output, outWigData))
-    doOutWigData(track, conn);
+    doOutWigData(track, table, conn);
 else if (sameString(output, outWigBed))
-    doOutWigBed(track, conn);
+    doOutWigBed(track, table, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }

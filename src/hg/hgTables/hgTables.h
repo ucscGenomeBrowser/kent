@@ -145,6 +145,9 @@ struct grp *makeGroupList(struct sqlConnection *conn,
 	struct trackDb *trackList);
 /* Get list of groups that actually have something in them. */
 
+struct slName *tablesForTrack(struct trackDb *track);
+/* Return list of all tables associated with track. */
+
 struct trackDb *findSelectedTrack(struct trackDb *trackList, 
 	struct grp *group, char *varName);
 /* Find selected track - from CGI variable if possible, else
@@ -436,10 +439,10 @@ struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
 	struct region *region, struct lm *lm);
 /*	return the wigAsciiData list	*/
 
-void doOutWigBed(struct trackDb *track, struct sqlConnection *conn);
+void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Return wiggle data in bed format. */
 
-void doOutWigData(struct trackDb *track, struct sqlConnection *conn);
+void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Return wiggle data in variableStep format. */
 
 void doSummaryStatsWiggle(struct sqlConnection *conn);

@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.33 2004/09/10 03:39:36 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.34 2004/09/11 03:29:37 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -213,45 +213,16 @@ return track;
 char *showTableField(struct trackDb *track)
 /* Show table control and label. */
 {
-struct joinerPair *jpList, *jp;
 struct slName *name, *nameList = NULL;
 char *selTable;
-struct hash *uniqHash = hashNew(8);
 
-/* Construct an alphabetical list of all joining tables, with
- * the track name on top. */
-    {
-    hashAdd(uniqHash, track->tableName, NULL);
-    jpList = joinerRelate(allJoiner, database, track->tableName);
-    for (jp = jpList; jp != NULL; jp = jp->next)
-	{
-	struct joinerDtf *dtf = jp->b;
-	char buf[256];
-	char *s;
-	if (sameString(dtf->database, database))
-	    s = dtf->table;
-	else
-	    {
-	    safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
-	    s = buf;
-	    }
-	if (!hashLookup(uniqHash, s))
-	    {
-	    hashAdd(uniqHash, s, NULL);
-	    name = slNameNew(s);
-	    slAddHead(&nameList, name);
-	    }
-	}
-    slNameSort(&nameList);
-    name = slNameNew(track->tableName);
-    slAddHead(&nameList, name);
-    }
+nameList = tablesForTrack(track);
 
 /* Get currently selected table.  If it isn't in our list
- * then revert to default. */
+ * then revert to first in list. */
 selTable = cartUsualString(cart, hgtaTable, track->tableName);
-if (!hashLookup(uniqHash, selTable))
-    selTable = track->tableName;
+if (!slNameInList(nameList, selTable))
+    selTable = nameList->name;
 
 /* Print out label and drop-down list. */
 hPrintf("<B>table:</B>");

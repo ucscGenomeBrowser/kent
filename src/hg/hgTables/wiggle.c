@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.17 2004/09/10 21:16:59 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.18 2004/09/11 03:29:37 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -306,7 +306,7 @@ freeMem(maxOutput);
 return maxOut;
 }
 
-static void doOutWig(struct trackDb *track, struct sqlConnection *conn,
+static void doOutWig(struct trackDb *track, char *table, struct sqlConnection *conn,
 	enum wigOutputType wigOutType)
 {
 struct region *regionList = getRegions(), *region;
@@ -320,7 +320,7 @@ wigDataHeader(track->shortLabel, track->longLabel, NULL, wigOutType);
 
 for (region = regionList; region != NULL; region = region->next)
     {
-    outCount = wigOutRegion(track->tableName, conn, region, maxOut - curOut,
+    outCount = wigOutRegion(table, conn, region, maxOut - curOut,
 	wigOutType, NULL);
     curOut += outCount;
     if (curOut >= maxOut)
@@ -466,23 +466,23 @@ outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data);
 return data;
 }
 
-void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
+void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn)
 /* Return wiggle data in variableStep format. */
 {
-doOutWig(track, conn, wigOutData);
+doOutWig(track, table, conn, wigOutData);
 }
 
-void doOutWigBed(struct trackDb *track, struct sqlConnection *conn)
+void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn)
 /* Return wiggle data in bed format. */
 {
-doOutWig(track, conn, wigOutBed);
+doOutWig(track, table, conn, wigOutBed);
 }
 
 void doSummaryStatsWiggle(struct sqlConnection *conn)
 /* Put up page showing summary stats for wiggle track. */
 {
 struct trackDb *track = curTrack;
-char *table = track->tableName;
+char *table = curTable;
 struct region *region, *regionList = getRegionsWithChromEnds();
 char *regionName = getRegionName();
 long long regionSize = basesInRegion(regionList);
