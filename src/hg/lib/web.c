@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.64 2004/12/15 00:36:26 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.65 2004/12/15 17:20:16 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -374,6 +374,8 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char *clades[128];
 char *labels[128];
+char *defaultClade = hClade(genome);
+char *defaultLabel = NULL;
 int numClades = 0;
 
 sr = sqlGetResult(conn, "select name, label from clade order by priority");
@@ -381,13 +383,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
     labels[numClades] = cloneString(row[1]);
+    if (sameWord(defaultClade, clades[numClades]))
+	defaultLabel = labels[numClades];
     numClades++;
     if (numClades >= ArraySize(clades))
 	internalErr();
     }
 
 cgiMakeDropListFull(cladeCgiName, labels, clades, numClades, 
-		    hClade(genome), onChangeText);
+		    defaultLabel, onChangeText);
 }
 
 void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
