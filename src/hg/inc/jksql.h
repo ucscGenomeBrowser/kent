@@ -298,6 +298,9 @@ char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
 int sqlTableUpdateTime(struct sqlConnection *conn, char *table);
 /* Get last update time for table (in Unix terms). */
 
+char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table);
+/* Get primary key if any for table, return NULL if none. */
+
 char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName);
 /* Get the definitions of a enum column in a table, returning a
  * null-terminated array of enum values.  Free array when finished.  */
