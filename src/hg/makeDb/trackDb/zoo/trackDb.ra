@@ -530,7 +530,7 @@ group regulation
 priority 52
 visibility hide
 color 12,12,120
-type bed 6
+type bed 6 .
 
 track transfacRatios
 shortLabel Transfac LikeRatios
@@ -539,7 +539,7 @@ group regulation
 priority 53
 visibility hide
 color 12,12,120
-type bed 6
+type bed 6 .
 
 track transfacRatios2
 shortLabel Transfac LikeRatios2
@@ -548,7 +548,7 @@ group regulation
 priority 54
 visibility hide
 color 12,12,120
-type bed 6
+type bed 6 .
 
 track spliceSitesPValues
 shortLabel Splice Sites PValues
@@ -557,7 +557,7 @@ group regulation
 priority 55
 visibility hide
 color 12,12,120
-type bed 6
+type bed 6 .
 
 track spliceSitesRatios
 shortLabel Splice Sites Ratios
@@ -566,7 +566,7 @@ group regulation
 priority 56
 visibility hide
 color 12,12,120
-type bed 6
+type bed 6 .
 
 track rmsk
 shortLabel RepeatMasker

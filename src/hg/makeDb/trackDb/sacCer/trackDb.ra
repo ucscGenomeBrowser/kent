@@ -5,7 +5,7 @@ longLabel Washington University Clones
 group map
 visibility hide
 altColor 180,180,180 
-type bed 4+
+type bed 4 +
 url  http://www.atcc.org/SearchCatalogs/AtccNumber.cfm
 
 track sgdGene

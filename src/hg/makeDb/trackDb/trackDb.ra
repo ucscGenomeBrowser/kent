@@ -228,7 +228,7 @@ visibility hide
 spectrum on
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track celeraCoverage
 shortLabel WSSD Coverage
@@ -514,7 +514,7 @@ group genes
 priority 51
 visibility hide
 color 180,90,0
-type bed 6
+type bed 6 .
 chromosomes chr22,
 
 track rnaGene
@@ -628,7 +628,7 @@ group rna
 priority 66
 visibility hide
 color 170,128,128
-type bed 3
+type bed 3 .
 
 track anyMrnaCov
 shortLabel mRNA/Pseud
@@ -637,7 +637,7 @@ group rna
 priority 67
 visibility hide
 color 170,128,128
-type bed 3
+type bed 3 .
 
 track tigrGeneIndex
 shortLabel TIGR Gene Index
@@ -656,7 +656,7 @@ group rna
 priority 69
 visibility hide
 spectrum on
-type bed 12 
+type bed 12 .
 
 track orthoIntrons
 shortLabel orthoIntrons
@@ -665,7 +665,7 @@ group rna
 color 107,74,34,
 priority 72.2
 visibility hide
-type bed 12
+type bed 12 .
 
 track uniGene
 shortLabel UniGene
@@ -682,7 +682,7 @@ group rna
 priority 71
 visibility hide
 color 200,0,50
-type bed 12
+type bed 12 .
 
 track genieBounds
 shortLabel Clone Bounds 
@@ -691,7 +691,7 @@ group rna
 priority 72
 visibility hide
 color 178,34,34
-type bed 9
+type bed 9 .
 
 track agxMapped
 shortLabel agxMapped
@@ -700,7 +700,7 @@ group rna
 color 153,26,42,
 priority 72.1
 visibility hide
-type bed 12
+type bed 12 .
 
 track altGraph
 shortLabel AltGraph
@@ -718,7 +718,7 @@ priority 63
 visibility hide
 useScore 1
 color 255,64,64
-type bed 8
+type bed 8 .
 url http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$
 urlLabel miRNA Registry: 
 
@@ -759,7 +759,7 @@ group regulation
 priority 90.1
 visibility hide
 spectrum on
-type bed 6
+type bed 6 .
 scoreMin 500
 scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
@@ -780,7 +780,7 @@ group regulation
 priority 91
 visibility hide
 spectrum on
-type bed 6
+type bed 6 .
 
 track eponine
 shortLabel Eponine TSS
@@ -798,7 +798,7 @@ group regulation
 priority 92
 visibility hide
 spectrum on
-type bed 6
+type bed 6 .
 
 track esRegGeneToMotif
 shortLabel Regulatory Module 
@@ -817,7 +817,7 @@ group regulation
 priority 94
 visibility hide
 spectrum on
-type bed 6
+type bed 6 .
 
 track transfac
 shortLabel Transfac Hits
@@ -835,7 +835,7 @@ group regulation
 priority 96
 visibility hide
 color 12,12,120
-type bed 6
+type bed 6 .
 
 track psuReg
 shortLabel Known Regulatory 
@@ -994,7 +994,7 @@ priority 137
 visibility hide
 color 120,70,30
 altColor 0,0,0
-type bed 4+
+type bed 4 +
 
 shortLabel Rat Synteny
 longLabel Human/Rat Synteny Using Blastz Single Coverage (100,000 base window)
@@ -1013,7 +1013,7 @@ priority 139
 visibility hide
 color 120,70,30
 altColor 0,0,0
-type bed 6+
+type bed 6 +
 
 track syntenyRat
 shortLabel Rat Synteny
@@ -1069,7 +1069,7 @@ longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
 priority 146
 visibility hide
-type bed 6 
+type bed 6 .
 
 track lineageMutations
 shortLabel LineageMutations
@@ -1147,7 +1147,7 @@ group x
 priority 151
 visibility hide
 chromosomes chr22,
-type bed 6
+type bed 6 .
 
 track exoMouse
 shortLabel Exonerate Mouse
@@ -1169,7 +1169,7 @@ visibility hide
 spectrum on
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track mouseOrtho
 shortLabel Mouse Ortholog
@@ -1179,7 +1179,7 @@ priority 157
 visibility hide
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track mouseOrthoSeed
 shortLabel Tight Ortholog
@@ -1190,7 +1190,7 @@ visibility hide
 spectrum on
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track ancientR
 shortLabel Ancient Repeats
@@ -1199,7 +1199,7 @@ group x
 priority 163
 visibility hide
 spectrum on
-type bed 12
+type bed 12 .
 
 track quality
 shortLabel Quality Scores

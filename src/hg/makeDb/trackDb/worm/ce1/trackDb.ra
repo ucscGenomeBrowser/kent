@@ -173,7 +173,7 @@ longLabel Alternative Splicing
 group rna
 priority 74.1
 visibility hide
-type bed 3
+type bed 3 .
 
 track gc5Base
 shortLabel GC % 5 base
@@ -199,7 +199,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gcatg_bedM
 shortLabel GCATG Minus
@@ -209,7 +209,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gtgtgt_bedP
 shortLabel GTGTGT Plus
@@ -219,7 +219,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gtgtgt_bedM
 shortLabel GTGTGT Minus
@@ -229,7 +229,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gtgttg_bedP
 shortLabel GTGTTG Plus
@@ -239,7 +239,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gtgttg_bedM
 shortLabel GTGTTG Minus
@@ -249,7 +249,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gttgtg_bedP
 shortLabel GTTGTG Plus
@@ -259,7 +259,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track gttgtg_bedM
 shortLabel GTTGTG Minus
@@ -269,7 +269,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track tgtgtg_bedP
 shortLabel TGTGTG Plus
@@ -279,7 +279,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track tgtgtg_bedM
 shortLabel TGTGTG Minus
@@ -289,7 +289,7 @@ priority 23.9
 visibility hide
 color 0,0,0
 altColor 255,128,128
-type bed 6
+type bed 6 .
 
 track altSites
 shortLabel altSpliceSites

@@ -244,7 +244,7 @@ longLabel Phylo-HMM-based conservation, Leptin, 90 percent
 group compGeno
 priority 150.1
 visibility pack
-type bed 3
+type bed 3 .
 
 track NIAGene
 shortLabel NIA Gene Index

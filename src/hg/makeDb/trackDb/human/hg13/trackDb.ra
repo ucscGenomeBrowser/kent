@@ -68,7 +68,7 @@ visibility hide
 color 30,130,210
 altColor 200,220,255
 spectrum on
-type bed 5 
+type bed 5 .
 
 track slamNonCodingRat
 shortLabel Slam Non-Coding Rat
@@ -79,7 +79,7 @@ visibility hide
 color 30,130,210
 altColor 200,220,255
 spectrum on
-type bed 5
+type bed 5 .
 
 track humMusL
 shortLabel Mouse Cons
@@ -298,7 +298,7 @@ group rna
 priority 69
 visibility hide
 spectrum on
-type bed 12 
+type bed 12 .
 
 track blatChimp
 shortLabel Chimp Blat

@@ -50,7 +50,7 @@ group rna
 priority 69
 visibility hide
 spectrum on
-type bed 12 
+type bed 12 .
 
 track tfbsCons
 shortLabel TFBS Conserved
@@ -58,7 +58,7 @@ longLabel HMR Conserved Transcription Factor Binding Sites
 priority 94
 group regulation
 visibility hide
-type bed 6+
+type bed 6 +
 spectrum on
 scoreMin 830
 scoreMax 1000
@@ -85,7 +85,7 @@ visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
-type bed 12
+type bed 12 .
 
 track blastzMm3
 shortLabel Mm3 Blastz
@@ -481,7 +481,7 @@ priority 180
 visibility hide
 color 120,70,30
 altColor 0,0,0
-type bed 4+
+type bed 4 +
 
 track mouseSynWhd
 shortLabel Mouse Synteny
@@ -491,7 +491,7 @@ priority 181
 visibility hide
 color 120,70,30
 altColor 0,0,0
-type bed 6+
+type bed 6 +
 
 track syntenyRat
 shortLabel Rat Synteny
@@ -677,7 +677,7 @@ group x
 priority 151
 visibility hide
 chromosomes chr22,
-type bed 6
+type bed 6 .
 
 track mouseOrtho
 shortLabel Mouse Ortholog
@@ -688,7 +688,7 @@ visibility hide
 spectrum on
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track mouseOrtho
 shortLabel Mouse Ortholog
@@ -698,7 +698,7 @@ priority 157
 visibility hide
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track mouseOrthoSeed
 shortLabel Tight Ortholog
@@ -709,7 +709,7 @@ visibility hide
 spectrum on
 color 0,100,0
 altColor 255,240,200
-type bed 5+
+type bed 5 +
 
 track ancientR
 shortLabel Ancient Repeats
@@ -718,7 +718,7 @@ group x
 priority 163
 visibility hide
 spectrum on
-type bed 12
+type bed 12 .
 
 track twinscanMgc
 shortLabel TwinScan MGC
@@ -1042,7 +1042,7 @@ longLabel Top 5 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
 priority 100.1
 group compGeno
 visibility hide
-type bed 5
+type bed 5 .
 
 track cns
 shortLabel CNS
@@ -1050,7 +1050,7 @@ longLabel Conserved non-coding (Cons elements minus predicted coding)
 priority 100.12
 group compGeno
 visibility hide
-type bed 4
+type bed 4 .
 
 track pHMM_3_WayTop5
 shortLabel Thresholded 3-Way Cons
@@ -1058,7 +1058,7 @@ longLabel Top 5 % of Human/Mouse/Rat PhyloHMM Cons
 priority 100.2
 group compGeno
 visibility hide
-type bed 5
+type bed 5 .
 
 track leptin
 shortLabel Leptin TBA
@@ -1090,7 +1090,7 @@ group compGeno
 priority 113.1
 visibility hide
 chromosomes chr7,
-type bed 3
+type bed 3 .
 
 track transcriptomeJurkat
 shortLabel Jurkat
@@ -1392,7 +1392,7 @@ visibility hide
 color 0,60,120
 altColor 255,220,100
 spectrum on
-type bed 6
+type bed 6 .
 
 track HInvGeneMrna
 shortLabel H-Inv
@@ -1409,7 +1409,7 @@ longLabel Top 1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
 priority 160
 group x
 visibility hide
-type bed 5
+type bed 5 .
 
 track pHMM_5_WayTop01
 shortLabel 0.1% Conserved
@@ -1417,7 +1417,7 @@ longLabel Top 0.1 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
 priority 160
 group x
 visibility hide
-type bed 5
+type bed 5 .
 
 track chainFr1Ex
 shortLabel chainFr1Ex
@@ -1518,7 +1518,7 @@ group x
 priority 161
 visibility hide
 color 20,0,50
-type bed 4
+type bed 4 .
 
 track encode_Stanford_Promoters
 shortLabel Promoter/Stanford
@@ -1542,7 +1542,7 @@ priority 25.1
 color 0,0,255
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 4
+type bed 4 .
 
 track encode_UCSD_ChIP_RNAP_HELA
 shortLabel ChIP/LI Pol2 HeLa
@@ -1683,7 +1683,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 color 10,10,130
 altColor 50,50,50
-type bed 3
+type bed 3 .
 
 track encodeAffyChIpRnapHl60SitesHr0
 subTrack encodeAffyChIpRnapHl60Sites
@@ -1750,7 +1750,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 color 130,10,10
 altColor 50,50,50
-type bed 3
+type bed 3 .
 
 track encodeAffyRnaHl60SitesHr0
 subTrack encodeAffyRnaHl60Sites
@@ -1780,7 +1780,7 @@ priority 50.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 60,75,60
-type bed 3
+type bed 3 .
 
 track encode_UVA_DNARep_2_4
 shortLabel DNA Rep/UVA 2-4hr
@@ -1790,7 +1790,7 @@ priority 50.2
 color 45,80,45
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 3
+type bed 3 .
 
 track encode_UVA_DNARep_4_6
 shortLabel DNA Rep/UVA 4-6hr
@@ -1800,7 +1800,7 @@ priority 50.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 30,90,30
-type bed 3
+type bed 3 .
 
 track encode_UVA_DNARep_6_8
 shortLabel DNA Rep/UVA 6-8hr
@@ -1810,7 +1810,7 @@ priority 50.4
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 20,110,20
-type bed 3
+type bed 3 .
 
 track encode_UVA_DNARep_8_10
 shortLabel DNA Rep/UVA 8-10hr
@@ -1820,7 +1820,7 @@ priority 50.5
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 10,130,10
-type bed 3
+type bed 3 .
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed

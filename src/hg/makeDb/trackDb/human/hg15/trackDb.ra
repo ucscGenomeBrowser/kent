@@ -62,7 +62,7 @@ longLabel HMR Conserved Transcription Factor Binding Sites
 priority 94
 group regulation
 visibility hide
-type bed 6+
+type bed 6 +
 spectrum on
 scoreMin 830
 scoreMax 1000
@@ -295,7 +295,7 @@ group varRep
 priority 147.1
 visibility hide
 spectrum on
-type bed 6
+type bed 6 .
 
 track blastzSelf
 shortLabel Blastz Self
@@ -350,7 +350,7 @@ group rna
 priority 69
 visibility hide
 spectrum on
-type bed 12 
+type bed 12 .
 
 track blastzCe1
 shortLabel Worm Blastz
@@ -452,5 +452,5 @@ longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
 priority 146
 visibility hide
-type bed 6 
+type bed 6 .
 

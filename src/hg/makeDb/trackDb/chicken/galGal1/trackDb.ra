@@ -66,7 +66,7 @@ group map
 priority 9
 visibility hide
 color 150,0,0
-type bed 6
+type bed 6 .
 
 track blatFr1
 shortLabel Fugu Blat

@@ -5,7 +5,7 @@ group map
 priority 9
 visibility hide
 color 150,0,0
-type bed 6
+type bed 6 .
 
 track gold
 shortLabel Assembly 
@@ -234,7 +234,7 @@ priority 130
 visibility hide
 color 0,60,120
 altColor 255,220,100
-type bed 4
+type bed 4 .
 
 track unAnnotated
 shortLabel unAnnotated
@@ -244,7 +244,7 @@ priority 129.5
 visibility hide
 color 20,0,50
 spectrum on
-type bed 4
+type bed 4 .
 
 track zdobnovHg16
 shortLabel Z Synt Human
@@ -279,7 +279,7 @@ longLabel Exon-anchored 5-way-symm. Human orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.4
 visibility hide
-type bed 6
+type bed 6 .
 otherDb hg16
 exonArrows on
 
@@ -289,7 +289,7 @@ longLabel Exon-anchored 5-way-symm. Chimp orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.5
 visibility hide
-type bed 6
+type bed 6 .
 otherDb panTro1
 exonArrows on
 
@@ -299,7 +299,7 @@ longLabel Exon-anchored 5-way-symm. Mouse orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.6
 visibility hide
-type bed 6
+type bed 6 .
 otherDb mm3
 exonArrows on
 
@@ -309,7 +309,7 @@ longLabel Exon-anchored 5-way-symm. Rat orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.7
 visibility hide
-type bed 6
+type bed 6 .
 otherDb rn3
 exonArrows on
 
@@ -331,7 +331,7 @@ priority 23.6
 visibility hide
 color 0,0,255
 useScore 1
-type bed 5
+type bed 5 .
 
 track contamination
 shortLabel Contamination

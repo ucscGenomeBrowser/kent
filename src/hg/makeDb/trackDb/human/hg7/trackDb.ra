@@ -90,7 +90,7 @@ group regulation
 priority 83.5
 visibility dense
 color 0,0,255
-type bed 8
+type bed 8 .
       
 track affyTranscriptome 
 shortLabel Transcriptome
