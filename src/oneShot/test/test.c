@@ -36,11 +36,11 @@ void test(char *fileName)
 {
 struct mafFile *mf = mafOpen(fileName);
 struct mafAli *maf;
+int i;
 while ((maf = mafNext(mf)) != NULL)
     {
-    printf("%6d %8.1f %8.1f %8.1f %8.1f\n", maf->textSize, maf->score, mafScoreMultiz(maf),
-        mafScoreParts(maf, 1),  mafScoreParts(maf, 10));
-    mafAliFree(&maf);
+    for (i=0; i<maf->textSize; ++i)
+	printf("%f\n", mafScoreRangeMultiz(maf, i, 1));
     }
 mafFileFree(&mf);
 }
