@@ -13,14 +13,16 @@ unsigned sqlUnsigned(char *s)
  * space or stop except at the null byte.) */
 {
 unsigned res = 0;
+char *p = s;
 char c;
 
-res = *s - '0';
-while ((c = *(++s)) != 0)
+while (((c = *(p++)) >= '0') && (c <= '9'))
     {
     res *= 10;
     res += c - '0';
     }
+if (c != '\0')
+    errAbort("invalid unsigned number: \"%s\"", s);
 return res;
 }
 
@@ -29,23 +31,22 @@ int sqlSigned(char *s)
  * all of string is number. */
 {
 int res = 0;
-boolean neg = FALSE;
+char *p = s;
 char c;
 
-if ((c = *s) == '-')
-    {
-    neg = TRUE;
-    c = *(++s);
-    }
-res = c - '0';
-while ((c = *(++s)) != 0)
+if (*p == '-')
+    p++;
+while (((c = *(p++)) >= '0') && (c <= '9'))
     {
     res *= 10;
     res += c - '0';
     }
-if (neg)
-    res = -res;
-return res;
+if (c != '\0')
+    errAbort("invalid signed number: \"%s\"", s);
+if (*s == '-')
+    return -res;
+else
+    return res;
 }
 
 off_t sqlOffset(char *s)
@@ -53,22 +54,20 @@ off_t sqlOffset(char *s)
  * number. */
 {
 off_t res = 0;
-boolean neg = FALSE;
+char *p = s;
 char c;
 
-if ((c = *s) == '-')
-    {
-    neg = TRUE;
-    c = *(++s);
-    }
-res = c - '0';
-while ((c = *(++s)) != 0)
+if (*p == '-')
+    p++;
+while (((c = *(p++)) >= '0') && (c <= '9'))
     {
     res *= 10;
     res += c - '0';
     }
-if (neg)
-    res = -res;
-return res;
+if (c != '\0')
+    errAbort("invalid signed number: \"%s\"", s);
+if (*s == '-')
+    return -res;
+else
+    return res;
 }
-
