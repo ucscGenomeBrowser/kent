@@ -39,14 +39,14 @@ struct chainNet
 struct fill
 /* Filling sequence or a gap. */
     {
-    /* Required fields */
+	/* Required fields */
     struct fill *next;	   /* Next in list. */
     int tStart, tSize;	   /* Range in target chromosome. */
     char *qName;	   /* Other chromosome (not allocated here) */
     char qStrand;	   /* Orientation + or - in other chrom. */
     int qStart,	qSize;	   /* Range in query chromosome. */
     struct fill *children; /* List of child gaps. */
-    /* Optional fields. */
+	/* Optional fields. */
     int chainId;	   /* Chain id.  0 for a gap. */
     int tN;	   /* Count of N's in target chromosome or -1 */
     int qN;	   /* Count of N's in query chromosome or -1 */
@@ -54,6 +54,8 @@ struct fill
     int qR;	   /* Count of repeats in query chromosome or -1 */
     int tNewR;	   /* Count of new (lineage specific) repeats in target */
     int qNewR;	   /* Count of new (lineage specific) repeats in query */
+    int tOldR;	   /* Count of ancient repeats (pre-split) in target */
+    int qOldR;	   /* Count of ancient repeats (pre-split) in query */
     };
 
 struct fill *fillNew()
@@ -61,7 +63,8 @@ struct fill *fillNew()
 {
 struct fill *fill;
 AllocVar(fill);
-fill->tN = fill->qN = fill->tR = fill->qR = fill->tNewR = fill->qNewR = -1;
+fill->tN = fill->qN = fill->tR = fill->qR = 
+	fill->tNewR = fill->qNewR = fill->tOldR = fill->tNewR = -1;
 return fill;
 }
 
@@ -177,6 +180,10 @@ for (;;)
 	        fill->tNewR = val;
 	    else if (sameString(name, "qNewR"))
 	        fill->qNewR = val;
+	    else if (sameString(name, "tOldR"))
+	        fill->tOldR = val;
+	    else if (sameString(name, "qOldR"))
+	        fill->qOldR = val;
 	    }
 	}
     }
@@ -208,6 +215,10 @@ for (fill = fillList; fill != NULL; fill = fill->next)
         fprintf(f, " tNewR %d", fill->tNewR);
     if (fill->qNewR >= 0)
         fprintf(f, " qNewR %d", fill->qNewR);
+    if (fill->tOldR >= 0)
+        fprintf(f, " tOldR %d", fill->tOldR);
+    if (fill->qOldR >= 0)
+        fprintf(f, " qOldR %d", fill->qOldR);
     fputc('\n', f);
     if (fill->children)
         rChromNetWrite(fill->children, f, depth+1);
@@ -266,6 +277,7 @@ struct chrom
     struct rbTree *nGaps; /* Gaps in sequence (Ns) */
     struct rbTree *repeats; /* Repeats in sequence */
     struct rbTree *newRepeats; /* New (lineage specific) repeats. */
+    struct rbTree *oldRepeats; /* Old (pre-split) repeats. */
     };
 
 struct range
@@ -334,32 +346,44 @@ sqlDisconnect(&conn);
 return tree;
 }
 
-struct rbTree *getRepeats(char *db, char *chrom)
+void getRepeats(char *db, struct hash *arHash, char *chrom,
+	struct rbTree **retAllRepeats,  struct rbTree **retNewRepeats)
 /* Return a tree of ranges for sequence gaps in chromosome */
 {
 struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
-struct rbTree *tree = rbTreeNew(rangeCmp);
+struct rbTree *allTree = rbTreeNew(rangeCmp);
+struct rbTree *newTree = rbTreeNew(rangeCmp);
 char tableName[64];
 char query[256];
 boolean hasBin;
 
 if (!hFindSplitTable(chrom, "rmsk", tableName, &hasBin))
     errAbort("Can't find rmsk table for %s\n", chrom);
-sprintf(query, "select genoStart,genoEnd from %s", tableName);
+sprintf(query, "select genoStart,genoEnd,repName,repClass,repFamily from %s", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct range *range;
-    lmAllocVar(tree->lm, range);
+    char arKey[512];
+    lmAllocVar(allTree->lm, range);
     range->start = sqlUnsigned(row[0]);
     range->end = sqlUnsigned(row[1]);
-    rbTreeAdd(tree, range);
+    rbTreeAdd(allTree, range);
+    sprintf(arKey, "%s.%s.%s", row[2], row[3], row[4]);
+    if (hashLookup(arHash, arKey))
+        {
+	lmAllocVar(newTree->lm, range);
+	range->start = sqlUnsigned(row[0]);
+	range->end = sqlUnsigned(row[1]);
+	rbTreeAdd(newTree, range);
+	}
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
-return tree;
+*retAllRepeats = allTree;
+*retNewRepeats = newTree;
 }
 
 struct rbTree *getNewRepeats(char *dirName, char *chrom)
@@ -387,6 +411,43 @@ lineFileClose(&lf);
 return tree;
 }
 
+boolean tableExists(char *db, char *table)
+/* Return TRUE if table exists in database. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+boolean exists = sqlTableExists(conn, table);
+sqlDisconnect(&conn);
+return exists;
+}
+
+struct hash *getAncientRepeats(char *tDb, char *qDb)
+/* Get hash of ancient repeats.  This keyed by name.family.class. */
+{
+char *db = NULL;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+char key[512];
+struct hash *hash = newHash(10);
+
+if (tableExists(tDb, "ancientRepeat"))
+    db = tDb;
+else if (tableExists(qDb, "ancientRepeat"))
+    db = qDb;
+else
+    errAbort("Can't find ancientRepeat table in %s or %s", tDb, qDb);
+conn = sqlConnect(db);
+sr = sqlGetResult(conn, "select name,family,class from ancientRepeat");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sprintf(key, "%s.%s.%s", row[0], row[1], row[2]);
+    hashAdd(hash, key, NULL);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return hash;
+}
+
 void getChroms(char *db, struct hash **retHash, struct chrom **retList)
 /* Get hash of chromosomes from database. */
 {
@@ -411,7 +472,7 @@ slReverse(&chromList);
 *retList = chromList;
 }
 
-void addTn(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddN(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
 /* Add tN's to all gaps underneath fillList. */
 {
 struct fill *fill;
@@ -420,11 +481,11 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     int s = fill->tStart;
     fill->tN = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
-	addTn(net, fill->children, tree);
+	tAddN(net, fill->children, tree);
     }
 }
 
-void addQn(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddN(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
 /* Add qN's to all gaps underneath fillList. */
 {
 struct fill *fill;
@@ -435,11 +496,11 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     int s = fill->qStart;
     fill->qN = intersectionSize(tree, s, s + fill->qSize);
     if (fill->children)
-	addQn(net, fill->children, qChromHash);
+	qAddN(net, fill->children, qChromHash);
     }
 }
 
-void addTr(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+void tAddR(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
 /* Add t repeats's to all things underneath fillList. */
 {
 struct fill *fill;
@@ -448,11 +509,11 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     int s = fill->tStart;
     fill->tR = intersectionSize(tree, s, s + fill->tSize);
     if (fill->children)
-	addTr(net, fill->children, tree);
+	tAddR(net, fill->children, tree);
     }
 }
 
-void addQr(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+void qAddR(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
 /* Add q repeats to all things underneath fillList. */
 {
 struct fill *fill;
@@ -462,7 +523,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     int s = fill->qStart;
     fill->qR = intersectionSize(qChrom->repeats, s, s + fill->qSize);
     if (fill->children)
-	addQr(net, fill->children, qChromHash);
+	qAddR(net, fill->children, qChromHash);
     }
 }
 
@@ -493,6 +554,33 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
+void tAddOldR(struct chainNet *net, struct fill *fillList, struct rbTree *tree)
+/* Add t new repeats's to all things underneath fillList. */
+{
+struct fill *fill;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    int s = fill->tStart;
+    fill->tOldR = intersectionSize(tree, s, s + fill->tSize);
+    if (fill->children)
+	tAddOldR(net, fill->children, tree);
+    }
+}
+
+void qAddOldR(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+/* Add q new repeats to all things underneath fillList. */
+{
+struct fill *fill;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
+    int s = fill->qStart;
+    fill->qOldR = intersectionSize(qChrom->oldRepeats, s, s + fill->qSize);
+    if (fill->children)
+	qAddOldR(net, fill->children, qChromHash);
+    }
+}
+
 
 
 void netClass(char *inName, char *tDb, char *qDb, char *outName)
@@ -503,6 +591,7 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct chrom *qChromList, *chrom;
 struct hash *qChromHash;
+struct hash *arHash = getAncientRepeats(tDb, qDb);
 
 getChroms(qDb, &qChromHash, &qChromList);
 
@@ -511,7 +600,7 @@ for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
     chrom->nGaps = getSeqGaps(qDb, chrom->name);
 printf("Reading repeats in %s\n", qDb);
 for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
-    chrom->repeats = getRepeats(qDb, chrom->name);
+    getRepeats(qDb, arHash, chrom->name, &chrom->repeats, &chrom->oldRepeats);
 if (qNewR)
     {
     printf("Reading new repeats from %s\n", qNewR);
@@ -522,17 +611,21 @@ if (qNewR)
 
 while ((net = chromNetRead(lf)) != NULL)
     {
-    struct rbTree *tnTree, *trTree;
-    printf("Processing %s.%s\n", tDb, net->name);
-    tnTree = getSeqGaps(tDb, net->name);
-    addTn(net, net->fillList, tnTree);
-    rbTreeFree(&tnTree);
-    addQn(net, net->fillList, qChromHash);
+    struct rbTree *tN, *tRepeats, *tOldRepeats;
 
-    trTree = getRepeats(tDb, net->name);
-    addTr(net, net->fillList, trTree);
-    rbTreeFree(&trTree);
-    addQr(net, net->fillList, qChromHash);
+    printf("Processing %s.%s\n", tDb, net->name);
+    tN = getSeqGaps(tDb, net->name);
+    tAddN(net, net->fillList, tN);
+    rbTreeFree(&tN);
+    qAddN(net, net->fillList, qChromHash);
+
+    getRepeats(tDb, arHash, net->name, &tRepeats, &tOldRepeats);
+    tAddR(net, net->fillList, tRepeats);
+    tAddOldR(net, net->fillList, tOldRepeats);
+    rbTreeFree(&tRepeats);
+    rbTreeFree(&tOldRepeats);
+    qAddR(net, net->fillList, qChromHash);
+    qAddOldR(net, net->fillList, qChromHash);
 
     if (tNewR)
         {
