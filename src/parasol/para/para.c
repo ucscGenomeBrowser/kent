@@ -271,6 +271,31 @@ if (!fi->reported)
 return 0;
 }
 
+void occassionalDot()
+/* Write out a dot every ten times this is called. */
+{
+static int dotMod = 10;
+static int dot = 10;
+if (--dot <= 0)
+    {
+    putc('.', stdout);
+    fflush(stdout);
+    dot = dotMod;
+    }
+}
+
+void occassionalSleep()
+/* Sleep every 1000 times this is called. */
+{
+static int dotMod = 600;
+static int dot = 600;
+if (--dot <= 0)
+    {
+    sleep(1);
+    dot = dotMod;
+    }
+}
+
 
 int checkOneJob(struct job *job, char *when, struct hash *hash)
 /* Perform checks on one job if checks not already in hash. 
@@ -278,20 +303,13 @@ int checkOneJob(struct job *job, char *when, struct hash *hash)
 {
 int errCount = 0;
 struct check *check;
-static int dotMod = 10;
-static int dot = 10;
 
 for (check = job->checkList; check != NULL; check = check->next)
     {
     if (sameWord(when, check->when))
 	{
 	errCount += doOneCheck(check, hash, stderr);
-	if (--dot <= 0)
-	    {
-	    putc('.', stdout);
-	    fflush(stdout);
-	    dot = dotMod;
-	    }
+	occassionalDot();
 	}
     }
 return errCount;
@@ -699,8 +717,8 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 		finished = TRUE;
 	        break;
 		}
-	    printf(".");
-	    fflush(stdout);
+	    occassionalDot();
+	    // occassionalSleep();
 	    ++pushCount;
 	    if (tryCount > 1)
 	        ++retryCount;
@@ -717,6 +735,8 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 	    }
 	}
     }
+if (pushCount > 0)
+    printf("\n");
 atomicWriteBatch(db, batch);
 uglyf("(updated job database on disk)\n");
 if (pushCount > 0)
