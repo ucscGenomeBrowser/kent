@@ -15,7 +15,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: fields.c,v 1.19 2004/07/19 07:22:39 kent Exp $";
+static char const rcsid[] = "$Id: fields.c,v 1.20 2004/07/19 15:58:45 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -563,8 +563,8 @@ if (logOp == NULL)
 hPrintf("<TD>%s</TD></TR>\n", logOp);
 }
 
-static void filterControlsForTable(char *db, char *rootTable)
-/* Put up filter controls for a single table. */
+static void filterControlsForTableDb(char *db, char *rootTable)
+/* Put up filter controls for a single database table. */
 {
 struct sqlConnection *conn = sqlConnect(db);
 char *table = chromTable(conn, rootTable);
@@ -621,6 +621,69 @@ hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "Cancel");
 }
 
+static void filterControlsForTableCt(char *db, char *table)
+/* Put up filter controls for a custom track. */
+{
+struct customTrack *ct = lookupCt(table);
+puts("<TABLE BORDER=0>");
+if (ct->fieldCount >= 3)
+    {
+    stringFilterOption(db, table, "chrom", " AND ");
+    numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
+    numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
+    }
+if (ct->fieldCount >= 4)
+    {
+    stringFilterOption(db, table, "name", " AND ");
+    }
+if (ct->fieldCount >= 5)
+    {
+    numericFilterOption(db, table, "score", "score", " AND ");
+    }
+if (ct->fieldCount >= 6)
+    {
+    stringFilterOption(db, table, "strand", " AND ");
+    }
+if (ct->fieldCount >= 8)
+    {
+    numericFilterOption(db, table, "thickStart", "thickStart", " AND ");
+    numericFilterOption(db, table, "thickEnd", "thickEnd", " AND ");
+    }
+if (ct->fieldCount >= 12)
+    {
+    numericFilterOption(db, table, "blockCount", "blockCount", " AND ");
+    }
+/* These are not bed fields, just extra constraints that we offer: */
+if (ct->fieldCount >= 3)
+    {
+    numericFilterOption(db, table, "chromLength", "(chromEnd - chromStart)", 
+			(ct->fieldCount >= 8) ? " AND " : "");
+    }
+if (ct->fieldCount >= 8)
+    {
+    numericFilterOption(db, table, "thickLength", "(thickEnd - thickStart)",
+			" AND ");
+    eqFilterOption(db, table, "compareStarts", "chromStart", "thickStart", 
+		   " AND ");
+    eqFilterOption(db, table, "compareEnds", "chromEnd", "thickEnd", "");
+    }
+puts("</TABLE>");
+hPrintf("<BR>\n");
+cgiMakeButton(hgtaDoFilterSubmit, "(Submit)");
+hPrintf(" ");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
+}
+
+
+static void filterControlsForTable(char *db, char *rootTable)
+/* Put up filter controls for a single table. */
+{
+if (isCustomTrack(rootTable))
+    filterControlsForTableCt(db, rootTable);
+else
+    filterControlsForTableDb(db, rootTable);
+}
+
 static void showLinkedFilters(struct dbTable *dtList)
 /* Put up a section with filters for each linked table. */
 {
@@ -671,7 +734,7 @@ void doFilterPage(struct sqlConnection *conn)
 /* Respond to filter create/edit button */
 {
 char *trackName = cartString(cart, hgtaTrack);
-struct trackDb *track = findTrack(trackName, fullTrackList);
+struct trackDb *track = mustFindTrack(trackName, fullTrackList);
 char *table = connectingTableForTrack(track);
 doBigFilterPage(conn, database, table);
 }
@@ -971,11 +1034,11 @@ void doTest(struct sqlConnection *conn)
 {
 char *s = NULL;
 textOpen();
-uglyf("Doing test!\n");
+hPrintf("Doing test!\n");
 s = filterClause("hg16", "knownGene");
 if (s != NULL)
-    uglyf("%s\n", s);
+    hPrintf("%s\n", s);
 else
-    uglyf("%p\n", s);
+    hPrintf("%p\n", s);
 }
 

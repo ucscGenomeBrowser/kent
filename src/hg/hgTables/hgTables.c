@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.33 2004/07/19 07:22:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.34 2004/07/19 15:58:45 kent Exp $";
 
 
 void usage()
@@ -39,7 +39,6 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
-char *customTrackPseudoDb = "customTrack"; /* Fake database for custom tracks */
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -328,7 +327,7 @@ struct hTableInfo *maybeGetHti(char *db, char *table)
 {
 struct hTableInfo *hti = NULL;
 
-if (sameString(customTrackPseudoDb, db))
+if (isCustomTrack(table))
     {
     struct customTrack *ct = lookupCt(table);
     hti = ctToHti(ct);
@@ -416,6 +415,22 @@ struct trackDb *findTrack(char *name, struct trackDb *trackList)
 /* Find track, or return NULL if can't find it. */
 {
 return findTrackInGroup(name, trackList, NULL);
+}
+
+struct trackDb *mustFindTrack(char *name, struct trackDb *trackList)
+/* Find track or squawk and die. */
+{
+struct trackDb *track = findTrack(name, trackList);
+if (track == NULL)
+    {
+    if (isCustomTrack(name))
+        errAbort("Can't find custom track %s. "
+	         "If it's been 8 hours since you accessed this track you "
+		 "may just need to upload it again.", name);
+    else
+	errAbort("Track %s doesn't exist in database %s.", name, database);
+    }
+return track;
 }
 
 struct trackDb *findSelectedTrack(struct trackDb *trackList, struct grp *group)
@@ -597,9 +612,7 @@ void doTopSubmit(struct sqlConnection *conn)
 {
 char *output = cartString(cart, hgtaOutputType);
 char *trackName = cartString(cart, hgtaTrack);
-struct trackDb *track = findTrack(trackName, fullTrackList);
-if (track == NULL)
-    errAbort("track %s doesn't exist in %s", trackName, database);
+struct trackDb *track = mustFindTrack(trackName, fullTrackList);
 if (sameString(output, outPrimaryTable))
     doOutPrimaryTable(track, conn);
 else if (sameString(output, outSchema))

@@ -73,6 +73,9 @@ struct customTrack *getCustomTracks();
 struct trackDb *findTrack(char *name, struct trackDb *trackList);
 /* Find track, or return NULL if can't find it. */
 
+struct trackDb *mustFindTrack(char *name, struct trackDb *trackList);
+/* Find track or squawk and die. */
+
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList, 
 	struct grp *group);
 /* Find named track that is in group (NULL for any group).

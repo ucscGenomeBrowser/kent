@@ -98,11 +98,6 @@ Some useful custom track routines from hgText:
 void filterOptionsCustomTrack(char *table, char *tableId)
 /* Print out an HTML table with form inputs for constraints on custom track */
 
-boolean printTabbedBed(struct bed *bedList, struct slName *chosenFields,
-		       boolean initialized)
-/* Print out the chosen fields of a bedList. */
-
-void doTabSeparatedCT(boolean allFields)
 
 #endif /* NEVER */
 

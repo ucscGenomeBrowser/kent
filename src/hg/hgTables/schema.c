@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.13 2004/07/19 07:22:39 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.14 2004/07/19 15:58:45 kent Exp $";
 
 
 void describeFields(char *db, char *table, 
@@ -200,7 +200,7 @@ hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("On loading all custom tracks are converted to ");
 hPrintf("<A HREF=\"/goldenPath/help/customTrack.html#BED\">BED</A> ");
-hPrintf("format on loading.");
+hPrintf("format.");
 webNewSection("Sample Rows");
 hPrintf("<TT><PRE>");
 for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
