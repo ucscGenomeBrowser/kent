@@ -963,8 +963,8 @@ identifier affySnp10KId external=Affymetrix
 
 identifier affySnp120KId external=Affymetrix
 "Affymetrix 120K SNP Identifier"
-    hgFixed.affyGenoDetails.affyId
-    $hg.affyGeno.name
+    hgFixed.affy120KDetails.affyId
+    $hg.affy120K.name
 
 identifier dbSnpId external=dbSNP fuzzy
 "NCBI dbSNP ID"
@@ -973,21 +973,18 @@ identifier dbSnpId external=dbSNP fuzzy
 identifier dbSnpHgId typeOf=dbSnpId 
 "Human dbSNP ID"
     hgFixed.dbSnpRsHg.rsId
-    $hg.snpNih.name
-    $hg.snpTsc.name
     $hg.snpMap.name
     hgFixed.affy10KDetails.rsId
+    hgFixed.affy120KDetails.rsId
 
 identifier dbSnpMmId typeOf=dbSnpId 
 "Mouse dbSNP ID"
     hgFixed.dbSnpRsMm.rsId
-    $mm.snpNih.name
     $mm.snpMap.name
 
 identifier dbSnpRnId typeOf=dbSnpId 
 "Rat dbSNP ID"
     hgFixed.dbSnpRsRn.rsId
-    $rn.snpNih.name
     $rn.snpMap.name
 
 # Other NCBI Identifiers
