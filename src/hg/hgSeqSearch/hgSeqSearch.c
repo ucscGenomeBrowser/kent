@@ -36,7 +36,7 @@ int bScore = b->match - (b->repMatch>>1) - b->misMatch - b->qNumInsert;
 return bScore - aScore;
 }
 
-void showAliPlaces(char *pslName)
+void showAliPlaces(char *pslName, char *faName)
 /* Show all the places that align. */
 {
 struct lineFile *lf = lineFileOpen(pslName, TRUE);
@@ -56,8 +56,9 @@ fprintf(stdout, " SIZE IDENTITY  CHROMOSOME   START     END       cDNA   START  
 fprintf(stdout, "-------------------------------------------------------------------------\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s%s\">",
-	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, extraCgi);
+    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s%s\">",
+	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
+	pslName, faName, extraCgi);
     printf("%5d  %5.1f%%  %9s  %9d %9d  %8s %5d %5d %5d</A>\n",
 	psl->match + psl->misMatch + psl->repMatch + psl->nCount,
 	100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
@@ -70,7 +71,7 @@ pslFreeList(&pslList);
 void doMiddle()
 {
 static struct dnaSeq *seq;
-struct tempName pslTn;
+struct tempName pslTn, faTn;
 char *userSeq = cgiString("userSeq");
 FILE *f;
 int maxSize = 20000;
@@ -88,6 +89,9 @@ if (seq->size > maxSize)
    seq->dna[maxSize] = 0;
    }
 
+makeTempName(&faTn, "hgSs", ".fa");
+faWrite(faTn.forCgi, seq->name, seq->dna, seq->size);
+
 makeTempName(&pslTn, "hgSs", ".psl");
 f = mustOpen(pslTn.forCgi, "w");
 
@@ -98,7 +102,7 @@ reverseComplement(seq->dna, seq->size);
 gfAlignStrand(hostName, hostPort, nibDir, seq, TRUE,  ffCdna, 40, gfSavePsl, f);
 carefulClose(&f);
 
-showAliPlaces(pslTn.forCgi);
+showAliPlaces(pslTn.forCgi, faTn.forCgi);
 }
 
 
