@@ -12,5 +12,6 @@ CREATE TABLE bgiGeneSnp (
     phase char(1) not null,	# Phase of SNP in codon (if applicable)
     siftComment varchar(255) not null,	# Comment from SIFT (if applicable)
               #Indices
-    INDEX(geneName(20),snpName(18))
+    INDEX(geneName(20)),
+    INDEX(snpName(18))
 );
