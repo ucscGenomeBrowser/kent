@@ -1,3 +1,7 @@
+30:
+     o Fixed bug in webBlat when using "Blat's Guess" and no
+       sequence name.
+
 29:
      o Made -out=blast9 and -out=blast8 report e values in format
        that will print 1.3e-123 instead of 0.00000.
