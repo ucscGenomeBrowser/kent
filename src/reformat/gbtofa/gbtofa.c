@@ -21,7 +21,7 @@ char *definitionWords[16];
 int definitionWordCount;
 char koharaName[64];
 
-char *ourName;
+char *ourName = NULL;
 
 char lineBuf[512];
 char *linePt;
@@ -250,3 +250,4 @@ carefulClose(&in);
 carefulClose(&out);
 return 0;
 }
+
