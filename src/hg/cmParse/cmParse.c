@@ -795,6 +795,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	slAddHead(&chrom->orderedList, contig);
 	hashAddSaveName(ctgHash, im.imreContig, contig, &contig->name);
 	contig->chrom = chrom;
+	clonePos = 0;
 	}
     cName = newSlName(origLine);
     slAddTail(&contig->lineList, cName);
@@ -892,9 +893,9 @@ for (nccp = nccpList; nccp != NULL; nccp = nccp->next)
 	}
     if (nt == NULL || !sameString(nt->name, nccp->nt))
         {
-	AllocVar(nt);
 	if (hashLookup(ntHash, nccp->nt) != NULL)
 	    errAbort("Duplicate %s in ctg_coords", nccp->nt);
+	AllocVar(nt);
 	hashAddSaveName(ntHash, nccp->nt, nt, &nt->name);
 	slAddHead(&ntList, nt);
 	}
@@ -1062,7 +1063,7 @@ for (nt = ntList; nt != NULL; nt = nextNt)
 
 carefulClose(&splitNtFile);
 hashFree(&ntCloneHash);
-hashFree(&ntHash);
+/* Do not free ntHash - strings used elsewhere. */
 }
 
 struct cmChrom *imParse(char *gsDir, char *imreDir, struct hash *cloneHash, 
