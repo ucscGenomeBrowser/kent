@@ -20,6 +20,7 @@ struct customTrack
     boolean needsLift;		/* True if coordinates need lifting. */
     boolean fromPsl;		/* Track was derived from psl file. */
     struct gffFile *gffHelper;	/* Used while processing GFF files. */
+    int offset;			/* Base offset. */
     };
 
 struct customTrack *customTracksFromText(char *text);

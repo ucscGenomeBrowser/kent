@@ -16,10 +16,10 @@ struct bed
 
     /* The following items are not loaded by   the bedLoad routines. */
     int score; /* Score - 0-1000 */
-    char strand[3];  /* + or -.  Second char may or may not exist and be + or - for other strand. */
-    unsigned reserved1; /* Start in other sequence if it's homology based. */
-    unsigned reserved2; /* End in other sequence if it's homology based. */
-    unsigned reserved3; /* Total size of other sequence. */
+    char strand[2];  /* + or -.  */
+    unsigned thickStart; /* Start of where display should be thick (start codon for genes) */
+    unsigned thickEnd;   /* End of where display should be thick (stop codon for genes) */
+    unsigned reserved;   /* Always zero for now. */
     unsigned blockCount; /* Number of blocks. */
     int *blockSizes;     /* Comma separated list of block sizes.  */
     int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
