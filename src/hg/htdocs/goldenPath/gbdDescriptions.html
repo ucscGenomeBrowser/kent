@@ -1789,6 +1789,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#BED">pjt_genscan</A> 
   - Genscan gene predictions for Zoo</LI>
   <LI><A 
+  href="#ProtHomolog">protHomolog</A> 
+  - SAM homolog data
+  <LI><A 
   href="#Pscreen">pscreen</A> 
   - P-screen (BDGP Gene Disruption Project) P element insertion locations 
   and genes
@@ -1931,6 +1934,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#SageExp">sageExp</A> 
   - Data related to SAGE experiments, tissue descriptions, etc.
+  <LI><A 
+  href="#SamSubdir">samSubdir</A> 
+  - Associates SAM data subdirectory with Known Gene ID
   <LI><A 
   href="#GenePredictions">sanger20</A> 
   - Sanger Institute Chromosome 20 Genes </LI>
@@ -4630,6 +4636,31 @@ Last used Apr. 2001.
     string organ;          "Organ identifier"
     lstring producer;      "Source of tissue"
     lstring desription;    "Description of experiment"
+    )
+</PRE>
+
+<H4><A name=ProtHomolog></A>SAM Protein Homolog Data</H4>
+<PRE>table protHomolog
+"table to store SAM homolog results"
+    (
+    string  proteinID;  	"Protein ID"
+    string  homologID;  	"Homolog ID"
+    char[1] charin;     	"Chain"
+    int     length;     	"Length of protein sequence"
+    double  bestEvalue; 	"Best E-value"
+    double  evalue;     	"E-value"
+    string  FSSP;       	"FSSP ID"
+    string  SCOPdomain; 	"SCOP domain ID"
+    string  SCOPsuid;   	"SCOP sunid"
+    )
+</PRE>
+
+<H4><A name=SamSubdir></A>SAM Data Subdirectory Linked to Known Gene ID</H4>
+<PRE>table samSubdir
+"Link together a Known Gene ID and a gene alias"
+    (
+    string proteinId;   "Protein ID"
+    string subdir;      "Name of the subdirectory where SAM results are"
     )
 </PRE>
 
