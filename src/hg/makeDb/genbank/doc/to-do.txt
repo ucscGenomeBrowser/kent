@@ -463,3 +463,11 @@
 
 - need to follow Kent argument conventions completely:
    bin/gbDbLoadStep -verbose=1 -initialLoad ci1 -noPerChrom=ci1 &
+
+- need to split mgcDownloadStep into download and process scripts, to
+  make it easier to rerun when processing fails.
+
+- alignment tmp files should not be automatically purged on initial load
+
+- iserver directories not group write?  need to doc cleaning this
+  up.

@@ -123,6 +123,12 @@
               the jobs, one can use the <CODE>parasol recover</CODE>
               command to generate a new jobs file with the jobs
               that have not completed.
+      <LI> When run with the <CODE>-initial</CODE>, the working directory
+           is not deleted.  This is to assist in debugging any problems.
+           After doing the initial load of the database anc checking
+           the results, <CODE>work/initial.$db</CODE> should be
+           removed.  Note that this hierarchy is very large, its good
+           remove it on the NFS server for the file system.
     </OL>
 
     <H3>Initial Database Load</H3>
@@ -147,58 +153,6 @@
       </UL>
 
     </OL>
-<!--
-
-set workdir=align.hg15
-set clusterdir=/iscratch/genbank/$workdir
-set iserverdir=/scratch/genbank
-bin/gbAlignSetup -verbose=1 -workdir=$workdir -clusterdir=$clusterdir hg15 '/scratch/hg/gs.16/build33/chromTrfMixedNib/*.nib' /cluster/store5/gs.16/build33/jkStuff/liftAll.lft  >&setup.log
-
-bin/gbAlignIServerCopy align.hg15 /scratch/genbank >&rsync.log
-
-bin/gbAlignFinish -verbose=1 -workdir=$workdir hg15 /cluster/store5/gs.16/build33/jkStuff/liftAll.lft  >&finish.log
-
-
-*** need to add ci to  
-
-ci1
-These are in /scratch/hg/ci1/nib/Scaffold_{0..2501).nib
-
-
-set workdir=ci1.work
-set clusterdir=/iscratch/genbank/$workdir
-set iserverdir=/scratch/genbank
-
-bin/gbAlignSetup -srcDb=genbank -type=mrna -verbose=1 -workdir=$workdir -clusterdir=$clusterdir ci1 '/scratch/hg/ci1/nib/*.nib' ''  >&ci1.setup.log
-bin/gbAlignIServerCopy $workdir /scratch/genbank >&ci1.rsync.log
-bin/gbAlignRun -workdir=$workdir >& ci1.align.log
-bin/gbAlignFinish -verbose=1 -workdir=$workdir ci1 ''  >&ci1.finish.log
-
- /cluster/store5/squirt/ci1/nib/*.nib
-
-###bin/gbAlignIServerClean $workdir
-
- setup /gbdb symlink if not present.
-use gbLoadRna -drop
- ./bin/gbDbLoadStep -initialLoad -noPerChrom=ci1 ci1 >&log&
-
-- changing blat and plsReps alignments.
-
-para recover
-
--finish
-
-- upodate etc files
-
-entry AK027653.1 2003-04-21 organism previously specified as "Homo sapiens" (native), is specfied as "synthetic construct" (xeno) in ./data/processed/genbank.135.0/daily.0521/mrna.gbidx, add one to ignored.idx
-
-fgrep AK027653 data/processed/genbank.135.0/*/*.gbidx
- running gbSanity
-   -allowLargeDeletes - override check for deleting large number of
-    entries.
-
-
--->
   </BODY>
 </HTML>
 
