@@ -110,12 +110,14 @@ struct indel
   char* mrnaSeq;
   char* genSeq;
   boolean insertion;
+  boolean cds;
 
   /* fields used if this is tracking codon substitutions*/
   int codonGenPos[3];  /* position of the codon bases */
   char genCodon[4];
   char mrnaCodon[4];
   boolean knownSnp;
+  boolean validatedSnp;
 };
 
 struct pslInfo
@@ -520,7 +522,7 @@ int snpBase(struct sqlConnection *conn, char *chr, int position)
 struct sqlResult *sr;
 char **row;
 int rowOff;
-int ret = FALSE;
+int ret = 0;
 static boolean checked = FALSE;
 static boolean haveSnp = FALSE;
 
@@ -536,12 +538,18 @@ if (!checked)
 if (haveSnp)
     {
     sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);
-    if ((row = sqlNextRow(sr)) != NULL) 
+    while ((row = sqlNextRow(sr)) != NULL) 
         {
         struct snp snp;
         snpStaticLoad(row+rowOff, &snp);
+	/* Check if this is a snp, not a indel */
         if (sameString(snp.class, "snp"))
-            ret = TRUE;
+	  /* Check if the snp has been validated*/
+	  if (differentString(snp.valid, "no-information"))
+	    ret = 2;
+	  else
+	    if (ret < 2)
+	      ret = 1;	
         }
     sqlFreeResult(&sr);
     }
@@ -1124,7 +1132,8 @@ struct evid *ev;
 }
 
 struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, char* chr, int gbase, 
-			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, boolean snp, char r, char g)
+			     struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, 
+			     boolean snp, boolean valid, char r, char g)
 /* Create a record of a mismatch */
 {
   struct indel *mi;
@@ -1139,6 +1148,7 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
   mi->hs = createEvid();
   mi->xe = createEvid();
   mi->knownSnp = snp;
+  mi->validatedSnp = valid;
   mi->insertion = FALSE;
   mi->mrnaSeq = needMem(2);
   mi->mrnaSeq[0] = r;
@@ -1187,6 +1197,7 @@ struct indel *createCodonSub(struct sqlConnection *conn, int mrnaStart,
   mi->hs = createEvid();
   mi->xe = createEvid();
   mi->knownSnp = knownSnp;
+  mi->validatedSnp = FALSE;
     
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
   searchTrans(conn, "mrna", rna, mi, strand, CODONSUB, cloneId, 0, 1);
@@ -1200,12 +1211,12 @@ struct indel *createCodonSub(struct sqlConnection *conn, int mrnaStart,
 }
 
 void cdsCompare(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna, struct dnaSeq *dna)
-/* Compare the alignment of the coding region of an mRNA to the genomic sequence */
+/* Compare the alignment of the coding and UTR regions of an mRNA to the genomic sequence */
 {
 int i,j;
 DNA *r, *d; 
 DNA rCodon[4], dCodon[4];
-int codonSnps = 0, codonMismatches = 0;
+int codonSnps = 0, codonMismatches = 0, valid = 0;
 int codonGenPos[3];
 int codonMrnaStart = 0;
 int nCodonBases = 0;   /* to deal with partial codons */
@@ -1254,14 +1265,15 @@ for (i = 0; i < pi->psl->blockCount; i++)
             if ((char)r[qstart+j] == (char)d[tstart+j])
                 pi->cdsMatch++;
             /* Check if mismatch is due to a SNP */
-            else if (snpBase(conn,pi->psl->tName,tPosition))
+            else if ((valid = snpBase(conn,pi->psl->tName,tPosition)) > 0)
                 {
                 pi->cdsMatch++;
                 pi->snp++;
                 codonSnps++;
+		valid--;
 		if (mismatchReport)
 		    {
-		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, TRUE, r[qstart+j], d[tstart+j]);
+		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, TRUE, valid, r[qstart+j], d[tstart+j]);
 		    slAddHead(&miList,mi);
 		    }
                 }
@@ -1270,7 +1282,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
                 pi->cdsMismatch++;
 		if (mismatchReport)
 		    {
-		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, FALSE, r[qstart+j], d[tstart+j]);
+		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, FALSE, FALSE, r[qstart+j], d[tstart+j]);
 		    slAddHead(&miList,mi);
 		    }
                 codonMismatches++;
@@ -1383,7 +1395,9 @@ struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char
     ni->mrnaSeq = seq;
   else
     ni->genSeq = seq;
-  
+  ni->knownSnp = FALSE;
+  ni->validatedSnp = FALSE;
+ 
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
   searchTrans(conn, "mrna", rna, ni, strand, INDEL, cloneId, left, right);
   searchTrans(conn, "est", rna, ni, strand, INDEL, cloneId, left, right);
@@ -1715,6 +1729,9 @@ for (indel = iList; indel != NULL; indel=indel->next)
               accFmt(indel->mrna), indel->mrnaStart, indel->chrom, indel->chromStart,
 	      indel->mrnaSeq, indel->genSeq);
       if (indel->knownSnp)
+	if (indel->validatedSnp)
+	  fprintf(of, ", SNP-validated");
+	else
           fprintf(of, ", SNP\n");
       else
           fprintf(of, "\n");	   
