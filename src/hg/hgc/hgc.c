@@ -76,8 +76,8 @@
 #include "jointalign.h"
 #include "gcPercent.h"
 #include "genMapDb.h"
-#include "geneGraph.h"
 #include "altGraphX.h"
+#include "geneGraph.h"
 #include "stsMapMouse.h"
 #include "stsInfoMouse.h"
 #include "dnaMotif.h"
@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.436 2003/06/18 19:06:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.437 2003/06/18 19:59:27 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9936,7 +9936,7 @@ char *scoresHeader ="CGH Log Ratio";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void printExprssnColorKey(float minVal, float maxVal, float stepSize,
+void printExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
 			  struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
@@ -9948,7 +9948,7 @@ assert(stepSize != 0);
 numColumns = maxVal/stepSize *2+1;
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
-printf("<th colspan=%d>False Color Key, all values log base 2</th></tr><tr>\n",numColumns);
+printf("<th colspan=%d>False Color Key, all values log base %d</th></tr><tr>\n",numColumns, base);
 /* have to add the stepSize/2 to account for the ability to 
    absolutely represent some numbers as floating points */
 for(currentVal = minVal; currentVal <= maxVal + (stepSize/2); currentVal += stepSize)
@@ -9965,7 +9965,7 @@ printf("</tr></table>\n");
 printf("</td></tr></table>\n");
 }
 
-void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize,
+void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
 			      struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
@@ -10054,10 +10054,10 @@ printf("</tr>\n");
 
 
 void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
-		     char *expName, float minScore, float maxScore, float stepSize,
+		     char *expName, float minScore, float maxScore, float stepSize, int base,
 		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
 		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
-		     void(*printKey)(float minVal, float maxVal, float size, struct rgbColor(*getColor)(float val, float max)),
+		     void(*printKey)(float minVal, float maxVal, float size, int base, struct rgbColor(*getColor)(float val, float max)),
 		     struct rgbColor(*getColor)(float val, float max))
 /* prints out a table from the data present in the bedList */
 {
@@ -10070,7 +10070,7 @@ if(bedList == NULL)
 featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
-    printKey(minScore, maxScore, stepSize, getColor);
+    printKey(minScore, maxScore, stepSize, base, getColor);
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
@@ -10279,7 +10279,7 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
 		    rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
@@ -10379,7 +10379,7 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize,
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
 		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
@@ -10387,10 +10387,10 @@ else
     }
 }
 
-void printAffyLinks(char *name)
+void printAffyGnfLinks(char *name, char *chip)
 /* print out links to affymetrix's netaffx website */
 {
-char *netaffx = "https://www.netaffx.com/LinkServlet?array=U95&probeset=";
+char *netaffx = "https://www.netaffx.com/LinkServlet?array=;";
 char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
 char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
 /* char *gnf = "http://expression.gnf.org/promoter/tissue/images/"; */
@@ -10399,13 +10399,31 @@ if(name != NULL)
     printf("<p>More information about individual probes and probe sets is available ");
     printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
     printf("<ul>\n");
-    printf("<li> Information about probe sequences is <a href=\"%s%s\">available there</a></li>\n",
-	   netaffx, name);
+    printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\">available there</a></li>\n",
+	   netaffx, chip, name);
     printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
     printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
     printf("</ul>\n");
     printf("<p>A <a href=\"%s%s\">histogram</a> of the data for the probe set selected (%s) over all ",gnfDetailed, name, name);
     printf("tissues is available at the<a href=\"http://expression.gnf.org/cgi-bin/index.cgi\"> GNF web supplement</a>.\n");
+    }
+}
+
+void printAffyUclaLinks(char *name, char *chip)
+/* print out links to affymetrix's netaffx website */
+{
+char *netaffx = "https://www.netaffx.com/LinkServlet?array=";
+char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
+if(name != NULL)
+    {
+    printf("<p>More information about individual probes and probe sets is available ");
+    printf("at Affymetrix's <a href=\"https://www.netaffx.com/index2.jsp\">netaffx.com</a> website. [registration required]\n");
+    printf("<ul>\n");
+    printf("<li> Information about probe sequences is <a href=\"%s%s&probeset=%s\">available there</a></li>\n",
+	   netaffx, chip, name);
+    printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
+    printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
+    printf("</ul>\n");
     }
 }
 
@@ -10426,7 +10444,7 @@ genericHeader(tdb, itemName);
 printf("<h2></h2><p>\n");
 printf("%s", tdb->html);
 
-printAffyLinks(itemName);
+printAffyGnfLinks(itemName, "U95");
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
 else 
@@ -10439,7 +10457,7 @@ else
 	hashAddUnique(erHash, buff, er);
 	}
     printf("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, minScore, maxScore, stepSize,
+    msBedPrintTable(bedList, erHash, itemName, expName, minScore, maxScore, stepSize, 2,
 		    msBedDefaultPrintHeader, msBedAffyPrintRow, printAffyExprssnColorKey, getColorForAffyBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
@@ -10465,7 +10483,7 @@ genericHeader(tdb, itemName);
 printf("<h2></h2><p>\n");
 printf("%s", tdb->html);
 
-printAffyLinks(itemName);
+printAffyGnfLinks(itemName, "U95");
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
 else 
@@ -10478,7 +10496,46 @@ else
 	hashAddUnique(erHash, buff, er);
 	}
     printf("<h2></h2><p>\n");
-    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize,
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
+		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+}
+
+void affyUclaDetails(struct trackDb *tdb, char *expName) 
+/* print out a page for the affy data from gnf based on ratio of
+ * measurements to the median of the measurements. */
+{
+struct bed *bedList;
+char *tableName = "affyUclaExps";
+char *itemName = cgiUsualString("i2","none");
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+float stepSize = 0.25;
+float maxScore = 1.5;
+
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+genericHeader(tdb, itemName);
+printf("<h2></h2><p>\n");
+printf("%s", tdb->html);
+
+printAffyUclaLinks(itemName, "U133");
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(tableName, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    printf("<h2></h2><p>\n");
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 10,
 		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
@@ -10612,7 +10669,7 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, -1 * maxScore,  maxScore, stepSize,
+    msBedPrintTable(bedList, erHash, itemName, expName, -1 * maxScore,  maxScore, stepSize, 2,
 		    cghNci60PrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
@@ -10907,7 +10964,13 @@ printf("</td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
-void makeGrayShades(struct memGfx *mg)
+int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
+/* Find color index corresponding to rgb color. */
+{
+return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
+}
+
+void makeGrayShades(struct vGfx *vg)
 /* Make eight shades of gray in display. */
 {
 int i;
@@ -10917,7 +10980,7 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
-    shadesOfGray[i] = mgFindColor(mg, rgb.r, rgb.g, rgb.b);
+    shadesOfGray[i] = vgFindRgb(vg, &rgb);
     }
 shadesOfGray[maxShade+1] = MG_RED;
 }
@@ -10956,177 +11019,114 @@ mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
 exprBedColorsMade = TRUE;
 }
 
-
-
-boolean altGraphXEdgeSeen(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
-/* is the mrnaIx already in seen? */
+boolean isExon(char *v, int i, int j)
+/** Return TRUE if edge i-j is an exon, FALSE otherwise. */
 {
-int i=0;
-boolean result = FALSE;
-for(i=0; i<*seenCount; i++)
-    {
-    if(ag->mrnaTissues[seen[i]] == ag->mrnaTissues[mrnaIx] ||
-       ag->mrnaLibs[seen[i]] == ag->mrnaLibs[mrnaIx])
-	{
-	result = TRUE;
-	break;
-	}
-    }
-if(!result)
-    {
-    seen[*seenCount++] = mrnaIx;
-    }
-return result;
-}
-
-int altGraphConfidenceForEdge(struct altGraphX *ag, int eIx)
-/* count how many unique libraries or tissues contain a given edge */
-{
-struct evidence *ev = slElementFromIx(ag->evidence, eIx);
-int *seen = NULL;
-int seenCount = 0,i;
-int conf = 0;
-AllocArray(seen, ag->edgeCount);
-for(i=0; i<ag->edgeCount; i++)
-    seen[i] = -1;
-for(i=0; i<ev->evCount; i++)
-    if(!altGraphXEdgeSeen(ag, seen, &seenCount, ev->mrnaIds[i]))
-	conf++;
-freez(&seen);
-return conf;
-}
-
-boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
-/* Return TRUE if a v1-v2 edge is in the list FALSE otherwise. */
-{
-struct ggEdge *e = NULL;
-for(e = edges; e != NULL; e = e->next)
-    {
-    if(e->vertex1 == v1 && e->vertex2 == v2)
-	return TRUE;
-    }
+if( (v[i] == ggHardStart || v[i] == ggSoftStart)  
+    && (v[j] == ggHardEnd || v[j] == ggSoftEnd))
+    return TRUE;
 return FALSE;
 }
 
-Color altGraphXColorForEdge(struct memGfx *mg, struct altGraphX *ag, int eIx)
-/* Return the color of an edge given by confidence */
+boolean isIntron(char *v, int i, int j)
+/** Return TRUE if edge i-j is an exon, FALSE otherwise. */
 {
-int confidence = altGraphConfidenceForEdge(ag, eIx);
-Color c = shadesOfGray[maxShade/4];
-struct geneGraph *gg = NULL;
-struct ggEdge *edges = NULL;
-
-if(ag->vTypes[ag->edgeStarts[eIx]] == ggHardStart && ag->vTypes[ag->edgeEnds[eIx]] == ggHardEnd)
-    {
-    gg = altGraphXToGG(ag);
-    edges = ggFindCassetteExons(gg);
-    if(altGraphXInEdges(edges, ag->edgeStarts[eIx], ag->edgeEnds[eIx]))
-	{
-	if(!exprBedColorsMade)
-	    makeRedGreenShades(mg);
-	if(confidence == 1) c = shadesOfRed[(maxRGBShade - 6 > 0) ? maxRGBShade - 6 : 0];
-	else if(confidence == 2) c = shadesOfRed[(maxRGBShade - 4 > 0) ? maxRGBShade - 4: 0];
-	else if(confidence >= 3) c = shadesOfRed[maxRGBShade];
-	}
-    else 
-	{
-	if(confidence == 1) c = shadesOfGray[maxShade/3];
-	else if(confidence == 2) c = shadesOfGray[2*maxShade/3];
-	else if(confidence >= 3) c = shadesOfGray[maxShade];
-	}    
-    freeGeneGraph(&gg);
-    slFreeList(&edges);
-    return c;
-    }
-else
-    {
-    if(confidence == 1) c = shadesOfGray[maxShade/3];
-    else if(confidence == 2) c = shadesOfGray[2*maxShade/3];
-    else if(confidence >= 3) c = shadesOfGray[maxShade];
-    }
-return c;
+if( (v[j] == ggHardStart || v[j] == ggSoftStart)  
+    && (v[i] == ggHardEnd || v[i] == ggSoftEnd))
+    return TRUE;
+return FALSE;
 }
 
 
-static void altGraphXDraw(struct altGraphX *ag, struct memGfx *mg, int xOff, int yOff, 
-			  int width,  MgFont *font)
-/* Draws the blocks for an alt-spliced gene and the connections */
+void doHumanEnlargeExons(struct altGraphX *ag)
+/* Experimental, doesn't quite seem to work yet. Idea is to scale
+ exons such that the smallest exon is no smaller that factor*largest
+ intron.*/
 {
-int start = ag->tStart;
-int end = ag->tEnd;
-int baseWidth = ag->tEnd - ag->tStart;
-int y = yOff;
-int heightPer = 2 * mgFontLineHeight(font);
-int lineHeight = mgFontLineHeight(font);
-int x1,x2;
-double scale = width/(double)baseWidth;
-int i;
-double y1, y2;
-int midLineOff = heightPer/2;
-int s =0, e=0;
-
-for(i= ag->edgeCount -1; i >= 0; i--)   // for(i=0; i< ag->edgeCount; i++)
+bool **em = altGraphXCreateEdgeMatrix(ag);
+int i,j,k;
+int maxIntron=0;
+char *vTypes = ag->vTypes;
+int *vPos = ag->vPositions;
+int minExon =BIGNUM;
+int increment = 0;
+double multFact = 1.2;
+double minIntronFact = .1;
+int vC = ag->vertexCount;
+/* Find largest intron. */
+for(i=0; i<vC; i++)
     {
-    char buff[16];
-    int textWidth;
-    int sx1 = 0;
-    int sx2 = 0;
-    int sw = 0;
-    s = ag->vPositions[ag->edgeStarts[i]];
-    e = ag->vPositions[ag->edgeEnds[i]];
-    x1 = round((double)((int)s-start)*scale) + xOff;
-    x2 = round((double)((int)e-start)*scale) + xOff;
-    sx1 = roundingScale(s-start, width, baseWidth)+xOff;
-    sx2 = roundingScale(e-start, width, baseWidth)+xOff;
-    sw = sx2 - sx1;
-    snprintf(buff, sizeof(buff), "%d-%d", ag->edgeStarts[i], ag->edgeEnds[i]); 
-    /* if it is an exon draw a box */
-    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
-	&& (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
+    for(j=0; j<vC; j++)
 	{
-	Color color2 = altGraphXColorForEdge(mg, ag, i);
-	mgDrawBox(mg, x1, y+(heightPer/2), (x2-x1), heightPer/2, color2);
-	textWidth = mgFontStringWidth(font, buff);
-	if (textWidth <= sw + 2 )
-	    mgTextCentered(mg, sx2-textWidth-2, y+(heightPer/2), textWidth+2, heightPer/2, MG_WHITE, font, buff);
+	if(em[i][j])
+	    {
+	    if(isIntron(vTypes, i, j))
+		maxIntron = max(maxIntron, abs(vPos[i] - vPos[j]));
+	    if(isExon(vTypes,i,j))
+		minExon = min(minExon, abs(vPos[i] - vPos[j]));
+	    }
 	}
-    /* if it is an intron draw an arc */
-    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
-	&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
+    }
+
+/*minExon = minIntronFact * maxIntron;*/
+multFact = (minIntronFact*maxIntron)/minExon;
+
+/* Enlarge each exon by stretching one end. */
+for(i=0; i<vC; i++)
+    {
+    for(j=0; j<vC; j++)
 	{
-	Color color2 = altGraphXColorForEdge(mg, ag, i);
-	int midX;   
-	int midY = y + heightPer/2;
-	midX = (x1+x2)/2;
-	mgDrawLine(mg, x1, midY, midX, y, color2);
-	mgDrawLine(mg, midX, y, x2, midY, color2);
-	textWidth = mgFontStringWidth(font, buff);
-	if (textWidth <= sw )
-	    mgTextCentered(mg, sx1, y+(heightPer/2), sw, heightPer/2, MG_BLACK, font, buff);
+	if(em[i][j])
+	    {
+	    if(isExon(vTypes, i, j))
+		{
+		int mark = vPos[j];
+		int size = abs(vPos[i] - vPos[j]);
+		increment = multFact*size - size;
+		ag->tEnd += increment;
+		for(k=0; k<vC; k++)
+		    {
+		    if(vPos[k] >= mark)
+			vPos[k] += increment;
+		    }
+		}
+	    }
 	}
     }
 }
+
 
 char *altGraphXMakeImage(struct trackDb *tdb, struct altGraphX *ag)
 /* create a drawing of splicing pattern */
 {
-struct memGfx *mg;
 MgFont *font = mgSmallFont();
 int trackTabWidth = 11;
 int fontHeight = mgFontLineHeight(font);
+struct spaceSaver *ssList = NULL;
+struct hash *heightHash = NULL;
+int rowCount = 0;
 struct tempName gifTn;
 int pixWidth = atoi(cartUsualString(cart, "pix", "600" ));
-int pixHeight = 2 * mgFontLineHeight(font)+2;
-mg = mgNew(pixWidth, pixHeight);
-mgClearPixels(mg);
-makeGrayShades(mg);
-altGraphXDraw(ag, mg, 0, 1, pixWidth, font);
+int pixHeight = 0;
+struct vGfx *vg;
+int lineHeight = 0;
+double scale = 0;
+
+scale = (double)pixWidth/(ag->tEnd - ag->tStart);
+lineHeight = 2 * fontHeight +1;
+altGraphXLayout(ag, ag->tStart, pixWidth, pixWidth, scale, 100, &ssList, &heightHash, &rowCount);
+pixHeight = rowCount * lineHeight;
 makeTempName(&gifTn, "hgc", ".gif");
-mgSaveGif(mg, gifTn.forCgi);
+vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+makeGrayShades(vg);
+vgSetClip(vg, 0, 0, pixWidth, pixHeight);
+altGraphXDrawPack(ag, ssList, 0, 0, pixWidth, lineHeight, lineHeight-1,
+		  ag->tStart, ag->tEnd, scale, ag->tEnd-ag->tStart, vg, font, MG_BLACK, shadesOfGray, "Dummy", NULL);
+vgUnclip(vg);
+vgClose(&vg);
 printf(
        "<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
        gifTn.forHtml, pixWidth, pixHeight);
-mgFree(&mg);
 return cloneString(gifTn.forHtml);
 }
 
@@ -11167,15 +11167,50 @@ int id = atoi(item);
 char query[256];
 int i,j;
 struct altGraphX *ag = NULL;
+struct altGraphX *orthoAg = NULL;
+char buff[128];
 struct sqlConnection *conn = hAllocConn();
 char *image = NULL;
 genericHeader(tdb, item);
 snprintf(query, sizeof(query),"select * from %s where id=%d", tdb->tableName, id);
 ag = altGraphXLoadByQuery(conn, query);
+//doHumanEnlargeExons(ag);
 if(ag == NULL)
     errAbort("hgc::doAltGraphXDetails() - couldn't find altGraphX with id=%d", id);
 printf("<center>\n");
+if(sameString(tdb->tableName, "altGraphXCon")) 
+    printf("Common Splicing<br>");
 image = altGraphXMakeImage(tdb,ag);
+if(sameString(tdb->tableName, "altGraphXCon")) 
+    {
+    struct sqlConnection *orthoConn = NULL;
+    struct altGraphX *origAg = NULL;
+    hSetDb2("mm3");
+    safef(query, sizeof(query), "select * from altGraphX where name='%s'", ag->name);
+    origAg = altGraphXLoadByQuery(conn, query);
+    //doHumanEnlargeExons(origAg);
+    puts("<br><center>Human</center>\n");
+    altGraphXMakeImage(tdb,origAg);
+    orthoConn = hAllocConn2();
+    safef(query, sizeof(query), "select orhtoAgName from orthoAgReport where agName='%s'", ag->name);
+    sqlQuickQuery(conn, query, buff, sizeof(buff));
+    safef(query, sizeof(query), "select * from altGraphX where name='%s'", buff);
+    orthoAg = altGraphXLoadByQuery(orthoConn, query);
+    //doHumanEnlargeExons(orthoAg);
+    if(differentString(orthoAg->strand, origAg->strand))
+	{
+	altGraphXReverseComplement(orthoAg);
+	puts("<br>Mouse (opposite strand)\n");
+	}
+    else 
+	puts("<br>Mouse\n");
+    printf("<a HREF=\"%s?db=%s&position=%s:%d-%d&mrna=squish&intronEst=squish&refGene=pack&altGraphX=full&%s\"",
+	   hgTracksName(), "mm3", orthoAg->tName, orthoAg->tStart, orthoAg->tEnd, cartSidUrlString(cart));
+    printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
+    printf("<font size=-1>[%s.%s:%d-%d]</font></a><br><br>\n", "mm3", 
+	   orthoAg->tName, orthoAg->tStart, orthoAg->tEnd);
+    altGraphXMakeImage(tdb,orthoAg);
+    }
 printf("<br><a HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraphX=full&%s\"",
        hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
 printf(" ALT=\"Zoom to browser coordinates of altGraphX\">");
@@ -12050,6 +12085,10 @@ else if(sameWord(track, "affyRatio"))
     {
     affyRatioDetails(tdb, item);
     }
+else if(sameWord(track, "affyUcla"))
+    {
+    affyUclaDetails(tdb, item);
+    }
 else if(sameWord(track, "loweProbes"))
     {
     doProbeDetails(tdb, item);
@@ -12062,7 +12101,7 @@ else if( sameWord(track, "gcPercent"))
     {
     doGcDetails(tdb, item);
     }
-else if( sameWord(track, "altGraphX"))
+else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon"))
     {
     doAltGraphXDetails(tdb,item);
     }
