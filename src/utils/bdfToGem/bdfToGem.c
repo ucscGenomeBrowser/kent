@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.3 2005/02/17 00:55:37 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.4 2005/02/18 00:33:36 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 
@@ -29,9 +29,200 @@ errAbort(
 );
 }
 
-static void outputGem(char *out, struct font_hdr *font)
+/*	lower and upper limit of character values to accept	*/
+#define LO_LMT	((int)' ')
+#define HI_LMT	(127)
+/*	given w pixels, round up to number of bytes needed	*/
+#define BYTEWIDTH(w)	(((w) + 3)/4)
+
+/*	a structure to store the incoming glyphs from the bdf file */
+struct bdfGlyph
 {
+struct bdfGlyph *next;
+int encoding;		/*	ascii value of character	*/
+int w;
+int h;
+int xOff;
+int yOff;
+int dWidth;		/*	width including space around bits	*/
+unsigned char **bitmap;
+};
+
+static unsigned char **allocRows(int w, int h)
+/*	allocate a bitmap of pixel size width = w, height = h	*/
+{
+int byteWidth = 0;
+unsigned char **bitmap = 0;
+int row;
+
+if ((0 == w) || (h == 0))
+    errAbort("allocRows: w or h are zero: %d x %d", w, h);
+
+byteWidth = BYTEWIDTH(w);
+/*	first allocate the row pointers	*/
+bitmap = (unsigned char **) needMem((size_t) (h * sizeof(unsigned char *)));
+/*	then allocate a pointer for each row	*/
+for (row = 0; row < h; ++row)
+    {
+    int col;
+    bitmap[row] = (unsigned char *) needMem((size_t) byteWidth);
+    for (col = 0; col < byteWidth; ++col)  /* and make sure it is all zero */
+	bitmap[row][col] = (unsigned char) NULL;
+    }
+return (bitmap);
+}
+
+static struct bdfGlyph *allocGlyph(int w, int h)
+/*	allocate a bdfGlyph structure, including its bitmap	*/
+{
+struct bdfGlyph *glyph;
+
+AllocVar(glyph);
+glyph->w = w;
+glyph->h = h;
+glyph->xOff = 0;
+glyph->yOff = 0;
+glyph->dWidth = 0;
+glyph->bitmap = allocRows(w, h);
+return (glyph);
+}
+
+static void freeGlyph(struct bdfGlyph **glyph)
+/*	release all storage related to a bdfGlyph structure	*/
+{
+int row;
+
+if ((struct bdfGlyph **)NULL == glyph) return;
+if ((struct bdfGlyph *)NULL == *glyph) return;
+
+for (row = 0; row < (*glyph)->h; ++row)
+    freeMem((*glyph)->bitmap[row]);
+freez(glyph);
+}
+
+static int encodeCmp(const void *va, const void *vb)
+/* Compare to sort based on encoding value */
+{
+const struct bdfGlyph *a = *((struct bdfGlyph **)va);
+const struct bdfGlyph *b = *((struct bdfGlyph **)vb);
+return (a->encoding - b->encoding);
+}
+
+static void outputGem(char *out, struct font_hdr *font,
+    struct bdfGlyph *glyphs)
+/*	all input is done, now do the output file	*/
+{
+unsigned char **bitmap = (unsigned char **)NULL; /* all glyphs together */
 FILE *f = mustOpen(out,"w");
+struct bdfGlyph *glyph;
+int glyphCount = 0;
+int maxGlyphCount = HI_LMT - LO_LMT + 1;
+int encoding = 0;
+int missing = 0;
+int offset = 0;
+int minXoff = BIGNUM;
+int maxXoff = -BIGNUM;
+int minYoff = BIGNUM;
+int maxYoff = -BIGNUM;
+int maxYextent = 0;
+int maxXextent = 0;
+int maxDwidth = 0;
+int bytesOut = 0;
+int row;
+
+bitmap = allocRows(font->frm_wdt, font->frm_hgt);
+verbose(2,"#\tallocated result bitmap: %d x %d\n",
+	font->frm_wdt, font->frm_hgt);
+
+slSort(&glyphs, encodeCmp);	/*	order glyphs by encoding value */
+
+/*	for our purposes here, the lowest limit must exist (space)
+ *	which will also be used to fill missing glyphs
+ */
+if (glyphs->encoding != LO_LMT)
+    errAbort("first character is not space: %d, we need a space\n",
+	glyphs->encoding);
+
+/*	Survey the individual glyph bounding boxes, find max,min extents
+ *	Sanity check against given maximums for the whole bitmap
+ *	as it will be put together.
+ */
+encoding = glyphs->encoding - 1;	/* to check for missing glyphs */
+for (glyph = glyphs; glyph; glyph=glyph->next)
+    {
+    int yExtent;
+    if (glyph->encoding != (encoding + 1))
+	{
+	verbose(2, "#\tmissing glyph between encodings: %d - %d\n", 
+		encoding, glyph->encoding);
+	missing += glyph->encoding - encoding;
+	}
+    encoding = glyph->encoding;
+    if (glyph->xOff < minXoff) minXoff = glyph->xOff;
+    if (glyph->xOff > maxXoff) maxXoff = glyph->xOff;
+    if (glyph->yOff < minYoff) minYoff = glyph->yOff;
+    if (glyph->yOff > maxYoff) maxYoff = glyph->yOff;
+    yExtent = glyph->h;
+    if (yExtent < 0)
+	errAbort("negative yExtent for glyph: %d, h: %d, yOff: %d",
+		glyph->encoding, glyph->h, glyph->yOff);
+    if (yExtent > font->frm_hgt)
+	errAbort("yExtent larger than possible for glyph: %d, h: %d, yOff: %d",
+ 		glyph->encoding, glyph->h, glyph->yOff);
+    if (glyph->w > maxXextent) maxXextent = glyph->w;
+    if (glyph->dWidth > maxDwidth) maxDwidth = glyph->dWidth;
+    if (yExtent > maxYextent) maxYextent = yExtent;
+    ++glyphCount;
+    }
+
+
+if (glyphCount > maxGlyphCount)
+    errAbort("found more glyphs than allowed: %d vs. %d\n",
+	glyphCount, maxGlyphCount);
+
+verbose(2, "#\thave %d glyphs to merge, missing: %d\n", glyphCount, missing);
+verbose(2, "#\tmin,max X offsets: %d, %d, maxXextent: %d\n",
+	minXoff, maxXoff, maxXextent);
+verbose(2, "#\tmin,max Y offsets: %d, %d, maxYextent: %d\n",
+	minYoff, maxYoff, maxYextent);
+
+//#       min,max X offsets: -1, 2, maxXextent: 16
+//#       min,max Y offsets: -4, 11, maxYextent: 18
+/*	Now that we know our and minYoff, this becomes our
+ *	reference to coordinate Y=0 in the global bitmap.
+ *	To copy an individual glyph into its place in the global bitmap,
+ *	the combination of the individual glyph's yOff with this minYoff
+ *	will move it to the correct row in the global bitmap.
+ */
+
+offset = 0;		/*	means X=byte position in global bitmap */
+glyphCount = 0;
+encoding = glyphs->encoding - 1;
+for (glyph = glyphs; glyph; glyph=glyph->next)
+    {
+    int byteWidth;
+
+    if (glyph->encoding != (encoding + 1))
+	{
+	verbose(2, "#\tmissing glyph between encodings: %d - %d\n", 
+		encoding, glyph->encoding);
+	missing += glyph->encoding - encoding;
+	errAbort("need to fill in this code to fill in the space with blank");
+	}
+    byteWidth = BYTEWIDTH(glyph->dWidth);
+    /* adjust starting row here by yOff and minYoff	TBD */
+    for (row = 0; row < glyph->h; ++row)
+	{
+	int col;
+	for (col = 0; col < byteWidth; ++col)
+	    {
+	    bitmap[row][offset+col] = glyph->bitmap[row][col];
+	    }
+	}
+    encoding = glyph->encoding;
+    offset += byteWidth;	/* next glyph x position in global bitmap */
+    ++glyphCount;
+    }
 
 if ((char *)NULL == name)
 	name = cloneString("name");	/*	default name of font */
@@ -42,13 +233,60 @@ fprintf(f, "#include \"common.h\"\n");
 fprintf(f, "#include \"memgfx.h\"\n");
 fprintf(f, "#include \"gemfont.h\"\n\n");
 
-fprintf(f, "UBYTE %s_data[] = {\n", name);
+fprintf(f, "static UBYTE %s_data[] = {\n", name);
+
+bytesOut = 0;
+for (row = 0; row < font->frm_hgt ; ++row)
+    {
+    int byteWidth = BYTEWIDTH(font->frm_wdt);
+    int col;
+    for (col = 0; col < byteWidth; ++col)
+	{
+	fprintf(f, "%#0x,", bitmap[row][col]);
+	++bytesOut;
+	if (0 == (bytesOut % 10))	/* every eight produces new line */
+	    fprintf(f,"\n");
+	}
+    }
+if (0 != (bytesOut % 10))  /* if not already a new line for the last one */
+    fprintf(f,"\n");
+
 fprintf(f, "};\n\n");
 
-fprintf(f, "static WORD %s_ch_ofst[257] = {\n", name);
-fprintf(f, "};\n\n");
+fprintf(f, "static WORD %s_ch_ofst[%d] = {\n", name, glyphCount);
 
-fprintf(f, "struct font_hdr %s_font = {\n", name);
+glyphCount = 0;
+encoding = glyphs->encoding - 1;
+offset = 0;
+for (glyph = glyphs; glyph; glyph=glyph->next)
+    {
+    int byteWidth;
+
+    if (glyph->encoding != (encoding + 1))
+	fprintf(f,"0,");	/*	missing chars are space */
+    encoding = glyph->encoding;
+    fprintf(f,"%d,",offset);
+    byteWidth = BYTEWIDTH(glyph->dWidth);
+    offset += byteWidth;
+    ++glyphCount;
+    if (0 == (glyphCount % 8))	/*	every eight produces new line */
+	fprintf(f,"\n");
+    }
+
+if (0 != (glyphCount % 8))	/* if not already a new line for the last one */
+    fprintf(f,"\n");
+
+font->top_dist = font->frm_hgt;
+font->asc_dist = font->frm_hgt + minYoff;
+font->hlf_dist = font->top_dist / 2;
+font->des_dist = - minYoff;
+font->bot_dist = - minYoff;
+font->wchr_wdt = maxXextent;
+font->wcel_wdt = maxDwidth;
+
+fprintf(f, "};\n\n");		/* done with ch_ofst[]	*/
+
+fprintf(f, "static struct font_hdr %s_font = {\n", name);
 fprintf(f, "STPROP, %hd, \"%s\", %hd, %hd,\n",
     font->size, font->facename, font->ADE_lo, font->ADE_hi);
 fprintf(f, "%hd, %hd, %hd, %hd, %hd,\n", font->top_dist,
@@ -64,7 +302,7 @@ fprintf(f, "NULL,\n");	/*	nxt_fnt	*/
 fprintf(f, "%hd, %hd, /* x/y offset */\n", font->xOff, font->yOff);
 fprintf(f, "};\n\n");
 
-fprintf(f, "MgFont *mgName()\n");
+fprintf(f, "MgFont *mgLargeFont()\n");
 fprintf(f, "{\n");
 fprintf(f, "return &%s_font;\n", name);
 fprintf(f, "}\n");
@@ -82,11 +320,11 @@ struct font_hdr fontHeader;  /* structure to be filled in during conversion */
 char *words[128];	/*	for splitting lines	*/
 int wordCount = 0;	/*	for splitting lines	*/
 int asciiLo = BIGNUM;	/*	a record of ASCII values encountered	*/
-int asciiHi = 0;	/*	lowest and highest, should be: [0-255]	*/
-int validGlyphs = 0;	/*	a count of chars found in range: [0-255] */
-boolean skipToNext = FALSE;	/* ignore characters not in range [0-255] */
+int asciiHi = 0;	/*	lowest and highest, should be: [LO-HI]	*/
+int validGlyphs = 0;	/*	a count of chars found in range: [LO-HI] */
+boolean skipToNext = FALSE;	/* ignore characters not in range [LO-HI] */
 boolean readingBitmap = FALSE;	/* working on the bitmap lines	*/
-int maxW = 0;		/*	a record of the maximum extents found */
+int maxDwidth = 0;	/*	a record of the maximum extents found */
 int minW = BIGNUM;	/*	for individual char bounding box	*/
 int maxH = 0;		/*	dimensions, smallest and largest box,	*/
 int minH = BIGNUM;	/*	for sanity checking purposes.	*/
@@ -95,15 +333,14 @@ int BBh = 0;		/*	width, height, X,Y offsets	*/
 int BBxoff = 0;
 int BByoff = 0;
 int glyphRow = 0;	/*	to count bitmap rows read for current char */
-int asciiValue = 0;;	/*	the current character's ascii value	*/
+int encoding = 0;	/*	the current character's ascii value	*/
 int maxX = 0;		/*	largest bounding box possible	*/
 int maxY = 0;		/* 	extracted from FOUNTBOUNDINGBOX line */
-unsigned char **bitmapRows = (unsigned char **)NULL;
-			/*	a single bitmap large enough for all */
-			/*	glyphs, allocated when we know how big */
-			/*	to make it: bitmapRows[ROW][BYTE]	*/
-int byteWidth = 0;	/*	width of a bitmap row in bytes	*/
-int combinedWidth = 0;	/*	sum of all glyph widths	*/
+int offX = 0;		/*	offset to X=0 in the FONTBOUNDINGBOX */
+int offY = 0;		/*	offset to Y=0 in the FONTBOUNDINGBOX */
+int combinedWidth = 0;	/*	sum of all glyph dWidths	*/
+struct bdfGlyph *curGlyph = NULL;    /* to accumulate the current glyph data */
+struct bdfGlyph *glyphList = NULL;   /* list of all glyphs read in */
 
 fontHeader.id = STPROP;
 fontHeader.size = 0;
@@ -147,7 +384,7 @@ while (lineFileNext(lf, &line, NULL))
 	char *c = line;
 	j = 0;
 verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
-	line, lineCount, asciiValue);
+	line, lineCount, encoding);
 	for (i = 0; i < len; ++i)
 	    {
 	    uc <<= 4;
@@ -155,10 +392,10 @@ verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
 		{
 		case '0': case '1': case '2': case '3': case '4':
 		case '5': case '6': case '7': case '8': case '9':
-		    uc |= (*c++ - '0') & 0xf;
+		    uc |= (*c++ - '0') & 0x0f;
 		    break;
 		case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-		    uc |= (*c++ - 'A' + 10) & 0xf;
+		    uc |= (*c++ - 'A' + 10) & 0x0f;
 		    break;
 		default:
 		    errAbort("unrecognized hex digit: %c at line %d",
@@ -166,18 +403,18 @@ verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
 		}
 	    if (i & 0x1)
 		{
-		bitmapRows[glyphRow][j++] = uc;
+		curGlyph->bitmap[glyphRow][j++] = uc;
 		uc = 0;
 		}
 	    }
 	if (len & 0x1) /* odd length ?  can that be, no, shouldn't happen */
 	    {
 	    uc <<= 4;
-	    bitmapRows[glyphRow][j] = uc;
+	    curGlyph->bitmap[glyphRow][j] = uc;
 	    errAbort("odd length of %d at line %d\n", lineCount);
 	    }
 	for (i = 0; i < j; ++i)
-	    verbose(4, "%02X", bitmapRows[glyphRow][i]);
+	    verbose(4, "%02X", curGlyph->bitmap[glyphRow][i]);
 	verbose(4,"\n");
 	++glyphRow;
 	continue;
@@ -213,36 +450,34 @@ verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
 	}
     else if (startsWith("FONTBOUNDINGBOX ", line))
 	{
-	int i;
 	wordCount = chopByWhite(line, words, ArraySize(words));
 	if (wordCount != 5)
 	    errAbort("can not find five words on FONTBOUNDINGBOX line");
 	maxX = sqlSigned(words[1]);
 	maxY = sqlSigned(words[2]);
-	byteWidth = (maxX + 3)/4;
-	bitmapRows = (unsigned char **)
-		needMem((size_t) (maxY * sizeof(unsigned char *)));
-	for (i = 0; i < maxY; ++i)
-	    bitmapRows[i] = (unsigned char *) needMem((size_t) byteWidth);
-	verbose(2,"allocated largest bitmap: %d x %d bytes\n", byteWidth, maxY);
+	offX = sqlSigned(words[3]);
+	offY = sqlSigned(words[4]);
+	verbose(2,"#\tlargest font size box: %d x %d, (0,0) offsets: %d, %d\n",
+		maxX, maxY, offX, offY);
 	}
     else if (startsWith("STARTCHAR ", line))
 	{
-	int i, j;
 	if ((0 == fontHeader.size) || (0 == maxX) || (0 == maxY))
 	    errAbort("at a STARTCHAR but haven't seen proper sizes yet");
-	/*	starting a character definition, zero out the bitmap	*/
-	for (i = 0; i < maxY; ++i)
-	    for (j = 0; j < byteWidth; ++j)
-		bitmapRows[i][j] = (unsigned char) NULL;
+	/*	starting a character, allocate the single sized glyph area */
+	curGlyph = allocGlyph(maxX, maxY);
 	}
     else if (startsWith("ENDCHAR", line))
 	{
 	if (glyphRow != BBh)
 	    errAbort("not the correct number of bitmap rows for char: %d\n",
-		asciiValue);
-	/*	finished with a character definition	*/
-	glyphRow = 0;
+		encoding);
+	/*	finished with a character definition, add to list	*/
+	slAddHead(&glyphList, curGlyph);
+	if (curGlyph->dWidth < 1)
+	    errAbort("less than one dWidth for character: %d",
+		curGlyph->encoding);
+	glyphRow = 0;		/* reset row counter for sanity checking */
 	}
     else if (startsWith("BITMAP", line))
 	{
@@ -253,18 +488,27 @@ verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
 	wordCount = chopByWhite(line, words, ArraySize(words));
 	if (wordCount != 2)
 	    errAbort("can not find two words on ENCODING line");
-	asciiValue = sqlSigned(words[1]);
+	encoding = sqlSigned(words[1]);
 	/* ignore all values outside the standard ascii */
-	if ((asciiValue < 0) || (asciiValue > 255))
+	if ((encoding < LO_LMT) || (encoding > HI_LMT))
 	    {
 	    skipToNext = TRUE;
 	    }
 	else
 	    {
-	    if (asciiValue < asciiLo) asciiLo = asciiValue;
-	    if (asciiValue > asciiHi) asciiHi = asciiValue;
+	    if (encoding < asciiLo) asciiLo = encoding;
+	    if (encoding > asciiHi) asciiHi = encoding;
 	    ++validGlyphs;
+	    curGlyph->encoding = encoding;
 	    }
+	}
+    else if (startsWith("DWIDTH ", line))
+	{
+	wordCount = chopByWhite(line, words, ArraySize(words));
+	if (wordCount != 3)
+	    errAbort("can not find three words on DWIDTH line");
+	curGlyph->dWidth = sqlSigned(words[1]);
+	combinedWidth += curGlyph->dWidth;
 	}
     else if (startsWith("BBX ", line))
 	{
@@ -273,14 +517,14 @@ verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
 	    errAbort("can not find five words on BBX line");
 	BBh = sqlSigned(words[2]);
 	/*	I don't know why there are glyphs defined that are
- 	 *	larger than the font, I'm going to skip them
+ 	 *	larger than the font size, I'm going to skip them
 	 */
 	if (BBh > fontHeader.size)
 	    {
 	    skipToNext = TRUE;
 	    --validGlyphs;
 	    verbose(2,"BBh == %d > %d for character: %d - skipping this char\n",
-		BBh, fontHeader.size, asciiValue);
+		BBh, fontHeader.size, encoding);
 	    }
 	else
 	    {
@@ -288,27 +532,32 @@ verbose(4, "processin bitmap line: %s at line %d, char: %d ... ",
 	    BBxoff = sqlSigned(words[3]);
 	    BByoff = sqlSigned(words[4]);
 	    if (BBw < minW) minW = BBw;
-	    if (BBw > maxW) maxW = BBw;
+	    if (BBw > maxDwidth) maxDwidth = BBw;
 	    if (BBh < minH) minH = BBh;
 	    if (BBh > maxH) maxH = BBh;
-	    combinedWidth += BBw;
+	    curGlyph->w = BBw;
+	    curGlyph->h = BBh;
+	    curGlyph->xOff = BBxoff;
+	    curGlyph->yOff = BByoff;
+	    if ((curGlyph->xOff < offX) || (curGlyph->yOff < offY))
+		errAbort("a glyph's x,y offsets are out of range: %d,%d vs limits %d,%d\n", curGlyph->xOff, curGlyph->yOff, offX, offY);
 	    }
 	}
     }
 lineFileClose(&lf);
-verbose(2, "read %d lines from file %s\n", lineCount, bdfFile);
-verbose(2, "facename: %s\n", fontHeader.facename);
-verbose(2, "ascii range: %d - %d, valid glyphs: %d\n", asciiLo, asciiHi,
+verbose(2, "#\tread %d lines from file %s\n", lineCount, bdfFile);
+verbose(2, "#\tfacename: %s\n", fontHeader.facename);
+verbose(2, "#\tascii range: %d - %d, valid glyphs: %d\n", asciiLo, asciiHi,
 	validGlyphs);
-verbose(2, "W,H range (%d-%d) (%d-%d), combinedWidth: %d\n", minW, minH,
-	maxW, maxH, combinedWidth);
+verbose(2, "#\tW,H range (%d-%d) (%d-%d), combinedWidth: %d\n", minW, minH,
+	maxDwidth, maxH, combinedWidth);
 fontHeader.frm_wdt = combinedWidth;
 fontHeader.frm_hgt = maxH;
 fontHeader.ADE_lo = asciiLo;
 fontHeader.ADE_hi = asciiHi;
 
 
-outputGem(outputFile, &fontHeader);
+outputGem(outputFile, &fontHeader, glyphList);
 }
 
 int main( int argc, char *argv[] )
