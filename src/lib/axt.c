@@ -19,7 +19,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.24 2003/05/18 07:56:51 baertsch Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.25 2003/09/04 23:58:51 braney Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -510,6 +510,29 @@ void axtScoreSchemeFree(struct axtScoreScheme **pObj)
 /* Free up score scheme. */
 {
 freez(pObj);
+}
+
+struct axtScoreScheme *axtScoreSchemeProteinRead(char *fileName)
+{
+FILE* file = (FILE *) NULL;
+int length;
+char *string;
+struct axtScoreScheme *ss;
+
+/*	find out how long the file is	*/
+file = mustOpen(fileName,"r");
+(void) fseek( file, (long) 0, SEEK_END );
+length = ftell(file);
+string = needMem( length + 1 );
+rewind(file);
+fread(string, 1, length, file );
+fclose(file);
+
+ss = axtScoreSchemeFromProteinText(string, fileName);
+
+freeMem(string);
+
+return ss;
 }
 
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName)
