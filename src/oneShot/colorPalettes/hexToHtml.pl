@@ -13,7 +13,7 @@
 #
 #	2005-02-02 - Created - Hiram
 #
-#	"$Id: hexToHtml.pl,v 1.1 2005/02/02 20:52:02 hiram Exp $"
+#	"$Id: hexToHtml.pl,v 1.2 2005/02/02 23:35:03 hiram Exp $"
 #
 
 use warnings;
@@ -21,14 +21,15 @@ use strict;
 
 my $argc = @ARGV;
 
-if( $argc < 1 ) {
+if( $argc < 1 )
+    {
     print "usage: $0 <files with color definitions> > palette.html\n";
     print "\tthe color definition files are two column files:\n";
     print "\t#rrggbb label\n";
     print "\twhere #rrggbb is a hex rgb designation, e.g. #a52a2a\n";
     print "\tand label is the label for that color\n";
     exit( 255 );
-}
+    }
 
 my @palettes;		#	an array of arrays
 my @paletteNames;	#	derived from the file names
@@ -36,7 +37,8 @@ my $paletteCount = 0;	#	number of palette definitions read in
 
 #	read each file, simply save each line in an array, then that
 #	array save in the @palettes array.
-while (my $fName = shift) {
+while (my $fName = shift)
+    {
     open (FH,"$fName") or die "Can not open color definition file $fName";
     my $paletteName = $fName;
     $paletteName =~ s/\..*//;	#	remove .txt extension
@@ -44,48 +46,70 @@ while (my $fName = shift) {
     ++$paletteCount;
     my @palette;
     my $paletteKey = 0;
-    while (my $line = <FH>) {
+    while (my $line = <FH>)
+	{
 	chomp $line;
 	$palette[$paletteKey] = $line;
 	++$paletteKey;
-    }
+	}
     close (FH);
     push (@palettes, \@palette);
-}
+    }
 
 print STDERR "read $paletteCount palette definitions\n";
 
 print '<HTML><HEAD><TITLE> Color Palette Examples </TITLE></HEAD><BODY>', "\n";
 print "<H3> Color Palette Examples </H3>\n";
-print "<TABLE><TR>\n";
+print "<H4> Use the pantone colors to be compatible for printing </H4>\n";
 
-#	print a TABLE header line with each palette name
-for (my $i=0; $i < $paletteCount; ++$i) {
-    printf "    <TH> %s </TH>\n", $paletteNames[$i];
-}
-print "</TR><TR>\n";
+my $maxColPerTable = 5;
+my $colTotal = 0;
+my $palettesDone = 0;
 
-#	Now, going through each palette, make its display table
-for (my $i=0; $i < $paletteCount; ++$i) {
-    print "    <TD><TABLE BORDER=1>\n";
-    my $palette = $palettes[$i];
-    my $paletteSize = scalar(@$palette);
-    for (my $j=0; $j < $paletteSize; ++$j) {
-	my $line = $palette->[$j];	#	recover the line read in above
-	my ($rgb, $label) = split('\s+',$line);
-	my $hexDigits = $rgb;
-	$hexDigits =~ m/^\#(..)(..)(..)$/;
-	my $red = hex($1);
-	my $green = hex($2);
-	my $blue = hex($3);
-	print '    <TR><TD WIDTH=40 HEIGHT=40 BGCOLOR="';
-	printf "%s", $rgb;
-	print '">&nbsp;</TD><TD ALIGN=LEFT>&nbsp;', $label;
-	print '&nbsp;</TD><TD ALIGN=RIGHT>&nbsp;';
-	printf "%d,%d,%d", $red, $green, $blue;
-	print '&nbsp;</TD></TR>', "\n";
+while ($palettesDone < $paletteCount)
+    {
+    my $colsThisTable = 0;
+
+    print "<TABLE BORDER=1><TR>\n";
+    #	print a TABLE header line with each palette name
+    for (my $i=$colTotal; ($i < $paletteCount) &&
+		($colsThisTable < $maxColPerTable); ++$i)
+	{
+	printf "    <TH> %s </TH>\n", $paletteNames[$i];
+	++$colsThisTable;
+	}
+    print "</TR><TR>\n";
+
+    $colsThisTable = 0;
+
+    #	Now, going through each palette, make its display table
+    for (my $i=$colTotal; ($i < $paletteCount) &&
+		($colsThisTable < $maxColPerTable); ++$i)
+	{
+	++$palettesDone;
+	print "    <TD><TABLE BORDER=1>\n";
+	my $palette = $palettes[$i];
+	my $paletteSize = scalar(@$palette);
+	for (my $j=0; $j < $paletteSize; ++$j)
+	    {
+	    my $line = $palette->[$j];	#	recover the line read in above
+	    my ($rgb, $label) = split('\s+',$line);
+	    my $hexDigits = $rgb;
+	    $hexDigits =~ m/^\#(..)(..)(..)$/;
+	    my $red = hex($1);
+	    my $green = hex($2);
+	    my $blue = hex($3);
+	    print '    <TR><TD WIDTH=40 HEIGHT=40 BGCOLOR="';
+	    printf "%s", $rgb;
+	    print '">&nbsp;</TD><TD ALIGN=LEFT>&nbsp;', $label;
+	    print '&nbsp;</TD><TD ALIGN=RIGHT>&nbsp;';
+	    printf "%d,%d,%d", $red, $green, $blue;
+	    print '&nbsp;</TD></TR>', "\n";
+	    }
+	print "    </TABLE></TD>\n";
+	++$colsThisTable;
+	++$colTotal;
+	}
+    print "</TR></TABLE>\n";
     }
-    print "    </TABLE></TD>\n";
-}
-print "</TR></TABLE>\n";
 print "</BODY></HTML>\n";
