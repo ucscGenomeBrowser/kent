@@ -10,11 +10,13 @@
 #include "hdb.h"
 #include "refLink.h"
 #include "nib.h"
+#include "bed.h"
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
 char *clChrom = "all";	/* Which chromosome. */
 boolean reportPercentId = FALSE;  /* Report percent id. */
+char *format = "psl";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,7 +28,8 @@ errAbort(
   "options:\n"
   "   -dots=N - Output a dot every N known genes\n"
   "   -chrom=chrN - Restrict to a single chromosome\n"
-  "   -percentId - calculate percent identity. Only works for blat tables. Slow\n"
+  "   -percentId - calculate percent identity. Only works for psl tables. Slow\n"
+  "   -format=type.  Type = 'bed' or 'psl'\n"
   );
 }
 
@@ -181,7 +184,7 @@ for (el = list; el != NULL; el = el->next)
 return stats;
 }
 
-void addBestMilli(struct psl *psl, int *milliMatches, 
+void addPslBestMilli(struct psl *psl, int *milliMatches, 
 	struct dnaSeq *geno, int genoStart, int genoEnd,
 	struct dnaSeq *query)
 /* Evaluated psl block-by-block for identity in parts per thousand.
@@ -267,13 +270,29 @@ int pslMilliId(struct psl *psl)
 1000 - pslCalcMilliBad(psl, FALSE);
 }
 
-void addFakeMilli(struct psl *psl, int *milliMatches, 
+void simpleAddMilli(int *milliMatches, int score, int start, int end, int genoStart, int genoEnd)
+/* Add bits of block that intersect region from genoStart to genoEnd to milliMatches */
+{
+/* Clip to window and if anything left update score array. */
+if (start < genoStart) start = genoStart;
+if (end > genoEnd) end = genoEnd;
+if (start < end)
+    {
+    int i;
+    start -= genoStart;
+    end -= genoStart;
+    for (i=start; i<end; ++i)
+	if (score > milliMatches[i]) milliMatches[i] = score;
+    }
+}
+
+void addPslFakeMilli(struct psl *psl, int *milliMatches, 
 	int genoStart, int genoEnd)
 /* Similar to addBestMilli above.  However this only makes as much
  * of the stats as it can without having the sequence loaded. */
 {
 int  i, j, blockCount = psl->blockCount, blockStart, blockEnd;
-int same, milli = pslMilliId(psl), *milliPt;
+int same, score = pslMilliId(psl), *milliPt;
 boolean tIsRc = (psl->strand[1] == '-');
 int start, end;
 int intersection;
@@ -282,7 +301,7 @@ int intersection;
 for (i=0; i<blockCount; ++i)
     {
     /* Get coordinates of block, coping with minus strand adjustment
-     * if necessary. */
+     * if necessary.  Then update block in milliMatches array. */
     blockStart = psl->tStarts[i];
     blockEnd = blockStart + psl->blockSizes[i];
     if (tIsRc)
@@ -295,19 +314,7 @@ for (i=0; i<blockCount; ++i)
 	start = blockStart;
 	end = blockEnd;
 	}
-
-    /* Clip to window and if anything left update score array. */
-    if (start < genoStart) start = genoStart;
-    if (end > genoEnd) end = genoEnd;
-    if (start < end)
-        {
-	start -= genoStart;
-	end -= genoStart;
-	for (j=start; j<end; ++j)
-	    {
-	    if (milli > milliMatches[j]) milliMatches[j] = milli;
-	    }
-	}
+    simpleAddMilli(milliMatches, score, start, end, genoStart, genoEnd);
     }
 }
 
@@ -354,28 +361,12 @@ stat->features += 1;
 return painted;
 }
 
-struct blatStats *calcGeneStats(char *chrom, 
-	struct dnaSeq *geno, int genoStart, int genoEnd,
-	struct psl *pslList,
-	struct genePred *gp)
-/* Figure out how psl hits gene and return resulting stats. 
- * This will take a short-cut and be much faster if geno is NULL.
- * (But the percent ID stuff won't be calculated. */
+void pslMakeMilli(struct dnaSeq *geno, struct psl *pslList, int *milliMatches, 
+	char *chrom, int genoStart, int genoEnd, 
+	struct hash *traceHash, struct dnaSeq **pTraceList)
+/* Fill in milliMatches array with scores from pslList. */
 {
-struct blatStats *stats;
-struct hash *traceHash = newHash(0);
-struct dnaSeq *traceList = NULL, *trace = NULL;
 struct psl *psl;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char query[256], **row;
-char *traceName;
-int *milliMatches;
-int exonCount = gp->exonCount, exonIx, exonStart, exonEnd;
-boolean anyMrna = FALSE;
-
-AllocVar(stats);
-AllocArray(milliMatches, genoEnd - genoStart);
 
 /* Loop through alignments that might intersect window. */
 for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
@@ -388,21 +379,53 @@ for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
 	{
 	if (geno != NULL)
 	    {
-	    traceName = psl->qName;
+	    char *traceName = psl->qName;
+	    struct dnaSeq *trace;
 	    if ((trace = hashFindVal(traceHash, traceName)) == NULL)
 		{
 		trace = hExtSeq(traceName);
-		slAddHead(&traceList, trace);
+		slAddHead(pTraceList, trace);
 		hashAdd(traceHash, traceName, trace);
 		}
-	    addBestMilli(psl, milliMatches, geno, genoStart, genoEnd, trace);
+	    addPslBestMilli(psl, milliMatches, geno, genoStart, genoEnd, trace);
 	    }
 	else
 	    {
-	    addFakeMilli(psl, milliMatches, genoStart, genoEnd);
+	    addPslFakeMilli(psl, milliMatches, genoStart, genoEnd);
 	    }
 	}
     }
+}
+
+void bedMakeMilli(struct bed *bedList, int *milliMatches, char *chrom, 
+	int genoStart, int genoEnd)
+/* Fill in milliMatches array from bedList. */
+{
+struct bed *bed;
+for (bed = bedList; bed != NULL; bed = bed->next)
+    {
+    if (bed->chromStart < genoEnd && bed->chromEnd > genoStart)
+        simpleAddMilli(milliMatches, 500, bed->chromStart, bed->chromEnd, genoStart, genoEnd);
+    }
+}
+
+struct blatStats *calcGeneStats(char *chrom, 
+	int genoStart, int genoEnd,
+	int *milliMatches,
+	struct genePred *gp)
+/* Figure out how psl hits gene and return resulting stats. 
+ * This will take a short-cut and be much faster if geno is NULL.
+ * (But the percent ID stuff won't be calculated. */
+{
+struct blatStats *stats;
+struct psl *psl;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[256], **row;
+int exonCount = gp->exonCount, exonIx, exonStart, exonEnd;
+boolean anyMrna = FALSE;
+
+AllocVar(stats);
 
 /* Gather stats on various regions starting with upstream and downstream
  * regions. */
@@ -529,19 +552,7 @@ for (exonIx = 1; exonIx < exonCount; ++exonIx)
 
 /* Clean up and return. */
 hFreeConn(&conn);
-freeHash(&traceHash);
-freeDnaSeqList(&traceList);
-freez(&milliMatches);
 return stats;
-}
-
-struct blatStats *fastGeneStats(char *chrom, 
-	int genoStart, int genoEnd,
-	struct psl *pslList,
-	struct genePred *gp)
-/* Figure out how psl hits gene and return resulting stats. 
- * This is the slow routine that does calculate percent ID. */
-{
 }
 
 
@@ -639,20 +650,38 @@ for (gp = gi->gpList; gp != NULL; gp = gp->next)
 return maxGp;
 }
 
-struct psl *getChromBlat(char *chrom, char *blatTable)
-/* Get all blatMouse alignments for chromosome sorted by chromosome
+boolean findSplitTable(char *chrom, char *splitTable, char *table)
+/* Look to see if 'origTable' is in database.   If it's
+ * not then shift to chrN_table.  Returns TRUE if table is split. */
+{
+if (hTableExists(splitTable))
+    {
+    strcpy(table, splitTable);
+    return FALSE;
+    }
+else
+    {
+    sprintf(table, "%s_%s", chrom, splitTable);
+    return TRUE;
+    }
+}
+
+struct psl *getChromPsl(char *chrom, char *splitTable)
+/* Get all alignments for chromosome sorted by chromosome
  * start position. */
 {
 char table[64];
 char query[256], **row;
 struct sqlResult *sr;
 struct psl *pslList = NULL, *psl;
-
-sprintf(table, "%s_%s", chrom, blatTable);
+boolean isSplit = findSplitTable(chrom, splitTable, table);
 if (hTableExists(table))
     {
     struct sqlConnection *conn = hAllocConn();
-    sprintf(query, "select * from %s", table);
+    if (isSplit)
+	sprintf(query, "select * from %s", table);
+    else
+	sprintf(query, "select * from %s and qName = '%s'", table, chrom);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -668,6 +697,43 @@ else
 return pslList;
 }
 
+struct bed *getChromBed(char *chrom, char *splitTable)
+/* Get all alignments for chromosome sorted by chromosome
+ * start position. */
+{
+char table[64];
+char query[256], **row;
+struct sqlResult *sr;
+struct bed *bedList = NULL, *bed;
+boolean isSplit = findSplitTable(chrom, splitTable, table);
+
+if (hTableExists(table))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    if (isSplit)
+	sprintf(query, "select chrom,chromStart,chromEnd from %s", table);
+    else
+	sprintf(query, "select chrom,chromStart,chromEnd from %s where chrom = '%s'", 
+		table, chrom);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	AllocVar(bed);
+	bed->chrom = cloneString(row[0]);
+	bed->chromStart = sqlUnsigned(row[1]);
+	bed->chromEnd = sqlUnsigned(row[2]);
+	slAddHead(&bedList, bed);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    slReverse(&bedList);
+    }
+else
+    warn("Table %s doesn't exist", table);
+return bedList;
+}
+
+
 
 struct blatStats *chromStats(char *chrom, struct hash *nmToGeneHash, char *table)
 /* Produce stats for one chromosome. Just consider longest isoform
@@ -679,20 +745,31 @@ struct genePred *gp;
 char nibName[512];
 FILE *nibFile;
 int chromSize;
-struct psl *pslList, *psl;
+struct psl *pslList = NULL;
+struct bed *bedList = NULL;
+void *itemList = NULL;
 struct dnaSeq *geno = NULL;
 int extraBefore = 800;
 int extraAfter = 200;
 int startRegion, endRegion;
 int sizeRegion;
+boolean isPsl = sameWord(format, "psl");
+struct hash *traceHash = newHash(0);
+struct dnaSeq *traceList = NULL, *trace = NULL;
 
 hNibForChrom(chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);
-psl = pslList = getChromBlat(chrom, table);
+if (isPsl)
+    itemList = pslList = getChromPsl(chrom, table);
+else
+    itemList = bedList = getChromBed(chrom, table);
+
 AllocVar(stats);
 giList = getChromGenes(chrom, nmToGeneHash);
 for (gi = giList; gi != NULL; gi = gi->next)
     {
+    int *milliMatches = NULL;
+    /* Expand region around gene a little and load corresponding sequence. */
     gp = longestIsoform(gi);
     if (gp->strand[0] == '+')
 	{
@@ -708,20 +785,29 @@ for (gi = giList; gi != NULL; gi = gi->next)
     if (endRegion > chromSize)
 	endRegion = chromSize;
     sizeRegion = endRegion - startRegion;
-
-    /* Expand region around gene a little and load corresponding sequence. */
     if (reportPercentId)
 	geno = nibLdPart(nibName, nibFile, chromSize, startRegion, sizeRegion);
-    gStats = calcGeneStats(chrom, geno, startRegion, endRegion, psl, gp);
+
+    AllocArray(milliMatches, sizeRegion);
+    if (isPsl)
+	pslMakeMilli(geno, itemList, milliMatches, chrom, startRegion, endRegion, traceHash, &traceList);
+    else
+        bedMakeMilli(itemList, milliMatches, chrom, startRegion, endRegion);
+    gStats = calcGeneStats(chrom, startRegion, endRegion, milliMatches, gp);
     addStats(gStats, stats);
     freez(&gStats);
     freeDnaSeq(&geno);
+    freez(&milliMatches);
     dotOut();
     }
 if (dotEvery > 0)
    printf("\n");
+carefulClose(&nibFile);
 geneIsoformsFreeList(&giList);
 pslFreeList(&pslList);
+bedFreeList(&bedList);
+freeHash(&traceHash);
+freeDnaSeqList(&traceList);
 return stats;
 }
 
@@ -785,6 +871,7 @@ cgiSpoof(&argc, argv);
 dotEvery = cgiUsualInt("dots", dotEvery);
 clChrom = cgiUsualString("chrom", clChrom);
 reportPercentId = cgiBoolean("percentId");
+format = cgiUsualString("format", format);
 if (argc != 4)
     usage();
 knownVsBlat(argv[1], argv[2], argv[3]);
