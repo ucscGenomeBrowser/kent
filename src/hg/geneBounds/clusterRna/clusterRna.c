@@ -51,7 +51,9 @@ struct psl *pslList = NULL, *psl;
 int rowOffset;
 struct sqlResult *sr;
 char **row;
-
+struct hTableInfo *hti = hFindTableInfo(chromName, table);
+if(hti == NULL)
+    errAbort("clusterRna::loadPsl() - Table %s doesn't exist for chrom %s.", table, chromName);
 sr = hChromQuery(conn, table, chromName, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -60,6 +62,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
+freez(&hti);
 printf("Loaded %d from %s\n", slCount(pslList), table);
 return pslList;
 }
@@ -139,6 +142,9 @@ struct estOrientInfo *eoiList = NULL, *eoi;
 int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, orientTable, chromName, NULL, &rowOffset);
 char **row;
+struct hTableInfo *hti = hFindTableInfo(chromName, orientTable);
+if(hti == NULL)
+    errAbort("clusterRna::loadEstOrientInfo() - Table %s doesn't exist for chrom %s.", orientTable, chromName);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -147,6 +153,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&eoiList);
+freez(&hti);
 return eoiList;
 }
 
