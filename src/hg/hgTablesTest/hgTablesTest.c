@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.6 2004/11/07 20:25:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.7 2004/11/07 23:46:22 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -170,13 +170,19 @@ if (htmlFormVarGet(mainForm, hgtaDoSummaryStats) != NULL)
     }
 }
 
+boolean varIncludesType(struct htmlForm *form, char *var, char *value)
+/* Return TRUE if value is one of the options for var. */
+{
+struct htmlFormVar *formVar = htmlFormVarGet(form, var);
+if (formVar == NULL)
+    errAbort("Couldn't find %s variable in form", var);
+return slNameInList(formVar->values, value);
+}
+
 boolean outTypeAvailable(struct htmlForm *form, char *value)
 /* Return true if outType options include value. */
 {
-struct htmlFormVar *outType = htmlFormVarGet(form, hgtaOutputType);
-if (outType == NULL)
-    errAbort("Couldn't find %s variable in form", hgtaOutputType);
-return slNameInList(outType->values, value);
+return varIncludesType(form, hgtaOutputType, value);
 }
 
 int countNoncommentLines(char *s)
@@ -357,6 +363,71 @@ if (outPage != NULL)
 htmlPageFree(&outPage);
 }
 
+void checkFaOutput(struct htmlPage *page, int expectedCount)
+/* Check that page contains expected number of sequences. */
+{
+char *s = page->htmlText;
+int count = countChars(page->htmlText, '>');
+if (count != expectedCount)
+    qaStatusSoftError(tablesTestList->status, 
+	    "Got %d sequences, expected %d", count, expectedCount);
+}
+
+void testOutSequence(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table, 
+     int expectedRows)
+/* Get as sequence and make sure count agrees with expected. */
+{
+struct htmlPage *outPage;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "sequence");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "seqUi1", hgtaDoTopSubmit, "submit");
+if (outPage != NULL)
+     {
+     struct htmlFormVar *typeVar;
+     struct htmlPage *seqPage;
+
+     /* Look and see if this is the form that gives various types
+      * of sequence as an option.  If so check protein and mRNA sequence if
+      * available, and then go to genomic page, which is the only
+      * think most tracks get. */
+     typeVar = htmlFormVarGet(outPage->forms, hgtaGeneSeqType);
+     if (typeVar != NULL)
+         {
+	 static char *types[] = {"protein", "mRNA"};
+	 int i;
+	 for (i=0; i<ArraySize(types); ++i)
+	     {
+	     char *type = types[i];
+	     if (slNameInList(typeVar->values, type))
+	         {
+		 struct htmlPage *page;
+		 char testName[128];
+		 htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, type);
+		 safef(testName, sizeof(testName), "%sSeq", type);
+		 page = quickSubmit(outPage, org, db, group, track, table,
+		    testName, hgtaDoGenePredSequence, "submit");
+		 checkFaOutput(page, expectedRows);
+		 htmlPageFree(&page);
+		 }
+	     }
+	 htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, "genomic");
+	 serialSubmit(&outPage, org, db, group, track, table, "seqUi2",
+	    hgtaDoGenePredSequence, "submit");
+	 }
+
+     /* On genomic page uncheck intron if it's there, then get results
+      * and count them. */
+     if (htmlFormVarGet(outPage->forms, "hgSeq.intron") != NULL)
+         htmlPageSetVar(outPage, NULL, "hgSeq.intron", NULL);
+     seqPage = quickSubmit(outPage, org, db, group, track, table,
+          "genomicSeq", hgtaDoGenomicDna, "submit");
+     checkFaOutput(seqPage, expectedRows);
+     htmlPageFree(&seqPage);
+     }
+htmlPageFree(&outPage);
+}
 	
 	
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
@@ -378,6 +449,7 @@ if (outTypeAvailable(mainForm, "primaryTable"))
     testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
     if (outTypeAvailable(mainForm, "bed"))
         {
+	testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutGff(tablePage, mainForm, org, db, group, track, table);
