@@ -1,5 +1,5 @@
 /* xp - A minimal non-verifying xml parser.  It's
- * stream oriented much like expas.
+ * stream oriented much like expat.
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
