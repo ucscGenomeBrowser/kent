@@ -20,26 +20,3 @@ printf("<tt>%s</tt> &nbsp;&nbsp;<br>", seq1 );
 printf("<tt>%s</tt> &nbsp;&nbsp;<br>", seq2 );
 
 }
-
-
-void flyFaCommentIntoInfo(char *faComment, struct wormCdnaInfo *retInfo)
-/* Process line from .fa file containing information about cDNA into binary
- * structure. */
-{
-if (retInfo)
-    {
-    char *s;
-    zeroBytes(retInfo, sizeof(*retInfo));
-    /* Separate out first word and use it as name. */
-    s = strchr(faComment, ' ');
-    if (s != NULL)
-	    *s++ = 0;
-    retInfo->name = faComment+1;
-    retInfo->motherString = faComment;
-	s = strrchr(retInfo->name, '.');
-	retInfo->orientation = '+';
-	if (s != NULL)
-		retInfo->orientation = (s[1] == '3' ? '-' : '+');
-    }
-}
-
