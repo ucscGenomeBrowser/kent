@@ -1,38 +1,55 @@
-<H2>Description</H2>
+<H2>Description</H2><P>
+
+  This track shows ENCODE regions that co-precipitate with antibody
+  against RNA polymerase II.  Retinoic Acid-stimulated HL-60 Cells
+  were harvested after 0, 2, 8, and 32 hours and whole cell extracts
+  (control) were made.  An antibody to RNA Polymerase II was used to
+  immunoprecipitate bound chromatin fragments (treatment).  DNA was
+  purified from these samples and hybridized to Affymetrix ENCODE
+  oligonucleotide tiling arrays.  These arrays have 25-mer probes
+  tiled every 21 bp on average in the non-repetitive ENCODE regions.
+
+<H2>Methods</H2><P>
+  The data from replicate arrays were quantile-normalized (Bolstad
+  <I>et al</I>.) and all arrays are scaled to a median array intensity
+  of 25.  Within a sliding 1001 bp window centered on each probe, a
+  signal estimator P = <I>ln</I>[<I>max</I>(PM - MM, 1)] (where PM is
+  perfect match and MM is mismatch) is computed for all treatment- and
+  control-probe pairs.  An estimate of the significance of the
+  enrichment of treatment signal over control signal in each window is
+  given by the P value computed using the Wilcoxon Rank Sum test over
+  all treatment and control signal estimates in that window. The log
+  transformed P value (-10 log<font size=1>[10]</font> P) is
+  displayed.
+<H2>Verification</H2><P>
+  Three independent biological replicates were generated and
+  hybridized to duplicate arrays (2 technical replicates).  Enriched
+  regions were generated from the signal, based on a log transformed P
+  value cutoff of 50. Based on their log transformed P values as
+  computed from the respective replicates, these sites were then
+  ranked individually within each of the replicates. All pairwise
+  differences in these ranks were computed among biological
+  replicates; replicates were accepted when the sum of rank
+  differences was relatively low (there are currently no hard cutoff
+  criteria).
+<H2>Credits</H2><P>
+  These data were generated and analyzed by the Gingeras/Struhl
+  collaboration with Tom Gingeras' group at Affymetrix and <A
+  HREF="http://www.hms.harvard.edu/dms/bbs/fac/struhl.html"
+  TARGET=_BLANK> Kevin Struhl</A>'s group at Harvard Medical School.
+<H2>References</H2><P>
+  Please see the <A TARGET=_BLANK
+  HREF="http://www.affymetrix.com/transcriptome/index.affx">
+  Affymetrix Transcriptome</A> site for a project overview and
+  additional references to Affymetrix tiling array publications.
 <P>
-RNA Polymerase II ChIP (treatment) enrichment over Whole Cell Extract 
-(control) from Retinoic Acid Stimulated HL-60 Cells after 0, 2, 8, and 32 hours 
-were hybridized to Affymetrix ENCODE oligonucleotide tiling arrays which 
-have 25mer probes tiled every 21 bp on average in the non-repeat 
-ENCODE regions.
-<H2>Methods</H2>
+  Bolstad, B. M., Irizarry, R. A., Astrand, M., and Speed,
+  T. P. (2003). A comparison of normalization methods for high density
+  oligonucleotide array data based on variance and
+  bias. <I>Bioinformatics</I> 19:185-193.
 <P>
-An estimate of signficance (-10log10(p-value)) using a Wilcoxon Rank Sum
-Scan Statistic where ln(max(PM-MM,1)) is calculated for treatment and
-control for all probe pairs within a sliding window of 1001bp of a given central
-probe using quantile normalizing replicate arrays whose median array 
-intensity was scaled to 25.
-<H2>Verification</H2>
-<P>
-Three independent biological replicates were generated; 
-these were used to hybridize 2 arrays (2 technical replicates).
-Enriched regions were generated 
-from this pval track based on a log transformed pval cutoff of 50. 
-These sites were then ranked, individually in each of the replicates, 
-based on their log transformed pvalues as computed from the respective 
-replicates.  All pairwise differences in these ranks were computed
-among biological replicates and replicates were accepted when the sum 
-of rank differences was relatively low (there is currently no hard 
-cutoff criteria).  
-<H2>Credits</H2>
-<P>
-This data was generated and analyzed by the Gingeras/Struhl collaboration
-with Tom Gingeras's group at Affymetrix and 
-<A TARGET=_BLANK HREF="http://www.hms.harvard.edu/dms/bbs/fac/struhl.html">
-Kevin Struhl</A>'s group at
-Harvard Medical School.
-<H2>References</H2>
-<P>
-<A TARGET=_BLANK HREF="http://www.affymetrix.com/transcriptome/index.affx">
-Affymetrix Transcriptome</A> project overview and
-references to Affymetrix tiling array publications.
+  Cawley, S., Bekiranov, S., Ng, H. H., Kapranov, P., Sekinger,
+  E. A., Kampa, D., Piccolboni, A., Sementchenko, V., Cheng, J.,
+  Williams, A. J., <I>et al</I>. (2004). Unbiased Mapping of Transcription
+  Factor Binding Sites along Human Chromosomes 21 and 22 Points to
+  Widespread Regulation of Noncoding RNAs. <I>Cell</I> 116:499-509.
