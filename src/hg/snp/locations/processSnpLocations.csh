@@ -73,20 +73,21 @@ else
     # chromosome names are changed (chrMT->chrM, chrUn is ignored)
 
     echo `date` Making snpNih.bed
-    gunzip $inputFile | $LOCDIR/createMouseSnpNihBed > snpNih.bed
+    gunzip $inputFile.gz
+    $LOCDIR/createMouseSnpNihBed < $inputFile > snpNih.bed
 
     echo `date` Making snpMap.bed
-    gunzip $inputFile | $LOCDIR/createMouseSnpMapBed > snpMap.bed
+    $LOCDIR/createMouseSnpMapBed < $inputFile > snpMap.bed
 
 endif
-
-# load data into database
-echo `date` Loading snpNih.bed
-hgLoadBed $database snpNih snpNih.bed -tab
 
 echo `date` Loading snpMap.bed
 hgLoadBed $database snpMap snpMap.bed \
     -sqlTable=$HOME/kent/src/hg/lib/snpMap.sql -tab
+
+# load data into database
+echo `date` Loading snpNih.bed
+hgLoadBed $database snpNih snpNih.bed -tab
 
 # useful data checks:
 foreach table ( $tables )
