@@ -156,8 +156,7 @@ void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
 {
 MYSQL *conn = sc->conn;
 if (format != NULL) {
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
+    vaWarn(format, args);
     }
 warn("mySQL error %d: %s", mysql_errno(conn), mysql_error(conn));
 }

@@ -100,6 +100,9 @@ struct bed *bedLoad5(char **row);
 struct bed *bedLoad12(char **row);
 /* Load all 12 fields of bed. */
 
+struct bed *bedLoadN(char *row[], int wordCount);
+/* Convert a row of strings to a bed. */
+
 void fullBedOutput(struct bed *el, FILE *f, char sep, char lastSep);
 /* Print out all 12 fields of bed.   */
 

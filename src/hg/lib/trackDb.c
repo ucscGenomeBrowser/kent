@@ -107,7 +107,8 @@ freeMem(el->shortLabel);
 freeMem(el->type);
 freeMem(el->longLabel);
 /* All strings in restrictList are allocated at once, so only need to free first. */
-freeMem(el->restrictList[0]);
+if (el->restrictList != NULL)
+    freeMem(el->restrictList[0]);
 freeMem(el->restrictList);
 freeMem(el->url);
 freeMem(el->html);

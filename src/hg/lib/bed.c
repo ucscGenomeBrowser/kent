@@ -263,3 +263,37 @@ ret->score = sqlUnsigned(row[4]);
 return ret;
 }
 
+struct bed *bedLoadN(char *row[], int wordCount)
+/* Convert a row of strings to a bed. */
+{
+struct bed * bed;
+int count;
+
+AllocVar(bed);
+bed->chrom = cloneString(row[0]);
+bed->chromStart = sqlUnsigned(row[1]);
+bed->chromEnd = sqlUnsigned(row[2]);
+if (wordCount > 3)
+     bed->name = cloneString(row[3]);
+if (wordCount > 4)
+     bed->score = sqlUnsigned(row[4]);
+if (wordCount > 5)
+     bed->strand[0] = row[5][0];
+if (wordCount > 6)
+     bed->thickStart = sqlUnsigned(row[6]);
+else
+     bed->thickStart = bed->chromStart;
+if (wordCount > 7)
+     bed->thickEnd = sqlUnsigned(row[7]);
+else
+     bed->thickEnd = bed->chromEnd;
+if (wordCount > 8)
+    bed->reserved = sqlUnsigned(row[8]);
+if (wordCount > 9)
+    bed->blockCount = sqlUnsigned(row[9]);
+if (wordCount > 10)
+    sqlSignedDynamicArray(row[10], &bed->blockSizes, &count);
+if (wordCount > 11)
+    sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
+return bed;
+}

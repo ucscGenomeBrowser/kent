@@ -11,6 +11,7 @@
 #include "fa.h"
 #include "hgConfig.h"
 #include "ctgPos.h"
+#include "trackDb.h"
 
 static struct sqlConnCache *hdbCc = NULL;
 
@@ -680,5 +681,14 @@ else
 freeDyString(&query);
 *retRowOffset = rowOffset;
 return sr;
+}
+
+boolean hTrackOnChrom(struct trackDb *tdb, char *chrom)
+/* Return TRUE if track exists on this chromosome. */
+{
+boolean chromOk = TRUE;
+if (tdb->restrictCount > 0)
+    chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
+return (chromOk && hFindSplitTable(chrom, tdb->tableName, NULL, NULL));
 }
 

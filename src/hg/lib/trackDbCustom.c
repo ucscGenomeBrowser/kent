@@ -124,6 +124,8 @@ else if (sameString(var, "longLabel") || sameString(var, "description"))
     bt->longLabel = cloneString(value);
 else if (sameString(var, "priority"))
     bt->priority = atof(value);
+else if (sameWord(var, "url"))
+    bt->url = cloneString(value);
 else if (sameString(var, "visibility"))
     {
     if (sameString(value, "dense") || sameString(value, "1"))
@@ -156,7 +158,6 @@ else if (sameWord(var, "chromosomes"))
     sqlStringDynamicArray(value, &bt->restrictList, &bt->restrictCount);
 else if (sameWord(var, "private"))
     bt->private = TRUE;
-    
 }
 
 void trackDbPolish(struct trackDb *bt)

@@ -5,6 +5,10 @@
 #ifndef TRACKDB_H
 #define TRACKDB_H
 
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif
+
 struct trackDb
 /* This describes an annotation track. */
     {

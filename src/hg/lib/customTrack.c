@@ -26,17 +26,6 @@
  *  priority = number.
  */
 
-static int countChars(char *s, char c)
-/* Return number of characters c in string s. */
-{
-char a;
-int count = 0;
-while ((a = *s++) != 0)
-    if (a == c)
-        ++count;
-return count;
-}
-
 
 static struct browserTable *btDefault()
 /* Return default custom table: black, dense, etc. */
@@ -154,7 +143,8 @@ static boolean checkChromName(char *word, int lineIx)
 /* Make sure it's a chromosome or a contig. */
 {
 if (!isChromName(word))
-    errAbort("line %d of custom input: not a chromosome", lineIx);
+    errAbort("line %d of custom input: %s (%d) not a chromosome", 
+    	lineIx, word, word[0]);
 }
 
 struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx)

@@ -11,6 +11,10 @@
 #include "dystring.h"
 #endif
 
+#ifndef TRACKDB_H
+#include "trackDb.h"
+#endif
+
 void hDefaultConnect();
 /* read the default settings from the config file */
 
@@ -79,6 +83,9 @@ char *hDbFromFreeze(char *freeze);
 
 struct slName *hDbList();
 /* List of all database versions. */
+
+boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
+/* Return TRUE if track exists on this chromosome. */
 
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
