@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.423 2003/06/03 20:11:49 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.424 2003/06/04 23:05:23 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4223,6 +4223,16 @@ cartWebStart(cart, "Fish Alignment");
 printf("Alignment between fish sequence %s (above) and human chromosome %s (below)\n",
        name, skipChr(seqName));
 fetchAndShowWaba("waba_tet", name);
+}
+
+
+void doHgCbr(struct trackDb *tdb, char *name)
+/* Do thing with cbr track. */
+{
+cartWebStart(cart, "Worm Alignment");
+printf("Alignment between C briggsae sequence %s (above) and C elegans chromosome %s (below)\n",
+       name, skipChr(seqName));
+fetchAndShowWaba("waba_cbr", name);
 }
 
 void doHgRepeat(struct trackDb *tdb, char *repeat)
@@ -11700,6 +11710,10 @@ else if (sameWord(track, "gap"))
 else if (sameWord(track, "tet_waba"))
     {
     doHgTet(tdb, item);
+    }
+else if (sameWord(track, "cbr_waba"))
+    {
+    doHgCbr(tdb, item);
     }
 else if (sameWord(track, "rmsk"))
     {
