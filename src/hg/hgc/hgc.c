@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.580 2004/03/09 00:39:28 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.581 2004/03/10 23:45:25 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4182,6 +4182,10 @@ for (i=0; i<dnaSeq->size; ++i)
     if (curBlock < psl->blockCount && psl->tStarts[curBlock] == (i + tStart) )
 	{
 	fprintf(f, "<A NAME=%d></A>", ++curBlock);
+	/* Watch out for (rare) out-of-order tStarts! */
+	while (curBlock < psl->blockCount &&
+	       psl->tStarts[curBlock] <= tStart + i)
+	    curBlock++;
 	}
     cfmOut(cfm, dna[i], seqOutColorLookup[colorFlags[i]]);
     }
