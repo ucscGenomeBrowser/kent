@@ -222,6 +222,15 @@ done >> seq_contig.md
     wc -l contig.lst
     #	380
 
+    #	Note 2004-06-30 - there are some clone numbers left in some of
+    #	the NCBI files that are incorrect.  Due to version number
+    #	changes, more than one version is listed.  Namely for accession
+    #	numbers: AC004491 AC004921 AC004983 AC005088 AC006014 AC099654
+    #	The AGP files are correct, the sequence.inf file lists these
+    #	twice: AC004491.1 AC004491.2
+    #	AC004921.1 AC004921.2 AC004983.2 AC004983.3
+    #	AC005088.2 AC005088.3 AC006014.2 AC006014.3
+    #	AC099654.4 AC099654.5 
 
     # FILES ARE NOW READY FOR REPEAT MASKING - start that process as
     #	other steps here can proceed in parallel.
@@ -884,10 +893,19 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 #	Delete the Celera AACC clones, they are not in this assembly,
 #	And fix the line of AC018743 to add it to the assembly, it was a
 #	last minute addition by Terry that didn't get carried into the
-#	NCBI sequence.inf file.
+#	NCBI sequence.inf file.  And remove the older versions of five
+#	clones that got left in by mistake at NCBI
+    #	AC004491.1=AC004491.2 AC004921.1=AC004921.2 AC004983.2=AC004983.3
+    #	AC005088.2=AC005088.3 AC006014.2=AC006014.3 AC099654.4=AC099654.5 
     cd /cluster/data/hg17
     sed -e "s/\tW\t/\t3\t/" \
 	-e "/^AACC010000.*/d" \
+	-e "/^AC004491.1.*/d" \
+	-e "/^AC004921.1.*/d" \
+	-e "/^AC004983.2.*/d" \
+	-e "/^AC005088.2.*/d" \
+	-e "/^AC006014.2.*/d" \
+	-e "/^AC099654.4.*/d" \
 	-e "s/AC018743.27\t31791062\t466818\t1\tD\tUn\t-\tBCM\tRP11-289M22\tSIZE:2big/AC018743.27\t31791062\t466818\t1\t-\t(12)\t-\tBCM\tRP11-289M22\tfor_assembly/" \
 	/cluster/store5/gs.18/ncbi/sequence.inf \
 	> sequence.inf
@@ -4932,7 +4950,7 @@ rm $TMP/$root.pp
 #type bed 12 .
 
 
-# PRODUCING GENSCAN PREDICTIONS (DONE - 2003-08-01 - Hiram)
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2004-07-01 - Hiram)
 #	Needed to download a new binary for this run.  Our Linux systems
 #  XXX - I thought a new binary was needed.  Turned out it was already
 #  here in our hg3rdParty CVS project.  All of this discussed here can
@@ -4959,6 +4977,9 @@ rm $TMP/$root.pp
 #
 #	I placed these currently in: /cluster/home/hiram/GENSCAN/
 #	I'll check with Angie where it should properly live ...
+#  XXX - it already lives in 'cvs co hg3rdParty/genscanlinux'
+#  These instructions should simple check it out right here in
+#  bed/genscan and make the gsub command refer to these copies.
 
     ssh eieio
     mkdir /cluster/data/hg17/bed/genscan
@@ -5040,7 +5061,7 @@ rm $TMP/$root.pp
     cd /cluster/data/hg17/bed/genscan
     ldHgGene hg17 genscan genscan.gtf
     #	This command is taking a very long time to run ...
-XXX - running 2004-06-30 14:46
+    #	It finished, but it took many hours.
     #	Read 100444 transcripts in 496249 lines in 1 files
     #	100444 groups 46 seqs 1 sources 1 feature types
 
@@ -5050,17 +5071,21 @@ XXX - running 2004-06-30 14:46
     #	  42974 groups 41 seqs 1 sources 1 feature types
     #	42974 gene predictions
     hgPepPred hg17 generic genscanPep genscan.pep
-#	Processing genscan.pep
+    #	Processing genscan.pep
     hgLoadBed hg17 genscanSubopt genscanSubopt.bed
-#	stringTab = 0
-#	Reading genscanSubopt.bed
-#	Loaded 518038 elements
-#	Sorted
-#	Creating table definition for 
-#	Saving bed.tab
-#	Loading hg17
+    #	Reading genscanSubopt.bed
+    #	Loaded 231850 elements of size 6
+    #	Sorted
+    #	Creating table definition for 
+    #	Saving bed.tab
+    #	Loading hg17
 
+    #	featureBits hg17 genscan
+    #	102287267 bases of 2866216770 (3.569%) in intersection
     #	featureBits hg16 genscan
     #	55333689 bases of 2865248791 (1.931%) in intersection
 
-
+    #	featureBits hg17 genscanSubopt
+    #	28718435 bases of 2866216770 (1.002%) in intersection
+    #	featureBits hg16 genscanSubopt
+    #	56082952 bases of 2865248791 (1.957%) in intersection
