@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.231 2005/01/26 11:51:47 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.232 2005/02/01 18:23:37 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2895,7 +2895,13 @@ if (table != NULL)
     dyStringPrintf(query, "%s<%u and %s>%u", 
     	hti->startField, end, hti->endField, start);
     if (extraWhere)
-        dyStringPrintf(query, " and %s", extraWhere);
+        {
+        /* allow more flexible additions to where clause */
+        if (!startsWith("order", extraWhere) && 
+            !startsWith("limit", extraWhere))
+                dyStringAppend(query, " and ");
+        dyStringPrintf(query, " %s", extraWhere);
+        }
     if (order)
         dyStringPrintf(query, " order by %s", hti->startField);
     //printf(" %s <p>",query->string);
@@ -4084,4 +4090,14 @@ struct slName *sln1 = *(struct slName **)el1;
 struct slName *sln2 = *(struct slName **)el2;
 return chrNameCmp(sln1->name, sln2->name);
 }
+
+int getTableSize(char *table)
+/* Get count of rows in a table in the primary database */
+{
+struct sqlConnection *conn = hAllocConn();
+int ct = sqlTableSize(conn, table);
+hFreeConn(&conn);
+return ct;
+}
+
 
