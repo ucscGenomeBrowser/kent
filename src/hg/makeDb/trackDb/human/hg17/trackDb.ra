@@ -8,7 +8,7 @@ type bed 3 +
 
 track multiz7way
 shortLabel Conservation
-longLabel Human/Chimp/Mouse/Rat/Chicken/Fugu/Zebrafish Multiz Alignments & PhyloHMM Cons 
+longLabel Hu/Chimp/Mouse/Rat/Chicken/Fugu/Zfish Multiz Alignments & PhyloHMM Cons 
 group compGeno
 priority 149
 visibility pack
