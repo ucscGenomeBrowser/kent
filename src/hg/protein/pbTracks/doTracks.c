@@ -1224,8 +1224,13 @@ vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");
 
-//if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "Genomic Sequence");
+if (strand == '-') 
+    {
+    trackTitle = cloneString("Genomic Sequence");
+    vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, trackTitle);
+    trackTitleLen = strlen(trackTitle);
+    mapBoxTrackTitle(xx-25-trackTitleLen*6, yy+7, trackTitleLen*6+12, 14, trackTitle, "dna");
+    }
 
 if (strand == '-')
     {
@@ -1361,6 +1366,8 @@ if (mrnaID != NULL)
     	}
     }
 
+//printf("<br>%d %d %d %d\n", prevGBStartPos, prevGBEndPos, 
+//	blockGenomeStartPositive[exCount-1], blockGenomeStartPositive[0]); fflush(stdout);
 if ((prevGBStartPos <= blockGenomeStartPositive[exCount-1]) && (prevGBEndPos >= blockGenomeStartPositive[0]))
     {
     showPrevGBPos = FALSE;
