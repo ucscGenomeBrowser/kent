@@ -230,13 +230,17 @@ for (;;)
     {
     if ((var = skipLeadingSpaces(s)) == NULL)
         break;
+
+    fprintf(stderr, "%s\n", var);
     if ((c = *var) == 0)
         break;
     if (!isalpha(c))
 	errAbort("line %d of custom input: variable needs to start with letter", lineIx);
     val = strchr(var, '=');
     if (val == NULL)
-        errAbort("line %d of custom input: missing = in var/val pair", lineIx);
+        {
+        errAbort("line %d of var %s in custom input: %s \n missing = in var/val pair", lineIx, var, line);
+        }
     *val++ = 0;
     c = *val;
     if (c == '\'' || c == '"')

@@ -1307,23 +1307,13 @@ int index = 0;
 int haystackLen = 0;
 int needleLen = 0;
 
-if (NULL == haystack) 
+if (NULL == haystack || NULL == needle) 
     {
-    haystackLen = 0;
-    }
-else
-    {
-    haystackLen = strlen(haystack);
+    return NULL;
     }
 
-if (NULL == needle) 
-    {
-    needleLen = 0;
-    }
-else
-    {
-    needleLen = strlen(needle);
-    }
+haystackLen = strlen(haystack);
+needleLen = strlen(needle);
 
 haystackCopy = (char*) needMem(haystackLen + 1);
 needleCopy = (char*) needMem(needleLen + 1);
