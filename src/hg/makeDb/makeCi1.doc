@@ -346,3 +346,30 @@ ci1.perChromTables = no
     hgLoadChain ci1 chainHg16ProtEx  chainHg16S.chain
 
 ### blat CioSav1
+    ssh kk
+    mkdir /cluster/data/ci1/bed/blatCioSav1
+    cd  /cluster/data/ci1/bed/blatCioSav1
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    ls -1S /scratch/hg/ci1/nib/Scaffold_*.nib > squirt.lst
+    ls -1S /iscratch/i/squirt/ci1/Savignyi/*.fa > other.lst
+    gensub2 squirt.lst other.lst gsub spec
+    mkdir psl
+    cd psl
+    for i in `cat ../squirt.lst`
+    do
+	mkdir `basename $i .nib`
+    done
+    cd ..
+    para create spec
+    para push
+
+    ssh eieo
+    pslSort dirs blatCioSav1.psl /tmp psl/*
+
+    hgLoadPsl ci1 blatCioSav1.psl
+### end blat
