@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.10 2003/08/18 15:56:41 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.11 2003/12/10 22:33:03 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -548,8 +548,11 @@ for(i=0; i<gg->mrnaRefCount; i++)
     dyStringPrintf(accessionList, "%s,", gg->mrnaRefs[i]);
 sqlStringDynamicArray(accessionList->string, &ag->mrnaRefs, &ag->mrnaRefCount);
 dyStringFree(&accessionList);
-ag->mrnaTissues = CloneArray(gg->mrnaTissues, gg->mrnaRefCount);
-ag->mrnaLibs = CloneArray(gg->mrnaLibs, gg->mrnaRefCount);
+if(gg->mrnaRefCount > 0)
+    {
+    ag->mrnaTissues = CloneArray(gg->mrnaTissues, gg->mrnaRefCount);
+    ag->mrnaLibs = CloneArray(gg->mrnaLibs, gg->mrnaRefCount);
+    }
 
 /* convert vertexes */
 for (i=0,j=0; i<totalVertexCount; ++i)
