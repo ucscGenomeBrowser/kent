@@ -4959,6 +4959,49 @@ if (anyMore)
 */
 }
 
+void doPslDetailed(struct trackDb *tdb, char *item)
+/* Fairly generic PSL handler -- print out some more details about the 
+ * alignment. */
+{
+int start = cartInt(cart, "o");
+int total = 0, i = 0;
+char *track = tdb->tableName;
+struct psl *pslList = NULL;
+struct sqlConnection *conn = hAllocConn();
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+
+puts("<P>");
+puts("<B>Alignment Summary:</B><BR>\n");
+pslList = getAlignments(conn, track, item);
+printAlignments(pslList, start, "htcCdnaAli", track, item);
+
+puts("<P>");
+total = 0;
+for (i=0;  i < pslList -> blockCount;  i++)
+    {
+    total += pslList->blockSizes[i];
+    }
+printf("%d block(s) covering %d bases<BR>\n"
+       "%d matching bases<BR>\n"
+       "%d mismatching bases<BR>\n"
+       "%d N bases<BR>\n"
+       "%d bases inserted in %s<BR>\n"
+       "%d bases inserted in %s<BR>\n"
+       "score: %d<BR>\n",
+       pslList->blockCount, total,
+       pslList->match,
+       pslList->misMatch,
+       pslList->nCount,
+       pslList->tBaseInsert, hOrganism(hGetDb()),
+       pslList->qBaseInsert, item,
+       pslScore(pslList));
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doSPGene(struct trackDb *tdb, char *mrnaName)
 /* Process click on a known gene. */
 {
@@ -10970,6 +11013,10 @@ else if (sameWord(track, "genieKnown"))
 else if (startsWith("viralProt", track))
     {
     doViralProt(tdb, item);
+    }
+else if (sameWord("otherSARS", track))
+    {
+    doPslDetailed(tdb, item);
     }
 else if (sameWord(track, "softberryGene"))
     {
