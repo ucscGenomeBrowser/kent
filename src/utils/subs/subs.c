@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-static char const rcsid[] = "$Id: subs.c,v 1.4 2003/05/06 07:41:08 kate Exp $";
+static char const rcsid[] = "$Id: subs.c,v 1.5 2003/06/10 17:19:33 kent Exp $";
 
 #define TRUE 1
 #define FALSE 0
@@ -193,7 +193,7 @@ Boolean next_word(FILE *f, char *b, int size)
  * Put the next word (separated by white space) from file into b.
  ******************************************************************/
 {
-char c;
+char c = 0;
 
 /* skip leading spaces */
 while (--size > 0)
@@ -409,7 +409,7 @@ Boolean query_sub(Sub *sb, char *orig)
  ******************************************************************/
 {
 char c;
-Boolean answer;
+Boolean answer = FALSE;
 Boolean got_answer = FALSE;
 
 report_sub(sb);
@@ -635,7 +635,7 @@ return FALSE;
 }
 
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 /******************************************************************
  * Parse command line printing usage if it doesn't make sense.
  * Then go call subber on each file.
@@ -723,5 +723,6 @@ while (plist != NULL)
 	sub_file(plist->name);
 	plist = plist->next;
 	}
+return 0;
 }
 

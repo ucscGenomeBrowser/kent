@@ -745,6 +745,7 @@ if (rq->f != NULL)
 	uTime, sTime, 
 	submitTime, startTime, now,
 	userName, errFile, cmd);
+    fflush(rq->f);
     rq->lastUsed = now;
     }
 }

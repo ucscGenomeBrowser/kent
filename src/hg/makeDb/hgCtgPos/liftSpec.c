@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "liftSpec.h"
 
-static char const rcsid[] = "$Id: liftSpec.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: liftSpec.c,v 1.3 2003/06/10 16:53:07 kent Exp $";
 
 void liftSpecStaticLoad(char **row, struct liftSpec *ret)
 /* Load a row from liftSpec table into ret.  The contents of ret will
@@ -87,19 +87,19 @@ void liftSpecOutput(struct liftSpec *el, FILE *f, char sep, char lastSep)
 /* Print out liftSpec.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%d", el->offset, sep);
+fprintf(f, "%d", el->offset);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->oldName, sep);
+fprintf(f, "%s", el->oldName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->oldSize, sep);
+fprintf(f, "%d", el->oldSize);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->newName, sep);
+fprintf(f, "%s", el->newName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->size, lastSep);
+fprintf(f, "%d", el->size);
 fputc(lastSep,f);
 }
 

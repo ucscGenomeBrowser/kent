@@ -1579,7 +1579,7 @@ IN PROGRESS
     # Sequence info should have already been loaded into database (PRELOAD)
 
 # PRODUCING SQUIRT ALIGNMENTS  (DONE 06/04/03)
-    ssh kk
+    ssh kkstore
     mkdir -p ~/hg15/bed/blatCi1
     cd ~/hg15/bed/blatCi1
     mkdir psl
@@ -1590,6 +1590,8 @@ IN PROGRESS
     ls -1S /iscratch/i/squirt/ci1/queryFa/*.fa > squirt.lst
     ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
     gensub2 human.lst squirt.lst gsub2D spec
+
+    ssh kk
     para create spec
     ....
     # When cluster run is done, sort alignments:
@@ -1597,17 +1599,17 @@ IN PROGRESS
     cd ~/hg15/bed/blatCi1
     mkdir /tmp/$LOGNAME
     pslSort dirs raw.psl /tmp/$LOGNAME psl/*
-    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.05
     liftUp -nohead lifted.psl ../../jkStuff/liftAll.lft warn cooked.psl
     pslSortAcc nohead chrom /tmp/$LOGNAME lifted.psl
 
     # Rename to correspond with tables as so and load into database:
     ssh hgwdev
-    cd ~/hg15/bed/blatSquirt/chrom
-    rm -f chr*_blatSquirt.psl
+    cd ~/hg15/bed/blatCi1/chrom
+    rm -f chr*_blatCi1.psl
     foreach i (chr?{,?}{,_random}.psl)
         set r = $i:r
-        mv $i ${r}_blatSquirt.psl
+        mv $i ${r}_blatCi1.psl
     end
     hgLoadPsl hg15 *.psl
 
@@ -1666,64 +1668,108 @@ IN PROGRESS
     cd /cluster/store2/tmp
     hgLoadRna addSeq hg15 /gbdb/hg15/fuguSeq/fugu_v3_mask.fasta
 
-# PRODUCING C elegans ALIGNMENTS (Working on - 2003-06-02 - Hiram)
-    # Check C elegans masked fa files are already on iscratch,
-    #	They should be, if not, the instructions for creation
-    #	are in makeCe1.doc.  These trfFa/c*.fa are both RepeatMasker
-    #	masked and TRF simple masked  (Can not get blat to work
-    #	with the masked nibs I have for C. elegans ?)
-
+# BLASTZ C elegans ALIGNMENTS (DONE - 2003-06-11 - Hiram)
+    #  This has been DONE, but there is some kind of problem in the
+    #  browser display because a click on the track produces the error:
+    #  Expecting two ranges in loadPslFromRangePair
+    #  instead of taking you to the alignment.
+    #  I believe some more needs to be done, something like the axtBest
+    #  business as seen below in the RAT BLASTZ
     ssh kk
-    ls -og /iscratch/i/worms/Celegans/trfFa/c*.fa
-    
-    mkdir ~/hg15/bed/blatCelegans
-    cd ~/hg15/bed/blatCelegans
-    mkdir psl
-    foreach f (~/hg15/?{,?}/NT_??????/NT_??????.fa)
-      set c=$f:t:r
-      mkdir -p psl/$c
-    end
-    ls -1S /iscratch/i/worms/Celegans/trfFa/c*.fa > worm.lst
-    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
-    cat << '_EOF_' > gsub
-#LOOP
-/cluster/home/kent/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root1)_$(root2).psl}
-#ENDLOOP
-'_EOF_'
-
-    gensub2 human.lst worm.lst gsub spec
-    para create spec
+    mkdir -p ~/hg15/bed/blastzCe1
+    cp ~angie/hummus/DEF.ce1-hg15.030611 ./DEF
+    . ./DEF
+    mkdir -p $BASE/run
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    # that created xdir.sh and joblist run/j
+    sh $BASE/xdir.sh
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    cd $BASE/run
+    # now edit j because it is not correct:
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+    # *** make sure the j2 edits are OK, then use it:
+    mv j2 j
+    # para create will create the file: 'batch' for the cluster run
+    para create j
     para try
     para check
     para push
-    para check
     ... etc ...
+# Average job time:                 239s       3.98m     0.07h    0.00d
+# Longest job:                     1578s      26.30m     0.44h    0.02d
 
-    # When cluster run is done, sort alignments:
+    # When that cluster run is done, results are in $BASE/raw/chr*/*
+    # continuing with ~angie/hummus/Notes:
+    # --- normalize and single_cov
+    cd ~/hg15/bed/blastzCe1
+    #   source the DEF file again in case you are coming back to this
+    . ./DEF
+    # a new run directory
+    mkdir -p $BASE/run.1
+    # another obscure script creates a new job list:
+    ~angie/hummus/do.out2lav $DEF >$BASE/run.1/j
+    cd $BASE/run.1
+    # the job list is once again incorrect, edit it:
+    sed -e 's/^/\/cluster\/home\/angie\/schwartzbin\//' j > j2
+    wc -l j*
+    head j2
+    # make sure the edited j2 is OK, then use it:
+    mv j2 j
+    para create j
+    para try
+    para push;para check; ... etc ...
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest job:                       13s       0.22m     0.00h    0.00d
+
+    # Translate the .lav files
+    # into axt files
     ssh eieio
-    cd ~/hg15/bed/blatCelegans
-    pslCat -dir psl/NT_?????? | \
-      liftUp -type=.psl stdout ~/hg15/jkStuff/liftAll.lft warn stdin | \
-      pslSortAcc nohead chrom temp stdin
-
-    # Rename to correspond with tables as so and load into database:
-    ssh hgwdev
-    cd ~/hg15/bed/blatCelegans/chrom
-    rm -f chr*_blatCelegans.psl
-    foreach i (chr?{,?}{,_random}.psl)
-        set r = $i:r
-        mv $i ${r}_blatCelegans.psl
+    set base="/cluster/store5/gs.16/build33/bed/blastzCe1"
+    set seq1_dir="/cluster/store5/gs.16/build33/nib"
+    set seq2_dir="/cluster/store5/worm/ce1/nib"
+    set tbl="blastzCe1"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | /cluster/bin/i386/lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | /cluster/bin/i386/axtSort stdin $out
+      popd
     end
-    hgLoadPsl hg15 *.psl
 
-    # Make fugu /gbdb/ symlink and load Fugu sequence data.
-    mkdir /gbdb/hg15/celegansSeq
-    cd /gbdb/hg15/celegansSeq
-    ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta
-    cd /cluster/store2/tmp
-    hgLoadRna addSeq hg15 /gbdb/hg15/fuguSeq/fugu_v3_mask.fasta
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
 
+    # load these blastz results
+    # next machine
+    ssh hgwdev
+    cd ~/hg15/bed/blastzCe1/pslChrom
+    /cluster/bin/i386/hgLoadPsl hg15 chr*_*.psl
+    # create trackDb/human/hg15/trackDb.ra entry:
+# track blastzCe1
+# shortLabel BLASTZ C elegans
+# longLabel All BLASTZ C elegans alignments
+# group compGeno
+# priority 111
+# visibility hide
+# color 100,50,0
+# altColor 255,240,200
+# spectrum on
+# type psl xeno ce1
 
+END OF BLASTZ C elegans
 
 TIGR GENE INDEX (TODO)
   o mkdir -p ~/hg15/bed/tigr    

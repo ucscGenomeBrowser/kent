@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: undupFa.c,v 1.2 2003/05/06 07:41:09 kate Exp $";
+static char const rcsid[] = "$Id: undupFa.c,v 1.3 2003/06/10 17:19:33 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -53,4 +53,5 @@ if (argc < 2)
     usage();
 for (i=1; i<argc; ++i)
     undupFa(argv[i]);
+return 0;
 }

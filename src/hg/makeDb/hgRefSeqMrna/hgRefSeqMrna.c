@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.11 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.12 2003/06/10 19:26:38 markd Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -84,6 +84,28 @@ char *refMrnaTableDef =
 ")\n";
 
 
+void checkForGenBankIncr(char *database)
+/* check to see if the database contains tables created by the incremental
+ * genbank update process, and abort with useful message if so */
+{
+static char *CHK_TABLES[] = {
+    "gbStatus", "gbSeq", "gbExtFile", NULL
+};
+int i;
+char *foundGbTable = NULL;
+struct sqlConnection *conn = sqlConnect(database);
+
+for (i = 0; CHK_TABLES[i] != NULL; i++)
+    {
+    if (sqlTableExists(conn, CHK_TABLES[i]))
+        errAbort("Table %s.%s exists, indicating that this database is managed\n"
+                 "by the GenBank incremental update process. Use the incrmental load\n"
+                 "process to load RefSeq mRNAs.",
+                 database, CHK_TABLES[i]);
+    }
+
+sqlDisconnect(&conn);
+}
 
 struct hash *loadNameTable(struct sqlConnection *conn, 
     char *tableName, int hashSize)
@@ -600,6 +622,7 @@ void hgRefSeqMrna(char *database, char *faFile, char *raFile, char *pslFile,
 /* hgRefSeqMrna - Load refSeq mRNA alignments and other info into 
  * refSeqGene table. */
 {
+checkForGenBankIncr(database);
 hgSetDb(database);
 processRefSeq(faFile, raFile, pslFile, loc2refFile, pepFile, mim2locFile);
 }

@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.4 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.5 2003/06/10 17:02:32 kent Exp $";
 
 int winSize ;               /* window size */
 boolean noLoad = FALSE;		/* Suppress loading mysql table . */
@@ -80,7 +80,7 @@ for (start=0; start<chromSize; start = end)
     else
         ppt = 0;
     fprintf(f, "%s\t%d\t%d\t%s\t%d\n",
-	    chrom, start, end, "GC", ppt, gcCount, count);
+	    chrom, start, end, "GC", ppt);
     }
 carefulClose(&nf);
 printf("\n");

@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.424 2003/06/04 23:05:23 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.428 2003/06/10 16:52:23 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -637,9 +637,10 @@ void resetClassStr(struct dyString *dy, int track)
 stopColorStr(dy,track);
 }
 
-boolean isColor(char *s)
-/* check for <a href name=class</a> to see if this is a colored coding region*/
+boolean isBlue(char *s)
+/* check for <a href name=class</a> to see if this is colored blue (coding region)*/
 {
+    /* check for blue */
     if (strstr(s,"6699FF") == NULL)
         return FALSE;
     else
@@ -1128,7 +1129,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         dyStringAppendC(dyTprot,'\n');
 
         /* skip regions with no alignment and no colored coding regions */
-        if ( numberOfGaps(q,oneSize) < oneSize || isColor(dyT->string)) 
+        if ( numberOfGaps(q,oneSize) < oneSize || isBlue(dyT->string)) 
             {
             fputs(dyTprot->string,f);
             fputs(dyT->string,f);
@@ -2083,10 +2084,20 @@ char *repMasking = cgiUsualString("hgSeq.repMasking", "");
 boolean caseUpper= FALSE;
 char *pos = NULL;
 
+    
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
 
 cartWebStart(cart, "Extended DNA Case/Color");
+
+if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
+    hgParseChromRange(pos, &seqName, &winStart, &winEnd);
+if (winEnd - winStart > 1000000)
+    {
+    printf("Please zoom in to 1 million bases or less to color the DNA");
+    return;
+    }
+
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
 puts(
      "Use this page to highlight features in genomic DNA text. "
@@ -2271,6 +2282,7 @@ if (sameString(action, "Extended case/color options"))
     doGetDnaExtended1();
     return;
     }
+
 
 puts("<PRE>");
 if (tbl[0] == 0)
@@ -6089,7 +6101,7 @@ printf("<B>%s Gene:</B> %s %s in %s \n", hOrganism(pg->assembly), pg->gene, pg->
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
-printf("<B>Score:</B> %d Gap Ration: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
+printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
 printf("<B>Chain:</B> %d  <BR>\n",pg->chainId);
 printf("<p>");
 puts("<LI>\n");
@@ -7069,7 +7081,7 @@ printTrackHtml(tdb);
 }
 
 void doBlatSquirt(struct trackDb *tdb, char *itemName)
-/* Handle click on blatSquirt track. */
+/* Handle click on blatCi1 track. */
 {
 char *track = tdb->tableName;
 char query[256];
@@ -7089,6 +7101,81 @@ printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
        hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
 printf("Ciona intestinalis DNA</A><BR>\n");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
+hFindSplitTable(seqName, track, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printTrackHtml(tdb);
+}
+
+void doBlatCb1(struct trackDb *tdb, char *itemName)
+/* Handle click on blatCi1 track. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL, *psl;
+struct dnaSeq *seq;
+boolean hasBin;
+char table[64];
+
+cartWebStart(cart, itemName);
+printf("<H1>Information on C.briggsae Sequence %s</H1>", itemName);
+
+printf("Get ");
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("C.briggsae DNA</A><BR>\n");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
+hFindSplitTable(seqName, track, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printTrackHtml(tdb);
+}
+void doBlatCe1(struct trackDb *tdb, char *itemName)
+/* Handle click on blatCi1 track. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL, *psl;
+struct dnaSeq *seq;
+boolean hasBin;
+char table[64];
+
+cartWebStart(cart, itemName);
+printf("<H1>Information on C.elegans Sequence %s</H1>", itemName);
+
+printf("Get ");
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("C.elegans DNA</A><BR>\n");
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
@@ -11660,7 +11747,7 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     doGetDnaExtended1();
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
-         sameWord(track, "all_mrna") ||
+	 sameWord(track, "all_mrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
@@ -11848,7 +11935,23 @@ else if (sameWord(track, "blatFugu"))
     {
     doBlatFish(tdb, item);
     }
-else if (sameWord(track, "blatSquirt"))
+else if (sameWord(track, "blatCe1"))
+    {
+    doBlatCe1(tdb, item);
+    }
+else if (sameWord(track, "blatCb1"))
+    {
+    doBlatCb1(tdb, item);
+    }
+else if (sameWord(track, "blatHg15")  || sameWord(track, "blatMm3")|| sameWord(track, "blatRn2"))
+    {
+    doBlatSquirt(tdb, item);
+    }
+else if (sameWord(track, "humanKnownGene")) 
+    {
+    doBlatSquirt(tdb, item);
+    }
+else if (sameWord(track, "blatCi1"))
     {
     doBlatSquirt(tdb, item);
     }

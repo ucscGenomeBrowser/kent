@@ -90,7 +90,7 @@ errAbort(
 /* Variables that can be set from command line. */
 
 int retries = 4;
-int maxQueue = 1000000;
+int maxQueue = 200000;
 int minPush = 1;
 int maxPush = 100000;
 int warnTime = 3*24*60;

@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.525 2003/06/04 23:52:18 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.528 2003/06/06 17:33:51 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -3334,6 +3334,9 @@ static char abbrev[32];
 
 strncpy(abbrev, full, sizeof(abbrev));
 abbr(abbrev, "SEPT20T.");
+abbr(abbrev, "T000000");
+abbr(abbrev, "T00000");
+abbr(abbrev, "T0000");
 return abbrev;
 }
 
@@ -9106,11 +9109,20 @@ hPrintf("><BR>\n");
 }
 
 
-void printEnsemblAnchor()
+void printEnsemblAnchor(char *database)
 /* Print anchor to Ensembl display on same window. */
 {
 int bigStart, bigEnd, smallStart, smallEnd;
 int ucscSize;
+char *organism = hOrganism(database);
+char *dir = NULL;
+
+if (sameWord(organism, "human"))
+    dir = "Homo_sapiens";
+else if (sameWord(organism, "mouse"))
+    dir = "Mus_musculus";
+else if (sameWord(organism, "rat"))
+    dir = "Rattus_norvegicus";
 
 ucscSize = winEnd - winStart;
 bigStart = smallStart = winStart;
@@ -9121,15 +9133,15 @@ if (ucscSize < 1000000)
     if (bigStart < 0) bigStart = 0;
     bigEnd += 500000;
     if (bigEnd > seqBaseCount) bigEnd = seqBaseCount;
-    hPrintf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+    hPrintf("<A HREF=\"http://www.ensembl.org/%s/contigview"
 	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d\" TARGET=_blank>",
-	    chromName, bigStart, bigEnd, smallStart, smallEnd);
+	    dir, chromName, bigStart, bigEnd, smallStart, smallEnd);
     }
 else
     {
-    hPrintf("<A HREF=\"http://www.ensembl.org/perl/contigview"
+    hPrintf("<A HREF=\"http://www.ensembl.org/%s/contigview"
 	   "?chr=%s&vc_start=%d&vc_end=%d\" TARGET=_blank>",
-	    chromName, bigStart, bigEnd);
+	    dir, chromName, bigStart, bigEnd);
     }
 }
 
@@ -9920,10 +9932,10 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg13"))
+if (sameString(database, "hg13") || sameString(database, "mm3"))
     {
     hPuts("<TD ALIGN=CENTER>");
-    printEnsemblAnchor();
+    printEnsemblAnchor(database);
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
 
@@ -10103,6 +10115,7 @@ registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
+registerTrackHandler("ensEst", ensGeneMethods);
 registerTrackHandler("mrna", mrnaMethods);
 registerTrackHandler("intronEst", estMethods);
 registerTrackHandler("est", estMethods);

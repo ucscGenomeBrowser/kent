@@ -1,10 +1,11 @@
 #include "common.h"
 #include "linefile.h"
+#include "hash.h"
 #include "align.h"
 #include "axt.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: align.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: align.c,v 1.3 2003/06/10 16:59:11 kent Exp $";
 
 struct align* alignNew(struct axt* axtList)
 /* Construct a new align object. */

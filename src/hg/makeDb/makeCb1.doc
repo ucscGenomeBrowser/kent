@@ -35,7 +35,26 @@ DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
     zcat sanger/cb25.agp8.fasta.gz > ultra.fa
     # create an artifical chrUn agp file:  (does 1000 N gaps)
     rm -f ultra.agp
+    rm -f ultra.lft
     scaffoldFaToAgp ultra.fa
+    # gap size is 1000, total gaps: 578
+    # chrom size is 109025926
+    # writing ultra.agp
+    # writing ultra.lft
+    mkdir Un
+    mv ultra.agp Un/chrUn.agp
+    mv ultra.lft Un/chrUn.lft
+    # hgGoldGapGl is an unusual command.  It is given a directory
+    # argument and a sub directory argument.  It puts those two together
+    # and then looks in that pathname for directory names of 1 or 2
+    # characters, and then looks in those subdirectories for agp files.
+    # it all comes from the structure of the hg* directory structure
+    # and how the human chromosomes are split into their contigs
+    #  SO, to handle hgGoldGapGl:
+    mkdir Un/Un
+    cd Un/Un
+    ln -s ../*.agp .
+
     #  Will put together the chrUn.fa later with the masked contigs
 
 #  Populate /iscratch/i for masking runs
@@ -163,7 +182,7 @@ rmdir /tmp/$bname
 		${b} -softAdd
 	faToNib -softMask ${b} ../ultraNibs/${r}.nib
     end
-    # combine them all to bee the query sequence for blastz runs
+    # combine them all to be the query sequence for blastz runs
     cat *.fa > ../allUltras.soft.fa
 
     #  With masked nib files ready, prepare cluster for blastz runs
@@ -177,22 +196,23 @@ rmdir /tmp/$bname
     cp -p *.out /iscratch/i/worms/Cbriggsae/rmsk
     ~kent/bin/iSync
 
-# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  WORKING ON THIS 2003-05-29 XXX
-#   create chromosome subdirectory and populate it
-    mkdir Un
-    # unzip the ultra contig file
-    zcat sanger/cb25.agp8.fasta.gz > cb25.agp8.ultra.fa
-    # create an artifical chrUn agp file:  (does 1000 N gaps)
-    rm -f cb25.agp8.ultra.agp Un
-    scaffoldFaToAgp cb25.agp8.ultra.fa
-    # and create the artifical chrUn.fa file:  (does 1000 N gaps)
-    ~hiram/bin/fa2chrUn.pl cb25.agp8.ultra.fa > Un/chrUn.fa
+# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  WORKING ON THIS 2003-06-10 XXXX
+#   Un directory was created above from the scaffoldToAgp
+    # next machine
+    ssh eieio
+    cd ~/cb1/Un
+    /cluster/home/hiram/bin/i386/agpToFa -simpleMultiMixed chrUn.agp \
+	chrUn chrUn.fa ../allUltras.soft.fa
+    # $ faSize chrUn.fa
+    # 109025926 bases (3588679 N's 105437247 real) in 1 sequences in 1 files
     # create nib file:
+    cd ~/cb1
     mkdir nib
-    faToNib Un/chrUn.fa nib/chrUn.nib
-# Writing 109024926 bases in 54512471 bytes
+    /cluster/bin/i386/faToNib -softMask Un/chrUn.fa nib/chrUn.nib
+    # Writing 109025926 bases in 54512971 bytes
 
-CREATING DATABASE (DONE 2003-05-20 - Hiram)
+
+# CREATING DATABASE (DONE 2003-06-10 - Hiram)
 
     # Create the database.
     # next machine
@@ -204,7 +224,7 @@ CREATING DATABASE (DONE 2003-05-20 - Hiram)
     # Use df to make sure there is at least 5 gig free on
     df -h /var/lib/mysql
 
-CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-20 - Hiram)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-06-10 - Hiram)
     # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
@@ -215,15 +235,15 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-20 - Hiram)
     # !!!
         echo 'drop table grp;' | hgsql cb1
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-20 - Hiram)
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-20 - Hiram)
 
     # Make symbolic links from /gbdb/cb1/nib to the real nibs.
     # next machine
+    # next machine
     ssh hgwdev
     mkdir -p /gbdb/cb1/nib
-    foreach f (/cluster/store5/worm/cb1/nib/*.nib)
-      ln -s $f /gbdb/cb1/nib
-    end
+    ln -s  /cluster/store5/worm/cb1/nib/chrUn.nib /gbdb/cb1/nib
+
     # Load /gbdb/cb1/nib paths into database and save size info.
     hgsql cb1  < ~/kent/src/hg/lib/chromInfo.sql
     # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE
@@ -232,12 +252,12 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-20 - Hiram)
     cd ~/cb1
     hgNibSeq -preMadeNib cb1 /gbdb/cb1/nib Un/chrUn.fa
 # Processing Un/chrUn.fa to /gbdb/cb1/nib/chrUn.nib
-# 109024926 total bases
+# 109025926 total bases
 #   Verify the hgNibSeq load functioned OK: 
     echo "select chrom,size from chromInfo" | hgsql -N cb1 > chrom.sizes
     cat chrom.sizes
 #   Typical contents of chrom.sizes:
-# chrUn   109024926
+# chrUn   109025926
 
 # Set up relational mrna tables.
     hgLoadRna new cb1
@@ -252,7 +272,7 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
         | hgsql cb1
 
 
-MAKE GCPERCENT (DONE 2003-05-20 14:30 - Hiram)
+# MAKE GCPERCENT (DONE 2003-06-10 - Hiram)
     # next machine
      ssh hgwdev
      mkdir -p /cluster/store5/worm/cb1/bed/gcPercent
@@ -261,9 +281,12 @@ MAKE GCPERCENT (DONE 2003-05-20 14:30 - Hiram)
     #  If you need to delete that table created
         echo 'drop table gcPercent;' | hgsql cb1;
      hgGcPercent cb1 ../../nib
+     hgGoldGapGl -noGl cb1 /cluster/store5/worm/cb1 Un
+     # hgGoldGapGl looked in /cluster/store5/worm/cb1/Un for a 1 or 2
+     # character directory name, then below that found the agp file !
 
 
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-06-10 - Hiram)
     # next machine
      ssh hgwdev
     echo 'insert into defaultDb values("C. briggsae", "cb1");' \
@@ -272,7 +295,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
         echo 'delete from defaultDb where name="cb1";' \
         | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("cb1", "July 2002", \
-        "/gbdb/cb1/nib", "worm", "chrUn", 1, 10, \
+        "/gbdb/cb1/nib", "worm", "chrUn:10000-100000", 1, 10, \
         "C. briggsae");' \
         | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
@@ -288,116 +311,28 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
     cvs commit makefile
     make alpha
 
-SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
-    # This TRF run takes about an hour on eieio
-    # so instead of binrsyncing and para-running, just do this on eieio:
-    # next machine
-    ssh eieio
-    mkdir ~/cb1/bed/simpleRepeat
-    cd ~/cb1/bed/simpleRepeat
-    mkdir trf
-    rm -f jobs.csh
-    touch jobs.csh
-    foreach f (/cluster/store5/worm/cb1/Un/chrUn.fa)
-      set fout = $f:t:r.bed
-      echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf ${f} /dev/null -bedAt=trf/${fout} -tempDir=/tmp" \
-        >> jobs.csh
-     echo ${f} ${fout}
-    end
-    tcsh jobs.csh |& tee jobs.log
-    wc -l jobs.csh
-    ls -1 trf | wc -l
+# CREATE REPEAT TRACKS (2003-06-10 - DONE - Hiram)
 
-    # When jobs are done,
-    # To Load this into the database as so
-    # next machine
+    ssh eieio
+    cd ~/cb1
+
+    # merge and lift up the repeatmasker output files to chrom
+    # coordinates
+    liftUp Un/chrUn.fa.out Un/chrUn.lft warn RMRun.ultras/out/*.out
+
+    # load into the database (chrUn_rmsk table)
+    ssh hgwdev
+    hgLoadOut cb1 Un/chrUn.fa.out
+
+    # lift the simple repeat output to chrom coordinates
+    ssh eieio
+    cd ~/cb1
+    cd bed/simpleRepeat
+    liftUp simpleRepeat.bed ~/cb1/Un/chrUn.lft warn trf/*.bed
+
+    # load into the database (simpleRepeat table)
     ssh hgwdev
     cd ~/cb1/bed/simpleRepeat
-    cat trf/chr*.bed > simpleRepeat.bed
     hgLoadBed cb1 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-
-Split into contigs for RepeatMasker, BLAT, and other cluster jobs
-    # next machine
-    ssh eieio
-    cd ~/cb1
-    # make about 1000 contig fa files, this is about 100,000 bases in each
-    mkdir split
-    faSplit sequence contigs/contigs.fa 1000 split/c
-
-    # copy those to /iscratch/i
-    # next machine
-    ssh kkr1u00
-    mkdir -p /iscratch/i/worms/Cbriggsae/contigs
-    cd /iscratch/i/worms/Cbriggsae/contigs
-    cp -p ~/cb1/split/c*.fa .
-    ~kent/bin/iSync
-    
-# RepeatMasker run on the supercontigs
-    ssh kk
-    cd ~/cb1
-    mkdir -p RMRun.supers/out
-    cd RMRun.supers
-    rm -fr spec
-    touch spec
-    echo '#!/bin/csh -fe
-#
-#   $1 is full pathname to a contig .fa file
-#   this directory . is the location to return results to
-
-set bname = `basename $1`
-/bin/mkdir -p /tmp/$bname
-/bin/cp $1 /tmp/$bname/
-pushd .
-cd /tmp/$bname
-/scratch/hg/RepeatMasker/RepeatMasker -ali -s -el $bname
-popd
-/bin/cp /tmp/$bname/$bname.out ./out
-if (-e /tmp/$bname/$bname.align) /bin/cp /tmp/$bname/$bname.align ./out
-# /bin/cp /tmp/$2*.masked ../masked/
-rm -f /tmp/$bname/$bname
-rm -f /tmp/$bname/$bname.*
-rmdir /tmp/$bname' > RMWorm
-    chmod +x RMWorm
-
-    rm -f gsub
-    echo '#LOOP
-/cluster/store5/worm/cb1/RMRun.supers/RMWorm {check in exists+ $(path1)}
-#ENDLOOP' > gsub
-
-    ls -1S /iscratch/i/worms/Cbriggsae/supers/s*.fa > briggsae.lst
-    echo "" > dummy.lst
-    gensub2 briggsae.lst dummy.lst gsub spec
-    para create spec
-    para try
-    
-RepeatMasker run
-    ssh kk
-    cd ~/cb1
-    mkdir RMRun
-    cd RMRun
-    mkdir out
-    rm -fr spec
-    touch spec
-    foreach d ( ../split/c*.fa )
-      set bname = `basename $d`
-      echo /cluster/bin/scripts/RMWorm $d \
-	'{'check out line+ out/$bname.out'}' >> spec
-    end
-    para create spec
-    para try
-    para check
-    para push
-
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CB1 (DONE - 2002-05-29 - Hiram)
-    ssh hgwdev
-    # DNA port is "0", trans prot port is "1"
-    echo 'insert into blatServers values("cb1", "blat10", "17782", "0"); \
-          insert into blatServers values("cb1", "blat10", "17783", "1");' \
-      | hgsql -h genome-testdb hgcentraltest
-        # if you need to delete those entries
-	echo 'delete from blatServers where db="cb1";' \
-        | hgsql -h genome-testdb hgcentraltest
-        # to check the entries:
-	echo 'select * from blatServers where db="cb1";' \
-        | hgsql -h genome-testdb hgcentraltest
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    # Loaded 32763 elements

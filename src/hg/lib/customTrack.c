@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.33 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.34 2003/06/12 14:26:11 braney Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -429,12 +429,18 @@ static boolean getNextFlatLine(struct lineFile **pLf, char **pLine, char **pNext
 {
 struct lineFile *lf = *pLf;
 char *nextLine;
+char *macNewLine;
 if (lf != NULL)
     return lineFileNext(lf, pLine, NULL);
 if ((*pLine = nextLine = *pNextLine) == NULL)
     return FALSE;
 if (nextLine[0] == 0)
     return FALSE;
+/* if a CR is coming up in the input stream, change to NL */
+if ((macNewLine = strchr(nextLine, '\r')) != NULL)
+    *macNewLine = '\n';
+/* now look for the next NL (which maybe isn't the CR
+ * we changed) */
 if ((nextLine = strchr(nextLine, '\n')) != NULL)
     *nextLine++ = 0;
 *pNextLine = nextLine;

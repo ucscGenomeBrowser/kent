@@ -16,7 +16,7 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.22 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.26 2003/06/11 07:04:01 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -718,6 +718,9 @@ return ffList;
 int pslOrientation(struct psl *psl)
 /* Translate psl strand + or - to orientation +1 or -1 */
 {
+/* code below doesn't support negative target strand (translated blat) */
+if (psl->strand[1] == '-')
+    errAbort("pslOrientation doesn't support a negative target strand");
 if (psl->strand[0] == '-')
     return -1;
 else
@@ -728,12 +731,17 @@ int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int of
 /* Return >0 if introns make it look like alignment is on + strand,
  *        <0 if introns make it look like alignment is on - strand,
  *        0 if can't tell.  The absolute value of the return indicates
- * how many splice sites we've seen supporting the orientation. */
+ * how many splice sites we've seen supporting the orientation.
+ * Sequence should NOT be reverse complemented.  */
 {
 int intronDir = 0;
 int oneDir;
 int i;
 DNA *dna = genoSeq->dna;
+
+/* code below doesn't support negative target strand (translated blat) */
+if (psl->strand[1] == '-')
+    errAbort("pslWeightedIntronOrientation doesn't support a negative target strand");
 
 for (i=1; i<psl->blockCount; ++i)
     {
@@ -752,7 +760,8 @@ return intronDir;
 int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset)
 /* Return 1 if introns make it look like alignment is on + strand,
  *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
+ *        0 if can't tell.
+ * Sequence should NOT be reverse complemented.  */
 {
 int intronDir = pslWeightedIntronOrientation(psl, genoSeq, offset);
 if (intronDir < 0)
@@ -763,7 +772,8 @@ return intronDir;
 }
 
 boolean pslHasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset)
-/* Return TRUE if there's a probable intron. */
+/* Return TRUE if there's a probable intron. Sequence should NOT be
+ * reverse complemented.*/
 {
 int blockCount = psl->blockCount, i;
 unsigned *tStarts = psl->tStarts;
@@ -779,8 +789,12 @@ for (i=1; i<blockCount; ++i)
     end = qStarts[i];
     if (start == end)
         {
-	start = tStarts[i-1]+blockSize-seqOffset;
-	end = tStarts[i]-seqOffset;
+        start = tStarts[i-1] + blockSize;
+        end = tStarts[i];
+        if (psl->strand[1] == '-')
+            reverseIntRange(&start, &end, psl->tSize);
+        start -= seqOffset;
+        end -= seqOffset;
 	if (intronOrientation(dna+start, dna+end) != 0)
 	    return TRUE;
 	}
@@ -991,20 +1005,31 @@ dyStringFree(&sqlCmd);
 return sqlCmdStr;
 }
 
-static int chkRanges(char* pslDesc, FILE* out, char* pName, char* pLabel,
-                     char pCLabel, char pStrand, unsigned pSize,
-                     unsigned pStart, unsigned pEnd,
-                     unsigned blockCount, unsigned* blockSizes,
-                     unsigned* pBlockStarts)
-/* check the target or query ranges in a PSL */
+static void printPslDesc(char* pslDesc, FILE* out, struct psl* psl)
+/* print description of a PSL on first error */
 {
-int errCount = 0;
+fprintf(out, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s\n",
+        psl->qName, psl->qStart, psl->qEnd,
+        psl->tName, psl->tStart, psl->tEnd,
+        pslDesc);
+}
+
+static void chkRanges(char* pslDesc, FILE* out, struct psl* psl,
+                      char* pName, char* pLabel, char pCLabel, char pStrand,
+                      unsigned pSize, unsigned pStart, unsigned pEnd,
+                      unsigned blockCount, unsigned* blockSizes,
+                      unsigned* pBlockStarts, int* errCountPtr)
+/* check the target or query ranges in a PSL, increment errorCnt */
+{
+int errCount = *errCountPtr;
 unsigned iBlk, prevBlkEnd = 0;
 
 if (pStart >= pEnd)
     {
-    fprintf(out, "Error: %s: %s %cStart %u >= %cEnd %u\n",
-            pslDesc, pName, pCLabel, pStart, pCLabel, pEnd);
+    if (errCount == 0)
+        printPslDesc(pslDesc, out, psl);
+    fprintf(out, "\t%s %cStart %u >= %cEnd %u\n",
+            pName, pCLabel, pStart, pCLabel, pEnd);
     errCount++;
     }
 for (iBlk = 0; iBlk < blockCount; iBlk++)
@@ -1017,49 +1042,62 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
 
     if (blockSizes[iBlk] == 0)
         {
-        fprintf(out, "Error: %s: %s %s block %u size is 0\n",
-                pslDesc, pName, pLabel, iBlk);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u size is 0\n", pName, pLabel, iBlk);
         errCount++;
         }
     if ((pSize > 0) && (blkEnd > pSize))
         {
-        fprintf(out, "Error: %s: %s %s block %u end %u > %cSize %u\n",
-                pslDesc, pName, pLabel, iBlk, blkEnd, pCLabel, pSize);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u end %u > %cSize %u\n",
+                pName, pLabel, iBlk, blkEnd, pCLabel, pSize);
         errCount++;
         }
     if (gBlkStart < pStart)
         {
-        fprintf(out, "Error: %s: %s %s block %u translated start %u < %cStart %u\n",
-                pslDesc, pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u translated start %u < %cStart %u\n",
+                pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
         errCount++;
         }
     if (gBlkStart >= pEnd)
         {
-        fprintf(out, "Error: %s: %s %s block %u translated start %u >= %cEnd %u\n",
-                pslDesc, pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u translated start %u >= %cEnd %u\n",
+                pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
         errCount++;
         }
     if (gBlkEnd < pStart)
         {
-        fprintf(out, "Error: %s: %s %s block %u translated end %u < %cStart %u\n",
-                pslDesc, pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u translated end %u < %cStart %u\n",
+                pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
         errCount++;
         }
     if (gBlkEnd > pEnd)
         {
-        fprintf(out, "Error: %s: %s %s block %u translated end %u > %cEnd %u\n",
-                pslDesc, pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u translated end %u > %cEnd %u\n",
+                pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
         errCount++;
         }
     if ((iBlk > 0) && (blkStart < prevBlkEnd))
         {
-        fprintf(out, "Error: %s: %s %s block %u start %u < previous block end %u\n",
-                pslDesc, pName, pLabel, iBlk, blkStart, prevBlkEnd);
+        if (errCount == 0)
+            printPslDesc(pslDesc, out, psl);
+        fprintf(out, "\t%s %s block %u start %u < previous block end %u\n",
+                pName, pLabel, iBlk, blkStart, prevBlkEnd);
         errCount++;
         }
     prevBlkEnd = blkEnd;
     }
-return errCount;
+*errCountPtr = errCount;
 }
 
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl)
@@ -1080,22 +1118,25 @@ for (i = 0; VALID_STRANDS[i] != NULL; i++)
     }
 if (VALID_STRANDS[i] == NULL)
     {
-    fprintf(out, "Error: %s: invalid PSL strand: \"%s\"\n",
-            pslDesc, psl->strand);
+    if (errCount == 0)
+        printPslDesc(pslDesc, out, psl);
+    fprintf(out, "\tinvalid PSL strand: \"%s\"\n", psl->strand);
     errCount++;
     }
 
 /* check target */
 strand = ((psl->strand[1] == '\0') ? '+' : psl->strand[1]);
-errCount +=  chkRanges(pslDesc,  out, psl->tName, "target", 't',
-                       strand, psl->tSize, psl->tStart, psl->tEnd,
-                       psl->blockCount, psl->blockSizes, psl->tStarts);
+chkRanges(pslDesc, out, psl, psl->tName, "target", 't',
+          strand, psl->tSize, psl->tStart, psl->tEnd,
+          psl->blockCount, psl->blockSizes, psl->tStarts,
+          &errCount);
 
 /* check query */
 strand = psl->strand[0];
-errCount += chkRanges(pslDesc, out, psl->qName, "query", 'q',
-                      strand, psl->qSize, psl->qStart, psl->qEnd,
-                      psl->blockCount, psl->blockSizes, psl->qStarts);
+chkRanges(pslDesc, out, psl, psl->qName, "query", 'q',
+          strand, psl->qSize, psl->qStart, psl->qEnd,
+          psl->blockCount, psl->blockSizes, psl->qStarts,
+          &errCount);
 return errCount;
 }
 

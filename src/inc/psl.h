@@ -149,15 +149,18 @@ int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int of
 /* Return >0 if introns make it look like alignment is on + strand,
  *        <0 if introns make it look like alignment is on - strand,
  *        0 if can't tell.  The absolute value of the return indicates
- * how many splice sites we've seen supporting the orientation. */
+ * how many splice sites we've seen supporting the orientation.
+ * Sequence should NOT be reverse complemented.  */
 
 int pslIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset);
 /* Return 1 if introns make it look like alignment is on + strand,
  *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
+ *        0 if can't tell.
+ * Sequence should NOT be reverse complemented.  */
 
 boolean pslHasIntron(struct psl *psl, struct dnaSeq *seq, int seqOffset);
-/* Return TRUE if there's a probable intron. */
+/* Return TRUE if there's a probable intron. Sequence should NOT be
+ * reverse complemented. */
 
 void pslTailSizes(struct psl *psl, int *retStartTail, int *retEndTail);
 /* Find the length of "tails" (rather than extensions) implied by psl. */

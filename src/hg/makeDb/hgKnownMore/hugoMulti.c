@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "hugoMulti.h"
 
-static char const rcsid[] = "$Id: hugoMulti.c,v 1.2 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hugoMulti.c,v 1.3 2003/06/10 17:03:54 kent Exp $";
 
 void hugoMultiStaticLoad(char **row, struct hugoMulti *ret)
 /* Load a row from hugoMulti table into ret.  The contents of ret will
@@ -114,44 +114,44 @@ void hugoMultiOutput(struct hugoMulti *el, FILE *f, char sep, char lastSep)
 /* Print out hugoMulti.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->hgnc, sep);
+fprintf(f, "%u", el->hgnc);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->symbol, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->symbol);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->map, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->omimId, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->pmId1, sep);
-fputc(sep,f);
-fprintf(f, "%u", el->pmId2, sep);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->refSeqAcc, sep);
+fprintf(f, "%s", el->map);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->aliases, sep);
+fprintf(f, "%s", el->omimId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->locusLinkId, sep);
+fprintf(f, "%u", el->pmId1);
+fputc(sep,f);
+fprintf(f, "%u", el->pmId2);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->gdbId, sep);
+fprintf(f, "%s", el->refSeqAcc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->swissProt, lastSep);
+fprintf(f, "%s", el->aliases);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->locusLinkId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->gdbId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->swissProt);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

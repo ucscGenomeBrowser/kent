@@ -5,7 +5,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faNoise.c,v 1.3 2003/05/06 07:41:06 kate Exp $";
+static char const rcsid[] = "$Id: faNoise.c,v 1.4 2003/06/10 17:19:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +45,8 @@ switch (base)
       return 'a';
    case 't':
       return 'c';
+   default:
+      return 'n';
    }
 }
 

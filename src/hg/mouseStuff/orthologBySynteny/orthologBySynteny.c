@@ -12,7 +12,7 @@
 #include "axtInfo.h"
 #include "gff.h"
 
-static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.5 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.6 2003/06/11 21:38:49 baertsch Exp $";
 
 #define INTRON 10 
 #define CODINGA 11 
@@ -31,6 +31,7 @@ static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.5 2003/05/06 07:22:29 
 
 char *db ; /* from database */
 char *db2; /* database that we are mapping synteny to */
+int filter; /* max gene prediction allowed */
 
 void usage()
 /* Explain usage and exit. */
@@ -45,6 +46,7 @@ errAbort(
   "   -track=name of track in to-db - find gene overlapping with syntenic location\n"
   "   -psl=geneTable is psl instead of gene prediction\n"
   "   -gff=output gene prediction\n"
+  "   -filter=max gene prediction allowed [default 2mb]\n"
   );
 }
 
@@ -91,25 +93,28 @@ void gffWrite(struct genePred *gp, FILE *f)
     return;
 }
 struct hash *allChains(char *fileName)
+/* read all chains in a chain file */
 {
     struct hash *hash = newHash(0);
     struct lineFile *lf = lineFileOpen(fileName, TRUE);
     struct chain *chain;
-    char *chainId;
+    char chainId[128];
 
     while ((chain = chainRead(lf)) != NULL)
         {
-        AllocVar(chainId);
-        sprintf(chainId, "%d",chain->id);
-        hashAddUnique(hash, chainId, chain);
+        safef(chainId, sizeof(chainId), "%d",chain->id);
+        if (hashLookup(hash, chainId) == NULL)
+                {
+                hashAddUnique(hash, chainId, chain);
+                }
         }
     lineFileClose(&lf);
     return hash;
 }
-struct axt *readAllAxt(char *chrom)
+struct axt *readAllAxt(char *chrom, char *alignment)
+/* read axt records from the database table alignment for a chromosome */
 {
 char query[255];
-char alignment[30] = "Blastz Chained";
 struct lineFile *lf ;
 struct axt *axt = NULL, *axtList = NULL;
 struct axtInfo *ai = NULL;
@@ -152,6 +157,7 @@ return(axtList);
 
 
 void verifyAlist(struct axt *axtList)
+/* very crude check for bad axt records */
 {
     struct axt *axt;
 for (axt = axtList; axt != NULL; axt = axt->next)
@@ -162,7 +168,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 }
 
 void generateGff(struct chain *chain, FILE *f, char *ortholog, char *name, char *type, double score, int level, struct genePred *gp, struct axt *axtList)
-    /* output a gff gene prediction*/
+/* output a gff gene prediction*/
 {
 int tmp;
 struct axt *axt= NULL ;
@@ -184,6 +190,7 @@ int tCodonPos = 1;
 int qCodonPos = 1;
 unsigned *eStarts, *eEnds;
 int prevQptr = 0;
+int lastChance = 0;
 
 AllocVar(gpSyn);
 for (axt = axtList; axt != NULL; axt = axt->next)
@@ -207,7 +214,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 if (axtFound == NULL)
     /* no alignment skip this one */
     {
-    fprintf(stderr,"No syntenic alignment %s %s:%d-%d\n",gp->name, gp->chrom, gp->txStart, gp->txEnd);
+    fprintf(stderr,"No syntenic alignment %s %s:%d-%d %s:%d-%d\n",gp->name, gp->chrom, gp->txStart, gp->txEnd, axt->tName, axt->tStart,axt->tEnd);
     genePredFree(&gpSyn);
     return;
     }
@@ -232,22 +239,24 @@ else
         gpSyn->strand[0] = '+';
         }
     }
+nextEndIndex = 0;
+assert(nextEndIndex < gp->exonCount);
+assert(nextEndIndex >= 0);
+nextStart = gp->exonStarts[nextEndIndex];
+nextEnd = gp->exonEnds[nextEndIndex];
+cStart = gp->cdsStart;
+cEnd = gp->cdsEnd-3;
+txStart = gp->txStart;
+txEnd = gp->txEnd-3;
+tPtr = axtFound->tStart;
 if (gp->strand[0] == '+')
     {
-    nextEndIndex = 0;
-    assert(nextEndIndex < gp->exonCount);
-    assert(nextEndIndex >= 0);
-    nextStart = gp->exonStarts[nextEndIndex];
-    nextEnd = gp->exonEnds[nextEndIndex];
-    cStart = gp->cdsStart;
-    cEnd = gp->cdsEnd-3;
-    txStart = gp->txStart;
-    txEnd = gp->txEnd-3;
     posStrand = TRUE;
-    tPtr = axtFound->tStart;
     }
 else
     {
+    posStrand = FALSE;
+    /*
     nextEndIndex = (gp->exonCount)-1;
     assert(nextEndIndex < gp->exonCount);
     assert(nextEndIndex >= 0);
@@ -257,17 +266,22 @@ else
     cEnd = gp->cdsStart+1;
     txStart = gp->txEnd-1;
     txEnd = gp->txStart+1;
-    posStrand = FALSE;
     tPtr = axtFound->tEnd;
+    */
     }
-            if (sameString("M65212",gp->name))
-                {
-                verifyAlist(axtList);
-                }
-            if (sameString("AL161993",gp->name))
-                {
-                verifyAlist(axtList);
-                }
+
+    if (gp->strand[0] == '-')
+        {
+        verifyAlist(axtList);
+        }
+    if (sameString("NM_023781",gp->name))
+        {
+        verifyAlist(axtList);
+        }
+    if (sameString("NM_010001",gp->name))
+        {
+        verifyAlist(axtList);
+        }
 for (axt = axtFound; axt != NULL ; axt = axt->next)
     /* loop thru set of axt alignments for gene */
     {
@@ -278,10 +292,30 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
     int sizeLeft = size; /* remaining bases in the alignment */
     int qPtr = axt->qStart; /*index into axt file for syntenic gene */
 
-    /* skip alignments if on different chromosome */
+    /* skip alignments if on different chromosome UNLESS we haven't found any exons yet */
     if (!sameString(axt->qName,axtFound->qName))
-        continue;
+        if (gpSyn->exonCount != 0)
+            continue;
+        else
+            {
+            /* start over with this new (presumably better alignment) */
+            axtFound = axt;
+            gpSyn->chrom = axtFound->qName;
+            gpSyn->cdsStart = 0;
+            gpSyn->txStart = 0;
+            tCoding = FALSE;
+            qCoding = FALSE;
+            tClass = INTERGENIC;
+            qClass = INTERGENIC;
+            prevTClass = INTERGENIC;
+            prevQClass = INTERGENIC;
+            qStopCodon = FALSE;
+            }
 
+    if (sameString(gp->name , "NM_008386"))
+        {
+        verifyAlist(axtList);
+        }
     tPtr = axt->tStart; /*index into axt file for gene */
     while ((tPtr > nextEnd ) && (nextEndIndex < (gp->exonCount)-1))
         { /* missed exons - find next block if we had regions that didn't align*/
@@ -295,7 +329,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             qClass = INTRON;
             }
         }
-    while ((tPtr > nextStart ) && (nextEndIndex <= (gp->exonCount)-1))
+    while ((tPtr > nextStart ) && (nextEndIndex <= (gp->exonCount)-1) && tPtr < txEnd)
         { /* starting in the middle of an exon - yuck*/
         if((nextEndIndex+1) < (gp->exonCount))
             {
@@ -316,10 +350,11 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             }
         } 
     prevQptr = qPtr;
+    /*
     if (!posStrand)
         {
         qPtr = axt->qEnd;
-        tPtr = axt->tEnd; /*index into axt file for gene */
+        tPtr = axt->tEnd; *index into axt file for gene *
         if (tPtr < nextEnd)
             {
             nextEndIndex--;
@@ -331,9 +366,10 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             nextEnd = (gp->exonStarts[nextEndIndex]);
             }
         }
+*/
     while (sizeLeft > 0)
         {
-        if (posStrand)
+        if (posStrand || !posStrand)
             { /* this next section sets the transcription start */
             if ((tClass == INTRON) && (tPtr >= nextStart)  && (tPtr >= cStart) && (tPtr < cEnd))        
                 {
@@ -361,7 +397,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
         else
             /* gene on neg strand */
             {
-            if ((tClass == INTRON) && (tPtr >= nextStart) && (tPtr >= cStart) && (tPtr < cEnd))        
+            if (((tClass == UTR5) || (tClass == INTRON)) && (tPtr >= nextStart) && (tPtr >= cStart) && (tPtr < cEnd))        
                 {
                 tCoding = TRUE;
                 if (qStopCodon == FALSE)
@@ -380,7 +416,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 tClass = UTR5; qClass = UTR5;
                 }
             }
-            if (posStrand)
+            if (posStrand || !posStrand)
                 {/* this is crucial, maps exons (regardless of coding or not) to syntenic region */
                 if (tPtr == nextStart)
                     {
@@ -399,6 +435,11 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                         {
                         assert(gpSyn->exonCount < gp->exonCount);
                         eStarts[gpSyn->exonCount] = prevQptr;
+                        if (qPtr-prevQptr > filter)
+                            {
+                            fprintf(stderr,"exon %d larger than %d %d-%d %s from %s:%d-%d axt %c to %s:%d-%d %d-%d %s.\n",gp->exonCount,filter, prevQptr, qPtr, gp->name,gp->chrom, gp->txStart,gp->txEnd, axtFound->qStrand, gpSyn->chrom, gpSyn->txStart,gp->txEnd, gpSyn->cdsStart, gpSyn->cdsEnd, gpSyn->strand);
+                            return;
+                            }
                         eEnds[gpSyn->exonCount] = qPtr;
                         nextEndIndex++;
                         gpSyn->exonCount++;	/* Number of exons */
@@ -434,7 +475,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     gpSyn->exonCount++;	/* Number of exons */
                     }
                 }
-            if (posStrand)
+            if (posStrand || !posStrand)
                 { /* handle start/stop coding */
                 if ((tPtr >= (cStart)) && (tPtr <=(cStart+2)))
                     {
@@ -454,7 +495,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     {
                     tClass=STOPCODON;
                     qClass=STOPCODON;
-                    gpSyn->cdsEnd = qPtr;	/* coding start position */
+                    gpSyn->cdsEnd = qPtr-1;	/* coding start position */
                     tCoding=FALSE;
                     qCoding=FALSE;
                     }
@@ -480,7 +521,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     tCoding=FALSE;
                     }
                 }
-            if (posStrand)
+            if (posStrand || !posStrand)
                 { /* handle end of transcription */
                 if (tPtr == (cEnd +3) )
                     {
@@ -511,7 +552,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
 
             if (t[i] != '-')
                 {/* don't count gaps */
-                if (posStrand)
+                if (posStrand || !posStrand)
                     {
                     tPtr++;
                     }
@@ -527,7 +568,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 }
             if (q[i] != '-')
                 {
-                if (posStrand)
+                if (posStrand || !posStrand)
                     qPtr++;
                 else
                     qPtr--;
@@ -542,6 +583,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             i++;
 
             }
+        lastChance = qPtr ; /*save this value in case there are no more alignments */
         } /* end of axt file */
 if (gpSyn->exonCount == 0)
     {
@@ -549,28 +591,44 @@ if (gpSyn->exonCount == 0)
     return;
     }
 
-if (posStrand)
+if (posStrand || !posStrand)
     {
     if (gpSyn->exonStarts[0] <= 0 ||  (gpSyn->exonEnds[0] <= 0) )
-        printf("%s is wrong\n",gpSyn->name);
+        fprintf(stderr,"%s is wrong\n",gpSyn->name);
     assert(gpSyn->exonStarts[0] > 0);
     assert(gpSyn->exonEnds[0] > 0);
     if (gpSyn->cdsStart == 0) gpSyn->cdsStart = gpSyn->exonStarts[0];
     if (gpSyn->cdsEnd == 0) gpSyn->cdsEnd = gpSyn->exonEnds[(gpSyn->exonCount)-1];
-    if (gpSyn->txEnd == 0) gpSyn->txEnd = gpSyn->exonEnds[(gpSyn->exonCount)-1];
+    if (gpSyn->txEnd != gpSyn->exonEnds[(gpSyn->exonCount)-1]) 
+        gpSyn->txEnd = gpSyn->exonEnds[(gpSyn->exonCount)-1] ;
     }
+    if (gpSyn->txEnd == 0) gpSyn->txEnd = lastChance; //gpSyn->exonEnds[(gpSyn->exonCount)-1];
+    if (gpSyn->txStart == 0)
+        gpSyn->txStart = gpSyn->exonStarts[0] ;
 if (gpSyn->txStart <= 0 ||  (gpSyn->txEnd <= 0) || (gpSyn->cdsStart <= 0) || (gpSyn->cdsEnd <= 0) )
-    printf("%s is wrong\n",gpSyn->name);
+    fprintf(stderr,"%s is wrong\n",gpSyn->name);
 assert(gpSyn->txStart > 0);
 assert(gpSyn->txEnd > 0);
 assert(gpSyn->cdsStart > 0);
 assert(gpSyn->cdsEnd > 0);
-gffWrite(gpSyn, stdout);
+if (gpSyn->txEnd < gpSyn->txStart || gpSyn->cdsEnd < gpSyn->cdsStart)
+    {
+    fprintf(stderr,"Gene Prediction backwards %d %s from %s:%d-%d axt %c to %s:%d-%d %d-%d %s.\n",filter, gp->name,gp->chrom, gp->txStart,gp->txEnd, axtFound->qStrand, gpSyn->chrom, gpSyn->txStart,gp->txEnd, gpSyn->cdsStart, gpSyn->cdsEnd, gpSyn->strand);
+    }
+else if (gpSyn->txEnd - gpSyn->txStart < filter && gpSyn->cdsEnd - gpSyn->cdsStart < filter) 
+    {
+    fprintf(stderr,"OK %s from %s:%d-%d %s axt %c to %s:%d-%d %d-%d %s.\n", gp->name,gp->chrom, gp->txStart,gp->txEnd, gp->strand, axtFound->qStrand, gpSyn->chrom, gpSyn->txStart,gpSyn->txEnd,gpSyn->cdsStart, gpSyn->cdsEnd, gpSyn->strand); 
+    gffWrite(gpSyn, stdout);
+    }
+else
+    {
+    fprintf(stderr,"Gene Prediction larger than %d %s from %s:%d-%d axt %c to %s:%d-%d %d-%d %s.\n",filter, gp->name,gp->chrom, gp->txStart,gp->txEnd, axtFound->qStrand, gpSyn->chrom, gpSyn->txStart,gp->txEnd, gpSyn->cdsStart, gpSyn->cdsEnd, gpSyn->strand);
+    }
 /*genePredFree(&gpSyn);*/
 }
 
 void chainPrintHead(struct chain *chain, FILE *f, char *ortholog, char *name, char *type, double score, int level)
-    /* output a map file similar to psl */
+/* output a map file similar to psl */
 {
 if (chain->qStrand == '+')
     fprintf(f, "%s\t%s\t%d\t%s\t%d\t+\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%d\t%1.0f\t%s\n", 
@@ -585,7 +643,7 @@ else
 }
 
 char *mapOrtholog(struct sqlConnection *conn,  char *geneTable, char *chrom, int gStart, int gEnd)
-    /* finds gene that overlaps syntenic projection */
+/* finds gene that overlaps syntenic projection */
 {
 struct sqlResult *sr;
 char **row;
@@ -632,12 +690,14 @@ struct chain *retSubChain;
 struct chain *retChainToFree;
 boolean hasBin = 0;
 /*int chainArr[MAXCHAINARRAY];*/
+filter = optionInt("filter",2000000);
 
                 verifyAlist(axtList);
 if (psl)
-    sprintf(query, "select g.qName, g.tName, g.strand, g.tStart, g.tEnd, g.qStart, g.qEnd, g.blockCount, g.tStarts, g.blockSizes, g.%s,n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s_%s n where n.tName = '%s' and n.tStart <= g.tEnd and n.tEnd >=  g.tStart and g.tName = '%s' and type <> 'gap' order by g.%s, g.tStart, score desc",fieldName, geneTable,chrom,netTable, chrom,chrom, fieldName );
+    sprintf(query, "select g.qName, g.tName, g.strand, g.tStart, g.tEnd, g.qStart, g.qEnd, g.blockCount, g.tStarts, g.blockSizes, g.%s,n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s n where n.tName = '%s' and n.tStart <= g.tEnd and n.tEnd >=  g.tStart and g.tName = '%s' and type <> 'gap' order by g.%s, g.tStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
 else
-    sprintf(query, "select g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds,  g.%s, n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s_%s n where n.tName = '%s' and n.tStart <= g.txEnd and n.tEnd >=  g.txStart and chrom = '%s' and n.type <> 'gap' order by g.%s, g.txStart, score desc",fieldName, geneTable,chrom,netTable, chrom,chrom, fieldName );
+    sprintf(query, "select g.name, g.chrom, g.strand, g.txStart, g.txEnd, g.cdsStart, g.cdsEnd, g.exonCount, g.exonStarts, g.exonEnds,  g.%s, n.chainId, n.type, n.level, n.qName, n.qStart, n.qEnd from %s g, %s n where n.tName = '%s' and n.tStart <= g.txEnd and n.tEnd >=  g.txStart and chrom = '%s' and n.type <> 'gap' order by g.%s, g.txStart, score desc",fieldName, geneTable,netTable, chrom,chrom, fieldName );
+//fprintf(stderr,"query\n%s\n",query);
 sr = sqlGetResult(conn, query);
 
                 verifyAlist(axtList);
@@ -649,31 +709,32 @@ while ((row = sqlNextRow(sr)) != NULL)
     int chainId = sqlUnsigned(row[11]);
     int level = sqlUnsigned(row[13]);
     int sizeOne;
-    char *chainIdStr;
+    char chainIdStr[128];
 
-    AllocVar(chainIdStr);
 
-                verifyAlist(axtList);
-sprintf(chainIdStr,"%d",chainId);
-/*gp = genePredLoad(row + hasBin);*/
-AllocVar(gp);
-gp->exonCount = sqlUnsigned(row[7]);
-gp->name = cloneString(row[0]);
-gp->chrom = cloneString(row[1]);
-strcpy(gp->strand, row[2]);
-gp->txStart = sqlUnsigned(row[3]);
-gp->txEnd = sqlUnsigned(row[4]);
-gp->cdsStart = sqlUnsigned(row[5]);
-gp->cdsEnd = sqlUnsigned(row[6]);
-sqlUnsignedDynamicArray(row[8], &gp->exonStarts, &sizeOne);
-assert(sizeOne == gp->exonCount);
-sqlUnsignedDynamicArray(row[9], &gp->exonEnds, &sizeOne);
-assert(sizeOne == gp->exonCount);
-                verifyAlist(axtList);
+    verifyAlist(axtList);
+    safef(chainIdStr,sizeof(chainStr),"%d",chainId);
+    /*gp = genePredLoad(row + hasBin);*/
+    AllocVar(gp);
+    gp->exonCount = sqlUnsigned(row[7]);
+    gp->name = cloneString(row[0]);
+    gp->chrom = cloneString(row[1]);
+    strcpy(gp->strand, row[2]);
+    gp->txStart = sqlUnsigned(row[3]);
+    gp->txEnd = sqlUnsigned(row[4]);
+    gp->cdsStart = sqlUnsigned(row[5]);
+    gp->cdsEnd = sqlUnsigned(row[6]);
+    sqlUnsignedDynamicArray(row[8], &gp->exonStarts, &sizeOne);
+    assert(sizeOne == gp->exonCount);
+    sqlUnsignedDynamicArray(row[9], &gp->exonEnds, &sizeOne);
+    assert(sizeOne == gp->exonCount);
+    verifyAlist(axtList);
+
     if ((atoi(row[11]) != 0) && strcmp(prevName,name))
         {
         /*printf("name %s prev %s\n",name, prevName);*/
         aChain = hashMustFindVal(chainHash, chainIdStr);
+        fprintf(stderr," chain %d ",aChain->id);
         chainSubsetOnT(aChain, geneStart, geneEnd, &retSubChain,  &retChainToFree);
         if(retSubChain != NULL)
             {
@@ -696,7 +757,9 @@ assert(sizeOne == gp->exonCount);
                 assert(gp->txEnd > 0);
                 verifyAlist(axtList);
                 if (gp->strand[0] == '+')
-                generateGff(retSubChain, stdout, ortholog, name, row[12], aChain->score, level, gp, axtList);
+                    generateGff(retSubChain, stdout, ortholog, name, row[12], aChain->score, level, gp, axtList);
+                else
+                    generateGff(retSubChain, stdout, ortholog, name, row[12], aChain->score, level, gp, axtList);
                 verifyAlist(axtList);
                 }
             else
@@ -722,7 +785,7 @@ hFreeConn2(&conn2);
 
 void orthologBySyntenyChrom(char *geneTable, char *netTable, char *chrom, struct hash *chainHash)
 {
-    struct axt *axtList = readAllAxt(chrom);
+    struct axt *axtList = readAllAxt(chrom,"Blastz Chained");
     subsetChain(geneTable, netTable, chrom, chainHash, axtList);
 
 }

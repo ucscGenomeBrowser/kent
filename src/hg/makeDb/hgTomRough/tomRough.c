@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "tomRough.h"
 
-static char const rcsid[] = "$Id: tomRough.c,v 1.2 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: tomRough.c,v 1.3 2003/06/10 17:09:59 kent Exp $";
 
 void tomRoughStaticLoad(char **row, struct tomRough *ret)
 /* Load a row from tomRough table into ret.  The contents of ret will
@@ -89,22 +89,22 @@ void tomRoughOutput(struct tomRough *el, FILE *f, char sep, char lastSep)
 /* Print out tomRough.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%d", el->omimId, sep);
+fprintf(f, "%d", el->omimId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chromosome, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->startBand, sep);
+fprintf(f, "%s", el->chromosome);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->endBand, sep);
+fprintf(f, "%s", el->startBand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->description, lastSep);
+fprintf(f, "%s", el->endBand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->description);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

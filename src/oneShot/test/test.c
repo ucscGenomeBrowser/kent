@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "math.h"
 #include "maf.h"
 
 void usage()
@@ -34,15 +35,12 @@ return acc;
 void test(char *fileName)
 /* test - Test something. */
 {
-struct mafFile *mf = mafOpen(fileName);
-struct mafAli *maf;
-int i;
-while ((maf = mafNext(mf)) != NULL)
-    {
-    for (i=0; i<maf->textSize; ++i)
-	printf("%f\n", mafScoreRangeMultiz(maf, i, 1));
-    }
-mafFileFree(&mf);
+signed char c;
+
+c = 127;
+printf("%x\n", c);
+c = -127;
+printf("%x\n", c);
 }
 
 int main(int argc, char *argv[])
