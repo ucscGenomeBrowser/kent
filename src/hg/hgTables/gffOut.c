@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.14 2005/02/26 00:43:51 hiram Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.15 2005/03/02 00:20:29 hiram Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -113,7 +113,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	if (dupCount > 0)
 	    {
 	    safef(txName, sizeof(txName), "%s_dup%d", bed->name, dupCount);
-	    hel->val = (void *)(NULL + dupCount + 1);
+	    hel->val = intToPt(dupCount + 1);
 	    }
 	else
 	    {

@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.163 2005/02/26 00:42:57 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.164 2005/03/02 00:22:04 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -3493,7 +3493,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
     if (dupCount > 0)
 	{
 	safef(txName, sizeof(txName), "%s_dup%d", bed->name, dupCount);
-	hel->val = (void *)(NULL + dupCount + 1);
+	hel->val = intToPt(dupCount + 1);
 	}
     else
 	{
