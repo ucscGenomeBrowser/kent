@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.12 2003/05/06 07:41:07 kate Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.13 2003/05/16 15:25:52 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -47,6 +47,12 @@ fprintf(f, "  );\n");
 fprintf(f, "}\n");
 fprintf(f, "\n");
 
+/* Initialize options array to empty */
+fprintf(f, "static struct optionSpec options[] = {\n");
+fprintf(f, "   {NULL, 0},\n");
+fprintf(f, "};\n");
+fprintf(f, "\n");
+
 /* Make the processing routine. */
 fprintf(f, "void %s(char *XXX)\n", name);
 fprintf(f, "/* %s - %s. */\n", name, description);
@@ -58,7 +64,7 @@ fprintf(f, "\n");
 fprintf(f, "int main(int argc, char *argv[])\n");
 fprintf(f, "/* Process command line. */\n");
 fprintf(f, "{\n");
-fprintf(f, "optionHash(&argc, argv);\n");
+fprintf(f, "optionInit(&argc, argv, options);\n");
 fprintf(f, "if (argc != 2)\n");
 fprintf(f, "    usage();\n");
 fprintf(f, "%s(argv[1]);\n", name);
