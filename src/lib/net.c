@@ -3,13 +3,11 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-#include <netdb.h>
 #include <signal.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <errno.h>
 #include <string.h>
 #include "common.h"
+#include "internet.h"
 #include "errabort.h"
 #include "net.h"
 #include "linefile.h"
@@ -28,27 +26,6 @@ if (sd < 0)
 return sd;
 }
 
-static boolean netFillInAddress(char *hostName, int port, struct sockaddr_in *address)
-/* Fill in address. Return FALSE if can't.  */
-{
-struct hostent *hostent;
-ZeroVar(address);
-address->sin_family = AF_INET;
-address->sin_port = htons(port);
-if (hostName == NULL)
-    address->sin_addr.s_addr = INADDR_ANY;
-else
-    {
-    hostent = gethostbyname(hostName);
-    if (hostent == NULL)
-	{
-	warn("Couldn't find host %s. h_errno %d (%s)", hostName, h_errno, hstrerror(h_errno));
-	return FALSE;
-	}
-    memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
-    }
-return TRUE;
-}
 
 int netConnect(char *hostName, int port)
 /* Start connection with a server. */
@@ -61,7 +38,7 @@ if (hostName == NULL)
     warn("NULL hostName in netConnect");
     return -1;
     }
-if (!netFillInAddress(hostName, port, &sai))
+if (!internetFillInAddress(hostName, port, &sai))
     return -1;
 if ((sd = netStreamSocket()) < 0)
     return sd;
@@ -103,7 +80,7 @@ int flag = 1;
 netBlockBrokenPipes();
 if ((sd = netStreamSocket()) < 0)
     return sd;
-if (!netFillInAddress(host, port, &sai))
+if (!internetFillInAddress(host, port, &sai))
     return -1;
 if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(int)))
     return -1;
