@@ -694,9 +694,11 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.mrnaOrientInfo.name minCheck=0.2
     $gbd.dupSpMrna.mrnaID minCheck=0.80
     $gbd.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
+    $gbd,!mm6,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
+    mm6.mrnaRefseq.mrna minCheck=0.20
     rn2,rn3.mrnaRefseq.mrna minCheck=0.03
-    $gbd.spMrna.mrnaID minCheck=0.98
+    $gbd,!mm6.spMrna.mrnaID minCheck=0.98
+    mm6.spMrna.mrnaID minCheck=0.20
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
@@ -721,6 +723,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     $dm.bdgpToRefSeq.value minCheck=0.99
+    mm6.spMrna.mrnaID minCheck=0.60
     hg15.geneBands.mrnaAcc
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
