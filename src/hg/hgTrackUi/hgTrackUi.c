@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.137 2004/09/01 16:05:05 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.138 2004/09/01 22:48:47 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -274,6 +274,49 @@ void cdsColorOptions(struct trackDb *tdb, int value)
         printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
 }
 
+void blastSGUi(struct trackDb *tdb)
+{
+char geneName[64];
+char accName[64];
+char sprotName[64];
+char posName[64];
+char cModeStr[64];
+boolean useGene, useAcc, useSprot, usePos;
+int cMode;
+char *cModes[3] = {"0", "1", "2"};
+
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
+safef(posName, sizeof(posName), "%s.posLabel", tdb->tableName);
+useGene= cartUsualBoolean(cart, geneName, TRUE);
+useAcc= cartUsualBoolean(cart, accName, FALSE);
+useSprot= cartUsualBoolean(cart, sprotName, FALSE);
+usePos= cartUsualBoolean(cart, posName, FALSE);
+
+safef(cModeStr, sizeof(cModeStr), "%s.cmode", tdb->tableName);
+cMode = cartUsualInt(cart, cModeStr, 0);
+
+printf("<P><B>Color elements: </B> ");
+cgiMakeRadioButton(cModeStr, cModes[0], cMode == 0);
+printf("by score ");
+cgiMakeRadioButton(cModeStr, cModes[1], cMode == 1);
+printf("by yeast chromosome ");
+cgiMakeRadioButton(cModeStr, cModes[2], cMode == 2);
+printf("black");
+
+printf("<P><B>Label elements by: </B> ");
+cgiMakeCheckBox(geneName, useGene);
+printf("Yeast Gene ");
+cgiMakeCheckBox(accName, useAcc);
+printf("Yeast mRNA ");
+cgiMakeCheckBox(sprotName, useSprot);
+printf("SwissProt ID ");
+cgiMakeCheckBox(posName, usePos);
+printf("Yeast Position");
+
+cdsColorOptions(tdb, 2);
+}
 void blastFBUi(struct trackDb *tdb)
 {
 char geneName[64];
@@ -957,8 +1000,9 @@ else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
 else if (sameString(track, "blastDm1FB"))
         blastFBUi(tdb);
-else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") ||
-	sameString(track, "blastSacCer1SG") ||  sameString(track, "tblastnHg16KGPep"))
+else if (sameString(track, "blastSacCer1SG"))
+        blastSGUi(tdb);
+else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") || sameString(track, "tblastnHg16KGPep"))
         blastUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
