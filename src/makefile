@@ -44,6 +44,7 @@ blatSuite: libs
 	cd hg/pslSort && ${MAKE}
 	cd utils/nibFrag && ${MAKE}
 	cd utils/faToNib && ${MAKE}
+	cd isPcr && ${MAKE}
 
 clean:
 	cd lib && ${MAKE} clean 
