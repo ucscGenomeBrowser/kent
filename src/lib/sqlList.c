@@ -607,6 +607,20 @@ ret = sqlSigned(s);
 return ret;
 }
 
+float sqlFloatComma(char **pS)
+/* Return signed number at *pS.  Advance *pS past comma at end */
+{
+char *s = *pS;
+char *e = strchr(s, ',');
+unsigned ret;
+
+*e++ = 0;
+*pS = e;
+ret = atof(s);
+return ret;
+}
+
+
 static char *findStringEnd(char *start, char endC)
 /* Return end of string. */
 {

@@ -607,6 +607,7 @@ while (ffList != NULL)
 	}
     if (!bundle->isProt)
 	ffSlideIntrons(bestPath);
+    bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     if (score > 32)
 	{

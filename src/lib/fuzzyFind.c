@@ -966,6 +966,7 @@ return aliList;
 
 boolean expandThroughNRight(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
     DNA *hayStart, DNA *hayEnd)
+/* Expand through up to three N's to the left. */
 {
 DNA *nEnd = ali->nEnd;
 DNA *hEnd = ali->hEnd;
@@ -975,7 +976,9 @@ while (nEnd < needleEnd && hEnd < hayEnd)
     {
     n = *nEnd;
     h = *hEnd;
-    if (n == h || n == 'n' || h == 'n')
+    if ((n == h) ||
+	(n == 'n' && (nEnd + 3 >= needleEnd || nEnd[1] != 'n' || nEnd[2] != 'n' || nEnd[3] != 'n')) ||
+	(h == 'n' && (hEnd + 3 >= hayEnd || hEnd[1] != 'n' || hEnd[2] != 'n' || hEnd[3] != 'n')))
         {
         nEnd += 1;
         hEnd += 1;
@@ -991,6 +994,7 @@ return expanded;
 
 boolean expandThroughNLeft(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
     DNA *hayStart, DNA *hayEnd)
+/* Expand through up to three N's to the left. */
 {
 DNA *nStart = ali->nStart-1;
 DNA *hStart = ali->hStart-1;
@@ -1000,7 +1004,9 @@ while (nStart >= needleStart && hStart >= hayStart)
     {
     n = *nStart;
     h = *hStart;
-    if (n == h || n == 'n' || h == 'n')
+    if ((n == h) ||
+	(n == 'n' && (nStart - 3 < needleStart || nStart[-1] != 'n' || nStart[-2] != 'n' || nStart[-3] != 'n')) ||
+	(h == 'n' && (hStart - 3 < hayStart || hStart[-1] != 'n' || hStart[-2] != 'n' || hStart[-3] != 'n')))
         {
         nStart -= 1;
         hStart -= 1;

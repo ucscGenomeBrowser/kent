@@ -620,7 +620,7 @@ for (i=0; i<last; ++i)
          maxScore = score;
 	 maxPos = i;
 	 }
-    else if (score < maxScore - maxDown)
+    else if (i > maxPos + maxDown)
          {
 	 break;
 	 }
@@ -648,7 +648,7 @@ for (i=-1; i>=last; --i)
          maxScore = score;
 	 maxPos = i;
 	 }
-    else if (score < maxScore - maxDown)
+    else if (i < maxPos - maxDown)
          {
 	 break;
 	 }

@@ -160,6 +160,19 @@ for (i=0; i<size; ++i)
     }
 }
 
+void upperToN(char *s, int size)
+/* Turn upper case letters to N's. */
+{
+char c;
+int i;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (isupper(c))
+        s[i] = 'n';
+    }
+}
+
 void unmaskNucSeqList(struct dnaSeq *seqList)
 /* Unmask all sequences. */
 {
@@ -535,8 +548,28 @@ int isRc;
 FILE *pslOut = mustOpen(outFile, "w");
 struct lineFile *lf = NULL;
 struct hash *t3Hash = NULL;
+boolean forceUpper = FALSE;
+boolean forceLower = FALSE;
+boolean toggle = FALSE;
+boolean maskUpper = FALSE;
 
 printf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
+
+/* Figure out how to manage query case. */
+if (transQuery)
+    {
+    if (qMask == NULL)
+       forceLower = TRUE;
+    else
+       {
+       maskUpper = TRUE;
+       toggle = !sameString(qMask, "upper");
+       }
+    }
+else
+    {
+    forceUpper = TRUE;
+    }
 
 if (!noHead)
     pslWriteHead(pslOut);
@@ -562,9 +595,20 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	aaSeq qSeq;
 
 	lf = lineFileOpen(queryFiles[i], TRUE);
-	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
+	while (faMixedSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name))
 	    {
 	    dotOut();
+	    /* Put it into right case and optionally mask on case. */
+	    if (forceLower)
+	        toLowerN(qSeq.dna, qSeq.size);
+	    else if (forceUpper)
+	        toUpperN(qSeq.dna, qSeq.size);
+	    else if (maskUpper)
+	        {
+		if (toggle)
+		    toggleCase(qSeq.dna, qSeq.size);
+		upperToN(qSeq.dna, qSeq.size);
+		}
 	    if (qSeq.size > qWarnSize)
 	        {
 		warn("Query sequence %d has size %d, it might take a while.", qSeq.name, qSeq.size);
