@@ -172,6 +172,30 @@ altColor 255,240,200
 spectrum on
 type chain hg15
 
+track mm3PepPsl
+shortLabel Mouse KGPep
+longLabel TBlastN Mouse(mm3) Known Gene Pep PSL
+group compgeno
+priority 50
+visibility dense
+type psl
+
+track rn2PepPsl
+shortLabel Rat KGPep
+longLabel TBlastN Rat(rn2) Known Gene Pep PSL
+group compgeno
+priority 50
+visibility dense
+type psl
+
+track hg15PepPsl
+shortLabel Human KGPep
+longLabel TBlastN Human(hg15) Known Gene Pep PSL
+group compgeno
+priority 50
+visibility dense
+type psl
+
 track hg15Pep
 shortLabel Human KGPep
 longLabel TBlastN Human(hg15) Known Gene Pep
