@@ -254,7 +254,7 @@ chromosomes chr22,
 track mrna
 shortLabel Human mRNAs
 longLabel Human mRNAs from Genbank
-priority 1		8
+priority 18
 visibility full
 spectrum on
 type psl .
