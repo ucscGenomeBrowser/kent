@@ -1,21 +1,24 @@
 
-L = $(MYSQLLIBS) -lm 
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = ${MYSQLLIBS} -lm 
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 %Test: %Test.c 
-	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
+	${CC} ${COPT}  -I../inc -I../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 %: %.c 
-	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
-	cp $@ $(HOME)/bin/$(MACHTYPE)/
+	${CC} ${COPT}  -I../inc -I../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
+	mv $@ ${HOME}/bin/${MACHTYPE}/
 
 O = liftAgp
 
 TESTS = 
 
-exe: $(O)
+exe: ${O}
 
-test: $(TESTS)
+test: ${TESTS}
 
 lib:
 	cd ../../lib; make
+
+clean::
+	rm -f ${O}
