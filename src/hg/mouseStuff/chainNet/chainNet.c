@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "localmem.h"
 #include "agpGap.h"
-#include "rmskOut.h"
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -25,7 +24,13 @@ void usage()
 errAbort(
   "chainNet - Make alignment nets out of chains\n"
   "usage:\n"
-  "   chainNet tDb qDb in.chain target.sizes query.sizes target.net query.net\n"
+  "   chainNet targetDb queryDb in.chain target.net query.net\n"
+  "where:\n"
+  "   targetDb is the target genome database (example hg12)\n"
+  "   queryDb is the query genome database (example mm2)\n"
+  "   in.chain is the chain file sorted by score\n"
+  "   target.net is the output over the target genome\n"
+  "   query.net is the output over the query genome\n"
   "options:\n"
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
@@ -78,7 +83,6 @@ struct chrom
     int size;		    /* Size of chromosome. */
     struct gap *root;	    /* Root of the gap/chain tree */
     struct rbTree *spaces;  /* Store gaps here for fast lookup. Items are spaces. */
-    struct rbTree *repeats; /* Store repeats here for fast lookup.  Items are ranges.*/
     struct rbTree *seqGaps; /* Gaps (stretches of Ns) in sequence.  Items are ranges.*/
     };
 
@@ -204,57 +208,33 @@ sqlDisconnect(&conn);
 return tree;
 }
 
-struct rbTree *getRepeats(char *db, char *chrom, struct lm *lm)
-/* Return a tree of ranges for sequence gaps in chromosome */
-{
-struct rbTree *tree = rbTreeNew(rangeCmp);
-#ifdef SOON
-struct sqlConnection *conn = sqlConnect(db);
-int rowOffset;
-struct sqlResult *sr = hChromQuery(conn, "rmsk", chrom, NULL, &rowOffset);
-char **row;
 
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct rmskOut r;
-    struct range *range;
-    rmskOutStaticLoad(row+rowOffset, &r);
-    lmAllocVar(lm, range);
-    range->start = r.genoStart;
-    range->end = r.genoEnd;
-    rbTreeAdd(tree, range);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-#endif /* SOON */
-return tree;
-}
-
-
-void makeChroms(char *sizeFile, char *db, struct lm *lm,
+void makeChroms(char *db, struct lm *lm,
 	struct hash **retHash, struct chrom **retList)
 /* Read size file and make chromosome structure for each
  * element.  Read in gaps and repeats. */
 {
-struct lineFile *lf = lineFileOpen(sizeFile, TRUE);
-char *row[2];
+char **row;
 struct hash *hash = newHash(0);
 struct chrom *chrom, *chromList = NULL;
-while (lineFileRow(lf, row))
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+
+while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
     if (hashLookup(hash, name) != NULL)
-        errAbort("Duplicate %s line %d of %s", name, lf->lineIx, lf->fileName);
+        errAbort("Duplicate %s in %s.chromInfo", name, db);
     AllocVar(chrom);
     slAddHead(&chromList, chrom);
     hashAddSaveName(hash, name, chrom, &chrom->name);
-    chrom->size = lineFileNeedNum(lf, row, 1);
+    chrom->size = sqlUnsigned(row[1]);
     chrom->spaces = rbTreeNew(spaceCmp);
     chrom->root = addGap(chrom, 0, chrom->size);
     chrom->seqGaps = getSeqGaps(db, chrom->name, lm);
-    chrom->repeats = getRepeats(db, chrom->name, lm);
     }
-lineFileClose(&lf);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
 slReverse(&chromList);
 *retHash = hash;
 *retList = chromList;
@@ -452,7 +432,8 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
 		gap = gapNew(gapStart, gapEnd);
-		if (oSeqPlugged(otherChrom, block->qEnd, nextBlock->qStart, gapStart, gapEnd))
+		if (oSeqPlugged(otherChrom, block->qEnd, 
+			nextBlock->qStart, gapStart, gapEnd))
 		    gap->oGap = TRUE;
 		else
 		    addSpaceForGap(chrom, gap);
@@ -513,7 +494,12 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	    gapEnd = nextBlock->qStart;
 	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
-		gap = addGap(chrom, gapStart, gapEnd);
+		gap = gapNew(gapStart, gapEnd);
+		if (oSeqPlugged(otherChrom, block->tEnd, nextBlock->tStart, 
+			gapStart, gapEnd))
+		    gap->oGap = TRUE;
+		else
+		    addSpaceForGap(chrom, gap);
 		slAddHead(&fill->gapList, gap);
 		}
 	    }
@@ -636,8 +622,8 @@ if (qMin < qMax)
     if (isRev)
         reverseIntRange(&qMin, &qMax, chain->qSize);
     spaceOut(f, rOutDepth);
-    fprintf(f, "fill %d %d %d %s %c %d %d %d\n", tMin, tMax, tMax-tMin, 
-    	chain->qName, chain->qStrand, qMin, qMax, qMax-qMin);
+    fprintf(f, "fill %d %d %d %s %c %d %d %d id %d\n", tMin, tMax, tMax-tMin, 
+    	chain->qName, chain->qStrand, qMin, qMax, qMax-qMin, chain->id);
     }
 }
 
@@ -709,8 +695,19 @@ if (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-void chainNet(char *tDb, char *qDb, char *chainFile, char *tSizes, char *qSizes
-	, char *tNet, char *qNet)
+void compactChromList(struct chrom *chromList)
+/* Free up bits of chromosome structure not needed for 
+ * classification and output. */
+{
+struct chrom *chrom;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    rbTreeFree(&chrom->spaces);
+    rbTreeFree(&chrom->seqGaps);
+    }
+}
+
+void chainNet(char *tDb, char *qDb, char *chainFile, char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
 {
 struct lineFile *lf = lineFileOpen(chainFile, TRUE);
@@ -719,10 +716,12 @@ struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
 struct lm *lm = lmInit(0);	/* Local memory for chromosome data. */
 
-makeChroms(qSizes, qDb, lm, &qHash, &qChromList);
-makeChroms(tSizes, tDb, lm, &tHash, &tChromList);
-printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
-	slCount(qChromList), qSizes);
+makeChroms(qDb, lm, &qHash, &qChromList);
+makeChroms(tDb, lm, &tHash, &tChromList);
+printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tDb,
+	slCount(qChromList), qDb);
+
+/* Loop through chain file building up net. */
 while ((chain = chainRead(lf)) != NULL)
     {
     if (chain->score < minScore) 
@@ -738,17 +737,24 @@ while ((chain = chainRead(lf)) != NULL)
     if (qChrom->size != chain->qSize)
         errAbort("%s is %d in %s but %d in %s", chain->qName, 
 		chain->qSize, chainFile,
-		qChrom->size, qSizes);
+		qChrom->size, qDb);
     tChrom = hashMustFindVal(tHash, chain->tName);
     if (tChrom->size != chain->tSize)
         errAbort("%s is %d in %s but %d in %s", chain->tName, 
 		chain->tSize, chainFile,
-		tChrom->size, tSizes);
+		tChrom->size, tDb);
     addChain(qChrom, tChrom, chain);
     if (verbose)
 	printf("%s has %d inserts, %s has %d\n", tChrom->name, 
 		tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
+
+/* Free up some stuff no longer needed. */
+printf("Compacting memory\n");
+compactChromList(tChromList);
+compactChromList(qChromList);
+lmCleanup(&lm);
+
 printf("writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
 printf("writing %s\n", qNet);
@@ -760,13 +766,13 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 8)
+if (argc != 6)
     usage();
 minSpace = optionInt("minSpace", minSpace);
 minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
 oGapRatio = optionFloat("oGapRatio", oGapRatio);
 verbose = optionExists("verbose");
-chainNet(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6],argv[7]);
+chainNet(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
