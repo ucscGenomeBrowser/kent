@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.720 2004/08/17 22:18:42 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.721 2004/08/18 19:20:31 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -181,7 +181,7 @@ char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&d
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
-char *gdbScript = "http://gdb.wehi.edu.au/gdb-bin/genera/accno?accessionNum=";
+char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 
