@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.17 2004/01/30 22:43:06 hartera Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.18 2004/02/01 00:17:55 genbank Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -66,20 +66,21 @@ char *createString =
 ")";
 
 
-void loadIntoDatabase(char *database, char *table, char *tabName)
+void loadIntoDatabase(char *database, char *table, char *tabName,
+                      bool appendTbl)
 /* Load tabbed file into database table. Drop and create table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
 char comment[256];
 
-if (!optionExists("oldTable"))
+if (!appendTbl)
     {
     dyStringPrintf(ds, createString, table);
     sqlMaybeMakeTable(conn, table, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, 
-       "delete from %s", table);
+       "truncate table %s", table);
     sqlUpdate(conn, ds->string);
     dyStringClear(ds);
     }
@@ -176,8 +177,21 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 carefulClose(&f);
 
 if (outFile == NULL)
-    loadIntoDatabase(database, table, tabName);
+    loadIntoDatabase(database, table, tabName, optionExists("oldTable"));
 }
+
+void ldHgGenePred(char *database, char *table, int gpCount, char *gpNames[])
+/* Load existing genePred files. */
+{
+int i;
+bool appendTbl = optionExists("oldTable");
+for (i = 0; i < gpCount; i++)
+    {
+    loadIntoDatabase(database, table, gpNames[i], appendTbl);
+    appendTbl = TRUE;  /* rest append */
+    }
+}
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -191,7 +205,7 @@ exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
 if (optionExists("predTab"))
-    loadIntoDatabase(argv[1], argv[2], argv[3]);
+    ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
 else
     ldHgGene(argv[1], argv[2], argc-3, argv+3);
 return 0;
