@@ -299,6 +299,14 @@ if(t1 == ggSoftStart || t1 == ggHardStart || t1 == ggRangeStart)
 return FALSE;
 }
 
+boolean overlappingExons(struct exonNode *en1, struct exonNode *en2)
+/* Return TRUE if exons overlap, FALSE otherwise. */
+{
+int overlap = 0;
+overlap = rangeIntersection(en1->tStart, en1->tEnd, en2->tStart, en2->tEnd);
+return overlap > 0;
+}
+
 boolean compatibleExons(struct exonNode *en1, struct exonNode *en2)
 /** Return TRUE if these two nodes are compatible (overlapping) with eachother
    FALSE otherwise. */
@@ -507,11 +515,10 @@ if(en->edgeCount != 0)
 copy->starts = CloneArray(en->starts, en->startCount);
 copy->ends = CloneArray(en->ends, en->endCount);
 
-/* Have to decide what to push onto the history stack. Basically
-   want to push exons that are different and not wildcards. */
+/* Handle logic for pushing nodes onto history stack. */
 if((history->nodes == NULL || history->nodes->class != en->class) && en->class != BIGNUM)
     {
-    if(history->nodes != NULL && compatibleExons(history->nodes, en))
+    if(history->nodes != NULL && overlappingExons(history->nodes, en))
 	{
 	notCompatPush = TRUE;
 	notCompat = slPopHead(&history->nodes);
@@ -521,11 +528,11 @@ if((history->nodes == NULL || history->nodes->class != en->class) && en->class !
     pop =TRUE;
     }
 en->color = enGray;
-if(en->next == NULL) /* It is a terminal node...*/
-    {
+//if(en->endType == ggSoftEnd && en->class != BIGNUM) /* It is a terminal node...*/
+//    {
 //    printf("%s\t%d\t%d\n", en->tName, en->tStart, en->tEnd);
     checkForMaximalPath(eg, maximalPaths, history);
-    }
+//    }
 for(i=0; i<en->edgeCount; i++)
     {
     struct exonNode *next = eg->nodes[en->edges[i]];
@@ -656,17 +663,30 @@ if(en->endType == ggSoftStart || en->endType == ggSoftEnd)
 return TRUE;
 }
 
+int countGoodEdges(struct exonGraph *eg, struct exonNode *en)
+/* Count how many edges off the node aren't to wildcard nodes. */
+{
+int i, count=0;
+for(i=0; i<en->edgeCount; i++)
+    {
+    if(eg->nodes[en->edges[i]]->class != BIGNUM)
+	count++;
+    }
+return count;
+}
+
 boolean confidentPath(struct hash *mrnaHash, struct exonGraph *eg, 
 		      struct exonPath *maximalPaths, struct exonPath *ep)
 /** Return TRUE if all edges in ep were seen in 5% or more
    of the paths. */
 {
 double minPercent = cgiOptionalDouble("minPercent", .05);
-int trumpSize = cgiOptionalInt("trumpSize", 150);
+int trumpSize = cgiOptionalInt("trumpSize", 450);
 int mrnaVal = cgiOptionalInt("mrnaWeight", 20);
 double minNum = 0;
-boolean exonPresent = FALSE;
 struct exonNode *en = NULL;
+int size = 0;
+boolean result = TRUE;
 if(slCount(eg->paths) > 10)
     {
     minNum = minPercent * slCount(eg->paths) + 1;
@@ -678,19 +698,20 @@ else
 
 for(en = ep->nodes; en != NULL; en = en->next)
     {
-    int count = en->edgeCount;
-    int size = uniqueSize(eg, maximalPaths, ep, en);
+    int count = countGoodEdges(eg,en);
+    size += uniqueSize(eg, maximalPaths, ep, en);
     if(en->next == NULL)
 	count++;
-    exonPresent = TRUE;
     if(hardStartsEnds(en))
-	count += 3;
+	count += 1;
     if(isMrnaNode(en, eg, mrnaHash))
 	count += mrnaVal;
-    if(count < minNum  && size < trumpSize  )
-	return FALSE;
+    if(count < minNum)
+	result =  FALSE;
     }
-return exonPresent;
+if(size >= trumpSize)
+    result = TRUE; 
+return result;
 }
 
 void putTic()
