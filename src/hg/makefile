@@ -138,6 +138,7 @@ UTIL_DIRS = \
 	hgTablesTest \
 	hgChroms \
 	hgGetAnn \
+	hgSpeciesRna \
 	hgsql \
 	hgsqldump \
 	intronEnds \
