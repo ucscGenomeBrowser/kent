@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
@@ -8,29 +9,29 @@ import java.util.*;
 public class TrackDb {
 
   // data -- matches column names except where noted
-  String tableName;
-  String shortLabel;
-  String type;
-  String longLabel;
-  int visibility;
-  float priority;
-  int colorR;
-  int colorG;
-  int colorB;
-  int altColorR;
-  int altColorG;
-  int altColorB;
-  int useScore;
+  public String tableName;
+  public String shortLabel;
+  public String type;
+  public String longLabel;
+  public int visibility;
+  public float priority;
+  public int colorR;
+  public int colorG;
+  public int colorB;
+  public int altColorR;
+  public int altColorG;
+  public int altColorB;
+  public int useScore;
   // the column is called "private" but this is a reserved word
   // in Java
-  int privateCol;
-  int restrictCount;
-  Blob restrictList;
-  Blob url;
-  Blob html;
-  String grp;
-  int canPack;
-  Blob settings;
+  public int privateCol;
+  public int restrictCount;
+  public Blob restrictList;
+  public Blob url;
+  public Blob html;
+  public String grp;
+  public int canPack;
+  public Blob settings;
 
    // constructors
  /**

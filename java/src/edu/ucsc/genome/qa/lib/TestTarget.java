@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.util.Properties;
 
 /**
@@ -6,12 +7,12 @@ import java.util.Properties;
 public class TestTarget {
 
   // data
-  String machine;
+  public String machine;
   // could hold database name or the string "all"
-  String dbSpec;
-  String table;
-  boolean quickOn;
-  int zoomCount;
+  public String dbSpec;
+  public String table;
+  public boolean quickOn;
+  public int zoomCount;
 
   // constructors
 

@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.io.*;
 import java.util.*;
 
@@ -7,15 +8,15 @@ import java.util.*;
 public class KnownGene {
 
   // data
-  String name;
-  String chrom;
-  int txStart;
-  int txEnd;
-  int cdsStart;
-  int cdsEnd;
-  int exonCount;
-  String proteinID;
-  String alignID;
+  public String name;
+  public String chrom;
+  public int txStart;
+  public int txEnd;
+  public int cdsStart;
+  public int cdsEnd;
+  public int exonCount;
+  public String proteinID;
+  public String alignID;
 
   // constructors
 

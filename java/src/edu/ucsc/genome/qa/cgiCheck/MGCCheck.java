@@ -1,3 +1,5 @@
+package edu.ucsc.genome.qa.cgiCheck;
+import edu.ucsc.genome.qa.lib.*;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
@@ -102,7 +104,7 @@ public class MGCCheck {
           String mode = "default";
           // String mode = "all";
           HgTracks.exerciseTrack(machine, assembly, chroms, 
-                                     track, mode, defaultPos, "full");
+                                     track, mode, defaultPos, "full", 3);
           System.out.println();
         }
       } catch (Exception e) {

@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.util.ArrayList;
 
 /**
@@ -7,8 +8,8 @@ import java.util.ArrayList;
 public class TrackControl {
 
   // data
-  ArrayList tracks;
-  ArrayList values;
+  public ArrayList tracks;
+  public ArrayList values;
 
   // constructors
  /**

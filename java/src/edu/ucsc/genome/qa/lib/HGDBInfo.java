@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.sql.*;
 
 /**
@@ -6,10 +7,10 @@ import java.sql.*;
 public class HGDBInfo {
 
   // data
-  String machine;
-  String database;
-  String user;
-  String password;
+  public String machine;
+  public String database;
+  public String user;
+  public String password;
 
   // constructors
 

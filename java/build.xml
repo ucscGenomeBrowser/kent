@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- Build file for genome.ucsc.edu QA library directory -->
+
+<project name="qa" default="build" basedir=".">
+    <target name="init">
+        <property name="build.dir" value="."/>
+        <property name="src.dir" value="src"/>
+        <property name="build.classes" value="${build.dir}/classes"/>
+        <property name="build.debug" value="on" />
+        <property name="build.optimize" value="off" />
+        <property name="build.compiler" value="modern" />
+        <property name="build.sysclasspath" value="last" />
+        <property name="build.includes" value="**/*.java"/>
+        <property name="build.excludes" value="edu/ucsc/genome/qa/cgiCheck/HGNearCheck.java,edu/ucsc/genome/qa/lib/ErrorFile.java"/>
+    </target>
+
+    <target name="build" depends="compile">
+    </target>
+
+    <target name="compile" depends="init">
+       <mkdir dir="${build.classes}" />
+       <javac srcdir="${src.dir}"
+              destdir="${build.classes}"
+              debug="${build.debug}"
+              optimize="${build.optimize}"
+              deprecation="${build.deprecation}"
+              includes="${build.includes}"
+              excludes="${build.excludes}">
+      </javac>
+    </target>
+
+
+</project>

@@ -1,3 +1,5 @@
+package edu.ucsc.genome.qa.lib;
+
 /**
  *  This container holds cart settings.
  */ 

@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import com.meterware.httpunit.*;
 
 /**
@@ -6,9 +7,9 @@ import com.meterware.httpunit.*;
 public class Robot {
 
   // data
-  String initialURL;
-  WebConversation wc; 
-  WebResponse currentPage;
+  public String initialURL;
+  public WebConversation wc; 
+  public WebResponse currentPage;
 
   // constructors
  /**

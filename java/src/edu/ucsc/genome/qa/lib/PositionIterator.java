@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.util.ArrayList;
 
 /**
@@ -6,10 +7,10 @@ import java.util.ArrayList;
 public class PositionIterator {
 
   // constants
-  String MODE_ALL = "all";
-  String MODE_FIRST = "first";
-  String MODE_MIDDLE = "middle";
-  String MODE_END = "end";
+  static final String MODE_ALL = "all";
+  static final String MODE_FIRST = "first";
+  static final String MODE_MIDDLE = "middle";
+  static final String MODE_END = "end";
 
   // data
   ArrayList chromList;

@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.io.*;
 import java.util.*;
 
@@ -7,8 +8,8 @@ import java.util.*;
 public class ChromInfo {
 
   // data
-  String chrom;
-  int size;
+  public String chrom;
+  public int size;
 
   // constructors
  /**

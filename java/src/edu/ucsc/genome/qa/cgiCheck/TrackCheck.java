@@ -1,3 +1,5 @@
+package edu.ucsc.genome.qa.cgiCheck;
+import edu.ucsc.genome.qa.lib.*;
 import java.io.*;
 import java.net.*;
 import java.sql.*;

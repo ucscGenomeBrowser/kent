@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.util.ArrayList;
 
 /** 

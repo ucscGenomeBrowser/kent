@@ -1,3 +1,4 @@
+package edu.ucsc.genome.qa.lib;
 import java.io.*;
 import java.util.*;
 
@@ -7,16 +8,16 @@ import java.util.*;
 public class TrackContainer {
 
   // data
-  String chrom;
+  public String chrom;
   // could store these as strings
-  int startpos;
-  int endpos;
-  String idcol;
-  String startcol;
-  String endcol;
-  String table;
-  String trackcontrol;
-  boolean split;
+  public int startpos;
+  public int endpos;
+  public String idcol;
+  public String startcol;
+  public String endcol;
+  public String table;
+  public String trackcontrol;
+  public boolean split;
 
   // constructors
 

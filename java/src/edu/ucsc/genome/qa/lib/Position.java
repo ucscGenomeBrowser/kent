@@ -1,14 +1,15 @@
+package edu.ucsc.genome.qa.lib;
 /**
  *  This container holds a position.  Format will be chrN:nnnnn-nnnnn.
  */
 public class Position {
 
   // data
-  String chromName;
-  int startPos;
-  int endPos;
-  String stringVal;
-  String format;
+  public String chromName;
+  public int startPos;
+  public int endPos;
+  public String stringVal;
+  public String format;
 
   // constructors
  /**
