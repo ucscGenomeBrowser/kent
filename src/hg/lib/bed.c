@@ -116,6 +116,19 @@ const struct bed *b = *((struct bed **)vb);
 return a->score - b->score;
 }
 
+int bedCmpPlusScore(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    {
+    dif = (a->chromStart - b->chromStart) * 1000 +(a->score - b->score);
+    }
+return dif;
+}
 struct bedLine *bedLineNew(char *line)
 /* Create a new bedLine based on tab-separated string s. */
 {
